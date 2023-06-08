@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D28C4727D64
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:00:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8933E727D66
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235926AbjFHLA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 07:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60728 "EHLO
+        id S235678AbjFHLAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 07:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236086AbjFHLAJ (ORCPT
+        with ESMTP id S235485AbjFHLAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 07:00:09 -0400
+        Thu, 8 Jun 2023 07:00:11 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68D631BFF;
-        Thu,  8 Jun 2023 04:00:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0DB5A136;
+        Thu,  8 Jun 2023 04:00:10 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 982D6AB6;
-        Thu,  8 Jun 2023 04:00:51 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3E8851042;
+        Thu,  8 Jun 2023 04:00:55 -0700 (PDT)
 Received: from e127643.broadband (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9E2AC3F71E;
-        Thu,  8 Jun 2023 04:00:03 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0C1FC3F71E;
+        Thu,  8 Jun 2023 04:00:06 -0700 (PDT)
 From:   James Clark <james.clark@arm.com>
 To:     coresight@lists.linaro.org
 Cc:     James Clark <james.clark@arm.com>,
@@ -40,9 +40,9 @@ Cc:     James Clark <james.clark@arm.com>,
         Will Deacon <will@kernel.org>,
         linux-arm-kernel@lists.infradead.org,
         linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/5] perf cs-etm: Track exception level
-Date:   Thu,  8 Jun 2023 11:59:28 +0100
-Message-Id: <20230608105930.1389276-5-james.clark@arm.com>
+Subject: [PATCH v2 5/5] perf cs-etm: Add exception level consistency check
+Date:   Thu,  8 Jun 2023 11:59:29 +0100
+Message-Id: <20230608105930.1389276-6-james.clark@arm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230608105930.1389276-1-james.clark@arm.com>
 References: <20230608105930.1389276-1-james.clark@arm.com>
@@ -57,235 +57,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently we assume all trace belongs to the host machine so when
-the decoder should be looking at the guest kernel maps it can crash
-because it looks at the host ones instead.
-
-Avoid one scenario (guest kernel running at EL1) by assigning the
-default guest machine to this trace. For userspace trace it's still not
-possible to determine guest vs host, but the PIDs should help in this
-case.
+Assert that our own tracking of the exception level matches what
+OpenCSD provides. OpenCSD doesn't distinguish between EL0 and EL1 in the
+memory access callback so the extra tracking was required. But a rough
+assert can still be done.
 
 Signed-off-by: James Clark <james.clark@arm.com>
 ---
- .../perf/util/cs-etm-decoder/cs-etm-decoder.c |  7 +-
- tools/perf/util/cs-etm.c                      | 75 +++++++++++++++----
- tools/perf/util/cs-etm.h                      |  7 +-
- 3 files changed, 67 insertions(+), 22 deletions(-)
+ .../perf/util/cs-etm-decoder/cs-etm-decoder.c |  6 +--
+ .../perf/util/cs-etm-decoder/cs-etm-decoder.h |  4 +-
+ tools/perf/util/cs-etm.c                      | 41 ++++++++++++++-----
+ 3 files changed, 36 insertions(+), 15 deletions(-)
 
 diff --git a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
-index 2af641d26866..44c49acd6bff 100644
+index 44c49acd6bff..e917985bbbe6 100644
 --- a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
 +++ b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
-@@ -561,12 +561,13 @@ cs_etm_decoder__set_tid(struct cs_etm_queue *etmq,
- 		break;
- 	}
+@@ -52,15 +52,15 @@ struct cs_etm_decoder {
+ static u32
+ cs_etm_decoder__mem_access(const void *context,
+ 			   const ocsd_vaddr_t address,
+-			   const ocsd_mem_space_acc_t mem_space __maybe_unused,
++			   const ocsd_mem_space_acc_t mem_space,
+ 			   const u8 trace_chan_id,
+ 			   const u32 req_size,
+ 			   u8 *buffer)
+ {
+ 	struct cs_etm_decoder *decoder = (struct cs_etm_decoder *) context;
  
-+	if (cs_etm__etmq_set_tid_el(etmq, tid, trace_chan_id,
-+				    elem->context.exception_level))
-+		return OCSD_RESP_FATAL_SYS_ERR;
-+
- 	if (tid == -1)
- 		return OCSD_RESP_CONT;
+-	return decoder->mem_access(decoder->data, trace_chan_id,
+-				   address, req_size, buffer);
++	return decoder->mem_access(decoder->data, trace_chan_id, address,
++				   req_size, buffer, mem_space);
+ }
  
--	if (cs_etm__etmq_set_tid(etmq, tid, trace_chan_id))
--		return OCSD_RESP_FATAL_SYS_ERR;
--
- 	/*
- 	 * A timestamp is generated after a PE_CONTEXT element so make sure
- 	 * to rely on that coming one.
+ int cs_etm_decoder__add_mem_access_cb(struct cs_etm_decoder *decoder,
+diff --git a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.h b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.h
+index 21d403f55d96..272c2efe78ee 100644
+--- a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.h
++++ b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.h
+@@ -11,6 +11,7 @@
+ #define INCLUDE__CS_ETM_DECODER_H__
+ 
+ #include <linux/types.h>
++#include <opencsd/ocsd_if_types.h>
+ #include <stdio.h>
+ 
+ struct cs_etm_decoder;
+@@ -19,7 +20,8 @@ struct cs_etm_packet_queue;
+ 
+ struct cs_etm_queue;
+ 
+-typedef u32 (*cs_etm_mem_cb_type)(struct cs_etm_queue *, u8, u64, size_t, u8 *);
++typedef u32 (*cs_etm_mem_cb_type)(struct cs_etm_queue *, u8, u64, size_t, u8 *,
++				  const ocsd_mem_space_acc_t);
+ 
+ struct cs_etmv3_trace_params {
+ 	u32 reg_ctrl;
 diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
-index e0904f276e89..916e86f003f4 100644
+index 916e86f003f4..ca01109c3fc4 100644
 --- a/tools/perf/util/cs-etm.c
 +++ b/tools/perf/util/cs-etm.c
-@@ -14,7 +14,6 @@
- #include <linux/types.h>
- #include <linux/zalloc.h>
- 
--#include <opencsd/ocsd_if_types.h>
- #include <stdlib.h>
- 
- #include "auxtrace.h"
-@@ -88,6 +87,8 @@ struct cs_etm_traceid_queue {
- 	union perf_event *event_buf;
- 	struct thread *thread;
- 	struct thread *prev_thread;
-+	ocsd_ex_level prev_el;
-+	ocsd_ex_level el;
- 	struct branch_stack *last_branch;
- 	struct branch_stack *last_branch_rb;
- 	struct cs_etm_packet *prev_packet;
-@@ -482,6 +483,7 @@ static int cs_etm__init_traceid_queue(struct cs_etm_queue *etmq,
- 
- 	queue = &etmq->etm->queues.queue_array[etmq->queue_nr];
- 	tidq->trace_chan_id = trace_chan_id;
-+	tidq->el = tidq->prev_el = ocsd_EL_unknown;
- 	tidq->thread = machine__findnew_thread(&etm->session->machines.host, -1,
- 					       queue->tid);
- 	tidq->prev_thread = machine__idle_thread(&etm->session->machines.host);
-@@ -621,6 +623,7 @@ static void cs_etm__packet_swap(struct cs_etm_auxtrace *etm,
- 		tmp = tidq->packet;
- 		tidq->packet = tidq->prev_packet;
- 		tidq->prev_packet = tmp;
-+		tidq->prev_el = tidq->el;
- 		thread__put(tidq->prev_thread);
- 		tidq->prev_thread = thread__get(tidq->thread);
- 	}
-@@ -882,11 +885,43 @@ static bool cs_etm__evsel_is_auxtrace(struct perf_session *session,
- 	return evsel->core.attr.type == aux->pmu_type;
+@@ -943,7 +943,8 @@ static u8 cs_etm__cpu_mode(struct cs_etm_queue *etmq, u64 address,
  }
  
--static u8 cs_etm__cpu_mode(struct cs_etm_queue *etmq, u64 address)
-+static struct machine *cs_etm__get_machine(struct cs_etm_queue *etmq,
-+					   ocsd_ex_level el)
+ static u32 cs_etm__mem_access(struct cs_etm_queue *etmq, u8 trace_chan_id,
+-			      u64 address, size_t size, u8 *buffer)
++			      u64 address, size_t size, u8 *buffer,
++			      const ocsd_mem_space_acc_t mem_space)
  {
--	struct machine *machine;
-+	enum cs_etm_pid_fmt pid_fmt = cs_etm__get_pid_fmt(etmq);
+ 	u8  cpumode;
+ 	u64 offset;
+@@ -959,6 +960,24 @@ static u32 cs_etm__mem_access(struct cs_etm_queue *etmq, u8 trace_chan_id,
+ 	if (!tidq)
+ 		return 0;
  
--	machine = &etmq->etm->session->machines.host;
 +	/*
-+	 * For any virtualisation based on nVHE (e.g. pKVM), or host kernels
-+	 * running at EL1 assume everything is the host.
++	 * We've already tracked EL along side the PID in cs_etm__set_thread()
++	 * so double check that it matches what OpenCSD thinks as well. It
++	 * doesn't distinguish between EL0 and EL1 for this mem access callback
++	 * so we had to do the extra tracking. Skip validation if it's any of
++	 * the 'any' values.
 +	 */
-+	if (pid_fmt == CS_ETM_PIDFMT_CTXTID)
-+		return &etmq->etm->session->machines.host;
-+
-+	/*
-+	 * Not perfect, but otherwise assume anything in EL1 is the default
-+	 * guest, and everything else is the host. Distinguishing between guest
-+	 * and host userspaces isn't currently supported either. Neither is
-+	 * multiple guest support. All this does is reduce the likeliness of
-+	 * decode errors where we look into the host kernel maps when it should
-+	 * have been the guest maps.
-+	 */
-+	switch (el) {
-+	case ocsd_EL1:
-+		return machines__find_guest(&etmq->etm->session->machines,
-+					    DEFAULT_GUEST_KERNEL_ID);
-+	case ocsd_EL3:
-+	case ocsd_EL2:
-+	case ocsd_EL0:
-+	case ocsd_EL_unknown:
-+	default:
-+		return &etmq->etm->session->machines.host;
++	if (!(mem_space == OCSD_MEM_SPACE_ANY ||
++	      mem_space == OCSD_MEM_SPACE_N || mem_space == OCSD_MEM_SPACE_S)) {
++		if (mem_space & OCSD_MEM_SPACE_EL1N) {
++			/* Includes both non secure EL1 and EL0 */
++			assert(tidq->el == ocsd_EL1 || tidq->el == ocsd_EL0);
++		} else if (mem_space & OCSD_MEM_SPACE_EL2)
++			assert(tidq->el == ocsd_EL2);
++		else if (mem_space & OCSD_MEM_SPACE_EL3)
++			assert(tidq->el == ocsd_EL3);
 +	}
-+}
 +
-+static u8 cs_etm__cpu_mode(struct cs_etm_queue *etmq, u64 address,
-+			   ocsd_ex_level el)
-+{
-+	struct machine *machine = cs_etm__get_machine(etmq, el);
+ 	cpumode = cs_etm__cpu_mode(etmq, address, tidq->el);
  
- 	if (address >= machine__kernel_start(machine)) {
- 		if (machine__is_host(machine))
-@@ -896,10 +931,14 @@ static u8 cs_etm__cpu_mode(struct cs_etm_queue *etmq, u64 address)
- 	} else {
- 		if (machine__is_host(machine))
- 			return PERF_RECORD_MISC_USER;
--		else if (perf_guest)
-+		else {
-+			/*
-+			 * Can't really happen at the moment because
-+			 * cs_etm__get_machine() will always return
-+			 * machines.host for any non EL1 trace.
-+			 */
- 			return PERF_RECORD_MISC_GUEST_USER;
--		else
--			return PERF_RECORD_MISC_HYPERVISOR;
-+		}
- 	}
- }
- 
-@@ -916,11 +955,12 @@ static u32 cs_etm__mem_access(struct cs_etm_queue *etmq, u8 trace_chan_id,
- 	if (!etmq)
- 		return 0;
- 
--	cpumode = cs_etm__cpu_mode(etmq, address);
- 	tidq = cs_etm__etmq_get_traceid_queue(etmq, trace_chan_id);
- 	if (!tidq)
- 		return 0;
- 
-+	cpumode = cs_etm__cpu_mode(etmq, address, tidq->el);
-+
  	if (!thread__find_map(tidq->thread, cpumode, address, &al))
- 		return 0;
- 
-@@ -1298,10 +1338,11 @@ cs_etm__get_trace(struct cs_etm_queue *etmq)
- 	return etmq->buf_len;
- }
- 
--static void cs_etm__set_thread(struct cs_etm_auxtrace *etm,
--			       struct cs_etm_traceid_queue *tidq, pid_t tid)
-+static void cs_etm__set_thread(struct cs_etm_queue *etmq,
-+			       struct cs_etm_traceid_queue *tidq, pid_t tid,
-+			       ocsd_ex_level el)
+@@ -1207,8 +1226,8 @@ static inline int cs_etm__t32_instr_size(struct cs_etm_queue *etmq,
  {
--	struct machine *machine = &etm->session->machines.host;
-+	struct machine *machine = cs_etm__get_machine(etmq, el);
+ 	u8 instrBytes[2];
  
- 	if (tid != -1) {
- 		thread__zput(tidq->thread);
-@@ -1311,10 +1352,12 @@ static void cs_etm__set_thread(struct cs_etm_auxtrace *etm,
- 	/* Couldn't find a known thread */
- 	if (!tidq->thread)
- 		tidq->thread = machine__idle_thread(machine);
-+
-+	tidq->el = el;
+-	cs_etm__mem_access(etmq, trace_chan_id, addr,
+-			   ARRAY_SIZE(instrBytes), instrBytes);
++	cs_etm__mem_access(etmq, trace_chan_id, addr, ARRAY_SIZE(instrBytes),
++			   instrBytes, 0);
+ 	/*
+ 	 * T32 instruction size is indicated by bits[15:11] of the first
+ 	 * 16-bit word of the instruction: 0b11101, 0b11110 and 0b11111
+@@ -1399,8 +1418,8 @@ static void cs_etm__copy_insn(struct cs_etm_queue *etmq,
+ 	else
+ 		sample->insn_len = 4;
+ 
+-	cs_etm__mem_access(etmq, trace_chan_id, sample->ip,
+-			   sample->insn_len, (void *)sample->insn);
++	cs_etm__mem_access(etmq, trace_chan_id, sample->ip, sample->insn_len,
++			   (void *)sample->insn, 0);
  }
  
--int cs_etm__etmq_set_tid(struct cs_etm_queue *etmq,
--			 pid_t tid, u8 trace_chan_id)
-+int cs_etm__etmq_set_tid_el(struct cs_etm_queue *etmq, pid_t tid,
-+			    u8 trace_chan_id, ocsd_ex_level el)
- {
- 	struct cs_etm_traceid_queue *tidq;
+ u64 cs_etm__convert_sample_time(struct cs_etm_queue *etmq, u64 cs_timestamp)
+@@ -1952,8 +1971,8 @@ static bool cs_etm__is_svc_instr(struct cs_etm_queue *etmq, u8 trace_chan_id,
+ 		 * so below only read 2 bytes as instruction size for T32.
+ 		 */
+ 		addr = end_addr - 2;
+-		cs_etm__mem_access(etmq, trace_chan_id, addr,
+-				   sizeof(instr16), (u8 *)&instr16);
++		cs_etm__mem_access(etmq, trace_chan_id, addr, sizeof(instr16),
++				   (u8 *)&instr16, 0);
+ 		if ((instr16 & 0xFF00) == 0xDF00)
+ 			return true;
  
-@@ -1322,7 +1365,7 @@ int cs_etm__etmq_set_tid(struct cs_etm_queue *etmq,
- 	if (!tidq)
- 		return -EINVAL;
+@@ -1968,8 +1987,8 @@ static bool cs_etm__is_svc_instr(struct cs_etm_queue *etmq, u8 trace_chan_id,
+ 		 * +---------+---------+-------------------------+
+ 		 */
+ 		addr = end_addr - 4;
+-		cs_etm__mem_access(etmq, trace_chan_id, addr,
+-				   sizeof(instr32), (u8 *)&instr32);
++		cs_etm__mem_access(etmq, trace_chan_id, addr, sizeof(instr32),
++				   (u8 *)&instr32, 0);
+ 		if ((instr32 & 0x0F000000) == 0x0F000000 &&
+ 		    (instr32 & 0xF0000000) != 0xF0000000)
+ 			return true;
+@@ -1985,8 +2004,8 @@ static bool cs_etm__is_svc_instr(struct cs_etm_queue *etmq, u8 trace_chan_id,
+ 		 * +-----------------------+---------+-----------+
+ 		 */
+ 		addr = end_addr - 4;
+-		cs_etm__mem_access(etmq, trace_chan_id, addr,
+-				   sizeof(instr32), (u8 *)&instr32);
++		cs_etm__mem_access(etmq, trace_chan_id, addr, sizeof(instr32),
++				   (u8 *)&instr32, 0);
+ 		if ((instr32 & 0xFFE0001F) == 0xd4000001)
+ 			return true;
  
--	cs_etm__set_thread(etmq->etm, tidq, tid);
-+	cs_etm__set_thread(etmq, tidq, tid, el);
- 	return 0;
- }
- 
-@@ -1392,7 +1435,7 @@ static int cs_etm__synth_instruction_sample(struct cs_etm_queue *etmq,
- 	struct perf_sample sample = {.ip = 0,};
- 
- 	event->sample.header.type = PERF_RECORD_SAMPLE;
--	event->sample.header.misc = cs_etm__cpu_mode(etmq, addr);
-+	event->sample.header.misc = cs_etm__cpu_mode(etmq, addr, tidq->el);
- 	event->sample.header.size = sizeof(struct perf_event_header);
- 
- 	/* Set time field based on etm auxtrace config. */
-@@ -1451,7 +1494,7 @@ static int cs_etm__synth_branch_sample(struct cs_etm_queue *etmq,
- 	ip = cs_etm__last_executed_instr(tidq->prev_packet);
- 
- 	event->sample.header.type = PERF_RECORD_SAMPLE;
--	event->sample.header.misc = cs_etm__cpu_mode(etmq, ip);
-+	event->sample.header.misc = cs_etm__cpu_mode(etmq, ip, tidq->prev_el);
- 	event->sample.header.size = sizeof(struct perf_event_header);
- 
- 	/* Set time field based on etm auxtrace config. */
-diff --git a/tools/perf/util/cs-etm.h b/tools/perf/util/cs-etm.h
-index 2f47f4ec5b27..7cca37887917 100644
---- a/tools/perf/util/cs-etm.h
-+++ b/tools/perf/util/cs-etm.h
-@@ -251,10 +251,11 @@ enum cs_etm_pid_fmt {
- };
- 
- #ifdef HAVE_CSTRACE_SUPPORT
-+#include <opencsd/ocsd_if_types.h>
- int cs_etm__get_cpu(u8 trace_chan_id, int *cpu);
--enum pid_fmt cs_etm__get_pid_fmt(struct cs_etm_queue *etmq);
--int cs_etm__etmq_set_tid(struct cs_etm_queue *etmq,
--			 pid_t tid, u8 trace_chan_id);
-+enum cs_etm_pid_fmt cs_etm__get_pid_fmt(struct cs_etm_queue *etmq);
-+int cs_etm__etmq_set_tid_el(struct cs_etm_queue *etmq, pid_t tid,
-+			    u8 trace_chan_id, ocsd_ex_level el);
- bool cs_etm__etmq_is_timeless(struct cs_etm_queue *etmq);
- void cs_etm__etmq_set_traceid_queue_timestamp(struct cs_etm_queue *etmq,
- 					      u8 trace_chan_id);
 -- 
 2.34.1
 
