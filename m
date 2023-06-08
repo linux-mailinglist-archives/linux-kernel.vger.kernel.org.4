@@ -2,249 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FD0E727711
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 08:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33FC5727718
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 08:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234581AbjFHGKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 02:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49208 "EHLO
+        id S234356AbjFHGLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 02:11:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234156AbjFHGKq (ORCPT
+        with ESMTP id S233529AbjFHGLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 02:10:46 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4355A26AA
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 23:10:44 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686204642;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=L997pm3OZhsNoBTfFX2W/lctWbOsQWynn+RPco5OgpU=;
-        b=MGa3vCMTokL6CKkH9wvmJbz/uqjVPW+/NE9H5ZTV6JyvdoH1/KXwWnGdMGOFxoid3HIsN1
-        dSd3H2nMXLjvBy58xkjO7mhm45DBk1I2k2/AcUPbVr/kmGuCIjqN4Q3hwUar0k6h3DE5F/
-        O5LcFMphiqp8AR7fAC/CXbTAZRiuirmVtLLDU30slKulDO732zi/vHyuvYr+vEtbwqesEz
-        VAIJnv7zPP3cTDvJe8S1G0VgsHnO8BFMQa55JX2ObQkpzTVpF1VgHq23y46h+hu1nJs6Rg
-        niJZUOw/HQ8A2+C4kNDeW8iWUkA36ParRGKITkIbLdkVVXaxjdjMMqoBiSyOiQ==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 526B01C000F;
-        Thu,  8 Jun 2023 06:10:41 +0000 (UTC)
-Date:   Thu, 8 Jun 2023 08:10:40 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Cc:     Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        <linux-mtd@lists.infradead.org>,
+        Thu, 8 Jun 2023 02:11:52 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B997726AA;
+        Wed,  7 Jun 2023 23:11:46 -0700 (PDT)
+X-UUID: 566aa9d205c311ee9cb5633481061a41-20230608
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=1OFytwcSfT7HEMWZ//hdXR+9Ei5VduxsNxF9LbaYBOo=;
+        b=EVsH/fUshQCEfh1g2bFJ/pAT76PKkqC0OtdfGCgL0g1JGJD/n6vrJa40np64OEj747jPDqXIsU678tvxoUQ8vb21Sc7bYhylckvEGmhG+p878hduA9rBFgjJ6E2vD81YJfjhN+vFm2DXNH+j+MVsF1khtUkSR4faHvPEnyNWi2o=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.26,REQID:e2288b81-6030-4251-8b11-039f52ac1564,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:cb9a4e1,CLOUDID:14d6f43d-7aa7-41f3-a6bd-0433bee822f3,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 566aa9d205c311ee9cb5633481061a41-20230608
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
+        (envelope-from <yi-de.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 231024555; Thu, 08 Jun 2023 14:11:42 +0800
+Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 8 Jun 2023 14:11:40 +0800
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (172.21.101.237)
+ by mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Thu, 8 Jun 2023 14:11:40 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=B5kLEG02chaQxN0JNSV7li5uKIQRePujlaysC1qiHB6W3Gwavvy9h8z6VXMypA/sSV0YZzksiQ8itQ7/fgkKTumWcU4C8j9v5so89aIjDBtdZXi/BDRdnRnyG8b6y0ckXFv6Dz/UFmQpaatv5e/MvNL6growf9VhETPGSWA5b+BsnCaGrFaZfgT707u8ntnU24OTC6YbyeWXg4SwKrCrQoTw8qGGeXQGyJ7McltlT2UIWw6CYnLWWLFMlAv55AYlr8eFZB9iF3dpN1W2qpSpns6AeWLd2cBMCnjihYEwHUjreUgCfpO68r/9UJwse4uqlkRpLcxioSUStUA3336cQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1OFytwcSfT7HEMWZ//hdXR+9Ei5VduxsNxF9LbaYBOo=;
+ b=XlYDA53jO8hkwCS4pYtmrW9dQkVLdQxUixaqnLzP1/768XCku41+NCZJF3pSYHK3TXn3fc9hKumwF4FnEAZllO1qfrPX9X6Ra7OSXoZG+QLCe4k7TOOhQbPKO88D4d7pCH6VOqX+/frrrufjpHmtM/btkQ5DpnpKpw8EokCXI5YQKd2jC7ZKRDxs5rkcTNWx5lIrbPegYSKKGqpwfHRsX8DVy4EPoPXX4BTTqT8GqvorVmrJzoyuhbHpJ6wVMk8KNDptz47IpHiXFm78yhmoied52amvC4mvPXe3KG4ng8AuHiN7YX8U7Drtr62Qo6IAw/vOZ3A7te+7tOa1XsLkCA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
+ dkim=pass header.d=mediatek.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1OFytwcSfT7HEMWZ//hdXR+9Ei5VduxsNxF9LbaYBOo=;
+ b=bLQG7NQT60o0bDD9/20ovz/muxnFWEc37vv6O8nUzsi/kPoTSCjAx2W9n/O96RYP6MSUTpOpVqb1suzqTmwKsjDrglkTY2OL+RkeJgPqKLfpFXwFNHqJOWYdMoin1eKdoxrpTJ3fZKenm8dV2UKa7cNOAAQUtSVFE/KgVraViuY=
+Received: from SI2PR03MB6167.apcprd03.prod.outlook.com (2603:1096:4:14f::8) by
+ SI2PR03MB6461.apcprd03.prod.outlook.com (2603:1096:4:1a1::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6455.33; Thu, 8 Jun 2023 06:11:38 +0000
+Received: from SI2PR03MB6167.apcprd03.prod.outlook.com
+ ([fe80::18a:8f94:379c:982d]) by SI2PR03MB6167.apcprd03.prod.outlook.com
+ ([fe80::18a:8f94:379c:982d%6]) with mapi id 15.20.6455.030; Thu, 8 Jun 2023
+ 06:11:38 +0000
+From:   =?utf-8?B?WWktRGUgV3UgKOWQs+S4gOW+tyk=?= <Yi-De.Wu@mediatek.com>
+To:     "conor.dooley@microchip.com" <conor.dooley@microchip.com>
+CC:     "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        =?utf-8?B?TVkgQ2h1YW5nICjojormmI7ouo0p?= <MY.Chuang@mediatek.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "quic_tsoni@quicinc.com" <quic_tsoni@quicinc.com>,
+        =?utf-8?B?U2hhd24gSHNpYW8gKOiVreW/l+elpSk=?= 
+        <shawn.hsiao@mediatek.com>,
+        =?utf-8?B?TWlsZXMgQ2hlbiAo6Zmz5rCR5qi6KQ==?= 
+        <Miles.Chen@mediatek.com>,
+        =?utf-8?B?UGVpTHVuIFN1ZWkgKOmai+WfueWAqyk=?= 
+        <PeiLun.Suei@mediatek.com>,
+        =?utf-8?B?TGlqdS1jbHIgQ2hlbiAo6Zmz6bqX5aaCKQ==?= 
+        <Liju-clr.Chen@mediatek.com>,
+        =?utf-8?B?SmFkZXMgU2hpaCAo5pa95ZCR546oKQ==?= 
+        <jades.shih@mediatek.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>,
+        "yipei.chang@gmail.com" <yipei.chang@gmail.com>,
+        "dbrazdil@google.com" <dbrazdil@google.com>,
+        "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] mtd: rawnand: meson: check buffer length
-Message-ID: <20230608081040.78e74eb1@xps-13>
-In-Reply-To: <3a9470ed-d7ad-6cae-0d58-732399590272@sberdevices.ru>
-References: <20230606101644.3297859-1-AVKrasnov@sberdevices.ru>
-        <9adef6da-5930-dcaa-f148-e4a398d39f2d@sberdevices.ru>
-        <3a9470ed-d7ad-6cae-0d58-732399590272@sberdevices.ru>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        =?utf-8?B?WWluZ3NoaXVhbiBQYW4gKOa9mOepjui7kik=?= 
+        <Yingshiuan.Pan@mediatek.com>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        =?utf-8?B?WmUteXUgV2FuZyAo546L5r6k5a6HKQ==?= 
+        <Ze-yu.Wang@mediatek.com>, "will@kernel.org" <will@kernel.org>,
+        =?utf-8?B?SXZhbiBUc2VuZyAo5pu+5b+X6LuSKQ==?= 
+        <ivan.tseng@mediatek.com>
+Subject: Re: [PATCH v3 2/7] dt-bindings: hypervisor: Add MediaTek GenieZone
+ hypervisor
+Thread-Topic: [PATCH v3 2/7] dt-bindings: hypervisor: Add MediaTek GenieZone
+ hypervisor
+Thread-Index: AQHZhKhmUF0/38V75UeFrDKRhI8uD69Wex2AgCobuwA=
+Date:   Thu, 8 Jun 2023 06:11:38 +0000
+Message-ID: <076db7465b2efb29589a00f6346854260664b1f7.camel@mediatek.com>
+References: <20230512080405.12043-1-yi-de.wu@mediatek.com>
+         <20230512080405.12043-3-yi-de.wu@mediatek.com>
+         <20230512-kudos-stunt-489ee651bdd8@wendy>
+In-Reply-To: <20230512-kudos-stunt-489ee651bdd8@wendy>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=mediatek.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SI2PR03MB6167:EE_|SI2PR03MB6461:EE_
+x-ms-office365-filtering-correlation-id: 1322757b-c0d4-4fb9-fdc9-08db67e7386f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: +D7c2042meO6Fsj3QIg0MNkggpvSxCzRZInnlGtR18DJL1I4IxuBl6nXpQpK0nrIsOkcMtHg5R5z7S2k4f/8Q5DzwmUCrv9YFDh1zTdlpxPDIm1UEekEWqdNKAe16jNm+/RW/ckuqw+EsuhdX5QQpaokfOqZWX/jknLH1EEfDr5fQ1DEhLKNU6+CaVCtinWPFuvKrawjcQniOkK5EmoxyQPV1bJJLGqinWG3TvAamJrYLjC/wDIamqk+Vgg6/8JkxtK4h3If2YFNImx3r7HUD1m4NlSPxABFL3Kfq6OdiAib8qsWK7+8BBTfpbINJAb6uVSPN0m4o+oifExTKjAgWFMaoeRWD/cVkh4Yx5JgI+OabosBuCvHbqdQjXJzZGBort+eXbfq3HSvyu+0trlkEpS5KI8fFsx07DqoSOf4JC77L7u8pYQkybSyZ0LgSco0gnGLp+1a2Mrlx3cqDobmtqfhch9wWLE6afFNLL/6/3l0J92yaHkt/jRwbAO2alD/sEjAcvq+TOfhYFRFDmooWh0K3c+AlyWtYQU/E1+rkYxFapU1Cm64Mwkl0Hub1xqCtvI0H/S54L2JKR8asfhBMy25vDubwKOk3ttzUS3uuaSHMyfpee1ErAg/qB+ehvd5+srojDRpUXdm0iQGH+lcPMLjjm4lftylu+vHcpDkxss=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR03MB6167.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(39860400002)(396003)(366004)(136003)(451199021)(66476007)(76116006)(478600001)(66446008)(66946007)(4326008)(6916009)(316002)(2906002)(64756008)(8936002)(41300700001)(8676002)(54906003)(66556008)(91956017)(5660300002)(7416002)(6486002)(71200400001)(6512007)(6506007)(26005)(107886003)(38100700002)(2616005)(83380400001)(186003)(36756003)(85182001)(86362001)(38070700005)(122000001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?K2hTTW9xeVZqYVBvdGE4a2pmYW5BTmEzZU9TUDRmOFVjeXNoQXJvMzloUnhU?=
+ =?utf-8?B?K042eDI0MzlRbkRqb0lpbFF6NkY5ZEVzR25zblNvMzhmd0pKRmF6M09VVWhs?=
+ =?utf-8?B?MGxqN1ZkdlB3dzd0QzdlVU11VmJZZkNaM0dSTGRpZTFuQmMrYW1GMTU1M05x?=
+ =?utf-8?B?TWkwRWlpazNpQ05VR0RKait3Y0V0NnVjaWNBckdtcWMyR05aZnBtY05lSE03?=
+ =?utf-8?B?MWNxNENEVXBVZDJ1eFMvUHN4TDNhYWhhUzdNNlBzSHdjTTczS05hM0JtMmtT?=
+ =?utf-8?B?WGptOXlSKzlwVmZFdldwS0hSNUgvRFhDSjBLMFVqTW5sSkVTTWFSNHYxODM4?=
+ =?utf-8?B?QlVpN0JlL1BDaG5zKzFyc3ZhT2c1U1kvMlp4d2NQenRFR2JDYVVPSnRROHpy?=
+ =?utf-8?B?SHd3bmppM2RudVgrOEMxeVpiYVJzY0dHSllsL0Q5L01pa1dHNXlMSVBtVFM4?=
+ =?utf-8?B?NnFKemJWZkY0WUoxQ3psMlBvcFF5NXZXQjNlczc3RG9RNURhSlJuTk5Dc2cz?=
+ =?utf-8?B?MXkyRUs0VzArVXVFbzNQU3RodGtWdnhNbDJKa0JNVnJtL3RKa0xFL0Jpa3h2?=
+ =?utf-8?B?QlkraGxTUVphcEh2eXVjUENpOW1sNCs4YUZ2QmJqclJQM1dlQjhFc2lMVnBo?=
+ =?utf-8?B?b0xQdnllVUdHa0t6Wk1EZ2xHSlZESXF5VmY0dGhwdUpxeXVkUWNxL2lDKzFm?=
+ =?utf-8?B?NVJDODhYTGQxSGdhWFh3WDlNTHpUK1pGMWlCQWpRc0E0NGdrc3draHl1REFl?=
+ =?utf-8?B?WFI5OUZuRnY5UmFublN1em5xakliSUtCRGNHZzlQTmFUZnZiZTdiZXM3MHZh?=
+ =?utf-8?B?NVpnNjRhS2txdUpydGdkQnczK2d0Z1J4V3RiSEZGQUlnTFAwK1ViZy9DcGoy?=
+ =?utf-8?B?bmhFZm9DK0JQMGc0dnJGUElvRnA5ZFZPRExQRXUzNGlVaHBZbGVZMFNxWnVi?=
+ =?utf-8?B?U1UxMEQ4VlYvaDgzalRrZTUwelFYRWVPS0ZhRWkyZDF0V245QjEvV09KRHFU?=
+ =?utf-8?B?dVRIY3c2S1hBN0syVkg2dGNTVGlRNE9aQm9UMjZra0NqWE1XSDd6YWJqUDhi?=
+ =?utf-8?B?bmVWcXBNMjN3N3huVDNMakViK3JaeHg1VkpXTjZod29odms5S0JmbHlXUkFr?=
+ =?utf-8?B?dzU0SVRiRUw5TVF2cWJqcFg1N0wzVjBhOTBnN1A3dm53R01uZkJ2TTU0cGpl?=
+ =?utf-8?B?VFFXZjlZY282Z2dSQ0UvSWdocVFVaHRJU2FBNjhHelpOV1R6L0RCcW43Y0Za?=
+ =?utf-8?B?YW5hTEJLVXBOM2FFQU5yM2VUUmlLUU90b0YvbUZFQ25IMm1aaU9KR2MyMGlv?=
+ =?utf-8?B?SXNvM2JaSzVlN2M0SXVlUmRScWp5V0VZQzR1YVVmdnI1SFdSZ0ZodVlTM2ky?=
+ =?utf-8?B?bXRRZXpZdSttcmN0cFRpWDA1V2NiMjlnOWMxNEN0T0dJVXFlZEVWZ1Q1RGcw?=
+ =?utf-8?B?UWxZRnl3V3dkaEVvUGZxVi83a3kxTzFiS2ticDlnQzVvWXU0dDlYK0JLVGc4?=
+ =?utf-8?B?cjdGbjhpdHJpVXFkQlc4YlhXOFRVYU0vSXJCK1h5SzdNRTB4WGIvNjVWbmpH?=
+ =?utf-8?B?SUh0VFVIZ0FwajZ0OXkvcGEveWw4TmlLcm0yMXdLekNwR0R6cTBkcG1ORDdF?=
+ =?utf-8?B?VGl3RVpYZHhwMGpPTGZWbCtLSTB0M1RuYnc5RDhJUytIeElhTmgrckZFWmly?=
+ =?utf-8?B?dXBmUEpzVW1ESmNSUXhGYnZsa2s4VmlVNThDNnE5UTFyaEU5b3N6UHd4NTFi?=
+ =?utf-8?B?NjRzSmJLRW1OUjd2SjVDZENWM01IM3U0azZMQlU2QWkrelFaOCt5QWtON3ZJ?=
+ =?utf-8?B?SXdFMXRMbitTS2UrZGEzQ2RQWDJqa0lZR2g2eFlXVUc5ZTZnVTM1UTI0SU5D?=
+ =?utf-8?B?djN6UENJVEtVTks3azM0akwwd05xN3ZkR1RvNUdFNHdmNElITmFPYUdkcHJY?=
+ =?utf-8?B?VnNSSERpQzYzY2FSanQxSHRwODk5MG1TaFpCUEQ3Sk5sNUVtWXN6U2JkMXZi?=
+ =?utf-8?B?cnR2NmJoaEUxalVmWXlnUWhjbmtTdXRhTXFGeTlaQTlCZ2xIbGJ3ZXNWa2s4?=
+ =?utf-8?B?ZWp2V2M2QWJFakNNZlhwc0NLK3JWbWpCYlNQTGxNV05Rd0hnUnBuR3M4ZzNK?=
+ =?utf-8?B?QlhiUmJPRTc5R0ZUeVhYN0ZYdjdoK2ozMmhudVRxN1g3UTl1RFlCcnlqb1gz?=
+ =?utf-8?B?NlE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <3DE40CB27277BD45B456001CF11DC835@apcprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SI2PR03MB6167.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1322757b-c0d4-4fb9-fdc9-08db67e7386f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jun 2023 06:11:38.4651
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: B4UWEgrglb43T2N+UH5uS+KJLA121gG1kAqYFGTx3G3F6fFU4JtIpmNtRDP8m92p85NdimSmhUIMf2zPbTEY3g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR03MB6461
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arseniy,
-
-avkrasnov@sberdevices.ru wrote on Thu, 8 Jun 2023 00:17:35 +0300:
-
-> Hi again Miquel, Liang!
->=20
-> What do You think about this patch?
-
-I really appreciate all the effort you are putting into this but
-please consider giving me a little bit of air as well, I'm already
-spending a lot of time reviewing all your patches. Please mind a ping
-is not relevant before a couple of weeks in general.
-
-In this case I had it in my "to apply" list but actually looking at it
-again I have a minor comment below.
-
->=20
-> Thanks, Arseniy
->=20
-> On 06.06.2023 19:29, Arseniy Krasnov wrote:
-> > Sorry, here is changelog:
-> > v1 -> v2:
-> > * Move checks from 'switch/case' which executes commands in 'meson_nfc_=
-exec_op()' to a special
-> >   separated function 'meson_nfc_check_op()' which is called before comm=
-ands processing.
-> >=20
-> > On 06.06.2023 13:16, Arseniy Krasnov wrote: =20
-> >> Meson NAND controller has limited buffer length, so check it before
-> >> command execution to avoid length trim. Also check MTD write size on
-> >> chip attach.
-> >>
-> >> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-> >> ---
-> >>  drivers/mtd/nand/raw/meson_nand.c | 47 +++++++++++++++++++++++++++----
-> >>  1 file changed, 42 insertions(+), 5 deletions(-)
-> >>
-> >> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/=
-meson_nand.c
-> >> index 23a73268421b..db6b18753071 100644
-> >> --- a/drivers/mtd/nand/raw/meson_nand.c
-> >> +++ b/drivers/mtd/nand/raw/meson_nand.c
-> >> @@ -111,6 +111,8 @@
-> >> =20
-> >>  #define PER_INFO_BYTE		8
-> >> =20
-> >> +#define NFC_CMD_RAW_LEN	GENMASK(13, 0)
-> >> +
-> >>  struct meson_nfc_nand_chip {
-> >>  	struct list_head node;
-> >>  	struct nand_chip nand;
-> >> @@ -284,7 +286,7 @@ static void meson_nfc_cmd_access(struct nand_chip =
-*nand, int raw, bool dir,
-> >> =20
-> >>  	if (raw) {
-> >>  		len =3D mtd->writesize + mtd->oobsize;
-> >> -		cmd =3D (len & GENMASK(13, 0)) | scrambler | DMA_DIR(dir);
-> >> +		cmd =3D len | scrambler | DMA_DIR(dir);
-> >>  		writel(cmd, nfc->reg_base + NFC_REG_CMD);
-> >>  		return;
-> >>  	}
-> >> @@ -573,7 +575,7 @@ static int meson_nfc_read_buf(struct nand_chip *na=
-nd, u8 *buf, int len)
-> >>  	if (ret)
-> >>  		goto out;
-> >> =20
-> >> -	cmd =3D NFC_CMD_N2M | (len & GENMASK(13, 0));
-> >> +	cmd =3D NFC_CMD_N2M | len;
-> >>  	writel(cmd, nfc->reg_base + NFC_REG_CMD);
-> >> =20
-> >>  	meson_nfc_drain_cmd(nfc);
-> >> @@ -597,7 +599,7 @@ static int meson_nfc_write_buf(struct nand_chip *n=
-and, u8 *buf, int len)
-> >>  	if (ret)
-> >>  		return ret;
-> >> =20
-> >> -	cmd =3D NFC_CMD_M2N | (len & GENMASK(13, 0));
-> >> +	cmd =3D NFC_CMD_M2N | len;
-> >>  	writel(cmd, nfc->reg_base + NFC_REG_CMD);
-> >> =20
-> >>  	meson_nfc_drain_cmd(nfc);
-> >> @@ -1007,6 +1009,31 @@ meson_nand_op_put_dma_safe_output_buf(const str=
-uct nand_op_instr *instr,
-> >>  		kfree(buf);
-> >>  }
-> >> =20
-> >> +static int meson_nfc_check_op(struct nand_chip *chip,
-> >> +			      const struct nand_operation *op)
-> >> +{
-> >> +	int op_id;
-> >> +
-> >> +	for (op_id =3D 0; op_id < op->ninstrs; op_id++) {
-> >> +		const struct nand_op_instr *instr;
-> >> +
-> >> +		instr =3D &op->instrs[op_id];
-> >> +
-> >> +		switch (instr->type) {
-> >> +		case NAND_OP_DATA_IN_INSTR:
-> >> +		case NAND_OP_DATA_OUT_INSTR:
-> >> +			if (instr->ctx.data.len > NFC_CMD_RAW_LEN)
-> >> +				return -ENOTSUPP;
-> >> +
-> >> +			break;
-> >> +		default:
-> >> +			break;
-> >> +		}
-> >> +	}
-> >> +
-> >> +	return 0;
-> >> +}
-> >> +
-> >>  static int meson_nfc_exec_op(struct nand_chip *nand,
-> >>  			     const struct nand_operation *op, bool check_only)
-> >>  {
-> >> @@ -1015,10 +1042,12 @@ static int meson_nfc_exec_op(struct nand_chip =
-*nand,
-> >>  	const struct nand_op_instr *instr =3D NULL;
-> >>  	void *buf;
-> >>  	u32 op_id, delay_idle, cmd;
-> >> +	int err;
-> >>  	int i;
-> >> =20
-> >> -	if (check_only)
-> >> -		return 0;
-> >> +	err =3D meson_nfc_check_op(nand, op);
-> >> +	if (err || check_only)
-> >> +		return err;
-
-For the sake of readability it is really important that we keep using
-standard constructions, so don't mix orthogonal checks and please use
-something like:
-
-	err =3D check();
-	if (err)
-		return err;
-
-	if (check_only)
-		return 0;
-
-> >> =20
-> >>  	meson_nfc_select_chip(nand, op->cs);
-> >>  	for (op_id =3D 0; op_id < op->ninstrs; op_id++) {
-> >> @@ -1293,6 +1322,7 @@ static int meson_nand_attach_chip(struct nand_ch=
-ip *nand)
-> >>  	struct meson_nfc_nand_chip *meson_chip =3D to_meson_nand(nand);
-> >>  	struct mtd_info *mtd =3D nand_to_mtd(nand);
-> >>  	int nsectors =3D mtd->writesize / 1024;
-> >> +	int raw_writesize;
-> >>  	int ret;
-> >> =20
-> >>  	if (!mtd->name) {
-> >> @@ -1304,6 +1334,13 @@ static int meson_nand_attach_chip(struct nand_c=
-hip *nand)
-> >>  			return -ENOMEM;
-> >>  	}
-> >> =20
-> >> +	raw_writesize =3D mtd->writesize + mtd->oobsize;
-> >> +	if (raw_writesize > NFC_CMD_RAW_LEN) {
-> >> +		dev_err(nfc->dev, "too big write size in raw mode: %d > %ld\n",
-> >> +			raw_writesize, NFC_CMD_RAW_LEN);
-> >> +		return -EINVAL;
-> >> +	}
-> >> +
-> >>  	if (nand->bbt_options & NAND_BBT_USE_FLASH)
-> >>  		nand->bbt_options |=3D NAND_BBT_NO_OOB;
-> >>   =20
-
-
-Thanks,
-Miqu=C3=A8l
+T24gRnJpLCAyMDIzLTA1LTEyIGF0IDEyOjA5ICswMTAwLCBDb25vciBEb29sZXkgd3JvdGU6DQo+
+IE9uIEZyaSwgTWF5IDEyLCAyMDIzIGF0IDA0OjA0OjAwUE0gKzA4MDAsIFlpLURlIFd1IHdyb3Rl
+Og0KPiA+IEZyb206ICJZaW5nc2hpdWFuIFBhbiIgPHlpbmdzaGl1YW4ucGFuQG1lZGlhdGVrLmNv
+bT4NCj4gPiANCj4gPiBBZGQgZG9jdW1lbnRhdGlvbiBmb3IgR2VuaWVab25lKGd6dm0pIG5vZGUu
+IFRoaXMgbm9kZSBpbmZvcm1zIGd6dm0NCj4gPiBkcml2ZXIgdG8gc3RhcnQgcHJvYmluZyBpZiBn
+ZW5pZXpvbmUgaHlwZXJ2aXNvciBpcyBhdmFpbGFibGUgYW5kDQo+ID4gYWJsZSB0byBkbyB2aXJ0
+dWFsIG1hY2hpbmUgb3BlcmF0aW9ucy4NCj4gDQo+IFByb3BhZ2F0ZWQgZnJvbSB2MjoNCj4gPiA+
+IFdoeSBjYW4ndCB0aGUgZHJpdmVyIGp1c3QgdHJ5IGFuZCBkbyB2aXJ0dWFsIG1hY2hpbmUgb3Bl
+cmF0aW9ucw0KPiA+ID4gdG8NCj4gPiA+IHNlZQ0KPiA+ID4gaWYgdGhlIGh5cGVydmlzb3IgaXMg
+dGhlcmU/IElPVywgbWFrZSB5b3VyIHNvZnR3YXJlIGludGVyZmFjZXMNCj4gPiA+IGRpc2NvdmVy
+YWJsZS4gRFQgaXMgZm9yIG5vbi1kaXNjb3ZlcmFibGUgaGFyZHdhcmUuDQo+ID4gDQo+ID4gQ2Fu
+IGRvLCBvdXIgaHlwZXJ2aXNvciBpcyBkaXNjb3ZlcmFibGUgdGhyb3VnaCBpbnZva2luZyBwcm9i
+aW5nDQo+ID4gaHlwZXJjYWxsLCBhbmQgd2UgdXNlIHRoZSBkZXZpY2UgdHJlZSB0byBwcmV2ZW50
+IHVubmVjZXNzYXJ5IG1vZHVsZQ0KPiA+IGxvYWRpbmcgb24gYWxsIHN5c3RlbXMuDQo+IA0KPiBS
+b2IgaXMgb3V0IG9mIG9mZmljZSBhdCB0aGUgbW9tZW50LCBidXQgdGhhdCBhcHBlYXJzIHRvIGJl
+IGEgcmVxdWVzdA0KPiB0bw0KPiBkcm9wIHRoZSB1c2Ugb2YgZGV2aWNldHJlZSBlbnRpcmVseS4g
+TWFpbmx5IHJlLXBvc3Rpbmcgc28gdGhhdCB0aGF0DQo+IGNvbnZlcnNhdGlvbiBhcHBlYXJzIG9u
+IHRoZSBsYXRlc3QgdmVyc2lvbiBvZiB0aGUgcGF0Y2hzZXQsIGdpdmVuIHlvdQ0KPiBvbmx5IHJl
+cGxpZWQgdG8gUm9iIHRvZGF5Lg0KPiANCj4gVGhhbmtzLA0KPiBDb25vci4NCg0KV2Ugd2lsbCBy
+ZW1vdmUgb3VyIGR0IGhlcmUgYW5kIHVzZSB0aGUgZGlzY292ZXJhYmxlIHdheSB0byBpbml0aWFs
+aXplDQpvdXIgZGV2aWNlcy4gVjQgcGF0Y2hlcyB3aGljaCBjb250YWluIHRoZSBjaGFuZ2VzIG1l
+bnRpb25lZCB3b3VsZCBiZQ0Kc3VibWl0dGVkIHNvb24gaW4gcmVjZW50IGRheXMuDQo=
