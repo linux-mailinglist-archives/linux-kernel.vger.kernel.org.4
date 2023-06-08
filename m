@@ -2,82 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B56FB727883
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:16:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A1BE727878
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:15:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234540AbjFHHQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 03:16:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52828 "EHLO
+        id S234366AbjFHHPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 03:15:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235056AbjFHHQB (ORCPT
+        with ESMTP id S233900AbjFHHPK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 03:16:01 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8266E273D;
-        Thu,  8 Jun 2023 00:15:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686208550; x=1717744550;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BL2likjgo0S+4XGmHIfpSStordjpYuBQnIcuC2vgFgY=;
-  b=W8VaGqQ/fn4iIv8/1d+0++WIeP9O1EfBGcIXyeABs+ByMqqTRjTHj1kM
-   EtbB8F25AZDNSl1eEm3Bzr4CaRmQy9P5cXtF03n/yvQ2C7rblQ9h9i6Is
-   t4fHDvH9Fm3ksHbeMyXtfsRUhWiEOSvozCGYf2ik/sViwQi70hugaNGEQ
-   PWGvMi/aRrltz1zOjrKRAPlWeWpJapzCrOsmSNqu5Gf7gdpRkT7PtGYts
-   AEaeTJK0AOsMQDbvVt/BWVKN+6H2BjLh/b/SMved/L3Tc+t58Uw4Qk6xE
-   A4GTxOQ1Uyik9AuCVa8xd6thCTzRnEE1xQMsPeK4hHhFdUmb3f9vjr31j
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="360567822"
-X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="scan'208";a="360567822"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 00:15:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="799711386"
-X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="scan'208";a="799711386"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 Jun 2023 00:15:43 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q79rz-0007Vr-04;
-        Thu, 08 Jun 2023 07:15:43 +0000
-Date:   Thu, 8 Jun 2023 15:14:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Douglas Anderson <dianders@chromium.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Douglas Anderson <dianders@chromium.org>,
-        devicetree@vger.kernel.org, cros-qcom-dts-watchers@chromium.org,
-        linux-arm-msm@vger.kernel.org,
-        yangcong5@huaqin.corp-partner.google.com,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Chris Morgan <macroalpha82@gmail.com>,
-        linux-input@vger.kernel.org, hsinyi@google.com
-Subject: Re: [PATCH v2 08/10] HID: i2c-hid: Support being a panel follower
-Message-ID: <202306081419.Dzz0T4iW-lkp@intel.com>
-References: <20230607144931.v2.8.Ib1a98309c455cd7e26b931c69993d4fba33bbe15@changeid>
+        Thu, 8 Jun 2023 03:15:10 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0246B1BEA
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 00:15:08 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9786c67ec32so56426266b.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 00:15:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686208506; x=1688800506;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1sd05CLDYUSvBW3GOCX6CLVAicdJRZHkCzuK6EVK+t4=;
+        b=rsu5m2iEH34QOsXVOnjWvmLBFdKyQWc7ps8rhXGL7otj6DyrQPgK6OqmEZyPSctaPr
+         9jz74ROAyIx4pNRpN+76HajlmxElGqb+N6JREhMttjIChF+7qmtL3Mbw0FEkuITN7sGf
+         Oz67H/s8Y5j5QPgQOsKUnveC1jBjjiozx1WPjhZ7qd5D4Y6L1PXYiH0zjZvnnlWvNcPd
+         71ll6RrJfzBFk3PrbXfV56kR1S0i3xiqJ7NSRp6RqiGNNC+O/i5qqsGu0CHoSKP0Pu2/
+         da4ZpHaKdWU48GBKpvWcv3CeUBrauB+MsiW+2dCt7lAmmodb4iAMVf0rxpcf/QqPlYPi
+         I8GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686208506; x=1688800506;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1sd05CLDYUSvBW3GOCX6CLVAicdJRZHkCzuK6EVK+t4=;
+        b=KecoUFXnh3LTC4dH3+cPmEQJaEDFQ245G6qtayHT0uDDLcdESvekkmg2arMkbXhz4v
+         cNYCJpV10K+VoYYzDmTUkcJrUnMJCTPeXyIwcfkYydccYEfvXUeprOo82aucgEO6Rr/2
+         akY7irh0fj9aMDDo+YmC7AbcTXyLfxhxQ8bQEiUpny310Pqa3G157jKuPRkvsoOi82Ow
+         O8VEFf2Euu5JnkZOAXXHdofC6QTM0h0STh2Fax7p9jkDkXBi7b7MD4Hp6DIm5K2Kk4B5
+         63jIUL5q9aB83RyPoMtHyv92Q+emT06lx8s3xrK1qT8O0a6ZPuoBw3AA2dD8lhhaQ/i0
+         3q7g==
+X-Gm-Message-State: AC+VfDwHzg5Q+O+ddPCaZ7OGEMvX9vhpJF6xkHVtmMCy0zXlflz2Xvqo
+        xf4VCPI5iKShtoYmBVhjHdM54bPIunck0ThQ0As=
+X-Google-Smtp-Source: ACHHUZ6o28Ei4sxl7rCD1F+9lYLgiWHAPjBPWLZKnkrR4M1vnXe8LnSs39VAtYvmcENHIY8C+m+XnA==
+X-Received: by 2002:a17:907:7da4:b0:974:1c98:d38e with SMTP id oz36-20020a1709077da400b009741c98d38emr8670170ejc.2.1686208506478;
+        Thu, 08 Jun 2023 00:15:06 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id p10-20020a170906604a00b009545230e682sm305674ejj.91.2023.06.08.00.15.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jun 2023 00:15:06 -0700 (PDT)
+Message-ID: <f2e17e0e-9c2e-3693-54fa-de3ba5eac846@linaro.org>
+Date:   Thu, 8 Jun 2023 09:15:04 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230607144931.v2.8.Ib1a98309c455cd7e26b931c69993d4fba33bbe15@changeid>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v3 2/5] phy: realtek: usb: Add driver for the Realtek SoC
+ USB 2.0 PHY
+Content-Language: en-US
+To:     =?UTF-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Ray Chi <raychi@google.com>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+References: <20230607062500.24669-1-stanley_chang@realtek.com>
+ <20230607062500.24669-2-stanley_chang@realtek.com>
+ <79201bd6-6048-7013-aeb7-34d218139844@linaro.org>
+ <8cb2d82c3b484262aa866c5e989fc8cd@realtek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <8cb2d82c3b484262aa866c5e989fc8cd@realtek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,50 +95,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Douglas,
+On 08/06/2023 08:59, Stanley Chang[昌育德] wrote:
+> Hi Krzysztof,
+> 
+> 
+>> I commented on your second patch, but everything is applicable here as well.
+>> You have many useless debug messages. Many incorrect or useless
+>> "if() return" which point to broken driver design (e.g. concurrent access to half
+>> initialized structures where you substitute lack of synchronization with
+>> incorrect "if() return"). Undocumented user interface is one more big trouble.
+>>
+>> I doubt you run checkpatch on this (be sure to run it with --strict and fix almost
+>> everything).
+>>
+>>
+> 1. I use checkpatch but without --strict. I will add it add and check again.
 
-kernel test robot noticed the following build errors:
+Around 300 issues pointed out...
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on hid/for-next dtor-input/next dtor-input/for-linus drm-misc/drm-misc-next linus/master v6.4-rc5 next-20230607]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 2. Do the debugfs interfaces need to provide a document?
+> I don't find any reference about this.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Douglas-Anderson/dt-bindings-HID-i2c-hid-Add-panel-property-to-i2c-hid-backed-touchscreens/20230608-055515
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230607144931.v2.8.Ib1a98309c455cd7e26b931c69993d4fba33bbe15%40changeid
-patch subject: [PATCH v2 08/10] HID: i2c-hid: Support being a panel follower
-config: i386-randconfig-i003-20230607 (https://download.01.org/0day-ci/archive/20230608/202306081419.Dzz0T4iW-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add robh https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git
-        git fetch robh for-next
-        git checkout robh/for-next
-        b4 shazam https://lore.kernel.org/r/20230607144931.v2.8.Ib1a98309c455cd7e26b931c69993d4fba33bbe15@changeid
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Not sure if we have it in docs, but it is discussed every now and then...
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306081419.Dzz0T4iW-lkp@intel.com/
+https://lore.kernel.org/all/CAMuHMdUaugQ5+Zhmg=oe=X2wvhazMiT=K-su0EJYKzD4Hdyn3Q@mail.gmail.com/
+https://lore.kernel.org/all/2023060209-scouts-affection-f54d@gregkh/
 
-All errors (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: drm_panel_add_follower
-   >>> referenced by i2c-hid-core.c:1159 (drivers/hid/i2c-hid/i2c-hid-core.c:1159)
-   >>>               drivers/hid/i2c-hid/i2c-hid-core.o:(i2c_hid_core_probe) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: drm_panel_remove_follower
-   >>> referenced by i2c-hid-core.c:1218 (drivers/hid/i2c-hid/i2c-hid-core.c:1218)
-   >>>               drivers/hid/i2c-hid/i2c-hid-core.o:(i2c_hid_core_remove) in archive vmlinux.a
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best regards,
+Krzysztof
+
