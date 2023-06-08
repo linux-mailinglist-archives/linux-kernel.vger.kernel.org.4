@@ -2,141 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC9C072852F
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:37:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED99472852B
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235854AbjFHQh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 12:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45640 "EHLO
+        id S233913AbjFHQgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 12:36:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232508AbjFHQhT (ORCPT
+        with ESMTP id S235893AbjFHQgh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 12:37:19 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B4C2D59
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 09:36:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686242212; x=1717778212;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=veQhTchAfnha6TSGQ8oHaXlBvjwa/QQKR6qpNgtP/Jw=;
-  b=BCNi7B6yF10ZOcxn70th0DSndRLLpIOI8PXS/3f145be5fM3mwvYIgQC
-   Udsd9A0P32CjaXIbwd5RlUr8dDphV/aeLjeDvlKy1nqOxagBzt8uMWkQw
-   H6NXK/IG897pGpp/6FBrjFzbtRUaTB/j5250ejL1bfLPIS03VBiMy/Iez
-   9fULQzU3yQ0p6f1xbOOtKxyLrjLUEcWmUDkQIv2Rl4rRfjkE711zTHq6c
-   lpWO9LSt+i55vo3SCq9ICOWEIGzfHF62PM2Ac6rGFTNm5o3kyebI7dmvn
-   87TN4CKyyc72XfF/fWZOt8auIwvfwF0JYH6PyDHHn8+7KXkCdkWhiztxV
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="420939766"
-X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
-   d="scan'208";a="420939766"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 09:35:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="660456380"
-X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
-   d="scan'208";a="660456380"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 08 Jun 2023 09:35:28 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q7Ibf-000832-2p;
-        Thu, 08 Jun 2023 16:35:27 +0000
-Date:   Fri, 9 Jun 2023 00:34:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hannes Reinecke <hare@suse.de>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: drivers/ata/libata-eh.c:2411:6: warning: stack frame size (2288)
- exceeds limit (2048) in 'ata_eh_report'
-Message-ID: <202306090021.YucfHGtk-lkp@intel.com>
+        Thu, 8 Jun 2023 12:36:37 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D30A2
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 09:36:05 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-543ae674f37so433173a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 09:36:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686242140; x=1688834140;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=/aL6Mm02RP068H18Hmx+R64BHyyt5ervIsVqvJjdt9Q=;
+        b=JdAw6Mq860YRQRBQswOEjzf4ISFKIXDDTQ9l5+MNDNoF1EZ0S1jAnlfVQnp3wSTKLf
+         kIrgXpITkuDawG2u8CMycorgDxUFVpWL5x1rcK5SeXYILykhJu1cXysOOYEBWsf1+54K
+         32y2qYyO5wU2TOJDEUoYhqc8bbZJM5oNqSKnGWCnfcxnHH8u/7B6Lo1a36cGs7EA/G5B
+         3OkmjlYhcoeo4hKxgvF2KxE7/KIW/UK3Zmbd6bpnWLGT6nnhkm2JrYf3WTfykpUuO6Em
+         Vyn0hKWWcGz0IA4xb7O2uCHk7PWP//aDpb9qwosyCGupjN0eqeIhjN3y6D7jQR6D7iwe
+         JtTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686242140; x=1688834140;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/aL6Mm02RP068H18Hmx+R64BHyyt5ervIsVqvJjdt9Q=;
+        b=OOiSWnndUB5PEpDcTYA/2vxgRv11E3ZnjBWzoMvSDAZFQa1ypJNsHf7CqCNW04RIfG
+         xG1cf8/jzvfADQeXCNm9BWYhbxGTXIzkF5vG1J3AScpv41vTF0+jXqwKCwr+BjAfOUPd
+         /Jh0k8Ml+LuCQvlE8WLu/bf58oGxh5ETgcj9az+CSXwazLv2QSgwh7yNRkXqhI2Yaljl
+         gRO6Dqq2hgtvoblkLJ7nnA8PYhVCGr5sFb8UeJwrqO8nx56i6dgdPOmeTU0TQg5ajkXT
+         6Pp+3vuhxryVdnXmFAqpKJk/YeJgELSOoefX2bGV0oMU2WSxaizWdfs40wjnCSl/SDq8
+         +YaA==
+X-Gm-Message-State: AC+VfDyOkM6OMQSl6H0OtH1jtwZuWx16eTVScdGXMSuJ0+R8qDk0mKPt
+        vUsqnv4JjibJyJVrSrF7DoFf
+X-Google-Smtp-Source: ACHHUZ41Md8JiH2gX2B8B2vO1CwrgtpmT9DH0nhknBHBFZk41hPsvipEwYYD0QPAAbP64J2nbjYOZQ==
+X-Received: by 2002:a17:902:e54b:b0:1a9:9ace:3e74 with SMTP id n11-20020a170902e54b00b001a99ace3e74mr5073873plf.65.1686242140125;
+        Thu, 08 Jun 2023 09:35:40 -0700 (PDT)
+Received: from thinkpad ([117.202.186.138])
+        by smtp.gmail.com with ESMTPSA id z11-20020a1709027e8b00b001b0295de9acsm1656054pla.179.2023.06.08.09.35.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 09:35:39 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 22:05:29 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     lpieralisi@kernel.org, kw@linux.com, kishon@kernel.org,
+        bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dlemoal@kernel.org, Yang Li <yang.lee@linux.alibaba.com>
+Subject: Re: [PATCH v6 8/9] PCI: endpoint: Add PCI Endpoint function driver
+ for MHI bus
+Message-ID: <20230608163529.GD8632@thinkpad>
+References: <20230607204923.GA1174664@bhelgaas>
+ <20230607211941.GA1176583@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230607211941.GA1176583@bhelgaas>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hannes,
+On Wed, Jun 07, 2023 at 04:19:41PM -0500, Bjorn Helgaas wrote:
+> [+cc Yang Li, sorry I didn't notice your patch earlier:
+> https://lore.kernel.org/r/20230607093514.104012-1-yang.lee@linux.alibaba.com]
+> 
+> I think we can squash this into the original commit since it hasn't
+> gone upstream yet.  Also note that removing the dev_err() apparently
+> makes "dev" unused, so we'd have to remove that as well, based on this
+> report [2].
+> 
+> [2] https://lore.kernel.org/r/202306080418.i64hTj5T-lkp@intel.com
+> 
+> On Wed, Jun 07, 2023 at 03:49:25PM -0500, Bjorn Helgaas wrote:
+> > On Fri, Jun 02, 2023 at 05:17:55PM +0530, Manivannan Sadhasivam wrote:
+> > > Add PCI Endpoint driver for the Qualcomm MHI (Modem Host Interface) bus.
+> > > The driver implements the MHI function over PCI in the endpoint device
+> > > such as SDX55 modem. The MHI endpoint function driver acts as a
+> > > controller driver for the MHI Endpoint stack and carries out all PCI
+> > > related activities like mapping the host memory using iATU, triggering
+> > > MSIs etc...
+> > > ...
+> > 
+> > > +static int pci_epf_mhi_bind(struct pci_epf *epf)
+> > > +{
+> > > ...
+> > 
+> > > +	ret = platform_get_irq_byname(pdev, "doorbell");
+> > > +	if (ret < 0) {
+> > > +		dev_err(dev, "Failed to get Doorbell IRQ\n");
+> > 
+> > This dev_err() causes this new warning from the 0-day robot [1]:
+> > 
+> >   drivers/pci/endpoint/functions/pci-epf-mhi.c:362:2-9: line 362 is redundant because platform_get_irq() already prints an error
+> > 
+> > Maybe we could drop it?
+> > 
 
-First bad commit (maybe != root cause):
+Right. I think Lorenzo can handle both while squashing.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   5f63595ebd82f56a2dd36ca013dd7f5ff2e2416a
-commit: 742bef476ca5352b16063161fb73a56629a6d995 ata: libata: move ata_{port,link,dev}_dbg to standard pr_XXX() macros
-date:   1 year, 5 months ago
-config: riscv-randconfig-r012-20230608 (https://download.01.org/0day-ci/archive/20230609/202306090021.YucfHGtk-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=742bef476ca5352b16063161fb73a56629a6d995
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 742bef476ca5352b16063161fb73a56629a6d995
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/ata/ drivers/gpu/drm/ drivers/hid/ drivers/media/tuners/ lib/
+- Mani
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306090021.YucfHGtk-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/ata/libata-eh.c:2411:6: warning: stack frame size (2288) exceeds limit (2048) in 'ata_eh_report' [-Wframe-larger-than]
-   void ata_eh_report(struct ata_port *ap)
-        ^
-   drivers/ata/libata-eh.c:3550:5: warning: stack frame size (4320) exceeds limit (2048) in 'ata_eh_recover' [-Wframe-larger-than]
-   int ata_eh_recover(struct ata_port *ap, ata_prereset_fn_t prereset,
-       ^
-   2 warnings generated.
---
->> drivers/ata/libata-pmp.c:915:12: warning: stack frame size (3296) exceeds limit (2048) in 'sata_pmp_eh_recover' [-Wframe-larger-than]
-   static int sata_pmp_eh_recover(struct ata_port *ap)
-              ^
-   1 warning generated.
-
-
-vim +/ata_eh_report +2411 drivers/ata/libata-eh.c
-
-022bdb075b9e1f drivers/scsi/libata-eh.c Tejun Heo 2006-05-15  2401  
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2402  /**
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2403   *	ata_eh_report - report error handling to user
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2404   *	@ap: ATA port to report EH about
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2405   *
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2406   *	Report EH to user.
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2407   *
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2408   *	LOCKING:
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2409   *	None.
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2410   */
-fb7fd61454c868 drivers/ata/libata-eh.c  Tejun Heo 2007-09-23 @2411  void ata_eh_report(struct ata_port *ap)
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2412  {
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2413  	struct ata_link *link;
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2414  
-1eca4365be25c5 drivers/ata/libata-eh.c  Tejun Heo 2008-11-03  2415  	ata_for_each_link(link, ap, HOST_FIRST)
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2416  		ata_eh_link_report(link);
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2417  }
-9b1e2658faf3f3 drivers/ata/libata-eh.c  Tejun Heo 2007-08-06  2418  
-
-:::::: The code at line 2411 was first introduced by commit
-:::::: fb7fd61454c8681cd2621051a710b78a00369203 libata-pmp-prep: make a number of functions global to libata
-
-:::::: TO: Tejun Heo <htejun@gmail.com>
-:::::: CC: Jeff Garzik <jeff@garzik.org>
+> > Bjorn
+> > 
+> > [1] https://lore.kernel.org/all/20230607163937.ZTc-D%25lkp@intel.com/
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+மணிவண்ணன் சதாசிவம்
