@@ -2,279 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE60A7288E3
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 21:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 203387288EA
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 21:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234897AbjFHTou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 15:44:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53826 "EHLO
+        id S236340AbjFHTp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 15:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbjFHTor (ORCPT
+        with ESMTP id S235943AbjFHTpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 15:44:47 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3EA210C;
-        Thu,  8 Jun 2023 12:44:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686253485; x=1717789485;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VxXoH67dsmpaHt3OmDmsDM54npgIe5Q392w5Z0/YsUI=;
-  b=AD3aLi8SpkM8t0j1bpOIB5NShvl3Bs7qNxYo7I9DKoUWxlgU/GhK2klP
-   SuHasoX0Jv5K2i+8lF71EGjYBVdsW6060iOUAKIlWNAPTfXuj3FNufIP5
-   IQG+F5PWsQKsq0asMCA6Hf+pVvVUVIhOUlH4lSr1dsPVqA5ddYu7jbgnP
-   ehaxns8k/NHEjT2WjWqjecffF741nH3sYfHSYMewlfzY9EfthE/es52MR
-   7IJkEqafegjPJAjRzyDGUf1jMHxeU+OW2XuFGQ5lFdde8ufPL3E6wyO7a
-   wgoFnaXr3Fzj6AHijrm7jRR674B8D5GRL/peabk36v5VK54G0YfsPsW9w
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="356288957"
-X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
-   d="scan'208";a="356288957"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 12:44:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="822754649"
-X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
-   d="scan'208";a="822754649"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 08 Jun 2023 12:44:42 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q7LYo-0008Cq-0a;
-        Thu, 08 Jun 2023 19:44:42 +0000
-Date:   Fri, 9 Jun 2023 03:43:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Alexander Stein <linux@ew.tq-group.com>
-Subject: Re: [rfc, rft, PATCH v1 1/1] gpio: aggregator: Introduce delay
- support for individual output pins
-Message-ID: <202306090344.UJNc4HFx-lkp@intel.com>
-References: <20230608162130.55015-1-andriy.shevchenko@linux.intel.com>
+        Thu, 8 Jun 2023 15:45:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E3362113
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 12:45:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686253504;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JmF/x59Qx/JvKg/Xn0EqjpftmVd313DRoIAQfS/rxFs=;
+        b=G4hJSKEL9AzdmzFSKKSae/kNbzCdqYCC6Nn4ZVlhsAFrq0mUVr/kefoXly+CBxPx5sAVVT
+        zVXJREEVgisgb8MqZkwPei6R6hZ6iTYtOeXAQ+r7e62S5XCOvWyowfQvwNLPxivtmclY9B
+        PZVZI2UTAKlVCeAZ6MEkHD75YExaE7I=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-624-JvfFcnj1NmiQFdOQ8x0Xbg-1; Thu, 08 Jun 2023 15:45:02 -0400
+X-MC-Unique: JvfFcnj1NmiQFdOQ8x0Xbg-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-97463348446so118596766b.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 12:45:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686253501; x=1688845501;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JmF/x59Qx/JvKg/Xn0EqjpftmVd313DRoIAQfS/rxFs=;
+        b=bycyRB5SxaMb2v/0hrsEVwnyepPh/pDkBrQXQvcqRsK7RCd3ZpHxOMc4c0ABSrO7lA
+         LXy3TX/NgLuGoxFb3DPSmjKVkXXS5h9vVqev54Ce+rBEhHNPOiL+UKLpetrQn253ZmCZ
+         vU31jZzEWUqJTdsRXdlMcS4iCwa1m4AEbfC+9/83PFIi8jyTjo1VGetYLGOfBz3SZpJe
+         s0YFhklHrgERgfPXBT55iemcGxqG/pqXkRSKWrPSB4xbvLPrONmExCpDLZopotCOZLYI
+         qdsWCcbRxesoSqhrbHsEjnw8sz51UFuY9sbv35X628c4x7gYUCIEqPMcSVCtVfBpTriO
+         W/zA==
+X-Gm-Message-State: AC+VfDy4wnF5LuTIohKJjXYxyOnSWayqN5g8/LINswpsDMUTInJb7lfr
+        +JnviaWa0HxUuLKjgYr7HIDjbv5B/lA7Rr4NqtZn2TPpToiMBAUbF1TFV4qMX5PnrenXJfuaqNC
+        pFbotr02hJECX1QUTOf4CZ59iqgsmqaQ9
+X-Received: by 2002:a17:907:6ea1:b0:969:bac4:8e22 with SMTP id sh33-20020a1709076ea100b00969bac48e22mr190956ejc.26.1686253501284;
+        Thu, 08 Jun 2023 12:45:01 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ638uv4/Vr+tj9RPa/sHzhVcwrauzcttV3G6j2YKZTAjolaDA5VYvQTw6KbxvqJuZQOjZ3t1g==
+X-Received: by 2002:a17:907:6ea1:b0:969:bac4:8e22 with SMTP id sh33-20020a1709076ea100b00969bac48e22mr190943ejc.26.1686253501017;
+        Thu, 08 Jun 2023 12:45:01 -0700 (PDT)
+Received: from redhat.com ([2.55.4.169])
+        by smtp.gmail.com with ESMTPSA id 17-20020a05600c235100b003f7f475c3c7sm534780wmq.8.2023.06.08.12.44.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 12:45:00 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 15:44:56 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Angus Chen <angus.chen@jaguarmicro.com>
+Cc:     jasowang@redhat.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] vdpa/vp_vdpa: Check queue number of vdpa device from
+ add_config
+Message-ID: <20230608154400-mutt-send-email-mst@kernel.org>
+References: <20230608090124.1807-1-angus.chen@jaguarmicro.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230608162130.55015-1-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230608090124.1807-1-angus.chen@jaguarmicro.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+On Thu, Jun 08, 2023 at 05:01:24PM +0800, Angus Chen wrote:
+> When add virtio_pci vdpa device,check the vqs number of device cap
+> and max_vq_pairs from add_config.
+> Simply starting from failing if the provisioned #qp is not
+> equal to the one that hardware has.
+> 
+> Signed-off-by: Angus Chen <angus.chen@jaguarmicro.com>
 
-kernel test robot noticed the following build errors:
+I am not sure about this one. How does userspace know
+which values are legal?
 
-[auto build test ERROR on brgl/gpio/for-next]
-[also build test ERROR on linus/master v6.4-rc5 next-20230608]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+If there's no way then maybe we should just cap the value
+to what device can support but otherwise keep the device
+working.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/gpio-aggregator-Introduce-delay-support-for-individual-output-pins/20230609-002703
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
-patch link:    https://lore.kernel.org/r/20230608162130.55015-1-andriy.shevchenko%40linux.intel.com
-patch subject: [rfc, rft, PATCH v1 1/1] gpio: aggregator: Introduce delay support for individual output pins
-config: hexagon-randconfig-r023-20230608 (https://download.01.org/0day-ci/archive/20230609/202306090344.UJNc4HFx-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add brgl https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git
-        git fetch brgl gpio/for-next
-        git checkout brgl/gpio/for-next
-        b4 shazam https://lore.kernel.org/r/20230608162130.55015-1-andriy.shevchenko@linux.intel.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/gpio/
+> ---
+> v1: Use max_vqs from add_config
+> v2: Just return fail if max_vqs from add_config is not same as device
+> 	cap. Suggested by jason.
+> 
+>  drivers/vdpa/virtio_pci/vp_vdpa.c | 35 ++++++++++++++++++-------------
+>  1 file changed, 21 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/vdpa/virtio_pci/vp_vdpa.c b/drivers/vdpa/virtio_pci/vp_vdpa.c
+> index 281287fae89f..c1fb6963da12 100644
+> --- a/drivers/vdpa/virtio_pci/vp_vdpa.c
+> +++ b/drivers/vdpa/virtio_pci/vp_vdpa.c
+> @@ -480,32 +480,39 @@ static int vp_vdpa_dev_add(struct vdpa_mgmt_dev *v_mdev, const char *name,
+>  	u64 device_features;
+>  	int ret, i;
+>  
+> -	vp_vdpa = vdpa_alloc_device(struct vp_vdpa, vdpa,
+> -				    dev, &vp_vdpa_ops, 1, 1, name, false);
+> -
+> -	if (IS_ERR(vp_vdpa)) {
+> -		dev_err(dev, "vp_vdpa: Failed to allocate vDPA structure\n");
+> -		return PTR_ERR(vp_vdpa);
+> +	if (add_config->mask & BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MAX_VQP)) {
+> +		if (add_config->net.max_vq_pairs != (v_mdev->max_supported_vqs / 2)) {
+> +			dev_err(&pdev->dev, "max vqs 0x%x should be equal to 0x%x which device has\n",
+> +				add_config->net.max_vq_pairs*2, v_mdev->max_supported_vqs);
+> +			return -EINVAL;
+> +		}
+>  	}
+>  
+> -	vp_vdpa_mgtdev->vp_vdpa = vp_vdpa;
+> -
+> -	vp_vdpa->vdpa.dma_dev = &pdev->dev;
+> -	vp_vdpa->queues = vp_modern_get_num_queues(mdev);
+> -	vp_vdpa->mdev = mdev;
+> -
+>  	device_features = vp_modern_get_features(mdev);
+>  	if (add_config->mask & BIT_ULL(VDPA_ATTR_DEV_FEATURES)) {
+>  		if (add_config->device_features & ~device_features) {
+> -			ret = -EINVAL;
+>  			dev_err(&pdev->dev, "Try to provision features "
+>  				"that are not supported by the device: "
+>  				"device_features 0x%llx provisioned 0x%llx\n",
+>  				device_features, add_config->device_features);
+> -			goto err;
+> +			return -EINVAL;
+>  		}
+>  		device_features = add_config->device_features;
+>  	}
+> +
+> +	vp_vdpa = vdpa_alloc_device(struct vp_vdpa, vdpa,
+> +				    dev, &vp_vdpa_ops, 1, 1, name, false);
+> +
+> +	if (IS_ERR(vp_vdpa)) {
+> +		dev_err(dev, "vp_vdpa: Failed to allocate vDPA structure\n");
+> +		return PTR_ERR(vp_vdpa);
+> +	}
+> +
+> +	vp_vdpa_mgtdev->vp_vdpa = vp_vdpa;
+> +
+> +	vp_vdpa->vdpa.dma_dev = &pdev->dev;
+> +	vp_vdpa->queues = v_mdev->max_supported_vqs;
+> +	vp_vdpa->mdev = mdev;
+>  	vp_vdpa->device_features = device_features;
+>  
+>  	ret = devm_add_action_or_reset(dev, vp_vdpa_free_irq_vectors, pdev);
+> -- 
+> 2.25.1
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306090344.UJNc4HFx-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/gpio/gpio-aggregator.c:26:
-   In file included from include/linux/gpio/driver.h:6:
-   In file included from include/linux/irqchip/chained_irq.h:10:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     547 |         val = __raw_readb(PCI_IOBASE + addr);
-         |                           ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   In file included from drivers/gpio/gpio-aggregator.c:26:
-   In file included from include/linux/gpio/driver.h:6:
-   In file included from include/linux/irqchip/chained_irq.h:10:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-         |                                                         ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-         |                                                   ^
-   In file included from drivers/gpio/gpio-aggregator.c:26:
-   In file included from include/linux/gpio/driver.h:6:
-   In file included from include/linux/irqchip/chained_irq.h:10:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     584 |         __raw_writeb(value, PCI_IOBASE + addr);
-         |                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-         |                                                       ~~~~~~~~~~ ^
->> drivers/gpio/gpio-aggregator.c:426:36: error: no member named 'of_gpio_n_cells' in 'struct gpio_chip'
-     426 |         if (gpiospec->args_count != chip->of_gpio_n_cells)
-         |                                     ~~~~  ^
->> drivers/gpio/gpio-aggregator.c:518:9: error: no member named 'of_xlate' in 'struct gpio_chip'
-     518 |                 chip->of_xlate = gpiochip_fwd_delay_of_xlate;
-         |                 ~~~~  ^
-   drivers/gpio/gpio-aggregator.c:519:9: error: no member named 'of_gpio_n_cells' in 'struct gpio_chip'
-     519 |                 chip->of_gpio_n_cells = 3;
-         |                 ~~~~  ^
-   6 warnings and 3 errors generated.
-
-
-vim +426 drivers/gpio/gpio-aggregator.c
-
-   417	
-   418	static int gpiochip_fwd_delay_of_xlate(struct gpio_chip *chip,
-   419					       const struct of_phandle_args *gpiospec,
-   420					       u32 *flags)
-   421	{
-   422		struct gpiochip_fwd *fwd = gpiochip_get_data(chip);
-   423		struct gpiochip_fwd_timing *timings;
-   424		u32 line;
-   425	
- > 426		if (gpiospec->args_count != chip->of_gpio_n_cells)
-   427			return -EINVAL;
-   428	
-   429		line = gpiospec->args[0];
-   430		if (line >= chip->ngpio)
-   431			return -EINVAL;
-   432	
-   433		timings = &fwd->delay_timings[line];
-   434		timings->ramp_up_us = gpiospec->args[1];
-   435		timings->ramp_down_us = gpiospec->args[2];
-   436	
-   437		return line;
-   438	}
-   439	
-   440	/**
-   441	 * gpiochip_fwd_create() - Create a new GPIO forwarder
-   442	 * @dev: Parent device pointer
-   443	 * @ngpios: Number of GPIOs in the forwarder.
-   444	 * @descs: Array containing the GPIO descriptors to forward to.
-   445	 *         This array must contain @ngpios entries, and must not be deallocated
-   446	 *         before the forwarder has been destroyed again.
-   447	 * @delay: True if the pins have an external delay line.
-   448	 *
-   449	 * This function creates a new gpiochip, which forwards all GPIO operations to
-   450	 * the passed GPIO descriptors.
-   451	 *
-   452	 * Return: An opaque object pointer, or an ERR_PTR()-encoded negative error
-   453	 *         code on failure.
-   454	 */
-   455	static struct gpiochip_fwd *gpiochip_fwd_create(struct device *dev,
-   456							unsigned int ngpios,
-   457							struct gpio_desc *descs[],
-   458							bool delay)
-   459	{
-   460		const char *label = dev_name(dev);
-   461		struct gpiochip_fwd *fwd;
-   462		struct gpio_chip *chip;
-   463		unsigned int i;
-   464		int error;
-   465	
-   466		fwd = devm_kzalloc(dev, struct_size(fwd, tmp, fwd_tmp_size(ngpios)),
-   467				   GFP_KERNEL);
-   468		if (!fwd)
-   469			return ERR_PTR(-ENOMEM);
-   470	
-   471		chip = &fwd->chip;
-   472	
-   473		/*
-   474		 * If any of the GPIO lines are sleeping, then the entire forwarder
-   475		 * will be sleeping.
-   476		 * If any of the chips support .set_config(), then the forwarder will
-   477		 * support setting configs.
-   478		 */
-   479		for (i = 0; i < ngpios; i++) {
-   480			struct gpio_chip *parent = gpiod_to_chip(descs[i]);
-   481	
-   482			dev_dbg(dev, "%u => gpio %d irq %d\n", i,
-   483				desc_to_gpio(descs[i]), gpiod_to_irq(descs[i]));
-   484	
-   485			if (gpiod_cansleep(descs[i]))
-   486				chip->can_sleep = true;
-   487			if (parent && parent->set_config)
-   488				chip->set_config = gpio_fwd_set_config;
-   489		}
-   490	
-   491		chip->label = label;
-   492		chip->parent = dev;
-   493		chip->owner = THIS_MODULE;
-   494		chip->get_direction = gpio_fwd_get_direction;
-   495		chip->direction_input = gpio_fwd_direction_input;
-   496		chip->direction_output = gpio_fwd_direction_output;
-   497		chip->get = gpio_fwd_get;
-   498		chip->get_multiple = gpio_fwd_get_multiple_locked;
-   499		chip->set = gpio_fwd_set;
-   500		chip->set_multiple = gpio_fwd_set_multiple_locked;
-   501		chip->to_irq = gpio_fwd_to_irq;
-   502		chip->base = -1;
-   503		chip->ngpio = ngpios;
-   504		fwd->descs = descs;
-   505	
-   506		if (chip->can_sleep)
-   507			mutex_init(&fwd->mlock);
-   508		else
-   509			spin_lock_init(&fwd->slock);
-   510	
-   511		if (delay) {
-   512			fwd->delay_timings = devm_kcalloc(dev, ngpios,
-   513							  sizeof(*fwd->delay_timings),
-   514							  GFP_KERNEL);
-   515			if (!fwd->delay_timings)
-   516				return ERR_PTR(-ENOMEM);
-   517	
- > 518			chip->of_xlate = gpiochip_fwd_delay_of_xlate;
-   519			chip->of_gpio_n_cells = 3;
-   520		}
-   521	
-   522		error = devm_gpiochip_add_data(dev, chip, fwd);
-   523		if (error)
-   524			return ERR_PTR(error);
-   525	
-   526		return fwd;
-   527	}
-   528	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
