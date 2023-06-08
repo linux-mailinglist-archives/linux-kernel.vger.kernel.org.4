@@ -2,123 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2AAA72792F
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:50:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34572727931
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233372AbjFHHuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 03:50:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43872 "EHLO
+        id S233525AbjFHHvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 03:51:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233514AbjFHHu1 (ORCPT
+        with ESMTP id S233490AbjFHHvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 03:50:27 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7ED2139
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 00:50:20 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-5147e40bbbbso402843a12.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 00:50:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686210619; x=1688802619;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CdtBaZj4Wh7F/cKA1LiZJZb7T0ESxgrV+Q/DGxp5Urg=;
-        b=R7Nwox0yH/aJ1X5B1nl0KPyzpfm4V5u26ECctIxgmM0pW6O45RS9p/z6ugEXZHxld3
-         DjX41wmgm3W2wiylZ3JH+T9hTIdg2lDIgS7mu6rRvM7G3IHsrfqz3L8JY4TJ7rBIpG9p
-         hiswHpGixEop3mJFf6I9aOJg3BUkuBKiOEUlJuYHZJP2o9F2SynFs6qO+/53tX29u3gb
-         MvG7qIJbr7uQmWVKbkXVK6ePdE7aRL747Z/lyXf+hWkQRroTD8wIonKX/T05p6g37HDs
-         vR1CsfP2ism0Cz604grw/YPBMqkAyHzA8FMPYQWALk1QL/QyaNBlXpOAHHbv3M4H3sdj
-         jNag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686210619; x=1688802619;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CdtBaZj4Wh7F/cKA1LiZJZb7T0ESxgrV+Q/DGxp5Urg=;
-        b=eHWfgSIxLgSlkuv5eXsGyIwcP+nECVn7W/CMlmYT2oETB9LNGcoNym9OHbIwNdmczK
-         5QPvn3PBUxUk7ll0cggJ0hsBGhWkKaTRZQr6WgDvDhYCSFL8DX16jEz1TZPaALAnYPU7
-         D9dVJT6CjyVFkRpaKv4QsJRS3fhux+OnnErFUKju9r5Ua4ft6+darz5X3/w3XLJRkAkB
-         Eexc7VcLG2XH2RaFdtzJ2rAtZMNmdD/fjUqnPPqNXRvHNhsdvJo0mJkR+2vGK8RgaUU1
-         kgd97N/7C8oyuJ1OdpmBalfTvLM/Gz6vVTjigui+zPaHz/ejvhORovT0AUVhQoL+KUhn
-         nx6g==
-X-Gm-Message-State: AC+VfDxplFwy/kkbn1/r0OZAY+XJ1SMYTp+PeqSKhHZl9dR0fhymRKmp
-        ogy/dwrXZFWwpBLt4tN3+xb6/A==
-X-Google-Smtp-Source: ACHHUZ4NNrwVqtQg76eKybrTKDBwByaBNPg+h0SR5A+VjJVIVBsGpjFs+P41gY1zcmunuv5OV0a0jA==
-X-Received: by 2002:aa7:d1d4:0:b0:514:945c:6cea with SMTP id g20-20020aa7d1d4000000b00514945c6ceamr6074596edp.37.1686210619206;
-        Thu, 08 Jun 2023 00:50:19 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id x23-20020aa7dad7000000b00516654bf182sm237626eds.41.2023.06.08.00.50.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 00:50:18 -0700 (PDT)
-Message-ID: <f06d9f97-591b-c76d-0313-49c1b7a1217e@linaro.org>
-Date:   Thu, 8 Jun 2023 09:50:16 +0200
+        Thu, 8 Jun 2023 03:51:09 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD78210C
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 00:51:03 -0700 (PDT)
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230608075059epoutp03e6a7dbdb7f5bb2d410fc9d6f7997d6bb~mn6kSfIRP0298702987epoutp03o
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 07:50:59 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230608075059epoutp03e6a7dbdb7f5bb2d410fc9d6f7997d6bb~mn6kSfIRP0298702987epoutp03o
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1686210659;
+        bh=HJppTh4hNx/lcCe0c2zXtHzte8UoSXTnYqenZDXOec4=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=i061bEF49zWI59T7QtPVQkQzYZL+ycj9MxtievDB4MXAR1ElG7V8vfYGGLfaPAm4F
+         UkRMZL273hIDgdvaS+CL8wGFYLRdkF7lSD2TtjDT3v1mD6Q/2NCK50p1YpgrOAWqUU
+         fY3NbMoHD3YU43z84db4iu8UkHKLC01Z2lHyEv2g=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20230608075058epcas1p208b63cbbb4dec4c9cf2a976c8643abd6~mn6jrHY981980819808epcas1p2n;
+        Thu,  8 Jun 2023 07:50:58 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.38.236]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4QcGc11J1mz4x9Q9; Thu,  8 Jun
+        2023 07:50:57 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        21.FB.48553.16881846; Thu,  8 Jun 2023 16:50:57 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20230608075056epcas1p498e31886d0eb6243db5aec32603ae762~mn6h-Hvjh1909019090epcas1p47;
+        Thu,  8 Jun 2023 07:50:56 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230608075056epsmtrp26e8294f529a4d25bf724b1bfa581fff3~mn6h7czUv3003730037epsmtrp2W;
+        Thu,  8 Jun 2023 07:50:56 +0000 (GMT)
+X-AuditID: b6c32a39-509937000001bda9-4e-64818861c066
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        61.8A.27706.06881846; Thu,  8 Jun 2023 16:50:56 +0900 (KST)
+Received: from kson001 (unknown [10.102.7.58]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20230608075056epsmtip1ad0ca5eaf3a865ba893b0cceb3a5da06~mn6hma8Tj0289902899epsmtip1R;
+        Thu,  8 Jun 2023 07:50:56 +0000 (GMT)
+From:   "Kwanghoon Son" <k.son@samsung.com>
+To:     "'Conor Dooley'" <conor.dooley@microchip.com>,
+        <linux-riscv@lists.infradead.org>
+Cc:     <conor@kernel.org>, "'Miguel Ojeda'" <ojeda@kernel.org>,
+        "'Alex Gaynor'" <alex.gaynor@gmail.com>,
+        "'Wedson Almeida Filho'" <wedsonaf@gmail.com>,
+        "'Boqun Feng'" <boqun.feng@gmail.com>,
+        "'Gary Guo'" <gary@garyguo.net>,
+        =?utf-8?Q?'Bj=C3=B6rn_Roy_Baron'?= <bjorn3_gh@protonmail.com>,
+        "'Jonathan Corbet'" <corbet@lwn.net>,
+        "'Paul Walmsley'" <paul.walmsley@sifive.com>,
+        "'Palmer Dabbelt'" <palmer@dabbelt.com>,
+        "'Nathan Chancellor'" <nathan@kernel.org>,
+        "'Nick Desaulniers'" <ndesaulniers@google.com>,
+        "'Tom Rix'" <trix@redhat.com>, <rust-for-linux@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <llvm@lists.linux.dev>
+In-Reply-To: <20230608-dispatch-sneer-aa09bd7b2eb8@wendy>
+Subject: RE: [PATCH v1 0/2] RISC-V: enable rust
+Date:   Thu, 8 Jun 2023 16:50:55 +0900
+Message-ID: <000001d999dd$f5166cd0$df434670$@samsung.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v3 5/5] dt-bindings: phy: realtek: Add the doc about the
- Realtek SoC USB 3.0 PHY
-Content-Language: en-US
-To:     =?UTF-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Ray Chi <raychi@google.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-References: <20230607062500.24669-1-stanley_chang@realtek.com>
- <20230607062500.24669-5-stanley_chang@realtek.com>
- <58aea31d-8f47-a558-6e17-17b55059bb23@linaro.org>
- <1f13680401e449a3b9384710206cc2b0@realtek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1f13680401e449a3b9384710206cc2b0@realtek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQFxm6qKyBFRC1seLjkBq1pGYFP2NAEpdoRnAm01MviwM83LIA==
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrBJsWRmVeSWpSXmKPExsWy7bCmnm5iR2OKwdwfLBZ/Z29nt7hxYT+z
+        xZotjUwWUzbtYLdYOXUVm8WTA+2MFhfPvGa0WNi2hMXi8q45bBbbPrcAJabsZ7NoX/mUzeLD
+        hP9MFivnL2e0eHm5h9mibRa/xfpnh5ktrn05zWKxYdlaRgdhjzcvX7J4LOn8xeSxc9Zddo8F
+        m0o9Nq3qZPPYvKTe48XmmYwei/sms3rc+bGU0aOnbROTx/t9V9k8LjVfZ/f4vEkugDcq2yYj
+        NTEltUghNS85PyUzL91WyTs43jne1MzAUNfQ0sJcSSEvMTfVVsnFJ0DXLTMH6E8lhbLEnFKg
+        UEBicbGSvp1NUX5pSapCRn5xia1SakFKToFpgV5xYm5xaV66Xl5qiZWhgYGRKVBhQnbGsq+d
+        LAVfOSq2v3rM3MD4m62LkZNDQsBE4tf0U8xdjFwcQgI7GCUaZkxgg3A+MUp07l3NAuF8Y5Q4
+        cfoQXMvnTR8ZIRJ7GSUmP5/BDuE8ZpSY8vsxM0gVm4CmxMJzvxlBbBGBMIlJvc/BljALzGKV
+        mPvyCStIglPAUqLn+X+wBmEBfYmbO/6ArWARUJE4c/ElWJwXqOZZ93o2CFtQ4uTMJywgNrOA
+        vMT2t3OYIU5SkPj5dBkrxDIniYVLdjJC1IhIzO5sg6qZzylxd2EkhO0i8WvVf6i4sMSr41vY
+        IWwpic/v9kK9mS1x9COMXSJxfdYiVgjbWGL/0slMXYwcQPM1Jdbv0ocIK0rs/D0Xai2fxLuv
+        PawgJRICvBIdbUIQprzErc5yiGpRiTNPP7JNYFSaheSvWUj+moXk/lkIuxYwsqxiFEstKM5N
+        Ty02LDCFR3Zyfu4mRnAW0LLcwTj97Qe9Q4xMHIyHGCU4mJVEeLPs61OEeFMSK6tSi/Lji0pz
+        UosPMZoCQ3ois5Rocj4wD+WVxBuaWBqYmBkZm1gYmhkqifN+eaqdIiSQnliSmp2aWpBaBNPH
+        xMEp1cDkN63p/vE5lvLC9n6M5xoz5Bq23Vb1++DzeFkwQxm7dfSyq5UsOXxT//30/tNZuO/m
+        u/63y3e8Ur7sI5J5c96c1fP4AxxfyZR0CS19wpbir3x2U8u2uFPiYkJcEdyL/TSzlou88jXY
+        97sypGKT9HMj35qrR5R0ewoP+bPzLLr3uodlD9N9L8Xfh+dGOIsmmwX6fNnArHru8aGCsAvP
+        unTVj7zYKp3Umbj+OHPwBpNnm6rYnPpdylqvtkx8UHGO31nFcGKvAQ/va7bPbzX7XoanPnu1
+        5HuxanlipVthQvRpz79MAZOM59qG3m6Rvm/W06E78dzBDPbp1a+5pR5wLHr/T41x0lerqS+S
+        tTOqspRYijMSDbWYi4oTAc9Ake2LBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrKIsWRmVeSWpSXmKPExsWy7bCSnG5CR2OKwdpj4hZ/Z29nt7hxYT+z
+        xZotjUwWUzbtYLdYOXUVm8WTA+2MFhfPvGa0WNi2hMXi8q45bBbbPrcAJabsZ7NoX/mUzeLD
+        hP9MFivnL2e0eHm5h9mibRa/xfpnh5ktrn05zWKxYdlaRgdhjzcvX7J4LOn8xeSxc9Zddo8F
+        m0o9Nq3qZPPYvKTe48XmmYwei/sms3rc+bGU0aOnbROTx/t9V9k8LjVfZ/f4vEkugDeKyyYl
+        NSezLLVI3y6BK2PZ106Wgq8cFdtfPWZuYPzN1sXIySEhYCLxedNHxi5GLg4hgd2MEvOapjJD
+        JEQlOi43AiU4gGxhicOHiyFqHjJKbJ86A6yZTUBTYuG534wgtohAmMSk3ufMIEXMAitYJe7P
+        O8oC0bGPUWLN7k9gHZwClhI9z/+DbRAW0Je4ueMPWJxFQEXizMWXYHFeoJpn3evZIGxBiZMz
+        n7CA2MwC2hJPbz6FsuUltr+dA3WpgsTPp8tYIa5wkli4ZCcjRI2IxOzONuYJjMKzkIyahWTU
+        LCSjZiFpWcDIsopRMrWgODc9t9iwwDAvtVyvODG3uDQvXS85P3cTIzglaGnuYNy+6oPeIUYm
+        DsZDjBIczEoivFn29SlCvCmJlVWpRfnxRaU5qcWHGKU5WJTEeS90nYwXEkhPLEnNTk0tSC2C
+        yTJxcEo1MJ3bs+47m8h52QUPz7xcpJDifklJV17S3Xz2sXzHOLXM5px1HFVzrt+zz/4kZVWS
+        YWTXcTox0PKAs8tjJqN4xxXpVTF30/tLvExDXXcXz9kRabv6nbSZ3mbhX1v9Ch0eLBVbxb5u
+        +o36zv65q0PdJiXd/pVi27DoG9+52qrM9o+r8z6lZLafj5a+xpF/a4KqlF7/rYqNwr57ds97
+        8nSl7zFRr6zpE2L3Hnb1tfcos/3xxenxDsNaHp/fbwoZnzzSmTonNyx+p/OLgoXT+GZkXvOv
+        EXjy6OD0Ylm3r4z125jVrx7qMTPJeOphf3t/W3b6sgs/Xs8/ph2yVdU06fCls2q9V8srr/2Z
+        9FVhVctKGyWW4oxEQy3mouJEAFHOyo14AwAA
+X-CMS-MailID: 20230608075056epcas1p498e31886d0eb6243db5aec32603ae762
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230608070229epcas1p1aeafe28fca0bd682585c4115670d7cc9
+References: <20230307102441.94417-1-conor.dooley@microchip.com>
+        <CGME20230608070229epcas1p1aeafe28fca0bd682585c4115670d7cc9@epcas1p1.samsung.com>
+        <20230608-dispatch-sneer-aa09bd7b2eb8@wendy>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/06/2023 09:32, Stanley Chang[昌育德] wrote:
->>> +examples:
->>> +  - |
->>> +    usb_port2_usb3phy: usb-phy@13e10 {
->>> +        compatible = "realtek,rtd1319d-usb3phy", "realtek,usb3phy";
->>> +        reg = <0x13e10 0x4>;
->>> +        #address-cells = <1>;
->>> +        #size-cells = <0>;
->>> +        #phy-cells = <0>;
->>> +
->>> +        phy@0 {
->>> +            reg = <0>;
->>> +            realtek,param =
->>> +                    <0x01 0xac8c>,
->>> +                    <0x06 0x0017>,
->>
->> First, this is matrix, not uint8 array. Second, 0xac8c is past 16 bits long, not 8.
->> Third, you put some magic register programming to DT.
->> Please don't. Drop all this from DT.
+> Hey Kwang,
 > 
-> realtek,param is an uint32-matrx.
-> I will revised the type.
+> > Hi,
+> > Recently I'm trying to put a rust patch on the risc-v board.
+> > I saw a patch [1] and looked through it roughly.
+> > Only if llvm(not gcc) is allowed, it looks good with no major problems.
+> >
+> > > I'll revisit this when my thoughts have settled down.
+> >
+> > If you let me know the problematic part, may I try the patch?
+> >
+> > [1] https://lore.kernel.org/linux-riscv/20230405-itinerary-handgrip-
+> > a5ffba368148@spud/
+> 
+> Yeah, you can definitely try this or the downstream rust-for-linux
+> project - both should work well on RISC-V.
+> The problematic part is figuring out what ISA extensions are supported
+> by the rust compiler being used (and by bindgen), and deciding what to
+> put in -march as a result.
+> 
+> I think it is unlikely to matter for you, unless you're aggressively
+> mixing versions for different parts of your toolchain.
+> 
+> I do intend revisting this, probably after the min. version for rust
+> gets bumped, I've just been really busy with other work the last weeks.
 
-Drop the property. It is not explained and not justified to be in DT.
+No rush! I was just curious.
+Thank you for the explanation!
 
-Best regards,
-Krzysztof
+> 
+> Cheers,
+> Conor.
 
