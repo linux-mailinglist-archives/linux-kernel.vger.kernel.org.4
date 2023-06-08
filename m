@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F17CB72754C
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 04:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EFCE72754E
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 04:54:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233828AbjFHCyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 22:54:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52938 "EHLO
+        id S233873AbjFHCyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 22:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbjFHCyb (ORCPT
+        with ESMTP id S233835AbjFHCyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 22:54:31 -0400
+        Wed, 7 Jun 2023 22:54:37 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3374E50;
-        Wed,  7 Jun 2023 19:54:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA032103;
+        Wed,  7 Jun 2023 19:54:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
         Content-ID:Content-Description:In-Reply-To:References;
-        bh=hRL53ufQNc+iuMhcj+kE/bG7v/x5YM0q+MX4eg7+/HE=; b=Cy1b1Eev0FUsLxSTCDDHeTpC6y
-        5WJgEsdM6aiw4DSARwXh5a6/hzFDgcJyZU8EGZyMuC1KPpIJJij8/KyV+t2AMaD2XO6ZP6vHUkrUE
-        ogvWdNez8ByVG2nEPG6f2S2klY4HnBlTr0BtpERIzG2/PyePmSuxJcYqgFyX069aQqBvti37F1IXj
-        XlzNaQKsXTpdnd1CZ+F2z578OZ9Ecruy9msz7DuWikbrkfXaSMQ9TM/Rzb/vzJewVCFKojnl8Wz1C
-        O1eom+yGdzhWSvMpDSJRqNg+xI8fwmID8FQzsVWCDuF8FcjKHrtT4lxMuvIJtXQqIctAgxtVGCqkx
-        HIJSukiA==;
+        bh=xA93YpODwXSEXwOg759c50kN9HhjwSvfbwEHkBFXNMM=; b=EBli7UlTGu/OQDRqm5hvXT6rNk
+        6w+MOgYceFTD0zypl9H1P0yPFfo9XL25UL7rWfZvxELR8dr47WwRgkd7GOqoiLoM3sLypqzh47QvN
+        /Hk/KskMYPkRQfoKguqwzRczFkVzPsJGPQbUiYb3SQPAJFHTuyaJlMrORnqvlcmWSr1PnnmZgKbtg
+        I+nNbLuC7jxLA9ge3XZ0XRO22MlfgZCIpcM41Fk7OyK7bjP6IgxQ1ij6RwomqMJ85k0gjhAaLn46Q
+        /sfAv+U/YTfl8gPHZ0YUDOXXiB6/Ze7b4B3HTrah8K5+hAuNjvoA1BYNcnYcH2H+h47y5SbgV1n23
+        YCq/qm2w==;
 Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q75nA-007rlv-1j;
-        Thu, 08 Jun 2023 02:54:28 +0000
+        id 1q75nI-007rnl-1K;
+        Thu, 08 Jun 2023 02:54:36 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-i2c@vger.kernel.org,
+        Jeff Chase <jnchase@google.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Joe Tessler <jrt@google.com>, linux-media@vger.kernel.org,
         Arnd Bergmann <arnd@arndb.de>, Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH] eeprom: at24: also select REGMAP
-Date:   Wed,  7 Jun 2023 19:54:24 -0700
-Message-Id: <20230608025424.29033-1-rdunlap@infradead.org>
+Subject: [PATCH] media: cec: i2c: ch7322: also select REGMAP
+Date:   Wed,  7 Jun 2023 19:54:35 -0700
+Message-Id: <20230608025435.29249-1-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -56,41 +57,55 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 Selecting only REGMAP_I2C can leave REGMAP unset, causing build errors,
 so also select REGMAP to prevent the build errors.
 
-../drivers/misc/eeprom/at24.c:540:42: warning: 'struct regmap_config' declared inside parameter list will not be visible outside of this definition or declaration
-  540 |                                   struct regmap_config *regmap_config)
-../drivers/misc/eeprom/at24.c: In function 'at24_make_dummy_client':
-../drivers/misc/eeprom/at24.c:552:18: error: implicit declaration of function 'devm_regmap_init_i2c' [-Werror=implicit-function-declaration]
-  552 |         regmap = devm_regmap_init_i2c(dummy_client, regmap_config);
-../drivers/misc/eeprom/at24.c:552:16: warning: assignment to 'struct regmap *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-  552 |         regmap = devm_regmap_init_i2c(dummy_client, regmap_config);
-../drivers/misc/eeprom/at24.c: In function 'at24_probe':
-../drivers/misc/eeprom/at24.c:586:16: error: variable 'regmap_config' has initializer but incomplete type
-  586 |         struct regmap_config regmap_config = { };
-../drivers/misc/eeprom/at24.c:586:30: error: storage size of 'regmap_config' isn't known
-  586 |         struct regmap_config regmap_config = { };
-../drivers/misc/eeprom/at24.c:586:30: warning: unused variable 'regmap_config' [-Wunused-variable]
+../drivers/media/cec/i2c/ch7322.c:158:21: error: variable 'ch7322_regmap' has initializer but incomplete type
+  158 | static const struct regmap_config ch7322_regmap = {
+../drivers/media/cec/i2c/ch7322.c:159:10: error: 'const struct regmap_config' has no member named 'reg_bits'
+  159 |         .reg_bits = 8,
+../drivers/media/cec/i2c/ch7322.c:159:21: warning: excess elements in struct initializer
+  159 |         .reg_bits = 8,
+../drivers/media/cec/i2c/ch7322.c:160:10: error: 'const struct regmap_config' has no member named 'val_bits'
+  160 |         .val_bits = 8,
+../drivers/media/cec/i2c/ch7322.c:160:21: warning: excess elements in struct initializer
+  160 |         .val_bits = 8,
+../drivers/media/cec/i2c/ch7322.c:161:10: error: 'const struct regmap_config' has no member named 'max_register'
+  161 |         .max_register = 0x7f,
+../drivers/media/cec/i2c/ch7322.c:161:25: warning: excess elements in struct initializer
+  161 |         .max_register = 0x7f,
+../drivers/media/cec/i2c/ch7322.c:162:10: error: 'const struct regmap_config' has no member named 'disable_locking'
+  162 |         .disable_locking = true,
+../drivers/media/cec/i2c/ch7322.c:162:28: warning: excess elements in struct initializer
+  162 |         .disable_locking = true,
+../drivers/media/cec/i2c/ch7322.c: In function 'ch7322_probe':
+../drivers/media/cec/i2c/ch7322.c:468:26: error: implicit declaration of function 'devm_regmap_init_i2c' [-Werror=implicit-function-declaration]
+  468 |         ch7322->regmap = devm_regmap_init_i2c(client, &ch7322_regmap);
+../drivers/media/cec/i2c/ch7322.c:468:24: warning: assignment to 'struct regmap *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  468 |         ch7322->regmap = devm_regmap_init_i2c(client, &ch7322_regmap);
+../drivers/media/cec/i2c/ch7322.c: At top level:
+../drivers/media/cec/i2c/ch7322.c:158:35: error: storage size of 'ch7322_regmap' isn't known
+  158 | static const struct regmap_config ch7322_regmap = {
 
-Fixes: 5c015258478e ("eeprom: at24: add basic regmap_i2c support")
+Fixes: 21b9a47e0ec7 ("media: cec: i2c: ch7322: Add ch7322 CEC controller driver")
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Heiner Kallweit <hkallweit1@gmail.com>
-Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: linux-i2c@vger.kernel.org
+Cc: Jeff Chase <jnchase@google.com>
+Cc: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc: Joe Tessler <jrt@google.com>
+Cc: linux-media@vger.kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>
 Cc: Mark Brown <broonie@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Masahiro Yamada <masahiroy@kernel.org>
 ---
- drivers/misc/eeprom/Kconfig |    1 +
+ drivers/media/cec/i2c/Kconfig |    1 +
  1 file changed, 1 insertion(+)
 
-diff -- a/drivers/misc/eeprom/Kconfig b/drivers/misc/eeprom/Kconfig
---- a/drivers/misc/eeprom/Kconfig
-+++ b/drivers/misc/eeprom/Kconfig
-@@ -6,6 +6,7 @@ config EEPROM_AT24
- 	depends on I2C && SYSFS
- 	select NVMEM
- 	select NVMEM_SYSFS
+diff -- a/drivers/media/cec/i2c/Kconfig b/drivers/media/cec/i2c/Kconfig
+--- a/drivers/media/cec/i2c/Kconfig
++++ b/drivers/media/cec/i2c/Kconfig
+@@ -5,6 +5,7 @@
+ config CEC_CH7322
+ 	tristate "Chrontel CH7322 CEC controller"
+ 	depends on I2C
 +	select REGMAP
  	select REGMAP_I2C
+ 	select CEC_CORE
  	help
- 	  Enable this driver to get read/write support to most I2C EEPROMs
