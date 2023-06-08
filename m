@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DAF9728569
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:40:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0D59728567
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235530AbjFHQkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 12:40:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48070 "EHLO
+        id S236820AbjFHQkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 12:40:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236396AbjFHQj3 (ORCPT
+        with ESMTP id S236449AbjFHQj3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 8 Jun 2023 12:39:29 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 745D22119
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 09:39:04 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-30aef0499b6so619242f8f.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 09:39:04 -0700 (PDT)
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534E62717
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 09:39:07 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-30d5931d17aso613310f8f.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 09:39:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1686242340; x=1688834340;
+        d=tessares.net; s=google; t=1686242341; x=1688834341;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=czHHBif6b3JNPCEfCU3p0DvzKEkPWI28pRVwFLD3TEk=;
-        b=75gqNSzuYINuHY5SCr+DHhdj+MkqUn5K3pmF8985c8b8Qmgt1IHJAZJbh3f+fzNMY+
-         JUtij/ifnHZ1Px7qoQ1wFDKBOqJToPqBdYBS2zGOInSX45sAZYmn2sOZQ7zd17InT0O2
-         AIAlryytQH9DnHpTSrMJF3xqZe9oT0H0DDff/9wWNrftjM751OclCeRqvFH2bTLCcEbF
-         mWkV7W28ySKLRml85f2ryhONR1gaaW1AniH5+dVoNnB8yUMbjwJ+VRh+2xa/K0HfBncg
-         dQN8umCqv6aPBowj7IRydRJYCEj1ITGy9KeepeK0zmgrV1BdIYcCye4Mav0dmWcqYw8Q
-         axYA==
+        bh=DG0t6hTRy1TiyueGnVsxEMjDQDrpL785hzWCnX9OzbM=;
+        b=v9od5LLaYjGyBE9sXoa5jMv4GgSBHzi8qzhPbOPMblfJyEoT1Ntk4FeEnl/yQ7csMd
+         tY74qfEBV8O9CBpbNnbHP0adFvE67AxXvEG3wZ8KM3A88BigiySiZSnZ/i9Wbroyx96M
+         90kDbSTXVgYDcE2ZhZiq2/wUEYbjK44rRfAG1BlhKCAZL9dsuKAUlsF3wj0rTCh2W31R
+         o7xcIJ6EQFbZT2XdJ6CwNaGnKstBh33/mWJ7bDOchCXqNZADtxC9C7T3POyMt7UKOJh3
+         R1Nl6ctWeHQsieBAib879az3l9JmYTqx3dpcZ9gVXk7tYGYY2G5v89BW683wQJk0DM/0
+         aLTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686242340; x=1688834340;
+        d=1e100.net; s=20221208; t=1686242341; x=1688834341;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=czHHBif6b3JNPCEfCU3p0DvzKEkPWI28pRVwFLD3TEk=;
-        b=ivM6s/hd2pW9k1D+CQEdkXOe0HCKLxanxOOhsm1lp/3DaSsSDTPOd9SUqscbraJ6js
-         Llwjmng8b2nACaGw4+5ii3UhME7Wnbhv0pp5fnwo8r+xv2Sih4TH/20MGRKMd2uPAJ4s
-         8Cx0yASRrqY+7/HkO8+RO8aBHUS+4FqGauIpgP9Ub6+/f2sGBD1WhY9C03ykQ2Fwbrae
-         gsxLm+LSC6IhU9sk1KLg1FVnAsZKbEMf1FMzio/C/b4cPbETUmgLWBr6ieHqxzyn1iZk
-         4qf2yKHtmdoLT+5FUpdtesnUWV5F9Ww+yFh7/c9VBBIhH2/lU/6gcB8Pnwlm3mxeV+SX
-         abjg==
-X-Gm-Message-State: AC+VfDxba2cSxaI7kqRIFMipbWv+eWyHX/IRQK2Qn/vZyXAvJmx7eEM+
-        ac7W2wRTuE7F8a4/Jj33n0oxyQ==
-X-Google-Smtp-Source: ACHHUZ5ejWfNPCf5kv9xyszkDUXkBmsLNfy8THTCbjUhm65isOwsiOMKIa209E2ordVxlqcTIstceg==
-X-Received: by 2002:adf:f1d1:0:b0:30a:e70d:9e73 with SMTP id z17-20020adff1d1000000b0030ae70d9e73mr7766087wro.33.1686242339908;
-        Thu, 08 Jun 2023 09:38:59 -0700 (PDT)
+        bh=DG0t6hTRy1TiyueGnVsxEMjDQDrpL785hzWCnX9OzbM=;
+        b=M7+vKY/yEDksiNF5pe665lWnyCDsdsg/B2pedjv4oDUFopGz5WLakNg1FfrIODmbP0
+         pIJH3kK5mYOHQwXDqhTX1Lu39s3KEr5mSTo89jCyfA6PuHZ2ztNbmFk8Gj6cROGLBlMv
+         xuuvsKDsr3CMS3fDzskRTI1GaDo/Jk9nich/wLmEPn4wQK6CIEttKTs7Eq3Ght4PFlPS
+         PB3R1TjsbkN1MUT/44SFw78AlIUowcYLSKCt/tm6/HGTDz75Ib2tE8gGCmDTZA0Y6nGJ
+         p0RgAZOgHPCw4WJctV/bSkCw+OyhWFrrBd51tiNWuU0fDwHfyhZeEcA5Jc/j4O5+PPTn
+         wiDg==
+X-Gm-Message-State: AC+VfDzX2jorytiBy9qytt3GTukGWwFxyso+SUx6QZPIBxWivsd5Kbn2
+        LuPGB4OQV9jeeothrQeYefW0jg==
+X-Google-Smtp-Source: ACHHUZ7mNCDI+jt9sTgoc5QjI1No/0dP3dNBFY0c0TDn+0iU4pVklcn3ibo2AcRHK8NMbAhDrfXtiw==
+X-Received: by 2002:a5d:5966:0:b0:304:6762:2490 with SMTP id e38-20020a5d5966000000b0030467622490mr7431282wri.3.1686242341257;
+        Thu, 08 Jun 2023 09:39:01 -0700 (PDT)
 Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id e13-20020adfef0d000000b0030aeb3731d0sm2038215wro.98.2023.06.08.09.38.58
+        by smtp.gmail.com with ESMTPSA id e13-20020adfef0d000000b0030aeb3731d0sm2038215wro.98.2023.06.08.09.39.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 09:38:59 -0700 (PDT)
+        Thu, 08 Jun 2023 09:39:00 -0700 (PDT)
 From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Thu, 08 Jun 2023 18:38:48 +0200
-Subject: [PATCH net 06/14] selftests: mptcp: diag: skip inuse tests if not
- supported
+Date:   Thu, 08 Jun 2023 18:38:49 +0200
+Subject: [PATCH net 07/14] selftests: mptcp: pm nl: remove hardcoded
+ default limits
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230608-upstream-net-20230608-mptcp-selftests-support-old-kernels-part-2-v1-6-20997a6fd841@tessares.net>
+Message-Id: <20230608-upstream-net-20230608-mptcp-selftests-support-old-kernels-part-2-v1-7-20997a6fd841@tessares.net>
 References: <20230608-upstream-net-20230608-mptcp-selftests-support-old-kernels-part-2-v1-0-20997a6fd841@tessares.net>
 In-Reply-To: <20230608-upstream-net-20230608-mptcp-selftests-support-old-kernels-part-2-v1-0-20997a6fd841@tessares.net>
 To:     mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
@@ -75,26 +75,26 @@ Cc:     Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
         Matthieu Baerts <matthieu.baerts@tessares.net>,
         stable@vger.kernel.org
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1252;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2377;
  i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=GFhSqu6crxevOWFlUMLP/NWLyXtLoglclQ/BPatDiGs=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkggQZ1TJ6RZ82IXZNGMBvvYLfKUyHoJAZyLbq5
- B+55fJO15WJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZIIEGQAKCRD2t4JPQmmg
- c0ogEAC5De1Wak4W2bPErgQJAQgZ7UQe8hoKJnfOsYDzE3i3Q+MZg/KnWX27LHbm+JZ/40ustCj
- P8Dxhkwbsoi/Y7tLwvwo7IJJ6r8qyHalenDoNywL1J3txjNY7Alj2gXfdaDWB7UoLAsZeqVMlRt
- 7iMOXgrPaSmP7a5XcfkbZnHoY4LMK11R0pM/VCdorceRiIXRjR7YoQmeX9uS+Kb5439K8HYMkIw
- wwmNkxywerdfOWOxfhbP/DM+8gp+We9hiEsD5/H4LtjARq3ECjQKniSTYOuSjZ4VlXLxbFNBtZI
- xyfoP2+Apk14eu85zmXtjIIr3OSkdqtRpatmXGX75Wn9iuR/UI1We3FnK8tTS51boHjruxs94OM
- YimNcl6q8o+xw5Y/vbUqLv5HZRRl8rG0FXPpE1vujcuW/eL2sHPNxXMvxhqGGcv+08arFHDl9Fi
- enKjaOXsuArKdRkUK9wB59EFxKRKhkaC6G2c9B3yz0pppGsJAcxSHmx5kpatXekr8xcfSPQv/Rp
- nOE1oA29xr27XV68cb7o+Whh/4XmNufUM3n8Wp6uympepL4bfuq9l0Nk7woP7MLlgtegmC9HlPc
- CVL/eGOdPukWMIzEInRCSn7lqYTZ4op2YZUtxsFBE1w8lC9ByYufMkvni19TPmhMiQFtDIUeDFU
- cLNweqj49lEMGHw==
+ bh=zenPus60hgnkS6/g6C+PcTE8gwjvfHkXz30wSKvDTLw=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkggQaPUSkIYhlVuF6CCKRXpqcJjLtMtkvcUJ5V
+ 4mYflZuiw2JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZIIEGgAKCRD2t4JPQmmg
+ c2BiD/0ZLPN/vt8nPU76WXsimATCWKM8DDK6lRKm1Br0xFin9kdDaH2gTz3MQYM/W8cGsbr6lv4
+ 9c6yOdwV/bVfJnJXR7SuSP3iTv6kvpTRePXHlNPfaglf777DQsow4GGEDM/fCojZiP00hcpHdZE
+ 62oDe/SuQcDQU20YjlF9PyR6h2CcJvoMKFVF2t6wYfK/z4o/+egdBBJ8MhezPR+RqAjzMyK2wIG
+ uAwImEUPeY+fWAhWkzPmMRvXzXsTo12TzMU45wLgiNcafjeBaM40Wi4nZd1oWBrxt9FX6voUfea
+ Ulpt9InGY1QIqLwl8XOnO8jLKrBum7eZxG3++D8z3BTh15eN7wQxTjJlu7xpuH5WcMui0/laK/v
+ iFJV3cM4pNenTH+6NmYdgoTCikt+mz3v3pRldpgg/v/082VzpBH8GQHS5mW7DpZrvjbq6r61ggm
+ b5h9yy7G6Afa/jgx0PHYXP0PF3nre6tp6UGyCitGBX+zhIT5PqAYHa/PAdKlsWk92Cijv7WVhVs
+ vuDirSjYk96S4FzESnlMD1GZQt+MNiKSQg+w0GqFY39dQHVl1Vx/iMbdTmIiIssSALxjfN1gnhs
+ IDOUdlSwQ2JSBehWux/iEH7bEvC/OI2cQyTMxj6zY+rVaTO6atrzPMm4VZciSvLQrV/eW+mONv3
+ VY1lRgQTHDKGfLw==
 X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,35 +105,56 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 Selftests are supposed to run on any kernels, including the old ones not
 supporting all MPTCP features.
 
-One of them is the reporting of the MPTCP sockets being used, introduced
-by commit c558246ee73e ("mptcp: add statistics for mptcp socket in use").
+One of them is the checks of the default limits returned by the MPTCP
+in-kernel path-manager. The default values have been modified by commit
+72bcbc46a5c3 ("mptcp: increase default max additional subflows to 2").
+Instead of comparing with hardcoded values, we can get the default one
+and compare with them.
 
-Similar to the parent commit, it looks like there is no good pre-check
-to do here, i.e. dedicated function available in kallsyms. Instead, we
-try to get info and if nothing is returned, the test is marked as
-skipped.
+Note that if we expect to have the latest version, we continue to check
+the hardcoded values to avoid unexpected behaviour changes.
 
 Link: https://github.com/multipath-tcp/mptcp_net-next/issues/368
-Fixes: e04a30f78809 ("selftest: mptcp: add test for mptcp socket in use")
+Fixes: eedbc685321b ("selftests: add PM netlink functional tests")
 Cc: stable@vger.kernel.org
 Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 ---
- tools/testing/selftests/net/mptcp/diag.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/net/mptcp/pm_netlink.sh | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/net/mptcp/diag.sh b/tools/testing/selftests/net/mptcp/diag.sh
-index 4a6165389b74..fa9e09ad97d9 100755
---- a/tools/testing/selftests/net/mptcp/diag.sh
-+++ b/tools/testing/selftests/net/mptcp/diag.sh
-@@ -173,7 +173,7 @@ chk_msk_inuse()
- 		sleep 0.1
- 	done
- 
--	__chk_nr get_msk_inuse $expected "$msg"
-+	__chk_nr get_msk_inuse $expected "$msg" 0
+diff --git a/tools/testing/selftests/net/mptcp/pm_netlink.sh b/tools/testing/selftests/net/mptcp/pm_netlink.sh
+index 32f7533e0919..664cafc60705 100755
+--- a/tools/testing/selftests/net/mptcp/pm_netlink.sh
++++ b/tools/testing/selftests/net/mptcp/pm_netlink.sh
+@@ -73,8 +73,12 @@ check()
  }
  
- # $1: ns, $2: port
+ check "ip netns exec $ns1 ./pm_nl_ctl dump" "" "defaults addr list"
+-check "ip netns exec $ns1 ./pm_nl_ctl limits" "accept 0
++
++default_limits="$(ip netns exec $ns1 ./pm_nl_ctl limits)"
++if mptcp_lib_expect_all_features; then
++	check "ip netns exec $ns1 ./pm_nl_ctl limits" "accept 0
+ subflows 2" "defaults limits"
++fi
+ 
+ ip netns exec $ns1 ./pm_nl_ctl add 10.0.1.1
+ ip netns exec $ns1 ./pm_nl_ctl add 10.0.1.2 flags subflow dev lo
+@@ -121,12 +125,10 @@ ip netns exec $ns1 ./pm_nl_ctl flush
+ check "ip netns exec $ns1 ./pm_nl_ctl dump" "" "flush addrs"
+ 
+ ip netns exec $ns1 ./pm_nl_ctl limits 9 1
+-check "ip netns exec $ns1 ./pm_nl_ctl limits" "accept 0
+-subflows 2" "rcv addrs above hard limit"
++check "ip netns exec $ns1 ./pm_nl_ctl limits" "$default_limits" "rcv addrs above hard limit"
+ 
+ ip netns exec $ns1 ./pm_nl_ctl limits 1 9
+-check "ip netns exec $ns1 ./pm_nl_ctl limits" "accept 0
+-subflows 2" "subflows above hard limit"
++check "ip netns exec $ns1 ./pm_nl_ctl limits" "$default_limits" "subflows above hard limit"
+ 
+ ip netns exec $ns1 ./pm_nl_ctl limits 8 8
+ check "ip netns exec $ns1 ./pm_nl_ctl limits" "accept 8
 
 -- 
 2.40.1
