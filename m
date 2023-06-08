@@ -2,113 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AB6C7281C3
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 15:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CDD372825C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 16:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236567AbjFHNuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 09:50:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34804 "EHLO
+        id S236910AbjFHOKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 10:10:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236270AbjFHNuT (ORCPT
+        with ESMTP id S236917AbjFHOJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 09:50:19 -0400
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46052269F;
-        Thu,  8 Jun 2023 06:50:17 -0700 (PDT)
-Received: by mail-ua1-x935.google.com with SMTP id a1e0cc1a2514c-7872d7b79e1so238361241.0;
-        Thu, 08 Jun 2023 06:50:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686232216; x=1688824216;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JefbxwS8aqfuO0sltL/BjEgEJCmd7+lJraBN297Csfc=;
-        b=gI44YAxQgTnjznzQn2SDbJz/ROox9M3dDZY1tM//RKFoqqa48pSfL4my+cg/eVO/SK
-         Jq4Pqe+bFR3HxJHI32UEgE05DFuCBEjH2UOlk+5ob8WzuQNjU5G4wONpOnoZ/y9F4iuP
-         +KTwEoIDM836YxVhfGJNGbFXyC4AIQMXpd8JgFZaj23c9EtSsnDK/YiQfIAyOjadLhrg
-         PfYZO9dBqaEVlISq0Jhndl8aLYw2lHRXMbMV5QYfgOQijcSuyt82lI3AHdrB+13ND8rt
-         uyfcqtjKJ7w7j0fABf/OIoqn2LY+Osjp7fwxOKtRSJxiAs71inyiDlk2M/NhZ4MqQL2v
-         KyRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686232216; x=1688824216;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JefbxwS8aqfuO0sltL/BjEgEJCmd7+lJraBN297Csfc=;
-        b=RQ9zxb+H6VHe8GkQLLm5Dcn22Ux+AW6W37k7VF+wwaaeubt8B7TBJbCMwD08fV6mJ9
-         DvYW+DFOTau+x8jXYWrDe4lFeMKfCgOOkOyLDcFFbS2PLdgPEDkhK2oJaM2czZxUeiOO
-         agwC3c6kZZOyQX0/SjiYKm1UVeDnSO76X5mNcRafnl/RISQUASNuYqOrIbFgMNfnkWdd
-         z4ftSqSJsLCcYMPEkCfbeMVkYDIC9HolXsUKC6RM/1WqldexEVjDIoDYxdfSDpvfRwhR
-         X9gtK7q4WV+T0omitDbxMQdGo4h7dihfqMRKgYSkFsxXacnWsif9Dfcsm+TjMEHX9dyY
-         KCqw==
-X-Gm-Message-State: AC+VfDwkU09jroSBrf61CFw35EGSsRBx0OX5L0Ups/ZnNrUDNDhwRvkR
-        aBpb930pcpe2dOZPs3ZppOYbbyY3L7HWW/ogeC0=
-X-Google-Smtp-Source: ACHHUZ7gmWtDKl/M4FY7lf0bQE7Qk1T1opApqqFmC/gXZVCVC1vLjjRwuye0BqBPLkv0dfGiMHDYgrWP5SHUAe+0KQI=
-X-Received: by 2002:a67:fdd5:0:b0:43b:2fa9:eb3a with SMTP id
- l21-20020a67fdd5000000b0043b2fa9eb3amr2002066vsq.9.1686232216233; Thu, 08 Jun
- 2023 06:50:16 -0700 (PDT)
+        Thu, 8 Jun 2023 10:09:47 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CAE2738;
+        Thu,  8 Jun 2023 07:09:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686233386; x=1717769386;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Cl+Du+DP0yTdD93duOr9DtkYzxj1V9kSJNpExPyfOvc=;
+  b=UEO/EN4MgYMUbtHNHP3vRpObHuv9oC5LFVn7OHizt696kLgdNE4BiJrY
+   SDg7AgtvC832IPIv3A2FUZ+3ab37Puyz7R2XJliav/LVVLT36tWyzNpLs
+   YLDjo1fNHeLPvkXIKUDo7xCiMENlGc2dHFFlgQ8cBZgSGNf3Fy5vYMp7P
+   YCzWhmaZNL14xl2WWQC1CxUnnZ3R4PBY1MPvB2VSUdaZeXUHB8L0d74bP
+   +qKUauHt+ToJ9njBiJFs0AbOzBHOWG7Kahi5W6Q8cc9xYrxuX+Lf9FUJK
+   JoL35lyUcMWuxaY5fkU944cw87XFGBEv+3qs7NfEVRRzXnopyU7sc1aV5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="346944708"
+X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
+   d="scan'208";a="346944708"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 06:50:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="1040112788"
+X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
+   d="scan'208";a="1040112788"
+Received: from swalker-mobl1.amr.corp.intel.com (HELO [10.209.22.184]) ([10.209.22.184])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 06:50:19 -0700
+Message-ID: <44e1dca7-1071-6d1c-b6d2-c4ca139ab973@intel.com>
+Date:   Thu, 8 Jun 2023 06:50:18 -0700
 MIME-Version: 1.0
-References: <1427388117-20101-1-git-send-email-benjamin.tissoires@redhat.com> <alpine.LNX.2.00.1504021432310.843@pobox.suse.cz>
-In-Reply-To: <alpine.LNX.2.00.1504021432310.843@pobox.suse.cz>
-From:   =?UTF-8?B?0JvQtdC20LDQvdC60LjQvSDQmNCy0LDQvQ==?= 
-        <abyss.7@gmail.com>
-Date:   Thu, 8 Jun 2023 16:50:05 +0300
-Message-ID: <CAJc7LbpGLaFhmSKzPdrr4k+Mf-x5-W30nO8Eq4LQmEJYDhS_XQ@mail.gmail.com>
-Subject: Re: [PATCH] HID: logitech-hidpp: add a module parameter to keep
- firmware gestures
-To:     Jiri Kosina <jkosina@suse.cz>
-Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Nestor Lopez Casado <nlopezcasad@logitech.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v11 05/20] x86/virt/tdx: Add SEAMCALL infrastructure
+Content-Language: en-US
+To:     "Huang, Kai" <kai.huang@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+References: <cover.1685887183.git.kai.huang@intel.com>
+ <ec640452a4385d61bec97f8b761ed1ff38898504.1685887183.git.kai.huang@intel.com>
+ <92e19d74-447f-19e0-d9ec-8a3f12f04927@intel.com>
+ <20230607185355.GH2244082@ls.amr.corp.intel.com>
+ <f7ef157e-8f26-8d7b-a9b8-cb8de7f7aa2b@intel.com>
+ <20230607194721.GI2244082@ls.amr.corp.intel.com>
+ <ZIDjx4i2Z/OQgUra@google.com>
+ <2061ced1-59d7-f21c-490c-b650b7378386@intel.com>
+ <c4695e35353513381d661c21d2ebcd786f39f327.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <c4695e35353513381d661c21d2ebcd786f39f327.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello again!
+On 6/7/23 17:51, Huang, Kai wrote:
+> How about I add below to the changelog?
+> 
+> "
+> The current TDX_MODULE_CALL macro handles neither #GP nor #UD.  The kernel would
+> hit Oops if SEAMCALL were mistakenly made when TDX is enabled by the BIOS or
+> when CPU isn't in VMX operation.  For the former, the callers could check
+> platform_tdx_enabled() first, although that doesn't rule out the buggy BIOS in
+> which case the kernel could still get Oops.  For the latter, the caller could
+> check CR4.VMXE based on the fact that currently setting this bit and doing VMXON
+> are done together when IRQ is disabled, although from hardware's perspective
+> checking CR4.VMXE isn't enough.
+> 
+> However this could be problematic if SEAMCALL is called in the cases such as
+> exception handler, NMI handler, etc, as disabling IRQ doesn't prevent any of
+> them from happening.
+> 
+> To have a clean solution, just make the SEAMCALL always return error code by
+> using EXTTABLE so the SEAMCALL can be safely called in any context.  A later
+> patch will need to use SEAMCALL in the machine check handler.  There might be
+> such use cases in the future too.
+> "
 
-I recently rebooted my laptop just to find out that my touchpad
-stopped working: no more gestures, no more button clicks supported,
-tap-to-click is very laggy.
-Just checked the module history and found commit
-https://github.com/torvalds/linux/commit/cae253d6033da885e71c29c1591b22838a52de76
-with description about "desktop environments can and
-should support touchpad gestures through libinput". Unfortunately my
-environment (Fedora 39 KDE) doesn't support it out-of-the-box, and I
-don't know how to return all the handful features that my touchpad
-provided.
+No, that's just word salad.
 
-Right now it's slightly better than useless.
+SEAMCALL is like VMRESUME.  It's will be called by KVM in unsafe (VMX
+off) contexts in normal operation like "reboot -f".  That means it needs
+an exception handler for #UD(???).
 
-Is there a way to return this option back? Or provide any guides on
-how to properly setup all the features?
-
-P.S. Sorry for the duplicate - the mail-lists rejected my previous
-message because of an accidental HTML subpart.
-
-On Thu, 2 Apr 2015 at 15:32, Jiri Kosina <jkosina@suse.cz> wrote:
->
-> On Thu, 26 Mar 2015, Benjamin Tissoires wrote:
->
-> > The Logitech T650 used to report 3 fingers swipes to the up as a press on
-> > the Super key. When we switched the touchpad to the raw mode, we also
-> > disable such firmware gesture and some users may rely on it.
-> >
-> > Unfortunately, 3 finger swipes are still not supported in most of the
-> > Linux environments, which means that we disabled a feature of the touchpad.
-> >
-> > Allow users to revert the raw reporting mode and keep going with the
-> > firmware gestures by providing a new module parameter.
-> >
-> > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
->
-> Applied to for-4.1/logitech.
->
-> --
-> Jiri Kosina
-> SUSE Labs
+I don't care if a bad BIOS can cause #GP.  Bad BIOS == oops.  You can
+argue that even if I don't care, it's worth having a nice error message
+and a common place for SEAMCALL error handling.  But it's not
+functionally needed.
