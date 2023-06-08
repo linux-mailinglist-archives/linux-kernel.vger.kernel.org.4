@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D48672774A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 08:34:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E5E8727748
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 08:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234754AbjFHGeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 02:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55604 "EHLO
+        id S234721AbjFHGdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 02:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234720AbjFHGeA (ORCPT
+        with ESMTP id S234266AbjFHGdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 02:34:00 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B252113
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 23:33:33 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-53fbb3a013dso103599a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 23:33:33 -0700 (PDT)
+        Thu, 8 Jun 2023 02:33:40 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F78F270B
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 23:33:39 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-517ab9a4a13so115633a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 23:33:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1686206013; x=1688798013;
+        d=bytedance.com; s=google; t=1686206019; x=1688798019;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=miu0m+9Tm1uoegobE94Ng9PUSsisbRCvMO54PFQ9FXA=;
-        b=J2eRYyxcjSLdIsZK45qLtsrvuNkwMWsQXmFlkud7KqjiXcUk1nY6DC8PGCcqy0nmMb
-         DtwfQFWLrYgbw6KDqOCbMhibo2TKQWXsi8sO2pDPkteo9ffY8OKOVQBhjzw3WvvO+ufs
-         iyl/iHuGyWeCSLwWlhNWDhs495TAZ6cOz1KHj5w35uN0+zqjYmt+UMvxWqoy8gwkJWC8
-         32HO5tLc9pjzbCTw24WrrAcMIR66NppqcoV/kWv+bPIsnVXfY2y/sCNyGHEveU5PXhMX
-         ZzsFaUATXBOOxMEQSCdH0Cp3wtr54k6jl1Ld78N3k3/50OJER2d/qbeJ/nEETKjO/aEz
-         y9xw==
+        bh=nwSmBGENtB9L+r5dkVtr2aEZeow7KKO4JZwDEcpVetc=;
+        b=IEHwjTXzJVuYe7DYM3MMNxTEdlSl/A+mPuD9qso7opHwllbtTs1HRB7CkpqkgdJLYq
+         zB+AvmDeMSnS/vMohpOGjFyxEG4+4lnIpqXql5aNQyRaRArkLbtZVtZ4OXGwgIkWRV3T
+         elnobLx9QVU9+PLQ3xtgwLIJo1oboYZKE3U/HKNQJ16AnyZjQlV/4oqLNRE5Fux7Ho20
+         OjNUd6O6YlQO0RY2JNaBg5k0euSmsBFJcfqya/3OoQuL/UWrW9h0wFUg+aeY8QKwaRH0
+         6sS1iUkpASJIpRqLgeSErBuefw05ikTuyoZ4fn+N0I8mCEmkrWb2pNpH5Qlj2V3F5gc7
+         kkRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686206013; x=1688798013;
+        d=1e100.net; s=20221208; t=1686206019; x=1688798019;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=miu0m+9Tm1uoegobE94Ng9PUSsisbRCvMO54PFQ9FXA=;
-        b=JjBkK6P2pBf5JoCUwo3yBq5FR2fSf2o8nDbs2Oq9BYiPIYKvbeaHuaXP9K1BMP7/MA
-         GhYzFJj7Pibe1f1LoU8ip8AbCVK9WP+ORpRXeXlv4PNZp/1oYk71yyR3AkSfOIahOy/Q
-         KAIOMVlbsY1EKm1gLFmJbq7Cg7w16Py31rLO+N6ySLmEDVtwD10eyOCftDX4kvROqKjO
-         /erbf6iL52KoiI3iRkEw5LoJC8e8gya0JSJ4aUW2x4BAnhFkP892FNcJhLHvQpfVGCxQ
-         2ABUgz78Tx/6NWT4XEEaetM+Sl59hOyntdyM7b5YlwYSRyrbgUp03CNw1gwuI05AcUIS
-         EQ+Q==
-X-Gm-Message-State: AC+VfDyKDRWd4650J6cFRA+OZQbepkdlwwFabDAVAa5PlnzHcBE8TTqt
-        cdBfL5Qe8grMrLa4U+R2PdMplA==
-X-Google-Smtp-Source: ACHHUZ7ItfOjl5dsrzp0GWRZLSS/iHwXakftJkx9kELNaxuK/TfqNPljoBUdN6vwzwB01SkyOVsZQQ==
-X-Received: by 2002:a17:90b:685:b0:256:87f4:432a with SMTP id m5-20020a17090b068500b0025687f4432amr6736938pjz.18.1686206012769;
-        Wed, 07 Jun 2023 23:33:32 -0700 (PDT)
+        bh=nwSmBGENtB9L+r5dkVtr2aEZeow7KKO4JZwDEcpVetc=;
+        b=mEPkzN90wyGxsWUMPCx9iJl6Qsa1AFQg8pw35kwklbnKbOezWy322OfwLHLtoFOYB6
+         kbcNdhpoMX3wi04aVbdeyvG8KTxClPzYIF7Czhx0tfRizw/JTe/A9SY0x6dPpS2kYJwl
+         BqVA9i5s7hz0qgY7Or3IJrB5P1OhxVPD/j7cr5Cg7H7GJZRy42sOPxzAX6KjfTdfNG9N
+         reTPh8hjWJOsqafRH7CpxQtmECIl7uccdAVjEqQJ9p7F4h90gXuIgE5ClB4etbqnj6Jm
+         M9poDB3RZhGZca8kR1bp20sp6MGktKTJUuuXM5Cek+NNXonnLHny1lq5izX1i0GsrrE0
+         +vyQ==
+X-Gm-Message-State: AC+VfDyGUQ5kDGTUGXqiTh+WgZTbKXreeL6/ce6mhloxacMNOKFhipqc
+        aTrgqAn2vW5sOnOeK9k6Mdxfmg==
+X-Google-Smtp-Source: ACHHUZ4nloOJkDga2G1MXrbXuhlMwBysk/Y1/2p/Y17/8yja5JwUCBsJmbIDo0dRfLfuqmRLt447zA==
+X-Received: by 2002:a17:90a:9cd:b0:256:7000:3789 with SMTP id 71-20020a17090a09cd00b0025670003789mr7066599pjo.9.1686206019152;
+        Wed, 07 Jun 2023 23:33:39 -0700 (PDT)
 Received: from C02G87K0MD6R.bytedance.net ([203.208.167.147])
-        by smtp.gmail.com with ESMTPSA id c15-20020a17090abf0f00b0025645d118adsm542039pjs.14.2023.06.07.23.33.27
+        by smtp.gmail.com with ESMTPSA id c15-20020a17090abf0f00b0025645d118adsm542039pjs.14.2023.06.07.23.33.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 23:33:32 -0700 (PDT)
+        Wed, 07 Jun 2023 23:33:38 -0700 (PDT)
 From:   Hao Jia <jiahao.os@bytedance.com>
 To:     mingo@redhat.com, peterz@infradead.org, mingo@kernel.org,
         juri.lelli@redhat.com, vincent.guittot@linaro.org,
@@ -57,9 +57,9 @@ To:     mingo@redhat.com, peterz@infradead.org, mingo@kernel.org,
         mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
         mgorman@techsingularity.net
 Cc:     linux-kernel@vger.kernel.org, Hao Jia <jiahao.os@bytedance.com>
-Subject: [PATCH v4 1/4] sched/core: Fixed missing rq clock update before calling set_rq_offline()
-Date:   Thu,  8 Jun 2023 14:33:09 +0800
-Message-Id: <20230608063312.79440-2-jiahao.os@bytedance.com>
+Subject: [PATCH v4 2/4] sched/core: Avoid double calling update_rq_clock() in __balance_push_cpu_stop()
+Date:   Thu,  8 Jun 2023 14:33:10 +0800
+Message-Id: <20230608063312.79440-3-jiahao.os@bytedance.com>
 X-Mailer: git-send-email 2.37.0 (Apple Git-136)
 In-Reply-To: <20230608063312.79440-1-jiahao.os@bytedance.com>
 References: <20230608063312.79440-1-jiahao.os@bytedance.com>
@@ -75,103 +75,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is triggered during cpu offline when CONFIG_CPU_FREQ is enabled
-and cpufreq is set to powersave:
+The WARN_DOUBLE_CLOCK warning is triggered during cpu offline.
 ------------[ cut here ]------------
-rq->clock_update_flags < RQCF_ACT_SKIP
-WARNING: CPU: 24 PID: 754 at kernel/sched/sched.h:1496
-enqueue_top_rt_rq+0x139/0x160
+rq->clock_update_flags & RQCF_UPDATED
+WARNING: CPU: 17 PID: 138 at kernel/sched/core.c:741
+update_rq_clock+0xaf/0x180
 Call Trace:
  <TASK>
- ? intel_pstate_update_util+0x3b0/0x3b0
- rq_offline_rt+0x1b7/0x250
- set_rq_offline.part.120+0x28/0x60
- rq_attach_root+0xc4/0xd0
- cpu_attach_domain+0x3dc/0x7f0
- ? __schedule+0x65e/0x1310
- partition_sched_domains_locked+0x2a5/0x3c0
- rebuild_sched_domains_locked+0x477/0x830
- ? percpu_rwsem_wait+0x140/0x140
- rebuild_sched_domains+0x1b/0x30
- cpuset_hotplug_workfn+0x2ca/0xc90
- ? balance_push+0x56/0x120
- ? _raw_spin_unlock+0x15/0x30
- ? finish_task_switch+0x98/0x2f0
- ? __switch_to+0x116/0x410
- ? __schedule+0x65e/0x1310 ? internal_add_timer+0x42/0x60
- ? _raw_spin_unlock_irqrestore+0x23/0x40
- ? add_timer_on+0xd5/0x130
- process_one_work+0x1bc/0x3d0
- worker_thread+0x4c/0x380
- ? preempt_count_add+0x56/0xa0
- ? rescuer_thread+0x310/0x310
+ __balance_push_cpu_stop+0x146/0x180
+ ? migration_cpu_stop+0x2a0/0x2a0
+ cpu_stopper_thread+0xa3/0x140
+ smpboot_thread_fn+0x14f/0x210
+ ? sort_range+0x20/0x20
  kthread+0xe6/0x110
  ? kthread_complete_and_exit+0x20/0x20
  ret_from_fork+0x1f/0x30
 
-More detailed key function call graph:
-rq_offline_rt()
-  __disable_runtime()
-    sched_rt_rq_enqueue()
-      enqueue_top_rt_rq()
-        cpufreq_update_util() <-- depends on CONFIG_CPU_FREQ
-          data->func(data, *rq_clock(rq)*, flags)
-            intel_pstate_update_util() <-- powersave policy callback function
-
-Before calling set_rq_offline() we need to update the rq clock to avoid
-using the old rq clock, and use rq_lock_irqsave()/rq_unlock_irqrestore()
-to replace raw_spin_rq_lock_irqsave()/raw_spin_rq_unlock_irqrestore() to
-ensure that rq->clock_update_flags are cleared before updating the rq
-clock.
-
-Steps to reproduce:
-1. Enable CONFIG_SMP and CONFIG_CPU_FREQ when compiling the kernel
-2. echo 1 > /sys/kernel/debug/clear_warn_once
-3. cpupower -c all frequency-set -g powersave
-4. Run some rt tasks e.g. Create 5*n rt (100% running) tasks (on a
-   system with n CPUs)
-5. Offline cpu one by one until the warninng is triggered
+To avoid this warning, we remove update_rq_clock() from
+the __migrate_task() function. And in order to avoid
+missing rq clock update, add update_rq_clock() call before
+migration_cpu_stop() calls __migrate_task().
 
 Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
 Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
 ---
- kernel/sched/topology.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ kernel/sched/core.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index 6682535e37c8..b89497696880 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -487,15 +487,17 @@ static void free_rootdomain(struct rcu_head *rcu)
- void rq_attach_root(struct rq *rq, struct root_domain *rd)
- {
- 	struct root_domain *old_rd = NULL;
--	unsigned long flags;
-+	struct rq_flags rf;
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index a68d1276bab0..1fd87657f521 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -2398,7 +2398,6 @@ static struct rq *__migrate_task(struct rq *rq, struct rq_flags *rf,
+ 	if (!is_cpu_allowed(p, dest_cpu))
+ 		return rq;
  
--	raw_spin_rq_lock_irqsave(rq, flags);
-+	rq_lock_irqsave(rq, &rf);
+-	update_rq_clock(rq);
+ 	rq = move_queued_task(rq, rf, p, dest_cpu);
  
- 	if (rq->rd) {
- 		old_rd = rq->rd;
+ 	return rq;
+@@ -2456,10 +2455,12 @@ static int migration_cpu_stop(void *data)
+ 				goto out;
+ 		}
  
--		if (cpumask_test_cpu(rq->cpu, old_rd->online))
-+		if (cpumask_test_cpu(rq->cpu, old_rd->online)) {
+-		if (task_on_rq_queued(p))
++		if (task_on_rq_queued(p)) {
 +			update_rq_clock(rq);
- 			set_rq_offline(rq);
+ 			rq = __migrate_task(rq, &rf, p, arg->dest_cpu);
+-		else
++		} else {
+ 			p->wake_cpu = arg->dest_cpu;
 +		}
  
- 		cpumask_clear_cpu(rq->cpu, old_rd->span);
- 
-@@ -515,7 +517,7 @@ void rq_attach_root(struct rq *rq, struct root_domain *rd)
- 	if (cpumask_test_cpu(rq->cpu, cpu_active_mask))
- 		set_rq_online(rq);
- 
--	raw_spin_rq_unlock_irqrestore(rq, flags);
-+	rq_unlock_irqrestore(rq, &rf);
- 
- 	if (old_rd)
- 		call_rcu(&old_rd->rcu, free_rootdomain);
+ 		/*
+ 		 * XXX __migrate_task() can fail, at which point we might end
 -- 
 2.37.0 (Apple Git-136)
 
