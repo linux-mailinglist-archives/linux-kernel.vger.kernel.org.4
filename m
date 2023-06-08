@@ -2,155 +2,334 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A1A97278A5
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C16907278A8
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:22:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235325AbjFHHVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 03:21:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56162 "EHLO
+        id S235432AbjFHHWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 03:22:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235285AbjFHHVf (ORCPT
+        with ESMTP id S235362AbjFHHVl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 03:21:35 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2093.outbound.protection.outlook.com [40.107.113.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE242D41;
-        Thu,  8 Jun 2023 00:21:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q/eVa532Fv0G1TuBE1eLmFJnRyMTzRIUcSm73u+UPEPjY23faWBhMuY+Dz+49X5uooySOmB2hwFPhf4VfcCERyNOVktXF+uhJhVnupkjvY+QqB7t2CNaAgaMATTqm+7OdyFVyibHlFEMTpfJft+dGWOJwd2voL0jFJ8WGiYWzkjj9rkHmlNmayfaP/FULsdWwjnobGKGZ7VoY7zMo6vRovhEsl9tCTu5Bwaz1tN9G7+9lcK0jyjGw4vfq295ZTZ5kidonL1URNpUmetNACd0GjYcchYak+OUibbfzAbNk+CJjnreVAkG0AUN6oo7ko8Es6cNBAddlMoUp3lWut0Jrg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=b0SjTs+Md7h3iUT221XjlgHI+NLrtkFvo1iikCIzzcM=;
- b=JLeLVc2fzV+hIVMvURALr8+LjtvllAuFMa3KG53zUFhvIQi3UtYqSESiZeHy18lotDDaiu5unCT1scnUxHZ5JexunvSUMnCt2N8Ca8WadT83xYGsuUaLGwrAEWgmZZUnJebOQX2vgW4Z94zmgJX8147r8KsIPm4R/bl9LyYOdBRivnd+QvYi9gkbP8+Jt3a4KwN0Lo28jSoc81FUi3kZu8fu1eyqNdrJ3r7kQ0xgjudInUIdJfqUJSoJrnWl8q0R5X+Zw0B/n0Hyxe2UbzWtWpaqaPpf4mPXNuZuqMJKPceVlAPWVAYl9JnpfRrL8nWByirTuCC0ApvDqHWxw4g1gQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b0SjTs+Md7h3iUT221XjlgHI+NLrtkFvo1iikCIzzcM=;
- b=TtWGIK6BuyZHbOWBrrIVk93943Bi8wnIok2+ITI68Fmv53B1xgaTGfjdVpiq6llpIoQGzMRV/hylQh2+gUPQb+wB2lPBG75ochur508WxQjV3s53mXwnlSdz0E/hoMNnjXr6A38BBnE01YckNkAsUAOgMX5nb+xconCz3ybJJxQ=
-Received: from TY2PR01MB3788.jpnprd01.prod.outlook.com (2603:1096:404:dd::14)
- by TYWPR01MB9662.jpnprd01.prod.outlook.com (2603:1096:400:230::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.19; Thu, 8 Jun
- 2023 07:20:53 +0000
-Received: from TY2PR01MB3788.jpnprd01.prod.outlook.com
- ([fe80::a4f8:4204:cbe6:6cb3]) by TY2PR01MB3788.jpnprd01.prod.outlook.com
- ([fe80::a4f8:4204:cbe6:6cb3%3]) with mapi id 15.20.6455.030; Thu, 8 Jun 2023
- 07:20:53 +0000
-From:   Chris Paterson <Chris.Paterson2@renesas.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-CC:     "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "patches@kernelci.org" <patches@kernelci.org>,
-        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
-        "pavel@denx.de" <pavel@denx.de>,
-        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>,
-        "srw@sladewatkins.net" <srw@sladewatkins.net>,
-        "rwarsow@gmx.de" <rwarsow@gmx.de>
-Subject: RE: [PATCH 5.4 00/99] 5.4.246-rc1 review
-Thread-Topic: [PATCH 5.4 00/99] 5.4.246-rc1 review
-Thread-Index: AQHZmYIMGSha5+A69Uiq7zdC9KWupq+AaZfg
-Date:   Thu, 8 Jun 2023 07:20:53 +0000
-Message-ID: <TY2PR01MB3788DF0241939043625338A2B750A@TY2PR01MB3788.jpnprd01.prod.outlook.com>
-References: <20230607200900.195572674@linuxfoundation.org>
-In-Reply-To: <20230607200900.195572674@linuxfoundation.org>
-Accept-Language: en-US, en-GB
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY2PR01MB3788:EE_|TYWPR01MB9662:EE_
-x-ms-office365-filtering-correlation-id: e633e188-d544-406a-429a-08db67f0e52f
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: IsV0R1+0Db8utyrUWyz0JC3jq5tgmv/G+n7PCtZnK2mw1Q4ozbQQMI6Lj/4gTgJqgTVbirDIjnzj22MnlvfNR1Ot88xmThNDGQAJk37Ja65NNKHZwphvS8tzmv5+yJtj8zZ3m/63Rx59t/DRkOAuMeHaLM4vlbiieDMHx35wrEdZ5p96JMEWyFVSuOsDK4e0LXudGZjYdIiW84lGAF8sTW+rSig+5LY28now6rUYaOUUzljkpWsAQ6rYZXub3r71wSHCLmfJlce6ZZ1KGUqFAYrzbSGznCs4/1oYkqLFC0tR+b/kjx5GPu2ffJwk2s1h91drrTCrgEHgosTn8N4EVdEB1so7xrTA1N7IjtxeT0ct3tpPzhE53jLwOdd74MX8M0K9MAAauJRFkXVJUyWlN4DGBKgW9XEn9X1wVbowyiJn3uiJqqtbIrcnPhH8sYirvj/o/Ft9C0s4gp0r4U25iqr34ctYzh2ejidHnIp8ntOTXqBnj2D6f/Zac/n6jOF6YgauU9jYzgFg1ovnN8rdlyXNU1XsyXDPgGKN920xnI+MjjyyKqGWjuplnDHgWJucBVjWsSGECYx2st0GwCNHvEUaG8OSQTy5Lt1oPwfEUORpHDu7h04kcjIF6wVXfL6JYwfZlOTtxgqB8/KkNFIIZQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR01MB3788.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(39860400002)(396003)(136003)(366004)(451199021)(186003)(478600001)(6506007)(26005)(316002)(966005)(9686003)(52536014)(7696005)(55016003)(8676002)(38070700005)(86362001)(41300700001)(38100700002)(71200400001)(8936002)(64756008)(66556008)(66946007)(66476007)(122000001)(76116006)(33656002)(54906003)(4744005)(4326008)(5660300002)(7416002)(2906002)(110136005)(66446008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-2?Q?Cr2S7E0KUenClRsMz7zCz/stFGQ2t6q26NWmRzO//Y9r71F4WUL99mn7hD?=
- =?iso-8859-2?Q?Bo6jCNOz+hER9rE4H3dcY2Hbw+iTOZUWSVTbUSMYgqmBZjQ6pKhUTbdtIk?=
- =?iso-8859-2?Q?zPKZqnPbL/X77X/7NX/U5i8WfGt3Si7jRYGP+IrwCd3XLYeFWAXSa14oHJ?=
- =?iso-8859-2?Q?j8J+Scm2ROqMheeb++NA7x5eWGQJctxwJbQw2nVhwohGhWtf3J0miEG8/A?=
- =?iso-8859-2?Q?qEyJ0fdDN0HIkVWv0fmZ1Hq+iP/BcrvY3thpAXpHxtyVAjqoRPBtQVLSjH?=
- =?iso-8859-2?Q?1KhZ3+JLD4fjyw+dV4+yqMYx/LfTe0XYzWCFO9qS2w3pGLIumkgLyqDiXe?=
- =?iso-8859-2?Q?BsWhkKvexdzt1IZeYrVoRz9aDMWyKeA9XlyJ2N70uUTZ5mAaDVMS6CB9P/?=
- =?iso-8859-2?Q?LFk46nXR6+xm/Yab8hDL1RqTdzjQIu1oUDg9IhsJXv9/abd0b9et/KHGJg?=
- =?iso-8859-2?Q?32hMzf0ksH2DWsCM/1aNfCDEqc9ZhkwkcG4dBbMlW9hG4DsqWhgKrPvwge?=
- =?iso-8859-2?Q?W2ps3asMovBalwS4Fzp2XQxzt3FKmc05mtGjKDp47goozyjqYER0W/CQMy?=
- =?iso-8859-2?Q?wxuHSlKqQVzoisKYslk4RmTOnG+d95CsTospyVGqgYRM2d97HriI8L3+gL?=
- =?iso-8859-2?Q?rghA3GsV+3kRKjC8GrHhCDGbiUZOia33j61SNjKPC5yuiGAdnJ2bCvuqjk?=
- =?iso-8859-2?Q?GyGhKBVKVJDP0DTDtA4xPb1zho2NI6q0mbuLqCawhDMOYBj+71ZWBnZGZY?=
- =?iso-8859-2?Q?h7JXIGYYAUeP1BjyplvxHQEhHluFpZ2KLUj99dv7I4+tgH9gtdXeMZ4Uv6?=
- =?iso-8859-2?Q?yJGGf8Y2aGZA3Xc0WAeW0d/vaDqrDHtC6G42xRmKwFSCWaWqZ3/1o01/Fc?=
- =?iso-8859-2?Q?HcNfXFfaKg7yDNPDlLJKLjs5CAi09zfSciqqo88EfudpwvHChJlMKq14Cy?=
- =?iso-8859-2?Q?eQdeRtc9qy027PfTjGIK0b9bt/Njz6yahuKbgC/OUVZ17/sPBSR52IKZf6?=
- =?iso-8859-2?Q?GMNf4Fn/5QVvD5rok/V40GfIbeGbaZ+vQPtXTMyTNiG8m9C5dsBt54wUXP?=
- =?iso-8859-2?Q?VZitf/u3bI3QrBtyHLdmUZrqS5PFPuTHf3xgaci0zQFDoLL3topXQMF7R7?=
- =?iso-8859-2?Q?AkaEk266SHgNKv/rhBRjEZGf3oMdGASMEBylOixuMTR8DCrbL6eTzvZ+CQ?=
- =?iso-8859-2?Q?N5tXNlG9yvlmPUJbcilJiOz9+ZqLUVdq4CNvD0iVlgxrjOQ4+NTttutSHP?=
- =?iso-8859-2?Q?9VkcfgDYf21yLkWaD2tUi3FlyjEo3VjNpG6hEsqor8LbZNTqRutybDNfpD?=
- =?iso-8859-2?Q?zoxwFx6L7FwSmInPsL6PDk3bUNgoiSMs03cV6JoMsfSpQsyizlHxTxr2+3?=
- =?iso-8859-2?Q?gskEDzhdtVL2PgSIxqN4zXoUXTjQP8JRyGN+5pePetiNz/wlPhmvSkZrGO?=
- =?iso-8859-2?Q?S7bx9gGGG50wzMjHjQ3FPKP3y95j2v9mxCq/PSc7jHRgk63qApOKsyu00H?=
- =?iso-8859-2?Q?R5h+rPpw+y0ZQ3eGXxzgk018Ct3MZMUnk1D5IiQTEXpYibwJ5QPXhbUmfN?=
- =?iso-8859-2?Q?40/CcH1KXxQAYG3H4++D2E6mwupc3kPo4ZvE36a4T/3AZ1Bf6DG82wXLxl?=
- =?iso-8859-2?Q?011gPh58+tLA1IllK1oMBOPRBgvJYBTo3WysvvfMar7onVm4pyylhFfw?=
- =?iso-8859-2?Q?=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-2"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 8 Jun 2023 03:21:41 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F2691984
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 00:21:15 -0700 (PDT)
+Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com [209.85.128.200])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 475CB3F460
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 07:21:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1686208870;
+        bh=ZsNRIyP+X7XOHybtDnn1u0u6wdb6BoZre2xC4a+Lfzc=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=XOSjU4smbrjehXIwJ9X4lXDpMAZW1PQmtdd/ETLnfqpuUdJEbvO7gC9WgVD9AAvIk
+         niQo0k+dVJD/blfCICLg6h1AqnJIwK34trGCyKmuYWCuja/rElAvfYTZ0E8djiGRqo
+         yNqk7OxjWsujeh1pqdu5GrD4H3YqgmpBhvr8CXjkpN0b/st01xqwVbr51AYVAUHJ8Y
+         MN9pfX3OkvRqglHlCwqja/MNUqiYTaJf2GWXg4V2z0kj801f3JP2aZn0LgzwQ9qVtW
+         uFZpp9dRbcdd9ZhjsPd71iQYMFHndc2rYUm1xwLyuI/K7Aax2R5qaPnwbZ+lYxVaOd
+         0MvpDrj/ZUxKg==
+Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-568960f4596so4879497b3.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 00:21:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686208868; x=1688800868;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZsNRIyP+X7XOHybtDnn1u0u6wdb6BoZre2xC4a+Lfzc=;
+        b=UDMGH9nGPCVYqHJffSfDUMOGEbF2KSSTwxet4fu5ZMPVHXYxVAAwvb+6id3462TFYW
+         aRrmyARAHuOXY/nWoX5/LvkgXAYVTtHf/6TY3Kj6fLP3o/89unGbWu0ppUzu7Tg3djul
+         WnqTWb8jG5aY4S59+xoX+iLyrWtJXL5EqIkanpHRTj3MJbDIBaeZJTjCB/KXYufA7CoR
+         kaWxnDhdcMs4/qp1S9Q8Lu3mMqnVQAHBxvrH6owgfyGzghW8fBZXD1lOVwePfugTqLA/
+         iTFnu70168MEQpTHZl8jQB6RyQaVmu4kPDQw/O7bni6y8Vhrz+2P6zYje6Zn90RGv5kP
+         GUJQ==
+X-Gm-Message-State: AC+VfDw08HcE3mIuiXA+bQTzhxU4ukcPe8wyKT9JhKcTGsjdpLk8R2FX
+        cMtVhD+rWkJdyZcLEral0P92YTdNBJY3TxSiRsv2tU/cf8St1EO2fAnpVeDN4O0gisyidDYcxS6
+        jV3njIMRoVTkFZ815CJHL9SOhN1/RS6DhfX+QSTVog2h09bd7dawXRyOo1Q==
+X-Received: by 2002:a0d:ca89:0:b0:565:beb0:75b4 with SMTP id m131-20020a0dca89000000b00565beb075b4mr8683762ywd.49.1686208868283;
+        Thu, 08 Jun 2023 00:21:08 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7X2flYyQdAEDNe82m+exDFIM0FQhBAqb+nyjjoepRZiJyrTEM1CairZrf0ohrMfiXcDXJEqvo+y7+2o3p1YDA=
+X-Received: by 2002:a0d:ca89:0:b0:565:beb0:75b4 with SMTP id
+ m131-20020a0dca89000000b00565beb075b4mr8683747ywd.49.1686208867965; Thu, 08
+ Jun 2023 00:21:07 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY2PR01MB3788.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e633e188-d544-406a-429a-08db67f0e52f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jun 2023 07:20:53.7367
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Bb5T+JgP3IEdvyp29EQz7xg1W3oe2yc1A3I93lRyfSyZUp8EEkPG4CAtRwfyMGepPLGde0mdXmBirlC/dkoxWMjNQ4ArokwVhocKVS4x0/4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWPR01MB9662
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230607180958.645115-1-aleksandr.mikhalitsyn@canonical.com> <8b22fc1e-595a-b729-dd21-2714f22a28a7@redhat.com>
+In-Reply-To: <8b22fc1e-595a-b729-dd21-2714f22a28a7@redhat.com>
+From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Date:   Thu, 8 Jun 2023 09:20:56 +0200
+Message-ID: <CAEivzxfkinMgLWNc7u=bMw7HFkjZjDTJKtNNZhF7fZB=VuNTeQ@mail.gmail.com>
+Subject: Re: [PATCH v4 00/14] ceph: support idmapped mounts
+To:     Xiubo Li <xiubli@redhat.com>
+Cc:     brauner@kernel.org, stgraber@ubuntu.com,
+        linux-fsdevel@vger.kernel.org, Ilya Dryomov <idryomov@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Greg,
+On Thu, Jun 8, 2023 at 5:01=E2=80=AFAM Xiubo Li <xiubli@redhat.com> wrote:
+>
+> Hi Alexander,
 
-> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Sent: Wednesday, June 7, 2023 9:16 PM
->=20
-> This is the start of the stable review cycle for the 5.4.246 release.
-> There are 99 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
-> Responses should be made by Fri, 09 Jun 2023 20:07:31 +0000.
-> Anything received after that time might be too late.
+Dear Xiubo,
 
-CIP configurations built and booted okay with Linux 5.4.246-rc1 (21d8ae1f2a=
-a0):
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/pipelines/8=
-93073933
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/commits/lin=
-ux-5.4.y
+>
+> As I mentioned in V2 thread
+> https://www.spinics.net/lists/kernel/msg4810994.html, we should use the
+> 'idmap' for all the requests below, because MDS will do the
+> 'check_access()' for all the requests by using the caller uid/gid,
+> please see
+> https://github.com/ceph/ceph/blob/main/src/mds/Server.cc#L3294-L3310.
+>
+>
+> Cscope tag: ceph_mdsc_do_request
+>     #   line  filename / context / line
+>     1    321  fs/ceph/addr.c <<ceph_netfs_issue_op_inline>>
+>               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
+>     2    443  fs/ceph/dir.c <<ceph_readdir>>
+>               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
+>     3    838  fs/ceph/dir.c <<ceph_lookup>>
+>               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
+>     4    933  fs/ceph/dir.c <<ceph_mknod>>
+>               err =3D ceph_mdsc_do_request(mdsc, dir, req);
+>     5   1045  fs/ceph/dir.c <<ceph_symlink>>
+>               err =3D ceph_mdsc_do_request(mdsc, dir, req);
+>     6   1120  fs/ceph/dir.c <<ceph_mkdir>>
+>               err =3D ceph_mdsc_do_request(mdsc, dir, req);
+>     7   1180  fs/ceph/dir.c <<ceph_link>>
+>               err =3D ceph_mdsc_do_request(mdsc, dir, req);
+>     8   1365  fs/ceph/dir.c <<ceph_unlink>>
+>               err =3D ceph_mdsc_do_request(mdsc, dir, req);
+>     9   1431  fs/ceph/dir.c <<ceph_rename>>
+>               err =3D ceph_mdsc_do_request(mdsc, old_dir, req);
+>    10   1927  fs/ceph/dir.c <<ceph_d_revalidate>>
+>               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
+>    11    154  fs/ceph/export.c <<__lookup_inode>>
+>               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
+>    12    262  fs/ceph/export.c <<__snapfh_to_dentry>>
+>               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
+>    13    347  fs/ceph/export.c <<__get_parent>>
+>               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
+>    14    490  fs/ceph/export.c <<__get_snap_name>>
+>               err =3D ceph_mdsc_do_request(fsc->mdsc, NULL, req);
+>    15    561  fs/ceph/export.c <<ceph_get_name>>
+>               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
+>    16    339  fs/ceph/file.c <<ceph_renew_caps>>
+>               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
+>    17    434  fs/ceph/file.c <<ceph_open>>
+>               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
+>    18    855  fs/ceph/file.c <<ceph_atomic_open>>
+>               err =3D ceph_mdsc_do_request(mdsc, (flags & O_CREAT) ? dir =
+:
+> NULL, req);
+>    19   2715  fs/ceph/inode.c <<__ceph_setattr>>
+>               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
+>    20   2839  fs/ceph/inode.c <<__ceph_do_getattr>>
+>               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
+>    21   2883  fs/ceph/inode.c <<ceph_do_getvxattr>>
+>               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
+>    22    126  fs/ceph/ioctl.c <<ceph_ioctl_set_layout>>
+>               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
+>    23    171  fs/ceph/ioctl.c <<ceph_ioctl_set_layout_policy>>
+>               err =3D ceph_mdsc_do_request(mdsc, inode, req);
+>    24    216  fs/ceph/locks.c <<ceph_lock_wait_for_completion>>
+>               err =3D ceph_mdsc_do_request(mdsc, inode, intr_req);
+>    25   1091  fs/ceph/super.c <<open_root_dentry>>
+>               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
+>    26   1151  fs/ceph/xattr.c <<ceph_sync_setxattr>>
+>               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
 
-Tested-by: Chris Paterson (CIP) <chris.paterson2@renesas.com>
+Sure, I remember about this point and as far as I mentioned earlier
+https://lore.kernel.org/all/20230519134420.2d04e5f70aad15679ab566fc@canonic=
+al.com/
+It is a discussional thing, because not all the inode_operations
+allows us to get a mount idmapping.
 
-Kind regards, Chris
+For instance,
+lookup, get_link, get_inode_acl, readlink, link, unlink, rmdir,
+listxattr, fiemap, update_time, fileattr_get
+inode_operations are not provided with an idmapping.
+
+atomic_open also lacks the mnt_idmap argument, but we have a struct
+file so we can get an idmapping through it.
+
+As far as I can see from the code:
+https://raw.githubusercontent.com/ceph/ceph/main/src/mds/Server.cc
+We have Server::check_access calls for all inode_operations, including
+the lookup.
+
+It means that with the current VFS we are not able to support MDS
+UID/GID-based path restriction with idmapped mounts.
+But we can return to it later if someone really wants it.
+
+If I understand your idea right, you want me to set req->r_mnt_idmap
+to an actual idmapping everywhere, where it is possible,
+and ignore inode_operations where we have no idmapping passed?
+
+Christian's approach was more conservative here, his idea was to pass
+an idmapping only to the operations that are creating
+some nodes on the filesystem, but pass a "nop_mnt_idmap" to everyone else.
+
+So, I'll try to set up MDS UID/GID-based path restriction on my local
+environment and reproduce the issue with it,
+but as I mentioned earlier we can't support it right now anyway. But
+as we already have an idmappings supported for most
+of existing filesystems, having it supported for cephfs would be great
+(even with this limitation about MDS UID/GID-based path restriction),
+because we already have a real world use cases for cephfs idmapped
+mounts and this particular patchset is used by LXD/LXC for more that a
+year.
+We can extend this later, if someone really wants to use this
+combination and once we extend the VFS layer.
+
+>
+>
+> And also could you squash the similar commit into one ?
+
+Sure, you mean commits that do `req->r_mnt_idmap =3D
+mnt_idmap_get(idmap)`? Will do.
+
+Big thanks for the fast reaction/review on this series, Xiubo!
+
+>
+
+Kind regards,
+Alex
+
+>
+> Thanks
+>
+> - Xiubo
+>
+>
+> On 6/8/23 02:09, Alexander Mikhalitsyn wrote:
+> > Dear friends,
+> >
+> > This patchset was originally developed by Christian Brauner but I'll co=
+ntinue
+> > to push it forward. Christian allowed me to do that :)
+> >
+> > This feature is already actively used/tested with LXD/LXC project.
+> >
+> > Git tree (based on https://github.com/ceph/ceph-client.git master):
+> > https://github.com/mihalicyn/linux/tree/fs.idmapped.ceph
+> >
+> > In the version 3 I've changed only two commits:
+> > - fs: export mnt_idmap_get/mnt_idmap_put
+> > - ceph: allow idmapped setattr inode op
+> > and added a new one:
+> > - ceph: pass idmap to __ceph_setattr
+> >
+> > In the version 4 I've reworked the ("ceph: stash idmapping in mdsc requ=
+est")
+> > commit. Now we take idmap refcounter just in place where req->r_mnt_idm=
+ap
+> > is filled. It's more safer approach and prevents possible refcounter un=
+derflow
+> > on error paths where __register_request wasn't called but ceph_mdsc_rel=
+ease_request is
+> > called.
+> >
+> > I can confirm that this version passes xfstests.
+> >
+> > Links to previous versions:
+> > v1: https://lore.kernel.org/all/20220104140414.155198-1-brauner@kernel.=
+org/
+> > v2: https://lore.kernel.org/lkml/20230524153316.476973-1-aleksandr.mikh=
+alitsyn@canonical.com/
+> > v3: https://lore.kernel.org/lkml/20230607152038.469739-1-aleksandr.mikh=
+alitsyn@canonical.com/#t
+> >
+> > Kind regards,
+> > Alex
+> >
+> > Original description from Christian:
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > This patch series enables cephfs to support idmapped mounts, i.e. the
+> > ability to alter ownership information on a per-mount basis.
+> >
+> > Container managers such as LXD support sharaing data via cephfs between
+> > the host and unprivileged containers and between unprivileged container=
+s.
+> > They may all use different idmappings. Idmapped mounts can be used to
+> > create mounts with the idmapping used for the container (or a different
+> > one specific to the use-case).
+> >
+> > There are in fact more use-cases such as remapping ownership for
+> > mountpoints on the host itself to grant or restrict access to different
+> > users or to make it possible to enforce that programs running as root
+> > will write with a non-zero {g,u}id to disk.
+> >
+> > The patch series is simple overall and few changes are needed to cephfs=
+.
+> > There is one cephfs specific issue that I would like to discuss and
+> > solve which I explain in detail in:
+> >
+> > [PATCH 02/12] ceph: handle idmapped mounts in create_request_message()
+> >
+> > It has to do with how to handle mds serves which have id-based access
+> > restrictions configured. I would ask you to please take a look at the
+> > explanation in the aforementioned patch.
+> >
+> > The patch series passes the vfs and idmapped mount testsuite as part of
+> > xfstests. To run it you will need a config like:
+> >
+> > [ceph]
+> > export FSTYP=3Dceph
+> > export TEST_DIR=3D/mnt/test
+> > export TEST_DEV=3D10.103.182.10:6789:/
+> > export TEST_FS_MOUNT_OPTS=3D"-o name=3Dadmin,secret=3D$password
+> >
+> > and then simply call
+> >
+> > sudo ./check -g idmapped
+> >
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >
+> > Alexander Mikhalitsyn (2):
+> >    fs: export mnt_idmap_get/mnt_idmap_put
+> >    ceph: pass idmap to __ceph_setattr
+> >
+> > Christian Brauner (12):
+> >    ceph: stash idmapping in mdsc request
+> >    ceph: handle idmapped mounts in create_request_message()
+> >    ceph: allow idmapped mknod inode op
+> >    ceph: allow idmapped symlink inode op
+> >    ceph: allow idmapped mkdir inode op
+> >    ceph: allow idmapped rename inode op
+> >    ceph: allow idmapped getattr inode op
+> >    ceph: allow idmapped permission inode op
+> >    ceph: allow idmapped setattr inode op
+> >    ceph/acl: allow idmapped set_acl inode op
+> >    ceph/file: allow idmapped atomic_open inode op
+> >    ceph: allow idmapped mounts
+> >
+> >   fs/ceph/acl.c                 |  6 +++---
+> >   fs/ceph/dir.c                 |  4 ++++
+> >   fs/ceph/file.c                | 10 ++++++++--
+> >   fs/ceph/inode.c               | 29 +++++++++++++++++------------
+> >   fs/ceph/mds_client.c          | 27 +++++++++++++++++++++++----
+> >   fs/ceph/mds_client.h          |  1 +
+> >   fs/ceph/super.c               |  2 +-
+> >   fs/ceph/super.h               |  3 ++-
+> >   fs/mnt_idmapping.c            |  2 ++
+> >   include/linux/mnt_idmapping.h |  3 +++
+> >   10 files changed, 64 insertions(+), 23 deletions(-)
+> >
+>
