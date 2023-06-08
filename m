@@ -2,216 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA557289EE
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 23:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5635C7289F5
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 23:09:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236987AbjFHVH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 17:07:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58090 "EHLO
+        id S236867AbjFHVI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 17:08:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232085AbjFHVH5 (ORCPT
+        with ESMTP id S237040AbjFHVIy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 17:07:57 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B71F2D42;
-        Thu,  8 Jun 2023 14:07:55 -0700 (PDT)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 358Gmvaa020704;
-        Thu, 8 Jun 2023 14:07:11 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=n63nSmaJuUIoK1z2sPRQ4AfXZLgi0W4CcBjJZp2U1xk=;
- b=SGyiU3kyk73AlxxlhOo8+ommK54fye8xSPI2cQeJ+CnU+/txGJaPhnb71JELAaeDUT0v
- gl0Ck4adRxqe5mJ+9ioncAVVzQIx+84JuCTEshBemeDE2ZwWNEYHm6+aHGVpk2nVKfCd
- SVj35SEwiPy7yBDiIQyxoFGLzyjBNbLeqwOlLlY7rOQRwPO9o/CHRyX43hvIA2Sx14tX
- HfbP4nJ7nd1lAqgxjLZ7rO3laMiSjSy0zEakjZCwqbXPPGK7QMGzIyO7BYhDq90aGcQo
- 6mLYJRzcfuKZYkn+KV8pmEskOJ+I8iTd+vMTIS6GWwb/Cr7H5zS81a9mtVWbaPinLFx3 YQ== 
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3r34d0yaqr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Jun 2023 14:07:11 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ahBET+gjuCryrG72W7denPT0LUI8KM0C9UnjHKBBdOQZ0Y3zLsyQBbKMGqbEcpNUGyln3QwLhYmakYPacc2/hSylirD9u2zXq58miUDF3E5zdCwgFWBVkCrYLybnd+zkNAqV/BFo1sJE3tW0Kln4kZyJbZh+v4hRDhyWxPtPHRb/4FzrdWpo6mpz7N5d38HE0iRQ2P1ApozEP3gd84l7BogpxV2z0zVftUiJoYgpNlHxW18jpjflpGeckwM3DxN3rdHV14L52Y5Pslhql7O7q1Mh4Xu9WDnhikSDiSJbaSBGGBCFDZlAjasDcUCsJ8GM5UdSmRzwz7bqcIPbbUUrrw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=n63nSmaJuUIoK1z2sPRQ4AfXZLgi0W4CcBjJZp2U1xk=;
- b=hQ/mb9RFn/R4sozFZCo/FU1LqvzcSitqkbTJMcdv+f3wMk7iJgbL80cFCwlBL4x9txz1adj5Lg0R6l0D++YjIcaGc++hA37/5xIqWxejC8M5maLrAD1gusatb7wEcPj2PW14Oe6OMHlUFWcJZnEYTkp/c5iuR4/v1U2fwRjWLq+gUkcpf8qls6SyRoYOXFkbxbvQR+lqT886bTPM6y/CrxxTcp4XCu2g9WUNVThnnQeoowDM4JLdNgv/JhYpbD45KguU5ocqSWSFchAKFBUxSqO/z0BUKC8KUWs0TaciI8bsgfPlBIc3b80PlThoPmg8o53A4o9HaeRMAy5ZIDJJNQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by SJ2PR15MB5647.namprd15.prod.outlook.com (2603:10b6:a03:4d1::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.36; Thu, 8 Jun
- 2023 21:07:09 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::bf7d:a453:b8d9:cf0]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::bf7d:a453:b8d9:cf0%6]) with mapi id 15.20.6455.030; Thu, 8 Jun 2023
- 21:07:08 +0000
-Message-ID: <4ca27e23-b027-0e39-495b-2ba3376342cc@meta.com>
-Date:   Thu, 8 Jun 2023 14:07:05 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.2
-Subject: Re: [PATCH bpf-next v3 1/3] bpf, x86: allow function arguments up to
- 12 for TRACING
-Content-Language: en-US
-To:     menglong8.dong@gmail.com, alexei.starovoitov@gmail.com
-Cc:     davem@davemloft.net, dsahern@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, x86@kernel.org,
-        imagedong@tencent.com, benbjiang@tencent.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20230607125911.145345-1-imagedong@tencent.com>
- <20230607125911.145345-2-imagedong@tencent.com>
-From:   Yonghong Song <yhs@meta.com>
-In-Reply-To: <20230607125911.145345-2-imagedong@tencent.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR13CA0086.namprd13.prod.outlook.com
- (2603:10b6:a03:2c4::31) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
+        Thu, 8 Jun 2023 17:08:54 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411EF30DF;
+        Thu,  8 Jun 2023 14:08:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686258528; x=1717794528;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=feLhceN5MoyaEEcZHMZvB1mjorERrPsarNA+YfBuF0Q=;
+  b=QQGZ0U+37sdjZ4y0QBUQFd6EwlixnWABbxh9gvyOOlLmx3+E56mnLGhl
+   mJQtP9GD/oIZSBv2qWwHtnTR8WycxDa1RyFslJV2dHpBcV7LF0RmWR2zT
+   Nfhoa56FFGhPfVZ08FGiQoqvEk0VUDGPygEHcpoXLtJK6FDXpXQXnKexM
+   wTSiOpVQzTNhTm6Q+isfLoH/RrD5xC8JHcwDXn2B/za0UHdKcO9Fv5RWI
+   OPaH1fyNj09Egop2DA6E+fwvoi6+z03+61HxyY5QEJRS2pEe/gNEncswx
+   47O75csdCNge+Arzyzf1Qs9TgreCDzXtZPs0Mfm2LG5r3Ui8YDuXTBIag
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="423309336"
+X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
+   d="scan'208";a="423309336"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 14:08:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="660533664"
+X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
+   d="scan'208";a="660533664"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 08 Jun 2023 14:08:40 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q7Ms3-0008Ga-1K;
+        Thu, 08 Jun 2023 21:08:39 +0000
+Date:   Fri, 9 Jun 2023 05:08:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tommaso Merciai <tomm.merciai@gmail.com>
+Cc:     oe-kbuild-all@lists.linux.dev, jacopo.mondi@ideasonboard.com,
+        laurent.pinchart@ideasonboard.com, martin.hecht@avnet.eu,
+        michael.roeder@avnet.eu, linuxfancy@googlegroups.com,
+        Tommaso Merciai <tomm.merciai@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Gerald Loacker <gerald.loacker@wolfvision.net>,
+        Nicholas Roth <nicholas@rothemail.net>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Mikhail Rudenko <mike.rudenko@gmail.com>,
+        Shawn Tu <shawnx.tu@intel.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 3/3] media: i2c: Add support for alvium camera
+Message-ID: <202306090401.jEkSrYuJ-lkp@intel.com>
+References: <20230608083127.545750-4-tomm.merciai@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|SJ2PR15MB5647:EE_
-X-MS-Office365-Filtering-Correlation-Id: d781b75c-4733-41f5-6d3b-08db6864520a
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mhbHtT4SHGVbjeG9+peYTt0TTV7rEqv9lHgRArqxTHCNuMGnRpyIPIj8pLZbY4oERhHtcDW36KooCZGu6rjWd7cmwVh+9nCZ6sVgqlq6XnqwABaaY3GcXbK7cFhg0FVcwMhXZ248/Thh1233YT62SI8seMFlw13pPGw0YKBT7BCsrkhyo+X7l02T+g7pQDBLBTXAfc0iqEHAZv/o6bpEIbjiMzu09bdk2refV2xC72OUKPvks7lJOea5H2BiXN6qaLcWzoDvkEAbKuuSkdpAU+OfYsPef2AkHu/yN+R5NIPoV3Uuj1mCnrvuBPPmDR4AzMISidoRARNBCiTJ0Gm61Pl6R7SstRaH6Wp01DeH/MadvDNhkMrxmj9uq5LB6bhvrAPN91gR6eiDunBQmanBjm0bjWVbWUog+po5yIGN3xIxAffY6KlC1umesiT4aLlN027tGrVUZgMG7eCGl7GxooBpOprGeowfGbn1z2VIMbOD8/czEp4iO35W1hRAwJ8wXgeE9uU0OAgdLp2apoZm8VvxEJrA0BrE2/kEV5g76aGqn+2dS+GBk5rmFwP0PY+s89/V6mCchOIT7rGCUQcKmRSEROxGKZ+7EwBHCz5kRXdhPa0gfYY4j2wHLm4rOsC4jW6lKAr/FXTMKHh1sEgdhw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(376002)(346002)(396003)(39860400002)(451199021)(31686004)(6512007)(6506007)(41300700001)(5660300002)(186003)(53546011)(36756003)(7416002)(4326008)(66476007)(66556008)(6666004)(66946007)(8936002)(83380400001)(8676002)(2616005)(478600001)(2906002)(86362001)(31696002)(6486002)(316002)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UG12aUVrWGNFL3FCYllTRGVqSVhiZytIRUJxRE95NE9IRzlGd1NQM3JDUXB6?=
- =?utf-8?B?ekJzWUY5WnR1NXhBUThSUzAyWXFqVS9iQjRZVWlGZnQ1MThqOHVHaWlDOWZ6?=
- =?utf-8?B?d2FlNzYrLzV5L21ySkVJQkFGNGJuNnNzNzFMc3hBbm1YR1JoRFdoNFZmQjVV?=
- =?utf-8?B?RlVkMU0wMGFqZEJHejZpbkp5RExkQUtyZlRzMndjLzNXcDk4emcrOHphMlhD?=
- =?utf-8?B?VC9VUVBiVUhoU1ZKN2RPek9UeHlmSGZNSVFNeXMyT1ZhZ0ZPS09UWm5QRUFF?=
- =?utf-8?B?MWxVNVROclFtbnZuaERBclFjbG8yN2hjZkVBOC80Zjdmd0pXWE1GSnVIQUV5?=
- =?utf-8?B?R2NDMUxIZXEwS2RCNnVSdDVLbnh3ZFZxVTQwYUZHalZyOWxCT0tGNFozL0hv?=
- =?utf-8?B?SWdNeUN3aTE0dm45RisweVJ0NWlYaUl1S0N2YkdNbTVLTW1ISlVpUGFjTVky?=
- =?utf-8?B?bWhIWVZNWTJuT3B3eTd3anU5QU9WV1cxMWd5bC96dGZMY3RjSTcyWXRoaVJH?=
- =?utf-8?B?VTY4VzVRaldLQ2QyZkNKenRlMmtIV1RvVzdTUTU2R3pOZVFXejBuRGUvWFpC?=
- =?utf-8?B?cWhxWWhMNXEzckw4czRwZGdzb0xuQ0p2bGp2a2R0a1dwWVRid29HMUpheEdE?=
- =?utf-8?B?YjB5eHNCcXA2ZDNSaTRTZlNSbXZkVVM5VHFKMHFEaG9LOUJ1UVdraXhKRDVp?=
- =?utf-8?B?ZHhGS0xmcFp0bktXd1hZLzVadDFDZUY3Uzl2T1d5cHRGc3MzQ3RTVTMzeGhF?=
- =?utf-8?B?dGM2bG96U3BJazRPdUNHZ0cwMFoyZndGK0xscE1CYlhVMHN5OXZMK0hPbFpq?=
- =?utf-8?B?ZDdBN0tzWjdwbUF3QlB2SGlRWS8zaWZIYkJlaVk5Z1VxK2orcU8rUzNiTEUw?=
- =?utf-8?B?ZnBOUkhrbFlQQ25jY2hWNUxqTzduNVdnQmNGOG02MjNUenpiaGNTV29OUkQ0?=
- =?utf-8?B?UkZTdjRNYVE2L2JZTXp1dUIybnM5Y2d2eU8yZ0pucFo3dVN6dWV1RWU0MFlR?=
- =?utf-8?B?M2Q0QUtOWHBlaDM2UUs5YWlySmtjZ0JnMzNlVXdxSE84c09xekFSSFY0S3cr?=
- =?utf-8?B?eFZMUkk5Rjc5SmJ4U1gwYjJOcHJHMUdoRm1HYmhPbEFMajViQ1VTaENNKzRF?=
- =?utf-8?B?WndzWUdkYi9iT1NtaTFLRzhwdm51ZHQrZEFaZnlReUh0eXJnOGYwNGQ4LzUx?=
- =?utf-8?B?UW5mY2xKN1hQby9TbTl2Z092bjhpbHZXaVVUYzMzRDFEbVdkaXQ4VTM1RWQ4?=
- =?utf-8?B?bmhObEk5d2hWODVLQUVkWWRDVlA5YWNIR1krby9mMWJEWWMxZ2E5YnYxeXNJ?=
- =?utf-8?B?MVZaYmFsekI2RUtjRFVnSVp0ckJWU1VxVGJoVFU5VGxWU0RPblA4NDUySG8v?=
- =?utf-8?B?U2padUpNY1lqdXN6NW5JUWtYREJ6a24rUUp1MGcvUGZtM0hIQVpLamFKMm4z?=
- =?utf-8?B?YUNGclp0a1F2dWJYQVBOWGJKS1ZDQXVQRCtrVmMrbnc1WGg0MFJrcVdBRGtz?=
- =?utf-8?B?RWtIT0hRRFZpanFheEJlczQwaEZPcVVOY2VzRzUvZjNGMHZoZDNIWk5jQkp2?=
- =?utf-8?B?KzZWK3kvNHZrQ2o1bldSUGVLT3krU09ZUk9WY2ZCU01ud0dKK3VPUGEvWHJ0?=
- =?utf-8?B?QnBHeDNFSzZZejhHSzg3QWp3RHRKYkdZbUtLaUNvU253dVArSnpkUHpMMVMv?=
- =?utf-8?B?MVVFaGh4bUpzUFJWMEZIWDJScmRBUXJHZ1A3bWxRMVdlVUhBU3FtYmtZd2to?=
- =?utf-8?B?RVN0SldFa2hVMmMzRGZlNnpOc3NrWmhUUTJxN3lVb2JvRWNlMnpiTFJnVU1G?=
- =?utf-8?B?dlluNGM1dElBS3RxSEI2ZVBMMU1MQjJkVWJkWVVWeHo3OVdDWXZqUGxmeTV3?=
- =?utf-8?B?azVwcWxWVk1FSlIyYXR5bTRhNDljSXEzckhEb1JQQzdYanFlNjNVem5HcnJW?=
- =?utf-8?B?ZjFYbHRsUVhHbkZ4VHFvWjl3U3VuaHVUR2pFU0xYK3JsWFRGRHM3bW84UUM2?=
- =?utf-8?B?MG9sZ1IrQWx2SU9kSDVJZVg0NVI4UE9vb3IvYVpMdFVHbFNQb2FwT0pjMURW?=
- =?utf-8?B?Q00xUURJZGh6YjFhU2RNb3FydThFS3FBQ2ZjbHljbFpBejZiNE9OOVdnK1dY?=
- =?utf-8?B?T0hRV21yL3VIQW9YaVA4ZEJqdWhFSy83YjFWT0pCeWt3K2QzRVQ2SWdHc2ty?=
- =?utf-8?B?MFE9PQ==?=
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d781b75c-4733-41f5-6d3b-08db6864520a
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2023 21:07:08.9294
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qSWejcwrRj5TwA/CTWfDHqTWtaVG4UtUrNfnze6Y307H5qyX45TW/kPN2oc6P7QA
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR15MB5647
-X-Proofpoint-GUID: 2JpqSjwo74rTcOOZSe2HqLP4KWF56roJ
-X-Proofpoint-ORIG-GUID: 2JpqSjwo74rTcOOZSe2HqLP4KWF56roJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-08_16,2023-06-08_01,2023-05-22_02
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230608083127.545750-4-tomm.merciai@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Tommaso,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on media-tree/master]
+[also build test WARNING on robh/for-next linus/master v6.4-rc5 next-20230608]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Tommaso-Merciai/dt-bindings-vendor-prefixes-Add-prefix-alliedvision/20230608-163423
+base:   git://linuxtv.org/media_tree.git master
+patch link:    https://lore.kernel.org/r/20230608083127.545750-4-tomm.merciai%40gmail.com
+patch subject: [PATCH v5 3/3] media: i2c: Add support for alvium camera
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20230609/202306090401.jEkSrYuJ-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 12.3.0
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add media-tree git://linuxtv.org/media_tree.git
+        git fetch media-tree master
+        git checkout media-tree/master
+        b4 shazam https://lore.kernel.org/r/20230608083127.545750-4-tomm.merciai@gmail.com
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=alpha olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash drivers/media/i2c/
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306090401.jEkSrYuJ-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/media/i2c/alvium-csi2.c: In function 'alvium_get_dt_data':
+>> drivers/media/i2c/alvium-csi2.c:3245:13: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+    3245 |         int ret = 0;
+         |             ^~~
 
 
-On 6/7/23 5:59 AM, menglong8.dong@gmail.com wrote:
-> From: Menglong Dong <imagedong@tencent.com>
-> 
-> For now, the BPF program of type BPF_PROG_TYPE_TRACING can only be used
-> on the kernel functions whose arguments count less than 6. This is not
-> friendly at all, as too many functions have arguments count more than 6.
+vim +/ret +3245 drivers/media/i2c/alvium-csi2.c
 
-Since you already have some statistics, maybe listed in the commit message.
+  3239	
+  3240	static int alvium_get_dt_data(struct alvium_dev *alvium)
+  3241	{
+  3242		struct device *dev = &alvium->i2c_client->dev;
+  3243		struct device_node *node = dev->of_node;
+  3244		struct fwnode_handle *endpoint;
+> 3245		int ret = 0;
+  3246	
+  3247		if (!node)
+  3248			return -EINVAL;
+  3249	
+  3250		ret = fwnode_property_read_u32(dev_fwnode(dev),
+  3251				  "alliedvision,lp2hs-delay-us",
+  3252				  &alvium->lp2hs_delay);
+  3253	
+  3254		endpoint = fwnode_graph_get_next_endpoint(dev_fwnode(dev), NULL);
+  3255		if (!endpoint) {
+  3256			dev_err(dev, "endpoint node not found\n");
+  3257			return -EINVAL;
+  3258		}
+  3259	
+  3260		if (v4l2_fwnode_endpoint_alloc_parse(endpoint, &alvium->ep)) {
+  3261			dev_err(dev, "could not parse endpoint\n");
+  3262			return 0;
+  3263		}
+  3264	
+  3265		if (alvium->ep.bus_type != V4L2_MBUS_CSI2_DPHY) {
+  3266			dev_err(dev, "unsupported bus type\n");
+  3267			return -EINVAL;
+  3268		}
+  3269	
+  3270		if (!alvium->ep.nr_of_link_frequencies) {
+  3271			dev_err(dev, "no link frequencies defined");
+  3272			return -EINVAL;
+  3273		}
+  3274	
+  3275		dev_info(dev, "freq: %llu\n",
+  3276					    alvium->ep.link_frequencies[0]);
+  3277		dev_info(dev, "lanes: %d\n",
+  3278					    alvium->ep.bus.mipi_csi2.num_data_lanes);
+  3279	
+  3280		return 0;
+  3281	}
+  3282	
 
-> 
-> Therefore, let's enhance it by increasing the function arguments count
-> allowed in arch_prepare_bpf_trampoline(), for now, only x86_64.
-> 
-> For the case that we don't need to call origin function, which means
-> without BPF_TRAMP_F_CALL_ORIG, we need only copy the function arguments
-> that stored in the frame of the caller to current frame. The arguments
-> of arg6-argN are stored in "$rbp + 0x18", we need copy them to
-> "$rbp - regs_off + (6 * 8)".
-
-Maybe I missed something, could you explain why it is '$rbp + 0x18'?
-
-In the current upstream code, we have
-
-         /* Generated trampoline stack layout:
-          *
-          * RBP + 8         [ return address  ]
-          * RBP + 0         [ RBP             ]
-          *
-          * RBP - 8         [ return value    ]  BPF_TRAMP_F_CALL_ORIG or
-          * 
-BPF_TRAMP_F_RET_FENTRY_RET flags
-          *
-          *                 [ reg_argN        ]  always
-          *                 [ ...             ]
-          * RBP - regs_off  [ reg_arg1        ]  program's ctx pointer
-          *
-          * RBP - nregs_off [ regs count      ]  always
-          *
-          * RBP - ip_off    [ traced function ]  BPF_TRAMP_F_IP_ARG flag
-          *
-          * RBP - run_ctx_off [ bpf_tramp_run_ctx ]
-          */
-
-Next on-stack argument will be RBP + 16, right?
-
-> 
-> For the case with BPF_TRAMP_F_CALL_ORIG, we need prepare the arguments
-> in stack before call origin function, which means we need alloc extra
-> "8 * (arg_count - 6)" memory in the top of the stack. Note, there should
-> not be any data be pushed to the stack before call the origin function.
-> Then, we have to store rbx with 'mov' instead of 'push'.
-> 
-> We use EMIT3_off32() or EMIT4() for "lea" and "sub". The range of the
-> imm in "lea" and "sub" is [-128, 127] if EMIT4() is used. Therefore,
-> we use EMIT3_off32() instead if the imm out of the range.
-> 
-> It works well for the FENTRY and FEXIT, I'm not sure if there are other
-> complicated cases.
-
-MODIFY_RETURN is also impacted by this patch.
-
-> 
-> Reviewed-by: Jiang Biao <benbjiang@tencent.com>
-> Signed-off-by: Menglong Dong <imagedong@tencent.com>
-[...]
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
