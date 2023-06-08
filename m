@@ -2,213 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3147E7286FB
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 20:15:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43882728700
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 20:16:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbjFHSPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 14:15:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41304 "EHLO
+        id S234014AbjFHSQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 14:16:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjFHSP2 (ORCPT
+        with ESMTP id S233419AbjFHSQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 14:15:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A5B31FDC;
-        Thu,  8 Jun 2023 11:15:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A0B6865054;
-        Thu,  8 Jun 2023 18:15:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1BB9C433EF;
-        Thu,  8 Jun 2023 18:15:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686248126;
-        bh=HSkHDkl1RvAqJTbqvoH8kuaiTAB3DjTsVtEeoNWG6d4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pK1q/HzkV8X1zoHnGxbnvpwl0WE/W+13njgnV0BQvxyogV+g3FrD8HWvVXCxGFvPa
-         qYOvWsPOsnRyxZ8kWbq7mF1smux5esAGrb6u/6VPDUFqFVf6bIszGxNLDv2JAQx74M
-         BAZ+fmfhHwEWIm39ZhIKgQXA/1CFNjrgqkDM/v4f5aODUCVoyyB6caTfC+A6BQ0vHS
-         MMx4F9S5HosFRgBQCWE03E70BfSx3D2aBLEChKlD7Fi6sQe9jQBkBqnaTMxEhvVwZh
-         ZRr/ig3hZIm2xP3T1QvgQTBTrTHN9zXKaLffuYtRS1HLPESfAYUbVJ96eGYzHqTqk/
-         Vwt+3nxAwDdSw==
-Date:   Thu, 8 Jun 2023 11:15:25 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>, sandeen@sandeen.net,
-        song@kernel.org, rafael@kernel.org, gregkh@linuxfoundation.org,
-        viro@zeniv.linux.org.uk, jack@suse.cz, jikos@kernel.org,
-        bvanassche@acm.org, ebiederm@xmission.com, mchehab@kernel.org,
-        keescook@chromium.org, p.raghav@samsung.com, da.gomez@samsung.com,
-        linux-fsdevel@vger.kernel.org, kernel@tuxforce.de,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/6] fs: distinguish between user initiated freeze and
- kernel initiated freeze
-Message-ID: <20230608181525.GE72224@frogsfrogsfrogs>
-References: <20230508011717.4034511-1-mcgrof@kernel.org>
- <20230508011717.4034511-4-mcgrof@kernel.org>
- <20230522234200.GC11598@frogsfrogsfrogs>
- <ZIFmEGdJ4CCbS1B3@infradead.org>
+        Thu, 8 Jun 2023 14:16:08 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A5E1FFA;
+        Thu,  8 Jun 2023 11:16:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686248164; x=1717784164;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DdflwQpDpA1mOVcKDeGYRGkKlW7HBM0/W9LRuBMTa7w=;
+  b=T6xFiluV045sUDw/YQ8YuL0YXkjFj6CtksAgxH2clCJzxuP+KjxYkpAG
+   XUPp2TO5q+cIl+HCg8nOxVMG38jRhkM8dagn3cJcGK8WzCyi6X//5VfeK
+   4ut84BB2XWQx1SInQEtdJBy5/kO9TjI2SFenOf9Si1S6Oda9kcjxuWrlF
+   ZQTj6i/JrPjLPDfMao/UX1rjoC4DNkQI+ELvcw5m4/xd5TO5zWUo/A85I
+   mUThj6fNQe0Ec8mkXVIO8TmIMdyVm1S+nEiJDhllQ7/dxmZwyRaNDEz24
+   PRuHOS/MDVzAjKSru2XAvVVCg0CEHFtpc9YWbauNEl/ubEZUeKR8ezJid
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="356261389"
+X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
+   d="scan'208";a="356261389"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 11:15:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="884289643"
+X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
+   d="scan'208";a="884289643"
+Received: from yjiang5-mobl.amr.corp.intel.com (HELO localhost) ([10.144.161.97])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 11:15:40 -0700
+Date:   Thu, 8 Jun 2023 11:15:40 -0700
+From:   Yunhong Jiang <yunhong.jiang@linux.intel.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Evgeniy Baskov <baskov@ispras.ru>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Peter Jones <pjones@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Dave Young <dyoung@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Kees Cook <keescook@chromium.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>
+Subject: Re: [PATCH v5 10/20] x86/decompressor: Call trampoline directly from
+ C code
+Message-ID: <20230608181540.GA2469@yjiang5-mobl.amr.corp.intel.com>
+References: <20230607072342.4054036-1-ardb@kernel.org>
+ <20230607072342.4054036-11-ardb@kernel.org>
+ <20230607180920.GA3110@yjiang5-mobl.amr.corp.intel.com>
+ <CAMj1kXHZx5Qb-XCxNsTV1jh7CSj6aEg8xEhPU6yvFbhYqhzcEA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZIFmEGdJ4CCbS1B3@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAMj1kXHZx5Qb-XCxNsTV1jh7CSj6aEg8xEhPU6yvFbhYqhzcEA@mail.gmail.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 10:24:32PM -0700, Christoph Hellwig wrote:
-> On Mon, May 22, 2023 at 04:42:00PM -0700, Darrick J. Wong wrote:
-> > How about this as an alternative patch?  Kernel and userspace freeze
-> > state are stored in s_writers; each type cannot block the other (though
-> > you still can't have nested kernel or userspace freezes); and the freeze
-> > is maintained until /both/ freeze types are dropped.
-> > 
-> > AFAICT this should work for the two other usecases (quiescing pagefaults
-> > for fsdax pmem pre-removal; and freezing fses during suspend) besides
-> > online fsck for xfs.
+On Thu, Jun 08, 2023 at 10:04:43AM +0200, Ard Biesheuvel wrote:
+> On Wed, 7 Jun 2023 at 20:09, Yunhong Jiang
+> <yunhong.jiang@linux.intel.com> wrote:
+> >
+> > On Wed, Jun 07, 2023 at 09:23:32AM +0200, Ard Biesheuvel wrote:
+> > > Instead of returning to the asm calling code to invoke the trampoline,
+> > > call it straight from the C code that sets the scene. That way, the
+> > > struct return type is no longer needed for returning two values, and the
+> > > call can be made conditional more cleanly in a subsequent patch.
+> > >
+> > > Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> > > ---
+> > >  arch/x86/boot/compressed/head_64.S    | 20 +++-----------
+> > >  arch/x86/boot/compressed/pgtable_64.c | 28 ++++++++------------
+> > >  2 files changed, 15 insertions(+), 33 deletions(-)
+> > >
+> ...
+> > > diff --git a/arch/x86/boot/compressed/pgtable_64.c b/arch/x86/boot/compressed/pgtable_64.c
+> > > index d66639c961b8eeda..1d28ad95ea839531 100644
+> > > --- a/arch/x86/boot/compressed/pgtable_64.c
+> > > +++ b/arch/x86/boot/compressed/pgtable_64.c
+> > > @@ -16,11 +16,6 @@ unsigned int __section(".data") pgdir_shift = 39;
+> > >  unsigned int __section(".data") ptrs_per_p4d = 1;
+> > >  #endif
+> > >
+> > > -struct paging_config {
+> > > -     unsigned long trampoline_start;
+> > > -     unsigned long l5_required;
+> > > -};
+> > > -
+> > >  /* Buffer to preserve trampoline memory */
+> > >  static char trampoline_save[TRAMPOLINE_32BIT_SIZE];
+> > >
+> > > @@ -106,10 +101,10 @@ static unsigned long find_trampoline_placement(void)
+> > >       return bios_start - TRAMPOLINE_32BIT_SIZE;
+> > >  }
+> > >
+> > > -struct paging_config paging_prepare(void *rmode)
+> > > +asmlinkage void set_paging_levels(void *rmode)
+> >
+> > Can you please change the refer to paging_prepare() in the comments above also?
 > 
-> I think this is fundamentally the right thing.  Can you send this as
-> a standalone thread in a separate thread to make it sure it gets
-> expedited?
-
-Yeah, I'll do that.
-
-> > -static int thaw_super_locked(struct super_block *sb);
-> > +static int thaw_super_locked(struct super_block *sb, unsigned short who);
+> You mean the below, right?
 > 
-> Is the unsigned short really worth it?  Even if it's just two values
-> I'd also go for a __bitwise type to get the typechecking as that tends
-> to help a lot goind down the road.
+> --- a/arch/x86/boot/compressed/pgtable_64.c
+> +++ b/arch/x86/boot/compressed/pgtable_64.c
+> @@ -24,7 +24,7 @@ static char trampoline_save[TRAMPOLINE_32BIT_SIZE];
+>   * purposes.
+>   *
+>   * Avoid putting the pointer into .bss as it will be cleared between
+> - * paging_prepare() and extract_kernel().
+> + * set_paging_levels() and extract_kernel().
+>   */
+>  unsigned long *trampoline_32bit __section(".data");
 
-Instead of __bitwise, I'll make freeze_super() take an enum, since
-callers can only initiate one at a time, and the compiler can (in
-theory) catch people passing garbage inputs.
-
-> >  /**
-> > - * freeze_super - lock the filesystem and force it into a consistent state
-> > + * __freeze_super - lock the filesystem and force it into a consistent state
-> >   * @sb: the super to lock
-> > + * @who: FREEZE_HOLDER_USERSPACE if userspace wants to freeze the fs;
-> > + * FREEZE_HOLDER_KERNEL if the kernel wants to freeze it
-> >   *
-> >   * Syncs the super to make sure the filesystem is consistent and calls the fs's
-> > - * freeze_fs.  Subsequent calls to this without first thawing the fs will return
-> > + * freeze_fs.  Subsequent calls to this without first thawing the fs may return
-> >   * -EBUSY.
-> >   *
-> > + * The @who argument distinguishes between the kernel and userspace trying to
-> > + * freeze the filesystem.  Although there cannot be multiple kernel freezes or
-> > + * multiple userspace freezes in effect at any given time, the kernel and
-> > + * userspace can both hold a filesystem frozen.  The filesystem remains frozen
-> > + * until there are no kernel or userspace freezes in effect.
-> > + *
-> >   * During this function, sb->s_writers.frozen goes through these values:
-> >   *
-> >   * SB_UNFROZEN: File system is normal, all writes progress as usual.
-> > @@ -1668,12 +1676,61 @@ static void sb_freeze_unlock(struct super_block *sb, int level)
-> >   *
-> >   * sb->s_writers.frozen is protected by sb->s_umount.
-> >   */
-> 
-> There's really no point in having a kerneldoc for a static function.
-> Either this moves to the actual exported functions, or it should
-> become a normal non-kerneldoc comment.  But I'm not even sre this split
-> makes much sense to start with.  I'd just add a the who argument
-> to freeze_super given that we have only very few callers anyway,
-> and it is way easier to follow than thse rappers hardoding the argument.
-
-Agreed.
-
-> > +static int __freeze_super(struct super_block *sb, unsigned short who)
-> >  {
-> > +	struct sb_writers *sbw = &sb->s_writers;
-> >  	int ret;
-> >  
-> >  	atomic_inc(&sb->s_active);
-> >  	down_write(&sb->s_umount);
-> > +
-> > +	if (sbw->frozen == SB_FREEZE_COMPLETE) {
-> > +		switch (who) {
-> 
-> Nit, but maybe split evetything inside this branch into a
-> freeze_frozen_super helper?
-
-Yes, will do.  I think Jan's simplification will condense this too.
-
-> > +static int thaw_super_locked(struct super_block *sb, unsigned short who)
-> > +{
-> > +	struct sb_writers *sbw = &sb->s_writers;
-> >  	int error;
-> >  
-> > +	if (sbw->frozen == SB_FREEZE_COMPLETE) {
-> > +		switch (who) {
-> > +		case FREEZE_HOLDER_KERNEL:
-> > +			if (!(sbw->freeze_holders & FREEZE_HOLDER_KERNEL)) {
-> > +				/* Caller doesn't hold a kernel freeze. */
-> > +				up_write(&sb->s_umount);
-> > +				return -EINVAL;
-> > +			}
-> > +			if (sbw->freeze_holders & FREEZE_HOLDER_USERSPACE) {
-> > +				/*
-> > +				 * We were sharing the freeze with userspace,
-> > +				 * so drop the userspace freeze but exit
-> > +				 * without unfreezing.
-> > +				 */
-> > +				sbw->freeze_holders &= ~who;
-> > +				up_write(&sb->s_umount);
-> > +				return 0;
-> > +			}
-> > +			break;
-> > +		case FREEZE_HOLDER_USERSPACE:
-> > +			if (!(sbw->freeze_holders & FREEZE_HOLDER_USERSPACE)) {
-> > +				/* Caller doesn't hold a userspace freeze. */
-> > +				up_write(&sb->s_umount);
-> > +				return -EINVAL;
-> > +			}
-> > +			if (sbw->freeze_holders & FREEZE_HOLDER_KERNEL) {
-> > +				/*
-> > +				 * We were sharing the freeze with the kernel,
-> > +				 * so drop the kernel freeze but exit without
-> > +				 * unfreezing.
-> > +				 */
-> > +				sbw->freeze_holders &= ~who;
-> > +				up_write(&sb->s_umount);
-> > +				return 0;
-> > +			}
-> > +			break;
-> > +		default:
-> > +			BUG();
-> > +			up_write(&sb->s_umount);
-> > +			return -EINVAL;
-> > +		}
-> 
-> To me this screams for another 'is_partial_thaw' or so helper, whith
-> which we could doe something like:
-> 
-> 	if (sbw->frozen != SB_FREEZE_COMPLETE) {
-> 		ret = -EINVAL;
-> 		goto out_unlock;
-> 	}
-> 	ret = is_partial_thaw(sb, who);
-> 	if (ret) {
-> 		if (ret == 1) {
-> 			sbw->freeze_holders &= ~who;
-> 			ret = 0
-> 		}
-> 		goto out_unlock;
-> 	}
-
-<nod>
-
-> Btw, same comment about the wrappers as on the freeze side.
-
-<nod>
-
---D
+Yes.
