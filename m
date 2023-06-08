@@ -2,152 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB2B672834E
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E80472836D
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:16:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235600AbjFHPLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 11:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46962 "EHLO
+        id S236748AbjFHPQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 11:16:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234372AbjFHPLQ (ORCPT
+        with ESMTP id S230033AbjFHPQB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 11:11:16 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B7F2D63;
-        Thu,  8 Jun 2023 08:11:14 -0700 (PDT)
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 358EqCxh003113;
-        Thu, 8 Jun 2023 15:11:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=LUPON5A/yOq6SV0ahS6sBgfeIZzY9Jqq451H2rYMksg=;
- b=GfhCC1litHF3NBsn7H5W8uW5ERTdCZjzUz45Iw2nzr2sbVP8rJ++PD3lg+xsRY/qNx57
- 12vEmKGYDQjehtKUvDo8KEQAvEb8CsuJeyU4pdIsTm42cgtj5MpyjqIo0Mo9X75l3F+h
- BnbDiMiroF1JxEIcDtwtXUTNP4SigsdEC6aHzb+AtfZuSc0ClFP1Ud1IFjovVB1pqNYR
- MaKP4z2oy9UPoTSBobY4zrEMLlwx+eTlXX2LpTWzEypDvR0bqQr1moH4B38GPqqXgSI7
- YQIthQqjMmo9t8pCvFe9rSVzx1sGFNVuuR2QnOrv8w+Y7aIa+g7YBnONvPCzNBHqRN4/ ng== 
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r3h4p8hqp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Jun 2023 15:11:03 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 358Cnfc6000311;
-        Thu, 8 Jun 2023 15:11:01 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([9.208.130.98])
-        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3r2a76s9jp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Jun 2023 15:11:01 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-        by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 358FB0DC61210898
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 8 Jun 2023 15:11:01 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8F8FC58066;
-        Thu,  8 Jun 2023 15:11:00 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DBAE958053;
-        Thu,  8 Jun 2023 15:10:59 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  8 Jun 2023 15:10:59 +0000 (GMT)
-Message-ID: <666b8422-3e4f-3d88-1ff7-1f650dd401ce@linux.ibm.com>
-Date:   Thu, 8 Jun 2023 11:10:59 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] tpm: factor out the user space mm from
- tpm_vtpm_set_locality()
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-integrity@vger.kernel.org
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        Alejandro Cabrera <alejandro.cabreraaldaya@tuni.fi>,
-        Jarkko Sakkinen <jarkko.sakkinen@tuni.fi>,
-        stable@vger.kernel.org, Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        Thu, 8 Jun 2023 11:16:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 513A52D5F
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 08:15:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686237312;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=/3w9oyHcHeuXmqT1TkLSNVHo+F4uoLMw3KpXpP7tVL8=;
+        b=eJz9M6jp0IVFHpA//yyLi2K98+f1zJf2Hu1i+n8AFwn4q7DD9er3GiRPzRc5Ul7sq3OYJZ
+        vUZrjv/YLpAapZMjs7hD0pxw6XEPUBhQJoCtmp+iqCSlaOvtWnpLrsXBfbCy4YBgSD/4wp
+        N+Ql+UNHDST28OT0mxLSoY/6HVd9ePU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-398-1LtaMsEfNDKBOh9S0kPYgA-1; Thu, 08 Jun 2023 11:15:03 -0400
+X-MC-Unique: 1LtaMsEfNDKBOh9S0kPYgA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4282C3C0F424;
+        Thu,  8 Jun 2023 15:15:00 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 36EF0492B00;
+        Thu,  8 Jun 2023 15:14:59 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>
+cc:     dhowells@redhat.com, linux-kbuild@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230530205001.1302975-1-jarkko@kernel.org>
- <8f15feb5-7c6e-5a16-d9b4-008b7b45b01a@linux.ibm.com>
- <324df0fa5ad1f0508c5f62c25dd1f8d297d78813.camel@kernel.org>
- <0438f5e3-ca42-343b-e79e-5f7976ec8a62@linux.ibm.com>
- <CT7AOKF4OGHA.2S5VUEAG76GYB@suppilovahvero>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <CT7AOKF4OGHA.2S5VUEAG76GYB@suppilovahvero>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: mR7sOTxaBrTwFfyiL_U6TBxePEWg73Om
-X-Proofpoint-ORIG-GUID: mR7sOTxaBrTwFfyiL_U6TBxePEWg73Om
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-08_10,2023-06-08_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- suspectscore=0 priorityscore=1501 phishscore=0 adultscore=0 mlxscore=0
- malwarescore=0 bulkscore=0 clxscore=1015 lowpriorityscore=0
- impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306080131
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: [RFC][PATCH] build: Deal with change in "make --no-print-directory" behaviour change
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2427603.1686237298.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Thu, 08 Jun 2023 16:14:58 +0100
+Message-ID: <2427604.1686237298@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Masahiro & the kbuild crew,
 
+Here's a patch to fix a change in make behaviour in make-4.4.  It's almost
+certainly the wrong solution, but it works for me for now.
 
-On 6/8/23 09:14, Jarkko Sakkinen wrote:
-> On Wed May 31, 2023 at 8:01 PM EEST, Stefan Berger wrote:
->>
->>
->
->>
->> This is swtpm picking up this command with its user buffer.
->>
->>     So, I am not sure at this point what is wrong.
->>
->>      Stefan
-> 
-> The answer was below but in short it is that you have a function that
-> expects __user * and you don't pass user tagged memory.
+Note that I tried just adding "--print-directory" to the $(MAKE) line afte=
+r
+the line I added, and that does seem to work - but it then prints a lot of
+additional "entering directory" lines (though they all seem to be the same=
+).
 
-There are two functions that expect user tagged memory:
+David
+---
+Emacs (and probably other IDEs) parse the "make: Entering directory" lines
+in the build output so that they can correctly resolve relative pathnames
+in messages from the compiler.  However, a change in make has broken this.
+I think it might be:
 
-static ssize_t vtpm_proxy_fops_read(struct file *filp, char __user *buf,
-				    size_t count, loff_t *off)
-static ssize_t vtpm_proxy_fops_write(struct file *filp, const char __user *buf,
-				     size_t count, loff_t *off)
+        [/usr/share/doc/make/NEWS]
+        ...
+        Version 4.4 (31 Oct 2022)
+        ...
+        * WARNING: Backward-incompatibility!
+          Previously if --no-print-directory was seen anywhere in the envi=
+ronment or
+          command line it would take precedence over any --print-directory=
+.  Now, the
+          last setting of directory printing options seen will be used, so=
+ a command
+          line such as "--no-print-directory -w" _will_ show directory ent=
+ry/exits.
 
-the correspond to this interface:
+Doing a kernel build now only prints the directory passed to the "-C" flag
+if present and no other directories.  This includes any build directory
+indicated with "O=3D".  So if I do:
 
-struct file_operations {
-	struct module *owner;
-	loff_t (*llseek) (struct file *, loff_t, int);
-	ssize_t (*read) (struct file *, char __user *, size_t, loff_t *);
-	ssize_t (*write) (struct file *, const char __user *, size_t, loff_t *);
+        make -C /my/data/linux O=3Dbuild
 
-defined here:
+I see:
 
-static const struct file_operations vtpm_proxy_fops = {
-	.owner = THIS_MODULE,
-	.llseek = no_llseek,
-	.read = vtpm_proxy_fops_read,
-	.write = vtpm_proxy_fops_write,
+        make: Entering directory '/my/data/linux'
 
-Conversely, I see no other function interfaces in tpm_vtpm_proxy.c where the code would be missing the __user.
+and all the path in messages emitted by the compiler are prefixed with "..=
+"
+- but then doing "M-x next-error" in emacs will prompt emacs to ask where
+the file is rather than jumping to it because it can't find it.
 
-Neither do I see any functions where I am passing a __user tagged buffer as parameter that shouldn't have
-such a tag on it or the reverse where a plain buffer is passed and it should be a __user tagged buffer.
+On the previous version of Fedora with make-4.3, an extra line is emitted
+by make:
 
-    Stefan
+        make[1]: Entering directory '/my/data/linux/build'
 
-> 
-> Even tho it is a bug, I think cc to stable is not necessary given that
-> it is not known to blow up anything. The main problem is that we have
-> code that does not work according to the expectations.
-> 
-> BR, Jarkko
-> 
-> 
+and that was sufficient for emacs to be able to resolve paths.
+
+Fix this by manually printing the missing line.
+
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Masahiro Yamada <masahiroy@kernel.org>
+cc: Nathan Chancellor <nathan@kernel.org>
+cc: Nick Desaulniers <ndesaulniers@google.com>
+cc: Nicolas Schier <nicolas@fjasle.eu>
+cc: linux-kbuild@vger.kernel.org
+---
+ Makefile |    1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Makefile b/Makefile
+index 836643eaefee..7f7c75087626 100644
+--- a/Makefile
++++ b/Makefile
+@@ -223,6 +223,7 @@ $(filter-out $(this-makefile), $(MAKECMDGOALS)) __all:=
+ __sub-make
+ =
+
+ # Invoke a second make in the output directory, passing relevant variable=
+s
+ __sub-make:
++	@echo "make[1]: Entering directory '$(abs_objtree)'"
+ 	$(Q)$(MAKE) -C $(abs_objtree) -f $(abs_srctree)/Makefile $(MAKECMDGOALS)
+ =
+
+ endif # need-sub-make
+
