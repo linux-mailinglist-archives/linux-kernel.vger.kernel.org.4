@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD537279A0
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 10:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 848337279A3
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 10:10:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234277AbjFHIKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 04:10:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55012 "EHLO
+        id S234461AbjFHIKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 04:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233944AbjFHIKJ (ORCPT
+        with ESMTP id S234458AbjFHIKc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 04:10:09 -0400
+        Thu, 8 Jun 2023 04:10:32 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8391730;
-        Thu,  8 Jun 2023 01:10:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471D226AE
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 01:10:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC3C064A13;
-        Thu,  8 Jun 2023 08:10:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B23AC433EF;
-        Thu,  8 Jun 2023 08:10:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CDD8764A03
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 08:10:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44BDFC433EF;
+        Thu,  8 Jun 2023 08:10:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686211807;
-        bh=C+rHEG/c674R9h1WxP8EIaYcHRasurafDpURUrS3qQg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=dltILT6bKoAPPSMw5xWupLlWDU5o4L9XaCS2ZMazGeizX3vQkdHsebLwKQt7o9eML
-         Hw1UbbLRwG/6ACxqRnlrCSt5s8OMn5gIbNNfeGnBuy8AFt6L/TbOJBj8a+YUqnTG9I
-         kP+UVBudNizPrK8D7y1H8uL9vpMU2YbL7Rtpzc/LxMXvsWNXQlAAG0tcb8IncOg7k0
-         mwaeg8Vj4WMRvdrl71eLX79qM2bmeHVkfvBjrcoOpCXqlQ1dBdFSCMMBUH7Iho9GoT
-         aLp/Tm7pd9CB4gSGsthy8sWEeW5Q5312RL5IuzuoiyljinRV2rHi0QNeQEW6gUl2T0
-         sF2i5kx3SZcFA==
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-4f6283d0d84so432817e87.1;
-        Thu, 08 Jun 2023 01:10:07 -0700 (PDT)
-X-Gm-Message-State: AC+VfDw0v9ubmUZbwUa1VY2v0wEIUts5aXTVGw7ZZMZaJYQybR6+OS+R
-        MRqhl9cqrg8yDxQTPNuh+tCtrxhg7pXqrDcFBZg=
-X-Google-Smtp-Source: ACHHUZ7ExumTs8tcu5KAEIGJtXlT6yHg7zABGWDQMrQgZdOrl3AS9d+MFyjfACdjHRn3fAjMpyShhY6nm6Xe9O08LqM=
-X-Received: by 2002:ac2:4c30:0:b0:4f2:74d3:8996 with SMTP id
- u16-20020ac24c30000000b004f274d38996mr2668920lfq.8.1686211805289; Thu, 08 Jun
- 2023 01:10:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <ZIFVGwImU3kpaGeH@work>
-In-Reply-To: <ZIFVGwImU3kpaGeH@work>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 8 Jun 2023 10:09:53 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFErhC7k+zg2ga-Lgo9f6muarbO6AJVx3g0KCGTLWkakg@mail.gmail.com>
-Message-ID: <CAMj1kXFErhC7k+zg2ga-Lgo9f6muarbO6AJVx3g0KCGTLWkakg@mail.gmail.com>
-Subject: Re: [PATCH][next] ARM: OMAP2+: Fix -Warray-bounds warning in _pwrdm_state_switch()
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Tony Lindgren <tony@atomide.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "Peter 'p2' De Schrijver" <peter.de-schrijver@nokia.com>,
-        Kevin Hilman <khilman@deeprootsystems.com>,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        s=k20201202; t=1686211828;
+        bh=8OIawGQRKkwbu/IyrxgY/eIFkFwYIqlXcO+jcYdoeJI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RFSAA9HfwxupfsLtXpeNkkBeiTM7Kcs78OER1NuZfai+Hsbb2WYkUIrHRF7Fc7s0p
+         5wwyMungR8F2tqHhUwzun8OmRXuvnZzcYUuwvWjNDUDpFx3A5zUzz672F5kQVr1Eb0
+         c0Of1oVXbPnnKqZSPZzMEgWXA5G0jorCz9E0AJxtPH23t+dUsmCX5nbW3SLjjS5Ori
+         PMoXo9vRGuqgeFzZkKxcr5s9XCK26FCKBEpaQFHT8DRbYUcvh2Z12h4PvzDqVXyj7R
+         Lq1XzxQLA+dQ45VMbziFMgEt16NbSyilnqdAtUTtd49lptgco1eqU1tcoPMluVS5t8
+         lCodTFWJ/684Q==
+Received: from 152.5.30.93.rev.sfr.net ([93.30.5.152] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1q7Aiv-003jsk-E2;
+        Thu, 08 Jun 2023 09:10:26 +0100
+Date:   Thu, 08 Jun 2023 09:10:24 +0100
+Message-ID: <87cz26nzm7.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     wangwudi <wangwudi@hisilicon.com>
+Cc:     <linux-kernel@vger.kernel.org>, <liaochang1@huawei.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v2] irqchip: gic-v3: Extend collection table
+In-Reply-To: <1686131113-3611-1-git-send-email-wangwudi@hisilicon.com>
+References: <1686131113-3611-1-git-send-email-wangwudi@hisilicon.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 93.30.5.152
+X-SA-Exim-Rcpt-To: wangwudi@hisilicon.com, linux-kernel@vger.kernel.org, liaochang1@huawei.com, tglx@linutronix.de
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -66,55 +66,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 8 Jun 2023 at 06:11, Gustavo A. R. Silva <gustavoars@kernel.org> wrote:
->
-> If function pwrdm_read_prev_pwrst() returns -EINVAL, we will end
-> up accessing array pwrdm->state_counter through negative index
-> -22. This is wrong and the compiler is legitimately warning us
-> about this potential problem.
->
-> Fix this by sanity checking the value stored in variable _prev_
-> before accessing array pwrdm->state_counter.
->
-> Address the following -Warray-bounds warning:
-> arch/arm/mach-omap2/powerdomain.c:178:45: warning: array subscript -22 is below array bounds of 'unsigned int[4]' [-Warray-bounds]
->
-> Link: https://github.com/KSPP/linux/issues/307
-> Fixes: ba20bb126940 ("OMAP: PM counter infrastructure.")
-> Cc: stable@vger.kernel.org
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/lkml/20230607050639.LzbPn%25lkp@intel.com/
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-
-Nice to see this work paying off.
-
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
-
-Does the error case need further handling here?
-
-
+On Wed, 07 Jun 2023 10:45:13 +0100,
+wangwudi <wangwudi@hisilicon.com> wrote:
+> 
+> Only single level table is supported to the collection table, and only
+> one page is allocated.
+> 
+> Extend collection table to support more CPUs:
+> 1. Recalculate the page number of collection table based on the number of
+> CPUs.
+> 2. Add 2 level tables to collection table.
+> 3. Add GITS_TYPER_CIDBITS macros.
+> 
+> It is noticed in an internal simulation research:
+> - the page_size of collection table is 4 KB
+> - the entry_size of collection table is	 16 Byte
+> - with 512 CPUs
+> 
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Signed-off-by: wangwudi <wangwudi@hisilicon.com>
 > ---
->  arch/arm/mach-omap2/powerdomain.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/arm/mach-omap2/powerdomain.c b/arch/arm/mach-omap2/powerdomain.c
-> index 777f9f8e7cd8..5e05dd1324e7 100644
-> --- a/arch/arm/mach-omap2/powerdomain.c
-> +++ b/arch/arm/mach-omap2/powerdomain.c
-> @@ -174,7 +174,7 @@ static int _pwrdm_state_switch(struct powerdomain *pwrdm, int flag)
->                 break;
->         case PWRDM_STATE_PREV:
->                 prev = pwrdm_read_prev_pwrst(pwrdm);
-> -               if (pwrdm->state != prev)
-> +               if (prev >= 0 && pwrdm->state != prev)
->                         pwrdm->state_counter[prev]++;
->                 if (prev == PWRDM_POWER_RET)
->                         _update_logic_membank_counters(pwrdm);
-> --
-> 2.34.1
->
->
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> 
+> ChangeLog:
+> v1-->v2:
+> 	1. Support 2 level table
+> 	2. Rewrite the commit log
+> 
+>  drivers/irqchip/irq-gic-v3-its.c   | 62 ++++++++++++++++++++++++++++++--------
+>  include/linux/irqchip/arm-gic-v3.h |  3 ++
+>  2 files changed, 53 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+> index 0ec2b1e1df75..573ef26ad449 100644
+> --- a/drivers/irqchip/irq-gic-v3-its.c
+> +++ b/drivers/irqchip/irq-gic-v3-its.c
+> @@ -126,6 +126,7 @@ struct its_node {
+>  #define is_v4(its)		(!!((its)->typer & GITS_TYPER_VLPIS))
+>  #define is_v4_1(its)		(!!((its)->typer & GITS_TYPER_VMAPP))
+>  #define device_ids(its)		(FIELD_GET(GITS_TYPER_DEVBITS, (its)->typer) + 1)
+> +#define collection_ids(its)	(FIELD_GET(GITS_TYPER_CIDBITS, (its)->typer) + 1)
+>  
+>  #define ITS_ITT_ALIGN		SZ_256
+>  
+> @@ -2626,6 +2627,10 @@ static int its_alloc_tables(struct its_node *its)
+>  			indirect = its_parse_indirect_baser(its, baser, &order,
+>  							    ITS_MAX_VPEID_BITS);
+>  			break;
+> +		case GITS_BASER_TYPE_COLLECTION:
+> +			indirect = its_parse_indirect_baser(its, baser, &order,
+> +							    order_base_2(num_possible_cpus()));
+> +			break;
+
+Nice try, but no. See below.
+
+>  		}
+>  
+>  		err = its_setup_baser(its, baser, cache, shr, order, indirect);
+> @@ -3230,18 +3235,6 @@ static void its_cpu_init_collection(struct its_node *its)
+>  	its_send_invall(its, &its->collections[cpu]);
+>  }
+>  
+> -static void its_cpu_init_collections(void)
+> -{
+> -	struct its_node *its;
+> -
+> -	raw_spin_lock(&its_lock);
+> -
+> -	list_for_each_entry(its, &its_nodes, entry)
+> -		its_cpu_init_collection(its);
+> -
+> -	raw_spin_unlock(&its_lock);
+> -}
+> -
+>  static struct its_device *its_find_device(struct its_node *its, u32 dev_id)
+>  {
+>  	struct its_device *its_dev = NULL, *tmp;
+> @@ -3316,6 +3309,51 @@ static bool its_alloc_table_entry(struct its_node *its,
+>  	return true;
+>  }
+>  
+> +static bool its_alloc_collection_table(struct its_node *its, struct its_baser *baser)
+> +{
+> +	int cpu = smp_processor_id();
+> +	int cpu_ids = 16;
+> +
+> +	if (its->typer & GITS_TYPER_CIL)
+> +		cpu_ids = collection_ids(its);
+> +
+> +	if (!(ilog2(cpu) < cpu_ids)) {
+> +		pr_warn("ITS: CPU%d out of Collection ID range for %dbits", cpu, cpu_ids);
+> +		return false;
+> +	}
+> +
+> +	if (!its_alloc_table_entry(its, baser, cpu)) {
+> +		pr_warn("ITS: CPU%d failed to allocate collection l2 table", cpu);
+> +		return false;
+> +	}
+> +
+> +	return true;
+> +}
+> +
+> +static bool its_cpu_init_collections(void)
+> +{
+> +	struct its_node *its;
+> +	struct its_baser *baser;
+> +
+> +	raw_spin_lock(&its_lock);
+> +
+> +	list_for_each_entry(its, &its_nodes, entry) {
+> +		baser = its_get_baser(its, GITS_BASER_TYPE_COLLECTION);
+> +		if (!baser) {
+> +			raw_spin_unlock(&its_lock);
+> +			return false;
+> +		}
+
+This looks wrong. ITSs that have a non-zero HCC field may not need
+memory to back their collections at all, such as GIC500. There may not
+even be a BASERn register holding the memory.
+
+So this patch more or less *guarantees* to break most implementation
+that are more than 5 year old.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
