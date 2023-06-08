@@ -2,186 +2,306 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6022A728815
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 21:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EBF5728821
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 21:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236454AbjFHTTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 15:19:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36406 "EHLO
+        id S236317AbjFHTUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 15:20:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234046AbjFHTTS (ORCPT
+        with ESMTP id S236951AbjFHTUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 15:19:18 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927BE35A5
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 12:18:43 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-ba81deea9c2so1060670276.2
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 12:18:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686251920; x=1688843920;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WLKDOkdQ4oq0ww1Vlfy/KRTEhctwBXtXyzZrgpalkvM=;
-        b=HEwZycAEZshzMQG1RY6xWzkEzRNEN/UEaemUkYXNmWskdkmVKrA8S+97io6IqWp9/V
-         /Ki/r1s4TSfiiefdOd1an7zeCiAQCXani7OPWb0Yu0dH1JXoMBV7ddckrsj8wmhXsvpX
-         lxVVQwwTUjyQXS/CCeF4VIDT1g2/zM6/NDtUcqQOoZLozwlnlFrDor/PrqoADqkak2qo
-         deaYgmKHf6xqfmf4KVoYNd/vj1wQpn8eoXEC4WQqeZC4WPbGo41LYWdy4IN4tXqheqG/
-         6B0lxLrh+XpboJCYpvDK5+1gNhnxK8xFzRPNdKypeMnMcoGI/ayoAWXa0T/S7aKkyUXg
-         eIPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686251920; x=1688843920;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WLKDOkdQ4oq0ww1Vlfy/KRTEhctwBXtXyzZrgpalkvM=;
-        b=BwFsmBVPmRhHmW6jz0KON42+GJBvVdJeCOtWe3klIbRSnfaAMAW5YZT1H6+w7KHrq8
-         9MX9V6NH+ccSrJC/uVg3dOx/SjsKzeWY8e0iv7/NKhVpE56D/VBFhuDOM9Mfl8O5I0+n
-         wafq+LMAmnBHCRyoHpii08h2CF9lnwW7QwPoQasWA/UV/nkt3SmJtVsUkU3/O8unESie
-         n1NKU2BmTDrHmLJW6B1M9OyFetaZFV4cP/7ofWxozMmJi6vQmEZ9V1fHrUIRX9MP6vYz
-         6j07PrPS6l80Q4OweZzcl+QxpafR3aHSn4V11p8JrynRgcYK0vPNsfZjyHmAP54ncct+
-         LQ1g==
-X-Gm-Message-State: AC+VfDyFDLonZ4N4H3qJj6m/lS42ttxNSii6LqTWHz+Pm1wAZYBDvNWW
-        J9DdA5UkKjT9gCrIJumwQC5IPw==
-X-Google-Smtp-Source: ACHHUZ78uQ3KAa2UlmiLkPkJ1ItAoVICWyvDzVcoJt54uwUIKvQ1XvbxMYD2Oe7/oQdSR2X0isfU0g==
-X-Received: by 2002:a25:e307:0:b0:ba8:7f98:4afa with SMTP id z7-20020a25e307000000b00ba87f984afamr579046ybd.26.1686251920409;
-        Thu, 08 Jun 2023 12:18:40 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id 22-20020a250316000000b00bb2f5dda19bsm432908ybd.47.2023.06.08.12.18.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 12:18:39 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 12:18:35 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
-        John David Anglin <dave.anglin@bell.net>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 08/23] parisc: add pte_unmap() to balance get_ptep()
-In-Reply-To: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com>
-Message-ID: <653369-95ef-acd2-d6ea-e95f5a997493@google.com>
-References: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com>
+        Thu, 8 Jun 2023 15:20:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCF535A3;
+        Thu,  8 Jun 2023 12:19:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7318565048;
+        Thu,  8 Jun 2023 19:19:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92FB1C433EF;
+        Thu,  8 Jun 2023 19:19:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686251965;
+        bh=mLOUm1pw4C1bDmEn+GaVOq6LXGOEbnXZs3/jiHFU1DM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=q/EIiaYKROJXw5aWMOmXQm05vasG29mD1HvxujqhVsHhdELsZmFIs0ClxmC7WiAX7
+         pEDhavxGKH9JK9OGkfCuDp2amYp/WOg5Y2LrhU9MZlXZ4/xE1HV1bRlxnKcomcsWkR
+         4+GMU4SgGL7XXun73X7WHdOTucn8cTm3mfXWanYzj/XFv1W3VkrMwp7zrRhjdRhDMH
+         eijuUshcLlTMkzqIO6AJlUN8M0rj5t6WiZxBWvhs5IpoMI2a8fcjs2lXu+3ZDTLq/b
+         H/mneTO9NcemhZa9tKZIBF6eU2gmVXxy9Y7gPiurzDIX7f5m7Ii+QJJ1K1TBvZu+/w
+         Sr+ngLYBLaBsA==
+Date:   Thu, 8 Jun 2023 14:19:24 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Sui Jingfeng <15330273260@189.cn>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        Christian Konig <christian.koenig@amd.com>,
+        Pan Xinhui <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Lijo Lazar <lijo.lazar@amd.com>,
+        YiPeng Chai <YiPeng.Chai@amd.com>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
+        Bokun Zhang <Bokun.Zhang@amd.com>,
+        Ville Syrjala <ville.syrjala@linux.intel.com>,
+        Li Yi <liyi@loongson.cn>,
+        Sui Jingfeng <suijingfeng@loongson.cn>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        Yi Liu <yi.l.liu@intel.com>, kvm@vger.kernel.org,
+        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        loongson-kernel@lists.loongnix.cn, amd-gfx@lists.freedesktop.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [Intel-gfx] [PATCH v3 4/4] PCI/VGA: introduce is_boot_device
+ function callback to vga_client_register
+Message-ID: <20230608191924.GA1210122@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230608114322.604887-5-15330273260@189.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To keep balance in future, remember to pte_unmap() after a successful
-get_ptep().  And act as if flush_cache_pages() really needs a map there,
-to read the pfn before "unmapping", to be sure page table is not removed.
+On Thu, Jun 08, 2023 at 07:43:22PM +0800, Sui Jingfeng wrote:
+> From: Sui Jingfeng <suijingfeng@loongson.cn>
+> 
+> The vga_is_firmware_default() function is arch-dependent, which doesn't
+> sound right. At least, it also works on the Mips and LoongArch platforms.
+> Tested with the drm/amdgpu and drm/radeon drivers. However, it's difficult
+> to enumerate all arch-driver combinations. I'm wrong if there is only one
+> exception.
+> 
+> With the observation that device drivers typically have better knowledge
+> about which PCI bar contains the firmware framebuffer, which could avoid
+> the need to iterate all of the PCI BARs.
+> 
+> But as a PCI function at pci/vgaarb.c, vga_is_firmware_default() is
+> probably not suitable to make such an optimization for a specific device.
+> 
+> There are PCI display controllers that don't have a dedicated VRAM bar,
+> this function will lose its effectiveness in such a case. Luckily, the
+> device driver can provide an accurate workaround.
+> 
+> Therefore, this patch introduces a callback that allows the device driver
+> to tell the VGAARB if the device is the default boot device. This patch
+> only intends to introduce the mechanism, while the implementation is left
+> to the device driver authors. Also honor the comment: "Clients have two
+> callback mechanisms they can use"
 
-Signed-off-by: Hugh Dickins <hughd@google.com>
----
- arch/parisc/kernel/cache.c | 26 +++++++++++++++++++++-----
- 1 file changed, 21 insertions(+), 5 deletions(-)
+s/bar/BAR/ (several)
 
-diff --git a/arch/parisc/kernel/cache.c b/arch/parisc/kernel/cache.c
-index ca4a302d4365..501160250bb7 100644
---- a/arch/parisc/kernel/cache.c
-+++ b/arch/parisc/kernel/cache.c
-@@ -426,10 +426,15 @@ void flush_dcache_page(struct page *page)
- 		offset = (pgoff - mpnt->vm_pgoff) << PAGE_SHIFT;
- 		addr = mpnt->vm_start + offset;
- 		if (parisc_requires_coherency()) {
-+			bool needs_flush = false;
- 			pte_t *ptep;
- 
- 			ptep = get_ptep(mpnt->vm_mm, addr);
--			if (ptep && pte_needs_flush(*ptep))
-+			if (ptep) {
-+				needs_flush = pte_needs_flush(*ptep);
-+				pte_unmap(ptep);
-+			}
-+			if (needs_flush)
- 				flush_user_cache_page(mpnt, addr);
- 		} else {
- 			/*
-@@ -561,14 +566,20 @@ EXPORT_SYMBOL(flush_kernel_dcache_page_addr);
- static void flush_cache_page_if_present(struct vm_area_struct *vma,
- 	unsigned long vmaddr, unsigned long pfn)
- {
--	pte_t *ptep = get_ptep(vma->vm_mm, vmaddr);
-+	bool needs_flush = false;
-+	pte_t *ptep;
- 
- 	/*
- 	 * The pte check is racy and sometimes the flush will trigger
- 	 * a non-access TLB miss. Hopefully, the page has already been
- 	 * flushed.
- 	 */
--	if (ptep && pte_needs_flush(*ptep))
-+	ptep = get_ptep(vma->vm_mm, vmaddr);
-+	if (ptep) {
-+		needs_flush = pte_needs_flush(*ptep);
-+		pte_unmap(ptep);
-+	}
-+	if (needs_flush)
- 		flush_cache_page(vma, vmaddr, pfn);
- }
- 
-@@ -635,17 +646,22 @@ static void flush_cache_pages(struct vm_area_struct *vma, unsigned long start, u
- 	pte_t *ptep;
- 
- 	for (addr = start; addr < end; addr += PAGE_SIZE) {
-+		bool needs_flush = false;
- 		/*
- 		 * The vma can contain pages that aren't present. Although
- 		 * the pte search is expensive, we need the pte to find the
- 		 * page pfn and to check whether the page should be flushed.
- 		 */
- 		ptep = get_ptep(vma->vm_mm, addr);
--		if (ptep && pte_needs_flush(*ptep)) {
-+		if (ptep) {
-+			needs_flush = pte_needs_flush(*ptep);
-+			pfn = pte_pfn(*ptep);
-+			pte_unmap(ptep);
-+		}
-+		if (needs_flush) {
- 			if (parisc_requires_coherency()) {
- 				flush_user_cache_page(vma, addr);
- 			} else {
--				pfn = pte_pfn(*ptep);
- 				if (WARN_ON(!pfn_valid(pfn)))
- 					return;
- 				__flush_cache_page(vma, addr, PFN_PHYS(pfn));
--- 
-2.35.3
+Nothing here uses the callback.  I don't want to merge this until we
+have a user.
 
+I'm not sure why the device driver should know whether its device is
+the default boot device.
+
+> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+> ---
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_device.c |  2 +-
+>  drivers/gpu/drm/i915/display/intel_vga.c   |  3 +--
+>  drivers/gpu/drm/nouveau/nouveau_vga.c      |  2 +-
+>  drivers/gpu/drm/radeon/radeon_device.c     |  2 +-
+>  drivers/pci/vgaarb.c                       | 22 ++++++++++++++++++----
+>  drivers/vfio/pci/vfio_pci_core.c           |  2 +-
+>  include/linux/vgaarb.h                     |  8 +++++---
+>  7 files changed, 28 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> index 5c7d40873ee2..7a096f2d5c16 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> @@ -3960,7 +3960,7 @@ int amdgpu_device_init(struct amdgpu_device *adev,
+>  	/* this will fail for cards that aren't VGA class devices, just
+>  	 * ignore it */
+>  	if ((adev->pdev->class >> 8) == PCI_CLASS_DISPLAY_VGA)
+> -		vga_client_register(adev->pdev, amdgpu_device_vga_set_decode);
+> +		vga_client_register(adev->pdev, amdgpu_device_vga_set_decode, NULL);
+>  
+>  	px = amdgpu_device_supports_px(ddev);
+>  
+> diff --git a/drivers/gpu/drm/i915/display/intel_vga.c b/drivers/gpu/drm/i915/display/intel_vga.c
+> index 286a0bdd28c6..98d7d4dffe9f 100644
+> --- a/drivers/gpu/drm/i915/display/intel_vga.c
+> +++ b/drivers/gpu/drm/i915/display/intel_vga.c
+> @@ -115,7 +115,6 @@ intel_vga_set_decode(struct pci_dev *pdev, bool enable_decode)
+>  
+>  int intel_vga_register(struct drm_i915_private *i915)
+>  {
+> -
+>  	struct pci_dev *pdev = to_pci_dev(i915->drm.dev);
+>  	int ret;
+>  
+> @@ -127,7 +126,7 @@ int intel_vga_register(struct drm_i915_private *i915)
+>  	 * then we do not take part in VGA arbitration and the
+>  	 * vga_client_register() fails with -ENODEV.
+>  	 */
+> -	ret = vga_client_register(pdev, intel_vga_set_decode);
+> +	ret = vga_client_register(pdev, intel_vga_set_decode, NULL);
+>  	if (ret && ret != -ENODEV)
+>  		return ret;
+>  
+> diff --git a/drivers/gpu/drm/nouveau/nouveau_vga.c b/drivers/gpu/drm/nouveau/nouveau_vga.c
+> index f8bf0ec26844..162b4f4676c7 100644
+> --- a/drivers/gpu/drm/nouveau/nouveau_vga.c
+> +++ b/drivers/gpu/drm/nouveau/nouveau_vga.c
+> @@ -92,7 +92,7 @@ nouveau_vga_init(struct nouveau_drm *drm)
+>  		return;
+>  	pdev = to_pci_dev(dev->dev);
+>  
+> -	vga_client_register(pdev, nouveau_vga_set_decode);
+> +	vga_client_register(pdev, nouveau_vga_set_decode, NULL);
+>  
+>  	/* don't register Thunderbolt eGPU with vga_switcheroo */
+>  	if (pci_is_thunderbolt_attached(pdev))
+> diff --git a/drivers/gpu/drm/radeon/radeon_device.c b/drivers/gpu/drm/radeon/radeon_device.c
+> index afbb3a80c0c6..71f2ff39d6a1 100644
+> --- a/drivers/gpu/drm/radeon/radeon_device.c
+> +++ b/drivers/gpu/drm/radeon/radeon_device.c
+> @@ -1425,7 +1425,7 @@ int radeon_device_init(struct radeon_device *rdev,
+>  	/* if we have > 1 VGA cards, then disable the radeon VGA resources */
+>  	/* this will fail for cards that aren't VGA class devices, just
+>  	 * ignore it */
+> -	vga_client_register(rdev->pdev, radeon_vga_set_decode);
+> +	vga_client_register(rdev->pdev, radeon_vga_set_decode, NULL);
+>  
+>  	if (rdev->flags & RADEON_IS_PX)
+>  		runtime = true;
+> diff --git a/drivers/pci/vgaarb.c b/drivers/pci/vgaarb.c
+> index b0bf4952a95d..d3dab61e0ef2 100644
+> --- a/drivers/pci/vgaarb.c
+> +++ b/drivers/pci/vgaarb.c
+> @@ -53,6 +53,7 @@ struct vga_device {
+>  	bool bridge_has_one_vga;
+>  	bool is_firmware_default;	/* device selected by firmware */
+>  	unsigned int (*set_decode)(struct pci_dev *pdev, bool decode);
+> +	bool (*is_boot_device)(struct pci_dev *pdev);
+>  };
+>  
+>  static LIST_HEAD(vga_list);
+> @@ -614,10 +615,17 @@ static bool vga_is_boot_device(struct vga_device *vgadev)
+>  	if (boot_vga && boot_vga->is_firmware_default)
+>  		return false;
+>  
+> -	if (vga_is_firmware_default(pdev)) {
+> -		vgadev->is_firmware_default = true;
+> +	/*
+> +	 * Ask the device driver first, if registered. Fallback to the
+> +	 * default implement if the callback is non-exist.
+> +	 */
+> +	if (vgadev->is_boot_device)
+> +		vgadev->is_firmware_default = vgadev->is_boot_device(pdev);
+> +	else
+> +		vgadev->is_firmware_default = vga_is_firmware_default(pdev);
+> +
+> +	if (vgadev->is_firmware_default)
+>  		return true;
+> -	}
+>  
+>  	/*
+>  	 * A legacy VGA device has MEM and IO enabled and any bridges
+> @@ -954,6 +962,10 @@ EXPORT_SYMBOL(vga_set_legacy_decoding);
+>   * @set_decode callback: If a client can disable its GPU VGA resource, it
+>   * will get a callback from this to set the encode/decode state.
+>   *
+> + * @is_boot_device: callback to the device driver, query if a client is the
+> + * default boot device, as the device driver typically has better knowledge
+> + * if specific device is the boot device. But this callback is optional.
+> + *
+>   * Rationale: we cannot disable VGA decode resources unconditionally, some
+>   * single GPU laptops seem to require ACPI or BIOS access to the VGA registers
+>   * to control things like backlights etc. Hopefully newer multi-GPU laptops do
+> @@ -969,7 +981,8 @@ EXPORT_SYMBOL(vga_set_legacy_decoding);
+>   * Returns: 0 on success, -1 on failure
+>   */
+>  int vga_client_register(struct pci_dev *pdev,
+> -		unsigned int (*set_decode)(struct pci_dev *pdev, bool decode))
+> +		unsigned int (*set_decode)(struct pci_dev *pdev, bool decode),
+> +		bool (*is_boot_device)(struct pci_dev *pdev))
+>  {
+>  	int ret = -ENODEV;
+>  	struct vga_device *vgadev;
+> @@ -981,6 +994,7 @@ int vga_client_register(struct pci_dev *pdev,
+>  		goto bail;
+>  
+>  	vgadev->set_decode = set_decode;
+> +	vgadev->is_boot_device = is_boot_device;
+>  	ret = 0;
+>  
+>  bail:
+> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
+> index a5ab416cf476..2a8873a330ba 100644
+> --- a/drivers/vfio/pci/vfio_pci_core.c
+> +++ b/drivers/vfio/pci/vfio_pci_core.c
+> @@ -2067,7 +2067,7 @@ static int vfio_pci_vga_init(struct vfio_pci_core_device *vdev)
+>  	if (ret)
+>  		return ret;
+>  
+> -	ret = vga_client_register(pdev, vfio_pci_set_decode);
+> +	ret = vga_client_register(pdev, vfio_pci_set_decode, NULL);
+>  	if (ret)
+>  		return ret;
+>  	vga_set_legacy_decoding(pdev, vfio_pci_set_decode(pdev, false));
+> diff --git a/include/linux/vgaarb.h b/include/linux/vgaarb.h
+> index d36225c582ee..66fe80ffad76 100644
+> --- a/include/linux/vgaarb.h
+> +++ b/include/linux/vgaarb.h
+> @@ -50,7 +50,8 @@ struct pci_dev *vga_default_device(void);
+>  void vga_set_default_device(struct pci_dev *pdev);
+>  int vga_remove_vgacon(struct pci_dev *pdev);
+>  int vga_client_register(struct pci_dev *pdev,
+> -		unsigned int (*set_decode)(struct pci_dev *pdev, bool state));
+> +		unsigned int (*set_decode)(struct pci_dev *pdev, bool state),
+> +		bool (*is_boot_device)(struct pci_dev *pdev));
+>  #else /* CONFIG_VGA_ARB */
+>  static inline void vga_set_legacy_decoding(struct pci_dev *pdev,
+>  		unsigned int decodes)
+> @@ -76,7 +77,8 @@ static inline int vga_remove_vgacon(struct pci_dev *pdev)
+>  	return 0;
+>  }
+>  static inline int vga_client_register(struct pci_dev *pdev,
+> -		unsigned int (*set_decode)(struct pci_dev *pdev, bool state))
+> +		unsigned int (*set_decode)(struct pci_dev *pdev, bool state),
+> +		bool (*is_boot_device)(struct pci_dev *pdev))
+>  {
+>  	return 0;
+>  }
+> @@ -114,7 +116,7 @@ static inline int vga_get_uninterruptible(struct pci_dev *pdev,
+>  
+>  static inline void vga_client_unregister(struct pci_dev *pdev)
+>  {
+> -	vga_client_register(pdev, NULL);
+> +	vga_client_register(pdev, NULL, NULL);
+>  }
+>  
+>  #endif /* LINUX_VGA_H */
+> -- 
+> 2.25.1
+> 
