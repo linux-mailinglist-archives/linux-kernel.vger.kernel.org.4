@@ -2,86 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99844727F65
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0894727F6F
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:53:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236347AbjFHLv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 07:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36252 "EHLO
+        id S233806AbjFHLxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 07:53:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236045AbjFHLvY (ORCPT
+        with ESMTP id S232417AbjFHLxA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 07:51:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E66E6C;
-        Thu,  8 Jun 2023 04:51:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 93C0264CD8;
-        Thu,  8 Jun 2023 11:51:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6374C433D2;
-        Thu,  8 Jun 2023 11:51:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686225082;
-        bh=JZFA/ybxQcOvxs/C01SkmXMMjXuWUvVPOYATnYCc0fE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=h4YmX7gA0DQ+0x58Ib+iXoeJcoOIpZxwlrr6dqP8vqI8X/NLrCGhd2lRKyISfnNVN
-         TqWYP4cuAALBXAspxB5qn5DTk5xyft0zzoZzhj4MgDP0eFEyw7QMfH7ckH6eoZdDyP
-         KiptIlSJQ9221GPxJqV0a2OJalgKSyvXrUBNsZy8=
-Date:   Thu, 8 Jun 2023 13:51:19 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Michal Sekletar <msekleta@redhat.com>
-Cc:     jirislaby@kernel.org, arozansk@redhat.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-Subject: Re: [PATCH v2 1/2] tty: tty_io: update timestamps on all device nodes
-Message-ID: <2023060816-quicken-around-d619@gregkh>
-References: <c91c458e-58d0-f13a-9adb-a48a19f82107@kernel.org>
- <20230608101616.44152-1-msekleta@redhat.com>
+        Thu, 8 Jun 2023 07:53:00 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9CD1FEB;
+        Thu,  8 Jun 2023 04:52:59 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-56ca07b34b1so4387067b3.0;
+        Thu, 08 Jun 2023 04:52:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686225179; x=1688817179;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zl1R25aFlMknfZ0TZaTg0XuHD/qftBgk3A9a/qrvBxE=;
+        b=JkWwFpUHXV9of/EMlxEglfiJIwG1whJEIcTeXTzj0r1UXBhS3QQTuzkkduG01/PtL+
+         Dc6zQvaguzzgwBx7WI0aYdeB7ZdtueyKcmvT7IKVzNRsqhuqwtYMPUyjy1gqCKi7EY23
+         SDoM2b1Qy5nIPOupVMsQuZokYSz/qFGraoOECWmgxh0wTrApXG7k5bt7SAB/kFmj9Ux4
+         H5IMMf5fkjKmupydwZm55ILHeDzk4y1Otqyjwmj34EZ6NbSwkuOhAZc6ig5rU70vV4i/
+         Y8Mwh64R+JCNUx3ml3+xihLvBqH1Ja3Dh1iA1tYZ2SdKKDpJQVjhW0iAhUfUpepA3d1x
+         UUKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686225179; x=1688817179;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zl1R25aFlMknfZ0TZaTg0XuHD/qftBgk3A9a/qrvBxE=;
+        b=DhlBh/6mCNcw8V8OMmn/ng8l0eb0wUuOEKbIMBYbXv9wLkue65tCJFZkI29/91rmQG
+         NDuxLdfTqWYwBCGxM6nVL2gMAwIhsksoTN60ErZrllYWnTXsYFfi3RWtt92qz2o3l4mk
+         IFDTP1jSHJ2sKhgKKfbROsZH6ErJ9iOq7oEolfZPbTzKG6MIzZXGbD7XgqSortxIB3lJ
+         XnWmy8ex6QxBT9qHGIt20ncjUofzi7Vs5e6uJOJFZs2DzKkwNTEuQNMd+aeWfOXwXaGY
+         lObg1sVZ+UK39QMfoLrkO6uN5ZyjQsO7y31NZ4MYBYsVh+zXP9+bqTtNDSJM3MUIBTbl
+         85ZQ==
+X-Gm-Message-State: AC+VfDwFc5HjTM2XjZWEhSQj/hqawcAtbpvj1gsPjjwY244ZCuI3gFQ+
+        7b/YgjjsIgOWjshyyYpqh7i95s2j9xMaEMKL+QI=
+X-Google-Smtp-Source: ACHHUZ6h6dDyv4SxutQEfzo1GDIGkQqE4VT4CGwB81++CdMgJ3EN0Xs26iS4UkX3+1xwEFlXbP9izWEIR2g4zFlOcTk=
+X-Received: by 2002:a0d:c584:0:b0:561:b246:77ca with SMTP id
+ h126-20020a0dc584000000b00561b24677camr9370671ywd.28.1686225178967; Thu, 08
+ Jun 2023 04:52:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230608101616.44152-1-msekleta@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230307102441.94417-1-conor.dooley@microchip.com> <20230608-dispatch-sneer-aa09bd7b2eb8@wendy>
+In-Reply-To: <20230608-dispatch-sneer-aa09bd7b2eb8@wendy>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Thu, 8 Jun 2023 13:52:47 +0200
+Message-ID: <CANiq72nnph7LS1fLRtHz8NJ91PWXPaUnm0EuoV3wrbvK398AnA@mail.gmail.com>
+Subject: Re: [PATCH v1 0/2] RISC-V: enable rust
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     linux-riscv@lists.infradead.org, conor@kernel.org,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, rust-for-linux@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 12:16:15PM +0200, Michal Sekletar wrote:
-> User space applications watch for timestamp changes on character device
-> files in order to determine idle time of a given terminal session. For
-> example, "w" program uses this information to populate the IDLE column
-> of its output [1]. Similarly, systemd-logind has optional feature where
-> it uses atime of the tty character device to determine if there was
-> activity on the terminal associated with the logind's session object. If
-> there was no activity for a configured period of time then logind will
-> terminate such session [2].
-> 
-> Now, usually (e.g. bash running on the terminal) the use of the terminal
-> will update timestamps (atime and mtime) on the corresponding terminal
-> character device. However, if access to the terminal, e.g. /dev/pts/0,
-> is performed through magic character device /dev/tty then such access
-> obviously changes the state of the terminal, however timestamps on the
-> device that correspond to the terminal (/dev/pts/0) are not updated.
-> 
-> This patch makes sure that we update timestamps on *all* character
-> devices that correspond to the given tty, because outside observers (w,
-> systemd-logind) are maybe checking these timestamps. Obviously, they can
-> not check timestamps on /dev/tty as that has per-process meaning.
+On Thu, Jun 8, 2023 at 9:01=E2=80=AFAM Conor Dooley <conor.dooley@microchip=
+.com> wrote:
+>
+> I do intend revisting this, probably after the min. version for rust
+> gets bumped, I've just been really busy with other work the last weeks.
 
-So how are you protecting this from being an information leak like we
-have had in the past where you could monitor how many characters were
-being sent to the tty through a proc file?  Seems like now you can just
-monitor any tty node in the system and get the same information, while
-today you can only do it for the tty devices you have permissions for,
-right?
+Thanks Conor! That would be great. We are increasing the minimum
+version after the merge window to Rust 1.70.0 (assuming no unexpected
+issues).
 
-thanks,
+This is the branch I have in case you want to use it, I will submit it
+soon: https://github.com/ojeda/linux/tree/rust-1.70
 
-greg k-h
+Cheers,
+Miguel
