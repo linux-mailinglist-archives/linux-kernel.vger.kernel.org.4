@@ -2,226 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 495F7728771
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 20:45:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86BAF728774
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 20:45:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233653AbjFHSpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 14:45:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49686 "EHLO
+        id S234021AbjFHSp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 14:45:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbjFHSpA (ORCPT
+        with ESMTP id S231477AbjFHSp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 14:45:00 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B07D193
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 11:44:58 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id 46e09a7af769-6b13e2af122so10855a34.2
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 11:44:58 -0700 (PDT)
+        Thu, 8 Jun 2023 14:45:26 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D603E2D74
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 11:45:18 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id 6a1803df08f44-6260e771419so5177326d6.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 11:45:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20221208.gappssmtp.com; s=20221208; t=1686249898; x=1688841898;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yt12+1+dARtKc3fRLQ7ivDg1sn89g+SY2IZ1KjaiaJs=;
-        b=0sPZpYtCx2uIcWQN2SI/AEQ/WWZcXhOA/di7WAeDir9+IxajPlSiVl+Hm2Chzremmo
-         dNc1GyBIQugOsTs0Op4y9GnHpYJA6Lk2SzxfAFqSh7gT18FVPy6ip84ibVOzTAH/UfUA
-         ZvZjqPRxbDJ1qCdiplb3WeEslaA6HHFH8lOx/eE5silGncLGYYiL5xP/SkdO+VG6Dm5D
-         1eFQ20JbZf12nZYUu92bxsTJf6ot+K12YXjoCdFGJuDefST2cgBxazwwt2XthTgYPA/o
-         sHIPKcuZ2bM83dfwq5rhxfjHleCZJVwihFvLBLGwll/oJeiCqDdp3ptsYVl+seJdxQ30
-         YSqA==
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1686249918; x=1688841918;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vB1ola4E25oLoCTIaa0hZ2bCKEZyZNPX8kWPehiyVw8=;
+        b=QyYiglSuM6pfS/XYtSqOVAeCLqbULZey2IGYw6NDTVuF4d4pFXmQPAomMQSeLGpQ76
+         zmXaEGlXqnAvgUkfwk1BtThj5hm3fRmDgaHojc2IHEHs5gmG8S98LebzUFxlwb72UuzF
+         zB2lQA464bh/1WsiDq90PVQYMBttECP0AbRMDqRtzv8aZPyyGJfYI0dxCe1PA3jpY43g
+         Gi/jN32iMlD6csqkxr0JJkZLI40tKqsacMKBayzwHkl/05UQeR97/ZxqS7GTzYatkXYA
+         tP5haPX5ZKd8GAyh87TlRnoqMzItj/BvoWgTfUxjY3mfdjidZQwnLOrE9R8lyXjU8gsQ
+         WOLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686249898; x=1688841898;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yt12+1+dARtKc3fRLQ7ivDg1sn89g+SY2IZ1KjaiaJs=;
-        b=WBcHH96ylf5kB+2IH5Z9xmBMH17REBirvfVX5PYtlrufoYw0C+/Rtku/+VdbBkqYUf
-         2C/IePV1nKhJvylGdhFys9ETuVSVJqDW96dVUAjMFMu9ugjjgNxitcsWhzvw3rz/jKG8
-         E7twc5GIgFZXxos1jqAD6xn2KAi7dT9ZhVhpVmoifR28IYNFEL1unzx4swOhoOxT1J6X
-         RqsfCw5E3BpavykhgiL0n8r/UGicv1GNaGUlUaiL952B5lfZWqmTqKzCTLO5Zq3JsvzQ
-         yTuaAzf0Kj7ji0y4VP/KSsm5S1wflX/wxAJg2hDfpzpc/k8+clhhkx6YafU3HI6/XazS
-         yxZQ==
-X-Gm-Message-State: AC+VfDxZE9F/t+/iMzIi43mTqVXJwd/rV9MfUnFBhFdQZy1FaUsCyFUX
-        DCkPGAyPcdVB/7GxYMZgveC0U3OKX4qInZmM6Z/q6Q==
-X-Google-Smtp-Source: ACHHUZ6qTt2rGt9wmZJ/SPf4KQOMj4ZBEd3BOO3j7B2iz3zwr55Kb1Y6wu4JUoLhK2C91muXfFqoZoIhgmucd8I7ZNU=
-X-Received: by 2002:a05:6359:a9b:b0:129:b9a9:7858 with SMTP id
- em27-20020a0563590a9b00b00129b9a97858mr3725483rwb.3.1686249897389; Thu, 08
- Jun 2023 11:44:57 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686249918; x=1688841918;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vB1ola4E25oLoCTIaa0hZ2bCKEZyZNPX8kWPehiyVw8=;
+        b=FgrUSZ41q49+jVOWby6pWX7utJ2aAUVHIOcevn1mNxI+HLFON1VQ+kMkRXmnZHIfiD
+         ZOjowR33+C9tf5YC04cke1gMQjf0lzZ/e3CHp/m4QKeViM93OTXrhnoBcsFKzIE9wchr
+         E8LPHQAx30GUbsFNST0SqlyjLaff7Ae+jNyJYhwR9xciLa/IAwuTCL+Z/MbRLSH/goMo
+         BaZ4GaQBDbHxPpTurI15bfhs4l2pBEkWJDRFuENs+BaM22U/t5vPCWF/qCWWNS6vNRBw
+         J1Q1cqLJoe0tW0TmeJXpipZ3b5xFrq3dJRUG6Nw/ZSrCfSZU1SPv27pqErhAamnXvDyT
+         ac+g==
+X-Gm-Message-State: AC+VfDwAmwre92/HM1N83JdYQyeZrJuaRCHafVdwQMyHiHrhXTN82vGK
+        gd2KhjuEkB7nrK48XxfaNrBHzw==
+X-Google-Smtp-Source: ACHHUZ4RGfCjbZ/Eww4hIR8wUeuQovzbHX1r3YXBGPpdAJEG1NRD5nknwVZUKoJJ6MdTAJYBPMF/Vg==
+X-Received: by 2002:a05:6214:20eb:b0:626:f35:ab95 with SMTP id 11-20020a05621420eb00b006260f35ab95mr2350120qvk.17.1686249917969;
+        Thu, 08 Jun 2023 11:45:17 -0700 (PDT)
+Received: from localhost (2603-7000-0c01-2716-8f57-5681-ccd3-4a2e.res6.spectrum.com. [2603:7000:c01:2716:8f57:5681:ccd3:4a2e])
+        by smtp.gmail.com with ESMTPSA id kr30-20020a0562142b9e00b00626286e41ccsm589592qvb.77.2023.06.08.11.45.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 11:45:17 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 14:45:16 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Cc:     vitaly.wool@konsulko.com, minchan@kernel.org,
+        senozhatsky@chromium.org, yosryahmed@google.com,
+        linux-mm@kvack.org, ddstreet@ieee.org, sjenning@redhat.com,
+        nphamcs@gmail.com, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [RFC PATCH v2 1/7] mm: zswap: add pool shrinking mechanism
+Message-ID: <20230608184516.GA356779@cmpxchg.org>
+References: <20230606145611.704392-1-cerasuolodomenico@gmail.com>
+ <20230606145611.704392-2-cerasuolodomenico@gmail.com>
+ <20230608165250.GG352940@cmpxchg.org>
+ <20230608170459.GH352940@cmpxchg.org>
 MIME-Version: 1.0
-References: <20230602103750.2290132-1-vladimir.oltean@nxp.com> <20230602103750.2290132-6-vladimir.oltean@nxp.com>
-In-Reply-To: <20230602103750.2290132-6-vladimir.oltean@nxp.com>
-From:   Jamal Hadi Salim <jhs@mojatatu.com>
-Date:   Thu, 8 Jun 2023 14:44:46 -0400
-Message-ID: <CAM0EoM=P9+wNnNQ=ky96rwCx1z20fR21EWEdx+Na39NCqqG=3A@mail.gmail.com>
-Subject: Re: [PATCH RESEND net-next 5/5] net/sched: taprio: dump class stats
- for the actual q->qdiscs[]
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>,
-        Peilin Ye <yepeilin.cs@gmail.com>,
-        Pedro Tammela <pctammela@mojatatu.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230608170459.GH352940@cmpxchg.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 6:38=E2=80=AFAM Vladimir Oltean <vladimir.oltean@nxp=
-.com> wrote:
->
-> This makes a difference for the software scheduling mode, where
-> dev_queue->qdisc_sleeping is the same as the taprio root Qdisc itself,
-> but when we're talking about what Qdisc and stats get reported for a
-> traffic class, the root taprio isn't what comes to mind, but q->qdiscs[]
-> is.
->
-> To understand the difference, I've attempted to send 100 packets in
-> software mode through traffic class 0 (they are in the Qdisc's backlog),
-> and recorded the stats before and after the change.
->
+On Thu, Jun 08, 2023 at 01:05:00PM -0400, Johannes Weiner wrote:
+> On Thu, Jun 08, 2023 at 12:52:51PM -0400, Johannes Weiner wrote:
+> > On Tue, Jun 06, 2023 at 04:56:05PM +0200, Domenico Cerasuolo wrote:
+> > > @@ -584,14 +601,70 @@ static struct zswap_pool *zswap_pool_find_get(char *type, char *compressor)
+> > >  	return NULL;
+> > >  }
+> > >  
+> > > +static int zswap_shrink(struct zswap_pool *pool)
+> > > +{
+> > > +	struct zswap_entry *lru_entry, *tree_entry = NULL;
+> > > +	struct zswap_header *zhdr;
+> > > +	struct zswap_tree *tree;
+> > > +	int swpoffset;
+> > > +	int ret;
+> > > +
+> > > +	/* get a reclaimable entry from LRU */
+> > > +	spin_lock(&pool->lru_lock);
+> > > +	if (list_empty(&pool->lru)) {
+> > > +		spin_unlock(&pool->lru_lock);
+> > > +		return -EINVAL;
+> > > +	}
+> > > +	lru_entry = list_last_entry(&pool->lru, struct zswap_entry, lru);
+> > > +	list_del_init(&lru_entry->lru);
+> > > +	zhdr = zpool_map_handle(pool->zpool, lru_entry->handle, ZPOOL_MM_RO);
+> > > +	tree = zswap_trees[swp_type(zhdr->swpentry)];
+> > > +	zpool_unmap_handle(pool->zpool, lru_entry->handle);
+> > > +	/*
+> > > +	 * Once the pool lock is dropped, the lru_entry might get freed. The
+> > > +	 * swpoffset is copied to the stack, and lru_entry isn't deref'd again
+> > > +	 * until the entry is verified to still be alive in the tree.
+> > > +	 */
+> > > +	swpoffset = swp_offset(zhdr->swpentry);
+> > > +	spin_unlock(&pool->lru_lock);
+> > > +
+> > > +	/* hold a reference from tree so it won't be freed during writeback */
+> > > +	spin_lock(&tree->lock);
+> > > +	tree_entry = zswap_entry_find_get(&tree->rbroot, swpoffset);
+> > > +	if (tree_entry != lru_entry) {
+> > > +		if (tree_entry)
+> > > +			zswap_entry_put(tree, tree_entry);
+> > > +		spin_unlock(&tree->lock);
+> > > +		return -EAGAIN;
+> > > +	}
+> > > +	spin_unlock(&tree->lock);
+> > > +
+> > > +	ret = zswap_writeback_entry(pool->zpool, lru_entry->handle);
+> > > +
+> > > +	spin_lock(&tree->lock);
+> > > +	if (ret) {
+> > > +		spin_lock(&pool->lru_lock);
+> > > +		list_move(&lru_entry->lru, &pool->lru);
+> > > +		spin_unlock(&pool->lru_lock);
+> > > +	}
+> > > +	zswap_entry_put(tree, tree_entry);
+> > 
+> > On re-reading this, I find the lru_entry vs tree_entry distinction
+> > unnecessarily complicated. Once it's known that the thing coming off
+> > the LRU is the same thing as in the tree, there is only "the entry".
+> > 
+> > How about 'entry' and 'tree_entry', and after validation use 'entry'
+> > throughout the rest of the function?
+> 
+> Even better, safe the tree_entry entirely by getting the reference
+> from the LRU already, and then just search the tree for a match:
+> 
+> 	/* Get an entry off the LRU */
+> 	spin_lock(&pool->lru_lock);
+> 	entry = list_last_entry();
+> 	list_del(&entry->lru);
+> 	zswap_entry_get(entry);
+> 	spin_unlock(&pool->lru_lock);
+> 
+> 	/* Check for invalidate() race */
+> 	spin_lock(&tree->lock);
+> 	if (entry != zswap_rb_search(&tree->rbroot, swpoffset)) {
+> 		ret = -EAGAIN;
+> 		goto put_unlock;
+> 	}
+> 	spin_unlock(&tree->lock);
 
-Other than the refcount issue i think the approach looks reasonable to
-me. The stats before/after you are showing below though are
-interesting; are you showing a transient phase where packets are
-temporarily in the backlog. Typically the backlog is a transient phase
-which lasts a very short period. Maybe it works differently for
-taprio? I took a quick look at the code and do see to decrement the
-backlog in the dequeue, so if it is not transient then some code path
-is not being hit.
+Eh, brainfart. It needs the tree lock to bump the ref, of course.
 
-Aside: I realize you are busy - but if you get time and provide some
-sample tc command lines for testing we could help create the tests for
-you, at least the first time. The advantage of putting these tests in
-tools/testing/selftests/tc-testing/ is that there are test tools out
-there that run these tests and so regressions are easier to catch
-sooner.
+But this should work, right?
 
-cheers,
-jamal
-
-> Here is before:
->
-> $ tc -s class show dev eth0
-> class taprio 8001:1 root leaf 8001:
->  Sent 0 bytes 0 pkt (dropped 0, overlimits 0 requeues 0)
->  backlog 9400b 100p requeues 0
->  Window drops: 0
-> class taprio 8001:2 root leaf 8001:
->  Sent 0 bytes 0 pkt (dropped 0, overlimits 0 requeues 0)
->  backlog 9400b 100p requeues 0
->  Window drops: 0
-> class taprio 8001:3 root leaf 8001:
->  Sent 0 bytes 0 pkt (dropped 0, overlimits 0 requeues 0)
->  backlog 9400b 100p requeues 0
->  Window drops: 0
-> class taprio 8001:4 root leaf 8001:
->  Sent 0 bytes 0 pkt (dropped 0, overlimits 0 requeues 0)
->  backlog 9400b 100p requeues 0
->  Window drops: 0
-> class taprio 8001:5 root leaf 8001:
->  Sent 0 bytes 0 pkt (dropped 0, overlimits 0 requeues 0)
->  backlog 9400b 100p requeues 0
->  Window drops: 0
-> class taprio 8001:6 root leaf 8001:
->  Sent 0 bytes 0 pkt (dropped 0, overlimits 0 requeues 0)
->  backlog 9400b 100p requeues 0
->  Window drops: 0
-> class taprio 8001:7 root leaf 8001:
->  Sent 0 bytes 0 pkt (dropped 0, overlimits 0 requeues 0)
->  backlog 9400b 100p requeues 0
->  Window drops: 0
-> class taprio 8001:8 root leaf 8001:
->  Sent 0 bytes 0 pkt (dropped 0, overlimits 0 requeues 0)
->  backlog 9400b 100p requeues 0
->  Window drops: 0
->
-> and here is after:
->
-> class taprio 8001:1 root
->  Sent 0 bytes 0 pkt (dropped 0, overlimits 0 requeues 0)
->  backlog 9400b 100p requeues 0
->  Window drops: 0
-> class taprio 8001:2 root
->  Sent 0 bytes 0 pkt (dropped 0, overlimits 0 requeues 0)
->  backlog 0b 0p requeues 0
->  Window drops: 0
-> class taprio 8001:3 root
->  Sent 0 bytes 0 pkt (dropped 0, overlimits 0 requeues 0)
->  backlog 0b 0p requeues 0
->  Window drops: 0
-> class taprio 8001:4 root
->  Sent 0 bytes 0 pkt (dropped 0, overlimits 0 requeues 0)
->  backlog 0b 0p requeues 0
->  Window drops: 0
-> class taprio 8001:5 root
->  Sent 0 bytes 0 pkt (dropped 0, overlimits 0 requeues 0)
->  backlog 0b 0p requeues 0
->  Window drops: 0
-> class taprio 8001:6 root
->  Sent 0 bytes 0 pkt (dropped 0, overlimits 0 requeues 0)
->  backlog 0b 0p requeues 0
->  Window drops: 0
-> class taprio 8001:7 root leaf 8010:
->  Sent 0 bytes 0 pkt (dropped 0, overlimits 0 requeues 0)
->  backlog 0b 0p requeues 0
->  Window drops: 0
-> class taprio 8001:8 root
->  Sent 0 bytes 0 pkt (dropped 0, overlimits 0 requeues 0)
->  backlog 0b 0p requeues 0
->  Window drops: 0
->
-> The most glaring (and expected) difference is that before, all class
-> stats reported the global stats, whereas now, they really report just
-> the counters for that traffic class.
->
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> ---
->  net/sched/sch_taprio.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
->
-> diff --git a/net/sched/sch_taprio.c b/net/sched/sch_taprio.c
-> index cc7ff98e5e86..23b98c3af8b2 100644
-> --- a/net/sched/sch_taprio.c
-> +++ b/net/sched/sch_taprio.c
-> @@ -2452,11 +2452,11 @@ static unsigned long taprio_find(struct Qdisc *sc=
-h, u32 classid)
->  static int taprio_dump_class(struct Qdisc *sch, unsigned long cl,
->                              struct sk_buff *skb, struct tcmsg *tcm)
->  {
-> -       struct netdev_queue *dev_queue =3D taprio_queue_get(sch, cl);
-> +       struct Qdisc *child =3D taprio_leaf(sch, cl);
->
->         tcm->tcm_parent =3D TC_H_ROOT;
->         tcm->tcm_handle |=3D TC_H_MIN(cl);
-> -       tcm->tcm_info =3D dev_queue->qdisc_sleeping->handle;
-> +       tcm->tcm_info =3D child->handle;
->
->         return 0;
->  }
-> @@ -2466,8 +2466,7 @@ static int taprio_dump_class_stats(struct Qdisc *sc=
-h, unsigned long cl,
->         __releases(d->lock)
->         __acquires(d->lock)
->  {
-> -       struct netdev_queue *dev_queue =3D taprio_queue_get(sch, cl);
-> -       struct Qdisc *child =3D dev_queue->qdisc_sleeping;
-> +       struct Qdisc *child =3D taprio_leaf(sch, cl);
->         struct tc_taprio_qopt_offload offload =3D {
->                 .cmd =3D TAPRIO_CMD_TC_STATS,
->                 .tc_stats =3D {
-> --
-> 2.34.1
->
+ 	/* Check for invalidate() race */
+ 	spin_lock(&tree->lock);
+ 	if (entry != zswap_rb_search(&tree->rbroot, swpoffset)) {
+ 		ret = -EAGAIN;
+ 		goto unlock;
+ 	}
+	zswap_entry_get(entry);
+ 	spin_unlock(&tree->lock);
