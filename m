@@ -2,142 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4231C7286E7
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 20:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E7017286EF
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 20:14:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236268AbjFHSIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 14:08:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39580 "EHLO
+        id S236354AbjFHSOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 14:14:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232256AbjFHSIC (ORCPT
+        with ESMTP id S232256AbjFHSN7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 14:08:02 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD4118C
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 11:08:00 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 5A8B41FD5F;
-        Thu,  8 Jun 2023 18:07:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1686247679; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KuVHWqF+Vmzlt+SUW4g6KuATrBuHpEsTJNICe6iwrHc=;
-        b=DzKX09a3MIGcFGy/bs4aXveZ1NRbWdFmwIJGNRB9beMcnjg3/3rQybTWLiKEEr28ctuSsN
-        ofr/NTBppLIfWVTmFNXZUx46CdJL0xK3Ddwm+KTSFVGpAx9e/RlIfnXRLns9g3ObZty3iL
-        f+CdUzcXf1FewvV7CQfhmUyhAGPfQQo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1686247679;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KuVHWqF+Vmzlt+SUW4g6KuATrBuHpEsTJNICe6iwrHc=;
-        b=Gzs5/PuXubrvgfiZMpux40aW3clbzJ70xqZmpsjIQJjGKctEyd1ZInHwX45CvkQBIAO0YA
-        iK5xiXdJ0Q+vtKAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4C8C6138E6;
-        Thu,  8 Jun 2023 18:07:59 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id QcinEv8YgmSBYQAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 08 Jun 2023 18:07:59 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id DD23BA0749; Thu,  8 Jun 2023 20:07:58 +0200 (CEST)
-Date:   Thu, 8 Jun 2023 20:07:58 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     Jan Kara <jack@suse.cz>, Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org, mhocko@suse.cz,
-        vbabka@suse.cz, regressions@lists.linux.dev,
-        Yu Ma <yu.ma@intel.com>
-Subject: Re: [PATCH] mm: convert mm's rss stats into percpu_counter
-Message-ID: <20230608180758.z4z4ijdjgfe4mbx4@quack3>
-References: <20221024052841.3291983-1-shakeelb@google.com>
- <20230608111408.s2minsenlcjow7q3@quack3>
- <20230608173700.wafw5tyw52gwoicu@google.com>
+        Thu, 8 Jun 2023 14:13:59 -0400
+Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D631FDC;
+        Thu,  8 Jun 2023 11:13:58 -0700 (PDT)
+Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-33dae9244a1so9686755ab.0;
+        Thu, 08 Jun 2023 11:13:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686248037; x=1688840037;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VIoynuv6udOW5LekCqRmnqhuS9COOvOVP6mK1YqrbbY=;
+        b=VYV6QBCjhAtjuwJW4rlVIab6s1g7BWTZkqVRHzF9tz8uYryliiX8o6A3/6iszkB3O3
+         +CuIbTsjBi+wv0NuQc9GesCowcecfd9ahy0nQhvSvKuNl8N1DvN3jqfJ5OQdfCjXLS4P
+         OFMI378FUP5blUc8SA1YTsZ7R3OS+7tA3qGfKYhccNemUDi6EVAZ1BDtpUMda29VQKZh
+         ICAzpqqwzzfIkTsukHLQywrUCuHP8y2jhXiPs4JAxbK+Pmgn2liuObJz+W+G2ejp5dYn
+         l2FwEaGSdQE/CmbViuvzmpuKRd6ZAEYSQeBAiCZd3iwMqnvUowSbsqlgSVouYM9jFdCO
+         uqww==
+X-Gm-Message-State: AC+VfDy2eCst5sk3V8OKLHP65OvXxphAIQiR9gDt6jwesnGYZ9m5L66F
+        j5o66swfeLRh/aQdIldSMw==
+X-Google-Smtp-Source: ACHHUZ4iP6csJ/GF+iB3FVST/z6ROywVESM1Yurn9hyif1K/ae0O1HCJlEceK2ccWaCvdUqsREVDDw==
+X-Received: by 2002:a92:c008:0:b0:33e:c0b:9ff2 with SMTP id q8-20020a92c008000000b0033e0c0b9ff2mr1730555ild.1.1686248037353;
+        Thu, 08 Jun 2023 11:13:57 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id z3-20020a056638000300b004163438fd4esm413711jao.92.2023.06.08.11.13.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 11:13:56 -0700 (PDT)
+Received: (nullmailer pid 3182680 invoked by uid 1000);
+        Thu, 08 Jun 2023 18:13:55 -0000
+Date:   Thu, 8 Jun 2023 12:13:55 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [dt-schema PATCH] schemas: iio: add label
+Message-ID: <168624795645.3178290.5235314768802159315.robh@kernel.org>
+References: <20230507171219.232216-1-krzk@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230608173700.wafw5tyw52gwoicu@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230507171219.232216-1-krzk@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 08-06-23 17:37:00, Shakeel Butt wrote:
-> On Thu, Jun 08, 2023 at 01:14:08PM +0200, Jan Kara wrote:
-> [...]
-> > 
-> > Somewhat late to the game but our performance testing grid has noticed this
-> > commit causes a performance regression on shell-heavy workloads. For
-> > example running 'make test' in git sources on our test machine with 192
-> > CPUs takes about 4% longer, system time is increased by about 9%:
-> > 
-> >                        before (9cd6ffa6025)  after (f1a7941243c1)
-> > Amean     User         471.12 *   0.30%*     481.77 *  -1.96%*
-> > Amean     System       244.47 *   0.90%*     269.13 *  -9.09%*
-> > Amean     Elapsed      709.22 *   0.45%*     742.27 *  -4.19%*
-> > Amean     CPU          100.00 (   0.20%)     101.00 *  -0.80%*
-> > 
-> > Essentially this workload spawns in sequence a lot of short-lived tasks and
-> > the task startup + teardown cost is what this patch increases. To
-> > demonstrate this more clearly, I've written trivial (and somewhat stupid)
-> > benchmark shell_bench.sh:
-> > 
-> > for (( i = 0; i < 20000; i++ )); do
-> > 	/bin/true
-> > done
-> > 
-> > And when run like:
-> > 
-> > numactl -C 1 ./shell_bench.sh
-> > 
-> > (I've forced physical CPU binding to avoid task migrating over the machine
-> > and cpu frequency scaling interfering which makes the numbers much more
-> > noisy) I get the following elapsed times:
-> > 
-> >          9cd6ffa6025    f1a7941243c1
-> > Avg      6.807429       7.631571
-> > Stddev   0.021797       0.016483
-> > 
-> > So some 12% regression in elapsed time. Just to be sure I've verified that
-> > per-cpu allocator patch [1] does not improve these numbers in any
-> > significant way.
-> > 
-> > Where do we go from here? I think in principle the problem could be fixed
-> > by being clever and when the task has only a single thread, we don't bother
-> > with allocating pcpu counter (and summing it at the end) and just account
-> > directly in mm_struct. When the second thread is spawned, we bite the
-> > bullet, allocate pcpu counter and start with more scalable accounting.
-> > These shortlived tasks in shell workloads or similar don't spawn any
-> > threads so this should fix the regression. But this is obviously easier
-> > said than done...
-> > 
+On Sun, 07 May 2023 19:12:19 +0200, Krzysztof Kozlowski wrote:
+> Linux IIO core code parses label property which is already used in
+> several IIO devices.
 > 
-> Thanks Jan for the report. I wanted to improve the percpu allocation to
-> eliminate this regression as it was reported by intel test bot as well.
-> However your suggestion seems seems targetted and reasonable as well. At
-> the moment I am travelling, so not sure when I will get to this. Do you
-> want to take a stab at it or you want me to do it? Also how urgent and
-> sensitive this regression is for you?
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> ---
+>  dtschema/schemas/iio/iio.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
 
-It is not really urgent but eventually we'd like to get this fixed (like
-within couple of months). I have currently other stuff in progress so if
-you could get to it, it would be nice, otherwise I should be able to look
-into this in a week or two.
+Applied, thanks!
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
