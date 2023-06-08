@@ -2,203 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 500707279E5
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 10:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D21837279E9
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 10:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235121AbjFHI0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 04:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33166 "EHLO
+        id S234266AbjFHI1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 04:27:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbjFHI0J (ORCPT
+        with ESMTP id S230499AbjFHI1a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 04:26:09 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D149E43
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 01:26:05 -0700 (PDT)
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-X-GND-Sasl: alex@ghiti.fr
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 51E5224000E;
-        Thu,  8 Jun 2023 08:26:00 +0000 (UTC)
-Message-ID: <dfd776cb-1ee4-3967-8f56-9cffa4742923@ghiti.fr>
-Date:   Thu, 8 Jun 2023 10:25:59 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2] riscv: mm: Pre-allocate PGD entries for
- vmalloc/modules area
-Content-Language: en-US
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux@rivosinc.com, Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Joerg Roedel <joro@8bytes.org>
-References: <20230531093817.665799-1-bjorn@kernel.org>
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <20230531093817.665799-1-bjorn@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Thu, 8 Jun 2023 04:27:30 -0400
+Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0906269E;
+        Thu,  8 Jun 2023 01:27:29 -0700 (PDT)
+Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-33b00ce51caso779175ab.2;
+        Thu, 08 Jun 2023 01:27:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686212849; x=1688804849;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=4vk0QrxAJZUCwNeUbkMMvVo1zLXlArkwoqu5OxCPG/U=;
+        b=ejJoQe/iLQ/TWRHmnpQJdmSB1IYftpH3uRDXgkbe4C6LBumHFkX7mM9mfPptyn3tLL
+         JjzkNxG/tDGQgQ/5Bw5fuFElQUYX6MQ5enktxNn4j74qpm0cp9TyobhV80XplBaFbIAl
+         GIFiW02z79tzUBKr72fi8NpupTBPv2B7eJhfkbKgNgVFZVCB1sWXq8zjlFYzpFo7qwB3
+         osm1FYmFZgr3HUQzYTXzahvGjbbDq3P/Nri0YphHo+/9FaMx5Hx0wJ/EqRBipJgN7YSC
+         c6BxinlFcyyzWVf4t0ZKiyfzAkh1GEqHivrXmeVArl1LXIUiH+bvgpmKSpjW9TqG1AOn
+         goLg==
+X-Gm-Message-State: AC+VfDz2JmcxsS8CnqWhpCLibqVYhOH3JAjQMebr3PiPkhGOE/g7m3Z/
+        10V7WdxFXtxI8mKmU+vDzA==
+X-Google-Smtp-Source: ACHHUZ619U2Ip5Lt8XRETTrvzYz6uAXH+LDeKR/g/LcFeC1bXxSA/7mpU+wN8RWZK1WLeyWpRxtq+Q==
+X-Received: by 2002:a92:cc0b:0:b0:33a:9a68:35ff with SMTP id s11-20020a92cc0b000000b0033a9a6835ffmr8400244ilp.26.1686212848800;
+        Thu, 08 Jun 2023 01:27:28 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id j3-20020a02cc63000000b0040f91a65669sm152296jaq.21.2023.06.08.01.27.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 01:27:28 -0700 (PDT)
+Received: (nullmailer pid 1409955 invoked by uid 1000);
+        Thu, 08 Jun 2023 08:27:25 -0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-remoteproc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+In-Reply-To: <20230531-rpm-rproc-v2-5-56a4a00c8260@gerhold.net>
+References: <20230531-rpm-rproc-v2-0-56a4a00c8260@gerhold.net>
+ <20230531-rpm-rproc-v2-5-56a4a00c8260@gerhold.net>
+Message-Id: <168621284569.1409937.7016655911882350618.robh@kernel.org>
+Subject: Re: [PATCH v2 05/12] dt-bindings: remoteproc: Add Qualcomm RPM
+ processor/subsystem
+Date:   Thu, 08 Jun 2023 02:27:25 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Björn,
 
-On 31/05/2023 11:38, Björn Töpel wrote:
-> From: Björn Töpel <bjorn@rivosinc.com>
->
-> The RISC-V port requires that kernel PGD entries are to be
-> synchronized between MMs. This is done via the vmalloc_fault()
-> function, that simply copies the PGD entries from init_mm to the
-> faulting one.
->
-> Historically, faulting in PGD entries have been a source for both bugs
-> [1], and poor performance.
->
-> One way to get rid of vmalloc faults is by pre-allocating the PGD
-> entries. Pre-allocating the entries potientially wastes 64 * 4K (65 on
-> SV39). The pre-allocation function is pulled from Jörg Rödel's x86
-> work, with the addition of 3-level page tables (PMD allocations).
->
-> The pmd_alloc() function needs the ptlock cache to be initialized
-> (when split page locks is enabled), so the pre-allocation is done in a
-> RISC-V specific pgtable_cache_init() implementation.
->
-> Pre-allocate the kernel PGD entries for the vmalloc/modules area, but
-> only for 64b platforms.
->
-> Link: https://lore.kernel.org/lkml/20200508144043.13893-1-joro@8bytes.org/ # [1]
-> Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
+On Thu, 08 Jun 2023 09:10:25 +0200, Stephan Gerhold wrote:
+> On Qualcomm platforms, most subsystems (e.g. audio/modem DSP) are
+> described as remote processors in the device tree, with a dedicated
+> node where properties and services related to them can be described.
+> 
+> The Resource Power Manager (RPM) is also such a subsystem, with a
+> remote processor that is running a special firmware. Unfortunately,
+> the RPM never got a dedicated node representing it properly in the
+> device tree. Most of the RPM services are described below a top-level
+> /smd or /rpm-glink node.
+> 
+> However, SMD/GLINK is just one of the communication channels to the RPM
+> firmware. For example, the MPM interrupt functionality provided by the
+> RPM does not use SMD/GLINK but writes directly to a special memory
+> region allocated by the RPM firmware in combination with a mailbox.
+> Currently there is no good place in the device tree to describe this
+> functionality. It doesn't belong below SMD/GLINK but it's not an
+> independent top-level device either.
+> 
+> Introduce a new "qcom,rpm-proc" compatible that allows describing the
+> RPM as a remote processor/subsystem like all others. The SMD/GLINK node
+> is moved to a "smd-edge"/"glink-edge" subnode consistent with other
+> existing bindings. Additional subnodes (e.g. interrupt-controller for
+> MPM, rpm-master-stats) can be also added there.
+> 
+> Deprecate using the old top-level /smd node since all SMD edges
+> are now specified as subnodes of the remote processor.
+> 
+> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
 > ---
-> v1->v2: Fixed broken !MMU build.
+> This patch is based on qcom/for-next, since it needs the new
+> qcom,rpm-master-stats.yaml schema that is only applied there.
 > ---
-> arch/riscv/mm/fault.c | 16 ++----------
->   arch/riscv/mm/init.c  | 58 +++++++++++++++++++++++++++++++++++++++++++
->   2 files changed, 60 insertions(+), 14 deletions(-)
->
-> diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
-> index 8685f85a7474..b023fb311e28 100644
-> --- a/arch/riscv/mm/fault.c
-> +++ b/arch/riscv/mm/fault.c
-> @@ -238,24 +238,12 @@ void handle_page_fault(struct pt_regs *regs)
->   	 * only copy the information from the master page table,
->   	 * nothing more.
->   	 */
-> -	if (unlikely((addr >= VMALLOC_START) && (addr < VMALLOC_END))) {
-> +	if ((!IS_ENABLED(CONFIG_MMU) || !IS_ENABLED(CONFIG_64BIT)) &&
-> +	    unlikely(addr >= VMALLOC_START && addr < VMALLOC_END)) {
->   		vmalloc_fault(regs, code, addr);
->   		return;
->   	}
->   
-> -#ifdef CONFIG_64BIT
-> -	/*
-> -	 * Modules in 64bit kernels lie in their own virtual region which is not
-> -	 * in the vmalloc region, but dealing with page faults in this region
-> -	 * or the vmalloc region amounts to doing the same thing: checking that
-> -	 * the mapping exists in init_mm.pgd and updating user page table, so
-> -	 * just use vmalloc_fault.
-> -	 */
-> -	if (unlikely(addr >= MODULES_VADDR && addr < MODULES_END)) {
-> -		vmalloc_fault(regs, code, addr);
-> -		return;
-> -	}
-> -#endif
->   	/* Enable interrupts if they were enabled in the parent context. */
->   	if (!regs_irqs_disabled(regs))
->   		local_irq_enable();
-> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> index 747e5b1ef02d..45ceaff5679e 100644
-> --- a/arch/riscv/mm/init.c
-> +++ b/arch/riscv/mm/init.c
-> @@ -1363,3 +1363,61 @@ int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
->   	return vmemmap_populate_basepages(start, end, node, NULL);
->   }
->   #endif
-> +
-> +#if defined(CONFIG_MMU) && defined(CONFIG_64BIT)
-> +/*
-> + * Pre-allocates page-table pages for a specific area in the kernel
-> + * page-table. Only the level which needs to be synchronized between
-> + * all page-tables is allocated because the synchronization can be
-> + * expensive.
-> + */
-> +static void __init preallocate_pgd_pages_range(unsigned long start, unsigned long end,
-> +					       const char *area)
-> +{
-> +	unsigned long addr;
-> +	const char *lvl;
-> +
-> +	for (addr = start; addr < end && addr >= start; addr = ALIGN(addr + 1, PGDIR_SIZE)) {
-> +		pgd_t *pgd = pgd_offset_k(addr);
-> +		p4d_t *p4d;
-> +		pud_t *pud;
-> +		pmd_t *pmd;
-> +
-> +		lvl = "p4d";
-> +		p4d = p4d_alloc(&init_mm, pgd, addr);
-> +		if (!p4d)
-> +			goto failed;
-> +
-> +		if (pgtable_l5_enabled)
-> +			continue;
-> +
-> +		lvl = "pud";
-> +		pud = pud_alloc(&init_mm, p4d, addr);
-> +		if (!pud)
-> +			goto failed;
-> +
-> +		if (pgtable_l4_enabled)
-> +			continue;
-> +
-> +		lvl = "pmd";
-> +		pmd = pmd_alloc(&init_mm, pud, addr);
-> +		if (!pmd)
-> +			goto failed;
-> +	}
-> +	return;
-> +
-> +failed:
-> +	/*
-> +	 * The pages have to be there now or they will be missing in
-> +	 * process page-tables later.
-> +	 */
-> +	panic("Failed to pre-allocate %s pages for %s area\n", lvl, area);
-> +}
-> +
-> +void __init pgtable_cache_init(void)
-> +{
-> +	preallocate_pgd_pages_range(VMALLOC_START, VMALLOC_END, "vmalloc");
-> +	if (IS_ENABLED(CONFIG_MODULES))
-> +		preallocate_pgd_pages_range(MODULES_VADDR, MODULES_END, "bpf/modules");
-> +}
-> +#endif
->
-> base-commit: ac9a78681b921877518763ba0e89202254349d1b
+>  .../bindings/remoteproc/qcom,rpm-proc.yaml         | 171 +++++++++++++++++++++
+>  .../devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml |   6 +-
+>  .../devicetree/bindings/soc/qcom/qcom,smd.yaml     |   7 +
+>  3 files changed, 181 insertions(+), 3 deletions(-)
+> 
 
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-You can add:
+yamllint warnings/errors:
 
-Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+dtschema/dtc warnings/errors:
+./Documentation/devicetree/bindings/remoteproc/qcom,rpm-proc.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/soc/qcom/qcom,rpm-master-stats.yaml
 
-Thanks!
+doc reference errors (make refcheckdocs):
 
-Alex
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230531-rpm-rproc-v2-5-56a4a00c8260@gerhold.net
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
