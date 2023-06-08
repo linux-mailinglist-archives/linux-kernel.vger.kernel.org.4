@@ -2,197 +2,542 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CBB57276C4
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 07:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C1417276C6
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 07:38:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234385AbjFHFhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 01:37:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40348 "EHLO
+        id S234397AbjFHFiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 01:38:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233977AbjFHFhY (ORCPT
+        with ESMTP id S232715AbjFHFit (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 01:37:24 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74121268F;
-        Wed,  7 Jun 2023 22:37:22 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 33B7F601B6;
-        Thu,  8 Jun 2023 07:37:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1686202639; bh=uTDCBRGWFZj2rXUOSuVG33tAlkl9SSqaEVboHArCRX0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=DIB525C5/mnLgvTfiMOV8ndRKKSw3U8kOxi3esDwqNFfDJ8Rji5NXK9N6UaX250Z0
-         Drpa+Q+O2Blc3HzmU4IbqyyxzjFhJ8HAR2k4g4lzmTgv/7XILzJtrcJl1kPuM+/Gah
-         gthOtpN5ciw0dJoRM/XOJ9R0cHhRC8bT80Z1x240MLZgsO/ZR1+9rr7x2IBi55XpMQ
-         PeMgJlDZLK+drXIa7So1bv21m/DwCMnsQfCUuPP6K7AWhnbPhI9MkM4kEP4fcy3iBC
-         AH+oGP69X0K+4dFuO6t5BgV0DJfMK2gyR0F7byOS+hVbpAeC2VmWH0EV94/BpDVia/
-         E7JBUrbQ8oOwg==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id iL6RA8KfVPru; Thu,  8 Jun 2023 07:37:16 +0200 (CEST)
-Received: from [192.168.1.6] (unknown [77.237.113.62])
-        by domac.alu.hr (Postfix) with ESMTPSA id 21D3B601B5;
-        Thu,  8 Jun 2023 07:37:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1686202636; bh=uTDCBRGWFZj2rXUOSuVG33tAlkl9SSqaEVboHArCRX0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=oy2IoqRo6QUb0OcyiqlYcMy+CEUdhR+sAs2IXEdF7ab+yDvgCRF3lPL0vEtPEBsGD
-         0kZWE4EP9ezZEBkzAsfe79tVhRiKgQPp7+muGz8aS5b2LGCGHMrN/g9v0G57tIhsHq
-         1NWePiXsacwZfLZo30Xew358qnGF7CUmXZR+Uv53BgAgTdxxhMX/q5Ai84MS2XGNBi
-         wy8RNusufUdRdb8hLeVFEhy7L3Y908AsnNf1vvA4kIhrIYwWFoknIbPWg40F5ck/nr
-         fz5+UmZeyGEiVaqJYoqKKUwpdq4NWAFV1m5Ob7Phxj/ZsPrzOhP5bHFGLuHYcLHmUM
-         NeO4mugU2ieJg==
-Message-ID: <884d9eb7-0e8e-3e59-cf6d-2c6931da35ee@alu.unizg.hr>
-Date:   Thu, 8 Jun 2023 07:37:15 +0200
+        Thu, 8 Jun 2023 01:38:49 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BE5268E;
+        Wed,  7 Jun 2023 22:38:47 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1b24eba185cso601785ad.2;
+        Wed, 07 Jun 2023 22:38:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686202727; x=1688794727;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=KbuJyzse4Bi2WrII0Cx/yNSeDiTgYsBnY8PUYJS2XiI=;
+        b=mmVuqZEpjAiOSV9R4PtxGwg8NnOnX9g571CiKvdZenHFtpUgjUrMbvJZer+L2R6hXe
+         5EXJQVwpd+G4EMeRL5g3D6I46ZSLQ3C70ci9u4Hyv5bVWMA6stcxYgtgGR3FTpbkIa4+
+         0qvP0C5M92Bd8XztcxsxGLhp7O7wbx5oyg3vTqqW9XJFibQp+Z5NmlxhbHvhOaMAvjud
+         /kQPxJsSuiyqj3SXrXNmNtGyyDpTgAGJ+TznkWs4/PUk4XOkonMfDowmqQdqOHn++o1y
+         FwkXMgZh5TErguVqq4auxTKBMm/Z6R6pxFIGY1Ze0dLq34n3tJ9UdylBlhIJ+qs1pDeq
+         KIJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686202727; x=1688794727;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KbuJyzse4Bi2WrII0Cx/yNSeDiTgYsBnY8PUYJS2XiI=;
+        b=Z6OFK9B4s64BhCbXIpdYLawurZClWbza++ScVXLqIOYza6LggzNRSmbEoNACPwDKOz
+         may7ZMRRYuy4q6QpXD4U3TUnohiKIsDCHuV4jop3bE5fAmvymloDI5/iFGtkkzedW8ue
+         rbA5+9TZTqupa8jZohauTRGljRdqMBNrMygoWCwwitLX+/WgapwNCV889Y9ennXQmUbi
+         vZ/8RItML+4YwwPYga4oJX9joPr6Lr9dvltotolG7nijKlhLs1X3ZvPXct6ive3vpYwG
+         HgUfCKqSQGJXYaIIpekWlBKH9Zd5F0Oz5wSz5QAd9QCSnCh4C5BmAU2wp9xvWTNw3VWd
+         5piQ==
+X-Gm-Message-State: AC+VfDwDmF/jx2riwiyu/h4aNsfEvgRnMtjL8wQwhlcDfRtcHL8akE3P
+        6opLq27WrlIAsG4OyvSaCmBYsPzyjVs=
+X-Google-Smtp-Source: ACHHUZ6ta9eb2GbSSNeGbPk7i0Ocx/UGi+9/WW3uSqQ783xtbx7bm6hfB3y9PqVeoc9svkNVyVr7Ug==
+X-Received: by 2002:a17:903:1110:b0:1a6:74f6:fa92 with SMTP id n16-20020a170903111000b001a674f6fa92mr4746911plh.19.1686202726626;
+        Wed, 07 Jun 2023 22:38:46 -0700 (PDT)
+Received: from bangji.hsd1.ca.comcast.net ([2601:647:6700:7f00:151d:c55c:d8a1:495a])
+        by smtp.gmail.com with ESMTPSA id t7-20020a1709027fc700b001a63ba28052sm485626plb.69.2023.06.07.22.38.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 22:38:46 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, Song Liu <song@kernel.org>,
+        Hao Luo <haoluo@google.com>, bpf@vger.kernel.org
+Subject: [PATCH] perf lock contention: Add -x option for CSV style output
+Date:   Wed,  7 Jun 2023 22:38:44 -0700
+Message-ID: <20230608053844.2872345-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: POSSIBLE BUG: selftests/net/fcnal-test.sh: [FAIL][FIX TESTED] in
- vrf "bind - ns-B IPv6 LLA" test
-Content-Language: en-US
-To:     Guillaume Nault <gnault@redhat.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <b6191f90-ffca-dbca-7d06-88a9788def9c@alu.unizg.hr>
- <ZHeN3bg28pGFFjJN@debian> <a379796a-5cd6-caa7-d11d-5ffa7419b90e@alu.unizg.hr>
- <ZH84zGEODT97TEXG@debian> <48cfd903-ad2f-7da7-e5a6-a22392dc8650@alu.unizg.hr>
- <ZH+BhFzvJkWyjBE0@debian> <a3b2891d-d355-dacd-24ec-af9f8aacac57@alu.unizg.hr>
- <ZIC1r6IHOM5nr9QD@debian>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <ZIC1r6IHOM5nr9QD@debian>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/7/23 18:51, Guillaume Nault wrote:
-> On Wed, Jun 07, 2023 at 12:04:52AM +0200, Mirsad Goran Todorovac wrote:
->> I cannot tell if those are new for the architecture (Ubuntu 22.04 + AMD Ryzen)
->>
->> However, Ubuntu's unsigned 6.3.1 generic mainline kernel is also affected.
->> So, it might seem like an old problem.
->>
->> (If you could isolate the exact tests, I could try a bisect.)
->>
->> [...]
->> TEST: ping local, VRF bind - ns-A IP                                          [ OK ]
->> TEST: ping local, VRF bind - VRF IP                                           [FAIL]
->> TEST: ping local, VRF bind - loopback                                         [ OK ]
->> TEST: ping local, device bind - ns-A IP                                       [FAIL]
->> TEST: ping local, device bind - VRF IP                                        [ OK ]
->> [...]
->>
->> SYSCTL: net.ipv4.raw_l3mdev_accept=1
->>
->> [...]
->> TEST: ping local, VRF bind - ns-A IP                                          [ OK ]
->> TEST: ping local, VRF bind - VRF IP                                           [FAIL]
->> TEST: ping local, VRF bind - loopback                                         [ OK ]
->> TEST: ping local, device bind - ns-A IP                                       [FAIL]
->> TEST: ping local, device bind - VRF IP                                        [ OK ]
->> [...]
->>
->> Yes, just tested, w commit 42510dffd0e2 these are still present
->> in fcnal-test.sh output:
->>
->> [...]
->> TEST: ping local, VRF bind - ns-A IP                                          [ OK ]
->> TEST: ping local, VRF bind - VRF IP                                           [FAIL]
->> TEST: ping local, VRF bind - loopback                                         [ OK ]
->> TEST: ping local, device bind - ns-A IP                                       [FAIL]
->> TEST: ping local, device bind - VRF IP                                        [ OK ]
->> [...]
->> TEST: ping local, VRF bind - ns-A IP                                          [ OK ]
->> TEST: ping local, VRF bind - VRF IP                                           [FAIL]
->> TEST: ping local, VRF bind - loopback                                         [ OK ]
->> TEST: ping local, device bind - ns-A IP                                       [FAIL]
->> TEST: ping local, device bind - VRF IP                                        [ OK ]
->> [...]
-> 
-> I have the same failures here. They don't seem to be recent.
-> I'll take a look.
+Sometimes we want to process the output by external programs.  Let's add
+the -x option to specify the field separator like perf stat.
 
-Certainly. I thought it might be something architecture-specific?
+  $ sudo ./perf lock con -ab -x, sleep 1
+  # output: contended, total wait, max wait, avg wait, type, caller
+  19, 194232, 21415, 10222, spinlock, process_one_work+0x1f0
+  15, 162748, 23843, 10849, rwsem:R, do_user_addr_fault+0x40e
+  4, 86740, 23415, 21685, rwlock:R, ep_poll_callback+0x2d
+  1, 84281, 84281, 84281, mutex, iwl_mvm_async_handlers_wk+0x135
+  8, 67608, 27404, 8451, spinlock, __queue_work+0x174
+  3, 58616, 31125, 19538, rwsem:W, do_mprotect_pkey+0xff
+  3, 52953, 21172, 17651, rwlock:W, do_epoll_wait+0x248
+  2, 30324, 19704, 15162, rwsem:R, do_madvise+0x3ad
+  1, 24619, 24619, 24619, spinlock, rcu_core+0xd4
 
-I have reproduced it also on a Lenovo IdeaPad 3 with Ubuntu 22.10,
-but on Lenovo desktop with AlmaLinux 8.8 (CentOS fork), the result
-was "888/888 passed".
+The first line is a comment that shows the output format.  Each line is
+separated by the given string ("," in this case).  The time is printed
+in nsec without the unit so that it can be parsed easily.
 
-However, I have a question:
+The characters can be used in the output like (":", "+" and ".") are not
+allowed for the -x option.
 
-In the ping + "With VRF" section, the tests with net.ipv4.raw_l3mdev_accept=1
-are repeated twice, while "No VRF" section has the versions:
+  $ ./perf lock con -x:
+  Cannot use the separator that is already used
 
-SYSCTL: net.ipv4.raw_l3mdev_accept=0
+   Usage: perf lock contention [<options>]
 
-and
+      -x, --field-separator <separator>
+                            print result in CSV format with custom separator
 
-SYSCTL: net.ipv4.raw_l3mdev_accept=1
+The stacktraces are printed in the same line separated by ":".  The
+header is updated to show the stacktrace.  Also the debug output is
+added at the end as a comment.
 
-The same happens with the IPv6 ping tests.
+  $ sudo ./perf lock con -abv -x, -F wait_total sleep 1
+  Looking at the vmlinux_path (8 entries long)
+  symsrc__init: cannot get elf header.
+  Using /proc/kcore for kernel data
+  Using /proc/kallsyms for symbols
+  # output: total wait, type, caller, stacktrace
+  37134, spinlock, rcu_core+0xd4, 0xffffffff9d0401e4 _raw_spin_lock_irqsave+0x44: 0xffffffff9c738114 rcu_core+0xd4: ...
+  21213, spinlock, raw_spin_rq_lock_nested+0x1b, 0xffffffff9d0407c0 _raw_spin_lock+0x30: 0xffffffff9c6d9cfb raw_spin_rq_lock_nested+0x1b: ...
+  20506, rwlock:W, ep_done_scan+0x2d, 0xffffffff9c9bc4dd ep_done_scan+0x2d: 0xffffffff9c9bd5f1 do_epoll_wait+0x6d1: ...
+  18044, rwlock:R, ep_poll_callback+0x2d, 0xffffffff9d040555 _raw_read_lock_irqsave+0x45: 0xffffffff9c9bc81d ep_poll_callback+0x2d: ...
+  17890, rwlock:W, do_epoll_wait+0x47b, 0xffffffff9c9bd39b do_epoll_wait+0x47b: 0xffffffff9c9be9ef __x64_sys_epoll_wait+0x6d1: ...
+  12114, spinlock, futex_wait_queue+0x60, 0xffffffff9d0407c0 _raw_spin_lock+0x30: 0xffffffff9d037cae __schedule+0xbe: ...
+  # debug: total=7, bad=0, bad_task=0, bad_stack=0, bad_time=0, bad_data=0
 
-In that case, it could be that we have only 2 actual FAIL cases,
-because the error is reported twice.
+Also note that some field (like lock symbols) can be empty.
 
-Is this intentional?
+  $ sudo ./perf lock con -abl -x, -E 10 sleep 1
+  # output: contended, total wait, max wait, avg wait, address, symbol, type
+  6, 275025, 61764, 45837, ffff9dcc9f7d60d0, , spinlock
+  18, 87716, 11196, 4873, ffff9dc540059000, , spinlock
+  2, 6472, 5499, 3236, ffff9dcc7f730e00, rq_lock, spinlock
+  3, 4429, 2341, 1476, ffff9dcc7f7b0e00, rq_lock, spinlock
+  3, 3974, 1635, 1324, ffff9dcc7f7f0e00, rq_lock, spinlock
+  4, 3290, 1326, 822, ffff9dc5f4e2cde0, , rwlock
+  3, 2894, 1023, 964, ffffffff9e0d7700, rcu_state, spinlock
+  1, 2567, 2567, 2567, ffff9dcc7f6b0e00, rq_lock, spinlock
+  4, 1259, 596, 314, ffff9dc69c2adde0, , rwlock
+  1, 934, 934, 934, ffff9dcc7f670e00, rq_lock, spinlock
 
-Thanks,
-Mirsad
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/Documentation/perf-lock.txt |   5 +
+ tools/perf/builtin-lock.c              | 303 +++++++++++++++++++------
+ 2 files changed, 241 insertions(+), 67 deletions(-)
 
-   74 #################################################################
-   75 With VRF
-   76
-   77 SYSCTL: net.ipv4.raw_l3mdev_accept=1
-   78
-   79 TEST: ping out, VRF bind - ns-B IP                                            [ OK ]
-   80 TEST: ping out, device bind - ns-B IP                                         [ OK ]
-   81 TEST: ping out, vrf device + dev address bind - ns-B IP                       [ OK ]
-   82 TEST: ping out, vrf device + vrf address bind - ns-B IP                       [ OK ]
-   83 TEST: ping out, VRF bind - ns-B loopback IP                                   [ OK ]
-   84 TEST: ping out, device bind - ns-B loopback IP                                [ OK ]
-   85 TEST: ping out, vrf device + dev address bind - ns-B loopback IP              [ OK ]
-   86 TEST: ping out, vrf device + vrf address bind - ns-B loopback IP              [ OK ]
-   87 TEST: ping in - ns-A IP                                                       [ OK ]
-   88 TEST: ping in - VRF IP                                                        [ OK ]
-   89 TEST: ping local, VRF bind - ns-A IP                                          [ OK ]
-   90 TEST: ping local, VRF bind - VRF IP                                           [FAIL]
-   91 TEST: ping local, VRF bind - loopback                                         [ OK ]
-   92 TEST: ping local, device bind - ns-A IP                                       [FAIL]
-   93 TEST: ping local, device bind - VRF IP                                        [ OK ]
-   94 TEST: ping local, device bind - loopback                                      [ OK ]
-   95 TEST: ping out, vrf bind, blocked by rule - ns-B loopback IP                  [ OK ]
-   96 TEST: ping out, device bind, blocked by rule - ns-B loopback IP               [ OK ]
-   97 TEST: ping in, blocked by rule - ns-A loopback IP                             [ OK ]
-   98 TEST: ping out, vrf bind, unreachable route - ns-B loopback IP                [ OK ]
-   99 TEST: ping out, device bind, unreachable route - ns-B loopback IP             [ OK ]
-  100 TEST: ping in, unreachable route - ns-A loopback IP                           [ OK ]
-  101 SYSCTL: net.ipv4.ping_group_range=0 2147483647
-  102
-  103 SYSCTL: net.ipv4.raw_l3mdev_accept=1
-  104
-  105 TEST: ping out, VRF bind - ns-B IP                                            [ OK ]
-  106 TEST: ping out, device bind - ns-B IP                                         [ OK ]
-  107 TEST: ping out, vrf device + dev address bind - ns-B IP                       [ OK ]
-  108 TEST: ping out, vrf device + vrf address bind - ns-B IP                       [ OK ]
-  109 TEST: ping out, VRF bind - ns-B loopback IP                                   [ OK ]
-  110 TEST: ping out, device bind - ns-B loopback IP                                [ OK ]
-  111 TEST: ping out, vrf device + dev address bind - ns-B loopback IP              [ OK ]
-  112 TEST: ping out, vrf device + vrf address bind - ns-B loopback IP              [ OK ]
-  113 TEST: ping in - ns-A IP                                                       [ OK ]
-  114 TEST: ping in - VRF IP                                                        [ OK ]
-  115 TEST: ping local, VRF bind - ns-A IP                                          [ OK ]
-  116 TEST: ping local, VRF bind - VRF IP                                           [FAIL]
-  117 TEST: ping local, VRF bind - loopback                                         [ OK ]
-  118 TEST: ping local, device bind - ns-A IP                                       [FAIL]
-  119 TEST: ping local, device bind - VRF IP                                        [ OK ]
-  
+diff --git a/tools/perf/Documentation/perf-lock.txt b/tools/perf/Documentation/perf-lock.txt
+index 6e5ba3cd2b72..d1efcbe7a470 100644
+--- a/tools/perf/Documentation/perf-lock.txt
++++ b/tools/perf/Documentation/perf-lock.txt
+@@ -200,6 +200,11 @@ CONTENTION OPTIONS
+ 	Note that it matches the substring so 'rq' would match both 'raw_spin_rq_lock'
+ 	and 'irq_enter_rcu'.
+ 
++-x::
++--field-separator=<SEP>::
++	Show results using a CSV-style output to make it easy to import directly
++	into spreadsheets. Columns are separated by the string specified in SEP.
++
+ 
+ SEE ALSO
+ --------
+diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
+index fc8356bd6e3a..52c87cc3d224 100644
+--- a/tools/perf/builtin-lock.c
++++ b/tools/perf/builtin-lock.c
+@@ -225,6 +225,12 @@ static void lock_stat_key_print_time(unsigned long long nsec, int len)
+ 		{ 0, NULL },
+ 	};
+ 
++	/* for CSV output */
++	if (len == 0) {
++		pr_info("%llu", nsec);
++		return;
++	}
++
+ 	for (int i = 0; table[i].unit; i++) {
+ 		if (nsec < table[i].base)
+ 			continue;
+@@ -1623,11 +1629,179 @@ static void sort_contention_result(void)
+ 	sort_result();
+ }
+ 
+-static void print_bpf_events(int total, struct lock_contention_fails *fails)
++static void print_header_stdio(void)
++{
++	struct lock_key *key;
++
++	list_for_each_entry(key, &lock_keys, list)
++		pr_info("%*s ", key->len, key->header);
++
++	switch (aggr_mode) {
++	case LOCK_AGGR_TASK:
++		pr_info("  %10s   %s\n\n", "pid",
++			show_lock_owner ? "owner" : "comm");
++		break;
++	case LOCK_AGGR_CALLER:
++		pr_info("  %10s   %s\n\n", "type", "caller");
++		break;
++	case LOCK_AGGR_ADDR:
++		pr_info("  %16s   %s\n\n", "address", "symbol");
++		break;
++	default:
++		break;
++	}
++}
++
++static void print_header_csv(const char *sep)
++{
++	struct lock_key *key;
++
++	pr_info("# output: ");
++	list_for_each_entry(key, &lock_keys, list)
++		pr_info("%s%s ", key->header, sep);
++
++	switch (aggr_mode) {
++	case LOCK_AGGR_TASK:
++		pr_info("%s%s %s\n", "pid", sep,
++			show_lock_owner ? "owner" : "comm");
++		break;
++	case LOCK_AGGR_CALLER:
++		pr_info("%s%s %s", "type", sep, "caller");
++		if (verbose > 0)
++			pr_info("%s %s", sep, "stacktrace");
++		pr_info("\n");
++		break;
++	case LOCK_AGGR_ADDR:
++		pr_info("%s%s %s%s %s\n", "address", sep, "symbol", sep, "type");
++		break;
++	default:
++		break;
++	}
++}
++
++static void print_header(void)
++{
++	if (!quiet) {
++		if (symbol_conf.field_sep)
++			print_header_csv(symbol_conf.field_sep);
++		else
++			print_header_stdio();
++	}
++}
++
++static void print_lock_stat_stdio(struct lock_contention *con, struct lock_stat *st)
++{
++	struct lock_key *key;
++	struct thread *t;
++	int pid;
++
++	list_for_each_entry(key, &lock_keys, list) {
++		key->print(key, st);
++		pr_info(" ");
++	}
++
++	switch (aggr_mode) {
++	case LOCK_AGGR_CALLER:
++		pr_info("  %10s   %s\n", get_type_str(st->flags), st->name);
++		break;
++	case LOCK_AGGR_TASK:
++		pid = st->addr;
++		t = perf_session__findnew(session, pid);
++		pr_info("  %10d   %s\n",
++			pid, pid == -1 ? "Unknown" : thread__comm_str(t));
++		break;
++	case LOCK_AGGR_ADDR:
++		pr_info("  %016llx   %s (%s)\n", (unsigned long long)st->addr,
++			st->name, get_type_name(st->flags));
++		break;
++	default:
++		break;
++	}
++
++	if (aggr_mode == LOCK_AGGR_CALLER && verbose > 0) {
++		struct map *kmap;
++		struct symbol *sym;
++		char buf[128];
++		u64 ip;
++
++		for (int i = 0; i < max_stack_depth; i++) {
++			if (!st->callstack || !st->callstack[i])
++				break;
++
++			ip = st->callstack[i];
++			sym = machine__find_kernel_symbol(con->machine, ip, &kmap);
++			get_symbol_name_offset(kmap, sym, ip, buf, sizeof(buf));
++			pr_info("\t\t\t%#lx  %s\n", (unsigned long)ip, buf);
++		}
++	}
++}
++
++static void print_lock_stat_csv(struct lock_contention *con, struct lock_stat *st,
++				const char *sep)
++{
++	struct lock_key *key;
++	struct thread *t;
++	int pid;
++
++	list_for_each_entry(key, &lock_keys, list) {
++		key->print(key, st);
++		pr_info("%s ", sep);
++	}
++
++	switch (aggr_mode) {
++	case LOCK_AGGR_CALLER:
++		pr_info("%s%s %s", get_type_str(st->flags), sep, st->name);
++		if (verbose <= 0)
++			pr_info("\n");
++		break;
++	case LOCK_AGGR_TASK:
++		pid = st->addr;
++		t = perf_session__findnew(session, pid);
++		pr_info("%d%s %s\n", pid, sep, pid == -1 ? "Unknown" : thread__comm_str(t));
++		break;
++	case LOCK_AGGR_ADDR:
++		pr_info("%llx%s %s%s %s\n", (unsigned long long)st->addr, sep,
++			st->name, sep, get_type_name(st->flags));
++		break;
++	default:
++		break;
++	}
++
++	if (aggr_mode == LOCK_AGGR_CALLER && verbose > 0) {
++		struct map *kmap;
++		struct symbol *sym;
++		char buf[128];
++		u64 ip;
++
++		for (int i = 0; i < max_stack_depth; i++) {
++			if (!st->callstack || !st->callstack[i])
++				break;
++
++			ip = st->callstack[i];
++			sym = machine__find_kernel_symbol(con->machine, ip, &kmap);
++			get_symbol_name_offset(kmap, sym, ip, buf, sizeof(buf));
++			pr_info("%s %#lx %s", i ? ":" : sep, (unsigned long) ip, buf);
++		}
++		pr_info("\n");
++	}
++}
++
++static void print_lock_stat(struct lock_contention *con, struct lock_stat *st)
++{
++	if (symbol_conf.field_sep)
++		print_lock_stat_csv(con, st, symbol_conf.field_sep);
++	else
++		print_lock_stat_stdio(con, st);
++}
++
++static void print_footer_stdio(int total, int bad, struct lock_contention_fails *fails)
+ {
+ 	/* Output for debug, this have to be removed */
+ 	int broken = fails->task + fails->stack + fails->time + fails->data;
+ 
++	if (!use_bpf)
++		print_bad_events(bad, total);
++
+ 	if (quiet || total == 0 || (broken == 0 && verbose <= 0))
+ 		return;
+ 
+@@ -1643,38 +1817,53 @@ static void print_bpf_events(int total, struct lock_contention_fails *fails)
+ 	pr_info(" %10s: %d\n", "data", fails->data);
+ }
+ 
++static void print_footer_csv(int total, int bad, struct lock_contention_fails *fails,
++			     const char *sep)
++{
++	/* Output for debug, this have to be removed */
++	if (use_bpf)
++		bad = fails->task + fails->stack + fails->time + fails->data;
++
++	if (quiet || total == 0 || (bad == 0 && verbose <= 0))
++		return;
++
++	total += bad;
++	pr_info("# debug: total=%d%s bad=%d", total, sep, bad);
++
++	if (use_bpf) {
++		pr_info("%s bad_%s=%d", sep, "task", fails->task);
++		pr_info("%s bad_%s=%d", sep, "stack", fails->stack);
++		pr_info("%s bad_%s=%d", sep, "time", fails->time);
++		pr_info("%s bad_%s=%d", sep, "data", fails->data);
++	} else {
++		int i;
++		const char *name[4] = { "acquire", "acquired", "contended", "release" };
++
++		for (i = 0; i < BROKEN_MAX; i++)
++			pr_info("%s bad_%s=%d", sep, name[i], bad_hist[i]);
++	}
++	pr_info("\n");
++}
++
++static void print_footer(int total, int bad, struct lock_contention_fails *fails)
++{
++	if (symbol_conf.field_sep)
++		print_footer_csv(total, bad, fails, symbol_conf.field_sep);
++	else
++		print_footer_stdio(total, bad, fails);
++}
++
+ static void print_contention_result(struct lock_contention *con)
+ {
+ 	struct lock_stat *st;
+-	struct lock_key *key;
+ 	int bad, total, printed;
+ 
+-	if (!quiet) {
+-		list_for_each_entry(key, &lock_keys, list)
+-			pr_info("%*s ", key->len, key->header);
+-
+-		switch (aggr_mode) {
+-		case LOCK_AGGR_TASK:
+-			pr_info("  %10s   %s\n\n", "pid",
+-				show_lock_owner ? "owner" : "comm");
+-			break;
+-		case LOCK_AGGR_CALLER:
+-			pr_info("  %10s   %s\n\n", "type", "caller");
+-			break;
+-		case LOCK_AGGR_ADDR:
+-			pr_info("  %16s   %s\n\n", "address", "symbol");
+-			break;
+-		default:
+-			break;
+-		}
+-	}
++	if (!quiet)
++		print_header();
+ 
+ 	bad = total = printed = 0;
+ 
+ 	while ((st = pop_from_result())) {
+-		struct thread *t;
+-		int pid;
+-
+ 		total += use_bpf ? st->nr_contended : 1;
+ 		if (st->broken)
+ 			bad++;
+@@ -1682,45 +1871,7 @@ static void print_contention_result(struct lock_contention *con)
+ 		if (!st->wait_time_total)
+ 			continue;
+ 
+-		list_for_each_entry(key, &lock_keys, list) {
+-			key->print(key, st);
+-			pr_info(" ");
+-		}
+-
+-		switch (aggr_mode) {
+-		case LOCK_AGGR_CALLER:
+-			pr_info("  %10s   %s\n", get_type_str(st->flags), st->name);
+-			break;
+-		case LOCK_AGGR_TASK:
+-			pid = st->addr;
+-			t = perf_session__findnew(session, pid);
+-			pr_info("  %10d   %s\n",
+-				pid, pid == -1 ? "Unknown" : thread__comm_str(t));
+-			break;
+-		case LOCK_AGGR_ADDR:
+-			pr_info("  %016llx   %s (%s)\n", (unsigned long long)st->addr,
+-				st->name, get_type_name(st->flags));
+-			break;
+-		default:
+-			break;
+-		}
+-
+-		if (aggr_mode == LOCK_AGGR_CALLER && verbose > 0) {
+-			struct map *kmap;
+-			struct symbol *sym;
+-			char buf[128];
+-			u64 ip;
+-
+-			for (int i = 0; i < max_stack_depth; i++) {
+-				if (!st->callstack || !st->callstack[i])
+-					break;
+-
+-				ip = st->callstack[i];
+-				sym = machine__find_kernel_symbol(con->machine, ip, &kmap);
+-				get_symbol_name_offset(kmap, sym, ip, buf, sizeof(buf));
+-				pr_info("\t\t\t%#lx  %s\n", (unsigned long)ip, buf);
+-			}
+-		}
++		print_lock_stat(con, st);
+ 
+ 		if (++printed >= print_nr_entries)
+ 			break;
+@@ -1737,10 +1888,7 @@ static void print_contention_result(struct lock_contention *con)
+ 	/* some entries are collected but hidden by the callstack filter */
+ 	total += con->nr_filtered;
+ 
+-	if (use_bpf)
+-		print_bpf_events(total, &con->fails);
+-	else
+-		print_bad_events(bad, total);
++	print_footer(total, bad, &con->fails);
+ }
+ 
+ static bool force;
+@@ -1846,6 +1994,16 @@ static int check_lock_contention_options(const struct option *options,
+ 		return -1;
+ 	}
+ 
++	if (symbol_conf.field_sep) {
++		if (strstr(symbol_conf.field_sep, ":") || /* part of type flags */
++		    strstr(symbol_conf.field_sep, "+") || /* part of caller offset */
++		    strstr(symbol_conf.field_sep, ".")) { /* can be in a symbol name */
++			pr_err("Cannot use the separator that is already used\n");
++			parse_options_usage(usage, options, "x", 1);
++			return -1;
++		}
++	}
++
+ 	if (show_lock_owner)
+ 		show_thread_stats = true;
+ 
+@@ -1963,6 +2121,15 @@ static int __cmd_contention(int argc, const char **argv)
+ 	if (select_key(true))
+ 		goto out_delete;
+ 
++	if (symbol_conf.field_sep) {
++		int i;
++		struct lock_key *keys = contention_keys;
++
++		/* do not align output in CSV format */
++		for (i = 0; keys[i].name; i++)
++			keys[i].len = 0;
++	}
++
+ 	if (use_bpf) {
+ 		lock_contention_start();
+ 		if (argc)
+@@ -2331,6 +2498,8 @@ int cmd_lock(int argc, const char **argv)
+ 	OPT_CALLBACK('S', "callstack-filter", NULL, "NAMES",
+ 		     "Filter specific function in the callstack", parse_call_stack),
+ 	OPT_BOOLEAN('o', "lock-owner", &show_lock_owner, "show lock owners instead of waiters"),
++	OPT_STRING_NOEMPTY('x', "field-separator", &symbol_conf.field_sep, "separator",
++		   "print result in CSV format with custom separator"),
+ 	OPT_PARENT(lock_options)
+ 	};
+ 
+-- 
+2.41.0.rc0.172.g3f132b7071-goog
+
