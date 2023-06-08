@@ -2,221 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1958727C5B
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C727F727C60
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:10:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234587AbjFHKJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 06:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
+        id S234748AbjFHKKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 06:10:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbjFHKJK (ORCPT
+        with ESMTP id S235932AbjFHKKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 06:09:10 -0400
-Received: from esa5.hc3370-68.iphmx.com (esa5.hc3370-68.iphmx.com [216.71.155.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230211FE6;
-        Thu,  8 Jun 2023 03:09:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=citrix.com; s=securemail; t=1686218946;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=aWljPlVMSdoT9SYIrb8PJl+i7YDeVSfUCamQpnFrIKA=;
-  b=H86Z2F1nvzhPgIDBAsA50bWBt1pdQcVs2q3+fmNpV2dr8eeB0G/kmLMH
-   5gysNpwKUpNXzswy6F4eA4V2+C6DKO9UCnzMaiftcIGbSRUmFsa3N2Sah
-   kXmucIm83bMlX8OJvatNAnfL2TuK0Yn+2/V9LnptMhmZT9ZhQ2qttmg4Q
-   E=;
-X-IronPort-RemoteIP: 104.47.55.168
-X-IronPort-MID: 110793610
-X-IronPort-Reputation: None
-X-IronPort-Listener: OutboundMail
-X-IronPort-SenderGroup: RELAY_O365
-X-IronPort-MailFlowPolicy: $RELAYED
-IronPort-Data: A9a23:PNFkOasfGyImZBJ8qKAPs1rQ8OfnVBReMUV32f8akzHdYApBsoF/q
- tZmKTiDM6uCYGemLogiaYvjoR8FuZDVy9JgQQY6+yg1Fn8R+JbJXdiXEBz9bniYRiHhoOCLz
- O1FM4Wdc5pkJpP4jk3wWlQ0hSAkjclkfpKlVKiffHg3HVQ+IMsYoUoLs/YjhYJ1isSODQqIu
- Nfjy+XSI1bg0DNvWo4uw/vrRChH4rKq4Fv0gnRkPaoQ5AGGxyFMZH4iDfrZw0XQE9E88tGSH
- 44v/JnhlkvF8hEkDM+Sk7qTWiXmlZaLYGBiIlIPM0STqkAqSh4ai87XB9JFAatjsB2bnsgZ9
- Tl4ncfYpTHFnEH7sL91vxFwS0mSNEDdkVPNCSDXXce7lyUqf5ZwqhnH4Y5f0YAwo45K7W9yG
- fMwIRkGSSivxO6K2rucZNFswcIxfdnuM9ZK0p1g5Wmx4fcOZ7nmGv+Pz/kImTA6i4ZJAOrUY
- NcfZXx3dhPcbhZTO1ARTpUjgOOvgXq5eDpdwL6XjfNvvy6Pk0osjf60boq9lt+iHK25mm6Co
- W3L5SLhCwwyP92D0zuVtHmrg4cjmAuiAdpNRebmr6YCbFu731A1EC0ZXEaB/uScgGTuaoJSe
- k8tw397xUQ13AnxJjXnZDW0rXuFlh8aRdtLEuc+5R2Ny6zb+AKQDC4PSTspQNU2vsg7bT8nz
- FmEm5XlBlRHubKWYWiQ+redsXW5Pi19BXQEZDMWQBEt4NT5pow3yBXVQb5LHKvwgtDrFDXY2
- T2GrCEiwb4UiKYj0qyh+FndjjGEp57XTxU07AHaQmKk6AxiYIevIYev7DDz6fdGMZbcRF2Gt
- 3sshceT9qYNAIuLmSjLR/8CdJmt5vCYIHjfjERpEp0J6Tug4TigcJpW7TU4I11mWu4UdDmsb
- ELNtAd54J5IIGDsfaJxe5i2Cckh0e7nD9uNaxzPRt9HY5w0fgnX+ihrPBSUxzq0zhhqlrwjM
- 5CGd8rqFWwdFals0DuxQaEazKMvwSc9g2jUQPgX0iia7FZXX1bNIZ9tDbdERrlRAH+syOkNz
- +tiCg==
-IronPort-HdrOrdr: A9a23:/dJHcqHbEErhENDQpLqEL8eALOsnbusQ8zAXP0AYc20yTiX4ra
- CTdZEgviMc5wxxZJhNo6HkBEDiewKkyXcW2/hoAV7KZmCP1wWVxelZnPDfKlbbaknDH4BmpM
- BdWpk7JefcSX5dpq/BjDVQFexL/PC3tJqFv6P16VBDbS9XUIlczyFfTjy2LyRNNWp7LKt8G5
- qY6tBGtDa7EE57Uu2wGmMZWezOvP3n/aiWAyI7Ow==
-X-Talos-CUID: =?us-ascii?q?9a23=3AV3cNDmj2Ji0gM7Pl5084p9xs7DJue1TW60/8YEO?=
- =?us-ascii?q?EE29OZoWVDlmCqbNhnJ87?=
-X-Talos-MUID: 9a23:lYx+8wqvJzawk7HAK4AezyheEt9Y7K2zMh8QtJ8s6/jUOH1zAg7I2Q==
-X-IronPort-AV: E=Sophos;i="6.00,226,1681185600"; 
-   d="scan'208";a="110793610"
-Received: from mail-bn8nam12lp2168.outbound.protection.outlook.com (HELO NAM12-BN8-obe.outbound.protection.outlook.com) ([104.47.55.168])
-  by ob1.hc3370-68.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 08 Jun 2023 06:09:04 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OKRiUIkexSloXOd++Y6kyvSK9RwARju3a3yo6XVHy1Brgva6f0fFgxH441NyQ14rWfFyfoGD07Bp9x6dw76rXKBr7aPboC0AiRIoisTJxenSIyaDclvYVmnjPJwdDOoOamou4hnKDjqzA46wEHg4mK9v/Hcjjlt52j5LMXraR88ZZFUlVDs0OzpsC9CCUDPKtKKRAB9SJM2SWp70P9YyWMCKqI2IDlXHp+6lNffTB2JPXIY83lbe2ESA2nOid/RAs/srBnytsemIgAgZxHo+LxGNHpe7JqE43qW+iZUIVrSLfDM21m5M52GRuxqwGGLQX7KUqQ/YqG2BowSMVgzFnA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hWch4lippnOTCX/KUqLusehQC0U+PU7xym8rA7/K7JA=;
- b=fda2um28a2/muW29En8RgnxRfdRAKpSicr5tOmkGdNhQjk8zZsfSJsk/GZwDFakQvTFzTwsM94edWkUjG84RwZ4JO7s0OfEYHfMIuPfmp2DCJ2TDO5IkPrftaX74VbsLLh4WnknEkg1F0NI94nPSpssDhWcZaoMu8Ll3DwpE0O8W1EmXgvdZwRco/8rwEY+IkksY3VzJHAOGySvAroy6XiBk1rFDwxvpFUToU9ce2AQcB0Oi4Oha5Midn6hYGsrTRmWxdt4R0qQpHIERDwVR5GoJXWAA0i+5/3tu1b32oaXyg1Ge83Z+YeyB+JIhdxbfRqGdFd57+x4BoVNAQXmqGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=citrix.com; dmarc=pass action=none header.from=citrix.com;
- dkim=pass header.d=citrix.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=citrix.onmicrosoft.com; s=selector2-citrix-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hWch4lippnOTCX/KUqLusehQC0U+PU7xym8rA7/K7JA=;
- b=ixtp3ceEZxQWjixYmACwcSC8U/sJZ/8Xcf/a9nQtbeIdLO9QR7YBGIggWgb/iiK+8cccuQTvDJI1NPXrAryi2aUnlzRvwacG2/G3R2VgfH0wMZY9OOPOp9p6GQkXOODaQlUK9P0Hlu134RZQrErJBrzuKen3gPNnYrkRTYVZn38=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=citrix.com;
-Received: from SJ0PR03MB6423.namprd03.prod.outlook.com (2603:10b6:a03:38d::21)
- by DM6PR03MB5291.namprd03.prod.outlook.com (2603:10b6:5:229::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Thu, 8 Jun
- 2023 10:09:02 +0000
-Received: from SJ0PR03MB6423.namprd03.prod.outlook.com
- ([fe80::192:6bdf:b105:64dd]) by SJ0PR03MB6423.namprd03.prod.outlook.com
- ([fe80::192:6bdf:b105:64dd%3]) with mapi id 15.20.6455.028; Thu, 8 Jun 2023
- 10:09:02 +0000
-Date:   Thu, 8 Jun 2023 12:08:55 +0200
-From:   Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
-To:     Demi Marie Obenour <demi@invisiblethingslab.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
-        Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org
-Subject: Re: [PATCH v2 16/16] xen-blkback: Inform userspace that device has
- been opened
-Message-ID: <ZIGot1mn+lChK4q8@Air-de-Roger>
-References: <20230530203116.2008-1-demi@invisiblethingslab.com>
- <20230530203116.2008-17-demi@invisiblethingslab.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230530203116.2008-17-demi@invisiblethingslab.com>
-X-ClientProxiedBy: LO4P123CA0113.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:192::10) To SJ0PR03MB6423.namprd03.prod.outlook.com
- (2603:10b6:a03:38d::21)
+        Thu, 8 Jun 2023 06:10:17 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B787D1FDF;
+        Thu,  8 Jun 2023 03:10:14 -0700 (PDT)
+X-QQ-mid: bizesmtp72t1686219003tjya3x6c
+Received: from linux-lab-host.localdomain ( [61.141.77.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 08 Jun 2023 18:10:02 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: OY3aTMibIIceE4+5YMhobSaP1h6B+Or/hGya94VrcWvAEv5xCwQu0Z/MZpJYV
+        Ar2k1rxgj+mzz5Bred1gka6b/wnlYIcP2cznOwc6Q1lWV/QtRGQABsAD0iPVkazj5zrKEJJ
+        4yenMpsSY6eaUXToKdoAMu5DGmacd4TafyDwCTMFzbnIotUEcJ73LUN7gNa4nJiMVrNuBpF
+        nML9dz03A9tNi3xoi3xhNNftGCzmqafbEFd7rzuUOpxPqFa2BDMuvXHvh/Kw6KUfW79UO6Q
+        T7LMJFZRNlWpeARnV94EZnsNovZu0P4Bk1QOktX9Mx6dIifpGuG/dr0RZfCjHS3fwCZ49TK
+        2yVeO4XsPkG13xVZ/RbYpxQNEO2/PfbEfxLHtUqM5SLXwTv2pTp1Qb3O2z4VQ==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 13470355492363888723
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        w@1wt.eu
+Subject: Re: [PATCH v3 0/3] tools/nolibc: add a new syscall helper
+Date:   Thu,  8 Jun 2023 18:10:01 +0800
+Message-Id: <20230608101001.38243-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <87e7a391-b97b-4001-b12a-76d20790563e@t-8ch.de>
+References: <87e7a391-b97b-4001-b12a-76d20790563e@t-8ch.de>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR03MB6423:EE_|DM6PR03MB5291:EE_
-X-MS-Office365-Filtering-Correlation-Id: 405d24ae-cdaa-4f0a-f8ef-08db6808620f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4V237diHWQAFu6s3XWs6gwdUyJG3RdOh0i0aujbf7hjd6Sg+VtaVI2OPleX29zBnDlXDtrbHofno/ddkhB9U81G82Kh0hhuWhjJzKLwIvtXG9wCMKCjy/Ly81VN+nLJpH9PLAhLhkqUxbJjeUlkonssp62HvR+vzvvndtpQzpRydTF1eVhAuZc2eRRezoQYXP1dvsJO0aqS4Hi5stm+BpHbr/7TY8I8ziY6Rkj4pZyY9RPCr5VmIQr4VWMPdcMZpzS8zlzZ1+hLof3fnwtqiEEOW248j9YOHsp8Z7utl+e/ksBmEzCvBdmfovRbDcQiGUWOcH5HrP4TTLitEUeBoGSQLjNjtcQ++YJbSaFZlSxYPZZTHP5cM7cUoxwrCtG+wGeU/BaU/AtXJkl2YPlj5LgC6VryAtl6npLhpaRPBwPARztMrmW7ELlpZqoCA4iQbfR7W9OIwE4zjb/fyZgJ7GpIym2PPXDpqOXbWGnk5LQNfdzuc+r9xRNnRvgMc9fRsgw/gL0Ko26K9QYacxLNnMSHEIDnyNLfaCu8CWbx7BLBInMPZ8WOcU5u4wRGnd2gVo8ZypSJmEvVtTyEYYISvM1pHH03B7a+ba7VfDLW2cuo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR03MB6423.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(4636009)(366004)(376002)(346002)(136003)(396003)(39860400002)(451199021)(6512007)(9686003)(6506007)(38100700002)(41300700001)(6486002)(6666004)(26005)(186003)(83380400001)(478600001)(54906003)(66476007)(4326008)(82960400001)(316002)(66946007)(8676002)(66556008)(6916009)(8936002)(2906002)(33716001)(5660300002)(86362001)(85182001)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bUZaWnVKTnpLTFcxTzhtK25rS042RDMwMzFxY3N4bDVhYzg5MXZlaTZhVDJv?=
- =?utf-8?B?dHgxM0ZiSVQ0dDY2c2Y1R2ZKV0Y0VEFrUFNRZmtEd0c4bEJhRDRxVWhRRG43?=
- =?utf-8?B?dEgvcWVyRGx0eU5vdUYvUUorMVJ1QlJIa1lSMERSOXQ3NzhheGZlS2hnNHBl?=
- =?utf-8?B?dnFudkwweXdCK2JkU0J1NWJQZWNXakNLREdOOFhCQ3JaeDBzZXZkOVBZVDd4?=
- =?utf-8?B?Nk9pN00wTDRkZXZVZ2ptUVpPWkFlR3V3M2pRU2lZcmlFbkQ0bEkycEJsNW1O?=
- =?utf-8?B?citqNzQ3TzFiNXB4WnpOR25JQmtpZ3FmL2llMlZsd0cyQlFGVmwwY0tXWFRU?=
- =?utf-8?B?NE41Y0h3bGtDYXFsMVYzUTFsdTVwMHZJVTYySHdxbk5sUlMwdEt4emp1N2Jt?=
- =?utf-8?B?bkNMS1gxZzl4SytmQ21xODk4V3czcHd4dmNDOXVxVnRpV2N1bHp1Nmpvai9z?=
- =?utf-8?B?NXlxck4yMGxJRlJ3VUhKUWZrS0dYQjZEemVwaWE2bU1oQ0Y0ZmNkbUIzcGpv?=
- =?utf-8?B?dWFDTVJwZUxFdnBZVUJSaFZqdlJrYTJxN2JuaHh1WVh0YTZEUWFmNTY3NWs0?=
- =?utf-8?B?NGcyU1lDZ1dZd1d2NmcxaVZpbUFJUjVaWVcrQlMyRDh1NFY5L3pFYkFacThh?=
- =?utf-8?B?TVVUV2NqMFhpRkcvMGVLM25VeWRNZG45YXR3SUV2bTZKTndROTJzNy9pR1l3?=
- =?utf-8?B?ZWNlK1lsZGJNaWdhR1M2dlFZL3hMUTZFQXZQcm1vRlY3MnFNR25lRDN4QlRO?=
- =?utf-8?B?UCtEZUR5ZGFWSVF5Tnp6ZFFnQmNXQjRvVkl1UTVud2ZQeUN3QklpZnpwNHgx?=
- =?utf-8?B?ZXo3cFhxNVFEZkFwczhGbm5YamRRSmZIMzNXelZGdmdoOHl0Vkc1VG0zUlhx?=
- =?utf-8?B?QUJ1NHg3WmhlN1hQczd4eFFrU1R2WWdQbjVCQ3N0SXlvZ0F5QmVialJ3cG8x?=
- =?utf-8?B?WENGeEhtUXJYMXpKQ1lzRGZPZmlsYUhRMld5MmJkbHBSc1VyMFNacUxGM3h0?=
- =?utf-8?B?cmk4VWhwdW9hNDJRRmpsV0dRbk1ZSjFaRWNMbVloQ2h0RnU5NkQ2enNwNzAx?=
- =?utf-8?B?M2krWnM3ODdFT1VFTFVpQ2pLTnlmU2tFdXVjZkV4ZVFwZXV6YVNSaEMyWjBq?=
- =?utf-8?B?bW8vZFY4T2Vkcmk2RHIxUTBxbnpPSld3Mk1tOGdyMTJndVRMemhFOVRCZDFB?=
- =?utf-8?B?Z0ZLQlJvRUo1elVlT3NuaWtWMjZkOGRDWDZGR1lSZlZ3L2JqdUhTSGZEUVVG?=
- =?utf-8?B?Tmw3aTlpU0w2dDMydEZ3Zmh4V2dEbUEyOFJlWENDOXdNTjg2aUJ6Zmlhemww?=
- =?utf-8?B?WkFXZG92Q3h4UTFvSVplNmxEN1puNnBmRjc4NzdVS2V1aHhTcHJRV1hPbnhu?=
- =?utf-8?B?ZEw0VmFUQ0d2elRoQ2lhMXREZ0d6S0xyOUNtY2NXZW5iUCtBanFvTW12STRP?=
- =?utf-8?B?Z2xCVUVBVzQwMkdYMHNaVDNKOTJBVzNVdldhbUpNUTcvN0VOaEZTRTlmQUtG?=
- =?utf-8?B?LzZVWEhyaXRwdkxsSm9vWTNUd1g0Tll5NkxwcjM1V3NhUGxhVjFtMlhJeWpM?=
- =?utf-8?B?cU93aThOdVd2NHl5MXpHNGxFclVkazJZVElPTEVZdS8wcWdMYVp5UnFoNnpB?=
- =?utf-8?B?Zm01d3lNK0FFZFRZQVRQTGxteDVYekFUWTlIWVdvZnk4Mnp5emFFUkJENUZz?=
- =?utf-8?B?ekhwYXFJZ09BZ0IxeGVGSXdwbUVaNEh3ZTd4dFkwaDlLa1RMSVhtSzhDQUJM?=
- =?utf-8?B?NDhjYnpqTmVCWVU4WDl4aHVxamN5eDBwMU5DeklvYUtTazlCbXFOUlQyNTBj?=
- =?utf-8?B?N0pZQXIxNW5YOCt2Yy9xdndMR2ExbXduamk1SGd1dUxaNGtnTkhUUmpiUjJx?=
- =?utf-8?B?Z0dVa0YyODIvR0JnWm1DZFpoenR6TWVLc0ZhNVVRb1RqSHh2a1FBZnlTNVNG?=
- =?utf-8?B?azFNTDZpZ0RMRTUzVW9YZGV1aUdNdGtJK0ZCU2dqZzhsTmVKekR1eVUvZVJR?=
- =?utf-8?B?dFZCcFB1MzYwZzcwdXBpKzRlTVZMdmkzUndSbVRaYkc2RThmWGt0NEMvTnZm?=
- =?utf-8?B?MlNQNVJWWi9PUFRadGhGa0RGNE11RURsNjJOUk9HMTJmRVZEbUdJK29MZDg5?=
- =?utf-8?B?ZGlvSDhRdUxxZm8ybFFaQ09vcnhUYW9mM0V3Y3FkMUJFM1FnSHVGeHlFUWtR?=
- =?utf-8?B?REE9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?bTdyOFNMVDdtU3RPTDNiTHVsYnNzQURrNjZzU205MWo1V0g0WDBSdzYrc3B1?=
- =?utf-8?B?UFBxZjNmdG91S1REZEJ6QlQrT3Q3aEM0NkRxdEhvcWNIQnkzREVwRTMzSUhD?=
- =?utf-8?B?WGU4dkNubm9SMDRRMldURndpd2Z4ZEUxS2Y3NGw2R3Z5VVVVR0FIbTRNNnJ0?=
- =?utf-8?B?eFhYVHV0U2ViQzBLM3pWWW5KUm9NVzFCekk0RUZsang4OGV6Y3cxMGIyNmVV?=
- =?utf-8?B?dFhnRlVISXptWEZkdWNCQ1pFZVU1YWJudTBEOGh0alZCUHdySzZUUFVaRDcw?=
- =?utf-8?B?a1pjZUxTOUVJdHEyblpMU0RFSThFd1F4cGprWlpoRnRKZFlPT2lsck9ud0V5?=
- =?utf-8?B?NlhybGJxQlpVQ1U0elpTZWh5aG9EUmxucUZ5aGNtdWcvb0E0bFcyVnROemVw?=
- =?utf-8?B?OW5WNzhocGJNSzB3TXlHNHViZmpYakdLSUlkcU4zSDgzMDg1cnNxUzNNUE5O?=
- =?utf-8?B?Qm14eEpOR0tQaWhLd0l0ZVEwaGVNUys0N3F5Wkc4QVhOQjhKZEx1eU14NHR2?=
- =?utf-8?B?OUFDVlBBMXd1dFU3V1NacUhoK1JWanRtMWYyMWxIOTJQa3M2enlacVZSdHpG?=
- =?utf-8?B?YzliUkt3NGttSHlDTUhZTys5R04vOUowSkdXWStBclFldjJOQmxmTWtoZXNs?=
- =?utf-8?B?M0wzVU9HNnpVUjg4NUF2NGJOSmtLRnRYbWE1WHlwTjFwSFQrYy9NRk1YdVpC?=
- =?utf-8?B?Z0xrMG5EbEYwSFlNTDlXNWN2alUxdXdxYXZBaXlwZ0V5Smsxd0t3a0RuVkor?=
- =?utf-8?B?VHFLKzdOUXcwTmptdmRJZUZBV3BTcDIxaVMxNmhPbGxmQWYrazFuM0RCczJD?=
- =?utf-8?B?dENRQXJJeER1K3VOdVIrbjNNOCtReitFcjJ6Z1NPbjh2ZTRtY3VLNjVkY0Uy?=
- =?utf-8?B?emsxcm0vRC9rQ2JXc1ExL3dVZENQa3ZrZzU2TE5adDlwd2tHWlFqZ2FyYVlj?=
- =?utf-8?B?N21GRmI3VWNLNEpTTGN3YVc1ZTlucW1hUk1GWkROYnlGcVF1a2NsNzNaQU04?=
- =?utf-8?B?UlVtcVhZc2MreExPTVBLSllWREIxNnVDR2hxUWlVQWczV2NjMnQ5ak9DVkpz?=
- =?utf-8?B?TE43UTI2cE1SbTlWUE5zM1IxeVcxVGxweDdBTVI1c1FrTXNyd2k5RjE3bUMy?=
- =?utf-8?B?QlhDOGwyZi9VdXVpeC9tUEMwYUlyR1dyZExWOHN2bmJ0SnViQWh6dHdvYm12?=
- =?utf-8?B?eTZoZnI5RHREMWdodk45MWI5U2Vrb0FFTVR5WFpIc3cvejN1bkV5RGhjeHZx?=
- =?utf-8?B?SWhQVjhwNG1PRlNsUElNenZBWlNYTEQyY1RqcE5USXNTSXBYUT09?=
-X-OriginatorOrg: citrix.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 405d24ae-cdaa-4f0a-f8ef-08db6808620f
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR03MB6423.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2023 10:09:01.9910
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 335836de-42ef-43a2-b145-348c2ee9ca5b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3lCGQazFV4igjyPs3o7iPz4lopdzhhmn5X7rgjYOjddc6kvZr/NjRRMGHxsFaVI9vCMMfXpCAHfgECEjJRuyQw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR03MB5291
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 04:31:16PM -0400, Demi Marie Obenour wrote:
-> Set "opened" to "0" before the hotplug script is called.  Once the
-> device node has been opened, set "opened" to "1".
+> On 2023-06-07 19:28:58+0800, Zhangjin Wu wrote:
+> > Willy, Thomas
+> > 
+> > This is the revision of the v2 syscall helpers [1], it is based on
+> > 20230606-nolibc-rv32+stkp7a of [2]. It doesn't conflict with the v4 of
+> > -ENOSYS patchset [3], so, it is ok to simply merge both of them.
+> > 
+> > This revision mainly applied Thomas' method, removed the __syscall()
+> > helper and replaced it with __sysret() instead, because __syscall()
+> > looks like _syscall() and syscall(), it may mixlead the developers.
+> >
+(...)
+> > BTW, two questions for Thomas,
+> > 
+> > * This commit 659a49abc9c2 ("tools/nolibc: validate C89 compatibility")
+> >   enables -std=c89, why not gnu11 used by kernel ? ;-)
 > 
-> "opened" is used exclusively by userspace.  It serves two purposes:
+> Because nolibc needs to support whatever its users need.
+> As nolibc is header-only all of it needs to work everywhere.
+> C89 should work for everybody :-)
 > 
-> 1. It tells userspace that the diskseq Xenstore entry is supported.
-> 
-> 2. It tells userspace that it can wait for "opened" to be set to 1.
->    Once "opened" is 1, blkback has a reference to the device, so
->    userspace doesn't need to keep one.
-> 
-> Together, these changes allow userspace to use block devices with
-> delete-on-close behavior, such as loop devices with the autoclear flag
-> set or device-mapper devices with the deferred-remove flag set.
 
-Now that I think a bit more about this, how are you planning to handle
-reboot with such devices?  It's fine for loop (because those get
-instantiated by the block script), but likely not with other block
-devices, as on reboot the toolstack will find the block device is
-gone.
+Get it, thanks.
 
-I guess the delete-on-close is only intended to be used for loop
-devices? (or in general block devices that are instantiated by the
-block script itself)
+> The kernel on the other hand is compiled standalone and is not limited
+> by its users.
+> 
+> See the discussion here:
+> 
+> https://lore.kernel.org/all/20230328-nolibc-c99-v2-0-c989f2289222@weissschuh.net/
+> https://lore.kernel.org/all/20230328-nolibc-c99-v1-1-a8302fb19f19@weissschuh.net/
+>
 
-Thanks, Roger.
+Thanks very much for sharing the whole history info.
+
+And as the your commit 063b6bc5b39f ("tools/nolibc: use __inline__ syntax")
+explains, the 'inline' keyword has been used in many headers of include/uapi/,
+so, how our -std=c89 work with them? I did find the clue eventually, here maybe:
+
+    $ grep -n inline scripts/headers_install.sh
+    11:	echo "asm/inline/volatile keywords."
+    37:	s/(^|[[:space:](])(inline|asm|volatile)([[:space:](]|$)/\1__\2__\3/g
+
+The headers_install target helped us convert all of the new keywords to the old
+ones, it's magic ;-)
+
+So, it should work if people not want to try a -I/path/to/include/uapi/, I did
+this for musl before, even If we do this, this may help:
+
+    diff --git a/tools/include/nolibc/std.h b/tools/include/nolibc/std.h
+    index 933bc0be7e1c..33d546cf9af0 100644
+    --- a/tools/include/nolibc/std.h
+    +++ b/tools/include/nolibc/std.h
+    @@ -7,6 +7,14 @@
+     #ifndef _NOLIBC_STD_H
+     #define _NOLIBC_STD_H
+     
+    +#ifndef NOLIBC_TEST
+    +#ifndef __STDC_VERSION__
+    +#define inline __inline__
+    +#define asm __asm__
+    +#define volatile __volatile__
+    +#endif
+    +#endif
+    +
+     /* Declare a few quite common macros and types that usually are in stdlib.h,
+      * stdint.h, ctype.h, unistd.h and a few other common locations. Please place
+      * integer type definitions and generic macros here, but avoid OS-specific and
+    diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+    index 4a3a105e1fdf..46f061a4458a 100644
+    --- a/tools/testing/selftests/nolibc/Makefile
+    +++ b/tools/testing/selftests/nolibc/Makefile
+    @@ -78,7 +78,7 @@ endif
+
+     CFLAGS_s390 = -m64
+     CFLAGS_STACKPROTECTOR ?= $(call cc-option,-mstack-protector-guard=global $(call cc-option,-fstack-protector-all))
+    -CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
+    +CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 -DNOLIBC_TEST \
+                    $(call cc-option,-fno-stack-protector) \
+                    $(CFLAGS_$(ARCH)) $(CFLAGS_STACKPROTECTOR)
+
+Is this worth a new patch? I do think it is not required.
+
+> > * Do we need to tune the order of the macros in unistd.h like this:
+> > 
+> >     #define _syscall(N, ...) __sysret(my_syscall##N(__VA_ARGS__))
+> >     #define _syscall_n(N, ...) _syscall(N, __VA_ARGS__)
+> >     #define __syscall_narg(_0, _1, _2, _3, _4, _5, _6, N, ...) N
+> >     #define _sycall_narg(...) __syscall_narg(__VA_ARGS__, 6, 5, 4, 3, 2, 1, 0)
+> >     #define syscall(...) _syscall_n(_sycall_narg(__VA_ARGS__), ##__VA_ARGS__)
+> > 
+> >   Before, It works but seems not put in using order:
+> > 
+> >     #define _syscall(N, ...) __sysret(my_syscall##N(__VA_ARGS__))
+> >     #define _sycall_narg(...) __syscall_narg(__VA_ARGS__, 6, 5, 4, 3, 2, 1, 0)
+> >     #define __syscall_narg(_0, _1, _2, _3, _4, _5, _6, N, ...) N
+> >     #define _syscall_n(N, ...) _syscall(N, __VA_ARGS__)
+> >     #define syscall(...) _syscall_n(_sycall_narg(__VA_ARGS__), ##__VA_ARGS__)
+> 
+> Not sure it makes a big difference.
+> If you want to change it, go for it.
+>
+
+Only switched two of them, oh, just found the '_sycall_narg' did miss a 's'
+character, it may be really worth a patch now, I know why I focused on the
+order so much, because the missing 's' made it not aligned well ;-)
+ 
+> >
+(...) 
+> >  tools/include/nolibc/sys.h    | 364 +++++-----------------------------
+> >  tools/include/nolibc/unistd.h |  11 +-
+> >  2 files changed, 55 insertions(+), 320 deletions(-)
+> 
+> For the full series:
+> 
+> Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
+>
+
+Thanks a lot, I'm really appreciated.
+
+Best regards,
+Zhangjin
+ 
+> Thanks,
+> Thomas
