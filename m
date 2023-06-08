@@ -2,97 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FB24727B7D
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55682727B80
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:34:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236011AbjFHJdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 05:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39412 "EHLO
+        id S236113AbjFHJeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 05:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236005AbjFHJd1 (ORCPT
+        with ESMTP id S235985AbjFHJdf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 05:33:27 -0400
-Received: from out0-219.mail.aliyun.com (out0-219.mail.aliyun.com [140.205.0.219])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDDEE2D63
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 02:33:12 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R551e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047201;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=28;SR=0;TI=SMTPD_---.TOc6qlT_1686216783;
-Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.TOc6qlT_1686216783)
-          by smtp.aliyun-inc.com;
-          Thu, 08 Jun 2023 17:33:04 +0800
-Date:   Thu, 08 Jun 2023 17:33:03 +0800
-From:   "Hou Wenlong" <houwenlong.hwl@antgroup.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     <linux-kernel@vger.kernel.org>,
-        "Lai Jiangshan" <jiangshan.ljs@antgroup.com>,
-        "Alexey Makhalov" <amakhalov@vmware.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Andy Lutomirski" <luto@kernel.org>,
-        "Anshuman Khandual" <anshuman.khandual@arm.com>,
-        "Borislav Petkov" <bp@alien8.de>,
-        "Boris Ostrovsky" <boris.ostrovsky@oracle.com>,
-        "Brian Gerst" <brgerst@gmail.com>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "David Woodhouse" <dwmw@amazon.co.uk>,
-        "H. Peter Anvin" <hpa@zytor.com>, "Ingo Molnar" <mingo@redhat.com>,
-        "Josh Poimboeuf" <jpoimboe@kernel.org>,
-        "Juergen Gross" <jgross@suse.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        "=?UTF-8?B?TWlrZSBSYXBvcG9ydCAoSUJNKQ==?=" <rppt@kernel.org>,
-        "Pasha Tatashin" <pasha.tatashin@soleen.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "=?UTF-8?B?U3JpdmF0c2EgUy4gQmhhdCAoVk13YXJlKQ==?=" 
-        <srivatsa@csail.mit.edu>, "Suren Baghdasaryan" <surenb@google.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Usama Arif" <usama.arif@bytedance.com>,
-        <virtualization@lists.linux-foundation.org>,
-        "VMware PV-Drivers Reviewers" <pv-drivers@vmware.com>,
-        <x86@kernel.org>, <xen-devel@lists.xenproject.org>
-Subject: Re: [PATCH RFC 0/4] x86/fixmap: Unify FIXADDR_TOP
-Message-ID: <20230608093303.GA16983@k08j02272.eu95sqa>
-References: <cover.1684137557.git.houwenlong.hwl@antgroup.com>
- <1f633e99-d294-6932-31e9-0eb158d030ea@intel.com>
+        Thu, 8 Jun 2023 05:33:35 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73FC32D79
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 02:33:34 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-30ad8f33f1aso275176f8f.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 02:33:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1686216812; x=1688808812;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cOj98+SP3A7ue8uJEiHbklaDi2wbfbIhAir4uuSrLHU=;
+        b=Laz1RwxGIXm70TgzRDCLNkCjouhFptZ6gdr6yztXF1zDimdNhFWFzEGo6BPIMxK2yG
+         qhUi7PZ5Pj/IIFnP7F/khg/w29O0p+iS/mDwDLmD+GsIg92naL8tetlwmvWgNZnr4Vmm
+         LVos3YWwVd21ZDWTGdrN2b4ips7bQLckATt4+dtyw7YzTiIYGYj/Et+6JfvPv6BfTcAf
+         EKzbqPH4jMtezbOAUCtX+FVxOBbQakai1lzurb8RqhMwqguCXmeeBAnbfjBUbjdACBU5
+         YiG/df/4i2ihDgFBEmWEwE6ZzPdrx4qcmwRSiBx1RYEGZ3jv2M/x0J/No3yZV9O0jf6d
+         VG4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686216812; x=1688808812;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cOj98+SP3A7ue8uJEiHbklaDi2wbfbIhAir4uuSrLHU=;
+        b=BJJmKmFU5gDT9apjthC3lQu8+zLV6z64bxsY37Blc1j3l+ePxI9tj+lzqbuQiFvjh2
+         93enT6L9gxwyvsXaJcQfLp46JkvS5efDpPbHrgKcSdeEvH3J+dNycxATfkPJTwaXqGCk
+         qMCUUj72D0fY5Np6iAivqX8FFLsc8YtpLZpaUNqEpGcrQ45Oo6WmOdnmkXBh14jf1wJi
+         8qRqWCAA+oQb/I55SQsYepPmbQ+CwWKeWTJLUUozb4jvBGpEkr2ltQPCIwCAqOFTN+7X
+         7gEQD17JCfa4xF1IBwirCPjNvewGn9iBjzt7CAJEyAIX3X4Z+NxfMra9my17hVTuPHc9
+         E4gg==
+X-Gm-Message-State: AC+VfDzXY7EquTrjNScAf01YmxiUDiXoN4r0Ih6GAknUDHZ7F8EB0v/8
+        60THPEb3z/R8XaN3HozumTi9nw==
+X-Google-Smtp-Source: ACHHUZ7P8OxpxQTjiKrorLWZywqz5NMirJO0K4lefJ+9XIYZYERDkbTiMsX/D53AhUJjyGH6f3r1lA==
+X-Received: by 2002:adf:fccf:0:b0:309:5068:9ebe with SMTP id f15-20020adffccf000000b0030950689ebemr5857679wrs.50.1686216812642;
+        Thu, 08 Jun 2023 02:33:32 -0700 (PDT)
+Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
+        by smtp.gmail.com with ESMTPSA id b14-20020a056000054e00b0030c2e3c7fb3sm986359wrf.101.2023.06.08.02.33.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jun 2023 02:33:32 -0700 (PDT)
+Message-ID: <bc366bde-95f6-1ddd-9528-a9c1dd30c04c@baylibre.com>
+Date:   Thu, 8 Jun 2023 11:33:31 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1f633e99-d294-6932-31e9-0eb158d030ea@intel.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 3/5] ASoC: mediatek: mt8188-mt6359: Cleanup return 0
+ disguised as return ret
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, broonie@kernel.org
+Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        matthias.bgg@gmail.com, trevor.wu@mediatek.com,
+        dan.carpenter@linaro.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com
+References: <20230608084727.74403-1-angelogioacchino.delregno@collabora.com>
+ <20230608084727.74403-4-angelogioacchino.delregno@collabora.com>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+In-Reply-To: <20230608084727.74403-4-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 08:49:15PM +0800, Dave Hansen wrote:
-> On 5/15/23 01:19, Hou Wenlong wrote:
-> > This patchset unifies FIXADDR_TOP as a variable for x86, allowing the
-> > fixmap area to be movable and relocated with the kernel image in the
-> > x86/PIE patchset [0]. This enables the kernel image to be relocated in
-> > the top 512G of the address space.
-> 
-> What problems does this patch set solve?  How might that solution be
-> visible to end users?  Why is this problem important to you?
-> 
-> Also, while you're waiting for someone to review _your_ code, have you
-> considered reviewing anyone else's code?  I don't think I've seen any
-> review activity from you lately.
+On 08/06/2023 10:47, AngeloGioacchino Del Regno wrote:
+> Change all instances of `return ret` to `return 0` at the end of
+> functions where ret is always zero and also change functions
+> mt8188_{hdmi,dptx}_codec_init to be consistent with how other
+> functions are returning errors
 
-Hello,
+Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
 
-Sorry for bothering you. This patch is not important; it is just a part
-of our PIE patchset. I should be more patient.
+-- 
+Regards,
+Alexandre
 
-We want to build the kernel as PIE and allow the kernel image area,
-including the fixmap area, to be placed at any virtual address. We have
-also implemented a PV Linux guest based on PIE, which can be used in
-software virtualization similar to Lguest. PIE makes the guest kernel
-share the host kernel space similar to a normal userspace process.
-Additionally, we are considering whether it is possible to use PIE and
-PVOPS to implement a user-mode kernel.
-
-Thank you for your advice. I will participate more actively in community
-review activities. Sorry again for bothering you.
-
-Thanks.
