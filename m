@@ -2,124 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0393F7283B9
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99BED7283BD
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:28:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233424AbjFHP1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 11:27:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54844 "EHLO
+        id S235703AbjFHP2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 11:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234497AbjFHP1r (ORCPT
+        with ESMTP id S237092AbjFHP2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 11:27:47 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B42A172E;
-        Thu,  8 Jun 2023 08:27:43 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 2496D1FDE6;
-        Thu,  8 Jun 2023 15:27:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1686238062; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YjexGMdyJWeBEjd6xCsB5dyXSs2Z5hB+eEW3odtxG74=;
-        b=SfueeyNYTBrTihKqx8oxJyfXgJUEO72qrEaWzKN9n/xvcrRpUuC7wTlr5iQ5JU20AoKVk+
-        RIlBFvY+Q+Do9PokOXqyijq2TF/CAdHol/tiqVodfAgEosBNsgNhjvbDhDhwUi/3kUlSxU
-        tJXq1cRpat2EYGkHF7TOihaLs/AntV8=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 162EF2C141;
-        Thu,  8 Jun 2023 15:27:41 +0000 (UTC)
-Date:   Thu, 8 Jun 2023 17:27:40 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Richard Weinberger <richard@nod.at>,
-        linux-hardening@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>
-Subject: Re: [RFC PATCH 0/1] Integer overflows while scanning for integers
-Message-ID: <ZIHzbBXlxEz6As9N@alley>
-References: <20230607223755.1610-1-richard@nod.at>
- <202306071634.51BBAFD14@keescook>
+        Thu, 8 Jun 2023 11:28:03 -0400
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C0572D46;
+        Thu,  8 Jun 2023 08:28:03 -0700 (PDT)
+Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-777b4716673so18918239f.1;
+        Thu, 08 Jun 2023 08:28:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686238082; x=1688830082;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Qr000rxGLVuWJZz2D0ArKGwSzq3Pa8ar0xjysheU/dU=;
+        b=WZRyiS3E0fuXwFPwXxtml2KtMBlbYjKiX4r0KFnMs/NxwkCrIiEzqBGOXq4eGfrubo
+         +zox4goabq5d5yBcVdqOyAgw9JvtwaK0MTT7/aldXjDDdDHE+z2IWKuiN1k5v/ODE7+M
+         F6y3D2bQUtlLeOdmrj/vbawdezcOUiMOFHRaNXNAZdYNZwLKYK7bRBI1vxowBAWcsop6
+         2qfy4w2wDXmbXwHebmRdeV1CrNMI1YxwdV9JMc5i748Li3PaXQWnDUorE8k4vutI4efm
+         LnmNGlz/mIZz56jaFB4SD2SpDC0UW289cbXItgqhtMPzI605u8aGT5789+B4C0kllA6M
+         pLFA==
+X-Gm-Message-State: AC+VfDzq4DFklGgJNJGxMGhMa30bdf6KclW9La33cLz7cTuT1XZyc3o0
+        XMXImi7alI+MI6wsw4EK4Q==
+X-Google-Smtp-Source: ACHHUZ7yIzpDskqBVsSZugxdatsLxV3rNEEOXYrrNCOawofOsVApP7TUr7KrKg+IbkgmirE1X6UUNw==
+X-Received: by 2002:a05:6602:2d01:b0:777:a4d2:8871 with SMTP id c1-20020a0566022d0100b00777a4d28871mr1838491iow.5.1686238082262;
+        Thu, 08 Jun 2023 08:28:02 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id t5-20020a028785000000b0040fa5258658sm332660jai.77.2023.06.08.08.28.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 08:28:01 -0700 (PDT)
+Received: (nullmailer pid 2724383 invoked by uid 1000);
+        Thu, 08 Jun 2023 15:27:59 -0000
+Date:   Thu, 8 Jun 2023 09:27:59 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Cc:     manivannan.sadhasivam@linaro.org, quic_vbadigan@quicinc.com,
+        quic_ramkri@quicinc.com, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
+        "open list:PCIE ENDPOINT DRIVER FOR QUALCOMM" 
+        <linux-pci@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] dt-bindings: PCI: qcom: ep: Add interconnects path
+Message-ID: <20230608152759.GA2721945-robh@kernel.org>
+References: <1686154687-29356-1-git-send-email-quic_krichai@quicinc.com>
+ <1686154687-29356-2-git-send-email-quic_krichai@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202306071634.51BBAFD14@keescook>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <1686154687-29356-2-git-send-email-quic_krichai@quicinc.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2023-06-07 16:36:12, Kees Cook wrote:
-> On Thu, Jun 08, 2023 at 12:37:54AM +0200, Richard Weinberger wrote:
-> > Hi!
-> > 
-> > Lately I wondered whether users of integer scanning functions check
-> > for overflows.
-> > To detect such overflows around scanf I came up with the following
-> > patch. It simply triggers a WARN_ON_ONCE() upon an overflow.
-> > 
-> > After digging into various scanf users I found that the network device
-> > naming code can trigger an overflow.
-> > 
-> > e.g:
-> > $ ip link add 1 type veth peer name 9999999999
-> > $ ip link set name "%d" dev 1
-> > 
-> > It will trigger the following WARN_ON_ONCE():
-> > ------------[ cut here ]------------
-> > WARNING: CPU: 2 PID: 433 at lib/vsprintf.c:3701 vsscanf+0x6ce/0x990
+On Wed, Jun 07, 2023 at 09:48:05PM +0530, Krishna chaitanya chundru wrote:
+> Add the "pcie-mem" interconnect path to the bindings.
 > 
-> Hm, it's considered a bug if a WARN or BUG can be reached from
-> userspace,
+> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
+> index b3c22eb..6fc5440 100644
+> --- a/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
+> +++ b/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
+> @@ -70,6 +70,13 @@ properties:
+>      description: GPIO used as WAKE# output signal
+>      maxItems: 1
+>  
+> +  interconnects:
+> +    maxItems: 1
+> +
+> +  interconnect-names:
+> +    items:
+> +      - const: pcie-mem
+> +
+>    resets:
+>      maxItems: 1
+>  
+> @@ -97,6 +104,8 @@ required:
+>    - interrupts
+>    - interrupt-names
+>    - reset-gpios
+> +  - interconnects
+> +  - interconnect-names
 
-Good point. WARN() does not look like the right way in this case.
+You can't add required properties. That's an ABI break. Up to the 
+platform whether that's acceptible, but you have to explain all this in 
+the commmit msg.
 
-Another problem is that some users use panic_on_warn. In this case,
-the above "ip" command calls would trigger panic(). And it does not
-look like an optimal behavior.
-
-I know there already are some WARN_ONs for similar situations, e.g.
-set_field_width() or set_precision(). But these do not get random
-values. And it would actually be nice to introduce something like
-INFO() that would be usable for these less serious problems where
-the backtrace is useful but they should never trigger panic().
-
-> so this probably needs to be rearranged (or callers fixed).
-> Do we need to change the scanf API for sane use inside the kernel?
-
-It seems that userspace implementation of sscanf() and vsscanf()
-returns -ERANGE in this case. It might be a reasonable solution.
-
-Well, there is a risk of introducing security problems. The error
-value might cause an underflow/overflow when the caller does not expect
-a negative value.
-
-Alternative solution would be to update the "ip" code so that it
-reads the number separately and treat zero return value as
--EINVAL.
-
-Best Regards,
-Petr
+>    - resets
+>    - reset-names
+>    - power-domains
+> -- 
+> 2.7.4
+> 
