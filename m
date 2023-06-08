@@ -2,82 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23165727B9C
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08AC9727B9F
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236019AbjFHJje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 05:39:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
+        id S236029AbjFHJkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 05:40:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234587AbjFHJjb (ORCPT
+        with ESMTP id S235470AbjFHJkt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 05:39:31 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4EF213C
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 02:39:30 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-30aeee7c8a0so310661f8f.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 02:39:30 -0700 (PDT)
+        Thu, 8 Jun 2023 05:40:49 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2082129
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 02:40:45 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-bb131cd7c4aso456609276.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 02:40:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686217169; x=1688809169;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kis83jMD1oWs6024Wvt+G1gr/3Bk88oMA3d6rNJj5g4=;
-        b=dh2IGeZP1UXlw/rxc8tHwYftXW4vIKDKiSgUwwpYDTnQLnUUZ2eKQNpLe1ae+OOkaq
-         ZUOfth6aGXN7TreMG667Tdd0b9nHJipOIZXaw1UP6PJgGrkbGVKv9GmuLrgVrxUYmEtL
-         Jn5nUBOvSxF1p5Yll4gh3dz0l4pJpALQwXgKrtbWLz6N817Sd0MTH8Sbh8LY9iGf6iAv
-         CA9Rl9Ase8AAeu4Y4vACb40mBoVt52+cKQzMjzXTUPPT7gr2SzKoi+ST2qflIt5sBVSX
-         V4/djTioCzHuu7SKvoD/QBgRw4Sn1CPnceGIBVTQmGx0HHJWzWQOb8PCENz9gqNAuTcO
-         o5lw==
+        d=linaro.org; s=google; t=1686217244; x=1688809244;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kT/4ERLhvhoaB2/3pcmd2QrnNqXZyt9hB0faS7bbTAE=;
+        b=JQWwvt4SW0ZHoc1UTQ/dMF3PvHa7Dt6eir0xAu8c0vS081G2qf9Jws1/lY9qbiTJX2
+         +gWjMQJs56riC/BRdtictohM2wJ9OLu6FgloOIQzwed62coe2jwySn/gJ8wBwnlsw106
+         ZUq4Dy1gJGCJGxkkTgNtdc+JzbCRwKCtFENp9CJQDmwBB4EY6eKqoEVhMti1xqwaG3xc
+         Gu76Ghco31hYIpNU0lpM5DL+hBgSua3N60APuXes4eMGg9ESPuO+pJpih0ahKgA0ERBs
+         7mJAnCzPyee6l+xMlfDGgfxiOuROO3/8Vwat/iEb9PBtYGI8LxiluEowXYW9rVJdSbL4
+         nvOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686217169; x=1688809169;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kis83jMD1oWs6024Wvt+G1gr/3Bk88oMA3d6rNJj5g4=;
-        b=QU/3b4/FKHwhOIsQ551MATEk8MuG+eISf0HMOnxOnUugFwihA8QzLbsUXSU+3V/9CX
-         LQRXsGjBMxnKEs65SJ0nIpywNBC+yfBMqnXefYwuPSMlJMU+DzkIjLwuqm/dSB50YMqo
-         RMspioF7MJGyJUj4RxHbKnRWe8fEquESE71h0kK/WJwem//Ef/X62DyQ651Gkkmc4Usb
-         zvnPG/wxkVwzY1kNRNxlkOr4kwxVELz6aWlsXAiqnqclQQ4UAsAx09yBhOdtJosaoWZf
-         0xw1qhxmPEJY0PS7ebgLjPAoLESTQqJsIV7WXAvefllkrb//jTd5tDCgaH2OFvLT+QX2
-         87EQ==
-X-Gm-Message-State: AC+VfDxfQ2Mo7pQjSKmnfw/4T4ZtOJQvbJk66cAHq4RlbfK6PS5lSCsA
-        kj/5twvP1vQ6PzhzO44ceITbSg==
-X-Google-Smtp-Source: ACHHUZ7Ms6WXtKfgT/Z+U3P+H7HunJuUiCLEYOMq2NRw8YGy939Doi5kEfI1/uibHdDRb84aF9r7Mg==
-X-Received: by 2002:a05:6000:108a:b0:30e:56b3:60fe with SMTP id y10-20020a056000108a00b0030e56b360femr1337520wrw.4.1686217168916;
-        Thu, 08 Jun 2023 02:39:28 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:3a59:921c:4758:7db5? ([2a05:6e02:1041:c10:3a59:921c:4758:7db5])
-        by smtp.googlemail.com with ESMTPSA id u13-20020adfeb4d000000b00301a351a8d6sm1046418wrn.84.2023.06.08.02.39.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 02:39:28 -0700 (PDT)
-Message-ID: <59c7c90c-50f2-5a77-af12-b266c6e6e0b1@linaro.org>
-Date:   Thu, 8 Jun 2023 11:39:27 +0200
+        d=1e100.net; s=20221208; t=1686217244; x=1688809244;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kT/4ERLhvhoaB2/3pcmd2QrnNqXZyt9hB0faS7bbTAE=;
+        b=dBf0owYORO+tCt7dwSntXfUnNMx+h26qlOz59sZEnFDG7pEO6lZPxctThSTLgQWYLA
+         koYyhiQ+PH0Kj1spY5kkwd3yANIcQDmpXYSOmWdJriKeKRa77B3HyMilhEG3Q643qgcW
+         nA9uEgnDAMo81geh2/6QSv1h11+QT6OslumriUmPMmwyayNcYmgKDpgqWA7q24G0VTpV
+         IlDLaI9lp7tjwOdTy4Fw78HCiFLvS/qaOgZkdlmSWgSPAynjhjo4XyQei6oKmN+BHu1H
+         /gwvWL8SRoST2IN014F4fMqCspsWHLe48KXz2G8/D5gr5jM3km8WCvoileOfglYfUtfz
+         hlGw==
+X-Gm-Message-State: AC+VfDx6bBlE5va7jl2d7gkwVAsUpmR7Xe+UNN3gqgH2GHjPJjun3VT7
+        KUI9uNQnRzy81ByXKB+qMJ3gR0waXLXqgZAjLPYZVKN+U11nXoZe
+X-Google-Smtp-Source: ACHHUZ4KvRi/dHX0SUu44hlf/6b3eJqA97g2u+OP4mTyY+DaM/novQI/e+r7uKvE/9LaO2LJ5i5YWSE9L936C+LApdA=
+X-Received: by 2002:a81:750b:0:b0:568:a55a:47eb with SMTP id
+ q11-20020a81750b000000b00568a55a47ebmr7861504ywc.7.1686217244551; Thu, 08 Jun
+ 2023 02:40:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v4 0/5] Add LVTS support for mt8192
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Chen-Yu Tsai <wenst@chromium.org>
-Cc:     =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
-        angelogioacchino.delregno@collabora.com, rafael@kernel.org,
-        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
-        p.zabel@pengutronix.de, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        james.lo@mediatek.com, rex-bc.chen@mediatek.com,
-        abailon@baylibre.com, amergnat@baylibre.com, khilman@baylibre.com
-References: <20230530195132.2286163-1-bero@baylibre.com>
- <CAGXv+5EVfgEBDm=7MmQ=OsP322KmE23PwycJ-0LjU+3dEZygUQ@mail.gmail.com>
- <572f5a88-8c2e-4324-b477-836a5024ec67@notapiano>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <572f5a88-8c2e-4324-b477-836a5024ec67@notapiano>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230607124628.157465-1-ulf.hansson@linaro.org>
+ <20230607124628.157465-12-ulf.hansson@linaro.org> <20230608052953.l44dwb6n62kx4umk@vireshk-i7>
+ <CAPDyKFodvtRE5DHeMSSG5o4iJw07TjFHSeAoTuugH9OAmE8bMQ@mail.gmail.com> <20230608092253.yeuzlz5bn2iqihuk@vireshk-i7>
+In-Reply-To: <20230608092253.yeuzlz5bn2iqihuk@vireshk-i7>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 8 Jun 2023 11:40:08 +0200
+Message-ID: <CAPDyKFrWCOinNPC_F1+D566j_a=-7d+DAcvO5qH3Sq_TX4dx0A@mail.gmail.com>
+Subject: Re: [PATCH 11/16] OPP: Add dev_pm_opp_add_dynamic() to allow more flexibility
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,69 +76,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/06/2023 19:09, Nícolas F. R. A. Prado wrote:
-> On Wed, May 31, 2023 at 12:49:43PM +0800, Chen-Yu Tsai wrote:
->> On Wed, May 31, 2023 at 3:51 AM Bernhard Rosenkränzer <bero@baylibre.com> wrote:
->>>
->>> From: Balsam CHIHI <bchihi@baylibre.com>
->>>
->>> Add full LVTS support (MCU thermal domain + AP thermal domain) to MediaTek MT8192 SoC.
->>> Also, add Suspend and Resume support to LVTS Driver (all SoCs),
->>> and update the documentation that describes the Calibration Data Offsets.
->>>
->>> Changelog:
->>>      v4 :
->>>          - Shrink the lvts_ap thermal sensor I/O range to 0xc00 to make
->>>            room for SVS support, pointed out by
->>>            AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->>>
->>>      v3 :
->>>          - Rebased :
->>>              base-commit: 6a3d37b4d885129561e1cef361216f00472f7d2e
->>>          - Fix issues in v2 pointed out by Nícolas F. R. A. Prado <nfraprado@collabora.com>:
->>>            Use filtered mode to make sure threshold interrupts are triggered,
->>
->> I'm seeing sensor readout (either through sysfs/thermal/<x>/temp or hwmon)
->> fail frequently on MT8192. If I run `sensors` (lm-sensors), at least a couple
->> of the LVTS sensors would be N/A. Not sure if this is related to this change.
-> 
-> Yes, it is. Filtered mode has some delay associated with reading, meaning most
-> of the time the value isn't ready, while immediate mode is, well, pretty much
-> immediate and the read always succeeds.
-> 
-> For temperature monitoring, filtered mode should be used. It supports triggering
-> interrupts when crossing the thresholds. Immediate mode is meant for one-off
-> readings of the temperature. This is why I suggested using filtered mode.
-> 
-> As far as the thermal framework goes, it's ok that filtered mode doesn't always
-> return a value, as it will keep the old one. But of course, having the
-> temperature readout always work would be a desired improvement.
-> 
-> As for ways to achieve that, I think the intended way would be to enable the
-> interrupts that signal data ready on filtered mode (bits 19, 20, 21, 28), read
-> the temperature and cache it so it is always available when the get_temp()
-> callback is called. The issue with this is that it would cause *a lot* of
-> interrupts, which doesn't seem worth it.
-> 
-> Another option that comes to mind would be to enable immediate mode only during
-> the get_temp() callback, to immediately read a value, and return to filtered
-> mode at the end. That might work, but I haven't tried yet.
+On Thu, 8 Jun 2023 at 11:22, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 08-06-23, 10:59, Ulf Hansson wrote:
+> > Certainly, what do you suggest?
+>
+> `data` :)
 
-Why not understand why the filtered mode is unable to return temperature 
-values most of the time?
+I thought you meant renaming the struct. :-)
 
-I tried with the filtered mode and I can see 90% of the time it is not 
-possible to read the temperature.
+Yes, I move to data instead!
 
-IIUC there are timings which can be setup, may be understand how to set 
-them up in order to read the temperature correctly?
-
-Caching values, switching the mode or whatever is hackish :/
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Uffe
