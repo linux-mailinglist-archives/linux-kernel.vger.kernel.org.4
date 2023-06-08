@@ -2,135 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6106D728601
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 19:11:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D285728604
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 19:11:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233734AbjFHRK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 13:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39184 "EHLO
+        id S236679AbjFHRLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 13:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231643AbjFHRKz (ORCPT
+        with ESMTP id S229889AbjFHRLe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 13:10:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4F9C2733
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 10:10:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686244200;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9z7T6Wkk/SdazHdjYQuKgRjHWVMoXTStQH+SQPSaOwc=;
-        b=Zx1DDFUyV9pxoPnjJdRn9b60PRD5v+/2tzMjjyEPGqwuXsU1NQPEfwaL+qjF4dWDhacj3j
-        nMWxlHl5B6K2xuWwxrosZwJuxn2AzsatWx+5TDb1BaN0Sz460xZs9JtLwB4oop7VQh6jia
-        u6kwdWK1eqJmuy8BpO5kYkcHGcrWQJg=
-Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com
- [209.85.128.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-198-v4ysgiKeOtabHdadH4uvAw-1; Thu, 08 Jun 2023 13:09:56 -0400
-X-MC-Unique: v4ysgiKeOtabHdadH4uvAw-1
-Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-568ae92e492so9950587b3.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 10:09:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686244196; x=1688836196;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Thu, 8 Jun 2023 13:11:34 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A4862136;
+        Thu,  8 Jun 2023 10:11:33 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-256422ad25dso496623a91.0;
+        Thu, 08 Jun 2023 10:11:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686244292; x=1688836292;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9z7T6Wkk/SdazHdjYQuKgRjHWVMoXTStQH+SQPSaOwc=;
-        b=U7QgAwFCyyErBDGLxofdsfcCiDZd4DNQcR32qYF+Jr3j1BgHpHEdIJbSaql/U9Ipx6
-         3W4Afn7qX8kiCTVSHKvhrXa/0xx4rLIKDW5+rJoZacO1FrS32Q5Nw1msgOm+eeSJjWuY
-         4aMd0FUbR5SJY0oL12td/9u1DuZ0tUzMq8v98OdxlhvKuLIagEoACqVYF/ng2tYzpc9+
-         OqWfF56fyv2CrJrmRi9Bxsn0pLp3pXmo2xLoSK4tjYtnZkj90zkkuGkw5X2yHlhoMEn9
-         i0xecPhtQ/PHvyibSsPp7GiNsfjN4ALSyHEHnCALEkjY4Sp4b1v4IAeApKTivN1LHhfG
-         1Apw==
-X-Gm-Message-State: AC+VfDxIxVpV6/Lfe2LXRWRUAm7cDy5RTzVoI+yEb3HmYqjPirhl29dv
-        GvSkojNQ3FBliUjOQZWyY9vRwPGUEi0y1ZUMZjEiwHLT4MFbcGUbhxXYYe3Z0TbpkEX49yCCxya
-        NPaMA6cQO2o4VViBq79Ksmw7K
-X-Received: by 2002:a0d:cf84:0:b0:565:9a3d:a3f9 with SMTP id r126-20020a0dcf84000000b005659a3da3f9mr410761ywd.9.1686244196436;
-        Thu, 08 Jun 2023 10:09:56 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4wmKzTc3/7wkPTGewfNcd0v7EPf3urCf81xQmG/YbMBi+ovkuVi0bLM1/xnxOeu7n6SLkXsw==
-X-Received: by 2002:a0d:cf84:0:b0:565:9a3d:a3f9 with SMTP id r126-20020a0dcf84000000b005659a3da3f9mr410744ywd.9.1686244196191;
-        Thu, 08 Jun 2023 10:09:56 -0700 (PDT)
-Received: from halaney-x13s ([2600:1700:1ff0:d0e0::22])
-        by smtp.gmail.com with ESMTPSA id k1-20020a819301000000b00555c30ec361sm21993ywg.143.2023.06.08.10.09.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 10:09:55 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 12:09:53 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Lee Jones <lee@kernel.org>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: qcom: Release the correct resources in
- dwc3_qcom_remove()
-Message-ID: <20230608170953.nbemo4cuipq5ui7h@halaney-x13s>
-References: <c0215a84cdf18fb3514c81842783ec53cf149deb.1685891059.git.christophe.jaillet@wanadoo.fr>
+        bh=X0Xr4K9cnwEpUv2AEzAchReOMWS0DSH3sD0+mXFGpWo=;
+        b=RTmafsJXiePGF8irS2bY69S+2DNvF7JkfDRkolowy2mCdE04SytlAbWK6TFybEi5u1
+         7yrCDn711JWYYfrjeb5DKoiOFsw74XM9+jCGBupXNL5JKYfdWCuYUfL8fJNqMZB63Grh
+         luI/ZWF9Tz8lT5rOzyW3HzwDFiu/M5GFY/KR4VguUrwB8h/ileAoXKoG5CqDjtKDekKZ
+         J9kzFhUogqtKYYGM4qMG2+wZHbnPzG91KAMuTqqQC6wqsN80GlilfUrmn4AI1i2W3Uem
+         dXo3LJk3bzJjDLtlGTeyQKlOLTKJuhhYxtISKDWHRTxlWg3Ny379NQbbBArDJ90RfrVY
+         2roA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686244292; x=1688836292;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=X0Xr4K9cnwEpUv2AEzAchReOMWS0DSH3sD0+mXFGpWo=;
+        b=X0pmfTahP5zi1avzeBPyVEVJrjOfm/5xz/H4ksrh4j1qKJjLuH4s/5ov85ci4xJSdu
+         DREg8pPoyG0NmSaiXd4M5jVIg0js4/krotyalD+Jdi5TXMDkU2Ch8EPdX5INWwU26vE5
+         Q/rfR97ZhFAukgW+VaBbyBIxYliuiItb7dFqW8aNHbW2KaZLDExEC5yL6eDu46aH014U
+         RObEuS9SRJFQ7A/JKcmDJq7OdyN6B7ory1Bs6iYn8yX24sJ7lQri7Nt2ZzgygDmeCJXR
+         l0l1XvMKD8xdapGGYPLKQJUSWruHTs0TG9E1GwY4XZEgvqYqJGQvvIJueKPqLdcIxJYP
+         dXqg==
+X-Gm-Message-State: AC+VfDyoVpKl1MiZ+7hk9tNA2Aa2gX0ynvkoQAf66dCd9HveRtNI01qq
+        thItNL6xyrUbHQjVXhVEZDt58EgW5HYRpiJHjTSsbxQQzDo=
+X-Google-Smtp-Source: ACHHUZ4sdjpiZcRrkp65Zj15eLf3o8W8T5TXQT0V1GcFJoTVDeImzDv5CpwKS97p0BlwMInw+BM/CWE+sxtaETQfxB4=
+X-Received: by 2002:a17:90b:811:b0:259:3f3c:99cc with SMTP id
+ bk17-20020a17090b081100b002593f3c99ccmr4366962pjb.21.1686244291715; Thu, 08
+ Jun 2023 10:11:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c0215a84cdf18fb3514c81842783ec53cf149deb.1685891059.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <CAKgT0UezciLjHacOx372+v8MZkDf22D5Thn82n-07xxKy_0FTQ@mail.gmail.com>
+ <CAKgT0UfMeVOz6AOqSvVvzpsedGDiXCNQrjM+4KDv7qJJ1orpsw@mail.gmail.com>
+ <a1cff65b-b390-3872-25b5-dd6bbfb3524c@linux.intel.com> <CAKgT0UcE5bUe7ChytSyUWEkyqdwnNR1k_rcfyykPPWJ=ZzsdRg@mail.gmail.com>
+ <ZIH1/e2OcCuD7DEi@araj-dh-work>
+In-Reply-To: <ZIH1/e2OcCuD7DEi@araj-dh-work>
+From:   Alexander Duyck <alexander.duyck@gmail.com>
+Date:   Thu, 8 Jun 2023 10:10:54 -0700
+Message-ID: <CAKgT0UfTzExYZGNCEXCJaS7huWDxwoC3Z_2JCzJHAgr9Qyxmsg@mail.gmail.com>
+Subject: Re: Question about reserved_regions w/ Intel IOMMU
+To:     Ashok Raj <ashok_raj@linux.intel.com>
+Cc:     Baolu Lu <baolu.lu@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>, iommu@lists.linux.dev,
+        Ashok Raj <ashok.raj@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 04, 2023 at 05:04:37PM +0200, Christophe JAILLET wrote:
-> In the probe, some resources are allocated with
-> dwc3_qcom_of_register_core() or dwc3_qcom_acpi_register_core(). The
-> corresponding resources are already coorectly freed in the error handling
+On Thu, Jun 8, 2023 at 8:40=E2=80=AFAM Ashok Raj <ashok_raj@linux.intel.com=
+> wrote:
+>
+> On Thu, Jun 08, 2023 at 07:33:31AM -0700, Alexander Duyck wrote:
+> > On Wed, Jun 7, 2023 at 8:05=E2=80=AFPM Baolu Lu <baolu.lu@linux.intel.c=
+om> wrote:
+> > >
+> > > On 6/8/23 7:03 AM, Alexander Duyck wrote:
+> > > > On Wed, Jun 7, 2023 at 3:40=E2=80=AFPM Alexander Duyck
+> > > > <alexander.duyck@gmail.com> wrote:
+> > > >>
+> > > >> I am running into a DMA issue that appears to be a conflict betwee=
+n
+> > > >> ACS and IOMMU. As per the documentation I can find, the IOMMU is
+> > > >> supposed to create reserved regions for MSI and the memory window
+> > > >> behind the root port. However looking at reserved_regions I am not
+> > > >> seeing that. I only see the reservation for the MSI.
+> > > >>
+> > > >> So for example with an enabled NIC and iommu enabled w/o passthru =
+I am seeing:
+> > > >> # cat /sys/bus/pci/devices/0000\:83\:00.0/iommu_group/reserved_reg=
+ions
+> > > >> 0x00000000fee00000 0x00000000feefffff msi
+> > > >>
+> > > >> Shouldn't there also be a memory window for the region behind the =
+root
+> > > >> port to prevent any possible peer-to-peer access?
+> > > >
+> > > > Since the iommu portion of the email bounced I figured I would fix
+> > > > that and provide some additional info.
+> > > >
+> > > > I added some instrumentation to the kernel to dump the resources fo=
+und
+> > > > in iova_reserve_pci_windows. From what I can tell it is finding the
+> > > > correct resources for the Memory and Prefetchable regions behind th=
+e
+> > > > root port. It seems to be calling reserve_iova which is successfull=
+y
+> > > > allocating an iova to reserve the region.
+> > > >
+> > > > However still no luck on why it isn't showing up in reserved_region=
+s.
+> > >
+> > > Perhaps I can ask the opposite question, why it should show up in
+> > > reserve_regions? Why does the iommu subsystem block any possible peer=
+-
+> > > to-peer DMA access? Isn't that a decision of the device driver.
+> > >
+> > > The iova_reserve_pci_windows() you've seen is for kernel DMA interfac=
+es
+> > > which is not related to peer-to-peer accesses.
+> >
+> > The problem is if the IOVA overlaps with the physical addresses of
+> > other devices that can be routed to via ACS redirect. As such if ACS
+> > redirect is enabled a host IOVA could be directed to another device on
+> > the switch instead. To prevent that we need to reserve those addresses
+> > to avoid address space collisions.
 
-nit not worthy of holding this up: s/coorectly/correctly/
+Our test case is just to perform DMA to/from the host on one device on
+a switch and what we are seeing is that when we hit an IOVA that
+matches up with the physical address of the neighboring devices BAR0
+then we are seeing an AER followed by a hot reset.
 
-> path of the probe, but not in the remove function.
-> 
-> Fix it.
-> 
-> Fixes: 2bc02355f8ba ("usb: dwc3: qcom: Add support for booting with ACPI")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Any untranslated address from a device must be forwarded to the IOMMU whe=
+n
+> ACS is enabled correct?I guess if you want true p2p, then you would need
+> to map so that the hpa turns into the peer address.. but its always a rou=
+nd
+> trip to IOMMU.
 
-Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
+This assumes all parts are doing the Request Redirect "correctly". In
+our case there is a PCIe switch we are trying to debug and we have a
+few working theories. One concern I have is that the switch may be
+throwing an ACS violation for us using an address that matches a
+neighboring device instead of redirecting it to the upstream port. If
+we pull the switch and just run on the root complex the issue seems to
+be resolved so I started poking into the code which led me to the
+documentation pointing out what is supposed to be reserved based on
+the root complex and MSI regions.
 
-Thanks,
-Andrew
-
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index aa96c473f839..9c95f1d909ba 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -942,11 +942,15 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->  static void dwc3_qcom_remove(struct platform_device *pdev)
->  {
->  	struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
-> +	struct device_node *np = pdev->dev.of_node;
->  	struct device *dev = &pdev->dev;
->  	int i;
->  
->  	device_remove_software_node(&qcom->dwc3->dev);
-> -	of_platform_depopulate(dev);
-> +	if (np)
-> +		of_platform_depopulate(&pdev->dev);
-> +	else
-> +		platform_device_put(pdev);
->  
->  	for (i = qcom->num_clocks - 1; i >= 0; i--) {
->  		clk_disable_unprepare(qcom->clks[i]);
-> -- 
-> 2.34.1
-> 
-
+As a part of going down that rabbit hole I realized that the
+reserved_regions seems to only list the MSI reservation. However after
+digging a bit deeper it seems like there is code to reserve the memory
+behind the root complex in the IOVA but it doesn't look like that is
+visible anywhere and is the piece I am currently trying to sort out.
+What I am working on is trying to figure out if the system that is
+failing is actually reserving that memory region in the IOVA, or if
+that is somehow not happening in our test setup.
