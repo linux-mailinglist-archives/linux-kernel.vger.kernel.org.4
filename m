@@ -2,63 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E47572817D
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 15:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37120728192
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 15:39:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235912AbjFHNhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 09:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57352 "EHLO
+        id S236099AbjFHNjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 09:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234893AbjFHNhi (ORCPT
+        with ESMTP id S236164AbjFHNi4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 09:37:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9F31BE4;
-        Thu,  8 Jun 2023 06:37:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0ED09615C6;
-        Thu,  8 Jun 2023 13:37:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF6F5C433D2;
-        Thu,  8 Jun 2023 13:37:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686231456;
-        bh=BeLMMho+JfetaCMdYYeJ2Zi2h2QiwQ+avqQ10upaJqQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tbafOJJxR4llsIUC08BCwYRiiq0+pP91D6rRU9M91q+n452llEDcBFT71vfYmGJ2W
-         FRNSRVAyzZTf/Q/t6jSDa6afTvG2uaP/VJ58W5en5YudF8Ld0zJ9mTbsGfosqSE84z
-         7zKlpUwlrnKFml6YiDhBUJvckqVVpQqUI+p1ssJG/3BV37Q31Htd6DoRbNilZa6h+R
-         ysdNZaujHWpyTPAASG0+9aaKLkS2+V3jho/LS/jC4pi6ypAdMxWA8RzsGdp/Kt3gAo
-         qlcqPgkAAS88VuWS8VfSlvXzb4RzhxhO0Goi71a8oJS/7oDy3n2e7qONeq28M8zMgg
-         P5a0oXoGz3Ifg==
-Date:   Thu, 8 Jun 2023 15:37:32 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Markus Elfring <Markus.Elfring@web.de>
-Cc:     Andrew Davis <afd@ti.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kernel-janitors@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [v2 2/2] i2c: davinci: Use struct name not type with
- devm_kzalloc()
-Message-ID: <ZIHZnMQHDyTsZx7O@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Markus Elfring <Markus.Elfring@web.de>, Andrew Davis <afd@ti.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        kernel-janitors@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20230515175042.495377-2-afd@ti.com>
- <61846ef5-26fb-52bf-11a3-b1c0b3b53b94@web.de>
- <ZIG6UzLMb7cj4bbj@shikoro>
- <d210abe3-7a9d-61fd-c358-dd4b2c8f2f60@web.de>
+        Thu, 8 Jun 2023 09:38:56 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F6726B3
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 06:38:55 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id ca18e2360f4ac-777a2ef8d45so19144139f.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 06:38:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1686231534; x=1688823534;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XO1CigyiND3L02YzTiuKf1ibThwImhtncqElbj41kYc=;
+        b=mnHhy4uzqnlQiGkCkIdasUBEdOiJcb/6vH26Sw+GbrtHdDdEIS3hHONhkFrxIORY2m
+         Ll1kWdqdxYs9gpF2pnw2lK0/wN7SBRS+zVN3lJzyE378w7ylgNFjHQC3feoiVh8gset5
+         FtK/0uQSGf93L3qLkCnQeWnkKn5jBFSWa7h+U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686231534; x=1688823534;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XO1CigyiND3L02YzTiuKf1ibThwImhtncqElbj41kYc=;
+        b=JPpfc01SNisMe6K+zqKMEqRcSXh+DzEGK1k9ln7y5q3fVJzRDwHlEqoCPvtnutXOBK
+         dxzzjrIQpBv4NVHCRQjMa8Box3rTgBrW+5JGV5GXBXCx0NCqtzCSMn8Eq6FZnK3mTMID
+         xdsdL9fJ9uuDXzKDBYfKiJ4gRTXqMUyRdZnTKBet/iQfHlMaA8LNnuA+EhZRviVSInsf
+         DxqdnfSOEJBaBL3LFjMS99AgxX+6dsb2uh6FP6rzXMcGnBDESdYSdPo3HKj8g8aB0mH7
+         f3CtVz9TzVoxg+fvTBK+75QekRE0fGyrO7dtn1R1Jf03ffMF/bXc4nqmpzmSL37xfDB0
+         1M8Q==
+X-Gm-Message-State: AC+VfDxJuf6kGSp0mGTildunVmX+HbkL+s6kIiH7i3aEAg8uiTvs6f5V
+        zLg2YHguprTpp+mo17I1/SoPot2HQnEQRIlgL7k=
+X-Google-Smtp-Source: ACHHUZ6jUwOnu/NQcID3ecVSxpwpIZkAXqQk4U0/wJqRS2wfuJ/EU9wY8IP8wWbnl29pfdNVVY294g==
+X-Received: by 2002:a6b:6102:0:b0:763:92eb:f81e with SMTP id v2-20020a6b6102000000b0076392ebf81emr8992566iob.8.1686231534041;
+        Thu, 08 Jun 2023 06:38:54 -0700 (PDT)
+Received: from mail-il1-f176.google.com (mail-il1-f176.google.com. [209.85.166.176])
+        by smtp.gmail.com with ESMTPSA id y10-20020a5ec80a000000b0076c70f8c4d1sm364864iol.45.2023.06.08.06.38.53
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jun 2023 06:38:53 -0700 (PDT)
+Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-33b7f217dd0so136675ab.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 06:38:53 -0700 (PDT)
+X-Received: by 2002:a05:6e02:12cb:b0:33d:8444:c071 with SMTP id
+ i11-20020a056e0212cb00b0033d8444c071mr221148ilm.5.1686231532849; Thu, 08 Jun
+ 2023 06:38:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BJ2b1EWvZ6YUgOz7"
-Content-Disposition: inline
-In-Reply-To: <d210abe3-7a9d-61fd-c358-dd4b2c8f2f60@web.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+References: <20230608130147.2835818-1-yangcong5@huaqin.corp-partner.google.com>
+ <20230608130147.2835818-3-yangcong5@huaqin.corp-partner.google.com>
+In-Reply-To: <20230608130147.2835818-3-yangcong5@huaqin.corp-partner.google.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 8 Jun 2023 06:38:40 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VsmAzxSx9LN5pe6DjMF9C6AJHX5kwZyNG=deUpW1jyRg@mail.gmail.com>
+Message-ID: <CAD=FV=VsmAzxSx9LN5pe6DjMF9C6AJHX5kwZyNG=deUpW1jyRg@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] HID: i2c-hid: elan: Add ili9882t timing
+To:     Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, dmitry.torokhov@gmail.com, jikos@kernel.org,
+        benjamin.tissoires@redhat.com, hsinyi@google.com,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,35 +80,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---BJ2b1EWvZ6YUgOz7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Thu, Jun 8, 2023 at 6:02=E2=80=AFAM Cong Yang
+<yangcong5@huaqin.corp-partner.google.com> wrote:
+>
+> +static const struct elan_i2c_hid_chip_data ilitek_ili9882t_chip_data =3D=
+ {
+> +       .post_power_delay_ms =3D 1,
+> +       .post_gpio_reset_on_delay_ms =3D 200,
+> +       .post_gpio_reset_off_delay_ms =3D 65,
+>         .hid_descriptor_address =3D 0x0001,
+> +       /* this touchscreen is tightly integrated with the panel and assu=
+mes
+> +        * that the relevant power rails (other than the IO rail) have al=
+ready
+> +        * been turned on by the panel driver because we're a panel follo=
+wer.
+> +        */
+
+I don't think the above is the right block comment style for this
+file. The first "/*" should be on a line on its own.
 
 
-> Will the patch review attention grow anyhow for affected aspects?
+> +       .main_supply_name =3D "null",
 
-What are "affected aspects" in this case?
-
-
---BJ2b1EWvZ6YUgOz7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSB2ZgACgkQFA3kzBSg
-KbZLUA//XVeJsfoZ7nyhcgxnlXcILtoW/H/nFPHCUSW3FunV8jaaoHxO5kTmKDdK
-zWnt3KY9+bWoZng+mFhbizebUQ0JEynKibE/PwGksXn+LETcahB+NBGw2qG71hZI
-G6dVkO3dObbf7XtybPqDPTFtTQ5S9xmlJYqbJKuTTwRjbeqTil+I2kGb1VUlRrj1
-FB9Kv60keGAQrdGvW/Vb3dfSZPLBdxSqjWb7xzwkjX6RLyAUpSJfRL+qkE3jQJeL
-WnDikMr+73NO2vQ9yZ/wSioMmza+OMt2aVH/3OzAl3UObkDbqDr31ZSStKcJaJRV
-Q1fDcldRnRMbhVAk0yg/tqEL1nHyV8KRyt53nFjL8RBmmSrYhnksqVBRGAfPBoU4
-NmkpejppA/Or+LVhP9C76xupc1hFtj/PfuB9UUDqneTCpSMhsF/B2Uqf71HW5evV
-VxWlneqoha18FZ8dGXNNYLlxpPkTfPv2xyM9RUGb8tUz0oP+dTot2IT0tFDNlz1S
-lnleqhUt5tPCAAdfAt5Nwaa25iiCMJ/YZ8KS2ry50L3XII223pSv1Egi7lbNd+Pq
-W7orj9VjdW7fOXJI+UTlIjy80qky/+8UTwQi8hj7JqKFVW0KfJK/CtzS9tToG5gb
-gIlLNcoBEDRwPSnww99THOIx7q7Xm/xU4RxQBfbTYWvSFnYvkJk=
-=iK2M
------END PGP SIGNATURE-----
-
---BJ2b1EWvZ6YUgOz7--
+This should actually be NULL without the quotes. ...then you should
+change the code not to try to grab the regulator in that case.
