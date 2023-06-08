@@ -2,127 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD0D6727B95
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:37:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8407F727B96
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:38:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236000AbjFHJhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 05:37:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42810 "EHLO
+        id S236006AbjFHJiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 05:38:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233473AbjFHJho (ORCPT
+        with ESMTP id S233071AbjFHJiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 05:37:44 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA271BFF
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 02:37:43 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-bacf5b89da7so488935276.2
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 02:37:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686217062; x=1688809062;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=k0aUfso+mqed718DXVZBOh7dWuv36gH3PMUsz0/Om4Y=;
-        b=RR9fneaGbSjT8vSD0NNMv3dAoiwDN/Po6A7iO6KQqhAtQV7KeeXJIdW01wkDjczV27
-         S/Q85c+80/41rffy1DjN7lKodqzjmCo+scaeyuBhQSs7G0D6JYcIhss3GXHW8imXsP60
-         bg3KfGqWUsPQn8WY+lmaHOxAYItdjVdfOJWlY++3ZPY0woVVvgKhG00KB9jjtr1dpdTy
-         bGJ5T5sDUJYnSMHNaNhCI4TR09T4Q3xpXhK8/uDmJ4+hB0p/aZEP4dwRe/PQJRoo6Jaq
-         PXw5SSF77ZLkdzz5X+Ow9AUKnE21QtyvkHN4Jq55zrDNLiNIuztFDugBBeQpmWHG77O+
-         1LMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686217062; x=1688809062;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=k0aUfso+mqed718DXVZBOh7dWuv36gH3PMUsz0/Om4Y=;
-        b=kIjhw+0McGDx9gcqKE93ykvRp/bjqyzEBcPWTKcrzFPjW4qYaMNmQF/1faX+Y1EwuA
-         MJJw98+LjaPZaONSzwz2pf3XNI2qQ2kvc+H/9pP8LJi9PHiBKzxxtqBySa9quYPlm7m5
-         5JrBSp481M4Jhnq03UO9a+0qJxNNBRfBZ2q7pD0zaxkl2uY1mTsbdaWmFXd/U6tu8fds
-         rWkeVlmErKTZKJpmaxFQn7fIiCPQ0BYGEyAk7I+MtAZJzpvvzkbvzRX8f4/UNUFRVEoN
-         KNnIimG3/DIkYokn39MeiGzLPABbEELM8wov78dbIkOgciXv5jwoo5VpsK8bxXv9oSjL
-         0h8A==
-X-Gm-Message-State: AC+VfDw2sr8YP7Xl9PuKt0Xhcd2g2KVkxCw+u4Ht0kyJj7ifs5EYH2y6
-        Bc9vdf87lDx/J4YoBUDc0gGCoj0XZ0sK5aXXkGm5Tw==
-X-Google-Smtp-Source: ACHHUZ7ax+5DTFnXlFyad+qoF5ItYOEatii5YFpBjAQeo0J9NB8fvXLq0abd1Ja5JDM2gGgJeN3c9yi24RybtdjhXmk=
-X-Received: by 2002:a81:5b8a:0:b0:561:e724:eb3 with SMTP id
- p132-20020a815b8a000000b00561e7240eb3mr9721264ywb.17.1686217062552; Thu, 08
- Jun 2023 02:37:42 -0700 (PDT)
+        Thu, 8 Jun 2023 05:38:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C7C1BFF
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 02:38:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F11AD64B58
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 09:38:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41AEFC433D2;
+        Thu,  8 Jun 2023 09:38:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686217090;
+        bh=V19RuyGw5moEVQtVIKIzHCHkmzutxvLKUftm4u1YHGA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=HfOYHujpVwPnBBs8MCW0W1iGvRx+wOQX/szfXZboXubF8q4XHtecO5OD86vbE2s6/
+         mZqC2BoP61MJ50e1RU2Zai29XGG84KdAt/OcBUJn9L4xVsvdJiwcKv220DewoB1v1z
+         DN/QCbMGv9MYdfe6PKd81teb+hFFuo+j96LSFw0cFG4OzNj0EzEAmi74B6EdK5m22T
+         Ix9XVYwbr30CZrteZulUWuoeFXAca2v/YMiHIrlHUL6CEEKCnEO+5reOmkJA928/Kp
+         XmSvzADO/8c4Ty1ufLex02AHZKKUpy0zQKelwWeOKlpsle0Yq04i+nEYxFcEovTFtw
+         MRtwgvAmJOAsQ==
+Message-ID: <059b17ce-cb65-fd55-29b1-2b253c6b41c4@kernel.org>
+Date:   Thu, 8 Jun 2023 17:38:07 +0800
 MIME-Version: 1.0
-References: <20230607124628.157465-1-ulf.hansson@linaro.org>
- <20230607124628.157465-14-ulf.hansson@linaro.org> <20230608053446.ngoxh7zo7drnr32z@vireshk-i7>
-In-Reply-To: <20230608053446.ngoxh7zo7drnr32z@vireshk-i7>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 8 Jun 2023 11:37:06 +0200
-Message-ID: <CAPDyKFqUWhdmctKRpQoqwZ2nsx_P2FiWvLzfm_d39QdECWoytA@mail.gmail.com>
-Subject: Re: [PATCH 13/16] OPP: Extend dev_pm_opp_data with OPP provider support
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nikunj Kela <nkela@quicinc.com>,
-        Prasad Sodagudi <psodagud@quicinc.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] f2fs: enable nowait async buffered writes
+Content-Language: en-US
+To:     Yangtao Li <frank.li@vivo.com>, Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     Lu Hongfei <luhongfei@vivo.com>,
+        linux-f2fs-devel@lists.sourceforge.net,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230531144006.7307-1-frank.li@vivo.com>
+ <e8e4758f-5895-acd7-27d2-4b72b69722b3@kernel.org>
+ <29bea47b-9085-05e7-d254-a40007e6c7f3@vivo.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <29bea47b-9085-05e7-d254-a40007e6c7f3@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 8 Jun 2023 at 07:34, Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 07-06-23, 14:46, Ulf Hansson wrote:
-> > diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> > index 79b4b44ced3e..81a3418e2eaf 100644
-> > --- a/drivers/opp/core.c
-> > +++ b/drivers/opp/core.c
-> > @@ -1112,6 +1112,15 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
-> >                       return ret;
-> >               }
-> >
-> > +             if (opp->provider == DEV_PM_OPP_TYPE_GENPD) {
-> > +                     ret = dev_pm_genpd_set_performance_state(dev, opp->level);
-> > +                     if (ret) {
-> > +                             dev_err(dev, "Failed to set performance level: %d\n",
-> > +                                     ret);
-> > +                             return ret;
-> > +                     }
-> > +             }
-> > +
->
-> I don't like this :)
->
-> We already have these calls in place from within _set_required_opps(), and we
-> should try to get this done in a way that those calls themselves get the
-> performance state configured.
+On 2023/6/6 19:13, Yangtao Li wrote:
+> On 2023/6/6 14:43, Chao Yu wrote:
+> 
+>> On 2023/5/31 22:40, Yangtao Li wrote:
+>>> This adds the async buffered write support to f2fs,
+>>> the following is the relevant test data.
+>>
+>> Yangtao,
+>>
+>> Could you please provide detailed test command?
+> 
+> 
+> Use fio to test, the following is the configuration:
+> 
+> # io_uring
+> [global]
+> ioengine=io_uring
+> sqthread_poll=1
+> threads=1
+> iodepth=32
+> hipri=0
+> direct=0
+> fixedbufs=0
+> uncached=0
+> nowait=0
+> force_async=0
+> randrepeat=0
+> time_based=0
+> size=256M
+> filename=/data/test/local/io_uring_test
+> group_reporting
+> [read256B-rand]
+> bs=4096
+> rw=randwrite
+> numjobs=1
 
-I was looking at that, but wanted to keep things as simple as possible
-in the $subject series.
+Thanks, it looks the performance is not very stable when iodepth is
+large, e.g. 32.
 
-The required opps are also different, as it's getting parsed from DT
-both for the genpd provider and the consumer. The point is, there are
-more code involved but just _set_required_opps().
+Could you please add above test parameter into commit message?
 
-For example, _set_performance_state() (which is the one that calls
-dev_pm_genpd_set_performance_state()) is designed to be used for
-required opps. Does it really make sense to rework
-_set_performance_state() so it can be used for this case too, just to
-avoid another call to dev_pm_genpd_set_performance_state() somewhere
-in the code?
+Otherwise, this patch looks good to me.
 
-One improvement we can make though, is to add a helper function,
-"_set_opp_level()", which we call from _set_opp(). This can then
-replace the call to _set_required_opps() and the code above that I am
-adding for DEV_PM_OPP_TYPE_GENPD. At least that should keep the code
-_set_opp() a bit more readable.
+Thanks,
 
-What do you think?
-
-Kind regards
-Uffe
+> 
+> 
+>>
+>> Thanks,
+>>
+>>>
+>>> iodepth      | 1    | 2    | 4    | 8    | 16   |
+>>> before(M/s)  | 1012 | 1133 | 894  | 981  | 866  |
+>>> after(M/s)   | 1488 | 1896 | 2081 | 2188 | 2207 |
+>>>
+>>> Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
+>>> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+>>> ---
+>>>   fs/f2fs/file.c | 5 +----
+>>>   1 file changed, 1 insertion(+), 4 deletions(-)
+>>>
+>>> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+>>> index 23c68ee946e5..4faf2c04e325 100644
+>>> --- a/fs/f2fs/file.c
+>>> +++ b/fs/f2fs/file.c
+>>> @@ -546,7 +546,7 @@ static int f2fs_file_open(struct inode *inode, struct file *filp)
+>>>       if (err)
+>>>           return err;
+>>>   -    filp->f_mode |= FMODE_NOWAIT | FMODE_BUF_RASYNC;
+>>> +    filp->f_mode |= FMODE_NOWAIT | FMODE_BUF_RASYNC | FMODE_BUF_WASYNC;
+>>>         return dquot_file_open(inode, filp);
+>>>   }
+>>> @@ -4515,9 +4515,6 @@ static ssize_t f2fs_buffered_write_iter(struct kiocb *iocb,
+>>>       struct inode *inode = file_inode(file);
+>>>       ssize_t ret;
+>>>   -    if (iocb->ki_flags & IOCB_NOWAIT)
+>>> -        return -EOPNOTSUPP;
+>>> -
+>>>       current->backing_dev_info = inode_to_bdi(inode);
+>>>       ret = generic_perform_write(iocb, from);
+>>>       current->backing_dev_info = NULL;
