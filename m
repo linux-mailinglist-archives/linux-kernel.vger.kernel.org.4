@@ -2,187 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E15D0728235
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 16:06:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCADE7281A4
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 15:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236812AbjFHOGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 10:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44478 "EHLO
+        id S236305AbjFHNpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 09:45:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234375AbjFHOG3 (ORCPT
+        with ESMTP id S235840AbjFHNpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 10:06:29 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B32702726;
-        Thu,  8 Jun 2023 07:06:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686233188; x=1717769188;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=TmBDcLd5Xfp9VvdnTTxpDHAil2WXF25OsQyhgty2URs=;
-  b=W8zaLGNrbX5K3lUAv0/7t79jQ6TQtpv7mwnyTyAekgWH97G7qT3nxVR0
-   vURnS0O7XkvDAbESWuAU7wg/XQGKhSuOHl2K6UjRGxzHgZ3EDGM/iGy3n
-   HENUbjI0SRfh2B3SdipAz/QwUeTSGGQsLZ5RBQrwMGcJfZ3Ap9tCLD9z0
-   tQGQ30VwWLN6AJcV5x4u2yuHq3pXs5qLlUR7N5GOI02MSeLUYs/7MbRqG
-   O0fsItPePMVkrjQsmHl1Eu6NzYo9UVhffIJTgCLFpGdyWMXu6JfpPdBo3
-   iHYjgejl4bY9FisNUruvglDXxGO/Q3pZHPBpSUTQNbPA+CIFxbmJjp5zs
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="420887667"
-X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="scan'208";a="420887667"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 06:43:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="854354478"
-X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="scan'208";a="854354478"
-Received: from swalker-mobl1.amr.corp.intel.com (HELO [10.209.22.184]) ([10.209.22.184])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 06:43:30 -0700
-Message-ID: <d2b3bc5e-1371-0c50-8ecb-64fc70917d42@intel.com>
-Date:   Thu, 8 Jun 2023 06:43:29 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v11 07/20] x86/virt/tdx: Add skeleton to enable TDX on
- demand
-Content-Language: en-US
-To:     "Huang, Kai" <kai.huang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "Luck, Tony" <tony.luck@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        Thu, 8 Jun 2023 09:45:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA8B2717
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 06:44:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686231874;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8YOm/Wq0xQ/f+nLG8S3hOURNC7q6SK7Qr+0HSWMgLNg=;
+        b=Ser92o5D1BWMx46DEhd09GtatGdPxx6I/wiLfK/ZeA3PP0ZfmtR/Odcj0QVPerpcFaDdRj
+        Jwa/JOlOT/cAOYJ4tn3ioEnKhAYM8BdviXyozVUAj+CCyOFBCFG7xLyWhe1Au7Umz3nZX7
+        1EcnJMvri0fbsrJS++GTFG+LXkzCfV8=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-217-kj0ue-D7PAKDOZYZX8M-pg-1; Thu, 08 Jun 2023 09:44:33 -0400
+X-MC-Unique: kj0ue-D7PAKDOZYZX8M-pg-1
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-62621cdb1f0so7018796d6.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 06:44:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686231872; x=1688823872;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8YOm/Wq0xQ/f+nLG8S3hOURNC7q6SK7Qr+0HSWMgLNg=;
+        b=VG9pJnIkuNOFNCuIzZLz3REzxzuv3XhaWqmPS9TYjPmTnTZuNej2hgIGVQ5TePw7AS
+         RuNKbiRPxvEsNri08skwZwClP4Skxv/NeT6xW8wYWJTQOCdx/JDJO2fhgvdZS2JInvWe
+         dZtD8/fElArDSNm52UJ0gnKBsNlL/jt9p4n+WurQw0Gfbo/B6qUD134u6HfWNpHoMoEq
+         BxSljmvFUDyWe2k9mOBE1bL/HmcuRRojVCsdIFBXCdiMeVdIZ5CBqlsvUhksJYN5I/Yt
+         0oskfjvktp3kJUZfhbLS8XwJZKuZp/IJQzfGIkGwFYngskl5v9o6puK/fDchKJ+xUA9u
+         c28g==
+X-Gm-Message-State: AC+VfDzXxrPKSQwbuVTpTuGKSeX8t6LTjLWfa/UjICaSErwXR6eh+LSv
+        PpTRNRZM1jW/aPRFY3/iyc/+DYfJ9zhQpz/KG2cLbAXbHwmVt8FTpKzMTapZo4FJgMHp/5jyFFK
+        t0DxeXgvexo9UO4/60ZqtfqE2clYqurAbAbIE5kon9koEgYRpaznPEh6ihaikTXNaET0zKniCqP
+        5EIDw3BINw
+X-Received: by 2002:a05:6214:cac:b0:623:66ee:79b2 with SMTP id s12-20020a0562140cac00b0062366ee79b2mr1756885qvs.36.1686231872723;
+        Thu, 08 Jun 2023 06:44:32 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5A2C40pJOWAeAfGPq9ZdpAs1lkgBc1Htg+VY1e2LQ46fr1nqLpB/LfJtD43nPGY6v0oKmm/A==
+X-Received: by 2002:a05:6214:cac:b0:623:66ee:79b2 with SMTP id s12-20020a0562140cac00b0062366ee79b2mr1756847qvs.36.1686231872356;
+        Thu, 08 Jun 2023 06:44:32 -0700 (PDT)
+Received: from fedora (g2.ign.cz. [91.219.240.8])
+        by smtp.gmail.com with ESMTPSA id h9-20020a0cf209000000b0062884fd5fbfsm418979qvk.21.2023.06.08.06.44.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 06:44:31 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Tianyu Lan <ltykernel@gmail.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
         "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-References: <cover.1685887183.git.kai.huang@intel.com>
- <21b3a45cb73b4e1917c1eba75b7769781a15aa14.1685887183.git.kai.huang@intel.com>
- <e7c21694-d31b-4dbe-f75b-5a7c0127f5c8@intel.com>
- <963deb7f6bcadbf2848ef54540ba1758b43731d6.camel@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <963deb7f6bcadbf2848ef54540ba1758b43731d6.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "arnd@arndb.de" <arnd@arndb.de>
+Cc:     Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 3/9] x86/hyperv: Mark Hyper-V vp assist page unencrypted
+ in SEV-SNP enlightened guest
+In-Reply-To: <BYAPR21MB16883BF49ED337A6EF063461D750A@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <20230601151624.1757616-1-ltykernel@gmail.com>
+ <20230601151624.1757616-4-ltykernel@gmail.com> <873536ksye.fsf@redhat.com>
+ <4103a70f-cc09-a966-3efa-5ab9273f5c55@gmail.com>
+ <87o7lsk2v8.fsf@redhat.com>
+ <BYAPR21MB16883BF49ED337A6EF063461D750A@BYAPR21MB1688.namprd21.prod.outlook.com>
+Date:   Thu, 08 Jun 2023 15:44:27 +0200
+Message-ID: <87y1ku2hms.fsf@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/7/23 19:10, Huang, Kai wrote:
-> On Wed, 2023-06-07 at 08:22 -0700, Dave Hansen wrote:
->> On 6/4/23 07:27, Kai Huang wrote:
->> ...
->>> +static int try_init_module_global(void)
->>> +{
->>> +   unsigned long flags;
->>> +   int ret;
->>> +
->>> +   /*
->>> +    * The TDX module global initialization only needs to be done
->>> +    * once on any cpu.
->>> +    */
->>> +   raw_spin_lock_irqsave(&tdx_global_init_lock, flags);
->>
->> Why is this "raw_"?
->>
->> There's zero mention of it anywhere.
-> 
-> Isaku pointed out the normal spinlock_t is converted to sleeping lock for
-> PREEMPT_RT kernel.  KVM calls this with IRQ disabled, thus requires a non-
-> sleeping lock.
-> 
-> How about adding below comment here?
-> 
->         /*
->          * Normal spinlock_t is converted to sleeping lock in PREEMPT_RT
->          * kernel.  Use raw_spinlock_t instead so this function can be called
->          * even when IRQ is disabled in any kernel configuration.
->          */
+"Michael Kelley (LINUX)" <mikelley@microsoft.com> writes:
 
-Go look at *EVERY* *OTHER* raw_spinlock_t in the kernel.  Do any of them
-say this?
+> From: Vitaly Kuznetsov <vkuznets@redhat.com> Sent: Tuesday, June 6, 2023 8:49 AM
+>> 
+>> Tianyu Lan <ltykernel@gmail.com> writes:
+>> 
+>> > On 6/5/2023 8:13 PM, Vitaly Kuznetsov wrote:
+>> >>> @@ -113,6 +114,11 @@ static int hv_cpu_init(unsigned int cpu)
+>> >>>
+>> >>>   	}
+>> >>>   	if (!WARN_ON(!(*hvp))) {
+>> >>> +		if (hv_isolation_type_en_snp()) {
+>> >>> +			WARN_ON_ONCE(set_memory_decrypted((unsigned long)(*hvp), 1));
+>> >>> +			memset(*hvp, 0, PAGE_SIZE);
+>> >>> +		}
+>> >> Why do we need to set the page as decrypted here and not when we
+>> >> allocate the page (a few lines above)?
+>> >
+>> > If Linux root partition boots in the SEV-SNP guest, the page still needs
+>> > to be decrypted.
+>
+> We have code in place that prevents this scenario.  We don't allow Linux
+> in the root partition to run in SEV-SNP mode.  See commit f8acb24aaf89.
+>
+>> >
+>> 
+>> I'd suggest we add a flag to indicate that VP assist page was actually
+>> set (on the first invocation of hv_cpu_init() for guest partitions and
+>> all invocations for root partition) and only call
+>> set_memory_decrypted()/memset() then: that would both help with the
+>> potential issue with KVM using enlightened vmcs and avoid the unneeded
+>> hypercall.
+>> 
+>
+> I think there's actually a more immediate problem with the code as
+> written.  The VP assist page for a CPU is not re-encrypted or freed when
+> a CPU goes offline (for reasons that have been discussed elsewhere).  So
+> if a CPU in an SEV-SNP VM goes offline and then comes back online, the
+> originally allocated and already decrypted VP assist page will be reused.
+> But bad things will happen if we try to decrypt the page again.
+>
+> Given that we disallow the root partition running in SEV-SNP mode,
+> can we avoid the complexity of a flag, and just do the decryption and
+> zero'ing when the page is allocated?
 
-Comment the function, say that it's always called with interrupts and
-preempt disabled.  Leaves it at that.  *Maybe* add on that it needs raw
-spinlocks because of it.  But don't (try to) explain the background of
-the lock type.
+Sure, makes perfect sense but let's leave a [one line] comment why we
+don't do any decryption for root partition then.
 
+-- 
+Vitaly
 
-
-
->>> +int tdx_cpu_enable(void)
->>> +{
->>> +   unsigned int lp_status;
->>> +   int ret;
->>> +
->>> +   if (!platform_tdx_enabled())
->>> +           return -EINVAL;
->>> +
->>> +   lp_status = __this_cpu_read(tdx_lp_init_status);
->>> +
->>> +   /* Already done */
->>> +   if (lp_status & TDX_LP_INIT_DONE)
->>> +           return lp_status & TDX_LP_INIT_FAILED ? -EINVAL : 0;
->>> +
->>> +   /*
->>> +    * The TDX module global initialization is the very first step
->>> +    * to enable TDX.  Need to do it first (if hasn't been done)
->>> +    * before doing the per-cpu initialization.
->>> +    */
->>> +   ret = try_init_module_global();
->>> +
->>> +   /*
->>> +    * If the module global initialization failed, there's no point
->>> +    * to do the per-cpu initialization.  Just mark it as done but
->>> +    * failed.
->>> +    */
->>> +   if (ret)
->>> +           goto update_status;
->>> +
->>> +   /* All '0's are just unused parameters */
->>> +   ret = seamcall(TDH_SYS_LP_INIT, 0, 0, 0, 0, NULL, NULL);
->>> +
->>> +update_status:
->>> +   lp_status = TDX_LP_INIT_DONE;
->>> +   if (ret)
->>> +           lp_status |= TDX_LP_INIT_FAILED;
->>> +
->>> +   this_cpu_write(tdx_lp_init_status, lp_status);
->>> +
->>> +   return ret;
->>> +}
->>> +EXPORT_SYMBOL_GPL(tdx_cpu_enable);
->>
->> You danced around it in the changelog, but the reason for the exports is
->> not clear.
-> 
-> I'll add one sentence to the changelog to explain:
-> 
->         Export both tdx_cpu_enable() and tdx_enable() as KVM will be the kernel
->         component to use TDX.
-
-Intel doesn't pay me by the word.  Do you get paid that way?  If not,
-please just say:
-
-	Export both tdx_cpu_enable() and tdx_enable() for KVM use.
