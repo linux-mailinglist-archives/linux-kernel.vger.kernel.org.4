@@ -2,89 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB00E72740E
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 03:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 042D7727416
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 03:18:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233139AbjFHBQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 21:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43670 "EHLO
+        id S232093AbjFHBS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 21:18:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233158AbjFHBQ0 (ORCPT
+        with ESMTP id S229659AbjFHBSY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 21:16:26 -0400
-Received: from mail-pj1-f65.google.com (mail-pj1-f65.google.com [209.85.216.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DD726AE;
-        Wed,  7 Jun 2023 18:16:22 -0700 (PDT)
-Received: by mail-pj1-f65.google.com with SMTP id 98e67ed59e1d1-256766a1c43so34154a91.1;
-        Wed, 07 Jun 2023 18:16:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686186982; x=1688778982;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4fjZocQuLj2YEu+oxrRPhJbmjewTJfCmZq5g1FLSCZg=;
-        b=P+4Dm75tmNxsfJSCwrBUJY0zB9KiieawRmiA2LFkOL5uoFE1xNqB6YpnTGpplIky2e
-         0O6ANUn/oX0HDKufycEe4b/XvmGevWnKZYrXMwyN9pqDwtAtqAPWpvyoDHFgPXmncBvZ
-         KgeN+VMKCPlw7AogKxwWp3tFyO501ZvUMLmSPF5ZW7Jq5ItVEasDHibe4GgUJ1AwFgyD
-         py270dOzzo6UN4MKT6YVW1zZaa5sMtVMO6ZoKKIYomWTv/iPo92WwrNNphHqnho4Yns8
-         D8gQE+0FDZzfcSlg3kQe3tRahTTTTWGG9sJQYRc26+sDC0hwN8v6qVF53R/eWZSsB4+1
-         d0KA==
-X-Gm-Message-State: AC+VfDxaRQwvUmaSpw6PSkh2YEDm3FpKb3ueb7ibpx0uDeSTxAHk0emO
-        yg3UBPOcnRSg6Kn/PlIrZA==
-X-Google-Smtp-Source: ACHHUZ5QvjEgG6Q8wAbgsgYjwXcFIa3cbvGL6K23v78TkeyNYGSc8+d804DIT9DZNEJ7ivrFsCrBqA==
-X-Received: by 2002:a17:90b:e8a:b0:255:f693:cf91 with SMTP id fv10-20020a17090b0e8a00b00255f693cf91mr3490612pjb.30.1686186981761;
-        Wed, 07 Jun 2023 18:16:21 -0700 (PDT)
-Received: from localhost.localdomain ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id g11-20020a17090a128b00b00250334d97dasm1906691pja.31.2023.06.07.18.16.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 18:16:21 -0700 (PDT)
-From:   sunliming <sunliming@kylinos.cn>
-To:     mhiramat@kernel.org, beaub@linux.microsoft.com,
-        rostedt@goodmis.org, shuah@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kelulanainsley@gmail.com,
-        sunliming <sunliming@kylinos.cn>
-Subject: [PATCH 3/3] selftests/user_events: Add test cases when event is disabled
-Date:   Thu,  8 Jun 2023 09:15:54 +0800
-Message-Id: <20230608011554.1181097-4-sunliming@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230608011554.1181097-1-sunliming@kylinos.cn>
-References: <20230608011554.1181097-1-sunliming@kylinos.cn>
+        Wed, 7 Jun 2023 21:18:24 -0400
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 7386626A2
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 18:18:23 -0700 (PDT)
+Received: from [172.30.38.103] (unknown [180.167.10.98])
+        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id DF0B418010F081;
+        Thu,  8 Jun 2023 09:18:12 +0800 (CST)
+Message-ID: <69929cae-5e94-65b6-7ea3-3986c89d6f61@nfschina.com>
+Date:   Thu, 8 Jun 2023 09:18:12 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2] drm/bridge: ti-sn65dsi86: Avoid possible buffer
+ overflow
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, andersson@kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+X-MD-Sfrom: suhui@nfschina.com
+X-MD-Bcc: suhui@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From:   Su Hui <suhui@nfschina.com>
+In-Reply-To: <CAD=FV=UxzUoAPbKtX3Xvq=g8DNcatQ8-s-8rcGEeE+G40a9RhQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When user_events are disabled, it's write operation should be fail. Add
-this test cases.
+On 2023/6/7 22:03, Doug Anderson wrote:
+> Hi,
+>
+> On Tue, Jun 6, 2023 at 6:25 PM Su Hui <suhui@nfschina.com> wrote:
+>> Smatch error:buffer overflow 'ti_sn_bridge_refclk_lut' 5 <= 5.
+>>
+>> Fixes: cea86c5bb442 ("drm/bridge: ti-sn65dsi86: Implement the pwm_chip")
+>> Signed-off-by: Su Hui <suhui@nfschina.com>
+>> ---
+>>   drivers/gpu/drm/bridge/ti-sn65dsi86.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+>> index 7a748785c545..bb88406495e9 100644
+>> --- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+>> +++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+>> @@ -305,7 +305,7 @@ static void ti_sn_bridge_set_refclk_freq(struct ti_sn65dsi86 *pdata)
+>>           * The PWM refclk is based on the value written to SN_DPPLL_SRC_REG,
+>>           * regardless of its actual sourcing.
+>>           */
+>> -       pdata->pwm_refclk_freq = ti_sn_bridge_refclk_lut[i];
+>> +       pdata->pwm_refclk_freq = ti_sn_bridge_refclk_lut[i < refclk_lut_size ? i : 1];
+> This looks more correct, but it really needs a comment since it's
+> totally not obviously what you're doing here. IMO the best solution
+> here is to update "i" right after the for loop and have a comment
+> about the datasheet saying that "1" is the default rate so we'll fall
+> back to that if we couldn't find a match. Moving it to right after the
+> for loop will change the value written into the registers, but that's
+> fine and makes it clearer what's happening.
+Got it. Add some comment and move the code up.
+I will send patch v3 soon.
+Thanks for your suggestion again :) .
 
-Signed-off-by: sunliming <sunliming@kylinos.cn>
----
- tools/testing/selftests/user_events/ftrace_test.c | 3 +++
- 1 file changed, 3 insertions(+)
+Su Hui
 
-diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
-index d33bd31425db..d3240a97f23d 100644
---- a/tools/testing/selftests/user_events/ftrace_test.c
-+++ b/tools/testing/selftests/user_events/ftrace_test.c
-@@ -297,6 +297,9 @@ TEST_F(user, write_events) {
- 	io[0].iov_base = &reg.write_index;
- 	io[0].iov_len = sizeof(reg.write_index);
- 
-+	/* Write should fail when event is not enabled */
-+	ASSERT_EQ(-1, writev(self->data_fd, (const struct iovec *)io, 3));
-+
- 	/* Enable event */
- 	self->enable_fd = open(enable_file, O_RDWR);
- 	ASSERT_NE(-1, write(self->enable_fd, "1", sizeof("1")))
--- 
-2.25.1
-
+>
+> -Doug
