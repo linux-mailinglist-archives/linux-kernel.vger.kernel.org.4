@@ -2,193 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C755727C01
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A1E1727C0A
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:58:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235544AbjFHJ5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 05:57:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53578 "EHLO
+        id S235779AbjFHJ6x convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 8 Jun 2023 05:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231439AbjFHJ5g (ORCPT
+        with ESMTP id S231439AbjFHJ6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 05:57:36 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BA826B2
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 02:57:34 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6F4746606F15;
-        Thu,  8 Jun 2023 10:57:32 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686218253;
-        bh=Abj1gkmLa48yb8iW0WQ8r6Hnx6PfuQ7ea7AnIpcaE50=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Tw3LJYSwlTxxs/4vWOISFnCIKFeE/Aw2I4fbULbv0/vnf0IVskSEmmKoW1SZ5+ABz
-         J1XD6X903rIQIKUtfr13/IhM1TfEDtKiNrL/sQlSXZTbU8uHPVgTrxDzqmQHDVA4yG
-         4vvStYukIMo6glYEzjByEjsKrK5erQ8pKP2avcLbMmwLqI5DoTuLx1uovnLz4GFZrc
-         wfKks3nHT+7y16s1LchIN8wnYAUila+W7zgnFzSt9eBzntD2/jL6+l+D3OaKPFp83v
-         bwCaQF6wrTRixWcgTVY26mUdj9T6D2GhHzZtA+UegMfFt67JT0rNJimmL3ZOWyocww
-         gvpFhbo/JL13g==
-Message-ID: <a8b454e3-dded-02d6-b97a-6a7aa3420cf1@collabora.com>
-Date:   Thu, 8 Jun 2023 11:57:30 +0200
+        Thu, 8 Jun 2023 05:58:51 -0400
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36D026B9;
+        Thu,  8 Jun 2023 02:58:49 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-bad05c6b389so527416276.2;
+        Thu, 08 Jun 2023 02:58:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686218329; x=1688810329;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uzz3OZh3QB/d2SKcrr0d8uZ9dUBpMs9PB0O6tVeC/Ug=;
+        b=hNJUcA2ydfjedY295HDN7qc51uPSU9rnzQd3dAd1mNy4ZUMGQjHLu0myksw3JQwBb0
+         EuVzPqCcrOEIZAdojenozcEiUdZio4nb42oGV6KVYJ7xG0weJ6Et+nTCA/hs+VW6hFPu
+         2d3nXk3DDZ7c+qDPA7I6pPoN/lpoAwCw+LM52ioh2Oqj+gUsDDeOLubM4XR8rfPIyqsZ
+         7kjPrJhXQDbnlAzijEXN6ONGKw3G9Dz7AUzg395wNXfoRd5O2o6090XXKC/rhx7g6E7t
+         HLM0Mizm0WHe+CsNu8eYPYTKtej39c5jzgl1uKfZBV5pGiXTg74jSN/ywKXU/VnTjnAq
+         /FbA==
+X-Gm-Message-State: AC+VfDy+F59A6py899IKrSSiMuSDgAeA9f9xj8lttjJpuz3lu2Vv/4hE
+        yxjL3r+W+9Po1Cgd1r32f68FUrTGkGptrA==
+X-Google-Smtp-Source: ACHHUZ4u46GNap8T+b+tokBe1BF3/Gt8dAsZjpMNWkmaXJGjLocTU6ogawm8QVNarzqjn911pNTxYg==
+X-Received: by 2002:a81:6583:0:b0:56a:3b3e:bc7 with SMTP id z125-20020a816583000000b0056a3b3e0bc7mr5129485ywb.16.1686218328766;
+        Thu, 08 Jun 2023 02:58:48 -0700 (PDT)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id x23-20020a25acd7000000b00bb1d8f2a593sm185261ybd.45.2023.06.08.02.58.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jun 2023 02:58:48 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-bad05c6b389so527400276.2;
+        Thu, 08 Jun 2023 02:58:48 -0700 (PDT)
+X-Received: by 2002:a0d:dd47:0:b0:568:b0f6:ce8a with SMTP id
+ g68-20020a0ddd47000000b00568b0f6ce8amr9980204ywe.24.1686218327937; Thu, 08
+ Jun 2023 02:58:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 5/5] ASoC: mediatek: mt8188-mt6359: Use bitfield macros
- for registers
-Content-Language: en-US
-To:     Alexandre Mergnat <amergnat@baylibre.com>, broonie@kernel.org
-Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        matthias.bgg@gmail.com, trevor.wu@mediatek.com,
-        dan.carpenter@linaro.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com
-References: <20230608084727.74403-1-angelogioacchino.delregno@collabora.com>
- <20230608084727.74403-6-angelogioacchino.delregno@collabora.com>
- <8bbbc852-6139-29d4-417c-a2d9c77c192f@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <8bbbc852-6139-29d4-417c-a2d9c77c192f@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230527164452.64797-1-contact@artur-rojek.eu>
+ <20230527164452.64797-4-contact@artur-rojek.eu> <CAMuHMdV3gn8g-gKam71K=WfT3CVNwvz5eKPSh2Fqi3wVg7ZwNw@mail.gmail.com>
+ <f7b9ceb9739f8ae5cbee4f6073ce3af3921a2540.camel@physik.fu-berlin.de>
+In-Reply-To: <f7b9ceb9739f8ae5cbee4f6073ce3af3921a2540.camel@physik.fu-berlin.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 8 Jun 2023 11:58:36 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVFBo+KMNQ6gzh3rZrZ+_Wfg=UJ4XOW4Uqibnjm6T7CdA@mail.gmail.com>
+Message-ID: <CAMuHMdVFBo+KMNQ6gzh3rZrZ+_Wfg=UJ4XOW4Uqibnjm6T7CdA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] sh: dma: Correct the number of DMA channels in SH7709
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Artur Rojek <contact@artur-rojek.eu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Rafael Ignacio Zurita <rafaelignacio.zurita@gmail.com>,
+        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 08/06/23 11:50, Alexandre Mergnat ha scritto:
-> On 08/06/2023 10:47, AngeloGioacchino Del Regno wrote:
->> Replace open coded instances of FIELD_GET() with it, move register
->> definitions at the top of the file and also replace magic numbers
->> with register definitions.
->>
->> While at it, also change a regmap_update_bits() call to regmap_write()
->> because the top 29 bits of AUD_TOP_CFG (31:3) are reserved (unused).
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> ---
->>   sound/soc/mediatek/mt8188/mt8188-mt6359.c | 32 ++++++++++++++---------
->>   1 file changed, 19 insertions(+), 13 deletions(-)
->>
->> diff --git a/sound/soc/mediatek/mt8188/mt8188-mt6359.c 
->> b/sound/soc/mediatek/mt8188/mt8188-mt6359.c
->> index 5b2660139421..ac69c23e0da1 100644
->> --- a/sound/soc/mediatek/mt8188/mt8188-mt6359.c
->> +++ b/sound/soc/mediatek/mt8188/mt8188-mt6359.c
->> @@ -6,6 +6,7 @@
->>    * Author: Trevor Wu <trevor.wu@mediatek.com>
->>    */
->> +#include <linux/bitfield.h>
->>   #include <linux/input.h>
->>   #include <linux/module.h>
->>   #include <linux/of_device.h>
->> @@ -19,6 +20,15 @@
->>   #include "../common/mtk-afe-platform-driver.h"
->>   #include "../common/mtk-soundcard-driver.h"
->> +#define CKSYS_AUD_TOP_CFG    0x032c
->> + #define RG_TEST_ON        BIT(0)
->> + #define RG_TEST_TYPE        BIT(2)
->> +#define CKSYS_AUD_TOP_MON    0x0330
->> + #define TEST_MISO_COUNT_1    GENMASK(3, 0)
->> + #define TEST_MISO_COUNT_2    GENMASK(7, 4)
->> + #define TEST_MISO_DONE_1    BIT(28)
->> + #define TEST_MISO_DONE_2    BIT(29)
->> +
->>   #define NAU8825_HS_PRESENT    BIT(0)
->>   /*
->> @@ -251,9 +261,6 @@ static const struct snd_kcontrol_new 
->> mt8188_nau8825_controls[] = {
->>       SOC_DAPM_PIN_SWITCH("Headphone Jack"),
->>   };
->> -#define CKSYS_AUD_TOP_CFG 0x032c
->> -#define CKSYS_AUD_TOP_MON 0x0330
->> -
->>   static int mt8188_mt6359_mtkaif_calibration(struct snd_soc_pcm_runtime *rtd)
->>   {
->>       struct snd_soc_component *cmpnt_afe =
->> @@ -265,13 +272,13 @@ static int mt8188_mt6359_mtkaif_calibration(struct 
->> snd_soc_pcm_runtime *rtd)
->>       struct mtkaif_param *param;
->>       int chosen_phase_1, chosen_phase_2;
->>       int prev_cycle_1, prev_cycle_2;
->> -    int test_done_1, test_done_2;
->> +    u8 test_done_1, test_done_2;
->>       int cycle_1, cycle_2;
-> 
-> Shouldn't be unsigned too ?
-> 
-> I'm wondering if it would be better (probably in another patch) to change the data 
-> type of the other variables too, to match their use-case. (maybe it's already the 
-> case, I'm just wondering)
-> 
+Hi Adrian,
 
-In theory, yes, cycle_1 and 2 should be unsigned, but the signedness of this
-variable is getting used in the calibration logic later, as in the for loop
-they are both being reinitialized to -1 ... so I couldn't just switch 'em to
-unsigned.
+On Thu, Jun 8, 2023 at 11:54 AM John Paul Adrian Glaubitz
+<glaubitz@physik.fu-berlin.de> wrote:
+> On Wed, 2023-06-07 at 11:16 +0200, Geert Uytterhoeven wrote:
+> > On Sat, May 27, 2023 at 6:45 PM Artur Rojek <contact@artur-rojek.eu> wrote:
+> > > According to the hardware manual [1], the DMAC found in SH7709 features
+> > > only 4 channels.
+> > >
+> > > While at it, also sort the existing targets and clarify that
+> > > NR_ONCHIP_DMA_CHANNELS must be a multiply of two.
+> > >
+> > > [1] https://www.renesas.com/us/en/document/mah/sh7709s-group-hardware-manual (p. 373)
+> > >
+> > > Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
+> > > ---
+> > >
+> > > v2: - sort existing targets
+> >
+> > Thanks for the update!
+> >
+> > >     - clarify that the value must be a multiply of two
+> >
+> > That's only true when there are two DMACs, right?
+> >
+> > Even in that case, you could mitigate that by avoiding the division by
+> >
+> >     #ifdef SH_DMAC_BASE1
+> >    -#define        SH_DMAC_NR_MD_CH        (CONFIG_NR_ONCHIP_DMA_CHANNELS / 2)
+> >    +#define        SH_DMAC_NR_MD_CH        6
+> >     #else
+> >     #define        SH_DMAC_NR_MD_CH        CONFIG_NR_ONCHIP_DMA_CHANNELS
+> >     #endif
+>
+> Aren't we dropping SH_DMAC_BASE1 in the other patch anyway?
 
->>       int mtkaif_chosen_phase[MT8188_MTKAIF_MISO_NUM];
->>       int mtkaif_phase_cycle[MT8188_MTKAIF_MISO_NUM];
->>       int mtkaif_calibration_num_phase;
->>       bool mtkaif_calibration_ok;
->> -    unsigned int monitor = 0;
->> +    u32 monitor = 0;
->>       int counter;
->>       int phase;
->>       int i;
->> @@ -303,8 +310,7 @@ static int mt8188_mt6359_mtkaif_calibration(struct 
->> snd_soc_pcm_runtime *rtd)
->>       mt6359_mtkaif_calibration_enable(cmpnt_codec);
->>       /* set test type to synchronizer pulse */
->> -    regmap_update_bits(afe_priv->topckgen,
->> -               CKSYS_AUD_TOP_CFG, 0xffff, 0x4);
->> +    regmap_write(afe_priv->topckgen, CKSYS_AUD_TOP_CFG, RG_TEST_TYPE);
->>       mtkaif_calibration_num_phase = 42;    /* mt6359: 0 ~ 42 */
->>       mtkaif_calibration_ok = true;
->> @@ -314,7 +320,7 @@ static int mt8188_mt6359_mtkaif_calibration(struct 
->> snd_soc_pcm_runtime *rtd)
->>           mt6359_set_mtkaif_calibration_phase(cmpnt_codec,
->>                               phase, phase, phase);
->> -        regmap_set_bits(afe_priv->topckgen, CKSYS_AUD_TOP_CFG, 0x1);
->> +        regmap_set_bits(afe_priv->topckgen, CKSYS_AUD_TOP_CFG, RG_TEST_ON);
->>           test_done_1 = 0;
->>           test_done_2 = 0;
->> @@ -326,14 +332,14 @@ static int mt8188_mt6359_mtkaif_calibration(struct 
->> snd_soc_pcm_runtime *rtd)
->>           while (!(test_done_1 & test_done_2)) {
->>               regmap_read(afe_priv->topckgen,
->>                       CKSYS_AUD_TOP_MON, &monitor);
->> -            test_done_1 = (monitor >> 28) & 0x1;
->> -            test_done_2 = (monitor >> 29) & 0x1;
->> +            test_done_1 = FIELD_GET(TEST_MISO_DONE_1, monitor);
->> +            test_done_2 = FIELD_GET(TEST_MISO_DONE_2, monitor);
->>               if (test_done_1 == 1)
->> -                cycle_1 = monitor & 0xf;
->> +                cycle_1 = FIELD_GET(TEST_MISO_COUNT_1, monitor);
->>               if (test_done_2 == 1)
->> -                cycle_2 = (monitor >> 4) & 0xf;
->> +                cycle_2 = FIELD_GET(TEST_MISO_COUNT_2, monitor);
->>               /* handle if never test done */
->>               if (++counter > 10000) {
->> @@ -361,7 +367,7 @@ static int mt8188_mt6359_mtkaif_calibration(struct 
->> snd_soc_pcm_runtime *rtd)
->>               mtkaif_phase_cycle[MT8188_MTKAIF_MISO_1] = prev_cycle_2;
->>           }
->> -        regmap_clear_bits(afe_priv->topckgen, CKSYS_AUD_TOP_CFG, 0x1);
->> +        regmap_clear_bits(afe_priv->topckgen, CKSYS_AUD_TOP_CFG, RG_TEST_ON);
->>           if (mtkaif_chosen_phase[MT8188_MTKAIF_MISO_0] >= 0 &&
->>               mtkaif_chosen_phase[MT8188_MTKAIF_MISO_1] >= 0)
-> 
-> After that:
-> 
-> Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
-> 
+Only for the SH4 parts that do not have it.
+It is still set in arch/sh/include/cpu-sh4a/cpu/dma.h for the SH4a parts with
+12 channels and 2 DMACs.
 
+> > That is actually safer, as the user can override NR_ONCHIP_DMA_CHANNELS
+> > when configuring his kernel, thus breaking DMA  due to an incorrect
+> > value of SH_DMAC_NR_MD_CH.
+> >
+> > Unfortunately we cannot protect against that when using a single DMAC,
+> > as SH_DMAC_NR_MD_CH can be either 4, 6, or 8.
+> >
+> > Perhaps this configuration should be moved from Kconfig to <cpu/dma.h>,
+> > to protect against a user overriding this value?
+>
+> Isn't SH_DMAC_NR_MD_CH already hardwired to the SoC being used?
+
+It depends on CONFIG_NR_ONCHIP_DMA_CHANNELS, while it
+should be fixed based on the SoC.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
