@@ -2,197 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E81F872899A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 22:39:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B162572899E
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 22:45:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236332AbjFHUjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 16:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45900 "EHLO
+        id S236429AbjFHUpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 16:45:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234009AbjFHUjL (ORCPT
+        with ESMTP id S229539AbjFHUpX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 16:39:11 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07FC1BE8
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 13:39:08 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 0AE182C0593;
-        Fri,  9 Jun 2023 08:39:05 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1686256745;
-        bh=v19MWtwVW2IiWNcAuLnjwIQsw+sLWgM145TwnC6PTzs=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=yKlpNBzOppKVY6BWxePnYu0TOODK1ZogkBKJqbbrICdZnJsGdIzFXtRiwX6bheSwt
-         OwozNcO1mzUSoEIkH2gV93DXjTlnDIrH7KXOi6sG7cwy5QfjH0jT9iXd/LpoEKJ9JU
-         MJQ7Ekc92dpUpGp4wsR45l9m0QrJRtANcmWOigtmmWskphT2ks9kRpNx4n7Szzps/O
-         /+8sKJhNQpDXI9G2WI49pmdcIAHRnSEccsWKw4l0uTG5fnSvREHrwkIKigF2qwct75
-         772knbg69uu4v4AJ9HE/jHR0FBgVq/XRyQw/AV4CFRFHmXfDjNOmsgONTzglw08k1d
-         mRyZhD5zMO4NQ==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B64823c680001>; Fri, 09 Jun 2023 08:39:04 +1200
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.26; Fri, 9 Jun 2023 08:39:04 +1200
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
- (TLS) id 15.0.1497.48; Fri, 9 Jun 2023 08:39:04 +1200
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1118.026; Fri, 9 Jun 2023 08:39:04 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: New kernel warning after updating from LTS 5.15.110 to 5.15.112
- (and 5.15.113)
-Thread-Topic: New kernel warning after updating from LTS 5.15.110 to 5.15.112
- (and 5.15.113)
-Thread-Index: AQHZkb4dgnEVWoKsX0S/ux9OJoU4IK98yP8AgAC/T4CAAUGLAIABgjCAgABZ1wA=
-Date:   Thu, 8 Jun 2023 20:39:04 +0000
-Message-ID: <1a168fef-8d9f-a700-2472-a60da508aeac@alliedtelesis.co.nz>
-References: <fe6f7aa0-56c2-3729-ce8c-0f2d943b33f4@alliedtelesis.co.nz>
- <7bb470fa70ff5944b7b9b82ac17d759819bccdf2.camel@kernel.org>
- <0bdf509f-f71a-e3b2-b9fb-4a726021219b@alliedtelesis.co.nz>
- <CT6JW4528UBU.1K3QJTVUN25OR@suppilovahvero>
- <CT7DAF9JJ4KD.37K8GDWP7GKG1@suppilovahvero>
-In-Reply-To: <CT7DAF9JJ4KD.37K8GDWP7GKG1@suppilovahvero>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.33.22.30]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <7589C5524C828741BCCDBB70EA9E2996@atlnz.lc>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=CMhUoijD c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=of4jigFt-DYA:10 a=VwQbUJbxAAAA:8 a=d_NS31tpAAAA:8 a=URbYG7BdFpQEoCwZzwwA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22 a=PfdiIfcH12mfzV1Ea7Td:22
-X-SEG-SpamProfiler-Score: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 8 Jun 2023 16:45:23 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC37A1FDA
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 13:45:21 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-564fb1018bcso14192497b3.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 13:45:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686257121; x=1688849121;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=vnoG17X4SR0Yr68DnHAZRjmH2ycNdwkX85eHutCEXPA=;
+        b=UN/Iuh6A4ZSn2Srw/iO2/QubYI3z1NBUEPCiOwH2gXvKtbxgDMkJwJQ3fcr7lYMaS6
+         LRgUsrWvSHO13NXiH9E6FCY713p0mH4UD6phKd3HXqJm2EK1H6v4xP2sMNG0LkiHtk+i
+         qdc2rvtqxhBrZt/vAZwTWMBKfQ/RLOzYINvXt795GjADbOfcB3Ly37ZVYeuBZDz4R7qO
+         LENlFPhFhtZtw1uGFcNraCjatKtaQ8LVu81LBVrP9XK2PoiMxOQU+D62A1+LG842jH7D
+         JCOU50sAWOiqTrv+RhqLhyXFYi2p3ZHBLG+b+Xb9fGNURYbw3afAIrJdf9EOkkyc3b6t
+         13yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686257121; x=1688849121;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vnoG17X4SR0Yr68DnHAZRjmH2ycNdwkX85eHutCEXPA=;
+        b=FXg4rPJZN5kZNASq2uU99VLDugAS2bn3tCIZWVyrXobieDVK4sxhaLM4DiQenZtv4V
+         8ag747dJK6yKYsHvmGJOWhj4ITsP6xHA0e50yaQlXEKIh7xWdvl35CCPdFdheMkTrXfQ
+         R4cFCyDq/rYSEM4Wpba5bJwC5Oefgt01iqpwUmQpm6rgfUAYtGgQJOAXFr8gP+HYHxpU
+         /2QO/xSrHEoVDO4VF8ZGiwiXFqKPVzqNXyDKkOF8l4Sx30PBcpEUas4xss4i4HCT1AQQ
+         3h5kzT73DPNDEmscn7AtISLb7tXVdwRgdeFbc/DThMdI2W1HvuGGaeahsSHrfWW7d5dZ
+         RShQ==
+X-Gm-Message-State: AC+VfDz+J+43/iBs07KElPbmtPRd0RSDAI1uUr8+W5O5RSo/EbBTGUoK
+        jJ2mhJabPQ81R5PsYv8j9JYVOIcyoy4=
+X-Google-Smtp-Source: ACHHUZ7uhwjynCVEVzqwdWP8vaJWg7hx84JcFomCDllbBtoGac7XAtCG6fQcADbdP5cT0fgiYf6v3PXmguI=
+X-Received: from badhri.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:6442])
+ (user=badhri job=sendgmr) by 2002:a81:a7c9:0:b0:569:8603:577 with SMTP id
+ e192-20020a81a7c9000000b0056986030577mr505740ywh.4.1686257120940; Thu, 08 Jun
+ 2023 13:45:20 -0700 (PDT)
+Date:   Thu,  8 Jun 2023 20:45:15 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Message-ID: <20230608204517.105396-1-badhri@google.com>
+Subject: [PATCH v7 1/2] usb: gadget: udc: core: Offload usb_udc_vbus_handler processing
+From:   Badhri Jagan Sridharan <badhri@google.com>
+To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        colin.i.king@gmail.com, xuetao09@huawei.com,
+        quic_eserrao@quicinc.com, water.zhangjiantao@huawei.com,
+        peter.chen@freescale.com, balbi@ti.com, francesco@dolcini.it,
+        alistair@alistair23.me, stephan@gerhold.net, bagasdotme@gmail.com,
+        luca@z3ntu.xyz
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Badhri Jagan Sridharan <badhri@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgSmFya2tvLA0KDQpPbiA5LzA2LzIzIDAzOjE3LCBKYXJra28gU2Fra2luZW4gd3JvdGU6DQo+
-IE9uIFdlZCBKdW4gNywgMjAyMyBhdCA3OjE1IFBNIEVFU1QsIEphcmtrbyBTYWtraW5lbiB3cm90
-ZToNCj4+IE9uIFdlZCBKdW4gNywgMjAyMyBhdCAxMjowNCBBTSBFRVNULCBDaHJpcyBQYWNraGFt
-IHdyb3RlOg0KPj4+IEhpIEphcmtrbywNCj4+Pg0KPj4+IE9uIDYvMDYvMjMgMjE6MzksIEphcmtr
-byBTYWtraW5lbiB3cm90ZToNCj4+Pj4gT24gU3VuLCAyMDIzLTA1LTI4IGF0IDIzOjQyICswMDAw
-LCBDaHJpcyBQYWNraGFtIHdyb3RlOg0KPj4+Pj4gSGksDQo+Pj4+Pg0KPj4+Pj4gV2UgaGF2ZSBh
-biBlbWJlZGRlZCBwcm9kdWN0IHdpdGggYW4gSW5maW5lb24gU0xNOTY3MCBUUE0uIEFmdGVyIHVw
-ZGF0aW5nDQo+Pj4+PiB0byBhIG5ld2VyIExUUyBrZXJuZWwgdmVyc2lvbiB3ZSBzdGFydGVkIHNl
-ZWluZyB0aGUgZm9sbG93aW5nIHdhcm5pbmcgYXQNCj4+Pj4+IGJvb3QuDQo+Pj4+Pg0KPj4+Pj4g
-W8KgwqDCoCA0Ljc0MTAyNV0gLS0tLS0tLS0tLS0tWyBjdXQgaGVyZSBdLS0tLS0tLS0tLS0tDQo+
-Pj4+PiBbwqDCoMKgIDQuNzQ5ODk0XSBpcnEgMzggaGFuZGxlciB0aXNfaW50X2hhbmRsZXIrMHgw
-LzB4MTU0IGVuYWJsZWQgaW50ZXJydXB0cw0KPj4+Pj4gW8KgwqDCoCA0Ljc1NjU1NV0gV0FSTklO
-RzogQ1BVOiAwIFBJRDogMCBhdCBrZXJuZWwvaXJxL2hhbmRsZS5jOjE1OQ0KPj4+Pj4gX19oYW5k
-bGVfaXJxX2V2ZW50X3BlcmNwdSsweGY0LzB4MTgwDQo+Pj4+PiBbwqDCoMKgIDQuNzY1NTU3XSBN
-b2R1bGVzIGxpbmtlZCBpbjoNCj4+Pj4+IFvCoMKgwqAgNC43Njg2MjZdIENQVTogMCBQSUQ6IDAg
-Q29tbTogc3dhcHBlci8wIE5vdCB0YWludGVkIDUuMTUuMTEzICMxDQo+Pj4+PiBbwqDCoMKgIDQu
-Nzc0NzQ3XSBIYXJkd2FyZSBuYW1lOiBBbGxpZWQgVGVsZXNpcyB4MjUwLTE4WFMgKERUKQ0KPj4+
-Pj4gW8KgwqDCoCA0Ljc4MDA4MF0gcHN0YXRlOiA2MDAwMDAwNSAoblpDdiBkYWlmIC1QQU4gLVVB
-TyAtVENPIC1ESVQgLVNTQlMNCj4+Pj4+IEJUWVBFPS0tKQ0KPj4+Pj4gW8KgwqDCoCA0Ljc4NzA3
-Ml0gcGMgOiBfX2hhbmRsZV9pcnFfZXZlbnRfcGVyY3B1KzB4ZjQvMHgxODANCj4+Pj4+IFvCoMKg
-wqAgNC43OTIxNDZdIGxyIDogX19oYW5kbGVfaXJxX2V2ZW50X3BlcmNwdSsweGY0LzB4MTgwDQo+
-Pj4+PiBbwqDCoMKgIDQuNzk3MjIwXSBzcCA6IGZmZmY4MDAwMDgwMDNlNDANCj4+Pj4+IFvCoMKg
-wqAgNC44MDA1NDddIHgyOTogZmZmZjgwMDAwODAwM2U0MCB4Mjg6IGZmZmY4MDAwMDkzOTUxYzAg
-eDI3Og0KPj4+Pj4gZmZmZjgwMDAwOTAyYTliOA0KPj4+Pj4gW8KgwqDCoCA0LjgwNzcxNl0geDI2
-OiBmZmZmODAwMDA4ZmU4ZDI4IHgyNTogZmZmZjgwMDAwOTRhNjJiZCB4MjQ6DQo+Pj4+PiBmZmZm
-MDAwMDAxYjkyNDAwDQo+Pj4+PiBbwqDCoMKgIDQuODE0ODg1XSB4MjM6IDAwMDAwMDAwMDAwMDAw
-MjYgeDIyOiBmZmZmODAwMDA4MDAzZWM0IHgyMToNCj4+Pj4+IDAwMDAwMDAwMDAwMDAwMDANCj4+
-Pj4+IFvCoMKgwqAgNC44MjIwNTNdIHgyMDogMDAwMDAwMDAwMDAwMDAwMSB4MTk6IGZmZmYwMDAw
-MDIzODEyMDAgeDE4Og0KPj4+Pj4gZmZmZmZmZmZmZmZmZmZmZg0KPj4+Pj4gW8KgwqDCoCA0Ljgy
-OTIyMl0geDE3OiBmZmZmODAwMDc2OTYyMDAwIHgxNjogZmZmZjgwMDAwODAwMDAwMCB4MTU6DQo+
-Pj4+PiBmZmZmODAwMDg4MDAzYjU3DQo+Pj4+PiBbwqDCoMKgIDQuODM2MzkwXSB4MTQ6IDAwMDAw
-MDAwMDAwMDAwMDAgeDEzOiBmZmZmODAwMDA5M2E1MDc4IHgxMjoNCj4+Pj4+IDAwMDAwMDAwMDAw
-MDAzNWQNCj4+Pj4+IFvCoMKgwqAgNC44NDM1NThdIHgxMTogMDAwMDAwMDAwMDAwMDExZiB4MTA6
-IGZmZmY4MDAwMDkzYTUwNzggeDkgOg0KPj4+Pj4gZmZmZjgwMDAwOTNhNTA3OA0KPj4+Pj4gW8Kg
-wqDCoCA0Ljg1MDcyN10geDggOiAwMDAwMDAwMGZmZmZlZmZmIHg3IDogZmZmZjgwMDAwOTNmZDA3
-OCB4NiA6DQo+Pj4+PiBmZmZmODAwMDA5M2ZkMDc4DQo+Pj4+PiBbwqDCoMKgIDQuODU3ODk1XSB4
-NSA6IDAwMDAwMDAwMDAwMGJmZjQgeDQgOiAwMDAwMDAwMDAwMDAwMDAwIHgzIDoNCj4+Pj4+IDAw
-MDAwMDAwMDAwMDAwMDANCj4+Pj4+IFvCoMKgwqAgNC44NjUwNjJdIHgyIDogMDAwMDAwMDAwMDAw
-MDAwMCB4MSA6IDAwMDAwMDAwMDAwMDAwMDAgeDAgOg0KPj4+Pj4gZmZmZjgwMDAwOTM5NTFjMA0K
-Pj4+Pj4gW8KgwqDCoCA0Ljg3MjIzMF0gQ2FsbCB0cmFjZToNCj4+Pj4+IFvCoMKgwqAgNC44NzQ2
-ODZdwqAgX19oYW5kbGVfaXJxX2V2ZW50X3BlcmNwdSsweGY0LzB4MTgwDQo+Pj4+PiBbwqDCoMKg
-IDQuODc5NDExXcKgIGhhbmRsZV9pcnFfZXZlbnQrMHg2NC8weGVjDQo+Pj4+PiBbwqDCoMKgIDQu
-ODgzMjY0XcKgIGhhbmRsZV9sZXZlbF9pcnErMHhjMC8weDFiMA0KPj4+Pj4gW8KgwqDCoCA0Ljg4
-NzIwMl3CoCBnZW5lcmljX2hhbmRsZV9pcnErMHgzMC8weDUwDQo+Pj4+PiBbwqDCoMKgIDQuODkx
-MjI5XcKgIG12ZWJ1X2dwaW9faXJxX2hhbmRsZXIrMHgxMWMvMHgyYTANCj4+Pj4+IFvCoMKgwqAg
-NC44OTU3ODBdwqAgaGFuZGxlX2RvbWFpbl9pcnErMHg2MC8weDkwDQo+Pj4+PiBbwqDCoMKgIDQu
-ODk5NzIwXcKgIGdpY19oYW5kbGVfaXJxKzB4NGMvMHhkMA0KPj4+Pj4gW8KgwqDCoCA0LjkwMzM5
-OF3CoCBjYWxsX29uX2lycV9zdGFjaysweDIwLzB4NGMNCj4+Pj4+IFvCoMKgwqAgNC45MDczMzhd
-wqAgZG9faW50ZXJydXB0X2hhbmRsZXIrMHg1NC8weDYwDQo+Pj4+PiBbwqDCoMKgIDQuOTExNTM4
-XcKgIGVsMV9pbnRlcnJ1cHQrMHgzMC8weDgwDQo+Pj4+PiBbwqDCoMKgIDQuOTE1MTMwXcKgIGVs
-MWhfNjRfaXJxX2hhbmRsZXIrMHgxOC8weDI0DQo+Pj4+PiBbwqDCoMKgIDQuOTE5MjQ0XcKgIGVs
-MWhfNjRfaXJxKzB4NzgvMHg3Yw0KPj4+Pj4gW8KgwqDCoCA0LjkyMjY1OV3CoCBhcmNoX2NwdV9p
-ZGxlKzB4MTgvMHgyYw0KPj4+Pj4gW8KgwqDCoCA0LjkyNjI0OV3CoCBkb19pZGxlKzB4YzQvMHgx
-NTANCj4+Pj4+IFvCoMKgwqAgNC45Mjk0MDRdwqAgY3B1X3N0YXJ0dXBfZW50cnkrMHgyOC8weDYw
-DQo+Pj4+PiBbwqDCoMKgIDQuOTMzMzQzXcKgIHJlc3RfaW5pdCsweGU0LzB4ZjQNCj4+Pj4+IFvC
-oMKgwqAgNC45MzY1ODRdwqAgYXJjaF9jYWxsX3Jlc3RfaW5pdCsweDEwLzB4MWMNCj4+Pj4+IFvC
-oMKgwqAgNC45NDA2OTldwqAgc3RhcnRfa2VybmVsKzB4NjAwLzB4NjQwDQo+Pj4+PiBbwqDCoMKg
-IDQuOTQ0Mzc1XcKgIF9fcHJpbWFyeV9zd2l0Y2hlZCsweGJjLzB4YzQNCj4+Pj4+IFvCoMKgwqAg
-NC45NDg0MDJdIC0tLVsgZW5kIHRyYWNlIDk0MDE5MzA0N2IzNWIzMTEgXS0tLQ0KPj4+Pj4NCj4+
-Pj4+IEluaXRpYWxseSBJIGRpc21pc3NlZCB0aGlzIGFzIGEgd2FybmluZyB0aGF0IHdvdWxkIHBy
-b2JhYmx5IGJlIGNsZWFuZWQNCj4+Pj4+IHVwIHdoZW4gd2UgZGlkIG1vcmUgd29yayBvbiB0aGUg
-VFBNIHN1cHBvcnQgZm9yIG91ciBwcm9kdWN0IGJ1dCB3ZSBhbHNvDQo+Pj4+PiBzZWVtIHRvIGJl
-IGdldHRpbmcgc29tZSBuZXcgaTJjIGlzc3VlcyBhbmQgcG9zc2libHkgYSBrZXJuZWwgc3RhY2sN
-Cj4+Pj4+IGNvcnJ1cHRpb24gdGhhdCB3ZSd2ZSBjb25mbGF0ZWQgd2l0aCB0aGlzIFRQTSB3YXJu
-aW5nLg0KPj4+PiBIaSwgc29ycnkgZm9yIGxhdGUgcmVzcG9uc2UuIEkndmUgYmVlbiBtb3Zpbmcg
-bXkgKGhvbWUpIG9mZmljZSB0bw0KPj4+PiBhIGRpZmZlcmVudCBsb2NhdGlvbiBkdXJpbmcgbGFz
-dCBjb3VwbGUgb2Ygd2Vla3MsIGFuZCBlbWFpbCBoYXMgYmVlbg0KPj4+PiBwaWxpbmcgdXAuDQo+
-Pj4+DQo+Pj4+IFdoYXQgZG9lcyBkbWlkZWNvZGUgZ2l2ZSB5b3U/DQo+Pj4+DQo+Pj4+IE1vcmUg
-c3BlY2lmaWMsIEknbSBpbnRlcmVzdGVkIG9uIERNSSB0eXBlIDQzOg0KPj4+Pg0KPj4+PiAkIHN1
-ZG8gZG1pZGVjb2RlIC10IDQzDQo+Pj4+ICMgZG1pZGVjb2RlIDMuNA0KPj4+PiBHZXR0aW5nIFNN
-QklPUyBkYXRhIGZyb20gc3lzZnMuDQo+Pj4+IFNNQklPUyAzLjQuMCBwcmVzZW50Lg0KPj4+Pg0K
-Pj4+PiBIYW5kbGUgMHgwMDRELCBETUkgdHlwZSA0MywgMzEgYnl0ZXMNCj4+Pj4gVFBNIERldmlj
-ZQ0KPj4+PiAJVmVuZG9yIElEOiBJTlRDDQo+Pj4+IAlTcGVjaWZpY2F0aW9uIFZlcnNpb246IDIu
-MA0KPj4+PiAJRmlybXdhcmUgUmV2aXNpb246IDYwMC4xOA0KPj4+PiAJRGVzY3JpcHRpb246IElO
-VEVMDQo+Pj4+IAlDaGFyYWN0ZXJpc3RpY3M6DQo+Pj4+IAkJRmFtaWx5IGNvbmZpZ3VyYWJsZSB2
-aWEgcGxhdGZvcm0gc29mdHdhcmUgc3VwcG9ydA0KPj4+PiAJT0VNLXNwZWNpZmljIEluZm9ybWF0
-aW9uOiAweDAwMDAwMDAwDQo+Pj4+DQo+Pj4+IEJSLCBKYXJra28NCj4+PiBUaGlzIGlzIGFuIGVt
-YmVkZGVkIEFSTTY0IChNYXJ2ZWxsIENOOTEzMCBTb0MpIGRldmljZSBzbyBubyBCSU9TLiBUaGUN
-Cj4+PiByZWxldmFudCBzbmlwcGV0IGZyb20gdGhlIGRldmljZSB0cmVlIGlzDQo+Pj4NCj4+PiAg
-IMKgwqDCoMKgwqDCoMKgIHRwbUAxIHsNCj4+PiAgIMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCBjb21wYXRpYmxlID0gImluZmluZW9uLHNsYjk2NzAiOw0KPj4+ICAgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIHJlZyA9IDwxPjsgLyogQ2hpcCBzZWxlY3QgMSAqLw0KPj4+ICAg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGludGVycnVwdC1wYXJlbnQgPSA8JmNwMF9n
-cGlvMj47DQo+Pj4gICDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgaW50ZXJydXB0cyA9
-IDwzMCBJUlFfVFlQRV9MRVZFTF9MT1c+Ow0KPj4+ICAgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgIHNwaS1tYXgtZnJlcXVlbmN5ID0gPDMxMjUwMDAwPjsNCj4+PiAgIMKgwqDCoMKgwqDC
-oMKgIH07DQo+Pj4NCj4+PiBhbmQgSSBjYW4gdGVsbCB5b3UgdGhhdCB0aGUgc3BlY2lmaWMgVFBN
-IGNoaXAgaXMgYW4gSW5maW5pZW9uDQo+Pj4gU0xNOTY3MEFRMjBGVzEzMTFYVE1BMQ0KPj4gT0ss
-IHlvdSBrbm93IHdoYXQgSSBvd24gdGhhdCBjaGlwIGluIHRoZSBmb3JtIG9mIExldHNUcnVzdFRQ
-TQ0KPj4gcHJvZHVjdC4NCj4+DQo+PiBJIGhhdmUgbm90IHVzZWQgaXQgYSBsb3QgYmVjYXVzZSBv
-ZiBsYWNrIG9mIHRpbWUgYnV0IEkgY291bGQgdHJ5DQo+PiB0byByZXByb2R1Y2UgdGhlIGJ1ZyB3
-aXRoIHRoYXQgYW5kIFJQaSAzQiwgb3IgYXQgbGVhc3Qgc2VlIHdoYXQNCj4+IGhhcHBlbnMgd2l0
-aCBkaWZmZXJlbnQgaGFyZHdhcmUgcGxhdGZvcm0gd2l0aCB0aGUgc2FtZSBUUE0gY2hpcC4NCj4g
-SSdtIG5vdCBkZXZpY2UgdHJlZSBleHBlcnQgYnV0IHdpdGggbXkgbGltaXRlZCBrbm93bGVkZ2Us
-IEkgZ3Vlc3Mga3dlDQo+IGNvdWxkIGFkZCBhIHF1aXJrIHRoYXQgdXNlcyBvZl9tYWNoaW5lX2lz
-X2NvbXBhdGlibGUoKSwgdG8gZGlzYWJsZQ0KPiBJUlEncywgaS5lLiBiYXNlIHRoZSBwb2xpY3kg
-b24gc3BlY2lmaWMgYm9hcmRzIHJhdGhlciB0aGFuIHNwZWNpZmljDQo+IGNoaXBzOiBbKl0NCj4N
-Cj4gCWlmIChvZl9tYWNoaW5lX2lzX2NvbXBhdGlibGUoIm1hcnZlbGwsY245MTMwIikpIHsNCj4g
-CQlkZXZfbm90aWNlKGRldiwgImRpc2FibGUgaW50ZXJydXB0cyIpOw0KPiAJCWludGVycnVwdHMg
-PSAwOwkNCj4gCX0NCj4NCj4gWypdIEkgbG9va2VkIHVwIGFyY2gvYXJtNjQvYm9vdC9kdHMvbWFy
-dmVsbC9jbjkxMzAuZHRzaS4gSSBob3BlIEkgcGlja2VkDQo+IHRoZSBjb3JyZWN0IGZpbGUuDQoN
-ClRoZSB3YXJuaW5nIGl0c2VsZiB3YXMgcmVzb2x2ZWQgYnkgYnJpbmdpbmcgaW4gYSBmdXJ0aGVy
-IGNoYW5nZSBmb3IgdGhlIA0KTFRTIGJyYW5jaFsxXS4gVGhlcmUgZG9lcyBzdGlsbCBzZWVtIHRv
-IGJlIGFuIGlzc3VlIHdpdGggdGhlIGludGVycnVwdHMgDQphY3R1YWxseSB3b3JraW5nIChzYW1l
-IGJlaGF2aW91ciBvbiBtYWlubGluZSkgYnV0IGF0IGxlYXN0IG5vdyB0aGVyZSBpcyANCm5vIHdh
-cm5pbmcgYW5kIG5vIGFkdmVyc2UgZG93bnN0cmVhbSBlZmZlY3RzLg0KDQpJbiB0ZXJtcyBvZiBk
-ZXZpY2UgdHJlZSBzdHVmZiB0byBkaXNhYmxlIHRoZSBpbnRlcnJ1cHQgSSBjb3VsZCBzaW1wbHkg
-DQpyZW1vdmUgdGhlIGludGVycnVwdCBwcm9wZXJ0aWVzIGZyb20gdGhlIGJvYXJkIERUUyAoSSB3
-YXMgZG9pbmcgdGhpcyBhcyANCmEgd29ya2Fyb3VuZCBiZWZvcmUgdGhlIGNvcnJlY3QgZml4IHdh
-cyBpZGVudGlmaWVkKS4NCg0KWzFdIC0gDQpodHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eC1p
-bnRlZ3JpdHkvYWM1Yjc2YWYtODdkYy1iMDRkLTYwMzUtOGVkYThiYTVlZDEyQGt1bmJ1cy5jb20v
-DQo=
+usb_udc_vbus_handler() can be invoked from interrupt context by irq
+handlers of the gadget drivers, however, usb_udc_connect_control() has
+to run in non-atomic context due to the following:
+a. Some of the gadget driver implementations expect the ->pullup
+   callback to be invoked in non-atomic context.
+b. usb_gadget_disconnect() acquires udc_lock which is a mutex.
+
+Hence offload invocation of usb_udc_connect_control()
+to workqueue.
+
+UDC should not be pulled up unless gadget driver is bound. The new flag
+"allow_connect" is now set by gadget_bind_driver() and cleared by
+gadget_unbind_driver(). This prevents work item to pull up the gadget
+even if queued when the gadget driver is already unbound.
+
+Cc: stable@vger.kernel.org
+Fixes: 1016fc0c096c ("USB: gadget: Fix obscure lockdep violation for udc_mutex")
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+---
+Changes since v1:
+- Address Alan Stern's comment on usb_udc_vbus_handler invocation from
+  atomic context:
+* vbus_events_lock is now a spinlock and allocations in
+* usb_udc_vbus_handler are atomic now.
+
+Changes since v2:
+- Addressing Alan Stern's comments:
+** connect_lock is now held by callers of
+* usb_gadget_pullup_update_locked() and gadget_(un)bind_driver() does
+* notdirectly hold the lock.
+
+** Both usb_gadget_(dis)connect() and usb_udc_vbus_handler() would
+* set/clear udc->vbus and invoke usb_gadget_pullup_update_locked.
+
+** Add "unbinding" to prevent new connections after the gadget is being
+* unbound.
+
+Changes since v3:
+** Made a minor cleanup which I missed to do in v3 in
+* usb_udc_vbus_handler().
+
+Changes since v4:
+- Addressing Alan Stern's comments:
+** usb_udc_vbus_handler() now offloads invocation of usb_udc_connect_control()
+* from workqueue.
+
+** Dropped vbus_events list as this was redundant. Updating to the
+* latest value is suffice
+
+Changes since v5:
+- Addressing Alan Stern's comments:
+** Squashed allow_connect logic to this patch.
+** Fixed comment length to wrap at 76
+** Cancelling vbus_work in del_gadget()
+
+Changes since v6:
+- Added reviewed by tag
+---
+ drivers/usb/gadget/udc/core.c | 29 +++++++++++++++++++++++++++--
+ 1 file changed, 27 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+index 52e6d2e84e35..d2e4f78c53e3 100644
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@ -37,6 +37,9 @@ static const struct bus_type gadget_bus_type;
+  * @vbus: for udcs who care about vbus status, this value is real vbus status;
+  * for udcs who do not care about vbus status, this value is always true
+  * @started: the UDC's started state. True if the UDC had started.
++ * @allow_connect: Indicates whether UDC is allowed to be pulled up.
++ * Set/cleared by gadget_(un)bind_driver() after gadget driver is bound or
++ * unbound.
+  *
+  * This represents the internal data structure which is used by the UDC-class
+  * to hold information about udc driver and gadget together.
+@@ -48,6 +51,8 @@ struct usb_udc {
+ 	struct list_head		list;
+ 	bool				vbus;
+ 	bool				started;
++	bool				allow_connect;
++	struct work_struct		vbus_work;
+ };
+ 
+ static struct class *udc_class;
+@@ -706,7 +711,7 @@ int usb_gadget_connect(struct usb_gadget *gadget)
+ 		goto out;
+ 	}
+ 
+-	if (gadget->deactivated) {
++	if (gadget->deactivated || !gadget->udc->allow_connect) {
+ 		/*
+ 		 * If gadget is deactivated we only save new state.
+ 		 * Gadget will be connected automatically after activation.
+@@ -1086,6 +1091,13 @@ static void usb_udc_connect_control(struct usb_udc *udc)
+ 		usb_gadget_disconnect(udc->gadget);
+ }
+ 
++static void vbus_event_work(struct work_struct *work)
++{
++	struct usb_udc *udc = container_of(work, struct usb_udc, vbus_work);
++
++	usb_udc_connect_control(udc);
++}
++
+ /**
+  * usb_udc_vbus_handler - updates the udc core vbus status, and try to
+  * connect or disconnect gadget
+@@ -1094,6 +1106,14 @@ static void usb_udc_connect_control(struct usb_udc *udc)
+  *
+  * The udc driver calls it when it wants to connect or disconnect gadget
+  * according to vbus status.
++ *
++ * This function can be invoked from interrupt context by irq handlers of
++ * the gadget drivers, however, usb_udc_connect_control() has to run in
++ * non-atomic context due to the following:
++ * a. Some of the gadget driver implementations expect the ->pullup
++ * callback to be invoked in non-atomic context.
++ * b. usb_gadget_disconnect() acquires udc_lock which is a mutex.
++ * Hence offload invocation of usb_udc_connect_control() to workqueue.
+  */
+ void usb_udc_vbus_handler(struct usb_gadget *gadget, bool status)
+ {
+@@ -1101,7 +1121,7 @@ void usb_udc_vbus_handler(struct usb_gadget *gadget, bool status)
+ 
+ 	if (udc) {
+ 		udc->vbus = status;
+-		usb_udc_connect_control(udc);
++		schedule_work(&udc->vbus_work);
+ 	}
+ }
+ EXPORT_SYMBOL_GPL(usb_udc_vbus_handler);
+@@ -1328,6 +1348,7 @@ int usb_add_gadget(struct usb_gadget *gadget)
+ 	mutex_lock(&udc_lock);
+ 	list_add_tail(&udc->list, &udc_list);
+ 	mutex_unlock(&udc_lock);
++	INIT_WORK(&udc->vbus_work, vbus_event_work);
+ 
+ 	ret = device_add(&udc->dev);
+ 	if (ret)
+@@ -1459,6 +1480,7 @@ void usb_del_gadget(struct usb_gadget *gadget)
+ 	flush_work(&gadget->work);
+ 	device_del(&gadget->dev);
+ 	ida_free(&gadget_id_numbers, gadget->id_number);
++	cancel_work_sync(&udc->vbus_work);
+ 	device_unregister(&udc->dev);
+ }
+ EXPORT_SYMBOL_GPL(usb_del_gadget);
+@@ -1527,6 +1549,7 @@ static int gadget_bind_driver(struct device *dev)
+ 	if (ret)
+ 		goto err_start;
+ 	usb_gadget_enable_async_callbacks(udc);
++	udc->allow_connect = true;
+ 	usb_udc_connect_control(udc);
+ 
+ 	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
+@@ -1558,6 +1581,8 @@ static void gadget_unbind_driver(struct device *dev)
+ 
+ 	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
+ 
++	udc->allow_connect = false;
++	cancel_work_sync(&udc->vbus_work);
+ 	usb_gadget_disconnect(gadget);
+ 	usb_gadget_disable_async_callbacks(udc);
+ 	if (gadget->irq)
+
+base-commit: d37537a1f7cf09e304fe7993cb5e732534a0fb22
+-- 
+2.41.0.162.gfafddb0af9-goog
+
