@@ -2,110 +2,428 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 458D37276EB
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 07:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77BC27276F1
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 07:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234482AbjFHFv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 01:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45530 "EHLO
+        id S234506AbjFHF4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 01:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231596AbjFHFv5 (ORCPT
+        with ESMTP id S231596AbjFHF4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 01:51:57 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EDD81707;
-        Wed,  7 Jun 2023 22:51:56 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-25655c1fcf7so62212a91.0;
-        Wed, 07 Jun 2023 22:51:56 -0700 (PDT)
+        Thu, 8 Jun 2023 01:56:21 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B491C1984;
+        Wed,  7 Jun 2023 22:56:16 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-64d18d772bdso147031b3a.3;
+        Wed, 07 Jun 2023 22:56:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686203515; x=1688795515;
+        d=gmail.com; s=20221208; t=1686203776; x=1688795776;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=edezA4FlQa4yBPYDm1dMgz4cn5b7ZEoxxGt3/cZlG2A=;
-        b=rrwSen/aCJnDP5iTTXhiDG2avnOdZi+PjlYNKqxrl3+vMeN3kLFgCq59LhyVnTrMP0
-         dKiNDul7TSOoAs3BCpt99HLYmx5T6mV2ra9yFu2PI2ErRA9rfeerknUvxCCEqnQOQRS0
-         4mzhM1PQUgBe4/AVI9UsoZ8lGZTsDlx0b7kNFA8ET3KSSylTRZEGh48lLiiRCM/liep3
-         IVWT8ldRLgrqZ+7zDz30BwHpTItHF/d7VB6LdIjrUGQ4lHRWWD24/ELBUnD2yODxClCs
-         xKY6V1q+UGut5nHQLFV4sZLiL+zsKKkzLOOtMfegBSw2k2x9RMqzXwJZpw1nFNoMXbuV
-         HAoQ==
+        bh=pZwzO3o0E1olTOiJsENxuVcjT+nDeF5XeaCyL2M7a98=;
+        b=a7SMFsYqI2rtfFNH1Fr9g7YlBQX1+mtpWlrE/eI391Pth/XnVfJfhGb8vwcyDG5uTg
+         T5PX2JuX2MUEFzlC8Pu1qxz9ypqAPEX6HJx6cvHM50fop0mrglrWH5SO47E1zw5XaXBw
+         6hcfvQVToTC0An/X19qGJyi/yu+L5vOZhKwU8ErmADvTley1j6SB3PpbS5GhXDY5z6BC
+         W4GOlZYQUjFSWhqST3GjPxRRKLy+D27AnSRUv6TyEgS4a3yfss5evHw0mPXdUwGBdy6+
+         UlMah5GiOpXc3dOlHhSlWX4vykDs8dpi1BH+eQtC2wLAzMWlObZFh72fuokmAeZKGZGK
+         pDzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686203515; x=1688795515;
+        d=1e100.net; s=20221208; t=1686203776; x=1688795776;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=edezA4FlQa4yBPYDm1dMgz4cn5b7ZEoxxGt3/cZlG2A=;
-        b=X0Lrzw6S8kHsSyYPfehF9R8wJRoFrHZR9iKlFFxr0TuyOHoSNS0upivB1dIexQWjBD
-         54yybThvBI9b9hgffxAlbyiF0giNweywWhbL57UhfsXurtsM09uUCITabrHgmdBAT00e
-         f80ldth/dx6hZR3aoXQOgZ6mn8N6ZLDK455IDCYcuEucn1tZhGCCRnHtnfA5BSV6DXy2
-         3p9gufaQZyTZad0eA+Vb0N7116VznYMv4wyFs1SRtHMcni3NUQbv5XmD8NdnQSRkJGXw
-         mvWeOe13ZZXnyzPZio9TlSK0/KGaZsxBkafFbapcgShKMuKJHkp/0bPXQNT49K6ldYD4
-         R2CQ==
-X-Gm-Message-State: AC+VfDxxLidSbVRwkKTj4EXB+JdVUt27Yv7zuR6/3b+DeSmUOBPbMRvL
-        Y8oJUcpcqIKYFYQlWH0mpfk=
-X-Google-Smtp-Source: ACHHUZ5SSWqD+2vo24pxwUlQz0AYKTMLPj89ezZzEUnDbXv5m+amO6MvVBxs1wpbc2X5cn9FB1J7Dg==
-X-Received: by 2002:a17:90b:38c2:b0:259:c00a:8830 with SMTP id nn2-20020a17090b38c200b00259c00a8830mr4919307pjb.4.1686203515133;
-        Wed, 07 Jun 2023 22:51:55 -0700 (PDT)
-Received: from hoboy.vegasvil.org ([2601:640:8200:e:e2d5:5eff:fea5:802f])
-        by smtp.gmail.com with ESMTPSA id gt1-20020a17090af2c100b002591b957641sm433072pjb.41.2023.06.07.22.51.54
+        bh=pZwzO3o0E1olTOiJsENxuVcjT+nDeF5XeaCyL2M7a98=;
+        b=KM5BSXhvo8PcLw/Rhgh6t9FMG/c4ICBByulvTg8lKiTIhjLVWiXrcYUbN3dHdpPj4B
+         GM6akpNtG50cPTcMPAd2NS2l8HyAig13iYskVL8AWIhl0Ivsg8SFsyJ1GqV13Sux1BTb
+         I00NvnCVIEMMIsH+c9CKn8ehU/plxF75mVYHSkZx8Z2IHCpTrLb1244mDIJADNqJoCqP
+         BKjjU1GWZGyWR+dy+0v8VFewl45a6xpW7g8rV378RgpcSoU7/kQsvXUfoXueh7Wky7kE
+         iyKG8btoyyOTShBc9AKqEKZD15hni8Nwpx/nmeQtZjkNVlM5qYGWYZM/VslrBBFblS53
+         OMkw==
+X-Gm-Message-State: AC+VfDyGoRiFGmoobsEI4TOPVrAgUOhJLV5VNOpLx8oAWuhd+hebbkML
+        SrAu1oDIPdcSUSsrH5YatC0=
+X-Google-Smtp-Source: ACHHUZ7gnr8owF3oPlHuDMQtmzRRgk19juqE+hi6ZsPd9ktJwCzZSYOp0D9+VPom979iEADZAsU5QA==
+X-Received: by 2002:a05:6a00:3a26:b0:64c:4f2f:a235 with SMTP id fj38-20020a056a003a2600b0064c4f2fa235mr8768315pfb.30.1686203775918;
+        Wed, 07 Jun 2023 22:56:15 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-10.three.co.id. [180.214.233.10])
+        by smtp.gmail.com with ESMTPSA id i20-20020aa79094000000b0063d2d9990ecsm303466pfa.87.2023.06.07.22.56.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 22:51:54 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 22:51:52 -0700
-From:   Richard Cochran <richardcochran@gmail.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Subject: Re: [PATCH net-next] net: micrel: Change to receive timestamp in the
- frame for lan8841
-Message-ID: <ZIFseH84Cv1KSOtj@hoboy.vegasvil.org>
-References: <20230607070948.1746768-1-horatiu.vultur@microchip.com>
- <ZIDCpPbCFCxKBV2k@hoboy.vegasvil.org>
+        Wed, 07 Jun 2023 22:56:15 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 90A081069EA; Thu,  8 Jun 2023 12:56:11 +0700 (WIB)
+Date:   Thu, 8 Jun 2023 12:56:11 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Richard Fontana <rfontana@redhat.com>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Franziska Naepelt <franziska.naepelt@googlemail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux SPDX Licenses <linux-spdx@vger.kernel.org>,
+        Linux Kernel Janitors <kernel-janitors@vger.kernel.org>,
+        Linux Crypto <linux-crypto@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Alexander Kjeldaas <astor@fast.no>,
+        Herbert Valerio Riedel <hvr@hvrlab.org>,
+        Kyle McMartin <kyle@debian.org>,
+        "Adam J . Richter" <adam@yggdrasil.com>,
+        Dr Brian Gladman <brg@gladman.me.uk>,
+        Stephan Mueller <smueller@chronox.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH 1/8] crypto: Convert dual BSD 3-Clause/GPL 2.0
+ boilerplate to SPDX identifier
+Message-ID: <ZIFte-Ik0PbwoYm-@debian.me>
+References: <20230607053940.39078-10-bagasdotme@gmail.com>
+ <20230607053940.39078-11-bagasdotme@gmail.com>
+ <CAC1cPGxD6xOLksyMHCcreFyEv5Yoo50LY=xM9BmOEP=oECoNww@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7112UkPf1cmvdMEW"
 Content-Disposition: inline
-In-Reply-To: <ZIDCpPbCFCxKBV2k@hoboy.vegasvil.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+In-Reply-To: <CAC1cPGxD6xOLksyMHCcreFyEv5Yoo50LY=xM9BmOEP=oECoNww@mail.gmail.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 10:47:16AM -0700, Richard Cochran wrote:
-> On Wed, Jun 07, 2023 at 09:09:48AM +0200, Horatiu Vultur wrote:
-> > +static long lan8841_ptp_do_aux_work(struct ptp_clock_info *ptp)
-> > +{
-> > +	struct kszphy_ptp_priv *ptp_priv = container_of(ptp, struct kszphy_ptp_priv,
-> > +							ptp_clock_info);
-> > +	struct skb_shared_hwtstamps *shhwtstamps;
-> > +	struct timespec64 ts;
-> > +	struct sk_buff *skb;
-> > +	u32 ts_header;
-> > +
-> > +	while ((skb = skb_dequeue(&ptp_priv->rx_queue)) != NULL) {
-> > +		lan8841_ptp_getseconds(ptp, &ts);
-> 
-> No need to call this once per frame.  It would be sufficent to call it
-> once every 2 seconds and cache the result.
 
-Okay, this is tricky.
+--7112UkPf1cmvdMEW
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-- If you call lan8841_ptp_getseconds() after gathering the received
-  frames, then the frame timestamps are clearly in the past WRT the
-  call to getseconds.  That makes the wrap check simpler.  But the
-  getseconds call really should be placed before the 'while' loop.
+On Wed, Jun 07, 2023 at 10:10:34AM -0400, Richard Fontana wrote:
+> On Wed, Jun 7, 2023 at 1:42=E2=80=AFAM Bagas Sanjaya <bagasdotme@gmail.co=
+m> wrote:
+> >
+> > Replace license boilerplate for dual BSD-3-Clause/GPL 2.0 (only or
+> > later) with corresponding SPDX license identifier.
+>=20
+> This is at least the fourth or fifth time (I'm losing track) where you
+> have incorrectly assumed a particular non-GPL license text matches a
+> particular SPDX identifier without (apparently) checking.
+>=20
+> Bagas, I urge that you learn more about the nature of SPDX identifiers
+> before submitting any further patches at least involving replacement
+> of non-GPL notices with SPDX identifiers. For this unprecedented
+> license notice replacement initiative to have any legitimacy it must
+> attempt to apply SPDX identifiers correctly.
+>=20
+> > diff --git a/crypto/aes_generic.c b/crypto/aes_generic.c
+> > index 666474b81c6aa5..2e042bd306f9c5 100644
+> > --- a/crypto/aes_generic.c
+> > +++ b/crypto/aes_generic.c
+> > @@ -1,3 +1,4 @@
+> > +// SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-or-later
+> >  /*
+> >   * Cryptographic API.
+> >   *
+> > @@ -11,39 +12,9 @@
+> >   *  Kyle McMartin <kyle@debian.org>
+> >   *  Adam J. Richter <adam@yggdrasil.com> (conversion to 2.5 API).
+> >   *
+> > - * This program is free software; you can redistribute it and/or modify
+> > - * it under the terms of the GNU General Public License as published by
+> > - * the Free Software Foundation; either version 2 of the License, or
+> > - * (at your option) any later version.
+> > - *
+> >   * -------------------------------------------------------------------=
+--------
+> >   * Copyright (c) 2002, Dr Brian Gladman <brg@gladman.me.uk>, Worcester=
+, UK.
+> >   * All rights reserved.
+> > - *
+> > - * LICENSE TERMS
+> > - *
+> > - * The free distribution and use of this software in both source and b=
+inary
+> > - * form is allowed (with or without changes) provided that:
+> > - *
+> > - *   1. distributions of this source code include the above copyright
+> > - *      notice, this list of conditions and the following disclaimer;
+> > - *
+> > - *   2. distributions in binary form include the above copyright
+> > - *      notice, this list of conditions and the following disclaimer
+> > - *      in the documentation and/or other associated materials;
+> > - *
+> > - *   3. the copyright holder's name is not used to endorse products
+> > - *      built using this software without specific written permission.
+> > - *
 
-- If the Rx frame rate exceeds 1/second, then it would be more
-  efficient to call getseconds every second, and cache the result.
-  But then the wrap around check needs to account for the fact that
-  the cached value may have occurred either before or after the frame
-  timestamp.
+Hi Richard,
 
-I'll explain that second point when my brain wakes again...
+> > - * ALTERNATIVELY, provided that this notice is retained in full, this =
+product
+> > - * may be distributed under the terms of the GNU General Public Licens=
+e (GPL),
+> > - * in which case the provisions of the GPL apply INSTEAD OF those give=
+n above.
+> > - *
+> > - * DISCLAIMER
+> > - *
+> > - * This software is provided 'as is' with no explicit or implied warra=
+nties
+> > - * in respect of its properties, including, but not limited to, correc=
+tness
+> > - * and/or fitness for purpose.
+> >   * -------------------------------------------------------------------=
+--------
+>=20
+> This is not BSD-3-Clause as defined by SPDX. It may be a match to
+> `Brian-Gladman-3-Clause` but I haven't checked closely.
+>=20
+> > diff --git a/crypto/algif_rng.c b/crypto/algif_rng.c
+> > index 407408c437308f..4d4b9e60f72c19 100644
+> > --- a/crypto/algif_rng.c
+> > +++ b/crypto/algif_rng.c
+> > @@ -1,41 +1,10 @@
+> > +// SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
+> >  /*
+> >   * algif_rng: User-space interface for random number generators
+> >   *
+> >   * This file provides the user-space API for random number generators.
+> >   *
+> >   * Copyright (C) 2014, Stephan Mueller <smueller@chronox.de>
+> > - *
+> > - * Redistribution and use in source and binary forms, with or without
+> > - * modification, are permitted provided that the following conditions
+> > - * are met:
+> > - * 1. Redistributions of source code must retain the above copyright
+> > - *    notice, and the entire permission notice in its entirety,
+> > - *    including the disclaimer of warranties.
+> > - * 2. Redistributions in binary form must reproduce the above copyright
+> > - *    notice, this list of conditions and the following disclaimer in =
+the
+> > - *    documentation and/or other materials provided with the distribut=
+ion.
+> > - * 3. The name of the author may not be used to endorse or promote
+> > - *    products derived from this software without specific prior
+> > - *    written permission.
+> > - *
+> > - * ALTERNATIVELY, this product may be distributed under the terms of
+> > - * the GNU General Public License, in which case the provisions of the=
+ GPL2
+> > - * are required INSTEAD OF the above restrictions.  (This clause is
+> > - * necessary due to a potential bad interaction between the GPL and
+> > - * the restrictions contained in a BSD-style copyright.)
+> > - *
+> > - * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
+> > - * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+> > - * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ALL OF
+> > - * WHICH ARE HEREBY DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE
+> > - * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+> > - * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+> > - * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+> > - * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+> > - * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+> > - * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+> > - * USE OF THIS SOFTWARE, EVEN IF NOT ADVISED OF THE POSSIBILITY OF SUCH
+> > - * DAMAGE.
+> >   */
+>=20
+> The BSD portion of this license notice is not a match to BSD-3-Clause
+> (see my comment on another patch which I think had the same license
+> text).
 
-Thanks,
-Richard
+At the time, I guessed that boilerplate wording have the same meaning as
+the actual BSD 3-Clause license.
+
+(And no wonder why this file missed previous SPDX batches).
+
+tglx, I'm adding you to Cc:. Please have a look on this (and following
+below) BSD wording variants.
+
+>=20
+>=20
+>=20
+>=20
+> >  #include <linux/capability.h>
+> > diff --git a/crypto/jitterentropy-kcapi.c b/crypto/jitterentropy-kcapi.c
+> > index 7d1463a1562acb..78230ce74fc840 100644
+> > --- a/crypto/jitterentropy-kcapi.c
+> > +++ b/crypto/jitterentropy-kcapi.c
+> > @@ -1,40 +1,10 @@
+> > +// SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
+> >  /*
+> >   * Non-physical true random number generator based on timing jitter --
+> >   * Linux Kernel Crypto API specific code
+> >   *
+> >   * Copyright Stephan Mueller <smueller@chronox.de>, 2015 - 2023
+> >   *
+> > - * Redistribution and use in source and binary forms, with or without
+> > - * modification, are permitted provided that the following conditions
+> > - * are met:
+> > - * 1. Redistributions of source code must retain the above copyright
+> > - *    notice, and the entire permission notice in its entirety,
+> > - *    including the disclaimer of warranties.
+> > - * 2. Redistributions in binary form must reproduce the above copyright
+> > - *    notice, this list of conditions and the following disclaimer in =
+the
+> > - *    documentation and/or other materials provided with the distribut=
+ion.
+> > - * 3. The name of the author may not be used to endorse or promote
+> > - *    products derived from this software without specific prior
+> > - *    written permission.
+> > - *
+> > - * ALTERNATIVELY, this product may be distributed under the terms of
+> > - * the GNU General Public License, in which case the provisions of the=
+ GPL2 are
+> > - * required INSTEAD OF the above restrictions.  (This clause is
+> > - * necessary due to a potential bad interaction between the GPL and
+> > - * the restrictions contained in a BSD-style copyright.)
+> > - *
+> > - * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
+> > - * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+> > - * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ALL OF
+> > - * WHICH ARE HEREBY DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE
+> > - * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+> > - * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+> > - * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+> > - * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+> > - * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+> > - * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+> > - * USE OF THIS SOFTWARE, EVEN IF NOT ADVISED OF THE POSSIBILITY OF SUCH
+> > - * DAMAGE.
+>=20
+> Also not a match to BSD-3-Clause.
+
+See my below reply.
+
+>=20
+>=20
+> >  #include <crypto/hash.h>
+> > diff --git a/crypto/jitterentropy.c b/crypto/jitterentropy.c
+> > index c7d7f2caa7793b..c8437bd20dc903 100644
+> > --- a/crypto/jitterentropy.c
+> > +++ b/crypto/jitterentropy.c
+> > @@ -1,3 +1,4 @@
+> > +// SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
+> >  /*
+> >   * Non-physical true random number generator based on timing jitter --
+> >   * Jitter RNG standalone code.
+> > @@ -9,40 +10,6 @@
+> >   *
+> >   * See https://www.chronox.de/jent.html
+> >   *
+> > - * License
+> > - * =3D=3D=3D=3D=3D=3D=3D
+> > - *
+> > - * Redistribution and use in source and binary forms, with or without
+> > - * modification, are permitted provided that the following conditions
+> > - * are met:
+> > - * 1. Redistributions of source code must retain the above copyright
+> > - *    notice, and the entire permission notice in its entirety,
+> > - *    including the disclaimer of warranties.
+> > - * 2. Redistributions in binary form must reproduce the above copyright
+> > - *    notice, this list of conditions and the following disclaimer in =
+the
+> > - *    documentation and/or other materials provided with the distribut=
+ion.
+> > - * 3. The name of the author may not be used to endorse or promote
+> > - *    products derived from this software without specific prior
+> > - *    written permission.
+> > - *
+> > - * ALTERNATIVELY, this product may be distributed under the terms of
+> > - * the GNU General Public License, in which case the provisions of the=
+ GPL2 are
+> > - * required INSTEAD OF the above restrictions.  (This clause is
+> > - * necessary due to a potential bad interaction between the GPL and
+> > - * the restrictions contained in a BSD-style copyright.)
+> > - *
+> > - * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
+> > - * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+> > - * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ALL OF
+> > - * WHICH ARE HEREBY DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE
+> > - * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+> > - * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+> > - * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+> > - * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+> > - * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+> > - * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+> > - * USE OF THIS SOFTWARE, EVEN IF NOT ADVISED OF THE POSSIBILITY OF SUCH
+> > - * DAMAGE.
+>=20
+> Also not a match to BSD-3-Clause.
+
+The first clause also addes disclaimer perseverance as in the second;
+and the third clause is worded differently (but same meaning).
+
+>=20
+>=20
+> > diff --git a/crypto/keywrap.c b/crypto/keywrap.c
+> > index 054d9a216fc9f3..8c51235a91a9ae 100644
+> > --- a/crypto/keywrap.c
+> > +++ b/crypto/keywrap.c
+> > @@ -1,39 +1,9 @@
+> > +// SPDX-License-Identifier: BSD-3-Clause OR GPL-2.0-only
+> >  /*
+> >   * Key Wrapping: RFC3394 / NIST SP800-38F
+> >   *
+> >   * Copyright (C) 2015, Stephan Mueller <smueller@chronox.de>
+> >   *
+> > - * Redistribution and use in source and binary forms, with or without
+> > - * modification, are permitted provided that the following conditions
+> > - * are met:
+> > - * 1. Redistributions of source code must retain the above copyright
+> > - *    notice, and the entire permission notice in its entirety,
+> > - *    including the disclaimer of warranties.
+> > - * 2. Redistributions in binary form must reproduce the above copyright
+> > - *    notice, this list of conditions and the following disclaimer in =
+the
+> > - *    documentation and/or other materials provided with the distribut=
+ion.
+> > - * 3. The name of the author may not be used to endorse or promote
+> > - *    products derived from this software without specific prior
+> > - *    written permission.
+> > - *
+> > - * ALTERNATIVELY, this product may be distributed under the terms of
+> > - * the GNU General Public License, in which case the provisions of the=
+ GPL2
+> > - * are required INSTEAD OF the above restrictions.  (This clause is
+> > - * necessary due to a potential bad interaction between the GPL and
+> > - * the restrictions contained in a BSD-style copyright.)
+> > - *
+> > - * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
+> > - * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+> > - * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE, ALL OF
+> > - * WHICH ARE HEREBY DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR BE
+> > - * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+> > - * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+> > - * OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+> > - * BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+> > - * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+> > - * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+> > - * USE OF THIS SOFTWARE, EVEN IF NOT ADVISED OF THE POSSIBILITY OF SUCH
+> > - * DAMAGE.
+>=20
+> Also not a match to BSD-3-Clause.
+
+See my above reply.
+
+Stephan (original author), was your intention to license these files
+under BSD 3-Clause?
+
+Thanks for reviewing.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--7112UkPf1cmvdMEW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZIFtewAKCRD2uYlJVVFO
+o6aPAQC0TpMnZT/6CXlB/GpDwU4wmtEuBmGnhWKL5HYoKfcpdQEA6HK/+R0hHtqU
+nmgZQxRBy/srfOQflXFPn1lUy8+yrwM=
+=XYcN
+-----END PGP SIGNATURE-----
+
+--7112UkPf1cmvdMEW--
