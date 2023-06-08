@@ -2,145 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DCB3727AB6
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D510727AB9
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235631AbjFHJCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 05:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51990 "EHLO
+        id S234628AbjFHJDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 05:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235601AbjFHJCD (ORCPT
+        with ESMTP id S231359AbjFHJDh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 05:02:03 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E87272E;
-        Thu,  8 Jun 2023 02:02:02 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 95A3A66058B2;
-        Thu,  8 Jun 2023 10:02:00 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686214921;
-        bh=LJ+HvhTd3r8A40SMUVKIa+zdl0EATp6N8y8llSkifhg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=BPd1t8XBtn8+kBHTWacnnTywabw5crwx4HWW2ZfQqRkv3FSbaMc4djBmtqXiEdksT
-         RY6LKQ0b5GUt/6dyETcf+oumayZ6S7ZcZOfevyRiSilJIOhUFYdABftjtGti7lEunk
-         +aXTwE6wUY4U1NsAdbjDhJYBhs+mY1Kw5x5qrIAhka3/xOCsS4fmkLC8rT3AyndWZq
-         Kg5O0bB14Evlq7oMBrdLUAw06uBRjWUDl4K43TPbOp2QzJZEwL3zunbcG5kYq51VB+
-         DCgRzH0fZv4YQEgJBBUMta31sd00p32plSEebCoEjOnUb3dwdix1jSm2Hq0Sledf9M
-         HjthEQ0dKa55w==
-Message-ID: <f0018817-d47b-d772-ed9f-9126bf71a0d1@collabora.com>
-Date:   Thu, 8 Jun 2023 11:01:58 +0200
+        Thu, 8 Jun 2023 05:03:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07262D53
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 02:02:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686214971;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UYiTEDV9xbat0CXOjHRUSDYApWdsY3/wGaCOCwJ5h8Q=;
+        b=FX9c7ySwjAt31AtT2e/c/w0xY2njQy1e/Usy6YYOVMoKdYDZmpBjfRc7yZqQ2vbiOBrc5A
+        /WyN6z4otV5LiShVuW8KGufncsVPurxULnGCnM9PFfztexLpwOJhxEnLuuYHExu5Uk4B9v
+        /VUaTIhEQ3T6rQ1D8qUpo1XGkyXbikg=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-642-ViQOIWztN4Wl6_VB5HsrZA-1; Thu, 08 Jun 2023 05:02:50 -0400
+X-MC-Unique: ViQOIWztN4Wl6_VB5HsrZA-1
+Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-514a6909c35so417337a12.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 02:02:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686214969; x=1688806969;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UYiTEDV9xbat0CXOjHRUSDYApWdsY3/wGaCOCwJ5h8Q=;
+        b=AnXXwiXr5Y1utGpF9Kh++vwaj1AXd5yrlYCYSgUlxVpt5b4WWbdTjkM4Zrh59H+PYW
+         8asSRtyo/aY7/L8VQW4hhU8RiaZF47HiOp8x6qqoskyFRkf2ab20eSumyzSoxDZCAVjB
+         S+N1utgMMVb8Ha6LcPDrHb8O1khPdcKkPrjSh8O+iMZQhS1aBpckrMRXDPwztIT+OsvB
+         z+RcelKIqdn+0tqgfO4fuJIHPKW/1ei1zHOiztcHWfrNFVE6ju/3iu7QVrCdj6Mhiawk
+         kC+qNdwL+7eyVw/VRfrjy58m4Wm9MgUW23rosK9FnHoDgfHUybyS6pq8Mw2nG3ULJT5P
+         CTkQ==
+X-Gm-Message-State: AC+VfDyN0KVJIr3U1IFhKvvAqxxdFUNIA58KaHg4TQRZPbVlR69zyetO
+        ZX+cNfibELH0lGl/wWKeAdsOI+84WZYjJXv+n7AixGVBZUN19Q0qmVyH13EC2lRrrQUxXkuQPGi
+        i1ceChE8jkSUqXHsjVbHkyYaz
+X-Received: by 2002:aa7:c909:0:b0:514:9284:2380 with SMTP id b9-20020aa7c909000000b0051492842380mr5525705edt.19.1686214969506;
+        Thu, 08 Jun 2023 02:02:49 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ583v3xnIpRXAoxcmeL7kTs6T18URZvEhmi8VeLKDuR82Z/L6n/+DSS2gBcfwqiyNxy0k0ozg==
+X-Received: by 2002:aa7:c909:0:b0:514:9284:2380 with SMTP id b9-20020aa7c909000000b0051492842380mr5525693edt.19.1686214969270;
+        Thu, 08 Jun 2023 02:02:49 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id y13-20020a056402134d00b005106975c7a1sm301873edw.23.2023.06.08.02.02.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jun 2023 02:02:48 -0700 (PDT)
+Message-ID: <e3f417ab-9072-11c1-9e2c-406b7aa6cf4a@redhat.com>
+Date:   Thu, 8 Jun 2023 11:02:47 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 3/5] media: mediatek: vcodec: Read HW active status
- from clock
-Content-Language: en-US
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Stephen Boyd <sboyd@kernel.org>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>, kernel@collabora.com,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20230607205714.510012-1-nfraprado@collabora.com>
- <20230607205714.510012-4-nfraprado@collabora.com>
- <CAGXv+5HHARvkCYfjPjRKgyWuzv-Dt215z1=yA+_tw4hyasdGQA@mail.gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <CAGXv+5HHARvkCYfjPjRKgyWuzv-Dt215z1=yA+_tw4hyasdGQA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+ Thunderbird/102.10.0
+Subject: Re: linux-next: Signed-off-by missing for commit in the drivers-x86
+ tree
+Content-Language: en-US, nl
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mark Gross <markgross@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20230608091527.3b26a533@canb.auug.org.au>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230608091527.3b26a533@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 08/06/23 10:12, Chen-Yu Tsai ha scritto:
-> On Thu, Jun 8, 2023 at 4:57 AM Nícolas F. R. A. Prado
-> <nfraprado@collabora.com> wrote:
->>
->> Remove the requirement of a VDEC_SYS reg iospace. To achieve that, rely
->> on the "active" clock being passed through the DT, and read its status
->> during IRQ handling to check whether the HW is active.
->>
->> The old behavior is still present when reg-names aren't supplied, as to
->> keep backward compatibility.
->>
->> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
->> ---
->>
->> (no changes since v1)
->>
->>   .../mediatek/vcodec/mtk_vcodec_dec_drv.c      | 59 +++++++++++++++----
->>   .../mediatek/vcodec/mtk_vcodec_dec_hw.c       | 20 +++++--
->>   .../mediatek/vcodec/mtk_vcodec_dec_pm.c       | 12 +++-
->>   .../platform/mediatek/vcodec/mtk_vcodec_drv.h |  1 +
->>   4 files changed, 74 insertions(+), 18 deletions(-)
->>
->> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
->> index 9c652beb3f19..8038472fb67b 100644
->> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
->> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
->> @@ -16,6 +16,7 @@
->>   #include <media/v4l2-mem2mem.h>
->>   #include <media/videobuf2-dma-contig.h>
->>   #include <media/v4l2-device.h>
->> +#include <linux/clk-provider.h>
-> 
->                     ^^^^^^^^^^^^^^
-> 
-> This seems like a violation of the API separation.
-> 
->>   #include "mtk_vcodec_drv.h"
->>   #include "mtk_vcodec_dec.h"
->> @@ -38,22 +39,29 @@ static int mtk_vcodec_get_hw_count(struct mtk_vcodec_dev *dev)
->>          }
->>   }
->>
->> +static bool mtk_vcodec_is_hw_active(struct mtk_vcodec_dev *dev)
->> +{
->> +       u32 cg_status = 0;
->> +
->> +       if (!dev->reg_base[VDEC_SYS])
->> +               return __clk_is_enabled(dev->pm.vdec_active_clk);
-> 
-> AFAIK this is still around for clk drivers that haven't moved to clk_hw.
-> It shouldn't be used by clock consumers. Would it be better to just pass
-> a syscon?
-> 
+Hi Stephen,
 
-This is a legit usage of __clk_is_enabled().... because that's what we're really
-doing here, we're checking if a clock got enabled by the underlying MCU (as that
-clock goes up after the VDEC boots).
+On 6/8/23 01:15, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Commit
+> 
+>   15f8e38c6c1e ("platform/x86: int3472: Evaluate device's _DSM method to control imaging clock")
+> 
+> is missing a Signed-off-by from its committer.
 
-If this is *not* acceptable as it is, we will have to add a clock API call to
-check if a clock is enabled... but it didn't seem worth doing since we don't
-expect anyone else to have any legit usage of that, or at least, we don't know
-about anyone else needing that...
+My bad, sorry. This is fixed now.
 
-As for the syscon, that's something that we've been discussing as well... the
-thing is: we're really *really* checking if a clock is enabled, so we should
-be using clock related calls... reading from a syscon means that we'd have to
-perform a register read (of.. again.. a clock) outside of the clock framework
-which, in my opinion, wouldn't be clean; I'd expect that to become a bit messy
-in the future too, should more MediaTek SoCs (I think MT8192/95 are already in
-the list, Nicolas please correct me if I'm wrong here) need the same thing, as
-we'd be adding more definitions around.
+Regards,
 
-Cheers,
-Angelo
+Hans
+
+
+
 
