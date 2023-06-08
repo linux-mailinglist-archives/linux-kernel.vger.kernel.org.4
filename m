@@ -2,86 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8617F727624
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 06:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B97E727626
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 06:36:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233906AbjFHEg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 00:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
+        id S233878AbjFHEgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 00:36:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232528AbjFHEgX (ORCPT
+        with ESMTP id S233629AbjFHEgp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 00:36:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 166B91988;
-        Wed,  7 Jun 2023 21:36:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 951326478D;
-        Thu,  8 Jun 2023 04:36:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A0E3C433D2;
-        Thu,  8 Jun 2023 04:36:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686198981;
-        bh=L/74qyYmuC5m/lS+AJK+0bRD2NenVahTw3pHvJavynU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=CjZ2FR/NVSEAmxfxC6it73ZkPHCC0KNq7ODRXgfwkeQnYARfnvcFfnZDHEz4j7iKQ
-         N43RK9KGXoYn1ZYCQL4T3jAQS1hUZKZ1+cJEjI1BO2QjXGtR5L2nQQAa3faFE7WHyp
-         q6Z+wKRF0odV0nvZzqvl+OkJyHMLTmPblr6uZzBL3+XCEtfn7ara+V3ld95F2Ftyjy
-         3nzVsFs72rddqA5Rsn4YQkyUzgSH69OcWbv+Z5mHBaZaildab4JBAZKr4C1JzTJK6F
-         G5pPo+j7me2d+h7ODJEwq5pR6eY7hUb9ZI51KZYTyVL7EhXUsb3fZFE4GpJtWVALGJ
-         8CzPRrjsZTeTw==
-Date:   Wed, 7 Jun 2023 21:36:20 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Raymond Hackley <raymondhackley@protonmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Michael Walle <michael@walle.cc>,
-        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Jeremy Kerr <jk@codeconstruct.com.au>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/2] NFC: nxp-nci: Add pad supply voltage pvdd-supply
-Message-ID: <20230607213620.4087b0e2@kernel.org>
-In-Reply-To: <20230606072454.145106-1-raymondhackley@protonmail.com>
-References: <20230606071824.144990-1-raymondhackley@protonmail.com>
-        <20230606072454.145106-1-raymondhackley@protonmail.com>
+        Thu, 8 Jun 2023 00:36:45 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 321622705;
+        Wed,  7 Jun 2023 21:36:42 -0700 (PDT)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 3584aXeb015730;
+        Thu, 8 Jun 2023 06:36:33 +0200
+Date:   Thu, 8 Jun 2023 06:36:33 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Zhangjin Wu <falcon@tinylab.org>, thomas@t-8ch.de,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: nolibc patches, still possible for 6.5 ?
+Message-ID: <ZIFa0Y7GIN0S/T6q@1wt.eu>
+References: <ZHyPi29q3MKiNAQZ@1wt.eu>
+ <5494ac68-b4b9-434f-92c1-7e197c92a4ab@paulmck-laptop>
+ <ZID0b+nIcypMjV0y@1wt.eu>
+ <66c0e446-846c-47a6-ab60-948dc0118cec@paulmck-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <66c0e446-846c-47a6-ab60-948dc0118cec@paulmck-laptop>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 06 Jun 2023 07:25:55 +0000 Raymond Hackley wrote:
-> +			if (r != -EPROBE_DEFER)
-> +				dev_err(dev,
-> +					"Failed to get regulator pvdd: %d\n",
-> +					r);
-> +			return r;
+On Wed, Jun 07, 2023 at 03:58:01PM -0700, Paul E. McKenney wrote:
+> > Regarding the build failure affecting s390x and riscv64, it's a regular
+> > kernel resulting from "make defconfig". For both archs, I'm getting this
+> > failure:
+> > 
+> >   In file included from kernel/rcu/update.c:649:
+> >   kernel/rcu/tasks.h: In function 'get_rcu_tasks_gp_kthread':
+> >     CC      fs/kernfs/dir.o
+> >     CC      security/bpf/hooks.o
+> >   kernel/rcu/tasks.h:1939:16: error: 'rcu_tasks' undeclared (first use in this function)
+> >    1939 |         return rcu_tasks.kthread_ptr;
+> >         |                ^~~~~~~~~
+> >   kernel/rcu/tasks.h:1939:16: note: each undeclared identifier is reported only once for each function it appears in
+> >   kernel/rcu/tasks.h:1940:1: error: control reaches end of non-void function [-Werror=return-type]
+> >    1940 | }
+> >         | ^
+> >   cc1: some warnings being treated as errors
+> > 
+> > I rebased the branch on top of 6.4-rc5 and got the same. I'm building
+> > with gcc-11.3.0 from kernel.org. I'm not sure whether this comes from
+> > my build environment or recent changes to the kernel, but I'm sure I
+> > haven't seen that error during 6.3-rc cycle. However, given that
+> > Zhangjin seems to have successfully built it for riscv, there might
+> > be something odd on my side.
+> 
+> That line of code is in rcu/dev but not in mainline yet.  In fact, it
+> is not yet in -next.
+> 
+> But it is a bug.  One that my Kconfig laziness hid from me.  Easy fix,
+> but it is clearly time for me to stop being lazy about that part of the
+> Kconfig setup.  :-/
+> 
+> So thank you for reporting it!
 
-dev_err_probe() ?
+Great, I'm happy that it cuold be used to spot a real bug ;-)
 
-> +	r = devm_add_action_or_reset(dev, nxp_nci_i2c_poweroff, phy);
-> +	if (r < 0) {
-> +		nfc_err(dev, "Failed to install poweroff handler: %d\n",
-> +			r);
-> +		nxp_nci_i2c_poweroff(phy);
+> Longer term, both to avoid you having to deal with RCU bugs and to make
+> it easier to have multiple administrative nolibc maintainers, it might
+> work better for you to base your stack on vX.y-rc1.  That way, I could
+> just pull directly from your tree.
+(...)
+> This is something to think about for some upcoming cycle, given that
+> we are already pretty much set up for the upcoming merge window.
 
-The _or_reset() stands for "we'll call the action for you if we can't
-add it". Don't call poweroff again.
--- 
-pw-bot: cr
+Yes I think it makes sense now. Initially tiny changes had implications
+on rcutorture and needed to be properly sequenced but that's no longer
+the case and we can indeed simplify this. And it will force us to gather
+all patches in one single series, which is also easier to review/discuss.
+
+So that works for me.
+
+Thanks!
+Willy
