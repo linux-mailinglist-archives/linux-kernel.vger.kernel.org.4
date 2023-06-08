@@ -2,114 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB517273BC
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 02:30:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF7CA7273BF
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 02:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232873AbjFHAaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 20:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33052 "EHLO
+        id S231577AbjFHAbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 20:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbjFHA36 (ORCPT
+        with ESMTP id S229659AbjFHAbh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 20:29:58 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA802128;
-        Wed,  7 Jun 2023 17:29:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686184197; x=1717720197;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=TDhH3H4jg2X/8d8NcY3cf7ZRv9oNiNqThvaMDhA7KtI=;
-  b=T/IPP0C51J8+9miklCFM5xoA+7PBkeTPx/gZ6CXT3PsqVDIbEQNZnDGU
-   CPUn/djcfArAQwMN180UsMne1825xjLcvX6xzXs9da+eyaBpM9IhjHW77
-   ROxd2n8RhenjUWrITst3HDbfRaFX5FStExMCZc6m6gJIJ9Fqsl7zMq71w
-   bblauOzvYdhKsUvlWGOAD0wct3DZSR0uwvrWJQTeFIGI26OBVUmURKNGA
-   S8yfhSXgH98dtEw/FSjvNTEytslbWNX7UdGoDP4FRzrxeCVGUEo2cS4+9
-   R3ASTgnB94Sqs44KcruAFpbwtQAap3281V0Vc1nQg4sXOFGkkKB+6vNvk
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="346762802"
-X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
-   d="scan'208";a="346762802"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 17:29:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="779664634"
-X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
-   d="scan'208";a="779664634"
-Received: from vsmyers-mobl2.amr.corp.intel.com (HELO [10.212.146.233]) ([10.212.146.233])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 17:29:56 -0700
-Message-ID: <c957ce2e-fb91-47bd-5ca2-2c7ba7f612c6@intel.com>
-Date:   Wed, 7 Jun 2023 17:29:55 -0700
+        Wed, 7 Jun 2023 20:31:37 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609632128;
+        Wed,  7 Jun 2023 17:31:35 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qc4rw0QHQz4wgv;
+        Thu,  8 Jun 2023 10:31:27 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1686184288;
+        bh=8F60OUp8CBqwzKFBb/J0sj2amxP/qg9IkT2KgaJBCzU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=C3PWvFiiyycWravL3+GM6DwHS5Ln6nUX1FN8GqvXB9i/H+AlZX2OtNWS0xpxem7Df
+         at/w2As1RARwqgY/s5+aAlXcrIlHk1IsKqT7huEe7/mwnb0v2eUtL4BNSlEyXs7M0F
+         XJT1fB1m6gCUQhcqlR9s8WO21VLC/aRZsISIFWFFNjNLsUeiqGbePxVyZACB1NUe5g
+         rDtVhCQW1W7j06IQvogFMcd+EFYxmadIpJ+tQNBV2beM3OyuD3A/DEMR3NcNTLrj4j
+         ulALn2z2nPi1+eSSOeRZ3HI9d/Kq0uL56q24XLZMCWASWJpFE/WWV4gJKw8HQoPB7f
+         rA3gHcvka+gYQ==
+Date:   Thu, 8 Jun 2023 10:31:26 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20230608103126.24c01d43@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v11 06/20] x86/virt/tdx: Handle SEAMCALL running out of
- entropy error
-Content-Language: en-US
-To:     "Huang, Kai" <kai.huang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "Luck, Tony" <tony.luck@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-References: <cover.1685887183.git.kai.huang@intel.com>
- <9b3582c9f3a81ae68b32d9997fcd20baecb63b9b.1685887183.git.kai.huang@intel.com>
- <1e58e3df-ae9a-607c-cfc3-4f3d033ed531@intel.com>
- <c05384781a900ec5f36809d3036f7af64ef3c997.camel@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <c05384781a900ec5f36809d3036f7af64ef3c997.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/i77_LI4b+/m/9CssqV4/xF0";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/7/23 16:36, Huang, Kai wrote:
-> On Wed, 2023-06-07 at 08:08 -0700, Hansen, Dave wrote:
->> On 6/4/23 07:27, Kai Huang wrote:
->>> Certain SEAMCALL leaf functions may return error due to running out of
->>> entropy, in which case the SEAMCALL should be retried as suggested by
->>> the TDX spec.
->>>
->>> Handle this case in SEAMCALL common function.  Mimic the existing
->>> rdrand_long() to retry RDRAND_RETRY_LOOPS times.
->>
->> ... because who are we kidding?  When the TDX module says it doesn't
->> have enough entropy it means rdrand.
-> 
-> The TDX spec says "e.g., RDRAND or RDSEED".
+--Sig_/i77_LI4b+/m/9CssqV4/xF0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Let's just say something a bit more useful and ambiguous:
+Hi all,
 
-	Some SEAMCALLs use the RDRAND hardware and can fail for the
-	same reasons as RDRAND.  Use the kernel RDRAND retry logic for
-	them.
+Today's linux-next merge of the net-next tree got a conflict in:
 
-We don't need to say "RDRAND and RDSEED", just saying "RDRAND hardware"
-is fine.  Everybody knows what you mean.
+  net/sched/sch_taprio.c
+
+between commit:
+
+  d636fc5dd692 ("net: sched: add rcu annotations around qdisc->qdisc_sleepi=
+ng")
+
+from the net tree and commit:
+
+  dced11ef84fb ("net/sched: taprio: don't overwrite "sch" variable in tapri=
+o_dump_class_stats()")
+
+from the net-next tree.
+
+I fixed it up (I think - see below) and can carry the fix as necessary.
+This is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc net/sched/sch_taprio.c
+index dd7dea2f6e83,3c4c2c334878..000000000000
+--- a/net/sched/sch_taprio.c
++++ b/net/sched/sch_taprio.c
+@@@ -2388,12 -2456,19 +2456,19 @@@ static int taprio_dump_class_stats(stru
+  	__acquires(d->lock)
+  {
+  	struct netdev_queue *dev_queue =3D taprio_queue_get(sch, cl);
+ -	struct Qdisc *child =3D dev_queue->qdisc_sleeping;
+++	struct Qdisc *child =3D rtnl_dereference(dev_queue->qdisc_sleeping);
++ 	struct tc_taprio_qopt_offload offload =3D {
++ 		.cmd =3D TAPRIO_CMD_TC_STATS,
++ 		.tc_stats =3D {
++ 			.tc =3D cl - 1,
++ 		},
++ 	};
+ =20
+- 	sch =3D rtnl_dereference(dev_queue->qdisc_sleeping);
+- 	if (gnet_stats_copy_basic(d, NULL, &sch->bstats, true) < 0 ||
+- 	    qdisc_qstats_copy(d, sch) < 0)
++ 	if (gnet_stats_copy_basic(d, NULL, &child->bstats, true) < 0 ||
++ 	    qdisc_qstats_copy(d, child) < 0)
+  		return -1;
+- 	return 0;
++=20
++ 	return taprio_dump_xstats(sch, d, &offload, &offload.tc_stats.stats);
+  }
+ =20
+  static void taprio_walk(struct Qdisc *sch, struct qdisc_walker *arg)
+
+--Sig_/i77_LI4b+/m/9CssqV4/xF0
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSBIV4ACgkQAVBC80lX
+0GwVFAf/XLPsL36oXBv44Wvz0NiQLHfTxc56wDkckBsszqcNDhcdZSKyOeCFNuuc
+P+gh0r0FePNRG/64aruMI+3N6aipPa1dyvX5kOqPZKajS0RzCVoPBsXtxODZ8hFa
+9VEzpVM55mpaP/ZswJ3ukqC+55klF6e0bhGNGv/lenNi7ooteUYxHqK3wWVST6XO
+0/SK+c1HzG5r/7iwZ3gpc4YdW6oSV0ZyNj+nH0neaqtmt4C+S8s1EoPZhA99e4R7
+KumiFxIZTb+HPINdwOpQ07/g8EVjjaf+THgl9RbrU+8JbAR+ACoTk+xrlzRe5P7l
+iT0MnmQTDladDjQpDRIeTQcNqpnhgw==
+=Dg6F
+-----END PGP SIGNATURE-----
+
+--Sig_/i77_LI4b+/m/9CssqV4/xF0--
