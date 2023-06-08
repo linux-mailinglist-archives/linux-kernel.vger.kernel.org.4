@@ -2,187 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A50727693
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 07:18:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EEBB72769A
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 07:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234039AbjFHFSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 01:18:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35160 "EHLO
+        id S233721AbjFHFS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 01:18:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233573AbjFHFSV (ORCPT
+        with ESMTP id S234051AbjFHFSl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 01:18:21 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54DCB10EA
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 22:18:20 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id 5614622812f47-39c7f5706f0so87597b6e.3
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 22:18:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686201499; x=1688793499;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cero/nNmUyyTgbddJ18ROOGs9bd2i20p7IPIh5GwALY=;
-        b=sJAzPiDAKc2OSCHZVzx3H0wpsmp/FJHYaIIEZAgwY1kpL4alxyP3pc7oBnw4k/dz+V
-         NWTEyv1Jy+Et3u3kOB0JZexCi/0r6WUvAE4vlpfSrCJzOvvgvYuf7MURiLKlL998U8LB
-         PykSgw36P4KLWwnlUwneNMoJDVqyQQFrubVe7J1nW1hODvl/+qOKlMuVaUcowBj3o7SO
-         b3MyLJprq2jFSmqH5p8zgE+8vrf7TLtg1T4I2POirHBL/pOvtLavAFZPVQUGM0LHWzRP
-         Fhww+p+MbEl4yBZBYE2zxtLh3R6821S3ZW0x81figdxQbBPJknY6vW54gsQ80khr3gEa
-         ADDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686201499; x=1688793499;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cero/nNmUyyTgbddJ18ROOGs9bd2i20p7IPIh5GwALY=;
-        b=X8Y1+SSOip3sDxi6GFlRAKRoK9S5KQSJtmngha0Ii3L7q8socESFDXsu6/Payn1g8+
-         zm9x1UbJwmMexk/oY8BtNhiRxBnBHLuvalmhz9LBo1uQgTlH165TGv5ADhhLYIp6MtTS
-         gfv5qkVGVzKLNJO147E6sVDhba7Fs8DeHxuMMnHZlbaDLIzFgNiE2ieoFZVN2Ky07oiH
-         EbWP7NQ0ClTUcBCR4LTBJ+OeZhidcmxCEak0PmAKAtkvu4LpV7oH011/HywUdMZmpAT7
-         XEgDTB5OXuMVSOAXTWTZmmywkRH085U+kda7bsEqKkwJWOrTXb6AUOaPaZD5R58sYOLA
-         WVmQ==
-X-Gm-Message-State: AC+VfDxv7dBerRAp3+Mg+DERLkz2FMWfzAJtRXE+ql79jS7AKqZ5RN50
-        391axlpT50m9lHsRK9+HtYQXNQ==
-X-Google-Smtp-Source: ACHHUZ5rn21cbWOU6lHWA9Ma4Ci1eR/2PI2FFfCu7VnVX/7t5MXa1P6VbXK9vLrFVhvjiq4AU48z4Q==
-X-Received: by 2002:a05:6808:a96:b0:39a:babe:a7e with SMTP id q22-20020a0568080a9600b0039ababe0a7emr4581980oij.35.1686201499410;
-        Wed, 07 Jun 2023 22:18:19 -0700 (PDT)
-Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id m4-20020a17090a71c400b0025671de4606sm2192660pjs.4.2023.06.07.22.18.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 22:18:18 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 10:48:16 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Beata Michalska <beata.michalska@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-        mark.rutland@arm.com, will@kernel.org, rafael@kernel.org,
-        sudeep.holla@arm.com, ionela.voinescu@arm.com, sumitg@nvidia.com,
-        yang@os.amperecomputing.com, Len Brown <len.brown@intel.com>,
-        vincent.guittot@linaro.org
-Subject: Re: [PATCH] arm64: Provide an AMU-based version of
- arch_freq_get_on_cpu
-Message-ID: <20230608051816.2ww7ncg65qo7kcuk@vireshk-i7>
-References: <20230606155754.245998-1-beata.michalska@arm.com>
- <20230608051509.h4a6gn572mjgdusv@vireshk-i7>
+        Thu, 8 Jun 2023 01:18:41 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC24B2707;
+        Wed,  7 Jun 2023 22:18:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.com;
+ s=s31663417; t=1686201508; x=1686806308; i=quwenruo.btrfs@gmx.com;
+ bh=1jGLFjVFutlL15INtZAvqv+dncEd6i/m4rHvXBBMmGg=;
+ h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+ b=azgJh8NQWNbUaBSZLWqGY+HoAK5Rm4HbdJTLlg9jWRF+cBQzEeacFhyLve4dmAinhfppBBR
+ H0ajL4enkFG6hvF1V2HqCvFzOY9/0vrmMXftOGKDXHMdPy/QCDqL5hQ43PJSb/73OY+DiZ8jM
+ i1cnjaUkPdxBrKw9lx6ixMLVRUfcMEvaPZsmp1QuocyIIEtqyAth5frq261ckmpl5ClQrKR1u
+ you+c4ehw+2YakiLXArWDKsDZkjOGdtLboWp53oj6xXGwYoIW13/5Ay7rmbmna9ZZR/sHlh/R
+ 9swM8ytar6JC9ot4eyjAhHI0NDoQzTOkoCDhDoW+O1e7dKUfGQxA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx005
+ [212.227.17.184]) with ESMTPSA (Nemesis) id 1M7sHo-1qC67d11nu-004yq6; Thu, 08
+ Jun 2023 07:18:28 +0200
+Message-ID: <230384e8-55dc-579d-64e8-0c0263b72673@gmx.com>
+Date:   Thu, 8 Jun 2023 13:18:20 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230608051509.h4a6gn572mjgdusv@vireshk-i7>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] btrfs: scrub: initialize variable explicitly
+Content-Language: en-US
+To:     Ou Shixiong <oushixiong@kylinos.cn>, Chris Mason <clm@fb.com>
+Cc:     Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230608024901.221232-1-oushixiong@kylinos.cn>
+From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
+In-Reply-To: <20230608024901.221232-1-oushixiong@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:6EfPHzuskSxAH6zrU41QsDDbzOkxv+G1nISa7FOgUVKJxduEZiv
+ bGFVjlVn3sPr6hweyQ5+arNY35eWjIBHYe6LJmsfV2Mk+JMUVuSfy2UJzzUa/FVK+HqD0hQ
+ rajl+QGAI+ti0ZHomWTAo1xCXUKiC4wGGDeEGKe2r3QUBQDrH/tV78dHWJvlEJ7Y2Cud07z
+ aRbG3x3pxwVl/CEj8dcsQ==
+UI-OutboundReport: notjunk:1;M01:P0:nwIOnVqnoZY=;TlhybxGQrgbpx67pnhiJaMmQFul
+ 9MaSWzK9TaqGHofGVGuDkz8hfMGiRbIJUTxoDlcQWO2edyIIpCKrJp/2TZgf8+IiX7cXnPGyL
+ dNigMNjWGrwcsXtLqjzs+0i8H+YHZAWVst6ZeL3Eu1sdWllIf8Rcgf5k7OAQ+YbXzCm6SsMoK
+ bKQVRZxdgzOU8yGiZJyv5yGJ+yM1wE7K4oN6HYfs5nX8lDuRxdFFYvtLbno/bTii3sZkNgwsC
+ fTp6U7xuu+Xlb2eU20hPsfLNZ0A+GQ7JlkM7tL4ZHvfl2oQFEqS8+aFfhDsknsLqemt4yAheh
+ iAfepHFXikLETcFEMfMylQPJ3307EtC0Lht0zqP36rb3pRlGPQOk78OLo59gBmIOwE8CjCP3c
+ iV4Gs9/aTf0QdieiRmKVX1DLDuVTQ9wAdoq8HWMsKk0opnE+WPh0MW3zNlrZmeB/lzkNCARpM
+ 1keKdUYIss0pSqsIWkegItIH38Er58k99hfZ0Cpu3AaSw3liULgEoa2xsmxeI6m3TdM76QcUs
+ fGqazMl3RRxnTGl2KykLDPBEqi4bL6T94MKXMHbFCWvUEuNLgoudT4zX8MJWi/Hla7uW+UBtv
+ O+LjcQ78YtxDyAUveprOl0kQUEUP9iA56USfnDK/bmFT9j0JcfY50cm1A1SleV1HjEkFPq0Vz
+ dIjc3jCsFKBoL5JEbGg/urDQNTGj0R3dHZ43HlbGjRzgyPYvmUXFGOnDLTPmw1SNLG2nt1X8s
+ vMf/trPTvr+/MPE8VatwUcspTsvYKJInhD8CrqtOybIdGhfphkjexEVM5K/d02u8tG8/eCDES
+ s+iQPTOK8Mp/hQ98YTUr45ZsWlj3Nu1vQvpACgWl6SUI2JvZIUGRF60rxrHh8aRYxUkqvy3F8
+ BIY0C4lytbStAqVcdWGsbmOGUZ+mRW4kgRH8h5QG5tMSb0a5CWzeJU4RBNdwis4+6gtVHQKO9
+ Zh937kFpSCf0xbPVleI2gB+JXeQ=
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Vincent
 
-On 08-06-23, 10:45, Viresh Kumar wrote:
-> +Len
-> 
-> On 06-06-23, 16:57, Beata Michalska wrote:
-> > diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-> > +unsigned int arch_freq_get_on_cpu(int cpu)
-> > +{
-> > +	unsigned int freq;
-> > +	u64 scale;
-> > +
-> > +	if (!cpumask_test_cpu(cpu, amu_fie_cpus))
-> > +		return 0;
-> > +
-> > +	if (!housekeeping_cpu(cpu, HK_TYPE_TICK)) {
-> 
-> I am not sure what we are doing in the `if` block here, at least a comment would
-> be useful.
-> 
-> > +		struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
-> > +		int ref_cpu = nr_cpu_ids;
-> > +
-> > +		if (cpumask_intersects(housekeeping_cpumask(HK_TYPE_TICK),
-> > +				       policy->cpus))
-> > +			ref_cpu = cpumask_nth_and(cpu, policy->cpus,
-> > +						  housekeeping_cpumask(HK_TYPE_TICK));
-> > +		cpufreq_cpu_put(policy);
-> > +		if (ref_cpu >= nr_cpu_ids)
-> > +			return 0;
-> > +		cpu = ref_cpu;
-> > +	}
-> 
-> A blank line here please.
-> 
-> > +	/*
-> > +	 * Reversed computation to the one used to determine
-> > +	 * the arch_freq_scale value
-> > +	 * (see amu_scale_freq_tick for details)
-> > +	 */
-> > +	scale = per_cpu(arch_freq_scale, cpu);
-> > +	scale *= cpufreq_get_hw_max_freq(cpu);
-> > +	freq = scale >> SCHED_CAPACITY_SHIFT;
-> > +
-> > +	return freq;
-> > +}
-> > +
-> >  #ifdef CONFIG_ACPI_CPPC_LIB
-> >  #include <acpi/cppc_acpi.h>
-> >  
-> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > index 6b52ebe5a890..9f2cf45bf190 100644
-> > --- a/drivers/cpufreq/cpufreq.c
-> > +++ b/drivers/cpufreq/cpufreq.c
-> > @@ -710,7 +710,8 @@ static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
-> >  	ssize_t ret;
-> >  	unsigned int freq;
-> >  
-> > -	freq = arch_freq_get_on_cpu(policy->cpu);
-> > +	freq = !cpufreq_driver->get ? arch_freq_get_on_cpu(policy->cpu)
-> > +				    : 0;
-> 
-> You may have changed the logic for X86 parts as well here. For a x86 platform
-> with setpolicy() and get() callbacks, we will not call arch_freq_get_on_cpu()
-> anymore ?
-> 
-> >  	if (freq)
-> >  		ret = sprintf(buf, "%u\n", freq);
-> >  	else if (cpufreq_driver->setpolicy && cpufreq_driver->get)
-> > @@ -747,7 +748,11 @@ store_one(scaling_max_freq, max);
-> >  static ssize_t show_cpuinfo_cur_freq(struct cpufreq_policy *policy,
-> >  					char *buf)
-> >  {
-> > -	unsigned int cur_freq = __cpufreq_get(policy);
-> > +	unsigned int cur_freq;
-> > +
-> > +	cur_freq = arch_freq_get_on_cpu(policy->cpu);
-> > +	if (!cur_freq)
-> > +		cur_freq = __cpufreq_get(policy);
-> 
-> For this and the above change, I am not sure what is the right thing to do.
-> 
-> >From Len's commit [1]:
-> 
->     Here we provide an x86 routine to make this calculation
->     on supported hardware, and use it in preference to any
->     driver driver-specific cpufreq_driver.get() routine.
-> 
-> I am not sure why Len updated `show_scaling_cur_freq()` and not
-> `show_cpuinfo_cur_freq()` ? Maybe we should update both these routines ?
-> 
-> Also, I don't think this is something that should have different logic for ARM
-> and X86, we should be consistent here as a cpufreq decision. Since both these
-> routines are reached via a read operation to a sysfs file, we shouldn't be
-> concerned about performance too.
-> 
-> What about doing this for both the routines, for all platforms now:
-> 
-> 	cur_freq = arch_freq_get_on_cpu(policy->cpu);
-> 	if (!cur_freq)
->                 ... get freq via policy->get() or policy->cur;
-> 
-> -- 
-> viresh
-> 
-> [1] commit f8475cef9008 ("x86: use common aperfmperf_khz_on_cpu() to calculate KHz using APERF/MPERF")
 
--- 
-viresh
+On 2023/6/8 10:49, Ou Shixiong wrote:
+>
+> Fix error of
+> error: =E2=80=98ret=E2=80=99 may be used uninitialized in this function =
+[-Werror=3Dmaybe-uninitialized]
+>
+> Signed-off-by: Ou Shixiong <oushixiong@kylinos.cn>
+
+Not again.
+
+Please explain how @ret can be uninitialized, and your toolchain version.
+
+To me, this looks like a false alert, and it's possible your toolchain
+is out of date or lacks certain backports.
+
+Thanks,
+Qu
+> ---
+>   fs/btrfs/scrub.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/fs/btrfs/scrub.c b/fs/btrfs/scrub.c
+> index 28caad17ccc7..0d5c87c52c33 100644
+> --- a/fs/btrfs/scrub.c
+> +++ b/fs/btrfs/scrub.c
+> @@ -1962,7 +1962,7 @@ static int scrub_simple_mirror(struct scrub_ctx *s=
+ctx,
+>   	/* An artificial limit, inherit from old scrub behavior */
+>   	struct btrfs_path path =3D { 0 };
+>   	u64 cur_logical =3D logical_start;
+> -	int ret;
+> +	int ret =3D 0;
+>
+>   	/* The range must be inside the bg */
+>   	ASSERT(logical_start >=3D bg->start && logical_end <=3D bg->start + b=
+g->length);
+>
+>
+> Content-type: Text/plain
+>
+> No virus found
+> 		Checked by Hillstone Network AntiVirus
