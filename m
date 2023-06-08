@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53088728648
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 19:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D43F672864B
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 19:25:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237053AbjFHRZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 13:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48078 "EHLO
+        id S237086AbjFHRZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 13:25:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237050AbjFHRZj (ORCPT
+        with ESMTP id S237059AbjFHRZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 13:25:39 -0400
+        Thu, 8 Jun 2023 13:25:48 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31CD61FD6
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 10:25:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAA22729;
+        Thu,  8 Jun 2023 10:25:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B79AB64FCA
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 17:25:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D30C7C433EF;
-        Thu,  8 Jun 2023 17:25:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5881D64F82;
+        Thu,  8 Jun 2023 17:25:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00A1DC433D2;
+        Thu,  8 Jun 2023 17:25:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686245137;
-        bh=ZaATAOm8boNxX2ZuQ1VyIMIjUgKnsaHEY03tgyAn5Fw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=vKNx49YDI6kEpnIIUbxKde9/CNVTPbqdrWmLKd42Cc4KH+4kNzuz8CAM9bo/LR/nI
-         EnV/hZdteDwrbFj0vEwvNq3hG82QfwrgXDbaEWPAWCO2IfbVgN3VEoWtJw989UBu1s
-         7c+4tz0UinNSdNCIqpjpyRTAJgHVEiHQxJxeWFg/y2tS00o7g0vL84/eT/uekAR4r4
-         wGhZV/L2b+k8rm8JX7NYDuCbtY2Zu4qone3JtPjN2F1NGdkC0ME3KsrJxGtXb24UFp
-         RmO/xdXzT2gsqWmfVXQafhXf8KVNR5HZ5hF6nIUBJA5DTQqD6mJH1aPco1vzRuynB8
-         Waaan6Ehhr7WQ==
-Date:   Thu, 8 Jun 2023 12:25:35 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Sui Jingfeng <15330273260@189.cn>
-Cc:     Lucas Stach <l.stach@pengutronix.de>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        etnaviv@lists.freedesktop.org, Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v8 1/8] drm/etnaviv: add a dedicated function to register
- an irq handler
-Message-ID: <20230608172535.GA1207045@bhelgaas>
+        s=k20201202; t=1686245145;
+        bh=sKEE1Ha7Onv2/h4XglcashuT7Hsevk+zCcxzbAznYIM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=A3intFhY6AW3soEmjHN+z/uRHcbHuuytfhyvrgmQ+ZZmte3qGf6yS5NcWlx2MZdOR
+         KNgNpFarInlPWPlvBe9hFDILFw2qyohv9pCibWlfrPdTd+4sSzKvZDTJv7psvgReCC
+         ZIW0yFy97ecYw/az2D5nZwCpc2KnOFg6A8hgyKeIHAtXfapysA2CBVSQoyu+9BCSEG
+         n+0A4nwhzETT9g1SjHMJPAGlU0IHu0Xu49vu1MP2jWM0g6CKrku7k+DhhvPvz5x9O1
+         R1fEql7U4sqKnohcsX9WhggIl2rpy7gey8oDADEomzPXHE+f2Iw5VRPwUg88XsaCv2
+         G0Oy0DEHxxm+A==
+Date:   Thu, 8 Jun 2023 18:25:40 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] leds: simatic-ipc-leds-gpio: add terminating
+ entries to gpio tables
+Message-ID: <20230608172540.GH3572061@google.com>
+References: <20230524124628.32295-1-henning.schild@siemens.com>
+ <20230524124628.32295-2-henning.schild@siemens.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230607105551.568639-2-15330273260@189.cn>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230524124628.32295-2-henning.schild@siemens.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,80 +60,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 06:55:44PM +0800, Sui Jingfeng wrote:
-> From: Sui Jingfeng <suijingfeng@loongson.cn>
+On Wed, 24 May 2023, Henning Schild wrote:
+
+> The entries do not seem to be stricly needed when the number of entries
+> is given via the number of LEDs. But adding them is a safeguard should
+> anyone ever iterate over the tables to their end, it also gets us in
+> line with other drivers that register "leds-gpio" tables.
 > 
-> Because getting IRQ from a device is platform-dependent, PCI devices have
-> different methods for getting an IRQ. This patch is a preparation patch to
-> extend the driver for the PCI device support.
-> 
-> Cc: Lucas Stach <l.stach@pengutronix.de>
-> Cc: Christian Gmeiner <christian.gmeiner@gmail.com>
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+> Signed-off-by: Henning Schild <henning.schild@siemens.com>
 > ---
->  drivers/gpu/drm/etnaviv/etnaviv_gpu.c | 34 ++++++++++++++++++++-------
->  1 file changed, 25 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
-> index de8c9894967c..b9c12d3145a2 100644
-> --- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
-> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
-> @@ -1817,6 +1817,29 @@ static const struct of_device_id etnaviv_gpu_match[] = {
->  };
->  MODULE_DEVICE_TABLE(of, etnaviv_gpu_match);
->  
-> +static int etnaviv_gpu_register_irq(struct etnaviv_gpu *gpu, int irq)
-> +{
-> +	struct device *dev = gpu->dev;
-> +	int err;
-> +
-> +	if (irq < 0) {
-> +		dev_err(dev, "failed to get irq: %d\n", irq);
+>  drivers/leds/simple/simatic-ipc-leds-gpio.c | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Isn't this message redundant because platform_get_irq() already
-emitted a message for this case?
+Applied, thanks
 
-> +		return irq;
-> +	}
-> +
-> +	err = devm_request_irq(dev, irq, irq_handler, 0, dev_name(dev), gpu);
-> +	if (err) {
-> +		dev_err(dev, "failed to request irq %u: %d\n", irq, err);
-> +		return err;
-> +	}
-> +
-> +	gpu->irq = irq;
-> +
-> +	dev_info(dev, "irq(%d) handler registered\n", irq);
-> +
-> +	return 0;
-> +}
-> +
->  static int etnaviv_gpu_platform_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
-> @@ -1837,16 +1860,9 @@ static int etnaviv_gpu_platform_probe(struct platform_device *pdev)
->  		return PTR_ERR(gpu->mmio);
->  
->  	/* Get Interrupt: */
-> -	gpu->irq = platform_get_irq(pdev, 0);
-> -	if (gpu->irq < 0)
-> -		return gpu->irq;
-> -
-> -	err = devm_request_irq(&pdev->dev, gpu->irq, irq_handler, 0,
-> -			       dev_name(gpu->dev), gpu);
-> -	if (err) {
-> -		dev_err(dev, "failed to request IRQ%u: %d\n", gpu->irq, err);
-> +	err = etnaviv_gpu_register_irq(gpu, platform_get_irq(pdev, 0));
-> +	if (err)
->  		return err;
-> -	}
->  
->  	/* Get Clocks: */
->  	gpu->clk_reg = devm_clk_get_optional(&pdev->dev, "reg");
-> -- 
-> 2.25.1
-> 
+-- 
+Lee Jones [李琼斯]
