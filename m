@@ -2,81 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51BDE7281DE
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 15:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D92D7281F0
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 15:58:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236308AbjFHNzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 09:55:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37534 "EHLO
+        id S236777AbjFHN6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 09:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235521AbjFHNzn (ORCPT
+        with ESMTP id S234955AbjFHN6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 09:55:43 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC01A19BB
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 06:55:41 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id ca18e2360f4ac-77ac30e95caso22143039f.2
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 06:55:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686232539; x=1688824539;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=27Vs9lje4ue6a9YND5XSnEpnS9VI2Lo/geXINpFnbB8=;
-        b=a2jfGHiuvki4o+FZ9TgQVGZTbfrXjGsGcKLEiSOwW65OyilhfesiJEWIE6IqIWYs9Y
-         t0vDniE1rX13BVJWm9Cwb0DIrLbHB4Rw3ciAhdDfBkl+OZzdUPd1DfokaFukIGIYxZUo
-         mydx7Xc4oCfXTHZrJfv0itD4PbVkAVkP+xFXo=
+        Thu, 8 Jun 2023 09:58:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2E4E2
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 06:57:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686232677;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=g42i/zU9qA1c+YWptB82V5/SsHIjXPKWidObbvv1lmA=;
+        b=GHrmMOWYa1tmpkpiod43PPT4Nyi1RMzV4P3AjcU6Sj8PoeB2hE1fAMdjLOtl7YzkgqhqaG
+        qVsyme1HUYtbyhYopAG3x+aNRoA9YkOVo2dO449AULhKsNrp0kGJ/8GSVzSsVDATO8jOdl
+        g/cFvrKgMa5anZthZlRep8KuUfnGIxs=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-647-CmbL7qXdOae2pSXePb2reA-1; Thu, 08 Jun 2023 09:57:55 -0400
+X-MC-Unique: CmbL7qXdOae2pSXePb2reA-1
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-626204b0663so1498866d6.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 06:57:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686232539; x=1688824539;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=27Vs9lje4ue6a9YND5XSnEpnS9VI2Lo/geXINpFnbB8=;
-        b=lDn70H+VcBf3D6HB8vuBhw6EKQ8Bka7mu9fSJmTN+jtIHdeJz/2Jh48dsNYSWgW/Mm
-         JXP9U6Z+gvz18HN1V3PYKqMJSqCrk7yFEYRC/ry6xcQ95tJE/CpfkuO/E47YmDoU+odd
-         Th5sCwzf96nBJUc60tB+6yfpTzZGgyQ5MhgwU6dStMzew/9PULGI9bUH8zoQTklckCOL
-         bwtLmIIUBKKjWaXdXtyHCqasfNJes7N/A8pB/qB5HfYv5vFXoc7eWal4dOzsSmHiNta0
-         GUc9ZP0fgJ3hX3eFw2mBQXmx81O3b5URbK++Dov4qMSAzi1Fn0eF3N+rxZKNUTAHrysn
-         FZCA==
-X-Gm-Message-State: AC+VfDySEkR777H5DSidp2cWb3zDbOy3E0bIcS7+0IdTY/OuFxzIyguf
-        n6vg26Qk61wlZJxYOFdDE6o3rA5/IHIAN2Di7bo=
-X-Google-Smtp-Source: ACHHUZ5pKLqVgUPd1/t4UYIwAYz24xWhlUSOTCpTenQSaRliQZ8VtkaUVe0eiNyb1C9EbW1t3fooyQ==
-X-Received: by 2002:a5e:de08:0:b0:76c:c701:2f77 with SMTP id e8-20020a5ede08000000b0076cc7012f77mr12386161iok.3.1686232538970;
-        Thu, 08 Jun 2023 06:55:38 -0700 (PDT)
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com. [209.85.166.171])
-        by smtp.gmail.com with ESMTPSA id u13-20020a6be90d000000b0076c750dc780sm366548iof.29.2023.06.08.06.55.35
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 06:55:37 -0700 (PDT)
-Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-33d928a268eso121355ab.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 06:55:35 -0700 (PDT)
-X-Received: by 2002:a05:6e02:1a82:b0:32f:7715:4482 with SMTP id
- k2-20020a056e021a8200b0032f77154482mr109894ilv.4.1686232535228; Thu, 08 Jun
- 2023 06:55:35 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230607152432.5435-1-pmladek@suse.com> <20230607152432.5435-3-pmladek@suse.com>
- <CAD=FV=WRzaLbLQ65usGeFq3ya=DV8cYyHQina_721EFoSTdBGA@mail.gmail.com> <ZIG1Qi0iUjTKICQM@alley>
-In-Reply-To: <ZIG1Qi0iUjTKICQM@alley>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 8 Jun 2023 06:55:23 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XzueJia--Zv4cAofzk7yocmP-7K8wa4doAN8pzED_hZA@mail.gmail.com>
-Message-ID: <CAD=FV=XzueJia--Zv4cAofzk7yocmP-7K8wa4doAN8pzED_hZA@mail.gmail.com>
-Subject: Re: [PATCH 2/7] watchdog/hardlockup: Make the config checks more straightforward
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        kgdb-bugreport@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        sparclinux@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-perf-users@vger.kernel.org
+        d=1e100.net; s=20221208; t=1686232675; x=1688824675;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=g42i/zU9qA1c+YWptB82V5/SsHIjXPKWidObbvv1lmA=;
+        b=hoXPrGea4ZDq3Z0IBoimZy1iPeQPAtKW7rkRrMOPNQ9CPELuc+4vr9Qazi1NegzvBq
+         fAbJYvBdQHXyeMvucsVAkUWWVKHbzryVKFuSI0LhQ7VXG+Zzn7lYBCFblZW/56CWM9tT
+         aVOFqJFSoKhuoBB+Bgxb6nK9ocoLlU6OAQpPnbw+ZKmNsTVruByRgv54Ir0MN0pOzYwE
+         G3SruqSSnO5dFw0AbbvEUcaccbMLN+YK7xPX8kZBXu7JOMtzqHlH/ro6sWsmsfquw6LV
+         DK2rUWjT7A6MFYBUTqmgtRf6U+VjptNvM1/oPBwMSSfaISxSC1C5dqPQXKNrNiWlefLg
+         ss9w==
+X-Gm-Message-State: AC+VfDwzpGBDNoqGOcoSVD3tENQPJGYulmFX9UzjnCXZ19GsmuICxtdY
+        hrMMs/oDxtxdhGkaLj9U6KgULelD2TgyXyeRJFCyW+cLvOj3rdZ76VtgDLJHFfFngUm5FfpceR3
+        4d1HwjNzxV0cf0ro0q5FpNr+u
+X-Received: by 2002:a05:6214:2a84:b0:625:8eef:1e71 with SMTP id jr4-20020a0562142a8400b006258eef1e71mr9635424qvb.0.1686232674814;
+        Thu, 08 Jun 2023 06:57:54 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4bVJN/VdumR9tSUvby4B1H71TO9IHWdUvCd72/2KL56rdsiFNJK/08VDIyt5j+OKO/UzePvg==
+X-Received: by 2002:a05:6214:2a84:b0:625:8eef:1e71 with SMTP id jr4-20020a0562142a8400b006258eef1e71mr9635397qvb.0.1686232674542;
+        Thu, 08 Jun 2023 06:57:54 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-247-199.dyn.eolo.it. [146.241.247.199])
+        by smtp.gmail.com with ESMTPSA id j9-20020a0cf509000000b0062618962ec0sm405431qvm.133.2023.06.08.06.57.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 06:57:54 -0700 (PDT)
+Message-ID: <5bd6ced877e97ac674d1308eab0b8d2107b7ab85.camel@redhat.com>
+Subject: Re: [PATCH net-next v6] net: ioctl: Use kernel memory on protocol
+ ioctl callbacks
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Breno Leitao <leitao@debian.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     alex.aring@gmail.com, andrea.righi@canonical.com,
+        asml.silence@gmail.com, ast@kernel.org, axboe@kernel.dk,
+        courmisch@gmail.com, davem@davemloft.net, dccp@vger.kernel.org,
+        dsahern@kernel.org, edumazet@google.com, gnault@redhat.com,
+        hbh25y@gmail.com, joannelkoong@gmail.com, kernelxing@tencent.com,
+        kuba@kernel.org, leit@fb.com, linux-kernel@vger.kernel.org,
+        linux-sctp@vger.kernel.org, linux-wpan@vger.kernel.org,
+        lucien.xin@gmail.com, marcelo.leitner@gmail.com,
+        martin.lau@kernel.org, martineau@kernel.org,
+        matthieu.baerts@tessares.net, miquel.raynal@bootlin.com,
+        mptcp@lists.linux.dev, netdev@vger.kernel.org,
+        stefan@datenfreihafen.org, willemdebruijn.kernel@gmail.com,
+        wojciech.drewek@intel.com
+Date:   Thu, 08 Jun 2023 15:57:48 +0200
+In-Reply-To: <ZIGUofpP4k24qfQs@gmail.com>
+References: <20230606180045.827659-1-leitao@debian.org>
+         <20230607173142.86395-1-kuniyu@amazon.com> <ZIGUofpP4k24qfQs@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,59 +93,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, 2023-06-08 at 01:43 -0700, Breno Leitao wrote:
+> Hello Kuniyuki,
+> On Wed, Jun 07, 2023 at 10:31:42AM -0700, Kuniyuki Iwashima wrote:
+> > > +/* This is the most common ioctl prep function, where the result (4 =
+bytes) is
+> > > + * copied back to userspace if the ioctl() returns successfully. No =
+input is
+> > > + * copied from userspace as input argument.
+> > > + */
+> > > +static int sock_ioctl_out(struct sock *sk, unsigned int cmd, void __=
+user *arg)
+> > > +{
+> > > +	int ret, karg =3D 0;
+> > > +
+> > > +	ret =3D sk->sk_prot->ioctl(sk, cmd, &karg);
+> >=20
+> > We need READ_ONCE(sk->sk_prot) as IPv4 conversion or ULP chnage could
+> > occur at the same time.
+>=20
+> Thanks for the heads-up. I would like to pick you brain and understand
+> a bit more about READ_ONCE() and what is the situation that READ_ONCE()
+> will solve.
 
-On Thu, Jun 8, 2023 at 4:02=E2=80=AFAM Petr Mladek <pmladek@suse.com> wrote=
-:
->
-> > >  config HARDLOCKUP_DETECTOR
-> > >         bool "Detect Hard Lockups"
-> > >         depends on DEBUG_KERNEL && !S390
-> > > -       depends on HAVE_HARDLOCKUP_DETECTOR_NON_ARCH || HAVE_HARDLOCK=
-UP_DETECTOR_ARCH
-> > > +       depends on ((HAVE_HARDLOCKUP_DETECTOR_PERF || HAVE_HARDLOCKUP=
-_DETECTOR_BUDDY) && !HAVE_NMI_WATCHDOG) || HAVE_HARDLOCKUP_DETECTOR_ARCH
-> >
-> > Adding the dependency to buddy (see ablove) would simplify the above
-> > to just this:
-> >
-> > depends on HAVE_HARDLOCKUP_DETECTOR_PERF ||
-> > HAVE_HARDLOCKUP_DETECTOR_BUDDY || HAVE_HARDLOCKUP_DETECTOR_ARCH
->
-> This is exactly what I do not want. It would just move the check
-> somewhere else. But it would make the logic harder to understand.
+AFAICS, in this specific case READ_ONCE() should not address any "real"
+bug causing visible issue.
 
-Hmmm. To me, it felt easier to understand by moving this into the
-"HAVE_HARDLOCKUP_DETECTOR_BUDDY". To me it was pretty easy to say "if
-an architecture defined its own arch-specific watchdog then buddy
-can't be enabled" and that felt like it fit cleanly within the
-"HAVE_HARDLOCKUP_DETECTOR_BUDDY" definition. It got rid of _a lot_ of
-other special cases / checks elsewhere and felt quite a bit cleaner to
-me. I only had to think about the conflict between the "buddy" and
-"nmi" watchdogs once when I understood
-"HAVE_HARDLOCKUP_DETECTOR_BUDDY".
+Still the lack of it will likely cause syzkaller report for (harmless,
+AFAICS) 'data races' around sk->sk_prot. We want to avoid such reports,
+even if harmless, because they can end-up hiding more relevant bugs.
 
+> Is the situation related to when sock_ioctl_out() start to execute, and
+> "sk->sk_prot" changes in a different thread? If that is the case, the
+> arguments (cmd and arg) will be from the "previous" instance.
+>=20
+> Also, grepping for "sk->sk_prot->", I see more than a bunch of calls
+> that do not use READ_ONCE() barrier. Why is this case different?
 
-> > As per above, it's simply a responsibility of architectures not to
-> > define that they have both "perf" if they have the NMI watchdog, so
-> > it's just buddy to worry about.
->
-> Where is this documented, please?
-> Is it safe to assume this?
+Races on sk->sk_prot can happen only on inet6_stream_ops (due to ulp
+and/or ADDRFORM) inet6_dgram_ops (due to ADDRFORM). AFAICS here
+READ_ONCE() is  needed as we can reach here via inet6_stream_ops-
+>inet6_ioctl
 
-It's not well documented and I agree that it could be improved. Right
-now, HAVE_NMI_WATCHDOG is documented to say that the architecture
-"defines its own arch_touch_nmi_watchdog()". Looking before my
-patches, you can see that "kernel/watchdog_hld.c" (the "perf" detector
-code) unconditionally defines arch_touch_nmi_watchdog(). That would
-give you a linker error.
+Cheers,
 
+Paolo
 
-> I would personally prefer to ensure this by the config check.
-> It is even better than documentation because nobody reads
-> documentation ;-)
-
-Sure. IMO this should be documented as close as possible to the root
-of the problem. Make "HAVE_NMI_WATCHDOG" depend on
-"!HAVE_HARDLOCKUP_DETECTOR_PERF". That expresses that an architecture
-is not allowed to declare that it has both.
