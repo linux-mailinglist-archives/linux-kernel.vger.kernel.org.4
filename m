@@ -2,107 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0FF872847F
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 214F9728480
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:02:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjFHQCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 12:02:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50018 "EHLO
+        id S232099AbjFHQC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 12:02:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232712AbjFHQBk (ORCPT
+        with ESMTP id S231830AbjFHQB6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 12:01:40 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D453130C6;
-        Thu,  8 Jun 2023 09:01:16 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 358G0up0003457;
-        Thu, 8 Jun 2023 11:00:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1686240056;
-        bh=+044SB8JfSnWUwpBcTcNTtHlcD21RFEeVggm7URky6I=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=h6F3VYVpzCHuJGJXoig9h0xAF0hFY0eQE2iDczds3Jg/zWaPA0XFW6+uFuCu70HUU
-         4asgU2N6RcdUqzbTeZIw5TdCAA8JrTlKRk5mmiqDnJhhM8YfxE5MZRwb+l/G12U+Fv
-         xTcpscwcCh79qtWd5okIrpa99306jP1dQ8hpOy6k=
-Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 358G0uDm091311
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 8 Jun 2023 11:00:56 -0500
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 8
- Jun 2023 11:00:56 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 8 Jun 2023 11:00:56 -0500
-Received: from [10.249.141.75] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 358G0qck023969;
-        Thu, 8 Jun 2023 11:00:52 -0500
-Message-ID: <fd3e3174-a2cd-9cd1-d04a-cd82a07977b7@ti.com>
-Date:   Thu, 8 Jun 2023 21:30:51 +0530
+        Thu, 8 Jun 2023 12:01:58 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5373C30E8
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 09:01:27 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-307d20548adso597212f8f.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 09:01:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686240086; x=1688832086;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=7N0Me9LjM46FYnisAvuqmrgrl7WoCTNWh45Ff6Fxt+8=;
+        b=gttB8sY1m+B86ejkha7nAJU1n0KqrIOK7/sE/rRK+25H1UZieT+zsdO+0rbQsLvd8c
+         I5Wg1cN1mXR6dwl9pV1manGgh6gIXrJ5ejHXFmNhNlK/GwIbcCHiQ4Nol+lvAiZ3Nz/6
+         IUIodkLs1oL6rJ1BrAJee2TSfDWhch7w+c/l6diK2u07lhMSpEMzoBn7zgHBxyNLbtVO
+         9krXCIXohBCU0mTJKeVMEoeBhr5PZwHzxlx+2hTEK2V0qawxe5iorOerjQrPdYuT0POs
+         ScbIiHt6M8pjMZUAiz8KlXmLcrq0QAoRHXzQb4VKx/QBUsUWp6OKjqBFlNaFdkGhEYf/
+         dy8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686240086; x=1688832086;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7N0Me9LjM46FYnisAvuqmrgrl7WoCTNWh45Ff6Fxt+8=;
+        b=MjjwVpHSixLZbkfoUcQc3yIg7didCpCiX/nthT+K4WR2By+djcQjRhHY5Zmpv6FVV3
+         FS4XZ6PQj//UiacwCNoRVZDQa6jYqg/wfzjq9IzhOXetnhFgEIVNt/B3pUtIwr707Ebx
+         BeTJdLGF+X6a0aODoHDoPbFPT4PVljaoBecnTC3txhcE9+TBRWiPavFKL0aPakX15fze
+         40eBvXgy1pphP6nIQ2EFwfrANtr7IHkKwLd6JsqzW2UW9fEHIGBoKUycKEQzQ485rWI/
+         Zc6Blu2qRSXDoDg9yAkaDtGYw4CsFs5cjpyNU3xqufEi2FGdVZld1wOKFWOhNO6Doz08
+         /bEQ==
+X-Gm-Message-State: AC+VfDzPz7CHixczAgboAJokedJn7IeQXmKHkWTMtxLtunisrqSLPlpK
+        bUt9jdoC0xey0zbgHMhdi2lEpQ==
+X-Google-Smtp-Source: ACHHUZ7ANFpS9UIJc7E0g+O6KdyFemqSpysdX1P7hU2MvokU9kB5rChedkc1nVMugLJPuhTQdqxDUw==
+X-Received: by 2002:a05:6000:108f:b0:306:2fab:1f81 with SMTP id y15-20020a056000108f00b003062fab1f81mr6925306wrw.21.1686240085766;
+        Thu, 08 Jun 2023 09:01:25 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:1b90:b83e:29ce:beb6? ([2a01:e0a:982:cbb0:1b90:b83e:29ce:beb6])
+        by smtp.gmail.com with ESMTPSA id t12-20020adfe10c000000b00307acec258esm1975127wrz.3.2023.06.08.09.01.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jun 2023 09:01:25 -0700 (PDT)
+Message-ID: <817a8764-45ac-74a8-935f-69d32d68f5fc@linaro.org>
+Date:   Thu, 8 Jun 2023 18:01:24 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v3 5/5] arm64: dts: ti: k3-j7200-common-proc-board: Add
- uart pin mux in wkup_pmx0
-To:     Nishanth Menon <nm@ti.com>
-CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <conor+dt@kernel.org>, <m-chawdhry@ti.com>, <n-francis@ti.com>
-References: <20230604045525.1889083-1-u-kumar1@ti.com>
- <20230604045525.1889083-6-u-kumar1@ti.com>
- <20230606120959.r4pnxuigknl7qkjr@outpour>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v2 0/2] Add support for Visionox R66451 AMOLED DSI panel
 Content-Language: en-US
-From:   "Kumar, Udit" <u-kumar1@ti.com>
-In-Reply-To: <20230606120959.r4pnxuigknl7qkjr@outpour>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, freedreno@lists.freedesktop.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20230516-b4-r66451-panel-driver-v2-0-9c8d5eeef579@quicinc.com>
+Organization: Linaro Developer Services
+In-Reply-To: <20230516-b4-r66451-panel-driver-v2-0-9c8d5eeef579@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Nishanth
+Hi,
 
-On 6/6/2023 5:39 PM, Nishanth Menon wrote:
-> On 10:25-20230604, Udit Kumar wrote:
->> Add uart pin mux of wkup domain into common board file.
->>
->> Signed-off-by: Udit Kumar <u-kumar1@ti.com>
->> ---
->>   .../dts/ti/k3-j7200-common-proc-board.dts     | 22 ++++++++++++++++++-
->>   1 file changed, 21 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts
->> index e12d93f56c51..809d1c910015 100644
->> --- a/arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts
->> +++ b/arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts
->> @@ -79,6 +79,24 @@ vdd_sd_dv: gpio-regulator-TLV71033 {
->>   	};
->>   };
->>   
->> [..]
-> Could you add the pins to wkup_uart0 node as well?
->
->> +		pinctrl-single,pins = <
->> +			J721E_WKUP_IOPAD(0xb0, PIN_INPUT, 0) /* (B14) WKUP_UART0_RXD */
->> +			J721E_WKUP_IOPAD(0xb4, PIN_OUTPUT, 0) /* (A14) WKUP_UART0_TXD */
->> +		>;
->> +	};
->> +};
-> We are also missing pinmux for main_uart1 and main_uart2
+On 31/05/2023 20:12, Jessica Zhang wrote:
+> Add support for the 1080x2340 Visionox R66451 AMOLED DSI panel that
+> comes with the Qualcomm HDK8350 display expansion pack.
+> 
+> The driver will come with display compression (DSC v1.2) enabled by
+> default.
+> 
+> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+> ---
+> Changes in v2:
+> - Reworded panel bindings commit message for brevity (Krzysztof)
+> - Used corresponding *_set_column_address() and *_set_page_address() DCS
+>    helper methods (Dmitry)
+> - Moved *_set_display_[on|off]() and *_[exit|enter]_sleep_mode() calls
+>    into _enable() and _disable(), respectively (Dmitry)
+> - Dropped cpu_to_le16() conversion for
+>    mipi_dsi_dcs_set_display_brightness() (Dmitry)
+> - Unset LPM flag after DCS commands are sent in _on() (Dmitry)
+> - Used real numbers for mode values (Dmitry)
+> - Used drm_connector_helper_get_modes_fixed() in get_modes() (Dmitry)
+> - Added BACKLIGHT_CLASS_DEVICE as a Kconfig dependency (Neil)
+> - Added error handling for mipi_dsi_picture_parameter_set() (Marijn)
+> - Dropped "0x" for dcs->bits_per_pixel value (Marijn)
+> - Link to v1: https://lore.kernel.org/r/20230516-b4-r66451-panel-driver-v1-0-4210bcbb1649@quicinc.com
+> 
+> ---
+> Jessica Zhang (2):
+>        dt-bindings: display: panel: Add Visionox R66451 AMOLED DSI panel
+>        drm/panel: Add driver for Visionox r66451 panel
+> 
+>   .../bindings/display/panel/visionox,r66451.yaml    |  59 ++++
+>   drivers/gpu/drm/panel/Kconfig                      |   9 +
+>   drivers/gpu/drm/panel/Makefile                     |   1 +
+>   drivers/gpu/drm/panel/panel-visionox-r66451.c      | 390 +++++++++++++++++++++
+>   4 files changed, 459 insertions(+)
+> ---
+> base-commit: a5abc0900af0cfb1b8093200a265d2791864f26b
+> change-id: 20230516-b4-r66451-panel-driver-bf04b5fb3d52
+> 
+> Best regards,
 
+Applied to drm-misc-next
 
-I will address missing pin mux in next version
-
-> [..]
+Neil
