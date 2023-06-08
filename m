@@ -2,60 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 907CF728538
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2DB5728542
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:39:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233743AbjFHQir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 12:38:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47124 "EHLO
+        id S235419AbjFHQjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 12:39:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234010AbjFHQim (ORCPT
+        with ESMTP id S235304AbjFHQjB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 12:38:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 013F63599;
-        Thu,  8 Jun 2023 09:38:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B77764F06;
-        Thu,  8 Jun 2023 16:37:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE13BC4339B;
-        Thu,  8 Jun 2023 16:37:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686242254;
-        bh=oXUT5oQvjYSEjb3Lc/kuaZbdEGwNN5fuS6434CRKp8A=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=dSdOYNmAcsUQ36ZKmxctSbZhqqpGcUgQSExQgpAuI8Y7k0q4AJvJnXoh+d+KwlDcs
-         VLdX0HCapLR6qKCNwW2x/psZc7hliH2QR4IeHkhA/nxWmdWHFZ/WTkMxSefYQZD5b0
-         7QEH4yyXzmwZRuH5CaYKeiTZcZSbAh+glQzpvAs2d+VOq8iJrGyMeD6cLPeKUD1ucv
-         c4CKp7h25VVADQD5V94t6zarwL07gHx6XgSvQvcz7Gj/vLhjHH7rNx/5qaLXzNgHZ/
-         KWnTd8Z8KvSwcbElIVgrSVdJ6mVuh111Qd3e1hkqNuW4HIoWw0KFUmeCuSerHlPdJj
-         fN7VYfwxo++Tg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 4891ACE14DD; Thu,  8 Jun 2023 09:37:34 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 09:37:34 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Zhangjin Wu <falcon@tinylab.org>, thomas@t-8ch.de,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: nolibc patches, still possible for 6.5 ?
-Message-ID: <c4b7c058-4c9f-4804-ba00-e7a9f2df4e3e@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <ZHyPi29q3MKiNAQZ@1wt.eu>
- <5494ac68-b4b9-434f-92c1-7e197c92a4ab@paulmck-laptop>
- <ZH1V21rhUQlvRgnU@1wt.eu>
- <ec85bd36-9b39-458c-9618-af500656ca7b@paulmck-laptop>
- <ZID1LnvAj1lamHhv@1wt.eu>
- <208b317e-8553-4d0d-b97c-a0e808fe98f2@paulmck-laptop>
- <ZIFZxLvMlUXxLGJE@1wt.eu>
+        Thu, 8 Jun 2023 12:39:01 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E183F19B;
+        Thu,  8 Jun 2023 09:38:35 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 358Gbced115700;
+        Thu, 8 Jun 2023 11:37:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1686242258;
+        bh=63yTje9gSZ+jL3DeHEsDLsQhdq8Nwny9LUmnTnUGE+M=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=mMb7qYCPTsSISYvnCZKBHOsT5LTo5Yy5QZYxuK5FL/uLaeD23cEu7GYJCqOdCabq6
+         T+t4W/2fw968v6NUqgD2Flg+grhPnctNcDSvQlgONL2Qr0pusyGDl0WzyzkvzvbOWs
+         Wyen5OqzfooB6KKH/7JqwQ8iLw06ldZGkaRw/4QE=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 358Gbcc5013232
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 8 Jun 2023 11:37:38 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 8
+ Jun 2023 11:37:38 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 8 Jun 2023 11:37:38 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 358Gbb31123010;
+        Thu, 8 Jun 2023 11:37:38 -0500
+From:   Aradhya Bhatia <a-bhatia1@ti.com>
+To:     Tomi Valkeinen <tomba@kernel.org>, Jyri Sarha <jyri.sarha@iki.fi>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+CC:     DRI Development List <dri-devel@lists.freedesktop.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rahul T R <r-ravikumar@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Jayesh Choudhary <j-choudhary@ti.com>,
+        Aradhya Bhatia <a-bhatia1@ti.com>
+Subject: [PATCH v8 2/2] drm/tidss: Add support for AM625 DSS
+Date:   Thu, 8 Jun 2023 22:07:34 +0530
+Message-ID: <20230608163734.2578-3-a-bhatia1@ti.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230608163734.2578-1-a-bhatia1@ti.com>
+References: <20230608163734.2578-1-a-bhatia1@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZIFZxLvMlUXxLGJE@1wt.eu>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,49 +76,178 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 06:32:04AM +0200, Willy Tarreau wrote:
-> On Wed, Jun 07, 2023 at 04:06:37PM -0700, Paul E. McKenney wrote:
-> > On Wed, Jun 07, 2023 at 11:22:54PM +0200, Willy Tarreau wrote:
-> > > On Wed, Jun 07, 2023 at 02:03:17PM -0700, Paul E. McKenney wrote:
-> > > > > > (There were some kernel test
-> > > > > > robot complaints as well, valid or not I am not sure.)
-> > > > > 
-> > > > > You mean in relation with nolibc stuff (or nolibc-test) or something
-> > > > > totally different ?
-> > > > 
-> > > > Apologies, this was me being confused and failing to look closely.
-> > > > 
-> > > > The complaints were not about nolibc, but rather about my patches that
-> > > > they were on top of.  Not your problem!
-> > > 
-> > > Ah no problem :-)
-> > > 
-> > > > And please let me know when the next batch from your tree are ready to go.
-> > > > (You might have been saying that they were in your recent emails, but
-> > > > I thought I should double-check.)
-> > > 
-> > > No pb, I just sent it while you were writing and our emails have crossed :-)
-> > > 
-> > > In short, it's ready now with branch 20230606-nolibc-rv32+stkp7a but if you
-> > > need any more info (more detailed summary, a public repost of the whole
-> > > series etc), just let me know. And I faced 2 kernel build errors on s390x
-> > > and riscv about rcu_task something, though you might be interested :-/
-> > 
-> > And I pulled them in and got this from "make run":
-> > 
-> > 138 test(s) passed, 0 skipped, 0 failed.[    2.416045] reboot: Power down
-> > 
-> > And this from "make run-user":
-> > 
-> > 136 test(s) passed, 2 skipped, 0 failed. See all results in /home/git/linux-rcu/tools/testing/selftests/nolibc/run.out
-> > 
-> > And run.out looks as it has before, so all looks good at this end.
-> > 
-> > Thus, unless you tell me otherwise, I will move these to my nolibc branch
-> > for the upcoming merge window.
-> 
-> Perfect, thank you very much Paul!
+Add support for the DSS controller on TI's AM625 SoC in the tidss
+driver.
 
-And done!
+The AM625 DSS supports 2 video planes connecting to 2 video ports.
+The first plane is a full plane supporting all the features, while the
+2nd plane is a "lite" plane without scaling support.
 
-							Thanx, Paul
+The first video port in AM625 DSS internally provides DPI output to 2
+OLDI transmitters. Each OLDI TX outputs 4 differential lanes of video
+output and 1 of clock output.
+
+The second video port outputs DPI data directly out of the SoC. It has
+24 data lines and can support a maximum of RGB888 output bus format.
+
+Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
+---
+
+Notes:
+
+  Changes from v7:
+  * Drop all changes made after v3.
+    - Drop output bus type support. All outputs from DSS will be the
+      video port outptus.
+  * Make the first video port type as INTERNAL from OLDI.
+
+ drivers/gpu/drm/tidss/tidss_dispc.c | 57 ++++++++++++++++++++++++++++-
+ drivers/gpu/drm/tidss/tidss_dispc.h |  2 +
+ drivers/gpu/drm/tidss/tidss_drv.c   |  1 +
+ 3 files changed, 59 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/tidss/tidss_dispc.c b/drivers/gpu/drm/tidss/tidss_dispc.c
+index dca077411f77..484da1aa27bb 100644
+--- a/drivers/gpu/drm/tidss/tidss_dispc.c
++++ b/drivers/gpu/drm/tidss/tidss_dispc.c
+@@ -275,6 +275,55 @@ const struct dispc_features dispc_j721e_feats = {
+ 	.vid_order = { 1, 3, 0, 2 },
+ };
+ 
++const struct dispc_features dispc_am625_feats = {
++	.max_pclk_khz = {
++		[DISPC_VP_DPI] = 165000,
++		[DISPC_VP_INTERNAL] = 170000,
++	},
++
++	.scaling = {
++		.in_width_max_5tap_rgb = 1280,
++		.in_width_max_3tap_rgb = 2560,
++		.in_width_max_5tap_yuv = 2560,
++		.in_width_max_3tap_yuv = 4096,
++		.upscale_limit = 16,
++		.downscale_limit_5tap = 4,
++		.downscale_limit_3tap = 2,
++		/*
++		 * The max supported pixel inc value is 255. The value
++		 * of pixel inc is calculated like this: 1+(xinc-1)*bpp.
++		 * The maximum bpp of all formats supported by the HW
++		 * is 8. So the maximum supported xinc value is 32,
++		 * because 1+(32-1)*8 < 255 < 1+(33-1)*4.
++		 */
++		.xinc_max = 32,
++	},
++
++	.subrev = DISPC_AM625,
++
++	.common = "common",
++	.common_regs = tidss_am65x_common_regs,
++
++	.num_vps = 2,
++	.vp_name = { "vp1", "vp2" },
++	.ovr_name = { "ovr1", "ovr2" },
++	.vpclk_name =  { "vp1", "vp2" },
++	.vp_bus_type = { DISPC_VP_INTERNAL, DISPC_VP_DPI },
++
++	.vp_feat = { .color = {
++			.has_ctm = true,
++			.gamma_size = 256,
++			.gamma_type = TIDSS_GAMMA_8BIT,
++		},
++	},
++
++	.num_planes = 2,
++	/* note: vid is plane_id 0 and vidl1 is plane_id 1 */
++	.vid_name = { "vid", "vidl1" },
++	.vid_lite = { false, true, },
++	.vid_order = { 1, 0 },
++};
++
+ static const u16 *dispc_common_regmap;
+ 
+ struct dss_vp_data {
+@@ -776,6 +825,7 @@ dispc_irq_t dispc_read_and_clear_irqstatus(struct dispc_device *dispc)
+ 	switch (dispc->feat->subrev) {
+ 	case DISPC_K2G:
+ 		return dispc_k2g_read_and_clear_irqstatus(dispc);
++	case DISPC_AM625:
+ 	case DISPC_AM65X:
+ 	case DISPC_J721E:
+ 		return dispc_k3_read_and_clear_irqstatus(dispc);
+@@ -791,6 +841,7 @@ void dispc_set_irqenable(struct dispc_device *dispc, dispc_irq_t mask)
+ 	case DISPC_K2G:
+ 		dispc_k2g_set_irqenable(dispc, mask);
+ 		break;
++	case DISPC_AM625:
+ 	case DISPC_AM65X:
+ 	case DISPC_J721E:
+ 		dispc_k3_set_irqenable(dispc, mask);
+@@ -1281,6 +1332,7 @@ void dispc_ovr_set_plane(struct dispc_device *dispc, u32 hw_plane,
+ 		dispc_k2g_ovr_set_plane(dispc, hw_plane, hw_videoport,
+ 					x, y, layer);
+ 		break;
++	case DISPC_AM625:
+ 	case DISPC_AM65X:
+ 		dispc_am65x_ovr_set_plane(dispc, hw_plane, hw_videoport,
+ 					  x, y, layer);
+@@ -2199,6 +2251,7 @@ static void dispc_plane_init(struct dispc_device *dispc)
+ 	case DISPC_K2G:
+ 		dispc_k2g_plane_init(dispc);
+ 		break;
++	case DISPC_AM625:
+ 	case DISPC_AM65X:
+ 	case DISPC_J721E:
+ 		dispc_k3_plane_init(dispc);
+@@ -2305,6 +2358,7 @@ static void dispc_vp_write_gamma_table(struct dispc_device *dispc,
+ 	case DISPC_K2G:
+ 		dispc_k2g_vp_write_gamma_table(dispc, hw_videoport);
+ 		break;
++	case DISPC_AM625:
+ 	case DISPC_AM65X:
+ 		dispc_am65x_vp_write_gamma_table(dispc, hw_videoport);
+ 		break;
+@@ -2579,7 +2633,8 @@ int dispc_runtime_resume(struct dispc_device *dispc)
+ 		REG_GET(dispc, DSS_SYSSTATUS, 2, 2),
+ 		REG_GET(dispc, DSS_SYSSTATUS, 3, 3));
+ 
+-	if (dispc->feat->subrev == DISPC_AM65X)
++	if (dispc->feat->subrev == DISPC_AM625 ||
++	    dispc->feat->subrev == DISPC_AM65X)
+ 		dev_dbg(dispc->dev, "OLDI RESETDONE %d,%d,%d\n",
+ 			REG_GET(dispc, DSS_SYSSTATUS, 5, 5),
+ 			REG_GET(dispc, DSS_SYSSTATUS, 6, 6),
+diff --git a/drivers/gpu/drm/tidss/tidss_dispc.h b/drivers/gpu/drm/tidss/tidss_dispc.h
+index 946ed769caaf..33ac5ad7a423 100644
+--- a/drivers/gpu/drm/tidss/tidss_dispc.h
++++ b/drivers/gpu/drm/tidss/tidss_dispc.h
+@@ -59,6 +59,7 @@ enum dispc_vp_bus_type {
+ 
+ enum dispc_dss_subrevision {
+ 	DISPC_K2G,
++	DISPC_AM625,
+ 	DISPC_AM65X,
+ 	DISPC_J721E,
+ };
+@@ -86,6 +87,7 @@ struct dispc_features {
+ };
+ 
+ extern const struct dispc_features dispc_k2g_feats;
++extern const struct dispc_features dispc_am625_feats;
+ extern const struct dispc_features dispc_am65x_feats;
+ extern const struct dispc_features dispc_j721e_feats;
+ 
+diff --git a/drivers/gpu/drm/tidss/tidss_drv.c b/drivers/gpu/drm/tidss/tidss_drv.c
+index 3f5f27fb6ebc..0a6f19314662 100644
+--- a/drivers/gpu/drm/tidss/tidss_drv.c
++++ b/drivers/gpu/drm/tidss/tidss_drv.c
+@@ -232,6 +232,7 @@ static void tidss_shutdown(struct platform_device *pdev)
+ 
+ static const struct of_device_id tidss_of_table[] = {
+ 	{ .compatible = "ti,k2g-dss", .data = &dispc_k2g_feats, },
++	{ .compatible = "ti,am625-dss", .data = &dispc_am625_feats, },
+ 	{ .compatible = "ti,am65x-dss", .data = &dispc_am65x_feats, },
+ 	{ .compatible = "ti,j721e-dss", .data = &dispc_j721e_feats, },
+ 	{ }
+-- 
+2.40.1
+
