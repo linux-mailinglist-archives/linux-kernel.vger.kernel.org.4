@@ -2,98 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1169672807F
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 14:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55C4572807C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 14:52:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236540AbjFHMxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 08:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35252 "EHLO
+        id S236496AbjFHMwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 08:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236531AbjFHMxE (ORCPT
+        with ESMTP id S233969AbjFHMwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 08:53:04 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 038C32D53;
-        Thu,  8 Jun 2023 05:53:02 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 8BCCD1FDCA;
-        Thu,  8 Jun 2023 12:53:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1686228781;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iPHubNd3f4LvIUOL4xlFGBEM6B8nD1gJK4q0E01tl0s=;
-        b=Te2moAQDad/Iq+YvfUOlr/O7BJK/IkovQcWqm+TfQkSsKbO6AOVcO0Paqyjh+92pJM51Iy
-        To/etdyccNOWX8LPQfLggUItpJmHX35bB3kWOsf3BfVV4c5eWH5eTFwRhyiXnvwcnqLd5u
-        Le+TNyhjVVEmPwleoVgqX5LqQS2PItc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1686228781;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iPHubNd3f4LvIUOL4xlFGBEM6B8nD1gJK4q0E01tl0s=;
-        b=TAdbOVq+p5nbyyPlDBo6ilZtoKbBAg9RGeJuJnGRcEKSz/seGJnYKcpMn+KReIesxGhRbD
-        aJSRso0xW2/gX2DA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5FF7113480;
-        Thu,  8 Jun 2023 12:53:01 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FkWdFi3PgWSTTAAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Thu, 08 Jun 2023 12:53:01 +0000
-Date:   Thu, 8 Jun 2023 14:46:45 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Qu Wenruo <quwenruo.btrfs@gmx.com>
-Cc:     Ou Shixiong <oushixiong@kylinos.cn>, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] btrfs: scrub: initialize variable explicitly
-Message-ID: <20230608124645.GJ28933@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <20230608024901.221232-1-oushixiong@kylinos.cn>
- <230384e8-55dc-579d-64e8-0c0263b72673@gmx.com>
+        Thu, 8 Jun 2023 08:52:10 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71B510EA
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 05:52:08 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f61530506aso5149785e9.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 05:52:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1686228727; x=1688820727;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=z6n0c0xP9FN5uGAILD9NjsAV9epj4Frj8P4gs3bw0Po=;
+        b=GRS3xh1u23fBnqStOSk4PdDpquoPz+HN1q7QL6hIN3TZyj6awfu02IPYJrI7zsgdAQ
+         EATgx08BDJ8VyCXqa1n5UKIxuwoA/hk9HYgdOuVYelqUBu5RLAbPu7oHmwnZbdVaDRpV
+         K4tGHvNhez6lPhs0LxfILc4G3yH/lf0QdmfQa8WN7iKW3CAyZzv/PKPqhAXjkiCJScdg
+         OlYQD1Snzf9GM2kSa166IcHBol7WdCclNEX6bqpr17VZz+EP8SkaUOCLzEWNhC+Gsfl0
+         MLsVQgP2wgM1NVFAqQgoKuUL3o/jRz80W0YjwTkZNPBb7pTRSW1Ga53QfsQqVz8bOGcE
+         d5SQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686228727; x=1688820727;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z6n0c0xP9FN5uGAILD9NjsAV9epj4Frj8P4gs3bw0Po=;
+        b=DWXG5JXG3dEcLbD6VKtwCHnbgdAEkKEHry2G1/Kxvv2UYyo691977lazCEA1ngMJMW
+         bfa6T2VPPacjjXstzD/nTnP24WREF5GRQtrKujBBnGagrz+j90QyN+j+ai10rq6VeolI
+         MDZzvRAui27Ut5Ld3Ei5ZnjshHG7pUdxvv5hQTl7C4bKWjHO8Wd0Eb5s2Zk6mInDqjzw
+         BRgs3dGNAJwWloWzsSy+2uXjhHYSGA/Fsm1AaXv/ksITRHwnBFQ/lYoRPAi5jGG9NPGf
+         ILZw0CrSuNxurK5xi39NiP8gv5n2Ax8f9NmbncP32qy7rW8wbr5NVkDddkabs8I70S9t
+         blpA==
+X-Gm-Message-State: AC+VfDz1OJ6Cxa88MlcisvVxUZZSeia/mmBwt4YyWGpuNNAj1L/ASytP
+        cZ4AOdAUsh5BrO+B8CewajYGfQ==
+X-Google-Smtp-Source: ACHHUZ6GT7PI8+BTn8MUBlyokSGpVd7fQSsMLvRin9z+sPl2yp+uzZlmskfMCJ88JLPXSfFUwzkpAw==
+X-Received: by 2002:a05:600c:3645:b0:3f6:692:5607 with SMTP id y5-20020a05600c364500b003f606925607mr1396359wmq.40.1686228727165;
+        Thu, 08 Jun 2023 05:52:07 -0700 (PDT)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id 16-20020a05600c021000b003f7f1b3aff1sm4925691wmi.26.2023.06.08.05.52.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 05:52:06 -0700 (PDT)
+References: <20230517070215.28463-1-yu.tu@amlogic.com>
+ <20230517070215.28463-4-yu.tu@amlogic.com>
+ <1j5y804q7u.fsf@starbuckisacylon.baylibre.com>
+ <73acf297-3f60-1ce1-2f05-af048aa37199@amlogic.com>
+ <1jttvi9vnq.fsf@starbuckisacylon.baylibre.com>
+ <20230608113244.jvf7w4flwjy5soud@CAB-WSD-L081021>
+User-agent: mu4e 1.8.13; emacs 28.2
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Cc:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        kelvin.zhang@amlogic.com, qi.duan@amlogic.com
+Subject: Re: [PATCH V9 3/4] clk: meson: S4: add support for Amlogic S4 SoC
+ PLL clock driver
+Date:   Thu, 08 Jun 2023 14:46:54 +0200
+In-reply-to: <20230608113244.jvf7w4flwjy5soud@CAB-WSD-L081021>
+Message-ID: <1jh6ri9kwb.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <230384e8-55dc-579d-64e8-0c0263b72673@gmx.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 01:18:20PM +0800, Qu Wenruo wrote:
-> 
-> 
-> On 2023/6/8 10:49, Ou Shixiong wrote:
-> >
-> > Fix error of
-> > error: ‘ret’ may be used uninitialized in this function [-Werror=maybe-uninitialized]
-> >
-> > Signed-off-by: Ou Shixiong <oushixiong@kylinos.cn>
-> 
-> Not again.
-> 
-> Please explain how @ret can be uninitialized, and your toolchain version.
-> 
-> To me, this looks like a false alert, and it's possible your toolchain
-> is out of date or lacks certain backports.
 
-Yeah, for obvious false altert warnings at least we need to know the
-compiler, version and architecture.
+On Thu 08 Jun 2023 at 14:32, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+>> 
+>> Neil is currently dealing with the dt-bindings, please
+>> * Adjust your patchset accordingly
+>> * Wait for his v2 to land, you'll need it.
+>> 
+>
+> I saw Neil patch series with merging 'private' and 'public' clock
+> bindings parts. Should I send the same patchset for a1 clocks after v6.5
+> landed?
+>
+
+I think Neil's patchset is already dealing with the a1.
+
+We'll see if it can be part of this cycle PR. I don't want to rush
+anything and rc6 is coming this monday. It may have to wait for the next cycle.
