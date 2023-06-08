@@ -2,106 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7AA5728002
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 14:30:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5D3C728007
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 14:31:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236233AbjFHMaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 08:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50074 "EHLO
+        id S236257AbjFHMbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 08:31:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232984AbjFHMaW (ORCPT
+        with ESMTP id S233910AbjFHMbJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 08:30:22 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F8510FB;
-        Thu,  8 Jun 2023 05:30:20 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QcNkq5nzFzLqJg;
-        Thu,  8 Jun 2023 20:27:15 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 8 Jun 2023 20:30:18 +0800
-Subject: Re: [PATCH] drivers/perf: hisi: Don't migrate perf to the CPU going
- to teardown
-To:     Junhao He <hejunhao3@huawei.com>, <will@kernel.org>,
-        <jonathan.cameron@huawei.com>, <linux-kernel@vger.kernel.org>,
-        <mark.rutland@arm.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-doc@vger.kernel.org>, <yangyicong@huawei.com>,
-        <shenyang39@huawei.com>, <prime.zeng@hisilicon.com>,
-        <yangyicong@hisilicon.com>
-References: <20230608114326.27649-1-hejunhao3@huawei.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <1e6ebefe-5a9b-2d14-6474-86e9eaf94656@huawei.com>
-Date:   Thu, 8 Jun 2023 20:30:18 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Thu, 8 Jun 2023 08:31:09 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF9C10FB;
+        Thu,  8 Jun 2023 05:31:08 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-52cb8e5e9f5so431316a12.0;
+        Thu, 08 Jun 2023 05:31:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686227468; x=1688819468;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KYaex83iYldjr4WaT4p4MVHnHxPq49V7RC/LIPfCpiw=;
+        b=WH4zfkGRn+TYAKddwln2Mf7XTBKgcp+jgv0ocs4ewFionyv1Tk/7NwprmBJ1hZTxHy
+         z7p1q7q42YfMw/Jq34Z25MilS8Qidt4AmA5wkMvtAff9DTWcd1FvOnZWB65Ja2cMGzLs
+         Wmbu9vNgrYQD7qsIXgLp9tttql3zA9ZhTAgUAwLSZdAycaxlmuAw5tPzqqIJwxyXIonJ
+         O2SA+FptbA8Twr3ZMQFqGDvPRW3VtIiKwjqMxircHAbt5hBj5aMP+IYSZYe6KNyczTo0
+         J2o9vhDYVQ2DmBnoXlH1MWHYfw4MrQpq36f2o+OGfcgDqatOSW0Gp5BxoShsJL6UEbJR
+         wn+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686227468; x=1688819468;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KYaex83iYldjr4WaT4p4MVHnHxPq49V7RC/LIPfCpiw=;
+        b=X3Gql+Ok0rci/ool0XpAZ0gWZkRy4jbUDXe1wL9EBTkyd87e43yGRQC6/oZ4+gCcr3
+         vfzr/Jg4ElloHK548TeH4t4dZEEDQMPeu3hRokPTl22mmesdBpADj5l7XCCzvFNS4AyT
+         IFLxuP+E4ZrvXLmMMyJFj4ZDVDn2sRGG2gh+PDuX9v8xycJECVblo+PfbetUJztUZ5/6
+         YzCoyjfpcq36RvAIcDaE40R2P/ode1yK7BLGju4tIOnMdBRppnExLrMA81IxjLCHyALt
+         RmACyPmDcg66SrQm0XFj294p2hAjAqjNLKTYu3uB5mpOd8MPFG2cvUSjxMtXu2qJHqyB
+         NhMA==
+X-Gm-Message-State: AC+VfDz8yoIBuPbJfNlgBocU6VWmt0Qk8kr305w2ka6TtCSb9xN6wKDO
+        eYA95LckyXJXZ3mrCB+vn1Uu2F4HfyCYaMFkDns=
+X-Google-Smtp-Source: ACHHUZ79SdbFXhWhPj+g4SPuGOYKNr6zjt8F3knEUXT3Yh7jB37ic8zcDORhrjLl68XbloQ/h75GKu3N8U40xoN+sRg=
+X-Received: by 2002:a17:90a:19d7:b0:258:de1b:9dcc with SMTP id
+ 23-20020a17090a19d700b00258de1b9dccmr2497551pjj.9.1686227467375; Thu, 08 Jun
+ 2023 05:31:07 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20230608114326.27649-1-hejunhao3@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230526030559.326566-1-aford173@gmail.com> <e1379d94-66a5-8538-abdf-de7770befb7d@prevas.dk>
+ <CAHCN7xK9RaLRSK_jSbbuGBUf14-FOHsrawi2J8G29iHSOj2Nyw@mail.gmail.com> <bfd050f2-b39e-c091-614e-0c77fe324435@prevas.dk>
+In-Reply-To: <bfd050f2-b39e-c091-614e-0c77fe324435@prevas.dk>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Thu, 8 Jun 2023 07:30:56 -0500
+Message-ID: <CAHCN7xKdKGA02=ZDNQkVVVDV0AZTqd7QpHA2Nq9LNnbmK=hKxA@mail.gmail.com>
+Subject: Re: [PATCH V8 0/7] drm: bridge: samsung-dsim: Support variable clocking
+To:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Cc:     dri-devel@lists.freedesktop.org, aford@beaconembedded.com,
+        Inki Dae <inki.dae@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Marek Vasut <marex@denx.de>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/8 19:43, Junhao He wrote:
-> The driver needs to migrate the perf context if the current using CPU going
-> to teardown. By the time calling the cpuhp::teardown() callback the
-> cpu_online_mask() hasn't updated yet and still includes the CPU going to
-> teardown. In current driver's implementation we may migrate the context
-> to the teardown CPU and leads to the below calltrace:
-> 
+On Thu, Jun 8, 2023 at 6:40=E2=80=AFAM Rasmus Villemoes
+<rasmus.villemoes@prevas.dk> wrote:
+>
+> On 07/06/2023 15.27, Adam Ford wrote:
+> > On Wed, Jun 7, 2023 at 8:15=E2=80=AFAM Rasmus Villemoes
+> > <rasmus.villemoes@prevas.dk> wrote:
+> >>
+> >> On 26/05/2023 05.05, Adam Ford wrote:
+> >>> This series fixes the blanking pack size and the PMS calculation.  It=
+ then
+> >>> adds support to allows the DSIM to dynamically DPHY clocks, and suppo=
+rt
+> >>> non-burst mode while allowing the removal of the hard-coded clock val=
+ues
+> >>> for the PLL for imx8m mini/nano/plus, and it allows the removal of th=
+e
+> >>> burst-clock device tree entry when burst-mode isn't supported by conn=
+ected
+> >>> devices like an HDMI brige.  In that event, the HS clock is set to th=
+e
+> >>> value requested by the bridge chip.
+> >>>
+> >>> This has been tested on both an i.MX8M Nano and i.MX8M Plus, and shou=
+ld
+> >>> work on i.MX8M Mini as well. Marek Szyprowski has tested it on variou=
+s
+> >>> Exynos boards.
+> >>
+> >> Hi all
+> >>
+> >> We're testing this on top of v6.4-rc4 on our imx8mp board, which has a
+> >> ti-sn65dsi86 DSI -> DisplayPort bridge. We do get an image at
+> >> 1920x1200, but the monitor says it's only at 58Hz, and measuring on th=
+e
+> >> DSI signals does seem to confirm that the update frequency is about 57=
+.7
+> >> or 57.8Hz (it's pretty hard to get a good measurement). It looks like
+> >> it's the lines that are too long, by a time that corresponds to about =
+80
+> >> pixels. But all the frontporch/backporch/hsync values look sane and
+> >> completely standard for that resolution.
+> >>
+> >> Setting samsung,burst-clock-frequency explicitly to something large
+> >> enough or letting it be derived from the 154MHz pixel clock makes no
+> >> difference.
+> >>
+> >> Any ideas?
+> >
+> > What refresh rate are you trying to achieve?  It seems like 57.7 or
+> > 57.8 is really close to the 58 the Monitor states.
+>
+> Oh, sorry, I thought that was clear, but it should be/we're aiming
+> for/expecting 60Hz, or (154MHz / (2080 * 1235)) which is about 59.95Hz.
+> We've tried with a variety of monitors that all have 1920x1200@60Hz as
+> max resolution, and parse-edid always gives the same hfp/hbp/...
+> numbers, namely
+>
+>        Modeline        "Mode 0" 154.00 1920 1968 2000 2080 1200 1203
+> 1209 1235 +hsync -vsync
+>
+> > I would expect the
+> > refresh to be driven by whatever the monitor states it can handle.
+>
+> Well, it states that it can handle 60Hz, and the pixel clock is also
+> computed to be the 154MHz, but still, the actual signals on the wire,
+> and hence also what the monitor ends up reporting, do not end up with 60
+> full frames per second.
+>
+> > Have you tried using modetest to see what refresh rates are available?
+>
+> Hm. My userspace may be a little weird. When I run modetest I just get
+>
+> trying to open device 'i915'...failed
+> trying to open device 'amdgpu'...failed
 > ...
-> [  368.104662][  T932] task:cpuhp/0         state:D stack:    0 pid:   15 ppid:     2 flags:0x00000008
-> [  368.113699][  T932] Call trace:
-> [  368.116834][  T932]  __switch_to+0x7c/0xbc
-> [  368.120924][  T932]  __schedule+0x338/0x6f0
-> [  368.125098][  T932]  schedule+0x50/0xe0
-> [  368.128926][  T932]  schedule_preempt_disabled+0x18/0x24
-> [  368.134229][  T932]  __mutex_lock.constprop.0+0x1d4/0x5dc
-> [  368.139617][  T932]  __mutex_lock_slowpath+0x1c/0x30
-> [  368.144573][  T932]  mutex_lock+0x50/0x60
-> [  368.148579][  T932]  perf_pmu_migrate_context+0x84/0x2b0
-> [  368.153884][  T932]  hisi_pcie_pmu_offline_cpu+0x90/0xe0 [hisi_pcie_pmu]
-> [  368.160579][  T932]  cpuhp_invoke_callback+0x2a0/0x650
-> [  368.165707][  T932]  cpuhp_thread_fun+0xe4/0x190
-> [  368.170316][  T932]  smpboot_thread_fn+0x15c/0x1a0
-> [  368.175099][  T932]  kthread+0x108/0x13c
-> [  368.179012][  T932]  ret_from_fork+0x10/0x18
-> ...
-> 
-> Use function cpumask_any_but() to find one correct active cpu to fixes
-> this issue.
-> 
-> Fixes: 8404b0fbc7fb ("drivers/perf: hisi: Add driver for HiSilicon PCIe PMU")
-> Signed-off-by: Junhao He <hejunhao3@huawei.com>
-Reviewed-by: Yicong Yang <yangyicong@hisilicon.com>
+> trying to open device 'imx-dcss'...failed
+> trying to open device 'mxsfb-drm'...failed
+> no device found
+>
 
-> ---
->  drivers/perf/hisilicon/hisi_pcie_pmu.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/perf/hisilicon/hisi_pcie_pmu.c b/drivers/perf/hisilicon/hisi_pcie_pmu.c
-> index 0bc8dc36aff5..14f8b4b03337 100644
-> --- a/drivers/perf/hisilicon/hisi_pcie_pmu.c
-> +++ b/drivers/perf/hisilicon/hisi_pcie_pmu.c
-> @@ -683,7 +683,7 @@ static int hisi_pcie_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
->  
->  	pcie_pmu->on_cpu = -1;
->  	/* Choose a new CPU from all online cpus. */
-> -	target = cpumask_first(cpu_online_mask);
-> +	target = cpumask_any_but(cpu_online_mask, cpu);
->  	if (target >= nr_cpu_ids) {
->  		pci_err(pcie_pmu->pdev, "There is no CPU to set\n");
->  		return 0;
-> 
+One the 8MP, I think you need to append "-M imx-lcdif" to the modetest
+command  to specify the driver being used.
+I don't have my 8MP with me right now, but I think that's the right name.
+
+> > The 8MP shares the video-pll clock with both disp1 and disp2 clocks,
+> > and the imx-lcdif driver, which sends the display signals to the DSI,
+> > uses the disp clock, so the video-pll needs to be an exact multiple of
+> > the pixel clock or the output won't sink.
+>
+> Bingo! I enabled the
+>
+>   DRM_DEV_DEBUG_DRIVER(drm->dev, "Pixel clock: %dkHz (actual: %dkHz)\n",
+>
+> in drivers/gpu/drm/mxsfb/lcdif_kms.c, and indeed it got me
+>
+>   Pixel clock: 154000kHz (actual: 148500kHz)
+>
+> Modifying the 1039500000 in imx8mp.dtsi to 1078000000 (i.e. 7 times the
+> desired pixel clock) gave me "actual" matching the desired pixel clock,
+> and the monitor now reports 60Hz.
+
+I am glad that worked!
+
+>
+> This product also has an LVDS display on lcdif2, so I'll have to
+> investigate how changing the video_pll1 rate affects that. And also what
+> to do about the case where somebody plugs in, say, a 1080p monitor that
+> would indeed require 148.5MHz pixel clock.
+
+That's the down-side to the 8MP with the shared clock.  According to
+the processor reference manual, It looks like the MEDIA_LDB_CLK can be
+a child of Audio_PLL2.  i don't know if you need both AUDIO_PLL1 and
+Audio_PLL2, but the Audio_PLL2 clock is fairly flexible, so if you can
+use Audio_pll1 for all your audio needs, and configure the audio_pll2
+for your LVDS, you might be able to get both LDB and DSI to sync at
+the nominal values.
+
+adam
+>
+> Thanks,
+> Rasmus
+>
