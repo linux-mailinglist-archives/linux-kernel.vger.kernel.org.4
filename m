@@ -2,164 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB63472868C
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 19:45:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A939728699
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 19:49:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235213AbjFHRpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 13:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57346 "EHLO
+        id S235650AbjFHRtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 13:49:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233785AbjFHRpc (ORCPT
+        with ESMTP id S231722AbjFHRtP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 13:45:32 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2095.outbound.protection.outlook.com [40.107.243.95])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8F82D42;
-        Thu,  8 Jun 2023 10:45:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cm20NTzM7KvA9rDnBof17wbDLKc2BEQ7uFD0IAIKb3KMzmx4wIogaVkmQrCpHR6PvrLsFu1xgMOrZbPjZW/FwyUEo8pc9k7EOLJ8fVVk7W+ay3TwQT60/fzuY1GFKJlhWEe2Q4AmmsVY0s7hZUdaJxEh40yR8dIEQTonikQg4G17YSPqqr12W9vTvqCFYJC6vFuHyGIRCQ3oQYBrZscvb0nzdqIh8IufyTKGtdDAZd5V82rVFwGHrwnAZmtQijThTeJDlq2+fldWSIoUnA5Igv9SQ4Pjuzpaz09MKomc7NuxYU6sv0OtwdvSxm7G17X7EHK+jF/fHCN2v6jU4piM+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YlCQ8aRKcjWKW5BdLJSLMCKDAIDBzq0DD6M/twJ1ay4=;
- b=n4TAjfsqIFTpXkFqPA/v4POXmOPdP+z691pGFOIVj/Zp/K6oSozYS7/tcmZlj44remVYH5vxb9WTaAVVTd+zzDbRzn0IWz20emZIZ7NXQNRnjQJQOlBdJWkw1+yvIIZmuV+YeyeOBac0loq739Vyd+R+YmJ18fF6LHFRYIRxDTiu7aQKPLZZGD2+gyGnUFL/B6bZcwHK8YuIIi+jM3gVfET7NyDIMvh90FXEzYtztWksspGhALUzMubQFswx2Xz9jF9QqpTddilF2hMGSR7JD9B2brkYudqC9ucO9w7qzcfC9a5BI2kqa35Tkv8sWXJctSfnSAMLufl5E1tFBWgryA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YlCQ8aRKcjWKW5BdLJSLMCKDAIDBzq0DD6M/twJ1ay4=;
- b=vfGNv0pHDERZwj+jx9880DmhVM5B12ErT3UTIk3xZJWA7xI1rQfYbgju/trcschD1naqmjGcONWGAMyKQwZBN2XwcTtYkIKhEq7LA6JT5uf+nHLOrEUTZIWiWYvPWLvycfFKofUHPtxizMqqmwOCDzIobWuyqZFn89VvOKdNO8A=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by PH7PR13MB6365.namprd13.prod.outlook.com (2603:10b6:510:2f9::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.19; Thu, 8 Jun
- 2023 17:45:24 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e%4]) with mapi id 15.20.6455.030; Thu, 8 Jun 2023
- 17:45:24 +0000
-Date:   Thu, 8 Jun 2023 19:45:16 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, Horatiu.Vultur@microchip.com,
-        Allan.Nielsen@microchip.com, UNGLinuxDriver@microchip.com,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: Re: [PATCH net 2/2] net: phylink: use USXGMII control-word format to
- parse Q-USGMII word
-Message-ID: <ZIITrPpnQB2rQNUr@corigine.com>
-References: <20230608163415.511762-1-maxime.chevallier@bootlin.com>
- <20230608163415.511762-4-maxime.chevallier@bootlin.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230608163415.511762-4-maxime.chevallier@bootlin.com>
-X-ClientProxiedBy: AM9P193CA0018.EURP193.PROD.OUTLOOK.COM
- (2603:10a6:20b:21e::23) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Thu, 8 Jun 2023 13:49:15 -0400
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7852D42;
+        Thu,  8 Jun 2023 10:49:13 -0700 (PDT)
+Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-6b15e510630so570461a34.3;
+        Thu, 08 Jun 2023 10:49:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686246551; x=1688838551;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=WrR2D8ApD1fWX5hojwIV0SLICJZBdxighBSqahhOUM8=;
+        b=fBS41vnK2WJcjx5qe0LvmtHULA/oM25tND85w81ZuAvMo11OAxhfm0qC9ktjrG3yyL
+         xATtlxzS6g+FsB5x4xlSkebptvZEqkQ0HbJqCGaIbnRSPxwORy8aAqee8G884pnmPpAd
+         2O/FbHd/qBA0fzvIYq7WSyaBuG2pqY+veikpFryBVAJ1LZUNZcNtzVwYHr4XA71hfi1y
+         htMc4VL6ZgyF7ENNShp4Q++1XW6deLjHr+wlE3LLPI8rh/RqJ3nxTnvyqYdXyvqYeYMM
+         q/qZRdf1hydEFVM0hMXwzpmNFAATHBQ8vpZISkmcueuhGOYlY+0XEgcDOcDbk4OSCBRd
+         g85Q==
+X-Gm-Message-State: AC+VfDzJEcDvUuc1iLfJiJWPjZz9pgvRfyeBTa6ST9l8Eu0bAuWNNmXH
+        1EOfFGvWmzOiw2p/OexQfw==
+X-Google-Smtp-Source: ACHHUZ4qqeNQJw4b85sgVojxz/Ckidtai67WfUX7oDZeoaGJMYAmMUojHFYJVgeGOi+p8Mjp87BalA==
+X-Received: by 2002:a9d:7a47:0:b0:6ad:e7dc:851d with SMTP id z7-20020a9d7a47000000b006ade7dc851dmr5441669otm.33.1686246551433;
+        Thu, 08 Jun 2023 10:49:11 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id ee24-20020a056638293800b0041658c1838asm403567jab.81.2023.06.08.10.49.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 10:49:10 -0700 (PDT)
+Received: (nullmailer pid 3085775 invoked by uid 1000);
+        Thu, 08 Jun 2023 17:49:08 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH7PR13MB6365:EE_
-X-MS-Office365-Filtering-Correlation-Id: b98410ae-c19b-4039-04a4-08db684822dc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nGPAox+yaHOBTAGo0Q4Qvjhz3Yjyr4ZhrfOE7mJEg+WHdhT2HUGxeOz560LhXYV1iJWE+T/Xmx4xZCxpgOxakESGPXe90BltcTEESVaXEuzckwT8wpNjwR77W54/KAj61rwfNFKqnM55DhjH0Y7mhqA8+JnQ4EHFk0xEg31c/WBrHNaFiPdcmWfThNgydDl3AAnBM6C5NWzUa0A0gcNr4w80w7UEew1V8B14XWCkrnZqPHvjurrulyf7GX6Aacbnb2WVBnuLOcbQFTDCbBQKdSC42ca/1uCtYlyAMRy+p/KExz+2xuW2eD4IVGIt+9BqSxqZ4a0fJ540Q+t8jE2xlrVezImMk7T4cxxqCO729YajcOKowX3+v8aclgGaWFfw2qjcIF6cLAMu2KzV1FD7aNTuivBXWiu2ojzYT6RDTIpTAYTvZXidEvE/D/4zaSkgAEvGBZvLs78FpiJnGpHNAtARyToN7le+mhVYV1KLJ8bfMlxCkTjEWEWpl5OoFUn/HFOprwXaiGsRpuF4Ig7BxUgGI7jek/FD38IlKd/rkV+ZwyMGRk8Flzn8gdyf/uBM
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39840400004)(136003)(396003)(366004)(376002)(451199021)(5660300002)(44832011)(7416002)(316002)(4326008)(6916009)(66946007)(66476007)(66556008)(8936002)(8676002)(38100700002)(41300700001)(86362001)(36756003)(2906002)(2616005)(6512007)(6506007)(6666004)(6486002)(186003)(83380400001)(54906003)(478600001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ijE7iVRZs4HHcyhJ4sPR8wcXDQtiY04gID9bPgVWyqCrxIly/HFA+TKOltSB?=
- =?us-ascii?Q?5vExkdf9ilnhv/uOeASTXghq3qnabeAlGgT7UinrVntiwd1+U0bUWwczZ9OK?=
- =?us-ascii?Q?YPJiaBKRTW2vTqo5ifUxb10Z78sDVHh1mHDA9Uee3rSoUUB47nvdkIbgWauY?=
- =?us-ascii?Q?aIMvrvfLIhn3gFGE94bcUNx6jd4WnL9oVwythV6fX/wyhTlZ0yQ3YbIKtmH9?=
- =?us-ascii?Q?KOIZ/OEobbIV4tVqqGkieWDAKkpVR7XsFUBiaSG/8TiFVLybiWAtpfGWwqD1?=
- =?us-ascii?Q?tpMcRi/XfOrYabftlrC8GLwiAg62GZHMCCGRstZMnNP8Uh+RESJBVl64mecX?=
- =?us-ascii?Q?JX3hm4GhwvKHQlfAnpF13L1frBtqslpp8aWLqzNDm/9m/iTIE5sZxZoyhU3Q?=
- =?us-ascii?Q?OAWTmDn50nhBXo4ytHADX5pUBNGPIp8bw+jneWPPBde/2LDhkuPyaEGdYKoW?=
- =?us-ascii?Q?WOY6G3IV1dyqgKwQztUmoQN1ERsVeLDQlLc50R8HY7Udo1MOd6EFLVwPPpAp?=
- =?us-ascii?Q?riITX2+wn1EPLSzXOSP6X1QXEjEbyrT+H8LQqkNs9XPu7if9mCLGcPzS1PFr?=
- =?us-ascii?Q?/gmZYY/S+wawQWyBHNaKrYEsOIH/Eiv0GQE5cepwXRtCsZsBHenwsFXyqFvh?=
- =?us-ascii?Q?3Dx0UvTHtRdUTqLgHeaEUST9GyzwPFp8xYbVD+6NvWnsfMJAL641L0700M7I?=
- =?us-ascii?Q?ibNAd6oWfpct3B897DSiIh7HFWyoRj0/QgygMzHgJGLzrRQa5OWntsIpM7IW?=
- =?us-ascii?Q?SmooiORz2XnXpciYP2xzeWL7PE2ALh2tPdoXEWzpnYuFiLUFhq65p+OWTjVo?=
- =?us-ascii?Q?flEX+ezy2Ln6rp0/VcMKJ5n/KV+7/koN1p2/6KpsUokvxgqoWINkAEeQ4qnE?=
- =?us-ascii?Q?niKUTQtWdoyseapNKTINJ8XwNnh+jF0BKMMnznupuUVhaBNZT55iYS3ij41x?=
- =?us-ascii?Q?A/FBADFlaZainYKX7C6hTdURufvq6OHb76uFmxXuubc50hQV/Ek12aYVYw5o?=
- =?us-ascii?Q?SV5aVJk61kc4Nt5hmOsMdvhi8n594FPMm4+MLBorupgQZMXDcsqfweaPDtXn?=
- =?us-ascii?Q?zeqmLTjBdFvmm33u7mMCxz1madu92FkGQaxhpDonxgjWTS3VxbD5Qv3gY8P3?=
- =?us-ascii?Q?ndcnXbKk5Om3p40zkIJCY0CABoXPgVlVyLgO7c9bJdefm9lF3VZ4fu4teUQu?=
- =?us-ascii?Q?IeriNOQOnzgH1knvY4VvT+Xa9UJXPjErrAklwJ3nLSGaXEdlB5+M0mkf0/5M?=
- =?us-ascii?Q?VyWs0K4NZlPF79Y8+64M+QuK6uZnyroB93cG5/QaR3HVGII4CPRpARodsSGA?=
- =?us-ascii?Q?1PsHXzXjpQkqb6EHXUHnoVVGEK6gNp69WTP5lBt3CJlx35l8ZrD/D6GrnvMX?=
- =?us-ascii?Q?FrsYDG2QbOCnE6nz5Tpdhs3d2dHWBSYmacvYeix+7IR8zolpd1Fwp86GEcBX?=
- =?us-ascii?Q?CLClm5nCRWxVpThWBfREZ+sP2FQse4CfRIm9SgpCOBSYohtq6OBuEp7vslbL?=
- =?us-ascii?Q?RyOP3JbytJdpEc+c4nOx9a/X3VfmblnrY7Q6USoNEd83SSvNtX1LZvp/sZ/2?=
- =?us-ascii?Q?LnTJaDtlTjF8azrooWt+sVD4ygHzHrTYxhN+5tF2jHFpIC0bgJdIH7EAY6X+?=
- =?us-ascii?Q?vQo0CWW59alV7Lz2uH0vbZHGWfpgJbhk7p7babdexbOdQFwWDmVU0y8YDu6I?=
- =?us-ascii?Q?bJz03A=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b98410ae-c19b-4039-04a4-08db684822dc
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2023 17:45:24.2271
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: osaehbduf2yXjwhy9GP6vQrcFtjQr7ww6w5BIfcvqulN0NrwsWE7bH9HfYdHk4T9yOQZgCBz/Hj7ZKUbuqrzdIB+AD4bllGIY5mkZtXA76Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR13MB6365
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Oleksii <oleksii.kurochko@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Anup Patel <apatel@ventanamicro.com>, qemu-riscv@nongnu.org,
+        u-boot@lists.denx.de, Andrew Jones <ajones@ventanamicro.com>,
+        palmer@dabbelt.com, Atish Patra <atishp@atishpatra.org>,
+        Jessica Clarke <jrtc27@jrtc27.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Alistair Francis <alistair.francis@wdc.com>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Rick Chen <rick@andestech.com>, linux-kernel@vger.kernel.org,
+        Leo <ycliang@andestech.com>
+In-Reply-To: <20230608-sitting-bath-31eddc03c5a5@spud>
+References: <20230608-sitting-bath-31eddc03c5a5@spud>
+Message-Id: <168624654839.3085745.9088493205796442132.robh@kernel.org>
+Subject: Re: [PATCH v2] dt-bindings: riscv: deprecate riscv,isa
+Date:   Thu, 08 Jun 2023 11:49:08 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 06:34:15PM +0200, Maxime Chevallier wrote:
 
-...
+On Thu, 08 Jun 2023 17:54:05 +0100, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> intro
+> =====
+> 
+> When the RISC-V dt-bindings were accepted upstream in Linux, the base
+> ISA etc had yet to be ratified. By the ratification of the base ISA,
+> incompatible changes had snuck into the specifications - for example the
+> Zicsr and Zifencei extensions were spun out of the base ISA.
+> 
+> Fast forward to today, and the reason for this patch.
+> Currently the riscv,isa dt property permits only a specific subset of
+> the ISA string - in particular it excludes version numbering.
+> With the current constraints, it is not possible to discern whether
+> "rv64i" means that the hart supports the fence.i instruction, for
+> example.
+> Future systems may choose to implement their own instruction fencing,
+> perhaps using a vendor extension, or they may not implement the optional
+> counter extensions. Software needs a way to determine this.
+> 
+> versioning schemes
+> ==================
+> 
+> "Use the extension versions that are described in the ISA manual" you
+> may say, and it's not like this has not been considered.
+> Firstly, software that parses the riscv,isa property at runtime will
+> need to contain a lookup table of some sort that maps arbitrary versions
+> to versions it understands. There is not a consistent application of
+> version number applied to extensions, with a higgledy-piggledy
+> collection of tags, "bare" and version documents awaiting the reader on
+> the "recently ratified extensions" page:
+> https://wiki.riscv.org/display/HOME/Recently+Ratified+Extensions
+> 
+> 	As an aside, this is reflected in the patch too, since many
+> 	extensions have yet to appear in a release of the ISA specs,
+> 	and are defined by commits in their respective "working draft"
+> 	repositories.
+> 
+> Secondly, there is an issue of backwards compatibility, whereby allowing
+> numbers in the ISA string, some parsers may be broken. This would
+> require an additional property to be created to even use the versions in
+> this manner.
+> 
+> boolean properties
+> ==================
+> 
+> If a new property is needed, the whole approach may as well be looked at
+> from the bottom up. A string with limited character choices etc is
+> hardly the best approach for communicating extension information to
+> software.
+> 
+> Switching to using boolean properties, one per extension, allows us to
+> define explicit meanings for the DT representation of each extension -
+> rather than the current situation where different operating systems or
+> other bits of software may impart different meanings to characters in
+> the string. Clearly the best source of meanings is the specifications
+> themselves, this just provides us the ability to choose at what point
+> in time the meaning is set. If an extension changes incompatibility in
+> the future, a new property will be required.
+> 
+> Off-list, some of the RVI folks have committed to shoring up the wording
+> in either the ISA specifications, the riscv-isa-manual or
+> so that in the future, modifications to and additions or removals of
+> features will require a new extension. Codifying that assertion
+> somewhere would make it quite unlikely that compatibility would be
+> broken, but we have the tools required to deal with it, if & when it
+> crops up.
+> It is in our collective interest, as consumers of extension meanings, to
+> define a scheme that enforces compatibility.
+> 
+> The use of boolean properties, rather than elements in a string, will
+> also permit validation that the strings have a meaning, as well as
+> potentially reject mutually exclusive combinations, or enforce
+> dependencies between instructions. That would not be possible with the
+> current dt-schema infrastructure for arbitrary strings, as we would need
+> to add a riscv,isa parser to dt-validate! That's not implemented in this
+> patch, but rather left as future work (for the brave, or the foolish).
+> 
+> acpi
+> ====
+> 
+> The current ACPI ECR is based on having a string unfortunately, but
+> ideally ACPI will move to another method, perhaps GUIDs, that give
+> explicit meaning to extensions.
+> 
+> parser simplicity
+> =================
+> 
+> Many systems that parse DT at runtime already implement an function that
+> can check for the presence of boolean properties, rather than having to
+> implement - although unfortunately for backwards compatibility with old
+> dtbs, existing parsers may not be removable - which may greatly simplify
+> dt parsing code. For example, in Linux, checking for an extension
+> becomes as simple as:
+> 	of_property_present(extension_node, "zicbom")
+> 
+> vendor extensions
+> =================
+> 
+> Compared to riscv,isa, this proposed scheme promotes vendor extensions,
+> oft touted as the strength of RISC-V, to first-class citizens.
+> At present, extensions are defined as meaning what the RISC-V ISA
+> specifications say they do. There is no realistic way of using that
+> interface to provide cross-platform definitions for what vendor
+> extensions mean. Vendor extensions may also have even less consistency
+> than RVI do in terms of versioning, or no care about backwards
+> compatibility.
+> A boolean property allows us to assign explicit meanings on a per vendor
+> extension basis, backed up by a description of their meanings.
+> 
+> fin
+> ===
+> 
+> Create a new file to store the extension meanings, each of which are
+> boolean children of a riscv,isa-extensions node and a new
+> riscv,isa-base property to replace the aspect of riscv,isa that is
+> not represented by booleans - the base ISA implemented by a hart.
+> Originally I proposed properties in the cpu node, rather than as a child
+> of the cpu node, but some concerns were raised about the size of the dtb
+> for systems with dozens of cpus & dozens of extensions. Using a child
+> node, and dropping the "riscv,isa-extension-" prefix saves the guts of
+> 20 bytes per extension, per hart, and hopefully placates the size
+> conscious.
+> 
+> As a starting point, add properties for extensions currently used in
+> Linux.
+> 
+> Finally, mark riscv,isa as deprecated, as removing it is an ABI break.
+> 
+> CC: Palmer Dabbelt <palmer@dabbelt.com>
+> CC: Paul Walmsley <paul.walmsley@sifive.com>
+> CC: Rob Herring <robh+dt@kernel.org>
+> CC: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> CC: Alistair Francis <alistair.francis@wdc.com>
+> CC: Andrew Jones <ajones@ventanamicro.com>
+> CC: Anup Patel <apatel@ventanamicro.com>
+> CC: Atish Patra <atishp@atishpatra.org>
+> CC: Jessica Clarke <jrtc27@jrtc27.com>
+> CC: Rick Chen <rick@andestech.com>
+> CC: Leo <ycliang@andestech.com>
+> CC: Oleksii <oleksii.kurochko@gmail.com>
+> CC: linux-riscv@lists.infradead.org
+> CC: qemu-riscv@nongnu.org
+> CC: u-boot@lists.denx.de
+> CC: devicetree@vger.kernel.org
+> CC: linux-kernel@vger.kernel.org
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+> Changes in v2:
+> - Use Sean's suggestion of a child node to calm fears of bloat
+> - Fixup a rake of wording etc issues that Drew pointed out
+> 
+> As a result of implementing Sean's suggestion, I believe I need to add
+> riscv,isa-extensions as an exception to the rules preventing vendor
+> properties being of object type, otherwise dt_binding_check is less than
+> happy with me.
+> 
+> I've tried to CC a few folks here that would care about this, but I am
+> sure there are more. I'll go cross-post it to sw-dev, if it allows me to
+> post there...
+> ---
+>  .../devicetree/bindings/riscv/cpus.yaml       |  57 ++--
+>  .../devicetree/bindings/riscv/extensions.yaml | 278 ++++++++++++++++++
+>  2 files changed, 313 insertions(+), 22 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/riscv/extensions.yaml
+> 
 
-> diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
-> index 809e6d5216dc..730f8860d2a6 100644
-> --- a/drivers/net/phy/phylink.c
-> +++ b/drivers/net/phy/phylink.c
-> @@ -3298,6 +3298,41 @@ void phylink_decode_usxgmii_word(struct phylink_link_state *state,
->  }
->  EXPORT_SYMBOL_GPL(phylink_decode_usxgmii_word);
->  
-> +/**
-> + * phylink_decode_usgmii_word() - decode the USGMII word from a MAC PCS
-> + * @state: a pointer to a struct phylink_link_state.
-> + * @lpa: a 16 bit value which stores the USGMII auto-negotiation word
-> + *
-> + * Helper for MAC PCS supporting the USGMII protocol and the auto-negotiation
-> + * code word.  Decode the USGMII code word and populate the corresponding fields
-> + * (speed, duplex) into the phylink_link_state structure. The structure for this
-> + * word is the same as the USXGMII word, expect it only supports speeds up to
-> + * 1Gbps.
-> + */
-> +static void phylink_decode_usgmii_word(struct phylink_link_state *state,
-> +				 uint16_t lpa)
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Hi Maxime,
+yamllint warnings/errors:
 
-a minor nit from my side: the indentation of the line above should line up
-with the inside of the opening parentheses on the previous line.
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/riscv/extensions.yaml: properties:riscv,isa-extensions: 'oneOf' conditional failed, one must be fixed:
+	Additional properties are not allowed ('additionalProperties', 'properties' were unexpected)
+		hint: A vendor boolean property can use "type: boolean"
+	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/riscv/extensions.yaml: properties:riscv,isa-extensions: 'oneOf' conditional failed, one must be fixed:
+		'enum' is a required property
+		'const' is a required property
+		hint: A vendor string property with exact values has an implicit type
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	Additional properties are not allowed ('additionalProperties', 'properties', 'type' were unexpected)
+		hint: A vendor string property with exact values has an implicit type
+	/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/riscv/extensions.yaml: properties:riscv,isa-extensions: 'oneOf' conditional failed, one must be fixed:
+		'$ref' is a required property
+		'allOf' is a required property
+		hint: A vendor property needs a $ref to types.yaml
+		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
+	'boolean' was expected
+		hint: A vendor boolean property can use "type: boolean"
+	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
+	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
 
-static void phylink_decode_usgmii_word(struct phylink_link_state *state,
-				       uint16_t lpa)
+doc reference errors (make refcheckdocs):
 
-...
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230608-sitting-bath-31eddc03c5a5@spud
 
-As I see there is feedback from Russell, of a more substantial nature,
-and it looks will be a v2, I'll mark this as changes requested in patchwork.
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
-pw-bot: cr
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
