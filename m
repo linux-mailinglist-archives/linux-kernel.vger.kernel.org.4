@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B500727A60
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 10:48:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A9EE727A65
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 10:48:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234378AbjFHIsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 04:48:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43330 "EHLO
+        id S235694AbjFHIs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 04:48:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235564AbjFHIro (ORCPT
+        with ESMTP id S235684AbjFHIr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 04:47:44 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4411984
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 01:47:21 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-652d76be8c2so287913b3a.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 01:47:21 -0700 (PDT)
+        Thu, 8 Jun 2023 04:47:56 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6861B270B
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 01:47:31 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-652dd220d67so271338b3a.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 01:47:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1686214041; x=1688806041;
+        d=bytedance.com; s=google; t=1686214051; x=1688806051;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jpOSC83U6MeRWzobwwrbyrIn8PFmAweJrd0CPHgT5eo=;
-        b=lB9UnP+PZk/bGV8hLEcegEzVxi28mg+gtSjiuOudDXzqRQv5k1+5jBOHYdossrt9Es
-         ERgR+FMrAuts8z9XMAxuklmArlSxafDMUAiEKOsMrqFFKQN/UsRQxIpfB87StBqVqFHK
-         Ura+mvZg4cga1RTr15CeCTDtETNyE9Gps03oGJuXVwJ8Tb17SIPRhjWqxxgQpW7WxDdZ
-         XMbtMfT+tMJvxCFtMhaY0FtUHJrrlbqn5MzZP+RsV63rq3EmAYjPZ4logvdQMc3zWh9I
-         ZVrrOd1xrLz1PrQNV4pauX4xGZLJ18NSmtBMz4ze4YB6aNgvmevGv+UzAnCOi4PNh2Nh
-         3KdQ==
+        bh=M478tZ0BJPqFdShribkt4DG9LiqmYQZeG2OJxmtwTQI=;
+        b=Yq2Nya/66Vu5w6nNpTUv8LEnsCGR+JlJ895K/cvR0mlClcb2DLPGqhvMmAhPRnVC6P
+         5lyLBb0BanEOEB5t67nNrVRDwmL/nXyneeJKirBxtqfYoX82wSUEyObyvO5lBx5WlZjd
+         7IFu2/h9klmSHROrvtKaxHRzYYf97RrRZ7R6kUT/MptavElCUHxFZYVt8v39v0QUxqH8
+         MBekCo2B/5+W5SBtVF33Auv200I2Z82VjkUUpo4jXKJb6wedh1dfBUxH68MnoVoVRJcq
+         CehSyCf+cG+5K5kWw96LsHynVXZEpos6blrNXcKzRev92YSyY59ZKV4R2rqBlgxN/CeI
+         vyVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686214041; x=1688806041;
+        d=1e100.net; s=20221208; t=1686214051; x=1688806051;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jpOSC83U6MeRWzobwwrbyrIn8PFmAweJrd0CPHgT5eo=;
-        b=d5nx5/6n82NScLCyPIfxrepsxRuULn9FeyKFvgxyM92dcPvBuqRzj2pimIjlDM5ht2
-         8RdcZaQ09/hXDGjLWSi0yduq5lT1TT2P0CC/5QMbvsZxTfuzWxkWSaCv50xcojJa8J25
-         lujFr5DrbKuOij9wZhslRkIeRUyN9IMSzw8F6+zTyBWxxq72BDzKRDDIlk3BWiZ5sJXw
-         +7S5tpYhdH8bdyP1Vk5naNGGAIxD1vjNpFrjt/xG7pTeeFDA24bzFOUcLTBC4/2arb8U
-         JR2oxEDO1FZvlIbQZverZj6ffhBj8vHtBQez8FYUJMPG0IsiJthbcCljPVfKcPs/VpuA
-         0FzQ==
-X-Gm-Message-State: AC+VfDzgAc4f4mUlhvO2yZxH5pDJTip/0rvwsnHxff78okiOYWRan556
-        f2au1HXAtgCIles4k0RD7WD0HQ==
-X-Google-Smtp-Source: ACHHUZ5+hqoVn2yxaf0eYbAugWWKR7uGqS4jxd8ISdwoApe43ylskaUC37/6UGXxnyifyJf0OSH8vQ==
-X-Received: by 2002:a05:6a00:18aa:b0:658:26a8:9d9e with SMTP id x42-20020a056a0018aa00b0065826a89d9emr10720128pfh.29.1686214041248;
-        Thu, 08 Jun 2023 01:47:21 -0700 (PDT)
+        bh=M478tZ0BJPqFdShribkt4DG9LiqmYQZeG2OJxmtwTQI=;
+        b=azADb3PtNZgOQvVOgPuBDcCD5gW/1te6cilvWEC7JNh9tg+B18hZ//sv5Lwmv7tDIt
+         iG7nbpPZWReuGBzJfBuj11jXK7rhlWfoVy3sXQbPQdkxgMePXb4PySt7sHoGZnzqO0Lq
+         cIWGcsg958qGl2/N8DUcHwJG3vfog/hYcQRov5Nkbe/0XQv44cM9mRY/DzD4bTUvBB6r
+         lkn0ZuZ/xSYh9DJIcjwbxtL46eIHApDh03jOYcGpiSXqFFZecxHuKyQQGan32U/54KVk
+         RV8quET0kYnpOnuBiZYFdFCdF6/GHTscgP8b40ZyzwfliVW6/GPn/nx7awJL8TuzUiGb
+         gpTA==
+X-Gm-Message-State: AC+VfDwHK3oAIi7GunOhXjZBQjskhTDtYhF8ZXtmo0dXyglKGIV7wyss
+        DZMIxEA7YrauD4TfT0pG9urJv+o8NwCuVqdlgOE=
+X-Google-Smtp-Source: ACHHUZ7154zUvrdNtTgZVFuJ8WpQ3S+Vr8G9uLG4z30KZw1UZuEHkqXzo6u/4y2aW+LeH1v8GBnjxw==
+X-Received: by 2002:a05:6a20:7d85:b0:10d:d0cd:c1c7 with SMTP id v5-20020a056a207d8500b0010dd0cdc1c7mr7184475pzj.15.1686214050909;
+        Thu, 08 Jun 2023 01:47:30 -0700 (PDT)
 Received: from localhost.localdomain ([61.213.176.13])
-        by smtp.gmail.com with ESMTPSA id 23-20020aa79157000000b0063b806b111csm614160pfi.169.2023.06.08.01.47.17
+        by smtp.gmail.com with ESMTPSA id 23-20020aa79157000000b0063b806b111csm614160pfi.169.2023.06.08.01.47.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 01:47:20 -0700 (PDT)
+        Thu, 08 Jun 2023 01:47:30 -0700 (PDT)
 From:   Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
 To:     Miklos Szeredi <miklos@szeredi.hu>, linux-fsdevel@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Andrew Morton <akpm@osdl.org>, me@jcix.top,
         Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
-Subject: [PATCH 1/2] fuse: support unlock remote OFD locks on file release
-Date:   Thu,  8 Jun 2023 16:46:08 +0800
-Message-Id: <20230608084609.14245-2-zhangjiachen.jaycee@bytedance.com>
+Subject: [PATCH 2/2] fuse: remove an unnecessary if statement
+Date:   Thu,  8 Jun 2023 16:46:09 +0800
+Message-Id: <20230608084609.14245-3-zhangjiachen.jaycee@bytedance.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230608084609.14245-1-zhangjiachen.jaycee@bytedance.com>
 References: <20230608084609.14245-1-zhangjiachen.jaycee@bytedance.com>
@@ -73,81 +73,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Like flock(2), the fcntl(2) OFD locks also use struct file addresses as
-the lock owner ID, and also should be unlocked on file release.
+FUSE remote locking code paths never add any locking state to
+inode->i_flctx, so the locks_remove_posix() function called on
+file close will return without calling fuse_setlk().
 
-The commit 37fb3a30b462 ("fuse: fix flock") fixed the flock unlocking
-issue on file release. This commit aims to fix the OFD lock by reusing
-the release_flag 'FUSE_RELEASE_FLOCK_UNLOCK'. The FUSE daemons should
-unlock both OFD locks and flocks in the FUSE_RELEASE handler.
+Therefore, as the if statement to be removed in this commit will
+always be false, remove it for clearness.
 
-To make it more clear, rename 'ff->flock' to 'ff->unlock_on_release', as
-it would be used for both flock and OFD lock. It will be set true if the
-value of fl->fl_owner equals to the struct file address.
-
-Fixes: 37fb3a30b462 ("fuse: fix flock")
+Fixes: 7142125937e1 ("[PATCH] fuse: add POSIX file locking support")
 Signed-off-by: Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
 ---
- fs/fuse/file.c   | 17 ++++++++++++++---
- fs/fuse/fuse_i.h |  2 +-
- 2 files changed, 15 insertions(+), 4 deletions(-)
+ fs/fuse/file.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
 diff --git a/fs/fuse/file.c b/fs/fuse/file.c
-index de37a3a06a71..7fe9d405969e 100644
+index 7fe9d405969e..57789215c666 100644
 --- a/fs/fuse/file.c
 +++ b/fs/fuse/file.c
-@@ -312,7 +312,7 @@ void fuse_file_release(struct inode *inode, struct fuse_file *ff,
- 
- 	fuse_prepare_release(fi, ff, open_flags, opcode);
- 
--	if (ff->flock) {
-+	if (ff->unlock_on_release) {
- 		ra->inarg.release_flags |= FUSE_RELEASE_FLOCK_UNLOCK;
- 		ra->inarg.lock_owner = fuse_lock_owner_id(ff->fm->fc, id);
- 	}
-@@ -2650,8 +2650,19 @@ static int fuse_file_lock(struct file *file, int cmd, struct file_lock *fl)
- 	} else {
- 		if (fc->no_lock)
- 			err = posix_lock_file(file, fl, NULL);
--		else
-+		else {
-+			/*
-+			 * Like flock, the OFD lock also uses the struct
-+			 * file address as the fl_owner, and should be
-+			 * unlocked on file release.
-+			 */
-+			if (file == fl->fl_owner) {
-+				struct fuse_file *ff = file->private_data;
-+
-+				ff->unlock_on_release = true;
-+			}
- 			err = fuse_setlk(file, fl, 0);
-+		}
- 	}
- 	return err;
- }
-@@ -2668,7 +2679,7 @@ static int fuse_file_flock(struct file *file, int cmd, struct file_lock *fl)
- 		struct fuse_file *ff = file->private_data;
- 
- 		/* emulate flock with POSIX locks */
--		ff->flock = true;
-+		ff->unlock_on_release = true;
- 		err = fuse_setlk(file, fl, 1);
+@@ -2619,10 +2619,6 @@ static int fuse_setlk(struct file *file, struct file_lock *fl, int flock)
+ 		return -ENOLCK;
  	}
  
-diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
-index 9b7fc7d3c7f1..574f67bd5684 100644
---- a/fs/fuse/fuse_i.h
-+++ b/fs/fuse/fuse_i.h
-@@ -225,7 +225,7 @@ struct fuse_file {
- 	wait_queue_head_t poll_wait;
+-	/* Unlock on close is handled by the flush method */
+-	if ((fl->fl_flags & FL_CLOSE_POSIX) == FL_CLOSE_POSIX)
+-		return 0;
+-
+ 	fuse_lk_fill(&args, file, fl, opcode, pid_nr, flock, &inarg);
+ 	err = fuse_simple_request(fm, &args);
  
- 	/** Has flock been performed on this file? */
--	bool flock:1;
-+	bool unlock_on_release:1;
- };
- 
- /** One input argument of a request */
 -- 
 2.20.1
 
