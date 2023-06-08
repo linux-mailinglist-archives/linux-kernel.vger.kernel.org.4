@@ -2,73 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C7D72853E
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 907CF728538
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235760AbjFHQjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 12:39:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47432 "EHLO
+        id S233743AbjFHQir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 12:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234916AbjFHQjA (ORCPT
+        with ESMTP id S234010AbjFHQim (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 12:39:00 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE1D30FA;
-        Thu,  8 Jun 2023 09:38:34 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 358GbbNS115695;
-        Thu, 8 Jun 2023 11:37:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1686242257;
-        bh=fto8hspIWYbudCmEl2g6ecL/UhlQpTiwRoj5dazNq+E=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=yjZCdYecCqlAfAByHrEBHPQ46JbIDet0HySG5g4tlTO8ToNCtOrdBEP8Lh9YsF8eQ
-         rlI5HTv/e0wwJbPunaMQrHN6oM8k6Li0HzGF1jXHKletw92au7WdAOTEQBstJ2KP2z
-         cT7ATZeBN3QAVhtFA97yk8QZvzRD0TTXtdeEDd1g=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 358Gbbkn111920
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 8 Jun 2023 11:37:37 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 8
- Jun 2023 11:37:37 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 8 Jun 2023 11:37:37 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 358GbZV7024680;
-        Thu, 8 Jun 2023 11:37:36 -0500
-From:   Aradhya Bhatia <a-bhatia1@ti.com>
-To:     Tomi Valkeinen <tomba@kernel.org>, Jyri Sarha <jyri.sarha@iki.fi>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC:     DRI Development List <dri-devel@lists.freedesktop.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        Jayesh Choudhary <j-choudhary@ti.com>,
-        Aradhya Bhatia <a-bhatia1@ti.com>
-Subject: [PATCH v8 1/2] dt-bindings: display: ti,am65x-dss: Add am625 dss compatible
-Date:   Thu, 8 Jun 2023 22:07:33 +0530
-Message-ID: <20230608163734.2578-2-a-bhatia1@ti.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230608163734.2578-1-a-bhatia1@ti.com>
-References: <20230608163734.2578-1-a-bhatia1@ti.com>
+        Thu, 8 Jun 2023 12:38:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 013F63599;
+        Thu,  8 Jun 2023 09:38:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B77764F06;
+        Thu,  8 Jun 2023 16:37:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE13BC4339B;
+        Thu,  8 Jun 2023 16:37:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686242254;
+        bh=oXUT5oQvjYSEjb3Lc/kuaZbdEGwNN5fuS6434CRKp8A=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=dSdOYNmAcsUQ36ZKmxctSbZhqqpGcUgQSExQgpAuI8Y7k0q4AJvJnXoh+d+KwlDcs
+         VLdX0HCapLR6qKCNwW2x/psZc7hliH2QR4IeHkhA/nxWmdWHFZ/WTkMxSefYQZD5b0
+         7QEH4yyXzmwZRuH5CaYKeiTZcZSbAh+glQzpvAs2d+VOq8iJrGyMeD6cLPeKUD1ucv
+         c4CKp7h25VVADQD5V94t6zarwL07gHx6XgSvQvcz7Gj/vLhjHH7rNx/5qaLXzNgHZ/
+         KWnTd8Z8KvSwcbElIVgrSVdJ6mVuh111Qd3e1hkqNuW4HIoWw0KFUmeCuSerHlPdJj
+         fN7VYfwxo++Tg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 4891ACE14DD; Thu,  8 Jun 2023 09:37:34 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 09:37:34 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Zhangjin Wu <falcon@tinylab.org>, thomas@t-8ch.de,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: nolibc patches, still possible for 6.5 ?
+Message-ID: <c4b7c058-4c9f-4804-ba00-e7a9f2df4e3e@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <ZHyPi29q3MKiNAQZ@1wt.eu>
+ <5494ac68-b4b9-434f-92c1-7e197c92a4ab@paulmck-laptop>
+ <ZH1V21rhUQlvRgnU@1wt.eu>
+ <ec85bd36-9b39-458c-9618-af500656ca7b@paulmck-laptop>
+ <ZID1LnvAj1lamHhv@1wt.eu>
+ <208b317e-8553-4d0d-b97c-a0e808fe98f2@paulmck-laptop>
+ <ZIFZxLvMlUXxLGJE@1wt.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZIFZxLvMlUXxLGJE@1wt.eu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,69 +63,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DSS controller on TI's AM625 SoC is an update from that on TI's
-AM65X SoC. The former has an additional OLDI TX on its first video port
-that helps output cloned video or WUXGA (1920x1200@60fps) resolution
-video output over a dual-link mode to reduce the required OLDI clock
-output.
+On Thu, Jun 08, 2023 at 06:32:04AM +0200, Willy Tarreau wrote:
+> On Wed, Jun 07, 2023 at 04:06:37PM -0700, Paul E. McKenney wrote:
+> > On Wed, Jun 07, 2023 at 11:22:54PM +0200, Willy Tarreau wrote:
+> > > On Wed, Jun 07, 2023 at 02:03:17PM -0700, Paul E. McKenney wrote:
+> > > > > > (There were some kernel test
+> > > > > > robot complaints as well, valid or not I am not sure.)
+> > > > > 
+> > > > > You mean in relation with nolibc stuff (or nolibc-test) or something
+> > > > > totally different ?
+> > > > 
+> > > > Apologies, this was me being confused and failing to look closely.
+> > > > 
+> > > > The complaints were not about nolibc, but rather about my patches that
+> > > > they were on top of.  Not your problem!
+> > > 
+> > > Ah no problem :-)
+> > > 
+> > > > And please let me know when the next batch from your tree are ready to go.
+> > > > (You might have been saying that they were in your recent emails, but
+> > > > I thought I should double-check.)
+> > > 
+> > > No pb, I just sent it while you were writing and our emails have crossed :-)
+> > > 
+> > > In short, it's ready now with branch 20230606-nolibc-rv32+stkp7a but if you
+> > > need any more info (more detailed summary, a public repost of the whole
+> > > series etc), just let me know. And I faced 2 kernel build errors on s390x
+> > > and riscv about rcu_task something, though you might be interested :-/
+> > 
+> > And I pulled them in and got this from "make run":
+> > 
+> > 138 test(s) passed, 0 skipped, 0 failed.[    2.416045] reboot: Power down
+> > 
+> > And this from "make run-user":
+> > 
+> > 136 test(s) passed, 2 skipped, 0 failed. See all results in /home/git/linux-rcu/tools/testing/selftests/nolibc/run.out
+> > 
+> > And run.out looks as it has before, so all looks good at this end.
+> > 
+> > Thus, unless you tell me otherwise, I will move these to my nolibc branch
+> > for the upcoming merge window.
+> 
+> Perfect, thank you very much Paul!
 
-The second video port is same from AM65x DSS and it outputs DPI video
-data. It can support 2K resolutions @ 60fps, independently.
+And done!
 
-Add the new controller's compatible and update descriptions.
-
-Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
----
-
-Notes:
-
-  Changes from v7:
-  * Drop the 3rd port property and update descriptions.
-  * Drop the Reviewed-by tags of Krzysztof Kozlowski and Rahul T R
-    because of the changes.
-
- .../bindings/display/ti/ti,am65x-dss.yaml      | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml b/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml
-index b6b402f16161..ae09cd3cbce1 100644
---- a/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml
-+++ b/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml
-@@ -12,14 +12,18 @@ maintainers:
-   - Tomi Valkeinen <tomi.valkeinen@ti.com>
- 
- description: |
--  The AM65x TI Keystone Display SubSystem with two output ports and
--  two video planes. The first video port supports OLDI and the second
--  supports DPI format. The fist plane is full video plane with all
--  features and the second is a "lite plane" without scaling support.
-+  The AM625 and AM65x TI Keystone Display SubSystem with two output
-+  ports and two video planes. In AM65x DSS, the first video port
-+  supports 1 OLDI TX and in AM625 DSS, the first video port output is
-+  internally routed to 2 OLDI TXes. The second video port supports DPI
-+  format. The first plane is full video plane with all features and the
-+  second is a "lite plane" without scaling support.
- 
- properties:
-   compatible:
--    const: ti,am65x-dss
-+    enum:
-+      - ti,am625-dss
-+      - ti,am65x-dss
- 
-   reg:
-     description:
-@@ -80,7 +84,9 @@ properties:
-       port@0:
-         $ref: /schemas/graph.yaml#/properties/port
-         description:
--          The DSS OLDI output port node form video port 1
-+          For AM65x DSS, the OLDI output port node from video port 1.
-+          For AM625 DSS, the internal DPI output port node from video
-+          port 1.
- 
-       port@1:
-         $ref: /schemas/graph.yaml#/properties/port
--- 
-2.40.1
-
+							Thanx, Paul
