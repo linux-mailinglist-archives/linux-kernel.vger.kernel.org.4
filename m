@@ -2,121 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D42B17275D5
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 05:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E72F07275DC
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 05:40:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233591AbjFHDiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 23:38:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40138 "EHLO
+        id S233648AbjFHDkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 23:40:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbjFHDiM (ORCPT
+        with ESMTP id S234107AbjFHDj5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 23:38:12 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A5F26A1;
-        Wed,  7 Jun 2023 20:38:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686195491; x=1717731491;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=5qPHntbywk3JpKVN534ugygboJcvwxaIHXdHw6nEyFI=;
-  b=n44dVgTnzyFlx9Ch8/XktQe94CnfaN+v3IXlNRj2yUlOA2w6uZDypwt4
-   v3r1k5ZcvboLXpw9VpyKmv8Ij0iPgD/t5IC7TLQ/ECZ9fgR/PJ66IFgqn
-   9W3zklz4U7FI84FtbN+j+4T7EgTY0WYd+0Bk9H+DknIyMq07sl+FuhD1y
-   7jlUeiQz7MgJ2DC1jV0CMMVLZGas8XcfdctFmzEgka7CPZL8hNIdaCcMG
-   9UwJuDJVLGR0JwB+96De4hru2AdPa5WGgOsX4I+PrL2rvsBM1DbOCI+9e
-   6ive0TgMKMAyaEd/qZXUtrMqG2P1BHZyxKaH35p894gafjTVQQSUt2BbQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="341846144"
-X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="scan'208";a="341846144"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 20:38:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="779710455"
-X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="scan'208";a="779710455"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
-  by fmsmga004.fm.intel.com with ESMTP; 07 Jun 2023 20:38:05 -0700
-Message-ID: <d29829f2-8102-7d53-379b-6f54ac03735c@linux.intel.com>
-Date:   Thu, 8 Jun 2023 11:37:05 +0800
+        Wed, 7 Jun 2023 23:39:57 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15F2326AB
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 20:39:30 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id d75a77b69052e-3f805551a19so981631cf.3
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 20:39:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1686195569; x=1688787569;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PvtGe+47bQaQV8brBLmNwnumVany/JnICTxUNCusye0=;
+        b=J65mhKmDzbLJbBnIRnqiuaaqadLBTovoBsSmppOCs2lltGkoL+ca38+UuosfJrHo+X
+         aum8iksSgOf9WzvZGVp5bzCBnwnYzzIuo+aTxhN+ZdlUTkOZ2JrKD8+DPFULwXEKpWkT
+         Cqjp64BwdglaVgMmKeTq2Hal8w1gpzEgW3l/GCS2GS/suK/82V1kjycHKdZR+tpgMf1a
+         s1i/+DE2ohpgAeVh/mqcAK1W9ob8CceFBtb2C1hUCvID0BOSkDIqyhgT7LJEmNxHQlzB
+         9d5T87S27x4aWfKqovv6ws+buo1N3ntSN59FwEatChjC++Su/ZMrpBNIkMaxdIlOd/9P
+         YGMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686195569; x=1688787569;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=PvtGe+47bQaQV8brBLmNwnumVany/JnICTxUNCusye0=;
+        b=Yzi24vwB4x8cR83tY3S10vmxAb9WajeA1RqtDU8JAhZDTRlNvS3nOcE+5hGCwr9dWT
+         3i2LTB5BJYtwEh8DsGs/Hde5Zbw82xs7TjEEqIBYG8EK3yqMen9g3q61WK6oC+AX3utk
+         GqgA0OAXLKw4GF5UGoW54+Yj1gRmmpPIfkvT9zM+TzchMjvx0jGbQCQ/3vNMONjyc+BV
+         CoEx6G/ubTJ97QCFt/tVhgstixD/VLc2C6bP3cW32VYYZknQr1XZjbiHbumclOQm0xrY
+         ZGEUGG8i+lotMoOAYpiwW/NmMcO61WZOwz1gyCfAWtcXvW3VYhPlqCaeeBXCrYVE0f7C
+         7+SQ==
+X-Gm-Message-State: AC+VfDxxqTfvVQDAD0re63QT3JE6pic00RMI68b3dxJHnCyUOtDkkml1
+        OANCgB7FB8HuWrUk6gtHmqUE2A==
+X-Google-Smtp-Source: ACHHUZ7/oM6oXW9uifA0GKweKEIcqiKoiqNo1XWxhdtGPeucV6PjfQ1N+nJe2D8iucOwcT/tAcLkzQ==
+X-Received: by 2002:ac8:5a11:0:b0:3f6:e3aa:a61f with SMTP id n17-20020ac85a11000000b003f6e3aaa61fmr6035006qta.19.1686195568988;
+        Wed, 07 Jun 2023 20:39:28 -0700 (PDT)
+Received: from [10.71.57.173] ([203.208.167.147])
+        by smtp.gmail.com with ESMTPSA id w17-20020a170902e89100b001affb590696sm236480plg.216.2023.06.07.20.39.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 20:39:28 -0700 (PDT)
+Message-ID: <c902419b-e265-75ff-1275-338dbfd69cda@bytedance.com>
+Date:   Thu, 8 Jun 2023 11:39:21 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Cc:     baolu.lu@linux.intel.com, "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>
-Subject: Re: [PATCH v3 04/10] iommu/vt-d: Add helper to setup pasid nested
- translation
-To:     "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>
-References: <20230511145110.27707-1-yi.l.liu@intel.com>
- <20230511145110.27707-5-yi.l.liu@intel.com>
- <BN9PR11MB5276A52907EDD2155D42B3C08C419@BN9PR11MB5276.namprd11.prod.outlook.com>
- <6fbf021b-5f53-0290-d565-f9e765b51f88@linux.intel.com>
- <DS0PR11MB752906AEC0AF9081454A2FFAC350A@DS0PR11MB7529.namprd11.prod.outlook.com>
-Content-Language: en-US
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <DS0PR11MB752906AEC0AF9081454A2FFAC350A@DS0PR11MB7529.namprd11.prod.outlook.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: Re: Re: [PATCH bpf-next] bpf: getsockopt hook to get optval
+ without checking kernel retval
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yangzhenze@bytedance.com,
+        wangdongdong.6@bytedance.com, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, haoluo@google.com,
+        jolsa@kernel.org
+References: <20230601024900.22902-1-zhoufeng.zf@bytedance.com>
+ <5bc1ac0d-cea8-19e5-785a-cd72140d8cdb@linux.dev>
+ <20881602-9afc-96b7-3d58-51c31e3f50b7@bytedance.com>
+ <d7be9d22-c6aa-da2a-77fc-9638ad1e0f15@linux.dev>
+ <2d138e12-9273-46e6-c219-96c665f38f0f@bytedance.com>
+ <CAKH8qBtxNuwvawZ3v1-eK0RovPHu5AtYpays29TjxE2s-2RHpQ@mail.gmail.com>
+From:   Feng Zhou <zhoufeng.zf@bytedance.com>
+In-Reply-To: <CAKH8qBtxNuwvawZ3v1-eK0RovPHu5AtYpays29TjxE2s-2RHpQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/8/23 11:35 AM, Liu, Yi L wrote:
->> From: Baolu Lu<baolu.lu@linux.intel.com>
->> Sent: Friday, May 26, 2023 12:16 PM
->> On 5/24/23 3:16 PM, Tian, Kevin wrote:
->>>> From: Yi Liu<yi.l.liu@intel.com>
->>>> Sent: Thursday, May 11, 2023 10:51 PM
+在 2023/6/7 01:04, Stanislav Fomichev 写道:
+> On Mon, Jun 5, 2023 at 8:20 PM Feng Zhou <zhoufeng.zf@bytedance.com> wrote:
+>>
+>> 在 2023/6/1 23:50, Martin KaFai Lau 写道:
+>>> On 5/31/23 11:05 PM, Feng Zhou wrote:
+>>>> 在 2023/6/1 13:37, Martin KaFai Lau 写道:
+>>>>> On 5/31/23 7:49 PM, Feng zhou wrote:
+>>>>>> From: Feng Zhou <zhoufeng.zf@bytedance.com>
+>>>>>>
+>>>>>> Remove the judgment on retval and pass bpf ctx by default. The
+>>>>>> advantage of this is that it is more flexible. Bpf getsockopt can
+>>>>>> support the new optname without using the module to call the
+>>>>>> nf_register_sockopt to register.
+>>>>>>
+>>>>>> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+>>>>>> ---
+>>>>>>    kernel/bpf/cgroup.c | 35 +++++++++++++----------------------
+>>>>>>    1 file changed, 13 insertions(+), 22 deletions(-)
+>>>>>>
+>>>>>> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+>>>>>> index 5b2741aa0d9b..ebad5442d8bb 100644
+>>>>>> --- a/kernel/bpf/cgroup.c
+>>>>>> +++ b/kernel/bpf/cgroup.c
+>>>>>> @@ -1896,30 +1896,21 @@ int
+>>>>>> __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
+>>>>>>        if (max_optlen < 0)
+>>>>>>            return max_optlen;
+>>>>>> -    if (!retval) {
+>>>>>> -        /* If kernel getsockopt finished successfully,
+>>>>>> -         * copy whatever was returned to the user back
+>>>>>> -         * into our temporary buffer. Set optlen to the
+>>>>>> -         * one that kernel returned as well to let
+>>>>>> -         * BPF programs inspect the value.
+>>>>>> -         */
+>>>>>> -
+>>>>>> -        if (get_user(ctx.optlen, optlen)) {
+>>>>>> -            ret = -EFAULT;
+>>>>>> -            goto out;
+>>>>>> -        }
+>>>>>> +    if (get_user(ctx.optlen, optlen)) {
+>>>>>> +        ret = -EFAULT;
+>>>>>> +        goto out;
+>>>>>> +    }
+>>>>>> -        if (ctx.optlen < 0) {
+>>>>>> -            ret = -EFAULT;
+>>>>>> -            goto out;
+>>>>>> -        }
+>>>>>> -        orig_optlen = ctx.optlen;
+>>>>>> +    if (ctx.optlen < 0) {
+>>>>>> +        ret = -EFAULT;
+>>>>>> +        goto out;
+>>>>>> +    }
+>>>>>> +    orig_optlen = ctx.optlen;
+>>>>>> -        if (copy_from_user(ctx.optval, optval,
+>>>>>> -                   min(ctx.optlen, max_optlen)) != 0) {
+>>>>>> -            ret = -EFAULT;
+>>>>>> -            goto out;
+>>>>>> -        }
+>>>>>> +    if (copy_from_user(ctx.optval, optval,
+>>>>>> +                min(ctx.optlen, max_optlen)) != 0) {
+>>>>> What is in optval that is useful to copy from if the kernel didn't
+>>>>> handle the optname?
 >>>>
->>>> +	/*
->>>> +	 * Memory type is only applicable to devices inside processor
->>>> coherent
->>>> +	 * domain. Will add MTS support once coherent devices are available.
->>>> +	 */
->>>> +	if (s1_cfg->flags & IOMMU_VTD_PGTBL_MTS_MASK) {
->>>> +		pr_warn_ratelimited("No memory type support %s\n",
->>>> +				    iommu->name);
->>>> +		return -EINVAL;
->>>> +	}
->>> If it's unsupported why exposing them in the uAPI at this point?
->> Agreed. We can remove this flag for now.
-> So we shall remove the below flags in uapi as well, is it?
+>>>> For example, if the user customizes a new optname, it will not be
+>>>> processed if the kernel does not support it. Then the data stored in
+>>>> optval is the data put
+>>>
+>>>
+>>>
+>>>> by the user. If this part can be seen by bpf prog, the user can
+>>>> implement processing logic of the custom optname through bpf prog.
+>>>
+>>> This part does not make sense. It is a (get)sockopt. Why the bpf prog
+>>> should expect anything useful in the original __user optval? Other than
+>>> unnecessary copy for other common cases, it looks like a bad api, so
+>>> consider it a NAK.
+>>>
+>>>>
+>>>>>
+>>>>> and there is no selftest also.
+>>>>>
+>>>>
+>>>> Yes, if remove this restriction, everyone thinks it's ok, I'll add it
+>>>> in the next version.
+>>>>
+>>>>>> +        ret = -EFAULT;
+>>>>>> +        goto out;
+>>>>>>        }
+>>>>>>        lock_sock(sk);
+>>>>>
+>>>>
+>>>
+>>
+>> According to my understanding, users will have such requirements,
+>> customize an optname, which is not available in the kernel. All logic is
+>> completed in bpf prog, and bpf prog needs to obtain the user data passed
+>> in by the system call, and then return the data required by the user
+>> according to this data.
+>>
+>> For optname not in the kernel, the error code is
+>> #define ENOPROTOOPT 92/* Protocol not available */
+>> Whether to consider the way of judging with error codes,
+>> If (! retval | | retval == -ENOPROTOOPT)
 > 
-> +#define IOMMU_VTD_PGTBL_MTS_MASK	(IOMMU_VTD_PGTBL_CD | \
-> +					 IOMMU_VTD_PGTBL_EMTE | \
-> +					 IOMMU_VTD_PGTBL_PCD | \
-> +					 IOMMU_VTD_PGTBL_PWT)
+> I'm also failing to see what you're trying to do here. You can already
+> implement custom optnames via getsockopt, so what's missing?
+> If you need to pass some data from the userspace to the hook, then
+> setsockopt hook will serve you better.
+> getsockopt is about reading something from the kernel/bpf; ignoring
+> initial user buffer value is somewhat implied here.
 
-I suppose so.
+Thanks, you reminded me that can pass data to bpf prog by setsockopt.
 
-Best regards,
-baolu
+
