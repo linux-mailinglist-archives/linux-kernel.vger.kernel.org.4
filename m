@@ -2,140 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3A3D727FFC
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 14:28:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABB13727FA0
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 14:08:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236554AbjFHM20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 08:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49216 "EHLO
+        id S235820AbjFHMIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 08:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233942AbjFHM2Y (ORCPT
+        with ESMTP id S234641AbjFHMIg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 08:28:24 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77559E43
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 05:28:21 -0700 (PDT)
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230608122818epoutp01cee327398f122359f953130046ab0df9~mrsskQFCI0325503255epoutp01D
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 12:28:17 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230608122818epoutp01cee327398f122359f953130046ab0df9~mrsskQFCI0325503255epoutp01D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1686227298;
-        bh=GZqw1aJu5pQAcbuNe5g1lBrt+2PDDEf+dePaVVQDS9s=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=DnotYXVETkqZZ/mobOI3zyKjBqm0xzADIVGVepw2fcd8oGvzX+iDDqaLRY/Ga4t6U
-         XfbvcIvZoORFW8gxvSRJSrDVmlZMYm8VA0H9g4P18zC4+ikX/LxyJ4P/KqF6idbSxY
-         /qt3JbQwyLnotAod7a6mPdDZcQDcFZxmvzC9qJp4=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-        20230608122816epcas5p2b58dd7d8b7124a1c8760ab13fef80505~mrsrSQhHv0812208122epcas5p2X;
-        Thu,  8 Jun 2023 12:28:16 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.181]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4QcNlz32Q5z4x9Pp; Thu,  8 Jun
-        2023 12:28:15 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        35.C7.16380.F59C1846; Thu,  8 Jun 2023 21:28:15 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20230608121123epcas5p3071e22355035496648768f4cd420dee1~mrd7ftIoY0769507695epcas5p3f;
-        Thu,  8 Jun 2023 12:11:23 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230608121123epsmtrp1727243a3d59cf2e910bb0ea7b28766b9~mrd7eajJr2145721457epsmtrp1h;
-        Thu,  8 Jun 2023 12:11:23 +0000 (GMT)
-X-AuditID: b6c32a4b-56fff70000013ffc-51-6481c95f127e
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        8C.0C.28392.B65C1846; Thu,  8 Jun 2023 21:11:23 +0900 (KST)
-Received: from green245 (unknown [107.99.41.245]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20230608121118epsmtip15e30d20fec6e750fa9049485a81dc2e6~mrd3Q0W5H2318023180epsmtip1C;
-        Thu,  8 Jun 2023 12:11:18 +0000 (GMT)
-Date:   Thu, 8 Jun 2023 17:38:17 +0530
-From:   Nitesh Shetty <nj.shetty@samsung.com>
-To:     Christoph Hellwig <hch@infradead.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Jonathan Corbet <corbet@lwn.net>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
-        Keith Busch <kbusch@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        James Smart <james.smart@broadcom.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        willy@infradead.org, hare@suse.de, djwong@kernel.org,
-        bvanassche@acm.org, ming.lei@redhat.com, dlemoal@kernel.org,
-        nitheshshetty@gmail.com, gost.dev@samsung.com,
-        Kanchan Joshi <joshi.k@samsung.com>,
-        Javier =?utf-8?B?R29uesOhbGV6?= <javier.gonz@samsung.com>,
-        Anuj Gupta <anuj20.g@samsung.com>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v12 5/9] nvme: add copy offload support
-Message-ID: <20230608120817.jg4xb4jhg77mlksw@green245>
+        Thu, 8 Jun 2023 08:08:36 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2097.outbound.protection.outlook.com [40.107.220.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A07E184;
+        Thu,  8 Jun 2023 05:08:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dhtugriglIRun4OgIduYyp+e4QoP4gUJhBMklfDVstLkjuesEsGLwRL7SCIhMGzIHdGnBGGfjQF1dXcf9qQNXSHAqV6EtOee1DLX9CR1/tqpt2MoLSt8xT7JZuFI97C9e4Fa1+HAQ+Gs6SQoBEhbqe8x2LRDSAftACn16yGP3Okk4lH92Jd4YTKzQ8f+9502phF7JuJZeF1becpkAW+d0YYHxsiRDz/z0WjsfP663SvpfGLPKrxUW0Ls38RohsipGrvYjV5TvtJXLFwBd9T7/xtqRJ1HYRXNGzTMkE7FJh/9BXAGQjmnAc2E1dcNo1D+4HRwtl0D0ZKxLI40nESy0Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=s/Uh/pcSqD+/WUUObUXVK8GdCYYTLXJWxXBFVH5GC5U=;
+ b=CgUXvGGtOr2yZDSi9gwgnFUSY0UgiCkUVr3CTdta3bTMRxmExh4ru3jaXq9yNfuCAPOzobK1ogTw34VuspdU+rwOlCkGFDa8RAW6gN7wInxS8dnUPZIxlAxe7LzCN+n4Qd+wfr2tOxCzkRBSK33XEo8gUQSXuG0LcyCrbZ78iF1bAE/RpqdhBOkhnzWlT8m0EEPaEI7o8Ay1RMDOd5lpMhtiDj2ykNhnY2Bwn3gJio7fxZQgZxv5iMEW0Qf677khB5XrkjyhnK75SDu/B5vEWGi9JkUe+S4MIRDDq055bEw6VnqzlfkiqcBI7LKbijMtzYxtgHjCVp91uUrXVjDP9A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=s/Uh/pcSqD+/WUUObUXVK8GdCYYTLXJWxXBFVH5GC5U=;
+ b=Ytd7DmV5/8kaKi/C7jCRw/EzXdCMbqgYvQk0ovBcxsSM7q2bQ14dqKChZH5hGzh6YNH6vexfEXH0RFgIid7dJdgCkGo3orzXWNnLKQipm7Ghzg/T+hwyl4e4QboshW0g7BjrIAcVef7DjDw/iBZOGfC6DYg8L9NvMj35CCOR1II=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by SJ2PR13MB6428.namprd13.prod.outlook.com (2603:10b6:a03:55a::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.19; Thu, 8 Jun
+ 2023 12:08:31 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e%4]) with mapi id 15.20.6455.030; Thu, 8 Jun 2023
+ 12:08:31 +0000
+Date:   Thu, 8 Jun 2023 14:08:26 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net v2] net: pch_gbe: Allow build on MIPS_GENERIC kernel
+Message-ID: <ZIHEutLwlOi1YDfX@corigine.com>
+References: <20230607055953.34110-1-jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230607055953.34110-1-jiaxun.yang@flygoat.com>
+X-ClientProxiedBy: AM4PR0101CA0073.eurprd01.prod.exchangelabs.com
+ (2603:10a6:200:41::41) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-In-Reply-To: <ZIAt7vL+/isPJEl5@infradead.org>
-User-Agent: NeoMutt/20171215
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0xTdxTH97ttb4uu7vJw+/GYkGqUR4p0lPqDWTGRyV2QDbe4zIFiQ68t
-        jz7sQ3QaBZwwMAgCAqtuPCzvRSwoQ1SGZYqABLUgCipM6jZxoiKKjgFraV3875PveZ+Tw6I5
-        tTHdWPFyDaWSi5I4+AJ6U7vPCm5sZ6o4oLjbEdV3XaahtNwZGqq7m4OjR+0TABU+fU1D5rYM
-        gEzmRWjk11B0YfwYA91uO4uh8+V5GOrOLcdQTd0lDJ0re4ah0TvPmejS3GMc5RlvAvSgX4eh
-        C4N+qCxdT0fnL3TSkanlOI5KKh8w0aGBZhxVdcxiyJh/AEPN5lSATj56QkdXBt1R70wHA02/
-        Oo6v9SRNfRGkbrgHJ8/q7jLJ3nsGOtlY7UuaerRkQ20mTjbq95Pnbqfg5InD+Qwy+8A4Tj57
-        MEgnn7T24+Th07WAbOzeQz5vWBLl+E3iaiklElMqL0oepxDHyyVCTsSXsetigwQBPC4vGK3i
-        eMlFMkrICdsQxV0fn2RZFsdrpyhJa5GiRGo1Z+Wa1SqFVkN5SRVqjZBDKcVJSr7SXy2SqbVy
-        ib+c0oTwAgI+CrI4bkuUDhp/AcoCYtffk9mMFFDNzgIOLEjwoWFsGs8CC1hOxDkAJ/XPmFaD
-        EzEBoL7T32Z4DmBvjwl7E5FxeRzYDC0A/jhksIf/AeCtoSGa1YtOLINFumFLKhYLJ/xg9xzL
-        KrsQW+G14sp5FxpRy4RtsxwrOxMfw5GBR/M6mxDA9CET08aOsPMHM92axoHgwhvlkVZ5MeEB
-        iyte0KxlITHhAH/LOTpfChJhsHY8zNanMxzrOM20sRt8mJNu52RYU1CN22K/A1A3oAM2Qyg8
-        2JVj700KWwtLaTb9Q3i06yRm0xfB7GmzfRFs2PzTG14Kf64vxW3sCm9OpdqZhIZr/9r3cwqD
-        rQdL6LnAU/fWbLq36tk4BGY+TWPoLPPQCHdYNcuyoQ+sb1lZChi1wJVSqmUSSh2kDJRTyf/f
-        O04hawDzr+Qb0Qzujzz1NwKMBYwAsmgcF3ZC6H6xE1ss2v0tpVLEqrRJlNoIgiynOkJzWxyn
-        sPyiXBPL4wcH8AUCAT84UMDjfMBeIeyMcyIkIg2VSFFKSvUmDmM5uKVgp8r/ApPvlpzRV3pv
-        fhKVnreuah370y7FjLAk8Mqcdlf467OZHfxI9xsGbuGuAV8pd8veu6nUwaGitMivZnL2eGxK
-        j9lYPCaTLUyLupq/c9VLwSchrzJl0Z/vk23rem+heckLv9Fw1VR0zEPfmATy8pHEYY+twsdu
-        nrfcLn4f0rd3/aYlZQXuvfuWzpjP5B2bldR4b0+5Kl9T73GM6hkUe0/24c7Rdy7G7Z4Ydi7y
-        qmuKDGcaCpYzxctendhyv31zhcu+jTt+f+1a2P+nT0bImHBt44jfZ47J/3AE1Tu+eCGJZ89O
-        LQ++HnT9XsCikney5qYFTRUb5Au/TvDX89PfT9nzckvy8dHtHLpaKuL50lRq0X/7hAE60wQA
-        AA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpkleLIzCtJLcpLzFFi42LZdlhJTjf7aGOKQeMkdov1p44xWzRN+Mts
-        sfpuP5vF68OfGC2mffjJbPHkQDujxeUnfBYP9ttb7H03m9Xi5oGdTBZ7Fk1isjg9YRGTxcrV
-        R5ksdi/8yGTx+M5ndouj/9+yWUw6dI3R4unVWUwWe29pWyxsW8JisWfvSRaLy7vmsFnMX/aU
-        3aL7+g42i+XH/zFZHJrczGSx40kjo8W61+9ZLE7ckrY4//c4q8XvH3PYHOQ9Ll/x9ph1/yyb
-        x85Zd9k9zt/byOKxeYWWx+WzpR6bVnWyeWxeUu+x+2YDm8fivsmsHr3N79g8Pj69xeLxft9V
-        No++LasYPTafrvb4vEkuQDCKyyYlNSezLLVI3y6BK+Puec2CY7wV82f9Zm9g/MLVxcjJISFg
-        ItF+7B1jFyMXh5DADkaJ7submSESkhLL/h6BsoUlVv57zg5R9IRR4n3XRHaQBIuAisT0WfeB
-        bA4ONgFtidP/OUDCIgJxEn0nl7CC1DMLrGOX+Lr1GtggYQFriQfXX4PZvAJmEm23L4PNERLY
-        xCSxdaIHRFxQ4uTMJywgNjNQzbzND5lB5jMLSEss/8cBYnIK6EpcWuQLUiEqICMxY+lX5gmM
-        grOQNM9C0jwLoXkBI/MqRsnUguLc9NxiwwKjvNRyveLE3OLSvHS95PzcTYzgVKKltYNxz6oP
-        eocYmTgYDzFKcDArifBm2denCPGmJFZWpRblxxeV5qQWH2KU5mBREue90HUyXkggPbEkNTs1
-        tSC1CCbLxMEp1cC0Z/knhkyZ9r8vrY6G/u3XyoiLVXFded7avvNzMZsSt92BTVm3f5S9+L/j
-        84YrLIuW+YTYt19/G+sq09h5L2TOh3Ymro695XcKY5ZUvlf61nN3tVR3flDMrFqLx+fLdspf
-        sxVwOzCtZULjVaW8xqWrrDljfhw45sMZdFODhS9+09yva/5KbH6y/NK9a4qJmTyrDa8tYk+R
-        nO5bpLDL5u0rA6eVblPXK54/tZA/i0H7/pH4T2V1gfqcUsK3WeNk5vdXMVqda4vuW/N5hsLE
-        NRkvZziXxG3oLP7424zdPD90BmuCzsa8x7buqXH/s2+kXbU7Jme48sLZ8Nh6xW3PrY7HxWjs
-        qXgtuM5Ty2Z7gocSS3FGoqEWc1FxIgCzmsAqlAMAAA==
-X-CMS-MailID: 20230608121123epcas5p3071e22355035496648768f4cd420dee1
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-        boundary="----RbnLpepSOhDWt1JmDV6HMUWO9Dmn-C3OOrycHY1seGoKI43i=_57f1d_"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230605122310epcas5p4aaebfc26fe5377613a36fe50423cf494
-References: <20230605121732.28468-1-nj.shetty@samsung.com>
-        <CGME20230605122310epcas5p4aaebfc26fe5377613a36fe50423cf494@epcas5p4.samsung.com>
-        <20230605121732.28468-6-nj.shetty@samsung.com>
-        <ZH3mjUb+yqI11XD8@infradead.org> <20230606113535.rjbhe6eqlyqk4pqq@green245>
-        <ZIAt7vL+/isPJEl5@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SJ2PR13MB6428:EE_
+X-MS-Office365-Filtering-Correlation-Id: e30cc47d-a0e3-4a81-70cb-08db68191360
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bq3SaE6URziwaD179cW+WN80w9Z9HV5qZtjC/xyYMSDtYbddPuotf6l6jLdmtv3Z4dZ9LZeU7Yldsv5Euq7xXTOdSAf2bydsgfIwiwMQOTSMaSai8URerNjekDVDltIK2bX22sbMn/7+FcBvE3FfJQw2oxO9IMiwuvN2LxC75XOtzUUPClq1sbwzK8QtHIl8sya8A/4lxnqQbXwFpZkBrExSDuY3Hz0NUnKvBkiMd3HB9x1KYARJM/1BW5H0A/P/DF8A8Ek7TArvf8wN1x580CYrlURolkd5GLw66RCjIfcRNpr9aguna4m7ELBdARTYyyqj9sYCMAGFCogvCijyZlgX2f3x/CK1PHeB5zR9XzdaXG/3vGsnK8bxmXbuGW4UDviQYhBIW46Zg2NZnBZMKJKRjCJnHgGeeNImfImjY+LxZ/4GeQ1ewFprYGEejAq9k4sayeU1YxI4tRJZR+zrtfpxz+rXNiGMi8GeEkVlJbn2T/MOzhLS+grbJGiw03CcpQUCpxY2j5IFiZQGCMwLLr2qm6BTxOQ7NEgRgVHr6Q3hwccY4EUS347EIRhL7xiKWaFRHPn9iEBn6U9jspVfXUDvJhxL7YDwalLM9DbwsYs=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39840400004)(136003)(396003)(376002)(366004)(346002)(451199021)(6486002)(6666004)(6506007)(6512007)(2616005)(83380400001)(186003)(36756003)(86362001)(44832011)(66946007)(66476007)(316002)(6916009)(5660300002)(4326008)(8936002)(8676002)(66556008)(2906002)(4744005)(41300700001)(38100700002)(478600001)(41533002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tuYS9VIZe0qhAQf8LHWY82frZUgi5/Ws1/ywr3CThQuAe9XycoqRGaWPd9zy?=
+ =?us-ascii?Q?boP0Z9d82Kv3Pckq4Sma+wlXgq33Ee0W48dMM971xMSJC8+2XPwAcz9Z32EY?=
+ =?us-ascii?Q?mjEvluTrWqdKtgsRI9biBWOSdJ/yak5+0/vvo5t/2iZwHCJ1T600iDnN0JHY?=
+ =?us-ascii?Q?tIaEBiJI9e8RKwy603xfBtiOw6rInIouEuSIv4v+0Aj9Gs+M8b6X8fc0XtWH?=
+ =?us-ascii?Q?b0HJa/AsexrCHdipqzYsFUp70JuacKCf7yXszy2WImTISuXW6mPVtEkHl8SC?=
+ =?us-ascii?Q?Vgy8+xPP28FLW3y4XIV4nADIxXOyKGseyua7nto5W2o5M1dGNsjxq8MKsGlz?=
+ =?us-ascii?Q?+c11T1LyCl2FwxzVMJdJH6Y0K1iknqsS6SJAD4zjy6SiflWgMPIh0S7MDsAH?=
+ =?us-ascii?Q?cZNNIDiF1w1hHM35jYR4GxZ54QPqOUM6w5xUX87xCNJKccbi6HEFqhiqnBb5?=
+ =?us-ascii?Q?fal5RZqA44EDoJVDnMmXz8C6EjfTGgtSFDs3w/SI+hSqTNhy5AC0vmbdfN/z?=
+ =?us-ascii?Q?QB1xCTmJGR7s9ezLUweRoWzT+Jkv7FglcBp/H/+QhxGMvfyIqwAgIn51hsUX?=
+ =?us-ascii?Q?5/bPcHVZwyPT/kAPsLq9yIebiupMofr9Y0wujeAmT5vLaGjiBBg1QkU0W5RE?=
+ =?us-ascii?Q?ZgGE6qyIV+N8gjaWaB1kqa7Ya59K5LzGoTi399HwoiPonTh0TYusEvRrsPd9?=
+ =?us-ascii?Q?OisfNbtSMGiH40b3+5HEg0QArPVdWdYYXI2YnswqjpIO14tSbaBZV9vVa8S6?=
+ =?us-ascii?Q?sFpLTR7M4eFCyU8FE2tH5tcn1LNRT7I3qUH2mhLkU5ZCO4XvO83PvRtCTtQV?=
+ =?us-ascii?Q?UXdk74iPfjkD+4372dafVKXCJ4eMhlKe0wesdTiQuYNacAFFwjEahYFa/9Jt?=
+ =?us-ascii?Q?NddwgZV1aJZXykjtroxB3xUb1Eo/SPsr+7BjvTx+gZYoQuwDEPnTLolGR+Bd?=
+ =?us-ascii?Q?C0lZmOA0RoRQwOnXnjNdotodT7ZExC7aDPxfyoBWd4pUte43HToaNjxlGP8q?=
+ =?us-ascii?Q?EuZW6k/ESxq0NuSv6xcYGqgilJRuKAA7SKGUdAvhS2zl6F3NziYoBG0zES4K?=
+ =?us-ascii?Q?Q3CGnM0v753xd/BXhgYsOElEvc3m8EmBfEYZaYKcv+Wk42Ifg6+wSrAS3hDJ?=
+ =?us-ascii?Q?iEOZbiabOHtZUJPP0FFRM1jx1Ec+35vjJ2Xrudxo+XE55O66uXM01awm8EYy?=
+ =?us-ascii?Q?BmDPnpE2vQ0aBBiE81PPnMIMYBwuTBEezqpiNdiCcc+ipFzxcRGm5SUuGmSW?=
+ =?us-ascii?Q?yQjDvggbcFRyUys3640A+/6/o1rFg2c5w44C8ke7e1aSzMqLO6tqfpZcL2SX?=
+ =?us-ascii?Q?ZhrecVtUVkuBeMHl5Rw0fII6cKpu7pCtQHiaV1COXZzUsb8Y5ga7fNAVIJRT?=
+ =?us-ascii?Q?yEm1SNlIxWUuNWx7fcMer2WvjyfjRgruFTXrFxOe1Z2g3IV0dC5vXjkJxN9G?=
+ =?us-ascii?Q?06StE1fMKSSYqh9l0LbK1PXrSQyVcdF4Xzn7YlbMQvDv+m0CtQDwhjBVEQCP?=
+ =?us-ascii?Q?9d4oNKSBAJdZCI1sBmPvdIWjfkzJrqZCZPB9t5KwCrUCEw6sGDC5Q3KJ0h9A?=
+ =?us-ascii?Q?cHPnFKOScWdUkclmR+/i8HHhEwGrM89XfR/XPMMaCvTpjvOfEGzXrO2p0hZh?=
+ =?us-ascii?Q?VBa8CHAHhOQ8AH7+rs3Lhfu3IUQJZsfp4aVkh58udpWy7FnvH53ImX1rg4G0?=
+ =?us-ascii?Q?jTAsnw=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e30cc47d-a0e3-4a81-70cb-08db68191360
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2023 12:08:31.3006
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: obg3S/NX3YlhDhT58pK1t1663iR4WmA1uJxSRRP/ivfmcrdvnIeDhEHtJF5fQh+EOdsHmxqiEFLyyVHG97yOzHBh8K1W5B+34TYUoFQc45E=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR13MB6428
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -143,55 +114,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-------RbnLpepSOhDWt1JmDV6HMUWO9Dmn-C3OOrycHY1seGoKI43i=_57f1d_
-Content-Type: text/plain; charset="utf-8"; format="flowed"
-Content-Disposition: inline
+On Wed, Jun 07, 2023 at 01:59:53PM +0800, Jiaxun Yang wrote:
+> MIPS Boston board, which is using MIPS_GENERIC kernel is using
+> EG20T PCH and thus need this driver.
+> 
+> Dependency of PCH_GBE, PTP_1588_CLOCK_PCH is also fixed for
+> MIPS_GENERIC.
+> 
+> Note that CONFIG_PCH_GBE is selected in arch/mips/configs/generic/
+> board-boston.config for a while, some how it's never wired up
+> in Kconfig.
+> 
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+> v2: Add PTP_1588_CLOCK_PCH dependency.
+> 
+> Netdev maintainers, is it possible to squeeze this tiny patch into
+> fixes tree?
 
-Hi Christoph and Martin,
+That question aside, this looks good to me.
 
-On 23/06/07 12:12AM, Christoph Hellwig wrote:
->On Tue, Jun 06, 2023 at 05:05:35PM +0530, Nitesh Shetty wrote:
->> Downside will be duplicating checks which are present for read, write in
->> block layer, device-mapper and zoned devices.
->> But we can do this, shouldn't be an issue.
->
->Yes.  Please never overload operations, this is just causing problems
->everywhere, and that why I split the operations from the flag a few
->years ago.
->
-
-Sure, we will add REQ_COPY_IN/OUT and send a new version.
-
->> The idea behind subsys is to prevent copy across different subsystem.
->> For example, copy across nvme subsystem and the scsi subsystem. [1]
->> At present, we don't support inter-namespace(copy across NVMe namespace),
->> but after community feedback for previous series we left scope for it.
->
->Never leave scope for something that isn't actually added.  That just
->creates a giant maintainance nightmare.  Cross-device copies are giant
->nightmare in general, and in the case of NVMe completely unusable
->as currently done in the working group.  Messing up something that
->is entirely reasonable (local copy) for something like that is a sure
->way to never get this series in.
-
-Sure, we can do away with subsys and realign more on single namespace copy.
-We are planning to use token to store source info, such as src sector,
-len and namespace. Something like below,
-
-struct nvme_copy_token {
-	struct nvme_ns *ns; // to make sure we are copying within same namespace
-/* store source info during *IN operation, will be used by *OUT operation */
-	sector_t src_sector;
-	sector_t sectors;
-};
-Do you have any better way to handle this in mind ?
-
-
-Thank you,
-Nitesh Shetty
-
-------RbnLpepSOhDWt1JmDV6HMUWO9Dmn-C3OOrycHY1seGoKI43i=_57f1d_
-Content-Type: text/plain; charset="utf-8"
-
-
-------RbnLpepSOhDWt1JmDV6HMUWO9Dmn-C3OOrycHY1seGoKI43i=_57f1d_--
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
