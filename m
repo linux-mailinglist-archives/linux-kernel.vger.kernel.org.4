@@ -2,169 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F93A72768E
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 07:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D9C4727699
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 07:18:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234299AbjFHFQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 01:16:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34594 "EHLO
+        id S234275AbjFHFSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 01:18:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233573AbjFHFQp (ORCPT
+        with ESMTP id S233573AbjFHFSi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 01:16:45 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B7426B6;
-        Wed,  7 Jun 2023 22:16:45 -0700 (PDT)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 357LwKrE023704;
-        Wed, 7 Jun 2023 22:16:33 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=pfpt0220; bh=m6eXUjhW/7LpIx2wbG81CQCd5iUqZ1757BwskOGc+V0=;
- b=CqfEKN4SfkTA40lfojxLRMkCfZxYk1zKzdyWSLiPELPLjsKH8t0WvX8n/PeLXkjYmG3o
- RZZRFrqsRfBD8USNGR3Y407rZ/1ctJAB49i3RI0qxl+LF6t4YudZe9ZtbSNLSNOdRI0h
- n04o4Y52F15E+cR3812Zf/jIyaGEWAJmQrEzK7QF8Ne9zncspCP7s0oRJgM39Is/Jnu/
- aOarOlG4HGQoV9XhKigYoJwPSGAIViFbj7FFAk/9KjTGQ/9vrmDs+8HM3hsF3oIPtwFv
- sSlDKtdlxlsB9T7OuROTBipRq9i/oMfDSGELx4f5rM3hvFdXXdvoHBHp9NBPWnVHMzcE vA== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3r329c1913-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 07 Jun 2023 22:16:32 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 7 Jun
- 2023 22:16:30 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
- Transport; Wed, 7 Jun 2023 22:16:30 -0700
-Received: from localhost.localdomain (unknown [10.28.36.165])
-        by maili.marvell.com (Postfix) with ESMTP id 64D413F703F;
-        Wed,  7 Jun 2023 22:16:27 -0700 (PDT)
-From:   Ratheesh Kannoth <rkannoth@marvell.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <sgoutham@marvell.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <sbhatta@marvell.com>, <gakula@marvell.com>, <schalla@marvell.com>,
-        <hkelam@marvell.com>, "Ratheesh Kannoth" <rkannoth@marvell.com>
-Subject: [PATCH net] octeontx2-af: Fix promiscuous mode
-Date:   Thu, 8 Jun 2023 10:46:25 +0530
-Message-ID: <20230608051625.2731378-1-rkannoth@marvell.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 8 Jun 2023 01:18:38 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9C526B8;
+        Wed,  7 Jun 2023 22:18:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686201514; x=1717737514;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cHXrEY01bYvheOLH7fG7jjiblWcaaSIEo6dV4ZMjUe0=;
+  b=LocKE1V9IsHhQOMmoyx+6Xu8aCJCT/IkxHeS2XhU57zhfTKCKzMh0F6K
+   ABCuJQnaPti6QoMosND/6tIMxAfGI4Yn13SbcAGAGOOxlWODFSHP26bjr
+   klQJuQjwkkMnCJDcy6A/uIkYD8QxlEHcYyIcbLMCXKsD92JbJ/Dzp3coc
+   Y5qifYizJtpJb3hHlV+GJQ8ATxksDpXpk6cH6ha4CwP7IEzt4LDQFlt7j
+   drpdnplxb2dTLH/N/gb7RgQV3jeq0/g+j6xG8BtBE/R7ILouEqzD9sAqZ
+   ZNb9xUqE6UG00LLAY6L5kysA27BIGgBss9NfhhtzsLn7A8x5oFBTqlEaA
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="357213723"
+X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
+   d="scan'208";a="357213723"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 22:18:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="703942649"
+X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
+   d="scan'208";a="703942649"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 07 Jun 2023 22:18:27 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q782U-0007Ih-2L;
+        Thu, 08 Jun 2023 05:18:26 +0000
+Date:   Thu, 8 Jun 2023 13:18:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Douglas Anderson <dianders@chromium.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Douglas Anderson <dianders@chromium.org>,
+        devicetree@vger.kernel.org, cros-qcom-dts-watchers@chromium.org,
+        linux-arm-msm@vger.kernel.org,
+        yangcong5@huaqin.corp-partner.google.com,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Chris Morgan <macroalpha82@gmail.com>,
+        linux-input@vger.kernel.org, hsinyi@google.com
+Subject: Re: [PATCH v2 08/10] HID: i2c-hid: Support being a panel follower
+Message-ID: <202306081344.M0jNn0Ce-lkp@intel.com>
+References: <20230607144931.v2.8.Ib1a98309c455cd7e26b931c69993d4fba33bbe15@changeid>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: 4ZBe907Ts0Vq0a3MbPSrm6swUbAjXPz1
-X-Proofpoint-ORIG-GUID: 4ZBe907Ts0Vq0a3MbPSrm6swUbAjXPz1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-08_02,2023-06-07_01,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230607144931.v2.8.Ib1a98309c455cd7e26b931c69993d4fba33bbe15@changeid>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CN10KB silicon introduced a new exact match feature,
-which is used for DMAC filtering. The state of installed
-DMAC filters in this exact match table is getting corrupted
-when promiscuous mode is toggled. Fix this by not touching
-Exact match related config when promiscuous mode is toggled.
+Hi Douglas,
 
-Fixes: 2dba9459d2c9 ("octeontx2-af: Wrapper functions for MAC addr add/del/update/reset")
-Signed-off-by: Ratheesh Kannoth <rkannoth@marvell.com>
----
- .../marvell/octeontx2/af/rvu_npc_hash.c       | 29 ++-----------------
- 1 file changed, 2 insertions(+), 27 deletions(-)
+kernel test robot noticed the following build errors:
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c
-index 51209119f0f2..9f11c1e40737 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c
-@@ -1164,10 +1164,8 @@ static u16 __rvu_npc_exact_cmd_rules_cnt_update(struct rvu *rvu, int drop_mcam_i
- {
- 	struct npc_exact_table *table;
- 	u16 *cnt, old_cnt;
--	bool promisc;
- 
- 	table = rvu->hw->table;
--	promisc = table->promisc_mode[drop_mcam_idx];
- 
- 	cnt = &table->cnt_cmd_rules[drop_mcam_idx];
- 	old_cnt = *cnt;
-@@ -1179,16 +1177,13 @@ static u16 __rvu_npc_exact_cmd_rules_cnt_update(struct rvu *rvu, int drop_mcam_i
- 
- 	*enable_or_disable_cam = false;
- 
--	if (promisc)
--		goto done;
--
--	/* If all rules are deleted and not already in promisc mode; disable cam */
-+	/* If all rules are deleted, disable cam */
- 	if (!*cnt && val < 0) {
- 		*enable_or_disable_cam = true;
- 		goto done;
- 	}
- 
--	/* If rule got added and not already in promisc mode; enable cam */
-+	/* If rule got added, enable cam */
- 	if (!old_cnt && val > 0) {
- 		*enable_or_disable_cam = true;
- 		goto done;
-@@ -1443,7 +1438,6 @@ int rvu_npc_exact_promisc_disable(struct rvu *rvu, u16 pcifunc)
- 	u32 drop_mcam_idx;
- 	bool *promisc;
- 	bool rc;
--	u32 cnt;
- 
- 	table = rvu->hw->table;
- 
-@@ -1466,17 +1460,8 @@ int rvu_npc_exact_promisc_disable(struct rvu *rvu, u16 pcifunc)
- 		return LMAC_AF_ERR_INVALID_PARAM;
- 	}
- 	*promisc = false;
--	cnt = __rvu_npc_exact_cmd_rules_cnt_update(rvu, drop_mcam_idx, 0, NULL);
- 	mutex_unlock(&table->lock);
- 
--	/* If no dmac filter entries configured, disable drop rule */
--	if (!cnt)
--		rvu_npc_enable_mcam_by_entry_index(rvu, drop_mcam_idx, NIX_INTF_RX, false);
--	else
--		rvu_npc_enable_mcam_by_entry_index(rvu, drop_mcam_idx, NIX_INTF_RX, !*promisc);
--
--	dev_dbg(rvu->dev, "%s: disabled  promisc mode (cgx=%d lmac=%d, cnt=%d)\n",
--		__func__, cgx_id, lmac_id, cnt);
- 	return 0;
- }
- 
-@@ -1494,7 +1479,6 @@ int rvu_npc_exact_promisc_enable(struct rvu *rvu, u16 pcifunc)
- 	u32 drop_mcam_idx;
- 	bool *promisc;
- 	bool rc;
--	u32 cnt;
- 
- 	table = rvu->hw->table;
- 
-@@ -1517,17 +1501,8 @@ int rvu_npc_exact_promisc_enable(struct rvu *rvu, u16 pcifunc)
- 		return LMAC_AF_ERR_INVALID_PARAM;
- 	}
- 	*promisc = true;
--	cnt = __rvu_npc_exact_cmd_rules_cnt_update(rvu, drop_mcam_idx, 0, NULL);
- 	mutex_unlock(&table->lock);
- 
--	/* If no dmac filter entries configured, disable drop rule */
--	if (!cnt)
--		rvu_npc_enable_mcam_by_entry_index(rvu, drop_mcam_idx, NIX_INTF_RX, false);
--	else
--		rvu_npc_enable_mcam_by_entry_index(rvu, drop_mcam_idx, NIX_INTF_RX, !*promisc);
--
--	dev_dbg(rvu->dev, "%s: Enabled promisc mode (cgx=%d lmac=%d cnt=%d)\n",
--		__func__, cgx_id, lmac_id, cnt);
- 	return 0;
- }
- 
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on hid/for-next dtor-input/next dtor-input/for-linus]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Douglas-Anderson/dt-bindings-HID-i2c-hid-Add-panel-property-to-i2c-hid-backed-touchscreens/20230608-055515
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230607144931.v2.8.Ib1a98309c455cd7e26b931c69993d4fba33bbe15%40changeid
+patch subject: [PATCH v2 08/10] HID: i2c-hid: Support being a panel follower
+config: arc-randconfig-r021-20230607 (https://download.01.org/0day-ci/archive/20230608/202306081344.M0jNn0Ce-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 12.3.0
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add robh https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git
+        git fetch robh for-next
+        git checkout robh/for-next
+        b4 shazam https://lore.kernel.org/r/20230607144931.v2.8.Ib1a98309c455cd7e26b931c69993d4fba33bbe15@changeid
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=arc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306081344.M0jNn0Ce-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   `.exit.text' referenced in section `__jump_table' of lib/test_dynamic_debug.o: defined in discarded section `.exit.text' of lib/test_dynamic_debug.o
+   `.exit.text' referenced in section `__jump_table' of lib/test_dynamic_debug.o: defined in discarded section `.exit.text' of lib/test_dynamic_debug.o
+   `.exit.text' referenced in section `__jump_table' of drivers/misc/phantom.o: defined in discarded section `.exit.text' of drivers/misc/phantom.o
+   `.exit.text' referenced in section `__jump_table' of drivers/misc/phantom.o: defined in discarded section `.exit.text' of drivers/misc/phantom.o
+   `.exit.text' referenced in section `__jump_table' of drivers/target/target_core_configfs.o: defined in discarded section `.exit.text' of drivers/target/target_core_configfs.o
+   `.exit.text' referenced in section `__jump_table' of drivers/target/target_core_configfs.o: defined in discarded section `.exit.text' of drivers/target/target_core_configfs.o
+   arceb-elf-ld: drivers/hid/i2c-hid/i2c-hid-core.o: in function `i2c_hid_core_remove':
+   drivers/hid/i2c-hid/i2c-hid-core.c:1218: undefined reference to `drm_panel_remove_follower'
+>> arceb-elf-ld: drivers/hid/i2c-hid/i2c-hid-core.c:1218: undefined reference to `drm_panel_remove_follower'
+   arceb-elf-ld: drivers/hid/i2c-hid/i2c-hid-core.o: in function `i2c_hid_core_probe':
+   drivers/hid/i2c-hid/i2c-hid-core.c:1159: undefined reference to `drm_panel_add_follower'
+>> arceb-elf-ld: drivers/hid/i2c-hid/i2c-hid-core.c:1159: undefined reference to `drm_panel_add_follower'
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
