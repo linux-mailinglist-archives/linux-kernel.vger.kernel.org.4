@@ -2,60 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69F81727D1A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:43:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6547727D1D
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:44:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233035AbjFHKna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 06:43:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52606 "EHLO
+        id S235518AbjFHKoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 06:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbjFHKn3 (ORCPT
+        with ESMTP id S229802AbjFHKoe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 06:43:29 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C6DD2D42
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 03:43:19 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 2A4EB8284;
-        Thu,  8 Jun 2023 18:43:11 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 8 Jun
- 2023 18:43:11 +0800
-Received: from [192.168.125.124] (183.27.98.122) by EXMBX168.cuchost.com
- (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 8 Jun
- 2023 18:43:10 +0800
-Message-ID: <7db1d08e-8310-8876-4ed8-36d6e53ab8bf@starfivetech.com>
-Date:   Thu, 8 Jun 2023 18:43:09 +0800
+        Thu, 8 Jun 2023 06:44:34 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FCA1AB;
+        Thu,  8 Jun 2023 03:44:33 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3586MvqF027461;
+        Thu, 8 Jun 2023 10:44:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=wUEiIhIjj7g/WIwbHZ11fcWHaz3Z2aJvN7BM7cb+73A=;
+ b=g2n51g7e5JjVdwV4VgjLfUAaFj5MRAL+fFXETWTZ2jQBb1ArEq/qHUX0yqk6wY2YgL8y
+ iSohyEPB9NdFGuhPI9OYVn8XSlPHszpZ26hKt1MI65AccwVm/cxAdb+K/ls7+NU9SQtG
+ rlXF34EbR1w+wNPNP9yJO3ZFCTr8zIazqmAC1Wi7la+Jq6/YIB8hv22xOBWUadxz7rll
+ EMH62CFYxiECY1LNj3NOsHUL456b2m86Vl4nf0WYqKnfbFEQVxR6qBTBgLHXzE9V7y6/
+ C+MId5zDvvR5uKunkOO40pouVsm+XMzOSN0WknULgJ+OC2t4SmzYhNq2oGulS/bJ7L6W MA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r2rbtjjdk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Jun 2023 10:44:29 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 358AiSgo031065
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 8 Jun 2023 10:44:28 GMT
+Received: from [10.204.67.150] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 8 Jun 2023
+ 03:44:23 -0700
+Message-ID: <4c27849d-cd34-77ed-7d45-6f366f9fa86a@quicinc.com>
+Date:   Thu, 8 Jun 2023 16:14:20 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v1] ASoC: starfive: Cleanup and fix error check for JH7110
- TDM
+ Thunderbird/102.9.0
+Subject: Re: [RESEND PATCH v1 2/2] misc: fastrpc: detect privileged processes
+ based on group ID
 Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-CC:     Claudiu Beznea <Claudiu.Beznea@microchip.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>
-References: <20230607081439.1517-1-walker.chen@starfivetech.com>
- <3eb7ffc5-a16a-4ac2-93a0-260f7cb1f81c@sirena.org.uk>
- <d941ac20-e8b3-cb13-4258-3a9a86e978d3@starfivetech.com>
- <fbbc0963-fba5-4178-b886-fbb35c0c8df2@sirena.org.uk>
-From:   Walker Chen <walker.chen@starfivetech.com>
-In-Reply-To: <fbbc0963-fba5-4178-b886-fbb35c0c8df2@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <srinivas.kandagatla@linaro.org>, <linux-arm-msm@vger.kernel.org>
+CC:     <ekangupt@qti.qualcomm.com>, <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>,
+        <fastrpc.upstream@qti.qualcomm.com>, <agross@kernel.org>,
+        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <devicetree@vger.kernel.org>
+References: <1686155407-20054-1-git-send-email-quic_ekangupt@quicinc.com>
+ <1686155407-20054-3-git-send-email-quic_ekangupt@quicinc.com>
+ <bdf49a17-bb4c-a00d-0239-ed5d0eef470d@linaro.org>
+From:   Ekansh Gupta <quic_ekangupt@quicinc.com>
+In-Reply-To: <bdf49a17-bb4c-a00d-0239-ed5d0eef470d@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.98.122]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: -KEza8Per70tyz-V6xbFzEdBOKBdBskU
+X-Proofpoint-ORIG-GUID: -KEza8Per70tyz-V6xbFzEdBOKBdBskU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-08_06,2023-06-08_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
+ adultscore=0 mlxlogscore=631 spamscore=0 priorityscore=1501 phishscore=0
+ impostorscore=0 mlxscore=0 clxscore=1015 lowpriorityscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306080091
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,40 +89,41 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2023/6/8 18:15, Mark Brown wrote:
-> On Thu, Jun 08, 2023 at 10:15:03AM +0800, Walker Chen wrote:
->> On 2023/6/7 19:44, Mark Brown wrote:
+On 6/8/2023 12:17 AM, Krzysztof Kozlowski wrote:
+> On 07/06/2023 18:30, Ekansh Gupta wrote:
+>> Get the information on privileged group IDs during rpmsg probing based
+>> on DT property. Check if the process requesting an offload to remote
+>> subsystem is privileged by comparing it's group ID with privileged
+>> group ID. Initialization process attributes are updated for a
+>> privileged process which is sent to remote process for resource
+>> management.
+>>
 > 
->> >> -		  (tdm->rx.wl << WL_BIT) |
->> >> -		  (tdm->rx.sscale << SSCALE_BIT) |
->> >> -		  (tdm->rx.sl << SL_BIT) |
->> >> -		  (tdm->rx.lrj << LRJ_BIT);
->> >> +	datarx = (tdm->rxwl << 8) |
->> >> +		  (tdm->rxsscale << 4) |
->> >> +		  (tdm->rxsl << 2) |
->> >> +		  TDM_PCMRXCR_LEFT_J;
 > 
->> > I'm not sure this change to use numbers here is a win - the _BIT
->> > definitions look fine (I might've called them _SHIFT but whatever).
 > 
->> This is Claudiu's advice. Using the macro BIT() to replace these definition of *_BIT, 
->> it will result in big changes in the code.
+>> +
+>>   static const struct file_operations fastrpc_fops = {
+>>   	.open = fastrpc_device_open,
+>>   	.release = fastrpc_device_release,
+>> @@ -2277,6 +2396,10 @@ static int fastrpc_rpmsg_probe(struct rpmsg_device *rpdev)
+>>   	if (!data)
+>>   		return -ENOMEM;
+>>   
+>> +	err = fastrpc_init_privileged_gids(rdev, "qcom,fastrpc-gids", &data->gidlist);
+>> +	if (err)
+>> +		dev_err(rdev, "Privileged gids init failed.\n");
+>> +
 > 
-> I'm questioning doing a change at all.
+> What about error paths? No need for cleanup?
 > 
->> Please refer to previous comments:
->>  https://lore.kernel.org/all/143e2fa2-e85d-8036-4f74-ca250c026c1b@microchip.com/
-> 
-> I can't find the comments you're referring to in there.
+All the necessary clean-up is added as part of 
+fastrpc_init_privileged_gids error path. There is no requirement to have 
+any additional handling in error path other that error log. Also there 
+is no intention to fail the probe in case gid information is not 
+properly read.
 
-You should see the following comments in the link above:
-
-> +       #define CLKPOL_BIT              5
-> +       #define TRITXEN_BIT             4
-> +       #define ELM_BIT                 3
-> +       #define SYNCM_BIT               2
-> +       #define MS_BIT                  1
-
-Instead of these *_BIT defines as plain numbers you can defined them using
-BIT() macro and use macros in place instead of
-
+Thanks,
+Ekansh
+> Best regards,
+> Krzysztof
+> 
