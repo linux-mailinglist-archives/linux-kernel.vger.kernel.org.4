@@ -2,161 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9985A727EBB
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FEB4727EBD
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:30:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235509AbjFHL3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 07:29:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46250 "EHLO
+        id S235690AbjFHLa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 07:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235115AbjFHL3w (ORCPT
+        with ESMTP id S232139AbjFHLaZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 07:29:52 -0400
-Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B252719
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 04:29:47 -0700 (PDT)
-Received: by mail-vk1-xa2b.google.com with SMTP id 71dfb90a1353d-461b408594fso367981e0c.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 04:29:47 -0700 (PDT)
+        Thu, 8 Jun 2023 07:30:25 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C44530C2;
+        Thu,  8 Jun 2023 04:30:10 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b065154b79so12389825ad.1;
+        Thu, 08 Jun 2023 04:30:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686223786; x=1688815786;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ti5W00fHo5+54ZqpdE6ywmJj9WVEs3HQLqx+j7roPaM=;
-        b=j9UYTd2O2XcooRATGj467HxZMPDB0Cg9aL5LSEvNsyNB/167ogbccoVHPhVnlpSZWG
-         DGwjl1hc1Ht3q63sDOZhBv2Y45SGTynRUYRh5yFf3RlUig17UAEktGlYlnqcm4oQJnu9
-         EwkDn+GxHlJgT2KLU1Fm8mKpcSDSJ1ZetNRe3im8cpFlisVRRXkPIrdCxhkQ48MOZ8En
-         0jzTx3+HB2NWZTUCIH3hhTe8lbbnFOLk86qxbqhL/NKgdUY4Oxj1jox+hmOQNH8nAwJH
-         0GxW+q4EVMUgSH0pehUz4k0JBJDdxb71mDBqBr/0pTE4JZ7YLQWpu9+OWP/1Z7mOFYlf
-         uHww==
+        d=gmail.com; s=20221208; t=1686223809; x=1688815809;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dQpBGT9U0xk8ceOcBXPqmShJrbITkq5sMpW+csFBGQY=;
+        b=hlXxBLnEnFDNUflMdn5jr+gLWr+60M8EzsIaGh6M295trLDPEJBVKtIGQG3Tu332Ur
+         nbZEidukoIhBfjOKqokq26paOZHdSOkeEwEGNDYp1WL1HyQlf2FAasBc/Y6Wfq14TJpp
+         rmo+nv2KppjXllUY2GJg6hgi58cS2IRushwVUTChj1TQlTLCs95YYqjdoYPeE4L6WaKM
+         VyJ+/ylNVw+hySkuQouv9oJGMnOMtT8lbO8+UA72+V5eDCl0iGQx9yoQ/WNysFMZPwbG
+         iQWDzV93ViBrQAngLCuzi6c/umzVqO7nNNGCnKOwd5CfT/MmnWnzetyJdqhsg2vRZKzk
+         Q+Tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686223786; x=1688815786;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ti5W00fHo5+54ZqpdE6ywmJj9WVEs3HQLqx+j7roPaM=;
-        b=LxitlTXxrcRjxmk1UNC0bSE8OsvAzf8KsiIdq1CWCVqw90JXMvNNWkf1fK5zJocV2i
-         S9K+iNbe7TJRHW4ABYWaOxIG45YbRNv6aokely94aXw8aRcSVMhx6hH4xushF/tIvCn9
-         SZUNz3rVmZNvgrkQaWDBnd0gzA7XmpnvHn/GpvfoMzr51fQgX+nFMHH34hd98LRvrRH6
-         XDF0tA2nhQ59xGJA0XYkMD1Dbz8zC0IZIzHuU6L8FqWs0JpsVcRo7S+0uXIHas/ic8A4
-         I6Fwjg7eaE/mUnUrP0ZzDj8eUVQGT7ZYu9yDUppg3MB2NMPHS/F1O19n/i0XdcJfWFZy
-         r//Q==
-X-Gm-Message-State: AC+VfDzg/EmqwId8V2yPKqOKYTwRTI4iyNHcHZuuangmtVyV91SHj6kJ
-        L+eXrn65/+mHO53jwsFXPzgw969ETMJM+bj98MFh3A==
-X-Google-Smtp-Source: ACHHUZ5zcnDOZfoYJbivv3/58L+IR70zNlCg7fYw4RIRpY5qWv0mfo+fyDF1mW7Z5LjTsSSYSKdgWltSjIajTRyIdnE=
-X-Received: by 2002:a1f:4103:0:b0:43f:e623:952 with SMTP id
- o3-20020a1f4103000000b0043fe6230952mr837973vka.2.1686223786516; Thu, 08 Jun
- 2023 04:29:46 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686223809; x=1688815809;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dQpBGT9U0xk8ceOcBXPqmShJrbITkq5sMpW+csFBGQY=;
+        b=bK+E+MUr/KuaeAqx9ZMQXubJEiWgbUsWqawQZblxCTMRRWGQZD0Wb1fZ2INBp+QmBP
+         CE+3mKKw63IffoYVJoiCYj66TFovQAA8rgmP1cJtVyYjTsGGdoASuoOwwiU6L8j0l54o
+         YUePIIA5yLsULLRXzVQNRK/b81aoAOplzHoDtpxvf2NQ7vTAsx1Mn+aHeRdSGH0svnj4
+         cmD6d3sVhcjsNSgCviBFi84EbxEOukJIuP9hpaJvcFrGlzYqOvGN7bWx+ixpZuXAHhb8
+         aTOeMkzLY65534l/cYmk97MDyPrVFnhY1a0TJ86uJWABZgNlEd3b8B0IanA1BXdhheYP
+         aBdw==
+X-Gm-Message-State: AC+VfDzui13w7WVuIHb2sTvFHfoRFU+DQ33Mkw3hwmEbEdEguzJnVCko
+        bZARVMA6XaTPbjBqkaXXCHU=
+X-Google-Smtp-Source: ACHHUZ7OiXr7qHhfDSAnv44x1I5fxNmN2hHourGMao2/pPl4DNJYgnLOXyteMkZ+/GfOuBL5YIBOFA==
+X-Received: by 2002:a17:902:dac4:b0:1a1:cb18:7f99 with SMTP id q4-20020a170902dac400b001a1cb187f99mr2069933plx.30.1686223809358;
+        Thu, 08 Jun 2023 04:30:09 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-16.three.co.id. [180.214.233.16])
+        by smtp.gmail.com with ESMTPSA id z24-20020a1709028f9800b001b016313b1esm1233913plo.82.2023.06.08.04.30.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 04:30:08 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 88222106A0E; Thu,  8 Jun 2023 18:30:06 +0700 (WIB)
+Date:   Thu, 8 Jun 2023 18:30:06 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 000/225] 6.1.33-rc1 review
+Message-ID: <ZIG7vqctqmK3r1RO@debian.me>
+References: <20230607200913.334991024@linuxfoundation.org>
 MIME-Version: 1.0
-References: <cover.1685333727.git.isaku.yamahata@intel.com>
- <a7fc71f5d30676e9360f3db040feb7e6ac18203f.1685333728.git.isaku.yamahata@intel.com>
- <CAAYXXYzR6JZq8OOD2qqC_vVGiCa3e5KmZZ+36YffGW6JFK4+Hw@mail.gmail.com>
-In-Reply-To: <CAAYXXYzR6JZq8OOD2qqC_vVGiCa3e5KmZZ+36YffGW6JFK4+Hw@mail.gmail.com>
-From:   Erdem Aktas <erdemaktas@google.com>
-Date:   Thu, 8 Jun 2023 04:29:35 -0700
-Message-ID: <CAAYXXYyUbqjmrezTw=p_yBkkB-o9H-Xg_J5rBCe1CXUpF5PM+A@mail.gmail.com>
-Subject: Re: [PATCH v14 055/113] KVM: TDX: TDP MMU TDX support
-To:     isaku.yamahata@intel.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Zhi Wang <zhi.wang.linux@gmail.com>, chen.bo@intel.com,
-        Vishal Annapurve <vannapurve@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="HPOmJrhShDyJTZTh"
+Content-Disposition: inline
+In-Reply-To: <20230607200913.334991024@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 28, 2023 at 9:21=E2=80=AFPM <isaku.yamahata@intel.com> wrote:
->
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
->
-> +static int tdx_sept_drop_private_spte(struct kvm *kvm, gfn_t gfn,
-> +                                      enum pg_level level, kvm_pfn_t pfn=
-)
-> +{
-> +       int tdx_level =3D pg_level_to_tdx_sept_level(level);
-> +       struct kvm_tdx *kvm_tdx =3D to_kvm_tdx(kvm);
-> +       struct tdx_module_output out;
-> +       gpa_t gpa =3D gfn_to_gpa(gfn);
-> +       hpa_t hpa =3D pfn_to_hpa(pfn);
-> +       hpa_t hpa_with_hkid;
-> +       u64 err;
-> +
-> +       /* TODO: handle large pages. */
-> +       if (KVM_BUG_ON(level !=3D PG_LEVEL_4K, kvm))
-> +               return -EINVAL;
-> +
-> +       if (unlikely(!is_hkid_assigned(kvm_tdx))) {
-> +               /*
-> +                * The HKID assigned to this TD was already freed and cac=
-he
-> +                * was already flushed. We don't have to flush again.
-> +                */
-> +               err =3D tdx_reclaim_page(hpa, false, 0);
-> +               if (KVM_BUG_ON(err, kvm))
-> +                       return -EIO;
-> +               tdx_unpin(kvm, pfn);
-> +               return 0;
-> +       }
-> +
-> +       do {
-> +               /*
-> +                * When zapping private page, write lock is held. So no r=
-ace
-> +                * condition with other vcpu sept operation.  Race only w=
-ith
-> +                * TDH.VP.ENTER.
-> +                */
-> +               err =3D tdh_mem_page_remove(kvm_tdx->tdr_pa, gpa, tdx_lev=
-el, &out);
-> +       } while (unlikely(err =3D=3D TDX_ERROR_SEPT_BUSY));
-> +       if (KVM_BUG_ON(err, kvm)) {
-> +               pr_tdx_error(TDH_MEM_PAGE_REMOVE, err, &out);
-> +               return -EIO;
-> +       }
-> +
-> +       hpa_with_hkid =3D set_hkid_to_hpa(hpa, (u16)kvm_tdx->hkid);
-> +       do {
-> +               /*
-> +                * TDX_OPERAND_BUSY can happen on locking PAMT entry.  Be=
-cause
-> +                * this page was removed above, other thread shouldn't be
-> +                * repeatedly operating on this page.  Just retry loop.
-> +                */
-> +               err =3D tdh_phymem_page_wbinvd(hpa_with_hkid);
-> +       } while (unlikely(err =3D=3D (TDX_OPERAND_BUSY | TDX_OPERAND_ID_R=
-CX)));
-> +       if (KVM_BUG_ON(err, kvm)) {
-> +               pr_tdx_error(TDH_PHYMEM_PAGE_WBINVD, err, NULL);
-> +               return -EIO;
-> +       }
 
+--HPOmJrhShDyJTZTh
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-It seems like when the TD is destroyed, all the TD private pages are
-removed with tdx_reclaim_page which also clears the page with
-movdir64b instruction. But when the page is removed while the TD is
-alive (in this case), the page content is never cleared with movdir64b
-which causes any poisoned cache line to be consumed by the host
-resulting in #MC exceptions in the host context.
+On Wed, Jun 07, 2023 at 10:13:13PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.33 release.
+> There are 225 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
 
-We should clear the page before returning it back to the free pool by
-calling tdx_clear_page((unsigned long)__va(hpa)) here.
+Successfully compiled and installed bindeb-pkgs on my computer (Acer
+Aspire E15, Intel Core i3 Haswell). No noticeable regressions.
 
->
-> +       tdx_unpin(kvm, pfn);
-> +       return 0;
-> +}
-> +
->
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--HPOmJrhShDyJTZTh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZIG7vgAKCRD2uYlJVVFO
+o4a0AQCqKU5FlNDVavEFwm/2q6G4JMaislj6oe9n37O7lZwilAEA5Ks2L+Rvp4IO
+tC3edwHvYKs3fNv4qtD4nA+o2suisQQ=
+=w3eK
+-----END PGP SIGNATURE-----
+
+--HPOmJrhShDyJTZTh--
