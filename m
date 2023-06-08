@@ -2,142 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8407F727B96
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:38:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23165727B9C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:39:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236006AbjFHJiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 05:38:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43092 "EHLO
+        id S236019AbjFHJje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 05:39:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233071AbjFHJiM (ORCPT
+        with ESMTP id S234587AbjFHJjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 05:38:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C7C1BFF
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 02:38:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F11AD64B58
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 09:38:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41AEFC433D2;
-        Thu,  8 Jun 2023 09:38:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686217090;
-        bh=V19RuyGw5moEVQtVIKIzHCHkmzutxvLKUftm4u1YHGA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=HfOYHujpVwPnBBs8MCW0W1iGvRx+wOQX/szfXZboXubF8q4XHtecO5OD86vbE2s6/
-         mZqC2BoP61MJ50e1RU2Zai29XGG84KdAt/OcBUJn9L4xVsvdJiwcKv220DewoB1v1z
-         DN/QCbMGv9MYdfe6PKd81teb+hFFuo+j96LSFw0cFG4OzNj0EzEAmi74B6EdK5m22T
-         Ix9XVYwbr30CZrteZulUWuoeFXAca2v/YMiHIrlHUL6CEEKCnEO+5reOmkJA928/Kp
-         XmSvzADO/8c4Ty1ufLex02AHZKKUpy0zQKelwWeOKlpsle0Yq04i+nEYxFcEovTFtw
-         MRtwgvAmJOAsQ==
-Message-ID: <059b17ce-cb65-fd55-29b1-2b253c6b41c4@kernel.org>
-Date:   Thu, 8 Jun 2023 17:38:07 +0800
+        Thu, 8 Jun 2023 05:39:31 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4EF213C
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 02:39:30 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-30aeee7c8a0so310661f8f.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 02:39:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686217169; x=1688809169;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kis83jMD1oWs6024Wvt+G1gr/3Bk88oMA3d6rNJj5g4=;
+        b=dh2IGeZP1UXlw/rxc8tHwYftXW4vIKDKiSgUwwpYDTnQLnUUZ2eKQNpLe1ae+OOkaq
+         ZUOfth6aGXN7TreMG667Tdd0b9nHJipOIZXaw1UP6PJgGrkbGVKv9GmuLrgVrxUYmEtL
+         Jn5nUBOvSxF1p5Yll4gh3dz0l4pJpALQwXgKrtbWLz6N817Sd0MTH8Sbh8LY9iGf6iAv
+         CA9Rl9Ase8AAeu4Y4vACb40mBoVt52+cKQzMjzXTUPPT7gr2SzKoi+ST2qflIt5sBVSX
+         V4/djTioCzHuu7SKvoD/QBgRw4Sn1CPnceGIBVTQmGx0HHJWzWQOb8PCENz9gqNAuTcO
+         o5lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686217169; x=1688809169;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kis83jMD1oWs6024Wvt+G1gr/3Bk88oMA3d6rNJj5g4=;
+        b=QU/3b4/FKHwhOIsQ551MATEk8MuG+eISf0HMOnxOnUugFwihA8QzLbsUXSU+3V/9CX
+         LQRXsGjBMxnKEs65SJ0nIpywNBC+yfBMqnXefYwuPSMlJMU+DzkIjLwuqm/dSB50YMqo
+         RMspioF7MJGyJUj4RxHbKnRWe8fEquESE71h0kK/WJwem//Ef/X62DyQ651Gkkmc4Usb
+         zvnPG/wxkVwzY1kNRNxlkOr4kwxVELz6aWlsXAiqnqclQQ4UAsAx09yBhOdtJosaoWZf
+         0xw1qhxmPEJY0PS7ebgLjPAoLESTQqJsIV7WXAvefllkrb//jTd5tDCgaH2OFvLT+QX2
+         87EQ==
+X-Gm-Message-State: AC+VfDxfQ2Mo7pQjSKmnfw/4T4ZtOJQvbJk66cAHq4RlbfK6PS5lSCsA
+        kj/5twvP1vQ6PzhzO44ceITbSg==
+X-Google-Smtp-Source: ACHHUZ7Ms6WXtKfgT/Z+U3P+H7HunJuUiCLEYOMq2NRw8YGy939Doi5kEfI1/uibHdDRb84aF9r7Mg==
+X-Received: by 2002:a05:6000:108a:b0:30e:56b3:60fe with SMTP id y10-20020a056000108a00b0030e56b360femr1337520wrw.4.1686217168916;
+        Thu, 08 Jun 2023 02:39:28 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:3a59:921c:4758:7db5? ([2a05:6e02:1041:c10:3a59:921c:4758:7db5])
+        by smtp.googlemail.com with ESMTPSA id u13-20020adfeb4d000000b00301a351a8d6sm1046418wrn.84.2023.06.08.02.39.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jun 2023 02:39:28 -0700 (PDT)
+Message-ID: <59c7c90c-50f2-5a77-af12-b266c6e6e0b1@linaro.org>
+Date:   Thu, 8 Jun 2023 11:39:27 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] f2fs: enable nowait async buffered writes
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v4 0/5] Add LVTS support for mt8192
 Content-Language: en-US
-To:     Yangtao Li <frank.li@vivo.com>, Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     Lu Hongfei <luhongfei@vivo.com>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <20230531144006.7307-1-frank.li@vivo.com>
- <e8e4758f-5895-acd7-27d2-4b72b69722b3@kernel.org>
- <29bea47b-9085-05e7-d254-a40007e6c7f3@vivo.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <29bea47b-9085-05e7-d254-a40007e6c7f3@vivo.com>
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Chen-Yu Tsai <wenst@chromium.org>
+Cc:     =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
+        angelogioacchino.delregno@collabora.com, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
+        p.zabel@pengutronix.de, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        james.lo@mediatek.com, rex-bc.chen@mediatek.com,
+        abailon@baylibre.com, amergnat@baylibre.com, khilman@baylibre.com
+References: <20230530195132.2286163-1-bero@baylibre.com>
+ <CAGXv+5EVfgEBDm=7MmQ=OsP322KmE23PwycJ-0LjU+3dEZygUQ@mail.gmail.com>
+ <572f5a88-8c2e-4324-b477-836a5024ec67@notapiano>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <572f5a88-8c2e-4324-b477-836a5024ec67@notapiano>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/6 19:13, Yangtao Li wrote:
-> On 2023/6/6 14:43, Chao Yu wrote:
-> 
->> On 2023/5/31 22:40, Yangtao Li wrote:
->>> This adds the async buffered write support to f2fs,
->>> the following is the relevant test data.
->>
->> Yangtao,
->>
->> Could you please provide detailed test command?
-> 
-> 
-> Use fio to test, the following is the configuration:
-> 
-> # io_uring
-> [global]
-> ioengine=io_uring
-> sqthread_poll=1
-> threads=1
-> iodepth=32
-> hipri=0
-> direct=0
-> fixedbufs=0
-> uncached=0
-> nowait=0
-> force_async=0
-> randrepeat=0
-> time_based=0
-> size=256M
-> filename=/data/test/local/io_uring_test
-> group_reporting
-> [read256B-rand]
-> bs=4096
-> rw=randwrite
-> numjobs=1
-
-Thanks, it looks the performance is not very stable when iodepth is
-large, e.g. 32.
-
-Could you please add above test parameter into commit message?
-
-Otherwise, this patch looks good to me.
-
-Thanks,
-
-> 
-> 
->>
->> Thanks,
->>
+On 01/06/2023 19:09, Nícolas F. R. A. Prado wrote:
+> On Wed, May 31, 2023 at 12:49:43PM +0800, Chen-Yu Tsai wrote:
+>> On Wed, May 31, 2023 at 3:51 AM Bernhard Rosenkränzer <bero@baylibre.com> wrote:
 >>>
->>> iodepth      | 1    | 2    | 4    | 8    | 16   |
->>> before(M/s)  | 1012 | 1133 | 894  | 981  | 866  |
->>> after(M/s)   | 1488 | 1896 | 2081 | 2188 | 2207 |
+>>> From: Balsam CHIHI <bchihi@baylibre.com>
 >>>
->>> Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
->>> Signed-off-by: Yangtao Li <frank.li@vivo.com>
->>> ---
->>>   fs/f2fs/file.c | 5 +----
->>>   1 file changed, 1 insertion(+), 4 deletions(-)
+>>> Add full LVTS support (MCU thermal domain + AP thermal domain) to MediaTek MT8192 SoC.
+>>> Also, add Suspend and Resume support to LVTS Driver (all SoCs),
+>>> and update the documentation that describes the Calibration Data Offsets.
 >>>
->>> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
->>> index 23c68ee946e5..4faf2c04e325 100644
->>> --- a/fs/f2fs/file.c
->>> +++ b/fs/f2fs/file.c
->>> @@ -546,7 +546,7 @@ static int f2fs_file_open(struct inode *inode, struct file *filp)
->>>       if (err)
->>>           return err;
->>>   -    filp->f_mode |= FMODE_NOWAIT | FMODE_BUF_RASYNC;
->>> +    filp->f_mode |= FMODE_NOWAIT | FMODE_BUF_RASYNC | FMODE_BUF_WASYNC;
->>>         return dquot_file_open(inode, filp);
->>>   }
->>> @@ -4515,9 +4515,6 @@ static ssize_t f2fs_buffered_write_iter(struct kiocb *iocb,
->>>       struct inode *inode = file_inode(file);
->>>       ssize_t ret;
->>>   -    if (iocb->ki_flags & IOCB_NOWAIT)
->>> -        return -EOPNOTSUPP;
->>> -
->>>       current->backing_dev_info = inode_to_bdi(inode);
->>>       ret = generic_perform_write(iocb, from);
->>>       current->backing_dev_info = NULL;
+>>> Changelog:
+>>>      v4 :
+>>>          - Shrink the lvts_ap thermal sensor I/O range to 0xc00 to make
+>>>            room for SVS support, pointed out by
+>>>            AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>>>
+>>>      v3 :
+>>>          - Rebased :
+>>>              base-commit: 6a3d37b4d885129561e1cef361216f00472f7d2e
+>>>          - Fix issues in v2 pointed out by Nícolas F. R. A. Prado <nfraprado@collabora.com>:
+>>>            Use filtered mode to make sure threshold interrupts are triggered,
+>>
+>> I'm seeing sensor readout (either through sysfs/thermal/<x>/temp or hwmon)
+>> fail frequently on MT8192. If I run `sensors` (lm-sensors), at least a couple
+>> of the LVTS sensors would be N/A. Not sure if this is related to this change.
+> 
+> Yes, it is. Filtered mode has some delay associated with reading, meaning most
+> of the time the value isn't ready, while immediate mode is, well, pretty much
+> immediate and the read always succeeds.
+> 
+> For temperature monitoring, filtered mode should be used. It supports triggering
+> interrupts when crossing the thresholds. Immediate mode is meant for one-off
+> readings of the temperature. This is why I suggested using filtered mode.
+> 
+> As far as the thermal framework goes, it's ok that filtered mode doesn't always
+> return a value, as it will keep the old one. But of course, having the
+> temperature readout always work would be a desired improvement.
+> 
+> As for ways to achieve that, I think the intended way would be to enable the
+> interrupts that signal data ready on filtered mode (bits 19, 20, 21, 28), read
+> the temperature and cache it so it is always available when the get_temp()
+> callback is called. The issue with this is that it would cause *a lot* of
+> interrupts, which doesn't seem worth it.
+> 
+> Another option that comes to mind would be to enable immediate mode only during
+> the get_temp() callback, to immediately read a value, and return to filtered
+> mode at the end. That might work, but I haven't tried yet.
+
+Why not understand why the filtered mode is unable to return temperature 
+values most of the time?
+
+I tried with the filtered mode and I can see 90% of the time it is not 
+possible to read the temperature.
+
+IIUC there are timings which can be setup, may be understand how to set 
+them up in order to read the temperature correctly?
+
+Caching values, switching the mode or whatever is hackish :/
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
