@@ -2,113 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7EAC7289F8
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 23:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3408B7289FB
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 23:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232938AbjFHVJb convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 8 Jun 2023 17:09:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59208 "EHLO
+        id S235497AbjFHVK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 17:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237021AbjFHVJ1 (ORCPT
+        with ESMTP id S229503AbjFHVKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 17:09:27 -0400
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88BB30D3;
-        Thu,  8 Jun 2023 14:09:18 -0700 (PDT)
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-bacfa9fa329so1174508276.0;
-        Thu, 08 Jun 2023 14:09:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686258558; x=1688850558;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RSyw6qf+FqNzsYEWzuRM5QiQmAyiFWZ9iK/UDhMvxuA=;
-        b=etsNKmEgF8KQfORpsEkKmYOkjsActJ0bOOB131/OGGz4I6+pXj71WZnVvD5M00ZgvE
-         5QhkMsKP3UWWt4rhKKkKrSFc+iWqZEEruQK+ImoEqLBqVufPq6SRGcime4EFoM67Up6Y
-         EBlzTbb+CMjBX9XcBlkVNb+gGGq4S4v/I3zZ85vwaIyavneqKG38CEjdqXVbMV8jqWcc
-         MATf3UZAcJcWbNbsifYWTAMmQQk52pR0vpBOq035BU+JNJ9wvRD5zuVoc3zF9zgQD42l
-         wdRsvL1BwJNAZPh5NgmcjiP9Phg6DFfO9vfdWmSPImSxLvvTRvB8WX2PHSpjKKod/Tfg
-         41gg==
-X-Gm-Message-State: AC+VfDwpRk8wkJm8voc8IE1vFqzZb9F4Ymptq96mC8N8LugITgtCodpB
-        NgF42/FxPB0ZXuOs6mlo9sssKaWmDGSAGur14ObmqW0R
-X-Google-Smtp-Source: ACHHUZ5t61NXy4P694dVP8XqYDtJ1I50buDty/yh8k/r9svoNIcqgPJcNQB3qlQ4h8YxC0kKH4hjTVxEv2qrwNXyKf0=
-X-Received: by 2002:a25:37d2:0:b0:ba7:7cbe:1080 with SMTP id
- e201-20020a2537d2000000b00ba77cbe1080mr736104yba.62.1686258557687; Thu, 08
- Jun 2023 14:09:17 -0700 (PDT)
+        Thu, 8 Jun 2023 17:10:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFD82D74;
+        Thu,  8 Jun 2023 14:10:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DEB9B65113;
+        Thu,  8 Jun 2023 21:10:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F18DC433EF;
+        Thu,  8 Jun 2023 21:10:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686258621;
+        bh=XViKg2onIRHkaR3bxOXk8HIsG3cq5Z9NWQifOKWD3uE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LrJNZN5vy4gUdsAb2fVJYPtTm+RrjguGIHksArF3V9UpzQ7/QYzdfe0ICwJLm7HhK
+         l/zCXRPqx9SlpEncrcdmXvVGmJuPekXlw7MZEiatQHSfHRZeNzM5Z5HhMGzyBYMjXt
+         MytLC1WfZVKClLuBonar3ZSzZnczZ6aBS+mGZ/LlaLrQW9mKPYzp92qrfGcXc+oh2s
+         dXBrugaDDr/XAhdowf3X6/pBBhA+TKsZ7WoIkAk3X7FZDzxsoRUXsOnVWPRFrn7EuL
+         v9N6ftiiqlvheEFmC56yYACeLIgbfCOnnb0MKvJNLkkVQ8K56SQISzHcVVIHOh09X0
+         Qm3Nzvz8YHyHQ==
+Date:   Thu, 8 Jun 2023 14:10:20 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     hch@infradead.org, sandeen@sandeen.net, song@kernel.org,
+        rafael@kernel.org, gregkh@linuxfoundation.org,
+        viro@zeniv.linux.org.uk, jack@suse.cz, jikos@kernel.org,
+        bvanassche@acm.org, ebiederm@xmission.com, mchehab@kernel.org,
+        keescook@chromium.org, p.raghav@samsung.com, da.gomez@samsung.com,
+        linux-fsdevel@vger.kernel.org, kernel@tuxforce.de,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/6] fs: distinguish between user initiated freeze and
+ kernel initiated freeze
+Message-ID: <20230608211020.GH72224@frogsfrogsfrogs>
+References: <20230508011717.4034511-1-mcgrof@kernel.org>
+ <20230508011717.4034511-4-mcgrof@kernel.org>
+ <20230522234200.GC11598@frogsfrogsfrogs>
+ <ZII5awqVCr9IUWtH@bombadil.infradead.org>
 MIME-Version: 1.0
-References: <20230608084407.140323-1-asavkov@redhat.com>
-In-Reply-To: <20230608084407.140323-1-asavkov@redhat.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 8 Jun 2023 14:09:06 -0700
-Message-ID: <CAM9d7cgvtuqMeQx8ehLCLw_Ur9Ju-VzDrakzFJxnxvFjdsWk_g@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] perf tools: annotation browser from c2c tui
-To:     Artem Savkov <asavkov@redhat.com>
-Cc:     linux-perf-users@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZII5awqVCr9IUWtH@bombadil.infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Jun 08, 2023 at 01:26:19PM -0700, Luis Chamberlain wrote:
+> On Mon, May 22, 2023 at 04:42:00PM -0700, Darrick J. Wong wrote:
+> > How about this as an alternative patch?
+> 
+> I'm all for it, this is low hanging fruit and I try to get back to it
+> as no one else does, so I'm glad someone else is looking and trying too!
+> 
+> Hopefully dropping patch 1 and 2 would help with this.
+> 
+> Comments below.
+> 
+> > From: Darrick J. Wong <djwong@kernel.org>
+> > Subject: fs: distinguish between user initiated freeze and kernel initiated freeze
+> > 
+> > Userspace can freeze a filesystem using the FIFREEZE ioctl or by
+> > suspending the block device; this state persists until userspace thaws
+> > the filesystem with the FITHAW ioctl or resuming the block device.
+> > Since commit 18e9e5104fcd ("Introduce freeze_super and thaw_super for
+> > the fsfreeze ioctl") we only allow the first freeze command to succeed.
+> > 
+> > The kernel may decide that it is necessary to freeze a filesystem for
+> > its own internal purposes, such as suspends in progress, filesystem fsck
+> > activities, or quiescing a device prior to removal.  Userspace thaw
+> > commands must never break a kernel freeze, and kernel thaw commands
+> > shouldn't undo userspace's freeze command.
+> > 
+> > Introduce a couple of freeze holder flags and wire it into the
+> > sb_writers state.  One kernel and one userspace freeze are allowed to
+> > coexist at the same time; the filesystem will not thaw until both are
+> > lifted.
+> 
+> This mix-match stuff is also important to document so we can get
+> userspace to understand what is allowed and we get a sense of direction
+> written / documented. Without this trying to navigate around this is
+> all implied. We may need to adjust things with time for thing we may
+> not have considered.
 
-On Thu, Jun 8, 2023 at 1:44 AM Artem Savkov <asavkov@redhat.com> wrote:
->
-> These patches add ability to start annotation browser from c2c report
-> tui. The idea comes from Arnaldo's "Profiling Data Structures" talk [1].
+That's captured in the kernledoc for freeze_super, which is no longer
+getting cut up into __freeze_super here.
 
-I was thinking about how it works and realized that it didn't collect
-samples by symbol.  Then I'm not sure if the result is meaningful.
-I think it'd show a random symbol that touched the cache line
-first.  The same cache line can be accessed from other locations
-but it cannot know where they are.
+> > -int freeze_super(struct super_block *sb)
+> > +static int __freeze_super(struct super_block *sb, unsigned short who)
+> >  {
+> > +	struct sb_writers *sbw = &sb->s_writers;
+> >  	int ret;
+> >  
+> >  	atomic_inc(&sb->s_active);
+> >  	down_write(&sb->s_umount);
+> > +
+> > +	if (sbw->frozen == SB_FREEZE_COMPLETE) {
+> > +		switch (who) {
+> 
+> <-- snip -->
+> 
+> > +		case FREEZE_HOLDER_USERSPACE:
+> > +			if (sbw->freeze_holders & FREEZE_HOLDER_USERSPACE) {
+> > +				/*
+> > +				 * Userspace freeze already in effect; tell
+> > +				 * the caller we're busy.
+> > +				 */
+> > +				deactivate_locked_super(sb);
+> > +				return -EBUSY;
+> 
+> I'm thinking some userspace might find this OK so thought maybe
+> something like -EALREADY would be better, to then allow userspace
+> to decide, however, since userspace would not control the thaw it
+> seems like risky business to support that.
 
-Also different instructions in a function (symbol) would access a
-different cache line.  The annotate output just shows any memory
-access.  So it might be good to check the instruction at the point
-but others should not be considered related.
+It already has to, since we've been returning EBUSY for "fs already
+frozen or being frozen" for years.
 
-Hmm.. I suspect even the same instruction will hit the different
-cache lines at different times.  Then probably the annotation
-won't work well in terms of correlating cache lines.
+--D
 
-Thanks,
-Namhyung
-
->
-> [1]: http://vger.kernel.org/~acme/prez/linux-plumbers-2022/
->
-> v1->v2: Addressed comments from Namhyung Kim
-> - No longer saving evsel for each hist entry, using evlist__first
->   instead.
-> - Factored out preparations to call annotation browser to do_annotate()
->   function
-> - Other small fixes and adjustments.
->
-> Artem Savkov (2):
->   perf util: move symbol__new_unresolved() to util/symbol.c
->   perf tools: allow running annotation browser from c2c-report
->
->  tools/perf/builtin-c2c.c       | 73 +++++++++++++++++++++++++++++++---
->  tools/perf/ui/browsers/hists.c | 22 ----------
->  tools/perf/util/symbol.c       | 22 ++++++++++
->  tools/perf/util/symbol.h       |  1 +
->  4 files changed, 91 insertions(+), 27 deletions(-)
->
-> --
-> 2.40.1
->
+> Anyway, I'm all for any alternative!
+> 
+>   Luis
