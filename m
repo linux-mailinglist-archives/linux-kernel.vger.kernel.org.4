@@ -2,270 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F38AE727C81
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:13:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AA12727C83
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235826AbjFHKNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 06:13:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37218 "EHLO
+        id S235244AbjFHKOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 06:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231837AbjFHKNk (ORCPT
+        with ESMTP id S236023AbjFHKON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 06:13:40 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 630552D63;
-        Thu,  8 Jun 2023 03:13:27 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9095EAB6;
-        Thu,  8 Jun 2023 03:14:12 -0700 (PDT)
-Received: from [10.1.197.1] (ewhatever.cambridge.arm.com [10.1.197.1])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 773E13F71E;
-        Thu,  8 Jun 2023 03:13:25 -0700 (PDT)
-Message-ID: <290b577c-4740-d2e2-d236-c8bbe2f907b9@arm.com>
-Date:   Thu, 8 Jun 2023 11:13:24 +0100
+        Thu, 8 Jun 2023 06:14:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 127CB2D54
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 03:14:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8987064BBE
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 10:14:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84C5BC433EF;
+        Thu,  8 Jun 2023 10:14:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686219246;
+        bh=A/yf/LULqe7cvpY9FNQQv9+HJYr9a5XLS/1CEJh4cUI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YCr1Wl0YP84wvIO2VnanRSDJFX8gKazY0fIbIaQQpeY8GwiC4hJKVKNwtW0q4LCzf
+         t93zJ1seq5bE9yZRw83p/S4eY8irVRPlLZHE4zT70ZBfYBB8OH/X3eb29hyfK3F353
+         XbqPetAS+vr27HRFX6ytssh7f8WeSAZBa142EB+1TSWnufkB3VYtvjcFHm/6n9j9GZ
+         jczUfeXFIjQA7EBXdX7DCGVMTVFYZ+tnHcgOjGY6svebxlSssNpgVxMIwRUPbwu7Dc
+         NLTXt4JHsFOjeQllk02r4Aoh9kBaJnSVJN2MLSjmPTVdPELaClUG4Na86StyoAV/Jw
+         Vnae3p4wKE9HA==
+Date:   Thu, 8 Jun 2023 13:13:40 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Haifeng Xu <haifeng.xu@shopee.com>,
+        David Hildenbrand <david@redhat.com>,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/mm_init.c: add debug messsge for dma zone
+Message-ID: <20230608101340.GI52412@kernel.org>
+References: <20230607090734.1259-1-haifeng.xu@shopee.com>
+ <ZIBY5niJ/7vvwdHC@dhcp22.suse.cz>
+ <ccc68b26-0896-2f2d-ba54-038f34e9eaa2@redhat.com>
+ <34f32148-24c3-09a3-8bec-9515139e15b1@shopee.com>
+ <ZIGcyku+DN5IHtwp@dhcp22.suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V11 05/10] arm64/perf: Add branch stack support in ARMV8
- PMU
-Content-Language: en-US
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, catalin.marinas@arm.com,
-        Mark Brown <broonie@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-References: <20230531040428.501523-1-anshuman.khandual@arm.com>
- <20230531040428.501523-6-anshuman.khandual@arm.com>
- <ZH3PCqYt/UzoiVx3@FVFF77S0Q05N>
- <ba396c30-6719-1dfb-77c2-9f7e1715b57c@arm.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <ba396c30-6719-1dfb-77c2-9f7e1715b57c@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZIGcyku+DN5IHtwp@dhcp22.suse.cz>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/06/2023 11:34, Anshuman Khandual wrote:
+On Thu, Jun 08, 2023 at 11:18:02AM +0200, Michal Hocko wrote:
+> On Thu 08-06-23 15:38:48, Haifeng Xu wrote:
+> > 
+> > 
+> > On 2023/6/7 18:22, David Hildenbrand wrote:
+> > > On 07.06.23 12:16, Michal Hocko wrote:
+> > >> On Wed 07-06-23 09:07:34, Haifeng Xu wrote:
+> > >>> If freesize is less than dma_reserve, print warning message to report
+> > >>> this case.
+> > >>
+> > >> Why?
+> > > 
+> > > I'd like to second that question, and add
+> > > 
+> > > a) Did you run into that scenario?
+> > > b) What can an admin do in that case with that error messages?
+> > 
+> > In theory，dma_reserve shouldn't exceed freesize, so the error messages can remind us
+> > to verify whether the configuration of reserved memory is correct.
 > 
-> 
-> On 6/5/23 17:35, Mark Rutland wrote:
->> On Wed, May 31, 2023 at 09:34:23AM +0530, Anshuman Khandual wrote:
->>> This enables support for branch stack sampling event in ARMV8 PMU, checking
->>> has_branch_stack() on the event inside 'struct arm_pmu' callbacks. Although
->>> these branch stack helpers armv8pmu_branch_XXXXX() are just dummy functions
->>> for now. While here, this also defines arm_pmu's sched_task() callback with
->>> armv8pmu_sched_task(), which resets the branch record buffer on a sched_in.
->>
->> This generally looks good, but I have a few comments below.
->>
->> [...]
->>
->>> +static inline bool armv8pmu_branch_valid(struct perf_event *event)
->>> +{
->>> +	WARN_ON_ONCE(!has_branch_stack(event));
->>> +	return false;
->>> +}
->>
->> IIUC this is for validating the attr, so could we please name this
->> armv8pmu_branch_attr_valid() ?
-> 
-> Sure, will change the name and updated call sites.
-> 
->>
->> [...]
->>
->>> +static int branch_records_alloc(struct arm_pmu *armpmu)
->>> +{
->>> +	struct pmu_hw_events *events;
->>> +	int cpu;
->>> +
->>> +	for_each_possible_cpu(cpu) {
+> I am not really convinced this is worth touching the code TBH.
 
-Shouldn't this be supported_pmus ? i.e.
-	for_each_cpu(cpu, &armpmu->supported_cpus) {
+The only architecture that sets the dma_reserve is x86_64 and it sets it to
+the number of reserved pages in DMA zone. There is no way freesize will be
+less than dma_reserve.
 
+I'm not sure that in general dma_reserve has some value now, but that's a
+completely different story.
 
->>> +		events = per_cpu_ptr(armpmu->hw_events, cpu);
->>> +		events->branches = kzalloc(sizeof(struct branch_records), GFP_KERNEL);
->>> +		if (!events->branches)
->>> +			return -ENOMEM;
+> -- 
+> Michal Hocko
+> SUSE Labs
 
-Do we need to free the allocated branches already ?
-
->>> +	}
-
-
-May be:
-	int ret = 0;
-
-	for_each_cpu(cpu, &armpmu->supported_cpus) {
-		events = per_cpu_ptr(armpmu->hw_events, cpu);
-		events->branches = kzalloc(sizeof(struct 		branch_records), GFP_KERNEL);
-		
-		if (!events->branches) {
-			ret = -ENOMEM;
-			break;
-		}
-	}
-
-	if (!ret)
-		return 0;
-
-	for_each_cpu(cpu, &armpmu->supported_cpus) {
-		events = per_cpu_ptr(armpmu->hw_events, cpu);
-		if (!events->branches)
-			break;
-		kfree(events->branches);
-	}
-	return ret;
-	
->>> +	return 0;
->>
->> This leaks memory if any allocation fails, and the next patch replaces this
->> code entirely.
-> 
-> Okay.
-> 
->>
->> Please add this once in a working state. Either use the percpu allocation
->> trick in the next patch from the start, or have this kzalloc() with a
->> corresponding kfree() in an error path.
-> 
-> I will change branch_records_alloc() as suggested in the next patch's thread
-> and fold those changes here in this patch.
-> 
->>
->>>   }
->>>   
->>>   static int armv8pmu_probe_pmu(struct arm_pmu *cpu_pmu)
->>> @@ -1145,12 +1162,24 @@ static int armv8pmu_probe_pmu(struct arm_pmu *cpu_pmu)
->>>   	};
->>>   	int ret;
->>>   
->>> +	ret = armv8pmu_private_alloc(cpu_pmu);
->>> +	if (ret)
->>> +		return ret;
->>> +
->>>   	ret = smp_call_function_any(&cpu_pmu->supported_cpus,
->>>   				    __armv8pmu_probe_pmu,
->>>   				    &probe, 1);
->>>   	if (ret)
->>>   		return ret;
->>>   
->>> +	if (arm_pmu_branch_stack_supported(cpu_pmu)) {
->>> +		ret = branch_records_alloc(cpu_pmu);
->>> +		if (ret)
->>> +			return ret;
->>> +	} else {
->>> +		armv8pmu_private_free(cpu_pmu);
->>> +	}
->>
->> I see from the next patch that "private" is four ints, so please just add that
->> to struct arm_pmu under an ifdef CONFIG_ARM64_BRBE. That'll simplify this, and
->> if we end up needing more space in future we can consider factoring it out.
-> 
-> struct arm_pmu {
-> 	........................................
->          /* Implementation specific attributes */
->          void            *private;
-> }
-> 
-> private pointer here creates an abstraction for given pmu implementation
-> to hide attribute details without making it known to core arm pmu layer.
-> Although adding ifdef CONFIG_ARM64_BRBE solves the problem as mentioned
-> above, it does break that abstraction. Currently arm_pmu layer is aware
-> about 'branch records' but not about BRBE in particular which the driver
-> adds later on. I suggest we should not break that abstraction.
-> 
-> Instead a global 'static struct brbe_hw_attr' in drivers/perf/arm_brbe.c
-> can be initialized into arm_pmu->private during armv8pmu_branch_probe(),
-> which will also solve the allocation-free problem. Also similar helpers
-> armv8pmu_task_ctx_alloc()/free() could be defined to manage task context
-> cache i.e arm_pmu->pmu.task_ctx_cache independently.
-> 
-> But now armv8pmu_task_ctx_alloc() can be called after pmu probe confirms
-> to have arm_pmu->has_branch_stack.
-> 
->>
->>> +
->>>   	return probe.present ? 0 : -ENODEV;
->>>   }
->>
->> It also seems odd to ceck probe.present *after* checking
->> arm_pmu_branch_stack_supported().
-> 
-> I will reorganize as suggested below.
-> 
->>
->> With the allocation removed I think this can be written more clearly as:
->>
->> | static int armv8pmu_probe_pmu(struct arm_pmu *cpu_pmu)
->> | {
->> |         struct armv8pmu_probe_info probe = {
->> |                 .pmu = cpu_pmu,
->> |                 .present = false,
->> |         };
->> |         int ret;
->> |
->> |         ret = smp_call_function_any(&cpu_pmu->supported_cpus,
->> |                                     __armv8pmu_probe_pmu,
->> |                                     &probe, 1);
->> |         if (ret)
->> |                 return ret; > |
->> |         if (!probe.present)
->> |                 return -ENODEV;
->> |
->> |         if (arm_pmu_branch_stack_supported(cpu_pmu))
->> |                 ret = branch_records_alloc(cpu_pmu);
->> |
->> |         return ret;
->> | }
-
-Could we not simplify this as below and keep the abstraction, since we
-already have it ?
-
- >> | static int armv8pmu_probe_pmu(struct arm_pmu *cpu_pmu)
- >> | {
- >> |         struct armv8pmu_probe_info probe = {
- >> |                 .pmu = cpu_pmu,
- >> |                 .present = false,
- >> |         };
- >> |         int ret;
- >> |
- >> |         ret = smp_call_function_any(&cpu_pmu->supported_cpus,
- >> |                                     __armv8pmu_probe_pmu,
- >> |                                     &probe, 1);
- >> |         if (ret)
- >> |                 return ret;
- >> |         if (!probe.present)
- >> |                 return -ENODEV;
- >> |
- >> |  	     if (!arm_pmu_branch_stack_supported(cpu_pmu))
- >> |		     return 0;
- >> |
- >> |	     ret = armv8pmu_private_alloc(cpu_pmu);
- >> |	     if (ret)
- >> |		 return ret;
- >> |		
- >> |	      ret = branch_records_alloc(cpu_pmu);
- >> |	      if (ret)
- >> |		  armv8pmu_private_free(cpu_pmu);
- >> |		
- >> |        return ret;
- >> | }
-
-
-Suzuki
-
+-- 
+Sincerely yours,
+Mike.
