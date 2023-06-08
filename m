@@ -2,119 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1878C7274C3
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 04:15:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E25417274E8
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 04:19:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233058AbjFHCPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 22:15:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36072 "EHLO
+        id S231940AbjFHCTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 22:19:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjFHCPJ (ORCPT
+        with ESMTP id S233153AbjFHCTv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 22:15:09 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E405126A3
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 19:15:06 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id D9BA824E25C;
-        Thu,  8 Jun 2023 10:15:04 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 8 Jun
- 2023 10:15:04 +0800
-Received: from [192.168.125.124] (183.27.98.122) by EXMBX168.cuchost.com
- (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 8 Jun
- 2023 10:15:04 +0800
-Message-ID: <d941ac20-e8b3-cb13-4258-3a9a86e978d3@starfivetech.com>
-Date:   Thu, 8 Jun 2023 10:15:03 +0800
+        Wed, 7 Jun 2023 22:19:51 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28CD8E;
+        Wed,  7 Jun 2023 19:19:48 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3582IB4p8029392, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3582IB4p8029392
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Thu, 8 Jun 2023 10:18:11 +0800
+Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Thu, 8 Jun 2023 10:18:27 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Thu, 8 Jun 2023 10:18:26 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
+ RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
+ 15.01.2375.007; Thu, 8 Jun 2023 10:18:26 +0800
+From:   =?big5?B?U3RhbmxleSBDaGFuZ1up96h8vHdd?= <stanley_chang@realtek.com>
+To:     kernel test robot <lkp@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+        "Vinod Koul" <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        "Conor Dooley" <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Ray Chi <raychi@google.com>,
+        "Flavio Suligoi" <f.suligoi@asem.it>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH v3 2/5] phy: realtek: usb: Add driver for the Realtek SoC USB 2.0 PHY
+Thread-Topic: [PATCH v3 2/5] phy: realtek: usb: Add driver for the Realtek SoC
+ USB 2.0 PHY
+Thread-Index: AQHZmQjR4Z6nmQOlk0qvgFcnmBMR/a9/E4qAgAEY5bA=
+Date:   Thu, 8 Jun 2023 02:18:26 +0000
+Message-ID: <2444f4875f484cc4bf2ff9c52815fa0c@realtek.com>
+References: <20230607062500.24669-2-stanley_chang@realtek.com>
+ <202306080128.Gh3c2H1O-lkp@intel.com>
+In-Reply-To: <202306080128.Gh3c2H1O-lkp@intel.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.190.159]
+x-kse-serverinfo: RTEXDAG01.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="big5"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v1] ASoC: starfive: Cleanup and fix error check for JH7110
- TDM
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-CC:     Claudiu Beznea <Claudiu.Beznea@microchip.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>
-References: <20230607081439.1517-1-walker.chen@starfivetech.com>
- <3eb7ffc5-a16a-4ac2-93a0-260f7cb1f81c@sirena.org.uk>
-From:   Walker Chen <walker.chen@starfivetech.com>
-In-Reply-To: <3eb7ffc5-a16a-4ac2-93a0-260f7cb1f81c@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.98.122]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 2023/6/7 19:44, Mark Brown wrote:
-> On Wed, Jun 07, 2023 at 04:14:39PM +0800, Walker Chen wrote:
-> 
->> Some minor issues were found during addtional testing and static
->> analysis. The patch fixed these minor issues.
->> 1.Use BIT() macro to indicate configuration for TDM registers.
->> 
->> 2.Fix the check for devm_reset_control_array_get_exclusive return
->> value. The devm_reset_control_array_get_exclusive() function may return
->> NULL if it's an optional request. If optional is intended then NULL
->> should not be treated as an error case, but as a special kind of success
->> case. So here the IS_ERR() is used to check better.
-> 
-> As covered in submitting-patches.rst please submit one patch per change
-> rather than combining multiple changes into a single patch, it makes
-> things much easier to review and handle.
-Hi Mark,
-
-Thanks for your review.
-OK, I will submit a single patch for each change in the next version.
-
-> 
->> -	datarx = (tdm->rx.ifl << IFL_BIT) |
->> -		  (tdm->rx.wl << WL_BIT) |
->> -		  (tdm->rx.sscale << SSCALE_BIT) |
->> -		  (tdm->rx.sl << SL_BIT) |
->> -		  (tdm->rx.lrj << LRJ_BIT);
->> +	datarx = (tdm->rxwl << 8) |
->> +		  (tdm->rxsscale << 4) |
->> +		  (tdm->rxsl << 2) |
->> +		  TDM_PCMRXCR_LEFT_J;
-> 
-> I'm not sure this change to use numbers here is a win - the _BIT
-> definitions look fine (I might've called them _SHIFT but whatever).
-
-This is Claudiu's advice. Using the macro BIT() to replace these definition of *_BIT, 
-it will result in big changes in the code.
-Please refer to previous comments:
- https://lore.kernel.org/all/143e2fa2-e85d-8036-4f74-ca250c026c1b@microchip.com/
-
-@Claudiu What do think about this ?
-
-> 
->> -static const struct of_device_id jh7110_tdm_of_match[] = {
->> +static const struct of_device_id jh7110_tdm_match[] = {
->>  	{ .compatible = "starfive,jh7110-tdm", },
->>  	{}
->>  };
->>  
->> -MODULE_DEVICE_TABLE(of, jh7110_tdm_of_match);
->> +MODULE_DEVICE_TABLE(of, jh7110_tdm_match);
-> 
-> This rename wasn't mentioned in the changelog.
-Will be added in the change log.
-
-Best regards,
-Walker
+PiBFUlJPUjogbW9kcG9zdDogImRldm1fdXNiX2dldF9waHlfYnlfcGhhbmRsZSINCj4gW2RyaXZl
+cnMvcG93ZXIvc3VwcGx5L3dtODMxeF9wb3dlci5rb10gdW5kZWZpbmVkIQ0KPiA+PiBFUlJPUjog
+bW9kcG9zdDogImRldm1fdXNiX2dldF9waHkiDQo+IFtkcml2ZXJzL3Bvd2VyL3N1cHBseS9kYTkx
+NTAtY2hhcmdlci5rb10gdW5kZWZpbmVkIQ0KPiANCj4gS2NvbmZpZyB3YXJuaW5nczogKGZvciBy
+ZWZlcmVuY2Ugb25seSkNCj4gICAgV0FSTklORzogdW5tZXQgZGlyZWN0IGRlcGVuZGVuY2llcyBk
+ZXRlY3RlZCBmb3IgVVNCX1BIWQ0KPiAgICBEZXBlbmRzIG9uIFtuXTogVVNCX1NVUFBPUlQgWz1u
+XQ0KPiAgICBTZWxlY3RlZCBieSBbeV06DQo+ICAgIC0gUEhZX1JUS19SVERfVVNCMlBIWSBbPXld
+DQo+IA0KDQpJIHdpbGwgYWRkIFVTQl9TVVVQUlQgZGVwZW5kZW5jeSB0byBLY29uZmlnLg0KDQpk
+aWZmIC0tZ2l0IGEvZHJpdmVycy9waHkvcmVhbHRlay9LY29uZmlnIGIvZHJpdmVycy9waHkvcmVh
+bHRlay9LY29uZmlnDQppbmRleCAyOGVlM2Q5YmU1NjguLmE1YTVhNzFlZGM5YyAxMDA2NDQNCi0t
+LSBhL2RyaXZlcnMvcGh5L3JlYWx0ZWsvS2NvbmZpZw0KKysrIGIvZHJpdmVycy9waHkvcmVhbHRl
+ay9LY29uZmlnDQpAQCAtNCw2ICs0LDcgQEANCiAjDQogY29uZmlnIFBIWV9SVEtfUlREX1VTQjJQ
+SFkNCiAgICAgICAgdHJpc3RhdGUgIlJlYWx0ZWsgUlREIFVTQjIgUEhZIFRyYW5zY2VpdmVyIERy
+aXZlciINCisgICAgICAgZGVwZW5kcyBvbiBVU0JfU1VQUE9SVA0KICAgICAgICBzZWxlY3QgR0VO
+RVJJQ19QSFkNCiAgICAgICAgc2VsZWN0IFVTQl9QSFkNCiAgICAgICAgaGVscA0KQEAgLTE0LDYg
+KzE1LDcgQEAgY29uZmlnIFBIWV9SVEtfUlREX1VTQjJQSFkNCg0KIGNvbmZpZyBQSFlfUlRLX1JU
+RF9VU0IzUEhZDQogICAgICAgIHRyaXN0YXRlICJSZWFsdGVrIFJURCBVU0IzIFBIWSBUcmFuc2Nl
+aXZlciBEcml2ZXIiDQorICAgICAgIGRlcGVuZHMgb24gVVNCX1NVUFBPUlQNCiAgICAgICAgc2Vs
+ZWN0IEdFTkVSSUNfUEhZDQogICAgICAgIHNlbGVjdCBVU0JfUEhZDQogICAgICAgIGhlbHANCg==
