@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A022728462
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43B87728463
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237091AbjFHP6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 11:58:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47114 "EHLO
+        id S237387AbjFHP6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 11:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237597AbjFHP6d (ORCPT
+        with ESMTP id S237141AbjFHP6h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 11:58:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3739CE4A
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 08:58:32 -0700 (PDT)
+        Thu, 8 Jun 2023 11:58:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E0461AE
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 08:58:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 729EC615CE
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 15:58:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30A8CC433D2;
-        Thu,  8 Jun 2023 15:58:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 93D3664E9E
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 15:58:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 533E7C4339C;
+        Thu,  8 Jun 2023 15:58:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686239910;
-        bh=zkzDUTzoUvqPxa4+BDd44n0s0GRo5pLLUljGElyMJTQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=I/XVPf9KwS+UK39Ut9ernkLGRkSct1q+3ySsKSQzlNmJTYKDomT9q+FUo9d2GwFqw
-         7PA4XotdT2u7dC6PJM+UG9xZPMF1VkM87H6c82OOOOF6YXnHT9xkJsAIINdqnJ9RAa
-         3Haofq/ufI19Xr2nm2XnAmD9ZNKUw9wArOI52zN7paJkpZhT10RSMuBe/h+ZFa2O4Z
-         sxgHqaIv1Ywwgn4pQDgI4RAtNBY9wg6yC1uG9RIPtk1WzVIbESi8WDnIbhvbdAQ96x
-         bAzk8VOGhrLvF7+7qJZfWVSVCFkdUEgBrlctiF+cWkV2sFk39MWD9LqsYDiYd/2+6a
-         JkiFqf7+a7ucw==
+        s=k20201202; t=1686239915;
+        bh=uDc3wiW+UB9ErrGr1OLqcQm1CPFTg15pwVckTZIQXa8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ggbDQH2xNVx05uwKB1tOsrbwWoAlYqFUP4vU8OghtMYkR3uIysJp60gmihDPV7IkZ
+         e9gWrMbdB4GCDKedNrUKPxzTf8hmdmRPLKScGN7Z4zYYYZy/99S8/fEt2KRjRkYsjJ
+         cLjhwD7mzpYTZfqP0F2E8rJrL74zaa51gqEezCKoZSJ4ygWTfv5Vm+226VGs5kNfdd
+         tudWXSUccEJE985UoHni4tKKK94x3Otx96cb5dZ/+QKn8LeE6tb5MwKOJ7/+ntAOKE
+         NnHNirALGXViDp2i7qRMDAOuhh9DvIe9mxZg5qmAzFXXz4jZVbFMLDr0fBDGOKMyN/
+         0jyhoFuIgqj0g==
 From:   Daniel Bristot de Oliveira <bristot@kernel.org>
 To:     Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -50,14 +50,16 @@ Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Vineeth Pillai <vineeth@bitbyteword.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Daniel Bristot de Oliveira <bristot@kernel.org>
-Subject: [RFC PATCH V3 0/6] SCHED_DEADLINE server infrastructure
-Date:   Thu,  8 Jun 2023 17:58:12 +0200
-Message-Id: <cover.1686239016.git.bristot@kernel.org>
+Subject: [RFC PATCH V3 1/6] sched: Unify runtime accounting across classes
+Date:   Thu,  8 Jun 2023 17:58:13 +0200
+Message-Id: <51ad657375206dac0f2609224babafa1c1486d4b.1686239016.git.bristot@kernel.org>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <cover.1686239016.git.bristot@kernel.org>
+References: <cover.1686239016.git.bristot@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,144 +68,242 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is RFC v3 of Peter's SCHED_DEADLINE server infrastructure
-implementation [1].
+From: Peter Zijlstra <peterz@infradead.org>
 
-SCHED_DEADLINE servers can help fixing starvation issues of low priority
-tasks (e.g., SCHED_OTHER) when higher priority tasks monopolize CPU
-cycles. Today we have RT Throttling; DEADLINE servers should be able to
-replace and improve that.
+All classes use sched_entity::exec_start to track runtime and have
+copies of the exact same code around to compute runtime.
 
-I rebased Peter's patches (adding changelogs where needed) on
-tip/sched/core as of today and incorporated fixes to issues discussed
-during RFC v1 & v2.
+Collapse all that.
 
-In the v1 there was discussion raised about the consequence of using
-deadline based servers on the fixed-priority workloads. For a demonstration
-here is the baseline of timerlat** scheduling latency as-is, with kernel
-build background workload:
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+---
+ include/linux/sched.h    |  2 +-
+ kernel/sched/deadline.c  | 15 +++--------
+ kernel/sched/fair.c      | 57 ++++++++++++++++++++++++++++++----------
+ kernel/sched/rt.c        | 15 +++--------
+ kernel/sched/sched.h     | 12 ++-------
+ kernel/sched/stop_task.c | 13 +--------
+ 6 files changed, 53 insertions(+), 61 deletions(-)
 
- # rtla timerlat top -u -d 10m 
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 1292d38d66cc..26b1925a702a 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -521,7 +521,7 @@ struct sched_statistics {
+ 	u64				block_max;
+ 	s64				sum_block_runtime;
  
-  --------------------- %< ------------------------                                                                                       
-  0 01:00:01   |          IRQ Timer Latency (us)        |         Thread Timer Latency (us)      |    Ret user Timer Latency (us)
-CPU COUNT      |      cur       min       avg       max |      cur       min       avg       max |      cur       min       avg       max
-  0 #3599960   |        1         0         1        31 |        6         1         6        65 |        9         2         9        86
-  1 #3599972   |        1         0         1        41 |        4         1         5        54 |        7         2         7        78
-  2 #3599966   |        1         0         1        36 |        6         1         6        65 |        9         2         9        81
-  3 #3599945   |        0         0         1        31 |        6         1         6        55 |        9         2         9        84
-  4 #3599939   |        1         0         1        32 |        4         1         6        53 |        7         2         8        85
-  5 #3599944   |        0         0         1        31 |        4         1         6        50 |        6         2         9        54
-  6 #3599945   |        1         0         1        38 |        5         1         6        53 |        8         2         9        88
-  7 #3599944   |        0         0         1        36 |        4         1         5        62 |        6         2         8        86
-  --------------------- >% ------------------------
-
-And this is the same tests with DL server activating without any delay*:
-  --------------------- %< ------------------------                                                                                       
-  0 00:10:01   |          IRQ Timer Latency (us)        |         Thread Timer Latency (us)      |    Ret user Timer Latency (us)
-CPU COUNT      |      cur       min       avg       max |      cur       min       avg       max |      cur       min       avg       max
-  0 #595748    |        1         0         1       254 |        8         1        31      1417 |       12         2        33      1422
-  1 #597951    |        1         0         1       239 |        6         1        27      1435 |        9         2        30      1438
-  2 #595060    |        1         0         1        24 |        5         1        28      1437 |        7         2        30      1441
-  3 #595914    |        1         0         1       218 |        6         1        29      1382 |        9         2        32      1385
-  4 #597829    |        1         0         1       233 |        8         1        26      1368 |       11         2        29      1427
-  5 #596314    |        2         0         1        21 |        7         1        29      1442 |       10         2        32      1447
-  6 #595532    |        1         0         1       238 |        6         1        31      1389 |        9         2        34      1392
-  7 #595852    |        0         0         1        34 |        6         1        30      1481 |        9         2        33      1484
-  --------------------- >% ------------------------
-
-The problem with DL server only implementation is that FIFO tasks might
-suffer preemption from NORMAL even when spare CPU cycles are available.
-In fact, fair deadline server is enqueued right away when NORMAL tasks
-wake up and they are first scheduled by the server, thus potentially
-preempting a well behaving FIFO task. This is of course not ideal.
-
-We had discussions about it, and one of the possibilities would be
-using a different scheduling algorithm for this. But IMHO that is
-an overkill. Juri and I discussed that, and that is why Juri added
-the patch 6/6.
-
-The patch 6/6 adds a PoC of an starvation monitor/watchdog that delays
-enqueuing of deadline servers to the point when fair tasks might start
-to actually suffer from starvation (just randomly picked HZ/2 for now).
-
-With that in place, the results get better again*:
-
-  --------------------- %< ------------------------                                                                                       
-  0 01:00:01   |          IRQ Timer Latency (us)        |         Thread Timer Latency (us)      |    Ret user Timer Latency (us)
-CPU COUNT      |      cur       min       avg       max |      cur       min       avg       max |      cur       min       avg       max
-  0 #3600004   |        1         0         1        29 |        8         1         5        50 |       11         2         8        66
-  1 #3600010   |        1         0         1        30 |        7         1         5        50 |       10         2         8        58
-  2 #3600010   |        0         0         1        30 |        5         1         5        43 |        7         2         7        70
-  3 #3600010   |        1         0         1        25 |        8         1         6        52 |       12         2         8        74
-  4 #3600010   |        1         0         1        63 |        8         1         6        72 |       12         2         8        88
-  5 #3600010   |        1         0         1        26 |        8         1         6        59 |       11         2         8        94
-  6 #3600010   |        1         0         1        29 |        9         1         5        55 |       12         2         8        82
-  7 #3600003   |        0         0         1       117 |        6         1         5       124 |        9         2         7       127
-  --------------------- >% ------------------------
-
-So, that is in the right direction but we can improve it. Here
-are the next steps I am taking:
-
- - Getting parameters from the sysctl sched_rt...
- - Trying to delay the start of the server for the 0-laxity time
- 	- Maybe starting the server throttled with replenish time
- 	  at 0-laxity
- - Maybe implement a starvation monitor offload, where the DL server
-   is started remotely, avoiding the overhead of its activation - like
-   stalld does;
- - Test with micro-interference to measure overheads.
-
-Here are some osnoise measurement, with osnoise threads running as FIFO:1 with
-different setups*:
- - CPU 2 isolated
- - CPU 3 isolated shared with a CFS busy loop task
- - CPU 8 non-isolated
- - CPU 9 non-isolated shared with a CFS busy loop task
-
-  --------------------- %< ------------------------                                                                                       
-# osnoise -P f:1 -c 2,3,8,9 -T 1 -d 10m -H 1 -q
-                                          Operating System Noise                                                                          
-duration:   0 00:12:39 | time is in us
-CPU Period       Runtime        Noise  % CPU Aval   Max Noise   Max Single          HW          NMI          IRQ      Softirq       Thread
-  2 #757       757000000           49    99.99999          14            3           0            0          106            0            0
-  3 #757       757001039     39322713    94.80546       52992         1103           0            0      3657933            0        59685
-  8 #757       757000000       779821    99.89698        1513            4           0          113       794899            0          189
-  9 #757       757001043     39922677    94.72620       53775         1105           0          112      4361243            0        49009
-   --------------------- >% ------------------------
-
-The results are promising, but there is a problem when no setting
-HRTICK_DL... checking it. No splat on any of these scenarios.
-
-* tests with throttling disabled, on the 6.3 stable RT. But also
-on 6.4 and tip/sched/core.
-** timerlat with user-space support under dev, you need these patch series:
-   https://lore.kernel.org/all/cover.1686063934.git.bristot@kernel.org
-   https://lore.kernel.org/all/cover.1686066600.git.bristot@kernel.org
-   or just run without the -u option :-)   
-
-Changes from v2:
-  - rebased on 6.4-rc1 tip/sched/core
-
-Juri Lelli (1):
-  sched/fair: Implement starvation monitor
-
-Peter Zijlstra (5):
-  sched: Unify runtime accounting across classes
-  sched/deadline: Collect sched_dl_entity initialization
-  sched/deadline: Move bandwidth accounting into {en,de}queue_dl_entity
-  sched/deadline: Introduce deadline servers
-  sched/fair: Add trivial fair server
-
- include/linux/sched.h    |  24 +-
- kernel/sched/core.c      |  23 +-
- kernel/sched/deadline.c  | 497 +++++++++++++++++++++++++--------------
- kernel/sched/fair.c      | 143 +++++++++--
- kernel/sched/rt.c        |  15 +-
- kernel/sched/sched.h     |  60 +++--
- kernel/sched/stop_task.c |  13 +-
- 7 files changed, 538 insertions(+), 237 deletions(-)
-
+-	u64				exec_max;
++	s64				exec_max;
+ 	u64				slice_max;
+ 
+ 	u64				nr_migrations_cold;
+diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+index f827067ad03b..030e7c11607f 100644
+--- a/kernel/sched/deadline.c
++++ b/kernel/sched/deadline.c
+@@ -1301,9 +1301,8 @@ static void update_curr_dl(struct rq *rq)
+ {
+ 	struct task_struct *curr = rq->curr;
+ 	struct sched_dl_entity *dl_se = &curr->dl;
+-	u64 delta_exec, scaled_delta_exec;
++	s64 delta_exec, scaled_delta_exec;
+ 	int cpu = cpu_of(rq);
+-	u64 now;
+ 
+ 	if (!dl_task(curr) || !on_dl_rq(dl_se))
+ 		return;
+@@ -1316,21 +1315,13 @@ static void update_curr_dl(struct rq *rq)
+ 	 * natural solution, but the full ramifications of this
+ 	 * approach need further study.
+ 	 */
+-	now = rq_clock_task(rq);
+-	delta_exec = now - curr->se.exec_start;
+-	if (unlikely((s64)delta_exec <= 0)) {
++	delta_exec = update_curr_common(rq);
++	if (unlikely(delta_exec <= 0)) {
+ 		if (unlikely(dl_se->dl_yielded))
+ 			goto throttle;
+ 		return;
+ 	}
+ 
+-	schedstat_set(curr->stats.exec_max,
+-		      max(curr->stats.exec_max, delta_exec));
+-
+-	trace_sched_stat_runtime(curr, delta_exec, 0);
+-
+-	update_current_exec_runtime(curr, now, delta_exec);
+-
+ 	if (dl_entity_is_special(dl_se))
+ 		return;
+ 
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 6189d1a45635..fda67f05190d 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -891,23 +891,17 @@ static void update_tg_load_avg(struct cfs_rq *cfs_rq)
+ }
+ #endif /* CONFIG_SMP */
+ 
+-/*
+- * Update the current task's runtime statistics.
+- */
+-static void update_curr(struct cfs_rq *cfs_rq)
++static s64 update_curr_se(struct rq *rq, struct sched_entity *curr)
+ {
+-	struct sched_entity *curr = cfs_rq->curr;
+-	u64 now = rq_clock_task(rq_of(cfs_rq));
+-	u64 delta_exec;
+-
+-	if (unlikely(!curr))
+-		return;
++	u64 now = rq_clock_task(rq);
++	s64 delta_exec;
+ 
+ 	delta_exec = now - curr->exec_start;
+-	if (unlikely((s64)delta_exec <= 0))
+-		return;
++	if (unlikely(delta_exec <= 0))
++		return delta_exec;
+ 
+ 	curr->exec_start = now;
++	curr->sum_exec_runtime += delta_exec;
+ 
+ 	if (schedstat_enabled()) {
+ 		struct sched_statistics *stats;
+@@ -917,8 +911,43 @@ static void update_curr(struct cfs_rq *cfs_rq)
+ 				max(delta_exec, stats->exec_max));
+ 	}
+ 
+-	curr->sum_exec_runtime += delta_exec;
+-	schedstat_add(cfs_rq->exec_clock, delta_exec);
++	return delta_exec;
++}
++
++/*
++ * Used by other classes to account runtime.
++ */
++s64 update_curr_common(struct rq *rq)
++{
++	struct task_struct *curr = rq->curr;
++	s64 delta_exec;
++
++	delta_exec = update_curr_se(rq, &curr->se);
++	if (unlikely(delta_exec <= 0))
++		return delta_exec;
++
++	trace_sched_stat_runtime(curr, delta_exec, 0);
++
++	account_group_exec_runtime(curr, delta_exec);
++	cgroup_account_cputime(curr, delta_exec);
++
++	return delta_exec;
++}
++
++/*
++ * Update the current task's runtime statistics.
++ */
++static void update_curr(struct cfs_rq *cfs_rq)
++{
++	struct sched_entity *curr = cfs_rq->curr;
++	s64 delta_exec;
++
++	if (unlikely(!curr))
++		return;
++
++	delta_exec = update_curr_se(rq_of(cfs_rq), curr);
++	if (unlikely(delta_exec <= 0))
++		return;
+ 
+ 	curr->vruntime += calc_delta_fair(delta_exec, curr);
+ 	update_min_vruntime(cfs_rq);
+diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+index 00e0e5074115..efec4f3fef83 100644
+--- a/kernel/sched/rt.c
++++ b/kernel/sched/rt.c
+@@ -1046,24 +1046,15 @@ static void update_curr_rt(struct rq *rq)
+ {
+ 	struct task_struct *curr = rq->curr;
+ 	struct sched_rt_entity *rt_se = &curr->rt;
+-	u64 delta_exec;
+-	u64 now;
++	s64 delta_exec;
+ 
+ 	if (curr->sched_class != &rt_sched_class)
+ 		return;
+ 
+-	now = rq_clock_task(rq);
+-	delta_exec = now - curr->se.exec_start;
+-	if (unlikely((s64)delta_exec <= 0))
++	delta_exec = update_curr_common(rq);
++	if (unlikely(delta_exec <= 0))
+ 		return;
+ 
+-	schedstat_set(curr->stats.exec_max,
+-		      max(curr->stats.exec_max, delta_exec));
+-
+-	trace_sched_stat_runtime(curr, delta_exec, 0);
+-
+-	update_current_exec_runtime(curr, now, delta_exec);
+-
+ 	if (!rt_bandwidth_enabled())
+ 		return;
+ 
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 556496c77dc2..da0cec2fc63a 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -2176,6 +2176,8 @@ struct affinity_context {
+ 	unsigned int flags;
+ };
+ 
++extern s64 update_curr_common(struct rq *rq);
++
+ struct sched_class {
+ 
+ #ifdef CONFIG_UCLAMP_TASK
+@@ -3207,16 +3209,6 @@ extern int sched_dynamic_mode(const char *str);
+ extern void sched_dynamic_update(int mode);
+ #endif
+ 
+-static inline void update_current_exec_runtime(struct task_struct *curr,
+-						u64 now, u64 delta_exec)
+-{
+-	curr->se.sum_exec_runtime += delta_exec;
+-	account_group_exec_runtime(curr, delta_exec);
+-
+-	curr->se.exec_start = now;
+-	cgroup_account_cputime(curr, delta_exec);
+-}
+-
+ #ifdef CONFIG_SCHED_MM_CID
+ 
+ #define SCHED_MM_CID_PERIOD_NS	(100ULL * 1000000)	/* 100ms */
+diff --git a/kernel/sched/stop_task.c b/kernel/sched/stop_task.c
+index 85590599b4d6..7595494ceb6d 100644
+--- a/kernel/sched/stop_task.c
++++ b/kernel/sched/stop_task.c
+@@ -70,18 +70,7 @@ static void yield_task_stop(struct rq *rq)
+ 
+ static void put_prev_task_stop(struct rq *rq, struct task_struct *prev)
+ {
+-	struct task_struct *curr = rq->curr;
+-	u64 now, delta_exec;
+-
+-	now = rq_clock_task(rq);
+-	delta_exec = now - curr->se.exec_start;
+-	if (unlikely((s64)delta_exec < 0))
+-		delta_exec = 0;
+-
+-	schedstat_set(curr->stats.exec_max,
+-		      max(curr->stats.exec_max, delta_exec));
+-
+-	update_current_exec_runtime(curr, now, delta_exec);
++	update_curr_common(rq);
+ }
+ 
+ /*
 -- 
 2.40.1
 
