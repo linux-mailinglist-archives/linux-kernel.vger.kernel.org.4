@@ -2,474 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E1C6728692
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 19:46:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB63472868C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 19:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235638AbjFHRqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 13:46:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57988 "EHLO
+        id S235213AbjFHRpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 13:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235563AbjFHRq3 (ORCPT
+        with ESMTP id S233785AbjFHRpc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 13:46:29 -0400
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D9D52D4B;
-        Thu,  8 Jun 2023 10:46:28 -0700 (PDT)
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 358HIa39032685;
-        Thu, 8 Jun 2023 13:46:17 -0400
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3r2abwfb12-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Jun 2023 13:46:17 -0400
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 358HkFoR041771
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 8 Jun 2023 13:46:15 -0400
-Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Thu, 8 Jun 2023
- 13:46:14 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Thu, 8 Jun 2023 13:46:14 -0400
-Received: from kimedia-VirtualBox.ad.analog.com (KPALLER2-L02.ad.analog.com [10.116.242.24])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 358HjaKk003381;
-        Thu, 8 Jun 2023 13:46:08 -0400
-From:   Kim Seer Paller <kimseer.paller@analog.com>
-CC:     Kim Seer Paller <kimseer.paller@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        <linux-kernel@vger.kernel.org>, <linux-iio@vger.kernel.org>
-Subject: [PATCH v3 2/2] iio: adc: max14001: New driver
-Date:   Fri, 9 Jun 2023 01:44:13 +0800
-Message-ID: <20230608174413.39959-3-kimseer.paller@analog.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230608174413.39959-1-kimseer.paller@analog.com>
-References: <20230608174413.39959-1-kimseer.paller@analog.com>
+        Thu, 8 Jun 2023 13:45:32 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2095.outbound.protection.outlook.com [40.107.243.95])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8F82D42;
+        Thu,  8 Jun 2023 10:45:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cm20NTzM7KvA9rDnBof17wbDLKc2BEQ7uFD0IAIKb3KMzmx4wIogaVkmQrCpHR6PvrLsFu1xgMOrZbPjZW/FwyUEo8pc9k7EOLJ8fVVk7W+ay3TwQT60/fzuY1GFKJlhWEe2Q4AmmsVY0s7hZUdaJxEh40yR8dIEQTonikQg4G17YSPqqr12W9vTvqCFYJC6vFuHyGIRCQ3oQYBrZscvb0nzdqIh8IufyTKGtdDAZd5V82rVFwGHrwnAZmtQijThTeJDlq2+fldWSIoUnA5Igv9SQ4Pjuzpaz09MKomc7NuxYU6sv0OtwdvSxm7G17X7EHK+jF/fHCN2v6jU4piM+g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YlCQ8aRKcjWKW5BdLJSLMCKDAIDBzq0DD6M/twJ1ay4=;
+ b=n4TAjfsqIFTpXkFqPA/v4POXmOPdP+z691pGFOIVj/Zp/K6oSozYS7/tcmZlj44remVYH5vxb9WTaAVVTd+zzDbRzn0IWz20emZIZ7NXQNRnjQJQOlBdJWkw1+yvIIZmuV+YeyeOBac0loq739Vyd+R+YmJ18fF6LHFRYIRxDTiu7aQKPLZZGD2+gyGnUFL/B6bZcwHK8YuIIi+jM3gVfET7NyDIMvh90FXEzYtztWksspGhALUzMubQFswx2Xz9jF9QqpTddilF2hMGSR7JD9B2brkYudqC9ucO9w7qzcfC9a5BI2kqa35Tkv8sWXJctSfnSAMLufl5E1tFBWgryA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YlCQ8aRKcjWKW5BdLJSLMCKDAIDBzq0DD6M/twJ1ay4=;
+ b=vfGNv0pHDERZwj+jx9880DmhVM5B12ErT3UTIk3xZJWA7xI1rQfYbgju/trcschD1naqmjGcONWGAMyKQwZBN2XwcTtYkIKhEq7LA6JT5uf+nHLOrEUTZIWiWYvPWLvycfFKofUHPtxizMqqmwOCDzIobWuyqZFn89VvOKdNO8A=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by PH7PR13MB6365.namprd13.prod.outlook.com (2603:10b6:510:2f9::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.19; Thu, 8 Jun
+ 2023 17:45:24 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e%4]) with mapi id 15.20.6455.030; Thu, 8 Jun 2023
+ 17:45:24 +0000
+Date:   Thu, 8 Jun 2023 19:45:16 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org, Horatiu.Vultur@microchip.com,
+        Allan.Nielsen@microchip.com, UNGLinuxDriver@microchip.com,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: Re: [PATCH net 2/2] net: phylink: use USXGMII control-word format to
+ parse Q-USGMII word
+Message-ID: <ZIITrPpnQB2rQNUr@corigine.com>
+References: <20230608163415.511762-1-maxime.chevallier@bootlin.com>
+ <20230608163415.511762-4-maxime.chevallier@bootlin.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230608163415.511762-4-maxime.chevallier@bootlin.com>
+X-ClientProxiedBy: AM9P193CA0018.EURP193.PROD.OUTLOOK.COM
+ (2603:10a6:20b:21e::23) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-ORIG-GUID: ECI0n448gMQ3U2HMCetpUVmtJfxPkEdn
-X-Proofpoint-GUID: ECI0n448gMQ3U2HMCetpUVmtJfxPkEdn
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-08_12,2023-06-08_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 phishscore=0 impostorscore=0 suspectscore=0
- priorityscore=1501 mlxscore=0 bulkscore=0 clxscore=1015 mlxlogscore=999
- spamscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306080156
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH7PR13MB6365:EE_
+X-MS-Office365-Filtering-Correlation-Id: b98410ae-c19b-4039-04a4-08db684822dc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nGPAox+yaHOBTAGo0Q4Qvjhz3Yjyr4ZhrfOE7mJEg+WHdhT2HUGxeOz560LhXYV1iJWE+T/Xmx4xZCxpgOxakESGPXe90BltcTEESVaXEuzckwT8wpNjwR77W54/KAj61rwfNFKqnM55DhjH0Y7mhqA8+JnQ4EHFk0xEg31c/WBrHNaFiPdcmWfThNgydDl3AAnBM6C5NWzUa0A0gcNr4w80w7UEew1V8B14XWCkrnZqPHvjurrulyf7GX6Aacbnb2WVBnuLOcbQFTDCbBQKdSC42ca/1uCtYlyAMRy+p/KExz+2xuW2eD4IVGIt+9BqSxqZ4a0fJ540Q+t8jE2xlrVezImMk7T4cxxqCO729YajcOKowX3+v8aclgGaWFfw2qjcIF6cLAMu2KzV1FD7aNTuivBXWiu2ojzYT6RDTIpTAYTvZXidEvE/D/4zaSkgAEvGBZvLs78FpiJnGpHNAtARyToN7le+mhVYV1KLJ8bfMlxCkTjEWEWpl5OoFUn/HFOprwXaiGsRpuF4Ig7BxUgGI7jek/FD38IlKd/rkV+ZwyMGRk8Flzn8gdyf/uBM
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39840400004)(136003)(396003)(366004)(376002)(451199021)(5660300002)(44832011)(7416002)(316002)(4326008)(6916009)(66946007)(66476007)(66556008)(8936002)(8676002)(38100700002)(41300700001)(86362001)(36756003)(2906002)(2616005)(6512007)(6506007)(6666004)(6486002)(186003)(83380400001)(54906003)(478600001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ijE7iVRZs4HHcyhJ4sPR8wcXDQtiY04gID9bPgVWyqCrxIly/HFA+TKOltSB?=
+ =?us-ascii?Q?5vExkdf9ilnhv/uOeASTXghq3qnabeAlGgT7UinrVntiwd1+U0bUWwczZ9OK?=
+ =?us-ascii?Q?YPJiaBKRTW2vTqo5ifUxb10Z78sDVHh1mHDA9Uee3rSoUUB47nvdkIbgWauY?=
+ =?us-ascii?Q?aIMvrvfLIhn3gFGE94bcUNx6jd4WnL9oVwythV6fX/wyhTlZ0yQ3YbIKtmH9?=
+ =?us-ascii?Q?KOIZ/OEobbIV4tVqqGkieWDAKkpVR7XsFUBiaSG/8TiFVLybiWAtpfGWwqD1?=
+ =?us-ascii?Q?tpMcRi/XfOrYabftlrC8GLwiAg62GZHMCCGRstZMnNP8Uh+RESJBVl64mecX?=
+ =?us-ascii?Q?JX3hm4GhwvKHQlfAnpF13L1frBtqslpp8aWLqzNDm/9m/iTIE5sZxZoyhU3Q?=
+ =?us-ascii?Q?OAWTmDn50nhBXo4ytHADX5pUBNGPIp8bw+jneWPPBde/2LDhkuPyaEGdYKoW?=
+ =?us-ascii?Q?WOY6G3IV1dyqgKwQztUmoQN1ERsVeLDQlLc50R8HY7Udo1MOd6EFLVwPPpAp?=
+ =?us-ascii?Q?riITX2+wn1EPLSzXOSP6X1QXEjEbyrT+H8LQqkNs9XPu7if9mCLGcPzS1PFr?=
+ =?us-ascii?Q?/gmZYY/S+wawQWyBHNaKrYEsOIH/Eiv0GQE5cepwXRtCsZsBHenwsFXyqFvh?=
+ =?us-ascii?Q?3Dx0UvTHtRdUTqLgHeaEUST9GyzwPFp8xYbVD+6NvWnsfMJAL641L0700M7I?=
+ =?us-ascii?Q?ibNAd6oWfpct3B897DSiIh7HFWyoRj0/QgygMzHgJGLzrRQa5OWntsIpM7IW?=
+ =?us-ascii?Q?SmooiORz2XnXpciYP2xzeWL7PE2ALh2tPdoXEWzpnYuFiLUFhq65p+OWTjVo?=
+ =?us-ascii?Q?flEX+ezy2Ln6rp0/VcMKJ5n/KV+7/koN1p2/6KpsUokvxgqoWINkAEeQ4qnE?=
+ =?us-ascii?Q?niKUTQtWdoyseapNKTINJ8XwNnh+jF0BKMMnznupuUVhaBNZT55iYS3ij41x?=
+ =?us-ascii?Q?A/FBADFlaZainYKX7C6hTdURufvq6OHb76uFmxXuubc50hQV/Ek12aYVYw5o?=
+ =?us-ascii?Q?SV5aVJk61kc4Nt5hmOsMdvhi8n594FPMm4+MLBorupgQZMXDcsqfweaPDtXn?=
+ =?us-ascii?Q?zeqmLTjBdFvmm33u7mMCxz1madu92FkGQaxhpDonxgjWTS3VxbD5Qv3gY8P3?=
+ =?us-ascii?Q?ndcnXbKk5Om3p40zkIJCY0CABoXPgVlVyLgO7c9bJdefm9lF3VZ4fu4teUQu?=
+ =?us-ascii?Q?IeriNOQOnzgH1knvY4VvT+Xa9UJXPjErrAklwJ3nLSGaXEdlB5+M0mkf0/5M?=
+ =?us-ascii?Q?VyWs0K4NZlPF79Y8+64M+QuK6uZnyroB93cG5/QaR3HVGII4CPRpARodsSGA?=
+ =?us-ascii?Q?1PsHXzXjpQkqb6EHXUHnoVVGEK6gNp69WTP5lBt3CJlx35l8ZrD/D6GrnvMX?=
+ =?us-ascii?Q?FrsYDG2QbOCnE6nz5Tpdhs3d2dHWBSYmacvYeix+7IR8zolpd1Fwp86GEcBX?=
+ =?us-ascii?Q?CLClm5nCRWxVpThWBfREZ+sP2FQse4CfRIm9SgpCOBSYohtq6OBuEp7vslbL?=
+ =?us-ascii?Q?RyOP3JbytJdpEc+c4nOx9a/X3VfmblnrY7Q6USoNEd83SSvNtX1LZvp/sZ/2?=
+ =?us-ascii?Q?LnTJaDtlTjF8azrooWt+sVD4ygHzHrTYxhN+5tF2jHFpIC0bgJdIH7EAY6X+?=
+ =?us-ascii?Q?vQo0CWW59alV7Lz2uH0vbZHGWfpgJbhk7p7babdexbOdQFwWDmVU0y8YDu6I?=
+ =?us-ascii?Q?bJz03A=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b98410ae-c19b-4039-04a4-08db684822dc
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2023 17:45:24.2271
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: osaehbduf2yXjwhy9GP6vQrcFtjQr7ww6w5BIfcvqulN0NrwsWE7bH9HfYdHk4T9yOQZgCBz/Hj7ZKUbuqrzdIB+AD4bllGIY5mkZtXA76Y=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR13MB6365
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The MAX14001 is configurable, isolated 10-bit ADCs for multi-range
-binary inputs.
+On Thu, Jun 08, 2023 at 06:34:15PM +0200, Maxime Chevallier wrote:
 
-Signed-off-by: Kim Seer Paller <kimseer.paller@analog.com>
----
- MAINTAINERS                |   1 +
- drivers/iio/adc/Kconfig    |  10 ++
- drivers/iio/adc/Makefile   |   1 +
- drivers/iio/adc/max14001.c | 337 +++++++++++++++++++++++++++++++++++++
- 4 files changed, 349 insertions(+)
- create mode 100644 drivers/iio/adc/max14001.c
+...
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b8ad615d011f..8c85d0b2d60d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12666,6 +12666,7 @@ L:	linux-iio@vger.kernel.org
- S:	Supported
- W:	https://ez.analog.com/linux-software-drivers
- F:	Documentation/devicetree/bindings/iio/dac/adi,max14001.yaml
-+F:	drivers/iio/adc/max14001.c
- 
- MAXBOTIX ULTRASONIC RANGER IIO DRIVER
- M:	Andreas Klinger <ak@it-klinger.de>
-diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
-index eb2b09ef5d5b..e599d166e98d 100644
---- a/drivers/iio/adc/Kconfig
-+++ b/drivers/iio/adc/Kconfig
-@@ -706,6 +706,16 @@ config MAX11410
- 	  To compile this driver as a module, choose M here: the module will be
- 	  called max11410.
- 
-+config MAX14001
-+	tristate "Analog Devices MAX14001 ADC driver"
-+	depends on SPI
-+	help
-+	  Say yes here to build support for Analog Devices MAX14001 Configurable,
-+	  Isolated 10-bit ADCs for Multi-Range Binary Inputs.
-+
-+	  To compile this driver as a module, choose M here: the module will be
-+	  called max14001.
-+
- config MAX1241
- 	tristate "Maxim max1241 ADC driver"
- 	depends on SPI_MASTER
-diff --git a/drivers/iio/adc/Makefile b/drivers/iio/adc/Makefile
-index e07e4a3e6237..9f8964258f03 100644
---- a/drivers/iio/adc/Makefile
-+++ b/drivers/iio/adc/Makefile
-@@ -65,6 +65,7 @@ obj-$(CONFIG_MAX11100) += max11100.o
- obj-$(CONFIG_MAX1118) += max1118.o
- obj-$(CONFIG_MAX11205) += max11205.o
- obj-$(CONFIG_MAX11410) += max11410.o
-+obj-$(CONFIG_MAX14001) += max14001.o
- obj-$(CONFIG_MAX1241) += max1241.o
- obj-$(CONFIG_MAX1363) += max1363.o
- obj-$(CONFIG_MAX9611) += max9611.o
-diff --git a/drivers/iio/adc/max14001.c b/drivers/iio/adc/max14001.c
-new file mode 100644
-index 000000000000..b04aa4ba5508
---- /dev/null
-+++ b/drivers/iio/adc/max14001.c
-@@ -0,0 +1,337 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
-+/*
-+ * Analog Devices MAX14001 ADC driver
-+ *
-+ * Copyright 2023 Analog Devices Inc.
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/bitrev.h>
-+#include <linux/device.h>
-+#include <linux/iio/iio.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/property.h>
-+#include <linux/regmap.h>
-+#include <linux/regulator/consumer.h>
-+#include <linux/spi/spi.h>
-+#include <linux/slab.h>
-+#include <linux/types.h>
-+
-+#include <asm/unaligned.h>
-+
-+/* MAX14001 Registers Address */
-+#define MAX14001_ADC			0x00
-+#define MAX14001_FADC			0x01
-+#define MAX14001_FLAGS			0x02
-+#define MAX14001_FLTEN			0x03
-+#define MAX14001_THL			0x04
-+#define MAX14001_THU			0x05
-+#define MAX14001_INRR			0x06
-+#define MAX14001_INRT			0x07
-+#define MAX14001_INRP			0x08
-+#define MAX14001_CFG			0x09
-+#define MAX14001_ENBL			0x0A
-+#define MAX14001_ACT			0x0B
-+#define MAX14001_WEN			0x0C
-+
-+#define MAX14001_VERIFICATION_REG(x)	((x) + 0x10)
-+
-+#define MAX14001_CFG_EXRF		BIT(5)
-+
-+#define MAX14001_ADDR_MASK		GENMASK(15, 11)
-+#define MAX14001_DATA_MASK		GENMASK(9, 0)
-+#define MAX14001_FILTER_MASK		GENMASK(3, 2)
-+
-+#define MAX14001_SET_WRITE_BIT		BIT(10)
-+#define MAX14001_WRITE_WEN		0x294
-+
-+struct max14001_state {
-+	struct spi_device	*spi;
-+	/*
-+	 * lock protect agains multiple concurrent accesses, RMW sequence, and
-+	 * SPI transfer
-+	 */
-+	struct mutex		lock;
-+	struct regmap		*regmap;
-+	int			vref_mv;
-+	/*
-+	 * DMA (thus cache coherency maintenance) requires the
-+	 * transfer buffers to live in their own cache lines.
-+	 */
-+	__be16			spi_tx_buffer __aligned(IIO_DMA_MINALIGN);
-+	__be16			spi_rx_buffer;
-+};
-+
-+static int max14001_read(void *context, unsigned int reg_addr, unsigned int *data)
-+{
-+	struct max14001_state *st = context;
-+	int ret;
-+
-+	struct spi_transfer xfers[] = {
-+		{
-+			.tx_buf = &st->spi_tx_buffer,
-+			.len = 2,
-+			.cs_change = 1,
-+		}, {
-+			.rx_buf = &st->spi_rx_buffer,
-+			.len = 2,
-+		},
-+	};
-+
-+	st->spi_tx_buffer = bitrev16(cpu_to_be16(FIELD_PREP(MAX14001_ADDR_MASK,
-+								reg_addr)));
-+
-+	ret = spi_sync_transfer(st->spi, xfers, ARRAY_SIZE(xfers));
-+	if (ret)
-+		return ret;
-+
-+	*data = bitrev16(be16_to_cpu(st->spi_rx_buffer)) & MAX14001_DATA_MASK;
-+
-+	return 0;
-+}
-+
-+static int max14001_write(void *context, unsigned int reg_addr, unsigned int data)
-+{
-+	struct max14001_state *st = context;
-+
-+	st->spi_tx_buffer = bitrev16(cpu_to_be16(
-+			FIELD_PREP(MAX14001_ADDR_MASK, reg_addr) |
-+			FIELD_PREP(MAX14001_SET_WRITE_BIT, 1) |
-+			FIELD_PREP(MAX14001_DATA_MASK, data)));
-+
-+	return spi_write(st->spi, &st->spi_tx_buffer, sizeof(st->spi_tx_buffer));
-+}
-+
-+static const struct regmap_config max14001_regmap_config = {
-+	.reg_read = max14001_read,
-+	.reg_write = max14001_write,
-+};
-+
-+static int max14001_write_verification_reg(struct max14001_state *st,
-+						unsigned int reg_addr)
-+{
-+	unsigned int reg_data;
-+	int ret;
-+
-+	ret = max14001_read(st, reg_addr, &reg_data);
-+	if (ret)
-+		return ret;
-+
-+	return max14001_write(st, MAX14001_VERIFICATION_REG(reg_addr), reg_data);
-+}
-+
-+static int max14001_reg_update(struct max14001_state *st,
-+				unsigned int reg_addr,
-+				unsigned int mask,
-+				unsigned int val)
-+{
-+	int ret;
-+	unsigned int reg_data;
-+
-+	/* Enable SPI Registers Write */
-+	ret = max14001_write(st, MAX14001_WEN, MAX14001_WRITE_WEN);
-+	if (ret)
-+		return ret;
-+
-+	ret = max14001_read(st, reg_addr, &reg_data);
-+	if (ret)
-+		return ret;
-+
-+	reg_data = FIELD_PREP(mask, val);
-+
-+	ret = max14001_write(st, reg_addr, reg_data);
-+	if (ret)
-+		return ret;
-+
-+	/* Write Verification Register */
-+	ret = max14001_write_verification_reg(st, reg_addr);
-+	if (ret)
-+		return ret;
-+
-+	/* Disable SPI Registers Write */
-+	return max14001_write(st, MAX14001_WEN, 0);
-+}
-+
-+static int max14001_read_raw(struct iio_dev *indio_dev,
-+			     struct iio_chan_spec const *chan,
-+			     int *val, int *val2, long mask)
-+{
-+	struct max14001_state *st = iio_priv(indio_dev);
-+	unsigned int data;
-+	int ret;
-+
-+	switch (mask) {
-+	case IIO_CHAN_INFO_RAW:
-+		mutex_lock(&st->lock);
-+		ret = max14001_read(st, MAX14001_ADC, &data);
-+		mutex_unlock(&st->lock);
-+		if (ret < 0)
-+			return ret;
-+
-+		*val = data;
-+
-+		return IIO_VAL_INT;
-+
-+	case IIO_CHAN_INFO_SCALE:
-+		*val = st->vref_mv;
-+		*val2 = 10;
-+
-+		return IIO_VAL_FRACTIONAL_LOG2;
-+
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static const struct iio_info max14001_info = {
-+	.read_raw = max14001_read_raw,
-+};
-+
-+static const struct iio_chan_spec max14001_channels[] = {
-+	{
-+		.type = IIO_VOLTAGE,
-+		.channel = 0,
-+		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |
-+				      BIT(IIO_CHAN_INFO_SCALE),
-+	}
-+};
-+
-+static void max14001_regulator_disable(void *data)
-+{
-+	struct regulator *reg = data;
-+
-+	regulator_disable(reg);
-+}
-+
-+static int max14001_init(struct max14001_state *st)
-+{
-+	int ret;
-+
-+	/* Enable SPI Registers Write */
-+	ret = max14001_write(st, MAX14001_WEN, MAX14001_WRITE_WEN);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Reads all registers and writes the values back to their appropriate
-+	 * verification registers to clear the Memory Validation fault.
-+	 */
-+	ret = max14001_write_verification_reg(st, MAX14001_FLTEN);
-+	if (ret)
-+		return ret;
-+
-+	ret = max14001_write_verification_reg(st, MAX14001_THL);
-+	if (ret)
-+		return ret;
-+
-+	ret = max14001_write_verification_reg(st, MAX14001_THU);
-+	if (ret)
-+		return ret;
-+
-+	ret = max14001_write_verification_reg(st, MAX14001_INRR);
-+	if (ret)
-+		return ret;
-+
-+	ret = max14001_write_verification_reg(st, MAX14001_INRT);
-+	if (ret)
-+		return ret;
-+
-+	ret = max14001_write_verification_reg(st, MAX14001_INRP);
-+	if (ret)
-+		return ret;
-+
-+	ret = max14001_write_verification_reg(st, MAX14001_CFG);
-+	if (ret)
-+		return ret;
-+
-+	ret = max14001_write_verification_reg(st, MAX14001_ENBL);
-+	if (ret)
-+		return ret;
-+
-+	/* Disable SPI Registers Write */
-+	return max14001_write(st, MAX14001_WEN, 0);
-+}
-+
-+static int max14001_probe(struct spi_device *spi)
-+{
-+	struct iio_dev *indio_dev;
-+	struct max14001_state *st;
-+	struct regulator *vref;
-+	struct device *dev = &spi->dev;
-+	int ret;
-+
-+	indio_dev = devm_iio_device_alloc(dev, sizeof(*st));
-+	if (!indio_dev)
-+		return -ENOMEM;
-+
-+	st = iio_priv(indio_dev);
-+	st->spi = spi;
-+
-+	st->regmap = devm_regmap_init(dev, NULL, st, &max14001_regmap_config);
-+
-+	indio_dev->name = "max14001";
-+	indio_dev->info = &max14001_info;
-+	indio_dev->channels = max14001_channels;
-+	indio_dev->num_channels = ARRAY_SIZE(max14001_channels);
-+	indio_dev->modes = INDIO_DIRECT_MODE;
-+
-+	ret = max14001_init(st);
-+	if (ret)
-+		return ret;
-+
-+	vref = devm_regulator_get_optional(dev, "vref");
-+	if (IS_ERR(vref)) {
-+		if (PTR_ERR(vref) != -ENODEV)
-+			return dev_err_probe(dev, PTR_ERR(vref),
-+					     "Failed to get vref regulator");
-+
-+		/* internal reference */
-+		st->vref_mv = 1250;
-+	} else {
-+		ret = regulator_enable(vref);
-+		if (ret)
-+			return dev_err_probe(dev, ret,
-+					"Failed to enable vref regulators\n");
-+
-+		ret = devm_add_action_or_reset(dev, max14001_regulator_disable,
-+					       vref);
-+		if (ret)
-+			return ret;
-+
-+		/* select external voltage reference source for the ADC */
-+		ret = max14001_reg_update(st, MAX14001_CFG,
-+					  MAX14001_CFG_EXRF, 1);
-+
-+		ret = regulator_get_voltage(vref);
-+		if (ret < 0)
-+			return dev_err_probe(dev, ret,
-+					     "Failed to get vref\n");
-+
-+		st->vref_mv = ret / 1000;
-+	}
-+
-+	mutex_init(&st->lock);
-+
-+	return devm_iio_device_register(dev, indio_dev);
-+}
-+
-+static const struct of_device_id max14001_of_match[] = {
-+	{ .compatible = "adi,max14001" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, max14001_of_match);
-+
-+static struct spi_driver max14001_driver = {
-+	.driver = {
-+		.name = "max14001",
-+		.of_match_table = max14001_of_match,
-+	},
-+	.probe = max14001_probe,
-+};
-+module_spi_driver(max14001_driver);
-+
-+MODULE_AUTHOR("Kim Seer Paller");
-+MODULE_DESCRIPTION("MAX14001 ADC driver");
-+MODULE_LICENSE("GPL");
--- 
-2.34.1
+> diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
+> index 809e6d5216dc..730f8860d2a6 100644
+> --- a/drivers/net/phy/phylink.c
+> +++ b/drivers/net/phy/phylink.c
+> @@ -3298,6 +3298,41 @@ void phylink_decode_usxgmii_word(struct phylink_link_state *state,
+>  }
+>  EXPORT_SYMBOL_GPL(phylink_decode_usxgmii_word);
+>  
+> +/**
+> + * phylink_decode_usgmii_word() - decode the USGMII word from a MAC PCS
+> + * @state: a pointer to a struct phylink_link_state.
+> + * @lpa: a 16 bit value which stores the USGMII auto-negotiation word
+> + *
+> + * Helper for MAC PCS supporting the USGMII protocol and the auto-negotiation
+> + * code word.  Decode the USGMII code word and populate the corresponding fields
+> + * (speed, duplex) into the phylink_link_state structure. The structure for this
+> + * word is the same as the USXGMII word, expect it only supports speeds up to
+> + * 1Gbps.
+> + */
+> +static void phylink_decode_usgmii_word(struct phylink_link_state *state,
+> +				 uint16_t lpa)
 
+Hi Maxime,
+
+a minor nit from my side: the indentation of the line above should line up
+with the inside of the opening parentheses on the previous line.
+
+static void phylink_decode_usgmii_word(struct phylink_link_state *state,
+				       uint16_t lpa)
+
+...
+
+As I see there is feedback from Russell, of a more substantial nature,
+and it looks will be a v2, I'll mark this as changes requested in patchwork.
+
+pw-bot: cr
