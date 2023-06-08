@@ -2,64 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1256728341
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:09:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EAE0728350
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236818AbjFHPJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 11:09:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46058 "EHLO
+        id S236095AbjFHPLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 11:11:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236748AbjFHPJf (ORCPT
+        with ESMTP id S236124AbjFHPLR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 11:09:35 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA0852D59
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 08:09:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686236973; x=1717772973;
-  h=message-id:date:mime-version:from:subject:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=EePSVTT+XOqP8KK0ENYuYqvWSUC0AoMNrVkgXoocbKg=;
-  b=OHqcsYHDL/JOotRvHVFyELhpufJhr3Kp9zb8dV45PP711kJJ9rNlupUL
-   f1Emgp9KN+2E/EDJ68wplyZpyY093ymJYQ9BKzgj+ndhxhbEuCGds+WgS
-   LXxzQJCgVJOtCalYoSa0Rddec1LcKQVe6NDq1wiui5jVPF7M4mxqa9wDu
-   Eh7uj50GNR1srWTadB2BE16KG7tP5taQwyL6EnWkOEKB0bnfLmwTPVdm9
-   1TOKTdlJYpKOFW9TuPI9dBHckqBz9Mn2ca5VNIXzUSj9McRR6JWDXAA4D
-   CSPz7gzJkHF+cXcKjwCtG8lZzIKpTWv6m+bn8WWAk9I5hslD//VhSFrIK
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="443700551"
-X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
-   d="scan'208";a="443700551"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 08:09:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="799842570"
-X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
-   d="scan'208";a="799842570"
-Received: from svuppala-mobl.amr.corp.intel.com (HELO [10.212.207.249]) ([10.212.207.249])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 08:09:32 -0700
-Message-ID: <6c75e986-29a4-d97c-3862-d20397f8b8b4@linux.intel.com>
-Date:   Thu, 8 Jun 2023 10:09:03 -0500
+        Thu, 8 Jun 2023 11:11:17 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4CB2D65
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 08:11:15 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id 5614622812f47-392116b8f31so486563b6e.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 08:11:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1686237073; x=1688829073;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XKYIY8lnLeesFrrYGM6yGBBcxp2DdDvQNqXJ/GPrn+0=;
+        b=BmAm0rXM4KZbTYym0HXYlOClgT/zGWm4ze6fwFqXwAqD1ItkmTYBl/+afhC3UDFEZl
+         uuRCKPD6RgfoUkFKIWZwzbDtBFAA1JCrB8QIqhbKWGVLgphLs9tCNZ4dqqMrQJ95EdDS
+         +7AZci3CA88AqfAQL6mijMM679CIZt98Z/tco=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686237073; x=1688829073;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XKYIY8lnLeesFrrYGM6yGBBcxp2DdDvQNqXJ/GPrn+0=;
+        b=GwDc9OJaFiqmsYCJxoWr6zBjjr4481DQ3GXrsvSObDcPbmdrMsshNp2TLeXftQuu1n
+         UyXHlv0Nb+/oC7ORBBnJ9jbfnTRvB0xJSOjBzoy6AU+Xn62Qa3k0KdjQjnMXBaVmyWfj
+         pAk4Xq0h1I6RBZjdCwVlmyhBJWGO7qt7wsdzru4D+4D2a5Pwo5bHe5zHwa2Rm2D6MGEo
+         MRN8bJbr4S1Q4ilsuJSAd6JTPslspKrN7JEaNbM/hMnPDtgFS8H7aNE9Rn0XDsXilpEI
+         NeE0Z1X0CN3II0HEOcns8plKZHoDNjZ9ZUUaXEw/75fJgNuhbBRii8OhBRA5gL18DstC
+         duqg==
+X-Gm-Message-State: AC+VfDz8jlCSXhn1f05duYQimiIGF1JpC8WRckqJo5ICqiWor2UtKKnc
+        iISERj2giHtDIj3QN/ULkRXWEZyOdK8vcHIbDfs=
+X-Google-Smtp-Source: ACHHUZ75S3gvyOcDlHP6xBHC7LssUFSYdXclhok/DcUJlwGVpU8/uTN7tKBXby8Yam/vixBcamn0Gw==
+X-Received: by 2002:a05:6808:8:b0:389:4f7b:949d with SMTP id u8-20020a056808000800b003894f7b949dmr6617372oic.22.1686237072970;
+        Thu, 08 Jun 2023 08:11:12 -0700 (PDT)
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com. [209.85.160.182])
+        by smtp.gmail.com with ESMTPSA id g29-20020a0caadd000000b0062168714c8fsm448616qvb.120.2023.06.08.08.11.12
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jun 2023 08:11:12 -0700 (PDT)
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-3f9b7de94e7so218691cf.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 08:11:12 -0700 (PDT)
+X-Received: by 2002:a92:c549:0:b0:33d:929c:af67 with SMTP id
+ a9-20020a92c549000000b0033d929caf67mr120694ilj.17.1686237051541; Thu, 08 Jun
+ 2023 08:10:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Subject: Re: [PATCH 2/4] soundwire: introduce SDW_DEV_NUM_ALLOC_IDA_WAKE_ONLY
-To:     Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        bard.liao@intel.com
-References: <20230531033736.792464-1-yung-chuan.liao@linux.intel.com>
- <20230531033736.792464-3-yung-chuan.liao@linux.intel.com>
- <ZIF94vZHzeGXfyin@matsya>
-Content-Language: en-US
-In-Reply-To: <ZIF94vZHzeGXfyin@matsya>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230607144931.v2.8.Ib1a98309c455cd7e26b931c69993d4fba33bbe15@changeid>
+ <202306081419.Dzz0T4iW-lkp@intel.com>
+In-Reply-To: <202306081419.Dzz0T4iW-lkp@intel.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 8 Jun 2023 08:10:39 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UMryHK+8j9FCKtSxykB8Tc-tU_B7MXMQPxpkdP2h8mJA@mail.gmail.com>
+Message-ID: <CAD=FV=UMryHK+8j9FCKtSxykB8Tc-tU_B7MXMQPxpkdP2h8mJA@mail.gmail.com>
+Subject: Re: [PATCH v2 08/10] HID: i2c-hid: Support being a panel follower
+To:     kernel test robot <lkp@intel.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>, llvm@lists.linux.dev,
+        oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
+        cros-qcom-dts-watchers@chromium.org, linux-arm-msm@vger.kernel.org,
+        yangcong5@huaqin.corp-partner.google.com,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Chris Morgan <macroalpha82@gmail.com>,
+        linux-input@vger.kernel.org, hsinyi@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,134 +95,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
+On Thu, Jun 8, 2023 at 12:15=E2=80=AFAM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> Hi Douglas,
+>
+> kernel test robot noticed the following build errors:
+>
+> [auto build test ERROR on robh/for-next]
+> [also build test ERROR on hid/for-next dtor-input/next dtor-input/for-lin=
+us drm-misc/drm-misc-next linus/master v6.4-rc5 next-20230607]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Douglas-Anderson/d=
+t-bindings-HID-i2c-hid-Add-panel-property-to-i2c-hid-backed-touchscreens/20=
+230608-055515
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git fo=
+r-next
+> patch link:    https://lore.kernel.org/r/20230607144931.v2.8.Ib1a98309c45=
+5cd7e26b931c69993d4fba33bbe15%40changeid
+> patch subject: [PATCH v2 08/10] HID: i2c-hid: Support being a panel follo=
+wer
+> config: i386-randconfig-i003-20230607 (https://download.01.org/0day-ci/ar=
+chive/20230608/202306081419.Dzz0T4iW-lkp@intel.com/config)
+> compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git =
+8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+> reproduce (this is a W=3D1 build):
+>         mkdir -p ~/bin
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         git remote add robh https://git.kernel.org/pub/scm/linux/kernel/g=
+it/robh/linux.git
+>         git fetch robh for-next
+>         git checkout robh/for-next
+>         b4 shazam https://lore.kernel.org/r/20230607144931.v2.8.Ib1a98309=
+c455cd7e26b931c69993d4fba33bbe15@changeid
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/make.cr=
+oss W=3D1 O=3Dbuild_dir ARCH=3Di386 olddefconfig
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/make.cr=
+oss W=3D1 O=3Dbuild_dir ARCH=3Di386 SHELL=3D/bin/bash
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202306081419.Dzz0T4iW-lkp=
+@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+> >> ld.lld: error: undefined symbol: drm_panel_add_follower
+>    >>> referenced by i2c-hid-core.c:1159 (drivers/hid/i2c-hid/i2c-hid-cor=
+e.c:1159)
+>    >>>               drivers/hid/i2c-hid/i2c-hid-core.o:(i2c_hid_core_pro=
+be) in archive vmlinux.a
+> --
+> >> ld.lld: error: undefined symbol: drm_panel_remove_follower
+>    >>> referenced by i2c-hid-core.c:1218 (drivers/hid/i2c-hid/i2c-hid-cor=
+e.c:1218)
+>    >>>               drivers/hid/i2c-hid/i2c-hid-core.o:(i2c_hid_core_rem=
+ove) in archive vmlinux.a
 
-On 6/8/23 02:06, Vinod Koul wrote:
-> On 31-05-23, 11:37, Bard Liao wrote:
->> From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
->>
->> This patch adds a new Device Number allocation strategy, with the IDA
->> used only for devices that are wake-capable.
->>
->> "regular" devices such as amplifiers will use Device Numbers
->> [1..min_ida-1].
->>
->> "wake-capable" devices such as jack or microphone codecs will use
->> Device Numbers [min_ida..11].
->>
->> This hybrid strategy extends the number of supported devices in a
->> system by only constraining the allocation if required, e.g. in the
->> case of Intel LunarLake platforms the wake-capable devices are
->> required to have a unique address to use the HDaudio SDI and HDAudio
->> WAKEEN/WAKESTS registers.
-> 
-> This seems to be a consequence of Intel hardware decisions, so I guess
-> best suited place for this is Intel controller, do we really want to
-> have this in core logic?
+Thanks for the report! Ugh, I guess I forgot that even though
+DRM_PANEL is bool, it gets bundled up into all of DRM which can be a
+module. Assuming that this series looks mostly the same in the next
+version, I'll plan to add this:
 
-It's a valid objection.
+depends on DRM || !DRM # if DRM=3Dm, this can't be 'y'
 
-The reason why I added the alternate strategies in the core logic is
-that the IDA and hybrid approach are just software-based with no
-specific hardware dependencies. If QCOM or AMD wanted to use the
-strategies contributed and tested by Intel, it'd be a two-line change on
-their side.
+...to each of the i2c-hid subclasses.
 
-That said, it's likely that at some point *someone* will want to
-constrain the device number allocation further, be it with ACPI/DT
-properties or reading hardware registers. The device number is a
-de-facto priority given the way we scan the PING frames, so some systems
-may want to give a higher priority to a specific peripherals.
-
-This would push us to add a master ops callback to control the device
-number allocation. It's a bit invasive but that would give the ultimate
-flexibility. Reuse between vendors could be possible if 'generic'
-callbacks were part of a library to pick from.
-
-I don't really have any objections if this vendor-specific callback was
-preferred, it may be a bit early to add this but long-term it's probably
-what makes more sense.
-
-I'll go with the flow on suggested recommendations.
-
->> Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
->> Reviewed-by: Rander Wang <rander.wang@intel.com>
->> Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
->> ---
->>  drivers/soundwire/bus.c       | 26 +++++++++++++++++++++-----
->>  include/linux/soundwire/sdw.h |  4 ++++
->>  2 files changed, 25 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
->> index e8c1c55a2a73..6f465cce8369 100644
->> --- a/drivers/soundwire/bus.c
->> +++ b/drivers/soundwire/bus.c
->> @@ -159,7 +159,9 @@ static int sdw_delete_slave(struct device *dev, void *data)
->>  
->>  	if (slave->dev_num) { /* clear dev_num if assigned */
->>  		clear_bit(slave->dev_num, bus->assigned);
->> -		if (bus->dev_num_alloc == SDW_DEV_NUM_ALLOC_IDA)
->> +		if (bus->dev_num_alloc == SDW_DEV_NUM_ALLOC_IDA ||
->> +		    (bus->dev_num_alloc == SDW_DEV_NUM_ALLOC_IDA_WAKE_ONLY &&
->> +		     slave->prop.wake_capable))
->>  			ida_free(&sdw_peripheral_ida, slave->dev_num);
->>  	}
->>  	list_del_init(&slave->node);
->> @@ -699,17 +701,31 @@ EXPORT_SYMBOL(sdw_compare_devid);
->>  /* called with bus_lock held */
->>  static int sdw_get_device_num(struct sdw_slave *slave)
->>  {
->> +	struct sdw_bus *bus = slave->bus;
->>  	int bit;
->>  
->> -	if (slave->bus->dev_num_alloc == SDW_DEV_NUM_ALLOC_IDA) {
->> +	if (bus->dev_num_alloc == SDW_DEV_NUM_ALLOC_IDA ||
->> +	    (bus->dev_num_alloc == SDW_DEV_NUM_ALLOC_IDA_WAKE_ONLY &&
->> +	     slave->prop.wake_capable)) {
->>  		bit = ida_alloc_range(&sdw_peripheral_ida,
->> -				      slave->bus->dev_num_ida_min, SDW_MAX_DEVICES,
->> +				      bus->dev_num_ida_min, SDW_MAX_DEVICES,
->>  				      GFP_KERNEL);
->>  		if (bit < 0)
->>  			goto err;
->>  	} else {
->> -		bit = find_first_zero_bit(slave->bus->assigned, SDW_MAX_DEVICES);
->> -		if (bit == SDW_MAX_DEVICES) {
->> +		int max_devices = SDW_MAX_DEVICES;
->> +
->> +		if (bus->dev_num_alloc == SDW_DEV_NUM_ALLOC_IDA_WAKE_ONLY &&
->> +		    !slave->prop.wake_capable) {
->> +			max_devices = bus->dev_num_ida_min - 1;
->> +
->> +			/* range check */
->> +			if (max_devices < 1 || max_devices > SDW_MAX_DEVICES)
->> +				return -EINVAL;
->> +		}
->> +
->> +		bit = find_first_zero_bit(bus->assigned, max_devices);
->> +		if (bit == max_devices) {
->>  			bit = -ENODEV;
->>  			goto err;
->>  		}
->> diff --git a/include/linux/soundwire/sdw.h b/include/linux/soundwire/sdw.h
->> index 4656d6d0f3bb..8a7541ac735e 100644
->> --- a/include/linux/soundwire/sdw.h
->> +++ b/include/linux/soundwire/sdw.h
->> @@ -869,10 +869,14 @@ struct sdw_master_ops {
->>   * @SDW_DEV_NUM_ALLOC_DEFAULT: unconstrained first-come-first-serve allocation,
->>   * using range [1, 11]
->>   * @SDW_DEV_NUM_ALLOC_IDA: IDA-based allocation, using range [ida_min, 11]
->> + * @SDW_DEV_NUM_ALLOC_IDA_WAKE_ONLY: Hybrid allocation where wake-capable devices rely on
->> + * IDA-based allocation and range [ida_min, 11], while regular devices rely on default
->> + * allocation in range [1, ida_min - 1]
->>   */
->>  enum sdw_dev_num_alloc {
->>  	SDW_DEV_NUM_ALLOC_DEFAULT = 0,
->>  	SDW_DEV_NUM_ALLOC_IDA,
->> +	SDW_DEV_NUM_ALLOC_IDA_WAKE_ONLY,
->>  };
->>  
->>  /**
->> -- 
->> 2.25.1
-> 
+-Doug
