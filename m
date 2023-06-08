@@ -2,120 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91DC27282CA
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 16:34:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F64F7282C7
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 16:34:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236991AbjFHOen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 10:34:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34530 "EHLO
+        id S236528AbjFHOe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 10:34:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236839AbjFHOef (ORCPT
+        with ESMTP id S236514AbjFHOeY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 10:34:35 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95392D6B;
-        Thu,  8 Jun 2023 07:34:26 -0700 (PDT)
+        Thu, 8 Jun 2023 10:34:24 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFE02D53;
+        Thu,  8 Jun 2023 07:34:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686234866; x=1717770866;
+  t=1686234860; x=1717770860;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=4g9PQjpGF62Belg2RoPVipGtcho2R9qNfKAKwzsZ5rA=;
-  b=R5gGCVyj6RkqnsVTfGMl6oUlMowOWh66RZCXMv+hySpzOqlXrqrQ/3HN
-   Nfn5uCBnmkZELvfaWT/5a82ZpsJjIjSph95LAr5J1dTTm9MMR92Wo7oZW
-   bfpk8tZEinndzJ/d5FvJyz+Tfyl93AOKR1Ujr3j+UaWJ/9jDfppuhLa7w
-   wuLsuW5hH1e+asrFelS1cisLMNd5sx+aEdC0OXn6jE10+XJSjzm41jB5U
-   yhh9+L2Dxr+LudNJLT0nWiTIgr+YO9G1MFAfsMnAy23Ja5BFgNN+1uzrp
-   Dd8WQTyMYYzz+cQBPtqbttyqJ3yANrjcOWPzztvw9Fw1otQh96M+QXk6D
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="420898268"
+  bh=XxmivJGLgaCaH1WntFP9Euy9AMy9td0vUpD6mlwrIWU=;
+  b=faAx3kZeM7Bc1PN1Gd3r1wwaWOutMgRsQkiczA6kkEcAs9HYVKLZ1Q1u
+   WXy/J69GpJ5WUQBsxzVwpXxa/1K1WjjCj2vQcNoMVTIbN9R0NkQ1vDK8I
+   q3w1PiIiC2b8z+w6EqN+nMlxpbIv5dc4YYiZThZoZRow721xKF7xAuF5S
+   weSLDD5lDHlUYKzxDUrC7nub83RWBpsaHTRVl8+YFz4zCL2u4uBM1yYzo
+   EdVN1DGx6t9jhUkRm3496vYX6eT1vWBqvn25ThSCYJ3SXN784nByY39Rg
+   L3DiJkALF4/65gPdnpeZNfZV0S8rXRJcLDDIEXPpohFxnGPYHIboenLAT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="423188590"
 X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
-   d="scan'208";a="420898268"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 07:27:20 -0700
+   d="scan'208";a="423188590"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 07:27:58 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="799837598"
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="1040125134"
 X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
-   d="scan'208";a="799837598"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 08 Jun 2023 07:27:17 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q7Gbc-0007to-2B;
-        Thu, 08 Jun 2023 14:27:16 +0000
-Date:   Thu, 8 Jun 2023 22:26:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jason Gerecke <killertofu@gmail.com>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Ping Cheng <pinglinux@gmail.com>,
-        Aaron Armstrong Skomra <skomra@gmail.com>,
-        Joshua Dickens <Joshua@joshua-dickens.com>,
-        Jason Gerecke <jason.gerecke@wacom.com>
-Subject: Re: [PATCH] HID: wacom: Use ktime_t rather than int when dealing
- with timestamps
-Message-ID: <202306082249.cMqfu24Y-lkp@intel.com>
-References: <20230607214102.2113-1-jason.gerecke@wacom.com>
+   d="scan'208";a="1040125134"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga005.fm.intel.com with ESMTP; 08 Jun 2023 07:27:52 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1q7GcA-002BKI-0n;
+        Thu, 08 Jun 2023 17:27:50 +0300
+Date:   Thu, 8 Jun 2023 17:27:50 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Richard Weinberger <richard@nod.at>
+Cc:     linux-hardening@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>
+Subject: Re: [RFC PATCH 1/1] vsprintf: Warn on integer scanning overflows
+Message-ID: <ZIHlZsPMZ2dI5/yG@smile.fi.intel.com>
+References: <20230607223755.1610-1-richard@nod.at>
+ <20230607223755.1610-2-richard@nod.at>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230607214102.2113-1-jason.gerecke@wacom.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230607223755.1610-2-richard@nod.at>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
+On Thu, Jun 08, 2023 at 12:37:55AM +0200, Richard Weinberger wrote:
+> The scanf function family has no way to indicate overflows
+> while scanning. As consequence users of these function have to make
+> sure their input cannot cause an overflow.
+> Since this is not always the case add WARN_ON_ONCE() guards to
+> trigger a warning upon an overflow.
 
-kernel test robot noticed the following build errors:
+...
 
-[auto build test ERROR on hid/for-next]
-[also build test ERROR on linus/master v6.4-rc5 next-20230608]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>  	if (prefix_chars < max_chars) {
+>  		rv = _parse_integer_limit(cp, base, &result, max_chars - prefix_chars);
+> +		WARN_ON_ONCE(rv & KSTRTOX_OVERFLOW);
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jason-Gerecke/HID-wacom-Use-ktime_t-rather-than-int-when-dealing-with-timestamps/20230608-054255
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
-patch link:    https://lore.kernel.org/r/20230607214102.2113-1-jason.gerecke%40wacom.com
-patch subject: [PATCH] HID: wacom: Use ktime_t rather than int when dealing with timestamps
-config: arm-randconfig-r036-20230608 (https://download.01.org/0day-ci/archive/20230608/202306082249.cMqfu24Y-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        git remote add hid https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git
-        git fetch hid for-next
-        git checkout hid/for-next
-        b4 shazam https://lore.kernel.org/r/20230607214102.2113-1-jason.gerecke@wacom.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+This seems incorrect. simple_strto*() are okay to overflow. It's by design.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306082249.cMqfu24Y-lkp@intel.com/
+>  		/* FIXME */
 
-All errors (new ones prefixed by >>):
+...and that's why this one is here.
 
->> ld.lld: error: undefined symbol: __aeabi_ldivmod
-   >>> referenced by wacom_wac.c
-   >>>               drivers/hid/wacom_wac.o:(wacom_wac_irq) in archive vmlinux.a
-   >>> did you mean: __aeabi_idivmod
-   >>> defined in: arch/arm/lib/lib.a(lib1funcs.o)
+>  		cp += (rv & ~KSTRTOX_OVERFLOW);
+>  	} else {
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With Best Regards,
+Andy Shevchenko
+
+
