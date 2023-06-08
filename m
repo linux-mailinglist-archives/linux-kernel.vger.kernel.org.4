@@ -2,148 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDB93727C46
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:05:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88F5F727C24
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235734AbjFHKFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 06:05:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58210 "EHLO
+        id S233171AbjFHKEA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 8 Jun 2023 06:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236095AbjFHKEl (ORCPT
+        with ESMTP id S235522AbjFHKD6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 06:04:41 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43ACD30C1;
-        Thu,  8 Jun 2023 03:04:29 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3588Juh3014011;
-        Thu, 8 Jun 2023 10:04:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=gGcxZvgA1XpXd/QMvwihachA1YvYAHMc3ntdl8NT2gM=;
- b=eIY9oaiTs3FDVK7rHx3Kz1oOw8UE4OJQ5Y5WzR4rZPcUE5RTC6U0iHwTJ7yOKAmgM/WX
- ox0soq/s1vVjxjOgLNjEnc7Opoq1L6vis2OAYWA0EvIbVW97qGwRGwRIaK6RzZoqw/BN
- DXubdVoZ4lFoOqi9gMGzVoGkY87K5Eh9CkXBUdcgib8ZR8UxNoMXPoWAiAyOs7PQijyF
- 4wINccCmAjOAAgGQQtQEVRht9fd1RGIboTrkhOR3OhSYQKqkhxn8zGA1fshLlG3PFpql
- wE9D4v1DfbVhZ2ePkarD6UX2cIEjmmtxjVijvKigFFUVvdFh9HdH/jkUTf5uFkChDvsX /w== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r33bvrxyb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Jun 2023 10:04:24 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 358A4NFq003084
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 8 Jun 2023 10:04:23 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 8 Jun 2023 03:04:18 -0700
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <gregkh@linuxfoundation.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <quic_wcheng@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-CC:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Subject: [PATCH v14 5/5] arm64: dts: qcom: ipq9574: Enable USB
-Date:   Thu, 8 Jun 2023 15:33:31 +0530
-Message-ID: <d78b00b6f5f316f16a9ae49dd743d01fca64d3ff.1686217906.git.quic_varada@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1686217906.git.quic_varada@quicinc.com>
-References: <cover.1686217906.git.quic_varada@quicinc.com>
+        Thu, 8 Jun 2023 06:03:58 -0400
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132C42736;
+        Thu,  8 Jun 2023 03:03:50 -0700 (PDT)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1q7CUZ-000ZFZ-Tz; Thu, 08 Jun 2023 12:03:43 +0200
+Received: from p57bd96d9.dip0.t-ipconnect.de ([87.189.150.217] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1q7CUZ-0047u5-Mf; Thu, 08 Jun 2023 12:03:43 +0200
+Message-ID: <8205bc2cb9f983914ff6920deed3f54893713ba0.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH v2 3/3] sh: dma: Correct the number of DMA channels in
+ SH7709
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Artur Rojek <contact@artur-rojek.eu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Rafael Ignacio Zurita <rafaelignacio.zurita@gmail.com>,
+        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 08 Jun 2023 12:03:43 +0200
+In-Reply-To: <CAMuHMdVFBo+KMNQ6gzh3rZrZ+_Wfg=UJ4XOW4Uqibnjm6T7CdA@mail.gmail.com>
+References: <20230527164452.64797-1-contact@artur-rojek.eu>
+         <20230527164452.64797-4-contact@artur-rojek.eu>
+         <CAMuHMdV3gn8g-gKam71K=WfT3CVNwvz5eKPSh2Fqi3wVg7ZwNw@mail.gmail.com>
+         <f7b9ceb9739f8ae5cbee4f6073ce3af3921a2540.camel@physik.fu-berlin.de>
+         <CAMuHMdVFBo+KMNQ6gzh3rZrZ+_Wfg=UJ4XOW4Uqibnjm6T7CdA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.48.2 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: wf6suDPnk8eBbBuDezl9HvnU2QWEDr_n
-X-Proofpoint-ORIG-GUID: wf6suDPnk8eBbBuDezl9HvnU2QWEDr_n
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-08_06,2023-06-08_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- mlxscore=0 clxscore=1015 spamscore=0 phishscore=0 mlxlogscore=692
- impostorscore=0 lowpriorityscore=0 priorityscore=1501 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306080085
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.150.217
+X-ZEDAT-Hint: PO
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Turn on USB related nodes
-Provide vdd info
+Hi Geert!
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
----
- Changes in v13:
-	- s/fixed_/regulator_fixed_/
+On Thu, 2023-06-08 at 11:58 +0200, Geert Uytterhoeven wrote:
+> > 
+> > Aren't we dropping SH_DMAC_BASE1 in the other patch anyway?
+> 
+> Only for the SH4 parts that do not have it.
+> It is still set in arch/sh/include/cpu-sh4a/cpu/dma.h for the SH4a parts with
+> 12 channels and 2 DMACs.
 
- Changes in v11:
-	- Rename dwc_0 -> usb_0_dwc3
-	- Maintain sorted order for the usb nodes
+OK, thanks for the clarification. I will review the other patches tonight.
 
- Changes in v10:
-	- Provide vdd info
+> > > That is actually safer, as the user can override NR_ONCHIP_DMA_CHANNELS
+> > > when configuring his kernel, thus breaking DMA  due to an incorrect
+> > > value of SH_DMAC_NR_MD_CH.
+> > > 
+> > > Unfortunately we cannot protect against that when using a single DMAC,
+> > > as SH_DMAC_NR_MD_CH can be either 4, 6, or 8.
+> > > 
+> > > Perhaps this configuration should be moved from Kconfig to <cpu/dma.h>,
+> > > to protect against a user overriding this value?
+> > 
+> > Isn't SH_DMAC_NR_MD_CH already hardwired to the SoC being used?
+> 
+> It depends on CONFIG_NR_ONCHIP_DMA_CHANNELS, while it
+> should be fixed based on the SoC.
 
- Changes in v5:
-	- Move "host" mode specification to board dts
-	- Due to dependency with earlier patches board dts
-	  filename changed ipq9574-al02-c7.dts -> ipq9574-rdp433.dts
+I agree. However, I would be fine with merging this patch set first and fixing
+this particular issue in a follow-up series.
 
- Changes in v2:
-	- Fix node placement and coding style
-	- "ok" -> "okay"
----
- arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+Adrian
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-index 50ba1d2..877026c 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-+++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-@@ -123,6 +123,29 @@
- 	};
- };
- 
-+&usb_0_dwc3 {
-+	dr_mode = "host";
-+};
-+
-+&usb_0_qmpphy {
-+	vdda-pll-supply = <&mp5496_l2>;
-+	vdda-phy-supply = <&regulator_fixed_0p925>;
-+
-+	status = "okay";
-+};
-+
-+&usb_0_qusbphy {
-+	vdd-supply = <&regulator_fixed_0p925>;
-+	vdda-pll-supply = <&mp5496_l2>;
-+	vdda-phy-dpdm-supply = <&regulator_fixed_3p3>;
-+
-+	status = "okay";
-+};
-+
-+&usb3 {
-+	status = "okay";
-+};
-+
- &xo_board_clk {
- 	clock-frequency = <24000000>;
- };
 -- 
-2.7.4
-
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
