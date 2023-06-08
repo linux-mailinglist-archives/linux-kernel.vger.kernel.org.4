@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A15057282AE
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 16:25:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6A9A7282B0
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 16:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237199AbjFHOZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 10:25:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55964 "EHLO
+        id S237353AbjFHOZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 10:25:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236568AbjFHOZS (ORCPT
+        with ESMTP id S237112AbjFHOZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 10:25:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D51D1FCC;
-        Thu,  8 Jun 2023 07:24:56 -0700 (PDT)
+        Thu, 8 Jun 2023 10:25:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056112D59;
+        Thu,  8 Jun 2023 07:25:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B3A564E21;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E30B64E2A;
+        Thu,  8 Jun 2023 14:24:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32260C433D2;
         Thu,  8 Jun 2023 14:24:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81F59C4339C;
-        Thu,  8 Jun 2023 14:24:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686234293;
-        bh=iWuNSLxO6q6HZETxHyJL7TfXVCdA5aUkY9bgnycApiw=;
+        s=k20201202; t=1686234295;
+        bh=W7P3iG4O3YjGApyRwNtiWKX5Kq+VmGX8uTvW8Ums99c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Tq32c9BM1jBz7n3OZOSVEKvK8CIw2f30Sc5jMXaFZuSj9ggqikMCPqn7VTj54d8A6
-         L7W6koyjYkTKWhvPAWAoB/DocpdbNRQmVt7Fb6QgmxXrdv5SFvwiXuL8uKm4M62mOT
-         ftmyEiKKgMoxx1KrVuv7D09woIaGiWylwqoFWcfa8po12eMQYGGODmx4Jjd6AOO2NB
-         jSFXVIwXS9dQM2AZy4hv9NMyrdZJnf8ZNCUki98sFcLHqDAtcH/nZ5J+a1tDBs1jx9
-         tN8MNU+VTiPXxDdZ/fUbebfIXPo80i69iWmxuCBkpsXXS1BIcMPA9IbSAXXAVIrTsq
-         kp5GlTS6jU7DQ==
+        b=ntFv6gYKlgbdRwOlDg1ZciYIhnPhN2Yth0zSMBh1rlXZK4/QWKEvGYg1VqYJU7Q7Y
+         7kPowQgOC8uSdSuIVTPw8oBH0M1YSfJjTwNZPmE3GP7hQP++wMeo+yIOFshXSfOxWM
+         kmEdw4koner4TpL3XNp9u65JUDy2+93IeydEtbqQ6qHjVK+wsFMWA8O6UX3h4NtYdx
+         NHVPrlm87C9dMQoa0JsB8wSfS0xHgoDuGdYQKSt4dq7x2V5PMg5WMimbx42hWDuqHX
+         ibVrSlp+cCQLo4yDl8Ecy3T+AR9+MhywHQsT3hKNrWQiJ0Gz/6hniiRPANFG6WcLxk
+         Fh0DE3EZ2xB+Q==
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -40,16 +40,16 @@ Cc:     linux-kernel@vger.kernel.org,
         Nicolas Schier <nicolas@fjasle.eu>,
         linux-um@lists.infradead.org,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v7 10/11] modpost: show offset from symbol for section mismatch warnings
-Date:   Thu,  8 Jun 2023 23:24:27 +0900
-Message-Id: <20230608142428.256985-11-masahiroy@kernel.org>
+Subject: [PATCH v7 11/11] linux/export.h: rename 'sec' argument to 'license'
+Date:   Thu,  8 Jun 2023 23:24:28 +0900
+Message-Id: <20230608142428.256985-12-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230608142428.256985-1-masahiroy@kernel.org>
 References: <20230608142428.256985-1-masahiroy@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,33 +58,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, modpost only shows the symbol names and section names, so it
-repeats the same message if there are multiple relocations in the same
-symbol. It is common the relocation spans across multiple instructions.
+Now, EXPORT_SYMBOL() is populated in two stages. In the first stage,
+all of EXPORT_SYMBOL/EXPORT_SYMBOL_GPL go into the same section,
+.export_symbol.
 
-It is better to show the offset from the symbol.
+'sec' does not make sense any more. Rename it to 'license'.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- scripts/mod/modpost.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Changes in v7:
+ - New patch
 
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 85df3f3ba9ee..40967ed816df 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -1147,8 +1147,8 @@ static void default_mismatch_handler(const char *modname, struct elf_info *elf,
+ include/linux/export.h | 8 ++++----
+ include/linux/pm.h     | 6 +++---
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/include/linux/export.h b/include/linux/export.h
+index fed2e5717461..b411fdb88720 100644
+--- a/include/linux/export.h
++++ b/include/linux/export.h
+@@ -46,11 +46,11 @@ extern struct module __this_module;
+  * be reused in other execution contexts such as the UEFI stub or the
+  * decompressor.
+  */
+-#define __EXPORT_SYMBOL(sym, sec, ns)
++#define __EXPORT_SYMBOL(sym, license, ns)
  
- 	sec_mismatch_count++;
+ #elif defined(__GENKSYMS__)
  
--	warn("%s: section mismatch in reference: %s (section: %s) -> %s (section: %s)\n",
--	     modname, fromsym, fromsec, tosym, tosec);
-+	warn("%s: section mismatch in reference: %s+0x%x (section: %s) -> %s (section: %s)\n",
-+	     modname, fromsym, (unsigned int)(faddr - from->st_value), fromsec, tosym, tosec);
+-#define __EXPORT_SYMBOL(sym, sec, ns)	__GENKSYMS_EXPORT_SYMBOL(sym)
++#define __EXPORT_SYMBOL(sym, license, ns)	__GENKSYMS_EXPORT_SYMBOL(sym)
  
- 	if (mismatch->mismatch == EXTABLE_TO_NON_TEXT) {
- 		if (match(tosec, mismatch->bad_tosec))
+ #elif defined(__ASSEMBLY__)
+ 
+@@ -67,9 +67,9 @@ extern struct module __this_module;
+ #endif /* CONFIG_MODULES */
+ 
+ #ifdef DEFAULT_SYMBOL_NAMESPACE
+-#define _EXPORT_SYMBOL(sym, sec)	__EXPORT_SYMBOL(sym, sec, __stringify(DEFAULT_SYMBOL_NAMESPACE))
++#define _EXPORT_SYMBOL(sym, license)	__EXPORT_SYMBOL(sym, license, __stringify(DEFAULT_SYMBOL_NAMESPACE))
+ #else
+-#define _EXPORT_SYMBOL(sym, sec)	__EXPORT_SYMBOL(sym, sec, "")
++#define _EXPORT_SYMBOL(sym, license)	__EXPORT_SYMBOL(sym, license, "")
+ #endif
+ 
+ #define EXPORT_SYMBOL(sym)		_EXPORT_SYMBOL(sym,)
+diff --git a/include/linux/pm.h b/include/linux/pm.h
+index aabb6bd8f89e..1810d776e84a 100644
+--- a/include/linux/pm.h
++++ b/include/linux/pm.h
+@@ -375,14 +375,14 @@ const struct dev_pm_ops name = { \
+ }
+ 
+ #ifdef CONFIG_PM
+-#define _EXPORT_DEV_PM_OPS(name, sec, ns)				\
++#define _EXPORT_DEV_PM_OPS(name, license, ns)				\
+ 	const struct dev_pm_ops name;					\
+-	__EXPORT_SYMBOL(name, sec, ns);					\
++	__EXPORT_SYMBOL(name, license, ns);				\
+ 	const struct dev_pm_ops name
+ #define EXPORT_PM_FN_GPL(name)		EXPORT_SYMBOL_GPL(name)
+ #define EXPORT_PM_FN_NS_GPL(name, ns)	EXPORT_SYMBOL_NS_GPL(name, ns)
+ #else
+-#define _EXPORT_DEV_PM_OPS(name, sec, ns)				\
++#define _EXPORT_DEV_PM_OPS(name, license, ns)				\
+ 	static __maybe_unused const struct dev_pm_ops __static_##name
+ #define EXPORT_PM_FN_GPL(name)
+ #define EXPORT_PM_FN_NS_GPL(name, ns)
 -- 
 2.39.2
 
