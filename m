@@ -2,121 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7730728ADA
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 00:05:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 185F9728AE1
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 00:06:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236338AbjFHWFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 18:05:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
+        id S235698AbjFHWGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 18:06:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235685AbjFHWFC (ORCPT
+        with ESMTP id S236839AbjFHWGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 18:05:02 -0400
-Received: from qproxy2-pub.mail.unifiedlayer.com (qproxy2-pub.mail.unifiedlayer.com [69.89.16.161])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BF71BE4
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 15:05:00 -0700 (PDT)
-Received: from gproxy3-pub.mail.unifiedlayer.com (gproxy3-pub.mail.unifiedlayer.com [69.89.30.42])
-        by qproxy2.mail.unifiedlayer.com (Postfix) with ESMTP id 58AE880495DA
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 22:05:00 +0000 (UTC)
-Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
-        by progateway5.mail.pro1.eigbox.com (Postfix) with ESMTP id 9C3791004B50B
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 22:04:59 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id 7NkZqBmakNX2a7NkZqhbw6; Thu, 08 Jun 2023 22:04:59 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=NMAQR22g c=1 sm=1 tr=0 ts=6482508b
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=of4jigFt-DYA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=nxr/Mmb6QjPf/EvaKOH1toSDoOYo96qJ9GgZy3xecCU=; b=GlFXxdezQbnkhPwfl7l/FKF5Jq
-        SapX1hyZWmgvqiryzC3BLNBWrVPJOgx2KsPO7bNjsQSMEuAdsh5oC2tvSR6O2ckmRrv2Md40yE/ij
-        VVXqTjMWtGfwOh1+ljafY1hA/PuIr5QydbA07YrkDEJ/UHlUpL5ODOB2tvuYoZLhwCi792y5p6ozG
-        vj12VfRS+3GNit30ENZikEm/xBgzpx43og2dfGWOhdgM13PTTZMPLVbEFaBe2M/IajKlACg79prbH
-        br040qrE0v8b+ZpMmZw1ixuTzyaaaY3CK/SOqpLDvV5Tk7MxxS3lkE7WRDwdXcYkFOkutYlJ/a2NR
-        XjlQ/LGQ==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:43294 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1q7NkY-000uBe-J7;
-        Thu, 08 Jun 2023 16:04:58 -0600
-Subject: Re: [PATCH 5.15 000/159] 5.15.116-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230607200903.652580797@linuxfoundation.org>
-In-Reply-To: <20230607200903.652580797@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <7c85103f-cd52-5489-4bca-242d36747860@w6rz.net>
-Date:   Thu, 8 Jun 2023 15:04:56 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1q7NkY-000uBe-J7
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:43294
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 8 Jun 2023 18:06:15 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE5D30D0
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 15:06:12 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1b0314f0aadso911115ad.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 15:06:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686261972; x=1688853972;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=f9CaDc6GGBWuK7eCpoNYT6YueR8Zbl2jpIpeaKQVQvQ=;
+        b=g6TUacceAYPEbfsv6EW0WtXBfm6IOz5S5d+OFFFjRuXIN+Gt6qw1Hxz/wxQRodLv6Q
+         fZvF+Q31Rn/FCi8bHs7ONm0lzgg2+m7cQKkQ6aAmUBSZVRKELWdRRtCJE1LkgFGEy3zQ
+         SxZE6ZO51wmiUifCL70ATkprYaVBcUZO8HlrsZfUqqxFI2uuJg2p5Hgbntzk6iKii5ZF
+         qYY0amN96y9UZxoF6WKyTwgEpRR55ljoc844L4vL0UGsBIG0swmXQmOgRXIkO3EUuJIv
+         vyKSVUkn1eQVVuBk8NZ6GWTUIYEHnAR4AAFKiV+taoOoCgyj5MdYG6SmNJrXxexjNXoH
+         ZfQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686261972; x=1688853972;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=f9CaDc6GGBWuK7eCpoNYT6YueR8Zbl2jpIpeaKQVQvQ=;
+        b=IwMKg5rYBxqYm5H81z1rIR8J0NKqFkAu2mL4Hmx8Uz3R3siBOi53gszCK7KQLEqbMs
+         kegPz7Yt7b8CtAnZ2TlvuvRr8zEVMPhzb1hWIKlk5FzxRPrPkM3zT13leb3ByfYffGr0
+         +kucu0YzO9QxjS/zhHK2nJRoyzEz8AMTogB01wKCn2hCCiUZTgA80LREpdFTi/dnftK+
+         1t1jMegJqW5Uv3qOI993bOfmsJyvQmUYKpZJAMKSQEq61Dzk5N2cQ5oTb/GwGivcGgrD
+         US66fcyPrC/mEwkzERlKISpeODcV7qhA1LPz/7X3CTFoCI06RI+bwyzeLYsfoP/YMVMf
+         /aaw==
+X-Gm-Message-State: AC+VfDzo71VGssBapnM68Khen5lvKn7a8UENnDYqu/rhvoDWfsa01brJ
+        jXPdRJmUqcbeLQtBB6v9Mc2wFULMgL+JIundLOnb065F/I5ln2w5O3Vh3rCJRbFWO20vSpuhApT
+        Hd8MGoP6fhtRMU9rIQLfVvGdJJR1zEkfR3g17CqvNcAc4H+NvMrWYkuwFCG07dshtytKvSw==
+X-Google-Smtp-Source: ACHHUZ6MQlIY790bFakXPIY1+zDRu/UOVYFkss4KwDwJ93EXpywhfKozP0OWWxinQPg4v+c45aCEckKGtc8=
+X-Received: from colette.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:5cff])
+ (user=ctshao job=sendgmr) by 2002:a17:902:8c81:b0:1b0:46af:7edf with SMTP id
+ t1-20020a1709028c8100b001b046af7edfmr626301plo.2.1686261971803; Thu, 08 Jun
+ 2023 15:06:11 -0700 (PDT)
+Date:   Thu,  8 Jun 2023 15:05:38 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Message-ID: <20230608220558.39094-1-ctshao@google.com>
+Subject: [PATCH v1 1/3] KVM: arm64: Consistently use free_removed_table() for stage-2
+From:   Chun-Tse Shao <ctshao@google.com>
+To:     linux-kernel@vger.kernel.org, yuzhao@google.com,
+        oliver.upton@linux.dev
+Cc:     Chun-Tse Shao <ctshao@google.com>, Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Ben Gardon <bgardon@google.com>,
+        Gavin Shan <gshan@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/7/23 1:15 PM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.116 release.
-> There are 159 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 09 Jun 2023 20:07:31 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.116-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+From: Oliver Upton <oliver.upton@linux.dev>
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+free_removed_table() is essential to the RCU-protected parallel walking
+scheme, as behind the scenes the cleanup is deferred until an RCU grace
+period. Nonetheless, the stage-2 unmap path calls put_page() directly,
+which leads to table memory being freed inline with the table walk.
 
-Tested-by: Ron Economos <re@w6rz.net>
+This is safe for the time being, as the stage-2 unmap walker is called
+while holding the write lock. A future change to KVM will further relax
+the locking mechanics around the stage-2 page tables to allow lock-free
+walkers protected only by RCU. As such, switch to the RCU-safe mechanism
+for freeing table memory.
+
+Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
+Signed-off-by: Chun-Tse Shao <ctshao@google.com>
+---
+ arch/arm64/kvm/hyp/pgtable.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+index 5282cb9ca4cf..cc1af0286755 100644
+--- a/arch/arm64/kvm/hyp/pgtable.c
++++ b/arch/arm64/kvm/hyp/pgtable.c
+@@ -1042,7 +1042,7 @@ static int stage2_unmap_walker(const struct kvm_pgtable_visit_ctx *ctx,
+ 					       kvm_granule_size(ctx->level));
+ 
+ 	if (childp)
+-		mm_ops->put_page(childp);
++		mm_ops->free_removed_table(childp, ctx->level);
+ 
+ 	return 0;
+ }
+-- 
+2.41.0.162.gfafddb0af9-goog
 
