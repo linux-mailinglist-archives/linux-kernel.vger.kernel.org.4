@@ -2,156 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2A6A7279F7
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 10:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 872177279F8
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 10:30:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234966AbjFHIak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 04:30:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35572 "EHLO
+        id S235097AbjFHIaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 04:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234241AbjFHIah (ORCPT
+        with ESMTP id S234241AbjFHIax (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 04:30:37 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B35269E
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 01:30:36 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f4db9987f8so435753e87.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 01:30:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686213034; x=1688805034;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9XY47hELzwip0lIu4ibeSPP8B13egx66c2j6pExWBEA=;
-        b=Cau52P98VQ2uueYSexxRDcaZORLJubNm6rSDoh+vDnNXM+uLh6tWYAUTZ7R8lTqZRk
-         acEwVCISqxlIZNNz12Uy6sNGoZ0mkNiVMDYRdkb1q9pOE88DU1zKxitKNCtTJl9efiQg
-         PlObBpFvIXmbfPkVjofKOI5sUcpRMAPXLEGEEuyRmJqma84lY/v0lRgMOXlPrQQOOGVP
-         EJromc9xEeyfUFTNmknsM84/jeLF2owbR5FLSxNS/CJrg1BP3V0/tyRFHIrPgtpK7sWD
-         dS0sM+ESqfARLc68omGcHN5XldsUQhFU/7/BYu1Ys6JxiOIdXpvGNh/9M4NxqNqOfJ+R
-         gxCA==
+        Thu, 8 Jun 2023 04:30:53 -0400
+Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0DA72700
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 01:30:50 -0700 (PDT)
+Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-77ac4ec0bb7so30555839f.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 01:30:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686213034; x=1688805034;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9XY47hELzwip0lIu4ibeSPP8B13egx66c2j6pExWBEA=;
-        b=N6VbdRlx4+dv7o5JeHx8avgOp49TMBKhx1taIxR2tRuJguGQrn8YKOTQWt6E3UB1+k
-         Tw82rdtdTCTyxLGzpf2bVytwfYb4WG3izsOwDYIaj1zuQ3qwpEkMwcb7nlogjxqwpkna
-         nXdRDirzZVU6POzKZyJywQEETCouLB8VE9O2WSvIff84SKCD1sPdM6hWvzwB+lzmzkGz
-         WBLHloBko79WTX4DqYXwG6QxaKposUR0b0MfUCxp7QgmNsd/0I8XR507q3v49+Kmn///
-         2FTSq6e+SnpInhgjpp0gzuug9EwaTNWwfESJ1/pLlzMvqOwpqRxfBECWixKCInRaRehm
-         Qm3Q==
-X-Gm-Message-State: AC+VfDyePEzzRGj+W42r9Bf3GFgrsQ6ivqmTsw0dxl41nsYxj/gPMrbz
-        GaE/IYbs1tUeJrKC03epsJE=
-X-Google-Smtp-Source: ACHHUZ7nNqvlGBT2n2ZGLpCjYm0ss1hx/qmwjv5eBkF1mTi9N2vny9l32a015Cbfpa7/IpZqYqFKUA==
-X-Received: by 2002:a05:6512:2309:b0:4f6:4466:7ebb with SMTP id o9-20020a056512230900b004f644667ebbmr455326lfu.20.1686213034102;
-        Thu, 08 Jun 2023 01:30:34 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f8:1500::1? (dc78bmyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f8:1500::1])
-        by smtp.gmail.com with ESMTPSA id v26-20020a2e925a000000b002a7899eaf9csm147177ljg.63.2023.06.08.01.30.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 01:30:33 -0700 (PDT)
-Message-ID: <775471c6-7a68-938d-3641-6eb2a0f055f2@gmail.com>
-Date:   Thu, 8 Jun 2023 11:30:32 +0300
+        d=1e100.net; s=20221208; t=1686213050; x=1688805050;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WK8lPp+uAqV1z2WiaSVD2hwMpnbs+EalTlic1O+h3+Q=;
+        b=jPQWIaYpY7vaANSCQ+ILdVdKiW9kV9wkVSA6IKGw1HPxiX88/MSJ5WSW4pPKO9/jjk
+         vrtlcn7WIcczQfImEXgZRFxUFyc0FjxhO3J8EEVSm1TLAXSrOAnaKFufXkyMzF82yLT2
+         O+H0bVCgYHKjAm9zOvpUuS7yNiqvbdPtt1XBDoHyGqDs57YTUeSDBembk6/pnrugUmhD
+         Ih44iOC99cmc3eKm1ODg1Vw5Pxmh0IzgBfYpnYRtGxALA5rzQLOrq5dExt9PYGJwSGan
+         2u3l11YL9qqEfDT1/l+ea/DyxXYo8yMe2Ny7Dle5uiLgy2/+GxKSxaHmvjaNUFr0mtKj
+         L6lg==
+X-Gm-Message-State: AC+VfDwjexZiHCGy0CG5qebatXWZ330Ni1zMhZzis7oMDin/hPv5NF+k
+        PSksmU48gGaJjlZUgQzyM1d0/yXJwz5lUumeTKkXT46w4lLy
+X-Google-Smtp-Source: ACHHUZ6Sz9NfD6EAf34/7DHTdpL4YBaBpVt47ZDmgc/QRbsIWp05OgEgUkLOTit9Ku5H6ubCvxcKpfurwALvBs+pGYK3wiZHUwT9
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US, en-GB
-To:     Chen-Yu Tsai <wenst@chromium.org>, Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
-Cc:     linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230608075651.3214540-1-wenst@chromium.org>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCH] regulator: Use bitfield values for range selectors
-In-Reply-To: <20230608075651.3214540-1-wenst@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:7348:0:b0:41f:58a4:1cc0 with SMTP id
+ a8-20020a027348000000b0041f58a41cc0mr254990jae.2.1686213050305; Thu, 08 Jun
+ 2023 01:30:50 -0700 (PDT)
+Date:   Thu, 08 Jun 2023 01:30:50 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e116ff05fd9a1126@google.com>
+Subject: [syzbot] [net?] possible deadlock in sk_diag_fill (5)
+From:   syzbot <syzbot+94679b52dd4cd45b8d2b@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/8/23 10:56, Chen-Yu Tsai wrote:
-> Right now the regulator helpers expect raw register values for the range
-> selectors. This is different from the voltage selectors, which are
-> normalized as bitfield values. This leads to a bit of confusion. Also,
-> raw values are harder to copy from datasheets or match up with them,
-> as datasheets will typically have bitfield values.
-> 
-> Make the helpers expect bitfield values, and convert existing users.
-> Include bitops.h explicitly for ffs(), and reorder the header include
-> statements. While at it, also replace module.h with export.h, since the
-> only use is EXPORT_SYMBOL_GPL.
-> 
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-> ---
->   drivers/regulator/atc260x-regulator.c  | 2 +-
->   drivers/regulator/bd718x7-regulator.c  | 8 ++++----
->   drivers/regulator/helpers.c            | 9 ++++++---
->   drivers/regulator/tps6287x-regulator.c | 2 +-
->   4 files changed, 12 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/regulator/atc260x-regulator.c b/drivers/regulator/atc260x-regulator.c
-> index 87e237d740bc..0bba33955a1a 100644
-> --- a/drivers/regulator/atc260x-regulator.c
-> +++ b/drivers/regulator/atc260x-regulator.c
-> @@ -37,7 +37,7 @@ static const struct linear_range atc2609a_ldo_voltage_ranges1[] = {
->   };
->   
->   static const unsigned int atc260x_ldo_voltage_range_sel[] = {
-> -	0x0, 0x20,
-> +	0x0, 0x1,
->   };
->   
->   static int atc260x_dcdc_set_voltage_time_sel(struct regulator_dev *rdev,
-> diff --git a/drivers/regulator/bd718x7-regulator.c b/drivers/regulator/bd718x7-regulator.c
-> index b0b9938c20a1..da1eea1207e5 100644
-> --- a/drivers/regulator/bd718x7-regulator.c
-> +++ b/drivers/regulator/bd718x7-regulator.c
-> @@ -289,7 +289,7 @@ static const struct linear_range bd71837_buck5_volts[] = {
->    * and 0x1 for last 3 ranges.
->    */
->   static const unsigned int bd71837_buck5_volt_range_sel[] = {
-> -	0x0, 0x0, 0x0, 0x80, 0x80, 0x80
-> +	0x0, 0x0, 0x0, 0x1, 0x1, 0x1
->   };
->   
->   /*
-> @@ -309,7 +309,7 @@ static const struct linear_range bd71847_buck3_volts[] = {
->   };
->   
->   static const unsigned int bd71847_buck3_volt_range_sel[] = {
-> -	0x0, 0x0, 0x0, 0x40, 0x80, 0x80, 0x80
-> +	0x0, 0x0, 0x0, 0x1, 0x2, 0x2, 0x2
->   };
->   
->   static const struct linear_range bd71847_buck4_volts[] = {
-> @@ -360,7 +360,7 @@ static const struct linear_range bd718xx_ldo1_volts[] = {
->   	REGULATOR_LINEAR_RANGE(1600000, 0x00, 0x03, 100000),
->   };
+Hello,
 
-Shouldn't the
-static const unsigned int bd71847_buck4_volt_range_sel[] = { 0x0, 0x40 };
+syzbot found the following issue on:
 
-be also converted to { 0x0, 0x1 }? The range mask seems to be:
-#define BD71847_BUCK4_RANGE_MASK        0x40
+HEAD commit:    e8d018dd0257 Linux 6.3-rc3
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16738e1cc80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d40f6d44826f6cf7
+dashboard link: https://syzkaller.appspot.com/bug?extid=94679b52dd4cd45b8d2b
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Other than that - the helpers + bd718x7 look good to me.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Yours,
-	-- Matti
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/37e6a8fafda3/disk-e8d018dd.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/6aadbe17d762/vmlinux-e8d018dd.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/0216f5047041/bzImage-e8d018dd.xz
 
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+94679b52dd4cd45b8d2b@syzkaller.appspotmail.com
 
-~~ When things go utterly wrong vim users can always type :help! ~~
+======================================================
+WARNING: possible circular locking dependency detected
+6.3.0-rc3-syzkaller #0 Not tainted
+------------------------------------------------------
+syz-executor.2/23477 is trying to acquire lock:
+ffff88801d542e80 (&u->lock/1){+.+.}-{2:2}, at: sk_diag_dump_icons net/unix/diag.c:87 [inline]
+ffff88801d542e80 (&u->lock/1){+.+.}-{2:2}, at: sk_diag_fill+0x6ea/0xfe0 net/unix/diag.c:157
 
+but task is already holding lock:
+ffff88801d5401e8 (rlock-AF_UNIX){+.+.}-{2:2}, at: spin_lock include/linux/spinlock.h:350 [inline]
+ffff88801d5401e8 (rlock-AF_UNIX){+.+.}-{2:2}, at: sk_diag_dump_icons net/unix/diag.c:69 [inline]
+ffff88801d5401e8 (rlock-AF_UNIX){+.+.}-{2:2}, at: sk_diag_fill+0x643/0xfe0 net/unix/diag.c:157
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #1 (rlock-AF_UNIX){+.+.}-{2:2}:
+       lock_acquire+0x1e1/0x520 kernel/locking/lockdep.c:5669
+       __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+       _raw_spin_lock_irqsave+0xd5/0x120 kernel/locking/spinlock.c:162
+       skb_queue_tail+0x36/0x120 net/core/skbuff.c:3683
+       unix_dgram_sendmsg+0x1502/0x2050 net/unix/af_unix.c:2082
+       sock_sendmsg_nosec net/socket.c:724 [inline]
+       sock_sendmsg net/socket.c:747 [inline]
+       ____sys_sendmsg+0x58f/0x890 net/socket.c:2501
+       ___sys_sendmsg net/socket.c:2555 [inline]
+       __sys_sendmmsg+0x3af/0x730 net/socket.c:2641
+       __do_sys_sendmmsg net/socket.c:2670 [inline]
+       __se_sys_sendmmsg net/socket.c:2667 [inline]
+       __x64_sys_sendmmsg+0xa0/0xb0 net/socket.c:2667
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (&u->lock/1){+.+.}-{2:2}:
+       check_prev_add kernel/locking/lockdep.c:3098 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3217 [inline]
+       validate_chain+0x166b/0x58e0 kernel/locking/lockdep.c:3832
+       __lock_acquire+0x125b/0x1f80 kernel/locking/lockdep.c:5056
+       lock_acquire+0x1e1/0x520 kernel/locking/lockdep.c:5669
+       _raw_spin_lock_nested+0x31/0x40 kernel/locking/spinlock.c:378
+       sk_diag_dump_icons net/unix/diag.c:87 [inline]
+       sk_diag_fill+0x6ea/0xfe0 net/unix/diag.c:157
+       sk_diag_dump net/unix/diag.c:196 [inline]
+       unix_diag_dump+0x3eb/0x640 net/unix/diag.c:220
+       netlink_dump+0x65e/0xcd0 net/netlink/af_netlink.c:2296
+       __netlink_dump_start+0x536/0x700 net/netlink/af_netlink.c:2401
+       netlink_dump_start include/linux/netlink.h:308 [inline]
+       unix_diag_handler_dump+0x1c0/0x8e0 net/unix/diag.c:319
+       sock_diag_rcv_msg+0xe3/0x400
+       netlink_rcv_skb+0x1df/0x430 net/netlink/af_netlink.c:2574
+       sock_diag_rcv+0x2a/0x40 net/core/sock_diag.c:280
+       netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
+       netlink_unicast+0x7c3/0x990 net/netlink/af_netlink.c:1365
+       netlink_sendmsg+0xa2a/0xd60 net/netlink/af_netlink.c:1942
+       sock_sendmsg_nosec net/socket.c:724 [inline]
+       sock_sendmsg net/socket.c:747 [inline]
+       sock_write_iter+0x397/0x520 net/socket.c:1138
+       do_iter_write+0x6ea/0xc50 fs/read_write.c:861
+       vfs_writev fs/read_write.c:934 [inline]
+       do_writev+0x27f/0x470 fs/read_write.c:977
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(rlock-AF_UNIX);
+                               lock(&u->lock/1);
+                               lock(rlock-AF_UNIX);
+  lock(&u->lock/1);
+
+ *** DEADLOCK ***
+
+5 locks held by syz-executor.2/23477:
+ #0: ffffffff8e095308 (sock_diag_mutex){+.+.}-{3:3}, at: sock_diag_rcv+0x1b/0x40 net/core/sock_diag.c:279
+ #1: ffffffff8e095168 (sock_diag_table_mutex){+.+.}-{3:3}, at: __sock_diag_cmd net/core/sock_diag.c:233 [inline]
+ #1: ffffffff8e095168 (sock_diag_table_mutex){+.+.}-{3:3}, at: sock_diag_rcv_msg+0x214/0x400 net/core/sock_diag.c:269
+ #2: ffff88807c415688 (nlk_cb_mutex-SOCK_DIAG){+.+.}-{3:3}, at: netlink_dump+0xe7/0xcd0 net/netlink/af_netlink.c:2244
+ #3: ffff888020e5a798 (&net->unx.table.locks[i]){+.+.}-{2:2}, at: spin_lock include/linux/spinlock.h:350 [inline]
+ #3: ffff888020e5a798 (&net->unx.table.locks[i]){+.+.}-{2:2}, at: unix_diag_dump+0x192/0x640 net/unix/diag.c:214
+ #4: ffff88801d5401e8 (rlock-AF_UNIX){+.+.}-{2:2}, at: spin_lock include/linux/spinlock.h:350 [inline]
+ #4: ffff88801d5401e8 (rlock-AF_UNIX){+.+.}-{2:2}, at: sk_diag_dump_icons net/unix/diag.c:69 [inline]
+ #4: ffff88801d5401e8 (rlock-AF_UNIX){+.+.}-{2:2}, at: sk_diag_fill+0x643/0xfe0 net/unix/diag.c:157
+
+stack backtrace:
+CPU: 1 PID: 23477 Comm: syz-executor.2 Not tainted 6.3.0-rc3-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ check_noncircular+0x2fe/0x3b0 kernel/locking/lockdep.c:2178
+ check_prev_add kernel/locking/lockdep.c:3098 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3217 [inline]
+ validate_chain+0x166b/0x58e0 kernel/locking/lockdep.c:3832
+ __lock_acquire+0x125b/0x1f80 kernel/locking/lockdep.c:5056
+ lock_acquire+0x1e1/0x520 kernel/locking/lockdep.c:5669
+ _raw_spin_lock_nested+0x31/0x40 kernel/locking/spinlock.c:378
+ sk_diag_dump_icons net/unix/diag.c:87 [inline]
+ sk_diag_fill+0x6ea/0xfe0 net/unix/diag.c:157
+ sk_diag_dump net/unix/diag.c:196 [inline]
+ unix_diag_dump+0x3eb/0x640 net/unix/diag.c:220
+ netlink_dump+0x65e/0xcd0 net/netlink/af_netlink.c:2296
+ __netlink_dump_start+0x536/0x700 net/netlink/af_netlink.c:2401
+ netlink_dump_start include/linux/netlink.h:308 [inline]
+ unix_diag_handler_dump+0x1c0/0x8e0 net/unix/diag.c:319
+ sock_diag_rcv_msg+0xe3/0x400
+ netlink_rcv_skb+0x1df/0x430 net/netlink/af_netlink.c:2574
+ sock_diag_rcv+0x2a/0x40 net/core/sock_diag.c:280
+ netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
+ netlink_unicast+0x7c3/0x990 net/netlink/af_netlink.c:1365
+ netlink_sendmsg+0xa2a/0xd60 net/netlink/af_netlink.c:1942
+ sock_sendmsg_nosec net/socket.c:724 [inline]
+ sock_sendmsg net/socket.c:747 [inline]
+ sock_write_iter+0x397/0x520 net/socket.c:1138
+ do_iter_write+0x6ea/0xc50 fs/read_write.c:861
+ vfs_writev fs/read_write.c:934 [inline]
+ do_writev+0x27f/0x470 fs/read_write.c:977
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f22a728c0f9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f22a80c6168 EFLAGS: 00000246 ORIG_RAX: 0000000000000014
+RAX: ffffffffffffffda RBX: 00007f22a73abf80 RCX: 00007f22a728c0f9
+RDX: 0000000000000001 RSI: 00000000200000c0 RDI: 0000000000000004
+RBP: 00007f22a72e7b39 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffc7d0da7bf R14: 00007f22a80c6300 R15: 0000000000022000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
