@@ -2,140 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DEA1727ABB
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:04:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DF82727D67
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:00:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235751AbjFHJEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 05:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53238 "EHLO
+        id S235787AbjFHLAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 07:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbjFHJEM (ORCPT
+        with ESMTP id S232139AbjFHLAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 05:04:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE61E61;
-        Thu,  8 Jun 2023 02:04:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F2BE661737;
-        Thu,  8 Jun 2023 09:04:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFEAAC433EF;
-        Thu,  8 Jun 2023 09:04:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686215049;
-        bh=ar2xnge7uTjidn2C7qc0VkqgJuiPo+8zNzrlooQb2Ao=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qjFY2bjerz+iWuvvKI54tr50nfB/nObVbtOpfA23SBHApaklkXGdtCDx6ZabiFO9f
-         oQS/r34aSdzeIlcwS9rImx35CqwvWqUZ47DACQqVkN7XQFkv6eVVxbjlZQN2aWHbcA
-         605IXA+ryjdjFcb5YdGlN/1tHtHFBf2Ah3ba6JFk=
-Date:   Thu, 8 Jun 2023 11:04:06 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        keescook@chromium.org, pbonzini@redhat.com,
-        linux-kernel@vger.kernel.org, ojeda@kernel.org,
-        ndesaulniers@google.com, mingo@redhat.com, will@kernel.org,
-        longman@redhat.com, boqun.feng@gmail.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, paulmck@kernel.org,
-        frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        rcu@vger.kernel.org, tj@kernel.org, tglx@linutronix.de,
-        linux-toolchains@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] Lock and Pointer guards
-Message-ID: <2023060857-trading-albatross-f46f@gregkh>
-References: <CAHk-=wg2RHZKTN29Gr7MhgYfaNtzz58wry9jCNP75LAmQ9t8-A@mail.gmail.com>
- <20230530092342.GA149947@hirez.programming.kicks-ass.net>
- <20230606094251.GA907347@hirez.programming.kicks-ass.net>
- <CAHk-=wi-RyoUhbChiVaJZoZXheAwnJ7OO=Gxe85BkPAd93TwDA@mail.gmail.com>
- <20230606134005.GE905437@hirez.programming.kicks-ass.net>
- <CAHk-=wgQ5m+SnWTYGHu0JgYXTk2dkGF+msX=ARfYoo3t1_fX9g@mail.gmail.com>
- <20230606180806.GA942082@hirez.programming.kicks-ass.net>
- <CAHk-=wgXN1YxGMUFeuC135aeUvqduF8zJJiZZingzS1Pao5h0A@mail.gmail.com>
- <20230607094101.GA964354@hirez.programming.kicks-ass.net>
- <20230608085248.GA1002251@hirez.programming.kicks-ass.net>
+        Thu, 8 Jun 2023 07:00:11 -0400
+Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC0E11A
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 04:00:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+        s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=GMxYhkc1VAN6YvzxDxUID5gzfvinfcgW0ko7ik3lln8=; b=GEMHS/USCzB14ZEJ4dE1ihPswr
+        sqIhALd+xoeXPiSDsghHKisxV8XrLDTf8lFXrjPJUao0ayE2ulzMXTjh2pgjLQ/YiH5xknP6Wuh87
+        zJddKFt9BfGJdsuyBqLPsep+9gMN6s6PB95xbTGD4duoBM11C7PQW43MSQWn00wjbSN5I3g/gJtYJ
+        EF+YfnQ8OI31b6ZVrkJuFffAtikqByGIfXnC2ILGVPAstHrXOKkGSg+3tRlmYsws8ETdMU06+j+G6
+        e5ETd25tBHvyvZMpG6VPaN8s3d4kd5exdmLYyueS5SZ/ovkGIVQS9L1R1sOLSd9cjeoZh68URsQyP
+        uHdp4Ofw==;
+Received: from [89.212.21.243] (port=58494 helo=localhost.localdomain)
+        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.96)
+        (envelope-from <andrej.picej@norik.com>)
+        id 1q7BZf-00CHxg-0m;
+        Thu, 08 Jun 2023 11:04:54 +0200
+From:   Andrej Picej <andrej.picej@norik.com>
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        upstream@phytec.de
+Subject: [PATCH] rtc: rv3028: Improve trickle charger logic
+Date:   Thu,  8 Jun 2023 11:04:46 +0200
+Message-Id: <20230608090446.2899646-1-andrej.picej@norik.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230608085248.GA1002251@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
+X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 10:52:48AM +0200, Peter Zijlstra wrote:
-> On Wed, Jun 07, 2023 at 11:41:01AM +0200, Peter Zijlstra wrote:
-> 
-> 
-> > > I'm sure there's something horribly wrong in the above, but my point
-> > > is that I'd really like this to make naming and conceptual sense.
-> > 
-> > Right, I hear ya. So the asymmetric case (iow destructor only) could be
-> > seen as using the copy-constructor.
-> > 
-> > #define DEFINE_CLASS(name, type, exit, init, init_args...)		\
-> > typedef type class_##name##_t;						\
-> > static inline void class_##name##_destructor(type *this)		\
-> > { type THIS = *this; exit; }						\
-> > static inline type class_##name##_constructor(init_args)		\
-> > { type THIS = init; return THIS; }
-> > 
-> > #define __INSTANTIATE_VAR(name, var)					\
-> > 	class_##name##_t var __cleanup(class_##name##_destructor)
-> > 
-> > #define INSTANTIATE_CLASS(name, var)					\
-> > 	__INSTANTIATE_VAR(name, var) = class_##name##_constructor
-> > 
-> > 
-> > DEFINE_CLASS(fd, struct fd, fdput(THIS), f, struct fd f)
-> > 
-> > 	INSTANTIATE_CLASS(fd, f)(perf_fget_light(fd));
-> > 
-> > 
-> > Alternatively, you be OK with exposing INSTANTIATE_VAR() to easily
-> > circumvent the default constructor?
-> 
-> Or perhaps use the smart-pointer concept applied to our classes like:
-> 
-> #define smart_ptr(name, var) \
-> 	__INSTANTIATE_VAR(name, var)
-> 
-> To mean a pointer that calls the destructor for class 'name'. I think
-> the nearest thing C++ has is std::unique_ptr<>.
-> 
-> 
-> Then we can write:
-> 
-> 
-> DEFINE_CLASS(kfree, void *, kfree(THIS), p, void *p)
-> 
-> 
-> 	smart_ptr(kfree, mem) = kzalloc_node(...);
-> 	if (!mem)
-> 		return -ENOMEM;
-> 
-> 	object = mem;
-> 
-> 	// further initiatlize object with error cases etc..
-> 
-> 	mem = NULL; // success, we keep it.
-> 	return object;
+Property "trickle-resistor-ohms" allows us to set trickle charger
+resistor. However there is no possibility to disable it afterwards.
 
-I like the idea, as we need a way to say "don't clean this up, it was
-passed to somewhere else" for these types of allocations, but have it
-"automatically" cleaned up on the error paths.
+From now on, disable trickle charger circuit in case device-tree
+property "trickle-resistor-ohms" is not present. RV3029 RTC driver uses
+the same trickle charger disable logic.
 
-I have no say in the naming, though I always disliked the idea of a
-pointer being "smart" as they are just a dumb memory register :)
+Additionally, lets make sure we only update internal EEPROM in case of a
+change. This prevents wear due to excessive EEPROM writes on each probe.
 
-thanks,
+Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+---
+ drivers/rtc/rtc-rv3028.c | 28 ++++++++++++++++++++++------
+ 1 file changed, 22 insertions(+), 6 deletions(-)
 
-greg k-h
+diff --git a/drivers/rtc/rtc-rv3028.c b/drivers/rtc/rtc-rv3028.c
+index ec5d7a614e2d..190507bf97d0 100644
+--- a/drivers/rtc/rtc-rv3028.c
++++ b/drivers/rtc/rtc-rv3028.c
+@@ -860,6 +860,7 @@ static int rv3028_probe(struct i2c_client *client)
+ 	struct rv3028_data *rv3028;
+ 	int ret, status;
+ 	u32 ohms;
++	int val_old, val;
+ 	struct nvmem_config nvmem_cfg = {
+ 		.name = "rv3028_nvram",
+ 		.word_size = 1,
+@@ -937,9 +938,18 @@ static int rv3028_probe(struct i2c_client *client)
+ 	if (ret)
+ 		return ret;
+ 
++	ret = regmap_read(rv3028->regmap, RV3028_BACKUP, &val_old);
++	if (ret < 0)
++		return ret;
++
++	/* mask out only trickle charger bits */
++	val_old = val_old & (RV3028_BACKUP_TCE | RV3028_BACKUP_TCR_MASK);
++
+ 	/* setup trickle charger */
+-	if (!device_property_read_u32(&client->dev, "trickle-resistor-ohms",
+-				      &ohms)) {
++	if (device_property_read_u32(&client->dev, "trickle-resistor-ohms", &ohms)) {
++		/* disable the trickle charger */
++		val = 0;
++	} else {
+ 		int i;
+ 
+ 		for (i = 0; i < ARRAY_SIZE(rv3028_trickle_resistors); i++)
+@@ -947,15 +957,21 @@ static int rv3028_probe(struct i2c_client *client)
+ 				break;
+ 
+ 		if (i < ARRAY_SIZE(rv3028_trickle_resistors)) {
+-			ret = rv3028_update_cfg(rv3028, RV3028_BACKUP, RV3028_BACKUP_TCE |
+-						 RV3028_BACKUP_TCR_MASK, RV3028_BACKUP_TCE | i);
+-			if (ret)
+-				return ret;
++			/* enable the trickle charger and setup its resistor accordingly */
++			val = RV3028_BACKUP_TCE | i;
+ 		} else {
+ 			dev_warn(&client->dev, "invalid trickle resistor value\n");
+ 		}
+ 	}
+ 
++	/* only update EEPROM if changes are necessary */
++	if (val_old != val) {
++		ret = rv3028_update_cfg(rv3028, RV3028_BACKUP, RV3028_BACKUP_TCE |
++					RV3028_BACKUP_TCR_MASK, val);
++		if (ret)
++			return ret;
++	}
++
+ 	ret = rtc_add_group(rv3028->rtc, &rv3028_attr_group);
+ 	if (ret)
+ 		return ret;
+-- 
+2.25.1
+
