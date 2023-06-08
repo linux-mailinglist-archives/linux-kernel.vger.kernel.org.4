@@ -2,772 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 029D6727E91
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:16:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A8D37287C6
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 21:12:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234877AbjFHLQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 07:16:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41630 "EHLO
+        id S234333AbjFHTMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 15:12:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbjFHLQj (ORCPT
+        with ESMTP id S229660AbjFHTMm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 07:16:39 -0400
-Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 763D31BC6;
-        Thu,  8 Jun 2023 04:16:34 -0700 (PDT)
-Received: from [192.168.4.25] (unknown [62.77.71.229])
-        by mx.gpxsee.org (Postfix) with ESMTPSA id CD3CA85DF;
-        Thu,  8 Jun 2023 13:16:31 +0200 (CEST)
-Message-ID: <c544814a-7d99-add9-0397-d56776f911dd@gpxsee.org>
-Date:   Thu, 8 Jun 2023 13:16:31 +0200
+        Thu, 8 Jun 2023 15:12:42 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2052.outbound.protection.outlook.com [40.107.95.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5563E2D70;
+        Thu,  8 Jun 2023 12:12:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nyxOySKj4bVIjas+4nfH/KjFkphEDBP9V8OmHf56GjYmGyYy07FgWmJ2WCAR26Izu00j1FJ7FOJ1LrI047Evnp6gDltcF9MXNuP66ev15gdSADOchzwFEr/Itnp4mMfgZqa9Ed6P7KFzRxhlYeEQlLd7IjwF+8WgJMQ6oeZDkmw9dHTF1YSG25a8wuNFXIR1gswJpjkhSKYw35AtHDDGIHhy95w/NS1v8ThUHhr9TU7zmbp3IojFy3jsrJJswejnFvJh2PnGbx+ZCIgRCjxL192JPyvkUZXAVDfaNlAZUdxXeKjTmeHCI34zz9NIreYg5405j+zsA0wXv8p2H1RZRg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qeEJf23KiqVdi186561Hz4E8bbnNIsDRZyt559ohm8o=;
+ b=bbLYTfR9xit16cKNes4xGt34aYltmsWfZDzN1s28ir4r8rkoG6QdFoedpg5Qhby6qc2blY4q5kRbLWJQfJKvyLYUpgsnApmneILQkJi2BHLJkoCmiiayePEEiHKLxAz04dHx1UeGSC2muoPxsmw6U8q2TtZLOvkmxaJOwyekLE55bljbIF7ZD7D0MXc4eRooT4iWRSYlt2bq/eqRger1nyr4bvJ/Fi6uOK87UGsA+p75fAo4VNT1TELcyRpmE6YxZTRGwC5EhhmZ3pchy07KuIkD4qYzKFg9vg6ANG5anpX+4Z5vc0bN+QFAUFSBRVbQc7taQxNHXKpYFxLXDZU13g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=gondor.apana.org.au smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qeEJf23KiqVdi186561Hz4E8bbnNIsDRZyt559ohm8o=;
+ b=ySTDGEU6pl23N5v6PIWXOm4LSEa+ySntjYVC+uwIG8eaXAKQuyt96fmifPSTNAdWp2Fx62HY1Vtjsp6vIiNDywuIZ8ho34hJH/1/muka3XacogEzj2Mcs7ZQoK0EzAL6hYYe6WWlybsqtRvnP7pgabhjtlJ5YsCU9fX64V6R9SM=
+Received: from MW4PR04CA0260.namprd04.prod.outlook.com (2603:10b6:303:88::25)
+ by CH3PR12MB8305.namprd12.prod.outlook.com (2603:10b6:610:12e::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Thu, 8 Jun
+ 2023 19:12:27 +0000
+Received: from CO1PEPF000044FC.namprd21.prod.outlook.com
+ (2603:10b6:303:88:cafe::ca) by MW4PR04CA0260.outlook.office365.com
+ (2603:10b6:303:88::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.26 via Frontend
+ Transport; Thu, 8 Jun 2023 19:12:26 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1PEPF000044FC.mail.protection.outlook.com (10.167.241.202) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6500.0 via Frontend Transport; Thu, 8 Jun 2023 19:12:25 +0000
+Received: from SITE-L-T34-2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 8 Jun
+ 2023 14:12:16 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     Tom Lendacky <thomas.lendacky@amd.com>,
+        John Allen <john.allen@amd.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+CC:     "David S . Miller" <davem@davemloft.net>,
+        <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH v4 00/11] Add dynamic boost control support
+Date:   Thu, 8 Jun 2023 06:17:46 -0500
+Message-ID: <20230608111757.32054-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [RESEND PATCH v6 1/1] Added Digiteq Automotive MGB4 driver
-Content-Language: en-US
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Martin_T=c5=afma?= <martin.tuma@digiteqautomotive.com>
-References: <20230524112126.2242-1-tumic@gpxsee.org>
- <20230524112126.2242-2-tumic@gpxsee.org>
- <3a7da3cd-8d03-a2c4-0534-a75565aefc13@xs4all.nl>
-From:   =?UTF-8?Q?Martin_T=c5=afma?= <tumic@gpxsee.org>
-In-Reply-To: <3a7da3cd-8d03-a2c4-0534-a75565aefc13@xs4all.nl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000044FC:EE_|CH3PR12MB8305:EE_
+X-MS-Office365-Filtering-Correlation-Id: 39199c6c-dea0-4c33-2361-08db68544baa
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: DKF32ryHJM8ODCpSW5b59tRhK+njOTKbje6DSIqsvkmjTNLiOvk0dxJdIxGMrxNJ8fhnLWm55Hac7p2IoZXXfd3k0g5j22yuYTR7LlkbQ+MPHHTlAp+lTHMZcijp4fr9A1koprFgub9w0Vldk5JLW/qnDvi/RoHtmqsqACC7P2CiaWtSiHC+2+JzkgRbzAYuI7pXBx6VMt2B0QBH13EvhWV/CpvosG0K7QaMJxR8ArGb7LqnMm+C8knYlgX5VpmrfTKLiDdJqcYi/zNUP5cwuk5Q4BfDXGQGquQh78khlSLiBYnwJMaMbTAdNUo6vsiqnvD7Lf52XAviCJTfFV2lxNhPykpmbU5dYHPBzqEmneZiHtFDkxjeRPTYFrU+jN1XbVS39fPvCbYT+eH7Ira4pImJOagdwcHwOqq+uUUyiCD4Oq4ANwt4N+4zkD/hPHMft94C7khCmgJvjJ4JlJlbqE+dudrm3dKj0pgQaJSma6BAI1/iHIKxAkpVm/oWM0yw6RVk137ePiDvuVUwfbUI5JXDuOaxnuguL2L3KNJlfCNOlNPODBTJUl+gLXECNqIIJA8xvJ82cDbOiXt2aDcIK3Qo6TTGLMTWub3TePA6qtwa6uqEIZkOceeFMkMxQP+h5jLxFzA1fEpGHRJF3iOiT2JTbpfxu7Z4qVwMAU9hbwFDRNr4yKfLUaohplVhpbei9/nk3Ear04gmaa3PgwBKhwAHTDPrFRN9ljQRiyvs3nuIibI5qCwG1hQYoMgaxthq5h7V47h71fo+Red/k1Ue/Q==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(396003)(39860400002)(376002)(451199021)(46966006)(40470700004)(36840700001)(2616005)(40480700001)(186003)(54906003)(40460700003)(81166007)(110136005)(478600001)(356005)(8676002)(8936002)(316002)(70206006)(70586007)(4326008)(41300700001)(16526019)(36860700001)(426003)(6666004)(7696005)(83380400001)(1076003)(26005)(82740400003)(336012)(47076005)(44832011)(86362001)(5660300002)(82310400005)(2906002)(36756003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2023 19:12:25.7633
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 39199c6c-dea0-4c33-2361-08db68544baa
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000044FC.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8305
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-This is the "technical" part of my response, comments bellow:
+Dynamic boost control is a feature of some SoCs that allows
+an authenticated entity to send commands to the security processor
+to control certain SOC characteristics with the intention to improve
+performance.
+
+This is implemented via a mechanism that a userspace application would
+authenticate using a nonce and key exchange over an IOCTL interface.
+
+After authentication is complete an application can exchange signed
+messages with the security processor and both ends can validate the
+data transmitted.
+
+This series includes a test suite that can be run on real hardware
+to ensure that the communication works as expected.  This can also be
+used for an application to model the communication path.
+
+Two sysfs files are introduced for reading the PSP bootloader version
+as well as TEE version which can be useful data points for debugging
+communication problems.
+
+---
+v3->v4:
+ * Pick up tags
+ * Move ioctl calls into a shared library used by python ctypes
+
+Mario Limonciello (11):
+  crypto: ccp: Rename macro for security attributes
+  crypto: ccp: Add support for displaying PSP firmware versions
+  crypto: ccp: Add bootloader and TEE version offsets
+  crypto: ccp: move setting PSP master to earlier in the init
+  crypto: ccp: Add support for fetching a nonce for dynamic boost
+    control
+  crypto: ccp: Add support for setting user ID for dynamic boost control
+  crypto: ccp: Add support for getting and setting DBC parameters
+  crypto: ccp: Add a sample library for ioctl use
+  crypto: ccp: Add a sample python script for Dynamic Boost Control
+  crypto: ccp: Add unit tests for dynamic boost control
+  crypto: ccp: Add Mario to MAINTAINERS
+
+ Documentation/ABI/testing/sysfs-driver-ccp |  18 ++
+ MAINTAINERS                                |  12 +
+ drivers/crypto/ccp/Makefile                |   3 +-
+ drivers/crypto/ccp/dbc.c                   | 250 +++++++++++++++++++
+ drivers/crypto/ccp/dbc.h                   |  56 +++++
+ drivers/crypto/ccp/psp-dev.c               |  19 +-
+ drivers/crypto/ccp/psp-dev.h               |   1 +
+ drivers/crypto/ccp/sp-dev.h                |   7 +
+ drivers/crypto/ccp/sp-pci.c                |  96 +++++++-
+ include/linux/psp-platform-access.h        |   4 +
+ include/uapi/linux/psp-dbc.h               | 147 ++++++++++++
+ tools/crypto/ccp/.gitignore                |   1 +
+ tools/crypto/ccp/Makefile                  |  13 +
+ tools/crypto/ccp/dbc.c                     |  72 ++++++
+ tools/crypto/ccp/dbc.py                    |  64 +++++
+ tools/crypto/ccp/dbc_cli.py                | 134 +++++++++++
+ tools/crypto/ccp/test_dbc.py               | 266 +++++++++++++++++++++
+ 17 files changed, 1146 insertions(+), 17 deletions(-)
+ create mode 100644 drivers/crypto/ccp/dbc.c
+ create mode 100644 drivers/crypto/ccp/dbc.h
+ create mode 100644 include/uapi/linux/psp-dbc.h
+ create mode 100644 tools/crypto/ccp/.gitignore
+ create mode 100644 tools/crypto/ccp/Makefile
+ create mode 100644 tools/crypto/ccp/dbc.c
+ create mode 100644 tools/crypto/ccp/dbc.py
+ create mode 100755 tools/crypto/ccp/dbc_cli.py
+ create mode 100755 tools/crypto/ccp/test_dbc.py
+
+
+base-commit: 134e0dc6b73ab7e99464182356a8b3fa4ea3b499
+-- 
+2.34.1
 
-On 07. 06. 23 10:41, Hans Verkuil wrote:
-> Hi Martin,
-> 
-> Some comments below:
-> 
-> On 24/05/2023 13:21, tumic@gpxsee.org wrote:
->> From: Martin Tůma <martin.tuma@digiteqautomotive.com>
-
->> diff --git a/Documentation/admin-guide/media/mgb4.rst b/Documentation/admin-guide/media/mgb4.rst
->> new file mode 100644
->> index 000000000000..77db2fa64ab4
->> --- /dev/null
->> +++ b/Documentation/admin-guide/media/mgb4.rst
->> @@ -0,0 +1,352 @@
->> +.. SPDX-License-Identifier: GPL-2.0
->> +
-> 
-> Perhaps it is a good idea to start with a high level overview of the
-> hardware blocks. That might help understand how the various parts are
-> connected.
-> 
-
-This is the "admin-guide" documentation and I'm not sure if the admins 
-(= the card users) are interested in some hardware blocks description. I 
-can for sure ad some basic info like that the card (with the given 
-module) has two inputs and two outputs, but if you hold the card in your 
-hands while installing it into the PCIe slot you definitely notice that ;-)
-
->> +**temperature** (R):
->> +    FPGA core temperature in Celsius degree.
-> 
-> I'm not sure if this is the right place for this. Shouldn't this
-> be exposed through the hwmon subsystem? That way you will see it
-> with e.g. the 'sensors' command. The drivers/media/i2c/video-i2c.c
-> driver uses hwmon in that way.
-> 
-
-Yes, this is the one exception where it makes sense and would improve 
-compatibility/usability for the user. I will change that.
-
->> +
->> +Common FPDL3/GMSL input parameters
->> +==================================
->> +
->> +**input_id** (R):
->> +    Input number ID, zero based.
-> 
-> Input of what? I assume that the HW modules have multiple inputs?
-> 
-
-Yes. The card has two inputs and two outputs (with the current FPDL/GMSL 
-modules).
-
->> +
->> +**link_status** (R):
->> +    Video link status. If the link is locked, chips are properly connected and
->> +    communicating at the same speed and protocol. The link can be locked without
->> +    an active video stream.
->> +
->> +    | 0 - unlocked
->> +    | 1 - locked
-> 
-> What is the relationship of this link status and the status bits returned by
-> VIDIOC_ENUMINPUT?
-> 
-
-This is "a necessary condition, not a sufficient one" for a valid video 
-stream. Maybe the V4L2_IN_ST_NO_SYNC flag (together with 
-V4L2_IN_ST_NO_SIGNAL) could be returned in this case in ENUMINPUT.
-
->> +
->> +**stream_status** (R):
->> +    Video stream status. A stream is detected if the link is locked, the input
->> +    pixel clock is running and the DE signal is moving.
->> +
->> +    | 0 - not detected
->> +    | 1 - detected
-> 
-> This definitely looks like this should be handled by ENUMINPUT.
-> 
-
-It is (also) handled in ENUMINPUT. You get V4L2_IN_ST_NO_SIGNAL in the 
-status in this case (in the code the check is based on the resolution, 
-but those are almost equivalent things. If there is no valid resolution, 
-there is no valid stream.
-
-The reason why this is also available in sysfs is that the users can 
-easily see all the info on one place (accessible without special SW) to 
-debug problems with the streams which will be much more common than with 
-some "regular" grabbers.
-
->> +
->> +**video_width** (R):
->> +    Video stream width. This is the actual width as detected by the HW. You may
->> +    see a different width in the v4l2 APIs as those values can not be arbitrary
->> +    changed by the driver.
->> +
->> +**video_height** (R):
->> +    Video stream height. This is the actual height as detected by the HW. You
->> +    may see a different height in the v4l2 APIs as those values can not be
->> +    arbitrary changed by the driver.
-> 
-> Is this the width/height of the active video? Or active + blanking video?
-> 
-> It is not quite clear to me what you mean with 'those values can not be arbitrary
-> changed by the driver'. With QUERY_DV_TIMINGS you can get all this info.
-> 
-
-When you do QUERY_DV_TIMINGS, you get this info. What was meant with 
-that description is, that you can see something different in your video 
-player that mostly does not automatically change the DV_TIMINGS and in 
-this property. Again, the card is primary designed to dvelope/test the 
-infotainment systems and the user often wants too see the current state 
-of the HW to find out why the video player stopped showing the expected 
-output.
-
->> +
->> +**vsync_status** (R):
->> +    The type of VSYNC pulses as detected by the video format detector.
->> +
->> +    | 0 - active low
->> +    | 1 - active high
->> +    | 2 - not available
->> +
->> +**hsync_status** (R):
->> +    The type of HSYNC pulses as detected by the video format detector.
->> +
->> +    | 0 - active low
->> +    | 1 - active high
->> +    | 2 - not available
-> 
-> Why do you need this?
-> 
-
-For example to set the correct type of hsync/vsync for the outputs, when 
-you want to emulate this input stream. Again, the users need some low 
-level info in the common use-cases.
-
->> +
->> +**vsync_gap_length** (RW):
->> +    If the incoming video signal does not contain synchronization VSYNC and
->> +    HSYNC pulses, these must be generated internally in the FPGA to achieve
->> +    the correct frame ordering. This value indicates, how many "empty" pixels
->> +    (pixels with deasserted Data Enable signal) are necessary to generate the
->> +    internal VSYNC pulse.
->> +
->> +**hsync_gap_length** (RW):
->> +    If the incoming video signal does not contain synchronization VSYNC and
->> +    HSYNC pulses, these must be generated internally in the FPGA to achieve
->> +    the correct frame ordering. This value indicates, how many "empty" pixels
->> +    (pixels with deasserted Data Enable signal) are necessary to generate the
->> +    internal HSYNC pulse. The value must be greater than 1 and smaller than
->> +    vsync_gap_length.
->> +
->> +**pclk_frequency** (R):
->> +    Input pixel clock frequency in kHz.
->> +
->> +    *Note: The frequency_range parameter must be set properly first to get
->> +    a valid frequency here.*
-> 
-> Wouldn't QUERY_DV_TIMINGS return this?
-> 
->> +
->> +**hsync_width** (R):
->> +    Width of the HSYNC signal in PCLK clock ticks.
->> +
->> +**vsync_width** (R):
->> +    Width of the VSYNC signal in PCLK clock ticks.
->> +
->> +**hback_porch** (R):
->> +    Number of PCLK pulses between deassertion of the HSYNC signal and the first
->> +    valid pixel in the video line (marked by DE=1).
->> +
->> +**hfront_porch** (R):
->> +    Number of PCLK pulses between the end of the last valid pixel in the video
->> +    line (marked by DE=1) and assertion of the HSYNC signal.
->> +
->> +**vback_porch** (R):
->> +    Number of video lines between deassertion of the VSYNC signal and the video
->> +    line with the first valid pixel (marked by DE=1).
->> +
->> +**vfront_porch** (R):
->> +    Number of video lines between the end of the last valid pixel line (marked
->> +    by DE=1) and assertion of the VSYNC signal.
-> 
-> Ditto for all these.
-> 
-
-Where applicable, the walues should be also returned in the appropriate 
-v4l2 APIs. But like described in the "why sysfs" mail, we want all the 
-values to be accesible on a single place with standard OS SW like cat.
-
->> +
->> +**frequency_range** (RW)
->> +    PLL frequency range of the OLDI input clock generator. The PLL frequency is
->> +    derived from the Pixel Clock Frequency (PCLK) and is equal to PCLK if
->> +    oldi_lane_width is set to "single" and PCLK/2 if oldi_lane_width is set to
->> +    "dual".
->> +
->> +    | 0 - PLL < 50MHz
->> +    | 1 - PLL >= 50MHz
->> +
->> +    *Note: This parameter can not be changed while the input v4l2 device is
->> +    open.*
->> +
->> +**alignment** (RW)
->> +    Pixel line alignment. Sets the pixel line alignment in bytes of the frame
->> +    buffers provided via the v4l2 interface. The number must be a power of 2.
-> 
-> A bit vague what you mean here. I wonder if this isn't something that userspace
-> can't set through the bytesperline field of struct v4l2_pix_format.
-> 
-
-Dtto like in all other cases. It probably could, but we want the 
-configuration to happen on a single place (accesible using standard UDEV 
-rules).
-
->> +
->> +    *Note: This parameter can not be changed while the input v4l2 device is
->> +    open.*
->> +
->> +Common FPDL3/GMSL output parameters
->> +===================================
->> +
->> +**output_id** (R):
->> +    Output number ID, zero based.
-> 
-> Output of what to what?
-> 
-
-This is the same info like in the case of inputs. The card has two 
-outputs and this simply enumerates the output.
-
->> +
->> +**video_source** (RW):
->> +    Output video source. If set to 0 or 1, the source is the corresponding card
->> +    input and the v4l2 output devices are disabled. If set to 2 or 3, the source
->> +    is the corresponding v4l2 video output device.
->> +
->> +    | 0 - input 0
->> +    | 1 - input 1
->> +    | 2 - v4l2 output 0
->> +    | 3 - v4l2 output 1
->> +
->> +    *Note: This parameter can not be changed while ANY of the input/output v4l2
->> +    devices is open.*
->> +
->> +**display_width** (RW):
->> +    Display width. There is no autodetection of the connected display, so the
->> +    propper value must be set before the start of streaming.
-> 
-> propper -> proper
-> 
-
-Ok.
-
->> +
->> +    *Note: This parameter can not be changed while the output v4l2 device is
->> +    open.*
->> +
->> +**display_height** (RW):
->> +    Display height. There is no autodetection of the connected display, so the
->> +    propper value must be set before the start of streaming.
->> +
->> +    *Note: This parameter can not be changed while the output v4l2 device is
->> +    open.*
->> +
->> +**frame_rate** (RW):
->> +    Output video frame rate in frames per second.
->> +
->> +**hsync_polarity** (RW):
->> +    HSYNC signal polarity.
->> +
->> +    | 0 - active low
->> +    | 1 - active high
->> +
->> +**vsync_polarity** (RW):
->> +    VSYNC signal polarity.
->> +
->> +    | 0 - active low
->> +    | 1 - active high
->> +
->> +**de_polarity** (RW):
->> +    DE signal polarity.
->> +
->> +    | 0 - active low
->> +    | 1 - active high
->> +
->> +**pclk_frequency** (RW):
->> +    Output pixel clock frequency. Allowed values are between 25000-190000(kHz)
->> +    and there is a non-linear stepping between two consecutive allowed
->> +    frequencies. The driver finds the nearest allowed frequency to the given
->> +    value and sets it. When reading this property, you get the exact
->> +    frequency set by the driver.
->> +
->> +    *Note: This parameter can not be changed while the output v4l2 device is
->> +    open.*
->> +
->> +**hsync_width** (RW):
->> +    Width of the HSYNC signal in PCLK clock ticks.
->> +
->> +**vsync_width** (RW):
->> +    Width of the VSYNC signal in PCLK clock ticks.
->> +
->> +**hback_porch** (RW):
->> +    Number of PCLK pulses between deassertion of the HSYNC signal and the first
->> +    valid pixel in the video line (marked by DE=1).
->> +
->> +**hfront_porch** (RW):
->> +    Number of PCLK pulses between the end of the last valid pixel in the video
->> +    line (marked by DE=1) and assertion of the HSYNC signal.
->> +
->> +**vback_porch** (RW):
->> +    Number of video lines between deassertion of the VSYNC signal and the video
->> +    line with the first valid pixel (marked by DE=1).
->> +
->> +**vfront_porch** (RW):
->> +    Number of video lines between the end of the last valid pixel line (marked
->> +    by DE=1) and assertion of the VSYNC signal.
-> 
-> For these as well I wonder how much can be done with VIDIOC_DV_S_TIMINGS.
-> 
-
-Dtto like all above cases.
-
->> --- a/Documentation/admin-guide/media/v4l-drivers.rst
->> +++ b/Documentation/admin-guide/media/v4l-drivers.rst
->> @@ -17,6 +17,7 @@ Video4Linux (V4L) driver-specific documentation
->>   	imx7
->>   	ipu3
->>   	ivtv
->> +	mgb4
->>   	omap3isp
->>   	omap4_camera
->>   	philips
-> 
-> A general note: I suggest that you split off the documentation part in
-> a separate patch rather than it being part of the driver.
-> 
-
-Ok, I will split the patches.
-
->> +
->> +static size_t freq_srch(u32 key, const u32 *array, size_t size)
->> +{
->> +	int l = 0;
->> +	int r = size - 1;
->> +	int m;
->> +
->> +	while (l <= r) {
->> +		m = (l + r) / 2;
->> +		if (array[m] < key)
->> +			l = m + 1;
->> +		else if (array[m] > key)
->> +			r = m - 1;
->> +		else
->> +			return m;
->> +	}
->> +
->> +	if (r < 0 || l > size - 1)
->> +		return m;
->> +	else
->> +		return (abs(key - array[l]) < abs(key - array[r])) ? l : r;
->> +}
-> 
-> Can you use the bsearch function? (see lib/bsearch.c)
-
-The function does not search for the exact match but for the nearest 
-value (= it always returns a value). lib/bsearch.c has IMHO no option 
-for that.
-
->> +
->> +u32 mgb4_cmt_set_vout(struct mgb4_vout_dev *voutdev, unsigned int freq)
-> 
-> Isn't mgb4_cmt_set_vout_freq a better name? At least that makes it clear
-> this sets the frequency.
-> 
-
-Ok, will change that.
-
->> +void mgb4_cmt_set_vin(struct mgb4_vin_dev *vindev, unsigned int freq_range)
-> 
-> mgb4_cmt_set_vin_freq_range?
-> 
-
-Ok.
-
->> +static struct i2c_adapter *get_i2c_adap(struct platform_device *pdev)
->> +{
->> +	struct device *dev;
->> +	int i;
->> +
->> +	for (i = 0; i < 10; i++) {
->> +		msleep(100);
-> 
-> What's the purpose of this msleep? That should be documented since it
-> is unexpected.
-
-Well, the purpose is to make the adapter fetch work... For some reason, 
-platform_device_register_resndata() of the i2c adapter does not work 
-synchronous and the adapter is not available after the register function 
-call. I have spent quiet lot time to find out why this happens/whether 
-there is a better mechanism to wait for the adapter as msleep(), but I 
-was not successful.
-
-If you know a better mechanism, I will love to change that as I also do 
-not like this "magic" sleep. But you are right I can at least document 
-that in the code.
-
->> + * This module handles the IIO trigger device. The card has two signal inputs
-> 
-> 'signal inputs': I assume that means it has two input pins (GPIO like) that an
-> external device can trigger? Or is it something else?
-> 
-
-Exactly. The card has two GPIO input pins that the users use for 
-external triggers. In the admin-guide doc you can find some more info 
-under "mgb4 iio (triggers)".
-
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Copyright (C) 2021-2022 Digiteq Automotive
-> 
-> Note that you can update the copyright year from 2022 to 2023 in all
-> these sources.
-
-Ok, will fix that.
-
->> + *     author: Martin Tuma <martin.tuma@digiteqautomotive.com>
->> + *
->> + * This is the v4l2 input device module. It initializes the signal deserializers
->> + * and creates the v4l2 video devices. The input signal can change at any time
->> + * which is handled by the "timings" callbacks and an IRQ based watcher, that
->> + * emits the V4L2_EVENT_SOURCE_CHANGE event in case of a signal source change.
->> + *
->> + * When the device is in loopback mode (a direct, in HW, in->out frame passing
->> + * mode) the cards's frame queue must be running regardles whether a v4l2 stream
-> 
-> cards's -> card's
-> regardles -> regardless of
-> 
-
-Ok.
-
->> +static int queue_setup(struct vb2_queue *q, unsigned int *nbuffers,
->> +		       unsigned int *nplanes, unsigned int sizes[],
->> +		       struct device *alloc_devs[])
->> +{
->> +	struct mgb4_vin_dev *vindev = vb2_get_drv_priv(q);
->> +	unsigned int size = BYTESPERLINE(vindev->width, vindev->alignment)
->> +	  * vindev->height;
->> +
->> +	if (*nbuffers < 2)
->> +		*nbuffers = 2;
-> 
-> I recommend setting min_buffers_needed to 2 in struct vb2_queue.
-> Then you can drop these two lines. It's the recommended way of
-> dealing with this.
-> 
-
-min_buffers_needed is already set to 2. If it makes this code useless, I 
-will remove it here.
-
->> +
->> +static int vidioc_enum_frameintervals(struct file *file, void *priv,
->> +				      struct v4l2_frmivalenum *ival)
-> 
-> I don't think this is needed: this is specific to camera sensor inputs,
-> but this is video input.
->
-
-Ok, I have AFAIK no special reason for that besides that someone might 
-want to use it. But if it is for camera sensor inputs only, I will drop it.
-
->> +static int vidioc_enum_framesizes(struct file *file, void *fh,
->> +				  struct v4l2_frmsizeenum *fsize)
-> 
-> Ditto.
-
-Like with frame intervals, If it is never used in the userspace, I will 
-drop it as well.
-
-> 
-> Looking at what the dv_timings ioctls do and the sysfs properties, it seems to me
-> that a lot of the sysfs timings properties can be handle here instead.
-> 
-> If some of the sysfs properties are missing here, then we can consider either
-> extending the dv timings API or keeping them as sysfs properties.
-> 
-
-I'll keep this discussion in the separate mail thread.
-
->> +static void signal_change(struct work_struct *work)
->> +{
->> +	struct mgb4_vin_dev *vindev = container_of(work, struct mgb4_vin_dev, err_work);
->> +	struct device *dev = &vindev->mgbdev->pdev->dev;
->> +	u32 resolution = detect_resolution(vindev);
->> +
->> +	if (res_cmp(vindev->width, vindev->height, resolution)) {
->> +		static const struct v4l2_event ev = {
->> +			.type = V4L2_EVENT_SOURCE_CHANGE,
->> +			.u.src_change.changes = V4L2_EVENT_SRC_CH_RESOLUTION,
->> +		};
->> +
->> +		v4l2_event_queue(&vindev->vdev, &ev);
->> +
->> +		if (vb2_is_streaming(&vindev->queue))
->> +			vb2_queue_error(&vindev->queue);
->> +	}
->> +
->> +	dev_warn(dev, "stream changed to %ux%u\n", resolution >> 16,
->> +		 resolution & 0xFFFF);
-> 
-> Not a warning. Change to dev_dbg or drop it. You don't want this to spam the
-> kernel log.
-
-Warning is probably wrong, but I would keep it at least as dev_info. It 
-is quiet useful for troubleshooting video signal problems. So it is not 
-exactly what I understand under dev_dbg which is for debuging the 
-driver/kernel code. Here the user debugs the infotainment setup/problems.
-
->> +static int deser_init(struct mgb4_vin_dev *vindev, int id)
->> +{
->> +	int rv, addr_size;
->> +	size_t values_count;
->> +	const struct mgb4_i2c_kv *values;
->> +	const struct i2c_board_info *info;
->> +	struct device *dev = &vindev->mgbdev->pdev->dev;
->> +
->> +	if (MGB4_IS_GMSL(vindev->mgbdev)) {
->> +		info = &gmsl_deser_info[id];
->> +		addr_size = 16;
->> +		values = gmsl_i2c;
->> +		values_count = ARRAY_SIZE(gmsl_i2c);
->> +	} else {
->> +		info = &fpdl3_deser_info[id];
->> +		addr_size = 8;
->> +		values = fpdl3_i2c;
->> +		values_count = ARRAY_SIZE(fpdl3_i2c);
->> +	}
->> +
->> +	rv = mgb4_i2c_init(&vindev->deser, vindev->mgbdev->i2c_adap, info, addr_size);
-> 
-> Consider using v4l2_i2c_new_subdev_board() instead. That's what V4L2 PCI drivers
-> normally use. The advantage is that this will call request_module() and avoids
-> having to wait for the module to be loaded by the kernel. I think that's why the
-> msleep(100) was needed in this driver.
-> 
-
-I have tried request_module() when fiddling with the "magic sleep", but 
-it didn't help. So this is IMHO not the solution. I will look at 
-v4l2_i2c_new_subdev_board() if it makes sense and eventually switch the 
-code, but I don't think it will help with the sleep issue.
-
->> +	vindev->queue.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
->> +	vindev->queue.io_modes = VB2_MMAP | VB2_DMABUF | VB2_READ;
-> 
-> The use of VB2_READ is discouraged for raw video devices. It's up to
-> you, though.
-
-What if there is some SW that only uses VB2_READ? I would rather let the 
-choice on the user(space).
-
-> 
->> +	vindev->queue.buf_struct_size = sizeof(struct frame_buffer);
->> +	vindev->queue.ops = &queue_ops;
->> +	vindev->queue.mem_ops = &vb2_dma_sg_memops;
->> +	vindev->queue.gfp_flags = GFP_DMA32;
->> +	vindev->queue.timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
->> +	vindev->queue.min_buffers_needed = 2;
-> 
-> Ah, this is already set, so in the setup callback you can just drop the
-> *nbuffers < 2 check.
-> 
-
-Ok.
-
->> +	vindev->queue.drv_priv = vindev;
->> +	vindev->queue.lock = &vindev->lock;
->> +	vindev->queue.dev = dev;
->> +	rv = vb2_queue_init(&vindev->queue);
->> +	if (rv) {
->> +		dev_err(dev, "failed to initialize vb2 queue\n");
->> +		goto err_v4l2_dev;
->> +	}
->> +
->> +	snprintf(vindev->vdev.name, sizeof(vindev->vdev.name), "mgb4-in%d", id + 1);
->> +	vindev->vdev.device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_READWRITE
->> +	  | V4L2_CAP_STREAMING;
->> +	vindev->vdev.fops = &video_fops;
->> +	vindev->vdev.ioctl_ops = &video_ioctl_ops;
->> +	vindev->vdev.release = video_device_release_empty;
->> +	vindev->vdev.v4l2_dev = &vindev->v4l2dev;
->> +	vindev->vdev.lock = &vindev->lock;
->> +	vindev->vdev.queue = &vindev->queue;
->> +	video_set_drvdata(&vindev->vdev, vindev);
->> +
->> +	rv = video_register_device(&vindev->vdev, VFL_TYPE_VIDEO, -1);
-> 
-> This should be the last thing this function does. You still do more
-> initialization below, but that should be done first.
-> 
-> As soon as the video device is registered it can be used, so you
-> want everything it relies on to be ready before you call this.
-> 
-
-Ok, will fix that.
-
->> +static int queue_setup(struct vb2_queue *q, unsigned int *nbuffers,
->> +		       unsigned int *nplanes, unsigned int sizes[],
->> +		       struct device *alloc_devs[])
->> +{
->> +	struct mgb4_vout_dev *voutdev = vb2_get_drv_priv(q);
->> +	unsigned long size = BYTESPERLINE(voutdev->width, voutdev->alignment)
->> +	  * voutdev->height;
->> +
->> +	if (*nbuffers < 2)
->> +		*nbuffers = 2;
-> 
-> I assume that min_buffers_needed is set to 2 for output as well, so just drop
-> this check.
-
-Ok.
-
->> +static int start_streaming(struct vb2_queue *vq, unsigned int count)
->> +{
->> +	struct mgb4_vout_dev *voutdev = vb2_get_drv_priv(vq);
->> +	struct device *dev = &voutdev->mgbdev->pdev->dev;
->> +	struct frame_buffer *buf = 0;
->> +	struct mgb4_regs *video = &voutdev->mgbdev->video;
->> +	int irq = xdma_get_user_irq(voutdev->mgbdev->xdev, voutdev->config->irq);
->> +	u32 addr;
->> +
->> +	mgb4_mask_reg(video, voutdev->config->regs.config, 0x2, 0x2);
->> +
->> +	addr = mgb4_read_reg(video, voutdev->config->regs.address);
->> +	if (addr >= ERR_QUEUE_FULL) {
->> +		dev_err(dev, "frame queue error (%d)\n", (int)addr);
->> +		return_all_buffers(voutdev, VB2_BUF_STATE_QUEUED);
->> +		return -EIO;
-> 
-> Should this perhaps be EBUSY? What exactly does this error mean?
-> Some comments would be helpful.
-
-If the HW returns any frame data address >= ERR_QUEUE_FULL, it means 
-some HW problem/error. This may be temporary as well as permanent, thats 
-why EIO. I myself have no more info when or what exact errors can 
-happen, the HW documentation just states that its an error...
-
->> +static int fh_open(struct file *file)
->> +{
->> +	struct mgb4_vout_dev *voutdev = video_drvdata(file);
->> +	struct mgb4_regs *video = &voutdev->mgbdev->video;
->> +	u32 config, resolution;
->> +	int ret;
->> +
->> +	/* Return EBUSY when the device is in loopback mode */
->> +	config = mgb4_read_reg(video, voutdev->config->regs.config);
->> +	if ((config & 0xc) >> 2 != voutdev->config->id + MGB4_VIN_DEVICES)
->> +		return -EBUSY;
-> 
-> A dev_dbg() line might be helpful in this case. Up to you, though.
-
-Yes, I will add some info message. But like in the resolution change, 
-wouldn't a dev_info not be better as this is not a driver debug but an 
-info for the user?
-
->> +struct mgb4_vout_dev *mgb4_vout_create(struct mgb4_dev *mgbdev, int id)
->> +{
->> +	int rv, irq;
->> +	struct device_attribute **attr, **module_attr;
->> +	struct mgb4_vout_dev *voutdev;
->> +	struct mgb4_regs *video;
->> +	struct pci_dev *pdev = mgbdev->pdev;
->> +	struct device *dev = &pdev->dev;
->> +
->> +	voutdev = kzalloc(sizeof(*voutdev), GFP_KERNEL);
->> +	if (!voutdev)
->> +		return NULL;
->> +
->> +	voutdev->mgbdev = mgbdev;
->> +	voutdev->config = &vout_cfg[id];
->> +	video = &voutdev->mgbdev->video;
->> +
->> +	/* Frame queue*/
-> 
-> Add space before */
-> 
-
-Will fix that.
-
->> +	voutdev->queue.type = V4L2_BUF_TYPE_VIDEO_OUTPUT;
->> +	voutdev->queue.io_modes = VB2_MMAP | VB2_DMABUF | VB2_WRITE;
-> 
-> Are you sure you want to support VB2_WRITE? Just checking.
-> 
-
-I have no special need for that, but why not to let it to the 
-user(space)? What if there is some simple SW that only can work using 
-read()?
-
->> +	rv = video_register_device(&voutdev->vdev, VFL_TYPE_VIDEO, -1);
-> 
-> Same as with the input: this should be the last thing in the probe().
-> 
-
-Will fix that.
-
-> 
-> Besides the small stuff, the main issue with this driver is how much is
-> done via sysfs. I think that should be reduced and where possible
-> properties should be moved to S_FMT and DV_TIMINGS.
-
-Again, I will keep this discussion in the separate mail thread.
-
-> 
-> Regards,
-> 
-> 	Hans
-
-Thanks for the review.
-
-Martin
