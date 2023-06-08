@@ -2,161 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E883727CEF
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 041A4727D08
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:39:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235888AbjFHKhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 06:37:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49318 "EHLO
+        id S235253AbjFHKje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 06:39:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232139AbjFHKg5 (ORCPT
+        with ESMTP id S231439AbjFHKjc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 06:36:57 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28CAEE50;
-        Thu,  8 Jun 2023 03:36:56 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3589lUGL014993;
-        Thu, 8 Jun 2023 10:36:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Edq7Xk9eUqj7YUleFcCYdqe/KJkToJPND49yy+TrQXc=;
- b=LRoUy8eXwKdnfSH+I4ejOibInog1/55Xv6OIRj5R1EUK6oPhOqKvhDeo3aFwit/n5tBF
- b3Z3Ts8dLiHNOHJmM4LQBxsjD1PnfFgBWJwIMjzFxtzG6M/iOoqCavAZTy1f6SXrqioZ
- 47OZT+vPNqGFrieH3viu/ufLbIxQX6Dx1iSYYkYMIZL4FbOINj7cHTBQaR8fSoDrQ/Nd
- 4rjYQs4I8aAYUZnEW9nFeT8tY4Qs8SHy/E8F2G5NQBhAY2ZPwgv1SSiXo9vD94bW06wT
- aFoGhZJD01G6nxDtas95mgdeY5JlgDx4z4lELvIN07gxkxfq8ChZkFa8brpePyH6ulIX rg== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r39ku8fek-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Jun 2023 10:36:51 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 358AaoE8032763
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 8 Jun 2023 10:36:50 GMT
-Received: from [10.204.67.150] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 8 Jun 2023
- 03:36:46 -0700
-Message-ID: <ced52be4-d5eb-2dcb-ce8a-f737fbcab1b6@quicinc.com>
-Date:   Thu, 8 Jun 2023 16:06:43 +0530
+        Thu, 8 Jun 2023 06:39:32 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B594AE4D
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 03:39:30 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-5151934a4e3so652178a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 03:39:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686220769; x=1688812769;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8wgec4tfIWdnEhpMr6ykg9xNvcCtcxWUQ6Om3tn4cEU=;
+        b=Jzu6MtqgjH4ZproiCgJgfX3WoIOd9YRTOe+yXyjdFcEaO+nd7lkAaB8Yjqrko+keSC
+         /yacB0AffOxXZuZIVJe3FLLrZS/P9rVZoFIh8usEjaPdcNVjIf1rAMNTJGXkrf+sl5Nd
+         GLRuFtKIt5GHSnGdU6jpB+DqUmjw5r4IdUqCTSJC2dF787mZ/u4vZVNgJzurEvPDkoXG
+         RKdeiRVKyvg73DiVVZpbD5ZR2Z77Wd39/d9u0XIltYqA5GN0XoBznZ7a03LkIFu8pbse
+         l2Dn3oAY5hueFhsldblYXjKgJhkaPvmV6cd9PyYS5ZIJ4Z2mAWAve6fqSkJ0Yxerrnk5
+         juMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686220769; x=1688812769;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8wgec4tfIWdnEhpMr6ykg9xNvcCtcxWUQ6Om3tn4cEU=;
+        b=HL7jQiSo3jDgSTIHJPteFpgJc8l/aMCyrQ9wWijH0rhLYGx3mnwc/2y2bWqgn7oLt9
+         dIivzOJMNXWsXcXtLr2ct9paa5i6O/uchkHZWo5yhn/VTroEZlCsnMCNzNrAGNPW0L3E
+         uh16YfqwEGpmgU4VhoB41JM8tvk9vZug2aC1r418W0NK9aZjhFuEqkib7L8k4etefiN+
+         T2JoLH04Xn8HIhzodGrktxzVCJ/zMXytmTNcVH2Mi0lH9KCUQZ8Qgta/IB7rhNfYIQ5J
+         xa3GETbyiT81ZYBItktnGPCxcwcGgBlb3blhMnJRpUAXRQJGYU+ajgXWZG7cBxOF7tQ5
+         ZpWQ==
+X-Gm-Message-State: AC+VfDwCJ2XrN2bOXypZJGM+z1kyrf7zAA0UKcXaAqff34iRhKJaZ0l6
+        gsF2gZhac2HbABBQw67Rc9c=
+X-Google-Smtp-Source: ACHHUZ4ytm/M/a+Iwv6nZciUDlVTlAht7v/lQ5uBsyjdfFH4TWUuLUvl3T6ueNXwjFKIgWOf3yY0ng==
+X-Received: by 2002:a05:6402:31ef:b0:514:8e14:7f1b with SMTP id dy15-20020a05640231ef00b005148e147f1bmr6910012edb.12.1686220768883;
+        Thu, 08 Jun 2023 03:39:28 -0700 (PDT)
+Received: from [147.251.42.107] (nbbroz2.fi.muni.cz. [147.251.42.107])
+        by smtp.gmail.com with ESMTPSA id o11-20020aa7c50b000000b00516a1fa0e60sm384205edq.89.2023.06.08.03.39.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jun 2023 03:39:28 -0700 (PDT)
+Message-ID: <f7a1a20c-bee8-c7a4-4c49-b66415f556f9@gmail.com>
+Date:   Thu, 8 Jun 2023 12:39:26 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RESEND PATCH v1 1/2] dt-bindings: misc: fastrpc: add fastrpc
- group IDs property
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH 0/5] Support kdump with LUKS encryption by reusing LUKS
+ volume key
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <srinivas.kandagatla@linaro.org>, <linux-arm-msm@vger.kernel.org>
-CC:     <ekangupt@qti.qualcomm.com>, <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>,
-        <fastrpc.upstream@qti.qualcomm.com>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <devicetree@vger.kernel.org>
-References: <1686155407-20054-1-git-send-email-quic_ekangupt@quicinc.com>
- <1686155407-20054-2-git-send-email-quic_ekangupt@quicinc.com>
- <44267461-e6f9-b549-a8eb-cba76384660b@linaro.org>
-From:   Ekansh Gupta <quic_ekangupt@quicinc.com>
-In-Reply-To: <44267461-e6f9-b549-a8eb-cba76384660b@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Coiby Xu <coxu@redhat.com>
+Cc:     Eric Biggers <ebiggers@kernel.org>, kexec@lists.infradead.org,
+        Baoquan He <bhe@redhat.com>, x86@kernel.org,
+        dm-devel@redhat.com, Pingfan Liu <kernelfans@gmail.com>,
+        linux-kernel@vger.kernel.org, Dave Hansen <dave.hansen@intel.com>,
+        Kairui Song <ryncsn@gmail.com>,
+        Jan Pazdziora <jpazdziora@redhat.com>,
+        Thomas Staudt <tstaudt@de.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Dave Young <dyoung@redhat.com>,
+        Ondrej Kozina <okozina@redhat.com>
+References: <20230601072444.2033855-1-coxu@redhat.com>
+ <20230602213452.GC628@quark.localdomain>
+ <f569a35a-bff9-9dbb-2ded-7e02ee060a9a@gmail.com>
+ <36mz3gn764ceadfbuhhmoo2zaiqmzplpkdcnszha2hzhmb3i62@sm6hilxryzk4>
+ <a5eaa21d-6551-5857-98cd-50578fe59566@gmail.com>
+ <oosx274kf6kzasncdfdg5a53ut6wey3nlnbho5x3rql2df3zep@c6r6m4whphvh>
+ <88581a3c-8bd3-f7b2-064c-c809a2152ed3@gmail.com>
+ <maamg4udo7visvgzp4m4qkfcds6djyiga236lb2mwtjasi6pvj@zmqzb2lijegj>
+From:   Milan Broz <gmazyland@gmail.com>
+In-Reply-To: <maamg4udo7visvgzp4m4qkfcds6djyiga236lb2mwtjasi6pvj@zmqzb2lijegj>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: gX2Llp7bCF3GsLLXyH8Dm8uUaYpRovvR
-X-Proofpoint-ORIG-GUID: gX2Llp7bCF3GsLLXyH8Dm8uUaYpRovvR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-08_07,2023-06-08_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- mlxscore=0 mlxlogscore=999 lowpriorityscore=0 phishscore=0 bulkscore=0
- priorityscore=1501 suspectscore=0 impostorscore=0 adultscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306080090
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/7/23 14:39, Coiby Xu wrote:
+...
+>> I do not think you need any cryptsetup patches, all you need is to write
+>> decrypted volume key from LUKS metadata with
+>>   cryptsetup luksDump ---dump-volume-key -volume-key-file <out> <device>
+>> (or any code equivalent with libcryptsetup), am I correct?
+> 
+> Correct me if I'm wrong, but I don't think there will be a safer way to
+> preserve key without patching cryptsetup. Actually the --dump-volume-key
+> approach has been proposed before and I agree with your conclusion [1]
+> on that approach i.e. "passing volume key this way is quite insecure".
+> Without patching cryptsetup, even if I save the volume key in the memory
+> reserved for the kdump kernel, I need to retrieve this key in the
+> userspace to unlock the LUKS device which may lead to quite a security
+> vulnerability.
 
+Hm, where are the patches for cryptsetup, then? I am afraid we do not want
+to add such specific things there.
 
-On 6/8/2023 12:14 AM, Krzysztof Kozlowski wrote:
-> On 07/06/2023 18:30, Ekansh Gupta wrote:
->> Add "qcom,fastrpc-gids" property to the list of optional properties.
->> This property contains the list of privileged group IDs which is
->> used to offload process to remote subsystem with increased privileges.
-> 
-> Why or when anyone would use this property?
-> 
-This property can be used for the use cases which requires prioritized 
-access to remote subsystem resources.
->>
->> Signed-off-by: Ekansh Gupta <quic_ekangupt@quicinc.com>
->> ---
->>   Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml | 6 ++++++
->>   1 file changed, 6 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml b/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
->> index 1ab9588..2a2124f 100644
->> --- a/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
->> +++ b/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
->> @@ -57,6 +57,11 @@ properties:
->>         Virtual machine IDs for remote processor.
->>       $ref: "/schemas/types.yaml#/definitions/uint32-array"
->>   
->> +  qcom,fastrpc-gids:
->> +    description:
->> +      Group IDs for fastrpc.
-> 
-> You just pasted here property name. It does not help me to understand
-> what's this. Explain in description.
-> 
-I'll add more details here when I re-submit the patch.
->> +    $ref: "/schemas/types.yaml#/definitions/uint32-array"
-> 
-> Drop quotes.
-> 
-> missing min/maxItems.
-> 
-I'll update this in v2. Thanks for reviewing.
->> +
->>     "#address-cells":
->>       const: 1
->>   
->> @@ -120,6 +125,7 @@ examples:
->>               qcom,glink-channels = "fastrpcglink-apps-dsp";
->>               label = "sdsp";
->>               qcom,non-secure-domain;
->> +            qcom,fastrpc-gids = <2908>
-> 
-> Eh, what does 2908 stands for? Why not 3012 or 1842? How anyone can
-> figure this out?
-> 
-There is no hard restriction for this value to be 2908, it can be 
-anything. Just that the process which needs a privileged offload to any 
-remote subsystem should have the same gid which is defined here, whether 
-it is 2908 or anything else.
+But we are just going to merge a patchset that changes how we use keyring
+where you can tell cryptsetup to store/link key under some specific name
+and to specific keyring
+(see https://gitlab.com/cryptsetup/cryptsetup/-/merge_requests/492)
+(Please talk to Red Hat cryptsetup maintainers for more info,
+I just mentioned this mail to them today.)
 
-The intention of having 2908 in example is because this is used in 
-Android world where any process running with 2908 gid can offload as 
-privileged process to remote subsystem.
-Ref: 
-https://review.lineageos.org/c/LineageOS/android_device_motorola_sm7250-common/+/305612/4/config.fs
+> I respect the efforts from you and the cryptsetup community to make LUKS
+> as secure as possible. And kdump is used in product environment. Kdump
+> is to a server as a black box is to an aircraft. So by no means I want
+> to reverse the used security measures and patching cryptsetup can allow
+> to keep the security measures. One concern raised by you against "FRC
+> v1" was a copy of the LUKS volume key for the kdump kernel creates an
+> attack vector. I took this feedback seriously and have sought advice
+> from my colleagues to implement the countermeasures ([PATCH 1/5] and
+> [Patch 4/5]).
+> 
+> [1] https://yhbt.net/lore/all/e5abd089-3398-fdb4-7991-0019be434b79@gmail.com/
 
-But, it can be set to anything just that the process also needs to adapt 
-to this gid.
+Yes, I appreciate that. And it is perfectly ok if your customers accept
+the trade-off and security risk of handling the key this way.
+
+Anyway, I feel we are going in circles here, and as it seems to be my fault,
+I do not want to sound grumpy as I am perhaps missing some context.
+
+Could you please talk to internal RH cryptsetup maintainers first and discuss
+your solution? They know what we can do here can help to find an acceptable
+solution. (I added cc to Ondra.)
 
 Thanks,
-Ekansh
-> Best regards,
-> Krzysztof
-> 
+Milan
