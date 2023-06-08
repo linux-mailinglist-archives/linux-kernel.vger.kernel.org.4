@@ -2,69 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D94B0727D46
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:52:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E437F727D4D
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236186AbjFHKwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 06:52:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56494 "EHLO
+        id S234041AbjFHKyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 06:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235252AbjFHKw1 (ORCPT
+        with ESMTP id S233379AbjFHKxz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 06:52:27 -0400
-Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440822D42
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 03:52:06 -0700 (PDT)
-Received: by mail-vk1-xa2d.google.com with SMTP id 71dfb90a1353d-45ee86a16caso144844e0c.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 03:52:06 -0700 (PDT)
+        Thu, 8 Jun 2023 06:53:55 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B301136
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 03:53:52 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f63a2e1c5fso594277e87.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 03:53:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686221525; x=1688813525;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t+wKmn+dGFIKb4lUNmkGpLUatoAVJNOyxAKbwg0PNTE=;
-        b=FXX4WlkDxC6e/BwUUoQ9mYR1oXHrRvqnPf4ZcRCqgk7HTbrvPt33x/D1C2YZBA3Plm
-         ZYMrYM9/4IJUKzSHlVl7pr6TLGSRB4oyo0ksF6IXwB3fil1KQLQXFtEwRWPHjHfqj6pk
-         7VAlyP0zgz/1ZpKxW+GYi5Vu0t5qXZQ3Sav4P67zD7ix5pzZc2wwRTQbQ+7tfEYkKkt7
-         67VGd5YoEXnw4f4N6H+GkSIOJaPb6wp6qvFnTbeI4IaHvxyfGAAwMcD056m5MXO9DEb2
-         ZU8Oy0JkN1jvhq9a3Zadds+RBKsrpXNbrA1esgzqqqemQbnOpLhjjKQEQVTuAXCrCTQz
-         pCRg==
+        d=linaro.org; s=google; t=1686221630; x=1688813630;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZXp+tkBu57J5GgSNnzpDh/hINct2oWOVcfdp9BtjDXA=;
+        b=ypj1M1BvEHARN5lmYJLj/weeH5JOKoYgiSFVw+KL/lN65G4oZijdY8tUOWPgdT8Pfp
+         gubvHWeRBWGg8aVRS35mQG5UDu+G2OZ+GrBYfdpc35xOl4IOtAsBNlPiP8f9boQfbulx
+         6YIjzZxUhD7bVdHNHYfvPMx7FjHjcM+ZdkkBIFKHUvgo3PJ+fR4tPtXkFrf4g77STbKj
+         8dfKfCkCE6nw2VM8akkcHdrveCqwxA+O5+K7ai/hBwSFT7Ie0mtsAn1SqCo7Ltz6LgkR
+         y2gsJooGbY3j1ULafdgMh86ETwhNw3j3a8AEC4m4KGT+CsZI+x3dIN2fERqOFZMOSzq9
+         MKgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686221525; x=1688813525;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=t+wKmn+dGFIKb4lUNmkGpLUatoAVJNOyxAKbwg0PNTE=;
-        b=XABCNvVsOc9zDNk1pN4iJ/7hqkafqq6RGvII/6+bt8wjoCra0JCf/kAB5j2nyOpvvM
-         LvX8WXk2RqPPdcQAkzsMBej8Wmv8Ei3lszIFy2DoxbfSgffdS2SJT+8NOQ4fIbSSK1FV
-         CVD3h6CdHOO+Ac6/OCSVfg8j5JQrPliOvde34ByL7OOTUKhU0GUsN+He3NYN5280fuO5
-         OsboPjCO73NR73L96B1+aKV4aDtRPEc18v3bnv4ATzf3iTu+bPkJPwrGkBFtAi0job+N
-         rlocEr1iHVpFS62R/4RU13VXXEFpXGvThYEkXYiSSgKcZVOQ0Q3DVlXOZN2O4J2U0j5J
-         gnSw==
-X-Gm-Message-State: AC+VfDzEVysHmUqA8948Fw/o8AGEzTic1pI8N5FcllIaMS4vSaWt3Lrm
-        bskFduf4/Vl7Byyu0nbwxhn4ZchhCSdFx2FaV6fz0w==
-X-Google-Smtp-Source: ACHHUZ693v6i8cQH8pJrkhIBaCx8F9RI+5evhOle5Jb3R3CnNgus9SfPOwHT3YuWZm+CoOsmxExNhFO/rhGiSLwHiZ4=
-X-Received: by 2002:a1f:43c6:0:b0:464:6036:604f with SMTP id
- q189-20020a1f43c6000000b004646036604fmr3036424vka.7.1686221525223; Thu, 08
- Jun 2023 03:52:05 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686221630; x=1688813630;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZXp+tkBu57J5GgSNnzpDh/hINct2oWOVcfdp9BtjDXA=;
+        b=ScXzd8T68wz1x4CfO6MI9s0rGAQWo9lGiHYNUOi3xIt6qnCiSK+OnFM1r4Tc8VscVV
+         nSa05/o3MqUtVDIi5Qs7KQrdeXfBZCJ02ro+AvouW3C2ZEF0vi6vNYmPFA7475zXLBMP
+         9MKwSQSRrPn0X2WAulIOU5bDttTM2dJHu2ln0x1l25C8DTcLbKovcA9+NhxmpnQhlWhF
+         G3Tbz8HFKDYPUKlzAlo7RvKIjrGcYHoLGNsUkrRQ9Bl2kjZIFDnyal8JJTEshgJeOt/B
+         SqenJGzPn3xo2X6dqwFuNTKlyZKx3FA/Lt6/whCgXnxT0zGAMMx48TaQs5/h7iM80miy
+         I6pQ==
+X-Gm-Message-State: AC+VfDzXpAeBKIARbdBt/gCGyWV2+SEkIIUgZHoqfC9d8ds/XK6AnqyW
+        FeKXU0GXElzgccrByMRjziaUQQ==
+X-Google-Smtp-Source: ACHHUZ6FmY7hG9q8DaTErvv5RvZ9OdIMgaQbc29Q2RqQwzRvhwPhjOOVRM2fiQy+ZBbR9MJDQv+Ryw==
+X-Received: by 2002:a2e:7e03:0:b0:2af:1622:a69 with SMTP id z3-20020a2e7e03000000b002af16220a69mr3628770ljc.48.1686221630610;
+        Thu, 08 Jun 2023 03:53:50 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id m16-20020ac24250000000b004f4cabba7ebsm143723lfl.199.2023.06.08.03.53.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jun 2023 03:53:50 -0700 (PDT)
+Message-ID: <2925b9c3-494b-1401-1e05-3d411cc90f28@linaro.org>
+Date:   Thu, 8 Jun 2023 13:53:49 +0300
 MIME-Version: 1.0
-References: <20230607200922.978677727@linuxfoundation.org>
-In-Reply-To: <20230607200922.978677727@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 8 Jun 2023 16:21:53 +0530
-Message-ID: <CA+G9fYuv4MhCAMSc33hZdDozV=MJzbK3CvHYCn10nDOY5gDQpQ@mail.gmail.com>
-Subject: Re: [PATCH 6.3 000/286] 6.3.7-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v13 3/5] arm64: dts: qcom: ipq9574: Add USB related nodes
+Content-Language: en-GB
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org
+References: <cover.1686215358.git.quic_varada@quicinc.com>
+ <2f91eb879daaf9955dc56135d60a4be5e191a44d.1686215358.git.quic_varada@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <2f91eb879daaf9955dc56135d60a4be5e191a44d.1686215358.git.quic_varada@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,173 +81,193 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 8 Jun 2023 at 01:52, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.3.7 release.
-> There are 286 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 09 Jun 2023 20:07:31 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
-6.3.7-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-6.3.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 08/06/2023 12:28, Varadarajan Narayanan wrote:
+> Add USB phy and controller related nodes
+> 
+> SS PHY need two supplies and HS PHY needs three supplies. 0.925V
+> and 3.3V are from fixed regulators and 1.8V is generated from
+> PMIC's LDO
+> 
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> ---
+>   Changes in v13:
+> 	- Move fixed regulator definitions from SoC dtsi to board dts
+> 	- Remove 'dr_mode' from SoC dtsi
+> 	- Move 'status' property to the end
+>   Changes in v12:
+> 	- Rebase
+>   Changes in v11:
+> 	- Rename dwc_0 -> usb_0_dwc3
+>   Changes in v10:
+> 	- Fix regulator definitions
+>   Changes in v8:
+> 	- Change clocks order to match the bindings
+>   Changes in v7:
+> 	- Change com_aux -> cfg_ahb
+>   Changes in v6:
+> 	- Introduce fixed regulators for the phy
+> 	- Resolved all 'make dtbs_check' messages
+> 
+>   Changes in v5:
+> 	- Fix additional comments
+> 	- Edit nodes to match with qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> 	- 'make dtbs_check' giving the following messages since
+> 	  ipq9574 doesn't have power domains. Hope this is ok
+> 
+> 		/local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: phy@7d000: 'power-domains' is a required property
+>          	From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+> 		/local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: usb@8a00000: 'power-domains' is a required property
+>          	From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> 
+>   Changes in v4:
+> 	- Use newer bindings without subnodes
+> 	- Fix coding style issues
+> 
+>   Changes in v3:
+> 	- Insert the nodes at proper location
+> 
+>   Changes in v2:
+> 	- Fixed issues flagged by Krzysztof
+> 	- Fix issues reported by make dtbs_check
+> 	- Remove NOC related clocks (to be added with proper
+> 	  interconnect support)
+> ---
+>   arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 18 ++++++
+>   arch/arm64/boot/dts/qcom/ipq9574.dtsi       | 85 +++++++++++++++++++++++++++++
+>   2 files changed, 103 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+> index 2b3ed8d..8261a2b 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+> +++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
+> @@ -21,6 +21,24 @@
+>   	chosen {
+>   		stdout-path = "serial0:115200n8";
+>   	};
+> +
+> +	regulator_fixed_3p3: s3300 {
 
+Nit: these two regulators are not references from SoC dtsi. So they can 
+be moved to one of the next commits.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+> +		compatible = "regulator-fixed";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		regulator-boot-on;
+> +		regulator-always-on;
+> +		regulator-name = "fixed_3p3";
+> +	};
+> +
+> +	regulator_fixed_0p925: s0925 {
+> +		compatible = "regulator-fixed";
+> +		regulator-min-microvolt = <925000>;
+> +		regulator-max-microvolt = <925000>;
+> +		regulator-boot-on;
+> +		regulator-always-on;
+> +		regulator-name = "fixed_0p925";
+> +	};
+>   };
+>   
+>   &blsp1_uart2 {
+> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> index 0baeb10..feabc19 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> @@ -465,6 +465,91 @@
+>   			status = "disabled";
+>   		};
+>   
+> +		usb_0_qusbphy: phy@7b000 {
+> +			compatible = "qcom,ipq9574-qusb2-phy";
+> +			reg = <0x0007b000 0x180>;
+> +			#phy-cells = <0>;
+> +
+> +			clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
+> +				 <&xo_board_clk>;
+> +			clock-names = "cfg_ahb",
+> +				      "ref";
+> +
+> +			resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
+> +			status = "disabled";
+> +		};
+> +
+> +		usb_0_qmpphy: phy@7d000 {
+> +			compatible = "qcom,ipq9574-qmp-usb3-phy";
+> +			reg = <0x0007d000 0xa00>;
+> +			#phy-cells = <0>;
+> +
+> +			clocks = <&gcc GCC_USB0_AUX_CLK>,
+> +				 <&xo_board_clk>,
+> +				 <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
+> +				 <&gcc GCC_USB0_PIPE_CLK>;
+> +			clock-names = "aux",
+> +				      "ref",
+> +				      "cfg_ahb",
+> +				      "pipe";
+> +
+> +			resets = <&gcc GCC_USB0_PHY_BCR>,
+> +				 <&gcc GCC_USB3PHY_0_PHY_BCR>;
+> +			reset-names = "phy",
+> +				      "phy_phy";
+> +
+> +			#clock-cells = <0>;
+> +			clock-output-names = "usb0_pipe_clk";
+> +
+> +			status = "disabled";
+> +		};
+> +
+> +		usb3: usb@8af8800 {
+> +			compatible = "qcom,ipq9574-dwc3", "qcom,dwc3";
+> +			reg = <0x08af8800 0x400>;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges;
+> +
+> +			clocks = <&gcc GCC_SNOC_USB_CLK>,
+> +				 <&gcc GCC_USB0_MASTER_CLK>,
+> +				 <&gcc GCC_ANOC_USB_AXI_CLK>,
+> +				 <&gcc GCC_USB0_SLEEP_CLK>,
+> +				 <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> +
+> +			clock-names = "cfg_noc",
+> +				      "core",
+> +				      "iface",
+> +				      "sleep",
+> +				      "mock_utmi";
+> +
+> +			assigned-clocks = <&gcc GCC_USB0_MASTER_CLK>,
+> +					  <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> +			assigned-clock-rates = <200000000>,
+> +					       <24000000>;
+> +
+> +			interrupts-extended = <&intc GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names = "pwr_event";
+> +
+> +			resets = <&gcc GCC_USB_BCR>;
+> +			status = "disabled";
+> +
+> +			usb_0_dwc3: usb@8a00000 {
+> +				compatible = "snps,dwc3";
+> +				reg = <0x8a00000 0xcd00>;
+> +				clocks = <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> +				clock-names = "ref";
+> +				interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
+> +				phys = <&usb_0_qusbphy>, <&usb_0_qmpphy>;
+> +				phy-names = "usb2-phy", "usb3-phy";
+> +				tx-fifo-resize;
+> +				snps,is-utmi-l1-suspend;
+> +				snps,hird-threshold = /bits/ 8 <0x0>;
+> +				snps,dis_u2_susphy_quirk;
+> +				snps,dis_u3_susphy_quirk;
+> +			};
+> +		};
+> +
+>   		intc: interrupt-controller@b000000 {
+>   			compatible = "qcom,msm-qgic2";
+>   			reg = <0x0b000000 0x1000>,  /* GICD */
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+-- 
+With best wishes
+Dmitry
 
-## Build
-* kernel: 6.3.7-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
-rc.git
-* git branch: linux-6.3.y
-* git commit: 78317e11fb00aba0b42e15367d2630a515e4a808
-* git describe: v6.3.5-333-g78317e11fb00
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v6.3.5=
--333-g78317e11fb00
-
-## Test Regressions (compared to v6.3.5)
-
-## Metric Regressions (compared to v6.3.5)
-
-## Test Fixes (compared to v6.3.5)
-
-## Metric Fixes (compared to v6.3.5)
-
-## Test result summary
-total: 138349, pass: 121372, fail: 2111, skip: 14667, xfail: 199
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 140 total, 139 passed, 1 failed
-* arm64: 50 total, 50 passed, 0 failed
-* i386: 36 total, 35 passed, 1 failed
-* mips: 26 total, 26 passed, 0 failed
-* parisc: 3 total, 3 passed, 0 failed
-* powerpc: 34 total, 34 passed, 0 failed
-* riscv: 22 total, 22 passed, 0 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 12 total, 12 passed, 0 failed
-* sparc: 6 total, 6 passed, 0 failed
-* x86_64: 42 total, 42 passed, 0 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-exec
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-mincore
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-user_events
-* kselftest-vDSO
-* kselftest-watchdog
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
