@@ -2,270 +2,338 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9FE37279AB
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 10:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D227279BD
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 10:12:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233089AbjFHILV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 04:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55448 "EHLO
+        id S234864AbjFHIMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 04:12:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234595AbjFHILQ (ORCPT
+        with ESMTP id S233756AbjFHIMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 04:11:16 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E062685;
-        Thu,  8 Jun 2023 01:11:14 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3587DKsp014183;
-        Thu, 8 Jun 2023 08:11:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=EvVCq+fSL3hZund+bI6Av8FrnqRN9Kpvc7+n0PKiSP8=;
- b=PSt4baUZIDXZJB1mQHy7dNq2IhWM91uRRMM6EyhG1zLoZ1R8PLDla8krls+P78KvfGVG
- zpt/comuSE7J+7wuGgb2XyrBjNMDq3q4c2y2BvUpEA/kEEBycNkWJEZ+3MBPmTQLAKu9
- tvLa2q4zkw8naLZLeCqwldvAmgM7RFx02gnjuEn4XKkS97j50kfS3JgYhQiC4B7S1rxS
- JR0pcvGMxRj1fqxOeJzXb/S0z/nEZwMwkXMYKQm7xsePiwURQx9Ly4L0zn3W7T5xhJuJ
- rm9x9M8AcmfUQLpvDOlH5Jks34Iu0RgFgztGvOITTeGYs4jq+tNA1Lo3Y1vB59NZJrir hg== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r33uygqbt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Jun 2023 08:11:03 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3588B3I8032505
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 8 Jun 2023 08:11:03 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 8 Jun 2023 01:10:58 -0700
-Date:   Thu, 8 Jun 2023 13:40:54 +0530
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <gregkh@linuxfoundation.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <quic_wcheng@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v12 3/5] arm64: dts: qcom: ipq9574: Add USB related nodes
-Message-ID: <20230608081053.GB16505@varda-linux.qualcomm.com>
-References: <cover.1686045347.git.quic_varada@quicinc.com>
- <5a14d113e90c85777d1c01af38a85f40d35519e0.1686045347.git.quic_varada@quicinc.com>
- <307409f2-a516-4aea-45bb-137ffc2bc725@linaro.org>
+        Thu, 8 Jun 2023 04:12:31 -0400
+Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FCE2700
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 01:12:29 -0700 (PDT)
+Received: by mail-vk1-xa2a.google.com with SMTP id 71dfb90a1353d-465db156268so65299e0c.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 01:12:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1686211948; x=1688803948;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cAiwpr4ZhLz8drmLYbFRJeJlB43Bw/gRsi8DXM2zl1Q=;
+        b=IEpW9QFjXmCUJ9pMxaLKoDnKjHHCSS3HNrFXVJ6GB6w8VcCMmyyIITHm+Wq6agO0oV
+         hhdPy6bo6ftpC5VEPT5yRIlvkChqHqzbct/Gu0Ciobgb5knyJ4ubr3jM2JsNgPmyKWre
+         crohC1Y0fr8/2j+WplE2CQbon9ggtXVIBX5J4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686211948; x=1688803948;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cAiwpr4ZhLz8drmLYbFRJeJlB43Bw/gRsi8DXM2zl1Q=;
+        b=FX6SC+LXSEE2fo7QtzlyllItGUGlqiUTn1RA/FVI0FUPWikxZjW87lWBlO1ROHytYM
+         G+QFJ+m28t3YD0qMMQmAHPo2eUfODYJ6GT/a3cRqe/gyItlI/xOWD5AJQdZCynoUF6fk
+         2/anfJHHeQO909mgaxskasESuowrm31JTF93T6wAoW+6CI0ays3ysD31QOiCs0+rqR0B
+         f2vgVO+pPXb5S3T/NIpqSxmTfnwW/xPw3iynUuBS/2/hUQRHCma8XKdRHwaFMEj6nWtU
+         Qy29pmpP6j3gnc7kap5KjLXxq3tz2Mkdx23Dy6KurEwi86eT6cXJ+PKBE0Lys+x3EnBG
+         1XAA==
+X-Gm-Message-State: AC+VfDxOfwnIFSJGlAKfvrxQKcLJ1IUUasxb4QYTCAGzd6crNBNyQHYH
+        bzwVbpShgrucImtlMLQHty7H7tljR1Il5CKSIvZxsPNueGj48YSx
+X-Google-Smtp-Source: ACHHUZ5e8GVd8y3ZD62t7YDa8qhdFbbtx2TZYiko3UVhh75VOZ/O5sXvSx8DnVAwYChCLw2M/6dhxEaJm5woLCMH9Cc=
+X-Received: by 2002:a1f:41ce:0:b0:456:a3bc:3daf with SMTP id
+ o197-20020a1f41ce000000b00456a3bc3dafmr2820852vka.9.1686211947817; Thu, 08
+ Jun 2023 01:12:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <307409f2-a516-4aea-45bb-137ffc2bc725@linaro.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: _LnJt_vxgUAwEwTT-zPMGNq0bYGUolGG
-X-Proofpoint-ORIG-GUID: _LnJt_vxgUAwEwTT-zPMGNq0bYGUolGG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-08_04,2023-06-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
- priorityscore=1501 impostorscore=0 mlxscore=0 bulkscore=0 malwarescore=0
- suspectscore=0 clxscore=1015 phishscore=0 lowpriorityscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306080069
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230607205714.510012-1-nfraprado@collabora.com> <20230607205714.510012-4-nfraprado@collabora.com>
+In-Reply-To: <20230607205714.510012-4-nfraprado@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Thu, 8 Jun 2023 16:12:16 +0800
+Message-ID: <CAGXv+5HHARvkCYfjPjRKgyWuzv-Dt215z1=yA+_tw4hyasdGQA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/5] media: mediatek: vcodec: Read HW active status
+ from clock
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Stephen Boyd <sboyd@kernel.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>, kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 08:50:41PM +0200, Krzysztof Kozlowski wrote:
-> On 07/06/2023 12:48, Varadarajan Narayanan wrote:
-> > Add USB phy and controller related nodes
-> >
-> > SS PHY need two supplies and HS PHY needs three supplies. 0.925V
-> > and 3.3V are from fixed regulators and 1.8V is generated from
-> > PMIC's LDO
-> >
-> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > ---
-> >  Changes in v12:
-> > 	- Rebase
-> >  Changes in v11:
-> > 	- Rename dwc_0 -> usb_0_dwc3
-> >  Changes in v10:
-> > 	- Fix regulator definitions
-> >  Changes in v8:
-> > 	- Change clocks order to match the bindings
-> >  Changes in v7:
-> > 	- Change com_aux -> cfg_ahb
-> >  Changes in v6:
-> > 	- Introduce fixed regulators for the phy
-> > 	- Resolved all 'make dtbs_check' messages
-> >
-> >  Changes in v5:
-> > 	- Fix additional comments
-> > 	- Edit nodes to match with qcom,sc8280xp-qmp-usb3-uni-phy.yaml
-> > 	- 'make dtbs_check' giving the following messages since
-> > 	  ipq9574 doesn't have power domains. Hope this is ok
-> >
-> > 		/local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: phy@7d000: 'power-domains' is a required property
-> >         	From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
-> > 		/local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: usb@8a00000: 'power-domains' is a required property
-> >         	From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> >
-> >  Changes in v4:
-> > 	- Use newer bindings without subnodes
-> > 	- Fix coding style issues
-> >
-> >  Changes in v3:
-> > 	- Insert the nodes at proper location
-> >
-> >  Changes in v2:
-> > 	- Fixed issues flagged by Krzysztof
-> > 	- Fix issues reported by make dtbs_check
-> > 	- Remove NOC related clocks (to be added with proper
-> > 	  interconnect support)
-> > ---
-> >  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 104 ++++++++++++++++++++++++++++++++++
-> >  1 file changed, 104 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> > index 0baeb10..8f7c59e 100644
-> > --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> > @@ -94,6 +94,24 @@
-> >  		};
-> >  	};
-> >
-> > +	fixed_3p3: s3300 {
+On Thu, Jun 8, 2023 at 4:57=E2=80=AFAM N=C3=ADcolas F. R. A. Prado
+<nfraprado@collabora.com> wrote:
 >
-> Use regulator- prefix for node name.
-
-ok
-
-> > +		compatible = "regulator-fixed";
-> > +		regulator-min-microvolt = <3300000>;
-> > +		regulator-max-microvolt = <3300000>;
-> > +		regulator-boot-on;
-> > +		regulator-always-on;
-> > +		regulator-name = "fixed_3p3";
-> > +	};
-> > +
-> > +	fixed_0p925: s0925 {
-> > +		compatible = "regulator-fixed";
-> > +		regulator-min-microvolt = <925000>;
-> > +		regulator-max-microvolt = <925000>;
-> > +		regulator-boot-on;
-> > +		regulator-always-on;
-> > +		regulator-name = "fixed_0p925";
-> > +	};
-> > +
-> >  	memory@40000000 {
-> >  		device_type = "memory";
-> >  		/* We expect the bootloader to fill in the size */
-> > @@ -465,6 +483,92 @@
-> >  			status = "disabled";
-> >  		};
-> >
-> > +		usb_0_qusbphy: phy@7b000 {
-> > +			compatible = "qcom,ipq9574-qusb2-phy";
-> > +			reg = <0x0007b000 0x180>;
-> > +			#phy-cells = <0>;
-> > +
-> > +			clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
-> > +				 <&xo_board_clk>;
-> > +			clock-names = "cfg_ahb",
-> > +				      "ref";
-> > +
-> > +			resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
-> > +			status = "disabled";
-> > +		};
-> > +
-> > +		usb_0_qmpphy: phy@7d000 {
-> > +			compatible = "qcom,ipq9574-qmp-usb3-phy";
-> > +			reg = <0x0007d000 0xa00>;
-> > +			#phy-cells = <0>;
-> > +
-> > +			clocks = <&gcc GCC_USB0_AUX_CLK>,
-> > +				 <&xo_board_clk>,
-> > +				 <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
-> > +				 <&gcc GCC_USB0_PIPE_CLK>;
-> > +			clock-names = "aux",
-> > +				      "ref",
-> > +				      "cfg_ahb",
-> > +				      "pipe";
-> > +
-> > +			resets = <&gcc GCC_USB0_PHY_BCR>,
-> > +				 <&gcc GCC_USB3PHY_0_PHY_BCR>;
-> > +			reset-names = "phy",
-> > +				      "phy_phy";
-> > +
-> > +			status = "disabled";
+> Remove the requirement of a VDEC_SYS reg iospace. To achieve that, rely
+> on the "active" clock being passed through the DT, and read its status
+> during IRQ handling to check whether the HW is active.
 >
-> status is always the last property.
-
-ok
-
-> > +
-> > +			#clock-cells = <0>;
-> > +			clock-output-names = "usb0_pipe_clk";
-> > +		};
-> > +
-> > +		usb3: usb@8af8800 {
-> > +			compatible = "qcom,ipq9574-dwc3", "qcom,dwc3";
-> > +			reg = <0x08af8800 0x400>;
-> > +			#address-cells = <1>;
-> > +			#size-cells = <1>;
-> > +			ranges;
-> > +
-> > +			clocks = <&gcc GCC_SNOC_USB_CLK>,
-> > +				 <&gcc GCC_USB0_MASTER_CLK>,
-> > +				 <&gcc GCC_ANOC_USB_AXI_CLK>,
-> > +				 <&gcc GCC_USB0_SLEEP_CLK>,
-> > +				 <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> > +
-> > +			clock-names = "cfg_noc",
-> > +				      "core",
-> > +				      "iface",
-> > +				      "sleep",
-> > +				      "mock_utmi";
-> > +
-> > +			assigned-clocks = <&gcc GCC_USB0_MASTER_CLK>,
-> > +					  <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> > +			assigned-clock-rates = <200000000>,
-> > +					       <24000000>;
-> > +
-> > +			interrupts-extended = <&intc GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>;
-> > +			interrupt-names = "pwr_event";
-> > +
-> > +			resets = <&gcc GCC_USB_BCR>;
-> > +			status = "disabled";
-> > +
-> > +			usb_0_dwc3: usb@8a00000 {
-> > +				compatible = "snps,dwc3";
-> > +				reg = <0x8a00000 0xcd00>;
-> > +				clocks = <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> > +				clock-names = "ref";
-> > +				interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
-> > +				phys = <&usb_0_qusbphy>, <&usb_0_qmpphy>;
-> > +				phy-names = "usb2-phy", "usb3-phy";
-> > +				tx-fifo-resize;
-> > +				snps,is-utmi-l1-suspend;
-> > +				snps,hird-threshold = /bits/ 8 <0x0>;
-> > +				snps,dis_u2_susphy_quirk;
-> > +				snps,dis_u3_susphy_quirk;
-> > +				dr_mode = "host";
+> The old behavior is still present when reg-names aren't supplied, as to
+> keep backward compatibility.
 >
-> Why is this property of the SoC?
+> Signed-off-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+> ---
+>
+> (no changes since v1)
+>
+>  .../mediatek/vcodec/mtk_vcodec_dec_drv.c      | 59 +++++++++++++++----
+>  .../mediatek/vcodec/mtk_vcodec_dec_hw.c       | 20 +++++--
+>  .../mediatek/vcodec/mtk_vcodec_dec_pm.c       | 12 +++-
+>  .../platform/mediatek/vcodec/mtk_vcodec_drv.h |  1 +
+>  4 files changed, 74 insertions(+), 18 deletions(-)
+>
+> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c =
+b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
+> index 9c652beb3f19..8038472fb67b 100644
+> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
+> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
+> @@ -16,6 +16,7 @@
+>  #include <media/v4l2-mem2mem.h>
+>  #include <media/videobuf2-dma-contig.h>
+>  #include <media/v4l2-device.h>
+> +#include <linux/clk-provider.h>
 
-Will remove it from here. It is present in ipq9574-rdp433.dts
+                   ^^^^^^^^^^^^^^
 
-Thanks
-Varada
+This seems like a violation of the API separation.
+
+>  #include "mtk_vcodec_drv.h"
+>  #include "mtk_vcodec_dec.h"
+> @@ -38,22 +39,29 @@ static int mtk_vcodec_get_hw_count(struct mtk_vcodec_=
+dev *dev)
+>         }
+>  }
+>
+> +static bool mtk_vcodec_is_hw_active(struct mtk_vcodec_dev *dev)
+> +{
+> +       u32 cg_status =3D 0;
+> +
+> +       if (!dev->reg_base[VDEC_SYS])
+> +               return __clk_is_enabled(dev->pm.vdec_active_clk);
+
+AFAIK this is still around for clk drivers that haven't moved to clk_hw.
+It shouldn't be used by clock consumers. Would it be better to just pass
+a syscon?
+
+ChenYu
+
+
+> +
+> +       cg_status =3D readl(dev->reg_base[VDEC_SYS]);
+> +       return (cg_status & VDEC_HW_ACTIVE) =3D=3D 0;
+> +}
+> +
+>  static irqreturn_t mtk_vcodec_dec_irq_handler(int irq, void *priv)
+>  {
+>         struct mtk_vcodec_dev *dev =3D priv;
+>         struct mtk_vcodec_ctx *ctx;
+> -       u32 cg_status =3D 0;
+>         unsigned int dec_done_status =3D 0;
+>         void __iomem *vdec_misc_addr =3D dev->reg_base[VDEC_MISC] +
+>                                         VDEC_IRQ_CFG_REG;
+>
+>         ctx =3D mtk_vcodec_get_curr_ctx(dev, MTK_VDEC_CORE);
+>
+> -       /* check if HW active or not */
+> -       cg_status =3D readl(dev->reg_base[0]);
+> -       if ((cg_status & VDEC_HW_ACTIVE) !=3D 0) {
+> -               mtk_v4l2_err("DEC ISR, VDEC active is not 0x0 (0x%08x)",
+> -                            cg_status);
+> +       if (!mtk_vcodec_is_hw_active(dev)) {
+> +               mtk_v4l2_err("DEC ISR, VDEC active is not 0x0");
+>                 return IRQ_HANDLED;
+>         }
+>
+> @@ -82,6 +90,25 @@ static int mtk_vcodec_get_reg_bases(struct mtk_vcodec_=
+dev *dev)
+>  {
+>         struct platform_device *pdev =3D dev->plat_dev;
+>         int reg_num, i;
+> +       struct resource *res;
+> +       bool no_vdecsys_reg =3D false;
+> +       static const char * const mtk_dec_reg_names[] =3D {
+> +               "misc",
+> +               "ld",
+> +               "top",
+> +               "cm",
+> +               "ad",
+> +               "av",
+> +               "pp",
+> +               "hwd",
+> +               "hwq",
+> +               "hwb",
+> +               "hwg"
+> +       };
+> +
+> +       res =3D platform_get_resource_byname(pdev, IORESOURCE_MEM, "misc"=
+);
+> +       if (res)
+> +               no_vdecsys_reg =3D true;
+>
+>         /* Sizeof(u32) * 4 bytes for each register base. */
+>         reg_num =3D of_property_count_elems_of_size(pdev->dev.of_node, "r=
+eg",
+> @@ -91,12 +118,22 @@ static int mtk_vcodec_get_reg_bases(struct mtk_vcode=
+c_dev *dev)
+>                 return -EINVAL;
+>         }
+>
+> -       for (i =3D 0; i < reg_num; i++) {
+> -               dev->reg_base[i] =3D devm_platform_ioremap_resource(pdev,=
+ i);
+> -               if (IS_ERR(dev->reg_base[i]))
+> -                       return PTR_ERR(dev->reg_base[i]);
+> +       if (!no_vdecsys_reg) {
+> +               for (i =3D 0; i < reg_num; i++) {
+> +                       dev->reg_base[i] =3D devm_platform_ioremap_resour=
+ce(pdev, i);
+> +                       if (IS_ERR(dev->reg_base[i]))
+> +                               return PTR_ERR(dev->reg_base[i]);
+>
+> -               mtk_v4l2_debug(2, "reg[%d] base=3D%p", i, dev->reg_base[i=
+]);
+> +                       mtk_v4l2_debug(2, "reg[%d] base=3D%p", i, dev->re=
+g_base[i]);
+> +               }
+> +       } else {
+> +               for (i =3D 0; i < reg_num; i++) {
+> +                       dev->reg_base[i+1] =3D devm_platform_ioremap_reso=
+urce_byname(pdev, mtk_dec_reg_names[i]);
+> +                       if (IS_ERR(dev->reg_base[i+1]))
+> +                               return PTR_ERR(dev->reg_base[i+1]);
+> +
+> +                       mtk_v4l2_debug(2, "reg[%d] base=3D%p", i+1, dev->=
+reg_base[i+1]);
+> +               }
+>         }
+>
+>         return 0;
+> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c b=
+/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
+> index b753bf54ebd9..4e786821015d 100644
+> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
+> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/of_device.h>
+>  #include <linux/pm_runtime.h>
+>  #include <linux/slab.h>
+> +#include <linux/clk-provider.h>
+>
+>  #include "mtk_vcodec_drv.h"
+>  #include "mtk_vcodec_dec.h"
+> @@ -63,22 +64,29 @@ static int mtk_vdec_hw_prob_done(struct mtk_vcodec_de=
+v *vdec_dev)
+>         return 0;
+>  }
+>
+> +static bool mtk_vcodec_is_hw_active(struct mtk_vdec_hw_dev *dev)
+> +{
+> +       u32 cg_status;
+> +
+> +       if (!dev->reg_base[VDEC_HW_SYS])
+> +               return __clk_is_enabled(dev->pm.vdec_active_clk);
+> +
+> +       cg_status =3D readl(dev->reg_base[VDEC_HW_SYS]);
+> +       return (cg_status & VDEC_HW_ACTIVE) =3D=3D 0;
+> +}
+> +
+>  static irqreturn_t mtk_vdec_hw_irq_handler(int irq, void *priv)
+>  {
+>         struct mtk_vdec_hw_dev *dev =3D priv;
+>         struct mtk_vcodec_ctx *ctx;
+> -       u32 cg_status;
+>         unsigned int dec_done_status;
+>         void __iomem *vdec_misc_addr =3D dev->reg_base[VDEC_HW_MISC] +
+>                                         VDEC_IRQ_CFG_REG;
+>
+>         ctx =3D mtk_vcodec_get_curr_ctx(dev->main_dev, dev->hw_idx);
+>
+> -       /* check if HW active or not */
+> -       cg_status =3D readl(dev->reg_base[VDEC_HW_SYS]);
+> -       if (cg_status & VDEC_HW_ACTIVE) {
+> -               mtk_v4l2_err("vdec active is not 0x0 (0x%08x)",
+> -                            cg_status);
+> +       if (!mtk_vcodec_is_hw_active(dev)) {
+> +               mtk_v4l2_err("vdec active is not 0x0");
+>                 return IRQ_HANDLED;
+>         }
+>
+> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c b=
+/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c
+> index 777d445999e9..53e621965950 100644
+> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c
+> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c
+> @@ -51,6 +51,9 @@ int mtk_vcodec_init_dec_clk(struct platform_device *pde=
+v, struct mtk_vcodec_pm *
+>                                 clk_info->clk_name);
+>                         return PTR_ERR(clk_info->vcodec_clk);
+>                 }
+> +
+> +               if (strcmp(clk_info->clk_name, "active") =3D=3D 0)
+> +                       pm->vdec_active_clk =3D clk_info->vcodec_clk;
+>         }
+>
+>         return 0;
+> @@ -84,6 +87,9 @@ static void mtk_vcodec_dec_clock_on(struct mtk_vcodec_p=
+m *pm)
+>
+>         dec_clk =3D &pm->vdec_clk;
+>         for (i =3D 0; i < dec_clk->clk_num; i++) {
+> +               if (strcmp(dec_clk->clk_info[i].clk_name, "active") =3D=
+=3D 0)
+> +                       continue;
+> +
+>                 ret =3D clk_prepare_enable(dec_clk->clk_info[i].vcodec_cl=
+k);
+>                 if (ret) {
+>                         mtk_v4l2_err("clk_prepare_enable %d %s fail %d", =
+i,
+> @@ -104,8 +110,12 @@ static void mtk_vcodec_dec_clock_off(struct mtk_vcod=
+ec_pm *pm)
+>         int i;
+>
+>         dec_clk =3D &pm->vdec_clk;
+> -       for (i =3D dec_clk->clk_num - 1; i >=3D 0; i--)
+> +       for (i =3D dec_clk->clk_num - 1; i >=3D 0; i--) {
+> +               if (strcmp(dec_clk->clk_info[i].clk_name, "active") =3D=
+=3D 0)
+> +                       continue;
+> +
+>                 clk_disable_unprepare(dec_clk->clk_info[i].vcodec_clk);
+> +       }
+>  }
+>
+>  static void mtk_vcodec_dec_enable_irq(struct mtk_vcodec_dev *vdec_dev, i=
+nt hw_idx)
+> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h b/dr=
+ivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+> index 9acab54fd650..180e74c69042 100644
+> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+> @@ -208,6 +208,7 @@ struct mtk_vcodec_pm {
+>         struct mtk_vcodec_clk   vdec_clk;
+>         struct mtk_vcodec_clk   venc_clk;
+>         struct device   *dev;
+> +       struct clk *vdec_active_clk;
+>  };
+>
+>  /**
+> --
+> 2.41.0
+>
+>
