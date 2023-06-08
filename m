@@ -2,114 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B88D672803B
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 14:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B56EB728040
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 14:42:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236282AbjFHMlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 08:41:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56632 "EHLO
+        id S236221AbjFHMmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 08:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbjFHMlE (ORCPT
+        with ESMTP id S235381AbjFHMmg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 08:41:04 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB85E43
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 05:41:03 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-5440e98616cso1218703a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 05:41:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686228062; x=1688820062;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=o6uvPLwieY5RkBOZk+PD7M8YvflhokrnPtugOrS3QNE=;
-        b=Mx3sJVE2F1ORzjGqe3xy6X7wsCEApK1+VCCgRvjXycaGUApi2Tp0szjSn8M0PPbOrY
-         L6ZT2JbB809hrtAlSMLtJWgI0nHKoi/twmYAH9M+c9GMxpGAo8IGutngAyddmrMKefPf
-         RCBU4mnCL8+y9Yt8bpiSs2ZXdu8RQpYfL+zv2Gdo/ZaxOJSXFBTVqBrjamKKAnk98XpL
-         A7o0ukDCFy0RxCHOvs0/9rVuq8Zu9N2PmEmZ1tpwMEr4hiD84QamxF/SauHaF9MhLS8B
-         H5kQh9NyXsLSH3lUag3Ko/bg3fjlMsun8spM10a3OnrUJn+QiGsJ/VHlyT4g7Qu0l+ww
-         rEGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686228062; x=1688820062;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o6uvPLwieY5RkBOZk+PD7M8YvflhokrnPtugOrS3QNE=;
-        b=b7qnQZHKQs2rCGk2Ki+65mVLruLUN8S684qTkdee1QKET+cRemuua+C2S67z6vR6l3
-         9wIgz7nIWC2tAvX4+orYfWtmf2YC2oAcVO7SZfEa8yeA8p58EfthcMgaV9azB0R7hhsi
-         PodSlCw1BhHuyWXH4+usqVXI5/Auyo3nJln7iVuaEINRyPbRA8+E7qvG44WuEM6Jcb+e
-         nUOLepMnhgajCLu9vs5og7mz6Jm5hF/CkuQyZaF20iQVXaCUogHgHkpMbdLQBoOGshCh
-         fUmxQONgSEs3o9RbApoaIIEbfKJDQtlChp5h75c/676FeKHnnW6dF63Ln9bHMWWrLpsE
-         sYdQ==
-X-Gm-Message-State: AC+VfDxnnjlVCmXvazHNSSiHOoFbr36/n0mT34YJAyV8pAmjnRW3i4+Y
-        KvDH2zTgyh/sxLgJvCvRB4tO
-X-Google-Smtp-Source: ACHHUZ5poAB/V7RXQ3dOzoAJckBX+G4y1Bj7UJT9KsKdnWi22t9GzGjV2GyemH6S7dwhra7PXiL1qQ==
-X-Received: by 2002:a17:90b:314c:b0:25b:83ca:2b75 with SMTP id ip12-20020a17090b314c00b0025b83ca2b75mr176896pjb.3.1686228062475;
-        Thu, 08 Jun 2023 05:41:02 -0700 (PDT)
-Received: from thinkpad ([117.202.186.138])
-        by smtp.gmail.com with ESMTPSA id 30-20020a17090a01de00b00259a3c99978sm1285622pjd.17.2023.06.08.05.40.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 05:41:02 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 18:10:57 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, mhi@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loic.poulain@linaro.org
-Subject: Re: [PATCH v2 0/2] Add MHI Endpoint network driver
-Message-ID: <20230608124057.GD5672@thinkpad>
-References: <20230607152427.108607-1-manivannan.sadhasivam@linaro.org>
- <20230607094922.43106896@kernel.org>
- <eb4b45ab-1f51-47e9-a286-a9e26461ebed@lunn.ch>
+        Thu, 8 Jun 2023 08:42:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC2226B1;
+        Thu,  8 Jun 2023 05:42:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BFCB064D18;
+        Thu,  8 Jun 2023 12:42:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00B55C433EF;
+        Thu,  8 Jun 2023 12:42:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686228155;
+        bh=gkgTenx1i0qZQfBHISvhcjd7PbwsAhLxgVxAEZgDex4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RkXXKrm1XcyA+fru3aRSaR0ZC0bPFdrljVEPzk24dF5/PqK7v3QC98rCjUfmfDMLY
+         2NTJvIFsP7zGV32+zPdbglP2CT6FlTT3smAoLMFWMZQuj+teia/g4yrmLcd0RbCabk
+         TNPAvRxpuYs/AeG/GHpkUxqK0e5qq0EheUIS4QN7+5OKabqXKBnhExD1M5Xb5/Zoyi
+         if3EMb6Sd70Ai67OGxfov/+DNozrKnGcSd7n70E6oQyVKHN3yu9Cyj1tXIdC6Uj9oe
+         I4khjD8bjFJZEKHNevztQCYiNebZJTqWdgPMJbp5GGKVxIu6nNU/ohpesLX5HrLKS0
+         TzxFM8kIWCaCA==
+Date:   Thu, 8 Jun 2023 13:42:30 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the regulator tree
+Message-ID: <20230608124230.GH1930705@google.com>
+References: <20230607163743.1c266a7f@canb.auug.org.au>
+ <38913e8e-4578-4c4f-a6cd-6f6e628957af@sirena.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <eb4b45ab-1f51-47e9-a286-a9e26461ebed@lunn.ch>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <38913e8e-4578-4c4f-a6cd-6f6e628957af@sirena.org.uk>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 08:13:32PM +0200, Andrew Lunn wrote:
-> On Wed, Jun 07, 2023 at 09:49:22AM -0700, Jakub Kicinski wrote:
-> > On Wed,  7 Jun 2023 20:54:25 +0530 Manivannan Sadhasivam wrote:
-> > > This series adds a network driver for the Modem Host Interface (MHI) endpoint
-> > > devices that provides network interfaces to the PCIe based Qualcomm endpoint
-> > > devices supporting MHI bus (like Modems). This driver allows the MHI endpoint
-> > > devices to establish IP communication with the host machines (x86, ARM64) over
-> > > MHI bus.
-> > > 
-> > > On the host side, the existing mhi_net driver provides the network connectivity
-> > > to the host.
+On Wed, 07 Jun 2023, Mark Brown wrote:
+
+> On Wed, Jun 07, 2023 at 04:37:43PM +1000, Stephen Rothwell wrote:
+> > Hi all,
 > > 
-> > Why are you posting the next version before the discussion on the
-> > previous one concluded? :|
+> > The following commit is also in the mfd tree as a different commit
+> > (but the same patch):
 > > 
-> > In any case, I'm opposed to reuse of the networking stack to talk
-> > to firmware. It's a local device. The networking subsystem doesn't
-> > have to cater to fake networks. Please carry:
+> >   75c8cb2f4cb2 ("mfd: axp20x: Add support for AXP313a PMIC")
 > > 
-> > Nacked-by: Jakub Kicinski <kuba@kernel.org>
+> > This is commit
+> > 
+> >   2f518d914bd3 ("mfd: axp20x: Add support for AXP313a PMIC")
+> > 
+> > in the mfd tree.
 > 
-> Remote Processor Messaging (rpmsg) Framework does seem to be what is
-> supposed to be used for these sorts of situations. Not that i know
-> much about it.
-> 
+> Hrm, that was a tag I pulled from Lee rather than something I applied -
+> not sure what's going on there.
 
-Rpmsg is another messaging protocol used for talking to the remote processor.
-MHI is somewhat similar in terms of usecase but it is a proprietary protocol
-used by Qcom for their devices.
+Mea culpa.  I hadn't rebased onto my own tag.
 
-- Mani
-
->      Andrew
+Should be fixed in the next -next cut.
 
 -- 
-மணிவண்ணன் சதாசிவம்
+Lee Jones [李琼斯]
