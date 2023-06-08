@@ -2,100 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 315CE728638
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 19:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AF6F72863A
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 19:21:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236958AbjFHRVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 13:21:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46232 "EHLO
+        id S236998AbjFHRVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 13:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231144AbjFHRVU (ORCPT
+        with ESMTP id S236852AbjFHRVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 13:21:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE587E59;
-        Thu,  8 Jun 2023 10:21:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4AC5664FAA;
-        Thu,  8 Jun 2023 17:21:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBBADC433EF;
-        Thu,  8 Jun 2023 17:21:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686244878;
-        bh=+1JMZudb5uniaYe3Y3wFcz2tkfuMGhPDOo6QPhGbJeI=;
+        Thu, 8 Jun 2023 13:21:50 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D7A72D61;
+        Thu,  8 Jun 2023 10:21:47 -0700 (PDT)
+Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
+        by linux.microsoft.com (Postfix) with ESMTPSA id D83DE20B92C2;
+        Thu,  8 Jun 2023 10:21:46 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D83DE20B92C2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1686244907;
+        bh=VBaFkE6GX3eC/7r1EJyEukf/dkEnREgtJAdwAFf6fgI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hvsQRNBUpffh2bzrvN4vsPMPOZ/NuzUw6AHwjYs+TmO/+5bq/B1NLn/y9DvjM3vhD
-         qSYXcAB1x479VEs7sJKgWqnpn1IxrjyvRCEHsQpzVJ2wAtqfyTdzWnp2kqDYhndLTF
-         7lNh5AlZn4b7Gp1kiAVotShPo4PJIvxx5SJexnBt7DGohA6CcKd2HCSbS0Y09VYk6M
-         y5iOpEOFO7lRNIFm9ZNMfqWzNmIBEOylkDaVyxyf5C+GS0RZkmTx2ywWbtBx80IMXu
-         aFRCzIeUuHSohx/8P4St1qor5bg+AYU8lVoMceWtUHz66aZlJ1OC/N/AgBafHJP/j1
-         +WU4ndAfymBuA==
-Date:   Thu, 8 Jun 2023 18:21:13 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvmarm@lists.linux.dev
-Subject: Re: [PATCH 3/3] KVM: arm64: Skip break phase when we have FEAT_BBM
- level 2
-Message-ID: <20230608172112.GA1606@willie-the-truck>
-References: <20230602170147.1541355-1-coltonlewis@google.com>
- <20230602170147.1541355-4-coltonlewis@google.com>
- <87sfb7octw.wl-maz@kernel.org>
- <ZH5VQMEoiHEITmF4@linux.dev>
+        b=PRUnpGMPyM/oASGKLPfI+Y43/nnlBH8E54/JaJa+Tmz8oum5swWUqwgpBjJEQUTi+
+         NHl0IvSGeGD5SSdRshDGqeVHJR2XdclvYsARIhq6LO23qcB0BbdXucXbgf/ozYtzg6
+         bGshuHgl/6TvS9jcXwAvIFAULQTCQZcux+67tvzk=
+Date:   Thu, 8 Jun 2023 10:21:43 -0700
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     sunliming <sunliming@kylinos.cn>
+Cc:     mhiramat@kernel.org, rostedt@goodmis.org, shuah@kernel.org,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kelulanainsley@gmail.com
+Subject: Re: [PATCH 3/3] selftests/user_events: Add test cases when event is
+ disabled
+Message-ID: <20230608172143.GB74@W11-BEAU-MD.localdomain>
+References: <20230608011554.1181097-1-sunliming@kylinos.cn>
+ <20230608011554.1181097-4-sunliming@kylinos.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZH5VQMEoiHEITmF4@linux.dev>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230608011554.1181097-4-sunliming@kylinos.cn>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 02:36:00PM -0700, Oliver Upton wrote:
-> On Sun, Jun 04, 2023 at 09:23:39AM +0100, Marc Zyngier wrote:
-> > On Fri, 02 Jun 2023 18:01:47 +0100, Colton Lewis <coltonlewis@google.com> wrote:
-> > > +static bool stage2_try_make_pte(const struct kvm_pgtable_visit_ctx *ctx, struct kvm_s2_mmu *mmu, kvm_pte_t new)
-> > >  {
-> > >  	struct kvm_pgtable_mm_ops *mm_ops = ctx->mm_ops;
-> > > 
-> > > -	WARN_ON(!stage2_pte_is_locked(*ctx->ptep));
-> > > +	if (!stage2_has_bbm_level2())
-> > > +		WARN_ON(!stage2_pte_is_locked(*ctx->ptep));
-> > > +
-> > > +	if (!stage2_try_set_pte(ctx, new))
-> > > +		return false;
-> > > +
-> > > +	if (kvm_pte_table(ctx->old, ctx->level))
-> > > +		kvm_call_hyp(__kvm_tlb_flush_vmid, mmu);
-> > > +	else if (kvm_pte_valid(ctx->old) && !stage2_pte_perms_equal(ctx->old, new))
-> > > +		kvm_call_hyp(__kvm_tlb_flush_vmid_ipa_nsh, mmu, ctx->addr, ctx->level);
-> > 
-> > Why a non-shareable invalidation? Nothing in this code captures the
-> > rationale for it. What if the permission change was a *restriction* of
-> > the permission? It should absolutely be global, and not local.
+On Thu, Jun 08, 2023 at 09:15:54AM +0800, sunliming wrote:
+> When user_events are disabled, it's write operation should be fail. Add
+> this test cases.
 > 
-> IIRC, Colton was testing largely with permission relaxation, and had
-> forward progress issues b.c. the stale TLB entry was never invalidated
-> in response to a permission fault.
+> Signed-off-by: sunliming <sunliming@kylinos.cn>
+> ---
+>  tools/testing/selftests/user_events/ftrace_test.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
+> index d33bd31425db..d3240a97f23d 100644
+> --- a/tools/testing/selftests/user_events/ftrace_test.c
+> +++ b/tools/testing/selftests/user_events/ftrace_test.c
+> @@ -297,6 +297,9 @@ TEST_F(user, write_events) {
+>  	io[0].iov_base = &reg.write_index;
+>  	io[0].iov_len = sizeof(reg.write_index);
+>  
+> +	/* Write should fail when event is not enabled */
+> +	ASSERT_EQ(-1, writev(self->data_fd, (const struct iovec *)io, 3));
+> +
 
-Would the series at:
+We should also check errno value in this case. See my reply in the other
+patch about -EFAULT vs -ENOENT in this case.
 
-https://lore.kernel.org/r/5d8e1f752051173d2d1b5c3e14b54eb3506ed3ef.1684892404.git-series.apopple@nvidia.com
+Thanks,
+-Beau
 
-help with that?
-
-Will
+>  	/* Enable event */
+>  	self->enable_fd = open(enable_file, O_RDWR);
+>  	ASSERT_NE(-1, write(self->enable_fd, "1", sizeof("1")))
+> -- 
+> 2.25.1
