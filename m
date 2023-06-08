@@ -2,393 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1FD47278D5
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAF677278AA
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:22:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235295AbjFHHaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 03:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34594 "EHLO
+        id S235138AbjFHHWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 03:22:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235509AbjFHH36 (ORCPT
+        with ESMTP id S235409AbjFHHWb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 03:29:58 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5525C1BEB
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 00:29:55 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-977c8423dccso294490666b.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 00:29:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686209394; x=1688801394;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=a7LBmVzSou3ooRsgmzhSqng8ngpcUaRrdsS89j8WENo=;
-        b=ArpoyfBFSTuI1FJQ5s/RsG40SpVg73ltXPVk7uvfnxVlY5D/a0UFy2tfQHI2dBe+F/
-         +35dHoH6TJL7Yx3PSRHqyDozLblvyOEXp6q+7x82fYPK55AD3+Xh13OdQ/o6aCg82nv8
-         UJo4f976c0NHOSfJH6NdVAFtcdaHqg7LkRWOZreymWi/WaJzvLwEkIOfa4A9E2VI8KhD
-         m52tIEnzOW4QRYb57k2RiB0RWLDXrJBdVErYbJthBTakVhZhSIODRuYdRz0Hnesb4m/G
-         Dgnws9zYOowgOs+GO05vs7JOOWR4YR9fZD9cmJDdK7TeObK/pWDsEF7dO3moPryFk3Lx
-         ZigA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686209394; x=1688801394;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a7LBmVzSou3ooRsgmzhSqng8ngpcUaRrdsS89j8WENo=;
-        b=b5WWlbx4gNnS9j6mV66MAGr5PI/DoArvWFHzSFgR1rY68AHzRNQdTYKQS19aZhFuE1
-         18fRBNLFkoK+5Jy68Q3nQmBMOgyBLtXbnanSU2doNk2N5uhCgfo0Gf9HM+rD5obT4MsE
-         NgsKxWI+VF3vutpI5xddbKIT9ht0cYtX9JEGzsIOSHo3mu4XjrMpBP9c0dA80HuJCA1U
-         1Dg/+zI6GsxL3WlvNgG8xNHgDkwxw6RovvgcA4APjAGIl2wARNVQ24rMDUwGjMR742yr
-         AbThGPFAKaFgooiqTQWInXSX0mBQLfUF9MvjC8poGKZLME7QxJHaNStQ3fAjluy7qiAR
-         94mw==
-X-Gm-Message-State: AC+VfDytgyku5CRur6WBgCgCZe6JcENIqNuDRD++i8FO39dBFA/UDrKn
-        wwDv4xfusnXaksZpfD0ymODxO5nF7v8MRzUSARM=
-X-Google-Smtp-Source: ACHHUZ4qzF2hO3OUr64rhyQl8jgmhTqXqnpgiyjt490poBQ+0k99ZOG2KGY0ITN0WSIgqC1lSHfBrA==
-X-Received: by 2002:a17:907:1c14:b0:96f:94f1:b0a5 with SMTP id nc20-20020a1709071c1400b0096f94f1b0a5mr1519974ejc.8.1686208896004;
-        Thu, 08 Jun 2023 00:21:36 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id z16-20020a170906241000b00978886c7cdbsm305528eja.183.2023.06.08.00.21.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 00:21:35 -0700 (PDT)
-Message-ID: <b343df1a-dbd8-919d-5bea-36d532ec4103@linaro.org>
-Date:   Thu, 8 Jun 2023 09:21:33 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v3 3/5] phy: realtek: usb: Add driver for the Realtek SoC
- USB 3.0 PHY
-Content-Language: en-US
-To:     =?UTF-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Ray Chi <raychi@google.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Thu, 8 Jun 2023 03:22:31 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2100.outbound.protection.outlook.com [40.107.113.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9899219A4;
+        Thu,  8 Jun 2023 00:22:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=f1D4vC5VADxiCL0WU32iptD04iEq+BCMw82kteIklyjRi0/MwsnfP17snayatbTgHnOv5RCP1j5DNYzXEaAwT7zZ9HukitMolLiwVbKxnHpATRXtcp/wVbueRQDt/gXvtD8oGQSTzWwl0sHIV5rzhs/CrtGbEnU0vwwFtOMPTmbSQOrbEfOackvsVWnzQXuU5hlnCSfSSSqD79NWM3s0cibKashM30JS8UE5k6SKytzjZBZBz0x4khz7uhCOPsEmvv1pXjozFzKfiEtZxqCN+wx6sWkTZGWo8Fn9o6bmZbGJmADPdNip6hxPpGd6B6Mk4OkD4EpS1jSWOlutPIleVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GJjkhWmOhMUf4umZSQkdSDcmbly2vnlvDKSldv4wR3w=;
+ b=gO7ByEApMRN4dOYFof/NcUibNh1I2e3eyD7SxVI7Ckvg17BCaTisGmZ6A02717I6WcddJ543YfI9XwJrCAHFD4rx7kMrMLCK21b9pOsHOlyJ6Y4205Y2YxHG/f83UFJqF+jJRROzJh/ycx2XE7nICvHpZpg5jP5glnw/IIX6rAvKxKBUB3Y4Fl5X5HmcjIHWVu8khmOX+wWE9OTq2SIa+vcilAHJEctxsnE0YJEY4ct/Kt3YM6pPlpTljIlU+kJEOaa1QY0+PH+lV7z8KCjMLQvyD3Efd2EXeKPhSXNh7dhQhyNxJXg91fWvCsIkccvC08wv6cOAQKLdno0/qYRRSQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GJjkhWmOhMUf4umZSQkdSDcmbly2vnlvDKSldv4wR3w=;
+ b=IaexP4uNXBzmlDBgrKPmMYMSMuH1L0k4gEDVoq9fCUM23JNM9hgx22mCpLHOuzSRK08/f1pEpzgy4TFepypu4MTchk7HGVNneh+spoDowhMa1uoT+c8XMs246HBD/6ItM9GyyMt0R9NH9fK9rNXfr1RaOGUewev0Nk6iOdXCSvw=
+Received: from TY2PR01MB3788.jpnprd01.prod.outlook.com (2603:1096:404:dd::14)
+ by TYWPR01MB9662.jpnprd01.prod.outlook.com (2603:1096:400:230::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.19; Thu, 8 Jun
+ 2023 07:22:14 +0000
+Received: from TY2PR01MB3788.jpnprd01.prod.outlook.com
+ ([fe80::a4f8:4204:cbe6:6cb3]) by TY2PR01MB3788.jpnprd01.prod.outlook.com
+ ([fe80::a4f8:4204:cbe6:6cb3%3]) with mapi id 15.20.6455.030; Thu, 8 Jun 2023
+ 07:22:12 +0000
+From:   Chris Paterson <Chris.Paterson2@renesas.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+CC:     "patches@lists.linux.dev" <patches@lists.linux.dev>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-References: <20230607062500.24669-1-stanley_chang@realtek.com>
- <20230607062500.24669-3-stanley_chang@realtek.com>
- <a9a2f3d0-9580-f027-8ec3-ac6e6bed5ed6@linaro.org>
- <0ac12a13a91d41f0ab3a58b435ccb17a@realtek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <0ac12a13a91d41f0ab3a58b435ccb17a@realtek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "patches@kernelci.org" <patches@kernelci.org>,
+        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
+        "pavel@denx.de" <pavel@denx.de>,
+        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>,
+        "srw@sladewatkins.net" <srw@sladewatkins.net>,
+        "rwarsow@gmx.de" <rwarsow@gmx.de>
+Subject: RE: [PATCH 4.19 00/88] 4.19.285-rc1 review
+Thread-Topic: [PATCH 4.19 00/88] 4.19.285-rc1 review
+Thread-Index: AQHZmX+Bz2YD9XNTqkGDN5VvxyH3ga+Aaa7A
+Date:   Thu, 8 Jun 2023 07:22:12 +0000
+Message-ID: <TY2PR01MB3788CA231433250A35C03FBDB750A@TY2PR01MB3788.jpnprd01.prod.outlook.com>
+References: <20230607200854.030202132@linuxfoundation.org>
+In-Reply-To: <20230607200854.030202132@linuxfoundation.org>
+Accept-Language: en-US, en-GB
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TY2PR01MB3788:EE_|TYWPR01MB9662:EE_
+x-ms-office365-filtering-correlation-id: a48a4f4b-56c3-4642-390f-08db67f1143e
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Q2TzcJrIJ04kNAsZEauKU04zIu4dRbByXSgC7x5HchLDYXxWMNZ/rZQW3laXUXH4fKtsdAi3qu1H33Zq2+a4kjT6N79VH9fMfjSp7tyOT7XXhMyC4DlkL/bS6tFVjTkWjJvsoqpxq+Ul+wTqbSZrf2TzYweMjuipKESFX4vBmlruxlrg84WgrZrHN4heaYdwr2SpEJymHUAzDOvfR9bAlxsGnULxPXGbVaOg2LFDb9JKWnRwqzZvXHZIIoJ+Hm4ibcjji3xM9bAKCk+kw3G+2i5HsQGP3Nm6vpTGG4SZ0R2EYysuZ/xaxF+KJCKIZX3lgZUZrW6t2XAzloQhvfdh1eeIktd3Sc8WCyo3ydeYsTdC5xP56JchO5Oxsa8ZvvDZMMfwW9TUixH6nVNKhE7NPTITJYghqtPVamW9HOnyAEx0Cfv0rKN/U7UJfFoHwWobHR3HRcTuvBkJcayT5vN8zVDwI77JGxadUjd6YBjo2vTeQSmdYkT3ltrEvCJJoKhowYjvdid8XblXu0xqWs7I5e3Ki0Ue3hUJLiNX3kBjDa5V+BuPdlWIBZMU4DYBH1J8hnwi8dyRScvp0iTi0ka5z1Hid1vUuakMlm7185VPC7PGoEkHXO4dtRRXx+uu+9xSm7AvfWjUqdQDUqDzBmiCsA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR01MB3788.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(39860400002)(396003)(136003)(366004)(451199021)(186003)(478600001)(6506007)(26005)(316002)(966005)(9686003)(52536014)(7696005)(55016003)(8676002)(38070700005)(86362001)(41300700001)(38100700002)(71200400001)(8936002)(64756008)(66556008)(66946007)(66476007)(122000001)(76116006)(33656002)(54906003)(4744005)(4326008)(5660300002)(7416002)(2906002)(110136005)(66446008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-2?Q?HDwjyAfAWQRw2UwM0APEO6IUSVwODPdJVTMhZuy/MzRUNzFKd1nYTKu6Nc?=
+ =?iso-8859-2?Q?IaolcysdDZwjoyyY+EdH2lsd325cUkBcJUheMHNxiaOj5tgZnvO9Dq9l8c?=
+ =?iso-8859-2?Q?0e5OHC+0Y+MiBYgie/p3782oUuSfQW6+qtkxhvTe+Vl3Anp1jt7v2J4/LK?=
+ =?iso-8859-2?Q?Ks0B3lqccI3MumU+TX7O8P53GqHNGhHaHNlhGSNT9uUmWb/qyFkn99ZSgX?=
+ =?iso-8859-2?Q?Kj9Ma8fXYZkvKayMrgfKW5WiyDMHb5uYbHFOF7Tbq2GEi5VpXSkyyuRtzU?=
+ =?iso-8859-2?Q?xuq90VDkJtPJDWtUTWZoyubmsPdxJCLwJdB4IQRLcGmHj4UiW/4+NXO4zG?=
+ =?iso-8859-2?Q?BZTepL/8c4hvtwAPlVyhjhgwmuUOIYpkPKvz172nq0j+mnkHL3d4OZWId3?=
+ =?iso-8859-2?Q?chS9Rkg4+BdnyWktHwCobLEgynR1pEQetlyL/wvQ0StzvS0FwOA3SBcb8V?=
+ =?iso-8859-2?Q?Hyg/J6+EsSphKOw2LD398vOdC5RIMQxTjwkgxAICKM4K92/DYYq5ASVno3?=
+ =?iso-8859-2?Q?1aO6tXcBtmHX6s65Spdl75y7HW6cdJ+LyX51dGJrwakuYeOZ8KRRYdmycS?=
+ =?iso-8859-2?Q?oaGuPkfiST0skX+/ItFvMMv7Y+W1OzGj1XIKCTh5CAUEvNT0sMtmfpr2Qh?=
+ =?iso-8859-2?Q?8tW3+RTKuxNbe6Kc/eSR0PGShJolKr86kOoenBtrXtogZYMy6AvtHBEz43?=
+ =?iso-8859-2?Q?3h+8xMW2XEH/DmgfP7qWToekP0Nd3YKS/+PqUd6wJzcu98GceNeClI0Oaq?=
+ =?iso-8859-2?Q?A0sdRoWDjTqXL8SFwLb+7WU8FX71OSpGMhB4dkxgjFG3YAWaL6uSZCOscN?=
+ =?iso-8859-2?Q?+b//uLwyf9mKRc2vBVPhoEW7tOxXAu8P1gkcKVPVOeXjWhiP9LFuXtZ+Uw?=
+ =?iso-8859-2?Q?uZ5AH3JgaDlR3B3QQiAxWz0fvd0oAatGmAStTFr+Rc/cXTEMWR1vOjC6nW?=
+ =?iso-8859-2?Q?JPTIdzxfECSGL/MWwRRUJ/sDrjMJsn9QKvrsNeNaVY/cCDZRmeoCcAmdnp?=
+ =?iso-8859-2?Q?osEwmHWrXZ46UtW+3+Ch6p7YiEsv4KYafOjBscduXrkwRjuwjo1Ac1cqXf?=
+ =?iso-8859-2?Q?D9E3lWX3SySYHhUQsiH4PhYaTWT1MYnbZeP5m7+V8Jz6VbygL/Tb6oIjrk?=
+ =?iso-8859-2?Q?QjDf41tD7mHRBjjsBWQPCTNh547DyjgK5p6JIHz/7thuWfXZc+OYY1dAwW?=
+ =?iso-8859-2?Q?bdZxXwzs1+siE6xJdgI3kW5N1w+Vx1mx+w7Y5KKgGqvPdbTLd85oqXO79h?=
+ =?iso-8859-2?Q?v1YSs95Ga9w6bYDKtq9ZLtjP22r3/GffGiUqI5OUr2NSQ1SCSwkc8MrbkH?=
+ =?iso-8859-2?Q?cOTXb+onjRuMZhHltPsI0vGgeLBUW/2Kxob4MtuPdeQvCpsLWvAcd4kt1W?=
+ =?iso-8859-2?Q?syiRcMqpPSi4Dq2Al4iRNCHKk5k4sjPcccqWDHAHgQE+g3C4BeFqalAIeS?=
+ =?iso-8859-2?Q?kJYp1jiaDyTuJeL/jpcud3mNLrb/uf5VOp12Q5jlGsz4mWXLA7LXCiTEXr?=
+ =?iso-8859-2?Q?T1jt2xBOWod5AJ4VwB7hYchOFswW5SgurUH99WgiaSrRtmN4CblYRL7fVA?=
+ =?iso-8859-2?Q?se6usXHj9zkD1S7M2iE/3K673P0Ql/y/peKE5OvozGNNXFd42LR2ckMVlb?=
+ =?iso-8859-2?Q?ciXradQ4Ux3+rE0+LarE+88MVwzv2Z8MZ1Yt+o3e7ZHcMHQNA6CCnMOg?=
+ =?iso-8859-2?Q?=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TY2PR01MB3788.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a48a4f4b-56c3-4642-390f-08db67f1143e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jun 2023 07:22:12.7356
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: axCwzVK/1p3EwhUBP+cAwoFKSEbguFpXp47JRbH1PCkrC6vQHA1Wewo0KPRoOedl2k9SbF3F8X4UhmaHSV/cyb/CQqNUtOiDRwU/2oyWi30=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWPR01MB9662
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/06/2023 08:59, Stanley Chang[昌育德] wrote:
-> Hi Krzysztof,
-> 
->>> +static void do_rtk_usb3_phy_toggle(struct rtk_usb_phy *rtk_phy, int i,
->>> +         bool isConnect)
->>> +{
->>> +     struct reg_addr *regAddr;
->>> +     struct phy_data *phy_data;
->>> +     struct phy_parameter *phy_parameter;
->>> +     size_t index;
->>> +
->>> +     regAddr = &((struct reg_addr *)rtk_phy->reg_addr)[i];
->>> +     phy_data = &((struct phy_data *)rtk_phy->phy_data)[i];
->>> +
->>> +     if (!phy_data) {
->>> +             dev_err(rtk_phy->dev, "%s phy_data is NULL!\n",
->>> + __func__);
->>
->> ???
-> Sorry, this check is redundant.
-> 
->>
->>> +             return;
->>> +     }
->>> +
->>> +     if (!phy_data->do_toggle)
->>> +             return;
->>> +
->>> +     phy_parameter = phy_data->parameter;
->>> +
->>> +     index = PHY_ADDR_MAP_ARRAY_INDEX(PHY_ADDR_0x09);
->>> +
->>> +     if (index < phy_data->size) {
->>> +             u8 addr = (phy_parameter + index)->addr;
->>> +             u16 data = (phy_parameter + index)->data;
->>> +
->>> +             if (addr == 0xFF) {
->>> +                     addr = ARRAY_INDEX_MAP_PHY_ADDR(index);
->>> +                     data = rtk_usb_phy_read(regAddr, addr);
->>> +                     (phy_parameter + index)->addr = addr;
->>> +                     (phy_parameter + index)->data = data;
->>> +             }
->>> +             mdelay(1);
->>> +             dev_info(rtk_phy->dev,
->>> +                         "%s ########## to toggle PHY addr 0x09
->> BIT(9)\n",
->>> +                         __func__);
->>> +             rtk_usb_phy_write(regAddr, addr, data&(~BIT(9)));
->>> +             mdelay(1);
->>> +             rtk_usb_phy_write(regAddr, addr, data);
->>> +     }
->>> +     dev_info(rtk_phy->dev, "%s ########## PHY addr 0x1f = 0x%04x\n",
->>> +                 __func__, rtk_usb_phy_read(regAddr,
->> PHY_ADDR_0x1F));
->>
->> Please drop all simple debug success messages. Linux has already
->> infrastructure for this.
->>
-> Okay. I will change the print dev_info to dev_dbg about debug message.
+Hello Greg,
 
-No, drop them. This piece of code had already 2 printks for register
-contents! Your driver is overloaded with printks and they are mostly
-useless for the user.
+> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Sent: Wednesday, June 7, 2023 9:15 PM
+>=20
+> This is the start of the stable review cycle for the 4.19.285 release.
+> There are 88 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
+> Responses should be made by Fri, 09 Jun 2023 20:07:31 +0000.
+> Anything received after that time might be too late.
 
-> 
->> ...
->>
->>> +     return 0;
->>> +}
->>> +
->>> +static int rtk_usb_phy_init(struct phy *phy) {
->>> +     struct rtk_usb_phy *rtk_phy = phy_get_drvdata(phy);
->>> +     int ret = 0;
->>> +     int i;
->>> +     unsigned long phy_init_time = jiffies;
->>> +
->>> +     if (!rtk_phy) {
->>> +             pr_err("%s rtk_phy is NULL!\n", __func__);
->>
->> What? How is this possible?
-> It should be not necessary. I will remove it.
-> 
->>> +             return -ENODEV;
->>> +     }
->>> +
->>> +     dev_dbg(rtk_phy->dev, "Init RTK USB 3.0 PHY\n");
->>> +     for (i = 0; i < rtk_phy->phyN; i++)
->>> +             ret = do_rtk_usb_phy_init(rtk_phy, i);
->>> +
->>> +     dev_info(rtk_phy->dev, "Initialized RTK USB 3.0 PHY (take %dms)\n",
->>> +                 jiffies_to_msecs(jiffies - phy_init_time));
->>
->> Please drop all simple debug success messages. Linux has already
->> infrastructure for this.
-> 
-> Ok, Thanks.
-> 
->>> +     return ret;
->>> +}
->>> +
->>> +static int rtk_usb_phy_exit(struct phy *phy) {
->>> +     struct rtk_usb_phy *rtk_phy = phy_get_drvdata(phy);
->>> +
->>> +     if (!rtk_phy) {
->>> +             pr_err("%s rtk_phy is NULL!\n", __func__);
->>> +             return -ENODEV;
->>> +     }
->>> +
->>> +     dev_dbg(rtk_phy->dev, "Exit RTK USB 3.0 PHY\n");
->>
->> Please drop all simple debug success messages. Linux has already
->> infrastructure for this.
-> 
-> Can I keep log for dev_dbg?
+CIP configurations built and booted okay with Linux 4.19.285-rc1 (a1cebe658=
+474):
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/pipelines/8=
+93073911
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/commits/lin=
+ux-4.19.y
 
-Of course not. This was dev_dbg and I commented on this. This is not a
-good debug, we do not print anything on function entrance and exit.
-ftrace() is for this.
+Tested-by: Chris Paterson (CIP) <chris.paterson2@renesas.com>=09
 
-> 
->>> +static void rtk_usb_phy_toggle(struct usb_phy *usb3_phy, bool
->>> +isConnect, int port) {
->>> +     int index = port;
->>> +     struct rtk_usb_phy *rtk_phy = NULL;
->>> +
->>> +     if (usb3_phy != NULL && usb3_phy->dev != NULL)
->>> +             rtk_phy = dev_get_drvdata(usb3_phy->dev);
->>> +
->>> +     if (rtk_phy == NULL) {
->>> +             pr_err("%s ERROR! NO this device\n", __func__);
->>
->> Your error messages are not helping. No need to shout, no need to handle
->> some non-existing cases. If this is real case, you have broken driver. I actually
->> suspect that.
->>
->> How can you interface with a driver where there is no device?
-> 
-> OK, I know this is not good programming practice, I will improve this question.
-> 
->>> +             return;
->>> +     }
->>> +
->>> +     if (index > rtk_phy->phyN) {
->>> +             pr_err("%s %d ERROR! port=%d > phyN=%d\n",
->>> +                         __func__, __LINE__, index, rtk_phy->phyN);
->>> +             return;
->>> +     }
->>> +
->>> +     do_rtk_usb3_phy_toggle(rtk_phy, index, isConnect); }
->>> +
->>> +static int rtk_usb_phy_notify_port_status(struct usb_phy *x, int port,
->>> +         u16 portstatus, u16 portchange) {
->>> +     bool isConnect = false;
->>
->> This is not C++. Don't use camelcase. See Coding style document.
-> 
-> I will revised for this style.
-> 
->>> +
->>> +     pr_debug("%s port=%d portstatus=0x%x portchange=0x%x\n",
->>> +                 __func__, port, (int)portstatus, (int)portchange);
->>> +     if (portstatus & USB_PORT_STAT_CONNECTION)
->>> +             isConnect = true;
->>> +
->>
->> ...
->>
->>> +
->>> +static int rtk_usb3_set_parameter_show(struct seq_file *s, void
->>> +*unused) {
->>> +     struct rtk_usb_phy *rtk_phy = s->private;
->>> +     const struct file *file = s->file;
->>> +     const char *file_name = file_dentry(file)->d_iname;
->>> +     struct dentry *p_dentry = file_dentry(file)->d_parent;
->>> +     const char *phy_dir_name = p_dentry->d_iname;
->>> +     int ret, index;
->>> +     struct phy_data *phy_data = NULL;
->>> +
->>> +     for (index = 0; index < rtk_phy->phyN; index++) {
->>> +             size_t sz = 30;
->>> +             char name[30] = {0};
->>> +
->>> +             snprintf(name, sz, "phy%d", index);
->>> +             if (strncmp(name, phy_dir_name, strlen(name)) == 0) {
->>> +                     phy_data = &((struct phy_data
->> *)rtk_phy->phy_data)[index];
->>> +                     break;
->>> +             }
->>> +     }
->>> +     if (!phy_data) {
->>> +             dev_err(rtk_phy->dev,
->>> +                                 "%s: No phy_data for %s/%s\n",
->>> +                                 __func__, phy_dir_name,
->> file_name);
->>
->> Mess wrapping/indentation. Actually everywhere in the file...
-> 
-> I will improve this.
-> 
->>> +static int rtk_usb3_set_parameter_open(struct inode *inode, struct
->>> +file *file) {
->>> +     return single_open(file, rtk_usb3_set_parameter_show,
->>> +inode->i_private); }
->>> +
->>> +static ssize_t rtk_usb3_set_parameter_write(struct file *file,
->>> +             const char __user *ubuf, size_t count, loff_t *ppos) {
->>> +     const char *file_name = file_dentry(file)->d_iname;
->>> +     struct dentry *p_dentry = file_dentry(file)->d_parent;
->>> +     const char *phy_dir_name = p_dentry->d_iname;
->>> +     struct seq_file         *s = file->private_data;
->>> +     struct rtk_usb_phy              *rtk_phy = s->private;
->>> +     struct reg_addr *regAddr = NULL;
->>> +     struct phy_data *phy_data = NULL;
->>> +     int ret = 0;
->>> +     char buffer[40] = {0};
->>> +     int index;
->>> +
->>> +     if (copy_from_user(&buffer, ubuf,
->>> +                 min_t(size_t, sizeof(buffer) - 1, count)))
->>> +             return -EFAULT;
->>> +
->>> +     for (index = 0; index < rtk_phy->phyN; index++) {
->>> +             size_t sz = 30;
->>> +             char name[30] = {0};
->>> +
->>> +             snprintf(name, sz, "phy%d", index);
->>> +             if (strncmp(name, phy_dir_name, strlen(name)) == 0) {
->>> +                     regAddr = &((struct reg_addr
->> *)rtk_phy->reg_addr)[index];
->>> +                     phy_data = &((struct phy_data
->> *)rtk_phy->phy_data)[index];
->>> +                     break;
->>
->>
->> Where is the ABI documentation for user interface?
-> 
-> Do debugfs nodes need ABI documentation?
-> Is there a reference?
->>
->>> +
->>> +static inline void create_debug_files(struct rtk_usb_phy *rtk_phy) {
->>> +     struct dentry *phy_debug_root = NULL;
->>> +     struct dentry *set_parameter_dir = NULL;
->>> +
->>> +     phy_debug_root = create_phy_debug_root();
->>> +
->>> +     if (!phy_debug_root) {
->>> +             dev_err(rtk_phy->dev, "%s Error phy_debug_root is NULL",
->>> +                         __func__);
->>> +             return;
->>> +     }
->>> +     rtk_phy->debug_dir = debugfs_create_dir(dev_name(rtk_phy->dev),
->>> +                 phy_debug_root);
->>> +     if (!rtk_phy->debug_dir) {
->>> +             dev_err(rtk_phy->dev, "%s Error debug_dir is NULL",
->>> + __func__);
->>
->> Are you sure you run checkpatch on this? Error messages on debugfs are
->> almost always incorrect.
-> 
-> Yes, I have run checkpatch for patches. 
-> Why the message is incorrect?
-
-Because debugfs failures should not cause any error prints. It's debug,
-not important.
-
-Do you see anywhere error messages?
-
-Entire debugfs handling code should be silent and even skip all error
-checking, as most API is ready for handling previous errors, I think.
-
-> 
->>> +static int get_phy_parameter(struct rtk_usb_phy *rtk_phy,
->>> +         struct device_node *sub_node) {
->>> +     struct device *dev = rtk_phy->dev;
->>> +     struct reg_addr *addr;
->>> +     struct phy_data *phy_data;
->>> +     int ret = 0;
->>> +     int index;
->>> +
->>> +     if (of_property_read_u32(sub_node, "reg", &index)) {
->>> +             dev_err(dev, "sub_node without reg\n");
->>> +             return -EINVAL;
->>> +     }
->>> +
->>> +     dev_dbg(dev, "sub_node index=%d\n", index);
->>
->> Please drop all simple debug success messages. Linux has already
->> infrastructure for this.
-> 
-> Can I keep log for dev_dbg?
-
-No, this was dev_dbg and I commented on this to remove it. Keep only
-useful debug messages, not hundreds of them in every place.
-
-Best regards,
-Krzysztof
-
+Kind regards, Chris
