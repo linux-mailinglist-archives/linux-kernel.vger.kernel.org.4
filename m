@@ -2,47 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF36C7289AD
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 22:51:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 115BC7289B0
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 22:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235598AbjFHUvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 16:51:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49812 "EHLO
+        id S235389AbjFHUwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 16:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232280AbjFHUvu (ORCPT
+        with ESMTP id S231302AbjFHUwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 16:51:50 -0400
+        Thu, 8 Jun 2023 16:52:13 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A27C1BE4
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 13:51:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F7942119;
+        Thu,  8 Jun 2023 13:52:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 925A66184B
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 20:51:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC0AFC433EF;
-        Thu,  8 Jun 2023 20:51:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CDE860B14;
+        Thu,  8 Jun 2023 20:52:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C73D1C433D2;
+        Thu,  8 Jun 2023 20:52:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686257509;
-        bh=x/RrRf5dGGG1fX8AYzgsquZj0sx1qcx5FUN9ejLtBOk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=bmbrLmuh3Kf5fgbzt819VivpqbjTtgmmQTPLR0hixRexyWkI0Kuk6xDtx/q2F0PPj
-         iJU/xmVZgIJwFPA/NbNf8kMufljIJgmPl9E5UTystYPdcHibDEEKPZ0eihi1Qq70We
-         ZYl1SpkDZoMi0NFI0+aj2zTgIDOs+PIqfYcYLHeoRlN50HkrRTrS5tqrilnGOQ+mkC
-         AoM2pGTVEByoTM+Q02naaSn6W+eJca4lccs5qBW5FkPbjX/bYTTwLc5Z705NFSHjo7
-         PouQ87kbumiF3n45KqgfirUiFF3zFDtDTRIc63wzQheISwW7nkA7v3/uSBCeXBSgwy
-         8lBebJZlZkAGg==
-Date:   Thu, 8 Jun 2023 21:51:44 +0100
-From:   Will Deacon <will@kernel.org>
-To:     torvalds@linux-foundation.org
-Cc:     catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com
-Subject: [GIT PULL] arm64 fixes for -rc6
-Message-ID: <20230608205144.GA2470@willie-the-truck>
+        s=k20201202; t=1686257530;
+        bh=dZRF0wu4p8bFAXmnVVu+7pXv++o6TuoR/UAe4rtPADA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=kydLsX4FK+/GlVwJwgrTWO+uQisApyThlieEqq2y/E1IZewKB9VmsQp35KAwMls/n
+         thQohIYKhutjOfbq/aTGeVZZ5lOI7VvHI/Qt9v+QgKXyJGVvTOlmN6Tifb1dxvTiez
+         OhM6WQuU/38O2/xKwbvPgikTPY3EVfGMWtPxyzx/dcXiKMLDgDMoI/zwr+fM3jgfbo
+         LBHmK7Bt6U+CXDZZkZJSMc2RB+Ulwphz8XmmpCBFJTqo0Cp591M3TmZFU4oIzBAvxf
+         Tmcu/hEuvl28hkK/v6qPJkNk47VB1d58oPnP9TI4IEoh172Uy+FNZoC2fMipLCR3dk
+         SWXQBQjvRwbrg==
+Date:   Thu, 8 Jun 2023 15:52:08 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "David E. Box" <david.e.box@linux.intel.com>
+Cc:     ville.syrjala@linux.intel.com, nirmal.patel@linux.intel.com,
+        jonathan.derrick@linux.dev, lorenzo.pieralisi@arm.com,
+        hch@infradead.org, kw@linux.com, robh@kernel.org,
+        bhelgaas@google.com, michael.a.bottini@intel.com,
+        rafael@kernel.org, me@adhityamohan.in, linux-pci@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [Intel-gfx] [PATCH V2] PCI: Move VMD ASPM/LTR fix to PCI quirk
+Message-ID: <20230608205208.GA1214785@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20230411213323.1362300-1-david.e.box@linux.intel.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -53,45 +57,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Tue, Apr 11, 2023 at 02:33:23PM -0700, David E. Box wrote:
+> In commit f492edb40b54 ("PCI: vmd: Add quirk to configure PCIe ASPM and
+> LTR") the VMD driver calls pci_enabled_link_state as a callback from
+> pci_bus_walk. Both will acquire the pci_bus_sem lock leading to a lockdep
+> warning. Instead of doing the pci_bus_walk, move the fix to quirks.c using
+> DECLARE_PCI_FIXUP_FINAL.
 
-Please pull these two tiny arm64 fixes for -rc6. One fixes a build
-breakage when MAX_ORDER can be nonsensical if CONFIG_EXPERT=y and the
-other fixes the address masking for perf's page fault software events
-so that it is consistent amongst them.
+s/pci_enabled_link_state/pci_enable_link_state/
 
-Cheers,
+Add "()" after pci_enable_link_state() and pci_bus_walk() to make it
+obvious they're functions.
 
-Will
+> ...
+> +++ b/drivers/pci/quirks.c
+> @@ -6023,3 +6023,75 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x9a2d, dpc_log_size);
+>  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x9a2f, dpc_log_size);
+>  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x9a31, dpc_log_size);
+>  #endif
+> +
+> +#ifdef CONFIG_VMD
+> +/*
+> + * Enable ASPM on the PCIE root ports under VMD and set the default LTR of the
+> + * storage devices on platforms where these values are not configured by BIOS.
+> + * This is needed for laptops, which require these settings for proper power
+> + * management of the SoC.
 
---->8
+s/PCIE/PCIe/ to match spec usage.
 
-The following changes since commit c4c597f1b367433c52c531dccd6859a39b4580fb:
+> + */
+> +#define VMD_DEVICE_LTR	0x1003	/* 3145728 ns */
 
-  arm64: mte: Do not set PG_mte_tagged if tags were not initialized (2023-05-16 14:59:16 +0100)
+It would be nice to know how this value was derived.  But I know we
+had this hard-coded value before, so it's not new with this patch.
 
-are available in the Git repository at:
+> +static void quirk_intel_vmd(struct pci_dev *pdev)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git tags/arm64-fixes
+I think this quirk could possibly stay in
+drivers/pci/controller/vmd.c, couldn't it?  It has a lot of
+VMD-specific knowledge that it would nice to contain in vmd.c.
 
-for you to fetch changes up to 0e2aba694866b451db0932a6706683c48379134c:
+> +{
+> +	struct pci_dev *parent;
+> +	u16 ltr = VMD_DEVICE_LTR;
 
-  arm64: mm: pass original fault address to handle_mm_fault() in PER_VMA_LOCK block (2023-06-02 13:02:44 +0100)
+I don't think "ltr" is an improvement over using "VMD_DEVICE_LTR"
+below.
 
-----------------------------------------------------------------
-arm64 fixes for -rc6
+> +	u32 ltr_reg;
+> +	int pos;
+> +
+> +	/* Check in VMD domain */
+> +	if (pci_domain_nr(pdev->bus) < 0x10000)
+> +		return;
 
-- Fix build breakage due to bogus MAX_ORDER definitions on !4k pages
+If in vmd.c, maybe could identify devices under a VMD by checking
+pdev->bus->ops as vmd_acpi_find_companion() does?
 
-- Avoid masking fault address for perf software events
+> +	/* Get Root Port */
+> +	parent = pci_upstream_bridge(pdev);
+> +	if (!parent || parent->vendor != PCI_VENDOR_ID_INTEL)
+> +		return;
+> +
+> +	/* Get VMD Host Bridge */
+> +	parent = to_pci_dev(parent->dev.parent);
+> +	if (!parent)
+> +		return;
+> +
+> +	/* Get RAID controller */
+> +	parent = to_pci_dev(parent->dev.parent);
+> +	if (!parent)
+> +		return;
+> +
+> +	switch (parent->device) {
+> +	case 0x467f:
+> +	case 0x4c3d:
+> +	case 0xa77f:
+> +	case 0x7d0b:
+> +	case 0xad0b:
+> +	case 0x9a0b:
+> +		break;
+> +	default:
+> +		return;
+> +	}
+> +
+> +	pci_enable_link_state(pdev, PCIE_LINK_STATE_ALL);
 
-----------------------------------------------------------------
-Catalin Marinas (1):
-      arm64: Remove the ARCH_FORCE_MAX_ORDER config input prompt
+Seems like you would want to set LTR *before* enabling the link
+states?
 
-Jisheng Zhang (1):
-      arm64: mm: pass original fault address to handle_mm_fault() in PER_VMA_LOCK block
+> +	pos = pci_find_ext_capability(pdev, PCI_EXT_CAP_ID_LTR);
+> +	if (!pos)
+> +		return;
+> +
+> +	/* Skip if the max snoop LTR is non-zero, indicating BIOS has set it */
+> +	pci_read_config_dword(pdev, pos + PCI_LTR_MAX_SNOOP_LAT, &ltr_reg);
+> +	if (!!(ltr_reg & (PCI_LTR_VALUE_MASK | PCI_LTR_SCALE_MASK)))
+> +		return;
+> +
+> +	/*
+> +	 * Set the LTR values to the maximum required by the platform to
+> +	 * allow the deepest power management savings. Write as a DWORD where
+> +	 * the lower word is the max snoop latency and the upper word is the
+> +	 * max non-snoop latency.
 
- arch/arm64/Kconfig    | 2 +-
- arch/arm64/mm/fault.c | 3 +--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+This comment suggests that the LTR value is platform-dependent, which
+is what I would expect, but the code and the hard-coded VMD_DEVICE_LTR
+value don't have any platform dependencies.  Again, nothing new in
+*this* patch; that's true in the current tree, too.
+
+> +	ltr_reg = (ltr << 16) | ltr;
+> +	pci_write_config_dword(pdev, pos + PCI_LTR_MAX_SNOOP_LAT, ltr_reg);
+> +	pci_info(pdev, "LTR set by VMD PCI quick\n");
+
+s/quick/quirk/
+
+> +
+> +}
+> +DECLARE_PCI_FIXUP_CLASS_FINAL(PCI_ANY_ID, PCI_ANY_ID,
+> +			      PCI_CLASS_STORAGE_EXPRESS, 0, quirk_intel_vmd);
+> +#endif
+> -- 
+> 2.34.1
+> 
