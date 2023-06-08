@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94949728083
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 14:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01FF5728080
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 14:53:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236578AbjFHMx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 08:53:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
+        id S236557AbjFHMxQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 8 Jun 2023 08:53:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236583AbjFHMxW (ORCPT
+        with ESMTP id S236531AbjFHMxK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 08:53:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C705E1FE9
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 05:52:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686228755;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=DF3P0wokkY59dQPGQ29NnzPHZoAXS481A55AVnfvnBg=;
-        b=GIEAarmzNiLOJWjWvZkoUQCIzN4wNRpYwGtFm8FayN9g+sm+/v1YaX0sqz4pfukaRoJPTG
-        byfRyRHlrKGAQ6wW4X7kcUja9AZJ4jymp0IeJp2Y9+SAZpHS09ALwAmxkll/Uq4eUWnZ64
-        DgvbeYzsKQ6sWWwDPFG9oM6Ibp0MOVo=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-644-b6Uwn8SQPf6DLs0AqZGcHQ-1; Thu, 08 Jun 2023 08:52:30 -0400
-X-MC-Unique: b6Uwn8SQPf6DLs0AqZGcHQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4C503280BC5D;
-        Thu,  8 Jun 2023 12:52:30 +0000 (UTC)
-Received: from pauld.bos.com (dhcp-17-165.bos.redhat.com [10.18.17.165])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E9653C0448E;
-        Thu,  8 Jun 2023 12:52:29 +0000 (UTC)
-From:   Phil Auld <pauld@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Juri Lelli <juri.lelli@redhat.com>, Ingo Molnar <mingo@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Ben Segall <bsegall@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>, Phil Auld <pauld@redhat.com>
-Subject: [PATCH v2] sched/nohz: Add HRTICK_BW for using cfs bandwidth with nohz_full
-Date:   Thu,  8 Jun 2023 08:52:28 -0400
-Message-Id: <20230608125228.56097-1-pauld@redhat.com>
+        Thu, 8 Jun 2023 08:53:10 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5982D42
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 05:53:07 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1q7F8D-0003bo-0V; Thu, 08 Jun 2023 14:52:49 +0200
+Message-ID: <343dc13df7369ccee22f51852b3e8518e500025a.camel@pengutronix.de>
+Subject: Re: [PATCH V8 0/7] drm: bridge: samsung-dsim: Support variable
+ clocking
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Adam Ford <aford173@gmail.com>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Cc:     Marek Vasut <marex@denx.de>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonas Karlman <jonas@kwiboo.se>, linux-kernel@vger.kernel.org,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        aford@beaconembedded.com, dri-devel@lists.freedesktop.org,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Date:   Thu, 08 Jun 2023 14:52:44 +0200
+In-Reply-To: <CAHCN7xKdKGA02=ZDNQkVVVDV0AZTqd7QpHA2Nq9LNnbmK=hKxA@mail.gmail.com>
+References: <20230526030559.326566-1-aford173@gmail.com>
+         <e1379d94-66a5-8538-abdf-de7770befb7d@prevas.dk>
+         <CAHCN7xK9RaLRSK_jSbbuGBUf14-FOHsrawi2J8G29iHSOj2Nyw@mail.gmail.com>
+         <bfd050f2-b39e-c091-614e-0c77fe324435@prevas.dk>
+         <CAHCN7xKdKGA02=ZDNQkVVVDV0AZTqd7QpHA2Nq9LNnbmK=hKxA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,164 +64,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CFS bandwidth limits and NOHZ full don't play well together.  Tasks
-can easily run well past their quotas before a remote tick does
-accounting.  This leads to long, multi-period stalls before such
-tasks can run again.  Use the hrtick mechanism to set a sched
-tick to fire at remaining_runtime in the future if we are on
-a nohz full cpu, if the task has quota and if we are likely to
-disable the tick (nr_running == 1).  This allows for bandwidth
-accounting before tasks go too far over quota.
+Am Donnerstag, dem 08.06.2023 um 07:30 -0500 schrieb Adam Ford:
+> On Thu, Jun 8, 2023 at 6:40 AM Rasmus Villemoes
+> <rasmus.villemoes@prevas.dk> wrote:
+> > 
+> > 
+[...]
+> > > Have you tried using modetest to see what refresh rates are available?
+> > 
+> > Hm. My userspace may be a little weird. When I run modetest I just get
+> > 
+> > trying to open device 'i915'...failed
+> > trying to open device 'amdgpu'...failed
+> > ...
+> > trying to open device 'imx-dcss'...failed
+> > trying to open device 'mxsfb-drm'...failed
+> > no device found
+> > 
+> 
+> One the 8MP, I think you need to append "-M imx-lcdif" to the modetest
+> command  to specify the driver being used.
+> I don't have my 8MP with me right now, but I think that's the right name.
 
-A number of container workloads use a dynamic number of real
-nohz tasks but also have other work that is limited which ends
-up running on the "spare" nohz cpus.  This is an artifact of
-having to specify nohz_full cpus at boot. Adding this hrtick
-resolves the issue of long stalls on these tasks. Currently
-the scheduler, when faced with these conflicting requirements
-choosed to favor nohz_full even though that is already best
-effort. Here we make it favor respecting the bandwidth
-limitations which are not supposed to be best effort.
+That's correct. Alternatively update libdrm to >= 2.4.114, which knows
+to look for this driver in the tests.
 
-Add the sched_feat HRTICK_BW off by default to allow users to
-enable this only when needed.
-
-Signed-off-by: Phil Auld <pauld@redhat.com>
-Suggested-by: Juri Lelli <jlelli@redhat.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Valentin Schneider <vschneid@redhat.com>
-Cc: Ben Segall <bsegall@google.com>
----
-
-v2: Clean up building issues with various related CONFIG changes. Add a
-check to start the hrtick in __account_cfs_rq_runtime() for when the
-task gets more runtime.
-
- kernel/sched/core.c     |  2 +-
- kernel/sched/fair.c     | 28 ++++++++++++++++++++++++++--
- kernel/sched/features.h |  1 +
- kernel/sched/sched.h    | 12 ++++++++++++
- 4 files changed, 40 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index a68d1276bab0..76425c377245 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -6562,7 +6562,7 @@ static void __sched notrace __schedule(unsigned int sched_mode)
- 
- 	schedule_debug(prev, !!sched_mode);
- 
--	if (sched_feat(HRTICK) || sched_feat(HRTICK_DL))
-+	if (sched_feat(HRTICK) || sched_feat(HRTICK_DL) || sched_feat(HRTICK_BW))
- 		hrtick_clear(rq);
- 
- 	local_irq_disable();
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 373ff5f55884..95e4b70ebb0a 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -5190,6 +5190,11 @@ entity_tick(struct cfs_rq *cfs_rq, struct sched_entity *curr, int queued)
- 		check_preempt_tick(cfs_rq, curr);
- }
- 
-+#if !defined(CONFIG_SCHED_HRTICK) || !defined(CONFIG_NO_HZ_FULL) || !defined(CONFIG_CFS_BANDWIDTH)
-+static void start_hrtick_cfs_bw(struct rq *rq, struct cfs_rq *cfs_rq)
-+{
-+}
-+#endif
- 
- /**************************************************
-  * CFS bandwidth control machinery
-@@ -5309,6 +5314,18 @@ static int assign_cfs_rq_runtime(struct cfs_rq *cfs_rq)
- 	return ret;
- }
- 
-+#if defined(CONFIG_SCHED_HRTICK) && defined(CONFIG_NO_HZ_FULL)
-+static void start_hrtick_cfs_bw(struct rq *rq, struct cfs_rq *cfs_rq)
-+{
-+	if (!tick_nohz_full_cpu(rq->cpu) || !cfs_bandwidth_used() || !cfs_rq->runtime_enabled)
-+		return;
-+
-+	/* runtime_remaining should never be negative here but just in case */
-+	if (rq->nr_running == 1 && cfs_rq->runtime_remaining > 0)
-+		hrtick_start(rq, cfs_rq->runtime_remaining);
-+}
-+#endif
-+
- static void __account_cfs_rq_runtime(struct cfs_rq *cfs_rq, u64 delta_exec)
- {
- 	/* dock delta_exec before expiring quota (as it could span periods) */
-@@ -5323,8 +5340,12 @@ static void __account_cfs_rq_runtime(struct cfs_rq *cfs_rq, u64 delta_exec)
- 	 * if we're unable to extend our runtime we resched so that the active
- 	 * hierarchy can be throttled
- 	 */
--	if (!assign_cfs_rq_runtime(cfs_rq) && likely(cfs_rq->curr))
--		resched_curr(rq_of(cfs_rq));
-+	if (likely(cfs_rq->curr)) {
-+		if (!assign_cfs_rq_runtime(cfs_rq))
-+			resched_curr(rq_of(cfs_rq));
-+		else if (hrtick_enabled_bw(rq_of(cfs_rq)))
-+			start_hrtick_cfs_bw(rq_of(cfs_rq), cfs_rq);
-+	}
- }
- 
- static __always_inline
-@@ -8096,6 +8117,9 @@ done: __maybe_unused;
- 	if (hrtick_enabled_fair(rq))
- 		hrtick_start_fair(rq, p);
- 
-+	if (hrtick_enabled_bw(rq))
-+		start_hrtick_cfs_bw(rq, task_cfs_rq(p));
-+
- 	update_misfit_status(p, rq);
- 
- 	return p;
-diff --git a/kernel/sched/features.h b/kernel/sched/features.h
-index ee7f23c76bd3..c9d4fa0c1430 100644
---- a/kernel/sched/features.h
-+++ b/kernel/sched/features.h
-@@ -39,6 +39,7 @@ SCHED_FEAT(WAKEUP_PREEMPTION, true)
- 
- SCHED_FEAT(HRTICK, false)
- SCHED_FEAT(HRTICK_DL, false)
-+SCHED_FEAT(HRTICK_BW, false)
- SCHED_FEAT(DOUBLE_TICK, false)
- 
- /*
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index ec7b3e0a2b20..db3a3b4b5746 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -2507,6 +2507,13 @@ static inline int hrtick_enabled_dl(struct rq *rq)
- 	return hrtick_enabled(rq);
- }
- 
-+static inline int hrtick_enabled_bw(struct rq *rq)
-+{
-+	if (!sched_feat(HRTICK_BW))
-+		return 0;
-+	return hrtick_enabled(rq);
-+}
-+
- void hrtick_start(struct rq *rq, u64 delay);
- 
- #else
-@@ -2521,6 +2528,11 @@ static inline int hrtick_enabled_dl(struct rq *rq)
- 	return 0;
- }
- 
-+static inline int hrtick_enabled_bw(struct rq *rq)
-+{
-+	return 0;
-+}
-+
- static inline int hrtick_enabled(struct rq *rq)
- {
- 	return 0;
--- 
-2.31.1
-
+Regards,
+Lucas
