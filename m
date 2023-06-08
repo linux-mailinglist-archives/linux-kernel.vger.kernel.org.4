@@ -2,112 +2,304 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A622728A03
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 23:13:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B91A2728A1C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 23:18:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236475AbjFHVNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 17:13:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60876 "EHLO
+        id S236527AbjFHVSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 17:18:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjFHVNQ (ORCPT
+        with ESMTP id S229845AbjFHVR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 17:13:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFEF32700
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 14:13:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 64C4761806
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 21:13:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC468C4339B;
-        Thu,  8 Jun 2023 21:13:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686258794;
-        bh=cuIyjEnaDDKHWGPHVUVqPlwF4bbvZEjknCMBtvezLbo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ALVinRIPZX+aFLgYXJ1Y/B16Nx2vpf8qAeAYJAlZHd63Aqmhp/805FB0GKKb8xtev
-         rF2tmBPV6MInMRnTKmm7J5G1zYaAjq+otXimabF7SOUbl+URABHZwxl82oKVBQdsiZ
-         vJoYriJZCkqNadHyXZ56BXxtrPkCg3pKopX2uyfkJLK7Uqeh1qDBJuRc4Yd1SHuqlW
-         Zs+mVQQWNEh5Ox7iCGm9bP4Ojzls+A/5ke/4H3T6rTSaFjEmnsc2sVFLLEv3aTUhZ1
-         7IA0Sa3jMzfAykjvKWFS4tvF950x8qLt2LKCUBgHHcMEnr/E6d7WBH4sP4BfvhVu6h
-         kooPumpvbDGmA==
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-4f62d93f38aso1358524e87.0;
-        Thu, 08 Jun 2023 14:13:14 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxXzXvAwugc2w1hJiQmcVmuleE6wX97a142OYX54Jc7VCbTYvwf
-        eCykNGssjfPT7uG0OLh3Rrby2Gy9fLaQG4AYJt8=
-X-Google-Smtp-Source: ACHHUZ5ud7Gh0ZQHPz/7bKTDcYVMi7EmZvDrF5a/DPE65AoGzomb84FF9oB2EqMwVEhhKqnsv9CkvARkh3bT9/ckq80=
-X-Received: by 2002:a2e:9009:0:b0:2b1:b0d2:5f03 with SMTP id
- h9-20020a2e9009000000b002b1b0d25f03mr3772006ljg.15.1686258792914; Thu, 08 Jun
- 2023 14:13:12 -0700 (PDT)
+        Thu, 8 Jun 2023 17:17:59 -0400
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761A62D52;
+        Thu,  8 Jun 2023 14:17:57 -0700 (PDT)
+Received: by mail-oo1-xc35.google.com with SMTP id 006d021491bc7-55ab0f777afso758724eaf.1;
+        Thu, 08 Jun 2023 14:17:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686259077; x=1688851077;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5ph1P5g/ydE4Fv0AaeusLGMjc57FCAOjuKJBDHrXp40=;
+        b=BRdaYTy9k0dHzngwQd9h8bdi/ISO9Cy281AV5kNdgGhi0qQCSsVp5+DQO0+c1odNLw
+         IAzrTqHB8sw+6WwnyDh/cgNF4vtmiPxc/RK615cLLY6bfQMmq9itVMPjecxgrVbPLn8Z
+         KvfMomctYVGLZuM+PlFbzVtuRos+YSneV5WIneJXKSf14mrzSYXSPMCgygSVSdbBI1oe
+         IMUTmeTFW8SAFmEDvvKyuYTJNgiv/KbvtSfY6to1jw+Iu79e18pqKr7NxqsImyljsomr
+         PfP5vq6OQxRmqTFLtgQveQ3eXPQGX/iXSUkFn/tmsMA75drElRS8rJSfRjApoSJ+dIly
+         FQ7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686259077; x=1688851077;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5ph1P5g/ydE4Fv0AaeusLGMjc57FCAOjuKJBDHrXp40=;
+        b=ksNeuNCe4x+3G/NWkpdLupllCXBh9rwbUry/5OhCxs4UQIBBfI5CPIsbuBgNmK7GTs
+         uyOEJzxmtx6GKtY+XoeQSWYliIDyd3LwAwbFa5Q5fdwpO5Sf9Vg5L12GrBC8E5f5fhTK
+         Xtzc7+Ut0R89p0whaeXE/qomUL2XHiLM0P0WBGueN5Ya/bYi6iZhk30oSzIod2qXMFZ4
+         axXtwJHk7HTC7A0wKhn6wfybcvrkVJenmQYuGN6IBFml+57dCFPxlRuVcQVCVO18+9sY
+         3TOQJUji/wyJ7sagGUijuSIs8blRTf8fs4xeApXvTOg/4Cw+H1DjhFPvS3Ud5HTyvgAV
+         fIAQ==
+X-Gm-Message-State: AC+VfDxTLkq8Z/Na8nAd8dO2YqmfLv9NFL57cKMHZ79atHvg9afk+nf4
+        oEy8xZ12e85L7PyTCXLMeJ77dNcd1deBPq+O45Y=
+X-Google-Smtp-Source: ACHHUZ6a3njgabVwW8LMu5H+hKoXM9xDBnuTICalDRFZDrbEAPedff7njpTJLvEUipVWSUVSsviWhhgatnPRZPJQ2+o=
+X-Received: by 2002:a4a:ce88:0:b0:558:b5c7:4832 with SMTP id
+ f8-20020a4ace88000000b00558b5c74832mr804427oos.3.1686259076654; Thu, 08 Jun
+ 2023 14:17:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230607091814.46080-1-puranjay12@gmail.com> <20230607091814.46080-4-puranjay12@gmail.com>
- <CAPhsuW7soOQasGw5fHB2qTeJnqR4ZrGBodyO87k=vg=TYqCsWA@mail.gmail.com> <CANk7y0ihF2RvwGXK0p0gOaGrMoPxfb6fcfn3-J40zn8LS8vROQ@mail.gmail.com>
-In-Reply-To: <CANk7y0ihF2RvwGXK0p0gOaGrMoPxfb6fcfn3-J40zn8LS8vROQ@mail.gmail.com>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 8 Jun 2023 14:13:00 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4KBYvE8oPz+4tF0_7zFoLhO-86Dh1LfZTiW1t59ty24g@mail.gmail.com>
-Message-ID: <CAPhsuW4KBYvE8oPz+4tF0_7zFoLhO-86Dh1LfZTiW1t59ty24g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 3/3] bpf, arm64: use bpf_jit_binary_pack_alloc
-To:     Puranjay Mohan <puranjay12@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, catalin.marinas@arm.com,
-        mark.rutland@arm.com, bpf@vger.kernel.org, kpsingh@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <ZBGNmXwQoW330Wr8@hovoldconsulting.com> <ZIHh95IeOPBTvB00@hovoldconsulting.com>
+In-Reply-To: <ZIHh95IeOPBTvB00@hovoldconsulting.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Thu, 8 Jun 2023 14:17:45 -0700
+Message-ID: <CAF6AEGv3y3C6nAq7nrkgbv5-9-tVgj+BtY1yU+fXXFFm_N7fcQ@mail.gmail.com>
+Subject: Re: Adreno devfreq lockdep splat with 6.3-rc2
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 8, 2023 at 9:51=E2=80=AFAM Puranjay Mohan <puranjay12@gmail.com=
-> wrote:
+On Thu, Jun 8, 2023 at 7:12=E2=80=AFAM Johan Hovold <johan@kernel.org> wrot=
+e:
 >
-> Hi Song,
+> Hi Rob,
 >
-> On Thu, Jun 8, 2023 at 6:28=E2=80=AFPM Song Liu <song@kernel.org> wrote:
-> >
-> > On Wed, Jun 7, 2023 at 2:18=E2=80=AFAM Puranjay Mohan <puranjay12@gmail=
-.com> wrote:
-> > >
-> > [...]
-> > > +
-> > >  static inline int epilogue_offset(const struct jit_ctx *ctx)
-> > >  {
-> > >         int to =3D ctx->epilogue_offset;
-> > > @@ -701,7 +716,8 @@ static int add_exception_handler(const struct bpf=
-_insn *insn,
-> > >                                  struct jit_ctx *ctx,
-> > >                                  int dst_reg)
-> > >  {
-> > > -       off_t offset;
-> > > +       off_t ins_offset;
-> > > +       off_t fixup_offset;
-> >
-> > Please add some comments for these two offsets.
->
-> Here I am using two variables because I need to change from the RO
-> buffer for calculating offsets
-> to the RW buffer for writing.
->
-> Earlier, a single variable could work because it was being reused for
-> calculating the second offset
-> after writing the first one. Here, I can't re-calculate using the same
-> variable because I have to change
-> to the RW buffer, and using the same variable would need changing back
-> to the RO buffer.
->
-> So, I am calculating both offsets first, changing to RW buffer and
-> writing both offsets.
->
-> But I will add comments explaining what these offsets are being used for.
+> Have you had a chance to look at this regression yet? It prevents us
+> from using lockdep on the X13s as it is disabled as soon as we start
+> the GPU.
 
-Thanks for the explanation! These comments will be useful for future work.
+Hmm, curious what is different between x13s and sc7180/sc7280 things?
+Or did lockdep recently get more clever (or more annotation)?
 
-Song
+I did spend some time a while back trying to bring some sense to
+devfreq/pm-qos/icc locking:
+https://patchwork.freedesktop.org/series/115028/
+
+but haven't had time to revisit that for a while
+
+BR,
+-R
+
+> On Wed, Mar 15, 2023 at 10:19:21AM +0100, Johan Hovold wrote:
+> >
+> > Since 6.3-rc2 (or possibly -rc1), I'm now seeing the below
+> > devfreq-related lockdep splat.
+> >
+> > I noticed that you posted a fix for something similar here:
+> >
+> >       https://lore.kernel.org/r/20230312204150.1353517-9-robdclark@gmai=
+l.com
+> >
+> > but that particular patch makes no difference.
+> >
+> > From skimming the calltraces below and qos/devfreq related changes in
+> > 6.3-rc1 it seems like this could be related to:
+> >
+> >       fadcc3ab1302 ("drm/msm/gpu: Bypass PM QoS constraint for idle cla=
+mp")
+>
+> Below is an updated splat from 6.4-rc5.
+>
+> Johan
+>
+> [ 2941.931507] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> [ 2941.931509] WARNING: possible circular locking dependency detected
+> [ 2941.931513] 6.4.0-rc5 #64 Not tainted
+> [ 2941.931516] ------------------------------------------------------
+> [ 2941.931518] ring0/359 is trying to acquire lock:
+> [ 2941.931520] ffff63310e35c078 (&devfreq->lock){+.+.}-{3:3}, at: qos_min=
+_notifier_call+0x28/0x88
+> [ 2941.931541]
+>                but task is already holding lock:
+> [ 2941.931543] ffff63310e3cace8 (&(c->notifiers)->rwsem){++++}-{3:3}, at:=
+ blocking_notifier_call_chain+0x30/0x70
+> [ 2941.931553]
+>                which lock already depends on the new lock.
+>
+> [ 2941.931555]
+>                the existing dependency chain (in reverse order) is:
+> [ 2941.931556]
+>                -> #4 (&(c->notifiers)->rwsem){++++}-{3:3}:
+> [ 2941.931562]        down_write+0x50/0x198
+> [ 2941.931567]        blocking_notifier_chain_register+0x30/0x8c
+> [ 2941.931570]        freq_qos_add_notifier+0x68/0x7c
+> [ 2941.931574]        dev_pm_qos_add_notifier+0xa0/0xf8
+> [ 2941.931579]        devfreq_add_device.part.0+0x360/0x5a4
+> [ 2941.931583]        devm_devfreq_add_device+0x74/0xe0
+> [ 2941.931587]        msm_devfreq_init+0xa0/0x154 [msm]
+> [ 2941.931624]        msm_gpu_init+0x2fc/0x588 [msm]
+> [ 2941.931649]        adreno_gpu_init+0x160/0x2d0 [msm]
+> [ 2941.931675]        a6xx_gpu_init+0x2c0/0x74c [msm]
+> [ 2941.931699]        adreno_bind+0x180/0x290 [msm]
+> [ 2941.931723]        component_bind_all+0x124/0x288
+> [ 2941.931728]        msm_drm_bind+0x1d8/0x6cc [msm]
+> [ 2941.931752]        try_to_bring_up_aggregate_device+0x1ec/0x2f4
+> [ 2941.931755]        __component_add+0xa8/0x194
+> [ 2941.931758]        component_add+0x14/0x20
+> [ 2941.931761]        dp_display_probe+0x2b4/0x474 [msm]
+> [ 2941.931785]        platform_probe+0x68/0xd8
+> [ 2941.931789]        really_probe+0x184/0x3c8
+> [ 2941.931792]        __driver_probe_device+0x7c/0x16c
+> [ 2941.931794]        driver_probe_device+0x3c/0x110
+> [ 2941.931797]        __device_attach_driver+0xbc/0x158
+> [ 2941.931800]        bus_for_each_drv+0x84/0xe0
+> [ 2941.931802]        __device_attach+0xa8/0x1d4
+> [ 2941.931805]        device_initial_probe+0x14/0x20
+> [ 2941.931807]        bus_probe_device+0xb0/0xb4
+> [ 2941.931810]        deferred_probe_work_func+0xa0/0xf4
+> [ 2941.931812]        process_one_work+0x288/0x5bc
+> [ 2941.931816]        worker_thread+0x74/0x450
+> [ 2941.931818]        kthread+0x124/0x128
+> [ 2941.931822]        ret_from_fork+0x10/0x20
+> [ 2941.931826]
+>                -> #3 (dev_pm_qos_mtx){+.+.}-{3:3}:
+> [ 2941.931831]        __mutex_lock+0xa0/0x840
+> [ 2941.931833]        mutex_lock_nested+0x24/0x30
+> [ 2941.931836]        dev_pm_qos_remove_notifier+0x34/0x140
+> [ 2941.931838]        genpd_remove_device+0x3c/0x174
+> [ 2941.931841]        genpd_dev_pm_detach+0x78/0x1b4
+> [ 2941.931844]        dev_pm_domain_detach+0x24/0x34
+> [ 2941.931846]        a6xx_gmu_remove+0x34/0xc4 [msm]
+> [ 2941.931869]        a6xx_destroy+0xd0/0x160 [msm]
+> [ 2941.931892]        adreno_unbind+0x40/0x64 [msm]
+> [ 2941.931916]        component_unbind+0x38/0x6c
+> [ 2941.931919]        component_unbind_all+0xc8/0xd4
+> [ 2941.931921]        msm_drm_uninit.isra.0+0x150/0x1c4 [msm]
+> [ 2941.931945]        msm_drm_bind+0x310/0x6cc [msm]
+> [ 2941.931967]        try_to_bring_up_aggregate_device+0x1ec/0x2f4
+> [ 2941.931970]        __component_add+0xa8/0x194
+> [ 2941.931973]        component_add+0x14/0x20
+> [ 2941.931976]        dp_display_probe+0x2b4/0x474 [msm]
+> [ 2941.932000]        platform_probe+0x68/0xd8
+> [ 2941.932003]        really_probe+0x184/0x3c8
+> [ 2941.932005]        __driver_probe_device+0x7c/0x16c
+> [ 2941.932008]        driver_probe_device+0x3c/0x110
+> [ 2941.932011]        __device_attach_driver+0xbc/0x158
+> [ 2941.932014]        bus_for_each_drv+0x84/0xe0
+> [ 2941.932016]        __device_attach+0xa8/0x1d4
+> [ 2941.932018]        device_initial_probe+0x14/0x20
+> [ 2941.932021]        bus_probe_device+0xb0/0xb4
+> [ 2941.932023]        deferred_probe_work_func+0xa0/0xf4
+> [ 2941.932026]        process_one_work+0x288/0x5bc
+> [ 2941.932028]        worker_thread+0x74/0x450
+> [ 2941.932031]        kthread+0x124/0x128
+> [ 2941.932035]        ret_from_fork+0x10/0x20
+> [ 2941.932037]
+>                -> #2 (&gmu->lock){+.+.}-{3:3}:
+> [ 2941.932043]        __mutex_lock+0xa0/0x840
+> [ 2941.932045]        mutex_lock_nested+0x24/0x30
+> [ 2941.932047]        a6xx_gpu_set_freq+0x30/0x5c [msm]
+> [ 2941.932071]        msm_devfreq_target+0xb8/0x1a8 [msm]
+> [ 2941.932094]        devfreq_set_target+0x84/0x27c
+> [ 2941.932098]        devfreq_update_target+0xc4/0xec
+> [ 2941.932102]        devfreq_monitor+0x38/0x170
+> [ 2941.932105]        process_one_work+0x288/0x5bc
+> [ 2941.932108]        worker_thread+0x74/0x450
+> [ 2941.932110]        kthread+0x124/0x128
+> [ 2941.932113]        ret_from_fork+0x10/0x20
+> [ 2941.932116]
+>                -> #1 (&df->lock){+.+.}-{3:3}:
+> [ 2941.932121]        __mutex_lock+0xa0/0x840
+> [ 2941.932124]        mutex_lock_nested+0x24/0x30
+> [ 2941.932126]        msm_devfreq_get_dev_status+0x48/0x134 [msm]
+> [ 2941.932149]        devfreq_simple_ondemand_func+0x3c/0x144
+> [ 2941.932153]        devfreq_update_target+0x4c/0xec
+> [ 2941.932157]        devfreq_monitor+0x38/0x170
+> [ 2941.932160]        process_one_work+0x288/0x5bc
+> [ 2941.932162]        worker_thread+0x74/0x450
+> [ 2941.932165]        kthread+0x124/0x128
+> [ 2941.932168]        ret_from_fork+0x10/0x20
+> [ 2941.932171]
+>                -> #0 (&devfreq->lock){+.+.}-{3:3}:
+> [ 2941.932175]        __lock_acquire+0x13d8/0x2188
+> [ 2941.932178]        lock_acquire+0x1e8/0x310
+> [ 2941.932180]        __mutex_lock+0xa0/0x840
+> [ 2941.932182]        mutex_lock_nested+0x24/0x30
+> [ 2941.932184]        qos_min_notifier_call+0x28/0x88
+> [ 2941.932188]        notifier_call_chain+0xa0/0x17c
+> [ 2941.932190]        blocking_notifier_call_chain+0x48/0x70
+> [ 2941.932193]        pm_qos_update_target+0xdc/0x1d0
+> [ 2941.932195]        freq_qos_apply+0x68/0x74
+> [ 2941.932198]        apply_constraint+0x100/0x148
+> [ 2941.932201]        __dev_pm_qos_update_request+0xb8/0x1fc
+> [ 2941.932203]        dev_pm_qos_update_request+0x3c/0x64
+> [ 2941.932206]        msm_devfreq_active+0xf8/0x194 [msm]
+> [ 2941.932227]        msm_gpu_submit+0x18c/0x1a8 [msm]
+> [ 2941.932249]        msm_job_run+0x98/0x11c [msm]
+> [ 2941.932272]        drm_sched_main+0x1a0/0x444 [gpu_sched]
+> [ 2941.932281]        kthread+0x124/0x128
+> [ 2941.932284]        ret_from_fork+0x10/0x20
+> [ 2941.932287]
+>                other info that might help us debug this:
+>
+> [ 2941.932289] Chain exists of:
+>                  &devfreq->lock --> dev_pm_qos_mtx --> &(c->notifiers)->r=
+wsem
+>
+> [ 2941.932296]  Possible unsafe locking scenario:
+>
+> [ 2941.932298]        CPU0                    CPU1
+> [ 2941.932300]        ----                    ----
+> [ 2941.932301]   rlock(&(c->notifiers)->rwsem);
+> [ 2941.932304]                                lock(dev_pm_qos_mtx);
+> [ 2941.932307]                                lock(&(c->notifiers)->rwsem=
+);
+> [ 2941.932309]   lock(&devfreq->lock);
+> [ 2941.932312]
+>                 *** DEADLOCK ***
+>
+> [ 2941.932313] 4 locks held by ring0/359:
+> [ 2941.932315]  #0: ffff633110966170 (&gpu->lock){+.+.}-{3:3}, at: msm_jo=
+b_run+0x8c/0x11c [msm]
+> [ 2941.932342]  #1: ffff633110966208 (&gpu->active_lock){+.+.}-{3:3}, at:=
+ msm_gpu_submit+0xdc/0x1a8 [msm]
+> [ 2941.932368]  #2: ffffa40da2f91ed0 (dev_pm_qos_mtx){+.+.}-{3:3}, at: de=
+v_pm_qos_update_request+0x30/0x64
+> [ 2941.932374]  #3: ffff63310e3cace8 (&(c->notifiers)->rwsem){++++}-{3:3}=
+, at: blocking_notifier_call_chain+0x30/0x70
+> [ 2941.932381]
+>                stack backtrace:
+> [ 2941.932383] CPU: 7 PID: 359 Comm: ring0 Not tainted 6.4.0-rc5 #64
+> [ 2941.932386] Hardware name: LENOVO 21BYZ9SRUS/21BYZ9SRUS, BIOS N3HET53W=
+ (1.25 ) 10/12/2022
+> [ 2941.932389] Call trace:
+> [ 2941.932391]  dump_backtrace+0x9c/0x11c
+> [ 2941.932395]  show_stack+0x18/0x24
+> [ 2941.932398]  dump_stack_lvl+0x60/0xac
+> [ 2941.932402]  dump_stack+0x18/0x24
+> [ 2941.932405]  print_circular_bug+0x26c/0x348
+> [ 2941.932407]  check_noncircular+0x134/0x148
+> [ 2941.932409]  __lock_acquire+0x13d8/0x2188
+> [ 2941.932411]  lock_acquire+0x1e8/0x310
+> [ 2941.932414]  __mutex_lock+0xa0/0x840
+> [ 2941.932416]  mutex_lock_nested+0x24/0x30
+> [ 2941.932418]  qos_min_notifier_call+0x28/0x88
+> [ 2941.932421]  notifier_call_chain+0xa0/0x17c
+> [ 2941.932424]  blocking_notifier_call_chain+0x48/0x70
+> [ 2941.932426]  pm_qos_update_target+0xdc/0x1d0
+> [ 2941.932428]  freq_qos_apply+0x68/0x74
+> [ 2941.932431]  apply_constraint+0x100/0x148
+> [ 2941.932433]  __dev_pm_qos_update_request+0xb8/0x1fc
+> [ 2941.932435]  dev_pm_qos_update_request+0x3c/0x64
+> [ 2941.932437]  msm_devfreq_active+0xf8/0x194 [msm]
+> [ 2941.932460]  msm_gpu_submit+0x18c/0x1a8 [msm]
+> [ 2941.932482]  msm_job_run+0x98/0x11c [msm]
+> [ 2941.932504]  drm_sched_main+0x1a0/0x444 [gpu_sched]
+> [ 2941.932511]  kthread+0x124/0x128
+> [ 2941.932514]  ret_from_fork+0x10/0x20
