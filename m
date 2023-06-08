@@ -2,94 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2B13727A13
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 10:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA61E727A1A
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 10:37:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234817AbjFHIgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 04:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38834 "EHLO
+        id S235483AbjFHIhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 04:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233645AbjFHIgm (ORCPT
+        with ESMTP id S233645AbjFHIht (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 04:36:42 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B25A326B2
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 01:36:40 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-5147f5efeb5so585648a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 01:36:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686213399; x=1688805399;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KP6FTQbezAovuHn8DXvJcqsrbsf1/vJCY3Cy9QhDcuY=;
-        b=l4G/0deA780yke9lCVpsQz9+5T9PPXsj68cOKT9hCDkYvKS49eun7pxuHW16iEZP/b
-         T1rcaMRIMwY+8YXee5rtf22mLEczKIXKY1g6IJBzTYh471ju92mHUqknGGuLD0DTvK8Z
-         gFaYicpruiY2UWFTlTY1B+9YGcvYGv9AmWpOuzaH0SqhJydXhDzbO6yxWhnK0fU60jhp
-         bHyzWnQ2qhDJ8aEb4KEPr7YSKlujuWbYyaEDzbcjNUEjblTOKuqMBaiFHiZdGrUpFjbs
-         N4XexIeytr493Pqqf1a1u5OohNOLFMz2kR6lq6Xx3EkEt8dXjJ7INiOHPvv8G4fVb2dz
-         atLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686213399; x=1688805399;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KP6FTQbezAovuHn8DXvJcqsrbsf1/vJCY3Cy9QhDcuY=;
-        b=lEpPnQ1dbXb0mJmtkwz2VTaocrdox3ORht82YksuhV5a3SkF5oV3TKdXxpjLZA82hb
-         q3Jn+4P7Tk6zxLIRSOyoxpPDd4BQJAHhYrWH/YO/430oRE2JCTQ07trIEmE9mMWkMbzG
-         6V4kBWwlNuU5JLMh78W5K4SgQ7l3eERf5c8ZvQLyXLNZ4uvaW4pufh8BI6Iq/SQCURGL
-         /vOB+KhlTW829TZsarsgxNTKrqTwu47M2rsjbVQKLBrCvBrtW9UePrU7m9pTZs+BwB2I
-         /t4U4zCkXDyysa1gO6VodfskkwVRzNzHhg2g+E+gaiYx+++y2xPoLZZ4O2+QaDocJpOs
-         Z/QA==
-X-Gm-Message-State: AC+VfDy5R7RAFEe6uYEzrFVtfemqJqdrdvb3YjRqxL0FApUe0su/j4ty
-        ajvU1YFP+rSmpO16PPt2jRoGnw==
-X-Google-Smtp-Source: ACHHUZ4Rr0xFX57yVQfz1/k8GLc/jFvOpE/oXWcHFHi0S+gaR1ek3G1G18/OfI6o6YcStn+m8N0Kig==
-X-Received: by 2002:a17:907:1c15:b0:96a:8c13:8dc0 with SMTP id nc21-20020a1709071c1500b0096a8c138dc0mr9105461ejc.37.1686213399231;
-        Thu, 08 Jun 2023 01:36:39 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id a14-20020a1709063a4e00b0097456b4085fsm383939ejf.190.2023.06.08.01.36.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 01:36:38 -0700 (PDT)
-Message-ID: <9f8a9208-62d4-0c96-7d1c-a452d3d7e799@linaro.org>
-Date:   Thu, 8 Jun 2023 10:36:36 +0200
+        Thu, 8 Jun 2023 04:37:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4B226B2;
+        Thu,  8 Jun 2023 01:37:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A69864AA9;
+        Thu,  8 Jun 2023 08:37:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3A46C433A1;
+        Thu,  8 Jun 2023 08:37:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686213467;
+        bh=b8w2dww11+jeMQIGk8g14QqcvLwbopMkYC+R8CQKZcI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=le1K4qUjRcurFJR4PvKWFr5yX1wr0bfbQMMQHpCiVNVL/GKFvdUoD3YXlQwh9z2aw
+         a2k/KClut7Rba/NBifCDLFmoNHZoSWst8biJ4nex0gyZrtMuZBwNJ/TI59S6X9Q3SI
+         PD52rYChAEgeGp/WmvngWXiwjouLglPxSMGOkbntnVfwdoRTNiMn8mcN4/PAGxHWnI
+         KKcwuJzJpG2khAypic80LcdVcW7flajlgM1XjpDxzo5fguM5HNdniH7+61plfrq24n
+         PqPJjdnb/NTO64Qyz6G4uavwQec+K3YYwagbM83ZkrAx2q9BgYjVnImFQ0YURyTh1m
+         nzneBZ1G8KChg==
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-4f004cc54f4so465853e87.3;
+        Thu, 08 Jun 2023 01:37:46 -0700 (PDT)
+X-Gm-Message-State: AC+VfDypERVI4+7y/0vomASr5qpZ8QsEXkJY8adAnn52FGKzyXhPLx6b
+        I04oGT/lUYJFRpFEtRzK2lzk3Xjxq/2RqKHZDXw=
+X-Google-Smtp-Source: ACHHUZ5YQ0EtwVOGgeqK+JNVOPM9pQ0uf1Q3nAcBP5h+ykVX8Gku7lWhb/0mJ5g2QMceulFBf3GJScF5rZVdvgUjp9g=
+X-Received: by 2002:a05:651c:113:b0:2b1:eab1:e083 with SMTP id
+ a19-20020a05651c011300b002b1eab1e083mr3391281ljb.16.1686213465018; Thu, 08
+ Jun 2023 01:37:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [v6 1/4] dt-bindings: pwm: Add ASPEED PWM Control documentation
-Content-Language: en-US
-To:     Billy Tsai <billy_tsai@aspeedtech.com>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "patrick@stwcx.xyz" <patrick@stwcx.xyz>
-References: <20230608021839.12769-1-billy_tsai@aspeedtech.com>
- <20230608021839.12769-2-billy_tsai@aspeedtech.com>
- <4dffd320-8e30-fb30-6ded-79519afddc21@linaro.org>
- <SG2PR06MB3365DD80EA2FD026D400C4A78B50A@SG2PR06MB3365.apcprd06.prod.outlook.com>
- <61278e12-ba39-4503-ca74-a7118b0f6e99@linaro.org>
- <SG2PR06MB336528007D2685F8D95DF4078B50A@SG2PR06MB3365.apcprd06.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <SG2PR06MB336528007D2685F8D95DF4078B50A@SG2PR06MB3365.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230607053940.39078-10-bagasdotme@gmail.com> <20230607053940.39078-11-bagasdotme@gmail.com>
+ <CAC1cPGxD6xOLksyMHCcreFyEv5Yoo50LY=xM9BmOEP=oECoNww@mail.gmail.com>
+In-Reply-To: <CAC1cPGxD6xOLksyMHCcreFyEv5Yoo50LY=xM9BmOEP=oECoNww@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 8 Jun 2023 10:37:33 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGnzphm5Wyz7RfZdWVxPnEihR0NGy5mFs4neQM+7EfEGQ@mail.gmail.com>
+Message-ID: <CAMj1kXGnzphm5Wyz7RfZdWVxPnEihR0NGy5mFs4neQM+7EfEGQ@mail.gmail.com>
+Subject: Re: [PATCH 1/8] crypto: Convert dual BSD 3-Clause/GPL 2.0 boilerplate
+ to SPDX identifier
+To:     Richard Fontana <rfontana@redhat.com>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Franziska Naepelt <franziska.naepelt@googlemail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux SPDX Licenses <linux-spdx@vger.kernel.org>,
+        Linux Kernel Janitors <kernel-janitors@vger.kernel.org>,
+        Linux Crypto <linux-crypto@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Alexander Kjeldaas <astor@fast.no>,
+        Herbert Valerio Riedel <hvr@hvrlab.org>,
+        Kyle McMartin <kyle@debian.org>,
+        "Adam J . Richter" <adam@yggdrasil.com>,
+        Dr Brian Gladman <brg@gladman.me.uk>,
+        Stephan Mueller <smueller@chronox.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -98,34 +81,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/06/2023 10:21, Billy Tsai wrote:
->         On 08/06/2023 09:47, Billy Tsai wrote:
->         >>
->         >>   >> +
->         >>   >> +allOf:
->         >>   >> +  - $ref: pwm.yaml#
->         >>   >> +
->         >>   >> +properties:
->         >>   >> +  compatible:
->         >>   >> +    enum:
->         >>   >> +      - aspeed,ast2600-pwm
->         >>   >> +
->         >>   >> +  "#pwm-cells":
->         >>   >> +    const: 3
->         >>
->         >>   > 3 cells? For one PWM? What are they?
->         >>
->         >> channel, period and polarity.
-> 
->         > Don't cut my responses. You wrote you have one PWM output, so only one
->         > channel. What do you put then in the channel?
-> 
-> You need to put 0 in the cell of the channel, the example of the dts usage will like following:
+On Wed, 7 Jun 2023 at 16:38, Richard Fontana <rfontana@redhat.com> wrote:
+>
+> On Wed, Jun 7, 2023 at 1:42=E2=80=AFAM Bagas Sanjaya <bagasdotme@gmail.co=
+m> wrote:
+> >
+> > Replace license boilerplate for dual BSD-3-Clause/GPL 2.0 (only or
+> > later) with corresponding SPDX license identifier.
+>
+> This is at least the fourth or fifth time (I'm losing track) where you
+> have incorrectly assumed a particular non-GPL license text matches a
+> particular SPDX identifier without (apparently) checking.
+>
 
-If you always put 0 isn't this a proof that it's wrong?
+What exactly does 'checking' entail here? There is no guidance in
+Documentation/process/license-rules.rst on how to perform this
+comparison.
 
+Also, checkpatch now complains about missing SPDX identifiers, which
+is what triggered this effort. Should it stop doing that?
 
+> Bagas, I urge that you learn more about the nature of SPDX identifiers
+> before submitting any further patches at least involving replacement
+> of non-GPL notices with SPDX identifiers. For this unprecedented
+> license notice replacement initiative to have any legitimacy it must
+> attempt to apply SPDX identifiers correctly.
+>
 
-Best regards,
-Krzysztof
+Since we're in language pedantic mode: it must do more than attempt,
+it must apply them correctly, period.
 
+Arguably, this is an 'attempt to apply SPDX identifiers correctly' on
+Bagas's part, which apparently falls short (and I may be guilty of the
+same for some arch crypto code)
+
+So what is the ambition here: do we just leave the ambiguous ones as-is?
