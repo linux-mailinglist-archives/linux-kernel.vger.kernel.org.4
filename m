@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00FC8728554
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:39:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2479872855A
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:40:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236571AbjFHQjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 12:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47636 "EHLO
+        id S236682AbjFHQjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 12:39:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236044AbjFHQj1 (ORCPT
+        with ESMTP id S236030AbjFHQj1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 8 Jun 2023 12:39:27 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC89359A
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 09:38:56 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-30aebe2602fso622775f8f.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 09:38:56 -0700 (PDT)
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EAFF2D7E
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 09:38:59 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-30e57e0a0c7so645791f8f.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 09:38:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1686242333; x=1688834333;
+        d=tessares.net; s=google; t=1686242334; x=1688834334;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Uw4JCOlggtaSPwBTDTjp07y/EtwINur5skPlUaghmwA=;
-        b=7f/9tOEXwXQllKsibzf7pBBpDrRxyepaLdPYMWKrNI+nUAC2S2heOkLiE8b1golsfi
-         /3y5yT7tEVpuby2LSMdNeK3M5Ok4gYfW2vUkCBjUSYPvID/C0RulqBL7klbMCSR0QV+F
-         DrqKWN58R/d15SS9BKYpOIy/j/Gasaz6ggF3tSetbdtqzO0zSIibgMuhjmFjsLMjUj7M
-         oJC2TKJTGHagvhcmx4lujd7M1yDR3zstbvHi54nqFMcMzyxbYNy72WbAlCHUOu5kgIch
-         NlD699UAwPFamOenwsp1Dsv7Nv/oHI/sZRl1I9BRe0TwvLbUnPuV9rhFqtp4Bvv+yXIo
-         47cw==
+        bh=vCtw9PrOLNArcQLmhG5Q8vIjJqO0AaB9WueRBaBXF60=;
+        b=tXL/drIY7f3MtCB92yRvPxZ9xCTaX0hOPfRz/rUAvsHx53Ajafcx8IOWAIXRnATmx5
+         EBeRncwYce2/jEJsdbzeRIrK2fx/CZ+zIMMjt+gYCPXx3A6MWLhgG+75HI6WROhbMpF/
+         0ITsOD0V79rA0GHdCoo3xIhpEMebXSJBLNJg0nKjza35dwXFC5ZGaoX5ONDQr/lg+ktC
+         uPGa10QJKS3WdBp/UxUEp17BdiE/zgyV8BFPP2SSMfHJ4q9wezcj2bOfGxCB6Gfmp4qB
+         cGzzra29qUE5b2qEWCD4hy2razKzweTSpRZlzT01Vy9tonmPq54hGIwnWCkfj1DK41Ta
+         er0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686242333; x=1688834333;
+        d=1e100.net; s=20221208; t=1686242334; x=1688834334;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Uw4JCOlggtaSPwBTDTjp07y/EtwINur5skPlUaghmwA=;
-        b=LDNBAdU6OZeclVVAuG/M8iJPiG0P89Zs9Ug2q2c/9UPa2gqdBifx1GVh9EKFVpW0T6
-         zdpjyJjRjdJjAXVZbiFGYOtq6nOeJ/lHcq3zOf3RlaOJuTfirgcXXR4wIO5fcPg0A1kF
-         n3kM640JPxWUxJLuG5aWXDhQPYAOirc+bMsKVCmemnJcuvEsSMvz0fb9mz2qSS71jkKS
-         MJvkHql/qbItmkJS5Ws0AQ1aChhPQD3DluhU016fmXOb/pzgl1dFvA1uCzIVCM+dPRl1
-         oAk9f9DVfeVdxjN1ikOvLdiHWq1jtaDcDllrCoy492bTU1bJ3HM4NR6sO3BCAqEYqpKh
-         NC3g==
-X-Gm-Message-State: AC+VfDzSM1yQ5ki2kTsG0mOqnQ7/T+1cAbGaXC1nam6DubIa0zNCQ4LJ
-        wsBK3tBMrXiC8HTDIL5n+8Qp+g==
-X-Google-Smtp-Source: ACHHUZ5v1EQxmdq5Wru7kw4Z39LM+198M8ioOAVIaKEJnfkNxZ86ROj4YT9I982x0uPwVAA+mFTVSw==
-X-Received: by 2002:a5d:4538:0:b0:306:368d:8a1c with SMTP id j24-20020a5d4538000000b00306368d8a1cmr6731624wra.45.1686242333282;
-        Thu, 08 Jun 2023 09:38:53 -0700 (PDT)
+        bh=vCtw9PrOLNArcQLmhG5Q8vIjJqO0AaB9WueRBaBXF60=;
+        b=ehaiBujlFL+xXj8g1N6QNDh1VxUr7gRnPH6pvh1iCwYzPOWhtVDtwTT6+Nqan6DgKo
+         m8/klBv0nib/+5oA0e2UKNIHYtrVMGlFc6sbH9y3Vc5/0sNhl9ePDTEg6KndW4aF16nd
+         YM8DR/R83W1AwmeTburkjP7cHcB6jpYhAk904+uk1D/0zWfZyID4nUxD8A6r2B3vA/7w
+         D7iX1YdYrAL8IzOhcNISmuHvW1nvLl4G9ElOVICFXkOGDnXBrfCf9q/FekxzhH5xJ+2O
+         l4fYsT+wkLyqP+piErpF9Le7WPJWm3iFaSXF7sa10FwkYLEYhslun0cQOumhC+2/HDM7
+         z4nQ==
+X-Gm-Message-State: AC+VfDw+K5iXpQgoRTFn2v1pl4tX5zg8oHpmCo5TueXoKdwgHPjaoBq7
+        bYAUGzko4385jRtaLAYTpdGQyQ==
+X-Google-Smtp-Source: ACHHUZ6UYtkV/BRN58QcXvsxCkID55O4V7in4RcbVabEQQjQB5KY5QZfk9kaARtgpAXOPbdY1XoOrw==
+X-Received: by 2002:adf:fccf:0:b0:309:5068:9ebe with SMTP id f15-20020adffccf000000b0030950689ebemr6705019wrs.50.1686242334665;
+        Thu, 08 Jun 2023 09:38:54 -0700 (PDT)
 Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id e13-20020adfef0d000000b0030aeb3731d0sm2038215wro.98.2023.06.08.09.38.52
+        by smtp.gmail.com with ESMTPSA id e13-20020adfef0d000000b0030aeb3731d0sm2038215wro.98.2023.06.08.09.38.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 09:38:52 -0700 (PDT)
+        Thu, 08 Jun 2023 09:38:54 -0700 (PDT)
 From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Thu, 08 Jun 2023 18:38:43 +0200
-Subject: [PATCH net 01/14] selftests: mptcp: lib: skip if missing symbol
+Date:   Thu, 08 Jun 2023 18:38:44 +0200
+Subject: [PATCH net 02/14] selftests: mptcp: connect: skip transp tests if
+ not supported
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230608-upstream-net-20230608-mptcp-selftests-support-old-kernels-part-2-v1-1-20997a6fd841@tessares.net>
+Message-Id: <20230608-upstream-net-20230608-mptcp-selftests-support-old-kernels-part-2-v1-2-20997a6fd841@tessares.net>
 References: <20230608-upstream-net-20230608-mptcp-selftests-support-old-kernels-part-2-v1-0-20997a6fd841@tessares.net>
 In-Reply-To: <20230608-upstream-net-20230608-mptcp-selftests-support-old-kernels-part-2-v1-0-20997a6fd841@tessares.net>
 To:     mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
@@ -74,26 +75,26 @@ Cc:     Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
         Matthieu Baerts <matthieu.baerts@tessares.net>,
         stable@vger.kernel.org
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2475;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1974;
  i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=d9kMX7C5QhFsCiyZaTdMhXR8W0fg17bpTpuLqXSu/Go=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkggQZth7JIHgU9JOMhTUTPn5Xm/sA0h+5GLjjs
- zo69zq3rb6JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZIIEGQAKCRD2t4JPQmmg
- c9g4EADCNFnAktQKkp9vmKC6KoWHc9kkDX8zDn8jFhjyHrn2BcXD6RHrl4cTuG2SJABsK1sKMOw
- Q60U3F6cScwWpZs1v9bUKs7hdT8oACQSdepJ7ZS3DWS2aZhXk+lsbLfgIbO5ZKngjvHjTMK4tAs
- /GALvC1gYpPIJ9HYSpH3tDD6XcSJo42uR/n/2QaR7q0vTvX+gL/wJocZM2XZfpt9iNO3DCdJ9s5
- nL8uGTybl/zZ0kRLTXtn7h0JTEvhF4QSzWH66aLBEi7V9uxclPliIVJwBrFSGbC5RfzAjRKbdmP
- BPz61HpXNXhC46U9RjaJGr+0oFGalFM7BkLUrwb93LiznEhKGe4ICNwjcQa1GcMbVf9BW5wb0MN
- PQFJeMqWtl8XQr7KeF8mhdE8kjbuoCDaDowKvgaDMTfqa1aLioN8Sp5ASWH/RihWKHQEXzt/OP8
- veqC6Lsalwg6IeABME8tTQMaFd5gEDxVGSd+tOeUA4WyBPu+RbcptFxvROCf7qOms4/EXhglVTt
- LkuLVIdW4bJBKxBjACTSmFvDJFSpJ6RsnDtGxr0EEUFuIKTC5O1htzbrCsPkyvrw6ToiGEuojUU
- KEO7TsFSuYcmZ5OBFzlNqsi72+bKOZS/aGaXHK2OuFYkOXNnJaE4DFg2zRypcRoHYnlbAUUNux1
- rMP5xwNib7xhs3g==
+ bh=R/V9S3P7iUXd6JZdAlgHifqyiG2/fdAKNW6ncrS04vo=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkggQZ+289JuG8nUU0lVwm58ouXSZYgDPVcbH/c
+ KhcDv70cLmJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZIIEGQAKCRD2t4JPQmmg
+ c8d9D/9H5uHAzLzmBYQN1zmUUbrX52oDu3mMYbl269BVrbFew7wuA+Sv/+1Qf4YdLV8h9/FlmAB
+ cVr6fplajCSksF2IVxrjpkS8593uJqyW8sP1bMDm7BVwg+DfqtrAuXTs3LPSgyw7mdyR+PyuDvq
+ RC7bFC9eT5yoETH6G9ZawftQBs7YEcPdTSgFJsvUrqkrELHljjyg2SQn6os38Ts1avKQBvV5vOP
+ 0mgePIFX+gX3neoTW3QDZphMcrEKTe//SW2nAAfoWQVQkMdI50uuHV2wrApQ2zNU781VJnkAC08
+ 2uvdnJWRK02wJRaTuVOnLpx8Yx7DvsQ61yRLHZI9A0p0El+7GDlvZJxVoWYmGs/2cHNG6/4+e0U
+ 4bFZzNJdMFHm+MUKlUViD4DLvLGtjUALsc/i9BCldJeiwIPby5DeKGYe2Wo3CuTf6prJW406wW6
+ FviBYmDijhnZzQRf888m1B3ZKUDkH1BRz1hpO4voot3exqnspAUIBk5h3ya8MuQ/zdsaYU0ox08
+ qjSXqwsspyJ+XizgUzs9T/06oa2+wpsYJ5RajT+ufLzatuqUEc6NzHXscjifeb/tEfuLvFrWOZH
+ 2CF1DoL4QyfCcR8kM0qocA/ifR5kRU6nZFVOoKuWIhmmIkDg/VpMkTP+aXvRK1EZ+pUCjSkONfF
+ 62sCTo+HrCETciw==
 X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,79 +105,52 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 Selftests are supposed to run on any kernels, including the old ones not
 supporting all MPTCP features.
 
-New functions are now available to easily detect if a certain feature is
-missing by looking at kallsyms.
+One of them is the support of IP(V6)_TRANSPARENT socket option with
+MPTCP connections introduced by commit c9406a23c116 ("mptcp: sockopt:
+add SOL_IP freebind & transparent options").
 
-These new helpers are going to be used in the following commits. In
-order to ease the backport of such future patches, it would be good if
-this patch is backported up to the introduction of MPTCP selftests,
-hence the Fixes tag below: this type of check was supposed to be done
-from the beginning.
+It is possible to look for "__ip_sock_set_tos" in kallsyms because
+IP(V6)_TRANSPARENT socket option support has been added after TOS
+support which came with the required infrastructure in MPTCP sockopt
+code. To support TOS, the following function has been exported (T). Not
+great but better than checking for a specific kernel version.
 
 Link: https://github.com/multipath-tcp/mptcp_net-next/issues/368
-Fixes: 048d19d444be ("mptcp: add basic kselftest for mptcp")
+Fixes: 5fb62e9cd3ad ("selftests: mptcp: add tproxy test case")
 Cc: stable@vger.kernel.org
 Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 ---
- tools/testing/selftests/net/mptcp/config       |  1 +
- tools/testing/selftests/net/mptcp/mptcp_lib.sh | 38 ++++++++++++++++++++++++++
- 2 files changed, 39 insertions(+)
+ tools/testing/selftests/net/mptcp/mptcp_connect.sh | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/tools/testing/selftests/net/mptcp/config b/tools/testing/selftests/net/mptcp/config
-index 38021a0dd527..6032f9b23c4c 100644
---- a/tools/testing/selftests/net/mptcp/config
-+++ b/tools/testing/selftests/net/mptcp/config
-@@ -1,3 +1,4 @@
-+CONFIG_KALLSYMS=y
- CONFIG_MPTCP=y
- CONFIG_IPV6=y
- CONFIG_MPTCP_IPV6=y
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_lib.sh b/tools/testing/selftests/net/mptcp/mptcp_lib.sh
-index 3286536b79d5..29b65f4b73b2 100644
---- a/tools/testing/selftests/net/mptcp/mptcp_lib.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_lib.sh
-@@ -38,3 +38,41 @@ mptcp_lib_check_mptcp() {
- 		exit ${KSFT_SKIP}
- 	fi
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect.sh b/tools/testing/selftests/net/mptcp/mptcp_connect.sh
+index c1f7bac19942..f9c36c6929cc 100755
+--- a/tools/testing/selftests/net/mptcp/mptcp_connect.sh
++++ b/tools/testing/selftests/net/mptcp/mptcp_connect.sh
+@@ -144,6 +144,7 @@ cleanup()
  }
-+
-+mptcp_lib_check_kallsyms() {
-+	if ! mptcp_lib_has_file "/proc/kallsyms"; then
-+		echo "SKIP: CONFIG_KALLSYMS is missing"
-+		exit ${KSFT_SKIP}
-+	fi
-+}
-+
-+# Internal: use mptcp_lib_kallsyms_has() instead
-+__mptcp_lib_kallsyms_has() {
-+	local sym="${1}"
-+
-+	mptcp_lib_check_kallsyms
-+
-+	grep -q " ${sym}" /proc/kallsyms
-+}
-+
-+# $1: part of a symbol to look at, add '$' at the end for full name
-+mptcp_lib_kallsyms_has() {
-+	local sym="${1}"
-+
-+	if __mptcp_lib_kallsyms_has "${sym}"; then
-+		return 0
+ 
+ mptcp_lib_check_mptcp
++mptcp_lib_check_kallsyms
+ 
+ ip -Version > /dev/null 2>&1
+ if [ $? -ne 0 ];then
+@@ -695,6 +696,15 @@ run_test_transparent()
+ 		return 0
+ 	fi
+ 
++	# IP(V6)_TRANSPARENT has been added after TOS support which came with
++	# the required infrastructure in MPTCP sockopt code. To support TOS, the
++	# following function has been exported (T). Not great but better than
++	# checking for a specific kernel version.
++	if ! mptcp_lib_kallsyms_has "T __ip_sock_set_tos$"; then
++		echo "INFO: ${msg} not supported by the kernel: SKIP"
++		return
 +	fi
 +
-+	mptcp_lib_fail_if_expected_feature "${sym} symbol not found"
-+}
-+
-+# $1: part of a symbol to look at, add '$' at the end for full name
-+mptcp_lib_kallsyms_doesnt_have() {
-+	local sym="${1}"
-+
-+	if ! __mptcp_lib_kallsyms_has "${sym}"; then
-+		return 0
-+	fi
-+
-+	mptcp_lib_fail_if_expected_feature "${sym} symbol has been found"
-+}
+ ip netns exec "$listener_ns" nft -f /dev/stdin <<"EOF"
+ flush ruleset
+ table inet mangle {
 
 -- 
 2.40.1
