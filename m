@@ -2,174 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EAE0728350
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:11:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB2B672834E
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:11:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236095AbjFHPLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 11:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46968 "EHLO
+        id S235600AbjFHPLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 11:11:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236124AbjFHPLR (ORCPT
+        with ESMTP id S234372AbjFHPLQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 11:11:17 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4CB2D65
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 08:11:15 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id 5614622812f47-392116b8f31so486563b6e.2
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 08:11:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686237073; x=1688829073;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XKYIY8lnLeesFrrYGM6yGBBcxp2DdDvQNqXJ/GPrn+0=;
-        b=BmAm0rXM4KZbTYym0HXYlOClgT/zGWm4ze6fwFqXwAqD1ItkmTYBl/+afhC3UDFEZl
-         uuRCKPD6RgfoUkFKIWZwzbDtBFAA1JCrB8QIqhbKWGVLgphLs9tCNZ4dqqMrQJ95EdDS
-         +7AZci3CA88AqfAQL6mijMM679CIZt98Z/tco=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686237073; x=1688829073;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XKYIY8lnLeesFrrYGM6yGBBcxp2DdDvQNqXJ/GPrn+0=;
-        b=GwDc9OJaFiqmsYCJxoWr6zBjjr4481DQ3GXrsvSObDcPbmdrMsshNp2TLeXftQuu1n
-         UyXHlv0Nb+/oC7ORBBnJ9jbfnTRvB0xJSOjBzoy6AU+Xn62Qa3k0KdjQjnMXBaVmyWfj
-         pAk4Xq0h1I6RBZjdCwVlmyhBJWGO7qt7wsdzru4D+4D2a5Pwo5bHe5zHwa2Rm2D6MGEo
-         MRN8bJbr4S1Q4ilsuJSAd6JTPslspKrN7JEaNbM/hMnPDtgFS8H7aNE9Rn0XDsXilpEI
-         NeE0Z1X0CN3II0HEOcns8plKZHoDNjZ9ZUUaXEw/75fJgNuhbBRii8OhBRA5gL18DstC
-         duqg==
-X-Gm-Message-State: AC+VfDz8jlCSXhn1f05duYQimiIGF1JpC8WRckqJo5ICqiWor2UtKKnc
-        iISERj2giHtDIj3QN/ULkRXWEZyOdK8vcHIbDfs=
-X-Google-Smtp-Source: ACHHUZ75S3gvyOcDlHP6xBHC7LssUFSYdXclhok/DcUJlwGVpU8/uTN7tKBXby8Yam/vixBcamn0Gw==
-X-Received: by 2002:a05:6808:8:b0:389:4f7b:949d with SMTP id u8-20020a056808000800b003894f7b949dmr6617372oic.22.1686237072970;
-        Thu, 08 Jun 2023 08:11:12 -0700 (PDT)
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com. [209.85.160.182])
-        by smtp.gmail.com with ESMTPSA id g29-20020a0caadd000000b0062168714c8fsm448616qvb.120.2023.06.08.08.11.12
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 08:11:12 -0700 (PDT)
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-3f9b7de94e7so218691cf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 08:11:12 -0700 (PDT)
-X-Received: by 2002:a92:c549:0:b0:33d:929c:af67 with SMTP id
- a9-20020a92c549000000b0033d929caf67mr120694ilj.17.1686237051541; Thu, 08 Jun
- 2023 08:10:51 -0700 (PDT)
+        Thu, 8 Jun 2023 11:11:16 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B7F2D63;
+        Thu,  8 Jun 2023 08:11:14 -0700 (PDT)
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 358EqCxh003113;
+        Thu, 8 Jun 2023 15:11:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=LUPON5A/yOq6SV0ahS6sBgfeIZzY9Jqq451H2rYMksg=;
+ b=GfhCC1litHF3NBsn7H5W8uW5ERTdCZjzUz45Iw2nzr2sbVP8rJ++PD3lg+xsRY/qNx57
+ 12vEmKGYDQjehtKUvDo8KEQAvEb8CsuJeyU4pdIsTm42cgtj5MpyjqIo0Mo9X75l3F+h
+ BnbDiMiroF1JxEIcDtwtXUTNP4SigsdEC6aHzb+AtfZuSc0ClFP1Ud1IFjovVB1pqNYR
+ MaKP4z2oy9UPoTSBobY4zrEMLlwx+eTlXX2LpTWzEypDvR0bqQr1moH4B38GPqqXgSI7
+ YQIthQqjMmo9t8pCvFe9rSVzx1sGFNVuuR2QnOrv8w+Y7aIa+g7YBnONvPCzNBHqRN4/ ng== 
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r3h4p8hqp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Jun 2023 15:11:03 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 358Cnfc6000311;
+        Thu, 8 Jun 2023 15:11:01 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([9.208.130.98])
+        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3r2a76s9jp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Jun 2023 15:11:01 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+        by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 358FB0DC61210898
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 8 Jun 2023 15:11:01 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8F8FC58066;
+        Thu,  8 Jun 2023 15:11:00 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DBAE958053;
+        Thu,  8 Jun 2023 15:10:59 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  8 Jun 2023 15:10:59 +0000 (GMT)
+Message-ID: <666b8422-3e4f-3d88-1ff7-1f650dd401ce@linux.ibm.com>
+Date:   Thu, 8 Jun 2023 11:10:59 -0400
 MIME-Version: 1.0
-References: <20230607144931.v2.8.Ib1a98309c455cd7e26b931c69993d4fba33bbe15@changeid>
- <202306081419.Dzz0T4iW-lkp@intel.com>
-In-Reply-To: <202306081419.Dzz0T4iW-lkp@intel.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 8 Jun 2023 08:10:39 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=UMryHK+8j9FCKtSxykB8Tc-tU_B7MXMQPxpkdP2h8mJA@mail.gmail.com>
-Message-ID: <CAD=FV=UMryHK+8j9FCKtSxykB8Tc-tU_B7MXMQPxpkdP2h8mJA@mail.gmail.com>
-Subject: Re: [PATCH v2 08/10] HID: i2c-hid: Support being a panel follower
-To:     kernel test robot <lkp@intel.com>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
-        cros-qcom-dts-watchers@chromium.org, linux-arm-msm@vger.kernel.org,
-        yangcong5@huaqin.corp-partner.google.com,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Chris Morgan <macroalpha82@gmail.com>,
-        linux-input@vger.kernel.org, hsinyi@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] tpm: factor out the user space mm from
+ tpm_vtpm_set_locality()
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-integrity@vger.kernel.org
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        Alejandro Cabrera <alejandro.cabreraaldaya@tuni.fi>,
+        Jarkko Sakkinen <jarkko.sakkinen@tuni.fi>,
+        stable@vger.kernel.org, Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-kernel@vger.kernel.org
+References: <20230530205001.1302975-1-jarkko@kernel.org>
+ <8f15feb5-7c6e-5a16-d9b4-008b7b45b01a@linux.ibm.com>
+ <324df0fa5ad1f0508c5f62c25dd1f8d297d78813.camel@kernel.org>
+ <0438f5e3-ca42-343b-e79e-5f7976ec8a62@linux.ibm.com>
+ <CT7AOKF4OGHA.2S5VUEAG76GYB@suppilovahvero>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <CT7AOKF4OGHA.2S5VUEAG76GYB@suppilovahvero>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: mR7sOTxaBrTwFfyiL_U6TBxePEWg73Om
+X-Proofpoint-ORIG-GUID: mR7sOTxaBrTwFfyiL_U6TBxePEWg73Om
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-08_10,2023-06-08_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ suspectscore=0 priorityscore=1501 phishscore=0 adultscore=0 mlxscore=0
+ malwarescore=0 bulkscore=0 clxscore=1015 lowpriorityscore=0
+ impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2306080131
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Thu, Jun 8, 2023 at 12:15=E2=80=AFAM kernel test robot <lkp@intel.com> w=
-rote:
->
-> Hi Douglas,
->
-> kernel test robot noticed the following build errors:
->
-> [auto build test ERROR on robh/for-next]
-> [also build test ERROR on hid/for-next dtor-input/next dtor-input/for-lin=
-us drm-misc/drm-misc-next linus/master v6.4-rc5 next-20230607]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Douglas-Anderson/d=
-t-bindings-HID-i2c-hid-Add-panel-property-to-i2c-hid-backed-touchscreens/20=
-230608-055515
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git fo=
-r-next
-> patch link:    https://lore.kernel.org/r/20230607144931.v2.8.Ib1a98309c45=
-5cd7e26b931c69993d4fba33bbe15%40changeid
-> patch subject: [PATCH v2 08/10] HID: i2c-hid: Support being a panel follo=
-wer
-> config: i386-randconfig-i003-20230607 (https://download.01.org/0day-ci/ar=
-chive/20230608/202306081419.Dzz0T4iW-lkp@intel.com/config)
-> compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git =
-8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-> reproduce (this is a W=3D1 build):
->         mkdir -p ~/bin
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
-n/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         git remote add robh https://git.kernel.org/pub/scm/linux/kernel/g=
-it/robh/linux.git
->         git fetch robh for-next
->         git checkout robh/for-next
->         b4 shazam https://lore.kernel.org/r/20230607144931.v2.8.Ib1a98309=
-c455cd7e26b931c69993d4fba33bbe15@changeid
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/make.cr=
-oss W=3D1 O=3Dbuild_dir ARCH=3Di386 olddefconfig
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/make.cr=
-oss W=3D1 O=3Dbuild_dir ARCH=3Di386 SHELL=3D/bin/bash
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202306081419.Dzz0T4iW-lkp=
-@intel.com/
->
-> All errors (new ones prefixed by >>):
->
-> >> ld.lld: error: undefined symbol: drm_panel_add_follower
->    >>> referenced by i2c-hid-core.c:1159 (drivers/hid/i2c-hid/i2c-hid-cor=
-e.c:1159)
->    >>>               drivers/hid/i2c-hid/i2c-hid-core.o:(i2c_hid_core_pro=
-be) in archive vmlinux.a
-> --
-> >> ld.lld: error: undefined symbol: drm_panel_remove_follower
->    >>> referenced by i2c-hid-core.c:1218 (drivers/hid/i2c-hid/i2c-hid-cor=
-e.c:1218)
->    >>>               drivers/hid/i2c-hid/i2c-hid-core.o:(i2c_hid_core_rem=
-ove) in archive vmlinux.a
 
-Thanks for the report! Ugh, I guess I forgot that even though
-DRM_PANEL is bool, it gets bundled up into all of DRM which can be a
-module. Assuming that this series looks mostly the same in the next
-version, I'll plan to add this:
+On 6/8/23 09:14, Jarkko Sakkinen wrote:
+> On Wed May 31, 2023 at 8:01 PM EEST, Stefan Berger wrote:
+>>
+>>
+>
+>>
+>> This is swtpm picking up this command with its user buffer.
+>>
+>>     So, I am not sure at this point what is wrong.
+>>
+>>      Stefan
+> 
+> The answer was below but in short it is that you have a function that
+> expects __user * and you don't pass user tagged memory.
 
-depends on DRM || !DRM # if DRM=3Dm, this can't be 'y'
+There are two functions that expect user tagged memory:
 
-...to each of the i2c-hid subclasses.
+static ssize_t vtpm_proxy_fops_read(struct file *filp, char __user *buf,
+				    size_t count, loff_t *off)
+static ssize_t vtpm_proxy_fops_write(struct file *filp, const char __user *buf,
+				     size_t count, loff_t *off)
 
--Doug
+the correspond to this interface:
+
+struct file_operations {
+	struct module *owner;
+	loff_t (*llseek) (struct file *, loff_t, int);
+	ssize_t (*read) (struct file *, char __user *, size_t, loff_t *);
+	ssize_t (*write) (struct file *, const char __user *, size_t, loff_t *);
+
+defined here:
+
+static const struct file_operations vtpm_proxy_fops = {
+	.owner = THIS_MODULE,
+	.llseek = no_llseek,
+	.read = vtpm_proxy_fops_read,
+	.write = vtpm_proxy_fops_write,
+
+Conversely, I see no other function interfaces in tpm_vtpm_proxy.c where the code would be missing the __user.
+
+Neither do I see any functions where I am passing a __user tagged buffer as parameter that shouldn't have
+such a tag on it or the reverse where a plain buffer is passed and it should be a __user tagged buffer.
+
+    Stefan
+
+> 
+> Even tho it is a bug, I think cc to stable is not necessary given that
+> it is not known to blow up anything. The main problem is that we have
+> code that does not work according to the expectations.
+> 
+> BR, Jarkko
+> 
+> 
