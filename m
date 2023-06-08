@@ -2,205 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B409728B98
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 01:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAF38728B92
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 01:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237010AbjFHXK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 19:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40086 "EHLO
+        id S236862AbjFHXKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 19:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236900AbjFHXK4 (ORCPT
+        with ESMTP id S236258AbjFHXKq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 19:10:56 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D9E30C8
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 16:10:54 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-bb2ffa1e235so1159086276.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 16:10:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686265854; x=1688857854;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SN0ge3MI/0IeqRc4N5LmJFP892MgbxzN2dbFaINJp+g=;
-        b=KCZTqmKJ+VJzOc9KKA8TdTIL+V67qW3YIPBb333hwaSl95weyBcaEOrdzBdrF3kxOt
-         03oci5v6cJVwIL3Av8EXMgkBonynnmFa7JnghjySfHmsuBn+o77q1MzXbQj/7DcqGAft
-         jJZ3qN+oW/akenO9XzoDbSgI/tgDK6d+uSCZvJVjYJKH5p5BMB4T+wvzmExywYspNrfy
-         tyMsammujvyeJ7hjQC3ZrKTepcFjtsW6EW6rJ/22wpDCuc44eHe0gAjKxGLMlayqCYaL
-         7R+agmogDqFnFWd3ev/dwL/lSNQ763vJZjHwLPfsZ3wASnYpEDskWHzHeNLR4TMc1tmK
-         9xTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686265854; x=1688857854;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SN0ge3MI/0IeqRc4N5LmJFP892MgbxzN2dbFaINJp+g=;
-        b=LjQdSPKgZ/1k4DD41qrHY2brXGEDGNsOW4jfEGzXg7uM8U/BiDoajcw+TRU/cSq3zF
-         /Laocu+yS6Ms58nLT1XyxtVtbLGVol7DXqpbx9oLvVwkEXYDSQNIYXCK6zvEljTNuWTY
-         pySHMVzN/WlfVGduz3Vd94JsBOMFogcXZTZvO3Lg0PJM1D4QKQlkh2/n+Y6t6Nj7N6Dw
-         TBdgGq9IzJnjl6vw9o1yy3mcLkYdgow5YT+gie4FSvfnIh4GTIAcDjn1DILxPdnCVlRs
-         4eIunRHNgzKgGXd0ZP8/AnSCjPXDOCBnxRlqakVxUD3CwsmLwzcIXpZ9OmKSJ0hbzPkK
-         S/LA==
-X-Gm-Message-State: AC+VfDx6rE6FmRRvrKQBMAgYKAhTN4a566cgA+x9su/tS3WRn5V2NRFI
-        9mEokYulvSrloFIaGY2Pi4NrS+jUobgZYvmt8GkL0w==
-X-Google-Smtp-Source: ACHHUZ4E9RVn5dOQXszUyb0/CmvdkGdz1gQ5GkEnozd1DWeFgjXKVXrU07bXYk/k93aNeBLxNomjZnRyF31Pn36Vknk=
-X-Received: by 2002:a0d:d84b:0:b0:569:e868:fd7f with SMTP id
- a72-20020a0dd84b000000b00569e868fd7fmr1147264ywe.7.1686265853979; Thu, 08 Jun
- 2023 16:10:53 -0700 (PDT)
+        Thu, 8 Jun 2023 19:10:46 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2084.outbound.protection.outlook.com [40.107.6.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B75B30C2
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 16:10:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BjoqRopW67Ds+wKZ55LJ6L3LgEJE52q8jXHXyCsFVU2Gn0KeGP5I4p0Dd2eXLJQPdNmkNfmZeeBzotUUUD9qDihWWEb6KPoTPomyOMrLnlkGfFGq93ZiHHHau/ziMcoLlczsC3a227jsj/NnnaTHWDIYo19CWkye0xOsSvB5MuTxmYPv7mUo+VQNv41lG2wm2XTOUgfhGID7vOYemLHx8fVZ+3grN+XE55Iwn9euemA6auYWrIxZ8bVrmO75aDKld1gGhcpiJCNkoWxZ1SiWAphg2fqI1BeOvzQMySbtQwscHXAR4LY0B3jv7m4LF+DpXgIaFihZik/3Jx6Xo/07ZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=30ovn0dE2MI+5v90BQkqxTk9fgY/JH7R3CdcoYtwNxA=;
+ b=Vt2JJ/ObNZXxKaIOKAe0po/3gjFBx41vkhvT0tfVnR5090caVlZx+6pNT59HSsGswsUA4DWVKjWk2cSbH90yEsAHikE//6Dhap9TsJsv81/A66sH9iNCRp3KjNlaPnB9ryy3qK9IEFhfGCEo9KAejQaQw/rn44kdm6yQ4druKnJ0c/wGKNzHJhfG7np6HujAu5FscZoLAzQ7g7srkeMUHNkbjUN0PyU1PQRMzaocferoSj2edzpjwFZCUxCToOIwAGsErzKN+QQaZJj5dUbueiO4wckBCdryMLJpuLogZYZ79ORRI72eJQb7fq1jHzl0t0ayZkpksMdrBhuEoZ714Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=30ovn0dE2MI+5v90BQkqxTk9fgY/JH7R3CdcoYtwNxA=;
+ b=qtxjLsLsAIwXrvHELM8eMQN9OcEkBL0/LDptfczW/mgheehFDPJoV5dcCwR3EM18ABhwaYPJ6h7kQfwbcpNQrYbLp+d8b1A3JclQVC8Ah4zk+ly6tk7/XNvSoM9h+5IQ6yVUSvxqKr7s+WVLskgn+C+kzql8NrjUpyKvYNhsbrU=
+Received: from AM0PR04MB6289.eurprd04.prod.outlook.com (2603:10a6:208:145::23)
+ by DB8PR04MB6907.eurprd04.prod.outlook.com (2603:10a6:10:119::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.36; Thu, 8 Jun
+ 2023 23:10:42 +0000
+Received: from AM0PR04MB6289.eurprd04.prod.outlook.com
+ ([fe80::7aac:2f58:b7e3:2c24]) by AM0PR04MB6289.eurprd04.prod.outlook.com
+ ([fe80::7aac:2f58:b7e3:2c24%6]) with mapi id 15.20.6455.030; Thu, 8 Jun 2023
+ 23:10:42 +0000
+From:   Leo Li <leoyang.li@nxp.com>
+To:     =?iso-8859-1?Q?Uwe_Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+CC:     Nathan Chancellor <nathan@kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>
+Subject: RE: [PATCH 4/6] bus: fsl-mc: fsl-mc-allocator: Improve error
+ reporting
+Thread-Topic: [PATCH 4/6] bus: fsl-mc: fsl-mc-allocator: Improve error
+ reporting
+Thread-Index: AQHZlJ98Oz9RTwIAQkWKphRxSM1C9a92K6+AgAtT7NCAAA9agIAABGng
+Date:   Thu, 8 Jun 2023 23:10:42 +0000
+Message-ID: <AM0PR04MB62894F383B97E4FFA6ED58118F50A@AM0PR04MB6289.eurprd04.prod.outlook.com>
+References: <20230310224128.2638078-1-u.kleine-koenig@pengutronix.de>
+ <20230310224128.2638078-5-u.kleine-koenig@pengutronix.de>
+ <20230601154101.GA2368233@dev-arch.thelio-3990X>
+ <20230601165945.f7itlyso4rbp2nbb@pengutronix.de>
+ <AM0PR04MB6289C7212F52C7A9DA4951D38F50A@AM0PR04MB6289.eurprd04.prod.outlook.com>
+ <20230608225355.3raozoq3v6teft7q@pengutronix.de>
+In-Reply-To: <20230608225355.3raozoq3v6teft7q@pengutronix.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AM0PR04MB6289:EE_|DB8PR04MB6907:EE_
+x-ms-office365-filtering-correlation-id: 2eee5afd-79fd-43b1-be61-08db687594e2
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: gsus/8gw2MdDzLHSOWvuqR06/JzR7JDoacOLe7Oh2GW5oOwg8f3SPn43UfIjkZLCwuR404KX/uonuigIE2FfhIiHAa9PJHLgrZvivJKwz7soL/gKY0z69ydeHDgj6armRWV+ctBXlUvSsFgyi95FyZZ1FKzKLBQo1xvjnj1kBp9Sl9rTc/Ig3ao7uuIUZM3a9xsvDuK/9WD3EJnkUE76VRyMOho3ngQP8RneCnPG3woZAdpMTHvDt97xEWYJ166gSfDojCPNYClv3Ko4KdLZZDE0tsNXuW/TdKcj7PGtTvCfngY34w/JNteyIjO+pQFNuEAQ0PEIkt5p1Z1IUoWQR4qIpUEY2ir9tfy4r6XOdPKOfnnRz1vBz5w5clGaShQ+ciQdfMIsLHMBOjRfruchUk77/WlolilK1/T6x95cPAvH2j0/ZdVt+UGkS2cgE1fNgRsb9pQmw5S8gx0LFaeklfwdk4F9WrnX+XZeL1CR6ptj6NrXWKLLEr4ZoVMReEqio0EKZGBd0dQvfSXcbThaa9o/jKK5VcDp+PtEUgQ6qOj7xiM6ztylCD0UkKcKrUAAdxlELdRYPBVMQ5qEhkNARONegGPd6/30Fpp61HkAb1M=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6289.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(39860400002)(136003)(396003)(376002)(451199021)(52536014)(5660300002)(122000001)(55236004)(53546011)(38070700005)(186003)(38100700002)(9686003)(6506007)(26005)(66574015)(83380400001)(54906003)(55016003)(33656002)(478600001)(2906002)(71200400001)(86362001)(966005)(7696005)(66446008)(66476007)(66556008)(66946007)(64756008)(8936002)(4326008)(6916009)(316002)(76116006)(8676002)(41300700001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?H6Bg5ALv6rz+VvJRjqwmzXfYNWI24F3Gc/ekSPc49Kr3z3M85glNQEkr5e?=
+ =?iso-8859-1?Q?FeSAOzA1NjRCncXNUQ5hjoOciXpiU/DPBTZGrp+7eXkdHwm5PiBKPEJwlL?=
+ =?iso-8859-1?Q?RvZET1GFdac+WyOVJ08cZZFiTIOodcM/heCPQQIufB95UNfqUWHoZPho5e?=
+ =?iso-8859-1?Q?zyuByhOT79nxDUk1eavFfrsv/yiTpg+Q8ZsbJ/4pFRF+NadlhCEV0VxO1W?=
+ =?iso-8859-1?Q?0mipkRRJj0WqQWLBSxmbGUUtGSZHK04PtBXWqJGA4+cT8grlOIbXUBOa8L?=
+ =?iso-8859-1?Q?JO2nNAUxndT+yZZQllCqXT5jsG5T+pAuExQ7Z8mKEAwLgCta2uWZubvcqd?=
+ =?iso-8859-1?Q?DDK1E1Z7VVhv92fyyw3zV4TGTgIhPRDxuX9CtxwhFAR4Yac3K08Wfd9q/Z?=
+ =?iso-8859-1?Q?yUJefPWqjutWFtEfqvXBOQ/65aJgt3G4B1bNprrl62mJlIQxMpUPF3ktEt?=
+ =?iso-8859-1?Q?kg+H7mLMHgkLHOLcCz/ksVv1ljnZKnUp9zpLSXox/KcqVoEiA/dLwZB95f?=
+ =?iso-8859-1?Q?fThpykFSk+dl19EFJbSQRCxmtrfoNju5oKGG9m5aXm2xFzduPMrHtB/Tdg?=
+ =?iso-8859-1?Q?bBfTpC5VXy2UcyTemmnmMzyt68gc3Bt44x6loz7ADGbULzwvXjlQced2/B?=
+ =?iso-8859-1?Q?aNOSp7XnZFJGa8EJBiqTIYdVgel0xRdOzbTXr3hcmCgsdV0upkgV7Bwj56?=
+ =?iso-8859-1?Q?lmLYDnxifhMMzbp1dLCyvoKkHSi28QTwmiaxEN5IFIt5LGoZzOEA8PgEvk?=
+ =?iso-8859-1?Q?2Yi5GO/pNgz0HawwHIfyTNbIdn2s4loCGLMPHlU853nsVYp5yqUilL+WyE?=
+ =?iso-8859-1?Q?e+5l+5Kmwx3JC8UbH10BLRd7hus6+ZqDia5YOGPSyPzZOdmNFsMYqzZpG5?=
+ =?iso-8859-1?Q?NF9STRBMFEJVjFCbuQmxoc7+ldhpwyjYOmE9tdAU2EyTIjcAEi9kmGZijb?=
+ =?iso-8859-1?Q?NRf3XPKNa9d5gYdOl1iK4TfSKbbphBJJKGSKLRC1I5d+zJm/gaEPPRlF3Z?=
+ =?iso-8859-1?Q?k1G8/XCUxhWop4mBftUlifIjy+darCGCGHxYkdCxoMEjQmemRBOVEUMfYk?=
+ =?iso-8859-1?Q?H11BD4NwkbH7MrfVcpV2Sh4wtIEuwJOzXKzQj71rLDQRZiFo8kqdIQjxoJ?=
+ =?iso-8859-1?Q?B8Iyko+MIraBxfkYZwZ8R0UNPmDNHKxydlFGLDWVTPBbQn/6lgOTfx7e42?=
+ =?iso-8859-1?Q?y85osXn6qz4mjFRTeMXVM4XfAuHsqzZAB67MyXp3I/iz0Hm1alGsmktqOE?=
+ =?iso-8859-1?Q?Wk1/a8QLJNBxq8RMVKnzUcUDlksN3Siy8xtfvSLpUMJo5mhuG2GFM4Aad+?=
+ =?iso-8859-1?Q?10cSPzISeScrjz6MqCHL8v3T5IGk9jziqeCDPHW6wbzPkGQQ7b4jciyMqR?=
+ =?iso-8859-1?Q?LzrAu8WsCXEEQvrBeWJ19ZtrK2BozUEaSZJJ5DNZiIQciHP5xZ4Hlkt+KD?=
+ =?iso-8859-1?Q?vues0CDP5QL8gKLnZvrItoJfB/gfBmCcfP+VqyPPteK64mLGQ4SNPPAOFJ?=
+ =?iso-8859-1?Q?U6rKkbqp7I/gQULXnqO0wSLXu3ljyrfcPnBxRD3jyVelrC/g0WwJ2u7w5T?=
+ =?iso-8859-1?Q?DOYfn96MOAabt7nlIDW23KQuHRdkF/cL9JYcwFd+bIkx3rlvO4kTKjz9GH?=
+ =?iso-8859-1?Q?LfH1wwZEvYPK4=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20230606113249.28057-1-wenbin.mei@mediatek.com> <20230606113249.28057-2-wenbin.mei@mediatek.com>
-In-Reply-To: <20230606113249.28057-2-wenbin.mei@mediatek.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 9 Jun 2023 01:10:18 +0200
-Message-ID: <CAPDyKFoR+0xtmjESCfk5-aUYhsjcc6ATevRoRpw+atCjmz5yrQ@mail.gmail.com>
-Subject: Re: [PATCH v5 1/1] mmc: mtk-sd: reduce CIT for better performance
-To:     Wenbin Mei <wenbin.mei@mediatek.com>
-Cc:     Chaotian Jing <chaotian.jing@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ritesh Harjani <riteshh@codeaurora.org>,
-        Asutosh Das <asutoshd@codeaurora.org>,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6289.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2eee5afd-79fd-43b1-be61-08db687594e2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jun 2023 23:10:42.0996
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: BNqtAqOtKkhHfBxuJx+ujxHJ+I4MRebFoji+hptqKHfZe7kYeGAWXnCgAgUNkKbjDbgO3JnZ4Y0tlXDil3vC9A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6907
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 6 Jun 2023 at 13:32, Wenbin Mei <wenbin.mei@mediatek.com> wrote:
->
-> CQHCI_SSC1 indicates to CQE the polling period to use when using periodic
-> SEND_QUEUE_STATUS(CMD13) polling.
-> Since MSDC CQE uses msdc_hclk as ITCFVAL, so driver should use hclk
-> frequency to get the actual time.
-> The default value 0x1000 that corresponds to 150us for MediaTek SoCs, let's
-> decrease it to 0x40 that corresponds to 2.35us, which can improve the
-> performance of some eMMC devices.
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Wenbin Mei <wenbin.mei@mediatek.com>
-
-Applied for next, thanks!
-
-Kind regards
-Uffe
 
 
-> ---
-> the previous patche link:
-> v4: https://patchwork.kernel.org/project/linux-mediatek/patch/20230605121442.23622-1-wenbin.mei@mediatek.com/
-> v3: https://patchwork.kernel.org/project/linux-mediatek/patch/20230605060107.22044-1-wenbin.mei@mediatek.com/
-> v2: https://patchwork.kernel.org/project/linux-mediatek/patch/20230510015851.11830-1-wenbin.mei@mediatek.com/
-> v1: https://patchwork.kernel.org/project/linux-mediatek/patch/20230419063048.10516-1-wenbin.mei@mediatek.com/
-> ---
->  drivers/mmc/host/cqhci.h  |  2 ++
->  drivers/mmc/host/mtk-sd.c | 47 +++++++++++++++++++++++++++++++++++++++
->  2 files changed, 49 insertions(+)
->
-> diff --git a/drivers/mmc/host/cqhci.h b/drivers/mmc/host/cqhci.h
-> index ba9387ed90eb..e35c655edefc 100644
-> --- a/drivers/mmc/host/cqhci.h
-> +++ b/drivers/mmc/host/cqhci.h
-> @@ -23,6 +23,8 @@
->  /* capabilities */
->  #define CQHCI_CAP                      0x04
->  #define CQHCI_CAP_CS                   0x10000000 /* Crypto Support */
-> +#define CQHCI_CAP_ITCFMUL              GENMASK(15, 12)
-> +#define CQHCI_ITCFMUL(x)               FIELD_GET(CQHCI_CAP_ITCFMUL, (x))
->
->  /* configuration */
->  #define CQHCI_CFG                      0x08
-> diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
-> index 8ce864169986..b582f19f82f2 100644
-> --- a/drivers/mmc/host/mtk-sd.c
-> +++ b/drivers/mmc/host/mtk-sd.c
-> @@ -473,6 +473,7 @@ struct msdc_host {
->         struct msdc_tune_para def_tune_para; /* default tune setting */
->         struct msdc_tune_para saved_tune_para; /* tune result of CMD21/CMD19 */
->         struct cqhci_host *cq_host;
-> +       u32 cq_ssc1_time;
->  };
->
->  static const struct mtk_mmc_compatible mt2701_compat = {
-> @@ -2450,9 +2451,50 @@ static void msdc_hs400_enhanced_strobe(struct mmc_host *mmc,
->         }
->  }
->
-> +static void msdc_cqe_cit_cal(struct msdc_host *host, u64 timer_ns)
-> +{
-> +       struct mmc_host *mmc = mmc_from_priv(host);
-> +       struct cqhci_host *cq_host = mmc->cqe_private;
-> +       u8 itcfmul;
-> +       unsigned long hclk_freq;
-> +       u64 value;
-> +
-> +       /*
-> +        * On MediaTek SoCs the MSDC controller's CQE uses msdc_hclk as ITCFVAL
-> +        * so we multiply/divide the HCLK frequency by ITCFMUL to calculate the
-> +        * Send Status Command Idle Timer (CIT) value.
-> +        */
-> +       hclk_freq = clk_get_rate(host->h_clk);
-> +       itcfmul = CQHCI_ITCFMUL(cqhci_readl(cq_host, CQHCI_CAP));
-> +       switch (itcfmul) {
-> +       case 0x0:
-> +               do_div(hclk_freq, 1000);
-> +               break;
-> +       case 0x1:
-> +               do_div(hclk_freq, 100);
-> +               break;
-> +       case 0x2:
-> +               do_div(hclk_freq, 10);
-> +               break;
-> +       case 0x3:
-> +               break;
-> +       case 0x4:
-> +               hclk_freq = hclk_freq * 10;
-> +               break;
-> +       default:
-> +               host->cq_ssc1_time = 0x40;
-> +               return;
-> +       }
-> +
-> +       value = hclk_freq * timer_ns;
-> +       do_div(value, 1000000000);
-> +       host->cq_ssc1_time = value;
-> +}
-> +
->  static void msdc_cqe_enable(struct mmc_host *mmc)
->  {
->         struct msdc_host *host = mmc_priv(mmc);
-> +       struct cqhci_host *cq_host = mmc->cqe_private;
->
->         /* enable cmdq irq */
->         writel(MSDC_INT_CMDQ, host->base + MSDC_INTEN);
-> @@ -2462,6 +2504,9 @@ static void msdc_cqe_enable(struct mmc_host *mmc)
->         msdc_set_busy_timeout(host, 20 * 1000000000ULL, 0);
->         /* default read data timeout 1s */
->         msdc_set_timeout(host, 1000000000ULL, 0);
-> +
-> +       /* Set the send status command idle timer */
-> +       cqhci_writel(cq_host, host->cq_ssc1_time, CQHCI_SSC1);
->  }
->
->  static void msdc_cqe_disable(struct mmc_host *mmc, bool recovery)
-> @@ -2803,6 +2848,8 @@ static int msdc_drv_probe(struct platform_device *pdev)
->                 /* cqhci 16bit length */
->                 /* 0 size, means 65536 so we don't have to -1 here */
->                 mmc->max_seg_size = 64 * 1024;
-> +               /* Reduce CIT to 0x40 that corresponds to 2.35us */
-> +               msdc_cqe_cit_cal(host, 2350);
->         }
->
->         ret = devm_request_irq(&pdev->dev, host->irq, msdc_irq,
-> --
-> 2.25.1
->
+> -----Original Message-----
+> From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> Sent: Thursday, June 8, 2023 5:54 PM
+> To: Leo Li <leoyang.li@nxp.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>; kernel@pengutronix.de;
+> llvm@lists.linux.dev; linux-kernel@vger.kernel.org; Stuart Yoder
+> <stuyoder@gmail.com>; Laurentiu Tudor <laurentiu.tudor@nxp.com>
+> Subject: Re: [PATCH 4/6] bus: fsl-mc: fsl-mc-allocator: Improve error
+> reporting
+>=20
+> Hello,
+>=20
+> On Thu, Jun 08, 2023 at 10:00:13PM +0000, Leo Li wrote:
+> > > Hmm, clang seems to be right, and I just confirmed that gcc
+> > > (arm-linux- gnueabihf-gcc (Debian 12.2.0-14) 12.2.0) doesn't emit a
+> > > warning. :-\
+> > >
+> > > My approach would be:
+> > >
+> > > diff --git a/drivers/bus/fsl-mc/fsl-mc-allocator.c
+> > > b/drivers/bus/fsl-mc/fsl-mc- allocator.c index
+> > > 0ad68099684e..991273f956ce 100644
+> > > --- a/drivers/bus/fsl-mc/fsl-mc-allocator.c
+> > > +++ b/drivers/bus/fsl-mc/fsl-mc-allocator.c
+> > > @@ -103,14 +103,15 @@ static int __must_check
+> > > fsl_mc_resource_pool_remove_device(struct fsl_mc_device
+> > >  	struct fsl_mc_resource *resource;
+> > >  	int error =3D -EINVAL;
+> > >
+> > > +	mc_bus_dev =3D to_fsl_mc_device(mc_dev->dev.parent);
+> > > +	mc_bus =3D to_fsl_mc_bus(mc_bus_dev);
+> > > +
+> > >  	resource =3D mc_dev->resource;
+> > >  	if (!resource || resource->data !=3D mc_dev) {
+> > >  		dev_err(&mc_bus_dev->dev, "resource mismatch\n");
+> > >  		goto out;
+> > >  	}
+> > >
+> > > -	mc_bus_dev =3D to_fsl_mc_device(mc_dev->dev.parent);
+> > > -	mc_bus =3D to_fsl_mc_bus(mc_bus_dev);
+> > >  	res_pool =3D resource->parent_pool;
+> > >  	if (res_pool !=3D &mc_bus->resource_pools[resource->type]) {
+> > >  		dev_err(&mc_bus_dev->dev, "pool mismatch\n");
+> > >
+> > >
+> > > Should I prepare a proper patch, or is it possible to squash this
+> > > change into b3134039c5b3cf879841e3ec84c8cbf7675554ec?
+> > >
+> > > @Li Yang: Please advice.
+> >
+> > This looks fine.  Please send a new patch and I can squash it to the or=
+iginal
+> commit.
+>=20
+> I did send a proper patch already, see
+>=20
+> 	https://lore.kernel.org/all/20230605112025.80061-1-u.kleine-
+> koenig@pengutronix.de
+>=20
+> You can apply that on top of the broken commit, or if you prefer also squ=
+ash
+> it into the offending commit. Note that in the above thread there is anot=
+her
+> fix for an older commit.
+
+Thanks.  Both look good.  Applied for next.
+
+Regards,
+Leo
