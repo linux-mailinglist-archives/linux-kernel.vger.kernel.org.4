@@ -2,90 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE267284DA
+	by mail.lfdr.de (Postfix) with ESMTP id 723667284D9
 	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234796AbjFHQYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 12:24:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34264 "EHLO
+        id S233922AbjFHQYY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 8 Jun 2023 12:24:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234750AbjFHQYC (ORCPT
+        with ESMTP id S234708AbjFHQYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 8 Jun 2023 12:24:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2976D3AB1
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 09:23:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B86E464E7C
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 16:23:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC6E2C433EF;
-        Thu,  8 Jun 2023 16:23:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686241416;
-        bh=4AyorKc6MZArZRKOyajHdmyghV9EfZC2niVhRovD1GM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=h0tXbLz4JQyLzU2/e7Ep3EAIU1Uy826FzPvIbpeC2yKVFp7cEpCgBC+t3L8DtmByW
-         knSPxbsCUMLiWtuF10SRWo3ZVnU7XdkQz3oOV8RCQ9PN3OMf5n42IA1rnWl8k8M+F4
-         Qc2u59avIWV3US9uI3G93388IQo/uAAS0sUA1YxwVsDvftYNM1oWN13l6Uj0p36wm8
-         APCNjtKUuCoo6gtE6kckH+3sIO8EiaMp730wL4nEzZFmCUlvZ+C3b9VtEqaLgLxhOW
-         rU+dnu8krj22W8hkLfm3aWmmBk9+ITNNq4iq3iWiTyQPMCPSQWnfKUkiYK5hgtEpmK
-         QjFvMurVAvPgw==
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Miroslav Benes <mbenes@suse.cz>
-Subject: [PATCH] objtool: Improve rate-limiting for missing __noreturn warnings
-Date:   Thu,  8 Jun 2023 09:23:32 -0700
-Message-Id: <185b1a78b42776467929ce9e7851e4dbcd0b55d4.1686241345.git.jpoimboe@kernel.org>
-X-Mailer: git-send-email 2.40.1
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36F63AAE;
+        Thu,  8 Jun 2023 09:23:37 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 2D0DD605DED7;
+        Thu,  8 Jun 2023 18:23:34 +0200 (CEST)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id zpbvNb15rfCI; Thu,  8 Jun 2023 18:23:33 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by lithops.sigma-star.at (Postfix) with ESMTP id 306FB6081100;
+        Thu,  8 Jun 2023 18:23:33 +0200 (CEST)
+Received: from lithops.sigma-star.at ([127.0.0.1])
+        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id xSVgNBinm5pl; Thu,  8 Jun 2023 18:23:33 +0200 (CEST)
+Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
+        by lithops.sigma-star.at (Postfix) with ESMTP id ED077605DED7;
+        Thu,  8 Jun 2023 18:23:32 +0200 (CEST)
+Date:   Thu, 8 Jun 2023 18:23:32 +0200 (CEST)
+From:   Richard Weinberger <richard@nod.at>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Petr Mladek <pmladek@suse.com>, Kees Cook <keescook@chromium.org>,
+        linux-hardening <linux-hardening@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        davem <davem@davemloft.net>, edumazet <edumazet@google.com>,
+        kuba <kuba@kernel.org>, pabeni <pabeni@redhat.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>
+Message-ID: <447684945.3699459.1686241412894.JavaMail.zimbra@nod.at>
+In-Reply-To: <2023060820-atom-doorstep-9442@gregkh>
+References: <20230607223755.1610-1-richard@nod.at> <202306071634.51BBAFD14@keescook> <ZIHzbBXlxEz6As9N@alley> <2023060820-atom-doorstep-9442@gregkh>
+Subject: Re: [RFC PATCH 0/1] Integer overflows while scanning for integers
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [195.201.40.130]
+X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF97 (Linux)/8.8.12_GA_3809)
+Thread-Topic: Integer overflows while scanning for integers
+Thread-Index: 8Ta4XA3Xj4SCOt1cjsjdEFB0STxIxQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a function with a lot of call sites is missing __noreturn, it could
-result in a lot of duplicate warnings (one for each call site).
+----- Ursprüngliche Mail -----
+> Von: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+> "some users" == "most major cloud providers and a few billion Android
+> phones"  So in pure numbers, the huge majority of Linux systems running
+> in the world have that option enabled.
+> 
+> So please don't use WARN() to catch issues that can be triggered by
+> userspace, that can cause data loss and worse at times.
 
-Each call site's function is already rate-limited to one warning per
-function via WARN_INSN().  Do the same for the callee (the "missing
-__noreturn" function itself).
+Sorry for being unclear. My goal is not having the WARN patch immediately
+applied without fixing known call sites which can trigger it.
 
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
----
- tools/objtool/check.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
-
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 8936a05f0e5a..bb2ed34cb90e 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -4507,9 +4507,13 @@ static int validate_reachable_instructions(struct objtool_file *file)
- 		if (prev_insn && prev_insn->dead_end) {
- 			call_dest = insn_call_dest(prev_insn);
- 			if (call_dest && !ignore_noreturn_call(prev_insn)) {
--				WARN_INSN(insn, "%s() is missing a __noreturn annotation",
--					  call_dest->name);
--				warnings++;
-+				if (!call_dest->warned) {
-+					WARN_INSN(insn, "%s() is missing a __noreturn annotation",
-+						  call_dest->name);
-+					warnings++;
-+					call_dest->warned = 1;
-+				}
-+
- 				continue;
- 			}
- 		}
--- 
-2.40.1
-
+Thanks,
+//richard
