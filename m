@@ -2,68 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12BF9728630
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 19:19:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 572D1728633
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 19:20:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236954AbjFHRTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 13:19:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44794 "EHLO
+        id S236965AbjFHRUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 13:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236934AbjFHRTo (ORCPT
+        with ESMTP id S237136AbjFHRUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 13:19:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A762733;
-        Thu,  8 Jun 2023 10:19:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D19ED64FCD;
-        Thu,  8 Jun 2023 17:19:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DFDFC433EF;
-        Thu,  8 Jun 2023 17:19:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686244779;
-        bh=jVlKyMFufGCHlZkmMNuunClFNKP+T7ofi0jXzgtrTD0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=doce8hIRJB6dZQNaJxkYXuCr8PvIPHT5XfQXwRvtsRKUrt6mSENxR9smISl9Qts37
-         YoWdffdY0CRrwSqxAoYTby1eMN2kKHmepYtgzCU5z/5wXxH7FsvqCmH3lbZ3hP7C/+
-         DtBDFV7iKL7sa3qqtytcNN74IuWeIvED0beA2QQ0pED0JECCcne+y9MIOWPa2D6zEf
-         SJg+T/ZOJvm7kjhWCnvvxkWZFB7GbU+9nTqa+kYhFM+CY1q+PJse7qam2riRrUVyMX
-         6k82RPM+ce7LT8A7fR0fFK0plbvuS+DQg7YrsnFMwFLOHSPEC4bfIkPja/ixTE/y4U
-         twSDGNiDululA==
-Date:   Thu, 8 Jun 2023 18:19:32 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Jakob Hauser <jahau@rocketmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Henrik Grimler <henrik@grimler.se>,
-        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v6 00/10 RESEND] Add RT5033 charger device driver
-Message-ID: <20230608171932.GG3572061@google.com>
-References: <cover.1684182964.git.jahau.ref@rocketmail.com>
- <cover.1684182964.git.jahau@rocketmail.com>
+        Thu, 8 Jun 2023 13:20:03 -0400
+Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B80C02D7C
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 10:19:49 -0700 (PDT)
+Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-77ac4aa24eeso68994739f.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 10:19:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686244788; x=1688836788;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1UWOZ/aAH8nGV++7RZgvI2KPvZxYZPTcR78qFXSGSUE=;
+        b=iCitq7j06cPxQ1xjjY2Oon5TSLLpzPnRdz1+UAT+GA4Hbsw3ggen/eKZSonCs18TgG
+         gb68TsUFQYYPbCO4yqRrl8PVDOjQtdFf/se1I7K3Gs1BMXMoSVwkg7p3/eYdsQ24lPXp
+         D8vFBCiUa58lP7/BoVro20dT4CkbyyRQ4jiDd153Yv+bWvKffcHuJiQ5U9w9ZIY2QnEu
+         iFZTyV+qLrhWsFs3GXtBv0xuFR+4IFP3+O/01alxfUVNlyEr9jyBMZdfRwq0p0RoTCt1
+         F17zh0XIW2RVpff93VjC8jtwfBtzrTuXfcnstJ2qqUs99WelUcPx+fFOOEYKrmluHr8u
+         pyGg==
+X-Gm-Message-State: AC+VfDzz0fzxobM7hYcGMf2fwc577XsMOGzIJIW/1dCVJtdkC8tUwL2a
+        TP8KBaBJly7FtxcHXGEsbbCX7bygx2Tpu8gAzBhYw9ZN+bdo
+X-Google-Smtp-Source: ACHHUZ6K7WuaDPSEWed7Zkwrw6uIxotMpt3r2ofdPNqxp69nHRy26OTokMCCDZ7atINBOeLzYpQiF6hgHS19IKh9vhpf8qQw6fQZ
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cover.1684182964.git.jahau@rocketmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a5e:c10b:0:b0:777:b315:f4fc with SMTP id
+ v11-20020a5ec10b000000b00777b315f4fcmr4065083iol.2.1686244788713; Thu, 08 Jun
+ 2023 10:19:48 -0700 (PDT)
+Date:   Thu, 08 Jun 2023 10:19:48 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a2c13905fda1757e@google.com>
+Subject: [syzbot] [hfs?] KASAN: slab-out-of-bounds Write in hfs_bnode_read_key
+From:   syzbot <syzbot+4f7a1fc5ec86b956afb4@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,69 +54,211 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 15 May 2023, Jakob Hauser wrote:
+Hello,
 
-> This patchset adds the charger driver "rt5033-charger". It is part of the
-> multifunction device rt5033. The patchset is based on an older version by
-> Beomho Seo of March 2015. For more information on the history and setup of
-> the patchset see the cover sheet of version v1, there is a link further down
-> below the changelog.
-> 
-> RESEND: Sorry for spamming. The first try of sending v6 got interrupted and
-> was split into two threads on the lore list. Therefore sending it again.
-> 
-> Changes in v6:
->  - Patch 5: In function rt5033_charger_probe() after
->    calling rt5033_charger_dt_init() replaced the return value from "-ENODEV"
->    to "PTR_ERR(charger->chg)", as suggested by Christophe.
->  - Patch 9: Changed the patch from adding "power-supplies: true" to replacing
->    "additionalProperties: false" by "unevaluatedProperties: false", as
->    suggested by Krzysztof.
-> 
-> v1: https://lore.kernel.org/linux-pm/cover.1677620677.git.jahau@rocketmail.com/T/#t
-> v2: https://lore.kernel.org/linux-pm/cover.1681646904.git.jahau@rocketmail.com/T/#t
-> v3: https://lore.kernel.org/linux-pm/cover.1682636929.git.jahau@rocketmail.com/T/#t
-> v4: https://lore.kernel.org/linux-pm/20230506155435.3005-1-jahau@rocketmail.com/T/#t
-> v5: https://lore.kernel.org/linux-pm/20230514123130.41172-1-jahau@rocketmail.com/T/#t
-> 
-> The result of the patchset v6 can be seen at:
-> https://github.com/Jakko3/linux/blob/rt5033-charger_v6/drivers/power/supply/rt5033_charger.c
-> 
-> Jakob Hauser (9):
->   mfd: rt5033: Fix chip revision readout
->   mfd: rt5033: Fix STAT_MASK, HZ_MASK and AICR defines
->   mfd: rt5033: Apply preparatory changes before adding rt5033-charger
->     driver
->   power: supply: rt5033_charger: Add RT5033 charger device driver
->   power: supply: rt5033_charger: Add cable detection and USB OTG supply
->   power: supply: rt5033_battery: Move struct rt5033_battery to battery
->     driver
->   power: supply: rt5033_battery: Adopt status property from charger
->   dt-bindings: power: supply: rt5033-battery: Apply
->     unevaluatedProperties
->   dt-bindings: Add rt5033 mfd, regulator and charger
-> 
-> Stephan Gerhold (1):
->   mfd: rt5033: Drop rt5033-battery sub-device
-> 
->  .../bindings/mfd/richtek,rt5033.yaml          | 138 ++++
->  .../power/supply/richtek,rt5033-battery.yaml  |   2 +-
->  .../power/supply/richtek,rt5033-charger.yaml  |  65 ++
->  drivers/mfd/rt5033.c                          |   8 +-
->  drivers/power/supply/Kconfig                  |   8 +
->  drivers/power/supply/Makefile                 |   1 +
->  drivers/power/supply/rt5033_battery.c         |  38 +-
->  drivers/power/supply/rt5033_charger.c         | 744 ++++++++++++++++++
->  include/linux/mfd/rt5033-private.h            |  64 +-
->  include/linux/mfd/rt5033.h                    |  24 -
->  10 files changed, 1034 insertions(+), 58 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
->  create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
->  create mode 100644 drivers/power/supply/rt5033_charger.c
+syzbot found the following issue on:
 
-All applied.  Sent for build testing.
+HEAD commit:    e5282a7d8f6b Merge tag 'scsi-fixes' of git://git.kernel.or..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=14a780b5280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=162cf2103e4a7453
+dashboard link: https://syzkaller.appspot.com/bug?extid=4f7a1fc5ec86b956afb4
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12feb345280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=123cb2a5280000
 
-I'll follow-up with a PR soon.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/74387b33231f/disk-e5282a7d.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/2da177a268c1/vmlinux-e5282a7d.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/21aac70676e3/bzImage-e5282a7d.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/934870c4002b/mount_0.gz
 
--- 
-Lee Jones [李琼斯]
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+4f7a1fc5ec86b956afb4@syzkaller.appspotmail.com
+
+memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=4991 'syz-executor175'
+loop0: detected capacity change from 0 to 64
+hfs: unable to locate alternate MDB
+hfs: continuing without an alternate MDB
+==================================================================
+BUG: KASAN: slab-out-of-bounds in memcpy_from_page include/linux/highmem.h:417 [inline]
+BUG: KASAN: slab-out-of-bounds in hfs_bnode_read fs/hfs/bnode.c:35 [inline]
+BUG: KASAN: slab-out-of-bounds in hfs_bnode_read_key+0x314/0x440 fs/hfs/bnode.c:70
+Write of size 256 at addr ffff88802a969a80 by task syz-executor175/4991
+
+CPU: 1 PID: 4991 Comm: syz-executor175 Not tainted 6.4.0-rc4-syzkaller-00276-ge5282a7d8f6b #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:351 [inline]
+ print_report+0x163/0x540 mm/kasan/report.c:462
+ kasan_report+0x176/0x1b0 mm/kasan/report.c:572
+ kasan_check_range+0x283/0x290 mm/kasan/generic.c:187
+ __asan_memcpy+0x40/0x70 mm/kasan/shadow.c:106
+ memcpy_from_page include/linux/highmem.h:417 [inline]
+ hfs_bnode_read fs/hfs/bnode.c:35 [inline]
+ hfs_bnode_read_key+0x314/0x440 fs/hfs/bnode.c:70
+ hfs_brec_insert+0x6a1/0xbd0 fs/hfs/brec.c:141
+ hfs_cat_create+0x5df/0xa70 fs/hfs/catalog.c:131
+ hfs_create+0x66/0xd0 fs/hfs/dir.c:202
+ lookup_open fs/namei.c:3492 [inline]
+ open_last_lookups fs/namei.c:3560 [inline]
+ path_openat+0x13df/0x3170 fs/namei.c:3788
+ do_filp_open+0x234/0x490 fs/namei.c:3818
+ do_sys_openat2+0x13f/0x500 fs/open.c:1356
+ do_sys_open fs/open.c:1372 [inline]
+ __do_sys_openat fs/open.c:1388 [inline]
+ __se_sys_openat fs/open.c:1383 [inline]
+ __x64_sys_openat+0x247/0x290 fs/open.c:1383
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f2ff084cb39
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 51 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffee0060a98 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f2ff084cb39
+RDX: 0000000000141842 RSI: 0000000020000380 RDI: 00000000ffffff9c
+RBP: 00007f2ff080c140 R08: 0000000000000260 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f2ff080c1d0
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+
+Allocated by task 4991:
+ kasan_save_stack mm/kasan/common.c:45 [inline]
+ kasan_set_track+0x4f/0x70 mm/kasan/common.c:52
+ ____kasan_kmalloc mm/kasan/common.c:374 [inline]
+ __kasan_kmalloc+0x98/0xb0 mm/kasan/common.c:383
+ kasan_kmalloc include/linux/kasan.h:196 [inline]
+ __do_kmalloc_node mm/slab_common.c:966 [inline]
+ __kmalloc+0xb9/0x230 mm/slab_common.c:979
+ kmalloc include/linux/slab.h:563 [inline]
+ hfs_find_init+0x90/0x1f0 fs/hfs/bfind.c:21
+ hfs_cat_create+0x182/0xa70 fs/hfs/catalog.c:96
+ hfs_create+0x66/0xd0 fs/hfs/dir.c:202
+ lookup_open fs/namei.c:3492 [inline]
+ open_last_lookups fs/namei.c:3560 [inline]
+ path_openat+0x13df/0x3170 fs/namei.c:3788
+ do_filp_open+0x234/0x490 fs/namei.c:3818
+ do_sys_openat2+0x13f/0x500 fs/open.c:1356
+ do_sys_open fs/open.c:1372 [inline]
+ __do_sys_openat fs/open.c:1388 [inline]
+ __se_sys_openat fs/open.c:1383 [inline]
+ __x64_sys_openat+0x247/0x290 fs/open.c:1383
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+The buggy address belongs to the object at ffff88802a969a80
+ which belongs to the cache kmalloc-96 of size 96
+The buggy address is located 0 bytes inside of
+ allocated 78-byte region [ffff88802a969a80, ffff88802a969ace)
+
+The buggy address belongs to the physical page:
+page:ffffea0000aa5a40 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x2a969
+anon flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+page_type: 0xffffffff()
+raw: 00fff00000000200 ffff888012441780 0000000000000000 dead000000000001
+raw: 0000000000000000 0000000080200020 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12c40(GFP_NOFS|__GFP_NOWARN|__GFP_NORETRY), pid 4454, tgid 4454 (udevd), ts 19438667625, free_ts 19434626307
+ set_page_owner include/linux/page_owner.h:31 [inline]
+ post_alloc_hook+0x1e6/0x210 mm/page_alloc.c:1731
+ prep_new_page mm/page_alloc.c:1738 [inline]
+ get_page_from_freelist+0x321c/0x33a0 mm/page_alloc.c:3502
+ __alloc_pages+0x255/0x670 mm/page_alloc.c:4768
+ alloc_slab_page+0x6a/0x160 mm/slub.c:1851
+ allocate_slab mm/slub.c:1998 [inline]
+ new_slab+0x84/0x2f0 mm/slub.c:2051
+ ___slab_alloc+0xa85/0x10a0 mm/slub.c:3192
+ __slab_alloc mm/slub.c:3291 [inline]
+ __slab_alloc_node mm/slub.c:3344 [inline]
+ slab_alloc_node mm/slub.c:3441 [inline]
+ __kmem_cache_alloc_node+0x1b8/0x290 mm/slub.c:3490
+ __do_kmalloc_node mm/slab_common.c:965 [inline]
+ __kmalloc+0xa8/0x230 mm/slab_common.c:979
+ kmalloc include/linux/slab.h:563 [inline]
+ kzalloc include/linux/slab.h:680 [inline]
+ tomoyo_encode2 security/tomoyo/realpath.c:45 [inline]
+ tomoyo_encode+0x26f/0x530 security/tomoyo/realpath.c:80
+ tomoyo_realpath_from_path+0x598/0x5e0 security/tomoyo/realpath.c:283
+ tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
+ tomoyo_path_perm+0x28d/0x700 security/tomoyo/file.c:822
+ security_inode_getattr+0xd3/0x120 security/security.c:2114
+ vfs_getattr fs/stat.c:167 [inline]
+ vfs_statx+0x18f/0x480 fs/stat.c:242
+ vfs_fstatat fs/stat.c:276 [inline]
+ __do_sys_newfstatat fs/stat.c:446 [inline]
+ __se_sys_newfstatat fs/stat.c:440 [inline]
+ __x64_sys_newfstatat+0x14f/0x1d0 fs/stat.c:440
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1302 [inline]
+ free_unref_page_prepare+0x903/0xa30 mm/page_alloc.c:2564
+ free_unref_page+0x37/0x3f0 mm/page_alloc.c:2659
+ qlist_free_all+0x22/0x60 mm/kasan/quarantine.c:185
+ kasan_quarantine_reduce+0x14b/0x160 mm/kasan/quarantine.c:292
+ __kasan_slab_alloc+0x23/0x70 mm/kasan/common.c:305
+ kasan_slab_alloc include/linux/kasan.h:186 [inline]
+ slab_post_alloc_hook+0x68/0x3a0 mm/slab.h:711
+ slab_alloc_node mm/slub.c:3451 [inline]
+ __kmem_cache_alloc_node+0x14c/0x290 mm/slub.c:3490
+ __do_kmalloc_node mm/slab_common.c:965 [inline]
+ __kmalloc+0xa8/0x230 mm/slab_common.c:979
+ kmalloc include/linux/slab.h:563 [inline]
+ kzalloc include/linux/slab.h:680 [inline]
+ tomoyo_encode2 security/tomoyo/realpath.c:45 [inline]
+ tomoyo_encode+0x26f/0x530 security/tomoyo/realpath.c:80
+ tomoyo_realpath_from_path+0x598/0x5e0 security/tomoyo/realpath.c:283
+ tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
+ tomoyo_path_perm+0x28d/0x700 security/tomoyo/file.c:822
+ security_inode_getattr+0xd3/0x120 security/security.c:2114
+ vfs_getattr fs/stat.c:167 [inline]
+ vfs_statx+0x18f/0x480 fs/stat.c:242
+ vfs_fstatat fs/stat.c:276 [inline]
+ __do_sys_newfstatat fs/stat.c:446 [inline]
+ __se_sys_newfstatat fs/stat.c:440 [inline]
+ __x64_sys_newfstatat+0x14f/0x1d0 fs/stat.c:440
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Memory state around the buggy address:
+ ffff88802a969980: 00 00 00 00 00 00 00 00 00 00 fc fc fc fc fc fc
+ ffff88802a969a00: fa fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
+>ffff88802a969a80: 00 00 00 00 00 00 00 00 00 06 fc fc fc fc fc fc
+                                              ^
+ ffff88802a969b00: fb fb fb fb fb fb fb fb fb fb fb fb fc fc fc fc
+ ffff88802a969b80: 00 00 00 00 00 00 00 00 00 00 fc fc fc fc fc fc
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
