@@ -2,96 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4346728BCA
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 01:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1126F728BE2
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 01:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237209AbjFHX3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 19:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46836 "EHLO
+        id S236702AbjFHXgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 19:36:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjFHX3X (ORCPT
+        with ESMTP id S229688AbjFHXgQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 19:29:23 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5787030F0;
-        Thu,  8 Jun 2023 16:29:22 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-65311774e52so905951b3a.3;
-        Thu, 08 Jun 2023 16:29:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686266962; x=1688858962;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6RGbjUYsdaohPZQXqH0ffB3I+/zH7l+P+guRk55pY3o=;
-        b=GKUqaxYpA9sPWVTJUqhY/WvUJd0oMJh68pPhWRdgURVT0nWmLLk+PH0CZGMNu9NA5Z
-         bRiLFi1+g5t3OToeIuLBoxouHAfU/mDzBROQ7M/Tsef1mypcXnCe8LHxoBxLOrnM6ZbM
-         4qfiJ87XgvvzdG45loNAZ4ywZD1ZcvLtxj+IIyoilamuFhZLXVq+SmbFp1cwklOXpCuI
-         yEEPvPJpyQ5KGkMGD6k2sp8h4rNxvLBHg68PEehqHNEXuLkCIioiOmhVzjyKekLNCh4n
-         fp6Ni/Frzf10PCiBBZbi7+BkpecMiiJJcRMZP40H3H/+HasliRX+d3grVqDxmZpSIs9v
-         CZKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686266962; x=1688858962;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6RGbjUYsdaohPZQXqH0ffB3I+/zH7l+P+guRk55pY3o=;
-        b=MiE5LnXODgV5mhJxBZDTIka27DotXVcxRQFyg6FKH3EK7TJCtTqzNTe4h4IWUFMhmI
-         PvlBd5FNYtXfr8GqonUNF9hNfemc0gjtPoDD+SFM+ArbtUtnisVuRPme684Llew5o+N3
-         +FFHbxAJOCOVrQxawwYFyu7pHWIiGtvO3UdV3LCAa7EtoOgE5rCNvxNFnhKUralf2VAp
-         +YPGUhS+OAvDwoB5AK9W9T98ryZ+LY4wTFXaLB8j4SK7oE91YqLKBHykevFvBgMSq/22
-         s34BE5PLegLgGfVoy39h/wuThp+6P4arovCfDkpJ3xJXpxNG71GRDtq5+Tzp4TuXOgQp
-         +FDw==
-X-Gm-Message-State: AC+VfDxOd0Pxg0fgTEQvOJwyrZ7dcebMBrGhu1dfGdw2579MeVxFGBSl
-        aN2StNjsSV2ElSW9MHegiS0=
-X-Google-Smtp-Source: ACHHUZ5BemoIUtUyIQMWaimD9moPUg4gS1XMy0WBlsJ68BJAUvGHQpvMYcO3s/oFNl28ctNzJaryZw==
-X-Received: by 2002:a05:6a20:e617:b0:105:dafa:fec2 with SMTP id my23-20020a056a20e61700b00105dafafec2mr4523293pzb.53.1686266961618;
-        Thu, 08 Jun 2023 16:29:21 -0700 (PDT)
-Received: from localhost ([192.55.54.50])
-        by smtp.gmail.com with ESMTPSA id q24-20020a62e118000000b0063b85893633sm1535576pfh.197.2023.06.08.16.29.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 16:29:20 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 16:29:19 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
-Cc:     "Huang, Kai" <kai.huang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        isaku.yamahata@gmail.com
-Subject: Re: [PATCH v11 08/20] x86/virt/tdx: Get information about TDX module
- and TDX-capable memory
-Message-ID: <20230608232919.GM2244082@ls.amr.corp.intel.com>
-References: <cover.1685887183.git.kai.huang@intel.com>
- <50386eddbb8046b0b222d385e56e8115ed566526.1685887183.git.kai.huang@intel.com>
- <20230608002725.xc25dantcwdxsuil@box.shutemov.name>
- <19ea7470e9d6fa698f9ad7caff3279873e530a0b.camel@intel.com>
- <20230608114128.vu75wlcojpyjak22@box.shutemov.name>
+        Thu, 8 Jun 2023 19:36:16 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A1930D5;
+        Thu,  8 Jun 2023 16:35:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686267340; x=1717803340;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sN7dvQMQ+/TpXG6CIcwf0XKyIcjODwPRfKZrLnuiPSY=;
+  b=UXqehFPuabB/RcoG8sNH/tX04ZZ+qGwLovbZb9OkWoz/EE3a13PqPnaO
+   jkVtAYuGFcj//7Ykm1zbTe71ntQ+tcukP5B41OhyE/dTk4qfLsYcu8MOU
+   7Bpsn0enkAnhqDb5Xjxp/MHdOY3GtpfdCIpTSZCW5MkGHK2jEYCeyALiK
+   cI1vBIG3ngxiWQkgw4Dpy8AZ+iN8+lotACEPj0gA7jLxg2lneR+UHLTAo
+   vOD1qUx8kW/pGF2B5ZXwhpvwVRU6YLcCUJMpFDi9T7mLA82YztW5UduqE
+   FZoPwn2u3E/LXGKJ+8Wgz2Nsrby98mhlyLoPQ9HZf7zYp1wNv+Rsfpsqn
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="337097733"
+X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
+   d="scan'208";a="337097733"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 16:34:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="822822455"
+X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
+   d="scan'208";a="822822455"
+Received: from yjiang5-mobl.amr.corp.intel.com (HELO localhost) ([10.144.161.97])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 16:34:03 -0700
+Date:   Thu, 8 Jun 2023 16:34:02 -0700
+From:   Yunhong Jiang <yunhong.jiang@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [patch] x86/realmode: Make stack lock work in trampoline_compat()
+Message-ID: <20230608233402.GA3430@yjiang5-mobl.amr.corp.intel.com>
+References: <20230508181633.089804905@linutronix.de>
+ <20230508185218.962208640@linutronix.de>
+ <20230524204818.3tjlwah2euncxzmh@box.shutemov.name>
+ <87y1lbl7r6.ffs@tglx>
+ <87sfbhlwp9.ffs@tglx>
+ <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name>
+ <87bki3kkfi.ffs@tglx>
+ <20230529203129.sthnhzgds7ynddxd@box.shutemov.name>
+ <87h6rujdvl.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230608114128.vu75wlcojpyjak22@box.shutemov.name>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <87h6rujdvl.ffs@tglx>
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SCC_BODY_URI_ONLY,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,29 +102,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 02:41:28PM +0300,
-"kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com> wrote:
-
-> On Thu, Jun 08, 2023 at 02:40:27AM +0000, Huang, Kai wrote:
-> > On Thu, 2023-06-08 at 03:27 +0300, kirill.shutemov@linux.intel.com wrote:
-> > > On Mon, Jun 05, 2023 at 02:27:21AM +1200, Kai Huang wrote:
-> > > > For now both 'tdsysinfo_struct' and CMRs are only used during the module
-> > > > initialization.  But because they are both relatively big, declare them
-> > > > inside the module initialization function but as static variables.
-> > > 
-> > > This justification does not make sense to me. static variables will not be
-> > > freed after function returned. They will still consume memory.
-> > > 
-> > > I think you need to allocate/free memory dynamically, if they are too big
-> > > for stack.
-> > 
-> > 
-> > I do need to keep tdsysinfo_struct as it will be used by KVM too.
+On Tue, May 30, 2023 at 12:46:22PM +0200, Thomas Gleixner wrote:
+> The stack locking and stack assignment macro LOAD_REALMODE_ESP fails to
+> work when invoked from the 64bit trampoline entry point:
 > 
-> Will you pass it down to KVM from this function? Will KVM use the struct
-> after the function returns?
+> trampoline_start64
+>   trampoline_compat
+>     LOAD_REALMODE_ESP <- lock
+One possibly dumb question and hope get some hints. The LOAD_REALMODE_ESP is
+defined under .code16 directive and will be used by 32-bit mode caller also. Is
+it ok because the instructions there will be same for both 16-bit and 32-bit? I
+checked
+https://ftp.gnu.org/old-gnu/Manuals/gas-2.9.1/html_chapter/as_16.html#SEC205 and
+don't find much information there.
 
-KVM needs tdsysinfo_struct to create guest TD.  It doesn't require
-1024-alignment.
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
