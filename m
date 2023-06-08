@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A314728434
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C04F728439
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237287AbjFHPwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 11:52:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40342 "EHLO
+        id S237449AbjFHPwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 11:52:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237257AbjFHPwD (ORCPT
+        with ESMTP id S237279AbjFHPwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 8 Jun 2023 11:52:03 -0400
 Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D292718;
-        Thu,  8 Jun 2023 08:51:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC7530C1;
+        Thu,  8 Jun 2023 08:51:43 -0700 (PDT)
 X-GND-Sasl: maxime.chevallier@bootlin.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686239500;
+        t=1686239502;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
         bh=C4HWsGpzkoFGrF2QEu9yk0kkw2l8QL+Vcx0ZQoZOw4Y=;
-        b=ov0tYYI6P9Nam51C5snonGKLQjwNwTE2TuDYrR2Ygmivu1eCHw+Zx09wK8Nvk60MFMhNDp
-        tuxWx0YvPjIeQlWbjNv8wnDHvsc8tFuHb0XLOIt4V59Z4v/i/R7muBPoqtdqL+YukusECG
-        1kaIsVO4J2RmVMM4/qSwxA2bqW8KCYrpfP7HkbTpW5VRiQLiekn3TZ2PFY9Ycf7KyEQcMz
-        IT6w3r3kZuWM/bl4ZFmhIfvPwhN8t+0R5xewFZsY3I+TlDJ9zFrnSzTLkpHK13OmuWfuw6
-        8NC5TeJWpsbcn+w3muz7o3UXBZSmcQw8XAmbOrMHhdsw2Ogv0tF7exL/gaLbjQ==
+        b=TkCouUfK9yU3pOqfJL8pfY9GNp+gYl9ldNM03VgVv9DUkJTiKLn7/EyDPIDe2AONR3ML3M
+        37ZQqHMOpzFLIS5Bof15p4xWSyF5nWpAoEnqFZrdM+Jv/0DoZtb0swRzfL1751Bj7fidP+
+        Lg1Zi8oCc07/ScByUwnpoXrv6r/Sow/5n2gdOKJUw5e95lChqXzhdYSapDoHS65Dgqf6hI
+        5euLD+cBEI3ZmZtZtWmU4duuqmXZ9dmF4YF3r71f13u70mLz5DDr4M1TvdHDqr97LXSYd1
+        tiqO9vr/8Arz2dXSfUiOfVx110roCokdh8klZpciUNXfOvtzkIKpwak/pygZxw==
 X-GND-Sasl: maxime.chevallier@bootlin.com
 X-GND-Sasl: maxime.chevallier@bootlin.com
 X-GND-Sasl: maxime.chevallier@bootlin.com
@@ -41,8 +41,8 @@ X-GND-Sasl: maxime.chevallier@bootlin.com
 X-GND-Sasl: maxime.chevallier@bootlin.com
 X-GND-Sasl: maxime.chevallier@bootlin.com
 X-GND-Sasl: maxime.chevallier@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7620160006;
-        Thu,  8 Jun 2023 15:51:39 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C5B3D60010;
+        Thu,  8 Jun 2023 15:51:40 +0000 (UTC)
 From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
 To:     davem@davemloft.net
 Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
@@ -54,9 +54,9 @@ Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
         linux-arm-kernel@lists.infradead.org, Horatiu.Vultur@microchip.com,
         Allan.Nielsen@microchip.com, UNGLinuxDriver@microchip.com,
         Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: [PATCH net 2/2] net: phylink: use a dedicated helper to parse usgmii control word
-Date:   Thu,  8 Jun 2023 18:34:14 +0200
-Message-Id: <20230608163415.511762-3-maxime.chevallier@bootlin.com>
+Subject: [PATCH net 2/2] net: phylink: use USXGMII control-word format to parse Q-USGMII word
+Date:   Thu,  8 Jun 2023 18:34:15 +0200
+Message-Id: <20230608163415.511762-4-maxime.chevallier@bootlin.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230608163415.511762-1-maxime.chevallier@bootlin.com>
 References: <20230608163415.511762-1-maxime.chevallier@bootlin.com>
