@@ -2,116 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF09C728B26
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 00:32:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02CB8728B28
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 00:35:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237186AbjFHWcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 18:32:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56526 "EHLO
+        id S229870AbjFHWfH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 18:35:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237218AbjFHWcb (ORCPT
+        with ESMTP id S229644AbjFHWfE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 18:32:31 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED742D78
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 15:32:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686263543; x=1717799543;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=qV3Dw8igkVoKguLTu65QopHctrOrSlhGJhrK2Z67mn4=;
-  b=Ultd5iGIcJyuXRxhPkEEjKokq/T4fHxBBKa30moIzItEGNLRPUMUmEsx
-   Y3J1t9ExeQo8G+iEneZfW2RIabPpGFDpuo4tZdxpXjmbIBtCcWDVSbbEb
-   kCj1qpTMZupAe9dVrL2lp+uRMxzH4eS2uKVDNGnpGGQZqpBjsAJ8dSzfg
-   ycBSbvW55ccH1/Q257K9ZGNUHxnzEJjPrOVlpsGKG8/oDNq0dbVShKy06
-   pbOhVcBOFlO7RTD5z7UuwKr4ryijdYqs2F+huBDksaIFScDGS55/SLUS4
-   foWqt5+hGLz51TERdPnLlFQ331Bf7J9w+ctg9fXaTYTRipUUIHGaIwBDG
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="347094808"
-X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
-   d="scan'208";a="347094808"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 15:32:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="956906460"
-X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
-   d="scan'208";a="956906460"
-Received: from b04f130c83f2.jf.intel.com ([10.165.154.98])
-  by fmsmga006.fm.intel.com with ESMTP; 08 Jun 2023 15:32:21 -0700
-From:   Tim Chen <tim.c.chen@linux.intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Tim C Chen <tim.c.chen@linux.intel.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shrikanth Hegde <sshegde@linux.vnet.ibm.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        naveen.n.rao@linux.vnet.ibm.com,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        Chen Yu <yu.c.chen@intel.com>, Hillf Danton <hdanton@sina.com>
-Subject: [Patch v2 6/6] sched/debug: Dump domains' sched group flags
-Date:   Thu,  8 Jun 2023 15:32:32 -0700
-Message-Id: <6c92a6e1bee6217b4286e77136287699755859b0.1686263351.git.tim.c.chen@linux.intel.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <cover.1686263351.git.tim.c.chen@linux.intel.com>
-References: <cover.1686263351.git.tim.c.chen@linux.intel.com>
+        Thu, 8 Jun 2023 18:35:04 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF005210E;
+        Thu,  8 Jun 2023 15:35:03 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QcfD640Xlz4x3y;
+        Fri,  9 Jun 2023 08:35:02 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1686263702;
+        bh=hW2Wj12x0/5Oy5lCwtoaU+wOXV8HzlR6fMY652h8rP0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=lYLa6HiKHSjpcc/+22FDJ4XedQlTkYcIi6NYakN/OnCdp46Fd+ClHU/T48Aqx0s2f
+         JWKD3i6tGI/TY8muGj4wvTPF7n8ATF22zQMNG414IzNZza/xFIbZFJrp43p+0FiIpN
+         zHBx2K9TY9ryDwOwUECjcTf5wsP7aTgClmxkkhfDvXYQEhNFGXWnZa7EhtqcoA12Gt
+         S8xHsFKjgwkx275zGSrMc7Ae1XWTrh24yNy3H8RaToEY395Y75zpaQ5f83AME7okMW
+         j5d+ZZdr9snF/lioLuV1blnqbpIOcNXANGbJ9XRdXjCjb8XGhwQDOAfd/ApJye5Mdr
+         QaJ+aMNoBoYmg==
+Date:   Fri, 9 Jun 2023 08:35:01 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Eugenio =?UTF-8?B?UMOpcmV6?= <eperezma@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the vhost tree
+Message-ID: <20230609083501.12f98e15@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/.P9ctSIoFLUXGjxxC/PyL2H";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tim C Chen <tim.c.chen@linux.intel.com>
+--Sig_/.P9ctSIoFLUXGjxxC/PyL2H
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-From: Peter Zijlstra (Intel) <peterz@infradead.org>
+Hi all,
 
-There have been a case where the SD_SHARE_CPUCAPACITY sched group flag
-in a parent domain were not set and propagated properly when a degenerate
-domain is removed.
+Commit
 
-Add dump of domain0 sched group flags of a CPU to make debug easier
-in the future.
+  45eaa1bb9e21 ("vdpa_sim: offer VHOST_BACKEND_F_ENABLE_AFTER_DRIVER_OK")
 
-Usage:
-cat /debug/sched/domains/cpu0/domain1/groups_flags
-to dump cpu0 domain1's sched group flags.
+is missing a Signed-off-by from its author.
 
-Signed-off-by: Tim Chen <tim.c.chen@linux.intel.com>
----
- kernel/sched/debug.c | 1 +
- 1 file changed, 1 insertion(+)
+--=20
+Cheers,
+Stephen Rothwell
 
-diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
-index 1637b65ba07a..55b50f940feb 100644
---- a/kernel/sched/debug.c
-+++ b/kernel/sched/debug.c
-@@ -389,6 +389,7 @@ static void register_sd(struct sched_domain *sd, struct dentry *parent)
- #undef SDM
- 
- 	debugfs_create_file("flags", 0444, parent, &sd->flags, &sd_flags_fops);
-+	debugfs_create_file("groups_flags", 0444, parent, &sd->groups->flags, &sd_flags_fops);
- }
- 
- void update_sched_domain_debugfs(void)
--- 
-2.32.0
+--Sig_/.P9ctSIoFLUXGjxxC/PyL2H
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSCV5UACgkQAVBC80lX
+0GylnQf/QiPA0MgMZTc670JnSkZKKSlNesp1iBPP45pJh4CnoUom8yri1+rBLFlR
+CVtNN5zPxGA8qFWtAQpEOkzVqozRQBZuJabOJL0ukssveu5ahQ/3jYfnl1JufS6H
+G3iqLsSYFpKa5F/JQs8nVftaf9FeV+vCTQK9plwWpIN3a2cXIYk2jcFaPVeglzt6
+crehD2K8p6isF4aZjdkzuSCOAEJBVg+HX4yobXqPtCmWQAdFwRvB6QFdHfPLtKf5
+RV7/mRdk1WEeETnMYnMhQyopbO0y9ItAzlwWm4JEIWAnRpZTd45T5aT1GAYHxzje
+CrhX8FLUK1D3/32YVoYkr3DopD1AhA==
+=SRi5
+-----END PGP SIGNATURE-----
+
+--Sig_/.P9ctSIoFLUXGjxxC/PyL2H--
