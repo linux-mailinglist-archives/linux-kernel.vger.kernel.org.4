@@ -2,96 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E5F472862A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 19:19:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F01B728631
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 19:19:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236843AbjFHRTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 13:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44620 "EHLO
+        id S236918AbjFHRTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 13:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236776AbjFHRTe (ORCPT
+        with ESMTP id S236897AbjFHRTh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 13:19:34 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E14D271D;
-        Thu,  8 Jun 2023 10:19:29 -0700 (PDT)
-Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 9500F20C145B;
-        Thu,  8 Jun 2023 10:19:28 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9500F20C145B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1686244768;
-        bh=vHFWL4OmnL1LTZcnfAluMeMCHwhUx7iXNArGhpAQSi8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K6XHKEUfkN5VuiTCYtCMbDTGGv6zSKNNBs91L3J+lb8pp1iYn8WFfu/N00LSRc/mZ
-         QYlenr88SGfE8D75o0GQAQs8G4aRETh8oj45NBDOtLZC0LFwsmGmHRxzxZZBGonoV4
-         KDfA7hzWgHHguNI7eh08Di0ydhKriOnKKgSaiSdc=
-Date:   Thu, 8 Jun 2023 10:19:21 -0700
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     sunliming <sunliming@kylinos.cn>
-Cc:     mhiramat@kernel.org, rostedt@goodmis.org, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kelulanainsley@gmail.com
-Subject: Re: [PATCH 1/3] tracing/user_events: Fix incorrect return value for
- writing operation when events are disabled
-Message-ID: <20230608171921.GA74@W11-BEAU-MD.localdomain>
-References: <20230608011554.1181097-1-sunliming@kylinos.cn>
- <20230608011554.1181097-2-sunliming@kylinos.cn>
+        Thu, 8 Jun 2023 13:19:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62072727;
+        Thu,  8 Jun 2023 10:19:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 51AF864FAE;
+        Thu,  8 Jun 2023 17:19:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83DCAC433D2;
+        Thu,  8 Jun 2023 17:19:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686244773;
+        bh=6ad4Ze1/w0HwSx4VHiAz44pNtRELAkpuEtOfWAJU1Eo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=YdfcfRKqLJ40FuDdoTSVmRM59ViFQ9d62OUiQnwXIXPAteXBAEXPSS1RwfI34G5Q/
+         IXT7FFgFG83agNDw1g2EZmqgIuAXoBm5Y2tnLegxMyp4PhZsYj+N4eHL+kq8pr2CC7
+         crFZoqJyfoVY6ZKzBAsac8uLYJvnSMaaXYhuGhUkZlno6X9sN4zviMFHrKEFNm8cW7
+         xzvDsHK2w/T1vIdlTZfAjlvk6uxU9Cs6UOjLU+j7K4/jtix0t5hdaNiGHVC4oEwhRq
+         pMYw3WUhTeuRw1Cwha0qtfFWslBtasx/UMavhic7exuLXedpc+q6J+WE7wAz1k6i+c
+         9jhxtxE3aMKSA==
+Date:   Thu, 8 Jun 2023 12:19:32 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        hch@infradead.org, stable@vger.kernel.org,
+        Jason Adriaanse <jason_a69@yahoo.co.uk>
+Subject: Re: [PATCH RESEND] PCI: Add function 1 DMA alias quirk for Marvell
+ 88SE9235
+Message-ID: <20230608171932.GA1206912@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230608011554.1181097-2-sunliming@kylinos.cn>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <731507e05d70239aec96fcbfab6e65d8ce00edd2.1686157165.git.robin.murphy@arm.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 09:15:52AM +0800, sunliming wrote:
-> The writing operation return the count of writes whether events are
-> enabled or disabled. This is incorrect when events are disabled. Fix
-> this by just return -EFAULT when events are disabled.
+On Wed, Jun 07, 2023 at 06:18:47PM +0100, Robin Murphy wrote:
+> Marvell's own product brief implies the 92xx series are a closely
+> related family, and sure enough it turns out that 9235 seems to need the
+> same quirk as the other three, although possibly only when certain ports
+> are used.
 > 
-> Signed-off-by: sunliming <sunliming@kylinos.cn>
+> CC: stable@vger.kernel.org
+> Reported-by: Jason Adriaanse <jason_a69@yahoo.co.uk>
+> Link: https://lore.kernel.org/linux-iommu/2a699a99-545c-1324-e052-7d2f41fed1ae@yahoo.co.uk/
+> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+
+Applied with Christoph's reviewed-by to pci/virtualization for v6.5,
+thanks!
+
 > ---
->  kernel/trace/trace_events_user.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-> index 1ac5ba5685ed..970bac0503fd 100644
-> --- a/kernel/trace/trace_events_user.c
-> +++ b/kernel/trace/trace_events_user.c
-> @@ -1957,7 +1957,8 @@ static ssize_t user_events_write_core(struct file *file, struct iov_iter *i)
->  
->  		if (unlikely(faulted))
->  			return -EFAULT;
-> -	}
-> +	} else
-> +		return -EFAULT;
->  
-
-I'm not sure this is a good idea. Imagine this scenario:
-A user process writes out a user_event and it hits a fault that gets
-returned as errno (EFAULT).
-
-The user process is likely to either forget it and say, not worth
-retrying, or it will retry (potentially in a loop).
-
-If the process does retry and it's now disabled, it might try many
-times.
-
-I think that -ENOENT is a better error to use here. That way a user
-process will know it got disabled mid-write vs a fault that might want
-to be re-attempted.
-
-Thanks,
--Beau
-
->  	return ret;
->  }
+> Note that the actual regression which started the thread is a different
+> matter, wherein a particular combination of parameters which used to put
+> intel-iommu into passthrough mode now enables full translation instead.
+> 
+> Take #2, hopefully not royally screwing up my email alises this time.
+> Sorry about that...
+> 
+>  drivers/pci/quirks.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+> index f4e2a88729fd..3186f2c84eab 100644
+> --- a/drivers/pci/quirks.c
+> +++ b/drivers/pci/quirks.c
+> @@ -4174,6 +4174,8 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9220,
+>  /* https://bugzilla.kernel.org/show_bug.cgi?id=42679#c49 */
+>  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9230,
+>  			 quirk_dma_func1_alias);
+> +DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9235,
+> +			 quirk_dma_func1_alias);
+>  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_TTI, 0x0642,
+>  			 quirk_dma_func1_alias);
+>  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_TTI, 0x0645,
 > -- 
-> 2.25.1
+> 2.39.2.101.g768bb238c484.dirty
+> 
