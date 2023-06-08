@@ -2,123 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B086D728933
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 22:07:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58BF7728938
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 22:11:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236511AbjFHUHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 16:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60276 "EHLO
+        id S235084AbjFHULA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 16:11:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236548AbjFHUHV (ORCPT
+        with ESMTP id S230096AbjFHUK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 16:07:21 -0400
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF7BB9;
-        Thu,  8 Jun 2023 13:07:19 -0700 (PDT)
-Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-77703f20aa9so50155139f.1;
-        Thu, 08 Jun 2023 13:07:19 -0700 (PDT)
+        Thu, 8 Jun 2023 16:10:58 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD07C1707;
+        Thu,  8 Jun 2023 13:10:57 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-652a6cf1918so850933b3a.1;
+        Thu, 08 Jun 2023 13:10:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686255057; x=1688847057;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=KaorFROknjCn9/iVhBQO9PAsd8HYdHVJN5C9ENR6YJY=;
+        b=d4haJP3T5+svy6N/pjKXZzN+9c59xnjk5MNne8EWxsJ/F2y/AlcU5khc1lDxZACmPo
+         5b8jd+FRn5zkglJwxsdgxLh08r6HR8hekliatKKBP8cwWWBwT7Y2GsvRTFHdmxSTvyan
+         45ayfpDci0sng7uLskyryB5GJ5Ytg6MS75CEdCSUg8NaULBGuL+PgGUvq0VVNwS7BuBQ
+         lTRYptfzi6HfFxncQMUNbNdTqSSXD05bJ1nffB0u5ZhkkzMrZVeVNPa6hX7WwVKirAXv
+         Q6kbsiDNw0pNPHn42Ft0AhI+I8uAl6p8WcbiheTYwuFVplwK+8BluGY1DknYeKbuYk5K
+         fApA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686254839; x=1688846839;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yCE7xocRBkEwXdhay/uk+7t0tswMRd2eea3cgJIDzvo=;
-        b=LYHhKDq7gYK2Pg8UvFlzDprXphJjtdKDejQttxbVjpAQV0+csgaOo918Ne3CNMue/G
-         3FDJpQ/gkFZyluflfxMhMnydZV9uG10URVZL77EKtILDHsPuTNK62pwIOZMC+vqHAIsh
-         9MAlduQNk+cf71jRqkbPm5Hy64Rl08RSEcsGebaDWPvfSBixUioxecHQOIqxkFJPJL8h
-         KL6wYx08fFRTe6t+pvijK2+KFhWAFVGd11t03rOHAIQVnstFQVW0QBkjaQnqBvIT+HxW
-         nNvM4sPG0JHLJ5SnlQrGBe6Ge6SNGJJW5fRglBgu4SATfxxZWxRo+9hV4N2uFgZhj2kT
-         s+HQ==
-X-Gm-Message-State: AC+VfDzS5FUtHlMG5DKbSzqYhlDt4PL83WOiPtNwYfFRKPakVZTFqse8
-        BelXMqLECzl4hAsidLrbLw==
-X-Google-Smtp-Source: ACHHUZ7Y/jQXG5jEUVhxK/gjEsU7RfT8KIAq/soUUNL8XKN2A7miMtfO/lnuGVj1MrM9HipcTArYmw==
-X-Received: by 2002:a6b:6d03:0:b0:76c:6d91:d293 with SMTP id a3-20020a6b6d03000000b0076c6d91d293mr11838245iod.2.1686254838828;
-        Thu, 08 Jun 2023 13:07:18 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id k8-20020a02c768000000b00416650ba62esm476861jao.76.2023.06.08.13.07.16
+        d=1e100.net; s=20221208; t=1686255057; x=1688847057;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KaorFROknjCn9/iVhBQO9PAsd8HYdHVJN5C9ENR6YJY=;
+        b=WUixBEfXKWI6hBlhqPPb7Jt7vmxS1J6KwnWb+8Gona0XbluFosMDB5plLEVUBGStAv
+         QEjyud+Z5ewz9ruPKzhKMl0tbv3EzYgCuOCL+pCGjeLBP7upKGDbEhcY2khCyzUW5fq1
+         nr6QFURP0VxNjLF/LyujfS1Ylb423cgIjlGeF6JEa8EfBMJ/Isll2hWnJlFWXSwNn2nw
+         n1E2NyqoLwtmL9fEDxVECouwq4OB00yKZntw9Etv1pX/LDG/asYQM9Wc9/TmdQOiRQEr
+         azIxDqfdVnww3Yq8R9XtUXzZZelZT3xyDlAf1WD7qyo8A3jx/c7rC/tHbukQiIAFyDCr
+         XARQ==
+X-Gm-Message-State: AC+VfDzChoXDk6eBA7uBfGFLSAiQlmXWfRKVMrTomM3tMgGLNe0I87fi
+        rg+faQ0j+822p90VO2kiOVM=
+X-Google-Smtp-Source: ACHHUZ4E7lX8FjskeXiifJrLjxkPRXnFFeAdkZpZwNyMNxtNO+OutUboGDoPhJ4L4suVZIB4vx0Y7A==
+X-Received: by 2002:a05:6a00:812:b0:658:2818:edd4 with SMTP id m18-20020a056a00081200b006582818edd4mr8062710pfk.13.1686255056839;
+        Thu, 08 Jun 2023 13:10:56 -0700 (PDT)
+Received: from localhost ([192.55.54.50])
+        by smtp.gmail.com with ESMTPSA id u5-20020a62ed05000000b006580e98326esm389759pfh.42.2023.06.08.13.10.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 13:07:17 -0700 (PDT)
-Received: (nullmailer pid 3317123 invoked by uid 1000);
-        Thu, 08 Jun 2023 20:07:15 -0000
-Date:   Thu, 8 Jun 2023 14:07:15 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Vincent Legoll <vincent.legoll@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 22/25] dt-bindings: devfreq: event: rockchip,dfi: Add
- rk3588 support
-Message-ID: <20230608200715.GA3315970-robh@kernel.org>
-References: <20230524083153.2046084-1-s.hauer@pengutronix.de>
- <20230524083153.2046084-23-s.hauer@pengutronix.de>
+        Thu, 08 Jun 2023 13:10:56 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 13:10:54 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     "Wang, Wei W" <wei.w.wang@intel.com>
+Cc:     Isaku Yamahata <isaku.yamahata@gmail.com>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        Zhi Wang <zhi.wang.linux@gmail.com>,
+        "Chen, Bo2" <chen.bo@intel.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+Subject: Re: [PATCH v14 011/113] KVM: TDX: Add C wrapper functions for
+ SEAMCALLs to the TDX module
+Message-ID: <20230608201054.GK2244082@ls.amr.corp.intel.com>
+References: <cover.1685333727.git.isaku.yamahata@intel.com>
+ <37b118268ccf73d8e9cc1ef8f9fb7376fb732d60.1685333727.git.isaku.yamahata@intel.com>
+ <DS0PR11MB6373872D1536D6469B29159CDC4DA@DS0PR11MB6373.namprd11.prod.outlook.com>
+ <20230607181537.GG2244082@ls.amr.corp.intel.com>
+ <DS0PR11MB63733FFA02B4A5C04561A1BFDC50A@DS0PR11MB6373.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230524083153.2046084-23-s.hauer@pengutronix.de>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <DS0PR11MB63733FFA02B4A5C04561A1BFDC50A@DS0PR11MB6373.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023 at 10:31:50AM +0200, Sascha Hauer wrote:
-> This adds rockchip,rk3588-dfi to the list of compatibles. Unlike ealier
-> SoCs the rk3588 has four interrupts (one for each channel) instead of
-> only one, so increase the number of allowed interrupts to four and also
-> add interrupt-names.
-> 
-> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> ---
-> 
-> Notes:
->     Changes since v4:
->     - new patch
-> 
->  .../bindings/devfreq/event/rockchip,dfi.yaml       | 14 +++++++++++++-
->  1 file changed, 13 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml b/Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml
-> index e8b64494ee8bd..4e647a9560560 100644
-> --- a/Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml
-> +++ b/Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml
-> @@ -14,6 +14,7 @@ properties:
->      enum:
->        - rockchip,rk3399-dfi
->        - rockchip,rk3568-dfi
-> +      - rockchip,rk3588-dfi
->  
->    clocks:
->      maxItems: 1
-> @@ -23,7 +24,18 @@ properties:
->        - const: pclk_ddr_mon
->  
->    interrupts:
-> -    maxItems: 1
-> +    minItems: 1
-> +    maxItems: 4
-> +
-> +  interrupt-names:
-> +    oneOf:
-> +      - items:
-> +          - const: ch0
-> +      - items:
-> +          - const: ch0
-> +          - const: ch1
-> +          - const: ch2
-> +          - const: ch3
+On Thu, Jun 08, 2023 at 01:43:27AM +0000,
+"Wang, Wei W" <wei.w.wang@intel.com> wrote:
 
-Names that are just an index are generally pointless.
+> On Thursday, June 8, 2023 2:16 AM, Isaku Yamahata wrote:
+> > On Mon, Jun 05, 2023 at 03:20:19PM +0000, "Wang, Wei W"
+> > <wei.w.wang@intel.com> wrote:
+> > > > +static inline u64 kvm_seamcall(u64 op, u64 rcx, u64 rdx, u64 r8, u64 r9,
+> > > > +			       struct tdx_module_output *out) {
+> > > > +	u64 ret;
+> > > > +
+> > > > +	ret = __seamcall(op, rcx, rdx, r8, r9, out);
+> > > > +	if (unlikely(ret == TDX_SEAMCALL_UD)) {
+> > > > +		/*
+> > > > +		 * TDX requires VMXON or #UD.  In the case of reboot or
+> > > > kexec,
+> > > > +		 * VMX is made off (VMXOFF) by kvm reboot notifier,
+> > > > +		 * kvm_reboot(), while TDs are still running.  The callers
+> > > > check
+> > > > +		 * the returned error and complain.  Suppress it by returning 0.
+> > > > +		 */
+> > >
+> > > Curious how do the callers check the returned error when " Suppress it
+> > > by returning 0" here.
+> > 
+> > It doesn't make sense for the caller to check the error and warn when
+> > kvm_rebooting = true.
+> > Let's make it "return kvm_rebooting ? 0 : ret;" instread of "return 0;".
+> > Does it make sense?
+> 
+> Seems no need. The comments look confusing, and not aligned to what
+> the code achieves. From what I read:
+> - if kvm_rebooting=true there: return 0 to caller and no error or warning happens
+> - if kvm_rebooting=false there: crash the system via kvm_spurious_fault.
+> In this non-rebooting case, I think the callers don’t get a chance to read the 
+> returned value and complain.
+
+How about this comment?
+
+	if (unlikely(ret == TDX_SEAMCALL_UD)) {
+		/*
+		 * TDX requires VMXON or #UD.  In the case of reboot or kexec,
+		 * kvm shutdown notifier, kvm_shutdown(), makes VMX off (VMXOFF)
+		 * while TDs can be still running to invoke SEAMCALL.  It
+		 * results in superfluous errors or warnings.
+		 * If rebooting, return 0 to suppress superfluous messages.
+		 * If not rebooting, panic by kvm_spurious_fault().
+		 */
+		kvm_spurious_fault();
+		return 0;
+	}
+
+> Another thing is, have you double-checked that invocation of seamcalls
+> indeed returns TDX_SEAMCALL_UD when VMX=off?
+
+I observed it several times during testing tdx module initialization. Here is
+the example I dug out from my debug logs.
+
+  tdx: SEAMCALL failed: CPU 162 is not in VMX operation.
+  tdx: TDX module initialization failed (-22)
+  kvm_intel: Failed to initialize TDX module.
+
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
