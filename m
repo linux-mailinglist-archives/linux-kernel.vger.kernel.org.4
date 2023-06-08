@@ -2,228 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E7F172849E
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:09:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E36672849F
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232729AbjFHQJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 12:09:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55550 "EHLO
+        id S233011AbjFHQKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 12:10:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232708AbjFHQJb (ORCPT
+        with ESMTP id S234046AbjFHQKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 12:09:31 -0400
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3451BDF;
-        Thu,  8 Jun 2023 09:09:30 -0700 (PDT)
-Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-777b4560ae8so26807539f.2;
-        Thu, 08 Jun 2023 09:09:30 -0700 (PDT)
+        Thu, 8 Jun 2023 12:10:05 -0400
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C9311A
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 09:10:04 -0700 (PDT)
+Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-75d46c7cd6cso61429985a.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 09:10:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1686240604; x=1688832604;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Loo5qde1he69f2u4i/ib9ZVM0psMD7Cg0M9AatqdFv0=;
+        b=aqqlosKfbPjKw/3gdBd2lQ7muprhCLsHawg3f4IEwYAKT/Q/itA1SQba/NYMZGYD9R
+         xByoMotkQ5YSr3smggHQRSUbmzsdMAbf02yCN/Mhm6mz8WQzdkQSQWhYdBByBGWDT2gQ
+         J8MXMovb/38C4r1QveZxusv3xE43gRWXE/y/5w1tQFj5VWhmY91XBGwsWLxBqyX1VCqq
+         9cvUg7fSyMgxDp1kYNUxpwBPzjwODYSinR7UbCGP0ydkvL8SP9VD/npfh8ejuRmu2x/3
+         6+IybunedSIMYu5nrUJvl1WrNfQ7oq3wtakVljkD8f+KYETinQm55Gjjoj/aosJsFkO5
+         DLig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686240569; x=1688832569;
+        d=1e100.net; s=20221208; t=1686240604; x=1688832604;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=A8MAtXZkrsYG/HkNDt42uWE09jxVB49iJ0UFdWUAyow=;
-        b=OLR6Eeudy+WLujveKYM9mYpLYDnTgYNOJUDLDJkDceejtMkZnN0aZxEIDHgZacF2UM
-         OFPeDcYjc5Db/W9ywpFDAPuDLlrc9KYg0lJSIj8eADJMzDePFixJ/7RM3W6/M/n7PX3y
-         I2QUxJGB5ZqVvi8RY4r3iRqpkr/FLGbpwBeDPJOYiC4JvvEljnDw8pIlD+SvQbtx0kxd
-         8zBRH7wAIYwWEyUu6u+hixE1IdQOHeMlxvf10K2okPiT5kiyEYBSKR6lFzbNtfTNBorp
-         AnZcpPqM6WkLIzLGeDmzmvfIg4oAq7NfmOo8nbq26/0BS0UjS1wXza79oOq0hd0Vkxs+
-         HKYQ==
-X-Gm-Message-State: AC+VfDxRj1KeaCO718ivoQfVZb/bgjknpasfFCMyxvAbNSS7/Uoku9Ez
-        BHIOPDZkYdVmcZFE9Mowbg==
-X-Google-Smtp-Source: ACHHUZ64aKy+sH0t8A7IOQ7qgaq0gx7MJX7wPrx+Ud/5T6iVeFYfh1Oqmiu/A65L7jv4nbkZXhpRKw==
-X-Received: by 2002:a5e:834d:0:b0:778:82d1:39a3 with SMTP id y13-20020a5e834d000000b0077882d139a3mr10262471iom.13.1686240569183;
-        Thu, 08 Jun 2023 09:09:29 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id y14-20020a02a38e000000b004090c67f155sm358129jak.91.2023.06.08.09.09.26
+        bh=Loo5qde1he69f2u4i/ib9ZVM0psMD7Cg0M9AatqdFv0=;
+        b=O+NpnhzqgzlB23rKfAyw1Tdk04xT3q0kK/acjFzyzbxCuHulitfN5u+vvXgH8rFPVw
+         qQ7WnpDTbU3dv7es1a5Wge/kiBEUUdlo5HESPZ+nAwin3vj24ADsGfU+v/kwx873GHyr
+         uV2WzTnalKD2XRr9nxokip25vjOIV6ArrhN9NIY4MHv+Phf4z6E0LCuXfq2UAb0il1W+
+         yPyR7YALMT617msZoQBV0j4Fmpdb2K/juP1mrVcxj5a7ligmPdrnAuSmyujEcyoEf9Hj
+         475uHO5fpMI9vhkR7EuZpkfoH3noxSi8vP7BHfWERMT79EwjYHqC2vKZnGJV0lJRtb7k
+         vEUw==
+X-Gm-Message-State: AC+VfDxPEkunYlK2d9aLE2Y1L4p1wMopvKySzTo3l4TZNatFkSDWbc2y
+        dPKLkYQZUflTfCN+UKXUpO37Zg==
+X-Google-Smtp-Source: ACHHUZ7mv0riOE/OFmjTpYzXkTHyDiyj3eH4VJr6BV5clO7YGWIkdpN3aq6+yAf4fKZ4SWED3zZGBg==
+X-Received: by 2002:a05:620a:8086:b0:75b:23a1:8345 with SMTP id ef6-20020a05620a808600b0075b23a18345mr7447418qkb.64.1686240604100;
+        Thu, 08 Jun 2023 09:10:04 -0700 (PDT)
+Received: from localhost (2603-7000-0c01-2716-8f57-5681-ccd3-4a2e.res6.spectrum.com. [2603:7000:c01:2716:8f57:5681:ccd3:4a2e])
+        by smtp.gmail.com with ESMTPSA id o12-20020a05620a15cc00b0075b17afcc1esm409106qkm.115.2023.06.08.09.10.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 09:09:28 -0700 (PDT)
-Received: (nullmailer pid 2787707 invoked by uid 1000);
-        Thu, 08 Jun 2023 16:09:25 -0000
-Date:   Thu, 8 Jun 2023 10:09:25 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Hao Zhang <quic_hazha@quicinc.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v4 2/3] dt-bindings: arm: Add Coresight Dummy Trace
-Message-ID: <20230608160925.GA2780221-robh@kernel.org>
-References: <20230505092422.32217-1-quic_hazha@quicinc.com>
- <20230505092422.32217-3-quic_hazha@quicinc.com>
- <99343862-6b6a-30ba-40e5-7f984434b1dc@linaro.org>
- <44524ce9-b24e-7e2d-819c-232149e29f0e@quicinc.com>
+        Thu, 08 Jun 2023 09:10:03 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 12:10:03 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Cc:     vitaly.wool@konsulko.com, minchan@kernel.org,
+        senozhatsky@chromium.org, yosryahmed@google.com,
+        linux-mm@kvack.org, ddstreet@ieee.org, sjenning@redhat.com,
+        nphamcs@gmail.com, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [RFC PATCH v2 5/7] mm: zswap: remove shrink from zpool interface
+Message-ID: <20230608161003.GE352940@cmpxchg.org>
+References: <20230606145611.704392-1-cerasuolodomenico@gmail.com>
+ <20230606145611.704392-6-cerasuolodomenico@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <44524ce9-b24e-7e2d-819c-232149e29f0e@quicinc.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230606145611.704392-6-cerasuolodomenico@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 01:52:41PM +0800, Hao Zhang wrote:
-> 
-> 
-> On 5/7/2023 4:04 PM, Krzysztof Kozlowski wrote:
-> > On 05/05/2023 11:24, Hao Zhang wrote:
-> > > Add new coresight-dummy.yaml file describing the bindings required
-> > > to define coresight dummy trace in the device trees.
-> > > 
-> > > Signed-off-by: Hao Zhang <quic_hazha@quicinc.com>
-> > > ---
-> > >   .../bindings/arm/arm,coresight-dummy.yaml     | 102 ++++++++++++++++++
-> > >   1 file changed, 102 insertions(+)
-> > >   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-dummy.yaml
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-dummy.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-dummy.yaml
-> > > new file mode 100644
-> > > index 000000000000..126518863eea
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/arm/arm,coresight-dummy.yaml
-> > > @@ -0,0 +1,102 @@
-> > > +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/arm/arm,coresight-dummy.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: ARM Coresight Dummy component
-> > > +
-> > > +description: |
-> > > +  Coresight Dummy Trace Module is for the specific devices that kernel
-> > > +  don't have permission to access or configure, e.g., CoreSight TPDMs
-> > > +  on Qualcomm platforms. So there need driver to register dummy devices
-> > > +  as Coresight devices. It may also be used to define components that
-> > > +  may not have any programming interfaces (e.g, static links), so that
-> > > +  paths can be established in the driver. Provide Coresight API for
-> > > +  dummy device operations, such as enabling and disabling dummy devices.
-> > > +  Build the Coresight path for dummy sink or dummy source for debugging.
-> > > +
-> > > +  The primary use case of the coresight dummy is to build path in kernel
-> > > +  side for dummy sink and dummy source.
-> > > +
-> > > +maintainers:
-> > > +  - Mao Jinlong <quic_jinlmao@quicinc.com>
-> > > +  - Tao Zhang <quic_taozha@quicinc.com>
-> > > +  - Hao Zhang <quic_hazha@quicinc.com>
-> > > +  - Yuanfang Zhang <quic_yuanfang@quicinc.com>
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    items:
-> > 
-> > You were asked to drop oneOf, not to replace with items. Drop items.
-> > Drop oneOf. It's just enum.
-> > 
-> 
-> Hi Krzysztof,
-> 
-> I will drop items and update it in the next version.
-> 
-> Thanks,
-> Hao
-> 
-> > > +      - enum:
-> > > +          - arm,coresight-dummy-sink
-> > > +          - arm,coresight-dummy-source
-> > > +
-> > > +  out-ports:
-> > > +    $ref: /schemas/graph.yaml#/properties/ports
-> > > +
-> > > +    properties:
-> > > +      port:
-> > > +        description: Output connection from the source to Coresight
-> > > +          Trace bus.
-> > > +        $ref: /schemas/graph.yaml#/properties/port
-> > > +
-> > > +  in-ports:
-> > > +    $ref: /schemas/graph.yaml#/properties/ports
-> > > +
-> > > +    properties:
-> > > +      port:
-> > > +        description: Input connection from the Coresight Trace bus to
-> > > +          dummy sink, such as Embedded USB debugger(EUD).
-> > > +        $ref: /schemas/graph.yaml#/properties/port
-> > > +
-> > > +required:
-> > > +  - compatible
-> > > +
-> > > +if:
-> > > +  # If the compatible contains the below value
-> > > +  properties:
-> > > +    compatible:
-> > > +      contains:
-> > > +        const: arm,coresight-dummy-sink
-> > > +
-> > > +then:
-> > > +  required:
-> > > +    - in-ports
-> > > +
-> > > +else:
-> > > +  required:
-> > > +    - out-ports
-> > 
-> > No improvements. Implement Rob's comments.
-> > 
-> 
-> Hi Krzysztof, Rob,
-> 
-> There are two comments from Rob:
-> 1) I could imagine the OS wanting to know more information than just
-> 'dummy'. Is data from an unknown source useful? Likewise, don't you want
-> to know where you are sending data too?
-> 2) This still allows the nodes when they don't make sense. I think this
-> needs to be 2 schema files. The only common part is 'compatible' and
-> that's not even shared.
-> 
-> 
-> 1. The necessary information for coresight is connection(ports) between
-> different components. However, this information is not very intuitive. There
-> would be a generic change to support coresight name in the further. You can
-> refer to the below link, this solution is still under discussion, I think
-> it's also helpful for our query.
-> https://lore.kernel.org/linux-arm-kernel/b7abee2a-99ca-26d6-5850-60ee19d9c0e9@quicinc.com/T/
+On Tue, Jun 06, 2023 at 04:56:09PM +0200, Domenico Cerasuolo wrote:
+> @@ -40,7 +36,7 @@ enum zpool_mapmode {
+>  bool zpool_has_pool(char *type);
+>  
+>  struct zpool *zpool_create_pool(const char *type, const char *name,
+> -			gfp_t gfp, const struct zpool_ops *ops);
+> +			gfp_t gfp);
 
-I don't really have more input. I'm looking for input from coresight 
-folks on this.
+This fits into a single line now.
 
-Design the binding so it is future proof. If you need to go back and add 
-more data to the binding in the future you've lost. It is perfectly fine 
-to have specific bindings with generic drivers (e.g. simple panel). Then 
-if you need more capabilities than a generic driver, then you can add a 
-specific driver in the future with no DT change.
+Otherwise, the patch looks great to me.
 
-> 2. Dummy driver is very simple, the only goal of it is to build a path in
-> kernel for subsystem, so we want to handle dummy source and sink in one
-> generic driver. For one same driver, shall we split the schema file?
-
-schemas and drivers are not 1:1. So yes, split the schema.
-
-Rob
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
