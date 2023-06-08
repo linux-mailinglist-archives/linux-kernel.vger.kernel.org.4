@@ -2,99 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2641F72797C
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 10:02:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A675B72797F
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 10:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235133AbjFHICn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 04:02:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49472 "EHLO
+        id S234766AbjFHICx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 04:02:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235075AbjFHICA (ORCPT
+        with ESMTP id S234364AbjFHICV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 04:02:00 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521BD213C;
-        Thu,  8 Jun 2023 01:01:52 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 35880vbB6001727, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 35880vbB6001727
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Thu, 8 Jun 2023 16:00:57 +0800
-Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 8 Jun 2023 16:01:13 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 8 Jun 2023 16:01:13 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Thu, 8 Jun 2023 16:01:13 +0800
-From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
+        Thu, 8 Jun 2023 04:02:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23AA426BA;
+        Thu,  8 Jun 2023 01:02:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ACB0F64A18;
+        Thu,  8 Jun 2023 08:02:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93806C433D2;
+        Thu,  8 Jun 2023 08:02:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686211324;
+        bh=w/yEsbDtDa91jOEzAVgq9g0PLRkhhzQq16y3KaLpBrM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kVP6KCoG5oc8inkb4NKyWt+t5NttTYCKqeMdIOAZOMqtJX2J2btHt5A/G93O/bJoy
+         u3LY1L0aty/AQQKpaLiP4hRaXiy2zojhA3cdfOWBafieEXRBYcpXdw/pKemWFTyzT9
+         GY2PS1Rnm0B8Jt805yc9vy4mJHB5bLf+jn9SWNGM=
+Date:   Thu, 8 Jun 2023 10:01:56 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     zhuyinbo <zhuyinbo@loongson.cn>
+Cc:     Minas Harutyunyan <hminas@synopsys.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
         Alan Stern <stern@rowland.harvard.edu>,
-        Ray Chi <raychi@google.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH v3 4/5] dt-bindings: phy: realtek: Add the doc about the Realtek SoC USB 2.0 PHY
-Thread-Topic: [PATCH v3 4/5] dt-bindings: phy: realtek: Add the doc about the
- Realtek SoC USB 2.0 PHY
-Thread-Index: AQHZmQjdazkCXQ0o50uX71FuvNBNuK9+uDoAgAHOxvD//3z9gIAAiH4Q
-Date:   Thu, 8 Jun 2023 08:01:13 +0000
-Message-ID: <289f65f0554344f69f3b0439a9e706ff@realtek.com>
-References: <20230607062500.24669-1-stanley_chang@realtek.com>
- <20230607062500.24669-4-stanley_chang@realtek.com>
- <7cce1d72-6b4d-9fff-32bc-942193388134@linaro.org>
- <0c405afedbcf4e468add480399775ebd@realtek.com>
- <7390105c-dad9-2785-1768-7f50b067633a@linaro.org>
-In-Reply-To: <7390105c-dad9-2785-1768-7f50b067633a@linaro.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXDAG02.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH v1] usb: dwc2: add pci_device_id driver_data parse support
+Message-ID: <2023060827-overlaid-displace-b3a1@gregkh>
+References: <20230518092240.8023-1-zhuyinbo@loongson.cn>
+ <2023051843-scruffy-gush-cdec@gregkh>
+ <aeaebb8c-e077-4678-62df-d80baff16347@loongson.cn>
+ <ad9bfa94-1372-4810-734e-0bbaace37553@loongson.cn>
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ad9bfa94-1372-4810-734e-0bbaace37553@loongson.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiA+Pg0KPiA+PiBUaGlzIG5lZWRzIHRvIGJlIHNwZWNpZmljLiBXaGF0IHRoZSBoZWNrIGlzICJQ
-SFkgcGFyYW1ldGVyIj8NCj4gPj4NCj4gPiBJdCBjb250YWlucyBtb3JlIHBhcmFtZXRlcnMNCj4g
-PiBwYWdlMCBoYXMgMTYgcGFyYW1ldGVycw0KPiA+IHBhZ2UxIGhhcyA4IHBhcmFtZXRlcnMNCj4g
-PiBwYWdlMiBoYXMgOCBwYXJhbWV0ZXJzDQo+ID4gSXQncyB0ZWRpb3VzIGlmIHdlIGxpc3QgdGhl
-bSBhbGwuDQo+IA0KPiBTdXJlLCBpZiB5b3UgcHJlZmVyIG5vdCB0byBsaXN0IHRoZW0sIHRoZW4g
-dGhleSBzaG91bGQgYmUgcmVtb3ZlZCBmcm9tIERULg0KPiANCj4gPiBBbmQgd2Ugb25seSBzZXQg
-dGhlIHBhcnQgdGhhdCBkaWZmZXJzIGZyb20gdGhlIGRlZmF1bHQuDQo+ID4gSXQncyBoYXJkIHRv
-IGV4cGxhaW4gd2hpY2ggcGFyYW1ldGVycyB3ZXJlIGNoYW5nZWQgYmVjYXVzZSBlYWNoIHBsYXRm
-b3JtIGlzDQo+IGRpZmZlcmVudC4NCj4gDQo+IElmIHRoaXMgaXMgcGh5IHR1bmluZyBwZXIgYm9h
-cmQsIHlvdSBuZWVkIHRvIGV4cGxhaW4gYW5kIGp1c3RpZnkgdGhlbS4NCj4gSWYgdGhpcyBpcyBw
-ZXIgcGxhdGZvcm0sIHRoZW4gZHJvcCBpdCAtIG5vdCBldmVuIG5lZWRlZCwgYmVjYXVzZSB5b3Ug
-aGF2ZQ0KPiBjb21wYXRpYmxlIGZvciB0aGlzLg0KPiANCk9rYXksIEkgdHJ5IHRvIHNwZWNpZnkg
-YnkgdGhlIGNvbXBhdGlibGUuDQoNClRoYW5rcywNClN0YW5sZXkNCg==
+On Thu, Jun 08, 2023 at 03:54:36PM +0800, zhuyinbo wrote:
+> 
+> Friendly ping ?
+
+For what?  I thought a new series was going to be submitted, I don't
+have anything in my queue to review for this at the moment.
+
+thanks,
+
+greg k-h
