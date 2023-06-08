@@ -2,147 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9037289E6
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 23:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2BFE7289E7
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 23:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236673AbjFHVGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 17:06:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56678 "EHLO
+        id S236950AbjFHVGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 17:06:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbjFHVGG (ORCPT
+        with ESMTP id S236417AbjFHVGa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 17:06:06 -0400
-Received: from frasgout13.his.huawei.com (unknown [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A522D51;
-        Thu,  8 Jun 2023 14:06:01 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Qcc1K1bHNz9y10X;
-        Fri,  9 Jun 2023 04:55:33 +0800 (CST)
-Received: from [10.81.215.46] (unknown [10.81.215.46])
-        by APP2 (Coremail) with SMTP id GxC2BwAHx02iQoJkyvgYAw--.4695S2;
-        Thu, 08 Jun 2023 22:05:46 +0100 (CET)
-Message-ID: <6663c7b0-26f5-bdd9-1209-b1c4d8ad31cc@huaweicloud.com>
-Date:   Thu, 8 Jun 2023 23:05:32 +0200
+        Thu, 8 Jun 2023 17:06:30 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3D92D51
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 14:06:27 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1b1fdab9d68so262835ad.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 14:06:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686258386; x=1688850386;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jv2tN0JqBK7d6JW9O3sH3O61Mg4WAY/x7lHveUrWRVk=;
+        b=3KMWfVUkEzATOh1/DghMUglCGUV9387S6S6NpJpiGHH8ZONDQEaaykX5QlVGArTItK
+         wjOTcwSGGvvlDqrSuYgwTAbLQBdi9s8v6cE8TzVeXhT6Rk/XshOklhP1mxMKZR7X/IqF
+         ldHzZrjoYAmwtMQPAT/i3C0Lp8RBeZV7QYWmCjXadPOBSIPh/DLTQKhZ4GicoR423AwX
+         6fli/EXqF1fvpHn8jYpOCeCx+P1c+CDwZtYI0EAjNptd+gf9P2QQs3gqh9GD8Tov+Jaw
+         u5QdAth6q54HcsEuCxP7PRippTvMTMfPN5ILaOapyuu6O12ibiBFqdTQ56s8LlY3gZYP
+         PY1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686258386; x=1688850386;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jv2tN0JqBK7d6JW9O3sH3O61Mg4WAY/x7lHveUrWRVk=;
+        b=KInBVXkutZqml3TTCrIWO21x7U3nvlGRSBk/fY1cILj/JWXyY/jv+uxWj3jiRx2UZJ
+         PomJiyJeVUPxCygTN/T2kQalLRywfqi3LlU0vtIKNBjF+ORduaqFxihtyJpdMZl1tHrt
+         5rWwqZ727O3ijdv9dqb0fyb34CfHJS7Qe3sAQl0gI0trQg5Pd7k3ueVeV1BPDbxRo2Um
+         ndtcLN6aWLo7DmYBUrf+2zv765QDvr+Nx3h65Cn3tljPcVfhtyFhBOhmyVp5ICfLE5JK
+         lSyaZWWzftD7TwuVYZIh4lq7+qsGZRfu604BBU+1P61n4obGw3GBWEwCOIRFyiSH92wL
+         14jQ==
+X-Gm-Message-State: AC+VfDzyTU+WCeWcDrkbAQhDHZ8igw0piiEekZi9dcBJeE+z1mPgnPVP
+        GAxcHhIWEN/DJg/XpnrVP0rFlfOlt5Zw4X+BaTf2GAHZ8UU=
+X-Google-Smtp-Source: ACHHUZ5jjIPNAv3M5nDF/cvGyS1MuQrKg/+FZbWKf8z85iPhpEtK8NV11FC1SjohA/BTdNKHnf3kIg==
+X-Received: by 2002:a17:902:ced0:b0:1b0:2a98:90d4 with SMTP id d16-20020a170902ced000b001b02a9890d4mr302835plg.3.1686258385884;
+        Thu, 08 Jun 2023 14:06:25 -0700 (PDT)
+Received: from bsegall-glaptop.localhost (c-73-158-249-138.hsd1.ca.comcast.net. [73.158.249.138])
+        by smtp.gmail.com with ESMTPSA id b16-20020a170902d51000b001af98dcf958sm1829384plg.288.2023.06.08.14.06.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 14:06:24 -0700 (PDT)
+From:   Benjamin Segall <bsegall@google.com>
+To:     Hao Jia <jiahao.os@bytedance.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, mingo@kernel.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        mgorman@techsingularity.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 4/4] sched/core: Avoid multiple calling
+ update_rq_clock() in unthrottle_offline_cfs_rqs()
+References: <20230608063312.79440-1-jiahao.os@bytedance.com>
+        <20230608063312.79440-5-jiahao.os@bytedance.com>
+Date:   Thu, 08 Jun 2023 14:06:21 -0700
+In-Reply-To: <20230608063312.79440-5-jiahao.os@bytedance.com> (Hao Jia's
+        message of "Thu, 8 Jun 2023 14:33:12 +0800")
+Message-ID: <xm26zg59acky.fsf@google.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] memfd: Check for non-NULL file_seals in memfd_create()
- syscall
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org,
-        =?UTF-8?Q?Marc-Andr=c3=a9_Lureau?= <marcandre.lureau@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-References: <20230607132427.2867435-1-roberto.sassu@huaweicloud.com>
- <20230607102131.11964c87b1078374c9d4b341@linux-foundation.org>
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-In-Reply-To: <20230607102131.11964c87b1078374c9d4b341@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwAHx02iQoJkyvgYAw--.4695S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxuF4xCrWUtw1kGr1DXrW8Zwb_yoWrurWfpF
-        WUXayDGr40qry8Xr1xAF1j9ryUK3ZFyF1rXr97ArWrAF1qv3Z8Aw4DJF429ryDCr45Zw17
-        Xa1kJF97KF18AaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyKb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04
-        k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF
-        7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUOyCJDUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQACBF1jj45wSQAAsB
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,NICE_REPLY_A,PDS_RDNS_DYNAMIC_FP,RCVD_IN_MSPIKE_BL,
-        RCVD_IN_MSPIKE_L3,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/7/2023 7:21 PM, Andrew Morton wrote:
-> On Wed,  7 Jun 2023 15:24:27 +0200 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
-> 
->> From: Roberto Sassu <roberto.sassu@huawei.com>
->>
->> Ensure that file_seals is non-NULL before using it in the memfd_create()
->> syscall. One situation in which memfd_file_seals_ptr() could return a NULL
->> pointer is when CONFIG_SHMEM=n.
-> 
-> Thanks.  Has thie crash actually been demonstrated?
+Hao Jia <jiahao.os@bytedance.com> writes:
 
-Welcome. Yes, I noticed it when booting Fedora 38:
+> This WARN_DOUBLE_CLOCK warning is triggered during cpu offline.
+> ------------[ cut here ]------------
+> rq->clock_update_flags & RQCF_UPDATED
+> WARNING: CPU: 0 PID: 3323 at kernel/sched/core.c:741
+> update_rq_clock+0xaf/0x180
+> Call Trace:
+>  <TASK>
+>  unthrottle_cfs_rq+0x4b/0x300
+>  rq_offline_fair+0x89/0x90
+>  set_rq_offline.part.118+0x28/0x60
+>  rq_attach_root+0xc4/0xd0
+>  cpu_attach_domain+0x3dc/0x7f0
+>  partition_sched_domains_locked+0x2a5/0x3c0
+>  rebuild_sched_domains_locked+0x477/0x830
+>  rebuild_sched_domains+0x1b/0x30
+>  cpuset_hotplug_workfn+0x2ca/0xc90
+>  ? balance_push+0x56/0xf0
+>  ? _raw_spin_unlock+0x15/0x30
+>  ? finish_task_switch+0x98/0x2f0
+>  ? __switch_to+0x291/0x410
+>  ? __schedule+0x65e/0x1310
+>  process_one_work+0x1bc/0x3d0
+>  worker_thread+0x4c/0x380
+>  ? preempt_count_add+0x92/0xa0
+>  ? rescuer_thread+0x310/0x310
+>  kthread+0xe6/0x110
+>  ? kthread_complete_and_exit+0x20/0x20
+>  ret_from_fork+0x1f/0x30
+>
+> The rq clock has been updated before the set_rq_offline()
+> function runs, so we don't need to call update_rq_clock() in
+> unthrottle_offline_cfs_rqs().
 
-Jun 07 11:45:17 localhost kernel: BUG: kernel NULL pointer dereference, address: 0000000000000000
-Jun 07 11:45:17 localhost kernel: #PF: supervisor write access in kernel mode
-Jun 07 11:45:17 localhost kernel: #PF: error_code(0x0002) - not-present page
-Jun 07 11:45:17 localhost kernel: PGD 0 P4D 0
-Jun 07 11:45:17 localhost kernel: Oops: 0002 [#1] PREEMPT SMP NOPTI
-Jun 07 11:45:17 localhost kernel: CPU: 0 PID: 752 Comm: dbus-broker-lau Not tainted 6.4.0-rc1+ #596
-Jun 07 11:45:17 localhost kernel: Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.13.0-1ubuntu1.1 04/01/2014
-Jun 07 11:45:17 localhost kernel: RIP: 0010:__do_sys_memfd_create+0x2a4/0x320
-Jun 07 11:45:17 localhost kernel: Code: ff 83 e3 02 0f 84 6a ff ff ff 49 81 7d 28 00 cd 24 82 74 0c 4c 89 ef e8 5a 6c 27 00 84 c0 74 29 49 8b 45 20 48 05 88 04 00 0>
-Jun 07 11:45:17 localhost kernel: RSP: 0018:ffffc900007d3ef8 EFLAGS: 00010246
-Jun 07 11:45:17 localhost kernel: RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
-Jun 07 11:45:17 localhost kernel: RDX: 0000000000000003 RSI: 0000000000000004 RDI: ffff888012ab1600
-Jun 07 11:45:17 localhost kernel: RBP: ffff888025eb4d60 R08: 0000000000000000 R09: 0000000000000000
-Jun 07 11:45:17 localhost kernel: R10: ffffffff83524c90 R11: 0000000000000000 R12: 000000000000000c
-Jun 07 11:45:17 localhost kernel: R13: ffff888012ab1600 R14: ffff888025eb4d66 R15: 0000000000000000
-Jun 07 11:45:17 localhost kernel: FS:  00007f4ef466de80(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
-Jun 07 11:45:17 localhost kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-Jun 07 11:45:17 localhost kernel: CR2: 0000000000000000 CR3: 000000000e7fe000 CR4: 0000000000350ef0
-Jun 07 11:45:17 localhost kernel: Call Trace:
-Jun 07 11:45:17 localhost kernel:  <TASK>
-Jun 07 11:45:17 localhost kernel:  do_syscall_64+0x3b/0x90
-Jun 07 11:45:17 localhost kernel:  entry_SYSCALL_64_after_hwframe+0x72/0xdc
-Jun 07 11:45:17 localhost kernel: RIP: 0033:0x7f4ef4a0dd2d
-Jun 07 11:45:17 localhost kernel: Code: c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 0>
-Jun 07 11:45:17 localhost kernel: RSP: 002b:00007fff308c5b58 EFLAGS: 00000246 ORIG_RAX: 000000000000013f
-Jun 07 11:45:17 localhost kernel: RAX: ffffffffffffffda RBX: 00005597c14742d8 RCX: 00007f4ef4a0dd2d
-Jun 07 11:45:17 localhost kernel: RDX: 00007f4ef49dfa5b RSI: 0000000000000003 RDI: 00005597c0b8f778
-Jun 07 11:45:17 localhost kernel: RBP: 00007fff308c5b80 R08: 0000000000000000 R09: 00007fff308c5fa0
-Jun 07 11:45:17 localhost kernel: R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-Jun 07 11:45:17 localhost kernel: R13: 00007fff308c5e60 R14: 00007fff308c5c20 R15: 00007fff308c5c00
-Jun 07 11:45:17 localhost kernel:  </TASK>
-Jun 07 11:45:17 localhost kernel: Modules linked in: sunrpc intel_rapl_msr intel_rapl_common kvm_amd snd_hda_codec_generic ccp snd_hda_intel snd_intel_dspcfg iTCO_w>
-Jun 07 11:45:17 localhost kernel: CR2: 0000000000000000
-Jun 07 11:45:17 localhost kernel: ---[ end trace 0000000000000000 ]---
-
-Thanks for picking the patches. If it is still possible, it seems
-that the Fixes tag is incorrect. The fixed commit should be:
-
-c3b1b1cbf002 ("ramfs: add support for "mode=" mount option")
-
-Roberto
-
->> --- a/mm/memfd.c
->> +++ b/mm/memfd.c
->> @@ -371,12 +371,15 @@ SYSCALL_DEFINE2(memfd_create,
->>   
->>   		inode->i_mode &= ~0111;
->>   		file_seals = memfd_file_seals_ptr(file);
->> -		*file_seals &= ~F_SEAL_SEAL;
->> -		*file_seals |= F_SEAL_EXEC;
->> +		if (file_seals) {
->> +			*file_seals &= ~F_SEAL_SEAL;
->> +			*file_seals |= F_SEAL_EXEC;
->> +		}
->>   	} else if (flags & MFD_ALLOW_SEALING) {
->>   		/* MFD_EXEC and MFD_ALLOW_SEALING are set */
->>   		file_seals = memfd_file_seals_ptr(file);
->> -		*file_seals &= ~F_SEAL_SEAL;
->> +		if (file_seals)
->> +			*file_seals &= ~F_SEAL_SEAL;
->>   	}
->>   
->>   	fd_install(fd, file);
+I don't think we do in the path from rq_attach_root (though that's easy
+enough to fix, of course).
 
