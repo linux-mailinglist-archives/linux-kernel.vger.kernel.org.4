@@ -2,118 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFD767283BE
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B37B7283C0
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:28:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235947AbjFHP2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 11:28:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55212 "EHLO
+        id S229848AbjFHP2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 11:28:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237100AbjFHP2X (ORCPT
+        with ESMTP id S235704AbjFHP2p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 11:28:23 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7863D2D7E
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 08:28:18 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id 6a1803df08f44-62884fa0e53so6035036d6.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 08:28:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686238097; x=1688830097;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yVT+E1lTqgVRqOMiUmOOqGCFZYtg8Gx2wGfwkHkIhvU=;
-        b=OFvpyrq/lBDNV1vdcmrMuXjLEhmg/ybSi729m+uNossAYd0shYaefVa/nGTQGZUN+I
-         4UlLlEQq/1ayEmGII7lyf8sKBD0xYfs3Hq1EDnrH+RfoDddi2B66B6s6czcPF9Fjtmuh
-         g5nu+hCcDcmPNYD8jX8AtcU7MLzNbWZQBVLkRaQOlcDTLe9KAfiC1fKd+A4E/dBaGgvC
-         joHvAcWMV1365pR1u+FHY7dEPZyuLOlUh2K3SOMKn/Rmn/MUwLpDXp6dvZa87DDuWR2H
-         PVOUXIA4X1heq4LRcsD+0n0VTrAfurE+cgotRdo8G6Vfsxoa8U7gHfLqus6aupkp6rNz
-         dwIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686238097; x=1688830097;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yVT+E1lTqgVRqOMiUmOOqGCFZYtg8Gx2wGfwkHkIhvU=;
-        b=TBrcq+nmxmFVMykKTkuZHONK0k67ELFzh8mLDa2J7DHmQgFvLR6xiDKAeE7/6L609F
-         Z3nNLyO5HiGJSDTkseu4QO8Gu+BsPeB6+0RmoFefD2LON7QuwJv8J+Om26YaBrjOvI+d
-         VosoL56+qWQJ8CxH1GBD77d/NQThiKBJNJUSPMZKwM8qxB62PoZL9eaVXIeA0pziHnf1
-         vXzZnehVFgmwpl3mPTznb1eUd9NDxBXa0jYH9Ld1npUiUSY4n9i59zMY7HyhB153U79m
-         qPqSwDOZR7nIFZhPTp9qyYSkEzpjF+jtcPhQlY6RO+pDbOnbs/Zk+Qe4KDywrZasipvB
-         rMCA==
-X-Gm-Message-State: AC+VfDzW/xQEPhWCe/h71PeSknyAUChzYkwXPeLAn4AyCBBZazWL3TTl
-        fKLqXJ+foj4pZOdm0SRVprAScvioFI++DYmHgTzRYw==
-X-Google-Smtp-Source: ACHHUZ6P2k2Tgyu/59Khxh6JHCZIquDvMKZdtfOoKcWOpAmaVJ+SduwImO/96dcKIS5uRClkC7pY3wVfpuk4MWCqgaU=
-X-Received: by 2002:a05:6214:5010:b0:62b:4e33:a16f with SMTP id
- jo16-20020a056214501000b0062b4e33a16fmr2439142qvb.28.1686238097551; Thu, 08
- Jun 2023 08:28:17 -0700 (PDT)
+        Thu, 8 Jun 2023 11:28:45 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E3CAF2D70;
+        Thu,  8 Jun 2023 08:28:36 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 32679AB6;
+        Thu,  8 Jun 2023 08:29:22 -0700 (PDT)
+Received: from [10.57.83.198] (unknown [10.57.83.198])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CB8B53F6C4;
+        Thu,  8 Jun 2023 08:28:35 -0700 (PDT)
+Message-ID: <b24a6c7b-27fc-41c0-5c82-15696b4a7dc1@arm.com>
+Date:   Thu, 8 Jun 2023 16:28:24 +0100
 MIME-Version: 1.0
-References: <20230607-arm64-flush-svcr-v1-1-7821a6199e0a@kernel.org>
-In-Reply-To: <20230607-arm64-flush-svcr-v1-1-7821a6199e0a@kernel.org>
-From:   Anders Roxell <anders.roxell@linaro.org>
-Date:   Thu, 8 Jun 2023 17:28:06 +0200
-Message-ID: <CADYN=9+OckUJ2x4FuMKAgxekhWibySZzMz=r-JbaCVZWyG8_GA@mail.gmail.com>
-Subject: Re: [PATCH] arm64/fpsimd: Exit streaming mode when flushing tasks
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Naresh Kamboju <naresh.kamboju@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: Question about reserved_regions w/ Intel IOMMU
+To:     Baolu Lu <baolu.lu@linux.intel.com>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>, iommu@lists.linux.dev
+References: <CAKgT0UezciLjHacOx372+v8MZkDf22D5Thn82n-07xxKy_0FTQ@mail.gmail.com>
+ <CAKgT0UfMeVOz6AOqSvVvzpsedGDiXCNQrjM+4KDv7qJJ1orpsw@mail.gmail.com>
+ <a1cff65b-b390-3872-25b5-dd6bbfb3524c@linux.intel.com>
+Content-Language: en-GB
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <a1cff65b-b390-3872-25b5-dd6bbfb3524c@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Jun 2023 at 22:42, Mark Brown <broonie@kernel.org> wrote:
->
-> Ensure there is no path where we might attempt to save SME state after we
-> flush a task by updating the SVCR register state as well as updating our
-> in memory state. I haven't seen a specific case where this is happening or
-> seen a path where it might happen but for the cost of a single low overhead
-> instruction it seems sensible to close the potential gap.
->
-> Signed-off-by: Mark Brown <broonie@kernel.org>
+On 2023-06-08 04:03, Baolu Lu wrote:
+> On 6/8/23 7:03 AM, Alexander Duyck wrote:
+>> On Wed, Jun 7, 2023 at 3:40 PM Alexander Duyck
+>> <alexander.duyck@gmail.com> wrote:
+>>>
+>>> I am running into a DMA issue that appears to be a conflict between
+>>> ACS and IOMMU. As per the documentation I can find, the IOMMU is
+>>> supposed to create reserved regions for MSI and the memory window
+>>> behind the root port. However looking at reserved_regions I am not
+>>> seeing that. I only see the reservation for the MSI.
+>>>
+>>> So for example with an enabled NIC and iommu enabled w/o passthru I 
+>>> am seeing:
+>>> # cat /sys/bus/pci/devices/0000\:83\:00.0/iommu_group/reserved_regions
+>>> 0x00000000fee00000 0x00000000feefffff msi
+>>>
+>>> Shouldn't there also be a memory window for the region behind the root
+>>> port to prevent any possible peer-to-peer access?
+>>
+>> Since the iommu portion of the email bounced I figured I would fix
+>> that and provide some additional info.
+>>
+>> I added some instrumentation to the kernel to dump the resources found
+>> in iova_reserve_pci_windows. From what I can tell it is finding the
+>> correct resources for the Memory and Prefetchable regions behind the
+>> root port. It seems to be calling reserve_iova which is successfully
+>> allocating an iova to reserve the region.
+>>
+>> However still no luck on why it isn't showing up in reserved_regions.
+> 
+> Perhaps I can ask the opposite question, why it should show up in
+> reserve_regions? Why does the iommu subsystem block any possible peer-
+> to-peer DMA access? Isn't that a decision of the device driver.
+> 
+> The iova_reserve_pci_windows() you've seen is for kernel DMA interfaces
+> which is not related to peer-to-peer accesses.
 
-Applied this onto todays next tag next-20230608 and ran
-kselftest-arm64 on a FVP model.
-I still see the "BUG: KFENCE: memory corruption in
-fpsimd_release_task+0x1c/0x3c".
+Right, in general the IOMMU driver cannot be held responsible for 
+whatever might happen upstream of the IOMMU input. The DMA layer carves 
+PCI windows out of its IOVA space unconditionally because we know that 
+they *might* be problematic, and we don't have any specific constraints 
+on our IOVA layout so it's no big deal to just sacrifice some space for 
+simplicity. We don't want to have to go digging any further into 
+bus-specific code to reason about whether the right ACS capabilities are 
+present and enabled everywhere to prevent direct P2P or not. Other 
+use-cases may have different requirements, though, so it's up to them 
+what they want to do.
 
-I'm trying to use the latest kselftest from today with older next tags
-trying to find when
-this issue started to happen.
+It's conceptually pretty much the same as the case where the device (or 
+indeed a PCI host bridge or other interconnect segment in-between) has a 
+constrained DMA address width - the device may not be able to access all 
+of the address space that the IOMMU provides, but the IOMMU itself can't 
+tell you that.
 
-Cheers,
-Anders
-
-
-> ---
->  arch/arm64/kernel/fpsimd.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
-> index 2fbafa5cc7ac..1627e0efe39a 100644
-> --- a/arch/arm64/kernel/fpsimd.c
-> +++ b/arch/arm64/kernel/fpsimd.c
-> @@ -1649,6 +1649,7 @@ void fpsimd_flush_thread(void)
->
->                 fpsimd_flush_thread_vl(ARM64_VEC_SME);
->                 current->thread.svcr = 0;
-> +               sme_smstop_sm();
->         }
->
->         current->thread.fp_type = FP_STATE_FPSIMD;
->
-> ---
-> base-commit: 44c026a73be8038f03dbdeef028b642880cf1511
-> change-id: 20230607-arm64-flush-svcr-47cc76a8cbbc
->
-> Best regards,
-> --
-> Mark Brown <broonie@kernel.org>
->
+Thanks,
+Robin.
