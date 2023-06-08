@@ -2,137 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9740727ED4
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5116727ED7
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235895AbjFHLdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 07:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49512 "EHLO
+        id S235536AbjFHLd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 07:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232940AbjFHLdD (ORCPT
+        with ESMTP id S235456AbjFHLd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 07:33:03 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C191734;
-        Thu,  8 Jun 2023 04:32:50 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 0B9655FD17;
-        Thu,  8 Jun 2023 14:32:48 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1686223968;
-        bh=ArxZiYt0qp/hxI5ZPD4sF0OBh5tn0afXnbxC4eDwIyU=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=bNFA395QIg2BsNA+rX3UafWQ9sOwa9yOQtgOmsdIl2UtMWN8utqHCarZsMceg9yum
-         KO5qBWnXTDOGZ5d09RwLOdneTdZYl9ZTuOfvqgygCi6sfwggkdbHzBgXuhIX20l5sV
-         s4U9VZqLgVMxUL01k51Hdt1XY2TusRAQMDEodZVEkdYMoamrXWKTus5+M8S1lPSh6V
-         qTwKcegboO/TsdBUWvvRlc8reLOrBEP4+iW/J1pckPOIRxucnuR0daee7Gq+CAih68
-         RaV64ihAmqTqzBvJKJ+A0ixZCbKMQkadopYAYDLjZxD/4b6WOKuxyquvRd9FmcglkR
-         TGwxwbPprNI0A==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Thu,  8 Jun 2023 14:32:44 +0300 (MSK)
-Date:   Thu, 8 Jun 2023 14:32:44 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Jerome Brunet <jbrunet@baylibre.com>
-CC:     Yu Tu <yu.tu@amlogic.com>, <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        <kelvin.zhang@amlogic.com>, <qi.duan@amlogic.com>
-Subject: Re: [PATCH V9 3/4] clk: meson: S4: add support for Amlogic S4 SoC
- PLL clock driver
-Message-ID: <20230608113244.jvf7w4flwjy5soud@CAB-WSD-L081021>
-References: <20230517070215.28463-1-yu.tu@amlogic.com>
- <20230517070215.28463-4-yu.tu@amlogic.com>
- <1j5y804q7u.fsf@starbuckisacylon.baylibre.com>
- <73acf297-3f60-1ce1-2f05-af048aa37199@amlogic.com>
- <1jttvi9vnq.fsf@starbuckisacylon.baylibre.com>
+        Thu, 8 Jun 2023 07:33:26 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18307270B
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 04:33:25 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-97668583210so79241866b.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 04:33:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686224003; x=1688816003;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IqHeY5G7mIeiooI7ja9w9njq/KqOX5B4nHAoGGVWiBk=;
+        b=y3dQmK7aPMR+m7bDoIYNkOxdVSh4YHDPLQ6ZD/TklPbRUFXC3ugRN4H47WJzBWQZin
+         VI+qaEpaNDYf9R21IHg6Drqcqq5TklxpZNFXf1rjDa0IlFVoNFH01SdPDuJCFAH4y4bi
+         brbYQybxma6THxKe8VbzdNkqPhu+dv9X22rbK5cCu5lHu/eF3yMswWIA8rSfPPMzdlFO
+         2nqO0pfeCqUOFWsZxc2u7NxxDsI+5AgfTJ2j7GZIElSyKC+CWg4U0iMIEUJQodualwNG
+         l7rwotR3e2nWo2eFVeX+IZGEON8e5cppPZCgNdlDpYUXg45qqrlq/R6NzPNmR2UY++yc
+         4YpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686224003; x=1688816003;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IqHeY5G7mIeiooI7ja9w9njq/KqOX5B4nHAoGGVWiBk=;
+        b=MtRIuR2Ef4R9XHTTPHqZfsl+Mw8mvUk3iykIoqjubCzC/LwQd/IcIBrO/6uF2BvZJ8
+         hNbNw1AkD4uiIm81q1qX99qKIZJjdT+5RhcgE5e2zyDqXqBi8T8CmuTSus0Sgg0fIMew
+         c5kjd0QHNVzVVXDeR36ZFzGo/Luz1aE3NeKWVRGO4An5GoPwCpC2Ps1eNmX0BX4qSV2g
+         ZPnSrlwkYgcWc94cKsxfzCNO8a8LlHbYMxkWFhgW/lKXMcCgY1veOGUgGBd1TIfLyV+Y
+         b62zLOGzIJSOh+5Q3sKbDdu1A1y+wUw0PVq3Ni5folUYs6ABI7kmiqfwcgNg74fQODek
+         W5RQ==
+X-Gm-Message-State: AC+VfDwbTkQ9hdGwEpMxHW5dn5vRbhtgJfupM9VZh3445WTCOJ0Hg46/
+        VgA0gNAH84vnyf+LksmaAdfFaQ==
+X-Google-Smtp-Source: ACHHUZ6aQyz91+hCmVLZTEti1T1pr0dOoizk+qwE1qd041u3uncqQAvrfQ/LD78OhEvNKifas2zDxA==
+X-Received: by 2002:a17:907:3f13:b0:96a:19d8:f082 with SMTP id hq19-20020a1709073f1300b0096a19d8f082mr11607970ejc.25.1686224003570;
+        Thu, 08 Jun 2023 04:33:23 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id n15-20020a170906b30f00b0096f67b55b0csm585508ejz.115.2023.06.08.04.33.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jun 2023 04:33:23 -0700 (PDT)
+Message-ID: <093c23a6-1c0f-6e86-3abb-a8267ebeed52@linaro.org>
+Date:   Thu, 8 Jun 2023 13:33:21 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1jttvi9vnq.fsf@starbuckisacylon.baylibre.com>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/08 06:55:00 #21458577
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [RESEND PATCH v1 1/2] dt-bindings: misc: fastrpc: add fastrpc
+ group IDs property
+Content-Language: en-US
+To:     Ekansh Gupta <quic_ekangupt@quicinc.com>,
+        srinivas.kandagatla@linaro.org, linux-arm-msm@vger.kernel.org
+Cc:     ekangupt@qti.qualcomm.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, fastrpc.upstream@qti.qualcomm.com,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, devicetree@vger.kernel.org
+References: <1686155407-20054-1-git-send-email-quic_ekangupt@quicinc.com>
+ <1686155407-20054-2-git-send-email-quic_ekangupt@quicinc.com>
+ <44267461-e6f9-b549-a8eb-cba76384660b@linaro.org>
+ <ced52be4-d5eb-2dcb-ce8a-f737fbcab1b6@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ced52be4-d5eb-2dcb-ce8a-f737fbcab1b6@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Jerome,
+On 08/06/2023 12:36, Ekansh Gupta wrote:
+> 
+> 
+> On 6/8/2023 12:14 AM, Krzysztof Kozlowski wrote:
+>> On 07/06/2023 18:30, Ekansh Gupta wrote:
+>>> Add "qcom,fastrpc-gids" property to the list of optional properties.
+>>> This property contains the list of privileged group IDs which is
+>>> used to offload process to remote subsystem with increased privileges.
+>>
+>> Why or when anyone would use this property?
+>>
+> This property can be used for the use cases which requires prioritized 
+> access to remote subsystem resources.
 
-On Thu, Jun 08, 2023 at 10:53:31AM +0200, Jerome Brunet wrote:
-> 
-> >>> +
-> >>> +static struct clk_regmap s4_fclk_div4 = {
-> >>> +     .data = &(struct clk_regmap_gate_data){
-> >>> +             .offset = ANACTRL_FIXPLL_CTRL1,
-> >>> +             .bit_idx = 21,
-> >>> +     },
-> >>> +     .hw.init = &(struct clk_init_data){
-> >>> +             .name = "fclk_div4",
-> >>> +             /*
-> >>> +              * For more information, please refer to s4_fixed_pll_dco.
-> >>> +              */
-> >> While div2 and div3 got an explanation from previous SoCs, they others -
-> >> like div4/div7/etc ... - have been able to cope with rw ops so far.
-> >> Why is the S4 different for all these clocks ?
-> >
-> > The chip was changed fixed pll for security reasons.
-> >
-> > Fixed PLL registers are not writable in the kernel phase. Write of fixed
-> > PLL-related register will cause the system to crash.
-> >
-> 
-> That is definitely worth mentionning
-> 
-> >> Requiring RO ops (or fishy clock flags) is usually a sign that a clock
-> >> is used without an appropriate driver.
-> >>
-> 
-> Neil is currently dealing with the dt-bindings, please
-> * Adjust your patchset accordingly
-> * Wait for his v2 to land, you'll need it.
-> 
+This does not help me much yet.... Which systems or boards need
+prioritized access?
 
-I saw Neil patch series with merging 'private' and 'public' clock
-bindings parts. Should I send the same patchset for a1 clocks after v6.5
-landed?
-
-> >>> +             .ops = &clk_regmap_gate_ro_ops,
-> >>> +             .parent_hws = (const struct clk_hw *[]) {
-> >>> +                     &s4_fclk_div4_div.hw
-> >>> +             },
-> >>> +             .num_parents = 1,
-> >>> +     },
-> >>> +};
-> >>> +
+>>>
+>>> Signed-off-by: Ekansh Gupta <quic_ekangupt@quicinc.com>
+>>> ---
+>>>   Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml | 6 ++++++
+>>>   1 file changed, 6 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml b/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+>>> index 1ab9588..2a2124f 100644
+>>> --- a/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+>>> +++ b/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+>>> @@ -57,6 +57,11 @@ properties:
+>>>         Virtual machine IDs for remote processor.
+>>>       $ref: "/schemas/types.yaml#/definitions/uint32-array"
+>>>   
+>>> +  qcom,fastrpc-gids:
+>>> +    description:
+>>> +      Group IDs for fastrpc.
+>>
+>> You just pasted here property name. It does not help me to understand
+>> what's this. Explain in description.
+>>
+> I'll add more details here when I re-submit the patch.
+>>> +    $ref: "/schemas/types.yaml#/definitions/uint32-array"
+>>
+>> Drop quotes.
+>>
+>> missing min/maxItems.
+>>
+> I'll update this in v2. Thanks for reviewing.
+>>> +
+>>>     "#address-cells":
+>>>       const: 1
+>>>   
+>>> @@ -120,6 +125,7 @@ examples:
+>>>               qcom,glink-channels = "fastrpcglink-apps-dsp";
+>>>               label = "sdsp";
+>>>               qcom,non-secure-domain;
+>>> +            qcom,fastrpc-gids = <2908>
+>>
+>> Eh, what does 2908 stands for? Why not 3012 or 1842? How anyone can
+>> figure this out?
+>>
+> There is no hard restriction for this value to be 2908, it can be 
+> anything. Just that the process which needs a privileged offload to any 
+> remote subsystem should have the same gid which is defined here, whether 
+> it is 2908 or anything else.
 > 
-> _______________________________________________
-> linux-amlogic mailing list
-> linux-amlogic@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-amlogic
+> The intention of having 2908 in example is because this is used in 
+> Android world where any process running with 2908 gid can offload as 
+> privileged process to remote subsystem.
+> Ref: 
+> https://review.lineageos.org/c/LineageOS/android_device_motorola_sm7250-common/+/305612/4/config.fs
+> 
+> But, it can be set to anything just that the process also needs to adapt 
+> to this gid.
 
--- 
-Thank you,
-Dmitry
+So this is process ID? Group ID? GID? Why would you ever encode group
+IDs, which change in every installation, or process IDs, which change
+every boot, in DTS common for all devices?
+
+This is not a DT property.
+
+Best regards,
+Krzysztof
+
