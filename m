@@ -2,127 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72504727923
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5033E727929
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:49:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233106AbjFHHsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 03:48:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42376 "EHLO
+        id S233096AbjFHHtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 03:49:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233143AbjFHHrm (ORCPT
+        with ESMTP id S233016AbjFHHtI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 03:47:42 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443D32126
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 00:47:31 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-30e3caa6aa7so303860f8f.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 00:47:31 -0700 (PDT)
+        Thu, 8 Jun 2023 03:49:08 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA59210C
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 00:49:06 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-51480d3e161so399398a12.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 00:49:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686210450; x=1688802450;
-        h=content-transfer-encoding:cc:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pKpO5ItYiMJJEW+sejs/pUx6xuufVOGsXiL4H+U2QwY=;
-        b=VRapvNbs5TXGVO1BxVueVxAZD0DTuxkR7z+FFcdZQ/M4+d2mDQcPgQBG+rk4w3CiMJ
-         n5DGxnLn5UYVzwS3kqnNYZW2EBiaZDLyrrqZ2kKur2Gq/TlX4T2S1//Gcm+r6hZjL8R9
-         LOaDcZUftcq+xcSn43bZt4NN+oFznjt1EMPIXdu/iFo4un+jotj1GY61o0h94paoobTk
-         K3GyC8q03HLXlkXk4UzzjmzF54ihv6AoE9mZo0pdUSp2u/7ej6V9rULUnkQsNesmSpc8
-         q86ux17YDjsKVl7KnD4SwxIvalG699Pl2hib4Oi+a5KOBKEdkIReMu5+Cqbltq9TSt/v
-         1q5Q==
+        d=linaro.org; s=google; t=1686210545; x=1688802545;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wKXuqqogfGtV6X2iudgEbDe3qPnP59JxR6B3QZM/6Dc=;
+        b=bhf+RuA4cxddlwxZKvK2wGkOnl/9IsTFmePcG64J8c5+dhVU8H5Ar6PU7SXUoD134P
+         X94MJk/g8AZRGzJdI3PPL2V1bHwEfi5J7Qg825NZjE8x82rCjKx1cQS/z6JUXTXDApM+
+         PBucjFaVmiMgyg3Vp9mAk8oy9p+Q+rUsKwjnWIPQms3F9ZxG9ZVPU5a/ru/vldHfmfSn
+         +sMw8fBv1FELUTlQcjlkKmHwwski8uJk6bBsfw7qrBeHrOYiaOlqpSyxWqTy3bYMn+Jb
+         0njLxhFKb4sFdZLjlURFzZcQ+OPrQSLBjV4dErXv1gcMV54WuJzf9HVlv/4Q8wMzsIM1
+         9gjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686210450; x=1688802450;
-        h=content-transfer-encoding:cc:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=pKpO5ItYiMJJEW+sejs/pUx6xuufVOGsXiL4H+U2QwY=;
-        b=H47/X4DBABqdL9cOy5Tun0pgaHmvSrTlEEmwJOIvAzgHpgNKJ1gAWTLLAEdhbchFrp
-         V7wmEatmbgX3RGwnkZy9DzcOlBXxf2NfRXCOk6VMHqO3ngLzQ9wKSv7ymboBDAGCucht
-         O4A7efMPtZXMiSRa2D2B8PsiPzaO2dMdWeiC8c8UxNhXp1WR8hDC/KZ86ixz+kOJuITs
-         Cs5HnjXUCy7VVLs2K6OisvUAvt4wi/b66ss0idX6nAzIwnE/OfZpsDT/q74Jo9fm8nR8
-         87aTjivRCdmEcq3a1fo2YwGfAtPcRE/kM+x4LxTBT8QCarkIsV4GqctU/ITfYrqmGQ7T
-         rD1g==
-X-Gm-Message-State: AC+VfDyowDYFGLHLcJ/kziHoi+S/mCBI0+55jkDX2xW0qWmOPWVvq3JV
-        KTqNhu3Z+3MkQ0rc02MIPjyrMBPh34Q=
-X-Google-Smtp-Source: ACHHUZ7FLCvn48wU8ttK/wqkrjcYnTcAakUdl/pruduaGLnlji9N1PUvK/8kk/UjPBh0vzwGCI0Ciw==
-X-Received: by 2002:a05:6000:4f:b0:306:41d3:fcb9 with SMTP id k15-20020a056000004f00b0030641d3fcb9mr6440745wrx.27.1686210449445;
-        Thu, 08 Jun 2023 00:47:29 -0700 (PDT)
-Received: from [192.168.0.210] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.googlemail.com with ESMTPSA id x4-20020a05600c21c400b003f72d7dc66esm1082613wmj.13.2023.06.08.00.47.28
+        d=1e100.net; s=20221208; t=1686210545; x=1688802545;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wKXuqqogfGtV6X2iudgEbDe3qPnP59JxR6B3QZM/6Dc=;
+        b=IibFDBMq+OKjtbrCIJqz5+SPhnNPhA9E5tBw3Q7IqszAS0cviy8IWNrGf6qM8robED
+         osJyicO7Cijo8pxFB1xxz/NiroSVjs5iCoA1mceU1WsviSAdwZnc+31/KOO6248QT2ms
+         /C8wNjwuHyFIZUbmzGk0arEghodgzmE5Eny3KvK+8CNrYz6fr1nVzR23hXUyMvnV9AMV
+         DZ3B9OS+yEowzfT+TB2kB0YAIORD1auqtLCow6AJtIlgi87S1Cmz/gZG4yHEZlqpLSB2
+         no/SwiKZz1cRFesVRNsPqtTsw0HIfkqwuyRF9CUTsHKYih7VJQ96wdQ6ZiDuln4zW7qS
+         5Vsg==
+X-Gm-Message-State: AC+VfDwHY2gKoHIvqu4alkAO36NPOOHxOdGF/4DFXg0VgqYz5oMFO8Y5
+        KZ6aMeHo6+uN2mFJba+w2ZkyUg==
+X-Google-Smtp-Source: ACHHUZ6yjUk/Bupi3XuBm3zPQr5L3cn8gW6giSpWJdT5x1Wi4H/8UZ3u8kE/ol+rO20wF6MKqMUrxA==
+X-Received: by 2002:a05:6402:6c6:b0:50b:d75d:3155 with SMTP id n6-20020a05640206c600b0050bd75d3155mr7195595edy.37.1686210544721;
+        Thu, 08 Jun 2023 00:49:04 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id u11-20020aa7db8b000000b00514b3a2008esm238999edt.2.2023.06.08.00.49.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 00:47:28 -0700 (PDT)
-Message-ID: <f0265d75-d0e9-9f03-c730-dcc32fcccc69@gmail.com>
-Date:   Thu, 8 Jun 2023 08:47:27 +0100
+        Thu, 08 Jun 2023 00:49:04 -0700 (PDT)
+Message-ID: <7df8ffb6-a544-d10e-5273-fd6c4b368b20@linaro.org>
+Date:   Thu, 8 Jun 2023 09:49:01 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v3 4/5] dt-bindings: phy: realtek: Add the doc about the
+ Realtek SoC USB 2.0 PHY
 Content-Language: en-US
-To:     Qing Zhang <zhangqing@loongson.cn>, loongarch@lists.linux.dev
-From:   "Colin King (gmail)" <colin.i.king@gmail.com>
-Subject: re: LoongArch: Add hardware breakpoints/watchpoints support
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     =?UTF-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Ray Chi <raychi@google.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+References: <20230607062500.24669-1-stanley_chang@realtek.com>
+ <20230607062500.24669-4-stanley_chang@realtek.com>
+ <7cce1d72-6b4d-9fff-32bc-942193388134@linaro.org>
+ <8a88cbee5c6245f2941c700b2bb30697@realtek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <8a88cbee5c6245f2941c700b2bb30697@realtek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 08/06/2023 09:24, Stanley Chang[昌育德] wrote:
+>>> +  realtek,usb-ctrl:
+>>> +    description: The phandle of syscon used to control USB PHY power
+>> domain.
+>>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>>
+>> No, we have power-domains for this.
+> 
+> Maybe I use the word "control power domain" is not well, I just want to control the ldo of usb phy.
+> Revised:
+> The phandle of syscon used to control the ldo of USB PHY.
 
-Static analysis with cppcheck has found an issue in 
-arch/loongarch/kernel/hw_breakpoint.c function hw_breakpoint_arch_parse 
-with the following commit:
+Isn't this still a power domain?
 
-commit edffa33c7bb5a73e90c754c7a497162b77d7c55f
-Author: Qing Zhang <zhangqing@loongson.cn>
-Date:   Sat Feb 25 15:52:57 2023 +0800
+> 
+>>> +
+>>> +patternProperties:
+>>> +  "^phy@[0-3]+$":
+>>> +    type: object
+>>> +    description:
+>>> +      Each sub-node is a PHY device for one XHCI controller.
+>>
+>> I don't think it is true. You claim above that you have 0 as phy-cells, means you
+>> have one phy. Here you say you can have up to 4 phys.
+> 
+> I mean the driver can support up to 4 phys.
 
-     LoongArch: Add hardware breakpoints/watchpoints support
+What driver can or cannot do, does not matter. This is about hardware.
+
+> For RTD1295 has only one phy.
+> For RTD1395 has two phys.
+
+Two phys? So how do you reference them when cells=0?
+
+> 
+>>> +      For most Relatek SoCs, one XHCI controller only support one the USB
+>> 2.0
+>>> +      phy. For RTD1395 SoC, the one XHCI controller has two USB 2.0
+>> PHYs.
+>>> +    properties:
+>>> +      realtek,page0-param:
+>>> +        description: PHY parameter at page 0. The data are the pair of
+>> the
+>>> +          offset and value.
+>>
+>> This needs to be specific. What the heck is "PHY parameter"?
+>>
+>>> +        $ref: /schemas/types.yaml#/definitions/uint32-array
+>>
+>> Array? Then maxItems.
+> I have found other document.
+> It should be a uint32-matrix.
+> I will add the maxItems.
+
+Entire property should be dropped.
+
+> 
+>>> +
+>>> +      realtek,page1-param:
+>>> +        description: PHY parameter at page 1. The data are the pair of
+>> the
+>>> +          offset and value.
+>>> +        $ref: /schemas/types.yaml#/definitions/uint32-array
+>>> +
+>>> +      realtek,page2-param:
+>>> +        description: PHY parameter at page 2. The data are the pair of
+>> the
+>>> +          offset and value. If the PHY support the page 2 parameter.
+>>> +        $ref: /schemas/types.yaml#/definitions/uint32-array
+>>> +
+>>> +      realtek,support-page2-param:
+>>> +        description: Set this flag if PHY support page 2 parameter.
+>>
+>> Why this cannot be deducted from compatible?
+> It can identify by compatible.
+
+So drop it.
+
+> 
+>>
+>>> +        type: boolean
+>>> +
+>>> +      realtek,do-toggle:
+>>> +        description: Set this flag to enable PHY parameter toggle when
+>> port
+>>> +          status change.
+>>
+>> Do not instruct OS what to do. Explain why this is a hardware characteristic.
+> 
+> In my original intention, we hope that this property can be used to control the phy driver do parameter toggle.
+> Is it a hardware characteristic? I don't think it's exactly a hardware feature.
+> Maybe it can be specified by the compatible.
+
+Drop it.
+
+> 
+>>> +        type: boolean
+>>> +
+>>> +      realtek,do-toggle-driving:
+>>> +        description: Set this flag to enable PHY parameter toggle for
+>> adjust
+>>> +          the driving when port status change.
+>>
+>> Do not instruct OS what to do. Explain why this is a hardware characteristic.
+>>
+>>
+>>> +        type: boolean
+>>> +
+>>> +      realtek,check-efuse:
+>>> +        description: Enable to update PHY parameter from reading otp
+>> table.
+>>
+>> Do not instruct OS what to do. Explain why this is a hardware characteristic.
+> 
+> Same above.
+
+So drop all of these.
 
 
-/*
-  * Validate the arch-specific HW Breakpoint register settings.
-  */
-int hw_breakpoint_arch_parse(struct perf_event *bp,
-                              const struct perf_event_attr *attr,
-                              struct arch_hw_breakpoint *hw)
-{
-         int ret;
-         u64 alignment_mask, offset;
-
-^^ alignment mask is not initialized
-
-         /* Build the arch_hw_breakpoint. */
-         ret = arch_build_bp_info(bp, attr, hw);
-         if (ret)
-                 return ret;
-
-         if (hw->ctrl.type != LOONGARCH_BREAKPOINT_EXECUTE)
-                 alignment_mask = 0x7;
-^^ only on this if path is alignment_mask being assigned
-
-         offset = hw->address & alignment_mask;
-         hw->address &= ~alignment_mask;
-
-^^ offset and hw->address being modified by potentially uninitialized 
-alignment_mask
-
-         hw->ctrl.len <<= offset;
-
-         return 0;
-}
-
-
-Regards,
-
-Colin
-
-
+Best regards,
+Krzysztof
 
