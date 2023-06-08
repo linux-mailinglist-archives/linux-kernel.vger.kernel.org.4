@@ -2,264 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95B9E727561
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 05:02:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 978C172755D
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 05:02:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233909AbjFHDCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 23:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54516 "EHLO
+        id S233885AbjFHDBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 23:01:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233906AbjFHDCD (ORCPT
+        with ESMTP id S229536AbjFHDBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 23:02:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781BA211C
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 20:01:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686193273;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VAX/4doU6LsuAU3r2edHNFmZkCL67LPKV2wnDv9MzVE=;
-        b=VAHiboz/VGNJQoWy5Oew2XCnu3FrGHFpqroQpwzYelY+eKu6y5msFOUS4myW8wEWnn/rqY
-        flLvTjD4y7pqHvGEQ+HtFtbKIeqHi9pv7CnxKtfTNWwjNFUjp9y+9aN78U9Y9fRkiKW+Mn
-        BexHCcoX5++VZZQm8hnPInTAhYNuRJE=
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
- [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-632-7wYj0IbJNv2RW3wSpT0b0g-1; Wed, 07 Jun 2023 23:01:12 -0400
-X-MC-Unique: 7wYj0IbJNv2RW3wSpT0b0g-1
-Received: by mail-oi1-f198.google.com with SMTP id 5614622812f47-39826f057a0so198033b6e.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 20:01:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686193271; x=1688785271;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VAX/4doU6LsuAU3r2edHNFmZkCL67LPKV2wnDv9MzVE=;
-        b=Ql3zcSS7Kf9NHz/xiciQf7PoLsC4RFEdo2ruK7k84+N/2Um/H5U0qAgwzBQqKJsuqu
-         SAbXSKRxymWeIu+xbUH9JSedhQJ1kkZj66NBfkKKMPcGCIofRbuc7qMU4Ak/5KYbN6fc
-         Mn2JIfJsveY9OC/i0iPXQrI+4jLBui5L2giDGy2dWlhejohq8aZnA8VLd3gatjKT+4Oi
-         Jc7PSVgVGMmdz2CUqO+uwY+CEFm4U8QQ/07KFl+joa3C9iU1QRhcCHzL1UxqB5oRxtC0
-         k714M/lOxJesTWQ41dQGZZYLR+TnwuVxqWFNtDzWK9IVhaBP8nzBJw2Jta5Ta8f8UsKt
-         LQAg==
-X-Gm-Message-State: AC+VfDxB1YY70InlWex6n846knc0/r4cqFDuXysLYd+eqSfE7I8wu2t2
-        Nm4xUOKB2J2XPpYaASllKJOiL/dC/3N1CNfhIBLIxEYvibcIz9ubFSrosEacPLfdnys5uXI5Iw2
-        XKg+Kcu7X9xDEPETAgZSf2mft
-X-Received: by 2002:a05:6808:6387:b0:39c:6e23:5e07 with SMTP id ec7-20020a056808638700b0039c6e235e07mr2522396oib.12.1686193271486;
-        Wed, 07 Jun 2023 20:01:11 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6quQf8Z87kps9NEUI8o515lXNLfPZudB9sqUZwpIdz/52Yu1Ep2Y4w+w3PWmRwcE3eNHd86Q==
-X-Received: by 2002:a05:6808:6387:b0:39c:6e23:5e07 with SMTP id ec7-20020a056808638700b0039c6e235e07mr2522374oib.12.1686193271110;
-        Wed, 07 Jun 2023 20:01:11 -0700 (PDT)
-Received: from [10.72.13.135] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id s12-20020a17090a5d0c00b0025930e50e28sm1995376pji.41.2023.06.07.20.01.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 20:01:10 -0700 (PDT)
-Message-ID: <8b22fc1e-595a-b729-dd21-2714f22a28a7@redhat.com>
-Date:   Thu, 8 Jun 2023 11:00:59 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 00/14] ceph: support idmapped mounts
+        Wed, 7 Jun 2023 23:01:44 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F202113;
+        Wed,  7 Jun 2023 20:01:38 -0700 (PDT)
+X-UUID: c539b41805a811eeb20a276fd37b9834-20230608
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=Ofi/l0w8Q+5hlbGrLm3Xx85J/eFYi/60zNeYrEGJISI=;
+        b=tT89yOx6g1lJ/gPZnVHlDVjcS27qTiOpdHcPELEFJzVWuz+mTX6dvaOelJouOkaTinAV0nXp02fGjmtvhbQpUxGQi7DeYAeI0HydOVbgN4fUyI4w8ZKsMy8f9VuHLcmPzC+U1Kra2ymP2h3Hu7jwNMUE8yyEXfeFgNGIFP9B8Pg=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.26,REQID:385db9b6-453a-4ae5-b1a4-bb1b914966b3,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:-5
+X-CID-META: VersionHash:cb9a4e1,CLOUDID:49f2bd3d-de1e-4348-bc35-c96f92f1dcbb,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: c539b41805a811eeb20a276fd37b9834-20230608
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <shawn.sung@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1139106175; Thu, 08 Jun 2023 11:01:31 +0800
+Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 8 Jun 2023 11:01:30 +0800
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (172.21.101.237)
+ by mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Thu, 8 Jun 2023 11:01:30 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EPkvsc0xtgt6PRaX41KRim/nohOgTVLPhcNwhSaykN4jgFYsJ3TfpQmsQygiGkelImlb6Fr/iNK/+Ulhli1EHznwy7/aNf4kZtqWQYZPKQJ7YoSCMIDAgpviYp+WzNSfs1GvXUC3yEfTrHRs0E8AQbH/hzXtrNC+Ne8aEquCiPT7YEO1PYPKjrJd5GvljI7KnmVitxWxzj1Lp4OzryVFpKgiLrkibqTKkwoFEgBMpMikcvHkEWnrvcA09t4LNLnyBwLRw4+FALc4K4KjrbguwOiSGxKeP3gfjFWwm9oLSnOSl20RWotcslKc7bdJODhifqFRWoFudMwM0uHYvXJbmw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ofi/l0w8Q+5hlbGrLm3Xx85J/eFYi/60zNeYrEGJISI=;
+ b=kuLtBwJ1yq9CxHfJ2fzNbvzf6t4vWA3/jZyIZ9gp1r1+hKGByjWr4lp9AIcDwePPnTWFAupt67QefwhMuKQRG82PZJwwv7NSf8BS7+eOF9F/X8O1SVWKAmabNwv/FHIDJa8F7tZ1+4YzZ+EQEMC1paZN4US/E13XiPDHgoCkCqhs4osqAH4sKI0B3TfuheTzEy5CZ+gkJL0yC7fjc1qfsv0idiJfKwTvpttgNakpF9HKIRZK+6IcIBF7Iizn3qPCPElVhy3AlPOaEk3lixRI2tWZWHZF0IdZFg2jneyqKEj4EJFdMsBzniZLlYMBGbySxKfv0UwnaXDmE5rG2OpGig==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
+ dkim=pass header.d=mediatek.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ofi/l0w8Q+5hlbGrLm3Xx85J/eFYi/60zNeYrEGJISI=;
+ b=g/prl0Y/AEsniEnXMtc9GbgvKEuM+KfnDzxQuF0FxWAPi+0/ygV8uB5qNOcongsxu9EKBhEw1hg+YbwPyRhvmFEpeHvwkacSoJW9tg5Je395DNQBLNcEdx1mrLgCyjHvNW3+x1Q1pH0QcDRo34T1eEBwbkPiQ01pw5HXOUNKTp0=
+Received: from TYZPR03MB6623.apcprd03.prod.outlook.com (2603:1096:400:1f5::13)
+ by KL1PR03MB6304.apcprd03.prod.outlook.com (2603:1096:820:ab::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.19; Thu, 8 Jun
+ 2023 03:01:28 +0000
+Received: from TYZPR03MB6623.apcprd03.prod.outlook.com
+ ([fe80::dbf3:d56:46f:ec66]) by TYZPR03MB6623.apcprd03.prod.outlook.com
+ ([fe80::dbf3:d56:46f:ec66%5]) with mapi id 15.20.6455.028; Thu, 8 Jun 2023
+ 03:01:28 +0000
+From:   =?utf-8?B?U2hhd24gU3VuZyAo5a6L5a2d6KyZKQ==?= 
+        <Shawn.Sung@mediatek.com>
+To:     "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        =?utf-8?B?U2luZ28gQ2hhbmcgKOW8teiIiOWciyk=?= 
+        <Singo.Chang@mediatek.com>,
+        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        =?utf-8?B?SmFzb24tSkggTGluICjmnpfnnb/npaUp?= 
+        <Jason-JH.Lin@mediatek.com>,
+        =?utf-8?B?TmFuY3kgTGluICjmnpfmrKPonqIp?= <Nancy.Lin@mediatek.com>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "fshao@google.com" <fshao@google.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v1 2/6] dt-bindings: reset: mt8188: Add reset control bits
+ for VDOSYS1
+Thread-Topic: [PATCH v1 2/6] dt-bindings: reset: mt8188: Add reset control
+ bits for VDOSYS1
+Thread-Index: AQHZmQccoZ+M6FRhCUuwkVRvA364Ja9+98iAgAFBMoA=
+Date:   Thu, 8 Jun 2023 03:01:27 +0000
+Message-ID: <a769105743d480c0da846a4c50de43811382626e.camel@mediatek.com>
+References: <20230607061121.6732-1-shawn.sung@mediatek.com>
+         <20230607061121.6732-3-shawn.sung@mediatek.com>
+         <72b71e37-f9e7-b182-824c-163d920723b8@collabora.com>
+In-Reply-To: <72b71e37-f9e7-b182-824c-163d920723b8@collabora.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Cc:     brauner@kernel.org, stgraber@ubuntu.com,
-        linux-fsdevel@vger.kernel.org, Ilya Dryomov <idryomov@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230607180958.645115-1-aleksandr.mikhalitsyn@canonical.com>
-From:   Xiubo Li <xiubli@redhat.com>
-In-Reply-To: <20230607180958.645115-1-aleksandr.mikhalitsyn@canonical.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=mediatek.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYZPR03MB6623:EE_|KL1PR03MB6304:EE_
+x-ms-office365-filtering-correlation-id: 82c64417-75af-410e-df5a-08db67cca739
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: mzelxEdE5MPSvmRA1fISKtQpv8xtqg0x8p8iNZpgQ8tzO2+xVmufYC3SxnK1rXPjxZ9TDNXYEQ4zXbka3ktCsVL/k7dAbhnQxPNWURylk7vA2vfzXuVlGBcEEPXjQ9XHrNnZQc9V07MbM8VcQ3LBOOiEhkYDTqc2ylEevgkohoGVdAFsFVjjTUPTVmanuZokvmOJthejdAJEc0cpWSdM2cidOe19f1BpnDpnEnmaK00vSzMpAgyIGHbq4AhV6ZCwvgKvj8ZiuUDd68h2fBrhvtF/tW2WFwfLTC9EoEU/l7xjvPKmYHphi53BUKXaN4DzzD+1UACMKMljrgCzvZALdazuMrvrXWzq7GV8YvlwQAVtCUx4Q0kSJfuJzIf0wLO5rmLahu1lBwUboSxaPj3C1uFNCdYtZz6U4hnydckum9o4rPdNb97G9+1xCySNcbFdF8kSMdAQJt+HXSneGWU9yCVp4CDT/6jkf+/2y4K0UAhHQ6qt2jQ5mFf5VL14HF2MoTghSo16TeWgd0RtuIYXdW0KHgmfeqSUbYoGL/3ccLS66ESNsr9iZqpEsF9oaTgQED0ZwArCGWEvwNA9t0CDY5EKnTSBwQrvk8ruMNiFPHCtyarVKKKHUO6hrauOhcxV
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR03MB6623.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(136003)(346002)(396003)(366004)(451199021)(86362001)(7416002)(2906002)(54906003)(110136005)(41300700001)(38100700002)(8676002)(8936002)(5660300002)(36756003)(85182001)(122000001)(66446008)(4326008)(76116006)(316002)(64756008)(66476007)(66946007)(66556008)(6486002)(71200400001)(38070700005)(478600001)(186003)(83380400001)(2616005)(6512007)(6506007)(26005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?L2pIZ01KV2JnOEpVd1RSVDJVVkRLNVFaUnc1dlV3Z203S2hPWFBEc3c0dldU?=
+ =?utf-8?B?dzk5U2hjNnBFN014WVBpRjRVV3dvWFNTRmkwS21wd1U2TCtGVGRkNnNsNlZo?=
+ =?utf-8?B?OXl2Yk5YSWRXRGtRTXNaRHJZT2I2K29YaVlzOTJOVWZyOHlhL3RqWjI3U3B2?=
+ =?utf-8?B?LzVVMFBRb2tGUzVaK1o3N2ZCNXg3Y3M0emZqOUZ0cUQva0dUNkJndjRETndu?=
+ =?utf-8?B?dTFNTmZyc0xjNDZqRUNPdURxMnR1aDUyVWxzQ0hYdlBLc21Ea1kxRnJidkNV?=
+ =?utf-8?B?U1NIY2YzYVZkOFdUNnVlN3RxZUFtT1Z2VXdRbUFiYnZFdXFENEdrbkpnYlJK?=
+ =?utf-8?B?YWl1c0wwQTVqNDV2NkVZT2FHZ3FxbUF6dzVhWlJldnc4ejJxTnlKd0E3OVh2?=
+ =?utf-8?B?SmhBeFlPWkVJRDIzbS8ybmJiakNlaVc0RXcvNGJzc1NJQmFxSVV3T0dvSkFQ?=
+ =?utf-8?B?UG1weHVLakdUa0MxWXlZaTBIUmZWNXo3WEhlQkRMdFZCR0kySTNUTFpGbkpO?=
+ =?utf-8?B?ai9mZndBT1I2MFJMRGxKTm1jaXp4SW9pREVMS1JnUmJ1VHdYT21wSmp1QzBs?=
+ =?utf-8?B?R1FqMVVsZmhjRW9pZDJ4SkJNc3hBVVBiME1Ta2NPRFVqYk8ydThLRTArOGxM?=
+ =?utf-8?B?bnNXYkUzakVoK3NDZXlydzBvSEhJVGhvODFPSmdwZ0VPWlRiQlFhNTNJbFVu?=
+ =?utf-8?B?elptZndpbTA4VFdFd3J0UXJzdWdselVNU05MMVQwTlBVRUpvOWhxRkF5U1B4?=
+ =?utf-8?B?b1Z6R2VhTFpuaXNyaTdWV3J0NnlEOFZKeW04dnFLczl1UjZoZDBhOC8wdEJq?=
+ =?utf-8?B?MEE4Mnh3VTlmNXluelJIejhrN25xbEhITDdwbzRIVFFWaFd0R2VoVUdwdHBQ?=
+ =?utf-8?B?VGs4N1BLS0RWTzNnK04weEtBNXA2M3IwQlJ3SUs5QktKWXFwMW8raUZ3QjQ1?=
+ =?utf-8?B?SEZwdTlKMGlKZDdOWXp4KzNLTlFhd2R3aEpsMjQxUEFhQjhFbllYNkQzTVpM?=
+ =?utf-8?B?TUNqNy95cTlNWUk4clIyMW00b3M4MUFGaVdBZ0dVZWFzZVducFZXM1pOVGlT?=
+ =?utf-8?B?WVRLUTV4UDg0WWx4WUNSMlZadm0wOXRaeUw1NFRmTjVZVnVubnZZekozU1Mw?=
+ =?utf-8?B?djdtbmJINDMyd2d1dXY2R2I3ZHBlUHFVQWdlVE1LYTl6MTdBVklHOVVTTVp2?=
+ =?utf-8?B?SXNiMS82SWUycDF3NVpJTnZmZTB2blRuenVMdDA5MldPNDFhWk5vd1JUUjZ6?=
+ =?utf-8?B?emFhMGR2eWZXM2J3NTRlcXpTUDJhUUVWVWFpa0VtaGZSblh2YmU4a25SaVFy?=
+ =?utf-8?B?bktKOFFuZHlzT2VuL1lqSFNYck4xZjVkemxRUmkzc1J5Vi81SkpQWk1oTTNU?=
+ =?utf-8?B?SERpbWM2ejl2MXBFdytFWGU0VW0xTGwxa3VES0xiUFJ0NHZVYUxJWHI2bVpF?=
+ =?utf-8?B?b1M1UFhZRnpvQk5Rb1UyTWgwTmhxek1mOGdKRnNWd1JmaFA4SDFjRFV3K3ZE?=
+ =?utf-8?B?RmF0My85OFFNU0dKU2VXUzYwSVNYVGFPa040UG5UNFg4RFJnRDNmNmhIMkUr?=
+ =?utf-8?B?cFlCa1pNMWlHZGNtNWFoV1FsdWo0TUhTR0UzZXNFOEY0U3A4cVl5V0RvZzJj?=
+ =?utf-8?B?cXJoZVVXK250Vm1YQkRyWGRQSkdDdnRGMmp2Y3BIK2U2QmsxWTBITG9rdUhN?=
+ =?utf-8?B?RDZrUVovZVZpMmlBUUQza1puWlFnaUxvcGZtOHRDZFc5U3FacEU2MGRzV0l1?=
+ =?utf-8?B?dDBHanZBWDFDN2FKajFVL1U3SldQR0tNcVJXV3FtV2VvQ0VWaEt4UG9za2tw?=
+ =?utf-8?B?ZG90djJDZ2krOGl0UUJjOUppQS9jTXY2czBMN0thbjcxTndBQXBqamIwUWxo?=
+ =?utf-8?B?NWVtem1Pd0txZldRTmdHeE9vMHpBa1FuZms4QW9Eb1FXelFGYmdvSjNibWRV?=
+ =?utf-8?B?UUxLK0ZjYzlCRDFNTHBMbUNUNk9Td1hBYndockl5TnhuU0tMQWgrRy93TEtU?=
+ =?utf-8?B?alFYODRHcTVtamNtd0VJekdEaERKbmZrQ0l4ekRBaStnb0V6OVFzRWlydDVm?=
+ =?utf-8?B?QVBNdEl6NHROVFd0T0d6L3RraS96a3Q2WTI4d1FSdW5NdEZ2UXM1VVNycFcw?=
+ =?utf-8?B?YXk5a21DSzhYOTBvenNpNkcrbC9XLzVQd1BSVXcxWC8ycHB4c1VvYUNoczFk?=
+ =?utf-8?B?ZWc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <9C526144443D2D4D97EE97207223B298@apcprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR03MB6623.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 82c64417-75af-410e-df5a-08db67cca739
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jun 2023 03:01:27.9210
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: /ho66y/z7QwydZj/tj6PBj9ckr2pN2kH2tWuorX2NPDUu4S52LRTJaIF21gJYMrpzmkFqgb5DKMBRhkFEEwl1A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR03MB6304
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexander,
-
-As I mentioned in V2 thread 
-https://www.spinics.net/lists/kernel/msg4810994.html, we should use the 
-'idmap' for all the requests below, because MDS will do the 
-'check_access()' for all the requests by using the caller uid/gid, 
-please see 
-https://github.com/ceph/ceph/blob/main/src/mds/Server.cc#L3294-L3310.
-
-
-Cscope tag: ceph_mdsc_do_request
-    #   line  filename / context / line
-    1    321  fs/ceph/addr.c <<ceph_netfs_issue_op_inline>>
-              err = ceph_mdsc_do_request(mdsc, NULL, req);
-    2    443  fs/ceph/dir.c <<ceph_readdir>>
-              err = ceph_mdsc_do_request(mdsc, NULL, req);
-    3    838  fs/ceph/dir.c <<ceph_lookup>>
-              err = ceph_mdsc_do_request(mdsc, NULL, req);
-    4    933  fs/ceph/dir.c <<ceph_mknod>>
-              err = ceph_mdsc_do_request(mdsc, dir, req);
-    5   1045  fs/ceph/dir.c <<ceph_symlink>>
-              err = ceph_mdsc_do_request(mdsc, dir, req);
-    6   1120  fs/ceph/dir.c <<ceph_mkdir>>
-              err = ceph_mdsc_do_request(mdsc, dir, req);
-    7   1180  fs/ceph/dir.c <<ceph_link>>
-              err = ceph_mdsc_do_request(mdsc, dir, req);
-    8   1365  fs/ceph/dir.c <<ceph_unlink>>
-              err = ceph_mdsc_do_request(mdsc, dir, req);
-    9   1431  fs/ceph/dir.c <<ceph_rename>>
-              err = ceph_mdsc_do_request(mdsc, old_dir, req);
-   10   1927  fs/ceph/dir.c <<ceph_d_revalidate>>
-              err = ceph_mdsc_do_request(mdsc, NULL, req);
-   11    154  fs/ceph/export.c <<__lookup_inode>>
-              err = ceph_mdsc_do_request(mdsc, NULL, req);
-   12    262  fs/ceph/export.c <<__snapfh_to_dentry>>
-              err = ceph_mdsc_do_request(mdsc, NULL, req);
-   13    347  fs/ceph/export.c <<__get_parent>>
-              err = ceph_mdsc_do_request(mdsc, NULL, req);
-   14    490  fs/ceph/export.c <<__get_snap_name>>
-              err = ceph_mdsc_do_request(fsc->mdsc, NULL, req);
-   15    561  fs/ceph/export.c <<ceph_get_name>>
-              err = ceph_mdsc_do_request(mdsc, NULL, req);
-   16    339  fs/ceph/file.c <<ceph_renew_caps>>
-              err = ceph_mdsc_do_request(mdsc, NULL, req);
-   17    434  fs/ceph/file.c <<ceph_open>>
-              err = ceph_mdsc_do_request(mdsc, NULL, req);
-   18    855  fs/ceph/file.c <<ceph_atomic_open>>
-              err = ceph_mdsc_do_request(mdsc, (flags & O_CREAT) ? dir : 
-NULL, req);
-   19   2715  fs/ceph/inode.c <<__ceph_setattr>>
-              err = ceph_mdsc_do_request(mdsc, NULL, req);
-   20   2839  fs/ceph/inode.c <<__ceph_do_getattr>>
-              err = ceph_mdsc_do_request(mdsc, NULL, req);
-   21   2883  fs/ceph/inode.c <<ceph_do_getvxattr>>
-              err = ceph_mdsc_do_request(mdsc, NULL, req);
-   22    126  fs/ceph/ioctl.c <<ceph_ioctl_set_layout>>
-              err = ceph_mdsc_do_request(mdsc, NULL, req);
-   23    171  fs/ceph/ioctl.c <<ceph_ioctl_set_layout_policy>>
-              err = ceph_mdsc_do_request(mdsc, inode, req);
-   24    216  fs/ceph/locks.c <<ceph_lock_wait_for_completion>>
-              err = ceph_mdsc_do_request(mdsc, inode, intr_req);
-   25   1091  fs/ceph/super.c <<open_root_dentry>>
-              err = ceph_mdsc_do_request(mdsc, NULL, req);
-   26   1151  fs/ceph/xattr.c <<ceph_sync_setxattr>>
-              err = ceph_mdsc_do_request(mdsc, NULL, req);
-
-
-And also could you squash the similar commit into one ?
-
-
-Thanks
-
-- Xiubo
-
-
-On 6/8/23 02:09, Alexander Mikhalitsyn wrote:
-> Dear friends,
->
-> This patchset was originally developed by Christian Brauner but I'll continue
-> to push it forward. Christian allowed me to do that :)
->
-> This feature is already actively used/tested with LXD/LXC project.
->
-> Git tree (based on https://github.com/ceph/ceph-client.git master):
-> https://github.com/mihalicyn/linux/tree/fs.idmapped.ceph
->
-> In the version 3 I've changed only two commits:
-> - fs: export mnt_idmap_get/mnt_idmap_put
-> - ceph: allow idmapped setattr inode op
-> and added a new one:
-> - ceph: pass idmap to __ceph_setattr
->
-> In the version 4 I've reworked the ("ceph: stash idmapping in mdsc request")
-> commit. Now we take idmap refcounter just in place where req->r_mnt_idmap
-> is filled. It's more safer approach and prevents possible refcounter underflow
-> on error paths where __register_request wasn't called but ceph_mdsc_release_request is
-> called.
->
-> I can confirm that this version passes xfstests.
->
-> Links to previous versions:
-> v1: https://lore.kernel.org/all/20220104140414.155198-1-brauner@kernel.org/
-> v2: https://lore.kernel.org/lkml/20230524153316.476973-1-aleksandr.mikhalitsyn@canonical.com/
-> v3: https://lore.kernel.org/lkml/20230607152038.469739-1-aleksandr.mikhalitsyn@canonical.com/#t
->
-> Kind regards,
-> Alex
->
-> Original description from Christian:
-> ========================================================================
-> This patch series enables cephfs to support idmapped mounts, i.e. the
-> ability to alter ownership information on a per-mount basis.
->
-> Container managers such as LXD support sharaing data via cephfs between
-> the host and unprivileged containers and between unprivileged containers.
-> They may all use different idmappings. Idmapped mounts can be used to
-> create mounts with the idmapping used for the container (or a different
-> one specific to the use-case).
->
-> There are in fact more use-cases such as remapping ownership for
-> mountpoints on the host itself to grant or restrict access to different
-> users or to make it possible to enforce that programs running as root
-> will write with a non-zero {g,u}id to disk.
->
-> The patch series is simple overall and few changes are needed to cephfs.
-> There is one cephfs specific issue that I would like to discuss and
-> solve which I explain in detail in:
->
-> [PATCH 02/12] ceph: handle idmapped mounts in create_request_message()
->
-> It has to do with how to handle mds serves which have id-based access
-> restrictions configured. I would ask you to please take a look at the
-> explanation in the aforementioned patch.
->
-> The patch series passes the vfs and idmapped mount testsuite as part of
-> xfstests. To run it you will need a config like:
->
-> [ceph]
-> export FSTYP=ceph
-> export TEST_DIR=/mnt/test
-> export TEST_DEV=10.103.182.10:6789:/
-> export TEST_FS_MOUNT_OPTS="-o name=admin,secret=$password
->
-> and then simply call
->
-> sudo ./check -g idmapped
->
-> ========================================================================
->
-> Alexander Mikhalitsyn (2):
->    fs: export mnt_idmap_get/mnt_idmap_put
->    ceph: pass idmap to __ceph_setattr
->
-> Christian Brauner (12):
->    ceph: stash idmapping in mdsc request
->    ceph: handle idmapped mounts in create_request_message()
->    ceph: allow idmapped mknod inode op
->    ceph: allow idmapped symlink inode op
->    ceph: allow idmapped mkdir inode op
->    ceph: allow idmapped rename inode op
->    ceph: allow idmapped getattr inode op
->    ceph: allow idmapped permission inode op
->    ceph: allow idmapped setattr inode op
->    ceph/acl: allow idmapped set_acl inode op
->    ceph/file: allow idmapped atomic_open inode op
->    ceph: allow idmapped mounts
->
->   fs/ceph/acl.c                 |  6 +++---
->   fs/ceph/dir.c                 |  4 ++++
->   fs/ceph/file.c                | 10 ++++++++--
->   fs/ceph/inode.c               | 29 +++++++++++++++++------------
->   fs/ceph/mds_client.c          | 27 +++++++++++++++++++++++----
->   fs/ceph/mds_client.h          |  1 +
->   fs/ceph/super.c               |  2 +-
->   fs/ceph/super.h               |  3 ++-
->   fs/mnt_idmapping.c            |  2 ++
->   include/linux/mnt_idmapping.h |  3 +++
->   10 files changed, 64 insertions(+), 23 deletions(-)
->
-
+SGkgQW5nZWxvR2lvYWNjaGlubywNCg0KU2hvdWxkIEkgdXNlIGVudW0gaW5zdGVhZCBvZiAjZGVm
+aW5lIGlmIHJlc2V0IElEIG11c3Qgc3RhcnRzIGZyb20gMD8NCg0KVGhhbmtzLA0KSHNpYW8gQ2hp
+ZW4gU3VuZw0KDQpPbiBXZWQsIDIwMjMtMDYtMDcgYXQgMDk6NTEgKzAyMDAsIEFuZ2Vsb0dpb2Fj
+Y2hpbm8gRGVsIFJlZ25vIHdyb3RlOg0KPiAgCSANCj4gRXh0ZXJuYWwgZW1haWwgOiBQbGVhc2Ug
+ZG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW50aWwNCj4geW91IGhhdmUg
+dmVyaWZpZWQgdGhlIHNlbmRlciBvciB0aGUgY29udGVudC4NCj4gIA0KPiBJbCAwNy8wNi8yMyAw
+ODoxMSwgSHNpYW8gQ2hpZW4gU3VuZyBoYSBzY3JpdHRvOg0KPiA+IEFkZCByZXNldCBjb250cm9s
+IGJpdHMgZm9yICBNVDgxODggVkRPU1lTMS4NCj4gPiANCj4gPiBTaWduZWQtb2ZmLWJ5OiBIc2lh
+byBDaGllbiBTdW5nIDxzaGF3bi5zdW5nQG1lZGlhdGVrLmNvbT4NCj4gPiAtLS0NCj4gPiAgIGlu
+Y2x1ZGUvZHQtYmluZGluZ3MvcmVzZXQvbXQ4MTg4LXJlc2V0cy5oIHwgMTIgKysrKysrKysrKysr
+DQo+ID4gICAxIGZpbGUgY2hhbmdlZCwgMTIgaW5zZXJ0aW9ucygrKQ0KPiA+IA0KPiA+IGRpZmYg
+LS1naXQgYS9pbmNsdWRlL2R0LWJpbmRpbmdzL3Jlc2V0L210ODE4OC1yZXNldHMuaA0KPiBiL2lu
+Y2x1ZGUvZHQtYmluZGluZ3MvcmVzZXQvbXQ4MTg4LXJlc2V0cy5oDQo+ID4gaW5kZXggMzc3Y2Rm
+ZGE4MmE5Li40MzlhOWEyNWNhMTkgMTAwNjQ0DQo+ID4gLS0tIGEvaW5jbHVkZS9kdC1iaW5kaW5n
+cy9yZXNldC9tdDgxODgtcmVzZXRzLmgNCj4gPiArKysgYi9pbmNsdWRlL2R0LWJpbmRpbmdzL3Jl
+c2V0L210ODE4OC1yZXNldHMuaA0KPiA+IEBAIC0zMyw0ICszMywxNiBAQA0KPiA+IA0KPiA+ICAg
+I2RlZmluZSBNVDgxODhfVE9QUkdVX1NXX1JTVF9OVU0gICAgICAgICAgICAgICAyNA0KPiA+IA0K
+PiA+ICsvKiBWRE9TWVMxICovDQo+ID4gKyNkZWZpbmUgTVQ4MTg4X1ZETzFfUlNUX01FUkdFMF9E
+TF9BU1lOQyAgICAgICAgIDkNCj4gDQo+IFNvcnJ5LCBJJ3ZlIGp1c3Qgbm90aWNlZCB0aGF0IHRo
+ZXJlJ3Mgbm8gaW5kZXggMCBpbiBwcmV2aW91cw0KPiBkZWZpbml0aW9uczogdGhpcw0KPiBpcyB3
+cm9uZywgaXQgbXVzdCBzdGFydCBmcm9tIDAgYW5kIG11c3QgYmUgc2VxdWVudGlhbC4NCj4gDQo+
+IA0K
