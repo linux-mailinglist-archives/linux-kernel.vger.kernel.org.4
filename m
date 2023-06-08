@@ -2,169 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6DA5727C0F
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3CD6727C16
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:00:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234625AbjFHJ7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 05:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54392 "EHLO
+        id S235671AbjFHKAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 06:00:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235863AbjFHJ7G (ORCPT
+        with ESMTP id S236064AbjFHJ75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 05:59:06 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646472D52;
-        Thu,  8 Jun 2023 02:59:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686218342; x=1717754342;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=lQws4uprA9sr/zsoQh/AXbU7/jhzjZmrrt3upVrA6vA=;
-  b=IG6t/eNOFgwM7kt2UtZ2RCaBRCVSsvnPnSwk6pXIPyolCi/pdbFN3jyz
-   t9SvaqMRncVbQfdZ7L007K/Jf92P6+7clWya6AesqeiTMGGd8IqRWCxmj
-   v6dRhb90T/xQaxnwYkKi0nv+BwLaQ0utFh1u8PAFxcfv8pOyPZ61QaC8w
-   acMESdRR9hw+xPa52ttfCj4kNPJR+2TO4XAornyBy1OToAtZMXW40GkYr
-   yrQdBkR9+j2Kv3BVeZmbJSSapXDuGYQgWmm+n+pyW1dH/zTjEnc9TCqxT
-   OIrHruVryvXLGvGuByUKb2GQbe2U5T30laR4T+cXiQsumlLyIgBljiCRI
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="357273381"
-X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="scan'208";a="357273381"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 02:59:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="660319355"
-X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="scan'208";a="660319355"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga003.jf.intel.com with ESMTP; 08 Jun 2023 02:59:01 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 8 Jun 2023 02:59:00 -0700
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 8 Jun 2023 02:59:00 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Thu, 8 Jun 2023 02:59:00 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.41) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Thu, 8 Jun 2023 02:58:59 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Jxe1S8319iha9WYBEZ4arYLSsJ5taRQx4zjxMUSQA01bFPnq0UC8TwDSGuZ7oExn187Bszt607/t51lVVMZFQqwHzi27r6GavBWjysu2UZWwEMTYb7ObdJGss4aoTw+40NLtQ83Q+pZ3xqnNAgY5TWwNrSjQUNpOIZcD83qOC2qKYejIvGK6dmOxXHLkSTkR1mtS9fYX216l+PCDWT7v1VmT9bQRmtHSZ3kKWLhsHTqXx2qFD4+/Zr9SgrGGjop0Dw/Humcb3sdss8zpdDU/Z+4oaLLUayCZJQJwKSIeawxAMt8b/t92dKh2m5iTNYWmOXDwlWDGdjSVJtGnlGrQwg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lQws4uprA9sr/zsoQh/AXbU7/jhzjZmrrt3upVrA6vA=;
- b=M+K48mLj/MjORhSv8QTgV+/2R50a6D+FBfQzO6xgK9XNxGym3httYMOXBOtbUASKYcsx2+4zLL8nOiAuwAzh6ytJglDmEOLmw65YIVr1r5VImhcrwfsOVQ7zvJ9RD+pr3aoJbgkVYnWsz/dTNp3ZHURB3JWcs+wd5PnFQM7tMxyai1KYVj2yV8E+0ne6eTf0hnJ6QGnJPKt2B+s6k/vW2CYEYrhTi/9uZ3XXSS5locWyIzO7pp6Vohs9+D6XKNixYU+zQPryNkQja8ljxSObH1cQ7RY8ghcMW/eMdBRe4gf/1a3PCPUdsOGQiu997/b5WDtx+m7FJECNj9xLjGd5Ew==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from CY5PR11MB6392.namprd11.prod.outlook.com (2603:10b6:930:37::15)
- by MW6PR11MB8340.namprd11.prod.outlook.com (2603:10b6:303:23e::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Thu, 8 Jun
- 2023 09:58:59 +0000
-Received: from CY5PR11MB6392.namprd11.prod.outlook.com
- ([fe80::5486:41e6:7c9e:740e]) by CY5PR11MB6392.namprd11.prod.outlook.com
- ([fe80::5486:41e6:7c9e:740e%6]) with mapi id 15.20.6455.030; Thu, 8 Jun 2023
- 09:58:59 +0000
-From:   "Liu, Yujie" <yujie.liu@intel.com>
-To:     "ndesaulniers@google.com" <ndesaulniers@google.com>
-CC:     lkp <lkp@intel.com>,
-        "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
-        "Li, Philip" <philip.li@intel.com>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        "guoren@kernel.org" <guoren@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "ardb@kernel.org" <ardb@kernel.org>
-Subject: Re: [PATCH] certs: buffer stderr from openssl unless error
-Thread-Topic: [PATCH] certs: buffer stderr from openssl unless error
-Thread-Index: AQHZiXLsaJQDawZJt0OZH6y+M8afcq9gn5aAgCAsWgA=
-Date:   Thu, 8 Jun 2023 09:58:59 +0000
-Message-ID: <6869338a02e108d9ed2c893f921c750ed1e00fb6.camel@intel.com>
-References: <20230517-genkey-v1-1-b887424da4a8@google.com>
-         <202305181712.xjvv1fbD-lkp@intel.com>
-         <CAKwvOd=hoKFMC40U-Pd=2dBJ4zT4P60OgJpHvNmH+zdGAd_J-Q@mail.gmail.com>
-In-Reply-To: <CAKwvOd=hoKFMC40U-Pd=2dBJ4zT4P60OgJpHvNmH+zdGAd_J-Q@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.44.4-0ubuntu1 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CY5PR11MB6392:EE_|MW6PR11MB8340:EE_
-x-ms-office365-filtering-correlation-id: 65c3aabe-32d8-4cdf-09bf-08db6806fadb
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: u3w+a9YT84zRXxf0cPY8HsMLje2SW/b7heP0tSRFAVXxHFSeDtJOGOtp00EKdW52ZHcxZKpvfric+sCXg6kVonaI5MQKcO8VZPpVXzUD7Sg7+1N457LIlzcqv/pD3qHEGQMzTXMZ40+OWKhRLsLsYaGuN1lTV7KqroPb1CLfOFZaxtEaRBV5mz2iAllMZ1tJdhVrVHfKMbBpxF6/RQ8A5yvvyCWJCtncykTQT3o/qA1uLlonvkIDuTi4Gr45dLl9gL8wzLkER342WlCBpcwqs/cLMxiyJ6aMgAtYQlZ+WECQyQiisateDWR8V2uSeTwiwG3xyY/gf0Xe5P+6Nw4kndbahAXoCCGJIJrs7Ll587+zA9NKfRzjBIP/8oE+oG21sQirKtvMZDND4yOrYsZWqyuMt8Euy7yiNXjM4HBy+530LNKPcCVH1R4fcj1R88S+E1TXv6Yxeus/1wmlH/9FgaCmTyGLMeqguThQogO+maDQ9KLDTKmtrr1pjaHk4tEfszEca2mPoKzcHiVDeNHiWnZz+GO6Yz4c/YIRtqTLI3iY4GQf28km2Bx7k4g0H6/3JiaVDBjgEJNiRKSs9UYOUlWkrFSSlCTeeLu+MRpdlIh70eP+maZj5wMbaT4ykpWen4Fak5CT5v1XCo6wDmkKhQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(136003)(346002)(396003)(376002)(39860400002)(451199021)(54906003)(71200400001)(478600001)(66446008)(5660300002)(122000001)(8936002)(8676002)(4326008)(2906002)(36756003)(86362001)(38070700005)(66476007)(76116006)(91956017)(66556008)(66946007)(82960400001)(6916009)(316002)(64756008)(6506007)(38100700002)(41300700001)(2616005)(53546011)(6512007)(26005)(186003)(966005)(83380400001)(6486002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZGx5enhKVnBCWnJTa2FYNjB1VDZVaWsxMlZXY2tobjFDeGRFbUwraVdLb1l4?=
- =?utf-8?B?VzFuUDlreUQrdytEVzRHS2FPZ3RhUE1FMkd4ZGJwM2g0blpka2dWcE5HNTJ3?=
- =?utf-8?B?ZnBZcVFXcTB2OUlQZnVjZDlUYWsyZ3R5Vm9JcG5US0NsaDFwL1dJNE9oZTR6?=
- =?utf-8?B?KzVlbzRuYm95bzVOR3U3VjgwaVNQRE9JV1BKK2YrTnE3aXlNSlBVcnYwdU5Z?=
- =?utf-8?B?NjFPbFEwdEFsMFRhaDE5eXYwWXoxUWhJKzVpRW5JVkxPTnAxRnlybmRURGM2?=
- =?utf-8?B?cXE0eUNuTVFGTERWcHY0NVcwZ3A1NVVxYzdsMEwrSXcrdFRJOTR2NUpqUHRD?=
- =?utf-8?B?d2Q1RnZNTXM3UHE2S2ZMOFk3K25Od0REUzB4TGQ4VW5iMGI5YXd5eXpnYUlN?=
- =?utf-8?B?NmkwV1JOSTBIRjNFT0ZQbWtmM1pKN2gzVUlPaWppSlE5cnlBazlLQjUyT2Jw?=
- =?utf-8?B?bnduTDlDOFVTSzFqQWc4REdVN3E5QlJpcUY5bmhkN2lhS052OWhMamkvTi9R?=
- =?utf-8?B?YkFYZHY3YXBFV2ZLRXlDQ3hCRVNpbjRJbmM5Qm05Vjd3cWFNckIxRHp0N2lm?=
- =?utf-8?B?Ui8vUC9rK0s5Z2E0UVo4YlExbnpPMXpBZ2Yvc3NwZEhiNU5QYWVRaEl5TUpl?=
- =?utf-8?B?SlF2cGYyTUR2ZDNwbUE3cERTcGplYW12d2JWWUNxcUNpbnlpRTNyc0c2NDFq?=
- =?utf-8?B?Q1c5S1hQcThyQ2VTYVpHcFBoUzVJT0R5emhOMVBxaUlNVzZhVWYrdVNZZXh3?=
- =?utf-8?B?VG9oRnJaZEw2S2J1emNMSGJsdUcvKzBudHowRmwyTE9VZnVWOVBHWEJ6SDNC?=
- =?utf-8?B?Unl1UU5rUmJXTkpKbkcxMFJtU1R2WG40Q0ptYVBLbFVRVzFVM0RSQ1loTUt1?=
- =?utf-8?B?S1o3YzlHbk1YMjhKSUwvSWlHcjc2cWRqV051MjhEaHBzdjRwL1V0SWtGN0hu?=
- =?utf-8?B?dkhRVDNHblNRVnlqZ2dXU1FuNTBObG9JVHdvVm9xWi9lanFmakVKYnYvT3dB?=
- =?utf-8?B?WHpPOUJLeFkwRE9hbWtJRVNxYjFuelp2UzFXVi9KYVcyWmQ5UGJQM1lqM2pv?=
- =?utf-8?B?dUM1ZExzRDJRWjlnTnRkdWsvTjFLRGZLeW5yMXlEWkowZGRETG9kQUdMVFBr?=
- =?utf-8?B?YU9qQysrSW9Xcm52QjEwSVkwbnpiU2VRd3NreDYrMjVsOHFwcGUrcDBwUVVJ?=
- =?utf-8?B?bnNxTjVTdU56a2pTOTBiQ3BEOHBqdlJLblJkMmZ5Q01Tbk5hNFovMk01V0t4?=
- =?utf-8?B?NHZmL3NYRHMvMXVwYTdPQ2FHVjhkWkJsRFlCVEdRK1hCUXNlNEh1dEg5d1dx?=
- =?utf-8?B?N3dmZGp4Sk45MzlHRFZjZWlpcEg0M2F2Q3ZWdGdvbHg4OGhJQ3dOK3g2VXJ0?=
- =?utf-8?B?S1JpWUNKSzhKcjlBK1lTbWhDUHJtZE02QmpkdzJrUHFlK2paaWZSdWRYcGNs?=
- =?utf-8?B?bnZ4eHlrUitRdi9yWGgxbk5ZRnNkMEFCMGI3aVp5NU9yYWI0KzZoZUxTMXAx?=
- =?utf-8?B?ZzR6ZkZYaHFVUndSWXBZM3EwRUhqUG9VRUs5VFBvL0xYNmNXK3dlRkJGOTdz?=
- =?utf-8?B?emlGVXIwSjB4NEplMy9DV0VnekhESnJQMmprb0FLeW5KUlVhNmd6YUpySWdU?=
- =?utf-8?B?bGhML2g0NzR1ZG1KUS9HVUV6RkdGczdFdUZvYnZid2Q4d2crUGlMd1RVSmU0?=
- =?utf-8?B?K3kxZXBoNnZmNGk4ekhkU29taytuRjRHOHNGczlOVU1WVTlIN2U0Sk54VWNL?=
- =?utf-8?B?VUxCeW84bGtuSXlZNUk1Q1Qva2VjOERPR01hSEVPOEVYc0pHb2tpSkNGN0Ix?=
- =?utf-8?B?SlZ1bDNNZU5Fd1FsZXgva01sSGxyL0ZFSERVYnJjTXZkejdhY09tRWZoajkx?=
- =?utf-8?B?MmpjdTBzWElPYkhJT1V1cFdGd0ZHajBHSUMyejJhckxTSTQzazBReURZTVpq?=
- =?utf-8?B?QTJuSm9FaWVvbFhNZ2w1bm1PcmZoMGxGNkJINVpnenByc3JpeEUvSzFNR0pu?=
- =?utf-8?B?bGxkMXV3dGp3cmx6bnd6RGRJdTBkSFMyVTBGeWx2b1NqcHVNRmxPN1pndE0w?=
- =?utf-8?B?VUVKTkRMTDMzWVQyRjYzeW1rSDI0cWN3M00vTUsvUm9QWE5TNUZoV0pKWVB0?=
- =?utf-8?Q?OQxBvO+3WdWA6XtZUzhbu2dVh?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <85507672B71016418C52B7CADD37553E@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Thu, 8 Jun 2023 05:59:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2663A2736;
+        Thu,  8 Jun 2023 02:59:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12A7664BA5;
+        Thu,  8 Jun 2023 09:59:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B10DC433EF;
+        Thu,  8 Jun 2023 09:59:33 +0000 (UTC)
+Message-ID: <e43029b5-edbb-9358-a0a6-a104ff2fa154@xs4all.nl>
+Date:   Thu, 8 Jun 2023 11:59:32 +0200
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 65c3aabe-32d8-4cdf-09bf-08db6806fadb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jun 2023 09:58:59.0426
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: tFCgcYwcvKXyvGCCi/mAXI2iphpN6gNi8sPA3D2AJMzY4q0Ufh2VoPiJoqcXD+IXYPsE9MMSxGiz8z/lbkoM7A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR11MB8340
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v12 7/7] media: nuvoton: Add driver for NPCM video capture
+ and encode engine
+Content-Language: en-US
+To:     Marvin Lin <milkfafa@gmail.com>, mchehab@kernel.org,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        andrzej.p@collabora.com
+Cc:     devicetree@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        kwliu@nuvoton.com, kflin@nuvoton.com
+References: <20230502084430.234182-1-milkfafa@gmail.com>
+ <20230502084430.234182-8-milkfafa@gmail.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <20230502084430.234182-8-milkfafa@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -172,107 +54,2239 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgTmljaywNCg0KT24gVGh1LCAyMDIzLTA1LTE4IGF0IDE1OjM2IC0wNzAwLCBOaWNrIERlc2F1
-bG5pZXJzIHdyb3RlOg0KPiBPbiBUaHUsIE1heSAxOCwgMjAyMyBhdCAzOjIz4oCvQU0ga2VybmVs
-IHRlc3Qgcm9ib3QgPGxrcEBpbnRlbC5jb20+IHdyb3RlOg0KPiA+IA0KPiA+IEhpLA0KPiA+IA0K
-PiA+IGtlcm5lbCB0ZXN0IHJvYm90IG5vdGljZWQgdGhlIGZvbGxvd2luZyBidWlsZCBlcnJvcnM6
-DQo+ID4gDQo+ID4gW2F1dG8gYnVpbGQgdGVzdCBFUlJPUiBvbiBmMWZjYmFhMThiMjhkZWMxMDI4
-MTU1MWRmZTZlZDNhM2VkODBlM2Q2XQ0KPiA+IA0KPiA+IHVybDrCoMKgwqAgaHR0cHM6Ly9naXRo
-dWIuY29tL2ludGVsLWxhYi1sa3AvbGludXgvY29tbWl0cy9uZGVzYXVsbmllcnMtZ29vZ2xlLWNv
-bS9jZXJ0cy1idWZmZXItc3RkZXJyLWZyb20tb3BlbnNzbC11bmxlc3MtZXJyb3IvMjAyMzA1MTgt
-MDA0NzUzDQo+ID4gYmFzZTrCoMKgIGYxZmNiYWExOGIyOGRlYzEwMjgxNTUxZGZlNmVkM2EzZWQ4
-MGUzZDYNCj4gPiBwYXRjaCBsaW5rOsKgwqDCoCBodHRwczovL2xvcmUua2VybmVsLm9yZy9yLzIw
-MjMwNTE3LWdlbmtleS12MS0xLWI4ODc0MjRkYTRhOCU0MGdvb2dsZS5jb20NCj4gPiBwYXRjaCBz
-dWJqZWN0OiBbUEFUQ0hdIGNlcnRzOiBidWZmZXIgc3RkZXJyIGZyb20gb3BlbnNzbCB1bmxlc3Mg
-ZXJyb3INCj4gPiBjb25maWc6IGNza3ktcmFuZGNvbmZpZy1tMDQxLTIwMjMwNTE3DQo+ID4gY29t
-cGlsZXI6IGNza3ktbGludXgtZ2NjIChHQ0MpIDEyLjEuMA0KPiA+IHJlcHJvZHVjZSAodGhpcyBp
-cyBhIFc9MSBidWlsZCk6DQo+ID4gwqDCoMKgwqDCoMKgwqAgd2dldCBodHRwczovL3Jhdy5naXRo
-dWJ1c2VyY29udGVudC5jb20vaW50ZWwvbGtwLXRlc3RzL21hc3Rlci9zYmluL21ha2UuY3Jvc3PC
-oC1PIH4vYmluL21ha2UuY3Jvc3MNCj4gDQo+IF4gc2hvdWxkIGVuY291cmFnZSBgbWtkaXIgfi9i
-aW5gOyB0aGUgZGViaWFuIGRvY2tlciBjb250YWluZXIgZG9lc24ndA0KPiBoYXZlIGB+L2JpbmAu
-DQo+IA0KPiA+IMKgwqDCoMKgwqDCoMKgIGNobW9kICt4IH4vYmluL21ha2UuY3Jvc3MNCj4gPiDC
-oMKgwqDCoMKgwqDCoCAjIGh0dHBzOi8vZ2l0aHViLmNvbS9pbnRlbC1sYWItbGtwL2xpbnV4L2Nv
-bW1pdC8wZTQzN2E0MWZkYjQxYzg0ODM0ZGU2Nzc2YmYzODk1MWIxOTc3OTJhDQo+ID4gwqDCoMKg
-wqDCoMKgwqAgZ2l0IHJlbW90ZSBhZGQgbGludXgtcmV2aWV3IGh0dHBzOi8vZ2l0aHViLmNvbS9p
-bnRlbC1sYWItbGtwL2xpbnV4DQo+ID4gwqDCoMKgwqDCoMKgwqAgZ2l0IGZldGNoIC0tbm8tdGFn
-cyBsaW51eC1yZXZpZXcgbmRlc2F1bG5pZXJzLWdvb2dsZS1jb20vY2VydHMtYnVmZmVyLXN0ZGVy
-ci1mcm9tLW9wZW5zc2wtdW5sZXNzLWVycm9yLzIwMjMwNTE4LTAwNDc1Mw0KPiANCj4gXiBob2x5
-IGNyYXAgdGhhdCB0YWtlcyBmb3JldmVyLiBtYXliZSByZWNvbW1lbmQgYGI0IHNoYXphbSA8bG9y
-ZSBsaW5rPmA/DQo+IA0KPiA+IMKgwqDCoMKgwqDCoMKgIGdpdCBjaGVja291dCAwZTQzN2E0MWZk
-YjQxYzg0ODM0ZGU2Nzc2YmYzODk1MWIxOTc3OTJhDQo+ID4gwqDCoMKgwqDCoMKgwqAgIyBzYXZl
-IHRoZSBjb25maWcgZmlsZQ0KPiA+IMKgwqDCoMKgwqDCoMKgIG1rZGlyIGJ1aWxkX2RpciAmJiBj
-cCBjb25maWcgYnVpbGRfZGlyLy5jb25maWcNCj4gPiDCoMKgwqDCoMKgwqDCoCBDT01QSUxFUl9J
-TlNUQUxMX1BBVEg9JEhPTUUvMGRheSBDT01QSUxFUj1nY2MtMTIuMS4wIG1ha2UuY3Jvc3MgVz0x
-IE89YnVpbGRfZGlyIEFSQ0g9Y3NreSBvbGRkZWZjb25maWcNCj4gDQo+IF4gc2hvdWxkIHVzZSBg
-fi9iaW4vbWFrZS5jcm9zc2Agc2luY2UgYH4vYmluYCBtYXkgbm90IGV4aXN0IGluICRQQVRILg0K
-PiANCj4gPiDCoMKgwqDCoMKgwqDCoCBDT01QSUxFUl9JTlNUQUxMX1BBVEg9JEhPTUUvMGRheSBD
-T01QSUxFUj1nY2MtMTIuMS4wIG1ha2UuY3Jvc3MgVz0xIE89YnVpbGRfZGlyIEFSQ0g9Y3NreSBT
-SEVMTD0vYmluL2Jhc2gNCg0KV2UndmUgdXBkYXRlZCB0aGUgInJlcHJvZHVjZSIgc2VjdGlvbiBp
-biBib3QncyByZXBvcnRzIHRvIGJlIG1vcmUNCnByZWNpc2UuIFRoYW5rcyBhIGxvdCBmb3IgdGhl
-IGlucHV0cy4NCg0KPiBIaSBQaGlsaXAsDQo+IEkndmUgcnVuIGludG8gc29tZSBpc3N1ZXMgd2l0
-aCBtYWtlLmNyb3NzIHdoZW4gdHJ5aW5nIHRvIGluc3RhbGwgdGhlDQo+IGNza3kgdG9vbGNoYWlu
-LiBNYXliZSB5b3UgY2FuIGhlbHA/DQo+IA0KPiBgYGANCj4gJCBDT01QSUxFUl9JTlNUQUxMX1BB
-VEg9JEhPTUUvMGRheSBDT01QSUxFUj1nY2MtMTIuMS4wDQo+IH4vYmluL21ha2UuY3Jvc3MgVz0x
-IE89YnVpbGRfZGlyIEFSQ0g9Y3NreSBvbGRkZWZjb25maWcNCj4gQ29tcGlsZXIgd2lsbCBiZSBp
-bnN0YWxsZWQgaW4gL3Jvb3QvMGRheQ0KPiBtYWtlOiBnY2M6IE5vIHN1Y2ggZmlsZSBvciBkaXJl
-Y3RvcnkNCj4gbGZ0cGdldCAtYyBodHRwczovL2Rvd25sb2FkLjAxLm9yZy8wZGF5LWNpL2Nyb3Nz
-LXBhY2thZ2UvLi9nY2MtMTIuMS4wLW5vbGliYy94ODZfNjQtZ2NjLTEyLjEuMC1ub2xpYmNfY3Nr
-eS1saW51eC50YXIueHoNCj4gL2xpbnV4DQo+IHRhciBKeGYgL3Jvb3QvMGRheS9nY2MtMTIuMS4w
-LW5vbGliYy94ODZfNjQtZ2NjLTEyLjEuMC1ub2xpYmNfY3NreS1saW51eC50YXIueHoNCj4gLUMg
-L3Jvb3QvMGRheQ0KPiBQbGVhc2UgdXBkYXRlOiBsaWJjNiBvciBnbGliYw0KPiBsZGQgL3Jvb3Qv
-MGRheS9nY2MtMTIuMS4wLW5vbGliYy9jc2t5LWxpbnV4L2Jpbi9jc2t5LWxpbnV4LWdjYw0KPiAv
-cm9vdC8wZGF5L2djYy0xMi4xLjAtbm9saWJjL2Nza3ktbGludXgvYmluL2Nza3ktbGludXgtZ2Nj
-Og0KPiAvbGliL3g4Nl82NC1saW51eC1nbnUvbGliYy5zby42OiB2ZXJzaW9uIGBHTElCQ18yLjMy
-JyBub3QgZm91bmQNCj4gKHJlcXVpcmVkIGJ5IC9yb290LzBkYXkvZ2NjLTEyLjEuMC1ub2xpYmMv
-Y3NreS1saW51eC9iaW4vY3NreS1saW51eC1nY2MpDQo+IC9yb290LzBkYXkvZ2NjLTEyLjEuMC1u
-b2xpYmMvY3NreS1saW51eC9iaW4vY3NreS1saW51eC1nY2M6DQo+IC9saWIveDg2XzY0LWxpbnV4
-LWdudS9saWJjLnNvLjY6IHZlcnNpb24gYEdMSUJDXzIuMzMnIG5vdCBmb3VuZA0KPiAocmVxdWly
-ZWQgYnkgL3Jvb3QvMGRheS9nY2MtMTIuMS4wLW5vbGliYy9jc2t5LWxpbnV4L2Jpbi9jc2t5LWxp
-bnV4LWdjYykNCj4gc2V0dXBfY3Jvc3N0b29sIGZhaWxlZA0KPiANCj4gJCBsZGQgLXYgL2xpYi94
-ODZfNjQtbGludXgtZ251L2xpYmMuc28uNg0KPiAvbGliNjQvbGQtbGludXgteDg2LTY0LnNvLjIg
-KDB4MDAwMDdmMTFmMzQ3ODAwMCkNCj4gbGludXgtdmRzby5zby4xICgweDAwMDA3ZmZjZjQ1YjIw
-MDApDQo+IA0KPiBWZXJzaW9uIGluZm9ybWF0aW9uOg0KPiAvbGliL3g4Nl82NC1saW51eC1nbnUv
-bGliYy5zby42Og0KPiBsZC1saW51eC14ODYtNjQuc28uMiAoR0xJQkNfMi4zKSA9PiAvbGliNjQv
-bGQtbGludXgteDg2LTY0LnNvLjINCj4gbGQtbGludXgteDg2LTY0LnNvLjIgKEdMSUJDX1BSSVZB
-VEUpID0+IC9saWI2NC9sZC1saW51eC14ODYtNjQuc28uMg0KPiANCj4gJCBjYXQgL2V0Yy9kZWJp
-YW5fdmVyc2lvbg0KPiAxMS42DQo+IGBgYA0KPiBQZXJoYXBzIEkgTVVTVCB1cGRhdGUgbXkgZGVi
-aWFuIGNvbnRhaW5lciB0byAxMS43Pw0KPiANCj4gQXJlIHRoZSAwZGF5IHRvb2xjaGFpbnMgbm90
-IHN0YXRpY2FsbHkgbGlua2VkPw0KPiBDYW4gdGhleSB1c2UgdGhlIG9uZXMgZnJvbSBrZXJuZWwu
-b3JnIHdoaWNoIGFyZT8NCj4gaHR0cHM6Ly9taXJyb3JzLmVkZ2Uua2VybmVsLm9yZy9wdWIvdG9v
-bHMvY3Jvc3N0b29sLw0KDQpQbGVhc2UgZm9sbG93IGJlbG93IHN0ZXBzIHRvIHVzZSB0aGUgdG9v
-bGNoYWlucyBwcm92aWRlZCBieSBrZXJuZWwub3JnLg0KV2UndmUgdGVzdGVkIHRoaXMgYW5kIGl0
-IGNhbiB3b3JrIGluIGEgZGViaWFuIDExLjYgZG9ja2VyIGVudi4NCg0KJCBjYXQgL2V0Yy9kZWJp
-YW5fdmVyc2lvbiANCjExLjYNCg0KJCBsZGQgLXYgL2xpYi94ODZfNjQtbGludXgtZ251L2xpYmMu
-c28uNiB8IGdyZXAgR0xJQkMNCgkJbGQtbGludXgteDg2LTY0LnNvLjIgKEdMSUJDXzIuMykgPT4g
-L2xpYjY0L2xkLWxpbnV4LXg4Ni02NC5zby4yDQoJCWxkLWxpbnV4LXg4Ni02NC5zby4yIChHTElC
-Q19QUklWQVRFKSA9PiAvbGliNjQvbGQtbGludXgteDg2LTY0LnNvLjINCg0KJCBleHBvcnQgVVJM
-PWh0dHBzOi8vbWlycm9ycy5lZGdlLmtlcm5lbC5vcmcvcHViL3Rvb2xzL2Nyb3NzdG9vbC9maWxl
-cy9iaW4veDg2XzY0DQoNCiQgQ09NUElMRVJfSU5TVEFMTF9QQVRIPSRIT01FLzBkYXkgQ09NUElM
-RVI9Z2NjLTEyLjEuMCAuL21ha2UuY3Jvc3MgVz0xIEFSQ0g9Y3NreSBvbGRkZWZjb25maWcNCkNv
-bXBpbGVyIHdpbGwgYmUgaW5zdGFsbGVkIGluIC9yb290LzBkYXkNCmxmdHBnZXQgLWMgaHR0cHM6
-Ly9taXJyb3JzLmVkZ2Uua2VybmVsLm9yZy9wdWIvdG9vbHMvY3Jvc3N0b29sL2ZpbGVzL2Jpbi94
-ODZfNjQvLi8xMi4xLjAveDg2XzY0LWdjYy0xMi4xLjAtbm9saWJjLWNza3ktbGludXgudGFyLnh6
-DQovcm9vdC9saW51eCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgDQp0YXIgSnhmIC9y
-b290LzBkYXkvMTIuMS4wL3g4Nl82NC1nY2MtMTIuMS4wLW5vbGliYy1jc2t5LWxpbnV4LnRhci54
-eiAtQyAvcm9vdC8wZGF5DQptYWtlIC0ta2VlcC1nb2luZyBDT05GSUdfT0ZfQUxMX0RUQlM9eSBD
-T05GSUdfRFRDPXkgQ1JPU1NfQ09NUElMRT0vcm9vdC8wZGF5L2djYy0xMi4xLjAtbm9saWJjL2Nz
-a3ktbGludXgvYmluL2Nza3ktbGludXgtIC0tam9icz0xNDQgVz0xIEFSQ0g9Y3NreSBvbGRkZWZj
-b25maWcNCi4uLg0KDQoNClRoYW5rcyBhIGxvdCBmb3IgdGhlIHN1Z2dlc3Rpb25zLiBXZSB3aWxs
-IGZ1cnRoZXIgaW1wcm92ZSB0aGUgMGRheQ0KbWFrZS5jcm9zcyB0b29sIHN1Y2ggYXM6DQoNCiog
-UHJvdmlkZSBzdGF0aWNhbGx5IGxpbmtlZCB0b29sY2hhaW5zIHRoYXQgZG9uJ3QgZGVwZW5kIG9u
-IHRoZSBsaWJjIGluDQp0aGUgZGlzdHJpYnV0aW9uDQoqIEFkZCBoaW50IHRvIGhlbHAgdXNlciBk
-ZWNpZGUgd2hldGhlciB0byB1c2UgMGRheSBvciBrZXJuZWwub3JnDQp0b29sY2hhaW5zLg0KDQpC
-ZXN0IFJlZ2FyZHMsDQpZdWppZQ0KDQo+ID4gDQo+ID4gSWYgeW91IGZpeCB0aGUgaXNzdWUsIGtp
-bmRseSBhZGQgZm9sbG93aW5nIHRhZyB3aGVyZSBhcHBsaWNhYmxlDQo+ID4gPiBSZXBvcnRlZC1i
-eToga2VybmVsIHRlc3Qgcm9ib3QgPGxrcEBpbnRlbC5jb20+DQo+ID4gPiBDbG9zZXM6IGh0dHBz
-Oi8vbG9yZS5rZXJuZWwub3JnL29lLWtidWlsZC1hbGwvMjAyMzA1MTgxNzEyLnhqdnYxZmJELWxr
-cEBpbnRlbC5jb20vDQo+ID4gDQo+ID4gQWxsIGVycm9ycyAobmV3IG9uZXMgcHJlZml4ZWQgYnkg
-Pj4pOg0KPiA+IA0KPiA+IMKgwqAgQXQgbWFpbi5jOjE1MjoNCj4gPiDCoMKgIC0gU1NMIGVycm9y
-OkZGRkZGRkZGODAwMDAwMDI6c3lzdGVtIGxpYnJhcnk6Ok5vIHN1Y2ggZmlsZSBvciBkaXJlY3Rv
-cnk6IC4uL2NyeXB0by9iaW8vYnNzX2ZpbGUuYzo2Nw0KPiA+IMKgwqAgLSBTU0wgZXJyb3I6MTAw
-MDAwODA6QklPIHJvdXRpbmVzOjpubyBzdWNoIGZpbGU6IC4uL2NyeXB0by9iaW8vYnNzX2ZpbGUu
-Yzo3NQ0KPiA+ID4gPiBleHRyYWN0LWNlcnQ6IGNlcnRzL3NpZ25pbmdfa2V5LnBlbTogTm8gc3Vj
-aCBmaWxlIG9yIGRpcmVjdG9yeQ0KPiA+IA0KPiA+IC0tDQo+ID4gMC1EQVkgQ0kgS2VybmVsIFRl
-c3QgU2VydmljZQ0KPiA+IGh0dHBzOi8vZ2l0aHViLmNvbS9pbnRlbC9sa3AtdGVzdHMvd2lraQ0K
-PiANCj4gDQo+IA0KDQo=
+Hi Marvin,
+
+Apologies for the delay in reviewing this. As you may have noticed, we
+have too many incoming patches and not enough reviewers, so it takes
+too often way too long before I have time to review drivers like this.
+
+On 02/05/2023 10:44, Marvin Lin wrote:
+> Add driver for Video Capture/Differentiation Engine (VCD) and Encoding
+> Compression Engine (ECE) present on Nuvoton NPCM SoCs. As described in
+> the datasheet NPCM750D_DS_Rev_1.0, the VCD can capture a frame from
+> digital video input and compare two frames in memory, and then the ECE
+> can compress the frame data into HEXTITLE format. This driver implements
+> V4L2 interfaces and provides user controls to support KVM feature, also
+> tested with VNC Viewer ver.6.22.826 and openbmc/obmc-ikvm.
+> 
+> Signed-off-by: Marvin Lin <milkfafa@gmail.com>
+> ---
+>  MAINTAINERS                                 |   12 +
+>  drivers/media/platform/Kconfig              |    1 +
+>  drivers/media/platform/Makefile             |    1 +
+>  drivers/media/platform/nuvoton/Kconfig      |   15 +
+>  drivers/media/platform/nuvoton/Makefile     |    2 +
+>  drivers/media/platform/nuvoton/npcm-regs.h  |  183 ++
+>  drivers/media/platform/nuvoton/npcm-video.c | 1898 +++++++++++++++++++
+>  7 files changed, 2112 insertions(+)
+>  create mode 100644 drivers/media/platform/nuvoton/Kconfig
+>  create mode 100644 drivers/media/platform/nuvoton/Makefile
+>  create mode 100644 drivers/media/platform/nuvoton/npcm-regs.h
+>  create mode 100644 drivers/media/platform/nuvoton/npcm-video.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 32772c383ab7..ef56f9bdb884 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -2529,6 +2529,18 @@ F:	drivers/rtc/rtc-nct3018y.c
+>  F:	include/dt-bindings/clock/nuvoton,npcm7xx-clock.h
+>  F:	include/dt-bindings/clock/nuvoton,npcm845-clk.h
+>  
+> +ARM/NUVOTON NPCM VIDEO ENGINE DRIVER
+> +M:	Joseph Liu <kwliu@nuvoton.com>
+> +M:	Marvin Lin <kflin@nuvoton.com>
+> +L:	linux-media@vger.kernel.org
+> +L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/media/nuvoton,npcm-ece.yaml
+> +F:	Documentation/devicetree/bindings/media/nuvoton,npcm-vcd.yaml
+> +F:	Documentation/userspace-api/media/drivers/npcm-video.rst
+> +F:	drivers/media/platform/nuvoton/
+> +F:	include/uapi/linux/npcm-video.h
+> +
+>  ARM/NUVOTON WPCM450 ARCHITECTURE
+>  M:	Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+>  L:	openbmc@lists.ozlabs.org (moderated for non-subscribers)
+> diff --git a/drivers/media/platform/Kconfig b/drivers/media/platform/Kconfig
+> index ee579916f874..91e54215de3a 100644
+> --- a/drivers/media/platform/Kconfig
+> +++ b/drivers/media/platform/Kconfig
+> @@ -73,6 +73,7 @@ source "drivers/media/platform/intel/Kconfig"
+>  source "drivers/media/platform/marvell/Kconfig"
+>  source "drivers/media/platform/mediatek/Kconfig"
+>  source "drivers/media/platform/microchip/Kconfig"
+> +source "drivers/media/platform/nuvoton/Kconfig"
+>  source "drivers/media/platform/nvidia/Kconfig"
+>  source "drivers/media/platform/nxp/Kconfig"
+>  source "drivers/media/platform/qcom/Kconfig"
+> diff --git a/drivers/media/platform/Makefile b/drivers/media/platform/Makefile
+> index 5453bb868e67..3296ec1ebe16 100644
+> --- a/drivers/media/platform/Makefile
+> +++ b/drivers/media/platform/Makefile
+> @@ -16,6 +16,7 @@ obj-y += intel/
+>  obj-y += marvell/
+>  obj-y += mediatek/
+>  obj-y += microchip/
+> +obj-y += nuvoton/
+>  obj-y += nvidia/
+>  obj-y += nxp/
+>  obj-y += qcom/
+> diff --git a/drivers/media/platform/nuvoton/Kconfig b/drivers/media/platform/nuvoton/Kconfig
+> new file mode 100644
+> index 000000000000..1dc8fa836821
+> --- /dev/null
+> +++ b/drivers/media/platform/nuvoton/Kconfig
+> @@ -0,0 +1,15 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +
+> +comment "Nuvoton media platform drivers"
+> +
+> +config VIDEO_NPCM_VCD_ECE
+> +	tristate "Nuvoton NPCM Video Capture/Encode Engine driver"
+> +	depends on V4L_PLATFORM_DRIVERS
+> +	depends on VIDEO_DEV
+> +	select VIDEOBUF2_DMA_CONTIG
+> +	help
+> +	  Support for the Video Capture/Differentiation Engine (VCD) and
+> +	  Encoding Compression Engine (ECE) present on Nuvoton NPCM SoCs.
+> +	  The VCD can capture a frame from digital video input and compare
+> +	  two frames in memory, and then the ECE can compress the frame
+> +	  data into HEXTITLE format.
+> diff --git a/drivers/media/platform/nuvoton/Makefile b/drivers/media/platform/nuvoton/Makefile
+> new file mode 100644
+> index 000000000000..74a4e3fc8555
+> --- /dev/null
+> +++ b/drivers/media/platform/nuvoton/Makefile
+> @@ -0,0 +1,2 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +obj-$(CONFIG_VIDEO_NPCM_VCD_ECE) += npcm-video.o
+> diff --git a/drivers/media/platform/nuvoton/npcm-regs.h b/drivers/media/platform/nuvoton/npcm-regs.h
+> new file mode 100644
+> index 000000000000..414e9eb96647
+> --- /dev/null
+> +++ b/drivers/media/platform/nuvoton/npcm-regs.h
+> @@ -0,0 +1,183 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Register definition header for NPCM video driver
+> + *
+> + * Copyright (C) 2022 Nuvoton Technologies
+> + */
+> +
+> +#ifndef _NPCM_REGS_H
+> +#define _NPCM_REGS_H
+> +
+> +/* VCD Registers */
+> +#define VCD_DIFF_TBL			0x0000
+> +#define VCD_FBA_ADR			0x8000
+> +#define VCD_FBB_ADR			0x8004
+> +
+> +#define VCD_FB_LP			0x8008
+> +#define  VCD_FBA_LP			GENMASK(15, 0)
+> +#define  VCD_FBB_LP			GENMASK(31, 16)
+> +
+> +#define VCD_CAP_RES			0x800c
+> +#define  VCD_CAP_RES_VERT_RES		GENMASK(10, 0)
+> +#define  VCD_CAP_RES_HOR_RES		GENMASK(26, 16)
+> +
+> +#define VCD_MODE			0x8014
+> +#define  VCD_MODE_VCDE			BIT(0)
+> +#define  VCD_MODE_CM565			BIT(1)
+> +#define  VCD_MODE_IDBC			BIT(3)
+> +#define  VCD_MODE_KVM_BW_SET		BIT(16)
+> +
+> +#define VCD_CMD				0x8018
+> +#define  VCD_CMD_GO			BIT(0)
+> +#define  VCD_CMD_RST			BIT(1)
+> +#define  VCD_CMD_OPERATION		GENMASK(6, 4)
+> +#define   VCD_CMD_OPERATION_CAPTURE	0
+> +#define   VCD_CMD_OPERATION_COMPARE	2
+> +
+> +#define	VCD_STAT			0x801c
+> +#define	 VCD_STAT_DONE			BIT(0)
+> +#define	 VCD_STAT_IFOT			BIT(2)
+> +#define	 VCD_STAT_IFOR			BIT(3)
+> +#define	 VCD_STAT_VHT_CHG		BIT(5)
+> +#define	 VCD_STAT_HAC_CHG		BIT(8)
+> +#define	 VCD_STAT_BUSY			BIT(30)
+> +#define	VCD_STAT_CLEAR			0x3fff
+> +
+> +#define VCD_INTE			0x8020
+> +#define  VCD_INTE_DONE_IE		BIT(0)
+> +#define  VCD_INTE_IFOT_IE		BIT(2)
+> +#define  VCD_INTE_IFOR_IE		BIT(3)
+> +#define  VCD_INTE_VHT_IE		BIT(5)
+> +#define  VCD_INTE_HAC_IE		BIT(8)
+> +
+> +#define VCD_RCHG			0x8028
+> +#define  VCD_RCHG_IG_CHG0		GENMASK(2, 0)
+> +#define  VCD_RCHG_TIM_PRSCL		GENMASK(12, 9)
+> +
+> +#define VCD_VER_HI_TIM			0x8044
+> +#define  VCD_VER_HI_TIME		GENMASK(23, 0)
+> +
+> +#define VCD_VER_HI_LST			0x8048
+> +#define  VCD_VER_HI_LAST		GENMASK(23, 0)
+> +
+> +#define VCD_HOR_AC_TIM			0x804c
+> +#define  VCD_HOR_AC_TIME		GENMASK(13, 0)
+> +
+> +#define VCD_HOR_AC_LST			0x8050
+> +#define  VCD_HOR_AC_LAST		GENMASK(13, 0)
+> +
+> +#define VCD_FIFO			0x805c
+> +#define  VCD_FIFO_TH			0x100350ff
+> +
+> +#define VCD_FB_SIZE			0x500000 /* support up to 1920 x 1200 */
+> +#define VCD_KVM_BW_PCLK			120000000UL
+> +#define VCD_BUSY_TIMEOUT_US		300000
+> +
+> +/* ECE Registers */
+> +#define ECE_DDA_CTRL			0x0000
+> +#define  ECE_DDA_CTRL_ECEEN		BIT(0)
+> +#define  ECE_DDA_CTRL_INTEN		BIT(8)
+> +
+> +#define ECE_DDA_STS			0x0004
+> +#define  ECE_DDA_STS_CDREADY		BIT(8)
+> +#define  ECE_DDA_STS_ACDRDY		BIT(10)
+> +
+> +#define ECE_FBR_BA			0x0008
+> +#define ECE_ED_BA			0x000c
+> +#define ECE_RECT_XY			0x0010
+> +
+> +#define ECE_RECT_DIMEN			0x0014
+> +#define  ECE_RECT_DIMEN_WR		GENMASK(10, 0)
+> +#define  ECE_RECT_DIMEN_WLTR		GENMASK(14, 11)
+> +#define  ECE_RECT_DIMEN_HR		GENMASK(26, 16)
+> +#define  ECE_RECT_DIMEN_HLTR		GENMASK(30, 27)
+> +
+> +#define ECE_RESOL			0x001c
+> +#define  ECE_RESOL_FB_LP_512		0
+> +#define  ECE_RESOL_FB_LP_1024		1
+> +#define  ECE_RESOL_FB_LP_2048		2
+> +#define  ECE_RESOL_FB_LP_2560		3
+> +#define  ECE_RESOL_FB_LP_4096		4
+> +
+> +#define ECE_HEX_CTRL			0x0040
+> +#define  ECE_HEX_CTRL_ENCDIS		BIT(0)
+> +#define  ECE_HEX_CTRL_ENC_GAP		GENMASK(12, 8)
+> +
+> +#define ECE_HEX_RECT_OFFSET		0x0048
+> +#define  ECE_HEX_RECT_OFFSET_MASK	GENMASK(22, 0)
+> +
+> +#define ECE_TILE_W			16
+> +#define ECE_TILE_H			16
+> +#define ECE_POLL_TIMEOUT_US		300000
+> +
+> +/* GCR Registers */
+> +#define INTCR				0x3c
+> +#define  INTCR_GFXIFDIS			GENMASK(9, 8)
+> +#define  INTCR_DEHS			BIT(27)
+> +
+> +#define INTCR2				0x60
+> +#define  INTCR2_GIRST2			BIT(2)
+> +#define  INTCR2_GIHCRST			BIT(5)
+> +#define  INTCR2_GIVCRST			BIT(6)
+> +
+> +#define INTCR3				0x9c
+> +#define  INTCR3_GMMAP			GENMASK(10, 8)
+> +#define   INTCR3_GMMAP_128MB		0
+> +#define   INTCR3_GMMAP_256MB		1
+> +#define   INTCR3_GMMAP_512MB		2
+> +#define   INTCR3_GMMAP_1GB		3
+> +#define   INTCR3_GMMAP_2GB		4
+> +
+> +#define INTCR4				0xc0
+> +#define  INTCR4_GMMAP			GENMASK(22, 16)
+> +#define  INTCR4_GMMAP_512MB		0x1f
+> +#define  INTCR4_GMMAP_512MB_ECC		0x1b
+> +#define  INTCR4_GMMAP_1GB		0x3f
+> +#define  INTCR4_GMMAP_1GB_ECC		0x37
+> +#define  INTCR4_GMMAP_2GB		0x7f
+> +#define  INTCR4_GMMAP_2GB_ECC		0x6f
+> +
+> +#define ADDR_GMMAP_128MB		0x07000000
+> +#define ADDR_GMMAP_256MB		0x0f000000
+> +#define ADDR_GMMAP_512MB		0x1f000000
+> +#define ADDR_GMMAP_512MB_ECC		0x1b000000
+> +#define ADDR_GMMAP_1GB			0x3f000000
+> +#define ADDR_GMMAP_1GB_ECC		0x37000000
+> +#define ADDR_GMMAP_2GB			0x7f000000
+> +#define ADDR_GMMAP_2GB_ECC		0x6f000000
+> +
+> +#define GMMAP_LENGTH			0xc00000 /* 4MB preserved, total 16MB */
+> +
+> +#define MFSEL1				0x0c
+> +#define  MFSEL1_DVH1SEL			BIT(27)
+> +
+> +/* GFXI Register */
+> +#define DISPST				0x00
+> +#define  DISPST_HSCROFF			BIT(1)
+> +#define  DISPST_MGAMODE			BIT(7)
+> +
+> +#define HVCNTL				0x10
+> +#define  HVCNTL_MASK			GENMASK(7, 0)
+> +
+> +#define HVCNTH				0x14
+> +#define  HVCNTH_MASK			GENMASK(2, 0)
+> +
+> +#define VVCNTL				0x20
+> +#define  VVCNTL_MASK			GENMASK(7, 0)
+> +
+> +#define VVCNTH				0x24
+> +#define  VVCNTH_MASK			GENMASK(2, 0)
+> +
+> +#define GPLLINDIV			0x40
+> +#define  GPLLINDIV_MASK			GENMASK(5, 0)
+> +#define  GPLLINDIV_GPLLFBDV8		BIT(7)
+> +
+> +#define GPLLFBDIV			0x44
+> +#define  GPLLFBDIV_MASK			GENMASK(7, 0)
+> +
+> +#define GPLLST				0x48
+> +#define  GPLLST_PLLOTDIV1		GENMASK(2, 0)
+> +#define  GPLLST_PLLOTDIV2		GENMASK(5, 3)
+> +#define  GPLLST_GPLLFBDV109		GENMASK(7, 6)
+> +
+> +#endif /* _NPCM_REGS_H */
+> diff --git a/drivers/media/platform/nuvoton/npcm-video.c b/drivers/media/platform/nuvoton/npcm-video.c
+> new file mode 100644
+> index 000000000000..b4edcb373755
+> --- /dev/null
+> +++ b/drivers/media/platform/nuvoton/npcm-video.c
+> @@ -0,0 +1,1898 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Driver for Video Capture/Differentiation Engine (VCD) and Encoding
+> + * Compression Engine (ECE) present on Nuvoton NPCM SoCs.
+> + *
+> + * Copyright (C) 2022 Nuvoton Technologies
+> + */
+> +
+> +#include <linux/atomic.h>
+> +#include <linux/bitfield.h>
+> +#include <linux/bitmap.h>
+> +#include <linux/clk.h>
+> +#include <linux/delay.h>
+> +#include <linux/device.h>
+> +#include <linux/dma-mapping.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/jiffies.h>
+> +#include <linux/mfd/syscon.h>
+> +#include <linux/module.h>
+> +#include <linux/mutex.h>
+> +#include <linux/of.h>
+> +#include <linux/of_irq.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/of_reserved_mem.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/reset.h>
+> +#include <linux/sched.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/string.h>
+> +#include <linux/v4l2-controls.h>
+> +#include <linux/videodev2.h>
+> +#include <media/v4l2-ctrls.h>
+> +#include <media/v4l2-dev.h>
+> +#include <media/v4l2-device.h>
+> +#include <media/v4l2-dv-timings.h>
+> +#include <media/v4l2-event.h>
+> +#include <media/v4l2-ioctl.h>
+> +#include <media/videobuf2-dma-contig.h>
+> +#include <uapi/linux/npcm-video.h>
+> +#include "npcm-regs.h"
+> +
+> +#define DEVICE_NAME	"npcm-video"
+> +#define MAX_WIDTH	1920
+> +#define MAX_HEIGHT	1200
+> +#define MIN_WIDTH	320
+> +#define MIN_HEIGHT	240
+> +#define MIN_LP		512
+> +#define MAX_LP		4096
+> +#define RECT_W		16
+> +#define RECT_H		16
+> +#define BITMAP_SIZE	32
+> +#define MAX_REQ_BUFS	10
+> +
+> +struct npcm_video_addr {
+> +	size_t size;
+> +	dma_addr_t dma;
+> +	void *virt;
+> +};
+> +
+> +struct npcm_video_buffer {
+> +	struct vb2_v4l2_buffer vb;
+> +	struct list_head link;
+> +};
+> +
+> +#define to_npcm_video_buffer(x) \
+> +	container_of((x), struct npcm_video_buffer, vb)
+> +
+> +enum {
+> +	VIDEO_STREAMING,
+> +	VIDEO_STOPPED,
+> +};
+> +
+> +struct rect_list {
+> +	struct v4l2_clip clip;
+> +	struct list_head list;
+> +};
+> +
+> +struct rect_list_info {
+> +	struct rect_list *list;
+> +	struct rect_list *first;
+> +	struct list_head *head;
+> +	unsigned int index;
+> +	unsigned int tile_perline;
+> +	unsigned int tile_perrow;
+> +	unsigned int offset_perline;
+> +	unsigned int tile_size;
+> +	unsigned int tile_cnt;
+> +};
+> +
+> +struct npcm_ece {
+> +	struct regmap *regmap;
+> +	atomic_t clients;
+> +	struct reset_control *reset;
+> +};
+> +
+> +struct npcm_video {
+> +	struct regmap *gcr_regmap;
+> +	struct regmap *gfx_regmap;
+> +	struct regmap *vcd_regmap;
+> +
+> +	struct device *dev;
+> +	struct v4l2_ctrl_handler ctrl_handler;
+> +	struct v4l2_device v4l2_dev;
+> +	struct v4l2_pix_format pix_fmt;
+> +	struct v4l2_bt_timings active_timings;
+> +	struct v4l2_bt_timings detected_timings;
+> +	unsigned int v4l2_input_status;
+> +	struct vb2_queue queue;
+> +	struct video_device vdev;
+> +	struct mutex video_lock; /* v4l2 and videobuf2 lock */
+> +
+> +	struct work_struct res_work;
+> +	struct list_head buffers;
+> +	spinlock_t lock; /* buffer list lock */
+> +	unsigned long flags;
+> +	unsigned int sequence;
+> +
+> +	struct npcm_video_addr src;
+> +	struct reset_control *reset;
+> +	struct npcm_ece ece;
+> +
+> +	unsigned int vb_index;
+> +	unsigned int bytesperline;
+> +	unsigned int bytesperpixel;
+> +	unsigned int rect_cnt;
+> +	unsigned int num_buffers;
+> +	struct list_head *list;
+> +	unsigned int rect[MAX_REQ_BUFS];
+> +	unsigned int ctrl_cmd;
+> +	unsigned int op_cmd;
+> +};
+> +
+> +#define to_npcm_video(x) container_of((x), struct npcm_video, v4l2_dev)
+> +
+> +struct npcm_fmt {
+> +	unsigned int fourcc;
+> +	unsigned int bpp; /* bytes per pixel */
+> +};
+> +
+> +static const struct npcm_fmt npcm_fmt_list[] = {
+> +	{
+> +		.fourcc = V4L2_PIX_FMT_RGB565,
+> +		.bpp	= 2,
+> +	},
+> +	{
+> +		.fourcc = V4L2_PIX_FMT_HEXTILE,
+> +		.bpp	= 2,
+> +	},
+> +};
+> +
+> +#define NUM_FORMATS ARRAY_SIZE(npcm_fmt_list)
+> +
+> +static const struct v4l2_dv_timings_cap npcm_video_timings_cap = {
+> +	.type = V4L2_DV_BT_656_1120,
+> +	.bt = {
+> +		.min_width = MIN_WIDTH,
+> +		.max_width = MAX_WIDTH,
+> +		.min_height = MIN_HEIGHT,
+> +		.max_height = MAX_HEIGHT,
+> +		.min_pixelclock = 6574080, /* 640 x 480 x 24Hz */
+> +		.max_pixelclock = 138240000, /* 1920 x 1200 x 60Hz */
+> +		.standards = V4L2_DV_BT_STD_CEA861 | V4L2_DV_BT_STD_DMT |
+> +			     V4L2_DV_BT_STD_CVT | V4L2_DV_BT_STD_GTF,
+> +		.capabilities = V4L2_DV_BT_CAP_PROGRESSIVE |
+> +				V4L2_DV_BT_CAP_REDUCED_BLANKING |
+> +				V4L2_DV_BT_CAP_CUSTOM,
+> +	},
+> +};
+> +
+> +static DECLARE_BITMAP(bitmap, BITMAP_SIZE);
+> +
+> +static const struct npcm_fmt *npcm_video_find_format(struct v4l2_format *f)
+> +{
+> +	const struct npcm_fmt *fmt;
+> +	unsigned int k;
+> +
+> +	for (k = 0; k < NUM_FORMATS; k++) {
+> +		fmt = &npcm_fmt_list[k];
+> +		if (fmt->fourcc == f->fmt.pix.pixelformat)
+> +			break;
+> +	}
+> +
+> +	if (k == NUM_FORMATS)
+> +		return NULL;
+> +
+> +	return &npcm_fmt_list[k];
+> +}
+> +
+> +static void npcm_video_ece_prepend_rect_header(void *addr, u16 x, u16 y, u16 w, u16 h)
+> +{
+> +	__be16 x_pos = cpu_to_be16(x);
+> +	__be16 y_pos = cpu_to_be16(y);
+> +	__be16 width = cpu_to_be16(w);
+> +	__be16 height = cpu_to_be16(h);
+> +	__be32 encoding = cpu_to_be32(5); /* Hextile encoding */
+> +
+> +	memcpy(addr, &x_pos, 2);
+> +	memcpy(addr + 2, &y_pos, 2);
+> +	memcpy(addr + 4, &width, 2);
+> +	memcpy(addr + 6, &height, 2);
+> +	memcpy(addr + 8, &encoding, 4);
+> +}
+> +
+> +static unsigned int npcm_video_ece_get_ed_size(struct npcm_video *video,
+> +					       unsigned int offset, void *addr)
+> +{
+> +	struct regmap *ece = video->ece.regmap;
+> +	unsigned int size, gap, val;
+> +	int ret;
+> +
+> +	ret = regmap_read_poll_timeout(ece, ECE_DDA_STS, val,
+> +				       (val & ECE_DDA_STS_CDREADY), 0,
+> +				       ECE_POLL_TIMEOUT_US);
+> +
+> +	if (ret) {
+> +		dev_warn(video->dev, "Wait for ECE_DDA_STS_CDREADY timeout\n");
+> +		return 0;
+> +	}
+> +
+> +	size = readl(addr + offset);
+> +	regmap_read(ece, ECE_HEX_CTRL, &val);
+> +	gap = FIELD_GET(ECE_HEX_CTRL_ENC_GAP, val);
+> +
+> +	dev_dbg(video->dev, "offset = %u, ed_size = %u, gap = %u\n", offset,
+> +		size, gap);
+> +
+> +	return size + gap;
+> +}
+> +
+> +static void npcm_video_ece_enc_rect(struct npcm_video *video,
+> +				    unsigned int r_off_x, unsigned int r_off_y,
+> +				    unsigned int r_w, unsigned int r_h)
+> +{
+> +	struct regmap *ece = video->ece.regmap;
+> +	unsigned int rect_offset = (r_off_y * video->bytesperline) + (r_off_x * 2);
+> +	unsigned int w_size = ECE_TILE_W, h_size = ECE_TILE_H;
+> +	unsigned int temp, w_tile, h_tile;
+> +
+> +	regmap_update_bits(ece, ECE_DDA_CTRL, ECE_DDA_CTRL_ECEEN, 0);
+> +	regmap_update_bits(ece, ECE_DDA_CTRL, ECE_DDA_CTRL_ECEEN, ECE_DDA_CTRL_ECEEN);
+> +	regmap_write(ece, ECE_DDA_STS, ECE_DDA_STS_CDREADY | ECE_DDA_STS_ACDRDY);
+> +	regmap_write(ece, ECE_RECT_XY, rect_offset);
+> +
+> +	w_tile = r_w / ECE_TILE_W;
+> +	h_tile = r_h / ECE_TILE_H;
+> +
+> +	if (r_w % ECE_TILE_W) {
+> +		w_tile += 1;
+> +		w_size = r_w % ECE_TILE_W;
+> +	}
+> +	if (r_h % ECE_TILE_H || !h_tile) {
+> +		h_tile += 1;
+> +		h_size = r_h % ECE_TILE_H;
+> +	}
+> +
+> +	temp = FIELD_PREP(ECE_RECT_DIMEN_WLTR, w_size - 1) |
+> +	       FIELD_PREP(ECE_RECT_DIMEN_HLTR, h_size - 1) |
+> +	       FIELD_PREP(ECE_RECT_DIMEN_WR, w_tile - 1) |
+> +	       FIELD_PREP(ECE_RECT_DIMEN_HR, h_tile - 1);
+> +
+> +	regmap_write(ece, ECE_RECT_DIMEN, temp);
+> +}
+> +
+> +static unsigned int npcm_video_ece_read_rect_offset(struct npcm_video *video)
+> +{
+> +	struct regmap *ece = video->ece.regmap;
+> +	unsigned int offset;
+> +
+> +	regmap_read(ece, ECE_HEX_RECT_OFFSET, &offset);
+> +	return FIELD_GET(ECE_HEX_RECT_OFFSET_MASK, offset);
+> +}
+> +
+> +/*
+> + * Set the line pitch (in bytes) for the frame buffers.
+> + * Can be on of those values: 512, 1024, 2048, 2560 or 4096 bytes.
+> + */
+> +static void npcm_video_ece_set_lp(struct npcm_video *video, unsigned int pitch)
+> +{
+> +	struct regmap *ece = video->ece.regmap;
+> +	unsigned int lp;
+> +
+> +	switch (pitch) {
+> +	case 512:
+> +		lp = ECE_RESOL_FB_LP_512;
+> +		break;
+> +	case 1024:
+> +		lp = ECE_RESOL_FB_LP_1024;
+> +		break;
+> +	case 2048:
+> +		lp = ECE_RESOL_FB_LP_2048;
+> +		break;
+> +	case 2560:
+> +		lp = ECE_RESOL_FB_LP_2560;
+> +		break;
+> +	case 4096:
+> +		lp = ECE_RESOL_FB_LP_4096;
+> +		break;
+> +	default:
+> +		return;
+> +	}
+> +
+> +	regmap_write(ece, ECE_RESOL, lp);
+> +}
+> +
+> +static inline void npcm_video_ece_set_fb_addr(struct npcm_video *video,
+> +					      unsigned int buffer)
+> +{
+> +	struct regmap *ece = video->ece.regmap;
+> +
+> +	regmap_write(ece, ECE_FBR_BA, buffer);
+> +}
+> +
+> +static inline void npcm_video_ece_set_enc_dba(struct npcm_video *video,
+> +					      unsigned int addr)
+> +{
+> +	struct regmap *ece = video->ece.regmap;
+> +
+> +	regmap_write(ece, ECE_ED_BA, addr);
+> +}
+> +
+> +static inline void npcm_video_ece_clear_rect_offset(struct npcm_video *video)
+> +{
+> +	struct regmap *ece = video->ece.regmap;
+> +
+> +	regmap_write(ece, ECE_HEX_RECT_OFFSET, 0);
+> +}
+> +
+> +static void npcm_video_ece_ctrl_reset(struct npcm_video *video)
+> +{
+> +	struct regmap *ece = video->ece.regmap;
+> +
+> +	regmap_update_bits(ece, ECE_DDA_CTRL, ECE_DDA_CTRL_ECEEN, 0);
+> +	regmap_update_bits(ece, ECE_HEX_CTRL, ECE_HEX_CTRL_ENCDIS, ECE_HEX_CTRL_ENCDIS);
+> +	regmap_update_bits(ece, ECE_DDA_CTRL, ECE_DDA_CTRL_ECEEN, ECE_DDA_CTRL_ECEEN);
+> +	regmap_update_bits(ece, ECE_HEX_CTRL, ECE_HEX_CTRL_ENCDIS, 0);
+> +
+> +	npcm_video_ece_clear_rect_offset(video);
+> +}
+> +
+> +static void npcm_video_ece_ip_reset(struct npcm_video *video)
+> +{
+> +	/*
+> +	 * After resetting a module and clearing the reset bit, it should wait
+> +	 * at least 10 us before accessing the module.
+> +	 */
+> +	reset_control_assert(video->ece.reset);
+> +	usleep_range(10, 20);
+> +	reset_control_deassert(video->ece.reset);
+> +	usleep_range(10, 20);
+> +}
+> +
+> +static inline void npcm_video_ece_init(struct npcm_video *video)
+> +{
+> +	npcm_video_ece_ip_reset(video);
+> +	npcm_video_ece_ctrl_reset(video);
+> +}
+> +
+> +static void npcm_video_ece_stop(struct npcm_video *video)
+> +{
+> +	struct regmap *ece = video->ece.regmap;
+> +
+> +	regmap_update_bits(ece, ECE_DDA_CTRL, ECE_DDA_CTRL_ECEEN, 0);
+> +	regmap_update_bits(ece, ECE_DDA_CTRL, ECE_DDA_CTRL_INTEN, 0);
+> +	regmap_update_bits(ece, ECE_HEX_CTRL, ECE_HEX_CTRL_ENCDIS, ECE_HEX_CTRL_ENCDIS);
+> +	npcm_video_ece_clear_rect_offset(video);
+> +}
+> +
+> +static bool npcm_video_alloc_fb(struct npcm_video *video,
+> +				struct npcm_video_addr *addr)
+> +{
+> +	addr->virt = dma_alloc_coherent(video->dev, VCD_FB_SIZE, &addr->dma,
+> +					GFP_KERNEL);
+> +	if (!addr->virt)
+> +		return false;
+> +
+> +	addr->size = VCD_FB_SIZE;
+> +	return true;
+> +}
+> +
+> +static void npcm_video_free_fb(struct npcm_video *video,
+> +			       struct npcm_video_addr *addr)
+> +{
+> +	dma_free_coherent(video->dev, addr->size, addr->virt, addr->dma);
+> +	addr->size = 0;
+> +	addr->dma = 0ULL;
+> +	addr->virt = NULL;
+> +}
+> +
+> +static void npcm_video_free_diff_table(struct npcm_video *video)
+> +{
+> +	struct list_head *head, *pos, *nx;
+> +	struct rect_list *tmp;
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < video->num_buffers; i++) {
+> +		head = &video->list[i];
+> +		list_for_each_safe(pos, nx, head) {
+> +			tmp = list_entry(pos, struct rect_list, list);
+> +			list_del(&tmp->list);
+> +			kfree(tmp);
+> +		}
+> +	}
+> +}
+> +
+> +static unsigned int npcm_video_add_rect(struct npcm_video *video,
+> +					unsigned int index,
+> +					unsigned int x, unsigned int y,
+> +					unsigned int w, unsigned int h)
+> +{
+> +	struct list_head *head = &video->list[index];
+> +	struct rect_list *list = NULL;
+> +	struct v4l2_rect *r;
+> +
+> +	list = kzalloc(sizeof(*list), GFP_KERNEL);
+> +	if (!list)
+> +		return 0;
+> +
+> +	r = &list->clip.c;
+> +	r->left = x;
+> +	r->top = y;
+> +	r->width = w;
+> +	r->height = h;
+> +
+> +	list_add_tail(&list->list, head);
+> +	return 1;
+> +}
+> +
+> +static void npcm_video_merge_rect(struct npcm_video *video,
+> +				  struct rect_list_info *info)
+> +{
+> +	struct list_head *head = info->head;
+> +	struct rect_list *list = info->list, *first = info->first;
+> +	struct v4l2_rect *r = &list->clip.c, *f = &first->clip.c;
+> +
+> +	if (!first) {
+> +		first = list;
+> +		info->first = first;
+> +		list_add_tail(&list->list, head);
+> +		video->rect_cnt++;
+> +	} else {
+> +		if ((r->left == (f->left + f->width)) && r->top == f->top) {
+> +			f->width += r->width;
+> +			kfree(list);
+> +		} else if ((r->top == (f->top + f->height)) &&
+> +			   (r->left == f->left)) {
+> +			f->height += r->height;
+> +			kfree(list);
+> +		} else if (((r->top > f->top) &&
+> +			   (r->top < (f->top + f->height))) &&
+> +			   ((r->left > f->left) &&
+> +			   (r->left < (f->left + f->width)))) {
+> +			kfree(list);
+> +		} else {
+> +			list_add_tail(&list->list, head);
+> +			video->rect_cnt++;
+> +			info->first = list;
+> +		}
+> +	}
+> +}
+> +
+> +static struct rect_list *npcm_video_new_rect(struct npcm_video *video,
+> +					     unsigned int offset,
+> +					     unsigned int index)
+> +{
+> +	struct v4l2_bt_timings *act = &video->active_timings;
+> +	struct rect_list *list = NULL;
+> +	struct v4l2_rect *r;
+> +
+> +	list = kzalloc(sizeof(*list), GFP_KERNEL);
+> +	if (!list)
+> +		return NULL;
+> +
+> +	r = &list->clip.c;
+> +
+> +	r->left = (offset << 4);
+> +	r->top = (index >> 2);
+> +	r->width = RECT_W;
+> +	r->height = RECT_H;
+> +	if ((r->left + RECT_W) > act->width)
+> +		r->width = act->width - r->left;
+> +	if ((r->top + RECT_H) > act->height)
+> +		r->height = act->height - r->top;
+> +
+> +	return list;
+> +}
+> +
+> +static int npcm_video_find_rect(struct npcm_video *video,
+> +				struct rect_list_info *info,
+> +				unsigned int offset)
+> +{
+> +	if (offset < info->tile_perline) {
+> +		info->list = npcm_video_new_rect(video, offset, info->index);
+> +		if (!info->list) {
+> +			dev_err(video->dev, "Failed to allocate rect_list\n");
+> +			return -ENOMEM;
+> +		}
+> +
+> +		npcm_video_merge_rect(video, info);
+> +	}
+> +	return 0;
+> +}
+> +
+> +static int npcm_video_build_table(struct npcm_video *video,
+> +				  struct rect_list_info *info)
+> +{
+> +	struct regmap *vcd = video->vcd_regmap;
+> +	unsigned int j, bit, value;
+> +	int ret;
+> +
+> +	for (j = 0; j < info->offset_perline; j += 4) {
+> +		regmap_read(vcd, VCD_DIFF_TBL + (j + info->index), &value);
+> +
+> +		bitmap_from_arr32(bitmap, &value, BITMAP_SIZE);
+> +
+> +		for_each_set_bit(bit, bitmap, BITMAP_SIZE) {
+> +			ret = npcm_video_find_rect(video, info, bit + (j << 3));
+> +			if (ret)
+> +				return ret;
+> +		}
+> +	}
+> +	info->index += 64;
+> +	return info->tile_perline;
+> +}
+> +
+> +static void npcm_video_get_rect_list(struct npcm_video *video, unsigned int index)
+> +{
+> +	struct v4l2_bt_timings *act = &video->active_timings;
+> +	struct rect_list_info info;
+> +	unsigned int tile_cnt = 0, mod;
+> +	int ret = 0;
+> +
+> +	memset(&info, 0, sizeof(struct rect_list_info));
+> +	info.head = &video->list[index];
+> +
+> +	info.tile_perline = act->width >> 4;
+> +	mod = act->width % RECT_W;
+> +	if (mod != 0)
+> +		info.tile_perline += 1;
+> +
+> +	info.tile_perrow = act->height >> 4;
+> +	mod = act->height % RECT_H;
+> +	if (mod != 0)
+> +		info.tile_perrow += 1;
+> +
+> +	info.tile_size = info.tile_perrow * info.tile_perline;
+> +
+> +	info.offset_perline = info.tile_perline >> 5;
+> +	mod = info.tile_perline % 32;
+> +	if (mod != 0)
+> +		info.offset_perline += 1;
+> +
+> +	info.offset_perline *= 4;
+> +
+> +	do {
+> +		ret = npcm_video_build_table(video, &info);
+> +		if (ret < 0)
+> +			return;
+> +
+> +		tile_cnt += ret;
+> +	} while (tile_cnt < info.tile_size);
+> +}
+> +
+> +static unsigned int npcm_video_is_mga(struct npcm_video *video)
+> +{
+> +	struct regmap *gfxi = video->gfx_regmap;
+> +	unsigned int dispst;
+> +
+> +	regmap_read(gfxi, DISPST, &dispst);
+> +	return ((dispst & DISPST_MGAMODE) == DISPST_MGAMODE);
+> +}
+> +
+> +static unsigned int npcm_video_hres(struct npcm_video *video)
+> +{
+> +	struct regmap *gfxi = video->gfx_regmap;
+> +	unsigned int hvcnth, hvcntl, apb_hor_res;
+> +
+> +	regmap_read(gfxi, HVCNTH, &hvcnth);
+> +	regmap_read(gfxi, HVCNTL, &hvcntl);
+> +	apb_hor_res = (((hvcnth & HVCNTH_MASK) << 8) + (hvcntl & HVCNTL_MASK) + 1);
+> +
+> +	return apb_hor_res;
+> +}
+> +
+> +static unsigned int npcm_video_vres(struct npcm_video *video)
+> +{
+> +	struct regmap *gfxi = video->gfx_regmap;
+> +	unsigned int vvcnth, vvcntl, apb_ver_res;
+> +
+> +	regmap_read(gfxi, VVCNTH, &vvcnth);
+> +	regmap_read(gfxi, VVCNTL, &vvcntl);
+> +
+> +	apb_ver_res = (((vvcnth & VVCNTH_MASK) << 8) + (vvcntl & VVCNTL_MASK));
+> +
+> +	return apb_ver_res;
+> +}
+> +
+> +static int npcm_video_capres(struct npcm_video *video, unsigned int hor_res,
+> +			     unsigned int vert_res)
+> +{
+> +	struct regmap *vcd = video->vcd_regmap;
+> +	unsigned int res, cap_res;
+> +
+> +	if (hor_res > MAX_WIDTH || vert_res > MAX_HEIGHT)
+> +		return -EINVAL;
+> +
+> +	res = FIELD_PREP(VCD_CAP_RES_VERT_RES, vert_res) |
+> +	      FIELD_PREP(VCD_CAP_RES_HOR_RES, hor_res);
+> +
+> +	regmap_write(vcd, VCD_CAP_RES, res);
+> +	regmap_read(vcd, VCD_CAP_RES, &cap_res);
+> +
+> +	if (cap_res != res)
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +
+> +static void npcm_video_vcd_ip_reset(struct npcm_video *video)
+> +{
+> +	/*
+> +	 * After resetting a module and clearing the reset bit, it should wait
+> +	 * at least 10 us before accessing the module.
+> +	 */
+> +	reset_control_assert(video->reset);
+> +	usleep_range(10, 20);
+> +	reset_control_deassert(video->reset);
+> +	usleep_range(10, 20);
+> +}
+> +
+> +static void npcm_video_vcd_state_machine_reset(struct npcm_video *video)
+> +{
+> +	struct regmap *vcd = video->vcd_regmap;
+> +	unsigned int stat;
+> +	int ret;
+> +
+> +	regmap_update_bits(vcd, VCD_MODE, VCD_MODE_VCDE, 0);
+> +	regmap_update_bits(vcd, VCD_MODE, VCD_MODE_IDBC, 0);
+> +	regmap_update_bits(vcd, VCD_CMD, VCD_CMD_RST, VCD_CMD_RST);
+> +
+> +	ret = regmap_read_poll_timeout(vcd, VCD_STAT, stat, (stat & VCD_STAT_DONE),
+> +				       0, ECE_POLL_TIMEOUT_US);
+> +	if (ret) {
+> +		dev_warn(video->dev, "Wait for VCD_STAT_DONE timeout\n");
+> +		return;
+> +	}
+> +
+> +	regmap_write(vcd, VCD_STAT, VCD_STAT_CLEAR);
+> +	regmap_update_bits(vcd, VCD_MODE, VCD_MODE_VCDE, VCD_MODE_VCDE);
+> +	regmap_update_bits(vcd, VCD_MODE, VCD_MODE_IDBC, VCD_MODE_IDBC);
+> +}
+> +
+> +static void npcm_video_gfx_reset(struct npcm_video *video)
+> +{
+> +	struct regmap *gcr = video->gcr_regmap;
+> +
+> +	regmap_update_bits(gcr, INTCR2, INTCR2_GIRST2, INTCR2_GIRST2);
+> +	npcm_video_vcd_state_machine_reset(video);
+> +	regmap_update_bits(gcr, INTCR2, INTCR2_GIRST2, 0);
+> +}
+> +
+> +static void npcm_video_kvm_bw(struct npcm_video *video, bool set_bw)
+> +{
+> +	struct regmap *vcd = video->vcd_regmap;
+> +
+> +	if (set_bw || !npcm_video_is_mga(video))
+> +		regmap_update_bits(vcd, VCD_MODE, VCD_MODE_KVM_BW_SET,
+> +				   VCD_MODE_KVM_BW_SET);
+> +	else
+> +		regmap_update_bits(vcd, VCD_MODE, VCD_MODE_KVM_BW_SET, 0);
+> +}
+> +
+> +static unsigned int npcm_video_pclk(struct npcm_video *video)
+> +{
+> +	struct regmap *gfxi = video->gfx_regmap;
+> +	unsigned int tmp, pllfbdiv, pllinotdiv, gpllfbdiv;
+> +	unsigned int gpllfbdv109, gpllfbdv8, gpllindiv;
+> +	unsigned int gpllst_pllotdiv1, gpllst_pllotdiv2;
+> +
+> +	regmap_read(gfxi, GPLLST, &tmp);
+> +	gpllfbdv109 = FIELD_GET(GPLLST_GPLLFBDV109, tmp);
+> +	gpllst_pllotdiv1 = FIELD_GET(GPLLST_PLLOTDIV1, tmp);
+> +	gpllst_pllotdiv2 = FIELD_GET(GPLLST_PLLOTDIV2, tmp);
+> +
+> +	regmap_read(gfxi, GPLLINDIV, &tmp);
+> +	gpllfbdv8 = FIELD_GET(GPLLINDIV_GPLLFBDV8, tmp);
+> +	gpllindiv = FIELD_GET(GPLLINDIV_MASK, tmp);
+> +
+> +	regmap_read(gfxi, GPLLFBDIV, &tmp);
+> +	gpllfbdiv = FIELD_GET(GPLLFBDIV_MASK, tmp);
+> +
+> +	pllfbdiv = (512 * gpllfbdv109 + 256 * gpllfbdv8 + gpllfbdiv);
+> +	pllinotdiv = (gpllindiv * gpllst_pllotdiv1 * gpllst_pllotdiv2);
+> +	if (pllfbdiv == 0 || pllinotdiv == 0)
+> +		return 0;
+> +
+> +	return ((pllfbdiv * 25000) / pllinotdiv) * 1000;
+> +}
+> +
+> +static unsigned int npcm_video_get_bpp(struct npcm_video *video)
+> +{
+> +	const struct npcm_fmt *fmt;
+> +	unsigned int k;
+> +
+> +	for (k = 0; k < NUM_FORMATS; k++) {
+> +		fmt = &npcm_fmt_list[k];
+> +		if (fmt->fourcc == video->pix_fmt.pixelformat)
+> +			break;
+> +	}
+> +
+> +	return fmt->bpp;
+> +}
+> +
+> +/*
+> + * Pitch must be a power of 2, >= linebytes,
+> + * at least 512, and no more than 4096.
+> + */
+> +static void npcm_video_set_linepitch(struct npcm_video *video,
+> +				     unsigned int linebytes)
+> +{
+> +	struct regmap *vcd = video->vcd_regmap;
+> +	unsigned int pitch = MIN_LP;
+> +
+> +	while ((pitch < linebytes) && (pitch < MAX_LP))
+> +		pitch *= 2;
+> +
+> +	regmap_write(vcd, VCD_FB_LP, FIELD_PREP(VCD_FBA_LP, pitch) |
+> +		     FIELD_PREP(VCD_FBB_LP, pitch));
+> +}
+> +
+> +static unsigned int npcm_video_get_linepitch(struct npcm_video *video)
+> +{
+> +	struct regmap *vcd = video->vcd_regmap;
+> +	unsigned int linepitch;
+> +
+> +	regmap_read(vcd, VCD_FB_LP, &linepitch);
+> +	return FIELD_GET(VCD_FBA_LP, linepitch);
+> +}
+> +
+> +static void npcm_video_command(struct npcm_video *video, unsigned int value)
+> +{
+> +	struct regmap *vcd = video->vcd_regmap;
+> +	unsigned int cmd;
+> +
+> +	regmap_write(vcd, VCD_STAT, VCD_STAT_CLEAR);
+> +	regmap_read(vcd, VCD_CMD, &cmd);
+> +	cmd |= FIELD_PREP(VCD_CMD_OPERATION, value);
+> +
+> +	regmap_write(vcd, VCD_CMD, cmd);
+> +	regmap_update_bits(vcd, VCD_CMD, VCD_CMD_GO, VCD_CMD_GO);
+> +	video->op_cmd = value;
+> +}
+> +
+> +static void npcm_video_init_reg(struct npcm_video *video)
+> +{
+> +	struct regmap *gcr = video->gcr_regmap, *vcd = video->vcd_regmap;
+> +
+> +	/* Selects Data Enable */
+> +	regmap_update_bits(gcr, INTCR, INTCR_DEHS, 0);
+> +
+> +	/* Enable display of KVM GFX and access to memory */
+> +	regmap_update_bits(gcr, INTCR, INTCR_GFXIFDIS, 0);
+> +
+> +	/* Active Vertical/Horizontal Counters Reset */
+> +	regmap_update_bits(gcr, INTCR2, INTCR2_GIHCRST | INTCR2_GIVCRST,
+> +			   INTCR2_GIHCRST | INTCR2_GIVCRST);
+> +
+> +	/* Select KVM GFX input */
+> +	regmap_update_bits(gcr, MFSEL1, MFSEL1_DVH1SEL, 0);
+> +
+> +	/* Reset video modules */
+> +	npcm_video_vcd_ip_reset(video);
+> +	npcm_video_gfx_reset(video);
+> +
+> +	/* Set the FIFO thresholds */
+> +	regmap_write(vcd, VCD_FIFO, VCD_FIFO_TH);
+> +
+> +	/* Set RCHG timer */
+> +	regmap_write(vcd, VCD_RCHG, FIELD_PREP(VCD_RCHG_TIM_PRSCL, 0xf) |
+> +		     FIELD_PREP(VCD_RCHG_IG_CHG0, 0x3));
+> +
+> +	/* Set video mode */
+> +	regmap_write(vcd, VCD_MODE, VCD_MODE_VCDE | VCD_MODE_CM565 |
+> +		     VCD_MODE_IDBC | VCD_MODE_KVM_BW_SET);
+> +}
+> +
+> +static int npcm_video_start_frame(struct npcm_video *video)
+> +{
+> +	struct npcm_video_buffer *buf;
+> +	struct regmap *vcd = video->vcd_regmap;
+> +	unsigned long flags;
+> +	unsigned int val;
+> +	int ret;
+> +
+> +	if (video->v4l2_input_status) {
+> +		dev_dbg(video->dev, "No video signal; skip capture frame\n");
+> +		return 0;
+> +	}
+> +
+> +	ret = regmap_read_poll_timeout(vcd, VCD_STAT, val, !(val & VCD_STAT_BUSY),
+> +				       1000, VCD_BUSY_TIMEOUT_US);
+> +	if (ret) {
+> +		dev_err(video->dev, "Wait for VCD_STAT_BUSY timeout\n");
+> +		return -EBUSY;
+> +	}
+> +
+> +	spin_lock_irqsave(&video->lock, flags);
+> +	buf = list_first_entry_or_null(&video->buffers,
+> +				       struct npcm_video_buffer, link);
+> +	if (!buf) {
+> +		spin_unlock_irqrestore(&video->lock, flags);
+> +		dev_dbg(video->dev, "No empty buffers; skip capture frame\n");
+> +		return 0;
+> +	}
+> +
+> +	spin_unlock_irqrestore(&video->lock, flags);
+> +
+> +	npcm_video_vcd_state_machine_reset(video);
+> +
+> +	regmap_read(vcd, VCD_HOR_AC_TIM, &val);
+> +	regmap_update_bits(vcd, VCD_HOR_AC_LST, VCD_HOR_AC_LAST,
+> +			   FIELD_GET(VCD_HOR_AC_TIME, val));
+> +
+> +	regmap_read(vcd, VCD_VER_HI_TIM, &val);
+> +	regmap_update_bits(vcd, VCD_VER_HI_LST, VCD_VER_HI_LAST,
+> +			   FIELD_GET(VCD_VER_HI_TIME, val));
+> +
+> +	regmap_update_bits(vcd, VCD_INTE, VCD_INTE_DONE_IE | VCD_INTE_IFOT_IE |
+> +			   VCD_INTE_IFOR_IE | VCD_INTE_HAC_IE | VCD_INTE_VHT_IE,
+> +			   VCD_INTE_DONE_IE | VCD_INTE_IFOT_IE | VCD_INTE_IFOR_IE |
+> +			   VCD_INTE_HAC_IE | VCD_INTE_VHT_IE);
+> +
+> +	npcm_video_command(video, video->ctrl_cmd);
+> +
+> +	return 0;
+> +}
+> +
+> +static void npcm_video_bufs_done(struct npcm_video *video,
+> +				 enum vb2_buffer_state state)
+> +{
+> +	struct npcm_video_buffer *buf;
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&video->lock, flags);
+> +	list_for_each_entry(buf, &video->buffers, link)
+> +		vb2_buffer_done(&buf->vb.vb2_buf, state);
+> +
+> +	INIT_LIST_HEAD(&video->buffers);
+> +	spin_unlock_irqrestore(&video->lock, flags);
+> +}
+> +
+> +static void npcm_video_get_diff_rect(struct npcm_video *video, unsigned int index)
+> +{
+> +	unsigned int width = video->active_timings.width;
+> +	unsigned int height = video->active_timings.height;
+> +
+> +	if (video->op_cmd != VCD_CMD_OPERATION_CAPTURE) {
+> +		video->rect_cnt = 0;
+> +		npcm_video_get_rect_list(video, index);
+> +		video->rect[index] = video->rect_cnt;
+> +	} else {
+> +		video->rect[index] = npcm_video_add_rect(video, index, 0, 0,
+> +							 width, height);
+> +	}
+> +}
+> +
+> +static void npcm_video_clear_gmmap(struct npcm_video *video)
+> +{
+> +	struct regmap *gcr = video->gcr_regmap;
+> +	unsigned int intcr, gmmap;
+> +	void __iomem *baseptr = NULL;
+> +
+> +	if (of_device_is_compatible(video->dev->of_node, "nuvoton,npcm750-vcd")) {
+> +		regmap_read(gcr, INTCR3, &intcr);
+> +		gmmap = FIELD_GET(INTCR3_GMMAP, intcr);
+> +
+> +		switch (gmmap) {
+> +		case INTCR3_GMMAP_128MB:
+> +			baseptr = ioremap_wc(ADDR_GMMAP_128MB, GMMAP_LENGTH);
+> +			break;
+> +		case INTCR3_GMMAP_256MB:
+> +			baseptr = ioremap_wc(ADDR_GMMAP_256MB, GMMAP_LENGTH);
+> +			break;
+> +		case INTCR3_GMMAP_512MB:
+> +			baseptr = ioremap_wc(ADDR_GMMAP_512MB, GMMAP_LENGTH);
+> +			break;
+> +		case INTCR3_GMMAP_1GB:
+> +			baseptr = ioremap_wc(ADDR_GMMAP_1GB, GMMAP_LENGTH);
+> +			break;
+> +		case INTCR3_GMMAP_2GB:
+> +			baseptr = ioremap_wc(ADDR_GMMAP_2GB, GMMAP_LENGTH);
+> +			break;
+> +		}
+> +	} else if (of_device_is_compatible(video->dev->of_node, "nuvoton,npcm845-vcd")) {
+> +		regmap_read(gcr, INTCR4, &intcr);
+> +		gmmap = FIELD_GET(INTCR4_GMMAP, intcr);
+> +
+> +		switch (gmmap) {
+> +		case INTCR4_GMMAP_512MB:
+> +			baseptr = ioremap_wc(ADDR_GMMAP_512MB, GMMAP_LENGTH);
+> +			break;
+> +		case INTCR4_GMMAP_512MB_ECC:
+> +			baseptr = ioremap_wc(ADDR_GMMAP_512MB_ECC, GMMAP_LENGTH);
+> +			break;
+> +		case INTCR4_GMMAP_1GB:
+> +			baseptr = ioremap_wc(ADDR_GMMAP_1GB, GMMAP_LENGTH);
+> +			break;
+> +		case INTCR4_GMMAP_1GB_ECC:
+> +			baseptr = ioremap_wc(ADDR_GMMAP_1GB_ECC, GMMAP_LENGTH);
+> +			break;
+> +		case INTCR4_GMMAP_2GB:
+> +			baseptr = ioremap_wc(ADDR_GMMAP_2GB, GMMAP_LENGTH);
+> +			break;
+> +		case INTCR4_GMMAP_2GB_ECC:
+> +			baseptr = ioremap_wc(ADDR_GMMAP_2GB_ECC, GMMAP_LENGTH);
+> +			break;
+> +		}
+> +	}
+> +
+> +	if (baseptr) {
+> +		memset(baseptr, 0, GMMAP_LENGTH);
+> +		iounmap(baseptr);
+> +	}
+> +}
+> +
+> +static void npcm_video_detect_resolution(struct npcm_video *video)
+> +{
+> +	struct v4l2_bt_timings *act = &video->active_timings;
+> +	struct v4l2_bt_timings *det = &video->detected_timings;
+> +	struct regmap *gfxi = video->gfx_regmap;
+> +	unsigned int dispst;
+> +	static const struct v4l2_event ev = {
+> +		.type = V4L2_EVENT_SOURCE_CHANGE,
+> +		.u.src_change.changes = V4L2_EVENT_SRC_CH_RESOLUTION,
+> +	};
+> +
+> +	video->v4l2_input_status = V4L2_IN_ST_NO_SIGNAL;
+> +	det->width = npcm_video_hres(video);
+> +	det->height = npcm_video_vres(video);
+> +
+> +	if (act->width != det->width || act->height != det->height) {
+> +		dev_dbg(video->dev, "Resolution changed\n");
+> +
+> +		if (npcm_video_hres(video) > 0 && npcm_video_vres(video) > 0) {
+> +			if (test_bit(VIDEO_STREAMING, &video->flags)) {
+> +				/*
+> +				 * Wait for resolution is available,
+> +				 * and it is also captured by host.
+> +				 */
+> +				do {
+> +					mdelay(100);
+> +					regmap_read(gfxi, DISPST, &dispst);
+> +				} while (npcm_video_vres(video) < 100 ||
+> +					 npcm_video_pclk(video) == 0 ||
+> +					 (dispst & DISPST_HSCROFF));
+> +			}
+> +
+> +			det->width = npcm_video_hres(video);
+> +			det->height = npcm_video_vres(video);
+> +			det->pixelclock = npcm_video_pclk(video);
+> +		}
+> +
+> +		v4l2_event_queue(&video->vdev, &ev);
+> +	}
+> +
+> +	if (det->width && det->height)
+> +		video->v4l2_input_status = 0;
+> +
+> +	dev_dbg(video->dev, "Got resolution[%dx%d] -> [%dx%d], status %d\n",
+> +		act->width, act->height, det->width, det->height,
+> +		video->v4l2_input_status);
+> +}
+> +
+> +static int npcm_video_set_resolution(struct npcm_video *video,
+> +				     struct v4l2_bt_timings *timing)
+> +{
+> +	struct regmap *vcd = video->vcd_regmap;
+> +	unsigned int mode;
+> +
+> +	if (npcm_video_capres(video, timing->width, timing->height)) {
+> +		dev_err(video->dev, "Failed to set VCD_CAP_RES\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	video->bytesperpixel = npcm_video_get_bpp(video);
+> +	npcm_video_set_linepitch(video, timing->width * video->bytesperpixel);
+> +	video->bytesperline = npcm_video_get_linepitch(video);
+> +
+> +	npcm_video_kvm_bw(video, timing->pixelclock > VCD_KVM_BW_PCLK);
+> +	npcm_video_gfx_reset(video);
+> +	regmap_read(vcd, VCD_MODE, &mode);
+> +
+> +	dev_dbg(video->dev, "VCD mode = 0x%x, %s mode\n", mode,
+> +		npcm_video_is_mga(video) ? "Hi Res" : "VGA");
+> +
+> +	dev_dbg(video->dev,
+> +		"Digital mode: %d x %d x %d, pixelclock %lld, bytesperline %d\n",
+> +		timing->width, timing->height, video->bytesperpixel,
+> +		timing->pixelclock, video->bytesperline);
+> +
+> +	return 0;
+> +}
+> +
+> +static void npcm_video_start(struct npcm_video *video)
+> +{
+> +	npcm_video_init_reg(video);
+> +
+> +	if (!npcm_video_alloc_fb(video, &video->src)) {
+> +		dev_err(video->dev, "Failed to allocate VCD frame buffer\n");
+> +		return;
+> +	}
+> +
+> +	npcm_video_detect_resolution(video);
+> +	if (npcm_video_set_resolution(video, &video->detected_timings)) {
+> +		dev_err(video->dev, "Failed to set resolution\n");
+> +		return;
+> +	}
+> +	video->active_timings = video->detected_timings;
+> +
+> +	/* Set frame buffer physical address */
+> +	regmap_write(video->vcd_regmap, VCD_FBA_ADR, video->src.dma);
+> +	regmap_write(video->vcd_regmap, VCD_FBB_ADR, video->src.dma);
+> +
+> +	video->pix_fmt.width = video->active_timings.width ?
+> +			       video->active_timings.width : MIN_WIDTH;
+> +	video->pix_fmt.height = video->active_timings.height ?
+> +				video->active_timings.height : MIN_HEIGHT;
+> +	video->pix_fmt.sizeimage = video->pix_fmt.width * video->pix_fmt.height *
+> +				   video->bytesperpixel;
+> +	video->pix_fmt.bytesperline = video->bytesperline;
+> +
+> +	if (atomic_inc_return(&video->ece.clients) == 1) {
+> +		npcm_video_ece_init(video);
+> +		npcm_video_ece_set_fb_addr(video, video->src.dma);
+> +		npcm_video_ece_set_lp(video, video->bytesperline);
+> +
+> +		dev_dbg(video->dev, "ECE open: client %d\n",
+> +			atomic_read(&video->ece.clients));
+> +	}
+> +}
+> +
+> +static void npcm_video_stop(struct npcm_video *video)
+> +{
+> +	struct regmap *vcd = video->vcd_regmap;
+> +
+> +	set_bit(VIDEO_STOPPED, &video->flags);
+> +	cancel_work_sync(&video->res_work);
+> +
+> +	regmap_write(vcd, VCD_INTE, 0);
+> +	regmap_write(vcd, VCD_MODE, 0);
+> +	regmap_write(vcd, VCD_RCHG, 0);
+> +	regmap_write(vcd, VCD_STAT, VCD_STAT_CLEAR);
+> +
+> +	if (video->src.size)
+> +		npcm_video_free_fb(video, &video->src);
+> +
+> +	if (video->list)
+> +		npcm_video_free_diff_table(video);
+> +
+> +	kfree(video->list);
+> +	video->list = NULL;
+> +
+> +	video->v4l2_input_status = V4L2_IN_ST_NO_SIGNAL;
+> +	video->flags = 0;
+> +	video->ctrl_cmd = VCD_CMD_OPERATION_CAPTURE;
+> +
+> +	if (atomic_dec_return(&video->ece.clients) == 0) {
+> +		npcm_video_ece_stop(video);
+> +		dev_dbg(video->dev, "ECE close: client %d\n",
+> +			atomic_read(&video->ece.clients));
+> +	}
+> +}
+> +
+> +static unsigned int npcm_video_raw(struct npcm_video *video, int index, void *addr)
+> +{
+> +	unsigned int width = video->active_timings.width;
+> +	unsigned int height = video->active_timings.height;
+> +	unsigned int i, len, offset, bytes = 0;
+> +
+> +	video->rect[index] = npcm_video_add_rect(video, index, 0, 0, width, height);
+> +
+> +	for (i = 0; i < height; i++) {
+> +		len = width * video->bytesperpixel;
+> +		offset = i * video->bytesperline;
+> +
+> +		memcpy(addr + bytes, video->src.virt + offset, len);
+> +		bytes += len;
+> +	}
+> +
+> +	return bytes;
+> +}
+> +
+> +static unsigned int npcm_video_hextile(struct npcm_video *video, unsigned int index,
+> +				       unsigned int dma_addr, void *vaddr)
+> +{
+> +	struct rect_list *rect_list;
+> +	struct v4l2_rect *rect;
+> +	unsigned int offset, len, bytes = 0;
+> +
+> +	npcm_video_ece_ctrl_reset(video);
+> +	npcm_video_ece_clear_rect_offset(video);
+> +	npcm_video_ece_set_fb_addr(video, video->src.dma);
+> +
+> +	/* Set base address of encoded data to video buffer */
+> +	npcm_video_ece_set_enc_dba(video, dma_addr);
+> +
+> +	npcm_video_ece_set_lp(video, video->bytesperline);
+> +	npcm_video_get_diff_rect(video, index);
+> +
+> +	list_for_each_entry(rect_list, &video->list[index], list) {
+> +		rect = &rect_list->clip.c;
+> +		offset = npcm_video_ece_read_rect_offset(video);
+> +		npcm_video_ece_enc_rect(video, rect->left, rect->top,
+> +					rect->width, rect->height);
+> +
+> +		len = npcm_video_ece_get_ed_size(video, offset, vaddr);
+> +		npcm_video_ece_prepend_rect_header(vaddr + offset,
+> +						   rect->left, rect->top,
+> +						   rect->width, rect->height);
+> +		bytes += len;
+> +	}
+> +
+> +	return bytes;
+> +}
+> +
+> +static irqreturn_t npcm_video_irq(int irq, void *arg)
+> +{
+> +	struct npcm_video *video = arg;
+> +	struct regmap *vcd = video->vcd_regmap;
+> +	struct npcm_video_buffer *buf;
+> +	unsigned int index, size, status, fmt;
+> +	dma_addr_t dma_addr;
+> +	void *addr;
+> +
+> +	regmap_read(vcd, VCD_STAT, &status);
+> +	dev_dbg(video->dev, "VCD irq status 0x%x\n", status);
+> +
+> +	regmap_write(vcd, VCD_STAT, VCD_STAT_CLEAR);
+> +
+> +	if (test_bit(VIDEO_STOPPED, &video->flags) ||
+> +	    !test_bit(VIDEO_STREAMING, &video->flags))
+> +		return IRQ_NONE;
+> +
+> +	if (status & VCD_STAT_DONE) {
+> +		regmap_write(vcd, VCD_INTE, 0);
+> +		spin_lock(&video->lock);
+> +		buf = list_first_entry_or_null(&video->buffers,
+> +					       struct npcm_video_buffer, link);
+> +		if (!buf) {
+> +			spin_unlock(&video->lock);
+> +			return IRQ_NONE;
+> +		}
+> +
+> +		addr = vb2_plane_vaddr(&buf->vb.vb2_buf, 0);
+> +		index = buf->vb.vb2_buf.index;
+> +		fmt = video->pix_fmt.pixelformat;
+> +
+> +		switch (fmt) {
+> +		case V4L2_PIX_FMT_RGB565:
+> +			size = npcm_video_raw(video, index, addr);
+> +			break;
+> +		case V4L2_PIX_FMT_HEXTILE:
+> +			dma_addr = vb2_dma_contig_plane_dma_addr(&buf->vb.vb2_buf, 0);
+> +			size = npcm_video_hextile(video, index, dma_addr, addr);
+> +			break;
+> +		default:
+> +			return IRQ_NONE;
+> +		}
+> +
+> +		vb2_set_plane_payload(&buf->vb.vb2_buf, 0, size);
+> +		buf->vb.vb2_buf.timestamp = ktime_get_ns();
+> +		buf->vb.sequence = video->sequence++;
+> +		buf->vb.field = V4L2_FIELD_NONE;
+> +
+> +		vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_DONE);
+> +		list_del(&buf->link);
+> +		spin_unlock(&video->lock);
+> +	}
+> +
+> +	/* Resolution changed */
+> +	if (status & VCD_STAT_VHT_CHG || status & VCD_STAT_HAC_CHG)
+> +		schedule_work(&video->res_work);
+
+I don't think you need to schedule work. If the resolution changed,
+then you can just call vb2_queue_error and queue the SOURCE_CHANGED
+event here. You don't need to detect the resolution, you know it has changed,
+so just inform userspace and that will call QUERY_DV_TIMINGS.
+
+> +
+> +	if (status & VCD_STAT_IFOR || status & VCD_STAT_IFOT) {
+> +		dev_warn(video->dev, "VCD FIFO overrun or over thresholds\n");
+> +		npcm_video_stop(video);
+> +		npcm_video_start(video);
+
+This is dangerous: video_start detects the resolution and can update the
+width/height. So now there can be a mismatch between what userspace expects
+and what the DMA sends.
+
+I would make a new npcm_video_init(video) function that does the initial
+timings detection. Call that on the first open. The npcm_video_start drops
+that code and just uses the last set timings.
+
+Feel free to use an alternative to this, as long as restarting the video
+here doesn't change the width/height/format as a side-effect.
+
+> +		if (npcm_video_start_frame(video))
+> +			dev_warn(video->dev, "Failed to recover from FIFO overrun\n");
+> +	}
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int npcm_video_querycap(struct file *file, void *fh,
+> +			       struct v4l2_capability *cap)
+> +{
+> +	strscpy(cap->driver, DEVICE_NAME, sizeof(cap->driver));
+> +	strscpy(cap->card, "NPCM Video Engine", sizeof(cap->card));
+> +	snprintf(cap->bus_info, sizeof(cap->bus_info), "platform:%s", DEVICE_NAME);
+> +
+> +	return 0;
+> +}
+> +
+> +static int npcm_video_enum_format(struct file *file, void *fh,
+> +				  struct v4l2_fmtdesc *f)
+> +{
+> +	const struct npcm_fmt *fmt;
+> +
+> +	if (f->index >= NUM_FORMATS)
+> +		return -EINVAL;
+> +
+> +	fmt = &npcm_fmt_list[f->index];
+> +	f->pixelformat = fmt->fourcc;
+> +
+> +	return 0;
+> +}
+> +
+> +static int npcm_video_try_format(struct file *file, void *fh,
+> +				 struct v4l2_format *f)
+> +{
+> +	struct npcm_video *video = video_drvdata(file);
+> +	const struct npcm_fmt *fmt;
+> +
+> +	fmt = npcm_video_find_format(f);
+> +	if (!fmt)
+> +		f->fmt.pix.pixelformat = npcm_fmt_list[0].fourcc;
+> +
+> +	f->fmt.pix.field = V4L2_FIELD_NONE;
+> +	f->fmt.pix.colorspace = V4L2_COLORSPACE_SRGB;
+> +	f->fmt.pix.quantization = V4L2_QUANTIZATION_FULL_RANGE;
+> +	f->fmt.pix.width = video->pix_fmt.width;
+> +	f->fmt.pix.height = video->pix_fmt.height;
+> +	f->fmt.pix.bytesperline = video->bytesperline;
+> +	f->fmt.pix.sizeimage = video->pix_fmt.sizeimage;
+> +
+> +	return 0;
+> +}
+> +
+> +static int npcm_video_get_format(struct file *file, void *fh,
+> +				 struct v4l2_format *f)
+> +{
+> +	struct npcm_video *video = video_drvdata(file);
+> +
+> +	f->fmt.pix = video->pix_fmt;
+> +	return 0;
+> +}
+> +
+> +static int npcm_video_set_format(struct file *file, void *fh,
+> +				 struct v4l2_format *f)
+> +{
+> +	struct npcm_video *video = video_drvdata(file);
+> +	int ret;
+> +
+> +	ret = npcm_video_try_format(file, fh, f);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (vb2_is_busy(&video->queue)) {
+> +		dev_err(video->dev, "%s device busy\n", __func__);
+> +		return -EBUSY;
+> +	}
+> +
+> +	video->pix_fmt.pixelformat = f->fmt.pix.pixelformat;
+> +	return 0;
+> +}
+> +
+> +static int npcm_video_enum_input(struct file *file, void *fh,
+> +				 struct v4l2_input *inp)
+> +{
+> +	struct npcm_video *video = video_drvdata(file);
+> +
+> +	if (inp->index)
+> +		return -EINVAL;
+> +
+> +	strscpy(inp->name, "Host VGA capture", sizeof(inp->name));
+> +	inp->type = V4L2_INPUT_TYPE_CAMERA;
+> +	inp->capabilities = V4L2_IN_CAP_DV_TIMINGS;
+> +	inp->status = video->v4l2_input_status;
+> +
+> +	return 0;
+> +}
+> +
+> +static int npcm_video_get_input(struct file *file, void *fh, unsigned int *i)
+> +{
+> +	*i = 0;
+> +
+> +	return 0;
+> +}
+> +
+> +static int npcm_video_set_input(struct file *file, void *fh, unsigned int i)
+> +{
+> +	if (i)
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +
+> +static int npcm_video_set_dv_timings(struct file *file, void *fh,
+> +				     struct v4l2_dv_timings *timings)
+> +{
+> +	struct npcm_video *video = video_drvdata(file);
+> +	int rc;
+> +
+> +	if (timings->bt.width == video->active_timings.width &&
+> +	    timings->bt.height == video->active_timings.height)
+> +		return 0;
+> +
+> +	if (vb2_is_busy(&video->queue)) {
+> +		dev_err(video->dev, "%s device busy\n", __func__);
+> +		return -EBUSY;
+> +	}
+> +
+> +	rc = npcm_video_set_resolution(video, &timings->bt);
+> +	if (rc)
+> +		return rc;
+> +
+> +	video->active_timings = timings->bt;
+> +	video->pix_fmt.width = timings->bt.width;
+> +	video->pix_fmt.height = timings->bt.height;
+> +	video->pix_fmt.sizeimage = timings->bt.width * timings->bt.height *
+> +				   video->bytesperpixel;
+> +	video->pix_fmt.bytesperline = video->bytesperline;
+> +	timings->type = V4L2_DV_BT_656_1120;
+> +
+> +	return 0;
+> +}
+> +
+> +static int npcm_video_get_dv_timings(struct file *file, void *fh,
+> +				     struct v4l2_dv_timings *timings)
+> +{
+> +	struct npcm_video *video = video_drvdata(file);
+> +
+> +	timings->type = V4L2_DV_BT_656_1120;
+> +	timings->bt = video->active_timings;
+> +
+> +	return 0;
+> +}
+> +
+> +static int npcm_video_query_dv_timings(struct file *file, void *fh,
+> +				       struct v4l2_dv_timings *timings)
+> +{
+> +	struct npcm_video *video = video_drvdata(file);
+> +
+> +	npcm_video_detect_resolution(video);
+> +	timings->type = V4L2_DV_BT_656_1120;
+> +	timings->bt = video->detected_timings;
+> +
+> +	return video->v4l2_input_status ? -ENOLINK : 0;
+> +}
+> +
+> +static int npcm_video_enum_dv_timings(struct file *file, void *fh,
+> +				      struct v4l2_enum_dv_timings *timings)
+> +{
+> +	return v4l2_enum_dv_timings_cap(timings, &npcm_video_timings_cap,
+> +					NULL, NULL);
+> +}
+> +
+> +static int npcm_video_dv_timings_cap(struct file *file, void *fh,
+> +				     struct v4l2_dv_timings_cap *cap)
+> +{
+> +	*cap = npcm_video_timings_cap;
+> +
+> +	return 0;
+> +}
+> +
+> +static int npcm_video_sub_event(struct v4l2_fh *fh,
+> +				const struct v4l2_event_subscription *sub)
+> +{
+> +	switch (sub->type) {
+> +	case V4L2_EVENT_SOURCE_CHANGE:
+> +		return v4l2_src_change_event_subscribe(fh, sub);
+> +	}
+> +
+> +	return v4l2_ctrl_subscribe_event(fh, sub);
+> +}
+> +
+> +static const struct v4l2_ioctl_ops npcm_video_ioctls = {
+> +	.vidioc_querycap = npcm_video_querycap,
+> +
+> +	.vidioc_enum_fmt_vid_cap = npcm_video_enum_format,
+> +	.vidioc_g_fmt_vid_cap = npcm_video_get_format,
+> +	.vidioc_s_fmt_vid_cap = npcm_video_set_format,
+> +	.vidioc_try_fmt_vid_cap = npcm_video_try_format,
+> +
+> +	.vidioc_reqbufs = vb2_ioctl_reqbufs,
+> +	.vidioc_querybuf = vb2_ioctl_querybuf,
+> +	.vidioc_qbuf = vb2_ioctl_qbuf,
+> +	.vidioc_expbuf = vb2_ioctl_expbuf,
+> +	.vidioc_dqbuf = vb2_ioctl_dqbuf,
+> +	.vidioc_create_bufs = vb2_ioctl_create_bufs,
+> +	.vidioc_prepare_buf = vb2_ioctl_prepare_buf,
+> +	.vidioc_streamon = vb2_ioctl_streamon,
+> +	.vidioc_streamoff = vb2_ioctl_streamoff,
+> +
+> +	.vidioc_enum_input = npcm_video_enum_input,
+> +	.vidioc_g_input = npcm_video_get_input,
+> +	.vidioc_s_input = npcm_video_set_input,
+> +
+> +	.vidioc_s_dv_timings = npcm_video_set_dv_timings,
+> +	.vidioc_g_dv_timings = npcm_video_get_dv_timings,
+> +	.vidioc_query_dv_timings = npcm_video_query_dv_timings,
+> +	.vidioc_enum_dv_timings = npcm_video_enum_dv_timings,
+> +	.vidioc_dv_timings_cap = npcm_video_dv_timings_cap,
+> +
+> +	.vidioc_subscribe_event = npcm_video_sub_event,
+> +	.vidioc_unsubscribe_event = v4l2_event_unsubscribe,
+> +};
+> +
+> +static int npcm_video_set_ctrl(struct v4l2_ctrl *ctrl)
+> +{
+> +	struct npcm_video *video = container_of(ctrl->handler, struct npcm_video,
+> +						ctrl_handler);
+> +
+> +	switch (ctrl->id) {
+> +	case V4L2_CID_NPCM_CAPTURE_MODE:
+> +		if (ctrl->val == V4L2_NPCM_CAPTURE_MODE_COMPLETE)
+> +			video->ctrl_cmd = VCD_CMD_OPERATION_CAPTURE;
+> +		else if (ctrl->val == V4L2_NPCM_CAPTURE_MODE_DIFF)
+> +			video->ctrl_cmd = VCD_CMD_OPERATION_COMPARE;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int npcm_video_get_volatile_ctrl(struct v4l2_ctrl *ctrl)
+> +{
+> +	struct npcm_video *video = container_of(ctrl->handler, struct npcm_video,
+> +						ctrl_handler);
+> +
+> +	switch (ctrl->id) {
+> +	case V4L2_CID_NPCM_RECT_COUNT:
+> +		ctrl->val = video->rect[video->vb_index];
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct v4l2_ctrl_ops npcm_video_ctrl_ops = {
+> +	.s_ctrl = npcm_video_set_ctrl,
+> +	.g_volatile_ctrl = npcm_video_get_volatile_ctrl,
+> +};
+> +
+> +static const struct v4l2_ctrl_config npcm_ctrl_capture_mode = {
+> +	.ops = &npcm_video_ctrl_ops,
+> +	.id = V4L2_CID_NPCM_CAPTURE_MODE,
+> +	.name = "NPCM Video Capture Mode",
+> +	.type = V4L2_CTRL_TYPE_INTEGER,
+> +	.min = 0,
+> +	.max = V4L2_NPCM_CAPTURE_MODE_DIFF,
+> +	.step = 1,
+> +	.def = 0,
+> +};
+> +
+> +static const struct v4l2_ctrl_config npcm_ctrl_rect_count = {
+> +	.ops = &npcm_video_ctrl_ops,
+> +	.id = V4L2_CID_NPCM_RECT_COUNT,
+> +	.name = "NPCM Compressed Hextile Rectangle Count",
+> +	.type = V4L2_CTRL_TYPE_INTEGER,
+> +	.flags = V4L2_CTRL_FLAG_VOLATILE,
+> +	.min = 0,
+> +	.max = (MAX_WIDTH / RECT_W) * (MAX_HEIGHT / RECT_H),
+> +	.step = 1,
+> +	.def = 0,
+> +};
+> +
+> +static void npcm_video_res_work(struct work_struct *w)
+> +{
+> +	struct npcm_video *video = container_of(w, struct npcm_video, res_work);
+> +
+> +	npcm_video_detect_resolution(video);
+> +
+> +	if (video->v4l2_input_status)
+> +		npcm_video_clear_gmmap(video);
+> +}
+> +
+> +static int npcm_video_open(struct file *file)
+> +{
+> +	struct npcm_video *video = video_drvdata(file);
+> +	int rc;
+> +
+> +	mutex_lock(&video->video_lock);
+> +	rc = v4l2_fh_open(file);
+> +	if (rc) {
+> +		mutex_unlock(&video->video_lock);
+> +		return rc;
+> +	}
+> +
+> +	if (v4l2_fh_is_singular_file(file))
+> +		npcm_video_start(video);
+> +
+> +	mutex_unlock(&video->video_lock);
+> +	return 0;
+> +}
+> +
+> +static int npcm_video_release(struct file *file)
+> +{
+> +	struct npcm_video *video = video_drvdata(file);
+> +	int rc;
+> +
+> +	mutex_lock(&video->video_lock);
+> +	if (v4l2_fh_is_singular_file(file))
+> +		npcm_video_stop(video);
+> +
+> +	rc = _vb2_fop_release(file, NULL);
+> +
+> +	mutex_unlock(&video->video_lock);
+> +	return rc;
+> +}
+> +
+> +static const struct v4l2_file_operations npcm_video_v4l2_fops = {
+> +	.owner = THIS_MODULE,
+> +	.read = vb2_fop_read,
+> +	.poll = vb2_fop_poll,
+> +	.unlocked_ioctl = video_ioctl2,
+> +	.mmap = vb2_fop_mmap,
+> +	.open = npcm_video_open,
+> +	.release = npcm_video_release,
+> +};
+> +
+> +static int npcm_video_queue_setup(struct vb2_queue *q, unsigned int *num_buffers,
+> +				  unsigned int *num_planes, unsigned int sizes[],
+> +				  struct device *alloc_devs[])
+> +{
+> +	struct npcm_video *video = vb2_get_drv_priv(q);
+> +	unsigned int i;
+> +
+> +	if (*num_planes) {
+> +		if (sizes[0] < video->pix_fmt.sizeimage)
+> +			return -EINVAL;
+> +
+> +		return 0;
+> +	}
+> +
+> +	*num_planes = 1;
+> +
+> +	if (*num_buffers > MAX_REQ_BUFS)
+> +		*num_buffers = MAX_REQ_BUFS;
+
+Why limit this? Can't you just use rect[VIDEO_MAX_FRAME]?
+
+> +
+> +	sizes[0] = video->pix_fmt.sizeimage;
+> +
+> +	if (video->list) {
+> +		npcm_video_free_diff_table(video);
+> +		kfree(video->list);
+> +		video->list = NULL;
+> +	}
+> +
+> +	video->list = kzalloc(sizeof(*video->list) * *num_buffers, GFP_KERNEL);
+> +	if (!video->list)
+> +		return -ENOMEM;
+> +
+> +	for (i = 0; i < *num_buffers; i++)
+> +		INIT_LIST_HEAD(&video->list[i]);
+> +
+> +	video->num_buffers = *num_buffers;
+> +	return 0;
+> +}
+> +
+> +static int npcm_video_buf_prepare(struct vb2_buffer *vb)
+> +{
+> +	struct npcm_video *video = vb2_get_drv_priv(vb->vb2_queue);
+> +
+> +	if (vb2_plane_size(vb, 0) < video->pix_fmt.sizeimage)
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +
+> +static int npcm_video_start_streaming(struct vb2_queue *q, unsigned int count)
+> +{
+> +	struct npcm_video *video = vb2_get_drv_priv(q);
+> +	int rc;
+> +
+> +	video->sequence = 0;
+> +	rc = npcm_video_start_frame(video);
+> +	if (rc) {
+> +		npcm_video_bufs_done(video, VB2_BUF_STATE_QUEUED);
+> +		return rc;
+> +	}
+> +
+> +	set_bit(VIDEO_STREAMING, &video->flags);
+> +	return 0;
+> +}
+> +
+> +static void npcm_video_stop_streaming(struct vb2_queue *q)
+> +{
+> +	struct npcm_video *video = vb2_get_drv_priv(q);
+> +	struct regmap *vcd = video->vcd_regmap;
+> +
+> +	clear_bit(VIDEO_STREAMING, &video->flags);
+> +	regmap_write(vcd, VCD_INTE, 0);
+> +	regmap_write(vcd, VCD_STAT, VCD_STAT_CLEAR);
+> +	npcm_video_gfx_reset(video);
+> +	npcm_video_bufs_done(video, VB2_BUF_STATE_ERROR);
+> +	video->ctrl_cmd = VCD_CMD_OPERATION_CAPTURE;
+> +}
+> +
+> +static void npcm_video_buf_queue(struct vb2_buffer *vb)
+> +{
+> +	struct npcm_video *video = vb2_get_drv_priv(vb->vb2_queue);
+> +	struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
+> +	struct npcm_video_buffer *nvb = to_npcm_video_buffer(vbuf);
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&video->lock, flags);
+> +	list_add_tail(&nvb->link, &video->buffers);
+> +	spin_unlock_irqrestore(&video->lock, flags);
+> +}
+> +
+> +static void npcm_video_buf_finish(struct vb2_buffer *vb)
+> +{
+> +	struct npcm_video *video = vb2_get_drv_priv(vb->vb2_queue);
+> +	struct list_head *head, *pos, *nx;
+> +	struct rect_list *tmp;
+> +
+> +	/*
+> +	 * When a video buffer is dequeued, free associated rect_list and
+> +	 * capture next frame.
+> +	 */
+> +	head = &video->list[video->vb_index];
+> +	list_for_each_safe(pos, nx, head) {
+> +		tmp = list_entry(pos, struct rect_list, list);
+> +		list_del(&tmp->list);
+> +		kfree(tmp);
+> +	}
+> +
+> +	if (npcm_video_start_frame(video)) {
+
+This is weird. This is not normally done here since you never know when
+userspace will dequeue a buffer.
+
+I would expect to see this called:
+
+1) In start_streaming (so that works)
+2) When a buffer is captured and vb2_buffer_done is called: if another
+   empty buffer is available, then use that.
+3) in buf_queue: if the buffer list was empty, and vb2_start_streaming_called()
+   is true, then you can start capturing again.
+
+> +		dev_err(video->dev, "Failed to capture next frame\n");
+> +		return;
+> +	}
+> +
+> +	video->vb_index = vb->index;
+> +}
+> +
+> +static const struct vb2_ops npcm_video_vb2_ops = {
+> +	.queue_setup = npcm_video_queue_setup,
+> +	.wait_prepare = vb2_ops_wait_prepare,
+> +	.wait_finish = vb2_ops_wait_finish,
+> +	.buf_prepare = npcm_video_buf_prepare,
+> +	.buf_finish = npcm_video_buf_finish,
+> +	.start_streaming = npcm_video_start_streaming,
+> +	.stop_streaming = npcm_video_stop_streaming,
+> +	.buf_queue =  npcm_video_buf_queue,
+> +};
+> +
+> +static int npcm_video_setup_video(struct npcm_video *video)
+> +{
+> +	struct v4l2_device *v4l2_dev = &video->v4l2_dev;
+> +	struct video_device *vdev = &video->vdev;
+> +	struct vb2_queue *vbq = &video->queue;
+> +	int rc;
+> +
+> +	video->pix_fmt.pixelformat = V4L2_PIX_FMT_HEXTILE;
+> +	video->pix_fmt.field = V4L2_FIELD_NONE;
+> +	video->pix_fmt.colorspace = V4L2_COLORSPACE_SRGB;
+> +	video->pix_fmt.quantization = V4L2_QUANTIZATION_FULL_RANGE;
+> +	video->v4l2_input_status = V4L2_IN_ST_NO_SIGNAL;
+> +
+> +	rc = v4l2_device_register(video->dev, v4l2_dev);
+> +	if (rc) {
+> +		dev_err(video->dev, "Failed to register v4l2 device\n");
+> +		return rc;
+> +	}
+> +
+> +	v4l2_ctrl_handler_init(&video->ctrl_handler, 2);
+> +	v4l2_ctrl_new_custom(&video->ctrl_handler, &npcm_ctrl_capture_mode, NULL);
+> +	v4l2_ctrl_new_custom(&video->ctrl_handler, &npcm_ctrl_rect_count, NULL);
+> +	if (video->ctrl_handler.error) {
+> +		dev_err(video->dev, "Failed to init controls: %d\n",
+> +			video->ctrl_handler.error);
+> +
+> +		rc = video->ctrl_handler.error;
+> +		goto rel_ctrl_handler;
+> +	}
+> +	v4l2_dev->ctrl_handler = &video->ctrl_handler;
+> +
+> +	vbq->type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+> +	vbq->io_modes = VB2_MMAP | VB2_DMABUF;
+> +	vbq->dev = v4l2_dev->dev;
+> +	vbq->lock = &video->video_lock;
+> +	vbq->ops = &npcm_video_vb2_ops;
+> +	vbq->mem_ops = &vb2_dma_contig_memops;
+> +	vbq->drv_priv = video;
+> +	vbq->buf_struct_size = sizeof(struct npcm_video_buffer);
+> +	vbq->timestamp_flags = V4L2_BUF_FLAG_TIMESTAMP_MONOTONIC;
+> +	vbq->min_buffers_needed = 3;
+> +
+> +	rc = vb2_queue_init(vbq);
+> +	if (rc) {
+> +		dev_err(video->dev, "Failed to init vb2 queue\n");
+> +		goto rel_ctrl_handler;
+> +	}
+> +	vdev->queue = vbq;
+> +	vdev->fops = &npcm_video_v4l2_fops;
+> +	vdev->device_caps = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
+> +	vdev->v4l2_dev = v4l2_dev;
+> +	strscpy(vdev->name, DEVICE_NAME, sizeof(vdev->name));
+> +	vdev->vfl_type = VFL_TYPE_VIDEO;
+> +	vdev->vfl_dir = VFL_DIR_RX;
+> +	vdev->release = video_device_release_empty;
+> +	vdev->ioctl_ops = &npcm_video_ioctls;
+> +	vdev->lock = &video->video_lock;
+> +
+> +	video_set_drvdata(vdev, video);
+> +	rc = video_register_device(vdev, VFL_TYPE_VIDEO, 0);
+> +	if (rc) {
+> +		dev_err(video->dev, "Failed to register video device\n");
+> +		goto rel_vb_queue;
+> +	}
+> +
+> +	return 0;
+> +
+> +rel_vb_queue:
+> +	vb2_queue_release(vbq);
+> +rel_ctrl_handler:
+> +	v4l2_ctrl_handler_free(&video->ctrl_handler);
+> +	v4l2_device_unregister(v4l2_dev);
+> +
+> +	return rc;
+> +}
+> +
+> +static int npcm_video_init(struct npcm_video *video)
+> +{
+> +	struct device *dev = video->dev;
+> +	int irq, rc;
+> +
+> +	irq = irq_of_parse_and_map(dev->of_node, 0);
+> +	if (!irq) {
+> +		dev_err(dev, "Failed to find VCD IRQ\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	rc = devm_request_threaded_irq(dev, irq, NULL, npcm_video_irq,
+> +				       IRQF_ONESHOT, DEVICE_NAME, video);
+> +	if (rc < 0) {
+> +		dev_err(dev, "Failed to request IRQ %d\n", irq);
+> +		return rc;
+> +	}
+> +
+> +	of_reserved_mem_device_init(dev);
+> +	rc = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
+> +	if (rc) {
+> +		dev_err(dev, "Failed to set DMA mask\n");
+> +		of_reserved_mem_device_release(dev);
+> +	}
+> +
+> +	return rc;
+> +}
+> +
+> +static const struct regmap_config npcm_video_regmap_cfg = {
+> +	.reg_bits	= 32,
+> +	.reg_stride	= 4,
+> +	.val_bits	= 32,
+> +	.max_register	= VCD_FIFO,
+> +};
+> +
+> +static const struct regmap_config npcm_video_ece_regmap_cfg = {
+> +	.reg_bits	= 32,
+> +	.reg_stride	= 4,
+> +	.val_bits	= 32,
+> +	.max_register	= ECE_HEX_RECT_OFFSET,
+> +};
+> +
+> +static int npcm_video_probe(struct platform_device *pdev)
+> +{
+> +	struct npcm_video *video = kzalloc(sizeof(*video), GFP_KERNEL);
+> +	struct device_node *ece_node;
+> +	struct platform_device *ece_pdev;
+> +	int rc;
+> +	void __iomem *regs;
+> +
+> +	if (!video)
+> +		return -ENOMEM;
+> +
+> +	video->dev = &pdev->dev;
+> +	spin_lock_init(&video->lock);
+> +	mutex_init(&video->video_lock);
+> +	INIT_WORK(&video->res_work, npcm_video_res_work);
+> +	INIT_LIST_HEAD(&video->buffers);
+> +
+> +	regs = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(regs)) {
+> +		dev_err(&pdev->dev, "Failed to parse VCD reg in DTS\n");
+> +		return PTR_ERR(regs);
+> +	}
+> +
+> +	video->vcd_regmap = devm_regmap_init_mmio(&pdev->dev, regs,
+> +						  &npcm_video_regmap_cfg);
+> +	if (IS_ERR(video->vcd_regmap)) {
+> +		dev_err(&pdev->dev, "Failed to initialize VCD regmap\n");
+> +		return PTR_ERR(video->vcd_regmap);
+> +	}
+> +
+> +	ece_node = of_parse_phandle(video->dev->of_node, "nuvoton,ece", 0);
+> +	if (IS_ERR(ece_node)) {
+> +		dev_err(&pdev->dev, "Failed to get ECE phandle in DTS\n");
+> +		return PTR_ERR(ece_node);
+> +	}
+> +
+> +	ece_pdev = of_find_device_by_node(ece_node);
+> +	of_node_put(ece_node);
+> +	if (IS_ERR(ece_pdev)) {
+> +		dev_err(&pdev->dev, "Failed to find ECE device\n");
+> +		return PTR_ERR(ece_pdev);
+> +	}
+> +
+> +	regs = devm_platform_ioremap_resource(ece_pdev, 0);
+> +	if (IS_ERR(regs)) {
+> +		dev_err(&pdev->dev, "Failed to parse ECE reg in DTS\n");
+> +		return PTR_ERR(regs);
+> +	}
+> +
+> +	video->ece.regmap = devm_regmap_init_mmio(&pdev->dev, regs,
+> +						  &npcm_video_ece_regmap_cfg);
+> +	if (IS_ERR(video->ece.regmap)) {
+> +		dev_err(&pdev->dev, "Failed to initialize ECE regmap\n");
+> +		return PTR_ERR(video->ece.regmap);
+> +	}
+> +
+> +	video->reset = devm_reset_control_get(&pdev->dev, NULL);
+> +	if (IS_ERR(video->reset)) {
+> +		dev_err(&pdev->dev, "Failed to get VCD reset control in DTS\n");
+> +		return PTR_ERR(video->reset);
+> +	}
+> +
+> +	video->ece.reset = devm_reset_control_get(&ece_pdev->dev, NULL);
+> +	if (IS_ERR(video->ece.reset)) {
+> +		dev_err(&pdev->dev, "Failed to get ECE reset control in DTS\n");
+> +		return PTR_ERR(video->ece.reset);
+> +	}
+> +
+> +	video->gcr_regmap = syscon_regmap_lookup_by_phandle(pdev->dev.of_node,
+> +							    "nuvoton,sysgcr");
+> +	if (IS_ERR(video->gcr_regmap))
+> +		return PTR_ERR(video->gcr_regmap);
+> +
+> +	video->gfx_regmap = syscon_regmap_lookup_by_phandle(pdev->dev.of_node,
+> +							    "nuvoton,sysgfxi");
+> +	if (IS_ERR(video->gfx_regmap))
+> +		return PTR_ERR(video->gfx_regmap);
+> +
+> +	rc = npcm_video_init(video);
+> +	if (rc)
+> +		return rc;
+> +
+> +	rc = npcm_video_setup_video(video);
+> +	if (rc)
+> +		return rc;
+> +
+> +	dev_info(video->dev, "NPCM video driver probed\n");
+> +	return 0;
+> +}
+> +
+> +static int npcm_video_remove(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct v4l2_device *v4l2_dev = dev_get_drvdata(dev);
+> +	struct npcm_video *video = to_npcm_video(v4l2_dev);
+> +
+> +	video_unregister_device(&video->vdev);
+> +	vb2_queue_release(&video->queue);
+> +	v4l2_ctrl_handler_free(&video->ctrl_handler);
+> +	v4l2_device_unregister(v4l2_dev);
+> +	npcm_video_ece_stop(video);
+> +	of_reserved_mem_device_release(dev);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id npcm_video_match[] = {
+> +	{ .compatible = "nuvoton,npcm750-vcd" },
+> +	{ .compatible = "nuvoton,npcm845-vcd" },
+> +	{},
+> +};
+> +
+> +MODULE_DEVICE_TABLE(of, npcm_video_match);
+> +
+> +static struct platform_driver npcm_video_driver = {
+> +	.driver = {
+> +		.name = DEVICE_NAME,
+> +		.of_match_table = npcm_video_match,
+> +	},
+> +	.probe = npcm_video_probe,
+> +	.remove = npcm_video_remove,
+> +};
+> +
+> +module_platform_driver(npcm_video_driver);
+> +
+> +MODULE_AUTHOR("Joseph Liu <kwliu@nuvoton.com>");
+> +MODULE_AUTHOR("Marvin Lin <kflin@nuvoton.com>");
+> +MODULE_DESCRIPTION("Driver for Nuvoton NPCM Video Capture/Encode Engine");
+> +MODULE_LICENSE("GPL v2");
+
+Regards,
+
+	Hans
