@@ -2,89 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B83727CBA
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:25:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F92C727CBB
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236070AbjFHKZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 06:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44448 "EHLO
+        id S235934AbjFHK0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 06:26:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235821AbjFHKZF (ORCPT
+        with ESMTP id S236099AbjFHK0E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 06:25:05 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C96F1FE9
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 03:25:03 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id af79cd13be357-75ebb3d57d0so35774485a.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 03:25:03 -0700 (PDT)
+        Thu, 8 Jun 2023 06:26:04 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E163173B
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 03:26:03 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-6532671ccc7so366437b3a.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 03:26:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686219902; x=1688811902;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M4tpowvLajrSGqwxArwQ8XTVeRE5lzXRcv/YtqNdBw4=;
-        b=YH3q+rIdJ9aqDvFqWk1k28ZGphaIpymYgHHHZsdqBrwDqOnyBw//q/PuD9Z4BGcIJr
-         b2W5mEbq7+sd2g4c/wNU/bTwIumphrtE0UBzEZWWo2GX88vo9uwxTsi5R15ev2+MfbPW
-         N0USFjP7yhy4Q+IUXlwTh04TcpArW8dK+bwfM=
+        d=linaro.org; s=google; t=1686219962; x=1688811962;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3xkH3r1pvwgUrEo7Gtm0dIWmSa6nSh/lG9Vqe1Of73g=;
+        b=nCZY15shRf0+YCOaFOuY8X6w310iPAZUYi5ASkQz/GUc+4dSc2cReU0+52jpmuft1b
+         zgRskJqRB9fkL8XXnZXtSGXpDEiQT3BsO1De6EkspTxOfkC7L1/My9JygCq3fEI5DVi3
+         gIZ8n1z9SzT8oR85zl9AJLdkOhhKpzMKA38CfDUFMNh3BPtoHjzUjRbbrn29AMGqT0F/
+         zu2wsnbm1hwaE4pjxWEmVcbQkkPkVGvF5UzRSs4IG0HYp0380HCk0LZjOxYvbLkanv/1
+         2eahg6XTZb7T4cCEZtQIc/e0qfI3USBtTHh1PlSGPKru2u9a+yQrVvaFuDoJ9Ic/yvd4
+         s/zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686219902; x=1688811902;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=M4tpowvLajrSGqwxArwQ8XTVeRE5lzXRcv/YtqNdBw4=;
-        b=BzKdm1sbgmJtwI35H6IxoYd/fEK1lN4M7BQIH4vR6DEw+VXNSewnAmQjQDlCzWKGXY
-         05tYYtOEjftnP4cpQ0AmsvjbssnZ5WzSPpQfkoHrWuCAmLcL0cnMDInHRbYdYKw2Dfsg
-         lqYzNXXJHzJ7dEFp7ChJNLRYSQM8ZPjqv1E87sE2cJtX9t8j1M99s17cXC+yxEP+mDFq
-         a4SuLWF2sa+0mhJtPMEXHMKzPTcer3kB/BCQKjVaHV3DJmZoO0MofSQlNWFw5B7IwViu
-         xlcZRAtZgEqqjFRUQ/4s84fMiP6dICJhP0F8IjsZ5SAWaFUFxfZrMkEPsLWznmB+GgcX
-         cG2g==
-X-Gm-Message-State: AC+VfDyu9XxdkT6ZGAwycF3iVPiB4+FJBJKDhBo0dlf503u3I6pbhL1f
-        G4MwOvOmYjyIN/tPseZcaHGHjpuIKR/XhueYCB78hA==
-X-Google-Smtp-Source: ACHHUZ6TqXsOE6AeMgrf8qZ2cS2Q5jwtdON5XIdoYB3PGdYiioki7lMcgM96mWTF4w2idgI1sb+/dQ==
-X-Received: by 2002:a05:620a:38c4:b0:75e:d11d:5196 with SMTP id qq4-20020a05620a38c400b0075ed11d5196mr3908323qkn.29.1686219902114;
-        Thu, 08 Jun 2023 03:25:02 -0700 (PDT)
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com. [209.85.222.180])
-        by smtp.gmail.com with ESMTPSA id p4-20020a05620a112400b0075cb3e8ad1fsm224357qkk.83.2023.06.08.03.25.01
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 03:25:01 -0700 (PDT)
-Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-75ebb3d57d0so35772985a.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 03:25:01 -0700 (PDT)
-X-Received: by 2002:ad4:5f0e:0:b0:623:690c:3cd7 with SMTP id
- fo14-20020ad45f0e000000b00623690c3cd7mr1200397qvb.47.1686219880090; Thu, 08
- Jun 2023 03:24:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230321102855.346732-1-benjamin.gaignard@collabora.com>
- <20230321102855.346732-4-benjamin.gaignard@collabora.com> <6c4658fd-3a64-b3f8-67cd-17ed2d7d3567@xs4all.nl>
- <20230531080331.GB6496@pendragon.ideasonboard.com> <608ae7d6-3f3b-137d-08d2-d41a240be2c4@xs4all.nl>
- <20230531123945.GF27043@pendragon.ideasonboard.com>
-In-Reply-To: <20230531123945.GF27043@pendragon.ideasonboard.com>
-From:   Tomasz Figa <tfiga@chromium.org>
-Date:   Thu, 8 Jun 2023 19:24:29 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5A6sz1BhEjiWyXH6B1TBTLt0ivAc6N0Vd73hebnpc7fKQ@mail.gmail.com>
-Message-ID: <CAAFQd5A6sz1BhEjiWyXH6B1TBTLt0ivAc6N0Vd73hebnpc7fKQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/8] media: videobuf2: Add a module param to limit vb2
- queue buffer storage
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        m.szyprowski@samsung.com, mchehab@kernel.org, ming.qian@nxp.com,
-        shijie.qin@nxp.com, eagle.zhou@nxp.com, bin.liu@mediatek.com,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        tiffany.lin@mediatek.com, andrew-ct.chen@mediatek.com,
-        yunfei.dong@mediatek.com, stanimir.k.varbanov@gmail.com,
-        quic_vgarodia@quicinc.com, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, daniel.almeida@collabora.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        d=1e100.net; s=20221208; t=1686219962; x=1688811962;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3xkH3r1pvwgUrEo7Gtm0dIWmSa6nSh/lG9Vqe1Of73g=;
+        b=XRXgbJxIYCaLu1eihKsN1gsR4fGBJ9EejFBV+tT8/db6buvfX+bJemk8R88ZoQ8jqg
+         eWG3F/AhpdZB+0s1nNOLLAZcJWj+E1cWMarqd5QyJzD1swjLG+G1Quk86I+dmzWgo4VE
+         mi3e5FX5ucNxHXolo0Hbf1pV+hOtxZiwVghxC/yrM3X7VTM6pqaJhadiBfwsFPhYeKXh
+         NT434TgA5LeQCAk5PgS5uIbCbOqSKtaaQ60Q8pjLZOUpNbUxgEYRD0BTG8zJ6vxh5HSI
+         kFlSE63v/GhVYnl3A22HqdysqCFI/dqDcVycQsujNRxdxd3pswb9UGzPmImGTGsroAav
+         euJg==
+X-Gm-Message-State: AC+VfDwk1buu0EyWm9+OU9hGqcvaoEKTslSbxGG0QoD7tXMGvsqiwdwX
+        enLBWbxA4E72RC/80TgiyaDN2Q==
+X-Google-Smtp-Source: ACHHUZ5JTCRE7fcyNWts+H2vn0LEXWHBO6ClckfueGh8B+IzoyS9r/drZKEBPVRJZZdzupk6aKns1w==
+X-Received: by 2002:a05:6a00:3a26:b0:659:3031:5037 with SMTP id fj38-20020a056a003a2600b0065930315037mr9799968pfb.3.1686219962556;
+        Thu, 08 Jun 2023 03:26:02 -0700 (PDT)
+Received: from leoy-huanghe ([156.59.39.101])
+        by smtp.gmail.com with ESMTPSA id m23-20020aa79017000000b006410f4f3ecdsm822251pfo.83.2023.06.08.03.25.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 03:26:02 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 18:25:55 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     coresight@lists.linaro.org, denik@chromium.org,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] perf cs-etm: Use previous thread for branch sample
+ source IP
+Message-ID: <20230608102555.GB123723@leoy-huanghe>
+References: <20230524131958.2139331-1-james.clark@arm.com>
+ <20230524131958.2139331-3-james.clark@arm.com>
+ <20230527090635.GB886420@leoy-yangtze.lan>
+ <630ab636-107d-4b12-5454-2ee91ad43543@arm.com>
+ <1e7aa657-6d1e-9e7c-95cb-b32d307abe93@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1e7aa657-6d1e-9e7c-95cb-b32d307abe93@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,113 +90,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 31, 2023 at 9:39=E2=80=AFPM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> On Wed, May 31, 2023 at 10:30:36AM +0200, Hans Verkuil wrote:
-> > On 5/31/23 10:03, Laurent Pinchart wrote:
-> > > On Wed, May 31, 2023 at 08:36:59AM +0200, Hans Verkuil wrote:
-> > >> On 21/03/2023 11:28, Benjamin Gaignard wrote:
-> > >>> Add module parameter "max_vb_buffer_per_queue" to be able to limit
-> > >>> the number of vb2 buffers store in queue.
-> > >>>
-> > >>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> > >>> ---
-> > >>>  drivers/media/common/videobuf2/videobuf2-core.c | 15 +++----------=
---
-> > >>>  include/media/videobuf2-core.h                  | 11 +++++++++--
-> > >>>  2 files changed, 12 insertions(+), 14 deletions(-)
-> > >>>
-> > >>> diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/driv=
-ers/media/common/videobuf2/videobuf2-core.c
-> > >>> index ae9d72f4d181..f4da917ccf3f 100644
-> > >>> --- a/drivers/media/common/videobuf2/videobuf2-core.c
-> > >>> +++ b/drivers/media/common/videobuf2/videobuf2-core.c
-> > >>> @@ -34,6 +34,8 @@
-> > >>>  static int debug;
-> > >>>  module_param(debug, int, 0644);
-> > >>>
-> > >>> +module_param(max_vb_buffer_per_queue, ulong, 0644);
-> > >>
-> > >> There is no MODULE_PARM_DESC here? Please add. I see it is not there=
- for
-> > >> the debug param either, it should be added for that as well.
-> > >
-> > > Would this be the right time to consider resource accounting in V4L2 =
-for
-> > > buffers ? Having a module parameter doesn't sound very useful, an
-> > > application could easily allocate more buffers by using buffer orphan=
-ing
-> > > (allocating buffers, exporting them as dmabuf objects, and freeing th=
-em,
-> > > which leaves the memory allocated). Repeating allocation cycles up to
-> > > max_vb_buffer_per_queue will allow allocating an unbounded number of
-> > > buffers, using all the available system memory. I'd rather not add a
-> > > module argument that only gives the impression of some kind of safety
-> > > without actually providing any value.
+On Thu, Jun 08, 2023 at 10:34:42AM +0100, James Clark wrote:
 
-Good point. It's even simpler, just keep opening new vim2m instances
-and requesting max buffers :).
+[...]
 
-> >
-> > Does dmabuf itself provide some accounting mechanism? Just wondering.
-> >
-> > More specific to V4L2: I'm not so sure about this module parameter eith=
-er.
-> > It makes sense to have a check somewhere against ridiculous values (i.e=
-.
-> > allocating MAXINT buffers), but that can be a define as well. But other=
-wise
-> > I am fine with allowing applications to allocate buffers until the memo=
-ry
-> > is full.
-> >
-> > The question is really: what is this parameter supposed to do? The only
-> > thing it does is to sanitize unlikely inputs (e.g. allocating MAXINT bu=
-ffers).
-> >
-> > I prefer that as a define, to be honest.
-> >
-> > I think it is perfectly fine for users to try to request more buffers t=
-han
-> > memory allows. It will just fail in that case, not a problem.
-> >
-> > And if an application is doing silly things like buffer orphaning, then=
- so
-> > what? Is that any different than allocating memory and not freeing it?
-> > Eventually it will run out of memory and crash, which is normal.
->
-> Linux provides APIs to account for and limit usage of resources,
-> including memory. A system administrator can prevent rogue processes
-> from starving system resources. The memory consumed by vb2 buffer isn't
-> taken into account, making V4L2 essentially unsafe for untrusted
-> processes.
+> >>> @@ -616,6 +618,8 @@ static void cs_etm__packet_swap(struct cs_etm_auxtrace *etm,
+> >>>  		tmp = tidq->packet;
+> >>>  		tidq->packet = tidq->prev_packet;
+> >>>  		tidq->prev_packet = tmp;
+> >>> +		thread__put(tidq->prev_thread);
+> >>> +		tidq->prev_thread = thread__get(tidq->thread);
+> >>
+> >> Maybe cs_etm__packet_swap() is not the best place to update
+> >> "tidq->prev_thread", since swapping packet doesn't mean it's necessarily
+> >> thread switching; can we move this change into the cs_etm__set_thread()?
+> >>
+> > 
+> > Yeah that might make more sense. I can move it there if we decide to
+> > keep this change.
+> > 
+> 
+> Unfortunately I don't think I can make this change. It seems like
+> putting the previous thread swap in  cs_etm__set_thread() has different
+> semantics to keeping all the swaps together in cs_etm__packet_swap().
 
-I agree that proper accounting would be useful, although I wouldn't
-really make this patch series depend on it, since it's not introducing
-the loophole in the first place.
-We had some discussion about this in ChromeOS long ago and we thought
-it would be really useful for killing browser tabs with big videos,
-but otherwise using very little regular memory (e.g. via javascript).
+Thanks for trying this.
 
-One challenge with accounting V4L2 allocations is how to count shared
-DMA-bufs. If one process allocates a V4L2 buffer, exports it to
-DMA-buf and then sends it to another process that keeps it alive, but
-frees the V4L2 buffer (and even closes the DMA-buf fd), should that
-memory be still accounted to it even though it doesn't hold a
-reference to it anymore?
+> This is because if you swap the thread in cs_etm__packet_swap() the
+> previous packet and next packet can have the _same_ thread if there
+> happened to be no change. However if you only swap previous thread in
+> cs_etm__set_thread(), that means that the previous thread is always
+> different to the next one. This has a huge difference on the decoding
+> because two adjacent packets on the same thread will say they branched
+> from the previous thread that ran, not the previous thread on the
+> previous packet.
 
->
-> Now, to be fair, there are many reasons why allowing access to v4L2
-> devices to untrusted applications is a bad idea, and memory consumption
-> is likely not even the worst one. Still, is this something we want to
-> fix, or do we want to consider V4L2 to be priviledged API only ? Right
-> now we can't do so, but with many Linux systems moving towards pipewire,
-> we could possibly have a system daemon isolating untrusted applications
-> from the rest of the system. We may thus not need to fix this in the
-> V4L2 API.
->
-> --
-> Regards,
->
-> Laurent Pinchart
+Seems to me, this is a synchronization issue between the field
+'tidq->prev_thread' and 'tidq->prev_packet'.
+
+It's still hard for me to understand "two adjacent packets on the same
+thread will say they branched from the previous thread that ran", IIUC,
+even we move thread swapping into cs_etm__set_thread(), if the two
+adjacent packets are in the same thread context, we can skip to update
+fields 'tidq->prev_thread' and 'tidq->prev_packet'.
+
+So I am curious if below cs_etm__set_thread() works or not?
+
+static void cs_etm__set_thread(struct cs_etm_auxtrace *etm,
+			       struct cs_etm_traceid_queue *tidq, pid_t tid)
+{
+	struct machine *machine = &etm->session->machines.host;
+
+	/* No context switching, bail out */
+	if ((tidq->thread->tid != tid)
+		return;
+
+	/* If tid is -1, we simply use idle thread context */
+	if (tid == -1)
+		goto find_idle_thread;
+
+	/*
+	 * The new incoming tid is different from current thread,
+	 * so it's to switch to the next thread context.
+	 */
+
+	/* Swap thread contexts */
+	thread__put(tidq->prev_thread);
+	tidq->prev_thread = thread__get(tidq->thread);
+
+	/* Find thread context for new tid */
+	thread__zput(tidq->thread);
+	tidq->thread = machine__find_thread(machine, -1, tid);
+
+find_idle_thread:
+	/* Couldn't find a known thread */
+	if (!tidq->thread)
+		tidq->thread = machine__idle_thread(machine);
+}
+
+Thanks,
+Leo
