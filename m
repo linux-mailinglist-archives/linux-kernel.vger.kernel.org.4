@@ -2,70 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19916727C66
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:12:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BD79727C68
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235434AbjFHKME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 06:12:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35540 "EHLO
+        id S235705AbjFHKMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 06:12:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235419AbjFHKMB (ORCPT
+        with ESMTP id S235419AbjFHKMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 06:12:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD7C21FE6
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 03:12:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 8 Jun 2023 06:12:16 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E06211C
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 03:12:14 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7268D61EF7
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 10:12:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4236C433D2;
-        Thu,  8 Jun 2023 10:11:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686219119;
-        bh=O7H8bNFpm2s9CtD+sRPpMy+feLf/EJEH6ZI7LjHujr0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=IBvYAI2CqeDaE06Z7QBTcl22qDFy/UZtWs5ACJLtzp4gGck5OpamsXAufhiys1Tlc
-         b7Q9P5pEd2ksOe0bOFtoOuF4ordItjiBRsYcIl2ziy6b0RhXBquTeB0vzBcY2L+4v2
-         ner70azGNZ1Wo6vxsyhIevFwIE5AlKH4fa9xCfmoyd9KPrnKT39B7GVnjAswNBmthy
-         WTYdV/hHk7fu3pN8cG3eh1bO4A2gUu88IHn5xb8tOQFcUc57/XD0XkThaL2P95RbD7
-         FXYW+0Xi8OuGIl4UcyaxkypAvZLGWmursjMhU/fyO2wr/VNKDQpJmcZpVcrtPOI6Gv
-         bCORgcSXo0qhg==
-Message-ID: <36678490-ee03-4ce0-a5b1-5292e9d92b8b@kernel.org>
-Date:   Thu, 8 Jun 2023 18:11:56 +0800
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 01C966606F10;
+        Thu,  8 Jun 2023 11:12:12 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686219133;
+        bh=htK85a15rgB70pAiwirg1NuBxZSlaNpIlLEQliB0CKQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KXRtkM4CXJf+IOobM2UO7YbpAL05O78sIPHxI2S5I6kSf1wCmo94OLUl7IAgrUiOt
+         nKWRrOftMrcsEBZGfpLdcHvnbsm8QiBUZXhF2+SOXAU3LtPJ/GZUVKziaX/kdmZFfe
+         rtb0TEPQK3exBin/8T6WjwAj+Y2BlE9JODWUBLk0AQN4AbQE0uqptb+/tORNIMcRem
+         kOReUlz1/AwZ5zidDHcbWWd+mSgMTVfRe07k+bdVrS1W5xRwSC25rkuo2WyLxLWurj
+         PeIj9NwRH8r909MctKH5r+1s7A/Wr1sHMewI40u6pcss2gyAnlS8kq1eogOS+gTbPp
+         LQBpdN8pBqjFQ==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     chunkuang.hu@kernel.org
+Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
+Subject: [PATCH 0/3] drm/mediatek: General cleanups
+Date:   Thu,  8 Jun 2023 12:12:06 +0200
+Message-Id: <20230608101209.126499-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [f2fs-dev] [PATCH] f2fs-tools: fix wrong write pointer check for
- non-zoned areas
-Content-Language: en-US
-To:     Daeho Jeong <daeho43@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com
-Cc:     Daeho Jeong <daehojeong@google.com>
-References: <20230606173948.3390215-1-daeho43@gmail.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20230606173948.3390215-1-daeho43@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/7 1:39, Daeho Jeong wrote:
-> From: Daeho Jeong <daehojeong@google.com>
-> 
-> Do not check F2FS_ZONED_HM for the whole device. We need to do this for
-> each area of devices.
-> 
-> Signed-off-by: Daeho Jeong <daehojeong@google.com>
+This series performs some cleanups in drm/mediatek; specifically, changes
+it to use devm_platform_get_and_ioremap_resource(), dev_err_probe() and
+devm_pm_runtime_enable, hence harmonizing log formats and removing some
+unneeded lines of code.
 
-Reviewed-by: Chao Yu <chao@kernel.org>
+AngeloGioacchino Del Regno (3):
+  drm/mediatek: Use devm_platform_get_and_ioremap_resource()
+  drm/mediatek: Use dev_err_probe() in probe functions
+  drm/mediatek: Use devm variant for pm_runtime_enable() when possible
 
-Thanks,
+ drivers/gpu/drm/mediatek/mtk_cec.c            | 29 ++++---------
+ drivers/gpu/drm/mediatek/mtk_disp_aal.c       | 21 ++++-----
+ drivers/gpu/drm/mediatek/mtk_disp_ccorr.c     | 19 +++-----
+ drivers/gpu/drm/mediatek/mtk_disp_color.c     | 22 ++++------
+ drivers/gpu/drm/mediatek/mtk_disp_gamma.c     | 19 +++-----
+ drivers/gpu/drm/mediatek/mtk_disp_merge.c     | 28 +++++-------
+ drivers/gpu/drm/mediatek/mtk_disp_ovl.c       | 26 +++++------
+ .../gpu/drm/mediatek/mtk_disp_ovl_adaptor.c   | 13 +++---
+ drivers/gpu/drm/mediatek/mtk_disp_rdma.c      | 43 +++++++------------
+ drivers/gpu/drm/mediatek/mtk_dsi.c            | 21 ++++-----
+ drivers/gpu/drm/mediatek/mtk_ethdr.c          | 18 ++++----
+ drivers/gpu/drm/mediatek/mtk_hdmi.c           | 17 +++-----
+ drivers/gpu/drm/mediatek/mtk_hdmi_ddc.c       | 15 +++----
+ drivers/gpu/drm/mediatek/mtk_mdp_rdma.c       | 29 ++++++-------
+ 14 files changed, 121 insertions(+), 199 deletions(-)
+
+-- 
+2.40.1
+
