@@ -2,209 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E3277283C5
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:33:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D33577283C8
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:33:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236617AbjFHPdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 11:33:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57436 "EHLO
+        id S236712AbjFHPdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 11:33:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231626AbjFHPc7 (ORCPT
+        with ESMTP id S236776AbjFHPde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 11:32:59 -0400
-Received: from esa2.hc3370-68.iphmx.com (esa2.hc3370-68.iphmx.com [216.71.145.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C901730
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 08:32:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=citrix.com; s=securemail; t=1686238374;
-  h=message-id:date:from:subject:to:cc:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=WjpY7Bi2u7E6TBTajO8ZBjer1lTeoRPOC3lkZhdsyuQ=;
-  b=JwLd8mdNC/EVgQmFLYrFRrXES4b3pR1Tn1EkE3Re1zTZ58rpjtc4iNMs
-   EX635ibvDk2cNAAIwKKfeiMSdVUTpSVWhbMdlMLsk20IJpRVf1WMwdXp9
-   YX/p/25cK953TbULI/h4LUi+tImCGMe98S6wGdTaVMd4ieKX+4u/+jeLu
-   o=;
-X-IronPort-RemoteIP: 104.47.66.45
-X-IronPort-MID: 111971237
-X-IronPort-Reputation: None
-X-IronPort-Listener: OutboundMail
-X-IronPort-SenderGroup: RELAY_O365
-X-IronPort-MailFlowPolicy: $RELAYED
-IronPort-Data: A9a23:SqkRc66OpvRWDg6fCmOrQgxRtNzGchMFZxGqfqrLsTDasY5as4F+v
- msWW2vQPfaIMGCge95wO9i0pBsF78XQytZqQAFuqSBnHi5G8cbLO4+Ufxz6V8+wwm8vb2o8t
- plDNYOQRCwQZiWBzvt4GuG59RGQ7YnRGvynTraCYnsrLeNdYH9JoQp5nOIkiZJfj9G8Agec0
- fv/uMSaM1K+s9JOGjt8B5mr9lU35JwehBtC5gZlPa4T7AeE/5UoJMl3yZ+ZfiOQrrZ8RoZWd
- 86bpJml82XQ+QsaC9/Nut4XpWVTH9Y+lSDX4pZnc/DKbipq/0Te4Y5iXBYoUm9Fii3hojxE4
- I4lWapc6+seFvakdOw1C3G0GszlVEFM0OevzXOX6aR/w6BaGpdFLjoH4EweZOUlFuhL7W5m/
- NpAFxMgdx65p8H1ypO6aOxBoZkyBZy+VG8fkikIITDxK98DGMqGZpqQoNhS0XE3m9xEGuvYa
- 4wBcz1zYR/cYhpJfFAKFJY5m+TujX76G9FagAvN+exrvC6NkkotjdABM/KMEjCObexTklyVu
- STt+GPhDwtBHNee1SCE4jSngeqncSbTAdtLReLhrKU16LGV7ksLVRlVSXqBnaigmHDhV/JDF
- BE24AN7+MDe82TuFLERRSaQomWAtxQNc8FNCOB84xPl4rbb5xaxAmkCUyJbb9onpIk6SFQC0
- F6K2dnuHz10t6O9Um+G+/GfqjbaEThFc0cBaDUCQA9D5MPsyKk3jxTSXpNgHbSzg9ndBz792
- XaJoTI4irFVitQEv42+/VfMgDWEvYXSQ0g+4QC/Y46+xgZwZYrgYpPy71HetKxENNzBEgTHu
- 2UYkc+D6uxIFYuKiCGGXOQKGveu+uqBNzrfx1VoGvHN6giQxpJqRqgIiBkWGaujGpxslePBC
- KMLhT5s2Q==
-IronPort-HdrOrdr: A9a23:paxQQKHjUTZSReZxpLqEU8eALOsnbusQ8zAXPo5KKCC9Ffbo8f
- xG/c5rsiMc7Qx6ZJhOo7290cW7LU80sKQFgrX409+ZLXXbUSiTXfxfBbKL+UyeJ8SGzJ8i6U
- 4DSchD4azLfDxHZJ3BkXCF+r8bqbHtzEnrv5a9854Kd25XgspbnmJE42igfHGebTM2dKYRJd
- 6z5tdnuzHlQngedMK9b0N1JdTrlpnklI/GfRVDPBIs6BCPgTS0gYSKaCSw71MxUy5v3bxnym
- TOkxX46qK/99m3xwTRzXW71eUnpPLRjvVCGe2RgYwuJjLghh3AXvUYZ4G/
-X-Talos-CUID: =?us-ascii?q?9a23=3AUILue2gmFsAZjTYcvXykI5HJpjJue1uF81T9OkG?=
- =?us-ascii?q?CKUUqQpyUa1q93/51up87?=
-X-Talos-MUID: 9a23:RKMLrAn84iDSS1WCtzuZdnpFLJpsoLiPMnxciIc45MWkKRMtGS202WE=
-X-IronPort-AV: E=Sophos;i="6.00,227,1681185600"; 
-   d="scan'208";a="111971237"
-Received: from mail-mw2nam12lp2045.outbound.protection.outlook.com (HELO NAM12-MW2-obe.outbound.protection.outlook.com) ([104.47.66.45])
-  by ob1.hc3370-68.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 08 Jun 2023 11:32:53 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ffv1OOmV2T/Qfpxuf7mi2XQqoE0W+96jF5Qa+gaeNlzTGS0jeUcfR8vtZwgomRET5oDCi3aqSnnt+9OBmSmx1SoAfYeCxphW32jG4q6fvDx45eDoVffOAeYk/TgDLrgnS0gd56GFZQDVLZFczySO4HA2tBGQlDyfh+aegfidOS0Hrfc8wsXSu+JPUiDWc9CTq4BJCvEI5joxX3vlTVj5Vcy5zbasnxTbM2lUzrWLbKxY61qQM1j3/OpTkqGvu/Mjols8cP0yQaC5+XlQZ/+T7wO/l0PFb5mKED0oJd/ZaUaq1foO4qh3WinSFVQuFnWwfvwxEazpjQE4bqS8nKVisg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WjpY7Bi2u7E6TBTajO8ZBjer1lTeoRPOC3lkZhdsyuQ=;
- b=TtI6FNnp4/lk86T1uE7/F7SIXPJsjSOpcie7506nYsAGxj/WmdyRHJ8GjqYOhATNLj41hDo81keVmYW2pvK1DmCy27/PAJ4cFHt5fscOdo3GOS8oLK12qg0YBrUG0bModGWubrhCfisIrQdNUs4kEWF5KimsURyDlsbZH6OXegOUHmm1H+YWcbOZYt44OCWHaLklxa+LZlzPLR9OeoUfQn11C3BLxHNTHlf/BS+Ks5yLiIz4ygZA4L2QeZ+IoawW9VL0K8Rq/xe84iSuWxNuv9tNVNSK/ooKZSTtR2OfxXI9++EK6M1hEmjlyeFaEGrDVr3WDTVQaF+DbF+FQvsPEw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=citrix.com; dmarc=pass action=none header.from=citrix.com;
- dkim=pass header.d=citrix.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=citrix.onmicrosoft.com; s=selector2-citrix-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WjpY7Bi2u7E6TBTajO8ZBjer1lTeoRPOC3lkZhdsyuQ=;
- b=d5bEU0v70l0knIEHIJsA59qqh1Xx2y7LT/1O8FtYjshIe1dXw9HnRCZAKK+2N/CjiG0mhxwXkzAZ/qyRqu0AWeEgX7rOPW4SksUftLEcxLLnE91ynlqVgY/TVS4GVy7wIVIj0Ebo+4MmPhotmsGQyYJUjFpu1QSaZHW2x93P674=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=citrix.com;
-Received: from BYAPR03MB3623.namprd03.prod.outlook.com (2603:10b6:a02:aa::12)
- by CH2PR03MB5205.namprd03.prod.outlook.com (2603:10b6:610:9b::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Thu, 8 Jun
- 2023 15:32:47 +0000
-Received: from BYAPR03MB3623.namprd03.prod.outlook.com
- ([fe80::bd96:913a:c06c:d606]) by BYAPR03MB3623.namprd03.prod.outlook.com
- ([fe80::bd96:913a:c06c:d606%4]) with mapi id 15.20.6455.030; Thu, 8 Jun 2023
- 15:32:47 +0000
-Message-ID: <4b1833cc-a68a-78ce-7e3a-3f9eb17e367f@citrix.com>
-Date:   Thu, 8 Jun 2023 16:32:41 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-From:   Andrew Cooper <andrew.cooper3@citrix.com>
-Subject: Re: [PATCH 3/3] x86: Disable running 32bit processes if ia32_disabled
- is passed
-Content-Language: en-GB
-To:     Jiri Slaby <jslaby@suse.cz>, Thomas Gleixner <tglx@linutronix.de>,
-        Nikolay Borisov <nik.borisov@suse.com>, x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org, mhocko@suse.com
-References: <20230607072936.3766231-1-nik.borisov@suse.com>
- <20230607072936.3766231-4-nik.borisov@suse.com> <87legvjxat.ffs@tglx>
- <80f2045b-f276-e127-8e46-87fb6994fb41@suse.com> <87fs73juwa.ffs@tglx>
- <ba15bccd-9580-c20e-ae9c-b8d60f49fa07@suse.com> <87a5xbjpk2.ffs@tglx>
- <875d0ab7-4470-25e2-6c01-72e231aae515@citrix.com> <874jnjj5z2.ffs@tglx>
- <278d7231-ee27-602f-4ba7-45d45d6772b3@citrix.com> <871qimkdft.ffs@tglx>
- <4217f682-f0e3-28de-1fb9-634c5df3581a@suse.cz>
-In-Reply-To: <4217f682-f0e3-28de-1fb9-634c5df3581a@suse.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: LO2P265CA0162.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:9::30) To BYAPR03MB3623.namprd03.prod.outlook.com
- (2603:10b6:a02:aa::12)
+        Thu, 8 Jun 2023 11:33:34 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4BF1734;
+        Thu,  8 Jun 2023 08:33:32 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id B39A65C00E4;
+        Thu,  8 Jun 2023 11:33:31 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Thu, 08 Jun 2023 11:33:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1686238411; x=1686324811; bh=bk7X7cG0vAXQHVnw4CA+kDw3ByHbOWHJInS
+        wfkkzHY8=; b=GBD0CSjijdigVUsvpDPVSARqWo7A/3D/qG+ji6CJ8nkz9tWCs7w
+        zl2Uuan4dpswf7TkqNwGmREgHmoZjfqWmDkFHet/tmyIYm8h4WlpNXbsC9PyzbG+
+        1F4uo8CkdvAcxL2MK6DoaPIgDgm6Mf9GIbtruQyT5aX8xLxlN+3Fzib5BXnGFtDy
+        2XtQB5lL+GcqvflWDaKw3Lf9DagabGt0/EboBfDTRuJwhGVCDXHCKn9LvS7FvGiR
+        aLHcgE1nH7RLX3PF9rF0YR8QjQq7D8z20woWsrd97LPk1Tf5nySZ67V2M4odgMp8
+        EQn26MbnsKJKE1sfp9qtocbi5jOVZZNCz8A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1686238411; x=1686324811; bh=bk7X7cG0vAXQH
+        Vnw4CA+kDw3ByHbOWHJInSwfkkzHY8=; b=BcCHXL7O/AS+XCPF4rcyZ3lxI2UJ6
+        wO4Hg/SDkzmMPw/NFljpJ/N4DKuLTe59gczbSSgHWl2yFucjtYVFAQBIpPAtmN4k
+        jC5jC+HHF4mYmXEa1OmZDgFm6ylnsPdyF3mktGwKjK4w4YmeYBn6wlmAYw11u/h7
+        Dgd8GNHoYlh19kT3jiHH8QAWxAF5a5rP8t0O0SvwV0EiWifVdLkfADEvHCXLW8wQ
+        bbcUShcMnzSLHkiYILmwFmdTRXVscfEsuDXvY8Vxk7f6Ek5DKYnCDOf4+xsfkZKB
+        79pnyvKnIpq/FtatVgXMslaH/E/JTn7ed1ue+XWEWo3nBllRtNh0v9gNg==
+X-ME-Sender: <xms:y_SBZKoyNgkvu_49gCTyqEsEfd5RnM0FGYHHVxCq01vyk060pQsWZA>
+    <xme:y_SBZIpqRgb2evEMIwxmXhsnZZAzsnMbaAh6KLbdrmaUA6_fb14gCyqGPrvKWCB4X
+    uQ-053Jw8nv5cQ>
+X-ME-Received: <xmr:y_SBZPOwS8pInKm3zZWJMP8CVpMEKFz44rK4GKZzWmorOTYrKyxt7tQAopA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtiedgkeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepffgvmhhi
+    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
+    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepvdejteegkefhteduhffgteffgeff
+    gfduvdfghfffieefieekkedtheegteehffelnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhs
+    lhgrsgdrtghomh
+X-ME-Proxy: <xmx:y_SBZJ4VHEJ6IODRlrD0AdCfRASzR991CxSln8nwuQWPGat8wLEIRg>
+    <xmx:y_SBZJ7sTI9LkWma72gNsSJJWq6NNL7qF2F0YqaJJ_Sxw4Eimi6mKg>
+    <xmx:y_SBZJhP5cYtaa7pcncXhrZyp-tZhoq-NSwSCodocfyQU8-AMKjvHQ>
+    <xmx:y_SBZGuWnSO2aEWvQjNZ4687abmS4GaS2U5x-OmgUMM-oxcwexNyBg>
+Feedback-ID: iac594737:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 8 Jun 2023 11:33:30 -0400 (EDT)
+Date:   Thu, 8 Jun 2023 11:33:26 -0400
+From:   Demi Marie Obenour <demi@invisiblethingslab.com>
+To:     Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
+        Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org
+Subject: Re: [PATCH v2 13/16] xen-blkback: Implement diskseq checks
+Message-ID: <ZIH0yQCICZRpliSc@itl-email>
+References: <20230530203116.2008-1-demi@invisiblethingslab.com>
+ <20230530203116.2008-14-demi@invisiblethingslab.com>
+ <ZH7tizoYl8YVFN9B@Air-de-Roger>
+ <ZH9mZGbM32CDmKGF@itl-email>
+ <ZIA9uBJxx2gqA4Cq@Air-de-Roger>
+ <ZICs+WYCPYdu2yoI@itl-email>
+ <ZIGRXrSGmgLF/07O@Air-de-Roger>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR03MB3623:EE_|CH2PR03MB5205:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5a8113b7-1850-4c80-38f2-08db68359c6b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1DoUGm74Jg7G8w176PePj3DU5RiKOCrOBrhO+m4Cte/NB+6cTitzhN92HhWBZBpwBDLhXcYDMWBkIZWWKGzVrT6O3mb+P0rhL0LTm42MfAQsTDSne3r8+ZMIYV2hiX+erlL5JUrQZvoqNo90jD1nt0jmI2dtBg/0VaLcDlLbCtEGUzx7MPAi//4E5k186bbTtjYEwQxUxtxWtSxRBAfw0MdC/zzD09XLKvAKyVC8RA1FCAET9e1h65mCPdHSn8zMMVCzyjUbQNrOYVYrpCf3wIvFjIDJP6P34WGuLqSPabU6zS26PqY43GaVUZX2DGUvtnflR9WJQ/gMELVZyRq7gIumifP5IylJgiTEapnDQefYZqtbLVum677s0wC9EARR0k0cw5+a+kpIrLLyjkmDYXdzmeaqnRBQWhgaeWJq37MGCa+GYL39LH1Vz4WwdbVx36DPdE4i7QI2Lmy7VO447x1QJNG27ous6EiKFPclR4uQD+NirxE2/T9ZYU0mag5hqXJ6QZK0QRtNPVMo6BtlmJUsTMn9fIsbogsSxvE6D320m02qgY+3AyWAe5eCaNI4Y++sFoyABul7Gj3qIntsU9J/jGbFlGq3e7BHfxvlBzR3RDNwdbSnRH4LSGTKDH5EvV0OQtmAHaiSSEG4/XCbvA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR03MB3623.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(396003)(366004)(39860400002)(346002)(451199021)(36756003)(5660300002)(2906002)(31696002)(86362001)(31686004)(6666004)(6486002)(83380400001)(53546011)(6512007)(26005)(6506007)(82960400001)(316002)(478600001)(110136005)(66946007)(38100700002)(4326008)(2616005)(186003)(66556008)(66476007)(8936002)(8676002)(41300700001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?M2pJSjhuTElvcFhJQlNhOGowM3VCQWVXbHBzZHJ0aDJ4ODFyNjlwL1FIYUhq?=
- =?utf-8?B?ckpuYWdyMEVGcytZczN5MUFybkZEM0Z2cUdjNisyN3c2TTNjTElkY1FHVDYx?=
- =?utf-8?B?QThqU1VuUGZHZWZBTTBYMDI4ZWdydm53c0xuS1dGUlVKVUF4ajdya0oxVCtK?=
- =?utf-8?B?bnF3bkZiVmpXeStDZFhuc3hTMyt2aEVodmkwdmdWWTVuNzVIQzM5dFdDYU9k?=
- =?utf-8?B?SW83ZTJIcTNiaDE1akZlYjc2NUFOU0tVbDM1Zyt4MVllaG9SL21MMXI0Um16?=
- =?utf-8?B?Z3lNbFZ6a0F2RWo5WlpZQzNKQVYxc0thNnhNVEZ4WnlRM2wzV3BGbWp0MHVq?=
- =?utf-8?B?MVFhc2dkRThSVkYyQ3dWSjRNSEFzMkpoc2lyZm1UQ01NYzBGOC9UOUJCSnFQ?=
- =?utf-8?B?alVSaGlJeHgrelFicW8vL1pWb2ZZbmMzaHhNcXBxZEpLdXJ0eDUyZWxIUWxQ?=
- =?utf-8?B?ejBzZkk1aG9PSkdvYlc0a25aN1pNTW5BUzZCZFNHeEFsUk9PdVMrRmI0bFlO?=
- =?utf-8?B?WFpnbEEzSmxKT1lYUTh3ak5WenY1LzEyTXp3eG1qU0xYWTQxaDhXd2VrUytv?=
- =?utf-8?B?c0pEa2doZlBHOG80c3pQTmtES0QxbkQ2bXJkeXBsSGVGcmpGRFFHSGtFNnRZ?=
- =?utf-8?B?cjc2enNDOGtuSUlVN1lmMzhOV1lOa0ZrQXUwMmFmNnpRVmM5d0pCeFJrRWgv?=
- =?utf-8?B?RFg1YnZiZkx3Mnl1YVVPRldlNVNCbzFrNXdkT2pBejcrYXZ5L1B2VVg5bEhr?=
- =?utf-8?B?S2oyQmowK05PTmw3RklGTHdkR0hKbEl6dU1DdnFZV2RDZ0dHb0FMYjhiaTQ5?=
- =?utf-8?B?ZjZSODdGNnJBdDA3aHQyUzY2L2Z2SGh4bXQ5cWVyREEvWnJIb20zYXUyNnUx?=
- =?utf-8?B?aWptVGpWUkNSWnRKUEZGZEticEVIRDcvSHJER0ZabzcwaG4wTDJTOStGWmNX?=
- =?utf-8?B?QWtLcnREeFppeGxjK045a29XMlNCYUtmUTl3SDUrUVVpZ0N6MU5vaGxXZVEr?=
- =?utf-8?B?Q05TQm90R3lLbklQTWRxZjI1NkMyKyswTUhrVHZ0SG9pUCsvZm9PV2FGZ0Vh?=
- =?utf-8?B?NjV2S3puc3BuekZRMWNsclNXdkIxbzU3aUlyVXZyeVRUWDJiYWVoUklxbzhL?=
- =?utf-8?B?d2ZYeEluR1h4OTVtbjlnV0F5WWpLYllvK0NCdGhLL295RFpnTUw2c0xseklS?=
- =?utf-8?B?N3VDZ3gzdWNiZGdxRmM0eU5Jc3pjN3hLUlIwUDltRXd1THhlYWM5ci80K0Ny?=
- =?utf-8?B?a1UvK3hSQ3JyN1E5anVYdGROS2hqLzJwV29VY0puWjd1OHU1OU91SUxNR1Fr?=
- =?utf-8?B?RGViME5QcGtVRklFaC9vc1R0dVZQNnpVSzRNUWpEUlR3SVowL2NaQ2Y2VUlM?=
- =?utf-8?B?cEFvVlV5NmNoYVlKdGtKV3lDQ3FaQmw4MXVMSHFST25pVUo0TkV1RkpNaEVy?=
- =?utf-8?B?OGVCTTVWOHBHSEJUbFRqb2ovRFpQbytKcXVTMlg5eDJkZ09xUUFyZUNJQVpZ?=
- =?utf-8?B?cjdyczQwQzdodkRESllUbmkzRGg1N3p2UlYzbHRRaU5mNzZrTTVkcTIvSzFL?=
- =?utf-8?B?ZjJqQW1xTjVQZzBacm8wTHhmZnN6NnJYQmVLdnNXYmRWeHZQZjdVOXkyYmVR?=
- =?utf-8?B?UVpRU3kxLys2R0ZJbEo3dFQwZ3k1cG85Q0Zta1Nua1hPQUxjaXJJYzFmR3hR?=
- =?utf-8?B?QkdiSjAvYmNGVWxEUmFYekg1QmwxcjVhS3ZkY0FyNHJrLzRwMDJYRWk0aUVF?=
- =?utf-8?B?dEZkU0IwY2pVMU84d0R1c09NVVBxSGJadUdvcTlHZVVsYzJWcHlaRkROR1Az?=
- =?utf-8?B?NGdrbG1XVW9yMkwrNHh0b1czRVZRWDhlZmhBUE4yZ2pPbkZLWDdMWGJOTzVp?=
- =?utf-8?B?NDBqM0k4Umo3eGhsNDhnSTA0NG9CSnYyZ2VJcktGT2ErN2dCeW40WHBTZlRu?=
- =?utf-8?B?ZVcwbXA5Ym0rVTZOeHl3OHV2MGd3MkFUMU1tWlQ0OU5TS0RvdGR4SDVWOUFa?=
- =?utf-8?B?RmpqSjdvL0p6andDUk5jMHFhcmIzK1JVeUJVdm5RYjdlc0J4WGhNSWtTczFj?=
- =?utf-8?B?YWFJNnF5MWZxQ2xYeGc3TGtuQ1pYSHFsWXRmdUM2S0J6NTc1UEpKamFURkFO?=
- =?utf-8?B?M2xTbjdjSGpaVmRUeTBPQ3dUekhEQzUyUk4zcCtwaW5zMmY1M1BiUFF4VElm?=
- =?utf-8?B?TlE9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: VsrYjmw09+Rn6FkNJZmxdN1GAgcQo4WiQbMB8I4lt8BpdczACLaY7n8bffk1dUh4AGRzaFyCFFw7ICq+Ivm2x4B+wbkeJJRUAXnNV6Gr2R+yCFSw0Y+EYX+4SJ7jkSxMI9bBQUiajA8eI3vih7zExFCYY2sXkgOOZGcgbNhVb1q9Xj3jQuaRYCu2X2h0OsP2Gc4KtXTYgq9uhx0FSaTD8O+yMSKwhehvH1qk4QQ5l8ZO7UAKUcrqKHS2s+3uHmzTRPP8HJIZJw+pDji/LPj96qJvCBjCEcCGyjXK8MW/u17RPvFhtc/2a65kto5z7NJYPpD4DL1aZrjX1J+Kr2YBfzxFjm+vMRj8evFY8REGnbTVYErnJroa5Cfy/RqlyIb5EiSNJyOgFBepiTL/WX+Cw+4iFP7RlglHYtxbFcNlQdpJfxkq/ETzPM1EagQUr9OiXQNpWwK4st9s3G50EfTeUff81WvlxNq8U756TQrKTfpw039phBY2Qr94yRCU46U/ZgabyFHHYHLFw03VO8hKWLQY8t6l2I5f1hXYOYg2hmpZoQFfsr5Psg0b/mxnVH7ypPp8CbRBroGZIIc47Lzm01DSPcc41bxwmj3bvVfYaC5XcW79+k7q12+lnTqlkxXj20a9eZNaH5efCraE/jB4uGEIgNbJql+qAUSWFdSnME+uJ6l4t7CuZ2yjTUanWlWNbsG+mTFdB4N2XSGWJvPO3HeSBCvBpiFi246dRJcdccuS1imH1kwg09NqvxTdfGDZpSgk+K3CxcwoRf1MTO+q9k0JZZs4vI7P6RbR9CgIYbAphaTrvK9LfYuvHYY+zd/AaSStaL/qJ4p/13km8vpO5MDdXY1fJZKaE/yqMMhm/7D7HFZ9LNSWezSC76BvBJP4
-X-OriginatorOrg: citrix.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5a8113b7-1850-4c80-38f2-08db68359c6b
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR03MB3623.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2023 15:32:47.2448
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 335836de-42ef-43a2-b145-348c2ee9ca5b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oSvcOz8Q0N7VP4Iy3pSDa4cK8bJ8G0i3DVJbWfzzgaatgSQ1nqvHNOJRcZK8iUIcpRuxPAcgCTnqjS6jbnxn8ZyHjkcJlC1DlBM40Mp3afw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR03MB5205
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="r3sHQtKDb7zekSfB"
+Content-Disposition: inline
+In-Reply-To: <ZIGRXrSGmgLF/07O@Air-de-Roger>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/06/2023 7:16 am, Jiri Slaby wrote:
-> On 08. 06. 23, 2:25, Thomas Gleixner wrote:
->> I really wish that we could disable syscall32 reliably on AMD and make
->> it raise #UD as it does on Intal.
->
-> Sorry, I am likely missing something, but why is not #GP enough when
-> we set CSTAR = 0?
 
-Yeah, don't be setting CSTAR to 0.
+--r3sHQtKDb7zekSfB
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 8 Jun 2023 11:33:26 -0400
+From: Demi Marie Obenour <demi@invisiblethingslab.com>
+To: Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
+Cc: Jens Axboe <axboe@kernel.dk>, Alasdair Kergon <agk@redhat.com>,
+	Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
+	Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>,
+	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+	xen-devel@lists.xenproject.org
+Subject: Re: [PATCH v2 13/16] xen-blkback: Implement diskseq checks
 
-If you set CSTAR to 0, and userspace has mapped something at 0, then the
-CPU will start executing from 0 in kernel mode.
+On Thu, Jun 08, 2023 at 10:29:18AM +0200, Roger Pau Monn=C3=A9 wrote:
+> On Wed, Jun 07, 2023 at 12:14:46PM -0400, Demi Marie Obenour wrote:
+> > On Wed, Jun 07, 2023 at 10:20:08AM +0200, Roger Pau Monn=C3=A9 wrote:
+> > > On Tue, Jun 06, 2023 at 01:01:20PM -0400, Demi Marie Obenour wrote:
+> > > > On Tue, Jun 06, 2023 at 10:25:47AM +0200, Roger Pau Monn=C3=A9 wrot=
+e:
+> > > > > On Tue, May 30, 2023 at 04:31:13PM -0400, Demi Marie Obenour wrot=
+e:
+> > > > > > -	if (be->major | be->minor) {
+> > > > > > -		if (be->major !=3D major || be->minor !=3D minor)
+> > > > > > -			pr_warn("changing physical device (from %x:%x to %x:%x) not=
+ supported.\n",
+> > > > > > -				be->major, be->minor, major, minor);
+> > > > > > +	diskseq_str =3D xenbus_read(XBT_NIL, dev->nodename, "diskseq"=
+, &diskseq_len);
+> > > > > > +	if (IS_ERR(diskseq_str)) {
+> > > > > > +		int err =3D PTR_ERR(diskseq_str);
+> > > > > > +		diskseq_str =3D NULL;
+> > > > > > +
+> > > > > > +		/*
+> > > > > > +		 * If this does not exist, it means legacy userspace that do=
+es not
+> > > > > > +		 * support diskseq.
+> > > > > > +		 */
+> > > > > > +		if (unlikely(!XENBUS_EXIST_ERR(err))) {
+> > > > > > +			xenbus_dev_fatal(dev, err, "reading diskseq");
+> > > > > > +			return;
+> > > > > > +		}
+> > > > > > +		diskseq =3D 0;
+> > > > > > +	} else if (diskseq_len <=3D 0) {
+> > > > > > +		xenbus_dev_fatal(dev, -EFAULT, "diskseq must not be empty");
+> > > > > > +		goto fail;
+> > > > > > +	} else if (diskseq_len > 16) {
+> > > > > > +		xenbus_dev_fatal(dev, -ERANGE, "diskseq too long: got %d but=
+ limit is 16",
+> > > > > > +				 diskseq_len);
+> > > > > > +		goto fail;
+> > > > > > +	} else if (diskseq_str[0] =3D=3D '0') {
+> > > > > > +		xenbus_dev_fatal(dev, -ERANGE, "diskseq must not start with =
+'0'");
+> > > > > > +		goto fail;
+> > > > > > +	} else {
+> > > > > > +		char *diskseq_end;
+> > > > > > +		diskseq =3D simple_strtoull(diskseq_str, &diskseq_end, 16);
+> > > > > > +		if (diskseq_end !=3D diskseq_str + diskseq_len) {
+> > > > > > +			xenbus_dev_fatal(dev, -EINVAL, "invalid diskseq");
+> > > > > > +			goto fail;
+> > > > > > +		}
+> > > > > > +		kfree(diskseq_str);
+> > > > > > +		diskseq_str =3D NULL;
+> > > > > > +	}
+> > > > >=20
+> > > > > Won't it be simpler to use xenbus_scanf() with %llx formatter?
+> > > >=20
+> > > > xenbus_scanf() doesn=E2=80=99t check for overflow and accepts lots =
+of junk it
+> > > > really should not.  Should this be fixed in xenbus_scanf()?
+> > >=20
+> > > That would be my preference, so that you can use it here instead of
+> > > kind of open-coding it.
+> >=20
+> > This winds up being a much more invasive patch as it requires changing
+> > sscanf().  It also has a risk (probably mostly theoretical) of breaking
+> > buggy userspace that passes garbage values here.
+>=20
+> Well, if the current function is not suitable for your purposes it
+> would be better to fix it rather than open-code what you need.  Mostly
+> because further usages would then also need to open-code whatever
+> required.
 
-If you've got SMEP active, this doesn't help.  Instead of executing from
-0, you'll take #PF.  Except you were already in kernel mode and #PF
-isn't an IST vector, so you'll then start executing the #PF handler on
-the same stack as before... which is the user stack, and it can still
-hijack execution by hooking a return address.
+That is fair.
 
-If you've got (just) SMAP active, then this doesn't help.  The hijacked
-execution doesn't need to touch the stack to execute STAC and re-permit
-user data accesses.
+> > > > > Also, you tie this logic to the "physical-device" watch, which
+> > > > > strictly implies that the "diskseq" node must be written to xenst=
+ore
+> > > > > before the "physical-device" node.  This seems fragile, but I don=
+'t
+> > > > > see much better optiono since the "diskseq" is optional.
+> > > >=20
+> > > > What about including the diskseq in the "physical-device" node?  Pe=
+rhaps
+> > > > use diskseq@major:minor syntax?
+> > >=20
+> > > Hm, how would you know whether the blkback instance in the kernel
+> > > supports the diskseq syntax in physical-device?
+> >=20
+> > That=E2=80=99s what the next patch is for =F0=9F=99=82.
+>=20
+> Hm, I think we should separate diskseq support from the notify open
+> stuff: it's possible a different (non-Linux) backend wants to
+> implement open notify support but doesn't have diskseq.
 
-If you've got SMEP, SMAP, *and* FMASK configured to clear AC
-automatically on syscall, then you end up in #DF from a SMEP violation
-trying to fetch the code, and a SMAP violation while trying to push the
-SMEP violation's #PF IRET frame.
+I like this idea!  What about having blkback set diskseq to zero?
+Userspace could then replace it with the actual value.
 
+> > > Can you fetch a disk using a diskseq identifier?
+> >=20
+> > Not yet, although I have considered adding this ability.  It would be
+> > one step towards a =E2=80=9Cdiskseqfs=E2=80=9D that userspace could use=
+ to open a device
+> > by diskseq.
+> >=20
+> > > Why I understand that this is an extra safety check in order to assert
+> > > blkback is opening the intended device, is this attempting to fix some
+> > > existing issue?
+> >=20
+> > Yes, it is.  I have a block script (written in C) that validates the
+> > device it has opened before passing the information to blkback.  It uses
+> > the diskseq to do this, but for that protection to be complete, blkback
+> > must also be aware of it.
+>=20
+> But if your block script opens the device, and keeps it open until
+> blkback has also taken a reference to it, there's no way such device
+> could be removed and recreated in the window you point out above, as
+> there's always a reference on it taken?
 
-It's almost as if not switching the stack was a terrible terrible idea...
+This assumes that the block script is not killed in the meantime,
+which is not a safe assumption due to timeouts and the OOM killer.
 
-~Andrew
+> > > I'm not sure I see how the major:minor numbers would point to a
+> > > different device than the one specified by the toolstack unless the
+> > > admin explicitly messes with the devices before blkback has got time
+> > > to open them.  But then the admin can already do pretty much
+> > > everything it wants with the system.
+> >=20
+> > Admins typically refer to e.g. device-mapper devices by name, not by
+> > major:minor number.  If a device is destroyed and recreated right as the
+> > block script is running, this race condition can occur.
+>=20
+> Right, but what about this device recreation happening after the admin
+> has written the guest config file but before the call to (lib)xl
+> happens?  blkback would also end up using a different device than
+> indented, and your proposed approach doesn't fix this.  The only way to
+> solve this would be to reference devices by UUID (iow: diskseq)
+> directly in the guest config file.
+
+That would be a good idea, but it is orthogonal to this patch.  My
+script opens the device and uses various means to check that it did
+open the correct device.  It then passes the diskseq to blkback.
+
+> Then the block script will open the device by diskseq and pass the
+> major:minor numbers to blkback.
+
+Alternatively, the toolstack could write both the diskseq and
+major:minor numbers and be confident that it is referring to the
+correct device, no matter how long ago it got that information.
+This could be quite useful for e.g. one VM exporting a device to
+another VM by calling losetup(8) and expecting a human to make a
+decision based on various properties about the device.  In this
+case there is no upper bound on the race window.
+--=20
+Sincerely,
+Demi Marie Obenour (she/her/hers)
+Invisible Things Lab
+
+--r3sHQtKDb7zekSfB
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmSB9MkACgkQsoi1X/+c
+IsGCMxAAqG5vSBmNdrqnGJZtBSgrA3UZ/y3fsa0PnxKkWgF3nhun+A8UeKOmjz0t
+RW9nmG3h6EhpC6XwBop/HnjHIRUS7Z77yDPGtyCHluCNQM3Tj2LOoK6rPn5TVxiR
+lsfvUkI41GYaOBKbQ+IEo9IKqpZZE7QIAnVZG8xNW7Klb67Pgi+Q2zb535Ghw67u
+xCaV90KBqXTqPZj4hODd8FT/4ewealg7a8Gsb+94TiXMhNPLFMgUbldwURuVp7gl
++16jnXeKkgJ+ccw0Q6UueDxx5o5T3tArta/rfjy2YW18te6QKfv7Ro51eIjCBS3k
+uInhLdrnAbfUUW4Y6XzPWXIc2ggBgxIxbhO/illtppLzqBXnlRsXdsSijk3E2y4/
+Qg56hHb3xDNXKmN6J4HOIF03AEAoD4R3aqt0WB8SKHNN3YMhTequs2RCmGTOrHTf
+QdXVw07joEeYwsZhgrVVtHEGheBeM0+2zdzgF5rUyy/8dS7wyIliFQgNOW8fPRXt
+RYPLy6GV+BJZtgTL0LrSw/kCcXEozbPI7Ju4nqwmQVzeXuklYYDvt8nkLkeY3bzz
+o895IvUlQGKODDHxJb55eCN6A7ztY9K4sb6gij7ny0RWjHuQezGIA334zfV0n3EM
+J4QwgQsldOF/lYTnpCefwXdOWf5PxXENvQi1G25JJWn4Z8JvpGw=
+=TpT1
+-----END PGP SIGNATURE-----
+
+--r3sHQtKDb7zekSfB--
