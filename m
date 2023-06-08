@@ -2,137 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB89727F7A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:54:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0CB727F83
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:57:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236466AbjFHLyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 07:54:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37762 "EHLO
+        id S235660AbjFHL5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 07:57:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234001AbjFHLyY (ORCPT
+        with ESMTP id S234001AbjFHL5i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 07:54:24 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114941FFA
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 04:54:23 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f7359a3b78so65745e9.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 04:54:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686225261; x=1688817261;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9pazMV69yfgFZtP5YDiQoyIf8m2D7hEJoNwU1Dx6CL8=;
-        b=n38eRUOr4umoCI3/QeJjYKUG5wauY5XjpbsCAk1wajgj91PVr1M6zAt4A9q6TvWUs7
-         VqUI2OLwjSp69CjrKIYNdE1Vl9nj/0BUVDz9dzA3+W70nmnMscD1svF4KX9ZvTVBRcY0
-         e/efkjGrGTB30e4tokL4P9NUorLG51i/Iao4ki/GG4GlhZ1Q59kKNACiouxvuKwQXD0r
-         V6npe7gl/9G7ZmM1Q8Uxzo0NKePnr9/d/wQ++4oKKTT5adJuUNdliPlwwZYz/WttxAdU
-         3VviFQ3ER2MuB7p5zTA1IPCQ02NF9kS4fNagTOZ+5i+QKGqgqX0D7m+ugJzTtYpwTiTf
-         F/6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686225261; x=1688817261;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9pazMV69yfgFZtP5YDiQoyIf8m2D7hEJoNwU1Dx6CL8=;
-        b=aSIa3WL0JFAHDzgU8pk6moPRf+TOSSGfd1C656pAVUaVM12e3aUH/3ZyHUicCAbnZf
-         +6AZmwMTAQ5WMeLLDpoJUI29sYDImxiHEnIiQmOa3D9vpMaMf0IWVlfA5UrTqfURJBvT
-         cARic5R2lZGs0idX3WFd055V+hnGHvOQWafhfz/U5YkCsssOR9KhplNgNkwWQOBFDoq/
-         tCs0it/8apxlfBBZBX6/dxUYG7xj2njyr+IUpBNFEPUWG60zCFJ9V2rPgqerzWWuqGGK
-         OOj4MsdMaoNKeLKAgds24SqJKzweqg6xc+6z8lASUCSMkBgNTvC/28hZ7ssY50T/cmmu
-         xrjw==
-X-Gm-Message-State: AC+VfDwtk1HAdkbSuzYPaYenRv2TEsu7gtM7Heo+5gmNhc0r4kLes/fa
-        wpw1zsEgzEJwY3FiuQledSn9AloP6j7I7r+jeNcwtQ==
-X-Google-Smtp-Source: ACHHUZ4mzPivgHhSIaZ4zzukHxcstQVei8abw9RuANC/UKP6oJ2udNBEdZbHZg/kO9daP38viSJzG29otuBxNJ69Wmg=
-X-Received: by 2002:a05:600c:1f0d:b0:3f7:ba55:d03b with SMTP id
- bd13-20020a05600c1f0d00b003f7ba55d03bmr156301wmb.2.1686225261431; Thu, 08 Jun
- 2023 04:54:21 -0700 (PDT)
+        Thu, 8 Jun 2023 07:57:38 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57C1210C;
+        Thu,  8 Jun 2023 04:57:36 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3589OCnw007652;
+        Thu, 8 Jun 2023 13:57:09 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=73Ubk5oRaELFQy9MiHEBTyfooWnX9EJZnQ7YDu0s2/M=;
+ b=S73rOSWmTnk9u+GB1rogOjulSFtgS1Yc0hW/82plEdlDrmEh7NEIIKQn34WDhlm4m6hk
+ aHL8TgxLwEnbSErpCCnYdsCvvUYntykGWAwjvdgi2ULqeqCRvxzEGyd2cP5AY6gPL3+O
+ 8VrV1n/27oCSe+A//hKYww5a2XPPDdS6qz8Dbwoy3+bLTQ7VFtlbqQoPN/4GjZj6DSZs
+ xSCl2hPEHuEN2QDDR7VNO+sg2ILkS6B/pAgnn0jvqn2Cd9lfAFV5z9AMrrxpzIoWbNGo
+ y/BuqtSQ1boqyKlU9A8eQuOvAnLwTLN8gRrqtfKobGAtcP/ZRFoo39sNXtREsDaGwy2g 2A== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3r3cax10j8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Jun 2023 13:57:09 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 20F8E10002A;
+        Thu,  8 Jun 2023 13:57:06 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A15922291CB;
+        Thu,  8 Jun 2023 13:57:06 +0200 (CEST)
+Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 8 Jun
+ 2023 13:57:05 +0200
+Message-ID: <a02ae654-b0bb-5d57-64b9-94cc3182b463@foss.st.com>
+Date:   Thu, 8 Jun 2023 13:57:05 +0200
 MIME-Version: 1.0
-References: <20230606064306.9192-1-duanmuquan@baidu.com> <CANn89iKwzEtNWME+1Xb57DcT=xpWaBf59hRT4dYrw-jsTdqeLA@mail.gmail.com>
- <DFBEBE81-34A5-4394-9C5B-1A849A6415F1@baidu.com> <CANn89iLm=UeSLBVjACnqyaLo7oMTrY7Ok8RXP9oGDHVwe8LVng@mail.gmail.com>
- <D8D0327E-CEF0-4DFC-83AB-BC20EE3DFCDE@baidu.com> <CANn89iKXttFLj4WCVjWNeograv=LHta4erhtqm=fpfiEWscJCA@mail.gmail.com>
- <8C32A1F5-1160-4863-9201-CF9346290115@baidu.com> <CANn89i+JBhj+g564rfVd9gK7OH48v3N+Ln0vAgJehM5xJh32-g@mail.gmail.com>
- <7FD2F3ED-A3B5-40EF-A505-E7A642D73208@baidu.com>
-In-Reply-To: <7FD2F3ED-A3B5-40EF-A505-E7A642D73208@baidu.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 8 Jun 2023 13:54:09 +0200
-Message-ID: <CANn89iJ5kHmksR=nGSMVjacuV0uqu5Hs0g1s343gvAM9Yf=+Bg@mail.gmail.com>
-Subject: Re: [PATCH v2] tcp: fix connection reset due to tw hashdance race.
-To:     "Duan,Muquan" <duanmuquan@baidu.com>
-Cc:     "davem@davemloft.net" <davem@davemloft.net>,
-        "dsahern@kernel.org" <dsahern@kernel.org>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 0/3] ASoC: stm32: fix dtbs_check warnings
+Content-Language: en-US
+To:     Olivier Moysan <olivier.moysan@foss.st.com>,
+        James Schulman <james.schulman@cirrus.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        "Lucas Tanure" <tanureal@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+CC:     Alexandre Torgue <alexandre.torgue@st.com>,
+        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230606115605.1633595-1-olivier.moysan@foss.st.com>
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+In-Reply-To: <20230606115605.1633595-1-olivier.moysan@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.21.93]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-08_08,2023-06-08_01,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 8, 2023 at 1:24=E2=80=AFPM Duan,Muquan <duanmuquan@baidu.com> w=
-rote:
->
-> Besides trying to find the right tw sock, another idea is that if FIN seg=
-ment finds listener sock, just discard the segment, because this is obvious=
- a bad case, and the peer will retransmit it. Or for FIN segment we only lo=
-ok up in the established hash table, if not found then discard it.
->
+Hi
 
-Sure, please give the RFC number and section number that discusses
-this point, and then we might consider this.
+On 6/6/23 13:56, Olivier Moysan wrote:
+> Fix dtbs_check warnings in STM32MP15 DK boards Devices Trees for
+> STM32 I2S and Cirrus CS42L51 codec.
+> 
+> - Add OF graph port property in I2S and CS42L51 DT bindings.
+>    Fixes warnings:
+>    audio-controller@4000b000: Unevaluated properties are not allowed
+>    ('port' was unexpected)
+>    cs42l51@4a: Unevaluated properties are not allowed
+>    ('port' was unexpected)
+> - Correct OF graph DAI audio format property for STM32MP15x Dkx I2S node
+> 
+> Changes in v2:
+> - Add port example in i2s and cs42l51 binding
+> 
+> Olivier Moysan (3):
+>    ASoC: dt-bindings: stm32: document audio of graph port for i2s
+>    ASoC: dt-bindings: document audio of graph port for cs42l51
+>    ARM: dts: stm32: fix i2s endpoint format property for stm32mp15xx-dkx
+> 
+>   .../devicetree/bindings/sound/cirrus,cs42l51.yaml     | 11 +++++++++++
+>   .../devicetree/bindings/sound/st,stm32-i2s.yaml       | 11 +++++++++++
+>   arch/arm/boot/dts/stm32mp15xx-dkx.dtsi                |  2 +-
+>   3 files changed, 23 insertions(+), 1 deletion(-)
+> 
 
-Just another reminder about TW : timewait sockets are "best effort".
+Patch[3] applied on stm32-next.
 
-Their allocation can fail, and /proc/sys/net/ipv4/tcp_max_tw_buckets
-can control their number to 0
-
-Applications must be able to recover gracefully if a 4-tuple is reused too =
-fast.
-
->
-> 2023=E5=B9=B46=E6=9C=888=E6=97=A5 =E4=B8=8B=E5=8D=8812:13=EF=BC=8CEric Du=
-mazet <edumazet@google.com> =E5=86=99=E9=81=93=EF=BC=9A
->
-> On Thu, Jun 8, 2023 at 5:59=E2=80=AFAM Duan,Muquan <duanmuquan@baidu.com>=
- wrote:
->
->
-> Hi, Eric,
->
-> Thanks a lot for your explanation!
->
-> Even if we add reader lock,  if set the refcnt outside spin_lock()/spin_u=
-nlock(), during the interval between spin_unlock() and refcnt_set(),  other=
- cpus will see the tw sock with refcont 0, and validation for refcnt will f=
-ail.
->
-> A suggestion, before the tw sock is added into ehash table, it has been a=
-lready used by tw timer and bhash chain, we can firstly add refcnt to 2 bef=
-ore adding two to ehash table,. or add the refcnt one by one for timer, bha=
-sh and ehash. This  can avoid the refcont validation failure on other cpus.
->
-> This can reduce the frequency of the connection reset issue from 20 min t=
-o 180 min for our product,  We may wait quite a long time before the best s=
-olution is ready, if this obvious defect is fixed, userland applications ca=
-n benefit from it.
->
-> Looking forward to your opinions!
->
->
-> Again, my opinion is that we need a proper fix, not work arounds.
->
-> I will work on this a bit later.
->
-> In the meantime you can apply locally your patch if you feel this is
-> what you want.
->
->
+Thanks
+Alex
