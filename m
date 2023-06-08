@@ -2,262 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E3D6728B33
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 00:43:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8558728B39
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 00:48:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236895AbjFHWnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 18:43:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60968 "EHLO
+        id S235802AbjFHWsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 18:48:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjFHWnX (ORCPT
+        with ESMTP id S230056AbjFHWsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 18:43:23 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CEC02D51;
-        Thu,  8 Jun 2023 15:43:17 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-5149390b20aso1993631a12.3;
-        Thu, 08 Jun 2023 15:43:17 -0700 (PDT)
+        Thu, 8 Jun 2023 18:48:18 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F762D5F
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 15:48:16 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-565a63087e9so10651757b3.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 15:48:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686264195; x=1688856195;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nNrbQrLzaDyIVZlVtGLtW2jLk0N+5CabOX0/0BQtIdw=;
-        b=Z8oBiTuSmda8WfrnWpSBXAFblGJZQhW+0gngR6wRk7rrGg7SictdrYmBd3xkFewYo8
-         V3PSBTjd9MB1aSMDSeHmVSRelYw+nb8rnTDPXiejzg3Hj0FRIL2IQKrMBu5WFqz3qDsH
-         4J68L2N6MPRx6sESdlsfwHJfOYVBMUbMLMKNW9qRzzuwWm8lyTV16OwYQ2b/E+EQsUmD
-         trKPFvuBONhEsf+mPRlMrWfit/IfDDIU77VsHld20ghn7ipbcNDaE35yvVUBQbTEthli
-         4pimfH8SlDCJoxXSzR0Vxhfahm4QiphI3OgMBuuKgUt2MSupdb0YglLhsFGbeKX1Ey8R
-         rxQw==
+        d=linaro.org; s=google; t=1686264496; x=1688856496;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SevHFuFvWiWBIFRswg9uj8IfEdbzTFJ6Jca5wyhSDJw=;
+        b=ECOhaM3p975Kr+3/aj2t5kmM5aiRRvok5V6OB95fKgNEnL8JxKL3JB4ZtcCnnv86+d
+         FgNkJD+sRQ7gZ0EY5ug+pNVmupLrGTzp6KDVW6x7B8oGluqsTm1i8J3m9/epq1kGt3qD
+         BbUiwiRxEZ59N6evbnQzDZjz18Ei0fV9HkOOs43Erb0vgMLLAnCJSKmMJnnO+N0EqfT8
+         M5q8i5Cuj/kkT68fJCJRG81FQLJEXDzIKwj/OwbR56Oq7TiYcR0X8rIpuNJGWv+agS6F
+         GkPkuXMkMVbgEbtfwPG15yrZHhO6IqZL/OXHYsEPci1qHtaeQn4UTC9c9f0guZEgWQIQ
+         3uoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686264195; x=1688856195;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nNrbQrLzaDyIVZlVtGLtW2jLk0N+5CabOX0/0BQtIdw=;
-        b=Xx7pG1xbEXR+cV5fe5rkBJmFnZr/WljT+w57D6ufB0SUAIzkhdxtBxTCmMqeJOGngM
-         9vt4EDLVqIEI0C4UkLChMCLqxv6QMBJGXeaNfkkynI/FcJvvzWhDSBU/lHUsKqRGTUPs
-         d5HGpqdnPTqzBmxFBTjZBhTwoflimiXTWiuP/nD1YoUfyPZDuRLTVaNQmtnCyjPTYnve
-         TCNItvubounYcuT8EjLu2VSk0NMVq7NxBfk4gudCg6ZVy/f5lzsJ9WUDiURGfseQdhS6
-         OYhYjvIAiQKrVERXyELaCYKDbPquKD1kD4T8gxeC5JAFpDXM0F5RDdSc/m0ivubcOcmx
-         NAfA==
-X-Gm-Message-State: AC+VfDziT5pYvflE6AI+ChJVMpAgtZeeTIxK4A4z1DQvEG46T+AYjDEn
-        K8nMnswq/27arqu/zcOC3ufh9JYfeFZl3nf5BEs=
-X-Google-Smtp-Source: ACHHUZ6h8iw4XdK67HugzDSJuLfkosNN7RLPVm4WF3BNjdX0x0XrF/pCVDQC4bNXIM/qYWMma4EU1YDeS+OeyMQzk1E=
-X-Received: by 2002:a17:907:5c1:b0:965:fb87:4215 with SMTP id
- wg1-20020a17090705c100b00965fb874215mr514444ejb.15.1686264195492; Thu, 08 Jun
- 2023 15:43:15 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686264496; x=1688856496;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SevHFuFvWiWBIFRswg9uj8IfEdbzTFJ6Jca5wyhSDJw=;
+        b=cI52B7dQFtgtOpW3bCdq0HVkE/XgLNRXmBW9phse3D0ARiqBxdnA/0qUmiygJNECj2
+         KateqieNPoXnlxs41bW9LBntGOxnSw3PPnJEL1mAJkHbTlWyiHWJ1qiJhVc4dsdJjTij
+         zIF8mTvhs5XY+VrJWwt3f5b7m82QDU+tIHA+S27vFaIABp2JIylhaeU6Wtm2ODpFN5gx
+         IC8/aP8vOW6QIG0W2npZU/IjUUB8bBCcRWSl2KlUK5sNEeDNniMtoots/ZxsN3Ro3JqT
+         LonSSyhvAnh4UiD79CcziVc7GhLtHZJ9dWZay4OuWA8YfBZsg8+c0EkDguU4KIkGrKV1
+         znUw==
+X-Gm-Message-State: AC+VfDwgi9oQp11H3xw21HYzyKi2MWdJqgSvVSRTiyyDoghXSckbMaVo
+        QPmjmzguHDElsC4GmRzHtclrj1Z/ttBSjsu+ty9PsA==
+X-Google-Smtp-Source: ACHHUZ6sg68tAvFst1nqZ5DMkn1OuhQZZTbeAVJLKGxB6g8cUNAHdkwHMsxryq4bL5XnmKBOXrRNIMQ0KdwxEmFUKFs=
+X-Received: by 2002:a81:92cc:0:b0:561:cb45:d7de with SMTP id
+ j195-20020a8192cc000000b00561cb45d7demr987980ywg.31.1686264496190; Thu, 08
+ Jun 2023 15:48:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230608212613.424070-1-jolsa@kernel.org>
-In-Reply-To: <20230608212613.424070-1-jolsa@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 8 Jun 2023 15:43:03 -0700
-Message-ID: <CAEf4BzbNakGzcycJJJqLsFwonOmya8=hKLD41TWX2zCJbh=r-Q@mail.gmail.com>
-Subject: Re: [PATCH RFC] ftrace: Show all functions with addresses in available_filter_functions_addrs
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Jackie Liu <liu.yun@linux.dev>
+References: <20230601015115.406002-1-victorshihgli@gmail.com> <20230601015115.406002-3-victorshihgli@gmail.com>
+In-Reply-To: <20230601015115.406002-3-victorshihgli@gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 9 Jun 2023 00:47:40 +0200
+Message-ID: <CAPDyKFrq1U1R+tvz3WLZCv2m5ta09L1ozoV4w-H5w38qX91BKw@mail.gmail.com>
+Subject: Re: [PATCH V5 2/4] mmc: sdhci-pci-gli: Set SDR104's clock to 205MHz
+ and enable SSC for GL9767
+To:     Victor Shih <victorshihgli@gmail.com>
+Cc:     adrian.hunter@intel.com, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, benchuanggli@gmail.com,
+        HL.Liu@genesyslogic.com.tw, Greg.tu@genesyslogic.com.tw,
+        Ben Chuang <ben.chuang@genesyslogic.com.tw>,
+        Victor Shih <victor.shih@genesyslogic.com.tw>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 8, 2023 at 2:26=E2=80=AFPM Jiri Olsa <jolsa@kernel.org> wrote:
+On Thu, 1 Jun 2023 at 03:51, Victor Shih <victorshihgli@gmail.com> wrote:
 >
+> From: Victor Shih <victor.shih@genesyslogic.com.tw>
 >
-> hi,
-> when ftrace based tracers we need to cross check available_filter_functio=
-ns
-> with /proc/kallsyms. For example for kprobe_multi bpf link (based on fpro=
-be)
-> we need to make sure that symbol regex resolves to traceable symbols and
-> that we get proper addresses for them.
+> Set GL9767 SDR104's clock to 205MHz and enable SSC feature
+> depend on register 0x888 BIT(1).
 >
-> Looks like on the last last LSF/MM/BPF there was an agreement to add new
-> file that will have available_filter_functions symbols plus addresses.
->
-> This RFC is to kick off the discussion, I'm not sure Steven wants to do
-> that differently ;-)
->
-> thanks,
-> jirka
->
->
+> Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
+> Signed-off-by: Victor Shih <victor.shih@genesyslogic.com.tw>
+> Acked-by: Adrian Hunter <adrian.hunter@intel.com>
 > ---
-> Adding new available_filter_functions_addrs file that shows all available
-> functions (same as available_filter_functions) together with addresses,
-> like:
->
->   # cat available_filter_functions_addrs | head
+>  drivers/mmc/host/sdhci-pci-gli.c | 135 ++++++++++++++++++++++++++++++-
 
-nit: can we have some more succinct name, like "traceable_funcs" or
-something? And btw, does this have to be part of tracefs/debugfs
-(never knew the difference, sorry). E.g., can it be instead exposed
-through sysfs?
+[...]
 
-Either than these minor things, yep, I think this is something that
-would be extremely useful, thanks, Jiri, for taking a stab at it!
-
->   ffffffff81000770 __traceiter_initcall_level
->   ffffffff810007c0 __traceiter_initcall_start
->   ffffffff81000810 __traceiter_initcall_finish
->   ffffffff81000860 trace_initcall_finish_cb
->   ...
->
-> It's useful to have address avilable for traceable symbols, so we don't
-> need to allways cross check kallsyms with available_filter_functions
-> (or the other way around) and have all the data in single file.
->
-> For backwards compatibility reasons we can't change the existing
-> available_filter_functions file output, but we need to add new file.
->
-> Suggested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  include/linux/ftrace.h |  1 +
->  kernel/trace/ftrace.c  | 52 ++++++++++++++++++++++++++++++++++++++----
->  2 files changed, 48 insertions(+), 5 deletions(-)
->
-> diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-> index b23bdd414394..6e372575a8e9 100644
-> --- a/include/linux/ftrace.h
-> +++ b/include/linux/ftrace.h
-> @@ -633,6 +633,7 @@ enum {
->         FTRACE_ITER_MOD         =3D (1 << 5),
->         FTRACE_ITER_ENABLED     =3D (1 << 6),
->         FTRACE_ITER_TOUCHED     =3D (1 << 7),
-> +       FTRACE_ITER_ADDRS       =3D (1 << 8),
->  };
->
->  void arch_ftrace_update_code(int command);
-> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> index 764668467155..1f33e1f04834 100644
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -3804,7 +3804,7 @@ static int __init ftrace_check_sync(void)
->  late_initcall_sync(ftrace_check_sync);
->  subsys_initcall(ftrace_check_for_weak_functions);
->
-> -static int print_rec(struct seq_file *m, unsigned long ip)
-> +static int print_rec(struct seq_file *m, unsigned long ip, bool print_ad=
-dr)
->  {
->         unsigned long offset;
->         char str[KSYM_SYMBOL_LEN];
-> @@ -3819,7 +3819,11 @@ static int print_rec(struct seq_file *m, unsigned =
-long ip)
->                 ret =3D NULL;
->         }
->
-> -       seq_puts(m, str);
-> +       if (print_addr)
-> +               seq_printf(m, "%lx %s", ip, str);
-> +       else
-> +               seq_puts(m, str);
 > +
->         if (modname)
->                 seq_printf(m, " [%s]", modname);
->         return ret =3D=3D NULL ? -1 : 0;
-> @@ -3830,9 +3834,13 @@ static inline int test_for_valid_rec(struct dyn_ft=
-race *rec)
->         return 1;
->  }
->
-> -static inline int print_rec(struct seq_file *m, unsigned long ip)
-> +static inline int print_rec(struct seq_file *m, unsigned long ip, bool p=
-rint_addr)
->  {
-> -       seq_printf(m, "%ps", (void *)ip);
-> +       if (print_addr)
-> +               seq_printf(m, "%lx %ps", ip, (void *)ip);
-> +       else
-> +               seq_printf(m, "%ps", (void *)ip);
-> +
->         return 0;
->  }
->  #endif
-> @@ -3861,7 +3869,7 @@ static int t_show(struct seq_file *m, void *v)
->         if (!rec)
->                 return 0;
->
-> -       if (print_rec(m, rec->ip)) {
-> +       if (print_rec(m, rec->ip, iter->flags & FTRACE_ITER_ADDRS)) {
->                 /* This should only happen when a rec is disabled */
->                 WARN_ON_ONCE(!(rec->flags & FTRACE_FL_DISABLED));
->                 seq_putc(m, '\n');
-> @@ -3996,6 +4004,30 @@ ftrace_touched_open(struct inode *inode, struct fi=
-le *file)
->         return 0;
->  }
->
-> +static int
-> +ftrace_avail_addrs_open(struct inode *inode, struct file *file)
+> +static void gl9767_set_pll(struct pci_dev *pdev, u8 dir, u16 ldiv, u8 pdiv)
 > +{
-> +       struct ftrace_iterator *iter;
-> +       int ret;
+> +       u32 pll;
 > +
-> +       ret =3D security_locked_down(LOCKDOWN_TRACEFS);
-> +       if (ret)
-> +               return ret;
+> +       gl9767_vhs_write(pdev);
 > +
-> +       if (unlikely(ftrace_disabled))
-> +               return -ENODEV;
+> +       pci_read_config_dword(pdev, PCIE_GLI_9767_SD_PLL_CTL, &pll);
+> +       pll &= ~(PCIE_GLI_9767_SD_PLL_CTL_PLL_LDIV |
+> +                PCIE_GLI_9767_SD_PLL_CTL_PLL_PDIV |
+> +                PCIE_GLI_9767_SD_PLL_CTL_PLL_DIR_EN);
+> +       pll |= FIELD_PREP(PCIE_GLI_9767_SD_PLL_CTL_PLL_LDIV, ldiv) |
+> +              FIELD_PREP(PCIE_GLI_9767_SD_PLL_CTL_PLL_PDIV, pdiv) |
+> +              FIELD_PREP(PCIE_GLI_9767_SD_PLL_CTL_PLL_DIR_EN, dir);
+> +       pci_write_config_dword(pdev, PCIE_GLI_9767_SD_PLL_CTL, pll);
 > +
-> +       iter =3D __seq_open_private(file, &show_ftrace_seq_ops, sizeof(*i=
-ter));
-> +       if (!iter)
-> +               return -ENOMEM;
+> +       gl9767_vhs_read(pdev);
 > +
-> +       iter->pg =3D ftrace_pages_start;
-> +       iter->flags =3D FTRACE_ITER_ADDRS;
-> +       iter->ops =3D &global_ops;
-> +
-> +       return 0;
-> +}
-> +
->  /**
->   * ftrace_regex_open - initialize function tracer filter files
->   * @ops: The ftrace_ops that hold the hash filters
-> @@ -5916,6 +5948,13 @@ static const struct file_operations ftrace_touched=
-_fops =3D {
->         .release =3D seq_release_private,
->  };
->
-> +static const struct file_operations ftrace_avail_addrs_fops =3D {
-> +       .open =3D ftrace_avail_addrs_open,
-> +       .read =3D seq_read,
-> +       .llseek =3D seq_lseek,
-> +       .release =3D seq_release_private,
-> +};
-> +
->  static const struct file_operations ftrace_filter_fops =3D {
->         .open =3D ftrace_filter_open,
->         .read =3D seq_read,
-> @@ -6377,6 +6416,9 @@ static __init int ftrace_init_dyn_tracefs(struct de=
-ntry *d_tracer)
->         trace_create_file("available_filter_functions", TRACE_MODE_READ,
->                         d_tracer, NULL, &ftrace_avail_fops);
->
-> +       trace_create_file("available_filter_functions_addrs", TRACE_MODE_=
-READ,
-> +                       d_tracer, NULL, &ftrace_avail_addrs_fops);
-> +
->         trace_create_file("enabled_functions", TRACE_MODE_READ,
->                         d_tracer, NULL, &ftrace_enabled_fops);
->
-> --
-> 2.40.1
->
+> +       /* wait for pll stable */
+> +       msleep(1);
+
+According to Documentation/timers/timers-howto.rst, this should be
+converted into usleep_range instead.
+
+[...]
+
+Other than the minor thing above, this looks good to me!
+
+Kind regards
+Uffe
