@@ -2,131 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10D037275E0
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 05:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E643B7275E6
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 05:49:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233815AbjFHDq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 23:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42450 "EHLO
+        id S233919AbjFHDtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 23:49:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232425AbjFHDq1 (ORCPT
+        with ESMTP id S233153AbjFHDtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 23:46:27 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E12E26A2
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 20:46:25 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-53fa457686eso803479a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 20:46:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686195985; x=1688787985;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zPf6EVQH09A92WbqJ3iwYGcgI/uGh046z4DNzjj1omg=;
-        b=x6pUm2+fmGAXqIGZ3GWmw8MJN6FQFDPN/jxNnk1a4d+x4XtXRgh6sZxLAVEkTnJjPZ
-         N50wRXzKdcFpb1ZTqQZytoJOYf/pWF8dL6UIEz9eKFFiaOY4qYogsxhLA9wTMDPz39aR
-         O4Z6T7eB/IP+BIptCY2mLHU5QzM3nTttzRVOhLSJxg63envUrv5PoPSijEF+odKdqijg
-         UggMv+QhzDLKINQc7fh9nHKfbKFeGikaIGn/sXx+9063qj7OEW46PHGRbF0NBCAwUSS1
-         e4rq0ylJdM/bFSfrwVi4Tfv86r0Rb108sq8rbwdhkAZovvcS/z4fBk1Vwyhxz71qwlF3
-         qeeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686195985; x=1688787985;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zPf6EVQH09A92WbqJ3iwYGcgI/uGh046z4DNzjj1omg=;
-        b=WIkEkVZ5asPdR1u9JvebYJUZhomxpKRShfSKKqJNrRiEv7j+I7xoidxBD/O2AGt9NJ
-         Xaaw5hpZ6qM7tAMmSzn8B4mV5GfmbZlebTW13FmL4Uzr3ZXqilhx6IXWCzstWZmZfuGo
-         s3O1nORvzoO0n2HRJIYLkkMRSFBzaHA6B5U7W/gcwVO0SnteAMMHabDHhAu63a5dOLWm
-         +sVhi98R5v2ecb51KSgtvREgcYnGWYJFgXC98s8gqng9eya7ffRaqfcIxRp5/lNPygKz
-         a0rJkWzJ+oCp7ds4KwVOImp6AQns049349wNWusjXXbflh4zxMSNByIvoYsUKQl9rn2u
-         WZ3A==
-X-Gm-Message-State: AC+VfDz5Z2CkyK1Ormoqj1gBcDZUfLV7uctdoKJgqqz2yFJHGy1ezFkS
-        c9UBxc5+pF67juUbgDa8NOyWwuX3f3U=
-X-Google-Smtp-Source: ACHHUZ5ERc0sQl+8hDoScAwGkH1OHFU8LnUFX+cZnrw2XC2h/eSo1wMN1HZaQKy57pvWLRPHzlIuFu5cJYw=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:903:42c4:b0:1a6:8a07:960a with SMTP id
- jy4-20020a17090342c400b001a68a07960amr199948plb.0.1686195984350; Wed, 07 Jun
- 2023 20:46:24 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 20:46:22 -0700
-In-Reply-To: <ZIECZMHxtEYnuBAJ@araj-dh-work>
-Mime-Version: 1.0
-References: <20230603193439.502645149@linutronix.de> <ZH4eNL4Bf7yPItee@google.com>
- <87pm694jmg.ffs@tglx> <ZICuhZHCqSYvR4IO@araj-dh-work> <ZIC/b+AwvH2wIz/o@google.com>
- <ZIECZMHxtEYnuBAJ@araj-dh-work>
-Message-ID: <ZIFPDvsKGZ7MVSMt@google.com>
-Subject: Re: [patch 0/6] Cure kexec() vs. mwait_play_dead() troubles
-From:   Sean Christopherson <seanjc@google.com>
-To:     Ashok Raj <ashok_raj@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Ashok Raj <ashok.raj@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Ashok Raj <ashok.raj@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 7 Jun 2023 23:49:06 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2053.outbound.protection.outlook.com [40.107.223.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EEF926B5;
+        Wed,  7 Jun 2023 20:49:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IHzXFC2a3xRXW+OzWKguGNHE/OI69NXwfc6ysegWLxaNtg/KAzAl+hMbNsCY4cG/lYUz5aqACIj1U/YWkMtSLF7QMhxgL6uoTff5RfBYsEQHWHGRAO99Z3L1S7ODDFzVpNCjAVQ0Oayf5R/JkQ9qQcNs+Jer/mgVPwBJdK9a1xhKSL+/NvrCGV9aiXS1mzUdyBx/4fsHGd8haQsTTotUEDBLF5ZDl8kOvw5gFoMJUZBurGNU+pj9cgHh7qh2LcC8bWUSvtzq2yvrXujG9BaPhOkqzseT4d+tCDaMorDj/KZRP9+PVv0LJzUwVrdXEZ1kdl7ChlHhr4dBllVnuKGWBQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/L0X9j+SlfrIu/KiAv02S1GhXiAL82f1qIegIMq3eDo=;
+ b=OFDO4IrnvZVjyNX0fbW77G42XZM9YJTqFeA8tagWfH+q7j/3vH9o2E+juOOrIKXye4IKWkBL5JDoGESw4Z37R8Def1X/tNTn6IUEc3B0nb8rNVgxEExtcaJmDKfBw2PxNCTnm7VP6o44dfhgUQYrKl8JLrqlztRVDKTKTbK63Dq43WXAN8UZ5jDvT1ZwoMjI+6+9mFxCSgNEmOjELO0nqnG14Ojp/tqOF9VEwSX1J6R4NCAB7v7Tzw0ID2/uZ+FmGZ4FIklgHhIGGVyHXhevSsA0L/LHaqayabQJHPamAqBVF9NSn4s4NBk4o2qAmahpooot0QsWnsHV5rSlfEn6fQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/L0X9j+SlfrIu/KiAv02S1GhXiAL82f1qIegIMq3eDo=;
+ b=QjhYo61U2dujkTFqOjUfFHry0qTMogo2qCVL6kJeGeHgumeEz158gAnLgsoLrh/+Sjvyt33bc9+vwRLX2x5IwGcl1mtooYdcivSgbHQO1PNF6tyMcZH05PWzapUzRHuv1E+BTnJdDWN0eANLSjxsuWtHHh+pL1jpLrsMegI8SmU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB2843.namprd12.prod.outlook.com (2603:10b6:5:48::24) by
+ PH0PR12MB7885.namprd12.prod.outlook.com (2603:10b6:510:28f::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6455.31; Thu, 8 Jun 2023 03:49:01 +0000
+Received: from DM6PR12MB2843.namprd12.prod.outlook.com
+ ([fe80::ff22:cffa:293:5cef]) by DM6PR12MB2843.namprd12.prod.outlook.com
+ ([fe80::ff22:cffa:293:5cef%3]) with mapi id 15.20.6455.030; Thu, 8 Jun 2023
+ 03:49:01 +0000
+Message-ID: <aeecb9a0-b3b2-cfa2-e5b7-a64d1ffe1c0c@amd.com>
+Date:   Thu, 8 Jun 2023 13:48:51 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.5.1
+Subject: Re: [RFC PATCH v2 1/3] ACPI: APEI: EINJ: Refactor
+ available_error_type_show()
+Content-Language: en-US
+To:     Yazen Ghannam <yazen.ghannam@amd.com>,
+        Avadhut Naik <Avadhut.Naik@amd.com>, rafael@kernel.org,
+        gregkh@linuxfoundation.org, lenb@kernel.org,
+        linux-acpi@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Cc:     avadnaik@amd.com, alexey.kardashevskiy@amd.com,
+        linux-kernel@vger.kernel.org
+References: <20230525204422.4754-1-Avadhut.Naik@amd.com>
+ <20230525204422.4754-2-Avadhut.Naik@amd.com>
+ <37f64467-c9d7-826d-de41-aa571b2df0ec@amd.com>
+From:   Alexey Kardashevskiy <aik@amd.com>
+In-Reply-To: <37f64467-c9d7-826d-de41-aa571b2df0ec@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SY5PR01CA0048.ausprd01.prod.outlook.com
+ (2603:10c6:10:1fc::18) To DM6PR12MB2843.namprd12.prod.outlook.com
+ (2603:10b6:5:48::24)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB2843:EE_|PH0PR12MB7885:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4a54ad92-fcfa-434b-45ad-08db67d34b98
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fVIG0m/s2qwLeLN1uRBFRBZ9C6JBa0VnkeEP/2wWd9C5gxbV0MdP0w19NvFCM/+Mx7xBSTFxsXmPbc1YJZpZ46qa6Zdjike0MLe2O1nZ7uCy5fknXhR6RxsbTCiPC3eeGRc0qXdoKbx8VHQakpyd5Mz5Zg9J3wm7IShw//ga4XdRbMzhBfpmkuU1N2tAVo+OAkbDay8ZUFp84axpa+Mm4XWl/yobYLiiiK3WyMWDpBdWRbJqejb4h5mu416OWQWCkLoXljlpIkyk7NIyMShTRVtVT08DEzXKiGhU5dZfdDxZw7oKA6I1sphejgRNVJf5v/Svy8gqtlOGVMIQfHwG9TKUCCIIgAhtgZLnfVz0USjnW1inAQiQooL/GhSCtmg5A9N7xFsz9gNctNLN/fLRFr0b4oQjjOkwxk4s8RJlFNc+HPYYa8cg0hzucSe0Hb9KwM/f19iCZ12+wbTOPqw2Jg6DYmT+qxj/FDRqqAGd3TTaeeYu49r24M2Jp/YWrWGRwt9F8IZSnnCx3lFEgzuvqN6xABz/yWK/PE7sN1vUd8KJIGDUx/CFBCCmpLuVfXiFDX7qc/QZxCZlMTnaqPj+I2biRBmpumfrJevuoJUZkTXiH28zPo3+4OLQqRycVYv0lKw2sXN9dAicP/RGmhsKcA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2843.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(376002)(346002)(366004)(396003)(451199021)(53546011)(478600001)(186003)(36756003)(6506007)(2616005)(83380400001)(6512007)(26005)(6666004)(6486002)(316002)(8676002)(41300700001)(66946007)(66476007)(66556008)(4326008)(31696002)(31686004)(5660300002)(2906002)(110136005)(8936002)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZXZiMmxWWlFuNnBZVmZrTjNsb3JJaDBWMldvWFRBRmFZVldDT3BHS2cyUDlF?=
+ =?utf-8?B?S3ROeXJiVXZ5eVh4b2dXc1laT1AwS2RabjdtendXcWxObit3Tk81bGpYa2ZJ?=
+ =?utf-8?B?VEYxTm5reEJYazVsWWFMQTFQeWdWSXBmdEd4NzFhMDFYWGFtNjJ0Skladjk5?=
+ =?utf-8?B?UDJ4OHQ5RjRkcmRQZXY5d0hJdFU5ZzRHWUVQNGJHUmwvNGh5cDh2dmZXWWIz?=
+ =?utf-8?B?VjRZRzlJcGNDWUdPMjFsOWFLUlpkR05OUEtFVitCd3Zhak9QMU81d1dBQVRh?=
+ =?utf-8?B?VzJ0UlU0WjVPOWQxQ3NpemNDb3ZqMFd6cWZERmpITTVhOWhFL0ZaTGxuUlkz?=
+ =?utf-8?B?UENUU3NuaEhoK1gzMkRWOW5uMlM0c3ppem9KVG5XVWl0QWdONzJPZ0UwUXZY?=
+ =?utf-8?B?RGpLdmZEUXNOL0pVSUhsMndJUUlPaHVjRS9CTHc2LytXOERhc2FMK1Fnci9B?=
+ =?utf-8?B?L2RESFRacVZMc2Mzc0IrK1dNdURtSjZGMzBLR2d2OU5XOFg5R2VVc1hsamlT?=
+ =?utf-8?B?YmlZUkpOQUxqVlFaR000WVplbEE2bXRDdXZnL0J2c2lScEVZL1N2b1ZkT2sx?=
+ =?utf-8?B?RlZUdW5QSWVpUnhIMUQ4dndFMHFQTGxhUlFTRUt1T1ZDQVQ3WjlmS1lmNzFQ?=
+ =?utf-8?B?aDJ5WFd1YjlTZW1HSnFnUUluK1NvZHR5eDhPUzNXTEMyYW5kVUFzS3JNamtM?=
+ =?utf-8?B?b09FbjJSQ1d6UllhV3ltaW8vaFJpK2tDOUpHdjhkelVLVDBkbnFzeFl2VXg3?=
+ =?utf-8?B?V25BSEdsNUNsVGI2TGlvcktnbEduOXdkdHBFSzhMemFleGt0N01rajJ0R0tm?=
+ =?utf-8?B?dUZ5dFhTcmdNWE11Y0VhbXNsS213QkVyQXJucSt3bWhvUVJFWDlOOTBvMmRO?=
+ =?utf-8?B?dTk2S29nUEh0K2FJQ3R6LzRHdklJNFJvWk1HUGlqWGpUMVNRUkN1SVJIYUNo?=
+ =?utf-8?B?UjlYTUlBYU9vTUxxOXJXcmtmaklNTUlWK2xnT09wbm8wL0lZdkd5SVBHRnNH?=
+ =?utf-8?B?MmZ5U041SnZFRkxuRjBhZExrYm84Nnl2VmFuVmpvUTVNTFd5UWFiYUdJMG1D?=
+ =?utf-8?B?ZzVIZXhlanByallKTG1UWU5qaFFZTFBGZFNFZ1ZJdWhJMlZNN0g2U3ZSOW9m?=
+ =?utf-8?B?RngxUUZjSzM1ZC96YStPMGZId2w3WUFtMStOdEFUaDZwamh4Q0Rnd2Vmc3lQ?=
+ =?utf-8?B?REFxK0RzVGRBQkJwN2oxNkVHVnNvRVZ0OEZpODVybVppV2dUZDJIYWJVSU5s?=
+ =?utf-8?B?eHZxb0ZKT2JicWhaQjR0SDBrYm1HYURFcjdyZkFjRVNCR0JHd2ZjaVBIZGYw?=
+ =?utf-8?B?THdiOWZvMXR0Snk1OEVPVkltZzFFZWF3dCtDNHNjNGJBenhlR3J0d0MyTEtv?=
+ =?utf-8?B?aTVaN0p1WThoNTQvaUlPRnlzVWo3c0JBWU45TEtUSDUzdGV3ejd4QU9ZNnZM?=
+ =?utf-8?B?c2haRENablQ4eHpDR0J5SFNRb1laeUNYNGJUSHluYWlRYWxBOEJJMS9ldkc3?=
+ =?utf-8?B?bVUxQk9LWlpaMkVyK3JOdEkxcjBzS0cwL0Npb01xUWRWazZTTUxKYkRUei9w?=
+ =?utf-8?B?QmFZdGhuYVlRbFprMmMwWlJ0VkZIWXAyaXhlUFovZ1FRdi8xVWtqeURVMkFZ?=
+ =?utf-8?B?TkkxNklPSjRpQjBLbG9zVmxtakJxS0crY29nSmt6a2kwMW1qejVvbklXcjcr?=
+ =?utf-8?B?aGE1T0Z2SFZyQm9KMExYOE12SzRFbkVOZTQ1MGhINnBQTnl5c0xXc1lhVTE0?=
+ =?utf-8?B?SWI4SDRDM0x1Y0hPYnhoY0NMWXMyRCtCYm1RMmJub1VHNmJqaHJIbFRSdlYv?=
+ =?utf-8?B?ZmJaSENFTnVEcGpGUXdaUHEybzF4Sng0TjI5cjdxK2pLMW1qUWpwUFpBa1g3?=
+ =?utf-8?B?NTZFanVNWlprV0ZibGErZ1IyY01vOFhIdisrYnBBazBQaWNBZHpqbWpHRGJy?=
+ =?utf-8?B?R3VlZW01alE1UDJQZmhxTUtRc3FmOTh5REt5ZG1xU2EwVVJTZnVnYWFIVzVw?=
+ =?utf-8?B?SkNvNnlaNGdMbVpES0doZWlOWXpKUUdRNVlhYXFEYnhtbmIwQjI5UGwvQUk2?=
+ =?utf-8?B?Z1E3cXh1YUdDTjlBOWpxNkpJYW4xaVZlWW53OWZnM3k4QWUzdEphdG5GSjRo?=
+ =?utf-8?Q?At2ZNzmR34J/QmwKT06fJGdmg?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4a54ad92-fcfa-434b-45ad-08db67d34b98
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2843.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2023 03:49:01.3620
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lzT/J9NaoJC2LMqJREdHvkI7QPGDUeJafDY8400cx17Sr2tqCN3pRy0i3ShAaDC3n3cP3aTTnt+iWmobS1fhIQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7885
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023, Ashok Raj wrote:
-> On Wed, Jun 07, 2023 at 10:33:35AM -0700, Sean Christopherson wrote:
-> > On Wed, Jun 07, 2023, Ashok Raj wrote:
-> > > On Tue, Jun 06, 2023 at 12:41:43AM +0200, Thomas Gleixner wrote:
-> > > > >> So parking them via INIT is not completely solving the problem, but it
-> > > > >> takes at least NMI and SMI out of the picture.
-> > > > >
-> > > > > Don't most SMM handlers rendezvous all CPUs?  I.e. won't blocking SMIs indefinitely
-> > > > > potentially cause problems too?
-> > > > 
-> > > > Not that I'm aware of. If so then this would be a hideous firmware bug
-> > > > as firmware must be aware of CPUs which hang around in INIT independent
-> > > > of this.
-> > > 
-> > > SMM does do the rendezvous of all CPUs, but also has a way to detect the
-> > > blocked ones, in WFS via some package scoped ubox register. So it knows to
-> > > skip those. I can find this in internal sources, but they aren't available
-> > > in the edk2 open reference code. They happen to be documented only in the
-> > > BWG, which isn't available freely.
-> > 
-> > Ah, so putting CPUs into WFS shouldn't result in odd delays.  At least not on
-> > bare metal.  Hmm, and AFAIK the primary use case for SMM in VMs is for secure
+
+
+On 8/6/23 00:20, Yazen Ghannam wrote:
+> On 5/25/23 4:44 PM, Avadhut Naik wrote:
+>> OSPM can discover the error injection capabilities of the platform by
+>> executing GET_ERROR_TYPE error injection action.[1] The action returns
+>> a DWORD representing a bitmap of platform supported error injections.[2]
+>>
+>> The available_error_type_show() function determines the bits set within
+>> this DWORD and provides a verbose output, from einj_error_type_string
+>> array, through /sys/kernel/debug/apei/einj/available_error_type file.
+>>
+>> The function however, assumes one to one correspondence between an error's
+>> position in the bitmap and its array entry offset. Consequently, some
+>> errors like Vendor Defined Error Type fail this assumption and will
+>> incorrectly be shown as not supported, even if their corresponding bit is
+>> set in the bitmap and they have an entry in the array.
+>>
+>> Navigate around the issue by converting einj_error_type_string into an
+>> array of structures with a predetermined mask for all error types
+>> corresponding to their bit position in the DWORD returned by GET_ERROR_TYPE
+>> action. The same breaks the aforementioned assumption resulting in all
+>> supported error types by a platform being outputted through the above
+>> available_error_type file.
+>>
+>> [1] ACPI specification 6.5, Table 18.25
+>> [2] ACPI specification 6.5, Table 18.30
+>>
+>> Suggested-by: Alexey Kardashevskiy <alexey.kardashevskiy@amd.com>
+>> Signed-off-by: Avadhut Naik <Avadhut.Naik@amd.com>
+>> ---
+>>   drivers/acpi/apei/einj.c | 43 ++++++++++++++++++++--------------------
+>>   1 file changed, 22 insertions(+), 21 deletions(-)
+>>
+>> diff --git a/drivers/acpi/apei/einj.c b/drivers/acpi/apei/einj.c
+>> index 013eb621dc92..d5f8dc4df7a5 100644
+>> --- a/drivers/acpi/apei/einj.c
+>> +++ b/drivers/acpi/apei/einj.c
+>> @@ -577,25 +577,25 @@ static u64 error_param2;
+>>   static u64 error_param3;
+>>   static u64 error_param4;
+>>   static struct dentry *einj_debug_dir;
+>> -static const char * const einj_error_type_string[] = {
+>> -	"0x00000001\tProcessor Correctable\n",
+>> -	"0x00000002\tProcessor Uncorrectable non-fatal\n",
+>> -	"0x00000004\tProcessor Uncorrectable fatal\n",
+>> -	"0x00000008\tMemory Correctable\n",
+>> -	"0x00000010\tMemory Uncorrectable non-fatal\n",
+>> -	"0x00000020\tMemory Uncorrectable fatal\n",
+>> -	"0x00000040\tPCI Express Correctable\n",
+>> -	"0x00000080\tPCI Express Uncorrectable non-fatal\n",
+>> -	"0x00000100\tPCI Express Uncorrectable fatal\n",
+>> -	"0x00000200\tPlatform Correctable\n",
+>> -	"0x00000400\tPlatform Uncorrectable non-fatal\n",
+>> -	"0x00000800\tPlatform Uncorrectable fatal\n",
+>> -	"0x00001000\tCXL.cache Protocol Correctable\n",
+>> -	"0x00002000\tCXL.cache Protocol Uncorrectable non-fatal\n",
+>> -	"0x00004000\tCXL.cache Protocol Uncorrectable fatal\n",
+>> -	"0x00008000\tCXL.mem Protocol Correctable\n",
+>> -	"0x00010000\tCXL.mem Protocol Uncorrectable non-fatal\n",
+>> -	"0x00020000\tCXL.mem Protocol Uncorrectable fatal\n",
+>> +static struct { u32 mask; const char *str; } const einj_error_type_string[] = {
+>> +	{0x00000001, "Processor Correctable"},
+>> +	{0x00000002, "Processor Uncorrectable non-fatal"},
+>> +	{0x00000004, "Processor Uncorrectable fatal"},
+>> +	{0x00000008, "Memory Correctable"},
+>> +	{0x00000010, "Memory Uncorrectable non-fatal"},
+>> +	{0x00000020, "Memory Uncorrectable fatal"},
+>> +	{0x00000040, "PCI Express Correctable"},
+>> +	{0x00000080, "PCI Express Uncorrectable non-fatal"},
+>> +	{0x00000100, "PCI Express Uncorrectable fatal"},
+>> +	{0x00000200, "Platform Correctable"},
+>> +	{0x00000400, "Platform Uncorrectable non-fatal"},
+>> +	{0x00000800, "Platform Uncorrectable fatal"},
+>> +	{0x00001000, "CXL.cache Protocol Correctable"},
+>> +	{0x00002000, "CXL.cache Protocol Uncorrectable non-fatal"},
+>> +	{0x00004000, "CXL.cache Protocol Uncorrectable fatal"},
+>> +	{0x00008000, "CXL.mem Protocol Correctable"},
+>> +	{0x00010000, "CXL.mem Protocol Uncorrectable non-fatal"},
+>> +	{0x00020000, "CXL.mem Protocol Uncorrectable fatal"},
+>>   };
+>>
 > 
-> Never knew SMM had any role in VM's.. I thought SMM was always native. 
+> I think it'd be easier to read if the masks used the BIT() macro rather
+> than a hex value.
+
+Makes sense but I'd say because it is easier to match the APCI spec 
+which uses the bit numbers, not easier to read (which is arguable).
+
+
 > 
-> Who owns this SMM for VM's.. from the VirtualBIOS?
+> Thanks,
+> Yazen
 
-Yes?
-
-> > boot, so taking SMIs after booting and putting CPUs back into WFS should be ok-ish.
-> > 
-> > Finding a victim to test this in a QEMU VM w/ Secure Boot would be nice to have.
-> 
-> I always seem to turn off secureboot installing Ubuntu :-)
-
-Yeah, I don't utilize it in any of my VMs either.
-
-> I'll try to find someone who might know especially doing SMM In VM. 
-> 
-> Can you tell what needs to be validated in the guest?  Would doing kexec
-> inside the guest with the new patch set be sufficient? 
-> 
-> Or you mean in guest, do a kexec and launch secure boot of new kernel?
-
-Yes?  I don't actually have hands on experience with such a setup, I'm familiar
-with it purely through bug reports, e.g. this one
-
-https://lore.kernel.org/all/BYAPR12MB301441A16CE6CFFE17147888A0A09@BYAPR12MB3014.namprd12.prod.outlook.com
-
-> If there is a specific test you want done, let me know.
-
-Smoke testing is all I was thinking.  I wouldn't put too much effort into trying
-to make sure this all works.  Like I said earlier, nice to have, but certainly not
-necessary.
+-- 
+Alexey
