@@ -2,208 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B11E6728499
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7F172849E
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232663AbjFHQIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 12:08:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54906 "EHLO
+        id S232729AbjFHQJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 12:09:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232463AbjFHQII (ORCPT
+        with ESMTP id S232708AbjFHQJb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 12:08:08 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D407E11A
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 09:08:06 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id 46e09a7af769-6b1fa5a04e9so516219a34.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 09:08:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20221208.gappssmtp.com; s=20221208; t=1686240485; x=1688832485;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BP3bxQmEgC4VjfYwLuwk34dGsdabvj85+UKn5ikI5zY=;
-        b=agC8qaMC7GHoefOrroKBSCu79N0jfckKO5roE8tw0ATj6jOj568AkyR2/a6Xq9Hjs/
-         0MamOrsCJmKz/tRgVO78L6XY4s90oLa+zqoTNgU5ptednTRmQ/2S6rNq6QTQMImcEwxr
-         ALvX2pHTNLxg32P5XvKXkr64sljL/TLaTNqFslE+sLzz+VcGWAkyuq+vInEUEL0R58Hf
-         Mn425+T9Tf/4SlzQ25yUhndKYnZVxJMqhp24aSKen2n2UnRpWyrBLKKT//927GnsVB5z
-         +HbZV0qNfhQnBL/w92iasPFf1ML21TzBxWcW402PakFll6yJikaWgUjiDoPnl2TKngAX
-         SkZA==
+        Thu, 8 Jun 2023 12:09:31 -0400
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3451BDF;
+        Thu,  8 Jun 2023 09:09:30 -0700 (PDT)
+Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-777b4560ae8so26807539f.2;
+        Thu, 08 Jun 2023 09:09:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686240485; x=1688832485;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BP3bxQmEgC4VjfYwLuwk34dGsdabvj85+UKn5ikI5zY=;
-        b=UF0rLIPAs6drBbkjedV5sARCjbvBkv22/n8ThQn7p8xk6blzvy0kZ8yuhhlqi6KhDy
-         75zxTVO16CZWFPGSmmhDHy2yQiVCPLfkksIM/qYu4vkZDquA+zfEsW76gOA6+0fb3SgS
-         D7UmyYu3lX9TztodUlnN1gqzuEK6QBex89UP9abkze65406AYMTlwFzoLdDbMOb2bNQN
-         NDb5SykeFTB2L/IWM2f+0goMlAmDQKxSSXJcybrQhmxV2ISVMij81+c3kj0wYG7Twyjy
-         bG3bw8LCue6DodzOhmKMUjtLyXxUsRKVkWonNyCdd1EwDO3wyFDLllIbVY53ScIImH75
-         s2NA==
-X-Gm-Message-State: AC+VfDyTNgAxgd1j9OS8LJTTOEL3t0K5DRGBlIlN/Tfrgq58h7ofZXoT
-        +oXJ5MyvYKfqOwzZ9euCgeTDfQUcKhNJb3LBeD4=
-X-Google-Smtp-Source: ACHHUZ7EYpn3580ns8FBjBpnBAw3+T8XBNtHJOV/34vqvskzwQqphQftBULkzc1SXXjS/eRfRXbumw==
-X-Received: by 2002:a9d:7d8d:0:b0:6b1:5e60:a2c9 with SMTP id j13-20020a9d7d8d000000b006b15e60a2c9mr1350294otn.9.1686240485068;
-        Thu, 08 Jun 2023 09:08:05 -0700 (PDT)
-Received: from ?IPV6:2804:14d:5c5e:44fb:bbfb:717f:472:7a01? ([2804:14d:5c5e:44fb:bbfb:717f:472:7a01])
-        by smtp.gmail.com with ESMTPSA id m4-20020a9d7e84000000b006a44338c8efsm617985otp.44.2023.06.08.09.08.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 09:08:04 -0700 (PDT)
-Message-ID: <91e6a8cd-2775-d759-4462-b1be7dc79bbe@mojatatu.com>
-Date:   Thu, 8 Jun 2023 13:08:00 -0300
+        d=1e100.net; s=20221208; t=1686240569; x=1688832569;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A8MAtXZkrsYG/HkNDt42uWE09jxVB49iJ0UFdWUAyow=;
+        b=OLR6Eeudy+WLujveKYM9mYpLYDnTgYNOJUDLDJkDceejtMkZnN0aZxEIDHgZacF2UM
+         OFPeDcYjc5Db/W9ywpFDAPuDLlrc9KYg0lJSIj8eADJMzDePFixJ/7RM3W6/M/n7PX3y
+         I2QUxJGB5ZqVvi8RY4r3iRqpkr/FLGbpwBeDPJOYiC4JvvEljnDw8pIlD+SvQbtx0kxd
+         8zBRH7wAIYwWEyUu6u+hixE1IdQOHeMlxvf10K2okPiT5kiyEYBSKR6lFzbNtfTNBorp
+         AnZcpPqM6WkLIzLGeDmzmvfIg4oAq7NfmOo8nbq26/0BS0UjS1wXza79oOq0hd0Vkxs+
+         HKYQ==
+X-Gm-Message-State: AC+VfDxRj1KeaCO718ivoQfVZb/bgjknpasfFCMyxvAbNSS7/Uoku9Ez
+        BHIOPDZkYdVmcZFE9Mowbg==
+X-Google-Smtp-Source: ACHHUZ64aKy+sH0t8A7IOQ7qgaq0gx7MJX7wPrx+Ud/5T6iVeFYfh1Oqmiu/A65L7jv4nbkZXhpRKw==
+X-Received: by 2002:a5e:834d:0:b0:778:82d1:39a3 with SMTP id y13-20020a5e834d000000b0077882d139a3mr10262471iom.13.1686240569183;
+        Thu, 08 Jun 2023 09:09:29 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id y14-20020a02a38e000000b004090c67f155sm358129jak.91.2023.06.08.09.09.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 09:09:28 -0700 (PDT)
+Received: (nullmailer pid 2787707 invoked by uid 1000);
+        Thu, 08 Jun 2023 16:09:25 -0000
+Date:   Thu, 8 Jun 2023 10:09:25 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Hao Zhang <quic_hazha@quicinc.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v4 2/3] dt-bindings: arm: Add Coresight Dummy Trace
+Message-ID: <20230608160925.GA2780221-robh@kernel.org>
+References: <20230505092422.32217-1-quic_hazha@quicinc.com>
+ <20230505092422.32217-3-quic_hazha@quicinc.com>
+ <99343862-6b6a-30ba-40e5-7f984434b1dc@linaro.org>
+ <44524ce9-b24e-7e2d-819c-232149e29f0e@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2] net/sched: Set the flushing flags to false to prevent
- an infinite loop and add one test to tdc
-Content-Language: en-US
-To:     renmingshuai <renmingshuai@huawei.com>
-Cc:     caowangbao@huawei.com, davem@davemloft.net, edumazet@google.com,
-        jhs@mojatatu.com, jiri@resnulli.us, kuba@kernel.org,
-        liaichun@huawei.com, linux-kernel@vger.kernel.org,
-        liubo335@huawei.com, netdev@vger.kernel.org, pabeni@redhat.com,
-        xiyou.wangcong@gmail.com, yanan@huawei.com
-References: <3679ed57-a0b9-4af2-cf83-e8aaa4bbd29e@mojatatu.com>
- <20230608123224.3191731-1-renmingshuai@huawei.com>
-From:   Pedro Tammela <pctammela@mojatatu.com>
-In-Reply-To: <20230608123224.3191731-1-renmingshuai@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <44524ce9-b24e-7e2d-819c-232149e29f0e@quicinc.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/06/2023 09:32, renmingshuai wrote:
->> On 07/06/2023 01:19, renmingshuai wrote:
->>>> On 06/06/2023 11:45, renmingshuai wrote:
->>>>> When a new chain is added by using tc, one soft lockup alarm will
->>>>> be
->>>>>     generated after delete the prio 0 filter of the chain. To
->>>>>     reproduce
->>>>>     the problem, perform the following steps:
->>>>> (1) tc qdisc add dev eth0 root handle 1: htb default 1
->>>>> (2) tc chain add dev eth0
->>>>> (3) tc filter del dev eth0 chain 0 parent 1: prio 0
->>>>> (4) tc filter add dev eth0 chain 0 parent 1:
->>>>
->>>> This seems like it could be added to tdc or 3 and 4 must be run in
->>>> parallel?
->>> 3 and 4 do not need to be run inparallel. When a new chain is added
->>> by the
->>>    way as step 1 and the step 3 is completed, this problem always
->>>    occurs
->>>    whenever step 4 is run.
->>
->> Got it,
->> The test still hangs with the provided patch.
->>
->> + tc qdisc add dev lo root handle 1: htb default 1
->> + tc chain add dev lo
->> + tc filter del dev lo chain 0 parent 1: prio 0
->> [   68.790030][ T6704] [+]
->> [   68.790060][ T6704] chain refcnt 2
->> [   68.790951][ T6704] [-]
->> + tc filter add dev lo chain 0 parent 1:
->> <hangs>
->>
->> Also please add this test to tdc, it should be straightforward.
->>
-> Sorry for not testing before. I forgot that the chain->refcnt was
-> increased by 1 when tcf_chain_get() is called in tc_del_tfilter().
->   The value of chain->refcnt is 2 after chain flush. The test
->   result is as follows:
-> [root@localhost ~]# tc qdisc add dev eth2 root handle 1: htb default 1
-> [root@localhost ~]# tc chain add dev eth2
-> [root@localhost ~]# tc filter del dev eth2 chain 0 parent 1: prio 0
-> [root@localhost ~]# tc filter add dev eth2 chain 0 parent 1:
-> Error: Filter kind and protocol must be specified.
-> We have an error talking to the kernel
+On Mon, May 15, 2023 at 01:52:41PM +0800, Hao Zhang wrote:
 > 
-> And I have add this test to tdc:
-> [root@localhost tc-testing]# ./tdc.py -f tc-tests/filters/tests.json
-> ok 7 c2b4 - Adding a new fiter after deleting a filter in a chain does
-> not cause  an infinite loop
 > 
-> Fixes: 726d061286ce ("net: sched: prevent insertion of new classifiers during chain flush")
-> Signed-off-by: renmingshuai <renmingshuai@huawei.com>
+> On 5/7/2023 4:04 PM, Krzysztof Kozlowski wrote:
+> > On 05/05/2023 11:24, Hao Zhang wrote:
+> > > Add new coresight-dummy.yaml file describing the bindings required
+> > > to define coresight dummy trace in the device trees.
+> > > 
+> > > Signed-off-by: Hao Zhang <quic_hazha@quicinc.com>
+> > > ---
+> > >   .../bindings/arm/arm,coresight-dummy.yaml     | 102 ++++++++++++++++++
+> > >   1 file changed, 102 insertions(+)
+> > >   create mode 100644 Documentation/devicetree/bindings/arm/arm,coresight-dummy.yaml
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/arm/arm,coresight-dummy.yaml b/Documentation/devicetree/bindings/arm/arm,coresight-dummy.yaml
+> > > new file mode 100644
+> > > index 000000000000..126518863eea
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/arm/arm,coresight-dummy.yaml
+> > > @@ -0,0 +1,102 @@
+> > > +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/arm/arm,coresight-dummy.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: ARM Coresight Dummy component
+> > > +
+> > > +description: |
+> > > +  Coresight Dummy Trace Module is for the specific devices that kernel
+> > > +  don't have permission to access or configure, e.g., CoreSight TPDMs
+> > > +  on Qualcomm platforms. So there need driver to register dummy devices
+> > > +  as Coresight devices. It may also be used to define components that
+> > > +  may not have any programming interfaces (e.g, static links), so that
+> > > +  paths can be established in the driver. Provide Coresight API for
+> > > +  dummy device operations, such as enabling and disabling dummy devices.
+> > > +  Build the Coresight path for dummy sink or dummy source for debugging.
+> > > +
+> > > +  The primary use case of the coresight dummy is to build path in kernel
+> > > +  side for dummy sink and dummy source.
+> > > +
+> > > +maintainers:
+> > > +  - Mao Jinlong <quic_jinlmao@quicinc.com>
+> > > +  - Tao Zhang <quic_taozha@quicinc.com>
+> > > +  - Hao Zhang <quic_hazha@quicinc.com>
+> > > +  - Yuanfang Zhang <quic_yuanfang@quicinc.com>
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    items:
+> > 
+> > You were asked to drop oneOf, not to replace with items. Drop items.
+> > Drop oneOf. It's just enum.
+> > 
+> 
+> Hi Krzysztof,
+> 
+> I will drop items and update it in the next version.
+> 
+> Thanks,
+> Hao
+> 
+> > > +      - enum:
+> > > +          - arm,coresight-dummy-sink
+> > > +          - arm,coresight-dummy-source
+> > > +
+> > > +  out-ports:
+> > > +    $ref: /schemas/graph.yaml#/properties/ports
+> > > +
+> > > +    properties:
+> > > +      port:
+> > > +        description: Output connection from the source to Coresight
+> > > +          Trace bus.
+> > > +        $ref: /schemas/graph.yaml#/properties/port
+> > > +
+> > > +  in-ports:
+> > > +    $ref: /schemas/graph.yaml#/properties/ports
+> > > +
+> > > +    properties:
+> > > +      port:
+> > > +        description: Input connection from the Coresight Trace bus to
+> > > +          dummy sink, such as Embedded USB debugger(EUD).
+> > > +        $ref: /schemas/graph.yaml#/properties/port
+> > > +
+> > > +required:
+> > > +  - compatible
+> > > +
+> > > +if:
+> > > +  # If the compatible contains the below value
+> > > +  properties:
+> > > +    compatible:
+> > > +      contains:
+> > > +        const: arm,coresight-dummy-sink
+> > > +
+> > > +then:
+> > > +  required:
+> > > +    - in-ports
+> > > +
+> > > +else:
+> > > +  required:
+> > > +    - out-ports
+> > 
+> > No improvements. Implement Rob's comments.
+> > 
+> 
+> Hi Krzysztof, Rob,
+> 
+> There are two comments from Rob:
+> 1) I could imagine the OS wanting to know more information than just
+> 'dummy'. Is data from an unknown source useful? Likewise, don't you want
+> to know where you are sending data too?
+> 2) This still allows the nodes when they don't make sense. I think this
+> needs to be 2 schema files. The only common part is 'compatible' and
+> that's not even shared.
+> 
+> 
+> 1. The necessary information for coresight is connection(ports) between
+> different components. However, this information is not very intuitive. There
+> would be a generic change to support coresight name in the further. You can
+> refer to the below link, this solution is still under discussion, I think
+> it's also helpful for our query.
+> https://lore.kernel.org/linux-arm-kernel/b7abee2a-99ca-26d6-5850-60ee19d9c0e9@quicinc.com/T/
 
-Please respin with the following applied:
+I don't really have more input. I'm looking for input from coresight 
+folks on this.
 
-diff --git 
-a/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json 
-b/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json
-index c759c3db9a37..361235ad574b 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json
-@@ -125,25 +125,5 @@
-          "teardown": [
-              "$TC qdisc del dev $DEV2 ingress"
-          ]
--    },
--    {
--        "id": "c2b4",
--        "name": "Adding a new fiter after deleting a filter in a chain 
-does not cause an infinite loop",
--        "category": [
--            "filter",
--            "prio"
--        ],
--        "setup": [
--            "$TC qdisc add dev $DEV1 root handle 1: htb default 1",
--            "$TC chain add dev $DEV1"
--        ],
--        "cmdUnderTest": "$TC filter del dev $DEV1 chain 0 parent 1: 
-prio 0",
--        "expExitCode": "0",
--        "verifyCmd": "$TC filter add dev $DEV1 chain 0 parent 1:",
--        "matchPattern": "Error: Filter kind and protocol must be 
-specified.",
--        "matchCount": "1",
--        "teardown": [
--            "$TC qdisc del dev $DEV1 root handle 1: htb default 1"
--        ]
-      }
-  ]
-diff --git 
-a/tools/testing/selftests/tc-testing/tc-tests/infra/filters.json 
-b/tools/testing/selftests/tc-testing/tc-tests/infra/filters.
-json
-new file mode 100644
-index 000000000000..55d6f209c388
---- /dev/null
-+++ b/tools/testing/selftests/tc-testing/tc-tests/infra/filters.json
-@@ -0,0 +1,24 @@
-+[
-+    {
-+        "id": "c2b4",
-+        "name": "Adding a new filter after flushing empty chain doesnt 
-cause an infinite loop",
-+        "category": [
-+            "filter",
-+            "chain"
-+        ],
-+        "setup": [
-+            "$IP link add dev $DUMMY type dummy || /bin/true",
-+            "$TC qdisc add dev $DUMMY root handle 1: htb default 1",
-+            "$TC chain add dev $DUMMY",
-+            "$TC filter del dev $DUMMY chain 0 parent 1: prio 0"
-+        ],
-+        "cmdUnderTest": "$TC filter add dev $DUMMY chain 0 parent 1:",
-+        "expExitCode": "2",
-+        "verifyCmd": "$TC chain ls dev $DUMMY",
-+        "matchPattern": "chain parent 1: chain 0",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DUMMY root handle 1: htb default 1"
-+        ]
-+    }
-+]
+Design the binding so it is future proof. If you need to go back and add 
+more data to the binding in the future you've lost. It is perfectly fine 
+to have specific bindings with generic drivers (e.g. simple panel). Then 
+if you need more capabilities than a generic driver, then you can add a 
+specific driver in the future with no DT change.
 
+> 2. Dummy driver is very simple, the only goal of it is to build a path in
+> kernel for subsystem, so we want to handle dummy source and sink in one
+> generic driver. For one same driver, shall we split the schema file?
 
+schemas and drivers are not 1:1. So yes, split the schema.
+
+Rob
