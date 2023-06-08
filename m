@@ -2,31 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C96B728438
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:52:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8211728436
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:52:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237326AbjFHPwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 11:52:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40328 "EHLO
+        id S237343AbjFHPwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 11:52:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236730AbjFHPwD (ORCPT
+        with ESMTP id S236398AbjFHPwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 8 Jun 2023 11:52:03 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2A52D7B;
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3412D7C;
         Thu,  8 Jun 2023 08:51:40 -0700 (PDT)
 X-GND-Sasl: maxime.chevallier@bootlin.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686239498;
+        t=1686239499;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=KipQ904kAoqGtS96BrNjtOhgVzKh/rdRo+o3pLuVLgA=;
-        b=maFxXu50qWEyI66ivk9kQ1/bxq+RSHUWsYwUSJ8Sv9P/A1Al6Wetw8FWqdcQMlVo8WJcB9
-        IJWGdcDgIv/Upj9cFAIOGWF0N2fENd+b3GJ/q6V42LJ22WNHwVkiAD3PJCyTjqUOiK50Dc
-        vDDpUj9ZTtmOoISX2GfdDBQANOo3d+Cm9upLkC4QG0kVYcENsjjzfRlGkC5O4PeLmoXeGe
-        jvarR/acOQJoMEdO00ynKx0kw/Kkw/LTpN1rUZ/fhmMSHCdlscUCc9gBivWar3W6Se9jf7
-        becxnjJ+FA1HTJvNXrw1d2b6ECpuI2H3uOTLXvudXHF4IOciFB0YMZwasJ53IA==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3hdxcC4WdqdL013cjRLJFVxMqvKvDEFUWXgd/lspsZA=;
+        b=juJrXjmN+G5LxsOnRrmENc7ESQQKUHcD6uWaS8nnBrqG6aSp9cW+iinHIMxAs37yuBoe6M
+        PUV5UQE3WGCQkgSqJ58dcxYdD+5PedNQUeCd3xMHn8WbN9ikwybzw/TAPCGCcsu3kEqhV1
+        IDMEKuM/iFM5E+mwmkxMdk72E8w+UFQ7LSQoo9qZIqUFmcz2hymOfzcp0x8zcTU0Ow9oAA
+        wEMm27bWTH1ye6MsaLLKRebO3m5DMIZl4691mbOEhZrqjK/ADR7j+eGAqN0NdmZfPXWwTp
+        d0f3YnL/s5fmYKohett38G3Gr24Do6BB31jm05fn11P8Le2vLoZsGM2sYfQXPQ==
 X-GND-Sasl: maxime.chevallier@bootlin.com
 X-GND-Sasl: maxime.chevallier@bootlin.com
 X-GND-Sasl: maxime.chevallier@bootlin.com
@@ -40,8 +41,8 @@ X-GND-Sasl: maxime.chevallier@bootlin.com
 X-GND-Sasl: maxime.chevallier@bootlin.com
 X-GND-Sasl: maxime.chevallier@bootlin.com
 X-GND-Sasl: maxime.chevallier@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6F4206000D;
-        Thu,  8 Jun 2023 15:51:36 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 51AD06000C;
+        Thu,  8 Jun 2023 15:51:38 +0000 (UTC)
 From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
 To:     davem@davemloft.net
 Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
@@ -53,44 +54,54 @@ Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
         linux-arm-kernel@lists.infradead.org, Horatiu.Vultur@microchip.com,
         Allan.Nielsen@microchip.com, UNGLinuxDriver@microchip.com,
         Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: [PATCH net 0/2] fixes for Q-USGMII speeds and autoneg 
-Date:   Thu,  8 Jun 2023 18:34:12 +0200
-Message-Id: <20230608163415.511762-1-maxime.chevallier@bootlin.com>
+Subject: [PATCH net 1/2] net: phylink: report correct max speed for QUSGMII
+Date:   Thu,  8 Jun 2023 18:34:13 +0200
+Message-Id: <20230608163415.511762-2-maxime.chevallier@bootlin.com>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230608163415.511762-1-maxime.chevallier@bootlin.com>
+References: <20230608163415.511762-1-maxime.chevallier@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As reported here [1], there are some inconsistencies for the Q-USGMII
-mode speeds and configuration. The first patch in this fixup series
-makes so that we correctly report the max speed of 1Gbps for this mode.
+Q-USGMII is the quad port version of USGMII, and supports a max speed of
+1Gbps on each line. Make so that phylink_interface_max_speed() reports
+this information correctly.
 
-The second patch uses a dedicated helper to decode the control word.
-This is necessary as although USGMII control words are close to USXGMII,
-they don't support the same speeds.
+Fixes: ae0e4bb2a0e0 ("net: phylink: Adjust link settings based on rate matching")
+Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+---
+ drivers/net/phy/phylink.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
-
-Maxime
-
-[1] : https://lore.kernel.org/netdev/ZHnd+6FUO77XFJvQ@shell.armlinux.org.uk/
-
-Maxime Chevallier (2):
-  net: phylink: report correct max speed for QUSGMII
-  net: phylink: use a dedicated helper to parse usgmii control word
-
- drivers/net/phy/phylink.c | 41 +++++++++++++++++++++++++++++++++++++--
- include/uapi/linux/mdio.h |  3 +++
- 2 files changed, 42 insertions(+), 2 deletions(-)
-
+diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
+index b4831110003c..809e6d5216dc 100644
+--- a/drivers/net/phy/phylink.c
++++ b/drivers/net/phy/phylink.c
+@@ -188,6 +188,7 @@ static int phylink_interface_max_speed(phy_interface_t interface)
+ 	case PHY_INTERFACE_MODE_RGMII_ID:
+ 	case PHY_INTERFACE_MODE_RGMII:
+ 	case PHY_INTERFACE_MODE_QSGMII:
++	case PHY_INTERFACE_MODE_QUSGMII:
+ 	case PHY_INTERFACE_MODE_SGMII:
+ 	case PHY_INTERFACE_MODE_GMII:
+ 		return SPEED_1000;
+@@ -204,7 +205,6 @@ static int phylink_interface_max_speed(phy_interface_t interface)
+ 	case PHY_INTERFACE_MODE_10GBASER:
+ 	case PHY_INTERFACE_MODE_10GKR:
+ 	case PHY_INTERFACE_MODE_USXGMII:
+-	case PHY_INTERFACE_MODE_QUSGMII:
+ 		return SPEED_10000;
+ 
+ 	case PHY_INTERFACE_MODE_25GBASER:
 -- 
 2.40.1
 
