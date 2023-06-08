@@ -2,68 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D60FF727587
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 05:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8A6A72758A
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 05:18:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232539AbjFHDSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 23:18:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60564 "EHLO
+        id S233985AbjFHDSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 23:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231753AbjFHDR6 (ORCPT
+        with ESMTP id S233976AbjFHDSb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 23:17:58 -0400
-Received: from mail-yw1-x1141.google.com (mail-yw1-x1141.google.com [IPv6:2607:f8b0:4864:20::1141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9EFE43;
-        Wed,  7 Jun 2023 20:17:57 -0700 (PDT)
-Received: by mail-yw1-x1141.google.com with SMTP id 00721157ae682-565de553de1so3138997b3.0;
-        Wed, 07 Jun 2023 20:17:57 -0700 (PDT)
+        Wed, 7 Jun 2023 23:18:31 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663F11FEB
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 20:18:30 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-bab8f66d3a2so221456276.3
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 20:18:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686194276; x=1688786276;
+        d=gmail.com; s=20221208; t=1686194309; x=1688786309;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=V7fMdE8eaW7BeuJ297fgloLKjwJdfmPyym4SYRcLyPI=;
-        b=gIimOiJmtBiXZ/AfGv9nbO9GUOUxWMjMHVDRQMd8A7YFdE8Dk/pmt/ao6FozOnablT
-         F7uU/1ol0VP7EEzjNS80q8nrViUR6/VoRT3dkTGUStdVjAQ2k0/LMN0GQ5WpJ34pRtMC
-         yxkmwGi8jPVDb/7pHSxyno9EDCyBpjjUagh9PxB88BS4TAJqScbUXBTYFaWXuR5SPSkl
-         8H/cphHwNeEZKS94o/sg/g85q93Ka0Cwa3L1XpWzgHoNfp2saysc8FWyvjnM/aZoMTqH
-         dFKdJQTnYHgny1px4n1+UyNLk1CJbSkh0Q3WmHOu4M43M0sHrJ7XmUpay7orEF/9VXpM
-         GTiQ==
+        bh=nwc6mr2r66yO+R5nODwj7/lU18A/4J2eFRpjFzGkqug=;
+        b=VaeTuAgYgLsecxvVPssPOWgo1sp2wNekGxhFy3iiwXqvq1zCJ12gzmsq9YNV23SJ2p
+         zpQNGpUR5dz9+/eS2XIv69onMv9PtK9BT3Tec7cdQ5MvKknXHMWwQ55tJ4WSVONQXiqw
+         fijgkeHS+i7zcHGwvEoTPMC9K0qfBpRIfblYeOHCKrC1v5SOBtB/RGlmYQFQJvAjDOml
+         36EiAPW8PPDjFJ12OxmaQkLLFy2FK2/gz/7nIDDRRX8CW5vH4mUEsRNDlkGN9V0YE8G3
+         1V3kELCdBugSmjpoDSqfflyGuYv+gnV9+ANujB3mvbc5WVNotikc6U9IXEfNjxAA8WiQ
+         ejJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686194276; x=1688786276;
+        d=1e100.net; s=20221208; t=1686194309; x=1688786309;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=V7fMdE8eaW7BeuJ297fgloLKjwJdfmPyym4SYRcLyPI=;
-        b=cZ55G5YIQsN7n4sVeB1nAfdsbiK2m6iNzA7lnCQhHRrdh5iR0zcHq7H5Xa4rFzBvdU
-         OYnlvm1z162YoYjVKKhoM7kI4c5b/SkKSu4xzQzaw31mBpyB/dtdrEPpLXQ3OWY0zzEl
-         ZMHaZETmX7dt7B3iX/tKaaHnkMHfFWss16PLdfvBku5gTgZWqFt6RnFxk3T8AhirZH0G
-         E03GJKEHFMyEo5Vzlt/j0hh8cJSqrUwF1GmcJSsbrjRMe/kEiRkfOhi1awplYueZWDWI
-         MaCoEHQFKENdeMWo64qxHT8oKsY2+Na4gD0Ok8JM0PrCseoDGMit+lVMQxN/6RgxJGpc
-         WjYA==
-X-Gm-Message-State: AC+VfDxI/h13Lmrd6YMbBuvc+xMP9IGJl9sOh1qjauT1R16kiS6gbyC3
-        jkFs35EhEH3EgJ4AIHO6aH9c3J+x/aaZWEwrlYgIUxQuIzwAfJ66
-X-Google-Smtp-Source: ACHHUZ5dPBEvyBVjI47c0kbRPC2Y0VkP2Lilanf4uyMojOYEDQLHVku5t53NLCaZ3cNkXLbvQCdyYer6yxkBkHGAyGQ=
-X-Received: by 2002:a0d:e8d2:0:b0:561:9bcc:6c81 with SMTP id
- r201-20020a0de8d2000000b005619bcc6c81mr1218726ywe.24.1686194276278; Wed, 07
- Jun 2023 20:17:56 -0700 (PDT)
+        bh=nwc6mr2r66yO+R5nODwj7/lU18A/4J2eFRpjFzGkqug=;
+        b=hJF8PHLsRKpd/QwOVcPqzTEU9xRwOGtjWQXCD7bkL5wHNV9CJ1EJxFeYYS5E+w0Hs7
+         FT8cb362Q2PKdIf+A1ARfCGGfV77KaTjLbASPf/yLIN3NuU03YZsSxYfFw8U6o/7SXg1
+         a02IQ/uNDtkxp6xykrja2BljtOhksUtgfAH4Vqt0+PVV0+uNymvJqU2iDByLK4hAZi9C
+         32pR4YLWky3xsM8nrDbIXLE2yTTCCxj4Wu/29XhNiOFhAhLcysm6cMZJWPp5MxNV0ZLA
+         NrNGmEkOf4DWaYdfjigPDLjQn3SHT3KOer5YdZ5OyPtajKzwCc2uT5oTEZr53jXg0djo
+         G5IQ==
+X-Gm-Message-State: AC+VfDw2syC9gJxuO1HeidlaafOtYoGvQJSUk3enH1PvlXyo1mjfAFcK
+        UZMv/wY1lPk2+T7F9ZrUJFoD0Yus9z6cE7cyPg==
+X-Google-Smtp-Source: ACHHUZ6uZ6vg9jT7+/EDn6fcB6hMpnV3J5VTaF0D1m8ll3MrrHaRriubHRS9DP18YPp7RAA2QC3cBTqXcnYbY7WxXj0=
+X-Received: by 2002:a0d:cd04:0:b0:568:f405:cbfe with SMTP id
+ p4-20020a0dcd04000000b00568f405cbfemr8265867ywd.47.1686194309459; Wed, 07 Jun
+ 2023 20:18:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230607125911.145345-1-imagedong@tencent.com>
- <20230607125911.145345-2-imagedong@tencent.com> <20230607200905.5tbosnupodvydezq@macbook-pro-8.dhcp.thefacebook.com>
-In-Reply-To: <20230607200905.5tbosnupodvydezq@macbook-pro-8.dhcp.thefacebook.com>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Thu, 8 Jun 2023 11:17:45 +0800
-Message-ID: <CADxym3abYOZ5JVa4FP5R-Vi7HAk=n_0vTmMGveDH8xvFtuaBDw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/3] bpf, x86: allow function arguments up to
- 12 for TRACING
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     davem@davemloft.net, dsahern@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, x86@kernel.org,
-        imagedong@tencent.com, benbjiang@tencent.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20230607072936.3766231-1-nik.borisov@suse.com>
+ <20230607072936.3766231-3-nik.borisov@suse.com> <87o7lrk568.ffs@tglx>
+In-Reply-To: <87o7lrk568.ffs@tglx>
+From:   Brian Gerst <brgerst@gmail.com>
+Date:   Wed, 7 Jun 2023 23:18:18 -0400
+Message-ID: <CAMzpN2ir7OCppX0WvbCsabH=1U5kToDeeHq69i-ze3WhTnWDew@mail.gmail.com>
+Subject: Re: [PATCH 2/3] x86/entry: Disable IA32 syscalls in the presence of ia32_disabled
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Nikolay Borisov <nik.borisov@suse.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, mhocko@suse.com, jslaby@suse.cz
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,60 +70,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 8, 2023 at 4:09=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Wed, Jun 7, 2023 at 5:23=E2=80=AFAM Thomas Gleixner <tglx@linutronix.de>=
+ wrote:
 >
-> On Wed, Jun 07, 2023 at 08:59:09PM +0800, menglong8.dong@gmail.com wrote:
-> > From: Menglong Dong <imagedong@tencent.com>
+> On Wed, Jun 07 2023 at 10:29, Nikolay Borisov wrote:
+> > diff --git a/arch/x86/include/asm/desc.h b/arch/x86/include/asm/desc.h
+> > index ab97b22ac04a..618b428586d1 100644
+> > --- a/arch/x86/include/asm/desc.h
+> > +++ b/arch/x86/include/asm/desc.h
+> > @@ -8,6 +8,7 @@
+> >  #include <asm/fixmap.h>
+> >  #include <asm/irq_vectors.h>
+> >  #include <asm/cpu_entry_area.h>
+> > +#include <asm/traps.h>
 > >
-> > For now, the BPF program of type BPF_PROG_TYPE_TRACING can only be used
-> > on the kernel functions whose arguments count less than 6. This is not
-> > friendly at all, as too many functions have arguments count more than 6=
+> >  #include <linux/debug_locks.h>
+> >  #include <linux/smp.h>
+> > @@ -429,6 +430,10 @@ static inline void idt_init_desc(gate_desc *gate, =
+const struct idt_data *d)
+> >       gate->offset_high       =3D (u32) (addr >> 32);
+> >       gate->reserved          =3D 0;
+> >  #endif
+> > +#ifdef CONFIG_IA32_EMULATION
+> > +     if (ia32_disabled && d->vector =3D=3D IA32_SYSCALL_VECTOR)
+> > +             gate->bits.p =3D 0;
+> > +#endif
+>
+> Why installing the IDT vector in the first place? This is completely
+> inconsistent with the CONFIG_IA32_EMULATION=3Dn behaviour.
+>
+> Just slapping this conditional into some random place is really not
+> cutting it.
+>
+> The obvious solution is to remove IA32_SYSCALL_VECTOR from def_idts[]
+> and handle it separately.
+>
+> >  extern unsigned long system_vectors[];
+> > diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.=
+c
+> > index 80710a68ef7d..71f8b55f70c9 100644
+> > --- a/arch/x86/kernel/cpu/common.c
+> > +++ b/arch/x86/kernel/cpu/common.c
+> > @@ -2054,17 +2054,24 @@ void syscall_init(void)
+> >       wrmsrl(MSR_LSTAR, (unsigned long)entry_SYSCALL_64);
+> >
+> >  #ifdef CONFIG_IA32_EMULATION
+> > -     wrmsrl_cstar((unsigned long)entry_SYSCALL_compat);
+> > -     /*
+> > -      * This only works on Intel CPUs.
+> > -      * On AMD CPUs these MSRs are 32-bit, CPU truncates MSR_IA32_SYSE=
+NTER_EIP.
+> > -      * This does not cause SYSENTER to jump to the wrong location, be=
+cause
+> > -      * AMD doesn't allow SYSENTER in long mode (either 32- or 64-bit)=
 .
-> >
-> > Therefore, let's enhance it by increasing the function arguments count
-> > allowed in arch_prepare_bpf_trampoline(), for now, only x86_64.
-> >
-> > For the case that we don't need to call origin function, which means
-> > without BPF_TRAMP_F_CALL_ORIG, we need only copy the function arguments
-> > that stored in the frame of the caller to current frame. The arguments
-> > of arg6-argN are stored in "$rbp + 0x18", we need copy them to
-> > "$rbp - regs_off + (6 * 8)".
-> >
-> > For the case with BPF_TRAMP_F_CALL_ORIG, we need prepare the arguments
-> > in stack before call origin function, which means we need alloc extra
-> > "8 * (arg_count - 6)" memory in the top of the stack. Note, there shoul=
-d
-> > not be any data be pushed to the stack before call the origin function.
-> > Then, we have to store rbx with 'mov' instead of 'push'.
+> > -      */
+> > -     wrmsrl_safe(MSR_IA32_SYSENTER_CS, (u64)__KERNEL_CS);
+> > -     wrmsrl_safe(MSR_IA32_SYSENTER_ESP,
+> > -                 (unsigned long)(cpu_entry_stack(smp_processor_id()) +=
+ 1));
+> > -     wrmsrl_safe(MSR_IA32_SYSENTER_EIP, (u64)entry_SYSENTER_compat);
+> > +     if (ia32_disabled) {
+> > +             wrmsrl_cstar((unsigned long)ignore_sysret);
+> > +             wrmsrl_safe(MSR_IA32_SYSENTER_CS, (u64)GDT_ENTRY_INVALID_=
+SEG);
+> > +             wrmsrl_safe(MSR_IA32_SYSENTER_ESP, 0ULL);
+> > +             wrmsrl_safe(MSR_IA32_SYSENTER_EIP, 0ULL);
+> > +     } else {
+> > +             wrmsrl_cstar((unsigned long)entry_SYSCALL_compat);
+> > +             /*
+> > +              * This only works on Intel CPUs.
+> > +              * On AMD CPUs these MSRs are 32-bit, CPU truncates MSR_I=
+A32_SYSENTER_EIP.
+> > +              * This does not cause SYSENTER to jump to the wrong loca=
+tion, because
+> > +              * AMD doesn't allow SYSENTER in long mode (either 32- or=
+ 64-bit).
+> > +              */
+> > +             wrmsrl_safe(MSR_IA32_SYSENTER_CS, (u64)__KERNEL_CS);
+> > +             wrmsrl_safe(MSR_IA32_SYSENTER_ESP,
+> > +                         (unsigned long)(cpu_entry_stack(smp_processor=
+_id()) + 1));
+> > +             wrmsrl_safe(MSR_IA32_SYSENTER_EIP, (u64)entry_SYSENTER_co=
+mpat);
+> > +     }
+> >  #else
+> >       wrmsrl_cstar((unsigned long)ignore_sysret);
+> >       wrmsrl_safe(MSR_IA32_SYSENTER_CS, (u64)GDT_ENTRY_INVALID_SEG);
 >
-> x86-64 psABI requires stack to be 16-byte aligned when args are passed on=
- the stack.
-> I don't see this logic in the patch.
+> So this ends up with two copies of the same code for invalidating
+> compat. Why?
+>
+>    if (IS_ENABLED(CONFIG_IA32_EMULATION) && !ia32_disabled)) {
+>         wrmsrl_cstar((unsigned long)entry_SYSCALL_compat);
+>         ...
+>    } else {
+>         wrmsrl_cstar((unsigned long)ignore_sysret);
+>         ...
+>    }
+>
+> All it requires is
+>
+> #ifdef CONFIG_IA32_EMULATION
+> void entry_SYSCALL_compat(void);
+> #else
+> #define entry_SYSCALL_compat NULL
+> #endif
+>
+> in the header which declares entry_SYSCALL_compat.
+>
+> No?
 
-Yeah, it seems I missed this logic......:)
+SYSCALL from 32-bit mode can't be disabled like that.  That's why
+ignore_sysret() exists for the !CONFIG_IA32_EMULATION case.
 
-I have not figure out the rule of the alignment, but after
-observing the behavior of the compiler, the stack seems
-should be like this:
-
------- stack frame begin
-rbp
-
-xxx   -- this part should be aligned in 16-byte
-
------- end of arguments in stack
-xxx
------- begin of arguments in stack
-
-So the code should be:
-
-+       if (nr_regs > 6 && (flags & BPF_TRAMP_F_CALL_ORIG)) {
-+                stack_size =3D ALIGN(stack_size, 16);
-+                stack_size +=3D (nr_regs - 6) * 8;
-+       }
-
-Am I right?
-
-Thanks!
-Menglong Dong
+Brian Gerst
