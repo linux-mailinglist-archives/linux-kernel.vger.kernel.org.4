@@ -2,105 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E297276AA
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 07:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29FFA7276AD
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 07:30:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234327AbjFHF3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 01:29:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37672 "EHLO
+        id S234349AbjFHFaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 01:30:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231320AbjFHF3S (ORCPT
+        with ESMTP id S234131AbjFHF35 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 01:29:18 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528B719BB;
-        Wed,  7 Jun 2023 22:29:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=AuoFXc6mC0CchCsTVGZxzFlsH6pVBxlEu3dUOFHvvfQ=; b=Syo8qVTQpUGvrpjzKiLhGW4olW
-        sJuNZOHW1JESoIpqG4kgoklwg3rwUAFASf7B6oBHY5dODAeP78HHiYpWmm8fNpb2AylunV5ggx2nN
-        bSkP1HbE6kIDxyPuD5LPCsuvGdGbFuRVJWHopON+ddKYPDSuIqlVTWeivflo87mpRvQXouGK0DlzL
-        0JIVL5XtASvtBxvljSTzt1cSr2ykwQbgEQ8PcbGpA3OUsb+yQP3VVq65/sDTX85I8iFU+WoAmVGxj
-        vJaMn5xsEK/APxX4HcwaqnHAGlXeRB5D8IkNkiTf1onh9i+Z2yWqjW5r6FltWRt6Dgkk7e4MLuJwz
-        Bo9HgZpQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q78Cm-0089EH-1Y;
-        Thu, 08 Jun 2023 05:29:04 +0000
-Date:   Wed, 7 Jun 2023 22:29:04 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Jan Kara <jack@suse.cz>
-Cc:     "Darrick J. Wong" <djwong@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>, hch@infradead.org,
-        sandeen@sandeen.net, song@kernel.org, rafael@kernel.org,
-        gregkh@linuxfoundation.org, viro@zeniv.linux.org.uk,
-        jikos@kernel.org, bvanassche@acm.org, ebiederm@xmission.com,
-        mchehab@kernel.org, keescook@chromium.org, p.raghav@samsung.com,
-        da.gomez@samsung.com, linux-fsdevel@vger.kernel.org,
-        kernel@tuxforce.de, kexec@lists.infradead.org,
+        Thu, 8 Jun 2023 01:29:57 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3EC326B5
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 22:29:56 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id e9e14a558f8ab-33e75ca0a8bso422775ab.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 22:29:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686202196; x=1688794196;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DE7OrFeNWC7NT42z/fRgG9LWd8ypqqUWEnKJtZerNBA=;
+        b=uZ/e30b1I3gC7oNBD9ef+9VYhMIXL4LiNnJraXSUHTeFWpER9LTP5EAjtj0ylaZdxd
+         uZTBI/sndU0Xr921yVKqdP0aIl33kJqFKnuIaRZ97zn6/UQch8HEPOUt1PmZJYc7Q+pJ
+         gfl+PGnIw9j6zc0vUxgzpFSsUFQ1BcsdkseRTExFmWsIgu22DSsu94ZFs2u5oxboMftz
+         YTUoqmE5jLXmAhKm6zMbVaE4IYi52QitHthsLJAQcpn0M3/oPvTquX+ZdsoW5rfqPPp4
+         RNpMEvJ2A+iB6b63Ge4kMF+v1BvQTqDn4dqR5TPg9hAe3H5ak2uA9SUKSRbs6128gsWN
+         vZww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686202196; x=1688794196;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DE7OrFeNWC7NT42z/fRgG9LWd8ypqqUWEnKJtZerNBA=;
+        b=MJR2d4+RX50QXSLe/98Bz0YYu8Ge4nYyYqZ4MVbYvJTqtk6vKW35uZhenVaZjC6dWg
+         ier+eg+ipfB8bIJYzbxgAojcTYUvB0z3hPrlaMCfbrKsIHHZBPJMBMDAQWwYtZWWpikZ
+         XvwjVBAMcnJ6xVZFN8QKESOauNx+Hls2fucC8YqnO/mv57WEvs2LzBEpWH1/ut4eV6Px
+         L8pCJnqL36DSG5+0bCEAe8bFCcX0hbxlBqbIeHdAEu/SYWFWvggvl0OZyTK5v3p+HULT
+         34aDVDRvWqPiqcvs/CbDoWvzJUqBoSc1d3oLcq8Lhouzzynz9HcvE9D/JAM3lzYAJf0I
+         9enA==
+X-Gm-Message-State: AC+VfDzn1iS95E+R+8mnp7EpPKOLdg4O5olgc51hgbR4kEHI5+k/uFff
+        Cr0G2C+bORflGmFs539NFU1Wgw==
+X-Google-Smtp-Source: ACHHUZ6qL/mjH4DcEc+/LspZAtJUP9Q8wg5tprU2IcEGsixo18RFI63Tt/3aBPlpI47U3xM+WDcJUA==
+X-Received: by 2002:a92:d089:0:b0:325:b002:89b4 with SMTP id h9-20020a92d089000000b00325b00289b4mr7837299ilh.25.1686202196369;
+        Wed, 07 Jun 2023 22:29:56 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id e21-20020a62aa15000000b0065014c15a57sm271206pff.35.2023.06.07.22.29.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 22:29:55 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 10:59:53 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/6] fs: distinguish between user initiated freeze and
- kernel initiated freeze
-Message-ID: <ZIFnID9ZNpd7zrNa@infradead.org>
-References: <20230508011717.4034511-1-mcgrof@kernel.org>
- <20230508011717.4034511-4-mcgrof@kernel.org>
- <20230522234200.GC11598@frogsfrogsfrogs>
- <20230525141430.slms7f2xkmesezy5@quack3>
+Subject: Re: [PATCH 11/16] OPP: Add dev_pm_opp_add_dynamic() to allow more
+ flexibility
+Message-ID: <20230608052953.l44dwb6n62kx4umk@vireshk-i7>
+References: <20230607124628.157465-1-ulf.hansson@linaro.org>
+ <20230607124628.157465-12-ulf.hansson@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230525141430.slms7f2xkmesezy5@quack3>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230607124628.157465-12-ulf.hansson@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25, 2023 at 04:14:30PM +0200, Jan Kara wrote:
-> Yes, this is exactly how I'd imagine it. Thanks for writing the patch!
-> 
-> I'd just note that this would need rebasing on top of Luis' patches 1 and
-> 2. Also:
+On 07-06-23, 14:46, Ulf Hansson wrote:
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index 954c94865cf5..0e6ee2980f88 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -1921,8 +1921,7 @@ int _opp_add(struct device *dev, struct dev_pm_opp *new_opp,
+>   * _opp_add_v1() - Allocate a OPP based on v1 bindings.
+>   * @opp_table:	OPP table
+>   * @dev:	device for which we do this operation
+> - * @freq:	Frequency in Hz for this OPP
+> - * @u_volt:	Voltage in uVolts for this OPP
+> + * @opp:	The OPP to add
+>   * @dynamic:	Dynamically added OPPs.
+>   *
+>   * This function adds an opp definition to the opp table and returns status.
+> @@ -1940,10 +1939,10 @@ int _opp_add(struct device *dev, struct dev_pm_opp *new_opp,
+>   * -ENOMEM	Memory allocation failure
+>   */
+>  int _opp_add_v1(struct opp_table *opp_table, struct device *dev,
+> -		unsigned long freq, long u_volt, bool dynamic)
+> +		struct dev_pm_opp_data *opp, bool dynamic)
 
-I'd not do that for now.  1 needs a lot more work, and 2 seems rather
-questionable.
+The name `opp` is mostly used for instances of `struct dev_pm_opp`. Can we use a
+different name here please for the data ?
 
-> Now the only remaining issue with the code is that the two different
-> holders can be attempting to freeze the filesystem at once and in that case
-> one of them has to wait for the other one instead of returning -EBUSY as
-> would happen currently. This can happen because we temporarily drop
-> s_umount in freeze_super() due to lock ordering issues. I think we could
-> do something like:
-> 
-> 	if (!sb_unfrozen(sb)) {
-> 		up_write(&sb->s_umount);
-> 		wait_var_event(&sb->s_writers.frozen,
-> 			       sb_unfrozen(sb) || sb_frozen(sb));
-> 		down_write(&sb->s_umount);
-> 		goto retry;
-> 	}
-> 
-> and then sprinkle wake_up_var(&sb->s_writers.frozen) at appropriate places
-> in freeze_super().
+> +/**
+> + * dev_pm_opp_add()  - Add an OPP table from a table definitions
+> + * @dev:	device for which we do this operation
+> + * @freq:	Frequency in Hz for this OPP
+> + * @u_volt:	Voltage in uVolts for this OPP
+> + *
+> + * This function adds an opp definition to the opp table and returns status.
+> + * The opp is made available by default and it can be controlled using
+> + * dev_pm_opp_enable/disable functions.
+> + *
+> + * Return:
+> + * 0		On success OR
+> + *		Duplicate OPPs (both freq and volt are same) and opp->available
+> + * -EEXIST	Freq are same and volt are different OR
+> + *		Duplicate OPPs (both freq and volt are same) and !opp->available
+> + * -ENOMEM	Memory allocation failure
+> + */
+> +int dev_pm_opp_add(struct device *dev, unsigned long freq, unsigned long u_volt)
 
-Let's do that separately as a follow on..
+Maybe move this to include/linux/pm_opp.h and mark it static inline and get rid
+of documentation too.
 
-> 
-> BTW, when reading this code, I've spotted attached cleanup opportunity but
-> I'll queue that separately so that is JFYI.
-> 
-> > +#define FREEZE_HOLDER_USERSPACE	(1U << 1)	/* userspace froze fs */
-> > +#define FREEZE_HOLDER_KERNEL	(1U << 2)	/* kernel froze fs */
-> 
-> Why not start from 1U << 0? And bonus points for using BIT() macro :).
+> +{
+> +	struct dev_pm_opp_data opp;
+> +
+> +	memset(&opp, 0, sizeof(opp));
 
-BIT() is a nasty thing and actually makes code harder to read. And it
-doesn't interact very well with the __bitwise annotation that might
-actually be useful here.
+What about
+        struct dev_pm_opp_data data = {0};
 
+I think it is guaranteed that all the fields will be 0 now, not the padding of
+course, but we don't care about that here.
+
+> +	opp.freq = freq;
+> +	opp.u_volt = u_volt;
+
+Or maybe just
+
+        struct dev_pm_opp_data data = {
+                .freq = freq,
+                .u_volt = u_volt,
+        };
+
+Rest must be 0.
+
+-- 
+viresh
