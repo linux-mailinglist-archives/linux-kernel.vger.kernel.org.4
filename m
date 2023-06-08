@@ -2,226 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84CAA728BBD
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 01:28:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE3D728BC1
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 01:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236509AbjFHX14 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 8 Jun 2023 19:27:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46150 "EHLO
+        id S234940AbjFHX31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 19:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbjFHX1y (ORCPT
+        with ESMTP id S237128AbjFHX3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 19:27:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B263330D4;
-        Thu,  8 Jun 2023 16:27:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CF6465151;
-        Thu,  8 Jun 2023 23:27:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A534EC433EF;
-        Thu,  8 Jun 2023 23:27:50 +0000 (UTC)
-Date:   Thu, 8 Jun 2023 19:27:48 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
+        Thu, 8 Jun 2023 19:29:14 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB4E30E1
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 16:29:12 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-56991d8e2b0so13680167b3.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 16:29:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686266951; x=1688858951;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=PUR1BaDg5UCDJ5L3mZfey+gmQnRwkETeHewM4NWReSw=;
+        b=I41YQStEQO3vr784nVk2AuN2KmcI6CYImyY6oj9xMSOL/Yo/n5AgLeGczhU8NFwLQe
+         ttny74OBfkuK6f8/wAMn399t38lrgo1DziPG3fqg2E8EOzKtpOmCLUIlu9VJl+oy96a6
+         HTs8mk3Q5WH2kmszROgWDPIekrDqjw5P+L9RKWeN+cf/s7N46twWudk+coNyz4KuYyQr
+         ZbHH0YlckfKFgDJvgw6uV2fJIEg454LWFtRqaHxPfRNDcZsyr7rFBGWMgz5hpVhqY1KR
+         W05OV+dPXayUdvhMkc4RX1/SbZlFDM6BolOt44PIQkCnZ9wnUmpKbi+Ww0jFE5uiRpgF
+         l3oQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686266951; x=1688858951;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PUR1BaDg5UCDJ5L3mZfey+gmQnRwkETeHewM4NWReSw=;
+        b=DAtweEWqVkfEgShfAaMuQM6dsHCLuayi1z3Sk8O9qIC5wuA1LFa4eH5BPsXiJfdEgL
+         4QOPeCG7fRgiytuPePUrmyfDEsgjltmuFDT93uLHVZkM39yG+26RxC620G+1uJPpRUk4
+         6V6DxfH48JbELXYP75LXlJd0QHqVKDNgal8CWMARUOU29Dx0ii26CxgWM+l758wjmjpq
+         /JmbyLPpO/yVocb99IF+BoaFghtf8wxxe/+kxbp4EYDvvh+nZqfFwv0KnTEiDg96S9eV
+         hkucHT8H1WPbFd0eFmkU7J8YDwl1gS0Aj06QIg8SB0ADLz1Q7CIs7EhA+wANFYJ3Bp/Y
+         cvEw==
+X-Gm-Message-State: AC+VfDwJ3ykNKviAo9m3vqYJ5k3fOpIJ8z5IdvpBRQYIXKMZAXxiHYlA
+        heSI4YGJAQ3UvqUOyBc1t5GsKdo5oZLx
+X-Google-Smtp-Source: ACHHUZ7nvCcbtXwbQ8tPrBNQ7joytk73IzC7nG/F+wmEeTixEorelfj8HzfbCMpJUhp83IeyIqzk8iZHWWnX
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:c3e5:ebc6:61e5:c73f])
+ (user=irogers job=sendgmr) by 2002:a81:b64e:0:b0:561:856f:69d3 with SMTP id
+ h14-20020a81b64e000000b00561856f69d3mr607499ywk.7.1686266951355; Thu, 08 Jun
+ 2023 16:29:11 -0700 (PDT)
+Date:   Thu,  8 Jun 2023 16:27:57 -0700
+Message-Id: <20230608232823.4027869-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Subject: [PATCH v2 00/26] Fix memory leaks (was reference count checking for thread)
+From:   Ian Rogers <irogers@google.com>
+To:     John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Jackie Liu <liu.yun@linux.dev>
-Subject: Re: [PATCH RFC] ftrace: Show all functions with addresses in
- available_filter_functions_addrs
-Message-ID: <20230608192748.435a1dbf@gandalf.local.home>
-In-Reply-To: <CAEf4BzbNakGzcycJJJqLsFwonOmya8=hKLD41TWX2zCJbh=r-Q@mail.gmail.com>
-References: <20230608212613.424070-1-jolsa@kernel.org>
-        <CAEf4BzbNakGzcycJJJqLsFwonOmya8=hKLD41TWX2zCJbh=r-Q@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        German Gomez <german.gomez@arm.com>,
+        Ali Saidi <alisaidi@amazon.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Dmitrii Dolgov <9erthalion6@gmail.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Changbin Du <changbin.du@huawei.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Steinar H. Gunderson" <sesse@google.com>,
+        Yuan Can <yuancan@huawei.com>,
+        Brian Robbins <brianrob@linux.microsoft.com>,
+        liuwenyu <liuwenyu7@huawei.com>,
+        Ivan Babrou <ivan@cloudflare.com>,
+        Fangrui Song <maskray@google.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, coresight@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 8 Jun 2023 15:43:03 -0700
-Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+Use leak sanitizer and reference count checking to fix outstanding
+memory leaks in "perf top" or those discovered in "perf test". Also
+fix address sanitizer issues discovered.
 
-> On Thu, Jun 8, 2023 at 2:26 PM Jiri Olsa <jolsa@kernel.org> wrote:
-> >
-> >
-> > hi,
-> > when ftrace based tracers we need to cross check available_filter_functions
-> > with /proc/kallsyms. For example for kprobe_multi bpf link (based on fprobe)
-> > we need to make sure that symbol regex resolves to traceable symbols and
-> > that we get proper addresses for them.
+Add reference count checking to thread after first refactoring bits of
+the code, such as making the thread red-black tree non-invasive (so
+the thread it references is easier to reference count, rather than
+having 3 potential references). Part of this refactoring also removes
+the dead thread list because if we held a reference here the threads
+would never die and anything else has questionable
+correctness.
 
-I forgot, what was the problem with doing the above?
+addr_location is made into its own C/header file to capture the init,
+exit and copy code.
 
-> >
-> > Looks like on the last last LSF/MM/BPF there was an agreement to add new
-> > file that will have available_filter_functions symbols plus addresses.
-> >
-> > This RFC is to kick off the discussion, I'm not sure Steven wants to do
-> > that differently ;-)
+Refactor and change callchain_cursor to come from a pthread key so
+that a destructor can run on pthreads exiting.
 
-I'm not totally against this, but I'd like to know the full issue its
-solving. Perhaps I need to know more about what is being done, and what is
-needed too.
+Fix additional outstanding memory leak and reference count issues to
+the point that "perf test" compiled with address sanitizer but without
+libtraceevent passes all but one test - libtraceevent reports leaks
+within its own code, most likely as it isn't compiled with
+sanitizers. The remaining failing test is "68: Test dwarf unwind" and
+that has address sanitizer issues as it uses memcpy to access the
+stack within the process - we likely want to skip parts of the test
+with sanitizers enabled.
 
-> >
-> > thanks,
-> > jirka
-> >
-> >
-> > ---
-> > Adding new available_filter_functions_addrs file that shows all available
-> > functions (same as available_filter_functions) together with addresses,
-> > like:
-> >
-> >   # cat available_filter_functions_addrs | head  
-> 
-> nit: can we have some more succinct name, like "traceable_funcs" or
+v2. Include extra fixes for callchain cursor, addr2line and related
+    "perf top" fixes, as well as the 2 patches in:
+    https://lore.kernel.org/lkml/20230607050148.3248353-1-irogers@google.com/
 
+Ian Rogers (26):
+  perf thread: Remove notion of dead threads
+  perf thread: Make threads rbtree non-invasive
+  perf thread: Add accessor functions for thread
+  perf maps: Make delete static, always use put
+  perf addr_location: Move to its own header
+  perf addr_location: Add init/exit/copy functions
+  perf thread: Add reference count checking
+  perf machine: Make delete_threads part of machine__exit
+  perf report: Avoid thread leak
+  perf header: Ensure bitmaps are freed
+  perf stat: Avoid evlist leak
+  perf intel-pt: Fix missed put and leak
+  perf evlist: Free stats in all evlist destruction
+  perf python: Avoid 2 leak sanitizer issues
+  perf jit: Fix two thread leaks
+  perf symbol-elf: Correct holding a reference
+  perf maps: Fix overlapping memory leak
+  perf machine: Fix leak of kernel dso
+  perf machine: Don't leak module maps
+  perf map/maps/thread: Changes to reference counting
+  perf annotate: Fix parse_objdump_line memory leak
+  perf top: Add exit routine for main thread
+  perf header: Avoid out-of-bounds read
+  perf callchain: Use pthread keys for tls callchain_cursor
+  perf srcline: Change free_srcline to zfree_srcline
+  perf hist: Fix srcline memory leak
 
-It's to match avaliable_filter_functions
+ tools/perf/arch/arm/tests/dwarf-unwind.c      |   2 +-
+ tools/perf/arch/arm64/tests/dwarf-unwind.c    |   2 +-
+ tools/perf/arch/powerpc/tests/dwarf-unwind.c  |   2 +-
+ tools/perf/arch/x86/tests/dwarf-unwind.c      |   2 +-
+ tools/perf/builtin-annotate.c                 |  28 +-
+ tools/perf/builtin-c2c.c                      |  22 +-
+ tools/perf/builtin-diff.c                     |  20 +-
+ tools/perf/builtin-inject.c                   |   4 +-
+ tools/perf/builtin-kmem.c                     |  13 +-
+ tools/perf/builtin-kwork.c                    |  15 +-
+ tools/perf/builtin-mem.c                      |   4 +-
+ tools/perf/builtin-report.c                   |  21 +-
+ tools/perf/builtin-sched.c                    |  80 ++---
+ tools/perf/builtin-script.c                   | 123 ++++----
+ tools/perf/builtin-stat.c                     |   1 +
+ tools/perf/builtin-timechart.c                |  11 +-
+ tools/perf/builtin-top.c                      |  19 +-
+ tools/perf/builtin-trace.c                    |  38 ++-
+ .../scripts/python/Perf-Trace-Util/Context.c  |   4 +-
+ tools/perf/tests/code-reading.c               |   6 +-
+ tools/perf/tests/dwarf-unwind.c               |   1 -
+ tools/perf/tests/hists_common.c               |   2 +-
+ tools/perf/tests/hists_cumulate.c             |  18 +-
+ tools/perf/tests/hists_filter.c               |  11 +-
+ tools/perf/tests/hists_link.c                 |  20 +-
+ tools/perf/tests/hists_output.c               |  12 +-
+ tools/perf/tests/maps.c                       |   2 +-
+ tools/perf/tests/mmap-thread-lookup.c         |   5 +-
+ tools/perf/tests/perf-targz-src-pkg           |   5 +-
+ tools/perf/tests/symbols.c                    |   1 -
+ tools/perf/tests/thread-maps-share.c          |  13 +-
+ tools/perf/trace/beauty/pid.c                 |   4 +-
+ tools/perf/ui/browsers/hists.c                |  19 +-
+ tools/perf/ui/hist.c                          |   5 +-
+ tools/perf/ui/stdio/hist.c                    |   2 +-
+ tools/perf/util/Build                         |   1 +
+ tools/perf/util/addr_location.c               |  44 +++
+ tools/perf/util/addr_location.h               |  31 ++
+ tools/perf/util/annotate.c                    |   5 +-
+ tools/perf/util/arm-spe.c                     |   4 +-
+ tools/perf/util/block-info.c                  |   4 +-
+ tools/perf/util/build-id.c                    |   2 +
+ tools/perf/util/callchain.c                   |  68 +++-
+ tools/perf/util/callchain.h                   |   4 +-
+ tools/perf/util/cs-etm.c                      |  28 +-
+ tools/perf/util/data-convert-json.c           |  16 +-
+ tools/perf/util/db-export.c                   |  30 +-
+ tools/perf/util/dlfilter.c                    |  17 +-
+ tools/perf/util/event.c                       |  37 +--
+ tools/perf/util/evlist.c                      |   2 +
+ tools/perf/util/evsel_fprintf.c               |   8 +-
+ tools/perf/util/header.c                      |  14 +-
+ tools/perf/util/hist.c                        |  59 ++--
+ tools/perf/util/intel-bts.c                   |   2 +-
+ tools/perf/util/intel-pt.c                    |  88 +++---
+ tools/perf/util/jitdump.c                     |  12 +-
+ tools/perf/util/machine.c                     | 292 +++++++++---------
+ tools/perf/util/map.c                         |   4 +-
+ tools/perf/util/maps.c                        |   5 +-
+ tools/perf/util/maps.h                        |   9 +-
+ tools/perf/util/python.c                      |   4 +
+ .../scripting-engines/trace-event-python.c    |  40 ++-
+ tools/perf/util/session.c                     |   8 +-
+ tools/perf/util/sort.c                        |  12 +-
+ tools/perf/util/srcline.c                     |  15 +-
+ tools/perf/util/srcline.h                     |   2 +-
+ tools/perf/util/symbol-elf.c                  |   4 +-
+ tools/perf/util/symbol.h                      |  17 +-
+ tools/perf/util/thread-stack.c                |  25 +-
+ tools/perf/util/thread.c                      | 222 +++++++------
+ tools/perf/util/thread.h                      | 210 ++++++++++++-
+ tools/perf/util/unwind-libdw.c                |  27 +-
+ tools/perf/util/unwind-libunwind-local.c      |  19 +-
+ tools/perf/util/unwind-libunwind.c            |   2 +-
+ tools/perf/util/vdso.c                        |   2 +-
+ 75 files changed, 1210 insertions(+), 722 deletions(-)
+ create mode 100644 tools/perf/util/addr_location.c
+ create mode 100644 tools/perf/util/addr_location.h
 
-Another way is to add a tracing option to make the address show up in the
-available_filter_functions file. That would be my preferred choice.
+-- 
+2.41.0.162.gfafddb0af9-goog
 
-  echo 1 > options/available_filter_addrs
-
-Or something like that.
-
-
-
-> something? And btw, does this have to be part of tracefs/debugfs
-
-Because it's part of ftrace, and that belongs in tracefs.
-
-> (never knew the difference, sorry). E.g., can it be instead exposed
-> through sysfs?
-
-tracefs is not debugfs, as debugfs includes all things debuggy (and
-considered not secure). tracefs is its own file system dedicated to the
-tracing code in the kernel. It exists with CONFIG_DEBUG not defined, and
-lives in /sys/kernel/tracing. The only reason /sys/kernel/debug/tracing
-(which is a duplicate mount point) exists is for backward compatibility for
-before tracefs existed. But that path really should be deprecated.
-
-> 
-> Either than these minor things, yep, I think this is something that
-> would be extremely useful, thanks, Jiri, for taking a stab at it!
-> 
-> >   ffffffff81000770 __traceiter_initcall_level
-> >   ffffffff810007c0 __traceiter_initcall_start
-> >   ffffffff81000810 __traceiter_initcall_finish
-> >   ffffffff81000860 trace_initcall_finish_cb
-> >   ...
-> >
-> > It's useful to have address avilable for traceable symbols, so we don't
-> > need to allways cross check kallsyms with available_filter_functions
-> > (or the other way around) and have all the data in single file.
-
-Is it really that big of an issue? Again, I'm not against this change, but
-I'm just wondering how much of a burden is it relieving?
-
-> >
-> > For backwards compatibility reasons we can't change the existing
-> > available_filter_functions file output, but we need to add new file.
-
-Or we could add an option to change it ;-)
-
-> >
-> > Suggested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> > Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >  include/linux/ftrace.h |  1 +
-> >  kernel/trace/ftrace.c  | 52 ++++++++++++++++++++++++++++++++++++++----
-> >  2 files changed, 48 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-> > index b23bdd414394..6e372575a8e9 100644
-> > --- a/include/linux/ftrace.h
-> > +++ b/include/linux/ftrace.h
-> > @@ -633,6 +633,7 @@ enum {
-> >         FTRACE_ITER_MOD         = (1 << 5),
-> >         FTRACE_ITER_ENABLED     = (1 << 6),
-> >         FTRACE_ITER_TOUCHED     = (1 << 7),
-> > +       FTRACE_ITER_ADDRS       = (1 << 8),
-> >  };
-> >
-> >  void arch_ftrace_update_code(int command);
-> > diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> > index 764668467155..1f33e1f04834 100644
-> > --- a/kernel/trace/ftrace.c
-> > +++ b/kernel/trace/ftrace.c
-> > @@ -3804,7 +3804,7 @@ static int __init ftrace_check_sync(void)
-> >  late_initcall_sync(ftrace_check_sync);
-> >  subsys_initcall(ftrace_check_for_weak_functions);
-> >
-> > -static int print_rec(struct seq_file *m, unsigned long ip)
-> > +static int print_rec(struct seq_file *m, unsigned long ip, bool print_addr)
-> >  {
-> >         unsigned long offset;
-> >         char str[KSYM_SYMBOL_LEN];
-> > @@ -3819,7 +3819,11 @@ static int print_rec(struct seq_file *m, unsigned long ip)
-> >                 ret = NULL;
-> >         }
-> >
-> > -       seq_puts(m, str);
-> > +       if (print_addr)
-> > +               seq_printf(m, "%lx %s", ip, str);
-> > +       else
-> > +               seq_puts(m, str);
-> > +
-> >         if (modname)
-> >                 seq_printf(m, " [%s]", modname);
-> >         return ret == NULL ? -1 : 0;
-> > @@ -3830,9 +3834,13 @@ static inline int test_for_valid_rec(struct dyn_ftrace *rec)
-> >         return 1;
-> >  }
-> >
-> > -static inline int print_rec(struct seq_file *m, unsigned long ip)
-> > +static inline int print_rec(struct seq_file *m, unsigned long ip, bool print_addr)
-> >  {
-> > -       seq_printf(m, "%ps", (void *)ip);
-> > +       if (print_addr)
-> > +               seq_printf(m, "%lx %ps", ip, (void *)ip);
-> > +       else
-> > +               seq_printf(m, "%ps", (void *)ip);
-> > +
-> >         return 0;
-> >  }
-> >  #endif
-> > @@ -3861,7 +3869,7 @@ static int t_show(struct seq_file *m, void *v)
-> >         if (!rec)
-> >                 return 0;
-> >
-
-Hmm, why not add the print here?
-
-	if (iter->flags & FTRACE_ITER_ADDRS)
-		seq_printf(m, "%lx ", rec->ip);
-
-and not touch print_rec().
-
-> > -       if (print_rec(m, rec->ip)) {
-> > +       if (print_rec(m, rec->ip, iter->flags & FTRACE_ITER_ADDRS)) {
-> >                 /* This should only happen when a rec is disabled */
-> >                 WARN_ON_ONCE(!(rec->flags & FTRACE_FL_DISABLED));
-> >                 seq_putc(m, '\n');
-> > @@ -3996,6 +4004,30 @@ ftrace_touched_open(struct inode *inode, struct file *file)
-> >         return 0;
-> >  }
-> >
-
--- Steve
