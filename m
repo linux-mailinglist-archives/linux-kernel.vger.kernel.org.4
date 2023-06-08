@@ -2,120 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D36BC727C9E
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD43C727BF4
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:54:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235961AbjFHKTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 06:19:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41088 "EHLO
+        id S235277AbjFHJy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 05:54:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235379AbjFHKS7 (ORCPT
+        with ESMTP id S233016AbjFHJyZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 06:18:59 -0400
-X-Greylist: delayed 1514 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 08 Jun 2023 03:18:56 PDT
-Received: from outbound-ss-761.bluehost.com (outbound-ss-761.bluehost.com [74.220.211.250])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4899F2D68
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 03:18:55 -0700 (PDT)
-Received: from cmgw12.mail.unifiedlayer.com (unknown [10.0.90.127])
-        by progateway8.mail.pro1.eigbox.com (Postfix) with ESMTP id B6E3C10043B47
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 09:53:40 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id 7CKqqqaNnbVUp7CKqqs6MF; Thu, 08 Jun 2023 09:53:40 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=f9iNuM+M c=1 sm=1 tr=0 ts=6481a524
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=of4jigFt-DYA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=0Vbst/TxzeAWSBYXwoL0oY52SY4mMfMBONbQLAZCISo=; b=yF3zBh/SqfKR9AcIIjAzGVBWfK
-        obpU/POfGtywR2ji0LsMfFWPS7RVZ2QJ+HJKtZqBO2Vf//9PLyVCik9mj4iCXBnVoPCp1rjVI1TJy
-        vnkTv4FNcnHP/kuTlIvikyWObUMnGlMTsjIxzeuULhm1W1KWJuvabXGng6V4kpJyGIRJRZqZGCGbq
-        kcM1N/uGtRQRA3l/dhtLexCjyei38gwCQIEKUEdCAMunBoEBAGI3+h5DISi36YjEdf7Tvt3y+hkHE
-        nGaOpMjUuhg8cUdJ4GpKJkEsOW3VZJayiAwqiP6ej5YETWoVw79Y+ByKxWsxSvbTPfdROIJa7UEIo
-        AbQ9C1CQ==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:43200 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1q7CKp-000MBa-Q7;
-        Thu, 08 Jun 2023 03:53:39 -0600
-Subject: Re: [PATCH 6.3 000/286] 6.3.7-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230607200922.978677727@linuxfoundation.org>
-In-Reply-To: <20230607200922.978677727@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <33c8385f-3564-58db-df54-a57f92b38abe@w6rz.net>
-Date:   Thu, 8 Jun 2023 02:53:37 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 8 Jun 2023 05:54:25 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA03269E
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 02:54:24 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-bad97da58adso477661276.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 02:54:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686218063; x=1688810063;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=o0ba9DNkSY4/DucgUWvAeaHUG2A2JOR/Yvq1EwvyCGo=;
+        b=PvrqaK1/kX1GZWYJfA7CicJo63zMlQ6/mCMec4FvBwqcpI23YdywuXvaYywxpXoVAt
+         fh+jOZqYZ/YwptXtLy+cR0dVNTruCXj0dQMldKBD49hQ4ZyxPkxkMkVMp5vJhV4kB58V
+         X2nOulJrWA/WpAOmg8EmidVRjaUHdL6w7vd1al+jmlqHcALAlFpXlxIiyuoLVI7oHPjD
+         dBK82ifo17E+pFRt4GbQN4CA7jy75ipE922hLl7V2V4Xcg0eNlwSgv673SEwq9YOEKDw
+         nI/U9R2Rwj/XvfEKcaBw7f+RlemPwY4n+uCHUpf2LvxIG7PHX9ZfP4RYnhxtz9ClrZMK
+         yVvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686218063; x=1688810063;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o0ba9DNkSY4/DucgUWvAeaHUG2A2JOR/Yvq1EwvyCGo=;
+        b=eiq1vDcRM4g4LftkeRFiPryrnyHwx9E8Vk5P7Mf0knigXdtUEu9vXP9Yxn/5MmvY7v
+         Xqg3FKTkynH9Wy7u6gEg2U6ww4B+rtwZeidS69LzKj23BemJjGRIUTXc/664IpzslFRX
+         TPsfx+7akdhBAPuvtf5XZkilJa8XX2Ai9fIveuyKwcQzDRLph/3yiLFLtOfSAelZbp68
+         c1y5HZPjaO5AXJ8xX3n+WFiiYfydQU1TRtfMfvRAe9sdU95p/I3cGqk7SaYtiRKVakIs
+         5wXWWWm2QfmS/PaPm90VbgXs4x7dsgvOMSUm6yn4grwozfq1bI4PsTPGnGNE0EdvOysq
+         7s9Q==
+X-Gm-Message-State: AC+VfDwgRYjoqFgcdV6V9unXDkjxEzNMGlZ74oeEdt8H8ssVfCSTeYnj
+        qATgf8DonZT7pc63a6dAygGJgxCFlvGk5QdesX5+7g==
+X-Google-Smtp-Source: ACHHUZ5a1sWdYHtcKgG2yKf8VeE8kNtZPQc7G/LZ+GLdMKmpWFnaDoLh/zKdSQaBoJ7nTto8hrjlXqozJ7J92leT9lo=
+X-Received: by 2002:a81:86c7:0:b0:561:429e:acd2 with SMTP id
+ w190-20020a8186c7000000b00561429eacd2mr10650706ywf.35.1686218063254; Thu, 08
+ Jun 2023 02:54:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1q7CKp-000MBa-Q7
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:43200
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230607124628.157465-1-ulf.hansson@linaro.org> <ZICXjExmCRwcQ3BA@e120937-lin>
+In-Reply-To: <ZICXjExmCRwcQ3BA@e120937-lin>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 8 Jun 2023 11:53:47 +0200
+Message-ID: <CAPDyKFoQv1wue122umZo4W3YNTQb4ic8bnJq_nrWZ7bu8dzKUQ@mail.gmail.com>
+Subject: Re: [PATCH 00/16] arm_scmi/opp/dvfs: Add generic performance scaling support
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/7/23 1:11 PM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.3.7 release.
-> There are 286 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Wed, 7 Jun 2023 at 16:43, Cristian Marussi <cristian.marussi@arm.com> wrote:
 >
-> Responses should be made by Fri, 09 Jun 2023 20:07:31 +0000.
-> Anything received after that time might be too late.
+> On Wed, Jun 07, 2023 at 02:46:12PM +0200, Ulf Hansson wrote:
+> > The current SCMI performance scaling support is limited to cpufreq. This series
+> > extends the support, so it can be used for all kind of devices and not only for
+> > CPUs.
+> >
+> > The changes are spread over a couple of different subsystems, although the
+> > changes that affects the other subsystems than the arm_scmi directory are
+> > mostly smaller. The series is based upon v6.4-rc5. That said, let's figure out
+> > on how to best move forward with this. I am of course happy to help in any way.
+> >
+> > Note that, so far this is only be tested on the Qemu virt platform with Optee
+> > running an SCMI server. If you want some more details about my test setup, I am
+> > certainly open to share that with you!
+> >
+> > Looking forward to get your feedback!
+> >
 >
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.3.7-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.3.y
-> and the diffstat can be found below.
+> Hi Ulf,
 >
-> thanks,
+> thanks for this first of all.
 >
-> greg k-h
+> I'll have a look at this properly in the next weeks, in the meantime
+> just a small minor remark after having had a quick look.
+>
+> You expose a few new perf_ops to fit your needs and in fact PERF was
+> still not exposing those data for (apparent) lack of users needing
+> those. (and/or historical reason I think)
+>
+> My concern is that this would lead to a growing number of ops as soon as
+> more data will be needed by future users; indeed other protocols do
+> expose more data but use a different approach: instead of custom ops
+> they let the user access a common static info structure like
+>
+>
+> +       int (*num_domains_get)(const struct scmi_protocol_handle *ph);
+> +       const struct scmi_perf_dom_info __must_check *(*info_get)
+> +               (const struct scmi_protocol_handle *ph, u32 domain);
+>
+> and expose the related common info struct in scmi_protocol.h too.
+> Another reason to stick to this aproach would be consistency with other
+> protos (even though I think PERF is not the only lacking info_get)
+>
+> Now, since really there was already a hidden user for this perf data
+> (that would be me :P ... in terms of an unpublished SCMI test-driver),
+> I happen to have a tested patch that just expose those 2 above ops and
+> exports scmi_perf_dom_info and related structures to scmi_protocol.h
+>
+> If you (and Sudeep) agree with this approach of limiting the number of
+> exposed ops in favour of sharing upfront some static info data, I can
+> quickly cleanup and post this patch for you to pick it up in your next
+> iteration.
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+I think your suggestions make perfect sense to me too.
 
-Tested-by: Ron Economos <re@w6rz.net>
+While I was adding the new ops in scmi_perf_proto_ops, I was merely
+trying to get inspiration from the scmi_power_proto_ops, it seems like
+those need an update too.
 
+Although, there is no need for you to send a patch for "perf" at this
+moment - as this piece of code is easy for me to put together myself.
+I will simply replace a few of the patches in the series with a new
+one, no problem at all.
+
+>
+> (really I'd have more conversion of this kind also for other remaining
+>  protos but these are unrelated to your series and I'd post it later)
+
+Yes, that can be handled separately, and I leave that for you to manage.
+
+Kind regards
+Uffe
