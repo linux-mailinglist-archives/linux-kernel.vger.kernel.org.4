@@ -2,106 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C6E7289B1
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 22:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D2217289B5
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 22:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233801AbjFHUwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 16:52:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50486 "EHLO
+        id S233385AbjFHUyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 16:54:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232338AbjFHUwj (ORCPT
+        with ESMTP id S230247AbjFHUyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 16:52:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61FC7E61;
-        Thu,  8 Jun 2023 13:52:38 -0700 (PDT)
+        Thu, 8 Jun 2023 16:54:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EEACE61
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 13:54:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F2C2864EA2;
-        Thu,  8 Jun 2023 20:52:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DC6EC433EF;
-        Thu,  8 Jun 2023 20:52:36 +0000 (UTC)
-Date:   Thu, 8 Jun 2023 16:52:34 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Florent Revest <revest@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org
-Subject: Re: [PATCH v11 02/11] tracing/probes: Add fprobe events for tracing
- function entry and exit.
-Message-ID: <20230608165234.0c00c146@gandalf.local.home>
-In-Reply-To: <168432114441.1351929.4695419422051966931.stgit@mhiramat.roam.corp.google.com>
-References: <168432112492.1351929.9265172785506392923.stgit@mhiramat.roam.corp.google.com>
-        <168432114441.1351929.4695419422051966931.stgit@mhiramat.roam.corp.google.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0D8264DE0
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 20:54:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 194E9C433EF;
+        Thu,  8 Jun 2023 20:54:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686257658;
+        bh=vAnKS04ZmoUmFeza/8dLtBRjhrlKFqWp+Hv8NpitkpE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SehzdQdaAIjt3P0NJ57xH/fUvGV2x1XyuaHVu/URqzGSOj8VGVw0osg/PQht8Qj4D
+         IRiXeJTb8KeNL6x15SPbGMfBjY7iIrKNGpEBqVxa8LEs+J++BfEt3uvxrmng0RF2Z1
+         TVwLcT1Z/tIAaOx4Pnf3fcwSGMo8fVBMyV4xMzaFIhH2/H9S3AziQTdWoTLh2nWwWS
+         NcQcKcr00D+PDecBCgwj8bKFQ149SsQXffiJt1lEEn+xkj1sQLgoroiU/Uu1QHrVyN
+         ZKDhnPbBuAqOqArxHGHs+yNu14Bwhs1e/dPoW3waZiQM2MHWSf8ltMF2TKvh0gDuaE
+         UaKP7ircZtQ2g==
+Date:   Thu, 8 Jun 2023 13:54:16 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Miroslav Benes <mbenes@suse.cz>
+Subject: Re: [PATCH] objtool: Improve rate-limiting for missing __noreturn
+ warnings
+Message-ID: <20230608205416.4mezxtxoqxwebdk5@treble>
+References: <185b1a78b42776467929ce9e7851e4dbcd0b55d4.1686241345.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <185b1a78b42776467929ce9e7851e4dbcd0b55d4.1686241345.git.jpoimboe@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 May 2023 19:59:04 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
-
-> Add fprobe events for tracing function entry and exit instead of kprobe
-> events. With this change, we can continue to trace function entry/exit
-> even if the CONFIG_KPROBES_ON_FTRACE is not available. Since
-> CONFIG_KPROBES_ON_FTRACE requires the CONFIG_DYNAMIC_FTRACE_WITH_REGS,
-> it is not available if the architecture only supports
-> CONFIG_DYNAMIC_FTRACE_WITH_ARGS. And that means kprobe events can not
-> probe function entry/exit effectively on such architecture.
-> But this can be solved if the dynamic events supports fprobe events.
+On Thu, Jun 08, 2023 at 09:23:32AM -0700, Josh Poimboeuf wrote:
+> If a function with a lot of call sites is missing __noreturn, it could
+> result in a lot of duplicate warnings (one for each call site).
 > 
-> The fprobe event is a new dynamic events which is only for the function
-> (symbol) entry and exit. This event accepts non register fetch arguments
-> so that user can trace the function arguments and return values.
+> Each call site's function is already rate-limited to one warning per
+> function via WARN_INSN().  Do the same for the callee (the "missing
+> __noreturn" function itself).
 > 
-> The fprobe events syntax is here;
+> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+> ---
+>  tools/objtool/check.c | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
 > 
->  f[:[GRP/][EVENT]] FUNCTION [FETCHARGS]
->  f[MAXACTIVE][:[GRP/][EVENT]] FUNCTION%return [FETCHARGS]
+> diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+> index 8936a05f0e5a..bb2ed34cb90e 100644
+> --- a/tools/objtool/check.c
+> +++ b/tools/objtool/check.c
+> @@ -4507,9 +4507,13 @@ static int validate_reachable_instructions(struct objtool_file *file)
+>  		if (prev_insn && prev_insn->dead_end) {
+>  			call_dest = insn_call_dest(prev_insn);
+>  			if (call_dest && !ignore_noreturn_call(prev_insn)) {
+> -				WARN_INSN(insn, "%s() is missing a __noreturn annotation",
+> -					  call_dest->name);
+> -				warnings++;
+> +				if (!call_dest->warned) {
+> +					WARN_INSN(insn, "%s() is missing a __noreturn annotation",
+> +						  call_dest->name);
+> +					warnings++;
+> +					call_dest->warned = 1;
+> +				}
+> +
 
-I finally got around to look at these (I know you already queued them), but
-looking at the above, the "%return" is redundant.
+NAK - this spits out a bunch of unreachables, will need to tweak it a
+bit.
 
-> 
-> E.g.
-> 
->  # echo 'f vfs_read $arg1'  >> dynamic_events
->  # echo 'f vfs_read%return $retval'  >> dynamic_events
->  # cat dynamic_events
->  f:fprobes/vfs_read__entry vfs_read arg1=$arg1
->  f:fprobes/vfs_read__exit vfs_read%return arg1=$retval
-
-Can't we just have:
-
-  f:fprobes/vfs_read__entry vfs_read arg1=$arg1
-  f:fprobes/vfs_read__exit vfs_read arg1=$retval
-
-Where if "$retval" is specified, it automatically becomes a return? If
-anything else is specified, it errors out. That is, if $retval is
-specified, it becomes a return probe, as a return probe can only have
-$retval. If anything else is specified, it errors out if $retval is also
-specified.
-
-Now if it's a void function, and you just want to make it a return then we
-can have your:
-
-  f:fprobes/vfs_read__exit vfs_read%return
-
-Thoughts?
-
--- Steve
-
-
-
+-- 
+Josh
