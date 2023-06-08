@@ -2,213 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62DEE7282E0
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 16:39:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F50C7282E4
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 16:39:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236593AbjFHOjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 10:39:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37988 "EHLO
+        id S236665AbjFHOja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 10:39:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjFHOjP (ORCPT
+        with ESMTP id S236234AbjFHOj1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 10:39:15 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967032D58
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 07:39:13 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id e9e14a558f8ab-33d22754450so2175175ab.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 07:39:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686235152; x=1688827152;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bH4ZjQM6aPxK+ZRdt1mqrjgyacqVVtEwfwRuNc+V6F4=;
-        b=gNqk40HhHxkcn/ngo1T18Sd2W/SSMWZGxYy50uqyOYywL6MhWWEdXHiDQ2KWIMdHsS
-         KoZEjcUZgS8/7hDbFTWNwmuoG966dsnVWLnH60lPlzaV/t4mdDGxIFSumW05ramUdXo/
-         nY9r0BeR2gEuKKpVWSz6OMQxNj6IrOIsf5DR4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686235152; x=1688827152;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bH4ZjQM6aPxK+ZRdt1mqrjgyacqVVtEwfwRuNc+V6F4=;
-        b=ECSSPSfBUHKTewPH/jhEMGf+DWiNMgtudKUGQoEmfv3WjWLjDsYMMvuBwsfYl4FniW
-         AGO649RYj+BTrrWtUzsUG+WURbYI69jdleX+DjZT0afNaHZjQ+3KxaaBytxcDGgcaNEq
-         14g/rPj69jJ1neoGO84lZI+PMSfRf9P4yOlkMZOaOipn72Rbxth0SvrsYm3ea9Rtq/Pc
-         RGiHmGSBbvhKCYi+EdKzKXrW/POmBkLLp1HGSoLB7pC3wC91OLAaH5SpTQoCsXG3j7mI
-         7BhTio787HzYGg3CeEsA/Vs5sJbQXIMxCnRrP1yn3vym11gij5dvJEBvCrI6ADnXp2cI
-         bAxA==
-X-Gm-Message-State: AC+VfDwbSu84D4dToQusd32B/Ei+MZfSaEAPHYo7XW8hT8wbC0L+0nkR
-        B+MZltepI/7HImrE9TxLqxem19j9KV0zc+vyAls=
-X-Google-Smtp-Source: ACHHUZ6LuIz7UiTxH/58jf46hs8QtQ3Vqn+vAG6znb7NPpfaYzrEgkRCwDm6WtRr0tu59in9b1WS7w==
-X-Received: by 2002:a92:c507:0:b0:33b:b6b9:a79d with SMTP id r7-20020a92c507000000b0033bb6b9a79dmr10448346ilg.31.1686235152152;
-        Thu, 08 Jun 2023 07:39:12 -0700 (PDT)
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com. [209.85.166.170])
-        by smtp.gmail.com with ESMTPSA id k24-20020a02c658000000b004143ffd4399sm317268jan.39.2023.06.08.07.39.11
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 07:39:11 -0700 (PDT)
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-33dea7d5424so113415ab.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 07:39:11 -0700 (PDT)
-X-Received: by 2002:a05:6e02:1b8b:b0:33d:67c9:a486 with SMTP id
- h11-20020a056e021b8b00b0033d67c9a486mr250532ili.26.1686235150817; Thu, 08 Jun
- 2023 07:39:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230607215224.2067679-1-dianders@chromium.org> <jehxiy3z4aieop5qgzmlon4u76n7gvt3kc6knxhb5yqkiz3rsp@mx27m75sx43r>
-In-Reply-To: <jehxiy3z4aieop5qgzmlon4u76n7gvt3kc6knxhb5yqkiz3rsp@mx27m75sx43r>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 8 Jun 2023 07:38:58 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Wr7Xatw1LsofiZ5Xx7WBvAuMMdq4D5Po1yJUC1VdtZdg@mail.gmail.com>
-Message-ID: <CAD=FV=Wr7Xatw1LsofiZ5Xx7WBvAuMMdq4D5Po1yJUC1VdtZdg@mail.gmail.com>
-Subject: Re: [PATCH v2 00/10] drm/panel and i2c-hid: Allow panels and
- touchscreens to power sequence together
-To:     Maxime Ripard <mripard@kernel.org>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
-        linux-kernel@vger.kernel.org, hsinyi@google.com,
-        cros-qcom-dts-watchers@chromium.org, devicetree@vger.kernel.org,
-        yangcong5@huaqin.corp-partner.google.com,
-        linux-arm-msm@vger.kernel.org,
-        Chris Morgan <macroalpha82@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 8 Jun 2023 10:39:27 -0400
+Received: from BN3PR00CU001.outbound.protection.outlook.com (mail-eastus2azon11020016.outbound.protection.outlook.com [52.101.56.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A90F2D59;
+        Thu,  8 Jun 2023 07:39:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=n1+bopyTzzUHGkmm6jXaDrr01Y0V4rfMApuHlSZvHwMruBLYS/aYTtrKAp1KTyp8fhQN17MXRi+l4FKpMsAtxvXokXba6s5CRpNQopLJfv1EY909YNbDHJ6FyhsmlD2UgCQTQ6kO46yZn+iQJOVAj4MKVcbTBnGshCNXm6YIZOgNrX//z4f1TI/ap4eyrBDVcMSdtZixnlE4sDAmkQB6OxnyakXaVvCdZaFc7YYHx5p4vUBBzXaBJTfzF/WfYpMA0BPW1zMnTmuaeP0VMPzFga/I/COSV0oNtxsB0e/4cZgwX5hKRcVOmyxxgteCGH6xLMHZFOuBWqAuZNB/wxzClA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5sGKz5NHkNKptq0G+ggqW7DenqGyO6yHM8r2y52W8Z0=;
+ b=lrase6x0djZFgl76LaXfGtxAc7xH9efBXANX6TlNAXtHLYBi8BQSoxZe6GrfP5NZS7uEvLocV5QSuNi48JUOphmCof1IVdzfc6BEC7BucjHkK7aE6dJnEf3vXkSFX+V8PFCWgaafnsk6XWECSTOarL4TXa3nIQQmVfNg2kQPuSj9LrhlWZipOnzO8ajZxJ4HCI9KdTN7RCQFG2wPHwTGfFtaMCXEMnTmOzjsAO/jdV9EcncToF0fNEBmuAjpLKIUzYe+I5w7Ym6KqaFNGuHoIBPc8lojK0wsSM6Vl22BI5NvIpsadldAkPdYDUVFiNglhqP/712Vl4JXz6bkOP6JSw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5sGKz5NHkNKptq0G+ggqW7DenqGyO6yHM8r2y52W8Z0=;
+ b=aKTDa8nsjQgBg+KTU4xGjJ1lMuzKjdGHLu+yy8+Lc+CUGbNgjWHz0eY358+8QlEg4qVViY0wPCc/GpJsZ6xh3WT4b2WPR8/qWwzp/nbmhk7fDc1m9gJ6zTXSNWUP0WTay6rnp1njkk6WJlxsWZzhBmZER02JUxURbKeGCl0EzPY=
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
+ by PH7PR21MB3046.namprd21.prod.outlook.com (2603:10b6:510:1e2::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.12; Thu, 8 Jun
+ 2023 14:39:23 +0000
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::7d5d:3139:cf68:64b]) by BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::7d5d:3139:cf68:64b%3]) with mapi id 15.20.6500.004; Thu, 8 Jun 2023
+ 14:39:23 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     "bp@alien8.de" <bp@alien8.de>
+CC:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        Wei Liu <wei.liu@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: RE: [PATCH v2 1/2] x86/hyperv: Fix hyperv_pcpu_input_arg handling
+ when CPUs go online/offline
+Thread-Topic: [PATCH v2 1/2] x86/hyperv: Fix hyperv_pcpu_input_arg handling
+ when CPUs go online/offline
+Thread-Index: AQHZjZob2yLFJBtHgUi6CCUhYCqkka9oNBYAgBjdbLA=
+Date:   Thu, 8 Jun 2023 14:39:23 +0000
+Message-ID: <BYAPR21MB168882149A235E16CDECA1D8D750A@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <1684862062-51576-1-git-send-email-mikelley@microsoft.com>
+ <ZG0LTAeV+KMAGXIq@liuwe-devbox-debian-v2>
+In-Reply-To: <ZG0LTAeV+KMAGXIq@liuwe-devbox-debian-v2>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=90ce544f-5797-4f90-b34c-2d3f5a2ee06a;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-06-08T14:34:39Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|PH7PR21MB3046:EE_
+x-ms-office365-filtering-correlation-id: 9cd6b409-4eb5-40bd-cdee-08db682e26d2
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: A5l/LK0LZTkqtMAZ1QcEiNuoRKWmtSBKvTCLOxcYjq/hw6uUwxgAZN/J4DV5fGZH5i/HPp6ct8xMBrUu3WnAeQKoAky4AybnQ0AtM75uH5PffBFV6WHus6o2dVjnIRfj3eChLF6fH54BepJaqhS47GUAEIB2RJswj6AfvqQ/Bl1soRXQg35HMsbTk4KjI4wVv8EDfY2+3FWi/qROnoKtCBDugNo9MKMynOk/8shOB/sHeVn50+XZbfEQ/wkSCKaez8W4J5cdeL5IU0mAt4UhmoTLrjYpnYqyzPj9ggmbczSN0Xh8DZGBXpL0NYncthW12xGwHRUQUbATNVYSrlWtcRYORdY7WTCVihah+5WyLxkTP6eMxR1Zdy9fKOx8d2Pb/CvLFQSfc0NjYYGbiD4Su9y4hqJ/kASlk6hKQ41h0AWpZWY5euy0N6Rz2TscjsQ1mh+OmkGUOBw61NpTLJ/OmJWlEhmOyX3AvGh+YeqPTtZHZ2wZJjjCWLU4/BF+QYpyMa+dn18MdZYVYidR2IZgwEVOLGiqbdZPBFJ0dowiJGkjzplXWCBpq5bEBbK0DP7hbLTSUlbdyFQZG9s2Bng2rZjQJYUt7sH0vE0oeF5W1BCo4LlPdShcwyS3JnBA7GVtTH5LLUJAvbSOqyyoKoDY0MdE8r/bOSByB+yd6dL5d3o=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(136003)(366004)(39860400002)(396003)(451199021)(7696005)(316002)(41300700001)(83380400001)(8990500004)(86362001)(38070700005)(9686003)(186003)(6506007)(7416002)(26005)(2906002)(4744005)(33656002)(55016003)(122000001)(82950400001)(82960400001)(38100700002)(52536014)(5660300002)(8936002)(8676002)(76116006)(66946007)(66556008)(66446008)(64756008)(66476007)(54906003)(478600001)(10290500003)(71200400001)(4326008)(6916009);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?yVb03tq7IqwjVe9pB/LogZPhmgXIk4YGnagB/a4VPtthgCLIHOAhCvHBnWZE?=
+ =?us-ascii?Q?FSC52TgtTnQaTFNsVqS/iPNYIuSTbPDHtvZFlYJQ7dIuNrkKPIFtW7xygsFp?=
+ =?us-ascii?Q?BBuB1gdhofDYVLZ/zVZvqSSKsOLdT2tNYcM6ommiziHnT3tMMPP8HGBduDxS?=
+ =?us-ascii?Q?kQIRyYXHJK/cNS1tnn36nAXSwnejoVyUOk160DpuwWC+nVuHriBRiKLD3VGP?=
+ =?us-ascii?Q?EQbLY3+G7aDIIWgxYzkhWGOIvgIR6PycV3d3/hQ+PDOJRvEXQsUAMhTCJybI?=
+ =?us-ascii?Q?CxqBwAgqQqC1d/yj+Tu6iH41iObvJvF1ckcFobWR6zIS2HPFTRUtT6ZkSM+y?=
+ =?us-ascii?Q?KXBcNcwIioqb5kCKMXFqPW5XQJVBdIwxZe1vBb+Hj4dD1oCj8Eiq5vrX8iO3?=
+ =?us-ascii?Q?qwaJ1w9aWiAL6iigGwwpJbovIrGceTRu9wxoZWQjaDpYs2Xz2tXPAfcTHMcI?=
+ =?us-ascii?Q?6c9IvwK9Zx+EXv/GXOwlkz4JKJy2WuiYcHMPrMORZ8YStvGQ2DAEH1qpAVuU?=
+ =?us-ascii?Q?Q7G+khEKF0hOnONdrVlEM2sZ6AEtIse1R22zQGDSk6MM+9TAI01oxH7P/xBw?=
+ =?us-ascii?Q?JrMpeS7BWnVBGqLrt2LAw+qBGrQ5kZtkNi53gruar6Ca3GBNyqGgU7xPBVqM?=
+ =?us-ascii?Q?xwrmZgn9VxnLxDMtAyCriU9N5WDuibqI3bhFg11n4gfQz8a2xjJCErHefrkC?=
+ =?us-ascii?Q?pTN02EehngJNPB8Hvm16mcNUDcEqSAJURYnrfkUWNRnWh0bqSiR1jQNEb9BM?=
+ =?us-ascii?Q?W2vuMQXGakQWJAXaIMf/Q/kawg54dnqwVlEoEEUEYxL10RqszAuxTXGYeAiS?=
+ =?us-ascii?Q?OBEpXOuNkBvw+22QPNtyAvD4Pc4Ju+8Ve5CrgI7q1Hmp3ixSPoY60asVNiZa?=
+ =?us-ascii?Q?hJdgoXImNSjAnkCXo0s/FLjV8iOSWikFnLBJC/OC/tvt0cEMY1Dh+wgTmujI?=
+ =?us-ascii?Q?bP3en1ZXLUKna41cniIG8cgo1agaQ/tzQiBQ5JVoRXhqyMpsHEZ66PWXx9Eo?=
+ =?us-ascii?Q?QecJMDgK9J3YnzminlM05D4dXwUJDjHcq0SINTHc5dJqtW+x+tuI9zcilaw0?=
+ =?us-ascii?Q?2hDBVb+Qcgp7Ox3mkbJN+Vjz26jpmQnYwVQBRb5e0XRs5T23+R1wqCa9W0Hs?=
+ =?us-ascii?Q?CrJOcKn1aRy5jCFUlHRTz9ucWQLB7erX8M6FisweLsXpLI4BOb6enIkYg4bH?=
+ =?us-ascii?Q?4SaHhow1DmCyXUmb/JBHBJLS4StL/o0ePs9LtTNI4oZVJgUaiFUPBnbJGFm1?=
+ =?us-ascii?Q?sdZODJq48Xw+ayx4tdzNSB0tTS4fhlhzwJ781pXFG5p3T7h80sm7Ijp/WJ/k?=
+ =?us-ascii?Q?zh2CL++N815yu3TG1itIyI7IHL9JJlCYVSZ9VLfOQp0fbc4xH+0wMdOUF5s5?=
+ =?us-ascii?Q?dT0lJVWJDxYNvoDnwVZa+7fn9gxNI5v2LUIVT3ttfpz03hJaUol3wLiorR8D?=
+ =?us-ascii?Q?dCAQQ/UdTHXyMzAR0WCbOytd9H9GHpCjoYETcOJy6eyjgpSWiPe09XlftT0g?=
+ =?us-ascii?Q?qbUYDDGVk5z4sHuDM0l5D1dOrj5xRVs1e1XO0Fm3GANd0CHBCgW36YogTzFt?=
+ =?us-ascii?Q?UFxa+3WClrXzihrrJRtTTDYSM1VilA7rwS72UisNm/ax5nhZJ4u2XSythK3g?=
+ =?us-ascii?Q?ew=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9cd6b409-4eb5-40bd-cdee-08db682e26d2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jun 2023 14:39:23.1851
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4PUs1XI53b9eMI51LALi1niwuajAO79hkXi7ZfIMCK8QwdLprl5H1tXW3NrdSJwxgt0z7HJdCbLiVxZErtpvB9pUqer9xQTDti1eUZ1e9/A=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR21MB3046
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Thu, Jun 8, 2023 at 12:17=E2=80=AFAM Maxime Ripard <mripard@kernel.org> =
-wrote:
->
-> Hi Douglas,
->
-> On Wed, Jun 07, 2023 at 02:49:22PM -0700, Douglas Anderson wrote:
+From: Wei Liu <wei.liu@kernel.org>
+>=20
+> On Tue, May 23, 2023 at 10:14:21AM -0700, Michael Kelley wrote:
+> [...]
+> > diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
+> > index 0f1001d..3ceb9df 100644
+> > --- a/include/linux/cpuhotplug.h
+> > +++ b/include/linux/cpuhotplug.h
+> > @@ -200,6 +200,7 @@ enum cpuhp_state {
 > >
-> > The big motivation for this patch series is mostly described in the pat=
-ch
-> > ("drm/panel: Add a way for other devices to follow panel state"), but t=
-o
-> > quickly summarize here: for touchscreens that are connected to a panel =
-we
-> > need the ability to power sequence the two device together. This is not=
- a
-> > new need, but so far we've managed to get by through a combination of
-> > inefficiency, added costs, or perhaps just a little bit of brokenness.
-> > It's time to do better. This patch series allows us to do better.
+> >  	/* Online section invoked on the hotplugged CPU from the hotplug thre=
+ad */
+> >  	CPUHP_AP_ONLINE_IDLE,
+> > +	CPUHP_AP_HYPERV_ONLINE,
+>=20
+> x86 maintainers, are you okay with this?
+>=20
+
+Boris -- Are you OK with this, and could give an ACK?  This small patch
+set fixes a problem introduced into 6.4-rc1 by other Confidential VM
+changes, so this fix needs to be incorporated before 6.4 is released.
+
+Michael
+
+> >  	CPUHP_AP_KVM_ONLINE,
+> >  	CPUHP_AP_SCHED_WAIT_EMPTY,
+> >  	CPUHP_AP_SMPBOOT_THREADS,
+> > --
+> > 1.8.3.1
 > >
-> > Assuming that people think this patch series looks OK, we'll have to
-> > figure out the right way to land it. The panel patches and i2c-hid
-> > patches will go through very different trees and so either we'll need
-> > an Ack from one side or the other or someone to create a tag for the
-> > other tree to pull in. This will _probably_ require the true drm-misc
-> > maintainers to get involved, not a lowly committer. ;-)
-> >
-> > Version 2 of this patch series doesn't change too much. At a high level=
-:
-> > * I added all the forgotten "static" to functions.
-> > * I've hopefully made the bindings better.
-> > * I've integrated into fw_devlink.
-> > * I cleaned up a few descriptions / comments.
-> >
-> > This still needs someone to say that the idea looks OK or to suggest
-> > an alternative that solves the problems. ;-)
->
-> Thanks for working on this.
->
-> I haven't seen in any of your commit messages how the panels were
-> actually "packaged" together?
->
-> Do a panel model typically come together with the i2c-hid support, or is
-> it added at manufacture time?
->
-> If it's the latter, it's indeed a fairly loose connection and we need
-> your work.
->
-> If it's the former though and we don't expect a given panel reference to
-> always (or never) come with a touchscreen attached,
-
-Thanks for your reply. Let me see what I can do to bring clarity.
-
-In at least some of the cases, I believe that the panel and the
-touchscreen _are_ logically distinct components, even if they've been
-glued together at some stage in manufacturing. Even on one of the
-"poster child" boards that I talk about in patch #3, the early
-versions of "homestar", I believe this to be the case. However, even
-if the panel and touchscreen are separate components then they still
-could be connected to the main board in a way that they share power
-and/or reset signals. In my experience, in every case where they do
-the EEs expect that the panel is power sequenced first and then the
-touchscreen is power sequenced second. The EEs look at the power
-sequencing requirements of the panel and touchscreen, see that there
-is a valid power sequence protocol where they can share rails, and
-design the board that way. Even if the touchscreen and panel are
-logically separate, the moment the board designers hook them up to the
-same power rails and/or reset signals they become tied. This is well
-supported by my patch series.
-
-The case that really motivated my patch series, though, is the case
-that Cong Yang recently has been working on. I think most of the
-discussion is in his original patch series [1]. Cong Yang's patch
-series is largely focused on supporting the "ILI9882T" chip and some
-panels that it's used with. I found a datasheet for that, and the
-title from the first page is illustrative: "In-cell IC Integrates TFT
-LCD Driver and Capacitive Touch Controller into a Two Chip Cascade".
-This is an integrated solution that's designed to handle both the LCD
-and the touchscreen.
-
-
-[1] https://lore.kernel.org/lkml/20230519032316.3464732-1-yangcong5@huaqin.=
-corp-partner.google.com/
-
-
-> I guess we can have
-> something much simpler with a bunch of helpers that would register a
-> i2c-hid device and would be called by the panel driver itself.
->
-> And then, since everything is self-contained managing the power state
-> becomes easier as well.
-
-Can you give me more details about how you think this would work?
-
-When you say that the panel would register an i2c-hid device itself,
-do you mean that we'd do something like give a phandle to the i2c bus
-to the panel and then the panel would manually instantiate the i2c-hid
-device on it? ...and I guess it would need to be a "subclass" of
-i2c-hid that knew about the connection to the panel code? This
-subclass and the panel code would communicate with each other about
-power sequencing needs through some private API (like MFD devices
-usually do?). Assuming I'm understanding correctly, I think that could
-work. Is it cleaner than my current approach, though?
-
-I guess, alternatively, we could put the "panel" directly under the
-i2c bus in this case. That would probably work for Cong Yang's current
-needs, but we'd end up in trouble if we ever had a similar situation
-with an eDP panel since eDP panels need to be under the DP-AUX bus.
-
-I guess overall, though, while I think this approach could solve Cong
-Yang's needs, I still feel like it's worth solving the case where
-board designers have made panel and touchscreens "coupled" by having
-them rely on the same power rails and/or reset signals.
-
-
--Doug
