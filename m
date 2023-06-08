@@ -2,203 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46AE5727EFC
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:40:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 796C4727EFF
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236350AbjFHLk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 07:40:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53640 "EHLO
+        id S236408AbjFHLkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 07:40:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236342AbjFHLjk (ORCPT
+        with ESMTP id S236715AbjFHLkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 07:39:40 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE712728
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 04:39:33 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-977ed383b8aso93659566b.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 04:39:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686224372; x=1688816372;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xqR4Cl4Oo+rFOH+Sj3ml0n4meYZgvylOhYiYI8g6ow8=;
-        b=fNh6Fmwm2YHAPIHwAdlcjDwjrjjCabjXApKTw4f1jhc/TcUV5nXOqWN8HjWJwlcOJf
-         vTTbIKlNpb5meuz04hanIifHDPLQAeyxuQQHCLhBrfhnFKslc0m+Dfu6l/7CDaLBenGV
-         zjiwKAmFc5zAyr5KJlTXWgnM+vmZ/WmH+PMlZ4Tzus6X5Sy6HrJXYUVjUk/pP4q2zUh8
-         As06JTdEVZ2Fr2RLIwDoxnMeycQhPt9HLj/bhZMRuq58sdYfixTFIkDJdSL/xHjC1/NX
-         9AxRxI2zvgxLRb9huFms2x335RT69oTKOO8vbGd2ArYwWpsWqqMnJiuOhiGn7b3o3jH7
-         dMhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686224372; x=1688816372;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xqR4Cl4Oo+rFOH+Sj3ml0n4meYZgvylOhYiYI8g6ow8=;
-        b=aMh9hRbolvIeq14tWBcYpUdNLPgRC7L8mgPEokvAWJuKC/sZgvyszGEl9IftZR6z8S
-         e5okfFlSQkiIZYLfCQraL/TaK3cITg6tFC65YFgzjEaoTWLMpBgDeno1BbfmZ8WOyo+a
-         Q8nacLxYujsiDY2p3mxrJJdiD8emAJIEMsJecFYFMe8wYqpkzFuw+qMOqlqvABojUVv2
-         3bC70cDnw1Te8clag6eHZSSWc/sPbjX5wTsPmJySJUzNyajhfqsEqK70YdI8Xkivf1io
-         jhfe+V3yTOITuZGpr5IC7UN+Kw0BZIP+FfJSl28I4utV4i3MHS5BPjJskbyGkk/PoWeA
-         0pjQ==
-X-Gm-Message-State: AC+VfDx79z1JMpMhvtxrHzycNZSHe1vx8flLC+oJkz99Xrgr1MXJCrP1
-        UQjYWV1MkNkTYpPhmFnh02YWDA==
-X-Google-Smtp-Source: ACHHUZ7Th7ms72bKEB7ZtHp2Yh/u7BnpHPOwK6btJqOe7BpFZDp6faRJ02BvsNxVIHPLbCYoCQTLjQ==
-X-Received: by 2002:a17:907:94d6:b0:96f:905e:6117 with SMTP id dn22-20020a17090794d600b0096f905e6117mr9214973ejc.56.1686224372459;
-        Thu, 08 Jun 2023 04:39:32 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id bv15-20020a170906b1cf00b009596e7e0dbasm577799ejb.162.2023.06.08.04.39.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 04:39:32 -0700 (PDT)
-Message-ID: <9435791f-98cb-19f0-f959-8624990959ba@linaro.org>
-Date:   Thu, 8 Jun 2023 13:39:30 +0200
+        Thu, 8 Jun 2023 07:40:21 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4DFC3580
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 04:40:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686224404; x=1717760404;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=MaLf+qHWHMdBUYCI61I1nmeoeH5HH31cXDOI9i4acqU=;
+  b=g1P5GIulinH/jnGQQX2jAPRVmpvJU6QEAx5SWdt2mKMj8sTAm1cdbCpj
+   rjCr5fjiGZMBOa+q4f4KsMyI/HakAjsqshHVDJyaJgtNmvuT0lsJIs0Do
+   tbe/wJu6DOhXFSCNXF7pNvdsCucgmEEZ0K9rQWKp8BJ/igpGFzR39UWTN
+   CX7qOuAepZPwIWrhhwMWhJtXzTGZH1g3pc6MoG39pd7FrqL4yGDWAhUZV
+   e2+gGt8Lh24RRGssBOWUyU1AN2hYWqQaeJnqXn+hCFhwgr91PVyqwmGWA
+   4/eyoBLVjGIuSm4QV+lMFVg6g9ieDELc9USZ3ioz0KtUUrC+JGGAeJqvq
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="423134341"
+X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
+   d="scan'208";a="423134341"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 04:40:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="822592350"
+X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
+   d="scan'208";a="822592350"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 08 Jun 2023 04:40:02 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q7Dzm-0007jE-0S;
+        Thu, 08 Jun 2023 11:40:02 +0000
+Date:   Thu, 8 Jun 2023 19:39:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/fam01-next20230606 5/7]
+ arch/x86/kvm/ioapic.c:214:33: error: array subscript 32 is above array
+ bounds of 'union kvm_ioapic_redirect_entry[24]'
+Message-ID: <202306081931.EoJfyobB-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 1/2] dt-bindings: reset: convert the xlnx,zynqmp-reset.txt
- to yaml
-Content-Language: en-US
-To:     Michal Simek <michal.simek@amd.com>,
-        "Mehta, Piyush" <piyush.mehta@amd.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "Paladugu, Siva Durga Prasad" <siva.durga.prasad.paladugu@amd.com>,
-        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
-        "nava.manne@xilinx.com" <nava.manne@xilinx.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "git (AMD-Xilinx)" <git@amd.com>
-References: <20230607065121.2265076-1-piyush.mehta@amd.com>
- <20230607065121.2265076-2-piyush.mehta@amd.com>
- <168612336438.2153757.6000360498539992409.robh@kernel.org>
- <MN2PR12MB4333E0628E2E67652E80067A8850A@MN2PR12MB4333.namprd12.prod.outlook.com>
- <55b59833-d070-f576-9d85-047175d9722c@linaro.org>
- <b1c80077-7509-883d-cfd1-fb3c0b0449d6@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <b1c80077-7509-883d-cfd1-fb3c0b0449d6@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/06/2023 13:34, Michal Simek wrote:
-> 
-> 
-> On 6/8/23 13:29, Krzysztof Kozlowski wrote:
->> On 08/06/2023 12:55, Mehta, Piyush wrote:
->>> Hello,
->>>
->>>> -----Original Message-----
->>>> From: Rob Herring <robh@kernel.org>
->>>> Sent: Wednesday, June 7, 2023 1:06 PM
->>>> To: Mehta, Piyush <piyush.mehta@amd.com>
->>>> Cc: p.zabel@pengutronix.de; Paladugu, Siva Durga Prasad
->>>> <siva.durga.prasad.paladugu@amd.com>; michal.simek@xilinx.com;
->>>> nava.manne@xilinx.com; devicetree@vger.kernel.org; linux-
->>>> kernel@vger.kernel.org; linux-usb@vger.kernel.org; conor+dt@kernel.org;
->>>> krzysztof.kozlowski+dt@linaro.org; robh+dt@kernel.org; Simek, Michal
->>>> <michal.simek@amd.com>; git (AMD-Xilinx) <git@amd.com>
->>>> Subject: Re: [PATCH 1/2] dt-bindings: reset: convert the xlnx,zynqmp-reset.txt
->>>> to yaml
->>>>
->>>>
->>>> On Wed, 07 Jun 2023 12:21:20 +0530, Piyush Mehta wrote:
->>>>> Convert the binding to DT schema format. It also updates the
->>>>> reset-controller description.
->>>>>
->>>>> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
->>>>> ---
->>>>> Note:
->>>>> The 1/2 patch introduced a warning related to the dt binding check,
->>>>> which was subsequently fixed in the 2/2 patch. This warning is a
->>>>> conversion warning due to a dependency on firmware dt binding.
->>>>>
->>>>> Warning:
->>>>>    DTC_CHK
->>>>> Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.example.dtb
->>>>>
->>>> /scratch/piyushm/torvalds/linux/Documentation/devicetree/bindings/reset/xln
->>>> x,zynqmp-reset.example.dtb: zynqmp-firmware: 'reset-controller' does not
->>>> match any of the regexes: 'pinctrl-[0-9]+'
->>>>> 	From schema:
->>>>> /scratch/piyushm/torvalds/linux/Documentation/devicetree/bindings/firm
->>>>> ware/xilinx/xlnx,zynqmp-firmware.yaml
->>>>>
->>>>> Please suggest to me, if it's fine to make a single patch instead of
->>>>> the separate patch 1/2 and 2/2.
->>>>> ---
->>>>>   .../bindings/reset/xlnx,zynqmp-reset.txt      | 55 ---------------
->>>>>   .../bindings/reset/xlnx,zynqmp-reset.yaml     | 67 +++++++++++++++++++
->>>>>   2 files changed, 67 insertions(+), 55 deletions(-)  delete mode
->>>>> 100644 Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.txt
->>>>>   create mode 100644
->>>>> Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml
->>>>>
->>>>
->>>> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
->>>> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->>>>
->>>> yamllint warnings/errors:
->>>>
->>>> dtschema/dtc warnings/errors:
->>>> /builds/robherring/dt-review-
->>>> ci/linux/Documentation/devicetree/bindings/reset/xlnx,zynqmp-
->>>> reset.example.dtb: zynqmp-firmware: 'reset-controller' does not match any of
->>>> the regexes: 'pinctrl-[0-9]+'
->>>> 	From schema: /builds/robherring/dt-review-
->>>> ci/linux/Documentation/devicetree/bindings/firmware/xilinx/xlnx,zynqmp-
->>>> firmware.yaml
->>>>
->>>> doc reference errors (make refcheckdocs):
->>>>
->>>> See https://patchwork.ozlabs.org/project/devicetree-
->>>> bindings/patch/20230607065121.2265076-2-piyush.mehta@amd.com
->>>>
->>>> The base for the series is generally the latest rc1. A different dependency
->>>> should be noted in *this* patch.
->>>>
->>>> If you already ran 'make dt_binding_check' and didn't see the above error(s),
->>>> then make sure 'yamllint' is installed and dt-schema is up to
->>>> date:
->>>>
->>>> pip3 install dtschema --upgrade
->>>>
->>>> Please check and re-submit after running the above command yourself. Note
->>>> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
->>>> your schema. However, it must be unset to test all examples with your schema.
->>>
->>> This dt_binding warning is known to us and is captured in commit description notes and to resolve it, we need to apply 2/2.
->>
->> So your patchset has broken bisectability. You need to fix it. If the
->> warning was known, then I am surprised that you sent broken patchset.
-> 
-> The first patch is conversion from txt yaml without any additional changes 
-> because in past we heart that we shouldn't really do other things in it. That's 
-> why 2 patches where made. No really issue to squashed them together.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/fam01-next20230606
+head:   deff3c1ef49381ffa232906f49f03e8d712755b7
+commit: e2af9c6b35f6c39c338b785312947759d0dcdba8 [5/7] Makefile: Enable -Warray-bounds
+config: i386-randconfig-i004-20230608 (https://download.01.org/0day-ci/archive/20230608/202306081931.EoJfyobB-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git/commit/?id=e2af9c6b35f6c39c338b785312947759d0dcdba8
+        git remote add gustavoars https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git
+        git fetch --no-tags gustavoars testing/fam01-next20230606
+        git checkout e2af9c6b35f6c39c338b785312947759d0dcdba8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/
 
-We always shared feedback that conversion should do only conversion, but
-a correct one. Conversion cannot introduce errors or warnings in the
-bindings. It can introduce warnings in DTS, but not in the bindings.
-This was also communicated several times.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306081931.EoJfyobB-lkp@intel.com/
 
-If pure-conversion results in non-bisectable patchset then:
-1. either conversion should come with changes,
-2. or conversion is done a bit wrong or could be done differently like
-here. You really do not need unrelated pieces of DTS in reset controller
-code. Drop them.
+All errors (new ones prefixed by >>):
 
-Best regards,
-Krzysztof
+   arch/x86/kvm/ioapic.c: In function 'ioapic_set_irq':
+>> arch/x86/kvm/ioapic.c:214:33: error: array subscript 32 is above array bounds of 'union kvm_ioapic_redirect_entry[24]' [-Werror=array-bounds]
+     214 |         entry = ioapic->redirtbl[irq];
+         |                 ~~~~~~~~~~~~~~~~^~~~~
+   In file included from arch/x86/kvm/ioapic.c:46:
+   arch/x86/kvm/ioapic.h:80:41: note: while referencing 'redirtbl'
+      80 |         union kvm_ioapic_redirect_entry redirtbl[IOAPIC_NUM_PINS];
+         |                                         ^~~~~~~~
+   cc1: all warnings being treated as errors
 
+
+vim +214 arch/x86/kvm/ioapic.c
+
+f458d039db7e85 arch/x86/kvm/ioapic.c Suravee Suthikulpanit 2019-11-14  205  
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  206  static int ioapic_set_irq(struct kvm_ioapic *ioapic, unsigned int irq,
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  207  		int irq_level, bool line_status)
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  208  {
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  209  	union kvm_ioapic_redirect_entry entry;
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  210  	u32 mask = 1 << irq;
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  211  	u32 old_irr;
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  212  	int edge, ret;
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  213  
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18 @214  	entry = ioapic->redirtbl[irq];
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  215  	edge = (entry.fields.trig_mode == IOAPIC_EDGE_TRIG);
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  216  
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  217  	if (!irq_level) {
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  218  		ioapic->irr &= ~mask;
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  219  		ret = 1;
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  220  		goto out;
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  221  	}
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  222  
+f458d039db7e85 arch/x86/kvm/ioapic.c Suravee Suthikulpanit 2019-11-14  223  	/*
+8be8f932e3db5f arch/x86/kvm/ioapic.c Paolo Bonzini         2020-05-04  224  	 * AMD SVM AVIC accelerate EOI write iff the interrupt is edge
+8be8f932e3db5f arch/x86/kvm/ioapic.c Paolo Bonzini         2020-05-04  225  	 * triggered, in which case the in-kernel IOAPIC will not be able
+8be8f932e3db5f arch/x86/kvm/ioapic.c Paolo Bonzini         2020-05-04  226  	 * to receive the EOI.  In this case, we do a lazy update of the
+8be8f932e3db5f arch/x86/kvm/ioapic.c Paolo Bonzini         2020-05-04  227  	 * pending EOI when trying to set IOAPIC irq.
+f458d039db7e85 arch/x86/kvm/ioapic.c Suravee Suthikulpanit 2019-11-14  228  	 */
+8be8f932e3db5f arch/x86/kvm/ioapic.c Paolo Bonzini         2020-05-04  229  	if (edge && kvm_apicv_activated(ioapic->kvm))
+f458d039db7e85 arch/x86/kvm/ioapic.c Suravee Suthikulpanit 2019-11-14  230  		ioapic_lazy_update_eoi(ioapic, irq);
+f458d039db7e85 arch/x86/kvm/ioapic.c Suravee Suthikulpanit 2019-11-14  231  
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  232  	/*
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  233  	 * Return 0 for coalesced interrupts; for edge-triggered interrupts,
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  234  	 * this only happens if a previous edge has not been delivered due
+00116795aa87ca arch/x86/kvm/ioapic.c Miaohe Lin            2019-12-11  235  	 * to masking.  For level interrupts, the remote_irr field tells
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  236  	 * us if the interrupt is waiting for an EOI.
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  237  	 *
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  238  	 * RTC is special: it is edge-triggered, but userspace likes to know
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  239  	 * if it has been already ack-ed via EOI because coalesced RTC
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  240  	 * interrupts lead to time drift in Windows guests.  So we track
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  241  	 * EOI manually for the RTC interrupt.
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  242  	 */
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  243  	if (irq == RTC_GSI && line_status &&
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  244  		rtc_irq_check_coalesced(ioapic)) {
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  245  		ret = 0;
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  246  		goto out;
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  247  	}
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  248  
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  249  	old_irr = ioapic->irr;
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  250  	ioapic->irr |= mask;
+7d2253684dd10e arch/x86/kvm/ioapic.c Nikita Leshenko       2017-11-05  251  	if (edge) {
+5bda6eed2e3626 arch/x86/kvm/ioapic.c Wincy Van             2014-12-24  252  		ioapic->irr_delivered &= ~mask;
+7d2253684dd10e arch/x86/kvm/ioapic.c Nikita Leshenko       2017-11-05  253  		if (old_irr == ioapic->irr) {
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  254  			ret = 0;
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  255  			goto out;
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  256  		}
+7d2253684dd10e arch/x86/kvm/ioapic.c Nikita Leshenko       2017-11-05  257  	}
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  258  
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  259  	ret = ioapic_service(ioapic, irq, line_status);
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  260  
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  261  out:
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  262  	trace_kvm_ioapic_set_irq(entry.bits, irq, ret == 0);
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  263  	return ret;
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  264  }
+44847dea79751e virt/kvm/ioapic.c     Paolo Bonzini         2014-03-18  265  
+
+:::::: The code at line 214 was first introduced by commit
+:::::: 44847dea79751e95665a439f8c63a65e51da8e1f KVM: ioapic: extract body of kvm_ioapic_set_irq
+
+:::::: TO: Paolo Bonzini <pbonzini@redhat.com>
+:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
