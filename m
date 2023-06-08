@@ -2,250 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 449B7728BA3
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 01:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A976728BAD
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 01:20:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235118AbjFHXSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 19:18:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41826 "EHLO
+        id S232119AbjFHXUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 19:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbjFHXSA (ORCPT
+        with ESMTP id S236764AbjFHXUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 19:18:00 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D61930C8
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 16:17:58 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-2563aaceda9so178962a91.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 16:17:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1686266278; x=1688858278;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=k1cBU8CvnLRhFfPk7oGDbturpNUeqfy4EAK1i9I4mZY=;
-        b=HeNLRTif69FEJZsrAxRthdhHPA2H8RoQIKQMj7Ba3IQpRy05P7Vm05z6w6fb1Pu2L+
-         mL5w9Iw8NjaexLH+zhRhPa7/iES4KAOEJVBHhQX7NlfIVKaKgmYej52dsXEoP//Yh5hq
-         NIJoKf7GX+aDqdg3UMAfra2+uc4Rjf5hhHKq7IjfJ9cEb4sevkU+B+sMo8OPYwudQdzB
-         96Nz3dcmwxwgoV5Kdbaagxhc3D5CPTeh9sA43AgUFns2iwxGs+lkEP9kBv6GTT3FWt7s
-         RRhMqLcqxY4/k6hqJH5ANzOST7+QD7U3BnHGi1d1F6ungTQmWIUSfoXX9JLKBqWhkKvR
-         l6bQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686266278; x=1688858278;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k1cBU8CvnLRhFfPk7oGDbturpNUeqfy4EAK1i9I4mZY=;
-        b=ZBD6NY8yFa4M+BsvWkDAWPEhMnholVCPAW5a7amlP9bpHdF/YUNmjRvHJlKEu1EVZ9
-         fi7oGBfemtPc/UXKtb7FaJbRGuRew1FdCgRPiwo83MImJvGQB7zhxZPrqEf3pHN4O8pD
-         ZxXODJAuUe9+cIlrm4ZaD6Jpiex4UZv1TCn5zO9Hr/EoY1NjGkyJz93YG2WoEkC/48NJ
-         WS5LFPzjTrIXuhk/8ApxEAjommAkI8FgE3TOMjmUjkjw5W7CX3sGQI6qzW/MVqdVSHDO
-         nkKZeMlQBNLFEGC2bKlmqJSlCMXl+uvLVJtnzUPiFaccFk8vaWgUXUnQc+rQlQzwLWCv
-         wuaQ==
-X-Gm-Message-State: AC+VfDzx3I3IsZxM5N9GD5BJJuPNWxFWMNcFcPOZQo3t+KJTa/65lNQq
-        7WHQH4I1N/jyKr1kCsPNMtlxsg==
-X-Google-Smtp-Source: ACHHUZ5Dw0QrQ8tgaZzHeyvYZfD1gsaQnW0ALhslQjfpgFVcXSPbguCIKDSdF8GAohY1XxhkEcjQTw==
-X-Received: by 2002:a17:90a:2ce5:b0:258:817a:814e with SMTP id n92-20020a17090a2ce500b00258817a814emr4896491pjd.28.1686266277912;
-        Thu, 08 Jun 2023 16:17:57 -0700 (PDT)
-Received: from dread.disaster.area (pa49-179-79-151.pa.nsw.optusnet.com.au. [49.179.79.151])
-        by smtp.gmail.com with ESMTPSA id oe1-20020a17090b394100b0023d386e4806sm1724156pjb.57.2023.06.08.16.17.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 16:17:57 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.96)
-        (envelope-from <david@fromorbit.com>)
-        id 1q7Ot8-009T5r-1z;
-        Fri, 09 Jun 2023 09:17:54 +1000
-Date:   Fri, 9 Jun 2023 09:17:54 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     Roman Gushchin <roman.gushchin@linux.dev>,
-        Kirill Tkhai <tkhai@ya.ru>, akpm@linux-foundation.org,
-        vbabka@suse.cz, viro@zeniv.linux.org.uk, brauner@kernel.org,
-        djwong@kernel.org, hughd@google.com, paulmck@kernel.org,
-        muchun.song@linux.dev, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zhengqi.arch@bytedance.com
-Subject: Re: [PATCH v2 3/3] fs: Use delayed shrinker unregistration
-Message-ID: <ZIJhou1d55d4H1s0@dread.disaster.area>
-References: <168599103578.70911.9402374667983518835.stgit@pro.pro>
- <168599180526.70911.14606767590861123431.stgit@pro.pro>
- <ZH6AA72wOd4HKTKE@P9FQF9L96D>
- <ZH6K0McWBeCjaf16@dread.disaster.area>
- <20230608163622.GA1435580@mit.edu>
+        Thu, 8 Jun 2023 19:20:03 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C0A30D2;
+        Thu,  8 Jun 2023 16:20:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686266401; x=1717802401;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YWclXhX5PQnVsjXMUGXPdGfgZPrttY9Wds2uez4jA6k=;
+  b=EKnMLV3+rg/1wjFqZ0OyMO54D4pmVBF6YACK5NWpAbDB1i7EoSNK7W+F
+   zOrKLW6Pj2bHQozk7nNLvR6Kw8zKVFsnRtCw5efKg9iTJyPvWYs7ROf1k
+   Ho6nCasvFsDzqQNlRr7R4zrbTgHGJI+VZYVCy5K8t6KwyTn1AYwN8uc8v
+   /Dh+t8Q188ZhUUkiLf9k/mnkacDgXBOVKrE3gZt7X+FcFRgbbZCPHM9dy
+   iWrspB4Pt7S2gbq/sFRnGybplUl0EyF7PZ2elEejvZ+I8DUmeodQqo83P
+   m53lu8KPi49OatcLOm+WjKIJmAWpF9trEBJk2fEqwfuKrGVwy0YULxbit
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="360815928"
+X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
+   d="scan'208";a="360815928"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 16:19:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="713286180"
+X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
+   d="scan'208";a="713286180"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 08 Jun 2023 16:19:48 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q7Oux-0008LI-0N;
+        Thu, 08 Jun 2023 23:19:47 +0000
+Date:   Fri, 9 Jun 2023 07:18:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Badhri Jagan Sridharan <badhri@google.com>,
+        gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        colin.i.king@gmail.com, xuetao09@huawei.com,
+        quic_eserrao@quicinc.com, water.zhangjiantao@huawei.com,
+        peter.chen@freescale.com, balbi@ti.com, francesco@dolcini.it,
+        alistair@alistair23.me, stephan@gerhold.net, bagasdotme@gmail.com,
+        luca@z3ntu.xyz
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Badhri Jagan Sridharan <badhri@google.com>
+Subject: Re: [PATCH v7 2/2] usb: gadget: udc: core: Prevent
+ soft_connect_store() race
+Message-ID: <202306090722.opxFRfOO-lkp@intel.com>
+References: <20230608204517.105396-2-badhri@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230608163622.GA1435580@mit.edu>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230608204517.105396-2-badhri@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 12:36:22PM -0400, Theodore Ts'o wrote:
-> On Tue, Jun 06, 2023 at 11:24:32AM +1000, Dave Chinner wrote:
-> > On Mon, Jun 05, 2023 at 05:38:27PM -0700, Roman Gushchin wrote:
-> > > Hm, it makes the API more complex and easier to mess with. Like what will happen
-> > > if the second part is never called? Or it's called without the first part being
-> > > called first?
-> > 
-> > Bad things.
-> > 
-> > Also, it doesn't fix the three other unregister_shrinker() calls in
-> > the XFS unmount path, nor the three in the ext4/mbcache/jbd2 unmount
-> > path.
-> > 
-> > Those are just some of the unregister_shrinker() calls that have
-> > dynamic contexts that would also need this same fix; I haven't
-> > audited the 3 dozen other unregister_shrinker() calls around the
-> > kernel to determine if any of them need similar treatment, too.
-> > 
-> > IOWs, this patchset is purely a band-aid to fix the reported
-> > regression, not an actual fix for the underlying problems caused by
-> > moving the shrinker infrastructure to SRCU protection.  This is why
-> > I really want the SRCU changeover reverted.
-> 
-> There's been so much traffic on linux-fsdevel so I missed this thread
-> until Darrick pointed it out to me today.  (Thanks, Darrick!)
-> 
-> From his description, and my quick read-through of this thread....
-> I'm worried.
-> 
-> Given that we're at -rc5 now, and the file system folks didn't get
-> consulted until fairly late in the progress, and the fact that this
-> may cause use-after-free problems that could lead to security issues,
-> perhaps we shoould consider reverting the SRCU changeover now, and try
-> again for the next merge window?
+Hi Badhri,
 
-Yes, please, because I think we can fix this in a much better way
-and make things a whole lot simpler at the same time.
+kernel test robot noticed the following build warnings:
 
-The root cause of the SRCU usage is that mm/memcg developers still
-haven't unified the non-memcg and the memcg based shrinker
-implementations. shrink_slab_memcg() doesn't require SRCU
-protection as it does not iterate the shrinker list at all; it
-requires *shrinker instance* lifetime protection. The problem is
-shrink_slab() doing the root memcg/global shrinker work - it
-iterates the shrinker list directly, and this is the list walk that
-SRCU is necessary for to "make shrinkers lockless"
+[auto build test WARNING on d37537a1f7cf09e304fe7993cb5e732534a0fb22]
 
-Going back to shrink_slab_memcg(), it does a lookup of the shrinker
-instance by idr_find(); idr_find() is a wrapper around
-radix_tree_lookup(), which means we can use RCU protection and
-reference counting to both validate the shrinker instance *and*
-guarantee that it isn't free from under us as we execute the
-shrinker.
+url:    https://github.com/intel-lab-lkp/linux/commits/Badhri-Jagan-Sridharan/usb-gadget-udc-core-Prevent-soft_connect_store-race/20230609-044555
+base:   d37537a1f7cf09e304fe7993cb5e732534a0fb22
+patch link:    https://lore.kernel.org/r/20230608204517.105396-2-badhri%40google.com
+patch subject: [PATCH v7 2/2] usb: gadget: udc: core: Prevent soft_connect_store() race
+config: hexagon-randconfig-r015-20230608 (https://download.01.org/0day-ci/archive/20230609/202306090722.opxFRfOO-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git checkout d37537a1f7cf09e304fe7993cb5e732534a0fb22
+        b4 shazam https://lore.kernel.org/r/20230608204517.105396-2-badhri@google.com
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/usb/gadget/udc/
 
-This requires, as I mentioned elsewhere in this thread, that the
-shrinker instance to be dynamically allocated, not embedded in other
-structures. Dynamically allocated shrinker instances and reference
-counting them means we can do this in shrink_slab_memcg() to ensure
-shrinker instance validity and lifetime rules are followed:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306090722.opxFRfOO-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/usb/gadget/udc/core.c:17:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/usb/gadget/udc/core.c:17:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/usb/gadget/udc/core.c:17:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> drivers/usb/gadget/udc/core.c:850:1: warning: unused label 'out' [-Wunused-label]
+     850 | out:
+         | ^~~~
+     851 |         trace_usb_gadget_deactivate(gadget, ret);
+   drivers/usb/gadget/udc/core.c:886:1: warning: unused label 'out' [-Wunused-label]
+     886 | out:
+         | ^~~~
+     887 |         trace_usb_gadget_activate(gadget, ret);
+   8 warnings generated.
 
 
-	rcu_read_lock()
-	shrinker = idr_find(&shrinker_idr, i);
-	if (!shrinker ||
-	    !refcount_inc_not_zero(&shrinker->refcount)) {
-		/* shrinker is being torn down */
-		clear_bit(i, info->map);
-		rcu_read_unlock();
-		continue;
-	}
-	rcu_read_unlock();
+vim +/out +850 drivers/usb/gadget/udc/core.c
 
-	/* do shrinker stuff */
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  815  
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  816  /**
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  817   * usb_gadget_deactivate - deactivate function which is not ready to work
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  818   * @gadget: the peripheral being deactivated
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  819   *
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  820   * This routine may be used during the gadget driver bind() call to prevent
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  821   * the peripheral from ever being visible to the USB host, unless later
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  822   * usb_gadget_activate() is called.  For example, user mode components may
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  823   * need to be activated before the system can talk to hosts.
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  824   *
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  825   * Returns zero on success, else negative errno.
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  826   */
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  827  int usb_gadget_deactivate(struct usb_gadget *gadget)
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  828  {
+5e42d710a108c2 drivers/usb/gadget/udc/core.c     Felipe Balbi           2016-05-31  829  	int ret = 0;
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  830  
+bfc8a68e3289a9 drivers/usb/gadget/udc/core.c     Badhri Jagan Sridharan 2023-06-08  831  	mutex_lock(&gadget->udc->connect_lock);
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  832  	if (gadget->deactivated)
+bfc8a68e3289a9 drivers/usb/gadget/udc/core.c     Badhri Jagan Sridharan 2023-06-08  833  		goto unlock;
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  834  
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  835  	if (gadget->connected) {
+bfc8a68e3289a9 drivers/usb/gadget/udc/core.c     Badhri Jagan Sridharan 2023-06-08  836  		ret = usb_gadget_disconnect_locked(gadget);
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  837  		if (ret)
+bfc8a68e3289a9 drivers/usb/gadget/udc/core.c     Badhri Jagan Sridharan 2023-06-08  838  			goto unlock;
+5e42d710a108c2 drivers/usb/gadget/udc/core.c     Felipe Balbi           2016-05-31  839  
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  840  		/*
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  841  		 * If gadget was being connected before deactivation, we want
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  842  		 * to reconnect it in usb_gadget_activate().
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  843  		 */
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  844  		gadget->connected = true;
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  845  	}
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  846  	gadget->deactivated = true;
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  847  
+bfc8a68e3289a9 drivers/usb/gadget/udc/core.c     Badhri Jagan Sridharan 2023-06-08  848  unlock:
+bfc8a68e3289a9 drivers/usb/gadget/udc/core.c     Badhri Jagan Sridharan 2023-06-08  849  	mutex_unlock(&gadget->udc->connect_lock);
+5e42d710a108c2 drivers/usb/gadget/udc/core.c     Felipe Balbi           2016-05-31 @850  out:
+5e42d710a108c2 drivers/usb/gadget/udc/core.c     Felipe Balbi           2016-05-31  851  	trace_usb_gadget_deactivate(gadget, ret);
+5e42d710a108c2 drivers/usb/gadget/udc/core.c     Felipe Balbi           2016-05-31  852  
+5e42d710a108c2 drivers/usb/gadget/udc/core.c     Felipe Balbi           2016-05-31  853  	return ret;
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  854  }
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  855  EXPORT_SYMBOL_GPL(usb_gadget_deactivate);
+5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2016-05-31  856  
 
-	if (refcount_dec_and_test(&shrinker->refcount)) {
-		/* shrinker is being torn down, waiting for us */
-		wakeup(&shrinker->completion_wait);
-	}
-	/* unsafe to reference shrinker now */
-
-And we enable the shrinker to run simply by:
-
-shrinker_register()
-{
-	.....
-	/* allow the shrinker to run now */
-	refcount_set(shrinker->refcount, 1);
-	return 0;
-}
-
-We then shut down the shrinker so we can tear it down like so:
-
-shrinker_unregister()
-{
-	DECLARE_WAITQUEUE(wait, current);
-
-	add_wait_queue_exclusive(shrinker->completion_wait, &wait);
-	if (!refcount_dec_and_test(&shrinker->refcount))) {
-		/* Wait for running instances to exit */
-		__set_current_state(TASK_UNINTERRUPTIBLE);
-		schedule();
-	}
-	remove_wait_queue(wq, &wait);
-
-	/* We own the entire shrinker instance now, start tearing it down */
-
-	.....
-
-	/* Free the shrinker itself after a RCU grace period expires */
-	kfree_rcu(shrinker, shrinker->rcu_head);
-}
-
-So, essentially we don't need SCRU at all to do lockless shrinker
-lookup for the memcg shrinker side of the fence, nor do we need
-synchronise_srcu() to wait for shrinker instances to finish running
-before we can tear stuff down. There is no global state in this at
-all; everything is per-shrinker instance.
-
-But SRCU is needed to protect the global shrinker list walk because
-it hasn't been converted to always use the root memcg and be
-iterated as if it is just another memcg.  IOWs, using SRCU to
-protect the global shrinker list walk is effectively slapping a
-bandaid over a more fundamental problem that we've known about for
-a long time.
-
-So the first thing that has to be done here is unify the shrinker
-infrastructure under the memcg implementation. The global shrinker
-state should be tracked in the root memcg, just like any other memcg
-shrinker is tracked. If memcg's are not enabled, then we should be
-creating a dummy global memcg that a get_root_memcg() helper returns
-when memcgs are disabled to tracks all the global shrinker state.
-then shrink_slab just doesn't care about what memcg is passed to it,
-it just does the same thing.
-
-IOWs, shrink_slab gets entirely replaced by shrink_slab_memcg(), and
-the need for SRCU goes away entirely because shrinker instance
-lookups are all RCU+refcount protected.
-
-Yes, this requires we change how shrinker instances are instantiated
-by subsystems, but this is mostly simple transformation of existing
-code. But it doesn't require changing shrinker implementations, it
-doesn't require a new teardown API, and it doesn't change the
-context under which shrinkers might run.
-
-All the existing RCU protected stuff in the shrinker maps and memcgs
-can remain that way.  We can also keep the shrinker rwsem/mutex for
-all the little internal bits of setup/teardown/non-rcu coordination
-that are needed; once the list iteration is lockless, there will be
-almost no contention on that lock at all...
-
-This isn't all that hard - it's just replicating a well known design
-pattern (i.e. refcount+RCU) we use all over the kernel combined with
-taking advantage of IDR being backed by RCU-safe infrastructure.
-
-If I had been cc'd on the original SRCU patches, this is exactly
-what I would have suggested as a better solution to the problem. We
-end up with cleaner, more robust and better performing
-infrastructure. This is far better than layering more complexity on
-top of what is really a poor foundation....
-
-Cheers,
-
-Dave.
 -- 
-Dave Chinner
-david@fromorbit.com
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
