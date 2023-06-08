@@ -2,137 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78B7D727810
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:02:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FFDC727812
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235268AbjFHHCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 03:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42752 "EHLO
+        id S234818AbjFHHC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 03:02:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235162AbjFHHCD (ORCPT
+        with ESMTP id S235200AbjFHHCC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 03:02:03 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D791FDA;
-        Thu,  8 Jun 2023 00:01:52 -0700 (PDT)
+        Thu, 8 Jun 2023 03:02:02 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D724A271F;
+        Thu,  8 Jun 2023 00:01:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686207711; x=1717743711;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=GkOP7rNUwgMIthRmAlcjFR5s8EhHf8h9HpAjchfyKK8=;
-  b=JEMzjN6F97ONk20TGmwatG4I9Fpg56gZwlccPS0QBLU/bvGXvpUIb9i+
-   FPlcU3LrUrR5WyPUp9E/9N2ibY/fxhnVD4/Apj0P1JcJdnLDjKqEwIT3Y
-   ovEm9WgvbG7vtRJGyak4exb7VFuuPU3ETUiZQNWqwmeuQCdOaOXtLtBjX
-   MUK5l+WKl/oKx1H/6wZA/RR/njwQm55M5vGuJ+XnyBqCD+F+wRQAHDFhU
-   6OnaUp3gMrYu+8wUYMAZTFyfY7JxJcpOKHDDDN84bqanU2PXjHrhWd5r1
-   2N9427x58zHnOhTRBJ6laiHMSHgSgiXIAotcyI5afKTP+BslPNrtlpfuD
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="359696355"
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1686207704; x=1717743704;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZZLdqZM7DUuJb+zfCqM9sRlIRP3z6YOCxQmfCfYvk1o=;
+  b=Fh61kMzQq+qveqK3FyI+9sBQF1VpCPcmARFSp/tpJdiZb8wwj9thmg0c
+   Qnc68/Br3Jfa+sydFnTXi+RyasXBpFxD0cYQ4OyByOg5kanHQzEgYhO7O
+   7DukZ8fjOyX1N2sMFFbWpLjk2TMJNoQXp9ltNOH5ruJtczzDMKKe1Kcj8
+   0KZ5/MReCEbFHSfE8FE003bWEW2ip3QXYLxxo9Ikpngjmo12cCIJzrvDM
+   VxPd83m1km0MlJuBSerX3AjJuywb7BKpddIBgt4lhSAKSxyJ7iXW1XJFJ
+   LjqjT5jQGAlLctWqVDqPxmiE5G+F344knkll7mGeXHdPEFBi9fH5OnA4q
+   Q==;
 X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="scan'208";a="359696355"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 00:01:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="709867977"
-X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="scan'208";a="709867977"
-Received: from inesxmail01.iind.intel.com ([10.223.154.20])
-  by orsmga002.jf.intel.com with ESMTP; 08 Jun 2023 00:01:09 -0700
-Received: from inlubt0316.iind.intel.com (inlubt0316.iind.intel.com [10.191.20.213])
-        by inesxmail01.iind.intel.com (Postfix) with ESMTP id 192481AA19;
-        Thu,  8 Jun 2023 12:31:07 +0530 (IST)
-Received: by inlubt0316.iind.intel.com (Postfix, from userid 12101951)
-        id 155F41DE; Thu,  8 Jun 2023 12:31:07 +0530 (IST)
-From:   Raag Jadav <raag.jadav@intel.com>
-To:     linus.walleij@linaro.org, mika.westerberg@linux.intel.com,
-        andriy.shevchenko@linux.intel.com
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mallikarjunappa.sangannavar@intel.com, pandith.n@intel.com,
-        Raag Jadav <raag.jadav@intel.com>
-Subject: [PATCH v1 4/4] pinctrl: intel: simplify exit path of gpio_request_enable hook
-Date:   Thu,  8 Jun 2023 12:30:17 +0530
-Message-Id: <20230608070017.28072-5-raag.jadav@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230608070017.28072-1-raag.jadav@intel.com>
-References: <20230608070017.28072-1-raag.jadav@intel.com>
+   d="asc'?scan'208";a="219382726"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Jun 2023 00:01:43 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 8 Jun 2023 00:01:43 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Thu, 8 Jun 2023 00:01:40 -0700
+Date:   Thu, 8 Jun 2023 08:01:16 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     <linux-riscv@lists.infradead.org>
+CC:     <conor@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, <rust-for-linux@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <llvm@lists.linux.dev>
+Subject: Re: [PATCH v1 0/2] RISC-V: enable rust
+Message-ID: <20230608-dispatch-sneer-aa09bd7b2eb8@wendy>
+References: <20230307102441.94417-1-conor.dooley@microchip.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Ka1WzDdcwslcLLPy"
+Content-Disposition: inline
+In-Reply-To: <20230307102441.94417-1-conor.dooley@microchip.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simplify exit path of ->gpio_request_enable() hook
-and save a few bytes.
+--Ka1WzDdcwslcLLPy
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-36 (-36)
-Function                                     old     new   delta
-intel_gpio_request_enable                    186     150     -36
-Total: Before=10431, After=10395, chg -0.35%
+Hey Kwang,
 
-Signed-off-by: Raag Jadav <raag.jadav@intel.com>
----
- drivers/pinctrl/intel/pinctrl-intel.c | 23 ++++++++++++-----------
- 1 file changed, 12 insertions(+), 11 deletions(-)
+On 08/06/2023 05:46, =EC=86=90=EA=B4=91=ED=9B=88/Tizen Platform Lab(SR)/=EC=
+=82=BC=EC=84=B1=EC=A0=84=EC=9E=90 wrote:
+> Hi,
+> Recently I'm trying to put a rust patch on the risc-v board.
+> I saw a patch [1] and looked through it roughly.
+> Only if llvm(not gcc) is allowed, it looks good with no major problems.
+>=20
+> > I'll revisit this when my thoughts have settled down.
+>=20
+> If you let me know the problematic part, may I try the patch?
+>=20
+> [1] https://lore.kernel.org/linux-riscv/20230405-itinerary-handgrip-
+> a5ffba368148@spud/
 
-diff --git a/drivers/pinctrl/intel/pinctrl-intel.c b/drivers/pinctrl/intel/pinctrl-intel.c
-index 1b5745202058..947797d87c93 100644
---- a/drivers/pinctrl/intel/pinctrl-intel.c
-+++ b/drivers/pinctrl/intel/pinctrl-intel.c
-@@ -489,20 +489,22 @@ static int intel_gpio_request_enable(struct pinctrl_dev *pctldev,
- 	struct intel_pinctrl *pctrl = pinctrl_dev_get_drvdata(pctldev);
- 	void __iomem *padcfg0;
- 	unsigned long flags;
-+	int ret;
- 
- 	padcfg0 = intel_get_padcfg(pctrl, pin, PADCFG0);
- 
-+	/* For positive cases */
-+	ret = 0;
-+
- 	raw_spin_lock_irqsave(&pctrl->lock, flags);
- 
- 	if (!intel_pad_owned_by_host(pctrl, pin)) {
--		raw_spin_unlock_irqrestore(&pctrl->lock, flags);
--		return -EBUSY;
-+		ret = -EBUSY;
-+		goto out_unlock;
- 	}
- 
--	if (!intel_pad_is_unlocked(pctrl, pin)) {
--		raw_spin_unlock_irqrestore(&pctrl->lock, flags);
--		return 0;
--	}
-+	if (!intel_pad_is_unlocked(pctrl, pin))
-+		goto out_unlock;
- 
- 	/*
- 	 * If pin is already configured in GPIO mode, we assume that
-@@ -510,16 +512,15 @@ static int intel_gpio_request_enable(struct pinctrl_dev *pctldev,
- 	 * potential glitches on the pin. Otherwise, for the pin in
- 	 * alternative mode, consumer has to supply respective flags.
- 	 */
--	if (intel_gpio_get_gpio_mode(padcfg0) == PADCFG0_PMODE_GPIO) {
--		raw_spin_unlock_irqrestore(&pctrl->lock, flags);
--		return 0;
--	}
-+	if (intel_gpio_get_gpio_mode(padcfg0) == PADCFG0_PMODE_GPIO)
-+		goto out_unlock;
- 
- 	intel_gpio_set_gpio_mode(padcfg0);
- 
-+out_unlock:
- 	raw_spin_unlock_irqrestore(&pctrl->lock, flags);
- 
--	return 0;
-+	return ret;
- }
- 
- static int intel_gpio_set_direction(struct pinctrl_dev *pctldev,
--- 
-2.17.1
+Yeah, you can definitely try this or the downstream rust-for-linux
+project - both should work well on RISC-V.
+The problematic part is figuring out what ISA extensions are supported
+by the rust compiler being used (and by bindgen), and deciding what to
+put in -march as a result.
 
+I think it is unlikely to matter for you, unless you're aggressively
+mixing versions for different parts of your toolchain.
+
+I do intend revisting this, probably after the min. version for rust
+gets bumped, I've just been really busy with other work the last weeks.
+
+Cheers,
+Conor.
+
+--Ka1WzDdcwslcLLPy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIF8rgAKCRB4tDGHoIJi
+0k0tAP9oSP5G1PJWtLGyf1+R6tsih6t/Fcf8f5aQBdxxrsXn/gD/UYOgt9r9Nkht
+w/d+pWUDXdDuNyfeTgh/x6BfVqn+TAo=
+=QM1l
+-----END PGP SIGNATURE-----
+
+--Ka1WzDdcwslcLLPy--
