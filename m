@@ -2,65 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E389D727B15
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:20:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F66727B19
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235220AbjFHJU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 05:20:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59946 "EHLO
+        id S235267AbjFHJVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 05:21:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232272AbjFHJU0 (ORCPT
+        with ESMTP id S232198AbjFHJVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 05:20:26 -0400
+        Thu, 8 Jun 2023 05:21:14 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ACF718F;
-        Thu,  8 Jun 2023 02:20:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E94E46;
+        Thu,  8 Jun 2023 02:21:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1686216025; x=1717752025;
+  t=1686216072; x=1717752072;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ImvKob1XLuKksnBkKdSIUMhiZFOJa0LRyXm3owOpFFY=;
-  b=wSerHhqUUwjM2WcctY2xGwEUuasUaqJf95a+HKK7r8y4TpObR+lVuqMs
-   auFPKlYHj4gaf+YDTFKVu/axF2hoZDRerFjMuLVBZ2hAPlEOO2lUbIh2g
-   BtK6GLme3CBJduKIIzLF2T32us/4U+HXLjyG+DJb9y5ruzu/NkvGDOHcf
-   RbPNfsHCwK/ZSznmirYTsJm4NJbfe5pQFhQ0fOTeGJOW7hkrUcNynw5Ve
-   i05UYidO8ZX6zU6spc/0ILzgqT3Fmcj2Lnp8NXBYurUsYI3jg8lbljNF5
-   Uvu9LteoHzzqR5Z164W2nizvXBz25i1s99wOtigWsx7g/SMV9f/bUODV9
+  bh=w1/ENiOIt/Tuo8NCI+h3xrdeeckOLLcjLjHSKZ2WX10=;
+  b=JpErmvnwMs8fY+oq0oCUwU2ZN7Jp8zoJHRJFuhqtX1jrtMyone8YCPpa
+   KEyh8EFnoEF97dilU1UrQpvg2RrU5/x3qk7fMB6ihas2J7Kk3IAqwYi/k
+   3KvafRWfrxhkd/ZQA7n242St8Ky05o/gnSDH1bGvPVYuze4XIw7h95E0v
+   Ug55IYni/5bIWTff117SScr//PNGzY+J8ZVvdEK0/ja2TLi/+rJPhsZve
+   JGIsaSPogOqEXj+ki1IDI5C/+dZR9o3FO+CWI3Ymgb0ZbzMHsPsT/Sji/
+   VYMqK3DZegXt64qz0bguTV/MEDRrgyReTJd+4TI1C5bTjVhaFKFT67tAm
    g==;
 X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="asc'?scan'208";a="216828071"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
+   d="scan'208";a="216828190"
+X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Jun 2023 02:20:24 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Jun 2023 02:21:11 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 8 Jun 2023 02:20:24 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Thu, 8 Jun 2023 02:20:22 -0700
-Date:   Thu, 8 Jun 2023 10:19:58 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Tushar Nimkar <quic_tnimkar@quicinc.com>
-CC:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_lsrao@quicinc.com>,
-        <quic_mkshah@quicinc.com>, <devicetree@vger.kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: arm: idle-states: Add
- idle-state-disabled property
-Message-ID: <20230608-steadying-idealism-1f8a97db1491@wendy>
-References: <20230608085544.16211-1-quic_tnimkar@quicinc.com>
- <20230608085544.16211-2-quic_tnimkar@quicinc.com>
+ 15.1.2507.21; Thu, 8 Jun 2023 02:21:05 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Thu, 8 Jun 2023 02:21:05 -0700
+Date:   Thu, 8 Jun 2023 11:21:04 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Richard Cochran <richardcochran@gmail.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>
+Subject: Re: [PATCH net-next] net: micrel: Change to receive timestamp in the
+ frame for lan8841
+Message-ID: <20230608092104.43dyqb2aqycqsmxq@soft-dev3-1>
+References: <20230607070948.1746768-1-horatiu.vultur@microchip.com>
+ <ZIDCpPbCFCxKBV2k@hoboy.vegasvil.org>
+ <ZIFseH84Cv1KSOtj@hoboy.vegasvil.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="vtCTEnlvLCD5pXov"
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <20230608085544.16211-2-quic_tnimkar@quicinc.com>
+In-Reply-To: <ZIFseH84Cv1KSOtj@hoboy.vegasvil.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -71,80 +67,223 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---vtCTEnlvLCD5pXov
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The 06/07/2023 22:51, Richard Cochran wrote:
+> 
+> On Wed, Jun 07, 2023 at 10:47:16AM -0700, Richard Cochran wrote:
+> > On Wed, Jun 07, 2023 at 09:09:48AM +0200, Horatiu Vultur wrote:
+> > > +static long lan8841_ptp_do_aux_work(struct ptp_clock_info *ptp)
+> > > +{
+> > > +   struct kszphy_ptp_priv *ptp_priv = container_of(ptp, struct kszphy_ptp_priv,
+> > > +                                                   ptp_clock_info);
+> > > +   struct skb_shared_hwtstamps *shhwtstamps;
+> > > +   struct timespec64 ts;
+> > > +   struct sk_buff *skb;
+> > > +   u32 ts_header;
+> > > +
+> > > +   while ((skb = skb_dequeue(&ptp_priv->rx_queue)) != NULL) {
+> > > +           lan8841_ptp_getseconds(ptp, &ts);
+> >
+> > No need to call this once per frame.  It would be sufficent to call it
+> > once every 2 seconds and cache the result.
 
-Hey Tushar,
+Funny thing is that I have already a patch for this, it is not 100%
+complete, because of one of the possible issues that you mention below.
+But in my case I read the seconds twice per second, regardless of the RX
+frame rate.
 
-On Thu, Jun 08, 2023 at 02:25:42PM +0530, Tushar Nimkar wrote:
-> This change adds idle-state-disabled property using which certain or all
-> idle-states can be kept disabled during boot-up. Once boot-up is completed
-> same can be enabled using below command.
->=20
-> echo N > /sys/devices/system/cpu/cpuX/cpuidle/stateX/disable
->=20
-> Cc: devicetree@vger.kernel.org
+> 
+> Okay, this is tricky.
+> 
+> - If you call lan8841_ptp_getseconds() after gathering the received
+>   frames, then the frame timestamps are clearly in the past WRT the
+>   call to getseconds.  That makes the wrap check simpler.  But the
+>   getseconds call really should be placed before the 'while' loop.
+> 
+> - If the Rx frame rate exceeds 1/second, then it would be more
+>   efficient to call getseconds every second, and cache the result.
+>   But then the wrap around check needs to account for the fact that
+>   the cached value may have occurred either before or after the frame
+>   timestamp.
+> 
+> I'll explain that second point when my brain wakes again...
 
-Firstly, you should CC the dt-bindings maintainers like
-get_maintainer.pl would tell you.
-Secondly, there are two 1/2 patches in this series.
+I am looking forward for your explanation.
 
-> Signed-off-by: Tushar Nimkar <quic_tnimkar@quicinc.com>
-> ---
->  Documentation/devicetree/bindings/cpu/idle-states.yaml | 8 ++++++++
->  1 file changed, 8 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/cpu/idle-states.yaml b/Doc=
-umentation/devicetree/bindings/cpu/idle-states.yaml
-> index b8cc826c9501..f999bc666bbd 100644
-> --- a/Documentation/devicetree/bindings/cpu/idle-states.yaml
-> +++ b/Documentation/devicetree/bindings/cpu/idle-states.yaml
-> @@ -358,6 +358,13 @@ patternProperties:
->            systems entry-latency-us + exit-latency-us will exceed
->            wakeup-latency-us by this duration.
-> =20
-> +      idle-state-disabled:
-> +        description: |
-> +          If present the idle state stays disabled.
+In the end don't you think it should be 2 different patches, first patch
+which changes to mode to get the RX timestamp, while the second one
+optimize this?
 
-> It can be enabled back from
-> +          shell using below command.
-> +          echo N > /sys/devices/system/cpu/cpuX/cpuidle/stateX/disable
+Bellow just for reference I added the patch which it tries to get the second
+part twice per second.
 
-Thirdly, this is operating system specific behaviour, tied to Linux, and
-has no place in a binding.
+---
+Subject: [PATCH] net: micrel: Schedule work to read seconds for lan8841
 
-Cheers,
-Conor.
+Instead of reading the seconds part of the received frame for each of
+the frames, schedule a workqueue to read the seconds part every 500ms
+and then for each of the received frames use this information instead of
+reading again the seconds part. Because if for example running with 512
+frames per second, there is no point to read 512 times the second part.
+Of course care needs to be taken in case of the less two significant
+bits are 0 or 3, to make sure there are no seconds wraparound.
+This will improve the CPU usage by ~20% and also it is possible to receive
+1024 Sync frames per second.
 
-> +        type: boolean
-> +
->        idle-state-name:
->          $ref: /schemas/types.yaml#/definitions/string
->          description:
-> @@ -548,6 +555,7 @@ examples:
->              CPU_SLEEP_0_0: cpu-sleep-0-0 {
->                  compatible =3D "arm,idle-state";
->                  local-timer-stop;
-> +                idle-state-disabled;
->                  arm,psci-suspend-param =3D <0x0010000>;
->                  entry-latency-us =3D <250>;
->                  exit-latency-us =3D <500>;
-> --=20
-> 2.17.1
->=20
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+---
+ drivers/net/phy/micrel.c | 49 ++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 45 insertions(+), 4 deletions(-)
 
---vtCTEnlvLCD5pXov
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
+index 28365006b2067..9832eea404377 100644
+--- a/drivers/net/phy/micrel.c
++++ b/drivers/net/phy/micrel.c
+@@ -33,6 +33,7 @@
+ #include <linux/ptp_classify.h>
+ #include <linux/net_tstamp.h>
+ #include <linux/gpio/consumer.h>
++#include <linux/workqueue.h>
+ 
+ /* Operation Mode Strap Override */
+ #define MII_KSZPHY_OMSO				0x16
+@@ -254,6 +255,9 @@
+ #define PS_TO_REG				200
+ #define FIFO_SIZE				8
+ 
++/* Delay used to get the second part from the LTC */
++#define LAN8841_GET_SEC_LTC_DELAY		(500 * NSEC_PER_MSEC)
++
+ struct kszphy_hw_stat {
+ 	const char *string;
+ 	u8 reg;
+@@ -321,6 +325,9 @@ struct kszphy_ptp_priv {
+ 	/* Lock for ptp_clock */
+ 	struct mutex ptp_lock;
+ 	struct ptp_pin_desc *pin_config;
++
++	s64 seconds;
++	struct delayed_work seconds_work;
+ };
+ 
+ struct kszphy_priv {
+@@ -3840,6 +3847,12 @@ static void lan8841_ptp_enable_processing(struct kszphy_ptp_priv *ptp_priv,
+ 			       LAN8841_PTP_INSERT_TS_32BIT,
+ 			       LAN8841_PTP_INSERT_TS_EN |
+ 			       LAN8841_PTP_INSERT_TS_32BIT);
++
++		/* Schedule the work to read the seconds, which will be used in
++		 * the received timestamp
++		 */
++		schedule_delayed_work(&ptp_priv->seconds_work,
++				      nsecs_to_jiffies(LAN8841_GET_SEC_LTC_DELAY));
+ 	} else {
+ 		/* Disable interrupts on the TX side */
+ 		phy_modify_mmd(phydev, 2, LAN8841_PTP_INT_EN,
+@@ -3853,6 +3866,11 @@ static void lan8841_ptp_enable_processing(struct kszphy_ptp_priv *ptp_priv,
+ 			       LAN8841_PTP_INSERT_TS_32BIT, 0);
+ 
+ 		ptp_cancel_worker_sync(ptp_priv->ptp_clock);
++
++		/* Stop the work, as there is no reason to continue to read the
++		 * seconds if there is no timestamping enabled
++		 */
++		cancel_delayed_work_sync(&ptp_priv->seconds_work);
+ 	}
+ }
+ 
+@@ -4062,6 +4080,8 @@ static int lan8841_ptp_settime64(struct ptp_clock_info *ptp,
+ 	phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_SET_NS_LO, lower_16_bits(ts->tv_nsec));
+ 	phy_write_mmd(phydev, 2, LAN8841_PTP_LTC_SET_NS_HI, upper_16_bits(ts->tv_nsec) & 0x3fff);
+ 
++	ptp_priv->seconds = ts->tv_sec;
++
+ 	/* Set the command to load the LTC */
+ 	phy_write_mmd(phydev, 2, LAN8841_PTP_CMD_CTL,
+ 		      LAN8841_PTP_CMD_CTL_PTP_LTC_LOAD);
+@@ -4116,7 +4136,6 @@ static void lan8841_ptp_getseconds(struct ptp_clock_info *ptp,
+ 	struct phy_device *phydev = ptp_priv->phydev;
+ 	time64_t s;
+ 
+-	mutex_lock(&ptp_priv->ptp_lock);
+ 	/* Issue the command to read the LTC */
+ 	phy_write_mmd(phydev, 2, LAN8841_PTP_CMD_CTL,
+ 		      LAN8841_PTP_CMD_CTL_PTP_LTC_READ);
+@@ -4127,7 +4146,6 @@ static void lan8841_ptp_getseconds(struct ptp_clock_info *ptp,
+ 	s |= phy_read_mmd(phydev, 2, LAN8841_PTP_LTC_RD_SEC_MID);
+ 	s <<= 16;
+ 	s |= phy_read_mmd(phydev, 2, LAN8841_PTP_LTC_RD_SEC_LO);
+-	mutex_unlock(&ptp_priv->ptp_lock);
+ 
+ 	set_normalized_timespec64(ts, s, 0);
+ }
+@@ -4644,15 +4662,20 @@ static long lan8841_ptp_do_aux_work(struct ptp_clock_info *ptp)
+ 	u32 ts_header;
+ 
+ 	while ((skb = skb_dequeue(&ptp_priv->rx_queue)) != NULL) {
+-		lan8841_ptp_getseconds(ptp, &ts);
++		mutex_lock(&ptp_priv->ptp_lock);
++		ts.tv_sec = ptp_priv->seconds;
++		mutex_unlock(&ptp_priv->ptp_lock);
++
+ 		ts_header = __be32_to_cpu(LAN8841_SKB_CB(skb)->header->reserved2);
+ 
+ 		shhwtstamps = skb_hwtstamps(skb);
+ 		memset(shhwtstamps, 0, sizeof(*shhwtstamps));
+ 
+ 		/* Check for any wrap arounds for the second part */
+-		if ((ts.tv_sec & GENMASK(1, 0)) < ts_header >> 30)
++		if ((ts.tv_sec & GENMASK(1, 0)) == 0 && (ts_header >> 30) == 3)
+ 			ts.tv_sec -= GENMASK(1, 0) + 1;
++		else if ((ts.tv_sec & GENMASK(1, 0)) == 3 && (ts_header >> 30) == 0)
++			ts.tv_sec += 1;
+ 
+ 		shhwtstamps->hwtstamp =
+ 			ktime_set((ts.tv_sec & ~(GENMASK(1, 0))) | ts_header >> 30,
+@@ -4665,6 +4688,21 @@ static long lan8841_ptp_do_aux_work(struct ptp_clock_info *ptp)
+ 	return -1;
+ }
+ 
++static void lan8841_ptp_seconds_work(struct work_struct *seconds_work)
++{
++	struct kszphy_ptp_priv *ptp_priv =
++		container_of(seconds_work, struct kszphy_ptp_priv, seconds_work.work);
++	struct timespec64 ts;
++
++	mutex_lock(&ptp_priv->ptp_lock);
++	lan8841_ptp_getseconds(&ptp_priv->ptp_clock_info, &ts);
++	ptp_priv->seconds = ts.tv_sec;
++	mutex_unlock(&ptp_priv->ptp_lock);
++
++	schedule_delayed_work(&ptp_priv->seconds_work,
++			      nsecs_to_jiffies(LAN8841_GET_SEC_LTC_DELAY));
++}
++
+ static struct ptp_clock_info lan8841_ptp_clock_info = {
+ 	.owner		= THIS_MODULE,
+ 	.name		= "lan8841 ptp",
+@@ -4749,6 +4787,8 @@ static int lan8841_probe(struct phy_device *phydev)
+ 
+ 	phydev->mii_ts = &ptp_priv->mii_ts;
+ 
++	INIT_DELAYED_WORK(&ptp_priv->seconds_work, lan8841_ptp_seconds_work);
++
+ 	return 0;
+ }
+ 
+@@ -4758,6 +4798,7 @@ static int lan8841_suspend(struct phy_device *phydev)
+ 	struct kszphy_ptp_priv *ptp_priv = &priv->ptp_priv;
+ 
+ 	ptp_cancel_worker_sync(ptp_priv->ptp_clock);
++	cancel_delayed_work_sync(&ptp_priv->seconds_work);
+ 
+ 	return genphy_suspend(phydev);
+ }
+-- 
+---
 
------BEGIN PGP SIGNATURE-----
+> 
+> Thanks,
+> Richard
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIGdPgAKCRB4tDGHoIJi
-0jYeAQD2vq8CAZyZPfQBYO0XGcZgS5CZfIokwYmVJvMluNX5FgD/VKSusjjBHh15
-cAJDaI7n/Zxpka9ImfjHO1sN2deJHgs=
-=tiyx
------END PGP SIGNATURE-----
-
---vtCTEnlvLCD5pXov--
+-- 
+/Horatiu
