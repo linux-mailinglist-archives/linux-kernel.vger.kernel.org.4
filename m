@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D870727868
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B98E172786D
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:12:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234408AbjFHHLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 03:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48952 "EHLO
+        id S234320AbjFHHML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 03:12:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235341AbjFHHLV (ORCPT
+        with ESMTP id S235284AbjFHHLa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 03:11:21 -0400
-Received: from mo4-p03-ob.smtp.rzone.de (mo4-p03-ob.smtp.rzone.de [85.215.255.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9D51FDC;
-        Thu,  8 Jun 2023 00:11:17 -0700 (PDT)
+        Thu, 8 Jun 2023 03:11:30 -0400
+Received: from mo4-p03-ob.smtp.rzone.de (mo4-p03-ob.smtp.rzone.de [85.215.255.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3014E2694;
+        Thu,  8 Jun 2023 00:11:18 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; t=1686208275; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=HJarbOsS9Ip6JYmwc0l7ea03uO8IHL01KhIkVOJHjMTQUUCT6HZvR4yzVQDErR8s4h
-    bMtvJqMwK389uDXF2NNBNbfcyNuiuul4MMc4Jo/yEfTf7qt7Ge6qNZT5V9Z1+qExLY8E
-    jlrIT8qvpQMvPe/dFa2cjwJRyqbszWoKczPogRzEt7KAsFm6qEMNhQy2mtrEJ7HqiIvA
-    q4zDbAfOVec1vD+Nd/8QejXiFSVnMmCOss8gny6jf9qD0GQxw6UaqnkEl9Vi48HPzoPr
-    w+xyX8Qbkrcwxa7NkfgDvZD0FroTjH9h3oVa9R76X6lj8X9OaPjbcGWVMjKeOAuEmla5
-    sukA==
+    b=AcDMLQgJrf928xP1VMewakE7nlCxK5jYcbbzUUPpomm4zxtq0mH3S6VrBajHy52DXS
+    IYb0JcKzArcNJgVz3OWsgfmtyOi/ekzbMTI/iw22+EiE/TpeqbTcUhaYBT3xJeLsq0q8
+    uwbudcydiikSIs4Xrj6OpQC5ecD0vn8lxXhGmOhVnyyYpiDrTx4qEtQMkd7n0oizsVYq
+    pJa7yIB7MuYIlj4Rj2ffmeGVJgTg6GvbXp38cE7jQMMebuLr1TPSgDj0M56J+IrT8qQB
+    R0ZN9XufK7Leqz5P6U6svUS6Ne9aDwcuhcrX4WiIILJ7lBgtLE5BChmr1bNZTT4BQzTR
+    swpg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686208275;
     s=strato-dkim-0002; d=strato.com;
     h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
     From:Subject:Sender;
-    bh=atGFNVhcudPWSzunIu6o4jd6PdOH+kV92QmDJh1lvok=;
-    b=oK0fPSX+YC0WrFm4pv3QwmBTAo+kuXhOtgZadaLXlFwgnPMfijYiBxqznorrc6/AXW
-    OGp/nJIPtK1Wv5vAJn3IXS/v0H+j5RxntBMHG7lA3qNU9yRBz9BfeBCzDS9+Tmw0MOqI
-    sgCLT0fNkQ+IhwHNXf1dtiykjEYjekD8Ljjxt9wNig6k0Ad5aQLQZlsiT2vmpE1OdtwI
-    M7PQbs0APwESKGBWyJu5oUAm9ncHtQuv5x8eMqeKmfSwGBNivqw5M1AQ1843hzHlJey8
-    LFD6S7oIhcewp8zBPSSB37rXszXxDb+OXTc/iNAbLu+s7TbWBVbUcjk+G7TmqrWlslPr
-    Sx3g==
+    bh=HZV9aVwyvKPAu680AA1+pBj60E1yrRK6tgCJfx+g4+I=;
+    b=ahAKDrPg5wZfzX93wrwW3bQIuTGiN+loR8hNa2C02smNl9T8dYa6ZNxQbLTffqor2q
+    NpuzmvLbQSGMKhC3squCyY+3UxzZzA2KAvUk8iGm02scfd55WnXWWi02D/U10YmA8MVg
+    t2eGerKqCvu4WwbGT7YX+4cOtsNtIM8Vx3hsCzlb+NJUW/AeSXZ+RNxoJaRDvURMWwF8
+    NNj2VgRK5PjTb8VPRdMQkFj6gY2xg5Zxtvgq4Q5l6e9BNv9us54uopZ6IUk1oxMpMZeF
+    oRNqwxAj5l0uQz0+TVLtJGnu0h3lPMxVM0Ae4SlkoVWHtkRE3sZtXC4ML41OW/N7hNIW
+    GBGw==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
@@ -42,35 +42,34 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686208275;
     s=strato-dkim-0002; d=gerhold.net;
     h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
     From:Subject:Sender;
-    bh=atGFNVhcudPWSzunIu6o4jd6PdOH+kV92QmDJh1lvok=;
-    b=nv1UkSknAxnxEsLVepCvHxr8ERddZaPSBl8tVexLbSAPetQnNVfzzwjHmjLxqk1G6j
-    UP69LNSyR9OFRMFNsptoT+NtJB46HlYPVIRMMt50vsXKoPomg9mBa/W3G/BUXWhPZWP3
-    CUyfcWYqNVnLWF1RNjRLLLkWo0LvOKJ74yv0xXKsEE72tr6EMQjz4hBD1lCWMmdqazBY
-    /Wf3IgteBRSyIBfKhqsGhACvpv2m4mMFziOwMtD5eNkFYvGeGDYgNVAOnfzlhByxu1Px
-    iL6WcL2WXyi0zhX9TbV1pFjKhNLJEKKPJpQOddfcJiGfVYU8f7mD+aEdkcbKNQ9q3Exh
-    PBJQ==
+    bh=HZV9aVwyvKPAu680AA1+pBj60E1yrRK6tgCJfx+g4+I=;
+    b=SrymmMk1wFsWcBzbETLYZzA5qdTaHHEiVqDKU6cQJx3xQd4xpuQdt5WbgnPARZykSy
+    UsGi0YjsZFIiVbpUAToCVGIsrNw0tyoqxE1T9uXmGyyhNEAMwMTuICoLS0tLm+baaFwp
+    jaGVpZSx/PKxw7v6o1cGk0RH9p68Ec03PH7GDdJv7JfAAyl4MIV6m+qXW/b2Wfnjg7w1
+    2SBD5yvGNylcnfMY4M46jG3tvDfCs/hBQjGFY2OCwXAWT8sHc2p+y84dCGCriIPM4ilD
+    LTYkBm4ziN44nIBJsgb5+I6DXFLub3WMycHM2uED18Bj/31u9O6LS+seLQCOuKG91UYD
+    ZHdg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686208275;
     s=strato-dkim-0003; d=gerhold.net;
     h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
     From:Subject:Sender;
-    bh=atGFNVhcudPWSzunIu6o4jd6PdOH+kV92QmDJh1lvok=;
-    b=YzBrDpgrDg6dpqB8kmUHVuaZkweBLAyhLl76YO0GffO8lLwk+UZBktOQtjQyQbok/w
-    0Kp6VHmtn7M1bDwgMnDw==
+    bh=HZV9aVwyvKPAu680AA1+pBj60E1yrRK6tgCJfx+g4+I=;
+    b=v5ey92iIJCO/+NL+GNQsUuqvQwHNpXT5yRg24wRnXANkZgRoaz5zPXcI/1wiXsf035
+    eLFXALlDUYxM4BKxgDDw==
 X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQjVd4CteZ/7jYgS+mLFY+H0JAn8u4ly9TY="
 Received: from [192.168.244.3]
     by smtp.strato.de (RZmta 49.5.3 DYNA|AUTH)
-    with ESMTPSA id Z82ec2z587BFKI4
+    with ESMTPSA id Z82ec2z587BFKI5
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
     Thu, 8 Jun 2023 09:11:15 +0200 (CEST)
 From:   Stephan Gerhold <stephan@gerhold.net>
-Date:   Thu, 08 Jun 2023 09:10:31 +0200
-Subject: [PATCH v2 11/12] ARM: dts: qcom: Add rpm-proc node for SMD
- platforms
+Date:   Thu, 08 Jun 2023 09:10:32 +0200
+Subject: [PATCH v2 12/12] ARM: dts: qcom: apq8064: Drop redundant /smd node
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230531-rpm-rproc-v2-11-56a4a00c8260@gerhold.net>
+Message-Id: <20230531-rpm-rproc-v2-12-56a4a00c8260@gerhold.net>
 References: <20230531-rpm-rproc-v2-0-56a4a00c8260@gerhold.net>
 In-Reply-To: <20230531-rpm-rproc-v2-0-56a4a00c8260@gerhold.net>
 To:     Bjorn Andersson <andersson@kernel.org>
@@ -94,157 +93,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rather than having the RPM SMD channels as the only child of a dummy
-SMD node, switch to representing the RPM as remoteproc like all the
-other remoteprocs (WCNSS, modem DSP).
+The "smd-edge"s for remote processors are typically specified below the
+remoteproc nodes. For some reason apq8064 also has them all listed in a
+top-level /smd node, disabled by default. None of the boards enable them.
 
-This allows assigning additional subdevices to it like the MPM
-interrupt-controller or rpm-master-stats.
+Right now apq8064 only has support for WCNSS/riva, but there the
+smd-edge is already defined with the same interrupt etc below the
+riva-pil node.
 
+Drop these redundant definitions since the /smd top-level node is now
+deprecated.
+
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
 ---
- arch/arm/boot/dts/qcom-apq8084.dtsi |  6 ++---
- arch/arm/boot/dts/qcom-msm8226.dtsi | 38 ++++++++++++++++----------------
- arch/arm/boot/dts/qcom-msm8974.dtsi | 44 ++++++++++++++++++-------------------
- 3 files changed, 44 insertions(+), 44 deletions(-)
+ arch/arm/boot/dts/qcom-apq8064.dtsi | 40 -------------------------------------
+ 1 file changed, 40 deletions(-)
 
-diff --git a/arch/arm/boot/dts/qcom-apq8084.dtsi b/arch/arm/boot/dts/qcom-apq8084.dtsi
-index 8f178bc87e1d..2b1f9d0fb510 100644
---- a/arch/arm/boot/dts/qcom-apq8084.dtsi
-+++ b/arch/arm/boot/dts/qcom-apq8084.dtsi
-@@ -784,10 +784,10 @@ spmi_bus: spmi@fc4cf000 {
- 		};
+diff --git a/arch/arm/boot/dts/qcom-apq8064.dtsi b/arch/arm/boot/dts/qcom-apq8064.dtsi
+index d2289205ff81..e0adf237fc5c 100644
+--- a/arch/arm/boot/dts/qcom-apq8064.dtsi
++++ b/arch/arm/boot/dts/qcom-apq8064.dtsi
+@@ -226,46 +226,6 @@ smem {
+ 		hwlocks = <&sfpb_mutex 3>;
  	};
  
 -	smd {
 -		compatible = "qcom,smd";
-+	rpm: remoteproc {
-+		compatible = "qcom,apq8084-rpm-proc", "qcom,rpm-proc";
- 
--		rpm {
-+		smd-edge {
- 			interrupts = <GIC_SPI 168 IRQ_TYPE_EDGE_RISING>;
- 			qcom,ipc = <&apcs 8 0>;
- 			qcom,smd-edge = <15>;
-diff --git a/arch/arm/boot/dts/qcom-msm8226.dtsi b/arch/arm/boot/dts/qcom-msm8226.dtsi
-index a3a9162e9c28..a3e8d023d0e6 100644
---- a/arch/arm/boot/dts/qcom-msm8226.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8226.dtsi
-@@ -53,26 +53,10 @@ pmu {
- 					 IRQ_TYPE_LEVEL_HIGH)>;
- 	};
- 
--	reserved-memory {
--		#address-cells = <1>;
--		#size-cells = <1>;
--		ranges;
 -
--		smem_region: smem@3000000 {
--			reg = <0x3000000 0x100000>;
--			no-map;
+-		modem-edge {
+-			interrupts = <0 37 IRQ_TYPE_EDGE_RISING>;
+-
+-			qcom,ipc = <&l2cc 8 3>;
+-			qcom,smd-edge = <0>;
+-
+-			status = "disabled";
 -		};
 -
--		adsp_region: adsp@dc00000 {
--			reg = <0x0dc00000 0x1900000>;
--			no-map;
+-		q6-edge {
+-			interrupts = <0 90 IRQ_TYPE_EDGE_RISING>;
+-
+-			qcom,ipc = <&l2cc 8 15>;
+-			qcom,smd-edge = <1>;
+-
+-			status = "disabled";
 -		};
--	};
 -
--	smd {
--		compatible = "qcom,smd";
-+	rpm: remoteproc {
-+		compatible = "qcom,msm8226-rpm-proc", "qcom,rpm-proc";
- 
--		rpm {
-+		smd-edge {
- 			interrupts = <GIC_SPI 168 IRQ_TYPE_EDGE_RISING>;
- 			qcom,ipc = <&apcs 8 0>;
- 			qcom,smd-edge = <15>;
-@@ -120,6 +104,22 @@ rpmpd_opp_super_turbo: opp6 {
- 		};
- 	};
- 
-+	reserved-memory {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
-+
-+		smem_region: smem@3000000 {
-+			reg = <0x3000000 0x100000>;
-+			no-map;
-+		};
-+
-+		adsp_region: adsp@dc00000 {
-+			reg = <0x0dc00000 0x1900000>;
-+			no-map;
-+		};
-+	};
-+
- 	smem {
- 		compatible = "qcom,smem";
- 
-diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi b/arch/arm/boot/dts/qcom-msm8974.dtsi
-index 58e144957c5d..0a5b5ecb5dfa 100644
---- a/arch/arm/boot/dts/qcom-msm8974.dtsi
-+++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
-@@ -113,6 +113,28 @@ pmu {
- 		interrupts = <GIC_PPI 7 0xf04>;
- 	};
- 
-+	rpm: remoteproc {
-+		compatible = "qcom,msm8974-rpm-proc", "qcom,rpm-proc";
-+
-+		smd-edge {
-+			interrupts = <GIC_SPI 168 IRQ_TYPE_EDGE_RISING>;
-+			qcom,ipc = <&apcs 8 0>;
-+			qcom,smd-edge = <15>;
-+
-+			rpm_requests: rpm-requests {
-+				compatible = "qcom,rpm-msm8974";
-+				qcom,smd-channels = "rpm_requests";
-+
-+				rpmcc: clock-controller {
-+					compatible = "qcom,rpmcc-msm8974", "qcom,rpmcc";
-+					#clock-cells = <1>;
-+					clocks = <&xo_board>;
-+					clock-names = "xo";
-+				};
-+			};
-+		};
-+	};
-+
- 	reserved-memory {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
-@@ -293,28 +315,6 @@ wcnss_smsm: wcnss@7 {
- 		};
- 	};
- 
--	smd {
--		compatible = "qcom,smd";
+-		dsps-edge {
+-			interrupts = <0 138 IRQ_TYPE_EDGE_RISING>;
 -
--		rpm {
--			interrupts = <GIC_SPI 168 IRQ_TYPE_EDGE_RISING>;
--			qcom,ipc = <&apcs 8 0>;
--			qcom,smd-edge = <15>;
+-			qcom,ipc = <&sps_sic_non_secure 0x4080 0>;
+-			qcom,smd-edge = <3>;
 -
--			rpm_requests: rpm-requests {
--				compatible = "qcom,rpm-msm8974";
--				qcom,smd-channels = "rpm_requests";
+-			status = "disabled";
+-		};
 -
--				rpmcc: clock-controller {
--					compatible = "qcom,rpmcc-msm8974", "qcom,rpmcc";
--					#clock-cells = <1>;
--					clocks = <&xo_board>;
--					clock-names = "xo";
--				};
--			};
+-		riva-edge {
+-			interrupts = <0 198 IRQ_TYPE_EDGE_RISING>;
+-
+-			qcom,ipc = <&l2cc 8 25>;
+-			qcom,smd-edge = <6>;
+-
+-			status = "disabled";
 -		};
 -	};
 -
- 	soc: soc {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
+ 	smsm {
+ 		compatible = "qcom,smsm";
+ 
 
 -- 
 2.40.1
