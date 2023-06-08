@@ -2,245 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B23EE727BF6
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:54:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 466427286AA
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 19:54:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235507AbjFHJye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 05:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51722 "EHLO
+        id S236024AbjFHRyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 13:54:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235350AbjFHJy2 (ORCPT
+        with ESMTP id S231336AbjFHRyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 05:54:28 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1325E62;
-        Thu,  8 Jun 2023 02:54:25 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3589rs1L025077;
-        Thu, 8 Jun 2023 04:53:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1686218034;
-        bh=6+5fwS0JDLD0KpIfX92CwlorVGpMYUaNA0VFqOEMhNI=;
-        h=Date:CC:Subject:To:References:From:In-Reply-To;
-        b=KPY3n4bjyOvBlcWpZyjASdmuZC7bWMc7M9eXaNxaMpHIXNRoPMtqBED4t/0gov+cG
-         Dq0vdy8e/64lLSxJ/kTSVA11T94woTCWemEw9GE4BbYfx9WviFeqsUmdM0cfOfgzsi
-         RSFS54vAF1LyNMy48aG4geCt03ULfOSgOwqUWtcw=
-Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3589rsXB042352
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 8 Jun 2023 04:53:54 -0500
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 8
- Jun 2023 04:53:54 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 8 Jun 2023 04:53:54 -0500
-Received: from [172.24.145.61] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3589rob1031680;
-        Thu, 8 Jun 2023 04:53:50 -0500
-Message-ID: <e9e1543f-0f38-89ed-f179-71ac8724f4e0@ti.com>
-Date:   Thu, 8 Jun 2023 15:23:49 +0530
+        Thu, 8 Jun 2023 13:54:45 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2071.outbound.protection.outlook.com [40.107.100.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04982D6A;
+        Thu,  8 Jun 2023 10:54:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FQ/pMA7c3/Mi+7Xp/E6OdvN0hswgnlVEtUgGilgI6YA22gHvIutp6IrIADllg9VE633cijDd8Q632kV8baZArcU+1VIriU1o4/8eC/flhTQIMlTTiU8A4HJcNmnELSgdWs+uoAd7emMxRzw1Zve8tratsyDhs51gvbzMf9Dj5kFMeCbk/Wc72OBDkJYBKIVzpyL8iQ+pviuC7WARDO9BTokVNC/YGAJEOBb+1dLrjbqxHA+CjY0GSZ2khlvsrVXLNGOISOTj/0+LD1lJMAB0ZGJx3eIKqFwALFRnS00I77oVqQTl5T83Z3SkoX87mlPKRqwlQtBsvBscAXWvmf/vDQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=d7sD+ORmXuDzPDkIJLGJ/J8tSBiUuS6MFTbvVMoF0Ng=;
+ b=VLKCG9nXEr9ZAkxkcYtzmxrezEVor1eEVTIoIMg63HXuh1yVqtlvrKkidXK2m4o2fKJ4nym8nVr7ZIhkvhW8Sb52sPFtAK8TlyXQXK5m9bcGOOA2VnDjft0bC3Shy8f7QKPXVuXlqUtI+VWi36WxoZ9+iY5OEqy2+ktXggBSVLo5V4bNWkuSsAgfcbgEYfHhp8a2btS8shJv0De1cnMXo3E7kL/aYRUwnCmqiOTzbOa3PnULTMOWTqRnRhONGfU+O7QkWyctoewqGa1+Ku19d60aibZUE+WlG+a5GKulzQVsNhavX13Kpmd7bVNgkeLaHd3+kAH7eRll+8/HtAL/Xg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=d7sD+ORmXuDzPDkIJLGJ/J8tSBiUuS6MFTbvVMoF0Ng=;
+ b=ZBJD6gbmWrMC69KodwSDoL1MbknCO0SuyawViWeukZ/IUYTwv7rB2PTEnlIIVtCFgnuAbjhi/7ufEceOP2X3/fpOs1yIMtheg7/9N941ynzoESB3Sne6m0WB6jihHB9ZK5uvn2x0kH9NAoL64FOJB0MeM7C1Py7Pdso4RsC7sdY=
+Received: from MW3PR05CA0003.namprd05.prod.outlook.com (2603:10b6:303:2b::8)
+ by CH3PR12MB9148.namprd12.prod.outlook.com (2603:10b6:610:19d::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Thu, 8 Jun
+ 2023 17:54:39 +0000
+Received: from CO1NAM11FT073.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:2b:cafe::f5) by MW3PR05CA0003.outlook.office365.com
+ (2603:10b6:303:2b::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.25 via Frontend
+ Transport; Thu, 8 Jun 2023 17:54:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT073.mail.protection.outlook.com (10.13.174.196) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6477.24 via Frontend Transport; Thu, 8 Jun 2023 17:54:38 +0000
+Received: from SITE-L-T34-2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 8 Jun
+ 2023 12:54:37 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     <rafael@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <perry.yuan@amd.com>, <Ray.Huang@amd.com>, <Wyes.Karny@amd.com>,
+        <gautham.shenoy@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        "Sun Peng Li" <sunpeng.li@amd.com>
+Subject: [PATCH] cpufreq: amd-pstate: Set default governor to schedutil
+Date:   Thu, 8 Jun 2023 04:53:58 -0500
+Message-ID: <20230608095358.30548-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-CC:     <tjoseph@cadence.com>, <robh@kernel.org>, <kw@linux.com>,
-        <bhelgaas@google.com>, <nadeem@cadence.com>,
-        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <vigneshr@ti.com>,
-        <srk@ti.com>, <nm@ti.com>, <s-vadapalli@ti.com>
-Subject: Re: [PATCH v3] PCI: cadence: Fix Gen2 Link Retraining process
-Content-Language: en-US
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
-References: <20230607091427.852473-1-s-vadapalli@ti.com>
- <ZIBanRGGPeFw90NZ@lpieralisi> <5888f3ff-bc95-16ed-3cae-958719d87874@ti.com>
- <ZIGi9Tfk7hemFIM6@lpieralisi>
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-In-Reply-To: <ZIGi9Tfk7hemFIM6@lpieralisi>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT073:EE_|CH3PR12MB9148:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1560cdee-c71a-4410-79cb-08db68496dc7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: puGc0q1FcbiLU/MY7KsZd7haGnHmJ/i5ubpRtzS7qg9iBe+SNYZWFlbwKee8LwNvicmjfaKuZEn0a5zxIH57RSEbnd9wNd+5bmx/S7QiVex1YOykUbPvOJXhBiYGWL7j4jxnJn+6yuYrZ/NaqKzP7TVcrKw+mPv4TSMr9LW9CDoyVLjxFt+IXQd8rTMg6ZtKnok53yfQ0Ot7HawPOtFEmIaVhxQmS6ESccpFIuMud26z5zgncMlvbYl20/zQQ9/jX5b/HAo3P3MxqcxLudaOKTZrq4y7vPPhBWQCLYbngPG3tVrbNh7NOiSk3e9CCHV1S2kdQCZcH1lUpzM0gzQhnIaL40coT6YLA7rCI1ebt0Pz5Ls3e4RDPpj5ZfovH/Ri7lq8eNz2oBJK7mZnwX0e/JkYyCgBbFjc+vAwNwTVw7q/NPp27liKKM4l93isoy/dUxrPPKpcVgnRWEOBTLNczXgiuV6FktZT0ZlL1O2LSlTfg3jaP0gqNcAmNBiqUsFSKfPKpk6icxDAalru+Xe/C380u+lLBy4U9X1tpyB5LK8anXgtoFGYSeO3YiCROaxAFlfrsAGspd7+8Gkk5uEgAAUZYekmxO6kshXn8roTyIKYOAyswPokPoq4x1dyweDYosRQSqAa7qgMmdp+FXzOAoK5WD5ylBsNhPtbmPWUPZweTq2C+kTm6G/SFn/LfcB9D4CBaj7jTqxVhTC+FEkZNBMOWRs3WKQZMh4wSoq/X405eehfCBVJdSwDP2tw78I4t3eLN5KqL/V9Ok62Wa9gag==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(396003)(39860400002)(346002)(451199021)(46966006)(36840700001)(40470700004)(40460700003)(70586007)(70206006)(316002)(6916009)(4326008)(54906003)(478600001)(86362001)(36756003)(6666004)(47076005)(83380400001)(36860700001)(1076003)(26005)(426003)(336012)(16526019)(186003)(41300700001)(8936002)(82310400005)(8676002)(5660300002)(44832011)(2906002)(7696005)(40480700001)(356005)(81166007)(82740400003)(2616005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2023 17:54:38.5185
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1560cdee-c71a-4410-79cb-08db68496dc7
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT073.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9148
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The Kconfig currently defaults the governor to schedutil on x86_64
+only when intel-pstate and SMP have been selected.
 
+If the kernel is built only with amd-pstate, the default governor
+should also be schedutil.
 
-On 08/06/23 15:14, Lorenzo Pieralisi wrote:
-> On Thu, Jun 08, 2023 at 09:31:59AM +0530, Siddharth Vadapalli wrote:
->> Hello Lorenzo,
->>
->> Thank you for reviewing this patch.
->>
->> On 07/06/23 15:53, Lorenzo Pieralisi wrote:
->>> On Wed, Jun 07, 2023 at 02:44:27PM +0530, Siddharth Vadapalli wrote:
->>>> The Link Retraining process is initiated to account for the Gen2 defect in
->>>> the Cadence PCIe controller in J721E SoC. The errata corresponding to this
->>>> is i2085, documented at:
->>>> https://www.ti.com/lit/er/sprz455c/sprz455c.pdf
->>>>
->>>> The existing workaround implemented for the errata waits for the Data Link
->>>> initialization to complete and assumes that the link retraining process
->>>> at the Physical Layer has completed. However, it is possible that the
->>>> Physical Layer training might be ongoing as indicated by the
->>>> PCI_EXP_LNKSTA_LT bit in the PCI_EXP_LNKSTA register.
->>>>
->>>> Fix the existing workaround, to ensure that the Physical Layer training
->>>> has also completed, in addition to the Data Link initialization.
->>>>
->>>> Fixes: 4740b969aaf5 ("PCI: cadence: Retrain Link to work around Gen2 training defect")
->>>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
->>>> Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
->>>> ---
->>>>
->>>> Hello,
->>>>
->>>> This patch is based on linux-next tagged next-20230606.
->>>>
->>>> v2:
->>>> https://lore.kernel.org/r/20230315070800.1615527-1-s-vadapalli@ti.com/
->>>> Changes since v2:
->>>> - Merge the cdns_pcie_host_training_complete() function with the
->>>>   cdns_pcie_host_wait_for_link() function, as suggested by Bjorn
->>>>   for the v2 patch.
->>>> - Add dev_err() to notify when Link Training fails, since this is a
->>>>   fatal error and proceeding from this point will almost always crash
->>>>   the kernel.
->>>>
->>>> v1:
->>>> https://lore.kernel.org/r/20230102075656.260333-1-s-vadapalli@ti.com/
->>>> Changes since v1:
->>>> - Collect Reviewed-by tag from Vignesh Raghavendra.
->>>> - Rebase on next-20230315.
->>>>
->>>> Regards,
->>>> Siddharth.
->>>>
->>>>  .../controller/cadence/pcie-cadence-host.c    | 20 +++++++++++++++++++
->>>>  1 file changed, 20 insertions(+)
->>>>
->>>> diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
->>>> index 940c7dd701d6..70a5f581ff4f 100644
->>>> --- a/drivers/pci/controller/cadence/pcie-cadence-host.c
->>>> +++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
->>>> @@ -12,6 +12,8 @@
->>>>  
->>>>  #include "pcie-cadence.h"
->>>>  
->>>> +#define LINK_RETRAIN_TIMEOUT HZ
->>>> +
->>>>  static u64 bar_max_size[] = {
->>>>  	[RP_BAR0] = _ULL(128 * SZ_2G),
->>>>  	[RP_BAR1] = SZ_2G,
->>>> @@ -80,8 +82,26 @@ static struct pci_ops cdns_pcie_host_ops = {
->>>>  static int cdns_pcie_host_wait_for_link(struct cdns_pcie *pcie)
->>>>  {
->>>>  	struct device *dev = pcie->dev;
->>>> +	unsigned long end_jiffies;
->>>> +	u16 link_status;
->>>>  	int retries;
->>>>  
->>>> +	/* Wait for link training to complete */
->>>> +	end_jiffies = jiffies + LINK_RETRAIN_TIMEOUT;
->>>> +	do {
->>>> +		link_status = cdns_pcie_rp_readw(pcie, CDNS_PCIE_RP_CAP_OFFSET + PCI_EXP_LNKSTA);
->>>> +		if (!(link_status & PCI_EXP_LNKSTA_LT))
->>>> +			break;
->>>
->>> You can use a bool variable eg link_trained and use that below.
->>
->> Sure, I will do that. link_trained = !(link_status & PCI_EXP_LNKSTA_LT); within
->> the do-while loop and checking for it to be true in the loop as well as below.
->>
->>>
->>>> +		usleep_range(0, 1000);
->>>> +	} while (time_before(jiffies, end_jiffies));
->>>> +
->>>> +	if (!(link_status & PCI_EXP_LNKSTA_LT)) {
->>>> +		dev_info(dev, "Link training complete\n");
->>>> +	} else {
->>>> +		dev_err(dev, "Fatal! Link training incomplete\n");
->>>> +		return -ETIMEDOUT;
->>>> +	}
->>>
->>> I don't necessarily see the reason why you are adding additional
->>> logging, more so given that this now does not affect just the
->>> workaround but all cadence controllers.
->>>
->>> Actually, is that something you have tested and considered ?
->>
->> While I agree that I could have performed the entire Link Training check only if
->> the Gen2 Link Retraining Quirk is set for the RC, considering that the
->> completion of the Link Training is a necessity irrespective of whether or not
->> the Quirk exists, I preferred to add the check unconditionally. I would like to
->> point out that the race condition responsible for the crash is the following:
->> Without the completion of the Physical Layer link training, the call to the
->> cdns_pci_map_bus() function in order to access the End Point's registers (if an
->> EP device is connected) results in the crash. This is primarily observed only on
->> RT Linux where the software call to cdns_pci_map_bus() by PCI subsystem occurs
->> quite fast, before the Physical Layer link training is complete. For this
->> reason, irrespective of whether the Physical Layer link training occurs only
->> once because of the default flow or occurs a second time due to the Gen2 Link
->> Retraining Quirk, it appears to me that the crash could potentially occur in
->> both cases if we don't wait for the Physical Layer link training to complete.
-> 
-> This means that you are fixing the controller code for all Cadence platforms
-> and current code is broken (I am not really sure what you mean wrt RT Linux
-> - please elaborate, this does not sound good to me at all), so the
-> commit log must be rewritten.
+Cc: Sun Peng (Leo) Li <sunpeng.li@amd.com>
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+---
+ drivers/cpufreq/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-By RT Linux, I am referring to Linux with Real Time configs enabled such as
-PREEMPT_RT, which results in faster code execution and lower latency.
-All along, it appears to be the case that with the Link Training initiated in
-PCIe controller hardware, the driver proceeds to finish the probe and therefore
-allow the PCI core subsystem to perform enumeration. However, as it turns out,
-the driver appears to have been depending on the latency of other processes
-running in the background, due to which the device enumeration process by the
-PCI core subsystem got delayed, thereby ensuring that the Link Training process
-in the PCIe controller hardware had successfully finished by that point in time.
-With RT configs, that latency has been reduced, resulting in the bus enumeration
-process starting off much earlier, and occurring while the PCIe controller is
-still performing Link Training.
-
-> 
->> Please let me know if this sounds acceptable. If not, I will check if the quirk
->> is set before proceeding to verify link training completion and implement this
->> in the v4 patch.
-> 
-> Not only this is acceptable but that's what you should do. Current code
-> relies on assumptions (that you will have to explain to me please) wrt
-> link training and that's not OK.
-
-Please let me know if further clarification is required in addition to my
-comment above.
-
-> 
-> Lorenzo
-> 
->>
->>>
->>> Thanks,
->>> Lorenzo
->>>
->>>> +
->>>>  	/* Check if the link is up or not */
->>>>  	for (retries = 0; retries < LINK_WAIT_MAX_RETRIES; retries++) {
->>>>  		if (cdns_pcie_link_up(pcie)) {
->>>> -- 
->>>> 2.25.1
->>>>
->>
->> -- 
->> Regards,
->> Siddharth.
-
+diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig
+index 2c839bd2b051..a1c51abddbc5 100644
+--- a/drivers/cpufreq/Kconfig
++++ b/drivers/cpufreq/Kconfig
+@@ -38,7 +38,7 @@ choice
+ 	prompt "Default CPUFreq governor"
+ 	default CPU_FREQ_DEFAULT_GOV_USERSPACE if ARM_SA1110_CPUFREQ
+ 	default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if ARM64 || ARM
+-	default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if X86_INTEL_PSTATE && SMP
++	default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if (X86_INTEL_PSTATE || X86_AMD_PSTATE) && SMP
+ 	default CPU_FREQ_DEFAULT_GOV_PERFORMANCE
+ 	help
+ 	  This option sets which CPUFreq governor shall be loaded at
 -- 
-Regards,
-Siddharth.
+2.34.1
+
