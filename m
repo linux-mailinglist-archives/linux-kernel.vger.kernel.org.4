@@ -2,57 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1611728929
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 22:06:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 753BF728926
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 22:06:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236240AbjFHUGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 16:06:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59528 "EHLO
+        id S235939AbjFHUGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 16:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235985AbjFHUGR (ORCPT
+        with ESMTP id S229845AbjFHUF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 16:06:17 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678A42733
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 13:06:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686254775; x=1717790775;
-  h=date:from:to:cc:subject:message-id;
-  bh=X3PlW5wMFegGroIE/7biwT4qrkPJ6GZH7/CXZ6Ps5YA=;
-  b=QNB6OZV8SbN6vZqTDREktRnfmoahMzadZ9MK1Yt7PMz+7Z7fa/O6ehiB
-   E5/bz2k3aVq22rxrEO08mO2hEL23vGfxNDDBuPDkelwnoGcOvt8vwY/S/
-   d+zYFzFE8jPZRG9jZClsGcRaisoQquGSlZfXZGKCGkPnWr8R53eaaNIpz
-   TCYZDvbQE8epCUaWZ2NVbV09C3wkVB/kzHp1mIGb6PE+/nG57HFVMRWR6
-   XoxQC1bSjgPsKdMH8dEv2haGMMwRVOFWOr4N6XKUh+BjXNi3AdUxxjKBj
-   0htCNBDm/sTwnNskmMWSEJ/VIXK+ficMcP4QY2wNUMuxLIqMHBRs0CJK+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="357426848"
-X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
-   d="scan'208";a="357426848"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 13:05:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="739885393"
-X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
-   d="scan'208";a="739885393"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 08 Jun 2023 13:05:43 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q7Lt9-0008Dk-0j;
-        Thu, 08 Jun 2023 20:05:43 +0000
-Date:   Fri, 09 Jun 2023 04:05:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/merge] BUILD SUCCESS
- ed1e745dafc282905e0a96ce8f4ce2f3c885f3ff
-Message-ID: <202306090434.dw3l4raT-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Thu, 8 Jun 2023 16:05:59 -0400
+Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B06B9;
+        Thu,  8 Jun 2023 13:05:56 -0700 (PDT)
+Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-33b1e83e1daso4877725ab.0;
+        Thu, 08 Jun 2023 13:05:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686254755; x=1688846755;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0/sR8/S11r6POKJwJKZdRyyXC9EYM0/cQxZIkmiJzsI=;
+        b=JRPIuhhmKyEUQLQ/SpOQzFK7PltQumnuLYZ0gPLtuMBS9DfVJIsm6xLVirNij1ta6T
+         EycuEU/bYjODCeP1NthOVTx8hYn5WSJUgqLdkvrAqLb1UJsVsPSaA9Jh4U73FW/lMtg+
+         yAAI3SZr8TVEm8GqlgGUL49IX0FO0+Uecz8xSEXgI6yZzLjRFFrSyRyp01rqtGWiQ06l
+         GZ1oc/q66JcqieM9QbzqSKcA8brJLlZgJwSp2doyymUFaqk0JwH6hOLrxrK5InjDy27V
+         Ybtz/THwO7wSRi2rpfmEO1r1UfFW6Q5LyZV+M3gOeoZlEe/SiM8h4LIp1z/iibpPm5gk
+         YUwA==
+X-Gm-Message-State: AC+VfDy40COyb2+aFBmlw4CoE4xaTWt7sMyVXToVZ0+xWxRUAVuo0pN+
+        3Jjsq2VJbcg3mxg8lorcIg==
+X-Google-Smtp-Source: ACHHUZ4Z/oQrytUoNlri3g8lDHCGhsb5liDnpSpmhO6hxn9vEvVy6hx4AJ8tUzV/0PRd4R7ABah0Qg==
+X-Received: by 2002:a05:6602:218c:b0:777:b4b7:f6ac with SMTP id b12-20020a056602218c00b00777b4b7f6acmr10471093iob.10.1686254755522;
+        Thu, 08 Jun 2023 13:05:55 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id u19-20020a02c953000000b0041672c963b3sm483509jao.50.2023.06.08.13.05.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 13:05:54 -0700 (PDT)
+Received: (nullmailer pid 3315825 invoked by uid 1000);
+        Thu, 08 Jun 2023 20:05:52 -0000
+Date:   Thu, 8 Jun 2023 14:05:52 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Julien Stephan <jstephan@baylibre.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        mkorpershoek@baylibre.com, khilman@baylibre.com,
+        Florian Sylvestre <fsylvestre@baylibre.com>,
+        Andy Hsieh <andy.hsieh@mediatek.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Vinod Koul <vkoul@kernel.org>
+Subject: Re: [PATCH v3 2/3] dt-bindings: phy: add mediatek MIPI CD-PHY module
+ v0.5
+Message-ID: <20230608200552.GA3303349-robh@kernel.org>
+References: <20230524083033.486490-1-jstephan@baylibre.com>
+ <20230524083033.486490-3-jstephan@baylibre.com>
+ <f92c39c8-177a-e18d-c3b0-79e7349ea4db@collabora.com>
+ <2jfgupyvtuenvm7x52l6bo5xzzpva7u6njeg3ecd52wwj4spv6@y3nsq7j2hl2u>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2jfgupyvtuenvm7x52l6bo5xzzpva7u6njeg3ecd52wwj4spv6@y3nsq7j2hl2u>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,109 +81,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/merge
-branch HEAD: ed1e745dafc282905e0a96ce8f4ce2f3c885f3ff  Merge branch 'x86/tdx' into x86/merge, to ease integration testing
+On Wed, May 24, 2023 at 04:05:03PM +0200, Julien Stephan wrote:
+> On Wed, May 24, 2023 at 11:45:30AM +0200, AngeloGioacchino Del Regno wrote:
+> > Il 24/05/23 10:30, Julien Stephan ha scritto:
+> > > From: Florian Sylvestre <fsylvestre@baylibre.com>
+> > >
+> > > This adds the bindings, for the MIPI CD-PHY module v0.5 embedded in
+> > > some Mediatek soc, such as the mt8365
+> > >
+> > > Signed-off-by: Florian Sylvestre <fsylvestre@baylibre.com>
+> > > Signed-off-by: Julien Stephan <jstephan@baylibre.com>
+> > > ---
+> > >   .../bindings/phy/mediatek,mt8365-csi-rx.yaml  | 67 +++++++++++++++++++
+> > >   MAINTAINERS                                   |  6 ++
+> > >   2 files changed, 73 insertions(+)
+> > >   create mode 100644 Documentation/devicetree/bindings/phy/mediatek,mt8365-csi-rx.yaml
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/phy/mediatek,mt8365-csi-rx.yaml b/Documentation/devicetree/bindings/phy/mediatek,mt8365-csi-rx.yaml
+> > > new file mode 100644
+> > > index 000000000000..a1bd96a98051
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/phy/mediatek,mt8365-csi-rx.yaml
+> > > @@ -0,0 +1,67 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > +# Copyright (c) 2023 MediaTek, BayLibre
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/phy/mediatek,mt8365-csi-rx.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Mediatek Sensor Interface MIPI CSI CD-PHY
+> > > +
+> > > +maintainers:
+> > > +  - Julien Stephan <jstephan@baylibre.com>
+> > > +  - Andy Hsieh <andy.hsieh@mediatek.com>
+> > > +
+> > > +description:
+> > > +  The SENINF CD-PHY is a set of CD-PHY connected to the SENINF CSI-2
+> > > +  receivers. The number of PHYs depends on the SoC model.
+> > > +  Depending on the SoC model, each PHYs can be either CD-PHY or D-PHY only
+> > > +  capable.
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    enum:
+> > > +      - mediatek,mt8365-csi-rx
+> > > +
+> > > +  reg:
+> > > +    maxItems: 1
+> > > +
+> > > +  '#phy-cells':
+> > > +    const: 0
+> > > +
+> > > +  mediatek,phy-type:
+> >
+> > Instead of declaring a phy-type here like this, can't we instead declare that in
+> > the phy cells, like we're doing with MTK TPHY and like other non-MediaTek PHYs are
+> > already doing?
+> >
+> > device {
+> > 	...
+> > 	phys = <&csi0_rx PHY_TYPE_CDPHY>;
+> > 	...
+> > }
+> >
+> > Regards,
+> > Angelo
+> >
+> >
+> 
+> Hi Angelo,
+> 
+> This is a hardware property that is not dynamic, so IMHO it doesn't make sense
+> to use phy argument for that. 
 
-elapsed time: 732m
+Why? Interrupt numbers are fixed hardware properties which go in arg 
+cells.
 
-configs tested: 90
-configs skipped: 6
+> Some driver already use a 'phy-type'
+> property (such as phy-cadence-torrent.yaml).
+> 
+> I was thinking of using phy argument on future upgrade when driver will
+> support D-PHY and C-PHY modes so the phy user will be able to choose the
+> mode.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Once you design the binding, you don't get to change it.
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r043-20230608   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r023-20230608   gcc  
-arm                  randconfig-r024-20230608   gcc  
-arm                  randconfig-r046-20230608   gcc  
-arm64                            allyesconfig   gcc  
-arm64        buildonly-randconfig-r002-20230608   gcc  
-arm64        buildonly-randconfig-r004-20230608   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r034-20230608   gcc  
-csky                                defconfig   gcc  
-hexagon              randconfig-r041-20230608   clang
-hexagon              randconfig-r045-20230608   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i005-20230608   gcc  
-i386                 randconfig-i006-20230608   gcc  
-i386                 randconfig-i016-20230608   clang
-i386                 randconfig-i051-20230608   gcc  
-i386                 randconfig-i052-20230608   gcc  
-i386                 randconfig-i053-20230608   gcc  
-i386                 randconfig-i054-20230608   gcc  
-i386                 randconfig-i055-20230608   gcc  
-i386                 randconfig-i056-20230608   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r004-20230608   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r021-20230608   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips         buildonly-randconfig-r003-20230608   clang
-mips                 randconfig-r002-20230608   clang
-mips                 randconfig-r032-20230608   clang
-nios2                               defconfig   gcc  
-nios2                randconfig-r013-20230608   gcc  
-nios2                randconfig-r014-20230608   gcc  
-openrisc             randconfig-r025-20230608   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r001-20230608   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r012-20230608   clang
-riscv                randconfig-r015-20230608   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r016-20230608   clang
-s390                 randconfig-r035-20230608   gcc  
-sh                               allmodconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r033-20230608   gcc  
-sparc64              randconfig-r011-20230608   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r005-20230608   gcc  
-x86_64       buildonly-randconfig-r006-20230608   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a011-20230608   clang
-x86_64               randconfig-a012-20230608   clang
-x86_64               randconfig-a013-20230608   clang
-x86_64               randconfig-a014-20230608   clang
-x86_64               randconfig-a015-20230608   clang
-x86_64               randconfig-a016-20230608   clang
-x86_64               randconfig-r036-20230608   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa       buildonly-randconfig-r001-20230608   gcc  
-xtensa               randconfig-r005-20230608   gcc  
-xtensa               randconfig-r022-20230608   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Rob
