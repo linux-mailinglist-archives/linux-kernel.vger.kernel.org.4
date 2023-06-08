@@ -2,140 +2,449 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F2E77287DD
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 21:14:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AC2B727E9C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236618AbjFHTNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 15:13:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59614 "EHLO
+        id S235144AbjFHLUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 07:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236602AbjFHTNA (ORCPT
+        with ESMTP id S233645AbjFHLUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 15:13:00 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2059.outbound.protection.outlook.com [40.107.237.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1531230FB;
-        Thu,  8 Jun 2023 12:12:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RiPk2GmgDOBzjHdjRzH3PRQV5xI7/tGU4D5crJUWUH5/gyAyaKklaPhOc/md0q3/G+LgSF6DWDfVqaHcjSZaCa91pwBOmXCQ340XrPTeTWfV6nLDBWzZmQ9m1MvZjEBIavZgnv7S3bDlZFKZZOmqC/OCRb5070VQ7yCj74Ts8ICrGWx1b6Wsckd+AjVgNWl8ziLDe+DHvItpbaCILIUOew6/ETRmv8/8ac3xIq+AvLXXJCPFU7/rlz3WSpDcNB0yZ0Ud3+PIoMzHSepUUGhVShwYinIxU367nNAAUmpFSA5ldpYDBGEcgc5G9pE2J/079NVybaJvMIET7E7imEAIBw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=a73otbbPyEuAM4HluaeLP7RTDTRMl+tnfUEHKBvkGr0=;
- b=O0q9EQHN5URw5EPfVgy1W3b83bA5vzv3pINOY7zy0V6ElIrWAYVj2itb9yqDqbKcw5oZiRRyECPcHQsZvu6RxvptNHgqf+Ap5LvshortzfPqXXG59BZy6DVxDZWN/aUrWhRopr1+iYLm2jYE8T6zYJc4AXyO4SN7zLjCNRUCA3P68wIP5TqPHumAGWLERk5vd1Sw4zpP9/7lvm/G2LypDFf42kl38yPnG6pTI9EFh0Eo9h17ALvr9oWUccgp5zHmIssbfMluKXW1vAwhS40yQltWAIT4pfxz47mzwnzIVw6J136ZW22C5a/k74pXrLhlXettA/cGvnMvz0VpGWaoDg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=gondor.apana.org.au smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=a73otbbPyEuAM4HluaeLP7RTDTRMl+tnfUEHKBvkGr0=;
- b=U2LzrB5WN/RGGf+iZEfJofIwF8YSEj94hPEr76fd467e1MhSUKcl0a+IuCbHsrbgfUAlLNURj7z1pIZJvtnj5gdRQeu0fX2f+Yadf2+/yfYREQUmdeXgt67zk+M7owD0IM0SRjeJktcb0ghLxL84o4bhcw0kc7BCfXBL8J7JE6Y=
-Received: from MW4PR04CA0252.namprd04.prod.outlook.com (2603:10b6:303:88::17)
- by PH7PR12MB6717.namprd12.prod.outlook.com (2603:10b6:510:1b0::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.36; Thu, 8 Jun
- 2023 19:12:34 +0000
-Received: from CO1PEPF000044FC.namprd21.prod.outlook.com
- (2603:10b6:303:88:cafe::f2) by MW4PR04CA0252.outlook.office365.com
- (2603:10b6:303:88::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.25 via Frontend
- Transport; Thu, 8 Jun 2023 19:12:34 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1PEPF000044FC.mail.protection.outlook.com (10.167.241.202) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6500.0 via Frontend Transport; Thu, 8 Jun 2023 19:12:34 +0000
-Received: from SITE-L-T34-2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 8 Jun
- 2023 14:12:29 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Tom Lendacky <thomas.lendacky@amd.com>,
-        John Allen <john.allen@amd.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-CC:     "David S . Miller" <davem@davemloft.net>,
-        <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH v4 11/11] crypto: ccp: Add Mario to MAINTAINERS
-Date:   Thu, 8 Jun 2023 06:17:57 -0500
-Message-ID: <20230608111757.32054-12-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230608111757.32054-1-mario.limonciello@amd.com>
-References: <20230608111757.32054-1-mario.limonciello@amd.com>
+        Thu, 8 Jun 2023 07:20:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA412269E
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 04:19:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686223188;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=sAXJdd97KiFYY0e9r/91ZtcCxcSiQCLGezCoABjxuhc=;
+        b=Mr68dY2A0qkHcyO5Ku93EGQUORHKr13ji4UArMoU35B5uwdLT219RycH3dmlzKePqsyegz
+        feo+rldG+xzcNXzP2rz3RHiZwRwl91lPLDGqZXV5IzHKmlvx3D+PktmtLvlin664nHvVkS
+        5j1eydGnyJyuV3cShVfyNXRhJ0go1T0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-556-wVt6Y_ljNBKe-hI7StWpVg-1; Thu, 08 Jun 2023 07:19:42 -0400
+X-MC-Unique: wVt6Y_ljNBKe-hI7StWpVg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 727AA3C0C892;
+        Thu,  8 Jun 2023 11:19:42 +0000 (UTC)
+Received: from gerbillo.redhat.com (unknown [10.39.194.68])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4272F2026D49;
+        Thu,  8 Jun 2023 11:19:41 +0000 (UTC)
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Networking for 6.4-rc6
+Date:   Thu,  8 Jun 2023 13:19:34 +0200
+Message-Id: <20230608111934.18511-1-pabeni@redhat.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000044FC:EE_|PH7PR12MB6717:EE_
-X-MS-Office365-Filtering-Correlation-Id: fe523062-cdd1-434f-5c7c-08db68545097
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pEGkCpPRbh3V2CpGR19CaFOFNd13/J5Vk47aV/fh7v8i6TCaO65tY8PMpINjPDNPdiPf4Jxz+FMFX/eGd7ISu3QbOMrboSggiSffd62OVzZaG8MbeonUZAhJHR911EbJiLFoCVEsK7y6j6Ec+VivUFCPh0xNt1K75vkIYPwVN/HJ0gKQluKIDKam+frZzwhR+FG6k97BCi54M4Zi3LLixLMPB6dYU+iB8YbgUGYhzgYYzg19cKYvNnQJcKDRTxsaUnTQqEq0Sq/YHvIe9DXPPQ3+hZN7M5tr+iSiIpNEGE3mPwtGs59lT4aH043yvv0G/mYJUye4qWv5/w4E8fzyQ8d3pU+WPt4T4unUYchQ3i+w+kEtpjJCwNWpFYI2xnozev9MGx435Q8MHcyJ7JpFYYcQPudrT23nHAGIpZEvl5OmJdntou+p1mqFSwawKYt6CqND+/+HN+g0i08huXIf5kQIw6YHvO6RMX+GeG2idHv/7G+n5mYK/ztxve5gRlhLLH0fNl566LI7YMytQ5X70tW7KO/6VnxEWMH/jjQCRxIJQZ3sMPullUxnX41JdzJUNgwqTOWgDztHaH6cV/bJ2l4DXEHZDjRqfKnpGVCruOT09ZAOME7Ia7xIHEHmjFXDB8Q5V+mcN/zpTz4zmYEBwOWE7MqanqqmhKTyeoB5hgJqle9tuTMjOtqssI+Vw7s04A5K+efnmLCXi3lIi5pT+rdui+zNAUl2OZoUJTiDA9On0arQXmphaYqXgmqEToJG1rpA0N9IAuyVFU9CVlzcUw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(376002)(396003)(136003)(451199021)(46966006)(36840700001)(40470700004)(110136005)(186003)(54906003)(70586007)(70206006)(81166007)(4326008)(356005)(6666004)(82310400005)(336012)(47076005)(426003)(478600001)(83380400001)(36860700001)(82740400003)(7696005)(2616005)(26005)(4744005)(2906002)(1076003)(40460700003)(36756003)(316002)(44832011)(41300700001)(40480700001)(8676002)(86362001)(5660300002)(16526019)(8936002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2023 19:12:34.0289
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: fe523062-cdd1-434f-5c7c-08db68545097
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000044FC.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6717
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I will maintain the platform access interface and dynamic boost
-control support.
+Hi Linus!
 
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
-v3->v4:
- * Add reference to new tools/crypto/ccp/dbc.c
----
- MAINTAINERS | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+The netfilter issue you have been notified is a WIP.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f2e19f576fec..709ebc2ebbe2 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -988,6 +988,18 @@ S:	Supported
- F:	drivers/crypto/ccp/sev*
- F:	include/uapi/linux/psp-sev.h
- 
-+AMD CRYPTOGRAPHIC COPROCESSOR (CCP) DRIVER - DBC SUPPORT
-+M:	Mario Limonciello <mario.limonciello@amd.com>
-+L:	linux-crypto@vger.kernel.org
-+S:	Supported
-+F:	drivers/crypto/ccp/dbc.c
-+F:	drivers/crypto/ccp/dbc.h
-+F:	drivers/crypto/ccp/platform-access.c
-+F:	drivers/crypto/ccp/platform-access.h
-+F:	include/uapi/linux/psp-dbc.h
-+F:	tools/crypto/ccp/*.c
-+F:	tools/crypto/ccp/*.py
-+
- AMD DISPLAY CORE
- M:	Harry Wentland <harry.wentland@amd.com>
- M:	Leo Li <sunpeng.li@amd.com>
--- 
-2.34.1
+The following changes since commit 714069daa5d345483578e2ff77fb6f06f4dcba6a:
+
+  Merge tag 'net-6.4-rc5' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2023-06-01 17:29:18 -0400)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.4-rc6
+
+for you to fetch changes up to 6c0ec7ab5aaff3706657dd4946798aed483b9471:
+
+  Merge branch 'bnxt_en-bug-fixes' (2023-06-08 10:52:48 +0200)
+
+----------------------------------------------------------------
+Networking fixes for 6.4-rc6, including fixes from can, wifi, netfilter,
+bluetooth and ebpf.
+
+Current release - regressions:
+
+  - bpf: sockmap: avoid potential NULL dereference in sk_psock_verdict_data_ready()
+
+  - wifi: iwlwifi: fix -Warray-bounds bug in iwl_mvm_wait_d3_notif()
+
+  - phylink: actually fix ksettings_set() ethtool call
+
+  - eth: dwmac-qcom-ethqos: fix a regression on EMAC < 3
+
+Current release - new code bugs:
+
+  - wifi: mt76: fix possible NULL pointer dereference in mt7996_mac_write_txwi()
+
+Previous releases - regressions:
+
+  - netfilter: fix NULL pointer dereference in nf_confirm_cthelper
+
+  - wifi: rtw88/rtw89: correct PS calculation for SUPPORTS_DYNAMIC_PS
+
+  - openvswitch: fix upcall counter access before allocation
+
+  - bluetooth:
+    - fix use-after-free in hci_remove_ltk/hci_remove_irk
+    - fix l2cap_disconnect_req deadlock
+
+  - nic: bnxt_en: prevent kernel panic when receiving unexpected PHC_UPDATE event
+
+Previous releases - always broken:
+
+  - core: annotate rfs lockless accesses
+
+  - sched: fq_pie: ensure reasonable TCA_FQ_PIE_QUANTUM values
+
+  - netfilter: add null check for nla_nest_start_noflag() in nft_dump_basechain_hook()
+
+  - bpf: fix UAF in task local storage
+
+  - ipv4: ping_group_range: allow GID from 2147483648 to 4294967294
+
+  - ipv6: rpl: fix route of death.
+
+  - tcp: gso: really support BIG TCP
+
+  - mptcp: fixes for user-space PM address advertisement
+
+  - smc: avoid to access invalid RMBs' MRs in SMCRv1 ADD LINK CONT
+
+  - can: avoid possible use-after-free when j1939_can_rx_register fails
+
+  - batman-adv: fix UaF while rescheduling delayed work
+
+  - eth: qede: fix scheduling while atomic
+
+  - eth: ice: make writes to /dev/gnssX synchronous
+
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+
+----------------------------------------------------------------
+Aditya Kumar Singh (1):
+      wifi: mac80211: fix switch count in EMA beacons
+
+Akihiro Suda (1):
+      net/ipv4: ping_group_range: allow GID from 2147483648 to 4294967294
+
+Alexander Sverdlin (1):
+      net: dsa: lan9303: allow vid != 0 in port_fdb_{add|del} methods
+
+Arnd Bergmann (1):
+      net: dsa: qca8k: add CONFIG_LEDS_TRIGGERS dependency
+
+Bartosz Golaszewski (1):
+      net: stmmac: dwmac-qcom-ethqos: fix a regression on EMAC < 3
+
+Ben Hutchings (1):
+      lib: cpu_rmap: Fix potential use-after-free in irq_cpu_rmap_release()
+
+Brett Creeley (2):
+      pds_core: Fix FW recovery detection
+      virtio_net: use control_buf for coalesce params
+
+David S. Miller (4):
+      Merge branch 'enetc-fixes'
+      Merge tag 'linux-can-fixes-for-6.4-20230605' of git://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can
+      Merge branch 'mptcp-addr-adv-fixes'
+      Merge branch 'rfs-lockless-annotate'
+
+Eelco Chaudron (1):
+      net: openvswitch: fix upcall counter access before allocation
+
+Eric Dumazet (10):
+      bpf, sockmap: Avoid potential NULL dereference in sk_psock_verdict_data_ready()
+      net/ipv6: fix bool/int mismatch for skip_notify_on_dev_down
+      net/ipv6: convert skip_notify_on_dev_down sysctl to u8
+      net/sched: fq_pie: ensure reasonable TCA_FQ_PIE_QUANTUM values
+      tcp: gso: really support BIG TCP
+      rfs: annotate lockless accesses to sk->sk_rxhash
+      rfs: annotate lockless accesses to RFS sock flow table
+      net: sched: add rcu annotations around qdisc->qdisc_sleeping
+      net: sched: move rtm_tca_policy declaration to include file
+      net: sched: act_police: fix sparse errors in tcf_police_dump()
+
+Fedor Pchelkin (2):
+      can: j1939: change j1939_netdev_lock type to mutex
+      can: j1939: avoid possible use-after-free when j1939_can_rx_register fails
+
+Florian Fainelli (1):
+      net: bcmgenet: Fix EEE implementation
+
+Florian Westphal (1):
+      bpf: netfilter: Add BPF_NETFILTER bpf_attach_type
+
+Gavrilov Ilia (1):
+      netfilter: nf_tables: Add null check for nla_nest_start_noflag() in nft_dump_basechain_hook()
+
+Geliang Tang (5):
+      mptcp: only send RM_ADDR in nl_cmd_remove
+      selftests: mptcp: update userspace pm addr tests
+      mptcp: add address into userspace pm list
+      selftests: mptcp: update userspace pm subflow tests
+      mptcp: update userspace pm infos
+
+Gustavo A. R. Silva (1):
+      wifi: iwlwifi: mvm: Fix -Warray-bounds bug in iwl_mvm_wait_d3_notif()
+
+Hangyu Hua (1):
+      net: sched: fix possible refcount leak in tc_chain_tmplt_add()
+
+Jakub Kicinski (9):
+      Merge branch 'net-ipv6-skip_notify_on_dev_down-fix'
+      netlink: specs: ethtool: fix random typos
+      Merge tag 'wireless-2023-06-06' of git://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless
+      Merge tag 'nf-23-06-07' of git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf
+      Merge tag 'for-net-2023-06-05' of git://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth
+      Merge tag 'for-netdev' of https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf
+      eth: bnxt: fix the wake condition
+      eth: ixgbe: fix the wake condition
+      Merge tag 'batadv-net-pullrequest-20230607' of git://git.open-mesh.org/linux-merge
+
+Jeremy Sowden (1):
+      netfilter: nft_bitwise: fix register tracking
+
+Jiasheng Jiang (1):
+      net: systemport: Replace platform_get_irq with platform_get_irq_optional
+
+Jiri Olsa (1):
+      bpf: Add extra path pointer check to d_path helper
+
+Johan Hovold (2):
+      Bluetooth: fix debugfs registration
+      Bluetooth: hci_qca: fix debugfs registration
+
+Johannes Berg (6):
+      wifi: mac80211: use correct iftype HE cap
+      wifi: cfg80211: reject bad AP MLD address
+      wifi: mac80211: mlme: fix non-inheritence element
+      wifi: mac80211: don't translate beacon/presp addrs
+      wifi: cfg80211: fix locking in sched scan stop work
+      wifi: cfg80211: fix locking in regulatory disconnect
+
+KP Singh (1):
+      bpf: Fix UAF in task local storage
+
+Kuniyuki Iwashima (2):
+      netfilter: ipset: Add schedule point in call_ad().
+      ipv6: rpl: Fix Route of Death.
+
+Lorenzo Bianconi (2):
+      wifi: mt76: mt7615: fix possible race in mt7615_mac_sta_poll
+      wifi: mt76: mt7996: fix possible NULL pointer dereference in mt7996_mac_write_txwi()
+
+Luiz Augusto von Dentz (1):
+      Bluetooth: Fix use-after-free in hci_remove_ltk/hci_remove_irk
+
+Manish Chopra (1):
+      qed/qede: Fix scheduling while atomic
+
+Marc Kleine-Budde (1):
+      Merge patch series "can: j1939: avoid possible use-after-free when j1939_can_rx_register fails"
+
+Martin KaFai Lau (1):
+      Merge branch 'Fix elem_size not being set for inner maps'
+
+Michal Schmidt (1):
+      ice: make writes to /dev/gnssX synchronous
+
+Min-Hua Chen (1):
+      net: sched: wrap tc_skip_wrapper with CONFIG_RETPOLINE
+
+Oleksij Rempel (1):
+      can: j1939: j1939_sk_send_loop_abort(): improved error queue handling in J1939 Socket
+
+Pablo Neira Ayuso (1):
+      netfilter: nf_tables: out-of-bound check in chain blob
+
+Paolo Abeni (1):
+      Merge branch 'bnxt_en-bug-fixes'
+
+Pauli Virtanen (4):
+      Bluetooth: ISO: consider right CIS when removing CIG at cleanup
+      Bluetooth: ISO: Fix CIG auto-allocation to select configurable CIG
+      Bluetooth: ISO: don't try to remove CIG if there are bound CIS left
+      Bluetooth: ISO: use correct CIS order in Set CIG Parameters event
+
+Pavan Chebbi (2):
+      bnxt_en: Fix bnxt_hwrm_update_rss_hash_cfg()
+      bnxt_en: Prevent kernel panic when receiving unexpected PHC_UPDATE event
+
+Ping-Ke Shih (3):
+      wifi: rtw88: correct PS calculation for SUPPORTS_DYNAMIC_PS
+      wifi: rtw89: correct PS calculation for SUPPORTS_DYNAMIC_PS
+      wifi: rtw89: remove redundant check of entering LPS
+
+Qingfang DENG (1):
+      neighbour: fix unaligned access to pneigh_entry
+
+Rhys Rustad-Elliott (2):
+      bpf: Fix elem_size not being set for inner maps
+      selftests/bpf: Add access_inner_map selftest
+
+Russell King (Oracle) (1):
+      net: phylink: actually fix ksettings_set() ethtool call
+
+Somnath Kotur (2):
+      bnxt_en: Query default VLAN before VNIC setup on a VF
+      bnxt_en: Implement .set_port / .unset_port UDP tunnel callbacks
+
+Sreekanth Reddy (1):
+      bnxt_en: Don't issue AP reset during ethtool's reset operation
+
+Sungwoo Kim (1):
+      Bluetooth: L2CAP: Add missing checks for invalid DCID
+
+Tijs Van Buggenhout (1):
+      netfilter: conntrack: fix NULL pointer dereference in nf_confirm_cthelper
+
+Vikas Gupta (1):
+      bnxt_en: Skip firmware fatal error recovery if chip is not accessible
+
+Vladislav Efanov (1):
+      batman-adv: Broken sync while rescheduling delayed work
+
+Wei Fang (2):
+      net: enetc: correct the statistics of rx bytes
+      net: enetc: correct rx_bytes statistics of XDP
+
+Weihao Gao (1):
+      Fix gitignore for recently added usptream self tests
+
+Wen Gu (1):
+      net/smc: Avoid to access invalid RMBs' MRs in SMCRv1 ADD LINK CONT
+
+Ying Hsu (1):
+      Bluetooth: Fix l2cap_disconnect_req deadlock
+
+Yonghong Song (1):
+      selftests/bpf: Fix sockopt_sk selftest
+
+Zhengping Jiang (1):
+      Bluetooth: hci_sync: add lock to protect HCI_UNREGISTER
+
+ Documentation/netlink/specs/ethtool.yaml           | 32 +++++------
+ Documentation/networking/ip-sysctl.rst             |  4 +-
+ drivers/bluetooth/hci_qca.c                        |  6 +-
+ drivers/net/dsa/lan9303-core.c                     |  4 --
+ drivers/net/dsa/qca/Kconfig                        |  1 +
+ drivers/net/ethernet/amd/pds_core/dev.c            | 10 +++-
+ drivers/net/ethernet/broadcom/bcmsysport.c         |  4 +-
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c          | 42 ++++++++++----
+ drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c  |  2 +-
+ drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c      |  1 +
+ drivers/net/ethernet/broadcom/genet/bcmgenet.c     | 22 +++-----
+ drivers/net/ethernet/broadcom/genet/bcmgenet.h     |  3 +
+ drivers/net/ethernet/broadcom/genet/bcmmii.c       |  5 ++
+ drivers/net/ethernet/freescale/enetc/enetc.c       | 16 +++++-
+ drivers/net/ethernet/intel/ice/ice_common.c        |  2 +-
+ drivers/net/ethernet/intel/ice/ice_common.h        |  2 +-
+ drivers/net/ethernet/intel/ice/ice_gnss.c          | 64 ++--------------------
+ drivers/net/ethernet/intel/ice/ice_gnss.h          | 10 ----
+ drivers/net/ethernet/intel/ixgbe/ixgbe_main.c      |  2 +-
+ drivers/net/ethernet/qlogic/qed/qed_l2.c           |  2 +-
+ drivers/net/ethernet/qlogic/qede/qede.h            |  4 ++
+ drivers/net/ethernet/qlogic/qede/qede_ethtool.c    | 24 +++++++-
+ drivers/net/ethernet/qlogic/qede/qede_main.c       | 34 +++++++++++-
+ .../ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c    |  3 +-
+ drivers/net/phy/phylink.c                          | 15 +++--
+ drivers/net/virtio_net.c                           | 16 +++---
+ drivers/net/wireless/intel/iwlwifi/mvm/d3.c        |  8 +--
+ drivers/net/wireless/mediatek/mt76/mt7615/mac.c    |  3 +
+ drivers/net/wireless/mediatek/mt76/mt7996/mac.c    | 19 ++++---
+ drivers/net/wireless/realtek/rtw88/mac80211.c      | 14 ++---
+ drivers/net/wireless/realtek/rtw88/main.c          |  4 +-
+ drivers/net/wireless/realtek/rtw88/ps.c            | 43 +++++++++++++++
+ drivers/net/wireless/realtek/rtw88/ps.h            |  2 +
+ drivers/net/wireless/realtek/rtw89/core.c          |  3 -
+ drivers/net/wireless/realtek/rtw89/mac80211.c      | 15 ++---
+ drivers/net/wireless/realtek/rtw89/ps.c            | 26 +++++++++
+ drivers/net/wireless/realtek/rtw89/ps.h            |  1 +
+ include/linux/netdevice.h                          |  9 ++-
+ include/net/bluetooth/hci.h                        |  1 +
+ include/net/bluetooth/hci_core.h                   |  4 +-
+ include/net/neighbour.h                            |  2 +-
+ include/net/netns/ipv6.h                           |  2 +-
+ include/net/ping.h                                 |  6 +-
+ include/net/pkt_sched.h                            |  2 +
+ include/net/rpl.h                                  |  3 -
+ include/net/sch_generic.h                          |  6 +-
+ include/net/sock.h                                 | 18 ++++--
+ include/uapi/linux/bpf.h                           |  1 +
+ kernel/bpf/map_in_map.c                            |  8 ++-
+ kernel/bpf/syscall.c                               |  9 +++
+ kernel/fork.c                                      |  2 +-
+ kernel/trace/bpf_trace.c                           | 12 +++-
+ lib/cpu_rmap.c                                     |  2 +-
+ net/batman-adv/distributed-arp-table.c             |  2 +-
+ net/bluetooth/hci_conn.c                           | 22 +++++---
+ net/bluetooth/hci_core.c                           | 10 ++--
+ net/bluetooth/hci_event.c                          | 44 +++++++++------
+ net/bluetooth/hci_sync.c                           | 23 ++++++--
+ net/bluetooth/l2cap_core.c                         | 13 +++++
+ net/can/j1939/main.c                               | 24 ++++----
+ net/can/j1939/socket.c                             |  5 ++
+ net/core/dev.c                                     |  8 ++-
+ net/core/skmsg.c                                   |  3 +-
+ net/ipv4/sysctl_net_ipv4.c                         |  8 +--
+ net/ipv4/tcp_offload.c                             | 19 +++----
+ net/ipv6/exthdrs.c                                 | 29 ++++------
+ net/ipv6/route.c                                   |  4 +-
+ net/mac80211/he.c                                  | 15 +++--
+ net/mac80211/mlme.c                                |  8 ++-
+ net/mac80211/rx.c                                  |  4 +-
+ net/mac80211/tx.c                                  |  2 +-
+ net/mptcp/pm.c                                     | 23 ++++++--
+ net/mptcp/pm_netlink.c                             | 18 ++++++
+ net/mptcp/pm_userspace.c                           | 48 +++++++++++++++-
+ net/mptcp/protocol.h                               |  1 +
+ net/netfilter/ipset/ip_set_core.c                  |  8 +++
+ net/netfilter/nf_conntrack_core.c                  |  3 +
+ net/netfilter/nf_tables_api.c                      |  4 +-
+ net/netfilter/nft_bitwise.c                        |  2 +-
+ net/openvswitch/datapath.c                         | 19 -------
+ net/openvswitch/vport.c                            | 18 +++++-
+ net/sched/act_police.c                             | 10 ++--
+ net/sched/cls_api.c                                |  3 +-
+ net/sched/sch_api.c                                | 28 ++++++----
+ net/sched/sch_fq_pie.c                             | 10 +++-
+ net/sched/sch_generic.c                            | 30 +++++-----
+ net/sched/sch_mq.c                                 |  8 +--
+ net/sched/sch_mqprio.c                             |  8 +--
+ net/sched/sch_pie.c                                |  5 +-
+ net/sched/sch_red.c                                |  5 +-
+ net/sched/sch_sfq.c                                |  5 +-
+ net/sched/sch_taprio.c                             |  6 +-
+ net/sched/sch_teql.c                               |  2 +-
+ net/smc/smc_llc.c                                  |  4 +-
+ net/wireless/core.c                                |  4 +-
+ net/wireless/nl80211.c                             |  2 +
+ net/wireless/reg.c                                 |  4 +-
+ tools/include/uapi/linux/bpf.h                     |  1 +
+ tools/lib/bpf/libbpf.c                             |  3 +-
+ tools/lib/bpf/libbpf_probes.c                      |  2 +
+ .../selftests/bpf/prog_tests/inner_array_lookup.c  | 31 +++++++++++
+ .../testing/selftests/bpf/prog_tests/sockopt_sk.c  |  2 +-
+ .../selftests/bpf/progs/inner_array_lookup.c       | 45 +++++++++++++++
+ tools/testing/selftests/net/.gitignore             |  3 +
+ tools/testing/selftests/net/mptcp/mptcp_join.sh    | 11 +++-
+ 105 files changed, 788 insertions(+), 386 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/inner_array_lookup.c
+ create mode 100644 tools/testing/selftests/bpf/progs/inner_array_lookup.c
 
