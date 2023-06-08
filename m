@@ -2,119 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B0CB727F83
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD2C727F8D
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235660AbjFHL5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 07:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38566 "EHLO
+        id S236513AbjFHL7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 07:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234001AbjFHL5i (ORCPT
+        with ESMTP id S236501AbjFHL7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 07:57:38 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57C1210C;
-        Thu,  8 Jun 2023 04:57:36 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3589OCnw007652;
-        Thu, 8 Jun 2023 13:57:09 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=73Ubk5oRaELFQy9MiHEBTyfooWnX9EJZnQ7YDu0s2/M=;
- b=S73rOSWmTnk9u+GB1rogOjulSFtgS1Yc0hW/82plEdlDrmEh7NEIIKQn34WDhlm4m6hk
- aHL8TgxLwEnbSErpCCnYdsCvvUYntykGWAwjvdgi2ULqeqCRvxzEGyd2cP5AY6gPL3+O
- 8VrV1n/27oCSe+A//hKYww5a2XPPDdS6qz8Dbwoy3+bLTQ7VFtlbqQoPN/4GjZj6DSZs
- xSCl2hPEHuEN2QDDR7VNO+sg2ILkS6B/pAgnn0jvqn2Cd9lfAFV5z9AMrrxpzIoWbNGo
- y/BuqtSQ1boqyKlU9A8eQuOvAnLwTLN8gRrqtfKobGAtcP/ZRFoo39sNXtREsDaGwy2g 2A== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3r3cax10j8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Jun 2023 13:57:09 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 20F8E10002A;
-        Thu,  8 Jun 2023 13:57:06 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A15922291CB;
-        Thu,  8 Jun 2023 13:57:06 +0200 (CEST)
-Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 8 Jun
- 2023 13:57:05 +0200
-Message-ID: <a02ae654-b0bb-5d57-64b9-94cc3182b463@foss.st.com>
-Date:   Thu, 8 Jun 2023 13:57:05 +0200
+        Thu, 8 Jun 2023 07:59:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860F52113
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 04:59:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 21C4D64CE9
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 11:59:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96A83C433EF;
+        Thu,  8 Jun 2023 11:59:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686225574;
+        bh=kqj+AnBwnPPQKa4kzE0ArmNg7GgENWk2/+XafiMcx5g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ShsluX5d4ZlHzfqTkZLdoPZBxhpZcjulNtqKiPyvLfOFldMuyZRaBqS8VsiweyA51
+         YNHEaBAA/InLeOtEo07ZiCploLCoXMWfEvkj0PSWD0+TWlUuZ/0BLzuZCOU3giTIZR
+         sF+xPlNzefUTZ87VeWWpIfUPY4Z7TSJQefk8VEZHAJcaYLvAel5OjTNwAZF9pbJAIQ
+         aWL3+5FRnJMXiws5nnodAruR7tn6JE6s0QcEXih9XEJlGOrDQNp8mDOTIeUXuxhuVT
+         +plZk0SdCa705FgMjgMb9VPaoxe4jP6kh013tmsG7cFC4ewDKyxPhbx7/nkKF6pt3K
+         wBXqnmXruZJfg==
+Date:   Thu, 8 Jun 2023 17:29:28 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
+Cc:     mani@kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, mhi@lists.linux.dev
+Subject: Re: [PATCH v2 0/2] Add MHI quirk for QAIC
+Message-ID: <20230608115928.GA5672@thinkpad>
+References: <20230519163902.4170-1-quic_jhugo@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 0/3] ASoC: stm32: fix dtbs_check warnings
-Content-Language: en-US
-To:     Olivier Moysan <olivier.moysan@foss.st.com>,
-        James Schulman <james.schulman@cirrus.com>,
-        David Rhodes <david.rhodes@cirrus.com>,
-        "Lucas Tanure" <tanureal@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>
-CC:     Alexandre Torgue <alexandre.torgue@st.com>,
-        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230606115605.1633595-1-olivier.moysan@foss.st.com>
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20230606115605.1633595-1-olivier.moysan@foss.st.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.21.93]
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-08_08,2023-06-08_01,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230519163902.4170-1-quic_jhugo@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+On Fri, May 19, 2023 at 10:39:00AM -0600, Jeffrey Hugo wrote:
+> With the QAIC driver in -next, I'd like to suggest some MHI changes that
+> specific to AIC100 devices, but perhaps provide a framework for other
+> device oddities.
+> 
+> AIC100 devices technically violate the MHI spec in two ways. Sadly, these
+> issues comes from the device hardware, so host SW needs to work around
+> them.
+> 
+> Thie first issue, presented in this series, has to do with the
+> SOC_HW_VERSION register. This register is suposed to be initialized by the
+> hardware prior to the MHI being accessable by the host to contain a
+> version string for the SoC of the device. This could be used by the host
+> MHI controller software to identify and handle version to version changes.
+> The AIC100 hardware does not initialize this register, and thus it
+> contains garbage.
+> 
+> This would not be much of a problem normally - the QAIC driver would just
+> never use it. However the MHI stack uses this register as part of the init
+> sequence and if the controller reports that the register is inaccessable
+> then the init sequence fails.  On some AIC100 cards, the garbage value
+> ends up being 0xFFFFFFFF which is PCIe spec defined to be a special value
+> indicating the access failed.  The MHI controller cannot tell if that
+> value is a PCIe link issue, or just garbage.
+> 
+> QAIC needs a way to tell MHI not to use this register. Other buses have a
+> quirk mechanism - a way to describe oddities in a particular
+> implementation that have some kind of workaround. Since this seems to be
+> the first need for such a thing in MHI, introduce a quirk framework.
+> 
+> The second issue AIC100 has involves the PK Hash registers. A solution for
+> this is expected to be proposed in the near future and is anticipated to
+> make use of the quirk framework proposed here. With PK Hash, there are two
+> oddities to handle. AIC100 does not initialize these registers until the
+> SBL is running, which is later than the spec indicates, and in practice
+> is after MHI reads/caches them. Also, AIC100 does not have enough
+> registers defined to fully report the 5 PK Hash slots, so a custom
+> reporting format is defined by the device.
+> 
 
-On 6/6/23 13:56, Olivier Moysan wrote:
-> Fix dtbs_check warnings in STM32MP15 DK boards Devices Trees for
-> STM32 I2S and Cirrus CS42L51 codec.
+Looking at the two issues you reported above, it looks to me that they can be
+handled inside the aic100 mhi_controller driver itself. Since the MHI stack
+exports the read_reg callback to controller drivers, if some registers are not
+supported by the device, then the callback can provide some fixed dummy data
+emulating the register until the issue is fixed in the device (if at all).
+
+Quirk framework could be useful if the device misbehaves against the protocol
+itself but for the register issues like this, I think the controller driver can
+handle itself.
+
+What do you think?
+
+- Mani
+
+> v2:
+> -Fix build error
+> -Fix typo in commit text
 > 
-> - Add OF graph port property in I2S and CS42L51 DT bindings.
->    Fixes warnings:
->    audio-controller@4000b000: Unevaluated properties are not allowed
->    ('port' was unexpected)
->    cs42l51@4a: Unevaluated properties are not allowed
->    ('port' was unexpected)
-> - Correct OF graph DAI audio format property for STM32MP15x Dkx I2S node
+> Jeffrey Hugo (2):
+>   bus: mhi: host: Add quirk framework and initial quirk
+>   accel/qaic: Add MHI_QUIRK_SOC_HW_VERSION_UNRELIABLE
 > 
-> Changes in v2:
-> - Add port example in i2s and cs42l51 binding
+>  drivers/accel/qaic/mhi_controller.c |  1 +
+>  drivers/bus/mhi/host/init.c         | 13 +++++++++----
+>  include/linux/mhi.h                 | 18 ++++++++++++++++++
+>  3 files changed, 28 insertions(+), 4 deletions(-)
 > 
-> Olivier Moysan (3):
->    ASoC: dt-bindings: stm32: document audio of graph port for i2s
->    ASoC: dt-bindings: document audio of graph port for cs42l51
->    ARM: dts: stm32: fix i2s endpoint format property for stm32mp15xx-dkx
+> -- 
+> 2.40.1
 > 
->   .../devicetree/bindings/sound/cirrus,cs42l51.yaml     | 11 +++++++++++
->   .../devicetree/bindings/sound/st,stm32-i2s.yaml       | 11 +++++++++++
->   arch/arm/boot/dts/stm32mp15xx-dkx.dtsi                |  2 +-
->   3 files changed, 23 insertions(+), 1 deletion(-)
 > 
 
-Patch[3] applied on stm32-next.
-
-Thanks
-Alex
+-- 
+மணிவண்ணன் சதாசிவம்
