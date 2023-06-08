@@ -2,139 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C78737287F4
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 21:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C04472882D
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 21:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235493AbjFHTQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 15:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34216 "EHLO
+        id S236658AbjFHTVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 15:21:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232731AbjFHTQt (ORCPT
+        with ESMTP id S235941AbjFHTVL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 15:16:49 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545852733
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 12:16:14 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-ba81ded8d3eso1042812276.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 12:16:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686251670; x=1688843670;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hqbvyW6crf6toTfKG311uSxHzLZVjYgM3m9zpPIhyDA=;
-        b=2n/XtD7AqYzwMObmNTcTXdhdmtrivr6xS0a6hxh2028Gq3sNV9XO29gB5O2y3L9l/t
-         L2rqH6x4Pz17FgKoR1Y4rQPo+pjlVHFvq4Uxf6V5Z1hVLY+dk3dbsKixOg2g0+O6MH3o
-         wHR7UhzFBUpyNSTJP8nVTqWIyYA0el7GHtc3GU+0DrUYPDVBZCtJf3wyrCUqLLZR09lv
-         VqBAJ8/LNlL6ViTV2apFi54AS+jw7a1Zjo/eBl1kmHqeluHIV3N/nqy10dITHeklJsgD
-         IGKWlS4umLi9ypWs+T7OEHIYU3YkWJ3FbGyXJ6NMN9TADYksX23kqJlAINxQPvIJDTtX
-         gwNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686251670; x=1688843670;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hqbvyW6crf6toTfKG311uSxHzLZVjYgM3m9zpPIhyDA=;
-        b=QF+TKxHOeWjnutrhEgwHahkOWAobUx0zXupdCu+ET4vh6hlOiihO8obiPDVpmHjQkx
-         uT/QETLrIoEI/OA9ESdt7Zl3x8PCUfcHJohuQ0RWouJjUTSf0elTaUkIfYhzuK+J10aa
-         leJkMNGXBPo2QaVsUjLBHE1DMAJQJU21ZNojAU9n354d5hFzoNKGuXZKIWe7VQEdD0uF
-         dAR0IiSbMmhYEBFvMsg/rj4ehm0RNfhTSJIEEMX3zTmi18A4H3T779mW29s7DP0y/tAp
-         42jvbwDdnmPsX1EiBuiQTaU/ktvki3EXh8SBhyD1oNriy5/m7u2zDWNE6zQQy4B8qQAJ
-         tUyg==
-X-Gm-Message-State: AC+VfDyBWVx9WOevYAzIG4nscaPchHHD2eFqBQzHG5/sRkuim+quCMnF
-        LZE9+IitjniTJtmQVUc6CLCbsw==
-X-Google-Smtp-Source: ACHHUZ7aUiIh5IKg+O5kgdrTnFDUinQat6T8kg6GewL/1W4sBHj9jDkDghROqTlVL3SjDvy6zEmR9Q==
-X-Received: by 2002:a25:e302:0:b0:bb1:5a06:70ed with SMTP id z2-20020a25e302000000b00bb15a0670edmr543635ybd.19.1686251670430;
-        Thu, 08 Jun 2023 12:14:30 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id e10-20020a25874a000000b00b9e5b28dbd8sm429689ybn.17.2023.06.08.12.14.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 12:14:29 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 12:14:26 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
-        John David Anglin <dave.anglin@bell.net>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 04/23] ia64/hugetlb: pte_alloc_huge() pte_offset_huge()
-In-Reply-To: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com>
-Message-ID: <1c2c7837-bfea-9640-a74-985379fcc5a@google.com>
-References: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com>
+        Thu, 8 Jun 2023 15:21:11 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10497E50;
+        Thu,  8 Jun 2023 12:20:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
+ s=s31663417; t=1686252015; x=1686856815; i=rwarsow@gmx.de;
+ bh=0BsqEZ8AeUZZU5Rv4gzd6HuD/lO3oQ0x9OYg9EC3PeI=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
+ b=ew5sebd4+ehWIjSAYkoqgROC4cSLR+/1E7k0MsQuOr0qGh3XC5KRFRqhCu0QnnvFi3rzVBm
+ viQYX9rGOMrJaNAXU8dqxbAqYVLxWyuJQJNqvB8X0ptP+1K6GFfP1Vz7jRvIx38MdeRh+QFnN
+ J+lJteoHifcMuV2Ph3vOBpOs+BcSeJGuBjCeilI2y9rNioTPGEY73oiIKx39bvQXcCjpjq8Y9
+ DPAE2JfPq+pVJALBPFFYWZrRIAnZHle2uTN0mObDxn3Ny//a3+nV1TpAPS8IOlPN8FKfL+/ZN
+ xm6rL97KaVOOxExq6PZ3OPILx716hG6QTB6vfa6jx1oTTgzOkPEQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.100.20] ([94.134.26.152]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MFKGZ-1qMzLJ1AL3-00Fieg; Thu, 08
+ Jun 2023 21:15:00 +0200
+Message-ID: <3589716d-4f21-ddf6-7b8f-8aad0d67658e@gmx.de>
+Date:   Thu, 8 Jun 2023 21:14:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+From:   Ronald Warsow <rwarsow@gmx.de>
+To:     linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Content-Language: de-DE, en-US
+Subject: Re: [PATCH 6.3 000/285] 6.3.7-rc2 review
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:T3yU0m5pNBW0i27IR/BXwNqamSuN7MJ1p3JBjBCDpEp/B5Ytkrz
+ RXr3UFGStq3Pr1oIXXMtAxEipgw/Nzq+aS6DhyVcSdkeWaBkhNphV47jVTeJTQgR6XRGEL6
+ EFsDqE65Gv4caHfnmbN0O20ir1rq2eNPusfA5oLEinlOjgsIotKrqIUx+h5meeKKp0sAc3j
+ Js5SYsCJ3W+ykybdutnSQ==
+UI-OutboundReport: notjunk:1;M01:P0:7y+1hLQkXPI=;KvWWOzVktbg4MiqeSaqbmcPIyCl
+ pGXRhf9hYXOGNxQr7D0ZsTFU9HrrTaDE+0SV5jJqUF5dq4BDHk56L6kso1HZf+8nkRmm2nN4j
+ /syorwKYiIghUYDENuK2557zauuyTrlzkuIKFhavTS0zprpmmgpJkfxkwjlOS16QbZtw78BWn
+ BBWvbG7dYeQDat3eXJ1U0RCKe7hWo0DYfrovbhYaS8tOF+5sR73csic3TlR7YSNdnRvovrEOY
+ dEUyCjtGvxoL8ZpijA9KPlEY8Gr96scf5qroNhr8n63HRo0E9yPvseQuOaanbRAm/QTarsfAI
+ oQnJzTBc2zfPuVedbAamtD3HjmJId9qRpRg1m3FtPmsa+/yHCUSx3ZddSeTZdBRgYRJPNZS6F
+ t8HGBwd7xY7u/aOaIK88cGBZ5G7dzLDHcYewUFgkX+02viGJXaYXyKhoK3PMSXEL8jdN8kxjc
+ iIcFBKo2ErXmU8n+fVb/HQM47KAJuQKLriQdeVU4jMWvcEQ5uWILFJcaYVjOOOYninfWvW6WK
+ sap+m0iwhxWR7+XRIUfpTh3FNWlpGmd7Nqc4OXRoRkjNZQxcCv/hq5xIwSCXrF0vAuHG4EjEk
+ a3c2bVyPruTR2iTNyoEqJNyVK9DkEYk5Jb+8+grOh1c68CYZlMtZBhzdUfCdvIaby5Y3TvECP
+ Ung3n0XMWkg7clYs1dtir/CfVrmhMF1XWtcawGmmpHFqODYvalPA0CSxtI+fWB5fC8U4rKHYI
+ F+00nuUBySBN95eJB2zDvrrrYHxfcss+dDTpEbKgGot/aluc1/2d6+dLpTbUe7VSHGMvOtJk9
+ Rgc6fhUOEBkHEoELfZF7xmReghTQGJS//Rqi7rdK0UAqarpJ+lbwozpQzAJ81NxRk9BVCb8DQ
+ 5HnewpAgLUS8uX9WBM8wQyElQqsZ1dV3rz1nU0a9foUJCf3dTl5lGk1xpcZwEC700S8Snjac4
+ f3mhA4rKRqW9EJdlZ+Uf3ECKhqs=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FAKE_REPLY_A1,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pte_alloc_map() expects to be followed by pte_unmap(), but hugetlb omits
-that: to keep balance in future, use the recently added pte_alloc_huge()
-instead; with pte_offset_huge() a better name for pte_offset_kernel().
+Hi Greg
 
-Signed-off-by: Hugh Dickins <hughd@google.com>
----
- arch/ia64/mm/hugetlbpage.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+6.3.7-rc2
 
-diff --git a/arch/ia64/mm/hugetlbpage.c b/arch/ia64/mm/hugetlbpage.c
-index 78a02e026164..adc49f2d22e8 100644
---- a/arch/ia64/mm/hugetlbpage.c
-+++ b/arch/ia64/mm/hugetlbpage.c
-@@ -41,7 +41,7 @@ huge_pte_alloc(struct mm_struct *mm, struct vm_area_struct *vma,
- 	if (pud) {
- 		pmd = pmd_alloc(mm, pud, taddr);
- 		if (pmd)
--			pte = pte_alloc_map(mm, pmd, taddr);
-+			pte = pte_alloc_huge(mm, pmd, taddr);
- 	}
- 	return pte;
- }
-@@ -64,7 +64,7 @@ huge_pte_offset (struct mm_struct *mm, unsigned long addr, unsigned long sz)
- 			if (pud_present(*pud)) {
- 				pmd = pmd_offset(pud, taddr);
- 				if (pmd_present(*pmd))
--					pte = pte_offset_map(pmd, taddr);
-+					pte = pte_offset_huge(pmd, taddr);
- 			}
- 		}
- 	}
--- 
-2.35.3
+compiles, boots and runs here on x86_64
+(Intel Rocket Lake)
+
+Thanks
+
+Tested-by: Ronald Warsow <rwarsow@gmx.de>
 
