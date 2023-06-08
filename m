@@ -2,144 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0918727C63
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 207FC727C65
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235309AbjFHKLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 06:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
+        id S235426AbjFHKLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 06:11:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234655AbjFHKLR (ORCPT
+        with ESMTP id S235434AbjFHKLX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 06:11:17 -0400
-Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6431D1FDF;
-        Thu,  8 Jun 2023 03:11:12 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R661e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0VkdrSLm_1686219066;
-Received: from 30.221.148.215(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VkdrSLm_1686219066)
-          by smtp.aliyun-inc.com;
-          Thu, 08 Jun 2023 18:11:07 +0800
-Message-ID: <770b7f48-2a5a-1c1b-b26d-bb0cfc3a1b46@linux.alibaba.com>
-Date:   Thu, 8 Jun 2023 18:11:03 +0800
+        Thu, 8 Jun 2023 06:11:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619B71FE9;
+        Thu,  8 Jun 2023 03:11:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E88E164BBC;
+        Thu,  8 Jun 2023 10:11:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5024FC4339B;
+        Thu,  8 Jun 2023 10:11:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686219080;
+        bh=Kdoa+A4zfK5hWYSR0TKThErEb7nbv61wEl1348h4gaM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AyyDL7/nsoNEq58sEyUvaSBc9emUHBAr26ahYp7M94RtClgMcJo9Wn8muPvy1ikI8
+         TAH+BTbHa9qgy+BWtRz0XMiOcCrLVWqRXXthYGZ1PmbZcd2zRxQa/NFzBkGr/4Ryy3
+         LqXYhjBU5OKpHSmZuz2OK7bue6KPruIITS9UdTB8Aa+VKQEV04AtGFX+qTghOdwW5R
+         080virOFb94yNCyq0rCsdxdcAGa6kTzoDdPxLOdhIQ96+5M41xVsK8VyxG4fIGG0vl
+         GKunDlCrB0AeggphUiWB5KYjqW5NHDbfu+/chQMk3ltW5VDUiElCTFu8zZdIkd5kkJ
+         b18w6LOI3dI3A==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1q7CcK-0005ub-Sj; Thu, 08 Jun 2023 12:11:45 +0200
+Date:   Thu, 8 Jun 2023 12:11:44 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     vkoul@kernel.org, andersson@kernel.org,
+        yung-chuan.liao@linux.intel.com,
+        pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] soundwire: qcom: stablity fixes
+Message-ID: <ZIGpYPrNYDlkRQIf@hovoldconsulting.com>
+References: <20230525133812.30841-1-srinivas.kandagatla@linaro.org>
+ <ZH2l-UbMyLi5Uwph@hovoldconsulting.com>
+ <5d6bcc6a-151e-ac21-2dd2-f72a91f562d5@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH v3 2/7] perf metric: Event "Compat" value supports
- matching multiple identifiers
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        Zhuo Song <zhuo.song@linux.alibaba.com>,
-        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        John Garry <john.g.garry@oracle.com>
-References: <1685438374-33287-1-git-send-email-renyu.zj@linux.alibaba.com>
- <1685438374-33287-3-git-send-email-renyu.zj@linux.alibaba.com>
- <c1d8ee9b-4839-1011-4dad-c4777d8f8224@oracle.com>
- <452e724b-2a2c-52fd-274b-60db7a7f730e@linux.alibaba.com>
- <c4b2fca8-602d-9c76-90a7-3eafd92da8bc@oracle.com>
- <fb5d1641-0eb1-8282-6a2a-48b32ea6c804@arm.com>
-From:   Jing Zhang <renyu.zj@linux.alibaba.com>
-In-Reply-To: <fb5d1641-0eb1-8282-6a2a-48b32ea6c804@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5d6bcc6a-151e-ac21-2dd2-f72a91f562d5@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 07, 2023 at 10:36:40AM +0100, Srinivas Kandagatla wrote:
+> On 05/06/2023 10:08, Johan Hovold wrote:
+> > On Thu, May 25, 2023 at 02:38:08PM +0100, Srinivas Kandagatla wrote:
+> >> During x13s audio testing we hit few corner cases due to issues
+> >> in codec drivers and some obvious code bugs.
+> >>
+> >> Here are the fixes for those issues, mostly the issues are around
+> >> devices loosing the sync in between runtime pm suspend resume path.
+> >>
+> >> With codec fixes along with these fixes, audio on x13s is pretty stable.
 
+> >> Changes since v1:
+> >> 	- dropped runtime pm changes patch as unable to reproduced it anymore
+> >> 	- fixed clk stop flag as suggested by Pierre
+> >> 	- rebased on top of linux-next
+> > 
+> > I tried to update to this series on my 6.4-rc5 branch for the X13s and
+> > the above changes appear to lead to breakages again.
+> > 
+> These patches are based on linux next, we can not cleanly apply them on 
+> rc5 i guess without the depended patches.
 
-在 2023/6/7 上午12:27, Robin Murphy 写道:
-> On 02/06/2023 5:20 pm, John Garry wrote:
->> On 01/06/2023 09:58, Jing Zhang wrote:
->>>>  From checking the driver, it seems that we have model names "arm_cmn600" and "arm_cmn650". Are you saying that "arm_cmn600X" would match for those? I am most curious about how "arm_cmn600X" matches "arm_cmn650".
->>>>
->>> Hi John,
->>>
->>>  From patch #1 we have identifiers "arm_cmn600_0" and "arm_cmn650_0" etc. 
->>
->> ok, I see. Your idea for the cmn driver HW identifier format is odd to me. Your HW identifier is a mix of the HW IP model name (from arm_cmn_device_data.model_name) with some the kernel revision identifier (from cmn_revision). The kernel revision identifier is an enum, and I don't think that it is a good idea to expose enum values through sysfs files.
->>
->> I assume that there is some ordering requirement for cmn_revision, considering that we have equality operations on the revision in the driver.
+Yeah, I did the corresponding changes you did in v2 to v1 applied to
+6.4-rc5 instead of backporting the dependencies.
+
+> I have tried these patches with your rc4 branch along with other 
+> depended patches my branch is at: 
+> https://git.linaro.org/people/srinivas.kandagatla/linux.git/log/?h=wip/sc8280xp-v6.4-rc4
 > 
-> That enum does actually follow the revision identifiers as provided by the hardware (see CMN_CFGM_PID2_REVISION), so I don't see any major issue with putting it into user ABI. And TBH I think I would prefer to just use a numeric value rather than have to maintain yet more tables of strings which given the usage model here would effectively only mangle a matchable value into a different matchable value anyway.
+> this works fine for me, not seeing any issues so far.
+> tested both speakers and headset.
 > 
-> I am inclined to agree that the mix between part driver-generated-string, part hardware-value looks a little funky. I still need to check with the hardware team exactly how the part number field from PERIPH_ID_0/1 is "configuration-dependent", and whether there might actually be a chance of using that as well.
+> > Specifically, with the updated clk stop flag (simple_clk_stop_capable) I
+> > see:
+> > 
+> > [   14.789533] wcd9380-codec sdw:0:0217:010d:00:3: Slave 1 state check1: UNATTACHED, status was 1
+> > [   14.789717] qcom-soundwire 3330000.soundwire-controller: qcom_swrm_irq_handler: SWR bus clsh detected
+> > [   14.796164] wcd9380-codec sdw:0:0217:010d:00:3: Slave 1 state check1: UNATTACHED, status was 1
+
+So as we discussed of list, this particular issue was due to a mistake I
+made when "backporting" your v2 where I forgot to invert the test when
+replacing simple_clk_stop_capable with clk_stop_mode1.
+
+> > and without the runtime pm patch that you dropped in v2 I get
+> > intermittent (e.g. twice in five boots):
+> > 
+> > [   11.527301] snd-sc8280xp sound: ASoC: adding FE link failed
+> > [   11.527409] snd-sc8280xp sound: ASoC: topology: could not load header: -517
+> Never seen this, looks like some corrupted tplg to me.. I might be wrong.
 > 
-
-Thanks Robin. So should we wait to confirm the configuration of the PERIPH_ID_0/1 field before pushing this patch? Or is it
-acceptable to use "cmn600_r0p0" as an identifier? Looking forward to your suggestion.
-
-> One nagging doubt that remains for metrics are any baked-in assumptions which may not always simply depend on the product version - for instance it happens to be the case currently that everything has a fixed flit size of 256 bits, hence the magic "32" in the bandwidth calculations, but if that ever became configurable in some future product, we may potentially have a problem guaranteeing a meaningful calculation.
+> > [   11.527557] qcom-apm gprsvc:service:2:1: tplg component load failed-517
+> > [   11.527640] qcom-apm gprsvc:service:2:1: ASoC: error at snd_soc_component_probe on gprsvc:service:2:1: -22
+> > [   11.528079] snd-sc8280xp sound: ASoC: failed to instantiate card -22
+> > [   11.533388] snd-sc8280xp: probe of sound failed with error -22
+> > 
+> > Again, this was with 6.4-rc5, but these problems are likely still there
+> > also with linux-next.
 > 
+> Have you tried linux-next?
 
-In this case, we may use "literal" to solve it later. It can use variables in bandwidth calculations. For example,
-"#slots" can get the value from the file of the current architecture and use it in the metric.
+No, not yet, but I just triggered the above once more after not having
+seen with my latest -rc5 branch for a while (e.g. 20 reboots?):
 
->>> The identifier consists of model_name and revision.
->>> The compatible value "arm_cmn600;arm_cmn650" can match the identifier "arm_cmn600_0" or "arm_cmn650_0". Maybe the message log
->>> is not clear enough.
->>>
->>> For example in patch #3 the metric "slc_miss_rate" is a generic metric for cmn-any. So we can define:
->>>
->>> +    {
->>> +        "MetricName": "slc_miss_rate",
->>> +        "BriefDescription": "The system level cache miss rate include.",
->>> +        "MetricGroup": "arm_cmn",
->>> +        "MetricExpr": "hnf_cache_miss / hnf_slc_sf_cache_access",
->>> +        "ScaleUnit": "100%",
->>> +        "Unit": "arm_cmn",
->>> +        "Compat": "arm_cmn600;arm_cmn650;arm_cmn700;arm_ci700"
->>> +    },
->>>
->>>
->>> It can match identifiers "arm_cmn600_{0,1,2..X}" or "arm_cmn650_{0,1,2..X}" or "arm_cmn700_{0,1,2..X}" or "arm_ci700_{ 0,1,2..X}".
->>> In other words, it can match all identifiers prefixed with “arm_cmn600” or “arm_cmn650” or “arm_cmn700” or “arm_ci700”.
->>>
->>> If a new model arm_cmn driver with identifier "arm_cmn750_0", it will not be matched, but if a new revision arm_cmn driver with identifier
->>> "arm_cmn700_4", it can be matched.
->>
->> OK, I see what you mean. My confusion came about though your commit message on this same patch, which did not mention cmn650. I assumed that the example event which you were describing was supported for arm_cmn650 and you intentionally omitted it.
->>
->>>
->>>
->>>>> Tokens in Unit field are delimited by ';'.
->>>> Thanks for taking a stab at solving this problem.
->>>>
->>>> I have to admit that I am not the biggest fan of having multiple values to match in the "Compat" value possibly for every event. It doesn't really scale.
->>>>
->>>> I would hope that there are at least some events which we are guaranteed to always be present. From what Robin said on the v2 series, for the implementations which we care about, events are generally added per subsequent version. So we should have some base set of fixed events.
-> 
-> Note that there's a slight difference between "present" and "valid", e.g. in the current driver-internal aliases, all MTSX events are marked CMN_ANY, meaning they're considered valid on any CMN configuration with an MTSX node, regardless of model. The events don't exist on CMN-600 or CMN-650, but that's because the MTSX itself wasn't a thing yet, so for simplicity we don't have to bother considering the events invalid when we know they will always be non-present and thus filtered anyway.
-> 
->>>> If we are confident that we have a fixed set of base set of events, can we ensure that those events would not require this compat string which needs each version explicitly stated?
->>>>
->>> If we are sure that some events will always exist in subsequent versions, we can set the Compat field to "arm_cmn;arm_ci". After that,
->>> whether it is a different model or a different revision of the cmn PMU, it will be compatible. That is, it matches all whose identifier
->>> is prefixed with “arm_cmn” or “arm_ci”.
->>
->> Sure, we could do something like that. Or if we are super-confident that every model and rev will support some event, then we can change perf tool to just not check Compat for that event.
-> 
-> The majority of events have stayed unchanged since the introduction of their respective node type, so assuming we already have a basic match on the PMU name to know which JSON to be looking at in the first place, I'd imagine the Compat field could be optional, and only needed for events which first appear in a subsequent revision or model, or the fiddly cases like where DVM node events got entirely rewritten in CMN-650.
-> 
+[   11.430131] qcom-soundwire 3210000.soundwire-controller: Qualcomm Soundwire controller v1.6.0 Registered
+[   11.431741] wcd938x_codec audio-codec: bound sdw:0:0217:010d:00:4 (ops wcd938x_sdw_component_ops [snd_soc_wcd938x_sdw])
+[   11.431933] wcd938x_codec audio-codec: bound sdw:0:0217:010d:00:3 (ops wcd938x_sdw_component_ops [snd_soc_wcd938x_sdw])
+[   11.435406] qcom-soundwire 3330000.soundwire-controller: Qualcomm Soundwire controller v1.6.0 Registered
+[   11.449286] qcom-soundwire 3250000.soundwire-controller: Qualcomm Soundwire controller v1.6.0 Registered
+[   11.450632] wsa883x-codec sdw:0:0217:0202:00:1: WSA883X Version 1_1, Variant: WSA8835_V2
+[   11.453155] wsa883x-codec sdw:0:0217:0202:00:1: WSA883X Version 1_1, Variant: WSA8835_V2
+[   11.456511] wsa883x-codec sdw:0:0217:0202:00:2: WSA883X Version 1_1, Variant: WSA8835_V2
+[   11.562623] q6apm-dai 3000000.remoteproc:glink-edge:gpr:service@1:dais: Adding to iommu group 23
+[   11.585766] snd-sc8280xp sound: ASoC: adding FE link failed
+[   11.585872] snd-sc8280xp sound: ASoC: topology: could not load header: -517
+[   11.586021] qcom-apm gprsvc:service:2:1: tplg component load failed-517
+[   11.586100] qcom-apm gprsvc:service:2:1: ASoC: error at snd_soc_component_probe on gprsvc:service:2:1: -22
+[   11.586530] snd-sc8280xp sound: ASoC: failed to instantiate card -22
+[   11.591831] snd-sc8280xp: probe of sound failed with error -22
 
-OK, thanks. Maybe we first need to confirm how to set the identifier format in the driver. Then it will be clearer how to implement Compat matching.
+I don't think I've ever seen it before dropping the runtime PM patch as
+you did in v2, and I hit it twice fairly quickly after dropping it. And
+now again.
 
+I'm not saying that the runtime PM patch is necessarily correct, and
+perhaps it is just changes in timing that lead to the above, but we
+definitely have a bug here.
 
-Thanks，
-Jing
+My X13s is sitting here in the above state right now if there's some
+state you want me to inspect.
+
+This is the branch I'm using:
+
+	https://github.com/jhovold/linux/tree/wip/sc8280xp-v6.4-rc5
+
+with commit
+
+	c0ab29445663 ("soundwire: qcom: enable runtime pm before controller is registered")
+
+reverted.
+
+Johan
