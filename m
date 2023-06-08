@@ -2,123 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71BCF7278D4
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:29:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AC127278D7
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:30:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235148AbjFHH3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 03:29:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34142 "EHLO
+        id S235311AbjFHHau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 03:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235211AbjFHH3c (ORCPT
+        with ESMTP id S234793AbjFHHas (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 03:29:32 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0AFF26AC
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 00:29:21 -0700 (PDT)
-Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9C623C4C;
-        Thu,  8 Jun 2023 09:28:51 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1686209333;
-        bh=vlIinTewP+cDKlpKQXd2OIGqSCvgjHtEAu4OH/s26NE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=PJYnkTDUXtPrki2J7u75rGyX5k/ctQpCgAREtF2QBGDS4igS0CYdsfvAgzIvWiiQi
-         0VoIGOss7jCZUG+PaTALc2Lq5jNR9dhoEkyJV1V/3lRlcKkRfRdP8N5FG0EiO+QBzP
-         IAHWODcqsOF/rTkVi3o+YiuyfbRaFNu0x6qBgskc=
-Message-ID: <be2c4c02-43bc-5b16-2162-b8ace8d34996@ideasonboard.com>
-Date:   Thu, 8 Jun 2023 10:29:14 +0300
+        Thu, 8 Jun 2023 03:30:48 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7894826AC
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 00:30:42 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f6370ddd27so394403e87.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 00:30:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686209441; x=1688801441;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=2IWfjRMKXtAYJWdbpoLM6wscEMkm49OW8tpzuar45To=;
+        b=ZaCXG+AYK9XoubTQgCTKf2nRHf7lLi48I1c7N9Tl1pq0ytdsxuYmhLro9CBZxfnwXo
+         zWIt+9Xzicpgj6q0FEbc6vPagmXYSqcZVMMOdbSp8/AIT7cIyhnU89DUxYB3L8ekRQ2N
+         O8VavVdWcjriLKCALn6IYKn7vhXZN3AwSfb6FM4pR/ji7LcC61AQ3sQrwhVApCZ4j7ax
+         jkyVf5ryAfmW22OsG2VAb8dUi1gB1pRIfzBLhuQG2HKp/Y2JfNJfIxagf+oockwW+6iw
+         GOJCMWN2TVu5xaZrPHNruk/mLLlqq8Gp6WFcJwFwq1ZSasjqsg5VQD6Dqo9G/B85DPYR
+         FyXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686209441; x=1688801441;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2IWfjRMKXtAYJWdbpoLM6wscEMkm49OW8tpzuar45To=;
+        b=iLmoRzFKgDfoIdNKXefDdfy1G+taF/ql4PjRUVpIn0nwMO/dgz2289jFuXFkBIHqzn
+         GVm+b66MYCp1//ZMf2eVFL2LMwIBtBPNdz84yANHY6jn1RAH2SWuoxRY8sQDeJFFCOKQ
+         5CSGuNZRUu2TDvQkzKHdjTHCXZWuz1ftnTRw3AK0p7tYZundCA99oKWkRuzKbJTntHJo
+         xePfjDZvF5H8DlMGpDOC+lesYWstSGJywOxI0drJtG/5CYzst1PwV3wxBRDGyaaVOiO6
+         nrsREkZ7NKFd3vxC2EAhmaQnQUGn+BAJcwPkmCN8Nj9AmcDbiSwOQ7BkcqjJldBfEDbc
+         MgpQ==
+X-Gm-Message-State: AC+VfDxE+xrq8unSUz0w3qjdcCxx1Jq+BCrCjChVOvE67EQBSvkhiJvz
+        AyVtZG3LLbB3DK19dCEEf010gA==
+X-Google-Smtp-Source: ACHHUZ6IY3k/0igRAxc43HI7Ll38QthT8Wh7k9RTxrOoNxMo98cdVo430gNHE0Pdep8oYW4Yb94CsA==
+X-Received: by 2002:a19:f809:0:b0:4f6:3677:54e with SMTP id a9-20020a19f809000000b004f63677054emr2597570lff.36.1686209440730;
+        Thu, 08 Jun 2023 00:30:40 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:1b90:b83e:29ce:beb6? ([2a01:e0a:982:cbb0:1b90:b83e:29ce:beb6])
+        by smtp.gmail.com with ESMTPSA id q7-20020adff947000000b0030af72bca98sm660713wrr.103.2023.06.08.00.30.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jun 2023 00:30:40 -0700 (PDT)
+Message-ID: <de71fe1b-870e-fd44-ca20-593d105fc2c1@linaro.org>
+Date:   Thu, 8 Jun 2023 09:30:39 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v7 0/8] drm/tidss: Use new connector model for tidss
+ Thunderbird/102.11.2
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH] drm/panel: s6d7aa0: remove the unneeded variable in
+ s6d7aa0_lock
 Content-Language: en-US
-To:     neil.armstrong@linaro.org, Aradhya Bhatia <a-bhatia1@ti.com>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
+To:     Wang Jianzheng <wangjianzheng@vivo.com>,
+        Artur Weber <aweber.kernel@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
         David Airlie <airlied@gmail.com>,
         Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Swapnil Jakhade <sjakhade@cadence.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Francesco Dolcini <francesco@dolcini.it>
-Cc:     DRI Development List <dri-devel@lists.freedesktop.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        Jayesh Choudhary <j-choudhary@ti.com>
-References: <20230606082142.23760-1-a-bhatia1@ti.com>
- <1f284e9d-5a1e-9fca-ceb0-478a413ae4ef@linaro.org>
- <1b31f36c-b1ba-43b5-9285-0f50384a78cf@ti.com>
- <42151d11-12d9-c165-0d4b-a0af80b683c3@linaro.org>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <42151d11-12d9-c165-0d4b-a0af80b683c3@linaro.org>
+        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     opensource.kernel@vivo.com
+References: <20230608033446.18412-1-wangjianzheng@vivo.com>
+Organization: Linaro Developer Services
+In-Reply-To: <20230608033446.18412-1-wangjianzheng@vivo.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/06/2023 12:48, neil.armstrong@linaro.org wrote:
-> On 06/06/2023 11:46, Aradhya Bhatia wrote:
->> Hi Neil,
->>
->> Thank you for reviewing the previous patches!
->>
->> On 06-Jun-23 14:37, Neil Armstrong wrote:
->>> Hi,
->>>
->>> On 06/06/2023 10:21, Aradhya Bhatia wrote:
->>>> Hi all,
->>>>
->>>> I have picked up this long standing series from Nikhil Devshatwar[1].
->>>>
->>>> This series moves the tidss to using new connectoe model, where the SoC
->>>> driver (tidss) creates the connector and all the bridges are attached
->>>> with the flag DRM_BRIDGE_ATTACH_NO_CONNECTOR. It also now creates 
->>>> bridge
->>>> to support format negotiation and and 'simple' encoder to expose it to
->>>> the userspace.
->>>>
->>>> Since the bridges do not create the connector, the bus_format and
->>>> bus_flag is set via atomic hooks.
->>>>
->>>> Support format negotiations in the tfp410, sii902x and mhdp-8546 bridge
->>>> drivers as a first step before moving the connector model.
->>>>
->>>> These patches were tested on AM625-SK EVM, AM625 SoC based BeaglePlay,
->>>> and J721E-SK. Display support for AM625 SoC has not been added upstream
->>>> and is a WIP. To test this series on AM625 based platforms, basic
->>>> display support patches, (for driver + devicetree), can be found in
->>>> the "next_AttachNoConn-v2" branch on my github fork[2].
->>>
->>> I can apply all bridge patches right now so only the tidss change 
->>> remain,
->>> is that ok for you ?
->>>
->>
->> While the bridge patches and the tidss patch can be separately built
->> without any issue, the tidss functionality will break if only the bridge
->> patches get picked up, and not the tidss.
->>
->> Would it be possible for you to pick all the patches together once Tomi
->> acks the tidss patch?
+On 08/06/2023 05:34, Wang Jianzheng wrote:
+> Remove unneeded variable and directly return 0.
 > 
-> Sure
+> Signed-off-by: Wang Jianzheng <wangjianzheng@vivo.com>
+> ---
+>   drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c b/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
+> index 102e1fc7ee38..fec0d014fd0e 100644
+> --- a/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
+> +++ b/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
+> @@ -66,7 +66,6 @@ static void s6d7aa0_reset(struct s6d7aa0 *ctx)
+>   static int s6d7aa0_lock(struct s6d7aa0 *ctx, bool lock)
+>   {
+>   	struct mipi_dsi_device *dsi = ctx->dsi;
+> -	int ret = 0;
+>   
+>   	if (lock) {
+>   		mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD1, 0xa5, 0xa5);
+> @@ -80,7 +79,7 @@ static int s6d7aa0_lock(struct s6d7aa0 *ctx, bool lock)
+>   			mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD3, 0xa5, 0xa5);
+>   	}
+>   
+> -	return ret;
+> +	return 0;
+>   }
+>   
+>   static int s6d7aa0_on(struct s6d7aa0 *ctx)
 
-I think this looks fine. For the series:
-
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-
-  Tomi
-
+Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
