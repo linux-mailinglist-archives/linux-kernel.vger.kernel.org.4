@@ -2,111 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A04CE7278F9
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC3BF7278FD
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:43:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235492AbjFHHkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 03:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38732 "EHLO
+        id S231234AbjFHHnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 03:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235514AbjFHHjy (ORCPT
+        with ESMTP id S229727AbjFHHnN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 03:39:54 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D96134;
-        Thu,  8 Jun 2023 00:39:53 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id D5779580263;
-        Thu,  8 Jun 2023 03:39:49 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 08 Jun 2023 03:39:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1686209989; x=1686217189; bh=KLXdTmjiH6Xbw
-        Q8H1+gxtl5yVppFjz4D4oQopIcKuzQ=; b=d9ZfRMzhwi/NYPwdIRTmXsfAeCzO/
-        25b7Gw2Veda1kYwShYOWCeRLGfu4tuj/6aQA4ymGTwoUXlLzwqbIwSk6fu/XP8Pq
-        LImvHWuv+65pDZclZ5u6b0WRJKcXEvTbUTZIDPEB3O88T/zswOe7xSm1ZD5Ht/Wx
-        +KGv05xSeKgXzdq/9SMiFJsqXWsWKgTi5LVzJvkGVP2bDo/plaPg8rjbkRJbSUI1
-        0mI5A26L5m9Tfv7HbaNb2iDzF1a5DWjv15aetlwE+cbNQF+nX7KO4bbtvcUgIaPK
-        pgDtSZX/IXpuYT9kkCamdWlgwfXzovnwy0PrpT6OXAqpNdlEgyWPNdmdA==
-X-ME-Sender: <xms:xIWBZJrtyY-4Z9GgMTwvhd4LsTUauiSiv5sEbPQwZmjb3pdL2PL0Mg>
-    <xme:xIWBZLqiYIKBbWqwZCqjFTJ3tOVCCBVTu27oDFX4thmGlfeK_ELIxKhRnrtS7UjMl
-    llOpc9eyFNAj0I>
-X-ME-Received: <xmr:xIWBZGO9MJxFw56uSA8PmWRiQ_8YmG-MZmF2-px-qbhd2vkp2htIymLyAxs5Ei4TBuqiOfvReEgvAieRoKY7scUitqc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedthedguddvvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkugho
-    ucfutghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrg
-    htthgvrhhnpedvudefveekheeugeeftddvveefgfduieefudeifefgleekheegleegjeej
-    geeghfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hiughoshgthhesihguohhstghhrdhorhhg
-X-ME-Proxy: <xmx:xIWBZE4BDwHugtCqKmaNVssvhlhtvUK3bUu1aphLIxdwId2pYx08_A>
-    <xmx:xIWBZI5muwJiVQR_nOwRrWlMlY5skij_c7CHEykPlsoWcCX0YYRqmg>
-    <xmx:xIWBZMjavLfOgAX6QFRsB8T8jPofVOs8P0yZmQjiAMJJ1oBmHlf4yQ>
-    <xmx:xYWBZEHZkvORjtzrL4yQRcdCnAeiCuyJyc0OrxH0WYNDEK1yEtWdlA>
-Feedback-ID: i494840e7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 8 Jun 2023 03:39:48 -0400 (EDT)
-Date:   Thu, 8 Jun 2023 10:39:45 +0300
-From:   Ido Schimmel <idosch@idosch.org>
-To:     David Ahern <dsahern@kernel.org>
-Cc:     Breno Leitao <leitao@debian.org>,
-        Remi Denis-Courmont <courmisch@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Mat Martineau <martineau@kernel.org>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>, axboe@kernel.dk,
-        asml.silence@gmail.com, leit@fb.com,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Jason Xing <kernelxing@tencent.com>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Hangyu Hua <hbh25y@gmail.com>,
-        Guillaume Nault <gnault@redhat.com>,
-        Andrea Righi <andrea.righi@canonical.com>,
-        Wojciech Drewek <wojciech.drewek@intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        "open list:DCCP PROTOCOL" <dccp@vger.kernel.org>,
-        "open list:IEEE 802.15.4 SUBSYSTEM" <linux-wpan@vger.kernel.org>,
-        "open list:NETWORKING [MPTCP]" <mptcp@lists.linux.dev>,
-        "open list:SCTP PROTOCOL" <linux-sctp@vger.kernel.org>
-Subject: Re: [PATCH net-next v6] net: ioctl: Use kernel memory on protocol
- ioctl callbacks
-Message-ID: <ZIGFwZQaW4gzNtGl@shredder>
-References: <20230606180045.827659-1-leitao@debian.org>
- <ef90361e-15b2-7ce8-fcec-21fccebe727e@kernel.org>
+        Thu, 8 Jun 2023 03:43:13 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AFDB1BF7;
+        Thu,  8 Jun 2023 00:43:11 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3587e8uA5026139, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3587e8uA5026139
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Thu, 8 Jun 2023 15:40:08 +0800
+Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Thu, 8 Jun 2023 15:40:25 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Thu, 8 Jun 2023 15:40:23 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
+ RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
+ 15.01.2375.007; Thu, 8 Jun 2023 15:40:23 +0800
+From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Ray Chi <raychi@google.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH v3 3/5] phy: realtek: usb: Add driver for the Realtek SoC USB 3.0 PHY
+Thread-Topic: [PATCH v3 3/5] phy: realtek: usb: Add driver for the Realtek SoC
+ USB 3.0 PHY
+Thread-Index: AQHZmQjXaabXymTUEkebktrVQM6RHa9+tOwAgAF5CeD//82RgIAAicGw
+Date:   Thu, 8 Jun 2023 07:40:23 +0000
+Message-ID: <96152ac15f5a4dd8901d6b126da8e7e2@realtek.com>
+References: <20230607062500.24669-1-stanley_chang@realtek.com>
+ <20230607062500.24669-3-stanley_chang@realtek.com>
+ <a9a2f3d0-9580-f027-8ec3-ac6e6bed5ed6@linaro.org>
+ <0ac12a13a91d41f0ab3a58b435ccb17a@realtek.com>
+ <b343df1a-dbd8-919d-5bea-36d532ec4103@linaro.org>
+In-Reply-To: <b343df1a-dbd8-919d-5bea-36d532ec4103@linaro.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.190.159]
+x-kse-serverinfo: RTEXDAG02.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ef90361e-15b2-7ce8-fcec-21fccebe727e@kernel.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 08:45:49AM -0600, David Ahern wrote:
-> What kind of testing was done with the patch? Would be good to run
-> through a NOS style of test suites to make sure the ipmr and ip6mr
-> changes are correct. (cc'ed Ido since the mlxsw crew has a really good
-> test up)
-
-We don't have that many multicast routing tests, but I ran those that we
-do have and they passed.
+PiA+PiBQbGVhc2UgZHJvcCBhbGwgc2ltcGxlIGRlYnVnIHN1Y2Nlc3MgbWVzc2FnZXMuIExpbnV4
+IGhhcyBhbHJlYWR5DQo+ID4+IGluZnJhc3RydWN0dXJlIGZvciB0aGlzLg0KPiA+Pg0KPiA+IE9r
+YXkuIEkgd2lsbCBjaGFuZ2UgdGhlIHByaW50IGRldl9pbmZvIHRvIGRldl9kYmcgYWJvdXQgZGVi
+dWcgbWVzc2FnZS4NCj4gDQo+IE5vLCBkcm9wIHRoZW0uIFRoaXMgcGllY2Ugb2YgY29kZSBoYWQg
+YWxyZWFkeSAyIHByaW50a3MgZm9yIHJlZ2lzdGVyIGNvbnRlbnRzIQ0KPiBZb3VyIGRyaXZlciBp
+cyBvdmVybG9hZGVkIHdpdGggcHJpbnRrcyBhbmQgdGhleSBhcmUgbW9zdGx5IHVzZWxlc3MgZm9y
+IHRoZSB1c2VyLg0KDQpJIHdpbGwgZHJvcCB0aGVtIHRvIHNpbXBsaWZ5IHRoZSBjb2RlLg0KDQo+
+ID4+IFBsZWFzZSBkcm9wIGFsbCBzaW1wbGUgZGVidWcgc3VjY2VzcyBtZXNzYWdlcy4gTGludXgg
+aGFzIGFscmVhZHkNCj4gPj4gaW5mcmFzdHJ1Y3R1cmUgZm9yIHRoaXMuDQo+ID4NCj4gPiBDYW4g
+SSBrZWVwIGxvZyBmb3IgZGV2X2RiZz8NCj4gDQo+IE9mIGNvdXJzZSBub3QuIFRoaXMgd2FzIGRl
+dl9kYmcgYW5kIEkgY29tbWVudGVkIG9uIHRoaXMuIFRoaXMgaXMgbm90IGEgZ29vZA0KPiBkZWJ1
+Zywgd2UgZG8gbm90IHByaW50IGFueXRoaW5nIG9uIGZ1bmN0aW9uIGVudHJhbmNlIGFuZCBleGl0
+Lg0KPiBmdHJhY2UoKSBpcyBmb3IgdGhpcy4NCg0KV2VsbCwgZm9yIGRlYnVnZ2luZyBwdXJwb3Nl
+cywgSSdtIGdvaW5nIHRvIGhhdmUgdG8gZGlnIGludG8gZnRyYWNlLg0KVGhpcyBpcyBhIGdyZWF0
+IHRpcC4NCj4gPj4NCj4gPj4gQXJlIHlvdSBzdXJlIHlvdSBydW4gY2hlY2twYXRjaCBvbiB0aGlz
+PyBFcnJvciBtZXNzYWdlcyBvbiBkZWJ1Z2ZzDQo+ID4+IGFyZSBhbG1vc3QgYWx3YXlzIGluY29y
+cmVjdC4NCj4gPg0KPiA+IFllcywgSSBoYXZlIHJ1biBjaGVja3BhdGNoIGZvciBwYXRjaGVzLg0K
+PiA+IFdoeSB0aGUgbWVzc2FnZSBpcyBpbmNvcnJlY3Q/DQo+IA0KPiBCZWNhdXNlIGRlYnVnZnMg
+ZmFpbHVyZXMgc2hvdWxkIG5vdCBjYXVzZSBhbnkgZXJyb3IgcHJpbnRzLiBJdCdzIGRlYnVnLCBu
+b3QNCj4gaW1wb3J0YW50Lg0KPiANCj4gRG8geW91IHNlZSBhbnl3aGVyZSBlcnJvciBtZXNzYWdl
+cz8NCj4gDQo+IEVudGlyZSBkZWJ1Z2ZzIGhhbmRsaW5nIGNvZGUgc2hvdWxkIGJlIHNpbGVudCBh
+bmQgZXZlbiBza2lwIGFsbCBlcnJvciBjaGVja2luZywNCj4gYXMgbW9zdCBBUEkgaXMgcmVhZHkg
+Zm9yIGhhbmRsaW5nIHByZXZpb3VzIGVycm9ycywgSSB0aGluay4NCg0KVGhhbmtzLCBJIHVuZGVy
+c3RhbmQgbm93Lg0KDQpUaGFua3MsDQpTdGFubGV5DQo=
