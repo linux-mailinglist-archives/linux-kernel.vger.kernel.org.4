@@ -2,71 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A59D972780A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:02:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8A7727813
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:03:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235199AbjFHHCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 03:02:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42738 "EHLO
+        id S234394AbjFHHDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 03:03:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234645AbjFHHB6 (ORCPT
+        with ESMTP id S234539AbjFHHDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 03:01:58 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 243DE2D73;
-        Thu,  8 Jun 2023 00:01:30 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Cx+enCfIFk8nEAAA--.1710S3;
-        Thu, 08 Jun 2023 15:01:22 +0800 (CST)
-Received: from [10.130.0.149] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax6OS_fIFkKNIGAA--.22132S3;
-        Thu, 08 Jun 2023 15:01:20 +0800 (CST)
-Subject: Re: [PATCH v2] perf symbol: Add LoongArch case in get_plt_sizes()
-To:     Huacai Chen <chenhuacai@kernel.org>
-References: <1684835873-15956-1-git-send-email-yangtiezhu@loongson.cn>
- <CAAhV-H4Es7qs54zr_hNPwn5MfgeLiKr3sgoTUP5iNj3JrH-1Uw@mail.gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Leo Yan <leo.yan@linaro.org>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        loongson-kernel@lists.loongnix.cn
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <7a085947-9011-ebc9-a97d-7a62c755a978@loongson.cn>
-Date:   Thu, 8 Jun 2023 15:01:19 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Thu, 8 Jun 2023 03:03:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02A92D72
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 00:02:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CB120611E2
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 07:02:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92AA8C433EF;
+        Thu,  8 Jun 2023 07:02:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686207778;
+        bh=5HtRogoAh3fjCmgcEryno3NX7M48UKDYlbGiGKHr5Fo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EWly14kwrh8eZxQZaeZ2zFY0UgJTfzku9jqovlZWOTLapW1GrGML4Yh9czEt4ALnZ
+         Vfa6/wKNkm4pSBcTfXrnXnPN1xPoG1nLqF504KVE2EIA6tM4jd5JhyJEEEYPSt14IX
+         VAIIfiEtM1BdJEjzNfH092venkVDi3JFJqsPgSEWeCEHxSVSBRwtDzMIdP7EY48UgO
+         5NTqdEkBoIRpryMOldg2xOORLAiHfYK2nnCbZ3meL6tpeYyEM+VOZVvIrt4mjMwjKv
+         5lzyL4xZIz88aGA3FwlfI9Ut8QKodxC6kZxp9ZEau2+hZf0502mPwNOhZoYeMpvBey
+         jRuITjaPtLK3A==
+Date:   Thu, 8 Jun 2023 12:32:53 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Bard Liao <yung-chuan.liao@linux.intel.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        pierre-louis.bossart@linux.intel.com, bard.liao@intel.com
+Subject: Re: [PATCH 1/4] soundwire: add enum to control device number
+ allocation
+Message-ID: <ZIF9Hd5Hv/CKQeUW@matsya>
+References: <20230531033736.792464-1-yung-chuan.liao@linux.intel.com>
+ <20230531033736.792464-2-yung-chuan.liao@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H4Es7qs54zr_hNPwn5MfgeLiKr3sgoTUP5iNj3JrH-1Uw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Ax6OS_fIFkKNIGAA--.22132S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7KrW8Ww4rAr15GF4UGrWkKrX_yoW8AF4fpr
-        13CF45KF1Dtr13G3Wxt395ZF4Igrs3CFyIgrySqFWjkFs7uw1IgrWxAry5CFyrXF1kWa4I
-        vr1Du343uF18trXCm3ZEXasCq-sJn29KB7ZKAUJUUUUk529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2kKe7AKxVWUtVW8ZwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        tVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vI
-        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jw0_GFylx2IqxVAqx4xG67
-        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
-        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14
-        v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUstxhDU
-        UUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230531033736.792464-2-yung-chuan.liao@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,65 +56,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnaldo,
+On 31-05-23, 11:37, Bard Liao wrote:
+> From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> 
+> Commit c60561014257 ("soundwire: bus: allow device number to be unique
+> at system level") introduced two strategies to allocate device
+> numbers.
+> 
+> a) a default unconstrained allocation, where each bus can allocate
+> Device Numbers independently.
+> 
+> b) an ida-based allocation. In this case each Device Number will be
+> unique at the system-level.
+> 
+> The IDA-based allocation is useful to simplify debug, but it was also
+> introduced as a prerequisite to deal with the Intel Lunar Lake
+> hardware programming sequences: the wake-ups have to be handled with a
+> system-unique SDI address at the HDaudio controller level.
+> 
+> At the time, the restriction introduced by the IDA to 8 devices total
+> seemed perfectly fine, but recently hardware vendors created
+> configurations with more than 8 devices.
+> 
+> This patch provides an iso-functionality change, with the allocation
+> selected with an enum instead of an 'ida_min' value. Follow-up patches
+> will add a new allocation strategy to allow for more than 8 devices
+> using information on the type of devices, and only use the IDA-based
+> allocation for devices capable of generating a wake.
+> 
+> Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> Reviewed-by: Rander Wang <rander.wang@intel.com>
+> Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+> ---
+>  drivers/soundwire/bus.c             |  4 ++--
+>  drivers/soundwire/intel_auxdevice.c |  1 +
+>  include/linux/soundwire/sdw.h       | 16 +++++++++++++++-
+>  3 files changed, 18 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
+> index b44f8d0affa6..e8c1c55a2a73 100644
+> --- a/drivers/soundwire/bus.c
+> +++ b/drivers/soundwire/bus.c
+> @@ -159,7 +159,7 @@ static int sdw_delete_slave(struct device *dev, void *data)
+>  
+>  	if (slave->dev_num) { /* clear dev_num if assigned */
+>  		clear_bit(slave->dev_num, bus->assigned);
+> -		if (bus->dev_num_ida_min)
+> +		if (bus->dev_num_alloc == SDW_DEV_NUM_ALLOC_IDA)
+>  			ida_free(&sdw_peripheral_ida, slave->dev_num);
+>  	}
+>  	list_del_init(&slave->node);
+> @@ -701,7 +701,7 @@ static int sdw_get_device_num(struct sdw_slave *slave)
+>  {
+>  	int bit;
+>  
+> -	if (slave->bus->dev_num_ida_min) {
+> +	if (slave->bus->dev_num_alloc == SDW_DEV_NUM_ALLOC_IDA) {
+>  		bit = ida_alloc_range(&sdw_peripheral_ida,
+>  				      slave->bus->dev_num_ida_min, SDW_MAX_DEVICES,
+>  				      GFP_KERNEL);
+> diff --git a/drivers/soundwire/intel_auxdevice.c b/drivers/soundwire/intel_auxdevice.c
+> index 0daa6ca9a224..30f3d2ab80fd 100644
+> --- a/drivers/soundwire/intel_auxdevice.c
+> +++ b/drivers/soundwire/intel_auxdevice.c
+> @@ -165,6 +165,7 @@ static int intel_link_probe(struct auxiliary_device *auxdev,
+>  	cdns->msg_count = 0;
+>  
+>  	bus->link_id = auxdev->id;
+> +	bus->dev_num_alloc = SDW_DEV_NUM_ALLOC_IDA;
+>  	bus->dev_num_ida_min = INTEL_DEV_NUM_IDA_MIN;
+>  	bus->clk_stop_timeout = 1;
+>  
+> diff --git a/include/linux/soundwire/sdw.h b/include/linux/soundwire/sdw.h
+> index c076a3f879b3..4656d6d0f3bb 100644
+> --- a/include/linux/soundwire/sdw.h
+> +++ b/include/linux/soundwire/sdw.h
+> @@ -864,6 +864,17 @@ struct sdw_master_ops {
+>  	void (*new_peripheral_assigned)(struct sdw_bus *bus, int dev_num);
+>  };
+>  
+> +/**
+> + * enum sdw_dev_num_alloc - Device Number allocation strategies
+> + * @SDW_DEV_NUM_ALLOC_DEFAULT: unconstrained first-come-first-serve allocation,
+> + * using range [1, 11]
+> + * @SDW_DEV_NUM_ALLOC_IDA: IDA-based allocation, using range [ida_min, 11]
+> + */
+> +enum sdw_dev_num_alloc {
+> +	SDW_DEV_NUM_ALLOC_DEFAULT = 0,
+> +	SDW_DEV_NUM_ALLOC_IDA,
 
-On 05/23/2023 06:26 PM, Huacai Chen wrote:
-> Acked-by: Huacai Chen <chenhuacai@loongson.cn>
->
-> On Tue, May 23, 2023 at 5:57 PM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
->>
->> We can see the following definitions in bfd/elfnn-loongarch.c:
->>
->>   #define PLT_HEADER_INSNS 8
->>   #define PLT_HEADER_SIZE (PLT_HEADER_INSNS * 4)
->>
->>   #define PLT_ENTRY_INSNS 4
->>   #define PLT_ENTRY_SIZE (PLT_ENTRY_INSNS * 4)
->>
->> so plt header size is 32 and plt entry size is 16 on LoongArch,
->> let us add LoongArch case in get_plt_sizes().
->>
->> Link: https://sourceware.org/git/?p=binutils-gdb.git;a=blob;f=bfd/elfnn-loongarch.c
->> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->> ---
->>
->> v2: Add EM_LOONGARCH definition to avoid build error
->>
->>  tools/perf/util/symbol-elf.c | 8 ++++++++
->>  1 file changed, 8 insertions(+)
->>
->> diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
->> index b2ed9cc..b3dbf6c 100644
->> --- a/tools/perf/util/symbol-elf.c
->> +++ b/tools/perf/util/symbol-elf.c
->> @@ -35,6 +35,10 @@
->>  #define EM_AARCH64     183  /* ARM 64 bit */
->>  #endif
->>
->> +#ifndef EM_LOONGARCH
->> +#define EM_LOONGARCH   258
->> +#endif
->> +
->>  #ifndef ELF32_ST_VISIBILITY
->>  #define ELF32_ST_VISIBILITY(o) ((o) & 0x03)
->>  #endif
->> @@ -411,6 +415,10 @@ static bool get_plt_sizes(struct dso *dso, GElf_Ehdr *ehdr, GElf_Shdr *shdr_plt,
->>                 *plt_header_size = 32;
->>                 *plt_entry_size = 16;
->>                 return true;
->> +       case EM_LOONGARCH:
->> +               *plt_header_size = 32;
->> +               *plt_entry_size = 16;
->> +               return true;
->>         case EM_SPARC:
->>                 *plt_header_size = 48;
->>                 *plt_entry_size = 12;
->> --
->> 2.1.0
+Let default be IDA as 0, am sure we are not setting this field in qcom
+or amd controller, lets retain the defaults please
 
-Are you OK with this change?
-Could you please pick it up in your tree?
+> +};
+> +
+>  /**
+>   * struct sdw_bus - SoundWire bus
+>   * @dev: Shortcut to &bus->md->dev to avoid changing the entire code.
+> @@ -895,9 +906,11 @@ struct sdw_master_ops {
+>   * meaningful if multi_link is set. If set to 1, hardware-based
+>   * synchronization will be used even if a stream only uses a single
+>   * SoundWire segment.
+> + * @dev_num_alloc: bus-specific device number allocation
+>   * @dev_num_ida_min: if set, defines the minimum values for the IDA
+>   * used to allocate system-unique device numbers. This value needs to be
+> - * identical across all SoundWire bus in the system.
+> + * identical across all SoundWire bus in the system. Only used if @sdw_num_alloc
+> + * is not default.
+>   */
+>  struct sdw_bus {
+>  	struct device *dev;
+> @@ -922,6 +935,7 @@ struct sdw_bus {
+>  	u32 bank_switch_timeout;
+>  	bool multi_link;
+>  	int hw_sync_min_links;
+> +	enum sdw_dev_num_alloc dev_num_alloc;
+>  	int dev_num_ida_min;
+>  };
+>  
+> -- 
+> 2.25.1
 
-Thanks,
-Tiezhu
-
+-- 
+~Vinod
