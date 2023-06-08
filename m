@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4946B72829E
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 16:25:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 881237282A0
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 16:25:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237051AbjFHOZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 10:25:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55752 "EHLO
+        id S237071AbjFHOZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 10:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237113AbjFHOYx (ORCPT
+        with ESMTP id S237142AbjFHOY4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 10:24:53 -0400
+        Thu, 8 Jun 2023 10:24:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69ABE30C3;
-        Thu,  8 Jun 2023 07:24:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F304D30D6;
+        Thu,  8 Jun 2023 07:24:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D62B264E20;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85DF764E25;
+        Thu,  8 Jun 2023 14:24:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B05E9C4339E;
         Thu,  8 Jun 2023 14:24:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A036C433A0;
-        Thu,  8 Jun 2023 14:24:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686234278;
-        bh=7ZPyZ9apG1M05E0n0MB6gFR/gnPXwymtgzxIDVjhPog=;
+        s=k20201202; t=1686234280;
+        bh=Ly+sWm6TM1FV97DnfVYc+edRAEXC0kuE80+arR4Mn2I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lyb/aRQonk8gbaoHdI0/Cb4ItgDLwxIK+DRpbx0KcKc6rNJ6Rpj7K2KQKpzmumDnE
-         WdoNs13V76MCdMdX41tTHvhd5gocZxNMJEERi+nfhLvD9G4pTxmLMApimqHyX0L624
-         t4x+22sxF1nQMKsXUZNPeEion4PCNsIBz8S6PkOgZJ9Qxtcjj2th9w1H4u/onrZWcR
-         YwxVkKN4TQA7V4Fl4JLvBPwXVE6EZ6t49WjXaMMKaPucewyNKER1YTMUKrXUqI2n5k
-         VGJi/w9oqzpuvrSUmQueff5KNiMOeypROw8NYKdqqIjd158V/EnZqu6id2PKTe1LUF
-         4J3jIFYyTWWcg==
+        b=YIEqPaQTLVy0UhU1ANwEfuEfbfEPgIno+/ovrkvx9dnO45qiOUOgsUsy0jl+9Gnhh
+         izr28sadiVKgyl1es0lpCzCTM1+wBX++R7Wo0xkIdY4inVzGOpE945pi/ckygQNpwJ
+         H1kS13OF2pGCT1NrMKtWJj7HhYrZ6iOMBF0tZAYK/keO3xz6XJFbaSq9tA87gkOz0/
+         Xqu7W0u4tu4GE85hoZP+Eb0S6BC9kNRmPdvobLpSqIyBkeoijjkqtVQlCRLGkr9sO0
+         izcqZemm2v3L+Zz8NmAwS2k6MKDXYl4vDVhhi/mSSmGdIlZ1k1jfXMVLDhYGJdAOti
+         RLXebP6yE/j0g==
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -40,9 +40,9 @@ Cc:     linux-kernel@vger.kernel.org,
         Nicolas Schier <nicolas@fjasle.eu>,
         linux-um@lists.infradead.org,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v7 01/11] Revert "[PATCH] uml: export symbols added by GCC hardened"
-Date:   Thu,  8 Jun 2023 23:24:18 +0900
-Message-Id: <20230608142428.256985-2-masahiroy@kernel.org>
+Subject: [PATCH v7 02/11] modpost: pass struct module pointer to check_section_mismatch()
+Date:   Thu,  8 Jun 2023 23:24:19 +0900
+Message-Id: <20230608142428.256985-3-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230608142428.256985-1-masahiroy@kernel.org>
 References: <20230608142428.256985-1-masahiroy@kernel.org>
@@ -58,90 +58,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit cead61a6717a9873426b08d73a34a325e3546f5d.
-
-It exported __stack_smash_handler and __guard, while they may not be
-defined by anyone.
-
-The code *declares* __stack_smash_handler and __guard. It does not
-create weak symbols. When the stack-protector is disabled, they are
-left undefined, but yet exported.
-
-If a loadable module tries to access non-existing symbols, bad things
-(a page fault, NULL pointer dereference, etc.) will happen. So, the
-current code is wrong.
-
-If the code were written as follows, it would *define* them as weak
-symbols so modules would be able to get access to them.
-
-  void (*__stack_smash_handler)(void *) __attribute__((weak));
-  EXPORT_SYMBOL(__stack_smash_handler);
-
-  long __guard __attribute__((weak));
-  EXPORT_SYMBOL(__guard);
-
-In fact, modpost forbids exporting undefined symbols. It shows an error
-message if it detects such a mistake.
-
-  ERROR: modpost: "..." [...] was exported without definition
-
-Unfortunately, it is checked only when the code is built as modular.
-The problem described above has been unnoticed for a long time because
-arch/um/os-Linux/user_syms.c is always built-in.
-
-With a planned change in Kbuild, exporting undefined symbols will always
-result in a build error instead of a run-time error. It is a good thing,
-but we need to fix the breakage in advance.
-
-One fix is to *define* weak symbols as shown above. An alternative is
-to export them conditionally as follows:
-
-  #ifdef CONFIG_STACKPROTECTOR
-  extern void __stack_smash_handler(void *);
-  EXPORT_SYMBOL(__stack_smash_handler);
-
-  external long __guard;
-  EXPORT_SYMBOL(__guard);
-  #endif
-
-This is what other architectures do; EXPORT_SYMBOL(__stack_chk_guard)
-is guarded by #ifdef CONFIG_STACKPROTECTOR.
-
-However, adding the #ifdef guard is not sensible because UML cannot
-enable the stack-protector in the first place! (Please note UML does
-not select HAVE_STACKPROTECTOR in Kconfig.)
-
-So, the code is already broken (and unused) in multiple ways.
-
-Just remove.
+The next commit will use it.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
 
-Changes in v7:
-  - New patch
+ scripts/mod/modpost.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
- arch/um/os-Linux/user_syms.c | 7 -------
- 1 file changed, 7 deletions(-)
-
-diff --git a/arch/um/os-Linux/user_syms.c b/arch/um/os-Linux/user_syms.c
-index 9b62a9d352b3..a310ae27b479 100644
---- a/arch/um/os-Linux/user_syms.c
-+++ b/arch/um/os-Linux/user_syms.c
-@@ -37,13 +37,6 @@ EXPORT_SYMBOL(vsyscall_ehdr);
- EXPORT_SYMBOL(vsyscall_end);
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index 8decf04633bc..403ba4d923f5 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -1211,7 +1211,7 @@ static void default_mismatch_handler(const char *modname, struct elf_info *elf,
+ 	}
+ }
+ 
+-static void check_section_mismatch(const char *modname, struct elf_info *elf,
++static void check_section_mismatch(struct module *mod, struct elf_info *elf,
+ 				   Elf_Sym *sym,
+ 				   unsigned int fsecndx, const char *fromsec,
+ 				   Elf_Addr faddr, Elf_Addr taddr)
+@@ -1222,7 +1222,7 @@ static void check_section_mismatch(const char *modname, struct elf_info *elf,
+ 	if (!mismatch)
+ 		return;
+ 
+-	default_mismatch_handler(modname, elf, mismatch, sym,
++	default_mismatch_handler(mod->name, elf, mismatch, sym,
+ 				 fsecndx, fromsec, faddr,
+ 				 tosec, taddr);
+ }
+@@ -1406,7 +1406,7 @@ static int addend_mips_rel(struct elf_info *elf, Elf_Shdr *sechdr, Elf_Rela *r)
+ #define R_LARCH_SUB32		55
  #endif
  
--/* Export symbols used by GCC for the stack protector. */
--extern void __stack_smash_handler(void *) __attribute__((weak));
--EXPORT_SYMBOL(__stack_smash_handler);
--
--extern long __guard __attribute__((weak));
--EXPORT_SYMBOL(__guard);
--
- #ifdef _FORTIFY_SOURCE
- extern int __sprintf_chk(char *str, int flag, size_t len, const char *format);
- EXPORT_SYMBOL(__sprintf_chk);
+-static void section_rela(const char *modname, struct elf_info *elf,
++static void section_rela(struct module *mod, struct elf_info *elf,
+ 			 Elf_Shdr *sechdr)
+ {
+ 	Elf_Rela *rela;
+@@ -1452,12 +1452,12 @@ static void section_rela(const char *modname, struct elf_info *elf,
+ 			break;
+ 		}
+ 
+-		check_section_mismatch(modname, elf, elf->symtab_start + r_sym,
++		check_section_mismatch(mod, elf, elf->symtab_start + r_sym,
+ 				       fsecndx, fromsec, r.r_offset, r.r_addend);
+ 	}
+ }
+ 
+-static void section_rel(const char *modname, struct elf_info *elf,
++static void section_rel(struct module *mod, struct elf_info *elf,
+ 			Elf_Shdr *sechdr)
+ {
+ 	Elf_Rel *rel;
+@@ -1507,7 +1507,7 @@ static void section_rel(const char *modname, struct elf_info *elf,
+ 			fatal("Please add code to calculate addend for this architecture\n");
+ 		}
+ 
+-		check_section_mismatch(modname, elf, elf->symtab_start + r_sym,
++		check_section_mismatch(mod, elf, elf->symtab_start + r_sym,
+ 				       fsecndx, fromsec, r.r_offset, r.r_addend);
+ 	}
+ }
+@@ -1524,19 +1524,19 @@ static void section_rel(const char *modname, struct elf_info *elf,
+  * to find all references to a section that reference a section that will
+  * be discarded and warns about it.
+  **/
+-static void check_sec_ref(const char *modname, struct elf_info *elf)
++static void check_sec_ref(struct module *mod, struct elf_info *elf)
+ {
+ 	int i;
+ 	Elf_Shdr *sechdrs = elf->sechdrs;
+ 
+ 	/* Walk through all sections */
+ 	for (i = 0; i < elf->num_sections; i++) {
+-		check_section(modname, elf, &elf->sechdrs[i]);
++		check_section(mod->name, elf, &elf->sechdrs[i]);
+ 		/* We want to process only relocation sections and not .init */
+ 		if (sechdrs[i].sh_type == SHT_RELA)
+-			section_rela(modname, elf, &elf->sechdrs[i]);
++			section_rela(mod, elf, &elf->sechdrs[i]);
+ 		else if (sechdrs[i].sh_type == SHT_REL)
+-			section_rel(modname, elf, &elf->sechdrs[i]);
++			section_rel(mod, elf, &elf->sechdrs[i]);
+ 	}
+ }
+ 
+@@ -1707,7 +1707,7 @@ static void read_symbols(const char *modname)
+ 					     sym_get_data(&info, sym));
+ 	}
+ 
+-	check_sec_ref(modname, &info);
++	check_sec_ref(mod, &info);
+ 
+ 	if (!mod->is_vmlinux) {
+ 		version = get_modinfo(&info, "version");
 -- 
 2.39.2
 
