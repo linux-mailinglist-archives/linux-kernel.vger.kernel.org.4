@@ -2,116 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09FAB728947
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 22:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC7472894B
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 22:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234936AbjFHURp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 16:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36396 "EHLO
+        id S231747AbjFHUSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 16:18:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjFHURm (ORCPT
+        with ESMTP id S229845AbjFHUR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 16:17:42 -0400
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66AC330FE;
-        Thu,  8 Jun 2023 13:17:11 -0700 (PDT)
-Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-777a9d7efabso50907939f.0;
-        Thu, 08 Jun 2023 13:17:11 -0700 (PDT)
+        Thu, 8 Jun 2023 16:17:59 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029F52D7E
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 13:17:45 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-510d6b939bfso1849613a12.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 13:17:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686255464; x=1688847464;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yFfOuXxs8iGOdfT2qhI1JEq3SXtax8RxnY5/Fc1nskw=;
+        b=tOrPL690XMDizppt1902CZdnVhRRGiAVY2h6pQOMPMquGW96yGqxA0WIbSxFO2hzYj
+         QJWnaa2e9gObU8AZ2JFs1RnUAEJIDlYvyz3Vk0eN8oMhXzeUPdODFYrHIciSsxP+IkvB
+         jQwIzPalMrRq9DKz/4lf8td/DpbRjoc5ifdZhGCvIzaMTootBnpupjCsIyoRUICz4e/t
+         s7DCsNccifNfK4D9fga3PZMYqo8cjQOHa1g5+0GmjGcyvRnrUycsTbOan/Dr+m5rK0cw
+         99nId16qyeJxOEnOuTWeiopCyGHCtsnDGSzjOlTPx/PNiWyaKL9qyVPA3bhi1oIBq4wV
+         bWXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686255430; x=1688847430;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=s2bzye3qdHnsdMOOpdJS17HW2XawEXF4P/SDFSPJSSg=;
-        b=iJQPKcH3qIdjrAexZDedFvQ8XMuGh4w2rPC6vb804f7EZi1RbQOPI5T+bNtLjTSx+m
-         61k49I5AYGCnwrpP5cncNzXJwqaLoZXCQmsxoj6nSVjX3E/FDN4d0h0KF8Jc3pnUyKK+
-         O0/6uVXnW9NaqOvBOhUyj3AZJWvgFG2ZQ7n1b/LOPys9g24m5kNRJ3NuznS5bdITZ/Xl
-         +qfpNDju/MPcSkJfreEK3Gq1XpDIcwqsKmg3ah8BeZ6izlYsV+437GftMaS1rVT94eUd
-         jQ7b5rM1mD4xAKV/IR7Mknmr946GE8d4t0XRgIb69P4plovtxjR50CM0Z/gXYgW5lVFT
-         6B4Q==
-X-Gm-Message-State: AC+VfDx9vJsCWR6Py/AmM9F9Y1eI2MNkBg9eJIVSp7DCLxy2+yWeMLIX
-        pWhFnD+0f8OlVo59qTJsGg==
-X-Google-Smtp-Source: ACHHUZ7lAstS+N8P/f6NVeo18fgD2XEUFYRJ7Q6a0iUpECaeA9h4PL28CMYx1jrmgNwCjR5rWjUmpw==
-X-Received: by 2002:a5d:8b42:0:b0:77a:c800:5161 with SMTP id c2-20020a5d8b42000000b0077ac8005161mr4512036iot.4.1686255430520;
-        Thu, 08 Jun 2023 13:17:10 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id g3-20020a02c543000000b0040f91a65669sm293961jaj.21.2023.06.08.13.17.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 13:17:09 -0700 (PDT)
-Received: (nullmailer pid 3391292 invoked by uid 1000);
-        Thu, 08 Jun 2023 20:17:07 -0000
-Date:   Thu, 8 Jun 2023 14:17:07 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Claudiu.Beznea@microchip.com, devicetree@vger.kernel.org,
-        alexandre.belloni@bootlin.com, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
-        conor+dt@kernel.org, conor@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        krzysztof.kozlowski+dt@linaro.org, tglx@linutronix.de,
-        wim@linux-watchdog.org, sebastian.reichel@collabora.com,
-        linux@roeck-us.net
-Subject: Re: [PATCH 3/5] dt-bindings: timer: microchip,sam9x60-pit64b:
- convert to yaml
-Message-ID: <20230608201707.GA3359628-robh@kernel.org>
-References: <20230525125602.640855-1-claudiu.beznea@microchip.com>
- <20230525125602.640855-4-claudiu.beznea@microchip.com>
- <20230525-straw-fidgeting-4c1099aa16fe@spud>
- <5edf3d3b-6f59-0af3-6414-940a278962bf@microchip.com>
- <20230526-knickers-aim-e01220e6a7cd@wendy>
- <5a5d25a2-e6b5-fd69-f615-cd3d6ed33b9f@microchip.com>
- <20230526-unsubtle-chowtime-ce329d7e5627@wendy>
+        d=1e100.net; s=20221208; t=1686255464; x=1688847464;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yFfOuXxs8iGOdfT2qhI1JEq3SXtax8RxnY5/Fc1nskw=;
+        b=PmycIlBVG4zW9Mw8IByfAKvqFRlW3qv4QK/5Evl5kOPDUIMP1QahCLpB0/F0vGdKjK
+         S/AeJb6K1hs++5PPoCHFYHUdb7hUbgPHOazu4s40bpl3Zr/qYAu0TgIXsIcUzSiA1j1u
+         faUBXsi0NzZ8bktFTzEEonIsgyxeEQTQofzmCiYs1q/J0QdOMDtd7pgXPSB6NDvugtx6
+         FQCMp7RvR5W50WHLJJ5+ba5+Aj+UNE4vjeHCUd5PZLoKwvyG5ZXPr2jH1U999inNWr2l
+         87U37kGRPCSmkkuzJ52aT0i1D69jgPHfxvKMgimMabxLA1M7X1N46jVdJCA3uAxTeyaa
+         k2GQ==
+X-Gm-Message-State: AC+VfDx9qrBVf4nnE0fNP1HxzY8exPz4l0Dlde6LwGuU7Lt+/zkg4BeW
+        K8/b4QVCajxDPcfzkPPSbVLoZBEl333CiQ9v2ww6rA==
+X-Google-Smtp-Source: ACHHUZ5rIRRCqsHv8Mj5sYTFvVoPuCCGYYh1ahL9p64lBD/iRVAni/xzcUb+JGKF5FFtYateiNco/3eYHVsT49XamTA=
+X-Received: by 2002:a17:907:c13:b0:973:d846:cd5d with SMTP id
+ ga19-20020a1709070c1300b00973d846cd5dmr154165ejc.74.1686255464184; Thu, 08
+ Jun 2023 13:17:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230526-unsubtle-chowtime-ce329d7e5627@wendy>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230602160914.4011728-1-vipinsh@google.com> <20230602160914.4011728-10-vipinsh@google.com>
+ <20230605223520.00007fbd.zhi.wang.linux@gmail.com> <ZH9tQjQk7QLyhUQR@google.com>
+ <20230607203711.000054ae.zhi.wang.linux@gmail.com>
+In-Reply-To: <20230607203711.000054ae.zhi.wang.linux@gmail.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Thu, 8 Jun 2023 13:17:08 -0700
+Message-ID: <CAHVum0dtZ2wW+itsOE=a7wwATu4VcGN-dQH1zF7Pz1LYy7J4UQ@mail.gmail.com>
+Subject: Re: [PATCH v2 09/16] KVM: arm64: Document the page table walker
+ actions based on the callback's return value
+To:     Zhi Wang <zhi.wang.linux@gmail.com>
+Cc:     maz@kernel.org, oliver.upton@linux.dev, james.morse@arm.com,
+        suzuki.poulose@arm.com, yuzenghui@huawei.com,
+        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
+        aleksandar.qemu.devel@gmail.com, tsbogend@alpha.franken.de,
+        anup@brainfault.org, atishp@atishpatra.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, seanjc@google.com, pbonzini@redhat.com,
+        dmatlack@google.com, ricarkol@google.com,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-mips@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 08:55:39AM +0100, Conor Dooley wrote:
-> On Fri, May 26, 2023 at 06:41:39AM +0000, Claudiu.Beznea@microchip.com wrote:
-> > On 26.05.2023 09:23, Conor Dooley wrote:
-> > > On Fri, May 26, 2023 at 04:47:28AM +0000, Claudiu.Beznea@microchip.com wrote:
-> > >> On 25.05.2023 20:14, Conor Dooley wrote:
-> > >>>> Convert Microchip PIT64B to YAML. Along with it clock-names binding has
-> > >>>> been added as the driver needs it to get PIT64B clocks.
-> > >>> I don't think both of these PIT things need to have different binding
-> > >>> files. 90% of it is the same, just the clock-names/number - so you can
-> > >>
-> > >> But these are different hardware blocks with different functionalities and
-> > >> different drivers.
-> > > 
-> > > Having different drivers doesn't preclude having them in the same
-> > > binding provided the function/description etc are more or less
-> > > identical. I was confused by:
-> > > 
-> > > +description:
-> > > +  The 64-bit periodic interval timer provides the operating system scheduler
-> > > +  interrupt. It is designed to offer maximum accuracy and efficient management,
-> > > +  even for systems with long response times.
-> > > 
-> > > +description:
-> > > +  Atmel periodic interval timer provides the operating system’s scheduler
-> > > +  interrupt. It is designed to offer maximum accuracy and efficient management,
-> > > +  even for systems with long response time.
-> > > 
-> > > Those seemed like they do the same thing to me!
-> > 
-> > They do the same thing, they are timers... But the way they do it (from
-> > hardware perspective) is totally different. With this would you still
-> > prefer to have them merged?
-> 
-> Yeah, one binding would be my preference.
+On Wed, Jun 7, 2023 at 5:37=E2=80=AFAM Zhi Wang <zhi.wang.linux@gmail.com> =
+wrote:
+>
+> On Tue, 6 Jun 2023 10:30:42 -0700
+> Vipin Sharma <vipinsh@google.com> wrote:
+>
+> > On Mon, Jun 05, 2023 at 10:35:20PM +0800, Zhi Wang wrote:
+> > > On Fri,  2 Jun 2023 09:09:07 -0700
+> > > Vipin Sharma <vipinsh@google.com> wrote:
+> > >
+> > > > Document what the page table walker do when walker callback functio=
+n returns
+> > > > a value.
+> > > >
+> > > > Current documentation is not correct as negative error of -EAGAIN o=
+n a
+> > > > non-shared page table walker doesn't terminate the walker and conti=
+nues
+> > > > to the next step.
+> > > >
+> > > > There might be a better place to keep this information, for now thi=
+s
+> > > > documentation will work as a reference guide until a better way is
+> > > > found.
+> > > >
+> > >
+> > > After reading the whole patch series, I was thinking it might be a go=
+od
+> > > time to improve the way how the visitor function and page table walke=
+r
+> > > talk to each other. The error code is good enough before, but its mea=
+ning
+> > > seems limited and vague when the visitor function wants to express mo=
+re about
+> > > what exactly happens inside. I am not sure if it is a good idea to co=
+ntinue
+> > > that way: 1. found a new situation. 2. choosing a error code for visi=
+tor
+> > > function. 3. walker translates the error code into the situation to
+> > > handle. 4. document the error code and its actual meaning.
+> > >
+> > > Eventually I am afraid that we are going to abuse the error code.
+> >
+> > I agree that error numbers are not sufficient and this will become more
+> > difficult and cumbersome for more cases in future if we need different
+> > behavior based on different error codes for different visitor functions=
+.
+> >
+> > >
+> > > What about introducing a set of flags for the visitor function to exp=
+ress
+> > > what happened and simplify the existing error code?
+> > >
+> >
+> > If I understood correctly what you meant, I think this will also end up
+> > having the same issue down the line, we are just switching errors with
+> > flags as they might not be able to express everything.
+> >
+> > "Flags for visitor function to express what happened"  - This is what
+> > ret val and errors do.
+> >
+>
+> Thanks so much for the efforts of the sample code.
+>
+> But when the "ret val" is an error code for pgtable matters, It turns vag=
+ue.
+> We have -EAGAIN to represent "retry" and "-ENONET" to represent PTE not t=
+here,
+> and they seems end up with different behaviors in different types of pgta=
+ble
+> walk. That is what I feels off.
+>
+> visitor_cb has two different requirements of returning the status: 1)
+> something wrong happens *not* related to the pgtable, e.g. failing to
+> allocate memory. 2) something happens related to the pgtable. e.g PTE doe=
+sn't
+> exists.
+>
+> For 1) It is natural to return an error code and the caller might just ba=
+il out
+> via its error handling path.
+>
+> I think the core problem is: the two different usages are mixed and they =
+don't
+> actually fit with each other. 2) is requiring more details in the future =
+other
+> than a simple error code.
+>
+>
+> For 2) I think it is better have a set of flags. the name of the flags ca=
+n
+> carry more explicit meanings than error code. E.g.:
+>
+> ------------------
+>
+> diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/as=
+m/kvm_pgtable.h
+> index 4cd6762bda80..b3f24b321cd7 100644
+> --- a/arch/arm64/include/asm/kvm_pgtable.h
+> +++ b/arch/arm64/include/asm/kvm_pgtable.h
+> @@ -204,6 +204,15 @@ enum kvm_pgtable_walk_flags {
+>         KVM_PGTABLE_WALK_HANDLE_FAULT           =3D BIT(4),
+>  };
+>
+> +struct kvm_pgtable_walk_status {
+> +       union {
+> +               u8 raw;
+> +               struct {
+> +                       unsigned retry:1;
+> +                       unsigned stop:1;
+> +                       unsigned ignore:1;
+> +                       /* more to come */
+> +               };
+> +       };
+> +};
+> +
+>  struct kvm_pgtable_visit_ctx {
+>         kvm_pte_t                               *ptep;
+>         kvm_pte_t                               old;
+> @@ -213,8 +222,10 @@ struct kvm_pgtable_visit_ctx {
+>         u64                                     end;
+>         u32                                     level;
+>         enum kvm_pgtable_walk_flags             flags;
+> +       struct kvm_pgtable_walk_status          *status;
+>  };
+>
+>  typedef int (*kvm_pgtable_visitor_fn_t)(const struct kvm_pgtable_visit_c=
+tx *ctx,
+>                                         enum kvm_pgtable_walk_flags visit=
+);
+>
+> ----------------
+>
+> Visitor functions sets the flags via ctx->status and kvm_pgtable_walk_xxx=
+ can
+> check the bits in the ctx to decide what to do for the next.
+>
+> I can cook a patch for re-factoring this part if we think it is a good id=
+ea.
+>
 
-I'd probably just leave them separate if they're pretty much unrelated.
-
-Rob
+This can also be one option. I will wait till others also weigh in on
+how to make walkers and callbacks work together for more use cases.
