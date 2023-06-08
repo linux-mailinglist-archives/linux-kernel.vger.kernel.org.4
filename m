@@ -2,77 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8E17727C96
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:17:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AFA6727C8B
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235913AbjFHKRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 06:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39196 "EHLO
+        id S235809AbjFHKQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 06:16:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235804AbjFHKRn (ORCPT
+        with ESMTP id S235661AbjFHKQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 06:17:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039ED2D44
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 03:16:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686219414;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CkSBFkEaQ4x9rH0bVltqMnMT5xLInhrDlt72mpqM2uM=;
-        b=XSNGje8pbwE5S1hAozdCBW/o0bPZvktejVMSAuM3hQiTrZMHGaCs2h3sdvTR91dsGgcHGr
-        Q30V/fJjQC75mkDfXMmF293HO8ma9PutzrQnrLQq7TDeYjjJXM2Nvwac2A+47tXMj4yHsR
-        n2hVJXpiiNvZpd2vmqYTDc+8NEywPLc=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-502-5xtmcyTMN7yyDn9WXPIWZg-1; Thu, 08 Jun 2023 06:16:53 -0400
-X-MC-Unique: 5xtmcyTMN7yyDn9WXPIWZg-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-97463348446so66054566b.2
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 03:16:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686219411; x=1688811411;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CkSBFkEaQ4x9rH0bVltqMnMT5xLInhrDlt72mpqM2uM=;
-        b=ZYdrU2YZCHKl26PMHiW0Glxdjn3qnyLlLhU2pfcfTHBqER2QM2aBFSXSCPOeAZSTGC
-         kAP5IsLBR8SAjsdr9oSEcAdeu3Ogj7ktvvUwZSa1PbkZlfRqUc07gtTlRFwgUKSuYNuJ
-         PdjUqRGq6a5BTBTCHU8pGAzJUxIERzVo956otmfGFqRWuhEfjntY3zXgjmHF+AwDor5O
-         SE8vPTSnlt4OqS2TgnRN+9LM3OX5Fzwy/GHSwLlHlavoTn4VK1PJ7XzKp1FTA/1yyc6k
-         rmM1uK5cyNAu+0qLvrMA7lpxdEDY5LVHSV/q3UgLVRAVIG6VYhXdBQgjahU8xwImGof2
-         tTDA==
-X-Gm-Message-State: AC+VfDxTmj1mRBXtJebYF69W6TmuiW97cYvyXViII4zWd2Y0IaN2kjBn
-        yQXYT++Px5bT9RQrpE7heVlubs8DTg2pg7Srh2VCyWgxEumcUd07qq0StXjYF1VWyhQ+f0yVqTd
-        NZ0lF7+jl9o84fb5copsZBjYm6CmClHc9
-X-Received: by 2002:a17:907:72cc:b0:973:9494:4e5c with SMTP id du12-20020a17090772cc00b0097394944e5cmr7850383ejc.65.1686219411441;
-        Thu, 08 Jun 2023 03:16:51 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7x6MAb8Al9ZO5Rr9aBjQBOdF0IBf+DSr4m+9KOnoWcs8EgLyJWZmfwY8JRVpJ0lgZMIUV87A==
-X-Received: by 2002:a17:907:72cc:b0:973:9494:4e5c with SMTP id du12-20020a17090772cc00b0097394944e5cmr7850367ejc.65.1686219411248;
-        Thu, 08 Jun 2023 03:16:51 -0700 (PDT)
-Received: from localhost.localdomain ([46.33.96.32])
-        by smtp.gmail.com with ESMTPSA id e20-20020a170906249400b00977da0f14ffsm506558ejb.171.2023.06.08.03.16.50
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 08 Jun 2023 03:16:50 -0700 (PDT)
-From:   Michal Sekletar <msekleta@redhat.com>
-To:     jirislaby@kernel.org
-Cc:     arozansk@redhat.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        msekleta@redhat.com, shuah@kernel.org
-Subject: [PATCH v2 2/2] selftests: tty: add selftest for tty timestamp updates
-Date:   Thu,  8 Jun 2023 12:16:16 +0200
-Message-Id: <20230608101616.44152-2-msekleta@redhat.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230608101616.44152-1-msekleta@redhat.com>
-References: <c91c458e-58d0-f13a-9adb-a48a19f82107@kernel.org>
- <20230608101616.44152-1-msekleta@redhat.com>
+        Thu, 8 Jun 2023 06:16:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B2F2700;
+        Thu,  8 Jun 2023 03:16:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DFF626133B;
+        Thu,  8 Jun 2023 10:16:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C817BC433EF;
+        Thu,  8 Jun 2023 10:16:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686219383;
+        bh=3RIXBkhz0gFNRjIrzHIO1ESCsLgw9gEjUuc5wQ6OvR4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=awAv8PdrGGVQPX8fPgjx1N+quYzCmaOB9MOpQLVosxcVFnut/sNWMDMtY5Kp5Ke58
+         l0t9JDYXXV+9Rgnpxf80ylEIBZ9hozGRzyDHO2HUQAUdh4PQ8nPjyi2jD4itZDLffk
+         cfucNcy6Dk0tEWPb22EUFWdjciCY9R1AxI+cSH4Q=
+Date:   Thu, 8 Jun 2023 12:16:20 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ekansh Gupta <quic_ekangupt@quicinc.com>
+Cc:     srinivas.kandagatla@linaro.org, linux-arm-msm@vger.kernel.org,
+        ekangupt@qti.qualcomm.com, linux-kernel@vger.kernel.org,
+        fastrpc.upstream@qti.qualcomm.com, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [RESEND PATCH v1 0/2] Privileged process support on remote
+ subsystem
+Message-ID: <2023060857-renewed-bonehead-5b36@gregkh>
+References: <1686155407-20054-1-git-send-email-quic_ekangupt@quicinc.com>
+ <2023060722-zap-fiftieth-4323@gregkh>
+ <a665978d-f1e7-380e-f5f2-cf1270fa7961@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a665978d-f1e7-380e-f5f2-cf1270fa7961@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,142 +58,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Michal Sekletar <msekleta@redhat.com>
----
- tools/testing/selftests/Makefile              |  1 +
- tools/testing/selftests/tty/.gitignore        |  2 +
- tools/testing/selftests/tty/Makefile          |  5 ++
- .../testing/selftests/tty/tty_tstamp_update.c | 88 +++++++++++++++++++
- 4 files changed, 96 insertions(+)
- create mode 100644 tools/testing/selftests/tty/.gitignore
- create mode 100644 tools/testing/selftests/tty/Makefile
- create mode 100644 tools/testing/selftests/tty/tty_tstamp_update.c
+On Thu, Jun 08, 2023 at 03:23:06PM +0530, Ekansh Gupta wrote:
+> 
+> 
+> On 6/8/2023 12:17 AM, Greg KH wrote:
+> > On Wed, Jun 07, 2023 at 10:00:05PM +0530, Ekansh Gupta wrote:
+> > > Add support to run remote user process as privileged on remote
+> > > subsystem. The privileged user process can be given prioritized
+> > > access to remote processor resources. This is achieved in kernel
+> > > based on the group ID of the process. The kernel will have a
+> > > pre-defined fastrpc group ID and if the process's group ID matches
+> > > with it, then the process is treated as a privileged process. This
+> > > information is sent to the remote processor during PD initialization
+> > > and the PD is treated as a privileged PD.
+> > > 
+> > > Ekansh Gupta (2):
+> > >    dt-bindings: misc: fastrpc: add fastrpc group IDs property
+> > >    misc: fastrpc: detect privileged processes based on group ID
+> > > 
+> > >   .../devicetree/bindings/misc/qcom,fastrpc.yaml     |   6 +
+> > >   drivers/misc/fastrpc.c                             | 124 +++++++++++++++++++++
+> > >   2 files changed, 130 insertions(+)
+> > > 
+> > > -- 
+> > > 2.7.4
+> > > 
+> > 
+> > Why is this a RESEND?
+> > 
+> I missed sending the patches to some necessary people and lists. Hence,
+> resent the patch series.
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 90a62cf75..862f5f9a7 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -86,6 +86,7 @@ TARGETS += timers
- endif
- TARGETS += tmpfs
- TARGETS += tpm2
-+TARGETS += tty
- TARGETS += user
- TARGETS += vDSO
- TARGETS += mm
-diff --git a/tools/testing/selftests/tty/.gitignore b/tools/testing/selftests/tty/.gitignore
-new file mode 100644
-index 000000000..fe70462a4
---- /dev/null
-+++ b/tools/testing/selftests/tty/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+tty_tstamp_update
-diff --git a/tools/testing/selftests/tty/Makefile b/tools/testing/selftests/tty/Makefile
-new file mode 100644
-index 000000000..50d7027b2
---- /dev/null
-+++ b/tools/testing/selftests/tty/Makefile
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0
-+CFLAGS = -O2 -Wall
-+TEST_GEN_PROGS := tty_tstamp_update
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/tty/tty_tstamp_update.c b/tools/testing/selftests/tty/tty_tstamp_update.c
-new file mode 100644
-index 000000000..0ee97943d
---- /dev/null
-+++ b/tools/testing/selftests/tty/tty_tstamp_update.c
-@@ -0,0 +1,88 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <errno.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/stat.h>
-+#include <unistd.h>
-+#include <linux/limits.h>
-+
-+#include "../kselftest.h"
-+
-+#define MIN_TTY_PATH_LEN 8
-+
-+static bool tty_valid(char *tty)
-+{
-+	if (strlen(tty) < MIN_TTY_PATH_LEN)
-+		return false;
-+
-+	if (strncmp(tty, "/dev/tty", MIN_TTY_PATH_LEN) == 0 ||
-+	    strncmp(tty, "/dev/pts", MIN_TTY_PATH_LEN) == 0)
-+		return true;
-+
-+	return false;
-+}
-+
-+static int write_dev_tty(void)
-+{
-+	FILE *f;
-+	int r = 0;
-+
-+	f = fopen("/dev/tty", "r+");
-+	if (!f)
-+		return -errno;
-+
-+	r = fprintf(f, "hello, world!\n");
-+	if (r != strlen("hello, world!\n"))
-+		r = -EIO;
-+
-+	fclose(f);
-+	return r;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	int r;
-+	char tty[PATH_MAX] = {};
-+	struct stat st1, st2;
-+
-+	ksft_print_header();
-+	ksft_set_plan(1);
-+
-+	r = readlink("/proc/self/fd/0", tty, PATH_MAX);
-+	if (r < 0)
-+		ksft_exit_fail_msg("readlink on /proc/self/fd/0 failed: %m\n");
-+
-+	if (!tty_valid(tty))
-+		ksft_exit_skip("invalid tty path '%s'\n", tty);
-+
-+	r = stat(tty, &st1);
-+	if (r < 0)
-+		ksft_exit_fail_msg("stat failed on tty path '%s': %m\n", tty);
-+
-+	/* We need to wait at least 8 seconds in order to observe timestamp change */
-+	/* https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fbf47635315ab308c9b58a1ea0906e711a9228de */
-+	sleep(10);
-+
-+	r = write_dev_tty();
-+	if (r < 0)
-+		ksft_exit_fail_msg("failed to write to /dev/tty: %s\n",
-+				   strerror(-r));
-+
-+	r = stat(tty, &st2);
-+	if (r < 0)
-+		ksft_exit_fail_msg("stat failed on tty path '%s': %m\n", tty);
-+
-+	/* We wrote to the terminal so timestamps should have been updated */
-+	if (st1.st_atim.tv_sec == st2.st_atim.tv_sec &&
-+	    st1.st_mtim.tv_sec == st2.st_mtim.tv_sec) {
-+		ksft_test_result_fail("tty timestamps not updated\n");
-+		ksft_exit_fail();
-+	}
-+
-+	ksft_test_result_pass(
-+		"timestamps of terminal '%s' updated after write to /dev/tty\n", tty);
-+	return EXIT_SUCCESS;
-+}
--- 
-2.39.1
+Please always say so when doing a resend as I think the documentation
+asks you to, right?
 
+thanks,
+
+greg k-h
