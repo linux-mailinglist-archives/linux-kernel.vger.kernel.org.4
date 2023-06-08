@@ -2,115 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD89727F97
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 14:04:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 167C3727F91
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 14:01:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236533AbjFHMEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 08:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40984 "EHLO
+        id S236501AbjFHMBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 08:01:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236536AbjFHMEF (ORCPT
+        with ESMTP id S230290AbjFHMBM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 08:04:05 -0400
-Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CFB02136
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 05:04:03 -0700 (PDT)
+        Thu, 8 Jun 2023 08:01:12 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87946210C
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 05:01:10 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-977ed383b8aso97358666b.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 05:01:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1686225844; x=1717761844;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=4vKyX2e3xjjf80UVNk4kdfkLWpJ45nfqrK+CtzrXfKM=;
-  b=PopBWgFuaBzdC5rWY4/6cbyvIctpDes6ky3K1vt++6XZ9aVH3CKAWjru
-   K0SasxLgNEj77ERIVAa2dad1sYlNQu4qos67is1pMYl7NfSNyZ6n9XoTz
-   yj+t6bN6xFirLWOY2Sgnaofowj9dPp3zQBnsqGFuTJPxEhVcjru5OvIUq
-   s=;
-X-IronPort-AV: E=Sophos;i="6.00,226,1681171200"; 
-   d="scan'208";a="337716486"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-m6i4x-0aba4706.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 12:03:58 +0000
-Received: from EX19D014EUC004.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1e-m6i4x-0aba4706.us-east-1.amazon.com (Postfix) with ESMTPS id 61C28A7B21;
-        Thu,  8 Jun 2023 12:03:56 +0000 (UTC)
-Received: from u5d18b891348c5b.ant.amazon.com (10.146.13.221) by
- EX19D014EUC004.ant.amazon.com (10.252.51.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Thu, 8 Jun 2023 12:03:50 +0000
-From:   James Gowans <jgowans@amazon.com>
-To:     Thomas Gleixner <tglx@linutronix.de>, <liaochang1@huawei.com>,
-        Marc Zyngier <maz@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, James Gowans <jgowans@amazon.com>,
-        KarimAllah Raslan <karahmed@amazon.com>,
-        Yipeng Zou <zouyipeng@huawei.com>,
-        Zhang Jianhua <chris.zjh@huawei.com>
-Subject: [PATCH 3/3] irqchip/gic-v3-its: Enable RESEND_WHEN_IN_PROGRESS for LPIs
-Date:   Thu, 8 Jun 2023 14:00:21 +0200
-Message-ID: <20230608120021.3273400-4-jgowans@amazon.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230608120021.3273400-1-jgowans@amazon.com>
-References: <20230608120021.3273400-1-jgowans@amazon.com>
+        d=linaro.org; s=google; t=1686225669; x=1688817669;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZSfpWD4teVA0PB2ivylgMo2dut6dNPatdLRqxIkNQ+Q=;
+        b=WoTNi+ai6NsW8KPLL3LglJc2enfwxbm4PzanNJzUP2kSg8rIB+8VAY8VxVGA8oHiBd
+         aCpp7uniWV9tqmT9LxQoBX4diI+7/0VA1bGTXiIVMFDUryAz58F2dSqdQFRzIabkPtNF
+         VNDGsZdS4ps1dVEBvYR8lsGyNwWK8Cr5ApUpLqNehriyJel3kUoJJ4shO6wHVkQ+dqCR
+         5GmbTemDGR1vowPNxXZAKpRwY6gSO8OCu2T7G2gMkP5bSNHDgfEzSpfwaO2tfbHmy8p0
+         xl0hr55EF2E2bIm4H1u8jMtYiKhvJtQItiOUuEnIMdZDwtYP2m7Z6v2WJRZ/sjvFcGRV
+         hzXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686225669; x=1688817669;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZSfpWD4teVA0PB2ivylgMo2dut6dNPatdLRqxIkNQ+Q=;
+        b=IS4Ujhylj+CZdjiRuTlZv8XV3P5aGf4j9ox/LzIY2MlS8WXb37plyccPaXEtZEad1e
+         3ROLLXKqdeTqHazzi8AVEQz23Dc6icon5HJiLcxHgRoMiInSfXwuyYr8KhFCxijTmp49
+         5HzAKyeOpr9nuakTh6HeJp28FKZvxRBuRLCJyzgjCpZ7hQYGhMLmXLIaLQU/fK5P+QH/
+         Ip5V0wvHvu3MADsyxPw2eE5e8Rodsh1luiZCPmQvUkI0j3dZtiD5T83I25WfoKODGljF
+         KXNR16iNIHgmnu6vyL8Huy21s09KRxldLNFf2eMVuZvWH6UWHp1WmZr7FcKGwhws9ta6
+         IjXQ==
+X-Gm-Message-State: AC+VfDx8d4rGUaYKHdRZqAKJXrO/l84QpGMnXNGNDtet3whM2IRiLKKk
+        gCwzPj3D1rPk/uJO/l0L3gwDoQ==
+X-Google-Smtp-Source: ACHHUZ64DPz/2YQ7ZsaUzDtgwN8iEGLtqsNJZpVuVaw6nlFGzaquFSCCNzMzj3L2VCS98bdm8s2DJA==
+X-Received: by 2002:a17:907:a413:b0:978:9011:5893 with SMTP id sg19-20020a170907a41300b0097890115893mr3107734ejc.37.1686225668903;
+        Thu, 08 Jun 2023 05:01:08 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id gg24-20020a170906e29800b00974638e4a98sm610936ejb.24.2023.06.08.05.01.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jun 2023 05:01:08 -0700 (PDT)
+Message-ID: <07c455ff-c44d-891b-e2ef-e5cc612975e6@linaro.org>
+Date:   Thu, 8 Jun 2023 14:01:06 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.146.13.221]
-X-ClientProxiedBy: EX19D033UWC003.ant.amazon.com (10.13.139.217) To
- EX19D014EUC004.ant.amazon.com (10.252.51.182)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v3 1/2] dt-bindings: nand: meson: Fix 'nand-rb' property
+Content-Language: en-US
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     oxffffaa@gmail.com, kernel@sberdevices.ru,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230608044728.1328506-1-AVKrasnov@sberdevices.ru>
+ <20230608044728.1328506-2-AVKrasnov@sberdevices.ru>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230608044728.1328506-2-AVKrasnov@sberdevices.ru>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GIC-v3 LPIs are impacted by an architectural design issue: they do not
-have a global active state and as such the next LPI can be delivered to
-a new CPU after an affinity change while the previous LPI handler has
-not yet returned on the original CPU. If LPIs had an active state, then
-an LPI would not be able to be retriggered until the first CPU had
-issued a deactivation. As is, it is necessary to cater for this case in
-software by enabling the IRQD_RESEND_WHEN_IN_PROGRESS flag for GIC-v3
-interrupts. Setting this flag mitigates the issue by getting the
-original CPU to resend the interrupt after the handler completed.
+On 08/06/2023 06:47, Arseniy Krasnov wrote:
+> Add description of 'nand-rb' property. Use "Fixes" because this property
+> must be supported since the beginning.
+> 
+> Fixes: fbc00b5e746f ("dt-bindings: nand: meson: convert txt to yaml")
+> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
 
-This RESEND_WHEN_INPROGRESS enablement is done for vanilla GIC-v3
-interrupts allocated from its_irq_domain_alloc as well as directly
-injected vLPIs for vPEs provided by GIC-v4 features, which still uses
-the GIC-v3 code.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Suggested-by: Marc Zyngier <maz@kernel.org>
-Signed-off-by: James Gowans <jgowans@amazon.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: KarimAllah Raslan <karahmed@amazon.com>
-Cc: Yipeng Zou <zouyipeng@huawei.com>
-Cc: Zhang Jianhua <chris.zjh@huawei.com>
----
- drivers/irqchip/irq-gic-v3-its.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
-index 0ec2b1e1df75..1994541eaef8 100644
---- a/drivers/irqchip/irq-gic-v3-its.c
-+++ b/drivers/irqchip/irq-gic-v3-its.c
-@@ -3585,6 +3585,7 @@ static int its_irq_domain_alloc(struct irq_domain *domain, unsigned int virq,
- 		irqd = irq_get_irq_data(virq + i);
- 		irqd_set_single_target(irqd);
- 		irqd_set_affinity_on_activate(irqd);
-+		irqd_set_resend_when_in_progress(irqd);
- 		pr_debug("ID:%d pID:%d vID:%d\n",
- 			 (int)(hwirq + i - its_dev->event_map.lpi_base),
- 			 (int)(hwirq + i), virq + i);
-@@ -4523,6 +4524,7 @@ static int its_vpe_irq_domain_alloc(struct irq_domain *domain, unsigned int virq
- 		irq_domain_set_hwirq_and_chip(domain, virq + i, i,
- 					      irqchip, vm->vpes[i]);
- 		set_bit(i, bitmap);
-+		irqd_set_resend_when_in_progress(irq_get_irq_data(virq + i));
- 	}
- 
- 	if (err) {
--- 
-2.25.1
+Best regards,
+Krzysztof
 
