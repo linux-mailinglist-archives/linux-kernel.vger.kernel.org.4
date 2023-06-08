@@ -2,95 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BFC2727B7B
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:33:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB24727B7D
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:33:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236053AbjFHJd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 05:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39650 "EHLO
+        id S236011AbjFHJdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 05:33:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236007AbjFHJdN (ORCPT
+        with ESMTP id S236005AbjFHJd1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 05:33:13 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1FC3A85
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 02:32:45 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f735259fa0so3076075e9.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 02:32:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1686216764; x=1688808764;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Qh+AyXkdA/v/9kzVTrAL99NIpdi0mGHc3m8uGx6UR50=;
-        b=2zfWTuEMe3vS7U9zuJsMP2vQfKn8N+zqkxv+/d/SAkFZXyxO/JlkYJDJfYLoU2SzYk
-         HOFfN7F+urIh30E6sqIClU5tRfZTXUkCUe5PetIsu0eLjLOfYWfhzb2tTFKWHusiTsLa
-         3C99D0XgCaxBQkWubyObQpI8fGvpsqVVnxy9I41a0tNssosTD5paCXmH0ORLOBGmZfeF
-         SREg7sdTJ8a4fI3a0h3g/UuzMW6WFAtA2NNxlRMyMHnXhtlvuDZC2i0pjONTDk8A34Zk
-         cgd9iHTXTqP4YkCLMJV1Wg+TESY2Ck6rPjmQHkeLZPiAhYPdDEAONBsrmPxEMrT3sAdq
-         Ml5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686216764; x=1688808764;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qh+AyXkdA/v/9kzVTrAL99NIpdi0mGHc3m8uGx6UR50=;
-        b=Ae2tlOlRx6cVqJYewalvORYxROd69xHQ3YtpENIGslSXfHS+vawWQWnBzVLbcI2HP/
-         6ydQmDaR1PMd3oLOZtuoUfw/uNPCmxQY3JEXnMt8woIFZajl0TDEq9QbltrvY9fhHTE6
-         P4XMCfn5QiVdm/38tZjoNqsdvGtQYPK9WsuvFpr9N6dXgdDYxZd88YJNI0I8nRV4rTim
-         J3MFdF1xOOyWsmAzTqbcBJNdVU+FJ8gVkn5WnoVID/NcEJ+HXtXhe/Tw61ihF5HzPBtj
-         4l9RYsIQwjfvl6Lc1HIWsuT/9P5eaNTeXPHC2e4igGnlAVuzwKlmokx/yyOrzC5QOOFt
-         ELXw==
-X-Gm-Message-State: AC+VfDzWHnARsoE5lPA+w4NXQG8LjO3771Y8oldmG5PNfG5klmZyg+nt
-        +iNx+luRRnZbyPj2dJjEs6NO2Q==
-X-Google-Smtp-Source: ACHHUZ4niH/W18GVbLuK2FNm3lOVu/Kuf0O3YTklSvQmuP4gcU0NpNfou88IFGerHEFcQg4ETn2BUw==
-X-Received: by 2002:a7b:c5d5:0:b0:3f4:2ae5:b35d with SMTP id n21-20020a7bc5d5000000b003f42ae5b35dmr846586wmk.40.1686216763972;
-        Thu, 08 Jun 2023 02:32:43 -0700 (PDT)
-Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.gmail.com with ESMTPSA id l5-20020a7bc345000000b003f735d6fa74sm4719624wmj.9.2023.06.08.02.32.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 02:32:43 -0700 (PDT)
-Message-ID: <c8976700-6d22-3f7a-73c8-6986504cebff@baylibre.com>
-Date:   Thu, 8 Jun 2023 11:32:42 +0200
+        Thu, 8 Jun 2023 05:33:27 -0400
+Received: from out0-219.mail.aliyun.com (out0-219.mail.aliyun.com [140.205.0.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDDEE2D63
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 02:33:12 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R551e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047201;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=28;SR=0;TI=SMTPD_---.TOc6qlT_1686216783;
+Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.TOc6qlT_1686216783)
+          by smtp.aliyun-inc.com;
+          Thu, 08 Jun 2023 17:33:04 +0800
+Date:   Thu, 08 Jun 2023 17:33:03 +0800
+From:   "Hou Wenlong" <houwenlong.hwl@antgroup.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     <linux-kernel@vger.kernel.org>,
+        "Lai Jiangshan" <jiangshan.ljs@antgroup.com>,
+        "Alexey Makhalov" <amakhalov@vmware.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Andy Lutomirski" <luto@kernel.org>,
+        "Anshuman Khandual" <anshuman.khandual@arm.com>,
+        "Borislav Petkov" <bp@alien8.de>,
+        "Boris Ostrovsky" <boris.ostrovsky@oracle.com>,
+        "Brian Gerst" <brgerst@gmail.com>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "David Woodhouse" <dwmw@amazon.co.uk>,
+        "H. Peter Anvin" <hpa@zytor.com>, "Ingo Molnar" <mingo@redhat.com>,
+        "Josh Poimboeuf" <jpoimboe@kernel.org>,
+        "Juergen Gross" <jgross@suse.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "=?UTF-8?B?TWlrZSBSYXBvcG9ydCAoSUJNKQ==?=" <rppt@kernel.org>,
+        "Pasha Tatashin" <pasha.tatashin@soleen.com>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "=?UTF-8?B?U3JpdmF0c2EgUy4gQmhhdCAoVk13YXJlKQ==?=" 
+        <srivatsa@csail.mit.edu>, "Suren Baghdasaryan" <surenb@google.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Usama Arif" <usama.arif@bytedance.com>,
+        <virtualization@lists.linux-foundation.org>,
+        "VMware PV-Drivers Reviewers" <pv-drivers@vmware.com>,
+        <x86@kernel.org>, <xen-devel@lists.xenproject.org>
+Subject: Re: [PATCH RFC 0/4] x86/fixmap: Unify FIXADDR_TOP
+Message-ID: <20230608093303.GA16983@k08j02272.eu95sqa>
+References: <cover.1684137557.git.houwenlong.hwl@antgroup.com>
+ <1f633e99-d294-6932-31e9-0eb158d030ea@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/5] ASoC: mediatek: mt8188-mt6359: clean up a return in
- codec_init
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, broonie@kernel.org
-Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        matthias.bgg@gmail.com, trevor.wu@mediatek.com,
-        dan.carpenter@linaro.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com
-References: <20230608084727.74403-1-angelogioacchino.delregno@collabora.com>
- <20230608084727.74403-3-angelogioacchino.delregno@collabora.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-In-Reply-To: <20230608084727.74403-3-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1f633e99-d294-6932-31e9-0eb158d030ea@intel.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/06/2023 10:47, AngeloGioacchino Del Regno wrote:
-> This code triggers a Smatch static checker warning and does sort of
-> look like an error path.
+On Wed, Jun 07, 2023 at 08:49:15PM +0800, Dave Hansen wrote:
+> On 5/15/23 01:19, Hou Wenlong wrote:
+> > This patchset unifies FIXADDR_TOP as a variable for x86, allowing the
+> > fixmap area to be movable and relocated with the kernel image in the
+> > x86/PIE patchset [0]. This enables the kernel image to be relocated in
+> > the top 512G of the address space.
 > 
-> sound/soc/mediatek/mt8188/mt8188-mt6359.c:597 mt8188_max98390_codec_init() warn: missing error code? 'ret'
+> What problems does this patch set solve?  How might that solution be
+> visible to end users?  Why is this problem important to you?
 > 
-> However, returning 0 is intentional.  Make that explicit.
+> Also, while you're waiting for someone to review _your_ code, have you
+> considered reviewing anyone else's code?  I don't think I've seen any
+> review activity from you lately.
 
-Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
+Hello,
 
--- 
-Regards,
-Alexandre
+Sorry for bothering you. This patch is not important; it is just a part
+of our PIE patchset. I should be more patient.
 
+We want to build the kernel as PIE and allow the kernel image area,
+including the fixmap area, to be placed at any virtual address. We have
+also implemented a PV Linux guest based on PIE, which can be used in
+software virtualization similar to Lguest. PIE makes the guest kernel
+share the host kernel space similar to a normal userspace process.
+Additionally, we are considering whether it is possible to use PIE and
+PVOPS to implement a user-mode kernel.
+
+Thank you for your advice. I will participate more actively in community
+review activities. Sorry again for bothering you.
+
+Thanks.
