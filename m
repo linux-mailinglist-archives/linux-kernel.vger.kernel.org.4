@@ -2,181 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 331A172792A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2AAA72792F
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233245AbjFHHuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 03:50:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43546 "EHLO
+        id S233372AbjFHHuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 03:50:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233644AbjFHHt6 (ORCPT
+        with ESMTP id S233514AbjFHHu1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 03:49:58 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7DA1BF9
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 00:49:56 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-30c55d2b9f3so189774f8f.2
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 00:49:56 -0700 (PDT)
+        Thu, 8 Jun 2023 03:50:27 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7ED2139
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 00:50:20 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-5147e40bbbbso402843a12.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 00:50:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1686210595; x=1688802595;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TtmUwjwB5GnvCa4t/yItESHxoD/YIIhkFf3u0QhCFEU=;
-        b=xHZvR8D8ubZlzKmO3AeT67Dan7R9Uya1zCc3WqXQriEUhsX7+QTOXWQzGP/uqPGEU3
-         VlbS/DY1rw2R5vY4sackU8REgmFUUhAIZL2TlAejLw6EdXsyv+KFa6DpTMtCaCxFPkP0
-         A8IRg4Fepnn7x4TvP4Rhz+sEmJmey5X6svMpU6ESSgq0oVF0uHL3ZrpIoLX5DYpMF7iU
-         h4xApXNZ/tLs+1/BZkgeoJXQDa7kf/6e7A0+ffyDl7nkhuR5qW9X7JGjbEgAvY19v0wn
-         UWbFO4EBork0PvWuQ353SZyamof5QZI2JERaNAa+qwp44YBjW63Ka7wx25xSMZ8ZR/ut
-         aP5g==
+        d=linaro.org; s=google; t=1686210619; x=1688802619;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CdtBaZj4Wh7F/cKA1LiZJZb7T0ESxgrV+Q/DGxp5Urg=;
+        b=R7Nwox0yH/aJ1X5B1nl0KPyzpfm4V5u26ECctIxgmM0pW6O45RS9p/z6ugEXZHxld3
+         DjX41wmgm3W2wiylZ3JH+T9hTIdg2lDIgS7mu6rRvM7G3IHsrfqz3L8JY4TJ7rBIpG9p
+         hiswHpGixEop3mJFf6I9aOJg3BUkuBKiOEUlJuYHZJP2o9F2SynFs6qO+/53tX29u3gb
+         MvG7qIJbr7uQmWVKbkXVK6ePdE7aRL747Z/lyXf+hWkQRroTD8wIonKX/T05p6g37HDs
+         vR1CsfP2ism0Cz604grw/YPBMqkAyHzA8FMPYQWALk1QL/QyaNBlXpOAHHbv3M4H3sdj
+         jNag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686210595; x=1688802595;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TtmUwjwB5GnvCa4t/yItESHxoD/YIIhkFf3u0QhCFEU=;
-        b=MYOZlEo+yZZH+Qo/Dr8ZUgyiQPlNTztnh5nbP1N2ojPL0lYW3ETR6NX2WUpf/DFUy6
-         sfd4Yrv3A9IYmT2e5D+UK3h1q4NQjwTf6bJAYe2+eE2n3BrTHqZmJzJGpuhpdEeUzYWN
-         Dbo90IqrnT2vIylXLIjdygXQl7ZSgQtVKsQmmv0sNdh+z8D/BcdL70rMEZYlJSkMVDTv
-         AbnAbbcdWbaJ3O8CiFz8wNdZocKyk+vdTuuLTnLS8ZT1XL01wzxgXvDMSazEQzCochC3
-         1GsitHL1CRYWxDkIigzlrIxSV5J0pbJwXrNXSf2Gucc31/qhBQVfpS6j2qoVMAXSrqJ9
-         NzPQ==
-X-Gm-Message-State: AC+VfDwbTj5Rhx4zTnDV7shDYdGhhsi6VGQMct6yhnjTNBcDqLoN2FkR
-        uMg00lk6QayPAhDq8JqD5rghEOwutdqa0rlV6F2nZg==
-X-Google-Smtp-Source: ACHHUZ7xonBX9mtbOt/iDujy0XqfgYu34JU3q4uwrHM1AsZR9QLNLK6ZW+hlqhCptuPlGRbKuLyi97bNcoYGMh4sD6Y=
-X-Received: by 2002:a5d:4d46:0:b0:30e:5283:ec85 with SMTP id
- a6-20020a5d4d46000000b0030e5283ec85mr5367913wru.33.1686210594989; Thu, 08 Jun
- 2023 00:49:54 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686210619; x=1688802619;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CdtBaZj4Wh7F/cKA1LiZJZb7T0ESxgrV+Q/DGxp5Urg=;
+        b=eHWfgSIxLgSlkuv5eXsGyIwcP+nECVn7W/CMlmYT2oETB9LNGcoNym9OHbIwNdmczK
+         5QPvn3PBUxUk7ll0cggJ0hsBGhWkKaTRZQr6WgDvDhYCSFL8DX16jEz1TZPaALAnYPU7
+         D9dVJT6CjyVFkRpaKv4QsJRS3fhux+OnnErFUKju9r5Ua4ft6+darz5X3/w3XLJRkAkB
+         Eexc7VcLG2XH2RaFdtzJ2rAtZMNmdD/fjUqnPPqNXRvHNhsdvJo0mJkR+2vGK8RgaUU1
+         kgd97N/7C8oyuJ1OdpmBalfTvLM/Gz6vVTjigui+zPaHz/ejvhORovT0AUVhQoL+KUhn
+         nx6g==
+X-Gm-Message-State: AC+VfDxplFwy/kkbn1/r0OZAY+XJ1SMYTp+PeqSKhHZl9dR0fhymRKmp
+        ogy/dwrXZFWwpBLt4tN3+xb6/A==
+X-Google-Smtp-Source: ACHHUZ4NNrwVqtQg76eKybrTKDBwByaBNPg+h0SR5A+VjJVIVBsGpjFs+P41gY1zcmunuv5OV0a0jA==
+X-Received: by 2002:aa7:d1d4:0:b0:514:945c:6cea with SMTP id g20-20020aa7d1d4000000b00514945c6ceamr6074596edp.37.1686210619206;
+        Thu, 08 Jun 2023 00:50:19 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id x23-20020aa7dad7000000b00516654bf182sm237626eds.41.2023.06.08.00.50.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jun 2023 00:50:18 -0700 (PDT)
+Message-ID: <f06d9f97-591b-c76d-0313-49c1b7a1217e@linaro.org>
+Date:   Thu, 8 Jun 2023 09:50:16 +0200
 MIME-Version: 1.0
-References: <tencent_B15C0F1F3105597D0DCE7DADC96C5EB5CF0A@qq.com> <20230607-jogging-grudging-70dede86bc53@spud>
-In-Reply-To: <20230607-jogging-grudging-70dede86bc53@spud>
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-Date:   Thu, 8 Jun 2023 09:49:44 +0200
-Message-ID: <CAHVXubggydGfNu3OzcxWXREJbB+G9dmr9sFD7vXhVxbG-N58Pg@mail.gmail.com>
-Subject: Re: [PATCH] riscv: reserve DTB before possible memblock allocation
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Woody Zhang <woodylab@foxmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v3 5/5] dt-bindings: phy: realtek: Add the doc about the
+ Realtek SoC USB 3.0 PHY
+Content-Language: en-US
+To:     =?UTF-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Ray Chi <raychi@google.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+References: <20230607062500.24669-1-stanley_chang@realtek.com>
+ <20230607062500.24669-5-stanley_chang@realtek.com>
+ <58aea31d-8f47-a558-6e17-17b55059bb23@linaro.org>
+ <1f13680401e449a3b9384710206cc2b0@realtek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1f13680401e449a3b9384710206cc2b0@realtek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 7, 2023 at 8:17=E2=80=AFPM Conor Dooley <conor@kernel.org> wrot=
-e:
->
-> +CC Alex, you should take a look at this patch.
->
-> On Wed, Jun 07, 2023 at 09:35:19PM +0800, Woody Zhang wrote:
-> > It's possible that early_init_fdt_scan_reserved_mem() allocates memory
-> > from memblock for dynamic reserved memory in `/reserved-memory` node.
-> > Any fixed reservation must be done before that to avoid potential
-> > conflicts.
-> >
-> > Reserve the DTB in memblock just after early scanning it.
->
-> The rationale makes sense to me, I am just wondering what compelling
-> reason there is to move it away from the memblock_reserve()s for the
-> initd and vmlinux? Moving it above early_init_fdt_scan_reserved_mem()
-> should be the sufficient minimum & would keep things together.
->
-> Cheers,
-> Conor.
+On 08/06/2023 09:32, Stanley Chang[昌育德] wrote:
+>>> +examples:
+>>> +  - |
+>>> +    usb_port2_usb3phy: usb-phy@13e10 {
+>>> +        compatible = "realtek,rtd1319d-usb3phy", "realtek,usb3phy";
+>>> +        reg = <0x13e10 0x4>;
+>>> +        #address-cells = <1>;
+>>> +        #size-cells = <0>;
+>>> +        #phy-cells = <0>;
+>>> +
+>>> +        phy@0 {
+>>> +            reg = <0>;
+>>> +            realtek,param =
+>>> +                    <0x01 0xac8c>,
+>>> +                    <0x06 0x0017>,
+>>
+>> First, this is matrix, not uint8 array. Second, 0xac8c is past 16 bits long, not 8.
+>> Third, you put some magic register programming to DT.
+>> Please don't. Drop all this from DT.
+> 
+> realtek,param is an uint32-matrx.
+> I will revised the type.
 
-Thanks Conor.
+Drop the property. It is not explained and not justified to be in DT.
 
-So the patch looks good to me.
+Best regards,
+Krzysztof
 
-But I find this fragile:
-
-- we do not check memblock_reserve() return value to make sure the
-reservation really happened (and quickly looking at the code, I'm not
-even sure it returns an error if the region was already allocated).
-- we have to make sure no memblock allocation happens before setup_bootmem(=
-).
-- we also have to check that no fixed memblock_reserve() happens after.
-
-The last 2 points may sound natural, but we'll have to take great care
-when adding some code around here. I'm working on an "early boot
-document" and I'll add something about that, but a runtime thing would
-be way better IMO.
-
-You can add:
-
-Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-
-Thanks,
-
-Alex
-
->
-> >
-> > Signed-off-by: Woody Zhang <woodylab@foxmail.com>
-> > ---
-> >  arch/riscv/kernel/setup.c | 10 ++++++++++
-> >  arch/riscv/mm/init.c      |  9 ---------
-> >  2 files changed, 10 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-> > index 36b026057503..c147fa8da929 100644
-> > --- a/arch/riscv/kernel/setup.c
-> > +++ b/arch/riscv/kernel/setup.c
-> > @@ -16,6 +16,7 @@
-> >  #include <linux/console.h>
-> >  #include <linux/screen_info.h>
-> >  #include <linux/of_fdt.h>
-> > +#include <linux/libfdt.h>
-> >  #include <linux/sched/task.h>
-> >  #include <linux/smp.h>
-> >  #include <linux/efi.h>
-> > @@ -256,6 +257,15 @@ static void __init parse_dtb(void)
-> >               pr_err("No DTB passed to the kernel\n");
-> >       }
-> >
-> > +     /*
-> > +      * If DTB is built in, no need to reserve its memblock.
-> > +      * Otherwise, do reserve it but avoid using
-> > +      * early_init_fdt_reserve_self() since __pa() does
-> > +      * not work for DTB pointers that are fixmap addresses
-> > +      */
-> > +     if (!IS_ENABLED(CONFIG_BUILTIN_DTB))
-> > +             memblock_reserve(dtb_early_pa, fdt_totalsize(dtb_early_va=
-));
-> > +
-> >  #ifdef CONFIG_CMDLINE_FORCE
-> >       strscpy(boot_command_line, CONFIG_CMDLINE, COMMAND_LINE_SIZE);
-> >       pr_info("Forcing kernel command line to: %s\n", boot_command_line=
-);
-> > diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> > index c6bb966e4123..f8c9a79acd94 100644
-> > --- a/arch/riscv/mm/init.c
-> > +++ b/arch/riscv/mm/init.c
-> > @@ -254,15 +254,6 @@ static void __init setup_bootmem(void)
-> >        */
-> >       early_init_fdt_scan_reserved_mem();
-> >
-> > -     /*
-> > -      * If DTB is built in, no need to reserve its memblock.
-> > -      * Otherwise, do reserve it but avoid using
-> > -      * early_init_fdt_reserve_self() since __pa() does
-> > -      * not work for DTB pointers that are fixmap addresses
-> > -      */
-> > -     if (!IS_ENABLED(CONFIG_BUILTIN_DTB))
-> > -             memblock_reserve(dtb_early_pa, fdt_totalsize(dtb_early_va=
-));
-> > -
-> >       dma_contiguous_reserve(dma32_phys_limit);
-> >       if (IS_ENABLED(CONFIG_64BIT))
-> >               hugetlb_cma_reserve(PUD_SHIFT - PAGE_SHIFT);
-> > --
-> > 2.39.2
-> >
