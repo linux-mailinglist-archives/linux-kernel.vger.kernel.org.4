@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE6567287D3
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 21:13:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF807287D5
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 21:13:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235570AbjFHTNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 15:13:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
+        id S236161AbjFHTNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 15:13:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236356AbjFHTMw (ORCPT
+        with ESMTP id S236344AbjFHTMw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 8 Jun 2023 15:12:52 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on20602.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e89::602])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A5A30D8;
-        Thu,  8 Jun 2023 12:12:33 -0700 (PDT)
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2043.outbound.protection.outlook.com [40.107.212.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A123330DC;
+        Thu,  8 Jun 2023 12:12:34 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LJQDEceI/xSeIP8Kn52OWJ9PLqzY+kp38LFjqDLnzTXPi2xJ61t02+qapK5/h2oUPvh+o4mMM3jOgwjKt5LjO3EHJiRwSymXB64Bu6l9pHx6az3D5NXAgZFlzKFCQvkRud8Z9VW7BFndMlJVZaMiL5odSCaeo+BS7GBphaSVL/yBX6o9rDMPsaUyQq59rejAqnBm0/s1ay08wfUhEdXqHWwn+0HHKpbVlrhebkTcFodbFuSB49D4GRCXvfTMU4xeBvO/T0iUArHD2FJgmYZOZRNDFUV2APuRqq9qcUUWQ6ewQ55iaBpXKgMkr0fjU3INS6KRdR4nH+5vWR4dayDY2g==
+ b=AZc2j9n6I9rF6aXD+7rpXO0QifACOJKuEQGdrWeZPGs3hL+ei4pvqxsEeNUBFfTY00F3q+4e3PF4ZpspUtew/w9UIvBBHvCrTCtFhO0/wwTFl4hXUGPnaHrwzOdt++uz0YYyNbmTAoCMB7VyKYICpXjNKgKb0dXDxZR/ofjARofOEUSidiVx3+I04dAkAVCwi94tK8IdxreGyP8u7OhH0WoGSe28k7zfmZ/OWVn3HDp9MZlWAl06BcwjD7I55FxPxOCb99ijK/5+AMUhAzngNFWZsTZEJrR16Qfe4+7VSL6AWtbySWukBDmFMx8a6AGEosYUAw1tWPb15tlCqUItqw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ILaifHIw6vbRQNlT/s6ir+20iU8kvoJBjKCJt9aeZRU=;
- b=n4wvfk0GgxFiBVcCxhD6WYaYDjxY7kC0ILLE05293Yl4OAwIzM4oPlBq/iOD4c4kcphU0NIZ874+BAP2WzIpjJbOoDZ7sBwhMO2OrutvW8nl4oR2AxnsbE21iu+Fqv9qEwB17HO+yjsUCKn0k80TIugX53/jHmNFF2TuX+yLXLUldCU6kLhMrcsb0GAmfqqh40vqwiDsC+mWrEveIhkaENhQIB7B52cVZ+Ft7XFmHQyv+MjQ/PqPc/unNrIRf2EHrdpZOGzCEiA6Aid2ZnSOK0pBFDkHPlDei7p5/8pKXi5uzuOQ3G8kczGbZKmT7z6qCyC1VGQTqSMy5AK+lmgpEg==
+ bh=0E/zhW87o3zuytWivtmejN7CvDwRrb3jSLk1a/a7Hso=;
+ b=hVlF26VD7BXvSnmcUm/AhVF17oOWNRVOv7o53IQew2mCK1jkh+C0bTH7mPw0orBwmZb/J2NDtAA1tdwDRO4KvXMPIBrawNPzrsfly73Z/pqYLFvYD+Iv/7TtuL14zh7w4eHt2wWKDzF3Tzk4JATcklUxUsdi2obn0KO6vtVvm0XNW1FXV9L0zsKGXuvbSeAWplytzctE6+R9MGQG81ljx51VdIgGqE2AiyrfKv7FHSAJf8xT4fYkT+3zFKuNwKBLtrma6RCulZwc9DDn591eu0f9R+7z4wId6ZALZKHFnwocKZ5WOUXbtMy1M5rGQ2XMPNeYfTv3z25vOtWg/DMtMA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=gondor.apana.org.au smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ILaifHIw6vbRQNlT/s6ir+20iU8kvoJBjKCJt9aeZRU=;
- b=A47w3wUFn2odOWGx97TUOcvstRQl8ZwuEk5SbiCaiTaqF9GHM6IoJVsEViuuHMP3PDcf0UdGza/DRERI+j15olY6gYYiXAHipSLdt9MKwWJqHOwEWfZVg4yapMeA7oB3EBxqRpGEemi8yz7XJBX7fJuuIv5a3B3TItnWoNqdleQ=
-Received: from MW4PR04CA0256.namprd04.prod.outlook.com (2603:10b6:303:88::21)
- by SJ2PR12MB7865.namprd12.prod.outlook.com (2603:10b6:a03:4cc::9) with
+ bh=0E/zhW87o3zuytWivtmejN7CvDwRrb3jSLk1a/a7Hso=;
+ b=3x6ALskTuI6QDYyRpEuIbY3Msv3/ZIeu8XvDSh7qy+TVi+MOJCBSc4MgJUAKtkaqmlaFccFe8/Q7qkqtboKE6m+kQg3b63vvjUEOZM2YTB0AT4sM5/4o05XLBlinUquZbdB8rKR/NvUtfnoOt8Xh0zwm4BCJWrP2QFXVepcp9BE=
+Received: from MW4PR04CA0259.namprd04.prod.outlook.com (2603:10b6:303:88::24)
+ by DM8PR12MB5479.namprd12.prod.outlook.com (2603:10b6:8:38::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.36; Thu, 8 Jun
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Thu, 8 Jun
  2023 19:12:31 +0000
 Received: from CO1PEPF000044FC.namprd21.prod.outlook.com
- (2603:10b6:303:88:cafe::b3) by MW4PR04CA0256.outlook.office365.com
- (2603:10b6:303:88::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.19 via Frontend
+ (2603:10b6:303:88:cafe::ca) by MW4PR04CA0259.outlook.office365.com
+ (2603:10b6:303:88::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33 via Frontend
  Transport; Thu, 8 Jun 2023 19:12:31 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
@@ -61,9 +61,9 @@ To:     Tom Lendacky <thomas.lendacky@amd.com>,
 CC:     "David S . Miller" <davem@davemloft.net>,
         <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
         Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH v4 04/11] crypto: ccp: move setting PSP master to earlier in the init
-Date:   Thu, 8 Jun 2023 06:17:50 -0500
-Message-ID: <20230608111757.32054-5-mario.limonciello@amd.com>
+Subject: [PATCH v4 05/11] crypto: ccp: Add support for fetching a nonce for dynamic boost control
+Date:   Thu, 8 Jun 2023 06:17:51 -0500
+Message-ID: <20230608111757.32054-6-mario.limonciello@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230608111757.32054-1-mario.limonciello@amd.com>
 References: <20230608111757.32054-1-mario.limonciello@amd.com>
@@ -75,82 +75,486 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000044FC:EE_|SJ2PR12MB7865:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4857d286-fb1c-43cd-2396-08db68544ed7
+X-MS-TrafficTypeDiagnostic: CO1PEPF000044FC:EE_|DM8PR12MB5479:EE_
+X-MS-Office365-Filtering-Correlation-Id: 76fdfa58-2301-4a8a-3335-08db68544f28
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: esk7JcwBq89+Dxg6BBamY0sXeWK/hbp9TdXvIFAIoVH3ptnbNK5QpTqSxFDxA+d8ROnWx6LJAOBzrfGEdZS6ByffnWSIFoMWp4inhYQdURl9U1/In/iuONNG5DtdgbRKCHW+gPk6N/f7eUDAaifRy6jaTSI2VuNtFITNutw+Qt8lgrGi6pJIUoVbaD549mPViTbqTsMCRsuNTXdi1tSLg2RXWF2S5T8d0BJvFp9ee6g7Jh38hMrWDdzXXQ10sQ73spWm7ihGLwsFIZ2EsTiqwuAtB4wWe7mLcH4sTK0TqaVdgl/2CuTwWBHZdMsy3aaIxFEYxZzw3RDkbvsnCdly27NBiWSIKuLum5aCMVic8zZLxmOnwmnm6QEET9NCwgo0KvAWZZzK+cS0NgVpIK3ZHzKbLe50ECeolShFTBMvQ4R/l0xN85lufL6JFQIcbyQetIvetg0NLc2zW+1iJSAOzbIm4bDvr28KBX211SGMN8+0Omw1RctkUBe8IcYR5F2pptnNC8Y/eZwcWkFo7Q2ws/TNT4F0KDm+Ssg+iHNPiFpIUzzc6JFwooCRw3s5TEWavYewlJaJJyWt4POVeo+lJEnYxgKB5CxyvLeu7net6D4pKkbjPgAQ7KmeCTXPP85jtavwv5AoS7TL6sSANUkJqiB9WRJN43AATbWk7x4YEgTlGqoKZN/vIAmhFyVbxcPhNob0erlDLKO3T0RdT5J1w6dLvQXtgUhlakhyh/kft7FUqT/sq/fl0R6odZVFUDakmk00iMbp+lR+RwkYzChcaQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(39860400002)(376002)(346002)(451199021)(46966006)(36840700001)(40470700004)(1076003)(36756003)(26005)(40480700001)(83380400001)(82310400005)(16526019)(41300700001)(186003)(5660300002)(426003)(8676002)(336012)(110136005)(54906003)(478600001)(8936002)(6666004)(4326008)(70586007)(70206006)(316002)(81166007)(7696005)(356005)(82740400003)(2906002)(86362001)(44832011)(36860700001)(47076005)(2616005)(40460700003)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: pzpxwJkZ6vuhoHwurUyU+Z/p0wGIULUZo9OKk++/vNLofXb59cdgAODjK8TC+WuhErk46Ha9C7/rM78ZG/kd/VD5i2WWei4MiAu9fHfTk92QJuYmhPX2AjcIBR5P6bXy+XuDdBn4nL4DW3xbpmfwk5neMWc4rAlPuydObwEb6ho3ye/osdBZH8o4sFz/s6pCzQlr+pMAqWSy+PO828Cewt2nRGmBDhJmWrx9K/xP/0On3sEHl7ypSRnVZwl5zHQVyNUNrcxD8EqkTF2shcfgtbWMxlFWNtA5ln2nk9rck6K1ll/Xks9yNqt0WkbjeRtUBoUGYmpTNAJzmg+Ramd7CPaB7ZoiE54srAEph96U5YwPIyINbOpB8mLbfbO4Lqkrz1YOWVJdk/LU7M+VWoo0b4ftu+p6IZoH9wW5zSGwXgto7//Bv6V4v4s1+Vk4Nq4oUjCEeMvYBdbAWCAdoLQwOFB9py/ZefB7Wj4FPj0vDgP5nKuHcWMfTZHwzQXpp+G2Lk5twd50M/pwBn3F4mYOTKB0W9V2SBIQ5IekE/Z4vD3va6pdxh7E3M8l6LLzyEU3TeRg5aDPg8Byg3DknjEjlpbxyZZtxTb1lt0YXz9yTFdrR/9ajW6Sq4LaS2RwkHRuY4LlbBO9sLV9tMkDnKWufX9N2p/WHrwQ/9vXPrSwM359VqY99ycyHJxr3gJHJBQ2SnJ/8uFOyHLN0Y3/bPof1q+/8XipUezcyzufZXdrMkWewBoOC4+0E7pWHe2vkj/DZcfDdtsWS3qgWXFbo8JQiQ==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(136003)(376002)(39860400002)(451199021)(36840700001)(46966006)(40470700004)(86362001)(81166007)(83380400001)(82740400003)(54906003)(336012)(70206006)(4326008)(356005)(47076005)(6666004)(110136005)(426003)(82310400005)(7696005)(70586007)(478600001)(16526019)(186003)(36756003)(36860700001)(40460700003)(30864003)(8676002)(5660300002)(8936002)(41300700001)(2616005)(40480700001)(2906002)(316002)(44832011)(66899021)(1076003)(26005)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2023 19:12:31.0445
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2023 19:12:31.6227
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4857d286-fb1c-43cd-2396-08db68544ed7
+X-MS-Exchange-CrossTenant-Network-Message-Id: 76fdfa58-2301-4a8a-3335-08db68544f28
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000044FC.namprd21.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7865
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR12MB5479
 X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dynamic boost control needs to use platform access symbols
-that look for the PSP master as part of initialization.
+Dynamic Boost Control is a feature offered on AMD client platforms that
+allows software to request and set power or frequency limits.
 
-So move the PSP master before psp_init() so that dynamic boost
-control can be initialized properly.
+Only software that has authenticated with the PSP can retrieve or set
+these limits.
 
-Reviewed-by: Tom Lendacky <thomas.lendacky@amd.com>
+Create a character device and ioctl for fetching the nonce. This ioctl
+supports optionally passing authentication information which will influence
+how many calls the nonce is valid for.
+
 Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
-v3->v4:
- * Pick up tag
-v2->v3:
- * Clean up master device if psp_init() failed
----
- drivers/crypto/ccp/psp-dev.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ drivers/crypto/ccp/Makefile         |   3 +-
+ drivers/crypto/ccp/dbc.c            | 191 ++++++++++++++++++++++++++++
+ drivers/crypto/ccp/dbc.h            |  44 +++++++
+ drivers/crypto/ccp/psp-dev.c        |   9 ++
+ drivers/crypto/ccp/psp-dev.h        |   1 +
+ drivers/crypto/ccp/sp-dev.h         |   5 +
+ drivers/crypto/ccp/sp-pci.c         |   1 +
+ include/linux/psp-platform-access.h |   1 +
+ include/uapi/linux/psp-dbc.h        |  67 ++++++++++
+ 9 files changed, 321 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/crypto/ccp/dbc.c
+ create mode 100644 drivers/crypto/ccp/dbc.h
+ create mode 100644 include/uapi/linux/psp-dbc.h
 
+diff --git a/drivers/crypto/ccp/Makefile b/drivers/crypto/ccp/Makefile
+index f6196495e862..aa0ba2d17e1e 100644
+--- a/drivers/crypto/ccp/Makefile
++++ b/drivers/crypto/ccp/Makefile
+@@ -11,7 +11,8 @@ ccp-$(CONFIG_PCI) += sp-pci.o
+ ccp-$(CONFIG_CRYPTO_DEV_SP_PSP) += psp-dev.o \
+                                    sev-dev.o \
+                                    tee-dev.o \
+-                                   platform-access.o
++                                   platform-access.o \
++                                   dbc.o
+ 
+ obj-$(CONFIG_CRYPTO_DEV_CCP_CRYPTO) += ccp-crypto.o
+ ccp-crypto-objs := ccp-crypto-main.o \
+diff --git a/drivers/crypto/ccp/dbc.c b/drivers/crypto/ccp/dbc.c
+new file mode 100644
+index 000000000000..7afeca903136
+--- /dev/null
++++ b/drivers/crypto/ccp/dbc.c
+@@ -0,0 +1,191 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * AMD Secure Processor Dynamic Boost Control interface
++ *
++ * Copyright (C) 2023 Advanced Micro Devices, Inc.
++ *
++ * Author: Mario Limonciello <mario.limonciello@amd.com>
++ */
++
++#include "dbc.h"
++
++struct error_map {
++	u32 psp;
++	int ret;
++};
++
++#define DBC_ERROR_ACCESS_DENIED		0x0001
++#define DBC_ERROR_EXCESS_DATA		0x0004
++#define DBC_ERROR_BAD_PARAMETERS	0x0006
++#define DBC_ERROR_BAD_STATE		0x0007
++#define DBC_ERROR_NOT_IMPLEMENTED	0x0009
++#define DBC_ERROR_BUSY			0x000D
++#define DBC_ERROR_MESSAGE_FAILURE	0x0307
++#define DBC_ERROR_OVERFLOW		0x300F
++#define DBC_ERROR_SIGNATURE_INVALID	0x3072
++
++static struct error_map error_codes[] = {
++	{DBC_ERROR_ACCESS_DENIED,	-EACCES},
++	{DBC_ERROR_EXCESS_DATA,		-E2BIG},
++	{DBC_ERROR_BAD_PARAMETERS,	-EINVAL},
++	{DBC_ERROR_BAD_STATE,		-EAGAIN},
++	{DBC_ERROR_MESSAGE_FAILURE,	-ENOENT},
++	{DBC_ERROR_NOT_IMPLEMENTED,	-ENOENT},
++	{DBC_ERROR_BUSY,		-EBUSY},
++	{DBC_ERROR_OVERFLOW,		-ENFILE},
++	{DBC_ERROR_SIGNATURE_INVALID,	-EPERM},
++	{0x0,	0x0},
++};
++
++static int send_dbc_cmd(struct psp_dbc_device *dbc_dev,
++			enum psp_platform_access_msg msg)
++{
++	int ret;
++
++	dbc_dev->mbox->req.header.status = 0;
++	ret = psp_send_platform_access_msg(msg, (struct psp_request *)dbc_dev->mbox);
++	if (ret == -EIO) {
++		int i;
++
++		dev_dbg(dbc_dev->dev,
++			 "msg 0x%x failed with PSP error: 0x%x\n",
++			 msg, dbc_dev->mbox->req.header.status);
++
++		for (i = 0; error_codes[i].psp; i++) {
++			if (dbc_dev->mbox->req.header.status == error_codes[i].psp)
++				return error_codes[i].ret;
++		}
++	}
++
++	return ret;
++}
++
++static int send_dbc_nonce(struct psp_dbc_device *dbc_dev)
++{
++	int ret;
++
++	dbc_dev->mbox->req.header.payload_size = sizeof(dbc_dev->mbox->dbc_nonce);
++	ret = send_dbc_cmd(dbc_dev, PSP_DYNAMIC_BOOST_GET_NONCE);
++	if (ret == -EAGAIN) {
++		dev_dbg(dbc_dev->dev, "retrying get nonce\n");
++		ret = send_dbc_cmd(dbc_dev, PSP_DYNAMIC_BOOST_GET_NONCE);
++	}
++
++	return ret;
++}
++
++void dbc_dev_destroy(struct psp_device *psp)
++{
++	struct psp_dbc_device *dbc_dev = psp->dbc_data;
++
++	if (!dbc_dev)
++		return;
++
++	misc_deregister(&dbc_dev->char_dev);
++	mutex_destroy(&dbc_dev->ioctl_mutex);
++	psp->dbc_data = NULL;
++}
++
++static long dbc_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
++{
++	struct psp_device *psp_master = psp_get_master_device();
++	void __user *argp = (void __user *)arg;
++	struct psp_dbc_device *dbc_dev;
++	int ret;
++
++	if (!psp_master || !psp_master->dbc_data)
++		return -ENODEV;
++	dbc_dev = psp_master->dbc_data;
++
++	mutex_lock(&dbc_dev->ioctl_mutex);
++
++	switch (cmd) {
++	case DBCIOCNONCE:
++		if (copy_from_user(&dbc_dev->mbox->dbc_nonce.user, argp,
++				   sizeof(struct dbc_user_nonce))) {
++			ret = -EFAULT;
++			goto unlock;
++		}
++
++		ret = send_dbc_nonce(dbc_dev);
++		if (ret)
++			goto unlock;
++
++		if (copy_to_user(argp, &dbc_dev->mbox->dbc_nonce.user,
++				 sizeof(struct dbc_user_nonce))) {
++			ret = -EFAULT;
++			goto unlock;
++		}
++		break;
++	default:
++		ret = -EINVAL;
++
++	}
++unlock:
++	mutex_unlock(&dbc_dev->ioctl_mutex);
++
++	return ret;
++}
++
++const struct file_operations dbc_fops = {
++	.owner	= THIS_MODULE,
++	.unlocked_ioctl = dbc_ioctl,
++};
++
++int dbc_dev_init(struct psp_device *psp)
++{
++	struct device *dev = psp->dev;
++	struct psp_dbc_device *dbc_dev;
++	int ret;
++
++	if (!PSP_FEATURE(psp, DBC))
++		return 0;
++
++	dbc_dev = devm_kzalloc(dev, sizeof(*dbc_dev), GFP_KERNEL);
++	if (!dbc_dev)
++		return -ENOMEM;
++
++	BUILD_BUG_ON(sizeof(union dbc_buffer) > PAGE_SIZE);
++	dbc_dev->mbox = (void *)devm_get_free_pages(dev, GFP_KERNEL, 0);
++	if (!dbc_dev->mbox) {
++		ret = -ENOMEM;
++		goto cleanup_dev;
++	}
++
++	psp->dbc_data = dbc_dev;
++	dbc_dev->dev = dev;
++
++	ret = send_dbc_nonce(dbc_dev);
++	if (ret == -EACCES) {
++		dev_dbg(dbc_dev->dev,
++			"dynamic boost control was previously authenticated\n");
++		ret = 0;
++	}
++	dev_dbg(dbc_dev->dev, "dynamic boost control is %savailable\n",
++		ret ? "un" : "");
++	if (ret) {
++		ret = 0;
++		goto cleanup_mbox;
++	}
++
++	dbc_dev->char_dev.minor = MISC_DYNAMIC_MINOR;
++	dbc_dev->char_dev.name = "dbc";
++	dbc_dev->char_dev.fops = &dbc_fops;
++	dbc_dev->char_dev.mode = 0600;
++	ret = misc_register(&dbc_dev->char_dev);
++	if (ret)
++		goto cleanup_mbox;
++
++	mutex_init(&dbc_dev->ioctl_mutex);
++
++	return 0;
++
++cleanup_mbox:
++	devm_free_pages(dev, (unsigned long)dbc_dev->mbox);
++
++cleanup_dev:
++	psp->dbc_data = NULL;
++	devm_kfree(dev, dbc_dev);
++
++	return ret;
++}
+diff --git a/drivers/crypto/ccp/dbc.h b/drivers/crypto/ccp/dbc.h
+new file mode 100644
+index 000000000000..1c3a0a078d15
+--- /dev/null
++++ b/drivers/crypto/ccp/dbc.h
+@@ -0,0 +1,44 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * AMD Platform Security Processor (PSP) Dynamic Boost Control support
++ *
++ * Copyright (C) 2023 Advanced Micro Devices, Inc.
++ *
++ * Author: Mario Limonciello <mario.limonciello@amd.com>
++ */
++
++#ifndef __DBC_H__
++#define __DBC_H__
++
++#include <uapi/linux/psp-dbc.h>
++
++#include <linux/device.h>
++#include <linux/miscdevice.h>
++#include <linux/psp-platform-access.h>
++
++#include "psp-dev.h"
++
++struct psp_dbc_device {
++	struct device *dev;
++
++	union dbc_buffer *mbox;
++
++	struct mutex ioctl_mutex;
++
++	struct miscdevice char_dev;
++};
++
++struct dbc_nonce {
++	struct psp_req_buffer_hdr	header;
++	struct dbc_user_nonce		user;
++} __packed;
++
++union dbc_buffer {
++	struct psp_request		req;
++	struct dbc_nonce		dbc_nonce;
++};
++
++void dbc_dev_destroy(struct psp_device *psp);
++int dbc_dev_init(struct psp_device *psp);
++
++#endif /* __DBC_H */
 diff --git a/drivers/crypto/ccp/psp-dev.c b/drivers/crypto/ccp/psp-dev.c
-index e3d6955d3265..3390f0bd6408 100644
+index 3390f0bd6408..d42d7bc62352 100644
 --- a/drivers/crypto/ccp/psp-dev.c
 +++ b/drivers/crypto/ccp/psp-dev.c
-@@ -173,13 +173,14 @@ int psp_dev_init(struct sp_device *sp)
- 		goto e_err;
+@@ -15,6 +15,7 @@
+ #include "sev-dev.h"
+ #include "tee-dev.h"
+ #include "platform-access.h"
++#include "dbc.h"
+ 
+ struct psp_device *psp_master;
+ 
+@@ -112,6 +113,12 @@ static void psp_init_platform_access(struct psp_device *psp)
+ 		dev_warn(psp->dev, "platform access init failed: %d\n", ret);
+ 		return;
  	}
- 
-+	/* master device must be set for platform access */
-+	if (psp->sp->set_psp_master_device)
-+		psp->sp->set_psp_master_device(psp->sp);
 +
- 	ret = psp_init(psp);
- 	if (ret)
- 		goto e_irq;
++	/* dbc must come after platform access as it tests the feature */
++	ret = dbc_dev_init(psp);
++	if (ret)
++		dev_warn(psp->dev, "failed to init dynamic boost control: %d\n",
++			 ret);
+ }
  
--	if (sp->set_psp_master_device)
--		sp->set_psp_master_device(sp);
--
- 	/* Enable interrupt */
- 	iowrite32(-1, psp->io_regs + psp->vdata->inten_reg);
+ static int psp_init(struct psp_device *psp)
+@@ -217,6 +224,8 @@ void psp_dev_destroy(struct sp_device *sp)
  
-@@ -188,6 +189,9 @@ int psp_dev_init(struct sp_device *sp)
- 	return 0;
+ 	tee_dev_destroy(psp);
  
- e_irq:
-+	if (sp->clear_psp_master_device)
-+		sp->clear_psp_master_device(sp);
++	dbc_dev_destroy(psp);
 +
- 	sp_free_psp_irq(psp->sp, psp);
- e_err:
- 	sp->psp_data = NULL;
+ 	platform_access_dev_destroy(psp);
+ 
+ 	sp_free_psp_irq(sp, psp);
+diff --git a/drivers/crypto/ccp/psp-dev.h b/drivers/crypto/ccp/psp-dev.h
+index 505e4bdeaca8..8a4de69399c5 100644
+--- a/drivers/crypto/ccp/psp-dev.h
++++ b/drivers/crypto/ccp/psp-dev.h
+@@ -40,6 +40,7 @@ struct psp_device {
+ 	void *sev_data;
+ 	void *tee_data;
+ 	void *platform_access_data;
++	void *dbc_data;
+ 
+ 	unsigned int capability;
+ };
+diff --git a/drivers/crypto/ccp/sp-dev.h b/drivers/crypto/ccp/sp-dev.h
+index 76c32ee6bd65..2329ad524b49 100644
+--- a/drivers/crypto/ccp/sp-dev.h
++++ b/drivers/crypto/ccp/sp-dev.h
+@@ -28,6 +28,10 @@
+ #define CACHE_NONE			0x00
+ #define CACHE_WB_NO_ALLOC		0xb7
+ 
++#define PLATFORM_FEATURE_DBC		0x1
++
++#define PSP_FEATURE(psp, feat)	(psp->vdata && psp->vdata->platform_features & PLATFORM_FEATURE_##feat)
++
+ /* Structure to hold CCP device data */
+ struct ccp_device;
+ struct ccp_vdata {
+@@ -71,6 +75,7 @@ struct psp_vdata {
+ 	const unsigned int inten_reg;
+ 	const unsigned int intsts_reg;
+ 	const unsigned int bootloader_info_reg;
++	const unsigned int platform_features;
+ };
+ 
+ /* Structure to hold SP device data */
+diff --git a/drivers/crypto/ccp/sp-pci.c b/drivers/crypto/ccp/sp-pci.c
+index 205b93d229a9..b6ab56abeb68 100644
+--- a/drivers/crypto/ccp/sp-pci.c
++++ b/drivers/crypto/ccp/sp-pci.c
+@@ -470,6 +470,7 @@ static const struct psp_vdata pspv3 = {
+ 	.feature_reg		= 0x109fc,	/* C2PMSG_63 */
+ 	.inten_reg		= 0x10690,	/* P2CMSG_INTEN */
+ 	.intsts_reg		= 0x10694,	/* P2CMSG_INTSTS */
++	.platform_features	= PLATFORM_FEATURE_DBC,
+ };
+ 
+ static const struct psp_vdata pspv4 = {
+diff --git a/include/linux/psp-platform-access.h b/include/linux/psp-platform-access.h
+index 75da8f5f7ad8..53b4a1df5180 100644
+--- a/include/linux/psp-platform-access.h
++++ b/include/linux/psp-platform-access.h
+@@ -8,6 +8,7 @@
+ enum psp_platform_access_msg {
+ 	PSP_CMD_NONE = 0x0,
+ 	PSP_I2C_REQ_BUS_CMD = 0x64,
++	PSP_DYNAMIC_BOOST_GET_NONCE,
+ };
+ 
+ struct psp_req_buffer_hdr {
+diff --git a/include/uapi/linux/psp-dbc.h b/include/uapi/linux/psp-dbc.h
+new file mode 100644
+index 000000000000..d032f78934e2
+--- /dev/null
++++ b/include/uapi/linux/psp-dbc.h
+@@ -0,0 +1,67 @@
++/* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
++/*
++ * Userspace interface for AMD Dynamic Boost Control (DBC)
++ *
++ * Copyright (C) 2023 Advanced Micro Devices, Inc.
++ *
++ * Author: Mario Limonciello <mario.limonciello@amd.com>
++ */
++
++#ifndef __PSP_DBC_USER_H__
++#define __PSP_DBC_USER_H__
++
++#include <linux/types.h>
++
++/**
++ * DOC: AMD Dynamic Boost Control (DBC) interface
++ */
++
++#define DBC_NONCE_SIZE		16
++#define DBC_SIG_SIZE		32
++
++/**
++ * struct dbc_user_nonce - Nonce exchange structure (input/output).
++ * @auth_needed: Whether the PSP should authenticate this request (input).
++ *               0: no authentication, PSP will return single use nonce.
++ *               1: authentication: PSP will return multi-use nonce.
++ * @nonce:       8 byte value used for future authentication (output).
++ * @signature:   Optional 32 byte signature created by software using a
++ *               previous nonce (input).
++ */
++struct dbc_user_nonce {
++	__u32	auth_needed;
++	__u8	nonce[DBC_NONCE_SIZE];
++	__u8	signature[DBC_SIG_SIZE];
++} __packed;
++
++/**
++ * Dynamic Boost Control (DBC) IOC
++ *
++ * possible return codes for all DBC IOCTLs:
++ *  0:          success
++ *  -EINVAL:    invalid input
++ *  -E2BIG:     excess data passed
++ *  -EFAULT:    failed to copy to/from userspace
++ *  -EBUSY:     mailbox in recovery or in use
++ *  -ENODEV:    driver not bound with PSP device
++ *  -EACCES:    request isn't authorized
++ *  -EINVAL:    invalid parameter
++ *  -ETIMEDOUT: request timed out
++ *  -EAGAIN:    invalid request for state machine
++ *  -ENOENT:    not implemented
++ *  -ENFILE:    overflow
++ *  -EPERM:     invalid signature
++ *  -EIO:       unknown error
++ */
++#define DBC_IOC_TYPE	'D'
++
++/**
++ * DBCIOCNONCE - Fetch a nonce from the PSP for authenticating commands.
++ *               If a nonce is fetched without authentication it can only
++ *               be utilized for one command.
++ *               If a nonce is fetched with authentication it can be used
++ *               for multiple requests.
++ */
++#define DBCIOCNONCE	_IOWR(DBC_IOC_TYPE, 0x1, struct dbc_user_nonce)
++
++#endif /* __PSP_DBC_USER_H__ */
 -- 
 2.34.1
 
