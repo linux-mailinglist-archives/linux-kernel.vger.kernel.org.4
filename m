@@ -2,103 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B96727ECE
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:31:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9740727ED4
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235979AbjFHLbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 07:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47182 "EHLO
+        id S235895AbjFHLdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 07:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235973AbjFHLbF (ORCPT
+        with ESMTP id S232940AbjFHLdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 07:31:05 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0771C2D42
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 04:30:48 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-51492ae66a4so708826a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 04:30:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686223846; x=1688815846;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=U7+yLjS2Rdd8+uD9LEVYNPNGYkGBInfOHop83YoJaEA=;
-        b=dLQKRo/NGUR6kw/0uWRJAYY+OEFxZpAL5WHNmgT7OPeQgtqnDBUMIruxm+6wPKf0bi
-         p6xt3+Mgo3R2a8JRPyZ9SegJycNN0k81HfuXLpcNMAChNJsSuhDbh2AfycsFa7KQ1PxH
-         qm948QlMwm4anohfh4c5xJMz98HB8ukVeDoQHb/szhjxKCtd2cafGzE/4ygBVYeXC9Hk
-         F9yCSItCwBZSpmEuGzUiePsqaO+5zJVggEsQiMa54cUZuLRsY2bab+rg3wGwD3l4WsQN
-         vFl3pGNNZY1VNXM24tsJIt06+lbj8qW1/zqCf0QLl0uDyz9bm6WGhjBr2zvnmAEdGzcg
-         13kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686223846; x=1688815846;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U7+yLjS2Rdd8+uD9LEVYNPNGYkGBInfOHop83YoJaEA=;
-        b=awJA7t/nih1awP1o9+iNs3ACEbbJIW+63dGb9XnHRll6ZyLThiNSQbKyDNftcGg+U1
-         KP9/rH5G6ZkzPaedIySXJ9Ore+74TlVoW7o+MAe2vsWlN+Su6Kx49RGjjRVAqvpprKDL
-         DHJ6l5RbFt6vFlXsWRKqqYQ9X2ThDhf4ICDUOltKJqgZe9fntebKsK8ENaHJnXe5s6e6
-         TmX/T0bNiIbBxgbzVbaQePVUqAcparV+eul7f7L/kab0qUMNb2435wEB4TMX961w54lf
-         zdJJQumQsD3zdvVFi17vI48iliGevY+WTKUlrbKzcEfkbUlCxDzN7A6xqtHEO093wDaF
-         5VQw==
-X-Gm-Message-State: AC+VfDx7CUg0neayEL5S3B+Om//nlRdi4GwR333Y0Hq4Fj1MPiYodA7T
-        9EtWoG8SIZHmuosx3vVag7hfWA==
-X-Google-Smtp-Source: ACHHUZ7IDl+KBpIUAFfVeokHth5486E9vBPZCjaiGmbSJYszj03jrLtK14VAf3gKtwBkyl3ykX/jLg==
-X-Received: by 2002:aa7:c602:0:b0:514:75ff:6a86 with SMTP id h2-20020aa7c602000000b0051475ff6a86mr7037567edq.29.1686223846434;
-        Thu, 08 Jun 2023 04:30:46 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id n21-20020aa7d055000000b0050bc7c882bfsm426433edo.65.2023.06.08.04.30.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 04:30:45 -0700 (PDT)
-Message-ID: <aeef2066-72f4-8e41-cec3-f5c6815820a6@linaro.org>
-Date:   Thu, 8 Jun 2023 13:30:44 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v11 1/2] dt-bindings: hwmon: add MAX31827
-Content-Language: en-US
-To:     Daniel Matyas <daniel.matyas@analog.com>
-Cc:     Rob Herring <robh@kernel.org>, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        Thu, 8 Jun 2023 07:33:03 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C191734;
+        Thu,  8 Jun 2023 04:32:50 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 0B9655FD17;
+        Thu,  8 Jun 2023 14:32:48 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1686223968;
+        bh=ArxZiYt0qp/hxI5ZPD4sF0OBh5tn0afXnbxC4eDwIyU=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=bNFA395QIg2BsNA+rX3UafWQ9sOwa9yOQtgOmsdIl2UtMWN8utqHCarZsMceg9yum
+         KO5qBWnXTDOGZ5d09RwLOdneTdZYl9ZTuOfvqgygCi6sfwggkdbHzBgXuhIX20l5sV
+         s4U9VZqLgVMxUL01k51Hdt1XY2TusRAQMDEodZVEkdYMoamrXWKTus5+M8S1lPSh6V
+         qTwKcegboO/TsdBUWvvRlc8reLOrBEP4+iW/J1pckPOIRxucnuR0daee7Gq+CAih68
+         RaV64ihAmqTqzBvJKJ+A0ixZCbKMQkadopYAYDLjZxD/4b6WOKuxyquvRd9FmcglkR
+         TGwxwbPprNI0A==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Thu,  8 Jun 2023 14:32:44 +0300 (MSK)
+Date:   Thu, 8 Jun 2023 14:32:44 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Jerome Brunet <jbrunet@baylibre.com>
+CC:     Yu Tu <yu.tu@amlogic.com>, <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20230608104152.14249-1-daniel.matyas@analog.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230608104152.14249-1-daniel.matyas@analog.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <kelvin.zhang@amlogic.com>, <qi.duan@amlogic.com>
+Subject: Re: [PATCH V9 3/4] clk: meson: S4: add support for Amlogic S4 SoC
+ PLL clock driver
+Message-ID: <20230608113244.jvf7w4flwjy5soud@CAB-WSD-L081021>
+References: <20230517070215.28463-1-yu.tu@amlogic.com>
+ <20230517070215.28463-4-yu.tu@amlogic.com>
+ <1j5y804q7u.fsf@starbuckisacylon.baylibre.com>
+ <73acf297-3f60-1ce1-2f05-af048aa37199@amlogic.com>
+ <1jttvi9vnq.fsf@starbuckisacylon.baylibre.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <1jttvi9vnq.fsf@starbuckisacylon.baylibre.com>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/08 06:55:00 #21458577
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/06/2023 12:41, Daniel Matyas wrote:
-> MAX31827 is a low-power temperature switch with I2C interface.
-> 
-> The device is a ±1°C accuracy from -40°C to +125°C
-> (12 bits) local temperature switch and sensor with I2C/SM-
-> Bus interface. The combination of small 6-bump wafer-lev-
-> el package (WLP) and high accuracy makes this temper-
-> ature sensor/switch ideal for a wide range of applications.
-> 
-> Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
-> 
-> Change log:
-> v10 -> v11: No change.
+Hello Jerome,
 
-Wasn't this applied? Why do you send it again?
+On Thu, Jun 08, 2023 at 10:53:31AM +0200, Jerome Brunet wrote:
+> 
+> >>> +
+> >>> +static struct clk_regmap s4_fclk_div4 = {
+> >>> +     .data = &(struct clk_regmap_gate_data){
+> >>> +             .offset = ANACTRL_FIXPLL_CTRL1,
+> >>> +             .bit_idx = 21,
+> >>> +     },
+> >>> +     .hw.init = &(struct clk_init_data){
+> >>> +             .name = "fclk_div4",
+> >>> +             /*
+> >>> +              * For more information, please refer to s4_fixed_pll_dco.
+> >>> +              */
+> >> While div2 and div3 got an explanation from previous SoCs, they others -
+> >> like div4/div7/etc ... - have been able to cope with rw ops so far.
+> >> Why is the S4 different for all these clocks ?
+> >
+> > The chip was changed fixed pll for security reasons.
+> >
+> > Fixed PLL registers are not writable in the kernel phase. Write of fixed
+> > PLL-related register will cause the system to crash.
+> >
+> 
+> That is definitely worth mentionning
+> 
+> >> Requiring RO ops (or fishy clock flags) is usually a sign that a clock
+> >> is used without an appropriate driver.
+> >>
+> 
+> Neil is currently dealing with the dt-bindings, please
+> * Adjust your patchset accordingly
+> * Wait for his v2 to land, you'll need it.
+> 
 
-Best regards,
-Krzysztof
+I saw Neil patch series with merging 'private' and 'public' clock
+bindings parts. Should I send the same patchset for a1 clocks after v6.5
+landed?
 
+> >>> +             .ops = &clk_regmap_gate_ro_ops,
+> >>> +             .parent_hws = (const struct clk_hw *[]) {
+> >>> +                     &s4_fclk_div4_div.hw
+> >>> +             },
+> >>> +             .num_parents = 1,
+> >>> +     },
+> >>> +};
+> >>> +
+> 
+> _______________________________________________
+> linux-amlogic mailing list
+> linux-amlogic@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-amlogic
+
+-- 
+Thank you,
+Dmitry
