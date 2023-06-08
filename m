@@ -2,102 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AB4D728ACF
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 00:02:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7730728ADA
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 00:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235020AbjFHWCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 18:02:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45272 "EHLO
+        id S236338AbjFHWFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 18:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjFHWCl (ORCPT
+        with ESMTP id S235685AbjFHWFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 18:02:41 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08AA1BE4;
-        Thu,  8 Jun 2023 15:02:39 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f4e71a09a7so1432714e87.1;
-        Thu, 08 Jun 2023 15:02:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686261758; x=1688853758;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s5KKRzmBzOKqm2z8tAEDfQa10e/C19M+QQIiqm4uKw8=;
-        b=m68m1ujJRGDqm5h5uysjsl5kXho3QN7dU53etI5gdpxuXmYI0ghMiWABgO5Ix53CIj
-         MKdXiAgPo+ImaCtXbPjOuIh78eAZHT7ScaytWQws9o43nrOcPeQy9j0vFuJiCMhc60Xi
-         EFKEQBW+ckHkiIgVDMa+pifJW2hESPt485WSO7tr+JeARamfXwl2eMrAF6q4Mb0tu8hz
-         quSkccXUxFXXMQb8cLKO9jmlTNrasACBWUb66pI9gWPx+oAVC/4CCqLJGlOph/2XhLPi
-         9uar0npYthBkGLXcyNc3XioE9SWw5Md/dCKRsZBXAZBE2OAf9ufR3vkSxpIcUJaDGaFZ
-         mjYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686261758; x=1688853758;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=s5KKRzmBzOKqm2z8tAEDfQa10e/C19M+QQIiqm4uKw8=;
-        b=c0Cv48+niEfa6EhoKNU6eVcC2lScdOk7EJQe0OfeqTBGIfTECgN6CJn3i1QR57MTqD
-         D5DQqlYPe0pGsNRmm83CmPTjazMqhTHKVSzzsgVIzT7am7484yXB4LTwUK9qdte6Pi5X
-         yoyh5owQktEgoJSwPA3UOtmBE1C9R6mwOtR+/LpLi+5t8LQePlc2mcVrzZGeGc3YLyz7
-         P0MqfdQwQlAzMCoZJ4QIliif+UXKFBzbP2YrB1jI8eFYIAjGxm5s2HpjVdvwfaiB65Rq
-         JEcuCsvsjCpvlMS6qFlurzQhP1lNJJRgRCHuXl10l9cNOKdeFfFjAQZVknSbQIgXcMdh
-         ZAwQ==
-X-Gm-Message-State: AC+VfDy+2CUfvaPoYLkTe+Bs8JOx5ZjNnctHztmPN6pbhtPEGSXQMPTA
-        exPtFTG3OmW4oC9lNPmDgGFZTJg/N2av892u2QY=
-X-Google-Smtp-Source: ACHHUZ6/6jSZSt6ax2bFu/vDu68+UujonpNAFo2ClX0MzqdKqlXBKZ2V+ZEty9FFdldqmq1yOWQENKotYjfXCP0RVho=
-X-Received: by 2002:a05:6512:39c2:b0:4f6:56ca:36fc with SMTP id
- k2-20020a05651239c200b004f656ca36fcmr129190lfu.6.1686261758005; Thu, 08 Jun
- 2023 15:02:38 -0700 (PDT)
+        Thu, 8 Jun 2023 18:05:02 -0400
+Received: from qproxy2-pub.mail.unifiedlayer.com (qproxy2-pub.mail.unifiedlayer.com [69.89.16.161])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BF71BE4
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 15:05:00 -0700 (PDT)
+Received: from gproxy3-pub.mail.unifiedlayer.com (gproxy3-pub.mail.unifiedlayer.com [69.89.30.42])
+        by qproxy2.mail.unifiedlayer.com (Postfix) with ESMTP id 58AE880495DA
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 22:05:00 +0000 (UTC)
+Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
+        by progateway5.mail.pro1.eigbox.com (Postfix) with ESMTP id 9C3791004B50B
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 22:04:59 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id 7NkZqBmakNX2a7NkZqhbw6; Thu, 08 Jun 2023 22:04:59 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=NMAQR22g c=1 sm=1 tr=0 ts=6482508b
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=of4jigFt-DYA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=nxr/Mmb6QjPf/EvaKOH1toSDoOYo96qJ9GgZy3xecCU=; b=GlFXxdezQbnkhPwfl7l/FKF5Jq
+        SapX1hyZWmgvqiryzC3BLNBWrVPJOgx2KsPO7bNjsQSMEuAdsh5oC2tvSR6O2ckmRrv2Md40yE/ij
+        VVXqTjMWtGfwOh1+ljafY1hA/PuIr5QydbA07YrkDEJ/UHlUpL5ODOB2tvuYoZLhwCi792y5p6ozG
+        vj12VfRS+3GNit30ENZikEm/xBgzpx43og2dfGWOhdgM13PTTZMPLVbEFaBe2M/IajKlACg79prbH
+        br040qrE0v8b+ZpMmZw1ixuTzyaaaY3CK/SOqpLDvV5Tk7MxxS3lkE7WRDwdXcYkFOkutYlJ/a2NR
+        XjlQ/LGQ==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:43294 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1q7NkY-000uBe-J7;
+        Thu, 08 Jun 2023 16:04:58 -0600
+Subject: Re: [PATCH 5.15 000/159] 5.15.116-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230607200903.652580797@linuxfoundation.org>
+In-Reply-To: <20230607200903.652580797@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <7c85103f-cd52-5489-4bca-242d36747860@w6rz.net>
+Date:   Thu, 8 Jun 2023 15:04:56 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <cover.1686166633.git.kjlx@templeofstupid.com> <c3d55cfd8ce7ed989c997d1e3ea2678879227300.1686166633.git.kjlx@templeofstupid.com>
- <04c149d2-4b7d-f1ee-28b7-3a7ff0c7aa51@meta.com>
-In-Reply-To: <04c149d2-4b7d-f1ee-28b7-3a7ff0c7aa51@meta.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 8 Jun 2023 15:02:26 -0700
-Message-ID: <CAADnVQL0qNQqoFAXq9NJ5-QR4wPtSruaeJ70q6DKv4z1iv3x8w@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 1/2] selftests/bpf: add a test for subprogram extables
-To:     Yonghong Song <yhs@meta.com>
-Cc:     Krister Johansen <kjlx@templeofstupid.com>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1q7NkY-000uBe-J7
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:43294
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 8, 2023 at 10:40=E2=80=AFAM Yonghong Song <yhs@meta.com> wrote:
+On 6/7/23 1:15 PM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.116 release.
+> There are 159 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
+> Responses should be made by Fri, 09 Jun 2023 20:07:31 +0000.
+> Anything received after that time might be too late.
 >
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.116-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
 >
-> On 6/7/23 2:04 PM, Krister Johansen wrote:
-> > In certain situations a program with subprograms may have a NULL
-> > extable entry.  This should not happen, and when it does, it turns a
-> > single trap into multiple.  Add a test case for further debugging and t=
-o
-> > prevent regressions.  N.b: without any other patches this can panic or
-> > oops a kernel.
+> thanks,
 >
-> Also, it would be great if you can show the kernel oops stack trace.
+> greg k-h
 
-+1
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Also please reorder the patches.
-patch 1 - fix
-patch 2 - test for the fix.
+Tested-by: Ron Economos <re@w6rz.net>
+
