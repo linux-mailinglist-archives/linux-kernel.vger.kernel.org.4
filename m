@@ -2,86 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EECD4728659
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 19:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53DD172865C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 19:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231459AbjFHR2l convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 8 Jun 2023 13:28:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51086 "EHLO
+        id S231743AbjFHR3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 13:29:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjFHR2j (ORCPT
+        with ESMTP id S230113AbjFHR3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 13:28:39 -0400
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7AB9E;
-        Thu,  8 Jun 2023 10:28:38 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-565ba2c7554so7636127b3.3;
-        Thu, 08 Jun 2023 10:28:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686245316; x=1688837316;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ukFo/mzaJtMm9NEOqRAOU0pEFyqxCrPdzo2ZbG7FqxE=;
-        b=IaBP9TSW+dgCFpdxrta5/k5cztQ8hT37kGbOEHwcWOS+wwO7HmdbNKYNI+T0xiVw0E
-         nvSoKyHYMcHCZFWVEoD9MHXmjyDHBE8pim2JAfL0c5SR8cpMUBn2q0a5NB00vlOdFAQx
-         ilvfZ5bGA5IU1cNEg6qWXZB6VUtqiVZDZn3eRXdvQ7dDEUHJ/kT/EEQlzHSBEKDxDTFH
-         5ZV0klUCyLkLJvlfR7yCOAJaduy0f/bjjI1VaSejPsZqhz/Nx2tbujm8PRJMnmHpGeRm
-         kF8hNm9tW6tMbdH5xte4kdSnHpaOwXLzZU8cbU+Mxi30mseidEU94M3euLFqXM4Xu7EH
-         xxkw==
-X-Gm-Message-State: AC+VfDxALD5WYcF5LahL2p8ebBVE0jkzBy8WFJdpli/2SDFVdoX6q2Il
-        aqqdHUwpPtGlIL2/2RNFHFNA00MY3SwOExbeOfw=
-X-Google-Smtp-Source: ACHHUZ7fsOJ6Yp4YMwR5f8pgMTPyH1KciEOlp94ErYqWbvPQDQqEBj7yh7plMrGmXL3g9avlKlZqmJWnUFeqZZUuTlY=
-X-Received: by 2002:a81:69d5:0:b0:565:3749:c24d with SMTP id
- e204-20020a8169d5000000b005653749c24dmr392314ywc.14.1686245316074; Thu, 08
- Jun 2023 10:28:36 -0700 (PDT)
+        Thu, 8 Jun 2023 13:29:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90AFB1FCC;
+        Thu,  8 Jun 2023 10:28:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24FF464E7C;
+        Thu,  8 Jun 2023 17:28:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBBACC433EF;
+        Thu,  8 Jun 2023 17:28:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686245337;
+        bh=ThoL6fzVB88JMlcXBLBufAfFLmPNoKStcU+9P8fl0V0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Vx19WCzbYxrT+XlhZtaBIlPEHUm1QDlr6Sh6w9xqkWf4KzzdFvDIzZkR1of82JKx4
+         cRReA+mUG3eEax8urHp/GM0WeUEwa61W3M7c0gqM7Qk3TWmQdaITEKRSxRBkb/RKSl
+         JyxZFNdA4A69lbV0dkybGQQl0e+E1mGWteRxDRvrwWVKb7RVTA8bo8Y2yJfzsS2r9Y
+         py5Q7kbemFRQNNkqw51jREvKGRqsokvhpKngnrVUypjvbJcxPONupB7E7SGehb22v5
+         kFdzCPu+yVproPKDBRaRuVRBKbbYM3CXfX+fT2rpOLqT4Xad38m+4K+2mnmiZgI8jl
+         VGu3qEoLoROWw==
+Date:   Thu, 8 Jun 2023 18:28:52 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Henning Schild <henning.schild@siemens.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Subject: Re: [PATCH v4 4/4] leds: simatic-ipc-leds-gpio: introduce more
+ Kconfig switches
+Message-ID: <20230608172852.GK3572061@google.com>
+References: <20230524124628.32295-1-henning.schild@siemens.com>
+ <20230524124628.32295-5-henning.schild@siemens.com>
 MIME-Version: 1.0
-References: <20230608084407.140323-1-asavkov@redhat.com> <20230608132533.GL998233@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230608132533.GL998233@hirez.programming.kicks-ass.net>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 8 Jun 2023 10:28:24 -0700
-Message-ID: <CAM9d7cguD5Qo72sa4TjYokMKBfVRkLmGKNk_Z4stF=6W0x2bSA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] perf tools: annotation browser from c2c tui
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Artem Savkov <asavkov@redhat.com>,
-        linux-perf-users@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230524124628.32295-5-henning.schild@siemens.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+On Wed, 24 May 2023, Henning Schild wrote:
 
-On Thu, Jun 8, 2023 at 6:25 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Thu, Jun 08, 2023 at 10:44:05AM +0200, Artem Savkov wrote:
-> > These patches add ability to start annotation browser from c2c report
-> > tui. The idea comes from Arnaldo's "Profiling Data Structures" talk [1].
-> >
-> > [1]: http://vger.kernel.org/~acme/prez/linux-plumbers-2022/
->
-> So what are the plans for doing IP to datatype::member resolution and
-> deleting this C2C abomination?
+> To describe the dependency chain better and allow for potential
+> fine-grained config tuning, introduce Kconfig switch for the individual
+> GPIO based drivers.
+> 
+> Signed-off-by: Henning Schild <henning.schild@siemens.com>
+> Acked-by: Hans de Goede <hdegoede@redhat.com>
+> ---
+>  drivers/leds/simple/Kconfig  | 31 ++++++++++++++++++++++++++++---
+>  drivers/leds/simple/Makefile |  7 +++----
+>  2 files changed, 31 insertions(+), 7 deletions(-)
 
-I'm working on it and hoping to post an RFC soonish.. but no plan to kill
-c2c entirely :)
+Applied, thanks
 
-Thanks,
-Namhyung
-
->
-> /me still regretting ever letting c2c happen..
+-- 
+Lee Jones [李琼斯]
