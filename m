@@ -2,185 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E126172753A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 04:51:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22442727547
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 04:51:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233783AbjFHCvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 22:51:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51128 "EHLO
+        id S233807AbjFHCv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 22:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233549AbjFHCu7 (ORCPT
+        with ESMTP id S233803AbjFHCvU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 22:50:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698961FFE
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 19:50:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686192610;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tuec0jKorjW3abx5vC9xzgC+qO8AVpXPFGA3JYTZHxw=;
-        b=iDSoOENgjYrDCraA/+zw8DOrJB2GN5Hz2OPqI05DOSP2m86gUTKUvZPSiZlcsVeM59bl/I
-        95KjDA6UuqEpswO7RdspJ38SVrpxZl5WhOlDlaql6VNFZHFntdYS4W3ONc+ApXyXoViedy
-        PypwgnSroIlssUCRj5zclNczLyZwOXk=
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
- [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-602-gotHO-LoPBetrT0e6IW4gQ-1; Wed, 07 Jun 2023 22:50:09 -0400
-X-MC-Unique: gotHO-LoPBetrT0e6IW4gQ-1
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-1b02cd4b829so1529415ad.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 19:50:09 -0700 (PDT)
+        Wed, 7 Jun 2023 22:51:20 -0400
+Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064BA1FF7;
+        Wed,  7 Jun 2023 19:51:16 -0700 (PDT)
+Received: by mail-vk1-xa34.google.com with SMTP id 71dfb90a1353d-463fdee669cso147754e0c.0;
+        Wed, 07 Jun 2023 19:51:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686192675; x=1688784675;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+4iCMufvU+mSHmPOmnXMCrZIm6v3t8Nrs/bcmlqQqCU=;
+        b=JKRyNhZ8bTG0BgOBUtLCvd/63nTwEAMUi/YoZ+JabRgc64hK9Jc+/4gll1b5cpxVJL
+         waD71aWa0V2zpn9hL3NEPyYfvpn7+P89wrGyqNBS0zicSX1lktF+PYXW3KPFICXk+4aG
+         6wm2GA80Vg53vRio3rR9tahUCTNPr9d1RerNYpnYjmgmIyWqlOnXgCYmKEIj4htcq/DP
+         Wf9tEpi0xGKs6DG/OCxjNKHEhPLRnz2IQE2X4aXwAwORBeRfuweY5cQ+4cdKkvUrt/HV
+         olB7OkwTLiY6CdMtC9eZ3xqDqD/VcctKbhvpilS2X6K/zlhil9ucXV4Zfo7eRjXfnw1c
+         nzRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686192608; x=1688784608;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tuec0jKorjW3abx5vC9xzgC+qO8AVpXPFGA3JYTZHxw=;
-        b=Y+KOEHmD53B3FzaGCo5aPpVn9lN6h5BwFilNe9NxZBujhHWimx/aknDcHwANplVhlP
-         Oaojbyij4s/2sSkf5rvF70IqK/ovXsgIdRq2MZP9QHoAR61n4ZtFztcu4PN7tb1qG0j3
-         r3C+hEz+JyUinPxTNrE3nr6ngpbeGqIziShFIAFt+fHp7PkFnUN19axWH3lw+b/Rgde5
-         M7Ab1f0eyh0WJQuKOToWCMYApFM6Y5tVLLtOTEEB4zUljTAw57G5tyPRszSLe8/47eag
-         tjhc8KJQU1/qYo58YbFEoxvwaH9y6isOTK1uxwlpJkyKcLHFI1PgemYHeSy3okbx8bG5
-         PxfQ==
-X-Gm-Message-State: AC+VfDz2j0DL3Tmtt1ceGkU8tQSabFBFH94fPax+TvNARzLT2M+agAJU
-        d0/YhvHJK7IGcTA93Vz8+xqy6eb4jFgCt0Z1aeub94x0RQxrLgL8TJrPrftinEhgkyFJLwh1bF5
-        Ubk6UlknnNHEnZ2jx+60F2eZj
-X-Received: by 2002:a17:903:230a:b0:1ad:d542:6e14 with SMTP id d10-20020a170903230a00b001add5426e14mr973619plh.12.1686192608193;
-        Wed, 07 Jun 2023 19:50:08 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6itOIvrnnLnEWMdjTRy3f3rHNskO67Z99VSuETtLabd21ScJatQO03ScLrZTuzsiiYoqJWcg==
-X-Received: by 2002:a17:903:230a:b0:1ad:d542:6e14 with SMTP id d10-20020a170903230a00b001add5426e14mr973606plh.12.1686192607910;
-        Wed, 07 Jun 2023 19:50:07 -0700 (PDT)
-Received: from [10.72.13.135] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id x15-20020a170902ec8f00b001b176ba9f17sm195739plg.149.2023.06.07.19.50.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 19:50:07 -0700 (PDT)
-Message-ID: <f1e81edf-595b-3f7c-3f00-2c96718fbb69@redhat.com>
-Date:   Thu, 8 Jun 2023 10:49:55 +0800
+        d=1e100.net; s=20221208; t=1686192675; x=1688784675;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+4iCMufvU+mSHmPOmnXMCrZIm6v3t8Nrs/bcmlqQqCU=;
+        b=agmBw+imyaYEfFTqpsDeqmjOm2XIrUWVlU2I2F+M1m6WJQfKC9qYBSq8XG/ChgUMQt
+         crosi2b7E7sp4JpBGuDNiSLtFWny6sOBsmDsb+QKcY6eEGPX3MysDxe07LEwhiAxwe+q
+         l3iZj0xxu4oO0wQ5CWAlbP7tUn3zm1yTXMxPAsUCS1nlpYrP7r3oAmkP3+sbkatA3VeF
+         k1z/hWEGFb+J5dMDtFiTfAdCNC7i47IBp6hl+mmKRyPXeSca++SOBv+bvTsFpq3GzuyJ
+         mZonERQQ3iyGhg1n1OsE+gjvrovh/5i/T/V/g/CkWKAueGG8oC/eArLlSJoq3haxXye/
+         LwEw==
+X-Gm-Message-State: AC+VfDwWoVRRkg0JmxVwf0ND3/J+cLr3PmyUHCBbx1uKp25JBIvaJKTB
+        OobtJ+i4wuJxYPgobFgKzeWBtNgfsGUrZ6n+IGShD/g+jIk=
+X-Google-Smtp-Source: ACHHUZ45xdz52r6mci4tsf4hW5WjVNgXix00zbT41XCQNvK3y33Ok0aCpKw5aIYWRfWbw+QdwBYs5ZW/gUGomuqLCp0=
+X-Received: by 2002:a1f:4551:0:b0:440:4946:fac with SMTP id
+ s78-20020a1f4551000000b0044049460facmr407809vka.4.1686192674953; Wed, 07 Jun
+ 2023 19:51:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 11/14] ceph: allow idmapped setattr inode op
-Content-Language: en-US
-To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Cc:     brauner@kernel.org, stgraber@ubuntu.com,
-        linux-fsdevel@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230607180958.645115-1-aleksandr.mikhalitsyn@canonical.com>
- <20230607180958.645115-12-aleksandr.mikhalitsyn@canonical.com>
-From:   Xiubo Li <xiubli@redhat.com>
-In-Reply-To: <20230607180958.645115-12-aleksandr.mikhalitsyn@canonical.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230606051217.2064-1-iecedge@gmail.com> <6ad5fba3-926a-7a23-b21b-abffd33708be@acm.org>
+ <CAFA-uR_Zn4MdFKs6U6dqPjuVS60yN4RcYU4jJzjknqy7-RWyEQ@mail.gmail.com> <e9b8b9c5-f400-9152-0f4b-537b05203dd2@acm.org>
+In-Reply-To: <e9b8b9c5-f400-9152-0f4b-537b05203dd2@acm.org>
+From:   Jianlin Lv <iecedge@gmail.com>
+Date:   Thu, 8 Jun 2023 10:51:03 +0800
+Message-ID: <CAFA-uR83jHJsDXnn-3LWcrw251S4MizHC_JPJssYrgoD6kLoAg@mail.gmail.com>
+Subject: Re: [PATCH] scsi: sd: support specify probe type of build-in driver
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com, paulmck@kernel.org,
+        bp@suse.de, peterz@infradead.org, will@kernel.org,
+        rdunlap@infradead.org, kim.phillips@amd.com, rostedt@goodmis.org,
+        wyes.karny@amd.com, jianlv@ebay.com, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-scsi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 6/8/23 02:09, Alexander Mikhalitsyn wrote:
-> From: Christian Brauner <christian.brauner@ubuntu.com>
+On Thu, Jun 8, 2023 at 1:07=E2=80=AFAM Bart Van Assche <bvanassche@acm.org>=
+ wrote:
 >
-> Enable __ceph_setattr() to handle idmapped mounts. This is just a matter
-> of passing down the mount's idmapping.
+> On 6/7/23 08:55, Jianlin Lv wrote:
+> > 1. MegaRAID adapters associated with 24 local disks. The disks are name=
+d
+> > sequentially as "sda," "sdb," and so on, up to "sdx."
+> > 2. STAT controllers associated with the root disk, named "sdy."
+> >
+> > Both the MegaRAID adapters and the SATA controller (PCH) are accessed v=
+ia
+> > the PCIe bus. In theory, depending on their PCIe bus ID in ascending or=
+der,
+> > the devices should be initialized in ascending order as well.
 >
-> Cc: Xiubo Li <xiubli@redhat.com>
-> Cc: Jeff Layton <jlayton@kernel.org>
-> Cc: Ilya Dryomov <idryomov@gmail.com>
-> Cc: ceph-devel@vger.kernel.org
-> Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
-> [ adapted to b27c82e12965 ("attr: port attribute changes to new types") ]
-> Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-> ---
-> v4:
-> 	- introduced fsuid/fsgid local variables
-> v3:
-> 	- reworked as Christian suggested here:
-> 	https://lore.kernel.org/lkml/20230602-vorzeichen-praktikum-f17931692301@brauner/
-> ---
->   fs/ceph/inode.c | 20 ++++++++++++--------
->   1 file changed, 12 insertions(+), 8 deletions(-)
+> Hmm ... I don't think there is anything that prevents the PCIe maintainer
+> from changing the PCIe probing behavior from synchronous to asynchronous?
+> In other words, I don't think it is safe to assume that PCIe devices are
+> always scanned in the same order.
 >
-> diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
-> index bcd9b506ec3b..ca438d1353b2 100644
-> --- a/fs/ceph/inode.c
-> +++ b/fs/ceph/inode.c
-> @@ -2052,31 +2052,35 @@ int __ceph_setattr(struct mnt_idmap *idmap, struct inode *inode,
->   	dout("setattr %p issued %s\n", inode, ceph_cap_string(issued));
->   
->   	if (ia_valid & ATTR_UID) {
-> +		kuid_t fsuid = from_vfsuid(idmap, i_user_ns(inode), attr->ia_vfsuid);
-> +
->   		dout("setattr %p uid %d -> %d\n", inode,
->   		     from_kuid(&init_user_ns, inode->i_uid),
->   		     from_kuid(&init_user_ns, attr->ia_uid));
->   		if (issued & CEPH_CAP_AUTH_EXCL) {
-> -			inode->i_uid = attr->ia_uid;
-> +			inode->i_uid = fsuid;
->   			dirtied |= CEPH_CAP_AUTH_EXCL;
->   		} else if ((issued & CEPH_CAP_AUTH_SHARED) == 0 ||
-> -			   !uid_eq(attr->ia_uid, inode->i_uid)) {
-> +			   !uid_eq(fsuid, inode->i_uid)) {
->   			req->r_args.setattr.uid = cpu_to_le32(
-> -				from_kuid(&init_user_ns, attr->ia_uid));
-> +				from_kuid(&init_user_ns, fsuid));
->   			mask |= CEPH_SETATTR_UID;
->   			release |= CEPH_CAP_AUTH_SHARED;
->   		}
->   	}
->   	if (ia_valid & ATTR_GID) {
-> +		kgid_t fsgid = from_vfsgid(idmap, i_user_ns(inode), attr->ia_vfsgid);
-> +
->   		dout("setattr %p gid %d -> %d\n", inode,
->   		     from_kgid(&init_user_ns, inode->i_gid),
->   		     from_kgid(&init_user_ns, attr->ia_gid));
->   		if (issued & CEPH_CAP_AUTH_EXCL) {
-> -			inode->i_gid = attr->ia_gid;
-> +			inode->i_gid = fsgid;
->   			dirtied |= CEPH_CAP_AUTH_EXCL;
->   		} else if ((issued & CEPH_CAP_AUTH_SHARED) == 0 ||
-> -			   !gid_eq(attr->ia_gid, inode->i_gid)) {
-> +			   !gid_eq(fsgid, inode->i_gid)) {
->   			req->r_args.setattr.gid = cpu_to_le32(
-> -				from_kgid(&init_user_ns, attr->ia_gid));
-> +				from_kgid(&init_user_ns, fsgid));
->   			mask |= CEPH_SETATTR_GID;
->   			release |= CEPH_CAP_AUTH_SHARED;
->   		}
-> @@ -2241,7 +2245,7 @@ int ceph_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
->   	if (ceph_inode_is_shutdown(inode))
->   		return -ESTALE;
->   
-> -	err = setattr_prepare(&nop_mnt_idmap, dentry, attr);
-> +	err = setattr_prepare(idmap, dentry, attr);
->   	if (err != 0)
->   		return err;
->   
-> @@ -2256,7 +2260,7 @@ int ceph_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
->   	err = __ceph_setattr(idmap, inode, attr);
->   
->   	if (err >= 0 && (attr->ia_valid & ATTR_MODE))
-> -		err = posix_acl_chmod(&nop_mnt_idmap, dentry, attr->ia_mode);
-> +		err = posix_acl_chmod(idmap, dentry, attr->ia_mode);
->   
->   	return err;
->   }
+> > For cloud deployment, the local volume provisioner detects and creates =
+PVs
+> > for each local disk (from sda to sdx) on the host, and it cleans up the
+> > disks when they are released.
+> > This requires the logical names of the disks to be deterministic.
+>
+> I see two possible solutions:
+> - Change the volume provisioner such that it uses disk references that do
+>    not depend on the probing order, e.g. /dev/disk/by-id/...
 
-You should also do 'req->r_mnt_idmap = idmap;' for sync setattr request.
+Yes, The "/dev/disk/by-id/" can uniquely identify SCSI devices. However,
+I don't think it is suitable for the volume provisioner workflow.
+For nodes of the same SKU , a unified YAML file will be defined to instruct
+the volume provisioner on how to manage the local disks.
+If use WWID, it would mean that a unique YAML file needs to be defined
+for each node. This approach becomes impractical when dealing with a large
+number of work nodes.
 
-the setattr will just cache the change locally in client side if the 'x' 
-caps are issued and returns directly or will set a sync setattr reqeust.
+Jianlin
 
-Thanks
-
-- Xiubo
-
+> - Implement an algorithm in systemd that makes disk names predictable.
+>    An explanation of how predictable names work for network interfaces is
+>    available here: https://wiki.debian.org/NetworkInterfaceNames. The
+>    systemd documentation about predictable network names is available her=
+e:
+>    https://www.freedesktop.org/software/systemd/man/systemd.net-naming-sc=
+heme.html
+>
+> These alternatives have the advantage that disk scanning remains asynchro=
+nous.
+>
+> Thanks,
+>
+> Bart.
+>
