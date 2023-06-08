@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81CBC728AF3
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 00:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A34BA728AF7
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 00:12:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237108AbjFHWLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 18:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50134 "EHLO
+        id S231864AbjFHWMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 18:12:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237033AbjFHWLN (ORCPT
+        with ESMTP id S229678AbjFHWMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 18:11:13 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B2430DB
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 15:11:10 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-543c6a2aa07so174592a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 15:11:10 -0700 (PDT)
+        Thu, 8 Jun 2023 18:12:05 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0529A2132
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 15:11:58 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b0424c5137so1994985ad.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 15:11:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1686262270; x=1688854270;
+        d=broadcom.com; s=google; t=1686262317; x=1688854317;
         h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
          :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=QIFTwNcQXPjlPibpzMZQ/8XjcUH/NrxWxvLGQKBbr7A=;
-        b=J65nG6HSGVR47pkJ82l38jSNh8dkEQxrIC4enfuXwSPC8+eoQhSorCMwXHUtbakz+l
-         ONUMKtnd9bh1LSrsdZYoftgfPgfONq1KoPh1/2XGDk+QHfb8o1dFJP6cTucTh3WIsW9x
-         soHgYZHBFEIoRKfU8p22w/l6i7pqaDCOKefu0=
+        bh=x9nK3i9uwFxcq6lUWHMYNr9e75iSuq75psq6tYfb4Fo=;
+        b=QErN5Iky8qhfSWrn6ClY5A5pSymxG3f2XiSBIjspIOnlcizlXWPTuQQQaUWGHG/cpv
+         1BMRzTpwAXVuna4COu4b6dC9HmS6VMmnxwEglLOXrIzDdVt2tAGMrwYpJ4Nu58MVT/rz
+         XgahIHDiFfSJZRuyQqMFHEtibFAH3lXByVwes=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686262270; x=1688854270;
+        d=1e100.net; s=20221208; t=1686262317; x=1688854317;
         h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
          :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QIFTwNcQXPjlPibpzMZQ/8XjcUH/NrxWxvLGQKBbr7A=;
-        b=AjusVOxrltyv5S/U367SYuwDxip1M6IFqEUCbs+ENkVS3RTSzENuSqYfBq/LXDjlzG
-         GwRTQXakGscjaZ5t2tW37upfEpGgJm20QjUmeA4agPoGvXTIv/HIqEYIB5e8odElCmp+
-         r7T6FZRB0sWfbT0lYTn+A+7hh7MXQ9cXDPeRZcREpGrhTTb0ZwjbTL0AIEuAnJ9W+npC
-         H/B38Y8wX6HbjhI3gEp5gh35gjgcA+zrBb0Ztbq2WUdeZ7ry1LqNrA0LKdRf3fZDAd8Q
-         UbFz1zRoJ3//hfbqcLAnhRfFy5hT42Ii1yan60I2CX45/Wzyiy9PypySJvUVIFl5BHsw
-         uRJQ==
-X-Gm-Message-State: AC+VfDxQ5AXlU8rqIOuI66tG9TkXSa+DLwSiMxkA/Txear/pOYWA0mit
-        RV83d+U/dfrrdYN/ksNsC/CZjA==
-X-Google-Smtp-Source: ACHHUZ6s+mqGDv/7V80BQpYuncWWRKleFZr8YCBu18Pwmh2TskElUvxXo6xpAkqxPEFZ42SQhDstCA==
-X-Received: by 2002:a17:902:e810:b0:1b2:4b28:794c with SMTP id u16-20020a170902e81000b001b24b28794cmr5157851plg.6.1686262270135;
-        Thu, 08 Jun 2023 15:11:10 -0700 (PDT)
+        bh=x9nK3i9uwFxcq6lUWHMYNr9e75iSuq75psq6tYfb4Fo=;
+        b=Md19H9hWoOiCu4j42p4pUlsv5y2pYl8t/DH+AgeMzYPQAQ0fjozNjdKxnXM6CryZ6t
+         HliQ2CK960S12NmgKgMW1/DpmEvyZHP5kQfdYS7jG404Xr9TureDDxwpQdgh2orQPA31
+         Zg57Sg+zq3vFIg0cwMgDRRCDE13lTETKEXMfe0wjJugrnEL8TuRXia6Bns02WjgYiu53
+         2tKCh9BqGMY4iLMoSK7CwikIHGgg47heJVEBbSRqo/BNnSHyzusuNI//grLrD8FqLh/h
+         OJ/2cbp9vBtzP4mG0ZGP6fv9Xv+mmIYm5eZPcMW6jDDaVY6X3SKr8F8F54iDPLPMNryW
+         d9nw==
+X-Gm-Message-State: AC+VfDygZIu3/E6RPAs10UXjzccga8Xt4v/A3dW5dKmPW9Pj254nkzp7
+        sLdZL9CBFMLWNFy5hhFaQpI+Ow==
+X-Google-Smtp-Source: ACHHUZ4Lw6wdJ3COwxi6sEIfjmuiojdVyLqpq9oVGTv5wDOB8UYlHHin2Nh+Hqo7B0wbqskIM5rd9A==
+X-Received: by 2002:a17:902:8bc7:b0:1b0:2658:db20 with SMTP id r7-20020a1709028bc700b001b02658db20mr8723448plo.53.1686262317354;
+        Thu, 08 Jun 2023 15:11:57 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id b10-20020a170902b60a00b001ae6e270d8bsm1879610pls.131.2023.06.08.15.11.08
+        by smtp.gmail.com with ESMTPSA id w17-20020a170902e89100b001affb590696sm1849831plg.216.2023.06.08.15.11.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 15:11:09 -0700 (PDT)
+        Thu, 08 Jun 2023 15:11:56 -0700 (PDT)
 From:   Florian Fainelli <florian.fainelli@broadcom.com>
 To:     bcm-kernel-feedback-list@broadcom.com,
         Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Ray Jui <rjui@broadcom.com>,
         Scott Branden <sbranden@broadcom.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/6] ARM: dts: bcm28155-ap: use node labels
-Date:   Thu,  8 Jun 2023 15:11:07 -0700
-Message-Id: <20230608221107.2982587-1-florian.fainelli@broadcom.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: power: reset: bcm21664-resetmgr: convert to YAML
+Date:   Thu,  8 Jun 2023 15:11:55 -0700
+Message-Id: <20230608221155.2982689-1-florian.fainelli@broadcom.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cb52d36db90fa24e40fccc69724a685344f2c2f3.1685127525.git.stano.jakubek@gmail.com>
-References: <cover.1685127525.git.stano.jakubek@gmail.com> <cb52d36db90fa24e40fccc69724a685344f2c2f3.1685127525.git.stano.jakubek@gmail.com>
+In-Reply-To: <20230527141222.GA5048@standask-GA-A55M-S2HP>
+References: <20230527141222.GA5048@standask-GA-A55M-S2HP>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000a1119405fda5874c"
+        boundary="00000000000072237e05fda58a78"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -75,14 +75,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000a1119405fda5874c
+--00000000000072237e05fda58a78
 Content-Transfer-Encoding: 8bit
 
 From: Florian Fainelli <f.fainelli@gmail.com>
 
-On Fri, 26 May 2023 21:30:50 +0200, Stanislav Jakubek <stano.jakubek@gmail.com> wrote:
-> Use node labels instead of nodename@address for BCM28155 AP board
-> to simplify its DTS file.
+On Sat, 27 May 2023 16:12:22 +0200, Stanislav Jakubek <stano.jakubek@gmail.com> wrote:
+> Convert Broadcom Kona family reset manager bindings to DT schema.
 > 
 > Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
 > ---
@@ -91,7 +90,7 @@ Applied to https://github.com/Broadcom/stblinux/commits/devicetree/next, thanks!
 --
 Florian
 
---000000000000a1119405fda5874c
+--00000000000072237e05fda58a78
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -162,14 +161,14 @@ kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
 NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
 AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
 LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIMd5/6s/aWYGdXGO
-Cyh9Vrq4nYoUYZZnwXGGZzljc9ytMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTIzMDYwODIyMTExMFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIBpOHNaBuaBKOAso
+BwENfVrkw5pJv0rn39Djd5/+DRJrMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDYwODIyMTE1N1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
 AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCC7KYeLQmBiSiROe+oiXQPghv/YgzP9YtP
-kwcfqOs3TMxuXrttwxVZu1hObn8htFvqki0ucXdd5Uu0/M6IAdGmwg/nH36RbOGMiErgeUdy52iL
-UIrd21J7xzN/Vd5QIQ1yp7v3UVpCVXz4nAw6FpzsqzoNNZd5cRKD5GhBwwHHG0NqODm+qBWzPHFN
-EHJ2v7oLyh6GQK1JLugxA31kXKJo//cJ4LZa1Wyx28wxRdkFU/0gv/yZLbkJAN0g3nOZA+0E/EFq
-/kcSbXwUKETDYOUDoa7xj7+wyN1K8HnN5xcd+7wxPiy9ExzGgKviZxvou+1rjkma7nx4wFQUcxEO
-R4NY
---000000000000a1119405fda5874c--
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAlAp/GJf8bTywMZhXAjcDSr6Zj6CiSMnIB
+U+GPPHucEXgAvEL1aCaJirYsmVa+ISNccuZ8aK4LGs5qnLZyGgN9whcYoPu7ecistJg3EGsvUjhw
+eIUQ2EF8Eiey8+E2Bz6QfDq3+LvpTiH7N7Rw5R1ybiScoA0hnJSmqO+K4visdY4kASqjaGz4bERx
+idG2n8CdpnAw2TMNMqttoeaS7mOYu/f9TMWuLYdQkRSZFDs9df5Fks8weu4PfTSz9XjJ5ml0VOBp
+3tclKTE9ZgxMNCT2oUpfQHpzbLxRNRCajU1pNf6N7zlRckWks97Gw4mpqgfIjmQum9Hc6eGupk9S
+ZGGu
+--00000000000072237e05fda58a78--
