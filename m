@@ -2,255 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9355A7283A8
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:23:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B98F7283AF
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:24:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236793AbjFHPXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 11:23:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52674 "EHLO
+        id S237065AbjFHPX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 11:23:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232018AbjFHPXS (ORCPT
+        with ESMTP id S237008AbjFHPXx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 11:23:18 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943AB26AD;
-        Thu,  8 Jun 2023 08:23:16 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 47EE85C01C4;
-        Thu,  8 Jun 2023 11:23:13 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Thu, 08 Jun 2023 11:23:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1686237793; x=1686324193; bh=8NQR1QgWkz5FJshx76hkwpBKXiFIu2ZBcaz
-        eZgfU2HU=; b=RNr33zvInGlHpMqFqPaWlax+/J8+13RX1z3cGoqD0m0mN6T9KFG
-        uTT4/u3eB4me0Falzaq63/Eemzr1qJtHm5R4bTa8/r21DQf3Yy7mwtd6p44inMtv
-        0JFHYicLUv9e4toFh/H+7UvqWYmznpmzIV8bwPZGVgN1aAjulb6mWWGTf5WDsgkG
-        rZwYYXi71/jw29GnspjgKa4nND6h73b7Z45UJ+V1JeDMzWDWboGXkrnkjvcMfrRv
-        zLPcHRFbZ3s/gvU0VvNCzIiLatTypTI+C2CnkczM93CuSEorSSoiJSOIjD8Lkb3V
-        yhBs5btMqhSesOtB0QYdVIDZfxKD7tLgL6w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1686237793; x=1686324193; bh=8NQR1QgWkz5FJ
-        shx76hkwpBKXiFIu2ZBcazeZgfU2HU=; b=yqh6JQeZP2OslVaaN0b9gaJwAlpTD
-        X84n2uEtVHFyB3O6aAGEmbiRHVdgmgZ1eZfw1LHyV/naZqMA4EWAQblH1eYvCfIp
-        1ILnCXQdTmPHGuBrkgAf4XOyMsdanOPcdhRJj3AgqmEBTNgHBZ6jW5o9mkBd78cP
-        iQB6nWQxUxd58M93OJIJPp21F9ntgyYSSVlATbT34ifDAcfcHb4U4tRTbO3/ttRq
-        8ZoiGHF714dhLWiQSBSv3sFvK2s2f3O1uT5BZhKq/1jH3cxvVSj1tmIje4cfQl4N
-        niXqwKld7slr8EPB4FvoLVPY6HzzBH+naNWCw/er4ElkDhh+l/n4pilOw==
-X-ME-Sender: <xms:YPKBZOe8-xo8s7Dfgt-AopesjR3IiAnC_W2hN5O7lh0Ia4keVlAS0w>
-    <xme:YPKBZIMU0WdxOItx84HVTp_nkTI_YvTFLAg9KKjvI2NS8-HMhqr4wzcPgqTyqbAc3
-    6qaALGQ_ppjUCY>
-X-ME-Received: <xmr:YPKBZPjFl4bpETpiF7W5ZGmwjx3XfxDnoL9zJrMElrBIuJ_XWfd9AQk_U_E>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtiedgkeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepffgvmhhi
-    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
-    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepvdejteegkefhteduhffgteffgeff
-    gfduvdfghfffieefieekkedtheegteehffelnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhs
-    lhgrsgdrtghomh
-X-ME-Proxy: <xmx:YPKBZL-G_3_Ci0GJw6XrystQz7a7FePvF3QI7x0lBogsLIuVP4tAvw>
-    <xmx:YPKBZKu9MyksjpE4khqAqJYtJqiMPbirkUanGOh9zy-mIl1kKRKmvQ>
-    <xmx:YPKBZCEA-qutMj487Mpgc9AYYvjqXp9tZZJa7O1Uq_Ao_6jBUQPupw>
-    <xmx:YfKBZOgpfrXR2AJL2GZsTVjPWsw6q3cdbRyGuIOAbUx1E3udWcBmpA>
-Feedback-ID: iac594737:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 8 Jun 2023 11:23:12 -0400 (EDT)
-Date:   Thu, 8 Jun 2023 11:23:07 -0400
-From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
-        Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org
-Subject: Re: [PATCH v2 16/16] xen-blkback: Inform userspace that device has
- been opened
-Message-ID: <ZIHyXrAj5+DXAblD@itl-email>
-References: <20230530203116.2008-1-demi@invisiblethingslab.com>
- <20230530203116.2008-17-demi@invisiblethingslab.com>
- <ZH75OTMA6N3zYrH2@Air-de-Roger>
- <ZH9tcGh0N2fEcwjH@itl-email>
- <ZIBDgKKDhDj+//Q0@Air-de-Roger>
- <ZICwaWidZxhaGp8v@itl-email>
- <ZIGbUDpqjwbR5zmz@Air-de-Roger>
+        Thu, 8 Jun 2023 11:23:53 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6297E2
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 08:23:50 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-1a28e087cf1so581064fac.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 08:23:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686237830; x=1688829830;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=7eGKNpEtS/LUHv9klt9Aj7lracb6KVmSgEsfdVlHAJM=;
+        b=pEqgsbZOYOIluO5fkSnfT4mHgsIy7URbBhqLKSJNCbfyLlxc4wqySsqRq/FQIAVlld
+         7niiHbqG8ABK+qg0QayJyfqS+hnEy1ZdLA1cpZcuZ2/Wh4l2+FgenjLCNS1j+9/823tX
+         KzqrCe2Xezxggq3zqU9PQJHr8JRErxf47ZfzdTOTwb1hbU3rJ6FoLvKNy2A7oCXOBc0F
+         CwNQJA9zvxuzf7Gqs6d2QIaZlxx8bQrLrnn1Ne1QrGaZNzj7Qw+hIypUS8oEe7vXsqNa
+         1kepINzbjWpkh4KfWT4iYK29Xb+H0UWWXw+gzHbejUVEGXRkr3L7uD70c5pF42rUvT3/
+         k+Kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686237830; x=1688829830;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7eGKNpEtS/LUHv9klt9Aj7lracb6KVmSgEsfdVlHAJM=;
+        b=i1lwnJ9WE2Emu3ZHCa2WhAiKUGLUvjhJAmXxL9TbMXPcvExhh1gg96JU+ihpHswfeN
+         gbuzflwN9ytRMn08EkN2UYzKYiuyBjTOYrsT+a030u00TsOncSenIPPHTrSkvtI1jLAy
+         CeAFYWOvJc54xarudYa3WbgyqqHLIznmQuGZxoTMCusj0kBRknHcDKvxDu8QNtp1fr5g
+         teAQupdpjHejBopYcurbOULE5WMTcGa4AHIwYECAVt4MC1racVfJq4llq/s8fDZcAYcL
+         CgK4NER5o67dvQ3r6+lVdIHpzzt3TXDephoXLt8/1+q9jhXeEaWNmdLN4CRDJ5H7ft8X
+         5TFw==
+X-Gm-Message-State: AC+VfDyVaw/LHf8cpubpF7+UpppuzlqyWoQpEvewt5LqwO5o0nrVkMUk
+        +7Q6I2DeXk89Fgnct6JNWT5yjZj4H/ntjMPZzpB7tw==
+X-Google-Smtp-Source: ACHHUZ6MRhIzgEshXbjiyw+TzgveWuN0oAAyfd+2WEGwxKcq9vh32aSGd6ZMUobJ+47wbPkRfTMCHLTd+ZQm+tiXSVw=
+X-Received: by 2002:a05:6870:346:b0:192:ba3b:a18 with SMTP id
+ n6-20020a056870034600b00192ba3b0a18mr7681443oaf.51.1686237829805; Thu, 08 Jun
+ 2023 08:23:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="PU98An8gDVvBtzYA"
-Content-Disposition: inline
-In-Reply-To: <ZIGbUDpqjwbR5zmz@Air-de-Roger>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <461dba105f644867a6687858d51324e8@hyperstone.com>
+In-Reply-To: <461dba105f644867a6687858d51324e8@hyperstone.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 8 Jun 2023 17:23:13 +0200
+Message-ID: <CAPDyKFr7=z5RyeOOBiSaGrtHRxCrTHqwYvMsUjgGmn7cvLa3ZA@mail.gmail.com>
+Subject: Re: [PATCHv2 2/2] mmc: block: ioctl: Add PROG-error aggregation
+To:     Christian Loehle <CLoehle@hyperstone.com>
+Cc:     "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Avri Altman <avri.altman@wdc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 25 May 2023 at 11:56, Christian Loehle <CLoehle@hyperstone.com> wrote:
+>
+> Userspace currently has no way of checking for error bits of
+> detection mode X. These are error bits that are only detected by
+> the card when executing the command. For e.g. a sanitize operation
+> this may be minutes after the RSP was seen by the host.
+>
+> Currently userspace programs cannot see these error bits reliably.
+> They could issue a multi ioctl cmd with a CMD13 immediately following
+> it, but since errors of detection mode X are automatically cleared
+> (they are all clear condition B).
+> mmc_poll_for_busy of the first ioctl may have already hidden such an
+> error flag.
+>
+> In case of the security operations: sanitize, secure erases and
+> RPMB writes, this could lead to the operation not being performed
+> successfully by the card with the user not knowing.
+> If the user trusts that this operation is completed
+> (e.g. their data is sanitized), this could be a security issue.
+> An attacker could e.g. provoke a eMMC (VCC) flash fail, where a
+> successful sanitize of a card is not possible. A card may move out
+> of PROG state but issue a bit 19 R1 error.
+>
+> This patch therefore will also have the consequence of a mmc-utils
+> patch, which enables the bit for the security-sensitive operations.
+>
+> Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
+> ---
+>  drivers/mmc/core/block.c   | 17 ++++++-----------
+>  drivers/mmc/core/mmc_ops.c | 25 ++++++++++++++++++++++++-
+>  drivers/mmc/core/mmc_ops.h |  3 +++
+>  3 files changed, 33 insertions(+), 12 deletions(-)
+>
+> diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+> index e46330815484..44c1b2825032 100644
+> --- a/drivers/mmc/core/block.c
+> +++ b/drivers/mmc/core/block.c
+> @@ -470,7 +470,7 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
+>         struct mmc_data data = {};
+>         struct mmc_request mrq = {};
+>         struct scatterlist sg;
+> -       bool r1b_resp, use_r1b_resp = false;
+> +       bool r1b_resp;
+>         unsigned int busy_timeout_ms;
+>         int err;
+>         unsigned int target_part;
+> @@ -551,8 +551,7 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
+>         busy_timeout_ms = idata->ic.cmd_timeout_ms ? : MMC_BLK_TIMEOUT_MS;
+>         r1b_resp = (cmd.flags & MMC_RSP_R1B) == MMC_RSP_R1B;
+>         if (r1b_resp)
+> -               use_r1b_resp = mmc_prepare_busy_cmd(card->host, &cmd,
+> -                                                   busy_timeout_ms);
+> +               mmc_prepare_busy_cmd(card->host, &cmd, busy_timeout_ms);
+>
+>         mmc_wait_for_req(card->host, &mrq);
+>         memcpy(&idata->ic.response, cmd.resp, sizeof(cmd.resp));
+> @@ -605,19 +604,15 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
+>         if (idata->ic.postsleep_min_us)
+>                 usleep_range(idata->ic.postsleep_min_us, idata->ic.postsleep_max_us);
+>
+> -       /* No need to poll when using HW busy detection. */
+> -       if ((card->host->caps & MMC_CAP_WAIT_WHILE_BUSY) && use_r1b_resp)
+> -               return 0;
+> -
+>         if (mmc_host_is_spi(card->host)) {
+>                 if (idata->ic.write_flag || r1b_resp || cmd.flags & MMC_RSP_SPI_BUSY)
+>                         return mmc_spi_err_check(card);
+>                 return err;
+>         }
+> -       /* Ensure RPMB/R1B command has completed by polling with CMD13. */
+> -       if (idata->rpmb || r1b_resp)
+> -               err = mmc_poll_for_busy(card, busy_timeout_ms, false,
+> -                                       MMC_BUSY_IO);
+> +       /* Poll for write/R1B execution errors */
+> +       if (idata->ic.write_flag || r1b_resp)
 
---PU98An8gDVvBtzYA
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 8 Jun 2023 11:23:07 -0400
-From: Demi Marie Obenour <demi@invisiblethingslab.com>
-To: Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
-Cc: Jens Axboe <axboe@kernel.dk>, Alasdair Kergon <agk@redhat.com>,
-	Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
-	Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>,
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-	xen-devel@lists.xenproject.org
-Subject: Re: [PATCH v2 16/16] xen-blkback: Inform userspace that device has
- been opened
+Earlier we polled for requests that were targeted to rpmb, no matter
+if they were write or reads. Are you intentionally changing this? If
+so, can you explain why?
 
-On Thu, Jun 08, 2023 at 11:11:44AM +0200, Roger Pau Monn=C3=A9 wrote:
-> On Wed, Jun 07, 2023 at 12:29:26PM -0400, Demi Marie Obenour wrote:
-> > On Wed, Jun 07, 2023 at 10:44:48AM +0200, Roger Pau Monn=C3=A9 wrote:
-> > > On Tue, Jun 06, 2023 at 01:31:25PM -0400, Demi Marie Obenour wrote:
-> > > > On Tue, Jun 06, 2023 at 11:15:37AM +0200, Roger Pau Monn=C3=A9 wrot=
-e:
-> > > > > On Tue, May 30, 2023 at 04:31:16PM -0400, Demi Marie Obenour wrot=
-e:
-> > > > > > Set "opened" to "0" before the hotplug script is called.  Once =
-the
-> > > > > > device node has been opened, set "opened" to "1".
-> > > > > >=20
-> > > > > > "opened" is used exclusively by userspace.  It serves two purpo=
-ses:
-> > > > > >=20
-> > > > > > 1. It tells userspace that the diskseq Xenstore entry is suppor=
-ted.
-> > > > > >=20
-> > > > > > 2. It tells userspace that it can wait for "opened" to be set t=
-o 1.
-> > > > > >    Once "opened" is 1, blkback has a reference to the device, so
-> > > > > >    userspace doesn't need to keep one.
-> > > > > >=20
-> > > > > > Together, these changes allow userspace to use block devices wi=
-th
-> > > > > > delete-on-close behavior, such as loop devices with the autocle=
-ar flag
-> > > > > > set or device-mapper devices with the deferred-remove flag set.
-> > > > >=20
-> > > > > There was some work in the past to allow reloading blkback as a
-> > > > > module, it's clear that using delete-on-close won't work if attem=
-pting
-> > > > > to reload blkback.
-> > > >=20
-> > > > Should blkback stop itself from being unloaded if delete-on-close i=
-s in
-> > > > use?
-> > >=20
-> > > Hm, maybe.  I guess that's the best we can do right now.
-> >=20
-> > I=E2=80=99ll implement this.
->=20
-> Let's make this a separate patch.
+> +               err = mmc_poll_for_busy_err_flags(card, busy_timeout_ms, false,
+> +                                       MMC_BUSY_IO, &idata->ic.response[0]);
 
-Good idea.
+I think it's better to extend the mmc_blk_busy_cb, rather than
+introducing an entirely new polling function.
 
-> > > > > Isn't there some existing way to check whether a device is opened?
-> > > > > (stat syscall maybe?).
-> > > >=20
-> > > > Knowing that the device has been opened isn=E2=80=99t enough.  The =
-block script
-> > > > needs to be able to wait for blkback (and not something else) to op=
-en
-> > > > the device.  Otherwise it will be confused if the device is opened =
-by
-> > > > e.g. udev.
-> > >=20
-> > > Urg, no, the block script cannot wait indefinitely for blkback to open
-> > > the device, as it has an execution timeout.  blkback is free to only
-> > > open the device upon guest frontend connection, and that (when using
-> > > libxl) requires the hotplug scripts execution to be finished so the
-> > > guest can be started.
-> >=20
-> > I=E2=80=99m a bit confused here.  My understanding is that blkdev_get_b=
-y_dev()
-> > already opens the device, and that happens in the xenstore watch
-> > handler.  I have tested this with delete-on-close device-mapper devices,
-> > and it does work.
->=20
-> Right, but on a very contended system there's no guarantee of when
-> blkback will pick up the update to "physical-device" and open the
-> device, so far the block script only writes the physical-device node
-> and exits.  With the proposed change the block script will also wait
-> for blkback to react to the physcal-device write, hence making VM
-> creation slower.
+Then you can call __mmc_poll_for_busy() here instead.
 
-Only block scripts that choose to wait for device open suffer
-this performance penalty.  My current plan is to only do so for
-delete-on-close devices which are managed by the block script
-itself.  Other devices will not suffer a performance hit.
+>
+>         return err;
+>  }
+> diff --git a/drivers/mmc/core/mmc_ops.c b/drivers/mmc/core/mmc_ops.c
+> index 3b3adbddf664..11e566ab719c 100644
+> --- a/drivers/mmc/core/mmc_ops.c
+> +++ b/drivers/mmc/core/mmc_ops.c
+> @@ -57,7 +57,9 @@ static const u8 tuning_blk_pattern_8bit[] = {
+>  struct mmc_busy_data {
+>         struct mmc_card *card;
+>         bool retry_crc_err;
+> +       bool aggregate_err_flags;
+>         enum mmc_busy_cmd busy_cmd;
+> +       u32 *status;
+>  };
+>
+>  struct mmc_op_cond_busy_data {
+> @@ -464,7 +466,8 @@ static int mmc_busy_cb(void *cb_data, bool *busy)
+>         u32 status = 0;
+>         int err;
+>
+> -       if (data->busy_cmd != MMC_BUSY_IO && host->ops->card_busy) {
+> +       if (data->busy_cmd != MMC_BUSY_IO && host->ops->card_busy &&
+> +                       !data->aggregate_err_flags) {
+>                 *busy = host->ops->card_busy(host);
+>                 return 0;
+>         }
+> @@ -477,6 +480,9 @@ static int mmc_busy_cb(void *cb_data, bool *busy)
+>         if (err)
+>                 return err;
+>
+> +       if (data->aggregate_err_flags)
+> +               *data->status = R1_STATUS(*data->status) | status;
+> +
+>         switch (data->busy_cmd) {
+>         case MMC_BUSY_CMD6:
+>                 err = mmc_switch_status_error(host, status);
+> @@ -549,12 +555,29 @@ int mmc_poll_for_busy(struct mmc_card *card, unsigned int timeout_ms,
+>
+>         cb_data.card = card;
+>         cb_data.retry_crc_err = retry_crc_err;
+> +       cb_data.aggregate_err_flags = false;
+>         cb_data.busy_cmd = busy_cmd;
+>
+>         return __mmc_poll_for_busy(host, 0, timeout_ms, &mmc_busy_cb, &cb_data);
+>  }
+>  EXPORT_SYMBOL_GPL(mmc_poll_for_busy);
+>
+> +int mmc_poll_for_busy_err_flags(struct mmc_card *card, unsigned int timeout_ms,
+> +                     bool retry_crc_err, enum mmc_busy_cmd busy_cmd, u32 *status)
+> +{
+> +       struct mmc_host *host = card->host;
+> +       struct mmc_busy_data cb_data;
+> +
+> +       cb_data.card = card;
+> +       cb_data.retry_crc_err = retry_crc_err;
+> +       cb_data.aggregate_err_flags = true;
+> +       cb_data.busy_cmd = busy_cmd;
+> +       cb_data.status = status;
+> +
+> +       return __mmc_poll_for_busy(host, 0, timeout_ms, &mmc_busy_cb, &cb_data);
+> +}
+> +EXPORT_SYMBOL_GPL(mmc_poll_for_busy_err_flags);
+> +
+>  bool mmc_prepare_busy_cmd(struct mmc_host *host, struct mmc_command *cmd,
+>                           unsigned int timeout_ms)
+>  {
+> diff --git a/drivers/mmc/core/mmc_ops.h b/drivers/mmc/core/mmc_ops.h
+> index 09ffbc00908b..fc7ec43a78dc 100644
+> --- a/drivers/mmc/core/mmc_ops.h
+> +++ b/drivers/mmc/core/mmc_ops.h
+> @@ -47,6 +47,9 @@ int __mmc_poll_for_busy(struct mmc_host *host, unsigned int period_us,
+>                         void *cb_data);
+>  int mmc_poll_for_busy(struct mmc_card *card, unsigned int timeout_ms,
+>                       bool retry_crc_err, enum mmc_busy_cmd busy_cmd);
+> +int mmc_poll_for_busy_err_flags(struct mmc_card *card, unsigned int timeout_ms,
+> +                     bool retry_crc_err, enum mmc_busy_cmd busy_cmd,
+> +                     u32 *status);
+>  int __mmc_switch(struct mmc_card *card, u8 set, u8 index, u8 value,
+>                 unsigned int timeout_ms, unsigned char timing,
+>                 bool send_status, bool retry_crc_err, unsigned int retries);
+> --
 
-In the long term, I would like to solve this problem entirely by using
-an ioctl to configure blkback.  The ioctl would take a file descriptor
-argument, avoiding the need for a round-trip through xenstore.  This
-also solves a security annoyance with the current design, which is that
-the device is opened by a kernel thread and so the security context of
-whoever requested the device to be opened is lost.
-
-> > > > > I would like to avoid adding more xenstore blkback state if such
-> > > > > information can be fetched from other methods.
-> > > >=20
-> > > > I don=E2=80=99t think it can be, unless the information is passed v=
-ia a
-> > > > completely different method.  Maybe netlink(7) or ioctl(2)?  Arguab=
-ly
-> > > > this information should not be stored in Xenstore at all, as it exp=
-oses
-> > > > backend implementation details to the frontend.
-> > >=20
-> > > Could you maybe use sysfs for this information?
-> >=20
-> > Probably?  This would involve adding a new file in sysfs.
-> >=20
-> > > We have all sorts of crap in xenstore, but it would be best if we can
-> > > see of placing stuff like this in another interface.
-> >=20
-> > Fair.
->=20
-> Let's see if that's a suitable approach, and we can avoid having to
-> add an extra node to xenstore.
-
-I thought about this some more and realized that in Qubes OS, we might
-want to include the diskseq in the information dom0 gets about each
-exported block device.  This would allow dom0 to write the xenstore node
-itself, but it would require some way for dom0 to be informed about
-blkback having this feature.
---=20
-Sincerely,
-Demi Marie Obenour (she/her/hers)
-Invisible Things Lab
-
---PU98An8gDVvBtzYA
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmSB8l4ACgkQsoi1X/+c
-IsFSYA//XhC38a6SDufwf6y+xaRXnVDYSdUsP21JYKyDgiz9s6lEag0nuPNrUkLt
-+pQdAxPoPq99fFKrhleiVEbr1GtEBonRU6qMCe/cUJ/BqTkUyJ75EOeRtxFjr7DI
-QC9dbaly+Q+WkiLwmtHiaWgk56TaGp+GqYrG2Zj6w0fmIwOmZ59IRaDeIqwJYA6p
-T4vagAEMK+f3poK6sWfEhZE2IJ5tGqyZwxvpVPY3ldnm5wS9n5WmNZF0rM7lKGzF
-J8S8ITQut9DtW9NicTQfFz1jjIMDs3KFReSPchQ41+IRUx6nM3sjr6RnE2kBCER8
-io/OtNbe6TVv5LxDe2bDLpEzPesjl3RNrx+mgC/LpIaO8JhvZEYpF49XmgQbXRhe
-HMob73O0quNIUMQLqQ18zunfqE4wIq8Yfv4E146jRaItTN+AZT4oAFZZJb8f43BS
-c95GNTtjdguBVeLKb3Vi9dH9bgqtO9CbDop9PeP1T05q2VHxMTEGhf2XkZoOCCxI
-oMIV9IEbkBcVQT/nVZa56Suqgp6XKy/llGIrvk45bhraLT8ljpoHUeZnjQaJxJEO
-YWr7ImrznVH+57dQbSlkQrWKZcp8f0dzzfoDGGWXP6UTTA9JiiVMkqjmk6YZEyQL
-VGban/xP4mC8GD10OtAsc/b3n0w87wxVYjYT9hdDtgIBUzjcGP4=
-=1nZV
------END PGP SIGNATURE-----
-
---PU98An8gDVvBtzYA--
+Kind regards
+Uffe
