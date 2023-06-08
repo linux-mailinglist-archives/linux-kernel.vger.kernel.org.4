@@ -2,818 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AB9F728844
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 21:23:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B278728842
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 21:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236272AbjFHTXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 15:23:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40382 "EHLO
+        id S234916AbjFHTXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 15:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234383AbjFHTXe (ORCPT
+        with ESMTP id S229678AbjFHTXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 15:23:34 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2076.outbound.protection.outlook.com [40.107.220.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76DC71730;
-        Thu,  8 Jun 2023 12:22:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=M0VZGGIAPO6glY0R9YPihMGOCb/dhCwp+YHKiQhU06SnlwzE+BEnGY112DFL+ob9OTMgeqULFY8OOZwB41pfmd4jcv/Ig455h9cJ7GwmPk+YAYY9tJCFObXpgKyvvnqNE6v0QZrdEqsyt8H1NXKXRufUwJ/A/Gim8FODOJfPz9TW9EO1RqDbeoGi2yafDZ7/VEkEMWvwmP64MXuhKVGQL/9eFDL+MBu2kGm8Wzl/HHF0mHWwxrzJw4nT4TxG8i6QoGobvX8aRLFXCTQwiFEJaiQPoftYYNatJS1gbaiVbOEXMU31lCB/P5clCkDCg7drekOgO446iBe86/vbcA8FOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xchf5Zdheh0V1fyiv/iULUU9EgjtWyDzAiqQf4mg1Bw=;
- b=Hy/lor4oXmE3VbgTy5tDLWU1Cj/sRVLfGYdF8n5Mr8CEf6bVCKwoZEkBfaYWJdMyt6Qh8TnvxjUIR4JQyCqG23uvgd33tybeGA8oSUOpJvKk3drnfIW29nTbTLcBSD78cHRgl7tOOYv6RSE7XKMEILga5A3vNTa/l1mkn1RZtrXUmhrS1cNG2N3WgFNHlQMNzMGaZIjsDOfzXcnVtvCLjdou+p3JsP8p69ucYN9UC6JSdS00E2RDWl6tV0M4P+BqoO6YsXXm/CtBdznhWJqTza1escQnjtfEP6ErdbBf/VACJn7EtfD7a00VBnm1fYw5uD5PMM6bHx4gZR0dm/p0Dg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xchf5Zdheh0V1fyiv/iULUU9EgjtWyDzAiqQf4mg1Bw=;
- b=pQSV3Zcoxq7hcQZjeXziIHOoiVs8tvoBMh+KbWqW/4butOUcBnHmV3dAjYSrG1hgYpUbTPsZaL4nbQLYmTIhS3y5mTJ+vYONTcVPs5YCcGxgaTh9CKAXqhxkYWaghrXBBUe/xPDS+vrNFq2r05sp9EFzd9CZfnAUYwdP+s7vs/4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS0PR12MB6390.namprd12.prod.outlook.com (2603:10b6:8:ce::7) by
- IA1PR12MB8239.namprd12.prod.outlook.com (2603:10b6:208:3f7::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.39; Thu, 8 Jun
- 2023 19:22:29 +0000
-Received: from DS0PR12MB6390.namprd12.prod.outlook.com
- ([fe80::f7fc:407f:3bae:bd96]) by DS0PR12MB6390.namprd12.prod.outlook.com
- ([fe80::f7fc:407f:3bae:bd96%3]) with mapi id 15.20.6455.037; Thu, 8 Jun 2023
- 19:22:29 +0000
-Message-ID: <e8de8503-da01-7f32-ef33-512df9b4e5c2@amd.com>
-Date:   Thu, 8 Jun 2023 14:22:25 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v5 03/26] cxl: Rename member @dport of struct cxl_dport to
- @dev
-Content-Language: en-US
-To:     Dan Williams <dan.j.williams@intel.com>,
-        alison.schofield@intel.com, vishal.l.verma@intel.com,
-        ira.weiny@intel.com, bwidawsk@kernel.org, dave.jiang@intel.com,
-        Jonathan.Cameron@huawei.com, linux-cxl@vger.kernel.org
-Cc:     rrichter@amd.com, linux-kernel@vger.kernel.org, bhelgaas@google.com
-References: <20230607221651.2454764-1-terry.bowman@amd.com>
- <20230607221651.2454764-4-terry.bowman@amd.com>
- <64817846759c9_e067a294f5@dwillia2-xfh.jf.intel.com.notmuch>
- <80c27ea8-4d82-a41d-1ccb-17d8da974faa@amd.com>
- <648227401791a_1433ac294d6@dwillia2-xfh.jf.intel.com.notmuch>
-From:   Terry Bowman <Terry.Bowman@amd.com>
-In-Reply-To: <648227401791a_1433ac294d6@dwillia2-xfh.jf.intel.com.notmuch>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BN9PR03CA0474.namprd03.prod.outlook.com
- (2603:10b6:408:139::29) To DS0PR12MB6390.namprd12.prod.outlook.com
- (2603:10b6:8:ce::7)
+        Thu, 8 Jun 2023 15:23:11 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE1F30FE
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 12:22:46 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-569386b7861so31293947b3.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 12:22:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686252164; x=1688844164;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VvuiwGfmHxTbGTIrjZEu2Atjrxfj5l7d/xiFwRLchQg=;
+        b=5jRACtmOYl24iPoTbIjNRpyUFAC/FI9lpuvtUNHnC43m7VYioQ/BjHL7bdRB1Sderj
+         Ku/HQKtR0qPfeCfubIqZ/AIBxONFw9MhEvcLPL8cbaxLn3mTiR/nWL6P2PCLjm+BwcQW
+         0EgQz3QqN/pDsKtdmzyltGWnacSj5IwEptrUle8FLf/akecGFE+OR3UMPvCEsj1BvLU9
+         B+ORl75p95EI9Mde8VL9yv1b1t+G7YgfanAmLLFyt7bpvhgPlWiVhcJ7Ue5u8gtJ1wSb
+         o7+vcjNZQIk2HsdRh5Pl//khJzNempIfA/Kf3RkDsGtD4+XKnKjXxiMtp0DlEfTwETu/
+         3u+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686252164; x=1688844164;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VvuiwGfmHxTbGTIrjZEu2Atjrxfj5l7d/xiFwRLchQg=;
+        b=RfQCK/jP5myon2RirKe5OBEfXyeae7ocfKDmNXL3f7bZONdBELRgep4KcYQedoJXxO
+         blRuigHCMsq9ieLhszMFQaCAbx0cCmd02ZxwZgOLLA3Ihscit9JC2EvqGALzLfmJHMH2
+         E1c7kPyqyR+lZ7woc7wWHnZzNAYQHPpnyKpnw7HF9aJJ6GyDQUu1vGtD1JXYORgCz4CT
+         j6MuCiipoXoYT4QBdVqbKWMM74TDLcVHtVBeVSyCHF5B6KhLSYbhYrGL1tEObiAUTXPL
+         6l8jYgr19nMECYqyXatwwSoa3WJy39hs3K1jMAfb7PZS2P3pX85N4VDU8r5M2fkuDfWN
+         g76Q==
+X-Gm-Message-State: AC+VfDwvHXcl9JlNADc45xN5+exmFyRZurlcQAobmfU1ULBdDuLwbMxz
+        K6MP3CQ/1n4ad2irjInhMh/1EA==
+X-Google-Smtp-Source: ACHHUZ40hyaOIkdH7B5oJObv6N1cySgcI9o6+PKHZNW5ZVazdwvrvX10Wz2CSgkv/8emrW9KOXZU2A==
+X-Received: by 2002:a81:a08c:0:b0:569:ef9b:eda with SMTP id x134-20020a81a08c000000b00569ef9b0edamr823988ywg.10.1686252163900;
+        Thu, 08 Jun 2023 12:22:43 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id n126-20020a817284000000b00561949f713fsm118018ywc.39.2023.06.08.12.22.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 12:22:43 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 12:22:39 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Helge Deller <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v2 11/23] powerpc: kvmppc_unmap_free_pmd()
+ pte_offset_kernel()
+In-Reply-To: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com>
+Message-ID: <c76aa421-aec3-4cc8-cc61-4130f2e27e1@google.com>
+References: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR12MB6390:EE_|IA1PR12MB8239:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0a82593e-4846-4c49-317c-08db6855b31e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HSjZCW2RtEai+WgUYT5KNzrqySfUOMwHiw9ecCpYPW+aQy5sw6o/z2pZv4uucRAlDBY1sPQd8TWXK7CV5un1+RykACoVxVG9uH/pfB58L97v1A1GWxrngScIRZrGCcUkc9VpmYOapSzoBVuK45HI3sEMos//99ZyzhLJInTi9+NcklUTmbDPQOfyQMY8y0ScrxHLIyKEA7h0xnZ491idiXG1OY2uq8D41AnIoBvi+Thd3uuDb/u+WFW/Cj4JfECAjF9v1cJSaQvQbQJg/MxJBOybdInPjduXCghX7zeE10X0k7UBbAC5P+Rps+O93WEnDt8KdQdk1wyAXdrdfPe2Cvcsg16JAYGxLdOOyDkpajD7Ou36ncNdre+JLU0jw5ZnwbMzzcnQykbQ3dC4RKBmVgwWx/NuCIUfsJTvn2YbNlAEuRJMuXj24+CH3lNAeunASVUCfU2YqrtjRXnpjyCLbsOkXCOpr198x9RMm+nXnfPEnn41NRj7hP7RMopKVW8dQakpv8i0Y12EFMiRyc17BrUfuK/irehH9HQmr4Th+g+/heROqDPCJcg5JE2pg445M4nINLsZ+AWD/SZVCFt5iwm8H/jEQ7LYEmJ717+TGfgHFMGvSxbVYIKlO7hvxUvPOONBHWGGItWm0yJAiJbz1w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB6390.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(376002)(346002)(39860400002)(136003)(451199021)(6506007)(6512007)(53546011)(186003)(31686004)(2616005)(6486002)(6666004)(66946007)(66556008)(66476007)(36756003)(4326008)(478600001)(83380400001)(8936002)(8676002)(31696002)(86362001)(5660300002)(38100700002)(7416002)(316002)(41300700001)(30864003)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?U1RzTVdWdmZ0cmpuNDF6RUZqZWZiRWRNOGJPZ2pBT1V5V3VtQ25lQVV0SmlN?=
- =?utf-8?B?b0c1U21DYzhHbEtFeFNJbDJ6UHBIbXVTdGNqWE92bG13cGJRcWgvYW12TWlK?=
- =?utf-8?B?SzV5QnRhOVMxWWtaL0w0WHJkZDZBQUsraWtscmJZQlNic1M4a2JUSXdHNlZF?=
- =?utf-8?B?MVE0aGpMZ25lc21pMkMySm8rRmNuUSt3VW1EZUZrWlFMQ3VQRjlnZndBMVps?=
- =?utf-8?B?ZTJJWmtMMTdsNkIyMHY3a1NFOU1mMVYrVDFuSTA4bHZqZE5XTDhxSVJPMC94?=
- =?utf-8?B?ZWR0N2Ewckc2RlZoSjJsbWpoVjg1N1V1eERBS1M5Qy9BUE5wQkxYR3dxWXhJ?=
- =?utf-8?B?OUJ4N01MNzhSUlpYZEVNZVBXVWVpQmxNeUJlM290MjBmbnRqWjR2QUtLQndL?=
- =?utf-8?B?VVJMVWkxSjZ5OWQyU2tDS1FscGJkenJnTFFvQU9aeTFQTjJVMFdHZ1ZSeUEw?=
- =?utf-8?B?ZlRBUWtrUXkySExjbGJ4MUV3K1VyRHN4TlM2aFRGWUFxem1BbnBPSC9USWdo?=
- =?utf-8?B?K0V2TUVqSklwY2UwaFlScURodG5GWTRXd0VTcjRSaFd4aDBuMGhGd3k3MjUv?=
- =?utf-8?B?NnRzckVHdWlLdkRXMWhDenY1NzdVbzREVmFSNE8zTzl5UDl5dnBSNmtLWWxp?=
- =?utf-8?B?Y3loRlJkRzJ6b0k5RG9wVzloYXRQVVJXTlhDN3UwcGNtd3I5VTltZDg2bkky?=
- =?utf-8?B?T0JVNy9SUUhGZ3ljMmlXbmdENGUwZnZidXQrbXFocDdOSnNBTTgrbzFjRDZ0?=
- =?utf-8?B?ZnNONGZYZ2xMR1hyY2JxNXFIaFlEODBMS01FQ1hmZURWU21BS1RZOEdNcUFs?=
- =?utf-8?B?Nzgyb21DOHc2RzlCUUVQZHFmbkg5TDRTQVZqbElVWVRzenNGUDFPbGlLNGdC?=
- =?utf-8?B?SkwvQUVtbmxrMHlwMm1URDRUbHRjbzNjc3RQY2VsTXQ0aW5EV0ZaVm1JdFlB?=
- =?utf-8?B?QlpzRWVoNlQ2Yi81c0tsYUl4c25DZ2czVmpuMHZ0MFd6ZnhJMFgwc1pKVi9H?=
- =?utf-8?B?OXU4YjFTdVM1TGtmYmZ6WkQwQmVVV2ZOcDBLeGFNK2VxRzhrQ2xTWm9MclVP?=
- =?utf-8?B?ZW5NRDFtdnF6c2RBTjg0TEVRc2JWTGFjR3laY21Uejg4U1pHNmF1Q1NldWEy?=
- =?utf-8?B?c1o3SWt3VWxjMVhEUGJ0WnNYQUlIZWpQbkRvTVBPUEhyR0VzNkRQNXljWjBW?=
- =?utf-8?B?Y0Q0VExWZzVvK3FBbUNTNU5kNWdKRlpub3pOSGt3SVhYR2JSWUwzTTQwNE1U?=
- =?utf-8?B?OEtLVGtOamRmT2lGVG41ckhKdlA5YXVUT3NUbThNMjJOTnBMb29UMm1uTEp0?=
- =?utf-8?B?R0NrZmhURWpBcU9NdWkvRVgxd1h5M3poWlZ3Z3NDaDdOa0ltY0M5NW5Fb0VK?=
- =?utf-8?B?aTFjdE5VM0VqSG5pQ2ZBemk1VXZOc1BNc2tPVlZ0Y20xRTRkVW5LQ2FndmVR?=
- =?utf-8?B?eXc2Z1ptaUczc2JKR0oyS0FlSDgzemF3YnFPNWhpSjB4ejBBU01ySW12VFRa?=
- =?utf-8?B?SE1UZHdEMUlFNjJHdkE0TEpwQVJ4SkVtTmtyZzRwa0phNzJuTU16cUhkVTl6?=
- =?utf-8?B?cUs3emhvSzFqTXlpRnJwUnZpb1U5ZTIwVVYxZVFwZGhUdGlZQzJmc3gyKzZU?=
- =?utf-8?B?a0lWeWpVNXM4TWpXcW9EeHhvMWNBeEpOZDFveHl6Z2pKblVYOHJ6UnRUR3NP?=
- =?utf-8?B?cUJkV0pqcGVkRkJPY1RFUXRSQXVOaXYyajR1eHllQzZuUW5wb1BrM0RnVi9z?=
- =?utf-8?B?L2pZMmtXWkRiMzVUSUlCUjNXblNpb3FFUnhzQjlmSU1iQzhOam1UU3R4Ym14?=
- =?utf-8?B?RWtMYVlLVzgwZjl6b2FobHV4alp4U1dnMzc5MVRMWkJ0YU51eTRtbXR1K29B?=
- =?utf-8?B?SWpoSXhTcitvM2I1bmF0L1pDQ3MyeG1SMmpmY2cvR1A1cUZnSUZUQUNmR29H?=
- =?utf-8?B?dERoQjR4TWE3TVgrc2tobWp3SjhTMmtRakRaRExuelBzWXFnaW9aUVR1ai9m?=
- =?utf-8?B?ZlowdUFlZXlGQ2FzTjBISm4yWkphMGpCdEtmTTNFbzYvWFc3emkxQ21sLzA1?=
- =?utf-8?B?aWdURXp1YUhUOG5zWEdTQ05VZk05ZXdCT2czbkRxRW41b1hDaS9RT1lodkZC?=
- =?utf-8?B?RVZKU2hjWUlrVU80UGE5QlhPZlhSNzRrS1RBbVFUV2xTQWlyMXF2aXczalBC?=
- =?utf-8?Q?RYiaU52H4AWmj8zkKE74TWcO88M2AM386xA2ATRvUg3m?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0a82593e-4846-4c49-317c-08db6855b31e
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB6390.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2023 19:22:29.1246
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mIQB+5G9a4lXBp0kVM2QuzOQxvOT3AoCOnZ/PRIenv/VefvprvnKQQmprHu8XRX9iezMMTDVkroyHMuVh1u2Hg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8239
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+kvmppc_unmap_free_pmd() use pte_offset_kernel(), like everywhere else
+in book3s_64_mmu_radix.c: instead of pte_offset_map(), which will come
+to need a pte_unmap() to balance it.
 
+But note that this is a more complex case than most: see those -EAGAINs
+in kvmppc_create_pte(), which is coping with kvmppc races beween page
+table and huge entry, of the kind which we are expecting to address
+in pte_offset_map() - this might want to be revisited in future.
 
-On 6/8/23 14:08, Dan Williams wrote:
-> Terry Bowman wrote:
->> Hi Dan,
->>
->>
->> On 6/8/23 01:42, Dan Williams wrote:
->>> Terry Bowman wrote:
->>>> From: Robert Richter <rrichter@amd.com>
->>>>
->>>> Reading code like dport->dport does not immediately suggest that this
->>>> points to the corresponding device structure of the dport. Rename
->>>> struct member @dport to @dev.
->>>
->>> This one I don't agree with.
->>>
->>> This can switch to ->dport_dev if you like. The reason for ->dport was
->>> for symmetry with the ->uport of a 'struct cxl_port'. So if you change
->>> this to ->dport_dev then also make the ->uport_dev change for symmetry.
->>>
->>> Unlike a 'struct cxl_port' a 'struct cxl_dport' is not a device in its
->>> own right which is what I see when I read dport->dev.
->>>
->>
->> Ok, I'll change the structure member names and code to use the following:
->> struct cxl_dport::dev  -> struct cxl_dport::dport_dev
->>
->> struct cxl_port::uport -> struct cxl_port::uport_dev
-> 
-> Sounds good, to save duplication of work I already have this that you
-> can just adopt:
+Signed-off-by: Hugh Dickins <hughd@google.com>
+---
+ arch/powerpc/kvm/book3s_64_mmu_radix.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/arch/powerpc/kvm/book3s_64_mmu_radix.c b/arch/powerpc/kvm/book3s_64_mmu_radix.c
+index 461307b89c3a..572707858d65 100644
+--- a/arch/powerpc/kvm/book3s_64_mmu_radix.c
++++ b/arch/powerpc/kvm/book3s_64_mmu_radix.c
+@@ -509,7 +509,7 @@ static void kvmppc_unmap_free_pmd(struct kvm *kvm, pmd_t *pmd, bool full,
+ 		} else {
+ 			pte_t *pte;
+ 
+-			pte = pte_offset_map(p, 0);
++			pte = pte_offset_kernel(p, 0);
+ 			kvmppc_unmap_free_pte(kvm, pte, full, lpid);
+ 			pmd_clear(p);
+ 		}
+-- 
+2.35.3
 
-Thanks Dan. I'll insert your patch into the series.
-
-Regards,
-Terry
-
-> 
-> -- >8 --
-> Subject: cxl: Rename 'uport' to 'uport_dev'
-> 
-> From: Dan Williams <dan.j.williams@intel.com>
-> 
-> For symmetry with the recent rename of ->dport_dev for a 'struct
-> cxl_dport', add the "_dev" suffix to the ->uport property of a 'struct
-> cxl_port'. These devices represent the downstream-port-device and
-> upstream-port-device respectively in the CXL/PCIe topology.
-> 
-> Signed-off-by: Dan Williams <dan.j.williams@intel.com>
-> ---
->  drivers/cxl/core/pci.c        |    4 +--
->  drivers/cxl/core/port.c       |   61 ++++++++++++++++++++++-------------------
->  drivers/cxl/core/region.c     |   48 +++++++++++++++++---------------
->  drivers/cxl/cxl.h             |   13 +++++----
->  drivers/cxl/cxlmem.h          |    4 +--
->  drivers/cxl/mem.c             |    2 +
->  drivers/cxl/port.c            |    2 +
->  tools/testing/cxl/test/cxl.c  |   20 +++++++------
->  tools/testing/cxl/test/mock.c |   10 +++----
->  9 files changed, 86 insertions(+), 78 deletions(-)
-> 
-> diff --git a/drivers/cxl/core/pci.c b/drivers/cxl/core/pci.c
-> index 67f4ab6daa34..375f01c6cad6 100644
-> --- a/drivers/cxl/core/pci.c
-> +++ b/drivers/cxl/core/pci.c
-> @@ -67,7 +67,7 @@ static int match_add_dports(struct pci_dev *pdev, void *data)
->  
->  /**
->   * devm_cxl_port_enumerate_dports - enumerate downstream ports of the upstream port
-> - * @port: cxl_port whose ->uport is the upstream of dports to be enumerated
-> + * @port: cxl_port whose ->uport_dev is the upstream of dports to be enumerated
->   *
->   * Returns a positive number of dports enumerated or a negative error
->   * code.
-> @@ -622,7 +622,7 @@ static int cxl_cdat_read_table(struct device *dev,
->   */
->  void read_cdat_data(struct cxl_port *port)
->  {
-> -	struct cxl_memdev *cxlmd = to_cxl_memdev(port->uport);
-> +	struct cxl_memdev *cxlmd = to_cxl_memdev(port->uport_dev);
->  	struct device *host = cxlmd->dev.parent;
->  	struct device *dev = &port->dev;
->  	struct pci_doe_mb *cdat_doe;
-> diff --git a/drivers/cxl/core/port.c b/drivers/cxl/core/port.c
-> index 93800e6e095f..a45a063d52ce 100644
-> --- a/drivers/cxl/core/port.c
-> +++ b/drivers/cxl/core/port.c
-> @@ -561,9 +561,9 @@ static void unregister_port(void *_port)
->  	 * unregistered while holding their parent port lock.
->  	 */
->  	if (!parent)
-> -		lock_dev = port->uport;
-> +		lock_dev = port->uport_dev;
->  	else if (is_cxl_root(parent))
-> -		lock_dev = parent->uport;
-> +		lock_dev = parent->uport_dev;
->  	else
->  		lock_dev = &parent->dev;
->  
-> @@ -583,7 +583,8 @@ static int devm_cxl_link_uport(struct device *host, struct cxl_port *port)
->  {
->  	int rc;
->  
-> -	rc = sysfs_create_link(&port->dev.kobj, &port->uport->kobj, "uport");
-> +	rc = sysfs_create_link(&port->dev.kobj, &port->uport_dev->kobj,
-> +			       "uport");
->  	if (rc)
->  		return rc;
->  	return devm_add_action_or_reset(host, cxl_unlink_uport, port);
-> @@ -614,7 +615,7 @@ static int devm_cxl_link_parent_dport(struct device *host,
->  
->  static struct lock_class_key cxl_port_key;
->  
-> -static struct cxl_port *cxl_port_alloc(struct device *uport,
-> +static struct cxl_port *cxl_port_alloc(struct device *uport_dev,
->  				       resource_size_t component_reg_phys,
->  				       struct cxl_dport *parent_dport)
->  {
-> @@ -630,7 +631,7 @@ static struct cxl_port *cxl_port_alloc(struct device *uport,
->  	if (rc < 0)
->  		goto err;
->  	port->id = rc;
-> -	port->uport = uport;
-> +	port->uport_dev = uport_dev;
->  
->  	/*
->  	 * The top-level cxl_port "cxl_root" does not have a cxl_port as
-> @@ -660,10 +661,11 @@ static struct cxl_port *cxl_port_alloc(struct device *uport,
->  		else if (parent_dport->rch)
->  			port->host_bridge = parent_dport->dport_dev;
->  		else
-> -			port->host_bridge = iter->uport;
-> -		dev_dbg(uport, "host-bridge: %s\n", dev_name(port->host_bridge));
-> +			port->host_bridge = iter->uport_dev;
-> +		dev_dbg(uport_dev, "host-bridge: %s\n",
-> +			dev_name(port->host_bridge));
->  	} else
-> -		dev->parent = uport;
-> +		dev->parent = uport_dev;
->  
->  	port->component_reg_phys = component_reg_phys;
->  	ida_init(&port->decoder_ida);
-> @@ -687,7 +689,7 @@ static struct cxl_port *cxl_port_alloc(struct device *uport,
->  }
->  
->  static struct cxl_port *__devm_cxl_add_port(struct device *host,
-> -					    struct device *uport,
-> +					    struct device *uport_dev,
->  					    resource_size_t component_reg_phys,
->  					    struct cxl_dport *parent_dport)
->  {
-> @@ -695,12 +697,12 @@ static struct cxl_port *__devm_cxl_add_port(struct device *host,
->  	struct device *dev;
->  	int rc;
->  
-> -	port = cxl_port_alloc(uport, component_reg_phys, parent_dport);
-> +	port = cxl_port_alloc(uport_dev, component_reg_phys, parent_dport);
->  	if (IS_ERR(port))
->  		return port;
->  
->  	dev = &port->dev;
-> -	if (is_cxl_memdev(uport))
-> +	if (is_cxl_memdev(uport_dev))
->  		rc = dev_set_name(dev, "endpoint%d", port->id);
->  	else if (parent_dport)
->  		rc = dev_set_name(dev, "port%d", port->id);
-> @@ -735,28 +737,29 @@ static struct cxl_port *__devm_cxl_add_port(struct device *host,
->  /**
->   * devm_cxl_add_port - register a cxl_port in CXL memory decode hierarchy
->   * @host: host device for devm operations
-> - * @uport: "physical" device implementing this upstream port
-> + * @uport_dev: "physical" device implementing this upstream port
->   * @component_reg_phys: (optional) for configurable cxl_port instances
->   * @parent_dport: next hop up in the CXL memory decode hierarchy
->   */
-> -struct cxl_port *devm_cxl_add_port(struct device *host, struct device *uport,
-> +struct cxl_port *devm_cxl_add_port(struct device *host,
-> +				   struct device *uport_dev,
->  				   resource_size_t component_reg_phys,
->  				   struct cxl_dport *parent_dport)
->  {
->  	struct cxl_port *port, *parent_port;
->  
-> -	port = __devm_cxl_add_port(host, uport, component_reg_phys,
-> +	port = __devm_cxl_add_port(host, uport_dev, component_reg_phys,
->  				   parent_dport);
->  
->  	parent_port = parent_dport ? parent_dport->port : NULL;
->  	if (IS_ERR(port)) {
-> -		dev_dbg(uport, "Failed to add%s%s%s: %ld\n",
-> +		dev_dbg(uport_dev, "Failed to add%s%s%s: %ld\n",
->  			parent_port ? " port to " : "",
->  			parent_port ? dev_name(&parent_port->dev) : "",
->  			parent_port ? "" : " root port",
->  			PTR_ERR(port));
->  	} else {
-> -		dev_dbg(uport, "%s added%s%s%s\n",
-> +		dev_dbg(uport_dev, "%s added%s%s%s\n",
->  			dev_name(&port->dev),
->  			parent_port ? " to " : "",
->  			parent_port ? dev_name(&parent_port->dev) : "",
-> @@ -773,33 +776,34 @@ struct pci_bus *cxl_port_to_pci_bus(struct cxl_port *port)
->  	if (is_cxl_root(port))
->  		return NULL;
->  
-> -	if (dev_is_pci(port->uport)) {
-> -		struct pci_dev *pdev = to_pci_dev(port->uport);
-> +	if (dev_is_pci(port->uport_dev)) {
-> +		struct pci_dev *pdev = to_pci_dev(port->uport_dev);
->  
->  		return pdev->subordinate;
->  	}
->  
-> -	return xa_load(&cxl_root_buses, (unsigned long)port->uport);
-> +	return xa_load(&cxl_root_buses, (unsigned long)port->uport_dev);
->  }
->  EXPORT_SYMBOL_NS_GPL(cxl_port_to_pci_bus, CXL);
->  
-> -static void unregister_pci_bus(void *uport)
-> +static void unregister_pci_bus(void *uport_dev)
->  {
-> -	xa_erase(&cxl_root_buses, (unsigned long)uport);
-> +	xa_erase(&cxl_root_buses, (unsigned long)uport_dev);
->  }
->  
-> -int devm_cxl_register_pci_bus(struct device *host, struct device *uport,
-> +int devm_cxl_register_pci_bus(struct device *host, struct device *uport_dev,
->  			      struct pci_bus *bus)
->  {
->  	int rc;
->  
-> -	if (dev_is_pci(uport))
-> +	if (dev_is_pci(uport_dev))
->  		return -EINVAL;
->  
-> -	rc = xa_insert(&cxl_root_buses, (unsigned long)uport, bus, GFP_KERNEL);
-> +	rc = xa_insert(&cxl_root_buses, (unsigned long)uport_dev, bus,
-> +		       GFP_KERNEL);
->  	if (rc)
->  		return rc;
-> -	return devm_add_action_or_reset(host, unregister_pci_bus, uport);
-> +	return devm_add_action_or_reset(host, unregister_pci_bus, uport_dev);
->  }
->  EXPORT_SYMBOL_NS_GPL(devm_cxl_register_pci_bus, CXL);
->  
-> @@ -920,7 +924,7 @@ __devm_cxl_add_dport(struct cxl_port *port, struct device *dport_dev,
->  	int rc;
->  
->  	if (is_cxl_root(port))
-> -		host = port->uport;
-> +		host = port->uport_dev;
->  	else
->  		host = &port->dev;
->  
-> @@ -1374,7 +1378,7 @@ static int add_port_attach_ep(struct cxl_memdev *cxlmd,
->  		rc = PTR_ERR(port);
->  	else {
->  		dev_dbg(&cxlmd->dev, "add to new port %s:%s\n",
-> -			dev_name(&port->dev), dev_name(port->uport));
-> +			dev_name(&port->dev), dev_name(port->uport_dev));
->  		rc = cxl_add_ep(dport, &cxlmd->dev);
->  		if (rc == -EBUSY) {
->  			/*
-> @@ -1436,7 +1440,8 @@ int devm_cxl_enumerate_ports(struct cxl_memdev *cxlmd)
->  		if (port) {
->  			dev_dbg(&cxlmd->dev,
->  				"found already registered port %s:%s\n",
-> -				dev_name(&port->dev), dev_name(port->uport));
-> +				dev_name(&port->dev),
-> +				dev_name(port->uport_dev));
->  			rc = cxl_add_ep(dport, &cxlmd->dev);
->  
->  			/*
-> diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
-> index 13cda989d944..39825e5301d0 100644
-> --- a/drivers/cxl/core/region.c
-> +++ b/drivers/cxl/core/region.c
-> @@ -906,10 +906,10 @@ static int cxl_port_attach_region(struct cxl_port *port,
->  
->  	dev_dbg(&cxlr->dev,
->  		"%s:%s %s add: %s:%s @ %d next: %s nr_eps: %d nr_targets: %d\n",
-> -		dev_name(port->uport), dev_name(&port->dev),
-> +		dev_name(port->uport_dev), dev_name(&port->dev),
->  		dev_name(&cxld->dev), dev_name(&cxlmd->dev),
->  		dev_name(&cxled->cxld.dev), pos,
-> -		ep ? ep->next ? dev_name(ep->next->uport) :
-> +		ep ? ep->next ? dev_name(ep->next->uport_dev) :
->  				      dev_name(&cxlmd->dev) :
->  			   "none",
->  		cxl_rr->nr_eps, cxl_rr->nr_targets);
-> @@ -984,7 +984,7 @@ static int check_last_peer(struct cxl_endpoint_decoder *cxled,
->  	 */
->  	if (pos < distance) {
->  		dev_dbg(&cxlr->dev, "%s:%s: cannot host %s:%s at %d\n",
-> -			dev_name(port->uport), dev_name(&port->dev),
-> +			dev_name(port->uport_dev), dev_name(&port->dev),
->  			dev_name(&cxlmd->dev), dev_name(&cxled->cxld.dev), pos);
->  		return -ENXIO;
->  	}
-> @@ -994,7 +994,7 @@ static int check_last_peer(struct cxl_endpoint_decoder *cxled,
->  	if (ep->dport != ep_peer->dport) {
->  		dev_dbg(&cxlr->dev,
->  			"%s:%s: %s:%s pos %d mismatched peer %s:%s\n",
-> -			dev_name(port->uport), dev_name(&port->dev),
-> +			dev_name(port->uport_dev), dev_name(&port->dev),
->  			dev_name(&cxlmd->dev), dev_name(&cxled->cxld.dev), pos,
->  			dev_name(&cxlmd_peer->dev),
->  			dev_name(&cxled_peer->cxld.dev));
-> @@ -1026,7 +1026,7 @@ static int cxl_port_setup_targets(struct cxl_port *port,
->  	 */
->  	if (!is_power_of_2(cxl_rr->nr_targets)) {
->  		dev_dbg(&cxlr->dev, "%s:%s: invalid target count %d\n",
-> -			dev_name(port->uport), dev_name(&port->dev),
-> +			dev_name(port->uport_dev), dev_name(&port->dev),
->  			cxl_rr->nr_targets);
->  		return -EINVAL;
->  	}
-> @@ -1076,7 +1076,7 @@ static int cxl_port_setup_targets(struct cxl_port *port,
->  	rc = granularity_to_eig(parent_ig, &peig);
->  	if (rc) {
->  		dev_dbg(&cxlr->dev, "%s:%s: invalid parent granularity: %d\n",
-> -			dev_name(parent_port->uport),
-> +			dev_name(parent_port->uport_dev),
->  			dev_name(&parent_port->dev), parent_ig);
->  		return rc;
->  	}
-> @@ -1084,7 +1084,7 @@ static int cxl_port_setup_targets(struct cxl_port *port,
->  	rc = ways_to_eiw(parent_iw, &peiw);
->  	if (rc) {
->  		dev_dbg(&cxlr->dev, "%s:%s: invalid parent interleave: %d\n",
-> -			dev_name(parent_port->uport),
-> +			dev_name(parent_port->uport_dev),
->  			dev_name(&parent_port->dev), parent_iw);
->  		return rc;
->  	}
-> @@ -1093,7 +1093,7 @@ static int cxl_port_setup_targets(struct cxl_port *port,
->  	rc = ways_to_eiw(iw, &eiw);
->  	if (rc) {
->  		dev_dbg(&cxlr->dev, "%s:%s: invalid port interleave: %d\n",
-> -			dev_name(port->uport), dev_name(&port->dev), iw);
-> +			dev_name(port->uport_dev), dev_name(&port->dev), iw);
->  		return rc;
->  	}
->  
-> @@ -1113,7 +1113,7 @@ static int cxl_port_setup_targets(struct cxl_port *port,
->  	rc = eig_to_granularity(eig, &ig);
->  	if (rc) {
->  		dev_dbg(&cxlr->dev, "%s:%s: invalid interleave: %d\n",
-> -			dev_name(port->uport), dev_name(&port->dev),
-> +			dev_name(port->uport_dev), dev_name(&port->dev),
->  			256 << eig);
->  		return rc;
->  	}
-> @@ -1126,11 +1126,11 @@ static int cxl_port_setup_targets(struct cxl_port *port,
->  		    ((cxld->flags & CXL_DECODER_F_ENABLE) == 0)) {
->  			dev_err(&cxlr->dev,
->  				"%s:%s %s expected iw: %d ig: %d %pr\n",
-> -				dev_name(port->uport), dev_name(&port->dev),
-> +				dev_name(port->uport_dev), dev_name(&port->dev),
->  				__func__, iw, ig, p->res);
->  			dev_err(&cxlr->dev,
->  				"%s:%s %s got iw: %d ig: %d state: %s %#llx:%#llx\n",
-> -				dev_name(port->uport), dev_name(&port->dev),
-> +				dev_name(port->uport_dev), dev_name(&port->dev),
->  				__func__, cxld->interleave_ways,
->  				cxld->interleave_granularity,
->  				(cxld->flags & CXL_DECODER_F_ENABLE) ?
-> @@ -1147,20 +1147,20 @@ static int cxl_port_setup_targets(struct cxl_port *port,
->  			.end = p->res->end,
->  		};
->  	}
-> -	dev_dbg(&cxlr->dev, "%s:%s iw: %d ig: %d\n", dev_name(port->uport),
-> +	dev_dbg(&cxlr->dev, "%s:%s iw: %d ig: %d\n", dev_name(port->uport_dev),
->  		dev_name(&port->dev), iw, ig);
->  add_target:
->  	if (cxl_rr->nr_targets_set == cxl_rr->nr_targets) {
->  		dev_dbg(&cxlr->dev,
->  			"%s:%s: targets full trying to add %s:%s at %d\n",
-> -			dev_name(port->uport), dev_name(&port->dev),
-> +			dev_name(port->uport_dev), dev_name(&port->dev),
->  			dev_name(&cxlmd->dev), dev_name(&cxled->cxld.dev), pos);
->  		return -ENXIO;
->  	}
->  	if (test_bit(CXL_REGION_F_AUTO, &cxlr->flags)) {
->  		if (cxlsd->target[cxl_rr->nr_targets_set] != ep->dport) {
->  			dev_dbg(&cxlr->dev, "%s:%s: %s expected %s at %d\n",
-> -				dev_name(port->uport), dev_name(&port->dev),
-> +				dev_name(port->uport_dev), dev_name(&port->dev),
->  				dev_name(&cxlsd->cxld.dev),
->  				dev_name(ep->dport->dport_dev),
->  				cxl_rr->nr_targets_set);
-> @@ -1172,7 +1172,7 @@ static int cxl_port_setup_targets(struct cxl_port *port,
->  out_target_set:
->  	cxl_rr->nr_targets_set += inc;
->  	dev_dbg(&cxlr->dev, "%s:%s target[%d] = %s for %s:%s @ %d\n",
-> -		dev_name(port->uport), dev_name(&port->dev),
-> +		dev_name(port->uport_dev), dev_name(&port->dev),
->  		cxl_rr->nr_targets_set - 1, dev_name(ep->dport->dport_dev),
->  		dev_name(&cxlmd->dev), dev_name(&cxled->cxld.dev), pos);
->  
-> @@ -1492,7 +1492,7 @@ static int cmp_decode_pos(const void *a, const void *b)
->  	if (!dev) {
->  		struct range *range = &cxled_a->cxld.hpa_range;
->  
-> -		dev_err(port->uport,
-> +		dev_err(port->uport_dev,
->  			"failed to find decoder that maps %#llx-%#llx\n",
->  			range->start, range->end);
->  		goto err;
-> @@ -1507,14 +1507,15 @@ static int cmp_decode_pos(const void *a, const void *b)
->  	put_device(dev);
->  
->  	if (a_pos < 0 || b_pos < 0) {
-> -		dev_err(port->uport,
-> +		dev_err(port->uport_dev,
->  			"failed to find shared decoder for %s and %s\n",
->  			dev_name(cxlmd_a->dev.parent),
->  			dev_name(cxlmd_b->dev.parent));
->  		goto err;
->  	}
->  
-> -	dev_dbg(port->uport, "%s comes %s %s\n", dev_name(cxlmd_a->dev.parent),
-> +	dev_dbg(port->uport_dev, "%s comes %s %s\n",
-> +		dev_name(cxlmd_a->dev.parent),
->  		a_pos - b_pos < 0 ? "before" : "after",
->  		dev_name(cxlmd_b->dev.parent));
->  
-> @@ -2059,11 +2060,11 @@ static struct cxl_region *devm_cxl_add_region(struct cxl_root_decoder *cxlrd,
->  	if (rc)
->  		goto err;
->  
-> -	rc = devm_add_action_or_reset(port->uport, unregister_region, cxlr);
-> +	rc = devm_add_action_or_reset(port->uport_dev, unregister_region, cxlr);
->  	if (rc)
->  		return ERR_PTR(rc);
->  
-> -	dev_dbg(port->uport, "%s: created %s\n",
-> +	dev_dbg(port->uport_dev, "%s: created %s\n",
->  		dev_name(&cxlrd->cxlsd.cxld.dev), dev_name(dev));
->  	return cxlr;
->  
-> @@ -2191,7 +2192,7 @@ static ssize_t delete_region_store(struct device *dev,
->  	if (IS_ERR(cxlr))
->  		return PTR_ERR(cxlr);
->  
-> -	devm_release_action(port->uport, unregister_region, cxlr);
-> +	devm_release_action(port->uport_dev, unregister_region, cxlr);
->  	put_device(&cxlr->dev);
->  
->  	return len;
-> @@ -2356,7 +2357,8 @@ int cxl_get_poison_by_endpoint(struct cxl_port *port)
->  
->  	rc = device_for_each_child(&port->dev, &ctx, poison_by_decoder);
->  	if (rc == 1)
-> -		rc = cxl_get_poison_unmapped(to_cxl_memdev(port->uport), &ctx);
-> +		rc = cxl_get_poison_unmapped(to_cxl_memdev(port->uport_dev),
-> +					     &ctx);
->  
->  	up_read(&cxl_region_rwsem);
->  	return rc;
-> @@ -2732,7 +2734,7 @@ static struct cxl_region *construct_region(struct cxl_root_decoder *cxlrd,
->  
->  err:
->  	up_write(&cxl_region_rwsem);
-> -	devm_release_action(port->uport, unregister_region, cxlr);
-> +	devm_release_action(port->uport_dev, unregister_region, cxlr);
->  	return ERR_PTR(rc);
->  }
->  
-> diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
-> index 7232c2a0e27c..754cfe59ae37 100644
-> --- a/drivers/cxl/cxl.h
-> +++ b/drivers/cxl/cxl.h
-> @@ -536,7 +536,7 @@ struct cxl_dax_region {
->   *		     downstream port devices to construct a CXL memory
->   *		     decode hierarchy.
->   * @dev: this port's device
-> - * @uport: PCI or platform device implementing the upstream port capability
-> + * @uport_dev: PCI or platform device implementing the upstream port capability
->   * @host_bridge: Shortcut to the platform attach point for this port
->   * @id: id for port device-name
->   * @dports: cxl_dport instances referenced by decoders
-> @@ -555,7 +555,7 @@ struct cxl_dax_region {
->   */
->  struct cxl_port {
->  	struct device dev;
-> -	struct device *uport;
-> +	struct device *uport_dev;
->  	struct device *host_bridge;
->  	int id;
->  	struct xarray dports;
-> @@ -641,21 +641,22 @@ struct cxl_region_ref {
->  /*
->   * The platform firmware device hosting the root is also the top of the
->   * CXL port topology. All other CXL ports have another CXL port as their
-> - * parent and their ->uport / host device is out-of-line of the port
-> + * parent and their ->uport_dev / host device is out-of-line of the port
->   * ancestry.
->   */
->  static inline bool is_cxl_root(struct cxl_port *port)
->  {
-> -	return port->uport == port->dev.parent;
-> +	return port->uport_dev == port->dev.parent;
->  }
->  
->  bool is_cxl_port(const struct device *dev);
->  struct cxl_port *to_cxl_port(const struct device *dev);
->  struct pci_bus;
-> -int devm_cxl_register_pci_bus(struct device *host, struct device *uport,
-> +int devm_cxl_register_pci_bus(struct device *host, struct device *uport_dev,
->  			      struct pci_bus *bus);
->  struct pci_bus *cxl_port_to_pci_bus(struct cxl_port *port);
-> -struct cxl_port *devm_cxl_add_port(struct device *host, struct device *uport,
-> +struct cxl_port *devm_cxl_add_port(struct device *host,
-> +				   struct device *uport_dev,
->  				   resource_size_t component_reg_phys,
->  				   struct cxl_dport *parent_dport);
->  struct cxl_port *find_cxl_root(struct cxl_port *port);
-> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> index a2845a7a69d8..76743016b64c 100644
-> --- a/drivers/cxl/cxlmem.h
-> +++ b/drivers/cxl/cxlmem.h
-> @@ -72,13 +72,13 @@ cxled_to_memdev(struct cxl_endpoint_decoder *cxled)
->  {
->  	struct cxl_port *port = to_cxl_port(cxled->cxld.dev.parent);
->  
-> -	return to_cxl_memdev(port->uport);
-> +	return to_cxl_memdev(port->uport_dev);
->  }
->  
->  bool is_cxl_memdev(const struct device *dev);
->  static inline bool is_cxl_endpoint(struct cxl_port *port)
->  {
-> -	return is_cxl_memdev(port->uport);
-> +	return is_cxl_memdev(port->uport_dev);
->  }
->  
->  struct cxl_memdev *devm_cxl_add_memdev(struct cxl_dev_state *cxlds);
-> diff --git a/drivers/cxl/mem.c b/drivers/cxl/mem.c
-> index 45d4c32d78b0..4cc461c22b8b 100644
-> --- a/drivers/cxl/mem.c
-> +++ b/drivers/cxl/mem.c
-> @@ -163,7 +163,7 @@ static int cxl_mem_probe(struct device *dev)
->  	}
->  
->  	if (dport->rch)
-> -		endpoint_parent = parent_port->uport;
-> +		endpoint_parent = parent_port->uport_dev;
->  	else
->  		endpoint_parent = &parent_port->dev;
->  
-> diff --git a/drivers/cxl/port.c b/drivers/cxl/port.c
-> index c23b6164e1c0..4cef2bf45ad2 100644
-> --- a/drivers/cxl/port.c
-> +++ b/drivers/cxl/port.c
-> @@ -91,7 +91,7 @@ static int cxl_switch_port_probe(struct cxl_port *port)
->  static int cxl_endpoint_port_probe(struct cxl_port *port)
->  {
->  	struct cxl_endpoint_dvsec_info info = { .port = port };
-> -	struct cxl_memdev *cxlmd = to_cxl_memdev(port->uport);
-> +	struct cxl_memdev *cxlmd = to_cxl_memdev(port->uport_dev);
->  	struct cxl_dev_state *cxlds = cxlmd->cxlds;
->  	struct cxl_hdm *cxlhdm;
->  	struct cxl_port *root;
-> diff --git a/tools/testing/cxl/test/cxl.c b/tools/testing/cxl/test/cxl.c
-> index f5c04787bcc8..4f62eb55f8b8 100644
-> --- a/tools/testing/cxl/test/cxl.c
-> +++ b/tools/testing/cxl/test/cxl.c
-> @@ -754,7 +754,7 @@ static void mock_init_hdm_decoder(struct cxl_decoder *cxld)
->  		/* check is endpoint is attach to host-bridge0 */
->  		port = cxled_to_port(cxled);
->  		do {
-> -			if (port->uport == &cxl_host_bridge[0]->dev) {
-> +			if (port->uport_dev == &cxl_host_bridge[0]->dev) {
->  				hb0 = true;
->  				break;
->  			}
-> @@ -889,7 +889,7 @@ static int mock_cxl_enumerate_decoders(struct cxl_hdm *cxlhdm,
->  		mock_init_hdm_decoder(cxld);
->  
->  		if (target_count) {
-> -			rc = device_for_each_child(port->uport, &ctx,
-> +			rc = device_for_each_child(port->uport_dev, &ctx,
->  						   map_targets);
->  			if (rc) {
->  				put_device(&cxld->dev);
-> @@ -919,29 +919,29 @@ static int mock_cxl_port_enumerate_dports(struct cxl_port *port)
->  	int i, array_size;
->  
->  	if (port->depth == 1) {
-> -		if (is_multi_bridge(port->uport)) {
-> +		if (is_multi_bridge(port->uport_dev)) {
->  			array_size = ARRAY_SIZE(cxl_root_port);
->  			array = cxl_root_port;
-> -		} else if (is_single_bridge(port->uport)) {
-> +		} else if (is_single_bridge(port->uport_dev)) {
->  			array_size = ARRAY_SIZE(cxl_root_single);
->  			array = cxl_root_single;
->  		} else {
->  			dev_dbg(&port->dev, "%s: unknown bridge type\n",
-> -				dev_name(port->uport));
-> +				dev_name(port->uport_dev));
->  			return -ENXIO;
->  		}
->  	} else if (port->depth == 2) {
->  		struct cxl_port *parent = to_cxl_port(port->dev.parent);
->  
-> -		if (is_multi_bridge(parent->uport)) {
-> +		if (is_multi_bridge(parent->uport_dev)) {
->  			array_size = ARRAY_SIZE(cxl_switch_dport);
->  			array = cxl_switch_dport;
-> -		} else if (is_single_bridge(parent->uport)) {
-> +		} else if (is_single_bridge(parent->uport_dev)) {
->  			array_size = ARRAY_SIZE(cxl_swd_single);
->  			array = cxl_swd_single;
->  		} else {
->  			dev_dbg(&port->dev, "%s: unknown bridge type\n",
-> -				dev_name(port->uport));
-> +				dev_name(port->uport_dev));
->  			return -ENXIO;
->  		}
->  	} else {
-> @@ -954,9 +954,9 @@ static int mock_cxl_port_enumerate_dports(struct cxl_port *port)
->  		struct platform_device *pdev = array[i];
->  		struct cxl_dport *dport;
->  
-> -		if (pdev->dev.parent != port->uport) {
-> +		if (pdev->dev.parent != port->uport_dev) {
->  			dev_dbg(&port->dev, "%s: mismatch parent %s\n",
-> -				dev_name(port->uport),
-> +				dev_name(port->uport_dev),
->  				dev_name(pdev->dev.parent));
->  			continue;
->  		}
-> diff --git a/tools/testing/cxl/test/mock.c b/tools/testing/cxl/test/mock.c
-> index dbeef5c6f606..da554df50bac 100644
-> --- a/tools/testing/cxl/test/mock.c
-> +++ b/tools/testing/cxl/test/mock.c
-> @@ -139,7 +139,7 @@ struct cxl_hdm *__wrap_devm_cxl_setup_hdm(struct cxl_port *port,
->  	struct cxl_hdm *cxlhdm;
->  	struct cxl_mock_ops *ops = get_cxl_mock_ops(&index);
->  
-> -	if (ops && ops->is_mock_port(port->uport))
-> +	if (ops && ops->is_mock_port(port->uport_dev))
->  		cxlhdm = ops->devm_cxl_setup_hdm(port, info);
->  	else
->  		cxlhdm = devm_cxl_setup_hdm(port, info);
-> @@ -154,7 +154,7 @@ int __wrap_devm_cxl_enable_hdm(struct cxl_port *port, struct cxl_hdm *cxlhdm)
->  	int index, rc;
->  	struct cxl_mock_ops *ops = get_cxl_mock_ops(&index);
->  
-> -	if (ops && ops->is_mock_port(port->uport))
-> +	if (ops && ops->is_mock_port(port->uport_dev))
->  		rc = 0;
->  	else
->  		rc = devm_cxl_enable_hdm(port, cxlhdm);
-> @@ -169,7 +169,7 @@ int __wrap_devm_cxl_add_passthrough_decoder(struct cxl_port *port)
->  	int rc, index;
->  	struct cxl_mock_ops *ops = get_cxl_mock_ops(&index);
->  
-> -	if (ops && ops->is_mock_port(port->uport))
-> +	if (ops && ops->is_mock_port(port->uport_dev))
->  		rc = ops->devm_cxl_add_passthrough_decoder(port);
->  	else
->  		rc = devm_cxl_add_passthrough_decoder(port);
-> @@ -186,7 +186,7 @@ int __wrap_devm_cxl_enumerate_decoders(struct cxl_hdm *cxlhdm,
->  	struct cxl_port *port = cxlhdm->port;
->  	struct cxl_mock_ops *ops = get_cxl_mock_ops(&index);
->  
-> -	if (ops && ops->is_mock_port(port->uport))
-> +	if (ops && ops->is_mock_port(port->uport_dev))
->  		rc = ops->devm_cxl_enumerate_decoders(cxlhdm, info);
->  	else
->  		rc = devm_cxl_enumerate_decoders(cxlhdm, info);
-> @@ -201,7 +201,7 @@ int __wrap_devm_cxl_port_enumerate_dports(struct cxl_port *port)
->  	int rc, index;
->  	struct cxl_mock_ops *ops = get_cxl_mock_ops(&index);
->  
-> -	if (ops && ops->is_mock_port(port->uport))
-> +	if (ops && ops->is_mock_port(port->uport_dev))
->  		rc = ops->devm_cxl_port_enumerate_dports(port);
->  	else
->  		rc = devm_cxl_port_enumerate_dports(port);
