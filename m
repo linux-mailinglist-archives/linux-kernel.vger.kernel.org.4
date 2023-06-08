@@ -2,247 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B598E7289E4
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 23:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F9037289E6
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 23:06:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231846AbjFHVFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 17:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56070 "EHLO
+        id S236673AbjFHVGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 17:06:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236912AbjFHVFT (ORCPT
+        with ESMTP id S230028AbjFHVGG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 17:05:19 -0400
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9686830D4;
-        Thu,  8 Jun 2023 14:05:08 -0700 (PDT)
-Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-777b4560ae8so50365639f.2;
-        Thu, 08 Jun 2023 14:05:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686258308; x=1688850308;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=659QQ5o0RJcYetO+FfSdtr0AtP1kq3MC1W2qbtyWfug=;
-        b=dtNOaNk1U0c9VtA823XT9CmtDmYu0LuJlxIllw8Xz5Sj3c7CcaPNAH8CvVMDS1rdx6
-         s0gR5lbwLTTwiI3pFcY3DHZpu2p2Z9atuWcOHxaycHBfkYILiSQwf8k3QQs1eNexOUmS
-         6+0Aqxsqs3pOAqyV49ilBZ4VEbqH41IIutXxElBiDP+v3iMpwT+MtrZN4IcpAqsejWx9
-         Uw6JDVNKtsAIJmVheH3LhbNbQwrHFzoS7rbiR3crKDPpqEuOnXw0YUzXMz9qtl/l2Fxh
-         JKU/jjLq3ytRsUC7bWCk0SRVHHVY20vzKE/Zp/HWeeEt982iTa0oszkdiIwHzRTq3Eq7
-         leQw==
-X-Gm-Message-State: AC+VfDzfvz3KCJA+u3f4mwvJUi4q7ECCSRlZDTtaIxkvbYy0Ki2rhg67
-        AvNigJW5+r73nr7XNYv5rA==
-X-Google-Smtp-Source: ACHHUZ7rRmGXmnpRmT5NgdTtJuMZenCQfLq1nIBRu8sRJkOPpqT6J9aOIzMkcUolL5ZTRHcwv6gLkA==
-X-Received: by 2002:a6b:fb12:0:b0:77a:c741:b749 with SMTP id h18-20020a6bfb12000000b0077ac741b749mr3956832iog.1.1686258307710;
-        Thu, 08 Jun 2023 14:05:07 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id i14-20020a02ca4e000000b00411b2414eb5sm490387jal.94.2023.06.08.14.05.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 14:05:06 -0700 (PDT)
-Received: (nullmailer pid 3445498 invoked by uid 1000);
-        Thu, 08 Jun 2023 21:05:04 -0000
-Date:   Thu, 8 Jun 2023 15:05:04 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Guillaume Ranquet <granquet@baylibre.com>
-Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, CK Hu <ck.hu@mediatek.com>,
-        Jitao shi <jitao.shi@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, mac.shen@mediatek.com,
-        stuart.lee@mediatek.com
-Subject: Re: [PATCH v4 1/8] dt-bindings: display: mediatek: add MT8195 hdmi
- bindings
-Message-ID: <20230608210504.GA3436215-robh@kernel.org>
-References: <20220919-v4-0-687f09a06dd9@baylibre.com>
- <20220919-v4-1-687f09a06dd9@baylibre.com>
+        Thu, 8 Jun 2023 17:06:06 -0400
+Received: from frasgout13.his.huawei.com (unknown [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A522D51;
+        Thu,  8 Jun 2023 14:06:01 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Qcc1K1bHNz9y10X;
+        Fri,  9 Jun 2023 04:55:33 +0800 (CST)
+Received: from [10.81.215.46] (unknown [10.81.215.46])
+        by APP2 (Coremail) with SMTP id GxC2BwAHx02iQoJkyvgYAw--.4695S2;
+        Thu, 08 Jun 2023 22:05:46 +0100 (CET)
+Message-ID: <6663c7b0-26f5-bdd9-1209-b1c4d8ad31cc@huaweicloud.com>
+Date:   Thu, 8 Jun 2023 23:05:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220919-v4-1-687f09a06dd9@baylibre.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] memfd: Check for non-NULL file_seals in memfd_create()
+ syscall
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?Q?Marc-Andr=c3=a9_Lureau?= <marcandre.lureau@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+References: <20230607132427.2867435-1-roberto.sassu@huaweicloud.com>
+ <20230607102131.11964c87b1078374c9d4b341@linux-foundation.org>
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+In-Reply-To: <20230607102131.11964c87b1078374c9d4b341@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwAHx02iQoJkyvgYAw--.4695S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxuF4xCrWUtw1kGr1DXrW8Zwb_yoWrurWfpF
+        WUXayDGr40qry8Xr1xAF1j9ryUK3ZFyF1rXr97ArWrAF1qv3Z8Aw4DJF429ryDCr45Zw17
+        Xa1kJF97KF18AaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyKb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0E
+        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
+        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0
+        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04
+        k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF
+        7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUOyCJDUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQACBF1jj45wSQAAsB
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,NICE_REPLY_A,PDS_RDNS_DYNAMIC_FP,RCVD_IN_MSPIKE_BL,
+        RCVD_IN_MSPIKE_L3,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 04:30:58PM +0200, Guillaume Ranquet wrote:
-> Add mt8195 SoC bindings for hdmi and hdmi-ddc
+On 6/7/2023 7:21 PM, Andrew Morton wrote:
+> On Wed,  7 Jun 2023 15:24:27 +0200 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
 > 
-> On mt8195 the ddc i2c controller is part of the hdmi IP block and thus has no
-> specific register range, power domain or interrupt, making it simpler
-> than the legacy "mediatek,hdmi-ddc" binding.
+>> From: Roberto Sassu <roberto.sassu@huawei.com>
+>>
+>> Ensure that file_seals is non-NULL before using it in the memfd_create()
+>> syscall. One situation in which memfd_file_seals_ptr() could return a NULL
+>> pointer is when CONFIG_SHMEM=n.
 > 
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> ---
->  .../bindings/display/mediatek/mediatek,hdmi.yaml   | 59 ++++++++++++++++++----
->  .../display/mediatek/mediatek,mt8195-hdmi-ddc.yaml | 45 +++++++++++++++++
->  2 files changed, 93 insertions(+), 11 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
-> index b90b6d18a828..4f62e6b94048 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
-> @@ -21,6 +21,7 @@ properties:
->        - mediatek,mt7623-hdmi
->        - mediatek,mt8167-hdmi
->        - mediatek,mt8173-hdmi
-> +      - mediatek,mt8195-hdmi
->  
->    reg:
->      maxItems: 1
-> @@ -29,18 +30,10 @@ properties:
->      maxItems: 1
->  
->    clocks:
-> -    items:
-> -      - description: Pixel Clock
-> -      - description: HDMI PLL
-> -      - description: Bit Clock
-> -      - description: S/PDIF Clock
-> +    maxItems: 4
->  
->    clock-names:
-> -    items:
-> -      - const: pixel
-> -      - const: pll
-> -      - const: bclk
-> -      - const: spdif
-> +    maxItems: 4
->  
->    phys:
->      maxItems: 1
-> @@ -58,6 +51,9 @@ properties:
->      description: |
->        phandle link and register offset to the system configuration registers.
->  
-> +  power-domains:
-> +    maxItems: 1
-> +
->    ports:
->      $ref: /schemas/graph.yaml#/properties/ports
->  
-> @@ -86,9 +82,50 @@ required:
->    - clock-names
->    - phys
->    - phy-names
-> -  - mediatek,syscon-hdmi
->    - ports
->  
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: mediatek,mt8195-hdmi
-> +    then:
-> +      properties:
-> +        clocks:
-> +          items:
-> +            - description: APB
-> +            - description: HDCP
-> +            - description: HDCP 24M
-> +            - description: Split HDMI
-> +        clock-names:
-> +          items:
-> +            - const: hdmi_apb_sel
-> +            - const: hdcp_sel
-> +            - const: hdcp24_sel
-> +            - const: split_hdmi
-> +
-> +      required:
-> +        - power-domains
-> +    else:
-> +      properties:
-> +        clocks:
-> +          items:
-> +            - description: Pixel Clock
-> +            - description: HDMI PLL
-> +            - description: Bit Clock
-> +            - description: S/PDIF Clock
-> +
-> +        clock-names:
-> +          items:
-> +            - const: pixel
-> +            - const: pll
-> +            - const: bclk
-> +            - const: spdif
+> Thanks.  Has thie crash actually been demonstrated?
 
-I don't understand how the same h/w block can have completely different 
-clocks. If not the same h/w or evolution of the same h/w, then do a 
-separate schema.
+Welcome. Yes, I noticed it when booting Fedora 38:
 
-> +
-> +      required:
-> +        - mediatek,syscon-hdmi
-> +
->  additionalProperties: false
->  
->  examples:
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,mt8195-hdmi-ddc.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,mt8195-hdmi-ddc.yaml
-> new file mode 100644
-> index 000000000000..84c096835b47
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,mt8195-hdmi-ddc.yaml
-> @@ -0,0 +1,45 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/mediatek/mediatek,mt8195-hdmi-ddc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Mediatek HDMI DDC for mt8195
-> +
-> +maintainers:
-> +  - CK Hu <ck.hu@mediatek.com>
-> +  - Jitao shi <jitao.shi@mediatek.com>
-> +
-> +description: |
-> +  The HDMI DDC i2c controller is used to interface with the HDMI DDC pins.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mediatek,mt8195-hdmi-ddc
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  mediatek,hdmi:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description:
-> +      A phandle to the mt8195 hdmi controller
-> +
-> +required:
-> +  - compatible
-> +  - clocks
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    hdmiddc0: i2c {
-> +      compatible = "mediatek,mt8195-hdmi-ddc";
-> +      mediatek,hdmi = <&hdmi0>;
-> +      clocks = <&clk26m>;
+Jun 07 11:45:17 localhost kernel: BUG: kernel NULL pointer dereference, address: 0000000000000000
+Jun 07 11:45:17 localhost kernel: #PF: supervisor write access in kernel mode
+Jun 07 11:45:17 localhost kernel: #PF: error_code(0x0002) - not-present page
+Jun 07 11:45:17 localhost kernel: PGD 0 P4D 0
+Jun 07 11:45:17 localhost kernel: Oops: 0002 [#1] PREEMPT SMP NOPTI
+Jun 07 11:45:17 localhost kernel: CPU: 0 PID: 752 Comm: dbus-broker-lau Not tainted 6.4.0-rc1+ #596
+Jun 07 11:45:17 localhost kernel: Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+Jun 07 11:45:17 localhost kernel: RIP: 0010:__do_sys_memfd_create+0x2a4/0x320
+Jun 07 11:45:17 localhost kernel: Code: ff 83 e3 02 0f 84 6a ff ff ff 49 81 7d 28 00 cd 24 82 74 0c 4c 89 ef e8 5a 6c 27 00 84 c0 74 29 49 8b 45 20 48 05 88 04 00 0>
+Jun 07 11:45:17 localhost kernel: RSP: 0018:ffffc900007d3ef8 EFLAGS: 00010246
+Jun 07 11:45:17 localhost kernel: RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
+Jun 07 11:45:17 localhost kernel: RDX: 0000000000000003 RSI: 0000000000000004 RDI: ffff888012ab1600
+Jun 07 11:45:17 localhost kernel: RBP: ffff888025eb4d60 R08: 0000000000000000 R09: 0000000000000000
+Jun 07 11:45:17 localhost kernel: R10: ffffffff83524c90 R11: 0000000000000000 R12: 000000000000000c
+Jun 07 11:45:17 localhost kernel: R13: ffff888012ab1600 R14: ffff888025eb4d66 R15: 0000000000000000
+Jun 07 11:45:17 localhost kernel: FS:  00007f4ef466de80(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
+Jun 07 11:45:17 localhost kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+Jun 07 11:45:17 localhost kernel: CR2: 0000000000000000 CR3: 000000000e7fe000 CR4: 0000000000350ef0
+Jun 07 11:45:17 localhost kernel: Call Trace:
+Jun 07 11:45:17 localhost kernel:  <TASK>
+Jun 07 11:45:17 localhost kernel:  do_syscall_64+0x3b/0x90
+Jun 07 11:45:17 localhost kernel:  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+Jun 07 11:45:17 localhost kernel: RIP: 0033:0x7f4ef4a0dd2d
+Jun 07 11:45:17 localhost kernel: Code: c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 0>
+Jun 07 11:45:17 localhost kernel: RSP: 002b:00007fff308c5b58 EFLAGS: 00000246 ORIG_RAX: 000000000000013f
+Jun 07 11:45:17 localhost kernel: RAX: ffffffffffffffda RBX: 00005597c14742d8 RCX: 00007f4ef4a0dd2d
+Jun 07 11:45:17 localhost kernel: RDX: 00007f4ef49dfa5b RSI: 0000000000000003 RDI: 00005597c0b8f778
+Jun 07 11:45:17 localhost kernel: RBP: 00007fff308c5b80 R08: 0000000000000000 R09: 00007fff308c5fa0
+Jun 07 11:45:17 localhost kernel: R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+Jun 07 11:45:17 localhost kernel: R13: 00007fff308c5e60 R14: 00007fff308c5c20 R15: 00007fff308c5c00
+Jun 07 11:45:17 localhost kernel:  </TASK>
+Jun 07 11:45:17 localhost kernel: Modules linked in: sunrpc intel_rapl_msr intel_rapl_common kvm_amd snd_hda_codec_generic ccp snd_hda_intel snd_intel_dspcfg iTCO_w>
+Jun 07 11:45:17 localhost kernel: CR2: 0000000000000000
+Jun 07 11:45:17 localhost kernel: ---[ end trace 0000000000000000 ]---
 
-How does one access this h/w device? There is nothing described to 
-access it.
+Thanks for picking the patches. If it is still possible, it seems
+that the Fixes tag is incorrect. The fixed commit should be:
 
-Rob
+c3b1b1cbf002 ("ramfs: add support for "mode=" mount option")
+
+Roberto
+
+>> --- a/mm/memfd.c
+>> +++ b/mm/memfd.c
+>> @@ -371,12 +371,15 @@ SYSCALL_DEFINE2(memfd_create,
+>>   
+>>   		inode->i_mode &= ~0111;
+>>   		file_seals = memfd_file_seals_ptr(file);
+>> -		*file_seals &= ~F_SEAL_SEAL;
+>> -		*file_seals |= F_SEAL_EXEC;
+>> +		if (file_seals) {
+>> +			*file_seals &= ~F_SEAL_SEAL;
+>> +			*file_seals |= F_SEAL_EXEC;
+>> +		}
+>>   	} else if (flags & MFD_ALLOW_SEALING) {
+>>   		/* MFD_EXEC and MFD_ALLOW_SEALING are set */
+>>   		file_seals = memfd_file_seals_ptr(file);
+>> -		*file_seals &= ~F_SEAL_SEAL;
+>> +		if (file_seals)
+>> +			*file_seals &= ~F_SEAL_SEAL;
+>>   	}
+>>   
+>>   	fd_install(fd, file);
+
