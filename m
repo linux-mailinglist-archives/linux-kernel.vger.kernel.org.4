@@ -2,82 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C04472882D
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 21:21:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3275A7287FA
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 21:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236658AbjFHTVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 15:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38148 "EHLO
+        id S234360AbjFHTRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 15:17:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235941AbjFHTVL (ORCPT
+        with ESMTP id S229918AbjFHTRa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 15:21:11 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10497E50;
-        Thu,  8 Jun 2023 12:20:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
- s=s31663417; t=1686252015; x=1686856815; i=rwarsow@gmx.de;
- bh=0BsqEZ8AeUZZU5Rv4gzd6HuD/lO3oQ0x9OYg9EC3PeI=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
- b=ew5sebd4+ehWIjSAYkoqgROC4cSLR+/1E7k0MsQuOr0qGh3XC5KRFRqhCu0QnnvFi3rzVBm
- viQYX9rGOMrJaNAXU8dqxbAqYVLxWyuJQJNqvB8X0ptP+1K6GFfP1Vz7jRvIx38MdeRh+QFnN
- J+lJteoHifcMuV2Ph3vOBpOs+BcSeJGuBjCeilI2y9rNioTPGEY73oiIKx39bvQXcCjpjq8Y9
- DPAE2JfPq+pVJALBPFFYWZrRIAnZHle2uTN0mObDxn3Ny//a3+nV1TpAPS8IOlPN8FKfL+/ZN
- xm6rL97KaVOOxExq6PZ3OPILx716hG6QTB6vfa6jx1oTTgzOkPEQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.100.20] ([94.134.26.152]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MFKGZ-1qMzLJ1AL3-00Fieg; Thu, 08
- Jun 2023 21:15:00 +0200
-Message-ID: <3589716d-4f21-ddf6-7b8f-8aad0d67658e@gmx.de>
-Date:   Thu, 8 Jun 2023 21:14:59 +0200
+        Thu, 8 Jun 2023 15:17:30 -0400
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 621732D4F
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 12:17:03 -0700 (PDT)
+Received: by mail-oi1-x232.google.com with SMTP id 5614622812f47-39aa8a055e0so43779b6e.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 12:17:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686251721; x=1688843721;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WK0F+BrKreVsJ5WKZMSSwYtM+YC+fc99jiRjqR8qAzI=;
+        b=RcRjFaFt7MTsXYJ14yWo4U5eA6pVqkDXz8EgSw8rQFycQ7pMspld1gf0LfqrvmcfQ5
+         wTF2Paqcgla4R0ay3/D+SBW87kCEr4gikKdylaKnD0ifdUg5uzvb81mHOycuMKL93pbu
+         +4jYc+S9ZIa5rCOofCbRs+g+NjpuL2HFQoI0VVvcn9kL+J6N1marZJvlyS6H29Uy9XP9
+         eG8fQcR/05AwiXrOcow804IstbsNP+1l3OZiN8NosONtubhmvXmzHlK/q5JRXElO9Al1
+         ir/ohc+1TCFZSM0rluyKdy7OGTLktO3/SESE0MYOh7msrNKoSiowE8nv54l9tGtZ2JpY
+         LUCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686251721; x=1688843721;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WK0F+BrKreVsJ5WKZMSSwYtM+YC+fc99jiRjqR8qAzI=;
+        b=FERnktyobmW45Y38fkdV7jDjWixMscImTdbfhW1cBfVn7uKKIV9Ifk5GgjnAGbQoau
+         kQtd/0SgRK4vzmR+fa7cFXYBW4qDo8mHTL1zxLDzC6wOgbAZAWIhRYNe/+QpSWN64XTb
+         twTnanszdc798rqKpL41nPeN1hf+NX6kFHacBhI6Shtew+zrzdKiuy51EbZTZTyIURPu
+         oiBnuwyXkOhYj7RheA/1VDraOBkTrdet2xORVcn8CRKiJAuSGr5aH4tbXviKeJeqNLKg
+         84qcb5dIAcskKYETBH6opQE8RrcIzBfs2kB8JlRdvIH3CqgqFvJbJggpfvzYF+BO0BOx
+         R+Ww==
+X-Gm-Message-State: AC+VfDwMtg5ecUfTa8fRsdBDkJIL95R/kTLE4bkmMXMkLJlvJMI+5DRm
+        ZxkVc/9zFEcD9oNoy5XECwdOBQ==
+X-Google-Smtp-Source: ACHHUZ4GiCiA0/Y6MKCFg7CaDp1TXejdH2N2rUDPBFAR/nPzuleTjqZzDRxE6rsfXkK23/Kmg+ycrg==
+X-Received: by 2002:a54:4893:0:b0:39a:b35b:a06c with SMTP id r19-20020a544893000000b0039ab35ba06cmr9888918oic.30.1686251720727;
+        Thu, 08 Jun 2023 12:15:20 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id a17-20020a81bb51000000b00545a08184fdsm89974ywl.141.2023.06.08.12.15.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 12:15:20 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 12:15:16 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Helge Deller <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v2 05/23] m68k: allow pte_offset_map[_lock]() to fail
+In-Reply-To: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com>
+Message-ID: <795f6a7-bcca-cdf-ad2a-fbdaa232998c@google.com>
+References: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-From:   Ronald Warsow <rwarsow@gmx.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Content-Language: de-DE, en-US
-Subject: Re: [PATCH 6.3 000/285] 6.3.7-rc2 review
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:T3yU0m5pNBW0i27IR/BXwNqamSuN7MJ1p3JBjBCDpEp/B5Ytkrz
- RXr3UFGStq3Pr1oIXXMtAxEipgw/Nzq+aS6DhyVcSdkeWaBkhNphV47jVTeJTQgR6XRGEL6
- EFsDqE65Gv4caHfnmbN0O20ir1rq2eNPusfA5oLEinlOjgsIotKrqIUx+h5meeKKp0sAc3j
- Js5SYsCJ3W+ykybdutnSQ==
-UI-OutboundReport: notjunk:1;M01:P0:7y+1hLQkXPI=;KvWWOzVktbg4MiqeSaqbmcPIyCl
- pGXRhf9hYXOGNxQr7D0ZsTFU9HrrTaDE+0SV5jJqUF5dq4BDHk56L6kso1HZf+8nkRmm2nN4j
- /syorwKYiIghUYDENuK2557zauuyTrlzkuIKFhavTS0zprpmmgpJkfxkwjlOS16QbZtw78BWn
- BBWvbG7dYeQDat3eXJ1U0RCKe7hWo0DYfrovbhYaS8tOF+5sR73csic3TlR7YSNdnRvovrEOY
- dEUyCjtGvxoL8ZpijA9KPlEY8Gr96scf5qroNhr8n63HRo0E9yPvseQuOaanbRAm/QTarsfAI
- oQnJzTBc2zfPuVedbAamtD3HjmJId9qRpRg1m3FtPmsa+/yHCUSx3ZddSeTZdBRgYRJPNZS6F
- t8HGBwd7xY7u/aOaIK88cGBZ5G7dzLDHcYewUFgkX+02viGJXaYXyKhoK3PMSXEL8jdN8kxjc
- iIcFBKo2ErXmU8n+fVb/HQM47KAJuQKLriQdeVU4jMWvcEQ5uWILFJcaYVjOOOYninfWvW6WK
- sap+m0iwhxWR7+XRIUfpTh3FNWlpGmd7Nqc4OXRoRkjNZQxcCv/hq5xIwSCXrF0vAuHG4EjEk
- a3c2bVyPruTR2iTNyoEqJNyVK9DkEYk5Jb+8+grOh1c68CYZlMtZBhzdUfCdvIaby5Y3TvECP
- Ung3n0XMWkg7clYs1dtir/CfVrmhMF1XWtcawGmmpHFqODYvalPA0CSxtI+fWB5fC8U4rKHYI
- F+00nuUBySBN95eJB2zDvrrrYHxfcss+dDTpEbKgGot/aluc1/2d6+dLpTbUe7VSHGMvOtJk9
- Rgc6fhUOEBkHEoELfZF7xmReghTQGJS//Rqi7rdK0UAqarpJ+lbwozpQzAJ81NxRk9BVCb8DQ
- 5HnewpAgLUS8uX9WBM8wQyElQqsZ1dV3rz1nU0a9foUJCf3dTl5lGk1xpcZwEC700S8Snjac4
- f3mhA4rKRqW9EJdlZ+Uf3ECKhqs=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FAKE_REPLY_A1,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg
+In rare transient cases, not yet made possible, pte_offset_map() and
+pte_offset_map_lock() may not find a page table: handle appropriately.
 
-6.3.7-rc2
+Restructure cf_tlb_miss() with a pte_unmap() (previously omitted)
+at label out, followed by one local_irq_restore() for all.
 
-compiles, boots and runs here on x86_64
-(Intel Rocket Lake)
+Signed-off-by: Hugh Dickins <hughd@google.com>
+---
+ arch/m68k/include/asm/mmu_context.h |  6 ++--
+ arch/m68k/kernel/sys_m68k.c         |  2 ++
+ arch/m68k/mm/mcfmmu.c               | 52 ++++++++++++-----------------
+ 3 files changed, 27 insertions(+), 33 deletions(-)
 
-Thanks
-
-Tested-by: Ronald Warsow <rwarsow@gmx.de>
+diff --git a/arch/m68k/include/asm/mmu_context.h b/arch/m68k/include/asm/mmu_context.h
+index 8ed6ac14d99f..141bbdfad960 100644
+--- a/arch/m68k/include/asm/mmu_context.h
++++ b/arch/m68k/include/asm/mmu_context.h
+@@ -99,7 +99,7 @@ static inline void load_ksp_mmu(struct task_struct *task)
+ 	p4d_t *p4d;
+ 	pud_t *pud;
+ 	pmd_t *pmd;
+-	pte_t *pte;
++	pte_t *pte = NULL;
+ 	unsigned long mmuar;
+ 
+ 	local_irq_save(flags);
+@@ -139,7 +139,7 @@ static inline void load_ksp_mmu(struct task_struct *task)
+ 
+ 	pte = (mmuar >= PAGE_OFFSET) ? pte_offset_kernel(pmd, mmuar)
+ 				     : pte_offset_map(pmd, mmuar);
+-	if (pte_none(*pte) || !pte_present(*pte))
++	if (!pte || pte_none(*pte) || !pte_present(*pte))
+ 		goto bug;
+ 
+ 	set_pte(pte, pte_mkyoung(*pte));
+@@ -161,6 +161,8 @@ static inline void load_ksp_mmu(struct task_struct *task)
+ bug:
+ 	pr_info("ksp load failed: mm=0x%p ksp=0x08%lx\n", mm, mmuar);
+ end:
++	if (pte && mmuar < PAGE_OFFSET)
++		pte_unmap(pte);
+ 	local_irq_restore(flags);
+ }
+ 
+diff --git a/arch/m68k/kernel/sys_m68k.c b/arch/m68k/kernel/sys_m68k.c
+index bd0274c7592e..c586034d2a7a 100644
+--- a/arch/m68k/kernel/sys_m68k.c
++++ b/arch/m68k/kernel/sys_m68k.c
+@@ -488,6 +488,8 @@ sys_atomic_cmpxchg_32(unsigned long newval, int oldval, int d3, int d4, int d5,
+ 		if (!pmd_present(*pmd))
+ 			goto bad_access;
+ 		pte = pte_offset_map_lock(mm, pmd, (unsigned long)mem, &ptl);
++		if (!pte)
++			goto bad_access;
+ 		if (!pte_present(*pte) || !pte_dirty(*pte)
+ 		    || !pte_write(*pte)) {
+ 			pte_unmap_unlock(pte, ptl);
+diff --git a/arch/m68k/mm/mcfmmu.c b/arch/m68k/mm/mcfmmu.c
+index 70aa0979e027..42f45abea37a 100644
+--- a/arch/m68k/mm/mcfmmu.c
++++ b/arch/m68k/mm/mcfmmu.c
+@@ -91,7 +91,8 @@ int cf_tlb_miss(struct pt_regs *regs, int write, int dtlb, int extension_word)
+ 	p4d_t *p4d;
+ 	pud_t *pud;
+ 	pmd_t *pmd;
+-	pte_t *pte;
++	pte_t *pte = NULL;
++	int ret = -1;
+ 	int asid;
+ 
+ 	local_irq_save(flags);
+@@ -100,47 +101,33 @@ int cf_tlb_miss(struct pt_regs *regs, int write, int dtlb, int extension_word)
+ 		regs->pc + (extension_word * sizeof(long));
+ 
+ 	mm = (!user_mode(regs) && KMAPAREA(mmuar)) ? &init_mm : current->mm;
+-	if (!mm) {
+-		local_irq_restore(flags);
+-		return -1;
+-	}
++	if (!mm)
++		goto out;
+ 
+ 	pgd = pgd_offset(mm, mmuar);
+-	if (pgd_none(*pgd))  {
+-		local_irq_restore(flags);
+-		return -1;
+-	}
++	if (pgd_none(*pgd))
++		goto out;
+ 
+ 	p4d = p4d_offset(pgd, mmuar);
+-	if (p4d_none(*p4d)) {
+-		local_irq_restore(flags);
+-		return -1;
+-	}
++	if (p4d_none(*p4d))
++		goto out;
+ 
+ 	pud = pud_offset(p4d, mmuar);
+-	if (pud_none(*pud)) {
+-		local_irq_restore(flags);
+-		return -1;
+-	}
++	if (pud_none(*pud))
++		goto out;
+ 
+ 	pmd = pmd_offset(pud, mmuar);
+-	if (pmd_none(*pmd)) {
+-		local_irq_restore(flags);
+-		return -1;
+-	}
++	if (pmd_none(*pmd))
++		goto out;
+ 
+ 	pte = (KMAPAREA(mmuar)) ? pte_offset_kernel(pmd, mmuar)
+ 				: pte_offset_map(pmd, mmuar);
+-	if (pte_none(*pte) || !pte_present(*pte)) {
+-		local_irq_restore(flags);
+-		return -1;
+-	}
++	if (!pte || pte_none(*pte) || !pte_present(*pte))
++		goto out;
+ 
+ 	if (write) {
+-		if (!pte_write(*pte)) {
+-			local_irq_restore(flags);
+-			return -1;
+-		}
++		if (!pte_write(*pte))
++			goto out;
+ 		set_pte(pte, pte_mkdirty(*pte));
+ 	}
+ 
+@@ -161,9 +148,12 @@ int cf_tlb_miss(struct pt_regs *regs, int write, int dtlb, int extension_word)
+ 		mmu_write(MMUOR, MMUOR_ACC | MMUOR_UAA);
+ 	else
+ 		mmu_write(MMUOR, MMUOR_ITLB | MMUOR_ACC | MMUOR_UAA);
+-
++	ret = 0;
++out:
++	if (pte && !KMAPAREA(mmuar))
++		pte_unmap(pte);
+ 	local_irq_restore(flags);
+-	return 0;
++	return ret;
+ }
+ 
+ void __init cf_bootmem_alloc(void)
+-- 
+2.35.3
 
