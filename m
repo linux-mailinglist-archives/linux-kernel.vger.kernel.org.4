@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C810728BDD
+	by mail.lfdr.de (Postfix) with ESMTP id 10C28728BDC
 	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 01:32:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237760AbjFHXbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 19:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47694 "EHLO
+        id S237638AbjFHXbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 19:31:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237597AbjFHXan (ORCPT
+        with ESMTP id S237350AbjFHXao (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 19:30:43 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025D530D7
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 16:30:06 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5655d99da53so25396257b3.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 16:30:06 -0700 (PDT)
+        Thu, 8 Jun 2023 19:30:44 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C35E35A3
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 16:30:09 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-568fa455b8fso15305717b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 16:30:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686267006; x=1688859006;
+        d=google.com; s=20221208; t=1686267008; x=1688859008;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Pl84Wb/J0XwyUQzqil2jyo7Ij9NgOb19MY5gzo850pI=;
-        b=xnSakeo5Yb7wwdtDMtyb7HVmj8YIuug35kGbTZONK5jWOa3frI8ut/fr93Fc8/JTwX
-         kvPVpJEjW0sAh9sgPXMO7hyOJi/3vdDxkAi+slwHAwCqrDu0YARCS7yvVlRIkeo5nA06
-         C15nsVuVNrmKDz9sWZFnqATC9K8cVorJcxIOokWO13z2/1LDCTGY/s1RQBTMMhreyVgg
-         83aqZxGUcA1c/VNd055oUlTQF1Lva5eiYUU+EMHdqdWbR/KXkbdHAGtQFr9pIqdCSeqs
-         LmvvrblYw88CmiAOK+DgWcGAsQbyYkW6/SP95piwYMv/4lRiHtmDhC7d3H3k9+1MYT+n
-         Mfsw==
+        bh=N0KYgNGPVbef0yxFQzrQIBdU6DpVCEwayIrlyOXU5ig=;
+        b=2tVEOfRMr9BaVlInmIrt6A8s/2SaJVEmRq0V2ofDi/ugL0FqWxUFVaSl7oU/tIkKNr
+         iyYTqNN6gaPCB6BDG4Oar1eMUgEJzu1pJfmbSSAH9QS6oDqzi3hP3T3BIaaDXdYGtylM
+         fslrT25m/eatU6xm7/7y2HZJh13Mp1sDozMho5OtVtalzcgWIZ3XV36U4WJJKsgxsaJM
+         zBvMGzzY+BgMcHash2dFDF0vYoz3jRmw1vSdOAGPhbOly7L0MM94sh6yjpCMMdW1LX4+
+         UrgKwN0Y2LcUS3wa/aKLU2Q4oZzn3p68Qr9hudfcH23XckDQYZnScPNcvMfzPW+NzpDe
+         I8bQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686267006; x=1688859006;
+        d=1e100.net; s=20221208; t=1686267008; x=1688859008;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Pl84Wb/J0XwyUQzqil2jyo7Ij9NgOb19MY5gzo850pI=;
-        b=Q/iplsoqKVgrJGsiEkyQb3VlkoSjWFEAGUhEPGLJCBBMyfIv0Fmp0ZEv3uIcFoFNVs
-         2QUhwpSBpY/BqgAtKBAp7tCMiXt9DBNPeSY1WKD0/UZg/SM69OcPR4KI1H8ILnycfF30
-         uN+ep2khtQQmQK9a/XJ418bB+RrYun48OMa891qYExHuHou9+VgmDIwIf+6k1iLsXw22
-         BAP3MdgqGxvxba8QKNJP6ywbYG4+B6gQzDtI8wYyP7uyvqMumoQ27gob1E985LoXLeTS
-         piojhZtOd7rljcOJn0fABXviVmeSyO31Tpw/5EXGnZ7uhA7nVK2/r7ErPi3AC+vwoVVe
-         7/EA==
-X-Gm-Message-State: AC+VfDyFuZkxDtppWuVH6Ils9Jw7mHSTVIl1Fg4RtUT/7eUVS9U9DCtQ
-        L7bPnNV9sPU4nM0S7hb1FTfvv8gwsiI0
-X-Google-Smtp-Source: ACHHUZ6XZQubQMzg154P6DYDd+lHosdgRP3GkxT70tkfupa8BerI7CJLgpzGAucDVJ4zIZScOONMhWdG/Fqr
+        bh=N0KYgNGPVbef0yxFQzrQIBdU6DpVCEwayIrlyOXU5ig=;
+        b=WaO3DggsotZrjNksvgCpf11NzIpv1x+Pi7Vhk5pAujAUXiIjyDMLXfLd/y3jI0vVjq
+         sr780WQ2ZhE6vLcJtZlGeo8GZW8sMRBC3PSQkWyAxISCpbIyLXarUQuvWfd23bsfdfJm
+         DMOJ7bbyW9834oG+lBqLK9ep5lr0SNtM5RiyMS32j/x/sxXADxQKqTvnO+49+KQxrivc
+         z171XIsAw0Qof3mEDLphENZzHikFSmXgwdVG2OUO1NGbnDnlJj3xlzzYmjvl816sj11n
+         u86luNdFX3tJmAnWdBeKCguDdwT/PL894GhaM0jU/t/3Uf0r7IKmzKGBH6/OnPWJ0R5t
+         VqSQ==
+X-Gm-Message-State: AC+VfDwzENaksz8mK0MI3/SYsLMC7Sgbji6F8MUbIm8Bqgic9s1dcP05
+        YN3+LZx/+sjLYsm8Bvqo+eYabmIO8J/y
+X-Google-Smtp-Source: ACHHUZ4xbu2nLPZfhvS6QmOV47vNfVRrhKEnpGCx8uSLcUdi8ahGG+FywCSAEA5a+AEVc8L9iatZo1ygXjai
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:c3e5:ebc6:61e5:c73f])
- (user=irogers job=sendgmr) by 2002:a05:690c:2e0f:b0:569:ea0e:b450 with SMTP
- id et15-20020a05690c2e0f00b00569ea0eb450mr590468ywb.5.1686267005998; Thu, 08
- Jun 2023 16:30:05 -0700 (PDT)
-Date:   Thu,  8 Jun 2023 16:28:19 -0700
+ (user=irogers job=sendgmr) by 2002:a81:ac43:0:b0:568:9bcc:5e16 with SMTP id
+ z3-20020a81ac43000000b005689bcc5e16mr629708ywj.2.1686267008171; Thu, 08 Jun
+ 2023 16:30:08 -0700 (PDT)
+Date:   Thu,  8 Jun 2023 16:28:20 -0700
 In-Reply-To: <20230608232823.4027869-1-irogers@google.com>
-Message-Id: <20230608232823.4027869-23-irogers@google.com>
+Message-Id: <20230608232823.4027869-24-irogers@google.com>
 Mime-Version: 1.0
 References: <20230608232823.4027869-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Subject: [PATCH v2 22/26] perf top: Add exit routine for main thread
+Subject: [PATCH v2 23/26] perf header: Avoid out-of-bounds read
 From:   Ian Rogers <irogers@google.com>
 To:     John Garry <john.g.garry@oracle.com>,
         Will Deacon <will@kernel.org>,
@@ -104,50 +104,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add exit_process_thread that reverses init_process_thread. This avoids
-leak sanitizer reporting memory leaks.
+intel-pt tests were failing:
+```
+...
+--- Test virtual LBR ---
+Linux
+[ perf record: Woken up 1 times to write data ]
+[ perf record: Captured and wrote 0.126 MB /tmp/perf-test-intel-pt-sh.FW57CXnCqQ/test-perf.data ]
+Failed with virtual lbr
+...
+```
+
+The root cause is an out-of-bounds read in header (where maxbrstack.py
+is from test_intel_pt.sh):
+```
+$ perf --no-pager script --itrace=L -s maxbrstack.py
+=================================================================
+==3907930==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x6020000095a8 at pc 0x563c26c840bb bp 0x7fff43582710 sp 0x7fff43582708
+READ of size 4 at 0x6020000095a8 thread T0
+    #0 0x563c26c840ba in process_group_desc util/header.c:2847
+    #1 0x563c26c8bc78 in perf_file_section__process util/header.c:4037
+    #2 0x563c26c8aa9b in perf_header__process_sections util/header.c:3813
+    #3 0x563c26c8d028 in perf_session__read_header util/header.c:4286
+    #4 0x563c26cbab29 in perf_session__open util/session.c:113
+    #5 0x563c26cbb3d0 in __perf_session__new util/session.c:221
+    #6 0x563c26aacb14 in perf_session__new util/session.h:73
+    #7 0x563c26acf7f1 in cmd_script tools/perf/builtin-script.c:4212
+    #8 0x563c26bb58ff in run_builtin tools/perf/perf.c:323
+    #9 0x563c26bb5e70 in handle_internal_command tools/perf/perf.c:377
+    #10 0x563c26bb6238 in run_argv tools/perf/perf.c:421
+    #11 0x563c26bb67a0 in main tools/perf/perf.c:537
+    #12 0x7f34bde46189 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58
+    #13 0x7f34bde46244 in __libc_start_main_impl ../csu/libc-start.c:381
+    #14 0x563c26a33390 in _start (/tmp/perf/perf+0x1eb390)
+
+0x6020000095a8 is located 8 bytes to the right of 16-byte region [0x602000009590,0x6020000095a0)
+allocated by thread T0 here:
+    #0 0x7f34beeb83b7 in __interceptor_calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+    #1 0x563c26c83df8 in process_group_desc util/header.c:2824
+    #2 0x563c26c8bc78 in perf_file_section__process util/header.c:4037
+    #3 0x563c26c8aa9b in perf_header__process_sections util/header.c:3813
+    #4 0x563c26c8d028 in perf_session__read_header util/header.c:4286
+    #5 0x563c26cbab29 in perf_session__open util/session.c:113
+    #6 0x563c26cbb3d0 in __perf_session__new util/session.c:221
+    #7 0x563c26aacb14 in perf_session__new util/session.h:73
+    #8 0x563c26acf7f1 in cmd_script tools/perf/builtin-script.c:4212
+    #9 0x563c26bb58ff in run_builtin tools/perf/perf.c:323
+    #10 0x563c26bb5e70 in handle_internal_command tools/perf/perf.c:377
+    #11 0x563c26bb6238 in run_argv tools/perf/perf.c:421
+    #12 0x563c26bb67a0 in main tools/perf/perf.c:537
+    #13 0x7f34bde46189 in __libc_start_call_main ../sysdeps/nptl/libc_start_call_main.h:58
+```
+
+Avoid the out-of-bounds read checking for the leader. Leave the 'nr'
+check intact as nr will be 0 or the counting down and evsel be a group
+member.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-top.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ tools/perf/util/header.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
-index 99010dfa5760..c363c04e16df 100644
---- a/tools/perf/builtin-top.c
-+++ b/tools/perf/builtin-top.c
-@@ -392,7 +392,7 @@ static void prompt_percent(int *target, const char *msg)
+diff --git a/tools/perf/util/header.c b/tools/perf/util/header.c
+index 3db7c1fae71e..52fbf526fe74 100644
+--- a/tools/perf/util/header.c
++++ b/tools/perf/util/header.c
+@@ -2844,7 +2844,7 @@ static int process_group_desc(struct feat_fd *ff, void *data __maybe_unused)
  
- static void perf_top__prompt_symbol(struct perf_top *top, const char *msg)
- {
--	char *buf = malloc(0), *p;
-+	char *buf = NULL, *p;
- 	struct hist_entry *syme = top->sym_filter_entry, *n, *found = NULL;
- 	struct hists *hists = evsel__hists(top->sym_evsel);
- 	struct rb_node *next;
-@@ -1227,6 +1227,14 @@ static void init_process_thread(struct perf_top *top)
- 	cond_init(&top->qe.cond);
- }
- 
-+static void exit_process_thread(struct perf_top *top)
-+{
-+	ordered_events__free(&top->qe.data[0]);
-+	ordered_events__free(&top->qe.data[1]);
-+	mutex_destroy(&top->qe.mutex);
-+	cond_destroy(&top->qe.cond);
-+}
-+
- static int __cmd_top(struct perf_top *top)
- {
- 	struct record_opts *opts = &top->record_opts;
-@@ -1357,6 +1365,7 @@ static int __cmd_top(struct perf_top *top)
- 	cond_signal(&top->qe.cond);
- 	pthread_join(thread_process, NULL);
- 	perf_set_singlethreaded();
-+	exit_process_thread(top);
- 	return ret;
- }
- 
+ 	i = nr = 0;
+ 	evlist__for_each_entry(session->evlist, evsel) {
+-		if (evsel->core.idx == (int) desc[i].leader_idx) {
++		if (i < nr_groups && evsel->core.idx == (int) desc[i].leader_idx) {
+ 			evsel__set_leader(evsel, evsel);
+ 			/* {anon_group} is a dummy name */
+ 			if (strcmp(desc[i].name, "{anon_group}")) {
 -- 
 2.41.0.162.gfafddb0af9-goog
 
