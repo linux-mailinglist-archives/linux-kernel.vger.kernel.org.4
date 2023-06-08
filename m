@@ -2,79 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82BC57279CD
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 10:18:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B01F87279D1
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 10:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235010AbjFHISI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 04:18:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58352 "EHLO
+        id S235103AbjFHIVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 04:21:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233781AbjFHISF (ORCPT
+        with ESMTP id S235044AbjFHIVK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 04:18:05 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB4FFE43;
-        Thu,  8 Jun 2023 01:17:59 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8BxLuuyjoFklnYAAA--.1833S3;
-        Thu, 08 Jun 2023 16:17:54 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxTMqwjoFkTfwGAA--.13801S3;
-        Thu, 08 Jun 2023 16:17:52 +0800 (CST)
-Message-ID: <f9cef1ed-fc46-bad5-e2d7-b734aaeb16c1@loongson.cn>
-Date:   Thu, 8 Jun 2023 16:17:52 +0800
+        Thu, 8 Jun 2023 04:21:10 -0400
+Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FCA52700
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 01:21:05 -0700 (PDT)
+Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-7776b76cc59so29486639f.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 01:21:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686212464; x=1688804464;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tFdbyfwK2zMGYrItzLYM26ey0ZOsA/HVPrlJVM9jIuY=;
+        b=RlmRoyuUosT3wISAb4Hi3UEDh83gmGXldA7tVjmiG5LD3TwjTKZ+ikWjCUs/gYtCTG
+         rRuRBCO2c073L+AUkf5vHFLXDnZhoVHFhCjRv5pioVDLHw1ixY/QilWFZRGQQJOAiZBV
+         5979h2xZNw1YNJGAUGiHgDV+MWVzk9KYTDfYH3HM7y8H2rEsfzzaGPGt0WaNX1A/Lp5Z
+         rKpdbfj2InWSd2B4o8RlzPnyySaC7gXx1m4QXgrYAewMTXtnll6portp13vNOQ8BPT29
+         F4ZvZcySBi1gWbRyCIZjDw8HpEUatgGeIRH59apFEw7QwfGAdYAE/KnmwPteTauYYex6
+         QhiA==
+X-Gm-Message-State: AC+VfDwOtG8CnzE8FDy+Feyu0KLhayQaqCXAchNu7YiWYHUwCEf6Ws+9
+        LTh6M4KSlgFcpFys+pdPVnrkkpyDG+I5FrDSXeev3ufFRlEJ
+X-Google-Smtp-Source: ACHHUZ7FXmOjWdl7KkEzBBg3I9xfBGy5q7PZjPFyCeGv1SBAIDyPW3jZ7shSbKEUUndJ9d1EbuVVsklnqcWxqLRKVGq6CVuKk+Tn
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] drm: gem: add an option for supporting the dma-coherent
- hardware.
-To:     Maxime Ripard <mripard@kernel.org>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-References: <20230607053053.345101-1-suijingfeng@loongson.cn>
- <d4378aad1cf179d308068ef6072c5c7ff2bf2502.camel@crapouillou.net>
- <6db23d14-652e-4b13-24cb-bfb92fa3faed@loongson.cn>
- <e9714a0c29b1c4268081827571ad2545b0e6d5ec.camel@crapouillou.net>
- <d5494751-0af0-42f6-bcad-f75415e4a6bd@loongson.cn>
- <2dd4c870a5605a79105fb621c97a5f59a18c8c24.camel@crapouillou.net>
- <ae085320-c93c-5d96-58ef-c5ee8b58c306@loongson.cn>
- <i2odidvev3ztxit4iv4ndxcuk4opckgs5fg4jjjfrq5nike35u@mlo7hshexe2n>
-Content-Language: en-US
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <i2odidvev3ztxit4iv4ndxcuk4opckgs5fg4jjjfrq5nike35u@mlo7hshexe2n>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxTMqwjoFkTfwGAA--.13801S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxuFyDZF4kArWfKF15JryktFc_yoW3Cr1kpF
-        W5KF4jkFWDJr1rtw18Kw4UXFyYyayrJry5Wr1DJ34xu3s0yr1UWr12kr1UuFyUXr18KF4F
-        v34jvFyxZF1DAagCm3ZEXasCq-sJn29KB7ZKAUJUUUUD529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        tVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vI
-        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67
-        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
-        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14
-        v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWx
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4YLvDU
-        UUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a6b:e603:0:b0:777:b713:22b5 with SMTP id
+ g3-20020a6be603000000b00777b71322b5mr3912686ioh.4.1686212464773; Thu, 08 Jun
+ 2023 01:21:04 -0700 (PDT)
+Date:   Thu, 08 Jun 2023 01:21:04 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000fa8ea705fd99ee81@google.com>
+Subject: [syzbot] [ntfs3?] WARNING in iov_iter_revert (4)
+From:   syzbot <syzbot+5e732e5de356b7242fb8@syzkaller.appspotmail.com>
+To:     almaz.alexandrovich@paragon-software.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+        ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com,
+        trix@redhat.com, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,250 +57,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello,
 
-On 2023/6/8 15:39, Maxime Ripard wrote:
-> On Thu, Jun 08, 2023 at 01:18:38AM +0800, Sui Jingfeng wrote:
->> Hi,
->>
->> On 2023/6/8 00:12, Paul Cercueil wrote:
->>> Hi Sui,
->>>
->>> Le mercredi 07 juin 2023 à 22:38 +0800, Sui Jingfeng a écrit :
->>>> Hi,  welcome to discussion.
->>>>
->>>>
->>>> I have limited skills in manipulating English.
->>>>
->>>> It may not express what I'm really means in the short time.
->>>>
->>>> Part of word in the sentence may not as accurate as your.
->>>>
->>>> Well, please don't misunderstand, I'm not doing the rude to you.
->>> No problem.
->>>
->>>> I will explain it with more details.
->>>>
->>>> See below:
->>>>
->>>>
->>>> On 2023/6/7 20:09, Paul Cercueil wrote:
->>>>> Hi Sui,
->>>>>
->>>>> Le mercredi 07 juin 2023 à 18:30 +0800, Sui Jingfeng a écrit :
->>>>>> Hi,
->>>>>>
->>>>>>
->>>>>> On 2023/6/7 17:36, Paul Cercueil wrote:
->>>>>>> Hi Sui,
->>>>>>>
->>>>>>> Le mercredi 07 juin 2023 à 13:30 +0800, Sui Jingfeng a écrit :
->>>>>>>> The single map_noncoherent member of struct
->>>>>>>> drm_gem_dma_object
->>>>>>>> may
->>>>>>>> not
->>>>>>>> sufficient for describing the backing memory of the GEM
->>>>>>>> buffer
->>>>>>>> object.
->>>>>>>>
->>>>>>>> Especially on dma-coherent systems, the backing memory is
->>>>>>>> both
->>>>>>>> cached
->>>>>>>> coherent for multi-core CPUs and dma-coherent for peripheral
->>>>>>>> device.
->>>>>>>> Say architectures like X86-64, LoongArch64, Loongson Mips64,
->>>>>>>> etc.
->>>>>>>>
->>>>>>>> Whether a peripheral device is dma-coherent or not can be
->>>>>>>> implementation-dependent. The single map_noncoherent option
->>>>>>>> is
->>>>>>>> not
->>>>>>>> enough
->>>>>>>> to reflect real hardware anymore. For example, the Loongson
->>>>>>>> LS3A4000
->>>>>>>> CPU
->>>>>>>> and LS2K2000/LS2K1000 SoC, peripheral device of such hardware
->>>>>>>> platform
->>>>>>>> allways snoop CPU's cache. Doing the allocation with
->>>>>>>> dma_alloc_coherent
->>>>>>>> function is preferred. The return buffer is cached, it should
->>>>>>>> not
->>>>>>>> using
->>>>>>>> the default write-combine mapping. While with the current
->>>>>>>> implement,
->>>>>>>> there
->>>>>>>> no way to tell the drm core to reflect this.
->>>>>>>>
->>>>>>>> This patch adds cached and coherent members to struct
->>>>>>>> drm_gem_dma_object.
->>>>>>>> which allow driver implements to inform the core. Introducing
->>>>>>>> new
->>>>>>>> mappings
->>>>>>>> while keeping the original default behavior unchanged.
->>>>>>> Did you try to simply set the "dma-coherent" property to the
->>>>>>> device's
->>>>>>> node?
->>>>>> But this approach can only be applied for the device driver with
->>>>>> DT
->>>>>> support.
->>>>>>
->>>>>> X86-64, Loongson ls3a4000 mips64, Loongson ls3a5000 CPU typically
->>>>>> do
->>>>>> not
->>>>>> have DT support.
->>>>>>
->>>>>> They using ACPI to pass parameter from the firmware to Linux
->>>>>> kernel.
->>>>>>
->>>>>> You approach will lost the effectiveness on such a case.
->>>>> Well, I don't really know how ACPI handles it - but it should just
->>>>> be a
->>>>> matter of setting dev->dma_coherent. That's basically what the DT
->>>>> code
->>>>> does.
->>>>>
->>>>> Some MIPS boards set it in their setup code for instance.
->>>>>
->>>> This is a *strategy*, not a *mechanism*.
->>>>
->>>> In this case, DT is just used to describing the hardware.
->>>>
->>>> (It is actually a hardware feature describing language, the
->>>> granularity
->>>> is large)
->>>>
->>>> It does not changing the state of the hardware.
->>>>
->>>> It's your platform firmware or kernel setting up code who actually do
->>>> such a things.
->>>>
->>>>
->>>> It's just that it works on *one* platform, it does not guarantee it
->>>> will
->>>> works on others.
->>> If you add the "dma-coherent" property in a device node in DT, you
->>> effectively specify that the device is DMA-coherent; so you describe
->>> the hardware, which is what DT is for, and you are not changing the
->>> state of the hardware.
->>>
->>> Note that some MIPS platforms (arch/mips/alchemy/common/setup.c)
->>> default to DMA-coherent mapping; I believe you could do something
->>> similar with your Loongson LS3A4000 CPU and LS2K2000/LS2K1000 SoC.
->>>
->> The preblem is that device driver can have various demand.
->>
->> It probably want to create different kind of buffers for different thing
->> simultaneously.
->>
->> Say, one allocated with dma_alloc_coherent for command buffer or dma
->> descriptor
->>
->> another one allocated with  dma_alloc_wc for uploading shader etc.
->>
->> also has the third one allocated with dma_alloc_noncoherent() for doing some
->> else.
-> And it will work just fine.
->
-> struct device dma_coherent, or DT's dma-coherent property define that
-> the device doesn't need any kind of cache maintenance, ever. If it's
-> missing, we need to perform cache maintenance to keep coherency.
->
-> dma_alloc_* functions provide guarantees to the driver. With
-> dma_alloc_wc and dma_alloc_coherent, the buffer is coherent, and thus
-> you don't need to perform cache maintenance operations by hand in the
-> driver.
+syzbot found the following issue on:
 
-BO returned by dma_alloc_wc() doesn't works on some platform.
+HEAD commit:    a4d7d7011219 Merge tag 'spi-fix-v6.4-rc5' of git://git.ker..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=16c28ab3280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3c980bfe8b399968
+dashboard link: https://syzkaller.appspot.com/bug?extid=5e732e5de356b7242fb8
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10ab7393280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11697e1b280000
 
-This may only guarantee for the CPU side. There is no guarantee for the 
-GPU side.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/1d4c310c7a76/disk-a4d7d701.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/918b9286fb09/vmlinux-a4d7d701.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/a1c1f51764b3/bzImage-a4d7d701.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/55b5173d0801/mount_0.gz
 
-For example, the GPU always snoop CPU's cache. The GPU fetch data from 
-the CPU's cache if hit.
+The issue was bisected to:
 
-if not hit, the GPU fetch the data from the system RAM.
+commit 6e5be40d32fb1907285277c02e74493ed43d77fe
+Author: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+Date:   Fri Aug 13 14:21:30 2021 +0000
+
+    fs/ntfs3: Add NTFS3 in fs/Kconfig and fs/Makefile
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16af0359280000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=15af0359280000
+console output: https://syzkaller.appspot.com/x/log.txt?x=11af0359280000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5e732e5de356b7242fb8@syzkaller.appspotmail.com
+Fixes: 6e5be40d32fb ("fs/ntfs3: Add NTFS3 in fs/Kconfig and fs/Makefile")
+
+RBP: 00007fff19f23f20 R08: 0000000000000002 R09: 00007fff19f23f30
+R10: 0000000100000000 R11: 0000000000000246 R12: 0000000000000005
+R13: 00007fff19f23f60 R14: 00007fff19f23f40 R15: 0000000000000001
+ </TASK>
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 5001 at lib/iov_iter.c:970 iov_iter_revert+0x59/0x60 lib/iov_iter.c:970
+Modules linked in:
+CPU: 0 PID: 5001 Comm: syz-executor145 Not tainted 6.4.0-rc5-syzkaller-00016-ga4d7d7011219 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
+RIP: 0010:iov_iter_revert+0x59/0x60 lib/iov_iter.c:970
+Code: 1d 6a 73 fd 48 81 fd 00 f0 ff 7f 77 18 e8 cf 6d 73 fd 48 89 ee 4c 89 e7 e8 84 f8 ff ff 5d 41 5c e9 bc 6d 73 fd e8 b7 6d 73 fd <0f> 0b eb ef 0f 1f 00 41 54 49 89 fc 55 53 e8 a4 6d 73 fd 49 8d 7c
+RSP: 0018:ffffc90003adf968 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff88807d889dc0 RSI: ffffffff8410d889 RDI: 0000000000000007
+RBP: ffffffffffff1000 R08: 0000000000000007 R09: 000000007ffff000
+R10: ffffffffffff1000 R11: 0000000000000001 R12: ffffc90003adfa60
+R13: ffffc90003adfa60 R14: ffff888078367a78 R15: ffff88807a84d400
+FS:  0000555556f46300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f62af0bc138 CR3: 000000001e80f000 CR4: 0000000000350ef0
+Call Trace:
+ <TASK>
+ generic_file_read_iter+0x2b2/0x5b0 mm/filemap.c:2820
+ ntfs_file_read_iter+0x1b8/0x270 fs/ntfs3/file.c:744
+ call_read_iter include/linux/fs.h:1862 [inline]
+ generic_file_splice_read+0x182/0x4b0 fs/splice.c:419
+ do_splice_to+0x1b9/0x240 fs/splice.c:902
+ splice_direct_to_actor+0x2ab/0x8a0 fs/splice.c:973
+ do_splice_direct+0x1ab/0x280 fs/splice.c:1082
+ do_sendfile+0xb19/0x12c0 fs/read_write.c:1254
+ __do_sys_sendfile64 fs/read_write.c:1322 [inline]
+ __se_sys_sendfile64 fs/read_write.c:1308 [inline]
+ __x64_sys_sendfile64+0x1d0/0x210 fs/read_write.c:1308
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f62af02a9f9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff19f23ef8 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
+RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 00007f62af02a9f9
+RDX: 0000000000000000 RSI: 0000000000000004 RDI: 0000000000000004
+RBP: 00007fff19f23f20 R08: 0000000000000002 R09: 00007fff19f23f30
+R10: 0000000100000000 R11: 0000000000000246 R12: 0000000000000005
+R13: 00007fff19f23f60 R14: 00007fff19f23f40 R15: 0000000000000001
+ </TASK>
 
 
-But when call dma_alloc_wc(), the BO at cpu side is marked as write 
-combine property.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-The write buffer within the CPU will gather the CPU side write access.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
-This is to say, there may have some data reside(stall) in the write buffer.
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-while the GPU will fetch data from the system RAM or CPU's cache.
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
-the GPU will fetch wrong data.
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
 
-This is the condition for our hardware, I don't know how does the ARM 
-platform guarantee
-
-the coherency in this case.
-
-
-If it relay on software to guarantee, then it is still non hardware 
-maintained coherency.
-
-
-When it relay on software, I called it implement-dependent.
-
-there are some archs without the implement or don't know how to implement.
-
-
-If it can't even snoop cpu's cache, I don't believe it can snoop cpu's 
-write buffer.
-
-I not sure dma api can do guarantee for all arch.
-
-
-> With dma_alloc_noncoherent, the buffer is non-coherent and the driver
-> needs to perform them when relevant.
->
-> How those buffers are created is platform specific, but the guarantees
-> provided *to the driver* are always there.
->
-> A buffer allocated with dma_alloc_coherent might be provided by
-> different means (at the hardware level with a coherency unit, by mapping
-> it non-cacheable), but as far as the driver is concerned it's always
-> going to be coherent.
->
-> Similarly, a driver using dma_alloc_noncoherent will always require
-> cache maintenance operations to use the API properly, even if the
-> hardware provides coherency (in which case, those operations will be
-> nop).
->
-> So, yeah, like I was saying in the other mail, it looks like you're
-> confusing a bunch of things. dma_alloc_* functions are about the driver
-> expectations and guarantees. DT's dma-coherent property is about how we
-> can implement them on a given platform.
-
-That is ideal situation.
-
-You don't have seen the actual bugs.
-
-Yeah, I do have a bit confusing about the DMA api.
-
-Maybe you and Paul can continue work on this.
-
-
-But DT's dma-coherent property is definitely not a system level solution.
-
-drm/amdgpu, drm/radeon and drm/i915 don't support DT.
-
-If ARM is dma-noncoherent, I suspect drm/amdgpu, drm/radeon will not works on ARM.
-
-there no function call dma_sync_for_device() dma_sync_for_cpu() etc
-
-These driver assume dma-coherent hardware.
-
-> They don't have to match, and that's precisely how we can have drivers
-> that run on any combination of platforms: the driver only cares about
-> the buffer guarantees, the platform description takes care of how they
-> are implemented.
->
-> Maxime
-
--- 
-Jingfeng
-
+If you want to undo deduplication, reply with:
+#syz undup
