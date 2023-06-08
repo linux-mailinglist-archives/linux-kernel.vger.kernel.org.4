@@ -2,99 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91BA2727B75
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:32:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E079727B78
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235857AbjFHJcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 05:32:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38454 "EHLO
+        id S235938AbjFHJce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 05:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235124AbjFHJbt (ORCPT
+        with ESMTP id S235941AbjFHJbz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 05:31:49 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F692D66
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 02:31:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686216692; x=1717752692;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JMt8rb6ddYRdXl6MLi1i9h8w7FO4bvZFiK6fEY2DLE4=;
-  b=AlRZ0Ehvt1dk8rJ2Cz5tad1zazl2WSMYoSGAodTW00fgpBW1PiOW9Bnt
-   tp+rjkYCI3HbnrubBCpQShYS2aEIwNBIS5Suo8I3i5U8MHtDY+pUh7EZC
-   QFYNfC9G8x6fZgAjofK7p2cGATrEF3tT8EwU4kbn8mJgvj5eq7sMdw/p3
-   24UTx0zSqAo5ff/5lOR5JAT0QrIYBNgCMQmlZ+NK4PPrP3RPQ6jv0uGPZ
-   BS5IQoqYf4/vOLtPX0yr98zMWBamNnnoxDVWwcKWfQMzy0/tPlmcjYG31
-   N5L0ltxobnbAXKEer6yPtQz0oLDHWey0oKROBRmS+gGormRft/DmKAXBY
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="337617607"
-X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="scan'208";a="337617607"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 02:31:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="739638211"
-X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="scan'208";a="739638211"
-Received: from operepel-mobl1.ger.corp.intel.com (HELO intel.com) ([10.252.58.149])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 02:31:30 -0700
-Date:   Thu, 8 Jun 2023 11:31:22 +0200
-From:   Andi Shyti <andi.shyti@linux.intel.com>
-To:     Sui Jingfeng <suijingfeng@loongson.cn>
-Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] drm/logicvc: Kconfig: select REGMAP and REGMAP_MMIO
-Message-ID: <ZIGf6mKwX9RIm5a5@ashyti-mobl2.lan>
-References: <20230608024207.581401-1-suijingfeng@loongson.cn>
- <ZIGAEZTJvq1GqFVD@aptenodytes>
- <aff664c7-b692-4fcf-ad61-8030cc648501@loongson.cn>
+        Thu, 8 Jun 2023 05:31:55 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1AE2727
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 02:31:50 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-30c4775d05bso255424f8f.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 02:31:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1686216709; x=1688808709;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=K2nCVCrZOkwudtPdu8IfLznRzJa7lQBEe+KUEz9jSjI=;
+        b=ZjkbQBZm7Dw969pcsyWCSsJ0MnYKqEAQbXFJU/2sVFXKohiH6CJEfMUuOF4ObEDdQU
+         go/8wjrFCceGpauw8oxTdLhFGSVRBS1tep/cUye9RPDK1KXSaUUnBUZn4eT9x/3E9hqK
+         KUqBHec+rGdQmlhmzLJAH5Bwy15Fx6HWdvU6YcV55HwzcG1Z4lFR5nnZdFQoskea1uoi
+         LgjUYR/eIfkKyCCyHsikPfm9BeZeM/dVdifqlLMFI4N6F89SwU5lVL868pt6Fd6j8qOR
+         ftpRlCewejJ40XYXibu/GvzJZ8j1NvCp5o+5i4gBE205mGaZhCMXMVXpSwrB5fFOEqxW
+         GkuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686216709; x=1688808709;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=K2nCVCrZOkwudtPdu8IfLznRzJa7lQBEe+KUEz9jSjI=;
+        b=Jh+KYI7JMO3O+1hN8xeyeA1suDUvWsmdhNGfvK//c46iUcrGc5SCdlqEDo9QUqXLTT
+         ioNg6EK6c6uhewAoRzR5j4l10VsTn9jTb+hbHkbvg6cdyWgt+K+9VzCdkbLT9wFvfGUS
+         eqCcGI9hZkTYwTV/9qk1jmrYY1/sAjTgqP2loiaCzXUpVIiDPalwtuWp8Ue1nU0mx08B
+         EoHX2QYjFKJgTfTUO+OTxo0ld7kXfkR3+5QAubE5mRqtQN00EWOslo9G6GwTyBnlIqQE
+         sCzx1pZhKDYOcI/L0EjQYgHHZdEuhgPozcnc6ZWB456Axvw1y90wcck094UnXEZvmoIs
+         fziA==
+X-Gm-Message-State: AC+VfDyEoxn086s3hsodzQFTIC19yaU2eJhUqXbfYuQf/wr3rXPvwLpG
+        YQ1kdsgGioNVngUl0RSA3aWIzQ==
+X-Google-Smtp-Source: ACHHUZ40NzTTDqWA9zTHhxTdub04YOLlEmvfv0QlDvpHjEWVBGENTRh9QrlohidOCVV9ZUBd14W1nQ==
+X-Received: by 2002:a5d:490f:0:b0:30a:ea8b:447d with SMTP id x15-20020a5d490f000000b0030aea8b447dmr6135595wrq.40.1686216709383;
+        Thu, 08 Jun 2023 02:31:49 -0700 (PDT)
+Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
+        by smtp.gmail.com with ESMTPSA id t1-20020adfe101000000b0030e5a63e2dbsm1018641wrz.80.2023.06.08.02.31.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jun 2023 02:31:48 -0700 (PDT)
+Message-ID: <adb0c4f8-f2f6-c587-9452-2205d0180ad7@baylibre.com>
+Date:   Thu, 8 Jun 2023 11:31:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aff664c7-b692-4fcf-ad61-8030cc648501@loongson.cn>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/5] ASoC: mediatek: mt8188-mt6359: Compress of_device_id
+ entries
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, broonie@kernel.org
+Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        matthias.bgg@gmail.com, trevor.wu@mediatek.com,
+        dan.carpenter@linaro.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com
+References: <20230608084727.74403-1-angelogioacchino.delregno@collabora.com>
+ <20230608084727.74403-2-angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+In-Reply-To: <20230608084727.74403-2-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jingfeng,
+On 08/06/2023 10:47, AngeloGioacchino Del Regno wrote:
+> Those entries fit in one line: compress them to reduce line count.
+> While at it, also add the sentinel comment to the last entry.
 
-On Thu, Jun 08, 2023 at 03:24:54PM +0800, Sui Jingfeng wrote:
-> Hi,
-> 
-> thanks a lot
-> 
-> On 2023/6/8 15:15, Paul Kocialkowski wrote:
-> > Hi,
-> > 
-> > On Thu 08 Jun 23, 10:42, Sui Jingfeng wrote:
-> > > drm/logicvc driver is depend on REGMAP and REGMAP_MMIO, should select this
-> > > two kconfig option, otherwise the driver failed to compile on platform
-> > > without REGMAP_MMIO selected:
-> > > 
-> > > ERROR: modpost: "__devm_regmap_init_mmio_clk" [drivers/gpu/drm/logicvc/logicvc-drm.ko] undefined!
-> > > make[1]: *** [scripts/Makefile.modpost:136: Module.symvers] Error 1
-> > > make: *** [Makefile:1978: modpost] Error 2
-> > > 
-> > > Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
-> > Thanks for the fix, looks good to me!
-> > 
-> > Acked-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> 
-> After received this Acked-by, do a need append this tag to the patch, and
-> resend this again?
-> 
-> I don't know about this.
-> 
-> I don't need to do anythings ales, you will push it to your repository,
-> right?
+Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
 
-no need... someone will pick it up and add the needed tags.
+-- 
+Regards,
+Alexandre
 
-Andi
