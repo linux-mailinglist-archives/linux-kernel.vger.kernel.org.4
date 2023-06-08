@@ -2,83 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 532427278E4
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A7177278E8
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235481AbjFHHeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 03:34:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36792 "EHLO
+        id S235449AbjFHHen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 03:34:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbjFHHeT (ORCPT
+        with ESMTP id S235476AbjFHHej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 03:34:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32755E6C;
-        Thu,  8 Jun 2023 00:34:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 8 Jun 2023 03:34:39 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54CD1FFA;
+        Thu,  8 Jun 2023 00:34:37 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC15A64977;
-        Thu,  8 Jun 2023 07:34:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 720AFC4339B;
-        Thu,  8 Jun 2023 07:34:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686209657;
-        bh=hj7i8hTygB8MxIuZCk3nWi7YtmKA5+Jz5129M0m2SeM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HUb4L4RV1pITd/cd8B+A+VOd1i4OmGGE3uzy0jZkmnThBRoaanecwIhgiT7x9BLF+
-         NBYu2Kssj1Evx9hGaKZm/akYBRdj4BaM2EhzNppDkm7HQHsYegm54fPtKCnNRYgaRs
-         fV9+YKhQfrmM4cjc3JuNfo23IooMymkTkDK9+h7tRppODnZY7CUhUu1gEhIyWKr1de
-         qnVav9TYfLTJunqL8qXvMtruMQIjLxteO62owDHP+jMCgDR2q8UuLQ4x7OXgIE3N8i
-         TGySpRSe45bro8dU6GiweaNsy2SlVd+QrU2V+yF8bCwAT2Puz0BG9s8TRtr0QAQeAE
-         HQYyPrGFv/fyg==
-Date:   Thu, 8 Jun 2023 09:34:12 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Karel Zak <kzag@redhat.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v2] fs: avoid empty option when generating legacy mount
- string
-Message-ID: <20230608-holprig-deswegen-4c3b31a71fc3@brauner>
-References: <20230607-fs-empty-option-v2-1-ffd0cba3bddb@weissschuh.net>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A9D576606F10;
+        Thu,  8 Jun 2023 08:34:35 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686209676;
+        bh=VlzcMt4Fb2IUSQOj1lmUGhufnD5Kd0XdRMKEOvM6z2I=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=JxoKYSTyQEGjwx6KZxhgPuCRSQJzGSA4cGn4WyDKEGQubQN7xPdAdFRrmt6eW02lI
+         XbGh7pKY15vhWpxovlkhibj5eCCK6LrpfNGuMCawkt7CNS1LHYbA2el2orwfgb8gT1
+         BchP4/LJXlVsQfYaEk9baTx2DfWbYL4LLJLtCjCPrQk6/iqN+OMkiFYCKi9743LGGm
+         FAAl2qaRDqQMya3FV5C5pL8wwDaZ/HoPp+v+t5ld54EA9yeuI4Sy0b1/aO2KpmGUCU
+         TnGLiEvhB1In5yPKKeq5S6Iv44I5+dias4puCOHqLZkeEpR2D3VypTDJ/oUpfUkX+X
+         sm/gU8sl+ZXVw==
+Message-ID: <caa38329-71a2-414f-6378-567fa92110b8@collabora.com>
+Date:   Thu, 8 Jun 2023 09:34:33 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 4/5] clk: mediatek: mt8183: Add CLK_VDEC_ACTIVE to vdec
+Content-Language: en-US
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     kernel@collabora.com, Chen-Yu Tsai <wenst@chromium.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+References: <20230607205714.510012-1-nfraprado@collabora.com>
+ <20230607205714.510012-5-nfraprado@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230607205714.510012-5-nfraprado@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230607-fs-empty-option-v2-1-ffd0cba3bddb@weissschuh.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 07:39:09PM +0200, Thomas Weißschuh wrote:
-> As each option string fragment is always prepended with a comma it would
-> happen that the whole string always starts with a comma.
-> This could be interpreted by filesystem drivers as an empty option and
-> may produce errors.
+Il 07/06/23 22:53, Nícolas F. R. A. Prado ha scritto:
+> Add the CLK_VDEC_ACTIVE clock to the vdec clock driver. This clock is
+> enabled by the VPU once it starts decoding.
 > 
-> For example the NTFS driver from ntfs.ko behaves like this and fails when
-> mounted via the new API.
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 > 
-> Link: https://github.com/util-linux/util-linux/issues/2298
-> Fixes: 3e1aeb00e6d1 ("vfs: Implement a filesystem superblock creation/configuration context")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> ---
 
-Applied a fixed up version of v1 to
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs.misc
 
-[1/1] fs: avoid empty option when generating legacy mount string
-      https://git.kernel.org/vfs/vfs/c/36851649d3f6
-
-yesterday.
