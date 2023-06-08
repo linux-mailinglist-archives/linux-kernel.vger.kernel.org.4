@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB527728BCF
+	by mail.lfdr.de (Postfix) with ESMTP id 602AE728BCE
 	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 01:31:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237319AbjFHXaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 19:30:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46934 "EHLO
+        id S237296AbjFHXaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 19:30:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237180AbjFHX3e (ORCPT
+        with ESMTP id S237182AbjFHX3e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 8 Jun 2023 19:29:34 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60B930D6
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 16:29:29 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-565d1b86a64so15356697b3.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 16:29:29 -0700 (PDT)
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0B430DF
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 16:29:32 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5651d8acfe2so16060677b3.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 16:29:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686266969; x=1688858969;
+        d=google.com; s=20221208; t=1686266971; x=1688858971;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=eGH8bmanmxADlfMPAGLnyXLKr5GaMQcYO5iL0xpxLsM=;
-        b=k+lyD9FRxliSp9Kk+y2zxZt7+UP/DipjPrHL8ilw+nKbmTMcsg2r+ySxNi+6Wrdk2C
-         E/8WTezpx3jjCeqzo8KLXFBzXSYoEHL+zrlj0cV1O1NtpESpZYbh6vXNhK95O2luq+Mo
-         ArOWLH9LYKYCj6VJR/B8z7lh/VXtg3HRh4kV1/JUhiNYo3L0E3ipvXfE6k2Xhx96DYL5
-         Hm9YNKyX7M0eFzMYc1dogAZNe9hxLSbiBPU80mHLovx8FNnaDpvw70cAvL3CiIm2IRc9
-         CvaiWA4LYuKdTLHmRrR+tbwU9CPGN7l1XFKzrk/WSaHw2ascPjAVTxy8hDxDHbsdOsv5
-         4kkg==
+        bh=YK7vivTUvVnngeLWzmeZQ8bqT/OVbRyCOXzMTcRsZMs=;
+        b=h0zjH+hUAGfTVAZ7FUCUWS+twdPiVH3SkQmolEIxSW6NKYWlfbX93GzrWc0xPE87rf
+         GCtKAcWHTFnmrRx0x6g+aMCnF7/smB+83LTuyDWpYDRcBrXRI/peA8iy6uqEdPuoCgj1
+         mPwWGkuikA6MRqCdj7bkDOG2NI8ry+HbmvIEhZhn1iD9NXqlyOaZpSxwAplOp0GWqF7z
+         h5TYTJfZ7Jeg/PmuzM79qNA7lNueWIaXYZdQqBZO3NpBdb7VYJ4HTbfCk4DNYH3QTFZW
+         3PgUNJ4Hc4UT5cofyQPEGCkxVMzE1BLJp/+LuT/CPLshhnrbL8XBMMKqqmuVgW9aQ3vW
+         4uZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686266969; x=1688858969;
+        d=1e100.net; s=20221208; t=1686266971; x=1688858971;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eGH8bmanmxADlfMPAGLnyXLKr5GaMQcYO5iL0xpxLsM=;
-        b=T2/ved9CiBwL9gLh7jI8jSD6ABU/aWQpiZJBJkrLtx+TdbutGnGwpeZteaY1m8JULq
-         gBqGMSeyyIHu6mrG7fFYShR2GgpANKBdwLQD3Lzvz9nrdzbIpbk5u6enjIHV9AANc1zO
-         Yf4mIZqFYYZAZyn1/S4FlXP110HYjEtNmBf7GziOwIe7KjOCcRNqJ+D5qzzMOyG2DExk
-         M/iiW2Ut7zxSRJzMsIehBy01O+UUcgQixseqchyb6xcK/b8unQsN10GteXGkb7YzYAPM
-         5BShsqGe4dtpWCqTeb3zf8ax9sMZ4FQHqW0Cesp57o50+j4Xz9uOoBmXi2DpU67FRmR7
-         lAxA==
-X-Gm-Message-State: AC+VfDyXTmdOl2WJgq7NT29AkoyPjiLtUVHOVA5QU+NV3t45sWBL/yhj
-        DgzhzbdJOCJBppcskwJ3Zh/DTv1M3x52
-X-Google-Smtp-Source: ACHHUZ6Ig1BCueYoQcVhW16qPJnDywZCzj8H7BT4EfROYt4YbYyrQNoflNmLVkXGi4CRYTDhjW7Zd8l60b0U
+        bh=YK7vivTUvVnngeLWzmeZQ8bqT/OVbRyCOXzMTcRsZMs=;
+        b=h8daY1fh1vckIMv9Kd+tW6fo3Tpwqj2eI7X7PnisT+qvvtrpbJsz8dht5xQMcGsSUv
+         IffkUu5TJhih1CAv1A3peahcfaNP18Ecrr3Gs9y16H0HwxrlMazcXAB5fmCRej26o3iY
+         +Kkc1eoYxjQTEKAfcy/ig6e1etao9lqQDh0j5AETwxR8FC78UO+j68Q3EzZ4LU7L4kuW
+         uww9096R5/ipOLt8Rtn8ThljWV6X5c8zqHJHrhAhVe87f715Dw4cJflhu5ebBtuCHvmj
+         txpNQcCIYaoT85eTrGAF9swKEwn5LjzwirVBlAQylLKDNRpJfPjwhpukGa4pznwgqIPB
+         EFdA==
+X-Gm-Message-State: AC+VfDxlkPhu4y/5npVI9xS9WSYGFHMUZfnH5aUuP7G06zYD/RnXJrNl
+        ppaCBjlMpBzeVJX3vZr0FAHdJKDAcZCW
+X-Google-Smtp-Source: ACHHUZ7lFo/l4NRGaS+SLLEGSLVGTsSlh5Hy8OpV3peTtU6WbuCKJ2Yl1mIVlrFEjceAhvhpmJc2Y0yNelZO
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:c3e5:ebc6:61e5:c73f])
- (user=irogers job=sendgmr) by 2002:a81:bc4e:0:b0:569:5003:7d79 with SMTP id
- b14-20020a81bc4e000000b0056950037d79mr704065ywl.3.1686266968895; Thu, 08 Jun
- 2023 16:29:28 -0700 (PDT)
-Date:   Thu,  8 Jun 2023 16:28:04 -0700
+ (user=irogers job=sendgmr) by 2002:a81:ad59:0:b0:561:c9c0:98d9 with SMTP id
+ l25-20020a81ad59000000b00561c9c098d9mr673787ywk.4.1686266971518; Thu, 08 Jun
+ 2023 16:29:31 -0700 (PDT)
+Date:   Thu,  8 Jun 2023 16:28:05 -0700
 In-Reply-To: <20230608232823.4027869-1-irogers@google.com>
-Message-Id: <20230608232823.4027869-8-irogers@google.com>
+Message-Id: <20230608232823.4027869-9-irogers@google.com>
 Mime-Version: 1.0
 References: <20230608232823.4027869-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Subject: [PATCH v2 07/26] perf thread: Add reference count checking
+Subject: [PATCH v2 08/26] perf machine: Make delete_threads part of machine__exit
 From:   Ian Rogers <irogers@google.com>
 To:     John Garry <john.g.garry@oracle.com>,
         Will Deacon <will@kernel.org>,
@@ -97,441 +97,111 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Modify struct declaration and accessor functions for the reference
-count checkers additional layer of indirection. Make sure pid_cmp in
-builtin-sched.c uses the underlying/original struct in pointer
-arithmetic, and not the temporary get/put indirection.
+The code required threads to be deleted before machine__exit was
+called or the threads would be leaked. This was error prone so move
+the delete_threads into machine__exit.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-sched.c    |  4 +-
- tools/perf/tests/hists_link.c |  2 +-
- tools/perf/ui/hist.c          |  5 ++-
- tools/perf/util/hist.c        |  2 +-
- tools/perf/util/machine.c     |  2 +-
- tools/perf/util/sort.c        |  2 +-
- tools/perf/util/thread.c      | 20 +++++----
- tools/perf/util/thread.h      | 79 ++++++++++++++++++-----------------
- 8 files changed, 63 insertions(+), 53 deletions(-)
+ tools/perf/tests/code-reading.c       | 1 -
+ tools/perf/tests/dwarf-unwind.c       | 1 -
+ tools/perf/tests/mmap-thread-lookup.c | 1 -
+ tools/perf/tests/symbols.c            | 1 -
+ tools/perf/util/machine.c             | 1 +
+ tools/perf/util/session.c             | 6 ------
+ 6 files changed, 1 insertion(+), 10 deletions(-)
 
-diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
-index c75ad82a6729..cd79068200e5 100644
---- a/tools/perf/builtin-sched.c
-+++ b/tools/perf/builtin-sched.c
-@@ -1385,7 +1385,7 @@ static int pid_cmp(struct work_atoms *l, struct work_atoms *r)
- {
- 	pid_t l_tid, r_tid;
+diff --git a/tools/perf/tests/code-reading.c b/tools/perf/tests/code-reading.c
+index 2a7b2b6f5286..ed3815163d1b 100644
+--- a/tools/perf/tests/code-reading.c
++++ b/tools/perf/tests/code-reading.c
+@@ -721,7 +721,6 @@ static int do_test_code_reading(bool try_kcore)
+ 	evlist__delete(evlist);
+ 	perf_cpu_map__put(cpus);
+ 	perf_thread_map__put(threads);
+-	machine__delete_threads(machine);
+ 	machine__delete(machine);
  
--	if (l->thread == r->thread)
-+	if (RC_CHK_ACCESS(l->thread) == RC_CHK_ACCESS(r->thread))
- 		return 0;
- 	l_tid = thread__tid(l->thread);
- 	r_tid = thread__tid(r->thread);
-@@ -1393,7 +1393,7 @@ static int pid_cmp(struct work_atoms *l, struct work_atoms *r)
- 		return -1;
- 	if (l_tid > r_tid)
- 		return 1;
--	return (int)(l->thread - r->thread);
-+	return (int)(RC_CHK_ACCESS(l->thread) - RC_CHK_ACCESS(r->thread));
+ 	return err;
+diff --git a/tools/perf/tests/dwarf-unwind.c b/tools/perf/tests/dwarf-unwind.c
+index ee983b677a6a..d01aa931fe81 100644
+--- a/tools/perf/tests/dwarf-unwind.c
++++ b/tools/perf/tests/dwarf-unwind.c
+@@ -235,7 +235,6 @@ noinline int test__dwarf_unwind(struct test_suite *test __maybe_unused,
+ 	thread__put(thread);
+ 
+  out:
+-	machine__delete_threads(machine);
+ 	machine__delete(machine);
+ 	return err;
+ }
+diff --git a/tools/perf/tests/mmap-thread-lookup.c b/tools/perf/tests/mmap-thread-lookup.c
+index 3891a2a3b46f..ddd1da9a4ba9 100644
+--- a/tools/perf/tests/mmap-thread-lookup.c
++++ b/tools/perf/tests/mmap-thread-lookup.c
+@@ -208,7 +208,6 @@ static int mmap_events(synth_cb synth)
+ 		addr_location__exit(&al);
+ 	}
+ 
+-	machine__delete_threads(machine);
+ 	machine__delete(machine);
+ 	return err;
+ }
+diff --git a/tools/perf/tests/symbols.c b/tools/perf/tests/symbols.c
+index 2d1aa42d36a9..16e1c5502b09 100644
+--- a/tools/perf/tests/symbols.c
++++ b/tools/perf/tests/symbols.c
+@@ -38,7 +38,6 @@ static int init_test_info(struct test_info *ti)
+ static void exit_test_info(struct test_info *ti)
+ {
+ 	thread__put(ti->thread);
+-	machine__delete_threads(ti->machine);
+ 	machine__delete(ti->machine);
  }
  
- static int avg_cmp(struct work_atoms *l, struct work_atoms *r)
-diff --git a/tools/perf/tests/hists_link.c b/tools/perf/tests/hists_link.c
-index 12bad8840699..2d19657ab5e0 100644
---- a/tools/perf/tests/hists_link.c
-+++ b/tools/perf/tests/hists_link.c
-@@ -148,7 +148,7 @@ static int find_sample(struct sample *samples, size_t nr_samples,
- 		       struct thread *t, struct map *m, struct symbol *s)
- {
- 	while (nr_samples--) {
--		if (samples->thread == t &&
-+		if (RC_CHK_ACCESS(samples->thread) == RC_CHK_ACCESS(t) &&
- 		    RC_CHK_ACCESS(samples->map) == RC_CHK_ACCESS(m) &&
- 		    samples->sym == s)
- 			return 1;
-diff --git a/tools/perf/ui/hist.c b/tools/perf/ui/hist.c
-index f164bd26fc41..2bf959d08354 100644
---- a/tools/perf/ui/hist.c
-+++ b/tools/perf/ui/hist.c
-@@ -11,6 +11,7 @@
- #include "../util/sort.h"
- #include "../util/evsel.h"
- #include "../util/evlist.h"
-+#include "../util/thread.h"
- #include "../util/util.h"
- 
- /* hist period print (hpp) functions */
-@@ -274,7 +275,9 @@ static int __hpp__sort_acc(struct hist_entry *a, struct hist_entry *b,
- 		if (ret)
- 			return ret;
- 
--		if (a->thread != b->thread || !hist_entry__has_callchains(a) || !symbol_conf.use_callchain)
-+		if ((a->thread == NULL ? NULL : RC_CHK_ACCESS(a->thread)) !=
-+		    (b->thread == NULL ? NULL : RC_CHK_ACCESS(b->thread)) ||
-+		    !hist_entry__has_callchains(a) || !symbol_conf.use_callchain)
- 			return 0;
- 
- 		ret = b->callchain->max_depth - a->callchain->max_depth;
-diff --git a/tools/perf/util/hist.c b/tools/perf/util/hist.c
-index a4c1b617f6e4..dfda52d348a3 100644
---- a/tools/perf/util/hist.c
-+++ b/tools/perf/util/hist.c
-@@ -2124,7 +2124,7 @@ static bool hists__filter_entry_by_thread(struct hists *hists,
- 					  struct hist_entry *he)
- {
- 	if (hists->thread_filter != NULL &&
--	    he->thread != hists->thread_filter) {
-+	    RC_CHK_ACCESS(he->thread) != RC_CHK_ACCESS(hists->thread_filter)) {
- 		he->filtered |= (1 << HIST_FILTER__THREAD);
- 		return true;
- 	}
 diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
-index 9fcf357a4d53..261188766307 100644
+index 261188766307..46af5e9748c9 100644
 --- a/tools/perf/util/machine.c
 +++ b/tools/perf/util/machine.c
-@@ -2055,7 +2055,7 @@ static void __machine__remove_thread(struct machine *machine, struct thread_rb_n
- 	if (!nd)
- 		nd = thread_rb_node__find(th, &threads->entries.rb_root);
+@@ -256,6 +256,7 @@ void machine__exit(struct machine *machine)
+ 	zfree(&machine->current_tid);
+ 	zfree(&machine->kallsyms_filename);
  
--	if (threads->last_match == th)
-+	if (threads->last_match && RC_CHK_ACCESS(threads->last_match) == RC_CHK_ACCESS(th))
- 		threads__set_last_match(threads, NULL);
++	machine__delete_threads(machine);
+ 	for (i = 0; i < THREADS__TABLE_SIZE; i++) {
+ 		struct threads *threads = &machine->threads[i];
  
- 	if (lock)
-diff --git a/tools/perf/util/sort.c b/tools/perf/util/sort.c
-index 5e45c770f91d..047c3606802f 100644
---- a/tools/perf/util/sort.c
-+++ b/tools/perf/util/sort.c
-@@ -128,7 +128,7 @@ static int hist_entry__thread_filter(struct hist_entry *he, int type, const void
- 	if (type != HIST_FILTER__THREAD)
- 		return -1;
- 
--	return th && he->thread != th;
-+	return th && RC_CHK_ACCESS(he->thread) != RC_CHK_ACCESS(th);
+diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
+index 65ac9f7fdf7e..00d18c74c090 100644
+--- a/tools/perf/util/session.c
++++ b/tools/perf/util/session.c
+@@ -278,11 +278,6 @@ struct perf_session *__perf_session__new(struct perf_data *data,
+ 	return ERR_PTR(ret);
  }
  
- struct sort_entry sort_thread = {
-diff --git a/tools/perf/util/thread.c b/tools/perf/util/thread.c
-index bee4ac1051ee..0b166404c5c3 100644
---- a/tools/perf/util/thread.c
-+++ b/tools/perf/util/thread.c
-@@ -41,9 +41,10 @@ struct thread *thread__new(pid_t pid, pid_t tid)
+-static void perf_session__delete_threads(struct perf_session *session)
+-{
+-	machine__delete_threads(&session->machines.host);
+-}
+-
+ static void perf_decomp__release_events(struct decomp *next)
  {
- 	char *comm_str;
- 	struct comm *comm;
--	struct thread *thread = zalloc(sizeof(*thread));
-+	RC_STRUCT(thread) *_thread = zalloc(sizeof(*_thread));
-+	struct thread *thread;
- 
--	if (thread != NULL) {
-+	if (ADD_RC_CHK(thread, _thread) != NULL) {
- 		thread__set_pid(thread, pid);
- 		thread__set_tid(thread, tid);
- 		thread__set_ppid(thread, -1);
-@@ -68,7 +69,7 @@ struct thread *thread__new(pid_t pid, pid_t tid)
- 		list_add(&comm->list, thread__comm_list(thread));
- 		refcount_set(thread__refcnt(thread), 1);
- 		/* Thread holds first ref to nsdata. */
--		thread->nsinfo = nsinfo__new(pid);
-+		RC_CHK_ACCESS(thread)->nsinfo = nsinfo__new(pid);
- 		srccode_state_init(thread__srccode_state(thread));
- 	}
- 
-@@ -105,26 +106,31 @@ void thread__delete(struct thread *thread)
- 	}
- 	up_write(thread__comm_lock(thread));
- 
--	nsinfo__zput(thread->nsinfo);
-+	nsinfo__zput(RC_CHK_ACCESS(thread)->nsinfo);
- 	srccode_state_free(thread__srccode_state(thread));
- 
- 	exit_rwsem(thread__namespaces_lock(thread));
- 	exit_rwsem(thread__comm_lock(thread));
- 	thread__free_stitch_list(thread);
--	free(thread);
-+	RC_CHK_FREE(thread);
- }
- 
- struct thread *thread__get(struct thread *thread)
- {
--	if (thread)
-+	struct thread *result;
-+
-+	if (RC_CHK_GET(result, thread))
- 		refcount_inc(thread__refcnt(thread));
--	return thread;
-+
-+	return result;
- }
- 
- void thread__put(struct thread *thread)
- {
- 	if (thread && refcount_dec_and_test(thread__refcnt(thread)))
- 		thread__delete(thread);
-+	else
-+		RC_CHK_PUT(thread);
- }
- 
- static struct namespaces *__thread__namespaces(struct thread *thread)
-diff --git a/tools/perf/util/thread.h b/tools/perf/util/thread.h
-index b103992c3831..9068a21ce0fa 100644
---- a/tools/perf/util/thread.h
-+++ b/tools/perf/util/thread.h
-@@ -15,6 +15,7 @@
- #include "rwsem.h"
- #include "event.h"
- #include "callchain.h"
-+#include <internal/rc_check.h>
- 
- struct addr_location;
- struct map;
-@@ -34,7 +35,7 @@ struct thread_rb_node {
- 	struct thread *thread;
- };
- 
--struct thread {
-+DECLARE_RC_STRUCT(thread) {
- 	struct maps		*maps;
- 	pid_t			pid_; /* Not all tools update this */
- 	pid_t			tid;
-@@ -123,192 +124,192 @@ int thread__memcpy(struct thread *thread, struct machine *machine,
- 
- static inline struct maps *thread__maps(struct thread *thread)
- {
--	return thread->maps;
-+	return RC_CHK_ACCESS(thread)->maps;
- }
- 
- static inline void thread__set_maps(struct thread *thread, struct maps *maps)
- {
--	thread->maps = maps;
-+	RC_CHK_ACCESS(thread)->maps = maps;
- }
- 
- static inline pid_t thread__pid(const struct thread *thread)
- {
--	return thread->pid_;
-+	return RC_CHK_ACCESS(thread)->pid_;
- }
- 
- static inline void thread__set_pid(struct thread *thread, pid_t pid_)
- {
--	thread->pid_ = pid_;
-+	RC_CHK_ACCESS(thread)->pid_ = pid_;
- }
- 
- static inline pid_t thread__tid(const struct thread *thread)
- {
--	return thread->tid;
-+	return RC_CHK_ACCESS(thread)->tid;
- }
- 
- static inline void thread__set_tid(struct thread *thread, pid_t tid)
- {
--	thread->tid = tid;
-+	RC_CHK_ACCESS(thread)->tid = tid;
- }
- 
- static inline pid_t thread__ppid(const struct thread *thread)
- {
--	return thread->ppid;
-+	return RC_CHK_ACCESS(thread)->ppid;
- }
- 
- static inline void thread__set_ppid(struct thread *thread, pid_t ppid)
- {
--	thread->ppid = ppid;
-+	RC_CHK_ACCESS(thread)->ppid = ppid;
- }
- 
- static inline int thread__cpu(const struct thread *thread)
- {
--	return thread->cpu;
-+	return RC_CHK_ACCESS(thread)->cpu;
- }
- 
- static inline void thread__set_cpu(struct thread *thread, int cpu)
- {
--	thread->cpu = cpu;
-+	RC_CHK_ACCESS(thread)->cpu = cpu;
- }
- 
- static inline int thread__guest_cpu(const struct thread *thread)
- {
--	return thread->guest_cpu;
-+	return RC_CHK_ACCESS(thread)->guest_cpu;
- }
- 
- static inline void thread__set_guest_cpu(struct thread *thread, int guest_cpu)
- {
--	thread->guest_cpu = guest_cpu;
-+	RC_CHK_ACCESS(thread)->guest_cpu = guest_cpu;
- }
- 
- static inline refcount_t *thread__refcnt(struct thread *thread)
- {
--	return &thread->refcnt;
-+	return &RC_CHK_ACCESS(thread)->refcnt;
- }
- 
- static inline bool thread__comm_set(const struct thread *thread)
- {
--	return thread->comm_set;
-+	return RC_CHK_ACCESS(thread)->comm_set;
- }
- 
- static inline void thread__set_comm_set(struct thread *thread, bool set)
- {
--	thread->comm_set = set;
-+	RC_CHK_ACCESS(thread)->comm_set = set;
- }
- 
- static inline int thread__var_comm_len(const struct thread *thread)
- {
--	return thread->comm_len;
-+	return RC_CHK_ACCESS(thread)->comm_len;
- }
- 
- static inline void thread__set_comm_len(struct thread *thread, int len)
- {
--	thread->comm_len = len;
-+	RC_CHK_ACCESS(thread)->comm_len = len;
- }
- 
- static inline struct list_head *thread__namespaces_list(struct thread *thread)
- {
--	return &thread->namespaces_list;
-+	return &RC_CHK_ACCESS(thread)->namespaces_list;
- }
- 
- static inline int thread__namespaces_list_empty(const struct thread *thread)
- {
--	return list_empty(&thread->namespaces_list);
-+	return list_empty(&RC_CHK_ACCESS(thread)->namespaces_list);
- }
- 
- static inline struct rw_semaphore *thread__namespaces_lock(struct thread *thread)
- {
--	return &thread->namespaces_lock;
-+	return &RC_CHK_ACCESS(thread)->namespaces_lock;
- }
- 
- static inline struct list_head *thread__comm_list(struct thread *thread)
- {
--	return &thread->comm_list;
-+	return &RC_CHK_ACCESS(thread)->comm_list;
- }
- 
- static inline struct rw_semaphore *thread__comm_lock(struct thread *thread)
- {
--	return &thread->comm_lock;
-+	return &RC_CHK_ACCESS(thread)->comm_lock;
- }
- 
- static inline u64 thread__db_id(const struct thread *thread)
- {
--	return thread->db_id;
-+	return RC_CHK_ACCESS(thread)->db_id;
- }
- 
- static inline void thread__set_db_id(struct thread *thread, u64 db_id)
- {
--	thread->db_id = db_id;
-+	RC_CHK_ACCESS(thread)->db_id = db_id;
- }
- 
- static inline void *thread__priv(struct thread *thread)
- {
--	return thread->priv;
-+	return RC_CHK_ACCESS(thread)->priv;
- }
- 
- static inline void thread__set_priv(struct thread *thread, void *p)
- {
--	thread->priv = p;
-+	RC_CHK_ACCESS(thread)->priv = p;
- }
- 
- static inline struct thread_stack *thread__ts(struct thread *thread)
- {
--	return thread->ts;
-+	return RC_CHK_ACCESS(thread)->ts;
- }
- 
- static inline void thread__set_ts(struct thread *thread, struct thread_stack *ts)
- {
--	thread->ts = ts;
-+	RC_CHK_ACCESS(thread)->ts = ts;
- }
- 
- static inline struct nsinfo *thread__nsinfo(struct thread *thread)
- {
--	return thread->nsinfo;
-+	return RC_CHK_ACCESS(thread)->nsinfo;
- }
- 
- static inline struct srccode_state *thread__srccode_state(struct thread *thread)
- {
--	return &thread->srccode_state;
-+	return &RC_CHK_ACCESS(thread)->srccode_state;
- }
- 
- static inline bool thread__filter(const struct thread *thread)
- {
--	return thread->filter;
-+	return RC_CHK_ACCESS(thread)->filter;
- }
- 
- static inline void thread__set_filter(struct thread *thread, bool filter)
- {
--	thread->filter = filter;
-+	RC_CHK_ACCESS(thread)->filter = filter;
- }
- 
- static inline int thread__filter_entry_depth(const struct thread *thread)
- {
--	return thread->filter_entry_depth;
-+	return RC_CHK_ACCESS(thread)->filter_entry_depth;
- }
- 
- static inline void thread__set_filter_entry_depth(struct thread *thread, int depth)
- {
--	thread->filter_entry_depth = depth;
-+	RC_CHK_ACCESS(thread)->filter_entry_depth = depth;
- }
- 
- static inline bool thread__lbr_stitch_enable(const struct thread *thread)
- {
--	return thread->lbr_stitch_enable;
-+	return RC_CHK_ACCESS(thread)->lbr_stitch_enable;
- }
- 
- static inline void thread__set_lbr_stitch_enable(struct thread *thread, bool en)
- {
--	thread->lbr_stitch_enable = en;
-+	RC_CHK_ACCESS(thread)->lbr_stitch_enable = en;
- }
- 
- static inline struct lbr_stitch	*thread__lbr_stitch(struct thread *thread)
- {
--	return thread->lbr_stitch;
-+	return RC_CHK_ACCESS(thread)->lbr_stitch;
- }
- 
- static inline void thread__set_lbr_stitch(struct thread *thread, struct lbr_stitch *lbrs)
- {
--	thread->lbr_stitch = lbrs;
-+	RC_CHK_ACCESS(thread)->lbr_stitch = lbrs;
- }
- 
- static inline bool thread__is_filtered(struct thread *thread)
+ 	struct decomp *decomp;
+@@ -305,7 +300,6 @@ void perf_session__delete(struct perf_session *session)
+ 	auxtrace__free(session);
+ 	auxtrace_index__free(&session->auxtrace_index);
+ 	perf_session__destroy_kernel_maps(session);
+-	perf_session__delete_threads(session);
+ 	perf_decomp__release_events(session->decomp_data.decomp);
+ 	perf_env__exit(&session->header.env);
+ 	machines__exit(&session->machines);
 -- 
 2.41.0.162.gfafddb0af9-goog
 
