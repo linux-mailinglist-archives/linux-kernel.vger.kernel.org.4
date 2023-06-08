@@ -2,133 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26787727B83
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE3D3727B87
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:35:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236084AbjFHJeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 05:34:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38782 "EHLO
+        id S235910AbjFHJfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 05:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236022AbjFHJdy (ORCPT
+        with ESMTP id S236099AbjFHJet (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 05:33:54 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F542736
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 02:33:52 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-5151934a4e3so555623a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 02:33:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686216831; x=1688808831;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XHrWR78MCn7GOVO6jP+VpXAA4JR1qkGlYZ5kPs6LqkE=;
-        b=mc9adXQtN6XersVDRhnlail8T5GQnruABpjREJFga4locj60fiGQc3DEbqU5rE+wM+
-         IVIRmVKEaZcE4Qy9s6zN5jyiM9QHKBST+8n1uIFdlmXdHCsph6CS4JwZa2QvxkCwPDYl
-         bgtCgFQr+DKjuEqmvhtdkzII9qvgdRM6Wlrxs4j4/Td7UTrfzQBbkrAghZH2zKTVKqPL
-         e7UBB+XDwWHcqsGVNv+uuTGhzlK09irLgNNfQG3gdsSs+cPGMH9MIhio02yScsNjZVWw
-         2eKHG9bnllb38SZ8PzHa8aMw5MKsP9G69/UdaO3HxfnpoWHAxItZy1qIiFx2AU71TI3f
-         Xwqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686216831; x=1688808831;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XHrWR78MCn7GOVO6jP+VpXAA4JR1qkGlYZ5kPs6LqkE=;
-        b=MKeaHVvEC2sjK5oPCBer/NXhJy/qmEaV0rWqUhZiQgBOPLfOmGQAOg2Xx+wcwYGhdl
-         m80YQmY3PJaHaUTKGD+4s9t5GZ6CAoJF/dzlgSmpMNTpkRTzwnfOX8f9PX+50ADcZM2C
-         pYb8Kzxq2bPLznbrJ5Cr7bQmYQlJzzGRFhFHDDLgoVhlV9AP/Z4q8izBXDkcC+72SG7s
-         vncL6sh8r7H/sOwjmofeHD72FkFUkF6Z51+ow9Ao5Tq+cWTcRxsohQW3N90iQDSN/n7W
-         B/gWhJESQqzPF+3x5AX8fSWqgQu5qcYGHJXjVIY7vUk+HTFbR/x6BEI658jGuTirr2l/
-         9cVw==
-X-Gm-Message-State: AC+VfDyK3o+dWvmQhqBweYJjKyyDtbA6m8pVJeNr0eywIfE/3vKi1Si2
-        UvitW94qVciRyqAHvDkN5FHGvw==
-X-Google-Smtp-Source: ACHHUZ5P3vA07L3KTs1RTP07AuvxF1iv5HiPlvFkqBvOQIBmIKUDz+s/jbEEE098Oeua68HrGDx7TQ==
-X-Received: by 2002:a17:907:6d05:b0:966:54ac:17d7 with SMTP id sa5-20020a1709076d0500b0096654ac17d7mr9357802ejc.76.1686216830865;
-        Thu, 08 Jun 2023 02:33:50 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id oz14-20020a170906cd0e00b0094e7d196aa4sm443537ejb.160.2023.06.08.02.33.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 02:33:50 -0700 (PDT)
-Message-ID: <e4cc5966-0af9-80cc-c01f-b33620717a1e@linaro.org>
-Date:   Thu, 8 Jun 2023 11:33:48 +0200
+        Thu, 8 Jun 2023 05:34:49 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 876CC2129;
+        Thu,  8 Jun 2023 02:34:46 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A1EE1AB6;
+        Thu,  8 Jun 2023 02:35:31 -0700 (PDT)
+Received: from [192.168.1.3] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DF8F53F71E;
+        Thu,  8 Jun 2023 02:34:43 -0700 (PDT)
+Message-ID: <1e7aa657-6d1e-9e7c-95cb-b32d307abe93@arm.com>
+Date:   Thu, 8 Jun 2023 10:34:42 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 1/2] ASoC: dt-bindings: qcom,wsa8840: Add WSA884x family
- of speakers
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 2/4] perf cs-etm: Use previous thread for branch sample
+ source IP
 Content-Language: en-US
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230608085023.141745-1-krzysztof.kozlowski@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230608085023.141745-1-krzysztof.kozlowski@linaro.org>
+From:   James Clark <james.clark@arm.com>
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     coresight@lists.linaro.org, denik@chromium.org,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230524131958.2139331-1-james.clark@arm.com>
+ <20230524131958.2139331-3-james.clark@arm.com>
+ <20230527090635.GB886420@leoy-yangtze.lan>
+ <630ab636-107d-4b12-5454-2ee91ad43543@arm.com>
+In-Reply-To: <630ab636-107d-4b12-5454-2ee91ad43543@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/06/2023 10:50, Krzysztof Kozlowski wrote:
-> Add binding for WSA8840/WSA8845/WSA8845H smart speaker amplifiers used
-> in Qualcomm QRD8550 board with SM8550 SoC.
+
+
+On 30/05/2023 15:28, James Clark wrote:
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../bindings/sound/qcom,wsa8840.yaml          | 66 +++++++++++++++++++
->  1 file changed, 66 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/sound/qcom,wsa8840.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/sound/qcom,wsa8840.yaml b/Documentation/devicetree/bindings/sound/qcom,wsa8840.yaml
-> new file mode 100644
-> index 000000000000..a999f787aa4d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/sound/qcom,wsa8840.yaml
-> @@ -0,0 +1,66 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/sound/qcom,wsa8840.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm WSA8840/WSA8845/WSA8845H smart speaker amplifier
-> +
-> +maintainers:
-> +  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> +  - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> +
-> +description:
-> +  WSA884X is a family of Qualcomm Aqstic smart speaker amplifiers using
-> +  SoundWire digital audio interface.
-> +
-> +allOf:
-> +  - $ref: dai-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: sdw10217020400
+> On 27/05/2023 10:06, Leo Yan wrote:
+>> On Wed, May 24, 2023 at 02:19:56PM +0100, James Clark wrote:
+>>> Branch samples currently use the IP of the previous packet as the from
+>>> IP, and the IP of the current packet as the to IP. But it incorrectly
+>>> uses the current thread. In some cases like a jump into a different
+>>> exception level this will attribute to the incorrect process.
+>>
+>> It's about the timing that branch has taken or not taken :)
+>>
+>> If we think the branch sample as 'branch has taken', then current code
+>> is doning right thing, otherwise, we need this fix.
+>>
+> 
+> If you diff the outputs side by side you can see it mainly has an effect
+> where there is a discontinuity. At this point we set either the from or
+> the to IPs to 0.
+> 
+> For example here is a before and after perf script output. Without the
+> change it looks like stress was running before it actually was. The
+> schedule function that was attributed to ls on the first line hasn't
+> finished running yet. But it's attributed to stress on the second line
+> even though the destination IP is 0 meaning we don't even know where it
+> went.
+> 
+> Before:
+> 
+>     ls  8350 [006] ... __schedule+0x394 => schedule+0x5c
+> stress  8357 [006] ... schedule+0x84 => 0 [unknown]
+> stress  8357 [006] ... 0 [unknown] => __unix_dgram_recvmsg+0x130
+> 
+> After:
+> 
+>     ls  8350 [006] ... __schedule+0x394 => schedule+0x5c
+>     ls  8357 [006] ... schedule+0x84 => 0 [unknown]
+> stress  8357 [006] ... 0 [unknown] => __unix_dgram_recvmsg+0x130
+> 
+> I didn't see any decode differences that weren't around these
+> discontinuity points, so it seems like a low risk change.
+> 
+>>> Fix it by tracking the previous thread in the same way the previous
+>>> packet is tracked.
+>>>
+>>> Signed-off-by: James Clark <james.clark@arm.com>
+>>> ---
+>>>  tools/perf/util/cs-etm.c | 9 +++++++--
+>>>  1 file changed, 7 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
+>>> index ebffc9052561..a997fe79d458 100644
+>>> --- a/tools/perf/util/cs-etm.c
+>>> +++ b/tools/perf/util/cs-etm.c
+>>> @@ -86,6 +86,7 @@ struct cs_etm_traceid_queue {
+>>>  	size_t last_branch_pos;
+>>>  	union perf_event *event_buf;
+>>>  	struct thread *thread;
+>>> +	struct thread *prev_thread;
+>>>  	struct branch_stack *last_branch;
+>>>  	struct branch_stack *last_branch_rb;
+>>>  	struct cs_etm_packet *prev_packet;
+>>> @@ -480,6 +481,7 @@ static int cs_etm__init_traceid_queue(struct cs_etm_queue *etmq,
+>>>  	tidq->trace_chan_id = trace_chan_id;
+>>>  	tidq->thread = machine__findnew_thread(&etm->session->machines.host, -1,
+>>>  					       queue->tid);
+>>> +	tidq->prev_thread = machine__idle_thread(&etm->session->machines.host);
+>>>  
+>>>  	tidq->packet = zalloc(sizeof(struct cs_etm_packet));
+>>>  	if (!tidq->packet)
+>>> @@ -616,6 +618,8 @@ static void cs_etm__packet_swap(struct cs_etm_auxtrace *etm,
+>>>  		tmp = tidq->packet;
+>>>  		tidq->packet = tidq->prev_packet;
+>>>  		tidq->prev_packet = tmp;
+>>> +		thread__put(tidq->prev_thread);
+>>> +		tidq->prev_thread = thread__get(tidq->thread);
+>>
+>> Maybe cs_etm__packet_swap() is not the best place to update
+>> "tidq->prev_thread", since swapping packet doesn't mean it's necessarily
+>> thread switching; can we move this change into the cs_etm__set_thread()?
+>>
+> 
+> Yeah that might make more sense. I can move it there if we decide to
+> keep this change.
+> 
 
-There is a mistake here - should be version 2, so "sdw20217020400". I
-will send a v2 a bit later.
+Unfortunately I don't think I can make this change. It seems like
+putting the previous thread swap in  cs_etm__set_thread() has different
+semantics to keeping all the swaps together in cs_etm__packet_swap().
 
-Best regards,
-Krzysztof
+This is because if you swap the thread in cs_etm__packet_swap() the
+previous packet and next packet can have the _same_ thread if there
+happened to be no change. However if you only swap previous thread in
+cs_etm__set_thread(), that means that the previous thread is always
+different to the next one. This has a huge difference on the decoding
+because two adjacent packets on the same thread will say they branched
+from the previous thread that ran, not the previous thread on the
+previous packet.
 
+>> Thanks,
+>> Leo
+>>
+>>>  	}
+>>>  }
+>>>  
+>>> @@ -791,6 +795,7 @@ static void cs_etm__free_traceid_queues(struct cs_etm_queue *etmq)
+>>>  		/* Free this traceid_queue from the array */
+>>>  		tidq = etmq->traceid_queues[idx];
+>>>  		thread__zput(tidq->thread);
+>>> +		thread__zput(tidq->prev_thread);
+>>>  		zfree(&tidq->event_buf);
+>>>  		zfree(&tidq->last_branch);
+>>>  		zfree(&tidq->last_branch_rb);
+>>> @@ -1450,8 +1455,8 @@ static int cs_etm__synth_branch_sample(struct cs_etm_queue *etmq,
+>>>  	sample.time = cs_etm__resolve_sample_time(etmq, tidq);
+>>>  
+>>>  	sample.ip = ip;
+>>> -	sample.pid = tidq->thread->pid_;
+>>> -	sample.tid = tidq->thread->tid;
+>>> +	sample.pid = tidq->prev_thread->pid_;
+>>> +	sample.tid = tidq->prev_thread->tid;
+>>>  	sample.addr = cs_etm__first_executed_instr(tidq->packet);
+>>>  	sample.id = etmq->etm->branches_id;
+>>>  	sample.stream_id = etmq->etm->branches_id;
+>>> -- 
+>>> 2.34.1
+>>>
