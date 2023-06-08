@@ -2,51 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4BD728610
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 19:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88F0C728612
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 19:15:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236489AbjFHROh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 13:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41718 "EHLO
+        id S236795AbjFHRPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 13:15:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231959AbjFHROe (ORCPT
+        with ESMTP id S231650AbjFHRPK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 13:14:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62DEE59
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 10:14:33 -0700 (PDT)
+        Thu, 8 Jun 2023 13:15:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32032269A;
+        Thu,  8 Jun 2023 10:15:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7030964F81
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 17:14:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35C1AC433D2;
-        Thu,  8 Jun 2023 17:14:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C272B64F81;
+        Thu,  8 Jun 2023 17:15:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D494BC433EF;
+        Thu,  8 Jun 2023 17:15:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686244472;
-        bh=R1L6b3wgbiK874cLJ3MogGauggBNR+aYC0k6slCiep0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lwuELfVCtQW00XSO3oJ3XcVCV5ox+/2z8vUhaiNl81TKhQuZE+PMEORvkviZ4n4mS
-         gC6Lhy3XyugFnER6NKGbV1FNAEkopXMWFHawmR9+W1t/kdHsvttMWCh4HgskqrKD5m
-         J5dkpV8DY70/GNEgVRtRsYUyU6znpXEGpqblJTsT2XN3VDRxryQwO1W6Vb78vkNGix
-         ovGkh77TUHpgliwWHhd7tJuAVs+XXXuEbPkoWeQso6xv08lz2e1xx+dCpr0wwc+z9q
-         Pj4Xu5/NOXcR/1Ae2OjhZODxEanNyrMXv2rN+InBkTkIY2IsCRBeltq/QGZrQ3ScI4
-         vrI0Jd94teIlQ==
-Date:   Thu, 8 Jun 2023 18:14:29 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mfd: intel-lpss: Add missing check for
- platform_get_resource
-Message-ID: <20230608171429.GF3572061@google.com>
-References: <20230531100257.17769-1-jiasheng@iscas.ac.cn>
+        s=k20201202; t=1686244509;
+        bh=4wyq5feJyGC1xVBcTZ/Mti/s0RME8bXOsMag48IzS5g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=XTu/6CbFHIlPGMsivoT/edMq3lP0JFtqLA2e4ijvZTyXI+rXPp30vZH5LPiAlfpWT
+         ugJrxfdgowagoYMwEL/U9+Kg/EBvzLktvSgkh/LEkNCyopOwy3PKxXLtppLkmBlsBE
+         UdSMxg86UJRbEhFWwiqyETZkIUd/+/UBqCVtGROzszLOA/BEkDSbtAgovo6eSjSGZI
+         TJ1908tHQzPGj3lDCD9pebdDBwxu2F6b80AfEn/ZLa2SseYdN4tEaRSkjYf94bPayd
+         1S0JP5aOo2mZDEF3c0j4lfBEO0yx/fmTo1/iqDaEMdTeuNBVOS7JYXMrNDQq+b0Gtn
+         xqUBgfOfFcFsA==
+Date:   Thu, 8 Jun 2023 12:15:07 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     ryder.lee@mediatek.com, jianjun.wang@mediatek.com,
+        lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
+        bhelgaas@google.com, p.zabel@pengutronix.de,
+        matthias.bgg@gmail.com, linux-pci@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 1/2] PCI: mediatek-gen3: Stop acquiring spinlocks in
+ {suspend,resume}_noirq
+Message-ID: <20230608171507.GA1204894@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230531100257.17769-1-jiasheng@iscas.ac.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230504113509.184633-2-angelogioacchino.delregno@collabora.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,39 +59,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 31 May 2023, Jiasheng Jiang wrote:
+On Thu, May 04, 2023 at 01:35:08PM +0200, AngeloGioacchino Del Regno wrote:
+> In mtk_pcie_suspend_noirq() and mtk_pcie_resume_noirq() we are,
+> respectively, disabling and enabling generation of interrupts and
+> then saving and restoring the enabled interrupts register: since
+> we're using noirq PM callbacks, that can be safely done without
+> holding any spin lock.
 
-> Add the missing check for platform_get_resource and return error
-> if it fails.
-> 
-> Fixes: 4b45efe85263 ("mfd: Add support for Intel Sunrisepoint LPSS devices")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
->  drivers/mfd/intel-lpss-acpi.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/mfd/intel-lpss-acpi.c b/drivers/mfd/intel-lpss-acpi.c
-> index a143c8dca2d9..1a6ebd3d9795 100644
-> --- a/drivers/mfd/intel-lpss-acpi.c
-> +++ b/drivers/mfd/intel-lpss-acpi.c
-> @@ -183,6 +183,9 @@ static int intel_lpss_acpi_probe(struct platform_device *pdev)
->  		return -ENOMEM;
+Tangent: it's annoying that pcie-mediatek.c and pcie-mediatek-gen3.c
+use identical "mtk_pcie_suspend_noirq()" names.  That makes browsing
+harder than it needs to be.  But I see that you refer to
+mediatek-gen3.
+
+> +++ b/drivers/pci/controller/pcie-mediatek-gen3.c
+> @@ -963,8 +963,6 @@ static void mtk_pcie_irq_save(struct mtk_gen3_pcie *pcie)
+>  {
+>  	int i;
 >  
->  	info->mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	if (!info->mem)
-> +		return -ENOMEM;
-
-This does not mean we're out of memory.
-
-Please use either -EINVAL or -ENODEV.
-
-> +
->  	info->irq = platform_get_irq(pdev, 0);
+> -	raw_spin_lock(&pcie->irq_lock);
+> -
+>  	pcie->saved_irq_state = readl_relaxed(pcie->base + PCIE_INT_ENABLE_REG);
 >  
->  	ret = intel_lpss_probe(&pdev->dev, info);
-> -- 
-> 2.25.1
-> 
+>  	for (i = 0; i < PCIE_MSI_SET_NUM; i++) {
+> @@ -973,16 +971,12 @@ static void mtk_pcie_irq_save(struct mtk_gen3_pcie *pcie)
+>  		msi_set->saved_irq_state = readl_relaxed(msi_set->base +
+>  					   PCIE_MSI_SET_ENABLE_OFFSET);
+>  	}
+> -
+> -	raw_spin_unlock(&pcie->irq_lock);
+>  }
 
--- 
-Lee Jones [李琼斯]
+Jianjun added mtk_pcie_irq_save() and mtk_pcie_irq_restore() with
+d537dc125f07 ("PCI: mediatek-gen3: Add system PM support").  
+
+I suggest looking at other drivers and structuring mediatek-gen3
+similarly, including using similar function names.  No other drivers
+have a .*_pcie_irq_save() function.  Several have .*_pcie_host_init(),
+and some of those do include some IRQ setup.
+
+Bjorn
