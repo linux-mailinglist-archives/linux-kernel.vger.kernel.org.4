@@ -2,76 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C16907278A8
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:22:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1FD47278D5
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235432AbjFHHWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 03:22:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
+        id S235295AbjFHHaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 03:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235362AbjFHHVl (ORCPT
+        with ESMTP id S235509AbjFHH36 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 03:21:41 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F2691984
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 00:21:15 -0700 (PDT)
-Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com [209.85.128.200])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 475CB3F460
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 07:21:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1686208870;
-        bh=ZsNRIyP+X7XOHybtDnn1u0u6wdb6BoZre2xC4a+Lfzc=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=XOSjU4smbrjehXIwJ9X4lXDpMAZW1PQmtdd/ETLnfqpuUdJEbvO7gC9WgVD9AAvIk
-         niQo0k+dVJD/blfCICLg6h1AqnJIwK34trGCyKmuYWCuja/rElAvfYTZ0E8djiGRqo
-         yNqk7OxjWsujeh1pqdu5GrD4H3YqgmpBhvr8CXjkpN0b/st01xqwVbr51AYVAUHJ8Y
-         MN9pfX3OkvRqglHlCwqja/MNUqiYTaJf2GWXg4V2z0kj801f3JP2aZn0LgzwQ9qVtW
-         uFZpp9dRbcdd9ZhjsPd71iQYMFHndc2rYUm1xwLyuI/K7Aax2R5qaPnwbZ+lYxVaOd
-         0MvpDrj/ZUxKg==
-Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-568960f4596so4879497b3.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 00:21:10 -0700 (PDT)
+        Thu, 8 Jun 2023 03:29:58 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5525C1BEB
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 00:29:55 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-977c8423dccso294490666b.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 00:29:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686209394; x=1688801394;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=a7LBmVzSou3ooRsgmzhSqng8ngpcUaRrdsS89j8WENo=;
+        b=ArpoyfBFSTuI1FJQ5s/RsG40SpVg73ltXPVk7uvfnxVlY5D/a0UFy2tfQHI2dBe+F/
+         +35dHoH6TJL7Yx3PSRHqyDozLblvyOEXp6q+7x82fYPK55AD3+Xh13OdQ/o6aCg82nv8
+         UJo4f976c0NHOSfJH6NdVAFtcdaHqg7LkRWOZreymWi/WaJzvLwEkIOfa4A9E2VI8KhD
+         m52tIEnzOW4QRYb57k2RiB0RWLDXrJBdVErYbJthBTakVhZhSIODRuYdRz0Hnesb4m/G
+         Dgnws9zYOowgOs+GO05vs7JOOWR4YR9fZD9cmJDdK7TeObK/pWDsEF7dO3moPryFk3Lx
+         ZigA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686208868; x=1688800868;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZsNRIyP+X7XOHybtDnn1u0u6wdb6BoZre2xC4a+Lfzc=;
-        b=UDMGH9nGPCVYqHJffSfDUMOGEbF2KSSTwxet4fu5ZMPVHXYxVAAwvb+6id3462TFYW
-         aRrmyARAHuOXY/nWoX5/LvkgXAYVTtHf/6TY3Kj6fLP3o/89unGbWu0ppUzu7Tg3djul
-         WnqTWb8jG5aY4S59+xoX+iLyrWtJXL5EqIkanpHRTj3MJbDIBaeZJTjCB/KXYufA7CoR
-         kaWxnDhdcMs4/qp1S9Q8Lu3mMqnVQAHBxvrH6owgfyGzghW8fBZXD1lOVwePfugTqLA/
-         iTFnu70168MEQpTHZl8jQB6RyQaVmu4kPDQw/O7bni6y8Vhrz+2P6zYje6Zn90RGv5kP
-         GUJQ==
-X-Gm-Message-State: AC+VfDw08HcE3mIuiXA+bQTzhxU4ukcPe8wyKT9JhKcTGsjdpLk8R2FX
-        cMtVhD+rWkJdyZcLEral0P92YTdNBJY3TxSiRsv2tU/cf8St1EO2fAnpVeDN4O0gisyidDYcxS6
-        jV3njIMRoVTkFZ815CJHL9SOhN1/RS6DhfX+QSTVog2h09bd7dawXRyOo1Q==
-X-Received: by 2002:a0d:ca89:0:b0:565:beb0:75b4 with SMTP id m131-20020a0dca89000000b00565beb075b4mr8683762ywd.49.1686208868283;
-        Thu, 08 Jun 2023 00:21:08 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7X2flYyQdAEDNe82m+exDFIM0FQhBAqb+nyjjoepRZiJyrTEM1CairZrf0ohrMfiXcDXJEqvo+y7+2o3p1YDA=
-X-Received: by 2002:a0d:ca89:0:b0:565:beb0:75b4 with SMTP id
- m131-20020a0dca89000000b00565beb075b4mr8683747ywd.49.1686208867965; Thu, 08
- Jun 2023 00:21:07 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686209394; x=1688801394;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a7LBmVzSou3ooRsgmzhSqng8ngpcUaRrdsS89j8WENo=;
+        b=b5WWlbx4gNnS9j6mV66MAGr5PI/DoArvWFHzSFgR1rY68AHzRNQdTYKQS19aZhFuE1
+         18fRBNLFkoK+5Jy68Q3nQmBMOgyBLtXbnanSU2doNk2N5uhCgfo0Gf9HM+rD5obT4MsE
+         NgsKxWI+VF3vutpI5xddbKIT9ht0cYtX9JEGzsIOSHo3mu4XjrMpBP9c0dA80HuJCA1U
+         1Dg/+zI6GsxL3WlvNgG8xNHgDkwxw6RovvgcA4APjAGIl2wARNVQ24rMDUwGjMR742yr
+         AbThGPFAKaFgooiqTQWInXSX0mBQLfUF9MvjC8poGKZLME7QxJHaNStQ3fAjluy7qiAR
+         94mw==
+X-Gm-Message-State: AC+VfDytgyku5CRur6WBgCgCZe6JcENIqNuDRD++i8FO39dBFA/UDrKn
+        wwDv4xfusnXaksZpfD0ymODxO5nF7v8MRzUSARM=
+X-Google-Smtp-Source: ACHHUZ4qzF2hO3OUr64rhyQl8jgmhTqXqnpgiyjt490poBQ+0k99ZOG2KGY0ITN0WSIgqC1lSHfBrA==
+X-Received: by 2002:a17:907:1c14:b0:96f:94f1:b0a5 with SMTP id nc20-20020a1709071c1400b0096f94f1b0a5mr1519974ejc.8.1686208896004;
+        Thu, 08 Jun 2023 00:21:36 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id z16-20020a170906241000b00978886c7cdbsm305528eja.183.2023.06.08.00.21.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jun 2023 00:21:35 -0700 (PDT)
+Message-ID: <b343df1a-dbd8-919d-5bea-36d532ec4103@linaro.org>
+Date:   Thu, 8 Jun 2023 09:21:33 +0200
 MIME-Version: 1.0
-References: <20230607180958.645115-1-aleksandr.mikhalitsyn@canonical.com> <8b22fc1e-595a-b729-dd21-2714f22a28a7@redhat.com>
-In-Reply-To: <8b22fc1e-595a-b729-dd21-2714f22a28a7@redhat.com>
-From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Date:   Thu, 8 Jun 2023 09:20:56 +0200
-Message-ID: <CAEivzxfkinMgLWNc7u=bMw7HFkjZjDTJKtNNZhF7fZB=VuNTeQ@mail.gmail.com>
-Subject: Re: [PATCH v4 00/14] ceph: support idmapped mounts
-To:     Xiubo Li <xiubli@redhat.com>
-Cc:     brauner@kernel.org, stgraber@ubuntu.com,
-        linux-fsdevel@vger.kernel.org, Ilya Dryomov <idryomov@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v3 3/5] phy: realtek: usb: Add driver for the Realtek SoC
+ USB 3.0 PHY
+Content-Language: en-US
+To:     =?UTF-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Ray Chi <raychi@google.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+References: <20230607062500.24669-1-stanley_chang@realtek.com>
+ <20230607062500.24669-3-stanley_chang@realtek.com>
+ <a9a2f3d0-9580-f027-8ec3-ac6e6bed5ed6@linaro.org>
+ <0ac12a13a91d41f0ab3a58b435ccb17a@realtek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <0ac12a13a91d41f0ab3a58b435ccb17a@realtek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,257 +94,301 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 8, 2023 at 5:01=E2=80=AFAM Xiubo Li <xiubli@redhat.com> wrote:
->
-> Hi Alexander,
+On 08/06/2023 08:59, Stanley Chang[昌育德] wrote:
+> Hi Krzysztof,
+> 
+>>> +static void do_rtk_usb3_phy_toggle(struct rtk_usb_phy *rtk_phy, int i,
+>>> +         bool isConnect)
+>>> +{
+>>> +     struct reg_addr *regAddr;
+>>> +     struct phy_data *phy_data;
+>>> +     struct phy_parameter *phy_parameter;
+>>> +     size_t index;
+>>> +
+>>> +     regAddr = &((struct reg_addr *)rtk_phy->reg_addr)[i];
+>>> +     phy_data = &((struct phy_data *)rtk_phy->phy_data)[i];
+>>> +
+>>> +     if (!phy_data) {
+>>> +             dev_err(rtk_phy->dev, "%s phy_data is NULL!\n",
+>>> + __func__);
+>>
+>> ???
+> Sorry, this check is redundant.
+> 
+>>
+>>> +             return;
+>>> +     }
+>>> +
+>>> +     if (!phy_data->do_toggle)
+>>> +             return;
+>>> +
+>>> +     phy_parameter = phy_data->parameter;
+>>> +
+>>> +     index = PHY_ADDR_MAP_ARRAY_INDEX(PHY_ADDR_0x09);
+>>> +
+>>> +     if (index < phy_data->size) {
+>>> +             u8 addr = (phy_parameter + index)->addr;
+>>> +             u16 data = (phy_parameter + index)->data;
+>>> +
+>>> +             if (addr == 0xFF) {
+>>> +                     addr = ARRAY_INDEX_MAP_PHY_ADDR(index);
+>>> +                     data = rtk_usb_phy_read(regAddr, addr);
+>>> +                     (phy_parameter + index)->addr = addr;
+>>> +                     (phy_parameter + index)->data = data;
+>>> +             }
+>>> +             mdelay(1);
+>>> +             dev_info(rtk_phy->dev,
+>>> +                         "%s ########## to toggle PHY addr 0x09
+>> BIT(9)\n",
+>>> +                         __func__);
+>>> +             rtk_usb_phy_write(regAddr, addr, data&(~BIT(9)));
+>>> +             mdelay(1);
+>>> +             rtk_usb_phy_write(regAddr, addr, data);
+>>> +     }
+>>> +     dev_info(rtk_phy->dev, "%s ########## PHY addr 0x1f = 0x%04x\n",
+>>> +                 __func__, rtk_usb_phy_read(regAddr,
+>> PHY_ADDR_0x1F));
+>>
+>> Please drop all simple debug success messages. Linux has already
+>> infrastructure for this.
+>>
+> Okay. I will change the print dev_info to dev_dbg about debug message.
 
-Dear Xiubo,
+No, drop them. This piece of code had already 2 printks for register
+contents! Your driver is overloaded with printks and they are mostly
+useless for the user.
 
->
-> As I mentioned in V2 thread
-> https://www.spinics.net/lists/kernel/msg4810994.html, we should use the
-> 'idmap' for all the requests below, because MDS will do the
-> 'check_access()' for all the requests by using the caller uid/gid,
-> please see
-> https://github.com/ceph/ceph/blob/main/src/mds/Server.cc#L3294-L3310.
->
->
-> Cscope tag: ceph_mdsc_do_request
->     #   line  filename / context / line
->     1    321  fs/ceph/addr.c <<ceph_netfs_issue_op_inline>>
->               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
->     2    443  fs/ceph/dir.c <<ceph_readdir>>
->               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
->     3    838  fs/ceph/dir.c <<ceph_lookup>>
->               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
->     4    933  fs/ceph/dir.c <<ceph_mknod>>
->               err =3D ceph_mdsc_do_request(mdsc, dir, req);
->     5   1045  fs/ceph/dir.c <<ceph_symlink>>
->               err =3D ceph_mdsc_do_request(mdsc, dir, req);
->     6   1120  fs/ceph/dir.c <<ceph_mkdir>>
->               err =3D ceph_mdsc_do_request(mdsc, dir, req);
->     7   1180  fs/ceph/dir.c <<ceph_link>>
->               err =3D ceph_mdsc_do_request(mdsc, dir, req);
->     8   1365  fs/ceph/dir.c <<ceph_unlink>>
->               err =3D ceph_mdsc_do_request(mdsc, dir, req);
->     9   1431  fs/ceph/dir.c <<ceph_rename>>
->               err =3D ceph_mdsc_do_request(mdsc, old_dir, req);
->    10   1927  fs/ceph/dir.c <<ceph_d_revalidate>>
->               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
->    11    154  fs/ceph/export.c <<__lookup_inode>>
->               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
->    12    262  fs/ceph/export.c <<__snapfh_to_dentry>>
->               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
->    13    347  fs/ceph/export.c <<__get_parent>>
->               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
->    14    490  fs/ceph/export.c <<__get_snap_name>>
->               err =3D ceph_mdsc_do_request(fsc->mdsc, NULL, req);
->    15    561  fs/ceph/export.c <<ceph_get_name>>
->               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
->    16    339  fs/ceph/file.c <<ceph_renew_caps>>
->               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
->    17    434  fs/ceph/file.c <<ceph_open>>
->               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
->    18    855  fs/ceph/file.c <<ceph_atomic_open>>
->               err =3D ceph_mdsc_do_request(mdsc, (flags & O_CREAT) ? dir =
-:
-> NULL, req);
->    19   2715  fs/ceph/inode.c <<__ceph_setattr>>
->               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
->    20   2839  fs/ceph/inode.c <<__ceph_do_getattr>>
->               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
->    21   2883  fs/ceph/inode.c <<ceph_do_getvxattr>>
->               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
->    22    126  fs/ceph/ioctl.c <<ceph_ioctl_set_layout>>
->               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
->    23    171  fs/ceph/ioctl.c <<ceph_ioctl_set_layout_policy>>
->               err =3D ceph_mdsc_do_request(mdsc, inode, req);
->    24    216  fs/ceph/locks.c <<ceph_lock_wait_for_completion>>
->               err =3D ceph_mdsc_do_request(mdsc, inode, intr_req);
->    25   1091  fs/ceph/super.c <<open_root_dentry>>
->               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
->    26   1151  fs/ceph/xattr.c <<ceph_sync_setxattr>>
->               err =3D ceph_mdsc_do_request(mdsc, NULL, req);
+> 
+>> ...
+>>
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +static int rtk_usb_phy_init(struct phy *phy) {
+>>> +     struct rtk_usb_phy *rtk_phy = phy_get_drvdata(phy);
+>>> +     int ret = 0;
+>>> +     int i;
+>>> +     unsigned long phy_init_time = jiffies;
+>>> +
+>>> +     if (!rtk_phy) {
+>>> +             pr_err("%s rtk_phy is NULL!\n", __func__);
+>>
+>> What? How is this possible?
+> It should be not necessary. I will remove it.
+> 
+>>> +             return -ENODEV;
+>>> +     }
+>>> +
+>>> +     dev_dbg(rtk_phy->dev, "Init RTK USB 3.0 PHY\n");
+>>> +     for (i = 0; i < rtk_phy->phyN; i++)
+>>> +             ret = do_rtk_usb_phy_init(rtk_phy, i);
+>>> +
+>>> +     dev_info(rtk_phy->dev, "Initialized RTK USB 3.0 PHY (take %dms)\n",
+>>> +                 jiffies_to_msecs(jiffies - phy_init_time));
+>>
+>> Please drop all simple debug success messages. Linux has already
+>> infrastructure for this.
+> 
+> Ok, Thanks.
+> 
+>>> +     return ret;
+>>> +}
+>>> +
+>>> +static int rtk_usb_phy_exit(struct phy *phy) {
+>>> +     struct rtk_usb_phy *rtk_phy = phy_get_drvdata(phy);
+>>> +
+>>> +     if (!rtk_phy) {
+>>> +             pr_err("%s rtk_phy is NULL!\n", __func__);
+>>> +             return -ENODEV;
+>>> +     }
+>>> +
+>>> +     dev_dbg(rtk_phy->dev, "Exit RTK USB 3.0 PHY\n");
+>>
+>> Please drop all simple debug success messages. Linux has already
+>> infrastructure for this.
+> 
+> Can I keep log for dev_dbg?
 
-Sure, I remember about this point and as far as I mentioned earlier
-https://lore.kernel.org/all/20230519134420.2d04e5f70aad15679ab566fc@canonic=
-al.com/
-It is a discussional thing, because not all the inode_operations
-allows us to get a mount idmapping.
+Of course not. This was dev_dbg and I commented on this. This is not a
+good debug, we do not print anything on function entrance and exit.
+ftrace() is for this.
 
-For instance,
-lookup, get_link, get_inode_acl, readlink, link, unlink, rmdir,
-listxattr, fiemap, update_time, fileattr_get
-inode_operations are not provided with an idmapping.
+> 
+>>> +static void rtk_usb_phy_toggle(struct usb_phy *usb3_phy, bool
+>>> +isConnect, int port) {
+>>> +     int index = port;
+>>> +     struct rtk_usb_phy *rtk_phy = NULL;
+>>> +
+>>> +     if (usb3_phy != NULL && usb3_phy->dev != NULL)
+>>> +             rtk_phy = dev_get_drvdata(usb3_phy->dev);
+>>> +
+>>> +     if (rtk_phy == NULL) {
+>>> +             pr_err("%s ERROR! NO this device\n", __func__);
+>>
+>> Your error messages are not helping. No need to shout, no need to handle
+>> some non-existing cases. If this is real case, you have broken driver. I actually
+>> suspect that.
+>>
+>> How can you interface with a driver where there is no device?
+> 
+> OK, I know this is not good programming practice, I will improve this question.
+> 
+>>> +             return;
+>>> +     }
+>>> +
+>>> +     if (index > rtk_phy->phyN) {
+>>> +             pr_err("%s %d ERROR! port=%d > phyN=%d\n",
+>>> +                         __func__, __LINE__, index, rtk_phy->phyN);
+>>> +             return;
+>>> +     }
+>>> +
+>>> +     do_rtk_usb3_phy_toggle(rtk_phy, index, isConnect); }
+>>> +
+>>> +static int rtk_usb_phy_notify_port_status(struct usb_phy *x, int port,
+>>> +         u16 portstatus, u16 portchange) {
+>>> +     bool isConnect = false;
+>>
+>> This is not C++. Don't use camelcase. See Coding style document.
+> 
+> I will revised for this style.
+> 
+>>> +
+>>> +     pr_debug("%s port=%d portstatus=0x%x portchange=0x%x\n",
+>>> +                 __func__, port, (int)portstatus, (int)portchange);
+>>> +     if (portstatus & USB_PORT_STAT_CONNECTION)
+>>> +             isConnect = true;
+>>> +
+>>
+>> ...
+>>
+>>> +
+>>> +static int rtk_usb3_set_parameter_show(struct seq_file *s, void
+>>> +*unused) {
+>>> +     struct rtk_usb_phy *rtk_phy = s->private;
+>>> +     const struct file *file = s->file;
+>>> +     const char *file_name = file_dentry(file)->d_iname;
+>>> +     struct dentry *p_dentry = file_dentry(file)->d_parent;
+>>> +     const char *phy_dir_name = p_dentry->d_iname;
+>>> +     int ret, index;
+>>> +     struct phy_data *phy_data = NULL;
+>>> +
+>>> +     for (index = 0; index < rtk_phy->phyN; index++) {
+>>> +             size_t sz = 30;
+>>> +             char name[30] = {0};
+>>> +
+>>> +             snprintf(name, sz, "phy%d", index);
+>>> +             if (strncmp(name, phy_dir_name, strlen(name)) == 0) {
+>>> +                     phy_data = &((struct phy_data
+>> *)rtk_phy->phy_data)[index];
+>>> +                     break;
+>>> +             }
+>>> +     }
+>>> +     if (!phy_data) {
+>>> +             dev_err(rtk_phy->dev,
+>>> +                                 "%s: No phy_data for %s/%s\n",
+>>> +                                 __func__, phy_dir_name,
+>> file_name);
+>>
+>> Mess wrapping/indentation. Actually everywhere in the file...
+> 
+> I will improve this.
+> 
+>>> +static int rtk_usb3_set_parameter_open(struct inode *inode, struct
+>>> +file *file) {
+>>> +     return single_open(file, rtk_usb3_set_parameter_show,
+>>> +inode->i_private); }
+>>> +
+>>> +static ssize_t rtk_usb3_set_parameter_write(struct file *file,
+>>> +             const char __user *ubuf, size_t count, loff_t *ppos) {
+>>> +     const char *file_name = file_dentry(file)->d_iname;
+>>> +     struct dentry *p_dentry = file_dentry(file)->d_parent;
+>>> +     const char *phy_dir_name = p_dentry->d_iname;
+>>> +     struct seq_file         *s = file->private_data;
+>>> +     struct rtk_usb_phy              *rtk_phy = s->private;
+>>> +     struct reg_addr *regAddr = NULL;
+>>> +     struct phy_data *phy_data = NULL;
+>>> +     int ret = 0;
+>>> +     char buffer[40] = {0};
+>>> +     int index;
+>>> +
+>>> +     if (copy_from_user(&buffer, ubuf,
+>>> +                 min_t(size_t, sizeof(buffer) - 1, count)))
+>>> +             return -EFAULT;
+>>> +
+>>> +     for (index = 0; index < rtk_phy->phyN; index++) {
+>>> +             size_t sz = 30;
+>>> +             char name[30] = {0};
+>>> +
+>>> +             snprintf(name, sz, "phy%d", index);
+>>> +             if (strncmp(name, phy_dir_name, strlen(name)) == 0) {
+>>> +                     regAddr = &((struct reg_addr
+>> *)rtk_phy->reg_addr)[index];
+>>> +                     phy_data = &((struct phy_data
+>> *)rtk_phy->phy_data)[index];
+>>> +                     break;
+>>
+>>
+>> Where is the ABI documentation for user interface?
+> 
+> Do debugfs nodes need ABI documentation?
+> Is there a reference?
+>>
+>>> +
+>>> +static inline void create_debug_files(struct rtk_usb_phy *rtk_phy) {
+>>> +     struct dentry *phy_debug_root = NULL;
+>>> +     struct dentry *set_parameter_dir = NULL;
+>>> +
+>>> +     phy_debug_root = create_phy_debug_root();
+>>> +
+>>> +     if (!phy_debug_root) {
+>>> +             dev_err(rtk_phy->dev, "%s Error phy_debug_root is NULL",
+>>> +                         __func__);
+>>> +             return;
+>>> +     }
+>>> +     rtk_phy->debug_dir = debugfs_create_dir(dev_name(rtk_phy->dev),
+>>> +                 phy_debug_root);
+>>> +     if (!rtk_phy->debug_dir) {
+>>> +             dev_err(rtk_phy->dev, "%s Error debug_dir is NULL",
+>>> + __func__);
+>>
+>> Are you sure you run checkpatch on this? Error messages on debugfs are
+>> almost always incorrect.
+> 
+> Yes, I have run checkpatch for patches. 
+> Why the message is incorrect?
 
-atomic_open also lacks the mnt_idmap argument, but we have a struct
-file so we can get an idmapping through it.
+Because debugfs failures should not cause any error prints. It's debug,
+not important.
 
-As far as I can see from the code:
-https://raw.githubusercontent.com/ceph/ceph/main/src/mds/Server.cc
-We have Server::check_access calls for all inode_operations, including
-the lookup.
+Do you see anywhere error messages?
 
-It means that with the current VFS we are not able to support MDS
-UID/GID-based path restriction with idmapped mounts.
-But we can return to it later if someone really wants it.
+Entire debugfs handling code should be silent and even skip all error
+checking, as most API is ready for handling previous errors, I think.
 
-If I understand your idea right, you want me to set req->r_mnt_idmap
-to an actual idmapping everywhere, where it is possible,
-and ignore inode_operations where we have no idmapping passed?
+> 
+>>> +static int get_phy_parameter(struct rtk_usb_phy *rtk_phy,
+>>> +         struct device_node *sub_node) {
+>>> +     struct device *dev = rtk_phy->dev;
+>>> +     struct reg_addr *addr;
+>>> +     struct phy_data *phy_data;
+>>> +     int ret = 0;
+>>> +     int index;
+>>> +
+>>> +     if (of_property_read_u32(sub_node, "reg", &index)) {
+>>> +             dev_err(dev, "sub_node without reg\n");
+>>> +             return -EINVAL;
+>>> +     }
+>>> +
+>>> +     dev_dbg(dev, "sub_node index=%d\n", index);
+>>
+>> Please drop all simple debug success messages. Linux has already
+>> infrastructure for this.
+> 
+> Can I keep log for dev_dbg?
 
-Christian's approach was more conservative here, his idea was to pass
-an idmapping only to the operations that are creating
-some nodes on the filesystem, but pass a "nop_mnt_idmap" to everyone else.
+No, this was dev_dbg and I commented on this to remove it. Keep only
+useful debug messages, not hundreds of them in every place.
 
-So, I'll try to set up MDS UID/GID-based path restriction on my local
-environment and reproduce the issue with it,
-but as I mentioned earlier we can't support it right now anyway. But
-as we already have an idmappings supported for most
-of existing filesystems, having it supported for cephfs would be great
-(even with this limitation about MDS UID/GID-based path restriction),
-because we already have a real world use cases for cephfs idmapped
-mounts and this particular patchset is used by LXD/LXC for more that a
-year.
-We can extend this later, if someone really wants to use this
-combination and once we extend the VFS layer.
+Best regards,
+Krzysztof
 
->
->
-> And also could you squash the similar commit into one ?
-
-Sure, you mean commits that do `req->r_mnt_idmap =3D
-mnt_idmap_get(idmap)`? Will do.
-
-Big thanks for the fast reaction/review on this series, Xiubo!
-
->
-
-Kind regards,
-Alex
-
->
-> Thanks
->
-> - Xiubo
->
->
-> On 6/8/23 02:09, Alexander Mikhalitsyn wrote:
-> > Dear friends,
-> >
-> > This patchset was originally developed by Christian Brauner but I'll co=
-ntinue
-> > to push it forward. Christian allowed me to do that :)
-> >
-> > This feature is already actively used/tested with LXD/LXC project.
-> >
-> > Git tree (based on https://github.com/ceph/ceph-client.git master):
-> > https://github.com/mihalicyn/linux/tree/fs.idmapped.ceph
-> >
-> > In the version 3 I've changed only two commits:
-> > - fs: export mnt_idmap_get/mnt_idmap_put
-> > - ceph: allow idmapped setattr inode op
-> > and added a new one:
-> > - ceph: pass idmap to __ceph_setattr
-> >
-> > In the version 4 I've reworked the ("ceph: stash idmapping in mdsc requ=
-est")
-> > commit. Now we take idmap refcounter just in place where req->r_mnt_idm=
-ap
-> > is filled. It's more safer approach and prevents possible refcounter un=
-derflow
-> > on error paths where __register_request wasn't called but ceph_mdsc_rel=
-ease_request is
-> > called.
-> >
-> > I can confirm that this version passes xfstests.
-> >
-> > Links to previous versions:
-> > v1: https://lore.kernel.org/all/20220104140414.155198-1-brauner@kernel.=
-org/
-> > v2: https://lore.kernel.org/lkml/20230524153316.476973-1-aleksandr.mikh=
-alitsyn@canonical.com/
-> > v3: https://lore.kernel.org/lkml/20230607152038.469739-1-aleksandr.mikh=
-alitsyn@canonical.com/#t
-> >
-> > Kind regards,
-> > Alex
-> >
-> > Original description from Christian:
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > This patch series enables cephfs to support idmapped mounts, i.e. the
-> > ability to alter ownership information on a per-mount basis.
-> >
-> > Container managers such as LXD support sharaing data via cephfs between
-> > the host and unprivileged containers and between unprivileged container=
-s.
-> > They may all use different idmappings. Idmapped mounts can be used to
-> > create mounts with the idmapping used for the container (or a different
-> > one specific to the use-case).
-> >
-> > There are in fact more use-cases such as remapping ownership for
-> > mountpoints on the host itself to grant or restrict access to different
-> > users or to make it possible to enforce that programs running as root
-> > will write with a non-zero {g,u}id to disk.
-> >
-> > The patch series is simple overall and few changes are needed to cephfs=
-.
-> > There is one cephfs specific issue that I would like to discuss and
-> > solve which I explain in detail in:
-> >
-> > [PATCH 02/12] ceph: handle idmapped mounts in create_request_message()
-> >
-> > It has to do with how to handle mds serves which have id-based access
-> > restrictions configured. I would ask you to please take a look at the
-> > explanation in the aforementioned patch.
-> >
-> > The patch series passes the vfs and idmapped mount testsuite as part of
-> > xfstests. To run it you will need a config like:
-> >
-> > [ceph]
-> > export FSTYP=3Dceph
-> > export TEST_DIR=3D/mnt/test
-> > export TEST_DEV=3D10.103.182.10:6789:/
-> > export TEST_FS_MOUNT_OPTS=3D"-o name=3Dadmin,secret=3D$password
-> >
-> > and then simply call
-> >
-> > sudo ./check -g idmapped
-> >
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >
-> > Alexander Mikhalitsyn (2):
-> >    fs: export mnt_idmap_get/mnt_idmap_put
-> >    ceph: pass idmap to __ceph_setattr
-> >
-> > Christian Brauner (12):
-> >    ceph: stash idmapping in mdsc request
-> >    ceph: handle idmapped mounts in create_request_message()
-> >    ceph: allow idmapped mknod inode op
-> >    ceph: allow idmapped symlink inode op
-> >    ceph: allow idmapped mkdir inode op
-> >    ceph: allow idmapped rename inode op
-> >    ceph: allow idmapped getattr inode op
-> >    ceph: allow idmapped permission inode op
-> >    ceph: allow idmapped setattr inode op
-> >    ceph/acl: allow idmapped set_acl inode op
-> >    ceph/file: allow idmapped atomic_open inode op
-> >    ceph: allow idmapped mounts
-> >
-> >   fs/ceph/acl.c                 |  6 +++---
-> >   fs/ceph/dir.c                 |  4 ++++
-> >   fs/ceph/file.c                | 10 ++++++++--
-> >   fs/ceph/inode.c               | 29 +++++++++++++++++------------
-> >   fs/ceph/mds_client.c          | 27 +++++++++++++++++++++++----
-> >   fs/ceph/mds_client.h          |  1 +
-> >   fs/ceph/super.c               |  2 +-
-> >   fs/ceph/super.h               |  3 ++-
-> >   fs/mnt_idmapping.c            |  2 ++
-> >   include/linux/mnt_idmapping.h |  3 +++
-> >   10 files changed, 64 insertions(+), 23 deletions(-)
-> >
->
