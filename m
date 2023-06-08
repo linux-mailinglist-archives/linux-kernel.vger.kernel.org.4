@@ -2,117 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA61E727A1A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 10:37:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4A19727A1F
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 10:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235483AbjFHIhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 04:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39242 "EHLO
+        id S233158AbjFHIjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 04:39:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233645AbjFHIht (ORCPT
+        with ESMTP id S233839AbjFHIjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 04:37:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4B226B2;
-        Thu,  8 Jun 2023 01:37:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 8 Jun 2023 04:39:22 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23F926B8;
+        Thu,  8 Jun 2023 01:39:20 -0700 (PDT)
+Received: from [192.168.10.48] (unknown [119.152.150.198])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A69864AA9;
-        Thu,  8 Jun 2023 08:37:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3A46C433A1;
-        Thu,  8 Jun 2023 08:37:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686213467;
-        bh=b8w2dww11+jeMQIGk8g14QqcvLwbopMkYC+R8CQKZcI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=le1K4qUjRcurFJR4PvKWFr5yX1wr0bfbQMMQHpCiVNVL/GKFvdUoD3YXlQwh9z2aw
-         a2k/KClut7Rba/NBifCDLFmoNHZoSWst8biJ4nex0gyZrtMuZBwNJ/TI59S6X9Q3SI
-         PD52rYChAEgeGp/WmvngWXiwjouLglPxSMGOkbntnVfwdoRTNiMn8mcN4/PAGxHWnI
-         KKcwuJzJpG2khAypic80LcdVcW7flajlgM1XjpDxzo5fguM5HNdniH7+61plfrq24n
-         PqPJjdnb/NTO64Qyz6G4uavwQec+K3YYwagbM83ZkrAx2q9BgYjVnImFQ0YURyTh1m
-         nzneBZ1G8KChg==
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-4f004cc54f4so465853e87.3;
-        Thu, 08 Jun 2023 01:37:46 -0700 (PDT)
-X-Gm-Message-State: AC+VfDypERVI4+7y/0vomASr5qpZ8QsEXkJY8adAnn52FGKzyXhPLx6b
-        I04oGT/lUYJFRpFEtRzK2lzk3Xjxq/2RqKHZDXw=
-X-Google-Smtp-Source: ACHHUZ5YQ0EtwVOGgeqK+JNVOPM9pQ0uf1Q3nAcBP5h+ykVX8Gku7lWhb/0mJ5g2QMceulFBf3GJScF5rZVdvgUjp9g=
-X-Received: by 2002:a05:651c:113:b0:2b1:eab1:e083 with SMTP id
- a19-20020a05651c011300b002b1eab1e083mr3391281ljb.16.1686213465018; Thu, 08
- Jun 2023 01:37:45 -0700 (PDT)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1F54F6605733;
+        Thu,  8 Jun 2023 09:39:15 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686213559;
+        bh=PRBO+SGpGVNVyEZwkfuIfWdn28x8QrprhmLGoj83lEI=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=knWIgt8GxFoafW6fQ7Gl2m9yA19hEzmpTCohAkDxUxO3y4WLgFJok0+mq5Vj5hpkT
+         Zz2M5hRNHViLxADau0oS5yIiFUtDREYVj+w6KTHJMWyPw6sB2KG4c0gWpi+551QzWU
+         /fh5Zlgpkak976cefjfBisBG84cXboeSJtp32WppNWYfBBRMy7irzJsZfb521evnl4
+         5655kYkjZBu2Mh9X2GhtxItA8AsB6QLA9uoMqjkaxT44XKsLvXqZd8U2qUflTw7nQo
+         vbh7hEzc1vjwnccGviigLcrl0aczTRwpKqBTYGckmZqzf3hREvD7SrjWr9KejJpitc
+         g7mZOGyHDvM4w==
+Message-ID: <11b94ce7-d7e3-1935-307b-5a0a0f32739f@collabora.com>
+Date:   Thu, 8 Jun 2023 13:39:11 +0500
 MIME-Version: 1.0
-References: <20230607053940.39078-10-bagasdotme@gmail.com> <20230607053940.39078-11-bagasdotme@gmail.com>
- <CAC1cPGxD6xOLksyMHCcreFyEv5Yoo50LY=xM9BmOEP=oECoNww@mail.gmail.com>
-In-Reply-To: <CAC1cPGxD6xOLksyMHCcreFyEv5Yoo50LY=xM9BmOEP=oECoNww@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 8 Jun 2023 10:37:33 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGnzphm5Wyz7RfZdWVxPnEihR0NGy5mFs4neQM+7EfEGQ@mail.gmail.com>
-Message-ID: <CAMj1kXGnzphm5Wyz7RfZdWVxPnEihR0NGy5mFs4neQM+7EfEGQ@mail.gmail.com>
-Subject: Re: [PATCH 1/8] crypto: Convert dual BSD 3-Clause/GPL 2.0 boilerplate
- to SPDX identifier
-To:     Richard Fontana <rfontana@redhat.com>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Franziska Naepelt <franziska.naepelt@googlemail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux SPDX Licenses <linux-spdx@vger.kernel.org>,
-        Linux Kernel Janitors <kernel-janitors@vger.kernel.org>,
-        Linux Crypto <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Alexander Kjeldaas <astor@fast.no>,
-        Herbert Valerio Riedel <hvr@hvrlab.org>,
-        Kyle McMartin <kyle@debian.org>,
-        "Adam J . Richter" <adam@yggdrasil.com>,
-        Dr Brian Gladman <brg@gladman.me.uk>,
-        Stephan Mueller <smueller@chronox.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, Peter Xu <peterx@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: selftests: -e error: missing kernel header files. Please run this
+ and try again
+Content-Language: en-US
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org
+References: <CA+G9fYueMV2gFF0sYR4Lf3btcEoxMpOy0_YvpjvS26WFZ2pcBA@mail.gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CA+G9fYueMV2gFF0sYR4Lf3btcEoxMpOy0_YvpjvS26WFZ2pcBA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Jun 2023 at 16:38, Richard Fontana <rfontana@redhat.com> wrote:
->
-> On Wed, Jun 7, 2023 at 1:42=E2=80=AFAM Bagas Sanjaya <bagasdotme@gmail.co=
-m> wrote:
-> >
-> > Replace license boilerplate for dual BSD-3-Clause/GPL 2.0 (only or
-> > later) with corresponding SPDX license identifier.
->
-> This is at least the fourth or fifth time (I'm losing track) where you
-> have incorrectly assumed a particular non-GPL license text matches a
-> particular SPDX identifier without (apparently) checking.
->
+On 6/8/23 1:21 PM, Naresh Kamboju wrote:
+> The make kselftest-install failed on Linux next 20230608.
+> 
+> make --silent --keep-going --jobs=8
+> O=/home/tuxbuild/.cache/tuxmake/builds/1/build
+> INSTALL_PATH=/home/tuxbuild/.cache/tuxmake/builds/1/build/kselftest_install
+> ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- 'HOSTCC=sccache clang'
+> 'CC=sccache clang' LLVM=1 LLVM_IAS=1 kselftest-install
+Around 6-8 months ago, selftests used to build kernel headers from the
+source tree automatically and were using those to build all applications.
+But this behavior got changed where user need to build header manually
+first before building kselftest because auto header build was in-consistent
+in some cases.
 
-What exactly does 'checking' entail here? There is no guidance in
-Documentation/process/license-rules.rst on how to perform this
-comparison.
+So from several months people, who were unaware of this are building
+kselftests with installed kernel headers in their distro. This was creating
+failure for some newer tests for people. They didn't know that selftests
+are supposed to build with kernel headers from source instead from locally
+installed headers in distro. So a patch has been introduced which spits
+error if kernel headers aren't built already:
+https://lore.kernel.org/all/20230606071637.267103-12-jhubbard@nvidia.com
 
-Also, checkpatch now complains about missing SPDX identifiers, which
-is what triggered this effort. Should it stop doing that?
+To fix things for your case, please build kernel headers by `make headers
+...` and then build kselftests. The error is trying to say the same thing.
 
-> Bagas, I urge that you learn more about the nature of SPDX identifiers
-> before submitting any further patches at least involving replacement
-> of non-GPL notices with SPDX identifiers. For this unprecedented
-> license notice replacement initiative to have any legitimacy it must
-> attempt to apply SPDX identifiers correctly.
->
+> 
+> make[3]: Entering directory '/builds/linux/tools/testing/selftests/alsa'
+> 
+> -e error: missing kernel header files.
+> Please run this and try again:
+> 
+>     cd /builds/linux/tools/testing/selftests/../../..
+>     make headers
+> 
+> make[3]: Leaving directory '/builds/linux/tools/testing/selftests/alsa'
+> make[3]: *** [../lib.mk:77: kernel_header_files] Error 1
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> Links,
+> ===
+> https://storage.tuxsuite.com/public/linaro/lkft/builds/2QsWmEgSFF9iwodTUrWsdopV4Qp/
+> 
+> --
+> Linaro LKFT
+> https://lkft.linaro.org
 
-Since we're in language pedantic mode: it must do more than attempt,
-it must apply them correctly, period.
-
-Arguably, this is an 'attempt to apply SPDX identifiers correctly' on
-Bagas's part, which apparently falls short (and I may be guilty of the
-same for some arch crypto code)
-
-So what is the ambition here: do we just leave the ambiguous ones as-is?
+-- 
+BR,
+Muhammad Usama Anjum
