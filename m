@@ -2,234 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C17AD728BFC
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 01:49:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D160728BFA
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 01:48:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237476AbjFHXs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 19:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59352 "EHLO
+        id S237390AbjFHXsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 19:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjFHXsy (ORCPT
+        with ESMTP id S229516AbjFHXsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 19:48:54 -0400
+        Thu, 8 Jun 2023 19:48:13 -0400
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4BE2715
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 16:48:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A082715;
+        Thu,  8 Jun 2023 16:48:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686268132; x=1717804132;
-  h=date:from:to:cc:subject:message-id;
-  bh=Vhg0/ILlINgffGOCpEq28IGl/J4iK5JB8UDjPg3i7fI=;
-  b=EiqcnG3M5lxt6fRgpvLAsEw81P+3ZXK8aOVySKZsS8nV3ANQL006KxLH
-   NftSkGcbErI6USHUMkaZMDvj8U+hyN5dgUbWtOSKnF2zPXH4upLulhpds
-   Fwm42TWBIW/YxjTEtROqXQUolOL5My30ZqLAMtMnbNPfzdDEow6Z6/T1z
-   iqQ2sr3opRydHwPXbO5k5nCjfYnuRr+zzVRTeB47pbUL5/MRXG4x+7bUG
-   UQzAk7oT+0Ub3tsRZrXOXpJ6M2Igf48ly//gs4855hFgb+X0Mgti6CcJE
-   JeZuZybN6ceNs8zmL8nW3ASPQJYG2GkJEKJ65/wzipLcqH7cPFt6+IpI3
+  t=1686268091; x=1717804091;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=SS3tGqT2jxeKbJCIIXoxiUIC7TstFYV4q/LJUZl+Zgw=;
+  b=RX4tdVd9hJbAzO/yM35mc1WLeLpLoLiJwFdSZYpbPLhzjUFWq7+wxzKr
+   aPrFRNJ4Ta6+kM4tfk29oWujBUT7f1NmExuDyDsQYl+xmsSnN+5OOJs2U
+   GbAOpK/KJLPB+wF/iN/zy/IudB2ff9rHFlHZOKMsxHs5CEdWF1MCk3iEd
+   PsuAKzroRCNeyKlr60rkTA9rDv5PuBa0CE2yR6ZyEDPunY2YLSbmWHdNc
+   NJsgHxUslXkRtYPtKDTz+FrrRDujiyU/7H+6Hi/hWBbh1cEdu0Dd/0GCj
+   VpBaQH2O2nuqNc2OvvqjFEHkQhA+kLUxRelY1tv21k62SATM8zJm63bMk
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="342139881"
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="342139749"
 X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
-   d="scan'208";a="342139881"
+   d="scan'208";a="342139749"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 16:48:50 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 16:48:10 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="713290391"
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="713290349"
 X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
-   d="scan'208";a="713290391"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 08 Jun 2023 16:48:48 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q7PN2-0008Mc-0i;
-        Thu, 08 Jun 2023 23:48:48 +0000
-Date:   Fri, 09 Jun 2023 07:47:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:testing/fam01-next20230608] BUILD SUCCESS WITH
- WARNING 22036d64a3a8a2358891a284b0e6b5fdbaecab73
-Message-ID: <202306090737.vtRhCFDN-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+   d="scan'208";a="713290349"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by fmsmga007.fm.intel.com with ESMTP; 08 Jun 2023 16:48:10 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 8 Jun 2023 16:48:09 -0700
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 8 Jun 2023 16:48:09 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Thu, 8 Jun 2023 16:48:09 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.107)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Thu, 8 Jun 2023 16:48:09 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VA6iEOeqUu7P3kAUs0/nWuneugNEcbKMpAh7Vxt3wqaYYbmXx09hEL0Foul66fR21GEF4yjSwJg9NI6RD075Yc8s2oPiZmZ401sqqI7MiFrUF2cCMLsTdLkzl4sgNmQD7X6gkkNq1Lcd/IcV/IiIZK9hQxCIiLtNHmx0Tc1+uOFJ+Y8tRe4Ckb4A/KU7W7jvPV+oSbprHkW4qlRNTdeBXIjeKTlYFKxO+RXZ8V6/IgPRsubDTRCWRZUFVkjN3tPwI90Y68VCxokskbTerZrU7HnWAcUTf8g2fgexDOBKm5r9FghbB0EGsM6S3ES8DIsk2f4KAcVbBPGtLDjrcPBVnQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GUs/9gOgdngwgmzzfOay8HL3WP/yDIjCXuZjMpqq5RM=;
+ b=WRuvlCpigQY5a63xbOPkyHFmu++zffcnbyoi9d9aW7QnaYtXoLh3KHYgC3FKzurCPLkHvWtf9y8R/OX5kcQEyK7maHluSUvaUStOXLnkrYa1r34GKx4BmGiz+M6TDSnTFd8uF7NQGbWsgwLAbiAreZCSOQOcRgpzdJsHpI0PGpr4QLb6zp7yOSieO2wYfeN4OKlaQ/pPuTU9eUqHVZJb6hgTwvTxzXydZOFxbV8fFZelHfmbkbQ1jmAZ8NpVxuLjVTdZjxWeyDRqPMV6yRoq9kfXXxfoLDU4o6G/ouQ8NEPAiPNGAOyR4b6fd/sdSVu3CvpT2sw2mRWB7UwYP/Zklg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH0PR11MB4886.namprd11.prod.outlook.com (2603:10b6:510:33::22)
+ by DS0PR11MB7529.namprd11.prod.outlook.com (2603:10b6:8:141::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.31; Thu, 8 Jun
+ 2023 23:48:03 +0000
+Received: from PH0PR11MB4886.namprd11.prod.outlook.com
+ ([fe80::b3c7:ebf8:7ddc:c5a4]) by PH0PR11MB4886.namprd11.prod.outlook.com
+ ([fe80::b3c7:ebf8:7ddc:c5a4%6]) with mapi id 15.20.6455.030; Thu, 8 Jun 2023
+ 23:48:00 +0000
+Message-ID: <b6084daf-990d-9ec2-4fc3-dd95fb25eb72@intel.com>
+Date:   Thu, 8 Jun 2023 16:47:58 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [net PATCH 1/2] octeontx2-af: fixed resource availability check
+To:     Naveen Mamindlapalli <naveenm@marvell.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <sgoutham@marvell.com>
+CC:     Satha Rao <skoteshwar@marvell.com>
+References: <20230608114201.31112-1-naveenm@marvell.com>
+ <20230608114201.31112-2-naveenm@marvell.com>
+Content-Language: en-US
+From:   "Samudrala, Sridhar" <sridhar.samudrala@intel.com>
+In-Reply-To: <20230608114201.31112-2-naveenm@marvell.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR13CA0021.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c0::26) To PH0PR11MB4886.namprd11.prod.outlook.com
+ (2603:10b6:510:33::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR11MB4886:EE_|DS0PR11MB7529:EE_
+X-MS-Office365-Filtering-Correlation-Id: 37b800d9-6171-4984-4e42-08db687acacf
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fr0d2fj62d7t8MOA4ng6quJD2R1wC1WAWQ/3qqhTWcNyuEb4/mlTb6togvSkV37w9lvpF+ejiAp3d/wFyJU/sJ4iZ4UTAkwTQTSEC4+0uOsLRGGySAh00dSgHEvsFRykK7kRFhxUTGpecpciMczZ0yyZSYyZNIOWgVQstl7DQ4q19sTrsnneOk3672JzRvMBDLYW0NSzwTFGZU8tSJ8ffNinReNxeJTrgvYyVFk+r55GTiwL1X3UxogL3XFvBwrKFwBqRZPO8Hj9AmF/8iaULAN7GboV80EALajowKLmEr5O+slrrl0m0DFVtzRPSb1/pvNS6vF4A7RW5+MgWmOI3vJ3a9STp5PjBKPDel8/JrFcPnuzeLjTwrzkALhUc9Ytz7Kggmm567sPp1O8y7g5WT1TaPoVqg2TCjbCF+f62ta9M1kDc4gCt5GFZztVlNXlZMrL3KQanA8kw3/RM/lXKHl/w4LBgIE7JdbJaXQ28+sjdwQxYZ06rpdQ6S+4AEaKqOTTWS6mVkNsMeQM3UfAs/HwUCb8BE+Zf1rprB8wQruRjV8MO3VtWgGu1xYPh3+B6u0Rv2sTXpm7FxcgBj41QJXN0bcks+PYWGdqiMr38/FykiHwZRBojKNupB5ZTqixsbQINPYdFzDX1Zw7Da6nZw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB4886.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(346002)(136003)(396003)(39860400002)(366004)(451199021)(6512007)(6506007)(53546011)(36756003)(478600001)(186003)(26005)(6486002)(316002)(8936002)(41300700001)(82960400001)(86362001)(8676002)(31686004)(31696002)(38100700002)(83380400001)(2616005)(2906002)(5660300002)(66476007)(66946007)(66556008)(4326008)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?T2tOU040dGpVbXZFOGtmdHFhbGNGR2JoRkp1N2p6WHRPMXJCUzlCN0xhNnJl?=
+ =?utf-8?B?cDl1QXd1Rzk1eno5Z1RrWURpcGk4c1U4R2R6UmcyVjJRYVkvSS9kOTcwVU5s?=
+ =?utf-8?B?dUl3aEpqTms1bnlBRjVUQVE2RlM0MVN2cE5YWDB1WDV3eDAzeGJjUmpxamZD?=
+ =?utf-8?B?VmhrZHVDSDkrbXArWnBPNmZlOEI2ZzRjOG5TZmEwczhtRWwvekZCNndNNUtl?=
+ =?utf-8?B?Yk0xa3FJSkxsY0h6MVRxSDh5RFFKeG0vby9ia1NuNGVMeXJ3bU5sMjY3Q0tF?=
+ =?utf-8?B?S3cyQURVK041UTJ4UGdXZHdVR3lkNHZtcHRPdlpQT20xbEJvSVFoS0E0SnE5?=
+ =?utf-8?B?WDJxRmhGdEh4V2NMMURsR1lBNncwQTlvZmUrZzk1WkU2RjVhOGpwTkxva0lr?=
+ =?utf-8?B?UU5aTmNyaVJzbFRzZGpia3ZxcDZlQlBvNE5BaU1RUTVsZDNsVWJhVjNnTENK?=
+ =?utf-8?B?d2pFU2MwQkwya1dpVFRYakE2d1R0bWNjRGdoNExKUUIvVnVpMGsrcGpobkpL?=
+ =?utf-8?B?anJVcHVjQVZFd2RxMGJIcndIenR2Sk5sL0t1UmhNMHdsaURock14SkJLVDdL?=
+ =?utf-8?B?dVU4NHVPaFh2NU1UWTJ5LzdmMDBJaE13bks3cEpJY2gvbHN4Nm1SN1lTM0Ju?=
+ =?utf-8?B?eVpWbDV3ZU1QQVlkMDcwNmZHRU84R1N4d2NaeDB1a2NwVk1oSVpOSXJhTEQ2?=
+ =?utf-8?B?UzV5eDUzYi9WV2ZmUFgwSmhGelU1T1BNa1MzNkFUQ0xjeDJnUkNVS3h5Nys4?=
+ =?utf-8?B?YjBFd0hUa0lqblR1T1gwMzhiR2tUL3lmbjZ5VllBcDcwOGU1NlBJTW5GUS9F?=
+ =?utf-8?B?QlYxQnE4cmVhbjNLdmhmd3k5YzNCWVpSV1M2SDl0THJOQWdqUTZSOEovK3lU?=
+ =?utf-8?B?VHF3dXNpaDAzMmkxbVVJNXNFWFdVRTJZU0c2OE9DanFjVzMvNzlBR3MvNVVU?=
+ =?utf-8?B?SDlnU0hEUldzbTFkZlNIMklTUUJHRzdyWFFRc2lyWWtycVp2OGRVNXlJbVNy?=
+ =?utf-8?B?bENWTTVmRXlUOWJQOWJGNEl3L2hTczFSYXVrU2RHWVpvMmdFMmVtSE9OUE9Q?=
+ =?utf-8?B?THlUZmpYRzB0N1FtZTdoUmJBdENaSVVMckh5VG44eEhlSGRSc1NWNGh0dFlZ?=
+ =?utf-8?B?WUpXK3llRnJjZWZ6SlF5eVBQOEhnSVFCdzVWN2xBaGJpUDY0K2U5dzNWcEN5?=
+ =?utf-8?B?R1R3aHlNYTdRdWxsVmJxbHZpM0NwdGlEeTdvRTQrckhwMldBNU0wTVpvV25I?=
+ =?utf-8?B?VGJ5aStLNVYyTWVIV2t0VXVHQ2NrL1ZKd2VSUktwUXV4ZWptczl0aGhGNlhk?=
+ =?utf-8?B?a3UyVFVQUm4zbXc1YjdBcnhmQmZna2dJNUNrcXM2R3NCcjIxUVNXUjhPRXRw?=
+ =?utf-8?B?ODFHd0RiN0VaWmZtN01DUFBialFZWWw2dnVSS1JpajF3cEhCQnJqSGZGdXJl?=
+ =?utf-8?B?aEwyVjFDTE5SckUyR1Z5blRnUTZSeFNVYzhTaVFBdndyekIySFBpUHptd29q?=
+ =?utf-8?B?UXlkTXhmdkduT2xENzVrVUpiY0hoa09za2dOZVhCMTdCY0Q1V3hpL1FXVW4y?=
+ =?utf-8?B?SU9pUnQzZWMwek91WGJKdU5FYTVablhmQUNEUGY1a3liNFdDQmVXYlJxVm5C?=
+ =?utf-8?B?Mi84dGVxV2YwRlptdGRhcVQ2WlY4SEcrdVJoUVNEQm1RQWZ3UFdKNnUxalNs?=
+ =?utf-8?B?TXdEZFNFT3ZQKzJBZXR6bkFNc0dRaFF1eXlZVkNqMzVwVGh1SFBQY3VVbnZx?=
+ =?utf-8?B?NGJ2SWpGT1d5elQ3bWJQU3VqOUZ5cTNMNVVjQ0NreG54ZXlrcElxRUJzV1dy?=
+ =?utf-8?B?MFM0dU02NHJLSUVLbGhwVUN3MkFTTWFMSHFnb3pUWjFuM1M2NnRiNHZDL2Jn?=
+ =?utf-8?B?UVF5ZmxCVHBxdUo2SU55Zm1uYm9acHlvZUVDbzNVNW1pbUkzREhCREJhR002?=
+ =?utf-8?B?ekw4TDlNa3RvTThwNlpHOVY1U3ordEsza3hlWmJCTS9IRVhNd2wzK0FTbFJS?=
+ =?utf-8?B?aFB2YXZ6T2Jwb0hZeUFtVURQSk1UM0JDZzFVbUlGa3h1UWJQeXZBRHVoUjFI?=
+ =?utf-8?B?QUFrc2I1U3BmN0h6WDYyYVFHdE1JTmZrZVhGVWZXdWxyWTMya0lOZzR1YzVu?=
+ =?utf-8?B?VlhYTWdSb3dKU1U2d05CUjVkU05EWlRGNCtzMnRvRXNxcnVvc29MYnVrZXEr?=
+ =?utf-8?B?ZXc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 37b800d9-6171-4984-4e42-08db687acacf
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB4886.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2023 23:48:00.2780
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tqi0QffmqfZZ6pT1+PYQWa1H1dMZ4N1+4Ed60Hcro1HXmCoc1Qk6YtnUBXoHbB97Yh1QzBZ+rRbWyifHDAPJjzpv+KgmBhUK4C03SyiH4T4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7529
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/fam01-next20230608
-branch HEAD: 22036d64a3a8a2358891a284b0e6b5fdbaecab73  ARM: OMAP2+: Fix -Warray-bounds warning _pwrdm_state_switch()
 
-Warning: (recently discovered and may have been fixed)
 
-arch/x86/kvm/ioapic.c:214:33: warning: array subscript 32 is above array bounds of 'union kvm_ioapic_redirect_entry[24]' [-Warray-bounds]
-drivers/hwmon/lm85.c:1110:26: warning: array subscript [0, 31] is outside array bounds of 'struct lm85_autofan[3]' [-Warray-bounds]
-drivers/leds/trigger/ledtrig-netdev.c:190:41: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
-drivers/net/ethernet/mellanox/mlx4/alloc.c:691:47: warning: array subscript -1 is below array bounds of 'long unsigned int *[2]' [-Warray-bounds]
-drivers/net/wireless/ath/ath9k/mac.c:373:22: warning: array subscript 32 is above array bounds of 'struct ath9k_tx_queue_info[10]' [-Warray-bounds]
-drivers/staging/rtl8712/rtl871x_xmit.c:949:40: warning: array subscript 4 is outside array bounds of 'void[160]' [-Warray-bounds]
-drivers/staging/rtl8712/rtl871x_xmit.c:949:40: warning: array subscript 4 is outside array bounds of 'void[256]' [-Warray-bounds]
-drivers/staging/rtl8712/rtl871x_xmit.c:949:40: warning: array subscript 4 is outside array bounds of 'void[272]' [-Warray-bounds]
-drivers/staging/rtl8712/rtl871x_xmit.c:949:40: warning: array subscript 4 is outside array bounds of 'void[320]' [-Warray-bounds]
-drivers/staging/rtl8712/rtl871x_xmit.c:949:40: warning: array subscript 4 is outside array bounds of 'void[448]' [-Warray-bounds]
-fs/smb/client/cifssmb.c:2987:31: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
-kernel/sched/psi.c:832:38: warning: array subscript 32 is above array bounds of 'unsigned int[4]' [-Warray-bounds]
+On 6/8/2023 4:42 AM, Naveen Mamindlapalli wrote:
+> From: Satha Rao <skoteshwar@marvell.com>
+> 
+> txschq_alloc response have two different arrays to store continuous
+> and non-continuous schedulers of each level. Requested count should
+> be checked for each array separately.
+> 
+> Fixes: 5d9b976d4480 ("octeontx2-af: Support fixed transmit scheduler topology")
+> Signed-off-by: Satha Rao <skoteshwar@marvell.com>
+> Signed-off-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
+> Signed-off-by: Naveen Mamindlapalli <naveenm@marvell.com>
 
-Warning ids grouped by kconfigs:
+Reviewed-by: Sridhar Samudrala <sridhar.samudrala@intel.com>
 
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   `-- drivers-staging-rtl8712-rtl871x_xmit.c:warning:array-subscript-is-outside-array-bounds-of-void
-|-- arc-allyesconfig
-|   `-- drivers-staging-rtl8712-rtl871x_xmit.c:warning:array-subscript-is-outside-array-bounds-of-void
-|-- arm-allmodconfig
-|   |-- drivers-hwmon-lm85.c:warning:array-subscript-is-outside-array-bounds-of-struct-lm85_autofan
-|   |-- drivers-leds-trigger-ledtrig-netdev.c:warning:writing-byte-into-a-region-of-size
-|   |-- drivers-net-wireless-ath-ath9k-mac.c:warning:array-subscript-is-above-array-bounds-of-struct-ath9k_tx_queue_info
-|   `-- drivers-staging-rtl8712-rtl871x_xmit.c:warning:array-subscript-is-outside-array-bounds-of-void
-|-- arm-allyesconfig
-|   |-- drivers-hwmon-lm85.c:warning:array-subscript-is-outside-array-bounds-of-struct-lm85_autofan
-|   |-- drivers-leds-trigger-ledtrig-netdev.c:warning:writing-byte-into-a-region-of-size
-|   |-- drivers-net-wireless-ath-ath9k-mac.c:warning:array-subscript-is-above-array-bounds-of-struct-ath9k_tx_queue_info
-|   `-- drivers-staging-rtl8712-rtl871x_xmit.c:warning:array-subscript-is-outside-array-bounds-of-void
-|-- arm64-allyesconfig
-|   |-- drivers-hwmon-lm85.c:warning:array-subscript-is-outside-array-bounds-of-struct-lm85_autofan
-|   |-- drivers-leds-trigger-ledtrig-netdev.c:warning:writing-byte-into-a-region-of-size
-|   |-- drivers-net-wireless-ath-ath9k-mac.c:warning:array-subscript-is-above-array-bounds-of-struct-ath9k_tx_queue_info
-|   `-- drivers-staging-rtl8712-rtl871x_xmit.c:warning:array-subscript-is-outside-array-bounds-of-void
-|-- i386-allyesconfig
-|   |-- drivers-hwmon-lm85.c:warning:array-subscript-is-outside-array-bounds-of-struct-lm85_autofan
-|   |-- drivers-leds-trigger-ledtrig-netdev.c:warning:writing-byte-into-a-region-of-size
-|   |-- drivers-net-ethernet-mellanox-mlx4-alloc.c:warning:array-subscript-is-below-array-bounds-of-long-unsigned-int
-|   |-- drivers-net-wireless-ath-ath9k-mac.c:warning:array-subscript-is-above-array-bounds-of-struct-ath9k_tx_queue_info
-|   |-- drivers-staging-rtl8712-rtl871x_xmit.c:warning:array-subscript-is-outside-array-bounds-of-void
-|   `-- kernel-sched-psi.c:warning:array-subscript-is-above-array-bounds-of-unsigned-int
-|-- m68k-allmodconfig
-|   `-- drivers-staging-rtl8712-rtl871x_xmit.c:warning:array-subscript-is-outside-array-bounds-of-void
-|-- m68k-allyesconfig
-|   `-- drivers-staging-rtl8712-rtl871x_xmit.c:warning:array-subscript-is-outside-array-bounds-of-void
-|-- mips-allmodconfig
-|   |-- drivers-hwmon-lm85.c:warning:array-subscript-is-outside-array-bounds-of-struct-lm85_autofan
-|   |-- drivers-leds-trigger-ledtrig-netdev.c:warning:writing-byte-into-a-region-of-size
-|   |-- drivers-net-wireless-ath-ath9k-mac.c:warning:array-subscript-is-above-array-bounds-of-struct-ath9k_tx_queue_info
-|   `-- drivers-staging-rtl8712-rtl871x_xmit.c:warning:array-subscript-is-outside-array-bounds-of-void
-|-- mips-allyesconfig
-|   |-- drivers-hwmon-lm85.c:warning:array-subscript-is-outside-array-bounds-of-struct-lm85_autofan
-|   |-- drivers-leds-trigger-ledtrig-netdev.c:warning:writing-byte-into-a-region-of-size
-|   |-- drivers-net-wireless-ath-ath9k-mac.c:warning:array-subscript-is-above-array-bounds-of-struct-ath9k_tx_queue_info
-|   `-- drivers-staging-rtl8712-rtl871x_xmit.c:warning:array-subscript-is-outside-array-bounds-of-void
-|-- parisc-allyesconfig
-|   |-- drivers-hwmon-lm85.c:warning:array-subscript-is-outside-array-bounds-of-struct-lm85_autofan
-|   |-- drivers-net-wireless-ath-ath9k-mac.c:warning:array-subscript-is-above-array-bounds-of-struct-ath9k_tx_queue_info
-|   `-- drivers-staging-rtl8712-rtl871x_xmit.c:warning:array-subscript-is-outside-array-bounds-of-void
-|-- powerpc-allmodconfig
-|   |-- drivers-hwmon-lm85.c:warning:array-subscript-is-outside-array-bounds-of-struct-lm85_autofan
-|   |-- drivers-leds-trigger-ledtrig-netdev.c:warning:writing-byte-into-a-region-of-size
-|   |-- drivers-net-wireless-ath-ath9k-mac.c:warning:array-subscript-is-above-array-bounds-of-struct-ath9k_tx_queue_info
-|   `-- drivers-staging-rtl8712-rtl871x_xmit.c:warning:array-subscript-is-outside-array-bounds-of-void
-|-- riscv-allmodconfig
-|   |-- drivers-hwmon-lm85.c:warning:array-subscript-is-outside-array-bounds-of-struct-lm85_autofan
-|   |-- drivers-leds-trigger-ledtrig-netdev.c:warning:writing-byte-into-a-region-of-size
-|   |-- drivers-net-wireless-ath-ath9k-mac.c:warning:array-subscript-is-above-array-bounds-of-struct-ath9k_tx_queue_info
-|   `-- drivers-staging-rtl8712-rtl871x_xmit.c:warning:array-subscript-is-outside-array-bounds-of-void
-|-- riscv-allyesconfig
-|   |-- drivers-hwmon-lm85.c:warning:array-subscript-is-outside-array-bounds-of-struct-lm85_autofan
-|   |-- drivers-leds-trigger-ledtrig-netdev.c:warning:writing-byte-into-a-region-of-size
-|   |-- drivers-net-wireless-ath-ath9k-mac.c:warning:array-subscript-is-above-array-bounds-of-struct-ath9k_tx_queue_info
-|   `-- drivers-staging-rtl8712-rtl871x_xmit.c:warning:array-subscript-is-outside-array-bounds-of-void
-|-- s390-allmodconfig
-|   `-- drivers-leds-trigger-ledtrig-netdev.c:warning:writing-byte-into-a-region-of-size
-|-- s390-allyesconfig
-|   |-- drivers-hwmon-lm85.c:warning:array-subscript-is-outside-array-bounds-of-struct-lm85_autofan
-|   `-- drivers-leds-trigger-ledtrig-netdev.c:warning:writing-byte-into-a-region-of-size
-|-- s390-defconfig
-|   `-- fs-smb-client-cifssmb.c:warning:writing-byte-into-a-region-of-size
-|-- sh-allmodconfig
-|   `-- drivers-staging-rtl8712-rtl871x_xmit.c:warning:array-subscript-is-outside-array-bounds-of-void
-|-- sparc-allyesconfig
-|   `-- drivers-staging-rtl8712-rtl871x_xmit.c:warning:array-subscript-is-outside-array-bounds-of-void
-|-- x86_64-allyesconfig
-|   |-- arch-x86-kvm-ioapic.c:warning:array-subscript-is-above-array-bounds-of-union-kvm_ioapic_redirect_entry
-|   |-- drivers-hwmon-lm85.c:warning:array-subscript-is-outside-array-bounds-of-struct-lm85_autofan
-|   |-- drivers-leds-trigger-ledtrig-netdev.c:warning:writing-byte-into-a-region-of-size
-|   |-- drivers-net-ethernet-mellanox-mlx4-alloc.c:warning:array-subscript-is-below-array-bounds-of-long-unsigned-int
-|   |-- drivers-net-wireless-ath-ath9k-mac.c:warning:array-subscript-is-above-array-bounds-of-struct-ath9k_tx_queue_info
-|   |-- drivers-staging-rtl8712-rtl871x_xmit.c:warning:array-subscript-is-outside-array-bounds-of-void
-|   `-- kernel-sched-psi.c:warning:array-subscript-is-above-array-bounds-of-unsigned-int
-`-- x86_64-rhel-8.3
-    `-- fs-smb-client-cifssmb.c:warning:writing-byte-into-a-region-of-size
-
-elapsed time: 725m
-
-configs tested: 61
-configs skipped: 2
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                            dove_defconfig   clang
-arm                         lpc32xx_defconfig   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-hexagon                             defconfig   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                               defconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-sh                               allmodconfig   gcc  
-sh                          r7780mp_defconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   clang
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a011-20230608   clang
-x86_64               randconfig-a012-20230608   clang
-x86_64               randconfig-a013-20230608   clang
-x86_64               randconfig-a014-20230608   clang
-x86_64               randconfig-a015-20230608   clang
-x86_64               randconfig-a016-20230608   clang
-x86_64               randconfig-x051-20230608   clang
-x86_64               randconfig-x052-20230608   clang
-x86_64               randconfig-x053-20230608   clang
-x86_64               randconfig-x054-20230608   clang
-x86_64               randconfig-x055-20230608   clang
-x86_64               randconfig-x056-20230608   clang
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>   drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c
+> index 26e639e57dae..967370c0a649 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c
+> @@ -1864,7 +1864,8 @@ static int nix_check_txschq_alloc_req(struct rvu *rvu, int lvl, u16 pcifunc,
+>   		free_cnt = rvu_rsrc_free_count(&txsch->schq);
+>   	}
+>   
+> -	if (free_cnt < req_schq || req_schq > MAX_TXSCHQ_PER_FUNC)
+> +	if (free_cnt < req_schq || req->schq[lvl] > MAX_TXSCHQ_PER_FUNC ||
+> +	    req->schq_contig[lvl] > MAX_TXSCHQ_PER_FUNC)
+>   		return NIX_AF_ERR_TLX_ALLOC_FAIL;
+>   
+>   	/* If contiguous queues are needed, check for availability */
