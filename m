@@ -2,111 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B10728B53
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 00:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB898728B59
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 00:54:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237011AbjFHWw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 18:52:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35772 "EHLO
+        id S232859AbjFHWyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 18:54:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236906AbjFHWwz (ORCPT
+        with ESMTP id S229688AbjFHWyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 18:52:55 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317932D78;
-        Thu,  8 Jun 2023 15:52:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686264774; x=1717800774;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=21zWUj9vAPSBXRfUhmtCO8AmWkPwEC5zfq8Lbo30rO8=;
-  b=SJEVaLgOQP0Ix4g7gnqGoEU5vuAZAGdWYncSrdAdnNZjXVC8Bjdf7Zzw
-   vxXKp2Ze281ZiqaXgurvl6O5LfKSeZcgI5wkg7TCG6b9s7fFXYJs+yTyO
-   cnY52jYVuYMfxiB7qR74iKkqpDU3bHw9xrgG0+97griZgvSJfnaQ/HIM3
-   tWdPLdbjyIzRZWEGmj/1r0ENWeTAz/0kWBmkGDmj8tl4oKAWbAPzKQ2cc
-   Sh0ccV/ZgJ5cWIweKSkXEjLVinN87g+rB3FjVp8KOBe38OZS7F2+N/qIV
-   mPdYG6POno6FWWEYFMqCjnH2ymgkmqpXIVEMmYWr3kePXklYQqUmKxMk6
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="342129258"
-X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
-   d="scan'208";a="342129258"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 15:52:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="780071573"
-X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
-   d="scan'208";a="780071573"
-Received: from fgorter-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.59.89])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 15:52:48 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id B87CF104C0F; Fri,  9 Jun 2023 01:52:45 +0300 (+03)
-Date:   Fri, 9 Jun 2023 01:52:45 +0300
-From:   kirill.shutemov@linux.intel.com
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, dave.hansen@intel.com, tony.luck@intel.com,
-        peterz@infradead.org, tglx@linutronix.de, seanjc@google.com,
-        pbonzini@redhat.com, david@redhat.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, ying.huang@intel.com,
-        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
-        sagis@google.com, imammedo@redhat.com
-Subject: Re: [PATCH v11 10/20] x86/virt/tdx: Add placeholder to construct
- TDMRs to cover all TDX memory regions
-Message-ID: <20230608225245.rvygi5zkr2niolsj@box>
-References: <cover.1685887183.git.kai.huang@intel.com>
- <f9148e67e968d7aed4707b67ea9b1aa761401255.1685887183.git.kai.huang@intel.com>
+        Thu, 8 Jun 2023 18:54:09 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879772D63
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 15:54:08 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q7OW0-00013w-5z; Fri, 09 Jun 2023 00:54:00 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q7OVy-0064OJ-Gg; Fri, 09 Jun 2023 00:53:58 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q7OVx-00CRF7-Lm; Fri, 09 Jun 2023 00:53:57 +0200
+Date:   Fri, 9 Jun 2023 00:53:55 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Leo Li <leoyang.li@nxp.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>
+Subject: Re: [PATCH 4/6] bus: fsl-mc: fsl-mc-allocator: Improve error
+ reporting
+Message-ID: <20230608225355.3raozoq3v6teft7q@pengutronix.de>
+References: <20230310224128.2638078-1-u.kleine-koenig@pengutronix.de>
+ <20230310224128.2638078-5-u.kleine-koenig@pengutronix.de>
+ <20230601154101.GA2368233@dev-arch.thelio-3990X>
+ <20230601165945.f7itlyso4rbp2nbb@pengutronix.de>
+ <AM0PR04MB6289C7212F52C7A9DA4951D38F50A@AM0PR04MB6289.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="m53nyjv77nkhb4ke"
 Content-Disposition: inline
-In-Reply-To: <f9148e67e968d7aed4707b67ea9b1aa761401255.1685887183.git.kai.huang@intel.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <AM0PR04MB6289C7212F52C7A9DA4951D38F50A@AM0PR04MB6289.eurprd04.prod.outlook.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 02:27:23AM +1200, Kai Huang wrote:
-> @@ -50,6 +51,8 @@ static DEFINE_MUTEX(tdx_module_lock);
->  /* All TDX-usable memory regions.  Protected by mem_hotplug_lock. */
->  static LIST_HEAD(tdx_memlist);
->  
-> +static struct tdmr_info_list tdx_tdmr_list;
-> +
->  /*
->   * Wrapper of __seamcall() to convert SEAMCALL leaf function error code
->   * to kernel error code.  @seamcall_ret and @out contain the SEAMCALL
 
-The name is misleading. It is not list, it is an array.
+--m53nyjv77nkhb4ke
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+Hello,
 
-...
+On Thu, Jun 08, 2023 at 10:00:13PM +0000, Leo Li wrote:
+> > Hmm, clang seems to be right, and I just confirmed that gcc (arm-linux-
+> > gnueabihf-gcc (Debian 12.2.0-14) 12.2.0) doesn't emit a warning. :-\
+> >=20
+> > My approach would be:
+> >=20
+> > diff --git a/drivers/bus/fsl-mc/fsl-mc-allocator.c b/drivers/bus/fsl-mc=
+/fsl-mc-
+> > allocator.c
+> > index 0ad68099684e..991273f956ce 100644
+> > --- a/drivers/bus/fsl-mc/fsl-mc-allocator.c
+> > +++ b/drivers/bus/fsl-mc/fsl-mc-allocator.c
+> > @@ -103,14 +103,15 @@ static int __must_check
+> > fsl_mc_resource_pool_remove_device(struct fsl_mc_device
+> >  	struct fsl_mc_resource *resource;
+> >  	int error =3D -EINVAL;
+> >=20
+> > +	mc_bus_dev =3D to_fsl_mc_device(mc_dev->dev.parent);
+> > +	mc_bus =3D to_fsl_mc_bus(mc_bus_dev);
+> > +
+> >  	resource =3D mc_dev->resource;
+> >  	if (!resource || resource->data !=3D mc_dev) {
+> >  		dev_err(&mc_bus_dev->dev, "resource mismatch\n");
+> >  		goto out;
+> >  	}
+> >=20
+> > -	mc_bus_dev =3D to_fsl_mc_device(mc_dev->dev.parent);
+> > -	mc_bus =3D to_fsl_mc_bus(mc_bus_dev);
+> >  	res_pool =3D resource->parent_pool;
+> >  	if (res_pool !=3D &mc_bus->resource_pools[resource->type]) {
+> >  		dev_err(&mc_bus_dev->dev, "pool mismatch\n");
+> >=20
+> >=20
+> > Should I prepare a proper patch, or is it possible to squash this chang=
+e into
+> > b3134039c5b3cf879841e3ec84c8cbf7675554ec?
+> >=20
+> > @Li Yang: Please advice.
+>=20
+> This looks fine.  Please send a new patch and I can squash it to the orig=
+inal commit.
 
-> @@ -112,6 +135,15 @@ struct tdx_memblock {
->  	unsigned long end_pfn;
->  };
->  
-> +struct tdmr_info_list {
-> +	void *tdmrs;	/* Flexible array to hold 'tdmr_info's */
-> +	int nr_consumed_tdmrs;	/* How many 'tdmr_info's are in use */
-> +
-> +	/* Metadata for finding target 'tdmr_info' and freeing @tdmrs */
-> +	int tdmr_sz;	/* Size of one 'tdmr_info' */
-> +	int max_tdmrs;	/* How many 'tdmr_info's are allocated */
-> +};
-> +
->  struct tdx_module_output;
->  u64 __seamcall(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
->  	       struct tdx_module_output *out);
+I did send a proper patch already, see=20
 
-Otherwise, looks okay.
+	https://lore.kernel.org/all/20230605112025.80061-1-u.kleine-koenig@pengutr=
+onix.de
 
-Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+You can apply that on top of the broken commit, or if you prefer also
+squash it into the offending commit. Note that in the above thread there
+is another fix for an older commit.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--m53nyjv77nkhb4ke
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSCXAIACgkQj4D7WH0S
+/k5/5wf8DGlJwZYFYcc47hF6t2PxNG6THgaqO/YKmcRqPnXo/9Zag0rBz8iAjVAi
+JGhnAECibEsDkFltWPjG4Uq/eBoMb8bY1zXTahbeglyJyXitkL+L8Btuf7eXs+CB
+jUPeVGZwLpGk/hhKHI95JLCcxKHBbf1L4WJ11hJ9nDm6H3PXqcmXUflE+Tc4BbrQ
+6oFOs1X+nBf7oepALE9odIxmqBapkkQ5hd7zf3JNLatwLxr7omnwT3ZBzrJc+p/e
+kBslHcFSFgALPA1fsRwj/ytqf/QeU0oS7boscRu0r+Rnyo0IV5fO6o5frjZ6Zlk6
+j+MjCEQyIYmcEqrDlZnRRfP9Ll/QpQ==
+=tye5
+-----END PGP SIGNATURE-----
+
+--m53nyjv77nkhb4ke--
