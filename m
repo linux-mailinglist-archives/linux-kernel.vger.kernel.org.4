@@ -2,55 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92691727F54
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:46:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07994727F5B
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236346AbjFHLqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 07:46:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60942 "EHLO
+        id S236023AbjFHLrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 07:47:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235988AbjFHLqU (ORCPT
+        with ESMTP id S236568AbjFHLqt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 07:46:20 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 287092D5D;
-        Thu,  8 Jun 2023 04:45:50 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8Bxb+tuv4FkLYMAAA--.1905S3;
-        Thu, 08 Jun 2023 19:45:50 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxhuRtv4Fk7HUHAA--.23684S3;
-        Thu, 08 Jun 2023 19:45:49 +0800 (CST)
-Subject: Re: [PATCH v12 2/2] spi: loongson: add bus driver for the loongson
- spi controller
-To:     Mark Brown <broonie@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230608072819.25930-1-zhuyinbo@loongson.cn>
- <20230608072819.25930-3-zhuyinbo@loongson.cn>
- <CAHp75VfrPX=VsXMry0Dg_Y4zgt59S=uY=rxCZzv8fBvr_w+i-g@mail.gmail.com>
- <88f19398-385e-440c-83e9-ce51ea60cc97@sirena.org.uk>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <fa6d546f-ce92-1fe9-5400-0cb8bccf8ee5@loongson.cn>
-Date:   Thu, 8 Jun 2023 19:45:49 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Thu, 8 Jun 2023 07:46:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F832D78
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 04:46:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F316164CCF
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 11:46:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEA8FC433D2;
+        Thu,  8 Jun 2023 11:46:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686224778;
+        bh=+0dyr4lC27Y7mQZWAwyeDXZTOlrPw8hFLVixUSBYIdQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hzd7Pq6Rxcm3HodDZIL5xtHYGJHt3PX4Vzwt9O1h4ec7cq+hkTdL9CrQCHtptvgz9
+         +W9EQtdfmshTN+m4MAl/WHRZ/QT+2iRAdPX208TLO2Sywfg2mWIqDlIiLMuH8gMImx
+         3mr1i1ydxPI0EkmAMSO/gjlHbYhTbZw6Meesinhy83qCADry6hsiiOVP+CIuy2g3X6
+         cb2FDOarlFB57ibZ0gHYim0/sWNyFYyyNko4PyfwRGoatBYviGSEHc41O+QqBnHg4q
+         PL8oMF74tw8USh43AB5pDKdAahtV+jvE5dQmy7oV96/wava/afxafXzxouPKwugyP2
+         V95e2slZPoimg==
+Date:   Thu, 8 Jun 2023 13:46:13 +0200
+From:   Simon Horman <horms@kernel.org>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] tools: ynl: Remove duplicate include
+Message-ID: <ZIG/hX09UKccKFO7@kernel.org>
+References: <20230608093036.96539-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-In-Reply-To: <88f19398-385e-440c-83e9-ce51ea60cc97@sirena.org.uk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxhuRtv4Fk7HUHAA--.23684S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
-        nUUI43ZEXa7xR_UUUUUUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230608093036.96539-1-jiapeng.chong@linux.alibaba.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,23 +57,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2023/6/8 下午6:29, Mark Brown 写道:
-> On Thu, Jun 08, 2023 at 01:15:39PM +0300, Andy Shevchenko wrote:
->> On Thu, Jun 8, 2023 at 10:28 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
->>>
->>> This bus driver supports the Loongson SPI hardware controller in the
->>> Loongson platforms and supports to use DTS and PCI framework to
+On Thu, Jun 08, 2023 at 05:30:36PM +0800, Jiapeng Chong wrote:
+> ./tools/net/ynl/generated/netdev-user.c: stdlib.h is included more than once.
 > 
-> Please delete unneeded context from mails when replying.  Doing this
-> makes it much easier to find your reply in the message, helping ensure
-> it won't be missed by people scrolling through the irrelevant quoted
-> material.
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=5466
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>  tools/net/ynl/generated/netdev-user.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/tools/net/ynl/generated/netdev-user.c b/tools/net/ynl/generated/netdev-user.c
+> index aea5c7cc8ead..1883a658180b 100644
+> --- a/tools/net/ynl/generated/netdev-user.c
+> +++ b/tools/net/ynl/generated/netdev-user.c
+> @@ -8,7 +8,6 @@
+>  #include "ynl.h"
+>  #include <linux/netdev.h>
+>  
+> -#include <stdlib.h>
+>  #include <stdio.h>
+>  #include <string.h>
+>  #include <libmnl/libmnl.h>
 
+This duplicates:
 
-okay, I got it.
+- [PATCH -next] tools: ynl: Remove duplicated include in handshake-user.c
+  https://lore.kernel.org/all/20230608083148.5514-1-yang.lee@linux.alibaba.com/
 
-Thanks,
-Yinbo
+So lets focus on that one.
+
+In all three very similar patches were sent in a short space of time.
+It's better not to do that.
+
+-- 
+pw-bot: reject
+
 
