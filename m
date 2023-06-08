@@ -2,75 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A19A4727D3F
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D94B0727D46
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:52:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236197AbjFHKw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 06:52:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56080 "EHLO
+        id S236186AbjFHKwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 06:52:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235116AbjFHKwE (ORCPT
+        with ESMTP id S235252AbjFHKw1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 06:52:04 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A5230F6
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 03:51:36 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id 5614622812f47-39a3f2668d5so323502b6e.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 03:51:36 -0700 (PDT)
+        Thu, 8 Jun 2023 06:52:27 -0400
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440822D42
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 03:52:06 -0700 (PDT)
+Received: by mail-vk1-xa2d.google.com with SMTP id 71dfb90a1353d-45ee86a16caso144844e0c.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 03:52:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shopee.com; s=shopee.com; t=1686221494; x=1688813494;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1686221525; x=1688813525;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ps3xEBUlTo7f8loMCsGDyMpKyduVCzzLK5zLOAo2FgA=;
-        b=Kag095czxCEU7vOdxKYZ/d98TyXJFonRNM16ghzk2PL20EnQiixiPr/iWa2l47tliV
-         XkK2Rb5wLA9XE+C70klonvxLrh1G87LUxWiGl/fVQBaXJaRuSMDXdDyvDNhk0lwtZZYR
-         UcO8IQH2bctkoF24qDUkRYolVPAAuiqnEu6h2El5B+9dr0rlHZiB9AnM8CjfC6ELmr2Z
-         AhqLj1MbQEmyJjq4L4Vy0nISNYXu8gf/9pEWSFFOZZYA5J+qLzDmXijxrwX6dRqTOc1v
-         4R9tw2hDnepnF0pRQqSW4aHVn2Z58L3HNVhU/OyC+xhgmDhHKi6AfZhTPuTefdy0TTzA
-         MCQA==
+        bh=t+wKmn+dGFIKb4lUNmkGpLUatoAVJNOyxAKbwg0PNTE=;
+        b=FXX4WlkDxC6e/BwUUoQ9mYR1oXHrRvqnPf4ZcRCqgk7HTbrvPt33x/D1C2YZBA3Plm
+         ZYMrYM9/4IJUKzSHlVl7pr6TLGSRB4oyo0ksF6IXwB3fil1KQLQXFtEwRWPHjHfqj6pk
+         7VAlyP0zgz/1ZpKxW+GYi5Vu0t5qXZQ3Sav4P67zD7ix5pzZc2wwRTQbQ+7tfEYkKkt7
+         67VGd5YoEXnw4f4N6H+GkSIOJaPb6wp6qvFnTbeI4IaHvxyfGAAwMcD056m5MXO9DEb2
+         ZU8Oy0JkN1jvhq9a3Zadds+RBKsrpXNbrA1esgzqqqemQbnOpLhjjKQEQVTuAXCrCTQz
+         pCRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686221494; x=1688813494;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Ps3xEBUlTo7f8loMCsGDyMpKyduVCzzLK5zLOAo2FgA=;
-        b=j/qBND4U6+UW95HbLaKNqCDsfI3ZwYwUCYY2rscP3ISHltLr5cS6B7rYXc3UeoA5wj
-         SMbgt7dvUEImVHw4TfPx6Bx5BHyG4L2NrP1NPqwTFrDz1PvKGfmUgFhlgPlnRO/KLg3o
-         Rm0fEvvXGCkAgUcZNiamyZOTPV4vb09IOBcCc/FEvsDJh2k512l6UChnincveTtBLYnL
-         ftM/3MMqqZktwK46KURNty8lf7BK/3Bt1YY+O+cY0vojjRTtrO5WeFZAGlWagwOG9lTs
-         sswxykm+8kwwsS+waQEdRuDxYk4ygJ8D79MBZ1JJgfmdfCevoepMQb7WEF7gq9c3Zxdk
-         gVag==
-X-Gm-Message-State: AC+VfDwIsA6Er6viG4FT60eg35zadDkm4acDsiZQVcnozs/OEUkBBrjD
-        sf1B1//73zh5S+JyppdMdJkvtA==
-X-Google-Smtp-Source: ACHHUZ72N291wzl0vYRQgKoDRSxdlp+HNwZWEHyWBr30AaBo6mZsWxlOZiVzilpKC0RImlSen5qXSw==
-X-Received: by 2002:a54:450a:0:b0:39a:b7a3:7d5e with SMTP id l10-20020a54450a000000b0039ab7a37d5emr4820536oil.33.1686221494459;
-        Thu, 08 Jun 2023 03:51:34 -0700 (PDT)
-Received: from [10.54.24.10] ([143.92.118.3])
-        by smtp.gmail.com with ESMTPSA id b15-20020a17090a010f00b00256799877ffsm1059500pjb.47.2023.06.08.03.51.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 03:51:34 -0700 (PDT)
-Message-ID: <a369ca46-f2c7-7d84-c67c-7006e13f1ada@shopee.com>
-Date:   Thu, 8 Jun 2023 18:51:30 +0800
+        d=1e100.net; s=20221208; t=1686221525; x=1688813525;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=t+wKmn+dGFIKb4lUNmkGpLUatoAVJNOyxAKbwg0PNTE=;
+        b=XABCNvVsOc9zDNk1pN4iJ/7hqkafqq6RGvII/6+bt8wjoCra0JCf/kAB5j2nyOpvvM
+         LvX8WXk2RqPPdcQAkzsMBej8Wmv8Ei3lszIFy2DoxbfSgffdS2SJT+8NOQ4fIbSSK1FV
+         CVD3h6CdHOO+Ac6/OCSVfg8j5JQrPliOvde34ByL7OOTUKhU0GUsN+He3NYN5280fuO5
+         OsboPjCO73NR73L96B1+aKV4aDtRPEc18v3bnv4ATzf3iTu+bPkJPwrGkBFtAi0job+N
+         rlocEr1iHVpFS62R/4RU13VXXEFpXGvThYEkXYiSSgKcZVOQ0Q3DVlXOZN2O4J2U0j5J
+         gnSw==
+X-Gm-Message-State: AC+VfDzEVysHmUqA8948Fw/o8AGEzTic1pI8N5FcllIaMS4vSaWt3Lrm
+        bskFduf4/Vl7Byyu0nbwxhn4ZchhCSdFx2FaV6fz0w==
+X-Google-Smtp-Source: ACHHUZ693v6i8cQH8pJrkhIBaCx8F9RI+5evhOle5Jb3R3CnNgus9SfPOwHT3YuWZm+CoOsmxExNhFO/rhGiSLwHiZ4=
+X-Received: by 2002:a1f:43c6:0:b0:464:6036:604f with SMTP id
+ q189-20020a1f43c6000000b004646036604fmr3036424vka.7.1686221525223; Thu, 08
+ Jun 2023 03:52:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.2
-Subject: Re: [PATCH] mm/mm_init.c: add debug messsge for dma zone
-To:     Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>
-Cc:     David Hildenbrand <david@redhat.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20230607090734.1259-1-haifeng.xu@shopee.com>
- <ZIBY5niJ/7vvwdHC@dhcp22.suse.cz>
- <ccc68b26-0896-2f2d-ba54-038f34e9eaa2@redhat.com>
- <34f32148-24c3-09a3-8bec-9515139e15b1@shopee.com>
- <ZIGcyku+DN5IHtwp@dhcp22.suse.cz> <20230608101340.GI52412@kernel.org>
-From:   Haifeng Xu <haifeng.xu@shopee.com>
-In-Reply-To: <20230608101340.GI52412@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230607200922.978677727@linuxfoundation.org>
+In-Reply-To: <20230607200922.978677727@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 8 Jun 2023 16:21:53 +0530
+Message-ID: <CA+G9fYuv4MhCAMSc33hZdDozV=MJzbK3CvHYCn10nDOY5gDQpQ@mail.gmail.com>
+Subject: Re: [PATCH 6.3 000/286] 6.3.7-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,44 +73,173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 8 Jun 2023 at 01:52, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.3.7 release.
+> There are 286 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 09 Jun 2023 20:07:31 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.3.7-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.3.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
 
-On 2023/6/8 18:13, Mike Rapoport wrote:
-> On Thu, Jun 08, 2023 at 11:18:02AM +0200, Michal Hocko wrote:
->> On Thu 08-06-23 15:38:48, Haifeng Xu wrote:
->>>
->>>
->>> On 2023/6/7 18:22, David Hildenbrand wrote:
->>>> On 07.06.23 12:16, Michal Hocko wrote:
->>>>> On Wed 07-06-23 09:07:34, Haifeng Xu wrote:
->>>>>> If freesize is less than dma_reserve, print warning message to report
->>>>>> this case.
->>>>>
->>>>> Why?
->>>>
->>>> I'd like to second that question, and add
->>>>
->>>> a) Did you run into that scenario?
->>>> b) What can an admin do in that case with that error messages?
->>>
->>> In theory，dma_reserve shouldn't exceed freesize, so the error messages can remind us
->>> to verify whether the configuration of reserved memory is correct.
->>
->> I am not really convinced this is worth touching the code TBH.
-> 
-> The only architecture that sets the dma_reserve is x86_64 and it sets it to
-> the number of reserved pages in DMA zone. There is no way freesize will be
-> less than dma_reserve.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Yes. From the comments, x86_64 calculates the dma_reserve in order to set zone watermarks more
-accurately. But berfore init_per_zone_wmark_min(), memblock_free_all() has already recalculated
-the managed pages. It seems that the dma_reserve is not really helpful to this.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-> 
-> I'm not sure that in general dma_reserve has some value now, but that's a
-> completely different story.
-> 
->> -- 
->> Michal Hocko
->> SUSE Labs
-> 
+## Build
+* kernel: 6.3.7-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-=
+rc.git
+* git branch: linux-6.3.y
+* git commit: 78317e11fb00aba0b42e15367d2630a515e4a808
+* git describe: v6.3.5-333-g78317e11fb00
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v6.3.5=
+-333-g78317e11fb00
+
+## Test Regressions (compared to v6.3.5)
+
+## Metric Regressions (compared to v6.3.5)
+
+## Test Fixes (compared to v6.3.5)
+
+## Metric Fixes (compared to v6.3.5)
+
+## Test result summary
+total: 138349, pass: 121372, fail: 2111, skip: 14667, xfail: 199
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 140 total, 139 passed, 1 failed
+* arm64: 50 total, 50 passed, 0 failed
+* i386: 36 total, 35 passed, 1 failed
+* mips: 26 total, 26 passed, 0 failed
+* parisc: 3 total, 3 passed, 0 failed
+* powerpc: 34 total, 34 passed, 0 failed
+* riscv: 22 total, 22 passed, 0 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 12 total, 12 passed, 0 failed
+* sparc: 6 total, 6 passed, 0 failed
+* x86_64: 42 total, 42 passed, 0 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-exec
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-mincore
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-user_events
+* kselftest-vDSO
+* kselftest-watchdog
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
