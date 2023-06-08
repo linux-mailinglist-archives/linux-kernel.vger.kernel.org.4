@@ -2,192 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F192B727731
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 08:21:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43DC772772C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 08:18:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234592AbjFHGUz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 02:20:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53294 "EHLO
+        id S234259AbjFHGSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 02:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234344AbjFHGUw (ORCPT
+        with ESMTP id S234086AbjFHGS1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 02:20:52 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D971726AA
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 23:20:49 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bb39316a68eso553897276.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 23:20:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686205249; x=1688797249;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RlkV9oZluLdE0Q1X2UHaZBqfxbjezgSg94v39TnZsYo=;
-        b=bxXFEIvgk/dI+tADARdi4vlHeR7u3JlFh98b/YBsFKo4p1yR85buugmZGfg7TFLsAK
-         wrdJ9nTRy7x1o6mPeNnYR9b5pL3HN9WqQV4Xxk9Y12YW0Ko3bKhu/RZMKKuo/yo2YtnC
-         E7VSzmMcMaVKyfPJIkHLKoJM4aW6dk96AHvgCKQ4IQ4xVn5ulYVKKaZtUWLKYcLF6ImO
-         Wj0uqDlzHhPNd9r1c3x0go4B9hKdXwK5lAdbSuwYNqnzFuKK8mbQdWTFeegW7GxPn0E4
-         DSNIb2BO1an4VRV5r8THTmnF18VhJKlVlMZXsWQijc+3dYl+gxT6lbA5Q7bCFvFstv9S
-         5MXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686205249; x=1688797249;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RlkV9oZluLdE0Q1X2UHaZBqfxbjezgSg94v39TnZsYo=;
-        b=cLEFmJ4UmL85o6i5uD37IUIgZbbWyNCnMs70AmREUjtsi/8odvlHkgT1JVghYwWtVZ
-         6peSRLnmi4rchKtiPBEEtekRzVK78QcVX7YbSNeaZXCx15qNmugE/Q6Z2BIu5iK0Azwj
-         43aSqUsKgnc6WvmwRImQCvbQcIic63W+pwfmg3AujHOfwvFCXMf64U3kRx/uXKhybXt7
-         rmOMzLs3Zw4vHmtPrklReREs3tonCZiLXeu3tE8t04dt1wiE7Ta2TIg5vlr5a7nJ38Ra
-         mIckUUObN7eKCD/y//ndYn6UAikhuzGkix20oSsT1X8gxOjjs7wbHGAA7pmlhR+uU7+F
-         gc8Q==
-X-Gm-Message-State: AC+VfDyUXMUwi724m+631uAGUlyaBhXXUfY6CVgwV8+d+jX9nyKt5CFu
-        PTeTdpIgj4YrSqjga+ripSMDNjCNwlai
-X-Google-Smtp-Source: ACHHUZ6G6iLw7XgrUUDzjI/KPKpsYCqjzGyyo4eNBZ8oaNkNg1vculHYfRrs1gpGI6UvA0u/7sekTCADrx5S
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:886b:58d8:e227:9ed9])
- (user=irogers job=sendgmr) by 2002:a05:6902:72d:b0:ba1:d0:7f7c with SMTP id
- l13-20020a056902072d00b00ba100d07f7cmr2844784ybt.2.1686205249117; Wed, 07 Jun
- 2023 23:20:49 -0700 (PDT)
-Date:   Wed,  7 Jun 2023 23:18:12 -0700
-In-Reply-To: <20230608061812.3715566-1-irogers@google.com>
-Message-Id: <20230608061812.3715566-2-irogers@google.com>
-Mime-Version: 1.0
-References: <20230608061812.3715566-1-irogers@google.com>
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Subject: [PATCH v1 2/2] perf srcline: Add a timeout to reading from addr2line
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 8 Jun 2023 02:18:27 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4147E1BD3
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 23:18:25 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1686205103;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZBph/fxT2399OO/NgDACkdHPcHG/E5AHNbxytMOUvjo=;
+        b=BxXywoy32gVAYmo8v0EBWUCpfiTlEXz1RG4n6ocpkeHQPVz4Ew/GBUO7Geeo0AOAuBFGp+
+        12w1ly/8UgfvxdRUN89ovqTz3DrH3X8lhTGl4SNj85xfzPp1791WOavgyilHYFblpGBSV7
+        GyAoz7OBaMVWVXGhhhRV95OIbdXzcwNWV+6N0XKPKd9NQpDSeNSESWj+7j8F0NbvWF1S3B
+        BAqIDbsdRdByZLHu0IwT1j7xjgYcuVLGmV6BOO4kFlpnmmitifvUcdUxAFDCdXNV1igrY3
+        8ffrBA1iQRPd05Vv1qJl4tI1h97JWD9H6dYkrrnZrGal+Cdh+AJZPjBV/pu2Kw==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 28CF020002;
+        Thu,  8 Jun 2023 06:18:21 +0000 (UTC)
+Date:   Thu, 8 Jun 2023 08:18:21 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     William Zhang <william.zhang@broadcom.com>
+Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        Linux MTD List <linux-mtd@lists.infradead.org>,
+        f.fainelli@gmail.com, rafal@milecki.pl, kursad.oney@broadcom.com,
+        joel.peshkin@broadcom.com, computersforpeace@gmail.com,
+        anand.gore@broadcom.com, dregan@mail.com, kamal.dasu@broadcom.com,
+        tomer.yacoby@broadcom.com, dan.beygelman@broadcom.com,
+        linux-kernel@vger.kernel.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 10/12] mtd: rawnand: brcmnand: Add BCMBCA read data bus
+ interface
+Message-ID: <20230608081821.1de5a50b@xps-13>
+In-Reply-To: <7b393f47-4053-a8c7-f32e-3881d8130d80@broadcom.com>
+References: <20230606231252.94838-1-william.zhang@broadcom.com>
+        <20230606231252.94838-11-william.zhang@broadcom.com>
+        <20230607102232.17c4a27b@xps-13>
+        <7b393f47-4053-a8c7-f32e-3881d8130d80@broadcom.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-addr2line may fail to send expected values causing perf to wait
-indefinitely. Add a 1 second timeout (twice the timeout for reading
-from /proc/pid/maps) so that such reads don't cause perf to appear to
-lock up.
+Hi William,
 
-There are already checks that the file for addr2line contains a debug
-section but this isn't always sufficient. The problem was observed
-when a valid elf file would set the configuration for binutils
-addr2line, then a later read of vmlinux with ELF debug sections would
-cause a failing write/read which would block indefinitely.
+william.zhang@broadcom.com wrote on Wed, 7 Jun 2023 13:24:23 -0700:
 
-As a service to future readers, if the io hits eof or an error,
-cleanup the addr2line process.
+> Hi Miquel,
+>=20
+> On 06/07/2023 01:22 AM, Miquel Raynal wrote:
+> > Hi William,
+> >=20
+> > william.zhang@broadcom.com wrote on Tue,  6 Jun 2023 16:12:50 -0700:
+> >  =20
+> >> The BCMBCA broadband SoC integrates the NAND controller differently th=
+an
+> >> STB, iProc and other SoCs.  It has different endianness for NAND cache
+> >> data and ONFI parameter data.
+> >>
+> >> Add a SoC read data bus shim for BCMBCA to meet the specific SoC need
+> >> and performance improvement using the optimized memcpy function on NAND
+> >> cache memory.
+> >>
+> >> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+> >> ---
+> >>
+> >>   drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c | 36 +++++++++++++++++
+> >>   drivers/mtd/nand/raw/brcmnand/brcmnand.c    | 44 ++++++++++++++-----=
+--
+> >>   drivers/mtd/nand/raw/brcmnand/brcmnand.h    |  2 +
+> >>   3 files changed, 68 insertions(+), 14 deletions(-)
+> >>
+> >> diff --git a/drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c b/drivers/mtd=
+/nand/raw/brcmnand/bcmbca_nand.c
+> >> index 7e48b6a0bfa2..899103a62c98 100644
+> >> --- a/drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c
+> >> +++ b/drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c
+> >> @@ -26,6 +26,18 @@ enum {
+> >>   	BCMBCA_CTLRDY		=3D BIT(4),
+> >>   }; =20
+> >>   >> +#if defined(CONFIG_ARM64) =20
+> >> +#define ALIGN_REQ		8
+> >> +#else
+> >> +#define ALIGN_REQ		4
+> >> +#endif
+> >> +
+> >> +static inline bool bcmbca_nand_is_buf_aligned(void *flash_cache,  voi=
+d *buffer)
+> >> +{
+> >> +	return IS_ALIGNED((uintptr_t)buffer, ALIGN_REQ) &&
+> >> +				IS_ALIGNED((uintptr_t)flash_cache, ALIGN_REQ);
+> >> +}
+> >> +
+> >>   static bool bcmbca_nand_intc_ack(struct brcmnand_soc *soc)
+> >>   {
+> >>   	struct bcmbca_nand_soc *priv =3D
+> >> @@ -56,6 +68,29 @@ static void bcmbca_nand_intc_set(struct brcmnand_so=
+c *soc, bool en)
+> >>   	brcmnand_writel(val, mmio);
+> >>   } =20
+> >>   >> +static void bcmbca_read_data_bus(struct brcmnand_soc *soc, =20
+> >> +				 void __iomem *flash_cache,  u32 *buffer,
+> >> +				 int fc_words, bool is_param)
+> >> +{
+> >> +	int i;
+> >> +
+> >> +	if (!is_param) {
+> >> +		/*
+> >> +		 * memcpy can do unaligned aligned access depending on source
+> >> +		 * and dest address, which is incompatible with nand cache. Fallback
+> >> +		 * to the memcpy for io version
+> >> +		 */
+> >> +		if (bcmbca_nand_is_buf_aligned(flash_cache, buffer))
+> >> +			memcpy((void *)buffer, (void *)flash_cache, fc_words * 4);
+> >> +		else
+> >> +			memcpy_fromio((void *)buffer, (void *)flash_cache, fc_words * 4);
+> >> +	} else {
+> >> +		/* Flash cache has same endian as the host for parameter pages */
+> >> +		for (i =3D 0; i < fc_words; i++, buffer++)
+> >> +			*buffer =3D __raw_readl(flash_cache + i * 4);
+> >> +	}
+> >> +}
+> >> +
+> >>   static int bcmbca_nand_probe(struct platform_device *pdev)
+> >>   {
+> >>   	struct device *dev =3D &pdev->dev;
+> >> @@ -75,6 +110,7 @@ static int bcmbca_nand_probe(struct platform_device=
+ *pdev) =20
+> >>   >>   	soc->ctlrdy_ack =3D bcmbca_nand_intc_ack; =20
+> >>   	soc->ctlrdy_set_enabled =3D bcmbca_nand_intc_set;
+> >> +	soc->read_data_bus =3D bcmbca_read_data_bus; =20
+> >>   >>   	return brcmnand_probe(pdev, soc); =20
+> >>   }
+> >> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/na=
+nd/raw/brcmnand/brcmnand.c
+> >> index d920e88c7f5b..656be4d73016 100644
+> >> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+> >> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+> >> @@ -814,6 +814,30 @@ static inline u32 edu_readl(struct brcmnand_contr=
+oller *ctrl,
+> >>   	return brcmnand_readl(ctrl->edu_base + offs);
+> >>   } =20
+> >>   >> +static inline void brcmnand_read_data_bus(struct brcmnand_contro=
+ller *ctrl, =20
+> >> +					   void __iomem *flash_cache, u32 *buffer,
+> >> +					   int fc_words, bool is_param)
+> >> +{
+> >> +	struct brcmnand_soc *soc =3D ctrl->soc;
+> >> +	int i;
+> >> +
+> >> +	if (soc->read_data_bus) {
+> >> +		soc->read_data_bus(soc, flash_cache, buffer, fc_words, is_param);
+> >> +	} else {
+> >> +		if (!is_param) {
+> >> +			for (i =3D 0; i < fc_words; i++, buffer++)
+> >> +				*buffer =3D brcmnand_read_fc(ctrl, i);
+> >> +		} else {
+> >> +			for (i =3D 0; i < fc_words; i++)
+> >> +				/*
+> >> +				 * Flash cache is big endian for parameter pages, at
+> >> +				 * least on STB SoCs
+> >> +				 */
+> >> +				buffer[i] =3D be32_to_cpu(brcmnand_read_fc(ctrl, i));
+> >> +		}
+> >> +	} =20
+> >=20
+> > Perhaps we could have a single function that is statically assigned at
+> > probe time instead of a first helper with two conditions which calls in
+> > one case another hook... This can be simplified I guess.
+> >  =20
+> Well this will need to be done at the SoC specific implementation level (=
+bcm<xxx>_nand.c) and each SoC will need to have either general data bus rea=
+d func with is_param option or data_bus_read_page, data_bus_read_param.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/util/config.c  |  7 +++++--
- tools/perf/util/srcline.c | 11 ++++++++---
- tools/perf/util/srcline.h |  1 +
- 3 files changed, 14 insertions(+), 5 deletions(-)
+You told me in case we would use exec_op we could avoid the param
+cache. If that's true then the whole support can be simplified.
 
-diff --git a/tools/perf/util/config.c b/tools/perf/util/config.c
-index f340dc73db6d..46f144c46827 100644
---- a/tools/perf/util/config.c
-+++ b/tools/perf/util/config.c
-@@ -19,6 +19,7 @@
- #include "util/llvm-utils.h"   /* perf_llvm_config */
- #include "util/stat.h"  /* perf_stat__set_big_num */
- #include "util/evsel.h"  /* evsel__hw_names, evsel__use_bpf_counters */
-+#include "util/srcline.h"  /* addr2line_timeout_ms */
- #include "build-id.h"
- #include "debug.h"
- #include "config.h"
-@@ -434,12 +435,14 @@ static int perf_buildid_config(const char *var, const char *value)
- 	return 0;
- }
- 
--static int perf_default_core_config(const char *var __maybe_unused,
--				    const char *value __maybe_unused)
-+static int perf_default_core_config(const char *var, const char *value)
- {
- 	if (!strcmp(var, "core.proc-map-timeout"))
- 		proc_map_timeout = strtoul(value, NULL, 10);
- 
-+	if (!strcmp(var, "core.addr2line-timeout"))
-+		addr2line_timeout_ms = strtoul(value, NULL, 10);
-+
- 	/* Add other config variables here. */
- 	return 0;
- }
-diff --git a/tools/perf/util/srcline.c b/tools/perf/util/srcline.c
-index cfca03abd6f8..e06a345c5d19 100644
---- a/tools/perf/util/srcline.c
-+++ b/tools/perf/util/srcline.c
-@@ -21,6 +21,8 @@
- #include "symbol.h"
- #include "subcmd/run-command.h"
- 
-+/* If addr2line doesn't return data for 1 second then timeout. */
-+int addr2line_timeout_ms = 1 * 1000;
- bool srcline_full_filename;
- 
- static const char *dso__name(struct dso *dso)
-@@ -512,7 +514,6 @@ static int read_addr2line_record(struct io *io,
- 		zfree(&line);
- 		return 0;
- 	}
--
- 	if (function != NULL)
- 		*function = strdup(strim(line));
- 
-@@ -574,7 +575,7 @@ static int addr2line(const char *dso_name, u64 addr,
- 	int len;
- 	char buf[128];
- 	ssize_t written;
--	struct io io;
-+	struct io io = { .eof = false };
- 	enum a2l_style a2l_style;
- 
- 	if (!a2l) {
-@@ -616,7 +617,7 @@ static int addr2line(const char *dso_name, u64 addr,
- 		goto out;
- 	}
- 	io__init(&io, a2l->out, buf, sizeof(buf));
--
-+	io.timeout_ms = addr2line_timeout_ms;
- 	switch (read_addr2line_record(&io, a2l_style,
- 				      &record_function, &record_filename, &record_line_nr)) {
- 	case -1:
-@@ -686,6 +687,10 @@ static int addr2line(const char *dso_name, u64 addr,
- out:
- 	free(record_function);
- 	free(record_filename);
-+	if (io.eof) {
-+		dso->a2l = NULL;
-+		addr2line_subprocess_cleanup(a2l);
-+	}
- 	return ret;
- }
- 
-diff --git a/tools/perf/util/srcline.h b/tools/perf/util/srcline.h
-index b11a0aaaa676..35a5ff3e78f5 100644
---- a/tools/perf/util/srcline.h
-+++ b/tools/perf/util/srcline.h
-@@ -9,6 +9,7 @@
- struct dso;
- struct symbol;
- 
-+extern int addr2line_timeout_ms;
- extern bool srcline_full_filename;
- char *get_srcline(struct dso *dso, u64 addr, struct symbol *sym,
- 		  bool show_sym, bool show_addr, u64 ip);
--- 
-2.41.0.rc0.172.g3f132b7071-goog
+>  Not sure how much this can be simplified... Or we have default
+> implementation in brcmnand.c but then there is one condition check
+> too. Page read is done at 512 bytes burst. One or two conditions
+> check outside of the per 512 bytes read loop does not sounds too bad
+> if performance is concern.
 
+It is unreadable. That is my main concern.
+
+>=20
+> >> +}
+> >> +
+> >>   static void brcmnand_clear_ecc_addr(struct brcmnand_controller *ctrl)
+> >>   { =20
+> >>   >> @@ -1811,20 +1835,11 @@ static void brcmnand_cmdfunc(struct nand_=
+chip *chip, unsigned command, =20
+> >>   			native_cmd =3D=3D CMD_PARAMETER_CHANGE_COL) {
+> >>   		/* Copy flash cache word-wise */
+> >>   		u32 *flash_cache =3D (u32 *)ctrl->flash_cache;
+> >> -		int i; =20
+> >>   >>   		brcmnand_soc_data_bus_prepare(ctrl->soc, true);
+> >>   >> -		/* =20
+> >> -		 * Must cache the FLASH_CACHE now, since changes in
+> >> -		 * SECTOR_SIZE_1K may invalidate it
+> >> -		 */
+> >> -		for (i =3D 0; i < FC_WORDS; i++)
+> >> -			/*
+> >> -			 * Flash cache is big endian for parameter pages, at
+> >> -			 * least on STB SoCs
+> >> -			 */
+> >> -			flash_cache[i] =3D be32_to_cpu(brcmnand_read_fc(ctrl, i));
+> >> +		brcmnand_read_data_bus(ctrl, ctrl->nand_fc, flash_cache,
+> >> +				   FC_WORDS, true); =20
+> >>   >>   		brcmnand_soc_data_bus_unprepare(ctrl->soc, true);
+> >>   >> @@ -2137,7 +2152,7 @@ static int brcmnand_read_by_pio(struct mtd_=
+info *mtd, struct nand_chip *chip, =20
+> >>   {
+> >>   	struct brcmnand_host *host =3D nand_get_controller_data(chip);
+> >>   	struct brcmnand_controller *ctrl =3D host->ctrl;
+> >> -	int i, j, ret =3D 0;
+> >> +	int i, ret =3D 0; =20
+> >>   >>   	brcmnand_clear_ecc_addr(ctrl);
+> >>   >> @@ -2150,8 +2165,9 @@ static int brcmnand_read_by_pio(struct mtd_=
+info *mtd, struct nand_chip *chip, =20
+> >>   		if (likely(buf)) {
+> >>   			brcmnand_soc_data_bus_prepare(ctrl->soc, false); =20
+> >>   >> -			for (j =3D 0; j < FC_WORDS; j++, buf++) =20
+> >> -				*buf =3D brcmnand_read_fc(ctrl, j);
+> >> +			brcmnand_read_data_bus(ctrl, ctrl->nand_fc, buf,
+> >> +					FC_WORDS, false);
+> >> +			buf +=3D FC_WORDS; =20
+> >>   >>   			brcmnand_soc_data_bus_unprepare(ctrl->soc, false); =20
+> >>   		}
+> >> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.h b/drivers/mtd/na=
+nd/raw/brcmnand/brcmnand.h
+> >> index f1f93d85f50d..88819bc395f8 100644
+> >> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.h
+> >> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.h
+> >> @@ -24,6 +24,8 @@ struct brcmnand_soc {
+> >>   	void (*ctlrdy_set_enabled)(struct brcmnand_soc *soc, bool en);
+> >>   	void (*prepare_data_bus)(struct brcmnand_soc *soc, bool prepare,
+> >>   				 bool is_param);
+> >> +	void (*read_data_bus)(struct brcmnand_soc *soc, void __iomem *flash_=
+cache,
+> >> +				 u32 *buffer, int fc_words, bool is_param);
+> >>   	const struct brcmnand_io_ops *ops;
+> >>   }; =20
+> >>   > >  =20
+> > Thanks,
+> > Miqu=C3=A8l
+> >  =20
+
+
+Thanks,
+Miqu=C3=A8l
