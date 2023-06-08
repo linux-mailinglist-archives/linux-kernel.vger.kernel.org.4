@@ -2,98 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4304B7278DA
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:31:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3B77278DE
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:32:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235445AbjFHHb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 03:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35466 "EHLO
+        id S234921AbjFHHcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 03:32:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235431AbjFHHbX (ORCPT
+        with ESMTP id S234391AbjFHHcn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 03:31:23 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506571FFA
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 00:31:21 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f7f7dfc037so30525e9.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 00:31:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686209480; x=1688801480;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=87g/Pi+Xu07Ub0dymM1C1BRfTRU/yKYa/DAr34FHvz8=;
-        b=oPA+9sJJdMdXsbev9YSi3SiSm2ZIqYn2qd3oymrV4pZ86OY5FZi24DS9+2KcyGRAdK
-         BdYOSFxaSEW0HMMPZPt8EoN47jKiTb1uVWbn5FVXtvgV7HyNEXxcpSUZe/UROcCFS38u
-         K/WPtSeUIfvmjJxH8GNjXN4sRDUg7tP69WWOvtCUNx0QW5WJPG2SWt9+wULwcYGHhjor
-         b2tWR9tMwBsX4hiD0ZoxdtOZlBRouZs88VYpC5yHSQhezUeT05D4rr9JN+awq7BFw/H+
-         a0wX+RotiLgzVz5R2NIt1Z8lalSzA+WjBwmHv81BgQdXM3VaxDagWD3ay/vgHq5zTKqq
-         auaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686209480; x=1688801480;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=87g/Pi+Xu07Ub0dymM1C1BRfTRU/yKYa/DAr34FHvz8=;
-        b=KEyK5UkC6eZLo5SzJ7o5Lr89829l7VcX9NLkoG1I06/FnkAmHJ0Z9Gn3/43TwLREB6
-         gEN267d3tGTxTL9yYp/6Qwc8WQWOOfSwlONRcSlzAMtjK6W7AMIEloGmdwbNg6PDrq9e
-         U8FS3K75cY3vUSAoFuw0Pr3O7qqvamoUWmoCraSNlzxxNhSuIW0sTtQERn0kyGphTJcJ
-         Mzgme7bSgOqKuhK1bsASL9tWC9xp9qdLx2GTXCvvql5oRqlABwUXed2b3v7/VOAc1Ohm
-         M6pRxo6okw8tss1v2xcstNguTa/PpcSF5BSoEoCwz+wQyTV7fPnnkeFvoW4jluqRat31
-         Lv6Q==
-X-Gm-Message-State: AC+VfDzHxxvhRqXhgX4gKUlr4rh1FoCLIMoIgtG9f3fd2MN5qGoX7ve/
-        Z3+hR/RteO/rFjgXeU5dJLrVD+wwwLmijt43s7NgXw==
-X-Google-Smtp-Source: ACHHUZ7ELdlD9jnH1dsTRoVai+B5bMm4dRKQ9K4DsjnWHafLoDk3UYW1VGcrMRQho2jeh6TMW3ih3O3Rh1Bf+L12Cp4=
-X-Received: by 2002:a05:600c:3b2a:b0:3f7:ba55:d038 with SMTP id
- m42-20020a05600c3b2a00b003f7ba55d038mr116077wms.6.1686209479606; Thu, 08 Jun
- 2023 00:31:19 -0700 (PDT)
+        Thu, 8 Jun 2023 03:32:43 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86209E;
+        Thu,  8 Jun 2023 00:32:42 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3587VjrS6005923, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3587VjrS6005923
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Thu, 8 Jun 2023 15:31:45 +0800
+Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Thu, 8 Jun 2023 15:32:01 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Thu, 8 Jun 2023 15:32:01 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
+ RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
+ 15.01.2375.007; Thu, 8 Jun 2023 15:32:01 +0800
+From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Ray Chi <raychi@google.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        "Flavio Suligoi" <f.suligoi@asem.it>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH v3 5/5] dt-bindings: phy: realtek: Add the doc about the Realtek SoC USB 3.0 PHY
+Thread-Topic: [PATCH v3 5/5] dt-bindings: phy: realtek: Add the doc about the
+ Realtek SoC USB 3.0 PHY
+Thread-Index: AQHZmQjklnRAOra5tUWspHWKA9A7xK9+uVYAgAG7/iA=
+Date:   Thu, 8 Jun 2023 07:32:01 +0000
+Message-ID: <1f13680401e449a3b9384710206cc2b0@realtek.com>
+References: <20230607062500.24669-1-stanley_chang@realtek.com>
+ <20230607062500.24669-5-stanley_chang@realtek.com>
+ <58aea31d-8f47-a558-6e17-17b55059bb23@linaro.org>
+In-Reply-To: <58aea31d-8f47-a558-6e17-17b55059bb23@linaro.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.190.159]
+x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20230608072903.3404438-1-lee@kernel.org>
-In-Reply-To: <20230608072903.3404438-1-lee@kernel.org>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 8 Jun 2023 09:31:07 +0200
-Message-ID: <CANn89iKtkzTKhmeK15BO4uZOBQJhQWgQkaUgT+cxo+BwxE6Ofw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] net/sched: cls_u32: Fix reference counter leak
- leading to overflow
-To:     Lee Jones <lee@kernel.org>
-Cc:     jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        stable@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 8, 2023 at 9:29=E2=80=AFAM Lee Jones <lee@kernel.org> wrote:
->
-> In the event of a failure in tcf_change_indev(), u32_set_parms() will
-> immediately return without decrementing the recently incremented
-> reference counter.  If this happens enough times, the counter will
-> rollover and the reference freed, leading to a double free which can be
-> used to do 'bad things'.
->
-> In order to prevent this, move the point of possible failure above the
-> point where the reference counter is incremented.  Also save any
-> meaningful return values to be applied to the return data at the
-> appropriate point in time.
->
-> This issue was caught with KASAN.
->
-> Fixes: 705c7091262d ("net: sched: cls_u32: no need to call tcf_exts_chang=
-e for newly allocated struct")
-> Suggested-by: Eric Dumazet <edumazet@google.com>
-> Signed-off-by: Lee Jones <lee@kernel.org>
-> ---
-
-Thanks Lee !
-
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+SGkgS3J6eXN6dG9mLA0KDQo+IA0KPiAxIHBoeSBvciA0PyBEZWNpZGUuDQoNCkluIGFjdHVhbGx5
+LCB3ZSBoYXZlIG9uZSBwaHkgZm9yIG9uZSBjb250cm9sbGVyLg0KSSBtZWFuIHRoZSBkcml2ZXIg
+Y2FuIHN1cHBvcnQgdXAgdG8gNCBwaHlzLg0KSSBjYW4gcmV2aXNlZCBhcw0KIl5waHlAWzBdKyQi
+DQpPciBvbmx5ICJwaHkiDQoNCj4gPiArDQo+ID4gK3BhdHRlcm5Qcm9wZXJ0aWVzOg0KPiA+ICsg
+ICJecGh5QFswLTNdKyQiOg0KPiA+ICsgICAgZGVzY3JpcHRpb246IEVhY2ggc3ViLW5vZGUgaXMg
+YSBQSFkgZGV2aWNlIGZvciBvbmUgWEhDSSBjb250cm9sbGVyLg0KPiA+ICsgICAgdHlwZTogb2Jq
+ZWN0DQo+ID4gKyAgICBwcm9wZXJ0aWVzOg0KPiA+ICsgICAgICByZWFsdGVrLHBhcmFtOg0KPiA+
+ICsgICAgICAgIGRlc2NyaXB0aW9uOiBUaGUgZGF0YSBvZiBQSFkgcGFyYW1ldGVyIGFyZSB0aGUg
+cGFpciBvZiB0aGUNCj4gPiArICAgICAgICAgIG9mZnNldCBhbmQgdmFsdWUuDQo+ID4gKyAgICAg
+ICAgJHJlZjogL3NjaGVtYXMvdHlwZXMueWFtbCMvZGVmaW5pdGlvbnMvdWludDgtYXJyYXkNCj4g
+DQo+IFlvdXIgY2hvaWNlIG9mIHR5cGVzIGlzIHN1cnByaXNpbmcuIElmIHRoaXMgaXMgYXJyYXks
+IHRoYW4gbWF4SXRlbXMgKGFuZCBwbGVhc2UNCj4gZG9uJ3QgdGVsbCBtZSBpdCBpcyBtYXhJdGVt
+czogMSkuIEFueXdheSwgd2h5IDggYml0cyBsb25nPw0KDQpJdCBzaG91bGQgYmUgYSB1aW50MzIt
+bWF0cml4Lg0KDQo+ID4gKw0KPiA+ICsgICAgICByZWFsdGVrLGRvLXRvZ2dsZToNCj4gPiArICAg
+ICAgICBkZXNjcmlwdGlvbjogU2V0IHRoaXMgZmxhZyB0byBlbmFibGUgdGhlIFBIWSBwYXJhbWV0
+ZXIgdG9nZ2xlDQo+ID4gKyAgICAgICAgICB3aGVuIHBvcnQgc3RhdHVzIGNoYW5nZS4NCj4gPiAr
+ICAgICAgICB0eXBlOiBib29sZWFuDQo+ID4gKw0KPiA+ICsgICAgICByZWFsdGVrLGRvLXRvZ2ds
+ZS1vbmNlOg0KPiA+ICsgICAgICAgIGRlc2NyaXB0aW9uOiBTZXQgdGhpcyBmbGFnIHRvIGRvIFBI
+WSBwYXJhbWV0ZXIgdG9nZ2xlIG9ubHkgb24NCj4gPiArICAgICAgICAgIFBIWSBpbml0Lg0KPiA+
+ICsgICAgICAgIHR5cGU6IGJvb2xlYW4NCj4gPiArDQo+ID4gKyAgICAgIHJlYWx0ZWssY2hlY2st
+ZWZ1c2U6DQo+ID4gKyAgICAgICAgZGVzY3JpcHRpb246IEVuYWJsZSB0byB1cGRhdGUgUEhZIHBh
+cmFtZXRlciBmcm9tIHJlYWRpbmcgb3RwDQo+IHRhYmxlLg0KPiA+ICsgICAgICAgIHR5cGU6IGJv
+b2xlYW4NCj4gPiArDQo+ID4gKyAgICAgIHJlYWx0ZWssdXNlLWRlZmF1bHQtcGFyYW1ldGVyOg0K
+PiA+ICsgICAgICAgIGRlc2NyaXB0aW9uOiBEb24ndCBzZXQgcGFyYW1ldGVyIGFuZCB1c2UgZGVm
+YXVsdCB2YWx1ZSBpbg0KPiBoYXJkd2FyZS4NCj4gPiArICAgICAgICB0eXBlOiBib29sZWFuDQo+
+ID4gKw0KPiA+ICsgICAgICByZWFsdGVrLGNoZWNrLXJ4LWZyb250LWVuZC1vZmZzZXQ6DQo+ID4g
+KyAgICAgICAgZGVzY3JpcHRpb246IEVuYWJsZSB0byBjaGVjayByeCBmcm9udCBlbmQgb2Zmc2V0
+Lg0KPiA+ICsgICAgICAgIHR5cGU6IGJvb2xlYW4NCj4gPiArDQo+ID4gK3JlcXVpcmVkOg0KPiA+
+ICsgIC0gY29tcGF0aWJsZQ0KPiA+ICsgIC0gcmVnDQo+ID4gKyAgLSAiI2FkZHJlc3MtY2VsbHMi
+DQo+ID4gKyAgLSAiI3NpemUtY2VsbHMiDQo+ID4gKyAgLSAiI3BoeS1jZWxscyINCj4gPiArDQo+
+ID4gK2FkZGl0aW9uYWxQcm9wZXJ0aWVzOiBmYWxzZQ0KPiA+ICsNCj4gPiArZXhhbXBsZXM6DQo+
+ID4gKyAgLSB8DQo+ID4gKyAgICB1c2JfcG9ydDJfdXNiM3BoeTogdXNiLXBoeUAxM2UxMCB7DQo+
+ID4gKyAgICAgICAgY29tcGF0aWJsZSA9ICJyZWFsdGVrLHJ0ZDEzMTlkLXVzYjNwaHkiLCAicmVh
+bHRlayx1c2IzcGh5IjsNCj4gPiArICAgICAgICByZWcgPSA8MHgxM2UxMCAweDQ+Ow0KPiA+ICsg
+ICAgICAgICNhZGRyZXNzLWNlbGxzID0gPDE+Ow0KPiA+ICsgICAgICAgICNzaXplLWNlbGxzID0g
+PDA+Ow0KPiA+ICsgICAgICAgICNwaHktY2VsbHMgPSA8MD47DQo+ID4gKw0KPiA+ICsgICAgICAg
+IHBoeUAwIHsNCj4gPiArICAgICAgICAgICAgcmVnID0gPDA+Ow0KPiA+ICsgICAgICAgICAgICBy
+ZWFsdGVrLHBhcmFtID0NCj4gPiArICAgICAgICAgICAgICAgICAgICA8MHgwMSAweGFjOGM+LA0K
+PiA+ICsgICAgICAgICAgICAgICAgICAgIDwweDA2IDB4MDAxNz4sDQo+IA0KPiBGaXJzdCwgdGhp
+cyBpcyBtYXRyaXgsIG5vdCB1aW50OCBhcnJheS4gU2Vjb25kLCAweGFjOGMgaXMgcGFzdCAxNiBi
+aXRzIGxvbmcsIG5vdCA4Lg0KPiBUaGlyZCwgeW91IHB1dCBzb21lIG1hZ2ljIHJlZ2lzdGVyIHBy
+b2dyYW1taW5nIHRvIERULg0KPiBQbGVhc2UgZG9uJ3QuIERyb3AgYWxsIHRoaXMgZnJvbSBEVC4N
+Cg0KcmVhbHRlayxwYXJhbSBpcyBhbiB1aW50MzItbWF0cnguDQpJIHdpbGwgcmV2aXNlZCB0aGUg
+dHlwZS4NCg0KVGhhbmtzLA0KU3RhbmxleQ0KDQo=
