@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15E58728BD9
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 01:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD9E1728BD8
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 01:32:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237778AbjFHXbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 19:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47810 "EHLO
+        id S237697AbjFHXbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 19:31:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237652AbjFHXa7 (ORCPT
+        with ESMTP id S237664AbjFHXbB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 19:30:59 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28EB73A97
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 16:30:12 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5618857518dso15406307b3.2
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 16:30:12 -0700 (PDT)
+        Thu, 8 Jun 2023 19:31:01 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48623A81
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 16:30:18 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-561ceb5b584so16142307b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 16:30:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686267011; x=1688859011;
+        d=google.com; s=20221208; t=1686267013; x=1688859013;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Fdzksl/kkftTB43GevdApw1PAO/LnxMdJnRBtlfxhEE=;
-        b=jUUrlAd0jFtx3gT8HHmiIn6ov/tGeo1Py3GP8BHc6orX8wxf2GSx0d3z64vOZamkLl
-         l/Rn2B157YaRbKvWQKYRUxyu9DF/kxOScXlwbieTmGChV7a9VFKNzVv5yqmgtjZOZLvI
-         EIgCMRTqv33YJZNKnwQEDnI7vuoO7RVCt3t3Crrp2tDmTVse1oCbPFF7ztH06ZD7nTWM
-         QNbHvW0h1qNsM012dkqb6aTN0M6Ht/kvOC1mhjtakrw7ep9PlK44Jazk2Hyl4HsUB2t/
-         /4rthPvbW9t9Rc/T7jAdig/pzIkyWS4B7eM4VfPrdD2U0HGx/Jn8/yzoWwqjtS9ggVmP
-         nXOQ==
+        bh=ivPelAwC3y4XSVWu/g/woCSsh93mZn6kVLmUE8y8n1c=;
+        b=o/8C7MEPCtvtxe0KTNOp2hvuO21OtSyIqnCUGXCxoDBVZ1hM0UTDfOuLLu9wmXoDgU
+         NupUf/lsgNze0GEP6mGhpeYIvSgXIly86oh9z2Em05rAYNrvq4FCzwyKmNFSaIShua41
+         3weNIDbvhelyAr+f3kRdO8Kq/ZZkpbKIZI84VAmPVqEsnlWzKcNR4rEVotPszMSNakud
+         XJQHVny/tO6wTL5odn0Z71wVTEZQYhdd7EYfW3ZZqN05eddIHrVyDKXC7K5eGqyv8S1W
+         IJV79rf3qBoAK0LtD2+roC7xthkMZNkAG9KPPjPL2yN6WYDofyTHc6lW29zb02e60YCU
+         aADg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686267011; x=1688859011;
+        d=1e100.net; s=20221208; t=1686267013; x=1688859013;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fdzksl/kkftTB43GevdApw1PAO/LnxMdJnRBtlfxhEE=;
-        b=RG3Es0no6C4UA8bK2xDnE0k5lGpIQisxsRWSzuUhfOj7ahKWBz2mblet6qWacI2QZK
-         OlcYVnAbEnyaEhmTeBPuw+Ok/7kjEw2BYbX9uQ5BMaILwLOX0zMh6TEjw0fSDZPpdPmk
-         a8CPuMUenAuUT5T13vpdwxZyqWDrcTbq66j//vRwvB5D7ykNkuifC07etVDfbcvl/+GD
-         nOisMhiW9IaAMJoT8agq6BZ0wVsGHmzead3ddpsF54v0JQ3WN6gUI+cO6zt/B1YhftaI
-         nno1u4wiBxn40HAKkGRk6E/2mkjukgvJ7eAHAKJ7U8mHxPsWmrk38dJdWfdI2stK1Jnd
-         1RxA==
-X-Gm-Message-State: AC+VfDzUvZ5wjh/wLA6k11PS6S2DKJQ3z/SPkD71E8Xckw4l9OXkMl/X
-        SxKMS7s+WPRLNYXeYbwqz6JAYk0LczSn
-X-Google-Smtp-Source: ACHHUZ5g5uyVZlOsr7pjdyZV6VH+phjABBlaux+DG9mdlabFHUh/Yg+4aAt5onkwPIjHgENJ5dKopd2fJFO0
+        bh=ivPelAwC3y4XSVWu/g/woCSsh93mZn6kVLmUE8y8n1c=;
+        b=W3XnYYZSkWR2BJPN4rnFVxXkpfm8EQA1L9UOOTnezfDiYEUSLi41GAZWvLfyZYlLGW
+         5QDaq+IALCT1e7b94983g+MdtrBcd6IkNAThUjkDVlJZa9hFen8ApdPggtlWRBSHKa/e
+         TCyn2+SSZCWgj0m18HG6LYBklkdO/aiQ2cpn3wu7RWbtO19p1Joj9lCgEi4ukvvRC8o/
+         BJQc+BoPJOtWox/DItKEdAFkCPxLbqxHD3kWv41Nu4aD7NOxgrgAnfFl6a4YaJKvaURQ
+         KNYi4hHqsR6nhz5VWaHbDaygHwxgKIFIePAhDpHJbiVYzCq3HgeaELOJgn4uoiQ3AclF
+         sl6w==
+X-Gm-Message-State: AC+VfDyT+W0PeMUP3UT8xsksLDlC3narHFFmQxjFair2yGHJNSXj38yy
+        73kdXxzxJLaJnd5j8/Njs/EuAFk2OXNx
+X-Google-Smtp-Source: ACHHUZ62wofB/jabYpP+aum/UbQ9ZFFxwtAKK2GM4KUJZ12ge6l2beqKO3P18e/K5xM1ekEKjDs0EnsTUyPv
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:c3e5:ebc6:61e5:c73f])
- (user=irogers job=sendgmr) by 2002:a81:bc4e:0:b0:569:5003:7d79 with SMTP id
- b14-20020a81bc4e000000b0056950037d79mr704640ywl.3.1686267011178; Thu, 08 Jun
- 2023 16:30:11 -0700 (PDT)
-Date:   Thu,  8 Jun 2023 16:28:21 -0700
+ (user=irogers job=sendgmr) by 2002:a81:ac4b:0:b0:565:c0e3:d2d7 with SMTP id
+ z11-20020a81ac4b000000b00565c0e3d2d7mr697104ywj.1.1686267013537; Thu, 08 Jun
+ 2023 16:30:13 -0700 (PDT)
+Date:   Thu,  8 Jun 2023 16:28:22 -0700
 In-Reply-To: <20230608232823.4027869-1-irogers@google.com>
-Message-Id: <20230608232823.4027869-25-irogers@google.com>
+Message-Id: <20230608232823.4027869-26-irogers@google.com>
 Mime-Version: 1.0
 References: <20230608232823.4027869-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Subject: [PATCH v2 24/26] perf callchain: Use pthread keys for tls callchain_cursor
+Subject: [PATCH v2 25/26] perf srcline: Change free_srcline to zfree_srcline
 From:   Ian Rogers <irogers@google.com>
 To:     John Garry <john.g.garry@oracle.com>,
         Will Deacon <will@kernel.org>,
@@ -97,363 +97,160 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pthread keys are more portable than __thread and allow the association
-of a destructor with the key. Use the destructor to clean up TLS
-callchain cursors to aid understanding memory leaks.
+Make use after free more unlikely.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-c2c.c                      |  4 +-
- tools/perf/builtin-script.c                   | 24 ++++++-----
- tools/perf/util/callchain.c                   | 40 ++++++++++++++++++-
- tools/perf/util/callchain.h                   |  4 +-
- tools/perf/util/db-export.c                   | 10 +++--
- tools/perf/util/hist.c                        | 29 ++++++++------
- .../scripting-engines/trace-event-python.c    | 10 +++--
- 7 files changed, 86 insertions(+), 35 deletions(-)
+ tools/perf/builtin-diff.c    |  4 ++--
+ tools/perf/util/annotate.c   |  2 +-
+ tools/perf/util/block-info.c |  4 ++--
+ tools/perf/util/hist.c       |  6 +++---
+ tools/perf/util/map.c        |  2 +-
+ tools/perf/util/srcline.c    | 15 ++++++++++-----
+ tools/perf/util/srcline.h    |  2 +-
+ 7 files changed, 20 insertions(+), 15 deletions(-)
 
-diff --git a/tools/perf/builtin-c2c.c b/tools/perf/builtin-c2c.c
-index 530a44a59f41..a4cf9de7a7b5 100644
---- a/tools/perf/builtin-c2c.c
-+++ b/tools/perf/builtin-c2c.c
-@@ -284,6 +284,7 @@ static int process_sample_event(struct perf_tool *tool __maybe_unused,
- 	struct hist_entry *he;
- 	struct addr_location al;
- 	struct mem_info *mi, *mi_dup;
-+	struct callchain_cursor *cursor;
- 	int ret;
- 
- 	addr_location__init(&al);
-@@ -297,7 +298,8 @@ static int process_sample_event(struct perf_tool *tool __maybe_unused,
- 	if (c2c.stitch_lbr)
- 		thread__set_lbr_stitch_enable(al.thread, true);
- 
--	ret = sample__resolve_callchain(sample, &callchain_cursor, NULL,
-+	cursor = get_tls_callchain_cursor();
-+	ret = sample__resolve_callchain(sample, cursor, NULL,
- 					evsel, &al, sysctl_perf_event_max_stack);
- 	if (ret)
- 		goto out;
-diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-index 784d478c2e05..e3f435e6a7d0 100644
---- a/tools/perf/builtin-script.c
-+++ b/tools/perf/builtin-script.c
-@@ -1557,11 +1557,13 @@ static int perf_sample__fprintf_bts(struct perf_sample *sample,
- 		unsigned int print_opts = output[type].print_ip_opts;
- 		struct callchain_cursor *cursor = NULL;
- 
--		if (symbol_conf.use_callchain && sample->callchain &&
--		    thread__resolve_callchain(al->thread, &callchain_cursor, evsel,
--					      sample, NULL, NULL, scripting_max_stack) == 0)
--			cursor = &callchain_cursor;
--
-+		if (symbol_conf.use_callchain && sample->callchain) {
-+			cursor = get_tls_callchain_cursor();
-+			if (thread__resolve_callchain(al->thread, cursor, evsel,
-+						      sample, NULL, NULL,
-+						      scripting_max_stack))
-+				cursor = NULL;
-+		}
- 		if (cursor == NULL) {
- 			printed += fprintf(fp, " ");
- 			if (print_opts & EVSEL__PRINT_SRCLINE) {
-@@ -2203,11 +2205,13 @@ static void process_event(struct perf_script *script,
- 		if (script->stitch_lbr)
- 			thread__set_lbr_stitch_enable(al->thread, true);
- 
--		if (symbol_conf.use_callchain && sample->callchain &&
--		    thread__resolve_callchain(al->thread, &callchain_cursor, evsel,
--					      sample, NULL, NULL, scripting_max_stack) == 0)
--			cursor = &callchain_cursor;
--
-+		if (symbol_conf.use_callchain && sample->callchain) {
-+			cursor = get_tls_callchain_cursor();
-+			if (thread__resolve_callchain(al->thread, cursor, evsel,
-+						      sample, NULL, NULL,
-+						      scripting_max_stack))
-+				cursor = NULL;
-+		}
- 		fputc(cursor ? '\n' : ' ', fp);
- 		sample__fprintf_sym(sample, al, 0, output[type].print_ip_opts, cursor,
- 				    symbol_conf.bt_stop_list, fp);
-diff --git a/tools/perf/util/callchain.c b/tools/perf/util/callchain.c
-index 909f62b3b266..7e9bd3b6be9f 100644
---- a/tools/perf/util/callchain.c
-+++ b/tools/perf/util/callchain.c
-@@ -58,7 +58,8 @@ struct callchain_param callchain_param_default = {
- 	CALLCHAIN_PARAM_DEFAULT
- };
- 
--__thread struct callchain_cursor callchain_cursor;
-+/* Used for thread-local struct callchain_cursor. */
-+static pthread_key_t callchain_cursor;
- 
- int parse_callchain_record_opt(const char *arg, struct callchain_param *param)
- {
-@@ -1116,7 +1117,7 @@ int hist_entry__append_callchain(struct hist_entry *he, struct perf_sample *samp
- 	if ((!symbol_conf.use_callchain || sample->callchain == NULL) &&
- 		!symbol_conf.show_branchflag_count)
- 		return 0;
--	return callchain_append(he->callchain, &callchain_cursor, sample->period);
-+	return callchain_append(he->callchain, get_tls_callchain_cursor(), sample->period);
- }
- 
- int fill_callchain_info(struct addr_location *al, struct callchain_cursor_node *node,
-@@ -1570,6 +1571,41 @@ int callchain_node__make_parent_list(struct callchain_node *node)
- 	return -ENOMEM;
- }
- 
-+static void callchain_cursor__delete(void *vcursor)
-+{
-+	struct callchain_cursor *cursor = vcursor;
-+	struct callchain_cursor_node *node, *next;
-+
-+	callchain_cursor_reset(cursor);
-+	for (node = cursor->first; node != NULL; node = next) {
-+		next = node->next;
-+		free(node);
-+	}
-+	free(cursor);
-+}
-+
-+static void init_callchain_cursor_key(void)
-+{
-+	if (pthread_key_create(&callchain_cursor, callchain_cursor__delete)) {
-+		pr_err("callchain cursor creation failed");
-+		abort();
-+	}
-+}
-+
-+struct callchain_cursor *get_tls_callchain_cursor(void)
-+{
-+	static pthread_once_t once_control = PTHREAD_ONCE_INIT;
-+	struct callchain_cursor *cursor;
-+
-+	pthread_once(&once_control, init_callchain_cursor_key);
-+	cursor = pthread_getspecific(callchain_cursor);
-+	if (!cursor) {
-+		cursor = zalloc(sizeof(*cursor));
-+		pthread_setspecific(callchain_cursor, cursor);
-+	}
-+	return cursor;
-+}
-+
- int callchain_cursor__copy(struct callchain_cursor *dst,
- 			   struct callchain_cursor *src)
- {
-diff --git a/tools/perf/util/callchain.h b/tools/perf/util/callchain.h
-index d95615daed73..ce9410018cf7 100644
---- a/tools/perf/util/callchain.h
-+++ b/tools/perf/util/callchain.h
-@@ -168,8 +168,6 @@ struct callchain_cursor {
- 	struct callchain_cursor_node	*curr;
- };
- 
--extern __thread struct callchain_cursor callchain_cursor;
--
- static inline void callchain_init(struct callchain_root *root)
- {
- 	INIT_LIST_HEAD(&root->node.val);
-@@ -231,6 +229,8 @@ static inline void callchain_cursor_advance(struct callchain_cursor *cursor)
- 	cursor->pos++;
- }
- 
-+struct callchain_cursor *get_tls_callchain_cursor(void);
-+
- int callchain_cursor__copy(struct callchain_cursor *dst,
- 			   struct callchain_cursor *src);
- 
-diff --git a/tools/perf/util/db-export.c b/tools/perf/util/db-export.c
-index 6184696dc266..b9fb71ab7a73 100644
---- a/tools/perf/util/db-export.c
-+++ b/tools/perf/util/db-export.c
-@@ -215,6 +215,7 @@ static struct call_path *call_path_from_sample(struct db_export *dbe,
- 	u64 kernel_start = machine__kernel_start(machine);
- 	struct call_path *current = &dbe->cpr->call_path;
- 	enum chain_order saved_order = callchain_param.order;
-+	struct callchain_cursor *cursor;
- 	int err;
- 
- 	if (!symbol_conf.use_callchain || !sample->callchain)
-@@ -226,13 +227,14 @@ static struct call_path *call_path_from_sample(struct db_export *dbe,
- 	 * the callchain starting with the root node and ending with the leaf.
- 	 */
- 	callchain_param.order = ORDER_CALLER;
--	err = thread__resolve_callchain(thread, &callchain_cursor, evsel,
-+	cursor = get_tls_callchain_cursor();
-+	err = thread__resolve_callchain(thread, cursor, evsel,
- 					sample, NULL, NULL, PERF_MAX_STACK_DEPTH);
- 	if (err) {
- 		callchain_param.order = saved_order;
- 		return NULL;
- 	}
--	callchain_cursor_commit(&callchain_cursor);
-+	callchain_cursor_commit(cursor);
- 
- 	while (1) {
- 		struct callchain_cursor_node *node;
-@@ -240,7 +242,7 @@ static struct call_path *call_path_from_sample(struct db_export *dbe,
- 		u64 dso_db_id = 0, sym_db_id = 0, offset = 0;
- 
- 
--		node = callchain_cursor_current(&callchain_cursor);
-+		node = callchain_cursor_current(cursor);
- 		if (!node)
- 			break;
- 
-@@ -265,7 +267,7 @@ static struct call_path *call_path_from_sample(struct db_export *dbe,
- 					     al.sym, node->ip,
- 					     kernel_start);
- 
--		callchain_cursor_advance(&callchain_cursor);
-+		callchain_cursor_advance(cursor);
- 		addr_location__exit(&al);
+diff --git a/tools/perf/builtin-diff.c b/tools/perf/builtin-diff.c
+index ca39657ee407..eec89567ae48 100644
+--- a/tools/perf/builtin-diff.c
++++ b/tools/perf/builtin-diff.c
+@@ -1387,8 +1387,8 @@ static int cycles_printf(struct hist_entry *he, struct hist_entry *pair,
+ 			  bi->start, bi->end, block_he->diff.cycles);
  	}
  
+-	free_srcline(start_line);
+-	free_srcline(end_line);
++	zfree_srcline(&start_line);
++	zfree_srcline(&end_line);
+ 
+ 	return scnprintf(hpp->buf, hpp->size, "%*s", width, buf);
+ }
+diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
+index fc5f44535ebe..58fc5fa00ecd 100644
+--- a/tools/perf/util/annotate.c
++++ b/tools/perf/util/annotate.c
+@@ -1196,7 +1196,7 @@ static void annotation_line__init(struct annotation_line *al,
+ 
+ static void annotation_line__exit(struct annotation_line *al)
+ {
+-	free_srcline(al->path);
++	zfree_srcline(&al->path);
+ 	zfree(&al->line);
+ }
+ 
+diff --git a/tools/perf/util/block-info.c b/tools/perf/util/block-info.c
+index 16a7b4adcf18..08279b1b65e5 100644
+--- a/tools/perf/util/block-info.c
++++ b/tools/perf/util/block-info.c
+@@ -305,8 +305,8 @@ static int block_range_entry(struct perf_hpp_fmt *fmt, struct perf_hpp *hpp,
+ 			  bi->start, bi->end);
+ 	}
+ 
+-	free_srcline(start_line);
+-	free_srcline(end_line);
++	zfree_srcline(&start_line);
++	zfree_srcline(&end_line);
+ 
+ 	return scnprintf(hpp->buf, hpp->size, "%*s", block_fmt->width, buf);
+ }
 diff --git a/tools/perf/util/hist.c b/tools/perf/util/hist.c
-index fb218b3e8a7c..4004c0915e4f 100644
+index 4004c0915e4f..77cb2cc83bb9 100644
 --- a/tools/perf/util/hist.c
 +++ b/tools/perf/util/hist.c
-@@ -1029,15 +1029,16 @@ iter_prepare_cumulative_entry(struct hist_entry_iter *iter,
- 			      struct addr_location *al __maybe_unused)
- {
- 	struct hist_entry **he_cache;
-+	struct callchain_cursor *cursor = get_tls_callchain_cursor();
- 
--	callchain_cursor_commit(&callchain_cursor);
-+	callchain_cursor_commit(cursor);
- 
- 	/*
- 	 * This is for detecting cycles or recursions so that they're
- 	 * cumulated only one time to prevent entries more than 100%
- 	 * overhead.
- 	 */
--	he_cache = malloc(sizeof(*he_cache) * (callchain_cursor.nr + 1));
-+	he_cache = malloc(sizeof(*he_cache) * (cursor->nr + 1));
- 	if (he_cache == NULL)
- 		return -ENOMEM;
- 
-@@ -1072,7 +1073,7 @@ iter_add_single_cumulative_entry(struct hist_entry_iter *iter,
- 	 * We need to re-initialize the cursor since callchain_append()
- 	 * advanced the cursor to the end.
- 	 */
--	callchain_cursor_commit(&callchain_cursor);
-+	callchain_cursor_commit(get_tls_callchain_cursor());
- 
- 	hists__inc_nr_samples(hists, he->filtered);
- 
-@@ -1085,7 +1086,7 @@ iter_next_cumulative_entry(struct hist_entry_iter *iter,
- {
- 	struct callchain_cursor_node *node;
- 
--	node = callchain_cursor_current(&callchain_cursor);
-+	node = callchain_cursor_current(get_tls_callchain_cursor());
- 	if (node == NULL)
- 		return 0;
- 
-@@ -1131,12 +1132,12 @@ iter_add_next_cumulative_entry(struct hist_entry_iter *iter,
- 		.raw_size = sample->raw_size,
- 	};
- 	int i;
--	struct callchain_cursor cursor;
-+	struct callchain_cursor cursor, *tls_cursor = get_tls_callchain_cursor();
- 	bool fast = hists__has(he_tmp.hists, sym);
- 
--	callchain_cursor_snapshot(&cursor, &callchain_cursor);
-+	callchain_cursor_snapshot(&cursor, tls_cursor);
- 
--	callchain_cursor_advance(&callchain_cursor);
-+	callchain_cursor_advance(tls_cursor);
- 
- 	/*
- 	 * Check if there's duplicate entries in the callchain.
-@@ -1222,7 +1223,7 @@ int hist_entry_iter__add(struct hist_entry_iter *iter, struct addr_location *al,
- 	if (al)
- 		alm = map__get(al->map);
- 
--	err = sample__resolve_callchain(iter->sample, &callchain_cursor, &iter->parent,
-+	err = sample__resolve_callchain(iter->sample, get_tls_callchain_cursor(), &iter->parent,
- 					iter->evsel, al, max_stack_depth);
- 	if (err) {
- 		map__put(alm);
-@@ -1568,8 +1569,10 @@ static int hists__hierarchy_insert_entry(struct hists *hists,
- 
- 		if (hist_entry__has_callchains(new_he) &&
- 		    symbol_conf.use_callchain) {
--			callchain_cursor_reset(&callchain_cursor);
--			if (callchain_merge(&callchain_cursor,
-+			struct callchain_cursor *cursor = get_tls_callchain_cursor();
-+
-+			callchain_cursor_reset(cursor);
-+			if (callchain_merge(cursor,
- 					    new_he->callchain,
- 					    he->callchain) < 0)
- 				ret = -1;
-@@ -1610,8 +1613,10 @@ static int hists__collapse_insert_entry(struct hists *hists,
- 				he_stat__add_stat(iter->stat_acc, he->stat_acc);
- 
- 			if (hist_entry__has_callchains(he) && symbol_conf.use_callchain) {
--				callchain_cursor_reset(&callchain_cursor);
--				if (callchain_merge(&callchain_cursor,
-+				struct callchain_cursor *cursor = get_tls_callchain_cursor();
-+
-+				callchain_cursor_reset(cursor);
-+				if (callchain_merge(cursor,
- 						    iter->callchain,
- 						    he->callchain) < 0)
- 					ret = -1;
-diff --git a/tools/perf/util/scripting-engines/trace-event-python.c b/tools/perf/util/scripting-engines/trace-event-python.c
-index d96e5c0fef45..59063ec98619 100644
---- a/tools/perf/util/scripting-engines/trace-event-python.c
-+++ b/tools/perf/util/scripting-engines/trace-event-python.c
-@@ -417,6 +417,7 @@ static PyObject *python_process_callchain(struct perf_sample *sample,
- 					 struct addr_location *al)
- {
- 	PyObject *pylist;
-+	struct callchain_cursor *cursor;
- 
- 	pylist = PyList_New(0);
- 	if (!pylist)
-@@ -425,19 +426,20 @@ static PyObject *python_process_callchain(struct perf_sample *sample,
- 	if (!symbol_conf.use_callchain || !sample->callchain)
- 		goto exit;
- 
--	if (thread__resolve_callchain(al->thread, &callchain_cursor, evsel,
-+	cursor = get_tls_callchain_cursor();
-+	if (thread__resolve_callchain(al->thread, cursor, evsel,
- 				      sample, NULL, NULL,
- 				      scripting_max_stack) != 0) {
- 		pr_err("Failed to resolve callchain. Skipping\n");
- 		goto exit;
+@@ -1317,8 +1317,8 @@ void hist_entry__delete(struct hist_entry *he)
+ 	if (he->branch_info) {
+ 		map__zput(he->branch_info->from.ms.map);
+ 		map__zput(he->branch_info->to.ms.map);
+-		free_srcline(he->branch_info->srcline_from);
+-		free_srcline(he->branch_info->srcline_to);
++		zfree_srcline(&he->branch_info->srcline_from);
++		zfree_srcline(&he->branch_info->srcline_to);
+ 		zfree(&he->branch_info);
  	}
--	callchain_cursor_commit(&callchain_cursor);
-+	callchain_cursor_commit(cursor);
  
+@@ -1336,7 +1336,7 @@ void hist_entry__delete(struct hist_entry *he)
  
- 	while (1) {
- 		PyObject *pyelem;
- 		struct callchain_cursor_node *node;
--		node = callchain_cursor_current(&callchain_cursor);
-+		node = callchain_cursor_current(cursor);
- 		if (!node)
- 			break;
- 
-@@ -493,7 +495,7 @@ static PyObject *python_process_callchain(struct perf_sample *sample,
- 					_PyUnicode_FromString(dsoname));
- 		}
- 
--		callchain_cursor_advance(&callchain_cursor);
-+		callchain_cursor_advance(cursor);
- 		PyList_Append(pylist, pyelem);
- 		Py_DECREF(pyelem);
+ 	zfree(&he->res_samples);
+ 	zfree(&he->stat_acc);
+-	free_srcline(he->srcline);
++	zfree_srcline(&he->srcline);
+ 	if (he->srcfile && he->srcfile[0])
+ 		zfree(&he->srcfile);
+ 	free_callchain(he->callchain);
+diff --git a/tools/perf/util/map.c b/tools/perf/util/map.c
+index ae1d54d4880a..c77e2fce6a37 100644
+--- a/tools/perf/util/map.c
++++ b/tools/perf/util/map.c
+@@ -498,7 +498,7 @@ int map__fprintf_srcline(struct map *map, u64 addr, const char *prefix,
+ 		char *srcline = map__srcline(map, addr, NULL);
+ 		if (strncmp(srcline, SRCLINE_UNKNOWN, strlen(SRCLINE_UNKNOWN)) != 0)
+ 			ret = fprintf(fp, "%s%s", prefix, srcline);
+-		free_srcline(srcline);
++		zfree_srcline(&srcline);
  	}
+ 	return ret;
+ }
+diff --git a/tools/perf/util/srcline.c b/tools/perf/util/srcline.c
+index cfca03abd6f8..b8e596528d7e 100644
+--- a/tools/perf/util/srcline.c
++++ b/tools/perf/util/srcline.c
+@@ -804,10 +804,15 @@ char *get_srcline_split(struct dso *dso, u64 addr, unsigned *line)
+ 	return NULL;
+ }
+ 
+-void free_srcline(char *srcline)
++void zfree_srcline(char **srcline)
+ {
+-	if (srcline && strcmp(srcline, SRCLINE_UNKNOWN) != 0)
+-		free(srcline);
++	if (*srcline == NULL)
++		return;
++
++	if (strcmp(*srcline, SRCLINE_UNKNOWN))
++		free(*srcline);
++
++	*srcline = NULL;
+ }
+ 
+ char *get_srcline(struct dso *dso, u64 addr, struct symbol *sym,
+@@ -880,7 +885,7 @@ void srcline__tree_delete(struct rb_root_cached *tree)
+ 		pos = rb_entry(next, struct srcline_node, rb_node);
+ 		next = rb_next(&pos->rb_node);
+ 		rb_erase_cached(&pos->rb_node, tree);
+-		free_srcline(pos->srcline);
++		zfree_srcline(&pos->srcline);
+ 		zfree(&pos);
+ 	}
+ }
+@@ -903,7 +908,7 @@ void inline_node__delete(struct inline_node *node)
+ 
+ 	list_for_each_entry_safe(ilist, tmp, &node->val, list) {
+ 		list_del_init(&ilist->list);
+-		free_srcline(ilist->srcline);
++		zfree_srcline(&ilist->srcline);
+ 		/* only the inlined symbols are owned by the list */
+ 		if (ilist->symbol && ilist->symbol->inlined)
+ 			symbol__delete(ilist->symbol);
+diff --git a/tools/perf/util/srcline.h b/tools/perf/util/srcline.h
+index b11a0aaaa676..a15c7db9058e 100644
+--- a/tools/perf/util/srcline.h
++++ b/tools/perf/util/srcline.h
+@@ -15,7 +15,7 @@ char *get_srcline(struct dso *dso, u64 addr, struct symbol *sym,
+ char *__get_srcline(struct dso *dso, u64 addr, struct symbol *sym,
+ 		  bool show_sym, bool show_addr, bool unwind_inlines,
+ 		  u64 ip);
+-void free_srcline(char *srcline);
++void zfree_srcline(char **srcline);
+ char *get_srcline_split(struct dso *dso, u64 addr, unsigned *line);
+ 
+ /* insert the srcline into the DSO, which will take ownership */
 -- 
 2.41.0.162.gfafddb0af9-goog
 
