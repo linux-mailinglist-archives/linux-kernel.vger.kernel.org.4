@@ -2,179 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E655727726
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 08:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A9B6727729
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 08:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234558AbjFHGQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 02:16:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51644 "EHLO
+        id S234658AbjFHGQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 02:16:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233170AbjFHGQC (ORCPT
+        with ESMTP id S234086AbjFHGQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 02:16:02 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1454106;
-        Wed,  7 Jun 2023 23:16:00 -0700 (PDT)
-X-UUID: ebc5adce05c311eeb20a276fd37b9834-20230608
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=tAU5pTPe1AK+qGtTcI9Kkh9u4GbW337tHdGJR6WygQM=;
-        b=AVR00oyh23nszYkbG7I1Z0TFjvY2ASXJofjWTtP5t8kAUoAKbtBBUjllIMME4d10Iodtx4ZNGQtO7dGm6kGXthxbhV7z4Q4iQj2WcWArZxsTq6VYwgF/tJZQWtWRP4ofspPFCE9H0InfZgYddsWVTnflMcMW2YVtVXS26jfLEBk=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.26,REQID:03e3c687-68e3-417f-8b71-1341bc3f4619,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,BULK:28,RULE:Release_Ham,ACTIO
-        N:release,TS:79
-X-CID-INFO: VERSION:1.1.26,REQID:03e3c687-68e3-417f-8b71-1341bc3f4619,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:51,FILE:0,BULK:28,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:79
-X-CID-META: VersionHash:cb9a4e1,CLOUDID:e4e6686e-2f20-4998-991c-3b78627e4938,B
-        ulkID:2306071527481U3980PY,BulkQuantity:36,Recheck:0,SF:38|29|28|17|19|48|
-        102,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:40|20,QS:nil,BEC:ni
-        l,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SDM,TF_CID_SPAM_ASC,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,
-        TF_CID_SPAM_OBB,TF_CID_SPAM_FCD,TF_CID_SPAM_SNR
-X-UUID: ebc5adce05c311eeb20a276fd37b9834-20230608
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
-        (envelope-from <shawn.sung@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1560925467; Thu, 08 Jun 2023 14:15:52 +0800
-Received: from mtkmbs10n2.mediatek.inc (172.21.101.183) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Thu, 8 Jun 2023 14:15:51 +0800
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (172.21.101.237)
- by mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Thu, 8 Jun 2023 14:15:51 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m16f0uibR9KZtG1XEVhR3bxvvcGC+HoarJwkh9iJ/goAe2xc3u9VM87K57ro1XTanJrSX2rVMP1RmLkaW1x9nlO7IYi1KoGJL9c7eC5uTM8T7apDSv+1CiqsLyWNucc9YM/PxQsE1mUScjv3LQCP9CsW/U407rnr0V6ETKQK6qge/oYtyvaF3wte91JvMv/nbNgNlRs8nRbWIjapYuOXtVNetiea94VpbtjQnIExKNlgeOd96pV4hsydDlJHvJj4mjYZEkKDkjv466ehtHlLoyp3fc0vPGn8doQsPVpEdFASxuZpDnyiQE7rkaMv4Wvd8XJXRf4VsixBdQkbf9vACQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tAU5pTPe1AK+qGtTcI9Kkh9u4GbW337tHdGJR6WygQM=;
- b=j0bIDSSizVh9KWzIfQhwnH+6c9TWu4KU7LVfI+MTuPCFwZI0rzAABwIhUTE+qOdsjatsc5nSGBr59r2MkxbCUldJECaOy4nXGjbw2YUjQaJM37X9bxEtcJ2VJE4CJJg/ZYPiFpqTQIr+5cZ92vXR0d+TuQQgoAY7IyuiV/c0hfY9xfJzLoAx7CccteLVVbaPFxE+ooQyLrBgIba97hO4dO/sQfremRBSEwqpv7uBjXdH6S5pM0/d+ijblFxcTwfW+ctZf61jWACEgKjWQgnA/6M7X6AbuzPZsZHSvMT9Rx6cuD9ZWTlQsuok/L97GIBINvHd0BJIiSM2eqIVVfkOCw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
- dkim=pass header.d=mediatek.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tAU5pTPe1AK+qGtTcI9Kkh9u4GbW337tHdGJR6WygQM=;
- b=nyvIckDiRQcgMHZO92XOU84y1igAAOR52r2qWXx3XwBY1DEBYDkKkWLhR7xOkNcmZWI5BP6SKK2Y/2+fZSpcNQ1YT6Fs/mMKQaFVAiICDJBWL89u94BbdSRtfD7UPpEUoAolX5jkOeGGcEazWERQx0GXeyaVeNOaypKCmgsnBOk=
-Received: from TYZPR03MB6623.apcprd03.prod.outlook.com (2603:1096:400:1f5::13)
- by PUZPR03MB5794.apcprd03.prod.outlook.com (2603:1096:301:a5::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.38; Thu, 8 Jun
- 2023 06:15:47 +0000
-Received: from TYZPR03MB6623.apcprd03.prod.outlook.com
- ([fe80::dbf3:d56:46f:ec66]) by TYZPR03MB6623.apcprd03.prod.outlook.com
- ([fe80::dbf3:d56:46f:ec66%5]) with mapi id 15.20.6455.028; Thu, 8 Jun 2023
- 06:15:47 +0000
-From:   =?utf-8?B?U2hhd24gU3VuZyAo5a6L5a2d6KyZKQ==?= 
-        <Shawn.Sung@mediatek.com>
-To:     "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        =?utf-8?B?U2luZ28gQ2hhbmcgKOW8teiIiOWciyk=?= 
-        <Singo.Chang@mediatek.com>,
-        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        =?utf-8?B?SmFzb24tSkggTGluICjmnpfnnb/npaUp?= 
-        <Jason-JH.Lin@mediatek.com>,
-        =?utf-8?B?TmFuY3kgTGluICjmnpfmrKPonqIp?= <Nancy.Lin@mediatek.com>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "fshao@google.com" <fshao@google.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v1 2/6] dt-bindings: reset: mt8188: Add reset control bits
- for VDOSYS1
-Thread-Topic: [PATCH v1 2/6] dt-bindings: reset: mt8188: Add reset control
- bits for VDOSYS1
-Thread-Index: AQHZmQccoZ+M6FRhCUuwkVRvA364Ja9+98iAgAFBMoCAADZLgA==
-Date:   Thu, 8 Jun 2023 06:15:47 +0000
-Message-ID: <08f52dc699db1dfe3a1dfff57cda00c7600d97d5.camel@mediatek.com>
-References: <20230607061121.6732-1-shawn.sung@mediatek.com>
-         <20230607061121.6732-3-shawn.sung@mediatek.com>
-         <72b71e37-f9e7-b182-824c-163d920723b8@collabora.com>
-         <a769105743d480c0da846a4c50de43811382626e.camel@mediatek.com>
-In-Reply-To: <a769105743d480c0da846a4c50de43811382626e.camel@mediatek.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=mediatek.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYZPR03MB6623:EE_|PUZPR03MB5794:EE_
-x-ms-office365-filtering-correlation-id: bdf17978-44b4-48a5-2ad6-08db67e7cd03
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: sx+71XNaR1wq+13hG8ofed9gV2tMkf5HgGSYViPfRF2rVcg0FlDVpi860iiTpbiHvC7uDUFpEM7ZMLsGxF8Hcj1eL+VIFwQz849MVH2SYblvoZPHiVbF+jUyhwDTSROke4+puULjjYVzA0hVdBy6Zjtm0jNBJSkNiKC9jswstmZUKlB8Ziut6CqUcQF+PE4qPfd1a1Y1NlItyUci8573i5u8rMRrZhXMBvNEon0yQMzDiETjJlX3/lnc7RLxjf5u+AmF7INpO4RzltqZhVHN3Dvs6TMIf9wfXiBsN1vhli5vuPVCHUAr5N28KqDGgLa+csapwEl2XxnZml+DGfiAvFeVCWjU3Ne88eXut/xXS7XLUiMyiPYzLL8PQWdFBtMY3BLJCXMcDmiIsMGLGaWgMn/VXa4+b98QCg7rtuavSCkOAyBm2iPdOE/RUFK7oyAj4ttDoSQq3tIpqyeuCWE9gWxmCj0BXRoHj1DIshQX6HRSe1hTdJFiqMBJPg7Bu4KtDQvfCVN0dkwHQvD0FZSEOA2Ts6WTmD6nl3ZyzgTQHqIqLbJ8doM+SJBrQJ/COdu+eIWb+TUI9bEzs1TiP4IUoCKT9hbjRnXyE+kVB2gZCigaQ1ZgtV56xMP4rEcqczUObijDHFAXwUzKJRGHQLsbh3aJPzARM5vK6xqANvRq82A=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR03MB6623.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(396003)(346002)(366004)(39860400002)(451199021)(26005)(6512007)(6506007)(2616005)(83380400001)(186003)(66446008)(64756008)(122000001)(2906002)(76116006)(66946007)(66476007)(66556008)(6486002)(71200400001)(5660300002)(38100700002)(7416002)(8936002)(86362001)(8676002)(38070700005)(85182001)(54906003)(36756003)(110136005)(478600001)(41300700001)(316002)(4326008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Mm92TTlOM28ybllUT3FKQTBxcjJMTE9TQXRQbXVqZXF6Rk1JZUdpS0dOVHVW?=
- =?utf-8?B?T1U1ZWcvdE1QOHF4aTlDSFRCZnJZZ05mQkVMV3BXYzM1VkhhL3ZrMWRNazM2?=
- =?utf-8?B?VUMvU1lSaWpKWnUyUHhUZWhHd2I1QmZsUW9VanUrRVd1UjBVU0dNcFVkU05a?=
- =?utf-8?B?Z0wzd0hDNXhKZjV5Qm9yRUh1Z1BZSVpTYnF4SE9LVDc2UXdRT3o5S3RIUXpi?=
- =?utf-8?B?Rjg4N3dkeUVOR01DWlNIWmFJY2lCV0UyVDNWeDcwRzc2VlFGL08rOE9yQVdN?=
- =?utf-8?B?RGdjMUxEY05PUzhQQ2F6ZXpMSGJsOW4rdk1CK09XZ0RZeEQvTWdva1lyTU8v?=
- =?utf-8?B?cS9ZcmZzRzlEa3BaTnNDOUo2V3RCejhnVDZBR0FKQnpnKzhXamV6MTI3Y3p4?=
- =?utf-8?B?dEg4NVF2WnVsQUQ4dHNwWGpuOVlQUnZCeW5hUkNEVG93SlhHSS80c25KVjgy?=
- =?utf-8?B?UnUvYzJPOGlqRW1aNjlndjg0YXpJcmFGWEF0Y1NYZy9nUUFrU29NTWU4K3Rm?=
- =?utf-8?B?c3RRaXpDUXNVMW5TNHNFUVlCN0gyZWphMzdxU1ovbTM3WWp6dVAxcFVXcHZE?=
- =?utf-8?B?bVBRMDlBZGpUMVVzTHVhVmJFTE1MSTQwTmdQNUZZSWs5cW1QaG9QREdvN2JS?=
- =?utf-8?B?RlJNK1QrUXUwQ0JVUUxOdWlZVXhuVENWVlRqdXJjWFk4R0c2UGxHV0hxM2pz?=
- =?utf-8?B?UkFTcjUvdUlWbjR3WE9qRWh3NjM1OHRNZ0o4UjlNUTNjZFBGVkp1VDRRRGZs?=
- =?utf-8?B?aVJYQ0hGQkZOL1B2eitjcVZyMFFJZDhaVGVibS9PRFlNSXRYTUUrVE9rWjA2?=
- =?utf-8?B?ME1JT0h3Wk1tTVh0RTFQMkVHZFIxa09qVHFQdFF5UXMwSVNTejJPU3JuZmpU?=
- =?utf-8?B?ZXdHcU81TEp5bnM0d0dLWCtScWVUcDRPRUlCR2tOTk55eFU4OHdmM3JYNm1Z?=
- =?utf-8?B?cjVMT3NnbmgyMnVRTzFtdUJsTnZ2SURUYVRsOG1KaGVpRk1ORllXRm5EbE9Y?=
- =?utf-8?B?YWM1SE9ORTJzc0ZPUUljWVdFR3preDFPUVZ2Y3hXRVMveENKaHFvSFlNcHI5?=
- =?utf-8?B?VGl0VWhZdDZ6a1dycWFSY1A3dHBZQWkxMWZLTnU3aUl3aURVNktTVVV3azhR?=
- =?utf-8?B?dXFTdGR2S1p3bVRNQytKN3VqVzNGYVl2Tzd0SXl5UW1FMG5xRkpTcGp5QXA1?=
- =?utf-8?B?aEk3ejkyTXRRTlFzYXlDM0ZrSUVNV0I5ekU0V21rV1FGYXlSVlE1cmwyZzV4?=
- =?utf-8?B?K2g1a250WGU5Ulh2b2ZuSHBINWQ4elMxTDQwb1UzdFQyRExLRFBabTUzdnBj?=
- =?utf-8?B?S0M1ZDJUTDMxdjEwQk10WEtUOEVmSHdRbU1wMmplMEc5YVF2TTJVdW1ucVBI?=
- =?utf-8?B?VWx1RWpkYjNScnFOSEkzRW5QQXVHZkVnaEhGL2tXZWxhcmN6RUVZV1lWT1Rp?=
- =?utf-8?B?TUUwUjJmdktCRlc2M25VTE10ZlZ0eGF5MG5rR294T1VyZlhxdENhbC9DOWJG?=
- =?utf-8?B?TnlQRmloR0x1NkxtVEorbDZQd0syeWIwUG5jdkdaZGlHYys3Vjh3MjVLai9I?=
- =?utf-8?B?U0ZSSGlMTXRQcEIrYXBDbEtQaTF4Y1EwazdkTTR3OFRjQUZadVlwOEkvbmVw?=
- =?utf-8?B?elpQc2EvUmpGYzc5bUJ2NXc2K1NMTFZsd3E2NGVCYjJWVWpYTjNHWUpCVktn?=
- =?utf-8?B?aDArSUwrTllMZ1JpZXpqWGcvSlJmdlJ0RUkvZUZqT3lrQ0hVem1LY1M1SWZS?=
- =?utf-8?B?Mmpya2hKeEloQlFvTzRFMTlzY1VVcUgvSjA2V1ZxYVAvVmt0NTNYMHVnSXZD?=
- =?utf-8?B?TFIrbzNBN3BnWThOSTBpMDloQTRnNDU1ZDBSV1I5ODRSc2U2TXdjQ0ZTcUd5?=
- =?utf-8?B?RStuQ2MwbFZ6WWVCVFo0S1JKQ0MrdUVINzJMa0dDOFpXM3dyUW1iREEzMHh4?=
- =?utf-8?B?cWJxTnpOY3Z0S3Y3MkkzTy9jYVllQjdHbnc5NGpQc1BxRkNRQUd1Z0hBSFcz?=
- =?utf-8?B?MkdiYzJxR3hNeXpzL2tLN0FmcGdiUHNreUZLeFVjWXZNaTI3czVPVG5qSWs3?=
- =?utf-8?B?Ym1mWE1EUzY3VmszZWZTQ08yckR6QjQydit1THpnc3lJOWR5K3puek9DemJY?=
- =?utf-8?B?SnVqS3ZERmtEc0pobDNaaTV2dG9wczlnVWplYnkvT1h3RENMMlZEYnZ0U1E3?=
- =?utf-8?B?RXc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <D0D2FD7CE9355B45B9AD9404EF4B9DAD@apcprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Thu, 8 Jun 2023 02:16:50 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F44270B;
+        Wed,  7 Jun 2023 23:16:46 -0700 (PDT)
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3585v8SY024204;
+        Thu, 8 Jun 2023 06:16:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=CuYYvdDyVxPvMIkgQPT/BtmdTGmAfxC7QUiM5MbG4F0=;
+ b=elP3Y6mu3/c4J2COXyayoDwnk+c8LbRZ+qTPCuEA0C6BwaMrWQR5rlBfTv2/I4k7YVJm
+ krBAHI3p5h9ek6ZLOZLUSNWp9OMpDG+53ItgItYY4Rx1ElwuRYEE6cuO5i8OoMyDWMUi
+ fXeIP2KuchnXVm6/3QN7mGI25KtKYKqDiB+sYPVHDJdAchzXzkZ8N60L4eNPlw3HTJ22
+ igYDl7H2Y+HmDdnZldol82HhGz6K4m6wKPZq+kidw0ojaQVBBub+KXeQstF48NXaQ33U
+ 0oNfqBjLk0pmapynH7/e/IAQDERCHfCO1fvUNuiirIz9dle/XCnjlq+4TWwFfY4tM8kC AQ== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r399p8a8s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Jun 2023 06:16:33 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3585CDhQ008779;
+        Thu, 8 Jun 2023 06:16:31 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3r2a7693u2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Jun 2023 06:16:31 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3586GSGo15401572
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 8 Jun 2023 06:16:29 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DB6CB2004E;
+        Thu,  8 Jun 2023 06:16:28 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6753820043;
+        Thu,  8 Jun 2023 06:16:27 +0000 (GMT)
+Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.109.253.169])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Thu,  8 Jun 2023 06:16:27 +0000 (GMT)
+Date:   Thu, 8 Jun 2023 11:46:24 +0530
+From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
+To:     Kemeng Shi <shikemeng@huaweicloud.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 16/19] ext4: call ext4_mb_mark_group_bb in
+ ext4_mb_clear_bb
+Message-ID: <ZIFyOKoJWMiV2xwJ@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+References: <20230603150327.3596033-1-shikemeng@huaweicloud.com>
+ <20230603150327.3596033-17-shikemeng@huaweicloud.com>
+ <ZH7+xclxW3hKb7GA@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+ <bb19c6f8-d31f-f686-17f9-3fd2bb1db3dd@huaweicloud.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR03MB6623.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bdf17978-44b4-48a5-2ad6-08db67e7cd03
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jun 2023 06:15:47.7585
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6929vFqyK5mDVrHfHHOPeszJwsYhk+SD7ysdM09rms7L4+JYexWHkk3U/piL4f1NP4DYHd+TzMbhlCTXMR9JwA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PUZPR03MB5794
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bb19c6f8-d31f-f686-17f9-3fd2bb1db3dd@huaweicloud.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: TSsqSjhN8gefHwRnTavDcAbG01_ne6QP
+X-Proofpoint-GUID: TSsqSjhN8gefHwRnTavDcAbG01_ne6QP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-08_03,2023-06-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 bulkscore=0 phishscore=0 malwarescore=0 suspectscore=0
+ mlxscore=0 impostorscore=0 clxscore=1015 adultscore=0 spamscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306080049
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -182,28 +87,292 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VXBkYXRlOg0KDQpJdCBzZWVtcyBkZXZpY2UgdHJlZSBkb2Vzbid0IGFjY2VwdCBlbnVtLg0KSSds
-bCB1c2UgI2RlZmluZSBoZXJlLg0KDQpPbiBUaHUsIDIwMjMtMDYtMDggYXQgMTE6MDEgKzA4MDAs
-IHNoYXduLnN1bmcgd3JvdGU6DQo+IEhpIEFuZ2Vsb0dpb2FjY2hpbm8sDQo+IA0KPiBTaG91bGQg
-SSB1c2UgZW51bSBpbnN0ZWFkIG9mICNkZWZpbmUgaWYgcmVzZXQgSUQgbXVzdCBzdGFydHMgZnJv
-bSAwPw0KPiANCj4gVGhhbmtzLA0KPiBIc2lhbyBDaGllbiBTdW5nDQo+IA0KPiBPbiBXZWQsIDIw
-MjMtMDYtMDcgYXQgMDk6NTEgKzAyMDAsIEFuZ2Vsb0dpb2FjY2hpbm8gRGVsIFJlZ25vIHdyb3Rl
-Og0KPiA+ICAJIA0KPiA+IEV4dGVybmFsIGVtYWlsIDogUGxlYXNlIGRvIG5vdCBjbGljayBsaW5r
-cyBvciBvcGVuIGF0dGFjaG1lbnRzDQo+ID4gdW50aWwNCj4gPiB5b3UgaGF2ZSB2ZXJpZmllZCB0
-aGUgc2VuZGVyIG9yIHRoZSBjb250ZW50Lg0KPiA+ICANCj4gPiBJbCAwNy8wNi8yMyAwODoxMSwg
-SHNpYW8gQ2hpZW4gU3VuZyBoYSBzY3JpdHRvOg0KPiA+ID4gQWRkIHJlc2V0IGNvbnRyb2wgYml0
-cyBmb3IgIE1UODE4OCBWRE9TWVMxLg0KPiA+ID4gDQo+ID4gPiBTaWduZWQtb2ZmLWJ5OiBIc2lh
-byBDaGllbiBTdW5nIDxzaGF3bi5zdW5nQG1lZGlhdGVrLmNvbT4NCj4gPiA+IC0tLQ0KPiA+ID4g
-ICBpbmNsdWRlL2R0LWJpbmRpbmdzL3Jlc2V0L210ODE4OC1yZXNldHMuaCB8IDEyICsrKysrKysr
-KysrKw0KPiA+ID4gICAxIGZpbGUgY2hhbmdlZCwgMTIgaW5zZXJ0aW9ucygrKQ0KPiA+ID4gDQo+
-ID4gPiBkaWZmIC0tZ2l0IGEvaW5jbHVkZS9kdC1iaW5kaW5ncy9yZXNldC9tdDgxODgtcmVzZXRz
-LmgNCj4gPiANCj4gPiBiL2luY2x1ZGUvZHQtYmluZGluZ3MvcmVzZXQvbXQ4MTg4LXJlc2V0cy5o
-DQo+ID4gPiBpbmRleCAzNzdjZGZkYTgyYTkuLjQzOWE5YTI1Y2ExOSAxMDA2NDQNCj4gPiA+IC0t
-LSBhL2luY2x1ZGUvZHQtYmluZGluZ3MvcmVzZXQvbXQ4MTg4LXJlc2V0cy5oDQo+ID4gPiArKysg
-Yi9pbmNsdWRlL2R0LWJpbmRpbmdzL3Jlc2V0L210ODE4OC1yZXNldHMuaA0KPiA+ID4gQEAgLTMz
-LDQgKzMzLDE2IEBADQo+ID4gPiANCj4gPiA+ICAgI2RlZmluZSBNVDgxODhfVE9QUkdVX1NXX1JT
-VF9OVU0gICAgICAgICAgICAgICAyNA0KPiA+ID4gDQo+ID4gPiArLyogVkRPU1lTMSAqLw0KPiA+
-ID4gKyNkZWZpbmUgTVQ4MTg4X1ZETzFfUlNUX01FUkdFMF9ETF9BU1lOQyAgICAgICAgIDkNCj4g
-PiANCj4gPiBTb3JyeSwgSSd2ZSBqdXN0IG5vdGljZWQgdGhhdCB0aGVyZSdzIG5vIGluZGV4IDAg
-aW4gcHJldmlvdXMNCj4gPiBkZWZpbml0aW9uczogdGhpcw0KPiA+IGlzIHdyb25nLCBpdCBtdXN0
-IHN0YXJ0IGZyb20gMCBhbmQgbXVzdCBiZSBzZXF1ZW50aWFsLg0KPiA+IA0KPiA+IA0K
+On Tue, Jun 06, 2023 at 10:16:38PM +0800, Kemeng Shi wrote:
+> 
+> 
+> on 6/6/2023 5:39 PM, Ojaswin Mujoo wrote:
+> > On Sat, Jun 03, 2023 at 11:03:24PM +0800, Kemeng Shi wrote:
+> >> call ext4_mb_mark_group_bb in ext4_mb_clear_bb to remove repeat code
+> >> to update block bitmap and group descriptor on disk.
+> >>
+> >> Note: ext4_mb_clear_bb will update buddy and bitmap in two critical sections
+> >> instead of update in the same critical section.
+> >>
+> >> Original lock behavior introduced in 7a2fcbf7f857 ("ext4: don't use
+> >> blocks freed but not yet committed in buddy cache init") to avoid
+> >> race betwwen ext4_mb_free_blocks and ext4_mb_init_cache:
+> >> ext4_mb_load_buddy_gfp
+> >> ext4_lock_group
+> >> mb_clear_bits(bitmap_bh, ...)
+> >> mb_free_blocks/ext4_mb_free_metadata
+> >> ext4_unlock_group
+> >> ext4_mb_unload_buddy
+> >>
+> >> New lock behavior in this patch:
+> >> ext4_mb_load_buddy_gfp
+> >> ext4_lock_group
+> >> mb_clear_bits(bitmap_bh, ...)
+> >> ext4_unlock_group
+> >>
+> >> /* no ext4_mb_init_cache for the same group will be called as
+> >> ext4_mb_load_buddy_gfp will ensure buddy page is update-to-date */
+> >>
+> >> ext4_lock_group
+> >> mb_free_blocks/ext4_mb_free_metadata
+> >> ext4_unlock_group
+> >> ext4_mb_unload_buddy
+> >>
+> >> As buddy page for group is always update-to-date between
+> >> ext4_mb_load_buddy_gfp and ext4_mb_unload_buddy. Then no
+> >> ext4_mb_init_cache will be called for the same group concurrentlly when
+> >> we update bitmap and buddy page betwwen buddy load and unload.
+> >>
+> >> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
+> > 
+> > Hi Kemeng,
+> > 
+> > Sorry for the late reply I was trying to understand the codepath
+> > properly. So I have a question here:
+> > 
+> > With the changes you've made in the patch, the flow would look something
+> > like:
+> > 
+> > ext4_mb_clear_bb():
+> >   ext4_mb_mark_group_bb():
+> >     ext4_group_lock()
+> >       - Mark bitmap free
+> >       - Modify gdp
+> >     ext4_group_unlock()
+> >     ext4_handle_dirty_metadata()
+> > 			- I understand this will add the bitmap and gdp buffers to journal's 
+> >         dirty metadata list
+> >   ...
+> >   ext4_group_lock()
+> >     ext4_mb_free_metadata()
+> > 			- Add ext4_free_data entries to sbi->s_freed_data_list. (On commit 
+> >         ext4_journal_commit_callback() will then free the buddy for these)
+> >   ext4_group_unlock()
+> > 
+> > My question is what happens if journal commits between
+> > ext4_handle_dirty_metadata() and ext4_mb_free_metadata() call (Possible?). Then we might
+> > never end up freeing the metadata in the buddy bitmap because the commit callback wont
+> > be able to find the ext4_free_data entries in sbi->s_freed_data_list.
+> > 
+> > Regards,
+> > ojaswin
+> > 
+> Hi Ojaswin, thanks for the reply. To my knowledge, commit should be normally done after handle
+> is stopped as following:
+> ext4_journal_start_sb
+> 	start_this_handle
+> 		read_lock(&journal->j_state_lock);
+> 		atomic_inc(&transaction->t_updates);
+> 		read_unlock(&journal->j_state_lock);
+> 
+> ext4_journal_stop
+> 	jbd2_journal_stop
+> 		stop_this_handle
+> 			if (atomic_dec_and_test(&transaction->t_updates))
+> 				wake_up(&journal->j_wait_updates);
+> 
+> jbd2_journal_commit_transaction
+> 	jbd2_journal_wait_updates
+> 		while (1)
+> 			if (!atomic_read(&transaction->t_updates))
+> 				/* break loop */
+> 	...
+> 
+> 	if (journal->j_commit_callback)
+> 		journal->j_commit_callback(journal, commit_transaction);
+> 
+> So no commit of transaction should not happen between ext4_handle_dirty_metadata and
+> ext4_mb_free_metadata.
+
+Hi Kemeng, 
+
+Okay makes sense. Thanks for the explanation :) 
+
+Regards,
+ojaswin
+
+> 
+> >> ---
+> >>  fs/ext4/mballoc.c | 90 ++++++++++++-----------------------------------
+> >>  1 file changed, 23 insertions(+), 67 deletions(-)
+> >>
+> >> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+> >> index 46b37f5c9223..e4f1b34448e3 100644
+> >> --- a/fs/ext4/mballoc.c
+> >> +++ b/fs/ext4/mballoc.c
+> >> @@ -6135,19 +6135,21 @@ static void ext4_mb_clear_bb(handle_t *handle, struct inode *inode,
+> >>  			       ext4_fsblk_t block, unsigned long count,
+> >>  			       int flags)
+> >>  {
+> >> -	struct buffer_head *bitmap_bh = NULL;
+> >> +	struct ext4_mark_context mc = {
+> >> +		.handle = handle,
+> >> +		.sb = inode->i_sb,
+> >> +		.state = 0,
+> >> +	};
+> >>  	struct super_block *sb = inode->i_sb;
+> >> -	struct ext4_group_desc *gdp;
+> >>  	struct ext4_group_info *grp;
+> >>  	unsigned int overflow;
+> >>  	ext4_grpblk_t bit;
+> >> -	struct buffer_head *gd_bh;
+> >>  	ext4_group_t block_group;
+> >>  	struct ext4_sb_info *sbi;
+> >>  	struct ext4_buddy e4b;
+> >>  	unsigned int count_clusters;
+> >>  	int err = 0;
+> >> -	int ret;
+> >> +	int mark_flags = 0;
+> >>  
+> >>  	sbi = EXT4_SB(sb);
+> >>  
+> >> @@ -6179,18 +6181,6 @@ static void ext4_mb_clear_bb(handle_t *handle, struct inode *inode,
+> >>  		/* The range changed so it's no longer validated */
+> >>  		flags &= ~EXT4_FREE_BLOCKS_VALIDATED;
+> >>  	}
+> >> -	count_clusters = EXT4_NUM_B2C(sbi, count);
+> >> -	bitmap_bh = ext4_read_block_bitmap(sb, block_group);
+> >> -	if (IS_ERR(bitmap_bh)) {
+> >> -		err = PTR_ERR(bitmap_bh);
+> >> -		bitmap_bh = NULL;
+> >> -		goto error_return;
+> >> -	}
+> >> -	gdp = ext4_get_group_desc(sb, block_group, &gd_bh);
+> >> -	if (!gdp) {
+> >> -		err = -EIO;
+> >> -		goto error_return;
+> >> -	}
+> >>  
+> >>  	if (!(flags & EXT4_FREE_BLOCKS_VALIDATED) &&
+> >>  	    !ext4_inode_block_valid(inode, block, count)) {
+> >> @@ -6200,28 +6190,7 @@ static void ext4_mb_clear_bb(handle_t *handle, struct inode *inode,
+> >>  		goto error_return;
+> >>  	}
+> >>  
+> >> -	BUFFER_TRACE(bitmap_bh, "getting write access");
+> >> -	err = ext4_journal_get_write_access(handle, sb, bitmap_bh,
+> >> -					    EXT4_JTR_NONE);
+> >> -	if (err)
+> >> -		goto error_return;
+> >> -
+> >> -	/*
+> >> -	 * We are about to modify some metadata.  Call the journal APIs
+> >> -	 * to unshare ->b_data if a currently-committing transaction is
+> >> -	 * using it
+> >> -	 */
+> >> -	BUFFER_TRACE(gd_bh, "get_write_access");
+> >> -	err = ext4_journal_get_write_access(handle, sb, gd_bh, EXT4_JTR_NONE);
+> >> -	if (err)
+> >> -		goto error_return;
+> >> -#ifdef AGGRESSIVE_CHECK
+> >> -	{
+> >> -		int i;
+> >> -		for (i = 0; i < count_clusters; i++)
+> >> -			BUG_ON(!mb_test_bit(bit + i, bitmap_bh->b_data));
+> >> -	}
+> >> -#endif
+> >> +	count_clusters = EXT4_NUM_B2C(sbi, count);
+> >>  	trace_ext4_mballoc_free(sb, inode, block_group, bit, count_clusters);
+> >>  
+> >>  	/* __GFP_NOFAIL: retry infinitely, ignore TIF_MEMDIE and memcg limit. */
+> >> @@ -6230,6 +6199,22 @@ static void ext4_mb_clear_bb(handle_t *handle, struct inode *inode,
+> >>  	if (err)
+> >>  		goto error_return;
+> >>  
+> >> +#ifdef AGGRESSIVE_CHECK
+> >> +	mark_flags |= EXT4_MB_BITMAP_MARKED_CHECK;
+> >> +#endif
+> >> +	err = ext4_mb_mark_group_bb(&mc, block_group, bit, count_clusters,
+> >> +				    mark_flags);
+> >> +
+> >> +
+> >> +	if (err && mc.changed == 0) {
+> >> +		ext4_mb_unload_buddy(&e4b);
+> >> +		goto error_return;
+> >> +	}
+> >> +
+> >> +#ifdef AGGRESSIVE_CHECK
+> >> +	BUG_ON(mc.changed != count_clusters);
+> >> +#endif
+> >> +
+> >>  	/*
+> >>  	 * We need to make sure we don't reuse the freed block until after the
+> >>  	 * transaction is committed. We make an exception if the inode is to be
+> >> @@ -6252,13 +6237,8 @@ static void ext4_mb_clear_bb(handle_t *handle, struct inode *inode,
+> >>  		new_entry->efd_tid = handle->h_transaction->t_tid;
+> >>  
+> >>  		ext4_lock_group(sb, block_group);
+> >> -		mb_clear_bits(bitmap_bh->b_data, bit, count_clusters);
+> >>  		ext4_mb_free_metadata(handle, &e4b, new_entry);
+> >>  	} else {
+> >> -		/* need to update group_info->bb_free and bitmap
+> >> -		 * with group lock held. generate_buddy look at
+> >> -		 * them with group lock_held
+> >> -		 */
+> >>  		if (test_opt(sb, DISCARD)) {
+> >>  			err = ext4_issue_discard(sb, block_group, bit,
+> >>  						 count_clusters, NULL);
+> >> @@ -6271,23 +6251,11 @@ static void ext4_mb_clear_bb(handle_t *handle, struct inode *inode,
+> >>  			EXT4_MB_GRP_CLEAR_TRIMMED(e4b.bd_info);
+> >>  
+> >>  		ext4_lock_group(sb, block_group);
+> >> -		mb_clear_bits(bitmap_bh->b_data, bit, count_clusters);
+> >>  		mb_free_blocks(inode, &e4b, bit, count_clusters);
+> >>  	}
+> >>  
+> >> -	ret = ext4_free_group_clusters(sb, gdp) + count_clusters;
+> >> -	ext4_free_group_clusters_set(sb, gdp, ret);
+> >> -	ext4_block_bitmap_csum_set(sb, gdp, bitmap_bh);
+> >> -	ext4_group_desc_csum_set(sb, block_group, gdp);
+> >>  	ext4_unlock_group(sb, block_group);
+> >>  
+> >> -	if (sbi->s_log_groups_per_flex) {
+> >> -		ext4_group_t flex_group = ext4_flex_group(sbi, block_group);
+> >> -		atomic64_add(count_clusters,
+> >> -			     &sbi_array_rcu_deref(sbi, s_flex_groups,
+> >> -						  flex_group)->free_clusters);
+> >> -	}
+> >> -
+> >>  	/*
+> >>  	 * on a bigalloc file system, defer the s_freeclusters_counter
+> >>  	 * update to the caller (ext4_remove_space and friends) so they
+> >> @@ -6302,26 +6270,14 @@ static void ext4_mb_clear_bb(handle_t *handle, struct inode *inode,
+> >>  
+> >>  	ext4_mb_unload_buddy(&e4b);
+> >>  
+> >> -	/* We dirtied the bitmap block */
+> >> -	BUFFER_TRACE(bitmap_bh, "dirtied bitmap block");
+> >> -	err = ext4_handle_dirty_metadata(handle, NULL, bitmap_bh);
+> >> -
+> >> -	/* And the group descriptor block */
+> >> -	BUFFER_TRACE(gd_bh, "dirtied group descriptor block");
+> >> -	ret = ext4_handle_dirty_metadata(handle, NULL, gd_bh);
+> >> -	if (!err)
+> >> -		err = ret;
+> >> -
+> >>  	if (overflow && !err) {
+> >>  		block += count;
+> >>  		count = overflow;
+> >> -		put_bh(bitmap_bh);
+> >>  		/* The range changed so it's no longer validated */
+> >>  		flags &= ~EXT4_FREE_BLOCKS_VALIDATED;
+> >>  		goto do_more;
+> >>  	}
+> >>  error_return:
+> >> -	brelse(bitmap_bh);
+> >>  	ext4_std_error(sb, err);
+> >>  	return;
+> >>  }
+> >> -- 
+> >> 2.30.0
+> >>
+> > 
+> 
+> -- 
+> Best wishes
+> Kemeng Shi
+> 
