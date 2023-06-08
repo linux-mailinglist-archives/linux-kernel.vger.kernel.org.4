@@ -2,92 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0016072793D
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:54:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD59E727942
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:55:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233619AbjFHHyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 03:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45676 "EHLO
+        id S233685AbjFHHyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 03:54:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233170AbjFHHyJ (ORCPT
+        with ESMTP id S233466AbjFHHyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 03:54:09 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474FD10F8
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 00:54:08 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-51458187be1so508804a12.2
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 00:54:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686210847; x=1688802847;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=E2Twlaiedobdlie44+yvfCt28qgI5GSJ8RzJigOLjck=;
-        b=ZRSQm2SbKPvteuLLgPLe7nCK0DjGUrekqwVBx0rP+syuDvylnzfmb9qt24XNGZ6ulz
-         na0MmTT2NJye+PzluJ6LcW3DhyGErcL2K9VGlFTfTw4FUZYh5x82Dg4HdlD8f8c9eAdK
-         20FmAs+cjr+D0BAnTZeCULB9MfbUQI0aWqS9fK/2XrJ6CdTDXppj4kl8ief1NvuE9kvM
-         YTX6BLXI/s9weYeS30cj8tfGn8Ib6uTXNqvKs7eSNgBq87jQ9lhpPelGD/cXeUU9G5kS
-         mPtnmnk2vwG7uuLODA3vMWi+tzqEhTzBevkTldS6+gIxMEci+LsUfozVz4OAG1C1Hcee
-         7peQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686210847; x=1688802847;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E2Twlaiedobdlie44+yvfCt28qgI5GSJ8RzJigOLjck=;
-        b=FDUvU1KZNge7pxM4D0JN49JJgCWbwB9nRQjIJZIh9eKctUWIsk/1fKB61yd5wrCH0G
-         12ofHoNDjSq94Mvhi0YZm+aTrsz2XVp6sxmEdAz8xLdn4wi284wYmMqECLc+DvoJII1i
-         9MWgJLV1boOg93mCszKFF7dtOrpeBGOj8UANCRFWaRpcxEsEVl0OUT7GRCvrNr71/zip
-         Qp1kKSiJys2gJrXA+Xt/EAJZY5hz5BDtx4kCPz4VPpIMO39zUku63un4BctA9Gce6B0Y
-         dmjN8eEpqJEqczwtnvFlQ6MiADoGbuzLI9s2kc5aozLJVtDdzH+ihfB7VTO3UFStHAGH
-         ICtw==
-X-Gm-Message-State: AC+VfDxxehVXtL5/AiVTB3sDBqLXcblAtWdQy3VjnT+C4WxMrcp7bops
-        ks5oG8E73fKLBlbcEZ//+jWWdg==
-X-Google-Smtp-Source: ACHHUZ4fomm2ljY9Wjm1oqS8KoBZmj6ojHu+GGsGRunrLXkGdjHgEpVBmbct0AHYw4BdzlGEQgP2SQ==
-X-Received: by 2002:a17:907:86ac:b0:977:d48f:97ad with SMTP id qa44-20020a17090786ac00b00977d48f97admr7723485ejc.75.1686210846735;
-        Thu, 08 Jun 2023 00:54:06 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id n27-20020a056402515b00b00502689a06b2sm235647edd.91.2023.06.08.00.54.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 00:54:06 -0700 (PDT)
-Message-ID: <61278e12-ba39-4503-ca74-a7118b0f6e99@linaro.org>
-Date:   Thu, 8 Jun 2023 09:54:01 +0200
+        Thu, 8 Jun 2023 03:54:44 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2373F128;
+        Thu,  8 Jun 2023 00:54:39 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8Ax3eo+iYFkYXUAAA--.1724S3;
+        Thu, 08 Jun 2023 15:54:38 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx+OQ8iYFkZ+8GAA--.22575S3;
+        Thu, 08 Jun 2023 15:54:36 +0800 (CST)
+Subject: Re: [PATCH v1] usb: dwc2: add pci_device_id driver_data parse support
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Minas Harutyunyan <hminas@synopsys.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230518092240.8023-1-zhuyinbo@loongson.cn>
+ <2023051843-scruffy-gush-cdec@gregkh>
+ <aeaebb8c-e077-4678-62df-d80baff16347@loongson.cn>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <ad9bfa94-1372-4810-734e-0bbaace37553@loongson.cn>
+Date:   Thu, 8 Jun 2023 15:54:36 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [v6 1/4] dt-bindings: pwm: Add ASPEED PWM Control documentation
+In-Reply-To: <aeaebb8c-e077-4678-62df-d80baff16347@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Language: en-US
-To:     Billy Tsai <billy_tsai@aspeedtech.com>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "patrick@stwcx.xyz" <patrick@stwcx.xyz>
-References: <20230608021839.12769-1-billy_tsai@aspeedtech.com>
- <20230608021839.12769-2-billy_tsai@aspeedtech.com>
- <4dffd320-8e30-fb30-6ded-79519afddc21@linaro.org>
- <SG2PR06MB3365DD80EA2FD026D400C4A78B50A@SG2PR06MB3365.apcprd06.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <SG2PR06MB3365DD80EA2FD026D400C4A78B50A@SG2PR06MB3365.apcprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Bx+OQ8iYFkZ+8GAA--.22575S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
+        nUUI43ZEXa7xR_UUUUUUUUU==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -96,31 +57,254 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/06/2023 09:47, Billy Tsai wrote:
-> 
->   >> +
->   >> +allOf:
->   >> +  - $ref: pwm.yaml#
->   >> +
->   >> +properties:
->   >> +  compatible:
->   >> +    enum:
->   >> +      - aspeed,ast2600-pwm
->   >> +
->   >> +  "#pwm-cells":
->   >> +    const: 3
-> 
->   > 3 cells? For one PWM? What are they?
-> 
-> channel, period and polarity.
 
-Don't cut my responses. You wrote you have one PWM output, so only one
-channel. What do you put then in the channel?
+Friendly ping ?
 
-I will start NAKing such patches without DTS user. It's like reviewing
-fake code for some unknown solution and trying to get from you piece of
-answers one by one, because you do not want to share entire part.
 
-Best regards,
-Krzysztof
+在 2023/5/20 上午11:24, zhuyinbo 写道:
+> 
+> Hi greg k-h,
+> 
+> I'm sorry for giving you feedback so late, for your suggestion that I
+> have a some analysis.
+> 
+> 2023 May 18, 2023 at 6:32 PM, Greg Kroah-Hartman wrote:
+>> On Thu, May 18, 2023 at 05:22:40PM +0800, Yinbo Zhu wrote:
+>>> The dwc2 driver has everything we need to run in PCI mode except
+>>> for pci_device_id driver_data parse.  With that to set Loongson
+>>> dwc2 element and added identified as PCI_VENDOR_ID_LOONGSON
+>>> and PCI_DEVICE_ID_LOONGSON_DWC2 in dwc2_pci_ids, the Loongson
+>>> dwc2 controller will work.
+>>>
+>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>>> ---
+>>>   drivers/usb/dwc2/core.h   |  1 +
+>>>   drivers/usb/dwc2/params.c | 33 +++++++++++++++++++++++++++++++--
+>>>   drivers/usb/dwc2/pci.c    | 14 +-------------
+>>>   include/linux/pci_ids.h   |  2 ++
+>>>   4 files changed, 35 insertions(+), 15 deletions(-)
+>>>
+>>> diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
+>>> index 0bb4c0c845bf..c92a1da46a01 100644
+>>> --- a/drivers/usb/dwc2/core.h
+>>> +++ b/drivers/usb/dwc2/core.h
+>>> @@ -1330,6 +1330,7 @@ irqreturn_t dwc2_handle_common_intr(int irq, 
+>>> void *dev);
+>>>   /* The device ID match table */
+>>>   extern const struct of_device_id dwc2_of_match_table[];
+>>>   extern const struct acpi_device_id dwc2_acpi_match[];
+>>> +extern const struct pci_device_id dwc2_pci_ids[];
+>>>   int dwc2_lowlevel_hw_enable(struct dwc2_hsotg *hsotg);
+>>>   int dwc2_lowlevel_hw_disable(struct dwc2_hsotg *hsotg);
+>>> diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
+>>> index 21d16533bd2f..f7550d293c2d 100644
+>>> --- a/drivers/usb/dwc2/params.c
+>>> +++ b/drivers/usb/dwc2/params.c
+>>> @@ -7,6 +7,8 @@
+>>>   #include <linux/module.h>
+>>>   #include <linux/of_device.h>
+>>>   #include <linux/usb/of.h>
+>>> +#include <linux/pci_ids.h>
+>>> +#include <linux/pci.h>
+>>>   #include "core.h"
+>>> @@ -55,6 +57,14 @@ static void dwc2_set_jz4775_params(struct 
+>>> dwc2_hsotg *hsotg)
+>>>           !device_property_read_bool(hsotg->dev, 
+>>> "disable-over-current");
+>>>   }
+>>> +static void dwc2_set_loongson_params(struct dwc2_hsotg *hsotg)
+>>> +{
+>>> +    struct dwc2_core_params *p = &hsotg->params;
+>>> +
+>>> +    p->phy_utmi_width = 8;
+>>> +    p->power_down = DWC2_POWER_DOWN_PARAM_NONE;
+>>> +}
+>>> +
+>>>   static void dwc2_set_x1600_params(struct dwc2_hsotg *hsotg)
+>>>   {
+>>>       struct dwc2_core_params *p = &hsotg->params;
+>>> @@ -281,6 +291,22 @@ const struct acpi_device_id dwc2_acpi_match[] = {
+>>>   };
+>>>   MODULE_DEVICE_TABLE(acpi, dwc2_acpi_match);
+>>> +const struct pci_device_id dwc2_pci_ids[] = {
+>>> +    {
+>>> +        PCI_DEVICE(PCI_VENDOR_ID_SYNOPSYS, PCI_PRODUCT_ID_HAPS_HSOTG),
+>>> +    },
+>>> +    {
+>>> +        PCI_DEVICE(PCI_VENDOR_ID_STMICRO,
+>>> +               PCI_DEVICE_ID_STMICRO_USB_OTG),
+>>> +    },
+>>> +    {
+>>> +        PCI_DEVICE(PCI_VENDOR_ID_LOONGSON, 
+>>> PCI_DEVICE_ID_LOONGSON_DWC2),
+>>> +        .driver_data = (unsigned long)dwc2_set_loongson_params,
+>>> +    },
+>>> +    { /* end: all zeroes */ }
+>>> +};
+>>> +MODULE_DEVICE_TABLE(pci, dwc2_pci_ids);
+>>> +
+>>>   static void dwc2_set_param_otg_cap(struct dwc2_hsotg *hsotg)
+>>>   {
+>>>       switch (hsotg->hw_params.op_mode) {
+>>> @@ -929,10 +955,13 @@ int dwc2_init_params(struct dwc2_hsotg *hsotg)
+>>>           set_params(hsotg);
+>>>       } else {
+>>>           const struct acpi_device_id *amatch;
+>>> +        const struct pci_device_id *pmatch;
+>>>           amatch = acpi_match_device(dwc2_acpi_match, hsotg->dev);
+>>> -        if (amatch && amatch->driver_data) {
+>>> -            set_params = (set_params_cb)amatch->driver_data;
+>>> +        pmatch = pci_match_id(dwc2_pci_ids, 
+>>> to_pci_dev(hsotg->dev->parent));
+>>
+>> Ick, this means this is not a "real" PCI driver, right?  Why not?
+> 
+> 
+> The params.c and platform.c was a part of pci dwc2 device driver. This 
+> pci.c was only play a role that register device resource but not operate
+> dwc2 hardware.  in other words, the params.c seems unrelated to the 
+> device type.  Whether this device is a PCI device, platform device, or 
+> PCI device, it is best to use params.c for operational dwc2 elements.
+> Failure to do so seems to break the original design.
+> 
+>>
+>> Please tie into the PCI device probe call, don't walk all PCI devices
+>> like this.
+> 
+> 
+> I learn about that you strongly disagree with using pci_match_id, May
+> I ask you the reason ?  actually, I use it was due to I noticed that
+> xhci-pci.c, ehci-pci.c and ohci-pci.c was all use it. and I don't use it
+> in dwc2/pci.c was considering set dwc2 element need dpend on elements.c
+> and platform.c, and usb driver (ohci,echi,xhci) was a relatively
+> indepent device driver when to operate usb controler. but dwc2 was not.
+> 
+> If I fource the element setting of dwc2 element in dwc2/pci.c. It will 
+> be following case. This will cause problems with element-initial
+> function or element-check function.
+> 
+> 1. initial dwc2 element.
+> 2. check the setting of dwc2 element whether was suitable
+> 3. set dwc2 element.
+> 
+> or
+> 
+> 1. set dwc2 element.
+> 2. initial dwc2 element.
+> 3. check the setting of dwc2 element whether was suitable
+> 
+> The corresponding code call process as follows:
+> 
+> 1. dwc2_set_default_params(hsotg);
+> 2. dwc2_get_device_properties(hsotg);
+> 3. dwc2_check_params(hsotg);
+> 4. dwc2_set_loongson_params;
+> 
+> or
+> 
+> 1. dwc2_set_loongson_params;
+> 2. dwc2_set_default_params(hsotg);
+> 3. dwc2_get_device_properties(hsotg);
+> 4. dwc2_check_params(hsotg);
+> 
+> But the platform dwc2 device or acpi dwc2 device was all following case
+> and It seems was correct order.
+> 
+> 1. dwc2_set_default_params(hsotg);
+> 2. dwc2_get_device_properties(hsotg);
+> 3. dwc2_set_loongson_params;
+> 4. dwc2_check_params(hsotg);
+> 
+>>
+>> How are you _sure_ that the parent is really a PCI device?  That is very
+>> very fragile and will break.
+>>
+>> Do this properly instead.
+> 
+> 
+> Thank you for your reminder. There was indeed an issue with my previous
+> code, and the modified code is as follows, then it seems to ensure that
+> device is a PCI device.
+> 
+> @@ -927,13 +954,20 @@ int dwc2_init_params(struct dwc2_hsotg *hsotg)
+>          if (match && match->data) {
+>                  set_params = match->data;
+>                  set_params(hsotg);
+> -       } else {
+> +       } else if (!match) {
+>                  const struct acpi_device_id *amatch;
+> +               const struct pci_device_id *pmatch = NULL;
+> 
+>                  amatch = acpi_match_device(dwc2_acpi_match, hsotg->dev);
+>                  if (amatch && amatch->driver_data) {
+>                          set_params = (set_params_cb)amatch->driver_data;
+>                          set_params(hsotg);
+> +               } else if (!amatch)
+> +                       pmatch = pci_match_id(dwc2_pci_ids,
+>                      to_pci_dev(hsotg->dev->parent));
+> +
+> +               if (pmatch && pmatch->driver_data) {
+> +                       set_params = (set_params_cb)pmatch->driver_data;
+> +                       set_params(hsotg);
+>                  }
+> 
+>>
+>>
+>>> +
+>>> +        if ((amatch && amatch->driver_data) || (pmatch && 
+>>> pmatch->driver_data)) {
+>>> +            set_params = (set_params_cb)pmatch->driver_data;
+>>>               set_params(hsotg);
+>>>           }
+>>>       }
+>>> diff --git a/drivers/usb/dwc2/pci.c b/drivers/usb/dwc2/pci.c
+>>> index b7306ed8be4c..f3a1e4232a31 100644
+>>> --- a/drivers/usb/dwc2/pci.c
+>>> +++ b/drivers/usb/dwc2/pci.c
+>>> @@ -24,7 +24,7 @@
+>>>   #include <linux/platform_device.h>
+>>>   #include <linux/usb/usb_phy_generic.h>
+>>> -#define PCI_PRODUCT_ID_HAPS_HSOTG    0xabc0
+>>> +#include "core.h"
+>>>   static const char dwc2_driver_name[] = "dwc2-pci";
+>>> @@ -122,18 +122,6 @@ static int dwc2_pci_probe(struct pci_dev *pci,
+>>>       return ret;
+>>>   }
+>>> -static const struct pci_device_id dwc2_pci_ids[] = {
+>>> -    {
+>>> -        PCI_DEVICE(PCI_VENDOR_ID_SYNOPSYS, PCI_PRODUCT_ID_HAPS_HSOTG),
+>>> -    },
+>>> -    {
+>>> -        PCI_DEVICE(PCI_VENDOR_ID_STMICRO,
+>>> -               PCI_DEVICE_ID_STMICRO_USB_OTG),
+>>> -    },
+>>> -    { /* end: all zeroes */ }
+>>> -};
+>>> -MODULE_DEVICE_TABLE(pci, dwc2_pci_ids);
+>>> -
+>>>   static struct pci_driver dwc2_pci_driver = {
+>>>       .name = dwc2_driver_name,
+>>>       .id_table = dwc2_pci_ids,
+>>> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+>>> index e43ab203054a..6481f648695a 100644
+>>> --- a/include/linux/pci_ids.h
+>>> +++ b/include/linux/pci_ids.h
+>>> @@ -157,6 +157,7 @@
+>>>   #define PCI_VENDOR_ID_PCI_SIG        0x0001
+>>>   #define PCI_VENDOR_ID_LOONGSON        0x0014
+>>> +#define PCI_DEVICE_ID_LOONGSON_DWC2    0x7a04
+>>>   #define PCI_VENDOR_ID_SOLIDIGM        0x025e
+>>> @@ -2356,6 +2357,7 @@
+>>>   #define PCI_DEVICE_ID_SYNOPSYS_HAPSUSB3_AXI    0xabce
+>>>   #define PCI_DEVICE_ID_SYNOPSYS_HAPSUSB31    0xabcf
+>>>   #define PCI_DEVICE_ID_SYNOPSYS_EDDA    0xedda
+>>> +#define PCI_PRODUCT_ID_HAPS_HSOTG       0xabc0
+>>
+>> Please read the top of this file for why you should not add new ids
+>> here.
+> 
+> okay, I will remove it.
+> 
+> Thanks!
+> Yinbo.
 
