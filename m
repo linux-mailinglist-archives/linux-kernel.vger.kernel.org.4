@@ -2,123 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D09EF7278BB
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7A3F7278BE
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:26:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235262AbjFHHZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 03:25:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59438 "EHLO
+        id S235230AbjFHHZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 03:25:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235465AbjFHHZA (ORCPT
+        with ESMTP id S234439AbjFHHZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 03:25:00 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C651B137
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 00:24:57 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8AxHutGgoFknnMAAA--.1744S3;
-        Thu, 08 Jun 2023 15:24:54 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxZuRGgoFkr98GAA--.22149S3;
-        Thu, 08 Jun 2023 15:24:54 +0800 (CST)
-Message-ID: <aff664c7-b692-4fcf-ad61-8030cc648501@loongson.cn>
-Date:   Thu, 8 Jun 2023 15:24:54 +0800
+        Thu, 8 Jun 2023 03:25:57 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C43D9E;
+        Thu,  8 Jun 2023 00:25:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686209156; x=1717745156;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sfNmgmPMVanuLL+3q2wGUF5ZoGfwANQwAmBIQBrBi1s=;
+  b=WqB4QfEOUxS6+3zlu+Z6G4VyxvFCk53CkfoU/XFeIn4LNxYe2dTeN5yx
+   w0u0W2f8nhB38lw3Rho64XJrGmhFIjpvWHEeFb+ysPo9dYxhsOQenprXg
+   OyfkyGXLTPGGUWbwaUKci5jPPQmg53ehQwnFbUIC1FAAj2rvzs0qff4j3
+   +mdGEG7TjpF1fzs6s+Eaf/bHFFCKuxKdgO1Yq8Q4walOQswCoigeImbPy
+   On5KddHbNq7zkzdHRzSib4bxU8P7PZwID5lQzNA0zipxyl0iDiGiBkr/+
+   W5h1LSk0pip2rY7qQrDNqvKK2ZXi2vhTo05iB5bQQ65oznvQZFSxZpiNU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="420799361"
+X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
+   d="scan'208";a="420799361"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 00:25:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="854237340"
+X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
+   d="scan'208";a="854237340"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 08 Jun 2023 00:25:53 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 08 Jun 2023 10:25:52 +0300
+Date:   Thu, 8 Jun 2023 10:25:52 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Pavan Holla <pholla@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        bleung@chromium.org, pmalani@chromium.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: typec: Fix fast_role_swap_current show function
+Message-ID: <ZIGCgBfb3UUfvhrc@kuha.fi.intel.com>
+References: <2023060611-coach-entitle-d4e4@gregkh>
+ <20230607193328.3359487-1-pholla@chromium.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2] drm/logicvc: Kconfig: select REGMAP and REGMAP_MMIO
-Content-Language: en-US
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230608024207.581401-1-suijingfeng@loongson.cn>
- <ZIGAEZTJvq1GqFVD@aptenodytes>
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <ZIGAEZTJvq1GqFVD@aptenodytes>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8AxZuRGgoFkr98GAA--.22149S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoW7ZF1kZryDZr18GF1xur13Jrc_yoW8XFW7pr
-        W8Ka4jyF4IvFW5KF1xAr13XFy5X3WkGFWS9F12k3WDuwn8AFyDZr93ZrWYgFy5ZrZrJF40
-        yFn7Ka45Ga12kagCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUU9Sb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv
-        67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
-        AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C2
-        67AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
-        8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWU
-        CwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
-        1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
-        daVFxhVjvjDU0xZFpf9x07jYSoJUUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230607193328.3359487-1-pholla@chromium.org>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Jun 07, 2023 at 07:33:26PM +0000, Pavan Holla wrote:
+> The current implementation mistakenly performs a & operation on
+> the output of sysfs_emit. This patch performs the & operation before
+> calling sysfs_emit.
+> 
+> Fixes: 662a60102c12 ("usb: typec: Separate USB Power Delivery from USB Type-C")
+> Reported-by: Benson Leung <bleung@chromium.org>
+> Signed-off-by: Pavan Holla <pholla@chromium.org>
 
-thanks a lot
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-On 2023/6/8 15:15, Paul Kocialkowski wrote:
-> Hi,
->
-> On Thu 08 Jun 23, 10:42, Sui Jingfeng wrote:
->> drm/logicvc driver is depend on REGMAP and REGMAP_MMIO, should select this
->> two kconfig option, otherwise the driver failed to compile on platform
->> without REGMAP_MMIO selected:
->>
->> ERROR: modpost: "__devm_regmap_init_mmio_clk" [drivers/gpu/drm/logicvc/logicvc-drm.ko] undefined!
->> make[1]: *** [scripts/Makefile.modpost:136: Module.symvers] Error 1
->> make: *** [Makefile:1978: modpost] Error 2
->>
->> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
-> Thanks for the fix, looks good to me!
->
-> Acked-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> ---
+>  drivers/usb/typec/pd.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/pd.c b/drivers/usb/typec/pd.c
+> index 0bcde1ff4d39..8cc66e4467c4 100644
+> --- a/drivers/usb/typec/pd.c
+> +++ b/drivers/usb/typec/pd.c
+> @@ -95,7 +95,7 @@ peak_current_show(struct device *dev, struct device_attribute *attr, char *buf)
+>  static ssize_t
+>  fast_role_swap_current_show(struct device *dev, struct device_attribute *attr, char *buf)
+>  {
+> -	return sysfs_emit(buf, "%u\n", to_pdo(dev)->pdo >> PDO_FIXED_FRS_CURR_SHIFT) & 3;
+> +	return sysfs_emit(buf, "%u\n", (to_pdo(dev)->pdo >> PDO_FIXED_FRS_CURR_SHIFT) & 3);
+>  }
+>  static DEVICE_ATTR_RO(fast_role_swap_current);
+>  
+> -- 
+> 2.41.0.rc0.172.g3f132b7071-goog
 
-After received this Acked-by, do a need append this tag to the patch, 
-and resend this again?
-
-I don't know about this.
-
-I don't need to do anythings ales, you will push it to your repository, 
-right?
-
-
-> Cheers,
->
-> Paul
->
->> ---
->>   drivers/gpu/drm/logicvc/Kconfig | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/gpu/drm/logicvc/Kconfig b/drivers/gpu/drm/logicvc/Kconfig
->> index fa7a88368809..1df22a852a23 100644
->> --- a/drivers/gpu/drm/logicvc/Kconfig
->> +++ b/drivers/gpu/drm/logicvc/Kconfig
->> @@ -5,5 +5,7 @@ config DRM_LOGICVC
->>   	select DRM_KMS_HELPER
->>   	select DRM_KMS_DMA_HELPER
->>   	select DRM_GEM_DMA_HELPER
->> +	select REGMAP
->> +	select REGMAP_MMIO
->>   	help
->>   	  DRM display driver for the logiCVC programmable logic block from Xylon
->> -- 
->> 2.25.1
->>
 -- 
-Jingfeng
-
+heikki
