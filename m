@@ -2,175 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F26BF7276BB
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 07:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D27B7276C1
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 07:35:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233908AbjFHFcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 01:32:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39228 "EHLO
+        id S233153AbjFHFfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 01:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233578AbjFHFck (ORCPT
+        with ESMTP id S234146AbjFHFeu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 01:32:40 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530DBE7;
-        Wed,  7 Jun 2023 22:32:39 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id 6a1803df08f44-62613b2c8b7so2337856d6.1;
-        Wed, 07 Jun 2023 22:32:39 -0700 (PDT)
+        Thu, 8 Jun 2023 01:34:50 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D34E4D
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 22:34:49 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1b011cffe7fso472175ad.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 22:34:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686202358; x=1688794358;
+        d=linaro.org; s=google; t=1686202489; x=1688794489;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=N2OFGIuk/0ZguBRl1X7uFzHckLFOr1kSCfMjfwMf9W8=;
-        b=qoMp/yLodDw9nsr5LnE3tGWU+9Ws4ygi8TqVxIQNvl+GqplEj1rOIc5FnXwIxpXe5a
-         Xnj0rcPNBL31fnBJMMrevabN48jCejuB3ZvcNSbKSwUj5Rb+0qNm3uA6kyumcmt/nmR/
-         FTQXOjY8D+AZMdKSTbNTky6c+WLOwS7p7c2qHCi35VOP08346/q4wNZN759uDU+v/b6k
-         AgPwu/1nsYifZ0BoEStSMX/DGeyze0Q4lUri1uQrmeHbRn70/Bugyo3vOoSapzI5k2pW
-         pvWyj0E8SGNaVFw73Yq/3MovmTa6g2zhjGwx1mv6A1RUda3C8NhV/OP0vlPOrBaFsp+v
-         esfQ==
+        bh=Hi3h3STrD8nAW7/sg6jcuBzQ5Kz2zlpfMrjH0c93LuE=;
+        b=t3Csx9jDOUGENAtJPJP0Bujqdp02H1al9yUYvJhgfDb5TYN7yPNiQ53mifoKoBQSW5
+         XRL+1BDN4BBdaz+F7j6Aa1TZIrEPMH2IfCi3aAXWrJ81JqsUDN3lTE3vYclFSkSXXjyh
+         rT4rlUEHxODl6nFE7lQ9QRPdETQq+FfWZbXW9Ef8hBjDhSzU5Q+hsZQ3y3mZw5WdyiEH
+         EuP0B60BiEtYEJB8UbFkBEWBk9qNx7XLg6SHllGl3V8yyCA57+kRlalVsRMjU0Px0CN+
+         u2zfS0lftayqESTQ4rUk9VUlYnB7df1oDDteQQ+siDAqVIQ9c6TBIS+sXcn5Yzi2P3xV
+         +iLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686202358; x=1688794358;
+        d=1e100.net; s=20221208; t=1686202489; x=1688794489;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=N2OFGIuk/0ZguBRl1X7uFzHckLFOr1kSCfMjfwMf9W8=;
-        b=Xf1MB6RSUuk7J8W1oevmPq38pGfVEt7/jGesxchPxJLoVOmBwd84go9l7xySfyrWFy
-         zIz67G0KG4g407bHXmTRp2HcjyqmflcNdqowZnXX7uUu3ZOOKbgbI/XrhXRA2iaUbTJW
-         n1JipwwoHUH9dkmNnmpZHFRFyCUIkXC0hJuYouZvFnIDY9zusIbw4VTx8C1qRtCGjfFj
-         n6viYbDdDblQHne2qXbQ6kq4qtQatC2MbJ7mRiFZ9HPhGDmzKbj3RItbcAllIsyRI+sm
-         CK/liznCjxfC/lJPNvRZo2ROiK+wWxmvTrjkmhikJdurmICC1aqDxk0OOUIj45xXvYlE
-         pkVg==
-X-Gm-Message-State: AC+VfDx2OH+3CzJDEnVAamCNcBrzIVfa44BAWyTUoQkNRL5UQlbj7oji
-        i1ZgE9wHRlFZ9/PiPvWzC9U=
-X-Google-Smtp-Source: ACHHUZ6Yd0uD+lPMu+WRO51kABisCs6xCdPxgBV7w0346Y5pSLhMQVaHAoCNGlfubwmhDgLj+1l3cA==
-X-Received: by 2002:a05:6214:230b:b0:62a:d642:df29 with SMTP id gc11-20020a056214230b00b0062ad642df29mr595195qvb.39.1686202358371;
-        Wed, 07 Jun 2023 22:32:38 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-10.three.co.id. [180.214.233.10])
-        by smtp.gmail.com with ESMTPSA id x17-20020a170902ea9100b0019c13d032d8sm436511plb.253.2023.06.07.22.32.37
+        bh=Hi3h3STrD8nAW7/sg6jcuBzQ5Kz2zlpfMrjH0c93LuE=;
+        b=Cr3YkwZfY04cjd6oaayi5jawRdqRFjTwGjhpSOT1j6U4/eijIIFm8IIxbjNosaMLt+
+         73bFArkBfLZ+YJFGauHosbI1NmpSWDtfgtXZArAc8wTDgtVwECxyr7k9uKX16HaDIiXq
+         fz4+BzR5DbGA4VElRnO7hWhP7Bej1mOStOocM+WLqUfvoc1uqNB3PZZqVGmniXkZLlO0
+         qjt/yHTcyWEEZrddCbEu29N74uaRrzUzvuj2q0v2ngO1FU9IgAliT0xQg3jwC28VtYi3
+         vB2EgRsoqNmfoaWzldqPZcmaIolidR/t1K0R6ITgZB+SkTQ1CWtU+ndBKEIxyzFrJGkO
+         El4A==
+X-Gm-Message-State: AC+VfDyvlOM3uf0gJgk12auRuIZqUDat0z9E8RPMvxfSlgdHDsEgE/su
+        GNKnI/WlqFJdJ4DZwanHmXJLlg==
+X-Google-Smtp-Source: ACHHUZ69DUeIZySrAUAki+m1E/uiJQzSlLA8X20Zfy3gPcqX9L/hc9WeD08FTtkNJ1y0TBB4FQQQgg==
+X-Received: by 2002:a17:903:493:b0:1ae:55c8:6b60 with SMTP id jj19-20020a170903049300b001ae55c86b60mr3174132plb.1.1686202488870;
+        Wed, 07 Jun 2023 22:34:48 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id k1-20020a170902694100b00199203a4fa3sm446622plt.203.2023.06.07.22.34.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 22:32:37 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 946451069EA; Thu,  8 Jun 2023 12:32:34 +0700 (WIB)
-Date:   Thu, 8 Jun 2023 12:32:34 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Richard Fontana <rfontana@redhat.com>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Franziska Naepelt <franziska.naepelt@googlemail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux SPDX Licenses <linux-spdx@vger.kernel.org>,
-        Linux Kernel Janitors <kernel-janitors@vger.kernel.org>,
-        Linux Crypto <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>
-Subject: Re: [PATCH 8/8] crypto: cts: Convert MIT boilerplate to
- corresponding SPDX license identifier
-Message-ID: <ZIFn8mNXVcI0SGTR@debian.me>
-References: <20230607053940.39078-10-bagasdotme@gmail.com>
- <20230607053940.39078-18-bagasdotme@gmail.com>
- <CAC1cPGx-mD0DAEanCFtoxoGRyHkcu-GTTNX=ePzjhb8XM+73mg@mail.gmail.com>
+        Wed, 07 Jun 2023 22:34:48 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 11:04:46 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 13/16] OPP: Extend dev_pm_opp_data with OPP provider
+ support
+Message-ID: <20230608053446.ngoxh7zo7drnr32z@vireshk-i7>
+References: <20230607124628.157465-1-ulf.hansson@linaro.org>
+ <20230607124628.157465-14-ulf.hansson@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xrhHIH4HO9EIBTVB"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAC1cPGx-mD0DAEanCFtoxoGRyHkcu-GTTNX=ePzjhb8XM+73mg@mail.gmail.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230607124628.157465-14-ulf.hansson@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 07-06-23, 14:46, Ulf Hansson wrote:
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index 79b4b44ced3e..81a3418e2eaf 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -1112,6 +1112,15 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
+>  			return ret;
+>  		}
+>  
+> +		if (opp->provider == DEV_PM_OPP_TYPE_GENPD) {
+> +			ret = dev_pm_genpd_set_performance_state(dev, opp->level);
+> +			if (ret) {
+> +				dev_err(dev, "Failed to set performance level: %d\n",
+> +					ret);
+> +				return ret;
+> +			}
+> +		}
+> +
 
---xrhHIH4HO9EIBTVB
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I don't like this :)
 
-On Wed, Jun 07, 2023 at 09:47:33AM -0400, Richard Fontana wrote:
-> On Wed, Jun 7, 2023 at 1:41=E2=80=AFAM Bagas Sanjaya <bagasdotme@gmail.co=
-m> wrote:
-> >
-> > License boilerplate in CTS mode implementation (crypto/cts.c) looks like
-> > MIT license with advertising clause. Replace it with correspondig
-> > SPDX tag.
-> >
-> > Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> > ---
-> >  crypto/cts.c | 24 +-----------------------
-> >  1 file changed, 1 insertion(+), 23 deletions(-)
-> >
-> > diff --git a/crypto/cts.c b/crypto/cts.c
-> > index 8f604f6554b1c3..9ec7e9787c0f6a 100644
-> > --- a/crypto/cts.c
-> > +++ b/crypto/cts.c
-> > @@ -1,3 +1,4 @@
-> > +// SPDX-License-Identifier: MIT
-> >  /*
-> >   * CTS: Cipher Text Stealing mode
-> >   *
-> > @@ -5,29 +6,6 @@
-> >   * The Regents of the University of Michigan
-> >   * ALL RIGHTS RESERVED
-> >   *
-> > - * Permission is granted to use, copy, create derivative works
-> > - * and redistribute this software and such derivative works
-> > - * for any purpose, so long as the name of The University of
-> > - * Michigan is not used in any advertising or publicity
-> > - * pertaining to the use of distribution of this software
-> > - * without specific, written prior authorization.  If the
-> > - * above copyright notice or any other identification of the
-> > - * University of Michigan is included in any copy of any
-> > - * portion of this software, then the disclaimer below must
-> > - * also be included.
-> > - *
-> > - * THIS SOFTWARE IS PROVIDED AS IS, WITHOUT REPRESENTATION
-> > - * FROM THE UNIVERSITY OF MICHIGAN AS TO ITS FITNESS FOR ANY
-> > - * PURPOSE, AND WITHOUT WARRANTY BY THE UNIVERSITY OF
-> > - * MICHIGAN OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
-> > - * WITHOUT LIMITATION THE IMPLIED WARRANTIES OF
-> > - * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE
-> > - * REGENTS OF THE UNIVERSITY OF MICHIGAN SHALL NOT BE LIABLE
-> > - * FOR ANY DAMAGES, INCLUDING SPECIAL, INDIRECT, INCIDENTAL, OR
-> > - * CONSEQUENTIAL DAMAGES, WITH RESPECT TO ANY CLAIM ARISING
-> > - * OUT OF OR IN CONNECTION WITH THE USE OF THE SOFTWARE, EVEN
-> > - * IF IT HAS BEEN OR IS HEREAFTER ADVISED OF THE POSSIBILITY OF
-> > - * SUCH DAMAGES.
-> >   */
->=20
-> This is not the MIT license (as defined by SPDX) - there may not be an
-> SPDX identifier covering this license text.
->=20
-> This is at least the second time in your recent patches where you have
-> assumed that a non-GPL license corresponds to a particular SPDX
-> identifier without (apparently) checking.
->=20
+We already have these calls in place from within _set_required_opps(), and we
+should try to get this done in a way that those calls themselves get the
+performance state configured.
 
-I was thought of interpolating license tags (heuristic matching) in
-cases like this. In this case, the UoMi license was adapted from
-(and roughly resembled) MIT (hence I thought of MIT variant).
-
-Greg, is Richard's comment right? If so, I'll drop this patch.
-
-Thanks!
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---xrhHIH4HO9EIBTVB
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZIFn7gAKCRD2uYlJVVFO
-ozfFAP9sWM4qlwFNu6r3na/bKCKHiwWU8alebLt42wOABFakzAEAjD3+2XFkgSTV
-d+qCr/jsqoR+CBbah4h4y+5xdfInHQM=
-=6Bvf
------END PGP SIGNATURE-----
-
---xrhHIH4HO9EIBTVB--
+-- 
+viresh
