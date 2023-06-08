@@ -2,98 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D8A7274FA
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 04:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE9E7274FC
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 04:27:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233249AbjFHCXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 22:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
+        id S231906AbjFHC1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 22:27:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231956AbjFHCXJ (ORCPT
+        with ESMTP id S229827AbjFHC1o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 22:23:09 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC2D26A9;
-        Wed,  7 Jun 2023 19:23:08 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id 5614622812f47-39aa8a055ecso108740b6e.1;
-        Wed, 07 Jun 2023 19:23:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686190988; x=1688782988;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rGkkSk0/C4/bnQbcrMfm2tdEZYME20m/Bpb2UhtM8LM=;
-        b=kO58IsSUgv7SxdqON7BQ46Mli60Pvg5kOD7zIwFnl6uM4cdbqwwZ7i3QFkOTSNX0Xd
-         Q3tlA/EspBc8nb9U7J+jDzy4Q8ZIAYghNiSYXIDz4p1kgkhMP7Au/C2VTQZFTRWOg3Ly
-         q/MoHvnu4HiPSDc59SYgnu5q2XI+1579WnyFhbQXrzRwUfWBUAEmY7Ec93qiSFCKSFdA
-         rp2H/rS/382h3CRSaqy3H9JkBzSjEapnRU3+9TZgkAGiZBg0eOgTrTymQR1G9T2z9sNF
-         AMgeNnybekX6wJ3rSHjPCcRkwvNtrPP/6gdaAdQpwifXXeUe+AG6PH+hoLBm/XmcHypJ
-         zQlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686190988; x=1688782988;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rGkkSk0/C4/bnQbcrMfm2tdEZYME20m/Bpb2UhtM8LM=;
-        b=NnCTJ3OyS62tGwXKEbKWwfVEuqSrwZUif5V+jvlaGMYLNySCZ752OFt7wubtlXt2T7
-         GmKxa3SBjOFWSjHBeIovjursEg3aIcArfPwwQnsV03YBjQBqkaLmnB49ckHqL1uyxlZU
-         NnAHavKrht2z3fEoDee1y6GtBojll4RIHcUdYS0PKBAx9Tn4OI9uN0l531epllfdn6oi
-         wo+aPhVNFAIRGU9W0FKBcSJhU5xP4/qBQHFcyXr0JeFBTxJsO+/6Y3dM3hVK1q1ztLmZ
-         gcoPlLewLV7rAZEKxfvtdkjoA0zQU0LeGKFqpmsCrNFMV4uAMdFXzcC5FeXZXU8+sE/p
-         TTeA==
-X-Gm-Message-State: AC+VfDwxRW6sEdl2ptE5QGdN+LkSDPwAsTd8YEbKZ8quVHpNbLy7HeeH
-        LdzvtkaWF5v/WssM/g/G7psIXCPjML0QSZdPvck=
-X-Google-Smtp-Source: ACHHUZ5u2kIvMA9SzdMee8mj5Xc/KyNzZBta5YguCmcEUqLwQ7OVJ/waKJh8OOV7pJKSj/1A/1fLBH15qLn37Gz/WS8=
-X-Received: by 2002:aca:b941:0:b0:39c:7f78:ba6d with SMTP id
- j62-20020acab941000000b0039c7f78ba6dmr62541oif.19.1686190987911; Wed, 07 Jun
- 2023 19:23:07 -0700 (PDT)
+        Wed, 7 Jun 2023 22:27:44 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CE6851BF0
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 19:27:42 -0700 (PDT)
+Received: from loongson.cn (unknown [192.168.100.1])
+        by gateway (Coremail) with SMTP id _____8AxnOqdPIFkg1MAAA--.1139S3;
+        Thu, 08 Jun 2023 10:27:41 +0800 (CST)
+Received: from lingfengzhe-ms7c94.loongson.cn (unknown [192.168.100.1])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxPMqcPIFkCkMGAA--.11968S2;
+        Thu, 08 Jun 2023 10:27:40 +0800 (CST)
+From:   Qi Hu <huqi@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     Qing Zhang <zhangqing@loongson.cn>, Enze Li <lienze@kylinos.cn>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Qi Hu <huqi@loongson.cn>, Miao HAO <haomiao19@mails.ucas.ac.cn>
+Subject: [PATCH v2] LoongArch: Fix function write_fcsr
+Date:   Thu,  8 Jun 2023 10:27:38 +0800
+Message-Id: <20230608022738.1861729-1-huqi@loongson.cn>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230602054112.2299565-1-wes.huang@moxa.com> <87y1l2m7u5.fsf@miraculix.mork.no>
-In-Reply-To: <87y1l2m7u5.fsf@miraculix.mork.no>
-From:   Wes Huang <wes155076@gmail.com>
-Date:   Thu, 8 Jun 2023 10:22:56 +0800
-Message-ID: <CAD_g2C3ng83vwbH83ntLgz7z=iDJoBFe5Dj5evJ0gSk5XSq2vw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] net: usb: qmi_wwan: add support for Compal RXM-G1
-To:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wes Huang <wes.huang@moxa.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8AxPMqcPIFkCkMGAA--.11968S2
+X-CM-SenderInfo: pkxtxqxorr0wxvrqhubq/1tbiAQAQCWSAc4ELYQABsl
+X-Coremail-Antispam: 1Uk129KBj9xXoW7Gw1DJw18uF48uryDXw4DJrc_yoW3Wrb_X3
+        WxJw4kur48Jay7Jwn0vFyrJr1093W8XFsIvF93Zr4xA3W5tr13Aw48Xw4UZr1Yk3yqqFs5
+        CrW0qry5CwsxtosvyTuYvTs0mTUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvT
+        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+        cSsGvfJTRUUUbhkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+        vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+        6r4UJVWxJr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj64x0Y40En7xvr7AKxVWU
+        JVW8JwAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4
+        IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE
+        7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcV
+        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jYZXOUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 7:18=E2=80=AFPM Bj=C3=B8rn Mork <bjorn@mork.no> wrot=
-e:
->
-> Wes Huang <wes155076@gmail.com> writes:
->
-> > Add support for Compal RXM-G1 which is based on Qualcomm SDX55 chip.
->
-> Patch looks good to me, but checkpatch warns about mismatch between From
-> (which ends up as Author) and your SoB:
->
->  WARNING: From:/Signed-off-by: email address mismatch: 'From: Wes Huang <=
-wes155076@gmail.com>' !=3D 'Signed-off-by: Wes Huang <wes.huang@moxa.com>'
->
-> If you have to send this from a different account, then you can work
-> around that issue by adding "From: Wes Huang <wes.huang@moxa.com>" as
-> the first line of the email body, followed by a single blank line.
->
-> git will then use the second From as Author, and it will match the SoB.
->
-> Acked-by: Bj=C3=B8rn Mork <bjorn@mork.no>
->
->
-> Bj=C3=B8rn
+Function "write_fcsr" uses wrong asm dest. Fix it!
 
-I'll resend the patch and add the "From" information to the first line
-of the email body. Thank you!
+Reported-by: Miao HAO <haomiao19@mails.ucas.ac.cn>
+Signed-off-by: Qi Hu <huqi@loongson.cn>
+---
+ arch/loongarch/include/asm/loongarch.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/include/asm/loongarch.h
+index b3323ab5b78d..35e8a52fea11 100644
+--- a/arch/loongarch/include/asm/loongarch.h
++++ b/arch/loongarch/include/asm/loongarch.h
+@@ -1496,7 +1496,7 @@ __BUILD_CSR_OP(tlbidx)
+ #define write_fcsr(dest, val) \
+ do {	\
+ 	__asm__ __volatile__(	\
+-	"	movgr2fcsr	%0, "__stringify(dest)"	\n"	\
++	"	movgr2fcsr	"__stringify(dest)", %0	\n"	\
+ 	: : "r" (val));	\
+ } while (0)
+ 
+-- 
+2.40.1
+
