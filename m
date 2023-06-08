@@ -2,147 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCADE7281A4
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 15:45:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1853A7281AB
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 15:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236305AbjFHNpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 09:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60024 "EHLO
+        id S235440AbjFHNrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 09:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235840AbjFHNpV (ORCPT
+        with ESMTP id S235625AbjFHNrU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 09:45:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AA8B2717
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 06:44:35 -0700 (PDT)
+        Thu, 8 Jun 2023 09:47:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A2A1FD6
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 06:46:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686231874;
+        s=mimecast20190719; t=1686231996;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8YOm/Wq0xQ/f+nLG8S3hOURNC7q6SK7Qr+0HSWMgLNg=;
-        b=Ser92o5D1BWMx46DEhd09GtatGdPxx6I/wiLfK/ZeA3PP0ZfmtR/Odcj0QVPerpcFaDdRj
-        Jwa/JOlOT/cAOYJ4tn3ioEnKhAYM8BdviXyozVUAj+CCyOFBCFG7xLyWhe1Au7Umz3nZX7
-        1EcnJMvri0fbsrJS++GTFG+LXkzCfV8=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=73nshEeWhw2n5gdRpaAAi9lUSo+UIEZBfmddmf0WSo8=;
+        b=QW7DacbZLKltZ0A87clNL628uRPcUz25ngxSTalGoe4kh7W4hThrZprVZLTvrIdxlZUHY6
+        a8WjDEgQNGAeZG5Aqw4qqIt77yKZeliVZY+QfZ89uZI3X7orHm3cTBfUL6At2rRJmZIQVB
+        srdwxCfB446gOJaEpjTBRohRdZOixrs=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-217-kj0ue-D7PAKDOZYZX8M-pg-1; Thu, 08 Jun 2023 09:44:33 -0400
-X-MC-Unique: kj0ue-D7PAKDOZYZX8M-pg-1
-Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-62621cdb1f0so7018796d6.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 06:44:33 -0700 (PDT)
+ us-mta-484-CFvb6UQhNViOW_dtRlNrbA-1; Thu, 08 Jun 2023 09:46:35 -0400
+X-MC-Unique: CFvb6UQhNViOW_dtRlNrbA-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-30ade645c59so254258f8f.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 06:46:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686231872; x=1688823872;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8YOm/Wq0xQ/f+nLG8S3hOURNC7q6SK7Qr+0HSWMgLNg=;
-        b=VG9pJnIkuNOFNCuIzZLz3REzxzuv3XhaWqmPS9TYjPmTnTZuNej2hgIGVQ5TePw7AS
-         RuNKbiRPxvEsNri08skwZwClP4Skxv/NeT6xW8wYWJTQOCdx/JDJO2fhgvdZS2JInvWe
-         dZtD8/fElArDSNm52UJ0gnKBsNlL/jt9p4n+WurQw0Gfbo/B6qUD134u6HfWNpHoMoEq
-         BxSljmvFUDyWe2k9mOBE1bL/HmcuRRojVCsdIFBXCdiMeVdIZ5CBqlsvUhksJYN5I/Yt
-         0oskfjvktp3kJUZfhbLS8XwJZKuZp/IJQzfGIkGwFYngskl5v9o6puK/fDchKJ+xUA9u
-         c28g==
-X-Gm-Message-State: AC+VfDzXxrPKSQwbuVTpTuGKSeX8t6LTjLWfa/UjICaSErwXR6eh+LSv
-        PpTRNRZM1jW/aPRFY3/iyc/+DYfJ9zhQpz/KG2cLbAXbHwmVt8FTpKzMTapZo4FJgMHp/5jyFFK
-        t0DxeXgvexo9UO4/60ZqtfqE2clYqurAbAbIE5kon9koEgYRpaznPEh6ihaikTXNaET0zKniCqP
-        5EIDw3BINw
-X-Received: by 2002:a05:6214:cac:b0:623:66ee:79b2 with SMTP id s12-20020a0562140cac00b0062366ee79b2mr1756885qvs.36.1686231872723;
-        Thu, 08 Jun 2023 06:44:32 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5A2C40pJOWAeAfGPq9ZdpAs1lkgBc1Htg+VY1e2LQ46fr1nqLpB/LfJtD43nPGY6v0oKmm/A==
-X-Received: by 2002:a05:6214:cac:b0:623:66ee:79b2 with SMTP id s12-20020a0562140cac00b0062366ee79b2mr1756847qvs.36.1686231872356;
-        Thu, 08 Jun 2023 06:44:32 -0700 (PDT)
-Received: from fedora (g2.ign.cz. [91.219.240.8])
-        by smtp.gmail.com with ESMTPSA id h9-20020a0cf209000000b0062884fd5fbfsm418979qvk.21.2023.06.08.06.44.29
+        d=1e100.net; s=20221208; t=1686231994; x=1688823994;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=73nshEeWhw2n5gdRpaAAi9lUSo+UIEZBfmddmf0WSo8=;
+        b=bnjcilHr8BMgIMzsz3cUK7AzKLfnGxOWcq2h0nklKr5a9w05y8uYYbC8TzxLen6u+m
+         z5Gaks8EGznPvXIeQaqHc4uGaggUA5nlu6e3TvpwnstN7bKCzr6Udi++HRB3hJ3Lniss
+         BQUbzsTyds2hqSafWKoBGnfmbP6pj3RuV2ZkXwm2eBwnKR1ogbukMaD6DrUOOSAbIQl4
+         e8ilbejCdCitzKDMnMqSx/RkYhJHaraca5Jx38fO4catJUlBxIyvxMxJJjs79s9UCXjV
+         hj2P1XpopjAWcaqe9RvRDkg8g3KXIQxkBkuGttKx6HDeCCyBeGlVNyDoYhRexmPn9mJa
+         XL6A==
+X-Gm-Message-State: AC+VfDzkX5Q6P7G99sCWP3nR2BFG+u2gRZy+FnhvsrrZ6SDr8Nvep6aM
+        4SQ0FNSltsv90CY3JbnJHRBROn6Xaug4RDjC4S9bJc6o/+G0SEkDA8KGVJ/g7U2V5XjwKim77Cn
+        EFXIgxI8ImQLcVN3DujNV9oA5
+X-Received: by 2002:adf:f547:0:b0:309:38af:91c6 with SMTP id j7-20020adff547000000b0030938af91c6mr7519235wrp.68.1686231994185;
+        Thu, 08 Jun 2023 06:46:34 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6nvd4pWYZsLG/t7CXB3KRL7ulTzo9Pl/yJm2BKU29KvWQFi9FA8ZY1S13xxeI6s5mULDgI/w==
+X-Received: by 2002:adf:f547:0:b0:309:38af:91c6 with SMTP id j7-20020adff547000000b0030938af91c6mr7519218wrp.68.1686231993887;
+        Thu, 08 Jun 2023 06:46:33 -0700 (PDT)
+Received: from redhat.com ([2.55.41.2])
+        by smtp.gmail.com with ESMTPSA id i1-20020adfefc1000000b0030647449730sm1671162wrp.74.2023.06.08.06.46.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 06:44:31 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Tianyu Lan <ltykernel@gmail.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "arnd@arndb.de" <arnd@arndb.de>
-Cc:     Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 3/9] x86/hyperv: Mark Hyper-V vp assist page unencrypted
- in SEV-SNP enlightened guest
-In-Reply-To: <BYAPR21MB16883BF49ED337A6EF063461D750A@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <20230601151624.1757616-1-ltykernel@gmail.com>
- <20230601151624.1757616-4-ltykernel@gmail.com> <873536ksye.fsf@redhat.com>
- <4103a70f-cc09-a966-3efa-5ab9273f5c55@gmail.com>
- <87o7lsk2v8.fsf@redhat.com>
- <BYAPR21MB16883BF49ED337A6EF063461D750A@BYAPR21MB1688.namprd21.prod.outlook.com>
-Date:   Thu, 08 Jun 2023 15:44:27 +0200
-Message-ID: <87y1ku2hms.fsf@redhat.com>
+        Thu, 08 Jun 2023 06:46:33 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 09:46:28 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Stefano Garzarella <sgarzare@redhat.com>,
+        Shannon Nelson <shannon.nelson@amd.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+        Tiwei Bie <tiwei.bie@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] vhost-vdpa: filter VIRTIO_F_RING_PACKED feature
+Message-ID: <20230608094528-mutt-send-email-mst@kernel.org>
+References: <32ejjuvhvcicv7wjuetkv34qtlpa657n4zlow4eq3fsi2twozk@iqnd2t5tw2an>
+ <CACGkMEu3PqQ99UoKF5NHgVADD3q=BF6jhLiyumeT4S1QCqN1tw@mail.gmail.com>
+ <20230606085643-mutt-send-email-mst@kernel.org>
+ <CAGxU2F7fkgL-HpZdj=5ZEGNWcESCHQpgRAYQA3W2sPZaoEpNyQ@mail.gmail.com>
+ <20230607054246-mutt-send-email-mst@kernel.org>
+ <CACGkMEuUapKvUYiJiLwtsN+x941jafDKS9tuSkiNrvkrrSmQkg@mail.gmail.com>
+ <20230608020111-mutt-send-email-mst@kernel.org>
+ <CACGkMEt4=3BRVNX38AD+mJU8v3bmqO-CdNj5NkFP-SSvsuy2Hg@mail.gmail.com>
+ <5giudxjp6siucr4l3i4tggrh2dpqiqhhihmdd34w3mq2pm5dlo@mrqpbwckpxai>
+ <CACGkMEtqn1dbrQZn3i-W_7sVikY4sQjwLRC5xAhMnyqkc3jwOw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACGkMEtqn1dbrQZn3i-W_7sVikY4sQjwLRC5xAhMnyqkc3jwOw@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Michael Kelley (LINUX)" <mikelley@microsoft.com> writes:
+On Thu, Jun 08, 2023 at 05:00:00PM +0800, Jason Wang wrote:
+> On Thu, Jun 8, 2023 at 4:00 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
+> >
+> > On Thu, Jun 08, 2023 at 03:46:00PM +0800, Jason Wang wrote:
+> >
+> > [...]
+> >
+> > >> > > > > I have a question though, what if down the road there
+> > >> > > > > is a new feature that needs more changes? It will be
+> > >> > > > > broken too just like PACKED no?
+> > >> > > > > Shouldn't vdpa have an allowlist of features it knows how
+> > >> > > > > to support?
+> > >> > > >
+> > >> > > > It looks like we had it, but we took it out (by the way, we were
+> > >> > > > enabling packed even though we didn't support it):
+> > >> > > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6234f80574d7569444d8718355fa2838e92b158b
+> > >> > > >
+> > >> > > > The only problem I see is that for each new feature we have to modify
+> > >> > > > the kernel.
+> > >> > > > Could we have new features that don't require handling by vhost-vdpa?
+> > >> > > >
+> > >> > > > Thanks,
+> > >> > > > Stefano
+> > >> > >
+> > >> > > Jason what do you say to reverting this?
+> > >> >
+> > >> > I may miss something but I don't see any problem with vDPA core.
+> > >> >
+> > >> > It's the duty of the parents to advertise the features it has. For example,
+> > >> >
+> > >> > 1) If some kernel version that is packed is not supported via
+> > >> > set_vq_state, parents should not advertise PACKED features in this
+> > >> > case.
+> > >> > 2) If the kernel has support packed set_vq_state(), but it's emulated
+> > >> > cvq doesn't support, parents should not advertise PACKED as well
+> > >> >
+> > >> > If a parent violates the above 2, it looks like a bug of the parents.
+> > >> >
+> > >> > Thanks
+> > >>
+> > >> Yes but what about vhost_vdpa? Talking about that not the core.
+> > >
+> > >Not sure it's a good idea to workaround parent bugs via vhost-vDPA.
+> >
+> > Sorry, I'm getting lost...
+> > We were talking about the fact that vhost-vdpa doesn't handle
+> > SET_VRING_BASE/GET_VRING_BASE ioctls well for packed virtqueue before
+> > that series [1], no?
+> >
+> > The parents seem okay, but maybe I missed a few things.
+> >
+> > [1] https://lore.kernel.org/virtualization/20230424225031.18947-1-shannon.nelson@amd.com/
+> 
+> Yes, more below.
+> 
+> >
+> > >
+> > >> Should that not have a whitelist of features
+> > >> since it interprets ioctls differently depending on this?
+> > >
+> > >If there's a bug, it might only matter the following setup:
+> > >
+> > >SET_VRING_BASE/GET_VRING_BASE + VDUSE.
+> > >
+> > >This seems to be broken since VDUSE was introduced. If we really want
+> > >to backport something, it could be a fix to filter out PACKED in
+> > >VDUSE?
+> >
+> > mmm it doesn't seem to be a problem in VDUSE, but in vhost-vdpa.
+> > I think VDUSE works fine with packed virtqueue using virtio-vdpa
+> > (I haven't tried), so why should we filter PACKED in VDUSE?
+> 
+> I don't think we need any filtering since:
+> 
+> PACKED features has been advertised to userspace via uAPI since
+> 6234f80574d7569444d8718355fa2838e92b158b. Once we relax in uAPI, it
+> would be very hard to restrict it again. For the userspace that tries
+> to negotiate PACKED:
+> 
+> 1) if it doesn't use SET_VRING_BASE/GET_VRING_BASE, everything works well
+> 2) if it uses SET_VRING_BASE/GET_VRING_BASE. it might fail or break silently
+> 
+> If we backport the fixes to -stable, we may break the application at
+> least in the case 1).
+> 
+> Thanks
 
-> From: Vitaly Kuznetsov <vkuznets@redhat.com> Sent: Tuesday, June 6, 2023 8:49 AM
->> 
->> Tianyu Lan <ltykernel@gmail.com> writes:
->> 
->> > On 6/5/2023 8:13 PM, Vitaly Kuznetsov wrote:
->> >>> @@ -113,6 +114,11 @@ static int hv_cpu_init(unsigned int cpu)
->> >>>
->> >>>   	}
->> >>>   	if (!WARN_ON(!(*hvp))) {
->> >>> +		if (hv_isolation_type_en_snp()) {
->> >>> +			WARN_ON_ONCE(set_memory_decrypted((unsigned long)(*hvp), 1));
->> >>> +			memset(*hvp, 0, PAGE_SIZE);
->> >>> +		}
->> >> Why do we need to set the page as decrypted here and not when we
->> >> allocate the page (a few lines above)?
->> >
->> > If Linux root partition boots in the SEV-SNP guest, the page still needs
->> > to be decrypted.
->
-> We have code in place that prevents this scenario.  We don't allow Linux
-> in the root partition to run in SEV-SNP mode.  See commit f8acb24aaf89.
->
->> >
->> 
->> I'd suggest we add a flag to indicate that VP assist page was actually
->> set (on the first invocation of hv_cpu_init() for guest partitions and
->> all invocations for root partition) and only call
->> set_memory_decrypted()/memset() then: that would both help with the
->> potential issue with KVM using enlightened vmcs and avoid the unneeded
->> hypercall.
->> 
->
-> I think there's actually a more immediate problem with the code as
-> written.  The VP assist page for a CPU is not re-encrypted or freed when
-> a CPU goes offline (for reasons that have been discussed elsewhere).  So
-> if a CPU in an SEV-SNP VM goes offline and then comes back online, the
-> originally allocated and already decrypted VP assist page will be reused.
-> But bad things will happen if we try to decrypt the page again.
->
-> Given that we disallow the root partition running in SEV-SNP mode,
-> can we avoid the complexity of a flag, and just do the decryption and
-> zero'ing when the page is allocated?
 
-Sure, makes perfect sense but let's leave a [one line] comment why we
-don't do any decryption for root partition then.
+I am less concerned about stable, and much more concerned about the
+future. Assume we add a new ring format. It will be silently passed
+to vhost-vdpa and things break again.
+This is why I think we need an allowlist in vhost-vdpa.
 
--- 
-Vitaly
+
+> >
+> > Thanks,
+> > Stefano
+> >
 
