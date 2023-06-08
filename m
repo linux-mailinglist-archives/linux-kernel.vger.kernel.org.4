@@ -2,81 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCCD87284EF
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C8C7284F3
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:28:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234140AbjFHQ1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 12:27:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38004 "EHLO
+        id S229544AbjFHQ25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 12:28:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235446AbjFHQ1o (ORCPT
+        with ESMTP id S233801AbjFHQ2l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 12:27:44 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55332119
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 09:27:43 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-bb1f7c5495dso900600276.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 09:27:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686241663; x=1688833663;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JnZcUsBlmkxhPY5xDmUWB0pgxLHVrwriE0mwCLpEUnU=;
-        b=S5fpT/ktB5F7mIMxiEF2EIPUYLN7a7oQPHzpd8td1D67OeqNU5Ffe2VFZKBO4N/Iff
-         QXME86UCHnap82iN21I6KKla7+myR8C7Wqq2YpAduHN/ku3k/+Mf8MzyxYjd7pSvVY2b
-         WLTmZpa5mGbS4e1hMpJn4lK4KffoebQg6iQHIxJB//XT8oZzIpFa9coLcw13cbm0eQ3b
-         1yliqGcYnuKmWWWwQZL7vAYQM5NFhjUL1mtDqlgR8OMr3l6Chfb8n7S5QgzZbTSsONh9
-         iJugnID7fhGXSSNMjbrAqLyMI0GWfE0kyUdww888vUJ0taJrQyhMu39Q6UPj7HlmPf9O
-         bMVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686241663; x=1688833663;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JnZcUsBlmkxhPY5xDmUWB0pgxLHVrwriE0mwCLpEUnU=;
-        b=Hh4NyJFeGdISDSWf6V2WboLjBdlHoMeDVJPYlF1wCchqO5FQqoC8MEQRLg4zyJnFJv
-         IEn9SgU3jCYLvvWQ9H8IujK6XA8SaMUDenD2n3cgTd2AGP/3f66KTeymiydyy/QYLXvo
-         dzKmp1lEbUQKUztIbsA2YvFFWozASG+TvX7UJMN2T1/78CTgnBKfsUQcCRVhzVD5kmu7
-         EfcpLWMbV/3fkUH5PpHkiY+o5sbKgDGZjL4K41/z76aBDz31LhZOV9DlwAhoScZGcgqz
-         szp7jA8jvlBzAFYrGZEQSREn2N3SPCYpIbTvM0/E+74BNAHn+pLoupYY4rDlA27wezNw
-         jUXQ==
-X-Gm-Message-State: AC+VfDzh7Q9wMSXQTmQ5ZtulGgvukcIjfw3NxfcvKYzjpatIqDLs/NK6
-        GrOtWcFWF6pGSbhzsGugy4I1oJ0fQXMxOW4gx1Y=
-X-Google-Smtp-Source: ACHHUZ6Wx4iggMZv88OaIN8lLr188aRiNGIEyyHKMKuHjEXqls0WHImnko+027dyK0y69NvnENMXZAj7gsJ1JVdd1+I=
-X-Received: by 2002:a0d:ebca:0:b0:561:8fef:13ce with SMTP id
- u193-20020a0debca000000b005618fef13cemr141253ywe.37.1686241662747; Thu, 08
- Jun 2023 09:27:42 -0700 (PDT)
+        Thu, 8 Jun 2023 12:28:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BF81FDC
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 09:28:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CAF664EF5
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 16:28:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9C10C433A0;
+        Thu,  8 Jun 2023 16:28:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686241719;
+        bh=5zH08XUfq+18tqlmHVWvpEAsjeO5Ce/XxzLXbX4gVVQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=JfmL+BlSm6q41L0gLNUh+FbjT1O6SVwiKrCWfDK5VghY/IietAuCdGmVkGDKyc+CG
+         ecpOIKaMpvJnuiNhsBKzEBEjbvzJH/VuMpaXgoBGyX18dddWlw4/yGwEqlzbD13nkj
+         OQhYkpRm0nqGO1ab4Nr4rt0H9LDMwNyE42ZLM5C+WqcJ2VpJLrbluEOuNyA0aOE4RN
+         oV8afTD79QjLpzYe3AOyUvNlg+Ulxy+NQ7aIeHswbV7m12UMQ+OvQcQBR5CIW8fNVj
+         nSACJAYPj2pX+aCIoXHKCVUYkWHUt83FwCjYoZzVWGFZGerON2bm3iV9MozSok0Vko
+         kz5Fe4Zs+uEpA==
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2b1b084620dso7989071fa.0;
+        Thu, 08 Jun 2023 09:28:39 -0700 (PDT)
+X-Gm-Message-State: AC+VfDwCGZnHOtYXQ6x5tdGksK+Km5Ohz9CHLDox72UK6XLyYuehcP74
+        2tzFK+/GfD5yq4fIU2AEiqbGl/wGYgucFK9lA3M=
+X-Google-Smtp-Source: ACHHUZ4YX0Ne++b7K0Iz0nPYwgBxAk5ute7QPeyjEc/PvBcXTPrezWlpefSE0BZKqQyRuzaIQ6x+FLzllBH98pluu/c=
+X-Received: by 2002:a2e:9cd1:0:b0:2b1:e943:8abe with SMTP id
+ g17-20020a2e9cd1000000b002b1e9438abemr3393233ljj.47.1686241717897; Thu, 08
+ Jun 2023 09:28:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAP-bSRZuLhZQ4Kpb4NRF2yY6XifYpB3ei4=6oFDAaG+OmeGebQ@mail.gmail.com>
- <ZH8YS+LxMM1ZPpsc@feng-clx> <CAP-bSRaNQj+fi1r0MZ64wB5_rfjHmEBFQ+QueiNQ9dnyJixG8A@mail.gmail.com>
- <ZH8pyG1SyfGxQKAm@feng-clx> <CAP-bSRa3_Janfh0yAnwmG=bh9niNUjWRPG2fQqc2SxcQR=OHGA@mail.gmail.com>
- <ZH86C4A4qpeAz/n4@feng-clx> <86521835-f13f-4d43-9a38-9a55abae0b89@paulmck-laptop>
- <CAP-bSRZa9axG59E3knkVXy4=36irR9E7SXqT-QSikW7BoQueBw@mail.gmail.com> <41b91385-8f04-4498-9eeb-0b3a192b55cb@paulmck-laptop>
-In-Reply-To: <41b91385-8f04-4498-9eeb-0b3a192b55cb@paulmck-laptop>
-From:   Chris Bainbridge <chris.bainbridge@gmail.com>
-Date:   Thu, 8 Jun 2023 17:27:31 +0100
-Message-ID: <CAP-bSRYm7_aJH6-YwcY_pq8_igAXQR++YfQrfZJoKaD8mW=fyg@mail.gmail.com>
-Subject: Re: PROBLEM: skew message does not handle negative ns skew
-To:     paulmck@kernel.org
-Cc:     Feng Tang <feng.tang@intel.com>, tglx@linutronix.de,
-        sboyd@kernel.org, LKML <linux-kernel@vger.kernel.org>
+References: <20230607091814.46080-1-puranjay12@gmail.com> <20230607091814.46080-4-puranjay12@gmail.com>
+In-Reply-To: <20230607091814.46080-4-puranjay12@gmail.com>
+From:   Song Liu <song@kernel.org>
+Date:   Thu, 8 Jun 2023 09:28:25 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7soOQasGw5fHB2qTeJnqR4ZrGBodyO87k=vg=TYqCsWA@mail.gmail.com>
+Message-ID: <CAPhsuW7soOQasGw5fHB2qTeJnqR4ZrGBodyO87k=vg=TYqCsWA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 3/3] bpf, arm64: use bpf_jit_binary_pack_alloc
+To:     Puranjay Mohan <puranjay12@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, catalin.marinas@arm.com,
+        mark.rutland@arm.com, bpf@vger.kernel.org, kpsingh@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 8 Jun 2023 at 17:25, Paul E. McKenney <paulmck@kernel.org> wrote:
+On Wed, Jun 7, 2023 at 2:18=E2=80=AFAM Puranjay Mohan <puranjay12@gmail.com=
+> wrote:
 >
-> Very good, thank you!
+[...]
+> +
+>  static inline int epilogue_offset(const struct jit_ctx *ctx)
+>  {
+>         int to =3D ctx->epilogue_offset;
+> @@ -701,7 +716,8 @@ static int add_exception_handler(const struct bpf_ins=
+n *insn,
+>                                  struct jit_ctx *ctx,
+>                                  int dst_reg)
+>  {
+> -       off_t offset;
+> +       off_t ins_offset;
+> +       off_t fixup_offset;
+
+Please add some comments for these two offsets.
+
+>         unsigned long pc;
+>         struct exception_table_entry *ex;
 >
-> May I please apply your Tested-by?
+> @@ -717,12 +733,11 @@ static int add_exception_handler(const struct bpf_i=
+nsn *insn,
+>                 return -EINVAL;
+>
+>         ex =3D &ctx->prog->aux->extable[ctx->exentry_idx];
+> -       pc =3D (unsigned long)&ctx->image[ctx->idx - 1];
+> +       pc =3D (unsigned long)&ctx->ro_image[ctx->idx - 1];
+>
+> -       offset =3D pc - (long)&ex->insn;
+> -       if (WARN_ON_ONCE(offset >=3D 0 || offset < INT_MIN))
+> +       ins_offset =3D pc - (long)&ex->insn;
+> +       if (WARN_ON_ONCE(ins_offset >=3D 0 || ins_offset < INT_MIN))
+>                 return -ERANGE;
+> -       ex->insn =3D offset;
+>
+>         /*
+>          * Since the extable follows the program, the fixup offset is alw=
+ays
+> @@ -732,11 +747,20 @@ static int add_exception_handler(const struct bpf_i=
+nsn *insn,
+>          * modifying the upper bits because the table is already sorted, =
+and
+>          * isn't part of the main exception table.
+>          */
+> -       offset =3D (long)&ex->fixup - (pc + AARCH64_INSN_SIZE);
+> -       if (!FIELD_FIT(BPF_FIXUP_OFFSET_MASK, offset))
+> +       fixup_offset =3D (long)&ex->fixup - (pc + AARCH64_INSN_SIZE);
+> +       if (!FIELD_FIT(BPF_FIXUP_OFFSET_MASK, fixup_offset))
+>                 return -ERANGE;
+>
+> -       ex->fixup =3D FIELD_PREP(BPF_FIXUP_OFFSET_MASK, offset) |
+> +       /*
+> +        * The offsets above have been calculated using the RO buffer but=
+ we
+> +        * need to use the R/W buffer for writes.
+> +        * switch ex to rw buffer for writing.
+> +        */
+> +       ex =3D (void *)ctx->image + ((void *)ex - (void *)ctx->ro_image);
+> +
+> +       ex->insn =3D ins_offset;
+> +
+> +       ex->fixup =3D FIELD_PREP(BPF_FIXUP_OFFSET_MASK, fixup_offset) |
+>                     FIELD_PREP(BPF_FIXUP_REG_MASK, dst_reg);
+>
+>         ex->type =3D EX_TYPE_BPF;
+[...]
+>         /* And we're done. */
+>         if (bpf_jit_enable > 1)
+>                 bpf_jit_dump(prog->len, prog_size, 2, ctx.image);
+>
+> -       bpf_flush_icache(header, ctx.image + ctx.idx);
+> +       bpf_flush_icache(ro_header, ctx.ro_image + ctx.idx);
+>
+>         if (!prog->is_func || extra_pass) {
+>                 if (extra_pass && ctx.idx !=3D jit_data->ctx.idx) {
+>                         pr_err_once("multi-func JIT bug %d !=3D %d\n",
+>                                     ctx.idx, jit_data->ctx.idx);
+> -                       bpf_jit_binary_free(header);
+>                         prog->bpf_func =3D NULL;
+>                         prog->jited =3D 0;
+>                         prog->jited_len =3D 0;
+> +                       goto out_free_hdr;
+> +               }
+> +               if (WARN_ON(bpf_jit_binary_pack_finalize(prog, ro_header,
+> +                                                        header))) {
+> +                       ro_header =3D NULL;
 
-Sure
+I think we need
+       prog =3D orig_prog;
+here.
 
-Tested-by: Chris Bainbridge <chris.bainbridge@gmail.com>
+Thanks,
+Song
