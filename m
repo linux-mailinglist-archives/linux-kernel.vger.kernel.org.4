@@ -2,146 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A82F7728A4D
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 23:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD0F728A54
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 23:38:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237077AbjFHVfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 17:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38572 "EHLO
+        id S235973AbjFHVig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 17:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235550AbjFHVfq (ORCPT
+        with ESMTP id S234340AbjFHVie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 17:35:46 -0400
-Received: from frasgout12.his.huawei.com (unknown [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E472D63;
-        Thu,  8 Jun 2023 14:35:44 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4Qccdv3tJDz9v7Jk;
-        Fri,  9 Jun 2023 05:23:47 +0800 (CST)
-Received: from [10.81.214.99] (unknown [10.81.214.99])
-        by APP2 (Coremail) with SMTP id GxC2BwCXUkmdSYJkKw0ZAw--.4340S2;
-        Thu, 08 Jun 2023 22:35:31 +0100 (CET)
-Message-ID: <77fb9677-8d5c-73e0-41d2-6b3c5040053e@huaweicloud.com>
-Date:   Thu, 8 Jun 2023 23:35:23 +0200
+        Thu, 8 Jun 2023 17:38:34 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA24E2D76;
+        Thu,  8 Jun 2023 14:38:33 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-ba829e17aacso1216609276.0;
+        Thu, 08 Jun 2023 14:38:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686260312; x=1688852312;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mNSTXKmj7hUlHOCo/xW5hZUWoBrrqUdvHn7X8LT0uEo=;
+        b=rZIcXZyCfGooVGGpLJeChBFLN7dybtTQQD+7IN5Ah2gDaJGh/7o5lF95DKFVrZsmau
+         JcQ65/GsP+NRet2RK+xat+jPJeJldBX+ajWq3AXStMP+NjrkQCBwhWDUHBWLgTrvLiW9
+         Zly30kTox+RY3fR2R+F6WxGyDP4RFLQgkC7lcsortV2U6N0eXXtJ1UW8HkAJH5Zbp61/
+         nXeFFq7CyIBapVygOmu9XOVRXN9kaw1HPg6dgsts8kvtrpirYegNqztW50RQlW7bszQo
+         /IRoSYsI2qP7dc3xmZAYjVl9OEaUtA+82pznAY7RWkkBEtUlLMh+xZIQ9YFcNu2DZI+N
+         TrfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686260312; x=1688852312;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mNSTXKmj7hUlHOCo/xW5hZUWoBrrqUdvHn7X8LT0uEo=;
+        b=YnlziMDHh3v0mVoWXz2x4dLNgSUQmKBsL044ZMTN4ecqnrMW56/bsdftVjkpLSPDsM
+         pzBrtpwbfCMKCp/Y2d4iJ1l54feO0bP1xfYCbvoiEVYYlb2mkxMy6fsw0T2X0MustoD/
+         gCsJKvWGl70UCVOakBx0PQlay79nJphCrU8cxdMdZk7T8LL47ePE8OchDWogkod30Wsg
+         7hDmdsv1zj1WV+8gbDVanHabPXYkI2A3tUQEzOnVvEa1IhPU8c7DJWuJowbyHwmKMDQz
+         rxjYr+szVs8O308DSgFcF2MdIwBmGU4SdO1f2sZn6oBGTKDfjwDv5DRVVcXETQseyQaI
+         wjWQ==
+X-Gm-Message-State: AC+VfDxwjiV7+8dg3kGMMzH/1lBk10YJx7fS9nGUb1FvlvlL6/0ojKIR
+        soS62SuTutqjy2B+tYwUWky3ItrQtbiEmg==
+X-Google-Smtp-Source: ACHHUZ64nz/89TF4yOsANzK3DPKHXPY8azQ0YKED8rWPYKwjdTat0cV7rT7fhdPR0mnUoTDTSHU0fg==
+X-Received: by 2002:a81:49c6:0:b0:561:e7bb:1b27 with SMTP id w189-20020a8149c6000000b00561e7bb1b27mr585571ywa.52.1686260312608;
+        Thu, 08 Jun 2023 14:38:32 -0700 (PDT)
+Received: from horus.lan (75-164-186-145.ptld.qwest.net. [75.164.186.145])
+        by smtp.gmail.com with ESMTPSA id e130-20020a816988000000b00545b02d4af5sm189158ywc.48.2023.06.08.14.38.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 14:38:32 -0700 (PDT)
+From:   Jason Gerecke <killertofu@gmail.com>
+X-Google-Original-From: Jason Gerecke <jason.gerecke@wacom.com>
+To:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>
+Cc:     Ping Cheng <pinglinux@gmail.com>,
+        Aaron Armstrong Skomra <skomra@gmail.com>,
+        Joshua Dickens <Joshua@Joshua-Dickens.com>,
+        Peter Hutterer <peter.hutterer@who-t.net>,
+        Jason Gerecke <jason.gerecke@wacom.com>, stable@vger.kernel.org
+Subject: [PATCH v2] HID: wacom: Use ktime_t rather than int when dealing with timestamps
+Date:   Thu,  8 Jun 2023 14:38:28 -0700
+Message-ID: <20230608213828.2108-1-jason.gerecke@wacom.com>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230607214102.2113-1-jason.gerecke@wacom.com>
+References: <20230607214102.2113-1-jason.gerecke@wacom.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH] shmem: Use ramfs_kill_sb() for kill_sb method of
- ramfs-based tmpfs
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     hughd@google.com, linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        David Howells <dhowells@redhat.com>
-References: <20230607161523.2876433-1-roberto.sassu@huaweicloud.com>
- <20230607104313.2909afb61021a1431dc56a28@linux-foundation.org>
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-In-Reply-To: <20230607104313.2909afb61021a1431dc56a28@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwCXUkmdSYJkKw0ZAw--.4340S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWw47WF45Gw1DZrWUAF48Xrb_yoW5JFWDpF
-        1kAF18Cr40gFyUZas29a10v34Sgw4kKr1vk34vv34rtasxtr1kKF1vkr4a9ryrurW0gryF
-        vr4qgFy3uFWYyFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04
-        k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UQzVbUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQACBF1jj45wWwAAsT
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,NICE_REPLY_A,PDS_RDNS_DYNAMIC_FP,RCVD_IN_MSPIKE_BL,
-        RCVD_IN_MSPIKE_L3,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/7/2023 7:43 PM, Andrew Morton wrote:
-> (cc's added)
+Code which interacts with timestamps needs to use the ktime_t type
+returned by functions like ktime_get. The int type does not offer
+enough space to store these values, and attempting to use it is a
+recipe for problems. In this particular case, overflows would occur
+when calculating/storing timestamps leading to incorrect values being
+reported to userspace. In some cases these bad timestamps cause input
+handling in userspace to appear hung.
 
-Ok. Recently, I started to automatize the recipients of the emails with 
-a script that takes the output of get_maintainer.pl and takes only the 
-maintainer, supporter and reviewer lines. Maybe I should add also 
-blamed_fixes.
+Link: https://gitlab.freedesktop.org/libinput/libinput/-/issues/901
+Fixes: 17d793f3ed53 ("HID: wacom: insert timestamp to packed Bluetooth (BT) events")
+CC: stable@vger.kernel.org
+Signed-off-by: Jason Gerecke <jason.gerecke@wacom.com>
+---
+v2: Use div_u64 to perform division to deal with ARC and ARM architectures
+    (as found by the kernel test robot)
 
-> On Wed,  7 Jun 2023 18:15:23 +0200 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
-> 
->> From: Roberto Sassu <roberto.sassu@huawei.com>
->>
->> As the ramfs-based tmpfs uses ramfs_init_fs_context() for the
->> init_fs_context method, which allocates fc->s_fs_info, use ramfs_kill_sb()
->> to free it and avoid a memory leak.
->>
->> Cc: stable@vger.kernel.org # v5.4.x
->> Fixes: f32356261d44 ("vfs: Convert ramfs, shmem, tmpfs, devtmpfs, rootfs to use the new mount API")
+ drivers/hid/wacom_wac.c | 6 +++---
+ drivers/hid/wacom_wac.h | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-As I mentioned in the other thread, the correct Fixes tag is:
-
-Fixes: c3b1b1cbf002 ("ramfs: add support for "mode=" mount option")
-
-of course, if it can be modified at this stage.
-
-Thanks
-
-Roberto
-
->> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
->> ---
->>   fs/ramfs/inode.c      | 2 +-
->>   include/linux/ramfs.h | 1 +
->>   mm/shmem.c            | 2 +-
->>   3 files changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/fs/ramfs/inode.c b/fs/ramfs/inode.c
->> index 5ba580c7883..fef477c7810 100644
->> --- a/fs/ramfs/inode.c
->> +++ b/fs/ramfs/inode.c
->> @@ -278,7 +278,7 @@ int ramfs_init_fs_context(struct fs_context *fc)
->>   	return 0;
->>   }
->>   
->> -static void ramfs_kill_sb(struct super_block *sb)
->> +void ramfs_kill_sb(struct super_block *sb)
->>   {
->>   	kfree(sb->s_fs_info);
->>   	kill_litter_super(sb);
->> diff --git a/include/linux/ramfs.h b/include/linux/ramfs.h
->> index 917528d102c..d506dc63dd4 100644
->> --- a/include/linux/ramfs.h
->> +++ b/include/linux/ramfs.h
->> @@ -7,6 +7,7 @@
->>   struct inode *ramfs_get_inode(struct super_block *sb, const struct inode *dir,
->>   	 umode_t mode, dev_t dev);
->>   extern int ramfs_init_fs_context(struct fs_context *fc);
->> +extern void ramfs_kill_sb(struct super_block *sb);
->>   
->>   #ifdef CONFIG_MMU
->>   static inline int
->> diff --git a/mm/shmem.c b/mm/shmem.c
->> index e40a08c5c6d..74abb97ea55 100644
->> --- a/mm/shmem.c
->> +++ b/mm/shmem.c
->> @@ -4196,7 +4196,7 @@ static struct file_system_type shmem_fs_type = {
->>   	.name		= "tmpfs",
->>   	.init_fs_context = ramfs_init_fs_context,
->>   	.parameters	= ramfs_fs_parameters,
->> -	.kill_sb	= kill_litter_super,
->> +	.kill_sb	= ramfs_kill_sb,
->>   	.fs_flags	= FS_USERNS_MOUNT,
->>   };
->>   
->> -- 
->> 2.25.1
+diff --git a/drivers/hid/wacom_wac.c b/drivers/hid/wacom_wac.c
+index 2ccf838371343..174bf03908d7c 100644
+--- a/drivers/hid/wacom_wac.c
++++ b/drivers/hid/wacom_wac.c
+@@ -1314,7 +1314,7 @@ static void wacom_intuos_pro2_bt_pen(struct wacom_wac *wacom)
+ 	struct input_dev *pen_input = wacom->pen_input;
+ 	unsigned char *data = wacom->data;
+ 	int number_of_valid_frames = 0;
+-	int time_interval = 15000000;
++	ktime_t time_interval = 15000000;
+ 	ktime_t time_packet_received = ktime_get();
+ 	int i;
+ 
+@@ -1348,7 +1348,7 @@ static void wacom_intuos_pro2_bt_pen(struct wacom_wac *wacom)
+ 	if (number_of_valid_frames) {
+ 		if (wacom->hid_data.time_delayed)
+ 			time_interval = ktime_get() - wacom->hid_data.time_delayed;
+-		time_interval /= number_of_valid_frames;
++		time_interval = div_u64(time_interval, number_of_valid_frames);
+ 		wacom->hid_data.time_delayed = time_packet_received;
+ 	}
+ 
+@@ -1359,7 +1359,7 @@ static void wacom_intuos_pro2_bt_pen(struct wacom_wac *wacom)
+ 		bool range = frame[0] & 0x20;
+ 		bool invert = frame[0] & 0x10;
+ 		int frames_number_reversed = number_of_valid_frames - i - 1;
+-		int event_timestamp = time_packet_received - frames_number_reversed * time_interval;
++		ktime_t event_timestamp = time_packet_received - frames_number_reversed * time_interval;
+ 
+ 		if (!valid)
+ 			continue;
+diff --git a/drivers/hid/wacom_wac.h b/drivers/hid/wacom_wac.h
+index 1a40bb8c5810c..ee21bb260f22f 100644
+--- a/drivers/hid/wacom_wac.h
++++ b/drivers/hid/wacom_wac.h
+@@ -324,7 +324,7 @@ struct hid_data {
+ 	int ps_connected;
+ 	bool pad_input_event_flag;
+ 	unsigned short sequence_number;
+-	int time_delayed;
++	ktime_t time_delayed;
+ };
+ 
+ struct wacom_remote_data {
+-- 
+2.41.0
 
