@@ -2,338 +2,485 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3D227279BD
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 10:12:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03E4B7279BE
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 10:12:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234864AbjFHIMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 04:12:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56738 "EHLO
+        id S234918AbjFHIMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 04:12:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233756AbjFHIMb (ORCPT
+        with ESMTP id S234863AbjFHIMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 04:12:31 -0400
-Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FCE2700
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 01:12:29 -0700 (PDT)
-Received: by mail-vk1-xa2a.google.com with SMTP id 71dfb90a1353d-465db156268so65299e0c.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 01:12:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686211948; x=1688803948;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cAiwpr4ZhLz8drmLYbFRJeJlB43Bw/gRsi8DXM2zl1Q=;
-        b=IEpW9QFjXmCUJ9pMxaLKoDnKjHHCSS3HNrFXVJ6GB6w8VcCMmyyIITHm+Wq6agO0oV
-         hhdPy6bo6ftpC5VEPT5yRIlvkChqHqzbct/Gu0Ciobgb5knyJ4ubr3jM2JsNgPmyKWre
-         crohC1Y0fr8/2j+WplE2CQbon9ggtXVIBX5J4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686211948; x=1688803948;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cAiwpr4ZhLz8drmLYbFRJeJlB43Bw/gRsi8DXM2zl1Q=;
-        b=FX6SC+LXSEE2fo7QtzlyllItGUGlqiUTn1RA/FVI0FUPWikxZjW87lWBlO1ROHytYM
-         G+QFJ+m28t3YD0qMMQmAHPo2eUfODYJ6GT/a3cRqe/gyItlI/xOWD5AJQdZCynoUF6fk
-         2/anfJHHeQO909mgaxskasESuowrm31JTF93T6wAoW+6CI0ays3ysD31QOiCs0+rqR0B
-         f2vgVO+pPXb5S3T/NIpqSxmTfnwW/xPw3iynUuBS/2/hUQRHCma8XKdRHwaFMEj6nWtU
-         Qy29pmpP6j3gnc7kap5KjLXxq3tz2Mkdx23Dy6KurEwi86eT6cXJ+PKBE0Lys+x3EnBG
-         1XAA==
-X-Gm-Message-State: AC+VfDxOfwnIFSJGlAKfvrxQKcLJ1IUUasxb4QYTCAGzd6crNBNyQHYH
-        bzwVbpShgrucImtlMLQHty7H7tljR1Il5CKSIvZxsPNueGj48YSx
-X-Google-Smtp-Source: ACHHUZ5e8GVd8y3ZD62t7YDa8qhdFbbtx2TZYiko3UVhh75VOZ/O5sXvSx8DnVAwYChCLw2M/6dhxEaJm5woLCMH9Cc=
-X-Received: by 2002:a1f:41ce:0:b0:456:a3bc:3daf with SMTP id
- o197-20020a1f41ce000000b00456a3bc3dafmr2820852vka.9.1686211947817; Thu, 08
- Jun 2023 01:12:27 -0700 (PDT)
+        Thu, 8 Jun 2023 04:12:33 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98340213C;
+        Thu,  8 Jun 2023 01:12:30 -0700 (PDT)
+Received: from [192.168.10.48] (unknown [119.152.150.198])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4C48166057BA;
+        Thu,  8 Jun 2023 09:12:22 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686211949;
+        bh=F7n1LdRXjpGUxnOtMckRx2pdbD4P1L25PCalXPGM0Yk=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=TS2G/KqAjCRzoK4ovZSPK0A8Mg9iWm7I3CrHqPnxzTlUS8S/8T0oVSmHMA2mHwbQG
+         lpueAM1cPrs6hp7VcEivK+Qrz9IMYz6dbreMfyDhAnz4E4QPUEkEBrKZcX8wdU0glU
+         Qjqh0IC0DfVmmX5uIbTqZs3Vhl8M3VFWtK6nyBRGEbFfDvuSEQw+a1cnGs0yP1OF6L
+         8j2KaZpTveKuaDDoWsgm7lFzemuC7Mhajyg3kOwNaNMYtiLuhvWcuSoO96r/yPUjGz
+         cDCvmbjU0xHlz+/tWKh2Y0l0nptzWTtpDEiW69HQPoicGZzNEJ7L716qq8wPRYpJF7
+         lYu0c6iiXoNqg==
+Message-ID: <ccbfb9b0-e616-02ad-b6a5-474e860d023a@collabora.com>
+Date:   Thu, 8 Jun 2023 13:12:17 +0500
 MIME-Version: 1.0
-References: <20230607205714.510012-1-nfraprado@collabora.com> <20230607205714.510012-4-nfraprado@collabora.com>
-In-Reply-To: <20230607205714.510012-4-nfraprado@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Thu, 8 Jun 2023 16:12:16 +0800
-Message-ID: <CAGXv+5HHARvkCYfjPjRKgyWuzv-Dt215z1=yA+_tw4hyasdGQA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] media: mediatek: vcodec: Read HW active status
- from clock
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Stephen Boyd <sboyd@kernel.org>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>, kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v17 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Content-Language: en-US
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+References: <20230606060822.1065182-1-usama.anjum@collabora.com>
+ <20230606060822.1065182-3-usama.anjum@collabora.com>
+ <CABb0KFGUSDwbMHQymCbPDwPiDit1+1JHbgTzzxXL04vQMUxo5w@mail.gmail.com>
+ <0b8b19e7-fffa-aa1f-8479-e5a338780f7a@collabora.com>
+ <CABb0KFHoYeOz7A6vAUqYDx8PkxjeujPrQRi+Y0YxkqQ_i4tTpA@mail.gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CABb0KFHoYeOz7A6vAUqYDx8PkxjeujPrQRi+Y0YxkqQ_i4tTpA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 8, 2023 at 4:57=E2=80=AFAM N=C3=ADcolas F. R. A. Prado
-<nfraprado@collabora.com> wrote:
->
-> Remove the requirement of a VDEC_SYS reg iospace. To achieve that, rely
-> on the "active" clock being passed through the DT, and read its status
-> during IRQ handling to check whether the HW is active.
->
-> The old behavior is still present when reg-names aren't supplied, as to
-> keep backward compatibility.
->
-> Signed-off-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
-> ---
->
-> (no changes since v1)
->
->  .../mediatek/vcodec/mtk_vcodec_dec_drv.c      | 59 +++++++++++++++----
->  .../mediatek/vcodec/mtk_vcodec_dec_hw.c       | 20 +++++--
->  .../mediatek/vcodec/mtk_vcodec_dec_pm.c       | 12 +++-
->  .../platform/mediatek/vcodec/mtk_vcodec_drv.h |  1 +
->  4 files changed, 74 insertions(+), 18 deletions(-)
->
-> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c =
-b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-> index 9c652beb3f19..8038472fb67b 100644
-> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-> @@ -16,6 +16,7 @@
->  #include <media/v4l2-mem2mem.h>
->  #include <media/videobuf2-dma-contig.h>
->  #include <media/v4l2-device.h>
-> +#include <linux/clk-provider.h>
+On 6/7/23 9:52 PM, Michał Mirosław wrote:
+> On Wed, 7 Jun 2023 at 18:13, Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
+>>
+>> Hi Michał,
+>>
+>> Thank you for taking time to review!
+>>
+>> On 6/7/23 7:52 PM, Michał Mirosław wrote:
+>>> On Tue, 6 Jun 2023 at 08:08, Muhammad Usama Anjum
+>>> <usama.anjum@collabora.com> wrote:
+>>>> This IOCTL, PAGEMAP_SCAN on pagemap file can be used to get and/or clear
+>>>> the info about page table entries. The following operations are supported
+>>>> in this ioctl:
+>>>> - Get the information if the pages have been written-to (PAGE_IS_WRITTEN),
+>>>>   file mapped (PAGE_IS_FILE), present (PAGE_IS_PRESENT) or swapped
+>>>>   (PAGE_IS_SWAPPED).
+>>>> - Find pages which have been written-to and/or write protect the pages
+>>>>   (atomic PM_SCAN_OP_GET + PM_SCAN_OP_WP)
+>>>>
+>>>> This IOCTL can be extended to get information about more PTE bits.
+>>> [...]
+>>>> --- a/fs/proc/task_mmu.c
+>>>> +++ b/fs/proc/task_mmu.c
+> [...]
+>>>> +static inline bool pagemap_scan_check_page_written(struct pagemap_scan_private *p)
+>>>> +{
+>>>> +       return (p->required_mask | p->anyof_mask | p->excluded_mask) &
+>>>> +              PAGE_IS_WRITTEN;
+>>>> +}
+>>>
+>>> This could be precalculated and put as a flag into
+>>> pagemap_scan_private - it is kernel-private structure and there are a
+>>> few spare bits in `flags` if you'd prefer not to add an explicit
+>>> boolean.
+>> This inline function is only being used at one spot. I can remove the
+>> function altogether. I don't like putting it in flags. It'll bring some
+>> complexity.
+> 
+> The difference at the call site will be function call vs field access.
+> Do you mean that moving the function to where the struct is
+> initialized would add complexity? Why is that?
+In my view, adding this calculation to `flag` would make the `flag double
+meaning. 1) user flags 2) wp flag is turn on or off
+Okay, I've added the flag and removed this function call from
+frpagemap_scan_test_walk().
 
-                   ^^^^^^^^^^^^^^
+> 
+>>> [...]
+>>>> +static int pagemap_scan_output(bool wt, bool file, bool pres, bool swap,
+>>>> +                              struct pagemap_scan_private *p,
+>>>> +                              unsigned long addr, unsigned int n_pages)
+>>>> +{
+>>>> +       unsigned long bitmap = PM_SCAN_BITMAP(wt, file, pres, swap);
+>>>> +       struct page_region *cur = &p->cur;
+>>>> +
+>>>> +       if (!n_pages)
+>>>> +               return -EINVAL;
+>>>> +
+>>>> +       if ((p->required_mask & bitmap) != p->required_mask)
+>>>> +               return 0;
+>>>> +       if (p->anyof_mask && !(p->anyof_mask & bitmap))
+>>>> +               return 0;
+>>>> +       if (p->excluded_mask & bitmap)
+>>>> +               return 0;
+>>>> +
+>>>> +       bitmap &= p->return_mask;
+>>>> +       if (!bitmap)
+>>>> +               return 0;
+>>>> +
+>>>> +       if (cur->bitmap == bitmap &&
+>>>> +           cur->start + cur->len * PAGE_SIZE == addr) {
+>>>> +               cur->len += n_pages;
+>>>> +               p->found_pages += n_pages;
+>>>> +       } else {
+>>>> +               /*
+>>>> +                * All data is copied to cur first. When more data is found, we
+>>>> +                * push cur to vec and copy new data to cur. The vec_index
+>>>> +                * represents the current index of vec array. We add 1 to the
+>>>> +                * vec_index while performing checks to account for data in cur.
+>>>> +                */
+>>>> +               if (cur->len && (p->vec_index + 1) >= p->vec_len)
+>>>> +                       return -ENOSPC;
+>>>> +
+>>>> +               if (cur->len) {
+>>>> +                       memcpy(&p->vec[p->vec_index], cur, sizeof(*p->vec));
+>>>> +                       p->vec_index++;
+>>>> +               }
+>>>> +
+>>>> +               cur->start = addr;
+>>>> +               cur->len = n_pages;
+>>>> +               cur->bitmap = bitmap;
+>>>> +               p->found_pages += n_pages;
+>>>> +       }
+>>>> +
+>>>> +       if (p->max_pages && (p->found_pages == p->max_pages))
+>>>> +               return PM_SCAN_FOUND_MAX_PAGES;
+>>>> +
+>>>> +       return 0;
+>>>> +}
+>>>> +
+>>>> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
+>>>> +                                 unsigned long end, struct mm_walk *walk)
+>>>> +{
+>>>> +       struct pagemap_scan_private *p = walk->private;
+>>>> +       struct vm_area_struct *vma = walk->vma;
+>>>> +       unsigned long addr = end;
+>>>> +       pte_t *pte, *orig_pte;
+>>>> +       spinlock_t *ptl;
+>>>> +       bool is_written;
+>>>> +       int ret = 0;
+>>>> +
+>>>> +       arch_enter_lazy_mmu_mode();
+>>>> +
+>>>> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>>>> +       ptl = pmd_trans_huge_lock(pmd, vma);
+>>>> +       if (ptl) {
+>>>> +               unsigned long n_pages = (end - start)/PAGE_SIZE;
+>>>> +
+>>>> +               if (p->max_pages && n_pages > p->max_pages - p->found_pages)
+>>>> +                       n_pages = p->max_pages - p->found_pages;
+>>>
+>>> Since p->found_pages is only ever increased in `pagemap_scan_output()`
+>>> and that function is only called for GET or GET+WP operations, maybe
+>>> the logic could be folded to pagemap_scan_output() to avoid
+>>> duplication?
+>>> In this function the calculation is used only when WP op is done to
+>>> split the HP if n_pages limit would be hit, but if using plain WP
+>>> (without GET) it doesn't make sense to use the limit.
+>> The n_pages is needed to decide if THP need to be broken down and it is
+>> used in pagemap_scan_output(). I've brought this condition out of
+>> pagemap_scan_output() to cater this former condition. If I move it to
+>> pagemap_scan_output(), I'll have to write same condition to find out if I
+>> need to breakt he THP. This seems like repetition, but we have same use
+>> case for tlbhuge page.
+> 
+> My point is that you need to split the THP only if doing a GET+WP
+> operation. If you only do GET, then the worst case would be for the
+> process to report a spurious WRITTEN bit if an earlier-visited part of
+> THP was modified and the scan restarted in the middle of a THP.
+We only need to split if doing GET+WP or WP only. In case of WP op, I need
+to check if we have less than HPAGE_SIZE/PAGE_SIZE pages and only then
+split. So moving this  if condition would not be beneficial.
 
-This seems like a violation of the API separation.
+> 
+>>>> (pagemap_scan_output() is trivial enough so I think it could be pulled
+>>> inside the spinlocked region.)
+>> It is already in spinlocked region. Spin lock is being released after tlb
+>> flush.
+> 
+> Ah, I was thinking about calling pagemap_scan_output() before checking
+> split_huge_pmd() case - and at that use the pagemap_scan_output()'s
+> return value to do the check.
+> 
+>>>> +               is_written = !is_pmd_uffd_wp(*pmd);
+>>>> +
+>>>> +               /*
+>>>> +                * Break huge page into small pages if the WP operation need to
+>>>> +                * be performed is on a portion of the huge page.
+>>>> +                */
+>>>> +               if (is_written && IS_PM_SCAN_WP(p->flags) &&
+>>>> +                   n_pages < HPAGE_SIZE/PAGE_SIZE) {
+>>>> +                       spin_unlock(ptl);
+>>>> +
+>>>> +                       split_huge_pmd(vma, pmd, start);
+>>>> +                       goto process_smaller_pages;
+>>>> +               }
+>>>> +
+>>>> +               if (IS_PM_SCAN_GET(p->flags))
+>>>> +                       ret = pagemap_scan_output(is_written, vma->vm_file,
+>>>> +                                                 pmd_present(*pmd),
+>>>> +                                                 is_swap_pmd(*pmd),
+>>>> +                                                 p, start, n_pages);
+>>>> +
+>>>> +               if (ret >= 0 && is_written && IS_PM_SCAN_WP(p->flags))
+>>>> +                       make_uffd_wp_pmd(vma, addr, pmd);
+>>>> +
+>>>> +               if (IS_PM_SCAN_WP(p->flags))
+>>>
+>>> Why `is_written` is not checked? If is_written is false, then the WP
+>>> op should be a no-op and so won't need TLB flushing, will it? [Same
+>>> for the PTE case below.]
+>> It can be done for THP. But for ptes we cannot trust is_written as
+>> is_written only represent last pte state.
+> 
+> Ok, so the PTE case could use a flag recording whether any PTE had WP
+> applied instead of `is_written`.
+Definately, but I'll have to add a extra variable. I'll add it as you have
+asked.
 
->  #include "mtk_vcodec_drv.h"
->  #include "mtk_vcodec_dec.h"
-> @@ -38,22 +39,29 @@ static int mtk_vcodec_get_hw_count(struct mtk_vcodec_=
-dev *dev)
->         }
->  }
->
-> +static bool mtk_vcodec_is_hw_active(struct mtk_vcodec_dev *dev)
-> +{
-> +       u32 cg_status =3D 0;
-> +
-> +       if (!dev->reg_base[VDEC_SYS])
-> +               return __clk_is_enabled(dev->pm.vdec_active_clk);
+> 
+>>>> +                       flush_tlb_range(vma, start, end);
+>>>> +
+>>> [...]
+>>>> +       if (IS_PM_SCAN_WP(p->flags))
+>>>> +               flush_tlb_range(vma, start, addr);
+>>>> +
+>>>> +       pte_unmap_unlock(orig_pte, ptl);
+>>>> +       arch_leave_lazy_mmu_mode();
+>>>> +
+>>>> +       cond_resched();
+>>>> +       return ret;
+>>>> +}
+>>>> +
+>>>> +#ifdef CONFIG_HUGETLB_PAGE
+>>>> +static int pagemap_scan_hugetlb_entry(pte_t *ptep, unsigned long hmask,
+>>>> +                                     unsigned long start, unsigned long end,
+>>>> +                                     struct mm_walk *walk)
+>>>> +{
+>>>> +       unsigned long n_pages = (end - start)/PAGE_SIZE;
+>>>> +       struct pagemap_scan_private *p = walk->private;
+>>>> +       struct vm_area_struct *vma = walk->vma;
+>>>> +       struct hstate *h = hstate_vma(vma);
+>>>> +       spinlock_t *ptl;
+>>>> +       bool is_written;
+>>>> +       int ret = 0;
+>>>> +       pte_t pte;
+>>>> +
+>>>> +       if (p->max_pages && n_pages > p->max_pages - p->found_pages)
+>>>> +               n_pages = p->max_pages - p->found_pages;
+>>>> +
+>>>> +       if (IS_PM_SCAN_WP(p->flags)) {
+>>>> +               i_mmap_lock_write(vma->vm_file->f_mapping);
+>>>> +               ptl = huge_pte_lock(h, vma->vm_mm, ptep);
+>>>> +       }
+>>>> +
+>>>> +       pte = huge_ptep_get(ptep);
+>>>> +       is_written = !is_huge_pte_uffd_wp(pte);
+>>>> +
+>>>> +       /*
+>>>> +        * Partial hugetlb page clear isn't supported
+>>>> +        */
+>>>> +       if (is_written && IS_PM_SCAN_WP(p->flags) &&
+>>>> +           n_pages < HPAGE_SIZE/PAGE_SIZE) {
+>>>> +               ret = -EPERM;
+>>>
+>>> Shouldn't this be ENOSPC, conveying that the operation would overflow
+>>> the n_pages limit?
+>> We are testing here is user has asked us to engage WP on a part of the
+>> hugetlb or we can only perform WP on a part of the engage as user buffer is
+>> full. We cannot judge this has happened because of the former or later
+>> condition. So I'm assuming that user's parameters aren't solid enough and
+>> returning -EPERM. It seemed more suitable to me. But I can return -ENOSPC
+>> as well, if you say?
+> 
+> Those two cases can be differentiated when checked before truncating
+> n_pages. If a user requests partial WP for a hugetlb page wouldn't
+> EINVAL (or other error - as this can't ever work) be more appropriate
+> (this check could happen only at the start of scan)? If the request is
+> due to max_pages limit (with found_pages > 0), then I'd return ENOSPC
+> and expect the user to restart the scan with a new buffer.
+Okay. I'll update.
 
-AFAIK this is still around for clk drivers that haven't moved to clk_hw.
-It shouldn't be used by clock consumers. Would it be better to just pass
-a syscon?
+> 
+> Our discussion here makes me wonder: what is the expected return value
+> for the ioctl WP (without GET) operation? If it would return e.g. the
+> number of 4K-pages successfully scanned, then the caller would be able
+> to detect the partial tail hugepage case and act accordingly.
+Returning error in case of only WP means partial hugetlb is hit. User
+should expect the partial wp on the memory area already.
 
-ChenYu
+If we really want to return number of pages cleared, possible option of
+return value:
+* Return 0 means whole region is wp-ed
+* Return number of pages wp-ed if some error occurred (we need to handle
+this only for hugetlb) OR return -1 * number of pages wp-ed?
 
+An another uniform way can be to sum all wp-ed pages every time and return
+them * -. -1 is needed to let the know user that wp operation got halted
+mid way.
 
-> +
-> +       cg_status =3D readl(dev->reg_base[VDEC_SYS]);
-> +       return (cg_status & VDEC_HW_ACTIVE) =3D=3D 0;
-> +}
-> +
->  static irqreturn_t mtk_vcodec_dec_irq_handler(int irq, void *priv)
->  {
->         struct mtk_vcodec_dev *dev =3D priv;
->         struct mtk_vcodec_ctx *ctx;
-> -       u32 cg_status =3D 0;
->         unsigned int dec_done_status =3D 0;
->         void __iomem *vdec_misc_addr =3D dev->reg_base[VDEC_MISC] +
->                                         VDEC_IRQ_CFG_REG;
->
->         ctx =3D mtk_vcodec_get_curr_ctx(dev, MTK_VDEC_CORE);
->
-> -       /* check if HW active or not */
-> -       cg_status =3D readl(dev->reg_base[0]);
-> -       if ((cg_status & VDEC_HW_ACTIVE) !=3D 0) {
-> -               mtk_v4l2_err("DEC ISR, VDEC active is not 0x0 (0x%08x)",
-> -                            cg_status);
-> +       if (!mtk_vcodec_is_hw_active(dev)) {
-> +               mtk_v4l2_err("DEC ISR, VDEC active is not 0x0");
->                 return IRQ_HANDLED;
->         }
->
-> @@ -82,6 +90,25 @@ static int mtk_vcodec_get_reg_bases(struct mtk_vcodec_=
-dev *dev)
->  {
->         struct platform_device *pdev =3D dev->plat_dev;
->         int reg_num, i;
-> +       struct resource *res;
-> +       bool no_vdecsys_reg =3D false;
-> +       static const char * const mtk_dec_reg_names[] =3D {
-> +               "misc",
-> +               "ld",
-> +               "top",
-> +               "cm",
-> +               "ad",
-> +               "av",
-> +               "pp",
-> +               "hwd",
-> +               "hwq",
-> +               "hwb",
-> +               "hwg"
-> +       };
-> +
-> +       res =3D platform_get_resource_byname(pdev, IORESOURCE_MEM, "misc"=
-);
-> +       if (res)
-> +               no_vdecsys_reg =3D true;
->
->         /* Sizeof(u32) * 4 bytes for each register base. */
->         reg_num =3D of_property_count_elems_of_size(pdev->dev.of_node, "r=
-eg",
-> @@ -91,12 +118,22 @@ static int mtk_vcodec_get_reg_bases(struct mtk_vcode=
-c_dev *dev)
->                 return -EINVAL;
->         }
->
-> -       for (i =3D 0; i < reg_num; i++) {
-> -               dev->reg_base[i] =3D devm_platform_ioremap_resource(pdev,=
- i);
-> -               if (IS_ERR(dev->reg_base[i]))
-> -                       return PTR_ERR(dev->reg_base[i]);
-> +       if (!no_vdecsys_reg) {
-> +               for (i =3D 0; i < reg_num; i++) {
-> +                       dev->reg_base[i] =3D devm_platform_ioremap_resour=
-ce(pdev, i);
-> +                       if (IS_ERR(dev->reg_base[i]))
-> +                               return PTR_ERR(dev->reg_base[i]);
->
-> -               mtk_v4l2_debug(2, "reg[%d] base=3D%p", i, dev->reg_base[i=
-]);
-> +                       mtk_v4l2_debug(2, "reg[%d] base=3D%p", i, dev->re=
-g_base[i]);
-> +               }
-> +       } else {
-> +               for (i =3D 0; i < reg_num; i++) {
-> +                       dev->reg_base[i+1] =3D devm_platform_ioremap_reso=
-urce_byname(pdev, mtk_dec_reg_names[i]);
-> +                       if (IS_ERR(dev->reg_base[i+1]))
-> +                               return PTR_ERR(dev->reg_base[i+1]);
-> +
-> +                       mtk_v4l2_debug(2, "reg[%d] base=3D%p", i+1, dev->=
-reg_base[i+1]);
-> +               }
->         }
->
->         return 0;
-> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c b=
-/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
-> index b753bf54ebd9..4e786821015d 100644
-> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
-> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
-> @@ -11,6 +11,7 @@
->  #include <linux/of_device.h>
->  #include <linux/pm_runtime.h>
->  #include <linux/slab.h>
-> +#include <linux/clk-provider.h>
->
->  #include "mtk_vcodec_drv.h"
->  #include "mtk_vcodec_dec.h"
-> @@ -63,22 +64,29 @@ static int mtk_vdec_hw_prob_done(struct mtk_vcodec_de=
-v *vdec_dev)
->         return 0;
->  }
->
-> +static bool mtk_vcodec_is_hw_active(struct mtk_vdec_hw_dev *dev)
-> +{
-> +       u32 cg_status;
-> +
-> +       if (!dev->reg_base[VDEC_HW_SYS])
-> +               return __clk_is_enabled(dev->pm.vdec_active_clk);
-> +
-> +       cg_status =3D readl(dev->reg_base[VDEC_HW_SYS]);
-> +       return (cg_status & VDEC_HW_ACTIVE) =3D=3D 0;
-> +}
-> +
->  static irqreturn_t mtk_vdec_hw_irq_handler(int irq, void *priv)
->  {
->         struct mtk_vdec_hw_dev *dev =3D priv;
->         struct mtk_vcodec_ctx *ctx;
-> -       u32 cg_status;
->         unsigned int dec_done_status;
->         void __iomem *vdec_misc_addr =3D dev->reg_base[VDEC_HW_MISC] +
->                                         VDEC_IRQ_CFG_REG;
->
->         ctx =3D mtk_vcodec_get_curr_ctx(dev->main_dev, dev->hw_idx);
->
-> -       /* check if HW active or not */
-> -       cg_status =3D readl(dev->reg_base[VDEC_HW_SYS]);
-> -       if (cg_status & VDEC_HW_ACTIVE) {
-> -               mtk_v4l2_err("vdec active is not 0x0 (0x%08x)",
-> -                            cg_status);
-> +       if (!mtk_vcodec_is_hw_active(dev)) {
-> +               mtk_v4l2_err("vdec active is not 0x0");
->                 return IRQ_HANDLED;
->         }
->
-> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c b=
-/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c
-> index 777d445999e9..53e621965950 100644
-> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c
-> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c
-> @@ -51,6 +51,9 @@ int mtk_vcodec_init_dec_clk(struct platform_device *pde=
-v, struct mtk_vcodec_pm *
->                                 clk_info->clk_name);
->                         return PTR_ERR(clk_info->vcodec_clk);
->                 }
-> +
-> +               if (strcmp(clk_info->clk_name, "active") =3D=3D 0)
-> +                       pm->vdec_active_clk =3D clk_info->vcodec_clk;
->         }
->
->         return 0;
-> @@ -84,6 +87,9 @@ static void mtk_vcodec_dec_clock_on(struct mtk_vcodec_p=
-m *pm)
->
->         dec_clk =3D &pm->vdec_clk;
->         for (i =3D 0; i < dec_clk->clk_num; i++) {
-> +               if (strcmp(dec_clk->clk_info[i].clk_name, "active") =3D=
-=3D 0)
-> +                       continue;
-> +
->                 ret =3D clk_prepare_enable(dec_clk->clk_info[i].vcodec_cl=
-k);
->                 if (ret) {
->                         mtk_v4l2_err("clk_prepare_enable %d %s fail %d", =
-i,
-> @@ -104,8 +110,12 @@ static void mtk_vcodec_dec_clock_off(struct mtk_vcod=
-ec_pm *pm)
->         int i;
->
->         dec_clk =3D &pm->vdec_clk;
-> -       for (i =3D dec_clk->clk_num - 1; i >=3D 0; i--)
-> +       for (i =3D dec_clk->clk_num - 1; i >=3D 0; i--) {
-> +               if (strcmp(dec_clk->clk_info[i].clk_name, "active") =3D=
-=3D 0)
-> +                       continue;
-> +
->                 clk_disable_unprepare(dec_clk->clk_info[i].vcodec_clk);
-> +       }
->  }
->
->  static void mtk_vcodec_dec_enable_irq(struct mtk_vcodec_dev *vdec_dev, i=
-nt hw_idx)
-> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h b/dr=
-ivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-> index 9acab54fd650..180e74c69042 100644
-> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
-> @@ -208,6 +208,7 @@ struct mtk_vcodec_pm {
->         struct mtk_vcodec_clk   vdec_clk;
->         struct mtk_vcodec_clk   venc_clk;
->         struct device   *dev;
-> +       struct clk *vdec_active_clk;
->  };
->
->  /**
-> --
-> 2.41.0
->
->
+> 
+>>>> +static int pagemap_scan_pte_hole(unsigned long addr, unsigned long end,
+>>>> +                                int depth, struct mm_walk *walk)
+>>>> +{
+>>>> +       unsigned long n_pages = (end - addr)/PAGE_SIZE;
+>>>> +       struct pagemap_scan_private *p = walk->private;
+>>>> +       struct vm_area_struct *vma = walk->vma;
+>>>> +       int ret = 0;
+>>>> +
+>>>> +       if (!vma || !IS_PM_SCAN_GET(p->flags))
+>>>> +               return 0;
+>>>> +
+>>>> +       if (p->max_pages && n_pages > p->max_pages - p->found_pages)
+>>>> +               n_pages = p->max_pages - p->found_pages;
+>>>
+>>> Nit: If the page flags don't match (wouldn't be output), the limit
+>>> would not be hit and the calculation is unnecessary. But if it was
+>>> done in pagemap_scan_output() instead after all the flags checks...
+>> Correct for this use case. But moving to pagemap_scan_output() would make
+>> me do duplicate calculation for other 2 cases as explained above.
+> 
+> (responded below the cases above)
+> 
+>>>> +       ret = pagemap_scan_output(false, vma->vm_file, false, false, p, addr,
+>>>> +                                 n_pages);
+>>>> +
+>>>> +       return ret;
+>>>> +}
+>>> [...]
+>>>> +static long do_pagemap_scan(struct mm_struct *mm,
+>>>> +                           struct pm_scan_arg __user *uarg)
+>>>> +{
+>>>> +       unsigned long start, end, walk_start, walk_end;
+>>>> +       unsigned long empty_slots, vec_index = 0;
+>>>> +       struct mmu_notifier_range range;
+>>>> +       struct page_region __user *vec;
+>>>> +       struct pagemap_scan_private p;
+>>>> +       struct pm_scan_arg arg;
+>>>> +       int ret = 0;
+>>>> +
+>>>> +       if (copy_from_user(&arg, uarg, sizeof(arg)))
+>>>> +               return -EFAULT;
+>>>> +
+>>>> +       start = untagged_addr((unsigned long)arg.start);
+>>>> +       vec = (struct page_region *)untagged_addr((unsigned long)arg.vec);
+>>>> +
+>>>> +       ret = pagemap_scan_args_valid(&arg, start, vec);
+>>>> +       if (ret)
+>>>> +               return ret;
+>>>> +
+>>>> +       end = start + arg.len;
+>>>> +       p.max_pages = arg.max_pages;
+>>>> +       p.found_pages = 0;
+>>>> +       p.flags = arg.flags;
+>>>> +       p.required_mask = arg.required_mask;
+>>>> +       p.anyof_mask = arg.anyof_mask;
+>>>> +       p.excluded_mask = arg.excluded_mask;
+>>>> +       p.return_mask = arg.return_mask;
+>>>> +       p.cur.start = p.cur.len = p.cur.bitmap = 0;
+>>>> +       p.vec = NULL;
+>>>> +       p.vec_len = PAGEMAP_WALK_SIZE >> PAGE_SHIFT;
+>>>
+>>> If p.vec_len would not count the entry held in `cur` (IOW: vec_len =
+>>> WALK_SIZE - 1), then pagemap_scan_output() wouldn't need the big
+>>> comment about adding or subtracting 1 when checking for overflow. The
+>>> output vector needs to have space for at least one entrry to make GET
+>>> useful. Maybe `cur` could be renamed or annotated to express that it
+>>> always holds the last entry?
+>> Ohhh.. This can be done by doing subtracting 1 from empty_slots. But I've
+>> explored the idea. I don't see any benefit. If we do this, then I'll have
+>> to put a comment why subtracting 1 is needed. Seems like same problem:
+>>
+>> --- a/fs/proc/task_mmu.c
+>> +++ b/fs/proc/task_mmu.c
+>> @@ -1909,7 +1909,7 @@ static int pagemap_scan_output(bool wt, bool file,
+>> bool pres, bool swap,
+>>                  * represents the current index of vec array. We add 1 to the
+>>                  * vec_index while performing checks to account for data in
+>> cur.
+>>                  */
+>> -               if (cur->len && (p->vec_index + 1) >= p->vec_len)
+>> +               if (cur->len && p->vec_index >= p->vec_len)
+>>                         return -ENOSPC;
+>>
+>>                 if (cur->len) {
+>> @@ -2202,7 +2202,7 @@ static long do_pagemap_scan(struct mm_struct *mm,
+>>                 if (IS_PM_SCAN_GET(p.flags)) {
+>>                         p.vec_index = 0;
+>>
+>> -                       empty_slots = arg.vec_len - vec_index;
+>> +                       empty_slots = arg.vec_len - 1 - vec_index;
+>>                         p.vec_len = min(p.vec_len, empty_slots);
+>>                 }
+>>
+>> Lets leave it as it is. I can change `cur` to `last` or any other name.
+>> Please suggest.
+> 
+> The difference is that you have the subtraction only once per the
+> outer page_walk loop iteration, but in the current version the
+> addition has to happen every pagemap_scan_output() call after a hole.
+I'll update as you are saying. After updating, we cannot abort this outer
+loop if length is 0 as the last element is present in cur.
+
+> 
+> From the readability perspective, "if (next_index >= vec_len)" is
+> short and self-documenting. Also I'd use "p.vec_len = min(p.vec_len,
+> empty_slots - 1)" as it also conveys the intent better (in that `vec`
+> is holding all but the last entry, but arg.vec_len holds the final
+> output buffer length).
+> 
+> If we're picking colors, then maybe make `arg.vec_len` have a
+> different name than `p.vec_len` (same for `vec_index`) so that there
+> is less confusion possible as to what they refer to. Maybe keep
+> `arg.vec_len`, but have `p.vec_buf`, `p.vec_buf_len`, and
+> `p.next_buf_index`?
+So we do have colors in variable names. :) I'll update.
+
+> 
+> (Note: you'd also need to decrement p.vec_len where it is first assigned.)
+> 
+> [...]
+> Best Regards
+> Michał Mirosław
+
+-- 
+BR,
+Muhammad Usama Anjum
