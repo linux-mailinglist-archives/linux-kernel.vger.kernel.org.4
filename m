@@ -2,121 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07F5E728A32
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 23:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC911728A34
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 23:23:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236494AbjFHVWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 17:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35224 "EHLO
+        id S237030AbjFHVXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 17:23:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230162AbjFHVW2 (ORCPT
+        with ESMTP id S236177AbjFHVXH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 17:22:28 -0400
-Received: from qproxy1-pub.mail.unifiedlayer.com (qproxy1-pub.mail.unifiedlayer.com [173.254.64.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA682D52
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 14:22:26 -0700 (PDT)
-Received: from gproxy2-pub.mail.unifiedlayer.com (unknown [69.89.18.3])
-        by qproxy1.mail.unifiedlayer.com (Postfix) with ESMTP id 69DE48028FFE
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 21:22:26 +0000 (UTC)
-Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
-        by progateway4.mail.pro1.eigbox.com (Postfix) with ESMTP id DBA1B10044399
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 21:22:25 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id 7N5NqBVn1NX2a7N5NqhLNY; Thu, 08 Jun 2023 21:22:25 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=NMAQR22g c=1 sm=1 tr=0 ts=64824691
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=of4jigFt-DYA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=i4Qt+Tm7Dwj+E4ESxu+wCcAIBtD6KKE4KOP29oOAQQU=; b=A4yiZdAoRO8X3pAE5aCu4SdHuc
-        MhTi6XjsnjS7IbqHOEEZu6XKafkUjjL5NE3nlO6LA1ZOf5HyqLo5PYqA+jC0nrX5G17cI4qi1zkrE
-        Oz8o48UOYHAOYQg8fkQKlmXIsDUoo//gF2vwMRn7+vkdsyoC8EzlTs5x0rpPQpOEN1DHydgRL5zHc
-        g5/VW74G8FQ4AsStGdUV51YePr2tW5Mbe5rPYeJCbVJCs0bH6MDcu8ndpC/YmhdKBFM5tRmahDBAX
-        JJ3wRXG6+B0WOnTVKIc3KByR3SvV05Y8fLZqPPZIxtxjtBmGZivHL6dqM9vpW/52UlOaq35txd01Q
-        iwEHUvHA==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:43274 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1q7N5M-000d2H-HW;
-        Thu, 08 Jun 2023 15:22:24 -0600
-Subject: Re: [PATCH 6.1 000/224] 6.1.33-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230608175726.909746266@linuxfoundation.org>
-In-Reply-To: <20230608175726.909746266@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <8bd9e161-d7b0-1374-3b76-b2e879dde043@w6rz.net>
-Date:   Thu, 8 Jun 2023 14:22:22 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 8 Jun 2023 17:23:07 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 159E62D51;
+        Thu,  8 Jun 2023 14:23:06 -0700 (PDT)
+Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 47F3E20C145C;
+        Thu,  8 Jun 2023 14:23:05 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 47F3E20C145C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1686259385;
+        bh=Nvrn68Ucat+XefKIbkKsoNwVILT76QIukgyRjjI67b8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Qo0M3T/QCmZMtpJ2HLB404s0zg8InmVkCqpBZL/o/ipvc+HGmwQlq7A/CqvEFmclK
+         EpawRhNjfgB+2pvPNsQJhDtftkrbBfRB9aTcBPh2JJ2bDyIIkFJn3N7t7xB3IZ0vqI
+         UKMVcZobolxtIM3UwHSvOMyv4oGWWeln+5FDvPNQ=
+Date:   Thu, 8 Jun 2023 14:22:56 -0700
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, ast@kernel.org,
+        dcook@linux.microsoft.com
+Subject: Re: [PATCH v2 3/5] tracing/user_events: Add auto cleanup and a flag
+ to persist events
+Message-ID: <20230608212256.GA134@W11-BEAU-MD.localdomain>
+References: <20230605233900.2838-1-beaub@linux.microsoft.com>
+ <20230605233900.2838-4-beaub@linux.microsoft.com>
+ <20230608162557.00be5f89@gandalf.local.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1q7N5M-000d2H-HW
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:43274
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230608162557.00be5f89@gandalf.local.home>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/8/23 11:00 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.33 release.
-> There are 224 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sat, 10 Jun 2023 17:56:43 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.33-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Thu, Jun 08, 2023 at 04:25:57PM -0400, Steven Rostedt wrote:
+> On Mon,  5 Jun 2023 16:38:58 -0700
+> Beau Belgrave <beaub@linux.microsoft.com> wrote:
+> 
+> > Currently user events need to be manually deleted via the delete IOCTL
+> > call or via the dynamic_events file. Most operators and processes wish
+> > to have these events auto cleanup when they are no longer used by
+> > anything to prevent them piling without manual maintenance. However,
+> > some operators may not want this, such as pre-registering events via the
+> > dynamic_events tracefs file.
+> > 
+> > Add a persist flag to user facing header and honor it within the
+> > register IOCTL call. Add max flag as well to ensure that only known
+> > flags can be used now and in the future. Update user_event_put() to
+> > attempt an auto delete of the event if it's the last reference. The
+> > auto delete must run in a work queue to ensure proper behavior of
+> > class->reg() invocations that don't expect the call to go away from
+> > underneath them during the unregister. Add work_struct to user_event
+> > struct to ensure we can do this reliably.
+> > 
+> > Link: https://lore.kernel.org/linux-trace-kernel/20230518093600.3f119d68@rorschach.local.home/
+> 
+> Since there still seems to be some controversy over the persistent events,
+> could we hold off on implementing them until next merge window? That is, I
+> would like to only have the fd owned events for this release, which would
+> give us time to hash out any of the issues with persistent events.
+> 
+> If they are not in, then they are not an API, but once they are in, then we
+> are stuck with them. I believe everyone is fine with the fd owned events,
+> right?
+> 
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+I am fine with this approach, however, FD owned events only means that
+anyone using the /sys/kernel/tracing/dynamic_events will have the event
+deleted immediately.
 
-Tested-by: Ron Economos <re@w6rz.net>
+Should we flat out issue an error instead of having it work, but then
+removed immediately?
 
+NOTE:
+I'm waiting for the other user_event patches to land in the tracing
+for-next since there will be conflicts and I want to make sure I get
+good coverage with catching all the put/get refs.
+
+> > 
+> > Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+> > Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
+> > ---
+> >  include/uapi/linux/user_events.h |  10 ++-
+> >  kernel/trace/trace_events_user.c | 118 +++++++++++++++++++++++++++----
+> >  2 files changed, 114 insertions(+), 14 deletions(-)
+> > 
+> >
+> 
+> That is we can keep all the code of this patch, but:
+> 
+> >  static __always_inline __must_check
+> > @@ -1609,7 +1695,8 @@ static int user_event_create(const char *raw_command)
+> >  
+> >  	mutex_lock(&group->reg_mutex);
+> >  
+> > -	ret = user_event_parse_cmd(group, name, &user, 0);
+> > +	/* Dyn events persist, otherwise they would cleanup immediately */
+> > +	ret = user_event_parse_cmd(group, name, &user, USER_EVENT_REG_PERSIST);
+> >  
+> >  	if (!ret)
+> >  		user_event_put(user, false);
+> > @@ -1843,8 +1930,13 @@ static int user_event_parse(struct user_event_group *group, char *name,
+> >  
+> 
+> Add here:
+> 
+> 	if (reg_flags) {
+> 		/* Holding off implementing PERSIST events */
+> 		ret = -EINVAL;
+> 		goto put_user_lock;
+> 	}
+> 
+> Which also reminds me. We should return EINVAL if any flags that we do not
+> know about is set. Otherwise when we do implement new flags, the user will
+> not know if they are taking effect or not.
+> 
+
+We do that in user_reg_get, but point taken, some flag could come
+through dynamic_events interface and then we'd miss it.
+
+Thanks,
+-Beau
+
+> -- Steve
+> 
+> 
+> >  	user->reg_flags = reg_flags;
+> >  
+> > -	/* Ensure we track self ref and caller ref (2) */
+> > -	refcount_set(&user->refcnt, 2);
+> > +	if (user->reg_flags & USER_EVENT_REG_PERSIST) {
+> > +		/* Ensure we track self ref and caller ref (2) */
+> > +		refcount_set(&user->refcnt, 2);
+> > +	} else {
+> > +		/* Ensure we track only caller ref (1) */
+> > +		refcount_set(&user->refcnt, 1);
+> > +	}
+> >  
+> >  	dyn_event_init(&user->devent, &user_event_dops);
+> >  	dyn_event_add(&user->devent, &user->call);
+> > @@ -2066,8 +2158,8 @@ static long user_reg_get(struct user_reg __user *ureg, struct user_reg *kreg)
+> >  	if (ret)
+> >  		return ret;
+> >  
+> > -	/* Ensure no flags, since we don't support any yet */
+> > -	if (kreg->flags != 0)
+> > +	/* Ensure only valid flags */
+> > +	if (kreg->flags & ~(USER_EVENT_REG_MAX-1))
+> >  		return -EINVAL;
+> >  
+> >  	/* Ensure supported size */
