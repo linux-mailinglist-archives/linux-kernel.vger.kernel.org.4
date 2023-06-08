@@ -2,84 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 696FC727F46
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:46:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CFB8727F5A
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235776AbjFHLqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 07:46:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60854 "EHLO
+        id S235873AbjFHLrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 07:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235704AbjFHLqD (ORCPT
+        with ESMTP id S236135AbjFHLqt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 07:46:03 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6022121
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 04:45:37 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-5151934a4e3so748672a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 04:45:37 -0700 (PDT)
+        Thu, 8 Jun 2023 07:46:49 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 188BF3594
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 04:46:19 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-ba829e17aacso630213276.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 04:46:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686224731; x=1688816731;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AbhAghjawLzBEcXZUXbPe6opYRFvtRyYlpt+uKgziIg=;
-        b=TvZwH3IlT2VEyjrc9IouFpTmIIY5a7r2X4e+92fqyZgenAl5p7XwVzkxHF/OR0wDy3
-         1F0GXmqcEr/CLJWaNMfCbbh7y8yUnRSpBUQ4KGKvG4++N86bFyNxcq0GfCcK2iBk4Z45
-         cMkEDfnGtCfDtvS39y5T9u47ixRq2cq3YI+x5jNxwLHuPHRjHDVq/doOs6VI2UntzJZ/
-         CpzrA+2wlyDPPu3xGg6GtOqYhPqzYfjG+yk5b0UnoQUFzExos/zTiJDhMj6ugJ2/UZY+
-         ZbOHdM6XRoXMJ4xs3r3iKCtFy8wGge58Cuu2ARJ+8oQN5SgEomnCSW0F3K+NtyxAb9CE
-         5m6w==
+        d=linaro.org; s=google; t=1686224778; x=1688816778;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UtSk9xDn8CsZW/wCpBfq6RyeGmVvXlUwVu3BaunqnL4=;
+        b=RcD9LjhuC/OPsU25KsUoWP0yPXGB8Y1IRUigOs6+zhTPTJubZR1d7bobRYsDB1PXry
+         rpO9hJ89Tp9nP04kruB7YAHGLUaXTKQbe6Gkikd+8eBILh0Y9teKYC3aDYhBYFih+x+2
+         zbWEJ7m6wjixKAcLmw2yM9HEG3YFEYptS+Dngj6mWNI0kiWFCyLKp1iZ3leJr57Ye4w6
+         k7i5fuDXguYAS5fvTLG1vEIWpwOJ4przqqOg/Bnkui7zGkigshcXEd9PfSOpReA6YbRs
+         gQLgciZpcLBCEQ++j+vHT9GSj/KTbWB+HCSXIZfRUyAUFuj16t+woe221GDUTKT73zhl
+         YU8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686224731; x=1688816731;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AbhAghjawLzBEcXZUXbPe6opYRFvtRyYlpt+uKgziIg=;
-        b=IisjjROQjJ+LRqPKyzKcERyHLddx1z6Inm9bEyEojQ4UfDSQtFEnB1O4wiHBaHefAx
-         cNrh7GNiptfZ7M2tfK3uNOkTi0OdAKetzD14bPOTRNe1mdeeAVQ3z0J88j4dxv5KwS91
-         XsXZakgZsW9oObAnTfBAPsH5naj9LQqfdTkKsoQimMbbz7qw4llOvGZcahfxwJGltBKI
-         pSBnnIxtThrqeKr5XdnXx4AL0mvGJ06CWIdTkFnUY2qheykRwA/E5wKbMyBZ+P9hvtMh
-         nrbhBqGHV3CnMWhfgbOLiDaoxgDHfIuwv5JfvJokdfxhNnmuxK1lY8H9FkrbHw6zAdne
-         Kb4Q==
-X-Gm-Message-State: AC+VfDxLOjqqqemPb8SoPCyFwp7CyUpq8z6KuT80aqcqFgb+CGZWvzja
-        1kW8YgFHK9NJYiaqV2cb46BJRg==
-X-Google-Smtp-Source: ACHHUZ5HmtzT2HmzwjEKYaHiDYcKIMmjjNdcI7Au+tLjgnldEAp2UvNxsmqjrhD4TDXuZihM4yzoNQ==
-X-Received: by 2002:aa7:c9d0:0:b0:50d:9e7c:264d with SMTP id i16-20020aa7c9d0000000b0050d9e7c264dmr7855652edt.8.1686224731465;
-        Thu, 08 Jun 2023 04:45:31 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id m8-20020a056402050800b005149cb5ee2dsm449662edv.82.2023.06.08.04.45.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 04:45:30 -0700 (PDT)
-Message-ID: <a9952e76-1204-5bc7-7856-0c7f8a411d76@linaro.org>
-Date:   Thu, 8 Jun 2023 13:45:28 +0200
+        d=1e100.net; s=20221208; t=1686224778; x=1688816778;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UtSk9xDn8CsZW/wCpBfq6RyeGmVvXlUwVu3BaunqnL4=;
+        b=Jm7646vOnt5sBJu9TX457hy8q+nrhc6cadIc1OwQ3Bz6dsZLGmZH1IQNTjFXomSdMN
+         06IBButSCM2nnamJYHbxQVhjzZU2jQMWV2T+qjTYnU8aPFbeFPeC+580plhYX7F4TN52
+         w5xHyx1BBWgXPy1Xxuzcoh/KOMZraxmTJ68BWKc21B8qYnkpBRVwIi+3nqxr4lAzywEZ
+         OBbYFikxbZ42jYdVw6LXH2nf4BChOBd9va7TN7bwGFPPii9K1HuqmgmUJK3g95Rs0I1x
+         oq9b3khNyoKNr+Q8HCZfSrTNZNaHML/LMY32BXSTd0wE2t3Vx5Synm6i9KIgP4szkG4n
+         5M3A==
+X-Gm-Message-State: AC+VfDzY91BGehnPSbNvi83uNGefZ+m6iuN5bzmdu5gyfUsTA2h0HKkR
+        tY5oS4KIWxJIVbjwgP+zY86th2lPA9mpO5Pla9n57Q==
+X-Google-Smtp-Source: ACHHUZ4y2+88M7dpE5kCj2m5CnEGYb4DaLh+1mYwJ8lVCokkrPZ3A9nP8+tAx041dQggLJUaQdxZo7KY7+N4mHlHHRM=
+X-Received: by 2002:a81:a190:0:b0:561:e2dc:fc60 with SMTP id
+ y138-20020a81a190000000b00561e2dcfc60mr9506753ywg.25.1686224778235; Thu, 08
+ Jun 2023 04:46:18 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v12 1/2] spi: add loongson spi bindings
-Content-Language: en-US
-To:     zhuyinbo <zhuyinbo@loongson.cn>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+References: <20230607124628.157465-1-ulf.hansson@linaro.org>
+ <20230607124628.157465-14-ulf.hansson@linaro.org> <20230608053446.ngoxh7zo7drnr32z@vireshk-i7>
+ <CAPDyKFqUWhdmctKRpQoqwZ2nsx_P2FiWvLzfm_d39QdECWoytA@mail.gmail.com> <20230608104540.tykxtvwhoyogthw5@vireshk-i7>
+In-Reply-To: <20230608104540.tykxtvwhoyogthw5@vireshk-i7>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 8 Jun 2023 13:45:42 +0200
+Message-ID: <CAPDyKFrbpm0W1Hdv+85MqMAC2-UbPOE6qp26L0UvVF0sSL2ayA@mail.gmail.com>
+Subject: Re: [PATCH 13/16] OPP: Extend dev_pm_opp_data with OPP provider support
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-References: <20230608072819.25930-1-zhuyinbo@loongson.cn>
- <20230608072819.25930-2-zhuyinbo@loongson.cn>
- <6ebed84c-2b42-c981-7b3f-e71cc88e4c2c@linaro.org>
- <4bf747c4-b767-b20c-e00f-724b50f44edb@loongson.cn>
- <6bfc2a22-6901-0858-7b90-bc4c52c66810@linaro.org>
- <bd2d7830-3ab6-0906-b06a-83d3e0a96749@loongson.cn>
- <11ca2b90-544d-18c2-fb15-7909ca60507f@linaro.org>
- <f6d4ecb5-e9df-346e-4aab-772fd01689c8@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <f6d4ecb5-e9df-346e-4aab-772fd01689c8@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,35 +76,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/06/2023 13:42, zhuyinbo wrote:
->>
->>> It can work was for ls2k1000 and ls2k0500 and it specifically refers to
->>> spi driver. but 2k0500 doesn't implementing a clock driver and doesn't
->>
->> We do not discuss here drivers, but bindings. Whatever your drivers are
->> not supporting, matters less.
->>
->>> use CCF to gain clock but can use "clock-frequency".  Is it necessary to
->>> obtain a clock based on CCF? If it's necessary, then it seems that it
->>> can only added 2k1000 spi first.
->>
->> Not related to bindings...
-> 
-> 
-> I may understand that what you said, and the dt-bindings only cover 
-> hardware and not involve the drivers. if so, I will add following:
-> 
-> 
-> --- a/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
-> @@ -16,6 +16,7 @@ properties:
->     compatible:
->       enum:
->         - loongson,ls2k1000-spi
-> +      - loongson,ls2k0500-spi
+On Thu, 8 Jun 2023 at 12:45, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 08-06-23, 11:37, Ulf Hansson wrote:
+> > The required opps are also different, as it's getting parsed from DT
+> > both for the genpd provider and the consumer. The point is, there are
+> > more code involved but just _set_required_opps().
+> >
+> > For example, _set_performance_state() (which is the one that calls
+> > dev_pm_genpd_set_performance_state()) is designed to be used for
+> > required opps. Does it really make sense to rework
+> > _set_performance_state() so it can be used for this case too, just to
+> > avoid another call to dev_pm_genpd_set_performance_state() somewhere
+> > in the code?
+>
+> What we need here, in you case, is really the required-opp thing, without the
+> DT parsing. The genpd will have an OPP table here, and devices (you are adding
+> OPP table dynamically for) shall have the genpd's OPPs as their required OPPs,
+> since for setting OPPs of the device, it is *required* to have OPP of the genpd
+> set too. Just like how it happens with DT. No special handling will be required
+> in dev_pm_opp_set_opp() path in this case and existing code will just work. You
+> just need to set the required-opp tables properly.
 
-Aren't they compatible?
+Okay, if I understand your point you want to avoid creating OPPs for
+each device, but rather coupling them with the genpd provider's OPP
+table. Right?
 
-Best regards,
-Krzysztof
+Note that, there is no such thing as a "required opp" in the SCMI
+performance protocol case. A device is compatible to use all of the
+OPPs that its corresponding SCMI performance domain provides. Should
+we rename the required opp things in the OPP core to better reflect
+this too?
 
+That said, we still need to be able to add OPPs dynamically when not
+based on DT. The difference would be that we add the OPPs when
+initializing the genpd provider instead of when attaching the devices.
+In other words, we still need something along the lines of the new
+dev_pm_opp_add_dynamic() API that $subject series is introducing, I
+think.
+
+Moreover, to tie the consumer device's OPP table to their genpd
+provider's OPP table (call it required-opp or whatever), we need
+another OPP helper function that we can call from the genpd provider's
+->attach_dev() callback. Similarly, we need to be able to remove this
+connection when genpd's ->detach_dev() callback is invoked. I will
+think of something here.
+
+Finally, I want to point out that there is work going on in parallel
+with this, that is adding performance state support for the ACPI PM
+domain. The ACPI PM domain, isn't a genpd provider but implements it's
+own PM domain. The important point is, that it will have its own
+variant of the dev_pm_genpd_set_performance_state() that we may need
+to call from the OPP library.
+
+Kind regards
+Uffe
