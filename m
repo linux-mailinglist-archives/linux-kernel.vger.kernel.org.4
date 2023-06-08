@@ -2,54 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A208172825F
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 16:10:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 582AF728262
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 16:11:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236913AbjFHOKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 10:10:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48338 "EHLO
+        id S236939AbjFHOLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 10:11:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236907AbjFHOKl (ORCPT
+        with ESMTP id S236926AbjFHOLE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 10:10:41 -0400
+        Thu, 8 Jun 2023 10:11:04 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A1B2D71
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 07:10:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329212726;
+        Thu,  8 Jun 2023 07:11:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38C7264E0B
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 14:10:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 910F0C4339E;
-        Thu,  8 Jun 2023 14:10:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD9ED64AAE;
+        Thu,  8 Jun 2023 14:11:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03A54C433D2;
+        Thu,  8 Jun 2023 14:11:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686233421;
-        bh=M2hdkj/aqger+2hxUCmWq7hrnZFgudHDHrlIG8mCorA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=SHK5/HCPiCK7LLA9ghCjDWIWcqFKwE+hFRmZqnRFs7eSPR+j2fjG6N619VtOqonyz
-         i2XOUZjlQ31LKy//mmJQEbmK9m2lgFam1mCxeep5bf450SHKizPYblnR4hcVp2fqRd
-         Zz/y+o/5FmxlXKp+rwEqvNhOHEiSX1ilMBRDeziJTR0tTD+1pryHV4iFgNCELv0egl
-         ZmyGGUIcNB28cVBoGDij2FThim8FBA38wrPOckAmgGN64PRyswO3DDnb27K9frdNPO
-         ZGpL5n8HY4o91Ky9LP5BhvIkVaUmk6tHQ04YDO5T+pundJabJqMoNLJCb+5PgSdMry
-         XF+weIEX8dyBw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 739DFE4D031;
-        Thu,  8 Jun 2023 14:10:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1686233462;
+        bh=0fbVVZxbX+7uBgaaZMvGPxIbYG32eywvC3Mz0AqXISM=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=TigkBz+YRO/u3oLmHQKwkHwj4QrP4ft+JZV3ZXtwhNeFhRm1GaZNDa0B9/f2X0A1/
+         Tw+IlYUnslamhSw5nPXeMWNAeKSQ33lefHzmbLvvJhnGXqydAkf0tZCLMg7COvk/1G
+         pnKJ1JYKToBNfjjZFbewCIVljf9lNDaBt5sWvRrk6YKQ6O720wW48C3JWdMKKk59R5
+         BLd+NiBkVuhOVcm4eJvb5KFgjvK3tL6xixKxzLoUH5f3z6Ujf/7cZC1Jp/wuF8aMl/
+         FkGU4TPM5NWJsds/qAW3bMrlMA5OOeAJDyzFNeY8JKTuatD6Rti8851XZa3mAHOnlk
+         fx9da291xNTpQ==
+Date:   Thu, 8 Jun 2023 16:10:58 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Siarhei Vishniakou <svv@google.com>
+cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bastien Nocera <hadess@hadess.net>
+Subject: Re: [PATCH v4] Add rumble support to latest xbox controllers
+In-Reply-To: <20230425163844.3711710-1-svv@google.com>
+Message-ID: <nycvar.YFH.7.76.2306081610380.29760@cbobk.fhfr.pm>
+References: <20230425163844.3711710-1-svv@google.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH -fixes] riscv: Check the virtual alignment before choosing a
- map size
-From:   patchwork-bot+linux-riscv@kernel.org
-Message-Id: <168623342146.30670.13170012353498536520.git-patchwork-notify@kernel.org>
-Date:   Thu, 08 Jun 2023 14:10:21 +0000
-References: <20230607125851.63370-1-alexghiti@rivosinc.com>
-In-Reply-To: <20230607125851.63370-1-alexghiti@rivosinc.com>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, ajones@ventanamicro.com,
-        robh@kernel.org, anup@brainfault.org, linux-kernel@vger.kernel.org,
-        songshuaishuai@tinylab.org
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,31 +55,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Tue, 25 Apr 2023, Siarhei Vishniakou wrote:
 
-This patch was applied to riscv/linux.git (fixes)
-by Palmer Dabbelt <palmer@rivosinc.com>:
-
-On Wed,  7 Jun 2023 14:58:51 +0200 you wrote:
-> We used to only check the alignment of the physical address to decide
-> which mapping would fit for a certain region of the linear mapping, but
-> it is not enough since the virtual address must also be aligned, so check
-> that too.
+> Currently, rumble is only supported via bluetooth on a single xbox
+> controller, called 'model 1708'. On the back of the device, it's named
+> 'wireless controller for xbox one'. However, in 2021, Microsoft released
+> a firmware update for this controller. As part of this update, the HID
+> descriptor of the device changed. The product ID was also changed from
+> 0x02fd to 0x0b20. On this controller, rumble was supported via
+> hid-microsoft, which matched against the old product id (0x02fd). As a
+> result, the firmware update broke rumble support on this controller.
 > 
-> Fixes: 3335068f8721 ("riscv: Use PUD/P4D/PGD pages for the linear mapping")
-> Reported-by: Song Shuai <songshuaishuai@tinylab.org>
-> Link: https://lore.kernel.org/linux-riscv/tencent_7C3B580B47C1B17C16488EC1@qq.com/
-> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> See:
+> https://news.xbox.com/en-us/2021/09/08/xbox-controller-firmware-update-rolling-out-to-insiders-starting-today/
 > 
-> [...]
+> The hid-microsoft driver actually supports rumble on the new firmware,
+> as well. So simply adding new product id is sufficient to bring back
+> this support.
+> 
+> After discussing further with the xbox team, it was pointed out that
+> another xbox controller, xbox elite series 2, can be supported in a
+> similar way.
+> 
+> Add rumble support for all of these devices in this patch. Two of the
+> devices have received firmware updates that caused their product id's to
+> change. Both old and new firmware versions of these devices were tested.
+> 
+> The tested controllers are:
+> 
+> 1. 'wireless controller for xbox one', model 1708
+> 2. 'xbox wireless controller', model 1914. This is also sometimes
+>    referred to as 'xbox series S|X'.
+> 3. 'elite series 2', model 1797.
+> 
+> The tested configurations are:
+> 1. model 1708, pid 0x02fd (old firmware)
+> 2. model 1708, pid 0x0b20 (new firmware)
+> 3. model 1914, pid 0x0b13
+> 4. model 1797, pid 0x0b05 (old firmware)
+> 5. model 1797, pid 0x0b22 (new firmware)
+> 
+> I verified rumble support on both bluetooth and usb.
+> 
+> Reviewed-by: Bastien Nocera <hadess@hadess.net>
+> Signed-off-by: Siarhei Vishniakou <svv@google.com>
 
-Here is the summary with links:
-  - [-fixes] riscv: Check the virtual alignment before choosing a map size
-    https://git.kernel.org/riscv/c/49a0a3731596
+Applied, sorry for the delay.
 
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Jiri Kosina
+SUSE Labs
 
