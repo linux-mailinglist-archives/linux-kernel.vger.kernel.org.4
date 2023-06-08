@@ -2,103 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AEAF728413
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:46:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9988F72843E
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236034AbjFHPqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 11:46:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33738 "EHLO
+        id S237416AbjFHPwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 11:52:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237000AbjFHPq1 (ORCPT
+        with ESMTP id S237459AbjFHPw0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 11:46:27 -0400
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82EB630D2
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 08:45:55 -0700 (PDT)
-Received: by mail-ot1-x32a.google.com with SMTP id 46e09a7af769-6b28fc460bcso518041a34.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 08:45:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686239096; x=1688831096;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZxAq7z+oPBcRliwq8X8cOVzLHZJjYZDmvyPWxCW1HZA=;
-        b=jg3GbXZgcvCu6UkfsGNYuuKUA/EjbWEwXtm/pJ82eGLGZ1iYBotW6rvmyvksZodaU/
-         OnErQhHnAaLfL1XfrSnwIdeQ1YsgkUhGnNKiTJeKLHs+//RZeKMfHRUmV7wS9oOBJaaZ
-         Xq862PpcNvuI9ht1km2B9ufhOXJ9CqFrss7XX2CNzHMYyIbPOoH2++DFtaiZJ2q/Wo1c
-         YkxbUYAkmfYGjnCmIwLoThGEXfPkWmZXt60SIq4lfDArMTLWxgTwJ0ONu47P2ZXuBSbi
-         Go41Ssi2CLIbu0PJPeCnX15u+ZRVuvLcTht5+MfXlIvEEl5eHkJllb0lT8gwXOUDwZJE
-         /Y+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686239096; x=1688831096;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZxAq7z+oPBcRliwq8X8cOVzLHZJjYZDmvyPWxCW1HZA=;
-        b=L7262mDvRZWUzPiN3eNcEcKvN69NFGbXUg/R5NQrVXMqR6YRA2YIqjNiM/jcIvbJP4
-         nHqroLBDpY4mCWzpV0Q8Vvk3zvQBwYwFjb50ieJl6FXxEpmzfRYFHOk+k9qLBQUYrYRx
-         UHUlARXh0ecozZJM0/Vruf3voJi84KXFUD419SD6sPK7iu9HNDoz3mhmybMJP46Z+xLF
-         Eaq9SYSoVnSYDY51zVreK6ufIX8/liUNqrc7sOtpFOM+1QZL0HAaM4YprM5sNpCVlgOR
-         VJtPAI3Ub56H3uFsdlFIwrm9oKyfc/X3DCyNnKrGqsTsEmYAIMZ08cEDtqZ50qQHyWlB
-         6j5g==
-X-Gm-Message-State: AC+VfDyvNi1vrM1gYVOvhc9Fv2xt19c6TX+TB7FEcXbq/1SNMGEOkZuA
-        jMglqfVi9WIaxnSkH9Iksyw=
-X-Google-Smtp-Source: ACHHUZ76oxl9RuTZPRyAdkFKxzFM0gxTSl/SsFHwS0hwo0pY5QftEWlrUWOnCMafmmVqyIVepFX2WQ==
-X-Received: by 2002:a05:6358:bba5:b0:129:be5b:fff with SMTP id df37-20020a056358bba500b00129be5b0fffmr7357082rwb.9.1686239096378;
-        Thu, 08 Jun 2023 08:44:56 -0700 (PDT)
-Received: from redkillpc.. ([49.207.203.99])
-        by smtp.gmail.com with ESMTPSA id y185-20020a6364c2000000b0053f2037d639sm1403130pgb.81.2023.06.08.08.44.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 08:44:55 -0700 (PDT)
-From:   Prathu Baronia <prathubaronia2011@gmail.com>
-To:     akpm@linux-foundation.org, masahiroy@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, nathan@kernel.org, ndesaulniers@google.com,
-        nicolas@fjasle.eu
-Subject: [PATCH] scripts: fix the gfp flags header path in gfp-translate
-Date:   Thu,  8 Jun 2023 21:14:49 +0530
-Message-Id: <20230608154450.21758-1-prathubaronia2011@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 8 Jun 2023 11:52:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875AE358B;
+        Thu,  8 Jun 2023 08:52:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B675B64E9D;
+        Thu,  8 Jun 2023 15:45:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91A73C433D2;
+        Thu,  8 Jun 2023 15:45:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686239108;
+        bh=v0S09gxGcrr5yO3mKqprr455Yowks9jvzBXWjjD335E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TNVbA2xUQfTXND2I94jmKNiVGNAwv3eiadwJrmeJIgOIr4yknjJT0/4O1RiuBeYjS
+         z3WoV4QpPOnnRvewrvAE+vwhewT5Yf9EyFwoMyj7EINpiGCm+R4xaqjThd+WibKV6V
+         TqQTzJx3CrWu/KeayvFj0M9NeM6ucXB8WHQFEV53ArNjNlN8BXXlTCMVmigJL32+zD
+         psgLIXnOWoIqUZa9irm8QZgk1gi1ir57yVAaFLNiJfyitX1gFa+OW4NRKM811cfv2q
+         h10VX79BancgY03a5EvKeOMFJ64eNXi90Ek3aDHJ45fVGkjBFAOYNFWNf0F86xJPET
+         o15pX+5r6RJxQ==
+Date:   Thu, 8 Jun 2023 16:45:03 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] mfd: pm8008: fix module autoloading
+Message-ID: <20230608154503.GO1930705@google.com>
+References: <20230526091646.17318-1-johan+linaro@kernel.org>
+ <20230526091646.17318-2-johan+linaro@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230526091646.17318-2-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since gfp flags have been shifted to gfp_types.h so update the path in
-the gfp-translate script.
+On Fri, 26 May 2023, Johan Hovold wrote:
 
-Signed-off-by: Prathu Baronia <prathubaronia2011@gmail.com>
----
- scripts/gfp-translate | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+> Add the missing module device table alias to that the driver can be
+> autoloaded when built as a module.
+> 
+> Fixes: 6b149f3310a4 ("mfd: pm8008: Add driver for QCOM PM8008 PMIC")
+> Cc: stable@vger.kernel.org      # 5.14
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  drivers/mfd/qcom-pm8008.c | 1 +
+>  1 file changed, 1 insertion(+)
 
-diff --git a/scripts/gfp-translate b/scripts/gfp-translate
-index b2ce416d944b..6c9aed17cf56 100755
---- a/scripts/gfp-translate
-+++ b/scripts/gfp-translate
-@@ -63,11 +63,11 @@ fi
- 
- # Extract GFP flags from the kernel source
- TMPFILE=`mktemp -t gfptranslate-XXXXXX` || exit 1
--grep -q ___GFP $SOURCE/include/linux/gfp.h
-+grep -q ___GFP $SOURCE/include/linux/gfp_types.h
- if [ $? -eq 0 ]; then
--	grep "^#define ___GFP" $SOURCE/include/linux/gfp.h | sed -e 's/u$//' | grep -v GFP_BITS > $TMPFILE
-+	grep "^#define ___GFP" $SOURCE/include/linux/gfp_types.h | sed -e 's/u$//' | grep -v GFP_BITS > $TMPFILE
- else
--	grep "^#define __GFP" $SOURCE/include/linux/gfp.h | sed -e 's/(__force gfp_t)//' | sed -e 's/u)/)/' | grep -v GFP_BITS | sed -e 's/)\//) \//' > $TMPFILE
-+	grep "^#define __GFP" $SOURCE/include/linux/gfp_types.h | sed -e 's/(__force gfp_t)//' | sed -e 's/u)/)/' | grep -v GFP_BITS | sed -e 's/)\//) \//' > $TMPFILE
- fi
- 
- # Parse the flags
+Applied, thanks
 
-base-commit: 44c026a73be8038f03dbdeef028b642880cf1511
 -- 
-2.34.1
-
+Lee Jones [李琼斯]
