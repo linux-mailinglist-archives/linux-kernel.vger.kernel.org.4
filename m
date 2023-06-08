@@ -2,260 +2,835 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9583B7287A1
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 21:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20FB77287A5
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 21:09:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235466AbjFHTIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 15:08:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56446 "EHLO
+        id S235242AbjFHTJD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 15:09:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235392AbjFHTIB (ORCPT
+        with ESMTP id S229864AbjFHTJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 15:08:01 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A7E30C1
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 12:07:49 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-56974f42224so8900277b3.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 12:07:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686251269; x=1688843269;
-        h=mime-version:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=mFXKG+o8ou8b37NYYPzSeVEYTzI6RrQFUcBP7+Z0kCs=;
-        b=gLnB65KDapj/L8oyti3OCPecdhfNzwnK27SyCP2Ij67wjZIq+Urt/Xj2ohzoxWGcqt
-         9md6NykL5+BICuB+yTQeY5noQu9v1v2MRkxsYM467PbVoGKY6MsnqM4jAqCuFHP/FIOV
-         Nmc3w5j8hy4a/q9QA4nUfQcqIorbpGtzTxxEZU3pKmFAyFx7OeJiQ8OIYPYs4ppaQJ99
-         d7EiKfcmdkw5gC0oGauuDJG9I1T0YqKfADh5DbR+Bsy6i3IAOqDTgdIwUCl9173XfMxd
-         gqB+NbUlpX0CJ1Eyi3fexT8Oih2q1dLLzjaj4zv6Fl4AW8zYJNZ/E0CIlX5rvC2IOp4N
-         oYyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686251269; x=1688843269;
-        h=mime-version:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mFXKG+o8ou8b37NYYPzSeVEYTzI6RrQFUcBP7+Z0kCs=;
-        b=KZBM04CIIcSdzJNX++63krIICc+FJF9vYyu79Z9wUewKuiqooM4ECoJYXYGD9+X50W
-         D0IANVjBh/2qSqdcdTGwOQ5od2RufyiYBUT2f7hx+8QYa2AOwOibs+wach/95WIjkkKi
-         xOPKZ5AH+i7r1uAP8HnQfB5gcoWbaXwCND4UEFHTba+pAF56JhodsHfVszON92RXwcMY
-         yWgr7lV8TPK59KebMTnCAt1Ot5eVH9rju5qNXnNLhWlHA9ghrepX6AmtXnxQu9Z1hNUG
-         QBpJ2lThtpmvvLeHEvz+JUpberED7HHN+X5qOcVKJwSNe79pCph2uXkc67DlkthKvRQk
-         fYVQ==
-X-Gm-Message-State: AC+VfDz4hnmv69yf30cwgTakln1YqdPSycJ3gr8m2oRG3blXWKSFj5Ym
-        NG5s6AgvlAJuFoNHjdwC6qW/nQ==
-X-Google-Smtp-Source: ACHHUZ4Dnk2jZ5ALQkJtH8c5bPqBsquF3+AZZ+zLteBdxMPlpIWo547PqJq12gBBTgb+B20F8e/7/A==
-X-Received: by 2002:a81:7b0b:0:b0:561:afca:5b4d with SMTP id w11-20020a817b0b000000b00561afca5b4dmr662072ywc.3.1686251268705;
-        Thu, 08 Jun 2023 12:07:48 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id j77-20020a819250000000b00565862c5e90sm103014ywg.83.2023.06.08.12.07.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 12:07:48 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 12:07:36 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
-        John David Anglin <dave.anglin@bell.net>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 00/23] arch: allow pte_offset_map[_lock]() to fail
-Message-ID: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com>
+        Thu, 8 Jun 2023 15:09:01 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB6C2D4F;
+        Thu,  8 Jun 2023 12:08:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686251338; x=1717787338;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=YEM0emHQs+4bGLvdglF3s4HbEKNrlrI4Dt70hLT3TxI=;
+  b=lPshTlC1jpZhixkFdlvYZws+qb1Jwg2hFbbqauL39i6WtZwMjC5Tah0c
+   JWZcVEZ4HWUdSvmrHSBifyznCVI2uva/OzFGCPoonxm/9hKmHHtl8/qOl
+   61ak0OQ7OTtP30Rpz+cQwSW/U8km0fHB3hnJwLDXDnczzuG+oLnDkfIbJ
+   fDW+ZrlJpm3Qg4tZOKrgU9hRgIhLQZKU+IE8YYXBCsw/r+xywQkCZTOUn
+   7/KRvaGVhmMJEqGZvMh3lawrpC/6mwdSCjRnan80CUO/7l6vIXY6VXpNY
+   IctejPZXcERSj2it1cW+xdiCVYrcfsw+POpNjYIGbz50NbXUplis3A7yb
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="385757108"
+X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
+   d="scan'208";a="385757108"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 12:08:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="780003330"
+X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
+   d="scan'208";a="780003330"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by fmsmga004.fm.intel.com with ESMTP; 08 Jun 2023 12:08:57 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 8 Jun 2023 12:08:57 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 8 Jun 2023 12:08:56 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Thu, 8 Jun 2023 12:08:56 -0700
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.49) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Thu, 8 Jun 2023 12:08:56 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nj0h6BCiohIanhDqy9hYr1ryM52d9ylEOqF5Md5jY667b8o/qDIrokwcNv09tLbZ8JHlHcAKqTL/BK+Y+cZK52NSZijQbZqzL2ymsXm58/pg8i1ojMzSR5LCR3z2ohPTgCs+1RRMAgmrt6ECY7VVthtFrTM5Ieo4SglGBaOp5sw6oDbm0O/r8kcQZqlRg3m2esQF7LAXYkGiy/vSHp2IsXuoRc99gqEeZeKyIGC9aQ9WtTal7ZTNNMuHIYy+53gEfd/odsMMiujZYx2Ar/IE2rgu9qQvTb/pzNBUCZl3wX3Ls9kvTJYb0lyfZWYVxt3yaqgHyS4DpUj1A3gVzMN8KA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xxmNwnr6aeo7jGoj0FEupopZYd5qsDw1wHVPEURyhDA=;
+ b=Dvl9v2KHGGNjcz7bbx9Wb1fXLVz4mAoPOaimzcH/caYU11WqHnCBW/sXBH7ibQhzxlmt2mCTQXOUAlhZ6pxWce1bPnT/vx+fp1ZJZ2ocu2TwSLMlJ6IowPPzSyvhYqINFwe3mOrRRyPBB3ZQNQ2Gu9WsJvt93jBL/VQckIq1/bi1OY5NerxEXsmQ/RJVFHuvnQ6TdFX/Ss8wfaa/+WOUtQVbY7wRGf26Mccg7daVf/nMHAYHxW5tlKpy6hpJpImcoB9Xna2zbhr5pgeruItSxcseYjZgYASBRwhXJanTcF87whsp1R5MK1Q/CkkpF/Ns2zD3HzXn0JK6q13p0MFY5g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
+ by SJ0PR11MB5151.namprd11.prod.outlook.com (2603:10b6:a03:2ac::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.38; Thu, 8 Jun
+ 2023 19:08:53 +0000
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::95c6:c77e:733b:eee5]) by PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::95c6:c77e:733b:eee5%5]) with mapi id 15.20.6455.030; Thu, 8 Jun 2023
+ 19:08:53 +0000
+Date:   Thu, 8 Jun 2023 12:08:48 -0700
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     Terry Bowman <Terry.Bowman@amd.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
+        <ira.weiny@intel.com>, <bwidawsk@kernel.org>,
+        <dave.jiang@intel.com>, <Jonathan.Cameron@huawei.com>,
+        <linux-cxl@vger.kernel.org>
+CC:     <rrichter@amd.com>, <linux-kernel@vger.kernel.org>,
+        <bhelgaas@google.com>
+Subject: Re: [PATCH v5 03/26] cxl: Rename member @dport of struct cxl_dport
+ to @dev
+Message-ID: <648227401791a_1433ac294d6@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20230607221651.2454764-1-terry.bowman@amd.com>
+ <20230607221651.2454764-4-terry.bowman@amd.com>
+ <64817846759c9_e067a294f5@dwillia2-xfh.jf.intel.com.notmuch>
+ <80c27ea8-4d82-a41d-1ccb-17d8da974faa@amd.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <80c27ea8-4d82-a41d-1ccb-17d8da974faa@amd.com>
+X-ClientProxiedBy: SJ0PR13CA0103.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c5::18) To PH8PR11MB8107.namprd11.prod.outlook.com
+ (2603:10b6:510:256::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|SJ0PR11MB5151:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7ce8e852-1243-4cd1-acf3-08db6853cc0f
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: r5n04TkitM9JWMDxqYG4xraD1a7WGa8Cg03yNt98pPtnm4IRJcxyqj3mP+EleO2fCqjkabAGinVp2q2r4DCFT835HPQIk50wPqCVEPzbruGBvg5RxIzHlq2XKqzWkZPPzTPjDWOy+kZOfRIbOjk9l0MX5CTGyqDe1L4Zw2Mdj/Wnxa4WFA4iWxBzTUeLJcPdO36SJqtvz3iNaajKYoQi9OR4UOtTsD9uZW6/9MDTvCUDl26tSyKnvRKYjHxQZBh8kVKDVtKWhqwlg5Z95eE8IY8dXyR9Nrgx58fpqOwxTV5bQqFERGPrxqCrwZdHtiTmiEUPobfs9aBrYkBXrgNKdM5cAxoYMA8CbJW2khyKEh08suLogUs8JKp75+bb5fYD0fi+mR2yQYmJ8uvvsMg9MST9VI4WPImCPYFphMqIPw8nM2rIdI/Y9fwsqHPZ42ICGN+jq9WOXJwWUGoKUCNSySzkWwlA+Y3umEThR/9ra/5oA6028sdRtOimgI8lTYDjL1OPp1yVuEDYKd9SNexuOUB0XKrzILNIks2qXmwFasbMf6PAHlWro5cvgoNUkTiR
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(39860400002)(346002)(376002)(366004)(136003)(451199021)(41300700001)(6486002)(316002)(83380400001)(86362001)(186003)(26005)(9686003)(6512007)(53546011)(6506007)(2906002)(30864003)(82960400001)(38100700002)(5660300002)(8936002)(8676002)(66946007)(66556008)(66476007)(110136005)(478600001)(6666004)(4326008);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pMU/taNDm7aQ+7iSeI+pafTP3F1bvXo+m2Jph9PyJPO19UClaE1xPqpUSHmv?=
+ =?us-ascii?Q?Sidd3wzotyEiJaCa+TzZhYxZ8pRjyHr19MxUBnkdoIUx9L/XMpIfVjMhzIh6?=
+ =?us-ascii?Q?vLrawTxQSsEpmwE23RBCnS9JTSh9WEJYg/gh+0TbfMi78qRRhs4FnUaTCLXi?=
+ =?us-ascii?Q?1/BUVN5N+Gm7D5GXd4r6d4QtT8koL4rd9NWsMRE8VHxU8y7OBigWoQPO0T8e?=
+ =?us-ascii?Q?32OhOkC47YFapDHNqZJyrRSkkLvn+MI47/QVLE8C/PTapMpiHw7vLgVmLiwX?=
+ =?us-ascii?Q?NIYZJfQi8QA8v41lny9Xf2Cb/d8aAXMMAH/C+mXXdUXRKmPULwsArERKx1C2?=
+ =?us-ascii?Q?TuFmUMKsMvzqjElygNUHnSX0HfoO4Q9YyrFa/7+dtHzh3IrrKQTXUKNSzVgP?=
+ =?us-ascii?Q?1wN7T3NydfOBYmJ/UI/RyQ7gqNj5ykkBhN8MpHJaHFlPR2X7o3TPtqx/RtMq?=
+ =?us-ascii?Q?yIgT4WhNNMFyopD2CrUMSXmtAmYkRL3sY/B6NyWadbgLijodtnx4MCOx7IGp?=
+ =?us-ascii?Q?hPi3VDQm4nbvyQatfUVvCSvGbZpmbyk1Uheb3K/2IGV53RxaQcOOZ1crRs9t?=
+ =?us-ascii?Q?UxgOr9EFQm1b7Iy3Kauj9897bqp0g2pjj61goHP1k1ZA9PvjarcmSAqTgbuo?=
+ =?us-ascii?Q?Sz80c1W8cYRuwHTReaDp91b0lnf1/AoeYoc47Jcve/C2gHLoKsUidh+2P3xD?=
+ =?us-ascii?Q?37m01dXeWlPQ0ShPp0AQYF1P9399wXTe+G3z8lv+EAi+vnsPM4ZTCEQyEPxL?=
+ =?us-ascii?Q?vrHbMgGySscklGcPz2hxbVImT6iEZAinxWWcatMPVFOXLq2/HyyPb1pBK6qE?=
+ =?us-ascii?Q?BZd2NOEiApijbZFw6/f1PY1yADI1GoKmbFfYJnAkSOsyQoLEAQl6SJlRCFqW?=
+ =?us-ascii?Q?x2bh8qMZSthFN6k890Fj/vTRV3X0+69KzphV0bwkk8Vq5ZOmECXdZrE7Qib5?=
+ =?us-ascii?Q?ghfxJ0UWVKqKAFIZ70DS4UgbzdSmd/n074fKENu2iTKLrF+FxrlHnsZbXlK6?=
+ =?us-ascii?Q?jOOQlBe8XSPPQZwpuCi6yu2QyOUBC2RQ7k1UBCWYgvcSQZg1aGflNSa+cBR0?=
+ =?us-ascii?Q?VEy+VqTzVDN9sDktnuH1WakH2mF8aEjbBFGXIDco++kRHqpFc7tunZx4xNDk?=
+ =?us-ascii?Q?aGcftuRBplq8R3Y0NJJaxGSDN21TPxpQlPw1BGZu4j3zTRcguXQgom46jA0Q?=
+ =?us-ascii?Q?Lo/JAyBkYxQ/hL/Mru8nppaLvJT9sH+ra4XoaCyTvtzrLchdsBcH7yBnuS9G?=
+ =?us-ascii?Q?MDNLOG7wgn8XU7+I81Sv5xomHuEJ5Mggxu911c2CcpfkPKZqA7qPEG8dUeil?=
+ =?us-ascii?Q?gdKMRENep1ek0sVfL4kEy0rQ/vhoy1gOE7S/KyZZaRTcQn1ECa4WB1wGwjFk?=
+ =?us-ascii?Q?tEQ8gxPZpuGDQf3oTARSQpjI3EfSXfASpIubVxlElUhUt4XmhsjormzDVHQM?=
+ =?us-ascii?Q?GCd9FSXf/Ne/G3fUkQ7VTll0HwEesMp4TwMJjxdoBmbEnEcwTRE9Xn9wIMkn?=
+ =?us-ascii?Q?4BSSwlZCFzAh1pW09juycQfQCPBMJVRm2wOVwkz0udQc2JiTQjPxL18zR5yx?=
+ =?us-ascii?Q?v6cVdRHy2G6y976/zmIFeGeU7DuNyY0ldDck69sF85W4IeUAGYmPLlQQbZVo?=
+ =?us-ascii?Q?Qw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7ce8e852-1243-4cd1-acf3-08db6853cc0f
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2023 19:08:52.1982
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 91FF5yyeYD9WBtbcCyYSbH/xp6EcNXsI0NqB66SBFd/KMwZBGtexp3FLRyz9HOOGc9ngXG1fF7Hy+PWs5BrgWq4Njr+AKKVko9uU7uMlack=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5151
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Here is v2 series of patches to various architectures, based on v6.4-rc5:
-preparing for v2 of changes following in mm, affecting pte_offset_map()
-and pte_offset_map_lock().  There are very few differences from v1:
-noted patch by patch below.
+Terry Bowman wrote:
+> Hi Dan,
+> 
+> 
+> On 6/8/23 01:42, Dan Williams wrote:
+> > Terry Bowman wrote:
+> >> From: Robert Richter <rrichter@amd.com>
+> >>
+> >> Reading code like dport->dport does not immediately suggest that this
+> >> points to the corresponding device structure of the dport. Rename
+> >> struct member @dport to @dev.
+> > 
+> > This one I don't agree with.
+> > 
+> > This can switch to ->dport_dev if you like. The reason for ->dport was
+> > for symmetry with the ->uport of a 'struct cxl_port'. So if you change
+> > this to ->dport_dev then also make the ->uport_dev change for symmetry.
+> > 
+> > Unlike a 'struct cxl_port' a 'struct cxl_dport' is not a device in its
+> > own right which is what I see when I read dport->dev.
+> >
+> 
+> Ok, I'll change the structure member names and code to use the following:
+> struct cxl_dport::dev  -> struct cxl_dport::dport_dev
+> 
+> struct cxl_port::uport -> struct cxl_port::uport_dev
 
-v1 was "arch: allow pte_offset_map[_lock]() to fail"
-https://lore.kernel.org/linux-mm/77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com/
-series of 23 posted on 2023-05-09,
-followed by "mm: allow pte_offset_map[_lock]() to fail"
-https://lore.kernel.org/linux-mm/68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com/
-series of 31 posted on 2023-05-21,
-followed by  "mm: free retracted page table by RCU"
-https://lore.kernel.org/linux-mm/35e983f5-7ed3-b310-d949-9ae8b130cdab@google.com/
-series of 12 posted on 2023-05-28.
+Sounds good, to save duplication of work I already have this that you
+can just adopt:
 
-The first two series are "independent": neither depends
-for build or correctness on the other, and the arch patches can either be
-merged separately via arch trees, or be picked up by akpm; but both series
-must be in before the third series is added to make the effective changes
-(and that adds just a little more in arm, powerpc, s390 and sparc).
+-- >8 --
+Subject: cxl: Rename 'uport' to 'uport_dev'
 
-What is it all about?  Some mmap_lock avoidance i.e. latency reduction.
-Initially just for the case of collapsing shmem or file pages to THPs;
-but likely to be relied upon later in other contexts e.g. freeing of
-empty page tables (but that's not work I'm doing).  mmap_write_lock
-avoidance when collapsing to anon THPs?  Perhaps, but again that's not
-work I've done: a quick attempt was not as easy as the shmem/file case.
+From: Dan Williams <dan.j.williams@intel.com>
 
-I would much prefer not to have to make these small but wide-ranging
-changes for such a niche case; but failed to find another way, and
-have heard that shmem MADV_COLLAPSE's usefulness is being limited by
-that mmap_write_lock it currently requires.
+For symmetry with the recent rename of ->dport_dev for a 'struct
+cxl_dport', add the "_dev" suffix to the ->uport property of a 'struct
+cxl_port'. These devices represent the downstream-port-device and
+upstream-port-device respectively in the CXL/PCIe topology.
 
-These changes (though of course not these exact patches, and not all
-of these architectures!) have been in Google's data centre kernel for
-three years now: we do rely upon them.
+Signed-off-by: Dan Williams <dan.j.williams@intel.com>
+---
+ drivers/cxl/core/pci.c        |    4 +--
+ drivers/cxl/core/port.c       |   61 ++++++++++++++++++++++-------------------
+ drivers/cxl/core/region.c     |   48 +++++++++++++++++---------------
+ drivers/cxl/cxl.h             |   13 +++++----
+ drivers/cxl/cxlmem.h          |    4 +--
+ drivers/cxl/mem.c             |    2 +
+ drivers/cxl/port.c            |    2 +
+ tools/testing/cxl/test/cxl.c  |   20 +++++++------
+ tools/testing/cxl/test/mock.c |   10 +++----
+ 9 files changed, 86 insertions(+), 78 deletions(-)
 
-What are the per-arch changes about?  Generally, two things.
-
-One: the current mmap locking may not be enough to guard against that
-tricky transition between pmd entry pointing to page table, and empty
-pmd entry, and pmd entry pointing to huge page: pte_offset_map() will
-have to validate the pmd entry for itself, returning NULL if no page
-table is there.  What to do about that varies: often the nearby error
-handling indicates just to skip it; but in some cases a "goto again"
-looks appropriate (and if that risks an infinite loop, then there
-must have been an oops, or pfn 0 mistaken for page table, before).
-
-Deeper study of each site might show that 90% of them here in arch
-code could only fail if there's corruption e.g. a transition to THP
-would be surprising on an arch without HAVE_ARCH_TRANSPARENT_HUGEPAGE.
-But given the likely extension to freeing empty page tables, I have
-not limited this set of changes to THP; and it has been easier, and
-sets a better example, if each site is given appropriate handling.
-
-Two: pte_offset_map() will need to do an rcu_read_lock(), with the
-corresponding rcu_read_unlock() in pte_unmap().  But most architectures
-never supported CONFIG_HIGHPTE, so some don't always call pte_unmap()
-after pte_offset_map(), or have used userspace pte_offset_map() where
-pte_offset_kernel() is more correct.  No problem in the current tree,
-but a problem once an rcu_read_unlock() will be needed to keep balance.
-
-A common special case of that comes in arch/*/mm/hugetlbpage.c, if
-the architecture supports hugetlb pages down at the lowest PTE level.
-huge_pte_alloc() uses pte_alloc_map(), but generic hugetlb code does
-no corresponding pte_unmap(); similarly for huge_pte_offset().
-Thanks to Mike Kravetz and Andrew Morton, v6.4-rc1 already provides
-pte_alloc_huge() and pte_offset_huge() to help fix up those cases.
-
-This posting is based on v6.4-rc5, but good for any v6.4-rc,
-current mm-everything and linux-next.
-
-01/23 arm: allow pte_offset_map[_lock]() to fail
-      v2: same as v1
-02/23 arm64: allow pte_offset_map() to fail
-      v2: add ack from Catalin
-03/23 arm64/hugetlb: pte_alloc_huge() pte_offset_huge()
-      v2: add ack from Catalin
-04/23 ia64/hugetlb: pte_alloc_huge() pte_offset_huge()
-      v2: same as v1
-05/23 m68k: allow pte_offset_map[_lock]() to fail
-      v2: same as v1
-06/23 microblaze: allow pte_offset_map() to fail
-      v2: same as v1
-07/23 mips: update_mmu_cache() can replace __update_tlb()
-      v2: same as v1
-08/23 parisc: add pte_unmap() to balance get_ptep()
-      v2: typo fix from Helge; stronger commit message
-09/23 parisc: unmap_uncached_pte() use pte_offset_kernel()
-      v2: same as v1
-10/23 parisc/hugetlb: pte_alloc_huge() pte_offset_huge()
-      v2: same as v1
-11/23 powerpc: kvmppc_unmap_free_pmd() pte_offset_kernel()
-      v2: same as v1
-12/23 powerpc: allow pte_offset_map[_lock]() to fail
-      v2: same as v1
-13/23 powerpc/hugetlb: pte_alloc_huge()
-      v2: same as v1
-14/23 riscv/hugetlb: pte_alloc_huge() pte_offset_huge()
-      v2: add review from Alex, ack from Palmer
-15/23 s390: allow pte_offset_map_lock() to fail
-      v2: add comment for Claudio
-16/23 s390: gmap use pte_unmap_unlock() not spin_unlock()
-      v2: add ack from Alexander
-17/23 sh/hugetlb: pte_alloc_huge() pte_offset_huge()
-      v2: same as v1
-18/23 sparc/hugetlb: pte_alloc_huge() pte_offset_huge()
-      v2: same as v1
-19/23 sparc: allow pte_offset_map() to fail
-      v2: same as v1
-20/23 sparc: iounit and iommu use pte_offset_kernel()
-      v2: same as v1
-21/23 x86: Allow get_locked_pte() to fail
-      v2: add WARN_ON_ONCE from PeterZ
-22/23 x86: sme_populate_pgd() use pte_offset_kernel()
-      v2: same as v1
-23/23 xtensa: add pte_unmap() to balance pte_offset_map()
-      v2: stronger commit message
-
- arch/arm/lib/uaccess_with_memcpy.c      |  3 ++
- arch/arm/mm/fault-armv.c                |  5 +++-
- arch/arm/mm/fault.c                     |  3 ++
- arch/arm64/mm/fault.c                   |  3 ++
- arch/arm64/mm/hugetlbpage.c             | 11 ++-----
- arch/ia64/mm/hugetlbpage.c              |  4 +--
- arch/m68k/include/asm/mmu_context.h     |  6 ++--
- arch/m68k/kernel/sys_m68k.c             |  2 ++
- arch/m68k/mm/mcfmmu.c                   | 52 +++++++++++++--------------------
- arch/microblaze/kernel/signal.c         |  5 ++--
- arch/mips/include/asm/pgtable.h         | 15 ++--------
- arch/mips/mm/tlb-r3k.c                  |  5 ++--
- arch/mips/mm/tlb-r4k.c                  |  9 ++----
- arch/parisc/kernel/cache.c              | 26 +++++++++++++----
- arch/parisc/kernel/pci-dma.c            |  2 +-
- arch/parisc/mm/hugetlbpage.c            |  4 +--
- arch/powerpc/kvm/book3s_64_mmu_radix.c  |  2 +-
- arch/powerpc/mm/book3s64/hash_tlb.c     |  4 +++
- arch/powerpc/mm/book3s64/subpage_prot.c |  2 ++
- arch/powerpc/mm/hugetlbpage.c           |  2 +-
- arch/powerpc/xmon/xmon.c                |  5 +++-
- arch/riscv/mm/hugetlbpage.c             |  4 +--
- arch/s390/kernel/uv.c                   |  2 ++
- arch/s390/mm/gmap.c                     | 31 ++++++++++++--------
- arch/s390/mm/pgtable.c                  | 12 ++++++--
- arch/sh/mm/hugetlbpage.c                |  4 +--
- arch/sparc/kernel/signal32.c            |  2 ++
- arch/sparc/mm/fault_64.c                |  3 ++
- arch/sparc/mm/hugetlbpage.c             |  4 +--
- arch/sparc/mm/io-unit.c                 |  2 +-
- arch/sparc/mm/iommu.c                   |  2 +-
- arch/sparc/mm/tlb.c                     |  2 ++
- arch/x86/kernel/ldt.c                   |  6 ++--
- arch/x86/mm/mem_encrypt_identity.c      |  2 +-
- arch/xtensa/mm/tlb.c                    |  5 +++-
- 35 files changed, 146 insertions(+), 105 deletions(-)
-
-Hugh
+diff --git a/drivers/cxl/core/pci.c b/drivers/cxl/core/pci.c
+index 67f4ab6daa34..375f01c6cad6 100644
+--- a/drivers/cxl/core/pci.c
++++ b/drivers/cxl/core/pci.c
+@@ -67,7 +67,7 @@ static int match_add_dports(struct pci_dev *pdev, void *data)
+ 
+ /**
+  * devm_cxl_port_enumerate_dports - enumerate downstream ports of the upstream port
+- * @port: cxl_port whose ->uport is the upstream of dports to be enumerated
++ * @port: cxl_port whose ->uport_dev is the upstream of dports to be enumerated
+  *
+  * Returns a positive number of dports enumerated or a negative error
+  * code.
+@@ -622,7 +622,7 @@ static int cxl_cdat_read_table(struct device *dev,
+  */
+ void read_cdat_data(struct cxl_port *port)
+ {
+-	struct cxl_memdev *cxlmd = to_cxl_memdev(port->uport);
++	struct cxl_memdev *cxlmd = to_cxl_memdev(port->uport_dev);
+ 	struct device *host = cxlmd->dev.parent;
+ 	struct device *dev = &port->dev;
+ 	struct pci_doe_mb *cdat_doe;
+diff --git a/drivers/cxl/core/port.c b/drivers/cxl/core/port.c
+index 93800e6e095f..a45a063d52ce 100644
+--- a/drivers/cxl/core/port.c
++++ b/drivers/cxl/core/port.c
+@@ -561,9 +561,9 @@ static void unregister_port(void *_port)
+ 	 * unregistered while holding their parent port lock.
+ 	 */
+ 	if (!parent)
+-		lock_dev = port->uport;
++		lock_dev = port->uport_dev;
+ 	else if (is_cxl_root(parent))
+-		lock_dev = parent->uport;
++		lock_dev = parent->uport_dev;
+ 	else
+ 		lock_dev = &parent->dev;
+ 
+@@ -583,7 +583,8 @@ static int devm_cxl_link_uport(struct device *host, struct cxl_port *port)
+ {
+ 	int rc;
+ 
+-	rc = sysfs_create_link(&port->dev.kobj, &port->uport->kobj, "uport");
++	rc = sysfs_create_link(&port->dev.kobj, &port->uport_dev->kobj,
++			       "uport");
+ 	if (rc)
+ 		return rc;
+ 	return devm_add_action_or_reset(host, cxl_unlink_uport, port);
+@@ -614,7 +615,7 @@ static int devm_cxl_link_parent_dport(struct device *host,
+ 
+ static struct lock_class_key cxl_port_key;
+ 
+-static struct cxl_port *cxl_port_alloc(struct device *uport,
++static struct cxl_port *cxl_port_alloc(struct device *uport_dev,
+ 				       resource_size_t component_reg_phys,
+ 				       struct cxl_dport *parent_dport)
+ {
+@@ -630,7 +631,7 @@ static struct cxl_port *cxl_port_alloc(struct device *uport,
+ 	if (rc < 0)
+ 		goto err;
+ 	port->id = rc;
+-	port->uport = uport;
++	port->uport_dev = uport_dev;
+ 
+ 	/*
+ 	 * The top-level cxl_port "cxl_root" does not have a cxl_port as
+@@ -660,10 +661,11 @@ static struct cxl_port *cxl_port_alloc(struct device *uport,
+ 		else if (parent_dport->rch)
+ 			port->host_bridge = parent_dport->dport_dev;
+ 		else
+-			port->host_bridge = iter->uport;
+-		dev_dbg(uport, "host-bridge: %s\n", dev_name(port->host_bridge));
++			port->host_bridge = iter->uport_dev;
++		dev_dbg(uport_dev, "host-bridge: %s\n",
++			dev_name(port->host_bridge));
+ 	} else
+-		dev->parent = uport;
++		dev->parent = uport_dev;
+ 
+ 	port->component_reg_phys = component_reg_phys;
+ 	ida_init(&port->decoder_ida);
+@@ -687,7 +689,7 @@ static struct cxl_port *cxl_port_alloc(struct device *uport,
+ }
+ 
+ static struct cxl_port *__devm_cxl_add_port(struct device *host,
+-					    struct device *uport,
++					    struct device *uport_dev,
+ 					    resource_size_t component_reg_phys,
+ 					    struct cxl_dport *parent_dport)
+ {
+@@ -695,12 +697,12 @@ static struct cxl_port *__devm_cxl_add_port(struct device *host,
+ 	struct device *dev;
+ 	int rc;
+ 
+-	port = cxl_port_alloc(uport, component_reg_phys, parent_dport);
++	port = cxl_port_alloc(uport_dev, component_reg_phys, parent_dport);
+ 	if (IS_ERR(port))
+ 		return port;
+ 
+ 	dev = &port->dev;
+-	if (is_cxl_memdev(uport))
++	if (is_cxl_memdev(uport_dev))
+ 		rc = dev_set_name(dev, "endpoint%d", port->id);
+ 	else if (parent_dport)
+ 		rc = dev_set_name(dev, "port%d", port->id);
+@@ -735,28 +737,29 @@ static struct cxl_port *__devm_cxl_add_port(struct device *host,
+ /**
+  * devm_cxl_add_port - register a cxl_port in CXL memory decode hierarchy
+  * @host: host device for devm operations
+- * @uport: "physical" device implementing this upstream port
++ * @uport_dev: "physical" device implementing this upstream port
+  * @component_reg_phys: (optional) for configurable cxl_port instances
+  * @parent_dport: next hop up in the CXL memory decode hierarchy
+  */
+-struct cxl_port *devm_cxl_add_port(struct device *host, struct device *uport,
++struct cxl_port *devm_cxl_add_port(struct device *host,
++				   struct device *uport_dev,
+ 				   resource_size_t component_reg_phys,
+ 				   struct cxl_dport *parent_dport)
+ {
+ 	struct cxl_port *port, *parent_port;
+ 
+-	port = __devm_cxl_add_port(host, uport, component_reg_phys,
++	port = __devm_cxl_add_port(host, uport_dev, component_reg_phys,
+ 				   parent_dport);
+ 
+ 	parent_port = parent_dport ? parent_dport->port : NULL;
+ 	if (IS_ERR(port)) {
+-		dev_dbg(uport, "Failed to add%s%s%s: %ld\n",
++		dev_dbg(uport_dev, "Failed to add%s%s%s: %ld\n",
+ 			parent_port ? " port to " : "",
+ 			parent_port ? dev_name(&parent_port->dev) : "",
+ 			parent_port ? "" : " root port",
+ 			PTR_ERR(port));
+ 	} else {
+-		dev_dbg(uport, "%s added%s%s%s\n",
++		dev_dbg(uport_dev, "%s added%s%s%s\n",
+ 			dev_name(&port->dev),
+ 			parent_port ? " to " : "",
+ 			parent_port ? dev_name(&parent_port->dev) : "",
+@@ -773,33 +776,34 @@ struct pci_bus *cxl_port_to_pci_bus(struct cxl_port *port)
+ 	if (is_cxl_root(port))
+ 		return NULL;
+ 
+-	if (dev_is_pci(port->uport)) {
+-		struct pci_dev *pdev = to_pci_dev(port->uport);
++	if (dev_is_pci(port->uport_dev)) {
++		struct pci_dev *pdev = to_pci_dev(port->uport_dev);
+ 
+ 		return pdev->subordinate;
+ 	}
+ 
+-	return xa_load(&cxl_root_buses, (unsigned long)port->uport);
++	return xa_load(&cxl_root_buses, (unsigned long)port->uport_dev);
+ }
+ EXPORT_SYMBOL_NS_GPL(cxl_port_to_pci_bus, CXL);
+ 
+-static void unregister_pci_bus(void *uport)
++static void unregister_pci_bus(void *uport_dev)
+ {
+-	xa_erase(&cxl_root_buses, (unsigned long)uport);
++	xa_erase(&cxl_root_buses, (unsigned long)uport_dev);
+ }
+ 
+-int devm_cxl_register_pci_bus(struct device *host, struct device *uport,
++int devm_cxl_register_pci_bus(struct device *host, struct device *uport_dev,
+ 			      struct pci_bus *bus)
+ {
+ 	int rc;
+ 
+-	if (dev_is_pci(uport))
++	if (dev_is_pci(uport_dev))
+ 		return -EINVAL;
+ 
+-	rc = xa_insert(&cxl_root_buses, (unsigned long)uport, bus, GFP_KERNEL);
++	rc = xa_insert(&cxl_root_buses, (unsigned long)uport_dev, bus,
++		       GFP_KERNEL);
+ 	if (rc)
+ 		return rc;
+-	return devm_add_action_or_reset(host, unregister_pci_bus, uport);
++	return devm_add_action_or_reset(host, unregister_pci_bus, uport_dev);
+ }
+ EXPORT_SYMBOL_NS_GPL(devm_cxl_register_pci_bus, CXL);
+ 
+@@ -920,7 +924,7 @@ __devm_cxl_add_dport(struct cxl_port *port, struct device *dport_dev,
+ 	int rc;
+ 
+ 	if (is_cxl_root(port))
+-		host = port->uport;
++		host = port->uport_dev;
+ 	else
+ 		host = &port->dev;
+ 
+@@ -1374,7 +1378,7 @@ static int add_port_attach_ep(struct cxl_memdev *cxlmd,
+ 		rc = PTR_ERR(port);
+ 	else {
+ 		dev_dbg(&cxlmd->dev, "add to new port %s:%s\n",
+-			dev_name(&port->dev), dev_name(port->uport));
++			dev_name(&port->dev), dev_name(port->uport_dev));
+ 		rc = cxl_add_ep(dport, &cxlmd->dev);
+ 		if (rc == -EBUSY) {
+ 			/*
+@@ -1436,7 +1440,8 @@ int devm_cxl_enumerate_ports(struct cxl_memdev *cxlmd)
+ 		if (port) {
+ 			dev_dbg(&cxlmd->dev,
+ 				"found already registered port %s:%s\n",
+-				dev_name(&port->dev), dev_name(port->uport));
++				dev_name(&port->dev),
++				dev_name(port->uport_dev));
+ 			rc = cxl_add_ep(dport, &cxlmd->dev);
+ 
+ 			/*
+diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
+index 13cda989d944..39825e5301d0 100644
+--- a/drivers/cxl/core/region.c
++++ b/drivers/cxl/core/region.c
+@@ -906,10 +906,10 @@ static int cxl_port_attach_region(struct cxl_port *port,
+ 
+ 	dev_dbg(&cxlr->dev,
+ 		"%s:%s %s add: %s:%s @ %d next: %s nr_eps: %d nr_targets: %d\n",
+-		dev_name(port->uport), dev_name(&port->dev),
++		dev_name(port->uport_dev), dev_name(&port->dev),
+ 		dev_name(&cxld->dev), dev_name(&cxlmd->dev),
+ 		dev_name(&cxled->cxld.dev), pos,
+-		ep ? ep->next ? dev_name(ep->next->uport) :
++		ep ? ep->next ? dev_name(ep->next->uport_dev) :
+ 				      dev_name(&cxlmd->dev) :
+ 			   "none",
+ 		cxl_rr->nr_eps, cxl_rr->nr_targets);
+@@ -984,7 +984,7 @@ static int check_last_peer(struct cxl_endpoint_decoder *cxled,
+ 	 */
+ 	if (pos < distance) {
+ 		dev_dbg(&cxlr->dev, "%s:%s: cannot host %s:%s at %d\n",
+-			dev_name(port->uport), dev_name(&port->dev),
++			dev_name(port->uport_dev), dev_name(&port->dev),
+ 			dev_name(&cxlmd->dev), dev_name(&cxled->cxld.dev), pos);
+ 		return -ENXIO;
+ 	}
+@@ -994,7 +994,7 @@ static int check_last_peer(struct cxl_endpoint_decoder *cxled,
+ 	if (ep->dport != ep_peer->dport) {
+ 		dev_dbg(&cxlr->dev,
+ 			"%s:%s: %s:%s pos %d mismatched peer %s:%s\n",
+-			dev_name(port->uport), dev_name(&port->dev),
++			dev_name(port->uport_dev), dev_name(&port->dev),
+ 			dev_name(&cxlmd->dev), dev_name(&cxled->cxld.dev), pos,
+ 			dev_name(&cxlmd_peer->dev),
+ 			dev_name(&cxled_peer->cxld.dev));
+@@ -1026,7 +1026,7 @@ static int cxl_port_setup_targets(struct cxl_port *port,
+ 	 */
+ 	if (!is_power_of_2(cxl_rr->nr_targets)) {
+ 		dev_dbg(&cxlr->dev, "%s:%s: invalid target count %d\n",
+-			dev_name(port->uport), dev_name(&port->dev),
++			dev_name(port->uport_dev), dev_name(&port->dev),
+ 			cxl_rr->nr_targets);
+ 		return -EINVAL;
+ 	}
+@@ -1076,7 +1076,7 @@ static int cxl_port_setup_targets(struct cxl_port *port,
+ 	rc = granularity_to_eig(parent_ig, &peig);
+ 	if (rc) {
+ 		dev_dbg(&cxlr->dev, "%s:%s: invalid parent granularity: %d\n",
+-			dev_name(parent_port->uport),
++			dev_name(parent_port->uport_dev),
+ 			dev_name(&parent_port->dev), parent_ig);
+ 		return rc;
+ 	}
+@@ -1084,7 +1084,7 @@ static int cxl_port_setup_targets(struct cxl_port *port,
+ 	rc = ways_to_eiw(parent_iw, &peiw);
+ 	if (rc) {
+ 		dev_dbg(&cxlr->dev, "%s:%s: invalid parent interleave: %d\n",
+-			dev_name(parent_port->uport),
++			dev_name(parent_port->uport_dev),
+ 			dev_name(&parent_port->dev), parent_iw);
+ 		return rc;
+ 	}
+@@ -1093,7 +1093,7 @@ static int cxl_port_setup_targets(struct cxl_port *port,
+ 	rc = ways_to_eiw(iw, &eiw);
+ 	if (rc) {
+ 		dev_dbg(&cxlr->dev, "%s:%s: invalid port interleave: %d\n",
+-			dev_name(port->uport), dev_name(&port->dev), iw);
++			dev_name(port->uport_dev), dev_name(&port->dev), iw);
+ 		return rc;
+ 	}
+ 
+@@ -1113,7 +1113,7 @@ static int cxl_port_setup_targets(struct cxl_port *port,
+ 	rc = eig_to_granularity(eig, &ig);
+ 	if (rc) {
+ 		dev_dbg(&cxlr->dev, "%s:%s: invalid interleave: %d\n",
+-			dev_name(port->uport), dev_name(&port->dev),
++			dev_name(port->uport_dev), dev_name(&port->dev),
+ 			256 << eig);
+ 		return rc;
+ 	}
+@@ -1126,11 +1126,11 @@ static int cxl_port_setup_targets(struct cxl_port *port,
+ 		    ((cxld->flags & CXL_DECODER_F_ENABLE) == 0)) {
+ 			dev_err(&cxlr->dev,
+ 				"%s:%s %s expected iw: %d ig: %d %pr\n",
+-				dev_name(port->uport), dev_name(&port->dev),
++				dev_name(port->uport_dev), dev_name(&port->dev),
+ 				__func__, iw, ig, p->res);
+ 			dev_err(&cxlr->dev,
+ 				"%s:%s %s got iw: %d ig: %d state: %s %#llx:%#llx\n",
+-				dev_name(port->uport), dev_name(&port->dev),
++				dev_name(port->uport_dev), dev_name(&port->dev),
+ 				__func__, cxld->interleave_ways,
+ 				cxld->interleave_granularity,
+ 				(cxld->flags & CXL_DECODER_F_ENABLE) ?
+@@ -1147,20 +1147,20 @@ static int cxl_port_setup_targets(struct cxl_port *port,
+ 			.end = p->res->end,
+ 		};
+ 	}
+-	dev_dbg(&cxlr->dev, "%s:%s iw: %d ig: %d\n", dev_name(port->uport),
++	dev_dbg(&cxlr->dev, "%s:%s iw: %d ig: %d\n", dev_name(port->uport_dev),
+ 		dev_name(&port->dev), iw, ig);
+ add_target:
+ 	if (cxl_rr->nr_targets_set == cxl_rr->nr_targets) {
+ 		dev_dbg(&cxlr->dev,
+ 			"%s:%s: targets full trying to add %s:%s at %d\n",
+-			dev_name(port->uport), dev_name(&port->dev),
++			dev_name(port->uport_dev), dev_name(&port->dev),
+ 			dev_name(&cxlmd->dev), dev_name(&cxled->cxld.dev), pos);
+ 		return -ENXIO;
+ 	}
+ 	if (test_bit(CXL_REGION_F_AUTO, &cxlr->flags)) {
+ 		if (cxlsd->target[cxl_rr->nr_targets_set] != ep->dport) {
+ 			dev_dbg(&cxlr->dev, "%s:%s: %s expected %s at %d\n",
+-				dev_name(port->uport), dev_name(&port->dev),
++				dev_name(port->uport_dev), dev_name(&port->dev),
+ 				dev_name(&cxlsd->cxld.dev),
+ 				dev_name(ep->dport->dport_dev),
+ 				cxl_rr->nr_targets_set);
+@@ -1172,7 +1172,7 @@ static int cxl_port_setup_targets(struct cxl_port *port,
+ out_target_set:
+ 	cxl_rr->nr_targets_set += inc;
+ 	dev_dbg(&cxlr->dev, "%s:%s target[%d] = %s for %s:%s @ %d\n",
+-		dev_name(port->uport), dev_name(&port->dev),
++		dev_name(port->uport_dev), dev_name(&port->dev),
+ 		cxl_rr->nr_targets_set - 1, dev_name(ep->dport->dport_dev),
+ 		dev_name(&cxlmd->dev), dev_name(&cxled->cxld.dev), pos);
+ 
+@@ -1492,7 +1492,7 @@ static int cmp_decode_pos(const void *a, const void *b)
+ 	if (!dev) {
+ 		struct range *range = &cxled_a->cxld.hpa_range;
+ 
+-		dev_err(port->uport,
++		dev_err(port->uport_dev,
+ 			"failed to find decoder that maps %#llx-%#llx\n",
+ 			range->start, range->end);
+ 		goto err;
+@@ -1507,14 +1507,15 @@ static int cmp_decode_pos(const void *a, const void *b)
+ 	put_device(dev);
+ 
+ 	if (a_pos < 0 || b_pos < 0) {
+-		dev_err(port->uport,
++		dev_err(port->uport_dev,
+ 			"failed to find shared decoder for %s and %s\n",
+ 			dev_name(cxlmd_a->dev.parent),
+ 			dev_name(cxlmd_b->dev.parent));
+ 		goto err;
+ 	}
+ 
+-	dev_dbg(port->uport, "%s comes %s %s\n", dev_name(cxlmd_a->dev.parent),
++	dev_dbg(port->uport_dev, "%s comes %s %s\n",
++		dev_name(cxlmd_a->dev.parent),
+ 		a_pos - b_pos < 0 ? "before" : "after",
+ 		dev_name(cxlmd_b->dev.parent));
+ 
+@@ -2059,11 +2060,11 @@ static struct cxl_region *devm_cxl_add_region(struct cxl_root_decoder *cxlrd,
+ 	if (rc)
+ 		goto err;
+ 
+-	rc = devm_add_action_or_reset(port->uport, unregister_region, cxlr);
++	rc = devm_add_action_or_reset(port->uport_dev, unregister_region, cxlr);
+ 	if (rc)
+ 		return ERR_PTR(rc);
+ 
+-	dev_dbg(port->uport, "%s: created %s\n",
++	dev_dbg(port->uport_dev, "%s: created %s\n",
+ 		dev_name(&cxlrd->cxlsd.cxld.dev), dev_name(dev));
+ 	return cxlr;
+ 
+@@ -2191,7 +2192,7 @@ static ssize_t delete_region_store(struct device *dev,
+ 	if (IS_ERR(cxlr))
+ 		return PTR_ERR(cxlr);
+ 
+-	devm_release_action(port->uport, unregister_region, cxlr);
++	devm_release_action(port->uport_dev, unregister_region, cxlr);
+ 	put_device(&cxlr->dev);
+ 
+ 	return len;
+@@ -2356,7 +2357,8 @@ int cxl_get_poison_by_endpoint(struct cxl_port *port)
+ 
+ 	rc = device_for_each_child(&port->dev, &ctx, poison_by_decoder);
+ 	if (rc == 1)
+-		rc = cxl_get_poison_unmapped(to_cxl_memdev(port->uport), &ctx);
++		rc = cxl_get_poison_unmapped(to_cxl_memdev(port->uport_dev),
++					     &ctx);
+ 
+ 	up_read(&cxl_region_rwsem);
+ 	return rc;
+@@ -2732,7 +2734,7 @@ static struct cxl_region *construct_region(struct cxl_root_decoder *cxlrd,
+ 
+ err:
+ 	up_write(&cxl_region_rwsem);
+-	devm_release_action(port->uport, unregister_region, cxlr);
++	devm_release_action(port->uport_dev, unregister_region, cxlr);
+ 	return ERR_PTR(rc);
+ }
+ 
+diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
+index 7232c2a0e27c..754cfe59ae37 100644
+--- a/drivers/cxl/cxl.h
++++ b/drivers/cxl/cxl.h
+@@ -536,7 +536,7 @@ struct cxl_dax_region {
+  *		     downstream port devices to construct a CXL memory
+  *		     decode hierarchy.
+  * @dev: this port's device
+- * @uport: PCI or platform device implementing the upstream port capability
++ * @uport_dev: PCI or platform device implementing the upstream port capability
+  * @host_bridge: Shortcut to the platform attach point for this port
+  * @id: id for port device-name
+  * @dports: cxl_dport instances referenced by decoders
+@@ -555,7 +555,7 @@ struct cxl_dax_region {
+  */
+ struct cxl_port {
+ 	struct device dev;
+-	struct device *uport;
++	struct device *uport_dev;
+ 	struct device *host_bridge;
+ 	int id;
+ 	struct xarray dports;
+@@ -641,21 +641,22 @@ struct cxl_region_ref {
+ /*
+  * The platform firmware device hosting the root is also the top of the
+  * CXL port topology. All other CXL ports have another CXL port as their
+- * parent and their ->uport / host device is out-of-line of the port
++ * parent and their ->uport_dev / host device is out-of-line of the port
+  * ancestry.
+  */
+ static inline bool is_cxl_root(struct cxl_port *port)
+ {
+-	return port->uport == port->dev.parent;
++	return port->uport_dev == port->dev.parent;
+ }
+ 
+ bool is_cxl_port(const struct device *dev);
+ struct cxl_port *to_cxl_port(const struct device *dev);
+ struct pci_bus;
+-int devm_cxl_register_pci_bus(struct device *host, struct device *uport,
++int devm_cxl_register_pci_bus(struct device *host, struct device *uport_dev,
+ 			      struct pci_bus *bus);
+ struct pci_bus *cxl_port_to_pci_bus(struct cxl_port *port);
+-struct cxl_port *devm_cxl_add_port(struct device *host, struct device *uport,
++struct cxl_port *devm_cxl_add_port(struct device *host,
++				   struct device *uport_dev,
+ 				   resource_size_t component_reg_phys,
+ 				   struct cxl_dport *parent_dport);
+ struct cxl_port *find_cxl_root(struct cxl_port *port);
+diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
+index a2845a7a69d8..76743016b64c 100644
+--- a/drivers/cxl/cxlmem.h
++++ b/drivers/cxl/cxlmem.h
+@@ -72,13 +72,13 @@ cxled_to_memdev(struct cxl_endpoint_decoder *cxled)
+ {
+ 	struct cxl_port *port = to_cxl_port(cxled->cxld.dev.parent);
+ 
+-	return to_cxl_memdev(port->uport);
++	return to_cxl_memdev(port->uport_dev);
+ }
+ 
+ bool is_cxl_memdev(const struct device *dev);
+ static inline bool is_cxl_endpoint(struct cxl_port *port)
+ {
+-	return is_cxl_memdev(port->uport);
++	return is_cxl_memdev(port->uport_dev);
+ }
+ 
+ struct cxl_memdev *devm_cxl_add_memdev(struct cxl_dev_state *cxlds);
+diff --git a/drivers/cxl/mem.c b/drivers/cxl/mem.c
+index 45d4c32d78b0..4cc461c22b8b 100644
+--- a/drivers/cxl/mem.c
++++ b/drivers/cxl/mem.c
+@@ -163,7 +163,7 @@ static int cxl_mem_probe(struct device *dev)
+ 	}
+ 
+ 	if (dport->rch)
+-		endpoint_parent = parent_port->uport;
++		endpoint_parent = parent_port->uport_dev;
+ 	else
+ 		endpoint_parent = &parent_port->dev;
+ 
+diff --git a/drivers/cxl/port.c b/drivers/cxl/port.c
+index c23b6164e1c0..4cef2bf45ad2 100644
+--- a/drivers/cxl/port.c
++++ b/drivers/cxl/port.c
+@@ -91,7 +91,7 @@ static int cxl_switch_port_probe(struct cxl_port *port)
+ static int cxl_endpoint_port_probe(struct cxl_port *port)
+ {
+ 	struct cxl_endpoint_dvsec_info info = { .port = port };
+-	struct cxl_memdev *cxlmd = to_cxl_memdev(port->uport);
++	struct cxl_memdev *cxlmd = to_cxl_memdev(port->uport_dev);
+ 	struct cxl_dev_state *cxlds = cxlmd->cxlds;
+ 	struct cxl_hdm *cxlhdm;
+ 	struct cxl_port *root;
+diff --git a/tools/testing/cxl/test/cxl.c b/tools/testing/cxl/test/cxl.c
+index f5c04787bcc8..4f62eb55f8b8 100644
+--- a/tools/testing/cxl/test/cxl.c
++++ b/tools/testing/cxl/test/cxl.c
+@@ -754,7 +754,7 @@ static void mock_init_hdm_decoder(struct cxl_decoder *cxld)
+ 		/* check is endpoint is attach to host-bridge0 */
+ 		port = cxled_to_port(cxled);
+ 		do {
+-			if (port->uport == &cxl_host_bridge[0]->dev) {
++			if (port->uport_dev == &cxl_host_bridge[0]->dev) {
+ 				hb0 = true;
+ 				break;
+ 			}
+@@ -889,7 +889,7 @@ static int mock_cxl_enumerate_decoders(struct cxl_hdm *cxlhdm,
+ 		mock_init_hdm_decoder(cxld);
+ 
+ 		if (target_count) {
+-			rc = device_for_each_child(port->uport, &ctx,
++			rc = device_for_each_child(port->uport_dev, &ctx,
+ 						   map_targets);
+ 			if (rc) {
+ 				put_device(&cxld->dev);
+@@ -919,29 +919,29 @@ static int mock_cxl_port_enumerate_dports(struct cxl_port *port)
+ 	int i, array_size;
+ 
+ 	if (port->depth == 1) {
+-		if (is_multi_bridge(port->uport)) {
++		if (is_multi_bridge(port->uport_dev)) {
+ 			array_size = ARRAY_SIZE(cxl_root_port);
+ 			array = cxl_root_port;
+-		} else if (is_single_bridge(port->uport)) {
++		} else if (is_single_bridge(port->uport_dev)) {
+ 			array_size = ARRAY_SIZE(cxl_root_single);
+ 			array = cxl_root_single;
+ 		} else {
+ 			dev_dbg(&port->dev, "%s: unknown bridge type\n",
+-				dev_name(port->uport));
++				dev_name(port->uport_dev));
+ 			return -ENXIO;
+ 		}
+ 	} else if (port->depth == 2) {
+ 		struct cxl_port *parent = to_cxl_port(port->dev.parent);
+ 
+-		if (is_multi_bridge(parent->uport)) {
++		if (is_multi_bridge(parent->uport_dev)) {
+ 			array_size = ARRAY_SIZE(cxl_switch_dport);
+ 			array = cxl_switch_dport;
+-		} else if (is_single_bridge(parent->uport)) {
++		} else if (is_single_bridge(parent->uport_dev)) {
+ 			array_size = ARRAY_SIZE(cxl_swd_single);
+ 			array = cxl_swd_single;
+ 		} else {
+ 			dev_dbg(&port->dev, "%s: unknown bridge type\n",
+-				dev_name(port->uport));
++				dev_name(port->uport_dev));
+ 			return -ENXIO;
+ 		}
+ 	} else {
+@@ -954,9 +954,9 @@ static int mock_cxl_port_enumerate_dports(struct cxl_port *port)
+ 		struct platform_device *pdev = array[i];
+ 		struct cxl_dport *dport;
+ 
+-		if (pdev->dev.parent != port->uport) {
++		if (pdev->dev.parent != port->uport_dev) {
+ 			dev_dbg(&port->dev, "%s: mismatch parent %s\n",
+-				dev_name(port->uport),
++				dev_name(port->uport_dev),
+ 				dev_name(pdev->dev.parent));
+ 			continue;
+ 		}
+diff --git a/tools/testing/cxl/test/mock.c b/tools/testing/cxl/test/mock.c
+index dbeef5c6f606..da554df50bac 100644
+--- a/tools/testing/cxl/test/mock.c
++++ b/tools/testing/cxl/test/mock.c
+@@ -139,7 +139,7 @@ struct cxl_hdm *__wrap_devm_cxl_setup_hdm(struct cxl_port *port,
+ 	struct cxl_hdm *cxlhdm;
+ 	struct cxl_mock_ops *ops = get_cxl_mock_ops(&index);
+ 
+-	if (ops && ops->is_mock_port(port->uport))
++	if (ops && ops->is_mock_port(port->uport_dev))
+ 		cxlhdm = ops->devm_cxl_setup_hdm(port, info);
+ 	else
+ 		cxlhdm = devm_cxl_setup_hdm(port, info);
+@@ -154,7 +154,7 @@ int __wrap_devm_cxl_enable_hdm(struct cxl_port *port, struct cxl_hdm *cxlhdm)
+ 	int index, rc;
+ 	struct cxl_mock_ops *ops = get_cxl_mock_ops(&index);
+ 
+-	if (ops && ops->is_mock_port(port->uport))
++	if (ops && ops->is_mock_port(port->uport_dev))
+ 		rc = 0;
+ 	else
+ 		rc = devm_cxl_enable_hdm(port, cxlhdm);
+@@ -169,7 +169,7 @@ int __wrap_devm_cxl_add_passthrough_decoder(struct cxl_port *port)
+ 	int rc, index;
+ 	struct cxl_mock_ops *ops = get_cxl_mock_ops(&index);
+ 
+-	if (ops && ops->is_mock_port(port->uport))
++	if (ops && ops->is_mock_port(port->uport_dev))
+ 		rc = ops->devm_cxl_add_passthrough_decoder(port);
+ 	else
+ 		rc = devm_cxl_add_passthrough_decoder(port);
+@@ -186,7 +186,7 @@ int __wrap_devm_cxl_enumerate_decoders(struct cxl_hdm *cxlhdm,
+ 	struct cxl_port *port = cxlhdm->port;
+ 	struct cxl_mock_ops *ops = get_cxl_mock_ops(&index);
+ 
+-	if (ops && ops->is_mock_port(port->uport))
++	if (ops && ops->is_mock_port(port->uport_dev))
+ 		rc = ops->devm_cxl_enumerate_decoders(cxlhdm, info);
+ 	else
+ 		rc = devm_cxl_enumerate_decoders(cxlhdm, info);
+@@ -201,7 +201,7 @@ int __wrap_devm_cxl_port_enumerate_dports(struct cxl_port *port)
+ 	int rc, index;
+ 	struct cxl_mock_ops *ops = get_cxl_mock_ops(&index);
+ 
+-	if (ops && ops->is_mock_port(port->uport))
++	if (ops && ops->is_mock_port(port->uport_dev))
+ 		rc = ops->devm_cxl_port_enumerate_dports(port);
+ 	else
+ 		rc = devm_cxl_port_enumerate_dports(port);
