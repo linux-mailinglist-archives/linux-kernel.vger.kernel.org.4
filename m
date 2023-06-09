@@ -2,71 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA40472A410
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 22:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3B2E72A414
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 22:06:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbjFIUGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 16:06:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54910 "EHLO
+        id S230081AbjFIUGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 16:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjFIUGL (ORCPT
+        with ESMTP id S229517AbjFIUGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 16:06:11 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EDA61A1
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 13:06:09 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id 46e09a7af769-6b160f3f384so899366a34.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 13:06:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1686341168; x=1688933168;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HhgUZ/b6d8SyK6wuMhy/QUdrYEmRpokDPNLka3VEsFM=;
-        b=NMpC/mp9kDSPKq28g6LDQCDDNdNID/NGCD4PlXsPaupeI+dF9VZy9b2ejR281Q3k98
-         rb8B22FPmmZ0RD4boaJzVR/s13NgyWQkfTqCJpoiQvLGx/u6K2eDihPxJgpaWCTPN9M4
-         69YLB0faetThS7IigtDzx38Q/Cptxe1++JWyviikhxkBlY8rTQoVyr7EdInLRnwS+yoQ
-         2kIvx+KBDoNXPuvn3sR39ADkFEecwxizVPVYt7ZeAqP/Vtt31UlnUdu2P/AgAsHIkhM4
-         InASaCsWEX6YsVrMjZe4FIE5oVOrAfeLrdPnhopkUt4SfFhxVdvI4CaSbx4IB7fK6fJt
-         npig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686341168; x=1688933168;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HhgUZ/b6d8SyK6wuMhy/QUdrYEmRpokDPNLka3VEsFM=;
-        b=lgtjYS+W9nbvhRAFxA4GOZRH1mhQqZFvY42eu3djZasQlaWexH0zd/MPH51iNeYNWv
-         83D+9vnLT1Otg+fBkMSGZ+3ZZqXdyj1k9VXgRRqRopkPKAW64j7Hsweh0ID7S4duM3mP
-         dCmCGmHJwc0opdJrhtgcTlQK4fPl6jdF92sS06JJGCKON3tcrvW0VaMEu7G1/MPSv7vL
-         TVJMRVFVC36SR/6kZ9Qu5wLmIvDYzd2IWA4lH4wF+3b9CSCcSawY0eenfa92xXK9/CcL
-         ib18xkYC5FizkybL3u2A/9q6bZGH4as2JZTwzZzhKxXK6R8wHTjCWfPX1oowNbMaTNg3
-         yoag==
-X-Gm-Message-State: AC+VfDxq6hNtP7zhbP8TETAKf7ryk1I+R+d+sMEE6dxlRn3p2nXPIkIp
-        qCLNL1oQu9c4ScSVBbf96nH8edcEf84T+a9jiaPg
-X-Google-Smtp-Source: ACHHUZ46O13fZRr5wz1JZPgAzoj3AsioK3u9YBoDpoGeFFr4WNUgRnEFS4DSXi6Tlfcrxs+oLK/wnZQXgEqZ/V9Vh+s=
-X-Received: by 2002:a05:6358:9f92:b0:129:bfd3:994 with SMTP id
- fy18-20020a0563589f9200b00129bfd30994mr1938185rwb.20.1686341168398; Fri, 09
- Jun 2023 13:06:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230603191518.1397490-1-roberto.sassu@huaweicloud.com>
-In-Reply-To: <20230603191518.1397490-1-roberto.sassu@huaweicloud.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 9 Jun 2023 16:05:57 -0400
-Message-ID: <CAHC9VhSzC0zV31XrEz06HKp=NNbz0XPT24ja0O1sZtNM_aXqHg@mail.gmail.com>
-Subject: Re: [PATCH v11 0/4] evm: Do HMAC of multiple per LSM xattrs for new inodes
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Fri, 9 Jun 2023 16:06:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849C33A82
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 13:06:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 19298659DE
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 20:06:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EB81C433EF;
+        Fri,  9 Jun 2023 20:06:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1686341194;
+        bh=I5eLjVvS0j4LRy8nwugVLv1qLrwPGv6yABwGuRiB+w0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YqaO5bl3XEMwtnhnotlvPEAgrU3xEt9NSz3dEe6LUBbD5J9rBClfs1UXqaQl2jASA
+         zYO51MdN9A0kxbg86I8m8gM5BK/nbJMwoet5nWMDR+21lql3f94v2/WBHXsb8Mt6qt
+         PnnuYVV0groHs6ywW6cwCI8pR/xRA4fJ9J0LVYuw=
+Date:   Fri, 9 Jun 2023 13:06:32 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v2 28/32] mm/memory: allow pte_offset_map[_lock]() to
+ fail
+Message-Id: <20230609130632.ec6ffe72fc5f7952af4a3e54@linux-foundation.org>
+In-Reply-To: <bb548d50-e99a-f29e-eab1-a43bef2a1287@google.com>
+References: <c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com>
+        <bb548d50-e99a-f29e-eab1-a43bef2a1287@google.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,25 +84,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 3, 2023 at 3:16=E2=80=AFPM Roberto Sassu
-<roberto.sassu@huaweicloud.com> wrote:
->
-> From: Roberto Sassu <roberto.sassu@huawei.com>
->
-> One of the major goals of LSM stacking is to run multiple LSMs side by si=
-de
-> without interfering with each other. The ultimate decision will depend on
-> individual LSM decision.
->
-> Several changes need to be made to the LSM infrastructure to be able to
-> support that. This patch set tackles one of them: gives to each LSM the
-> ability to specify one or multiple xattrs to be set at inode creation
-> time and, at the same time, gives to EVM the ability to access all those
-> xattrs and calculate the HMAC on them ...
+On Thu, 8 Jun 2023 18:43:38 -0700 (PDT) Hugh Dickins <hughd@google.com> wrote:
 
-Thanks for sticking with this Roberto, I see a few
-comments/suggestions on this patchset, but overall it is looking
-pretty good; I'm hopeful we will be able to merge the next revision.
+> copy_pte_range(): use pte_offset_map_nolock(), and allow for it to fail;
+> but with a comment on some further assumptions that are being made there.
+> 
+> zap_pte_range() and zap_pmd_range(): adjust their interaction so that
+> a pte_offset_map_lock() failure in zap_pte_range() leads to a retry in
+> zap_pmd_range(); remove call to pmd_none_or_trans_huge_or_clear_bad().
+> 
+> Allow pte_offset_map_lock() to fail in many functions.  Update comment
+> on calling pte_alloc() in do_anonymous_page().  Remove redundant calls
+> to pmd_trans_unstable(), pmd_devmap_trans_unstable(), pmd_none() and
+> pmd_bad(); but leave pmd_none_or_clear_bad() calls in free_pmd_range()
+> and copy_pmd_range(), those do simplify the next level down.
+> 
+> ...
+>
+> @@ -3728,11 +3737,9 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+>  			vmf->page = pfn_swap_entry_to_page(entry);
+>  			vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd,
+>  					vmf->address, &vmf->ptl);
+> -			if (unlikely(!pte_same(*vmf->pte, vmf->orig_pte))) {
+> -				spin_unlock(vmf->ptl);
+> -				goto out;
+> -			}
+> -
+> +			if (unlikely(!vmf->pte ||
+> +				     !pte_same(*vmf->pte, vmf->orig_pte)))
+> +				goto unlock;
+>  			/*
+>  			 * Get a page reference while we know the page can't be
+>  			 * freed.
 
---=20
-paul-moore.com
+This hunk falls afoul of
+https://lkml.kernel.org/r/20230602092949.545577-5-ryan.roberts@arm.com.
+
+I did this:
+
+@@ -3729,7 +3738,8 @@ vm_fault_t do_swap_page(struct vm_fault
+ 			vmf->page = pfn_swap_entry_to_page(entry);
+ 			vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd,
+ 					vmf->address, &vmf->ptl);
+-			if (unlikely(!pte_same(*vmf->pte, vmf->orig_pte)))
++			if (unlikely(!vmf->pte ||
++				     !pte_same(*vmf->pte, vmf->orig_pte)))
+ 				goto unlock;
+ 
+ 			/*
+
