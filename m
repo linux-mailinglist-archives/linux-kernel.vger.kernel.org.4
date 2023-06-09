@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EDEA729071
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 08:56:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFF75729073
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 08:57:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238686AbjFIG4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 02:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58690 "EHLO
+        id S238573AbjFIG5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 02:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238585AbjFIG40 (ORCPT
+        with ESMTP id S238702AbjFIG5A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 02:56:26 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38C12D71
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 23:55:55 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-bacfcc7d1b2so1407226276.2
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 23:55:55 -0700 (PDT)
+        Fri, 9 Jun 2023 02:57:00 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BDAE3A95
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 23:56:59 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-569386b7861so37985837b3.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 23:56:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686293747; x=1688885747;
+        d=linaro.org; s=google; t=1686293818; x=1688885818;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XZUFecL2O9/GZEN1hKmxyv/duFaVrRit7bbN2Zt7pr4=;
-        b=qyfcFmQFLMByJcnxqXDdxeSb/MNFQeAXc1wPdxjpYjXQzj9rOlzIZyboOdvsOJu9so
-         x+n1m8djqBu2kiZjDdWumE6EYw/lEtjgEUGeap4fJH4hFNuTlvlP6fe6AjgjmKyPviir
-         GLYffRr/ZIKq3jWb7BYWtOW8WN8M3O8scfI009yCXOWPNv2WtMhTFOaN2tHH7Yn7TcYL
-         nDBJzBisAlm93BYhM+Q4Wy9ogenG2bFR0b1C+Rmcl6xuCclrBt8wN9Wb/2Q62CK4Zhpo
-         A+nHe4Im6G9KG7KBGcMriGfdWL1qqWcgIEZzHkiyDJmEg3VgB2R08a09EKyz61uKCtSc
-         +Hiw==
+        bh=EPnqXMOZVL6sTkCADxUPTqWs/TKz+PEnmIF/0BFjH8Q=;
+        b=mzFSM/gnMPcPABMe+P7vONS3ZNBzFZ9yP/J/Kr8qWjXAfWXj9lFRm4Yq5/znbHMaWX
+         xa4OS/lQHkFrz2nfYSXYiYy3orqqgjwZKo5yrQXNxWb73VSA5KzWr+QN1yf4Kq1ghL/J
+         9Ccjx9032BjHefkUrpu6AZrB5c3oKZX04WJs+3IDQYMldxlmefymp3XWso0HIvfnRkvA
+         JM2W9KMPJzbH9r7LPO0+vj+3i4N1F5IXtIDzl0LJ2fI3VES6vCs964litPxtkO4+S5aB
+         KMxYJRmNiIiUJipGFNW3tfV+VYH93p2PzrqIvxzh0OO9Wo6GlXn3Oi+pJ1JLC9zZQBIK
+         CIvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686293747; x=1688885747;
+        d=1e100.net; s=20221208; t=1686293818; x=1688885818;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XZUFecL2O9/GZEN1hKmxyv/duFaVrRit7bbN2Zt7pr4=;
-        b=NsBodZFl1Fltq7QRYT+1CPVruTpizdtbpx1orpjVohqI8iGVwecqQGp5WVPEdWybCf
-         XfnL1he+8xn8dRuDZM/Wb5HUzIb280yvAdIc4N5z2uKaXnVR8i3VE+vc1mkX8UZ+F3kY
-         Q4sAsI+PDk1xhsFw3rkVHkOpKdzjrKrXmoLtx5hYbpVBrrFaRuUsOGN0AFOThUQ7IGSj
-         yBwjbub0PFi7jIXkByFKQEM51mcadk9tm35BAUya047RhNtfPAf5CfpLROEhKhAS4XgG
-         LCcTuCWinacOjt7o06vzZgj/DAamn/cPjN3Yh2Dp5p47vkBcf84FubQr0XnEtXep12SK
-         xWXw==
-X-Gm-Message-State: AC+VfDwz3e8ssUjCtlwQchQtBSNfaWO5YGBNlQbALJfgRqkJOnJ6cG1Z
-        CTZfnZ11FlD54C53aZn0BymJBW69QjR+qpb7lOSP6w==
-X-Google-Smtp-Source: ACHHUZ5vQLrbvAK4LANdhCpIwv+QOEXpNH+EWL8HamiNOTDPfSaHPkHL1fwjMU3qEMq3LNmnQmyOQwm0D0Hp66yTLlo=
-X-Received: by 2002:a25:f804:0:b0:ba8:32c9:dfa1 with SMTP id
- u4-20020a25f804000000b00ba832c9dfa1mr350415ybd.60.1686293747188; Thu, 08 Jun
- 2023 23:55:47 -0700 (PDT)
+        bh=EPnqXMOZVL6sTkCADxUPTqWs/TKz+PEnmIF/0BFjH8Q=;
+        b=gzmySGxe8FtQQcaDA/LaHHpHq+6ecEPxIgli50Gi4mlXkJwFrmKOslgFJl1QLqblqG
+         3RX7vt4U4IVNQ3LSx6VQITAzjC70t65xsHRX7seJ326+1AjFZJnhjf/yc0wMXj5n6OM9
+         q6P7rwyZuLXQFM/BkCx8yYnBMgc7fVt+EcF0hQav+Yj455nfg2A+poWRiIirrl6iCdrn
+         ja3UsuSueHhhDAznTv7R7Ekc+RI1mh7M/GRD4MzoHHh8g+G3WqL66h4h7c5m9idKdiGT
+         w4vIz0h0q7QVQ6uU0RtkxYJ0tCwhQzLidkX8iO33Q5i8qNK02PSWuMnSPSLyf5MF7R2s
+         MRRQ==
+X-Gm-Message-State: AC+VfDzEiSnTa5vuUTjYeLjlUS+kzZWR8F6NX+kqEDriDVQHMDxQqkAR
+        Jid5gVWNJw0eYTgnLPIHlMX4OKR3ee6SoFz3Onig9w==
+X-Google-Smtp-Source: ACHHUZ5X127VTzj4zOV1xeRhWkNtYt3iBIPKSBWOTbrgngPPTDrQ5epKwgsmZoP+K3u1v9n+9tto9vaqGSEX4/wb7mQ=
+X-Received: by 2002:a25:54f:0:b0:bac:46f2:8d0f with SMTP id
+ 76-20020a25054f000000b00bac46f28d0fmr2700548ybf.3.1686293818393; Thu, 08 Jun
+ 2023 23:56:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230602033146.46387-1-quic_minghao@quicinc.com>
-In-Reply-To: <20230602033146.46387-1-quic_minghao@quicinc.com>
+References: <20230601173831.982429-1-nm@ti.com>
+In-Reply-To: <20230601173831.982429-1-nm@ti.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 9 Jun 2023 08:55:35 +0200
-Message-ID: <CACRpkdaxuSW+4yL_b3iTKacAedYxrjcZ4YFy+sYU__THX3zDsA@mail.gmail.com>
-Subject: Re: [PATCH v2] pinctrl: qcom: Add support to log pin status before
- suspend for TLMM
-To:     Minghao Zhang <quic_minghao@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     agross@kernel.org, konrad.dybcio@somainline.org,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_satyap@quicinc.com,
-        quic_tsoni@quicinc.com
+Date:   Fri, 9 Jun 2023 08:56:47 +0200
+Message-ID: <CACRpkdawgFtSt3wEGz5MC9apFiLgUbta4TRc6YhOrEGbT6Okvg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: pinctrl: Drop k3
+To:     Nishanth Menon <nm@ti.com>
+Cc:     Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -74,16 +75,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 5:32=E2=80=AFAM Minghao Zhang <quic_minghao@quicinc.=
-com> wrote:
+On Thu, Jun 1, 2023 at 7:38=E2=80=AFPM Nishanth Menon <nm@ti.com> wrote:
 
-> This change supports to print pin status before device suspend
-> to debug for TLMM. And expose 2 APIs to enable/disable this
-> functionality.
->
-> Signed-off-by: Minghao Zhang <quic_minghao@quicinc.com>
+> If you could pick this up for the next 6.5 kernel window now that we have=
+ kept the
+> old header around for one cycle.
 
-I'm waiting for a review from the maintainers on this one.
+Patch applied!
 
 Yours,
 Linus Walleij
