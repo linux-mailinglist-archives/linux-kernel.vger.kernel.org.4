@@ -2,195 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F34837297AF
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 13:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E227297AD
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 13:01:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239226AbjFILBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 07:01:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50602 "EHLO
+        id S239234AbjFILA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 07:00:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239115AbjFILAi (ORCPT
+        with ESMTP id S238722AbjFILAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 07:00:38 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBC72697
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 04:00:34 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-ba8151a744fso1642225276.2
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 04:00:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686308433; x=1688900433;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=K4Y48r3j1MQPLlV/kjC9yfsXr4I31wdq934Y1dJ0Nsk=;
-        b=Bq0+pzwMrRaOH2aSm04bqk6dDxzo7qINbAi33GZ7y6PikMkHTdzyGsUbVtNyBGkfKu
-         XbJLppmitzUnNRUYBC2L+BI8p03SqtbhvCa6fOnF9uZRj0TSC9LoivAn0TkDxoD0E8Sj
-         yk7nnh5LQmwaM6GKwI7y8T50m7+g4L3BUH6OCb9O3R3N24ThjsP4udl1ISI7k00FwWhG
-         t+keiDdmVTnPz1k+YiXJbYfYEHS020ohkT8i8RpfUjq5pUQX0zxRQ73bVmnC0BvBPJul
-         q2zN4voQg2fIszHR1GDhnvwcCFz6NnyxXeGIZ9IUUXAyVL0KhfhVbWLQ0rf5m3OzKg8F
-         cvZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686308433; x=1688900433;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K4Y48r3j1MQPLlV/kjC9yfsXr4I31wdq934Y1dJ0Nsk=;
-        b=VkEWxlLt56ArZ7g2tipykPRUCghine/vOsGyyTQZDWypksR7pkHzUU1uae13HoJPt8
-         q+i7M2KGMTQYjaAK/voqtY6UOq6TKq9VgD86R8y44MFTPdSazzQqj0pObz+Asx4UYMcG
-         IspZ+JKgHnzCmozTnVJOqKRJ3hhySlnAF+nlEyMqs93nsXKRtfm02yoNpYfs7M1+sfIM
-         GmYrLSv/X0P0god3XUkPAVYUFhPVSrjGhq+8QfKSp+aU7eRmxeoRjqXGrQoYUhNM5zfO
-         RlGuF261S8wuftXfDcBrpYiurZ7Rw9xpPp7zRF1MQgfcukEZkwEJ1BW1hd5FadVM6L6u
-         /JVw==
-X-Gm-Message-State: AC+VfDzoc+byXAelegvvKrJwhCDUjMDt8eVC6HGIz1l7nc/rK3i1dbTV
-        Gv70vk5/zyocAK+n0rUNL4D0HSPci0u0D0CWfN6sEw==
-X-Google-Smtp-Source: ACHHUZ7tJfEx3W5/3301HQ0zS8Igb3M5tusRxraMhy4mbwMtzbL2oMSIfqUeiAMPzKKjwpGEgDq1PmpMtn28IjP0fGY=
-X-Received: by 2002:a0d:f944:0:b0:55a:c62:3a92 with SMTP id
- j65-20020a0df944000000b0055a0c623a92mr749035ywf.29.1686308433306; Fri, 09 Jun
- 2023 04:00:33 -0700 (PDT)
+        Fri, 9 Jun 2023 07:00:33 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9BF6A210C;
+        Fri,  9 Jun 2023 04:00:31 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3F394AB6;
+        Fri,  9 Jun 2023 04:01:16 -0700 (PDT)
+Received: from [192.168.1.3] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9BE693F587;
+        Fri,  9 Jun 2023 04:00:28 -0700 (PDT)
+Message-ID: <2e075792-7af8-209b-082b-48d687387463@arm.com>
+Date:   Fri, 9 Jun 2023 12:00:27 +0100
 MIME-Version: 1.0
-References: <20230607124628.157465-1-ulf.hansson@linaro.org>
- <20230607124628.157465-14-ulf.hansson@linaro.org> <20230608053446.ngoxh7zo7drnr32z@vireshk-i7>
- <CAPDyKFqUWhdmctKRpQoqwZ2nsx_P2FiWvLzfm_d39QdECWoytA@mail.gmail.com>
- <20230608104540.tykxtvwhoyogthw5@vireshk-i7> <CAPDyKFrbpm0W1Hdv+85MqMAC2-UbPOE6qp26L0UvVF0sSL2ayA@mail.gmail.com>
- <20230609051005.fxuvp4ilcjvhhrkc@vireshk-i7>
-In-Reply-To: <20230609051005.fxuvp4ilcjvhhrkc@vireshk-i7>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 9 Jun 2023 12:59:57 +0200
-Message-ID: <CAPDyKFobvMr0LBr0PW3L-A=dtE2jnd2RxHktN85Z9dLsi8u3TQ@mail.gmail.com>
-Subject: Re: [PATCH 13/16] OPP: Extend dev_pm_opp_data with OPP provider support
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nikunj Kela <nkela@quicinc.com>,
-        Prasad Sodagudi <psodagud@quicinc.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 2/4] perf cs-etm: Use previous thread for branch sample
+ source IP
+Content-Language: en-US
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     coresight@lists.linaro.org, denik@chromium.org,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230524131958.2139331-1-james.clark@arm.com>
+ <20230524131958.2139331-3-james.clark@arm.com>
+ <20230527090635.GB886420@leoy-yangtze.lan>
+ <630ab636-107d-4b12-5454-2ee91ad43543@arm.com>
+ <1e7aa657-6d1e-9e7c-95cb-b32d307abe93@arm.com>
+ <20230608102555.GB123723@leoy-huanghe>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <20230608102555.GB123723@leoy-huanghe>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 9 Jun 2023 at 07:10, Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 08-06-23, 13:45, Ulf Hansson wrote:
-> > Okay, if I understand your point you want to avoid creating OPPs for
-> > each device, but rather coupling them with the genpd provider's OPP
-> > table. Right?
->
-> Not exactly :)
->
-> > Note that, there is no such thing as a "required opp" in the SCMI
-> > performance protocol case. A device is compatible to use all of the
-> > OPPs that its corresponding SCMI performance domain provides. Should
-> > we rename the required opp things in the OPP core to better reflect
-> > this too?
->
-> Not really :)
 
-I think it may be confusing, but okay, let's leave it as is.
 
->
-> > That said, we still need to be able to add OPPs dynamically when not
-> > based on DT. The difference would be that we add the OPPs when
-> > initializing the genpd provider instead of when attaching the devices.
-> > In other words, we still need something along the lines of the new
-> > dev_pm_opp_add_dynamic() API that $subject series is introducing, I
-> > think.
->
-> That's fine.
->
-> > Moreover, to tie the consumer device's OPP table to their genpd
-> > provider's OPP table (call it required-opp or whatever), we need
-> > another OPP helper function that we can call from the genpd provider's
-> > ->attach_dev() callback. Similarly, we need to be able to remove this
-> > connection when genpd's ->detach_dev() callback is invoked. I will
-> > think of something here.
->
-> Something like set/link/config_required_opp()..
->
-> > Finally, I want to point out that there is work going on in parallel
-> > with this, that is adding performance state support for the ACPI PM
-> > domain. The ACPI PM domain, isn't a genpd provider but implements it's
-> > own PM domain. The important point is, that it will have its own
-> > variant of the dev_pm_genpd_set_performance_state() that we may need
-> > to call from the OPP library.
->
-> Okay.
->
-> Let me explain how structures are linked currently with help of below (badly
-> made) drawing. The 'level' fields are only set for Genpd's OPP entries and not
-> devices. The genpd OPP table normally has only this information, where it
-> presents all the possible level values, separate OPP for each of them.
->
-> Now the devices don't have `level` set in their OPP table, DT or in C
-> structures. All they have are links for required OPPs, which help us find the
-> required level or performance state for a particular genpd.
->
->   +-----------------+                    +------------------+
->   |  Device A       |                    | GENPD OPP Table  |
->   +-----------------+  required-opps     +------------------+   required-opps
->   |OPP1: freq: x1   +--------------------+ OPP1:            +--------------+
->   +-----------------+                    |      level: 1    |              |
->   |OPP2: freq: y1   +-----------+        +------------------+              |
->   +-----------------+           |        | OPP2:            +---------+    |
->   |OPP3: freq: z1   +--------+  +--------+      level: 2    |         |    |
->   +-----------------+        |           +------------------+         |    |
->                              |           | OPP3:            +--+      |    |
->                              |           |      level: 3    |  |      |    |
->                              |           +------------------+  |      |    |
->   +-----------------+        |           | OPP4:            |  |      |    |
->   |  Device B       |        +-----------+      level: 4    |  |      |    |
->   +-----------------+                    +------------------+  |      |    |
->   |OPP1: freq: x2   +------------------------------------------+      |    |
->   +-----------------+                                                 |    |
->   |OPP2: freq: y2   +-------------------------------------------------+    |
->   +-----------------+                                                      |
->   |OPP3: freq: z2   +------------------------------------------------------+
->   +-----------------+
->
+On 08/06/2023 11:25, Leo Yan wrote:
+> On Thu, Jun 08, 2023 at 10:34:42AM +0100, James Clark wrote:
+> 
+> [...]
+> 
+>>>>> @@ -616,6 +618,8 @@ static void cs_etm__packet_swap(struct cs_etm_auxtrace *etm,
+>>>>>  		tmp = tidq->packet;
+>>>>>  		tidq->packet = tidq->prev_packet;
+>>>>>  		tidq->prev_packet = tmp;
+>>>>> +		thread__put(tidq->prev_thread);
+>>>>> +		tidq->prev_thread = thread__get(tidq->thread);
+>>>>
+>>>> Maybe cs_etm__packet_swap() is not the best place to update
+>>>> "tidq->prev_thread", since swapping packet doesn't mean it's necessarily
+>>>> thread switching; can we move this change into the cs_etm__set_thread()?
+>>>>
+>>>
+>>> Yeah that might make more sense. I can move it there if we decide to
+>>> keep this change.
+>>>
+>>
+>> Unfortunately I don't think I can make this change. It seems like
+>> putting the previous thread swap in  cs_etm__set_thread() has different
+>> semantics to keeping all the swaps together in cs_etm__packet_swap().
+> 
+> Thanks for trying this.
+> 
+>> This is because if you swap the thread in cs_etm__packet_swap() the
+>> previous packet and next packet can have the _same_ thread if there
+>> happened to be no change. However if you only swap previous thread in
+>> cs_etm__set_thread(), that means that the previous thread is always
+>> different to the next one. This has a huge difference on the decoding
+>> because two adjacent packets on the same thread will say they branched
+>> from the previous thread that ran, not the previous thread on the
+>> previous packet.
+> 
+> Seems to me, this is a synchronization issue between the field
+> 'tidq->prev_thread' and 'tidq->prev_packet'.
+> 
+> It's still hard for me to understand "two adjacent packets on the same
+> thread will say they branched from the previous thread that ran", IIUC,
+> even we move thread swapping into cs_etm__set_thread(), if the two
+> adjacent packets are in the same thread context, we can skip to update
+> fields 'tidq->prev_thread' and 'tidq->prev_packet'.
+> 
+> So I am curious if below cs_etm__set_thread() works or not?
+> 
+> static void cs_etm__set_thread(struct cs_etm_auxtrace *etm,
+> 			       struct cs_etm_traceid_queue *tidq, pid_t tid)
+> {
+> 	struct machine *machine = &etm->session->machines.host;
+> 
+> 	/* No context switching, bail out */
+> 	if ((tidq->thread->tid != tid)
+> 		return;
+> 
+> 	/* If tid is -1, we simply use idle thread context */
+> 	if (tid == -1)
+> 		goto find_idle_thread;
+> 
+> 	/*
+> 	 * The new incoming tid is different from current thread,
+> 	 * so it's to switch to the next thread context.
+> 	 */
+> 
+> 	/* Swap thread contexts */
+> 	thread__put(tidq->prev_thread);
+> 	tidq->prev_thread = thread__get(tidq->thread);
+> 
+> 	/* Find thread context for new tid */
+> 	thread__zput(tidq->thread);
+> 	tidq->thread = machine__find_thread(machine, -1, tid);
+> 
+> find_idle_thread:
+> 	/* Couldn't find a known thread */
+> 	if (!tidq->thread)
+> 		tidq->thread = machine__idle_thread(machine);
+> }
+> 
 
-Thanks for taking the time to explain things further! It's not
-entirely easy to follow all the things in the OPP library.
+I tried this change but I still don't think it's giving the right
+results. Tracking previous thread in cs_etm__set_thread() changes the
+semantics of being "the thread for the previous packet" to being "the
+previous different thread of an unknown old packet". If you imagine the
+packets and thread changes are like this (where <d> is a discontinuity
+packet):
 
-However, I think you are mixing up the "level" field with the "pstate"
-field in the struct dev_pm_opp. The pstate field is solely for genpd
-and the required opps, while level is *generic* for all types of
-devices. Right?
+    <--thread 1--> <--thread 2-------------------> <------thread 3-->
+<d> <--packet 1--> <d> <--packet 2--> <packet 3--> <d> <--packet 4-->
 
-More precisely, _read_opp_key() parses for the "opp-level" property
-from DT to set the ->level field. Additionally, the generic OPP
-helpers functions, like dev_pm_opp_get_level(),
-dev_pm_opp_find_level_exact(), dev_pm_opp_find_level_ceil() allows any
-type of consumer driver to operate on the level for an OPP for its
-device. Please have a look at the apple-soc-cpufreq, for example.
+Branches are generated using the last IP of the previous packet, and the
+first IP of the next packet, ignoring everything in between as they are
+just sequential instructions.
 
->
-> What I am asking you to do now is, create an OPP table for the Genpd first, with
-> OPPs for each possible level. Now the Genpd layer creates the OPP table for
-> Device A, where it won't fill the levels, but all other fields and then use a
-> new API to add required OPPs for the device's OPP, which will point into Genpd's
-> OPP entries. And with that the existing code will work fine without any other
-> modifications.
->
-> Does this help ?
+So assuming there are discontinuity packets between the thread switches
+we should get:
 
-Well, I think what you propose may be doable, but I fail to understand
-the benefit of implementing it like that.
+  thread 1 branches from packet 1 to 0x0
+  thread 2 branches from 0x0 to packet 2
+  thread 2 branches from packet 2 to packet 3
+  thread 2 branches from packet 3 to 0x0
+  thread 3 branches from 0x0 to packet 4
 
-As I said earlier, there is no such thing as a required OPP for the
-SCMI performance domain and neither are the OPP tables described in
-DT.
+By tracking the previous thread for each packet, packet 2 and 3 stay in
+thread 2.
 
-Moreover, as I understand it, we already have the generic "level" to
-use, why not use it here?
+If we track the previous thread instead, then both packet 2 and 3 would
+continue to look like they branch from thread 1 like this:
 
-Kind regards
-Uffe
+  thread ? branches from packet 1 to 0x0
+  thread 1 branches from 0x0 to packet 2
+  thread 1 branches from packet 2 to packet 3
+  thread 1 branches from packet 3 to 0x0
+  thread 2 branches from 0x0 to packet 4
+
+Everything gets shifted back by 1 thread. I don't see the issue of
+keeping all the swap stuff together in one place. Maybe there is an
+issue with the naming of prev_thread? It's not really the previous
+thread, it's the previous _packets_ thread. It might be the same thread
+as the current one if there was no switch:
+
+diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
+index ca01109c3fc4..f3c73c86010a 100644
+--- a/tools/perf/util/cs-etm.c
++++ b/tools/perf/util/cs-etm.c
+@@ -86,8 +86,8 @@ struct cs_etm_traceid_queue {
+        size_t last_branch_pos;
+        union perf_event *event_buf;
+        struct thread *thread;
+-       struct thread *prev_thread;
+-       ocsd_ex_level prev_el;
++       struct thread *prev_packet_thread;
++       ocsd_ex_level prev_packet_el;
+        ocsd_ex_level el;
+        struct branch_stack *last_branch;
+
+> Thanks,
+> Leo
