@@ -2,278 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ECF0729C94
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:18:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C042729C97
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:19:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241283AbjFIOSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 10:18:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44230 "EHLO
+        id S230199AbjFIOTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 10:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240986AbjFIOSW (ORCPT
+        with ESMTP id S241306AbjFIOSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 10:18:22 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E8B30FA;
-        Fri,  9 Jun 2023 07:18:17 -0700 (PDT)
-X-GND-Sasl: alexis.lothore@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686320296;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=b39bYWGKkS87Qxp1JUHAqabHNNEbNwI74c/phbn31+I=;
-        b=byMhOSIVwIq6RrEKs4zYdzD9eigsgnGZkUQyJ4z9mb6bVKhZbFQ8NhgI7iOjSapeebQxZT
-        LUZdQG/ItC9f1X7v59MXhOQd6lXaD+dhTZ2Z+wPtINu/j1JSNkZHqMgCn1symqj7BecWDG
-        LPJzumjYfHkh4tUJFcY8z4DLwKdARMwEU5Pkl66Z4LpNk4wKh280ILfEubs/SEB08QWFjL
-        VIV+9M2389h3VdP3UbPhCR18QQaOGikPjHkbA9gFBVWTLLm5ge4ZPBSQV8Y44TEN6wwcXO
-        2BM8DayNULsaDkSCpphplsD1/S9vI17AcQ+hkKPh3CTD2dBNhQjboyfIJ4JIEA==
-X-GND-Sasl: alexis.lothore@bootlin.com
-X-GND-Sasl: alexis.lothore@bootlin.com
-X-GND-Sasl: alexis.lothore@bootlin.com
-X-GND-Sasl: alexis.lothore@bootlin.com
-X-GND-Sasl: alexis.lothore@bootlin.com
-X-GND-Sasl: alexis.lothore@bootlin.com
-X-GND-Sasl: alexis.lothore@bootlin.com
-X-GND-Sasl: alexis.lothore@bootlin.com
-X-GND-Sasl: alexis.lothore@bootlin.com
-X-GND-Sasl: alexis.lothore@bootlin.com
-X-GND-Sasl: alexis.lothore@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 494F12000C;
-        Fri,  9 Jun 2023 14:18:15 +0000 (UTC)
-From:   alexis.lothore@bootlin.com
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        paul.arola@telus.com, scott.roberts@telus.com
-Subject: [PATCH net-next 2/2] net: dsa: mv88e6xxx: implement egress tbf qdisc for 6393x family
-Date:   Fri,  9 Jun 2023 16:18:12 +0200
-Message-ID: <20230609141812.297521-3-alexis.lothore@bootlin.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230609141812.297521-1-alexis.lothore@bootlin.com>
-References: <20230609141812.297521-1-alexis.lothore@bootlin.com>
+        Fri, 9 Jun 2023 10:18:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000E73C04;
+        Fri,  9 Jun 2023 07:18:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A42260F55;
+        Fri,  9 Jun 2023 14:18:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90C2AC433D2;
+        Fri,  9 Jun 2023 14:18:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686320329;
+        bh=Zb/QrR0wax3Fy/77ML8eioj8ePs8p5HDZtXKHZi0OSk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VNkOU9Yf/y5hFxZkd6DOQzmPPRc8S1Z9E3pRJK/Mo7rmYwqBlXXDfis5s//61/A68
+         bOqAscNaLFMi30ewJKsrgbHzYSAFvEXCpZldJp7Iqm34KnOUWe/VqcuGMH7OsFgwgF
+         /+QLEbuRi/j6cj6PQ+osk7eimHr5ZBkEehceehhBpfUAINIwrNkEzUxdXN6KZQc4ul
+         VEwskEqhS93eH408uwB1KvKVonJq1bjbSNnCbeZqVI3h4Tnkrl/jrHAzCCelpijC3X
+         S6xtrzCip0lpRuTCdRQoIlgKSBRntL1JudGe1kLfSj+T/eAxTe3ISzP0dlY09tft8O
+         YiuqY9EgHKLWA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 61ADA40692; Fri,  9 Jun 2023 11:18:46 -0300 (-03)
+Date:   Fri, 9 Jun 2023 11:18:46 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        German Gomez <german.gomez@arm.com>,
+        Ali Saidi <alisaidi@amazon.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Dmitrii Dolgov <9erthalion6@gmail.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Changbin Du <changbin.du@huawei.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Steinar H. Gunderson" <sesse@google.com>,
+        Yuan Can <yuancan@huawei.com>,
+        Brian Robbins <brianrob@linux.microsoft.com>,
+        liuwenyu <liuwenyu7@huawei.com>,
+        Ivan Babrou <ivan@cloudflare.com>,
+        Fangrui Song <maskray@google.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, coresight@lists.linaro.org
+Subject: Re: [PATCH v2 05/26] perf addr_location: Move to its own header
+Message-ID: <ZIM0xpF5qxojDaqW@kernel.org>
+References: <20230608232823.4027869-1-irogers@google.com>
+ <20230608232823.4027869-6-irogers@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230608232823.4027869-6-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexis Lothoré <alexis.lothore@bootlin.com>
+Em Thu, Jun 08, 2023 at 04:28:02PM -0700, Ian Rogers escreveu:
+> addr_location is a common abstraction, move it into its own header and
+> source file in preparation for wider clean up.
 
-The 6393x switches family has a basic, per-port egress rate limit
-capability. This feature allows to configure any rate limit between 64kbps
-and 10Gbps. This rate limit is said to be "burstless"
-The switch offers the following controls, per port:
-- count mode: frames, L1 bytes, L2 bytes, L3 bytes
-- egress rate: recommended fixed values to be programmed, depending on
-  actually targeted rate:
-  - 64 kbps for rate between 64kbps and 1Mbps
-  - 1 Mbps for rate between 1Mbps and 100Mbps
-  - 10 Mbps for rate between 100Mbps and 1Gbps
-  - 100Mbps for rate between 1Gbps and 10Gbps
-- egress decrement rate, as number of steps programmed in egress rate
-- an optional frame overhead count(0 to 60), which will be added to counted
-  bytes to adjust (decrease) rate limiting. Could be used for example to
-  avoid saturating a receiving side which add more encapsulation to frames
+Thanks, applied.
 
-Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
----
- drivers/net/dsa/mv88e6xxx/chip.c |   1 +
- drivers/net/dsa/mv88e6xxx/port.c | 104 +++++++++++++++++++++++++++++++
- drivers/net/dsa/mv88e6xxx/port.h |  17 ++++-
- 3 files changed, 120 insertions(+), 2 deletions(-)
+- Arnaldo
 
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index 0f1ae2aeaf00..901698513f26 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -5633,6 +5633,7 @@ static const struct mv88e6xxx_ops mv88e6393x_ops = {
- 	.port_set_cmode = mv88e6393x_port_set_cmode,
- 	.port_setup_message_port = mv88e6xxx_setup_message_port,
- 	.port_set_upstream_port = mv88e6393x_port_set_upstream_port,
-+	.port_setup_tc = mv88e6393x_port_setup_tc,
- 	.stats_snapshot = mv88e6390_g1_stats_snapshot,
- 	.stats_set_histogram = mv88e6390_g1_stats_set_histogram,
- 	.stats_get_sset_count = mv88e6320_stats_get_sset_count,
-diff --git a/drivers/net/dsa/mv88e6xxx/port.c b/drivers/net/dsa/mv88e6xxx/port.c
-index dd66ec902d4c..b2f0087807ad 100644
---- a/drivers/net/dsa/mv88e6xxx/port.c
-+++ b/drivers/net/dsa/mv88e6xxx/port.c
-@@ -12,12 +12,16 @@
- #include <linux/if_bridge.h>
- #include <linux/phy.h>
- #include <linux/phylink.h>
-+#include <net/pkt_cls.h>
  
- #include "chip.h"
- #include "global2.h"
- #include "port.h"
- #include "serdes.h"
- 
-+#define MBPS_TO_KBPS(x)	((x) * 1000)
-+#define GBPS_TO_KBPS(x)	(MBPS_TO_KBPS(x) * 1000)
-+
- int mv88e6xxx_port_read(struct mv88e6xxx_chip *chip, int port, int reg,
- 			u16 *val)
- {
-@@ -1497,6 +1501,106 @@ int mv88e6393x_port_set_upstream_port(struct mv88e6xxx_chip *chip, int port,
- 	return mv88e6393x_port_policy_write(chip, port, ptr, data);
- }
- 
-+int mv88e6393x_tbf_add(struct mv88e6xxx_chip *chip, int port,
-+		       struct tc_tbf_qopt_offload_replace_params *replace_params)
-+{
-+	int rate_kbps = DIV_ROUND_UP(replace_params->rate.rate_bytes_ps * 8, 1000);
-+	int overhead = DIV_ROUND_UP(replace_params->rate.overhead, 4);
-+	int rate_step, decrement_rate, err;
-+	u16 val;
-+
-+	if (rate_kbps < MV88E6393X_PORT_EGRESS_RATE_MIN_KBPS ||
-+	    rate_kbps >= MV88E6393X_PORT_EGRESS_RATE_MAX_KBPS)
-+		return -EOPNOTSUPP;
-+
-+	if (replace_params->rate.overhead > MV88E6393X_PORT_EGRESS_MAX_OVERHEAD)
-+		return -EOPNOTSUPP;
-+
-+	/* Switch supports only max rate configuration. There is no
-+	 * configurable burst/max size nor latency.
-+	 * Formula defining registers value is:
-+	 * EgressRate = 8 * EgressDec / (16ns * desired Rate)
-+	 * EgressRate is a set of fixed values depending of targeted range
-+	 */
-+	if (rate_kbps < MBPS_TO_KBPS(1)) {
-+		decrement_rate = rate_kbps / 64;
-+		rate_step = MV88E6XXX_PORT_EGRESS_RATE_CTL1_STEP_64_KBPS;
-+	} else if (rate_kbps < MBPS_TO_KBPS(100)) {
-+		decrement_rate = rate_kbps / MBPS_TO_KBPS(1);
-+		rate_step = MV88E6XXX_PORT_EGRESS_RATE_CTL1_STEP_1_MBPS;
-+	} else if (rate_kbps < GBPS_TO_KBPS(1)) {
-+		decrement_rate = rate_kbps / MBPS_TO_KBPS(10);
-+		rate_step = MV88E6XXX_PORT_EGRESS_RATE_CTL1_STEP_10_MBPS;
-+	} else {
-+		decrement_rate = rate_kbps / MBPS_TO_KBPS(100);
-+		rate_step = MV88E6XXX_PORT_EGRESS_RATE_CTL1_STEP_100_MBPS;
-+	}
-+
-+	dev_dbg(chip->dev, "p%d: adding egress tbf qdisc with %dkbps rate",
-+		port, rate_kbps);
-+	val = decrement_rate;
-+	val |= (overhead << MV88E6XXX_PORT_EGRESS_RATE_CTL1_FRAME_OVERHEAD_SHIFT);
-+	err = mv88e6xxx_port_write(chip, port, MV88E6XXX_PORT_EGRESS_RATE_CTL1,
-+				   val);
-+	if (err)
-+		return err;
-+
-+	val = rate_step;
-+	/* Configure mode to bits per second mode, on layer 1 */
-+	val |= MV88E6XXX_PORT_EGRESS_RATE_CTL2_COUNT_L1_BYTES;
-+	err = mv88e6xxx_port_write(chip, port, MV88E6XXX_PORT_EGRESS_RATE_CTL2,
-+				   val);
-+	if (err)
-+		return err;
-+
-+	return 0;
-+}
-+
-+int mv88e6393x_tbf_del(struct mv88e6xxx_chip *chip, int port)
-+{
-+	int err;
-+
-+	dev_dbg(chip->dev, "p%d: removing tbf qdisc", port);
-+	err = mv88e6xxx_port_write(chip, port, MV88E6XXX_PORT_EGRESS_RATE_CTL2,
-+				   0x0000);
-+	if (err)
-+		return err;
-+	return mv88e6xxx_port_write(chip, port, MV88E6XXX_PORT_EGRESS_RATE_CTL1,
-+				    0x0001);
-+}
-+
-+static int mv88e6393x_tc_setup_qdisc_tbf(struct mv88e6xxx_chip *chip, int port,
-+					 struct tc_tbf_qopt_offload *qopt)
-+{
-+	/* Device only supports per-port egress rate limiting */
-+	if (qopt->parent != TC_H_ROOT)
-+		return -EOPNOTSUPP;
-+
-+	switch (qopt->command) {
-+	case TC_TBF_REPLACE:
-+		return mv88e6393x_tbf_add(chip, port, &qopt->replace_params);
-+	case TC_TBF_DESTROY:
-+		return mv88e6393x_tbf_del(chip, port);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	return -EOPNOTSUPP;
-+}
-+
-+int mv88e6393x_port_setup_tc(struct dsa_switch *ds, int port,
-+			     enum tc_setup_type type, void *type_data)
-+{
-+	struct mv88e6xxx_chip *chip = ds->priv;
-+
-+	switch (type) {
-+	case TC_SETUP_QDISC_TBF:
-+		return mv88e6393x_tc_setup_qdisc_tbf(chip, port, type_data);
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+
- int mv88e6393x_port_mgmt_rsvd2cpu(struct mv88e6xxx_chip *chip)
- {
- 	u16 ptr;
-diff --git a/drivers/net/dsa/mv88e6xxx/port.h b/drivers/net/dsa/mv88e6xxx/port.h
-index 86deeb347cbc..791ad335b647 100644
---- a/drivers/net/dsa/mv88e6xxx/port.h
-+++ b/drivers/net/dsa/mv88e6xxx/port.h
-@@ -222,10 +222,21 @@
- #define MV88E6095_PORT_CTL2_CPU_PORT_MASK		0x000f
- 
- /* Offset 0x09: Egress Rate Control */
--#define MV88E6XXX_PORT_EGRESS_RATE_CTL1		0x09
-+#define MV88E6XXX_PORT_EGRESS_RATE_CTL1				0x09
-+#define MV88E6XXX_PORT_EGRESS_RATE_CTL1_STEP_64_KBPS		0x1E84
-+#define MV88E6XXX_PORT_EGRESS_RATE_CTL1_STEP_1_MBPS		0x01F4
-+#define MV88E6XXX_PORT_EGRESS_RATE_CTL1_STEP_10_MBPS		0x0032
-+#define MV88E6XXX_PORT_EGRESS_RATE_CTL1_STEP_100_MBPS		0x0005
-+#define MV88E6XXX_PORT_EGRESS_RATE_CTL1_FRAME_OVERHEAD_SHIFT	8
-+#define MV88E6393X_PORT_EGRESS_RATE_MIN_KBPS			64
-+#define MV88E6393X_PORT_EGRESS_RATE_MAX_KBPS			10000000
-+#define MV88E6393X_PORT_EGRESS_MAX_OVERHEAD			60
- 
- /* Offset 0x0A: Egress Rate Control 2 */
--#define MV88E6XXX_PORT_EGRESS_RATE_CTL2		0x0a
-+#define MV88E6XXX_PORT_EGRESS_RATE_CTL2				0x0a
-+#define MV88E6XXX_PORT_EGRESS_RATE_CTL2_COUNT_L1_BYTES		0x4000
-+#define MV88E6XXX_PORT_EGRESS_RATE_CTL2_COUNT_L2_BYTES		0x8000
-+#define MV88E6XXX_PORT_EGRESS_RATE_CTL2_COUNT_L3_BYTES		0xC000
- 
- /* Offset 0x0B: Port Association Vector */
- #define MV88E6XXX_PORT_ASSOC_VECTOR			0x0b
-@@ -415,6 +426,8 @@ int mv88e6393x_set_egress_port(struct mv88e6xxx_chip *chip,
- 			       int port);
- int mv88e6393x_port_set_upstream_port(struct mv88e6xxx_chip *chip, int port,
- 				      int upstream_port);
-+int mv88e6393x_port_setup_tc(struct dsa_switch *ds, int port,
-+			     enum tc_setup_type type, void *type_data);
- int mv88e6393x_port_mgmt_rsvd2cpu(struct mv88e6xxx_chip *chip);
- int mv88e6393x_port_set_ether_type(struct mv88e6xxx_chip *chip, int port,
- 				   u16 etype);
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/util/Build           |  1 +
+>  tools/perf/util/addr_location.c | 16 ++++++++++++++++
+>  tools/perf/util/addr_location.h | 28 ++++++++++++++++++++++++++++
+>  tools/perf/util/event.c         | 12 ------------
+>  tools/perf/util/symbol.h        | 17 +----------------
+>  5 files changed, 46 insertions(+), 28 deletions(-)
+>  create mode 100644 tools/perf/util/addr_location.c
+>  create mode 100644 tools/perf/util/addr_location.h
+> 
+> diff --git a/tools/perf/util/Build b/tools/perf/util/Build
+> index c449741adf30..ff2fd1a36bb8 100644
+> --- a/tools/perf/util/Build
+> +++ b/tools/perf/util/Build
+> @@ -1,4 +1,5 @@
+>  perf-y += arm64-frame-pointer-unwind-support.o
+> +perf-y += addr_location.o
+>  perf-y += annotate.o
+>  perf-y += block-info.o
+>  perf-y += block-range.o
+> diff --git a/tools/perf/util/addr_location.c b/tools/perf/util/addr_location.c
+> new file mode 100644
+> index 000000000000..c73fc2aa236c
+> --- /dev/null
+> +++ b/tools/perf/util/addr_location.c
+> @@ -0,0 +1,16 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include "addr_location.h"
+> +#include "map.h"
+> +#include "thread.h"
+> +
+> +/*
+> + * The preprocess_sample method will return with reference counts for the
+> + * in it, when done using (and perhaps getting ref counts if needing to
+> + * keep a pointer to one of those entries) it must be paired with
+> + * addr_location__put(), so that the refcounts can be decremented.
+> + */
+> +void addr_location__put(struct addr_location *al)
+> +{
+> +	map__zput(al->map);
+> +	thread__zput(al->thread);
+> +}
+> diff --git a/tools/perf/util/addr_location.h b/tools/perf/util/addr_location.h
+> new file mode 100644
+> index 000000000000..7dfa7417c0fe
+> --- /dev/null
+> +++ b/tools/perf/util/addr_location.h
+> @@ -0,0 +1,28 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef __PERF_ADDR_LOCATION
+> +#define __PERF_ADDR_LOCATION 1
+> +
+> +#include <linux/types.h>
+> +
+> +struct thread;
+> +struct maps;
+> +struct map;
+> +struct symbol;
+> +
+> +struct addr_location {
+> +	struct thread *thread;
+> +	struct maps   *maps;
+> +	struct map    *map;
+> +	struct symbol *sym;
+> +	const char    *srcline;
+> +	u64	      addr;
+> +	char	      level;
+> +	u8	      filtered;
+> +	u8	      cpumode;
+> +	s32	      cpu;
+> +	s32	      socket;
+> +};
+> +
+> +void addr_location__put(struct addr_location *al);
+> +
+> +#endif /* __PERF_ADDR_LOCATION */
+> diff --git a/tools/perf/util/event.c b/tools/perf/util/event.c
+> index e1ce7cb5e421..6ee23145ee7e 100644
+> --- a/tools/perf/util/event.c
+> +++ b/tools/perf/util/event.c
+> @@ -767,18 +767,6 @@ int machine__resolve(struct machine *machine, struct addr_location *al,
+>  	return 0;
+>  }
+>  
+> -/*
+> - * The preprocess_sample method will return with reference counts for the
+> - * in it, when done using (and perhaps getting ref counts if needing to
+> - * keep a pointer to one of those entries) it must be paired with
+> - * addr_location__put(), so that the refcounts can be decremented.
+> - */
+> -void addr_location__put(struct addr_location *al)
+> -{
+> -	map__zput(al->map);
+> -	thread__zput(al->thread);
+> -}
+> -
+>  bool is_bts_event(struct perf_event_attr *attr)
+>  {
+>  	return attr->type == PERF_TYPE_HARDWARE &&
+> diff --git a/tools/perf/util/symbol.h b/tools/perf/util/symbol.h
+> index 7558735543c2..5ca8665dd2c1 100644
+> --- a/tools/perf/util/symbol.h
+> +++ b/tools/perf/util/symbol.h
+> @@ -9,6 +9,7 @@
+>  #include <linux/list.h>
+>  #include <linux/rbtree.h>
+>  #include <stdio.h>
+> +#include "addr_location.h"
+>  #include "path.h"
+>  #include "symbol_conf.h"
+>  #include "spark.h"
+> @@ -120,22 +121,6 @@ struct ref_reloc_sym {
+>  	u64		unrelocated_addr;
+>  };
+>  
+> -struct addr_location {
+> -	struct thread *thread;
+> -	struct maps   *maps;
+> -	struct map    *map;
+> -	struct symbol *sym;
+> -	const char    *srcline;
+> -	u64	      addr;
+> -	char	      level;
+> -	u8	      filtered;
+> -	u8	      cpumode;
+> -	s32	      cpu;
+> -	s32	      socket;
+> -};
+> -
+> -void addr_location__put(struct addr_location *al);
+> -
+>  int dso__load(struct dso *dso, struct map *map);
+>  int dso__load_vmlinux(struct dso *dso, struct map *map,
+>  		      const char *vmlinux, bool vmlinux_allocated);
+> -- 
+> 2.41.0.162.gfafddb0af9-goog
+> 
+
 -- 
-2.41.0
 
+- Arnaldo
