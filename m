@@ -2,108 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCD54729847
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 13:38:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6151172984C
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 13:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238801AbjFILi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 07:38:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38674 "EHLO
+        id S238819AbjFILlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 07:41:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbjFILi1 (ORCPT
+        with ESMTP id S231932AbjFILlB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 07:38:27 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146F530E6
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 04:38:25 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f735bfcbbbso11961475e9.2
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 04:38:25 -0700 (PDT)
+        Fri, 9 Jun 2023 07:41:01 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19C130ED
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 04:40:58 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-ba8cd61ee2dso4000447276.1
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 04:40:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20221208.gappssmtp.com; s=20221208; t=1686310703; x=1688902703;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6e5QbRUnU+agFZANreqZIgq4SD5UQhoPe6DRJUY6y9k=;
-        b=YMwWwqAnsDoN4SkvomdU10HDl54IFKKlrEjetiCPwmKf2brL04M3tC2/hSLmW31nPB
-         HE4IJnCcnnApNMje3Akdyb7kZAMQRFTao7i/N2oXp+vhpJBz4AlksxYQVeEgWDs5pVFk
-         WhlQrAjm3HGufIfHlnIfnhJhhvW24ZH9sUFq3EftfbMwaSHkMFzMKpOE/sr2UTyfuhGs
-         yHyL0RlZpXRy8G6jSsWOv7yq/rxTTd2tLMYpcIWVtvuPmw0zj8yceWAV5mcPYozfl1W3
-         tZ5YKbtv8WmiSkdwqDEPla45xeAmRU4oIu8eUGvwFnbHTzAG8a4BqC1FPhP3cxaIS/A/
-         lKWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686310703; x=1688902703;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=ventanamicro.com; s=google; t=1686310858; x=1688902858;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6e5QbRUnU+agFZANreqZIgq4SD5UQhoPe6DRJUY6y9k=;
-        b=FFOWDkKIVzrm7Z+d/H5t0lb4fujWjYu4ID22ZZWXKAzrmc5SO9L2QHinGqE0OUHhGD
-         FA9gvrYcKK9jAWk4zQPGYNDKuIQXW1CnKTc5cJLkUuvgK2gxSfSsM4LvyP9o4f+GBSOO
-         MBC1A0TXCxVi1eKhKcABNikdBV4p0l/IAzHpYAUaGsNtCk3i1dhxnSg2XW9JP6kFIUb2
-         tmrO0HgPwYRvAEY58kYGzMioufsgNkrb3hWWekfcDpnqhtXKc/52jaePngPz3mmx+zVJ
-         KHRHmz1uukhHxK6qM2hEGw+2B5daNjOiSh9XhGVsucDQES8rb78s31JBZZPWryPu4aFP
-         2AiQ==
-X-Gm-Message-State: AC+VfDy7MhUrw4tRZY2z6D3Fx7QeHVH03xOfBr1U6be7kzYqjJGNr6q/
-        aDwTsk3y+F80OpweH6wsG1Omuoy+qcIHFIZF2AcDew==
-X-Google-Smtp-Source: ACHHUZ5tXNBQnN0YokqinPTWBRgL5yCO5urh+1uT1H6tsM9CPm+SC1MbYVNW80JpCuQ2kovJMT8d2g==
-X-Received: by 2002:a05:600c:cd:b0:3f7:e7a0:967c with SMTP id u13-20020a05600c00cd00b003f7e7a0967cmr748405wmm.19.1686310703366;
-        Fri, 09 Jun 2023 04:38:23 -0700 (PDT)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id n6-20020a7bcbc6000000b003f6f6a6e769sm2422024wmi.17.2023.06.09.04.38.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 04:38:22 -0700 (PDT)
-Date:   Fri, 9 Jun 2023 13:38:21 +0200
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     simon.horman@corigine.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH net-next 3/3] tools: ynl: Remove duplicated include in
- devlink-user.c
-Message-ID: <ZIMPLYi/xRih+DlC@nanopsycho>
-References: <20230609085249.131071-1-yang.lee@linux.alibaba.com>
+        bh=xJt3feXs6SxyQtoTGkEhwKTgAeqCp1KzPotYyZ8bIc4=;
+        b=Y1My6pemRG3jJeTY2XZLEGCaA4W6dI+/ilaXi1H7/t5ar1Xt08MRq8dPmkoDStDMXm
+         kT2xMT9WUoCFhPjjVnNLR8FpVjjfLYljLuWfy8+gOcf4qMNF/4Tck3DfURhGh74b+61z
+         5GXCx94pwXORCfv023PbhMTxYlyvhBya7BIUcVnWvxxeGZcEgH5TX6NbHW18bpW1nuGw
+         Zu7ssPlBukM6546UMTV8PcfcFD6llsNDuNBHHzOZtqi1Ok3QZgWECjoiRzVFRgFzyVHD
+         DMbQV34S2wEd4j9azFOrRar6xAS/7Ve1/EQCLv7a1Gpoq0xRaDBwip/8ZWJP5a1jFG/J
+         z5TA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686310858; x=1688902858;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xJt3feXs6SxyQtoTGkEhwKTgAeqCp1KzPotYyZ8bIc4=;
+        b=UodhOEcHpTGwBnclItFxl5+MbF8vcAzTJktWRlqKx+jSLG1fUUc9/tqyVaq256DMBO
+         dQHqOyXejLHgT37+WlayfzibPe+aazxyKtIoKrHyg0kOGKV2hymfj3W9Z2RKvLh09KYr
+         94dpjjZUURn+Gr1WipJeGCk900dTf2t30PZOT+Kb4+tlkhKBHGx55Xn4hrzpd+Lqa/Z+
+         Tq3Iqer5ApQaM1pLVIvE6lMv1oG1sEiaianBoMvn/lKWtVR9ocBlTbWYxTzRCbfRFZut
+         R+sWZeJhUx1N3dNy0OIdVnBm3RzkPX3rzH/k7TlF1P1ejSETZvZ+7Dzc97goU+/L3GfE
+         0F+g==
+X-Gm-Message-State: AC+VfDw1b7OPbiCnNILUbt4k4mYQoOwXRhDmiw6E/mGizTjVZ7cEM+lb
+        E4Pq0sZlwlltgDGC9RSHdFf/pIU0C0DiKIviTIcPAQ==
+X-Google-Smtp-Source: ACHHUZ6tcnye369zFXBV2bBHJWRzfVKRU8NYtwA27HSSc5WJJxk9tivdQDX48v29djspGuooSVUxeE1q+GAIw2Q6QXE=
+X-Received: by 2002:a81:4e4e:0:b0:568:ed48:21bb with SMTP id
+ c75-20020a814e4e000000b00568ed4821bbmr1746710ywb.13.1686310857937; Fri, 09
+ Jun 2023 04:40:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230609085249.131071-1-yang.lee@linux.alibaba.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230508142842.854564-1-apatel@ventanamicro.com>
+ <20230508142842.854564-3-apatel@ventanamicro.com> <20230608182828.GA3183987-robh@kernel.org>
+ <CAGETcx_4OH=EmSUL2-rwKa=1uoOj+AH_xn4PoPsc0kt_aU0WOg@mail.gmail.com>
+In-Reply-To: <CAGETcx_4OH=EmSUL2-rwKa=1uoOj+AH_xn4PoPsc0kt_aU0WOg@mail.gmail.com>
+From:   Anup Patel <apatel@ventanamicro.com>
+Date:   Fri, 9 Jun 2023 17:10:45 +0530
+Message-ID: <CAK9=C2V1LH0739Nq5Ji7gGbgbyFtNAtBYR43fU7vr9omD5tKSA@mail.gmail.com>
+Subject: Re: [PATCH v3 02/11] of/irq: Set FWNODE_FLAG_BEST_EFFORT for the
+ interrupt controller DT nodes
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Rob Herring <robh@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, iommu@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fri, Jun 09, 2023 at 10:52:47AM CEST, yang.lee@linux.alibaba.com wrote:
->./tools/net/ynl/generated/devlink-user.c: stdlib.h is included more than once.
+On Fri, Jun 9, 2023 at 1:35=E2=80=AFAM Saravana Kannan <saravanak@google.co=
+m> wrote:
 >
->Reported-by: Abaci Robot <abaci@linux.alibaba.com>
->Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=5464
->Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
->---
-> tools/net/ynl/generated/devlink-user.c | 1 -
-> 1 file changed, 1 deletion(-)
+> On Thu, Jun 8, 2023 at 11:28=E2=80=AFAM Rob Herring <robh@kernel.org> wro=
+te:
+> >
+> > +Saravana
+> >
+> > On Mon, May 08, 2023 at 07:58:33PM +0530, Anup Patel wrote:
+> > > The RISC-V APLIC interrupt controller driver is a regular platform
+> > > driver so we need to ensure that it is probed as soon as possible.
+> > > To achieve this, we mark the interrupt controller device nodes with
+> > > FWNODE_FLAG_BEST_EFFORT (just like console DT node).
+> > >
+> > > Fixes: 8f486cab263c ("driver core: fw_devlink: Allow firmware to mark=
+ devices as best effort")
+> >
+> > It is good practice to Cc the commit author of what you are fixing.
+> >
+> > > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > > ---
+> > >  drivers/of/irq.c | 10 ++++++++++
+> > >  1 file changed, 10 insertions(+)
+> > >
+> > > diff --git a/drivers/of/irq.c b/drivers/of/irq.c
+> > > index 174900072c18..94e1d9245cff 100644
+> > > --- a/drivers/of/irq.c
+> > > +++ b/drivers/of/irq.c
+> > > @@ -535,6 +535,16 @@ void __init of_irq_init(const struct of_device_i=
+d *matches)
+> > >       INIT_LIST_HEAD(&intc_desc_list);
+> > >       INIT_LIST_HEAD(&intc_parent_list);
+> > >
+> > > +     /*
+> > > +      * We need interrupt controller platform drivers to work as soo=
+n
+> >
+> > If it's platform drivers/devices you care about, then perhaps this
+> > should be done when platform devices are created.
+> >
+> > > +      * as possible so mark the interrupt controller device nodes wi=
+th
+> > > +      * FWNODE_FLAG_BEST_EFFORT so that fw_delink knows not to delay
+> > > +      * the probe of the interrupt controller device for suppliers
+> > > +      * without drivers.
+> > > +      */
+> > > +     for_each_node_with_property(np, "interrupt-controller")
+> >
+> > This function only operates on nodes matching 'matches', but this
+> > operates on everything.
+> >
+> > It does make sense that if we init an interrupt controller here, then w=
+e
+> > will surely want to probe its driver later on. So maybe just move
+> > setting FWNODE_FLAG_BEST_EFFORT within
+> > for_each_matching_node_and_match() below.
+> >
+> > > +             np->fwnode.flags |=3D FWNODE_FLAG_BEST_EFFORT;
+> > > +
 >
->diff --git a/tools/net/ynl/generated/devlink-user.c b/tools/net/ynl/generated/devlink-user.c
->index c3204e20b971..18157afd7c73 100644
->--- a/tools/net/ynl/generated/devlink-user.c
->+++ b/tools/net/ynl/generated/devlink-user.c
+> Definite Nack. You are pretty much disabling fw_devlink for all
+> interrupt controllers. There are plenty of examples of the IRQ drivers
+> being needed very early on and still probing properly without the need
+> for this flag. Please fix your driver/DT.
 
-You are patching generated file, as the path suggests.
-See what the file header says:
-/* Do not edit directly, auto-generated from: */
-/*      Documentation/netlink/specs/devlink.yaml */
+Okay, I will try to set FWNODE_FLAG_BEST_EFFORT only for
+APLIC device_node via IRQCHIP_DECLARE().
+
+Regards,
+Anup
 
 
->@@ -8,7 +8,6 @@
-> #include "ynl.h"
-> #include <linux/devlink.h>
-> 
->-#include <stdlib.h>
-> #include <stdio.h>
-> #include <string.h>
-> #include <libmnl/libmnl.h>
->-- 
->2.20.1.7.g153144c
+>
+> -Saravana
 >
 >
+> > >       for_each_matching_node_and_match(np, matches, &match) {
+> > >               if (!of_property_read_bool(np, "interrupt-controller") =
+||
+> > >                               !of_device_is_available(np))
+> > > --
+> > > 2.34.1
+> > >
