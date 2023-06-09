@@ -2,112 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A308729C31
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC711729C37
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:07:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239554AbjFIOGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 10:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35240 "EHLO
+        id S240337AbjFIOHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 10:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbjFIOGC (ORCPT
+        with ESMTP id S239822AbjFIOG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 10:06:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA8F1BC6;
-        Fri,  9 Jun 2023 07:06:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D4E0965847;
-        Fri,  9 Jun 2023 14:06:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5DE9C433D2;
-        Fri,  9 Jun 2023 14:05:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686319560;
-        bh=kgO/2c+NjKZyd1iafWHrG8i9N2lcKWxvnLxiKEZHcSk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vNr7hdLCTjdv+lb2+2bCz4KNEEQE5RmUFO5PbsMtBT8H2HIcsXYBO2yM/9F9Z2p6/
-         skSGokOV3XQInW2ZGGlBV+KxWCR2Vw4Uyg3cyriHxIXjgA49ZhucK1ZJ0VPCMGGzeS
-         hHJqu9C8XrumksEs6l06A2a92jJQzlea8JD6aFVk=
-Date:   Fri, 9 Jun 2023 16:05:57 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Xianting Tian <xianting.tian@linux.alibaba.com>
-Cc:     arei.gonglei@huawei.com, mst@redhat.com, jasowang@redhat.com,
-        xuanzhuo@linux.alibaba.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, amit@kernel.org, arnd@arndb.de,
-        marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        linux-bluetooth@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xianting Tian <tianxianting.txt@alibaba-inc.com>
-Subject: Re: [PATCH 1/3] virtio-crypto: fixup potential cpu stall when free
- unused bufs
-Message-ID: <2023060924-onion-armhole-803e@gregkh>
-References: <20230609131817.712867-1-xianting.tian@linux.alibaba.com>
- <20230609131817.712867-2-xianting.tian@linux.alibaba.com>
- <2023060924-skinning-reset-e256@gregkh>
- <2023060940-wrongdoer-wince-5701@gregkh>
- <91aa6ce0-e8a3-21ac-d29e-b2a47f6386d1@linux.alibaba.com>
+        Fri, 9 Jun 2023 10:06:57 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F154930FC
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 07:06:55 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-977ed383b8aso309204866b.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 07:06:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686319614; x=1688911614;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8ez83xrnUgbw0MAP7/4bHfz4IcI1smRL2ein9QCNd6Q=;
+        b=MWLzBqFecgIKNf1kgPAbYdebxEuEwkAqBZ/e49ZS5gOtgYOKtpD8LQ66Vnv9LPxiJF
+         Mo9RX6D+aYNPiN9nEWemYZ6fCyB7Hqdx00XbM3YtyU6iX6l3saQ6vFZCasD2zN5AKmli
+         wHWkF3yxP8aqdzkMYYz+zxRIdZFMgMBPLMI99CLY3WSQOqFCjvgSoqxOo2E9jPdueDAg
+         TdG04blH0/lMwU9GRTQpsDIE+hyW/ePw7XJHVgV4b9z3jvWj6PpTE/AN2OPP1MMFGs/H
+         qFE96ooOh70XorMN5d40jzSzZRDM+LU0W+0oU8GvzDStCIxJHYaW9lHRgC3vDieyK1lT
+         sqkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686319614; x=1688911614;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8ez83xrnUgbw0MAP7/4bHfz4IcI1smRL2ein9QCNd6Q=;
+        b=aDkvpC0TxferpU+EhBfIuIvHHBAX/xxshtma97Gn3Hrp0Ys/XbUFX8uZ7vDygzZz5j
+         JA9JVMLtNKjAZgHr+UnohOk8EtHO7Mn9uqvHu2XDevmD1EoVVw7v3pm3n2xfCtyovwZD
+         GAa3lrMSbMs/zCnegcQm6qvTBX+Fzai+1KwypSFhteKsURUpW48vZ4Xx38nV1lQKVdXm
+         gL4BnGeMD1dHUtXwNyhMq/Dc0yeBb57C6g4njmj9iZKWMfK0UyBgBFCDXciAVBS3sa/Q
+         i2P31G8SAD20P4eI1C6S/pV5H4EFJ+FdWbIGhQsUGe3XckBlubEda5Xi76IzxlM651f9
+         2mTQ==
+X-Gm-Message-State: AC+VfDytNDrMqYJwAJsD+jYWul9Arkf47m8/wGsz/aDG4QoGXMKIlNZe
+        1hkr7Cz8kfoPlk+Y5yNy95E2cg==
+X-Google-Smtp-Source: ACHHUZ6eNQSN6PIFn6NAH6sD5EEzqacvW4Z3scV2BWSPG/097RqqphuqnMSNGCi9/N3LutXcW3LILw==
+X-Received: by 2002:a17:907:2d06:b0:973:da59:7c91 with SMTP id gs6-20020a1709072d0600b00973da597c91mr2053621ejc.51.1686319614494;
+        Fri, 09 Jun 2023 07:06:54 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id kf10-20020a17090776ca00b00965f6ad266bsm1307695ejc.119.2023.06.09.07.06.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 07:06:54 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-scsi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: ufs: samsung,exynos: drop unneeded quotes
+Date:   Fri,  9 Jun 2023 16:06:51 +0200
+Message-Id: <20230609140651.64488-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <91aa6ce0-e8a3-21ac-d29e-b2a47f6386d1@linux.alibaba.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 09:49:39PM +0800, Xianting Tian wrote:
-> 
-> 在 2023/6/9 下午9:41, Greg KH 写道:
-> > On Fri, Jun 09, 2023 at 03:39:24PM +0200, Greg KH wrote:
-> > > On Fri, Jun 09, 2023 at 09:18:15PM +0800, Xianting Tian wrote:
-> > > > From: Xianting Tian <tianxianting.txt@alibaba-inc.com>
-> > > > 
-> > > > Cpu stall issue may happen if device is configured with multi queues
-> > > > and large queue depth, so fix it.
-> > > > 
-> > > > Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
-> > > > ---
-> > > >   drivers/crypto/virtio/virtio_crypto_core.c | 1 +
-> > > >   1 file changed, 1 insertion(+)
-> > > > 
-> > > > diff --git a/drivers/crypto/virtio/virtio_crypto_core.c b/drivers/crypto/virtio/virtio_crypto_core.c
-> > > > index 1198bd306365..94849fa3bd74 100644
-> > > > --- a/drivers/crypto/virtio/virtio_crypto_core.c
-> > > > +++ b/drivers/crypto/virtio/virtio_crypto_core.c
-> > > > @@ -480,6 +480,7 @@ static void virtcrypto_free_unused_reqs(struct virtio_crypto *vcrypto)
-> > > >   			kfree(vc_req->req_data);
-> > > >   			kfree(vc_req->sgs);
-> > > >   		}
-> > > > +		cond_resched();
-> > > that's not "fixing a stall", it is "call the scheduler because we are
-> > > taking too long".  The CPU isn't stalled at all, just busy.
-> > > 
-> > > Are you sure this isn't just a bug in the code?  Why is this code taking
-> > > so long that you have to force the scheduler to run?  This is almost
-> > > always a sign that something else needs to be fixed instead.
-> > And same comment on the other 2 patches, please fix this properly.
-> > 
-> > Also, this is a tight loop that is just freeing memory, why is it taking
-> > so long?  Why do you want it to take longer (which is what you are doing
-> > here), ideally it would be faster, not slower, so you are now slowing
-> > down the system overall with this patchset, right?
-> 
-> yes, it is the similar fix with one for virtio-net
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/net/virtio_net.c?h=v6.4-rc5&id=f8bb5104394560e29017c25bcade4c6b7aabd108 <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/net/virtio_net.c?h=v6.4-rc5&id=f8bb5104394560e29017c25bcade4c6b7aabd108>
+Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+checking for this can be enabled in yamllint.
 
-I would argue that this too is incorrect, because why does freeing
-memory take so long?  And again, you are making it take longer, is that
-ok?
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-thanks,
+diff --git a/Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml b/Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml
+index a9988798898d..88cc1e3a0c88 100644
+--- a/Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml
++++ b/Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml
+@@ -54,7 +54,7 @@ properties:
+     const: ufs-phy
+ 
+   samsung,sysreg:
+-    $ref: '/schemas/types.yaml#/definitions/phandle-array'
++    $ref: /schemas/types.yaml#/definitions/phandle-array
+     description: Should be phandle/offset pair. The phandle to the syscon node
+                  which indicates the FSYSx sysreg interface and the offset of
+                  the control register for UFS io coherency setting.
+-- 
+2.34.1
 
-greg k-h
