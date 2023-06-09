@@ -2,134 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09A28729D7C
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:56:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6386729D87
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:57:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231880AbjFIO4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 10:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38698 "EHLO
+        id S241765AbjFIO5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 10:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240841AbjFIO4O (ORCPT
+        with ESMTP id S241761AbjFIO5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 10:56:14 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE44B3C0D
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 07:55:46 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686322537;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=z1hdB/vFVE45XIPK9ERIBNmxTcvOEAi7QtCWRI08vE4=;
-        b=41PCry0bCNNKUu7xqplNbVFZ0NN5EWsw8XlDuKMb/YQ0VhDq0buMxxXe1scrxCHwcd9aHY
-        +ETo8/Xk9uQ0fHFCbIhyGjgMW2yq3bTSkwUpUN9YvYA/iJZTTYXJ87cRmbMugsPkbcgiy2
-        GioDwKICEa8KaXuXBp1Cw7GknMhIkF9+oa7iC0wGJMBbOqhCxHKNeBoZ0d3Qh/lerKhWVE
-        pH8cZuxFX+ESUBb26KJyi7UDlr0J8dyLgORLsqu2zADDzihEUKn//+HEYqClxIphcMENJP
-        VuVZyuLKRjgKyD9w7LXggsdODJMFptPj8W/+iK4Vla+45mY/oKfbG5ticFd9Dw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686322537;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=z1hdB/vFVE45XIPK9ERIBNmxTcvOEAi7QtCWRI08vE4=;
-        b=6OJmqEfIKbIqa5MWE1h9iPhGCslT8k5paJIZtLJqhyBxJIAMrhY8npPbHEmcNK6wlKvJKr
-        j2HjwhL0yDbjnuAg==
-To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>, vschneid@redhat.com,
-        Phil Auld <pauld@redhat.com>, vdonnefort@google.com
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        wangxiongfeng2@huawei.com, Wei Li <liwei391@huawei.com>,
-        "liaoyu (E)" <liaoyu15@huawei.com>, zhangqiao22@huawei.com,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@kernel.org>
-Subject: Re: [Question] report a race condition between CPU hotplug state
- machine and hrtimer 'sched_cfs_period_timer' for cfs bandwidth throttling
-In-Reply-To: <8e785777-03aa-99e1-d20e-e956f5685be6@huawei.com>
-References: <8e785777-03aa-99e1-d20e-e956f5685be6@huawei.com>
-Date:   Fri, 09 Jun 2023 16:55:37 +0200
-Message-ID: <87mt18it1y.ffs@tglx>
+        Fri, 9 Jun 2023 10:57:05 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726533C26
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 07:56:41 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-19f2fb9b1cdso608589fac.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 07:56:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20221208.gappssmtp.com; s=20221208; t=1686322600; x=1688914600;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mNjEF1zb+JpJdY0weZ4OdAOu0yke/I9t8R3uYm6sLTw=;
+        b=yqu1Gt/I72W8rGCMTbNxP4nxyhxODNNERehop1YFjTuhAXJzp3uvoX/x6Zqn80ZPsP
+         qPNKqE0PRLSNo9svzye/a1X7FjDNhWzOUX+2yPywDUpNtdZd/TITx3Ce2a77ghBWrL9U
+         EmSNrEfZYGTeblSWGgITvKbFQLgD9LROEfaw65vEhd231ogFe7GnM79ShBz8kCsPyZaH
+         cdkBTFk7A522ggTbqdCnOhpuWmX4QnN7G4NRlIwBcPXt41WPTGi7ZtUuiGXlFu6e5sm+
+         Rb3YsG0S3J8oSiUu0dFlFvTTfDMUk5BkxDdgpUI1gDHvHUXH96EzUxGV6KBzx01Lb3Nt
+         SjLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686322600; x=1688914600;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mNjEF1zb+JpJdY0weZ4OdAOu0yke/I9t8R3uYm6sLTw=;
+        b=cJF+mWZnSntF1FYV0ZqHPbk7UMnKAiM20DD6IozoFq2r6hERD/iY+64uXlhNPS1ibH
+         1pKt+mvBBl+qwtkFIqH/1XNire/dNhEPaht9n2plp/FLgKUKvT1m7xrL3gYaeKEn2Dtf
+         orM0OvEzwFBvGpOS1YH/2w88NmXqbtwHZlI+VftQOWL/yGkqZUpHmPz1SQW5uCDuYiva
+         XdwrYIWXEE6rIOynDUG5+S7AXAvQ97ZELlvNo/2n75CfofkZg5VBaMQO4HSoufzIu/cn
+         QEE+3/tEOwAarg3Wx4WtT12NbtsQ7eUS7xXXnbKSPetc4proWDjbb4aNs21mMMMxg/6H
+         j+pg==
+X-Gm-Message-State: AC+VfDyDwzrBEDHOZFL5RgoAD3fwYwfmRS4IdO2g5HpgBkLX5k5dH5nf
+        c7ZbAWAUgJ+lCeJxxujydd+MfQ==
+X-Google-Smtp-Source: ACHHUZ5lyjIg3/k8ishXP5lVr7SzW3xDk6gDIW+APpNABj3FGwxCpQmA/zWxRkbdHKZaShP8U7SZcw==
+X-Received: by 2002:a05:6870:fc84:b0:19f:7c4c:38b4 with SMTP id ly4-20020a056870fc8400b0019f7c4c38b4mr1554940oab.15.1686322600226;
+        Fri, 09 Jun 2023 07:56:40 -0700 (PDT)
+Received: from ?IPV6:2804:7f1:e2c0:9e83:b7c7:f418:cfcf:f0dd? ([2804:7f1:e2c0:9e83:b7c7:f418:cfcf:f0dd])
+        by smtp.gmail.com with ESMTPSA id a21-20020a056870d19500b001a3093ec23fsm2236633oac.32.2023.06.09.07.56.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Jun 2023 07:56:39 -0700 (PDT)
+Message-ID: <facdfceb-fe2e-795b-ea89-1b67478eb533@mojatatu.com>
+Date:   Fri, 9 Jun 2023 11:56:35 -0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH RESEND net-next 5/5] net/sched: taprio: dump class stats
+ for the actual q->qdiscs[]
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>,
+        Peilin Ye <yepeilin.cs@gmail.com>,
+        Pedro Tammela <pctammela@mojatatu.com>
+References: <20230602103750.2290132-1-vladimir.oltean@nxp.com>
+ <20230602103750.2290132-6-vladimir.oltean@nxp.com>
+ <CAM0EoM=P9+wNnNQ=ky96rwCx1z20fR21EWEdx+Na39NCqqG=3A@mail.gmail.com>
+ <20230609121043.ekfvbgjiko7644t7@skbuf>
+Content-Language: en-US
+From:   Victor Nogueira <victor@mojatatu.com>
+In-Reply-To: <20230609121043.ekfvbgjiko7644t7@skbuf>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09 2023 at 19:24, Xiongfeng Wang wrote:
+On 09/06/2023 09:10, Vladimir Oltean wrote:
+> On Thu, Jun 08, 2023 at 02:44:46PM -0400, Jamal Hadi Salim wrote:
+>> Other than the refcount issue i think the approach looks reasonable to
+>> me. The stats before/after you are showing below though are
+>> interesting; are you showing a transient phase where packets are
+>> temporarily in the backlog. Typically the backlog is a transient phase
+>> which lasts a very short period. Maybe it works differently for
+>> taprio? I took a quick look at the code and do see to decrement the
+>> backlog in the dequeue, so if it is not transient then some code path
+>> is not being hit.
+> 
+> It's a fair concern. The thing is that I put very aggressive time slots
+> in the schedule that I'm testing with, and my kernel has a lot of
+> debugging stuff which bogs it down (kasan, kmemleak, lockdep, DMA API
+> debug etc). Not to mention that the CPU isn't the fastest to begin with.
+> 
+> The way taprio works is that there's a hrtimer which fires at the
+> expiration time of the current schedule entry and sets up the gates for
+> the next one. Each schedule entry has a gate for each traffic class
+> which determines what traffic classes are eligible for dequeue() and
+> which ones aren't.
+> 
+> The dequeue() procedure, though also invoked by the advance_schedule()
+> hrtimer -> __netif_schedule(), is also time-sensitive. By the time
+> taprio_dequeue() runs, taprio_entry_allows_tx() function might return
+> false when the system is so bogged down that it wasn't able to make
+> enough progress to dequeue() an skb in time. When that happens, there is
+> no mechanism, currently, to age out packets that stood too much in the
+> TX queues (what does "too much" mean?).
+> 
+> Whereas enqueue() is technically not time-sensitive, i.e. you can
+> enqueue whenever you want and the Qdisc will dequeue whenever it can.
+> Though in practice, to make this scheduling technique useful, the user
+> space enqueue should also be time-aware (though you can't capture this
+> with ping).
+> 
+> If I increase all my sched-entry intervals by a factor of 100, the
+> backlog issue goes away and the system can make forward progress.
+> 
+> So yeah, sorry, I didn't pay too much attention to the data I was
+> presenting for illustrative purposes.
+> 
+>> Aside: I realize you are busy - but if you get time and provide some
+>> sample tc command lines for testing we could help create the tests for
+>> you, at least the first time. The advantage of putting these tests in
+>> tools/testing/selftests/tc-testing/ is that there are test tools out
+>> there that run these tests and so regressions are easier to catch
+>> sooner.
+> 
+> Yeah, ok. The script posted in a reply on the cover letter is still what
+> I'm working with. The things it intends to capture are:
+> - attaching a custom Qdisc to one of taprio's classes doesn't fail
+> - attaching taprio to one of taprio's classes fails
+> - sending packets through one queue increases the counters (any counters)
+>    of just that queue
+> 
+> All the above, replicated once for the software scheduling case and once
+> for the offload case. Currently netdevsim doesn't attempt to emulate
+> taprio offload.
+> 
+> Is there a way to skip tests? I may look into tdc, but I honestly don't
+> have time for unrelated stuff such as figuring out why my kernel isn't
+> configured for the other tests to pass - and it seems that once one test
+> fails, the others are completely skipped, see below.
 
-Cc+ scheduler people, leave context intact
+You can tell tdc to run a specific test file by providing the "-f" option.
+For example, if you want to run only taprio tests, you can issue the
+following command:
 
-> Hello,
->  When I do some low power tests, the following hung task is printed.
->
->   Call trace:
->    __switch_to+0xd4/0x160
->    __schedule+0x38c/0x8c4
->    __cond_resched+0x24/0x50
->    unmap_kernel_range_noflush+0x210/0x240
->    kretprobe_trampoline+0x0/0xc8
->    __vunmap+0x70/0x31c
->    __vfree+0x34/0x8c
->    vfree+0x40/0x58
->    free_vm_stack_cache+0x44/0x74
->    cpuhp_invoke_callback+0xc4/0x71c
->    _cpu_down+0x108/0x284
->    kretprobe_trampoline+0x0/0xc8
->    suspend_enter+0xd8/0x8ec
->    suspend_devices_and_enter+0x1f0/0x360
->    pm_suspend.part.1+0x428/0x53c
->    pm_suspend+0x3c/0xa0
->    devdrv_suspend_proc+0x148/0x248 [drv_devmng]
->    devdrv_manager_set_power_state+0x140/0x680 [drv_devmng]
->    devdrv_manager_ioctl+0xcc/0x210 [drv_devmng]
->    drv_ascend_intf_ioctl+0x84/0x248 [drv_davinci_intf]
->    __arm64_sys_ioctl+0xb4/0xf0
->    el0_svc_common.constprop.0+0x140/0x374
->    do_el0_svc+0x80/0xa0
->    el0_svc+0x1c/0x28
->    el0_sync_handler+0x90/0xf0
->    el0_sync+0x168/0x180
->
-> After some analysis, I found it is caused by the following race condition.
->
-> 1. A task running on CPU1 is throttled for cfs bandwidth. CPU1 starts the
-> hrtimer cfs_bandwidth 'period_timer' and enqueue the hrtimer on CPU1's rbtree.
-> 2. Then the task is migrated to CPU2 and starts to offline CPU1. CPU1 starts
-> CPUHP AP steps, and then the hrtimer 'period_timer' expires and re-enqueued on CPU1.
-> 3. CPU1 runs to take_cpu_down() and disable irq. After CPU1 finished CPUHP AP
-> steps, CPU2 starts the rest CPUHP step.
-> 4. When CPU2 runs to free_vm_stack_cache(), it is sched out in __vunmap()
-> because it run out of CPU quota. start_cfs_bandwidth() does not restart the
-> hrtimer because 'cfs_b->period_active' is set.
-> 5. The task waits the hrtimer 'period_timer' to expire to wake itself up, but
-> CPU1 has disabled irq and the hrtimer won't expire until it is migrated to CPU2
-> in hrtimers_dead_cpu(). But the task is blocked and cannot proceed to
-> hrtimers_dead_cpu() step. So the task hungs.
->
->     CPU1      			                 	 CPU2
-> Task set cfs_quota
-> start hrtimer cfs_bandwidth 'period_timer'
-> 						start to offline CPU1
-> CPU1 start CPUHP AP step
-> ...
-> 'period_timer' expired and re-enqueued on CPU1
-> ...
-> disable irq in take_cpu_down()
-> ...
-> 						CPU2 start the rest CPUHP steps
-> 						...
-> 					      sched out in free_vm_stack_cache()
-> 						wait for 'period_timer' expires
->
->
-> Appreciate it a lot if anyone can give some suggestion on how fix this problem !
->
-> Thanks,
-> Xiongfeng
+./tdc.py -f tc-tests/qdiscs/taprio.json
+
+This is also described in tdc's README.
+
+> Also, by which rule are the test IDs created?
+
+When creating a test case in tdc, you must have an ID field.
+What we do to generate the IDs is leave the "id" field as an
+empty string on the test case description, for example:
+
+
+{
+     "id": "",
+     "name": "My dummy test case",
+     ...
+}
+
+and run the following:
+
+./tdc.py -i
+
+This will automatically fill up the "id" field in the JSON
+with an appropriate ID.
+
+> root@debian:~# cd selftests/tc-testing/
+> root@debian:~/selftests/tc-testing# ./tdc.sh
+> considering category qdisc
+>   -- ns/SubPlugin.__init__
+> Test 0582: Create QFQ with default setting
+> Test c9a3: Create QFQ with class weight setting
+> Test d364: Test QFQ with max class weight setting
+> Test 8452: Create QFQ with class maxpkt setting
+> Test 22df: Test QFQ class maxpkt setting lower bound
+> Test 92ee: Test QFQ class maxpkt setting upper bound
+> Test d920: Create QFQ with multiple class setting
+> Test 0548: Delete QFQ with handle
+> Test 5901: Show QFQ class
+> Test 0385: Create DRR with default setting
+> Test 2375: Delete DRR with handle
+> Test 3092: Show DRR class
+> Test 3460: Create CBQ with default setting
+> exit: 2
+> exit: 0
+> Error: Specified qdisc kind is unknown.
+
+As you stated, this likely means you are missing a config option.
+However you can just ask tdc to run a specific test file to avoid this.
+
+> (...)
+
+cheers,
+Victor
