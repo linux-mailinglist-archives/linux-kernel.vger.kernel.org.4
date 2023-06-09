@@ -2,68 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 393867295F5
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70AAE7295FC
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:55:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241926AbjFIJyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 05:54:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45580 "EHLO
+        id S238985AbjFIJzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 05:55:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241841AbjFIJyB (ORCPT
+        with ESMTP id S239682AbjFIJy1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 05:54:01 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108BA3C17
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 02:45:46 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f620583bc2so1896187e87.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 02:45:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686303936; x=1688895936;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OyPIqlqxRuU6hxzq8gXMRlVGGSvpxZkTFPb66tJ1Xqo=;
-        b=UNrpvbXBRfqltDS+kyA10cskn9M8NCS7FsnSwGxZy67LMqdSrc6i2wpL8V+g37r/WH
-         yH2bDzKD6yQHyFzREFL2ofIrxpRrJZr5gjiYmbMF0Z0RDTs4FgKRHdL1LKTEfZkD36AA
-         cZGMcC2gFDRFPEvJqWJ8ABcU8PGw71MpJtaIKfEGgRpujg0TiHUORrbmVtqS2iL6lRv1
-         sAG+uC1y4BuPNFXDYSc3wEr1selX9uamV/3O1VtfBULIChPCm0tr7VW2brL8sSgOWyJU
-         VCjCwjFr7bu2frRGQ/abg0ZyLhsUN9w1HkwVaVZGgo3anTZ9hyDtKvDyGlQ5xnT/2jAU
-         o+PA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686303936; x=1688895936;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OyPIqlqxRuU6hxzq8gXMRlVGGSvpxZkTFPb66tJ1Xqo=;
-        b=Iyi0exUJI+WlFhf+juxfjwB8jb7K1iH8a8pzx89zowJDUbREVclJlOBwus8jm/EPGf
-         RYRxATMQyknV3hosKy59x5jhTIIict5KVsLGQDUuJDKH3eod6Nf00HtvpHJ9S/XIW4gb
-         1gQOB+PVeYxTw8LWy0zYGT3d17vVkpPcOt+Q46xZ33kA8LJWI0AdhnMUTTPuMuInG6je
-         0JZRXU72wYoJ2I4encDHwk/prRkr4ZfPNPUo1QrG3XkWyz9I+TjA75cPKue6caysjY8y
-         VmaqcEMMCk+k1KvenE22gv5REHpUTqcG1x5GrdduYKlHVAWl1KQlm5bllTHEyAC8P09f
-         uHAg==
-X-Gm-Message-State: AC+VfDyvJetwzbg0j66kdEzTf3UmdwAyT3QlAiw14Jud56+1Hibu46bO
-        Z9NIRf8t8qnnN+n0xvxVCHabIg==
-X-Google-Smtp-Source: ACHHUZ6jqJz6Av9WC5URKovNOaKHk2nHULDzFC8UZ9uWQe8LC3rchhQ2xb4qu/K7ekAKldta5+nb2g==
-X-Received: by 2002:a19:6402:0:b0:4f6:5068:3c11 with SMTP id y2-20020a196402000000b004f650683c11mr493536lfb.40.1686303935819;
-        Fri, 09 Jun 2023 02:45:35 -0700 (PDT)
-Received: from hades.. ([2a02:85f:fc18:36c8:3efd:feff:fe6b:c5ca])
-        by smtp.gmail.com with ESMTPSA id cs6-20020a056000088600b0030ae849c70csm3954693wrb.37.2023.06.09.02.45.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 02:45:35 -0700 (PDT)
-From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
-To:     ardb@kernel.org
-Cc:     jan.kiszka@siemens.com, masahisa.kojima@linaro.org,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Jeremy Kerr <jk@ozlabs.org>, linux-efi@vger.kernel.org,
+        Fri, 9 Jun 2023 05:54:27 -0400
+Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD70946BB
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 02:46:11 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R311e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VkhjX-o_1686303963;
+Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VkhjX-o_1686303963)
+          by smtp.aliyun-inc.com;
+          Fri, 09 Jun 2023 17:46:04 +0800
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+To:     akpm@linux-foundation.org
+Cc:     mgorman@techsingularity.net, vbabka@suse.cz, david@redhat.com,
+        baolin.wang@linux.alibaba.com, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] efivarfs: force RO when remounting if SetVariable is not supported
-Date:   Fri,  9 Jun 2023 12:45:32 +0300
-Message-Id: <20230609094532.562934-1-ilias.apalodimas@linaro.org>
-X-Mailer: git-send-email 2.37.2
+Subject: [PATCH] mm: compaction: skip memory hole rapidly when isolating migratable pages
+Date:   Fri,  9 Jun 2023 17:45:54 +0800
+Message-Id: <8cc668b77c8eb2fa78058b3d81386ebed9c5a9cd.1686294549.git.baolin.wang@linux.alibaba.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,100 +40,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If SetVariable at runtime is not supported by the firmware we never assign
-a callback for that function. At the same time mount the efivarfs as
-RO so no one can call that.  However, we never check the permission flags
-when someone remounts the filesystem as RW. As a result this leads to a
-crash looking like this:
+On some machines, the normal zone can have a large memory hole like
+below memory layout, and we can see the range from 0x100000000 to
+0x1800000000 is a hole. So when isolating some migratable pages, the
+scanner can meet the hole and it will take more time to skip the large
+hole. From my measurement, I can see the isolation scanner will take
+80us ~ 100us to skip the large hole [0x100000000 - 0x1800000000].
 
-$ mount -o remount,rw /sys/firmware/efi/efivars
-$ efi-updatevar -f PK.auth PK
+So adding a new helper to fast search next online memory section
+to skip the large hole can help to find next suitable pageblock
+efficiently. With this patch, I can see the large hole scanning only
+takes < 1us.
 
-[  303.279166] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-[  303.280482] Mem abort info:
-[  303.280854]   ESR = 0x0000000086000004
-[  303.281338]   EC = 0x21: IABT (current EL), IL = 32 bits
-[  303.282016]   SET = 0, FnV = 0
-[  303.282414]   EA = 0, S1PTW = 0
-[  303.282821]   FSC = 0x04: level 0 translation fault
-[  303.283771] user pgtable: 4k pages, 48-bit VAs, pgdp=000000004258c000
-[  303.284913] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
-[  303.286076] Internal error: Oops: 0000000086000004 [#1] PREEMPT SMP
-[  303.286936] Modules linked in: qrtr tpm_tis tpm_tis_core crct10dif_ce arm_smccc_trng rng_core drm fuse ip_tables x_tables ipv6
-[  303.288586] CPU: 1 PID: 755 Comm: efi-updatevar Not tainted 6.3.0-rc1-00108-gc7d0c4695c68 #1
-[  303.289748] Hardware name: Unknown Unknown Product/Unknown Product, BIOS 2023.04-00627-g88336918701d 04/01/2023
-[  303.291150] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[  303.292123] pc : 0x0
-[  303.292443] lr : efivar_set_variable_locked+0x74/0xec
-[  303.293156] sp : ffff800008673c10
-[  303.293619] x29: ffff800008673c10 x28: ffff0000037e8000 x27: 0000000000000000
-[  303.294592] x26: 0000000000000800 x25: ffff000002467400 x24: 0000000000000027
-[  303.295572] x23: ffffd49ea9832000 x22: ffff0000020c9800 x21: ffff000002467000
-[  303.296566] x20: 0000000000000001 x19: 00000000000007fc x18: 0000000000000000
-[  303.297531] x17: 0000000000000000 x16: 0000000000000000 x15: 0000aaaac807ab54
-[  303.298495] x14: ed37489f673633c0 x13: 71c45c606de13f80 x12: 47464259e219acf4
-[  303.299453] x11: ffff000002af7b01 x10: 0000000000000003 x9 : 0000000000000002
-[  303.300431] x8 : 0000000000000010 x7 : ffffd49ea8973230 x6 : 0000000000a85201
-[  303.301412] x5 : 0000000000000000 x4 : ffff0000020c9800 x3 : 00000000000007fc
-[  303.302370] x2 : 0000000000000027 x1 : ffff000002467400 x0 : ffff000002467000
-[  303.303341] Call trace:
-[  303.303679]  0x0
-[  303.303938]  efivar_entry_set_get_size+0x98/0x16c
-[  303.304585]  efivarfs_file_write+0xd0/0x1a4
-[  303.305148]  vfs_write+0xc4/0x2e4
-[  303.305601]  ksys_write+0x70/0x104
-[  303.306073]  __arm64_sys_write+0x1c/0x28
-[  303.306622]  invoke_syscall+0x48/0x114
-[  303.307156]  el0_svc_common.constprop.0+0x44/0xec
-[  303.307803]  do_el0_svc+0x38/0x98
-[  303.308268]  el0_svc+0x2c/0x84
-[  303.308702]  el0t_64_sync_handler+0xf4/0x120
-[  303.309293]  el0t_64_sync+0x190/0x194
-[  303.309794] Code: ???????? ???????? ???????? ???????? (????????)
-[  303.310612] ---[ end trace 0000000000000000 ]---
+[    0.000000] Zone ranges:
+[    0.000000]   DMA      [mem 0x0000000040000000-0x00000000ffffffff]
+[    0.000000]   DMA32    empty
+[    0.000000]   Normal   [mem 0x0000000100000000-0x0000001fa7ffffff]
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000040000000-0x0000000fffffffff]
+[    0.000000]   node   0: [mem 0x0000001800000000-0x0000001fa3c7ffff]
+[    0.000000]   node   0: [mem 0x0000001fa3c80000-0x0000001fa3ffffff]
+[    0.000000]   node   0: [mem 0x0000001fa4000000-0x0000001fa402ffff]
+[    0.000000]   node   0: [mem 0x0000001fa4030000-0x0000001fa40effff]
+[    0.000000]   node   0: [mem 0x0000001fa40f0000-0x0000001fa73cffff]
+[    0.000000]   node   0: [mem 0x0000001fa73d0000-0x0000001fa745ffff]
+[    0.000000]   node   0: [mem 0x0000001fa7460000-0x0000001fa746ffff]
+[    0.000000]   node   0: [mem 0x0000001fa7470000-0x0000001fa758ffff]
+[    0.000000]   node   0: [mem 0x0000001fa7590000-0x0000001fa7ffffff]
 
-Fix this by adding a .reconfigure() function to the fs operations which
-we can use to check the requested flags and deny anything that's not RO
-if the firmware doesn't implement SetVariable at runtime.
-
-Fixes: f88814cc2578 ("efi/efivars: Expose RT service availability via efivars abstraction")
-Signed-off-by: Ilias Apalodimas <ilias.apalodimas@linaro.org>
+Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 ---
- fs/efivarfs/super.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ include/linux/mmzone.h | 10 ++++++++++
+ mm/compaction.c        | 23 ++++++++++++++++++++++-
+ 2 files changed, 32 insertions(+), 1 deletion(-)
 
-diff --git a/fs/efivarfs/super.c b/fs/efivarfs/super.c
-index e028fafa04f3..2a55e5bc9ac1 100644
---- a/fs/efivarfs/super.c
-+++ b/fs/efivarfs/super.c
-@@ -14,6 +14,7 @@
- #include <linux/slab.h>
- #include <linux/magic.h>
- #include <linux/statfs.h>
-+#include <linux/printk.h>
- 
- #include "internal.h"
- 
-@@ -269,8 +270,19 @@ static int efivarfs_get_tree(struct fs_context *fc)
- 	return get_tree_single(fc, efivarfs_fill_super);
+diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+index 5a7ada0413da..87e6c535d895 100644
+--- a/include/linux/mmzone.h
++++ b/include/linux/mmzone.h
+@@ -2000,6 +2000,16 @@ static inline unsigned long next_present_section_nr(unsigned long section_nr)
+ 	return -1;
  }
  
-+static int efivarfs_reconfigure(struct fs_context *fc)
++static inline unsigned long next_online_section_nr(unsigned long section_nr)
 +{
-+	if (!efivar_supports_writes() && !(fc->sb_flags & SB_RDONLY)) {
-+		pr_err("Firmware does not support SetVariableRT. Can not remount with rw\n");
-+		return -EINVAL;
++	while (++section_nr <= __highest_present_section_nr) {
++		if (online_section_nr(section_nr))
++			return section_nr;
 +	}
 +
-+	return 0;
++	return -1UL;
 +}
 +
- static const struct fs_context_operations efivarfs_context_ops = {
- 	.get_tree	= efivarfs_get_tree,
-+	.reconfigure	= efivarfs_reconfigure,
- };
+ /*
+  * These are _only_ used during initialisation, therefore they
+  * can use __initdata ...  They could have names to indicate
+diff --git a/mm/compaction.c b/mm/compaction.c
+index 3398ef3a55fe..3a55fdd20c49 100644
+--- a/mm/compaction.c
++++ b/mm/compaction.c
+@@ -229,6 +229,21 @@ static void reset_cached_positions(struct zone *zone)
+ 				pageblock_start_pfn(zone_end_pfn(zone) - 1);
+ }
  
- static int efivarfs_init_fs_context(struct fs_context *fc)
++static unsigned long skip_hole_pageblock(unsigned long start_pfn)
++{
++	unsigned long next_online_nr;
++	unsigned long start_nr = pfn_to_section_nr(start_pfn);
++
++	if (online_section_nr(start_nr))
++		return -1UL;
++
++	next_online_nr = next_online_section_nr(start_nr);
++	if (next_online_nr != -1UL)
++		return section_nr_to_pfn(next_online_nr);
++
++	return -1UL;
++}
++
+ /*
+  * Compound pages of >= pageblock_order should consistently be skipped until
+  * released. It is always pointless to compact pages of such order (if they are
+@@ -1991,8 +2006,14 @@ static isolate_migrate_t isolate_migratepages(struct compact_control *cc)
+ 
+ 		page = pageblock_pfn_to_page(block_start_pfn,
+ 						block_end_pfn, cc->zone);
+-		if (!page)
++		if (!page) {
++			unsigned long next_pfn;
++
++			next_pfn = skip_hole_pageblock(block_start_pfn);
++			if (next_pfn != -1UL)
++				block_end_pfn = next_pfn;
+ 			continue;
++		}
+ 
+ 		/*
+ 		 * If isolation recently failed, do not retry. Only check the
 -- 
-2.37.2
+2.27.0
 
