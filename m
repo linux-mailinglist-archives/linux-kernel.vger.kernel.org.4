@@ -2,65 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C1F8729EEC
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 17:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0118D729EF6
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 17:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241733AbjFIPno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 11:43:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39268 "EHLO
+        id S241670AbjFIPoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 11:44:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241889AbjFIPn3 (ORCPT
+        with ESMTP id S241984AbjFIPni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 11:43:29 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D603AAF
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 08:43:14 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-2568befcf1dso780356a91.0
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 08:43:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686325393; x=1688917393;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YcNWElfzuHmvHEteOQOaYn8quGWbB0S6G/IrszP+gtw=;
-        b=EZoxjoT+sbbWXFq3ckovd0SjjsIzQf7/P4/ZOBrkvYIMDFJNw3/gcOEBFqgWQMDDo2
-         iynJdjNid1Kpt6yfFROS3fcMtu5y22Sf5FXHCPvPYkWauaXg6jTTof3LEEurXDJOJNmw
-         /FQRBK9niUZla8tVcfBy3xoX5JppoQuPJ8mTSGuo/8znup40G/tVUkpg6X9Q2H3/J6WB
-         DDCVAzycCzL1m5bHECPmK5Posa35NDttHJ4E+KtRE2t5m+HMxkjDpsliYgaspTU/ZKo1
-         FDib+kXivtdTaJSd5yvEB+CRB278/Au/D5a1Z/OClkFTnPZEYphcs9T3l1BAIQrItYlr
-         Nf8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686325393; x=1688917393;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YcNWElfzuHmvHEteOQOaYn8quGWbB0S6G/IrszP+gtw=;
-        b=WQz8ibtyA4B5YIzO5czWoSCxl4oeCRK9C2BQTfPaFGn6GCTfsv0+d0eKLERCCwROix
-         KlOAXQWI4RaMvsRjAnVKBONnUbIoFmLO0MvrlE55oNn3SxYnP32VyLKQyR5mEr5X/fEd
-         WoDMetqoweNRbhH0OVvUUsh+5lTet4pbozE/D3v4epr1E/wOCKo0kv+d8D1+2KYMTsm7
-         W0zx7X+RKc8/iQS86BXnusXaL4u7uZDszFS5Ab/WMvM6uAOID0xSvnTYyUMVPDj52+6M
-         K4jTnssovcgQjbNAzJMODOpgBW4MXK4FajEXQijJ3CRepkQoRTeBVOGNfGdhDNCo8yns
-         HQZg==
-X-Gm-Message-State: AC+VfDyXvE2tKR8aG/1hFgMD+EhExm8actFSs2ziBuTSdRX7lw4b300q
-        5wFhv9NyxkcAI5nbPQGTUwjS0ro0Qdc=
-X-Google-Smtp-Source: ACHHUZ6FMnkvQP5CRedHYI1o4NMqL8GmK1nI3K7sungBEl2uIce9FxWCtql5/aYEW/UqUVGmz2YxUQ==
-X-Received: by 2002:a17:90a:6408:b0:259:ba4a:134d with SMTP id g8-20020a17090a640800b00259ba4a134dmr6404330pjj.20.1686325393515;
-        Fri, 09 Jun 2023 08:43:13 -0700 (PDT)
-Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:1bc3:5645:d3d:e4be])
-        by smtp.gmail.com with ESMTPSA id mu13-20020a17090b388d00b0024e1172c1d3sm3081760pjb.32.2023.06.09.08.43.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 08:43:13 -0700 (PDT)
-From:   Max Filippov <jcmvbkbc@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH] xtensa: report trax and perf counters in cpuinfo
-Date:   Fri,  9 Jun 2023 08:43:06 -0700
-Message-Id: <20230609154306.1911894-1-jcmvbkbc@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Fri, 9 Jun 2023 11:43:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301B13C2A;
+        Fri,  9 Jun 2023 08:43:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ACC2B6589D;
+        Fri,  9 Jun 2023 15:43:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27E7DC433D2;
+        Fri,  9 Jun 2023 15:43:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686325406;
+        bh=k5H0w5Da6WZZ3aTGInSoVeleNc+ktLVZTOXjpBlYsqI=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=ZI3OoO392J6Fyh3Q6JpxeL35MUDlmqeUudg/Mw++d7JKiz5TKNywgXAzcih6P7jv+
+         B5+UuuWrp/uSH3inZ1VFgKYGnBuBtDl7Jl3K1DSS9MT5Gl/vSlN0tvTtFpMbt3Neve
+         y+gs71F0Lyc1zWlb/jgFSWkTMMCl+GFoDgeFMfdSiAVzopHBF++raQVJo7EYflRiiv
+         lLD0nk5gQCduGnOCQbInAzIH8m3v1YLmkQqxiike+o4TeVuXNEnX8o/ICnRifETRPg
+         qDHIoCcL4LYDAG4Dnd+ahn5wP/1M0HZB56ulqoh08oXxRrBz9gNhbsa+9p3+30/NJ4
+         lMSMdySjUDNtQ==
+Date:   Fri, 9 Jun 2023 17:43:21 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Daniel Thompson <daniel.thompson@linaro.org>
+cc:     Jonathan Cameron <jic23@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-input@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] HID: sensor-hub: Allow multi-function sensor devices
+In-Reply-To: <20230528092427.42332-1-daniel.thompson@linaro.org>
+Message-ID: <nycvar.YFH.7.76.2306091742090.5716@cbobk.fhfr.pm>
+References: <20230528092427.42332-1-daniel.thompson@linaro.org>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,69 +58,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add 'trax' to the list of CPU features when xtensa core is configured
-with TRAX.
-Add 'perf' to the list of CPU features when xtensa core is configured
-with perf counters and show the number of configured perf counters.
+On Sun, 28 May 2023, Daniel Thompson wrote:
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
- arch/xtensa/include/asm/core.h |  8 ++++++++
- arch/xtensa/kernel/setup.c     | 12 ++++++++++--
- 2 files changed, 18 insertions(+), 2 deletions(-)
+> The Lenovo Yoga C630 has a combined keyboard and accelerometer that
+> interfaces via i2c-hid. Currently this laptop either has a working
+> keyboard (if CONFIG_HID_SENSOR_HUB is disabled) or a working accelerometer.
+> only works on kernels. Put another way, most distro kernels enable
+> CONFIG_HID_SENSOR_HUB and therefore cannot work on this device since the
+> keyboard doesn't work!
+> 
+> Fix this by providing a richer connect mask during the probe. With this
+> change both keyboard and screen orientation sensors work correctly.
+> 
+> Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
 
-diff --git a/arch/xtensa/include/asm/core.h b/arch/xtensa/include/asm/core.h
-index f856d2bcb9f3..0e1bb6f019d6 100644
---- a/arch/xtensa/include/asm/core.h
-+++ b/arch/xtensa/include/asm/core.h
-@@ -26,6 +26,14 @@
- #define XCHAL_SPANNING_WAY 0
- #endif
- 
-+#ifndef XCHAL_HAVE_TRAX
-+#define XCHAL_HAVE_TRAX 0
-+#endif
-+
-+#ifndef XCHAL_NUM_PERF_COUNTERS
-+#define XCHAL_NUM_PERF_COUNTERS 0
-+#endif
-+
- #if XCHAL_HAVE_WINDOWED
- #if defined(CONFIG_USER_ABI_DEFAULT) || defined(CONFIG_USER_ABI_CALL0_PROBE)
- /* Whether windowed ABI is supported in userspace. */
-diff --git a/arch/xtensa/kernel/setup.c b/arch/xtensa/kernel/setup.c
-index ba20c6800fd4..357e7b0dff09 100644
---- a/arch/xtensa/kernel/setup.c
-+++ b/arch/xtensa/kernel/setup.c
-@@ -587,6 +587,12 @@ c_show(struct seq_file *f, void *slot)
- # if XCHAL_HAVE_OCD
- 		     "ocd "
- # endif
-+#if XCHAL_HAVE_TRAX
-+		     "trax "
-+#endif
-+#if XCHAL_NUM_PERF_COUNTERS
-+		     "perf "
-+#endif
- #endif
- #if XCHAL_HAVE_DENSITY
- 	    	     "density "
-@@ -636,11 +642,13 @@ c_show(struct seq_file *f, void *slot)
- 	seq_printf(f,"physical aregs\t: %d\n"
- 		     "misc regs\t: %d\n"
- 		     "ibreak\t\t: %d\n"
--		     "dbreak\t\t: %d\n",
-+		     "dbreak\t\t: %d\n"
-+		     "perf counters\t: %d\n",
- 		     XCHAL_NUM_AREGS,
- 		     XCHAL_NUM_MISC_REGS,
- 		     XCHAL_NUM_IBREAK,
--		     XCHAL_NUM_DBREAK);
-+		     XCHAL_NUM_DBREAK,
-+		     XCHAL_NUM_PERF_COUNTERS);
- 
- 
- 	/* Interrupt. */
+Srinivas, are you aware of any multi-function device that this patch might 
+break?
+
+Thanks,
+
 -- 
-2.30.2
+Jiri Kosina
+SUSE Labs
 
