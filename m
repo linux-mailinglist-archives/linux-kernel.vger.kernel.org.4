@@ -2,304 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A42172A573
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 23:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0787572A576
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 23:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231167AbjFIVky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 17:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32928 "EHLO
+        id S232024AbjFIVmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 17:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbjFIVkw (ORCPT
+        with ESMTP id S229599AbjFIVm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 17:40:52 -0400
-Received: from cheetah.elm.relay.mailchannels.net (cheetah.elm.relay.mailchannels.net [23.83.212.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBAA03A80
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 14:40:46 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 367B8640F41
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 21:40:46 +0000 (UTC)
-Received: from pdx1-sub0-mail-a291.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id B7A48640F8E
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 21:40:45 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1686346845; a=rsa-sha256;
-        cv=none;
-        b=WV87zZ5V3uGg0duP3DbMsRlRH/znkglc0Y55VeW9zDl/eYV6uyARI3ELmmBUm2ydVWZHiJ
-        N6vN2N668WOff1Gruaqzed8ePinjNXcuba84wsmIBrgl+zy8mWC9Z72wpDzKn8luHOwxeY
-        pl0fs5fnHICmm3hSMPjeMHyON0VvLAgzvNhAoAD1nb5CJgiGiK5tFitIZkl49GXNa9iKRh
-        1Z8MNCs/MxxYctoF8qmaGjVjfOFNlBObB48XrlDF1kvxjRCrTX8qaBaVqRrWkZD0dmfv3y
-        sBbALrtsrv7p+rTo7vn5xkFYOEESMnTPXGHD26oJM+5ag6sSQFXG8lQCeq9w+Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1686346845;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=gltbK8ydRIbwpte3aEqpNTy+/R8ZSH6iUk0sVn8mJqE=;
-        b=ioRWgTwKTA1D4XzUyUYo8Wtm3blEOxOgyrKodUy+G0SQe93pkawrVWtbPZChofDs//lEez
-        PAByg/R+MhazzQzDxktlOE3dBJrua8+2cuQBuLc86JdpxJ98iPqvG5MWXxdzzw0kq3Tujk
-        Jmoffn6hgnVcgYR31awMrvJxZIOkwwA9p0PzW+dFNV5VBHEz+tpINhNtlK5aOpwSLla/ZY
-        UYZewZBpgacMYlStMJvmvX0IYzM9davCKQPcf4D13dOz9DHXYnBOUNGTABWJ+drqK8BvOA
-        1QwWD1p/+2Zg3Ifkls4CfwwnNNKDkZ5zyR3LPoW8nZ/8PqJ/3BC24EJIs1DELA==
-ARC-Authentication-Results: i=1;
-        rspamd-6c69b8658d-szjxp;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MC-Relay: Good
-X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MailChannels-Auth-Id: dreamhost
-X-Unite-Reaction: 7cefe5863ad587f5_1686346846036_564628365
-X-MC-Loop-Signature: 1686346846036:2622549684
-X-MC-Ingress-Time: 1686346846036
-Received: from pdx1-sub0-mail-a291.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.103.24.98 (trex/6.8.1);
-        Fri, 09 Jun 2023 21:40:46 +0000
-Received: from kmjvbox (c-73-93-64-36.hsd1.ca.comcast.net [73.93.64.36])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kjlx@templeofstupid.com)
-        by pdx1-sub0-mail-a291.dreamhost.com (Postfix) with ESMTPSA id 4QdDz13W8QzL5
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 14:40:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
-        s=dreamhost; t=1686346845;
-        bh=gltbK8ydRIbwpte3aEqpNTy+/R8ZSH6iUk0sVn8mJqE=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=EJubkK/7eYxIDJedEoHDamhxA0JtMfWmWJSOR1caFsUlwxNxUIiG+K2L7hYwZuMi7
-         2DTDRlFhWgQCjJP82uMwAVinQosKVcfdqGHBlcnIzIxzy/wlfpqDODq3TAUFOVmxaT
-         sC17YdGwKfH85qB9QOTvFNylo3UPuR+3GayDI7tY=
-Received: from johansen (uid 1000)
-        (envelope-from kjlx@templeofstupid.com)
-        id e00d9
-        by kmjvbox (DragonFly Mail Agent v0.12);
-        Fri, 09 Jun 2023 14:40:44 -0700
-Date:   Fri, 9 Jun 2023 14:40:44 -0700
-From:   Krister Johansen <kjlx@templeofstupid.com>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf v4 2/2] selftests/bpf: add a test for subprogram extables
-Message-ID: <6a8b4285d119652f78993af2955a213e7af58ba0.1686345886.git.kjlx@templeofstupid.com>
-References: <cover.1686345886.git.kjlx@templeofstupid.com>
+        Fri, 9 Jun 2023 17:42:28 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2076.outbound.protection.outlook.com [40.107.93.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36BDE210E;
+        Fri,  9 Jun 2023 14:42:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CRlXdZutnIgg5yeJasPfvf+pibElhj+m7d2olXKCs7p1ixFOSltaq5uhqWyZMpfOCtg5Vau+HhNb8ee4FF3iHxKUyg2TfLczDWLUFnhj3Kb4xHk3Y48YpZ27ng5HpoaoibZt2ozTWi+6Rcl1YMl6z19GDCAPqEuXWmNtiMrcFz1gbqXqZZaZAFxBsqWl86dUKqE7IomV7HYkRQNT6i7RrO3g8CTMdYXrsBDmLz9PlD83xUSkO6IdCJiZKJ26NodhXWSJSuIdCw2ROhrYreF4B46+yTMNTmTv30os7C2aqzaW1pKFLTxx+etb91ctqM8k8cH3yQeCbkTCUXWQPOUPbw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1mZ/lHDNYu1dq7Yp/J9HZmjygw4cWS5U+hgXxzhqA7Q=;
+ b=cDP3j8DRR63b6RobgduY2XfB5mjx2RT1bej0jFEXSmuSeJlZy25Z6bEhQNzSwp+G3c61SPGLcMl5oivE2HW1CTOjx0LLyff19SXxVoFpB6p3Pd4UT/7FnvN7s999IMrTaDBO6G/tz+4osowLa6qsng5GOVDMHYg0TIpc9KJFNAgHuZqG5eoyvyYNLlgu2ZXVrPuczfGGNHpMBcGXwFOkpEpomWKZ15s8W657P6fjXzhmmL3zkP2HUWTgBYjkIVTAzM4cmIZVyr+LtLMD1P+JVq+NqbvgiimaMu3tkeq+WHV0uAm7bXvJW1xpJMdEIRkgzsdwsemDEosmbJF60QmQJw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1mZ/lHDNYu1dq7Yp/J9HZmjygw4cWS5U+hgXxzhqA7Q=;
+ b=hcz78jLirgrNxanrX730fOH6CXSX6ChSI5xWlPr4b8yydDXotAp1DfAyvvCl2EaEtY7qOG9eJRSGf4kBmKoaei/d15HrhHobd2eLmkTvLWyXd74kTZa0nA0g5jJIBzNRqQFhEj7ycFNkQflOG3cs07jpubhSpF1zPd6nv7XNOqQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5311.namprd12.prod.outlook.com (2603:10b6:5:39f::7) by
+ BY5PR12MB4162.namprd12.prod.outlook.com (2603:10b6:a03:201::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.42; Fri, 9 Jun
+ 2023 21:42:24 +0000
+Received: from DM4PR12MB5311.namprd12.prod.outlook.com
+ ([fe80::1a81:77c7:9126:e215]) by DM4PR12MB5311.namprd12.prod.outlook.com
+ ([fe80::1a81:77c7:9126:e215%4]) with mapi id 15.20.6455.037; Fri, 9 Jun 2023
+ 21:42:24 +0000
+Message-ID: <30ff8a49-d3ab-63b7-1c9d-fbbea7a4b565@amd.com>
+Date:   Fri, 9 Jun 2023 17:42:21 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] cpufreq: amd-pstate: Set default governor to schedutil
+Content-Language: en-US
+To:     Mario Limonciello <mario.limonciello@amd.com>, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        perry.yuan@amd.com, Ray.Huang@amd.com, Wyes.Karny@amd.com,
+        gautham.shenoy@amd.com
+References: <20230608095358.30548-1-mario.limonciello@amd.com>
+From:   Leo Li <sunpeng.li@amd.com>
+In-Reply-To: <20230608095358.30548-1-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQBPR01CA0120.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:1::20) To DM4PR12MB5311.namprd12.prod.outlook.com
+ (2603:10b6:5:39f::7)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1686345886.git.kjlx@templeofstupid.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5311:EE_|BY5PR12MB4162:EE_
+X-MS-Office365-Filtering-Correlation-Id: d537376a-40a5-473b-5150-08db6932695b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NWoozBii1mVruld8p7xz6WY7bVJPr7uMbf4zSv51v3B1lmDJDs2NCF28AtTurTjR6nvHDlhebHlJZIC3pIv5rG4ehB1vWRPvWp5ekR0QC1/RBBrm5C4+M5+3l/adDK5gaP13p7DbmdKl8y/OCZjn1ZuMYGnoZz/jtlr6W4zpgxk+iInO2o21ymf7XlWbE2uJsicAlhD1Vmkv5UWjIQ9nuhxF2mqPErK2zWESN0Vb0U4auQ/RemXfkBKWUT47Ql4rGi0io1Hl8cjYMEKhtdmNbeC32sodt/r0bQMdKIrXz2mleCQHaTq2O5Cy5n8/e3+DUACyDKNXnabyApyA7HL+nfnQ69+8o3zV6SZdvNDT/R9N4NQZQr3lY8YRywUyPWxvx+9JDQqbkts1G/4lCmKoW6bXHHN+Mk1F2b8igbQNQA2Dg1lbjEquzA+c8jLfRk37YkIiNeSuHDZbbVHThQpVNIIZy03MZaq961QGCj5Z1FPpt7wwdEaZspb0nsS6maa8RdZOekEXFvliQYFryT0HMwocBNEZeXKIP9TomovS81psdC1U+tjc8vOcAImnZzGpy5wSi5mjXg9ObOrQan0dpPFMMHgSyVmWz08wI00mvhakOgIHbTwglRaIMVvw/Q5JssiD+AYS0yZaIkpiMe3JBw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5311.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(396003)(366004)(346002)(136003)(451199021)(31686004)(66556008)(66476007)(66946007)(8676002)(5660300002)(8936002)(36756003)(4326008)(6666004)(478600001)(41300700001)(316002)(6486002)(38100700002)(6512007)(53546011)(26005)(6506007)(186003)(2616005)(83380400001)(86362001)(31696002)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?b1ZXdkNNVmp6Zi9FbFlTdkhVOURzR3AyNFJmN2ZEK3l2UWNSVUl0ZGw2OUow?=
+ =?utf-8?B?SnhRNEtuYWFnYzBKSktZK0NUUWhBd25renplMHhWSXk5RjQrQWJNcUVCSHZj?=
+ =?utf-8?B?SnRGSzAvcVJyNTdoNGo1VDNicWxlL2MzQjB1OWJiOE1GdUJreFlnUUxkRVhx?=
+ =?utf-8?B?TDY4MDBIaTBkUlp6RWNyVG4rYklvNytxMjZQc0hKWDFhYWxOT3Yxb2FPZG5D?=
+ =?utf-8?B?dnhKZVplenRhbGxFcVRMYThqZ0ZHMHJRcXc0RExvYUs4TzZYU0ZkRmJQdzBJ?=
+ =?utf-8?B?QWhsbGtWWTlmY1lkbWpycThSNU1iSXcyN0dtYzR0WFNGZDQrUkhjWjJoWll4?=
+ =?utf-8?B?cnF4Ymd5SXFPa21lU0FFdWNFSnkxMjF6SEU3ajdrZnRYU1dPaVJNeHZEMjlj?=
+ =?utf-8?B?NWsxazI0M2ZvVzFHMjI5M1cwZnV5TFJWY3FwM1E2Um5vUngrQ0xOdWhtZ2hs?=
+ =?utf-8?B?c0gxbkhIVlZLQnBTYjhEU3poOUd5KzJHVCtxUnlUdkt3a3o2NjNOVm90eEQw?=
+ =?utf-8?B?Z0NpRDZ6dWdiNzViZGxCZlVOME5tWTVJWHNOQkdjOU9HR3lsTU9jWUxRanF2?=
+ =?utf-8?B?a1BtOEgzcGF3cE1MK0xKVnp0TVBTMy9BVlp4TWh5R1JneWYxSEFORVNUVWY2?=
+ =?utf-8?B?UThMMkxYb1JVMUdRSWtFL1lCb0Y4V0kwTkJzelIwM3JHcGxKQ2NJNHNOVlgy?=
+ =?utf-8?B?MUdrMmtSSUxyank3UFpOdnlGeVg4MmVDa3dmcVMzSjhFamZPZTFuZFJwV09N?=
+ =?utf-8?B?Q3lBaU5OWmZMMDNSOVpSOXhvOWsvamJReG9Ec3FvV3QxSi9VMXFJcitRTXRN?=
+ =?utf-8?B?dFdlb1lBVDFldGpUZWxFY043NE9NL0lwOFEydE9Za2dsdGM1MEtBQ3h1NUVv?=
+ =?utf-8?B?dHlXQzdOMHAxc0RiY2Vkd0NEaGErNG9uc1FyOVJLTm4veFJmTWVtODd3NDB6?=
+ =?utf-8?B?QmtzTlkvc0M4T3FLS1dhYWVRaTRFY05TVnBGQW8zaFhodHNsbVFiOVBydWl1?=
+ =?utf-8?B?am95TXZWL0NNbHlzZkpTdk5WbEtHRGpQbWlHM291T0FXRkVuUXUrdFkzRjN2?=
+ =?utf-8?B?elh5cERGUzJlbGo3S1R1dlhJNzF4NWFzS1FaR1hSbU1qakpjejFoRnZZQzNi?=
+ =?utf-8?B?Rkdjc0ZGakdHMG1rcGdZWDZzWjBkWWdJUkU4NkxaajEwOTdhYm5UT2REUGJH?=
+ =?utf-8?B?ZDlFRVNrMkNVb0dkSWhsZ3E3VmZldVVLQWNSdjFodVE0SXBiazRWRC9IQUJ4?=
+ =?utf-8?B?aWx1Qlk1SkUyd2J3bXhLOGtiMkRQa1ErR0pGTS9GWXZFaC9yd3lMUklIeUtP?=
+ =?utf-8?B?WGdWSXc0ZlA5bFR1K0pRNTdPdGJpd3ZiallJWmdGTWV3QldHTVkxOXpxWUxT?=
+ =?utf-8?B?MEkwc3FZZVlMV0JBZUZoOSs1QU1IRlNIY3VUc05UOXpqd0lEMWYvM1FvZ0kw?=
+ =?utf-8?B?NkFOeVpZSDNWQXVMb1ZGbHBZRWVtaS8vUUNXSjZvYmxFNGorTTFZQlhtcHV2?=
+ =?utf-8?B?ZU5BbXl3cUh1TVlBWUJyU21LNTd5UFVRRlNISENkb3ZvMUV5RmNaMjBpdURr?=
+ =?utf-8?B?ZjBkQkE1djVLdnUwTzN3ZmRGMzcwMkRBbCtxZG5Jd2FyYXdxOGgvdEkzRUhJ?=
+ =?utf-8?B?TGVuNmhwWlpYZ25XVW95YUJmN0FBOXdreTdrVmRxOEZiTk9YZGpqd1pacUZY?=
+ =?utf-8?B?WGV5RHp1dTRmUk05eUJMMWNvMDNtL3JINkdFL2MzcERTUWlmOC9mMUFJMEor?=
+ =?utf-8?B?Q0Jxbzd1Ty9IUmtBbkw5ZmJiUmpyTzJ5MzBaUzlSR205M2J3dnFqcVBzSmJy?=
+ =?utf-8?B?R21mQVpSaVMwdllXT2ZqK2VPSkNlMmdIZWhaWXVoQWlGRWloNmdHS3U3WEFy?=
+ =?utf-8?B?MUpNbEtTZXZLVkFtN0xSY3F6cDFMcWZPUTNqT0lXMnEzUkkrOWdyV3BKNHF2?=
+ =?utf-8?B?YktiMHhQaDB1MjMvVStuaGRpdFB2akFkd01PUnBLZjFyMEFVUjlteFBWQXJH?=
+ =?utf-8?B?T2VVZHludStjd1B5d1BhMytoaW83eHp6YzcxWlpMUFI1dzVwdWw3L1FlM09O?=
+ =?utf-8?B?SDk3YWY4c1I5MDJKWXdWMWFTM2tmSXdGV09NUWJla0xLZmhya2RGWWJYUWF0?=
+ =?utf-8?Q?EW8fmTAwpF2ubXHJuN4YiYUBf?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d537376a-40a5-473b-5150-08db6932695b
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5311.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 21:42:24.3269
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UokAsCMXmpRcF/z22NK6ahIVyHOWwseVIUORn1LDZVzOzXiAZXaO+mPd+kQXydKA
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4162
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In certain situations a program with subprograms may have a NULL
-extable entry.  This should not happen, and when it does, it turns a
-single trap into multiple.  Add a test case for further debugging and to
-prevent regressions.
 
-The test-case contains three essentially identical versions of the same
-test because just one program may not be sufficient to trigger the oops.
-This is due to the fact that the items are stored in a binary tree and
-have identical values so it's possible to sometimes find the ksym with
-the extable.  With 3 copies, this has been reliable on this author's
-test systems.
 
-When triggered out of this test case, the oops looks like this:
+On 6/8/23 05:53, Mario Limonciello wrote:
+> The Kconfig currently defaults the governor to schedutil on x86_64
+> only when intel-pstate and SMP have been selected.
+> 
+> If the kernel is built only with amd-pstate, the default governor
+> should also be schedutil.
+> 
+> Cc: Sun Peng (Leo) Li <sunpeng.li@amd.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 
-   BUG: kernel NULL pointer dereference, address: 000000000000000c
-   #PF: supervisor read access in kernel mode
-   #PF: error_code(0x0000) - not-present page
-   PGD 0 P4D 0
-   Oops: 0000 [#1] PREEMPT SMP NOPTI
-   CPU: 0 PID: 1132 Comm: test_progs Tainted: G           OE      6.4.0-rc3+ #2
-   RIP: 0010:cmp_ex_search+0xb/0x30
-   Code: cc cc cc cc e8 36 cb 03 00 66 0f 1f 44 00 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 55 48 89 e5 48 8b 07 <48> 63 0e 48 01 f1 31 d2 48 39 c8 19 d2 48 39 c8 b8 01 00 00 00 0f
-   RSP: 0018:ffffb30c4291f998 EFLAGS: 00010006
-   RAX: ffffffffc00b49da RBX: 0000000000000002 RCX: 000000000000000c
-   RDX: 0000000000000002 RSI: 000000000000000c RDI: ffffb30c4291f9e8
-   RBP: ffffb30c4291f998 R08: ffffffffab1a42d0 R09: 0000000000000001
-   R10: 0000000000000000 R11: ffffffffab1a42d0 R12: ffffb30c4291f9e8
-   R13: 000000000000000c R14: 000000000000000c R15: 0000000000000000
-   FS:  00007fb5d9e044c0(0000) GS:ffff92e95ee00000(0000) knlGS:0000000000000000
-   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-   CR2: 000000000000000c CR3: 000000010c3a2005 CR4: 00000000007706f0
-   DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-   DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-   PKRU: 55555554
-   Call Trace:
-    <TASK>
-    bsearch+0x41/0x90
-    ? __pfx_cmp_ex_search+0x10/0x10
-    ? bpf_prog_45a7907e7114d0ff_handle_fexit_ret_subprogs3+0x2a/0x6c
-    search_extable+0x3b/0x60
-    ? bpf_prog_45a7907e7114d0ff_handle_fexit_ret_subprogs3+0x2a/0x6c
-    search_bpf_extables+0x10d/0x190
-    ? bpf_prog_45a7907e7114d0ff_handle_fexit_ret_subprogs3+0x2a/0x6c
-    search_exception_tables+0x5d/0x70
-    fixup_exception+0x3f/0x5b0
-    ? look_up_lock_class+0x61/0x110
-    ? __lock_acquire+0x6b8/0x3560
-    ? __lock_acquire+0x6b8/0x3560
-    ? __lock_acquire+0x6b8/0x3560
-    kernelmode_fixup_or_oops+0x46/0x110
-    __bad_area_nosemaphore+0x68/0x2b0
-    ? __lock_acquire+0x6b8/0x3560
-    bad_area_nosemaphore+0x16/0x20
-    do_kern_addr_fault+0x81/0xa0
-    exc_page_fault+0xd6/0x210
-    asm_exc_page_fault+0x2b/0x30
-   RIP: 0010:bpf_prog_45a7907e7114d0ff_handle_fexit_ret_subprogs3+0x2a/0x6c
-   Code: f3 0f 1e fa 0f 1f 44 00 00 66 90 55 48 89 e5 f3 0f 1e fa 48 8b 7f 08 49 bb 00 00 00 00 00 80 00 00 4c 39 df 73 04 31 f6 eb 04 <48> 8b 77 00 49 bb 00 00 00 00 00 80 00 00 48 81 c7 7c 00 00 00 4c
-   RSP: 0018:ffffb30c4291fcb8 EFLAGS: 00010282
-   RAX: 0000000000000001 RBX: 0000000000000001 RCX: 0000000000000000
-   RDX: 00000000cddf1af1 RSI: 000000005315a00d RDI: ffffffffffffffea
-   RBP: ffffb30c4291fcb8 R08: ffff92e644bf38a8 R09: 0000000000000000
-   R10: 0000000000000000 R11: 0000800000000000 R12: ffff92e663652690
-   R13: 00000000000001c8 R14: 00000000000001c8 R15: 0000000000000003
-    bpf_trampoline_251255721842_2+0x63/0x1000
-    bpf_testmod_return_ptr+0x9/0xb0 [bpf_testmod]
-    ? bpf_testmod_test_read+0x43/0x2d0 [bpf_testmod]
-    sysfs_kf_bin_read+0x60/0x90
-    kernfs_fop_read_iter+0x143/0x250
-    vfs_read+0x240/0x2a0
-    ksys_read+0x70/0xe0
-    __x64_sys_read+0x1f/0x30
-    do_syscall_64+0x68/0xa0
-    ? syscall_exit_to_user_mode+0x77/0x1f0
-    ? do_syscall_64+0x77/0xa0
-    ? irqentry_exit+0x35/0xa0
-    ? sysvec_apic_timer_interrupt+0x4d/0x90
-    entry_SYSCALL_64_after_hwframe+0x72/0xdc
-   RIP: 0033:0x7fb5da00a392
-   Code: ac 00 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb be 0f 1f 80 00 00 00 00 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75 10 0f 05 <48> 3d 00 f0 ff ff 77 56 c3 0f 1f 44 00 00 48 83 ec 28 48 89 54 24
-   RSP: 002b:00007ffc5b3cab68 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-   RAX: ffffffffffffffda RBX: 000055bee7b8b100 RCX: 00007fb5da00a392
-   RDX: 00000000000001c8 RSI: 0000000000000000 RDI: 0000000000000009
-   RBP: 00007ffc5b3caba0 R08: 0000000000000000 R09: 0000000000000037
-   R10: 000055bee7b8c2a7 R11: 0000000000000246 R12: 000055bee78f1f60
-   R13: 00007ffc5b3cae90 R14: 0000000000000000 R15: 0000000000000000
-    </TASK>
-   Modules linked in: bpf_testmod(OE) nls_iso8859_1 dm_multipath scsi_dh_rdac scsi_dh_emc scsi_dh_alua intel_rapl_msr intel_rapl_common intel_uncore_frequency_common ppdev nfit crct10dif_pclmul crc32_pclmul psmouse ghash_clmulni_intel sha512_ssse3 aesni_intel parport_pc crypto_simd cryptd input_leds parport rapl ena i2c_piix4 mac_hid serio_raw ramoops reed_solomon pstore_blk drm pstore_zone efi_pstore autofs4 [last unloaded: bpf_testmod(OE)]
-   CR2: 000000000000000c
+Reviewed-by: Leo Li <sunpeng.li@amd.com>
 
-Though there may be some variation, depending on which suprogram
-triggers the bug.
+Thanks!
 
-Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
----
- .../bpf/prog_tests/subprogs_extable.c         | 29 +++++++++++
- .../bpf/progs/test_subprogs_extable.c         | 51 +++++++++++++++++++
- 2 files changed, 80 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c b/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
-new file mode 100644
-index 000000000000..3afd9f775f68
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
-@@ -0,0 +1,29 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+#include "test_subprogs_extable.skel.h"
-+
-+void test_subprogs_extable(void)
-+{
-+	const int read_sz = 456;
-+	struct test_subprogs_extable *skel;
-+	int err;
-+
-+	skel = test_subprogs_extable__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
-+		return;
-+
-+	err = test_subprogs_extable__attach(skel);
-+	if (!ASSERT_OK(err, "skel_attach"))
-+		goto cleanup;
-+
-+	/* trigger tracepoint */
-+	ASSERT_OK(trigger_module_test_read(read_sz), "trigger_read");
-+
-+	ASSERT_NEQ(skel->bss->triggered, 0, "verify at least one program ran");
-+
-+	test_subprogs_extable__detach(skel);
-+
-+cleanup:
-+	test_subprogs_extable__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_subprogs_extable.c b/tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-new file mode 100644
-index 000000000000..e2a21fbd4e44
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-@@ -0,0 +1,51 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 8);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} test_array SEC(".maps");
-+
-+unsigned int triggered;
-+
-+static __u64 test_cb(struct bpf_map *map, __u32 *key, __u64 *val, void *data)
-+{
-+	return 1;
-+}
-+
-+SEC("fexit/bpf_testmod_return_ptr")
-+int BPF_PROG(handle_fexit_ret_subprogs, int arg, struct file *ret)
-+{
-+	*(volatile long *)ret;
-+	*(volatile int *)&ret->f_mode;
-+	bpf_for_each_map_elem(&test_array, test_cb, NULL, 0);
-+	triggered++;
-+	return 0;
-+}
-+
-+SEC("fexit/bpf_testmod_return_ptr")
-+int BPF_PROG(handle_fexit_ret_subprogs2, int arg, struct file *ret)
-+{
-+	*(volatile long *)ret;
-+	*(volatile int *)&ret->f_mode;
-+	bpf_for_each_map_elem(&test_array, test_cb, NULL, 0);
-+	triggered++;
-+	return 0;
-+}
-+
-+SEC("fexit/bpf_testmod_return_ptr")
-+int BPF_PROG(handle_fexit_ret_subprogs3, int arg, struct file *ret)
-+{
-+	*(volatile long *)ret;
-+	*(volatile int *)&ret->f_mode;
-+	bpf_for_each_map_elem(&test_array, test_cb, NULL, 0);
-+	triggered++;
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.25.1
-
+> ---
+>   drivers/cpufreq/Kconfig | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig
+> index 2c839bd2b051..a1c51abddbc5 100644
+> --- a/drivers/cpufreq/Kconfig
+> +++ b/drivers/cpufreq/Kconfig
+> @@ -38,7 +38,7 @@ choice
+>   	prompt "Default CPUFreq governor"
+>   	default CPU_FREQ_DEFAULT_GOV_USERSPACE if ARM_SA1110_CPUFREQ
+>   	default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if ARM64 || ARM
+> -	default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if X86_INTEL_PSTATE && SMP
+> +	default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if (X86_INTEL_PSTATE || X86_AMD_PSTATE) && SMP
+>   	default CPU_FREQ_DEFAULT_GOV_PERFORMANCE
+>   	help
+>   	  This option sets which CPUFreq governor shall be loaded at
