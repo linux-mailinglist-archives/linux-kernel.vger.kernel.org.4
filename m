@@ -2,243 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B834728FCB
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 08:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E03728FD3
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 08:21:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237668AbjFIGUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 02:20:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41226 "EHLO
+        id S237118AbjFIGVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 02:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237118AbjFIGUJ (ORCPT
+        with ESMTP id S230184AbjFIGVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 02:20:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8101F30D7;
-        Thu,  8 Jun 2023 23:20:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D434B652FC;
-        Fri,  9 Jun 2023 06:20:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF383C433D2;
-        Fri,  9 Jun 2023 06:20:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686291606;
-        bh=OyHEyL0l02vl6b3PdzfyNfv96SWGjIxdDxN1JhqYKMo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=js4DiRFHSuOLfoYopN7jltodknsqQOVpGVonhJ/MzQS4UP2h3ltg4YtWHTVZDjLVo
-         +vNgdHNVgQO0LsKwvbD0B+IOWX1T1hgtY6ptCBSyX8tnJ8lgKR+qqyPl8B7Qfc8y+W
-         sslAkHph568fPQZX+HJXicHLBP2FuQTx4SpN5wAubFtIaJunlBckMEjkmlh5Mguc1F
-         MRY2/I3m4iK7wfYPVfxQiQvrnqTCHJNup7+Z75Rif2/KoqUkQXy6YBeHn/8M89doW7
-         5YBh1xq5bbuihpZKjDADxtCx7I5ljTIK9c9m5y2XkP+Ms8Ej7IU5/s0XzpN/3MSSlz
-         fP/yjYizHC5ow==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 09 Jun 2023 09:20:01 +0300
-Message-Id: <CT7WHF8KFNTD.22QJUBTRFIVLS@suppilovahvero>
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Chris Packham" <Chris.Packham@alliedtelesis.co.nz>,
-        "Lino Sanfilippo" <l.sanfilippo@kunbus.com>,
-        "Sasha Levin" <sashal@kernel.org>,
-        "Peter Huewe" <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>
-Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: New kernel warning after updating from LTS 5.15.110 to 5.15.112
- (and 5.15.113)
-X-Mailer: aerc 0.14.0
-References: <fe6f7aa0-56c2-3729-ce8c-0f2d943b33f4@alliedtelesis.co.nz>
- <7bb470fa70ff5944b7b9b82ac17d759819bccdf2.camel@kernel.org>
- <0bdf509f-f71a-e3b2-b9fb-4a726021219b@alliedtelesis.co.nz>
- <CT6JW4528UBU.1K3QJTVUN25OR@suppilovahvero>
- <CT7DAF9JJ4KD.37K8GDWP7GKG1@suppilovahvero>
- <1a168fef-8d9f-a700-2472-a60da508aeac@alliedtelesis.co.nz>
-In-Reply-To: <1a168fef-8d9f-a700-2472-a60da508aeac@alliedtelesis.co.nz>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 9 Jun 2023 02:21:07 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62641FE6
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 23:21:03 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-5149bdb59daso2120512a12.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 23:21:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google; t=1686291662; x=1688883662;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=s0KsiO4chph33S79F9ENBTiIdHIAq8Drk63634LLZQs=;
+        b=kbV4G7FpeyKX8vqSKQVxCHgnfKl+l276t269BAHAwJ23WxJ7nO/Oasy+9J5YumKyca
+         T0uhyyudNLhM+w7pc9FA736CWqmxTkyTSsXqXOdfoQrYeO1IEHkoZSz4uKQsYCPrsTwM
+         ULacDwUYyqRuKtDEU6r//KnkwN3AFNWxWIfls=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686291662; x=1688883662;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=s0KsiO4chph33S79F9ENBTiIdHIAq8Drk63634LLZQs=;
+        b=i78FQOOHf0wE1eL1ZnxwtJ65Etyxjofp3oEeIbZr2oaALKBKh5YCGBjW52C8l5IGC9
+         oK6txk9i1nVQjX7QMxMUTXJS/0GsnlhVeSluRTcdGyS5PrgClg26hJ1cHDP5EHAsBEY9
+         t9eq+/f5O1UF5HgU7qiDZCFqYltPBjo/lK4optWb+G4qUApBNg1EYD8t0r4ftZUt5zqS
+         bpse0kKPfnHkLd6NXmjR+NT4zi9d09gi1F6zByg4jb93flWt/RhfqkUoLedSWwF+DuR9
+         aCepyHzwq/pwYWGRQbYzmaX9n6c9JAxQe2qUJhkH/M2UDnrxRsWr6EGUN1u7+pjLHN30
+         N4jw==
+X-Gm-Message-State: AC+VfDy5inc8EVkEzxo+b0bqoWrpirFmPF9/F/X4rgzRAbFw/oT08LuX
+        WScfPdiYHFZxSsIs9MUhUMxXOS9f4HzHFbXntJn14g==
+X-Google-Smtp-Source: ACHHUZ6l4dLtGlhnWIwTWUWwtNlYtOyR1yl1ptA5SoQD+GUUgf1U2scpLgKXakdx81uLNojiuXQ7iA==
+X-Received: by 2002:aa7:c44a:0:b0:514:bc92:8e1d with SMTP id n10-20020aa7c44a000000b00514bc928e1dmr392209edr.14.1686291661889;
+        Thu, 08 Jun 2023 23:21:01 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-95-248-31-20.retail.telecomitalia.it. [95.248.31.20])
+        by smtp.gmail.com with ESMTPSA id m7-20020aa7d347000000b005149461b1e0sm1380058edr.25.2023.06.08.23.20.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 23:21:01 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: [PATCH v3 0/4] Add display support on the stm32f746-disco board
+Date:   Fri,  9 Jun 2023 08:20:46 +0200
+Message-Id: <20230609062050.2107143-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu Jun 8, 2023 at 11:39 PM EEST, Chris Packham wrote:
-> Hi Jarkko,
->
-> On 9/06/23 03:17, Jarkko Sakkinen wrote:
-> > On Wed Jun 7, 2023 at 7:15 PM EEST, Jarkko Sakkinen wrote:
-> >> On Wed Jun 7, 2023 at 12:04 AM EEST, Chris Packham wrote:
-> >>> Hi Jarkko,
-> >>>
-> >>> On 6/06/23 21:39, Jarkko Sakkinen wrote:
-> >>>> On Sun, 2023-05-28 at 23:42 +0000, Chris Packham wrote:
-> >>>>> Hi,
-> >>>>>
-> >>>>> We have an embedded product with an Infineon SLM9670 TPM. After upd=
-ating
-> >>>>> to a newer LTS kernel version we started seeing the following warni=
-ng at
-> >>>>> boot.
-> >>>>>
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.741025] ------------[ cut here ]------------
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.749894] irq 38 handler tis_int_handler+0x0/0x=
-154 enabled interrupts
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.756555] WARNING: CPU: 0 PID: 0 at kernel/irq/=
-handle.c:159
-> >>>>> __handle_irq_event_percpu+0xf4/0x180
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.765557] Modules linked in:
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.768626] CPU: 0 PID: 0 Comm: swapper/0 Not tai=
-nted 5.15.113 #1
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.774747] Hardware name: Allied Telesis x250-18=
-XS (DT)
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.780080] pstate: 60000005 (nZCv daif -PAN -UAO=
- -TCO -DIT -SSBS
-> >>>>> BTYPE=3D--)
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.787072] pc : __handle_irq_event_percpu+0xf4/0=
-x180
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.792146] lr : __handle_irq_event_percpu+0xf4/0=
-x180
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.797220] sp : ffff800008003e40
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.800547] x29: ffff800008003e40 x28: ffff800009=
-3951c0 x27:
-> >>>>> ffff80000902a9b8
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.807716] x26: ffff800008fe8d28 x25: ffff800009=
-4a62bd x24:
-> >>>>> ffff000001b92400
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.814885] x23: 0000000000000026 x22: ffff800008=
-003ec4 x21:
-> >>>>> 0000000000000000
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.822053] x20: 0000000000000001 x19: ffff000002=
-381200 x18:
-> >>>>> ffffffffffffffff
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.829222] x17: ffff800076962000 x16: ffff800008=
-000000 x15:
-> >>>>> ffff800088003b57
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.836390] x14: 0000000000000000 x13: ffff800009=
-3a5078 x12:
-> >>>>> 000000000000035d
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.843558] x11: 000000000000011f x10: ffff800009=
-3a5078 x9 :
-> >>>>> ffff8000093a5078
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.850727] x8 : 00000000ffffefff x7 : ffff800009=
-3fd078 x6 :
-> >>>>> ffff8000093fd078
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.857895] x5 : 000000000000bff4 x4 : 0000000000=
-000000 x3 :
-> >>>>> 0000000000000000
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.865062] x2 : 0000000000000000 x1 : 0000000000=
-000000 x0 :
-> >>>>> ffff8000093951c0
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.872230] Call trace:
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.874686]=C2=A0 __handle_irq_event_percpu+0xf4/=
-0x180
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.879411]=C2=A0 handle_irq_event+0x64/0xec
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.883264]=C2=A0 handle_level_irq+0xc0/0x1b0
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.887202]=C2=A0 generic_handle_irq+0x30/0x50
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.891229]=C2=A0 mvebu_gpio_irq_handler+0x11c/0x=
-2a0
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.895780]=C2=A0 handle_domain_irq+0x60/0x90
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.899720]=C2=A0 gic_handle_irq+0x4c/0xd0
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.903398]=C2=A0 call_on_irq_stack+0x20/0x4c
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.907338]=C2=A0 do_interrupt_handler+0x54/0x60
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.911538]=C2=A0 el1_interrupt+0x30/0x80
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.915130]=C2=A0 el1h_64_irq_handler+0x18/0x24
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.919244]=C2=A0 el1h_64_irq+0x78/0x7c
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.922659]=C2=A0 arch_cpu_idle+0x18/0x2c
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.926249]=C2=A0 do_idle+0xc4/0x150
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.929404]=C2=A0 cpu_startup_entry+0x28/0x60
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.933343]=C2=A0 rest_init+0xe4/0xf4
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.936584]=C2=A0 arch_call_rest_init+0x10/0x1c
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.940699]=C2=A0 start_kernel+0x600/0x640
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.944375]=C2=A0 __primary_switched+0xbc/0xc4
-> >>>>> [=C2=A0=C2=A0=C2=A0 4.948402] ---[ end trace 940193047b35b311 ]---
-> >>>>>
-> >>>>> Initially I dismissed this as a warning that would probably be clea=
-ned
-> >>>>> up when we did more work on the TPM support for our product but we =
-also
-> >>>>> seem to be getting some new i2c issues and possibly a kernel stack
-> >>>>> corruption that we've conflated with this TPM warning.
-> >>>> Hi, sorry for late response. I've been moving my (home) office to
-> >>>> a different location during last couple of weeks, and email has been
-> >>>> piling up.
-> >>>>
-> >>>> What does dmidecode give you?
-> >>>>
-> >>>> More specific, I'm interested on DMI type 43:
-> >>>>
-> >>>> $ sudo dmidecode -t 43
-> >>>> # dmidecode 3.4
-> >>>> Getting SMBIOS data from sysfs.
-> >>>> SMBIOS 3.4.0 present.
-> >>>>
-> >>>> Handle 0x004D, DMI type 43, 31 bytes
-> >>>> TPM Device
-> >>>> 	Vendor ID: INTC
-> >>>> 	Specification Version: 2.0
-> >>>> 	Firmware Revision: 600.18
-> >>>> 	Description: INTEL
-> >>>> 	Characteristics:
-> >>>> 		Family configurable via platform software support
-> >>>> 	OEM-specific Information: 0x00000000
-> >>>>
-> >>>> BR, Jarkko
-> >>> This is an embedded ARM64 (Marvell CN9130 SoC) device so no BIOS. The
-> >>> relevant snippet from the device tree is
-> >>>
-> >>>   =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tpm@1 {
-> >>>   =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 compatible =3D "infineon,slb9670";
-> >>>   =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 reg =3D <1>; /* Chip select 1 */
-> >>>   =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 interrupt-parent =3D <&cp0_gpio2>;
-> >>>   =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 interrupts =3D <30 IRQ_TYPE_LEVEL_LOW>;
-> >>>   =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 spi-max-frequency =3D <31250000>;
-> >>>   =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
-> >>>
-> >>> and I can tell you that the specific TPM chip is an Infinieon
-> >>> SLM9670AQ20FW1311XTMA1
-> >> OK, you know what I own that chip in the form of LetsTrustTPM
-> >> product.
-> >>
-> >> I have not used it a lot because of lack of time but I could try
-> >> to reproduce the bug with that and RPi 3B, or at least see what
-> >> happens with different hardware platform with the same TPM chip.
-> > I'm not device tree expert but with my limited knowledge, I guess kwe
-> > could add a quirk that uses of_machine_is_compatible(), to disable
-> > IRQ's, i.e. base the policy on specific boards rather than specific
-> > chips: [*]
-> >
-> > 	if (of_machine_is_compatible("marvell,cn9130")) {
-> > 		dev_notice(dev, "disable interrupts");
-> > 		interrupts =3D 0;=09
-> > 	}
-> >
-> > [*] I looked up arch/arm64/boot/dts/marvell/cn9130.dtsi. I hope I picke=
-d
-> > the correct file.
->
-> The warning itself was resolved by bringing in a further change for the=
-=20
-> LTS branch[1]. There does still seem to be an issue with the interrupts=
-=20
-> actually working (same behaviour on mainline) but at least now there is=
-=20
-> no warning and no adverse downstream effects.
->
-> In terms of device tree stuff to disable the interrupt I could simply=20
-> remove the interrupt properties from the board DTS (I was doing this as=
-=20
-> a workaround before the correct fix was identified).
+The series adds support for the display on the stm32f746-disco board,
+along with a generic patch that adds the "bpp" parameter to the stm-drm
+module. The intention is to allow users to size, within certain limits,
+the memory footprint required by the framebuffer.
 
-I think it would be a good call because if a product creator *wants*
-interrupts they will know it. Thus, it is perfectly fine IMHO to
-disable them in the  board DTS. I.e. very different case from
-PC/workstation computing.
+Changes in v3:
+- rename ltdc-pins-a-0 to ltdc-0.
+- drop [4/6] dt-bindings: display: simple: add Rocktech RK043FN48H
+  Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next):
+  https://cgit.freedesktop.org/drm/drm-misc/commit/?id=c42a37a27c777d63961dd634a30f7c887949491a
+- drop [5/6] drm/panel: simple: add support for Rocktech RK043FN48H panel
+  Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next)
+  https://cgit.freedesktop.org/drm/drm-misc/commit/?id=13cdd12a9f934158f4ec817cf048fcb4384aa9dc
 
-BR, Jarkko
+Dario Binacchi (4):
+  ARM: dts: stm32: add ltdc support on stm32f746 MCU
+  ARM: dts: stm32: add pin map for LTDC on stm32f7
+  ARM: dts: stm32: support display on stm32f746-disco board
+  drm/stm: add an option to change FB bpp
+
+ arch/arm/boot/dts/stm32f7-pinctrl.dtsi | 35 ++++++++++++++++++
+ arch/arm/boot/dts/stm32f746-disco.dts  | 51 ++++++++++++++++++++++++++
+ arch/arm/boot/dts/stm32f746.dtsi       | 10 +++++
+ drivers/gpu/drm/stm/drv.c              |  8 +++-
+ 4 files changed, 103 insertions(+), 1 deletion(-)
+
+-- 
+2.32.0
+
