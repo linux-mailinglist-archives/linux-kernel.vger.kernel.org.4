@@ -2,113 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F188E729B38
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 15:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B46F1729B3E
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 15:15:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241038AbjFINOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 09:14:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37908 "EHLO
+        id S241282AbjFINPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 09:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240847AbjFINOR (ORCPT
+        with ESMTP id S241213AbjFINPJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 09:14:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BA2E43;
-        Fri,  9 Jun 2023 06:14:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BA238614D1;
-        Fri,  9 Jun 2023 13:14:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 501EDC433D2;
-        Fri,  9 Jun 2023 13:14:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686316455;
-        bh=qgIw3ZmXGorDQYkQ1E+r3SCp4BCBY6HOYRFQ0E9qhj8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=eM1TpsLXyvb5hqFPZtL+HvhboO5hsh4NRQd8mHIEvZS1Zx81GPjJD0ltvcq+PSQSi
-         BD4etuaw0grWBkCR1tF6WWWTVOH9xLg88NcJiIEEO9OuH241BGKd4KSUHXXU/nXGHj
-         qeundAAb/1uEOt4TCddwRZukAd89nT+GLDhvbvLkkQqFUn0P7MBZBNXAXFKJKODWKL
-         sM62G66SI2TPgxbnLrAonM1Y4+TzVxPyagrsP836dcAd7J1RB+qiLwsqLRr5Qbcm7S
-         aJaw6k4+FpGnzfzh/ysVyXt+y4vK9OMZNAQG7+hI138uZc+L/ZYW81YMA8GRGe/div
-         xeRTIJwNIOwUg==
-Message-ID: <9ae34dcc-0022-8097-7c86-8b11811ac2e1@kernel.org>
-Date:   Fri, 9 Jun 2023 15:14:07 +0200
+        Fri, 9 Jun 2023 09:15:09 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1B5A4E4A;
+        Fri,  9 Jun 2023 06:15:08 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 36C7BAB6;
+        Fri,  9 Jun 2023 06:15:53 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.38.153])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EE0123F71E;
+        Fri,  9 Jun 2023 06:15:05 -0700 (PDT)
+Date:   Fri, 9 Jun 2023 14:15:03 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, catalin.marinas@arm.com,
+        Mark Brown <broonie@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH V11 06/10] arm64/perf: Enable branch stack events via
+ FEAT_BRBE
+Message-ID: <ZIMl170wv1ZDyNsK@FVFF77S0Q05N.cambridge.arm.com>
+References: <20230531040428.501523-1-anshuman.khandual@arm.com>
+ <20230531040428.501523-7-anshuman.khandual@arm.com>
+ <ZH3mhorKNo77hsv5@FVFF77S0Q05N>
+ <e960d5d5-07a8-2049-7d0a-07268ecfe36a@arm.com>
+ <ZIMfVsF50cODuOYx@FVFF77S0Q05N.cambridge.arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 1/2] dt-bindings: arm: idle-states: Add
- idle-state-disabled property
-Content-Language: en-US
-To:     Tushar Nimkar <quic_tnimkar@quicinc.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_lsrao@quicinc.com,
-        quic_mkshah@quicinc.com, devicetree@vger.kernel.org
-References: <20230608085544.16211-1-quic_tnimkar@quicinc.com>
- <20230608085544.16211-2-quic_tnimkar@quicinc.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20230608085544.16211-2-quic_tnimkar@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZIMfVsF50cODuOYx@FVFF77S0Q05N.cambridge.arm.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/06/2023 10:55, Tushar Nimkar wrote:
-> This change adds idle-state-disabled property using which certain or all
-
-Please do not use "This commit/patch", but imperative mood. See longer
-explanation here:
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
-
-> idle-states can be kept disabled during boot-up. Once boot-up is completed
-> same can be enabled using below command.
+On Fri, Jun 09, 2023 at 01:47:18PM +0100, Mark Rutland wrote:
+> On Fri, Jun 09, 2023 at 10:52:37AM +0530, Anshuman Khandual wrote:
+> > On 6/5/23 19:13, Mark Rutland wrote:
+> > > Looking at <linux/perf_event.h> I see:
+> > > 
+> > > | /*
+> > > |  * branch stack layout:
+> > > |  *  nr: number of taken branches stored in entries[]
+> > > |  *  hw_idx: The low level index of raw branch records
+> > > |  *          for the most recent branch.
+> > > |  *          -1ULL means invalid/unknown.
+> > > |  *
+> > > |  * Note that nr can vary from sample to sample
+> > > |  * branches (to, from) are stored from most recent
+> > > |  * to least recent, i.e., entries[0] contains the most
+> > > |  * recent branch.
+> > > |  * The entries[] is an abstraction of raw branch records,
+> > > |  * which may not be stored in age order in HW, e.g. Intel LBR.
+> > > |  * The hw_idx is to expose the low level index of raw
+> > > |  * branch record for the most recent branch aka entries[0].
+> > > |  * The hw_idx index is between -1 (unknown) and max depth,
+> > > |  * which can be retrieved in /sys/devices/cpu/caps/branches.
+> > > |  * For the architectures whose raw branch records are
+> > > |  * already stored in age order, the hw_idx should be 0.
+> > > |  */
+> > > | struct perf_branch_stack {
+> > > |         __u64                           nr;  
+> > > |         __u64                           hw_idx;
+> > > |         struct perf_branch_entry        entries[];
+> > > | };
+> > > 
+> > > ... which seems to indicate we should be setting hw_idx to 0, since IIUC our
+> > > records are in age order.
+> > Branch records are indeed in age order, sure will change hw_idx as 0. Earlier
+> > figured that there was no need for hw_idx and hence marked it as -1UL similar
+> > to other platforms like powerpc.
 > 
-
-I don't understand and you did not explain here, why this is useful and
-why this is needed.
-
-> echo N > /sys/devices/system/cpu/cpuX/cpuidle/stateX/disable
-
-
+> That's fair enough; looking at power_pmu_bhrb_read() in
+> arch/powerpc/perf/core-book3s.c, I see a comment:
 > 
-> Cc: devicetree@vger.kernel.org
-> Signed-off-by: Tushar Nimkar <quic_tnimkar@quicinc.com>
-
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC.  It might happen, that command when run on an older
-kernel, gives you outdated entries.  Therefore please be sure you base
-your patches on recent Linux kernel.
-
-> ---
->  Documentation/devicetree/bindings/cpu/idle-states.yaml | 8 ++++++++
->  1 file changed, 8 insertions(+)
+> 	Branches are read most recent first (ie. mfbhrb 0 is
+> 	the most recent branch).
 > 
-> diff --git a/Documentation/devicetree/bindings/cpu/idle-states.yaml b/Documentation/devicetree/bindings/cpu/idle-states.yaml
-> index b8cc826c9501..f999bc666bbd 100644
-> --- a/Documentation/devicetree/bindings/cpu/idle-states.yaml
-> +++ b/Documentation/devicetree/bindings/cpu/idle-states.yaml
-> @@ -358,6 +358,13 @@ patternProperties:
->            systems entry-latency-us + exit-latency-us will exceed
->            wakeup-latency-us by this duration.
->  
-> +      idle-state-disabled:
-> +        description: |
-> +          If present the idle state stays disabled. It can be enabled back from
-> +          shell using below command.
-> +          echo N > /sys/devices/system/cpu/cpuX/cpuidle/stateX/disable
+> ... which suggests that should be 0 also, or that the documentation is wrong.
+> 
+> Do you know how the perf tool consumes this?
 
-This is Linux specific command, so does not fit the bindings.
 
-Best regards,
-Krzysztof
+Thinking about this some more, if what this is saying is that if entries[0]
+must be strictly the last branch, and we've lost branches due to interrupt
+latency, then we clearly don't meet that requirement and must report -1ULL
+here.
 
+So while it'd be nice to figure this out, I'm happy using -1ULL, and would be a
+bit concerned using 0.
+
+Sorry for flip-flopping on this.
+
+Thanks,
+Mark.
