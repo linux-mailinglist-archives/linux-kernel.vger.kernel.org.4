@@ -2,124 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD77728E9E
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 05:35:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90BFD728E93
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 05:32:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbjFIDez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 23:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33160 "EHLO
+        id S238042AbjFIDbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 23:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237753AbjFIDev (ORCPT
+        with ESMTP id S237665AbjFIDbq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 23:34:51 -0400
-X-Greylist: delayed 513 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 08 Jun 2023 20:34:45 PDT
-Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.220])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B7AF930FD
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 20:34:45 -0700 (PDT)
-HMM_SOURCE_IP: 172.18.0.218:59564.1727155665
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-36.111.64.85 (unknown [172.18.0.218])
-        by chinatelecom.cn (HERMES) with SMTP id CE8C72800B7;
-        Fri,  9 Jun 2023 11:26:04 +0800 (CST)
-X-189-SAVE-TO-SEND: +liuq131@chinatelecom.cn
-Received: from  ([36.111.64.85])
-        by app0025 with ESMTP id b3a94a8e8d4e468aa458479e5c11cc05 for akpm@linux-foundation.org;
-        Fri, 09 Jun 2023 11:26:07 CST
-X-Transaction-ID: b3a94a8e8d4e468aa458479e5c11cc05
-X-Real-From: liuq131@chinatelecom.cn
-X-Receive-IP: 36.111.64.85
-X-MEDUSA-Status: 0
-Sender: liuq131@chinatelecom.cn
-From:   liuq <liuq131@chinatelecom.cn>
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        liuq <liuq131@chinatelecom.cn>
-Subject: [PATCH] mm/min_free_kbytes: modify min_free_kbytes calculation rules
-Date:   Fri,  9 Jun 2023 11:25:52 +0800
-Message-Id: <20230609032552.218010-1-liuq131@chinatelecom.cn>
+        Thu, 8 Jun 2023 23:31:46 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5A930FE;
+        Thu,  8 Jun 2023 20:31:42 -0700 (PDT)
+Received: from dggpemm500011.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Qcmlc1ChSzkXMB;
+        Fri,  9 Jun 2023 11:29:16 +0800 (CST)
+Received: from localhost.huawei.com (10.137.16.203) by
+ dggpemm500011.china.huawei.com (7.185.36.110) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 9 Jun 2023 11:31:38 +0800
+From:   renmingshuai <renmingshuai@huawei.com>
+To:     <pctammela@mojatatu.com>
+CC:     <caowangbao@huawei.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <jhs@mojatatu.com>, <jiri@resnulli.us>,
+        <kuba@kernel.org>, <liaichun@huawei.com>,
+        <linux-kernel@vger.kernel.org>, <liubo335@huawei.com>,
+        <netdev@vger.kernel.org>, <pabeni@redhat.com>,
+        <renmingshuai@huawei.com>, <xiyou.wangcong@gmail.com>,
+        <yanan@huawei.com>
+Subject: [PATCH v3] net/sched: Set the flushing flags to false to prevent an infinite loop and add one test to tdc
+Date:   Fri, 9 Jun 2023 11:31:15 +0800
+Message-ID: <20230609033115.3738692-1-renmingshuai@huawei.com>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <91e6a8cd-2775-d759-4462-b1be7dc79bbe@mojatatu.com>
+References: <91e6a8cd-2775-d759-4462-b1be7dc79bbe@mojatatu.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.137.16.203]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500011.china.huawei.com (7.185.36.110)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current calculation of min_free_kbytes only uses ZONE_DMA and
-ZONE_NORMAL pages,but the ZONE_MOVABLE zone->_watermark[WMARK_MIN]
-will also divide part of min_free_kbytes.This will cause the min
-watermark of ZONE_NORMAL to be too small in the presence of ZONE_MOVEABLE.
+>On 08/06/2023 09:32, renmingshuai wrote:
+>>> On 07/06/2023 01:19, renmingshuai wrote:
+>>>>> On 06/06/2023 11:45, renmingshuai wrote:
+>>>>>> When a new chain is added by using tc, one soft lockup alarm will
+>>>>>> be
+>>>>>>     generated after delete the prio 0 filter of the chain. To
+>>>>>>     reproduce
+>>>>>>     the problem, perform the following steps:
+>>>>>> (1) tc qdisc add dev eth0 root handle 1: htb default 1
+>>>>>> (2) tc chain add dev eth0
+>>>>>> (3) tc filter del dev eth0 chain 0 parent 1: prio 0
+>>>>>> (4) tc filter add dev eth0 chain 0 parent 1:
+>>>>>
+>>>>> This seems like it could be added to tdc or 3 and 4 must be run in
+>>>>> parallel?
+>>>> 3 and 4 do not need to be run inparallel. When a new chain is added
+>>>> by the
+>>>>    way as step 1 and the step 3 is completed, this problem always
+>>>>    occurs
+>>>>    whenever step 4 is run.
+>>>
+>>> Got it,
+>>> The test still hangs with the provided patch.
+>>>
+>>> + tc qdisc add dev lo root handle 1: htb default 1
+>>> + tc chain add dev lo
+>>> + tc filter del dev lo chain 0 parent 1: prio 0
+>>> [   68.790030][ T6704] [+]
+>>> [   68.790060][ T6704] chain refcnt 2
+>>> [   68.790951][ T6704] [-]
+>>> + tc filter add dev lo chain 0 parent 1:
+>>> <hangs>
+>>>
+>>> Also please add this test to tdc, it should be straightforward.
+>>>
+>> Sorry for not testing before. I forgot that the chain->refcnt was
+>> increased by 1 when tcf_chain_get() is called in tc_del_tfilter().
+>>   The value of chain->refcnt is 2 after chain flush. The test
+>>   result is as follows:
+>> [root@localhost ~]# tc qdisc add dev eth2 root handle 1: htb default 1
+>> [root@localhost ~]# tc chain add dev eth2
+>> [root@localhost ~]# tc filter del dev eth2 chain 0 parent 1: prio 0
+>> [root@localhost ~]# tc filter add dev eth2 chain 0 parent 1:
+>> Error: Filter kind and protocol must be specified.
+>> We have an error talking to the kernel
+>> 
+>> And I have add this test to tdc:
+>> [root@localhost tc-testing]# ./tdc.py -f tc-tests/filters/tests.json
+>> ok 7 c2b4 - Adding a new fiter after deleting a filter in a chain does
+>> not cause  an infinite loop
+>> 
+>> Fixes: 726d061286ce ("net: sched: prevent insertion of new classifiers during chain flush")
+>> Signed-off-by: renmingshuai <renmingshuai@huawei.com>
+>
+>Please respin with the following applied:
+>
+>diff --git 
+>a/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json 
+>b/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json
+>index c759c3db9a37..361235ad574b 100644
+>--- a/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json
+>+++ b/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json
+>@@ -125,25 +125,5 @@
+>          "teardown": [
+>              "$TC qdisc del dev $DEV2 ingress"
+>          ]
+>-    },
+>-    {
+>-        "id": "c2b4",
+>-        "name": "Adding a new fiter after deleting a filter in a chain 
+>does not cause an infinite loop",
+>-        "category": [
+>-            "filter",
+>-            "prio"
+>-        ],
+>-        "setup": [
+>-            "$TC qdisc add dev $DEV1 root handle 1: htb default 1",
+>-            "$TC chain add dev $DEV1"
+>-        ],
+>-        "cmdUnderTest": "$TC filter del dev $DEV1 chain 0 parent 1: 
+>prio 0",
+>-        "expExitCode": "0",
+>-        "verifyCmd": "$TC filter add dev $DEV1 chain 0 parent 1:",
+>-        "matchPattern": "Error: Filter kind and protocol must be 
+>specified.",
+>-        "matchCount": "1",
+>-        "teardown": [
+>-            "$TC qdisc del dev $DEV1 root handle 1: htb default 1"
+>-        ]
+>      }
+>  ]
+>diff --git 
+>a/tools/testing/selftests/tc-testing/tc-tests/infra/filters.json 
+>b/tools/testing/selftests/tc-testing/tc-tests/infra/filters.
+>json
+>new file mode 100644
+>index 000000000000..55d6f209c388
+>--- /dev/null
+>+++ b/tools/testing/selftests/tc-testing/tc-tests/infra/filters.json
+>@@ -0,0 +1,24 @@
+>+[
+>+    {
+>+        "id": "c2b4",
+>+        "name": "Adding a new filter after flushing empty chain doesnt 
+>cause an infinite loop",
+>+        "category": [
+>+            "filter",
+>+            "chain"
+>+        ],
+>+        "setup": [
+>+            "$IP link add dev $DUMMY type dummy || /bin/true",
+>+            "$TC qdisc add dev $DUMMY root handle 1: htb default 1",
+>+            "$TC chain add dev $DUMMY",
+>+            "$TC filter del dev $DUMMY chain 0 parent 1: prio 0"
+>+        ],
+>+        "cmdUnderTest": "$TC filter add dev $DUMMY chain 0 parent 1:",
+>+        "expExitCode": "2",
+>+        "verifyCmd": "$TC chain ls dev $DUMMY",
+>+        "matchPattern": "chain parent 1: chain 0",
+>+        "matchCount": "1",
+>+        "teardown": [
+>+            "$TC qdisc del dev $DUMMY root handle 1: htb default 1"
+>+        ]
+>+    }
+>+]
 
-Signed-off-by: liuq <liuq131@chinatelecom.cn>
+Ok. The new test is passed.
+[root@localhost tc-testing]# ./tdc.py -f tc-tests/infra/filter.json
+Test c2b4: Adding a new filter after flushing empty chain doesn't cause an infinite loop
+All test results:
+1..1
+ok 1 c2b4 - Adding a new filter after flushing empty chain doesn't cause an infinite loop
+
+Fixes: 726d061286ce ("net: sched: prevent insertion of new classifiers during chain flush")
+Signed-off-by: renmingshuai <renmingshuai@huawei.com>
 ---
- include/linux/mm.h |  1 +
- mm/khugepaged.c    |  2 +-
- mm/page_alloc.c    | 15 ++++++++++++++-
- 3 files changed, 16 insertions(+), 2 deletions(-)
+ net/sched/cls_api.c                           |  7 ++++++
+ .../tc-testing/tc-tests/infra/filter.json     | 25 +++++++++++++++++++
+ 2 files changed, 32 insertions(+)
+ create mode 100644 tools/testing/selftests/tc-testing/tc-tests/infra/filter.json
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index cf3d0d673f6b..1f91d035bcaf 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -863,6 +863,7 @@ void split_page(struct page *page, unsigned int order);
- void folio_copy(struct folio *dst, struct folio *src);
- 
- unsigned long nr_free_buffer_pages(void);
-+unsigned long nr_free_pagecache_pages(void);
- 
- /*
-  * Compound pages have a destructor function.  Provide a
-diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index 16be62d493cd..6632264b951c 100644
---- a/mm/khugepaged.c
-+++ b/mm/khugepaged.c
-@@ -2342,7 +2342,7 @@ static void set_recommended_min_free_kbytes(void)
- 
- 	/* don't ever allow to reserve more than 5% of the lowmem */
- 	recommended_min = min(recommended_min,
--			      (unsigned long) nr_free_buffer_pages() / 20);
-+			      (unsigned long) nr_free_pagecache_pages() / 20);
- 	recommended_min <<= (PAGE_SHIFT-10);
- 
- 	if (recommended_min > min_free_kbytes) {
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index e008a3df0485..489b564526dd 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -5775,6 +5775,19 @@ unsigned long nr_free_buffer_pages(void)
- }
- EXPORT_SYMBOL_GPL(nr_free_buffer_pages);
- 
-+/**
-+ * nr_free_pagecache_pages - count number of pages beyond high watermark
-+ *
-+ * nr_free_pagecache_pages() counts the number of pages which are beyond the
-+ * high watermark within all zones.
-+ *
-+ * Return: number of pages beyond high watermark within all zones.
-+ */
-+unsigned long nr_free_pagecache_pages(void)
-+{
-+	return nr_free_zone_pages(gfp_zone(GFP_HIGHUSER_MOVABLE));
-+}
-+
- static inline void show_node(struct zone *zone)
- {
- 	if (IS_ENABLED(CONFIG_NUMA))
-@@ -8651,7 +8664,7 @@ void calculate_min_free_kbytes(void)
- 	unsigned long lowmem_kbytes;
- 	int new_min_free_kbytes;
- 
--	lowmem_kbytes = nr_free_buffer_pages() * (PAGE_SIZE >> 10);
-+	lowmem_kbytes = nr_free_pagecache_pages() * (PAGE_SIZE >> 10);
- 	new_min_free_kbytes = int_sqrt(lowmem_kbytes * 16);
- 
- 	if (new_min_free_kbytes > user_min_free_kbytes)
+diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
+index 2621550bfddc..3ea054e03fbf 100644
+--- a/net/sched/cls_api.c
++++ b/net/sched/cls_api.c
+@@ -2442,6 +2442,13 @@ static int tc_del_tfilter(struct sk_buff *skb, struct nlmsghdr *n,
+ 		tfilter_notify_chain(net, skb, block, q, parent, n,
+ 				     chain, RTM_DELTFILTER, extack);
+ 		tcf_chain_flush(chain, rtnl_held);
++		/* Set the flushing flags to false to prevent an infinite loop
++		 * when a new filter is added.
++		 */
++		mutex_lock(&chain->filter_chain_lock);
++		if (chain->refcnt == 2)
++			chain->flushing = false;
++		mutex_unlock(&chain->filter_chain_lock);
+ 		err = 0;
+ 		goto errout;
+ 	}
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/infra/filter.json b/tools/testing/selftests/tc-testing/tc-tests/infra/filter.json
+new file mode 100644
+index 000000000000..db3b42aaa4fa
+--- /dev/null
++++ b/tools/testing/selftests/tc-testing/tc-tests/infra/filter.json
+@@ -0,0 +1,25 @@
++[
++    {
++        "id": "c2b4",
++        "name": "Adding a new filter after flushing empty chain doesn't cause an infinite loop",
++        "category": [
++            "filter",
++            "chain"
++        ],
++        "setup": [
++            "$IP link add dev $DUMMY type dummy || /bin/true",
++            "$TC qdisc add dev $DUMMY root handle 1: htb default 1",
++            "$TC chain add dev $DUMMY",
++            "$TC filter del dev $DUMMY chain 0 parent 1: prio 0"
++        ],
++        "cmdUnderTest": "$TC filter add dev $DUMMY chain 0 parent 1:",
++        "expExitCode": "2",
++        "verifyCmd": "$TC chain ls dev $DUMMY",
++        "matchPattern": "chain parent 1: chain 0",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DUMMY root handle 1: htb default 1",
++            "$IP link del dev $DUMMY type dummy"
++        ]
++    }
++]
 -- 
 2.27.0
 
