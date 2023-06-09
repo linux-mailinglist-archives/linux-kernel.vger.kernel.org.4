@@ -2,115 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB5A1729A10
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 14:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD0A7299F5
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 14:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231948AbjFIMbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 08:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41624 "EHLO
+        id S238606AbjFIM3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 08:29:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240624AbjFIMbn (ORCPT
+        with ESMTP id S240536AbjFIM2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 08:31:43 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A53163AB9;
-        Fri,  9 Jun 2023 05:31:15 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8AxX+stGoNkQBYBAA--.3286S3;
-        Fri, 09 Jun 2023 20:25:17 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxZuQsGoNkJCULAA--.33833S3;
-        Fri, 09 Jun 2023 20:25:16 +0800 (CST)
-Message-ID: <9899fa21-8ffd-eed4-2b6e-68ddcd6fd670@loongson.cn>
-Date:   Fri, 9 Jun 2023 20:25:16 +0800
+        Fri, 9 Jun 2023 08:28:51 -0400
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497961FF3
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 05:28:09 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-ba8a0500f4aso1726306276.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 05:28:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686313528; x=1688905528;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=smGNflJ7bjmXBjjEtuvZGOYN45xQ1O6Q8NPK2CFlfvE=;
+        b=UjUKL/p0Zv0Fjvpzhs8BqsA26pl29Ryk131TCJ1q/PMegwFwbd+H9yfB8f5qNCbv4d
+         1/+ReYYrOsEfVQhsbEAW0XvFcC66rcWa14t2NUhoiP53HmP9WLfe/Rp0RbBsI3wyqvxW
+         4fK7byK2S3825cKASqE0Qx8WzVWuQsLOBa5xLOJdCXgtXQ6gJMzBmZZWIqRuTs9uq34P
+         oERTqr6ZXPnVKq9d4RH4oqYlAUnBhxtd0LBiRzbSBHfz6VJOZvbMx8AegnuX+X7DLnZi
+         0dMzt05LkRdB3Zs527M6EWuNbKoGi30eWmzReMQDoJ5iirN2WoAOGLCsWRZO/4jrcSgt
+         +rVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686313528; x=1688905528;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=smGNflJ7bjmXBjjEtuvZGOYN45xQ1O6Q8NPK2CFlfvE=;
+        b=TbGwTCzECXhV6E6hhKm8CWXMTMVT2We0zoGde9oHLDKdewomKKqKWe3y/8f7qpBxQ8
+         cW34S8oGo9lTsLbGoj2TYkKdc0hjQr6QIlMDHkH3Du3CrIJ2cSgIWSW/A/hif/FEkHW8
+         drt7V+sL1wyfyJGubQenHxW6T21XqnIJTmjMfmYN5wkN4kDk6lO/vYD34eH4gUJ4yHAq
+         6isA9VDhCde5Hx8K/fBoLRfmPns3hdIq9VkRl93B5J5TgKzpJPUkMGrlOAO2F6V/wHeV
+         X2gNFc5XlaFzMxxGFcTtwZ3SVBRc/cNvK67EwgAmA1FG9o5kAw/aY/XVHAMrdcYN9AOx
+         fLZg==
+X-Gm-Message-State: AC+VfDwIQf4o+PxpflzWsWs1BMzFWy60X0esZC+leH3MXzI0sMNgH/ol
+        VLFr1aWgNgJrvtNncP53kovprA4bX7Z29cDQ/BdiyQ==
+X-Google-Smtp-Source: ACHHUZ77rBUMB96NN2jzxPTCVZ++T/qAsc1W/ugmaXuhcy0WBFOHqot0Olv3GSCeqyqa6nKWwOHh8NDE4YnEMNbnUIU=
+X-Received: by 2002:a0d:c841:0:b0:568:8e96:7008 with SMTP id
+ k62-20020a0dc841000000b005688e967008mr1081432ywd.0.1686313528385; Fri, 09 Jun
+ 2023 05:25:28 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v5 1/4] PCI/VGA: Use unsigned type for the io_state
- variable
-Content-Language: en-US
-To:     Andi Shyti <andi.shyti@linux.intel.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20230609112417.632313-1-suijingfeng@loongson.cn>
- <ZIMRpbUHcW5qGFBU@ashyti-mobl2.lan>
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <ZIMRpbUHcW5qGFBU@ashyti-mobl2.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8AxZuQsGoNkJCULAA--.33833S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoWrurWktFyxKry5trWUCr43XFc_yoW8Jry8pF
-        W0y3Z5CFW0qrsrAFW2vFs5XF1ruwsrGFyxArWagry3uF13J3s7tFs0krWYqws7JryxZa1S
-        vry5Wr1DWa98AFXCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPlb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
-        wI0_Cr1j6rxdM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        tVWrXwAv7VC2z280aVAFwI0_Gr1j6F4UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64
-        vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F4
-        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFyl
-        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW5JVW7JwCI42IY6xIIjxv20xvEc7CjxV
-        AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4U
-        JVWxJr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07
-        j55rcUUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230525172142.9039-1-quic_jkona@quicinc.com> <20230525172142.9039-4-quic_jkona@quicinc.com>
+ <6e1d098d-03b9-aa63-a0bf-6cf748a0db0d@linaro.org> <7074f718-a3d5-8a03-3830-77a5a0b15500@linaro.org>
+ <df7ab6f7-6c5e-9a7d-8d9b-09ff32da34d6@quicinc.com> <c60bb4d9-1b53-6c60-8b9d-13069bdff882@linaro.org>
+ <1a6d46e4-7ec4-262c-dc3b-fc9c988f979e@quicinc.com>
+In-Reply-To: <1a6d46e4-7ec4-262c-dc3b-fc9c988f979e@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Fri, 9 Jun 2023 15:25:17 +0300
+Message-ID: <CAA8EJprx6=QztOHi_18uqcGK9WnhkQJ_WP9TyKrsOT=WgKdRaw@mail.gmail.com>
+Subject: Re: [PATCH V2 3/6] clk: qcom: clk-alpha-pll: Remove explicit CAL_L
+ configuration for EVO PLL
+To:     Jagadeesh Kona <quic_jkona@quicinc.com>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Taniya Das <quic_tdas@quicinc.com>,
+        Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
+        Imran Shaik <quic_imrashai@quicinc.com>,
+        Ajit Pandey <quic_ajipan@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, 9 Jun 2023 at 14:50, Jagadeesh Kona <quic_jkona@quicinc.com> wrote:
+>
+> Hi Dmitry,
+>
+> Thanks for your review!
+>
+> On 6/1/2023 8:13 PM, Dmitry Baryshkov wrote:
+> > On 01/06/2023 17:33, Jagadeesh Kona wrote:
+> >> Hi Dmitry, Konrad,
+> >>
+> >> On 5/26/2023 9:23 PM, Dmitry Baryshkov wrote:
+> >>> On 26/05/2023 12:33, Konrad Dybcio wrote:
+> >>>>
+> >>>>
+> >>>> On 25.05.2023 19:21, Jagadeesh Kona wrote:
+> >>>>> In lucid evo pll, the CAL_L field is part of L value register
+> >>>>> itself, and
+> >>>>> the l value configuration passed from clock controller driver includes
+> >>>>> CAL_L and L values as well. Hence remove explicit configuration of
+> >>>>> CAL_L
+> >>>>> for evo pll.
+> >>>>>
+> >>>>> Fixes: 260e36606a03 ("clk: qcom: clk-alpha-pll: add Lucid EVO PLL
+> >>>>> configuration interfaces")
+> >>>>> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+> >>>>> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
+> >>>>> ---
+> >>>> Oh that isn't obvious at first sight, nice find!
+> >>>>
+> >>>> I'd suggest a different solution though:
+> >>>>
+> >>>> #define LUCID_EVO_PLL_L_LVAL    GENMASK(..
+> >>>> #define LUCID_EVO_PLL_L_CAL_L    GENMASK(..
+> >>>>
+> >>>> lval = FIELD_PREP(LUCID_EVO_PLL_L_LVAL, config->l) |
+> >>>>         FIELD_PREP(LUCID_EVO_PLL_L_CAL_L, config->cal_l);
+> >>>>
+> >>>> This would make the separation between the two parts more explicit
+> >>>>
+> >>>> however
+> >>>>
+> >>>> config->l would then represent the L value and not the end value
+> >>>> written to the L register
+> >>>
+> >>> Yes. I think there should be separate config->l and config->cal_l
+> >>> values (and probably ringosc_cal_l, basing on the comment in the
+> >>> source).
+> >>> Thanks for your suggestions. In all recent chipsets, L & CAL_L fields
+> >> are encapsulated in the same register, so we feel it is better to
+> >> directly pass the combined configuration value in config->l itself and
+> >> program it directly into register without any additional handling
+> >> required in pll driver code.
+> >
+> > My feeling is that it is better to split it, since these are the
+> > different fields. The value .l = 0x4444003e doesn't mean anything per se.
+> >
+> > Three values are much more meaningful:
+> > .l = 0x3e,
+> > .cal_l = 0x44,
+> > .ringosc_cal_l = 0x44,
+> >
+> > Not to mention that this way you don't have to touch pll configuration
+> > for the existing Lucid EVO PLL. Not to mention that for the Lucid ole
+> > PLLs the cal_l and ringosc_cal_l values seem to be static (0x44), so
+> > there is no need to put them to the variable data.
+> >
+>
+> Sure, will keep the existing code as is and will remove this patch in
+> the next series.
+>
+> >>
+> >> Also the evo pll code is currently reused for both lucid evo and ole
+> >> pll's. Lucid ole PLL has an additional RINGOSC_CAL_L field along with
+> >> L, CAL_L fields in the same L register. By passing combined
+> >> configuration value in config->l itself, we feel we can avoid all the
+> >> additional handling required in PLL code.
+> >>
+> >>> Just a question: is camcc-sm8550 using the same PLL type or is it
+> >>> some kind of subtype of lucid_evo PLL?
+> >>>
+> >> No, it is not the same lucid evo PLL. It uses lucid ole PLL.
+> >
+> > Then please don't reuse the clk_lucid_evo_pll_configure() call.
+> > You can add a new one, which will handle L/CAL_L/RINGOSC_CAL_L differences.
+> >
+>
+> The only difference between evo and ole pll configure is extra
+> RINGOSC_CAL_L programming needed only for ole pll. We can achieve the
+> same with clk_lucid_evo_pll_configure() itself by directly including
+> RINGOSC_CAL_L field in L configuration for OLE PLL's.
 
-On 2023/6/9 19:48, Andi Shyti wrote:
-> Hi Sui,
->
-> On Fri, Jun 09, 2023 at 07:24:14PM +0800, Sui Jingfeng wrote:
->> The io_state variable in the vga_arb_write() function is declared with
->> unsigned int type, while the vga_str_to_iostate() function takes int *
->> type. To keep them consistent, replace the third argument of
->> vga_str_to_iostate() function with the unsigned int * type.
->>
->> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
-> Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
-Thanks a lot.
-> Andi
->
->> ---
->>   drivers/pci/vgaarb.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/pci/vgaarb.c b/drivers/pci/vgaarb.c
->> index 5a696078b382..c1bc6c983932 100644
->> --- a/drivers/pci/vgaarb.c
->> +++ b/drivers/pci/vgaarb.c
->> @@ -77,7 +77,7 @@ static const char *vga_iostate_to_str(unsigned int iostate)
->>   	return "none";
->>   }
->>   
->> -static int vga_str_to_iostate(char *buf, int str_size, int *io_state)
->> +static int vga_str_to_iostate(char *buf, int str_size, unsigned int *io_state)
->>   {
->>   	/* we could in theory hand out locks on IO and mem
->>   	 * separately to userspace but it can cause deadlocks */
->> -- 
->> 2.25.1
+Please don't, that's all I can say. Those are different fields. By
+looking at the config->l one can calculate PLL rate. If you overload
+the config->l with CAL_L and RINGOSC_CAL_L, the purpose of this field
+is gone.
+
+As the CAL_L and RINGOSC_CAL_L fields are static, just move them to
+the clk_lucid_ole_pll_configure().
 
 -- 
-Jingfeng
-
+With best wishes
+Dmitry
