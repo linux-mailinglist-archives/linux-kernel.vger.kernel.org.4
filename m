@@ -2,73 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE9F4729313
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 536A1729321
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:29:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240915AbjFII1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 04:27:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57492 "EHLO
+        id S240684AbjFII1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 04:27:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241416AbjFIIZw (ORCPT
+        with ESMTP id S240849AbjFIIZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 04:25:52 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 53A8D3C14;
-        Fri,  9 Jun 2023 01:24:52 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1q7XQE-0004Jv-08; Fri, 09 Jun 2023 10:24:38 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id BF6ADC02EE; Fri,  9 Jun 2023 10:23:14 +0200 (CEST)
-Date:   Fri, 9 Jun 2023 10:23:14 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Paul Burton <paulburton@kernel.org>,
-        Siarhei Volkau <lis8215@gmail.com>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, list@opendingux.net
-Subject: Re: [PATCH 3/4] mips: ingenic: Enable EXT/2 divider on JZ4750/55/60
- if EXT is 24 MHz
-Message-ID: <20230609082314.GI8160@alpha.franken.de>
-References: <20230604122655.69698-1-paul@crapouillou.net>
- <20230604122655.69698-3-paul@crapouillou.net>
+        Fri, 9 Jun 2023 04:25:01 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF994239
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 01:23:45 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-565cd2fc9acso14104647b3.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 01:23:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686299015; x=1688891015;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=clWHzASagbXarxkqMQp3BusxNsMWhJHA3a9/CJktoY0=;
+        b=oN5x+/Jfig74uJFKFq6GopdHh9QY37GHbCi4uTjfj8Oy/+9u3FMu61GHqQgfJWmFdS
+         0qz0d1eaQQtgMu+YAM4QnbgcTgolkvui06vi9FR81rDEJIjqKYyyiW8NhHIGAWM/OEAX
+         ftx8e4DuOPmmHYTrqvNY+n0qm5OrCZvQavVnkE0xBLsTPPfGbxeTQJCoimov9K/etVQL
+         eOMkJAs8S7zrglUox7mtcaG7LIMm2V7yX8aBIXi5xZvYmlaHcA6tdX01Js76Oof7EHg1
+         CsCxeetqJ+fNyPAxgs0Vr2lG5m0gQygEmdH1T2Lbz2FUGpzLAt9Zq3oB87/OplwLBtHi
+         Lj+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686299015; x=1688891015;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=clWHzASagbXarxkqMQp3BusxNsMWhJHA3a9/CJktoY0=;
+        b=LcQPKaya/4GrPbEiiOk8dKLQr6viPKuozpl3iGtM2jmoELoVoCsgiyviLEnC8+O7o5
+         JQV1wZ4WySFcY1oAHYE6p9/9kysNgqfjYdoqY2JYNG9NrWl+SJLgoVlRoBD8XwC/ayvk
+         Jk47bNIDnJjL0OkUbCKdJoKDiJjAzCEkfs125OYcLj5dC/vkusbBo+K9KENYNjugV/gm
+         JpvRS/JXckYA8BVGzxWd95yXeJ0LGGqVykgPRn8wTQVNgGKNZdpaw7QW6P6JKF7F0cap
+         vMUs7TPKOlpuGiXQBjr0JO/w+NjpN895WoPEvYcL6rmB5TVMWCHmbSg7H8Y7mjhL0lX0
+         Lw9g==
+X-Gm-Message-State: AC+VfDwOX4qB6VVd+f8oF6++ur84Qd1wBFV7ycWZ9di/blmrcxwNwLwi
+        71IPl9Ve7X5WmRiKTaiIxG0WfYxM+GD1eta4J2k=
+X-Google-Smtp-Source: ACHHUZ6V/DmgfMPkizJ3Rn3UZ9t97ZIYJzn5H5kUmpA+J9NQKEVdgg5A1LTkkqDeGW9ZtSqNJWpgddz5Mdw+UGluQ0E=
+X-Received: by 2002:a25:8c8c:0:b0:b9e:6fd1:4350 with SMTP id
+ m12-20020a258c8c000000b00b9e6fd14350mr480715ybl.17.1686299015644; Fri, 09 Jun
+ 2023 01:23:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230604122655.69698-3-paul@crapouillou.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230601075333.14021-1-ihuguet@redhat.com> <87sfb1oz13.fsf@meer.lwn.net>
+In-Reply-To: <87sfb1oz13.fsf@meer.lwn.net>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Fri, 9 Jun 2023 10:23:24 +0200
+Message-ID: <CANiq72=G_qnoNhjrr2K7h3u=k8AXr2QTjoN9uJ53Ls2FvsQd9w@mail.gmail.com>
+Subject: Re: [PATCH v4] Add .editorconfig file for basic formatting
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     =?UTF-8?B?w43DsWlnbyBIdWd1ZXQ=?= <ihuguet@redhat.com>,
+        ojeda@kernel.org, danny@kdrag0n.dev, masahiroy@kernel.org,
+        jgg@nvidia.com, mic@digikod.net, linux-kernel@vger.kernel.org,
+        joe@perches.com, linux@rasmusvillemoes.dk, willy@infradead.org,
+        mailhol.vincent@wanadoo.fr
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 04, 2023 at 02:26:54PM +0200, Paul Cercueil wrote:
-> The JZ4750, JZ4755 and JZ4760 (non-B version) support using a 24 MHz
-> external crystal oscillator instead of the typical 12 MHz one.
-> 
-> However, most of the SoC's IP blocks only work with a 12 MHz clock.
-> Thanksfully, there is a /2 divider we can enable when a 24 MHz external
-> crystal is present.
-> 
-> Force-enable this /2 divider when the oscillator is 24 MHz, so that the
-> SoC always uses a 12 MHz clock internally.
-> 
-> It is done here, and not in the clocks driver, because we need the EXT
-> clock to be 12 MHz for the early console to work, and the clocks driver
-> probes way too late.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> ---
->  arch/mips/generic/board-ingenic.c | 57 +++++++++++++++++++++++++++++++
->  1 file changed, 57 insertions(+)
+On Fri, Jun 9, 2023 at 9:50=E2=80=AFAM Jonathan Corbet <corbet@lwn.net> wro=
+te:
+>
+> So I must confess to still being really nervous about installing a file
+> that will silently reconfigure the editors of everybody working on the
 
-applied to mips-next.
+Yeah, especially given the variety of editors (and plugins for those)
+used for kernel development.
 
-Thomas.
+> kernel source; I wish there were a straightforward way to do this as an
+> opt-in thing.  We're talking about creating a flag-day behavioral change
+> for, potentially, thousands of kernel developers.  Something tells me
+> that we might just hear from a few of them.
+>
+> I wonder if we should, instead, ship a file like this as something like
+> Documentation/process/editorconfig, then provide a "make editorconfig"
+> command that installs it in the top-level directory for those who want
+> it?
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+That would make me less worried indeed. It would also allow to be a
+bit more aggressive on introducing some of the unclear file
+extensions/rules to test them out first over time.
+
+Cheers,
+Miguel
