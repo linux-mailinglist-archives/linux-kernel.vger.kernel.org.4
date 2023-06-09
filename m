@@ -2,90 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A473729B1E
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 15:10:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 235E2729B20
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 15:11:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240622AbjFINKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 09:10:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
+        id S240893AbjFINKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 09:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239341AbjFINK3 (ORCPT
+        with ESMTP id S240568AbjFINKk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 09:10:29 -0400
+        Fri, 9 Jun 2023 09:10:40 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DBE2D74;
-        Fri,  9 Jun 2023 06:10:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA95530CB
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 06:10:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D9A0B657D3;
-        Fri,  9 Jun 2023 13:10:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B81ABC433D2;
-        Fri,  9 Jun 2023 13:10:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686316227;
-        bh=UDgymT2rhCU6DESF/YCiKaWmfZRHvZQoUcAfEB8ZmWI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zGZH+ZOjneapjQSK1IqmZBDuE4mFnyhlsRpqtjmsPzrNsJ4zy4akL4P0yciY2B45W
-         5dUQzaTZDowoyRRkGVZBciT1Tf/1Vmlevn5D0LUceNtbonLCs5Xx++ggHHUerxifsG
-         xjcNDDMMZzk3H58c+hjy6yFDwcg70muWawDFZ1nE=
-Date:   Fri, 9 Jun 2023 15:10:24 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Brad Warrum <bwarrum@linux.ibm.com>,
-        Ritu Agarwal <rituagar@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Ian Kent <raven@themaw.net>,
-        "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
-        Jeremy Kerr <jk@ozlabs.org>, Ard Biesheuvel <ardb@kernel.org>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        Bob Peterson <rpeterso@redhat.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        Steve French <sfrench@samba.org>,
-        Paulo Alcantara <pc@manguebit.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Ruihan Li <lrh2000@pku.edu.cn>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        autofs@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, cluster-devel@redhat.com,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org
-Subject: Re: [PATCH 2/9] usb: update the ctime as well when updating mtime
- after an ioctl
-Message-ID: <2023060903-headache-very-c029@gregkh>
-References: <20230609125023.399942-1-jlayton@kernel.org>
- <20230609125023.399942-3-jlayton@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230609125023.399942-3-jlayton@kernel.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FC4261032
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 13:10:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5D17C433EF;
+        Fri,  9 Jun 2023 13:10:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686316238;
+        bh=dYgHVCavziVVOSUw7Iki4kRziz9CUr2KE3bVPxVmsAg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=O8vatzP5GnLZPdXpWJ9TEw2Cz1aTuZXTs3ufk4L3qf3oYMY0rQdZwKf+D1lJOejQP
+         J4iKD64wi/+WQ1hzXaX1Pn8aSxzUxOow3v8fgA/ZcsXVe3U+U0gNL/HeNDOt+QNS7l
+         t5j76sXjRWAD6e9/2OSeSBpVLl2ygdTS5jsUHh2H9Px+hYbs7otssHTQzJ2Xe8MLpn
+         mJ3nNJuyZw/f2ggLLmQS2etloKPytL7x5O9AZMr1TgGLAwjkSmbOEG2l3lf+IH9Cjt
+         HfhnEkkPlDXCvNhuNX3hJfHPlrvxRkauIxTsw+ZsO6Cx0Iy0sk49P0Dd5u2W+hl5Ov
+         0WZmXyibOZr6A==
+Received: from 152.5.30.93.rev.sfr.net ([93.30.5.152] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1q7bsy-0045ap-3F;
+        Fri, 09 Jun 2023 14:10:36 +0100
+Date:   Fri, 09 Jun 2023 14:10:34 +0100
+Message-ID: <871qikok6t.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     wangwudi <wangwudi@hisilicon.com>
+Cc:     <linux-kernel@vger.kernel.org>,
+        "liaochang (A)" <liaochang1@huawei.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v2] irqchip: gic-v3: Extend collection table
+In-Reply-To: <ec424c75-cce8-8828-18a7-1314d94e1875@hisilicon.com>
+References: <1686131113-3611-1-git-send-email-wangwudi@hisilicon.com>
+        <87cz26nzm7.wl-maz@kernel.org>
+        <82ea3d910d104fbb8df9b27585085895@hisilicon.com>
+        <ec424c75-cce8-8828-18a7-1314d94e1875@hisilicon.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 93.30.5.152
+X-SA-Exim-Rcpt-To: wangwudi@hisilicon.com, linux-kernel@vger.kernel.org, liaochang1@huawei.com, tglx@linutronix.de
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 08:50:16AM -0400, Jeff Layton wrote:
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+On Fri, 09 Jun 2023 11:02:04 +0100,
+wangwudi <wangwudi@hisilicon.com> wrote:
+>=20
+> Hi Marc,
+>=20
+> =E5=9C=A8 2023/6/9 17:24, wangwudi =E5=86=99=E9=81=93:
+> >=20
+> >=20
+> > -----=E9=82=AE=E4=BB=B6=E5=8E=9F=E4=BB=B6-----
+> > =E5=8F=91=E4=BB=B6=E4=BA=BA: Marc Zyngier [mailto:maz@kernel.org]=20
+> > =E5=8F=91=E9=80=81=E6=97=B6=E9=97=B4: 2023=E5=B9=B46=E6=9C=888=E6=97=A5=
+ 16:10
+> > =E6=94=B6=E4=BB=B6=E4=BA=BA: wangwudi <wangwudi@hisilicon.com>
+> > =E6=8A=84=E9=80=81: linux-kernel@vger.kernel.org; liaochang (A) <liaoch=
+ang1@huawei.com>; Thomas Gleixner <tglx@linutronix.de>
+> > =E4=B8=BB=E9=A2=98: Re: [PATCH v2] irqchip: gic-v3: Extend collection t=
+able
+> >=20
+> > On Wed, 07 Jun 2023 10:45:13 +0100,
+> > wangwudi <wangwudi@hisilicon.com> wrote:
+> >>
+> >> Only single level table is supported to the collection table, and only=
+=20
+> >> one page is allocated.
+> >>
+> >> Extend collection table to support more CPUs:
+> >> 1. Recalculate the page number of collection table based on the number=
+=20
+> >> of CPUs.
+> >> 2. Add 2 level tables to collection table.
+> >> 3. Add GITS_TYPER_CIDBITS macros.
+> >>
+> >> It is noticed in an internal simulation research:
+> >> - the page_size of collection table is 4 KB
+> >> - the entry_size of collection table is 16 Byte
+> >> - with 512 CPUs
+> >>
+> >> Cc: Thomas Gleixner <tglx@linutronix.de>
+> >> Cc: Marc Zyngier <maz@kernel.org>
+> >> Signed-off-by: wangwudi <wangwudi@hisilicon.com>
+> >> ---
+> >>
+> >> ChangeLog:
+> >> v1-->v2:
+> >> 	1. Support 2 level table
+> >> 	2. Rewrite the commit log
+> >>
+> >>  drivers/irqchip/irq-gic-v3-its.c   | 62 +++++++++++++++++++++++++++++=
++--------
+> >>  include/linux/irqchip/arm-gic-v3.h |  3 ++
+> >>  2 files changed, 53 insertions(+), 12 deletions(-)
+> >>
+> >> diff --git a/drivers/irqchip/irq-gic-v3-its.c=20
+> >> b/drivers/irqchip/irq-gic-v3-its.c
+> >> index 0ec2b1e1df75..573ef26ad449 100644
+> >> --- a/drivers/irqchip/irq-gic-v3-its.c
+> >> +++ b/drivers/irqchip/irq-gic-v3-its.c
+> >> @@ -126,6 +126,7 @@ struct its_node {
+> >>  #define is_v4(its)		(!!((its)->typer & GITS_TYPER_VLPIS))
+> >>  #define is_v4_1(its)		(!!((its)->typer & GITS_TYPER_VMAPP))
+> >>  #define device_ids(its)		(FIELD_GET(GITS_TYPER_DEVBITS, (its)->typer)=
+ + 1)
+> >> +#define collection_ids(its)	(FIELD_GET(GITS_TYPER_CIDBITS, (its)->typ=
+er) + 1)
+> >> =20
+> >>  #define ITS_ITT_ALIGN		SZ_256
+> >> =20
+> >> @@ -2626,6 +2627,10 @@ static int its_alloc_tables(struct its_node *it=
+s)
+> >>  			indirect =3D its_parse_indirect_baser(its, baser, &order,
+> >>  							    ITS_MAX_VPEID_BITS);
+> >>  			break;
+> >> +		case GITS_BASER_TYPE_COLLECTION:
+> >> +			indirect =3D its_parse_indirect_baser(its, baser, &order,
+> >> +							    order_base_2(num_possible_cpus()));
+> >> +			break;
+> >=20
+> > Nice try, but no. See below.
+> >=20
+> >>  		}
+> >> =20
+> >>  		err =3D its_setup_baser(its, baser, cache, shr, order, indirect); @=
+@=20
+> >> -3230,18 +3235,6 @@ static void its_cpu_init_collection(struct its_nod=
+e *its)
+> >>  	its_send_invall(its, &its->collections[cpu]);  }
+> >> =20
+> >> -static void its_cpu_init_collections(void) -{
+> >> -	struct its_node *its;
+> >> -
+> >> -	raw_spin_lock(&its_lock);
+> >> -
+> >> -	list_for_each_entry(its, &its_nodes, entry)
+> >> -		its_cpu_init_collection(its);
+> >> -
+> >> -	raw_spin_unlock(&its_lock);
+> >> -}
+> >> -
+> >>  static struct its_device *its_find_device(struct its_node *its, u32=20
+> >> dev_id)  {
+> >>  	struct its_device *its_dev =3D NULL, *tmp; @@ -3316,6 +3309,51 @@=20
+> >> static bool its_alloc_table_entry(struct its_node *its,
+> >>  	return true;
+> >>  }
+> >> =20
+> >> +static bool its_alloc_collection_table(struct its_node *its, struct=20
+> >> +its_baser *baser) {
+> >> +	int cpu =3D smp_processor_id();
+> >> +	int cpu_ids =3D 16;
+> >> +
+> >> +	if (its->typer & GITS_TYPER_CIL)
+> >> +		cpu_ids =3D collection_ids(its);
+> >> +
+> >> +	if (!(ilog2(cpu) < cpu_ids)) {
+> >> +		pr_warn("ITS: CPU%d out of Collection ID range for %dbits", cpu, cp=
+u_ids);
+> >> +		return false;
+> >> +	}
+> >> +
+> >> +	if (!its_alloc_table_entry(its, baser, cpu)) {
+> >> +		pr_warn("ITS: CPU%d failed to allocate collection l2 table", cpu);
+> >> +		return false;
+> >> +	}
+> >> +
+> >> +	return true;
+> >> +}
+> >> +
+> >> +static bool its_cpu_init_collections(void) {
+> >> +	struct its_node *its;
+> >> +	struct its_baser *baser;
+> >> +
+> >> +	raw_spin_lock(&its_lock);
+> >> +
+> >> +	list_for_each_entry(its, &its_nodes, entry) {
+> >> +		baser =3D its_get_baser(its, GITS_BASER_TYPE_COLLECTION);
+> >> +		if (!baser) {
+> >> +			raw_spin_unlock(&its_lock);
+> >> +			return false;
+> >> +		}
+> >=20
+> > This looks wrong. ITSs that have a non-zero HCC field may not need
+> > memory to back their collections at all, such as GIC500. There may
+> > not even be a BASERn register holding the memory.
+> >=20
+> > So this patch more or less *guarantees* to break most
+> > implementation that are more than 5 year old.
+> >
+>=20
+> For the collection table, if the HCC field is not zero, neither
+> l1-table nor l2-table table is allocated. How do you think?
 
-Sorry, but I can't take commits without any changelog text at all (nor
-would you want me to...)
+What do I think? I've already said what I think, right under the 4
+lines of code that break anything with a GIC500.
 
-thanks,
+	M.
 
-greg k-h
+--=20
+Without deviation from the norm, progress is not possible.
