@@ -2,222 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CFA8729A50
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 14:48:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 268E5729A53
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 14:48:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239403AbjFIMr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 08:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51222 "EHLO
+        id S240506AbjFIMsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 08:48:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230464AbjFIMrZ (ORCPT
+        with ESMTP id S231932AbjFIMrl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 08:47:25 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6178E2136;
-        Fri,  9 Jun 2023 05:47:23 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8B628AB6;
-        Fri,  9 Jun 2023 05:48:08 -0700 (PDT)
-Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.38.153])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4F31F3F6C4;
-        Fri,  9 Jun 2023 05:47:21 -0700 (PDT)
-Date:   Fri, 9 Jun 2023 13:47:18 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, catalin.marinas@arm.com,
-        Mark Brown <broonie@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH V11 06/10] arm64/perf: Enable branch stack events via
- FEAT_BRBE
-Message-ID: <ZIMfVsF50cODuOYx@FVFF77S0Q05N.cambridge.arm.com>
-References: <20230531040428.501523-1-anshuman.khandual@arm.com>
- <20230531040428.501523-7-anshuman.khandual@arm.com>
- <ZH3mhorKNo77hsv5@FVFF77S0Q05N>
- <e960d5d5-07a8-2049-7d0a-07268ecfe36a@arm.com>
+        Fri, 9 Jun 2023 08:47:41 -0400
+Received: from mail.8bytes.org (mail.8bytes.org [IPv6:2a01:238:42d9:3f00:e505:6202:4f0c:f051])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2DE632733
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 05:47:40 -0700 (PDT)
+Received: from 8bytes.org (p4ff2bfbf.dip0.t-ipconnect.de [79.242.191.191])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.8bytes.org (Postfix) with ESMTPSA id AD86D224B97;
+        Fri,  9 Jun 2023 14:47:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+        s=default; t=1686314858;
+        bh=YjGOnPYrTFPIBGBxwiHuHXw9n3uaZhsC76vfavl7xs4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=clA3Vb++35ioHDrkwWIlWTS+/dcZ/UDPUgvfHMWkHZ5LStS8FfPrzRmtZROK6z3Ws
+         og88wDpTGAsZDXF3aeszN56sMi+YMGfkM/r4ZVmhmmXZDUmooGS7ZjoR24QA5Qh3AV
+         6K5OVHVjTHV5KLjz7ofumxPL4cKAunZM0a4N1umSAjYftvpJcb6/2avSHOZS89w8I/
+         C6dIT26zCErLU4tujCU2svbdbGKOI4ly3Hc7n6IWvszV71/aI/NOaYymN949NO3tmH
+         zWsSGBzbgdxRs/FFt/gaoZq4iCad2ZeHy5aqbVuhX4LaTe7MBxtIcA348cV7YJqLu4
+         FO3oILGDJoXAw==
+Date:   Fri, 9 Jun 2023 14:47:37 +0200
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Cc:     linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        joao.m.martins@oracle.com, alejandro.j.jimenez@oracle.com,
+        boris.ostrovsky@oracle.com, jon.grimm@amd.com,
+        santosh.shukla@amd.com, vasant.hegde@amd.com,
+        kishon.vijayabraham@amd.com, jsnitsel@redhat.com
+Subject: Re: [PATCH v3 0/5] iommu/amd: AVIC Interrupt Remapping Improvements
+Message-ID: <ZIMfaVIoKlL-t8Sf@8bytes.org>
+References: <20230530141137.14376-1-suravee.suthikulpanit@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e960d5d5-07a8-2049-7d0a-07268ecfe36a@arm.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230530141137.14376-1-suravee.suthikulpanit@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 10:52:37AM +0530, Anshuman Khandual wrote:
-> [...]
+On Tue, May 30, 2023 at 10:11:32AM -0400, Suravee Suthikulpanit wrote:
+> Suravee Suthikulpanit (4):
+>   iommu/amd: Remove the unused struct amd_ir_data.ref
+>   iommu/amd: Introduce Disable IRTE Caching Support
+>   iommu/amd: Do not Invalidate IRT when IRTE caching is disabled
+>   iommu/amd: Improving Interrupt Remapping Table Invalidation
 > 
-> On 6/5/23 19:13, Mark Rutland wrote:
-> >> +void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
-> >> +{
-> >> +	struct brbe_hw_attr *brbe_attr = (struct brbe_hw_attr *)cpuc->percpu_pmu->private;
-> >> +	u64 brbfcr, brbcr;
-> >> +	int idx, loop1_idx1, loop1_idx2, loop2_idx1, loop2_idx2, count;
-> >> +
-> >> +	brbcr = read_sysreg_s(SYS_BRBCR_EL1);
-> >> +	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
-> >> +
-> >> +	/* Ensure pause on PMU interrupt is enabled */
-> >> +	WARN_ON_ONCE(!(brbcr & BRBCR_EL1_FZP));
-> >> +
-> >> +	/* Pause the buffer */
-> >> +	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
-> >> +	isb();
-> >> +
-> >> +	/* Determine the indices for each loop */
-> >> +	loop1_idx1 = BRBE_BANK0_IDX_MIN;
-> >> +	if (brbe_attr->brbe_nr <= BRBE_BANK_MAX_ENTRIES) {
-> >> +		loop1_idx2 = brbe_attr->brbe_nr - 1;
-> >> +		loop2_idx1 = BRBE_BANK1_IDX_MIN;
-> >> +		loop2_idx2 = BRBE_BANK0_IDX_MAX;
-> >> +	} else {
-> >> +		loop1_idx2 = BRBE_BANK0_IDX_MAX;
-> >> +		loop2_idx1 = BRBE_BANK1_IDX_MIN;
-> >> +		loop2_idx2 = brbe_attr->brbe_nr - 1;
-> >> +	}
-> >> +
-> >> +	/* Loop through bank 0 */
-> >> +	select_brbe_bank(BRBE_BANK_IDX_0);
-> >> +	for (idx = 0, count = loop1_idx1; count <= loop1_idx2; idx++, count++) {
-> >> +		if (!capture_branch_entry(cpuc, event, idx))
-> >> +			goto skip_bank_1;
-> >> +	}
-> >> +
-> >> +	/* Loop through bank 1 */
-> >> +	select_brbe_bank(BRBE_BANK_IDX_1);
-> >> +	for (count = loop2_idx1; count <= loop2_idx2; idx++, count++) {
-> >> +		if (!capture_branch_entry(cpuc, event, idx))
-> >> +			break;
-> >> +	}
-> >> +
-> >> +skip_bank_1:
-> >> +	cpuc->branches->branch_stack.nr = idx;
-> >> +	cpuc->branches->branch_stack.hw_idx = -1ULL;
-> >> +	process_branch_aborts(cpuc);
-> >> +
-> >> +	/* Unpause the buffer */
-> >> +	write_sysreg_s(brbfcr & ~BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
-> >> +	isb();
-> >> +	armv8pmu_branch_reset();
-> >> +}
-> > The loop indicies are rather difficult to follow, and I think those can be made
-> > quite a lot simpler if split out, e.g.
-> > 
-> > | int __armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
-> > | {
-> > | 	struct brbe_hw_attr *brbe_attr = (struct brbe_hw_attr *)cpuc->percpu_pmu->private;
-> > | 	int nr_hw_entries = brbe_attr->brbe_nr;
-> > | 	int idx;
-> 
-> I guess idx needs an init to 0.
+>  .../admin-guide/kernel-parameters.txt         |  1 +
+>  drivers/iommu/amd/amd_iommu_types.h           |  7 +-
+>  drivers/iommu/amd/init.c                      | 38 +++++++-
+>  drivers/iommu/amd/iommu.c                     | 97 ++++++++++---------
+>  4 files changed, 94 insertions(+), 49 deletions(-)
 
-Yes, sorry, that should have been:
-
-	int idx = 0;
-
-> > | 
-> > | 	select_brbe_bank(BRBE_BANK_IDX_0);
-> > | 	while (idx < nr_hw_entries && idx < BRBE_BANK0_IDX_MAX) {
-> > | 		if (!capture_branch_entry(cpuc, event, idx))
-> > | 			return idx;
-> > | 		idx++;
-> > | 	}
-> > | 
-> > | 	select_brbe_bank(BRBE_BANK_IDX_1);
-> > | 	while (idx < nr_hw_entries && idx < BRBE_BANK1_IDX_MAX) {
-> > | 		if (!capture_branch_entry(cpuc, event, idx))
-> > | 			return idx;
-> > | 		idx++;
-> > | 	}
-> > | 
-> > | 	return idx;
-> > | }
-> 
-> These loops are better than the proposed one with indices, will update.
-
-Great!
-
-> > | 
-> > | void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
-> > | {
-> > | 	u64 brbfcr, brbcr;
-> > | 	int nr;
-> > | 
-> > | 	brbcr = read_sysreg_s(SYS_BRBCR_EL1);
-> > | 	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
-> > | 
-> > | 	/* Ensure pause on PMU interrupt is enabled */
-> > | 	WARN_ON_ONCE(!(brbcr & BRBCR_EL1_FZP));
-> > | 
-> > | 	/* Pause the buffer */
-> > | 	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
-> > | 	isb();
-> > | 
-> > | 	nr = __armv8pmu_branch_read(cpus, event);
-> > | 
-> > | 	cpuc->branches->branch_stack.nr = nr;
-> > | 	cpuc->branches->branch_stack.hw_idx = -1ULL;
-> > | 	process_branch_aborts(cpuc);
-> > | 
-> > | 	/* Unpause the buffer */
-> > | 	write_sysreg_s(brbfcr & ~BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
-> > | 	isb();
-> > | 	armv8pmu_branch_reset();
-> > | }
-> > 
-> > Looking at <linux/perf_event.h> I see:
-> > 
-> > | /*
-> > |  * branch stack layout:
-> > |  *  nr: number of taken branches stored in entries[]
-> > |  *  hw_idx: The low level index of raw branch records
-> > |  *          for the most recent branch.
-> > |  *          -1ULL means invalid/unknown.
-> > |  *
-> > |  * Note that nr can vary from sample to sample
-> > |  * branches (to, from) are stored from most recent
-> > |  * to least recent, i.e., entries[0] contains the most
-> > |  * recent branch.
-> > |  * The entries[] is an abstraction of raw branch records,
-> > |  * which may not be stored in age order in HW, e.g. Intel LBR.
-> > |  * The hw_idx is to expose the low level index of raw
-> > |  * branch record for the most recent branch aka entries[0].
-> > |  * The hw_idx index is between -1 (unknown) and max depth,
-> > |  * which can be retrieved in /sys/devices/cpu/caps/branches.
-> > |  * For the architectures whose raw branch records are
-> > |  * already stored in age order, the hw_idx should be 0.
-> > |  */
-> > | struct perf_branch_stack {
-> > |         __u64                           nr;  
-> > |         __u64                           hw_idx;
-> > |         struct perf_branch_entry        entries[];
-> > | };
-> > 
-> > ... which seems to indicate we should be setting hw_idx to 0, since IIUC our
-> > records are in age order.
-> Branch records are indeed in age order, sure will change hw_idx as 0. Earlier
-> figured that there was no need for hw_idx and hence marked it as -1UL similar
-> to other platforms like powerpc.
-
-That's fair enough; looking at power_pmu_bhrb_read() in
-arch/powerpc/perf/core-book3s.c, I see a comment:
-
-	Branches are read most recent first (ie. mfbhrb 0 is
-	the most recent branch).
-
-... which suggests that should be 0 also, or that the documentation is wrong.
-
-Do you know how the perf tool consumes this?
-
-Thanks,
-Mark.
+Applied, thanks.
