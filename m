@@ -2,121 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E83F729F1E
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 17:49:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A594729F2C
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 17:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241944AbjFIPtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 11:49:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43888 "EHLO
+        id S241951AbjFIPuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 11:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241912AbjFIPtH (ORCPT
+        with ESMTP id S241887AbjFIPuI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 11:49:07 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E61B359D;
-        Fri,  9 Jun 2023 08:49:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686325745; x=1717861745;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=MMOQJvuhySW3Bx7Au361jmZr/o23ev6AN5VhmCppLTM=;
-  b=Ie2msF5MXRteANZb70tjW4p6r6eyuRT5e9m6Lf9DQoGlYkjExid3er1A
-   c41k4uo8VH+o9BdnJBZYKINtPCZbgD6X+RoUMEvtVTz6yCsrjcon3KG/a
-   KloaGbrrI+JSGOPP0v3AocQTUSgiVYQj2m332J1Fy0TQph4FhVkZFYwQQ
-   BTyd5VLBuIt1o4SF2V2V+Tpz2KOtfPOzKwaTB5ZGZ8jKQwEYy5aA1r58L
-   jCV9AmfxBYN1l/3dpCMfWiG4vMXMO1QUqQO8MPbMsS/FYZx0yd93qU9mo
-   JrOo3XAUcv6WoWRXXMNngB26geF8zmvcqxhvJzSPBx/BEAgZ8Fg8Rhvmh
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="423504375"
-X-IronPort-AV: E=Sophos;i="6.00,229,1681196400"; 
-   d="scan'208";a="423504375"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 08:48:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="854785638"
-X-IronPort-AV: E=Sophos;i="6.00,229,1681196400"; 
-   d="scan'208";a="854785638"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 09 Jun 2023 08:48:54 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 7310765E; Fri,  9 Jun 2023 18:49:02 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Damien Le Moal <dlemoal@kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Cc:     Hans de Goede <hdegoede@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: [PATCH v2 3/3] ata: ahci_platform: Make code agnostic to OF/ACPI
-Date:   Fri,  9 Jun 2023 18:49:00 +0300
-Message-Id: <20230609154900.43024-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
-In-Reply-To: <20230609154900.43024-1-andriy.shevchenko@linux.intel.com>
-References: <20230609154900.43024-1-andriy.shevchenko@linux.intel.com>
+        Fri, 9 Jun 2023 11:50:08 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E623A96
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 08:49:58 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1a15ce37b39so833669fac.1
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 08:49:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1686325796; x=1688917796;
+        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
+         :user-agent:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yrgoKXBwHUX7WEq9UMaUcmVG2l73/fiJgyEmMbnqlYc=;
+        b=wumVhPyiGuTYNfJupdHd62oH9GAZ2PCLmUDDwKDcX/P3q7ZJiv7dip83Lt1lbaCuHM
+         MigaIh4WrBk9OKrbyKNNNXa0kd/dwOrpTT9ewxlQGzS5PVLgpxmnzvdjmt7gq9owAdIF
+         9No7pVaKOYTtteE7AuLn0IsS5+Xu5qlHWkUdHDiQeLZDF5LdwKv8BkJDPevN5830rw6d
+         u8klF0jeWIRK2Mn54o9QDGIG5w7G6IFXIYMMQlFrZNpO61n39uEAV1uE+vjS4IG+auji
+         0O0mdkM1esVd84qo3mkpBegd7uuXID4I2Ay5go7S5hNkWWY7wITiJ9+OCtJRZXy0VjBp
+         g4rA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686325796; x=1688917796;
+        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
+         :user-agent:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yrgoKXBwHUX7WEq9UMaUcmVG2l73/fiJgyEmMbnqlYc=;
+        b=jRem82+qaxo0SMmdMKjmp8pPAtwfvCSHayKeJPGuPLLuF4p1HlwlcWydOnwMpACeRQ
+         HY4HyWBnjvckR87yknZjL/L27/bB7H6zCBSmKXgb2ApIDjqtuHLci3csOVadjcvvr9Gr
+         u6BU6Q0PBQjikHPuj5KffSwDxfWjcwltSDSjDVPbR6J60t0LOYRSH0O8kwejujqtu3pB
+         sOkbB6EhNRF4JHNlWjx+2DpBIeJ8a+4W5N3GUetCauaJnB52ErH/awDXYHd3N/JzEAR+
+         cU5cFUSiE1D7RiMkeCWJyfVO/nhXk2rOaFg9GEgAITG4FiLmctK63iHzlVYT2kCER1+x
+         m7cg==
+X-Gm-Message-State: AC+VfDyimlWgLOnb1Xd1EOT7cISRyl0O82wcVnJDcikwMo76QvA33QNa
+        S9KeShU6rIC80fNspqGX1MuoRwximeboTWBR7V9H9Q==
+X-Google-Smtp-Source: ACHHUZ7xTLHhpKmBrjq1Rs7OSGnlzQSAus+GRPqqwKhHhI3913poqD6cqJyhGqkdmWsDuT1tIxGttok8cQaWzMIomls=
+X-Received: by 2002:a05:6870:988c:b0:1a1:d1c1:f69b with SMTP id
+ eg12-20020a056870988c00b001a1d1c1f69bmr1331796oab.55.1686325796513; Fri, 09
+ Jun 2023 08:49:56 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 9 Jun 2023 08:49:55 -0700
+From:   Guillaume Ranquet <granquet@baylibre.com>
+User-Agent: meli 0.7.2
+References: <20220919-v4-0-687f09a06dd9@baylibre.com> <20220919-v4-1-687f09a06dd9@baylibre.com>
+ <20230608210504.GA3436215-robh@kernel.org>
+In-Reply-To: <20230608210504.GA3436215-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Fri, 9 Jun 2023 08:49:55 -0700
+Message-ID: <CABnWg9tvBLH7R2Yqd_4=AOCdcHzw7Y-rigHN1jjoHe0EUGk1Bw@mail.gmail.com>
+Subject: Re: [PATCH v4 1/8] dt-bindings: display: mediatek: add MT8195 hdmi bindings
+To:     Rob Herring <robh@kernel.org>
+Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, CK Hu <ck.hu@mediatek.com>,
+        Jitao shi <jitao.shi@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, mac.shen@mediatek.com,
+        stuart.lee@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the help of a new device_is_compatible() make
-the driver code agnostic to the OF/ACPI. This makes
-it neater. As a side effect the header inclusions is
-corrected (seems mod_devicetable.h was implicitly
-included).
+On Thu, 08 Jun 2023 23:05, Rob Herring <robh@kernel.org> wrote:
+>On Mon, May 29, 2023 at 04:30:58PM +0200, Guillaume Ranquet wrote:
+>> Add mt8195 SoC bindings for hdmi and hdmi-ddc
+>>
+>> On mt8195 the ddc i2c controller is part of the hdmi IP block and thus has no
+>> specific register range, power domain or interrupt, making it simpler
+>> than the legacy "mediatek,hdmi-ddc" binding.
+>>
+>> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+>> ---
+>>  .../bindings/display/mediatek/mediatek,hdmi.yaml   | 59 ++++++++++++++++++----
+>>  .../display/mediatek/mediatek,mt8195-hdmi-ddc.yaml | 45 +++++++++++++++++
+>>  2 files changed, 93 insertions(+), 11 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
+>> index b90b6d18a828..4f62e6b94048 100644
+>> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
+>> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
+>> @@ -21,6 +21,7 @@ properties:
+>>        - mediatek,mt7623-hdmi
+>>        - mediatek,mt8167-hdmi
+>>        - mediatek,mt8173-hdmi
+>> +      - mediatek,mt8195-hdmi
+>>
+>>    reg:
+>>      maxItems: 1
+>> @@ -29,18 +30,10 @@ properties:
+>>      maxItems: 1
+>>
+>>    clocks:
+>> -    items:
+>> -      - description: Pixel Clock
+>> -      - description: HDMI PLL
+>> -      - description: Bit Clock
+>> -      - description: S/PDIF Clock
+>> +    maxItems: 4
+>>
+>>    clock-names:
+>> -    items:
+>> -      - const: pixel
+>> -      - const: pll
+>> -      - const: bclk
+>> -      - const: spdif
+>> +    maxItems: 4
+>>
+>>    phys:
+>>      maxItems: 1
+>> @@ -58,6 +51,9 @@ properties:
+>>      description: |
+>>        phandle link and register offset to the system configuration registers.
+>>
+>> +  power-domains:
+>> +    maxItems: 1
+>> +
+>>    ports:
+>>      $ref: /schemas/graph.yaml#/properties/ports
+>>
+>> @@ -86,9 +82,50 @@ required:
+>>    - clock-names
+>>    - phys
+>>    - phy-names
+>> -  - mediatek,syscon-hdmi
+>>    - ports
+>>
+>> +allOf:
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            const: mediatek,mt8195-hdmi
+>> +    then:
+>> +      properties:
+>> +        clocks:
+>> +          items:
+>> +            - description: APB
+>> +            - description: HDCP
+>> +            - description: HDCP 24M
+>> +            - description: Split HDMI
+>> +        clock-names:
+>> +          items:
+>> +            - const: hdmi_apb_sel
+>> +            - const: hdcp_sel
+>> +            - const: hdcp24_sel
+>> +            - const: split_hdmi
+>> +
+>> +      required:
+>> +        - power-domains
+>> +    else:
+>> +      properties:
+>> +        clocks:
+>> +          items:
+>> +            - description: Pixel Clock
+>> +            - description: HDMI PLL
+>> +            - description: Bit Clock
+>> +            - description: S/PDIF Clock
+>> +
+>> +        clock-names:
+>> +          items:
+>> +            - const: pixel
+>> +            - const: pll
+>> +            - const: bclk
+>> +            - const: spdif
+>
+>I don't understand how the same h/w block can have completely different
+>clocks. If not the same h/w or evolution of the same h/w, then do a
+>separate schema.
+>
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/ata/ahci_platform.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Hi Rob,
 
-diff --git a/drivers/ata/ahci_platform.c b/drivers/ata/ahci_platform.c
-index ab30c7138d73..81fc63f6b008 100644
---- a/drivers/ata/ahci_platform.c
-+++ b/drivers/ata/ahci_platform.c
-@@ -9,14 +9,14 @@
-  */
- 
- #include <linux/kernel.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/pm.h>
- #include <linux/device.h>
--#include <linux/of_device.h>
- #include <linux/platform_device.h>
-+#include <linux/property.h>
- #include <linux/libata.h>
- #include <linux/ahci_platform.h>
--#include <linux/acpi.h>
- #include <linux/pci_ids.h>
- #include "ahci.h"
- 
-@@ -56,10 +56,10 @@ static int ahci_probe(struct platform_device *pdev)
- 	if (rc)
- 		return rc;
- 
--	if (of_device_is_compatible(dev->of_node, "hisilicon,hisi-ahci"))
-+	if (device_is_compatible(dev, "hisilicon,hisi-ahci"))
- 		hpriv->flags |= AHCI_HFLAG_NO_FBS | AHCI_HFLAG_NO_NCQ;
- 
--	port = acpi_device_get_match_data(dev);
-+	port = device_get_match_data(dev);
- 	if (!port)
- 		port = &ahci_port_info;
- 
--- 
-2.40.0.1.gaa8946217a0b
+I'm not entirely sure what's the best approach here.
+The IPs are different enough to warrant a separate schema IMHO.
+Though CK asked me to merge both IPs together (for both schema and code).
 
+CK might want to chime in and advocate his point of view?
+
+>> +
+>> +      required:
+>> +        - mediatek,syscon-hdmi
+>> +
+>>  additionalProperties: false
+>>
+>>  examples:
+>> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,mt8195-hdmi-ddc.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,mt8195-hdmi-ddc.yaml
+>> new file mode 100644
+>> index 000000000000..84c096835b47
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,mt8195-hdmi-ddc.yaml
+>> @@ -0,0 +1,45 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/display/mediatek/mediatek,mt8195-hdmi-ddc.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Mediatek HDMI DDC for mt8195
+>> +
+>> +maintainers:
+>> +  - CK Hu <ck.hu@mediatek.com>
+>> +  - Jitao shi <jitao.shi@mediatek.com>
+>> +
+>> +description: |
+>> +  The HDMI DDC i2c controller is used to interface with the HDMI DDC pins.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - mediatek,mt8195-hdmi-ddc
+>> +
+>> +  clocks:
+>> +    maxItems: 1
+>> +
+>> +  mediatek,hdmi:
+>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>> +    description:
+>> +      A phandle to the mt8195 hdmi controller
+>> +
+>> +required:
+>> +  - compatible
+>> +  - clocks
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>> +    hdmiddc0: i2c {
+>> +      compatible = "mediatek,mt8195-hdmi-ddc";
+>> +      mediatek,hdmi = <&hdmi0>;
+>> +      clocks = <&clk26m>;
+>
+>How does one access this h/w device? There is nothing described to
+>access it.
+>
+
+The device is embedded into the HDMI block and thus uses the
+mediatek,hdmi phandle to access its sets of registers in the middle of
+the mediatek,hdmi register range.
+
+Hope this clarifies things,
+Guillaume.
+
+>Rob
