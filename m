@@ -2,189 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4762B729D83
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:57:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A193729D70
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:55:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241749AbjFIO4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 10:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38670 "EHLO
+        id S241724AbjFIOyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 10:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241682AbjFIO42 (ORCPT
+        with ESMTP id S241648AbjFIOyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 10:56:28 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B623A87
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 07:56:01 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f732d37d7cso18368645e9.2
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 07:56:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686322548; x=1688914548;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ivatK82mIE79m2bjB3shZCKbThxgPNsfOJBEjwu6Sbk=;
-        b=g3gqEel5hZ91PR/5WW666p6143wPgKRHct1WMme18BZDzpj1ossV6woI7s33X9jido
-         Ajp+7zCIcWK7Vh5GmcEekrzFbIh1m9cpANsrA3cjcqJGDzXvs+GHN3IZR4VFeNdKslbf
-         3muw4ZeDeOb6EYekdgYBPdUWkzaPper537/n0PxFOzvAdZGuycHXokHOXDrXJq5pAOJy
-         nbpT6TRUTWWKhabLVardlHjjd2xIbOQa0g7DfN7tkjEey/0tlC4HGFBCFCDFS1CfXDdJ
-         4sizJSD5w9eJKqODGMonOLTY/tGoQNnY/WX05cDC4HjxuyNHzFc3Rrk43ZQdoAZMfJcq
-         V51A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686322548; x=1688914548;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ivatK82mIE79m2bjB3shZCKbThxgPNsfOJBEjwu6Sbk=;
-        b=ZtOnEH0/lxWW+QnujKGR4+VGfegs8U/bfaWf97XdVVdICvKNt2c95zA9mbHuOnov+j
-         FF7FpAAgcptA1CkBgz/QCE1C8FCZbAiSDlTYqlEB6CQfD4SfxDSh7TFjhZ6dexCTp9HY
-         TWF5Qauhe0521rPISvkRw38dMcVZn17+7b+7y+GmuXXYZ4oWHXccnx0tjmasmqv+6cEN
-         5hPWRJOsrI/e8TSBXU5vS6uHl/ZQTGmNJNmJ5hmI2MxJpVFIoGgb3ZK/XIaoD7LvQh0Y
-         thELPx4iJDSQ4TGmy0TjEfDhhtzLVmVv2lVC5tUBoVrS6aAgHpWxbKOobIVMms6rKg3p
-         sZUg==
-X-Gm-Message-State: AC+VfDyIA0sH1HUgiNkNJIh+Bh70t3dS/25obqJkyOW9oDavlvHEzlfE
-        6bq7ADDwdcezd1UM+TEe3l6i/A==
-X-Google-Smtp-Source: ACHHUZ5dWz0dRCo8oE+uEbyqJqzKGnyMC9AFlnm0/AaLeKxls87+Rx6ZuPcuzqiz8ZR1mbhPI1g80Q==
-X-Received: by 2002:a05:600c:290:b0:3f7:f7d5:a07f with SMTP id 16-20020a05600c029000b003f7f7d5a07fmr1421885wmk.17.1686322548271;
-        Fri, 09 Jun 2023 07:55:48 -0700 (PDT)
-Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id c21-20020a05600c0ad500b003f7310a3ffasm2946632wmr.2.2023.06.09.07.55.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 07:55:47 -0700 (PDT)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     broonie@kernel.org
-Cc:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
-        ckeepax@opensource.cirrus.com, kuninori.morimoto.gx@renesas.com,
-        linux-kernel@vger.kernel.org, pierre-louis.bossart@linux.intel.com,
-        alsa-devel@alsa-project.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Mohammad Rafi Shaik <quic_mohs@quicinc.com>
-Subject: [PATCH v2 11/11] ASoC: q6dsp: q6apm-dai: Add mmap and copy compress DAI callbacks
-Date:   Fri,  9 Jun 2023 15:54:07 +0100
-Message-Id: <20230609145407.18774-12-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20230609145407.18774-1-srinivas.kandagatla@linaro.org>
-References: <20230609145407.18774-1-srinivas.kandagatla@linaro.org>
-MIME-Version: 1.0
+        Fri, 9 Jun 2023 10:54:36 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2089.outbound.protection.outlook.com [40.107.102.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAE2359C
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 07:54:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TvQw11cN1iTSr0SKcJ4SHrBP2ngscc0r66ea+tNoiie4F4RY/crWRkX3V/eUM6jDIYj7tWgGQppJFNXTYPe9HOeeT40K+cOi2anm8FDPhKds/xbvW6ZEFH0PcTlIWlBvYqtS5Gr/bOtTElB8IZ7riOswkMdBPvnvqFiSn2Zry0QLP7wXCFHopeXwiXNpieOcEkCXa8enS3ZkBVmuKOv2oYXu/viRkuyD1TLfASGTwlYVNzsDqwe4+izYgdWP3KGMl+uqcehNUvMJwI9WwIal2/SQMhK8aHW0sgmVTbx712RTzXEyQMe9x4db7kECa8OCLN3TzwixVe8PDYeflOqfVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SC+YV4Sgfwo8OHcszvKt0afV4qQxDY5hGQdrcwfN8+A=;
+ b=UD0ekq3KBSXoKgmFrRnWZD5ZDJtNqCDW7tDymIA3HBu+Jmw3Virt+Xrydb/HpHzVN76nwIj3Utvi9hCkOry6AYJVCf61oyEyvt5wnXZuyl6/6tbzzmS/YYlLJpaZeB8Iz/QBubwue/m7cedvbc7cOvmUToD4LnBX2Dn/Ynv7PRVXgNRbRYZxDQfa2GZHT7vv96gpeYTC8GgV/22buM6mVky4h5GXyI6rMD2x9L91y8be0kZmsg68BVvhLctRjcq/YGxZYxYH6M0ZMS3DSe75ampV4GUINVepE0TZQk1LW0TxmTVVDDzncRCjKpP90fIPWAIjnE8AnMj05O8ZpXlkBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SC+YV4Sgfwo8OHcszvKt0afV4qQxDY5hGQdrcwfN8+A=;
+ b=bIe6o8lqIEmUdw3Wc1pyjZkjZaVqzfsEoUShWKWSChkMMk7cS6Ovq1GSuxNMVwZmGCDHi30hrlCJDfhpAiScQzKsGtpi+cYszdRv0YOzeV6WN7bcAtV+8lAjIDZ8D5udriKF6P/S3n++g5KWkiKljQv5qTsLNYJlBs79HwmPdfk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
+ by BL3PR12MB6595.namprd12.prod.outlook.com (2603:10b6:208:38e::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.42; Fri, 9 Jun
+ 2023 14:54:26 +0000
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::4666:2db3:db1e:810c]) by CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::4666:2db3:db1e:810c%7]) with mapi id 15.20.6455.037; Fri, 9 Jun 2023
+ 14:54:26 +0000
+Message-ID: <3f71e132-8b9b-8f54-973c-ad9403369c1a@amd.com>
+Date:   Fri, 9 Jun 2023 10:54:22 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [RESEND 11/15] drm/amd/display/amdgpu_dm/amdgpu_dm_helpers: Move
+ SYNAPTICS_DEVICE_ID into CONFIG_DRM_AMD_DC_DCN ifdef
+To:     Lee Jones <lee@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+References: <20230609081732.3842341-1-lee@kernel.org>
+ <20230609081732.3842341-12-lee@kernel.org>
+Content-Language: en-US
+From:   Harry Wentland <harry.wentland@amd.com>
+In-Reply-To: <20230609081732.3842341-12-lee@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: YQBPR0101CA0057.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c00:1::34) To CO6PR12MB5427.namprd12.prod.outlook.com
+ (2603:10b6:5:358::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|BL3PR12MB6595:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9dde8987-5763-44bd-16b2-08db68f96bba
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: EqWRpxU6MhWdoQjJGf4TXkdBu1JTgYMZ2HkblSbCzBIlu8DRAL0hjOX5mVbYFF0Kd1V7aBtiLR/xRu9X6ld5TK3nPHFzwMNbp0vV/ZSQ9JGqmPCnURi19DcFjDs5O4QFLDvU+ku+KxybfyUQO6iDgdn40emVQzQ1QbeAfHiAUKU82LcVtasHxV39Bc4Z9CGM0O07Va9iWdW3YM1aZMrn9CN2+JJbpAX5fSQMmPafVIerk/D3TNGniMxjKME255qGJmRNG7VntfBE8CjJYQPWYIVk/uMkQ8eAmpMOJuRGzZ1H4SJJvzMphpKHtLwHrdDIE1II3UxFQ6evLJJAYxxxUS8hUl7LkmdQKV0abRjIzCplJdSEW9ZSr6O8wawIOEgQGdBkIB1ErGTIzzxV4E7qjRGDRz6moZtlGeTcnZCIevYdawrA17FbBXgrALIfur+luzYFtu5K6dpvgd+ThzoqqD2E9NdNvZx/epVp8apeVIyloGs4rB44Ne/aTf3AzH2UySaA2yoqEEmTApLg5/gDp9ZZuMgdnvfPseEpS59grN5tnwaO/My8MJ76SAVTCTziP8+TLaYJSRESGX3z8ZKj0KxNi77ofdiRI4z2xLo3gS1Kx26Wsg/lbe1fI9gdKsUxU3poH75BSbv3+xr43H5gyg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(39860400002)(376002)(346002)(136003)(451199021)(2906002)(31686004)(44832011)(66574015)(83380400001)(5660300002)(8936002)(8676002)(54906003)(316002)(36756003)(66946007)(66556008)(41300700001)(4326008)(6916009)(478600001)(6486002)(6666004)(66476007)(186003)(31696002)(2616005)(86362001)(38100700002)(6512007)(6506007)(26005)(53546011)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TDBlMEFvOGs1OUZnY3ByYmlxQ1VWT3dDZE5mcXUzZHllMzhRdytab1J6dzZv?=
+ =?utf-8?B?UW5BT0NOb0RUT2t3YzJnbS9XdE5CV3VpVTVVSnFQQUowenhIZkx1VmR5ZHZm?=
+ =?utf-8?B?MCtOQnY1UHFqY0ZxRFpuQjhHMnU5MjZ2Qk9sbVlxVGJBVVJBb3UrN0FjQWdh?=
+ =?utf-8?B?VXBnUHRINHRvU1VSWlIvM3VaaS9STGdMUGwvd1dSbmxyRzQxSit3Y2YvYzhF?=
+ =?utf-8?B?T2tsKzlBeDIzUml1UTBnakE3RVpIYmxQNFIzZEJHcHBqZ1BnRm5HbTFyUlVo?=
+ =?utf-8?B?SGRLaUdOc2NlTnpoZUxLcmxMMmREcGplZ3U1KzljdStYWUFvWG5xdCtmWFlr?=
+ =?utf-8?B?Y1BaS0RnQ045cHZNMEorUzlyYTBRUTY1Unc1Z05sc0FBMm5LSytNMWEzY3VP?=
+ =?utf-8?B?UjE3TUE5L00vQU1tNm1SWkZNZE9xSXRUNlhkSFBKS042dmtneHpFdTU2MUZt?=
+ =?utf-8?B?Y2duV25KbXJ5SG53OEF6eElQTEE2NUdjbzNKdk1ha3F4MDFFSllJczNSdmhr?=
+ =?utf-8?B?b1lEQ2dCZVpVQWNSUDFSYWx4bHA1ZXUrbExWcjh1OVZudDN0ZXc3d1pTdC8x?=
+ =?utf-8?B?dWlmQzJ1YUpZZFo0WHJqQXlzYUF6YzZnSzdBcjhtZEtHQUN3S3czWWE0c1ZW?=
+ =?utf-8?B?NXhvTnJ6RDNKMXJGUFJUNXFWS0NHc0RJZ1lIY1BiOG84ekFLYk1IMWN2M2xz?=
+ =?utf-8?B?T0RIeThMVEhlOUdaMXE2allyeHJPYjhmeU1yMUVZcitDaXZWcUNjUWwwcHU0?=
+ =?utf-8?B?WXQrOUtyR0JGd1YybCtadzIxcUFiV3AyeGYxSndFTzFHQ2t5N0ZvZnFOVXhY?=
+ =?utf-8?B?MUtyZmg2azMwVTA5OEJLOC9tTDRpSW5CTXBWM0ZnZ0N4cDJrRy9xSHNld2hi?=
+ =?utf-8?B?aWlaMWI5N04vNGorUk4wTThQMFdOWnRpY1NqaS80RWl4aDZ3SFZpc0FQWmZm?=
+ =?utf-8?B?clYzTTM1ME4vbE0vWk5PRGsvdDJNRWRIK0FhQnphcjNVWUNqd3c3czgzQ3Az?=
+ =?utf-8?B?RFY0cVFKa2plVFdKS09WUHB0alpxcDRzYVlPc3FYekZ1cVA2ZVFGSUlKZk1U?=
+ =?utf-8?B?Y2FwaS9YOUJZRlZmZ1hYU2t6THRiYUNnZ0JYWTVsUXl5amRXbmhaZWdKanRJ?=
+ =?utf-8?B?cjk1MWxFSlJ3TUxHenhIbFJYRXdJTVc3T1R0QzdiRzJrayt5OG5INDdNQytV?=
+ =?utf-8?B?cDlrV0M5Z0pIL1hrM01CYm11eXg2MTRhWU9SbUsxVGxXZytKUjlFa3F1QzF5?=
+ =?utf-8?B?SmhPc1pBTkVJTkorbEQ1Z2E0Z2R0L0pHMXVxYzlhWndSTnRBaTgvTFVBektI?=
+ =?utf-8?B?OHBHdmRqVjVxS0NuQWQyODBybVdUM2pjM3VQTFRxNmhoWjlaQS92MDNCamhT?=
+ =?utf-8?B?RzFBeEkybHE2b1NhVlZ0YVZtTkNIOFY5MG1WUWNIdnBURCtsOCs2VDVQR1hG?=
+ =?utf-8?B?MXVaSVlHR25NaW40eGQvOHA1QkNjazBBdWdqVjMvNFFvZjVLZmttdU1OMVRr?=
+ =?utf-8?B?YXNYMXg2QjF5ZjNoWHRPVlVuUW9XVEtIbUdtL0w4bGdWTlB0dytieVNYRTEy?=
+ =?utf-8?B?bUpEcnJKY1dxSGVGZ0pZYmg4WVptcWdWMDZtTklnWUhWNHR5M3k2WTFTdnA0?=
+ =?utf-8?B?eDFlNjJjSlh5ZzBHYWhpWnhPdDVPSnJjZVd4eTcvS01qZjlRdnBMMEJWcjVs?=
+ =?utf-8?B?OUVPZ1pYNzZzcFZNMDNMcVZHYjdBNU4wd05sQkhzeGJDeTRFcjUyaUlCVnI1?=
+ =?utf-8?B?VzhZM20rZW5DZ1k4QjVndm9iR2JHamtHRnZHT1dZNlZXb21DcFlMSXpHb1pR?=
+ =?utf-8?B?TzRLbTgyV0oxRGkvYUI0VzdMeFluUkliTWxDMUFiNGhvblpIUzNIS2Zydzlz?=
+ =?utf-8?B?YXNBWExRYzBUODZENjMyK3pucENHdUtCUTcvVm0xdU5QTG9MU0I4T0M0NU5X?=
+ =?utf-8?B?NEQzUVhrY24yMEZIaDcwQW0reDlhaFFHdTlReExYMW1YcTkvazFWNTJSczV2?=
+ =?utf-8?B?WlQzaldsaVJINll6QjYzejNwVEZyQllnR3dCVmZ0MWRLOXBSUnlnd3ArSFpV?=
+ =?utf-8?B?OEpzaUZjdm4weHdsdWtsTnpTTjRMWWNYY0V5Tm56YUdVamdIcFJRTytIVWg1?=
+ =?utf-8?Q?ucI9DNZMQq4V46qlA20opF4Iy?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9dde8987-5763-44bd-16b2-08db68f96bba
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 14:54:26.8480
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HKD44Gqsd4iuJwBPBVtN0F57qAKtM85dTX07HAnge0kPlfWwISLUW7hPpc/t3MgesAhG62bsumXomjzbtFZFag==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6595
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add q6apm mmap and copy compress DAI callbacks to support compress
-offload playback.
+On 6/9/23 04:17, Lee Jones wrote:
+> Fixes the following W=1 kernel build warning(s):
+> 
+>  drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_helpers.c:48:22: warning: ‘SYNAPTICS_DEVICE_ID’ defined but not used [-Wunused-const-variable=]
+> 
+> Cc: Harry Wentland <harry.wentland@amd.com>
+> Cc: Leo Li <sunpeng.li@amd.com>
+> Cc: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+> Cc: Alex Deucher <alexander.deucher@amd.com>
+> Cc: "Christian König" <christian.koenig@amd.com>
+> Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
+> Cc: David Airlie <airlied@gmail.com>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: amd-gfx@lists.freedesktop.org
+> Cc: dri-devel@lists.freedesktop.org
+> Signed-off-by: Lee Jones <lee@kernel.org>
 
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Co-developed-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
-Signed-off-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
----
- sound/soc/qcom/qdsp6/q6apm-dai.c | 81 ++++++++++++++++++++++++++++++++
- 1 file changed, 81 insertions(+)
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
 
-diff --git a/sound/soc/qcom/qdsp6/q6apm-dai.c b/sound/soc/qcom/qdsp6/q6apm-dai.c
-index c67147e5388b..5eb0b864c740 100644
---- a/sound/soc/qcom/qdsp6/q6apm-dai.c
-+++ b/sound/soc/qcom/qdsp6/q6apm-dai.c
-@@ -737,6 +737,85 @@ static int q6apm_dai_compr_set_metadata(struct snd_soc_component *component,
- 	return ret;
- }
- 
-+static int q6apm_dai_compr_mmap(struct snd_soc_component *component,
-+				struct snd_compr_stream *stream,
-+				struct vm_area_struct *vma)
-+{
-+	struct snd_compr_runtime *runtime = stream->runtime;
-+	struct q6apm_dai_rtd *prtd = runtime->private_data;
-+	struct device *dev = component->dev;
-+
-+	return dma_mmap_coherent(dev, vma, prtd->dma_buffer.area, prtd->dma_buffer.addr,
-+				 prtd->dma_buffer.bytes);
-+}
-+
-+static int q6apm_compr_copy(struct snd_soc_component *component,
-+			    struct snd_compr_stream *stream, char __user *buf,
-+			    size_t count)
-+{
-+	struct snd_compr_runtime *runtime = stream->runtime;
-+	struct q6apm_dai_rtd *prtd = runtime->private_data;
-+	void *dstn;
-+	unsigned long flags;
-+	size_t copy;
-+	u32 wflags = 0;
-+	u32 app_pointer;
-+	u32 bytes_received;
-+	uint32_t bytes_to_write;
-+	int avail, bytes_in_flight = 0;
-+
-+	bytes_received = prtd->bytes_received;
-+
-+	/**
-+	 * Make sure that next track data pointer is aligned at 32 bit boundary
-+	 * This is a Mandatory requirement from DSP data buffers alignment
-+	 */
-+	if (prtd->next_track)
-+		bytes_received = ALIGN(prtd->bytes_received, prtd->pcm_count);
-+
-+	app_pointer = bytes_received/prtd->pcm_size;
-+	app_pointer = bytes_received -  (app_pointer * prtd->pcm_size);
-+	dstn = prtd->dma_buffer.area + app_pointer;
-+
-+	if (count < prtd->pcm_size - app_pointer) {
-+		if (copy_from_user(dstn, buf, count))
-+			return -EFAULT;
-+	} else {
-+		copy = prtd->pcm_size - app_pointer;
-+		if (copy_from_user(dstn, buf, copy))
-+			return -EFAULT;
-+		if (copy_from_user(prtd->dma_buffer.area, buf + copy, count - copy))
-+			return -EFAULT;
-+	}
-+
-+	spin_lock_irqsave(&prtd->lock, flags);
-+	bytes_in_flight = prtd->bytes_received - prtd->copied_total;
-+
-+	if (prtd->next_track) {
-+		prtd->next_track = false;
-+		prtd->copied_total = ALIGN(prtd->copied_total, prtd->pcm_count);
-+		prtd->bytes_sent = ALIGN(prtd->bytes_sent, prtd->pcm_count);
-+	}
-+
-+	prtd->bytes_received = bytes_received + count;
-+
-+	/* Kick off the data to dsp if its starving!! */
-+	if (prtd->state == Q6APM_STREAM_RUNNING && (bytes_in_flight == 0)) {
-+		bytes_to_write = prtd->pcm_count;
-+		avail = prtd->bytes_received - prtd->bytes_sent;
-+
-+		if (avail < prtd->pcm_count)
-+			bytes_to_write = avail;
-+
-+		q6apm_write_async(prtd->graph, bytes_to_write, 0, 0, wflags);
-+		prtd->bytes_sent += bytes_to_write;
-+	}
-+
-+	spin_unlock_irqrestore(&prtd->lock, flags);
-+
-+	return count;
-+}
-+
- static const struct snd_compress_ops q6apm_dai_compress_ops = {
- 	.open		= q6apm_dai_compr_open,
- 	.free		= q6apm_dai_compr_free,
-@@ -747,6 +826,8 @@ static const struct snd_compress_ops q6apm_dai_compress_ops = {
- 	.ack		= q6apm_dai_compr_ack,
- 	.set_params	= q6apm_dai_compr_set_params,
- 	.set_metadata	= q6apm_dai_compr_set_metadata,
-+	.mmap		= q6apm_dai_compr_mmap,
-+	.copy		= q6apm_compr_copy,
- };
- 
- static const struct snd_soc_component_driver q6apm_fe_dai_component = {
--- 
-2.21.0
+Harry
+
+> ---
+>  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+> index 09e056a647087..cd20cfc049969 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
+> @@ -44,9 +44,6 @@
+>  #include "dm_helpers.h"
+>  #include "ddc_service_types.h"
+>  
+> -/* MST Dock */
+> -static const uint8_t SYNAPTICS_DEVICE_ID[] = "SYNA";
+> -
+>  /* dm_helpers_parse_edid_caps
+>   *
+>   * Parse edid caps
+> @@ -702,6 +699,9 @@ static void apply_synaptics_fifo_reset_wa(struct drm_dp_aux *aux)
+>  	DC_LOG_DC("Done apply_synaptics_fifo_reset_wa\n");
+>  }
+>  
+> +/* MST Dock */
+> +static const uint8_t SYNAPTICS_DEVICE_ID[] = "SYNA";
+> +
+>  static uint8_t write_dsc_enable_synaptics_non_virtual_dpcd_mst(
+>  		struct drm_dp_aux *aux,
+>  		const struct dc_stream_state *stream,
 
