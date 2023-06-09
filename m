@@ -2,57 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A596C729CAE
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 159CC729CB2
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241160AbjFIOWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 10:22:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47330 "EHLO
+        id S231135AbjFIOWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 10:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241119AbjFIOWF (ORCPT
+        with ESMTP id S239318AbjFIOWt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 10:22:05 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301203598
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 07:22:04 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q7d01-0007ok-Tg; Fri, 09 Jun 2023 16:21:57 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q7d00-006Dw8-Nd; Fri, 09 Jun 2023 16:21:56 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q7d00-00CbtK-3b; Fri, 09 Jun 2023 16:21:56 +0200
-Date:   Fri, 9 Jun 2023 16:21:55 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-pwm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pwm: stm32: Implement .get_state()
-Message-ID: <20230609142155.h5fvn4fxdcleoznw@pengutronix.de>
-References: <20230608-pwm-stm32-get-state-v1-1-db7e58a7461b@pengutronix.de>
- <dac9c545-fcbc-3aec-c341-abc62f551703@foss.st.com>
+        Fri, 9 Jun 2023 10:22:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3663830E7;
+        Fri,  9 Jun 2023 07:22:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C74D86189D;
+        Fri,  9 Jun 2023 14:22:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21A3DC433EF;
+        Fri,  9 Jun 2023 14:22:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686320568;
+        bh=PFEySzC7tACtP/XyP8fsFBTxk131P5gKr8Atqgb7dqo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=toM+LEM3YozmlHZ+XBE1mBW2qo9vKIHZXnT3Z9w+O8PouVRTFEeXOiTABtgF2FYs5
+         fecRrZ7+1u0/8h1veEVKzXPEuK3WXbwX1y6RVhgFxD3Aj6c27wT8ydpqcr2+v5iyu/
+         bOdPel0xByAwm/pI5BsjqNcvB0SDjKu/cWw1xwg0egDUkV9opK9g+P1tlEswQYPPq1
+         /LYOP/IPXu3ISRFIDS4eUCfNYGrFFqfc5qMemZLjC/HLBUV9cJzyZp8hj/yqfS0Kfb
+         /kOUg9QB1Iz6M0I+HroY6Bi+E0ygI3nnP8E4Z2OleuuVMDtZczKCZnNZEm8uZZ7VxM
+         8bRuhy49tzTJw==
+Date:   Fri, 9 Jun 2023 15:22:41 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+        "jsnitsel@redhat.com" <jsnitsel@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>
+Subject: Re: [Patch V10 2/3] tpm_tis-spi: Add hardware wait polling
+Message-ID: <3b5e149d-4d52-46f8-85f5-821aa7b99ae9@sirena.org.uk>
+References: <ZEaWQD_QTs2usVl8@orome>
+ <5fae29cd-d5f4-4616-be1c-1cd4d5b9a538@sirena.org.uk>
+ <ZEag1lAonYcmNFXk@orome>
+ <DM4PR12MB5769BB69B97F77DBA9ED2935C3779@DM4PR12MB5769.namprd12.prod.outlook.com>
+ <DM4PR12MB5769499349B6B936FE46BF0CC3419@DM4PR12MB5769.namprd12.prod.outlook.com>
+ <ZHhW_wFvRWInR_iM@orome>
+ <dec901be-4bef-43e0-a125-23c5c4e92789@sirena.org.uk>
+ <ZHiQ44gAL3YEZPUh@orome>
+ <c0cf893d-8bc5-4f4b-a326-bb10dd0c84de@sirena.org.uk>
+ <CT86OCSDQS17.21FWH48JRKKI9@suppilovahvero>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wkz2lg5pii5fhdhh"
+        protocol="application/pgp-signature"; boundary="O0OAEmr40Unwas+e"
 Content-Disposition: inline
-In-Reply-To: <dac9c545-fcbc-3aec-c341-abc62f551703@foss.st.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <CT86OCSDQS17.21FWH48JRKKI9@suppilovahvero>
+X-Cookie: Tom's hungry, time to eat lunch.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -60,73 +79,39 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---wkz2lg5pii5fhdhh
-Content-Type: text/plain; charset=iso-8859-1
+--O0OAEmr40Unwas+e
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hello Fabrice,
+On Fri, Jun 09, 2023 at 05:19:15PM +0300, Jarkko Sakkinen wrote:
+> On Thu Jun 1, 2023 at 3:40 PM EEST, Mark Brown wrote:
+> > On Thu, Jun 01, 2023 at 02:36:51PM +0200, Thierry Reding wrote:
+> > > On Thu, Jun 01, 2023 at 12:04:59PM +0100, Mark Brown wrote:
+> > > > On Thu, Jun 01, 2023 at 10:29:51AM +0200, Thierry Reding wrote:
 
-On Fri, Jun 09, 2023 at 03:06:47PM +0200, Fabrice Gasnier wrote:
-> On 6/8/23 16:06, Philipp Zabel wrote:
-> > +static int stm32_pwm_get_state(struct pwm_chip *chip,
-> > +			       struct pwm_device *pwm, struct pwm_state *state)
-> > +{
-> > +	struct stm32_pwm *priv =3D to_stm32_pwm_dev(chip);
-> > +	int ch =3D pwm->hwpwm;
-> > +	unsigned long rate;
-> > +	u32 ccer, psc, arr, ccr;
-> > +	u64 dty, prd;
-> > +	int ret;
-> > +
-> > +	ret =3D regmap_read(priv->regmap, TIM_CCER, &ccer);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	state->enabled =3D ccer & (TIM_CCER_CC1E << (ch * 4));
-> > +	state->polarity =3D (ccer & (TIM_CCER_CC1P << (ch * 4))) ?
-> > +			  PWM_POLARITY_INVERSED : PWM_POLARITY_NORMAL;
-> > +	regmap_read(priv->regmap, TIM_PSC, &psc);
-> > +	regmap_read(priv->regmap, TIM_ARR, &arr);
-> > +	read_ccrx(priv, ch, &ccr);
-> > +	rate =3D clk_get_rate(priv->clk);
-> > +
-> > +	prd =3D (u64)NSEC_PER_SEC * (psc + 1) * (arr + 1);
-> > +	state->period =3D DIV_ROUND_UP_ULL(prd, rate);
-> > +	dty =3D (u64)NSEC_PER_SEC * (psc + 1) * ccr;
-> > +	state->duty_cycle =3D DIV_ROUND_UP_ULL(dty, rate);
->=20
-> Just a question/thought, could it be worth to use DIV_ROUND_CLOSEST_ULL()=
- ?
+> > > Jarkko, can you pick this up for v6.5?
 
-No, round up is the right choice. The reason for that is that .apply()
-rounds down in its divisions. If you use ROUND_CLOSEST here, reapplying
-the result from .get_state() might not be idempotent.
+> > No, I said that I had applied the SPI parts for v6.4 so there would be
+> > no blocker whenever people got round to reviewing the TPM side.
 
-> > +
-> > +	return ret;
-> > +}
+> I'm totally cool with this: won't pick the patch then.
 
-Best regards
-Uwe
+I have no intention of applying the patch, I am expecting it to go via
+the TPM tree.
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---wkz2lg5pii5fhdhh
+--O0OAEmr40Unwas+e
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSDNYMACgkQj4D7WH0S
-/k7s5Af/RT0ZOdJvsT4ylvLPggQkwlMTUHV0alz7e2/4+uYnw8bv5kN9Ly38Mnm5
-IKwDWxm5tRbuUNm658LqBYi4xXRnPdvkR3Sx18PE8KZsIkbjRcaizPk2UnkpIJKd
-UWtztLyKTT5LUp2mn9WGjzUgC+eXW67uSY0/ChoWVANu9/J2bpbp2rpIz3l2vk30
-jwdWMX61A7j5kS/XanteA7nKuFwI94MdzrfqCMSAW2w2YKS63RcA/aPr1tKtlPZv
-77UHlviGhFPm7R4LrAaX3Swj2OIq3Lj7nREr9YUT5/vO+AULV9pX2nUvR9zAMVVw
-y/4kR4atPgutjQ19zD+pfpXz/jlQGQ==
-=yi3A
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSDNbAACgkQJNaLcl1U
+h9DFTwf/fxy+VHx3rPhTGHVI3g+3B5YfkGyIZZUUizJ4Y/FZtz0pzFEhcFBiThSp
+BDTAmG6rrS1bbseotnzkArMI0v0ts2BX+CqhaLxWAOHusEdDUS/xXXUzpZOHK6ZD
++f7ELs4ANXHTVpYV3vDnMO0bcM/hjtljLj2GhG1FrAcEHP6l65aTrK+we6dR1kMG
+QlIIiLaq2DWTrpW9B//x8slCBbMmCNEWNnmGliBuBr83FiIPydVk8oDXlHZSfSd0
+90tNkdivHTNG9Dhs1c487cuIoirN+sevKt+ucutAk/mi1tteNzIlpVcLQoq54sOj
+0QgnqIAtXTSvNrPXRMKufHDpj3K0qA==
+=uu6t
 -----END PGP SIGNATURE-----
 
---wkz2lg5pii5fhdhh--
+--O0OAEmr40Unwas+e--
