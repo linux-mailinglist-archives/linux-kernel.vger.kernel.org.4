@@ -2,152 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3955729C27
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A308729C31
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:06:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231842AbjFIOEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 10:04:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34570 "EHLO
+        id S239554AbjFIOGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 10:06:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239717AbjFIOEJ (ORCPT
+        with ESMTP id S230199AbjFIOGC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 10:04:09 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D8D30E8
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 07:04:06 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id 5614622812f47-39a3f2668d5so654810b6e.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 07:04:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google; t=1686319442; x=1688911442;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=M+/tsw/Fu7oYLrMbswe2mW+6R/VrTvrAxwbkhuN1+gE=;
-        b=Utd6Z28yE85i1neitAe8UZz432SrAl01+uJzUB/LjoTKQmZKRCimEc4nBq/b0Nu9xp
-         C7M2mQaWndb7qwAqiUZp8SjJkBzZsIPZ3ug8UXMQFwWtKB0pxAqeXcH3t63IMm6SCMl9
-         M4bke8jWOas6OUUdccm1gJAb5Sxvd01zc4K/N6KuORebv09uaOQrLUO0PTN20LGMhbeT
-         N2fCskWvCpWEhfdPFHfmE46vEyq9zkARbUUeokvvwJKgY5cvoxBmz57TvpLq6zQo8chj
-         EopZvcsxcsb6FnPBszfO/eFd/advpvEORDZPXcfzCBsOVP1urmCheVb2FsVQpBc4mowf
-         yL1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686319442; x=1688911442;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=M+/tsw/Fu7oYLrMbswe2mW+6R/VrTvrAxwbkhuN1+gE=;
-        b=lBQskyB9vsj0Maa2zWjuRM6q2zgr7gGfEjBdTjyf+PGtqI1jDomRJZhQPiehKwjYq4
-         VoF1Rpi+P22792bRDly78YUyLAElXvN3eFSg8jhbBCsqgJrKejL2oS1Mt+JfHm8/PkmJ
-         WmVvWXFtZTkODXq1w9SREmXDWFezEh685TFGnWAMt+HC9WU+roZIKaMh2Iak8bsJFaxn
-         1RvyU64rdU3HRzyIMzjtowq9bijxMwPlIl4C31Iy8+YDyEjigL9+bbOvZimlJDMB1LNm
-         qBQMzCjbs5RwWxMpEKoVv1UusAi8772Oc41mMhHFqLTtlGCZZHVpmra+bZIjaZyWC2lS
-         I/Wg==
-X-Gm-Message-State: AC+VfDwzsTgyjMKM7IkaI17j++x9an5M2hC8SIU+04kj9jNlecJUs6EZ
-        OB0sgRBHKascCBqiopkNbjCTuFCQxwaTS3FY2RbwF99iLPl6qqEs
-X-Google-Smtp-Source: ACHHUZ7xd+DAStaq6dQecRItFmQrfrlVp253/CYtE0GVX7ER0YONC2JpXH5xCh1cp/C/WvLlK7eHvBYBvpCTrfdgZRk=
-X-Received: by 2002:a05:6808:bd1:b0:398:2ec7:d5ed with SMTP id
- o17-20020a0568080bd100b003982ec7d5edmr1943178oik.19.1686319442584; Fri, 09
- Jun 2023 07:04:02 -0700 (PDT)
+        Fri, 9 Jun 2023 10:06:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA8F1BC6;
+        Fri,  9 Jun 2023 07:06:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D4E0965847;
+        Fri,  9 Jun 2023 14:06:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5DE9C433D2;
+        Fri,  9 Jun 2023 14:05:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686319560;
+        bh=kgO/2c+NjKZyd1iafWHrG8i9N2lcKWxvnLxiKEZHcSk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vNr7hdLCTjdv+lb2+2bCz4KNEEQE5RmUFO5PbsMtBT8H2HIcsXYBO2yM/9F9Z2p6/
+         skSGokOV3XQInW2ZGGlBV+KxWCR2Vw4Uyg3cyriHxIXjgA49ZhucK1ZJ0VPCMGGzeS
+         hHJqu9C8XrumksEs6l06A2a92jJQzlea8JD6aFVk=
+Date:   Fri, 9 Jun 2023 16:05:57 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Xianting Tian <xianting.tian@linux.alibaba.com>
+Cc:     arei.gonglei@huawei.com, mst@redhat.com, jasowang@redhat.com,
+        xuanzhuo@linux.alibaba.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, amit@kernel.org, arnd@arndb.de,
+        marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        linux-bluetooth@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xianting Tian <tianxianting.txt@alibaba-inc.com>
+Subject: Re: [PATCH 1/3] virtio-crypto: fixup potential cpu stall when free
+ unused bufs
+Message-ID: <2023060924-onion-armhole-803e@gregkh>
+References: <20230609131817.712867-1-xianting.tian@linux.alibaba.com>
+ <20230609131817.712867-2-xianting.tian@linux.alibaba.com>
+ <2023060924-skinning-reset-e256@gregkh>
+ <2023060940-wrongdoer-wince-5701@gregkh>
+ <91aa6ce0-e8a3-21ac-d29e-b2a47f6386d1@linux.alibaba.com>
 MIME-Version: 1.0
-References: <20230609-v4l2-vtotal-v1-0-4b7dee7e073e@skidata.com> <20230609-v4l2-vtotal-v1-1-4b7dee7e073e@skidata.com>
-In-Reply-To: <20230609-v4l2-vtotal-v1-1-4b7dee7e073e@skidata.com>
-From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
-Date:   Fri, 9 Jun 2023 15:03:46 +0100
-Message-ID: <CAPY8ntDsUPZvN0M_7pyRfERK9V0MCkD6pp7zu6G9nDWYHwSVcw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] media: uapi: Add V4L2_CID_VTOTAL control
-To:     Benjamin Bara <bbara93@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        laurent.pinchart@ideasonboard.com, jacopo.mondi@ideasonboard.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Benjamin Bara <benjamin.bara@skidata.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <91aa6ce0-e8a3-21ac-d29e-b2a47f6386d1@linux.alibaba.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Benjamin
+On Fri, Jun 09, 2023 at 09:49:39PM +0800, Xianting Tian wrote:
+> 
+> 在 2023/6/9 下午9:41, Greg KH 写道:
+> > On Fri, Jun 09, 2023 at 03:39:24PM +0200, Greg KH wrote:
+> > > On Fri, Jun 09, 2023 at 09:18:15PM +0800, Xianting Tian wrote:
+> > > > From: Xianting Tian <tianxianting.txt@alibaba-inc.com>
+> > > > 
+> > > > Cpu stall issue may happen if device is configured with multi queues
+> > > > and large queue depth, so fix it.
+> > > > 
+> > > > Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+> > > > ---
+> > > >   drivers/crypto/virtio/virtio_crypto_core.c | 1 +
+> > > >   1 file changed, 1 insertion(+)
+> > > > 
+> > > > diff --git a/drivers/crypto/virtio/virtio_crypto_core.c b/drivers/crypto/virtio/virtio_crypto_core.c
+> > > > index 1198bd306365..94849fa3bd74 100644
+> > > > --- a/drivers/crypto/virtio/virtio_crypto_core.c
+> > > > +++ b/drivers/crypto/virtio/virtio_crypto_core.c
+> > > > @@ -480,6 +480,7 @@ static void virtcrypto_free_unused_reqs(struct virtio_crypto *vcrypto)
+> > > >   			kfree(vc_req->req_data);
+> > > >   			kfree(vc_req->sgs);
+> > > >   		}
+> > > > +		cond_resched();
+> > > that's not "fixing a stall", it is "call the scheduler because we are
+> > > taking too long".  The CPU isn't stalled at all, just busy.
+> > > 
+> > > Are you sure this isn't just a bug in the code?  Why is this code taking
+> > > so long that you have to force the scheduler to run?  This is almost
+> > > always a sign that something else needs to be fixed instead.
+> > And same comment on the other 2 patches, please fix this properly.
+> > 
+> > Also, this is a tight loop that is just freeing memory, why is it taking
+> > so long?  Why do you want it to take longer (which is what you are doing
+> > here), ideally it would be faster, not slower, so you are now slowing
+> > down the system overall with this patchset, right?
+> 
+> yes, it is the similar fix with one for virtio-net
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/net/virtio_net.c?h=v6.4-rc5&id=f8bb5104394560e29017c25bcade4c6b7aabd108 <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/net/virtio_net.c?h=v6.4-rc5&id=f8bb5104394560e29017c25bcade4c6b7aabd108>
 
-Thanks for the patch.
+I would argue that this too is incorrect, because why does freeing
+memory take so long?  And again, you are making it take longer, is that
+ok?
 
-On Fri, 9 Jun 2023 at 14:16, Benjamin Bara <bbara93@gmail.com> wrote:
->
-> From: Benjamin Bara <benjamin.bara@skidata.com>
->
-> Currently, V4L2_CID_VBLANK can be used to control the frame duration of
-> a stream. However, camera sensors usually have a register for the
-> vertical total size (image data + blanking), e.g. VMAX on the imx290.
-> The dependency between format height and vertical blanking results to a
-> change of the vertical blanking value and limits whenever the format of
-> the frame is changed and therefore makes it harder for user space to do
-> calculations, e.g. the frame duration.
->
-> V4L2_CID_VTOTAL does not depend on the format and therefore simplifies
-> calculations. Additionally, it represents the hardware "better" and
-> therefore also simplifies calculations on the driver side.
->
-> Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
-> ---
->  Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst | 6 ++++++
->  drivers/media/v4l2-core/v4l2-ctrls-defs.c                        | 1 +
->  include/uapi/linux/v4l2-controls.h                               | 1 +
->  3 files changed, 8 insertions(+)
->
-> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
-> index 71f23f131f97..e72d1363ad85 100644
-> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
-> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
-> @@ -59,6 +59,12 @@ Image Source Control IDs
->      non-sensitive.
->      This control is required for automatic calibration of sensors/cameras.
->
-> +``V4L2_CID_VTOTAL (integer)``
-> +    Number of total lines per frame, including data and idle lines (blanking).
-> +    The unit of the vertical total size is a line. Every line has length of the
-> +    image width plus horizontal blanking at the pixel rate defined by
-> +    ``V4L2_CID_PIXEL_RATE`` control in the same sub-device.
-> +
->  .. c:type:: v4l2_area
->
->  .. flat-table:: struct v4l2_area
+thanks,
 
-The documentation for Frame interval configuration on Raw camera
-sensors[1] needs updating to describe the new behaviour as well.
-
-  Dave
-
-[1] https://elixir.bootlin.com/linux/latest/source/Documentation/driver-api/media/camera-sensor.rst#L80
-
-
-> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> index 564fedee2c88..6a0d310d5f42 100644
-> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> @@ -1112,6 +1112,7 @@ const char *v4l2_ctrl_get_name(u32 id)
->         case V4L2_CID_TEST_PATTERN_BLUE:        return "Blue Pixel Value";
->         case V4L2_CID_TEST_PATTERN_GREENB:      return "Green (Blue) Pixel Value";
->         case V4L2_CID_NOTIFY_GAINS:             return "Notify Gains";
-> +       case V4L2_CID_VTOTAL:                   return "Vertical Total Size";
->
->         /* Image processing controls */
->         /* Keep the order of the 'case's the same as in v4l2-controls.h! */
-> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-> index 5e80daa4ffe0..99120005634e 100644
-> --- a/include/uapi/linux/v4l2-controls.h
-> +++ b/include/uapi/linux/v4l2-controls.h
-> @@ -1117,6 +1117,7 @@ enum v4l2_jpeg_chroma_subsampling {
->  #define V4L2_CID_TEST_PATTERN_GREENB           (V4L2_CID_IMAGE_SOURCE_CLASS_BASE + 7)
->  #define V4L2_CID_UNIT_CELL_SIZE                        (V4L2_CID_IMAGE_SOURCE_CLASS_BASE + 8)
->  #define V4L2_CID_NOTIFY_GAINS                  (V4L2_CID_IMAGE_SOURCE_CLASS_BASE + 9)
-> +#define V4L2_CID_VTOTAL                                (V4L2_CID_IMAGE_SOURCE_CLASS_BASE + 10)
->
->
->  /* Image processing controls */
->
-> --
-> 2.34.1
->
+greg k-h
