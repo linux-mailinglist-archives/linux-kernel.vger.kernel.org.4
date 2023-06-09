@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14833729BFE
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD6B729BFF
 	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 15:51:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240462AbjFINvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 09:51:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57944 "EHLO
+        id S239804AbjFINvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 09:51:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbjFINvQ (ORCPT
+        with ESMTP id S239812AbjFINvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 9 Jun 2023 09:51:16 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBF230FE;
-        Fri,  9 Jun 2023 06:51:13 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f6e68cc738so13841885e9.1;
-        Fri, 09 Jun 2023 06:51:12 -0700 (PDT)
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B76318D;
+        Fri,  9 Jun 2023 06:51:14 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f60a27c4a2so2201486e87.2;
+        Fri, 09 Jun 2023 06:51:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686318671; x=1688910671;
+        d=gmail.com; s=20221208; t=1686318672; x=1688910672;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=m4tE0ixG9sqs6aNXbUxazOE/cyIRGnmIyM4kgiUq+vs=;
-        b=V3V9NaCpgdRHYcBEP6XgaaySravagZXfbIGhIoRGAkBBpdLvUhqEOA10SzMCpiLJrN
-         5QgI3PhkpfLXHrIaohHCegvLuwScRoiW6ubPjvBC7li9BYiE34/t2WpeidDkJ+JLMDws
-         aAI8rkIFXPxZmHXsKhlyDD0G7DiBJP2dSLYZKx18VQSOJy00+icS9DKvy/DeCz0TpRMR
-         AqUEDJdLT5rj6V9JQU+RoBBCxV0/RDj7YSjwAbvT5iASkoW59ZNnXg6jaP2InH8p82Mh
-         sMNaU6DPe93TpEnWZK/exM8baS7tzRvVQ0mYU6cXujVqeRgxo0PZ1rpZ94dSrNkYlCaj
-         rCnw==
+        bh=NYq8sLZvkKIRyh10Exy08xI3yetDl/UeLuaCQ7b94Wk=;
+        b=aunkLK03le309fkrjQAgSe2FayEUzMUvrrsFxVMP6JWPs8On1DjlSZnQ9k+519WJbG
+         +49T3yrIY4OrSKwH24BXaKanNwlyBFpbVJwS/pZNB5o9m4C9BZkWNkYqtT6kZTkKDhD5
+         CcPOVmoJ3cv1twb83/VSCkuIYZpoe67lb5yO7p5XzfoiEzZS3MvHzL9Sk2MOwmFVVcLc
+         WnW7wFheWjl9Wx6cNeeEgrfWrLUBTuf8iw66idIQbLIBL4cOnDF8qVLbpu2SOtuNhvjx
+         0x01NoyubaDhiR86H+Nw4fHMAwrCkpDIf0xaj2++M1q5lmCYBBT3RvYug5Cw58T2tP+V
+         liIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686318671; x=1688910671;
+        d=1e100.net; s=20221208; t=1686318672; x=1688910672;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=m4tE0ixG9sqs6aNXbUxazOE/cyIRGnmIyM4kgiUq+vs=;
-        b=EsRushqTB9849idsPUb1GDbv7hkGPFHsASNlXZx9Pj2eV514qh1ac6kp54qBCKyJiz
-         hxSnCZf2JAp1WknDBc3AINCeUINblafM/S7Cd8Byj33pOzIcwyQgrTbnV1k7H3IHD4sT
-         /8uI8ZkbcCk0qR/7ZhsZTffAP21RKGSE0f5Qtxo+LsqY4Ls4gXBdgU+UB/NON88DFyng
-         io5VuPLGXbyZ9PgFZqIXbM3t0xRoHbXBopJ8OqqHU9a/XU/6QpkpSIfrJdt6+LhYRrQs
-         DaOl5T8HohPZom14r7UXQ41IjqLzbmpyC27YGpqwx/97/IXxNgCTLltxOLbr80CvpLFL
-         5Xsg==
-X-Gm-Message-State: AC+VfDyqFwFWJnQkRIl9PD+vvn1sFEqkOMROk8FZiYaJowh2OInXjB9S
-        kfhKRAVS9KcRj0Hs/LBPPrw=
-X-Google-Smtp-Source: ACHHUZ5Prxwipg2bSnx3v+jjMbOAVYsYP6X25Ot1B0lU/9NOLLHBKpwMNMJZs50tHmsyU277HV7hRg==
-X-Received: by 2002:a05:600c:ac6:b0:3f6:ffe:9ef1 with SMTP id c6-20020a05600c0ac600b003f60ffe9ef1mr938272wmr.36.1686318670935;
-        Fri, 09 Jun 2023 06:51:10 -0700 (PDT)
+        bh=NYq8sLZvkKIRyh10Exy08xI3yetDl/UeLuaCQ7b94Wk=;
+        b=MEFYHHnpcBFL63bhksD/35xt/2HEBN5YUlt8eanluWPkuxvZx/eeF506MYDUgPPdeO
+         o2TTvYbFgnEc6VcFjQ4Hi6CaJoAszlXB9Gqf037k7lZhPTHbI/C13ixejY/TH8LbuulK
+         VMQkRkMSzOAeI3mWaywpGPnXNWBSwgWk/JskAp0FSJOA7nDbB5+7yFxAZ6MPT2QP1yES
+         m+wK0xV2ankbLM05jdWSvCLgaK0JwGhOEx4BgDbsRTLm9GKZ8/WV41gjOeG5faGnTVpb
+         3RuLYaSj0dnQNTd7+oUdS44lQ7y/TUCkooyZWEkLOhLXruTbA5sMAv4L2oUk0lPYqX0M
+         9NNA==
+X-Gm-Message-State: AC+VfDxtUXRWl3kTkd/fEdbhRB6qj6I0UNc5KXPNgAdUCNv+Bk7blbss
+        0+iH1X79dkrQ+2waznU1hQY=
+X-Google-Smtp-Source: ACHHUZ6lf1FuckB7RHwYWbLXPQX/YZWBtPcQpxD+c0qXi5U7hD+gwtJhQ7Mc0oFtVMRiLLGU8fGEhw==
+X-Received: by 2002:ac2:5bd1:0:b0:4f4:b47d:5c07 with SMTP id u17-20020ac25bd1000000b004f4b47d5c07mr902477lfn.46.1686318671881;
+        Fri, 09 Jun 2023 06:51:11 -0700 (PDT)
 Received: from localhost.localdomain (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
-        by smtp.googlemail.com with ESMTPSA id l15-20020adff48f000000b003078cd719ffsm4533962wro.95.2023.06.09.06.51.09
+        by smtp.googlemail.com with ESMTPSA id l15-20020adff48f000000b003078cd719ffsm4533962wro.95.2023.06.09.06.51.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 06:51:10 -0700 (PDT)
+        Fri, 09 Jun 2023 06:51:11 -0700 (PDT)
 From:   Christian Marangi <ansuelsmth@gmail.com>
 To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
         Christian Marangi <ansuelsmth@gmail.com>,
@@ -57,9 +57,9 @@ To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         Yang Li <yang.lee@linux.alibaba.com>,
         linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] leds: trigger: netdev: add additional specific link speed mode
-Date:   Fri,  9 Jun 2023 15:51:01 +0200
-Message-Id: <20230609135103.14221-2-ansuelsmth@gmail.com>
+Subject: [PATCH 2/3] leds: trigger: netdev: add additional specific link duplex mode
+Date:   Fri,  9 Jun 2023 15:51:02 +0200
+Message-Id: <20230609135103.14221-3-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230609135103.14221-1-ansuelsmth@gmail.com>
 References: <20230609135103.14221-1-ansuelsmth@gmail.com>
@@ -75,247 +75,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add additional modes for specific link speed. Use ethtool APIs to get the
-current link speed and enable the LED accordingly. Under netdev event
+Add additional modes for specific link duplex. Use ethtool APIs to get the
+current link duplex and enable the LED accordingly. Under netdev event
 handler the rtnl lock is already held and is not needed to be set to
 access ethtool APIs.
 
 This is especially useful for PHY and Switch that supports LEDs hw
-control for specific link speed. (example scenario a PHY that have 2 LED
-connected one green and one orange where the green is turned on with
-1000mbps speed and orange is turned on with 10mpbs speed)
-
-On mode set from sysfs we check if we have enabled split link speed mode
-and reject enabling generic link mode to prevent wrong and redundant
-configuration.
-
-Rework logic on the set baseline state to support these new modes to
-select if we need to turn on or off the LED.
+control for specific link duplex.
 
 Add additional modes:
-- link_10: Turn on LED when link speed is 10mbps
-- link_100: Turn on LED when link speed is 100mbps
-- link_1000: Turn on LED when link speed is 1000mbps
+- half_duplex: Turn on LED when link is half duplex
+- full_duplex: Turn on LED when link is full duplex
 
 Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 ---
- drivers/leds/trigger/ledtrig-netdev.c | 84 ++++++++++++++++++++++++---
- include/linux/leds.h                  |  3 +
- 2 files changed, 80 insertions(+), 7 deletions(-)
+ drivers/leds/trigger/ledtrig-netdev.c | 26 +++++++++++++++++++++++++-
+ include/linux/leds.h                  |  2 ++
+ 2 files changed, 27 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/leds/trigger/ledtrig-netdev.c b/drivers/leds/trigger/ledtrig-netdev.c
-index c9b040bacbb0..f20d5168710a 100644
+index f20d5168710a..3c1571b620e4 100644
 --- a/drivers/leds/trigger/ledtrig-netdev.c
 +++ b/drivers/leds/trigger/ledtrig-netdev.c
-@@ -13,6 +13,7 @@
- #include <linux/atomic.h>
- #include <linux/ctype.h>
- #include <linux/device.h>
-+#include <linux/ethtool.h>
- #include <linux/init.h>
- #include <linux/jiffies.h>
- #include <linux/kernel.h>
-@@ -21,6 +22,7 @@
- #include <linux/module.h>
- #include <linux/netdevice.h>
- #include <linux/mutex.h>
-+#include <linux/rtnetlink.h>
- #include <linux/timer.h>
- #include "../leds.h"
- 
-@@ -52,6 +54,8 @@ struct led_netdev_data {
- 	unsigned int last_activity;
+@@ -55,6 +55,7 @@ struct led_netdev_data {
  
  	unsigned long mode;
-+	u32 link_speed;
-+
+ 	u32 link_speed;
++	u8 duplex;
+ 
  	bool carrier_link_up;
  	bool hw_control;
- };
-@@ -77,7 +81,24 @@ static void set_baseline_state(struct led_netdev_data *trigger_data)
- 	if (!trigger_data->carrier_link_up) {
- 		led_set_brightness(led_cdev, LED_OFF);
- 	} else {
-+		bool blink_on = false;
-+
- 		if (test_bit(TRIGGER_NETDEV_LINK, &trigger_data->mode))
+@@ -98,6 +99,14 @@ static void set_baseline_state(struct led_netdev_data *trigger_data)
+ 		    trigger_data->link_speed == SPEED_1000)
+ 			blink_on = true;
+ 
++		if (test_bit(TRIGGER_NETDEV_HALF_DUPLEX, &trigger_data->mode) &&
++		    trigger_data->duplex == DUPLEX_HALF)
 +			blink_on = true;
 +
-+		if (test_bit(TRIGGER_NETDEV_LINK_10, &trigger_data->mode) &&
-+		    trigger_data->link_speed == SPEED_10)
++		if (test_bit(TRIGGER_NETDEV_FULL_DUPLEX, &trigger_data->mode) &&
++		    trigger_data->duplex == DUPLEX_FULL)
 +			blink_on = true;
 +
-+		if (test_bit(TRIGGER_NETDEV_LINK_100, &trigger_data->mode) &&
-+		    trigger_data->link_speed == SPEED_100)
-+			blink_on = true;
-+
-+		if (test_bit(TRIGGER_NETDEV_LINK_1000, &trigger_data->mode) &&
-+		    trigger_data->link_speed == SPEED_1000)
-+			blink_on = true;
-+
-+		if (blink_on)
+ 		if (blink_on)
  			led_set_brightness(led_cdev,
  					   led_cdev->blink_brightness);
- 		else
-@@ -196,9 +217,21 @@ static int set_device_name(struct led_netdev_data *trigger_data,
- 		    dev_get_by_name(&init_net, trigger_data->device_name);
+@@ -218,6 +227,7 @@ static int set_device_name(struct led_netdev_data *trigger_data,
  
  	trigger_data->carrier_link_up = false;
--	if (trigger_data->net_dev != NULL)
-+	trigger_data->link_speed = 0;
-+	if (trigger_data->net_dev != NULL) {
-+		struct ethtool_link_ksettings cmd;
-+
- 		trigger_data->carrier_link_up = netif_carrier_ok(trigger_data->net_dev);
+ 	trigger_data->link_speed = 0;
++	trigger_data->duplex = 0;
+ 	if (trigger_data->net_dev != NULL) {
+ 		struct ethtool_link_ksettings cmd;
  
-+		if (trigger_data->carrier_link_up) {
-+			rtnl_lock();
-+			__ethtool_get_link_ksettings(trigger_data->net_dev, &cmd);
-+			rtnl_unlock();
-+
-+			trigger_data->link_speed = cmd.base.speed;
-+		}
-+	}
-+
- 	trigger_data->last_activity = 0;
+@@ -229,6 +239,7 @@ static int set_device_name(struct led_netdev_data *trigger_data,
+ 			rtnl_unlock();
  
- 	set_baseline_state(trigger_data);
-@@ -234,6 +267,9 @@ static ssize_t netdev_led_attr_show(struct device *dev, char *buf,
- 
- 	switch (attr) {
- 	case TRIGGER_NETDEV_LINK:
-+	case TRIGGER_NETDEV_LINK_10:
-+	case TRIGGER_NETDEV_LINK_100:
-+	case TRIGGER_NETDEV_LINK_1000:
- 	case TRIGGER_NETDEV_TX:
- 	case TRIGGER_NETDEV_RX:
- 		bit = attr;
-@@ -249,7 +285,7 @@ static ssize_t netdev_led_attr_store(struct device *dev, const char *buf,
- 				     size_t size, enum led_trigger_netdev_modes attr)
- {
- 	struct led_netdev_data *trigger_data = led_trigger_get_drvdata(dev);
--	unsigned long state;
-+	unsigned long state, mode = trigger_data->mode;
- 	int ret;
- 	int bit;
- 
-@@ -259,6 +295,9 @@ static ssize_t netdev_led_attr_store(struct device *dev, const char *buf,
- 
- 	switch (attr) {
- 	case TRIGGER_NETDEV_LINK:
-+	case TRIGGER_NETDEV_LINK_10:
-+	case TRIGGER_NETDEV_LINK_100:
-+	case TRIGGER_NETDEV_LINK_1000:
- 	case TRIGGER_NETDEV_TX:
- 	case TRIGGER_NETDEV_RX:
- 		bit = attr;
-@@ -267,13 +306,20 @@ static ssize_t netdev_led_attr_store(struct device *dev, const char *buf,
- 		return -EINVAL;
+ 			trigger_data->link_speed = cmd.base.speed;
++			trigger_data->duplex = cmd.base.duplex;
+ 		}
  	}
  
--	cancel_delayed_work_sync(&trigger_data->work);
--
- 	if (state)
--		set_bit(bit, &trigger_data->mode);
-+		set_bit(bit, &mode);
- 	else
--		clear_bit(bit, &trigger_data->mode);
-+		clear_bit(bit, &mode);
-+
-+	if (test_bit(TRIGGER_NETDEV_LINK, &mode) &&
-+	    (test_bit(TRIGGER_NETDEV_LINK_10, &mode) ||
-+	     test_bit(TRIGGER_NETDEV_LINK_100, &mode) ||
-+	     test_bit(TRIGGER_NETDEV_LINK_1000, &mode)))
-+		return -EINVAL;
- 
-+	cancel_delayed_work_sync(&trigger_data->work);
-+
-+	trigger_data->mode = mode;
- 	trigger_data->hw_control = can_hw_control(trigger_data);
- 
- 	set_baseline_state(trigger_data);
-@@ -295,6 +341,9 @@ static ssize_t netdev_led_attr_store(struct device *dev, const char *buf,
- 	static DEVICE_ATTR_RW(trigger_name)
- 
- DEFINE_NETDEV_TRIGGER(link, TRIGGER_NETDEV_LINK);
-+DEFINE_NETDEV_TRIGGER(link_10, TRIGGER_NETDEV_LINK_10);
-+DEFINE_NETDEV_TRIGGER(link_100, TRIGGER_NETDEV_LINK_100);
-+DEFINE_NETDEV_TRIGGER(link_1000, TRIGGER_NETDEV_LINK_1000);
+@@ -270,6 +281,8 @@ static ssize_t netdev_led_attr_show(struct device *dev, char *buf,
+ 	case TRIGGER_NETDEV_LINK_10:
+ 	case TRIGGER_NETDEV_LINK_100:
+ 	case TRIGGER_NETDEV_LINK_1000:
++	case TRIGGER_NETDEV_HALF_DUPLEX:
++	case TRIGGER_NETDEV_FULL_DUPLEX:
+ 	case TRIGGER_NETDEV_TX:
+ 	case TRIGGER_NETDEV_RX:
+ 		bit = attr;
+@@ -298,6 +311,8 @@ static ssize_t netdev_led_attr_store(struct device *dev, const char *buf,
+ 	case TRIGGER_NETDEV_LINK_10:
+ 	case TRIGGER_NETDEV_LINK_100:
+ 	case TRIGGER_NETDEV_LINK_1000:
++	case TRIGGER_NETDEV_HALF_DUPLEX:
++	case TRIGGER_NETDEV_FULL_DUPLEX:
+ 	case TRIGGER_NETDEV_TX:
+ 	case TRIGGER_NETDEV_RX:
+ 		bit = attr;
+@@ -344,6 +359,8 @@ DEFINE_NETDEV_TRIGGER(link, TRIGGER_NETDEV_LINK);
+ DEFINE_NETDEV_TRIGGER(link_10, TRIGGER_NETDEV_LINK_10);
+ DEFINE_NETDEV_TRIGGER(link_100, TRIGGER_NETDEV_LINK_100);
+ DEFINE_NETDEV_TRIGGER(link_1000, TRIGGER_NETDEV_LINK_1000);
++DEFINE_NETDEV_TRIGGER(half_duplex, TRIGGER_NETDEV_HALF_DUPLEX);
++DEFINE_NETDEV_TRIGGER(full_duplex, TRIGGER_NETDEV_FULL_DUPLEX);
  DEFINE_NETDEV_TRIGGER(tx, TRIGGER_NETDEV_TX);
  DEFINE_NETDEV_TRIGGER(rx, TRIGGER_NETDEV_RX);
  
-@@ -338,6 +387,9 @@ static DEVICE_ATTR_RW(interval);
- static struct attribute *netdev_trig_attrs[] = {
- 	&dev_attr_device_name.attr,
- 	&dev_attr_link.attr,
-+	&dev_attr_link_10.attr,
-+	&dev_attr_link_100.attr,
-+	&dev_attr_link_1000.attr,
+@@ -390,6 +407,8 @@ static struct attribute *netdev_trig_attrs[] = {
+ 	&dev_attr_link_10.attr,
+ 	&dev_attr_link_100.attr,
+ 	&dev_attr_link_1000.attr,
++	&dev_attr_full_duplex.attr,
++	&dev_attr_half_duplex.attr,
  	&dev_attr_rx.attr,
  	&dev_attr_tx.attr,
  	&dev_attr_interval.attr,
-@@ -352,6 +404,7 @@ static int netdev_trig_notify(struct notifier_block *nb,
- 		netdev_notifier_info_to_dev((struct netdev_notifier_info *)dv);
- 	struct led_netdev_data *trigger_data =
- 		container_of(nb, struct led_netdev_data, notifier);
-+	struct ethtool_link_ksettings cmd;
- 
- 	if (evt != NETDEV_UP && evt != NETDEV_DOWN && evt != NETDEV_CHANGE
- 	    && evt != NETDEV_REGISTER && evt != NETDEV_UNREGISTER
-@@ -368,9 +421,17 @@ static int netdev_trig_notify(struct notifier_block *nb,
- 	mutex_lock(&trigger_data->lock);
+@@ -422,6 +441,7 @@ static int netdev_trig_notify(struct notifier_block *nb,
  
  	trigger_data->carrier_link_up = false;
-+	trigger_data->link_speed = 0;
+ 	trigger_data->link_speed = 0;
++	trigger_data->duplex = 0;
  	switch (evt) {
  	case NETDEV_CHANGENAME:
  		trigger_data->carrier_link_up = netif_carrier_ok(dev);
-+
-+		if (trigger_data->carrier_link_up) {
-+			__ethtool_get_link_ksettings(trigger_data->net_dev, &cmd);
-+
-+			trigger_data->link_speed = cmd.base.speed;
-+		}
-+
+@@ -430,6 +450,7 @@ static int netdev_trig_notify(struct notifier_block *nb,
+ 			__ethtool_get_link_ksettings(trigger_data->net_dev, &cmd);
+ 
+ 			trigger_data->link_speed = cmd.base.speed;
++			trigger_data->duplex = cmd.base.duplex;
+ 		}
+ 
  		fallthrough;
- 	case NETDEV_REGISTER:
- 		dev_put(trigger_data->net_dev);
-@@ -384,6 +445,12 @@ static int netdev_trig_notify(struct notifier_block *nb,
- 	case NETDEV_UP:
- 	case NETDEV_CHANGE:
- 		trigger_data->carrier_link_up = netif_carrier_ok(dev);
-+
-+		if (trigger_data->carrier_link_up) {
-+			__ethtool_get_link_ksettings(trigger_data->net_dev, &cmd);
-+
-+			trigger_data->link_speed = cmd.base.speed;
-+		}
+@@ -450,6 +471,7 @@ static int netdev_trig_notify(struct notifier_block *nb,
+ 			__ethtool_get_link_ksettings(trigger_data->net_dev, &cmd);
+ 
+ 			trigger_data->link_speed = cmd.base.speed;
++			trigger_data->duplex = cmd.base.duplex;
+ 		}
  		break;
  	}
- 
-@@ -426,7 +493,10 @@ static void netdev_trig_work(struct work_struct *work)
- 	if (trigger_data->last_activity != new_activity) {
- 		led_stop_software_blink(trigger_data->led_cdev);
- 
--		invert = test_bit(TRIGGER_NETDEV_LINK, &trigger_data->mode);
-+		invert = test_bit(TRIGGER_NETDEV_LINK, &trigger_data->mode) ||
-+			 test_bit(TRIGGER_NETDEV_LINK_10, &trigger_data->mode) ||
-+			 test_bit(TRIGGER_NETDEV_LINK_100, &trigger_data->mode) ||
-+			 test_bit(TRIGGER_NETDEV_LINK_1000, &trigger_data->mode);
+@@ -496,7 +518,9 @@ static void netdev_trig_work(struct work_struct *work)
+ 		invert = test_bit(TRIGGER_NETDEV_LINK, &trigger_data->mode) ||
+ 			 test_bit(TRIGGER_NETDEV_LINK_10, &trigger_data->mode) ||
+ 			 test_bit(TRIGGER_NETDEV_LINK_100, &trigger_data->mode) ||
+-			 test_bit(TRIGGER_NETDEV_LINK_1000, &trigger_data->mode);
++			 test_bit(TRIGGER_NETDEV_LINK_1000, &trigger_data->mode) ||
++			 test_bit(TRIGGER_NETDEV_HALF_DUPLEX, &trigger_data->mode) ||
++			 test_bit(TRIGGER_NETDEV_FULL_DUPLEX, &trigger_data->mode);
  		interval = jiffies_to_msecs(
  				atomic_read(&trigger_data->interval));
  		/* base state is ON (link present) */
 diff --git a/include/linux/leds.h b/include/linux/leds.h
-index 4b3d8bda1fff..39f15b1e772c 100644
+index 39f15b1e772c..7d428100b42b 100644
 --- a/include/linux/leds.h
 +++ b/include/linux/leds.h
-@@ -582,6 +582,9 @@ static inline void *led_get_trigger_data(struct led_classdev *led_cdev)
- /* Trigger specific enum */
- enum led_trigger_netdev_modes {
- 	TRIGGER_NETDEV_LINK = 0,
-+	TRIGGER_NETDEV_LINK_10,
-+	TRIGGER_NETDEV_LINK_100,
-+	TRIGGER_NETDEV_LINK_1000,
+@@ -585,6 +585,8 @@ enum led_trigger_netdev_modes {
+ 	TRIGGER_NETDEV_LINK_10,
+ 	TRIGGER_NETDEV_LINK_100,
+ 	TRIGGER_NETDEV_LINK_1000,
++	TRIGGER_NETDEV_HALF_DUPLEX,
++	TRIGGER_NETDEV_FULL_DUPLEX,
  	TRIGGER_NETDEV_TX,
  	TRIGGER_NETDEV_RX,
  
