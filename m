@@ -2,241 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECDCC729E71
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 17:27:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AE83729E75
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 17:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241167AbjFIP1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 11:27:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55290 "EHLO
+        id S232169AbjFIP1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 11:27:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241802AbjFIP1C (ORCPT
+        with ESMTP id S232122AbjFIP1p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 11:27:02 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6DD2D70
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 08:26:54 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f6255ad8aeso2469312e87.2
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 08:26:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686324412; x=1688916412;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q8h8nvAlYxjt65p34kTEt9z5VacxK7Nqh+ENT3iDotY=;
-        b=r7dwKJjomTzS138lHBt4vXtOJxVTBCplyBMk28R3almKAIEJ2NBkoog+qRIlpwewid
-         RBvo5MJekgxOQrFUqmjy6nwfeT2gGIqljzXGEjZxPEwJuC4rnhF9KFeVWZ/J6LPoB9qM
-         gLSZ0l20sJszC6Obp3MzSsOmf/Y/4l73uklf3B1o448dwmc6XwIQOiFEu6pxfRAb3psK
-         SNzMCm2zo5uOQSbJyFUPdFnHr0hE8jJi1zJEXrnnuUSdiaNeGqndCCYH2sxhnFQX9qy0
-         TIUVnfOM0oBJ/GrdFMq54k+B2plFO7ib5326+Ga8XG2bcUEaB6DenjPTXI4GhDLP16/O
-         E0TQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686324412; x=1688916412;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q8h8nvAlYxjt65p34kTEt9z5VacxK7Nqh+ENT3iDotY=;
-        b=Wf8zH5cAN1TY9zE6lVZ8Eq4Qtz8zemuAxovDeH9Wyce0153b1DdtjBkKNAeO+q3By+
-         y1eHkwAQ/SNc6GLvTuolD5cu+Eh2zShH7hd0WHK7qD8eQ+M2974FGdXxo/E2B3KFLNY5
-         JUvx/9U4yzUO0eBkf5s/BTRCUHt0Lfzr/07LG7egtF+R7Yd6ayhnkB0/IFxpYzBQ5/MX
-         b91MRPXQKBVCLllQO91z+w0t+Te3+60G/p00PtsJOiA9NUZK4X/XBpUr1Guq5ra9EmZx
-         NjCPNVzfgi/AfkDU4nyTNhgf+r8wHJFyPa1DejnBxI1dIY02U5Ql4BlH7Z06231ETBrf
-         oGug==
-X-Gm-Message-State: AC+VfDwwrTCTg7OGH8/BmRFQONecIAeXmG1j3PzkP8kCDJErtXh6v6Wa
-        sN753+7hKY/t7p+vRMlXzHhwDQ==
-X-Google-Smtp-Source: ACHHUZ6nfXS3EdrDJ02t1fgKYoivhiWD/EO9yQWbZsiNC/Qxwhtoz2NveBXHLPaML4z3I42Xi/d64g==
-X-Received: by 2002:a19:e304:0:b0:4f3:d682:7b1c with SMTP id a4-20020a19e304000000b004f3d6827b1cmr1021019lfh.45.1686324412226;
-        Fri, 09 Jun 2023 08:26:52 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id d17-20020ac25ed1000000b004db508326c0sm575310lfq.90.2023.06.09.08.26.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Jun 2023 08:26:51 -0700 (PDT)
-Message-ID: <0e4b8889-7440-f011-ade2-bc5b415e7b79@linaro.org>
-Date:   Fri, 9 Jun 2023 17:26:50 +0200
+        Fri, 9 Jun 2023 11:27:45 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D602D70;
+        Fri,  9 Jun 2023 08:27:40 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1686324459;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=H5xcCQGgFV8eBxBmrqSktx3CUKeTiFDUNo+4OSLOwWY=;
+        b=gQArpqEion7u+nd4yvWRi/Bn51ejuyiQgLjvNCMg8EbqELRT8hX+Eyylgqv+oIE4Zm+Sam
+        aMj+4iKG9jOi8GXqPF6onxFy4NGn/i3UnR+OwxaOQq8ko1XDNLlpalaCzIrZloWKtc2u8W
+        yfNff8vD5vv4e89RVQVPlp/1jXzv4XwlMefpvYt+tC0iNdUvoNO6EqOAQ27YcoI6/TJaIo
+        FSMO+kf/E3HHsdlqEiEubE5dO59j13Q3CDdLA1g8nOeLcJGSjt5aKiZGdlJ6WOjZtwCrvY
+        Ao7Nznb+qF6YEyGFwWqfrCN/rWIsZsAtnn7IUFdzKTtC9tqWoAF1T/4rME42BQ==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0FB681C0002;
+        Fri,  9 Jun 2023 15:27:36 +0000 (UTC)
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-mtd@lists.infradead.org
+Subject: Re: [PATCH] mtd: mtdpart: Drop useless LIST_HEAD
+Date:   Fri,  9 Jun 2023 17:27:36 +0200
+Message-Id: <20230609152736.1188482-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To:  <547248195d87d1240d6126d13eb1364b1a0b634d.1685853690.git.christophe.jaillet@wanadoo.fr>
+References: 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 11/12] ARM: dts: qcom: Add rpm-proc node for SMD
- platforms
-Content-Language: en-US
-To:     Stephan Gerhold <stephan@gerhold.net>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org
-References: <20230531-rpm-rproc-v2-0-56a4a00c8260@gerhold.net>
- <20230531-rpm-rproc-v2-11-56a4a00c8260@gerhold.net>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230531-rpm-rproc-v2-11-56a4a00c8260@gerhold.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-linux-mtd-patch-notification: thanks
+X-linux-mtd-patch-commit: b'6db02fdfdca0cf39b4d66950451d7f22b72a9031'
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, 2023-06-04 at 04:42:01 UTC, Christophe JAILLET wrote:
+> 'tmp_list' is unused, so drop it.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next, thanks.
 
-On 8.06.2023 09:10, Stephan Gerhold wrote:
-> Rather than having the RPM SMD channels as the only child of a dummy
-> SMD node, switch to representing the RPM as remoteproc like all the
-> other remoteprocs (WCNSS, modem DSP).
-> 
-> This allows assigning additional subdevices to it like the MPM
-> interrupt-controller or rpm-master-stats.
-> 
-> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->  arch/arm/boot/dts/qcom-apq8084.dtsi |  6 ++---
->  arch/arm/boot/dts/qcom-msm8226.dtsi | 38 ++++++++++++++++----------------
->  arch/arm/boot/dts/qcom-msm8974.dtsi | 44 ++++++++++++++++++-------------------
->  3 files changed, 44 insertions(+), 44 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/qcom-apq8084.dtsi b/arch/arm/boot/dts/qcom-apq8084.dtsi
-> index 8f178bc87e1d..2b1f9d0fb510 100644
-> --- a/arch/arm/boot/dts/qcom-apq8084.dtsi
-> +++ b/arch/arm/boot/dts/qcom-apq8084.dtsi
-> @@ -784,10 +784,10 @@ spmi_bus: spmi@fc4cf000 {
->  		};
->  	};
->  
-> -	smd {
-> -		compatible = "qcom,smd";
-> +	rpm: remoteproc {
-> +		compatible = "qcom,apq8084-rpm-proc", "qcom,rpm-proc";
->  
-> -		rpm {
-> +		smd-edge {
->  			interrupts = <GIC_SPI 168 IRQ_TYPE_EDGE_RISING>;
->  			qcom,ipc = <&apcs 8 0>;
->  			qcom,smd-edge = <15>;
-> diff --git a/arch/arm/boot/dts/qcom-msm8226.dtsi b/arch/arm/boot/dts/qcom-msm8226.dtsi
-> index a3a9162e9c28..a3e8d023d0e6 100644
-> --- a/arch/arm/boot/dts/qcom-msm8226.dtsi
-> +++ b/arch/arm/boot/dts/qcom-msm8226.dtsi
-> @@ -53,26 +53,10 @@ pmu {
->  					 IRQ_TYPE_LEVEL_HIGH)>;
->  	};
->  
-> -	reserved-memory {
-> -		#address-cells = <1>;
-> -		#size-cells = <1>;
-> -		ranges;
-> -
-> -		smem_region: smem@3000000 {
-> -			reg = <0x3000000 0x100000>;
-> -			no-map;
-> -		};
-> -
-> -		adsp_region: adsp@dc00000 {
-> -			reg = <0x0dc00000 0x1900000>;
-> -			no-map;
-> -		};
-> -	};
-> -
-> -	smd {
-> -		compatible = "qcom,smd";
-> +	rpm: remoteproc {
-> +		compatible = "qcom,msm8226-rpm-proc", "qcom,rpm-proc";
->  
-> -		rpm {
-> +		smd-edge {
->  			interrupts = <GIC_SPI 168 IRQ_TYPE_EDGE_RISING>;
->  			qcom,ipc = <&apcs 8 0>;
->  			qcom,smd-edge = <15>;
-> @@ -120,6 +104,22 @@ rpmpd_opp_super_turbo: opp6 {
->  		};
->  	};
->  
-> +	reserved-memory {
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		ranges;
-> +
-> +		smem_region: smem@3000000 {
-> +			reg = <0x3000000 0x100000>;
-> +			no-map;
-> +		};
-> +
-> +		adsp_region: adsp@dc00000 {
-> +			reg = <0x0dc00000 0x1900000>;
-> +			no-map;
-> +		};
-> +	};
-> +
->  	smem {
->  		compatible = "qcom,smem";
->  
-> diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi b/arch/arm/boot/dts/qcom-msm8974.dtsi
-> index 58e144957c5d..0a5b5ecb5dfa 100644
-> --- a/arch/arm/boot/dts/qcom-msm8974.dtsi
-> +++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
-> @@ -113,6 +113,28 @@ pmu {
->  		interrupts = <GIC_PPI 7 0xf04>;
->  	};
->  
-> +	rpm: remoteproc {
-> +		compatible = "qcom,msm8974-rpm-proc", "qcom,rpm-proc";
-> +
-> +		smd-edge {
-> +			interrupts = <GIC_SPI 168 IRQ_TYPE_EDGE_RISING>;
-> +			qcom,ipc = <&apcs 8 0>;
-> +			qcom,smd-edge = <15>;
-> +
-> +			rpm_requests: rpm-requests {
-> +				compatible = "qcom,rpm-msm8974";
-> +				qcom,smd-channels = "rpm_requests";
-> +
-> +				rpmcc: clock-controller {
-> +					compatible = "qcom,rpmcc-msm8974", "qcom,rpmcc";
-> +					#clock-cells = <1>;
-> +					clocks = <&xo_board>;
-> +					clock-names = "xo";
-> +				};
-> +			};
-> +		};
-> +	};
-> +
->  	reserved-memory {
->  		#address-cells = <1>;
->  		#size-cells = <1>;
-> @@ -293,28 +315,6 @@ wcnss_smsm: wcnss@7 {
->  		};
->  	};
->  
-> -	smd {
-> -		compatible = "qcom,smd";
-> -
-> -		rpm {
-> -			interrupts = <GIC_SPI 168 IRQ_TYPE_EDGE_RISING>;
-> -			qcom,ipc = <&apcs 8 0>;
-> -			qcom,smd-edge = <15>;
-> -
-> -			rpm_requests: rpm-requests {
-> -				compatible = "qcom,rpm-msm8974";
-> -				qcom,smd-channels = "rpm_requests";
-> -
-> -				rpmcc: clock-controller {
-> -					compatible = "qcom,rpmcc-msm8974", "qcom,rpmcc";
-> -					#clock-cells = <1>;
-> -					clocks = <&xo_board>;
-> -					clock-names = "xo";
-> -				};
-> -			};
-> -		};
-> -	};
-> -
->  	soc: soc {
->  		#address-cells = <1>;
->  		#size-cells = <1>;
-> 
+Miquel
