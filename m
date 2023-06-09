@@ -2,113 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB38872936D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:40:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA4672936F
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:40:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234656AbjFIIkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 04:40:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43396 "EHLO
+        id S240838AbjFIIk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 04:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241315AbjFIIkS (ORCPT
+        with ESMTP id S238462AbjFIIkZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 04:40:18 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FBA6B9;
-        Fri,  9 Jun 2023 01:39:53 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f6255ad8aeso1877390e87.2;
-        Fri, 09 Jun 2023 01:39:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686299991; x=1688891991;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U7KaDvTnSiAOhtxrXI9e8hMyb073N1sL1o/KOoe1nTE=;
-        b=SfbPH9cruR9dotCW+msb0IPgb0ZkIkiwSYD6FkssF3SKcA03WufipUvsO93SujLTgR
-         VDYAIbYSy2N6zKdy8zBPoEeoowKMrvZZ1j2qiib8zRWJk3Yy068xuaSuC5/NAbqFT4ny
-         DMCqiL4bAE1TyK0qUGJb2BhDsBbUEupZ4JjQwZMA17pObSI9FllmDfhtFGZB31RVw/KQ
-         Nt6o3FBL27+SHSggzJTkDuvRCFJnJgzQUCz8zohGAK9c0A3yn1i2ZKQNeIUKHt4ShLli
-         eqomdVDcOi1p1Nj+BsdoRjzwFbgbkuj8jZIE7+Xz1tqICwMVx0Tj3iQtxn7e7BalX2YH
-         oi+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686299991; x=1688891991;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U7KaDvTnSiAOhtxrXI9e8hMyb073N1sL1o/KOoe1nTE=;
-        b=jByHbs+1O4mFTMlf5qLRbu6+DfhSsNu6z/OSID0meSKj3Kh8SFDjkNKNth6f1qTL82
-         54rzaRB22E6P9drPUERkU3HYDPGLo3cJIhF/auyynNXdbNLrZV8/nvYyKXTnD2W6Fc1u
-         CWIMCQ2ERiLhvLQJONRQjiENWUiARhZGKd81vY7Bg2gwV/j1pk7osYWXdfjGhgTZOSH/
-         5dadOmdRje8RT9g62VuMORNW34bbLINtXXz0seyEq0Efyyq2Fks7FUzah7r0dqY3R4uY
-         fFBjPzUKxGPUvyLu4twtU6e5qaF5iiuigSSiAAapo3IBvJ9Aby9J6PwgDnBwRTETunHr
-         Cs3g==
-X-Gm-Message-State: AC+VfDxquSo/ijOTxQymhhB1bdTyisOAIfzTRXhuk16j2utYOFrdy4vZ
-        K2ABCNGUQSRXP1vDlju41Pg=
-X-Google-Smtp-Source: ACHHUZ5b2lXvg8Y2AGqYGWqPf+6jSt6zYXUwI8SAye1fksrRg33WvFhKbs2Bqa0QwlMR1jDaSfubYA==
-X-Received: by 2002:ac2:505a:0:b0:4f4:db63:239f with SMTP id a26-20020ac2505a000000b004f4db63239fmr522757lfm.24.1686299991486;
-        Fri, 09 Jun 2023 01:39:51 -0700 (PDT)
-Received: from localhost.localdomain (bba-2-50-150-163.alshamil.net.ae. [2.50.150.163])
-        by smtp.gmail.com with ESMTPSA id d6-20020adffd86000000b0030ae87bd3e3sm3810587wrr.18.2023.06.09.01.39.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 01:39:50 -0700 (PDT)
-From:   Yongsheng Yang <iyysheng@gmail.com>
-To:     corbet@lwn.net
-Cc:     iyysheng@gmai.com, iyysheng@gmail.com, jdelvare@suse.com,
-        linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@roeck-us.net
-Subject: Re: [PATCH] Documentation/hwmon: Fix description of devm_hwmon_device_unregister
-Date:   Fri,  9 Jun 2023 12:39:35 +0400
-Message-ID: <20230609083935.1340-1-iyysheng@gmail.com>
-X-Mailer: git-send-email 2.41.0.windows.1
-In-Reply-To: <871qilqglv.fsf@meer.lwn.net>
-References: <871qilqglv.fsf@meer.lwn.net>
+        Fri, 9 Jun 2023 04:40:25 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612722D7B
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 01:40:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686300001; x=1717836001;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8d8EZLl9aLDs76xNI8gDdKl0+/w1V8ZJkq3N24V7zo4=;
+  b=cbf2qvHXQnWpzOXp825hvpuB71vU9Wxcmx0WfTDEdhOoamKmy1bj9KsS
+   ZY55u94/cf2c3Ro/1AFZDkXCN+zMuKRK8tKW0c44p5bc2oc3eQh+U2RAs
+   AOXYdnXNISyW6uWsYIdhWfez9/lTvJNnMgSt3211bXgbGR3LFqhAhwx51
+   LvBHSPq1DPCdR7CylM7xvbYwVLsiZ5BjMuY1myn7dYvbdLEVY+1TaAWzG
+   0n8PJyzYmtSiT49q3g1smhbYMVynhTVgCLcsbDrTtCaxwViXbxr/0NrAw
+   fPjDnofk37WC+Ddfpy5IIkpwKzwXJBEAysazaDuyjlgGfSGQcExN/YzD6
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="337184615"
+X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
+   d="scan'208";a="337184615"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 01:40:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="713429673"
+X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
+   d="scan'208";a="713429673"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 09 Jun 2023 01:39:59 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q7Xf4-0008rc-2O;
+        Fri, 09 Jun 2023 08:39:58 +0000
+Date:   Fri, 9 Jun 2023 16:39:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Greg Ungerer <gerg@linux-m68k.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+Subject: drivers/memstick/host/r592.c:83:9: sparse: sparse: incorrect type in
+ assignment (different base types)
+Message-ID: <202306091608.zuOYo5EP-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> YYang <iyysheng@gmail.com> writes:
-> 
-> > From: YYang <iyysheng@gmai.com>
-> >
-> > Use devm_hwmon_device_register_with_info to replace
-> > hwmon_device_register_with_info in description of
-> > devm_hwmon_device_unregister.
-> >
-> > Signed-off-by: YYang <iyysheng@gmai.com>
-> > ---
-> >  Documentation/hwmon/hwmon-kernel-api.rst | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
-> > index c2d1e0299d8d..6cacf7daf25c 100644
-> > --- a/Documentation/hwmon/hwmon-kernel-api.rst
-> > +++ b/Documentation/hwmon/hwmon-kernel-api.rst
-> > @@ -66,7 +66,7 @@ hwmon_device_register_with_info.
-> >  
-> >  devm_hwmon_device_unregister does not normally have to be called. It is only
-> >  needed for error handling, and only needed if the driver probe fails after
-> > -the call to hwmon_device_register_with_info and if the automatic (device
-> > +the call to devm_hwmon_device_register_with_info and if the automatic (device
-> >  managed) removal would be too late.
-> 
-> If, while you're at it, you add the trailing parentheses() to the
-> function name, then the docs build will automatically make a cross-link
-> to the documentation.
-> 
-> Thanks,
-> 
-> jon
+Hi Greg,
 
-Sure, I have modfied the commit message and post the updated version. Thanks
-for your advice.
+First bad commit (maybe != root cause):
 
-Thanks
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   33f2b5785a2b6b0ed1948aafee60d3abb12f1e3a
+commit: d4aa8affa1e9e51c237a1ec47a97e96dce76c98c m68knommu: fix use of cpu_to_le() on IO access
+date:   2 years, 10 months ago
+config: m68k-randconfig-s041-20230608 (https://download.01.org/0day-ci/archive/20230609/202306091608.zuOYo5EP-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.3.0
+reproduce:
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d4aa8affa1e9e51c237a1ec47a97e96dce76c98c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout d4aa8affa1e9e51c237a1ec47a97e96dce76c98c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=m68k SHELL=/bin/bash
 
-Yongsheng
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306091608.zuOYo5EP-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/memstick/host/r592.c:83:9: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int volatile [usertype] @@     got restricted __be32 [usertype] @@
+   drivers/memstick/host/r592.c:83:9: sparse:     expected unsigned int volatile [usertype]
+   drivers/memstick/host/r592.c:83:9: sparse:     got restricted __be32 [usertype]
+>> drivers/memstick/host/r592.c:83:9: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int volatile [usertype] @@     got restricted __be32 [usertype] @@
+   drivers/memstick/host/r592.c:83:9: sparse:     expected unsigned int volatile [usertype]
+   drivers/memstick/host/r592.c:83:9: sparse:     got restricted __be32 [usertype]
+>> drivers/memstick/host/r592.c:83:9: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int volatile [usertype] @@     got restricted __be32 [usertype] @@
+   drivers/memstick/host/r592.c:83:9: sparse:     expected unsigned int volatile [usertype]
+   drivers/memstick/host/r592.c:83:9: sparse:     got restricted __be32 [usertype]
+   drivers/memstick/host/r592.c:75:16: sparse: sparse: cast to restricted __be32
+   drivers/memstick/host/r592.c:75:16: sparse: sparse: cast to restricted __be32
+
+vim +83 drivers/memstick/host/r592.c
+
+9263412501022f Maxim Levitsky 2011-03-25  42  
+9263412501022f Maxim Levitsky 2011-03-25  43  /**
+9263412501022f Maxim Levitsky 2011-03-25  44   * memstick_debug_get_tpc_name - debug helper that returns string for
+9263412501022f Maxim Levitsky 2011-03-25  45   * a TPC number
+9263412501022f Maxim Levitsky 2011-03-25  46   */
+9263412501022f Maxim Levitsky 2011-03-25 @47  const char *memstick_debug_get_tpc_name(int tpc)
+9263412501022f Maxim Levitsky 2011-03-25  48  {
+9263412501022f Maxim Levitsky 2011-03-25  49  	return tpc_names[tpc-1];
+9263412501022f Maxim Levitsky 2011-03-25  50  }
+9263412501022f Maxim Levitsky 2011-03-25  51  EXPORT_SYMBOL(memstick_debug_get_tpc_name);
+9263412501022f Maxim Levitsky 2011-03-25  52  
+9263412501022f Maxim Levitsky 2011-03-25  53  
+9263412501022f Maxim Levitsky 2011-03-25  54  /* Read a register*/
+9263412501022f Maxim Levitsky 2011-03-25  55  static inline u32 r592_read_reg(struct r592_device *dev, int address)
+9263412501022f Maxim Levitsky 2011-03-25  56  {
+9263412501022f Maxim Levitsky 2011-03-25  57  	u32 value = readl(dev->mmio + address);
+9263412501022f Maxim Levitsky 2011-03-25  58  	dbg_reg("reg #%02d == 0x%08x", address, value);
+9263412501022f Maxim Levitsky 2011-03-25  59  	return value;
+9263412501022f Maxim Levitsky 2011-03-25  60  }
+9263412501022f Maxim Levitsky 2011-03-25  61  
+9263412501022f Maxim Levitsky 2011-03-25  62  /* Write a register */
+9263412501022f Maxim Levitsky 2011-03-25  63  static inline void r592_write_reg(struct r592_device *dev,
+9263412501022f Maxim Levitsky 2011-03-25  64  							int address, u32 value)
+9263412501022f Maxim Levitsky 2011-03-25  65  {
+9263412501022f Maxim Levitsky 2011-03-25  66  	dbg_reg("reg #%02d <- 0x%08x", address, value);
+9263412501022f Maxim Levitsky 2011-03-25  67  	writel(value, dev->mmio + address);
+9263412501022f Maxim Levitsky 2011-03-25  68  }
+9263412501022f Maxim Levitsky 2011-03-25  69  
+9263412501022f Maxim Levitsky 2011-03-25  70  /* Reads a big endian DWORD register */
+9263412501022f Maxim Levitsky 2011-03-25  71  static inline u32 r592_read_reg_raw_be(struct r592_device *dev, int address)
+9263412501022f Maxim Levitsky 2011-03-25  72  {
+9263412501022f Maxim Levitsky 2011-03-25  73  	u32 value = __raw_readl(dev->mmio + address);
+9263412501022f Maxim Levitsky 2011-03-25  74  	dbg_reg("reg #%02d == 0x%08x", address, value);
+9263412501022f Maxim Levitsky 2011-03-25  75  	return be32_to_cpu(value);
+9263412501022f Maxim Levitsky 2011-03-25  76  }
+9263412501022f Maxim Levitsky 2011-03-25  77  
+9263412501022f Maxim Levitsky 2011-03-25  78  /* Writes a big endian DWORD register */
+9263412501022f Maxim Levitsky 2011-03-25  79  static inline void r592_write_reg_raw_be(struct r592_device *dev,
+9263412501022f Maxim Levitsky 2011-03-25  80  							int address, u32 value)
+9263412501022f Maxim Levitsky 2011-03-25  81  {
+9263412501022f Maxim Levitsky 2011-03-25  82  	dbg_reg("reg #%02d <- 0x%08x", address, value);
+9263412501022f Maxim Levitsky 2011-03-25 @83  	__raw_writel(cpu_to_be32(value), dev->mmio + address);
+9263412501022f Maxim Levitsky 2011-03-25  84  }
+9263412501022f Maxim Levitsky 2011-03-25  85  
+
+:::::: The code at line 83 was first introduced by commit
+:::::: 9263412501022fecef844907129ee2513b5a89de memstick: add driver for Ricoh R5C592 card reader
+
+:::::: TO: Maxim Levitsky <maximlevitsky@gmail.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
