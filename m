@@ -2,308 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB186729F9B
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07B74729FA0
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:07:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242048AbjFIQFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 12:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54302 "EHLO
+        id S241205AbjFIQGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 12:06:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241710AbjFIQFQ (ORCPT
+        with ESMTP id S229737AbjFIQGx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 12:05:16 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C77C926B9
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:05:14 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686326713;
+        Fri, 9 Jun 2023 12:06:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BBB630D6
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:06:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686326764;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fjsZ04y6hc5zJ9QRVXOl+odp216CYZq3tOMIcqTyFms=;
-        b=N6hiHM9/2QSLdX35l32mJoDcGMUES0Ml2Q2uhvMas38wJQ/HExi6+Tu6TYEhWPIyZMlmV+
-        6njvaLcgfG7diux2mPptAALrY8hRvKFRezX0ko/NPymRgPwWaN2czmAO7wXpSQPIyIhW2P
-        O7JaA4r+KGSqMtP4uiKko7hWQumHJMVQpn31aQmKcrhdp3aSONOxw8B6zgiz+CVE4aDmZv
-        npFX+STvw06wCe0fvh5mOanm08bIWO7E9QcdpFmxBE2QGXSGZW/3/pKiA7S52naEv3I9iP
-        VbJ0J3a3c43NZvlmGTDr+x33/1JTNFL2fuhdFMgRxrBIrSLAa0QRcUz4k0iGyQ==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id AF1D6C000B;
-        Fri,  9 Jun 2023 16:05:12 +0000 (UTC)
-Date:   Fri, 9 Jun 2023 18:05:10 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        linux-kernel@vger.kernel.org, Rafael J Wysocki <rafael@kernel.org>
-Subject: Re: [PATCH v3 4/4] nvmem: core: Expose cells through sysfs
-Message-ID: <20230609180510.707860a0@xps-13>
-In-Reply-To: <20aa1fc7-3844-a565-03a2-e2d8ce6055d5@linaro.org>
-References: <20230605133422.45840-1-miquel.raynal@bootlin.com>
-        <20230605133422.45840-5-miquel.raynal@bootlin.com>
-        <20aa1fc7-3844-a565-03a2-e2d8ce6055d5@linaro.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        bh=+M7az6Jbp6Oqou6iuD63oUNoAb5aXxDturRi9Hwe0gE=;
+        b=dpPcOUdr2vjeymZGEeYaRwHYQJyZ4sb6aAnOT5udyhYlGYWtiPwItGyCsDSNRjIDlGYXpH
+        p12cen3t0qkpW0tAkXFZXXfz1zSJuDVJzJfazrUV8TxZNLPTVeqGUg2NkL7bpd31UIvNyk
+        u5IUX2WeXaIYzv0xTAa3YDRPsC6Elvg=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-636-4495n50dP4ePM7qZRw4kng-1; Fri, 09 Jun 2023 12:05:55 -0400
+X-MC-Unique: 4495n50dP4ePM7qZRw4kng-1
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-30b218c0bbbso749304f8f.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 09:05:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686326754; x=1688918754;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+M7az6Jbp6Oqou6iuD63oUNoAb5aXxDturRi9Hwe0gE=;
+        b=RkL88BjDJnq2A83m6K0zqoNauuJkHjWQ/49roCPjl1CcU/EZestXAOF9kAs198FVDi
+         VVchh9dnu96vlSfJ0i7vlhhvMfs6Yb3sYtRcY6T6ydXRXj/oKsZXHJX32Zo6RZw5lpS4
+         wmF7HxkSo6Ck78TqghcLePFNW9DdAVKdu0olEhverU0g6SPQ7ht1JqGbwXkYjrqQsfaL
+         bK+uAYhTELTAW3ZwdsmjMoSCOOEXv4t0qKbk66sKp9yTVicmlCYgcVh2yo8QUfPY1o0t
+         RntqAolE5OUVqHfnP5+IPQKHA7QXsNsDIvoGc40+sBXzmoaAQEWIcgg/FyngudNXFGTd
+         0kvA==
+X-Gm-Message-State: AC+VfDwCpSTXhXFLLOuIRb6q/54Z7E2QCyZzMsM9o0vvz+QZPZaFjG4P
+        0IsZFJDEvmVb1tftijc1sY8W4mIKER1PbXy3RREmTitsPS7eItebeS80fiSKntI1UUIAUPntcAq
+        0zUY0bPnIKmegKsHkvBX1cqd5
+X-Received: by 2002:a5d:4e88:0:b0:309:41d8:eec4 with SMTP id e8-20020a5d4e88000000b0030941d8eec4mr1062150wru.39.1686326754291;
+        Fri, 09 Jun 2023 09:05:54 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ70iwfwN+298k3OOZDF7xlgm6Z2CMUhRp6FaLoDmzGdsg4L4C82nksLMOKVyP8jx0VshOn9wQ==
+X-Received: by 2002:a5d:4e88:0:b0:309:41d8:eec4 with SMTP id e8-20020a5d4e88000000b0030941d8eec4mr1062133wru.39.1686326753971;
+        Fri, 09 Jun 2023 09:05:53 -0700 (PDT)
+Received: from redhat.com ([2a06:c701:7403:2800:22a6:7656:500:4dab])
+        by smtp.gmail.com with ESMTPSA id p13-20020a5d4e0d000000b002fb60c7995esm4841314wrt.8.2023.06.09.09.05.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 09:05:53 -0700 (PDT)
+Date:   Fri, 9 Jun 2023 12:05:50 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Xianting Tian <xianting.tian@linux.alibaba.com>
+Cc:     arei.gonglei@huawei.com, jasowang@redhat.com,
+        xuanzhuo@linux.alibaba.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, amit@kernel.org, arnd@arndb.de,
+        gregkh@linuxfoundation.org, marcel@holtmann.org,
+        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        linux-bluetooth@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] virtio_console: fixup potential cpu stall when free
+ unused bufs
+Message-ID: <20230609120332-mutt-send-email-mst@kernel.org>
+References: <20230609131817.712867-1-xianting.tian@linux.alibaba.com>
+ <20230609131817.712867-3-xianting.tian@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230609131817.712867-3-xianting.tian@linux.alibaba.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Srinivas,
+On Fri, Jun 09, 2023 at 09:18:16PM +0800, Xianting Tian wrote:
+> Cpu stall issue may happen if device is configured with multi queues
+> and large queue depth, so fix it.
 
-srinivas.kandagatla@linaro.org wrote on Tue, 6 Jun 2023 11:31:07 +0100:
+"may happen" is ambigous.
 
-> Thanks for doing this Miquel
+So is this: "for virtio-net we were getting
+stall on CPU was observed message, this driver is similar
+so theoretically the same logic applies"
 
-Great, I'm glad you like the idea :)
+or is this
 
->=20
-> Few minor comments below.
->=20
-> On 05/06/2023 14:34, Miquel Raynal wrote:
-> > The binary content of nvmem devices is available to the user so in the
-> > easiest cases, finding the content of a cell is rather easy as it is
-> > just a matter of looking at a known and fixed offset. However, nvmem
-> > layouts have been recently introduced to cope with more advanced
-> > situations, where the offset and size of the cells is not known in
-> > advance or is dynamic. When using layouts, more advanced parsers are
-> > used by the kernel in order to give direct access to the content of each
-> > cell, regardless of its position/size in the underlying
-> > device. Unfortunately, these information are not accessible by users,
-> > unless by fully re-implementing the parser logic in userland.
-> >=20
-> > Let's expose the cells and their content through sysfs to avoid these
-> > situations. Of course the relevant NVMEM sysfs Kconfig option must be
-> > enabled for this support to be available.
-> >=20
-> > Not all nvmem devices expose cells. Indeed, the .bin_attrs attribute
-> > group member will be filled at runtime only when relevant and will
-> > remain empty otherwise. In this case, as the cells attribute group will
-> > be empty, it will not lead to any additional folder/file creation.
-> >=20
-> > Exposed cells are read-only. There is, in practice, everything in the
-> > core to support a write path, but as I don't see any need for that, I
-> > prefer to keep the interface simple (and probably safer). The interface
-> > is documented as being in the "testing" state which means we can later
-> > add a write attribute if though relevant.
-> >=20
-> > There is one limitation though: if a layout is built as a module but is
-> > not properly installed in the system and loaded manually with insmod
-> > while the nvmem device driver was built-in, the cells won't appear in
-> > sysfs. But if done like that, the cells won't be usable by the built-in
-> > kernel drivers anyway.
-> >=20
-> > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> > ---
-> >   drivers/nvmem/core.c | 128 +++++++++++++++++++++++++++++++++++++++++--
-> >   1 file changed, 124 insertions(+), 4 deletions(-)
-> >=20
-> > diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-> > index 342cd380b420..625e3de273b7 100644
-> > --- a/drivers/nvmem/core.c
-> > +++ b/drivers/nvmem/core.c
-> > @@ -325,6 +325,61 @@ static umode_t nvmem_bin_attr_is_visible(struct ko=
-bject *kobj,
-> >   	return nvmem_bin_attr_get_umode(nvmem);
-> >   } =20
-> >   > +static struct nvmem_cell *nvmem_create_cell(struct nvmem_cell_entr=
-y *entry, =20
-> > +					    const char *id, int index);
-> > +
-> > +static ssize_t nvmem_cell_attr_read(struct file *filp, struct kobject =
-*kobj,
-> > +				    struct bin_attribute *attr, char *buf,
-> > +				    loff_t pos, size_t count)
-> > +{
-> > +	struct nvmem_cell_entry *entry;
-> > +	struct nvmem_cell *cell =3D NULL;
-> > +	struct nvmem_device *nvmem;
-> > +	size_t cell_sz, read_len;
-> > +	struct device *dev;
-> > +	void *content;
-> > +
-> > +	if (attr->private)
-> > +		dev =3D attr->private; =20
-> I see no point in this, as we do not set any private data for this attrib=
-ute.
->=20
-> How about storing nvmem_cell_entry in private and using it here.
-> This should also avoid looping for every cell in the follow on code.
+"the following error occured: ..... "
 
-Mmmh, excellent idea, that will simplify a lot the helper, I'll do
-that, thanks a lot for the suggestion!
-
->=20
-> > +	else
-> > +		dev =3D kobj_to_dev(kobj); =20
->=20
-> new line here.
->=20
-> > +	nvmem =3D to_nvmem_device(dev);
-> > +
-> > +	mutex_lock(&nvmem_mutex);
-> > +	list_for_each_entry(entry, &nvmem->cells, node) {
-> > +		if (strncmp(entry->name, attr->attr.name, XATTR_NAME_MAX))
-> > +			continue;
-> > +
-> > +		cell =3D nvmem_create_cell(entry, entry->name, 0); =20
->=20
-> > +		if (IS_ERR(cell)) {
-> > +			mutex_unlock(&nvmem_mutex);
-> > +			return PTR_ERR(cell);
-> > +		}
-> > +
-> > +		break;
-> > +	}
-> > +	mutex_unlock(&nvmem_mutex);
-> > +
-> > +	if (!cell)
-> > +		return -EINVAL;
-> > +
-> > +	content =3D nvmem_cell_read(cell, &cell_sz);
-> > +	if (IS_ERR(content)) {
-> > +		read_len =3D PTR_ERR(content);
-> > +		goto destroy_cell;
-> > +	}
-> > +
-> > +	read_len =3D min_t(unsigned int, cell_sz - pos, count); > +	memcpy(bu=
-f, content + pos, read_len);
-> > +	kfree(content);
-> > +
-> > +destroy_cell:
-> > +	kfree_const(cell->id);
-> > +	kfree(cell);
-> > +
-> > +	return read_len;
-> > +}
-> > +
-> >   /* default read/write permissions */
-> >   static struct bin_attribute bin_attr_rw_nvmem =3D {
-> >   	.attr	=3D {
-> > @@ -346,8 +401,14 @@ static const struct attribute_group nvmem_bin_grou=
-p =3D {
-> >   	.is_bin_visible =3D nvmem_bin_attr_is_visible,
-> >   }; =20
-> >   > +/* Cell attributes will be dynamically allocated */ =20
-> > +static struct attribute_group nvmem_cells_group =3D {
-> > +	.name		=3D "cells",
-> > +};
-> > +
-> >   static const struct attribute_group *nvmem_dev_groups[] =3D {
-> >   	&nvmem_bin_group,
-> > +	&nvmem_cells_group,
-> >   	NULL,
-> >   }; =20
-> >   > @@ -406,6 +467,59 @@ static void nvmem_sysfs_remove_compat(struct n=
-vmem_device *nvmem, =20
-> >   		device_remove_bin_file(nvmem->base_dev, &nvmem->eeprom);
-> >   } =20
-> >   > +static int nvmem_populate_sysfs_cells(struct nvmem_device *nvmem) =
-=20
-> > +{
-> > +	struct bin_attribute **cells_attrs, *attrs;
-> > +	struct nvmem_cell_entry *entry;
-> > +	unsigned int ncells =3D 0, i =3D 0;
-> > +	int ret =3D 0;
-> > +
-> > +	mutex_lock(&nvmem_mutex);
-> > +
-> > +	if (list_empty(&nvmem->cells))
-> > +		goto unlock_mutex;
-> > +
-> > +	list_for_each_entry(entry, &nvmem->cells, node)
-> > +		ncells++; =20
->=20
-> list_count_nodes?
-
-I didn't even know about this macro. Of course I'll use it!
-
-> > +
-> > +	/* Allocate an array of attributes with a sentinel */
-> > +	cells_attrs =3D devm_kcalloc(&nvmem->dev, ncells + 1,
-> > +				   sizeof(struct bin_attribute *), GFP_KERNEL);
-> > +	if (!cells_attrs) {
-> > +		ret =3D -ENOMEM;
-> > +		goto unlock_mutex;
-> > +	}
-> > +
-> > +	attrs =3D devm_kcalloc(&nvmem->dev, ncells, sizeof(struct bin_attribu=
-te), GFP_KERNEL);
-> > +	if (!attrs) {
-> > +		ret =3D -ENOMEM;
-> > +		goto unlock_mutex;
-> > +	}
-> > +
-> > +	/* Initialize each attribute to take the name and size of the cell */
-> > +	list_for_each_entry(entry, &nvmem->cells, node) {
-> > +		sysfs_bin_attr_init(&attrs[i]);
-> > +		attrs[i].attr.name =3D devm_kstrdup(&nvmem->dev, entry->name, GFP_KE=
-RNEL);
-> > +		attrs[i].attr.mode =3D 0444;
-> > +		attrs[i].size =3D entry->bytes;
-> > +		attrs[i].read =3D &nvmem_cell_attr_read;
-> > +		if (!attrs[i].attr.name) {
-> > +			ret =3D -ENOMEM;
-> > +			goto unlock_mutex;
-> > +		}
-> > +
-> > +		cells_attrs[i] =3D &attrs[i];
-> > +		i++;
-> > +	}
-> > +
-> > +	nvmem_cells_group.bin_attrs =3D cells_attrs;
-> > +
-> > +unlock_mutex:
-> > +	mutex_unlock(&nvmem_mutex);
-> > +
-> > +	return ret;
-> > +}
-> > +
-> >   #else /* CONFIG_NVMEM_SYSFS */ =20
-> >   >   static int nvmem_sysfs_setup_compat(struct nvmem_device *nvmem, =
-=20
-> > @@ -976,16 +1090,22 @@ struct nvmem_device *nvmem_register(const struct=
- nvmem_config *config)
-> >   	if (rval)
-> >   		goto err_remove_cells; =20
-> >   > +	rval =3D nvmem_add_cells_from_layout(nvmem); =20
-> > +	if (rval)
-> > +		goto err_remove_cells;
-> > +
-> > +#ifdef CONFIG_NVMEM_SYSFS
-> > +	rval =3D nvmem_populate_sysfs_cells(nvmem);
-> > +	if (rval)
-> > +		goto err_remove_cells;
-> > +#endif
-> > +
-> >   	dev_dbg(&nvmem->dev, "Registering nvmem device %s\n", config->name);=
- =20
-> >   >   	rval =3D device_add(&nvmem->dev); =20
-> >   	if (rval)
-> >   		goto err_remove_cells; =20
-> >   > -	rval =3D nvmem_add_cells_from_layout(nvmem); =20
-> > -	if (rval)
-> > -		goto err_remove_cells;
-> > -
-> >   	blocking_notifier_call_chain(&nvmem_notifier, NVMEM_ADD, nvmem); =20
-> >   >   	return nvmem; =20
+?
 
 
-Thanks,
-Miqu=C3=A8l
+> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+> ---
+>  drivers/char/virtio_console.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/char/virtio_console.c b/drivers/char/virtio_console.c
+> index b65c809a4e97..5ec4cf4ea919 100644
+> --- a/drivers/char/virtio_console.c
+> +++ b/drivers/char/virtio_console.c
+> @@ -1935,6 +1935,7 @@ static void remove_vqs(struct ports_device *portdev)
+>  		flush_bufs(vq, true);
+>  		while ((buf = virtqueue_detach_unused_buf(vq)))
+>  			free_buf(buf, true);
+> +		cond_resched();
+>  	}
+>  	portdev->vdev->config->del_vqs(portdev->vdev);
+>  	kfree(portdev->in_vqs);
+> -- 
+> 2.17.1
+
