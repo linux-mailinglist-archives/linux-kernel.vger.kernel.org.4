@@ -2,315 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA3A0728CE0
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 03:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8028E728CE3
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 03:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237164AbjFIBKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 21:10:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32780 "EHLO
+        id S237226AbjFIBLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 21:11:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjFIBKj (ORCPT
+        with ESMTP id S237194AbjFIBLN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 21:10:39 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15F4184
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 18:10:37 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-565bd368e19so10730187b3.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 18:10:37 -0700 (PDT)
+        Thu, 8 Jun 2023 21:11:13 -0400
+Received: from mail-oo1-xc29.google.com (mail-oo1-xc29.google.com [IPv6:2607:f8b0:4864:20::c29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B711734
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 18:11:11 -0700 (PDT)
+Received: by mail-oo1-xc29.google.com with SMTP id 006d021491bc7-55554c33bf3so818452eaf.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 18:11:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686273037; x=1688865037;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aQBwLL4HlECbSO5gR059+G6dephAddbWEgO6E2LDWZA=;
-        b=pehkqmIu5uuC2/B3POt5qXky+VS7UB4H0MKZKoA0UPHDqWhVIxnSWvN2qZj214i7Wi
-         xlP2w3eBKNw5TWHpEBt8Ykvx85JhHDfFCoQrHuZvQV3gF+6AdXASRaQWOncyvod5v/cn
-         lgCa62bmqNVztpuFb1tB0iswKKgr36t6UpOuDeHZ2gPb/O3B3TO2wbqCc1yTI1noFll7
-         3JosUpTyMIooa8ybR3xoSKQBoApqEb5yRt0CGd4bkYJ/922RqEv0JAPqXk9hzJKhIMnT
-         DFobijIf2lK30P2q6urus71da4ADA/iomZybOe90CAfsWC55Rzl6LoyMj3bmbkCn6ZM3
-         5Fuw==
+        d=google.com; s=20221208; t=1686273070; x=1688865070;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6t04VHxxvgy87m1PmWNniDTbl7PTXZyrjVB3uf4V0HA=;
+        b=mTk9d4eUqpL2hSkyiy7p1kHFt9V500PQg8nfV5Dl4cS4evEwmPy6yoHgV5DHmS3FxK
+         NbgZA37nQ/GUtPrHxqAHe1cNZhEnEiDbVi1MDMRm0zHSlGl5BNGK7uCjjpFBux9c+j4m
+         REhnC/GG2TdYlOYMiqxqlWIQc++Bu4uKChohoeciOUW6HfCGVaDf+NlbjzQo9TtcAse5
+         gUuyWQNVxzZVCWPx/zM0xrP4L/OhloKweaQleGmQfZ3UcErbnExBga9EGqTaFYExc9D5
+         A9Y3Jdvc+OAAwKqa56dKjn32pSlzGTLRZyRot52zNuzCebUrdqBAIefaXWOJlF0MYnyW
+         SLaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686273037; x=1688865037;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aQBwLL4HlECbSO5gR059+G6dephAddbWEgO6E2LDWZA=;
-        b=k9orL6bekU9n1yjUwy70/IBXEuBqTSiI6JJCngPfJA5XjB4jfKspmi7SkIZx9jbR2I
-         BOul06UomJR+USyX0CTWEpmZea9FFJOVOj6Zp6toYOTsnTDcQbtFLmIgo7Kn/Q119cPH
-         d+UkRTlwYWm8QtzVNOyYrRfUCUMw3kdTPdD2kGZzQMyIt4/b9KVJ6EuVCs417sRawYl+
-         3pvUwDsiR0DgQgheGRiAxQmI8w7Jmv4+BKQ0DXRvJvHVmO7PLUUM6l4v1NWC1s08bK5r
-         dMo4PVMEL7CK2V+DQAmXTgI/kZTtvSxTOhaNWPL9WGofsHniKYv1FaroZuIngTxIGl4z
-         UbYg==
-X-Gm-Message-State: AC+VfDxIYdaltIfQG+Lq3tgs37r2J9o0bf0sMA6GZsBrX4z6b3xG/Opn
-        ZGMM4TPaBWDUCCV45BY7XgsMEA==
-X-Google-Smtp-Source: ACHHUZ4RPJYEqOW+mRJ0KmB3JL8CSbjs+Mlo2tkty+xU7pqquzaJQl3sBeIwjaFrTRmmS8IvpanSCg==
-X-Received: by 2002:a81:47d4:0:b0:565:9d00:8a14 with SMTP id u203-20020a8147d4000000b005659d008a14mr1378760ywa.20.1686273036762;
-        Thu, 08 Jun 2023 18:10:36 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id a17-20020a81bb51000000b00545a08184fdsm265795ywl.141.2023.06.08.18.10.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 18:10:36 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 18:10:32 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 04/32] mm/pgtable: allow pte_offset_map[_lock]() to fail
-In-Reply-To: <c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com>
-Message-ID: <2929bfd-9893-a374-e463-4c3127ff9b9d@google.com>
-References: <c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com>
+        d=1e100.net; s=20221208; t=1686273070; x=1688865070;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6t04VHxxvgy87m1PmWNniDTbl7PTXZyrjVB3uf4V0HA=;
+        b=CShmj+YH8HFly++CRmg4XP4VxHsosTQZVBcOEcaNIzGtOG8wvYtBNJKaR6PQxntqIY
+         UI3r3Tod34nX6iiN7HPh4KPpboO9YylAuGMfKMMONPLY8Y/zZ2LP522cbOMco9Ny5iBu
+         6tQsZ7To7pMoLRQifFs/KjEwXrDQdGOmcudgt9F6UrbiWmz03D6WtRoPdNTFp4kvPFwp
+         K6lEi4D5xnbv91x6QgEDA5CqeyV/nCg1BC2aoud4fzIe5kVPGAL7TEuXXLyPyzFlA3Zd
+         Q1UrsfSftuHC2W7ioa/lIqNMV2mjqwUZk4sJhR2YoOGLmQsiEuzEoCHJimhVwxtBk1SK
+         YeVA==
+X-Gm-Message-State: AC+VfDwSL2TDGbTThtYPWppH7rYM0ysLki0R2MOy4GDQdCaNyz0oEgCJ
+        X3YSGdWbPT2EBtM9sQLRhQChDQoRC3pLUzFVCboTFg==
+X-Google-Smtp-Source: ACHHUZ7yaBLm0LL+IwFANCK4QJtFGTbyC/PIvIHBAEqLfn3M8KtkReRXt0/UiFfb7ZyHQbQG86UTdc1f5axmdMSv/Bg=
+X-Received: by 2002:a05:6808:1b10:b0:398:581:aedd with SMTP id
+ bx16-20020a0568081b1000b003980581aeddmr152154oib.37.1686273070437; Thu, 08
+ Jun 2023 18:11:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20230608204517.105396-2-badhri@google.com> <202306090722.opxFRfOO-lkp@intel.com>
+In-Reply-To: <202306090722.opxFRfOO-lkp@intel.com>
+From:   Badhri Jagan Sridharan <badhri@google.com>
+Date:   Thu, 8 Jun 2023 18:10:33 -0700
+Message-ID: <CAPTae5+iL0sG8kezCLMFj26QB51L7hoWno63PHiPpepFsKf0Wg@mail.gmail.com>
+Subject: Re: [PATCH v7 2/2] usb: gadget: udc: core: Prevent
+ soft_connect_store() race
+To:     kernel test robot <lkp@intel.com>
+Cc:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        colin.i.king@gmail.com, xuetao09@huawei.com,
+        quic_eserrao@quicinc.com, water.zhangjiantao@huawei.com,
+        peter.chen@freescale.com, balbi@ti.com, francesco@dolcini.it,
+        alistair@alistair23.me, stephan@gerhold.net, bagasdotme@gmail.com,
+        luca@z3ntu.xyz, llvm@lists.linux.dev,
+        oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make pte_offset_map() a wrapper for __pte_offset_map() (optionally
-outputs pmdval), pte_offset_map_lock() a sparse __cond_lock wrapper for
-__pte_offset_map_lock(): those __funcs added in mm/pgtable-generic.c.
+Removed the unused out labels reported by test in v8.
 
-__pte_offset_map() do pmdval validation (including pmd_clear_bad()
-when pmd_bad()), returning NULL if pmdval is not for a page table.
-__pte_offset_map_lock() verify pmdval unchanged after getting the
-lock, trying again if it changed.
+Regards,
+Badhri
 
-No #ifdef CONFIG_TRANSPARENT_HUGEPAGE around them: that could be done
-to cover the imminent case, but we expect to generalize it later, and
-it makes a mess of where to do the pmd_bad() clearing.
-
-Add pte_offset_map_nolock(): outputs ptl like pte_offset_map_lock(),
-without actually taking the lock.  This will be preferred to open uses of
-pte_lockptr(), because (when split ptlock is in page table's struct page)
-it points to the right lock for the returned pte pointer, even if *pmd
-gets changed racily afterwards.
-
-Update corresponding Documentation.
-
-Do not add the anticipated rcu_read_lock() and rcu_read_unlock()s yet:
-they have to wait until all architectures are balancing pte_offset_map()s
-with pte_unmap()s (as in the arch series posted earlier).  But comment
-where they will go, so that it's easy to add them for experiments.  And
-only when those are in place can transient racy failure cases be enabled.
-Add more safety for the PAE mismatched pmd_low pmd_high case at that time.
-
-Signed-off-by: Hugh Dickins <hughd@google.com>
----
- Documentation/mm/split_page_table_lock.rst | 17 ++++---
- include/linux/mm.h                         | 27 +++++++----
- include/linux/pgtable.h                    | 22 ++++++---
- mm/pgtable-generic.c                       | 56 ++++++++++++++++++++++
- 4 files changed, 101 insertions(+), 21 deletions(-)
-
-diff --git a/Documentation/mm/split_page_table_lock.rst b/Documentation/mm/split_page_table_lock.rst
-index 50ee0dfc95be..a834fad9de12 100644
---- a/Documentation/mm/split_page_table_lock.rst
-+++ b/Documentation/mm/split_page_table_lock.rst
-@@ -14,15 +14,20 @@ tables. Access to higher level tables protected by mm->page_table_lock.
- There are helpers to lock/unlock a table and other accessor functions:
- 
-  - pte_offset_map_lock()
--	maps pte and takes PTE table lock, returns pointer to the taken
--	lock;
-+	maps PTE and takes PTE table lock, returns pointer to PTE with
-+	pointer to its PTE table lock, or returns NULL if no PTE table;
-+ - pte_offset_map_nolock()
-+	maps PTE, returns pointer to PTE with pointer to its PTE table
-+	lock (not taken), or returns NULL if no PTE table;
-+ - pte_offset_map()
-+	maps PTE, returns pointer to PTE, or returns NULL if no PTE table;
-+ - pte_unmap()
-+	unmaps PTE table;
-  - pte_unmap_unlock()
- 	unlocks and unmaps PTE table;
-  - pte_alloc_map_lock()
--	allocates PTE table if needed and take the lock, returns pointer
--	to taken lock or NULL if allocation failed;
-- - pte_lockptr()
--	returns pointer to PTE table lock;
-+	allocates PTE table if needed and takes its lock, returns pointer to
-+	PTE with pointer to its lock, or returns NULL if allocation failed;
-  - pmd_lock()
- 	takes PMD table lock, returns pointer to taken lock;
-  - pmd_lockptr()
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 27ce77080c79..3c2e56980853 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2787,14 +2787,25 @@ static inline void pgtable_pte_page_dtor(struct page *page)
- 	dec_lruvec_page_state(page, NR_PAGETABLE);
- }
- 
--#define pte_offset_map_lock(mm, pmd, address, ptlp)	\
--({							\
--	spinlock_t *__ptl = pte_lockptr(mm, pmd);	\
--	pte_t *__pte = pte_offset_map(pmd, address);	\
--	*(ptlp) = __ptl;				\
--	spin_lock(__ptl);				\
--	__pte;						\
--})
-+pte_t *__pte_offset_map(pmd_t *pmd, unsigned long addr, pmd_t *pmdvalp);
-+static inline pte_t *pte_offset_map(pmd_t *pmd, unsigned long addr)
-+{
-+	return __pte_offset_map(pmd, addr, NULL);
-+}
-+
-+pte_t *__pte_offset_map_lock(struct mm_struct *mm, pmd_t *pmd,
-+			unsigned long addr, spinlock_t **ptlp);
-+static inline pte_t *pte_offset_map_lock(struct mm_struct *mm, pmd_t *pmd,
-+			unsigned long addr, spinlock_t **ptlp)
-+{
-+	pte_t *pte;
-+
-+	__cond_lock(*ptlp, pte = __pte_offset_map_lock(mm, pmd, addr, ptlp));
-+	return pte;
-+}
-+
-+pte_t *pte_offset_map_nolock(struct mm_struct *mm, pmd_t *pmd,
-+			unsigned long addr, spinlock_t **ptlp);
- 
- #define pte_unmap_unlock(pte, ptl)	do {		\
- 	spin_unlock(ptl);				\
-diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-index 94235ff2706e..3fabbb018557 100644
---- a/include/linux/pgtable.h
-+++ b/include/linux/pgtable.h
-@@ -94,14 +94,22 @@ static inline pte_t *pte_offset_kernel(pmd_t *pmd, unsigned long address)
- #define pte_offset_kernel pte_offset_kernel
- #endif
- 
--#if defined(CONFIG_HIGHPTE)
--#define pte_offset_map(dir, address)				\
--	((pte_t *)kmap_local_page(pmd_page(*(dir))) +		\
--	 pte_index((address)))
--#define pte_unmap(pte) kunmap_local((pte))
-+#ifdef CONFIG_HIGHPTE
-+#define __pte_map(pmd, address) \
-+	((pte_t *)kmap_local_page(pmd_page(*(pmd))) + pte_index((address)))
-+#define pte_unmap(pte)	do {	\
-+	kunmap_local((pte));	\
-+	/* rcu_read_unlock() to be added later */	\
-+} while (0)
- #else
--#define pte_offset_map(dir, address)	pte_offset_kernel((dir), (address))
--#define pte_unmap(pte) ((void)(pte))	/* NOP */
-+static inline pte_t *__pte_map(pmd_t *pmd, unsigned long address)
-+{
-+	return pte_offset_kernel(pmd, address);
-+}
-+static inline void pte_unmap(pte_t *pte)
-+{
-+	/* rcu_read_unlock() to be added later */
-+}
- #endif
- 
- /* Find an entry in the second-level page table.. */
-diff --git a/mm/pgtable-generic.c b/mm/pgtable-generic.c
-index d2fc52bffafc..c7ab18a5fb77 100644
---- a/mm/pgtable-generic.c
-+++ b/mm/pgtable-generic.c
-@@ -10,6 +10,8 @@
- #include <linux/pagemap.h>
- #include <linux/hugetlb.h>
- #include <linux/pgtable.h>
-+#include <linux/swap.h>
-+#include <linux/swapops.h>
- #include <linux/mm_inline.h>
- #include <asm/tlb.h>
- 
-@@ -229,3 +231,57 @@ pmd_t pmdp_collapse_flush(struct vm_area_struct *vma, unsigned long address,
- }
- #endif
- #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
-+
-+pte_t *__pte_offset_map(pmd_t *pmd, unsigned long addr, pmd_t *pmdvalp)
-+{
-+	pmd_t pmdval;
-+
-+	/* rcu_read_lock() to be added later */
-+	pmdval = pmdp_get_lockless(pmd);
-+	if (pmdvalp)
-+		*pmdvalp = pmdval;
-+	if (unlikely(pmd_none(pmdval) || is_pmd_migration_entry(pmdval)))
-+		goto nomap;
-+	if (unlikely(pmd_trans_huge(pmdval) || pmd_devmap(pmdval)))
-+		goto nomap;
-+	if (unlikely(pmd_bad(pmdval))) {
-+		pmd_clear_bad(pmd);
-+		goto nomap;
-+	}
-+	return __pte_map(&pmdval, addr);
-+nomap:
-+	/* rcu_read_unlock() to be added later */
-+	return NULL;
-+}
-+
-+pte_t *pte_offset_map_nolock(struct mm_struct *mm, pmd_t *pmd,
-+			     unsigned long addr, spinlock_t **ptlp)
-+{
-+	pmd_t pmdval;
-+	pte_t *pte;
-+
-+	pte = __pte_offset_map(pmd, addr, &pmdval);
-+	if (likely(pte))
-+		*ptlp = pte_lockptr(mm, &pmdval);
-+	return pte;
-+}
-+
-+pte_t *__pte_offset_map_lock(struct mm_struct *mm, pmd_t *pmd,
-+			     unsigned long addr, spinlock_t **ptlp)
-+{
-+	spinlock_t *ptl;
-+	pmd_t pmdval;
-+	pte_t *pte;
-+again:
-+	pte = __pte_offset_map(pmd, addr, &pmdval);
-+	if (unlikely(!pte))
-+		return pte;
-+	ptl = pte_lockptr(mm, &pmdval);
-+	spin_lock(ptl);
-+	if (likely(pmd_same(pmdval, pmdp_get_lockless(pmd)))) {
-+		*ptlp = ptl;
-+		return pte;
-+	}
-+	pte_unmap_unlock(pte, ptl);
-+	goto again;
-+}
--- 
-2.35.3
-
+On Thu, Jun 8, 2023 at 4:20=E2=80=AFPM kernel test robot <lkp@intel.com> wr=
+ote:
+>
+> Hi Badhri,
+>
+> kernel test robot noticed the following build warnings:
+>
+> [auto build test WARNING on d37537a1f7cf09e304fe7993cb5e732534a0fb22]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/Badhri-Jagan-Sridh=
+aran/usb-gadget-udc-core-Prevent-soft_connect_store-race/20230609-044555
+> base:   d37537a1f7cf09e304fe7993cb5e732534a0fb22
+> patch link:    https://lore.kernel.org/r/20230608204517.105396-2-badhri%4=
+0google.com
+> patch subject: [PATCH v7 2/2] usb: gadget: udc: core: Prevent soft_connec=
+t_store() race
+> config: hexagon-randconfig-r015-20230608 (https://download.01.org/0day-ci=
+/archive/20230609/202306090722.opxFRfOO-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git =
+4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> reproduce (this is a W=3D1 build):
+>         mkdir -p ~/bin
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         git checkout d37537a1f7cf09e304fe7993cb5e732534a0fb22
+>         b4 shazam https://lore.kernel.org/r/20230608204517.105396-2-badhr=
+i@google.com
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/make.cr=
+oss W=3D1 O=3Dbuild_dir ARCH=3Dhexagon olddefconfig
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang ~/bin/make.cr=
+oss W=3D1 O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash drivers/usb/gadget=
+/udc/
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202306090722.opxFRfOO-lkp=
+@intel.com/
+>
+> All warnings (new ones prefixed by >>):
+>
+>    In file included from drivers/usb/gadget/udc/core.c:17:
+>    In file included from include/linux/dma-mapping.h:10:
+>    In file included from include/linux/scatterlist.h:9:
+>    In file included from arch/hexagon/include/asm/io.h:334:
+>    include/asm-generic/io.h:547:31: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      547 |         val =3D __raw_readb(PCI_IOBASE + addr);
+>          |                           ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:560:61: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      560 |         val =3D __le16_to_cpu((__le16 __force)__raw_readw(PCI_=
+IOBASE + addr));
+>          |                                                         ~~~~~~=
+~~~~ ^
+>    include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded fro=
+m macro '__le16_to_cpu'
+>       37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+>          |                                                   ^
+>    In file included from drivers/usb/gadget/udc/core.c:17:
+>    In file included from include/linux/dma-mapping.h:10:
+>    In file included from include/linux/scatterlist.h:9:
+>    In file included from arch/hexagon/include/asm/io.h:334:
+>    include/asm-generic/io.h:573:61: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      573 |         val =3D __le32_to_cpu((__le32 __force)__raw_readl(PCI_=
+IOBASE + addr));
+>          |                                                         ~~~~~~=
+~~~~ ^
+>    include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded fro=
+m macro '__le32_to_cpu'
+>       35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+>          |                                                   ^
+>    In file included from drivers/usb/gadget/udc/core.c:17:
+>    In file included from include/linux/dma-mapping.h:10:
+>    In file included from include/linux/scatterlist.h:9:
+>    In file included from arch/hexagon/include/asm/io.h:334:
+>    include/asm-generic/io.h:584:33: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      584 |         __raw_writeb(value, PCI_IOBASE + addr);
+>          |                             ~~~~~~~~~~ ^
+>    include/asm-generic/io.h:594:59: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBA=
+SE + addr);
+>          |                                                       ~~~~~~~~=
+~~ ^
+>    include/asm-generic/io.h:604:59: warning: performing pointer arithmeti=
+c on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+>      604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBA=
+SE + addr);
+>          |                                                       ~~~~~~~~=
+~~ ^
+> >> drivers/usb/gadget/udc/core.c:850:1: warning: unused label 'out' [-Wun=
+used-label]
+>      850 | out:
+>          | ^~~~
+>      851 |         trace_usb_gadget_deactivate(gadget, ret);
+>    drivers/usb/gadget/udc/core.c:886:1: warning: unused label 'out' [-Wun=
+used-label]
+>      886 | out:
+>          | ^~~~
+>      887 |         trace_usb_gadget_activate(gadget, ret);
+>    8 warnings generated.
+>
+>
+> vim +/out +850 drivers/usb/gadget/udc/core.c
+>
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  815
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  816  /**
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  817   * usb_gadget_deactivate - deactivate function which is not=
+ ready to work
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  818   * @gadget: the peripheral being deactivated
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  819   *
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  820   * This routine may be used during the gadget driver bind()=
+ call to prevent
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  821   * the peripheral from ever being visible to the USB host, =
+unless later
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  822   * usb_gadget_activate() is called.  For example, user mode=
+ components may
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  823   * need to be activated before the system can talk to hosts=
+.
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  824   *
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  825   * Returns zero on success, else negative errno.
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  826   */
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  827  int usb_gadget_deactivate(struct usb_gadget *gadget)
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  828  {
+> 5e42d710a108c2 drivers/usb/gadget/udc/core.c     Felipe Balbi           2=
+016-05-31  829         int ret =3D 0;
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  830
+> bfc8a68e3289a9 drivers/usb/gadget/udc/core.c     Badhri Jagan Sridharan 2=
+023-06-08  831         mutex_lock(&gadget->udc->connect_lock);
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  832         if (gadget->deactivated)
+> bfc8a68e3289a9 drivers/usb/gadget/udc/core.c     Badhri Jagan Sridharan 2=
+023-06-08  833                 goto unlock;
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  834
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  835         if (gadget->connected) {
+> bfc8a68e3289a9 drivers/usb/gadget/udc/core.c     Badhri Jagan Sridharan 2=
+023-06-08  836                 ret =3D usb_gadget_disconnect_locked(gadget)=
+;
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  837                 if (ret)
+> bfc8a68e3289a9 drivers/usb/gadget/udc/core.c     Badhri Jagan Sridharan 2=
+023-06-08  838                         goto unlock;
+> 5e42d710a108c2 drivers/usb/gadget/udc/core.c     Felipe Balbi           2=
+016-05-31  839
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  840                 /*
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  841                  * If gadget was being connected before deac=
+tivation, we want
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  842                  * to reconnect it in usb_gadget_activate().
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  843                  */
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  844                 gadget->connected =3D true;
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  845         }
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  846         gadget->deactivated =3D true;
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  847
+> bfc8a68e3289a9 drivers/usb/gadget/udc/core.c     Badhri Jagan Sridharan 2=
+023-06-08  848  unlock:
+> bfc8a68e3289a9 drivers/usb/gadget/udc/core.c     Badhri Jagan Sridharan 2=
+023-06-08  849         mutex_unlock(&gadget->udc->connect_lock);
+> 5e42d710a108c2 drivers/usb/gadget/udc/core.c     Felipe Balbi           2=
+016-05-31 @850  out:
+> 5e42d710a108c2 drivers/usb/gadget/udc/core.c     Felipe Balbi           2=
+016-05-31  851         trace_usb_gadget_deactivate(gadget, ret);
+> 5e42d710a108c2 drivers/usb/gadget/udc/core.c     Felipe Balbi           2=
+016-05-31  852
+> 5e42d710a108c2 drivers/usb/gadget/udc/core.c     Felipe Balbi           2=
+016-05-31  853         return ret;
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  854  }
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  855  EXPORT_SYMBOL_GPL(usb_gadget_deactivate);
+> 5a8d651a2bde01 drivers/usb/gadget/udc/udc-core.c Felipe Balbi           2=
+016-05-31  856
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
