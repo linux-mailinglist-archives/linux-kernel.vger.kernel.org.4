@@ -2,128 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99E3E72917B
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:47:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6416772917F
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:47:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239020AbjFIHrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 03:47:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54202 "EHLO
+        id S239010AbjFIHrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 03:47:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239010AbjFIHql (ORCPT
+        with ESMTP id S239034AbjFIHr3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 03:46:41 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0985F1FDA;
-        Fri,  9 Jun 2023 00:46:39 -0700 (PDT)
-Date:   Fri, 09 Jun 2023 07:46:36 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686296797;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ALkFxJwcKxaKkbysMd3CGHSOn9xdIigfWesyaC2/HgY=;
-        b=QFYPpxgfBCFvWRAX9TonzR+WIvkeqYQaHkGF/4IsTvD5dz/SmRIjpkKPRPyfQcaojnulgL
-        hXtJWj/zFrYg68YKhdKaxYYWgBSTxokKYY8tvxlEN/0g+aJq5mbg6pzQlHNoSCDYJRBP29
-        SqvMXPiBQOL4LITNJ7rCH1/TTxt9jK3Y+f/tahbM7MqP4CjQZb+oski4G4D1BpVwYnjr4w
-        6Grc9BGNa1oJhbuqoRDtHIryvAeZ7M4278F+lGzoI9+Uh6FtgaldJDZJo/mKbXxfbu7uRH
-        am2g3V9N8vFkb7fhmAy6aCwR68xxBUPn+oxrGDt/k6fZncdO5eay/mXxCLaekw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686296797;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ALkFxJwcKxaKkbysMd3CGHSOn9xdIigfWesyaC2/HgY=;
-        b=YDrMYPQc0/286j/g1Bs08E38WZkb1PhERTvHZG3xC0TJuXcTuPNB0JMbD2n8m0VMypSish
-        vR27UKJs/B6lNcAg==
-From:   "tip-bot2 for Nathan Chancellor" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] percpu: Fix self-assignment of __old in
- raw_cpu_generic_try_cmpxchg()
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: =?utf-8?q?=3C20230607-fix-shadowing-in-raw=5Fcpu=5Fgeneric=5F?=
- =?utf-8?q?try=5Fcmpxchg-v1-1-8f0a3d930d43=40kernel=2Eorg=3E?=
-References: =?utf-8?q?=3C20230607-fix-shadowing-in-raw=5Fcpu=5Fgeneric=5Ft?=
- =?utf-8?q?ry=5Fcmpxchg-v1-1-8f0a3d930d43=40kernel=2Eorg=3E?=
+        Fri, 9 Jun 2023 03:47:29 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985D830D1;
+        Fri,  9 Jun 2023 00:47:21 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f738f579ceso10408685e9.3;
+        Fri, 09 Jun 2023 00:47:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686296840; x=1688888840;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E3GyzALgiAbKVN3scNeYJuUugUOGcxM8aiFsKeh7Wl4=;
+        b=R+uUnQnUw8AxfbwxaV8YiwuF1jLiTqyc3ikoithVKsDf2XRY1Grc2neL5OuPsMvI6k
+         Aut8pa1a2xznKmSJPHM79kd4zTp2KNIeOMqs4W3Wjd8riKCaPnH77NhiEtQmqZG4n3NK
+         KzQ1qM0MzBY+88JxJK+2WDoQZuavecnHTvzKehTsL7N7zPp0/WZ+PvlMw2mQEpcgkbSu
+         yVnxPDfcBhbfvA6vh6cHEdyhrmYkXKbtuup90Sjm/+Kg2+rYjB4OyWcQA/cWvT4GlI4W
+         lLXRzq1YM3cJLPIOnE6j7u0TMrthQANIHCdVbhGvnQ02OS0DGXcr847XvPzB3ilzkzXP
+         udBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686296840; x=1688888840;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E3GyzALgiAbKVN3scNeYJuUugUOGcxM8aiFsKeh7Wl4=;
+        b=Stx5YS4vcxeyGG3nYfMc5/yubY4PaZ17n+npM9KVk6OWt3QlBYAtP56QwE7PN/9lX1
+         99jvdFG4AXwwWHFfhnYnTHG5Ekxdz1ysxNHOR8X+LHDZ7JkZLj4niBZ65FkZM9ISvaAO
+         liiNbpdLMF/hOIk7b1ANTLtnNNZFbZejwVjh/c6YpDbgIXy58MMC9qvC83Huj/ZKT16F
+         oBsIIaeUP1texsHgTEkZOzhBy0psRUizBbB/y4sRkmiHnVqcu31SGVC4o47Aj/fomw4h
+         twGU8pU1Hg+U5JhGGezwNDsEvgFPhLMAw5Vj3v+6f4bTgXdVSSptBItJejpFBTiU5CfI
+         KuDw==
+X-Gm-Message-State: AC+VfDyRR4oHT8y7UXMA85PwRrgDuvEckdAOopafrVLBK3J9QPiY9yRH
+        uduQnYM0zikti1mCdzX5+fc=
+X-Google-Smtp-Source: ACHHUZ4gwo6kHA7MJ+HM5oTO2Vi7xTZ8RW4693y0tK8OmSBoiP3YJ6/wNOeC+7NfEEjhZUC5Q5wcNg==
+X-Received: by 2002:a05:600c:21c7:b0:3f6:11cb:4926 with SMTP id x7-20020a05600c21c700b003f611cb4926mr288758wmj.22.1686296839703;
+        Fri, 09 Jun 2023 00:47:19 -0700 (PDT)
+Received: from localhost.localdomain (bba-2-50-150-163.alshamil.net.ae. [2.50.150.163])
+        by smtp.gmail.com with ESMTPSA id b10-20020adfe30a000000b00300aee6c9cesm3693602wrj.20.2023.06.09.00.47.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 00:47:19 -0700 (PDT)
+From:   Yongsheng Yang <iyysheng@gmail.com>
+To:     linux@roeck-us.net
+Cc:     bagasdotme@gmail.com, corbet@lwn.net, iyysheng@gmail.com,
+        jdelvare@suse.com, linux-doc@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Documentation/hwmon: Fix description of devm_hwmon_device_unregister
+Date:   Fri,  9 Jun 2023 11:47:04 +0400
+Message-ID: <20230609074704.1259-1-iyysheng@gmail.com>
+X-Mailer: git-send-email 2.41.0.windows.1
+In-Reply-To: <e1fcbb8d-c9b3-868e-8053-6ebc33a3e66a@roeck-us.net>
+References: <e1fcbb8d-c9b3-868e-8053-6ebc33a3e66a@roeck-us.net>
 MIME-Version: 1.0
-Message-ID: <168629679641.404.10468324915005302564.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the locking/core branch of tip:
+> On 6/8/23 18:31, Bagas Sanjaya wrote:
+> > On Fri, Jun 09, 2023 at 02:42:30AM +0400, YYang wrote:
+> >> From: YYang <iyysheng@gmai.com>
+> >>
+> >> Use devm_hwmon_device_register_with_info to replace
+> >> hwmon_device_register_with_info in description of
+> >> devm_hwmon_device_unregister.
+> >>
+> >> Signed-off-by: YYang <iyysheng@gmai.com>
+> > 
+> > Is your SoB address gmail one (sounds typo here)?
+> > 
+> 
+> Looks like it. YYang - please resubmit with correct SoB.
+> 
+> Thanks,
+> Guenter
 
-Commit-ID:     093d9b240a1fa261ff8aeb7c7cc484dedacfda53
-Gitweb:        https://git.kernel.org/tip/093d9b240a1fa261ff8aeb7c7cc484dedacfda53
-Author:        Nathan Chancellor <nathan@kernel.org>
-AuthorDate:    Wed, 07 Jun 2023 14:20:59 -07:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Thu, 08 Jun 2023 10:28:39 +02:00
+Sorry for my mistake, I fixed the misspelling. Will post the updated version.
 
-percpu: Fix self-assignment of __old in raw_cpu_generic_try_cmpxchg()
+Thanks
 
-After commit c5c0ba953b8c ("percpu: Add {raw,this}_cpu_try_cmpxchg()"),
-clang built ARCH=arm and ARCH=arm64 kernels with CONFIG_INIT_STACK_NONE
-started panicking on boot in alloc_vmap_area():
-
-  [    0.000000] kernel BUG at mm/vmalloc.c:1638!
-  [    0.000000] Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
-  [    0.000000] Modules linked in:
-  [    0.000000] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.4.0-rc2-ARCH+ #1
-  [    0.000000] Hardware name: linux,dummy-virt (DT)
-  [    0.000000] pstate: 200000c9 (nzCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-  [    0.000000] pc : alloc_vmap_area+0x7ec/0x7f8
-  [    0.000000] lr : alloc_vmap_area+0x7e8/0x7f8
-
-Compiling mm/vmalloc.c with W=2 reveals an instance of -Wshadow, which
-helps uncover that through macro expansion, '__old = *(ovalp)' in
-raw_cpu_generic_try_cmpxchg() can become '__old = *(&__old)' through
-raw_cpu_generic_cmpxchg(), which results in garbage being assigned to
-the inner __old and the cmpxchg not working properly.
-
-Add an extra underscore to __old in raw_cpu_generic_try_cmpxchg() so
-that there is no more self-assignment, which resolves the panics.
-
-Closes: https://github.com/ClangBuiltLinux/linux/issues/1868
-Fixes: c5c0ba953b8c ("percpu: Add {raw,this}_cpu_try_cmpxchg()")
-Debugged-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20230607-fix-shadowing-in-raw_cpu_generic_try_cmpxchg-v1-1-8f0a3d930d43@kernel.org
----
- include/asm-generic/percpu.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/include/asm-generic/percpu.h b/include/asm-generic/percpu.h
-index 68c410e..94cbd50 100644
---- a/include/asm-generic/percpu.h
-+++ b/include/asm-generic/percpu.h
-@@ -101,9 +101,9 @@ do {									\
- #define raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval)			\
- ({									\
- 	typeof(pcp) *__p = raw_cpu_ptr(&(pcp));				\
--	typeof(pcp) __val = *__p, __old = *(ovalp);			\
-+	typeof(pcp) __val = *__p, ___old = *(ovalp);			\
- 	bool __ret;							\
--	if (__val == __old) {						\
-+	if (__val == ___old) {						\
- 		*__p = nval;						\
- 		__ret = true;						\
- 	} else {							\
+Yongsheng
