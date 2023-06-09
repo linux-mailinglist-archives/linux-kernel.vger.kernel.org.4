@@ -2,200 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C452D728E9F
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 05:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE6FF728E89
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 05:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238023AbjFIDga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 23:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33740 "EHLO
+        id S237918AbjFIDXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 23:23:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjFIDg0 (ORCPT
+        with ESMTP id S229445AbjFIDXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 23:36:26 -0400
-X-Greylist: delayed 792 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 08 Jun 2023 20:36:24 PDT
-Received: from mail-m11877.qiye.163.com (mail-m11877.qiye.163.com [115.236.118.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4222B30F0;
-        Thu,  8 Jun 2023 20:36:23 -0700 (PDT)
-Received: from [172.23.197.13] (unknown [121.32.254.149])
-        by mail-m11877.qiye.163.com (Hmail) with ESMTPA id CD1954001E6;
-        Fri,  9 Jun 2023 11:22:51 +0800 (CST)
-Message-ID: <64f5298c-6712-de7e-7f90-5aeb0d0d770c@sangfor.com.cn>
-Date:   Fri, 9 Jun 2023 11:22:51 +0800
+        Thu, 8 Jun 2023 23:23:17 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCAC930F2
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 20:23:15 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-97458c97333so221023166b.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 20:23:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686280994; x=1688872994;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lR4PdEBpm66GXLyK91fb9Hkr7it6RDc+Xu6p+y1I6mA=;
+        b=VzeHWQsOxDrTjhpiRanRhdeNOgoG4H6Sms7xBt7h6K+PhiZqeM9Sbtn3y4WhxHf1bP
+         i3aItjTP1Pr10Yf1PKa8A9H5oF35tpQlxjA2+E/c/TIaXimqKz2OOOFBWGXv+i4/tz+b
+         fk+iQ3kZvi/IF3kQnCvxhSoyx0w02i311P7G69QLNnaWxEs/5nQmbKgB5oNbyk47wTBX
+         Lvm59LwhBu0pG9dGvV5F94iJCzjuFHvJckQeRSAQLPNiKh1kaTgSnN/YQAEq2Au2vtf4
+         EhdiGqPkKCn9xuLoxz/jyDAz7Gb8tXe6Hqq8JqXxaFBMN8H2MJi0pMcmpVT17ez4snyH
+         8jYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686280994; x=1688872994;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lR4PdEBpm66GXLyK91fb9Hkr7it6RDc+Xu6p+y1I6mA=;
+        b=OoZxeHx3hFA/9QX50sJjZQKP+rN/5kw8ASwuH1uLqwGdRPYqVBEl6xBsS86MPlFL8B
+         BlNdxIuzRpxLQZJHvQ85zbo1ICw4Q8cWqlzEmuK4EqgwkDtRwBPLdH/GdGQiD54aHA7E
+         6glbJ/khz+vjuItitBqvNhIeZeG5n4QUJosvfMusk8nl/TD3X9lK/ZnOtsbZBZWw1PW5
+         04dq4wOlnLSbNK1PgiPhptJy+WmDAx6lmQFpWMaA+RG0XEXueo9ungSlOT4f4YHBtFs4
+         DlZYVtE6S8jAcJ0wjPAL0QhCV8G4wOdnZweBIVvgzG7NcSCXoC/NqTer8VX6Yrbacgr5
+         6beA==
+X-Gm-Message-State: AC+VfDwt/O47ceXMRXR8cAjVaVgKUA7uHI9XO7yTBiZ2Su56XG0peddQ
+        jqDnQdkZGwI3fov9L887T8l3lDdeSKpEYyvuOzI=
+X-Google-Smtp-Source: ACHHUZ5iaY5FcNQkiNbHXTUnK1hbAWFUyTbX/nFz3LcECW969VHszYuaH25MaHZyd2y5TbEk3PMBj3bJvn/TRm4iHzg=
+X-Received: by 2002:a17:907:a4e:b0:969:fc68:fa9a with SMTP id
+ be14-20020a1709070a4e00b00969fc68fa9amr452656ejc.40.1686280994039; Thu, 08
+ Jun 2023 20:23:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v11 3/8] ARM: ftrace: Enable HAVE_FUNCTION_GRAPH_RETVAL
-To:     linux@armlinux.org.uk
-Cc:     mhiramat@kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        mark.rutland@arm.com, will@kernel.org, catalin.marinas@arm.com,
-        rmk+kernel@armlinux.org.uk, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
-        tglx@linutronix.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        bp@alien8.de, hpa@zytor.com, chenhuacai@kernel.org,
-        zhangqing@loongson.cn, kernel@xen0n.name, mingo@redhat.com,
-        peterz@infradead.org, xiehuan09@gmail.com, dinghui@sangfor.com.cn,
-        huangcun@sangfor.com.cn, dolinux.peng@gmail.com,
-        linux-trace-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <cover.1680954589.git.pengdonglin@sangfor.com.cn>
- <c61eb9290c3e817d4d70c429c0e987e3ec51a3c4.1680954589.git.pengdonglin@sangfor.com.cn>
- <20230608215719.7537ce38@gandalf.local.home>
-Content-Language: en-US
-From:   Donglin Peng <pengdonglin@sangfor.com.cn>
-In-Reply-To: <20230608215719.7537ce38@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZTUxMVhhIH0pMHhlKH0kfGVUTARMWGhIXJBQOD1
-        lXWRgSC1lBWUpJSlVISVVJTk9VSk9CWVdZFhoPEhUdFFlBWU9LSFVKTkxJSklVSktLVUpCWQY+
-X-HM-Tid: 0a889e2daa942eb3kusncd1954001e6
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OFE6Tzo4LD1IMi0WEhBLOTcf
-        CCEKCzdVSlVKTUNNSUNLQkxIT0lKVTMWGhIXVQseFRwfFBUcFxIVOwgaFRwdFAlVGBQWVRgVRVlX
-        WRILWUFZSklKVUhJVUlOT1VKT0JZV1kIAVlBTE9CTTcG
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <cover.1685350577.git.chunguang.xu@shopee.com> <ZH9NcBtrDxwq5xRU@ovpn-8-17.pek2.redhat.com>
+ <CADtkEeeVWZ_b9mDWzwaq_5hdfZ53-RX2rd1SDDem=YsSBQ_g8A@mail.gmail.com>
+ <ZIEnQpAgeqm0xcQP@ovpn-8-23.pek2.redhat.com> <CADtkEeds0jCug7F9MymVOdEVBrkSdX6mnLz4kZGCJ7og9JCc7A@mail.gmail.com>
+ <ZIHcyBePwLQahkYI@ovpn-8-23.pek2.redhat.com>
+In-Reply-To: <ZIHcyBePwLQahkYI@ovpn-8-23.pek2.redhat.com>
+From:   =?UTF-8?B?6K645pil5YWJ?= <brookxu.cn@gmail.com>
+Date:   Fri, 9 Jun 2023 11:23:02 +0800
+Message-ID: <CADtkEefZ7OKNxDvs_nk3Vr9X=P3Pv1joqesV3piBR8Dfr=SFqg@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/4] nvme-tcp: fix hung issues for deleting
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     kbusch@kernel.org, axboe@kernel.dk, hch@lst.de, sagi@grimberg.me,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/9 9:57, Steven Rostedt wrote:
-> On Sat,  8 Apr 2023 05:42:17 -0700
-> Donglin Peng <pengdonglin@sangfor.com.cn> wrote:
-> 
->> The previous patch ("function_graph: Support recording and printing
->> the return value of function") has laid the groundwork for the for
->> the funcgraph-retval, and this modification makes it available on
->> the ARM platform.
->>
->> We introduce a new structure called fgraph_ret_regs for the ARM platform
->> to hold return registers and the frame pointer. We then fill its content
->> in the return_to_handler and pass its address to the function
->> ftrace_return_to_handler to record the return value.
->>
->> Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>
-> 
-> I really don't want to add this without an ack from an arm maintainer.
-> 
-> I have the patches queued (for testing), but I may remove the ones that do
-> not have the appropriate acks.
-> 
-> -- Steve
-> 
+Ming Lei <ming.lei@redhat.com> =E4=BA=8E2023=E5=B9=B46=E6=9C=888=E6=97=A5=
+=E5=91=A8=E5=9B=9B 21:51=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Thu, Jun 08, 2023 at 10:48:50AM +0800, =E8=AE=B8=E6=98=A5=E5=85=89 wro=
+te:
+> > Ming Lei <ming.lei@redhat.com> =E4=BA=8E2023=E5=B9=B46=E6=9C=888=E6=97=
+=A5=E5=91=A8=E5=9B=9B 08:56=E5=86=99=E9=81=93=EF=BC=9A
+> > >
+> > > On Wed, Jun 07, 2023 at 12:09:17PM +0800, =E8=AE=B8=E6=98=A5=E5=85=89=
+ wrote:
+> > > > Hi Ming:
+> > > >
+> > > > Ming Lei <ming.lei@redhat.com> =E4=BA=8E2023=E5=B9=B46=E6=9C=886=E6=
+=97=A5=E5=91=A8=E4=BA=8C 23:15=E5=86=99=E9=81=93=EF=BC=9A
+> > > > >
+> > > > > Hello Chunguang,
+> > > > >
+> > > > > On Mon, May 29, 2023 at 06:59:22PM +0800, brookxu.cn wrote:
+> > > > > > From: Chunguang Xu <chunguang.xu@shopee.com>
+> > > > > >
+> > > > > > We found that nvme_remove_namespaces() may hang in flush_work(&=
+ctrl->scan_work)
+> > > > > > while removing ctrl. The root cause may due to the state of ctr=
+l changed to
+> > > > > > NVME_CTRL_DELETING while removing ctrl , which intterupt nvme_t=
+cp_error_recovery_work()/
+> > > > > > nvme_reset_ctrl_work()/nvme_tcp_reconnect_or_remove().  At this=
+ time, ctrl is
+> > > > >
+> > > > > I didn't dig into ctrl state check in these error handler yet, bu=
+t error
+> > > > > handling is supposed to provide forward progress for any controll=
+er state.
+> > > > >
+> > > > > Can you explain a bit how switching to DELETING interrupts the ab=
+ove
+> > > > > error handling and breaks the forward progress guarantee?
+> > > >
+> > > > Here we freezed ctrl, if ctrl state has changed to DELETING or
+> > > > DELETING_NIO(by nvme disconnect),  we will break up and lease ctrl
+> > > > freeze, so nvme_remove_namespaces() hang.
+> > > >
+> > > > static void nvme_tcp_error_recovery_work(struct work_struct *work)
+> > > > {
+> > > >         ...
+> > > >         if (!nvme_change_ctrl_state(ctrl, NVME_CTRL_CONNECTING)) {
+> > > >                 /* state change failure is ok if we started ctrl de=
+lete */
+> > > >                 WARN_ON_ONCE(ctrl->state !=3D NVME_CTRL_DELETING &&
+> > > >                              ctrl->state !=3D NVME_CTRL_DELETING_NO=
+IO);
+> > > >                 return;
+> > > >         }
+> > > >
+> > > >         nvme_tcp_reconnect_or_remove(ctrl);
+> > > > }
+> > > >
+> > > >
+> > > > Another path, we will check ctrl state while reconnecting, if it ch=
+anges to
+> > > > DELETING or DELETING_NIO, we will break up and lease ctrl freeze an=
+d
+> > > > queue quiescing (through reset path), as a result Hang occurs.
+> > > >
+> > > > static void nvme_tcp_reconnect_or_remove(struct nvme_ctrl *ctrl)
+> > > > {
+> > > >         /* If we are resetting/deleting then do nothing */
+> > > >         if (ctrl->state !=3D NVME_CTRL_CONNECTING) {
+> > > >                 WARN_ON_ONCE(ctrl->state =3D=3D NVME_CTRL_NEW ||
+> > > >                         ctrl->state =3D=3D NVME_CTRL_LIVE);
+> > > >                 return;
+> > > >         }
+> > > >         ...
+> > > > }
+> > > >
+> > > > > > freezed and queue is quiescing . Since scan_work may continue t=
+o issue IOs to
+> > > > > > load partition table, make it blocked, and lead to nvme_tcp_err=
+or_recovery_work()
+> > > > > > hang in flush_work(&ctrl->scan_work).
+> > > > > >
+> > > > > > After analyzation, we found that there are mainly two case:
+> > > > > > 1. Since ctrl is freeze, scan_work hang in __bio_queue_enter() =
+while it issue
+> > > > > >    new IO to load partition table.
+> > > > >
+> > > > > Yeah, nvme freeze usage is fragile, and I suggested to move
+> > > > > nvme_start_freeze() from nvme_tcp_teardown_io_queues to
+> > > > > nvme_tcp_configure_io_queues(), such as the posted change on rdma=
+:
+> > > > >
+> > > > > https://lore.kernel.org/linux-block/CAHj4cs-4gQHnp5aiekvJmb6o8qAc=
+b6nLV61uOGFiisCzM49_dg@mail.gmail.com/T/#ma0d6bbfaa0c8c1be79738ff86a2fdcf75=
+82e06b0
+> > > >
+> > > > While drive reconnecting, I think we should freeze ctrl or quiescin=
+g queue,
+> > > > otherwise nvme_fail_nonready_command()may return BLK_STS_RESOURCE,
+> > > > and the IOs may retry frequently. So I think we may better freeze c=
+trl
+> > > > while entering
+> > > > error_recovery/reconnect, but need to unfreeze it while exit.
+> > >
+> > > quiescing is always done in error handling, and freeze is actually
+> > > not a must, and it is easier to cause race by calling freeze & unfree=
+ze
+> > > from different contexts.
+> >
+> > I think if we donot freeze ctrl, as the IO already submit (just queue
+> > to hctx->dispatch) and may
+> > pending for a long time,  it may trigger new hang task issue, but
+> > freeze ctrl may can avoid these
+> > hang task.
+>
+> How can the freeze make the difference? If driver/device can't move on,
+> any request is stuck, so the IO path waits in either submit_bio() or
+> upper layer after returning from submit_bio().
+>
 
-Hi Russell, can I get a ack for arm?
+Now error_recovery and reset ctrl are handled somewhat differently:
+1. error_recovery will freeze the controller, but it will unquiescing
+queue to fast fail pending IO later,
+otherwise this part of IO may cause task hang during the reconnection,
+so while error_recovery work
+interrupted, just leave ctrl freeze, queue is unquiescing.
 
-> 
->> ---
->> v10:
->>   - Use CONFIG_FUNCTION_GRAPH_TRACER to control fgraph_ret_regs definition
->>
->> v9:
->>   - Fix stack pointer align issues
->>   - Update the commit message
->>
->> v8:
->>   - Modify the control range of CONFIG_HAVE_FUNCTION_GRAPH_RETVAL
->> ---
->>   arch/arm/Kconfig               |  1 +
->>   arch/arm/include/asm/ftrace.h  | 22 ++++++++++++++++++++++
->>   arch/arm/kernel/asm-offsets.c  |  8 +++++++-
->>   arch/arm/kernel/entry-ftrace.S | 10 ++++++----
->>   4 files changed, 36 insertions(+), 5 deletions(-)
->>
->> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
->> index e24a9820e12f..73061379855a 100644
->> --- a/arch/arm/Kconfig
->> +++ b/arch/arm/Kconfig
->> @@ -98,6 +98,7 @@ config ARM
->>   	select HAVE_FAST_GUP if ARM_LPAE
->>   	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
->>   	select HAVE_FUNCTION_ERROR_INJECTION
->> +	select HAVE_FUNCTION_GRAPH_RETVAL if HAVE_FUNCTION_GRAPH_TRACER
->>   	select HAVE_FUNCTION_GRAPH_TRACER
->>   	select HAVE_FUNCTION_TRACER if !XIP_KERNEL
->>   	select HAVE_GCC_PLUGINS
->> diff --git a/arch/arm/include/asm/ftrace.h b/arch/arm/include/asm/ftrace.h
->> index 7e9251ca29fe..3c457902b355 100644
->> --- a/arch/arm/include/asm/ftrace.h
->> +++ b/arch/arm/include/asm/ftrace.h
->> @@ -77,4 +77,26 @@ static inline bool arch_syscall_match_sym_name(const char *sym,
->>   
->>   #endif /* ifndef __ASSEMBLY__ */
->>   
->> +#ifndef __ASSEMBLY__
->> +#ifdef CONFIG_FUNCTION_GRAPH_TRACER
->> +struct fgraph_ret_regs {
->> +	/* r0 - r3 */
->> +	unsigned long regs[4];
->> +
->> +	unsigned long fp;
->> +	unsigned long __unused;
->> +};
->> +
->> +static inline unsigned long fgraph_ret_regs_return_value(struct fgraph_ret_regs *ret_regs)
->> +{
->> +	return ret_regs->regs[0];
->> +}
->> +
->> +static inline unsigned long fgraph_ret_regs_frame_pointer(struct fgraph_ret_regs *ret_regs)
->> +{
->> +	return ret_regs->fp;
->> +}
->> +#endif /* ifdef CONFIG_FUNCTION_GRAPH_TRACER */
->> +#endif
->> +
->>   #endif /* _ASM_ARM_FTRACE */
->> diff --git a/arch/arm/kernel/asm-offsets.c b/arch/arm/kernel/asm-offsets.c
->> index 38121c59cbc2..18bb85115b21 100644
->> --- a/arch/arm/kernel/asm-offsets.c
->> +++ b/arch/arm/kernel/asm-offsets.c
->> @@ -23,6 +23,7 @@
->>   #include <asm/suspend.h>
->>   #include <asm/vdso_datapage.h>
->>   #include <asm/hardware/cache-l2x0.h>
->> +#include <asm/ftrace.h>
->>   #include <linux/kbuild.h>
->>   #include <linux/arm-smccc.h>
->>   #include "signal.h"
->> @@ -170,5 +171,10 @@ int main(void)
->>     DEFINE(KEXEC_INDIR_PAGE,	offsetof(struct kexec_relocate_data, kexec_indirection_page));
->>     DEFINE(KEXEC_MACH_TYPE,	offsetof(struct kexec_relocate_data, kexec_mach_type));
->>     DEFINE(KEXEC_R2,		offsetof(struct kexec_relocate_data, kexec_r2));
->> -  return 0;
->> +#ifdef CONFIG_FUNCTION_GRAPH_TRACER
->> +  BLANK();
->> +  DEFINE(FGRET_REGS_SIZE,	sizeof(struct fgraph_ret_regs));
->> +  BLANK();
->> +#endif
->> +  return 0;
->>   }
->> diff --git a/arch/arm/kernel/entry-ftrace.S b/arch/arm/kernel/entry-ftrace.S
->> index 3e7bcaca5e07..d41a1676608c 100644
->> --- a/arch/arm/kernel/entry-ftrace.S
->> +++ b/arch/arm/kernel/entry-ftrace.S
->> @@ -257,11 +257,13 @@ ENDPROC(ftrace_graph_regs_caller)
->>   
->>   #ifdef CONFIG_FUNCTION_GRAPH_TRACER
->>   ENTRY(return_to_handler)
->> -	stmdb	sp!, {r0-r3}
->> -	add	r0, sp, #16		@ sp at exit of instrumented routine
->> +	mov	ip, sp				@ sp at exit of instrumented routine
->> +	stmdb	sp!, {r0-r3, ip, lr}		@ fill fgraph_ret_regs
->> +	mov	r0, sp
->>   	bl	ftrace_return_to_handler
->> -	mov	lr, r0			@ r0 has real ret addr
->> -	ldmia	sp!, {r0-r3}
->> +	mov	lr, r0				@ r0 has real ret addr
->> +	ldmia	sp, {r0-r3}
->> +	add	sp, sp, #FGRET_REGS_SIZE	@ restore stack pointer
->>   	ret	lr
->>   ENDPROC(return_to_handler)
->>   #endif
-> 
+Think carefully, the new IO will still hang in enter_queue, it seems
+that this solution still not work fine, if we try to remove freeze from
+nvme_tcp_teardown_io_queues(), I think we may also need to
+refactor error_recovery.
 
+2. Reset ctrl will freeze the controller and quiescing queue at the
+same time, while reset interrupted,
+ctrl is freeze and the queue is quiescing.
+
+I may got the point of you, what
+https://lore.kernel.org/linux-block/CAHj4cs-4gQHnp5aiekvJmb6o8qAcb6nLV61uOG=
+FiisCzM49_dg@mail.gmail.com/T/#ma0d6bbfaa0c8c1be79738ff86a2fdcf7582e06b0
+proposal seems better.
+
+> Thanks,
+> Ming
+>
