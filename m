@@ -2,240 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7C82729474
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EADFF729470
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241326AbjFIJNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 05:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38532 "EHLO
+        id S241136AbjFIJNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 05:13:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241279AbjFIJN1 (ORCPT
+        with ESMTP id S240463AbjFIJNR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 05:13:27 -0400
+        Fri, 9 Jun 2023 05:13:17 -0400
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 920325241;
-        Fri,  9 Jun 2023 02:09:04 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8DxDeu464JkivwAAA--.3009S3;
-        Fri, 09 Jun 2023 17:07:04 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxhuS364JkNXMKAA--.31671S3;
-        Fri, 09 Jun 2023 17:07:03 +0800 (CST)
-Subject: Re: [PATCH v2] usb: dwc2: add pci_device_id driver_data parse support
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Minas Harutyunyan <hminas@synopsys.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230609025047.691-1-zhuyinbo@loongson.cn>
- <2023060915-uneasy-pedicure-35f4@gregkh>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <1e2a07a4-f81f-3672-f29c-144d1a12ea21@loongson.cn>
-Date:   Fri, 9 Jun 2023 17:07:03 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <2023060915-uneasy-pedicure-35f4@gregkh>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxhuS364JkNXMKAA--.31671S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
-        nUUI43ZEXa7xR_UUUUUUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5F8724EE6;
+        Fri,  9 Jun 2023 02:08:54 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8Dxi+rJ64JknfwAAA--.2936S3;
+        Fri, 09 Jun 2023 17:07:21 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxVeTG64JkiHMKAA--.31757S2;
+        Fri, 09 Jun 2023 17:07:19 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kselftest@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Subject: [PATCH v5] selftests/clone3: Fix broken test under !CONFIG_TIME_NS
+Date:   Fri,  9 Jun 2023 17:07:05 +0800
+Message-Id: <1686301625-9477-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8DxVeTG64JkiHMKAA--.31757S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7Kw48Jry3JF4kZryDJF1rXwc_yoW5JFyrpF
+        yxZw1DKFWFgF17tFyDZ3yqgFyrCF1kXrW8XF47Z34UAr1fXr97Xr4xKa48JryUKrWFvrWF
+        yFyfGF4xWr1UXagCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUU9Fb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+        AVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
+        AKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v2
+        6r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
+        CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF
+        0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIx
+        AIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2
+        KfnxnUUI43ZEXa7IU8uuWJUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When execute the following command to test clone3 on LoongArch:
 
+  # cd tools/testing/selftests/clone3 && make && ./clone3
 
-ÔÚ 2023/6/9 ÏÂÎç2:13, Greg Kroah-Hartman Ð´µÀ:
-> On Fri, Jun 09, 2023 at 10:50:47AM +0800, Yinbo Zhu wrote:
->> The dwc2 driver has everything we need to run in PCI mode except
->> for pci_device_id driver_data parse.  With that to set Loongson
->> dwc2 element and added identified as PCI_VENDOR_ID_LOONGSON
->> and PCI_DEVICE_ID_LOONGSON_DWC2 in dwc2_pci_ids, the Loongson
->> dwc2 controller will work.
->>
->> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->> ---
->> Change in v2:
->> 		1. Move the dwc2 pci ID from pci_ids.h to params.c.
->> 		2. Add some code logic to ensure that the current device is
->> 		   a PCI device.
->> 		3. Fix the compile issue when dwc2 pci driver as module.
->>
->>   drivers/usb/dwc2/core.h   |  1 +
->>   drivers/usb/dwc2/params.c | 39 ++++++++++++++++++++++++++++++++++++++-
->>   drivers/usb/dwc2/pci.c    | 14 +-------------
->>   3 files changed, 40 insertions(+), 14 deletions(-)
->>
->> diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
->> index 0bb4c0c845bf..c92a1da46a01 100644
->> --- a/drivers/usb/dwc2/core.h
->> +++ b/drivers/usb/dwc2/core.h
->> @@ -1330,6 +1330,7 @@ irqreturn_t dwc2_handle_common_intr(int irq, void *dev);
->>   /* The device ID match table */
->>   extern const struct of_device_id dwc2_of_match_table[];
->>   extern const struct acpi_device_id dwc2_acpi_match[];
->> +extern const struct pci_device_id dwc2_pci_ids[];
->>   
->>   int dwc2_lowlevel_hw_enable(struct dwc2_hsotg *hsotg);
->>   int dwc2_lowlevel_hw_disable(struct dwc2_hsotg *hsotg);
->> diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
->> index 21d16533bd2f..6b68a8830781 100644
->> --- a/drivers/usb/dwc2/params.c
->> +++ b/drivers/usb/dwc2/params.c
->> @@ -7,9 +7,14 @@
->>   #include <linux/module.h>
->>   #include <linux/of_device.h>
->>   #include <linux/usb/of.h>
->> +#include <linux/pci_ids.h>
->> +#include <linux/pci.h>
->>   
->>   #include "core.h"
->>   
->> +#define PCI_PRODUCT_ID_HAPS_HSOTG	0xabc0
->> +#define PCI_DEVICE_ID_LOONGSON_DWC2	0x7a04
->> +
->>   static void dwc2_set_bcm_params(struct dwc2_hsotg *hsotg)
->>   {
->>   	struct dwc2_core_params *p = &hsotg->params;
->> @@ -55,6 +60,14 @@ static void dwc2_set_jz4775_params(struct dwc2_hsotg *hsotg)
->>   		!device_property_read_bool(hsotg->dev, "disable-over-current");
->>   }
->>   
->> +static void dwc2_set_loongson_params(struct dwc2_hsotg *hsotg)
->> +{
->> +	struct dwc2_core_params *p = &hsotg->params;
->> +
->> +	p->phy_utmi_width = 8;
->> +	p->power_down = DWC2_POWER_DOWN_PARAM_PARTIAL;
->> +}
->> +
->>   static void dwc2_set_x1600_params(struct dwc2_hsotg *hsotg)
->>   {
->>   	struct dwc2_core_params *p = &hsotg->params;
->> @@ -281,6 +294,23 @@ const struct acpi_device_id dwc2_acpi_match[] = {
->>   };
->>   MODULE_DEVICE_TABLE(acpi, dwc2_acpi_match);
->>   
->> +const struct pci_device_id dwc2_pci_ids[] = {
->> +	{
->> +		PCI_DEVICE(PCI_VENDOR_ID_SYNOPSYS, PCI_PRODUCT_ID_HAPS_HSOTG),
->> +	},
->> +	{
->> +		PCI_DEVICE(PCI_VENDOR_ID_STMICRO,
->> +			   PCI_DEVICE_ID_STMICRO_USB_OTG),
->> +	},
->> +	{
->> +		PCI_DEVICE(PCI_VENDOR_ID_LOONGSON, PCI_DEVICE_ID_LOONGSON_DWC2),
->> +		.driver_data = (unsigned long)dwc2_set_loongson_params,
->> +	},
->> +	{ /* end: all zeroes */ }
->> +};
->> +MODULE_DEVICE_TABLE(pci, dwc2_pci_ids);
->> +EXPORT_SYMBOL_GPL(dwc2_pci_ids);
->> +
->>   static void dwc2_set_param_otg_cap(struct dwc2_hsotg *hsotg)
->>   {
->>   	switch (hsotg->hw_params.op_mode) {
->> @@ -927,13 +957,20 @@ int dwc2_init_params(struct dwc2_hsotg *hsotg)
->>   	if (match && match->data) {
->>   		set_params = match->data;
->>   		set_params(hsotg);
->> -	} else {
->> +	} else if (!match) {
->>   		const struct acpi_device_id *amatch;
->> +		const struct pci_device_id *pmatch = NULL;
->>   
->>   		amatch = acpi_match_device(dwc2_acpi_match, hsotg->dev);
->>   		if (amatch && amatch->driver_data) {
->>   			set_params = (set_params_cb)amatch->driver_data;
->>   			set_params(hsotg);
->> +		} else if (!amatch)
->> +			pmatch = pci_match_id(dwc2_pci_ids, to_pci_dev(hsotg->dev->parent));
-> 
-> At this point in time, how can you guarantee that the parent device
-> really is a PCI one?  This function is being called from a platform
-> device callback, and platform devices should NEVER be a child of a PCI
-> device, as that's not how PCI or platform devices work.
-> 
-> So how is this even possible?
-> 
-> confused,
-> 
+we can see the following error info:
 
+  # [5719] Trying clone3() with flags 0x80 (size 0)
+  # Invalid argument - Failed to create new process
+  # [5719] clone3() with flags says: -22 expected 0
+  not ok 18 [5719] Result (-22) is different than expected (0)
 
-Hi greg k-h,
+This is because if CONFIG_TIME_NS is not set, but the flag
+CLONE_NEWTIME (0x80) is used to clone a time namespace, it
+will return -EINVAL in copy_time_ns().
 
-My current considerations are based on that the dwc2 drivers support
-three types of devices, they are Platform device / ACPI device / PCI
-device, and The dwc2/platform.c can all cover the three type dwc2
-device, no matter how it is registered.
+If kernel does not support CONFIG_TIME_NS, /proc/self/ns/time
+will be not exist, and then we should skip clone3() test with
+CLONE_NEWTIME.
 
-So, when a dwc2 device wasn't platform device and acpi device and It
-will be a PCI device, and the the dwc2/pci.c will register a dwc2
-platform device that dwc2 device is a device that in dwc2/platform.c's
-dwc2_driver_probe.  the "&dwc2->dev->parent" is the "hsotg->dev->parent"
-and it was also the &pci->dev.
+With this patch under !CONFIG_TIME_NS:
 
-So, We can use "to_pci_dev(hsotg->dev->parent)" to gain a dwc2 pci
-device.
+  # cd tools/testing/selftests/clone3 && make && ./clone3
+  ...
+  # Time namespaces are not supported
+  ok 18 # SKIP Skipping clone3() with CLONE_NEWTIME
+  # Totals: pass:17 fail:0 xfail:0 xpass:0 skip:1 error:0
 
-1)  DWC2 PCI device driver (drivers/usb/dwc2/pci.c) :
+Fixes: 515bddf0ec41 ("selftests/clone3: test clone3 with CLONE_NEWTIME")
+Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
 
-static int dwc2_pci_probe(struct pci_dev *pci,
-                           const struct pci_device_id *id)
-{
-...
-         struct platform_device  *dwc2;
-...
-         struct device           *dev = &pci->dev;
-...
-	dwc2 = platform_device_alloc("dwc2", PLATFORM_DEVID_AUTO);
-	              //"dwc2" was used to match dwc2 platform driver
-...
-         dwc2->dev.parent = dev;
-...
+v5:
+  -- Rebase on the next branch of shuah/linux-kselftest.git
+     to avoid potential merge conflicts due to changes in the link:
+     https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=next&id=f8424c54d041
+  -- Update the commit message and send it as a single patch
 
-}
+Here is the v4 patch:
+https://lore.kernel.org/loongarch/1685968410-5412-2-git-send-email-yangtiezhu@loongson.cn/
 
-2)   DWC2 PLATFROM driver (drivers/usb/dwc2/platform.c) :
-// This driver cover pci type device.
+ tools/testing/selftests/clone3/clone3.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-static const char dwc2_driver_name[] = "dwc2";
-static struct platform_driver dwc2_platform_driver = {
-         .driver = {
-                 .name = dwc2_driver_name,
-			//"dwc2" was used to match pci type dwc2 device
-...
-         },
-         .probe = dwc2_driver_probe,
-         .remove = dwc2_driver_remove,
-         .shutdown = dwc2_driver_shutdown,
-};
-static int dwc2_driver_probe(struct platform_device *dev)
-{
-// The dev is the "dwc2" platform device in dwc2/pci.c driver.
-         struct dwc2_hsotg *hsotg;
-...
-         hsotg->dev = &dev->dev;
-
-// The hsotg->dev->parent or &dev->dev->parent is the &pci->dev in
-// dwc2/pci.c driver.
-...
-}
-
-
-Thanks,
-Yinbo
+diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
+index e60cf4d..1c61e3c 100644
+--- a/tools/testing/selftests/clone3/clone3.c
++++ b/tools/testing/selftests/clone3/clone3.c
+@@ -196,7 +196,12 @@ int main(int argc, char *argv[])
+ 			CLONE3_ARGS_NO_TEST);
+ 
+ 	/* Do a clone3() in a new time namespace */
+-	test_clone3(CLONE_NEWTIME, 0, 0, CLONE3_ARGS_NO_TEST);
++	if (access("/proc/self/ns/time", F_OK) == 0) {
++		test_clone3(CLONE_NEWTIME, 0, 0, CLONE3_ARGS_NO_TEST);
++	} else {
++		ksft_print_msg("Time namespaces are not supported\n");
++		ksft_test_result_skip("Skipping clone3() with CLONE_NEWTIME\n");
++	}
+ 
+ 	/* Do a clone3() with exit signal (SIGCHLD) in flags */
+ 	test_clone3(SIGCHLD, 0, -EINVAL, CLONE3_ARGS_NO_TEST);
+-- 
+2.1.0
 
