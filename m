@@ -2,177 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2BE3729494
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:17:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7910A729497
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:17:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241392AbjFIJRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 05:17:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38806 "EHLO
+        id S236411AbjFIJRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 05:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241398AbjFIJQx (ORCPT
+        with ESMTP id S241173AbjFIJRZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 05:16:53 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA40F4680;
-        Fri,  9 Jun 2023 02:12:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686301950; x=1717837950;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=2j4jomLk0TGKjFcKFTNcFF+0r1t7bJB8PqnhgjRoH/k=;
-  b=GHF7Lz17Ge139CmGgYRXhMJNM38rojCBt6xDOLqUmWhgZ/Zg8K+OYWN8
-   Y8JMmOjHawJHz+GaTDuV1siHxGFaiSK4AjExaIlJYnvqUDs1T+Wcvzsat
-   2O2ho1SXiGr/Whzg13Y5ZgYgHTY49+mVzT+g0yTEvkTI816+7plj/UWYz
-   hxcn9ER8Ur9q0q2juORbklsZvuFrrpe8PPn9CN9r9EOzESvCWQ2pZ+qsR
-   m+8WmiwFtcgEiLcF3hGRQU+JxKNuJgHyybjlfPU2fbz9qmY//e6ctDdhK
-   tf64ymrF5vda9XKOsKby1GK4rgMYy2732CQ9jXJPoNMg1cW4CdZy3t3xr
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="342230314"
-X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
-   d="scan'208";a="342230314"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 02:10:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="780236905"
-X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
-   d="scan'208";a="780236905"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga004.fm.intel.com with ESMTP; 09 Jun 2023 02:10:43 -0700
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 9 Jun 2023 02:10:43 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Fri, 9 Jun 2023 02:10:43 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.171)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Fri, 9 Jun 2023 02:10:43 -0700
+        Fri, 9 Jun 2023 05:17:25 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2106.outbound.protection.outlook.com [40.107.215.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 356A849DB;
+        Fri,  9 Jun 2023 02:12:50 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ghIJE1JsHXoBoEM3dLQCbc3++f+AUI1liLvV+AHDuhEkoXJ35USN7195htcR+MJsuW20CaZ4K7aalwY4ETLZYGNOxbpkObTH4Gs4EI5q4SPFvtdbxXZGIlOwtKjs3AtGiD9HE7t3sOhUNfbecGi1kPtVSw4iirLILKRJ5rBTLruPNiMZo6+d9p7PrmTUNBTv8j1/nwksIHfKaN0aONJo1zYxQyCa6gsUVlUZDl6FcvqvllSZD5VSMqDMVE1phipGXOto/7pDYTREpHawgB9Lhis6g4ONkE6BGAx+6LGH2DZfzkzoBYJR1KoMl6otpQiQOiVo9U/v0vVeCBXBFb0a7A==
+ b=DX8Twq2DeW6/OSL9C6lrOruZaRCSMzpd9F6Th+Z+u+J75VzA5yNClwLxvNW/3iXoLLuNx1HOAThKh5Z1KNzSkACTn6xlzDuUILDQFqOvnMCyHKe7suvNAfyTrC7+EJ2mTzBXE5DhyepZh3okmpXy/rtK5WikbHiaS5z+BqGfu/ISP49+dCdv6ABWv8guu3yqLCxZ3rhIWYTJPED1HRMoBAk8f8tkb14Ab1ZqWosUhTRM2izwwfQG+AcfHUi96CRfL9C8M36FDV5mKIEgfNHWF0yPQioL8NgQeLP6Bogx6kag7m97REewjxQ8j1pLkkwE+/IqiqFrdYab5ExofQFWmw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2j4jomLk0TGKjFcKFTNcFF+0r1t7bJB8PqnhgjRoH/k=;
- b=eL/jyt3ZFta+c2kjxISEVIrnchEo7ae/x/BbYC0Trre4MY6iVRqNpa5WNz1OhtysMRt7huFFWM+wV/2MUTZLqGf2/JZWGvs90inH8rVXd+2ju8P/P2wTy5H9LeMDcgzBUnfFWtHbTp8ntZBHnPEK4RJHA4u7jHF6OlghKVf7MSPp6F4aZQNiIbh3CfUBCo79sp0zPMEMTgCH/7qyqT7izM+Rn4vAk13vYEaj7wxG+KjtoIRWo3Qi7dqyKH+C2zFh4KPQKtXaS1/2ojvwoZJZzxSaVcuR7rB0KER4qV987bL4S1FO+bE1zX/cOcIJwWBcx07TD5EWRbXodzobktfA9A==
+ bh=BcnZEPCGxWM6iZJAxlBiGI+kmaOHAJrMS8LzmmCTIyY=;
+ b=Of6uJsKJ/XuLwNEONco1CynXsB+xbC7CftNnlhChbt8PSF4D7hDsoefmhxMDqWWsCqFVkInkUCyjjHKcloRqVXlvzg4MR8tCZ4wkk5F4rGrjH03z0sgEKPs7gb67cZWeI+tZRCeZDM+FCZUUHcQgLIXjJEvLZVy3KTJDojaH1khhqV1F7lQtAisnpX9P++YL6DbaeLPJz4az/MYm9zbY9SBysarUP2X85yRQb5ftX2CPyt+0i6ZY1kkPbSfk6HKvCGDvcxOuPpjO8h+6QJ0uce+GmOpRGUsm4qWzDtgPgFpslrh8vxbK9o1aBzDPhKfL52ElDiBK/BNEz65272rK0w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM6PR11MB2779.namprd11.prod.outlook.com (2603:10b6:5:c6::26) by
- DS7PR11MB7931.namprd11.prod.outlook.com (2603:10b6:8:e5::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.33; Fri, 9 Jun 2023 09:10:43 +0000
-Received: from DM6PR11MB2779.namprd11.prod.outlook.com
- ([fe80::5c56:cdad:30cb:c3de]) by DM6PR11MB2779.namprd11.prod.outlook.com
- ([fe80::5c56:cdad:30cb:c3de%4]) with mapi id 15.20.6455.030; Fri, 9 Jun 2023
- 09:10:42 +0000
-From:   "Jadav, Raag" <raag.jadav@intel.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-CC:     "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Sangannavar, Mallikarjunappa" 
-        <mallikarjunappa.sangannavar@intel.com>,
-        "N, Pandith" <pandith.n@intel.com>
-Subject: RE: [PATCH v2 3/4] pinctrl: intel: simplify exit path of set_mux hook
-Thread-Topic: [PATCH v2 3/4] pinctrl: intel: simplify exit path of set_mux
- hook
-Thread-Index: AQHZmqwOzSQDmehkJEaWgiHSbhsDla+CJXQAgAAG6zA=
-Date:   Fri, 9 Jun 2023 09:10:42 +0000
-Message-ID: <DM6PR11MB27791AE074AE94F8CA5C02A58C51A@DM6PR11MB2779.namprd11.prod.outlook.com>
-References: <20230609082539.24311-1-raag.jadav@intel.com>
- <20230609082539.24311-4-raag.jadav@intel.com>
- <20230609083552.GM45886@black.fi.intel.com>
-In-Reply-To: <20230609083552.GM45886@black.fi.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM6PR11MB2779:EE_|DS7PR11MB7931:EE_
-x-ms-office365-filtering-correlation-id: 3cdb54d9-3737-43f9-1619-08db68c966dd
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: NWvX2fo4TSQYKLX1qQDFR1F6sjWpMCKok/YWeaMCIdpiXd9OeD+YbYjsM4CWNnV5CGW+Bx9salc6t9X6W5fKn6hxTrzvVdbgy162eY8KOV5kcRH35++9Foff26Ox6BoFcrQVU5JOxtSe1GlR27G4qRe8q833460nnEVeT09+GS85u4JJQLFCUClZ5s5H6Xk3tOFaccFAy87SNVW7ETmEjZ0RQzH9+ZyfLjzCQh2Ka99ljJLeP2JUW73xx8Y62qXmMb9jIXl/BOTwSnZzDhANVj7n79dZ2oFAlPYofIaM7nq+0EY6Z9oRUGweLq2M3MG6CNWLf0zahjxC5RReqVe5uRgHPD0X/baxB0xSU9uOHUjlW2Zl8YByxDqrrGZowsbZTtVhSIIWuKZUrrlD3yeoS6lG+Kd0cwkU2XxWAnyWqODIYiXu9Wj5wE01qsmXQ5DBmsETK1vU6U3JukBpLUUaTY6xqov1WxIrT8ClunQ0ScqbUbmQP4ef+gW4+mnSxJCbRY5qbfA4+XVM5WcLnKrSbgwo/AcaId6xlcS5p0ppSzAVrGw6h7IGyo1xe+snzonRjjJEPoiIKyiVarN8UPV/6hL+xYo/IKaewS5TqkbgMhg=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB2779.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(366004)(346002)(39860400002)(136003)(376002)(451199021)(66556008)(71200400001)(7696005)(4744005)(76116006)(66446008)(2906002)(64756008)(66476007)(82960400001)(122000001)(66946007)(54906003)(38100700002)(86362001)(8676002)(8936002)(38070700005)(478600001)(316002)(6916009)(33656002)(4326008)(55016003)(52536014)(5660300002)(41300700001)(6506007)(26005)(9686003)(186003)(83380400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?L0lXQTAybitrZWxRYkVNSlRPWXRLTGhrQmJ4ZGQ3V09URlJEdnVneWQyQnZ6?=
- =?utf-8?B?WDBVZU80RVhyNmJ4aDNzMjFvZFl4cGpNcnBaWDZNLzZYUXFBT0dxNDZid1Yv?=
- =?utf-8?B?bHZmbk1nYnNhMVh0aGIvS29lYk1xRlpibWJBcU1pQ2UrUURpQ2FHS1hXaWxW?=
- =?utf-8?B?RmhVWmJORjhRMDBDek5SV2oyVnZxaGIwQlpTaG8xS25kdTZaTUpsNmlaNmZi?=
- =?utf-8?B?NHlJZjdvODNhQU1ZbEY1dktqSHlPUnY4RUtrNjNRK1piMWJsb3RDMDdoWmxs?=
- =?utf-8?B?VldDWld5UURTMXg3clB3aGNEZnVyclVteVZ2U25Ha0pya3kxZUFOb2lUUllz?=
- =?utf-8?B?RFZxMUtzbGRGRzYvd010Q1FGZld5a0ppQXFKM0pCSFlpbkV3aXZpdWplWFhq?=
- =?utf-8?B?UlJmVUNkMUhWS21XVE54MFJmNkFTeUtZcVFadmhDNUNkWnhRVDZWVUhMeVNH?=
- =?utf-8?B?WVg4alRlNkltdVhBN0U2N04xemxCTU5BVnZyc016NnVKOUhxN0lML3VwOGRL?=
- =?utf-8?B?ZDhBOFAyaGJDazZLMlo3T29maU81eFdjY1JIZ2hEOHFJOWo0NHo3eUVZTzRk?=
- =?utf-8?B?ak9IREZWcy84eVpxaVhRWFNvNW1wMFF0dUl5cmpRSG16QkNYWEFiNTRPYXZY?=
- =?utf-8?B?dW9Mc1BJaHdxd3pFVzVsK3VXRXB5ZVhrK2JNNmU4TndZeXZzVS9lTUppR05D?=
- =?utf-8?B?d3dubHJIU1BqYlR3TnFTY2lXVjhSNFpEeFBRVHFrTUd3czFaQUJvTkF2WFpU?=
- =?utf-8?B?dE9BMDRxZTlMODZEMzMxYTl3S1lidUVwOWpQa3J6cFE0NnB3bS9jVmFnUTNS?=
- =?utf-8?B?VkRhUGFacTBuQzY5RmdnMnEzM0gzOGJ2QjhNeUpDdjZOQ0ZxNWh3V01ySzBW?=
- =?utf-8?B?ais5WGtYa0IzU0pXYzVxZ2pMTSt2T2Z1S3Z4ekQwUlZoZng1S1kvY01YRm5m?=
- =?utf-8?B?ZmFyMDhmNm05Skx0Um95SzA3MW9HK3BkQnl5MTk0dFY3V0dxeWYzQktMVm9h?=
- =?utf-8?B?QzZMMlR3YUtUQkIzdmMySzBYT1A4UzNURXRwRzBicmdoQ1Y4UWxPL2VrK0RO?=
- =?utf-8?B?L1h2ZDhGU05JdlFVMENXTGRmTnQ4YVppWVFJZzNsZUp2cXhZMWUwc3hpckpR?=
- =?utf-8?B?aHlubSt6YllGYzdtQzZzeGY3UTlxeUhWaWZaekdpN1doVUVqVGlwWmtkYm1E?=
- =?utf-8?B?clFrZkRGTTBuVDNpNm1LMUtoa2dlbUd4cnBqREZYQ0k1N3V6aGtKU3J2Zkdq?=
- =?utf-8?B?MXBRVnNseGdXdWdic0w2bHUwL20yQUhuRUx2RiswZTBmTysxL0w0KzQzT2sv?=
- =?utf-8?B?SHl3UnNwNzVjN2VaMExEMEcwWERPM0sxT3l5R1RKaGZLZ1hSYlo1VExhdmNJ?=
- =?utf-8?B?WkZFc09HZ1pBLzJZRDNxZzh6bDhOVmZ3RVg3bWsvM01HTVlwUENpZ3E4Ym9R?=
- =?utf-8?B?UGxzczhCWmxxdVF4alN6ZmRoN2FuV1NmZHk2OFJJZzlrMVdLamdsTk1UM0Jh?=
- =?utf-8?B?WUljdXEvT3RwVHFOR1hjS05xd3l4TittUjgydlhBc0MyRlo2akgwejNwZEJ2?=
- =?utf-8?B?ZmdZS0s0akJBNEJVdncxQ2VWM2RIc3FWWm5JaHJUemMrUzdZSXc2alFhQ0x3?=
- =?utf-8?B?NEdybloyTXkyVlpSWHp1cUlhY1BZK3ZIWENLengxbnB4S3AraG5uUk52aCsz?=
- =?utf-8?B?cjAyTWpvcEE4bC9vZ2tBcnF4OVdGZzlUY2dVUUlRN0RMeFRtVnR3QnQ1bmhx?=
- =?utf-8?B?OFppeTNvTkxOb1ovNXAyZHRNUmdiTmo4Q2NHaHlwMFdnb25DR3k2SU9uVDJL?=
- =?utf-8?B?WG5QY2ZxUllxV0h1UmFZeUFFQzRITThhOGFtQlZYVUk2K1JwZkJyeURFMnJr?=
- =?utf-8?B?MEpHbnRBV0syS2NMOS9uemZFc2pwRHVyaDlqSHhSaG9mRkhCUjNCNFowVExs?=
- =?utf-8?B?aUVxYXdEcHJyeTZJd1YvYXRqMkJ4MXZObWtSWlNBZGxxTzY5Zm55cko1Mlg2?=
- =?utf-8?B?WnYwSXJxOW9jeFQwdTRlallobTc1WlVGVXZTc2ttUGhxS2JVc3V6ZE9rS1VY?=
- =?utf-8?B?dUNQUUV3Q2ViLzRPQkNuOFhqQTBUelZQVXY1L2pqYjVOY3YvbnFMeUZUZFU4?=
- =?utf-8?Q?g077I7a1fQ9ug5MGPY12zj90S?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BcnZEPCGxWM6iZJAxlBiGI+kmaOHAJrMS8LzmmCTIyY=;
+ b=j0AgQtSyBMrILpMwxd2uDiWKVujOxDBDTOcntQXbOnvmNEewoBXGsjjFZolP3ugmV6m8RlZLhz1siYbh4Son/c6HnEnmcnvHBuDVhFazAY4iKdz0yeN7cZIU6+DXESxN+mKlmkj4wrdvHFlmJAuq46YZF4DEbdQi/6DCGU6EcIZTwcrNMX1OhkJjVUxVVyZ++xOZ/wyIiBpIp8+F1rBxzG99/IbbeKvRDt5ONhpUbaC7vgwV00rRFb/vUkJ8mMT2XzptmaRbJxDczmCLDNyNHnTIkXYuUtVFoT+7J16DIJhm9wOnyoow64wGqbCJdtRfly+bDLDR9QIaBuCafeQMJw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB6697.apcprd06.prod.outlook.com (2603:1096:400:451::6)
+ by TYZPR06MB6786.apcprd06.prod.outlook.com (2603:1096:400:45e::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.28; Fri, 9 Jun
+ 2023 09:11:23 +0000
+Received: from TYZPR06MB6697.apcprd06.prod.outlook.com
+ ([fe80::f652:a96b:482:409e]) by TYZPR06MB6697.apcprd06.prod.outlook.com
+ ([fe80::f652:a96b:482:409e%5]) with mapi id 15.20.6455.030; Fri, 9 Jun 2023
+ 09:11:23 +0000
+From:   Lu Hongfei <luhongfei@vivo.com>
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Daniil Lunev <dlunev@chromium.org>,
+        Jinyoung Choi <j-young.choi@samsung.com>,
+        Lu Hongfei <luhongfei@vivo.com>, Bean Huo <beanhuo@micron.com>,
+        Peter Wang <peter.wang@mediatek.com>,
+        linux-kernel@vger.kernel.org (open list),
+        linux-scsi@vger.kernel.org (open list:UNIVERSAL FLASH STORAGE HOST
+        CONTROLLER DRIVER)
+Cc:     opensource.kernel@vivo.com
+Subject: [PATCH v4] scsi: ufs: wb: Add explicit flush_threshold sysfs attribute
+Date:   Fri,  9 Jun 2023 17:11:10 +0800
+Message-Id: <20230609091113.22531-1-luhongfei@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: TYCP286CA0280.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:3c9::8) To TYZPR06MB6697.apcprd06.prod.outlook.com
+ (2603:1096:400:451::6)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYZPR06MB6697:EE_|TYZPR06MB6786:EE_
+X-MS-Office365-Filtering-Correlation-Id: 31ed1f55-46ce-4ed7-30e7-08db68c97efc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: X0WKU2XfQKznObL88o+glrxTrQiXHkzOVhvrba2NqOq04fORq8SnTJBvDcUhPyfPeuDUU80I0vIge0eiotHbCLzlwXplMR50DEIP+RHGZzhoOpvOjkBV93EKMzT+6xhpjBV2kAbvhPoIZTSpY3GWoB8OSrF2TVzZU97KKV/WE2BoegzrcIux5WlGcAQ8HjdME1/Hw0HBLPed23g9hOxJ5LDc7mZHh52b6gCOEY2YCyo0a0ZYaqGMhE6HQ8NaNEQiFvgkpWHUxVtBX//6l3RxNuWNQDWYqPGLSeSIP4QOy807C3Llx+fCMlGWIhoAOtV0ITWk+hCbGqHTRMiTgz1ykZnthAlP+gNnJqAihSy52jtjMMs2h0I/0Efee5CIj/ne2or7LNLYDrQ2Li7+VcoXKZoqGLNwHlWstrA3fNN/tFvwiexgZZ8J+fXPrJlTVNDf+RT1IU8s5GEzU3DtDIqfjenA2c1xBypAM2b25j21AMn3pbdomcBicW589LH1udawMw8gVH1BWcnbh+AcPV0yQLrbpFc7iUuctsMruFl0XRHAODWaKc7QgHjsMglwPPiN9yRpSK212OZrhOsKKcJ4SO9a3q9ztt429rneCgLrmrrV/ByoX9I4YUSZbF2h/DtZ0BIgNbWLxxI+fCQ9b2NOGg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB6697.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39850400004)(136003)(396003)(376002)(366004)(451199021)(52116002)(6486002)(2906002)(2616005)(86362001)(107886003)(6666004)(26005)(66476007)(38350700002)(66946007)(921005)(1076003)(4326008)(5660300002)(6506007)(38100700002)(8676002)(478600001)(8936002)(66556008)(316002)(6512007)(41300700001)(36756003)(7416002)(186003)(110136005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?b1JboQzd8i12JUUQXmiGVPK7/4CFhYZJMFAomEurtP5+WLGgpbvHpobREFHi?=
+ =?us-ascii?Q?vAZS0trA0u06riPfQarhSMZ1QQhVfJNEr9PsXHVVXO+INSHMxtt6oUUzpEKP?=
+ =?us-ascii?Q?nrkwqx9kvEWntF6e1TRTXgoFDPpOnS+fAoV5eH2FM4VcKY9Hgyey04iz1RK9?=
+ =?us-ascii?Q?U4+gGFsgbgdaPcTDh2tfmn65+F8LoCoZZ/sK3aEjgjl/H3vNMkAsu1X56qB9?=
+ =?us-ascii?Q?7qUwfwSiJNk/531HTz0PjxfBgCsv9jrOO8GoeWyu1/Be7be6Tqhpdm/VoJeH?=
+ =?us-ascii?Q?7yhjIykOpBPA+ppjEKsVO1nYLHsk80NM+IL3dCHpPkf5AD0dyysY+mmQbjUQ?=
+ =?us-ascii?Q?eUrXtQVN6lI0bZciiQn5c8A2beLpgB300q5iveQZ85V2Ba3ePpA9Rx8Vh7fy?=
+ =?us-ascii?Q?jN2FkJg68hgPstVI1gzOHSlqRtJOLN/yxu1YzpOofeYzM8RzqcB13NGZjwWO?=
+ =?us-ascii?Q?vu584ganGcaQ+UtV4zu+naEsrMIz9MIh86LmCNh5Bx9c7Cl6xWHHsXNXq/gj?=
+ =?us-ascii?Q?l7jbnlDbGDJcViOZAq3nXLVcSz73SIMCXkXetXMABE2x8Uhk8/46h0ag2Aiy?=
+ =?us-ascii?Q?bThPp8R0IH2qMuyrD2UEPeLX6uCyg4ib7y/YpTkrQYh9Y5Bb0B6QDd7evt70?=
+ =?us-ascii?Q?bjrGMNczTy6xxDWPgDBBppD3mkNgcH2vMJGyydgP63CKL/k7JgTQAyDx2Y3O?=
+ =?us-ascii?Q?6jYghzlelIOEI4UbH/0FMtXcnR16n/j41/dot23ewSBx6NY6sV+JWPhu3Fxg?=
+ =?us-ascii?Q?DNzETnASm9hBwZs04MF5qQmcxKg3+DTaEeIrfLmxrsPNPJUeOyPemkcNVB14?=
+ =?us-ascii?Q?42BBt8NeqNwY7K9i9/QoqguB17NdmMcvAoUGCHLY6bUt59e3vu039oyTuoLC?=
+ =?us-ascii?Q?5zeTBg7dIAu7r2+kwlbxO9l34ed/O6Nhv6VcxjND64R05vM+97it6gJaQ6Xt?=
+ =?us-ascii?Q?HupuRp7TiHwLmV6VN1RahLIUFpQkAWaoJ916I0gobBgSCN4ObASG/EQK3LEu?=
+ =?us-ascii?Q?fxn6kW/5BMxSqbzkFg/ibk5V46Wg0W/nFSzNreKs73g/SdaXG4twuIWLRFzh?=
+ =?us-ascii?Q?RNdRptQWeItPCJaVg+OuOUzkgTsuRTSCbuGPyCKBNuAyhU6PGv+gaE1pHzO4?=
+ =?us-ascii?Q?kdtNuzqrHFl1tBS+6G7r/287bYy+MViQzJJdfA7WbAmKpyn8V8F02mFUu44B?=
+ =?us-ascii?Q?ifZ/Sbe+/mE3eqBVaXXQJz4RLIa2J9FwKfR776kBVWZ6e1z7921tci4Nf7HI?=
+ =?us-ascii?Q?Gxnh4F+tdIuzAX9MJr52Des0yrIW6zFFqf+wn3RahOwJOn6toCaUeLd4/XMl?=
+ =?us-ascii?Q?1SvxwiGab2xgnz26BWqxmP4WqboMBXj+1OfhpQtERDvG+TZpGF8s8ITqwQk7?=
+ =?us-ascii?Q?we8msuz7f9r9d62ssgtUdtsVOSeAqBPVbTQZh84pswKZs8xGZGgtnE3Bf/Tn?=
+ =?us-ascii?Q?MNjkQma8PFB2wZ7gWXPReR7VILLNllg+zNr0kGAcgts+AhshvJgXrSGvRRN2?=
+ =?us-ascii?Q?Pn20H7i9wK2X5+KQpQb4EaGtumFLYrd41MngoF8f+b3tK5GgFCZtUV5/GIv0?=
+ =?us-ascii?Q?0JpCNd6PVBfxME5le6Kbt29qNYV/4oqwb891I4z9?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 31ed1f55-46ce-4ed7-30e7-08db68c97efc
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB6697.apcprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB2779.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3cdb54d9-3737-43f9-1619-08db68c966dd
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jun 2023 09:10:42.6474
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 09:11:23.3753
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: trZo8WiJilU8PUXL7vDYR1DK0sT+TcRQ05vZPA8Y7ucw1DSWVfFCPwr6Mm7BaQD/wSFTHzsw+PQBWTxlKEa9pQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB7931
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3GtEqduFzLiklMzyuuNQLTFRTAK2goy460IVTqHnpgY9AEgScWv5bUhlUx9wjBmsFaL7Gk9E5CJnkDaR4JuJPw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB6786
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBPbiBGcmksIEp1biAwOSwgMjAyMyBhdCAwMTo1NTozOFBNICswNTMwLCBSYWFnIEphZGF2IHdy
-b3RlOg0KPiA+IFNpbXBsaWZ5IGV4aXQgcGF0aCBvZiAtPnNldF9tdXgoKSBob29rIGFuZCBzYXZl
-IGEgZmV3IGJ5dGVzLg0KPiA+DQo+ID4gYWRkL3JlbW92ZTogMC8wIGdyb3cvc2hyaW5rOiAwLzEg
-dXAvZG93bjogMC8tMjIgKC0yMikNCj4gPiBGdW5jdGlvbiAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICBvbGQgICAgIG5ldyAgIGRlbHRhDQo+ID4gaW50ZWxfcGlubXV4X3NldF9t
-dXggICAgICAgICAgICAgICAgICAgICAgICAgMjQyICAgICAyMjAgICAgIC0yMg0KPiA+IFRvdGFs
-OiBCZWZvcmU9MTA0NTMsIEFmdGVyPTEwNDMxLCBjaGcgLTAuMjElDQo+ID4NCj4gPiBTaWduZWQt
-b2ZmLWJ5OiBSYWFnIEphZGF2IDxyYWFnLmphZGF2QGludGVsLmNvbT4NCj4gPiAtLS0NCj4gPiAg
-ZHJpdmVycy9waW5jdHJsL2ludGVsL3BpbmN0cmwtaW50ZWwuYyB8IDkgKysrKystLS0tDQo+ID4g
-IDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyksIDQgZGVsZXRpb25zKC0pDQo+IA0KPiBU
-aGlzIGFkZHMgb25lIG1vcmUgbGluZSBzbyBpdCBpcyBub3Qgc2ltcGxpZnlpbmcgOy0pDQoNCldv
-dWxkICJvcHRpbWl6ZSIgc291bmQgYW55IGJldHRlcj8NCg0K
+There are three flags that control Write Booster Feature:
+
+    1. WB ON/OFF
+    2. WB Hibern Flush ON/OFF (implicitly)
+    3. WB Flush ON/OFF (explicit)
+
+In the case of "Hibern Flush", one of the conditions for flush WB buffer is
+that avail_wb_buff < wb_flush_threshold.
+
+As we know, different users have different requirements for power
+consumption and performance. Therefore, we need the ability to manually
+set wb_flush_threshold, so that users can easily and flexibly adjust
+the wb_flush_threshold value, thereby achieving a balance between power
+consumption and performance.
+
+So the sysfs attribute that controls this is necessary.
+
+The meaning of wb_flush_threshold is the percentage of WB's total size,
+such as 1 representing 10%, 2 representing 20%, and so on.
+
+Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
+---
+The modifications made compared to the previous version are as follows:
+1. Add wb_flush_threshold related information to sysfs documentation.
+
+ Documentation/ABI/testing/sysfs-driver-ufs |  8 ++++++
+ drivers/ufs/core/ufs-sysfs.c               | 33 ++++++++++++++++++++++
+ 2 files changed, 41 insertions(+)
+
+diff --git a/Documentation/ABI/testing/sysfs-driver-ufs b/Documentation/ABI/testing/sysfs-driver-ufs
+index 228aa43e14ed..25bc2db78ff5
+--- a/Documentation/ABI/testing/sysfs-driver-ufs
++++ b/Documentation/ABI/testing/sysfs-driver-ufs
+@@ -1426,6 +1426,14 @@ Description:	This entry shows the status of WriteBooster buffer flushing
+ 		If flushing is enabled, the device executes the flush
+ 		operation when the command queue is empty.
+ 
++What:		/sys/bus/platform/drivers/ufshcd/*/wb_flush_threshold
++What:		/sys/bus/platform/devices/*.ufs/wb_flush_threshold
++Date:		June 2023
++Contact:	Lu Hongfei <luhongfei@vivo.com>
++Description:	wb_flush_threshold is a percentage that represents the threshold for flush WB.
++		When avail_wb_buff < wb_flush_threshold, the dev will flush WB when entered H8.
++		When avail_wb_buff >= wb_flush_threshold, it is not necessary.
++
+ What:		/sys/bus/platform/drivers/ufshcd/*/device_descriptor/hpb_version
+ What:		/sys/bus/platform/devices/*.ufs/device_descriptor/hpb_version
+ Date:		June 2021
+diff --git a/drivers/ufs/core/ufs-sysfs.c b/drivers/ufs/core/ufs-sysfs.c
+index cdf3d5f2b77b..347207f4e8ee 100644
+--- a/drivers/ufs/core/ufs-sysfs.c
++++ b/drivers/ufs/core/ufs-sysfs.c
+@@ -298,6 +298,37 @@ static ssize_t enable_wb_buf_flush_store(struct device *dev,
+ 	return res < 0 ? res : count;
+ }
+ 
++static ssize_t wb_flush_threshold_show(struct device *dev,
++					 struct device_attribute *attr,
++					 char *buf)
++{
++	struct ufs_hba *hba = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%u\n", hba->vps->wb_flush_threshold);
++}
++
++static ssize_t wb_flush_threshold_store(struct device *dev,
++					  struct device_attribute *attr,
++					  const char *buf, size_t count)
++{
++	struct ufs_hba *hba = dev_get_drvdata(dev);
++	unsigned int wb_flush_threshold;
++
++	if (kstrtouint(buf, 0, &wb_flush_threshold))
++		return -EINVAL;
++
++	/* The range of values for wb_flush_threshold is (0,10] */
++	if (wb_flush_threshold > UFS_WB_BUF_REMAIN_PERCENT(100) ||
++		wb_flush_threshold == 0) {
++		dev_err(dev, "The value of wb_flush_threshold is invalid!\n");
++		return -EINVAL;
++	}
++
++	hba->vps->wb_flush_threshold = wb_flush_threshold;
++
++	return count;
++}
++
+ static DEVICE_ATTR_RW(rpm_lvl);
+ static DEVICE_ATTR_RO(rpm_target_dev_state);
+ static DEVICE_ATTR_RO(rpm_target_link_state);
+@@ -307,6 +338,7 @@ static DEVICE_ATTR_RO(spm_target_link_state);
+ static DEVICE_ATTR_RW(auto_hibern8);
+ static DEVICE_ATTR_RW(wb_on);
+ static DEVICE_ATTR_RW(enable_wb_buf_flush);
++static DEVICE_ATTR_RW(wb_flush_threshold);
+ 
+ static struct attribute *ufs_sysfs_ufshcd_attrs[] = {
+ 	&dev_attr_rpm_lvl.attr,
+@@ -318,6 +350,7 @@ static struct attribute *ufs_sysfs_ufshcd_attrs[] = {
+ 	&dev_attr_auto_hibern8.attr,
+ 	&dev_attr_wb_on.attr,
+ 	&dev_attr_enable_wb_buf_flush.attr,
++	&dev_attr_wb_flush_threshold.attr,
+ 	NULL
+ };
+ 
+-- 
+2.39.0
+
