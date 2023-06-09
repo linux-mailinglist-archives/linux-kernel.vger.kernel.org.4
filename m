@@ -2,107 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A23F7728CC1
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 03:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F090728CC8
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 03:02:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234171AbjFIBBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 21:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56542 "EHLO
+        id S235531AbjFIBCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 21:02:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjFIBBW (ORCPT
+        with ESMTP id S230049AbjFIBCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 21:01:22 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B4E81FDF;
-        Thu,  8 Jun 2023 18:01:19 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-2568befcf1dso238933a91.0;
-        Thu, 08 Jun 2023 18:01:19 -0700 (PDT)
+        Thu, 8 Jun 2023 21:02:14 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05BF9270B
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 18:02:14 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1b022faa1dbso1879305ad.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 18:02:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686272479; x=1688864479;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=7GcNSL4DrLjjHO/zit5UTBbLm7yHWLP5ztae1gnlGWI=;
-        b=sAbLNpHAex02mYVvqOt0plUdK9fvvXTixE5yY+9UVIKnYDA4KyfHRNzYP5e51ZXjpD
-         IRajIjbDtwqdwuejkKxnKBQi5WTnYesmsuuwqL7Wxz3ZNYw+t005Z7pRGnKYeAMzDUDI
-         yDkUtMbboAGfgcL58wyahkFax3e1p+cqMwbfCgn0vRzT9BLmmo8fyniuvX1OUwSPgyUy
-         1EhlzRhHSUJwImMdOImUMDLW2WaEqWreK2/GDZIoaN64FL/cExhsveE1joZuN+8P9V5w
-         Viwzcmm7FaP0z0pKfZPWkf4lHe9ZLTx98CKiSr+D99SFflxRhpgHv5DTAgc2433ibv6+
-         FjTw==
+        d=gmail.com; s=20221208; t=1686272533; x=1688864533;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oQmmOcARHheT/z0yqfeYwhuuLEt2pQoVjtP4drhj3Is=;
+        b=f6Ro4yKSSB8vqHOEQfM8BBmex4shPq1e4xgFGvpi0ZMfFgMtFAuoUkLB3uEbzKbol0
+         bwa5UqJDV7JzuHls5aWMaO/80Au9uBLvgK1Hl0n1nq3h6xDyReOyb9F22aeDfbV5slJS
+         k3T/0ovb7Dgfc2FLO7qHR+LKrZ68Zj4VwiSHkJI7tvUMk1GrKAIpJcW1kYB8M9HDxKV+
+         9MJiavQOZ5Ej3J0hi44VcEJdbwmifu/rb4IoghCWbMJCcgIHtcq/hzJphxs3eVdKSxY5
+         7lTDV7iBiTKEGSpkvG7SQ96nadCW2tTkRLDn8yV5Uld/Ilery/ywiCfDNgp2Onbn6mvO
+         Vk3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686272479; x=1688864479;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7GcNSL4DrLjjHO/zit5UTBbLm7yHWLP5ztae1gnlGWI=;
-        b=O5Iai3dRgRz2+NnlqCTC2Et7QPzfRWcITSv3H63LWq1gQ3Q50nLrGBtpNCrwr3HsP9
-         II0OTDedf5acUxB7Z6C0GNXB2NyKfFmmDVbxp2kPb1DFGoRvjMqtubtinwrtKNbeIrc6
-         YfhBSkbLzhe5BlIdnUU8TSSYp0QvxqZLFLj3ZOMk0vT9HTjxDgkzvE8nG2SJ8G68akHU
-         6zBfEnS604dLYE9hdlUCozIJtiD0Z5Wt5ctfPSz48WKy+yobksAd0JeXCiCxcX/qh94S
-         qlSobWege5cYXqM1GlpG4E433Lt8WJ/HZziJoPP/F82CLlKtO4K+bKyb2zVQ9DMhIDwD
-         rZeA==
-X-Gm-Message-State: AC+VfDxyhgQXo0Zd2CO0L6JWvF05RUEa00zxq2qaSValRH2o4hfNL8hC
-        MNusJMXtyT3JLn1Pr1hSA98=
-X-Google-Smtp-Source: ACHHUZ6jjOlH808x2cK2fy3GrlUPPHFpDPjJG7DxzWDCWN4FKlIUvdVYp8hLGainLYut0IJwqR4VuA==
-X-Received: by 2002:a17:90a:d382:b0:244:d441:8f68 with SMTP id q2-20020a17090ad38200b00244d4418f68mr4457367pju.16.1686272478352;
-        Thu, 08 Jun 2023 18:01:18 -0700 (PDT)
-Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
-        by smtp.gmail.com with ESMTPSA id e6-20020a656886000000b00543ad78e3bdsm1635848pgt.16.2023.06.08.18.01.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 18:01:17 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 8 Jun 2023 15:01:18 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
-Subject: [GIT PULL] cgroup fixes for v6.4-rc5
-Message-ID: <ZIJ53jQAPxEXF-iu@slm.duckdns.org>
+        d=1e100.net; s=20221208; t=1686272533; x=1688864533;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oQmmOcARHheT/z0yqfeYwhuuLEt2pQoVjtP4drhj3Is=;
+        b=FHyc8pNeyISaWe94SlAdI6iZLfT0Wfvwpw7sNPGDdxNmqn9dbGRz6JOUTXOKEOqco/
+         f9AKRQZ/VzYse+LWR6S/QSAEcVo/EfIol8xxrEP5LD+qVxhO+TfO93xGVHcft+CGchDp
+         CCUCJlg4uZuo5dOTyx+s7kluDPQ8j34+qYFNbUHBiHpqHWP5hqyIAFxqSXyA1DTU/psK
+         UAuLJOlK6340FQhWW8dPEPVeGrivmrbxmL4w9+u2RBRHjchIt1YKkXRD8oNko3xTfoRv
+         0EuBBwkqxdv+uuC/FQ4jP/tllyXmlfIIT3Nhg/Ttmf3wnKl7oAYlPqUARBs+llpxGuE2
+         VbWw==
+X-Gm-Message-State: AC+VfDz0P/eX8FP3ukY43dQAFr0wh9K5dfOfQHc1N2kcq6lYjvDVSPwM
+        DoLez4sOyVCT3+Voc6MPJ5v1JS65Ep/gxRbbmiJmezad
+X-Google-Smtp-Source: ACHHUZ4JlzYLrk3G44UTV1BNyYCkM2xR3ckuEqr6N3eVqsOpz/ptx9A3yYPL5QJQFNkL0vmhXikApWVt32L1jCsCoZc=
+X-Received: by 2002:a17:902:e881:b0:1b0:3cda:6351 with SMTP id
+ w1-20020a170902e88100b001b03cda6351mr98158plg.0.1686272533333; Thu, 08 Jun
+ 2023 18:02:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230607135746.92995-1-hch@lst.de> <aab7ae20-d36a-47cf-bc1a-9590c3d8b3b7@sirena.org.uk>
+In-Reply-To: <aab7ae20-d36a-47cf-bc1a-9590c3d8b3b7@sirena.org.uk>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Thu, 8 Jun 2023 22:02:00 -0300
+Message-ID: <CAOMZO5DhO7G70FZXZzwoX_Xm=VHtb8E=8G8moz+CjEdnUc2Eeg@mail.gmail.com>
+Subject: Re: [PATCH] block: fix rootwait=
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Christoph Hellwig <hch@lst.de>, axboe@kernel.dk,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 44c026a73be8038f03dbdeef028b642880cf1511:
+Hi Mark,
 
-  Linux 6.4-rc3 (2023-05-21 14:05:48 -0700)
+On Thu, Jun 8, 2023 at 3:26=E2=80=AFPM Mark Brown <broonie@kernel.org> wrot=
+e:
 
-are available in the Git repository at:
+> instead of mounting the device we already knew about.  A bisect (log
+> below) lands on this commit and reverting the first hunk:
+>
+> > @@ -181,7 +181,7 @@ static int __init devt_from_devname(const char *nam=
+e, dev_t *devt)
+> >         *p =3D '\0';
+> >         *devt =3D blk_lookup_devt(s, part);
+> >         if (*devt)
+> > -               return 0;
+> > +               return -ENODEV;
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/ tags/cgroup-for-6.4-rc5-fixes
+I have tested reverting this first hunk and it also works for me, so
+if someone submits this fix:
 
-for you to fetch changes up to 5647e53f7856bb39dae781fe26aa65a699e2fc9f:
+Tested-by: Fabio Estevam <festevam@gmail.com>
 
-  cgroup: Documentation: Clarify usage of memory limits (2023-06-05 14:08:12 -1000)
-
-----------------------------------------------------------------
-cgroup: Fixes for v6.4-rc5
-
-* Fix css_set reference leaks on fork failures.
-
-* Fix CPU hotplug locking in cgroup_transfer_tasks() which is used by
-  cgroup1 cpuset.
-
-* Doc update.
-
-----------------------------------------------------------------
-Dan Schatzberg (1):
-      cgroup: Documentation: Clarify usage of memory limits
-
-John Sperbeck (1):
-      cgroup: always put cset in cgroup_css_set_put_fork
-
-Qi Zheng (1):
-      cgroup: fix missing cpus_read_{lock,unlock}() in cgroup_transfer_tasks()
-
- Documentation/admin-guide/cgroup-v2.rst | 22 ++++++++++------------
- kernel/cgroup/cgroup-v1.c               |  4 ++--
- kernel/cgroup/cgroup.c                  | 17 ++++++++---------
- 3 files changed, 20 insertions(+), 23 deletions(-)
+Thanks
