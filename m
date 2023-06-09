@@ -2,165 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1E007293B6
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEEDB7293B3
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:52:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239742AbjFIIw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 04:52:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51858 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241041AbjFIIv5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S241020AbjFIIv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 9 Jun 2023 04:51:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE3BE2
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 01:51:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686300664;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PUwIKYQbWiICJqD4Rq9YjSeC0WyuaQsDDkRv9B8gaVA=;
-        b=MZAudQ+fIcuXAoOfx+E2AT9sMnnNUfRzzel2zwuz2R6CS4lP1BMMzRrgdRR6JFNCmmF/NR
-        GYrUtzEGOtZQ5n3aKonKnQ/7JbpjoOkWBxZpzArOOfhycOb+qFej2EozHR3Xwg8hTcMJ8x
-        7lnsxI+6k1RktbVSz5QBwdo9TiSyUwc=
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
- [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-591-OLuHDa9JOt-EaHYELT6CXA-1; Fri, 09 Jun 2023 04:51:03 -0400
-X-MC-Unique: OLuHDa9JOt-EaHYELT6CXA-1
-Received: by mail-lj1-f197.google.com with SMTP id 38308e7fff4ca-2b1a7e31de7so8745671fa.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 01:51:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686300662; x=1688892662;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PUwIKYQbWiICJqD4Rq9YjSeC0WyuaQsDDkRv9B8gaVA=;
-        b=KTBsAm8sG4bCimJWYDThhvQ5klvFzxrw2z50vlH5hC5Ewe6hqfdk+WI9QMiMTQ3wG8
-         gkR0sF2s5nE6wsRwurgvXTdABWD7zC+HhLCRBbjyuWr8RB1fMjUwfb+sPgftpqQ+5ppf
-         GnYDr4+9V1BySsp6t+Hlw7DpOXbJ7H/+hop2phJ3EWaWjhCSde7O4dI0x3TyC+p3Mwp2
-         Qwb5dqyi2R7SBh2O27a3U/cFDBu6kH5lUxP1gUswizKhMyhAr31FHfRfvXVPJNcVEDJO
-         x/6skHtX4+ryQWMG60EbT5MSI3HKqn2cy3/ug704DeMuNAZ9bjWBKnY9ugreJeduLB0R
-         oLwg==
-X-Gm-Message-State: AC+VfDxspxtf4OOOu5oNUc48+EL34wWbxLDofmImpeqAKQedKPKwiB/n
-        UdRZMAHp5woE1YLahpB/iuaSqgvKeG12W+kZ7ocgIJ+OYm/5lsfxJOqBNAUdTp1fo/cJaloSsJq
-        L38DGE7W2ouhF0PGf7cCnl6yXltDO9kAnDRCdJX6S
-X-Received: by 2002:a2e:8095:0:b0:2b1:d4fc:75f2 with SMTP id i21-20020a2e8095000000b002b1d4fc75f2mr630704ljg.7.1686300661869;
-        Fri, 09 Jun 2023 01:51:01 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ74MF4dxCl8k4XChxgb3mf0hGEb09TATYrjAceDQVZS7F92Pkhh+82rhpkg6qWM7CqpxENGgwwTmxb7gP/C09s=
-X-Received: by 2002:a2e:8095:0:b0:2b1:d4fc:75f2 with SMTP id
- i21-20020a2e8095000000b002b1d4fc75f2mr630691ljg.7.1686300661480; Fri, 09 Jun
- 2023 01:51:01 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52118 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241144AbjFIIvp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 9 Jun 2023 04:51:45 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14706273D
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 01:51:34 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5B09D6606F1D;
+        Fri,  9 Jun 2023 09:51:32 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686300692;
+        bh=Ya3Bf10FXHAeuvldqlJxi2/xeEMaINZ4ThUEyM5QPR4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=dNA0nj0aGt7hBoirQJOL7pqMPhxBRhqkaZTDsYm63+1Z0spWXLnAibjGFgzzg/+64
+         FV61d+Tg5X7geH1ws0pM1EGkKkO4xL/VrTkTxwJjbXeE/zef69w6/ONUG8UCSQjQJn
+         3dnr41PrWROUs582zaUoNrXOuPaXy4DeIHiagkwYvV5+cETuugBFVliOxHPKOVkpk3
+         8+lBInwCOVywelEVeUANDkWPiqCbjID7YzxwKNZFvmR5hhJuftV1v/HEHyH+CiiR8X
+         6+BDFeEYGWOu2u0Bu3/4bSbCvoa3MDIoXqDuqyZpugnS7tj5vEybucumER/Ij6P9AQ
+         RPIt1BxXcaI5g==
+Message-ID: <bde7ccff-0990-5a1a-0da3-e01df7bde00d@collabora.com>
+Date:   Fri, 9 Jun 2023 10:51:29 +0200
 MIME-Version: 1.0
-References: <20230601075333.14021-1-ihuguet@redhat.com> <87sfb1oz13.fsf@meer.lwn.net>
- <CACT4oucYVtGPj+cJrkAKXiwW74VNqb1R3u9jYQ9XnU6-LVde7g@mail.gmail.com>
-In-Reply-To: <CACT4oucYVtGPj+cJrkAKXiwW74VNqb1R3u9jYQ9XnU6-LVde7g@mail.gmail.com>
-From:   =?UTF-8?B?w43DsWlnbyBIdWd1ZXQ=?= <ihuguet@redhat.com>
-Date:   Fri, 9 Jun 2023 10:50:50 +0200
-Message-ID: <CACT4oudWXa+YPtxHReeMoP6538h=cXJ19MrMhxChUhyfrmuv9w@mail.gmail.com>
-Subject: Re: [PATCH v4] Add .editorconfig file for basic formatting
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     ojeda@kernel.org, danny@kdrag0n.dev, masahiroy@kernel.org,
-        jgg@nvidia.com, mic@digikod.net, linux-kernel@vger.kernel.org,
-        joe@perches.com, linux@rasmusvillemoes.dk, willy@infradead.org,
-        mailhol.vincent@wanadoo.fr
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [RESEND 05/15] drm/mediatek/mtk_disp_ccorr: Remove half completed
+ incorrect struct header
+Content-Language: en-US
+To:     Lee Jones <lee@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230609081732.3842341-1-lee@kernel.org>
+ <20230609081732.3842341-6-lee@kernel.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230609081732.3842341-6-lee@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 10:49=E2=80=AFAM =C3=8D=C3=B1igo Huguet <ihuguet@red=
-hat.com> wrote:
->
-> On Fri, Jun 9, 2023 at 9:50=E2=80=AFAM Jonathan Corbet <corbet@lwn.net> w=
-rote:
-> >
-> > =C3=8D=C3=B1igo Huguet <ihuguet@redhat.com> writes:
-> >
-> > > EditorConfig is a specification to define the most basic code formatt=
-ing
-> > > stuff, and it's supported by many editors and IDEs, either directly o=
-r
-> > > via plugins, including VSCode/VSCodium, Vim, emacs and more.
-> > >
-> > > It allows to define formatting style related to indentation, charset,
-> > > end of lines and trailing whitespaces. It also allows to apply differ=
-ent
-> > > formats for different files based on wildcards, so for example it is
-> > > possible to apply different configs to *.{c,h}, *.py and *.rs.
-> > >
-> > > In linux project, defining a .editorconfig might help to those people
-> > > that work on different projects with different indentation styles, so
-> > > they cannot define a global style. Now they will directly see the
-> > > correct indentation on every fresh clone of the project.
-> > >
-> > > See https://editorconfig.org
-> > >
-> > > Co-developed-by: Danny Lin <danny@kdrag0n.dev>
-> > > Signed-off-by: Danny Lin <danny@kdrag0n.dev>
-> > > Signed-off-by: =C3=8D=C3=B1igo Huguet <ihuguet@redhat.com>
-> >
-> > So I must confess to still being really nervous about installing a file
-> > that will silently reconfigure the editors of everybody working on the
-> > kernel source; I wish there were a straightforward way to do this as an
-> > opt-in thing.  We're talking about creating a flag-day behavioral chang=
-e
-> > for, potentially, thousands of kernel developers.  Something tells me
-> > that we might just hear from a few of them.
-> >
-> > I wonder if we should, instead, ship a file like this as something like
-> > Documentation/process/editorconfig, then provide a "make editorconfig"
-> > command that installs it in the top-level directory for those who want
-> > it?
-> >
-> > Or perhaps I'm worrying too much?
->
-> This is a valid option, indeed, but In my opinion we are overlooking this=
-.
->
-> Adding an .editorconfig will not silently reconfigure the editors of
-> everyone because for most editors you need to install a plugin to use
-> it. In my opinion, that's enough "opt-in". Here is the list of editors
-> that have built-in support, and those that need a plugin install. I
+Il 09/06/23 10:17, Lee Jones ha scritto:
+> Fixes the following W=1 kernel build warning(s):
+> 
+>   drivers/gpu/drm/mediatek/mtk_disp_ccorr.c:47: warning: Function parameter or member 'clk' not described in 'mtk_disp_ccorr'
+>   drivers/gpu/drm/mediatek/mtk_disp_ccorr.c:47: warning: Function parameter or member 'regs' not described in 'mtk_disp_ccorr'
+>   drivers/gpu/drm/mediatek/mtk_disp_ccorr.c:47: warning: Function parameter or member 'cmdq_reg' not described in 'mtk_disp_ccorr'
+>   drivers/gpu/drm/mediatek/mtk_disp_ccorr.c:47: warning: Function parameter or member 'data' not described in 'mtk_disp_ccorr'
+> 
+> Cc: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: David Airlie <airlied@gmail.com>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: Matthias Brugger <matthias.bgg@gmail.com>
+> Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-mediatek@lists.infradead.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Signed-off-by: Lee Jones <lee@kernel.org>
 
-Sorry, forgot the link: https://editorconfig.org/
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-> don't think that those with built-in support are widely used for
-> kernel development, and many of them allow to disable the feature.
->
-> I see this as the exact same case as adding a .clang-format file, as
-> we already have. Some editors, either built-in or via plugin,
-> automatically reformat code when this file is present. And it's far
-> more "intrusive" than editorconfig.
->
-> Also, note that, for those with editorconfig enabled in their editors,
-> the editor would be enforcing formatting rules that are mandatory, not
-> optional.
->
-> Said that, if you still prefer to do it via `make editorconfig`, I can
-> change it.
->
-> >
-> > Thanks,
-> >
-> > jon
-> >
->
->
-> --
-> =C3=8D=C3=B1igo Huguet
-
-
-
---=20
-=C3=8D=C3=B1igo Huguet
 
