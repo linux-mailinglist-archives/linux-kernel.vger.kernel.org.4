@@ -2,104 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1764072A6D1
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 01:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9094F72A6D7
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 01:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbjFIXoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 19:44:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38790 "EHLO
+        id S231452AbjFIXq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 19:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjFIXot (ORCPT
+        with ESMTP id S229679AbjFIXqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 19:44:49 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94973583
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 16:44:48 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5618857518dso32602637b3.2
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 16:44:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686354288; x=1688946288;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Vquh/FHEiTi4dfmwC93Zb1HN75IHvU0zO7o9cBuEMsA=;
-        b=FCP0fOyzN9/3Ga8MAUupyeO/SBcmgO+H3658UtCYXVKdPWWl8DD5eqYsRehY2WKGf+
-         AXBmBbUYWO2XvyYtM366DaHsG8JhaRe7LePLo3G06uvsAXLvJ0tUm+IWfyoNxin/VZ/X
-         w6/1984Hd54rpFawN2H6XGIYUwMA38ZElwNNKPqd5hxVlqLajaHoK4xewnINgAySx/wY
-         mP4GqdGEzRTqqrLK64yKC0vJwG6iLnLd3TJQhzKumTuSg5SWnFo7YDVmJDRN1anzpfzK
-         8NYiQQiz5PCqhobM1uRPdg+gdm54Q1fnuOsqNRieBNINyoaZ23N1tcsff1MxS9XaETCk
-         p5Ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686354288; x=1688946288;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Vquh/FHEiTi4dfmwC93Zb1HN75IHvU0zO7o9cBuEMsA=;
-        b=aZj06bECPR++pKRgrq9j92ev6+HpPkKdXkU60y58Vx/pFrjZocn+4V8d/d7TukWaqb
-         9B6nAoksrJoeYb4myfekgRs/XJsjuYG/vE6LSJYZYHzf9Xox3HIgs9YWlmOX8ibnutYn
-         ll5sNW6cd6N06loc7Nt38va2+7zoQBmUxqxqnKYONfkuhAxJps7UfCk+cTReqBqgPXvc
-         b8hPe5zyHbwLeMtIPblff9QcDEAY7EwA30XFIv70dnonCY+zCuReJyRwmj+PjFRBIQTB
-         yH19U/2MrJR4hwI7XeSjf3mxh1QTnHMcZhWDWcLR/P/1H6kt6Ahnni2ZAGOftZ+V5EdR
-         naHQ==
-X-Gm-Message-State: AC+VfDxJ3GlsWemdSNSN2Uz9eGBxZd8ov3WO5V38WmTrj2WVyh1evtXB
-        dvE0KhvdsKveeLk3xMLaWyUPhFYsGlLHdcNc6V8=
-X-Google-Smtp-Source: ACHHUZ5pDeP3eqZoDjQhSM9IDzK2EOAvUdHuzW7pPGye9KkHXA+NIDnSXfQQMQTdo2fACqri4pujW9SgulIHDBOG1d4=
-X-Received: from ndesaulniers-desktop.svl.corp.google.com ([2620:15c:2d1:203:1bbc:33a1:472f:b279])
- (user=ndesaulniers job=sendgmr) by 2002:a81:ef0a:0:b0:56c:e0c5:de88 with SMTP
- id o10-20020a81ef0a000000b0056ce0c5de88mr507827ywm.1.1686354288039; Fri, 09
- Jun 2023 16:44:48 -0700 (PDT)
-Date:   Fri, 09 Jun 2023 16:44:45 -0700
-Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAGy5g2QC/x2NQQrCQBAEvxLm7MKYFTV+RTzMxjY7iGuYUQmE/
- D0bj0V10TM5TOF0aWYy/NT1XSrsdw31WcqAoPfK1HIb+chdeObvgFGq4A4SD5zi6Qyq+ySOkEx Kn7fiJf6BbWI0PHT6n1xvy7IC0ZCYtnQAAAA=
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=UIrHvErwpgNbhCkRZAYSX0CFd/XFEwqX3D0xqtqjNug=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1686354286; l=960;
- i=ndesaulniers@google.com; s=20220923; h=from:subject:message-id;
- bh=jjBejqM3KHdCEAqZe3eEIdjesYfxVlFu8f+bbwqWVDI=; b=6LwADhRYgxCHpTWgXm6Vbi4BQlrA1hf/HNYYJW3SMkt3KXdweCywwNx5/pdRD/qfEksCXWAAT
- G5iOr9EpETGAv/i6LNd+BY7ZrE9IrbFBKWN19Q46iqvYeTEpOpzOY1f
-X-Mailer: b4 0.12.0
-Message-ID: <20230609-khugepage-v1-1-dad4e8382298@google.com>
-Subject: [PATCH] mm/khugepaged: use DEFINE_READ_MOSTLY_HASHTABLE macro
-From:   ndesaulniers@google.com
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 9 Jun 2023 19:46:25 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F356B30FE
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 16:46:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686354385; x=1717890385;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4HsSE/uhcsnZXiarm4S5bjp5qiVOuFJwIva9sHYvHFk=;
+  b=J6vKapJqP0mf44k4y1N4r6URYIAN7byHLTf/YLfNpWahnxIxbWk0iISu
+   GD53dfuyQ+d8QKQxiFas6zZK+QAQkEN90AsXch8Svf1CTjQgis7pSaBEH
+   oCMCH7z9t6xJdTbH0nlUCBVHehWwo24hLyjsx07AVzbQasXAhClJo4+nG
+   Cy9Mhde49l5qikNbbUHDTPQ99AYxR5Z6cA1merntWjo70dsqBHFBEulvt
+   bqpJYd+DMv1bQeabQeCt85s5lHhoYGMhTKQCsrCRVghgxEfy/02TigaAr
+   xLmqHWWpO9yQzg6oAP51LadUy86W/WKMJ3FUsgaTmEXgsi2+EtkzPW/k9
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="342384659"
+X-IronPort-AV: E=Sophos;i="6.00,230,1681196400"; 
+   d="scan'208";a="342384659"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 16:46:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="704715256"
+X-IronPort-AV: E=Sophos;i="6.00,230,1681196400"; 
+   d="scan'208";a="704715256"
+Received: from cdhirema-mobl5.amr.corp.intel.com (HELO desk) ([10.251.26.88])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 16:46:24 -0700
+Date:   Fri, 9 Jun 2023 16:46:19 -0700
+From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To:     Jordy Zomer <jordyzomer@google.com>
+Cc:     linux-kernel@vger.kernel.org, phil@philpotter.co.uk
+Subject: Re: [PATCH 1/1] cdrom: Fix spectre-v1 gadget
+Message-ID: <20230609234619.3bkmlgpxzaetua4d@desk>
+References: <20230609131355.71130-1-jordyzomer@google.com>
+ <20230609131355.71130-2-jordyzomer@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230609131355.71130-2-jordyzomer@google.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These are equivalent, but DEFINE_READ_MOSTLY_HASHTABLE exists to define
-a hashtable in the .data..read_mostly section.
+On Fri, Jun 09, 2023 at 01:13:55PM +0000, Jordy Zomer wrote:
+> This patch fixes a spectre-v1 gadget in cdrom.
+> The gadget could be triggered by,
+>  speculatviely bypassing the cdi->capacity check.
+> 
+> Signed-off-by: Jordy Zomer <jordyzomer@google.com>
+> ---
+>  drivers/cdrom/cdrom.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
+> index 416f723a2dbb..3c349bc0a269 100644
+> --- a/drivers/cdrom/cdrom.c
+> +++ b/drivers/cdrom/cdrom.c
+> @@ -233,6 +233,7 @@
+>  
+>  -------------------------------------------------------------------------*/
+>  
+> +#include "asm/barrier.h"
+>  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+>  
+>  #define REVISION "Revision: 3.20"
+> @@ -2329,6 +2330,8 @@ static int cdrom_ioctl_media_changed(struct cdrom_device_info *cdi,
+>  	if (arg >= cdi->capacity)
+>  		return -EINVAL;
+>  
+> +	arg = array_index_mask_nospec(arg, cdi->capacity);
 
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
- mm/khugepaged.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index 6b9d39d65b73..e7dc49214413 100644
---- a/mm/khugepaged.c
-+++ b/mm/khugepaged.c
-@@ -88,7 +88,7 @@ static unsigned int khugepaged_max_ptes_swap __read_mostly;
- static unsigned int khugepaged_max_ptes_shared __read_mostly;
- 
- #define MM_SLOTS_HASH_BITS 10
--static __read_mostly DEFINE_HASHTABLE(mm_slots_hash, MM_SLOTS_HASH_BITS);
-+static DEFINE_READ_MOSTLY_HASHTABLE(mm_slots_hash, MM_SLOTS_HASH_BITS);
- 
- static struct kmem_cache *mm_slot_cache __read_mostly;
- 
-
----
-base-commit: 64569520920a3ca5d456ddd9f4f95fc6ea9b8b45
-change-id: 20230609-khugepage-09ea340b378e
-
-Best regards,
--- 
-Nick Desaulniers <ndesaulniers@google.com>
-
+array_index_nospec() is the correct function to use. The above generates
+a mask and not the original value. Also it is effective when the second
+argument is a build time constant. If thats not possible and this
+function is not called very often barrier_nospec() is also an option.
