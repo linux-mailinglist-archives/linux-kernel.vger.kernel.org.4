@@ -2,58 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A362729791
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 12:53:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F26F7297A9
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 13:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238709AbjFIKxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 06:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48714 "EHLO
+        id S236230AbjFILAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 07:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjFIKxb (ORCPT
+        with ESMTP id S230477AbjFILAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 06:53:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D19E83
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 03:53:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 261E4656D0
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 10:53:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88C5CC433D2;
-        Fri,  9 Jun 2023 10:53:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686308009;
-        bh=defKlFYq4qk5TY8DNFvgXgdYeoY5vXhX3sDVEAMBSf8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A9Gm15pgCGz3oayFmuV4WrwHFlwCOBxa3/AHYHb/AoeumPalqI3fOYTO5GlR7k+Kq
-         NzZ00yfP/EQFls2j2R/hz5AtO6EUUNXchz9FdqZhDhITm3ypQZVGPLScdABySzLsZ/
-         r9OauYwJ3Dbd9mTMEjpTq27r/pmtTZ/vOOBYmt05CfBRHjxfFka7kWevKMzOoS2SGC
-         zgU0qWtyCejjcTVO96aCYa3v/yd7Qh1ig9qEqKoSfLPor4+0CG+KiM4FCxQSLtN6BF
-         GNPKF9qu1FjyCdti23NIRA4W03wQzik7cn1i7g1WZ0rOAr/ytxOV+33o1mYbafFtSC
-         tSKctA+/mbH2g==
-Date:   Fri, 9 Jun 2023 11:53:24 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
-        linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] regulator: Use bitfield values for range selectors
-Message-ID: <e78127b2-4c00-4fcd-b829-7a9d465ad2e9@sirena.org.uk>
-References: <20230608075651.3214540-1-wenst@chromium.org>
- <c9947378-419b-cd35-73fe-aa1564340d2b@gmail.com>
+        Fri, 9 Jun 2023 07:00:21 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637BD211C
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 04:00:16 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 3DC2B5FD90;
+        Fri,  9 Jun 2023 14:00:13 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1686308413;
+        bh=BzSyFtFdXcnd2HT0HS0gqYm2mT8eWVT9T37dAgibYaE=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=iIwhIrEHgiJBZcjqFXIOdLAKV4Fj4v1NVFIKCN9cj2pwpMSn+26WrFFPwYkiNcR6H
+         zWm6tEssID3X1tSyGiwh6DKtbpUEbkiIHpkWlbo5tzHzK/iiUVttnzwGfXOjKMkw8/
+         SpXOaomSu3Sc+9LEem+gZF+f/vMTQadvBD4GdCstryi4uEzMKK2Fecq6XkxlWz8rWB
+         fA3PRDqgwfRoZNvIbDQmGWHrvJiKK5ANsKsMfSe+rki4os1dt+kd9c0DKWlmbZQOSB
+         7heG8M1R4MOWdv64rIMYS7cana4gnX+b+NBbofUEbI953MLWC63x4ZCNOk9dsQGOAa
+         GwE/BQd/5Re1g==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Fri,  9 Jun 2023 14:00:11 +0300 (MSK)
+Message-ID: <03b86107-e03f-b41e-09e8-c8509c307005@sberdevices.ru>
+Date:   Fri, 9 Jun 2023 13:55:07 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="STdPkXn5eBBeGzoF"
-Content-Disposition: inline
-In-Reply-To: <c9947378-419b-cd35-73fe-aa1564340d2b@gmail.com>
-X-Cookie: Tom's hungry, time to eat lunch.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2] mtd: rawnand: meson: check buffer length
+Content-Language: en-US
+To:     Liang Yang <liang.yang@amlogic.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+CC:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
+        <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+References: <20230606101644.3297859-1-AVKrasnov@sberdevices.ru>
+ <9adef6da-5930-dcaa-f148-e4a398d39f2d@sberdevices.ru>
+ <3a9470ed-d7ad-6cae-0d58-732399590272@sberdevices.ru>
+ <7903580d-685c-14e6-5572-81a4cb31cced@amlogic.com>
+ <20230608085458.449a24c0@xps-13>
+ <4e6cd8a8-f618-4bc3-5fa9-eab2b501dd89@amlogic.com>
+ <a6a20b50-02b0-53c0-1e65-75035bc59c87@amlogic.com>
+ <20230608152114.3a1d82ac@xps-13>
+ <3cc9765c-f32a-fe8a-f7af-fb884ee63b48@amlogic.com>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <3cc9765c-f32a-fe8a-f7af-fb884ee63b48@amlogic.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/09 07:08:00 #21465535
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,30 +84,209 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---STdPkXn5eBBeGzoF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Fri, Jun 09, 2023 at 01:45:15PM +0300, Matti Vaittinen wrote:
+On 09.06.2023 10:59, Liang Yang wrote:
+> Hi Miquel,
+> 
+> On 2023/6/8 21:21, Miquel Raynal wrote:
+>> [ EXTERNAL EMAIL ]
+>>
+>> Hi Liang,
+>>
+>> liang.yang@amlogic.com wrote on Thu, 8 Jun 2023 20:37:14 +0800:
+>>
+>>> Hi Arseniy and Miquel,
+>>>
+>>> On 2023/6/8 15:12, Liang Yang wrote:
+>>>> Hi Miquel,
+>>>>
+>>>> On 2023/6/8 14:54, Miquel Raynal wrote:
+>>>>> [ EXTERNAL EMAIL ]
+>>>>>
+>>>>> Hi Liang,
+>>>>>
+>>>>> liang.yang@amlogic.com wrote on Thu, 8 Jun 2023 14:42:53 +0800:
+>>>>>
+>>>>>> Hi Arseniy,
+>>>>>>
+>>>>>> On 2023/6/8 5:17, Arseniy Krasnov wrote:
+>>>>>>> [ EXTERNAL EMAIL ]
+>>>>>>>
+>>>>>>> Hi again Miquel, Liang!
+>>>>>>>
+>>>>>>> What do You think about this patch?
+>>>>>>>
+>>>>>>> Thanks, Arseniy
+>>>>>>>
+>>>>>>> On 06.06.2023 19:29, Arseniy Krasnov wrote:
+>>>>>>>> Sorry, here is changelog:
+>>>>>>>> v1 -> v2:
+>>>>>>>> * Move checks from 'switch/case' which executes commands in >>>>> 'meson_nfc_exec_op()' to a special
+>>>>>>>>      separated function 'meson_nfc_check_op()' which is called >>>>> before commands processing.
+>>>>>>>>
+>>>>>>>> On 06.06.2023 13:16, Arseniy Krasnov wrote:
+>>>>>>>>> Meson NAND controller has limited buffer length, so check it before
+>>>>>>>>> command execution to avoid length trim. Also check MTD write size on
+>>>>>>>>> chip attach.
+>>>>>>>>>
+>>>>>>>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>>>>>>>>> ---
+>>>>>>>>>     drivers/mtd/nand/raw/meson_nand.c | 47 >>>>>> +++++++++++++++++++++++++++----
+>>>>>>>>>     1 file changed, 42 insertions(+), 5 deletions(-)
+>>>>>>>>>
+>>>>>>>>> diff --git a/drivers/mtd/nand/raw/meson_nand.c >>>>>> b/drivers/mtd/nand/raw/meson_nand.c
+>>>>>>>>> index 23a73268421b..db6b18753071 100644
+>>>>>>>>> --- a/drivers/mtd/nand/raw/meson_nand.c
+>>>>>>>>> +++ b/drivers/mtd/nand/raw/meson_nand.c
+>>>>>>>>> @@ -111,6 +111,8 @@
+>>>>>>>>>
+>>>>>>>>>     #define PER_INFO_BYTE               8
+>>>>>>>>>
+>>>>>>>>> +#define NFC_CMD_RAW_LEN     GENMASK(13, 0)
+>>>>>>>>> +
+>>>>>>>>>     struct meson_nfc_nand_chip {
+>>>>>>>>>         struct list_head node;
+>>>>>>>>>         struct nand_chip nand;
+>>>>>>>>> @@ -284,7 +286,7 @@ static void meson_nfc_cmd_access(struct >>>>>> nand_chip *nand, int raw, bool dir,
+>>>>>>>>>
+>>>>>>>>>         if (raw) {
+>>>>>>>>>                 len = mtd->writesize + mtd->oobsize;
+>>>>>>>>> -            cmd = (len & GENMASK(13, 0)) | scrambler | DMA_DIR(dir);
+>>>>>>>>> +            cmd = len | scrambler | DMA_DIR(dir);
+>>>>>>>>>                 writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>>>>>>
+>>>>>> I think we could keep "& GENMASK(13, 0)". it is better here to >>> indicate how many bits of length in this command and don't destory >>> the command once we don't check the "len" outside of this function. >>> or the code "if (len >  NFC_CMD_RAW_LEN)" is better to put inside >>> this function nearly. Thanks.
+>>>>>
+>>>>> It depends who calls this helper. If only used inside >> exec_op,write_page_raw() and read_page_raw() also call >> meson_nfc_cmd_access(), > but i don't find where constrain the "len".
+>>>
+>>> Is the helper "meson_nfc_check_op()" needed by exec_op() after the constraint in attach_chip()? the length passed in exec_op() seems smaller than "mtd->writesize + mtd->oobsize" now.
+>>
+>> exec_op() is primarily dedicated to performing side commands than page
+>> accesses, typically the parameter page is X bytes, you might want to
+>> read it 3 times, depending on the capabilities of the controller, you
+>> might need to split the operation or not, so the core checks what are
+>> the controller capabilities before doing the operation. So yes, the
+>> check_op() thing is necessary.
+> 
+> ok, i get it. thanks
+> 
+> @Arseniy I have no other questions about this patch.
 
-> For the helpers.c and bd718x7
-> Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Got it!
 
-There's a v2: https://lore.kernel.org/r/20230609075032.2804554-1-wenst@chromium.org
+Thanks, Arseniy
 
---STdPkXn5eBBeGzoF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSDBKMACgkQJNaLcl1U
-h9DOpAf+PkJ/QuzLn8aNnGKCJxAp3SWGKrGCl0yGeON2PRjAwYfaeAkLpflRvSCv
-EB3U3AmUkWCBq2LVX5Tlm66uL1h3Saps2O2DosVH81gLilRWuZNXrqmKdnJdZlGH
-T/u7KgzCF1oCHGC+Igkhzn4yYmnmWOvi2Uq2IXsM89at55M3LXOh4c3t7stG5UN3
-gRkXi1cJiAD0l6RQgusfg359lX1mQNmVNx8udp5ExBc4hPKcJMQAYW1kwoheTp/O
-Z65YsFCzjH5AHGQh6hF16ySy7uE4mRCU6L+78fi240Qmg0/UAhtAozAG42/ZQrvv
-ddms+6rhpwLjte9WfZshoxcl+IX+PQ==
-=Fgdk
------END PGP SIGNATURE-----
-
---STdPkXn5eBBeGzoF--
+>>
+>>>
+>>> @Arseniy if it does need, I think the same constraint is needed by
+>>> "meson_nfc_cmd_access()"
+>>>
+>>>>
+>>>>> it's not useful. If used outside, then if you want to clarify
+>>>>> things you may want to use:
+>>>>>
+>>>>> #define NFC_CMD_OP_LEN(cmd) FIELD_PREP(GENMASK(13, 0), (cmd))
+>>>>>
+>>>>> This is by far my favorite construction. Could apply to many other
+>>>>> fields, like DMA_DIR, scrambler, etc.
+>>>
+>>> @Miquel, FIELD_PREP() is better, but i have no idea whether we should add FIELD_PREP() in this patch, or keep the previous code.
+>>>
+>>>>>
+>>>>>>>>>                 return;
+>>>>>>>>>         }
+>>>>>>>>> @@ -573,7 +575,7 @@ static int meson_nfc_read_buf(struct nand_chip >>>>>> *nand, u8 *buf, int len)
+>>>>>>>>>         if (ret)
+>>>>>>>>>                 goto out;
+>>>>>>>>>
+>>>>>>>>> -    cmd = NFC_CMD_N2M | (len & GENMASK(13, 0));
+>>>>>>>>> +    cmd = NFC_CMD_N2M | len;
+>>>>>>>>>         writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>>>>>>>>>
+>>>>>>>>>         meson_nfc_drain_cmd(nfc);
+>>>>>>>>> @@ -597,7 +599,7 @@ static int meson_nfc_write_buf(struct >>>>>> nand_chip *nand, u8 *buf, int len)
+>>>>>>>>>         if (ret)
+>>>>>>>>>                 return ret;
+>>>>>>>>>
+>>>>>>>>> -    cmd = NFC_CMD_M2N | (len & GENMASK(13, 0));
+>>>>>>>>> +    cmd = NFC_CMD_M2N | len;
+>>>>>>>>>         writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>>>>>>>>>
+>>>>>>>>>         meson_nfc_drain_cmd(nfc);
+>>>>>>>>> @@ -1007,6 +1009,31 @@ meson_nand_op_put_dma_safe_output_buf(const >>>>>> struct nand_op_instr *instr,
+>>>>>>>>>                 kfree(buf);
+>>>>>>>>>     }
+>>>>>>>>>
+>>>>>>>>> +static int meson_nfc_check_op(struct nand_chip *chip,
+>>>>>>>>> +                          const struct nand_operation *op)
+>>>>>>>>> +{
+>>>>>>>>> +    int op_id;
+>>>>>>>>> +
+>>>>>>>>> +    for (op_id = 0; op_id < op->ninstrs; op_id++) {
+>>>>>>>>> +            const struct nand_op_instr *instr;
+>>>>>>>>> +
+>>>>>>>>> +            instr = &op->instrs[op_id];
+>>>>>>>>> +
+>>>>>>>>> +            switch (instr->type) {
+>>>>>>>>> +            case NAND_OP_DATA_IN_INSTR:
+>>>>>>>>> +            case NAND_OP_DATA_OUT_INSTR:
+>>>>>>>>> +                    if (instr->ctx.data.len > NFC_CMD_RAW_LEN)
+>>>>>>>>> +                            return -ENOTSUPP;
+>>>>>>>>> +
+>>>>>>>>> +                    break;
+>>>>>>>>> +            default:
+>>>>>>>>> +                    break;
+>>>>>>>>> +            }
+>>>>>>>>> +    }
+>>>>>>>>> +
+>>>>>>>>> +    return 0;
+>>>>>>>>> +}
+>>>>>>>>> +
+>>>>>>>>>     static int meson_nfc_exec_op(struct nand_chip *nand,
+>>>>>>>>>                              const struct nand_operation *op, bool >>>>>> check_only)
+>>>>>>>>>     {
+>>>>>>>>> @@ -1015,10 +1042,12 @@ static int meson_nfc_exec_op(struct >>>>>> nand_chip *nand,
+>>>>>>>>>         const struct nand_op_instr *instr = NULL;
+>>>>>>>>>         void *buf;
+>>>>>>>>>         u32 op_id, delay_idle, cmd;
+>>>>>>>>> +    int err;
+>>>>>>>>>         int i;
+>>>>>>>>>
+>>>>>>>>> -    if (check_only)
+>>>>>>>>> -            return 0;
+>>>>>>>>> +    err = meson_nfc_check_op(nand, op);
+>>>>>>>>> +    if (err || check_only)
+>>>>>>>>> +            return err;
+>>>>>>>>>
+>>>>>>>>>         meson_nfc_select_chip(nand, op->cs);
+>>>>>>>>>         for (op_id = 0; op_id < op->ninstrs; op_id++) {
+>>>>>>>>> @@ -1293,6 +1322,7 @@ static int meson_nand_attach_chip(struct >>>>>> nand_chip *nand)
+>>>>>>>>>         struct meson_nfc_nand_chip *meson_chip = to_meson_nand(nand);
+>>>>>>>>>         struct mtd_info *mtd = nand_to_mtd(nand);
+>>>>>>>>>         int nsectors = mtd->writesize / 1024;
+>>>>>>>>> +    int raw_writesize;
+>>>>>>>>>         int ret;
+>>>>>>>>>
+>>>>>>>>>         if (!mtd->name) {
+>>>>>>>>> @@ -1304,6 +1334,13 @@ static int meson_nand_attach_chip(struct >>>>>> nand_chip *nand)
+>>>>>>>>>                         return -ENOMEM;
+>>>>>>>>>         }
+>>>>>>>>>
+>>>>>>>>> +    raw_writesize = mtd->writesize + mtd->oobsize;
+>>>>>>>>> +    if (raw_writesize > NFC_CMD_RAW_LEN) {
+>>>>>>>>> +            dev_err(nfc->dev, "too big write size in raw mode: %d >>>>>> > %ld\n",
+>>>>>>>>> +                    raw_writesize, NFC_CMD_RAW_LEN);
+>>>>>>>>> +            return -EINVAL;
+>>>>>>>>> +    }
+>>>>>>>>> +
+>>>>>>>>>         if (nand->bbt_options & NAND_BBT_USE_FLASH)
+>>>>>>>>>                 nand->bbt_options |= NAND_BBT_NO_OOB;
+>>>>>>>>>
+>>>>>
+>>>>>
+>>>>> Thanks,
+>>>>> Miquèl
+>>
+>>
+>> Thanks,
+>> Miquèl
