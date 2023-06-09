@@ -2,176 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11536729A3B
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 14:44:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49B17729A43
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 14:45:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240673AbjFIMo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 08:44:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48914 "EHLO
+        id S240718AbjFIMpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 08:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238873AbjFIMo1 (ORCPT
+        with ESMTP id S239106AbjFIMps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 08:44:27 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0F01BC6;
-        Fri,  9 Jun 2023 05:44:25 -0700 (PDT)
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 359Cga8M008426;
-        Fri, 9 Jun 2023 12:44:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : content-type : mime-version; s=pp1;
- bh=xvQu0AiyIjgiXGGDfx0WYJkuDdk/m9Wc+TbG/u0vKbI=;
- b=apqmGBDYutGFPb/x+jkOmWnBlCXPZ5e2rV8j3cq5xvEpWCHfaUd707EHx04ZZ6MzkQ2q
- Y2WbT3F0faiV8R0/RRUiQMvLTn7K7NpKrN8/zQ/usrxnBL7h9bgGfMfv6qUZF093gOxZ
- k3RGuZBXQw7m5aDFAULvf80NhRv7FaMf/ZVso4/4UbyIVpvqZ7h6KuGSBZ8ClCa9Cd8k
- Kc19vdpqSL7rGz1WGBrSRgzDBPsgIn2B1V/U575+oLmyGfr1NMZTdUq8b7OkwbrSZ3px
- vrV4C2V0R1/CPPUMGZ/6yVGjoCFtmot514TqFs0u+nhfr3r653soZE86sME52mchJsNk FA== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r44aq818b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Jun 2023 12:44:24 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3593h4gL009532;
-        Fri, 9 Jun 2023 12:44:22 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3r2a769xv6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Jun 2023 12:44:22 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 359CiIRB21234198
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 9 Jun 2023 12:44:18 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ADA182004D;
-        Fri,  9 Jun 2023 12:44:18 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 77F7220043;
-        Fri,  9 Jun 2023 12:44:18 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Fri,  9 Jun 2023 12:44:18 +0000 (GMT)
-Date:   Fri, 9 Jun 2023 14:44:17 +0200
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: [GIT PULL] s390 updates for 6.4-rc6
-Message-ID: <ZIMeobQOfS8XyayA@tuxmaker.boeblingen.de.ibm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 6NjOKPqenhPLWWu5n9F6FeWPJsvrCpkF
-X-Proofpoint-GUID: 6NjOKPqenhPLWWu5n9F6FeWPJsvrCpkF
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 9 Jun 2023 08:45:48 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7943213C
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 05:45:46 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f624daccd1so2114094e87.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 05:45:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686314745; x=1688906745;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mqzhrN9pZnLZEEaMP6DZ4D7gUVGJg2soYgokq2ZQmXY=;
+        b=U2hoJl7bvWeuQNlcYG60WzzxhzukFA4kk8DzerHk+MH/nRm+n0jEtgdGlGBpOdpUrI
+         lIHB8vnpMpRA0d0ysNQnmeAbbniSe3iRIifZ3hfJ+67ouEdq/JWiE6L11EIbrzIM6YMB
+         rzVJH4vGT5UH5eAa8usCcXLTpTNnM5cH3gVYXOgaYERCpWCMlf8hc8B/FCrlTYM2MJgR
+         V13S5gevk4cukMKAMX+SSd0ado0nfDoL4cu0sjE8RbzkkqaNgiekfpnsn0mG1beghC5k
+         vfpO5tF75UyMl/7yOAKc+XVx/KVOvpilygpWHiG4pCJAMdBuOAV8EPikWMNeXKfFNucv
+         5/jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686314745; x=1688906745;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mqzhrN9pZnLZEEaMP6DZ4D7gUVGJg2soYgokq2ZQmXY=;
+        b=f0FjlkrTxEideSuAdHxo4Txca+LXh3O4YtNpOl4SIKF0obf5Gd4CHXksFN4yHIzWR5
+         3o6rypxfNGoTNMNSTq8ZxFFSlHulUt2uhrsQ+c8xpPjW+4a1AlMdwKGuu5f715hA7vxa
+         MHXNqHjyHLn1u4KrY4/1NWKFaGSuHhMXiEmj4jmf2/Jjp9sEQsKpAQMj/TMMepq+R9Rr
+         oGt++UF0OdjiM6IqqTdNxmJILfS+sR7TJVyKXJpkKyO9Tnx9smr0ZFHimXjn0bdHHn4n
+         L1mqDTsTqQJmHJuVdNvf83Ijia2/ynDvBOkTcr70Nkji70Ky3y9TVjTrf23yh7zSn4j0
+         9iZA==
+X-Gm-Message-State: AC+VfDx0tUmP21AH2Ws3FN4p1N/iEcdZvcMxncL6mb8mEDAsv/7GO/H/
+        SReopNX1LK0eAKHPcLQGsRaemQ==
+X-Google-Smtp-Source: ACHHUZ73qhFRlQjkdfcodVR00YCWIcOSrAUusZhwn92tcL5LUIQPLXadeg94Aa1h5SWcz2YTOaoXIg==
+X-Received: by 2002:a19:4312:0:b0:4f4:b28f:6b9c with SMTP id q18-20020a194312000000b004f4b28f6b9cmr779377lfa.29.1686314744958;
+        Fri, 09 Jun 2023 05:45:44 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id 7-20020ac24847000000b004f4cabba7desm528961lfy.74.2023.06.09.05.45.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Jun 2023 05:45:44 -0700 (PDT)
+Message-ID: <e075f78a-5eac-8200-853b-db73c3d5025c@linaro.org>
+Date:   Fri, 9 Jun 2023 14:45:43 +0200
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-09_08,2023-06-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- impostorscore=0 malwarescore=0 adultscore=0 suspectscore=0 spamscore=0
- phishscore=0 priorityscore=1501 clxscore=1015 mlxlogscore=809 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306090106
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH V3 4/5] clk: qcom: camcc-sm8550: Add support for qdss,
+ sleep and xo clocks
+Content-Language: en-US
+To:     Jagadeesh Kona <quic_jkona@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Taniya Das <quic_tdas@quicinc.com>,
+        Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
+        Imran Shaik <quic_imrashai@quicinc.com>,
+        Ajit Pandey <quic_ajipan@quicinc.com>
+References: <20230601143430.5595-1-quic_jkona@quicinc.com>
+ <20230601143430.5595-5-quic_jkona@quicinc.com>
+ <ee48f7fd-35f1-288f-2133-1c473e8804ab@linaro.org>
+ <a818de04-ca30-f4fb-4c69-fd172b96f816@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <a818de04-ca30-f4fb-4c69-fd172b96f816@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Linus,
 
-please pull s390 changes for 6.4-rc6.
 
-Thank you,
-Alexander
+On 9.06.2023 13:50, Jagadeesh Kona wrote:
+> Hi Dmitry,
+> 
+> Thanks for your review!
+I've noticed that many QUIC contributors seem to add this to the beginning
+of their emails.. Top-posting is generally discouraged on LKML
 
-The following changes since commit 0f1cbf941d5949110adf70725a9614e622de8d99:
+You can find gregkh's reasoning for this e.g. here:
 
-  s390/iommu: get rid of S390_CCW_IOMMU and S390_AP_IOMMU (2023-05-01 14:11:28 -0300)
+https://lkml.org/lkml/2021/4/21/143
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-6.4-3
-
-for you to fetch changes up to 03c5c83b70dca3729a3eb488e668e5044bd9a5ea:
-
-  s390/purgatory: disable branch profiling (2023-05-25 19:41:45 +0200)
-
-----------------------------------------------------------------
-s390 updates for 6.4-rc6
-
-- Avoid linker error for randomly generated config file that                  
-  has CONFIG_BRANCH_PROFILE_NONE enabled and make it similar                  
-  to riscv, x86 and also to commit 4bf3ec384edf ("s390: disable               
-  branch profiling for vdso").                                                
-
-- Currently, if the device is offline and all the channel paths are           
-  either configured or varied offline, the associated subchannel gets         
-  unregistered. Don't unregister the subchannel, instead unregister           
-  offline device.                                                             
-
-----------------------------------------------------------------
-Alexander Gordeev (1):
-  s390/purgatory: disable branch profiling
-
-Vineeth Vijayan (1):
-  s390/cio: unregister device when the only path is gone
-
- arch/s390/purgatory/Makefile | 1 +
- drivers/s390/cio/device.c    | 5 ++++-
- 2 files changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/arch/s390/purgatory/Makefile b/arch/s390/purgatory/Makefile
-index 32573b4f9bd2..cc8cf5abea15 100644
---- a/arch/s390/purgatory/Makefile
-+++ b/arch/s390/purgatory/Makefile
-@@ -26,6 +26,7 @@ KBUILD_CFLAGS += -Wno-pointer-sign -Wno-sign-compare
- KBUILD_CFLAGS += -fno-zero-initialized-in-bss -fno-builtin -ffreestanding
- KBUILD_CFLAGS += -Os -m64 -msoft-float -fno-common
- KBUILD_CFLAGS += -fno-stack-protector
-+KBUILD_CFLAGS += -DDISABLE_BRANCH_PROFILING
- KBUILD_CFLAGS += $(CLANG_FLAGS)
- KBUILD_CFLAGS += $(call cc-option,-fno-PIE)
- KBUILD_AFLAGS := $(filter-out -DCC_USING_EXPOLINE,$(KBUILD_AFLAGS))
-diff --git a/drivers/s390/cio/device.c b/drivers/s390/cio/device.c
-index d5c43e9b5128..c0d620ffea61 100644
---- a/drivers/s390/cio/device.c
-+++ b/drivers/s390/cio/device.c
-@@ -1376,6 +1376,7 @@ void ccw_device_set_notoper(struct ccw_device *cdev)
- enum io_sch_action {
- 	IO_SCH_UNREG,
- 	IO_SCH_ORPH_UNREG,
-+	IO_SCH_UNREG_CDEV,
- 	IO_SCH_ATTACH,
- 	IO_SCH_UNREG_ATTACH,
- 	IO_SCH_ORPH_ATTACH,
-@@ -1408,7 +1409,7 @@ static enum io_sch_action sch_get_action(struct subchannel *sch)
- 	}
- 	if ((sch->schib.pmcw.pam & sch->opm) == 0) {
- 		if (ccw_device_notify(cdev, CIO_NO_PATH) != NOTIFY_OK)
--			return IO_SCH_UNREG;
-+			return IO_SCH_UNREG_CDEV;
- 		return IO_SCH_DISC;
- 	}
- 	if (device_is_disconnected(cdev))
-@@ -1470,6 +1471,7 @@ static int io_subchannel_sch_event(struct subchannel *sch, int process)
- 	case IO_SCH_ORPH_ATTACH:
- 		ccw_device_set_disconnected(cdev);
- 		break;
-+	case IO_SCH_UNREG_CDEV:
- 	case IO_SCH_UNREG_ATTACH:
- 	case IO_SCH_UNREG:
- 		if (!cdev)
-@@ -1503,6 +1505,7 @@ static int io_subchannel_sch_event(struct subchannel *sch, int process)
- 		if (rc)
- 			goto out;
- 		break;
-+	case IO_SCH_UNREG_CDEV:
- 	case IO_SCH_UNREG_ATTACH:
- 		spin_lock_irqsave(sch->lock, flags);
- 		sch_set_cdev(sch, NULL);
+Konrad
+> 
+> On 6/1/2023 8:23 PM, Dmitry Baryshkov wrote:
+>> On 01/06/2023 17:34, Jagadeesh Kona wrote:
+>>> Add support for camera qdss, sleep and xo clocks.
+>>>
+>>> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+>>> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
+>>
+>> You probably missed the Co-developed-by tag.
+>>
+> 
+> Yes, will add in the next series.
+> 
+>>> ---
+>>> Changes since V2:
+>>>   - No changes.
+>>> Changes since V1:
+>>>   - Newly added.
+>>>
+>>>   drivers/clk/qcom/camcc-sm8550.c | 180 ++++++++++++++++++++++++++++++++
+>>>   1 file changed, 180 insertions(+)
+>>
+>>
+> 
+> Thanks & Regards,
+> Jagadeesh
