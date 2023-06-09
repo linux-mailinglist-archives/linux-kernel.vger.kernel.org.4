@@ -2,83 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14916728E60
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 05:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A409728E6A
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 05:16:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236243AbjFIDO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 23:14:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55122 "EHLO
+        id S238188AbjFIDQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 23:16:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjFIDOz (ORCPT
+        with ESMTP id S238204AbjFIDPq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 23:14:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078D830F3
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 20:14:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686280448;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xIgL9i3w0AdAhUryhJlWnRJCq0oGm95s0fdioQLwB1I=;
-        b=W1vpGzcKwhhgLnY5BpMMoOmVvojpU8kr83rwXGm9WJnzfV1LgxJiKW4hRKPsTbWB/RprcQ
-        0T/kWoq2+WjKVPgrPdZdsdGdYGR403JFve8s3SQBxL0uuTh9bZZmj68QMbLBGAZ9E2izRU
-        yZXKzDISeKXw2DaZZ/TRUIQv09Ujjzg=
-Received: from mail-vk1-f200.google.com (mail-vk1-f200.google.com
- [209.85.221.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-270-3fdtkq3tOfmKQbKkPx9c6Q-1; Thu, 08 Jun 2023 23:14:06 -0400
-X-MC-Unique: 3fdtkq3tOfmKQbKkPx9c6Q-1
-Received: by mail-vk1-f200.google.com with SMTP id 71dfb90a1353d-4644c388212so31447e0c.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 20:14:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686280446; x=1688872446;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xIgL9i3w0AdAhUryhJlWnRJCq0oGm95s0fdioQLwB1I=;
-        b=N/fLGw/YjnXex9t9Mj0dxu0FvvL2OB1S6TZHOMZV2bqL1lOeUaD99Wdz/AbnOmcM24
-         Yh/ze2zISouSumEvqgBplHcgAFXLb/mRkmz/3R8vDAeZCyKtFItdSl7l81dhxez//NpS
-         spw1wVWLJnDvB1G9xUJFqJX6Slp0at7H7k6fQmGl3lUy2r9EX7CVEl6iqQSzAlqF4P23
-         5tl0vLoNHOeWM3NF64POSEn9EeD6SN8euIB3q5VwBtg8lekDJ+Rxd6Eb6BEYIlN5nSyb
-         N4XfigtSOoOZxeSinJ0kn/ST7BB+/6nbWMpl7TdBNkxxqwHUO/jIM01XyhCYAlmGxK30
-         ZmpQ==
-X-Gm-Message-State: AC+VfDwh4IWMKZLJpi46rX+2BtjiHQqE9al5qLFHBPE9Ifw2roKzbEcG
-        XLXaCMkJD2DoAAtYIFBRJQ792g04YR+YNZ8eqUGtVMaL8oOWhfHnU8xU3gAfu9YkNzx5HP1rgEv
-        mZqr7zqtQZcAsEtVsRwXu9ZJfQzr/TvVaJhcsagAX
-X-Received: by 2002:ac5:c858:0:b0:457:3a45:38d2 with SMTP id g24-20020ac5c858000000b004573a4538d2mr203802vkm.1.1686280446398;
-        Thu, 08 Jun 2023 20:14:06 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5++K06QbioYKyQ9Uyh0Xp/3wGCUXlqXahKVRmOXmWm5nsxWpaViogeMufGtgI6Ae4jvfzUyKzwBfawuTdRgb0=
-X-Received: by 2002:ac5:c858:0:b0:457:3a45:38d2 with SMTP id
- g24-20020ac5c858000000b004573a4538d2mr203780vkm.1.1686280446144; Thu, 08 Jun
- 2023 20:14:06 -0700 (PDT)
+        Thu, 8 Jun 2023 23:15:46 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E108359D
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 20:15:30 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-82-39.bstnma.fios.verizon.net [173.48.82.39])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 3593Elua024531
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 8 Jun 2023 23:14:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1686280489; bh=toNjQdoCeAvnZ6qZsKcXjmAWgV2OEZsjUbkzA9vLDRc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=V6Xb8aegEOkeEyBeN38ysZfp1jEhTXOT8SnHbHJEdkEOCNCz8W92E0MqReTdntL+h
+         I/j8hxJr2P9INH7AujnGp2Ark0F6nVRhn/kc+X0wknN8N0WisNoNT09oLDK/GK/vTU
+         m5YGoyQ4XiDBQ91DKR9qsgPL2bw3AMWNPAiskpRUXrCpSfYxwUEj4QsiUHE58BKd/g
+         Oes+Nu7mZHaT+HAQMTbhyiRMIT48ixKxqhJopCkJs+OBAyaKxNX0gbn1DQPYVukJk0
+         40XWHBN5ZrHweekmNPD0FscxIeqcLQRq8obODjZhENMyqkJWnxkPqLnzaPGhlwFF8a
+         SPpZzn1i1KRXg==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id C817B15C00B0; Thu,  8 Jun 2023 23:14:46 -0400 (EDT)
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     linux-ext4@vger.kernel.org, Baokun Li <libaokun1@huawei.com>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>, adilger.kernel@dilger.ca,
+        jack@suse.cz, ritesh.list@gmail.com, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com, yukuai3@huawei.com
+Subject: Re: [PATCH v4 00/12] ext4: fix WARNING in ext4_da_update_reserve_space
+Date:   Thu,  8 Jun 2023 23:14:42 -0400
+Message-Id: <168628045803.1458216.15147562703737118169.b4-ty@mit.edu>
+X-Mailer: git-send-email 2.31.0
+In-Reply-To: <20230424033846.4732-1-libaokun1@huawei.com>
+References: <20230424033846.4732-1-libaokun1@huawei.com>
 MIME-Version: 1.0
-References: <20230609005158.2421285-1-surenb@google.com> <20230609005158.2421285-2-surenb@google.com>
- <877csdpfcq.fsf@yhuang6-desk2.ccr.corp.intel.com>
-In-Reply-To: <877csdpfcq.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   Ming Lei <ming.lei@redhat.com>
-Date:   Fri, 9 Jun 2023 11:13:55 +0800
-Message-ID: <CAFj5m9K-Kyu-NV1q3eGeA8MOcC1XYgYyENnti-Qd8Mj-A6=Q5Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/6] swap: remove remnants of polling from read_swap_cache_async
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
-        willy@infradead.org, hannes@cmpxchg.org, mhocko@suse.com,
-        josef@toxicpanda.com, jack@suse.cz, ldufour@linux.ibm.com,
-        laurent.dufour@fr.ibm.com, michel@lespinasse.org,
-        liam.howlett@oracle.com, jglisse@google.com, vbabka@suse.cz,
-        minchan@google.com, dave@stgolabs.net, punit.agrawal@bytedance.com,
-        lstoakes@gmail.com, hdanton@sina.com, apopple@nvidia.com,
-        peterx@redhat.com, david@redhat.com, yuzhao@google.com,
-        dhowells@redhat.com, hughd@google.com, viro@zeniv.linux.org.uk,
-        brauner@kernel.org, pasha.tatashin@soleen.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,12 +56,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 9:58=E2=80=AFAM Huang, Ying <ying.huang@intel.com> w=
-rote:
->
-> + Ming Lei for confirmation.
 
-Good catch, it isn't necessary to pass the polling parameter now.
+On Mon, 24 Apr 2023 11:38:34 +0800, Baokun Li wrote:
+> V1->V2:
+>         Modify the patch 1 description and add the Fixes tag.
+>         Add the patch 2 as suggested by Jan Kara.
+> V2->V3:
+>         Remove the redundant judgment of count in Patch [1].
+>         Rename ext4_es_alloc_should_nofail to ext4_es_must_keep.
+>         Split Patch [2].
+>         Make some functions return void to simplify the code.
+> V3->V4:
+>         using nofail preallocation.
+> 
+> [...]
 
-Thanks,
+Applied, thanks!
 
+[01/12] ext4: only update i_reserved_data_blocks on successful block allocation
+        commit: 58f109aeac17eb37069e63a082264683bbfaf696
+[02/12] ext4: add a new helper to check if es must be kept
+        commit: 353c585db33932679f6f8c00414745ce09c841c2
+[03/12] ext4: factor out __es_alloc_extent() and __es_free_extent()
+        commit: eee0d79e61a904b103a5604496f595a435690a82
+[04/12] ext4: use pre-allocated es in __es_insert_extent()
+        commit: 2e7ff3411271a1dec6b8bf58b8f81286e927727c
+[05/12] ext4: use pre-allocated es in __es_remove_extent()
+        commit: d89b8ec674242325c2a4dcb894fdb7ee04d63312
+[06/12] ext4: using nofail preallocation in ext4_es_remove_extent()
+        commit: 413ebcba8610df6db5740f9bb551ea41dc353171
+[07/12] ext4: using nofail preallocation in ext4_es_insert_delayed_block()
+        commit: d40d2a66f5035413531f5450ed94731bb907d852
+[08/12] ext4: using nofail preallocation in ext4_es_insert_extent()
+        commit: bbaaebb30b6e75c1998d7ef58a2207a01a611524
+[09/12] ext4: make ext4_es_remove_extent() return void
+        commit: d0dc2a074d20492b46339eb7674c3527a1a9b0a2
+[10/12] ext4: make ext4_es_insert_delayed_block() return void
+        commit: 6b014bd8fede82619a08e5abe497daef5ef1796c
+[11/12] ext4: make ext4_es_insert_extent() return void
+        commit: 4ac358b63dba50218b8e46352ef319f490945a86
+[12/12] ext4: make ext4_zeroout_es() return void
+        commit: 703f64cb4dc0b7d30a7125bd3f28ba785f1e4351
+
+Best regards,
+-- 
+Theodore Ts'o <tytso@mit.edu>
