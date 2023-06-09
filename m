@@ -2,80 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C68FB7296C5
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 12:24:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 052347296CC
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 12:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239867AbjFIKYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 06:24:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34394 "EHLO
+        id S237546AbjFIKZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 06:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239196AbjFIKXd (ORCPT
+        with ESMTP id S241616AbjFIKZA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 06:23:33 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF8983D5;
-        Fri,  9 Jun 2023 03:14:41 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f61530506aso15954745e9.1;
-        Fri, 09 Jun 2023 03:14:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686305679; x=1688897679;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S4w797wispCQIvC1+I191yIlxN8vu+W70vn1IehhZLk=;
-        b=Ivrc3ZX4qYJ6ptP2qfaWCzgYDY0FcK4PjynEUT5H6p1ZmYda4MfKG45lNxBRgVFf/4
-         4P44paMMKpv4PRGMcFmImdPnpkWcAGGwHeX19pj1M4JKGSPcIQzcZGdBxE97z1JWKR70
-         t4ibY7GDC6UuCiFZWC1Eo6aRYhXs7MI7NUZrJiEZM1aoTBemz0JtWCZrZuqO4Gnk61Fo
-         N1cR+5a+3bRLYiDVqSLT3Xt8HAS9JwvHAvCw8oStp56p7JY1BAkqCCoprrBhBziVrLvk
-         84APqVCmV03im6mlOP9kpgFfe11KgsWX4WvV9Gf+H+Q+G/B521skQsNKsTKkrfj9FcAf
-         AiPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686305679; x=1688897679;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=S4w797wispCQIvC1+I191yIlxN8vu+W70vn1IehhZLk=;
-        b=eC6dHMVStFZagZJ0EAGSK1g8RvaCoFk5f7cWNbHu557KlwXsm+U30QPgggn1Tn3WGZ
-         +nf77xL2dTvNh9N7OTPoWmXBQNSDITWR8GxIg4/cbc7OhnvW84mY2HvmN52XeEvl0qq2
-         4qhEjrflk29Cz35F/9npAYw6qjXxZMhAahXa54NWG4BOUVfiNvgrkRnPA4YQSb7/3esT
-         W4PDhoeOqQr95H0bNNmJZV1r/MGAmVa4htljoLwKGA23eTjScCv813KJF6977cB5/AY1
-         GpW5LWos8W+intjCpHLB16DKo5N7chCAMUDT1K9HHX0JZtEFEeMDgOoFC4sfVxc2866M
-         T4aw==
-X-Gm-Message-State: AC+VfDyII+jn/1nhlRvWY9FxLUt5IcxfoWvuQS+MJhSQjziEnqTg7At8
-        vNRy4z7U1Tuh6VY0laejOMM=
-X-Google-Smtp-Source: ACHHUZ7o5LyWmK1syHp15DLngMz8RBlouRr4Yt8JP7cr+FGnQs7cIrbH4zikm6Yy1VhKpl3F3ZKobw==
-X-Received: by 2002:a7b:ce8c:0:b0:3f1:789d:ad32 with SMTP id q12-20020a7bce8c000000b003f1789dad32mr776146wmj.11.1686305679340;
-        Fri, 09 Jun 2023 03:14:39 -0700 (PDT)
-Received: from localhost (freebox.vlq16.iliad.fr. [213.36.7.13])
-        by smtp.gmail.com with ESMTPSA id m6-20020adfdc46000000b0030e5bd253aasm4049044wrj.39.2023.06.09.03.14.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Jun 2023 03:14:38 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 09 Jun 2023 12:14:38 +0200
-Message-Id: <CT81H24H03PE.33SAJUIJQMY90@syracuse>
-Cc:     <linux-wireless@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+        Fri, 9 Jun 2023 06:25:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494108A6B;
+        Fri,  9 Jun 2023 03:15:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 150BD65674;
+        Fri,  9 Jun 2023 10:15:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89486C433EF;
+        Fri,  9 Jun 2023 10:15:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686305735;
+        bh=69i66ox8ltEgL7P8307OpSEFPOK7ge4DxS4uiN/dP78=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=cg6IWFuxqv09zXT72fguVqtyCBgiTwtFNBa8tvGamnt4MY4ymz+ncSpIeKky8SqPv
+         pW+TE/qUpmBjmEY6XQl+sPzBlcZjXD4NQRm+DdI14BFVhdnzZ4riUaMdpMmkbxGj1d
+         XnXGKBC8R+qpA8CFqn1MXSahpTr4+P3M7/9sAyERl8JeRK2yf+Ve6qi00dNeuiyUiW
+         pXqds5te6TQVBcuJYpR04MMRf1bt+Mtba/79ghQbLQirBu0NuOFqNe+syHsVFF4sbq
+         Gx3W/R5cELcFGcm7taPUhLdAxcQSraloLhTlrtJJobj2+tuG6a+GfParBHAnneyuuF
+         eEbfxTq8Bg7kg==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Remi Pommarel <repk@triplefau.lt>
+Cc:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] ath9k: Fix possible stall on ath9k_txq_list_has_key()
-From:   "Nicolas Escande" <nico.escande@gmail.com>
-To:     "Remi Pommarel" <repk@triplefau.lt>,
-        =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        "Kalle Valo" <kvalo@kernel.org>,
-        "Jouni Malinen" <jouni@codeaurora.org>
-X-Mailer: aerc 0.15.1
 References: <20230609093744.1985-1-repk@triplefau.lt>
-In-Reply-To: <20230609093744.1985-1-repk@triplefau.lt>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Fri, 09 Jun 2023 13:15:32 +0300
+In-Reply-To: <20230609093744.1985-1-repk@triplefau.lt> (Remi Pommarel's
+        message of "Fri, 9 Jun 2023 11:37:44 +0200")
+Message-ID: <87sfb1gcvv.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri Jun 9, 2023 at 11:37 AM CEST, Remi Pommarel wrote:
+Remi Pommarel <repk@triplefau.lt> writes:
+
 > On EDMA capable hardware, ath9k_txq_list_has_key() can enter infinite
 > loop if it is called while all txq_fifos have packets that use different
 > key that the one we are looking for. Fix it by exiting the loop if all
@@ -86,12 +67,10 @@ On Fri Jun 9, 2023 at 11:37 AM CEST, Remi Pommarel wrote:
 >
 > rcu: INFO: rcu_sched self-detected stall on CPU
 > ath10k_pci 0000:01:00.0: failed to read temperature -11
-> rcu:    1-....: (5254 ticks this GP) idle=3D189/1/0x4000000000000002 soft=
-irq=3D8442983/8442984 fqs=3D2579
->         (t=3D5257 jiffies g=3D17983297 q=3D334)
+> rcu:    1-....: (5254 ticks this GP) idle=189/1/0x4000000000000002 softirq=8442983/8442984 fqs=2579
+>         (t=5257 jiffies g=17983297 q=334)
 > Task dump for CPU 1:
-> task:hostapd         state:R  running task     stack:    0 pid:  297 ppid=
-:   289 flags:0x0000000a
+> task:hostapd         state:R  running task     stack:    0 pid:  297 ppid:   289 flags:0x0000000a
 > Call trace:
 >  dump_backtrace+0x0/0x170
 >  show_stack+0x1c/0x24
@@ -138,46 +117,12 @@ irq=3D8442983/8442984 fqs=3D2579
 > This rcu stall is hard to reproduce as is, but changing ATH_TXFIFO_DEPTH
 > from 8 to 2 makes it reasonably easy to reproduce.
 >
-> Fixes: ca2848022c12 ("ath9k: Postpone key cache entry deletion for TXQ fr=
-ames reference it")
+> Fixes: ca2848022c12 ("ath9k: Postpone key cache entry deletion for TXQ frames reference it")
 > Signed-off-by: Remi Pommarel <repk@triplefau.lt>
-> ---
->  drivers/net/wireless/ath/ath9k/main.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/net/wireless/ath/ath9k/main.c b/drivers/net/wireless=
-/ath/ath9k/main.c
-> index a4197c14f0a9..7f9f06ea8a05 100644
-> --- a/drivers/net/wireless/ath/ath9k/main.c
-> +++ b/drivers/net/wireless/ath/ath9k/main.c
-> @@ -850,7 +850,7 @@ static bool ath9k_txq_list_has_key(struct list_head *=
-txq_list, u32 keyix)
->  static bool ath9k_txq_has_key(struct ath_softc *sc, u32 keyix)
->  {
->  	struct ath_hw *ah =3D sc->sc_ah;
-> -	int i;
-> +	int i, j;
->  	struct ath_txq *txq;
->  	bool key_in_use =3D false;
-> =20
-> @@ -868,8 +868,9 @@ static bool ath9k_txq_has_key(struct ath_softc *sc, u=
-32 keyix)
->  		if (sc->sc_ah->caps.hw_caps & ATH9K_HW_CAP_EDMA) {
->  			int idx =3D txq->txq_tailidx;
-> =20
-> -			while (!key_in_use &&
-> -			       !list_empty(&txq->txq_fifo[idx])) {
-> +			for (j =3D 0; !key_in_use &&
-> +			     !list_empty(&txq->txq_fifo[idx]) &&
-> +			     j < ATH_TXFIFO_DEPTH; j++) {
->  				key_in_use =3D ath9k_txq_list_has_key(
->  					&txq->txq_fifo[idx], keyix);
->  				INCR(idx, ATH_TXFIFO_DEPTH);
 
-Works with AR9392 (Qualcomm Atheros AR93xx Wireless Network Adapter (rev 01=
-))
+Title is missing "wifi:" but I can add that.
 
-Tested-by: Nicolas Escande <nico.escande@gmail.com>
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
 
----
-Nicolas E.
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
