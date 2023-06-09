@@ -2,139 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52414728DBB
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 04:21:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70FDC728DBD
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 04:23:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237315AbjFICU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 22:20:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39428 "EHLO
+        id S237963AbjFICXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 22:23:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbjFICUx (ORCPT
+        with ESMTP id S229709AbjFICW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 22:20:53 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A973F210E;
-        Thu,  8 Jun 2023 19:20:50 -0700 (PDT)
-Received: from loongson.cn (unknown [10.2.9.158])
-        by gateway (Coremail) with SMTP id _____8BxKuqAjIJkldgAAA--.2683S3;
-        Fri, 09 Jun 2023 10:20:48 +0800 (CST)
-Received: from kvm-1-158.loongson.cn (unknown [10.2.9.158])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxbMp_jIJkDnwJAA--.20801S2;
-        Fri, 09 Jun 2023 10:20:47 +0800 (CST)
-From:   Bibo Mao <maobibo@loongson.cn>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Will Deacon <will@kernel.org>, loongarch@lists.linux.dev,
-        loongson-kernel@lists.loongnix.cn
-Subject: [PATCH v4] PCI: Align pci memory space base address with page size
-Date:   Fri,  9 Jun 2023 10:20:47 +0800
-Message-Id: <20230609022047.2195689-1-maobibo@loongson.cn>
-X-Mailer: git-send-email 2.27.0
+        Thu, 8 Jun 2023 22:22:57 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E1B273D
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 19:22:55 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id 5614622812f47-39aa8a055e0so262178b6e.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 19:22:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686277373; x=1688869373;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KXK7JovcIS9AEnwlQeZVXpP6ImBMvB54Qtj7t2A/A00=;
+        b=JEb/nBXlabKHiK5t5YZZypFaHWeJlhRnoHuVs7k1qqYbIM1L/ILjJayxZaLcWtQy/F
+         /zM43IT6530q53uWBcD+F5SNeYvl6lye+JZgrnzfRZYCLu25lWF26iQSQ9t4zU3pQuWz
+         67CmzuupHGc8q3zZfEfgNnXeruPD6moh4zoYk2/zZdcGTfkdhpN5qNzlrwV5O22/lH+6
+         th76lq1FNCViy+8vK1aSr38m6w5/6e9hP3eIhA2/OldB+EjwrZx4pS/ZPQN3n1iRIV2/
+         ioyWrUCIlpXJJiB+EiscUPF8GYTWqcb9OOyYUdf+bx3i8V3nKOK2HQaB0p1dIzdf0g3L
+         IG+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686277373; x=1688869373;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KXK7JovcIS9AEnwlQeZVXpP6ImBMvB54Qtj7t2A/A00=;
+        b=Ap2xJRPEGBIJDfl2YaKs2ErLHCeuDKE/rYw1x7DufsO5BOGcKG1jJjt6X7jn/Db9i3
+         z+gf021vOfNYTMf/g4OkvZrHj+bNLt9UXuHNLfEUw10kxTUdhGYDX3iXes+eaIslTF5+
+         gxiSuRcDbyf0sh8aX4Nmq/bXt5kh2J6S+jFOrY6H9gojqulo8ju3qeNzx4fNSLWLNRHl
+         riPgJ9JpeoD96sp/fQS018ERl8+//ZvgwhBueoQw4ctUk02XUWAKdb5qcU0AuGHXHYBU
+         e2IRCV/qPzLVG7gzhU9PrJ08xk1AIfZQmG8rRS/vsBXSUcq+Zz5OL5Q3DREzjMnkrBlW
+         2ifw==
+X-Gm-Message-State: AC+VfDxzlMHOT6Zt8g0YTA8PQoyHb9M/2AaLn1fCuK7d87K3fxmzP4sZ
+        oZZR+JflRVEW6umMXzXXs1LPi0RRuks=
+X-Google-Smtp-Source: ACHHUZ5CC4Sb5UkHUu+ZCm3N27/Ud+AHPwQTpJ3tWO6OFa+6NobNRj4JpbXu54GjQ8QGui/mtxYNAg==
+X-Received: by 2002:a05:6808:7c9:b0:38e:d739:6f3f with SMTP id f9-20020a05680807c900b0038ed7396f3fmr218573oij.56.1686277373475;
+        Thu, 08 Jun 2023 19:22:53 -0700 (PDT)
+Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:3aa3:2af1:e3f1:5039])
+        by smtp.gmail.com with ESMTPSA id w22-20020a1709027b9600b001ac95be5081sm2014846pll.307.2023.06.08.19.22.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 19:22:52 -0700 (PDT)
+From:   Max Filippov <jcmvbkbc@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>
+Subject: [PATCH 0/5] xtensa: clean up platform interface
+Date:   Thu,  8 Jun 2023 19:22:35 -0700
+Message-Id: <20230609022240.1694244-1-jcmvbkbc@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxbMp_jIJkDnwJAA--.20801S2
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxGr1rurW3JF48uF4UArWkAFc_yoW5Gr15pF
-        y3A3ZrCrW8Kr1fJ3yDt34kuFZxXan2g3yYvryfCas3GFnrZF9rCw1kAry2qFyUCr4kGryj
-        qFn5KF15Xay5XagCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUU9Fb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
-        wI0_Gr1j6F4UJwAaw2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2
-        xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
-        Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x
-        0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AK
-        xVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67
-        AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI
-        42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMI
-        IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2
-        KfnxnUUI43ZEXa7IU8hiSPUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some PCI devices have only 4K memory space size, it is normal in general
-machines and aligned with page size. However some architectures which
-support different page size, default page size on LoongArch is 16K, and
-ARM64 supports page size varying from 4K to 64K. On machines where larger
-page size is use, memory space region of two different pci devices may be
-in one page. It is not safe with mmu protection, also VFIO pci device
-driver requires base address of pci memory space page aligned, so that it
-can be memory mapped to qemu user space when it is passed-through to vm.
+Hello,
 
-It consumes more pci memory resource with page size alignment requirement,
-here extra option PCI_MEMRES_PAGE_ALIGN is added, it can be enabled by
-different architectures.
+this series drops platform_* interfaces that lost their meaning or got a
+different standard implementation and cleans up existing users and
+default definitions.
 
-Signed-off-by: Bibo Mao <maobibo@loongson.cn>
----
-Change history
-v4: add extra kernel option PCI_MEMRES_PAGE_ALIGN to set memory resource
-    page aligned.
+Max Filippov (5):
+  xtensa: xt2000: drop empty platform_init
+  xtensa: drop platform_heartbeat
+  xtensa: drop platform_restart
+  xtensa: drop platform_halt and platform_power_off
+  xtensa: clean up default platform functions
 
-v3: move alignment requirement to generic pci code
+ arch/xtensa/include/asm/platform.h   | 20 ------------
+ arch/xtensa/kernel/platform.c        | 29 +++++++++--------
+ arch/xtensa/kernel/setup.c           | 22 ++++++++++---
+ arch/xtensa/kernel/time.c            |  4 ---
+ arch/xtensa/platforms/iss/setup.c    | 24 ++++++++------
+ arch/xtensa/platforms/xt2000/setup.c | 48 ++++++++++++++--------------
+ arch/xtensa/platforms/xtfpga/setup.c | 34 +++++++++++++-------
+ 7 files changed, 94 insertions(+), 87 deletions(-)
 
-v2: add pci resource alignment requirement in arch specified function
-    pcibios_align_resource on arm64/LoongArch platforms
-
----
- arch/loongarch/Kconfig  | 1 +
- drivers/pci/Kconfig     | 3 +++
- drivers/pci/setup-res.c | 7 +++++++
- 3 files changed, 11 insertions(+)
-
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index d38b066fc931..65b2f6ba9f8e 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -142,6 +142,7 @@ config LOONGARCH
- 	select PCI_LOONGSON
- 	select PCI_MSI_ARCH_FALLBACKS
- 	select PCI_QUIRKS
-+	select PCI_MEMRES_PAGE_ALIGN
- 	select PERF_USE_VMALLOC
- 	select RTC_LIB
- 	select SMP
-diff --git a/drivers/pci/Kconfig b/drivers/pci/Kconfig
-index 9309f2469b41..9be5f85ff9dc 100644
---- a/drivers/pci/Kconfig
-+++ b/drivers/pci/Kconfig
-@@ -128,6 +128,9 @@ config PCI_LOCKLESS_CONFIG
- config PCI_BRIDGE_EMUL
- 	bool
- 
-+config PCI_MEMRES_PAGE_ALIGN
-+	bool
-+
- config PCI_IOV
- 	bool "PCI IOV support"
- 	select PCI_ATS
-diff --git a/drivers/pci/setup-res.c b/drivers/pci/setup-res.c
-index 967f9a758923..6ad76734a670 100644
---- a/drivers/pci/setup-res.c
-+++ b/drivers/pci/setup-res.c
-@@ -339,6 +339,13 @@ int pci_assign_resource(struct pci_dev *dev, int resno)
- 		return -EINVAL;
- 	}
- 
-+#ifdef CONFIG_PCI_MEMRES_PAGE_ALIGN
-+	/*
-+	 * force minimum page alignment for vfio pci usage
-+	 */
-+	if (res->flags & IORESOURCE_MEM)
-+		align = max_t(resource_size_t, PAGE_SIZE, align);
-+#endif
- 	size = resource_size(res);
- 	ret = _pci_assign_resource(dev, resno, size, align);
- 
 -- 
-2.27.0
+2.30.2
 
