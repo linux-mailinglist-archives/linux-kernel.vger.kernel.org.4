@@ -2,127 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AE39728D07
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 03:23:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56315728D0A
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 03:24:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237606AbjFIBX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 21:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39586 "EHLO
+        id S237694AbjFIBXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 21:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbjFIBXZ (ORCPT
+        with ESMTP id S237618AbjFIBXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 21:23:25 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A694F18D
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 18:23:24 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-565c7399afaso11693017b3.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 18:23:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686273804; x=1688865804;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3KTDoQQSpcjB9NQiyOQFUXOX88v07BrrKabYvpMIx6w=;
-        b=PhwpDxcjLXiR7MGVaWKfABLE3dmRB3qka2k6U1l+muDGzWLhomU4qiQ57KmT6VH8qY
-         ACB3DayhC4faseiipd0QCNLUtNtuFH3XTvyWMyC+FvmNiYj2hTBmc8pdfyd4XFmOfbWU
-         tZooxmyCXH+STIuVMaRhFjnJtSpEto0Mxch6xRdf+bo4VO2G6a/c8gheC2mOEmzSx5zk
-         ccYQOeUWSm1v0s9lMRW9nRmwt5CbXGDSvPCaqv/QLtUPzWt0If7EQ4o8TmUAMcKVROe3
-         I5HEpFf63MgdvN7DdkYJ8qdg2z230og4tgBl+c7UnWgkZm/cRQnWkzi++q5rmkDVXcaG
-         0vug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686273804; x=1688865804;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3KTDoQQSpcjB9NQiyOQFUXOX88v07BrrKabYvpMIx6w=;
-        b=GiZd0qIQHOl9r87QXH+ZzsjIRWiv+KvxNhYDHhmgudyKY22riOcjdH3NFHbUdJD/SC
-         3jg/7wMfqW9hKKhIgzUvde/s9fG3pj39i/HCdw4FEfYUv03qHXVxCqS9DOhYnD20bXBs
-         Ccth8W1bMF4xm0s+mtcvuCaIzjVv5ii1QShydMK60JDjmSALoAbd1c4SnRGiJ5DTrg2A
-         bcr8anlJasdgiBp8wrc1747ZLZH9IoDdPFxyBhHtNCCPjTMIHX6fzO/9Rd+Y4GIpfzrf
-         XxMXoei1MN3D1sJKckPrL0QHpx9UYnM34Nx83hD7XvlkYShA8i/NxuOLfYixT6bwWPnV
-         ySMA==
-X-Gm-Message-State: AC+VfDxr8usE8FyZufSo6SSZXNUpodEWKNsI8b7L+KdektYVD8M2hOVG
-        pj7+jsCxNDdOkaPwnyX/w1Cu8g==
-X-Google-Smtp-Source: ACHHUZ5Qxg9qOQctVm9TDBIrvRBwWLkj4+fag3kdEXz2orEpq2AOsjXF+B86JD9LcmOUKUNihoCjxw==
-X-Received: by 2002:a81:6743:0:b0:568:f9f0:b057 with SMTP id b64-20020a816743000000b00568f9f0b057mr1198700ywc.26.1686273803806;
-        Thu, 08 Jun 2023 18:23:23 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id i11-20020a0ddf0b000000b00568ab5dd873sm288724ywe.65.2023.06.08.18.23.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 18:23:23 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 18:23:19 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 13/32] mm/hmm: retry if pte_offset_map() fails
-In-Reply-To: <c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com>
-Message-ID: <d6c6dd68-25d4-653b-f94b-a45c53ee04b@google.com>
-References: <c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com>
+        Thu, 8 Jun 2023 21:23:46 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BAB3630E5
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 18:23:42 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8BxrOodf4JkfdQAAA--.2714S3;
+        Fri, 09 Jun 2023 09:23:41 +0800 (CST)
+Received: from [10.20.42.43] (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxbMobf4Jk01sJAA--.20460S3;
+        Fri, 09 Jun 2023 09:23:39 +0800 (CST)
+Message-ID: <48ca03db-1e2c-b02a-f743-7911d970851f@loongson.cn>
+Date:   Fri, 9 Jun 2023 09:23:39 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v8 1/8] drm/etnaviv: add a dedicated function to register
+ an irq handler
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Sui Jingfeng <15330273260@189.cn>
+Cc:     Lucas Stach <l.stach@pengutronix.de>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        etnaviv@lists.freedesktop.org, Bjorn Helgaas <bhelgaas@google.com>
+References: <20230608172535.GA1207045@bhelgaas>
+Content-Language: en-US
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+Organization: Loongson
+In-Reply-To: <20230608172535.GA1207045@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8DxbMobf4Jk01sJAA--.20460S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj93XoWxCr45CF18Xr4DJFWUXFy5trc_yoW5Xr1fpF
+        s7GFyYkr18ua42g34xZF98ZFya9w1fWFyxAw1Dt3sIk3s0vrs5tryYkFWUG34fAryrCw4I
+        yr4jgFW7uF1Y9rgCm3ZEXasCq-sJn29KB7ZKAUJUUUUf529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUPYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+        Gr0_Gr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
+        kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
+        twAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
+        k0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l
+        4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxV
+        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
+        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j5o7tUUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hmm_vma_walk_pmd() is called through mm_walk, but already has a goto
-again loop of its own, so take part in that if pte_offset_map() fails.
+Hi,
 
-Signed-off-by: Hugh Dickins <hughd@google.com>
-Reviewed-by: Alistair Popple <apopple@nvidia.com>
----
- mm/hmm.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/mm/hmm.c b/mm/hmm.c
-index e23043345615..b1a9159d7c92 100644
---- a/mm/hmm.c
-+++ b/mm/hmm.c
-@@ -381,6 +381,8 @@ static int hmm_vma_walk_pmd(pmd_t *pmdp,
- 	}
- 
- 	ptep = pte_offset_map(pmdp, addr);
-+	if (!ptep)
-+		goto again;
- 	for (; addr < end; addr += PAGE_SIZE, ptep++, hmm_pfns++) {
- 		int r;
- 
+On 2023/6/9 01:25, Bjorn Helgaas wrote:
+> On Wed, Jun 07, 2023 at 06:55:44PM +0800, Sui Jingfeng wrote:
+>> From: Sui Jingfeng <suijingfeng@loongson.cn>
+>>
+>> Because getting IRQ from a device is platform-dependent, PCI devices have
+>> different methods for getting an IRQ. This patch is a preparation patch to
+>> extend the driver for the PCI device support.
+>>
+>> Cc: Lucas Stach <l.stach@pengutronix.de>
+>> Cc: Christian Gmeiner <christian.gmeiner@gmail.com>
+>> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+>> Cc: Bjorn Helgaas <bhelgaas@google.com>
+>> Cc: Daniel Vetter <daniel@ffwll.ch>
+>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+>> ---
+>>   drivers/gpu/drm/etnaviv/etnaviv_gpu.c | 34 ++++++++++++++++++++-------
+>>   1 file changed, 25 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
+>> index de8c9894967c..b9c12d3145a2 100644
+>> --- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
+>> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
+>> @@ -1817,6 +1817,29 @@ static const struct of_device_id etnaviv_gpu_match[] = {
+>>   };
+>>   MODULE_DEVICE_TABLE(of, etnaviv_gpu_match);
+>>   
+>> +static int etnaviv_gpu_register_irq(struct etnaviv_gpu *gpu, int irq)
+>> +{
+>> +	struct device *dev = gpu->dev;
+>> +	int err;
+>> +
+>> +	if (irq < 0) {
+>> +		dev_err(dev, "failed to get irq: %d\n", irq);
+> Isn't this message redundant because platform_get_irq() already
+> emitted a message for this case?
+Indeed, will be fixed at version.
+>> +		return irq;
+>> +	}
+>> +
+>> +	err = devm_request_irq(dev, irq, irq_handler, 0, dev_name(dev), gpu);
+>> +	if (err) {
+>> +		dev_err(dev, "failed to request irq %u: %d\n", irq, err);
+>> +		return err;
+>> +	}
+>> +
+>> +	gpu->irq = irq;
+>> +
+>> +	dev_info(dev, "irq(%d) handler registered\n", irq);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>   static int etnaviv_gpu_platform_probe(struct platform_device *pdev)
+>>   {
+>>   	struct device *dev = &pdev->dev;
+>> @@ -1837,16 +1860,9 @@ static int etnaviv_gpu_platform_probe(struct platform_device *pdev)
+>>   		return PTR_ERR(gpu->mmio);
+>>   
+>>   	/* Get Interrupt: */
+>> -	gpu->irq = platform_get_irq(pdev, 0);
+>> -	if (gpu->irq < 0)
+>> -		return gpu->irq;
+>> -
+>> -	err = devm_request_irq(&pdev->dev, gpu->irq, irq_handler, 0,
+>> -			       dev_name(gpu->dev), gpu);
+>> -	if (err) {
+>> -		dev_err(dev, "failed to request IRQ%u: %d\n", gpu->irq, err);
+>> +	err = etnaviv_gpu_register_irq(gpu, platform_get_irq(pdev, 0));
+>> +	if (err)
+>>   		return err;
+>> -	}
+>>   
+>>   	/* Get Clocks: */
+>>   	gpu->clk_reg = devm_clk_get_optional(&pdev->dev, "reg");
+>> -- 
+>> 2.25.1
+>>
 -- 
-2.35.3
+Jingfeng
 
