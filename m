@@ -2,117 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2102972A6A7
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 01:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 957AD72A6AA
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 01:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232291AbjFIXRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 19:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59014 "EHLO
+        id S232317AbjFIXT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 19:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjFIXRm (ORCPT
+        with ESMTP id S231630AbjFIXTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 19:17:42 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345742D7E
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 16:17:42 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b02d0942caso10223415ad.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 16:17:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=osandov-com.20221208.gappssmtp.com; s=20221208; t=1686352661; x=1688944661;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7RWuX+kZ/I+FgoPe+JjGYufRY/zYD1Mu3QxCDrMKGlE=;
-        b=n6tk3kvmE4tmB8KJRAQbmvKm6tDzPxxBtgvVo40GnL8Z019gUykcAyYKe+2GJ/BCvB
-         mZfAt6QLb+TcGcFYLxzYksdcaGG0vipWUtab6Ff8EftrRZmNtRyJy3szqsraaTodiLwL
-         R1nNMxwL1wDrUOBfnQsEm2EZ5bRpWDvRVZrI9T7WmK4DXa5CImG3CLc5+0OIO19I0Y+7
-         aD6OfXyv9vpk7So7Bh/hmNxK/TVHQvJM0dTdGhGrwmJGd2idK3MLi3Tz+D+kFTTlCK20
-         clrboVuQKvzuNCFEPHCjKNutbBBTyEQZyTn1JAae7fZLGAImgFXKcq8p4OZvpPsg42TC
-         T5DQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686352661; x=1688944661;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7RWuX+kZ/I+FgoPe+JjGYufRY/zYD1Mu3QxCDrMKGlE=;
-        b=bpXG7KUXPhvYBbOZS7CY/d9u+fMReR+fP39iW7pZwSd2X1hfJUJnh9mUgCGZhmg9Mx
-         hlmGRF8UcM/NdS1MY4cpRZYfAh3qj0MfuYy3//i4meetF3PgCOazkZBwYy31gCe1rXER
-         HCkNxQdG6QzHHSlgSy+ioWPuRCMiApSDW4WUdG52q+KTdAAAHB+SdrBlm3jjldI3GTuT
-         g/okUNJaPqxad4gSKIWczql+2a0MWRzkZwNMPGOKcMrOAkxbHAHnVLHpfq5rmSTYAKiK
-         991Uz4oQbi/qC4Bim/fn7yOAFSv5ztQA17kjHrAqHrKr/gAViBo1VMTJcNBuXwNvtn22
-         6vMw==
-X-Gm-Message-State: AC+VfDzgxC9teywPVV5m44PHiJtYVcc6SOfsrsF9U/wNkKXOq5YmTyUn
-        EUwbNjyoGhTix/Flq/qyWS/EdQ==
-X-Google-Smtp-Source: ACHHUZ7ihrkV19nTxaELivb9kdHmXDY6SEwTwsd6YpSswQGgsHzOKYi3wbTgq24gQqqtjJr6azf+yw==
-X-Received: by 2002:a17:903:1104:b0:1af:d225:9002 with SMTP id n4-20020a170903110400b001afd2259002mr308875plh.14.1686352661470;
-        Fri, 09 Jun 2023 16:17:41 -0700 (PDT)
-Received: from telecaster ([2620:10d:c090:400::5:eb84])
-        by smtp.gmail.com with ESMTPSA id j3-20020a170902da8300b001b045c9ababsm3756196plx.264.2023.06.09.16.17.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 16:17:41 -0700 (PDT)
-Date:   Fri, 9 Jun 2023 16:17:39 -0700
-From:   Omar Sandoval <osandov@osandov.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-debuggers@vger.kernel.org,
-        kernel-team@fb.com
-Subject: Re: [PATCH] x86/unwind/orc: add ELF section with ORC version number
-Message-ID: <ZIOzE4f2xr9CCA45@telecaster>
-References: <5b70bc58ef70aab0a821111cd3201eeced8bab95.1686263379.git.osandov@osandov.com>
- <20230609220430.agw2rtswmjbquzom@treble>
- <ZIOmpuqLTJROYQt8@telecaster>
- <20230609224803.275vqw345utsusah@treble>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230609224803.275vqw345utsusah@treble>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 9 Jun 2023 19:19:54 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B02E2D74;
+        Fri,  9 Jun 2023 16:19:53 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id F38FD320090C;
+        Fri,  9 Jun 2023 19:19:49 -0400 (EDT)
+Received: from imap50 ([10.202.2.100])
+  by compute6.internal (MEProxy); Fri, 09 Jun 2023 19:19:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
+        :content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1686352789; x=1686439189; bh=tM
+        mYHIDjBqJKDccW2yNNVtw4vNAo2LIKf8v53tnNtqU=; b=X4PTZzoH3iGrrVTNtV
+        nhJ/GIyb/+bCPohzNetpXMJTh9hlF4mV9KAhOFyO8FGeH70usdmfmO3tCqSwl1b3
+        GGBTnb806f0IWQAwo4/hSny+AOauDF/LyoBEDS739jKz4qcZMhrFzEljpKmh47Fc
+        36MLiH8Zp2gdWOh9rWcN1lHKDUW2eCJvLyrACIENOeOqlwag1dVJ4qVcmeZm78EX
+        HzEullvXa1bbJKCngw+AIpbRhQjl6FhIM1d5D797ZzaLRW5Jlyv0HmPAnB0hK7qe
+        1Xw5fjIje4NviO5PdDf2DAVwg2a/nk+mi9idfGYPtdkagkwSmbqb2A8gniSAM/vk
+        yEOw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1686352789; x=1686439189; bh=tMmYHIDjBqJKD
+        ccW2yNNVtw4vNAo2LIKf8v53tnNtqU=; b=d8uSvn6R4ktoKCUQpQ/E5FRc/4ifB
+        MIMxNdBNR/sLpTyDEmAxObUxukv2u0qQEWn4eJzw+sL+/K9dOdVp/oHwW2ZTpySI
+        hDRa48/7ms/B+m6DD1Ac+JwYdooFvC5B7HeMj92f1jYjEJSRszAvDO6zEA2yFlaa
+        fcxY8VSH0n/Yrs0AGH4WXmb8w6molmWqhy2dQ3nVEg+lV+FZch6pXmbBz1UgqQDK
+        uQNF5ptIj6qhQ5NfeIE7O26zaD8vrMtoCSuDFmk4KsB85RwKFbtVZMS73dG6P2kt
+        NZWen4Fa0rCT5UmOu67xhH3q4nLKhmyoBicbhMbxpYA7HKXUuYC0xu8hw==
+X-ME-Sender: <xms:lLODZCa8Zf0KsY8GW8HHb1GMOLGhtOA6t6hVWIYWvOk5-iK3Ryp4XA>
+    <xme:lLODZFZcWfoKa8I6c-LhlDikpwHcDXLrQJsFd-Ra3S6sRV4Za8WyrLvnJpI2lcZzb
+    iM995um_XKFBbRaRg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtledgvdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetnhgu
+    rhgvficulfgvfhhfvghrhidfuceorghnughrvgifsegrjhdrihgurdgruheqnecuggftrf
+    grthhtvghrnhephefhfeekgfekudevheffheeihedujeefjeevjeefudfgfeeutdeuvdeh
+    hfevueffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    eprghnughrvgifsegrjhdrihgurdgruh
+X-ME-Proxy: <xmx:lLODZM_sqYsK0L437TC1lo4edRi6Yxzcodj7PHrHsQzkWYwx3kiEUQ>
+    <xmx:lLODZEo60zelKocOz8RXjUV7UFFdA_KkGXeNuy4IWDhaYvOBx40Ong>
+    <xmx:lLODZNoRyq9j5WUBUEsn4oIm_vi_S2P_JLEhKym-fR-lQvEKQhndDQ>
+    <xmx:lbODZBenee8DWDfphkM1MGgGHudjwWCdLBSrvc5ZGOn1m5sJDzijNw>
+Feedback-ID: idfb84289:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 44ECA1700089; Fri,  9 Jun 2023 19:19:48 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
+Mime-Version: 1.0
+Message-Id: <778e2930-1678-45bb-a01e-21bf321fb6d8@betaapp.fastmail.com>
+In-Reply-To: <20230609140729.64799-1-krzysztof.kozlowski@linaro.org>
+References: <20230609140729.64799-1-krzysztof.kozlowski@linaro.org>
+Date:   Sat, 10 Jun 2023 08:49:27 +0930
+From:   "Andrew Jeffery" <andrew@aj.id.au>
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        "Corey Minyard" <minyard@acm.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Conor Dooley" <conor+dt@kernel.org>,
+        "Joel Stanley" <joel@jms.id.au>,
+        openipmi-developer@lists.sourceforge.net,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: ipmi: aspeed,ast2400-kcs-bmc: drop unneeded quotes
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 03:48:03PM -0700, Josh Poimboeuf wrote:
-> On Fri, Jun 09, 2023 at 03:24:38PM -0700, Omar Sandoval wrote:
-> > > Though, instead of
-> > > using an incrementing version, Peter had the idea to hash the struct,
-> > > like:
-> > > 
-> > >   awk '/^struct orc_entry {$/ { p=1 } p { print } /^}/ { p=0 }' arch/x86/include/asm/orc_types.h | sha1sum
-> > > 
-> > > That way we don't have to remember to bump the version number, and it
-> > > would be more resilient to partial backports in distros.
-> > > 
-> > > Would something like that work for you?
-> > 
-> > Any sort of unique identifier works for me. One thing that the proposed
-> > hash wouldn't catch is if ORC_REG_* or ORC_TYPE_* are ever renumbered
-> > (i.e., the meanings of existing values change). It also wouldn't catch
-> > if something about the .orc_unwind_ip section changed. But assuming
-> > changes like that would be much rarer, it could be handled manually by
-> > bumping a "salt" for the hash. E.g., by adding 'BEGIN { print <SALT> }'
-> > to the awk script:
-> > 
-> > awk 'BEGIN { print 1 } /^struct orc_entry {$/ { p=1 } p { print } /^}/ { p=0 }' arch/x86/include/asm/orc_types.h | sha1sum
-> > 
-> > I'll defer to you guys whether it's easier to remember to bump a version
-> > everytime or only in those rare cases.
-> 
-> I think I'd prefer only bumping it in the rare cases, because we're
-> going to end up forgetting either way ;-)
-> 
-> To catch REG/TYPE changes, we could forego awk and just hash the whole
-> file, the only downside being that it might introduce unnecessary
-> changes if we change a comment or something.  But the file changes
-> rarely enough.
-> 
-> Or we could tweak the awk to also print ORC_{REG,TYPE}_* pretty easily.
 
-Printing ORC_{REG,TYPE}_* should cover almost everything, and if there's
-anything not covered, it can be handled manually, so that sounds good to
-me. I'll draft a patch doing that.
 
-Thanks,
-Omar
+On Fri, 9 Jun 2023, at 23:37, Krzysztof Kozlowski wrote:
+> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+> checking for this can be enabled in yamllint.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Acked-by: Andrew Jeffery <andrew@aj.id.au>
+
+> ---
+>  .../devicetree/bindings/ipmi/aspeed,ast2400-kcs-bmc.yaml  | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git 
+> a/Documentation/devicetree/bindings/ipmi/aspeed,ast2400-kcs-bmc.yaml 
+> b/Documentation/devicetree/bindings/ipmi/aspeed,ast2400-kcs-bmc.yaml
+> index 4ff6fabfcb30..129e32c4c774 100644
+> --- a/Documentation/devicetree/bindings/ipmi/aspeed,ast2400-kcs-bmc.yaml
+> +++ b/Documentation/devicetree/bindings/ipmi/aspeed,ast2400-kcs-bmc.yaml
+> @@ -41,7 +41,7 @@ properties:
+>        - description: STR register
+> 
+>    aspeed,lpc-io-reg:
+> -    $ref: '/schemas/types.yaml#/definitions/uint32-array'
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+>      minItems: 1
+>      maxItems: 2
+>      description: |
+> @@ -50,7 +50,7 @@ properties:
+>        status address may be optionally provided.
+> 
+>    aspeed,lpc-interrupts:
+> -    $ref: "/schemas/types.yaml#/definitions/uint32-array"
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+>      minItems: 2
+>      maxItems: 2
+>      description: |
+> @@ -63,12 +63,12 @@ properties:
+> 
+>    kcs_chan:
+>      deprecated: true
+> -    $ref: '/schemas/types.yaml#/definitions/uint32'
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+>      description: The LPC channel number in the controller
+> 
+>    kcs_addr:
+>      deprecated: true
+> -    $ref: '/schemas/types.yaml#/definitions/uint32'
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+>      description: The host CPU IO map address
+> 
+>  required:
+> -- 
+> 2.34.1
