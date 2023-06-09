@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41A6E72933C
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF5472933D
 	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240871AbjFIIcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 04:32:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33156 "EHLO
+        id S240932AbjFIIcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 04:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240899AbjFIIbU (ORCPT
+        with ESMTP id S240914AbjFIIbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 04:31:20 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2EC3A94
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 01:30:46 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-64d44b198baso1184328b3a.0
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 01:30:46 -0700 (PDT)
+        Fri, 9 Jun 2023 04:31:21 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D93803A9F
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 01:30:47 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-651e298be3fso1570316b3a.2
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 01:30:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686299445; x=1688891445;
+        d=chromium.org; s=google; t=1686299447; x=1688891447;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=11zc4FsjjThT9aF4m1qk+2IflC0iJrne6V3Jm40ZBR0=;
-        b=WMoYiK/iXxPeqvuSRQWk/tYTcNjJU80QxtgpGB3hlLcCXiJQnqNF15avOkmQ0GpyLx
-         eKy8+A8sRWAeorUOpjs6DmNg4x6M9M53n99aD7PcmPhHY7VafIuaT+b5NDGJ+TUXiofz
-         eMoLcBQ1o8hK+kMDaGcJauXBShrpPGiPGuHMw=
+        bh=Y20hfxdBlfIy/ItHN/HqfoEN5rlOgkF1Vq6pZHwBBZQ=;
+        b=b1z1ImptZRD1QiXEaYQtBkKMiaM1FzlNwl9m2l0/VOouTX+wm5uYRm2cqqdIywDi3P
+         wzrJ7EddFJviATlgeX9kWgCVwZciNX1ZoNozWzT9lc9gWLb6dNIASTx2pNtphn3V/ple
+         MVgElzNSNJNs36hcTdccf0alSjZNX1fHWvlzI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686299445; x=1688891445;
+        d=1e100.net; s=20221208; t=1686299447; x=1688891447;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=11zc4FsjjThT9aF4m1qk+2IflC0iJrne6V3Jm40ZBR0=;
-        b=YU+OlcynumVcdM2+ELzwa3uxbQi8AdcNh2zRDAUDM5GQ7KAbmVchEY/ahADBBON0pA
-         mmqq72Hz/yVoTTbsPtPu/YH0XRYo51R4s0N2nWLLt6XV3rstlkFwkrAnk8Jo25UROyke
-         Zyo7x3FyIDNYNZhG5PIZG0D0xY2r89bT9NLLRkJGJNJTyaX4zqZpDntkzVqdwcAuUo7R
-         2hNYpKh0uVccmBNI4aN/wVQv9sUeI7n3obYWAZ45eXo6FO+xHkjP3L+7H1ufBeNMWghd
-         UAfGXO/BxecoImRoeiYC85+DCbHg0hrOorZUeS0mZs014Eu/E8j+vMfud5Ajo1wmosIZ
-         xSqA==
-X-Gm-Message-State: AC+VfDxHERhqk2qb4PqGWiXC4GMSgK9+djrwEwHMq48Cd/9Eli+cbhIs
-        6mnU3OqJsJ8LA3J7DMeSjCYO2A==
-X-Google-Smtp-Source: ACHHUZ5xpoOoksvbDS28+5deuwiplC6Vp3HHVXsrSO8dFl4pdVvNkxHNkySvOoAhhlJXej2Ra8nmsg==
-X-Received: by 2002:a05:6a21:6d84:b0:116:fc1b:fa38 with SMTP id wl4-20020a056a216d8400b00116fc1bfa38mr1344531pzb.7.1686299444790;
-        Fri, 09 Jun 2023 01:30:44 -0700 (PDT)
+        bh=Y20hfxdBlfIy/ItHN/HqfoEN5rlOgkF1Vq6pZHwBBZQ=;
+        b=hs/ezg/+nYPuv6bA16DjGvnsFMBwcUaoa26nltkJKlN+2PhXfn6roJwafFJgZnMGEZ
+         hGsvKeh0wPEsjl9mKuRqrK8sgsNhAAOV5qBTKVecRzVoQWJ4CFmvOcE0L0aqIm2o3tcM
+         DLsbtpDTQavcU0pxjU2wNeTA35rG0lKEcm7rdBJD12gW2XkCwvdKe3UN5FHJcgIR50Yn
+         NaGr2H2fGI7OTKS3NVwu7c7by7xWfTzXsuQnVawMW7vJsUuMmQYdlllxW+q9h4MiIdV0
+         1EIJ4Zu7TLkqV3lQ8OYRZgd1zbZuP93guC3Rtwp/3LT8OPaFTp9IrvOhU1rrvNtJoJjz
+         /cvg==
+X-Gm-Message-State: AC+VfDzaHC/2nwD2DT2QWXRUemeXi3XCGnzGeKt4wofF+dWD52jSGd5K
+        PQNN5UBwAa7WEzy6k1K8wEHeEQ==
+X-Google-Smtp-Source: ACHHUZ5Put2IsUN+JeMEl0ftnTU8g4YJZw9JRRCey+z+DaRPLycmDKsBgW74WLrRp8KgF+PhgfXgTg==
+X-Received: by 2002:a05:6a20:1606:b0:10f:708b:bb28 with SMTP id l6-20020a056a20160600b0010f708bbb28mr797120pzj.7.1686299447295;
+        Fri, 09 Jun 2023 01:30:47 -0700 (PDT)
 Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:c2ea:d8e4:1fe8:21f0])
-        by smtp.gmail.com with ESMTPSA id 23-20020aa79157000000b0063b806b111csm2184327pfi.169.2023.06.09.01.30.42
+        by smtp.gmail.com with ESMTPSA id 23-20020aa79157000000b0063b806b111csm2184327pfi.169.2023.06.09.01.30.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 01:30:44 -0700 (PDT)
+        Fri, 09 Jun 2023 01:30:46 -0700 (PDT)
 From:   Chen-Yu Tsai <wenst@chromium.org>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -59,9 +59,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
 Cc:     Chen-Yu Tsai <wenst@chromium.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/9] regulator: mt6358: Drop *_SSHUB regulators
-Date:   Fri,  9 Jun 2023 16:30:01 +0800
-Message-ID: <20230609083009.2822259-5-wenst@chromium.org>
+Subject: [PATCH 5/9] regulator: mt6358: Const-ify mt6358_regulator_info data structures
+Date:   Fri,  9 Jun 2023 16:30:02 +0800
+Message-ID: <20230609083009.2822259-6-wenst@chromium.org>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
 In-Reply-To: <20230609083009.2822259-1-wenst@chromium.org>
 References: <20230609083009.2822259-1-wenst@chromium.org>
@@ -70,96 +70,139 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The *_SSHUB regulators are actually alternate configuration interfaces
-for their non *_SSHUB counterparts. They are not separate regulator
-outputs. These registers are intended for the companion processor to
-use to configure the power rails while the main processor is sleeping.
-They are not intended for the main operating system to use.
+In the MT6358 regulator driver, each regulator is described by a
+|struct regulator_desc| wrapped by a |struct mt6358_regulator_info|.
+The latter was tied to the regulator device using the config's
+driver_data field, which meant that the variables could not be constant.
 
-Since they are not real outputs they shouldn't be modeled separately.
-Remove them. Luckily no device tree actually uses them.
+Since each regulator device has a pointer to its regulator_desc, and
+mt6358_regulator_info wraps that, the driver could use container_of()
+to retrieve it instead.
+
+Switch to using container_of(), drop tha driver_data setting, and
+const-ify all the regulator descriptions.
 
 Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 ---
- drivers/regulator/mt6358-regulator.c       | 14 --------------
- include/linux/regulator/mt6358-regulator.h |  4 ----
- 2 files changed, 18 deletions(-)
+ drivers/regulator/mt6358-regulator.c | 21 +++++++++++----------
+ 1 file changed, 11 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/regulator/mt6358-regulator.c b/drivers/regulator/mt6358-regulator.c
-index faf6b0757019..946a251a8b3a 100644
+index 946a251a8b3a..2851ef53ac63 100644
 --- a/drivers/regulator/mt6358-regulator.c
 +++ b/drivers/regulator/mt6358-regulator.c
-@@ -505,9 +505,6 @@ static struct mt6358_regulator_info mt6358_regulators[] = {
- 	MT6358_BUCK("buck_vcore", VCORE, 500000, 1293750, 6250,
- 		    buck_volt_range1, 0x7f, MT6358_BUCK_VCORE_DBG0, 0x7f,
- 		    MT6358_VCORE_VGPU_ANA_CON0, 1),
--	MT6358_BUCK("buck_vcore_sshub", VCORE_SSHUB, 500000, 1293750, 6250,
--		    buck_volt_range1, 0x7f, MT6358_BUCK_VCORE_SSHUB_ELR0, 0x7f,
--		    MT6358_VCORE_VGPU_ANA_CON0, 1),
- 	MT6358_BUCK("buck_vpa", VPA, 500000, 3650000, 50000,
- 		    buck_volt_range3, 0x3f, MT6358_BUCK_VPA_DBG0, 0x3f,
- 		    MT6358_VPA_ANA_CON0, 3),
-@@ -583,10 +580,6 @@ static struct mt6358_regulator_info mt6358_regulators[] = {
- 	MT6358_LDO1("ldo_vsram_others", VSRAM_OTHERS, 500000, 1293750, 6250,
- 		    buck_volt_range1, MT6358_LDO_VSRAM_OTHERS_DBG0, 0x7f00,
- 		    MT6358_LDO_VSRAM_CON2, 0x7f),
--	MT6358_LDO1("ldo_vsram_others_sshub", VSRAM_OTHERS_SSHUB, 500000,
--		    1293750, 6250, buck_volt_range1,
--		    MT6358_LDO_VSRAM_OTHERS_SSHUB_CON1, 0x7f,
--		    MT6358_LDO_VSRAM_OTHERS_SSHUB_CON1, 0x7f),
- 	MT6358_LDO1("ldo_vsram_gpu", VSRAM_GPU, 500000, 1293750, 6250,
- 		    buck_volt_range1, MT6358_LDO_VSRAM_GPU_DBG0, 0x7f00,
- 		    MT6358_LDO_VSRAM_CON3, 0x7f),
-@@ -603,9 +596,6 @@ static struct mt6358_regulator_info mt6366_regulators[] = {
- 	MT6366_BUCK("buck_vcore", VCORE, 500000, 1293750, 6250,
- 		    buck_volt_range1, 0x7f, MT6358_BUCK_VCORE_DBG0, 0x7f,
- 		    MT6358_VCORE_VGPU_ANA_CON0, 1),
--	MT6366_BUCK("buck_vcore_sshub", VCORE_SSHUB, 500000, 1293750, 6250,
--		    buck_volt_range1, 0x7f, MT6358_BUCK_VCORE_SSHUB_ELR0, 0x7f,
--		    MT6358_VCORE_VGPU_ANA_CON0, 1),
- 	MT6366_BUCK("buck_vpa", VPA, 500000, 3650000, 50000,
- 		    buck_volt_range3, 0x3f, MT6358_BUCK_VPA_DBG0, 0x3f,
- 		    MT6358_VPA_ANA_CON0, 3),
-@@ -670,10 +660,6 @@ static struct mt6358_regulator_info mt6366_regulators[] = {
- 	MT6366_LDO1("ldo_vsram_others", VSRAM_OTHERS, 500000, 1293750, 6250,
- 		    buck_volt_range1, MT6358_LDO_VSRAM_OTHERS_DBG0, 0x7f00,
- 		    MT6358_LDO_VSRAM_CON2, 0x7f),
--	MT6366_LDO1("ldo_vsram_others_sshub", VSRAM_OTHERS_SSHUB, 500000,
--		    1293750, 6250, buck_volt_range1,
--		    MT6358_LDO_VSRAM_OTHERS_SSHUB_CON1, 0x7f,
--		    MT6358_LDO_VSRAM_OTHERS_SSHUB_CON1, 0x7f),
- 	MT6366_LDO1("ldo_vsram_gpu", VSRAM_GPU, 500000, 1293750, 6250,
- 		    buck_volt_range1, MT6358_LDO_VSRAM_GPU_DBG0, 0x7f00,
- 		    MT6358_LDO_VSRAM_CON3, 0x7f),
-diff --git a/include/linux/regulator/mt6358-regulator.h b/include/linux/regulator/mt6358-regulator.h
-index a4307cd9edd6..c71a6a9fce7a 100644
---- a/include/linux/regulator/mt6358-regulator.h
-+++ b/include/linux/regulator/mt6358-regulator.h
-@@ -47,8 +47,6 @@ enum {
- 	MT6358_ID_VLDO28,
- 	MT6358_ID_VAUD28,
- 	MT6358_ID_VSIM2,
--	MT6358_ID_VCORE_SSHUB,
--	MT6358_ID_VSRAM_OTHERS_SSHUB,
- 	MT6358_ID_RG_MAX,
+@@ -34,6 +34,8 @@ struct mt6358_regulator_info {
+ 	u32 modeset_mask;
  };
  
-@@ -88,8 +86,6 @@ enum {
- 	MT6366_ID_VMC,
- 	MT6366_ID_VAUD28,
- 	MT6366_ID_VSIM2,
--	MT6366_ID_VCORE_SSHUB,
--	MT6366_ID_VSRAM_OTHERS_SSHUB,
- 	MT6366_ID_RG_MAX,
++#define to_regulator_info(x) container_of((x), struct mt6358_regulator_info, desc)
++
+ #define MT6358_BUCK(match, vreg, min, max, step,		\
+ 	volt_ranges, vosel_mask, _da_vsel_reg, _da_vsel_mask,	\
+ 	_modeset_reg, _modeset_shift)		\
+@@ -342,9 +344,9 @@ static unsigned int mt6358_map_mode(unsigned int mode)
+ static int mt6358_set_voltage_sel(struct regulator_dev *rdev,
+ 				  unsigned int selector)
+ {
++	const struct mt6358_regulator_info *info = to_regulator_info(rdev->desc);
+ 	int idx, ret;
+ 	const u32 *pvol;
+-	struct mt6358_regulator_info *info = rdev_get_drvdata(rdev);
+ 
+ 	pvol = info->index_table;
+ 
+@@ -358,9 +360,9 @@ static int mt6358_set_voltage_sel(struct regulator_dev *rdev,
+ 
+ static int mt6358_get_voltage_sel(struct regulator_dev *rdev)
+ {
++	const struct mt6358_regulator_info *info = to_regulator_info(rdev->desc);
+ 	int idx, ret;
+ 	u32 selector;
+-	struct mt6358_regulator_info *info = rdev_get_drvdata(rdev);
+ 	const u32 *pvol;
+ 
+ 	ret = regmap_read(rdev->regmap, info->desc.vsel_reg, &selector);
+@@ -384,8 +386,8 @@ static int mt6358_get_voltage_sel(struct regulator_dev *rdev)
+ 
+ static int mt6358_get_buck_voltage_sel(struct regulator_dev *rdev)
+ {
++	const struct mt6358_regulator_info *info = to_regulator_info(rdev->desc);
+ 	int ret, regval;
+-	struct mt6358_regulator_info *info = rdev_get_drvdata(rdev);
+ 
+ 	ret = regmap_read(rdev->regmap, info->da_vsel_reg, &regval);
+ 	if (ret != 0) {
+@@ -402,9 +404,9 @@ static int mt6358_get_buck_voltage_sel(struct regulator_dev *rdev)
+ 
+ static int mt6358_get_status(struct regulator_dev *rdev)
+ {
++	const struct mt6358_regulator_info *info = to_regulator_info(rdev->desc);
+ 	int ret;
+ 	u32 regval;
+-	struct mt6358_regulator_info *info = rdev_get_drvdata(rdev);
+ 
+ 	ret = regmap_read(rdev->regmap, info->status_reg, &regval);
+ 	if (ret != 0) {
+@@ -418,7 +420,7 @@ static int mt6358_get_status(struct regulator_dev *rdev)
+ static int mt6358_regulator_set_mode(struct regulator_dev *rdev,
+ 				     unsigned int mode)
+ {
+-	struct mt6358_regulator_info *info = rdev_get_drvdata(rdev);
++	const struct mt6358_regulator_info *info = to_regulator_info(rdev->desc);
+ 	int val;
+ 
+ 	switch (mode) {
+@@ -443,7 +445,7 @@ static int mt6358_regulator_set_mode(struct regulator_dev *rdev,
+ 
+ static unsigned int mt6358_regulator_get_mode(struct regulator_dev *rdev)
+ {
+-	struct mt6358_regulator_info *info = rdev_get_drvdata(rdev);
++	const struct mt6358_regulator_info *info = to_regulator_info(rdev->desc);
+ 	int ret, regval;
+ 
+ 	ret = regmap_read(rdev->regmap, info->modeset_reg, &regval);
+@@ -498,7 +500,7 @@ static const struct regulator_ops mt6358_volt_fixed_ops = {
  };
  
+ /* The array is indexed by id(MT6358_ID_XXX) */
+-static struct mt6358_regulator_info mt6358_regulators[] = {
++static const struct mt6358_regulator_info mt6358_regulators[] = {
+ 	MT6358_BUCK("buck_vdram1", VDRAM1, 500000, 2087500, 12500,
+ 		    buck_volt_range2, 0x7f, MT6358_BUCK_VDRAM1_DBG0, 0x7f,
+ 		    MT6358_VDRAM1_ANA_CON0, 8),
+@@ -589,7 +591,7 @@ static struct mt6358_regulator_info mt6358_regulators[] = {
+ };
+ 
+ /* The array is indexed by id(MT6366_ID_XXX) */
+-static struct mt6358_regulator_info mt6366_regulators[] = {
++static const struct mt6358_regulator_info mt6366_regulators[] = {
+ 	MT6366_BUCK("buck_vdram1", VDRAM1, 500000, 2087500, 12500,
+ 		    buck_volt_range2, 0x7f, MT6358_BUCK_VDRAM1_DBG0, 0x7f,
+ 		    MT6358_VDRAM1_ANA_CON0, 8),
+@@ -712,7 +714,7 @@ static int mt6358_regulator_probe(struct platform_device *pdev)
+ 	struct mt6397_chip *mt6397 = dev_get_drvdata(pdev->dev.parent);
+ 	struct regulator_config config = {};
+ 	struct regulator_dev *rdev;
+-	struct mt6358_regulator_info *mt6358_info;
++	const struct mt6358_regulator_info *mt6358_info;
+ 	int i, max_regulator, ret;
+ 
+ 	ret = mt6358_sync_vcn33_setting(&pdev->dev);
+@@ -729,7 +731,6 @@ static int mt6358_regulator_probe(struct platform_device *pdev)
+ 
+ 	for (i = 0; i < max_regulator; i++) {
+ 		config.dev = &pdev->dev;
+-		config.driver_data = &mt6358_info[i];
+ 		config.regmap = mt6397->regmap;
+ 
+ 		rdev = devm_regulator_register(&pdev->dev,
 -- 
 2.41.0.162.gfafddb0af9-goog
 
