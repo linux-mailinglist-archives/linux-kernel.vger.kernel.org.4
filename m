@@ -2,204 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5477293EE
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:56:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 370CE7293F3
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240030AbjFIIzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 04:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54456 "EHLO
+        id S240415AbjFII4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 04:56:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241090AbjFIIyP (ORCPT
+        with ESMTP id S241196AbjFIIz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 04:54:15 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E7AD30ED;
-        Fri,  9 Jun 2023 01:53:43 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4012FAB6;
-        Fri,  9 Jun 2023 01:54:28 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.25.215])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 501D23F71E;
-        Fri,  9 Jun 2023 01:53:41 -0700 (PDT)
-Date:   Fri, 9 Jun 2023 09:53:38 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Junhao He <hejunhao3@huawei.com>
-Cc:     will@kernel.org, jonathan.cameron@huawei.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-doc@vger.kernel.org, linuxarm@huawei.com,
-        yangyicong@huawei.com, shenyang39@huawei.com,
-        prime.zeng@hisilicon.com
-Subject: Re: [PATCH v4 1/3] drivers/perf: hisi: Add support for HiSilicon
- H60PA and PAv3 PMU driver
-Message-ID: <ZILokkt17/yCPQQ2@FVFF77S0Q05N>
-References: <20230609075608.36559-1-hejunhao3@huawei.com>
- <20230609075608.36559-2-hejunhao3@huawei.com>
+        Fri, 9 Jun 2023 04:55:56 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5AF7469F;
+        Fri,  9 Jun 2023 01:54:46 -0700 (PDT)
+Received: from loongson.cn (unknown [10.2.5.185])
+        by gateway (Coremail) with SMTP id _____8BxL_DM6IJksvoAAA--.3020S3;
+        Fri, 09 Jun 2023 16:54:36 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.2.5.185])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx+OTK6IJkGGgKAA--.31915S2;
+        Fri, 09 Jun 2023 16:54:35 +0800 (CST)
+From:   Tianrui Zhao <zhaotianrui@loongson.cn>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
+        Xi Ruoyao <xry111@xry111.site>, zhaotianrui@loongson.cn,
+        tangyouling@loongson.cn
+Subject: [PATCH v13 00/30] Add KVM LoongArch support
+Date:   Fri,  9 Jun 2023 16:54:04 +0800
+Message-Id: <20230609085434.2130272-1-zhaotianrui@loongson.cn>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230609075608.36559-2-hejunhao3@huawei.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Bx+OTK6IJkGGgKAA--.31915S2
+X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
+        nUUI43ZEXa7xR_UUUUUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This series adds KVM LoongArch support. Loongson 3A5000 supports hardware
+assisted virtualization. With cpu virtualization, there are separate
+hw-supported user mode and kernel mode in guest mode. With memory
+virtualization, there are two-level hw mmu table for guest mode and host
+mode. Also there is separate hw cpu timer with consant frequency in
+guest mode, so that vm can migrate between hosts with different freq.
+Currently, we are able to boot LoongArch Linux Guests.
 
-This generally looks ok, but I have a few minor comments.
+Few key aspects of KVM LoongArch added by this series are:
+1. Enable kvm hardware function when kvm module is loaded.
+2. Implement VM and vcpu related ioctl interface such as vcpu create,
+   vcpu run etc. GET_ONE_REG/SET_ONE_REG ioctl commands are use to
+   get general registers one by one.
+3. Hardware access about MMU, timer and csr are emulated in kernel.
+4. Hardwares such as mmio and iocsr device are emulated in user space
+   such as APIC, IPI, pci devices etc.
 
-On Fri, Jun 09, 2023 at 03:56:06PM +0800, Junhao He wrote:
-> Compared to the original PA device, H60PA offers higher bandwidth.
-> The H60PA is a new device and we use HID to differentiate them.
-> 
-> The events supported by PAv3 and PAv2 are different. They use the
-> same HID.
+The running environment of LoongArch virt machine:
+1. Cross tools to build kernel and uefi:
+   $ wget https://github.com/loongson/build-tools/releases/download/2022.09.06/loongarch64-clfs-6.3-cross-tools-gcc-glibc.tar.xz
+   tar -vxf loongarch64-clfs-6.3-cross-tools-gcc-glibc.tar.xz  -C /opt
+   export PATH=/opt/cross-tools/bin:$PATH
+   export LD_LIBRARY_PATH=/opt/cross-tools/lib:$LD_LIBRARY_PATH
+   export LD_LIBRARY_PATH=/opt/cross-tools/loongarch64-unknown-linux-gnu/lib/:$LD_LIBRARY_PATH
+2. This series is based on the linux source code:
+   https://github.com/loongson/linux-loongarch-kvm
+   Build command:
+   git checkout kvm-loongarch
+   make ARCH=loongarch CROSS_COMPILE=loongarch64-unknown-linux-gnu- loongson3_defconfig
+   make ARCH=loongarch CROSS_COMPILE=loongarch64-unknown-linux-gnu-
+3. QEMU hypervisor with LoongArch supported:
+   https://github.com/loongson/qemu
+   Build command:
+   git checkout kvm-loongarch
+   ./configure --target-list="loongarch64-softmmu"  --enable-kvm
+   make
+4. Uefi bios of LoongArch virt machine:
+   Link: https://github.com/tianocore/edk2-platforms/tree/master/Platform/Loongson/LoongArchQemuPkg#readme
+5. you can also access the binary files we have already build:
+   https://github.com/yangxiaojuan-loongson/qemu-binary
+The command to boot loongarch virt machine:
+   $ qemu-system-loongarch64 -machine virt -m 4G -cpu la464 \
+   -smp 1 -bios QEMU_EFI.fd -kernel vmlinuz.efi -initrd ramdisk \
+   -serial stdio   -monitor telnet:localhost:4495,server,nowait \
+   -append "root=/dev/ram rdinit=/sbin/init console=ttyS0,115200" \
+   --nographic
 
-That's a bit unfortunate -- doesn't that mean an older kernel that knows about
-v2 will try to probe v3 as v2? Presumably things will go wrong if it pokes the
-MMIO registers?
+Changes for v13:
+1. Remove patch-28 "Implement probe virtualization when cpu init", as the
+virtualization information about FPU,PMP,LSX in guest.options,options_dyn
+is not used and the gcfg reg value can be read in kvm_hardware_enable, so
+remove the previous cpu_probe_lvz function.
+2. Fix vcpu_enable_cap interface, it should return -EINVAL directly, as
+FPU cap is enable by default, and do not support any other caps now.
+3. Simplify the jirl instruction with jr when without return addr,
+simplify case HW0 ... HW7 statment in interrupt.c
+4. Rename host_stack,host_gp in kvm_vcpu_arch to host_sp,host_tp.
+5. Remove 'cpu' parameter in _kvm_check_requests, as 'cpu' is not used,
+and remove 'cpu' parameter in kvm_check_vmid function, as it can get
+cpu number by itself.
 
-I appreciate it may be too late to change that now, but it seems like something
-to consider in future (e.g. any changes not backwards compatible with v3 should
-use a new HID).
+Changes for v12:
+1. Improve the gcsr write/read/xchg interface to avoid the previous
+instruction statment like parse_r and make the code easy understanding,
+they are implemented in asm/insn-def.h and the instructions consistent
+of "opcode" "rj" "rd" "simm14" arguments.
+2. Fix the maintainers list of LoongArch KVM.
 
-> The PMU version register is used in the driver to
-> distinguish different versions.
-> 
-> For each H60PA PMU, except for the overflow interrupt register, other
-> functions of the H60PA PMU are the same as the original PA PMU module.
-> It has 8-programable counters and each counter is free-running.
-> Interrupt is supported to handle counter (64-bits) overflow.
-> 
-> Signed-off-by: Junhao He <hejunhao3@huawei.com>
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Reviewed-by: Yicong Yang <yangyicong@hisilicon.com>
-> ---
->  drivers/perf/hisilicon/hisi_uncore_pa_pmu.c | 142 +++++++++++++++++---
->  drivers/perf/hisilicon/hisi_uncore_pmu.h    |   9 ++
->  2 files changed, 136 insertions(+), 15 deletions(-)
+Changes for v11:
+1. Add maintainers for LoongArch KVM.
 
-> @@ -284,6 +302,15 @@ static int hisi_pa_pmu_init_data(struct platform_device *pdev,
->  
->  	pa_pmu->identifier = readl(pa_pmu->base + PA_PMU_VERSION);
->  
-> +	/* When running on v3 or later, returns the largest version supported */
-> +	if (pa_pmu->identifier >= HISI_PMU_V3)
-> +		pa_pmu->dev_info = &pa_pmu_info[2];
-> +	else if (pa_pmu->identifier == HISI_PMU_V2)
-> +		pa_pmu->dev_info = &pa_pmu_info[1];
-> +
-> +	if (!pa_pmu->dev_info || !pa_pmu->dev_info->name)
-> +		return -EINVAL;
-> +
+Changes for v10:
+1. Fix grammatical problems in LoongArch documentation.
+2. It is not necessary to save or restore the LOONGARCH_CSR_PGD when
+vcpu put and vcpu load, so we remove it.
 
-Why does this use indices '2' and '1'? What happened to '0'?
+Changes for v9:
+1. Apply the new defined interrupt number macros in loongarch.h to kvm,
+such as INT_SWI0, INT_HWI0, INT_TI, INT_IPI, etc. And remove the
+previous unused macros.
+2. Remove unused variables in kvm_vcpu_arch, and reorder the variables
+to make them more standard.
 
-It would be a bit clearer with something like:
+Changes for v8:
+1. Adjust the cpu_data.guest.options structure, add the ases flag into
+it, and remove the previous guest.ases. We do this to keep consistent
+with host cpu_data.options structure.
+2. Remove the "#include <asm/kvm_host.h>" in some files which also
+include the "<linux/kvm_host.h>". As linux/kvm_host.h already include
+the asm/kvm_host.h.
+3. Fix some unstandard spelling and grammar errors in comments, and
+improve a little code format to make it easier and standard.
 
-	enum pmu_dev_info_idx {
-		HISI_PMU_DEV_INFO_V2,
-		HISI_PMU_DEV_INFO_V3,
-		NR_HISI_PMU_DEV_INFO
-	}
+Changes for v7:
+1. Fix the kvm_save/restore_hw_gcsr compiling warnings reported by
+kernel test robot. The report link is:
+https://lore.kernel.org/oe-kbuild-all/202304131526.iXfLaVZc-lkp@intel.com/
+2. Fix loongarch kvm trace related compiling problems.
 
-Then the above can be:
+Changes for v6:
+1. Fix the Documentation/virt/kvm/api.rst compile warning about
+loongarch parts.
 
-	if (pa_pmu->identifier >= HISI_PMU_V3)
-		pa_pmu->dev_info = &pa_pmu_info[PMU_DEV_INFO_V3];
-	else if (pa_pmu->identifier == HISI_PMU_V2)
-		pa_pmu->dev_info = &pa_pmu_info[PMU_DEV_INFO_V2];
-	else
-		return -EINVAL;
-	
-	if (!pa_pmu->dev_info->name)
-		return -EINVAL;
+Changes for v5:
+1. Implement get/set mp_state ioctl interface, and only the
+KVM_MP_STATE_RUNNABLE state is supported now, and other states
+will be completed in the future. The state is also used when vcpu
+run idle instruction, if vcpu state is changed to RUNNABLE, the
+vcpu will have the possibility to be woken up.
+2. Supplement kvm document about loongarch-specific part, such as add
+api introduction for GET/SET_ONE_REG, GET/SET_FPU, GET/SET_MP_STATE,
+etc.
+3. Improve the kvm_switch_to_guest function in switch.S, remove the
+previous tmp,tmp1 arguments and replace it with t0,t1 reg.
 
-... and when you define the dev_info instances:
+Changes for v4:
+1. Add a csr_need_update flag in _vcpu_put, as most csr registers keep
+unchanged during process context switch, so we need not to update it
+every time. We can do this only if the soft csr is different form hardware.
+That is to say all of csrs should update after vcpu enter guest, as for
+set_csr_ioctl, we have written soft csr to keep consistent with hardware.
+2. Improve get/set_csr_ioctl interface, we set SW or HW or INVALID flag
+for all csrs according to it's features when kvm init. In get/set_csr_ioctl,
+if csr is HW, we use gcsrrd/ gcsrwr instruction to access it, else if csr is
+SW, we use software to emulate it, and others return false.
+3. Add set_hw_gcsr function in csr_ops.S, and it is used in set_csr_ioctl.
+We have splited hw gcsr into three parts, so we can calculate the code offset
+by gcsrid and jump here to run the gcsrwr instruction. We use this function to
+make the code easier and avoid to use the previous SET_HW_GCSR(XXX) interface.
+4. Improve kvm mmu functions, such as flush page table and make clean page table
+interface.
 
-> +static const struct hisi_pmu_dev_info hisi_h32pa[] = {
-> +	[1] = {
-> +		.name = "pa",
-> +		.attr_groups = hisi_pa_pmu_v2_attr_groups,
-> +		.private = &hisi_pa_pmu_regs,
-> +	},
-> +	[2] = {
-> +		.name = "pa",
-> +		.attr_groups = hisi_pa_pmu_v3_attr_groups,
-> +		.private = &hisi_pa_pmu_regs,
-> +	},
-> +	{}
-> +};
+Changes for v3:
+1. Remove the vpid array list in kvm_vcpu_arch and use a vpid variable here,
+because a vpid will never be recycled if a vCPU migrates from physical CPU A
+to B and back to A.
+2. Make some constant variables in kvm_context to global such as vpid_mask,
+guest_eentry, enter_guest, etc.
+3. Add some new tracepoints, such as kvm_trace_idle, kvm_trace_cache,
+kvm_trace_gspr, etc.
+4. There are some duplicate codes in kvm_handle_exit and kvm_vcpu_run,
+so we move it to a new function kvm_pre_enter_guest.
+5. Change the RESUME_HOST, RESUME_GUEST value, return 1 for resume guest
+and "<= 0" for resume host.
+6. Fcsr and fpu registers are saved/restored together.
 
-... you could have:
+Changes for v2:
+1. Seprate the original patch-01 and patch-03 into small patches, and the
+patches mainly contain kvm module init, module exit, vcpu create, vcpu run,
+etc.
+2. Remove the original KVM_{GET,SET}_CSRS ioctl in the kvm uapi header,
+and we use the common KVM_{GET,SET}_ONE_REG to access register.
+3. Use BIT(x) to replace the "1 << n_bits" statement.
 
-	static const struct hisi_pmu_dev_info hisi_h32pa[NR_HISI_PMU_DEV_INFO] = {
-		[HISI_PMU_DEV_INFO_V2] = {
-			.name = "pa",
-			.attr_groups = hisi_pa_pmu_v2_attr_groups,
-			.private = &hisi_pa_pmu_regs,
-		},
-		[HISI_PMU_DEV_INFO_V3] = {
-			.name = "pa",
-			.attr_groups = hisi_pa_pmu_v3_attr_groups,
-			.private = &hisi_pa_pmu_regs,
-		},
-	};
+Tianrui Zhao (30):
+  LoongArch: KVM: Add kvm related header files
+  LoongArch: KVM: Implement kvm module related interface
+  LoongArch: KVM: Implement kvm hardware enable, disable interface
+  LoongArch: KVM: Implement VM related functions
+  LoongArch: KVM: Add vcpu related header files
+  LoongArch: KVM: Implement vcpu create and destroy interface
+  LoongArch: KVM: Implement vcpu run interface
+  LoongArch: KVM: Implement vcpu handle exit interface
+  LoongArch: KVM: Implement vcpu get, vcpu set registers
+  LoongArch: KVM: Implement vcpu ENABLE_CAP ioctl interface
+  LoongArch: KVM: Implement fpu related operations for vcpu
+  LoongArch: KVM: Implement vcpu interrupt operations
+  LoongArch: KVM: Implement misc vcpu related interfaces
+  LoongArch: KVM: Implement vcpu load and vcpu put operations
+  LoongArch: KVM: Implement vcpu status description
+  LoongArch: KVM: Implement update VM id function
+  LoongArch: KVM: Implement virtual machine tlb operations
+  LoongArch: KVM: Implement vcpu timer operations
+  LoongArch: KVM: Implement kvm mmu operations
+  LoongArch: KVM: Implement handle csr excption
+  LoongArch: KVM: Implement handle iocsr exception
+  LoongArch: KVM: Implement handle idle exception
+  LoongArch: KVM: Implement handle gspr exception
+  LoongArch: KVM: Implement handle mmio exception
+  LoongArch: KVM: Implement handle fpu exception
+  LoongArch: KVM: Implement kvm exception vector
+  LoongArch: KVM: Implement vcpu world switch
+  LoongArch: KVM: Enable kvm config and add the makefile
+  LoongArch: KVM: Supplement kvm document about LoongArch-specific part
+  LoongArch: KVM: Add maintainers for LoongArch KVM
 
-... which would clearly match up with the probe path, and would ensure the
-arrays are always correctly sized if there's a v4, etc.
+ Documentation/virt/kvm/api.rst             |  71 +-
+ MAINTAINERS                                |  12 +
+ arch/loongarch/Kbuild                      |   1 +
+ arch/loongarch/Kconfig                     |   2 +
+ arch/loongarch/configs/loongson3_defconfig |   2 +
+ arch/loongarch/include/asm/insn-def.h      |  55 ++
+ arch/loongarch/include/asm/inst.h          |  16 +
+ arch/loongarch/include/asm/kvm_csr.h       | 231 ++++++
+ arch/loongarch/include/asm/kvm_host.h      | 253 ++++++
+ arch/loongarch/include/asm/kvm_types.h     |  11 +
+ arch/loongarch/include/asm/kvm_vcpu.h      |  97 +++
+ arch/loongarch/include/asm/loongarch.h     |  20 +-
+ arch/loongarch/include/uapi/asm/kvm.h      | 106 +++
+ arch/loongarch/kernel/asm-offsets.c        |  32 +
+ arch/loongarch/kvm/Kconfig                 |  38 +
+ arch/loongarch/kvm/Makefile                |  22 +
+ arch/loongarch/kvm/csr_ops.S               |  76 ++
+ arch/loongarch/kvm/exit.c                  | 707 +++++++++++++++++
+ arch/loongarch/kvm/interrupt.c             | 113 +++
+ arch/loongarch/kvm/main.c                  | 347 ++++++++
+ arch/loongarch/kvm/mmu.c                   | 725 +++++++++++++++++
+ arch/loongarch/kvm/switch.S                | 301 +++++++
+ arch/loongarch/kvm/timer.c                 | 266 +++++++
+ arch/loongarch/kvm/tlb.c                   |  32 +
+ arch/loongarch/kvm/trace.h                 | 168 ++++
+ arch/loongarch/kvm/vcpu.c                  | 869 +++++++++++++++++++++
+ arch/loongarch/kvm/vm.c                    |  76 ++
+ arch/loongarch/kvm/vmid.c                  |  66 ++
+ include/uapi/linux/kvm.h                   |   9 +
+ 29 files changed, 4710 insertions(+), 14 deletions(-)
+ create mode 100644 arch/loongarch/include/asm/insn-def.h
+ create mode 100644 arch/loongarch/include/asm/kvm_csr.h
+ create mode 100644 arch/loongarch/include/asm/kvm_host.h
+ create mode 100644 arch/loongarch/include/asm/kvm_types.h
+ create mode 100644 arch/loongarch/include/asm/kvm_vcpu.h
+ create mode 100644 arch/loongarch/include/uapi/asm/kvm.h
+ create mode 100644 arch/loongarch/kvm/Kconfig
+ create mode 100644 arch/loongarch/kvm/Makefile
+ create mode 100644 arch/loongarch/kvm/csr_ops.S
+ create mode 100644 arch/loongarch/kvm/exit.c
+ create mode 100644 arch/loongarch/kvm/interrupt.c
+ create mode 100644 arch/loongarch/kvm/main.c
+ create mode 100644 arch/loongarch/kvm/mmu.c
+ create mode 100644 arch/loongarch/kvm/switch.S
+ create mode 100644 arch/loongarch/kvm/timer.c
+ create mode 100644 arch/loongarch/kvm/tlb.c
+ create mode 100644 arch/loongarch/kvm/trace.h
+ create mode 100644 arch/loongarch/kvm/vcpu.c
+ create mode 100644 arch/loongarch/kvm/vm.c
+ create mode 100644 arch/loongarch/kvm/vmid.c
 
-> diff --git a/drivers/perf/hisilicon/hisi_uncore_pmu.h b/drivers/perf/hisilicon/hisi_uncore_pmu.h
-> index 07890a8e96ca..a8d6d6905f3f 100644
-> --- a/drivers/perf/hisilicon/hisi_uncore_pmu.h
-> +++ b/drivers/perf/hisilicon/hisi_uncore_pmu.h
-> @@ -24,6 +24,7 @@
->  #define pr_fmt(fmt)     "hisi_pmu: " fmt
->  
->  #define HISI_PMU_V2		0x30
-> +#define HISI_PMU_V3		0x40
->  #define HISI_MAX_COUNTERS 0x10
->  #define to_hisi_pmu(p)	(container_of(p, struct hisi_pmu, pmu))
->  
-> @@ -62,6 +63,13 @@ struct hisi_uncore_ops {
->  	void (*disable_filter)(struct perf_event *event);
->  };
->  
-> +/* Describes the HISI PMU chip features information */
-> +struct hisi_pmu_dev_info {
-> +	const char *name;
-> +	const struct attribute_group **attr_groups;
-> +	void *private;
-> +};
-> +
->  struct hisi_pmu_hwevents {
->  	struct perf_event *hw_events[HISI_MAX_COUNTERS];
->  	DECLARE_BITMAP(used_mask, HISI_MAX_COUNTERS);
-> @@ -72,6 +80,7 @@ struct hisi_pmu_hwevents {
->  struct hisi_pmu {
->  	struct pmu pmu;
->  	const struct hisi_uncore_ops *ops;
-> +	const struct hisi_pmu_dev_info *dev_info;
->  	struct hisi_pmu_hwevents pmu_events;
->  	/* associated_cpus: All CPUs associated with the PMU */
->  	cpumask_t associated_cpus;
+-- 
+2.39.1
 
-Will other hisi pmu drivers use the hisi_pmu_dev_info field in future?
-
-I ask because otherwise you could make this local to hisi_uncore_pa_pmu.c if
-you structured this as:
-
-struct hisi_pa_pmu {
-	struct hisi_pmu;
-	const char *name;
-	const struct attribute_group **attr_groups;
-	const struct hisi_pa_pmu_int_regs *regs;
-}
-
-... which would give you some additional type-safety.
-
-Thanks,
-Mark
