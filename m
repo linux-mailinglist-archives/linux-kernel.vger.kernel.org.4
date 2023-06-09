@@ -2,143 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 973ED729FC7
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A68B729FD3
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbjFIQNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 12:13:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58860 "EHLO
+        id S241884AbjFIQOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 12:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232446AbjFIQNq (ORCPT
+        with ESMTP id S240564AbjFIQOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 12:13:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC85E2D44;
-        Fri,  9 Jun 2023 09:13:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E214659B1;
-        Fri,  9 Jun 2023 16:13:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D35ECC433EF;
-        Fri,  9 Jun 2023 16:13:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686327224;
-        bh=LhBOPmVWiuPUJIE5GrF/M4tdGkC4quufp7Koq2ZDGQI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Sg7lp6e/IiNPD5JZOY2U2ZfOH3jGxOK/5t1Fco/wfXnTnzJRbdGtIaN0kki2GKVag
-         mYdVFhj91b2lEL9xr/NI8Bk6b7G2j3Pf3YjeSG1KkxytgyJmBCT/DuHNT4HuC38IN3
-         VJ5dIKqZ7IxAXqy63dTCTzwljHXhuej2nJiZhhRmYFJN9k/QpQmZFGlws6i9fBXBBD
-         LPXYdoTJGCxa25JIKc/sZuGaTNssbzn8FPFJeMVWDCPJBU9OLKRBR+RmTTmk91BcVv
-         ICp+DoN7JCyd9LxGtesYVwQxhUDvnN0uNv/3h1CJmaglmet4taUfTfA8b/jNAAT0tj
-         Eo1HhC5I2OExg==
-Date:   Fri, 9 Jun 2023 09:13:40 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>, corbet@lwn.net,
-        will@kernel.org, boqun.feng@gmail.com, mark.rutland@arm.com,
-        catalin.marinas@arm.com, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
-        robin.murphy@arm.com, dwmw2@infradead.org,
-        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-crypto@vger.kernel.org, sfr@canb.auug.org.au,
-        mpe@ellerman.id.au, James.Bottomley@hansenpartnership.com,
-        deller@gmx.de, linux-parisc@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 5/12] percpu: Add {raw,this}_cpu_try_cmpxchg()
-Message-ID: <20230609161340.GA4019185@dev-arch.thelio-3990X>
-References: <20230531132323.587480729@infradead.org>
- <f320f021-88c4-c5c9-0781-c82d0b88f67d@linaro.org>
+        Fri, 9 Jun 2023 12:14:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2128359C
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:13:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686327231;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yjnwFmKQpbvVOv8RhC06l9oJtf9FhCX/e6y5G4jDiGU=;
+        b=IpdvPo1UvYL+9rYGNi/hW+Q7+0UwKFhOWKMyNRcPWJ/6NGmeUlmCDP3FOu0af8qoVU/tvE
+        iaMWIkFksyB6Ifh3Y0XVSp1+/rC7CQHD360jOaCs+XHN+y8CE+VdmrKFGf6D7L1RXDOQ9U
+        zpBN9FEefjVazSO5hFqLJgt3l0EwlBk=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-656-0AJE2yNNPly3LWgN_LAE8Q-1; Fri, 09 Jun 2023 12:13:50 -0400
+X-MC-Unique: 0AJE2yNNPly3LWgN_LAE8Q-1
+Received: by mail-lf1-f72.google.com with SMTP id 2adb3069b0e04-4ecb00906d0so1578746e87.1
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 09:13:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686327228; x=1688919228;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yjnwFmKQpbvVOv8RhC06l9oJtf9FhCX/e6y5G4jDiGU=;
+        b=ICypJMrcP8dffA3VQXms4hur/iaWptRqo2FGdzr4X3kTOeYB61x6wiQ8iZRuOrliea
+         n5cgHVZGKPbvjxYtbYnP9t1pVKHNpQpV1X9zbNNfQFosfFFeWhLzgoLkvPKvDdRif+tK
+         v0H5HDrZ4anRRTJGjMUm5z3TBiBThsLcWsg3evbeNB8xx4sqzQ13IDOzHRII9RiQL3pX
+         kUqxsqmAMz4FmbiyNlYqfPL4W3GoxAl4/nHVfcQl0aCIsKDHnNpcUkrw/+PoUAMujmtR
+         0g+8GjzcwX40i+1iUUnwvv0g4Zz18uAc2AZkzu3scJ7L5yn2R0w3/8ecZrypdQfgZV+A
+         LmUQ==
+X-Gm-Message-State: AC+VfDySyfk6YXKKyzy2RcbhIklcFKFeFKicQaWHiztD35zrjyKeH94j
+        bTHyIFmblmcNPsXwDnRXKV0hqLvPqg7Bf8kL2khzhUAfhhbNE3himY7nUviiEKb2VEDk0Yd/LQD
+        Wma9tfysHagXB2naLH8CevLdi
+X-Received: by 2002:a19:671a:0:b0:4f1:458c:c4c with SMTP id b26-20020a19671a000000b004f1458c0c4cmr1048714lfc.43.1686327228514;
+        Fri, 09 Jun 2023 09:13:48 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6eiDpt4qpPOKsRpIwXVfpY5xuIiaiJRcUaZa3uurpD0Gy5kWNN3IDlSv9xR4c2XOYksnMJ7Q==
+X-Received: by 2002:a19:671a:0:b0:4f1:458c:c4c with SMTP id b26-20020a19671a000000b004f1458c0c4cmr1048698lfc.43.1686327228139;
+        Fri, 09 Jun 2023 09:13:48 -0700 (PDT)
+Received: from debian (2a01cb058918ce00d1f444ced1f78888.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:d1f4:44ce:d1f7:8888])
+        by smtp.gmail.com with ESMTPSA id t11-20020a7bc3cb000000b003f7ed463954sm3107493wmj.25.2023.06.09.09.13.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 09:13:47 -0700 (PDT)
+Date:   Fri, 9 Jun 2023 18:13:45 +0200
+From:   Guillaume Nault <gnault@redhat.com>
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: POSSIBLE BUG: selftests/net/fcnal-test.sh: [FAIL][FIX TESTED] in
+ vrf "bind - ns-B IPv6 LLA" test
+Message-ID: <ZINPuawVp2KKoCjS@debian>
+References: <b6191f90-ffca-dbca-7d06-88a9788def9c@alu.unizg.hr>
+ <ZHeN3bg28pGFFjJN@debian>
+ <a379796a-5cd6-caa7-d11d-5ffa7419b90e@alu.unizg.hr>
+ <ZH84zGEODT97TEXG@debian>
+ <48cfd903-ad2f-7da7-e5a6-a22392dc8650@alu.unizg.hr>
+ <ZH+BhFzvJkWyjBE0@debian>
+ <a3b2891d-d355-dacd-24ec-af9f8aacac57@alu.unizg.hr>
+ <ZIC1r6IHOM5nr9QD@debian>
+ <884d9eb7-0e8e-3e59-cf6d-2c6931da35ee@alu.unizg.hr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f320f021-88c4-c5c9-0781-c82d0b88f67d@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <884d9eb7-0e8e-3e59-cf6d-2c6931da35ee@alu.unizg.hr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Konrad,
-
-On Fri, Jun 09, 2023 at 06:10:38PM +0200, Konrad Dybcio wrote:
-> 
-> 
-> On 31.05.2023 15:08, Peter Zijlstra wrote:
-> > Add the try_cmpxchg() form to the per-cpu ops.
+On Thu, Jun 08, 2023 at 07:37:15AM +0200, Mirsad Goran Todorovac wrote:
+> On 6/7/23 18:51, Guillaume Nault wrote:
+> > On Wed, Jun 07, 2023 at 12:04:52AM +0200, Mirsad Goran Todorovac wrote:
+> > > [...]
+> > > TEST: ping local, VRF bind - ns-A IP                                          [ OK ]
+> > > TEST: ping local, VRF bind - VRF IP                                           [FAIL]
+> > > TEST: ping local, VRF bind - loopback                                         [ OK ]
+> > > TEST: ping local, device bind - ns-A IP                                       [FAIL]
+> > > TEST: ping local, device bind - VRF IP                                        [ OK ]
+> > > [...]
+> > > TEST: ping local, VRF bind - ns-A IP                                          [ OK ]
+> > > TEST: ping local, VRF bind - VRF IP                                           [FAIL]
+> > > TEST: ping local, VRF bind - loopback                                         [ OK ]
+> > > TEST: ping local, device bind - ns-A IP                                       [FAIL]
+> > > TEST: ping local, device bind - VRF IP                                        [ OK ]
+> > > [...]
 > > 
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > ---
-> +CC Nathan, llvm list
+> > I have the same failures here. They don't seem to be recent.
+> > I'll take a look.
 > 
-> Hi all, this patch seems to break booting on Qualcomm ARM64 platforms
-> when compiled with clang (GCC works fine) for some reason..:
+> Certainly. I thought it might be something architecture-specific?
 > 
-> next-20230605 - works
-> next-20230606 - doesn't
-> 
-> grev -m 1 dc4e51fd9846 on next-20230606 - works again
-> b4 shazam <this_msgid> -P 1-4 - still works
-> b4 shazam <this_msgid> -P 5 - breaks
-> 
-> Confirmed on at least Qualcomm QCM2290, SM8250.
-> 
-> Checking the serial console, it hits a BUG_ON:
-> 
-> [    0.000000] ------------[ cut here ]------------
-> [    0.000000] kernel BUG at mm/vmalloc.c:1638!
-> [    0.000000] Internal error: Oops - BUG: 00000000f2000800 [#1] SMP
-> [    0.000000] Modules linked in:
-> [    0.000000] CPU: 0 PID: 0 Comm: swapper/0 Not tainted [snip]
-> [    0.000000] Hardware name: Qualcomm Technologies, Inc. Robotics RB1 (DT)
-> [    0.000000] pstate: 000000c5 (nzcv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [    0.000000] pc : alloc_vmap_area+0xafc/0xb08
-> [    0.000000] lr : alloc_vmap_area+0x9e4/0xb08
-> [    0.000000] sp : ffffa50137f53c20
-> [    0.000000] x29: ffffa50137f53c60 x28: ffffa50137f30c18 x27: 0000000000000000
-> [    0.000000] x26: 0000000000007fff x25: ffff800080000000 x24: 000000000000cfff
-> [    0.000000] x23: ffffffffffff8000 x22: ffffa50137fef970 x21: fffffbfff0000000
-> [    0.000000] x20: ffff022982003208 x19: ffff0229820031f8 x18: ffffa50137f64f70
-> [    0.000000] x17: ffffa50137fef980 x16: ffffa501375e6d08 x15: 0000000000000001
-> [    0.000000] x14: ffffa5013831e1a0 x13: ffffa50137f30c18 x12: 0000000000402dc2
-> [    0.000000] x11: 0000000000000000 x10: ffff022982003018 x9 : ffffa5013831e188
-> [    0.000000] x8 : ffffcb55ff003228 x7 : 0000000000000000 x6 : 0000000000000048
-> [    0.000000] x5 : 0000000000000000 x4 : ffffa50137f53bd0 x3 : ffffa50136490000
-> [    0.000000] x2 : 0000000000000001 x1 : ffffa5013831e190 x0 : ffff022982003208
-> [    0.000000] Call trace:
-> [    0.000000]  alloc_vmap_area+0xafc/0xb08
-> [    0.000000]  __get_vm_area_node+0x108/0x1e8
-> [    0.000000]  __vmalloc_node_range+0x1fc/0x728
-> [    0.000000]  __vmalloc_node+0x5c/0x70
-> [    0.000000]  init_IRQ+0x90/0x11c
-> [    0.000000]  start_kernel+0x1ac/0x3bc
-> [    0.000000]  __primary_switched+0xc4/0xcc
-> [    0.000000] Code: f000e300 91062000 943bd9ba 17ffff8f (d4210000)
-> [    0.000000] ---[ end trace 0000000000000000 ]---
-> [    0.000000] Kernel panic - not syncing: Attempted to kill the idle task!
-> 
-> Compiled with clang 15.0.7 from Arch repos, with
-> make ARCH=arm64 LLVM=1
+> I have reproduced it also on a Lenovo IdeaPad 3 with Ubuntu 22.10,
+> but on Lenovo desktop with AlmaLinux 8.8 (CentOS fork), the result
+> was "888/888 passed".
 
-Thanks a lot for testing with LLVM, submitting this report, and doing a
-bisect. I sent a patch to fix this a couple of days ago and Peter pushed
-it to -tip today, so it should be in the next -next release:
+I've taken a deeper look at these failures. That's actually a problem in
+ping. That's probably why you have different results depending on the
+distribution.
 
-https://git.kernel.org/tip/093d9b240a1fa261ff8aeb7c7cc484dedacfda53
+The problem is that, for some versions, 'ping -I netdev ...' doesn't
+bind the socket to 'netdev' if the IPv4 address to ping is set on that
+same device. The VRF tests depend on this socket binding, so they fail
+when ping refuses to bind. That was fixed upstream with commit
+92ce8ef21393 ("Revert "ping: do not bind to device when destination IP
+is on device"") (https://github.com/iputils/iputils/commit/92ce8ef2139353da3bf55fe2280bd4abd2155c9f).
 
-Cheers,
-Nathan
+Long story short, the tests should pass with the latest upstream ping
+version.
+
+Alternatively, you can modify the commands run by fcnal-test.sh and
+provide the -I option twice: one for setting the device binding and one
+for setting the source IPv4 address. This way ping should accept to
+bind its socket.
+
+Something like (not tested):
+
+-                run_cmd ping -c1 -w1 -I ${VRF} ${a}
++                run_cmd ping -c1 -w1 -I ${VRF} -I ${a} ${a}
+[...]
+-        run_cmd ping -c1 -w1 -I ${NSA_DEV} ${a}
++        run_cmd ping -c1 -w1 -I ${NSA_DEV} -I ${a} ${a}
+
+> However, I have a question:
+> 
+> In the ping + "With VRF" section, the tests with net.ipv4.raw_l3mdev_accept=1
+> are repeated twice, while "No VRF" section has the versions:
+> 
+> SYSCTL: net.ipv4.raw_l3mdev_accept=0
+> 
+> and
+> 
+> SYSCTL: net.ipv4.raw_l3mdev_accept=1
+> 
+> The same happens with the IPv6 ping tests.
+> 
+> In that case, it could be that we have only 2 actual FAIL cases,
+> because the error is reported twice.
+> 
+> Is this intentional?
+
+I don't know why the non-VRF tests are run once with raw_l3mdev_accept=0
+and once with raw_l3mdev_accept=1. Unless I'm missing something, this
+option shouldn't affect non-VRF users. Maybe the objective is to make
+sure that it really doesn't affect them. David certainly knows better.
+
+> Thanks,
+> Mirsad
+> 
+
