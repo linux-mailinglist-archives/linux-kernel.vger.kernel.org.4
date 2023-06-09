@@ -2,565 +2,399 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E035172A18B
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 19:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D687072A192
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 19:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbjFIRo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 13:44:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50612 "EHLO
+        id S229764AbjFIRqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 13:46:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbjFIRo0 (ORCPT
+        with ESMTP id S229506AbjFIRqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 13:44:26 -0400
-Received: from finn.localdomain (finn.gateworks.com [108.161.129.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E0D30ED;
-        Fri,  9 Jun 2023 10:44:19 -0700 (PDT)
-Received: from 068-189-091-139.biz.spectrum.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
-        by finn.localdomain with esmtp (Exim 4.93)
-        (envelope-from <tharvey@gateworks.com>)
-        id 1q7g9h-006CiX-UZ; Fri, 09 Jun 2023 17:44:10 +0000
-From:   Tim Harvey <tharvey@gateworks.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tim Harvey <tharvey@gateworks.com>
-Subject: [PATCH v2 2/2] arm64: dts: freescale: Add imx8mp-venice-gw73xx-2x
-Date:   Fri,  9 Jun 2023 10:44:07 -0700
-Message-Id: <20230609174407.3373396-2-tharvey@gateworks.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230609174407.3373396-1-tharvey@gateworks.com>
-References: <20230609174407.3373396-1-tharvey@gateworks.com>
+        Fri, 9 Jun 2023 13:46:03 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C26C210E;
+        Fri,  9 Jun 2023 10:45:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686332757; x=1717868757;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=cc9iwUij6vM+joAEwGbMl1FB/1ykWvdjLGPUa9gA69c=;
+  b=Zb91PvTtsBlkDPSFr7qQvLs6/oT67rmDH0BWSY9UZBpu1rIbq8CzOxVH
+   iTkvvq3v+9ixB6wfmw/3xSyDgNNWBGhNROh73IASWLvJO8OKixcHOV60b
+   Uqj49LUkGgCzcejXvpaN0F6ve7ZuOH1ToJnBRCxbQslvqmJktZ62g1beI
+   GBkk6j+oGzG6Ev3n8KFXHILEU5csqSBqNAqFYcTAzV49CXuPEqtc8HzKI
+   sXGe1gaD9cjR9DT6/MNSpQdxUIst1AF6vHYBKKtByLDOWqMTIbvOhPagP
+   okv1rfrje9nQV/tYrC1bN5s207HkU2U/0iw0Bj5PS9JPJGFNBq/qqUHvA
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="338011996"
+X-IronPort-AV: E=Sophos;i="6.00,230,1681196400"; 
+   d="scan'208";a="338011996"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 10:45:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="854813845"
+X-IronPort-AV: E=Sophos;i="6.00,230,1681196400"; 
+   d="scan'208";a="854813845"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga001.fm.intel.com with ESMTP; 09 Jun 2023 10:45:12 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 9 Jun 2023 10:45:12 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Fri, 9 Jun 2023 10:45:12 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.40) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Fri, 9 Jun 2023 10:45:11 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bQYiPc2O2/HjfOMjNcx1AYLdNlM1eKTIb0JUXNwLuDMa9iw/DYw16Qr3FMHB4EUJKZMS7ohuOLFiPHAsXsgCKYj9IMjE6Iwl7hFBJn4uXww06mgkMFVF+Vyb4Tzwr3tFXZNBqih437vzAnTNHXPHLUmOJgS3Wpnnqe7t7e9hpNDhAnWOEAOahnkbUi+RvCDF6CBZFUM6y+6qTLdhXAqbIn+TxGOxAf8dcCAnEyf56z0/XHP7TVie5ECy0wNy9pCycwkDcm/BS1WWndwca57ieTDC5HDuRzXLKqXM1JAWSS1oN/BWxaX5ipOBWOTK9W73LHtFlr4xdRHurEUbvtvI/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DUxm/BScPbCIRx86/s8HYMILzfw7KyD6EYojQxOVxgU=;
+ b=LaYP+o7ikz1bDRhEptNAk2cjy4UwL7GjkdZa5cLUZJo77lO78oPv8wi9LVSOZwZBMtM85CGkXm/u0dBSBRqKdOJB/gWWPZV3YCHYUjemuOh3z3KEv0U095/bwBBeesQuFFLEKzFTeP93V3B1jd8yrhdole/wcYG2rmyNKPMDNOxpVbaJKoxu0XLrE5oRPRxMp/6psDQNciyDWEo+wNcj1LalYdYE7YPOVSoV2/+4Bn/tXVjHQPKjffgiZOscl0XM2w/YKeLcUm7dyC1rimKJcGWYMXD4AzHUj8HPd8IGgW6MSq20COZyFIm/TC1Igs5b10Z14SPWLkQ/o8gloMKh4Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CO6PR11MB5603.namprd11.prod.outlook.com (2603:10b6:5:35c::12)
+ by SN7PR11MB7637.namprd11.prod.outlook.com (2603:10b6:806:340::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.24; Fri, 9 Jun
+ 2023 17:45:05 +0000
+Received: from CO6PR11MB5603.namprd11.prod.outlook.com
+ ([fe80::4287:6d31:8c78:de92]) by CO6PR11MB5603.namprd11.prod.outlook.com
+ ([fe80::4287:6d31:8c78:de92%6]) with mapi id 15.20.6455.039; Fri, 9 Jun 2023
+ 17:45:00 +0000
+Message-ID: <8d043ad3-e117-7bc6-d18e-6b7f17bf4de7@intel.com>
+Date:   Fri, 9 Jun 2023 19:44:57 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [RFT][PATCH v1 1/4] ACPI: button: Eliminate the driver notify
+ callback
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
+CC:     LKML <linux-kernel@vger.kernel.org>
+References: <1847933.atdPhlSkOF@kreacher> <2176493.Icojqenx9y@kreacher>
+From:   "Wilczynski, Michal" <michal.wilczynski@intel.com>
+In-Reply-To: <2176493.Icojqenx9y@kreacher>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P123CA0258.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:194::11) To CO6PR11MB5603.namprd11.prod.outlook.com
+ (2603:10b6:5:35c::12)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR11MB5603:EE_|SN7PR11MB7637:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7ad85273-9f09-4139-4f9e-08db69113f61
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: TwOMr3iuJEBlACKdb93Pu7QhQRJoAwJd83LXlPa0J77NOohYWy4sIdf8cqDW4QDW40SlgGbnsQ8UucVPF8F8xpYfXcsM2hz4H2Bw/JjlNR9RgD2zwt8Nn+tk+vB81Eaw46BcKs41YWj2C00zxcBOBuIYiAhZ7WJAsgXh2VyEeBU3oc7THbGU2n0njA3qoWyTik9eEYbn3+fhQw45+le2biE7aT3kNW5k6cbpTMFHnfV4Iaw+usKzxB0/UZB9e9mpL1BvD9RY3HtvtMlsF7feGDRyB1bQOQBKKefy46TZa8pSh6617kQbNBR1ygnP4GmEdEc3lj5qUMO+xgxwI65MxziPvY1ByL+RoH8g3Ych5yTO+76C2jWD+le10g0nQowQsxzHN2355xM1sn42o/XGVQXtOiQM4WMT9+JKSkoqmWMRAU0t3QYz/jQljsfOM45BAAB5XmdRw7l0gqdwnLEcQlaFc9SOApdbHtq5adSydAOK2aF0TEXHV8NUDoteBOLo9TaksLb/eG7O1etND59Soa8N6ME1W7w/8DyfJHVVITVPI1n0xX+Gnf290wq1QpQArj3dVWXBi2FQUSdUeHZDKDDiTfMKpgSm/7b4w0BybOSOz0KReo6epT1g9tagprjfWOGPQQ8+ClVxpl10XoT6PA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR11MB5603.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(396003)(366004)(376002)(346002)(136003)(451199021)(66946007)(4326008)(66476007)(84970400001)(8676002)(8936002)(66556008)(2906002)(86362001)(316002)(41300700001)(110136005)(31696002)(5660300002)(31686004)(38100700002)(6486002)(478600001)(82960400001)(6666004)(53546011)(36756003)(186003)(6512007)(6506007)(26005)(83380400001)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?di9iQ3NtSllzelZReXRJdTNITVNBc0o5TTVrMCtWN0Q5UEdwYVhPeUtYUGp4?=
+ =?utf-8?B?Q1E2ZFVPTGM5ekw1TEp1WGxSRVcwZmUzZU1RT1UvZE00KzJ3Vk9HT2dzS1dB?=
+ =?utf-8?B?aGhXeE1Oa0UzUmdaU0VZakQ4T0gyckcvWWdXWm4ycVZvWFlPWG91LzhDS1FH?=
+ =?utf-8?B?YTNFL1BFdEh5QUh4c3NlQjFucWUyZVFXcUUwYktDMmRDdWZUMHArUS8ybUNI?=
+ =?utf-8?B?amQralRaNnJxUUlzN1o0WFJrR0FoQmZCRHlTZHBOWTNFZldUWnhTeDAyUUp0?=
+ =?utf-8?B?dGprR2RyaXN6QzNCOVJIR3FWa09ydVBZLzl3SVhVWjVkSFpFQmhacktZMjFq?=
+ =?utf-8?B?eDQvYTdzNEpzbllLbEZmdFZNUVEzVnRia3dqbzZ0MVNGL253a3ZqNWtMcXV6?=
+ =?utf-8?B?QXhlYWdFWUc0ZE1WdWR5bldoUzVLc3BnYjFTS0tXTW5jeEFvQzAwSTRZOEVo?=
+ =?utf-8?B?SHBlMVRDdm5Kd0puSTc5RHptSWtuRTVXM3JyM3ZKYTVNak5QbTQ4YTRyaldW?=
+ =?utf-8?B?cU4vSjhuUVQrb2l3L09TeWUwRXd0NUlCNnN6K1lBTW5HVE9yYTlOLzFsaFUr?=
+ =?utf-8?B?YUIzcjhpKzgxUjJ4amVYb2tZdUltTmRoa0oyU3ZxN1VNdjJrT0dwNnhoTVp6?=
+ =?utf-8?B?eGJ1bW9Sc1JkczBHV3JaQWI1UGJaa3E0ajhqUkZDR0JQK0toV2JkSlBDZ3RG?=
+ =?utf-8?B?eDQ2S09BZCtkQ2tjUm9PM3BOMWFMeHFlcGdodVd1NllDeXBmZGIxTndFaDF5?=
+ =?utf-8?B?YmI3T3JsR0FMZmV4VUZ4MFRPcjJqdUQrc1B2TjduTDdBWWNuNmtzSHZkSzZ0?=
+ =?utf-8?B?R3NXZ2RSdVNvZ3F5ZStucnB1cmhHZVVlQml0ZHBPME5CT2pKL0dkbHZKd3ha?=
+ =?utf-8?B?RWNYOEhlcHlERUFWRUNBSUJjeVJZVjBTVmp4MFBvcklvbDdreWV1cFM2UGNL?=
+ =?utf-8?B?ZDE3UFE3Rnlha0E2aGh2Y3Vjd2tFYjI4QVI1MVQrQ0pLRTNTcFR1ay9LS29L?=
+ =?utf-8?B?OFg2RjREL1NTMlowL0dpd0dINGdMRGZJUmc2eVRZZTA0TU9TRDlWakk1dDlK?=
+ =?utf-8?B?SC9BMkRQT1FIYWdSQUhpZ0dWSXlKK2FyckxHSzJicldTWWNpUCtSc25hZy9a?=
+ =?utf-8?B?OGxUdG8xRlkwNitWemVPZWhTeENjZGFVUVFBdU5xU3NjQk1lcUZiSlB1cmhl?=
+ =?utf-8?B?Y2NiRXFoeU5tWmp5L0dxQ05DeThQWlNST0xZb0Zmd29ITFVGUVNmQ0w5OWVy?=
+ =?utf-8?B?SmtIWW1WRUcvUmN0ZHE5NWZWSTNyRi9lbkxRRjkvMHcyNjFmS28rWW5teTFq?=
+ =?utf-8?B?YlEvTlFkWWZyYk8rRzJXMHk4SlltRkFxTEFJOHRBK244dUY2QjlXN2ZuaXJm?=
+ =?utf-8?B?WHNQcy9ERTR5RHptZll4Vno0alhuZFk2WmJEUEhPVEJod0dDVzNicXRXOEZ5?=
+ =?utf-8?B?ZFcvdWkraGxuZGJwRW9nMDl4OXQ0OGcyTXcvVjI5b0hjSkJBUzJ3bitMand6?=
+ =?utf-8?B?MW4xYzdDSkZaTU56YjZYbWtabU4zVmdxYmdwSjgvenJZTGlSTFhreVFQWXhw?=
+ =?utf-8?B?czU2aitUZzZxbE1YVVY5eGRISFVOaVFmT00vUTRNVERjUVd5K3lmVnFoVjNl?=
+ =?utf-8?B?U1NYcFRYOFhjVXluOXNLZ2xJMldIV0oxdmV3eG1oTHdjbi90VWZwMmFISWFC?=
+ =?utf-8?B?d2Viemw2RVdLRjk5U3Bvc09kT3pCd2lhNlJuNUNHU2NZK2x5MGc2SkpiMXA1?=
+ =?utf-8?B?enpVYnlUSHBBK1hpalpJWXA0c0daazRRNEpHQnF0TUFjYXRoREEyV1hyRWRa?=
+ =?utf-8?B?aDZJM1VrOU4xSExERFQ3aDlodnNTaVBMaHVUV09CQUYwTGJZTDZDT3NWNFlz?=
+ =?utf-8?B?THNyUHQwNGhyTU92eW5rejJqN2g1ZC9EQ2NldS9qQkd2d2kwTFB3aEprRGZO?=
+ =?utf-8?B?NzJUZlVOTlRmYzFXRUdNTXNYRmI5aXR5VHFEQU9DbEl3bEJyRVdmZzZVUXpX?=
+ =?utf-8?B?a1ZWRGdKNkQvcFo5SWZ1RzMyWHBQR1h1RmVuTkZ6UWZqem9NcE9vY0hteFc5?=
+ =?utf-8?B?SEM2YTNYaXhIV29rQ1BYVk53bG9DN3RRT21EL29BTjllUVZnSGhOL2MxNHZR?=
+ =?utf-8?B?M0hjZVBpSUxnRkJlMG13SGpwbnl3NG1WNTJWYUJhZVhKYTJSZTVyVWRVaXdQ?=
+ =?utf-8?B?OHc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7ad85273-9f09-4139-4f9e-08db69113f61
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR11MB5603.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 17:45:00.4192
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: A78Fe83NySACqvilTg/xd/yNqGr+CC2gvRoNRzVbF3PT1XHXYdGJnumNYotP6/Be+/hZ68qrSa5NlNiIgIlVzElXjdD14r+jsUIHP9+NNm8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB7637
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Gateworks imx8mp-venice-gw73xx-2x consists of a SOM + baseboard.
 
-The GW702x SOM contains the following:
- - i.MX8M Plus SoC
- - LPDDR4 memory
- - eMMC Boot device
- - Gateworks System Controller (GSC) with integrated EEPROM, button
-   controller, and ADC's
- - PMIC
- - SOM connector providing:
-  - eQoS GbE MII
-  - 1x SPI
-  - 2x I2C
-  - 4x UART
-  - 2x USB 3.0
-  - 1x PCI
-  - 1x SDIO (4-bit 3.3V)
-  - 1x SDIO (4-bit 3.3V/1.8V)
-  - GPIO
 
-The GW73xx Baseboard contains the following:
-  - GPS
-  - microSD
-  - off-board I/O connector with SPI
-  - off-board I/O connector with I2C, and GPIO
-  - off-board I/O connector with MIPI DSI, MIPI CSI, I2C, and GPIO
-  - off-board I/O connector with RS232 and RS485
-  - EERPOM
-  - USB 3.0 HUB
-  - USB 3.0 TypeA socket
-  - USB 2.0 Micro-B OTG socket
-  - Accelerometer
-  - 1x GbE (eQoS)
-  - 1x GbE (PCI)
-  - PCIe clock generator
-  - PCIe switch
-  - 2x full-length miniPCIe socket with PCI and USB2.0
-  - 1x full-length miniPCIe socket with PCI/USB3 (via mux) SIM, and USB2.0
-  - 1x half-length miniPCIe socket with USB2.0 and USB3.0
-  - USB Type-C with USB PD Sink capability and peripheral support
-  - USB Type-C with USB 3.0 host support
-  - on-board 802.11abgnac with Bluetooth 5.2
-  - Wide range DC input supply
+On 6/4/2023 5:19 PM, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> Rework the ACPI button driver to install notify handlers or fixed
+> event handlers for the devices it binds to by itself, reduce the
+> indentation level in its notify handler routine and drop its
+> notify callback.
+>
+> This will allow acpi_device_install_notify_handler() and
+> acpi_device_remove_notify_handler() to be simplified going forward
+> and it will allow the driver to use different notify handlers for the
+> lid and for the power and sleep buttons.
+>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/acpi/button.c |  140 ++++++++++++++++++++++++++++++++++----------------
+>  1 file changed, 96 insertions(+), 44 deletions(-)
+>
+> Index: linux-pm/drivers/acpi/button.c
+> ===================================================================
+> --- linux-pm.orig/drivers/acpi/button.c
+> +++ linux-pm/drivers/acpi/button.c
+> @@ -135,7 +135,6 @@ static const struct dmi_system_id dmi_li
+>  
+>  static int acpi_button_add(struct acpi_device *device);
+>  static void acpi_button_remove(struct acpi_device *device);
+> -static void acpi_button_notify(struct acpi_device *device, u32 event);
+>  
+>  #ifdef CONFIG_PM_SLEEP
+>  static int acpi_button_suspend(struct device *dev);
+> @@ -153,7 +152,6 @@ static struct acpi_driver acpi_button_dr
+>  	.ops = {
+>  		.add = acpi_button_add,
+>  		.remove = acpi_button_remove,
+> -		.notify = acpi_button_notify,
+>  	},
+>  	.drv.pm = &acpi_button_pm,
+>  };
+> @@ -409,45 +407,55 @@ static void acpi_lid_initialize_state(st
+>  	button->lid_state_initialized = true;
+>  }
+>  
+> -static void acpi_button_notify(struct acpi_device *device, u32 event)
+> +static void acpi_button_notify(acpi_handle handle, u32 event, void *data)
+>  {
+> -	struct acpi_button *button = acpi_driver_data(device);
+> +	struct acpi_device *device = data;
+> +	struct acpi_button *button;
+>  	struct input_dev *input;
+> +	int keycode;
+>  
+> -	switch (event) {
+> -	case ACPI_FIXED_HARDWARE_EVENT:
+> -		event = ACPI_BUTTON_NOTIFY_STATUS;
+> -		fallthrough;
+> -	case ACPI_BUTTON_NOTIFY_STATUS:
+> -		input = button->input;
+> -		if (button->type == ACPI_BUTTON_TYPE_LID) {
+> -			if (button->lid_state_initialized)
+> -				acpi_lid_update_state(device, true);
+> -		} else {
+> -			int keycode;
+> -
+> -			acpi_pm_wakeup_event(&device->dev);
+> -			if (button->suspended)
+> -				break;
+> -
+> -			keycode = test_bit(KEY_SLEEP, input->keybit) ?
+> -						KEY_SLEEP : KEY_POWER;
+> -			input_report_key(input, keycode, 1);
+> -			input_sync(input);
+> -			input_report_key(input, keycode, 0);
+> -			input_sync(input);
+> -
+> -			acpi_bus_generate_netlink_event(
+> -					device->pnp.device_class,
+> -					dev_name(&device->dev),
+> -					event, ++button->pushed);
+> -		}
+> -		break;
+> -	default:
+> +	if (event != ACPI_BUTTON_NOTIFY_STATUS) {
+>  		acpi_handle_debug(device->handle, "Unsupported event [0x%x]\n",
+>  				  event);
+> -		break;
+> +		return;
+> +	}
+> +
+> +	button = acpi_driver_data(device);
+> +
+> +	if (button->type == ACPI_BUTTON_TYPE_LID) {
+> +		if (button->lid_state_initialized)
+> +			acpi_lid_update_state(device, true);
+> +
+> +		return;
+>  	}
+> +
+> +	acpi_pm_wakeup_event(&device->dev);
+> +
+> +	if (button->suspended)
+> +		return;
+> +
+> +	input = button->input;
+> +	keycode = test_bit(KEY_SLEEP, input->keybit) ? KEY_SLEEP : KEY_POWER;
+> +
+> +	input_report_key(input, keycode, 1);
+> +	input_sync(input);
+> +	input_report_key(input, keycode, 0);
+> +	input_sync(input);
+> +
+> +	acpi_bus_generate_netlink_event(device->pnp.device_class,
+> +					dev_name(&device->dev),
+> +					event, ++button->pushed);
+> +}
+> +
+> +static void acpi_button_notify_run(void *data)
+> +{
+> +	acpi_button_notify(NULL, ACPI_BUTTON_NOTIFY_STATUS, data);
+> +}
+> +
+> +static u32 acpi_button_event(void *data)
+> +{
+> +	acpi_os_execute(OSL_NOTIFY_HANDLER, acpi_button_notify_run, data);
+> +	return ACPI_INTERRUPT_HANDLED;
+>  }
+>  
+>  #ifdef CONFIG_PM_SLEEP
+> @@ -492,8 +500,9 @@ static int acpi_button_add(struct acpi_d
+>  	struct acpi_button *button;
+>  	struct input_dev *input;
+>  	const char *hid = acpi_device_hid(device);
+> +	acpi_status status;
+>  	char *name, *class;
+> -	int error;
+> +	int error = 0;
+>  
+>  	if (!strcmp(hid, ACPI_BUTTON_HID_LID) &&
+>  	     lid_init_state == ACPI_BUTTON_LID_INIT_DISABLED)
+> @@ -535,12 +544,15 @@ static int acpi_button_add(struct acpi_d
+>  	} else {
+>  		pr_info("Unsupported hid [%s]\n", hid);
+>  		error = -ENODEV;
+...
+> -		goto err_free_input;
+>  	}
+>  
+> -	error = acpi_button_add_fs(device);
+> -	if (error)
+> -		goto err_free_input;
+> +	if (!error)
+> +		error = acpi_button_add_fs(device);
+> +
+> +	if (error) {
+> +		input_free_device(input);
+> +		goto err_free_button;
+> +	}
 
-Signed-off-by: Tim Harvey <tharvey@gateworks.com>
----
-v2:
- - remove invalid uart-has-rtscts from uart3
----
- arch/arm64/boot/dts/freescale/Makefile        |   1 +
- .../dts/freescale/imx8mp-venice-gw73xx-2x.dts |  19 +
- .../dts/freescale/imx8mp-venice-gw73xx.dtsi   | 414 ++++++++++++++++++
- 3 files changed, 434 insertions(+)
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-venice-gw73xx-2x.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-venice-gw73xx.dtsi
+This logic is correct, just a bit weird to read and it's saving just one call to input_free_device().
 
-diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index 841259e01eb7..7d9a0eec1048 100644
---- a/arch/arm64/boot/dts/freescale/Makefile
-+++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -101,6 +101,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-phyboard-pollux-rdk.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mp-tqma8mpql-mba8mpxl.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mp-venice-gw71xx-2x.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mp-venice-gw72xx-2x.dtb
-+dtb-$(CONFIG_ARCH_MXC) += imx8mp-venice-gw73xx-2x.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mp-venice-gw74xx.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mp-venice-gw7905-2x.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mp-verdin-nonwifi-dahlia.dtb
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw73xx-2x.dts b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw73xx-2x.dts
-new file mode 100644
-index 000000000000..000fd15e0c07
---- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw73xx-2x.dts
-@@ -0,0 +1,19 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright 2023 Gateworks Corporation
-+ */
-+
-+/dts-v1/;
-+
-+#include "imx8mp.dtsi"
-+#include "imx8mp-venice-gw702x.dtsi"
-+#include "imx8mp-venice-gw73xx.dtsi"
-+
-+/ {
-+	model = "Gateworks Venice GW73xx-2x i.MX8MP Development Kit";
-+	compatible = "gateworks,imx8mp-gw73xx-2x", "fsl,imx8mp";
-+
-+	chosen {
-+		stdout-path = &uart2;
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw73xx.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw73xx.dtsi
-new file mode 100644
-index 000000000000..1c05398c862c
---- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw73xx.dtsi
-@@ -0,0 +1,414 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright 2023 Gateworks Corporation
-+ */
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/leds/common.h>
-+#include <dt-bindings/phy/phy-imx8-pcie.h>
-+
-+/ {
-+	led-controller {
-+		compatible = "gpio-leds";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_gpio_leds>;
-+
-+		led-0 {
-+			function = LED_FUNCTION_STATUS;
-+			color = <LED_COLOR_ID_GREEN>;
-+			gpios = <&gpio4 1 GPIO_ACTIVE_HIGH>;
-+			default-state = "on";
-+			linux,default-trigger = "heartbeat";
-+		};
-+
-+		led-1 {
-+			function = LED_FUNCTION_STATUS;
-+			color = <LED_COLOR_ID_RED>;
-+			gpios = <&gpio4 5 GPIO_ACTIVE_HIGH>;
-+			default-state = "off";
-+		};
-+	};
-+
-+	pcie0_refclk: pcie0-refclk {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <100000000>;
-+	};
-+
-+	pps {
-+		compatible = "pps-gpio";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_pps>;
-+		gpios = <&gpio4 3 GPIO_ACTIVE_HIGH>;
-+		status = "okay";
-+	};
-+
-+	reg_usb1_vbus: regulator-usb1 {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_reg_usb1_en>;
-+		compatible = "regulator-fixed";
-+		regulator-name = "usb1_vbus";
-+		gpio = <&gpio1 12 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+	};
-+
-+	reg_usb2_vbus: regulator-usb2 {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_reg_usb2_en>;
-+		compatible = "regulator-fixed";
-+		regulator-name = "usb2_vbus";
-+		gpio = <&gpio4 12 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+	};
-+
-+	reg_wifi_en: regulator-wifi-en {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_reg_wl>;
-+		compatible = "regulator-fixed";
-+		regulator-name = "wl";
-+		gpio = <&gpio4 19 GPIO_ACTIVE_HIGH>;
-+		startup-delay-us = <100>;
-+		enable-active-high;
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	reg_usdhc2_vmmc: regulator-usdhc2-vmmc {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_usdhc2_vmmc>;
-+		compatible = "regulator-fixed";
-+		regulator-name = "VDD_3V3_SD";
-+		enable-active-high;
-+		gpio = <&gpio2 19 0>; /* SD2_RESET */
-+		off-on-delay-us = <12000>;
-+		regulator-max-microvolt = <3300000>;
-+		regulator-min-microvolt = <3300000>;
-+		startup-delay-us = <100>;
-+	};
-+};
-+
-+/* off-board header */
-+&ecspi2 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_spi2>;
-+	cs-gpios = <&gpio5 13 GPIO_ACTIVE_LOW>;
-+	status = "okay";
-+};
-+
-+&gpio4 {
-+	gpio-line-names =
-+		"", "", "", "",
-+		"", "", "", "",
-+		"dio1", "", "", "dio0",
-+		"", "", "pci_usb_sel", "",
-+		"", "", "", "",
-+		"", "", "rs485_en", "rs485_term",
-+		"", "", "", "rs485_half",
-+		"pci_wdis#", "", "", "";
-+};
-+
-+&i2c2 {
-+	clock-frequency = <400000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_i2c2>;
-+	status = "okay";
-+
-+	accelerometer@19 {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_accel>;
-+		compatible = "st,lis2de12";
-+		reg = <0x19>;
-+		st,drdy-int-pin = <1>;
-+		interrupt-parent = <&gpio4>;
-+		interrupts = <21 IRQ_TYPE_LEVEL_LOW>;
-+		interrupt-names = "INT1";
-+	};
-+};
-+
-+&pcie_phy {
-+	fsl,refclk-pad-mode = <IMX8_PCIE_REFCLK_PAD_INPUT>;
-+	fsl,clkreq-unsupported;
-+	clocks = <&pcie0_refclk>;
-+	clock-names = "ref";
-+	status = "okay";
-+};
-+
-+&pcie {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_pcie0>;
-+	reset-gpio = <&gpio4 29 GPIO_ACTIVE_LOW>;
-+	status = "okay";
-+};
-+
-+/* GPS */
-+&uart1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_uart1>;
-+	status = "okay";
-+};
-+
-+/* bluetooth HCI */
-+&uart3 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_uart3>, <&pinctrl_bten>;
-+	cts-gpios = <&gpio5 8 GPIO_ACTIVE_LOW>;
-+	rts-gpios = <&gpio5 9 GPIO_ACTIVE_LOW>;
-+	status = "okay";
-+
-+	bluetooth {
-+		compatible = "brcm,bcm4330-bt";
-+		shutdown-gpios = <&gpio4 16 GPIO_ACTIVE_HIGH>;
-+	};
-+};
-+
-+/* RS232 */
-+&uart4 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_uart4>;
-+	status = "okay";
-+};
-+
-+/* USB1 - OTG */
-+&usb3_0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usb1>;
-+	fsl,over-current-active-low;
-+	status = "okay";
-+};
-+
-+&usb3_phy0 {
-+	vbus-supply = <&reg_usb1_vbus>;
-+	status = "okay";
-+};
-+
-+&usb_dwc3_0 {
-+	/* dual role is implemented but not a full featured OTG */
-+	adp-disable;
-+	hnp-disable;
-+	srp-disable;
-+	dr_mode = "otg";
-+	usb-role-switch;
-+	role-switch-default-mode = "peripheral";
-+	status = "okay";
-+
-+	connector {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_usbcon1>;
-+		compatible = "gpio-usb-b-connector", "usb-b-connector";
-+		type = "micro";
-+		label = "otg";
-+		id-gpios = <&gpio3 21 GPIO_ACTIVE_HIGH>;
-+	};
-+};
-+
-+/* USB2 - USB3.0 Hub */
-+&usb3_1 {
-+	fsl,permanently-attached;
-+	fsl,disable-port-power-control;
-+	status = "okay";
-+};
-+
-+&usb3_phy1 {
-+	vbus-supply = <&reg_usb2_vbus>;
-+	status = "okay";
-+};
-+
-+&usb_dwc3_1 {
-+	dr_mode = "host";
-+	status = "okay";
-+};
-+
-+/* SDIO WiFi */
-+&usdhc1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usdhc1>;
-+	bus-width = <4>;
-+	non-removable;
-+	vmmc-supply = <&reg_wifi_en>;
-+	status = "okay";
-+};
-+
-+/* microSD */
-+&usdhc2 {
-+	pinctrl-names = "default", "state_100mhz", "state_200mhz";
-+	pinctrl-0 = <&pinctrl_usdhc2>, <&pinctrl_usdhc2_gpio>;
-+	pinctrl-1 = <&pinctrl_usdhc2_100mhz>, <&pinctrl_usdhc2_gpio>;
-+	pinctrl-2 = <&pinctrl_usdhc2_200mhz>, <&pinctrl_usdhc2_gpio>;
-+	cd-gpios = <&gpio2 12 GPIO_ACTIVE_LOW>;
-+	bus-width = <4>;
-+	vmmc-supply = <&reg_usdhc2_vmmc>;
-+	status = "okay";
-+};
-+
-+&iomuxc {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_hog>;
-+
-+	pinctrl_hog: hoggrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SAI1_RXD6__GPIO4_IO08	0x40000146 /* DIO1 */
-+			MX8MP_IOMUXC_SAI1_TXC__GPIO4_IO11	0x40000146 /* DIO0 */
-+			MX8MP_IOMUXC_SAI1_TXD2__GPIO4_IO14	0x40000106 /* PCIE_USBSEL */
-+			MX8MP_IOMUXC_SAI2_MCLK__GPIO4_IO27	0x40000106 /* RS485_HALF */
-+			MX8MP_IOMUXC_SAI2_RXC__GPIO4_IO22	0x40000106 /* RS485_EN */
-+			MX8MP_IOMUXC_SAI2_RXD0__GPIO4_IO23	0x40000106 /* RS485_TERM */
-+			MX8MP_IOMUXC_SAI3_RXFS__GPIO4_IO28	0x40000106 /* PCIE_WDIS# */
-+		>;
-+	};
-+
-+	pinctrl_accel: accelgrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SAI2_RXFS__GPIO4_IO21	0x150	/* IRQ */
-+		>;
-+	};
-+
-+	pinctrl_bten: btengrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SAI1_TXD4__GPIO4_IO16	0x146
-+		>;
-+	};
-+
-+	pinctrl_gpio_leds: gpioledgrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SAI1_RXC__GPIO4_IO01	0x6	/* LEDG */
-+			MX8MP_IOMUXC_SAI1_RXD3__GPIO4_IO05	0x6	/* LEDR */
-+		>;
-+	};
-+
-+	pinctrl_pcie0: pcie0grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SAI3_RXC__GPIO4_IO29	0x106
-+		>;
-+	};
-+
-+	pinctrl_pps: ppsgrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SAI1_RXD1__GPIO4_IO03	0x146
-+		>;
-+	};
-+
-+	pinctrl_reg_wl: regwlgrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SAI1_TXD7__GPIO4_IO19	0x146
-+		>;
-+	};
-+
-+	pinctrl_reg_usb1_en: regusb1grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_GPIO1_IO12__GPIO1_IO12	0x146 /* USB1_EN */
-+		>;
-+	};
-+
-+	pinctrl_usb1: usb1grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_GPIO1_IO13__USB1_OTG_OC	0x140 /* USB1_FLT# */
-+		>;
-+	};
-+
-+	pinctrl_usbcon1: usbcon1grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SAI5_RXD0__GPIO3_IO21	0x140 /* USB1_ID */
-+		>;
-+	};
-+
-+	pinctrl_reg_usb2_en: regusb2grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SAI1_TXD0__GPIO4_IO12	0x146 /* USBHUB_RST# */
-+		>;
-+	};
-+
-+	pinctrl_spi2: spi2grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_ECSPI2_SCLK__ECSPI2_SCLK	0x140
-+			MX8MP_IOMUXC_ECSPI2_MOSI__ECSPI2_MOSI	0x140
-+			MX8MP_IOMUXC_ECSPI2_MISO__ECSPI2_MISO	0x140
-+			MX8MP_IOMUXC_ECSPI2_SS0__GPIO5_IO13	0x140
-+		>;
-+	};
-+
-+	pinctrl_uart1: uart1grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_UART1_RXD__UART1_DCE_RX	0x140
-+			MX8MP_IOMUXC_UART1_TXD__UART1_DCE_TX	0x140
-+		>;
-+	};
-+
-+	pinctrl_uart3: uart3grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_UART3_RXD__UART3_DCE_RX	0x140
-+			MX8MP_IOMUXC_UART3_TXD__UART3_DCE_TX	0x140
-+			MX8MP_IOMUXC_ECSPI1_MISO__GPIO5_IO08	0x140
-+			MX8MP_IOMUXC_ECSPI1_SS0__GPIO5_IO09	0x140
-+		>;
-+	};
-+
-+	pinctrl_uart4: uart4grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_UART4_RXD__UART4_DCE_RX	0x140
-+			MX8MP_IOMUXC_UART4_TXD__UART4_DCE_TX	0x140
-+		>;
-+	};
-+
-+	pinctrl_usdhc1: usdhc1grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SD1_CLK__USDHC1_CLK	0x190
-+			MX8MP_IOMUXC_SD1_CMD__USDHC1_CMD	0x1d0
-+			MX8MP_IOMUXC_SD1_DATA0__USDHC1_DATA0	0x1d0
-+			MX8MP_IOMUXC_SD1_DATA1__USDHC1_DATA1	0x1d0
-+			MX8MP_IOMUXC_SD1_DATA2__USDHC1_DATA2	0x1d0
-+			MX8MP_IOMUXC_SD1_DATA3__USDHC1_DATA3	0x1d0
-+		>;
-+	};
-+
-+	pinctrl_usdhc2: usdhc2grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SD2_CLK__USDHC2_CLK	0x190
-+			MX8MP_IOMUXC_SD2_CMD__USDHC2_CMD	0x1d0
-+			MX8MP_IOMUXC_SD2_DATA0__USDHC2_DATA0	0x1d0
-+			MX8MP_IOMUXC_SD2_DATA1__USDHC2_DATA1	0x1d0
-+			MX8MP_IOMUXC_SD2_DATA2__USDHC2_DATA2	0x1d0
-+			MX8MP_IOMUXC_SD2_DATA3__USDHC2_DATA3	0x1d0
-+			MX8MP_IOMUXC_GPIO1_IO04__USDHC2_VSELECT	0xc1
-+		>;
-+	};
-+
-+	pinctrl_usdhc2_100mhz: usdhc2-100mhzgrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SD2_CLK__USDHC2_CLK	0x194
-+			MX8MP_IOMUXC_SD2_CMD__USDHC2_CMD	0x1d4
-+			MX8MP_IOMUXC_SD2_DATA0__USDHC2_DATA0	0x1d4
-+			MX8MP_IOMUXC_SD2_DATA1__USDHC2_DATA1	0x1d4
-+			MX8MP_IOMUXC_SD2_DATA2__USDHC2_DATA2	0x1d4
-+			MX8MP_IOMUXC_SD2_DATA3__USDHC2_DATA3	0x1d4
-+			MX8MP_IOMUXC_GPIO1_IO04__USDHC2_VSELECT	0xc1
-+		>;
-+	};
-+
-+	pinctrl_usdhc2_200mhz: usdhc2-200mhzgrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SD2_CLK__USDHC2_CLK	0x196
-+			MX8MP_IOMUXC_SD2_CMD__USDHC2_CMD	0x1d6
-+			MX8MP_IOMUXC_SD2_DATA0__USDHC2_DATA0	0x1d6
-+			MX8MP_IOMUXC_SD2_DATA1__USDHC2_DATA1	0x1d6
-+			MX8MP_IOMUXC_SD2_DATA2__USDHC2_DATA2	0x1d6
-+			MX8MP_IOMUXC_SD2_DATA3__USDHC2_DATA3	0x1d6
-+			MX8MP_IOMUXC_GPIO1_IO04__USDHC2_VSELECT	0xc1
-+		>;
-+	};
-+
-+	pinctrl_usdhc2_vmmc: usdhc2-vmmc-grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SD2_RESET_B__USDHC2_RESET_B	0x1d0
-+		>;
-+	};
-+
-+	pinctrl_usdhc2_gpio: usdhc2gpiogrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SD2_CD_B__GPIO2_IO12		0x1c4
-+		>;
-+	};
-+};
--- 
-2.25.1
+>  
+>  	snprintf(button->phys, sizeof(button->phys), "%s/button/input0", hid);
+>  
+> @@ -568,6 +580,30 @@ static int acpi_button_add(struct acpi_d
+>  	error = input_register_device(input);
+>  	if (error)
+>  		goto err_remove_fs;
+> +
+> +	switch (device->device_type) {
+> +	case ACPI_BUS_TYPE_POWER_BUTTON:
+> +		status = acpi_install_fixed_event_handler(ACPI_EVENT_POWER_BUTTON,
+> +							  acpi_button_event,
+> +							  device);
+> +		break;
+> +	case ACPI_BUS_TYPE_SLEEP_BUTTON:
+> +		status = acpi_install_fixed_event_handler(ACPI_EVENT_SLEEP_BUTTON,
+> +							  acpi_button_event,
+> +							  device);
+> +		break;
+> +	default:
+> +		status = acpi_install_notify_handler(device->handle,
+> +						     ACPI_DEVICE_NOTIFY,
+> +						     acpi_button_notify,
+> +						     device);
+> +		break;
+> +	}
+> +	if (ACPI_FAILURE(status)) {
+> +		error = -ENODEV;
+> +		goto err_input_unregister;
+> +	}
+> +
+>  	if (button->type == ACPI_BUTTON_TYPE_LID) {
+>  		/*
+>  		 * This assumes there's only one lid device, or if there are
+> @@ -580,11 +616,11 @@ static int acpi_button_add(struct acpi_d
+>  	pr_info("%s [%s]\n", name, acpi_device_bid(device));
+>  	return 0;
+>  
+> - err_remove_fs:
+> +err_input_unregister:
+> +	input_unregister_device(input);
+> +err_remove_fs:
+>  	acpi_button_remove_fs(device);
+> - err_free_input:
+> -	input_free_device(input);
+> - err_free_button:
+> +err_free_button:
+>  	kfree(button);
+>  	return error;
+>  }
+> @@ -593,6 +629,22 @@ static void acpi_button_remove(struct ac
+>  {
+>  	struct acpi_button *button = acpi_driver_data(device);
+>  
+> +	switch (device->device_type) {
+> +	case ACPI_BUS_TYPE_POWER_BUTTON:
+> +		acpi_remove_fixed_event_handler(ACPI_EVENT_POWER_BUTTON,
+> +						acpi_button_event);
+> +		break;
+> +	case ACPI_BUS_TYPE_SLEEP_BUTTON:
+> +		acpi_remove_fixed_event_handler(ACPI_EVENT_SLEEP_BUTTON,
+> +						acpi_button_event);
+> +		break;
+> +	default:
+> +		acpi_remove_notify_handler(device->handle, ACPI_DEVICE_NOTIFY,
+> +					   acpi_button_notify);
+> +		break;
+> +	}
+> +	acpi_os_wait_events_complete();
+> +
+>  	acpi_button_remove_fs(device);
+>  	input_unregister_device(button->input);
+>  	kfree(button);
+>
+>
+
+Reviewed-by: Michal Wilczynski <michal.wilczynski@intel.com>
+
 
