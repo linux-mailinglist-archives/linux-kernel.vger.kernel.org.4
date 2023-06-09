@@ -2,184 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C263972A213
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:23:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B38DD72A215
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:24:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbjFISXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 14:23:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38816 "EHLO
+        id S230282AbjFISYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 14:24:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbjFISXC (ORCPT
+        with ESMTP id S229664AbjFISYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 14:23:02 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F6B1730;
-        Fri,  9 Jun 2023 11:23:00 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 359FqxYu003464;
-        Fri, 9 Jun 2023 18:22:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=xZAwHAYdiTHICYvfdxFuK+h4NxTCnlISN12IpXG6Fug=;
- b=UHBqy/E9IkxqoT8OB0UOGj1ZWnAXq+E1h4dxaKEGTuai6hIt1i+BixS6PI9jD+5uJUJK
- nxcmVIQAOnRXjazMiK8aEq8TD71ffYOc5Pv52fKiY3Lo1Sd+nhodUhnHdCoA+WQe8+WM
- nSGpY/zmlqMhhrB2ejEPbJ5DE9nD1dPCROVZ2RACEVksnXTl4Aq4WSPjShZVd0a6ZW0K
- hAoJwnCd/gUhgJTtCojQkyNS5NLywBVpUIMTcCD3fpM7ZTQKZnJT4y4XnSFrWcpfCiPW
- /qIhzeK1WdNve9kqff+ti4DBVzvVHCpDb5zHb+82T7J72ajAEouo+gTEWramFT3ygWNh 4A== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r3w7dsj45-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Jun 2023 18:22:47 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 359IMZRC003104
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 9 Jun 2023 18:22:35 GMT
-Received: from [10.134.65.165] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 9 Jun 2023
- 11:22:35 -0700
-Message-ID: <0416ee79-ac07-aefc-d83b-bc21894312ab@quicinc.com>
-Date:   Fri, 9 Jun 2023 11:22:34 -0700
+        Fri, 9 Jun 2023 14:24:05 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC17935A9;
+        Fri,  9 Jun 2023 11:24:03 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-977d0ee1736so310313766b.0;
+        Fri, 09 Jun 2023 11:24:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686335042; x=1688927042;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=g+A8wixS0zjvyB9FSD1Erdd296FgN5bJlGC3/Xdlkho=;
+        b=jgNDUp5BePly7KqpLWqI5CHYUr1iXuk7PkNIWSIi9i8hk0Lj0f4LLl8feCzvtS2ahP
+         eQ7oGkdmWsAdXXjfmnosYFXZqoXR8c7Pn4eiNjrVouH9nWh7+GFim3wL9vrO/nbK6Cx2
+         Olr1mxHD+6F0HBxkMitvCNEX6YeVWponr+mjPi5cKQ5NvYUzFJTK5TrtewxaG5QxlcAX
+         ENk4X36LeMbtXxHny0HsHHxdfNmjOigp8L/MP+wmydf1VGw3GN63zGZgShBuMLZtTvbW
+         7ivgFxsml90jULinc8Ks+4k7bk53UD/KKU9Duuijr8+i1msMp9ZsFu0SIXoYkagOaHxp
+         xbFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686335042; x=1688927042;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=g+A8wixS0zjvyB9FSD1Erdd296FgN5bJlGC3/Xdlkho=;
+        b=AfCttxPT9ofHeFlk+tROodtQmP8QoTqpB6g3bZK/1jo9kRxJzbrdPAHLBViyskNqme
+         CwtqrIVdK3NB989v2mf5bk341ipKAUd+NeOEs9PCIqTTln1NNPdKOAc/WQAgMnZb07yr
+         mmYqZk85z+LUfcrsgEvkKnCsnY7adJd6IN/kJzcu4FwV7ZiU+aPy7dCJ1M9xUIW2mikW
+         Ht8+b+2ktXmDM5Jo4oFjhucux61qohab0Obxw2Y3nqicGa90wc0pPmwDUeZFyhodpzqr
+         4qZ2QVPy55H7W4wEdmCnY23jYC4LgYsOlmPb212ZeD3qze0g8mBI1jX0vWn/ctgM/9fi
+         CuvA==
+X-Gm-Message-State: AC+VfDyXz02rEloB9Ta366NEd/Jm6YTV6NRy0YWq17D4k5FlPOzTcTqd
+        NKFRRlnKn1O2eqAhQ7q2aG7aIgTEWsf0vVgAnY8=
+X-Google-Smtp-Source: ACHHUZ41grNXcAaSN/FbUbD/K3aeEdP27CBX3nRFj/kMa6Hcz0aQbohBZXCBjHCNLTgPsIBWfvjirkFsOb5wWtHjXr8=
+X-Received: by 2002:a17:906:ef01:b0:94f:395b:df1b with SMTP id
+ f1-20020a170906ef0100b0094f395bdf1bmr2458080ejs.21.1686335042073; Fri, 09 Jun
+ 2023 11:24:02 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v13 22/24] virt: gunyah: Add irqfd interface
-Content-Language: en-US
-To:     Alex Elder <elder@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Jonathan Corbet <corbet@lwn.net>
-CC:     Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Will Deacon <will@kernel.org>, Andy Gross <agross@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230509204801.2824351-1-quic_eberman@quicinc.com>
- <20230509204801.2824351-23-quic_eberman@quicinc.com>
- <1c386f4e-e2dd-eb79-9117-9b19877f2ccc@linaro.org>
-From:   Elliot Berman <quic_eberman@quicinc.com>
-In-Reply-To: <1c386f4e-e2dd-eb79-9117-9b19877f2ccc@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: woGnfPQzRI2anPREFMhlFBTuvfUVFi7P
-X-Proofpoint-ORIG-GUID: woGnfPQzRI2anPREFMhlFBTuvfUVFi7P
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-09_13,2023-06-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- spamscore=0 impostorscore=0 phishscore=0 adultscore=0 mlxlogscore=917
- lowpriorityscore=0 suspectscore=0 clxscore=1015 priorityscore=1501
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306090153
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAEf4Bzb2_THiWkqNRnbN5LsOif6+9=GY7LrtEbQf6o24cihhMQ@mail.gmail.com>
+ <20230609093625.727490-1-zhangmingyi5@huawei.com> <CAKH8qBu0AiB_0SZgU5N8EOmm4=hp5BRe=Yp5PHbyT1ZbRjdeOw@mail.gmail.com>
+In-Reply-To: <CAKH8qBu0AiB_0SZgU5N8EOmm4=hp5BRe=Yp5PHbyT1ZbRjdeOw@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 9 Jun 2023 11:23:50 -0700
+Message-ID: <CAEf4BzZdpL3k5G4kY2t0xPs2YALz45O+MEmY672b409CvfL4NQ@mail.gmail.com>
+Subject: Re: [PATCH] libbpf:fix use empty function pointers in ringbuf_poll
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     zhangmingyi <zhangmingyi5@huawei.com>, andrii@kernel.org,
+        ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, edumazet@google.com, hsinweih@uci.edu,
+        jakub@cloudflare.com, john.fastabend@gmail.com,
+        kongweibin2@huawei.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, liuxin350@huawei.com,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzbot+49f6cef45247ff249498@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com, wuchangye@huawei.com,
+        xiesongyang@huawei.com, yanan@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jun 9, 2023 at 9:55=E2=80=AFAM Stanislav Fomichev <sdf@google.com> =
+wrote:
+>
+> On Fri, Jun 9, 2023 at 2:38=E2=80=AFAM zhangmingyi <zhangmingyi5@huawei.c=
+om> wrote:
+> >
+> > On Fri, Jun 9, 2023 at 1:39 AM Andrii Nakryiko <andrii.nakryiko@gmail.c=
+om> wrote:
+> >
+> > > On Thu, Jun 8, 2023 at 9:27=E2=80=AFAM Stanislav Fomichev <sdf@google=
+.com> wrote:
+> > > >
+> > > > On Thu, Jun 8, 2023 at 6:00=E2=80=AFAM zhangmingyi <zhangmingyi5@hu=
+awei.com> wrote:
+> > > > >
+> > > > > On 06/06,Stanislav Fomichev wrote:
+> > > > >
+> > > > > > On 06/05, Xin Liu wrote:
+> > > > > > > From: zhangmingyi <zhangmingyi5@huawei.com>
+> > > > > >
+> > > > > > > The sample_cb of the ring_buffer__new interface can transfer =
+NULL. However,
+> > > > > > > the system does not check whether sample_cb is NULL during
+> > > > > > > ring_buffer__poll, null pointer is used.
+> > > > >
+> > > > > > What is the point of calling ring_buffer__new with sample_cb =
+=3D=3D NULL?
+> > > > >
+> > > > > Yes, as you said, passing sample_cb in ring_buffer__new to NULL d=
+oesn't
+> > > > > make sense, and few people use it that way, but that doesn't prev=
+ent this
+> > > > > from being a allowed and supported scenario. And when ring_buffer=
+__poll is
+> > > > > called, it leads to a segmentation fault (core dump), which I thi=
+nk needs
+> > > > > to be fixed to ensure the security quality of libbpf.
+> > > >
+> > > > I dunno. I'd argue that passing a NULL to ring_buffer__new is an AP=
+I
+> > > > misuse. Maybe ring_buffer__new should return -EINVAL instead when
+> > > > passed NULL sample_cb? Although, we don't usually have those checks
+> > > > for the majority of the arguments in libbpf...
+> > >
+> > > Right. I'd say we should add a proper doc comment specifying all
+> > > arguments and which ones are optional or not. And make it explicit
+> > > that callback is not optional. If we start checking every possible
+> > > pointer for NULL, libbpf will be littered with NULL checks, I'm not
+> > > sure that's good.
+> >
+> > I agree, we should add a proper doc comment specifying all
+> > arguments and which ones are optional or not.
+> > However, why does the external interface API in libbpf not verify input
+> > parameters or add verification where risky operations may exist?
+> > What's more, i think sample_cb=3DNULL is not strictly a mistake or
+> > prohibited use, and is meaningless.
+>
+> It's not really customary in C to do it? So maybe you can follow up
+> with the update to the doc?
 
+Yep, we do not check every `struct bpf_object *` pointer to be non-NULL.
 
-On 6/5/2023 12:50 PM, Alex Elder wrote:
-> On 5/9/23 3:47 PM, Elliot Berman wrote:
->> Enable support for creating irqfds which can raise an interrupt on a
->> Gunyah virtual machine. irqfds are exposed to userspace as a Gunyah VM
->> function with the name "irqfd". If the VM devicetree is not configured
->> to create a doorbell with the corresponding label, userspace will still
->> be able to assert the eventfd but no interrupt will be raised on the
->> guest.
->>
->> Co-developed-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
->> Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
->> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
-> 
-> I have a minor suggestion.  I think I'd like to look at this
-> again, so:
-> 
-> Acked-by: Alex Elder <elder@linaro.org>
-> 
->> ---
->>   Documentation/virt/gunyah/vm-manager.rst |   2 +-
->>   drivers/virt/gunyah/Kconfig              |   9 ++
->>   drivers/virt/gunyah/Makefile             |   1 +
->>   drivers/virt/gunyah/gunyah_irqfd.c       | 180 +++++++++++++++++++++++
->>   include/uapi/linux/gunyah.h              |  35 +++++
->>   5 files changed, 226 insertions(+), 1 deletion(-)
->>   create mode 100644 drivers/virt/gunyah/gunyah_irqfd.c
->>
-> 
-> . . .
-> 
->> @@ -99,6 +102,38 @@ struct gh_fn_vcpu_arg {
->>       __u32 id;
->>   };
->> +/**
->> + * enum gh_irqfd_flags - flags for use in gh_fn_irqfd_arg
->> + * @GH_IRQFD_FLAGS_LEVEL: make the interrupt operate like a level 
->> triggered
->> + *                        interrupt on guest side. Triggering IRQFD 
->> before
->> + *                        guest handles the interrupt causes 
->> interrupt to
->> + *                        stay asserted.
->> + */
->> +enum gh_irqfd_flags {
->> +    GH_IRQFD_FLAGS_LEVEL        = 1UL << 0,
-> 
->      BIT(0),            /* ? */
-> 
+Having said that, I don't think it's such a big deal to make this
+callback optional by assigning a no-op callback.
 
-The BIT macro isn't a standard C macro and isn't defined by Linux, so it 
-causes compile errors at least for me when I use it in userspace.
+So let's definitely update doc comments to be explicit about one way
+or the other. For the callback, let's just not do it on every record.
+Just once during initialization would be better.
 
->> +};
->> +
->> +/**
->> + * struct gh_fn_irqfd_arg - Arguments to create an irqfd function.
->> + *
->> + * Create this function with &GH_VM_ADD_FUNCTION using type 
->> &GH_FN_IRQFD.
->> + *
->> + * Allows setting an eventfd to directly trigger a guest interrupt.
->> + * irqfd.fd specifies the file descriptor to use as the eventfd.
->> + * irqfd.label corresponds to the doorbell label used in the guest 
->> VM's devicetree.
->> + *
->> + * @fd: an eventfd which when written to will raise a doorbell
->> + * @label: Label of the doorbell created on the guest VM
->> + * @flags: see &enum gh_irqfd_flags
->> + * @padding: padding bytes
->> + */
->> +struct gh_fn_irqfd_arg {
->> +    __u32 fd;
->> +    __u32 label;
->> +    __u32 flags;
->> +    __u32 padding;
->> +};
->> +
->>   /**
->>    * struct gh_fn_desc - Arguments to create a VM function
->>    * @type: Type of the function. See &enum gh_fn_type.
-> 
+>
+> The kindergarten is over, you pass NULL you get SIGSEGV :-D
