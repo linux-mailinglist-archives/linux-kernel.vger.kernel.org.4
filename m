@@ -2,67 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E99547290C0
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:17:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3574B7290C8
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:18:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238359AbjFIHRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 03:17:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37138 "EHLO
+        id S237733AbjFIHSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 03:18:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238363AbjFIHQv (ORCPT
+        with ESMTP id S230292AbjFIHSR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 03:16:51 -0400
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBED33C0C;
-        Fri,  9 Jun 2023 00:16:25 -0700 (PDT)
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-55a35e2a430so955141eaf.0;
-        Fri, 09 Jun 2023 00:16:24 -0700 (PDT)
+        Fri, 9 Jun 2023 03:18:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81C03598
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 00:17:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686295048;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=15kZRnaZwPiIUtkudYdawd69yNtpyzsjo2sikqV4oqc=;
+        b=jEP52qohZQJT2y88ha6pyPF0QfpTiA6ClaCQZDYmgsjMwDtPir+ig5XYKv4Mtmm0Q5GIzq
+        E8fmFT/ribzFQ58phO8V+WHuv0j6GusZv2aLJdctToIloPb0Om9Kmbh0aOuIxDS4aynQHt
+        Fba19R6OaphkUqksXmS+Rp3B7TTrs+g=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-640-HobQ1v5qO8SNOlKXCY0IgQ-1; Fri, 09 Jun 2023 03:17:26 -0400
+X-MC-Unique: HobQ1v5qO8SNOlKXCY0IgQ-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f7e835ce65so7016515e9.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 00:17:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686294983; x=1688886983;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qlEnrejP306tfhpMplsX5giHdTZA+I7y4O+BUMi+2Nw=;
-        b=VsLIa+FZlxfaW8jJvHxPTGu0P/JYnE0mk8da2ZXD3OXnjGHLjJARU1WYN3DGa2kbIX
-         zvO7/Mdekam4de1DfRY8hBsUwLLDRFcz5oQS/ENWPR5DwSLnXNmEnY9dQmeWPWxBLaWf
-         GjWy0WIGoBb4v+YDcVm5cjWJ4UG+TF0R1ynTCDEfwwiuSCca5lmohWnVwQLKzze1egVc
-         B4GdCygzoj+jnjH1boRZDf2Nini/keFXkzhVas6eqIehrNHHjssiwpFztBVik3E5ILM4
-         QueX0ImthS+6/ffbStYwPcYeJjrm7VYHzpWXM27pPaq3YzZsDphIEV6vWkOiyMKYxDIv
-         /SNw==
-X-Gm-Message-State: AC+VfDywfrzNJhrFJLMUXevSqLnCEnX3oLHvVRG/7XWWQhIHbVvfqDHo
-        s3Be8oeNZU7eWERzVb6PZVi/fcRtPBTpO6/u
-X-Google-Smtp-Source: ACHHUZ7SrNSlU2WosgDGI7REMShGdA6SZ0kmck6mCg91omwKNXMJ7aMVd6n1aKUIlqz4pakbhb4MFw==
-X-Received: by 2002:a05:6808:1803:b0:39c:73b1:ac0 with SMTP id bh3-20020a056808180300b0039c73b10ac0mr959697oib.5.1686294982719;
-        Fri, 09 Jun 2023 00:16:22 -0700 (PDT)
-Received: from V92F7Y9K0C.lan ([136.25.84.107])
-        by smtp.gmail.com with ESMTPSA id g3-20020a17090a3c8300b0024e33c69ee5sm2264883pjc.5.2023.06.09.00.16.21
+        d=1e100.net; s=20221208; t=1686295045; x=1688887045;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=15kZRnaZwPiIUtkudYdawd69yNtpyzsjo2sikqV4oqc=;
+        b=TQpGh7aMCCTq/w1AaF0ICRXRw9E6d0oZmHCE+pNdaXVaWtpcwBqn2DIK1Tu5xBj5EY
+         U322aTiVZGIbUStkrLzUjM+qwOhqfhKZTHij44EaxjQt3I55iXrIMe4jk4f3mvX3a1uS
+         3dBpgaWylSY1wwlMLTifCdR0BZADJi5aJ6tZ+CdQI6lib/ZbCIPvnUz2UfZT1TxjHxhP
+         +Elq8ygkM0817cHpi7j7HSFmdYCCmX0YZ2DPYLsBWLoytG7D4M6ypmof03xjs1fMiTds
+         e00Mp6blniqLMCR/MswrfctOge2kNZ9KBjW7yG98Zn/T6BpWn9K/9XL/yaQ7XCae/ePf
+         tZ1Q==
+X-Gm-Message-State: AC+VfDzPpr28q/NaDVAyDrGdFCIU/BYXgILQw1hk1iVDOUvl7gh6Oaur
+        IDovmHQZ6h1r/AXefTGn+RXwkpT6cTqovMzQFxEk/696eXzpp6rmLUgtA4jhwayCfEblEqJ8z0q
+        RW9L9EOuMvH463F5pjhj3k/5b
+X-Received: by 2002:a05:600c:c2:b0:3f7:30c0:c6a with SMTP id u2-20020a05600c00c200b003f730c00c6amr433282wmm.25.1686295045440;
+        Fri, 09 Jun 2023 00:17:25 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7waRKCvgqgJoAjOYyIenyGhdYJn4/2vpRsAbVkjBZW18/rDXsC3rXgUmARtFQATJ5s/wzvLA==
+X-Received: by 2002:a05:600c:c2:b0:3f7:30c0:c6a with SMTP id u2-20020a05600c00c200b003f730c00c6amr433267wmm.25.1686295045075;
+        Fri, 09 Jun 2023 00:17:25 -0700 (PDT)
+Received: from redhat.com ([2.55.4.169])
+        by smtp.gmail.com with ESMTPSA id k15-20020a7bc40f000000b003f7f1b3aff1sm1711774wmi.26.2023.06.09.00.17.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 00:16:22 -0700 (PDT)
-Date:   Fri, 9 Jun 2023 00:16:19 -0700
-From:   Dennis Zhou <dennis@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Dennis Zhou <dennis@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v2] mmc: inline the first mmc_scan() on mmc_start_host()
-Message-ID: <ZILRw9MBGNwH9NsG@V92F7Y9K0C.lan>
-References: <20230329202148.71107-1-dennis@kernel.org>
- <ZCTOMVjW+pnZVGsQ@snowbird>
- <CAPDyKFrcdJuyA9B-JDReacT2z1ircDoY4oTXZQ8AVFk6UEFYsw@mail.gmail.com>
- <ZCclEE6Qw3on7/eO@snowbird>
- <CAPDyKFqc33gUYXpY==jbNrOiba2_xUYLs-bv0RTYYU5d8T0VBA@mail.gmail.com>
- <CAPDyKFos3i60U0g0vJstetvLMyouiTpUP8-Jop_LMB9T-ZNU=w@mail.gmail.com>
- <ZII-vJWGb7F97S_A@V92F7Y9K0C.corp.robot.car>
- <2023060930-uphold-collie-3ec5@gregkh>
+        Fri, 09 Jun 2023 00:17:24 -0700 (PDT)
+Date:   Fri, 9 Jun 2023 03:17:20 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Stefano Garzarella <sgarzare@redhat.com>,
+        Shannon Nelson <shannon.nelson@amd.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+        Tiwei Bie <tiwei.bie@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] vhost-vdpa: filter VIRTIO_F_RING_PACKED feature
+Message-ID: <20230609031610-mutt-send-email-mst@kernel.org>
+References: <20230607054246-mutt-send-email-mst@kernel.org>
+ <CACGkMEuUapKvUYiJiLwtsN+x941jafDKS9tuSkiNrvkrrSmQkg@mail.gmail.com>
+ <20230608020111-mutt-send-email-mst@kernel.org>
+ <CACGkMEt4=3BRVNX38AD+mJU8v3bmqO-CdNj5NkFP-SSvsuy2Hg@mail.gmail.com>
+ <5giudxjp6siucr4l3i4tggrh2dpqiqhhihmdd34w3mq2pm5dlo@mrqpbwckpxai>
+ <CACGkMEtqn1dbrQZn3i-W_7sVikY4sQjwLRC5xAhMnyqkc3jwOw@mail.gmail.com>
+ <lw3nmkdszqo6jjtneyp4kjlmutooozz7xj2fqyxgh4v2ralptc@vkimgnbfafvi>
+ <CACGkMEt1yRV9qOLBqtQQmJA_UoRLCpznT=Gvd5D51Uaz2jakHA@mail.gmail.com>
+ <20230608102259-mutt-send-email-mst@kernel.org>
+ <CACGkMEvirfb8g0ev=b0CjpL5_SPJabqiQKxdwuRNqG2E=N7iGA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <2023060930-uphold-collie-3ec5@gregkh>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACGkMEvirfb8g0ev=b0CjpL5_SPJabqiQKxdwuRNqG2E=N7iGA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,218 +93,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Fri, Jun 09, 2023 at 08:19:51AM +0200, Greg KH wrote:
-> On Thu, Jun 08, 2023 at 01:49:00PM -0700, Dennis Zhou wrote:
-> > On Fri, May 12, 2023 at 01:42:51PM +0200, Ulf Hansson wrote:
-> > > + Linus,
-> > > 
-> > > Hi Dennis,
-> > > 
-> > > On Mon, 3 Apr 2023 at 11:50, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+On Fri, Jun 09, 2023 at 10:16:50AM +0800, Jason Wang wrote:
+> On Thu, Jun 8, 2023 at 10:23 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> >
+> > On Thu, Jun 08, 2023 at 05:29:58PM +0800, Jason Wang wrote:
+> > > On Thu, Jun 8, 2023 at 5:21 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
 > > > >
-> > > > On Fri, 31 Mar 2023 at 20:23, Dennis Zhou <dennis@kernel.org> wrote:
+> > > > On Thu, Jun 08, 2023 at 05:00:00PM +0800, Jason Wang wrote:
+> > > > >On Thu, Jun 8, 2023 at 4:00 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
+> > > > >>
+> > > > >> On Thu, Jun 08, 2023 at 03:46:00PM +0800, Jason Wang wrote:
+> > > > >>
+> > > > >> [...]
+> > > > >>
+> > > > >> >> > > > > I have a question though, what if down the road there
+> > > > >> >> > > > > is a new feature that needs more changes? It will be
+> > > > >> >> > > > > broken too just like PACKED no?
+> > > > >> >> > > > > Shouldn't vdpa have an allowlist of features it knows how
+> > > > >> >> > > > > to support?
+> > > > >> >> > > >
+> > > > >> >> > > > It looks like we had it, but we took it out (by the way, we were
+> > > > >> >> > > > enabling packed even though we didn't support it):
+> > > > >> >> > > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6234f80574d7569444d8718355fa2838e92b158b
+> > > > >> >> > > >
+> > > > >> >> > > > The only problem I see is that for each new feature we have to modify
+> > > > >> >> > > > the kernel.
+> > > > >> >> > > > Could we have new features that don't require handling by vhost-vdpa?
+> > > > >> >> > > >
+> > > > >> >> > > > Thanks,
+> > > > >> >> > > > Stefano
+> > > > >> >> > >
+> > > > >> >> > > Jason what do you say to reverting this?
+> > > > >> >> >
+> > > > >> >> > I may miss something but I don't see any problem with vDPA core.
+> > > > >> >> >
+> > > > >> >> > It's the duty of the parents to advertise the features it has. For example,
+> > > > >> >> >
+> > > > >> >> > 1) If some kernel version that is packed is not supported via
+> > > > >> >> > set_vq_state, parents should not advertise PACKED features in this
+> > > > >> >> > case.
+> > > > >> >> > 2) If the kernel has support packed set_vq_state(), but it's emulated
+> > > > >> >> > cvq doesn't support, parents should not advertise PACKED as well
+> > > > >> >> >
+> > > > >> >> > If a parent violates the above 2, it looks like a bug of the parents.
+> > > > >> >> >
+> > > > >> >> > Thanks
+> > > > >> >>
+> > > > >> >> Yes but what about vhost_vdpa? Talking about that not the core.
+> > > > >> >
+> > > > >> >Not sure it's a good idea to workaround parent bugs via vhost-vDPA.
+> > > > >>
+> > > > >> Sorry, I'm getting lost...
+> > > > >> We were talking about the fact that vhost-vdpa doesn't handle
+> > > > >> SET_VRING_BASE/GET_VRING_BASE ioctls well for packed virtqueue before
+> > > > >> that series [1], no?
+> > > > >>
+> > > > >> The parents seem okay, but maybe I missed a few things.
+> > > > >>
+> > > > >> [1] https://lore.kernel.org/virtualization/20230424225031.18947-1-shannon.nelson@amd.com/
 > > > > >
-> > > > > Hi Ulf,
+> > > > >Yes, more below.
 > > > > >
-> > > > > On Fri, Mar 31, 2023 at 02:43:10PM +0200, Ulf Hansson wrote:
-> > > > > > On Thu, 30 Mar 2023 at 01:48, Dennis Zhou <dennis@kernel.org> wrote:
-> > > > > > >
-> > > > > > > When using dm-verity with a data partition on an emmc device, dm-verity
-> > > > > > > races with the discovery of attached emmc devices. This is because mmc's
-> > > > > > > probing code sets up the host data structure then a work item is
-> > > > > > > scheduled to do discovery afterwards. To prevent this race on init,
-> > > > > > > let's inline the first call to detection, __mm_scan(), and let
-> > > > > > > subsequent detect calls be handled via the workqueue.
-> > > > > >
-> > > > > > In principle, I don't mind the changes in $subject patch, as long as
-> > > > > > it doesn't hurt the overall initialization/boot time. Especially, we
-> > > > > > may have more than one mmc-slot being used, so this needs to be well
-> > > > > > tested.
-> > > > > >
+> > > > >>
+> > > > >> >
+> > > > >> >> Should that not have a whitelist of features
+> > > > >> >> since it interprets ioctls differently depending on this?
+> > > > >> >
+> > > > >> >If there's a bug, it might only matter the following setup:
+> > > > >> >
+> > > > >> >SET_VRING_BASE/GET_VRING_BASE + VDUSE.
+> > > > >> >
+> > > > >> >This seems to be broken since VDUSE was introduced. If we really want
+> > > > >> >to backport something, it could be a fix to filter out PACKED in
+> > > > >> >VDUSE?
+> > > > >>
+> > > > >> mmm it doesn't seem to be a problem in VDUSE, but in vhost-vdpa.
+> > > > >> I think VDUSE works fine with packed virtqueue using virtio-vdpa
+> > > > >> (I haven't tried), so why should we filter PACKED in VDUSE?
 > > > > >
-> > > > > I unfortunately don't have a device with multiple mmcs available. Is
-> > > > > this something you could help me with?
-> > > >
-> > > > Yes, I can help to test. Allow me a few days to see what I can do.
-> > > >
-> > > > Note that, just having one eMMC and one SD card should work too. It
-> > > > doesn't have to be multiple eMMCs.
-> > > >
+> > > > >I don't think we need any filtering since:
 > > > > >
-> > > > > > Although, more importantly, I fail to understand how this is going to
-> > > > > > solve the race condition. Any I/O request to an eMMC or SD requires
-> > > > > > the mmc block device driver to be up and running too, which is getting
-> > > > > > probed from a separate module/driver that's not part of mmc_rescan().
+> > > > >PACKED features has been advertised to userspace via uAPI since
+> > > > >6234f80574d7569444d8718355fa2838e92b158b. Once we relax in uAPI, it
+> > > > >would be very hard to restrict it again. For the userspace that tries
+> > > > >to negotiate PACKED:
 > > > > >
-> > > > > I believe the call chain is something like this:
+> > > > >1) if it doesn't use SET_VRING_BASE/GET_VRING_BASE, everything works well
+> > > > >2) if it uses SET_VRING_BASE/GET_VRING_BASE. it might fail or break silently
 > > > > >
-> > > > > __mmc_rescan()
-> > > > >     mmc_rescan_try_freq()
-> > > > >         mmc_attach_mmc()
-> > > > >             mmc_add_card()
-> > > > >                 device_add()
-> > > > >                     bus_probe_device()
-> > > > >                         mmc_blk_probe()
-> > > > >
-> > > > > The initial calling of this is the host probe. So effectively if there
-> > > > > is a card attached, we're inlining the device_add() call for the card
-> > > > > attached rather than waiting for the workqueue item to kick off.
-> > > > >
-> > > > > dm is a part of late_initcall() while mmc is a module_init(), when built
-> > > > > in becoming a device_initcall(). So this solves a race via the initcall
-> > > > > chain. In the current state, device_initcall() finishes and we move onto
-> > > > > the late_initcall() phase. But now, dm is racing with the workqueue to
-> > > > > init the attached emmc device.
+> > > > >If we backport the fixes to -stable, we may break the application at
+> > > > >least in the case 1).
 > > > >
-> > > > You certainly have a point!
+> > > > Okay, I see now, thanks for the details!
 > > > >
-> > > > This should work when the mmc blk module is built-in. Even if that
-> > > > doesn't solve the entire problem, it should be a step in the right
-> > > > direction.
+> > > > Maybe instead of "break silently", we can return an explicit error for
+> > > > SET_VRING_BASE/GET_VRING_BASE in stable branches.
+> > > > But if there are not many cases, we can leave it like that.
+> > >
+> > > A second thought, if we need to do something for stable. is it better
+> > > if we just backport Shannon's series to stable?
+> > >
 > > > >
-> > > > I will give it some more thinking and run some tests at my side, then
-> > > > I will get back to you again.
-> > > >
-> > > > Kind regards
-> > > > Uffe
-> > > >
-> > > > > >
-> > > > > > >
-> > > > > > > Signed-off-by: Dennis Zhou <dennis@kernel.org>
-> > > > > > > ---
-> > > > > > > Sigh.. fix missing static declaration.
-> > > > > > >
-> > > > > > >  drivers/mmc/core/core.c | 15 +++++++++++----
-> > > > > > >  1 file changed, 11 insertions(+), 4 deletions(-)
-> > > > > > >
-> > > > > > > diff --git a/drivers/mmc/core/core.c b/drivers/mmc/core/core.c
-> > > > > > > index 368f10405e13..fda7ee57dee3 100644
-> > > > > > > --- a/drivers/mmc/core/core.c
-> > > > > > > +++ b/drivers/mmc/core/core.c
-> > > > > > > @@ -2185,10 +2185,8 @@ int mmc_card_alternative_gpt_sector(struct mmc_card *card, sector_t *gpt_sector)
-> > > > > > >  }
-> > > > > > >  EXPORT_SYMBOL(mmc_card_alternative_gpt_sector);
-> > > > > > >
-> > > > > > > -void mmc_rescan(struct work_struct *work)
-> > > > > > > +static void __mmc_rescan(struct mmc_host *host)
-> > > > > > >  {
-> > > > > > > -       struct mmc_host *host =
-> > > > > > > -               container_of(work, struct mmc_host, detect.work);
-> > > > > > >         int i;
-> > > > > > >
-> > > > > > >         if (host->rescan_disable)
-> > > > > > > @@ -2249,6 +2247,14 @@ void mmc_rescan(struct work_struct *work)
-> > > > > > >                 mmc_schedule_delayed_work(&host->detect, HZ);
-> > > > > > >  }
-> > > > > > >
-> > > > > > > +void mmc_rescan(struct work_struct *work)
-> > > > > > > +{
-> > > > > > > +       struct mmc_host *host =
-> > > > > > > +               container_of(work, struct mmc_host, detect.work);
-> > > > > > > +
-> > > > > > > +       __mmc_rescan(host);
-> > > > > > > +}
-> > > > > > > +
-> > > > > > >  void mmc_start_host(struct mmc_host *host)
-> > > > > > >  {
-> > > > > > >         host->f_init = max(min(freqs[0], host->f_max), host->f_min);
-> > > > > > > @@ -2261,7 +2267,8 @@ void mmc_start_host(struct mmc_host *host)
-> > > > > > >         }
-> > > > > > >
-> > > > > > >         mmc_gpiod_request_cd_irq(host);
-> > > > > > > -       _mmc_detect_change(host, 0, false);
-> > > > > > > +       host->detect_change = 1;
-> > > > > > > +       __mmc_rescan(host);
-> > > > > > >  }
-> > > > > > >
-> > > > > > >  void __mmc_stop_host(struct mmc_host *host)
-> > > > > > > --
-> > > > > > > 2.40.0
-> > > > > > >
-> > > 
-> > > My apologies for the long delay. I finally managed to test this.
-> > > 
-> > > I decided to pick an old arm32 based platform. An ST-Ericsson HREF,
-> > > based upon the ux500 SoC. It's quite good to use for these types of
-> > > tests as it has two eMMCs soldered, an embedded SDIO (for WiFi) and an
-> > > SD-card slot. So in total there are 4 devices that get probed.
-> > > 
-> > > The SDIO card isn't detected properly, but always fails in the similar
-> > > way (thus I left it out from the below data). I tested both with and
-> > > without an SD card inserted during boot, to get some more data to
-> > > compare. These are the summary from my tests:
-> > > 
-> > > v6.4-rc1 without SD card:
-> > > ~2.18s - MMC1 (eMMC)
-> > > ~3.33s - MMC3 (eMMC)
-> > > ~5.91s - kernel boot complete
-> > > 
-> > > v6.4-rc1 with an SD card:
-> > > ~2.18s - MMC1 (eMMC)
-> > > ~3.45s - MMC3 (eMMC)
-> > > ~3.57s - MMC2 (SD)
-> > > ~5.76s - kernel boot complete
-> > > 
-> > > v6.4-rc1 + patch without SD card:
-> > > ~2.24s - MMC1 (eMMC)
-> > > ~3.58s - MMC3 (eMMC)
-> > > ~5.96s - kernel boot complete
-> > > 
-> > > v6.4-rc1 + patch with an SD card:
-> > > ~2.24s - MMC1 (eMMC)
-> > > ~3.73s - MMC2 (SD)
-> > > ~3.98s - MMC3 (eMMC)
-> > > ~6.73s - kernel boot complete
-> > > 
-> > > By looking at these results, I was kind of surprised. I was thinking
-> > > that the asynchronous probe should address the parallelism problem.
-> > > Then I discovered that it in fact, hasn't been enabled for the mmci
-> > > driver that is being used for this platform. Huh, I was under the
-> > > assumption that it has been enabled for all mmc hosts by now. :-)
-> > > 
-> > > Okay, so I am going to run another round of tests, with async probe
-> > > enabled for the mmci driver too. I will let you know the results as
-> > > soon as I can.
-> > > 
-> > > Kind regards
-> > > Uffe
-> > 
-> > Hi Uffe,
-> > 
-> > Kindly this has been way too long for review. It's been over 3 months.
-> > What's going on here?
-> > 
-> > I think there's a misunderstanding too. Without this fix, the machine
-> > doesn't even boot. I'm not sure why perf is the blocking question here.
+> > > > I was just concerned about how does the user space understand that it
+> > > > can use SET_VRING_BASE/GET_VRING_BASE for PACKED virtqueues in a given
+> > > > kernel or not.
+> > >
+> > > My understanding is that if packed is advertised, the application
+> > > should assume SET/GET_VRING_BASE work.
+> > >
+> > > Thanks
+> >
+> >
+> > Let me ask you this. This is a bugfix yes?
 > 
-> Well you can not degrade performance of existing machines that work
-> today, right?  That would be a regression and it seems that you are
-> doing that if I read the numbers above correctly.
+> Not sure since it may break existing user space applications which
+> make it hard to be backported to -stable.
+
+Sorry, I was actually referring to 
+    vhost_vdpa: support PACKED when setting-getting vring_base
+and friends.
+
+These are bugfixes yes?  What is the appropriate Fixes tag?
+
+
+> Before the fix, PACKED might work if SET/GET_VRING_BASE is not used.
+> After the fix, PACKED won't work at all.
 > 
-
-I agree that we shouldn't degrade performance of existing machines, but
-this is a timing bug on existing platforms that have a slow enough cpu
-such that emmc doesn't finish probing before dm-verity progresses to
-trying to read off the device. In my opinion it's a bit unfair to trade
-performance in the common case for not supporting all use cases. I'm
-just trying to get my machines to boot without having to carry my own
-patch here.
-
-As a path forward I can add a command line flag as a bool to handle this
-and that should hopefully take care of the regresion aspect to this.
-
-
-> > Greg, is there another tree I can run this through?
+> Thanks
 > 
-> Why would you want to route around a maintainer just to get a patch that
-> would have to be reverted applied?  :)
-> 
+> What is the appropriate Fixes
+> > tag?
+> >
+> > > >
+> > > > Thanks,
+> > > > Stefano
+> > > >
+> >
 
-What's your advice here as I don't feel like I'm getting adequate
-traction with Ulf. I think I've generally been quite patient here
-waiting > 3 months for this patch to be reviewed.
-
-Thanks,
-Dennis
