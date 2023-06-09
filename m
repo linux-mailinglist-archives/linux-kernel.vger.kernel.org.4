@@ -2,151 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC977297DA
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 13:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 688B67297D8
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 13:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239286AbjFILJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 07:09:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54994 "EHLO
+        id S239232AbjFILJN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 9 Jun 2023 07:09:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238911AbjFILJP (ORCPT
+        with ESMTP id S238911AbjFILJA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 07:09:15 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067972115
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 04:09:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686308954; x=1717844954;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wVr1kLbtriASKspXcRj+ZyuEM7xKec0xrsttnTYTUqQ=;
-  b=FE3iSz7Nq2oO9QnSZmnBd23tO0t1iGt7FiYKprpYc/pbQA8nIM09STkD
-   +aOndeEKtRSsptPDlx5fYSSZp0tWseV0Die5gcJ+cXNK9NLicyuAiUTuD
-   T5dWZ9roNryC2eeaEZWh5xp9M5PYyZwfAYZK5RGzg5DwfrFVC/VhVDSZ/
-   +QXJpsSDdFoMFwyF25BYJkhjwG5YfjCQaJy5SvnlScdk3qcxOoJMPHUIC
-   y8yrMJb+KrsrmFe4op1nZ/1a/urKeUD4i8E6taH9qNOH5YiclfQWly9we
-   fxOnesldzsplA7X9vuoYmnwhVwVxYILb3FJQ7E9sv2buLtOk+9AEMWMbJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="443942914"
-X-IronPort-AV: E=Sophos;i="6.00,229,1681196400"; 
-   d="scan'208";a="443942914"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 04:09:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="713477018"
-X-IronPort-AV: E=Sophos;i="6.00,229,1681196400"; 
-   d="scan'208";a="713477018"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 09 Jun 2023 04:09:07 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q7ZzP-0008x1-0f;
-        Fri, 09 Jun 2023 11:09:07 +0000
-Date:   Fri, 9 Jun 2023 19:08:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
-Subject: ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol
- '.L.str'; recompile with -fPIC
-Message-ID: <202306091810.x8zmn8Qv-lkp@intel.com>
+        Fri, 9 Jun 2023 07:09:00 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103102113;
+        Fri,  9 Jun 2023 04:08:56 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QcyvV56M1z6GDPW;
+        Fri,  9 Jun 2023 19:06:46 +0800 (CST)
+Received: from localhost (10.126.170.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 9 Jun
+ 2023 12:08:53 +0100
+Date:   Fri, 9 Jun 2023 12:08:52 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     "Verma, Vishal L" <vishal.l.verma@intel.com>
+CC:     "Jiang, Dave" <dave.jiang@intel.com>,
+        "Schofield, Alison" <alison.schofield@intel.com>,
+        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "Weight, Russell H" <russell.h.weight@intel.com>,
+        "bwidawsk@kernel.org" <bwidawsk@kernel.org>,
+        "Weiny, Ira" <ira.weiny@intel.com>,
+        "dave@stgolabs.net" <dave@stgolabs.net>
+Subject: Re: [PATCH v2 1/4] cxl: add a firmware update mechanism using the
+ sysfs firmware loader
+Message-ID: <20230609120852.00003c6c@Huawei.com>
+In-Reply-To: <298ed811de7148da70609ac2c6ef81f025690620.camel@intel.com>
+References: <20230602-vv-fw_update-v2-0-e9e5cd5adb44@intel.com>
+        <20230602-vv-fw_update-v2-1-e9e5cd5adb44@intel.com>
+        <20230608154905.00007551@Huawei.com>
+        <6666972e336a6749f24ce3aab7dddad63a796974.camel@intel.com>
+        <298ed811de7148da70609ac2c6ef81f025690620.camel@intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [10.126.170.42]
+X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   33f2b5785a2b6b0ed1948aafee60d3abb12f1e3a
-commit: 8dc2a7e8027fbeca0c7df81d4c82e735a59b5741 riscv: Fix relocatable kernels with early alternatives using -fno-pie
-date:   9 days ago
-config: riscv-randconfig-r001-20230609 (https://download.01.org/0day-ci/archive/20230609/202306091810.x8zmn8Qv-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8dc2a7e8027fbeca0c7df81d4c82e735a59b5741
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 8dc2a7e8027fbeca0c7df81d4c82e735a59b5741
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+On Thu, 8 Jun 2023 20:26:43 +0000
+"Verma, Vishal L" <vishal.l.verma@intel.com> wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306091810.x8zmn8Qv-lkp@intel.com/
+> On Thu, 2023-06-08 at 20:15 +0000, Verma, Vishal L wrote:
+> >   
+> > > > +
+> > > > +       fwl = firmware_upload_register(THIS_MODULE, &cxlmd->dev,
+> > > > +                                      dev_name(&cxlmd->dev),
+> > > > +                                      &cxl_memdev_fw_ops, cxlds);
+> > > > +       if (IS_ERR(fwl)) {
+> > > > +               dev_err(&cxlmd->dev, "Failed to register firmware loader\n");
+> > > > +               return PTR_ERR(fwl);  
+> > > 
+> > > It's called from probe only so could use dev_err_probe() for slight
+> > > simplification.  
+> > 
+> > From what I can tell, this ends up looking like:
+> > 
+> >         fwl = firmware_upload_register(THIS_MODULE, dev, dev_name(dev),
+> >                                        &cxl_memdev_fw_ops, cxlds);
+> >         rc = dev_err_probe(dev, PTR_ERR(fwl),
+> >                            "Failed to register firmware loader\n");
+> >         if (rc)
+> >                 return rc;
+> > 
+> > Is that what you meant? Happy to make the change if so.
+> > 
+> >   
+> Actually I can't drop the IS_ERR() check - so unless I'm missing
+> something, this doesn't look like much of a simplification:
+> 
+> 
+> 	if (IS_ERR(fwl)) {
+> 		rc = dev_err_probe(dev, PTR_ERR(fwl),
+> 				   "Failed to register firmware loader\n");
+> 		if (rc)
+> 			return rc;
+> 	}
+> 
 
-All errors (new ones prefixed by >>):
+Ah. I replied to previous. It's simpler than that as you know rc != 0 as
+it's IS_ERR(fwl)
 
->> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol '.L.str'; recompile with -fPIC
-   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
-   >>> referenced by errata.c:0 (arch/riscv/errata/sifive/errata.c:0)
-   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
---
->> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symbol '.L.str'; recompile with -fPIC
-   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
-   >>> referenced by errata.c:0 (arch/riscv/errata/sifive/errata.c:0)
-   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
---
->> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol '.L__unnamed_4'; recompile with -fPIC
-   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
-   >>> referenced by errata.c:66 (arch/riscv/errata/sifive/errata.c:66)
-   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
---
->> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symbol '.L__unnamed_4'; recompile with -fPIC
-   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
-   >>> referenced by errata.c:66 (arch/riscv/errata/sifive/errata.c:66)
-   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
---
->> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol '.L__unnamed_5'; recompile with -fPIC
-   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
-   >>> referenced by errata.c:66 (arch/riscv/errata/sifive/errata.c:66)
-   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
---
->> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symbol '.L__unnamed_5'; recompile with -fPIC
-   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
-   >>> referenced by errata.c:66 (arch/riscv/errata/sifive/errata.c:66)
-   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
---
->> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol '.L__unnamed_6'; recompile with -fPIC
-   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
-   >>> referenced by errata.c:66 (arch/riscv/errata/sifive/errata.c:66)
-   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
---
->> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symbol '.L__unnamed_6'; recompile with -fPIC
-   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
-   >>> referenced by errata.c:66 (arch/riscv/errata/sifive/errata.c:66)
-   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
---
->> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol '.L__unnamed_7'; recompile with -fPIC
-   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
-   >>> referenced by errata.c:66 (arch/riscv/errata/sifive/errata.c:66)
-   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
---
->> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symbol '.L__unnamed_7'; recompile with -fPIC
-   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
-   >>> referenced by errata.c:66 (arch/riscv/errata/sifive/errata.c:66)
-   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
---
->> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol '.L__unnamed_8'; recompile with -fPIC
-   >>> defined in vmlinux.a(arch/riscv/errata/sifive/errata.o)
-   >>> referenced by errata.c:66 (arch/riscv/errata/sifive/errata.c:66)
-   >>>               arch/riscv/errata/sifive/errata.o:(sifive_errata_patch_func) in archive vmlinux.a
-..
+dev_err_probe() does two helpful things over dev_err()
+1. Handles stashing the debug messages for the deferred probe cases (not
+   relevant here but harmless)
+2. Returns the variable you pass in as second argument to allow
+   return dev_err_probe()
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+Jonathan
