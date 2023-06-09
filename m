@@ -2,164 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B98D7291E3
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:58:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BCE17291D1
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:56:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbjFIH57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 03:57:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34024 "EHLO
+        id S239537AbjFIH4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 03:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239478AbjFIH53 (ORCPT
+        with ESMTP id S239372AbjFIHzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 03:57:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFBC3AAE
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 00:56:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686297377;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Fri, 9 Jun 2023 03:55:54 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB141BE2;
+        Fri,  9 Jun 2023 00:55:25 -0700 (PDT)
+Date:   Fri, 09 Jun 2023 07:55:14 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1686297315;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=X3bCqAOghUMsrFt01sdBss+0xjEFSAaHuAsd0sFdmyw=;
-        b=aFdx9+R6+0PGOjZBcELs4mHXfv7BGXhe29O3/WP99QZHni81TGxF/FUL2xIpMvyKx8uL/B
-        2OIRLLTa/tKG691bSiktdmwi1kUbd5MiANGTLfLMlYQ9TA6CLHEljiMNH1BsTxSad+7smm
-        enEacumaBeC3o/QF4W9Zn5PbhKEbsuk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-138-GRetf83ANGaLxKsxo5bctQ-1; Fri, 09 Jun 2023 03:56:08 -0400
-X-MC-Unique: GRetf83ANGaLxKsxo5bctQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8AF8385A5A8;
-        Fri,  9 Jun 2023 07:56:07 +0000 (UTC)
-Received: from MiWiFi-R3L-srv.redhat.com (ovpn-12-92.pek2.redhat.com [10.72.12.92])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6EFCF20268C6;
-        Fri,  9 Jun 2023 07:56:01 +0000 (UTC)
-From:   Baoquan He <bhe@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
-        christophe.leroy@csgroup.eu, hch@lst.de, rppt@kernel.org,
-        willy@infradead.org, agordeev@linux.ibm.com,
-        wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
-        David.Laight@ACULAB.COM, shorne@gmail.com, deller@gmx.de,
-        Baoquan He <bhe@redhat.com>
-Subject: [PATCH v6 04/19] mm/ioremap: Define generic_ioremap_prot() and generic_iounmap()
-Date:   Fri,  9 Jun 2023 15:55:13 +0800
-Message-Id: <20230609075528.9390-5-bhe@redhat.com>
-In-Reply-To: <20230609075528.9390-1-bhe@redhat.com>
-References: <20230609075528.9390-1-bhe@redhat.com>
+        bh=Q6FqFH1BcUytgqX4QKu6xifdNtfoGeELk4tAxVMyGeg=;
+        b=HXuE+w7Dm3yxc6KfeAmuQen4ZEiCLEoqXCE0+BoFCME8c6NxNHkGWj7xNYAvuUPJ8ynbHp
+        yZ/XUYYlZ0kxxpC0v9oXm2w2NgGecWrkUMYYy2z8XGBZE+FZo4bp44sQWYaqZ4CfpOsoTm
+        kBoEYqZYdMQbosbu1pJ1KjYkRwRanzJFKe+Mg0CTBcsLeIfdpMhmCeYnYRJDW+yXPu+SpE
+        WdenkcA5OOMnURRdC9WdsBAnTVkh+meAnPJBgZ9+Rn6gDlc+qU5uX8MfEfmKnDqPpGejaN
+        s/OL6kZe/xsyPf8C2BuKgT/XzFR1kS9k3rKPA5YC/gMGXN+SfdaUTyR3OOV9uQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1686297315;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Q6FqFH1BcUytgqX4QKu6xifdNtfoGeELk4tAxVMyGeg=;
+        b=bXlnvLXqk8XNGDfJmxMlGjIHwA/9V4Ihxb29PCFQIl/LZqG74lptlhlNyL7qohJa+kC1OI
+        6nxePkJoApN2rFDw==
+From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: sched/core] arm64/arch_timer: Fix MMIO byteswap
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230606080614.GB905437@hirez.programming.kicks-ass.net>
+References: <20230606080614.GB905437@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Message-ID: <168629731478.404.15268928192840800699.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
+The following commit has been merged into the sched/core branch of tip:
 
-Define a generic version of ioremap_prot() and iounmap() that
-architectures can call after they have performed the necessary
-alteration to parameters and/or necessary verifications.
+Commit-ID:     5416bf1cf5602ab3a38b4c0d15ccec1ca4199633
+Gitweb:        https://git.kernel.org/tip/5416bf1cf5602ab3a38b4c0d15ccec1ca4199633
+Author:        Peter Zijlstra <peterz@infradead.org>
+AuthorDate:    Tue, 06 Jun 2023 10:06:14 +02:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Tue, 06 Jun 2023 10:19:51 +02:00
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Baoquan He <bhe@redhat.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
+arm64/arch_timer: Fix MMIO byteswap
+
+The readl_relaxed() to __raw_readl() change meant to loose the
+instrumentation, but also (inadvertently) lost the byteswap.
+
+Fixes: 24ee7607b286 ("arm64/arch_timer: Provide noinstr sched_clock_read() functions")
+Reported-by: Mark Rutland <mark.rutland@arm.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+Link: https://lkml.kernel.org/r/20230606080614.GB905437@hirez.programming.kicks-ass.net
 ---
- include/asm-generic/io.h |  4 ++++
- mm/ioremap.c             | 22 ++++++++++++++++------
- 2 files changed, 20 insertions(+), 6 deletions(-)
+ drivers/clocksource/arm_arch_timer.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/asm-generic/io.h b/include/asm-generic/io.h
-index 587e7e9b9a37..a7ca2099ba19 100644
---- a/include/asm-generic/io.h
-+++ b/include/asm-generic/io.h
-@@ -1073,9 +1073,13 @@ static inline bool iounmap_allowed(void *addr)
- }
- #endif
+diff --git a/drivers/clocksource/arm_arch_timer.c b/drivers/clocksource/arm_arch_timer.c
+index b23d23b..e733a2a 100644
+--- a/drivers/clocksource/arm_arch_timer.c
++++ b/drivers/clocksource/arm_arch_timer.c
+@@ -776,9 +776,9 @@ static noinstr u64 arch_counter_get_cnt_mem(struct arch_timer *t, int offset_lo)
+ 	u32 cnt_lo, cnt_hi, tmp_hi;
  
-+void __iomem *generic_ioremap_prot(phys_addr_t phys_addr, size_t size,
-+				   pgprot_t prot);
-+
- void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
- 			   unsigned long prot);
- void iounmap(volatile void __iomem *addr);
-+void generic_iounmap(volatile void __iomem *addr);
+ 	do {
+-		cnt_hi = __raw_readl(t->base + offset_lo + 4);
+-		cnt_lo = __raw_readl(t->base + offset_lo);
+-		tmp_hi = __raw_readl(t->base + offset_lo + 4);
++		cnt_hi = __le32_to_cpu((__le32 __force)__raw_readl(t->base + offset_lo + 4));
++		cnt_lo = __le32_to_cpu((__le32 __force)__raw_readl(t->base + offset_lo));
++		tmp_hi = __le32_to_cpu((__le32 __force)__raw_readl(t->base + offset_lo + 4));
+ 	} while (cnt_hi != tmp_hi);
  
- static inline void __iomem *ioremap(phys_addr_t addr, size_t size)
- {
-diff --git a/mm/ioremap.c b/mm/ioremap.c
-index 8652426282cc..db6234b9db59 100644
---- a/mm/ioremap.c
-+++ b/mm/ioremap.c
-@@ -11,8 +11,8 @@
- #include <linux/io.h>
- #include <linux/export.h>
- 
--void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
--			   unsigned long prot)
-+void __iomem *generic_ioremap_prot(phys_addr_t phys_addr, size_t size,
-+				   pgprot_t prot)
- {
- 	unsigned long offset, vaddr;
- 	phys_addr_t last_addr;
-@@ -28,7 +28,7 @@ void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
- 	phys_addr -= offset;
- 	size = PAGE_ALIGN(size + offset);
- 
--	if (!ioremap_allowed(phys_addr, size, prot))
-+	if (!ioremap_allowed(phys_addr, size, pgprot_val(prot)))
- 		return NULL;
- 
- 	area = get_vm_area_caller(size, VM_IOREMAP,
-@@ -38,17 +38,22 @@ void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
- 	vaddr = (unsigned long)area->addr;
- 	area->phys_addr = phys_addr;
- 
--	if (ioremap_page_range(vaddr, vaddr + size, phys_addr,
--			       __pgprot(prot))) {
-+	if (ioremap_page_range(vaddr, vaddr + size, phys_addr, prot)) {
- 		free_vm_area(area);
- 		return NULL;
- 	}
- 
- 	return (void __iomem *)(vaddr + offset);
- }
-+
-+void __iomem *ioremap_prot(phys_addr_t phys_addr, size_t size,
-+			   unsigned long prot)
-+{
-+	return generic_ioremap_prot(phys_addr, size, __pgprot(prot));
-+}
- EXPORT_SYMBOL(ioremap_prot);
- 
--void iounmap(volatile void __iomem *addr)
-+void generic_iounmap(volatile void __iomem *addr)
- {
- 	void *vaddr = (void *)((unsigned long)addr & PAGE_MASK);
- 
-@@ -58,4 +63,9 @@ void iounmap(volatile void __iomem *addr)
- 	if (is_vmalloc_addr(vaddr))
- 		vunmap(vaddr);
- }
-+
-+void iounmap(volatile void __iomem *addr)
-+{
-+	generic_iounmap(addr);
-+}
- EXPORT_SYMBOL(iounmap);
--- 
-2.34.1
-
+ 	return ((u64) cnt_hi << 32) | cnt_lo;
