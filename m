@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC36B72A253
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:33:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DBDF72A256
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:33:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231377AbjFISdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 14:33:09 -0400
+        id S231516AbjFISda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 14:33:30 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbjFISdB (ORCPT
+        with ESMTP id S231233AbjFISdX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 14:33:01 -0400
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D94F3AA7
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 11:32:44 -0700 (PDT)
-Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-77a1cad6532so91956739f.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 11:32:44 -0700 (PDT)
+        Fri, 9 Jun 2023 14:33:23 -0400
+Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599E44205
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 11:32:51 -0700 (PDT)
+Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-33b6c47898dso9120665ab.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 11:32:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686335563; x=1688927563;
+        d=1e100.net; s=20221208; t=1686335570; x=1688927570;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hnZjmUhUHC5WzRiQVce8eotoya7iaXZahSL1XR1JRyA=;
-        b=Bdst1AIrtFrCvGXgjI5a0DADc/NxvzK6oeUm1ZdRravNddCL88kEhZ6plu2piDeEEh
-         bl7U5TXndk/0QV7yP6EqlJ/c6/dO+l3SpV26MqDpcTb5lW2VnYmxHC0CtNU39lUHalmH
-         bye5M70mbwuW+OakNjL2vwGr2GgpKxVbPvwRZL/chqur/lNO3SGMkzbeqmDtyNV48OgS
-         omAHbmsO9b43IKq7fKkdWNjU8QvKt3/ZTFqBkXr/V2Lbw9PEBCwGJw2K7VNP4tU2km4P
-         64GE/UFEmm2G5Cc8yUpVZxMhTuRRXU2WB2gPuKUx/JgLUpdg4C6IxgG22+KNA4DHuByL
-         658A==
-X-Gm-Message-State: AC+VfDzOVa5ThFfQsGf7KeoXaX16YQQTogH3wuMQYk1FwqQ02RmrJ8OE
-        Gj+Rp+e7aRmrMp7tAJLR5Q==
-X-Google-Smtp-Source: ACHHUZ7E+AJAkw1qTBSn1r7TWOknh6JTmYsfRB0r/52+w0ltiXbOtHquEX8LzWfF8UsWHnr8J+ghwQ==
-X-Received: by 2002:a5d:9d1a:0:b0:776:bfbe:a72b with SMTP id j26-20020a5d9d1a000000b00776bfbea72bmr2493921ioj.14.1686335563510;
-        Fri, 09 Jun 2023 11:32:43 -0700 (PDT)
+        bh=bDsI6y+39w6RrJxOoiKJblVUr+xr5BV/zYozHnP9juw=;
+        b=c2rxuocowS25lq84k+rxbEkUt0K1+EUkMcEFlFKmB3PJmm1I13tLDVAdvD0YZDTueZ
+         nUHF1aSVJ8sl3aCnES0hxmTafhlHN8wcfytiFSatn0o24yWSbnQs13+5OwIoeOeGWe2n
+         1W3dyTPqyi9dchfUGR9kun2w93+SsunAS5es/gWX17ohgGYitCMTGlaLA40ZqF7fIcs8
+         35iq2kBrp6Pw7D+qRvbL+9vsZdgkdXnB3lmNCk2d+ZiZNkK7NpuSPmIbIM1XgjsEpwuQ
+         cHDRmfyeoUZ190dO23i/wDP2aU+LwJ2CV0wOh5JYI9SXaXqNulTiMlIWTP+Ym62z4yKd
+         pmqg==
+X-Gm-Message-State: AC+VfDytBsJ13JRwcN25Allh+CiylrTja6wYVotIxaOjZhVjqz6DeLJl
+        UiJsPmgCLqpdFqQtxq0d/A==
+X-Google-Smtp-Source: ACHHUZ6DEagZP+w3SELSpPxmJK661d/nGvdwb8QCFGy6mM1D9jVKQqt37IfcnNZh71b3U4xaaQlZTg==
+X-Received: by 2002:a92:c743:0:b0:331:a2f5:b50d with SMTP id y3-20020a92c743000000b00331a2f5b50dmr2068590ilp.30.1686335570552;
+        Fri, 09 Jun 2023 11:32:50 -0700 (PDT)
 Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id i19-20020a02cc53000000b0041408b79f1esm1096848jaq.111.2023.06.09.11.32.42
+        by smtp.gmail.com with ESMTPSA id p7-20020a056e0206c700b0033b2a123254sm1199546ils.61.2023.06.09.11.32.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 11:32:42 -0700 (PDT)
-Received: (nullmailer pid 1767271 invoked by uid 1000);
-        Fri, 09 Jun 2023 18:32:41 -0000
+        Fri, 09 Jun 2023 11:32:49 -0700 (PDT)
+Received: (nullmailer pid 1767422 invoked by uid 1000);
+        Fri, 09 Jun 2023 18:32:48 -0000
 From:   Rob Herring <robh@kernel.org>
 To:     Michael Ellerman <mpe@ellerman.id.au>,
         Nicholas Piggin <npiggin@gmail.com>,
         Christophe Leroy <christophe.leroy@csgroup.eu>
 Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] powerpc: fsl_soc: Use of_range_to_resource() for "ranges" parsing
-Date:   Fri,  9 Jun 2023 12:32:38 -0600
-Message-Id: <20230609183238.1767186-1-robh@kernel.org>
+Subject: [PATCH] powerpc: fsl_rio: Use of_range_to_resource() for "ranges" parsing
+Date:   Fri,  9 Jun 2023 12:32:44 -0600
+Message-Id: <20230609183244.1767325-1-robh@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,38 +66,89 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 shouldn't be implementing their own parsing of it. Refactor the FSL RapidIO
 "ranges" parsing to use of_range_to_resource() instead.
 
+One change is the original code would look for "#size-cells" and
+"#address-cells" in the parent node if not found in the port child
+nodes. That is non-standard behavior and not necessary AFAICT. In 2011
+in commit 54986964c13c ("powerpc/85xx: Update SRIO device tree nodes")
+there was an ABI break. The upstream .dts files have been correct since
+at least that point.
+
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- arch/powerpc/sysdev/fsl_soc.c | 16 ++++------------
- 1 file changed, 4 insertions(+), 12 deletions(-)
+ arch/powerpc/sysdev/fsl_rio.c | 34 ++++++++--------------------------
+ 1 file changed, 8 insertions(+), 26 deletions(-)
 
-diff --git a/arch/powerpc/sysdev/fsl_soc.c b/arch/powerpc/sysdev/fsl_soc.c
-index 6ebbbca41065..68709743450e 100644
---- a/arch/powerpc/sysdev/fsl_soc.c
-+++ b/arch/powerpc/sysdev/fsl_soc.c
-@@ -51,18 +51,10 @@ phys_addr_t get_immrbase(void)
+diff --git a/arch/powerpc/sysdev/fsl_rio.c b/arch/powerpc/sysdev/fsl_rio.c
+index f8e492ee54cc..18176d0df612 100644
+--- a/arch/powerpc/sysdev/fsl_rio.c
++++ b/arch/powerpc/sysdev/fsl_rio.c
+@@ -453,8 +453,8 @@ int fsl_rio_setup(struct platform_device *dev)
+ 	struct device_node *np, *rmu_node;
+ 	int rlen;
+ 	u32 ccsr;
+-	u64 range_start, range_size;
+-	int paw, aw, sw;
++	u64 range_start;
++	int aw;
+ 	u32 i;
+ 	static int tmp;
+ 	struct device_node *rmu_np[MAX_MSG_UNIT_NUM] = {NULL};
+@@ -569,6 +569,8 @@ int fsl_rio_setup(struct platform_device *dev)
  
- 	soc = of_find_node_by_type(NULL, "soc");
- 	if (soc) {
--		int size;
--		u32 naddr;
--		const __be32 *prop = of_get_property(soc, "#address-cells", &size);
--
--		if (prop && size == 4)
--			naddr = be32_to_cpup(prop);
--		else
--			naddr = 2;
--
--		prop = of_get_property(soc, "ranges", &size);
--		if (prop)
--			immrbase = of_translate_address(soc, prop + naddr);
+ 	/*set up ports node*/
+ 	for_each_child_of_node(dev->dev.of_node, np) {
 +		struct resource res;
 +
-+		if (!of_range_to_resource(soc, 0, &res))
-+			immrbase = res.start;
+ 		port_index = of_get_property(np, "cell-index", NULL);
+ 		if (!port_index) {
+ 			dev_err(&dev->dev, "Can't get %pOF property 'cell-index'\n",
+@@ -576,32 +578,14 @@ int fsl_rio_setup(struct platform_device *dev)
+ 			continue;
+ 		}
  
- 		of_node_put(soc);
- 	}
+-		dt_range = of_get_property(np, "ranges", &rlen);
+-		if (!dt_range) {
++		if (of_range_to_resource(np, 0, &res)) {
+ 			dev_err(&dev->dev, "Can't get %pOF property 'ranges'\n",
+ 					np);
+ 			continue;
+ 		}
+ 
+-		/* Get node address wide */
+-		cell = of_get_property(np, "#address-cells", NULL);
+-		if (cell)
+-			aw = *cell;
+-		else
+-			aw = of_n_addr_cells(np);
+-		/* Get node size wide */
+-		cell = of_get_property(np, "#size-cells", NULL);
+-		if (cell)
+-			sw = *cell;
+-		else
+-			sw = of_n_size_cells(np);
+-		/* Get parent address wide wide */
+-		paw = of_n_addr_cells(np);
+-		range_start = of_read_number(dt_range + aw, paw);
+-		range_size = of_read_number(dt_range + aw + paw, sw);
+-
+-		dev_info(&dev->dev, "%pOF: LAW start 0x%016llx, size 0x%016llx.\n",
+-				np, range_start, range_size);
++		dev_info(&dev->dev, "%pOF: LAW %pR\n",
++				np, &res);
+ 
+ 		port = kzalloc(sizeof(struct rio_mport), GFP_KERNEL);
+ 		if (!port)
+@@ -624,9 +608,7 @@ int fsl_rio_setup(struct platform_device *dev)
+ 		}
+ 
+ 		INIT_LIST_HEAD(&port->dbells);
+-		port->iores.start = range_start;
+-		port->iores.end = port->iores.start + range_size - 1;
+-		port->iores.flags = IORESOURCE_MEM;
++		port->iores = res;	/* struct copy */
+ 		port->iores.name = "rio_io_win";
+ 
+ 		if (request_resource(&iomem_resource, &port->iores) < 0) {
 -- 
 2.39.2
 
