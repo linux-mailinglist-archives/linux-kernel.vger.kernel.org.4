@@ -2,137 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 608E6729B9C
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 15:29:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1FA4729BAD
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 15:35:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240822AbjFIN3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 09:29:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48462 "EHLO
+        id S237454AbjFINfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 09:35:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240524AbjFIN3a (ORCPT
+        with ESMTP id S238702AbjFINev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 09:29:30 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4916530D6;
-        Fri,  9 Jun 2023 06:29:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1686317369; x=1717853369;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Ln5MOgUZB7SbgB086cTfTL+ICqhAXe3k6EqP7XZziOE=;
-  b=C/3ASJ+vFhbzVsMTXEGMdOxb8JNm8AKcdz1W8kuXxYHLeV1RW1cqbdL1
-   qkA+WnYAkMFmZVfyDiBML1M0x5MdJ/XSiTz5v14jbwg2x6AGkyqYhoC3e
-   UPgxiWBvE7QvzoEnxOxvkI5ICxjLZv+wlVaWBl+o4I1T8cF5l5RcUsjlr
-   aToCVai6HWToJ6M1g8g9orjiAQuhYghJr2yp75sOfvrrMrebhBH4Kb2kD
-   q5EHv7peIcx3bU2lsky9jz+VowumPmhd4JhZVsJbtveclLdrav9ZQPsdq
-   eXW83PdBOLq1ORBeLwEE4JPNQs/4KDXE7cnbPv0V5UUMEi2OjO4txjn7/
-   w==;
-X-IronPort-AV: E=Sophos;i="6.00,229,1681164000"; 
-   d="scan'208";a="31366204"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 09 Jun 2023 15:29:22 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Fri, 09 Jun 2023 15:29:23 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Fri, 09 Jun 2023 15:29:23 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1686317363; x=1717853363;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Ln5MOgUZB7SbgB086cTfTL+ICqhAXe3k6EqP7XZziOE=;
-  b=ILTMkl6YNCx36luKpIz/KI2LcO1cKQwcp6M2dN3+XVnhIS63N65y+Jde
-   44K01Dsp7srhtHMKBXD7Oe+raH/rJkY6HbGsBCWmtwpusINkrxKntlLoO
-   5vPZ4gVeJwXFvx4i2MJW8uEHdApqJlb11PsfEJ2H/Z7YmfiBa8pFx1lC2
-   Y8WwztRIQodJ6NEnQ4uyVl3WQEKNd3ZvpzoYKvCMQ9ZmIq8gPbpP7w8JK
-   k3dAD1jtI2W/Lch5eEht986Wp2VsHNFKW4tV0RSPvJ3UoC/5s1mipeJtd
-   D/r2BnpAfMPe47vDB1FHCWAxpxrdzTIHowTP2M82KWGKICNHkZKyVHOS2
-   g==;
-X-IronPort-AV: E=Sophos;i="6.00,229,1681164000"; 
-   d="scan'208";a="31366203"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 09 Jun 2023 15:29:22 +0200
-Received: from steina-w.tq-net.de (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id A4D16280090;
-        Fri,  9 Jun 2023 15:29:22 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>, Marek Vasut <marex@denx.de>
-Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux@ew.tq-group.com
-Subject: [PATCH 3/3] arm64: defconfig: Enable i.MX93 devices
-Date:   Fri,  9 Jun 2023 15:29:15 +0200
-Message-Id: <20230609132915.634338-4-alexander.stein@ew.tq-group.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230609132915.634338-1-alexander.stein@ew.tq-group.com>
-References: <20230609132915.634338-1-alexander.stein@ew.tq-group.com>
+        Fri, 9 Jun 2023 09:34:51 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 999892D48;
+        Fri,  9 Jun 2023 06:34:49 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C4797AB6;
+        Fri,  9 Jun 2023 06:35:34 -0700 (PDT)
+Received: from [10.57.24.231] (unknown [10.57.24.231])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6E0363F71E;
+        Fri,  9 Jun 2023 06:34:47 -0700 (PDT)
+Message-ID: <510f88f2-574c-097f-7299-2842b1cf432d@arm.com>
+Date:   Fri, 9 Jun 2023 14:34:45 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UPPERCASE_50_75,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH V11 06/10] arm64/perf: Enable branch stack events via
+ FEAT_BRBE
+Content-Language: en-US
+To:     Mark Rutland <mark.rutland@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, catalin.marinas@arm.com,
+        Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+References: <20230531040428.501523-1-anshuman.khandual@arm.com>
+ <20230531040428.501523-7-anshuman.khandual@arm.com>
+ <ZH3mhorKNo77hsv5@FVFF77S0Q05N>
+ <e960d5d5-07a8-2049-7d0a-07268ecfe36a@arm.com>
+ <ZIMfVsF50cODuOYx@FVFF77S0Q05N.cambridge.arm.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <ZIMfVsF50cODuOYx@FVFF77S0Q05N.cambridge.arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These drivers are used on i.MX93 based devices.
 
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
----
- arch/arm64/configs/defconfig | 4 ++++
- 1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 8d850be05835f..0c2ee173a8730 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -425,6 +425,7 @@ CONFIG_TOUCHSCREEN_GOODIX=m
- CONFIG_TOUCHSCREEN_ELAN=m
- CONFIG_TOUCHSCREEN_EDT_FT5X06=m
- CONFIG_INPUT_MISC=y
-+CONFIG_INPUT_BBNSM_PWRKEY=m
- CONFIG_INPUT_PM8941_PWRKEY=y
- CONFIG_INPUT_PM8XXX_VIBRATOR=m
- CONFIG_INPUT_TPS65219_PWRBUTTON=m
-@@ -674,6 +675,7 @@ CONFIG_SUNXI_WATCHDOG=m
- CONFIG_NPCM7XX_WATCHDOG=y
- CONFIG_IMX2_WDT=y
- CONFIG_IMX_SC_WDT=m
-+CONFIG_IMX7ULP_WDT=m
- CONFIG_QCOM_WDT=m
- CONFIG_MESON_GXBB_WATCHDOG=m
- CONFIG_MESON_WATCHDOG=m
-@@ -1088,6 +1090,7 @@ CONFIG_RTC_DRV_ARMADA38X=y
- CONFIG_RTC_DRV_PM8XXX=m
- CONFIG_RTC_DRV_TEGRA=y
- CONFIG_RTC_DRV_SNVS=m
-+CONFIG_RTC_DRV_BBNSM=m
- CONFIG_RTC_DRV_IMX_SC=m
- CONFIG_RTC_DRV_MT6397=m
- CONFIG_RTC_DRV_XGENE=y
-@@ -1396,6 +1399,7 @@ CONFIG_ARM_SPE_PMU=m
- CONFIG_ARM_DMC620_PMU=m
- CONFIG_HISI_PMU=y
- CONFIG_NVMEM_IMX_OCOTP=y
-+CONFIG_NVMEM_IMX_OCOTP_ELE=m
- CONFIG_NVMEM_IMX_OCOTP_SCU=y
- CONFIG_NVMEM_LAYERSCAPE_SFP=m
- CONFIG_NVMEM_MESON_EFUSE=m
--- 
-2.34.1
+On 09/06/2023 13:47, Mark Rutland wrote:
+> On Fri, Jun 09, 2023 at 10:52:37AM +0530, Anshuman Khandual wrote:
+>> [...]
+>>
+>> On 6/5/23 19:13, Mark Rutland wrote:
+>>>> +void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
+>>>> +{
+>>>> +	struct brbe_hw_attr *brbe_attr = (struct brbe_hw_attr *)cpuc->percpu_pmu->private;
+>>>> +	u64 brbfcr, brbcr;
+>>>> +	int idx, loop1_idx1, loop1_idx2, loop2_idx1, loop2_idx2, count;
+>>>> +
+>>>> +	brbcr = read_sysreg_s(SYS_BRBCR_EL1);
+>>>> +	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
+>>>> +
+>>>> +	/* Ensure pause on PMU interrupt is enabled */
+>>>> +	WARN_ON_ONCE(!(brbcr & BRBCR_EL1_FZP));
+>>>> +
+>>>> +	/* Pause the buffer */
+>>>> +	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+>>>> +	isb();
+>>>> +
+>>>> +	/* Determine the indices for each loop */
+>>>> +	loop1_idx1 = BRBE_BANK0_IDX_MIN;
+>>>> +	if (brbe_attr->brbe_nr <= BRBE_BANK_MAX_ENTRIES) {
+>>>> +		loop1_idx2 = brbe_attr->brbe_nr - 1;
+>>>> +		loop2_idx1 = BRBE_BANK1_IDX_MIN;
+>>>> +		loop2_idx2 = BRBE_BANK0_IDX_MAX;
+>>>> +	} else {
+>>>> +		loop1_idx2 = BRBE_BANK0_IDX_MAX;
+>>>> +		loop2_idx1 = BRBE_BANK1_IDX_MIN;
+>>>> +		loop2_idx2 = brbe_attr->brbe_nr - 1;
+>>>> +	}
+>>>> +
+>>>> +	/* Loop through bank 0 */
+>>>> +	select_brbe_bank(BRBE_BANK_IDX_0);
+>>>> +	for (idx = 0, count = loop1_idx1; count <= loop1_idx2; idx++, count++) {
+>>>> +		if (!capture_branch_entry(cpuc, event, idx))
+>>>> +			goto skip_bank_1;
+>>>> +	}
+>>>> +
+>>>> +	/* Loop through bank 1 */
+>>>> +	select_brbe_bank(BRBE_BANK_IDX_1);
+>>>> +	for (count = loop2_idx1; count <= loop2_idx2; idx++, count++) {
+>>>> +		if (!capture_branch_entry(cpuc, event, idx))
+>>>> +			break;
+>>>> +	}
+>>>> +
+>>>> +skip_bank_1:
+>>>> +	cpuc->branches->branch_stack.nr = idx;
+>>>> +	cpuc->branches->branch_stack.hw_idx = -1ULL;
+>>>> +	process_branch_aborts(cpuc);
+>>>> +
+>>>> +	/* Unpause the buffer */
+>>>> +	write_sysreg_s(brbfcr & ~BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+>>>> +	isb();
+>>>> +	armv8pmu_branch_reset();
+>>>> +}
+>>> The loop indicies are rather difficult to follow, and I think those can be made
+>>> quite a lot simpler if split out, e.g.
+>>>
+>>> | int __armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
+>>> | {
+>>> | 	struct brbe_hw_attr *brbe_attr = (struct brbe_hw_attr *)cpuc->percpu_pmu->private;
+>>> | 	int nr_hw_entries = brbe_attr->brbe_nr;
+>>> | 	int idx;
+>>
+>> I guess idx needs an init to 0.
+> 
+> Yes, sorry, that should have been:
+> 
+> 	int idx = 0;
+> 
+>>> | 
+>>> | 	select_brbe_bank(BRBE_BANK_IDX_0);
+>>> | 	while (idx < nr_hw_entries && idx < BRBE_BANK0_IDX_MAX) {
+>>> | 		if (!capture_branch_entry(cpuc, event, idx))
+>>> | 			return idx;
+>>> | 		idx++;
+>>> | 	}
+>>> | 
+>>> | 	select_brbe_bank(BRBE_BANK_IDX_1);
+>>> | 	while (idx < nr_hw_entries && idx < BRBE_BANK1_IDX_MAX) {
+>>> | 		if (!capture_branch_entry(cpuc, event, idx))
+>>> | 			return idx;
+>>> | 		idx++;
+>>> | 	}
+>>> | 
+>>> | 	return idx;
+>>> | }
+>>
+>> These loops are better than the proposed one with indices, will update.
+> 
+> Great!
+> 
+>>> | 
+>>> | void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
+>>> | {
+>>> | 	u64 brbfcr, brbcr;
+>>> | 	int nr;
+>>> | 
+>>> | 	brbcr = read_sysreg_s(SYS_BRBCR_EL1);
+>>> | 	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
+>>> | 
+>>> | 	/* Ensure pause on PMU interrupt is enabled */
+>>> | 	WARN_ON_ONCE(!(brbcr & BRBCR_EL1_FZP));
+>>> | 
+>>> | 	/* Pause the buffer */
+>>> | 	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+>>> | 	isb();
+>>> | 
+>>> | 	nr = __armv8pmu_branch_read(cpus, event);
+>>> | 
+>>> | 	cpuc->branches->branch_stack.nr = nr;
+>>> | 	cpuc->branches->branch_stack.hw_idx = -1ULL;
+>>> | 	process_branch_aborts(cpuc);
+>>> | 
+>>> | 	/* Unpause the buffer */
+>>> | 	write_sysreg_s(brbfcr & ~BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+>>> | 	isb();
+>>> | 	armv8pmu_branch_reset();
+>>> | }
+>>>
+>>> Looking at <linux/perf_event.h> I see:
+>>>
+>>> | /*
+>>> |  * branch stack layout:
+>>> |  *  nr: number of taken branches stored in entries[]
+>>> |  *  hw_idx: The low level index of raw branch records
+>>> |  *          for the most recent branch.
+>>> |  *          -1ULL means invalid/unknown.
+>>> |  *
+>>> |  * Note that nr can vary from sample to sample
+>>> |  * branches (to, from) are stored from most recent
+>>> |  * to least recent, i.e., entries[0] contains the most
+>>> |  * recent branch.
+>>> |  * The entries[] is an abstraction of raw branch records,
+>>> |  * which may not be stored in age order in HW, e.g. Intel LBR.
+>>> |  * The hw_idx is to expose the low level index of raw
+>>> |  * branch record for the most recent branch aka entries[0].
+>>> |  * The hw_idx index is between -1 (unknown) and max depth,
+>>> |  * which can be retrieved in /sys/devices/cpu/caps/branches.
+>>> |  * For the architectures whose raw branch records are
+>>> |  * already stored in age order, the hw_idx should be 0.
+>>> |  */
+>>> | struct perf_branch_stack {
+>>> |         __u64                           nr;  
+>>> |         __u64                           hw_idx;
+>>> |         struct perf_branch_entry        entries[];
+>>> | };
+>>>
+>>> ... which seems to indicate we should be setting hw_idx to 0, since IIUC our
+>>> records are in age order.
+>> Branch records are indeed in age order, sure will change hw_idx as 0. Earlier
+>> figured that there was no need for hw_idx and hence marked it as -1UL similar
+>> to other platforms like powerpc.
+> 
+> That's fair enough; looking at power_pmu_bhrb_read() in
+> arch/powerpc/perf/core-book3s.c, I see a comment:
+> 
+> 	Branches are read most recent first (ie. mfbhrb 0 is
+> 	the most recent branch).
+> 
+> ... which suggests that should be 0 also, or that the documentation is wrong.
+> 
+> Do you know how the perf tool consumes this?
+> 
+> Thanks,
+> Mark.
 
+It looks like it's a unique ID/last position updated in the LBR FIFO and
+it's used to stitch callchains together when the stack depth exceeds the
+buffer size. Perf takes the previous one that got filled to the limit
+and and the new one and stitches them together if the hw_idx matches.
+
+There are some options in perf you need to provide to make it happen, so
+I think for BRBE it doesn't matter what value is assigned to it. -1
+seems to be a 'not used' value which we should probably set in case the
+event is opened with PERF_SAMPLE_BRANCH_HW_INDEX
+
+You could also fail to open the event if PERF_SAMPLE_BRANCH_HW_INDEX is
+set, and that would save writing out -1 every time for every branch
+stack. Although it's not enabled by default, so maybe that's not necessary.
+
+James
