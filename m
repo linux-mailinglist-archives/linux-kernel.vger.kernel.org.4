@@ -2,38 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C029B72931B
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:29:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9F4729313
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240902AbjFII1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 04:27:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57272 "EHLO
+        id S240915AbjFII1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 04:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241424AbjFIIZx (ORCPT
+        with ESMTP id S241416AbjFIIZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 04:25:53 -0400
+        Fri, 9 Jun 2023 04:25:52 -0400
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C62B43C1B;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 53A8D3C14;
         Fri,  9 Jun 2023 01:24:52 -0700 (PDT)
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1q7XQE-0004Jv-07; Fri, 09 Jun 2023 10:24:38 +0200
+        id 1q7XQE-0004Jv-08; Fri, 09 Jun 2023 10:24:38 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id B03E5C02EE; Fri,  9 Jun 2023 10:22:57 +0200 (CEST)
-Date:   Fri, 9 Jun 2023 10:22:57 +0200
+        id BF6ADC02EE; Fri,  9 Jun 2023 10:23:14 +0200 (CEST)
+Date:   Fri, 9 Jun 2023 10:23:14 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 To:     Paul Cercueil <paul@crapouillou.net>
 Cc:     Paul Burton <paulburton@kernel.org>,
         Siarhei Volkau <lis8215@gmail.com>, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org, list@opendingux.net
-Subject: Re: [PATCH 2/4] mips: ingenic: Remove useless __maybe_unused
-Message-ID: <20230609082257.GH8160@alpha.franken.de>
+Subject: Re: [PATCH 3/4] mips: ingenic: Enable EXT/2 divider on JZ4750/55/60
+ if EXT is 24 MHz
+Message-ID: <20230609082314.GI8160@alpha.franken.de>
 References: <20230604122655.69698-1-paul@crapouillou.net>
- <20230604122655.69698-2-paul@crapouillou.net>
+ <20230604122655.69698-3-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230604122655.69698-2-paul@crapouillou.net>
+In-Reply-To: <20230604122655.69698-3-paul@crapouillou.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -44,39 +45,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 04, 2023 at 02:26:53PM +0200, Paul Cercueil wrote:
-> These flags are useless in this case as the code referencing these data
-> structures is always seen by the compiler (and not behind #ifdef
-> guards).
+On Sun, Jun 04, 2023 at 02:26:54PM +0200, Paul Cercueil wrote:
+> The JZ4750, JZ4755 and JZ4760 (non-B version) support using a 24 MHz
+> external crystal oscillator instead of the typical 12 MHz one.
+> 
+> However, most of the SoC's IP blocks only work with a 12 MHz clock.
+> Thanksfully, there is a /2 divider we can enable when a 24 MHz external
+> crystal is present.
+> 
+> Force-enable this /2 divider when the oscillator is 24 MHz, so that the
+> SoC always uses a 12 MHz clock internally.
+> 
+> It is done here, and not in the clocks driver, because we need the EXT
+> clock to be 12 MHz for the early console to work, and the clocks driver
+> probes way too late.
 > 
 > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 > ---
->  arch/mips/generic/board-ingenic.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/mips/generic/board-ingenic.c b/arch/mips/generic/board-ingenic.c
-> index c422bbc890ed..7a4fce06875d 100644
-> --- a/arch/mips/generic/board-ingenic.c
-> +++ b/arch/mips/generic/board-ingenic.c
-> @@ -117,14 +117,14 @@ static void ingenic_halt(void)
->  		ingenic_wait_instr();
->  }
->  
-> -static int __maybe_unused ingenic_pm_enter(suspend_state_t state)
-> +static int ingenic_pm_enter(suspend_state_t state)
->  {
->  	ingenic_wait_instr();
->  
->  	return 0;
->  }
->  
-> -static const struct platform_suspend_ops ingenic_pm_ops __maybe_unused = {
-> +static const struct platform_suspend_ops ingenic_pm_ops = {
->  	.valid = suspend_valid_only_mem,
->  	.enter = ingenic_pm_enter,
->  };
-> -- 
-> 2.39.2
+>  arch/mips/generic/board-ingenic.c | 57 +++++++++++++++++++++++++++++++
+>  1 file changed, 57 insertions(+)
 
 applied to mips-next.
 
