@@ -2,100 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52AAB728E3E
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 05:02:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 767F7728E44
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 05:04:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237972AbjFIDC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 23:02:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51674 "EHLO
+        id S238006AbjFIDE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 23:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbjFIDCR (ORCPT
+        with ESMTP id S236588AbjFIDEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 23:02:17 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF48E30E6
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 20:02:16 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-2568cb87a0dso211803a91.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 20:02:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1686279736; x=1688871736;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EE3DCAhezkDxz5vIdXbfcFIbXdDrZcSNl8SsaCm92RM=;
-        b=JbXYANjlm9TVIqjkjB0E1B2F4ITp4Ry0RYZfFmm/xNpsjReVVd5NTrdx32LQdnLbxw
-         BXznJMtAhTUfcW4zNLga6oOd6Tn3s61MceiKMniH+WdWG9mwdgtYkeKciLw5tCSos0ua
-         lvwCiKmNQZz9w+Mbsv/0sxVdvY8+J/Z3umoz8YukD4A2Sp/w1vni/iG1/ZBZp8LtzQF5
-         sX68mGw7w9YOVU77hXLdgAK1+seHWwKnUq/fYOTdQX4s/O9pcXr0ROxaPTdxWwHyOein
-         cd6k9WAHJBdIMKb3AHkGyO2fTCTcSB6ao1V+Oi82ZA1QOYXis2cgvTM0SJ8sDY2IacO2
-         g/oQ==
+        Thu, 8 Jun 2023 23:04:20 -0400
+Received: from mail-pf1-f194.google.com (mail-pf1-f194.google.com [209.85.210.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9857130E6;
+        Thu,  8 Jun 2023 20:04:18 -0700 (PDT)
+Received: by mail-pf1-f194.google.com with SMTP id d2e1a72fcca58-653f9c7b3e4so1022842b3a.2;
+        Thu, 08 Jun 2023 20:04:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686279736; x=1688871736;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EE3DCAhezkDxz5vIdXbfcFIbXdDrZcSNl8SsaCm92RM=;
-        b=Yo54YPP+dnX+8/JP5GxKKV+66e/QRIOkeQkGvCeswX8B0GVzWtjlj5iSopypAVwkfa
-         FKMqQ7CKCN8aYWh9iLh5vl1ndB7BX9q2YzGCOs2vriIW6zOp+/DzZwFGGama83dLQ1b9
-         9sPrzrMVVOQVTPPT7XPiMAHQVAsmgutpo+peNrRG/nQe9TWjg6mkRB4yBTAXhZe6nXri
-         N2A5Gm0fIYEVgfD9MD8coKiokcCQVJ00P3CtZpUxCinekE2XuYqYnU56t8pcSz3SZq/2
-         l1SztCM7CbCSJTvbfaHpWjJlx7Mect0NeE+HGpWyRTrq6H3U7KlycRNNjcG9mbzCZLg2
-         PPjA==
-X-Gm-Message-State: AC+VfDwcwqOHctf5iRdjQVqZ0U5Z8EeEAlbfJ3UsojaSFQxlca3pVurc
-        ys66medd2g0nscMfXWIvzlGKVA==
-X-Google-Smtp-Source: ACHHUZ5lZx2YCvaNmBBfnEToX7VOG1Agyyp37Lb2WnJQZY/tIT4W0txlkLU5n5DbL2v/DIlZAl4Kxw==
-X-Received: by 2002:a17:902:e807:b0:1ae:8595:14b with SMTP id u7-20020a170902e80700b001ae8595014bmr242592plg.6.1686279736459;
-        Thu, 08 Jun 2023 20:02:16 -0700 (PDT)
-Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id u7-20020a17090282c700b001ac5b0a959bsm2088769plz.24.2023.06.08.20.02.15
+        d=1e100.net; s=20221208; t=1686279858; x=1688871858;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=59GQ9AhyFkzfBGxyjIZEJrXmZrr4sm+i3SWD90zj3wY=;
+        b=aYtf820ZP48hIQXbtw13gT8rttPjTyonTrXdmsQYyOESNUFwZf2bcDTTLxRn1Q+3lG
+         pIqDx3w6LjJbgDhOGGPW48m5mnlliYC6in20y1sFUR6zSfxYue2ULHmYhQcVN7W/PbHW
+         PLQKiifrXvbKfcn4e4/fXZqGleCRQYQyM7NIHqRgFj17ixUZ8QXppQiGpAEkQamyUa8q
+         bI7M1qEzfGwl807EJXPZ1WLgQqARQb7FbHQ9j0TxhuZ9/0iOkPpYkSOL91nLaHkwqzRP
+         h46DfyaB1z8S0TRbYIYI/K2UJucpypFieu2iRikQMaPCDNGMLtyYtt8LeRmrWjj3IXqx
+         VT7A==
+X-Gm-Message-State: AC+VfDyZ5NmSJsv6BDPPbXLI+DN3Cpis4Mz6s9hl/MovTIsjc/fcLNWq
+        xtPH4BFJdEoRIJ+f24VjJg==
+X-Google-Smtp-Source: ACHHUZ5UVxY14D1+wNQgLxZLAZyOjnBVLcigDRa21eDTvN8JUmWnyb16tYxtEjwkjggAVSdspqJGCg==
+X-Received: by 2002:a05:6a00:1911:b0:663:8255:8cc3 with SMTP id y17-20020a056a00191100b0066382558cc3mr77833pfi.7.1686279857968;
+        Thu, 08 Jun 2023 20:04:17 -0700 (PDT)
+Received: from localhost.localdomain ([116.128.244.169])
+        by smtp.gmail.com with ESMTPSA id a16-20020a62bd10000000b0065ecdefa57fsm1713778pff.0.2023.06.08.20.04.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 20:02:15 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc:     Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring Mailing List <io-uring@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-In-Reply-To: <20230609015403.3523811-1-ammarfaizi2@gnuweeb.org>
-References: <20230609015403.3523811-1-ammarfaizi2@gnuweeb.org>
-Subject: Re: [PATCH liburing v1 0/2] Fixes for io_uring_for_each_cqe
-Message-Id: <168627973530.474576.3838052998706625567.b4-ty@kernel.dk>
-Date:   Thu, 08 Jun 2023 21:02:15 -0600
+        Thu, 08 Jun 2023 20:04:17 -0700 (PDT)
+From:   sunliming <sunliming@kylinos.cn>
+To:     mhiramat@kernel.org, beaub@linux.microsoft.com,
+        rostedt@goodmis.org, shuah@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kelulanainsley@gmail.com,
+        sunliming <sunliming@kylinos.cn>
+Subject: [PATCH v2 0/3] tracing/user_events: Fix incorrect return value for
+Date:   Fri,  9 Jun 2023 11:02:59 +0800
+Message-Id: <20230609030302.1278716-1-sunliming@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-c6835
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Now the writing operation return the count of writes whether events are
+enabled or disabled. Fix this by just return -ENOENT when events are disabled.
 
-On Fri, 09 Jun 2023 08:54:01 +0700, Ammar Faizi wrote:
-> Please consider taking these last-minute fixes for liburing-2.4
-> release. There are two patches in this series:
-> 
-> ## 1. man/io_uring_for_each_cqe: Fix return value, title, and typo
-> 
->   - Fix the return value. io_uring_for_each_cqe() doesn't return an int.
-> 
-> [...]
+v1 -> v2:
+- Change the returh vale from -EFAULT to -ENOENT
 
-Applied, thanks!
+sunliming (3):
+  tracing/user_events: Fix incorrect return value for writing operation
+    when events are disabled
+  selftests/user_events: Enable the event before write_fault test in
+    ftrace self-test
+  selftests/user_events: Add test cases when event is disabled
 
-[1/2] man/io_uring_for_each_cqe: Fix return value, title, and typo
-      commit: c8d06ed9bcbf2ae294242f9caacecfa01bf138b2
-[2/2] man/io_uring_for_each_cqe: Explicitly tell it's a macro and add an example
-      commit: 298c083d75ecde5a8833366167b3b6abff0c8d39
+ kernel/trace/trace_events_user.c                  | 3 ++-
+ tools/testing/selftests/user_events/ftrace_test.c | 8 ++++++++
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
-Best regards,
 -- 
-Jens Axboe
-
-
+2.25.1
 
