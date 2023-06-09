@@ -2,55 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C1A17290A5
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 884837290A8
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237823AbjFIHO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 03:14:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36108 "EHLO
+        id S237848AbjFIHOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 03:14:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230230AbjFIHOY (ORCPT
+        with ESMTP id S230316AbjFIHOs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 03:14:24 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 647F2272A;
-        Fri,  9 Jun 2023 00:14:23 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 43818AB6;
-        Fri,  9 Jun 2023 00:15:08 -0700 (PDT)
-Received: from [10.163.44.201] (unknown [10.163.44.201])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B954E3F71E;
-        Fri,  9 Jun 2023 00:14:17 -0700 (PDT)
-Message-ID: <584cb976-4e21-5dc2-bce2-cd6c3b5d1613@arm.com>
-Date:   Fri, 9 Jun 2023 12:44:12 +0530
+        Fri, 9 Jun 2023 03:14:48 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F39273A;
+        Fri,  9 Jun 2023 00:14:47 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id 46e09a7af769-6b162127472so408868a34.0;
+        Fri, 09 Jun 2023 00:14:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686294887; x=1688886887;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yj+I/Z078bQFH9XJY9DtKo6v8eFiX2booMeshYQ82pY=;
+        b=LrrM5LABjmgulWhc+P2jC16Pz1Hvb5PDpEhoa/Vhr2qcu1wEdMsipsNCHaktK0ulKb
+         MNyGZgH5U6hCvZ5pdvBIZ3pqPJPgbFifjEd72ss72elZJ/33JDq3o4p2FKO2KsJLx6/D
+         2LdJWl6KeqmI3hVhogPaue2NNbf1uPB26arntK46+l8xdQM13pqj93ouneMnfAjcbCYs
+         qBF3GFO6ZMMbCvGeIAbEhK72YK4U3jCuJxqFNf9w5y6VsCQ92e6xqonpF7bkcGo5ZCDd
+         aGmYwD7mt6vSKSlnrbbtpTJwtUEwQCCN/xhYJAw2nYbyY3VUENCL8AzK0AC187NmP7sH
+         jcqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686294887; x=1688886887;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Yj+I/Z078bQFH9XJY9DtKo6v8eFiX2booMeshYQ82pY=;
+        b=gqEh75Svj5lWwffmGOtycC8JioF95aeO3SeWVajtQKaIV9h8lTochK5cclluTCtGe8
+         FEmeXtOoFYTz6TIBdOVtBPssPDbrCszhwY6JMSuOyJPUah5PWsF8KYJ0KwG0X37wmBkM
+         O1bQh43s55vJY60+xc9Jmb2OtGqOGTuk25iW2dKWlMpBkiPSyTF4hW3IlsnhD7xR7Gz9
+         gF8onNeReLbmUAxIAzCymfOqXdDwq/HechfsnZ/tMKt6ljdKqbEyOoH0Sy6UPiiXbfB7
+         xGuWorxa3zesBCUTnuvgbgHvT9F0mLgxyw76JCJT3HIUpQYZihqlRSjwTF+Zt1qiSL+D
+         Npsg==
+X-Gm-Message-State: AC+VfDywUZJegfTrn2xkgKhc8Fg4wFABuJGpjHy6/OebFHXJ6WOl6eF9
+        1k+GO+5+g8rxcXWO2s7AAsU=
+X-Google-Smtp-Source: ACHHUZ5iTxPB2V2Uervt0cQoqR/babM8rB56SsgMpRcNL22NDg3rd4x5Tue8UHARwrQjw7wQ5FgAtw==
+X-Received: by 2002:a05:6359:a02:b0:127:f5d3:b6f9 with SMTP id el2-20020a0563590a0200b00127f5d3b6f9mr619332rwb.18.1686294886835;
+        Fri, 09 Jun 2023 00:14:46 -0700 (PDT)
+Received: from localhost.localdomain (2001-b400-e282-07a7-2523-0b40-49e4-7cbb.emome-ip6.hinet.net. [2001:b400:e282:7a7:2523:b40:49e4:7cbb])
+        by smtp.gmail.com with ESMTPSA id f3-20020a656283000000b005308b255502sm2085196pgv.68.2023.06.09.00.14.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 00:14:46 -0700 (PDT)
+From:   Victor Shih <victorshihgli@gmail.com>
+To:     ulf.hansson@linaro.org, adrian.hunter@intel.com
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        benchuanggli@gmail.com, HL.Liu@genesyslogic.com.tw,
+        Greg.tu@genesyslogic.com.tw,
+        Victor Shih <victor.shih@genesyslogic.com.tw>
+Subject: [PATCH V6 0/4] Add Genesys Logic GL9767 support
+Date:   Fri,  9 Jun 2023 15:14:37 +0800
+Message-Id: <20230609071441.451464-1-victorshihgli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V11 05/10] arm64/perf: Add branch stack support in ARMV8
- PMU
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, catalin.marinas@arm.com,
-        Mark Brown <broonie@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-References: <20230531040428.501523-1-anshuman.khandual@arm.com>
- <20230531040428.501523-6-anshuman.khandual@arm.com>
- <ZH3PCqYt/UzoiVx3@FVFF77S0Q05N>
- <ba396c30-6719-1dfb-77c2-9f7e1715b57c@arm.com>
- <290b577c-4740-d2e2-d236-c8bbe2f907b9@arm.com>
-Content-Language: en-US
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <290b577c-4740-d2e2-d236-c8bbe2f907b9@arm.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,83 +71,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[..]
+From: Victor Shih <victor.shih@genesyslogic.com.tw>
 
-On 6/8/23 15:43, Suzuki K Poulose wrote:
->>> | static int armv8pmu_probe_pmu(struct arm_pmu *cpu_pmu)
->>> | {
->>> |         struct armv8pmu_probe_info probe = {
->>> |                 .pmu = cpu_pmu,
->>> |                 .present = false,
->>> |         };
->>> |         int ret;
->>> |
->>> |         ret = smp_call_function_any(&cpu_pmu->supported_cpus,
->>> |                                     __armv8pmu_probe_pmu,
->>> |                                     &probe, 1);
->>> |         if (ret)
->>> |                 return ret;
->>> |         if (!probe.present)
->>> |                 return -ENODEV;
->>> |
->>> |           if (!arm_pmu_branch_stack_supported(cpu_pmu))
->>> |             return 0;
->>> |
->>> |         ret = armv8pmu_private_alloc(cpu_pmu);
->>> |         if (ret)
->>> |         return ret;
->>> |       
->>> |          ret = branch_records_alloc(cpu_pmu);
->>> |          if (ret)
->>> |          armv8pmu_private_free(cpu_pmu);
->>> |       
->>> |        return ret;
->>> | }
+These patches support for the GL9767 chipset and add support SD3/SD Express
+mode for the GL9767.
 
+Changes in v6 (June. 9, 2023)
+* rebased to the linux-kernel-v6.4.0-rc5 in Ulf Hansson next branch.
+* Patch#2: use usleep_range() to instead msleep() in
+           gl9767_set_pll() function.
+* Patch#4: use usleep_range() to instead msleep() in
+           gl9767_init_sd_express() function.
 
-After splitting the task ctx cache management from pmu private data
-management, the above function will look something like this taking
-care of all error path freeing as well.
+----------------- original cover letter from v5 -----------------
+These patches support for the GL9767 chipset and add support SD3/SD Express
+mode for the GL9767.
 
-static int armv8pmu_probe_pmu(struct arm_pmu *cpu_pmu)
-{
-        struct armv8pmu_probe_info probe = {
-                .pmu = cpu_pmu,
-                .present = false,
-        };
-        int ret;
+Changes in v5 (June. 1, 2023)
+* rebased to the linux-kernel-v6.4.0-rc1 in Ulf Hansson next branch.
+* Patch#3: adjust the alignment of definitions.
 
-        ret = armv8pmu_private_alloc(cpu_pmu);
-        if (ret)
-                return ret;
+----------------- original cover letter from v4 -----------------
+These patches support for the GL9767 chipset and add support SD3/SD Express
+mode for the GL9767.
 
-        ret = smp_call_function_any(&cpu_pmu->supported_cpus,
-                                    __armv8pmu_probe_pmu,
-                                    &probe, 1);
-        if (ret)
-                goto probe_err;
+Changes in v4 (May. 31, 2023)
+* rebased to the linux-kernel-v6.4.0-rc1 in Ulf Hansson next branch.
+* add VDD2 definition for power control-register.
+* Patch#4: use SDHCI_VDD2_POWER_ON to instead SDHCI_POWER_ON in
+           gl9767_init_sd_express() function.
+           use SDHCI_VDD2_POWER_180 to instead SDHCI_POWER_180 in
+           gl9767_init_sd_express() function.
 
-        if (!probe.present) {
-                ret = -ENODEV;
-                goto probe_err;
-        }
+----------------- original cover letter from v3 -----------------
+These patches support for the GL9767 chipset and add support SD3/SD Express
+mode for the GL9767.
 
-        if (cpu_pmu->has_branch_stack) {
-                ret = armv8pmu_task_ctx_cache_alloc(cpu_pmu);
-                if (ret)
-                        goto probe_err;
+Changes in v3 (May. 31, 2023)
+* rebased to the linux-kernel-v6.4.0-rc1 in Ulf Hansson next branch.
+* Patch#2: use msleep() to instead mdelay().
+* Patch#3: modify the if-else condition and content in
+           gl9767_init_sd_express() function.
+           adjust the order of definitions.
 
-                ret = branch_records_alloc(cpu_pmu);
-                if (ret) {
-                        armv8pmu_task_ctx_cache_free(cpu_pmu);
-                        goto probe_err;
-                }
-                return 0;
-        }
-        armv8pmu_private_free(cpu_pmu);
-        return 0;
+----------------- original cover letter from v2 -----------------
+These patches support for the GL9767 chipset and add support SD3/SD Express
+mode for the GL9767.
 
-probe_err:
-        armv8pmu_private_free(cpu_pmu);
-        return ret;
-}
+Changes in v2 (May. 30, 2023)
+* rebased to the linux-kernel-v6.4.0-rc1 in Ulf Hansson next branch.
+* Add set SDR104's clock to 205MHz and enable SSC for GL9767.
+* drop export sdhci_check_ro() function.
+* Patch#1: add gl9767_vhs_read() and gl9767_vhs_write().
+* Patch#3: use mmc->ops->get_ro() to instead sdhci_check_ro().
+           use msleep() to instead mdelay().
+           modify the wait time for Power valid to CLKREQ.
+           drop unused definitions.
+
+----------------- original cover letter from v1 -----------------
+These patches support for the GL9767 chipset and add support SD3/SD Express
+mode for the GL9767.
+
+Changes in v1 (May. 12, 2023)
+* rebased to the linux-kernel-v6.4.0-rc1 in Ulf Hansson next branch.
+* enable MSI interrupt for the GL9767.
+* add support SDR mode for the GL9767.
+* export sdhci_check_ro() function.
+* add support SD Express mode for the GL9767.
+
+Victor Shih (4):
+  mmc: sdhci-pci-gli: Add Genesys Logic GL9767 support
+  mmc: sdhci-pci-gli: Set SDR104's clock to 205MHz and enable SSC for
+    GL9767
+  mmc: sdhci: Add VDD2 definition for power control register
+  mmc: sdhci-pci-gli: Add support SD Express card for GL9767
+
+ drivers/mmc/host/sdhci-pci-core.c |   1 +
+ drivers/mmc/host/sdhci-pci-gli.c  | 406 ++++++++++++++++++++++++++++++
+ drivers/mmc/host/sdhci-pci.h      |   2 +
+ drivers/mmc/host/sdhci.h          |   7 +
+ 4 files changed, 416 insertions(+)
+
+-- 
+2.25.1
+
