@@ -2,53 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 353A872A355
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 21:46:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C95A72A359
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 21:48:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231924AbjFITq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 15:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46088 "EHLO
+        id S229917AbjFITsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 15:48:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjFITqZ (ORCPT
+        with ESMTP id S229454AbjFITsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 15:46:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06D73590
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 12:46:24 -0700 (PDT)
+        Fri, 9 Jun 2023 15:48:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A0BE4A;
+        Fri,  9 Jun 2023 12:48:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8486D6207B
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 19:46:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B831CC433EF;
-        Fri,  9 Jun 2023 19:46:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9938C65B55;
+        Fri,  9 Jun 2023 19:48:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2C3CC433EF;
+        Fri,  9 Jun 2023 19:48:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686339984;
-        bh=JvHYpswbys1U43XNU3gZS8w1UgfVc1fwneoyXTNvECk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=J78D8Dy1WGHKj+OU1z1AyPk/ILwM0Ky/0tg1+4BmsQVGYRqn4RNHttT3R+k4aZ7jE
-         kgbXw3wSFaqQgiTP+C3VCtoXUYD9K07zHs7hYM8DJcWxxssnCXRM4Of8NuDq1DhpeR
-         l30RirOHJRX54yqwmIjGKcEOxtgjwaq30xUQWaEZqlgj12UBDJy+FLlBiFNCN3H9f+
-         tD5iAFRYcmTKU7Tiz/vaN9L9anrGMkB9ckgoXJ+rreCSbR6j3Nb0ZFACuRnvs7eGu0
-         9gaeVILUk0c+/RhstEtifN5mx+AUSsi/8Iu2RXsjAd61fkxkS8sI2qbh2/xfbOE6o4
-         f4NdG9LUEQ6Ag==
-Date:   Fri, 9 Jun 2023 14:46:21 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Sui Jingfeng <suijingfeng@loongson.cn>
-Cc:     Li Yi <liyi@loongson.cn>, etnaviv@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Sui Jingfeng <15330273260@189.cn>
-Subject: Re: [PATCH v8 6/8] drm/etnaviv: add driver support for the PCI
- devices
-Message-ID: <20230609194621.GA1257228@bhelgaas>
+        s=k20201202; t=1686340088;
+        bh=vRa5+x8YqrUPTrMvhWgSuXzIjrvokCR+9EDGmt85tqM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ChS1WcA0jb9t3utyWXMEm7DclUZ62ObuGUG46Swbeqx1GbA1hlbcJQHlu2stE9hIv
+         GH1NSTdsT/MseOoSIUE54kM+kcazwtBa97h+DOy5EJ/b2dDWy077Tv5RIfj3UnsA14
+         7LuDRvovdrXGN4yO8NgoQqmE8OIDhgO0MvuReZ0DK2VSXv9AMXdTlwEr4jb0ZztOFT
+         PIl40lOqD+NoJZkGwcMITMb7yHdAgAaHoHSk1cxDrS6qaIkEsOZxQU9TUM7MKRvjvB
+         jZ2ok9uKAnj5r4yhw+ekgoIrVEf0ZJDPs99Z/ihWppNQcf89FrxJLj7SZKalOxIxAK
+         xOv1EQ/We2oAg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id BAEE940692; Fri,  9 Jun 2023 16:48:04 -0300 (-03)
+Date:   Fri, 9 Jun 2023 16:48:04 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        German Gomez <german.gomez@arm.com>,
+        Ali Saidi <alisaidi@amazon.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Dmitrii Dolgov <9erthalion6@gmail.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Changbin Du <changbin.du@huawei.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Steinar H. Gunderson" <sesse@google.com>,
+        Yuan Can <yuancan@huawei.com>,
+        Brian Robbins <brianrob@linux.microsoft.com>,
+        liuwenyu <liuwenyu7@huawei.com>,
+        Ivan Babrou <ivan@cloudflare.com>,
+        Fangrui Song <maskray@google.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, coresight@lists.linaro.org
+Subject: Re: [PATCH v2 06/26] perf addr_location: Add init/exit/copy functions
+Message-ID: <ZIOB9Kmg+uQ+vgSI@kernel.org>
+References: <20230608232823.4027869-1-irogers@google.com>
+ <20230608232823.4027869-7-irogers@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <79e07134-4f89-22dd-5a9c-3c8dfac50bf2@loongson.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230608232823.4027869-7-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,40 +93,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 10, 2023 at 02:07:58AM +0800, Sui Jingfeng wrote:
-> On 2023/6/10 01:52, Bjorn Helgaas wrote:
-> > On Fri, Jun 09, 2023 at 09:37:02AM +0800, Sui Jingfeng wrote:
-> > > On 2023/6/9 01:32, Bjorn Helgaas wrote:
-> > > > On Wed, Jun 07, 2023 at 06:55:49PM +0800, Sui Jingfeng wrote:
-> > > > > From: Sui Jingfeng <suijingfeng@loongson.cn>
-> > > > > 
-> > > > > This patch adds PCI driver support on top of what we already have. Take
-> > > > > the GC1000 in LS7A1000/LS2K1000 as the first instance of the PCI device
-> > > > > driver. There is only one GPU core for the GC1000 in the LS7A1000 and
-> > > > > LS2K1000. Therefore, component frameworks can be avoided.
-> > > > > +	{PCI_VENDOR_ID_LOONGSON, 0x7a15, PCI_ANY_ID, PCI_ANY_ID, 0, 0, 0},
-> > > > > +	{PCI_VENDOR_ID_LOONGSON, 0x7a05, PCI_ANY_ID, PCI_ANY_ID, 0, 0, 0},
-> > > > PCI_VDEVICE()
-> > > This make it impossible to hook device-specific data in the future.
-> > > 
-> > > But currently there no device specific data associated with the
-> > > 0x7a05 and 0x7a15,
-> > > 
-> > > so it's acceptable for now. Thanks.
-> > Haha, ISTR having this conversation before, sorry for repeating it.
-> > 
-> > Indeed, it's fine as-is.  But PCI_VDEVICE() actually *does* allow for
-> > vendor-specific data because it doesn't include the data element,
-> > which defaults to zero if you don't specify it.
-> > 
-> > So for example, drivers/net/ethernet/realtek/r8169_main.c has this:
-> > 
-> >    { PCI_VDEVICE(REALTEK, 0x8129) },
-> >    { PCI_VDEVICE(REALTEK, 0x8136), RTL_CFG_NO_GBIT },
-> > 
-> > where 0x8129 has no driver_data (it defaults to zero), but 0x8136
-> > does.
-> 
-> PCI_VDEVICE macro end with two zero. (I thought it was three)
+Em Thu, Jun 08, 2023 at 04:28:03PM -0700, Ian Rogers escreveu:
+> +++ b/tools/perf/builtin-kmem.c
+> @@ -399,7 +399,9 @@ static u64 find_callsite(struct evsel *evsel, struct perf_sample *sample)
+>  	struct addr_location al;
+>  	struct machine *machine = &kmem_session->machines.host;
+>  	struct callchain_cursor_node *node;
+> +	u64 result;
+>  
+> +	addr_location__init(&al);
+>  	if (alloc_func_list == NULL) {
+>  		if (build_alloc_func_list() < 0)
+>  			goto out;
+> @@ -427,16 +429,19 @@ static u64 find_callsite(struct evsel *evsel, struct perf_sample *sample)
+>  			else
+>  				addr = node->ip;
+>  
+> -			return addr;
+> +			result = addr;
+> +			goto out;
+>  		} else
+>  			pr_debug3("skipping alloc function: %s\n", caller->name);
+>  
+>  		callchain_cursor_advance(&callchain_cursor);
+>  	}
+>  
+> -out:
+>  	pr_debug2("unknown callsite: %"PRIx64 "\n", sample->ip);
+> -	return sample->ip;
+> +	result = sample->ip;
+> +out:
+> +	addr_location__exit(&al);
+> +	return result;
+>  }
 
-No worries, I thought the same thing the first five times I read it :)
+I needed this to make sure result is set to something, mostly keeping
+the previous logic as build_alloc_func_list() already does
+debugging/error prints about what went wrong if it takes the 'goto out'.
+
+- Arnaldo
+
+diff --git a/tools/perf/builtin-kmem.c b/tools/perf/builtin-kmem.c
+index a11f280d20bd3d12..96a6611e4e53f448 100644
+--- a/tools/perf/builtin-kmem.c
++++ b/tools/perf/builtin-kmem.c
+@@ -399,7 +399,7 @@ static u64 find_callsite(struct evsel *evsel, struct perf_sample *sample)
+ 	struct addr_location al;
+ 	struct machine *machine = &kmem_session->machines.host;
+ 	struct callchain_cursor_node *node;
+-	u64 result;
++	u64 result = sample->ip;
+ 
+ 	addr_location__init(&al);
+ 	if (alloc_func_list == NULL) {
+@@ -438,7 +438,6 @@ static u64 find_callsite(struct evsel *evsel, struct perf_sample *sample)
+ 	}
+ 
+ 	pr_debug2("unknown callsite: %"PRIx64 "\n", sample->ip);
+-	result = sample->ip;
+ out:
+ 	addr_location__exit(&al);
+ 	return result;
