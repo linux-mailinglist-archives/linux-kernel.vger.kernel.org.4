@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F486729599
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:41:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FF1A729668
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 12:11:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240262AbjFIJk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 05:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33536 "EHLO
+        id S240603AbjFIKK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 06:10:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241315AbjFIJjc (ORCPT
+        with ESMTP id S241369AbjFIKKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 05:39:32 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2015FF7
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 02:33:56 -0700 (PDT)
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+        Fri, 9 Jun 2023 06:10:19 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC8E4EF6
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 02:59:17 -0700 (PDT)
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com [209.85.208.199])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 232D13F371
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:32:43 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 10CB23F574
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:32:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1686303163;
-        bh=LI2l8EJ+sB/HFX7H7shv6XhttNoaeY5XoeYDpHH2kwI=;
+        s=20210705; t=1686303166;
+        bh=/3eW+11n/4iCvn/s3430tPb8fe2pR8+LzRYCxQYjku8=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=AMMyW/NK+XcsRtAcYWPGiSDChEYT1Ej+2sM67810W4WhrtpRy4UerOgzFyoo6HkTS
-         hTr2LY2UWrDntAyvtD0m1mfYocjm4Cl20RxaW4jUwoXcI0jE1k9SmWpsvYqtvadlXI
-         mx1s9eqQfT2rfdycg95gem7N88obloUfXRv0mf555g6JtJQCcOp0Up7mXKb2ckj50/
-         pX1E+rOkIZjiQTdZu6WgZvN5E87bWZHSpgFSm8R0uwSNWb7HIsggYh1Z6pYO/DDchi
-         tORhSWC4FoIxy1yM1K3xIlHiOuCTD8agGK+UELcZFGoow/CpPYhGKrv6y6mKFaCAhu
-         lvigP3aBY+M3g==
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-94a35b0d4ceso151180066b.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 02:32:43 -0700 (PDT)
+        b=oesWZssZIjW57ZWF92PWBoWu4iY32fpTt65uUzVnDdsTEkcZnEBnQ2VhxKOckiRuM
+         LzF8EbIgATwmQaU3uCpXPQGZmJq/H8JuPQTuZ3GSqB94+B87CJP5IsuFbHEOAdRRoM
+         5HSwMJRfEXCmHvseQ9HMnIRijIM8tQwXm0yxf9mzXytIjH6U52XCFGTN+r1m+fy0BH
+         WsgzpYFwSg8ynd4DAk1xoaD9xzloUwc+Vm3Q40QG0dsqAemgJkN0TklMS+ODVfuFOT
+         ZyFi6CZGTDIPgp9ero4qtB/+ahSTmroiGRkJDn3kTCfBI28aaF1ypJR2qsPsxXGFOY
+         sZaAW0lFcz95A==
+Received: by mail-lj1-f199.google.com with SMTP id 38308e7fff4ca-2b168e97cdfso12476141fa.2
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 02:32:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686303162; x=1688895162;
+        d=1e100.net; s=20221208; t=1686303164; x=1688895164;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LI2l8EJ+sB/HFX7H7shv6XhttNoaeY5XoeYDpHH2kwI=;
-        b=UlPPO9BysaY3k8mSFUceR7F+NaWj36Mg6Bcjp8u29826QEDIG8pQhr/1yP1PAjsqka
-         9BC03i+CmwsH42t9GIynmsGtay199Rg/KjZOX9RMypkK3XtLjUHFUptfEUZPQLAV5wRM
-         bNIiCA+ja/PrXdrXQPZKWjvNDnp9dcYizg12aCNEtu1YIaBdUi3lYXoZxf0v7dN8/VJM
-         zHvzVWNsfZYryiQTmxUzdC4/oILxXEUG066yujVNTdmiwvHyvXfJwOb2dMcb/07RNtq/
-         R2wvABZz72jOkXxNIewOmKPa1Im9Oyyp4lXK1U+Mu5ACXtqEAaseQqbnWv/P/lxFke8s
-         nV/A==
-X-Gm-Message-State: AC+VfDzZ5nWI64CUAHKWjn0AcxUalqXbhZ+Rx4L26Vd0KlVqWqFbCIoF
-        D/sQdqonNr+z5FpGE911fF41kcHPX3k0DZ5rK1uT9WvcJBk8v3YkLw5ASUEuBk1fR0ZvQO7T7Sp
-        nnpbkHVBXgZuKuQWxv7PyAopEFrMPsjW/tFVO5HvyhQ==
-X-Received: by 2002:a17:906:9b85:b0:96f:dd14:f749 with SMTP id dd5-20020a1709069b8500b0096fdd14f749mr1013830ejc.23.1686303162164;
-        Fri, 09 Jun 2023 02:32:42 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ77wxEqwisvkM7+2vPR5pOe0yqJEVm3fqKHexLUXhCzHN6fLXH9IQYibj/vo6ANsqqCr7Q5EA==
-X-Received: by 2002:a17:906:9b85:b0:96f:dd14:f749 with SMTP id dd5-20020a1709069b8500b0096fdd14f749mr1013810ejc.23.1686303161710;
-        Fri, 09 Jun 2023 02:32:41 -0700 (PDT)
+        bh=/3eW+11n/4iCvn/s3430tPb8fe2pR8+LzRYCxQYjku8=;
+        b=O6fYaunkRcfqxUofCIOObLRbfhOkiziMZF5ROeQUVTf2+O7x7fDcbGSNDsoi04kFGh
+         Hzij35dSSGPMgtxuAgZtV7Xa/diwO41IHeV2+S330hi3RF3HYziyCRNJHimoxEXVT/Il
+         mLb97eDgklBZqrcDJ498EnvwMH+bfzkxbw/yNzZ2MsSnjS7Srb/KXr2Q/khJXB8Vk9AY
+         ccgYFGXqI2VL76b5cgO4ffoiGwokS7e5jdbDUFukL7wNpjPVkIPrukLQcnznsrB+6pCE
+         vnRgmT/uS7U2kf/2935hMc9mxhe5rsFsRXFs7qG1HNcPz3lkC68pw13zpExGdhrIiPr1
+         9AkA==
+X-Gm-Message-State: AC+VfDxfc31Powjb1aA1htl7SVVDJz/wYK/H4/BfrVcLh6f/5XYC4S9M
+        pc7/BGk/t6mV9H48MOAtfOd7WTtGudpUbdc4SsEOx2Ub6kVQs4etke09VhvsmV/nsjO3Jg9PZLy
+        t5v0rxq+6rztoiyM2mdyuA4A0q1Pgleiaiq5u18WZsg==
+X-Received: by 2002:a2e:8659:0:b0:2b2:3a4:4ebe with SMTP id i25-20020a2e8659000000b002b203a44ebemr802393ljj.48.1686303164552;
+        Fri, 09 Jun 2023 02:32:44 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6Xp6K9xKO9YEjHS2qWVmuHEJbD+pzRh3X4TI7BNImhUPEhsy5RO+Z9y84aSm4a3Lt8GGRPiw==
+X-Received: by 2002:a2e:8659:0:b0:2b2:3a4:4ebe with SMTP id i25-20020a2e8659000000b002b203a44ebemr802382ljj.48.1686303164306;
+        Fri, 09 Jun 2023 02:32:44 -0700 (PDT)
 Received: from amikhalitsyn.local (dslb-002-205-064-187.002.205.pools.vodafone-ip.de. [2.205.64.187])
-        by smtp.gmail.com with ESMTPSA id e25-20020a170906081900b0094ee3e4c934sm1031248ejd.221.2023.06.09.02.32.40
+        by smtp.gmail.com with ESMTPSA id e25-20020a170906081900b0094ee3e4c934sm1031248ejd.221.2023.06.09.02.32.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 02:32:41 -0700 (PDT)
+        Fri, 09 Jun 2023 02:32:43 -0700 (PDT)
 From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
 To:     xiubli@redhat.com
 Cc:     brauner@kernel.org, stgraber@ubuntu.com,
@@ -67,9 +67,9 @@ Cc:     brauner@kernel.org, stgraber@ubuntu.com,
         Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
         Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v6 04/15] ceph: pass an idmapping to mknod/symlink/mkdir/rename
-Date:   Fri,  9 Jun 2023 11:31:15 +0200
-Message-Id: <20230609093125.252186-5-aleksandr.mikhalitsyn@canonical.com>
+Subject: [PATCH v6 05/15] ceph: allow idmapped getattr inode op
+Date:   Fri,  9 Jun 2023 11:31:16 +0200
+Message-Id: <20230609093125.252186-6-aleksandr.mikhalitsyn@canonical.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230609093125.252186-1-aleksandr.mikhalitsyn@canonical.com>
 References: <20230609093125.252186-1-aleksandr.mikhalitsyn@canonical.com>
@@ -78,7 +78,7 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -87,8 +87,8 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Christian Brauner <christian.brauner@ubuntu.com>
 
-Enable mknod/symlink/mkdir/rename iops to handle idmapped mounts.
-This is just a matter of passing down the mount's idmapping.
+Enable ceph_getattr() to handle idmapped mounts. This is just a matter
+of passing down the mount's idmapping.
 
 Cc: Xiubo Li <xiubli@redhat.com>
 Cc: Jeff Layton <jlayton@kernel.org>
@@ -97,48 +97,22 @@ Cc: ceph-devel@vger.kernel.org
 Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
 Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
 ---
-v4:
-	- call mnt_idmap_get
----
- fs/ceph/dir.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ fs/ceph/inode.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/ceph/dir.c b/fs/ceph/dir.c
-index 1b46f2b998c3..2c0c2c98085b 100644
---- a/fs/ceph/dir.c
-+++ b/fs/ceph/dir.c
-@@ -923,6 +923,7 @@ static int ceph_mknod(struct mnt_idmap *idmap, struct inode *dir,
- 	req->r_parent = dir;
- 	ihold(dir);
- 	set_bit(CEPH_MDS_R_PARENT_LOCKED, &req->r_req_flags);
-+	req->r_mnt_idmap = mnt_idmap_get(idmap);
- 	req->r_args.mknod.mode = cpu_to_le32(mode);
- 	req->r_args.mknod.rdev = cpu_to_le32(rdev);
- 	req->r_dentry_drop = CEPH_CAP_FILE_SHARED | CEPH_CAP_AUTH_EXCL | CEPH_CAP_XATTR_EXCL;
-@@ -1035,6 +1036,7 @@ static int ceph_symlink(struct mnt_idmap *idmap, struct inode *dir,
+diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
+index fe8adb9d67a6..533349fe542f 100644
+--- a/fs/ceph/inode.c
++++ b/fs/ceph/inode.c
+@@ -2979,7 +2979,7 @@ int ceph_getattr(struct mnt_idmap *idmap, const struct path *path,
+ 			return err;
  	}
  
- 	set_bit(CEPH_MDS_R_PARENT_LOCKED, &req->r_req_flags);
-+	req->r_mnt_idmap = mnt_idmap_get(idmap);
- 	req->r_dentry = dget(dentry);
- 	req->r_num_caps = 2;
- 	req->r_dentry_drop = CEPH_CAP_FILE_SHARED | CEPH_CAP_AUTH_EXCL | CEPH_CAP_XATTR_EXCL;
-@@ -1111,6 +1113,7 @@ static int ceph_mkdir(struct mnt_idmap *idmap, struct inode *dir,
- 	req->r_parent = dir;
- 	ihold(dir);
- 	set_bit(CEPH_MDS_R_PARENT_LOCKED, &req->r_req_flags);
-+	req->r_mnt_idmap = mnt_idmap_get(idmap);
- 	req->r_args.mkdir.mode = cpu_to_le32(mode);
- 	req->r_dentry_drop = CEPH_CAP_FILE_SHARED | CEPH_CAP_AUTH_EXCL | CEPH_CAP_XATTR_EXCL;
- 	req->r_dentry_unless = CEPH_CAP_FILE_EXCL;
-@@ -1422,6 +1425,7 @@ static int ceph_rename(struct mnt_idmap *idmap, struct inode *old_dir,
- 	req->r_old_dentry_unless = CEPH_CAP_FILE_EXCL;
- 	req->r_dentry_drop = CEPH_CAP_FILE_SHARED | CEPH_CAP_XATTR_EXCL;
- 	req->r_dentry_unless = CEPH_CAP_FILE_EXCL;
-+	req->r_mnt_idmap = mnt_idmap_get(idmap);
- 	/* release LINK_RDCACHE on source inode (mds will lock it) */
- 	req->r_old_inode_drop = CEPH_CAP_LINK_SHARED | CEPH_CAP_LINK_EXCL;
- 	if (d_really_is_positive(new_dentry)) {
+-	generic_fillattr(&nop_mnt_idmap, inode, stat);
++	generic_fillattr(idmap, inode, stat);
+ 	stat->ino = ceph_present_inode(inode);
+ 
+ 	/*
 -- 
 2.34.1
 
