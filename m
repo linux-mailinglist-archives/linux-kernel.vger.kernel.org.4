@@ -2,176 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C94C72924D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:10:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 130BF729256
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239866AbjFIIJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 04:09:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44044 "EHLO
+        id S239308AbjFIIKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 04:10:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239780AbjFIIJG (ORCPT
+        with ESMTP id S240168AbjFIIJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 04:09:06 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF333C30
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 01:08:29 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q7XAK-0006kw-V8; Fri, 09 Jun 2023 10:08:13 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q7XAH-0069Zi-QX; Fri, 09 Jun 2023 10:08:09 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q7XAG-00CXLI-Ow; Fri, 09 Jun 2023 10:08:08 +0200
-Date:   Fri, 9 Jun 2023 10:08:08 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial@vger.kernel.org,
+        Fri, 9 Jun 2023 04:09:29 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19B43A80
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 01:09:07 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-565e6beb7aaso13701807b3.2
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 01:09:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686298146; x=1688890146;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=D+JG9ScbeIgWCoIoD1lrBSynxF7pZ7ZmtCOtSuAlDGQ=;
+        b=RfeoHUBLwqk9vTTBDLCpOuzNXpllWDEkPYc6yjXtxGCPNmX/rvie991AU10lJs4XbF
+         9RzbOtcSEpi5Rh8KstlxITQN3Ffo4ROyfYENBHFqs9HkcG3CFgO7j5lBQrxeeGMGBjp2
+         NZdxOQon49qNf9HZ1Qgrz3xC18+gnVg36Hvk5SsHYUm7h4j5tszvUdFL2KV4ehwHCBOk
+         gyj3AdqSIMMtQdGmRCxc7HYtfEU+n7ezPeWYkyEIY3KjdS94V8qvWswp+jF2hFiGMFim
+         NoPZGExtzKBOx7SOm5zC/zUvIhzRSqstVSVI3uYZkXeW9ex9SLXGk6aLeA5PY5ojGjGB
+         epOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686298146; x=1688890146;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=D+JG9ScbeIgWCoIoD1lrBSynxF7pZ7ZmtCOtSuAlDGQ=;
+        b=eNcq1vEnbYas9GdNDJuuT+ezQEyKeNJweClGQfpE/1t8VdGFXViIhDQBoU6O8YP/nL
+         cBQnKcHC4DO7S3ViwaF0hR5codHd3/TzrkLe2GHcRYhrm8uIERMNAMVlb+NWS4/n+jin
+         kPw/Lxn8gBmlLeIr9E/xhwZjE6ipi8oY4zL89hNQKCabV469Lyk0Z7Ie5IhPKyV67bY2
+         hDra7VRlYAZ3gdojNgdjiIFz8+SaHGlj4IX9pVDOhENWmrTNlpcTTduaEv/VqOo4jUhq
+         wNFgMrVr/K2HfEpOEjCCce2Jn0jlda1w86zCFJCa4Y2F/tRbwJk4s77FC7XnoanVjVG2
+         n5Nw==
+X-Gm-Message-State: AC+VfDzB1BclvD+P63rrZeYGcsgQS9gsQFiRxWKcv0CLnPVzMAo0zGEA
+        fdkuqFxnG3WXCZrv185a/49LCA==
+X-Google-Smtp-Source: ACHHUZ5DQYcZ9JTl8EUp4l7QLImYygbjncdx8ql55YYe3IsFqc7F1XNEab87Po2zAxMo3TGE3P0BfA==
+X-Received: by 2002:a0d:e684:0:b0:565:e87f:a78f with SMTP id p126-20020a0de684000000b00565e87fa78fmr500342ywe.25.1686298145738;
+        Fri, 09 Jun 2023 01:09:05 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id n19-20020a819c53000000b005688f7596ccsm453200ywa.78.2023.06.09.01.09.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 01:09:04 -0700 (PDT)
+Date:   Fri, 9 Jun 2023 01:08:52 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Helge Deller <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH] powerpc/legacy_serial: check CONFIG_SERIAL_8250_CONSOLE
-Message-ID: <20230609080808.cuujwvy55s2vvn4m@pengutronix.de>
-References: <20230609003328.15008-1-rdunlap@infradead.org>
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v2 07/23 fix] mips: update_mmu_cache() can replace __update_tlb():
+ fix
+In-Reply-To: <178970b0-1539-8aac-76fd-972c6c46ec17@google.com>
+Message-ID: <6852be98-64e6-6092-d1c-13124b97bc75@google.com>
+References: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com> <178970b0-1539-8aac-76fd-972c6c46ec17@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ndc6ya4l57czhno4"
-Content-Disposition: inline
-In-Reply-To: <20230609003328.15008-1-rdunlap@infradead.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I expect this to fix the
+arch/mips/mm/tlb-r4k.c:300:16: warning: variable 'pmdp' set but not used
+reported by the kernel test robot; but I am uncomfortable rearranging
+lines in this tlb_probe_hazard() area, and would be glad for review and
+testing by someone familiar with mips - thanks in advance!
 
---ndc6ya4l57czhno4
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202306091304.cNVIspK0-lkp@intel.com/
+Signed-off-by: Hugh Dickins <hughd@google.com>
+---
+ arch/mips/mm/tlb-r4k.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-Hello Randy,
+diff --git a/arch/mips/mm/tlb-r4k.c b/arch/mips/mm/tlb-r4k.c
+index c96725d17cab..80fc90d8d2f1 100644
+--- a/arch/mips/mm/tlb-r4k.c
++++ b/arch/mips/mm/tlb-r4k.c
+@@ -293,11 +293,13 @@ void local_flush_tlb_one(unsigned long page)
+ void update_mmu_cache(struct vm_area_struct *vma,
+ 		      unsigned long address, pte_t *ptep)
+ {
+-	unsigned long flags;
++#ifdef CONFIG_MIPS_HUGE_TLB_SUPPORT
+ 	pgd_t *pgdp;
+ 	p4d_t *p4dp;
+ 	pud_t *pudp;
+ 	pmd_t *pmdp;
++#endif
++	unsigned long flags;
+ 	int idx, pid;
+ 
+ 	/*
+@@ -316,15 +318,15 @@ void update_mmu_cache(struct vm_area_struct *vma,
+ 		pid = read_c0_entryhi() & cpu_asid_mask(&current_cpu_data);
+ 		write_c0_entryhi(address | pid);
+ 	}
+-	pgdp = pgd_offset(vma->vm_mm, address);
+ 	mtc0_tlbw_hazard();
+ 	tlb_probe();
+ 	tlb_probe_hazard();
++	idx = read_c0_index();
++#ifdef CONFIG_MIPS_HUGE_TLB_SUPPORT
++	pgdp = pgd_offset(vma->vm_mm, address);
+ 	p4dp = p4d_offset(pgdp, address);
+ 	pudp = pud_offset(p4dp, address);
+ 	pmdp = pmd_offset(pudp, address);
+-	idx = read_c0_index();
+-#ifdef CONFIG_MIPS_HUGE_TLB_SUPPORT
+ 	/* this could be a huge page  */
+ 	if (ptep == (pte_t *)pmdp) {
+ 		unsigned long lo;
+-- 
+2.35.3
 
-On Thu, Jun 08, 2023 at 05:33:28PM -0700, Randy Dunlap wrote:
-> When SERIAL_8250_CONSOLE is not set but PPC_UDBG_16550=3Dy,
-> the legacy_serial code references fsl8250_handle_irq, which is
-> only built when SERIAL_8250_CONSOLE is set.
->=20
-> Be consistent in referencing the used CONFIG_SERIAL_8250*
-> symbols so that the build errors do not happen.
->=20
-> Prevents these build errors:
->=20
-> powerpc-linux-ld: arch/powerpc/kernel/legacy_serial.o: in function `seria=
-l_dev_init':
-> legacy_serial.c:(.init.text+0x2aa): undefined reference to `fsl8250_handl=
-e_irq'
-> powerpc-linux-ld: legacy_serial.c:(.init.text+0x2b2): undefined reference=
- to `fsl8250_handle_irq'
->=20
-> Fixes: 66eff0ef528b ("powerpc/legacy_serial: Warn about 8250 devices oper=
-ated without active FSL workarounds")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-serial@vger.kernel.org
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Nicholas Piggin <npiggin@gmail.com>
-> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Cc: linuxppc-dev@lists.ozlabs.org
-> ---
->  arch/powerpc/kernel/legacy_serial.c |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff -- a/arch/powerpc/kernel/legacy_serial.c b/arch/powerpc/kernel/legac=
-y_serial.c
-> --- a/arch/powerpc/kernel/legacy_serial.c
-> +++ b/arch/powerpc/kernel/legacy_serial.c
-> @@ -508,9 +508,9 @@ static void __init fixup_port_irq(int in
-> =20
->  	port->irq =3D virq;
-> =20
-> -	if (IS_ENABLED(CONFIG_SERIAL_8250) &&
-> +	if (IS_ENABLED(CONFIG_SERIAL_8250_CONSOLE) &&
->  	    of_device_is_compatible(np, "fsl,ns16550")) {
-> -		if (IS_REACHABLE(CONFIG_SERIAL_8250)) {
-> +		if (IS_REACHABLE(CONFIG_SERIAL_8250_CONSOLE)) {
->  			port->handle_irq =3D fsl8250_handle_irq;
->  			port->has_sysrq =3D IS_ENABLED(CONFIG_SERIAL_8250_CONSOLE);
->  		} else {
-
-Argh, indeed there is a problem. Your patch however defeats the idea of
-66eff0ef528b[1] which is still valid. And with your patch the else
-branch that starts at the end of the above hunk is never taken.
-
-With the feedback I got on
-https://lore.kernel.org/linux-serial/20230605130857.85543-3-u.kleine-koenig=
-@pengutronix.de
-the probable outcome is that CONFIG_SERIAL_8250_FSL becomes tristate and
-so the fix that is more future proof and keeps the warning, looks as
-follows:
-
-diff --git a/arch/powerpc/kernel/legacy_serial.c b/arch/powerpc/kernel/lega=
-cy_serial.c
-index fdbd85aafeb1..6ee65741dbd5 100644
---- a/arch/powerpc/kernel/legacy_serial.c
-+++ b/arch/powerpc/kernel/legacy_serial.c
-@@ -510,7 +510,7 @@ static void __init fixup_port_irq(int index,
-=20
- 	if (IS_ENABLED(CONFIG_SERIAL_8250) &&
- 	    of_device_is_compatible(np, "fsl,ns16550")) {
--		if (IS_REACHABLE(CONFIG_SERIAL_8250)) {
-+		if (IS_REACHABLE(CONFIG_SERIAL_8250_FSL)) {
- 			port->handle_irq =3D fsl8250_handle_irq;
- 			port->has_sysrq =3D IS_ENABLED(CONFIG_SERIAL_8250_CONSOLE);
- 		} else {
-
-This should to the right thing now (while CONFIG_SERIAL_8250_FSL is
-still bool and only on if CONFIG_SERIAL_8250 is =3Dy) and also once
-CONFIG_SERIAL_8250_FSL can be =3Dm (which would make fsl8250_handle_irq
-not available for powerpc platform code).
-
-But given that I screwed this up several times now, I will think about
-this some more and do some more tests before submitting that as a proper
-patch.
-
-Best regards
-Uwe
-
-[1] Warn if the 8250 device is used but the required FSL workarounds are
-not.
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---ndc6ya4l57czhno4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSC3ecACgkQj4D7WH0S
-/k5T9Af/fgeBpi2x/JEzkhLoSz3doP+2Pv+/pfLZFelOSp4kIlGd8qnJoxVmGXwS
-jTAcJ+jpz9fheIA1Obhl0K38LuODmGg8ZFankSMEUvUNDjcalTXb7mQpT/qmVX41
-kDWGHNpNnbgnAKA56gg/IGt/0PVzLeFi8NuBXqS/jv52hNySnXOjIaRVC2ZE36EM
-kAd7pGtf8SGNo4+o9V/JIbMWnoXZuS4Qvo+MPJcfFE5IHlk4wHmYCxtuUAH56SuM
-06Rs0YdxYgN2yoc/fch7XjD7fnYuM7TgnYPn0uZSG6+brec3SKVml3VopzggGSHZ
-lORWQ0Mp14HXFfYDMD9zdAF1EIj5kg==
-=igw/
------END PGP SIGNATURE-----
-
---ndc6ya4l57czhno4--
