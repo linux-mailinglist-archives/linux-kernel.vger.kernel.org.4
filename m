@@ -2,77 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1FB9729259
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77B2372925B
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239856AbjFIIL0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 9 Jun 2023 04:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47786 "EHLO
+        id S239514AbjFIIMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 04:12:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbjFIIK5 (ORCPT
+        with ESMTP id S230391AbjFIIMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 04:10:57 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39BD1AB;
-        Fri,  9 Jun 2023 01:10:53 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1q7XCp-002oBq-4N; Fri, 09 Jun 2023 10:10:47 +0200
-Received: from ip5b40320d.dynamic.kabel-deutschland.de ([91.64.50.13] helo=suse-laptop.fritz.box)
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1q7XCo-002gny-TQ; Fri, 09 Jun 2023 10:10:47 +0200
-Message-ID: <025fe4853ff0a258dafdf71075419a2b740cabbd.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH v6 11/19] sh: add <asm-generic/io.h> including
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
-        christophe.leroy@csgroup.eu, hch@lst.de, rppt@kernel.org,
-        willy@infradead.org, agordeev@linux.ibm.com,
-        wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
-        David.Laight@ACULAB.COM, shorne@gmail.com, deller@gmx.de,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org
-Date:   Fri, 09 Jun 2023 10:10:46 +0200
-In-Reply-To: <20230609075528.9390-12-bhe@redhat.com>
-References: <20230609075528.9390-1-bhe@redhat.com>
-         <20230609075528.9390-12-bhe@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.48.2 
+        Fri, 9 Jun 2023 04:12:16 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE1AB9;
+        Fri,  9 Jun 2023 01:12:14 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f732d37d7cso14250885e9.2;
+        Fri, 09 Jun 2023 01:12:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686298333; x=1688890333;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/K5tYpr0uyjRNSZAPyx3ZIoIIDJLXA5XyIkkuNX3V10=;
+        b=U5smjNqwRLICYAf9BnfzzvQesG0TofUWx5lEm4axQW7kDdK+jGuIDIwUD+KBzbIwQo
+         /FBIc1lk+eYZgHqtGv9FVW7FqxQg1EHGMDGpLJVUm6vsqOmfUP1cMZZAZxKaSOMjBEa8
+         0xLDw3m2+L/PSX07fVXMkdznWZ0O7o+Fl7OC3n8BHa676nF3ASIGHpP7uQs8B83pGv9i
+         iMAwimHfjgDoqO5x6Oi7SA++BpikpCguxB7yk4weYLWzuMirZTwcmWsFRQwGsxggesV+
+         03lxkRASFO48RNQ7FsMhn81nd5lGqQ0lS8YXHIWOn/Xm/Z6v03aFC0HoLLv6it8eUCYt
+         lu9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686298333; x=1688890333;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/K5tYpr0uyjRNSZAPyx3ZIoIIDJLXA5XyIkkuNX3V10=;
+        b=XTjEiW3RoJMBsLVp+WA/RgUSC6CTjKGUll48ccxa234pYvhmWV16+3yLQwz/PtFz2N
+         Zraoi7ZSBnE+n5Xir/fy4dXmBqWjoFlBoHzso2pR0T/nRLjs0B8605hBlqBQL5t+j4q1
+         tYvUqekd9Kx05sLNQwELA9hP4VNnXqI9TKamMMsFcLY0MFX8gwjCseZ23K3TaXyKjTui
+         Ev4w6Dq18g0MtZZB7rzkfEdco52yo+ZckJxlgm+MEHfwQjYvpQ/stjR7uPvgoQUxHn8R
+         YmtGS0YI/NV6IGd4licV7tQHsobEYFkZ5Rjin5j18b35jYWYgOAsbcRdTVWICYkFOOnq
+         VgYQ==
+X-Gm-Message-State: AC+VfDwx0HeTHo4RL8wSKOQNnVa1IYrFjfeTn+/0Z4nZ6kFvovfJEzBs
+        ouxdn4f18b3LIjhRqeeJNK8=
+X-Google-Smtp-Source: ACHHUZ5pMVfMD2N6fxcWKg1ENmmI5IvXZhleR9/leoP5eQbaNK2wmzw/zgbW+vJt+ArN/b3USKzlCw==
+X-Received: by 2002:a7b:cb0e:0:b0:3f4:2ae5:b35d with SMTP id u14-20020a7bcb0e000000b003f42ae5b35dmr518114wmj.40.1686298332758;
+        Fri, 09 Jun 2023 01:12:12 -0700 (PDT)
+Received: from debian ([63.135.72.41])
+        by smtp.gmail.com with ESMTPSA id p18-20020a05600c205200b003f74eb308fasm1806222wmg.48.2023.06.09.01.12.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 01:12:12 -0700 (PDT)
+Date:   Fri, 9 Jun 2023 09:12:10 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
+        rwarsow@gmx.de
+Subject: Re: [PATCH 4.19 00/88] 4.19.285-rc1 review
+Message-ID: <ZILe2u4BsXGwXXAc@debian>
+References: <20230607200854.030202132@linuxfoundation.org>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 91.64.50.13
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230607200854.030202132@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Baoquan!
+Hi Greg,
 
-On Fri, 2023-06-09 at 15:55 +0800, Baoquan He wrote:
-> Also add macro definitions for port|mm io functions since SuperH
-> has its own implementation in arch/sh/kernel/iomap.c and
-> arch/sh/include/asm/io_noioport.h. These will conflict with the port|mm io
-> function definitions in include/asm-generic/io.h to cause compiling
-> errors like below:
+On Wed, Jun 07, 2023 at 10:15:17PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.285 release.
+> There are 88 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-What change does the "Also" refer to?
+Build test (gcc version 11.3.1 20230511):
+mips: 63 configs -> no  failure
+arm: 115 configs -> no failure
+arm64: 2 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
-Adrian
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/3799
+
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
 -- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+Regards
+Sudip
