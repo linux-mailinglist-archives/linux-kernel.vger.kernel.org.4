@@ -2,73 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83AFA728CD3
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 03:06:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92C93728CD5
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 03:07:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237117AbjFIBGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 21:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58960 "EHLO
+        id S237146AbjFIBHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 21:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjFIBGD (ORCPT
+        with ESMTP id S229520AbjFIBHG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 21:06:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2347F270F;
-        Thu,  8 Jun 2023 18:06:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 74D1C6528A;
-        Fri,  9 Jun 2023 01:06:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC84AC4339C;
-        Fri,  9 Jun 2023 01:06:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686272760;
-        bh=fnrj8HODEZPuaXfIuvje1guJksw1G513Xiodc8YprVU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=CnanVOefCZe19tiPP03sOSqtFNcHuMeIG4TL5s/ZhGmQbf/TobM+ilWdjIqTSZGtC
-         dYt/2dQIlDJn17FVHvjxBlJSABu0kSVX68bgHK6QdODndv2cMfPvDttGNrGW640Lta
-         TQ41obJdEZyoq5AaNHnrvwzDSXRMuxELpdStTIL5iFZXIXnRqI4UNoJf6AN0yKv5QG
-         afZfn/GBHtVKwtdOcVgXnI8SYi1dwrvRB4XwH9pe3xEja0m0SE1ZiL/M28ddYx6Gv6
-         fNrgf1C+88kxXWz2Ou8UQvWX3PwRcTq17l+rvMgbuHqEfMWHTeEFG//m9+3Mzoyuyp
-         aejAq2s2GPelw==
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-4f62b512fe2so1590704e87.1;
-        Thu, 08 Jun 2023 18:06:00 -0700 (PDT)
-X-Gm-Message-State: AC+VfDw79SWG1BpHicS9rCTe5h9AoxwXB/6ta14yOjl14IDs57Um9XGR
-        RulDa3cL/QaX+EiIGIiwp2pALC+dER4nrMxFrg==
-X-Google-Smtp-Source: ACHHUZ6OqexUjRIDLhjygD1zyaTSRKOXCn926L5zqqZ+dXrrEh0r0ELzATK2GNJVppdKRs/fpEhLSyPSr7XcKiwZwQA=
-X-Received: by 2002:a19:6753:0:b0:4f6:47a2:7bb4 with SMTP id
- e19-20020a196753000000b004f647a27bb4mr322218lfj.60.1686272758863; Thu, 08 Jun
- 2023 18:05:58 -0700 (PDT)
+        Thu, 8 Jun 2023 21:07:06 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D55E47
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 18:07:04 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-568ba7abc11so11400877b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 18:07:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686272824; x=1688864824;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FYWG+Dmea1iVO9u1anz9ea+vH7b9XYdNpJnPYqrcQ8g=;
+        b=F4iPSaqGVauSHCN3PPx1HPCWJrbnjh20XWi+31Rxj6kybI3XEkrDo9g8TlN/DUHnID
+         cA24qUKu4G6Vj7NJbRdZASctuqFdhdFDB+bQFh7yqdfrUkggC5zThxCrXeltsHoErZDt
+         xA3Doa45fnOu6mBH+w4Zu0i9kibQ9g3niiOe6jmkqXtnnKBsq4Rlqd1i923q7ctcGoK9
+         NpGckUH03ViLvNgz5x9NiKAf8htS6SXGATYEGV3wZ9h6z7DQULhRQ42RGKscWpa7yH/X
+         UrzgAwS5xf827WDV7tLvd4mt4ZGJ4FS3qwkbBLtNfkKh0VkQABmVM7ywrrTk/wDqi4Mi
+         rRxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686272824; x=1688864824;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FYWG+Dmea1iVO9u1anz9ea+vH7b9XYdNpJnPYqrcQ8g=;
+        b=hi+mtgluv+dLiMQ20HBArXgNH8AwbgZXVXkDJUiWPmJK3Z23Dl5DYts2FTFPYBOePj
+         mKJWVJird4PgB1/AOv8lUsfmH7qZMIYzM/l8pguUdna1mVHhAfB/sB/8YbWzkCfjNznL
+         g+gkN7RRsIxq+JHPOeK+9ojHHoZ7Lq49XZosB2Dv+MhAIV9E4NPa8s0JgwKp0NkZf5Em
+         XuDu/BI6gMnvXUCoHtn5KhtO057DN370MrszUr00Espu2Yv6QZ2ijfONEOcBHX4o2HLQ
+         K9Jg/M39Sw0NRKmwKQexb+6h7pZ9koHXEaCCgEoCbyTkxvgEsnmHrvdYbWlxkpfKFYUp
+         +aNA==
+X-Gm-Message-State: AC+VfDxDSR6kjCr9hZtSG/O2D/xbBWZ1fG3KW77AtbI3fewCtDbO5nVJ
+        iutW29kw5L0PdRDTe+wrXQbuxw==
+X-Google-Smtp-Source: ACHHUZ4e9gtItKHo/uKH6fckN0QfmcYW2cVTmMNzekmPXGojmR2zjeAFUImej/93RTPFo775/xnN5A==
+X-Received: by 2002:a81:7b0b:0:b0:561:afca:5b4d with SMTP id w11-20020a817b0b000000b00561afca5b4dmr1387844ywc.3.1686272823636;
+        Thu, 08 Jun 2023 18:07:03 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id y4-20020a81a104000000b00566e949fb9esm282673ywg.82.2023.06.08.18.07.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 18:07:02 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 18:06:53 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v2 01/32] mm: use pmdp_get_lockless() without surplus
+ barrier()
+In-Reply-To: <c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com>
+Message-ID: <f35279a9-9ac0-de22-d245-591afbfb4dc@google.com>
+References: <c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com>
 MIME-Version: 1.0
-References: <20230607061121.6732-1-shawn.sung@mediatek.com> <20230607061121.6732-2-shawn.sung@mediatek.com>
-In-Reply-To: <20230607061121.6732-2-shawn.sung@mediatek.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Fri, 9 Jun 2023 09:05:46 +0800
-X-Gmail-Original-Message-ID: <CAAOTY__LvESsCU74vWwdTKDT6C-xasO7d5sXdzihyssmEaQbYQ@mail.gmail.com>
-Message-ID: <CAAOTY__LvESsCU74vWwdTKDT6C-xasO7d5sXdzihyssmEaQbYQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/6] dt-bindings: display/mediatek: mt8188: Add
- documentations for VDOSYS1
-To:     Hsiao Chien Sung <shawn.sung@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Singo Chang <singo.chang@mediatek.com>,
-        Nancy Lin <nancy.lin@mediatek.com>,
-        Jason-JH Lin <jason-jh.lin@mediatek.com>,
-        Fei Shao <fshao@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,197 +102,203 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Hsiao-chien:
+Use pmdp_get_lockless() in preference to READ_ONCE(*pmdp), to get a more
+reliable result with PAE (or READ_ONCE as before without PAE); and remove
+the unnecessary extra barrier()s which got left behind in its callers.
 
-Separate mmsys part to another patch because it would go through
-different maintainer's tree.
+HOWEVER: Note the small print in linux/pgtable.h, where it was designed
+specifically for fast GUP, and depends on interrupts being disabled for
+its full guarantee: most callers which have been added (here and before)
+do NOT have interrupts disabled, so there is still some need for caution.
 
-Separate padding part to another patch because it's a new device.
+Signed-off-by: Hugh Dickins <hughd@google.com>
+Acked-by: Yu Zhao <yuzhao@google.com>
+Acked-by: Peter Xu <peterx@redhat.com>
+---
+ fs/userfaultfd.c        | 10 +---------
+ include/linux/pgtable.h | 17 -----------------
+ mm/gup.c                |  6 +-----
+ mm/hmm.c                |  2 +-
+ mm/khugepaged.c         |  5 -----
+ mm/ksm.c                |  3 +--
+ mm/memory.c             | 14 ++------------
+ mm/mprotect.c           |  5 -----
+ mm/page_vma_mapped.c    |  2 +-
+ 9 files changed, 7 insertions(+), 57 deletions(-)
 
-Regards,
-Chun-Kuang.
+diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+index 0fd96d6e39ce..f7a0817b1ec0 100644
+--- a/fs/userfaultfd.c
++++ b/fs/userfaultfd.c
+@@ -349,15 +349,7 @@ static inline bool userfaultfd_must_wait(struct userfaultfd_ctx *ctx,
+ 	if (!pud_present(*pud))
+ 		goto out;
+ 	pmd = pmd_offset(pud, address);
+-	/*
+-	 * READ_ONCE must function as a barrier with narrower scope
+-	 * and it must be equivalent to:
+-	 *	_pmd = *pmd; barrier();
+-	 *
+-	 * This is to deal with the instability (as in
+-	 * pmd_trans_unstable) of the pmd.
+-	 */
+-	_pmd = READ_ONCE(*pmd);
++	_pmd = pmdp_get_lockless(pmd);
+ 	if (pmd_none(_pmd))
+ 		goto out;
+ 
+diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+index c5a51481bbb9..8ec27fe69dc8 100644
+--- a/include/linux/pgtable.h
++++ b/include/linux/pgtable.h
+@@ -1344,23 +1344,6 @@ static inline int pud_trans_unstable(pud_t *pud)
+ static inline int pmd_none_or_trans_huge_or_clear_bad(pmd_t *pmd)
+ {
+ 	pmd_t pmdval = pmdp_get_lockless(pmd);
+-	/*
+-	 * The barrier will stabilize the pmdval in a register or on
+-	 * the stack so that it will stop changing under the code.
+-	 *
+-	 * When CONFIG_TRANSPARENT_HUGEPAGE=y on x86 32bit PAE,
+-	 * pmdp_get_lockless is allowed to return a not atomic pmdval
+-	 * (for example pointing to an hugepage that has never been
+-	 * mapped in the pmd). The below checks will only care about
+-	 * the low part of the pmd with 32bit PAE x86 anyway, with the
+-	 * exception of pmd_none(). So the important thing is that if
+-	 * the low part of the pmd is found null, the high part will
+-	 * be also null or the pmd_none() check below would be
+-	 * confused.
+-	 */
+-#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+-	barrier();
+-#endif
+ 	/*
+ 	 * !pmd_present() checks for pmd migration entries
+ 	 *
+diff --git a/mm/gup.c b/mm/gup.c
+index bbe416236593..3bd5d3854c51 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -653,11 +653,7 @@ static struct page *follow_pmd_mask(struct vm_area_struct *vma,
+ 	struct mm_struct *mm = vma->vm_mm;
+ 
+ 	pmd = pmd_offset(pudp, address);
+-	/*
+-	 * The READ_ONCE() will stabilize the pmdval in a register or
+-	 * on the stack so that it will stop changing under the code.
+-	 */
+-	pmdval = READ_ONCE(*pmd);
++	pmdval = pmdp_get_lockless(pmd);
+ 	if (pmd_none(pmdval))
+ 		return no_page_table(vma, flags);
+ 	if (!pmd_present(pmdval))
+diff --git a/mm/hmm.c b/mm/hmm.c
+index 6a151c09de5e..e23043345615 100644
+--- a/mm/hmm.c
++++ b/mm/hmm.c
+@@ -332,7 +332,7 @@ static int hmm_vma_walk_pmd(pmd_t *pmdp,
+ 	pmd_t pmd;
+ 
+ again:
+-	pmd = READ_ONCE(*pmdp);
++	pmd = pmdp_get_lockless(pmdp);
+ 	if (pmd_none(pmd))
+ 		return hmm_vma_walk_hole(start, end, -1, walk);
+ 
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 6b9d39d65b73..732f9ac393fc 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -961,11 +961,6 @@ static int find_pmd_or_thp_or_none(struct mm_struct *mm,
+ 		return SCAN_PMD_NULL;
+ 
+ 	pmde = pmdp_get_lockless(*pmd);
+-
+-#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+-	/* See comments in pmd_none_or_trans_huge_or_clear_bad() */
+-	barrier();
+-#endif
+ 	if (pmd_none(pmde))
+ 		return SCAN_PMD_NONE;
+ 	if (!pmd_present(pmde))
+diff --git a/mm/ksm.c b/mm/ksm.c
+index 0156bded3a66..df2aa281d49d 100644
+--- a/mm/ksm.c
++++ b/mm/ksm.c
+@@ -1194,8 +1194,7 @@ static int replace_page(struct vm_area_struct *vma, struct page *page,
+ 	 * without holding anon_vma lock for write.  So when looking for a
+ 	 * genuine pmde (in which to find pte), test present and !THP together.
+ 	 */
+-	pmde = *pmd;
+-	barrier();
++	pmde = pmdp_get_lockless(pmd);
+ 	if (!pmd_present(pmde) || pmd_trans_huge(pmde))
+ 		goto out;
+ 
+diff --git a/mm/memory.c b/mm/memory.c
+index f69fbc251198..2eb54c0d5d3c 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -4925,18 +4925,9 @@ static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
+ 		 * So now it's safe to run pte_offset_map().
+ 		 */
+ 		vmf->pte = pte_offset_map(vmf->pmd, vmf->address);
+-		vmf->orig_pte = *vmf->pte;
++		vmf->orig_pte = ptep_get_lockless(vmf->pte);
+ 		vmf->flags |= FAULT_FLAG_ORIG_PTE_VALID;
+ 
+-		/*
+-		 * some architectures can have larger ptes than wordsize,
+-		 * e.g.ppc44x-defconfig has CONFIG_PTE_64BIT=y and
+-		 * CONFIG_32BIT=y, so READ_ONCE cannot guarantee atomic
+-		 * accesses.  The code below just needs a consistent view
+-		 * for the ifs and we later double check anyway with the
+-		 * ptl lock held. So here a barrier will do.
+-		 */
+-		barrier();
+ 		if (pte_none(vmf->orig_pte)) {
+ 			pte_unmap(vmf->pte);
+ 			vmf->pte = NULL;
+@@ -5060,9 +5051,8 @@ static vm_fault_t __handle_mm_fault(struct vm_area_struct *vma,
+ 		if (!(ret & VM_FAULT_FALLBACK))
+ 			return ret;
+ 	} else {
+-		vmf.orig_pmd = *vmf.pmd;
++		vmf.orig_pmd = pmdp_get_lockless(vmf.pmd);
+ 
+-		barrier();
+ 		if (unlikely(is_swap_pmd(vmf.orig_pmd))) {
+ 			VM_BUG_ON(thp_migration_supported() &&
+ 					  !is_pmd_migration_entry(vmf.orig_pmd));
+diff --git a/mm/mprotect.c b/mm/mprotect.c
+index 92d3d3ca390a..c5a13c0f1017 100644
+--- a/mm/mprotect.c
++++ b/mm/mprotect.c
+@@ -309,11 +309,6 @@ static inline int pmd_none_or_clear_bad_unless_trans_huge(pmd_t *pmd)
+ {
+ 	pmd_t pmdval = pmdp_get_lockless(pmd);
+ 
+-	/* See pmd_none_or_trans_huge_or_clear_bad for info on barrier */
+-#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+-	barrier();
+-#endif
+-
+ 	if (pmd_none(pmdval))
+ 		return 1;
+ 	if (pmd_trans_huge(pmdval))
+diff --git a/mm/page_vma_mapped.c b/mm/page_vma_mapped.c
+index 4e448cfbc6ef..64aff6718bdb 100644
+--- a/mm/page_vma_mapped.c
++++ b/mm/page_vma_mapped.c
+@@ -210,7 +210,7 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
+ 		 * compiler and used as a stale value after we've observed a
+ 		 * subsequent update.
+ 		 */
+-		pmde = READ_ONCE(*pvmw->pmd);
++		pmde = pmdp_get_lockless(pvmw->pmd);
+ 
+ 		if (pmd_trans_huge(pmde) || is_pmd_migration_entry(pmde) ||
+ 		    (pmd_present(pmde) && pmd_devmap(pmde))) {
+-- 
+2.35.3
 
-Hsiao Chien Sung <shawn.sung@mediatek.com> =E6=96=BC 2023=E5=B9=B46=E6=9C=
-=887=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=882:11=E5=AF=AB=E9=81=93=
-=EF=BC=9A
->
-> Add device tree documentations for MT8188 VDOSYS1.
->
-> Signed-off-by: Hsiao Chien Sung <shawn.sung@mediatek.com>
-> ---
->  .../bindings/arm/mediatek/mediatek,mmsys.yaml |  1 +
->  .../display/mediatek/mediatek,ethdr.yaml      |  5 +-
->  .../display/mediatek/mediatek,mdp-rdma.yaml   |  5 +-
->  .../display/mediatek/mediatek,merge.yaml      |  1 +
->  .../display/mediatek/mediatek,padding.yaml    | 80 +++++++++++++++++++
->  5 files changed, 90 insertions(+), 2 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/display/mediatek/me=
-diatek,padding.yaml
->
-> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsy=
-s.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
-> index 536f5a5ebd24..642fa2e4736e 100644
-> --- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
-> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
-> @@ -32,6 +32,7 @@ properties:
->                - mediatek,mt8183-mmsys
->                - mediatek,mt8186-mmsys
->                - mediatek,mt8188-vdosys0
-> +              - mediatek,mt8188-vdosys1
->                - mediatek,mt8192-mmsys
->                - mediatek,mt8195-vdosys1
->                - mediatek,mt8195-vppsys0
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
-ethdr.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,et=
-hdr.yaml
-> index 801fa66ae615..e3f740ab0564 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.y=
-aml
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.y=
-aml
-> @@ -23,7 +23,10 @@ description:
->
->  properties:
->    compatible:
-> -    const: mediatek,mt8195-disp-ethdr
-> +    oneOf:
-> +      - enum:
-> +        - mediatek,mt8188-disp-ethdr
-> +        - mediatek,mt8195-disp-ethdr
->
->    reg:
->      maxItems: 7
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
-mdp-rdma.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek=
-,mdp-rdma.yaml
-> index dd12e2ff685c..07c345fa9178 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-rdm=
-a.yaml
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-rdm=
-a.yaml
-> @@ -21,7 +21,10 @@ description:
->
->  properties:
->    compatible:
-> -    const: mediatek,mt8195-vdo1-rdma
-> +    oneOf:
-> +      - enum:
-> +        - mediatek,mt8188-vdo1-rdma
-> +        - mediatek,mt8195-vdo1-rdma
->
->    reg:
->      maxItems: 1
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
-merge.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,me=
-rge.yaml
-> index 2f8e2f4dc3b8..600f1b4608f8 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,merge.y=
-aml
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,merge.y=
-aml
-> @@ -23,6 +23,7 @@ properties:
->      oneOf:
->        - enum:
->            - mediatek,mt8173-disp-merge
-> +          - mediatek,mt8188-disp-merge
->            - mediatek,mt8195-disp-merge
->
->    reg:
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
-padding.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,=
-padding.yaml
-> new file mode 100644
-> index 000000000000..8a9e74cbf6dc
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,padding=
-.yaml
-> @@ -0,0 +1,80 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/mediatek/mediatek,padding.yam=
-l#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MediaTek PADDING
-> +
-> +maintainers:
-> +  - Chun-Kuang Hu <chunkuang.hu@kernel.org>
-> +  - Philipp Zabel <p.zabel@pengutronix.de>
-> +
-> +description:
-> +  MediaTek PADDING provides ability to VDOSYS1 to fill pixels to
-> +  width and height of a layer with a specified color.
-> +  Since MIXER in VDOSYS1 requires the width of a layer to be 2-pixel-ali=
-gn, or
-> +  4-pixel-align when ETHDR is enabled, we need PADDING to deal with odd =
-width.
-> +  Please notice that even if the PADDING is in bypass mode,
-> +  settings in the registers must be cleared to 0, otherwise
-> +  undeinfed behaviors could happen.
-> +
-> +properties:
-> +  compatible:
-> +    const: mediatek,mt8188-vdo1-padding
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: RDMA Clock
-> +
-> +  mediatek,gce-client-reg:
-> +    description:
-> +      The register of display function block to be set by gce. There are=
- 4 arguments,
-> +      such as gce node, subsys id, offset and register size. The subsys =
-id that is
-> +      mapping to the register of display function blocks is defined in t=
-he gce header
-> +      include/dt-bindings/gce/<chip>-gce.h of each chips.
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    items:
-> +      items:
-> +        - description: phandle of GCE
-> +        - description: GCE subsys id
-> +        - description: register offset
-> +        - description: register size
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - power-domains
-> +  - clocks
-> +  - mediatek,gce-client-reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/clock/mt8188-clk.h>
-> +    #include <dt-bindings/power/mt8188-power.h>
-> +    #include <dt-bindings/gce/mt8188-gce.h>
-> +    #include <dt-bindings/memory/mt8188-memory-port.h>
-> +
-> +    soc {
-> +        #address-cells =3D <2>;
-> +        #size-cells =3D <2>;
-> +
-> +        vdo1_padding0: vdo1_padding0@1c11d000 {
-> +            compatible =3D "mediatek,mt8188-vdo1-padding";
-> +            reg =3D <0 0x1c11d000 0 0x1000>;
-> +            clocks =3D <&vdosys1 CLK_VDO1_PADDING0>;
-> +            power-domains =3D <&spm MT8188_POWER_DOMAIN_VDOSYS1>;
-> +            mediatek,gce-client-reg =3D
-> +                <&gce0 SUBSYS_1c11XXXX 0xd000 0x1000>;
-> +        };
-> +    };
-> --
-> 2.18.0
->
