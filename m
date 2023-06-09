@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EAF67291AF
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:49:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7BE97291AE
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239240AbjFIHtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 03:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54954 "EHLO
+        id S239214AbjFIHs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 03:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239107AbjFIHrp (ORCPT
+        with ESMTP id S239037AbjFIHrp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 9 Jun 2023 03:47:45 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7072121;
-        Fri,  9 Jun 2023 00:47:42 -0700 (PDT)
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C871FEB;
+        Fri,  9 Jun 2023 00:47:41 -0700 (PDT)
 Date:   Fri, 09 Jun 2023 07:47:36 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686296857;
+        s=2020; t=1686296856;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vrhZCMplyizefRqS6kdXynqwThRa/YNMtlT+wHVGuCw=;
-        b=Pht3l2pBJv3GF+SMMG8D+tb5N40hTJLW3URgMH0s43iVuvufqfaQ1qp5/XGKI61oauWsOm
-        nNVwkVAJe4FjpT1v0XlcYcZmpBBGu0P3OocylnOweJ2ejCUlO0QcwNC9k3Yw8+/667AR/2
-        AF6ldbkp0EHpw5PteDMu6W+z1s5gIwDdO3Z6a4khaVbscD1snUSDy4afj8Y2EVqIY0P5C0
-        o+9LQegbX3OHb3GJ646C6ejzbVsMYXvLz/7xADj/ub1f0706FhyTGLGCe9SF6FTl447oIC
-        a7SX+u3Rnp+SZAk5CJnFyry+MxwQr/tzwLy5pc7b9nL+UgiBi8o6GckkQZ9Qbg==
+        bh=FMLOC9+JcExYQXo480vdAW5+Y3vcBAhxA0RE2WfX4O8=;
+        b=v1+/jUJiUrSlPjG3J/oWtNZa1q1L2TbW4GPGn8UcG/lp/PWSXfGkGDZZKkD6Xxzicc9Zas
+        3Msmcwace+oKxWcJXRc9MQNJ/UI4Mc0iaVCQ5s65IVBE6fI3MvB3MJtgHol6rkFuoIjVeN
+        eGAk2Kk6dcO0BQ6TbUOnQybUuCt8pxu76JlLyjlCpVYFrfm9LTwLkrGOrld+VTDUiMrzty
+        ug+qK5fca5Am9IvobjqigyqV8FIe+0CYT56o6LtXvDOJ4p3CkBodMMyF7bzWITNbpC/cUq
+        MR+23bwdeT/9uTzWS13Pqp79BqVUqqORKbkfAATGCqQifyPIwH32gxZOM3k2iw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686296857;
+        s=2020e; t=1686296856;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vrhZCMplyizefRqS6kdXynqwThRa/YNMtlT+wHVGuCw=;
-        b=/PgHlsoEuZWefg+wR6j1GmEVmWqyI6BqTy28gdlEOJO+1ce/vPyYFkBupoo3djgcUHxgkl
-        PTLBsoMYE3Ud1FCQ==
+        bh=FMLOC9+JcExYQXo480vdAW5+Y3vcBAhxA0RE2WfX4O8=;
+        b=qw4o68jpjQ3DozaCo3xigiSo1g2h1k7N5BEER8fxBsS8WTsgwIFtcszaIRMcO6s5v3Ep9T
+        iu0lVBQm/o8mzJAA==
 From:   "tip-bot2 for Josh Poimboeuf" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: objtool/core] objtool: Fix reloc_hash size
+Subject: [tip: objtool/core] objtool: Add mark_sec_changed()
 Cc:     Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <38ef60dc8043270bf3b9dfd139ae2a30ca3f75cc.1685464332.git.jpoimboe@kernel.org>
-References: <38ef60dc8043270bf3b9dfd139ae2a30ca3f75cc.1685464332.git.jpoimboe@kernel.org>
+In-Reply-To: <9a810a8d2e28af6ba07325362d0eb4703bb09d3a.1685464332.git.jpoimboe@kernel.org>
+References: <9a810a8d2e28af6ba07325362d0eb4703bb09d3a.1685464332.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
-Message-ID: <168629685671.404.3682740079672959168.tip-bot2@tip-bot2>
+Message-ID: <168629685608.404.5335907781714907060.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,105 +66,179 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the objtool/core branch of tip:
 
-Commit-ID:     eb0481bbc4ce386e73e28ad8590b4f12c8aded56
-Gitweb:        https://git.kernel.org/tip/eb0481bbc4ce386e73e28ad8590b4f12c8aded56
+Commit-ID:     ff4082730c2aaff3706232266e09d1ae4b350521
+Gitweb:        https://git.kernel.org/tip/ff4082730c2aaff3706232266e09d1ae4b350521
 Author:        Josh Poimboeuf <jpoimboe@kernel.org>
-AuthorDate:    Tue, 30 May 2023 10:20:57 -07:00
+AuthorDate:    Tue, 30 May 2023 10:20:58 -07:00
 Committer:     Josh Poimboeuf <jpoimboe@kernel.org>
 CommitterDate: Wed, 07 Jun 2023 10:03:16 -07:00
 
-objtool: Fix reloc_hash size
+objtool: Add mark_sec_changed()
 
-With CONFIG_DEBUG_INFO, DWARF creates a lot of relocations and
-reloc_hash is woefully undersized, which can affect performance
-significantly.  Fix that.
+Ensure elf->changed always gets set when sec->changed gets set.
 
-Link: https://lore.kernel.org/r/38ef60dc8043270bf3b9dfd139ae2a30ca3f75cc.1685464332.git.jpoimboe@kernel.org
+Link: https://lore.kernel.org/r/9a810a8d2e28af6ba07325362d0eb4703bb09d3a.1685464332.git.jpoimboe@kernel.org
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- tools/objtool/elf.c                 | 16 +++++++---------
- tools/objtool/include/objtool/elf.h |  8 +++++++-
- 2 files changed, 14 insertions(+), 10 deletions(-)
+ tools/objtool/elf.c                 | 31 ++++++++++++++--------------
+ tools/objtool/include/objtool/elf.h | 14 ++++++++++++-
+ 2 files changed, 29 insertions(+), 16 deletions(-)
 
 diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
-index 4bbdd8e..f72ec6d 100644
+index f72ec6d..67967c2 100644
 --- a/tools/objtool/elf.c
 +++ b/tools/objtool/elf.c
-@@ -328,12 +328,12 @@ static int read_sections(struct elf *elf)
- 			}
- 		}
+@@ -562,7 +562,8 @@ int elf_add_reloc(struct elf *elf, struct section *sec, unsigned long offset,
+ 	elf_hash_add(reloc, &reloc->hash, reloc_hash(reloc));
  
--		if (sec->sh.sh_flags & SHF_EXECINSTR)
--			elf->text_size += sec->sh.sh_size;
--
- 		list_add_tail(&sec->list, &elf->sections);
- 		elf_hash_add(section, &sec->hash, sec->idx);
- 		elf_hash_add(section_name, &sec->name_hash, str_hash(sec->name));
+ 	sec->rsec->sh.sh_size += sec->rsec->sh.sh_entsize;
+-	sec->rsec->changed = true;
 +
-+		if (is_reloc_sec(sec))
-+			elf->num_relocs += sec->sh.sh_size / sec->sh.sh_entsize;
- 	}
++	mark_sec_changed(elf, sec->rsec, true);
  
- 	if (opts.stats) {
-@@ -888,19 +888,18 @@ static int read_reloc(struct section *rsec, int i, struct reloc *reloc)
- 
- static int read_relocs(struct elf *elf)
- {
--	unsigned long nr_reloc, max_reloc = 0, tot_reloc = 0;
-+	unsigned long nr_reloc, max_reloc = 0;
- 	struct section *rsec;
+ 	return 0;
+ }
+@@ -577,7 +578,7 @@ static void elf_dirty_reloc_sym(struct elf *elf, struct symbol *sym)
  	struct reloc *reloc;
- 	unsigned int symndx;
- 	struct symbol *sym;
- 	int i;
  
--	if (!elf_alloc_hash(reloc, elf->text_size / 16))
-+	if (!elf_alloc_hash(reloc, elf->num_relocs))
- 		return -1;
+ 	list_for_each_entry(reloc, &sym->reloc_list, sym_reloc_entry)
+-		reloc->sec->changed = true;
++		mark_sec_changed(elf, reloc->sec, true);
+ }
  
- 	list_for_each_entry(rsec, &elf->sections, list) {
--		if ((rsec->sh.sh_type != SHT_RELA) &&
--		    (rsec->sh.sh_type != SHT_REL))
-+		if (!is_reloc_sec(rsec))
- 			continue;
+ /*
+@@ -654,7 +655,7 @@ static int elf_update_symbol(struct elf *elf, struct section *symtab,
+ 			symtab_data->d_align = 1;
+ 			symtab_data->d_type = ELF_T_SYM;
  
- 		rsec->base = find_section_by_index(elf, rsec->sh.sh_info);
-@@ -942,12 +941,11 @@ static int read_relocs(struct elf *elf)
- 			nr_reloc++;
- 		}
- 		max_reloc = max(max_reloc, nr_reloc);
--		tot_reloc += nr_reloc;
+-			symtab->changed = true;
++			mark_sec_changed(elf, symtab, true);
+ 			symtab->truncate = true;
+ 
+ 			if (t) {
+@@ -669,7 +670,7 @@ static int elf_update_symbol(struct elf *elf, struct section *symtab,
+ 				shndx_data->d_align = sizeof(Elf32_Word);
+ 				shndx_data->d_type = ELF_T_WORD;
+ 
+-				symtab_shndx->changed = true;
++				mark_sec_changed(elf, symtab_shndx, true);
+ 				symtab_shndx->truncate = true;
+ 			}
+ 
+@@ -773,11 +774,11 @@ non_local:
  	}
  
- 	if (opts.stats) {
- 		printf("max_reloc: %lu\n", max_reloc);
--		printf("tot_reloc: %lu\n", tot_reloc);
-+		printf("num_relocs: %lu\n", elf->num_relocs);
- 		printf("reloc_bits: %d\n", elf->reloc_bits);
+ 	symtab->sh.sh_size += symtab->sh.sh_entsize;
+-	symtab->changed = true;
++	mark_sec_changed(elf, symtab, true);
+ 
+ 	if (symtab_shndx) {
+ 		symtab_shndx->sh.sh_size += sizeof(Elf32_Word);
+-		symtab_shndx->changed = true;
++		mark_sec_changed(elf, symtab_shndx, true);
+ 	}
+ 
+ 	return sym;
+@@ -1040,7 +1041,8 @@ static int elf_add_string(struct elf *elf, struct section *strtab, char *str)
+ 
+ 	len = strtab->sh.sh_size;
+ 	strtab->sh.sh_size += data->d_size;
+-	strtab->changed = true;
++
++	mark_sec_changed(elf, strtab, true);
+ 
+ 	return len;
+ }
+@@ -1075,7 +1077,6 @@ struct section *elf_create_section(struct elf *elf, const char *name,
+ 	}
+ 
+ 	sec->idx = elf_ndxscn(s);
+-	sec->changed = true;
+ 
+ 	sec->data = elf_newdata(s);
+ 	if (!sec->data) {
+@@ -1122,7 +1123,7 @@ struct section *elf_create_section(struct elf *elf, const char *name,
+ 	elf_hash_add(section, &sec->hash, sec->idx);
+ 	elf_hash_add(section_name, &sec->name_hash, str_hash(sec->name));
+ 
+-	elf->changed = true;
++	mark_sec_changed(elf, sec, true);
+ 
+ 	return sec;
+ }
+@@ -1208,9 +1209,8 @@ int elf_write_insn(struct elf *elf, struct section *sec,
+ 	}
+ 
+ 	memcpy(data->d_buf + offset, insn, len);
+-	elf_flagdata(data, ELF_C_SET, ELF_F_DIRTY);
+ 
+-	elf->changed = true;
++	mark_sec_changed(elf, sec, true);
+ 
+ 	return 0;
+ }
+@@ -1235,7 +1235,7 @@ int elf_write_reloc(struct elf *elf, struct reloc *reloc)
+ 		return -1;
+ 	}
+ 
+-	elf->changed = true;
++	mark_sec_changed(elf, rsec, true);
+ 
+ 	return 0;
+ }
+@@ -1307,12 +1307,14 @@ int elf_write(struct elf *elf)
+ 		if (sec->truncate)
+ 			elf_truncate_section(elf, sec);
+ 
+-		if (sec->changed) {
++		if (sec_changed(sec)) {
+ 			s = elf_getscn(elf->elf, sec->idx);
+ 			if (!s) {
+ 				WARN_ELF("elf_getscn");
+ 				return -1;
+ 			}
++
++			/* Note this also flags the section dirty */
+ 			if (!gelf_update_shdr(s, &sec->sh)) {
+ 				WARN_ELF("gelf_update_shdr");
+ 				return -1;
+@@ -1324,8 +1326,7 @@ int elf_write(struct elf *elf)
+ 				return -1;
+ 			}
+ 
+-			sec->changed = false;
+-			elf->changed = true;
++			mark_sec_changed(elf, sec, false);
+ 		}
  	}
  
 diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
-index 6f82f25..b81d78b 100644
+index b81d78b..56b66ff 100644
 --- a/tools/objtool/include/objtool/elf.h
 +++ b/tools/objtool/include/objtool/elf.h
-@@ -90,8 +90,9 @@ struct elf {
- 	int fd;
- 	bool changed;
+@@ -39,7 +39,7 @@ struct section {
+ 	Elf_Data *data;
  	char *name;
--	unsigned int text_size, num_files;
-+	unsigned int num_files;
- 	struct list_head sections;
-+	unsigned long num_relocs;
+ 	int idx;
+-	bool changed, text, rodata, noinstr, init, truncate;
++	bool _changed, text, rodata, noinstr, init, truncate;
+ 	struct reloc *reloc_data;
+ };
  
- 	int symbol_bits;
- 	int symbol_name_bits;
-@@ -158,6 +159,11 @@ static inline size_t elf_rela_size(struct elf *elf)
- 	return elf_addr_size(elf) == 4 ? sizeof(Elf32_Rela) : sizeof(Elf64_Rela);
+@@ -164,6 +164,18 @@ static inline bool is_reloc_sec(struct section *sec)
+ 	return sec->sh.sh_type == SHT_RELA || sec->sh.sh_type == SHT_REL;
  }
  
-+static inline bool is_reloc_sec(struct section *sec)
++static inline bool sec_changed(struct section *sec)
 +{
-+	return sec->sh.sh_type == SHT_RELA || sec->sh.sh_type == SHT_REL;
++	return sec->_changed;
++}
++
++static inline void mark_sec_changed(struct elf *elf, struct section *sec,
++				    bool changed)
++{
++	sec->_changed = changed;
++	elf->changed |= changed;
 +}
 +
  #define for_each_sec(file, sec)						\
