@@ -2,66 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C327A7295D9
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F4B7295B4
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:43:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241879AbjFIJuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 05:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43170 "EHLO
+        id S240283AbjFIJnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 05:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242013AbjFIJuL (ORCPT
+        with ESMTP id S241870AbjFIJnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 05:50:11 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7A83A92
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 02:43:45 -0700 (PDT)
+        Fri, 9 Jun 2023 05:43:14 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2CD55B7
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 02:37:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686303825; x=1717839825;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=c2G/ZBWJ+bChfZroJsrTfZdBnqBEt1G0Os4orLnXNfg=;
-  b=CjT/x1rVaPT5bx4y7g6Xbgo3Yfo4JAkCtrKfMyolNKcm+B/4cLMd4zRI
-   flfF50fBGtWvz/TWkQIf8Dg9isqKZTrI/h1GTeizsl73cJKq2y2GWzXVF
-   55sDDQX6tYeeysHg+yQX7RTZ4Qff1GwKqTGaHXXY/8s96BMiWsOKWwkuQ
-   +ofhc1NZgAiX6XIXDZu/cRAvfhgHhlNrS89DY4dkQ/lZFZAbJCWJxtm+i
-   ybmn454hY4yyhRIHZaREWVerELLMzvGechBA5DSuW297xIx9MgFE1cZwD
-   UjsnA68iHmK7x68h2iRSaE6y/TSgTgjyWR/OhYBHeXwskrLNT6IwqnvlT
+  t=1686303467; x=1717839467;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rk7chkn2Ajk2IUmRC+vui8JKJ3e/M+H0BoW4sdyq49Q=;
+  b=DI897rqW3XVa6tDwsXMxX+eUxphf7gyykQ2iozk/u+Sni7R2h1ohd0vT
+   L3qwSFUv1lHoORHnIImrJHCZ2Huryjun/KRear1W1sMwYcDZvUsGG9vxY
+   EzNViF6g5aHj66Bctfj9FzUoelnN9LVHdS8qf7BFiws3iyFnA8C+jOeII
+   oucykjcsJ+L9vCh2MKCoGx8DmRmAVCUI35F/ZseYK8kUec15doUXdamv7
+   cHVApAQ71xhL9n7ypPzvBjazhoVXwsI8ay2nBeHNUAiseERHXs+iDH+qa
+   4CYkKPsxxTMN5I8ldNpJRyjeGYcLiVJFEOlOjTNzkyho8wAPmEViMcUYm
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="337919073"
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="360918493"
 X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
-   d="scan'208";a="337919073"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 02:36:04 -0700
+   d="scan'208";a="360918493"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 02:36:03 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="854687095"
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="713449337"
 X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
-   d="scan'208";a="854687095"
+   d="scan'208";a="713449337"
 Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 09 Jun 2023 02:36:02 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 09 Jun 2023 02:36:02 -0700
 Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1q7YXJ-0008tq-1w;
+        id 1q7YXJ-0008to-1m;
         Fri, 09 Jun 2023 09:36:01 +0000
-Date:   Fri, 9 Jun 2023 17:35:29 +0800
+Date:   Fri, 9 Jun 2023 17:35:39 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Lu Hongfei <luhongfei@vivo.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        opensource.kernel@vivo.com, luhongfei@vivo.com
-Subject: Re: [PATCH] mm/vmalloc: Replace the ternary conditional operator
- with min()
-Message-ID: <202306091701.KHIG4Osf-lkp@intel.com>
-References: <20230609061309.42453-1-luhongfei@vivo.com>
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: arch/powerpc/include/asm/hw_irq.h:494 mtmsr_isync_irqsafe() warn:
+ inconsistent indenting
+Message-ID: <202306091705.0mLF1ntp-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230609061309.42453-1-luhongfei@vivo.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -72,82 +63,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lu,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on akpm-mm/mm-everything]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Lu-Hongfei/mm-vmalloc-Replace-the-ternary-conditional-operator-with-min/20230609-141417
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230609061309.42453-1-luhongfei%40vivo.com
-patch subject: [PATCH] mm/vmalloc: Replace the ternary conditional operator with min()
-config: i386-randconfig-i011-20230608 (https://download.01.org/0day-ci/archive/20230609/202306091701.KHIG4Osf-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
-        git fetch akpm-mm mm-everything
-        git checkout akpm-mm/mm-everything
-        b4 shazam https://lore.kernel.org/r/20230609061309.42453-1-luhongfei@vivo.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   33f2b5785a2b6b0ed1948aafee60d3abb12f1e3a
+commit: 0fa6831811f62cfc10415d731bcf9fde2647ad81 powerpc/64: Fix msr_check_and_set/clear MSR[EE] race
+date:   8 months ago
+config: powerpc-randconfig-m031-20230608 (https://download.01.org/0day-ci/archive/20230609/202306091705.0mLF1ntp-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 12.3.0
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306091701.KHIG4Osf-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306091705.0mLF1ntp-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+New smatch warnings:
+arch/powerpc/include/asm/hw_irq.h:494 mtmsr_isync_irqsafe() warn: inconsistent indenting
 
->> mm/vmalloc.c:3574:9: warning: comparison of distinct pointer types ('typeof (remains) *' (aka 'unsigned int *') and 'typeof (((1UL) << 12)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
-                   num = min(remains, PAGE_SIZE);
-                         ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:67:19: note: expanded from macro 'min'
-   #define min(x, y)       __careful_cmp(x, y, <)
-                           ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:36:24: note: expanded from macro '__careful_cmp'
-           __builtin_choose_expr(__safe_cmp(x, y), \
-                                 ^~~~~~~~~~~~~~~~
-   include/linux/minmax.h:26:4: note: expanded from macro '__safe_cmp'
-                   (__typecheck(x, y) && __no_side_effects(x, y))
-                    ^~~~~~~~~~~~~~~~~
-   include/linux/minmax.h:20:28: note: expanded from macro '__typecheck'
-           (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                      ~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~
-   1 warning generated.
+Old smatch warnings:
+arch/powerpc/kernel/process.c:445 giveup_all() warn: bitwise AND condition is false here
+arch/powerpc/kernel/process.c:587 save_all() warn: bitwise AND condition is false here
 
+vim +494 arch/powerpc/include/asm/hw_irq.h
 
-vim +3574 mm/vmalloc.c
-
-  3561	
-  3562	/*
-  3563	 * Atomically zero bytes in the iterator.
-  3564	 *
-  3565	 * Returns the number of zeroed bytes.
-  3566	 */
-  3567	static size_t zero_iter(struct iov_iter *iter, size_t count)
-  3568	{
-  3569		size_t remains = count;
-  3570	
-  3571		while (remains > 0) {
-  3572			size_t num, copied;
-  3573	
-> 3574			num = min(remains, PAGE_SIZE);
-  3575			copied = copy_page_to_iter_nofault(ZERO_PAGE(0), 0, num, iter);
-  3576			remains -= copied;
-  3577	
-  3578			if (copied < num)
-  3579				break;
-  3580		}
-  3581	
-  3582		return count - remains;
-  3583	}
-  3584	
+   473	
+   474	static inline unsigned long mtmsr_isync_irqsafe(unsigned long msr)
+   475	{
+   476	#ifdef CONFIG_PPC64
+   477		if (arch_irqs_disabled()) {
+   478			/*
+   479			 * With soft-masking, MSR[EE] can change from 1 to 0
+   480			 * asynchronously when irqs are disabled, and we don't want to
+   481			 * set MSR[EE] back to 1 here if that has happened. A race-free
+   482			 * way to do this is ensure EE is already 0. Another way it
+   483			 * could be done is with a RESTART_TABLE handler, but that's
+   484			 * probably overkill here.
+   485			 */
+   486			msr &= ~MSR_EE;
+   487			mtmsr_isync(msr);
+   488			irq_soft_mask_set(IRQS_ALL_DISABLED);
+   489			local_paca->irq_happened |= PACA_IRQ_HARD_DIS;
+   490		} else
+   491	#endif
+   492			mtmsr_isync(msr);
+   493	
+ > 494		return msr;
+   495	}
+   496	
 
 -- 
 0-DAY CI Kernel Test Service
