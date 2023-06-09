@@ -2,88 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E99787291C5
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEA4872921D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:02:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239138AbjFIHwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 03:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55978 "EHLO
+        id S240026AbjFIICj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 04:02:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238947AbjFIHvc (ORCPT
+        with ESMTP id S239467AbjFIICR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 03:51:32 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3816468F
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 00:50:49 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-bad0c4f6f50so2197037276.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 00:50:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686297048; x=1688889048;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D2cdBW2Mj+SXNwvwcmaMfvn9vGgTGDb3aldi7qM0FW4=;
-        b=QRfj1lAj6qrW35HA4Jbny7ps8mFhM+5OtqT/QQ3+fzPkcQ3jonOXAWsLO0bRStdrNp
-         JEFqjpnRS6mVxoUT6NcO41jGMJVdzSRDhz1eOpiOOwOaXNfYREtI8rUQqeYQZbXwTSUV
-         CKYIES3M5S2yh0UhSKElNYrzzi6hgRrmmFeE8rW9/xL6YTUpUF3eWeA7rSzZ65b9Dt/8
-         s+hEvAYXKfv8nVA9SCGpphZfnhwR4nz9MTltLxObf6bKhmBz+FNLrpdks6VvsgVA1R3E
-         66kqz85dbkRKbj3qeHi2P75myeZOiC6ZoaEWsb0WUpI1EUUjz6ivJ3F0JyZBeNA8Cg4r
-         4k1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686297048; x=1688889048;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D2cdBW2Mj+SXNwvwcmaMfvn9vGgTGDb3aldi7qM0FW4=;
-        b=LFjxnsmOt0DLMRy8svyFtiWEbXpLw7eFn+rkiDq1iMeKHrC1Sw+TFVR8DIiHsXD3qc
-         gMwGPKsekZu3uGI/FwfVAqdGEWQjo82X7d4x/ddLDuY+2BVNZHnYHm3jc1BN5mqAxOZv
-         Wv8vT5Zvd14gnYkNqNMIqZnsCsBYJTcUlzH8Iq4PyC72Gr8G8XHbXMBk/IymwzO662LY
-         YffWEVOhhPJd13Kh4fbYaNKE0wlq22SouWseP1WfifZ6jnjq0Nx1qRMbMD6lwmz/Waea
-         Sys72vJG2splvz1ynTJ9pozokVWl8JsWbdsZN8tkKlj7cJyeXbI4II01uFYz3lrvMMNt
-         IgTw==
-X-Gm-Message-State: AC+VfDyt0yDLeX47wSWIS1XJRQyTBcocgWVxAB4btqHtaK2VUluip5CQ
-        55aoR06k1un3imcSLvnZh9lO0JBKiEGlGiDPsTQCog==
-X-Google-Smtp-Source: ACHHUZ6VxExrksH/syijxzGAVPfotWL9Iavo6MOv8iMAl0+OtFlw9eEv+9fDhDiPQ33DN1/gnp2GtZrimvY635G7MjQ=
-X-Received: by 2002:a25:6008:0:b0:ba1:6bad:9270 with SMTP id
- u8-20020a256008000000b00ba16bad9270mr2587471ybb.27.1686297048725; Fri, 09 Jun
- 2023 00:50:48 -0700 (PDT)
+        Fri, 9 Jun 2023 04:02:17 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D953149F6
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 01:00:23 -0700 (PDT)
+X-QQ-mid: bizesmtp75t1686297177txpqd2r4
+Received: from localhost.localdomain ( [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 09 Jun 2023 15:52:55 +0800 (CST)
+X-QQ-SSF: 01200000000000908000000A0000000
+X-QQ-FEAT: +ynUkgUhZJmBFu75q0NPiJ6aTl945nO9gpI8bXNQ/ESzHgPsBD6fTZ5m1288J
+        zUyIKDG/VCQPAvgJv00JVCR58ywZjCK6YjDdv0JYBuzp28QKvYJwqgFmgP0oldjR3hTAGFh
+        PUgfCXEAj9hNkaK1ifnQvqZt2ZVmVlRKFE9S0CwxsXKkjf++zlB6yn+WLwkCpF6nmISkiYO
+        l7FFfKrhTDo2/Gd5+cLEvSf5U2NFe/6FgXmSHV9azmKTFtTXoAbtfmPOnGUr+72hfELjQI2
+        LQh2KPGArq0GVhIc115bdF+haP9LAbyfiuQuKkruJFA2zoeWVupU+Wjd++LJOVZKaeyn2/k
+        fzwyP1B9I/hfqdM+s03OjYv6W3oVvNP2lpFAA22
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 14437550590923538906
+From:   Song Shuai <songshuaishuai@tinylab.org>
+To:     catalin.marinas@arm.com, will@kernel.org, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, chris@zankel.net,
+        jcmvbkbc@gmail.com, songshuaishuai@tinylab.org,
+        steven.price@arm.com, vincenzo.frascino@arm.com,
+        leyfoon.tan@starfivetech.com, mason.huo@starfivetech.com,
+        jeeheng.sia@starfivetech.com, conor.dooley@microchip.com,
+        ajones@ventanamicro.com
+Cc:     linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: [PATCH V2 0/4] Remove WARN_ON in save_processor_state
+Date:   Fri,  9 Jun 2023 15:50:45 +0800
+Message-Id: <20230609075049.2651723-1-songshuaishuai@tinylab.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20230608162130.55015-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230608162130.55015-1-andriy.shevchenko@linux.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 9 Jun 2023 09:50:37 +0200
-Message-ID: <CACRpkdbaf3UzW+x6emER5J5KJUQoJmdipwY_RQp0Ovj2N6RnsA@mail.gmail.com>
-Subject: Re: [rfc, rft, PATCH v1 1/1] gpio: aggregator: Introduce delay
- support for individual output pins
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andy@kernel.org>,
-        Alexander Stein <linux@ew.tq-group.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 8, 2023 at 6:22=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+During hibernation or restoration, freeze_secondary_cpus
+checks num_online_cpus via BUG_ON, and the subsequent
+save_processor_state also does the checking with WARN_ON.
 
-> The aggregator mode can also handle properties of the platform, that
-> do not belong to the GPIO controller itself. One of such a property
-> is signal delay line. Intdoduce support of it.
-(...)
-> I don't like the idea of gpio-delay or similar. We have already GPIO
-> aggregator that incorporates the GPIO proxy / forwarder functionality.
+In the case of CONFIG_PM_SLEEP_SMP=n, freeze_secondary_cpus
+is not defined, but the sole possible condition to disable 
+CONFIG_PM_SLEEP_SMP is !SMP where num_online_cpus is always 1.
+We also don't have to check it in save_processor_state.
 
-You are right. This is the right solution going forward IMO.
+So remove the unnecessary checking in save_processor_state
+for ARM,arm64,riscv,xtensa architechtures.
 
-Yours,
-Linus Walleij
+Changes since V1:
+https://lore.kernel.org/linux-riscv/20230525025555.24104-1-songshuaishuai@tinylab.org/
+- supplement the case of CONFIG_PM_SLEEP_SMP=n in commit message as Will suggests
+
+Song Shuai (4):
+  ARM: hibernate: remove WARN_ON in save_processor_state
+  arm64: hibernate: remove WARN_ON in save_processor_state
+  riscv: hibernate: remove WARN_ON in save_processor_state
+  xtensa: hibernate: remove WARN_ON in save_processor_state
+
+ arch/arm/kernel/hibernate.c    | 1 -
+ arch/arm64/kernel/hibernate.c  | 1 -
+ arch/riscv/kernel/hibernate.c  | 1 -
+ arch/xtensa/kernel/hibernate.c | 1 -
+ 4 files changed, 4 deletions(-)
+
+-- 
+2.20.1
+
