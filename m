@@ -2,103 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68CA67298C8
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 13:55:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A2E7298D6
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 13:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238990AbjFILzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 07:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43262 "EHLO
+        id S239688AbjFIL52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 07:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239800AbjFILyu (ORCPT
+        with ESMTP id S239673AbjFIL5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 07:54:50 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A797E4205
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 04:54:28 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-51478f6106cso2904163a12.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 04:54:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686311609; x=1688903609;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hFLyNFdjW8q+t01Kpf1PQ/GPcGV/1xyWhVkZdWigx8Q=;
-        b=P84n5OXIDE2oJV4pFMoCu86Pu6g9l83iWP+oBjcYzqOt4w0dgvH1Vx+7XepY21LFHE
-         Xg3oJ7wnQfgo0RirnxhJx6TW90TYkyH6AGvHvivTGiMLi/B+iyhjW4f9yJW0pYBKy0os
-         2idCU13J4k6Uxh4gErJwjA5KPORzBc4Jjv7RUUvMlLnkemwkDj8Y5td+AMfzJxqh5+v/
-         oNDrWVbO1PC8d6MNDtpCVBHf4ySqkSH9pSdXYmq6go/yBkv1mcU/ET8rcmcAJy1NXUXc
-         RiWFe9lPbg2xCS67V62jIBnQBxkIhT3dfE83y8d3MYDc84iwzxGXjVkai9P6JJNnL1k6
-         CNvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686311609; x=1688903609;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hFLyNFdjW8q+t01Kpf1PQ/GPcGV/1xyWhVkZdWigx8Q=;
-        b=JFCTcMi5UuEPmugog1aaNr2oX+ATDx5DSvO7TQhE9+NPy2xKZRZ4txRAC3g+45ZYNX
-         5C+tVmZFxuWheX2S7LTI98FLadf56MU601qoghdPxdU/gglKUrOLqEy+ENJ5cAz4/qAq
-         9WRMcSW47U8QYoY5GRNw8Q34e0h68ULWMTehPtZaIoeDMdPD2fdteZm3RUVx2pt93s/M
-         mqWHNgWZ++GCEA0BHHOVCw2A8k1RfqsZrlh/iM9NMJ8dbjFVIHy2moCBY7TeuKobl4bZ
-         5Mfyed2t/tQo778+r+TQ6yiQYwtRkNWNQrk7lwioak4sUKwCrlZtWU3WFbY7Hvh4MBZv
-         DMUw==
-X-Gm-Message-State: AC+VfDyHCjAIRhECqnxDGYarKNxgbscixj/0tL3DHKAOTj1IWjH/5vS/
-        3nX2c9BL9T8/jkg9VJ3sqgZSPw==
-X-Google-Smtp-Source: ACHHUZ4NZJ1Rx44rsznhdvEIYrZ5YDVyZDaKGvwoc5f2sIGzzVpBTv1xaoE4WfaUaNDrDmxPlcB9Dw==
-X-Received: by 2002:a17:907:980d:b0:969:e9ec:9a0 with SMTP id ji13-20020a170907980d00b00969e9ec09a0mr1603279ejc.77.1686311608931;
-        Fri, 09 Jun 2023 04:53:28 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id u3-20020a17090617c300b009788dfde0b2sm1222514eje.12.2023.06.09.04.53.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Jun 2023 04:53:28 -0700 (PDT)
-Message-ID: <4d27c8ea-f5bd-704d-e8fc-823799854bb5@linaro.org>
-Date:   Fri, 9 Jun 2023 13:53:26 +0200
+        Fri, 9 Jun 2023 07:57:22 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4EF53AAD;
+        Fri,  9 Jun 2023 04:56:55 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 359Aln3O019565;
+        Fri, 9 Jun 2023 11:56:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=M9xsgVqTNTNefZwM9+ecC5BzYKJ58t3QzykSQdlfF3o=;
+ b=Z0zF2Q60IxdnBz6w+Yfjv6tmCc59WVFr+AzHkIVSO9/j1h4NMuuT3IiSXQzAvjcmTYWK
+ quMywBFwWDlf7bNIlYawvFbU93jEB3BL8tFF4DSJsckWohq7qwBsKD3HarEdZY2UvJ2t
+ Hwjkqxqh0kb+wSVABHpDxWEwlhENoIxfE047FS8xomOy7k14VJV6UM35Ssda2bcuQPgT
+ 3SBP1kHBRTQDU3gIyn0Xe29/GbirQb/4VKZ7X/6UbYaz2ekxJUzVMXgvX06T65OyAHSS
+ pgzaMaVntV8dZq7OW9f0lr4ju8WNgTjgORzd47CaKjTzYa3K5AhfWn9+mV19OLkkF+Qb Qg== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r3nwesd8s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Jun 2023 11:56:22 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 359Bu1Jh005213
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 9 Jun 2023 11:56:01 GMT
+Received: from [10.216.57.100] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 9 Jun 2023
+ 04:55:55 -0700
+Message-ID: <25107dc2-fab3-2091-200d-7ed83dabecdf@quicinc.com>
+Date:   Fri, 9 Jun 2023 17:25:51 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 2/2] tty: serial: samsung_tty: Fix a memory leak in
- s3c24xx_serial_getclk() when iterating clk
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v2 1/3] dt-bindings: PCI: qcom: ep: Add interconnects path
 Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Thomas Abraham <thomas.abraham@linaro.org>,
-        Kukjin Kim <kgene.kim@samsung.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org
-References: <e4359d5ef206f5b349c1d15a515a1205e78dda55.1686285892.git.christophe.jaillet@wanadoo.fr>
- <93bf8f574310256fcea50e5c5a62b5c37e20bb14.1686285892.git.christophe.jaillet@wanadoo.fr>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <93bf8f574310256fcea50e5c5a62b5c37e20bb14.1686285892.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8
+To:     Rob Herring <robh@kernel.org>
+CC:     <quic_vbadigan@quicinc.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        <quic_ramkri@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Conor Dooley" <conor+dt@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        <linux-pci@vger.kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+        <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        <manivannan.sadhasivam@linaro.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andy Gross <agross@kernel.org>
+References: <1686154687-29356-1-git-send-email-quic_krichai@quicinc.com>
+ <1686154687-29356-2-git-send-email-quic_krichai@quicinc.com>
+ <168615848698.3589455.9774241463877355430.robh@kernel.org>
+From:   Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
+In-Reply-To: <168615848698.3589455.9774241463877355430.robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: lMLuEKcnX1MnpFW47hhElSz7E3bXH7fX
+X-Proofpoint-ORIG-GUID: lMLuEKcnX1MnpFW47hhElSz7E3bXH7fX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-09_08,2023-06-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 mlxlogscore=753 phishscore=0 priorityscore=1501
+ suspectscore=0 clxscore=1015 spamscore=0 adultscore=0 mlxscore=0
+ lowpriorityscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2306090101
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/06/2023 06:45, Christophe JAILLET wrote:
-> When the best clk is searched, we iterate over all possible clk.
-> 
-> If we find a better match, the previous one, if any, needs to be freed.
-> If a better match has already been found, we still need to free the new
-> one, otherwise it leaks.
-> 
-> Fixes: 5f5a7a5578c5 ("serial: samsung: switch to clkdev based clock lookup")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> This patch is speculative. Review with care.
-> 
 
+On 6/7/2023 10:51 PM, Rob Herring wrote:
+> On Wed, 07 Jun 2023 21:48:05 +0530, Krishna chaitanya chundru wrote:
+>> Add the "pcie-mem" interconnect path to the bindings.
+>>
+>> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+>> ---
+>>   Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml | 9 +++++++++
+>>   1 file changed, 9 insertions(+)
+>>
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>
+> yamllint warnings/errors:
+>
+> dtschema/dtc warnings/errors:
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pci/qcom,pcie-ep.example.dtb: pcie-ep@1c00000: 'interconnects' is a required property
+> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pci/qcom,pcie-ep.example.dtb: pcie-ep@1c00000: 'interconnect-names' is a required property
+> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
+>
+> doc reference errors (make refcheckdocs):
+>
+> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/1686154687-29356-2-git-send-email-quic_krichai@quicinc.com
+>
+> The base for the series is generally the latest rc1. A different dependency
+> should be noted in *this* patch.
+>
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+>
+> pip3 install dtschema --upgrade
+>
+> Please check and re-submit after running the above command yourself. Note
+> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+> your schema. However, it must be unset to test all examples with your schema.
+>
+Fixed the errors.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
+- Krishna chaitanya
 
