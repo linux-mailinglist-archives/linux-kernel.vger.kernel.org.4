@@ -2,116 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76F457294F8
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:25:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C9A9729515
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240104AbjFIJZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 05:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48026 "EHLO
+        id S240054AbjFIJ3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 05:29:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241555AbjFIJYq (ORCPT
+        with ESMTP id S241583AbjFIJ2u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 05:24:46 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906DA7287;
-        Fri,  9 Jun 2023 02:18:53 -0700 (PDT)
-Date:   Fri, 09 Jun 2023 09:18:13 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686302294;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=xZRhkDtTSeZgnqu7N8XwI7ct33rW0W+QqL6s4Ga2BxU=;
-        b=d53OvKO4aVNs1Bv7j7EpoJmcL1pqH5I3Y8S+hc9ma/xNXtUskgj88c2txhxkJXQ6YMppXv
-        UnUjVscJ8M/KOPkCjnXkg60XWrY+Vi1qDZzG6LekBTeY7VtLNFx3ZyFeq31c7t9zgo+cce
-        Z7YS3RjMHcaHtJeIsFOn0HvlBgHNXFOR6/o8DDQbRN+hPhUYb75iGP4tqRXKZ6UFoIdoUJ
-        QQBg6UFKloTImGWC/GXepogCoCN9NCQDApp+ueSeGjO2NiC9GkoxXTXLAdklzE4Leo6dKU
-        g/2q5V00y6Y2r1X19fdc4c1CwVozNWxvhIKRvEA9mOTSEyoyFeo4QKmjfHsYmg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686302294;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=xZRhkDtTSeZgnqu7N8XwI7ct33rW0W+QqL6s4Ga2BxU=;
-        b=WSnfe8lI18zPdZWsVuC24ZigkrV4oE2SgHYb0pf2q44d567uGc+e1lofwhPCneBlngV323
-        +Zjnm+V4Kzaq/2Dw==
-From:   "tip-bot2 for Ingo Molnar" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: objtool/core] x86/orc: Make the is_callthunk() definition
- depend on CONFIG_BPF_JIT=y
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org
+        Fri, 9 Jun 2023 05:28:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B605FEA
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 02:22:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686302495;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=78c5jYWz1mcsmCQBMqSzgZMFoxirWTll/3bzdXrUFCY=;
+        b=IGQ9pD7np4qIufH2MLIWt30MPDaN5EMC+gKaM1zu0DX8acVsT5uDOU3TZffwHarqR1klgn
+        Q/A9Sctr95OrmXkdDnhEup2h3YokfFte2JlCLbac+lZsfSDs493kzVo/SZbJnK+qUPvyBE
+        /9kIHTSI6tkZ/IT4hn/p9VUk2RYBIVM=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-64-PmFCjZxtMGuIxOAbbyyN6Q-1; Fri, 09 Jun 2023 05:21:33 -0400
+X-MC-Unique: PmFCjZxtMGuIxOAbbyyN6Q-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D88693C11A27;
+        Fri,  9 Jun 2023 09:21:32 +0000 (UTC)
+Received: from eperezma.remote.csb (unknown [10.39.193.246])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6C16320268C7;
+        Fri,  9 Jun 2023 09:21:29 +0000 (UTC)
+From:   =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>
+To:     mst@redhat.com, Jason Wang <jasowang@redhat.com>
+Cc:     Zhu Lingshan <lingshan.zhu@intel.com>,
+        virtualization@lists.linux-foundation.org,
+        "Gonglei (Arei)" <arei.gonglei@huawei.com>, longpeng2@huawei.com,
+        Lei Yang <leiyang@redhat.com>,
+        Parav Pandit <parav@mellanox.com>,
+        Gautam Dawar <gdawar@xilinx.com>,
+        Dragos Tatulea <dtatulea@nvidia.com>,
+        Laurent Vivier <lvivier@redhat.com>, linux-api@vger.kernel.org,
+        Liuxiangdong <liuxiangdong5@huawei.com>,
+        linux-kernel@vger.kernel.org, alvaro.karsz@solid-run.com,
+        Shannon Nelson <snelson@pensando.io>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Cindy Lu <lulu@redhat.com>, si-wei.liu@oracle.com,
+        Harpreet Singh Anand <hanand@xilinx.com>
+Subject: [PATCH v2 0/4] Add VHOST_BACKEND_F_ENABLE_AFTER_DRIVER_OK flag to vdpa backend
+Date:   Fri,  9 Jun 2023 11:21:23 +0200
+Message-Id: <20230609092127.170673-1-eperezma@redhat.com>
 MIME-Version: 1.0
-Message-ID: <168630229338.404.8674192988459787200.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the objtool/core branch of tip:
+To migrate vDPA-net device state though CVQ we need to start the dataplane=
+=0D
+after the control virtqueue.=0D
+=0D
+As vdpa frontend doesn't know if the parent vdpa driver supports it, let's=
+=0D
+allow them to expose custom backend features by themselves.=0D
+=0D
+Comments are welcome.=0D
+=0D
+Thanks!=0D
+=0D
+v2: address doc issues from checkpath and fix lack of signed-off-by.=0D
+=0D
+v1: from RFC: Tweak doc as Shannon suggestion.=0D
+=0D
+Eugenio P=C3=A9rez (4):=0D
+  vdpa: add VHOST_BACKEND_F_ENABLE_AFTER_DRIVER_OK flag=0D
+  vdpa: accept VHOST_BACKEND_F_ENABLE_AFTER_DRIVER_OK backend feature=0D
+  vdpa: add get_backend_features vdpa operation=0D
+  vdpa_sim: offer VHOST_BACKEND_F_ENABLE_AFTER_DRIVER_OK=0D
+=0D
+ drivers/vdpa/vdpa_sim/vdpa_sim.c |  8 ++++++++=0D
+ drivers/vhost/vdpa.c             | 15 ++++++++++++++-=0D
+ include/linux/vdpa.h             |  4 ++++=0D
+ include/uapi/linux/vhost_types.h |  4 ++++=0D
+ 4 files changed, 30 insertions(+), 1 deletion(-)=0D
+=0D
+-- =0D
+2.31.1=0D
+=0D
 
-Commit-ID:     301cf77e21317b3465c5e2bb0188df24bbf1c2e2
-Gitweb:        https://git.kernel.org/tip/301cf77e21317b3465c5e2bb0188df24bbf=
-1c2e2
-Author:        Ingo Molnar <mingo@kernel.org>
-AuthorDate:    Fri, 09 Jun 2023 11:04:53 +02:00
-Committer:     Ingo Molnar <mingo@kernel.org>
-CommitterDate: Fri, 09 Jun 2023 11:09:04 +02:00
-
-x86/orc: Make the is_callthunk() definition depend on CONFIG_BPF_JIT=3Dy
-
-Recent commit:
-
-  020126239b8f Revert "x86/orc: Make it callthunk aware"
-
-Made the only user of is_callthunk() depend on CONFIG_BPF_JIT=3Dy, while
-the definition of the helper function is unconditional.
-
-Move is_callthunk() inside the #ifdef block.
-
-Addresses this build failure:
-
-   arch/x86/kernel/callthunks.c:296:13: error: =E2=80=98is_callthunk=E2=80=99=
- defined but not used [-Werror=3Dunused-function]
-
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: linux-kernel@vger.kernel.org
-Cc: Peter Zijlstra <peterz@infradead.org>
----
- arch/x86/kernel/callthunks.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/kernel/callthunks.c b/arch/x86/kernel/callthunks.c
-index 8e0a9b6..fcb8eea 100644
---- a/arch/x86/kernel/callthunks.c
-+++ b/arch/x86/kernel/callthunks.c
-@@ -293,6 +293,7 @@ void *callthunks_translate_call_dest(void *dest)
- 	return target ? : dest;
- }
-=20
-+#ifdef CONFIG_BPF_JIT
- static bool is_callthunk(void *addr)
- {
- 	unsigned int tmpl_size =3D SKL_TMPL_SIZE;
-@@ -306,7 +307,6 @@ static bool is_callthunk(void *addr)
- 	return !bcmp((void *)(dest - tmpl_size), tmpl, tmpl_size);
- }
-=20
--#ifdef CONFIG_BPF_JIT
- int x86_call_depth_emit_accounting(u8 **pprog, void *func)
- {
- 	unsigned int tmpl_size =3D SKL_TMPL_SIZE;
