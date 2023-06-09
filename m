@@ -2,133 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A06F2728E82
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 05:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C452D728E9F
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 05:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237447AbjFIDUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 23:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57896 "EHLO
+        id S238023AbjFIDga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 23:36:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238071AbjFIDTx (ORCPT
+        with ESMTP id S229615AbjFIDg0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 23:19:53 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B1930F2
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 20:19:27 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id 46e09a7af769-6b2993c9652so308269a34.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 20:19:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1686280763; x=1688872763;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TD4YPSy4tQn9C5x5+zUZn6e9X1T4rUdNHcpnpttXoIA=;
-        b=WzpKdYtXqdD4MQ7psFHTj0bwcj7wv4sNADyuwWxgpw1lTcdIzFm3nNykvRdQzFXueR
-         evsbCc/Q45O5j8zmmB5Y2c/gY9CdYDTldDwByBVx26AnT7P4wb+Z5VK5v7hnCCDfCXLq
-         fw+75iM6P91E8oauoxvc8IRMiwHNMjZEUEdjSQ3T1N1ItebB9OTxfI6V16dOHa0ofPHW
-         5QO7uIJ6rhd7gvcda/9u2b+l3ZIrFkiWxumbn9vwcjZCGB7s0cOmof5wi77H7xt55jHH
-         yA4Y5tTr99HkZPYJmnl5sAfwax6TgMAx2rSUR93giMtXSonyt5ea2bcW++DRBcV0jVUC
-         RvmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686280763; x=1688872763;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=TD4YPSy4tQn9C5x5+zUZn6e9X1T4rUdNHcpnpttXoIA=;
-        b=d3NMvYZVSZq+A5s8umr24Og2KFWmGGCczlUL59s8iJIfo+dPOIXuBh1TcchdiG08uQ
-         /baSk3DLjmnCfrM5i+7kRJZ+AbXzyZfEDvLFR0k+0V1d0rRrZAZGHDitR8MPs0IZ+mEf
-         mp9/lailgiUmM2W85WCj7lkZV5E9BV7leMv9L9pNKY8VgEStyM5RxrlcM5jLOFxOsBkg
-         +dxLu75+LIWrG4QNZPEinDElTBmm6JVmg6UkEvL+zJQW0YKOjFzN/CRp9E1SV6kFXxSX
-         ccpiNjd0V1S5G3fegCttGU4IuCzrzvHpxUQF6Kb7m89V/ZRo3zrJ4GHhzJ7r60BmEXQv
-         mY+Q==
-X-Gm-Message-State: AC+VfDwHsXx3qVMCoIRREuLqLNkNhwJgloYxgpEUvLanpJfclgMAx9Qd
-        /rI1yafMA3wHJuL9gdDVrnxxLg==
-X-Google-Smtp-Source: ACHHUZ6uitpOSR0QrTFAXI2YTiJ4ss0zpjaswY8MGvpF4gLoCopfG9HPzHMXwU7ULgq1qgbr+4S+NQ==
-X-Received: by 2002:a05:6359:59a:b0:123:ab5:5654 with SMTP id ee26-20020a056359059a00b001230ab55654mr199602rwb.20.1686280763553;
-        Thu, 08 Jun 2023 20:19:23 -0700 (PDT)
-Received: from [10.85.115.102] ([203.208.167.147])
-        by smtp.gmail.com with ESMTPSA id d36-20020a634f24000000b0050fa6546a45sm1913854pgb.6.2023.06.08.20.19.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 20:19:23 -0700 (PDT)
-Message-ID: <504c702c-b31a-a9d4-22a0-8a09547d30e5@bytedance.com>
-Date:   Fri, 9 Jun 2023 11:19:03 +0800
+        Thu, 8 Jun 2023 23:36:26 -0400
+X-Greylist: delayed 792 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 08 Jun 2023 20:36:24 PDT
+Received: from mail-m11877.qiye.163.com (mail-m11877.qiye.163.com [115.236.118.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4222B30F0;
+        Thu,  8 Jun 2023 20:36:23 -0700 (PDT)
+Received: from [172.23.197.13] (unknown [121.32.254.149])
+        by mail-m11877.qiye.163.com (Hmail) with ESMTPA id CD1954001E6;
+        Fri,  9 Jun 2023 11:22:51 +0800 (CST)
+Message-ID: <64f5298c-6712-de7e-7f90-5aeb0d0d770c@sangfor.com.cn>
+Date:   Fri, 9 Jun 2023 11:22:51 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [External] Re: [PATCH v4 4/4] sched/core: Avoid multiple calling
- update_rq_clock() in unthrottle_offline_cfs_rqs()
-To:     Benjamin Segall <bsegall@google.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, mingo@kernel.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        mgorman@techsingularity.net, linux-kernel@vger.kernel.org
-References: <20230608063312.79440-1-jiahao.os@bytedance.com>
- <20230608063312.79440-5-jiahao.os@bytedance.com>
- <xm26zg59acky.fsf@google.com>
-From:   Hao Jia <jiahao.os@bytedance.com>
-In-Reply-To: <xm26zg59acky.fsf@google.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v11 3/8] ARM: ftrace: Enable HAVE_FUNCTION_GRAPH_RETVAL
+To:     linux@armlinux.org.uk
+Cc:     mhiramat@kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        mark.rutland@arm.com, will@kernel.org, catalin.marinas@arm.com,
+        rmk+kernel@armlinux.org.uk, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
+        tglx@linutronix.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        bp@alien8.de, hpa@zytor.com, chenhuacai@kernel.org,
+        zhangqing@loongson.cn, kernel@xen0n.name, mingo@redhat.com,
+        peterz@infradead.org, xiehuan09@gmail.com, dinghui@sangfor.com.cn,
+        huangcun@sangfor.com.cn, dolinux.peng@gmail.com,
+        linux-trace-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <cover.1680954589.git.pengdonglin@sangfor.com.cn>
+ <c61eb9290c3e817d4d70c429c0e987e3ec51a3c4.1680954589.git.pengdonglin@sangfor.com.cn>
+ <20230608215719.7537ce38@gandalf.local.home>
+Content-Language: en-US
+From:   Donglin Peng <pengdonglin@sangfor.com.cn>
+In-Reply-To: <20230608215719.7537ce38@gandalf.local.home>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZTUxMVhhIH0pMHhlKH0kfGVUTARMWGhIXJBQOD1
+        lXWRgSC1lBWUpJSlVISVVJTk9VSk9CWVdZFhoPEhUdFFlBWU9LSFVKTkxJSklVSktLVUpCWQY+
+X-HM-Tid: 0a889e2daa942eb3kusncd1954001e6
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6OFE6Tzo4LD1IMi0WEhBLOTcf
+        CCEKCzdVSlVKTUNNSUNLQkxIT0lKVTMWGhIXVQseFRwfFBUcFxIVOwgaFRwdFAlVGBQWVRgVRVlX
+        WRILWUFZSklKVUhJVUlOT1VKT0JZV1kIAVlBTE9CTTcG
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/6/9 Benjamin Segall wrote:
-> Hao Jia <jiahao.os@bytedance.com> writes:
+On 2023/6/9 9:57, Steven Rostedt wrote:
+> On Sat,  8 Apr 2023 05:42:17 -0700
+> Donglin Peng <pengdonglin@sangfor.com.cn> wrote:
 > 
->> This WARN_DOUBLE_CLOCK warning is triggered during cpu offline.
->> ------------[ cut here ]------------
->> rq->clock_update_flags & RQCF_UPDATED
->> WARNING: CPU: 0 PID: 3323 at kernel/sched/core.c:741
->> update_rq_clock+0xaf/0x180
->> Call Trace:
->>   <TASK>
->>   unthrottle_cfs_rq+0x4b/0x300
->>   rq_offline_fair+0x89/0x90
->>   set_rq_offline.part.118+0x28/0x60
->>   rq_attach_root+0xc4/0xd0
->>   cpu_attach_domain+0x3dc/0x7f0
->>   partition_sched_domains_locked+0x2a5/0x3c0
->>   rebuild_sched_domains_locked+0x477/0x830
->>   rebuild_sched_domains+0x1b/0x30
->>   cpuset_hotplug_workfn+0x2ca/0xc90
->>   ? balance_push+0x56/0xf0
->>   ? _raw_spin_unlock+0x15/0x30
->>   ? finish_task_switch+0x98/0x2f0
->>   ? __switch_to+0x291/0x410
->>   ? __schedule+0x65e/0x1310
->>   process_one_work+0x1bc/0x3d0
->>   worker_thread+0x4c/0x380
->>   ? preempt_count_add+0x92/0xa0
->>   ? rescuer_thread+0x310/0x310
->>   kthread+0xe6/0x110
->>   ? kthread_complete_and_exit+0x20/0x20
->>   ret_from_fork+0x1f/0x30
+>> The previous patch ("function_graph: Support recording and printing
+>> the return value of function") has laid the groundwork for the for
+>> the funcgraph-retval, and this modification makes it available on
+>> the ARM platform.
 >>
->> The rq clock has been updated before the set_rq_offline()
->> function runs, so we don't need to call update_rq_clock() in
->> unthrottle_offline_cfs_rqs().
+>> We introduce a new structure called fgraph_ret_regs for the ARM platform
+>> to hold return registers and the frame pointer. We then fill its content
+>> in the return_to_handler and pass its address to the function
+>> ftrace_return_to_handler to record the return value.
+>>
+>> Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>
 > 
-> I don't think we do in the path from rq_attach_root (though that's easy
-> enough to fix, of course).
+> I really don't want to add this without an ack from an arm maintainer.
+> 
+> I have the patches queued (for testing), but I may remove the ones that do
+> not have the appropriate acks.
+> 
+> -- Steve
 > 
 
-Thanks for your review.
+Hi Russell, can I get a ack for arm?
 
-Now our fix method is that after applying patch1, we update the rq clock 
-before set_rq_offline(). Then use rq_clock_{start, stop}_loop_update to 
-avoid updating the rq clock multiple times in unthrottle_cfs_rq().
+> 
+>> ---
+>> v10:
+>>   - Use CONFIG_FUNCTION_GRAPH_TRACER to control fgraph_ret_regs definition
+>>
+>> v9:
+>>   - Fix stack pointer align issues
+>>   - Update the commit message
+>>
+>> v8:
+>>   - Modify the control range of CONFIG_HAVE_FUNCTION_GRAPH_RETVAL
+>> ---
+>>   arch/arm/Kconfig               |  1 +
+>>   arch/arm/include/asm/ftrace.h  | 22 ++++++++++++++++++++++
+>>   arch/arm/kernel/asm-offsets.c  |  8 +++++++-
+>>   arch/arm/kernel/entry-ftrace.S | 10 ++++++----
+>>   4 files changed, 36 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+>> index e24a9820e12f..73061379855a 100644
+>> --- a/arch/arm/Kconfig
+>> +++ b/arch/arm/Kconfig
+>> @@ -98,6 +98,7 @@ config ARM
+>>   	select HAVE_FAST_GUP if ARM_LPAE
+>>   	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
+>>   	select HAVE_FUNCTION_ERROR_INJECTION
+>> +	select HAVE_FUNCTION_GRAPH_RETVAL if HAVE_FUNCTION_GRAPH_TRACER
+>>   	select HAVE_FUNCTION_GRAPH_TRACER
+>>   	select HAVE_FUNCTION_TRACER if !XIP_KERNEL
+>>   	select HAVE_GCC_PLUGINS
+>> diff --git a/arch/arm/include/asm/ftrace.h b/arch/arm/include/asm/ftrace.h
+>> index 7e9251ca29fe..3c457902b355 100644
+>> --- a/arch/arm/include/asm/ftrace.h
+>> +++ b/arch/arm/include/asm/ftrace.h
+>> @@ -77,4 +77,26 @@ static inline bool arch_syscall_match_sym_name(const char *sym,
+>>   
+>>   #endif /* ifndef __ASSEMBLY__ */
+>>   
+>> +#ifndef __ASSEMBLY__
+>> +#ifdef CONFIG_FUNCTION_GRAPH_TRACER
+>> +struct fgraph_ret_regs {
+>> +	/* r0 - r3 */
+>> +	unsigned long regs[4];
+>> +
+>> +	unsigned long fp;
+>> +	unsigned long __unused;
+>> +};
+>> +
+>> +static inline unsigned long fgraph_ret_regs_return_value(struct fgraph_ret_regs *ret_regs)
+>> +{
+>> +	return ret_regs->regs[0];
+>> +}
+>> +
+>> +static inline unsigned long fgraph_ret_regs_frame_pointer(struct fgraph_ret_regs *ret_regs)
+>> +{
+>> +	return ret_regs->fp;
+>> +}
+>> +#endif /* ifdef CONFIG_FUNCTION_GRAPH_TRACER */
+>> +#endif
+>> +
+>>   #endif /* _ASM_ARM_FTRACE */
+>> diff --git a/arch/arm/kernel/asm-offsets.c b/arch/arm/kernel/asm-offsets.c
+>> index 38121c59cbc2..18bb85115b21 100644
+>> --- a/arch/arm/kernel/asm-offsets.c
+>> +++ b/arch/arm/kernel/asm-offsets.c
+>> @@ -23,6 +23,7 @@
+>>   #include <asm/suspend.h>
+>>   #include <asm/vdso_datapage.h>
+>>   #include <asm/hardware/cache-l2x0.h>
+>> +#include <asm/ftrace.h>
+>>   #include <linux/kbuild.h>
+>>   #include <linux/arm-smccc.h>
+>>   #include "signal.h"
+>> @@ -170,5 +171,10 @@ int main(void)
+>>     DEFINE(KEXEC_INDIR_PAGE,	offsetof(struct kexec_relocate_data, kexec_indirection_page));
+>>     DEFINE(KEXEC_MACH_TYPE,	offsetof(struct kexec_relocate_data, kexec_mach_type));
+>>     DEFINE(KEXEC_R2,		offsetof(struct kexec_relocate_data, kexec_r2));
+>> -  return 0;
+>> +#ifdef CONFIG_FUNCTION_GRAPH_TRACER
+>> +  BLANK();
+>> +  DEFINE(FGRET_REGS_SIZE,	sizeof(struct fgraph_ret_regs));
+>> +  BLANK();
+>> +#endif
+>> +  return 0;
+>>   }
+>> diff --git a/arch/arm/kernel/entry-ftrace.S b/arch/arm/kernel/entry-ftrace.S
+>> index 3e7bcaca5e07..d41a1676608c 100644
+>> --- a/arch/arm/kernel/entry-ftrace.S
+>> +++ b/arch/arm/kernel/entry-ftrace.S
+>> @@ -257,11 +257,13 @@ ENDPROC(ftrace_graph_regs_caller)
+>>   
+>>   #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+>>   ENTRY(return_to_handler)
+>> -	stmdb	sp!, {r0-r3}
+>> -	add	r0, sp, #16		@ sp at exit of instrumented routine
+>> +	mov	ip, sp				@ sp at exit of instrumented routine
+>> +	stmdb	sp!, {r0-r3, ip, lr}		@ fill fgraph_ret_regs
+>> +	mov	r0, sp
+>>   	bl	ftrace_return_to_handler
+>> -	mov	lr, r0			@ r0 has real ret addr
+>> -	ldmia	sp!, {r0-r3}
+>> +	mov	lr, r0				@ r0 has real ret addr
+>> +	ldmia	sp, {r0-r3}
+>> +	add	sp, sp, #FGRET_REGS_SIZE	@ restore stack pointer
+>>   	ret	lr
+>>   ENDPROC(return_to_handler)
+>>   #endif
+> 
 
-Do you have any better suggestions?
-
-Thanks,
-Hao
