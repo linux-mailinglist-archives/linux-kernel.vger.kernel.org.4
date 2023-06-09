@@ -2,245 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 980F5728F5C
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 07:41:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A570728F6E
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 07:53:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233795AbjFIFlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 01:41:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58242 "EHLO
+        id S236897AbjFIFvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 01:51:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjFIFlo (ORCPT
+        with ESMTP id S229537AbjFIFvH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 01:41:44 -0400
-Received: from mx6.didiglobal.com (mx6.didiglobal.com [111.202.70.123])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 8EF4F2D7C
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 22:41:42 -0700 (PDT)
-Received: from mail.didiglobal.com (unknown [10.79.65.12])
-        by mx6.didiglobal.com (Maildata Gateway V2.8) with ESMTPS id 4ED8211003DC0E;
-        Fri,  9 Jun 2023 13:41:39 +0800 (CST)
-Received: from didi-ThinkCentre-M930t-N000 (10.79.64.101) by
- ZJY02-ACTMBX-02.didichuxing.com (10.79.65.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 9 Jun 2023 13:41:38 +0800
-Date:   Fri, 9 Jun 2023 13:41:37 +0800
-X-MD-Sfrom: tiozhang@didiglobal.com
-X-MD-SrcIP: 10.79.65.12
-From:   Tio Zhang <tiozhang@didiglobal.com>
-To:     <tj@kernel.org>, <jiangshanlai@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>, <pmladek@suse.com>,
-        <zyhtheonly@yeah.net>, <zwp10758@gmail.com>,
-        <tiozhang@didiglobal.com>, <fuyuanli@didiglobal.com>
-Subject: [PATCH 2/2] workqueue: introduce queue_work_cpumask to queue work
- onto a given cpumask
-Message-ID: <20230609053910.GA19570@didi-ThinkCentre-M930t-N000>
-Mail-Followup-To: tj@kernel.org, jiangshanlai@gmail.com,
-        linux-kernel@vger.kernel.org, pmladek@suse.com, zyhtheonly@yeah.net,
-        zwp10758@gmail.com, fuyuanli@didiglobal.com
+        Fri, 9 Jun 2023 01:51:07 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90EB330D3
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 22:51:04 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id CDF8921A02;
+        Fri,  9 Jun 2023 05:51:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1686289862; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=UyouZ59jZ1L5CU9YPnNfl4jMT/ujs57hNTuxiWy+JUQ=;
+        b=BrdZPt5SEo12XNnFWwZQ1camI46oJRjkjWrxEliXh9XbNxCPYhjaNF1AE31E0cFCPgYD8X
+        IDPEbTSw3DUhmlCr7IjHUPb/KVM2zr1WZ50607xKtCo6PyJhy4iorh6ObKUCCTQV36NibI
+        S7BVsAWlTA1swVSRCuhaE/wvzlA72mY=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 806DD133E6;
+        Fri,  9 Jun 2023 05:51:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id tQPpHca9gmRsKAAAMHmgww
+        (envelope-from <jgross@suse.com>); Fri, 09 Jun 2023 05:51:02 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org
+Cc:     Juergen Gross <jgross@suse.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH] x86/mm: Remove Xen-PV leftovers from init_32.c
+Date:   Fri,  9 Jun 2023 07:51:00 +0200
+Message-Id: <20230609055100.12633-1-jgross@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAEQmJ=iwgFFjM+brDGRx9h8o6hQVNBPY1UB9nTg4PWQ=6r1pyQ@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [10.79.64.101]
-X-ClientProxiedBy: ZJY01-PUBMBX-01.didichuxing.com (10.79.64.32) To
- ZJY02-ACTMBX-02.didichuxing.com (10.79.65.12)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce queue_work_cpumask to queue work on a "random" CPU onto a given
-cpumask. It would be helpful when devices/modules want to assign works on
-different cpusets but do not want to maintain extra workqueues, motivation
-of doing this is to better improve boot/working times for devices when we
-want to prevent our works running from some "bad" CPUs, i,e, some CPUs
-filling with irqs, FIFO or some other "bad" things which would potentially
-stuck our works.
+There are still some unneeded paravirt calls in arch/x86/mm/init_32.c.
 
-And default to the first CPU that is in the intersection of the cpumask
-given and the online cpumask.
-The only exception is if the CPU is local in the cpuset we will just use
-the current CPU.
+Remove them.
 
-The implementation refactors queue_work_node, it patches
-'commit 8204e0c1113d ("workqueue: Provide queue_work_node to queue work
-near a given NUMA node")'
-
-For now queue_work_cpumask is not available for unbound workqueues, We will
-try to further patch it.
-
-Signed-off-by: tiozhang <tiozhang@didiglobal.com>
-Signed-off-by: zzzyhtheonly <zyhtheonly@yeah.net>
+Signed-off-by: Juergen Gross <jgross@suse.com>
 ---
- include/linux/workqueue.h |   2 +
- kernel/workqueue.c        | 108 ++++++++++++++++++++++++++------------
- 2 files changed, 76 insertions(+), 34 deletions(-)
+ arch/x86/mm/init_32.c | 17 ++---------------
+ 1 file changed, 2 insertions(+), 15 deletions(-)
 
-diff --git a/include/linux/workqueue.h b/include/linux/workqueue.h
-index 3992c994787f..61e56f4fcdaa 100644
---- a/include/linux/workqueue.h
-+++ b/include/linux/workqueue.h
-@@ -440,6 +440,8 @@ extern bool queue_work_on(int cpu, struct workqueue_struct *wq,
- 			struct work_struct *work);
- extern bool queue_work_node(int node, struct workqueue_struct *wq,
- 			    struct work_struct *work);
-+extern bool queue_work_cpumask(cpumask_var_t cpumask,
-+			struct workqueue_struct *wq, struct work_struct *work);
- extern bool queue_delayed_work_on(int cpu, struct workqueue_struct *wq,
- 			struct delayed_work *work, unsigned long delay);
- extern bool mod_delayed_work_on(int cpu, struct workqueue_struct *wq,
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index 4666a1a92a31..d2c157b90b7c 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -1561,38 +1561,73 @@ bool queue_work_on(int cpu, struct workqueue_struct *wq,
- EXPORT_SYMBOL(queue_work_on);
+diff --git a/arch/x86/mm/init_32.c b/arch/x86/mm/init_32.c
+index d4e2648a1dfb..b63403d7179d 100644
+--- a/arch/x86/mm/init_32.c
++++ b/arch/x86/mm/init_32.c
+@@ -45,7 +45,6 @@
+ #include <asm/olpc_ofw.h>
+ #include <asm/pgalloc.h>
+ #include <asm/sections.h>
+-#include <asm/paravirt.h>
+ #include <asm/setup.h>
+ #include <asm/set_memory.h>
+ #include <asm/page_types.h>
+@@ -74,7 +73,6 @@ static pmd_t * __init one_md_table_init(pgd_t *pgd)
+ #ifdef CONFIG_X86_PAE
+ 	if (!(pgd_val(*pgd) & _PAGE_PRESENT)) {
+ 		pmd_table = (pmd_t *)alloc_low_page();
+-		paravirt_alloc_pmd(&init_mm, __pa(pmd_table) >> PAGE_SHIFT);
+ 		set_pgd(pgd, __pgd(__pa(pmd_table) | _PAGE_PRESENT));
+ 		p4d = p4d_offset(pgd, 0);
+ 		pud = pud_offset(p4d, 0);
+@@ -99,7 +97,6 @@ static pte_t * __init one_page_table_init(pmd_t *pmd)
+ 	if (!(pmd_val(*pmd) & _PAGE_PRESENT)) {
+ 		pte_t *page_table = (pte_t *)alloc_low_page();
  
- /**
-- * workqueue_select_cpu_near - Select a CPU based on NUMA node
-- * @node: NUMA node ID that we want to select a CPU from
-+ * workqueue_select_cpu_cpumask - Select a CPU based on cpumask
-+ * @cpumask: cpumask that we want to select a CPU from
-  *
-  * This function will attempt to find a "random" cpu available on a given
-- * node. If there are no CPUs available on the given node it will return
-- * WORK_CPU_UNBOUND indicating that we should just schedule to any
-+ * cpumask. If there are no CPUs available on the given cpumask it will
-+ * return WORK_CPU_UNBOUND indicating that we should just schedule to any
-  * available CPU if we need to schedule this work.
-  */
--static int workqueue_select_cpu_near(int node)
-+static int workqueue_select_cpu_cpumask(cpumask_var_t cpumask)
- {
- 	int cpu;
- 
--	/* No point in doing this if NUMA isn't enabled for workqueues */
--	if (!wq_numa_enabled)
--		return WORK_CPU_UNBOUND;
--
--	/* Delay binding to CPU if node is not valid or online */
--	if (node < 0 || node >= MAX_NUMNODES || !node_online(node))
--		return WORK_CPU_UNBOUND;
--
--	/* Use local node/cpu if we are already there */
-+	/* Use local cpu later if we are already there */
- 	cpu = raw_smp_processor_id();
--	if (node == cpu_to_node(cpu))
-+	if (cpumask_test_cpu(cpu, cpumask))
- 		return cpu;
- 
--	/* Use "random" otherwise know as "first" online CPU of node */
--	cpu = cpumask_any_and(cpumask_of_node(node), cpu_online_mask);
-+	/* Use "random" otherwise know as "first" online CPU of cpumask */
-+	cpu = cpumask_any_and(cpumask, cpu_online_mask);
- 
- 	/* If CPU is valid return that, otherwise just defer */
- 	return cpu < nr_cpu_ids ? cpu : WORK_CPU_UNBOUND;
- }
- 
-+/**
-+ * queue_work_cpumask - queue work on a "random" cpu for a given cpumask
-+ * @cpumask: cpumask that we are targeting the work for
-+ * @wq: workqueue to use
-+ * @work: work to queue
-+ *
-+ * We queue the work to a "random" CPU within a given cpumask. The basic
-+ * idea here is to provide a way to somehow associate work with a given
-+ * cpumask.
-+ *
-+ * This function will only make a best effort attempt at getting this onto
-+ * the right cpumask. If no cpu in this cpumask is requested or the
-+ * requested cpumask is offline then we just fall back to standard
-+ * queue_work behavior.
-+ *
-+ * Currently the "random" CPU ends up being the first available CPU in the
-+ * intersection of cpu_online_mask and the cpumask given, unless we
-+ * are running on the cpumask. In that case we just use the current CPU.
-+ *
-+ * Will not work when your workqueue is WQ_UNBOUND.
-+ *
-+ * Return: %false if @work was already on a queue, %true otherwise.
-+ */
-+bool queue_work_cpumask(cpumask_var_t cpumask, struct workqueue_struct *wq,
-+			struct work_struct *work)
-+{
-+	unsigned long flags;
-+	bool ret = false;
-+
-+	local_irq_save(flags);
-+
-+	if (!test_and_set_bit(WORK_STRUCT_PENDING_BIT, work_data_bits(work))) {
-+		int cpu = workqueue_select_cpu_cpumask(cpumask);
-+
-+		__queue_work(cpu, wq, work);
-+		ret = true;
-+	}
-+
-+	local_irq_restore(flags);
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(queue_work_cpumask);
-+
- /**
-  * queue_work_node - queue work on a "random" cpu for a given NUMA node
-  * @node: NUMA node that we are targeting the work for
-@@ -1616,30 +1651,35 @@ static int workqueue_select_cpu_near(int node)
- bool queue_work_node(int node, struct workqueue_struct *wq,
- 		     struct work_struct *work)
- {
--	unsigned long flags;
-+	int cpu;
- 	bool ret = false;
- 
--	/*
--	 * This current implementation is specific to unbound workqueues.
--	 * Specifically we only return the first available CPU for a given
--	 * node instead of cycling through individual CPUs within the node.
--	 *
--	 * If this is used with a per-cpu workqueue then the logic in
--	 * workqueue_select_cpu_near would need to be updated to allow for
--	 * some round robin type logic.
--	 */
--	WARN_ON_ONCE(!(wq->flags & WQ_UNBOUND));
-+	/* No point in doing this if NUMA isn't enabled for wq */
-+	if (!wq_numa_enabled)
-+		cpu = WORK_CPU_UNBOUND;
- 
--	local_irq_save(flags);
-+	/* Delay binding to CPU if node is not valid or online */
-+	if (node < 0 || node >= MAX_NUMNODES || !node_online(node))
-+		cpu = WORK_CPU_UNBOUND;
- 
--	if (!test_and_set_bit(WORK_STRUCT_PENDING_BIT, work_data_bits(work))) {
--		int cpu = workqueue_select_cpu_near(node);
-+	/* Fall back to standard behavior */
-+	if (cpu == WORK_CPU_UNBOUND)
-+		return queue_work_on(cpu, wq, work);
- 
--		__queue_work(cpu, wq, work);
--		ret = true;
-+	/* Use local cpu if we are already there, preempt_disable to make
-+	 * sure that we dont migrate, otherwise this would be meaningless
-+	 */
-+	preempt_disable();
-+	cpu = raw_smp_processor_id();
-+	if (node == cpu_to_node(cpu)) {
-+		ret = queue_work_on(cpu, wq, work);
-+		preempt_enable();
-+	} else {
-+		preempt_enable();
-+		ret = queue_work_cpumask(
-+			(struct cpumask *)cpumask_of_node(node), wq, work);
+-		paravirt_alloc_pte(&init_mm, __pa(page_table) >> PAGE_SHIFT);
+ 		set_pmd(pmd, __pmd(__pa(page_table) | _PAGE_TABLE));
+ 		BUG_ON(page_table != pte_offset_kernel(pmd, 0));
  	}
+@@ -181,12 +178,10 @@ static pte_t *__init page_table_kmap_check(pte_t *pte, pmd_t *pmd,
+ 			set_pte(newpte + i, pte[i]);
+ 		*adr = (void *)(((unsigned long)(*adr)) + PAGE_SIZE);
  
--	local_irq_restore(flags);
- 	return ret;
+-		paravirt_alloc_pte(&init_mm, __pa(newpte) >> PAGE_SHIFT);
+ 		set_pmd(pmd, __pmd(__pa(newpte)|_PAGE_TABLE));
+ 		BUG_ON(newpte != pte_offset_kernel(pmd, 0));
+ 		__flush_tlb_all();
+ 
+-		paravirt_release_pte(__pa(pte) >> PAGE_SHIFT);
+ 		pte = newpte;
+ 	}
+ 	BUG_ON(vaddr < fix_to_virt(FIX_KMAP_BEGIN - 1)
+@@ -482,7 +477,6 @@ void __init native_pagetable_init(void)
+ 				pfn, pmd, __pa(pmd), pte, __pa(pte));
+ 		pte_clear(NULL, va, pte);
+ 	}
+-	paravirt_alloc_pmd(&init_mm, __pa(base) >> PAGE_SHIFT);
+ 	paging_init();
  }
- EXPORT_SYMBOL_GPL(queue_work_node);
+ 
+@@ -491,15 +485,8 @@ void __init native_pagetable_init(void)
+  * point, we've been running on some set of pagetables constructed by
+  * the boot process.
+  *
+- * If we're booting on native hardware, this will be a pagetable
+- * constructed in arch/x86/kernel/head_32.S.  The root of the
+- * pagetable will be swapper_pg_dir.
+- *
+- * If we're booting paravirtualized under a hypervisor, then there are
+- * more options: we may already be running PAE, and the pagetable may
+- * or may not be based in swapper_pg_dir.  In any case,
+- * paravirt_pagetable_init() will set up swapper_pg_dir
+- * appropriately for the rest of the initialization to work.
++ * This will be a pagetable constructed in arch/x86/kernel/head_32.S.
++ * The root of the pagetable will be swapper_pg_dir.
+  *
+  * In general, pagetable_init() assumes that the pagetable may already
+  * be partially populated, and so it avoids stomping on any existing
 -- 
-2.39.2 (Apple Git-143)
+2.35.3
 
