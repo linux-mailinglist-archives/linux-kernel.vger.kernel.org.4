@@ -2,52 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2999B72A233
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:29:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34D2E72A234
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbjFIS3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 14:29:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43134 "EHLO
+        id S230012AbjFISaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 14:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230230AbjFIS3t (ORCPT
+        with ESMTP id S229586AbjFISaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 14:29:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 024DF1730
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 11:29:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 89D4A65A36
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 18:29:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93AEBC433D2;
-        Fri,  9 Jun 2023 18:29:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1686335385;
-        bh=SGJLakpGQ9+imGHhwroWvQc/1Heuje+5zACglaU2qHc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=A2T8P8YR6ss4yJosVhVgMWl3ZvvXT2jEX6kAijUTb5vVRZaZT9jUp7wSn+Iv3h33G
-         rl1Oz8XqTaRxrDLZRTxmimF4Uq0zPJ7l86l9hqSa0miqL1EZUYHvyYY5iZLpkChUdy
-         7SEGtKdoYwcHaYOOmCL0TSIyIDEgqgjjdQ/QoiTM=
-Date:   Fri, 9 Jun 2023 11:29:44 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Tarun Sahu <tsahu@linux.ibm.com>
-Cc:     linux-mm@kvack.org, muchun.song@linux.dev, mike.kravetz@oracle.com,
-        aneesh.kumar@linux.ibm.com, willy@infradead.org,
-        sidhartha.kumar@oracle.com, gerald.schaefer@linux.ibm.com,
-        linux-kernel@vger.kernel.org, jaypatel@linux.ibm.com
-Subject: Re: [PATCH v3] mm/folio: Avoid special handling for order value 0
- in folio_set_order
-Message-Id: <20230609112944.fc08936beb29a18f7bfb5ae3@linux-foundation.org>
-In-Reply-To: <20230609162907.111756-1-tsahu@linux.ibm.com>
-References: <20230609162907.111756-1-tsahu@linux.ibm.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        Fri, 9 Jun 2023 14:30:14 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F91F3A81;
+        Fri,  9 Jun 2023 11:30:13 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-5149429c944so3509644a12.0;
+        Fri, 09 Jun 2023 11:30:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686335411; x=1688927411;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LQo5qsgPUcGmlyO2rsvI2X/zOsK6NI/XGYG2Pjs5ocQ=;
+        b=PBfGgDhGmwDrb3XoBCsHhl1vgR0qXNPyBZOCH0smqKcmnUxY3qoafT5S+OBe3EvfPJ
+         JcsuczB/nksBDdysKtvq/YQjIprYBv8pKopIWmBb9lRj/z9UuunQ91hpld1ybv1yzZw7
+         sIW/wympb6rkv4YEarGkw7fJDB3zS+gssOBv1AXzrd8iJeDVKKHFAGuJrrGHjowDN8/u
+         /ehZGM7ASvyZeZ/eV1isDwlmkRXczPgizAgaRgj7kwuckZA+j1BZXkRDNJtBUDn4yHDV
+         opJNYf2OIwhgU0xQeJYu5TfmW+iQ387X3BuaD8mS2eqGB2rX0H//adVaFKFw16UQPGE1
+         mkeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686335411; x=1688927411;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LQo5qsgPUcGmlyO2rsvI2X/zOsK6NI/XGYG2Pjs5ocQ=;
+        b=DFIaZZE/Kmz4Yh9yqVnA1GL+MIsKb2cSfzf5Oo78zAHkw9xbPreTqjsjMNifrrXpwh
+         FzKUhlhGIzFum1Cy0BpElfs4DE4u8UvHopiPOnefAEgnK8PoFzprNkEv1HLS+7VLarH5
+         wOBwOJheFjpz2uYnARF+VWlCWkRciLWl/hWUgm8PG36PmzPNUz4Eq8J7V/Uvl1/FWE8w
+         fol2cwlzkwJisz144UOvC5SzUJi9okcK2Fz0c8Hc2vxj1836aY2OA4Pn4JAmBUMg2qlB
+         idxkn/4enLIy2jB9yQ4ntbLYbL1s65LUiO3+WjFHhrbQa/y6HTU6Aa3gACAS2u7shIKO
+         rs0g==
+X-Gm-Message-State: AC+VfDwSr8WGN90Az4SHDx8pp2kew3Mtp2a2obdmDhCEZoPKgRQOn1+a
+        UxXyMDa2oiXQuOuv7zAXDADgYOo7cT3ELYNY+4HmVX3RmUM=
+X-Google-Smtp-Source: ACHHUZ7P/m3FTYaf26T03r8XIjRSHEPKt+H8rxF2AlOg8srGmGahQc1w2H60obas9zD3lQxQxFkWqbYdkVFC4ASERmw=
+X-Received: by 2002:a17:906:fe4d:b0:973:93e3:bc9a with SMTP id
+ wz13-20020a170906fe4d00b0097393e3bc9amr2292627ejb.6.1686335411415; Fri, 09
+ Jun 2023 11:30:11 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230608212613.424070-1-jolsa@kernel.org> <CAEf4BzbNakGzcycJJJqLsFwonOmya8=hKLD41TWX2zCJbh=r-Q@mail.gmail.com>
+ <20230608192748.435a1dbf@gandalf.local.home> <CAEf4BzYkNHu7hiMYWQWs_gpYOfHL0FVuf-O0787Si2ze=PFX5w@mail.gmail.com>
+ <ZILhqvrjeFIPHauy@FVFF77S0Q05N> <ZINW9FqIoja76DRa@krava>
+In-Reply-To: <ZINW9FqIoja76DRa@krava>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 9 Jun 2023 11:29:59 -0700
+Message-ID: <CAEf4BzbgsLOoLKyscq6S95QeehVoAzOnQ=xmsFz8dfEUAnhObw@mail.gmail.com>
+Subject: Re: [PATCH RFC] ftrace: Show all functions with addresses in available_filter_functions_addrs
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Jackie Liu <liu.yun@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,62 +76,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  9 Jun 2023 21:59:07 +0530 Tarun Sahu <tsahu@linux.ibm.com> wrote:
+On Fri, Jun 9, 2023 at 9:44=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrote=
+:
+>
+> On Fri, Jun 09, 2023 at 09:24:10AM +0100, Mark Rutland wrote:
+> > On Thu, Jun 08, 2023 at 04:55:40PM -0700, Andrii Nakryiko wrote:
+> > > On Thu, Jun 8, 2023 at 4:27=E2=80=AFPM Steven Rostedt <rostedt@goodmi=
+s.org> wrote:
+> > > > On Thu, 8 Jun 2023 15:43:03 -0700 Andrii Nakryiko <andrii.nakryiko@=
+gmail.com> wrote:
+> > > > > On Thu, Jun 8, 2023 at 2:26=E2=80=AFPM Jiri Olsa <jolsa@kernel.or=
+g> wrote:
+> >
+> > > There are BPF tools that allow user to specify regex/glob of kernel
+> > > functions to attach to. This regex/glob is checked against
+> > > available_filter_functions to check which functions are traceable. Al=
+l
+> > > good. But then also it's important to have corresponding memory
+> > > addresses for selected functions (for many reasons, e.g., to have
+> > > non-ambiguous and fast attachment by address instead of by name, or
+> > > for some post-processing based on captured IP addresses, etc). And
+> > > that means that now we need to also parse /proc/kallsyms and
+> > > cross-join it with data fetched from available_filter_functions.
+> > >
+> > > All this is unnecessary if avalable_filter_functions would just
+> > > provide function address in the first place. It's a huge
+> > > simplification. And saves memory and CPU.
+> >
+> > Do you need the address of the function entry-point or the address of t=
+he
+> > patch-site within the function? Those can differ, and the rec->ip addre=
+ss won't
+> > necessarily equal the address in /proc/kallsyms, so the pointer in
+> > /proc/kallsyms won't (always) match the address we could print for the =
+ftrace site.
+> >
+> > On arm64, today we can have offsets of +0, +4, and +8, and within a sin=
+gle
+> > kernel image different functions can have different offsets. I suspect =
+in
+> > future that we may have more potential offsets (e.g. due to changes for=
+ HW/SW
+> > CFI).
+>
+> so we need that for kprobe_multi bpf link, which is based on fprobe,
+> and that uses ftrace_set_filter_ips to setup the ftrace_ops filter
+>
+> and ftrace_set_filter_ips works fine with ip address being the address
+> of the patched instruction (it's matched in ftrace_location)
+>
+> but right, I did not realize this.. it might cause confusion if people
+> don't know it's patch-side addresses..  not sure if there's easy way to
+> get real function address out of rec->ip, but it will also get more
+> complicated on x86 when IBT is enabled, will check
 
-> folio_set_order(folio, 0) is used in kernel at two places
-> __destroy_compound_gigantic_folio and __prep_compound_gigantic_folio.
-> Currently, It is called to clear out the folio->_folio_nr_pages and
-> folio->_folio_order.
-> 
-> For __destroy_compound_gigantic_folio:
-> In past, folio_set_order(folio, 0) was needed because page->mapping used
-> to overlap with _folio_nr_pages and _folio_order. So if these fields were
-> left uncleared during freeing gigantic hugepages, they were causing
-> "BUG: bad page state" due to non-zero page->mapping. Now, After
-> Commit a01f43901cfb ("hugetlb: be sure to free demoted CMA pages to
-> CMA") page->mapping has explicitly been cleared out for tail pages. Also,
-> _folio_order and _folio_nr_pages no longer overlaps with page->mapping.
-> 
-> So, folio_set_order(folio, 0) can be removed from freeing gigantic
-> folio path (__destroy_compound_gigantic_folio).
+ok, sorry, I'm confused. Two questions:
 
-The above appears to be a code cleanup only?
+1. when attaching kprobe_multi, does bpf() syscall expect function
+address or (func+offset_of_mcount) address? I hope it's the former,
+just function's address?
 
-> Another place, folio_set_order(folio, 0) is called inside
-> __prep_compound_gigantic_folio during error path. Here,
-> folio_set_order(folio, 0) can also be removed if we move
-> folio_set_order(folio, order) after for loop.
-> 
-> The patch also moves _folio_set_head call in __prep_compound_gigantic_folio()
-> such that we avoid clearing them in the error path.
+2. If rec->ip is not function's address, can we somehow adjust the
+value to be a function address before printing it?
 
-And the above also sounds like a code cleanup.
+In short, I think it's confusing to have addresses with +0 or +4 or +8
+offsets. It would be great if we can just keep it +0 at the interface
+level (when attach and in available_filter_functions_addrs).
 
-> Also, as Mike pointed out:
-> "It would actually be better to move the calls _folio_set_head and
-> folio_set_order in __prep_compound_gigantic_folio() as suggested here. Why?
-> In the current code, the ref count on the 'head page' is still 1 (or more)
-> while those calls are made. So, someone could take a speculative ref on the
-> page BEFORE the tail pages are set up."
-> 
-> This way, folio_set_order(folio, 0) is no more needed. And it will also
-> helps removing the confusion of folio order being set to 0 (as _folio_order
-> field is part of first tail page).
-> 
-> Testing: I have run LTP tests, which all passes. and also I have written
-> the test in LTP which tests the bug caused by compound_nr and page->mapping
-> overlapping.
-
-What bug?  Please describe the end-user visible effects of any bug.
-
-And if a bug is indeed fixed, please let's try to identify a Fixes:
-target and let's decide whether a -stable backport is needed.
-
-Thanks.
-
-> https://github.com/linux-test-project/ltp/blob/master/testcases/kernel/mem/hugetlb/hugemmap/hugemmap32.c
-> 
-> Running on older kernel ( < 5.10-rc7) with the above bug this fails while
-> on newer kernel and, also with this patch it passes.
-> 
-
+>
+> or we could just use patch-side addresses and reflect that in the file's
+> name like 'available_filter_functions_patch_addrs' .. it's already long
+> name ;-)
+>
+> jirka
