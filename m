@@ -2,140 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0144072A260
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:35:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0692372A265
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231299AbjFISfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 14:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49050 "EHLO
+        id S230083AbjFISg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 14:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbjFISfq (ORCPT
+        with ESMTP id S229817AbjFISgz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 14:35:46 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D89A1FFE
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 11:35:45 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f624daccd1so2610008e87.0
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 11:35:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686335744; x=1688927744;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mzHdn1DaLzWURRN7ZYzg7ldO/12Vf7Ax/qC+Hs/RMDw=;
-        b=IfM+S68ZeejULF2odiSYoidoZk7h1LBUvvkgGxfC2bGAqKqnCVVRt4v6li4ay+SSW1
-         2Zs+NN9SzoX0viWeHrv3EizqXNW1cHwhvj7fVlUWXytkRh5vW8e/y+pI1MvSj0HdVBMa
-         aU8RLu/rEExpLKJVsdj4OgAxJYE5fdDWywHheVOnNCFm/Syvzz21JoQdW7YQX8++gCGp
-         J7tWp2eQ6F+vqU7kZTkIH4jcT0thLc+Gtvad6p6MDR1tbtww/tLqxlYymlbrkspki5eT
-         amd+Bcbu5vyAv8z6H11bJzZiquCXsRhCQ1QqgeRt+meBW1EXwJuRbMT7M33ZRIGwqS+I
-         7w6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686335744; x=1688927744;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mzHdn1DaLzWURRN7ZYzg7ldO/12Vf7Ax/qC+Hs/RMDw=;
-        b=P8ooFFO4/4EdQj4Ctdc50eq9883Zpwy3zRUHzYB0g2u17bZGd2p9Aogte/lBu/kDjF
-         9r9Ja3o4X2GjQutcxw7Tx8rgOv53aURgZIwPulZB2yQkqUTRml+Vhobs4uSP0d0B5ysX
-         Ore6HUQJJIzHd/8mSWAjabJ37b1TeS09kj9N0eYZmWZvlnsmMTpHTYMhYBvu9vt0NKV0
-         lIbvGfHGljQVkSc+GgeqsXqc99Ek1E0VX08DmA/e/6h55CbPCbK6lHuo2oDUoWVMSGUR
-         Z69UCNE8oJFExTJTbUceNe4KmL0GRuNZBKh2cP0QoLDXI4P8MIwvLnDB/Y4b+xmZYXLT
-         wBVQ==
-X-Gm-Message-State: AC+VfDyYPUNuh4z6nP4U7AGQ7fetAK+sCgK54suvcDqtdEUs3RcSJUOa
-        CIIewyrdgbPp2b1s0zwnaufOuA==
-X-Google-Smtp-Source: ACHHUZ66uv0L+a3FfUxOdzki0YRk+LVgedzWgi8j8TZxEFYFEkg+/7G9u8TzuQykdO23vnBMk3HWaA==
-X-Received: by 2002:a19:5049:0:b0:4f4:4cd4:2586 with SMTP id z9-20020a195049000000b004f44cd42586mr1231188lfj.20.1686335743642;
-        Fri, 09 Jun 2023 11:35:43 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id o1-20020a056512050100b004f38267a2f9sm622720lfb.161.2023.06.09.11.35.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Jun 2023 11:35:43 -0700 (PDT)
-Message-ID: <0e3b5d21-24dc-6c44-0984-98d4a33fbe6e@linaro.org>
-Date:   Fri, 9 Jun 2023 20:35:39 +0200
+        Fri, 9 Jun 2023 14:36:55 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEBB030CD
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 11:36:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686335813; x=1717871813;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=HLt/YP1Xx7AOS2RQbcl2WGOkHJOI0bVMQO6zjd3elu4=;
+  b=a4qalco+buehyQgNd+w3lX1rNz3Fp3P6PfUEFk24vPBZq+cvDqtRGOCN
+   6UIatbxONRw/PJt31fjYFKw4rZtZkXeYW5ygRsHSxxWvLLtHmdicKuBdK
+   815igVC+ZSQJIHXpZWABpT9GmuFEvDKK7J/TAN4wlm3Rd+PX7NaQPsEgs
+   LWDxq0NzSPuHLQ5GxWOSVawe8h8qfGj4neTYbCA8kXB/sIpWWiXrWWSLe
+   RjJenNKqi0TvCDwuGJZOCOfR4y3vhy+gXikSBLcG8iz4sg4xv3EJfRuU4
+   R53hQieek3zZaOmUykWlStzXlkj/a0Of5RYURH/zC/zd4nK1zMAX5d0UX
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="338022051"
+X-IronPort-AV: E=Sophos;i="6.00,230,1681196400"; 
+   d="scan'208";a="338022051"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 11:36:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="710443919"
+X-IronPort-AV: E=Sophos;i="6.00,230,1681196400"; 
+   d="scan'208";a="710443919"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 09 Jun 2023 11:36:50 -0700
+From:   Alexander Shishkin <alexander.shishkin@linux.intel.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ravi Shankar <ravi.v.shankar@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Sohil Mehta <sohil.mehta@intel.com>
+Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Subject: [PATCH v3 00/12] Enable Linear Address Space Separation support
+Date:   Fri,  9 Jun 2023 21:36:20 +0300
+Message-Id: <20230609183632.48706-1-alexander.shishkin@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v8 08/18] drm/msm/a6xx: Remove both GBIF and RBBM GBIF
- halt on hw init
-To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-References: <20230223-topic-gmuwrapper-v8-0-69c68206609e@linaro.org>
- <20230223-topic-gmuwrapper-v8-8-69c68206609e@linaro.org>
- <eucocwnrumtpp5obno6dg3vl54wrrflge7cbt34ubfy32czl7d@b3kkk3l7ibfj>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <eucocwnrumtpp5obno6dg3vl54wrrflge7cbt34ubfy32czl7d@b3kkk3l7ibfj>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Changes from v2[5]:
+- Added myself to the SoB chain
 
+Changes from v1[1]:
+- Emulate vsyscall violations in execute mode in the #GP fault handler
+- Use inline memcpy and memset while patching alternatives
+- Remove CONFIG_X86_LASS
+- Make LASS depend on SMAP
+- Dropped the minimal KVM enabling patch
 
-On 9.06.2023 20:25, Akhil P Oommen wrote:
-> On Mon, May 29, 2023 at 03:52:27PM +0200, Konrad Dybcio wrote:
->>
->> Currently we're only deasserting REG_A6XX_RBBM_GBIF_HALT, but we also
->> need REG_A6XX_GBIF_HALT to be set to 0.
->>
->> This is typically done automatically on successful GX collapse, but in
->> case that fails, we should take care of it.
->>
->> Also, add a memory barrier to ensure it's gone through before jumping
->> to further initialization.
->>
->> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 6 +++++-
->>  1 file changed, 5 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
->> index 083ccb5bcb4e..dfde5fb65eed 100644
->> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
->> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
->> @@ -1003,8 +1003,12 @@ static int hw_init(struct msm_gpu *gpu)
->>  	a6xx_gmu_set_oob(&a6xx_gpu->gmu, GMU_OOB_GPU_SET);
->>  
->>  	/* Clear GBIF halt in case GX domain was not collapsed */
->> -	if (a6xx_has_gbif(adreno_gpu))
->> +	if (a6xx_has_gbif(adreno_gpu)) {
->> +		gpu_write(gpu, REG_A6XX_GBIF_HALT, 0);
->>  		gpu_write(gpu, REG_A6XX_RBBM_GBIF_HALT, 0);
->> +		/* Let's make extra sure that the GPU can access the memory.. */
->> +		mb();
-> This barrier is unnecessary because writel transactions are ordered and
-> we don't expect a traffic from GPU immediately after this.
-> 
-> -Akhil
-Right, let's remove it!
+Linear Address Space Separation (LASS) is a security feature that intends to
+prevent malicious virtual address space accesses across user/kernel mode.
 
-Konrad
->> +	}
->>  
->>  	gpu_write(gpu, REG_A6XX_RBBM_SECVID_TSB_CNTL, 0);
->>  
->>
->> -- 
->> 2.40.1
->>
+Such mode based access protection already exists today with paging and features
+such as SMEP and SMAP. However, to enforce these protections, the processor
+must traverse the paging structures in memory.  Malicious software can use
+timing information resulting from this traversal to determine details about the
+paging structures, and these details may also be used to determine the layout
+of the kernel memory.
+
+The LASS mechanism provides the same mode-based protections as paging but
+without traversing the paging structures. Because the protections enforced by
+LASS are applied before paging, software will not be able to derive
+paging-based timing information from the various caching structures such as the
+TLBs, mid-level caches, page walker, data caches, etc. LASS can avoid probing
+using double page faults, TLB flush and reload, and SW prefetch instructions.
+See [2], [3] and [4] for some research on the related attack vectors.
+
+LASS enforcement relies on the typical kernel implemetation to divide the
+64-bit virtual address space into two halves:
+  Addr[63]=0 -> User address space
+  Addr[63]=1 -> Kernel address space
+Any data access or code execution across address spaces typically results in a
+#GP fault.
+
+Kernel accesses usually only happen to the kernel address space. However, there
+are valid reasons for kernel to access memory in the user half. For these cases
+(such as text poking and EFI runtime accesses), the kernel can temporarily
+suspend the enforcement of LASS by toggling SMAP (Supervisor Mode Access
+Prevention) using the stac()/clac() instructions.
+
+User space cannot access any kernel address while LASS is enabled.
+Unfortunately, legacy vsyscall functions are located in the address range
+0xffffffffff600000 - 0xffffffffff601000 and emulated in kernel.  To avoid
+breaking user applications when LASS is enabled, extend the vsyscall emulation
+in execute (XONLY) mode to the #GP fault handler.
+
+In contrast, the vsyscall EMULATE mode is deprecated and not expected to be
+used by anyone.  Supporting EMULATE mode with LASS would need complex
+intruction decoding in the #GP fault handler and is probably not worth the
+hassle. Disable LASS in this rare case when someone absolutely needs and
+enables vsyscall=emulate via the command line.
+
+As of now there is no publicly available CPU supporting LASS.  The first one to
+support LASS would be the Sierra Forest line. The Intel Simics® Simulator was
+used as software development and testing vehicle for this patch set.
+
+[1] https://lore.kernel.org/lkml/20230110055204.3227669-1-yian.chen@intel.com/
+[2] “Practical Timing Side Channel Attacks against Kernel Space ASLR”,
+https://www.ieee-security.org/TC/SP2013/papers/4977a191.pdf
+[3] “Prefetch Side-Channel Attacks: Bypassing SMAP and Kernel ASLR”, http://doi.acm.org/10.1145/2976749.2978356
+[4] “Harmful prefetch on Intel”, https://ioactive.com/harmful-prefetch-on-intel/ (H/T Anders)
+[5] https://lore.kernel.org/all/20230530114247.21821-1-alexander.shishkin@linux.intel.com/
+
+Alexander Shishkin (1):
+  x86/vsyscall: Document the fact that vsyscall=emulate disables LASS
+
+Peter Zijlstra (1):
+  x86/asm: Introduce inline memcpy and memset
+
+Sohil Mehta (9):
+  x86/cpu: Enumerate the LASS feature bits
+  x86/alternatives: Disable LASS when patching kernel alternatives
+  x86/cpu: Enable LASS during CPU initialization
+  x86/cpu: Remove redundant comment during feature setup
+  x86/vsyscall: Reorganize the #PF emulation code
+  x86/traps: Consolidate user fixups in exc_general_protection()
+  x86/vsyscall: Add vsyscall emulation for #GP
+  x86/vsyscall: Disable LASS if vsyscall mode is set to EMULATE
+  [RFC] x86/efi: Disable LASS enforcement when switching to EFI MM
+
+Yian Chen (1):
+  x86/cpu: Set LASS CR4 bit as pinning sensitive
+
+ .../admin-guide/kernel-parameters.txt         |  4 +-
+ arch/x86/entry/vsyscall/vsyscall_64.c         | 70 ++++++++++++++-----
+ arch/x86/include/asm/cpufeatures.h            |  1 +
+ arch/x86/include/asm/disabled-features.h      |  4 +-
+ arch/x86/include/asm/smap.h                   |  4 ++
+ arch/x86/include/asm/string_32.h              | 21 ++++++
+ arch/x86/include/asm/string_64.h              | 21 ++++++
+ arch/x86/include/asm/vsyscall.h               | 16 +++--
+ arch/x86/include/uapi/asm/processor-flags.h   |  2 +
+ arch/x86/kernel/alternative.c                 | 12 +++-
+ arch/x86/kernel/cpu/common.c                  | 10 ++-
+ arch/x86/kernel/cpu/cpuid-deps.c              |  1 +
+ arch/x86/kernel/traps.c                       | 12 ++--
+ arch/x86/mm/fault.c                           | 13 +---
+ arch/x86/platform/efi/efi_64.c                |  6 ++
+ tools/arch/x86/include/asm/cpufeatures.h      |  1 +
+ 16 files changed, 153 insertions(+), 45 deletions(-)
+
+-- 
+2.39.2
+
