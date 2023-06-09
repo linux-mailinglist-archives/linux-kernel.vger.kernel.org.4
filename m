@@ -2,228 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07357729022
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 08:40:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5F3A729024
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 08:40:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237379AbjFIGkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 02:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
+        id S237872AbjFIGkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 02:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229784AbjFIGkK (ORCPT
+        with ESMTP id S237582AbjFIGkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 02:40:10 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2051.outbound.protection.outlook.com [40.107.21.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8BDD9E;
-        Thu,  8 Jun 2023 23:40:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=k5G4rkDAok8kcfWSTHhh5GTb74d+NF8xJQsqs37J2/i+FtMmmg83NFTZj+StX5AgHPy2H7QGYTXuVaQZvQzeUqmgoTF/44fZ925axeXrgrGm6umEBEJXxvgCJyYvQH0ICMrso5jioaLiw2AsBd839YgsV49m7gFEj7eNp8GjQj9Xyl4TT/heosOc9fIYqaSeRpzp6KjNdMR4vMn0qXF7AwMOkX3Kt5pe4YV2ASx7gWvVs5dxbNe4DdiLGpRkv07tQ7a+0Y9UzxT++fGHCwQ6vWKkZPSM0kSHpPM8DSVLiZHfg9BYaL9p8HM2O0F3j3oDZkWnJISMuQhDViafDtXI8A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=If0u87yQ5K2Iwbvl+lX21NS09uLaKq0sla1vkSY0eOk=;
- b=fJ30xyqkTZaNYep6aCchYPLvsldCqCM7skUFk0IUlthULb5LNHHH4MFnzaCjUxaHHHSeip/704PzbIdgvdPRIM89q4bZawV/CSBX3z95tSJroL3NRzZ+3LJBIKxWtNGeOOF8eCjFRIv3G2ht8/rDZ7omvn+9Eyx/YUjqVLAJix57PFCIA1J5CxyaQypg1cH8OiDLKBuFrqr0tFyNDRohA12pRmi8eQwuoatVUb80nOZQHwPfKwmlju9axqT59O8uqWQWZfM3qPvjRcsK+hfaaF0h7ysRAIQoS8cj9Vl/4xKzS1VW8b1l+Q5twhG6ihLgsgZ7rmrWoAdE+ugrV709bA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=If0u87yQ5K2Iwbvl+lX21NS09uLaKq0sla1vkSY0eOk=;
- b=hERktXJif8WA2XLj2pFH2KAf8pZMkrM4DMG142lxGP9RFzb5uuBK7fmuac4D/1WZeWKFeX9GOupmjV4WxRIT9zU4PZ+v7VNkg2Db002Ajvvkw3SFl8NTWOXBgcD6KLKzmntnes+7coVB84i8vxNT50iU4mVxm0a2QmjZlafRrnfr150BR/cpYsMOWwdxiArPqZY0NCoFv6gGow0W/vQPmiVBebtbnYU8uWN7bQqC/dS7YTaL2vEncBY2opQAokLHVnxu/BBak2QOX6HzaPkbzzBsoBz/oyu2ORfborkTHrlzapWF/bhCtp7WtVGxj+NvbOpmBGeD3x96sPYPAKw3yQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-Received: from AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:588::19)
- by AS8PR10MB7732.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:62b::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.39; Fri, 9 Jun
- 2023 06:40:06 +0000
-Received: from AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::53c2:174a:8b13:ce94]) by AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::53c2:174a:8b13:ce94%3]) with mapi id 15.20.6455.037; Fri, 9 Jun 2023
- 06:40:06 +0000
-Message-ID: <da7d3871-3b2f-1172-62a8-70f6856e4968@siemens.com>
-Date:   Fri, 9 Jun 2023 08:40:03 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v5 3/3] efi: Add tee-based EFI variable driver
-Content-Language: en-US
-To:     Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-efi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        "Su, Bao Cheng (RC-CN DF FA R&D)" <baocheng.su@siemens.com>
-References: <20230526010748.1222-1-masahisa.kojima@linaro.org>
- <CAC_iWj+E7-XK6dCeSn4205K0O3EZCLxCaC+adu-14ST6sdudfA@mail.gmail.com>
- <76da826f-b608-6add-5401-6de818b180e3@siemens.com>
- <CAFA6WYPCDRjFzsUMU=SNzEt88nT7Fcm1eOFL8z4HiQO+=2JeVA@mail.gmail.com>
- <cc6bd203-83ea-c247-0986-7fec6f327ee8@siemens.com>
- <CAC_iWjKZNHJxq4VMFnV7oQngwBBCQveh=s34u1LZ59YUqViPbw@mail.gmail.com>
- <CAC_iWjJMv68yLC606SBhMmBYkR4wVC8SvUcPvNM=RX_qL=9Bvw@mail.gmail.com>
- <b9b8c1d3-fc8e-df94-d12b-a9e3debf3418@siemens.com>
- <CAC_iWj+cP4RfDNu_n-ZOp7A62W34drLpPszN_hrkqF_aPTLtMg@mail.gmail.com>
- <871ece13-7d6e-44d4-3bda-317658202f6f@siemens.com>
- <CAC_iWjKgCJWgKU8tC3Nfn-0CgwGhw89B3JpTgsjkjDDOcWZEdw@mail.gmail.com>
- <CAMj1kXGbXdbDr6DbyuziSFuxMgAimjNnkhqy8C-S5AbxdnixuQ@mail.gmail.com>
- <CAC_iWjJ0uw_p9=6C+U+q8BNQgnDBgbDpcu8s8c80oB25i9y77w@mail.gmail.com>
- <3eb9bf84-4cf0-6cfe-9ad3-f7eef7d775fb@siemens.com>
- <CAC_iWjLdmmQ4+BVt_mOP5Ht9jDHQqoVV+-ATR-nDrmG37raGjQ@mail.gmail.com>
-From:   Jan Kiszka <jan.kiszka@siemens.com>
-In-Reply-To: <CAC_iWjLdmmQ4+BVt_mOP5Ht9jDHQqoVV+-ATR-nDrmG37raGjQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0143.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:98::16) To AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:20b:588::19)
+        Fri, 9 Jun 2023 02:40:19 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B71CE46;
+        Thu,  8 Jun 2023 23:40:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1686292817; x=1717828817;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=PXkXMddf/L10BB2XF000eUm5tEjAoMZu0QK1VuQ3Lww=;
+  b=BVFSJqrfuF4HbEphYpxXxOzqUvXivmBPWgahwZjRTSOCa7VeI4FMWMpl
+   6YE+9eHo/KgvAMIwgmyxicUHmrIyLPvDIpXBCS3r7XfQI/GF/J41tWPvy
+   Pcma9z1T/lqUjM9zmxlqakEdpvkR13oXx9tQCb+vrStDYH4OJOFrDq51C
+   C5qRoAXg+A1TI+rdbq2V+Cz0jeLftDNWk1IRl8RZKN4X+AO+3kXZfzS+P
+   wdf+CVb2ux6yXn2MPNfzamI9HrWwJF/MoHPXFE17A/6fcZ4iHFNTkvPmc
+   FeOUs/EcoMaNSE+9/2TmuM8rZ23v9Zhcc7bxLqUfeZminE9KShcg69L4i
+   g==;
+X-IronPort-AV: E=Sophos;i="6.00,228,1681164000"; 
+   d="scan'208";a="31355999"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 09 Jun 2023 08:40:15 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Fri, 09 Jun 2023 08:40:15 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Fri, 09 Jun 2023 08:40:15 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1686292815; x=1717828815;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=PXkXMddf/L10BB2XF000eUm5tEjAoMZu0QK1VuQ3Lww=;
+  b=Y52mNv7CfvUbCZ2xevSc0vwet0MqhsPeqgEJoZY/SqBRE9bGuiwfgO/I
+   H5aIUb+cfQyztaqXGPusm/JM2huGCzaVwqFP9XG1/dQ0jgKJGlkg7SPP4
+   RSBJ55uGZhniAGUHXFVU5tJ4akwxNxsrsFT6R+YCLilIWVpw3rCPDqorl
+   QqfOVjtsKnC3e+CcIIGzVy4+Z6NyJNqfP7n6vnKH/gp+0X3Jtss4aoj9v
+   CqyuDltDJdKCMpf4vCM83ON/UL6ZejMjgREvnPtnW0WHktjU5joJwnhnb
+   lfJHQJv9zJFWM+sbV6vdLZFApYHl+xG0coKrlH/jBkg7Hunyv1pQWKbGf
+   w==;
+X-IronPort-AV: E=Sophos;i="6.00,228,1681164000"; 
+   d="scan'208";a="31355998"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 09 Jun 2023 08:40:15 +0200
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 4CF5C280087;
+        Fri,  9 Jun 2023 08:40:15 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Geert Uytterhoeven <geert@glider.be>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andy@kernel.org>,
+        "linux@ew.tq-group.com" <linux@ew.tq-group.com>
+Subject: Re: [rfc, rft, PATCH v1 1/1] gpio: aggregator: Introduce delay support for individual output pins
+Date:   Fri, 09 Jun 2023 08:40:15 +0200
+Message-ID: <4808746.GXAFRqVoOG@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20230608162130.55015-1-andriy.shevchenko@linux.intel.com>
+References: <20230608162130.55015-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS4PR10MB6181:EE_|AS8PR10MB7732:EE_
-X-MS-Office365-Filtering-Correlation-Id: 365c997c-e45d-420c-aac9-08db68b45c9a
-X-LD-Processed: 38ae3bcd-9579-4fd4-adda-b42e1495d55a,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PqgeIOIZ2MNU3Fj4CJ8puCYCXQO+tgPU8soBJuJXAPxtzWmyrWWl9eHfgMshX1jFzgHEK4V0DQi/3Q9y4I9i+hHOvktWPh3UBJbBI/j5zn5WibAaK1Me94gAkrndwCm4e6hy1cJYm0PzCoB7wQyivV4BhBOT9Vt4ON8FZ0v0+MD+FiEcX7OhjIG1y1hU1DXpb8SHvIKnr834nHI/9etn1TqQlcLYPj2WJMQEghur9jYW9F+QZUHNK5VA5DAnVAX5BzsBzekrBmN58SZaPDRI8D553jMQ1qhuMmT2tQeqRQ6zd20z8GBQq7jHnDHHWVIZORZDWn2VGS5qO67gosxdtBDrBboeh5YKJHgzGTvUFAIKF0XOCF/yYpFlGefXjT5IT6QADo+/CtnZdwjjtpflXVP0yX+bQT2d8Lc4/082i3Dc7Enl2oNxpIMNBrJ+aHgfMYF/JVlLC+MGXKL2FBTHDl1KYIPfHRe8KO7NUoyNcnlR2cWKtxomtKr0EGEVzoUS4JxdsdBvrFRft50OoSmFN9Oo5PslaFUWxvGWORJvYVvtLcMmcKqu7IfDLk6zeeTb8Rh+LaGaDNRScDK/9nMxXbPZXakvzWWaGpBG0YkeR5c5PQiwDmt4v4RjrGFg7L+tObnBnx0+NvzXv2dd5ahGxw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(39860400002)(396003)(376002)(136003)(451199021)(36756003)(31696002)(86362001)(478600001)(4326008)(54906003)(6916009)(316002)(66946007)(66476007)(66556008)(107886003)(6486002)(6666004)(8936002)(8676002)(41300700001)(2906002)(5660300002)(7416002)(44832011)(82960400001)(38100700002)(2616005)(6512007)(26005)(6506007)(186003)(53546011)(83380400001)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bE43RWJVNzhzM0t1V25PWEdCdjhTbm10RVlOQUVRV20wNkVlMGdDUUwrZnhl?=
- =?utf-8?B?Y0wzMWRsTVQ2L2MzMzZUWVhLRUZlS29RaStQNStPNFlGWkpuRVd6aUg0dFQw?=
- =?utf-8?B?aENmQkdzbERIdWpjUVVSL0owYUROZ1FvS0dobTZyMTRBNlYzSTBvSXJWR2ZH?=
- =?utf-8?B?VnJGNml3VkhiVVYyaE8yM1d3ZUN1NEljUzBtR3JZc1BtVXU1UG16YURvZUtu?=
- =?utf-8?B?S2tCbHFERzZWT0pXVHF0ZkJuNjl0T0NmbWxZWnpZelgveU9NK1JjeGR3NSs2?=
- =?utf-8?B?TWhrdm82ZkVVVi9oWmhUZmR0T2NDMjgzdW1aK3BWMnRhM01BMnlUbExSTmkw?=
- =?utf-8?B?Q21CVTloNTJBSFB4cXk0ai9BN3NQT2RpYlE2L2NiNjQ3cTBjNk1jZkRzb01P?=
- =?utf-8?B?c2dWRmo5bXlWbDd4UGxNWXhWcldlcXdQeEJ3UnhPS0M0dEx4b2NUMTlwc1NS?=
- =?utf-8?B?UU9xRVl1cDdWazJXb3ZRbXJyNUl5cDhPSEp4dXZ0ckQ3cit3U1ZBSzV6N3RK?=
- =?utf-8?B?K2x4QllCNDZzaHp3eEFhQzg1NXRQV0lLekFkQTM5MUxZU2psWnl5Wnkyd1Ro?=
- =?utf-8?B?Y29iM0ZWVi9Mbkt5eVg0bC9yMEU4KzA1WWluNXlJSXFXQVNJZjBha1hPQnpJ?=
- =?utf-8?B?dStuZTRjSm42cDgwRlZmbXBpbDVSLytYaVpBT3kyKy9OUUYwY1Nrd29MZGJP?=
- =?utf-8?B?UnlOd1VBY2gzeEJGRzdBVUJHM3I3ZndXRGhuN3RJVGcxUFJHME1CQXAveFo0?=
- =?utf-8?B?ZHBzUEg1cUJvc2xOY0JaaGNlaFUzMjNQN0dCUVJIVTRUU2wwN0tDcGEveHBa?=
- =?utf-8?B?US9nR2UrVlFSbGN1MHZ0QXZRRXAyTnM1NkVoY3ppQ1JwUVQzVWZWVzJpY3BL?=
- =?utf-8?B?ajdUcXRHbnNCNFRyK3Zya2s4TFZ3bDdJNkxlNlZFb3M5clozOU1iUlNGL1hB?=
- =?utf-8?B?SVFGajJPV0x5TWJQWkVHSnBjRFhoQjVxaWdNVWdBS0dBNmtmQUg2dU5IT2xy?=
- =?utf-8?B?ZGhXU0JCd3VYT0Z2Zjh6bkhwNW5WTmpXaDF2cU9xV0lCdUt5Mm4vbDhtR1pW?=
- =?utf-8?B?VExVMzJKM3huZWtzeHQ5WTJnWDl6N3Z1NmRreWNiYjRTWHhDdGhQSFBuUURm?=
- =?utf-8?B?KytmSk1uZUZndjg1OEtrZVVlT0pTdnk3U2o1RzIxUXVvZ1lQczVOVVBYbS8v?=
- =?utf-8?B?eGtHTVBHSjkxcEpvL0JKV0VCRjZlZWRyUlhqdWt2THUvL0ZNd0QrUFllTHg1?=
- =?utf-8?B?WitudVYxNG9BU0R5NkpaN3EzbzVrRm5USU5EMkpudkdtMVRXcVFwZmNpVVoy?=
- =?utf-8?B?eWRZWHRlWXR6aG5veUpOdCtxRlBFWHd2NXBCL2padHVVczVaWkZKam5paUNl?=
- =?utf-8?B?eUE4UENGZmhocW9ETFZYelByVTZmZi9lZFdZeTdYV01VbGZRUDZJbmg2a2oz?=
- =?utf-8?B?bUpSQjNWMnVUc3lJMTN5MktyVUxaRGJEMFVoVmNadFplcjJXdzdlVFBja0NS?=
- =?utf-8?B?Ym0rWVpoYVg5anNlcElMTDhYRmcvYUZVemw0eWwwOHJCOHN0b2lINityazI1?=
- =?utf-8?B?Zm1FS3dCZDRxVFJNcXBQdkw5cGl3ekdWeXBJVGMxSVdrMWxCMndVeENSSW52?=
- =?utf-8?B?a3ZDN091NzNyYkNma2poMzJRZ0tHVHovblJSMWl3bmZIazBrR0xwcWhKSDYy?=
- =?utf-8?B?bzFrM0xjTlFGZjIyMzVRaUcwRkFuS0RuS1E0Qkp3V01YUlNhakdxSkRhRmpB?=
- =?utf-8?B?RVFyM1dJbElXNmtjTCtNcDBxOFBOZnRocHRxcitPMDJoSlBPdlB3YktRR2Qr?=
- =?utf-8?B?VEk4K1lIMnA5U0ZEQ0w4ZTJoc1RUOGFqaUVZVHpmcGY2TlorZkRhTGxKdW9P?=
- =?utf-8?B?NjVna2NwNndSU2ZhdUJSSGQzUEV4TTFwbGlTakJHc2dYbHFFdGdqVkRheTgr?=
- =?utf-8?B?TDhLZDVoVG9qeElIVmlpUnVYVDBFM2ZacFJzSjlYVTV6UlVtOTQyNE5UQnh6?=
- =?utf-8?B?WS9qZjJFdTc0R0VMTGZmeWlhV0JqcGpmUUNnV1JlMjUrQ0tvTlMvdDVWTDNr?=
- =?utf-8?B?Q1luN2I2ZzdzWGRSK2drR1lsZkJNTngvb3hyVGttSVpNY1lCRjZydCtrNjB1?=
- =?utf-8?Q?A7q6wn35UpLaPxs2X0rAJIllu?=
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 365c997c-e45d-420c-aac9-08db68b45c9a
-X-MS-Exchange-CrossTenant-AuthSource: AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 06:40:06.1087
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WlzwlCfqS3W7DKR3vKE90MdQBhEt8M5oPcNfXlLn8X9TQkq1gXzWcZprbsb8/6N3rxTJNVaF6oRFWqpG2Dy/5A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR10MB7732
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09.06.23 08:34, Ilias Apalodimas wrote:
-> Hi Jan,
-> 
-> [...]
-> 
->>> --- a/drivers/firmware/efi/vars.c
->>> +++ b/drivers/firmware/efi/vars.c
->>> @@ -123,7 +123,7 @@ EXPORT_SYMBOL_GPL(efivars_unregister);
->>>
->>>  bool efivar_supports_writes(void)
->>>  {
->>> -       return __efivars && __efivars->ops->set_variable;
->>> +       return __efivars && __efivars->ops->set_variable != set_variable_int;
->>>  }
->>>  EXPORT_SYMBOL_GPL(efivar_supports_writes);
->>>
->>> diff --git a/fs/efivarfs/super.c b/fs/efivarfs/super.c
->>> index e028fafa04f3..e40b5c4c5106 100644
->>> --- a/fs/efivarfs/super.c
->>> +++ b/fs/efivarfs/super.c
->>> @@ -242,9 +242,6 @@ static int efivarfs_fill_super(struct super_block
->>> *sb, struct fs_context *fc)
->>>         sb->s_d_op              = &efivarfs_d_ops;
->>>         sb->s_time_gran         = 1;
->>>
->>> -       if (!efivar_supports_writes())
->>> -               sb->s_flags |= SB_RDONLY;
->>> -
->>>         inode = efivarfs_get_inode(sb, NULL, S_IFDIR | 0755, 0, true);
->>>         if (!inode)
->>>                 return -ENOMEM;
->>> diff --git a/include/linux/efi.h b/include/linux/efi.h
->>> index 58d1c271d3b0..ec0ac6ef50a3 100644
->>> --- a/include/linux/efi.h
->>> +++ b/include/linux/efi.h
->>> @@ -1084,6 +1084,10 @@ int efivars_register(struct efivars *efivars,
->>>                      const struct efivar_operations *ops);
->>>  int efivars_unregister(struct efivars *efivars);
->>>
->>> +efi_status_t set_variable_int(efi_char16_t *name, efi_guid_t *vendor,
->>> +                             u32 attributes, unsigned long data_size,
->>> +                             void *data);
->>> +
->>>  void efivars_generic_ops_register(void);
->>>  void efivars_generic_ops_unregister(void);
->>>
->>> Thanks
->>> /Ilias
->>
->> As just written in my other reply: The root cause is the dependency on
->> tee-supplicant daemon. That needs to be resolved, and then also r/w
->> mounting will just work.
-> 
-> That's partially true.  If we solve the dependency your problem will
-> go away only if everything gets compiled as built in.  But if you have
-> them as modules there's still a chance you mount the efivarfs before
-> installing all the modules.  In that case, you'll end up with the same
-> problem no?
+Am Donnerstag, 8. Juni 2023, 18:23:08 CEST schrieb Andy Shevchenko:
+> The aggregator mode can also handle properties of the platform, that
+> do not belong to the GPIO controller itself. One of such a property
+> is signal delay line. Intdoduce support of it.
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>=20
+> I don't like the idea of gpio-delay or similar. We have already GPIO
+> aggregator that incorporates the GPIO proxy / forwarder functionality.
+>=20
+> This one is RFC because:
+> 1) just compile tested;
+> 2) has obvious issues with CONFIG_OF_GPIO;
+> 3) contains ~5 patches in a single change for now;
+> 4) requires additional work with blocking sysfs for this;
+> 5) requires some DT bindings work;
+> 6) ...whatever I forgot...
+>=20
+> Any comments are appreciated, and tests are esp. welcome!
 
-Obviously, this will need proper probing of the TA services in the
-proper order so that the STMM driver is pulled in before efivarfs gets used.
+=46WIW: Replacing CONFIG_GPIO_DELAY=3Dm with CONFIG_GPIO_AGGREGATOR=3Dm wor=
+ks as=20
+well on my platform.
+But I'm not sure if it's worth the additional complexity for gpio-aggregato=
+r=20
+to replace gpio-delay.
 
-> 
-> That's why I think this patch (or a variation of it) is useful.  It
-> solves the kernel panic you are seeing if you remount the efivarfs as
-> RW and It unifies the way the kernel responds to userspace no matter
-> what the firmware does with its setvariableRT service.
+Regards,
+Alexander
 
-I'm not against fixes crashes, but the r/w issue is a different thing IMHO.
+>  drivers/gpio/gpio-aggregator.c | 84 ++++++++++++++++++++++++++++++----
+>  1 file changed, 74 insertions(+), 10 deletions(-)
+>=20
+> diff --git a/drivers/gpio/gpio-aggregator.c b/drivers/gpio/gpio-aggregato=
+r.c
+> index 20a686f12df7..802d123f0188 100644
+> --- a/drivers/gpio/gpio-aggregator.c
+> +++ b/drivers/gpio/gpio-aggregator.c
+> @@ -10,12 +10,14 @@
+>  #include <linux/bitmap.h>
+>  #include <linux/bitops.h>
+>  #include <linux/ctype.h>
+> +#include <linux/delay.h>
+>  #include <linux/idr.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/mutex.h>
+>  #include <linux/overflow.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/property.h>
+>  #include <linux/slab.h>
+>  #include <linux/spinlock.h>
+>  #include <linux/string.h>
+> @@ -239,6 +241,11 @@ static void __exit gpio_aggregator_remove_all(void)
+>   *  GPIO Forwarder
+>   */
+>=20
+> +struct gpiochip_fwd_timing {
+> +	unsigned long ramp_up_us;
+> +	unsigned long ramp_down_us;
+> +};
+> +
+>  struct gpiochip_fwd {
+>  	struct gpio_chip chip;
+>  	struct gpio_desc **descs;
+> @@ -246,6 +253,7 @@ struct gpiochip_fwd {
+>  		struct mutex mlock;	/* protects tmp[] if can_sleep */
+>  		spinlock_t slock;	/* protects tmp[] if !can_sleep */
+>  	};
+> +	struct gpiochip_fwd_timing *delay_timings;
+>  	unsigned long tmp[];		/* values and descs for multiple ops=20
+*/
+>  };
+>=20
+> @@ -333,11 +341,28 @@ static int gpio_fwd_get_multiple_locked(struct
+> gpio_chip *chip, static void gpio_fwd_set(struct gpio_chip *chip, unsigned
+> int offset, int value) {
+>  	struct gpiochip_fwd *fwd =3D gpiochip_get_data(chip);
+> +	const struct gpiochip_fwd_timing *delay_timings;
+> +	struct gpio_desc *desc =3D fwd->descs[offset];
+> +	bool is_active_low =3D gpiod_is_active_low(desc);
+> +	bool ramp_up;
+>=20
+> -	if (chip->can_sleep)
+> -		gpiod_set_value_cansleep(fwd->descs[offset], value);
+> -	else
+> -		gpiod_set_value(fwd->descs[offset], value);
+> +	delay_timings =3D &fwd->delay_timings[offset];
+> +	ramp_up =3D (!is_active_low && value) || (is_active_low && !value);
+> +	if (chip->can_sleep) {
+> +		gpiod_set_value_cansleep(desc, value);
+> +
+> +		if (ramp_up && delay_timings->ramp_up_us)
+> +			fsleep(delay_timings->ramp_up_us);
+> +		if (!ramp_up && delay_timings->ramp_down_us)
+> +			fsleep(delay_timings->ramp_down_us);
+> +	} else {
+> +		gpiod_set_value(desc, value);
+> +
+> +		if (ramp_up && delay_timings->ramp_up_us)
+> +			udelay(delay_timings->ramp_up_us);
+> +		if (!ramp_up && delay_timings->ramp_down_us)
+> +			udelay(delay_timings->ramp_down_us);
+> +	}
+>  }
+>=20
+>  static void gpio_fwd_set_multiple(struct gpiochip_fwd *fwd, unsigned long
+> *mask, @@ -390,6 +415,28 @@ static int gpio_fwd_to_irq(struct gpio_chip
+> *chip, unsigned int offset) return gpiod_to_irq(fwd->descs[offset]);
+>  }
+>=20
+> +static int gpiochip_fwd_delay_of_xlate(struct gpio_chip *chip,
+> +				       const struct of_phandle_args=20
+*gpiospec,
+> +				       u32 *flags)
+> +{
+> +	struct gpiochip_fwd *fwd =3D gpiochip_get_data(chip);
+> +	struct gpiochip_fwd_timing *timings;
+> +	u32 line;
+> +
+> +	if (gpiospec->args_count !=3D chip->of_gpio_n_cells)
+> +		return -EINVAL;
+> +
+> +	line =3D gpiospec->args[0];
+> +	if (line >=3D chip->ngpio)
+> +		return -EINVAL;
+> +
+> +	timings =3D &fwd->delay_timings[line];
+> +	timings->ramp_up_us =3D gpiospec->args[1];
+> +	timings->ramp_down_us =3D gpiospec->args[2];
+> +
+> +	return line;
+> +}
+> +
+>  /**
+>   * gpiochip_fwd_create() - Create a new GPIO forwarder
+>   * @dev: Parent device pointer
+> @@ -397,6 +444,7 @@ static int gpio_fwd_to_irq(struct gpio_chip *chip,
+> unsigned int offset) * @descs: Array containing the GPIO descriptors to
+> forward to.
+>   *         This array must contain @ngpios entries, and must not be
+> deallocated *         before the forwarder has been destroyed again.
+> + * @delay: True if the pins have an external delay line.
+>   *
+>   * This function creates a new gpiochip, which forwards all GPIO operati=
+ons
+> to * the passed GPIO descriptors.
+> @@ -406,7 +454,8 @@ static int gpio_fwd_to_irq(struct gpio_chip *chip,
+> unsigned int offset) */
+>  static struct gpiochip_fwd *gpiochip_fwd_create(struct device *dev,
+>  						unsigned int=20
+ngpios,
+> -						struct gpio_desc=20
+*descs[])
+> +						struct gpio_desc=20
+*descs[],
+> +						bool delay)
+>  {
+>  	const char *label =3D dev_name(dev);
+>  	struct gpiochip_fwd *fwd;
+> @@ -459,6 +508,17 @@ static struct gpiochip_fwd *gpiochip_fwd_create(stru=
+ct
+> device *dev, else
+>  		spin_lock_init(&fwd->slock);
+>=20
+> +	if (delay) {
+> +		fwd->delay_timings =3D devm_kcalloc(dev, ngpios,
+> +						  sizeof(*fwd-
+>delay_timings),
+> +						  GFP_KERNEL);
+> +		if (!fwd->delay_timings)
+> +			return ERR_PTR(-ENOMEM);
+> +
+> +		chip->of_xlate =3D gpiochip_fwd_delay_of_xlate;
+> +		chip->of_gpio_n_cells =3D 3;
+> +	}
+> +
+>  	error =3D devm_gpiochip_add_data(dev, chip, fwd);
+>  	if (error)
+>  		return ERR_PTR(error);
+> @@ -476,6 +536,7 @@ static int gpio_aggregator_probe(struct platform_devi=
+ce
+> *pdev) struct device *dev =3D &pdev->dev;
+>  	struct gpio_desc **descs;
+>  	struct gpiochip_fwd *fwd;
+> +	bool delay;
+>  	int i, n;
+>=20
+>  	n =3D gpiod_count(dev, NULL);
+> @@ -492,7 +553,9 @@ static int gpio_aggregator_probe(struct platform_devi=
+ce
+> *pdev) return PTR_ERR(descs[i]);
+>  	}
+>=20
+> -	fwd =3D gpiochip_fwd_create(dev, n, descs);
+> +	delay =3D fwnode_device_is_compatible(dev_fwnode(dev), "gpio-delay");
+> +
+> +	fwd =3D gpiochip_fwd_create(dev, n, descs, delay);
+>  	if (IS_ERR(fwd))
+>  		return PTR_ERR(fwd);
+>=20
+> @@ -500,23 +563,24 @@ static int gpio_aggregator_probe(struct
+> platform_device *pdev) return 0;
+>  }
+>=20
+> -#ifdef CONFIG_OF
+>  static const struct of_device_id gpio_aggregator_dt_ids[] =3D {
+>  	/*
+>  	 * Add GPIO-operated devices controlled from userspace below,
+> -	 * or use "driver_override" in sysfs
+> +	 * or use "driver_override" in sysfs.
+>  	 */
+> +	{
+> +		.compatible =3D "gpio-delay",
+> +	},
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(of, gpio_aggregator_dt_ids);
+> -#endif
+>=20
+>  static struct platform_driver gpio_aggregator_driver =3D {
+>  	.probe =3D gpio_aggregator_probe,
+>  	.driver =3D {
+>  		.name =3D DRV_NAME,
+>  		.groups =3D gpio_aggregator_groups,
+> -		.of_match_table =3D of_match_ptr(gpio_aggregator_dt_ids),
+> +		.of_match_table =3D gpio_aggregator_dt_ids,
+>  	},
+>  };
 
-Jan
 
--- 
-Siemens AG, Technology
-Competence Center Embedded Linux
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
+
 
