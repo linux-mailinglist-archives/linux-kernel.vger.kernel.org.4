@@ -2,141 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B661872A099
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16A6772A0A2
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:52:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjFIQtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 12:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52522 "EHLO
+        id S230002AbjFIQwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 12:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbjFIQs7 (ORCPT
+        with ESMTP id S229790AbjFIQwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 12:48:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C640F3A8C;
-        Fri,  9 Jun 2023 09:48:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 58DC665A02;
-        Fri,  9 Jun 2023 16:48:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7117EC433EF;
-        Fri,  9 Jun 2023 16:48:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686329331;
-        bh=wj6ps6y4ft6WvpJQrBdcLusOhuloDy4bHnascQVlTT0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=O4xMnvyru9ylkQLSbinraMlwoqqoCRzqiohujByEGtJFDGMM2+bIqDUl5eHnyQxXo
-         rY6Jt+s9J9b2BJMm3LdqlppNkZafwg1ABQk0do5vWtrwv0HjpULglS2SDN2D6aMymp
-         CWxzgfiCmay+hbv7MVTWZ0mdVEp8uqGYXaqtxKSQkL5P7BHI2KgvO4BKLhYRuItyUe
-         b1MGXu2c7L7tT5+p5OajerVERb9IENBTZBVZNst9tkM+K3jNo95v+iyFA8Z0Q9QZCe
-         4IkGGUvPbx+9E+dUiQyq/RGdROHaFJmb7Ilr8VJ8sFWFpVVNEi3FletAovP7YIwJSa
-         +jJM45seUVXUw==
-Date:   Fri, 9 Jun 2023 11:48:50 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Sui Jingfeng <suijingfeng@loongson.cn>
-Cc:     Sui Jingfeng <15330273260@189.cn>,
-        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        nouveau@lists.freedesktop.org,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        dri-devel@lists.freedesktop.org, YiPeng Chai <YiPeng.Chai@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Ville Syrjala <ville.syrjala@linux.intel.com>,
-        Yi Liu <yi.l.liu@intel.com>, kvm@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, Jason Gunthorpe <jgg@ziepe.ca>,
-        Ben Skeggs <bskeggs@redhat.com>, linux-pci@vger.kernel.org,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Bokun Zhang <Bokun.Zhang@amd.com>,
-        intel-gfx@lists.freedesktop.org,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        loongson-kernel@lists.loongnix.cn,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Abhishek Sahu <abhsahu@nvidia.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Yishai Hadas <yishaih@nvidia.com>, Li Yi <liyi@loongson.cn>,
-        Pan Xinhui <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian Konig <christian.koenig@amd.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>
-Subject: Re: [Intel-gfx] [PATCH v3 4/4] PCI/VGA: introduce is_boot_device
- function callback to vga_client_register
-Message-ID: <20230609164850.GA1251187@bhelgaas>
+        Fri, 9 Jun 2023 12:52:35 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4A61993
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:52:34 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-256797b5664so663216a91.2
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 09:52:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686329554; x=1688921554;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AdL8NMRyWgx4omfN+veAQU7XOV8UtG2HtxDF43UR3l4=;
+        b=V2g3MrSlKjY/8gjoUkuEp3iUrdjqGn13Dq1/8VPIaIlCBeFhAAwrNk8PkIMgO0Ends
+         sO5CQHx9eyuM7PAZOKExIzQ9HW9tFWINyVLJsg6IHU60vQ+x/eumfDZ4tMVaprHJX9n9
+         McU9REwcuDQ77irw36UT1e5gXWQtEg4LtHBzgmaLRYRDCee6RQgi4B2u0p+h4spBC8U0
+         DY9TSvUnZDC4u22SX/AlwRONejDm575xmedjqmLOaTg3HppHQjt3hFQEWsKpUJ0ih9RI
+         z08JPmP94V9ozf5vHi9BBdX2v0btLmt15mmdy1un4aal9g7kctseMr/4OOHIQ5lhoIlb
+         Ja+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686329554; x=1688921554;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AdL8NMRyWgx4omfN+veAQU7XOV8UtG2HtxDF43UR3l4=;
+        b=OcHWztu5RRIeOAV6zjHee5wM4XPfGP2Mho0JrKBdDUuF/p0bG88o0t8z1efadlDj75
+         AoszLG+A9wpugdqhihc/zoPulK7MMcelRP9DYPG18QvwY6+q6XXZl3pTeE4RJ/ey/Dz4
+         gWjXvyrpdiVCTYXIimPh+jVIy3/h1JmOdkB8wEe7AQbS1/7r0I9mBY9CbjMEulLbqqqk
+         WqbeIjxD5m0++RbC3uu4PTb+0s49qQPhmJ9PXHJ1bIJNCJmnpZ3IAoYY3sSHYUpB+btn
+         h3Yto3nG71gI6VjSFggL/wGOsdj+cyMsJvbZbk4POkRj2QJC8lYJZFI8WdCR/H0JSxqw
+         qJ3w==
+X-Gm-Message-State: AC+VfDyjaSHWFYWLLjLUXQd43uuTWLbDTJ5202Q9JQmDC/xPdcGFz3j+
+        i7m1UnrvoHH6MtZlHvhHnG00Cahcpx15Q4wCcRFpy1UNKeT5Xu/I
+X-Google-Smtp-Source: ACHHUZ5wfy8qoPdGu3z+HlPTKMfs6OsO6RQS/quD2YO7N6mhmKv8/34GYVO3IuWRCdkq6jsOXhqz1BC4FD3hxPYGmJw=
+X-Received: by 2002:a17:90a:f007:b0:258:de25:5e2f with SMTP id
+ bt7-20020a17090af00700b00258de255e2fmr1430038pjb.38.1686329553729; Fri, 09
+ Jun 2023 09:52:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0d2ba099-9817-13be-c85b-997211443119@loongson.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <F4B69136-C13A-4449-9005-4BB0617E60AC@oracle.com>
+In-Reply-To: <F4B69136-C13A-4449-9005-4BB0617E60AC@oracle.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Fri, 9 Jun 2023 18:52:22 +0200
+Message-ID: <CAKfTPtCBQJYfFgFhA6=364onup2TU1hrTxJYJA5OiSJ_ECB0JA@mail.gmail.com>
+Subject: Re: Reporting a performance regression in sched/fair on Unixbench
+ Shell Scripts with commit a53ce18cacb4
+To:     Saeed Mirzamohammadi <saeed.mirzamohammadi@oracle.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "zhangqiao22@huawei.com" <zhangqiao22@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 10:27:39AM +0800, Sui Jingfeng wrote:
-> On 2023/6/9 03:19, Bjorn Helgaas wrote:
-> > On Thu, Jun 08, 2023 at 07:43:22PM +0800, Sui Jingfeng wrote:
-> > > From: Sui Jingfeng <suijingfeng@loongson.cn>
-> > > 
-> > > The vga_is_firmware_default() function is arch-dependent, which doesn't
-> > > sound right. At least, it also works on the Mips and LoongArch platforms.
-> > > Tested with the drm/amdgpu and drm/radeon drivers. However, it's difficult
-> > > to enumerate all arch-driver combinations. I'm wrong if there is only one
-> > > exception.
-> > > 
-> > > With the observation that device drivers typically have better knowledge
-> > > about which PCI bar contains the firmware framebuffer, which could avoid
-> > > the need to iterate all of the PCI BARs.
-> > > 
-> > > But as a PCI function at pci/vgaarb.c, vga_is_firmware_default() is
-> > > probably not suitable to make such an optimization for a specific device.
-> > > 
-> > > There are PCI display controllers that don't have a dedicated VRAM bar,
-> > > this function will lose its effectiveness in such a case. Luckily, the
-> > > device driver can provide an accurate workaround.
-> > > 
-> > > Therefore, this patch introduces a callback that allows the device driver
-> > > to tell the VGAARB if the device is the default boot device. This patch
-> > > only intends to introduce the mechanism, while the implementation is left
-> > > to the device driver authors. Also honor the comment: "Clients have two
-> > > callback mechanisms they can use"
-> > s/bar/BAR/ (several)
-> > 
-> > Nothing here uses the callback.  I don't want to merge this until we
-> > have a user.
-> 
-> This is chicken and egg question.
-> 
-> If you could help get this merge first, I will show you the first user.
-> 
-> > I'm not sure why the device driver should know whether its device is
-> > the default boot device.
-> 
-> It's not that the device driver should know,
-> 
-> but it's about that the device driver has the right to override.
-> 
-> Device driver may have better approach to identify the default boot
-> device.
+Hi Saeed,
 
-The way we usually handle this is to include the new callback in the
-same series as the first user of it.  That has two benefits:
-(1) everybody can review the whole picture and possibly suggest
-different approaches, and (2) when we merge the infrastructure,
-we also merge a user of it at the same time, so the whole thing can be
-tested and we don't end up with unused code.
+On Fri, 9 Jun 2023 at 00:48, Saeed Mirzamohammadi
+<saeed.mirzamohammadi@oracle.com> wrote:
+>
+> Hi all,
+>
+> I=E2=80=99m reporting a regression of up to 8% with Unixbench Shell Scrip=
+ts benchmarks after the following commit:
+>
+> Commit Data:
+>  commit-id        : a53ce18cacb477dd0513c607f187d16f0fa96f71
+>  subject          : sched/fair: Sanitize vruntime of entity being migrate=
+d
+>  author           : vincent.guittot@linaro.org
+>  author date      : 2023-03-17 16:08:10
+>
+>
+> We have observed this on our v5.4 and v4.14 kernel and not yet tested 5.1=
+5 but I expect the same.
 
-Bjorn
+It would be good to confirm that the regression is present on v6.3
+where the patch has been merged originally.  It can be that there is
+hidden dependency with other patches introduced since v5.4
+
+>
+> ub_gcc_1copy_Shell_Scripts_1_concurrent  :  -0.01%
+> ub_gcc_1copy_Shell_Scripts_8_concurrent  :  -0.1%
+> ub_gcc_1copy_Shell_Scripts_16_concurrent  :  -0.12%%
+> ub_gcc_56copies_Shell_Scripts_1_concurrent  :  -2.29%%
+> ub_gcc_56copies_Shell_Scripts_8_concurrent  :  -4.22%
+> ub_gcc_56copies_Shell_Scripts_16_concurrent  :  -4.23%
+> ub_gcc_224copies_Shell_Scripts_1_concurrent  :  -5.54%
+> ub_gcc_224copies_Shell_Scripts_8_concurrent  :  -8%
+> ub_gcc_224copies_Shell_Scripts_16_concurrent  :  -7.05%
+> ub_gcc_448copies_Shell_Scripts_1_concurrent  :  -6.4%
+> ub_gcc_448copies_Shell_Scripts_8_concurrent  :  -8.35%
+> ub_gcc_448copies_Shell_Scripts_16_concurrent  :  -7.09%
+>
+> Link to unixbench:
+> github.com/kdlucas/byte-unixbench
+
+I tried to reproduce the problem with v6.3 on my system but I don't
+see any difference with or without the patch
+
+Do you have more details on your setup ? number of cpu and topology ?
+
+>
+> Info about benchmark:
+>  "The shells scripts test measures the number of times per minute a
+>   process can start and reap a set of one, two, four and eight concurrent
+> copies of a shell scripts where the shell script applies a series of
+> transformation to a data file=E2=80=9D
+>
+> I have also evaluated performance before and after both of these two comm=
+its (one if fixing the other) but I still observe the same regression (C1 i=
+s still the source of regression).
+> C1. a53ce18cacb4 sched/fair: Sanitize vruntime of entity being migrated
+> C2. 829c1651e9c4 sched/fair: sanitize vruntime of entity being placed
+
+C2 has introduced some regressions because of the case of newly
+migrated tasks that were not correctly managed and C1 fixes this
+problem. Then, both have an impact on system that runs for days  with
+low prio task
+
+Thanks,
+Vincent
+
+
+>
+> Thank you very much,
+> Saeed
+>
