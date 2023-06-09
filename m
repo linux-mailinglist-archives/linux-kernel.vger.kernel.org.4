@@ -2,117 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3F8728F05
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 06:39:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB308728F07
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 06:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjFIEjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 00:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46398 "EHLO
+        id S230011AbjFIEk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 00:40:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238051AbjFIEjg (ORCPT
+        with ESMTP id S229537AbjFIEkz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 00:39:36 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C1230F1;
-        Thu,  8 Jun 2023 21:39:35 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3594JVM3025898;
-        Fri, 9 Jun 2023 04:39:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=AdSf+nxOWU8wHe///6FcmZs/IpVxpxCPCP6es/Dvi1s=;
- b=CeYakn1JYqqFu+ge2bylCXj2PWPF4MPUqCsahlBLVzB12mgBE8bhO7h57mqJ0WaPaxV9
- eYl/Ubc+gInqNl186Z3FuNnOn84ztZkYeHoTHT7EEuqmP6tiVqlUkUTbwRfKqRsuV8bd
- 98pmgUHbvTNM0abCJJTccRBis8AkkOe261IgnyEuYLWXNkWubjWuzfhznYokv0jhqUsI
- XeurOtecTpE+pICuLCxhkcF46Hr0NLhSjjOMgP0xidgXa5jefJyqE7+512Qb0mtd/2eZ
- jh4UTWKMkRuXDDM0+JVV81ITeMSx4OofDQYLghvwMbtYKQ+DFzx5AnOPl1R5H4jF/nZ6 Lw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r39kuae4n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Jun 2023 04:39:31 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3594dUL9032544
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 9 Jun 2023 04:39:30 GMT
-Received: from [10.216.3.169] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 8 Jun 2023
- 21:39:27 -0700
-Message-ID: <b95652b2-c93d-34b3-1d52-340f7590b857@quicinc.com>
-Date:   Fri, 9 Jun 2023 10:09:24 +0530
+        Fri, 9 Jun 2023 00:40:55 -0400
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777D430E7
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 21:40:54 -0700 (PDT)
+Received: by mail-il1-x12f.google.com with SMTP id e9e14a558f8ab-33bf12b5fb5so188345ab.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 21:40:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686285654; x=1688877654;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WctVijjK+PCqOwFmysl43LsrrAqXcmJG+wVLVPPGK9g=;
+        b=LI82naPsaC/+dYDlxTaENt7V74zG+hG+8etdK/sKAQ0PSFINCTxC+FXyyMIzTt/K7M
+         L+V2ijDwHzY/VcIOVAfaVwu1edhDmeRGimjWYbI2AuBLtdZWYQmewNknc4EdmeHa1e7m
+         TxTfTSeXeXlqAB3X7YMI648BpWd7k/IjSZU8kIbZ0KSZKqGkcihsTLrgxa0yKQlKVEdC
+         xB02NgxMEs/D9MAWd8bj7ggVN3PBrmwIaD5D8nb91VXBUlz5v6RSe+3uEpqcT/0BeUU+
+         8I0L7ue01xc19O701ZjD0XWel5DLbjlnA/9OBVBBY7ZZk/t+x+T1tsL8QBfCxyK6I0VO
+         c0gA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686285654; x=1688877654;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WctVijjK+PCqOwFmysl43LsrrAqXcmJG+wVLVPPGK9g=;
+        b=ioBUry90SswmRv4bv0qn5vt2eTN6PRVt5yc50+ITz4F50x+dczkMFpUGJ6VWDe3fXA
+         mJMLZeDaTO6b8bZN3eTXF4x+CPtJ0LG8nfSGY9alkhAUweUcOv3JZZSWLPqi/73yNLK0
+         Qrz+pKpzfCYBD35a32Ojr9tq9EXDBXdvpvFO/h2ElMyOtB4nCg7gsKpZRo5I7HLEJk7M
+         ih8CFTmi9rZpnJ4osKBHDNc84/1HhoMJ2ExI3pK8ELD3MyipTSyCoMUUc1R37ZikPAt9
+         R09OyekP+YVgHwce+pFh/M8eHUgtlNymv0lbC6HdhXu3PPKoaExdjEzGpewQ5s6X1gUi
+         IwDg==
+X-Gm-Message-State: AC+VfDyyWnZKUIkhzxQdxhmFmjlCL199VcMNblD+eRrw+g55Cel3b9xv
+        S0EmhA80l911apH+Iw5briodP7v86LC7HMZbuP3Tyw==
+X-Google-Smtp-Source: ACHHUZ6g3S3eCkQr0Cq1l0j9GFF36Yvjnpmx6WE+39uupEOPHAtfRnGT74BrmWjAzChFIiEr4jsHV+MqZAk6GvRUcow=
+X-Received: by 2002:a92:c244:0:b0:33a:e716:a76e with SMTP id
+ k4-20020a92c244000000b0033ae716a76emr291878ilo.28.1686285653709; Thu, 08 Jun
+ 2023 21:40:53 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 1/2] dt-bindings: arm: idle-states: Add
- idle-state-disabled property
-Content-Language: en-US
-To:     Conor Dooley <conor.dooley@microchip.com>
-CC:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_lsrao@quicinc.com>,
-        <quic_mkshah@quicinc.com>, <devicetree@vger.kernel.org>
-References: <20230608085544.16211-1-quic_tnimkar@quicinc.com>
- <20230608085544.16211-2-quic_tnimkar@quicinc.com>
- <20230608-steadying-idealism-1f8a97db1491@wendy>
-From:   Tushar Nimkar <quic_tnimkar@quicinc.com>
-In-Reply-To: <20230608-steadying-idealism-1f8a97db1491@wendy>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 1pNJGaNN2yWtidvUjT0AUrC2_kIVTxfR
-X-Proofpoint-ORIG-GUID: 1pNJGaNN2yWtidvUjT0AUrC2_kIVTxfR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-09_02,2023-06-08_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- mlxscore=0 mlxlogscore=517 lowpriorityscore=0 phishscore=0 bulkscore=0
- priorityscore=1501 suspectscore=0 impostorscore=0 adultscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306090040
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230527072210.2900565-1-irogers@google.com> <20230527072210.2900565-29-irogers@google.com>
+ <b8efdc75-253c-ad88-f82f-90c626a26592@amd.com>
+In-Reply-To: <b8efdc75-253c-ad88-f82f-90c626a26592@amd.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 8 Jun 2023 21:40:42 -0700
+Message-ID: <CAP-5=fXg-4NWOhOoTCfNm3aWp_rd6PWcq5NyZ7xwinbuDPUtZg@mail.gmail.com>
+Subject: Re: [PATCH v5 28/34] perf pmus: Split pmus list into core and other
+To:     Ravi Bangoria <ravi.bangoria@amd.com>
+Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Ming Wang <wangming01@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Dmitrii Dolgov <9erthalion6@gmail.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Ali Saidi <alisaidi@amazon.com>, Rob Herring <robh@kernel.org>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Kang Minchul <tegongkang@gmail.com>,
+        linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Conor for reviewing.
+On Thu, Jun 8, 2023 at 9:01=E2=80=AFPM Ravi Bangoria <ravi.bangoria@amd.com=
+> wrote:
+>
+> Hi Ian,
 
-On 6/8/2023 2:49 PM, Conor Dooley wrote:
-> Hey Tushar,
-> 
-> On Thu, Jun 08, 2023 at 02:25:42PM +0530, Tushar Nimkar wrote:
+Hi Ravi,
 
-> 
-> Firstly, you should CC the dt-bindings maintainers like
-> get_maintainer.pl would tell you.
-> Secondly, there are two 1/2 patches in this series.
-> 
-1. Sure, I will include dt maintainer in next version.
-2. Yes, one of the Patch 1/2 sent by mistake.
-I will remove in next version.
+> On 27-May-23 12:52 PM, Ian Rogers wrote:
+> > Split the pmus list into core and other. This will later allow for
+> > the core and other pmus to be populated separately.
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+> > ---
+> >  tools/perf/util/pmus.c | 52 ++++++++++++++++++++++++++++++------------
+> >  1 file changed, 38 insertions(+), 14 deletions(-)
+> >
+> > diff --git a/tools/perf/util/pmus.c b/tools/perf/util/pmus.c
+> > index 58ff7937e9b7..4ef4fecd335f 100644
+> > --- a/tools/perf/util/pmus.c
+> > +++ b/tools/perf/util/pmus.c
+> > @@ -12,13 +12,19 @@
+> >  #include "pmu.h"
+> >  #include "print-events.h"
+> >
+> > -static LIST_HEAD(pmus);
+> > +static LIST_HEAD(core_pmus);
+> > +static LIST_HEAD(other_pmus);
+>
+> AMD ibs_fetch// and ibs_op// PMUs are per SMT-thread and are independent =
+of
+> core hw pmu. I wonder where does IBS fit. Currently it's part of other_pm=
+us.
+> So, is it safe to assume that other_pmus are not just uncore pmus? In tha=
+t
+> case shall we add a comment here?
 
-> 
-> Thirdly, this is operating system specific behaviour, tied to Linux, and
-> has no place in a binding.
-> 
-3. I will remove [echo N > 
-/sys/devices/system/cpu/cpuX/cpuidle/stateX/disable] command from 
-bindings document.
-
-> Cheers,
-> Conor.
-> 
+I'm a fan of comments. The code has landed in perf-tools-next:
+https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/p=
+erf/util/pmus.c?h=3Dperf-tools-next
+Do you have any suggestions on wording? I've had limited success
+adding glossary terms, for example, offcore vs uncore:
+https://perf.wiki.kernel.org/index.php/Glossary#Offcore
+I think offcore is a more interconnect related term, but I'd prefer
+not to be inventing the definitions. I'd like it if we could be less
+ambiguous in the code and provide useful information on the wiki, so
+help appreciated :-)
 
 Thanks,
-Tushar
+Ian
+
+> Thanks,
+> Ravi
