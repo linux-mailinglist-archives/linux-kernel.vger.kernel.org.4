@@ -2,100 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E615672A517
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 23:05:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 822E972A51E
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 23:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbjFIVF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 17:05:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51110 "EHLO
+        id S231758AbjFIVIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 17:08:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjFIVFz (ORCPT
+        with ESMTP id S229530AbjFIVIq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 17:05:55 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFA4358E
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 14:05:54 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-565a022ef06so20166507b3.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 14:05:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686344753; x=1688936753;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3r39wuzTsS9xYxplRKTYr5FPCI7llaPoOWnnNkuMMsk=;
-        b=oWqsFt8rrI2cTkrMOZDO63fKjzVonN2R6CRpJ4Qpv8VrEC9PwLLRdo6fvIDXzMqbWU
-         MCL9JQEYMgGi1cAfDfnBxqXXRhFirceGmIh9iL60Ch2/AzS09A7x84n60XzAcXG7kkvI
-         E/dL1t27A+8gqa5n2KAuJdGMzDDLbUwLnwS1Vny61JNzRWzUW4/llupUDpAAQRfdzTSI
-         PdezuqxMd5C/VOccVnUEzUHKA3ylazNH9wgPNpzbtXI+5a13GmfJ+e9pKnt5zeTkpwTK
-         fw70De7FHPwgvcwqrGfTv48YpBDrha1t7PB3/CxPt1N0DLI0/bwJNVhCnkwN6QtvTav7
-         zX8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686344753; x=1688936753;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3r39wuzTsS9xYxplRKTYr5FPCI7llaPoOWnnNkuMMsk=;
-        b=BkRMA7H6KEIRk25bHdvej74Mc0ZDw1CRLBtkz+Oe3xP+puJuki9/BrfvAenz1UHY8s
-         LIoS88DykerwrKSWL+UVtrNjekH9UBxX55XvGWfKhbtoqqJ28EwCHatb719Wd0DLP9dO
-         tAOP75z1gbjQPHztLt9S7cIpnXNLw+Tn8OSc8UNXvZOpteAy2okXb0k8rR3EkQJvc34S
-         OjM48Myy0n8hgSVkh1Fh8Ag7x7ZxE4eEa/one2ms79OSJugCrTaWQCaHprQ7j60fYh+P
-         0HayKAnknt0kMLLS6EXoNChzEElGqjIuWfUFTsbdUbFd2/dA+cFcN/J2PHngoOS+MonO
-         QYQg==
-X-Gm-Message-State: AC+VfDxxViGdO0mhdWntWnBIDN8zmg6BIHLZhHbjucaCz1kKGTVmndYr
-        5r7dnW0sUm8LaSkrY2mVUeoj3Pt32HOgh6q8Gn0pXg==
-X-Google-Smtp-Source: ACHHUZ6zAJw3vwna8czLhvW2LNWOrVkyLLE4YwmYrh3Hvv6IxuJyqP5M/++p7ZXt9nC/2LmuHtMkYzyLbtN5tKWm40o=
-X-Received: by 2002:a81:d345:0:b0:559:deed:f363 with SMTP id
- d5-20020a81d345000000b00559deedf363mr2563607ywl.2.1686344753319; Fri, 09 Jun
- 2023 14:05:53 -0700 (PDT)
+        Fri, 9 Jun 2023 17:08:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9C01FDC;
+        Fri,  9 Jun 2023 14:08:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5357B65B87;
+        Fri,  9 Jun 2023 21:08:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 312F0C433EF;
+        Fri,  9 Jun 2023 21:08:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686344924;
+        bh=khMjJZ6SbRtiHSzoAiJYcCLwvpHE55DPi59sRUk9SnA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=EPwq+3SVS8hpxxiCv7rr8f9wFYJwjqxeQoWOBcRM374UN7xGFI1xqLQix1de/69rs
+         mzSKQ2vsWaothpzV/NFEyqhlOanSvTSMOsuJjwPr3fNID8aTiJBypYwjufjDvFM/SO
+         /VDFyzRbixe+F1NWRWKhzGNQUNVq0yLdyVmmHwJ0qoTO1YRqU2wm9DkbMj+3sgEBsI
+         yWoBtYIC1jxiyzAzp8N+onYpJng/asUqh8dxb0fbpTm3J+IM0DuAyBCExuuU3IHD+V
+         RB52HW+NYCIG4Ye+w1p8jQuYEdC/Y8pGUd9yUkj2zYf9hIAlH7PN4PeuQ/JXbSs7Ab
+         3klNk7thwj8Xw==
+Date:   Fri, 9 Jun 2023 14:08:43 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Magali Lemes do Sacramento <magali.lemes@canonical.com>
+Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        shuah@kernel.org, vfedorenko@novek.ru,
+        tianjia.zhang@linux.alibaba.com, andrei.gherzan@canonical.com,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net v2 1/3] selftests: net: tls: check if FIPS mode is
+ enabled
+Message-ID: <20230609140843.4444e444@kernel.org>
+In-Reply-To: <CAO9q4O1SctX1323-8JDO0=ovsLfNpv4EjOSdP_PwYDJ76tAQiQ@mail.gmail.com>
+References: <20230609164324.497813-1-magali.lemes@canonical.com>
+        <20230609164324.497813-2-magali.lemes@canonical.com>
+        <20230609105307.492cd1f2@kernel.org>
+        <CAO9q4O1SctX1323-8JDO0=ovsLfNpv4EjOSdP_PwYDJ76tAQiQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230609202722.3634721-1-arnd@kernel.org>
-In-Reply-To: <20230609202722.3634721-1-arnd@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 9 Jun 2023 23:05:40 +0200
-Message-ID: <CACRpkdZhad+Hk-ES_ptx1HFoSv=L2WWcUsS5huGN25fj0nK0iA@mail.gmail.com>
-Subject: Re: [PATCH] Input: ads7846 - fix pointer cast warning
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        kernel test robot <lkp@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Luca Ellero <l.ellero@asem.it>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 10:27=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
-te:
+On Fri, 9 Jun 2023 17:15:38 -0300 Magali Lemes do Sacramento wrote:
+> > Eh, let me help you, this should really be part of the SETUP() function
+> > but SETUP() doesn't currently handle SKIP(). So you'll need to add this
+> > to your series:  
+> 
+> May I add your Suggested-by tag to this upcoming patch in this patchset v3?
 
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The previous bugfix caused a warning on 64-bit builds:
->
-> drivers/input/touchscreen/ads7846.c:1126:17: warning: cast to smaller int=
-eger type 'u32' (aka 'unsigned int') from 'const void *' [-Wvoid-pointer-to=
--int-cast]
->
-> Change the cast back to something that works on both 32-bit and 64-bit
-> kernels.
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202306100442.jStknDT1-lkp@i=
-ntel.com/
-> Fixes: 8f7913c04f6a7 ("Input: ads7846 - Fix usage of match data")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Excellent fix, thanks! Sorry for not predicting this.
-
-Yours,
-Linus Walleij
+No strong preference but sure, why not :)
