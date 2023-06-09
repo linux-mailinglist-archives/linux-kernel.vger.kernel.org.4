@@ -2,66 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F090728CC8
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 03:02:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D343728CCA
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 03:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235531AbjFIBCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 21:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57248 "EHLO
+        id S236263AbjFIBCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 21:02:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbjFIBCO (ORCPT
+        with ESMTP id S230049AbjFIBCe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 21:02:14 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05BF9270B
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 18:02:14 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1b022faa1dbso1879305ad.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 18:02:14 -0700 (PDT)
+        Thu, 8 Jun 2023 21:02:34 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8882D30DA
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 18:02:30 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5689bcc5f56so16153207b3.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 18:02:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686272533; x=1688864533;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oQmmOcARHheT/z0yqfeYwhuuLEt2pQoVjtP4drhj3Is=;
-        b=f6Ro4yKSSB8vqHOEQfM8BBmex4shPq1e4xgFGvpi0ZMfFgMtFAuoUkLB3uEbzKbol0
-         bwa5UqJDV7JzuHls5aWMaO/80Au9uBLvgK1Hl0n1nq3h6xDyReOyb9F22aeDfbV5slJS
-         k3T/0ovb7Dgfc2FLO7qHR+LKrZ68Zj4VwiSHkJI7tvUMk1GrKAIpJcW1kYB8M9HDxKV+
-         9MJiavQOZ5Ej3J0hi44VcEJdbwmifu/rb4IoghCWbMJCcgIHtcq/hzJphxs3eVdKSxY5
-         7lTDV7iBiTKEGSpkvG7SQ96nadCW2tTkRLDn8yV5Uld/Ilery/ywiCfDNgp2Onbn6mvO
-         Vk3Q==
+        d=google.com; s=20221208; t=1686272550; x=1688864550;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Ko+yK0G5YPcfLrCdYKWKvJQM3mjVNr0PQnkqrJ1wnbo=;
+        b=5WReRZo4IyzFkMULlIrJ9ZxOwQNTLiI8QH6WR8pORRLZ3+QfjAG0J7srogyXJQuuv1
+         +bQF+h+kC49jf/ipib783FfRTGH1Vs0Q0hv3RPgcvYzI02Z4HdcI3HLic0dXLQoivBiK
+         Uep+OmUvda1Kdmf3Vvxfx2/ZWq42465JS4742wAqk8sDp/d4VUaeH6mYgR2xooRY2+5j
+         529UaL1qKGr48g6TJ3Suyupjlw7q5WdLvgPUxrP/JjSBrqod6VnftbqtzhNfhF8kcSSR
+         ZFnoSHWz+5EnZH2vEjqFCYcLU6lL0vA4Uq0hxamFcaUPitS8rFNBDbQApsLZQU2VUVFx
+         PW2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686272533; x=1688864533;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oQmmOcARHheT/z0yqfeYwhuuLEt2pQoVjtP4drhj3Is=;
-        b=FHyc8pNeyISaWe94SlAdI6iZLfT0Wfvwpw7sNPGDdxNmqn9dbGRz6JOUTXOKEOqco/
-         f9AKRQZ/VzYse+LWR6S/QSAEcVo/EfIol8xxrEP5LD+qVxhO+TfO93xGVHcft+CGchDp
-         CCUCJlg4uZuo5dOTyx+s7kluDPQ8j34+qYFNbUHBiHpqHWP5hqyIAFxqSXyA1DTU/psK
-         UAuLJOlK6340FQhWW8dPEPVeGrivmrbxmL4w9+u2RBRHjchIt1YKkXRD8oNko3xTfoRv
-         0EuBBwkqxdv+uuC/FQ4jP/tllyXmlfIIT3Nhg/Ttmf3wnKl7oAYlPqUARBs+llpxGuE2
-         VbWw==
-X-Gm-Message-State: AC+VfDz0P/eX8FP3ukY43dQAFr0wh9K5dfOfQHc1N2kcq6lYjvDVSPwM
-        DoLez4sOyVCT3+Voc6MPJ5v1JS65Ep/gxRbbmiJmezad
-X-Google-Smtp-Source: ACHHUZ4JlzYLrk3G44UTV1BNyYCkM2xR3ckuEqr6N3eVqsOpz/ptx9A3yYPL5QJQFNkL0vmhXikApWVt32L1jCsCoZc=
-X-Received: by 2002:a17:902:e881:b0:1b0:3cda:6351 with SMTP id
- w1-20020a170902e88100b001b03cda6351mr98158plg.0.1686272533333; Thu, 08 Jun
- 2023 18:02:13 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230607135746.92995-1-hch@lst.de> <aab7ae20-d36a-47cf-bc1a-9590c3d8b3b7@sirena.org.uk>
-In-Reply-To: <aab7ae20-d36a-47cf-bc1a-9590c3d8b3b7@sirena.org.uk>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Thu, 8 Jun 2023 22:02:00 -0300
-Message-ID: <CAOMZO5DhO7G70FZXZzwoX_Xm=VHtb8E=8G8moz+CjEdnUc2Eeg@mail.gmail.com>
-Subject: Re: [PATCH] block: fix rootwait=
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Christoph Hellwig <hch@lst.de>, axboe@kernel.dk,
-        linux-kernel@vger.kernel.org
+        d=1e100.net; s=20221208; t=1686272550; x=1688864550;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ko+yK0G5YPcfLrCdYKWKvJQM3mjVNr0PQnkqrJ1wnbo=;
+        b=TLex/LrFCSY/oQqnMhvjMqwlvZhHhPeB00hUn5zz+NQYS/6MgSjAW1skS5T28oouE4
+         6wra33/LKs6KmSi4jObbZIKmIPI48nOyAkESwBcMl4Eg/vTUo/0h8UIFCzAE65dWToHF
+         ziEwqH05Uj8T1TwBgDo2m2/fbi9f8tzhDokqPdoR7aQUOccIet9tnILhdtJsRG+dxWrt
+         rnXSifu+cOpAH1uB9ofKtJOESqaV4U+Bd65ISNLZfPdl0gnUfxA7pXeAFsfeUaSamE3x
+         y/qAo90jDK/EKNjhFhaXTkKzgoO2LIP2QshZx8k/1M3kIvtmDqzEqKqEFfpgbiqeBOrT
+         rrUw==
+X-Gm-Message-State: AC+VfDz2jjLqUhwfD4AJYvyp8qgpXnPpD23KUGsJfty0iA6HDeYZYYcu
+        T+D5bR6ossBxH64v4If1zToNyKJZyNk=
+X-Google-Smtp-Source: ACHHUZ5X/e7P/sRrnF31cXCY2LmhWQ8GUEg4/ulRtLmCPxBwNyMVqmRJH9vPaRcSF1cyxoP4Ny5Wb4wlyEc=
+X-Received: from badhri.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:6442])
+ (user=badhri job=sendgmr) by 2002:a81:ad62:0:b0:565:d16b:d799 with SMTP id
+ l34-20020a81ad62000000b00565d16bd799mr733681ywk.1.1686272549802; Thu, 08 Jun
+ 2023 18:02:29 -0700 (PDT)
+Date:   Fri,  9 Jun 2023 01:02:26 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Message-ID: <20230609010227.978661-1-badhri@google.com>
+Subject: [PATCH v8 1/2] usb: gadget: udc: core: Offload usb_udc_vbus_handler processing
+From:   Badhri Jagan Sridharan <badhri@google.com>
+To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        colin.i.king@gmail.com, xuetao09@huawei.com,
+        quic_eserrao@quicinc.com, water.zhangjiantao@huawei.com,
+        peter.chen@freescale.com, balbi@ti.com, francesco@dolcini.it,
+        alistair@alistair23.me, stephan@gerhold.net, bagasdotme@gmail.com,
+        luca@z3ntu.xyz
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Badhri Jagan Sridharan <badhri@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,25 +71,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+usb_udc_vbus_handler() can be invoked from interrupt context by irq
+handlers of the gadget drivers, however, usb_udc_connect_control() has
+to run in non-atomic context due to the following:
+a. Some of the gadget driver implementations expect the ->pullup
+   callback to be invoked in non-atomic context.
+b. usb_gadget_disconnect() acquires udc_lock which is a mutex.
 
-On Thu, Jun 8, 2023 at 3:26=E2=80=AFPM Mark Brown <broonie@kernel.org> wrot=
-e:
+Hence offload invocation of usb_udc_connect_control()
+to workqueue.
 
-> instead of mounting the device we already knew about.  A bisect (log
-> below) lands on this commit and reverting the first hunk:
->
-> > @@ -181,7 +181,7 @@ static int __init devt_from_devname(const char *nam=
-e, dev_t *devt)
-> >         *p =3D '\0';
-> >         *devt =3D blk_lookup_devt(s, part);
-> >         if (*devt)
-> > -               return 0;
-> > +               return -ENODEV;
+UDC should not be pulled up unless gadget driver is bound. The new flag
+"allow_connect" is now set by gadget_bind_driver() and cleared by
+gadget_unbind_driver(). This prevents work item to pull up the gadget
+even if queued when the gadget driver is already unbound.
 
-I have tested reverting this first hunk and it also works for me, so
-if someone submits this fix:
+Cc: stable@vger.kernel.org
+Fixes: 1016fc0c096c ("USB: gadget: Fix obscure lockdep violation for udc_mutex")
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+---
+Changes since v1:
+- Address Alan Stern's comment on usb_udc_vbus_handler invocation from
+  atomic context:
+* vbus_events_lock is now a spinlock and allocations in
+* usb_udc_vbus_handler are atomic now.
 
-Tested-by: Fabio Estevam <festevam@gmail.com>
+Changes since v2:
+- Addressing Alan Stern's comments:
+** connect_lock is now held by callers of
+* usb_gadget_pullup_update_locked() and gadget_(un)bind_driver() does
+* notdirectly hold the lock.
 
-Thanks
+** Both usb_gadget_(dis)connect() and usb_udc_vbus_handler() would
+* set/clear udc->vbus and invoke usb_gadget_pullup_update_locked.
+
+** Add "unbinding" to prevent new connections after the gadget is being
+* unbound.
+
+Changes since v3:
+** Made a minor cleanup which I missed to do in v3 in
+* usb_udc_vbus_handler().
+
+Changes since v4:
+- Addressing Alan Stern's comments:
+** usb_udc_vbus_handler() now offloads invocation of usb_udc_connect_control()
+* from workqueue.
+
+** Dropped vbus_events list as this was redundant. Updating to the
+* latest value is suffice
+
+Changes since v5:
+- Addressing Alan Stern's comments:
+** Squashed allow_connect logic to this patch.
+** Fixed comment length to wrap at 76
+** Cancelling vbus_work in del_gadget()
+
+Changes since v6:
+- Added reviewed by tag
+
+Changes since v7:
+- None
+---
+ drivers/usb/gadget/udc/core.c | 29 +++++++++++++++++++++++++++--
+ 1 file changed, 27 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+index 52e6d2e84e35..d2e4f78c53e3 100644
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@ -37,6 +37,9 @@ static const struct bus_type gadget_bus_type;
+  * @vbus: for udcs who care about vbus status, this value is real vbus status;
+  * for udcs who do not care about vbus status, this value is always true
+  * @started: the UDC's started state. True if the UDC had started.
++ * @allow_connect: Indicates whether UDC is allowed to be pulled up.
++ * Set/cleared by gadget_(un)bind_driver() after gadget driver is bound or
++ * unbound.
+  *
+  * This represents the internal data structure which is used by the UDC-class
+  * to hold information about udc driver and gadget together.
+@@ -48,6 +51,8 @@ struct usb_udc {
+ 	struct list_head		list;
+ 	bool				vbus;
+ 	bool				started;
++	bool				allow_connect;
++	struct work_struct		vbus_work;
+ };
+ 
+ static struct class *udc_class;
+@@ -706,7 +711,7 @@ int usb_gadget_connect(struct usb_gadget *gadget)
+ 		goto out;
+ 	}
+ 
+-	if (gadget->deactivated) {
++	if (gadget->deactivated || !gadget->udc->allow_connect) {
+ 		/*
+ 		 * If gadget is deactivated we only save new state.
+ 		 * Gadget will be connected automatically after activation.
+@@ -1086,6 +1091,13 @@ static void usb_udc_connect_control(struct usb_udc *udc)
+ 		usb_gadget_disconnect(udc->gadget);
+ }
+ 
++static void vbus_event_work(struct work_struct *work)
++{
++	struct usb_udc *udc = container_of(work, struct usb_udc, vbus_work);
++
++	usb_udc_connect_control(udc);
++}
++
+ /**
+  * usb_udc_vbus_handler - updates the udc core vbus status, and try to
+  * connect or disconnect gadget
+@@ -1094,6 +1106,14 @@ static void usb_udc_connect_control(struct usb_udc *udc)
+  *
+  * The udc driver calls it when it wants to connect or disconnect gadget
+  * according to vbus status.
++ *
++ * This function can be invoked from interrupt context by irq handlers of
++ * the gadget drivers, however, usb_udc_connect_control() has to run in
++ * non-atomic context due to the following:
++ * a. Some of the gadget driver implementations expect the ->pullup
++ * callback to be invoked in non-atomic context.
++ * b. usb_gadget_disconnect() acquires udc_lock which is a mutex.
++ * Hence offload invocation of usb_udc_connect_control() to workqueue.
+  */
+ void usb_udc_vbus_handler(struct usb_gadget *gadget, bool status)
+ {
+@@ -1101,7 +1121,7 @@ void usb_udc_vbus_handler(struct usb_gadget *gadget, bool status)
+ 
+ 	if (udc) {
+ 		udc->vbus = status;
+-		usb_udc_connect_control(udc);
++		schedule_work(&udc->vbus_work);
+ 	}
+ }
+ EXPORT_SYMBOL_GPL(usb_udc_vbus_handler);
+@@ -1328,6 +1348,7 @@ int usb_add_gadget(struct usb_gadget *gadget)
+ 	mutex_lock(&udc_lock);
+ 	list_add_tail(&udc->list, &udc_list);
+ 	mutex_unlock(&udc_lock);
++	INIT_WORK(&udc->vbus_work, vbus_event_work);
+ 
+ 	ret = device_add(&udc->dev);
+ 	if (ret)
+@@ -1459,6 +1480,7 @@ void usb_del_gadget(struct usb_gadget *gadget)
+ 	flush_work(&gadget->work);
+ 	device_del(&gadget->dev);
+ 	ida_free(&gadget_id_numbers, gadget->id_number);
++	cancel_work_sync(&udc->vbus_work);
+ 	device_unregister(&udc->dev);
+ }
+ EXPORT_SYMBOL_GPL(usb_del_gadget);
+@@ -1527,6 +1549,7 @@ static int gadget_bind_driver(struct device *dev)
+ 	if (ret)
+ 		goto err_start;
+ 	usb_gadget_enable_async_callbacks(udc);
++	udc->allow_connect = true;
+ 	usb_udc_connect_control(udc);
+ 
+ 	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
+@@ -1558,6 +1581,8 @@ static void gadget_unbind_driver(struct device *dev)
+ 
+ 	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
+ 
++	udc->allow_connect = false;
++	cancel_work_sync(&udc->vbus_work);
+ 	usb_gadget_disconnect(gadget);
+ 	usb_gadget_disable_async_callbacks(udc);
+ 	if (gadget->irq)
+
+base-commit: d37537a1f7cf09e304fe7993cb5e732534a0fb22
+-- 
+2.41.0.162.gfafddb0af9-goog
+
