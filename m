@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C91D1728D2B
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 03:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4588728D2D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 03:38:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237854AbjFIBhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 21:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46306 "EHLO
+        id S237842AbjFIBi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 21:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237844AbjFIBhT (ORCPT
+        with ESMTP id S229923AbjFIBiZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 21:37:19 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582F22D72
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 18:37:17 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-568ba7abc11so11571467b3.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 18:37:17 -0700 (PDT)
+        Thu, 8 Jun 2023 21:38:25 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DDF918C
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 18:38:23 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id 46e09a7af769-6b2993c9652so261143a34.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 18:38:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686274636; x=1688866636;
+        d=google.com; s=20221208; t=1686274702; x=1688866702;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zu44LOJFUZSfjUzXfaM7AXaMVzmcNQ9SKaG/n0S1Di4=;
-        b=g/fK8hP5bFpFVjO76tLNArCNe2GlcEYd1TR7ZwQdCtSODKo9bn2ob62ekzm4ZsThhU
-         yjQK+8xMaXjxfJ1yZWY7NOanC9yVcDVOaMe2iZYwQzT6eJ8h5uTrJC9oVwwCDxswbBHp
-         l/xid7bUgRR1+bdWUBBbvmFDZ/iNYOS5AHsDau932Tn9EMZ4WD6ylqBkwxof8Mw7/egD
-         Ww4k6FcpaXFX8Vqb/E2HUbm90tkOaEYqBxZ6KyMuDMKUc0iBxBMpA3o8pXAN+XBCXRzs
-         f8EIBhd27TS5I+YyqHsJshT+x1siX1ieudcplgI00w6T7xrRyEgdPl7QxJSf2yBgKL3/
-         hKjg==
+        bh=AiDluOv2NKQXWITQOVsUWe3sj/TRHmtPFYOGjZ2ttyw=;
+        b=T0KllypmaI6dTB7DB6gV+sXkQkzh1ghuQsJWEK3jBazIFUwKZcsQ3r5kr988Onz36X
+         Dex8mQRK1D2tkuguCbuqQKOnDZrak1tNbdPv9EQlJylAGS/JOPCnfCNAKd3nfZKgjEDX
+         NyjKhyt6lzb+I77gA/PrGWpgqss/Ipf03liz3QsE5ZInJrgAzICnzUTYMrBYboMu8+Ko
+         Te1BCCl46W+vNegr6tum9ZNWdColvrZcB8P0b/1QpqOrN9yiBM3NUya9DmMuMuxFqXqJ
+         gRuJjfPoEiaWO0bbttWGNF01oOM4LC9iGoxIWBtycc73x4aBvX+fDbj/NGV2UJ/71lCf
+         Nnag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686274636; x=1688866636;
+        d=1e100.net; s=20221208; t=1686274702; x=1688866702;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zu44LOJFUZSfjUzXfaM7AXaMVzmcNQ9SKaG/n0S1Di4=;
-        b=BkAcWE0/HBrOzTrkMOrCSUbtIY7MNRxodkTQvGzYPbaDBpIHfgZwHFOjecZDc2ff6w
-         MI/xgy7N9EPvM4MM911Fk3uH6xw9oxxTi4VKvvL5bF02I7B4wHffQXFqpXkm9xbsDvoO
-         GIgopXEJcKpmjPEiKKxlvbwGDH549hkK9M1zQWKADQ9Kf4jKk1o3n3IwQWeqj+WWH5tT
-         XhwEuQBiG0E3cgADvnigbcbMuN+vmByhRvREFSmLwZkJhNIGqNFfF55c46pOPa9MGVJI
-         mlZWeUJdLSgVwnXUTpQUorZbE1DYM5GsUJ2OavEmMmoknZ274ljF0mKsh2Gilbgza2c0
-         Pfbg==
-X-Gm-Message-State: AC+VfDz3NjF5iI86q8ZHokLDPr7fL/1ivpqJyGdP20+IYDo7OctquOoQ
-        qdRe69pvQQbtT74+YKrepnqdjg==
-X-Google-Smtp-Source: ACHHUZ5BEYGpIOz49tbHOiOve9aTVph95zxtniJYmBvQce3mSMb/qY9GD2nlVpV9ClVLYloJKEZjzA==
-X-Received: by 2002:a81:46d7:0:b0:565:eedc:8dbe with SMTP id t206-20020a8146d7000000b00565eedc8dbemr1425297ywa.27.1686274636468;
-        Thu, 08 Jun 2023 18:37:16 -0700 (PDT)
+        bh=AiDluOv2NKQXWITQOVsUWe3sj/TRHmtPFYOGjZ2ttyw=;
+        b=d8ZvJRiEINg5LtWCaKk1ndGwufvihXUWXmJyI14yAy8mzulU4+PO2F4Fo+E62dYYAF
+         vsZGnqMgFeDvfC+jXwMen858VHC8tQ3AW1QhYkrn32P6QfNJKwyYfmhQ2MhD458GMhz3
+         S/ZdnTljEou88FbVrAUOnkNGzmAHi5B+giz0XmXhvlgSJXWnshuVAxSO+I8UP/b2PJkQ
+         mD34YafQqbH3vAP/ZMOOP8dN7NIkI2vBzrVHqQIkGzzcMUl9yk9k6s8a5MLyFVouE/9G
+         BUHzY7uxww8BCf0rWMZmT/kRatZVMR6MZrJJqTeo7t8ES7fWlsEnaKOphFQuB4oDGICS
+         AXMw==
+X-Gm-Message-State: AC+VfDyG6+7/obxGJUuvdGneQX/SY2C93wk4q6m8n3ZL2JqWavQuxdyX
+        lxpHFTabjCF9P1KfLhh5Ir9OHw==
+X-Google-Smtp-Source: ACHHUZ4lATUYWdzZUuFyIeEB4NQ1kndPyTKKCxuz2TahCj6Q7NKx5y9YMV8W26QVvIO6910YNrrjBg==
+X-Received: by 2002:a05:6830:cb:b0:6b1:570c:de5 with SMTP id x11-20020a05683000cb00b006b1570c0de5mr88477oto.17.1686274701910;
+        Thu, 08 Jun 2023 18:38:21 -0700 (PDT)
 Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id k124-20020a816f82000000b00565b26a9c9csm292968ywc.64.2023.06.08.18.37.13
+        by smtp.gmail.com with ESMTPSA id y7-20020a056902052700b00b8f13ff2a8esm586262ybs.61.2023.06.08.18.38.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 18:37:15 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 18:37:12 -0700 (PDT)
+        Thu, 08 Jun 2023 18:38:21 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 18:38:17 -0700 (PDT)
 From:   Hugh Dickins <hughd@google.com>
 X-X-Sender: hugh@ripple.attlocal.net
 To:     Andrew Morton <akpm@linux-foundation.org>
@@ -84,9 +84,10 @@ cc:     Mike Kravetz <mike.kravetz@oracle.com>,
         Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
         Ryan Roberts <ryan.roberts@arm.com>,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 23/32] mm/mglru: allow pte_offset_map_nolock() to fail
+Subject: [PATCH v2 24/32] mm/migrate_device: allow pte_offset_map_lock() to
+ fail
 In-Reply-To: <c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com>
-Message-ID: <51ece73e-7398-2e4a-2384-56708c87844f@google.com>
+Message-ID: <1131be62-2e84-da2f-8f45-807b2cbeeec5@google.com>
 References: <c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -101,55 +102,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MGLRU's walk_pte_range() use the safer pte_offset_map_nolock(), rather
-than pte_lockptr(), to get the ptl for its trylock.  Just return false
-and move on to next extent if it fails, like when the trylock fails.
-Remove the VM_WARN_ON_ONCE(pmd_leaf) since that will happen, rarely.
+migrate_vma_collect_pmd(): remove the pmd_trans_unstable() handling after
+splitting huge zero pmd, and the pmd_none() handling after successfully
+splitting huge page: those are now managed inside pte_offset_map_lock(),
+and by "goto again" when it fails.
+
+But the skip after unsuccessful split_huge_page() must stay: it avoids an
+endless loop.  The skip when pmd_bad()?  Remove that: it will be treated
+as a hole rather than a skip once cleared by pte_offset_map_lock(), but
+with different timing that would be so anyway; and it's arguably best to
+leave the pmd_bad() handling centralized there.
+
+migrate_vma_insert_page(): remove comment on the old pte_offset_map()
+and old locking limitations; remove the pmd_trans_unstable() check and
+just proceed to pte_offset_map_lock(), aborting when it fails (page has
+been charged to memcg, but as in other cases, it's uncharged when freed).
 
 Signed-off-by: Hugh Dickins <hughd@google.com>
-Acked-by: Yu Zhao <yuzhao@google.com>
+Reviewed-by: Alistair Popple <apopple@nvidia.com>
 ---
- mm/vmscan.c | 16 +++++++---------
- 1 file changed, 7 insertions(+), 9 deletions(-)
+ mm/migrate_device.c | 31 ++++---------------------------
+ 1 file changed, 4 insertions(+), 27 deletions(-)
 
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 6d0cd2840cf0..6a9bb6b30dc8 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -3993,15 +3993,15 @@ static bool walk_pte_range(pmd_t *pmd, unsigned long start, unsigned long end,
- 	struct pglist_data *pgdat = lruvec_pgdat(walk->lruvec);
- 	int old_gen, new_gen = lru_gen_from_seq(walk->max_seq);
+diff --git a/mm/migrate_device.c b/mm/migrate_device.c
+index d30c9de60b0d..a14af6b12b04 100644
+--- a/mm/migrate_device.c
++++ b/mm/migrate_device.c
+@@ -83,9 +83,6 @@ static int migrate_vma_collect_pmd(pmd_t *pmdp,
+ 		if (is_huge_zero_page(page)) {
+ 			spin_unlock(ptl);
+ 			split_huge_pmd(vma, pmdp, addr);
+-			if (pmd_trans_unstable(pmdp))
+-				return migrate_vma_collect_skip(start, end,
+-								walk);
+ 		} else {
+ 			int ret;
  
--	VM_WARN_ON_ONCE(pmd_leaf(*pmd));
+@@ -100,16 +97,12 @@ static int migrate_vma_collect_pmd(pmd_t *pmdp,
+ 			if (ret)
+ 				return migrate_vma_collect_skip(start, end,
+ 								walk);
+-			if (pmd_none(*pmdp))
+-				return migrate_vma_collect_hole(start, end, -1,
+-								walk);
+ 		}
+ 	}
+ 
+-	if (unlikely(pmd_bad(*pmdp)))
+-		return migrate_vma_collect_skip(start, end, walk);
 -
--	ptl = pte_lockptr(args->mm, pmd);
--	if (!spin_trylock(ptl))
-+	pte = pte_offset_map_nolock(args->mm, pmd, start & PMD_MASK, &ptl);
-+	if (!pte)
- 		return false;
-+	if (!spin_trylock(ptl)) {
-+		pte_unmap(pte);
-+		return false;
-+	}
- 
+ 	ptep = pte_offset_map_lock(mm, pmdp, addr, &ptl);
++	if (!ptep)
++		goto again;
  	arch_enter_lazy_mmu_mode();
--
--	pte = pte_offset_map(pmd, start & PMD_MASK);
- restart:
- 	for (i = pte_index(start), addr = start; addr != end; i++, addr += PAGE_SIZE) {
- 		unsigned long pfn;
-@@ -4042,10 +4042,8 @@ static bool walk_pte_range(pmd_t *pmd, unsigned long start, unsigned long end,
- 	if (i < PTRS_PER_PTE && get_next_vma(PMD_MASK, PAGE_SIZE, args, &start, &end))
- 		goto restart;
  
--	pte_unmap(pte);
+ 	for (; addr < end; addr += PAGE_SIZE, ptep++) {
+@@ -595,27 +588,10 @@ static void migrate_vma_insert_page(struct migrate_vma *migrate,
+ 	pmdp = pmd_alloc(mm, pudp, addr);
+ 	if (!pmdp)
+ 		goto abort;
 -
- 	arch_leave_lazy_mmu_mode();
--	spin_unlock(ptl);
-+	pte_unmap_unlock(pte, ptl);
+ 	if (pmd_trans_huge(*pmdp) || pmd_devmap(*pmdp))
+ 		goto abort;
+-
+-	/*
+-	 * Use pte_alloc() instead of pte_alloc_map().  We can't run
+-	 * pte_offset_map() on pmds where a huge pmd might be created
+-	 * from a different thread.
+-	 *
+-	 * pte_alloc_map() is safe to use under mmap_write_lock(mm) or when
+-	 * parallel threads are excluded by other means.
+-	 *
+-	 * Here we only have mmap_read_lock(mm).
+-	 */
+ 	if (pte_alloc(mm, pmdp))
+ 		goto abort;
+-
+-	/* See the comment in pte_alloc_one_map() */
+-	if (unlikely(pmd_trans_unstable(pmdp)))
+-		goto abort;
+-
+ 	if (unlikely(anon_vma_prepare(vma)))
+ 		goto abort;
+ 	if (mem_cgroup_charge(page_folio(page), vma->vm_mm, GFP_KERNEL))
+@@ -650,7 +626,8 @@ static void migrate_vma_insert_page(struct migrate_vma *migrate,
+ 	}
  
- 	return suitable_to_scan(total, young);
- }
+ 	ptep = pte_offset_map_lock(mm, pmdp, addr, &ptl);
+-
++	if (!ptep)
++		goto abort;
+ 	if (check_stable_address_space(mm))
+ 		goto unlock_abort;
+ 
 -- 
 2.35.3
 
