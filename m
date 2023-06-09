@@ -2,209 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD57272A030
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:30:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B8F72A036
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:32:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbjFIQ35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 12:29:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42364 "EHLO
+        id S229696AbjFIQb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 12:31:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjFIQ3n (ORCPT
+        with ESMTP id S229541AbjFIQb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 12:29:43 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAFBB1BEB
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:29:42 -0700 (PDT)
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 359GNitX031946;
-        Fri, 9 Jun 2023 16:29:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : content-transfer-encoding : mime-version; s=pp1;
- bh=L/xGwhX2AoTt7EqDkVYEXtV8BmGP3M8VcDdHfDlDTOo=;
- b=e2i546JPXmvZj+fZ6iNoyn2N8m0y5grJ95Jf0Xs/MOS9CoVsAp7DGDjGHQRlNz1f0RPj
- BCtj95bzAfcJWxJDLLaK3Ki5vLcr5OX4MYajfdL6hNyHsleamYLooN7eIMQ583a+jzkX
- NDLu7qjanToUL5t5hEhEKpBrQoAubRydd3YwdeR6IS92RTgwnbrTSoIOVace8UJvd99A
- GjwAkPTr1FZFzrJ8z/aS8OZ5gHnKgBcC9hp2kQ7HCMJeCReP5euzrQflfo7jf7xp43QG
- vLLDxm6NeaqljK5rZ+WSwVm6qf94E0yWLGLV3iIjkOELpE68rdYSaDHMreFo/qBk2i5C jg== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r47jc032h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Jun 2023 16:29:20 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3599SOsk021810;
-        Fri, 9 Jun 2023 16:29:18 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3r2a76a22f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Jun 2023 16:29:17 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 359GTEpF21234262
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 9 Jun 2023 16:29:14 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 828C220043;
-        Fri,  9 Jun 2023 16:29:14 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4843020040;
-        Fri,  9 Jun 2023 16:29:12 +0000 (GMT)
-Received: from tarunpc.ibmuc.com (unknown [9.43.86.205])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Fri,  9 Jun 2023 16:29:12 +0000 (GMT)
-From:   Tarun Sahu <tsahu@linux.ibm.com>
-To:     linux-mm@kvack.org
-Cc:     akpm@linux-foundation.org, muchun.song@linux.dev,
-        mike.kravetz@oracle.com, aneesh.kumar@linux.ibm.com,
-        willy@infradead.org, sidhartha.kumar@oracle.com,
-        gerald.schaefer@linux.ibm.com, linux-kernel@vger.kernel.org,
-        jaypatel@linux.ibm.com, tsahu@linux.ibm.com
-Subject: [PATCH v3] mm/folio: Avoid special handling for order value 0 in folio_set_order
-Date:   Fri,  9 Jun 2023 21:59:07 +0530
-Message-Id: <20230609162907.111756-1-tsahu@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: ILg9SmIf6gmUc4pFU8EEijKVkf_BPtjl
-X-Proofpoint-GUID: ILg9SmIf6gmUc4pFU8EEijKVkf_BPtjl
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 9 Jun 2023 12:31:58 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D42571AB;
+        Fri,  9 Jun 2023 09:31:56 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-977c89c47bdso350587566b.2;
+        Fri, 09 Jun 2023 09:31:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686328315; x=1688920315;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7rlAqFxCz5Ne5aNPQx9aRysGdidTcTLDbsbNzl4FRlY=;
+        b=OiKlFAj+WWsrQxniU3ecowfRCGEQJZGnKPIDPfv2NJOLuv+WqOALRhRa+Q97+yktHQ
+         zskEvCVr+lA6oOv8lWmZujjjvbBa4rsbHN6YE+2BhxSu0nEnGgv0y7TbbEa4INrxyibr
+         5hZvsJxI0NLbBI8v+49cgtmtlkP7LbZ0cpVyx92vI3lVp1E2IwGDfWpdtLBLtWPZCDvk
+         bqF8LfdUsWuXL4kITuj7yx+hhfNY0lfBTUyTGng1Jg1m0SvTjPeS/ImQUHEWmKrCfQiA
+         BV93XhXJ3/dgtu8fPSOj0O9Zi28P6fTmJxaLUcX1YOhlsne4FlScjoIDAWC/uULI2uUD
+         owTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686328315; x=1688920315;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7rlAqFxCz5Ne5aNPQx9aRysGdidTcTLDbsbNzl4FRlY=;
+        b=J9gqaWsOCK+GpkjV3MBdsJRBVzhgqCTNul4ozOcROJ+sm0kqWq8mBqvckAGplAcdzz
+         /lQqCEsJ+dULaSdBeZEZ8otE0NMfL4524rweY6Jf+f5/sm93XLv3CfQsRdpiZWrTY5NF
+         TJptccidcj2Ol82OcaKvbh5ezWbCxwOSSFSoo9FwDZ3AGAntuexVvhQBEZSPR9yjdu1B
+         AvU/mekMgUTmbsF30gmvqQcVCx0pJaqyA5q5xlGCGzimzJtRPIvRQbYYwXs/Ycie6Anm
+         B62VUiiLUBCRnNEbAs5MdL/kie13k8uz6bPGmoCrgWONfdwcw4C5+FG2cgt5FKHT9kRe
+         XTlg==
+X-Gm-Message-State: AC+VfDy7Ljr9lWvm90BD/ZWSUZ3UBTckXKkBNWUGa/SVWl8e0HkPblm4
+        szLf8CroqWuUmYzF6t/UR/EEnIP//74=
+X-Google-Smtp-Source: ACHHUZ5EO2p2JLlN6XiQPXK/vURKlAPjMKBtnTzV9exHQvAM/+VuYFafNdOrH+efudjq/20k7/tocw==
+X-Received: by 2002:a17:906:fe4d:b0:974:1e0e:91ee with SMTP id wz13-20020a170906fe4d00b009741e0e91eemr2526028ejb.13.1686328314902;
+        Fri, 09 Jun 2023 09:31:54 -0700 (PDT)
+Received: from zambezi.local (ip-94-112-104-28.bb.vodafone.cz. [94.112.104.28])
+        by smtp.gmail.com with ESMTPSA id kg1-20020a17090776e100b00977da5d3350sm1449326ejc.107.2023.06.09.09.31.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 09:31:54 -0700 (PDT)
+From:   Ilya Dryomov <idryomov@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Ceph fixes for 6.4-rc6
+Date:   Fri,  9 Jun 2023 18:31:42 +0200
+Message-Id: <20230609163142.16428-1-idryomov@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-09_11,2023-06-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 suspectscore=0 phishscore=0 mlxlogscore=999
- priorityscore=1501 impostorscore=0 spamscore=0 bulkscore=0 adultscore=0
- clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306090135
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-folio_set_order(folio, 0) is used in kernel at two places
-__destroy_compound_gigantic_folio and __prep_compound_gigantic_folio.
-Currently, It is called to clear out the folio->_folio_nr_pages and
-folio->_folio_order.
+Hi Linus,
 
-For __destroy_compound_gigantic_folio:
-In past, folio_set_order(folio, 0) was needed because page->mapping used
-to overlap with _folio_nr_pages and _folio_order. So if these fields were
-left uncleared during freeing gigantic hugepages, they were causing
-"BUG: bad page state" due to non-zero page->mapping. Now, After
-Commit a01f43901cfb ("hugetlb: be sure to free demoted CMA pages to
-CMA") page->mapping has explicitly been cleared out for tail pages. Also,
-_folio_order and _folio_nr_pages no longer overlaps with page->mapping.
+The following changes since commit 9561de3a55bed6bdd44a12820ba81ec416e705a7:
 
-So, folio_set_order(folio, 0) can be removed from freeing gigantic
-folio path (__destroy_compound_gigantic_folio).
+  Linux 6.4-rc5 (2023-06-04 14:04:27 -0400)
 
-Another place, folio_set_order(folio, 0) is called inside
-__prep_compound_gigantic_folio during error path. Here,
-folio_set_order(folio, 0) can also be removed if we move
-folio_set_order(folio, order) after for loop.
+are available in the Git repository at:
 
-The patch also moves _folio_set_head call in __prep_compound_gigantic_folio()
-such that we avoid clearing them in the error path.
+  https://github.com/ceph/ceph-client.git tags/ceph-for-6.4-rc6
 
-Also, as Mike pointed out:
-"It would actually be better to move the calls _folio_set_head and
-folio_set_order in __prep_compound_gigantic_folio() as suggested here. Why?
-In the current code, the ref count on the 'head page' is still 1 (or more)
-while those calls are made. So, someone could take a speculative ref on the
-page BEFORE the tail pages are set up."
+for you to fetch changes up to 409e873ea3c1fd3079909718bbeb06ac1ec7f38b:
 
-This way, folio_set_order(folio, 0) is no more needed. And it will also
-helps removing the confusion of folio order being set to 0 (as _folio_order
-field is part of first tail page).
+  ceph: fix use-after-free bug for inodes when flushing capsnaps (2023-06-08 08:56:25 +0200)
 
-Testing: I have run LTP tests, which all passes. and also I have written
-the test in LTP which tests the bug caused by compound_nr and page->mapping
-overlapping.
+----------------------------------------------------------------
+A fix for a potential data corruption in differential backup and
+snapshot-based mirroring scenarios in RBD and a reference counting
+fixup to avoid use-after-free in CephFS, all marked for stable.
 
-https://github.com/linux-test-project/ltp/blob/master/testcases/kernel/mem/hugetlb/hugemmap/hugemmap32.c
+----------------------------------------------------------------
+Ilya Dryomov (2):
+      rbd: move RBD_OBJ_FLAG_COPYUP_ENABLED flag setting
+      rbd: get snapshot context after exclusive lock is ensured to be held
 
-Running on older kernel ( < 5.10-rc7) with the above bug this fails while
-on newer kernel and, also with this patch it passes.
+Xiubo Li (1):
+      ceph: fix use-after-free bug for inodes when flushing capsnaps
 
-Signed-off-by: Tarun Sahu <tsahu@linux.ibm.com>
----
-v2->v3
-- removed the copy of page/folio definition from commit msg
-v1->v2
-- Reword the commit message
-
- mm/hugetlb.c  | 9 +++------
- mm/internal.h | 8 ++------
- 2 files changed, 5 insertions(+), 12 deletions(-)
-
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index f154019e6b84..607553445855 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -1489,7 +1489,6 @@ static void __destroy_compound_gigantic_folio(struct folio *folio,
- 			set_page_refcounted(p);
- 	}
- 
--	folio_set_order(folio, 0);
- 	__folio_clear_head(folio);
- }
- 
-@@ -1951,9 +1950,6 @@ static bool __prep_compound_gigantic_folio(struct folio *folio,
- 	struct page *p;
- 
- 	__folio_clear_reserved(folio);
--	__folio_set_head(folio);
--	/* we rely on prep_new_hugetlb_folio to set the destructor */
--	folio_set_order(folio, order);
- 	for (i = 0; i < nr_pages; i++) {
- 		p = folio_page(folio, i);
- 
-@@ -1999,6 +1995,9 @@ static bool __prep_compound_gigantic_folio(struct folio *folio,
- 		if (i != 0)
- 			set_compound_head(p, &folio->page);
- 	}
-+	__folio_set_head(folio);
-+	/* we rely on prep_new_hugetlb_folio to set the destructor */
-+	folio_set_order(folio, order);
- 	atomic_set(&folio->_entire_mapcount, -1);
- 	atomic_set(&folio->_nr_pages_mapped, 0);
- 	atomic_set(&folio->_pincount, 0);
-@@ -2017,8 +2016,6 @@ static bool __prep_compound_gigantic_folio(struct folio *folio,
- 		p = folio_page(folio, j);
- 		__ClearPageReserved(p);
- 	}
--	folio_set_order(folio, 0);
--	__folio_clear_head(folio);
- 	return false;
- }
- 
-diff --git a/mm/internal.h b/mm/internal.h
-index 68410c6d97ac..c59fe08c5b39 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -425,16 +425,12 @@ int split_free_page(struct page *free_page,
-  */
- static inline void folio_set_order(struct folio *folio, unsigned int order)
- {
--	if (WARN_ON_ONCE(!folio_test_large(folio)))
-+	if (WARN_ON_ONCE(!order || !folio_test_large(folio)))
- 		return;
- 
- 	folio->_folio_order = order;
- #ifdef CONFIG_64BIT
--	/*
--	 * When hugetlb dissolves a folio, we need to clear the tail
--	 * page, rather than setting nr_pages to 1.
--	 */
--	folio->_folio_nr_pages = order ? 1U << order : 0;
-+	folio->_folio_nr_pages = 1U << order;
- #endif
- }
- 
--- 
-2.31.1
-
+ drivers/block/rbd.c | 62 +++++++++++++++++++++++++++++++++++++----------------
+ fs/ceph/caps.c      |  6 ++++++
+ fs/ceph/snap.c      |  4 +++-
+ 3 files changed, 53 insertions(+), 19 deletions(-)
