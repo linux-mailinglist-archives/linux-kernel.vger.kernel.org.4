@@ -2,84 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5469072A628
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 00:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88B8672A62C
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 00:11:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232710AbjFIWLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 18:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41528 "EHLO
+        id S232752AbjFIWLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 18:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjFIWLO (ORCPT
+        with ESMTP id S232727AbjFIWLr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 18:11:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25E530F8
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 15:11:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9825465C8C
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 22:11:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89B0EC433EF;
-        Fri,  9 Jun 2023 22:11:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1686348673;
-        bh=lffJYaMQAt9WPAdTp1t2dEqqXehvGeWl0jgqeQiZLsI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=veolEzIkoNAhgbTjDkz+B4HaCTlVkq0cOqTDiKJoT3tbi2byP08KumyaxKPbusMxn
-         zaq9ENZkZOEQ15ayq670UoLBmJBtHeAAgxt6J3b/dRk+TDT+r14OKJV91mfPXEFwEV
-         dHDceG0/cT+PDUwfxP4UymV3WPb8PpdO8x7N34JY=
-Date:   Fri, 9 Jun 2023 15:11:11 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Khalid Aziz <khalid.aziz@oracle.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Steven Sistare <steven.sistare@oracle.com>,
-        ying.huang@intel.com, mgorman@techsingularity.net,
-        baolin.wang@linux.alibaba.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Khalid Aziz <khalid@kernel.org>
-Subject: Re: [PATCH v4] mm, compaction: Skip all non-migratable pages during
- scan
-Message-Id: <20230609151111.bb7908254853a0879db07746@linux-foundation.org>
-In-Reply-To: <3c2ac70b-31a2-4e85-0ade-cb9f701525b3@oracle.com>
-References: <ZG/I7tYY4uV/32hP@casper.infradead.org>
-        <ZG/To8Z3StoVoenU@casper.infradead.org>
-        <60367660-f4a3-06dc-4d17-4dbdc733ef74@oracle.com>
-        <ZHDh4Jeb/vKY+nGU@casper.infradead.org>
-        <f5a37f8d-d888-9085-2f2b-1e350a267396@redhat.com>
-        <ZHD+eOMpZpWXNAig@casper.infradead.org>
-        <e31cd404-56ce-4cad-fcc3-3a6695f750fa@redhat.com>
-        <846b770c-9f63-90a2-0435-ec82484e3f74@nvidia.com>
-        <ZHF2byaRlaX3W6Md@casper.infradead.org>
-        <9821bd9c-7c30-8f0c-68e4-6b1d312bc032@nvidia.com>
-        <ZHPydXSAfRq8sh0u@casper.infradead.org>
-        <4d035744-271d-1ca3-a440-f8b1573eec96@redhat.com>
-        <3c2ac70b-31a2-4e85-0ade-cb9f701525b3@oracle.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 9 Jun 2023 18:11:47 -0400
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A09B930F9;
+        Fri,  9 Jun 2023 15:11:45 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="6.00,230,1681138800"; 
+   d="scan'208";a="162941221"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 10 Jun 2023 07:11:44 +0900
+Received: from renesas-ubuntu18.ree.adwin.renesas.com (unknown [10.226.93.27])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 638CC40CF008;
+        Sat, 10 Jun 2023 07:11:40 +0900 (JST)
+From:   Chris Paterson <chris.paterson2@renesas.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Biju Das <biju.das@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chris Paterson <chris.paterson2@renesas.com>,
+        stable@vger.kernel.org,
+        Tomohiro Komagata <tomohiro.komagata.aj@renesas.com>
+Subject: [PATCH] arm64: dts: renesas: Fix txdv-skew-psec typo in RZ/G2L family smarc-som.dtsi files
+Date:   Fri,  9 Jun 2023 23:11:36 +0100
+Message-Id: <20230609221136.7431-1-chris.paterson2@renesas.com>
+X-Mailer: git-send-email 2.40.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 May 2023 09:42:33 -0600 Khalid Aziz <khalid.aziz@oracle.com> wrote:
+It looks like txdv-skew-psec is a typo from a copy+paste. txdv-skew-psec
+is not present in the PHY bindings nor is it in the driver.
 
-> > I completely agree that we should be careful with such mapcount vs. pagecount checks, and if we can use something 
-> > better, let's use something *better*.
-> 
-> When we have a reliable folio_maybe_dma_longterm_pinned() function, it will be better to call that instead of doing 
-> refcount vs mapcount check. Until that better function to check for pinned pages is in place, may I propose that the 
-> current patch fixes a customer problem though not optimally and is a good enough working solution. When a better 
-> function is in place, page_has_extra_refs() function can be updated to rely on this other function instead of refcount 
-> vs mapcount.
+Correct to txen-skew-psec which is clearly what it was meant to be.
 
-We seem rather stuck with this patch.  I think I'll drop it while we
-ponder a way forward.
+Given that the default for txen-skew-psec is 0, and the device tree is
+only trying to set it to 0 anyway, there should not be any functional
+change from this fix.
+
+Fixes: 361b0dcbd7f9 ("arm64: dts: renesas: rzg2l-smarc-som: Enable Ethernet")
+Fixes: 6494e4f90503 ("arm64: dts: renesas: rzg2ul-smarc-som: Enable Ethernet on SMARC platform")
+Fixes: ce0c63b6a5ef ("arm64: dts: renesas: Add initial device tree for RZ/G2LC SMARC EVK")
+Cc: stable@vger.kernel.org # 6.1.y
+Reported-by: Tomohiro Komagata <tomohiro.komagata.aj@renesas.com>
+Signed-off-by: Chris Paterson <chris.paterson2@renesas.com>
+
+---
+
+I've put all three fixes into a single patch to save on churn.
+If it is preferred that each dtsi is fixed in a separate commit I'm happy
+to make the change. Let me know.
+
+Thanks!
+---
+ arch/arm64/boot/dts/renesas/rzg2l-smarc-som.dtsi  | 4 ++--
+ arch/arm64/boot/dts/renesas/rzg2lc-smarc-som.dtsi | 2 +-
+ arch/arm64/boot/dts/renesas/rzg2ul-smarc-som.dtsi | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/renesas/rzg2l-smarc-som.dtsi b/arch/arm64/boot/dts/renesas/rzg2l-smarc-som.dtsi
+index fbbb4f03440b..d0515769e66d 100644
+--- a/arch/arm64/boot/dts/renesas/rzg2l-smarc-som.dtsi
++++ b/arch/arm64/boot/dts/renesas/rzg2l-smarc-som.dtsi
+@@ -100,7 +100,7 @@ phy0: ethernet-phy@7 {
+ 		rxc-skew-psec = <2400>;
+ 		txc-skew-psec = <2400>;
+ 		rxdv-skew-psec = <0>;
+-		txdv-skew-psec = <0>;
++		txen-skew-psec = <0>;
+ 		rxd0-skew-psec = <0>;
+ 		rxd1-skew-psec = <0>;
+ 		rxd2-skew-psec = <0>;
+@@ -128,7 +128,7 @@ phy1: ethernet-phy@7 {
+ 		rxc-skew-psec = <2400>;
+ 		txc-skew-psec = <2400>;
+ 		rxdv-skew-psec = <0>;
+-		txdv-skew-psec = <0>;
++		txen-skew-psec = <0>;
+ 		rxd0-skew-psec = <0>;
+ 		rxd1-skew-psec = <0>;
+ 		rxd2-skew-psec = <0>;
+diff --git a/arch/arm64/boot/dts/renesas/rzg2lc-smarc-som.dtsi b/arch/arm64/boot/dts/renesas/rzg2lc-smarc-som.dtsi
+index 8a0d56872de7..79279ffb4099 100644
+--- a/arch/arm64/boot/dts/renesas/rzg2lc-smarc-som.dtsi
++++ b/arch/arm64/boot/dts/renesas/rzg2lc-smarc-som.dtsi
+@@ -77,7 +77,7 @@ phy0: ethernet-phy@7 {
+ 		rxc-skew-psec = <2400>;
+ 		txc-skew-psec = <2400>;
+ 		rxdv-skew-psec = <0>;
+-		txdv-skew-psec = <0>;
++		txen-skew-psec = <0>;
+ 		rxd0-skew-psec = <0>;
+ 		rxd1-skew-psec = <0>;
+ 		rxd2-skew-psec = <0>;
+diff --git a/arch/arm64/boot/dts/renesas/rzg2ul-smarc-som.dtsi b/arch/arm64/boot/dts/renesas/rzg2ul-smarc-som.dtsi
+index 49ecd33aeeb8..97cdad2a12e2 100644
+--- a/arch/arm64/boot/dts/renesas/rzg2ul-smarc-som.dtsi
++++ b/arch/arm64/boot/dts/renesas/rzg2ul-smarc-som.dtsi
+@@ -83,7 +83,7 @@ phy0: ethernet-phy@7 {
+ 		rxc-skew-psec = <2400>;
+ 		txc-skew-psec = <2400>;
+ 		rxdv-skew-psec = <0>;
+-		txdv-skew-psec = <0>;
++		txen-skew-psec = <0>;
+ 		rxd0-skew-psec = <0>;
+ 		rxd1-skew-psec = <0>;
+ 		rxd2-skew-psec = <0>;
+@@ -112,7 +112,7 @@ phy1: ethernet-phy@7 {
+ 		rxc-skew-psec = <2400>;
+ 		txc-skew-psec = <2400>;
+ 		rxdv-skew-psec = <0>;
+-		txdv-skew-psec = <0>;
++		txen-skew-psec = <0>;
+ 		rxd0-skew-psec = <0>;
+ 		rxd1-skew-psec = <0>;
+ 		rxd2-skew-psec = <0>;
+-- 
+2.40.1
+
