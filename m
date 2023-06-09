@@ -2,290 +2,349 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D977C729FB3
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ED91729FB8
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242122AbjFIQKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 12:10:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56536 "EHLO
+        id S242136AbjFIQKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 12:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242076AbjFIQKi (ORCPT
+        with ESMTP id S242134AbjFIQKu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 12:10:38 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5744035B5
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:10:36 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-543a09ee32eso755292a12.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 09:10:36 -0700 (PDT)
+        Fri, 9 Jun 2023 12:10:50 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6CC635B3
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:10:43 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f619c2ba18so2430589e87.1
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 09:10:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686327036; x=1688919036;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=sFUAFP5ptKF9i1DX/sdXd+RC2UZtcoQAkwMutNG+aSc=;
-        b=TE8HaICBN/0Ax7Okr7xnZeVgpaM0mni9irF6vSYt7KtO7JKzU6aguLbz7IwHMgihTj
-         xqv8rI81jumHhIBfN78ajHTDkA9+yoYXlSWz1DbLdC9RVGLmiqg8gKCQEiAUkBYfHMpA
-         7hn7uqLRZyzNpxD+ua3VzVTTNDZq5fRExdysAmR7AUynaXbjMa25O33t5jelW1Q90+Am
-         ShHLt8kPhtMqOspeKSgnVFd0nHm+jMUxKooYYuyObH9fJ7C7bxD/np6vn6nBIibQD1uh
-         KEOxriTaMCx/nZhig9tm2eV3HpiM+IFBpi9/9u9RdF773RSWnn5cpVVJniMAq6eTjOU6
-         cPTg==
+        d=linaro.org; s=google; t=1686327042; x=1688919042;
+        h=content-transfer-encoding:in-reply-to:from:cc:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7A4fU6QoWxC0y2Sy3FIgTg9nFgE7RuqgyoUp2KWf0Go=;
+        b=XTRb6KWtvjOWlVe6ijBWSXNL5zPLJVAIKcPEDxX7UFHLqkCvY76bG3mzmi1sXlytUz
+         DftRWFb9+0I0QmyWzpszBUn4AtfS1FJym9LdbwQ24SJ5QyJpvQdfigbxeJ2XySzXxnCM
+         aw0a32JQsTgz9mfFwcmsHr1V5N81hU+6Yr9ECaIy6dm0L3Bm8qrYUOQRwaZb1Aad7f0d
+         VtbB0iON1neb4qmal8SWqe+CQRBGLskxXOHGhYk0yXaaRaTVOO8CAumS8nzdQBPRrsG7
+         zoS9BJAp6eWzAR8r09dElcaQEKo8EY4rTlzaYhqwH9J32xpUF3GqXzlgh91JQNb7T4zW
+         E+3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686327036; x=1688919036;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20221208; t=1686327042; x=1688919042;
+        h=content-transfer-encoding:in-reply-to:from:cc:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sFUAFP5ptKF9i1DX/sdXd+RC2UZtcoQAkwMutNG+aSc=;
-        b=X+uYBcAIhpy1DN5Yzu3ndCaDWtlXYhWHIBE01LqlCnYpbndQcAwIJId1d3mvpS6tkd
-         Sscujg5SUqsude898dBEqHfwW4ig1hNUqk04inYnVMimb4bkFapcp9CxeOUiKe6Ks159
-         YJ66gYqOXbSdd5bcKk3GIInRTDJ3HyYDCZHbVw/4/Zy02ZSGSTAKSHx2nMjgT9JaFAx/
-         rQ/oCjh/8pr2DGSyJStk/0YC2JK59Prf7ag32DhP0bOYuHjRvoqXPMDQt8WTHImC8uve
-         mFh/we1K5/efdDq+7F/+6QDG7tZyCDOsux6yAprMxz1t6/VMZvU2Eg9MiJVdHX8YrjFz
-         Rz2Q==
-X-Gm-Message-State: AC+VfDw9870FOYY5UyYQkrefF1UKJXJbzPOCbfMr4l3zfxnFStfMG8LG
-        5GavChOciBqH5JUMkU3QUzbi
-X-Google-Smtp-Source: ACHHUZ6nGqlsmw10WFMwRr0+VqM/PpRECoAhWjX1RfecCN76SnaBVOc8xmTt0Td+nbYpd9/Fh2zfnw==
-X-Received: by 2002:a17:902:db12:b0:1b1:99c9:8ce5 with SMTP id m18-20020a170902db1200b001b199c98ce5mr6111685plx.16.1686327035563;
-        Fri, 09 Jun 2023 09:10:35 -0700 (PDT)
-Received: from thinkpad ([117.202.185.129])
-        by smtp.gmail.com with ESMTPSA id r17-20020a170902c61100b001ac84f5559csm3472967plr.126.2023.06.09.09.10.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 09:10:34 -0700 (PDT)
-Date:   Fri, 9 Jun 2023 21:40:29 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc:     tjoseph@cadence.com, lpieralisi@kernel.org, robh@kernel.org,
-        kw@linux.com, bhelgaas@google.com, nadeem@cadence.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, vigneshr@ti.com, srk@ti.com,
-        nm@ti.com
-Subject: Re: [PATCH v3] PCI: cadence: Fix Gen2 Link Retraining process
-Message-ID: <20230609161029.GG6847@thinkpad>
-References: <20230607091427.852473-1-s-vadapalli@ti.com>
- <20230608154206.GI5672@thinkpad>
- <67865af6-7ea4-63e3-6c35-4cd038f36af3@ti.com>
- <20230609055737.GA6847@thinkpad>
- <a63fc8b0-581b-897f-cac6-cb0a0e82c63e@ti.com>
+        bh=7A4fU6QoWxC0y2Sy3FIgTg9nFgE7RuqgyoUp2KWf0Go=;
+        b=Mt0VP4H4+IPzeZ7XIs1amFbwelHGeoJg7tj7qMokL6wBY2CEjky6aaom3XdIOKj/I0
+         edmomOU93B6jThwsJh36bOnbxnLyZ4+dvMIKPWjuwvm9RVOnSqsB4816n+yrvSZ7OwY8
+         Y2pYDUL7QTzQXjnToowrvERAoQ44FnUIKpuk/TI1OA/fKLJGSe0xY8yTMqw1HiMNqax6
+         cZxPOJzwWbQ10sq/YMm72+M6bcfUNEPguwAM0Rao7QJg/gwICGwcmWco4kODAiwLO7wW
+         56u5tUlwD60UEYnaQTr20iHy/xOVebRajCN1rdd/UuhE/fM/lUjt+UPSkBO8r5SYFM0/
+         I2uA==
+X-Gm-Message-State: AC+VfDzPOO5PkZVJYYU4qSod2pg3p1s5Me6dKvUeFunzMVV5gBHjFP0o
+        BW4hl7kNC51aGA8R5kQpY9yRyA==
+X-Google-Smtp-Source: ACHHUZ5ZGgSMiJfuI5fvPzb//LBZ0VtwD8E//F+BiE2R6HZ2SAPeeNmjeUuvenzCgUluIhSQRSB/mg==
+X-Received: by 2002:a19:671e:0:b0:4f4:3418:4726 with SMTP id b30-20020a19671e000000b004f434184726mr1117317lfc.56.1686327041951;
+        Fri, 09 Jun 2023 09:10:41 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id f14-20020a19ae0e000000b004f4e637db2fsm587260lfc.167.2023.06.09.09.10.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Jun 2023 09:10:41 -0700 (PDT)
+Message-ID: <f320f021-88c4-c5c9-0781-c82d0b88f67d@linaro.org>
+Date:   Fri, 9 Jun 2023 18:10:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a63fc8b0-581b-897f-cac6-cb0a0e82c63e@ti.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 5/12] percpu: Add {raw,this}_cpu_try_cmpxchg()
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+References: <20230531132323.587480729@infradead.org>
+Cc:     corbet@lwn.net, will@kernel.org, peterz@infradead.org,
+        boqun.feng@gmail.com, mark.rutland@arm.com,
+        catalin.marinas@arm.com, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
+        robin.murphy@arm.com, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-crypto@vger.kernel.org, sfr@canb.auug.org.au,
+        mpe@ellerman.id.au, James.Bottomley@hansenpartnership.com,
+        deller@gmx.de, linux-parisc@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230531132323.587480729@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 11:59:09AM +0530, Siddharth Vadapalli wrote:
-> 
-> 
-> On 09/06/23 11:27, Manivannan Sadhasivam wrote:
-> > On Fri, Jun 09, 2023 at 09:46:20AM +0530, Siddharth Vadapalli wrote:
-> >> Hello Mani,
-> >>
-> >> Thank you for reviewing this patch.
-> >>
-> >> On 08/06/23 21:12, Manivannan Sadhasivam wrote:
-> >>> On Wed, Jun 07, 2023 at 02:44:27PM +0530, Siddharth Vadapalli wrote:
-> >>>> The Link Retraining process is initiated to account for the Gen2 defect in
-> >>>> the Cadence PCIe controller in J721E SoC. The errata corresponding to this
-> >>>> is i2085, documented at:
-> >>>> https://www.ti.com/lit/er/sprz455c/sprz455c.pdf
-> >>>>
-> >>>> The existing workaround implemented for the errata waits for the Data Link
-> >>>> initialization to complete and assumes that the link retraining process
-> >>>> at the Physical Layer has completed. However, it is possible that the
-> >>>> Physical Layer training might be ongoing as indicated by the
-> >>>> PCI_EXP_LNKSTA_LT bit in the PCI_EXP_LNKSTA register.
-> >>>>
-> >>>> Fix the existing workaround, to ensure that the Physical Layer training
-> >>>> has also completed, in addition to the Data Link initialization.
-> >>>>
-> >>>
-> >>> cdns_pcie_host_wait_for_link() function is called even for the non-quirky cases
-> >>> as well, so does this patch. But if your patch is only targeting the link
-> >>> retraining case, you should move the logic to cdns_pcie_retrain().
-> >>
-> >> In the v2 version of this patch at:
-> >> https://lore.kernel.org/r/20230315070800.1615527-1-s-vadapalli@ti.com/
-> >> I had implemented it as suggested above by you. However, based on the discussion
-> >> with Bjorn at:
-> >> https://lore.kernel.org/r/20230509182416.GA1259841@bhelgaas/
-> >> it was agreed upon that waiting for two things in succession doesn't seem to be
-> >> the best way to implement it. Therefore, the cdns_pcie_host_training_complete()
-> >> function in the v2 patch is merged into the cdns_pcie_host_wait_for_link()
-> >> function in this patch.
-> >>
-> > 
-> > I think Bjorn's point was to make the wait_for_link() behavior same across
-> > drivers. While I agree with that, I'd like to know whether adding this wait for
-> > all cases (not just during link retraining quirk) adds up any latency or not.
-> > 
-> > Can you measure that?
-> 
-> For J7200 SoC which doesn't have the link retraining quirk set, I added prints
-> before and after the exact section of newly added code with this patch. The
-> output with timestamps for the case where no EP is connected to the board is:
-> [    1.350061] j721e-pcie 2910000.pcie: <1> Before link training check
-> [    1.356324] j721e-pcie 2910000.pcie: Link training complete
-> [    1.361883] j721e-pcie 2910000.pcie: <1> After link training check
-> indicating a latency of about 12 milliseconds.
-> 
-> On the other hand, with an EP device connected, the output is:
-> [    1.349822] j721e-pcie 2910000.pcie: <1> Before link training check
-> [    1.356083] j721e-pcie 2910000.pcie: Link training complete
-> [    1.361641] j721e-pcie 2910000.pcie: <1> After link training check
-> again indicating a latency of about 12 milliseconds.
-> 
-> For the J721e SoC which has the quirk, without an EP device connected, the
-> output is:
-> [    2.668926] j721e-pcie 2910000.pcie: <1> Before link training check
-> [    2.675178] j721e-pcie 2910000.pcie: Link training complete
-> [    2.680734] j721e-pcie 2910000.pcie: <1> After link training check
-> with the latency again being about 12 milliseconds.
-> 
-> Now, with the EP device connected to the board with J721e SoC, the output for
-> the training phase is:
-> [    2.685335] j721e-pcie 2910000.pcie: <1> Before link training check
-> [    2.691592] j721e-pcie 2910000.pcie: Link training complete
-> [    2.697150] j721e-pcie 2910000.pcie: <1> After link training check
-> and for the retraining phase is:
-> [    2.807581] j721e-pcie 2910000.pcie: <1> Before link training check
-> [    2.831578] j721e-pcie 2910000.pcie: LINK DOWN!
-> [    2.831905] j721e-pcie 2910000.pcie: Link training complete
-> [    2.841653] j721e-pcie 2910000.pcie: <1> After link training check
-> During the training phase, the latency again is about 12 milliseconds, while
-> during the retraining phase, the latency is about 34 milliseconds.
-> 
-> Note, the above latency is measured for the Non-RT Linux kernel, with the
-> assumption that the latency will be lower for the RT Linux kernel.
-> 
-> I suppose this indicates a latency of about 12 milliseconds for the PCIe
-> controllers without the Gen2 Link Retraining quirk, while for the PCIe
-> controller with the Gen2 Link Retraining quirk, it is a net latency of 12+34
-> milliseconds = 46 milliseconds for the training and retraining phases.
-> 
 
-Thanks for the detailed measurement. So the latency of 12ms for non-quirky
-devices seems fine to me, unless someone really cares about optimizing boot
-time.
 
-- Mani
-
-> > 
-> >>>
-> >>>
-> >>>> Fixes: 4740b969aaf5 ("PCI: cadence: Retrain Link to work around Gen2 training defect")
-> >>>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-> >>>> Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
-> >>>> ---
-> >>>>
-> >>>> Hello,
-> >>>>
-> >>>> This patch is based on linux-next tagged next-20230606.
-> >>>>
-> >>>> v2:
-> >>>> https://lore.kernel.org/r/20230315070800.1615527-1-s-vadapalli@ti.com/
-> >>>> Changes since v2:
-> >>>> - Merge the cdns_pcie_host_training_complete() function with the
-> >>>>   cdns_pcie_host_wait_for_link() function, as suggested by Bjorn
-> >>>>   for the v2 patch.
-> >>>> - Add dev_err() to notify when Link Training fails, since this is a
-> >>>>   fatal error and proceeding from this point will almost always crash
-> >>>>   the kernel.
-> >>>>
-> >>>> v1:
-> >>>> https://lore.kernel.org/r/20230102075656.260333-1-s-vadapalli@ti.com/
-> >>>> Changes since v1:
-> >>>> - Collect Reviewed-by tag from Vignesh Raghavendra.
-> >>>> - Rebase on next-20230315.
-> >>>>
-> >>>> Regards,
-> >>>> Siddharth.
-> >>>>
-> >>>>  .../controller/cadence/pcie-cadence-host.c    | 20 +++++++++++++++++++
-> >>>>  1 file changed, 20 insertions(+)
-> >>>>
-> >>>> diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
-> >>>> index 940c7dd701d6..70a5f581ff4f 100644
-> >>>> --- a/drivers/pci/controller/cadence/pcie-cadence-host.c
-> >>>> +++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
-> >>>> @@ -12,6 +12,8 @@
-> >>>>  
-> >>>>  #include "pcie-cadence.h"
-> >>>>  
-> >>>> +#define LINK_RETRAIN_TIMEOUT HZ
-> >>>> +
-> >>>>  static u64 bar_max_size[] = {
-> >>>>  	[RP_BAR0] = _ULL(128 * SZ_2G),
-> >>>>  	[RP_BAR1] = SZ_2G,
-> >>>> @@ -80,8 +82,26 @@ static struct pci_ops cdns_pcie_host_ops = {
-> >>>>  static int cdns_pcie_host_wait_for_link(struct cdns_pcie *pcie)
-> >>>>  {
-> >>>>  	struct device *dev = pcie->dev;
-> >>>> +	unsigned long end_jiffies;
-> >>>> +	u16 link_status;
-> >>>>  	int retries;
-> >>>>  
-> >>>> +	/* Wait for link training to complete */
-> >>>> +	end_jiffies = jiffies + LINK_RETRAIN_TIMEOUT;
-> >>>> +	do {
-> >>>> +		link_status = cdns_pcie_rp_readw(pcie, CDNS_PCIE_RP_CAP_OFFSET + PCI_EXP_LNKSTA);
-> >>>> +		if (!(link_status & PCI_EXP_LNKSTA_LT))
-> >>>> +			break;
-> >>>> +		usleep_range(0, 1000);
-> >>>> +	} while (time_before(jiffies, end_jiffies));
-> >>>> +
-> >>>> +	if (!(link_status & PCI_EXP_LNKSTA_LT)) {
-> >>>> +		dev_info(dev, "Link training complete\n");
-> >>>
-> >>> This info is not needed.
-> >>
-> >> Sure. I will drop it in the v4 patch.
-> >>
-> >>>
-> >>>> +	} else {
-> >>>> +		dev_err(dev, "Fatal! Link training incomplete\n");
-> >>>
-> >>> This could be, "Link retraining incomplete".
-> >>
-> >> I added the word "Fatal" since Linux is almost always guaranteed to crash if the
-> >> link training doesn't complete before the PCI subsystem attempts to enumerate
-> >> the EP devices. Therefore, adding the word "Fatal" will help the users identify
-> >> what the cause of the crash is, which would otherwise be overlooked, unless the
-> >> critical nature of this error is conveyed to the user.
-> >>
-> > 
-> > Ok.
-> > 
-> > - Mani
-> > 
-> >>>
-> >>> - Mani
-> >>>
-> >>>> +		return -ETIMEDOUT;
-> >>>> +	}
-> >>>> +
-> >>>>  	/* Check if the link is up or not */
-> >>>>  	for (retries = 0; retries < LINK_WAIT_MAX_RETRIES; retries++) {
-> >>>>  		if (cdns_pcie_link_up(pcie)) {
-> >>>> -- 
-> >>>> 2.25.1
-> >>>>
-> >>>
-> >>
-> >> -- 
-> >> Regards,
-> >> Siddharth.
-> > 
+On 31.05.2023 15:08, Peter Zijlstra wrote:
+> Add the try_cmpxchg() form to the per-cpu ops.
 > 
-> -- 
-> Regards,
-> Siddharth.
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
++CC Nathan, llvm list
 
--- 
-மணிவண்ணன் சதாசிவம்
+Hi all, this patch seems to break booting on Qualcomm ARM64 platforms
+when compiled with clang (GCC works fine) for some reason..:
+
+next-20230605 - works
+next-20230606 - doesn't
+
+grev -m 1 dc4e51fd9846 on next-20230606 - works again
+b4 shazam <this_msgid> -P 1-4 - still works
+b4 shazam <this_msgid> -P 5 - breaks
+
+Confirmed on at least Qualcomm QCM2290, SM8250.
+
+Checking the serial console, it hits a BUG_ON:
+
+[    0.000000] ------------[ cut here ]------------
+[    0.000000] kernel BUG at mm/vmalloc.c:1638!
+[    0.000000] Internal error: Oops - BUG: 00000000f2000800 [#1] SMP
+[    0.000000] Modules linked in:
+[    0.000000] CPU: 0 PID: 0 Comm: swapper/0 Not tainted [snip]
+[    0.000000] Hardware name: Qualcomm Technologies, Inc. Robotics RB1 (DT)
+[    0.000000] pstate: 000000c5 (nzcv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[    0.000000] pc : alloc_vmap_area+0xafc/0xb08
+[    0.000000] lr : alloc_vmap_area+0x9e4/0xb08
+[    0.000000] sp : ffffa50137f53c20
+[    0.000000] x29: ffffa50137f53c60 x28: ffffa50137f30c18 x27: 0000000000000000
+[    0.000000] x26: 0000000000007fff x25: ffff800080000000 x24: 000000000000cfff
+[    0.000000] x23: ffffffffffff8000 x22: ffffa50137fef970 x21: fffffbfff0000000
+[    0.000000] x20: ffff022982003208 x19: ffff0229820031f8 x18: ffffa50137f64f70
+[    0.000000] x17: ffffa50137fef980 x16: ffffa501375e6d08 x15: 0000000000000001
+[    0.000000] x14: ffffa5013831e1a0 x13: ffffa50137f30c18 x12: 0000000000402dc2
+[    0.000000] x11: 0000000000000000 x10: ffff022982003018 x9 : ffffa5013831e188
+[    0.000000] x8 : ffffcb55ff003228 x7 : 0000000000000000 x6 : 0000000000000048
+[    0.000000] x5 : 0000000000000000 x4 : ffffa50137f53bd0 x3 : ffffa50136490000
+[    0.000000] x2 : 0000000000000001 x1 : ffffa5013831e190 x0 : ffff022982003208
+[    0.000000] Call trace:
+[    0.000000]  alloc_vmap_area+0xafc/0xb08
+[    0.000000]  __get_vm_area_node+0x108/0x1e8
+[    0.000000]  __vmalloc_node_range+0x1fc/0x728
+[    0.000000]  __vmalloc_node+0x5c/0x70
+[    0.000000]  init_IRQ+0x90/0x11c
+[    0.000000]  start_kernel+0x1ac/0x3bc
+[    0.000000]  __primary_switched+0xc4/0xcc
+[    0.000000] Code: f000e300 91062000 943bd9ba 17ffff8f (d4210000)
+[    0.000000] ---[ end trace 0000000000000000 ]---
+[    0.000000] Kernel panic - not syncing: Attempted to kill the idle task!
+
+Compiled with clang 15.0.7 from Arch repos, with
+make ARCH=arm64 LLVM=1
+
+Konrad
+>  include/asm-generic/percpu.h |  113 +++++++++++++++++++++++++++++++++++++++++--
+>  include/linux/percpu-defs.h  |   19 +++++++
+>  2 files changed, 128 insertions(+), 4 deletions(-)
+> 
+> --- a/include/asm-generic/percpu.h
+> +++ b/include/asm-generic/percpu.h
+> @@ -89,16 +89,37 @@ do {									\
+>  	__ret;								\
+>  })
+>  
+> -#define raw_cpu_generic_cmpxchg(pcp, oval, nval)			\
+> +#define __cpu_fallback_try_cmpxchg(pcp, ovalp, nval, _cmpxchg)		\
+> +({									\
+> +	typeof(pcp) __val, __old = *(ovalp);				\
+> + 	__val = _cmpxchg(pcp, __old, nval);				\
+> +	if (__val != __old)						\
+> +		*(ovalp) = __val;					\
+> +	__val == __old;							\
+> +})
+> +
+> +#define raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval)			\
+>  ({									\
+>  	typeof(pcp) *__p = raw_cpu_ptr(&(pcp));				\
+> -	typeof(pcp) __ret;						\
+> -	__ret = *__p;							\
+> -	if (__ret == (oval))						\
+> +	typeof(pcp) __val = *__p, __old = *(ovalp);			\
+> +	bool __ret;							\
+> +	if (__val == __old) {						\
+>  		*__p = nval;						\
+> +		__ret = true;						\
+> +	} else {							\
+> +		*(ovalp) = __val;					\
+> +		__ret = false;						\
+> +	}								\
+>  	__ret;								\
+>  })
+>  
+> +#define raw_cpu_generic_cmpxchg(pcp, oval, nval)			\
+> +({									\
+> +	typeof(pcp) __old = (oval);					\
+> +	raw_cpu_generic_try_cmpxchg(pcp, &__old, nval);			\
+> +	__old;								\
+> +})
+> +
+>  #define raw_cpu_generic_cmpxchg_double(pcp1, pcp2, oval1, oval2, nval1, nval2) \
+>  ({									\
+>  	typeof(pcp1) *__p1 = raw_cpu_ptr(&(pcp1));			\
+> @@ -170,6 +191,16 @@ do {									\
+>  	__ret;								\
+>  })
+>  
+> +#define this_cpu_generic_try_cmpxchg(pcp, ovalp, nval)			\
+> +({									\
+> +	bool __ret;							\
+> +	unsigned long __flags;						\
+> +	raw_local_irq_save(__flags);					\
+> +	__ret = raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval);		\
+> +	raw_local_irq_restore(__flags);					\
+> +	__ret;								\
+> +})
+> +
+>  #define this_cpu_generic_cmpxchg(pcp, oval, nval)			\
+>  ({									\
+>  	typeof(pcp) __ret;						\
+> @@ -282,6 +313,43 @@ do {									\
+>  #define raw_cpu_xchg_8(pcp, nval)	raw_cpu_generic_xchg(pcp, nval)
+>  #endif
+>  
+> +#ifndef raw_cpu_try_cmpxchg_1
+> +#ifdef raw_cpu_cmpxchg_1
+> +#define raw_cpu_try_cmpxchg_1(pcp, ovalp, nval) \
+> +	__cpu_fallback_try_cmpxchg(pcp, ovalp, nval, raw_cpu_cmpxchg_1)
+> +#else
+> +#define raw_cpu_try_cmpxchg_1(pcp, ovalp, nval) \
+> +	raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
+> +#endif
+> +#endif
+> +#ifndef raw_cpu_try_cmpxchg_2
+> +#ifdef raw_cpu_cmpxchg_2
+> +#define raw_cpu_try_cmpxchg_2(pcp, ovalp, nval) \
+> +	__cpu_fallback_try_cmpxchg(pcp, ovalp, nval, raw_cpu_cmpxchg_2)
+> +#else
+> +#define raw_cpu_try_cmpxchg_2(pcp, ovalp, nval) \
+> +	raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
+> +#endif
+> +#endif
+> +#ifndef raw_cpu_try_cmpxchg_4
+> +#ifdef raw_cpu_cmpxchg_4
+> +#define raw_cpu_try_cmpxchg_4(pcp, ovalp, nval) \
+> +	__cpu_fallback_try_cmpxchg(pcp, ovalp, nval, raw_cpu_cmpxchg_4)
+> +#else
+> +#define raw_cpu_try_cmpxchg_4(pcp, ovalp, nval) \
+> +	raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
+> +#endif
+> +#endif
+> +#ifndef raw_cpu_try_cmpxchg_8
+> +#ifdef raw_cpu_cmpxchg_8
+> +#define raw_cpu_try_cmpxchg_8(pcp, ovalp, nval) \
+> +	__cpu_fallback_try_cmpxchg(pcp, ovalp, nval, raw_cpu_cmpxchg_8)
+> +#else
+> +#define raw_cpu_try_cmpxchg_8(pcp, ovalp, nval) \
+> +	raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
+> +#endif
+> +#endif
+> +
+>  #ifndef raw_cpu_cmpxchg_1
+>  #define raw_cpu_cmpxchg_1(pcp, oval, nval) \
+>  	raw_cpu_generic_cmpxchg(pcp, oval, nval)
+> @@ -407,6 +475,43 @@ do {									\
+>  #define this_cpu_xchg_8(pcp, nval)	this_cpu_generic_xchg(pcp, nval)
+>  #endif
+>  
+> +#ifndef this_cpu_try_cmpxchg_1
+> +#ifdef this_cpu_cmpxchg_1
+> +#define this_cpu_try_cmpxchg_1(pcp, ovalp, nval) \
+> +	__cpu_fallback_try_cmpxchg(pcp, ovalp, nval, this_cpu_cmpxchg_1)
+> +#else
+> +#define this_cpu_try_cmpxchg_1(pcp, ovalp, nval) \
+> +	this_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
+> +#endif
+> +#endif
+> +#ifndef this_cpu_try_cmpxchg_2
+> +#ifdef this_cpu_cmpxchg_2
+> +#define this_cpu_try_cmpxchg_2(pcp, ovalp, nval) \
+> +	__cpu_fallback_try_cmpxchg(pcp, ovalp, nval, this_cpu_cmpxchg_2)
+> +#else
+> +#define this_cpu_try_cmpxchg_2(pcp, ovalp, nval) \
+> +	this_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
+> +#endif
+> +#endif
+> +#ifndef this_cpu_try_cmpxchg_4
+> +#ifdef this_cpu_cmpxchg_4
+> +#define this_cpu_try_cmpxchg_4(pcp, ovalp, nval) \
+> +	__cpu_fallback_try_cmpxchg(pcp, ovalp, nval, this_cpu_cmpxchg_4)
+> +#else
+> +#define this_cpu_try_cmpxchg_4(pcp, ovalp, nval) \
+> +	this_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
+> +#endif
+> +#endif
+> +#ifndef this_cpu_try_cmpxchg_8
+> +#ifdef this_cpu_cmpxchg_8
+> +#define this_cpu_try_cmpxchg_8(pcp, ovalp, nval) \
+> +	__cpu_fallback_try_cmpxchg(pcp, ovalp, nval, this_cpu_cmpxchg_8)
+> +#else
+> +#define this_cpu_try_cmpxchg_8(pcp, ovalp, nval) \
+> +	this_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
+> +#endif
+> +#endif
+> +
+>  #ifndef this_cpu_cmpxchg_1
+>  #define this_cpu_cmpxchg_1(pcp, oval, nval) \
+>  	this_cpu_generic_cmpxchg(pcp, oval, nval)
+> --- a/include/linux/percpu-defs.h
+> +++ b/include/linux/percpu-defs.h
+> @@ -343,6 +343,21 @@ static __always_inline void __this_cpu_p
+>  	pscr2_ret__;							\
+>  })
+>  
+> +#define __pcpu_size_call_return2bool(stem, variable, ...)		\
+> +({									\
+> +	bool pscr2_ret__;						\
+> +	__verify_pcpu_ptr(&(variable));					\
+> +	switch(sizeof(variable)) {					\
+> +	case 1: pscr2_ret__ = stem##1(variable, __VA_ARGS__); break;	\
+> +	case 2: pscr2_ret__ = stem##2(variable, __VA_ARGS__); break;	\
+> +	case 4: pscr2_ret__ = stem##4(variable, __VA_ARGS__); break;	\
+> +	case 8: pscr2_ret__ = stem##8(variable, __VA_ARGS__); break;	\
+> +	default:							\
+> +		__bad_size_call_parameter(); break;			\
+> +	}								\
+> +	pscr2_ret__;							\
+> +})
+> +
+>  /*
+>   * Special handling for cmpxchg_double.  cmpxchg_double is passed two
+>   * percpu variables.  The first has to be aligned to a double word
+> @@ -426,6 +441,8 @@ do {									\
+>  #define raw_cpu_xchg(pcp, nval)		__pcpu_size_call_return2(raw_cpu_xchg_, pcp, nval)
+>  #define raw_cpu_cmpxchg(pcp, oval, nval) \
+>  	__pcpu_size_call_return2(raw_cpu_cmpxchg_, pcp, oval, nval)
+> +#define raw_cpu_try_cmpxchg(pcp, ovalp, nval) \
+> +	__pcpu_size_call_return2bool(raw_cpu_try_cmpxchg_, pcp, ovalp, nval)
+>  #define raw_cpu_cmpxchg_double(pcp1, pcp2, oval1, oval2, nval1, nval2) \
+>  	__pcpu_double_call_return_bool(raw_cpu_cmpxchg_double_, pcp1, pcp2, oval1, oval2, nval1, nval2)
+>  
+> @@ -513,6 +530,8 @@ do {									\
+>  #define this_cpu_xchg(pcp, nval)	__pcpu_size_call_return2(this_cpu_xchg_, pcp, nval)
+>  #define this_cpu_cmpxchg(pcp, oval, nval) \
+>  	__pcpu_size_call_return2(this_cpu_cmpxchg_, pcp, oval, nval)
+> +#define this_cpu_try_cmpxchg(pcp, ovalp, nval) \
+> +	__pcpu_size_call_return2bool(this_cpu_try_cmpxchg_, pcp, ovalp, nval)
+>  #define this_cpu_cmpxchg_double(pcp1, pcp2, oval1, oval2, nval1, nval2) \
+>  	__pcpu_double_call_return_bool(this_cpu_cmpxchg_double_, pcp1, pcp2, oval1, oval2, nval1, nval2)
+>  
