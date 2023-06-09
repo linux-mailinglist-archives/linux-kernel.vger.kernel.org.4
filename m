@@ -2,80 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F26F7297A9
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 13:00:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A3C729799
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 12:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236230AbjFILAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 07:00:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50546 "EHLO
+        id S238953AbjFIKzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 06:55:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbjFILAV (ORCPT
+        with ESMTP id S231156AbjFIKzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 07:00:21 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637BD211C
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 04:00:16 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 3DC2B5FD90;
-        Fri,  9 Jun 2023 14:00:13 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1686308413;
-        bh=BzSyFtFdXcnd2HT0HS0gqYm2mT8eWVT9T37dAgibYaE=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=iIwhIrEHgiJBZcjqFXIOdLAKV4Fj4v1NVFIKCN9cj2pwpMSn+26WrFFPwYkiNcR6H
-         zWm6tEssID3X1tSyGiwh6DKtbpUEbkiIHpkWlbo5tzHzK/iiUVttnzwGfXOjKMkw8/
-         SpXOaomSu3Sc+9LEem+gZF+f/vMTQadvBD4GdCstryi4uEzMKK2Fecq6XkxlWz8rWB
-         fA3PRDqgwfRoZNvIbDQmGWHrvJiKK5ANsKsMfSe+rki4os1dt+kd9c0DKWlmbZQOSB
-         7heG8M1R4MOWdv64rIMYS7cana4gnX+b+NBbofUEbI953MLWC63x4ZCNOk9dsQGOAa
-         GwE/BQd/5Re1g==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Fri,  9 Jun 2023 14:00:11 +0300 (MSK)
-Message-ID: <03b86107-e03f-b41e-09e8-c8509c307005@sberdevices.ru>
-Date:   Fri, 9 Jun 2023 13:55:07 +0300
+        Fri, 9 Jun 2023 06:55:42 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001AE83
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 03:55:40 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230609105537euoutp0277cc096c01d4b087a19b49cd2c7bca5c~m_FD6DJjc1769117691euoutp027
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 10:55:37 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230609105537euoutp0277cc096c01d4b087a19b49cd2c7bca5c~m_FD6DJjc1769117691euoutp027
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1686308137;
+        bh=MG810wCAdn7iBm5xOj3Wkk95nQ9HsppSwFyyybEY8Gk=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=UAYIvwxlRKFB4BE2Nf+r7E8RZvUxw3NINI64l0qvvcVByo7RUMGpSFlVf+C6UBcEV
+         dRrJcROiycK8PuzscSLZ80DCbezikmXAEn7g9wUFVm3g4QzNk5D8n+JdsNY2RPoxFx
+         Rznj0EfgMxtMNnaMnkALwgwEKNWZOpV43X8gqlAc=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20230609105537eucas1p137770cc93271d7cfa1d3311e5d64060a~m_FDzDB_52229222292eucas1p1_;
+        Fri,  9 Jun 2023 10:55:37 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 83.F1.42423.82503846; Fri,  9
+        Jun 2023 11:55:36 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230609105536eucas1p13a7d4621552a27f7eb117e3f0300740c~m_FDhBSN02276322763eucas1p1z;
+        Fri,  9 Jun 2023 10:55:36 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230609105536eusmtrp1a09a06c9cd430b278b0fbe1a49f831e3~m_FDgg3SQ2700927009eusmtrp1D;
+        Fri,  9 Jun 2023 10:55:36 +0000 (GMT)
+X-AuditID: cbfec7f2-a51ff7000002a5b7-75-648305288058
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 25.84.14344.82503846; Fri,  9
+        Jun 2023 11:55:36 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230609105536eusmtip11a59c483b9312dc34bbe029a7a5cb8e4~m_FDGfKdA2716527165eusmtip1k;
+        Fri,  9 Jun 2023 10:55:36 +0000 (GMT)
+Message-ID: <622e1132-3a66-de4d-9334-c63dcfd4c716@samsung.com>
+Date:   Fri, 9 Jun 2023 12:55:35 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2] mtd: rawnand: meson: check buffer length
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
+        Gecko/20100101 Thunderbird/102.11.2
+Subject: Re: [PATCH] block: fix rootwait= again
 Content-Language: en-US
-To:     Liang Yang <liang.yang@amlogic.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20230606101644.3297859-1-AVKrasnov@sberdevices.ru>
- <9adef6da-5930-dcaa-f148-e4a398d39f2d@sberdevices.ru>
- <3a9470ed-d7ad-6cae-0d58-732399590272@sberdevices.ru>
- <7903580d-685c-14e6-5572-81a4cb31cced@amlogic.com>
- <20230608085458.449a24c0@xps-13>
- <4e6cd8a8-f618-4bc3-5fa9-eab2b501dd89@amlogic.com>
- <a6a20b50-02b0-53c0-1e65-75035bc59c87@amlogic.com>
- <20230608152114.3a1d82ac@xps-13>
- <3cc9765c-f32a-fe8a-f7af-fb884ee63b48@amlogic.com>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <3cc9765c-f32a-fe8a-f7af-fb884ee63b48@amlogic.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/09 07:08:00 #21465535
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+To:     Christoph Hellwig <hch@lst.de>, axboe@kernel.dk
+Cc:     festevam@gmail.com, broonie@kernel.org,
+        linux-kernel@vger.kernel.org
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20230609051737.328930-1-hch@lst.de>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprEKsWRmVeSWpSXmKPExsWy7djP87oarM0pBpPn21isvtvPZjH14RM2
+        i4dX/S1Wrj7KZHF51xw2B1aPnbPusntcPlvqsWlVJ5vH7psNbB6fN8kFsEZx2aSk5mSWpRbp
+        2yVwZZxfeJup4AlHxekt85gbGFvYuxg5OSQETCROrFrN2sXIxSEksIJR4tPmTcwQzhdGid9L
+        LkM5nxkl3r1YzQbTcnjzMkaIxHJGicn3brBDOB8ZJc4u3gk2mFfATuL3/vOsIDaLgIrEmsYV
+        zBBxQYmTM5+wgNiiAqkSu68dAKsRFtCXaHwCEWcWEJe49WQ+E4gtImAscW3uL0aIuIfEn/k3
+        wK5gEzCU6HrbBWZzAtkbt31hg6iRl9j+dg4zxKUHOCT+fHGAsF0k3jVegYoLS7w6vgUaADIS
+        pyf3sIA8ICHQziix4Pd9JghnAqNEw/NbjBBV1hJ3zv0C2sABtEFTYv0ufYiwo8TRvpUsIGEJ
+        AT6JG28FIW7gk5i0bTozRJhXoqNNCKJaTWLW8XVwaw9euMQ8gVFpFlKozELy/Swk38xC2LuA
+        kWUVo3hqaXFuemqxYV5quV5xYm5xaV66XnJ+7iZGYLI5/e/4px2Mc1991DvEyMTBeIhRgoNZ
+        SYQ3y74+RYg3JbGyKrUoP76oNCe1+BCjNAeLkjivtu3JZCGB9MSS1OzU1ILUIpgsEwenVAMT
+        z41/+T+N/uenGMprJP/O35+/u0DzyOLtGSLGa4PnaFh1/ftZP3XvjzPtknal8xZe/S/3qfnd
+        bSXDm+7+ayYuU1t6ob+hsyet+OVFwZTdtf9YJvPkSR2cq3DMbBP3Folbhsc9VEU4A164yN/n
+        q/+wrGrrwosH1i6WnbpYW/pdpI2W9uYjlgI2EiyPr3of+SvxLLN9ekv1gi3+AksVD5ao9xht
+        vtFy56nGlx/rtq86dXvtqQ/FbVu+b0g466rv/vqZcNG+WdXNO3e2q5vq8Le3Gn68LRxa5h/9
+        PqTjc5pa6TlnlfBTS6bZV/hxmHYYRofsO2ykG7rz2KScJ0nHvv1fuO/4+jdzz3brVCkzGjFw
+        KrEUZyQaajEXFScCALWSMCilAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrCIsWRmVeSWpSXmKPExsVy+t/xu7oarM0pBpMma1msvtvPZjH14RM2
+        i4dX/S1Wrj7KZHF51xw2B1aPnbPusntcPlvqsWlVJ5vH7psNbB6fN8kFsEbp2RTll5akKmTk
+        F5fYKkUbWhjpGVpa6BmZWOoZGpvHWhmZKunb2aSk5mSWpRbp2yXoZZxfeJup4AlHxekt85gb
+        GFvYuxg5OSQETCQOb17G2MXIxSEksJRR4taehcwQCRmJk9MaWCFsYYk/17rYIIreM0psfPmO
+        DSTBK2An8Xv/ebAiFgEViTWNK5gh4oISJ2c+YQGxRQVSJe4u6QerFxbQl2h8AhFnFhCXuPVk
+        PhOILSJgLHFt7i9GiLiHxJ/5N8DqhQQMJNb8uwgWZxMwlOh62wUW5wSyN277wgZRbybRtbUL
+        qldeYvvbOcwTGIVmITljFpJ1s5C0zELSsoCRZRWjSGppcW56brGRXnFibnFpXrpecn7uJkZg
+        dG079nPLDsaVrz7qHWJk4mA8xCjBwawkwptlX58ixJuSWFmVWpQfX1Sak1p8iNEUGBYTmaVE
+        k/OB8Z1XEm9oZmBqaGJmaWBqaWasJM7rWdCRKCSQnliSmp2aWpBaBNPHxMEp1cBkyzKzL1mi
+        IdboyRSfsw5KjYvfnmkIubl+ldtJl50GvD2XNI4cjzNYamd12L4pRo7Z1+HjP72bh32yK8SC
+        crd5yElFaEx9b3PjHAPTi68nF5snqu32/fXE6XNYeH7Bw3K1WNlTwc/OuBU7Fgbxxc3dvJYp
+        UieZ09Q5IaawrFH9QnxY8PeLYja/9/h1e3V1MuSdeOFb//SH4rW6yRWtSTIGdmlrO+YL5LFn
+        le89F7rBPFNkndNNb85/XOfmbmw5KLK9tEe0+2GhS+Rc7Zn1ah1duelapk8VllzPXXZ60aNM
+        xs47WsUCm4pFQ3le5bw7sLQ7T2jZx29bmiPme2ubc4adKup/9Lxlx1GTzzb/lViKMxINtZiL
+        ihMBumYdQjcDAAA=
+X-CMS-MailID: 20230609105536eucas1p13a7d4621552a27f7eb117e3f0300740c
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20230609105536eucas1p13a7d4621552a27f7eb117e3f0300740c
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230609105536eucas1p13a7d4621552a27f7eb117e3f0300740c
+References: <20230609051737.328930-1-hch@lst.de>
+        <CGME20230609105536eucas1p13a7d4621552a27f7eb117e3f0300740c@eucas1p1.samsung.com>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,210 +113,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 09.06.2023 07:17, Christoph Hellwig wrote:
+> The previous rootwait fix added an -EINVAL return to a completely
+> bogus superflous branch, fix this.
+>
+> Fixes: 1341c7d2ccf4 ("block: fix rootwait=")
+> Reported-by: Mark Brown <broonie@kernel.org>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> Tested-by: Fabio Estevam <festevam@gmail.com>
+
+This fixes the issue I've found in today's next-20230609.
+
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
 
 
-On 09.06.2023 10:59, Liang Yang wrote:
-> Hi Miquel,
-> 
-> On 2023/6/8 21:21, Miquel Raynal wrote:
->> [ EXTERNAL EMAIL ]
->>
->> Hi Liang,
->>
->> liang.yang@amlogic.com wrote on Thu, 8 Jun 2023 20:37:14 +0800:
->>
->>> Hi Arseniy and Miquel,
->>>
->>> On 2023/6/8 15:12, Liang Yang wrote:
->>>> Hi Miquel,
->>>>
->>>> On 2023/6/8 14:54, Miquel Raynal wrote:
->>>>> [ EXTERNAL EMAIL ]
->>>>>
->>>>> Hi Liang,
->>>>>
->>>>> liang.yang@amlogic.com wrote on Thu, 8 Jun 2023 14:42:53 +0800:
->>>>>
->>>>>> Hi Arseniy,
->>>>>>
->>>>>> On 2023/6/8 5:17, Arseniy Krasnov wrote:
->>>>>>> [ EXTERNAL EMAIL ]
->>>>>>>
->>>>>>> Hi again Miquel, Liang!
->>>>>>>
->>>>>>> What do You think about this patch?
->>>>>>>
->>>>>>> Thanks, Arseniy
->>>>>>>
->>>>>>> On 06.06.2023 19:29, Arseniy Krasnov wrote:
->>>>>>>> Sorry, here is changelog:
->>>>>>>> v1 -> v2:
->>>>>>>> * Move checks from 'switch/case' which executes commands in >>>>> 'meson_nfc_exec_op()' to a special
->>>>>>>>      separated function 'meson_nfc_check_op()' which is called >>>>> before commands processing.
->>>>>>>>
->>>>>>>> On 06.06.2023 13:16, Arseniy Krasnov wrote:
->>>>>>>>> Meson NAND controller has limited buffer length, so check it before
->>>>>>>>> command execution to avoid length trim. Also check MTD write size on
->>>>>>>>> chip attach.
->>>>>>>>>
->>>>>>>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->>>>>>>>> ---
->>>>>>>>>     drivers/mtd/nand/raw/meson_nand.c | 47 >>>>>> +++++++++++++++++++++++++++----
->>>>>>>>>     1 file changed, 42 insertions(+), 5 deletions(-)
->>>>>>>>>
->>>>>>>>> diff --git a/drivers/mtd/nand/raw/meson_nand.c >>>>>> b/drivers/mtd/nand/raw/meson_nand.c
->>>>>>>>> index 23a73268421b..db6b18753071 100644
->>>>>>>>> --- a/drivers/mtd/nand/raw/meson_nand.c
->>>>>>>>> +++ b/drivers/mtd/nand/raw/meson_nand.c
->>>>>>>>> @@ -111,6 +111,8 @@
->>>>>>>>>
->>>>>>>>>     #define PER_INFO_BYTE               8
->>>>>>>>>
->>>>>>>>> +#define NFC_CMD_RAW_LEN     GENMASK(13, 0)
->>>>>>>>> +
->>>>>>>>>     struct meson_nfc_nand_chip {
->>>>>>>>>         struct list_head node;
->>>>>>>>>         struct nand_chip nand;
->>>>>>>>> @@ -284,7 +286,7 @@ static void meson_nfc_cmd_access(struct >>>>>> nand_chip *nand, int raw, bool dir,
->>>>>>>>>
->>>>>>>>>         if (raw) {
->>>>>>>>>                 len = mtd->writesize + mtd->oobsize;
->>>>>>>>> -            cmd = (len & GENMASK(13, 0)) | scrambler | DMA_DIR(dir);
->>>>>>>>> +            cmd = len | scrambler | DMA_DIR(dir);
->>>>>>>>>                 writel(cmd, nfc->reg_base + NFC_REG_CMD);
->>>>>>
->>>>>> I think we could keep "& GENMASK(13, 0)". it is better here to >>> indicate how many bits of length in this command and don't destory >>> the command once we don't check the "len" outside of this function. >>> or the code "if (len >  NFC_CMD_RAW_LEN)" is better to put inside >>> this function nearly. Thanks.
->>>>>
->>>>> It depends who calls this helper. If only used inside >> exec_op,write_page_raw() and read_page_raw() also call >> meson_nfc_cmd_access(), > but i don't find where constrain the "len".
->>>
->>> Is the helper "meson_nfc_check_op()" needed by exec_op() after the constraint in attach_chip()? the length passed in exec_op() seems smaller than "mtd->writesize + mtd->oobsize" now.
->>
->> exec_op() is primarily dedicated to performing side commands than page
->> accesses, typically the parameter page is X bytes, you might want to
->> read it 3 times, depending on the capabilities of the controller, you
->> might need to split the operation or not, so the core checks what are
->> the controller capabilities before doing the operation. So yes, the
->> check_op() thing is necessary.
-> 
-> ok, i get it. thanks
-> 
-> @Arseniy I have no other questions about this patch.
+> ---
+>   block/early-lookup.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/block/early-lookup.c b/block/early-lookup.c
+> index 48ea3e982419cc..a5be3c68ed079c 100644
+> --- a/block/early-lookup.c
+> +++ b/block/early-lookup.c
+> @@ -181,7 +181,7 @@ static int __init devt_from_devname(const char *name, dev_t *devt)
+>   	*p = '\0';
+>   	*devt = blk_lookup_devt(s, part);
+>   	if (*devt)
+> -		return -ENODEV;
+> +		return 0;
+>   
+>   	/* try disk name without p<part number> */
+>   	if (p < s + 2 || !isdigit(p[-2]) || p[-1] != 'p')
 
-Got it!
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
-Thanks, Arseniy
-
->>
->>>
->>> @Arseniy if it does need, I think the same constraint is needed by
->>> "meson_nfc_cmd_access()"
->>>
->>>>
->>>>> it's not useful. If used outside, then if you want to clarify
->>>>> things you may want to use:
->>>>>
->>>>> #define NFC_CMD_OP_LEN(cmd) FIELD_PREP(GENMASK(13, 0), (cmd))
->>>>>
->>>>> This is by far my favorite construction. Could apply to many other
->>>>> fields, like DMA_DIR, scrambler, etc.
->>>
->>> @Miquel, FIELD_PREP() is better, but i have no idea whether we should add FIELD_PREP() in this patch, or keep the previous code.
->>>
->>>>>
->>>>>>>>>                 return;
->>>>>>>>>         }
->>>>>>>>> @@ -573,7 +575,7 @@ static int meson_nfc_read_buf(struct nand_chip >>>>>> *nand, u8 *buf, int len)
->>>>>>>>>         if (ret)
->>>>>>>>>                 goto out;
->>>>>>>>>
->>>>>>>>> -    cmd = NFC_CMD_N2M | (len & GENMASK(13, 0));
->>>>>>>>> +    cmd = NFC_CMD_N2M | len;
->>>>>>>>>         writel(cmd, nfc->reg_base + NFC_REG_CMD);
->>>>>>>>>
->>>>>>>>>         meson_nfc_drain_cmd(nfc);
->>>>>>>>> @@ -597,7 +599,7 @@ static int meson_nfc_write_buf(struct >>>>>> nand_chip *nand, u8 *buf, int len)
->>>>>>>>>         if (ret)
->>>>>>>>>                 return ret;
->>>>>>>>>
->>>>>>>>> -    cmd = NFC_CMD_M2N | (len & GENMASK(13, 0));
->>>>>>>>> +    cmd = NFC_CMD_M2N | len;
->>>>>>>>>         writel(cmd, nfc->reg_base + NFC_REG_CMD);
->>>>>>>>>
->>>>>>>>>         meson_nfc_drain_cmd(nfc);
->>>>>>>>> @@ -1007,6 +1009,31 @@ meson_nand_op_put_dma_safe_output_buf(const >>>>>> struct nand_op_instr *instr,
->>>>>>>>>                 kfree(buf);
->>>>>>>>>     }
->>>>>>>>>
->>>>>>>>> +static int meson_nfc_check_op(struct nand_chip *chip,
->>>>>>>>> +                          const struct nand_operation *op)
->>>>>>>>> +{
->>>>>>>>> +    int op_id;
->>>>>>>>> +
->>>>>>>>> +    for (op_id = 0; op_id < op->ninstrs; op_id++) {
->>>>>>>>> +            const struct nand_op_instr *instr;
->>>>>>>>> +
->>>>>>>>> +            instr = &op->instrs[op_id];
->>>>>>>>> +
->>>>>>>>> +            switch (instr->type) {
->>>>>>>>> +            case NAND_OP_DATA_IN_INSTR:
->>>>>>>>> +            case NAND_OP_DATA_OUT_INSTR:
->>>>>>>>> +                    if (instr->ctx.data.len > NFC_CMD_RAW_LEN)
->>>>>>>>> +                            return -ENOTSUPP;
->>>>>>>>> +
->>>>>>>>> +                    break;
->>>>>>>>> +            default:
->>>>>>>>> +                    break;
->>>>>>>>> +            }
->>>>>>>>> +    }
->>>>>>>>> +
->>>>>>>>> +    return 0;
->>>>>>>>> +}
->>>>>>>>> +
->>>>>>>>>     static int meson_nfc_exec_op(struct nand_chip *nand,
->>>>>>>>>                              const struct nand_operation *op, bool >>>>>> check_only)
->>>>>>>>>     {
->>>>>>>>> @@ -1015,10 +1042,12 @@ static int meson_nfc_exec_op(struct >>>>>> nand_chip *nand,
->>>>>>>>>         const struct nand_op_instr *instr = NULL;
->>>>>>>>>         void *buf;
->>>>>>>>>         u32 op_id, delay_idle, cmd;
->>>>>>>>> +    int err;
->>>>>>>>>         int i;
->>>>>>>>>
->>>>>>>>> -    if (check_only)
->>>>>>>>> -            return 0;
->>>>>>>>> +    err = meson_nfc_check_op(nand, op);
->>>>>>>>> +    if (err || check_only)
->>>>>>>>> +            return err;
->>>>>>>>>
->>>>>>>>>         meson_nfc_select_chip(nand, op->cs);
->>>>>>>>>         for (op_id = 0; op_id < op->ninstrs; op_id++) {
->>>>>>>>> @@ -1293,6 +1322,7 @@ static int meson_nand_attach_chip(struct >>>>>> nand_chip *nand)
->>>>>>>>>         struct meson_nfc_nand_chip *meson_chip = to_meson_nand(nand);
->>>>>>>>>         struct mtd_info *mtd = nand_to_mtd(nand);
->>>>>>>>>         int nsectors = mtd->writesize / 1024;
->>>>>>>>> +    int raw_writesize;
->>>>>>>>>         int ret;
->>>>>>>>>
->>>>>>>>>         if (!mtd->name) {
->>>>>>>>> @@ -1304,6 +1334,13 @@ static int meson_nand_attach_chip(struct >>>>>> nand_chip *nand)
->>>>>>>>>                         return -ENOMEM;
->>>>>>>>>         }
->>>>>>>>>
->>>>>>>>> +    raw_writesize = mtd->writesize + mtd->oobsize;
->>>>>>>>> +    if (raw_writesize > NFC_CMD_RAW_LEN) {
->>>>>>>>> +            dev_err(nfc->dev, "too big write size in raw mode: %d >>>>>> > %ld\n",
->>>>>>>>> +                    raw_writesize, NFC_CMD_RAW_LEN);
->>>>>>>>> +            return -EINVAL;
->>>>>>>>> +    }
->>>>>>>>> +
->>>>>>>>>         if (nand->bbt_options & NAND_BBT_USE_FLASH)
->>>>>>>>>                 nand->bbt_options |= NAND_BBT_NO_OOB;
->>>>>>>>>
->>>>>
->>>>>
->>>>> Thanks,
->>>>> Miquèl
->>
->>
->> Thanks,
->> Miquèl
