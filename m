@@ -2,324 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CFF1729CF5
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C357729CF7
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238266AbjFIOdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 10:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54054 "EHLO
+        id S240227AbjFIOeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 10:34:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241482AbjFIOdd (ORCPT
+        with ESMTP id S229969AbjFIOeJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 10:33:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC0B3585;
-        Fri,  9 Jun 2023 07:33:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EED7361338;
-        Fri,  9 Jun 2023 14:33:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3CC0C433D2;
-        Fri,  9 Jun 2023 14:33:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686321209;
-        bh=CY+YYElYqC/kJKILLNqHwJZdhRGnFwjotZHTV7ULykA=;
-        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=cmDVEVwII5eebwEqT5/cbmDOQpms95jzSsjtKUNDmmB2S7jVf/RVt2C9PvCXKxEdT
-         x+bPrOB9L5j/FnzcBUQr7RBPxC+l/7g5MKqnSWruQgJr9pxf8h1/3CTVNcvZy/hiGI
-         uPRs3253OP/q06CWGcLJaCS5uqPxW8TCezvTs3E4fJDGuc9ivCGJZ8bniI4aZa/W0W
-         GmUnPtont62O3yEVAqyEtzS0vVKhzCGSv4JSOW5LNkswdf4j3rWyBUc5seUSk6XBBO
-         8wvjckUSxNlF/UGyRvyQmnOfXT9wyID+Cn8F79TesLfBUX7cFjpfwvn1S+RTksV39u
-         kprcOUmu2WFLA==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 09 Jun 2023 17:33:23 +0300
-Message-Id: <CT86Z65L4O9A.2FIOFZUI6BVB4@suppilovahvero>
-Cc:     <jsnitsel@redhat.com>, <hdegoede@redhat.com>,
-        <oe-lkp@lists.linux.dev>, <lkp@intel.com>,
-        <peter.ujfalusi@linux.intel.com>, <peterz@infradead.org>,
-        <linux@mniewoehner.de>, <linux-integrity@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <l.sanfilippo@kunbus.com>,
-        <lukas@wunner.de>, <p.rosenberger@kunbus.com>,
-        "kernel test robot" <yujie.liu@intel.com>
-Subject: Re: [PATCH v2] tpm,tpm_tis: Handle interrupt storm
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Lino Sanfilippo" <LinoSanfilippo@gmx.de>, <peterhuewe@gmx.de>,
-        <jgg@ziepe.ca>
-X-Mailer: aerc 0.14.0
-References: <20230530174712.6989-1-LinoSanfilippo@gmx.de>
-In-Reply-To: <20230530174712.6989-1-LinoSanfilippo@gmx.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 9 Jun 2023 10:34:09 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114392D55;
+        Fri,  9 Jun 2023 07:34:08 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f6d7abe9a4so14573795e9.2;
+        Fri, 09 Jun 2023 07:34:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686321246; x=1688913246;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0HNUo/yfFy/PNKrzdN1Hl17P1eWviTOR305UNqdfbQA=;
+        b=qBc0VlaLwv0Z4E7v5I0Dzn+WpaioBcXONDE4esSEXplZ9iRbuQbYMF0kUj2IRfpkDp
+         Y0iVpG8HMfiAfNshYTMiRh5XaFo894BeZHdUYu4UzzpZTKeMlhtxfGKuwLuXNIcOdZyW
+         Z/cQNtVSPL4fgPq+Lrm64q6zQU9MrXpOHxSNontqJWP1DpLGdODrQPq54SIpHh/dKud8
+         bHsJH14tf7+qAMMKJuF0gMlFzsKQX7c6F/HMAhJrnCuLFeshml9Vpn2Pd+TulGOEhjkE
+         8763xcoXlAi9+sbC33P4RgaWKKTYLD6PK5VrYxZyfTuJOaC5q7pREPi2e2MSO6tR0vdv
+         omZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686321246; x=1688913246;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0HNUo/yfFy/PNKrzdN1Hl17P1eWviTOR305UNqdfbQA=;
+        b=C8tuS5MDcq4HdHkSXrT3Y8ncMMamkodqSBaDf1argjp4DkcLOqWBzJ5FuEPQhpljva
+         62iEV0J7Sr6Nuud7rRwewoqzZSxmHj/McklVnTqWzTotdgSludJLxzcMJYtMvWYqYgqr
+         Qq17G7l9B1KlMA0fpDu39IO254TRv+80u2gV0/AYKgld4PnaOkHmdUNulUj6F1eAavpg
+         zQCqiD8eDotW2r3ybAUFEugXEiTa8njtpd49w8SQOCbVibKAxUwR6/KUNGihW/cdiNb8
+         dXJUZ+bBkSl/zzt2ohExx+CufKuXeA4O09UKmLpsgkvKpsWiXfhm52/nj2FkfdN4cQV3
+         fxLQ==
+X-Gm-Message-State: AC+VfDz4+Pyq+Zlg+maTgJxtcQT5nppTPLpm6zNrhIzQ2v7vvUcu0n08
+        3E5scu6PaALlTUSA3uuQiqg=
+X-Google-Smtp-Source: ACHHUZ5Zn+0lR9YTGINzKuvCgIKeE9urQSQ15IvghtqY5fm3gw79REBiBsfzDMm9FhfP3CWeMs7LWw==
+X-Received: by 2002:a05:600c:2042:b0:3f7:f90c:4979 with SMTP id p2-20020a05600c204200b003f7f90c4979mr1261704wmg.26.1686321246207;
+        Fri, 09 Jun 2023 07:34:06 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id l8-20020a1c7908000000b003f7f4dc6d14sm2852554wme.14.2023.06.09.07.34.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Jun 2023 07:34:05 -0700 (PDT)
+Message-ID: <e80e29f3-9085-f1e3-feb9-23b85cc0c914@gmail.com>
+Date:   Fri, 9 Jun 2023 16:34:03 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: Aw: Re: Re: Re: Re: Re: [PATCH v3 0/5] arm: dts: mt7623: relocate
+ gmacs, mt7530 switch, and add port@5
+Content-Language: en-US, ca-ES, es-ES
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Frank Wunderlich <frank-w@public-files.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, erkin.bozoglu@xeront.com
+References: <20230210182505.24597-1-arinc.unal@arinc9.com>
+ <trinity-dab715b9-3953-40da-bc25-c4c2a5e9b7c3-1676715866453@3c-app-gmx-bap53>
+ <27a26da8-8297-5327-7493-54d8359b6970@arinc9.com>
+ <trinity-dd260791-3637-4193-8f93-a9fcdb013dcb-1676722705920@3c-app-gmx-bap53>
+ <2dc2fc39-b0d5-c872-36bf-fde851debe4b@arinc9.com>
+ <A329B2DF-04B7-40FA-BBCE-1F1012A6DBBD@public-files.de>
+ <fb96d8eb-2eb7-db19-1135-1a833294dd67@arinc9.com>
+ <trinity-899c01a6-0fc5-4900-aea8-2b43802c8329-1676814734826@3c-app-gmx-bs35>
+ <trinity-3f46d325-bc45-4ee7-ae86-c8db4467aa94-1681303779505@3c-app-gmx-bap50>
+ <703ad8a8-f84e-6404-4cce-5386bfaa2bd7@arinc9.com>
+ <trinity-489cdc3b-e861-49d0-b1ec-e964f00388df-1681312277092@3c-app-gmx-bap50>
+ <0d242292-16b7-6837-7d1a-b70c41309e6b@arinc9.com>
+ <trinity-990f3b28-d67c-49ef-9094-c3b7d2059e36-1681318402336@3c-app-gmx-bap50>
+ <e08c5175-d771-5b87-d065-47942a800419@arinc9.com>
+ <0fa22575-18d8-5598-1377-7f66c56aa861@gmail.com>
+ <8f27983d-0b1d-47f1-9219-f609423c9fb6@arinc9.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <8f27983d-0b1d-47f1-9219-f609423c9fb6@arinc9.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue May 30, 2023 at 8:47 PM EEST, Lino Sanfilippo wrote:
-> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
->
-> After activation of interrupts for TPM TIS drivers 0-day reports an
-> interrupt storm on an Inspur NF5180M6/NF5180M6 server.
->
-> Fix this by detecting the storm and falling back to polling:
-> Count the number of unhandled interrupts within a 10 ms time interval. In
-> case that more than 1000 were unhandled deactivate interrupts entirely,
-> deregister the handler and use polling instead.
->
-> The storm detection logic equals the implementation in note_interrupt()
-> which uses timestamps and counters stored in struct irq_desc. Since this
-> structure is private to the generic interrupt core the TPM TIS core uses
-> its own timestamps and counters. Furthermore the TPM interrupt handler
-> always returns IRQ_HANDLED to prevent the generic interrupt core from
-> processing the interrupt storm.
->
-> Since the interrupt deregistration function devm_free_irq() waits for all
-> interrupt handlers to finish, only trigger a worker in the interrupt
-> handler and do the unregistration in the worker to avoid a deadlock.
->
-> Reported-by: kernel test robot <yujie.liu@intel.com>
-> Closes: https://lore.kernel.org/oe-lkp/202305041325.ae8b0c43-yujie.liu@in=
-tel.com/
-> Suggested-by: Lukas Wunner <lukas@wunner.de>
-> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> ---
-
-Sorry for the latency. I've moved home office to a new location,
-which has caused ~2 week lag. Unfortunate timing.
-
->  drivers/char/tpm/tpm_tis_core.c | 93 ++++++++++++++++++++++++++++-----
->  drivers/char/tpm/tpm_tis_core.h |  4 ++
->  2 files changed, 85 insertions(+), 12 deletions(-)
->
-> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_c=
-ore.c
-> index 558144fa707a..7ae8228e803f 100644
-> --- a/drivers/char/tpm/tpm_tis_core.c
-> +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -468,25 +468,32 @@ static int tpm_tis_send_data(struct tpm_chip *chip,=
- const u8 *buf, size_t len)
->  	return rc;
->  }
-> =20
-> +static void __tpm_tis_disable_interrupts(struct tpm_chip *chip)
-> +{
-> +	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
-> +	u32 intmask =3D 0;
-> +
-> +	tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
-> +	intmask &=3D ~TPM_GLOBAL_INT_ENABLE;
-> +
-> +	tpm_tis_request_locality(chip, 0);
-> +	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
-> +	tpm_tis_relinquish_locality(chip, 0);
-> +
-> +	chip->flags &=3D ~TPM_CHIP_FLAG_IRQ;
-> +}
-> +
->  static void disable_interrupts(struct tpm_chip *chip)
-
-Add tpm_ prefix here too. It makes tracing/grepping/etc so much nicer.
-
->  {
->  	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
-> -	u32 intmask;
-
-int_mask is more readable
-
-> -	int rc;
-> =20
->  	if (priv->irq =3D=3D 0)
->  		return;
-> =20
-> -	rc =3D tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
-> -	if (rc < 0)
-> -		intmask =3D 0;
-> -
-> -	intmask &=3D ~TPM_GLOBAL_INT_ENABLE;
-> -	rc =3D tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
-> +	__tpm_tis_disable_interrupts(chip);
-> =20
->  	devm_free_irq(chip->dev.parent, priv->irq, chip);
->  	priv->irq =3D 0;
-> -	chip->flags &=3D ~TPM_CHIP_FLAG_IRQ;
->  }
-> =20
->  /*
-> @@ -752,6 +759,53 @@ static bool tpm_tis_req_canceled(struct tpm_chip *ch=
-ip, u8 status)
->  	return status =3D=3D TPM_STS_COMMAND_READY;
->  }
-> =20
-> +static void tpm_tis_reenable_polling(struct tpm_chip *chip)
-> +{
-> +	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
-> +
-> +	dev_warn(&chip->dev, FW_BUG
-> +		 "TPM interrupt storm detected, polling instead\n");
-> +
-> +	__tpm_tis_disable_interrupts(chip);
-> +
-> +	/*
-> +	 * devm_free_irq() must not be called from within the interrupt handler=
-,
-> +	 * since this function waits for running handlers to finish and thus it
-> +	 * would deadlock. Instead trigger a worker that takes care of the
-> +	 * unregistration.
-> +	 */
-> +	schedule_work(&priv->free_irq_work);
-> +}
-> +
-> +static irqreturn_t tpm_tis_check_for_interrupt_storm(struct tpm_chip *ch=
-ip)
-> +{
-> +	struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
-> +	const unsigned int MAX_UNHANDLED_IRQS =3D 1000;
-
-Please declare this in the beginning of file because it is non-empirical
-tuning parameter. I do not want it to be buried here. It is now as good
-as a magic number.
-
-Or perhaps even tpm_tis_core.h?
-
-Why MAX_UNHANDLED_IRQS is exactly 1000 and not 1? I would rollback eagerly.
-
-> +
-> +	/*
-> +	 * The worker to free the TPM interrupt (free_irq_work) may already
-> +	 * be scheduled, so make sure it is not scheduled again.
-> +	 */
-> +	if (!(chip->flags & TPM_CHIP_FLAG_IRQ))
-> +		return IRQ_HANDLED;
-> +
-> +	if (time_after(jiffies, priv->last_unhandled_irq + HZ/10))
-> +		priv->unhandled_irqs =3D 1;
-> +	else
-> +		priv->unhandled_irqs++;
-> +
-> +	priv->last_unhandled_irq =3D jiffies;
-> +
-> +	if (priv->unhandled_irqs > MAX_UNHANDLED_IRQS)
-> +		tpm_tis_reenable_polling(chip);
-> +
-> +	/*
-> +	 * Prevent the genirq code from starting its own interrupt storm
-> +	 * handling by always reporting that the interrupt was handled.
-> +	 */
-> +	return IRQ_HANDLED;
-> +}
-> +
->  static irqreturn_t tis_int_handler(int dummy, void *dev_id)
->  {
->  	struct tpm_chip *chip =3D dev_id;
-> @@ -761,10 +815,10 @@ static irqreturn_t tis_int_handler(int dummy, void =
-*dev_id)
-> =20
->  	rc =3D tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interrupt)=
-;
->  	if (rc < 0)
-> -		return IRQ_NONE;
-> +		goto unhandled;
-> =20
->  	if (interrupt =3D=3D 0)
-> -		return IRQ_NONE;
-> +		goto unhandled;
-> =20
->  	set_bit(TPM_TIS_IRQ_TESTED, &priv->flags);
->  	if (interrupt & TPM_INTF_DATA_AVAIL_INT)
-> @@ -780,10 +834,13 @@ static irqreturn_t tis_int_handler(int dummy, void =
-*dev_id)
->  	rc =3D tpm_tis_write32(priv, TPM_INT_STATUS(priv->locality), interrupt)=
-;
->  	tpm_tis_relinquish_locality(chip, 0);
->  	if (rc < 0)
-> -		return IRQ_NONE;
-> +		goto unhandled;
-> =20
->  	tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interrupt);
->  	return IRQ_HANDLED;
-> +
-> +unhandled:
-> +	return tpm_tis_check_for_interrupt_storm(chip);
->  }
-> =20
->  static void tpm_tis_gen_interrupt(struct tpm_chip *chip)
-> @@ -804,6 +861,15 @@ static void tpm_tis_gen_interrupt(struct tpm_chip *c=
-hip)
->  		chip->flags &=3D ~TPM_CHIP_FLAG_IRQ;
->  }
-> =20
-> +static void tpm_tis_free_irq_func(struct work_struct *work)
-> +{
-> +	struct tpm_tis_data *priv =3D container_of(work, typeof(*priv), free_ir=
-q_work);
-> +	struct tpm_chip *chip =3D priv->chip;
-> +
-> +	devm_free_irq(chip->dev.parent, priv->irq, chip);
-> +	priv->irq =3D 0;
-> +}
-> +
->  /* Register the IRQ and issue a command that will cause an interrupt. If=
- an
->   * irq is seen then leave the chip setup for IRQ operation, otherwise re=
-verse
->   * everything and leave in polling mode. Returns 0 on success.
-> @@ -816,6 +882,7 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *=
-chip, u32 intmask,
->  	int rc;
->  	u32 int_status;
-> =20
-> +	INIT_WORK(&priv->free_irq_work, tpm_tis_free_irq_func);
-> =20
->  	rc =3D devm_request_threaded_irq(chip->dev.parent, irq, NULL,
->  				       tis_int_handler, IRQF_ONESHOT | flags,
-> @@ -918,6 +985,7 @@ void tpm_tis_remove(struct tpm_chip *chip)
->  		interrupt =3D 0;
-> =20
->  	tpm_tis_write32(priv, reg, ~TPM_GLOBAL_INT_ENABLE & interrupt);
-> +	flush_work(&priv->free_irq_work);
-> =20
->  	tpm_tis_clkrun_enable(chip, false);
-> =20
-> @@ -1021,6 +1089,7 @@ int tpm_tis_core_init(struct device *dev, struct tp=
-m_tis_data *priv, int irq,
->  	chip->timeout_b =3D msecs_to_jiffies(TIS_TIMEOUT_B_MAX);
->  	chip->timeout_c =3D msecs_to_jiffies(TIS_TIMEOUT_C_MAX);
->  	chip->timeout_d =3D msecs_to_jiffies(TIS_TIMEOUT_D_MAX);
-> +	priv->chip =3D chip;
->  	priv->timeout_min =3D TPM_TIMEOUT_USECS_MIN;
->  	priv->timeout_max =3D TPM_TIMEOUT_USECS_MAX;
->  	priv->phy_ops =3D phy_ops;
-> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_c=
-ore.h
-> index e978f457fd4d..b1fa42367052 100644
-> --- a/drivers/char/tpm/tpm_tis_core.h
-> +++ b/drivers/char/tpm/tpm_tis_core.h
-> @@ -91,11 +91,15 @@ enum tpm_tis_flags {
->  };
-> =20
->  struct tpm_tis_data {
-> +	struct tpm_chip *chip;
->  	u16 manufacturer_id;
->  	struct mutex locality_count_mutex;
->  	unsigned int locality_count;
->  	int locality;
->  	int irq;
-> +	struct work_struct free_irq_work;
-> +	unsigned long last_unhandled_irq;
-> +	unsigned int unhandled_irqs;
->  	unsigned int int_mask;
->  	unsigned long flags;
->  	void __iomem *ilb_base_addr;
->
-> base-commit: 7877cb91f1081754a1487c144d85dc0d2e2e7fc4
-> --=20
-> 2.40.1
 
 
-BR, Jarkko
+On 03/06/2023 12:48, Arınç ÜNAL wrote:
+> On 29.05.2023 16:40, Matthias Brugger wrote:
+>>
+>>
+>> On 12/04/2023 19:06, Arınç ÜNAL wrote:
+>>> On 12.04.2023 19:53, Frank Wunderlich wrote:
+>>>> Hi
+>>>>
+>>>>> Gesendet: Mittwoch, 12. April 2023 um 18:21 Uhr
+>>>>> Von: "Arınç ÜNAL" <arinc.unal@arinc9.com>
+>>>>>> thanks, it changes the master when i upgrade iproute to 6.1 (from debian 
+>>>>>> bullseye-backports), but i cannot do any traffic on it after switching to 
+>>>>>> gmac1...
+>>>>>>
+>>>>>> 5: wan@eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue 
+>>>>>> state UP group default qlen 1000
+>>>>>>       link/ether f2:d2:51:56:cd:3d brd ff:ff:ff:ff:ff:ff
+>>>>>>       inet 192.168.0.11/24 scope global wan
+>>>>>>          valid_lft forever preferred_lft forever
+>>>>>>
+>>>>>> see no p5-TX/gmac-rx
+>>>>
+>>>>> Did you apply the vlan and flooding fix patches from Richard?
+>>>>
+>>>> have now applied all patches i've found from richard (which are all rejected):
+>>>>
+>>>> fe4495bb3cc2 2023-02-12 Fix setting up CPU and User ports to be in the 
+>>>> correct mode during setup and when toggling vlan_filtering on a bridge 
+>>>> port.  (HEAD -> 6.3-rc)
+>>>> b0641f3e1a69 2023-02-12 Fix Flooding: Disable by default on User ports and 
+>>>> Enable on CPU ports
+>>>> cb04b3451524 2023-02-12 Do not add all User ports to the CPU by default. 
+>>>> This will break Multi CPU when added a seperate patch. It will be 
+>>>> overwritten by .port_enable and since we are forcing output to a port via 
+>>>> the Special Tag this is not needed.
+>>>>
+>>>> and now it seems working and is clear ;)
+>>>>
+>>>> root@bpi-r2:~# ip l show wan
+>>>> 5: wan@eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state 
+>>>> UP mode DEFAULT group default qlen 1000
+>>>>      link/ether f2:d2:51:56:cd:3d brd ff:ff:ff:ff:ff:ff
+>>>>
+>>>> iperf3
+>>>> [ ID] Interval           Transfer     Bitrate         Retr
+>>>> [  5]   0.00-10.00  sec  1.09 GBytes   940 Mbits/sec    0 sender
+>>>> [  5]   0.00-10.03  sec  1.09 GBytes   936 Mbits/sec receiver
+>>>>
+>>>>
+>>>> iperf3 -R
+>>>> [ ID] Interval           Transfer     Bitrate         Retr
+>>>> [  5]   0.00-10.04  sec  1.09 GBytes   936 Mbits/sec    0 sender
+>>>> [  5]   0.00-10.00  sec  1.09 GBytes   938 Mbits/sec receiver
+>>>>
+>>>>
+>>>> how do you deal with these patches? do you include them into your mt7530 
+>>>> fixes series? they (and vladimirs preferred cpu-port) need to be applied 
+>>>> before these DTS-changes
+>>>
+>>> Dealing with this is the last step on my tasklist. Take a look:
+>>>
+>>> https://arinc9.notion.site/mt7530-c-improvements-bbfdc2ceb958484b9627297b88bc6d4a
+>>>
+>>
+>> I'm a bit lost here. @frank can this be merged now or are there still 
+>> oustanding issues. It seems to me that not, but just in case...
+> 
+> I fixed the network connectivity issue on the MT7530 DSA sudriver which was the 
+> main problem this patch series would cause. I don't see an issue that should 
+> block this series anymore.
+> 
+> With the current MT7530 DSA sudriver, port 5 will be the active CPU port instead 
+> of 6. I've got a patch series to prefer port 6 instead but in the meantime, this 
+> patch series should be good to apply.
+> 
+> Arınç
+
+Applied now, thanks!
