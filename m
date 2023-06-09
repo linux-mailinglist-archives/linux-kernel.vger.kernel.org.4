@@ -2,231 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3574B7290C8
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E8927290D1
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:19:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237733AbjFIHSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 03:18:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38244 "EHLO
+        id S230382AbjFIHT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 03:19:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbjFIHSR (ORCPT
+        with ESMTP id S238333AbjFIHTP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 03:18:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81C03598
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 00:17:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686295048;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=15kZRnaZwPiIUtkudYdawd69yNtpyzsjo2sikqV4oqc=;
-        b=jEP52qohZQJT2y88ha6pyPF0QfpTiA6ClaCQZDYmgsjMwDtPir+ig5XYKv4Mtmm0Q5GIzq
-        E8fmFT/ribzFQ58phO8V+WHuv0j6GusZv2aLJdctToIloPb0Om9Kmbh0aOuIxDS4aynQHt
-        Fba19R6OaphkUqksXmS+Rp3B7TTrs+g=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-640-HobQ1v5qO8SNOlKXCY0IgQ-1; Fri, 09 Jun 2023 03:17:26 -0400
-X-MC-Unique: HobQ1v5qO8SNOlKXCY0IgQ-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f7e835ce65so7016515e9.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 00:17:26 -0700 (PDT)
+        Fri, 9 Jun 2023 03:19:15 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF361734
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 00:19:07 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-bab8f66d3a2so1422677276.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 00:19:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686295147; x=1688887147;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wOnQny2umDrk1smK2zGM40DSipRaq+yaONPV/kg+jes=;
+        b=Q2ZeCh/kiBwRYajWH6H2lX7Tqx8slH9n01ZbvULiY0+FLiPuy0UPSJwhNF85mtdA1x
+         ygo3wjOrWzzqc46K+yMjHp2NLV7Bn9ibwQDIzwXq6p36FJ5UUvViiqMKTI3TCbm/WgLm
+         BRSGVf5ZVLN3BWI3oANYPl4um6vbJ5GkR4VcH6zXQb9J3QWntxOWZxnzdnmzekg5L1WX
+         JAj2VbzGsI9BBF9TuBr5fLckF26aAKBjC8B722yhWwbd4SnK9mvZxMmXYzSxd79v61xU
+         9EBXJIALhm26kekKS/SsP2lzptr6n8kXpUxLDrSFlSDZt0K18XMqxwj/pNVuQFXYW8L2
+         NhAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686295045; x=1688887045;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=15kZRnaZwPiIUtkudYdawd69yNtpyzsjo2sikqV4oqc=;
-        b=TQpGh7aMCCTq/w1AaF0ICRXRw9E6d0oZmHCE+pNdaXVaWtpcwBqn2DIK1Tu5xBj5EY
-         U322aTiVZGIbUStkrLzUjM+qwOhqfhKZTHij44EaxjQt3I55iXrIMe4jk4f3mvX3a1uS
-         3dBpgaWylSY1wwlMLTifCdR0BZADJi5aJ6tZ+CdQI6lib/ZbCIPvnUz2UfZT1TxjHxhP
-         +Elq8ygkM0817cHpi7j7HSFmdYCCmX0YZ2DPYLsBWLoytG7D4M6ypmof03xjs1fMiTds
-         e00Mp6blniqLMCR/MswrfctOge2kNZ9KBjW7yG98Zn/T6BpWn9K/9XL/yaQ7XCae/ePf
-         tZ1Q==
-X-Gm-Message-State: AC+VfDzPpr28q/NaDVAyDrGdFCIU/BYXgILQw1hk1iVDOUvl7gh6Oaur
-        IDovmHQZ6h1r/AXefTGn+RXwkpT6cTqovMzQFxEk/696eXzpp6rmLUgtA4jhwayCfEblEqJ8z0q
-        RW9L9EOuMvH463F5pjhj3k/5b
-X-Received: by 2002:a05:600c:c2:b0:3f7:30c0:c6a with SMTP id u2-20020a05600c00c200b003f730c00c6amr433282wmm.25.1686295045440;
-        Fri, 09 Jun 2023 00:17:25 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7waRKCvgqgJoAjOYyIenyGhdYJn4/2vpRsAbVkjBZW18/rDXsC3rXgUmARtFQATJ5s/wzvLA==
-X-Received: by 2002:a05:600c:c2:b0:3f7:30c0:c6a with SMTP id u2-20020a05600c00c200b003f730c00c6amr433267wmm.25.1686295045075;
-        Fri, 09 Jun 2023 00:17:25 -0700 (PDT)
-Received: from redhat.com ([2.55.4.169])
-        by smtp.gmail.com with ESMTPSA id k15-20020a7bc40f000000b003f7f1b3aff1sm1711774wmi.26.2023.06.09.00.17.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 00:17:24 -0700 (PDT)
-Date:   Fri, 9 Jun 2023 03:17:20 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Stefano Garzarella <sgarzare@redhat.com>,
-        Shannon Nelson <shannon.nelson@amd.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-        Tiwei Bie <tiwei.bie@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] vhost-vdpa: filter VIRTIO_F_RING_PACKED feature
-Message-ID: <20230609031610-mutt-send-email-mst@kernel.org>
-References: <20230607054246-mutt-send-email-mst@kernel.org>
- <CACGkMEuUapKvUYiJiLwtsN+x941jafDKS9tuSkiNrvkrrSmQkg@mail.gmail.com>
- <20230608020111-mutt-send-email-mst@kernel.org>
- <CACGkMEt4=3BRVNX38AD+mJU8v3bmqO-CdNj5NkFP-SSvsuy2Hg@mail.gmail.com>
- <5giudxjp6siucr4l3i4tggrh2dpqiqhhihmdd34w3mq2pm5dlo@mrqpbwckpxai>
- <CACGkMEtqn1dbrQZn3i-W_7sVikY4sQjwLRC5xAhMnyqkc3jwOw@mail.gmail.com>
- <lw3nmkdszqo6jjtneyp4kjlmutooozz7xj2fqyxgh4v2ralptc@vkimgnbfafvi>
- <CACGkMEt1yRV9qOLBqtQQmJA_UoRLCpznT=Gvd5D51Uaz2jakHA@mail.gmail.com>
- <20230608102259-mutt-send-email-mst@kernel.org>
- <CACGkMEvirfb8g0ev=b0CjpL5_SPJabqiQKxdwuRNqG2E=N7iGA@mail.gmail.com>
+        d=1e100.net; s=20221208; t=1686295147; x=1688887147;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wOnQny2umDrk1smK2zGM40DSipRaq+yaONPV/kg+jes=;
+        b=lvv06ODoN44I8c75emmBH3NReCyGTjcbNXYJIuKd6GSlSEoV1Xxo3vuoFLzp3w1Zub
+         3boKgbFTTPqRL4j8DtGBcEHtO2nPvvPUd36Gf6VncmrK096czxuxI5pNV2COKLG8ZgMF
+         qXjatLbHXRkLw6/1M9BMcJvskiUuQ8YRsPxMAC9+slERQM64UYN+9ilBNTKeFCbKbjJt
+         TmQLIiEFlltUE2GH7a9wN3odOzOjwH9O/I0OEO7w73O88pBM9GQlbudtibY7pHm1woPt
+         DcCp8KY79Qpq1MFNzZKyXXWqyLOpClqIUQ44pwC8IQofeWtkqNvsMfXgjIbSl3PDO+rK
+         xMNQ==
+X-Gm-Message-State: AC+VfDxqpendYL20n75cOEdMHHFUuX2vj0ydDCdwyeS+Agp7/LHC91L7
+        gO8bA7esGvvhDxrlZBBHlkca59rJ7yDh3WpF4vwv/e5mMMWk10Si
+X-Google-Smtp-Source: ACHHUZ5/A4sqbElurOLrxvngAAGU5+a732xM1IRjBEuxN/qGJstSrqSESlmH+Vfwt26rChyYHG+EOPw3RPZeMqTtKt0=
+X-Received: by 2002:a25:2509:0:b0:bb8:9a96:3e05 with SMTP id
+ l9-20020a252509000000b00bb89a963e05mr258713ybl.48.1686295146827; Fri, 09 Jun
+ 2023 00:19:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACGkMEvirfb8g0ev=b0CjpL5_SPJabqiQKxdwuRNqG2E=N7iGA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230606071717.8088-1-pshete@nvidia.com>
+In-Reply-To: <20230606071717.8088-1-pshete@nvidia.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 9 Jun 2023 09:18:55 +0200
+Message-ID: <CACRpkda_FjWO6SEW_upvZhYxc1=SzMgrfBXwDmVnYJCG+XJZyA@mail.gmail.com>
+Subject: Re: [PATCH] gpio: tegra186: Check PMC driver status before any request
+To:     Prathamesh Shete <pshete@nvidia.com>
+Cc:     brgl@bgdev.pl, thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-tegra@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, smangipudi@nvidia.com,
+        Manish Bhardwaj <mbhardwaj@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 10:16:50AM +0800, Jason Wang wrote:
-> On Thu, Jun 8, 2023 at 10:23 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> >
-> > On Thu, Jun 08, 2023 at 05:29:58PM +0800, Jason Wang wrote:
-> > > On Thu, Jun 8, 2023 at 5:21 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
-> > > >
-> > > > On Thu, Jun 08, 2023 at 05:00:00PM +0800, Jason Wang wrote:
-> > > > >On Thu, Jun 8, 2023 at 4:00 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
-> > > > >>
-> > > > >> On Thu, Jun 08, 2023 at 03:46:00PM +0800, Jason Wang wrote:
-> > > > >>
-> > > > >> [...]
-> > > > >>
-> > > > >> >> > > > > I have a question though, what if down the road there
-> > > > >> >> > > > > is a new feature that needs more changes? It will be
-> > > > >> >> > > > > broken too just like PACKED no?
-> > > > >> >> > > > > Shouldn't vdpa have an allowlist of features it knows how
-> > > > >> >> > > > > to support?
-> > > > >> >> > > >
-> > > > >> >> > > > It looks like we had it, but we took it out (by the way, we were
-> > > > >> >> > > > enabling packed even though we didn't support it):
-> > > > >> >> > > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6234f80574d7569444d8718355fa2838e92b158b
-> > > > >> >> > > >
-> > > > >> >> > > > The only problem I see is that for each new feature we have to modify
-> > > > >> >> > > > the kernel.
-> > > > >> >> > > > Could we have new features that don't require handling by vhost-vdpa?
-> > > > >> >> > > >
-> > > > >> >> > > > Thanks,
-> > > > >> >> > > > Stefano
-> > > > >> >> > >
-> > > > >> >> > > Jason what do you say to reverting this?
-> > > > >> >> >
-> > > > >> >> > I may miss something but I don't see any problem with vDPA core.
-> > > > >> >> >
-> > > > >> >> > It's the duty of the parents to advertise the features it has. For example,
-> > > > >> >> >
-> > > > >> >> > 1) If some kernel version that is packed is not supported via
-> > > > >> >> > set_vq_state, parents should not advertise PACKED features in this
-> > > > >> >> > case.
-> > > > >> >> > 2) If the kernel has support packed set_vq_state(), but it's emulated
-> > > > >> >> > cvq doesn't support, parents should not advertise PACKED as well
-> > > > >> >> >
-> > > > >> >> > If a parent violates the above 2, it looks like a bug of the parents.
-> > > > >> >> >
-> > > > >> >> > Thanks
-> > > > >> >>
-> > > > >> >> Yes but what about vhost_vdpa? Talking about that not the core.
-> > > > >> >
-> > > > >> >Not sure it's a good idea to workaround parent bugs via vhost-vDPA.
-> > > > >>
-> > > > >> Sorry, I'm getting lost...
-> > > > >> We were talking about the fact that vhost-vdpa doesn't handle
-> > > > >> SET_VRING_BASE/GET_VRING_BASE ioctls well for packed virtqueue before
-> > > > >> that series [1], no?
-> > > > >>
-> > > > >> The parents seem okay, but maybe I missed a few things.
-> > > > >>
-> > > > >> [1] https://lore.kernel.org/virtualization/20230424225031.18947-1-shannon.nelson@amd.com/
-> > > > >
-> > > > >Yes, more below.
-> > > > >
-> > > > >>
-> > > > >> >
-> > > > >> >> Should that not have a whitelist of features
-> > > > >> >> since it interprets ioctls differently depending on this?
-> > > > >> >
-> > > > >> >If there's a bug, it might only matter the following setup:
-> > > > >> >
-> > > > >> >SET_VRING_BASE/GET_VRING_BASE + VDUSE.
-> > > > >> >
-> > > > >> >This seems to be broken since VDUSE was introduced. If we really want
-> > > > >> >to backport something, it could be a fix to filter out PACKED in
-> > > > >> >VDUSE?
-> > > > >>
-> > > > >> mmm it doesn't seem to be a problem in VDUSE, but in vhost-vdpa.
-> > > > >> I think VDUSE works fine with packed virtqueue using virtio-vdpa
-> > > > >> (I haven't tried), so why should we filter PACKED in VDUSE?
-> > > > >
-> > > > >I don't think we need any filtering since:
-> > > > >
-> > > > >PACKED features has been advertised to userspace via uAPI since
-> > > > >6234f80574d7569444d8718355fa2838e92b158b. Once we relax in uAPI, it
-> > > > >would be very hard to restrict it again. For the userspace that tries
-> > > > >to negotiate PACKED:
-> > > > >
-> > > > >1) if it doesn't use SET_VRING_BASE/GET_VRING_BASE, everything works well
-> > > > >2) if it uses SET_VRING_BASE/GET_VRING_BASE. it might fail or break silently
-> > > > >
-> > > > >If we backport the fixes to -stable, we may break the application at
-> > > > >least in the case 1).
-> > > >
-> > > > Okay, I see now, thanks for the details!
-> > > >
-> > > > Maybe instead of "break silently", we can return an explicit error for
-> > > > SET_VRING_BASE/GET_VRING_BASE in stable branches.
-> > > > But if there are not many cases, we can leave it like that.
-> > >
-> > > A second thought, if we need to do something for stable. is it better
-> > > if we just backport Shannon's series to stable?
-> > >
-> > > >
-> > > > I was just concerned about how does the user space understand that it
-> > > > can use SET_VRING_BASE/GET_VRING_BASE for PACKED virtqueues in a given
-> > > > kernel or not.
-> > >
-> > > My understanding is that if packed is advertised, the application
-> > > should assume SET/GET_VRING_BASE work.
-> > >
-> > > Thanks
-> >
-> >
-> > Let me ask you this. This is a bugfix yes?
-> 
-> Not sure since it may break existing user space applications which
-> make it hard to be backported to -stable.
+On Tue, Jun 6, 2023 at 9:17=E2=80=AFAM Prathamesh Shete <pshete@nvidia.com>=
+ wrote:
 
-Sorry, I was actually referring to 
-    vhost_vdpa: support PACKED when setting-getting vring_base
-and friends.
+> This patch fixes the issue where even if PMC driver status is
+> disabled still we are trying to look up for the IRQ domain
+> that PMC driver would've registered if it had been enabled.
+>
+> Signed-off-by: Manish Bhardwaj <mbhardwaj@nvidia.com>
+> Signed-off-by: Prathamesh Shete <pshete@nvidia.com>
 
-These are bugfixes yes?  What is the appropriate Fixes tag?
+Patch applied!
 
-
-> Before the fix, PACKED might work if SET/GET_VRING_BASE is not used.
-> After the fix, PACKED won't work at all.
-> 
-> Thanks
-> 
-> What is the appropriate Fixes
-> > tag?
-> >
-> > > >
-> > > > Thanks,
-> > > > Stefano
-> > > >
-> >
-
+Yours,
+Linus Walleij
