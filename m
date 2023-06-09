@@ -2,88 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4449A729239
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0E9F7291BF
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:51:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239577AbjFIIGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 04:06:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55672 "EHLO
+        id S239206AbjFIHvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 03:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239471AbjFIHtn (ORCPT
+        with ESMTP id S239428AbjFIHuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 03:49:43 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A523AA1
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 00:49:21 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-568ba7abc11so13492327b3.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 00:49:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686296960; x=1688888960;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=o3c2ntYAOnDdSkrfl6TadBZmpYpoDIkLc1TtVzVrRJ8=;
-        b=IKrGMIFZ/EjMmj9mSBuFlJHyclCyZWfGsF9i5dacTEK78et2kPUekz7nYsXJRvbKVu
-         AAlWv6lnPv4lVG3NxH/xCOskpaEXs+dwdY0EIGAiyA16DQVL9Tefc2AiqbVpPyfFiE08
-         QrzR0llTMHM2kimq7fy7i6XtLWK2at8OpZYgQ3YGV8WXP0sqnDxCsP1Fei6uUeV2a8mj
-         P9TM/TEh+u3CjCtabvhK/46qAB4NJOoLQUNwOnhuV/2dwCFJNvTXZD+zJz3aqKODPSAo
-         /NqsIuD9Fen1gD303bC7MOIdDxxkt6Lewdtj4IKv9w/22g+yUWtAwUjjZ+8MGd78ROOo
-         ZtMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686296960; x=1688888960;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=o3c2ntYAOnDdSkrfl6TadBZmpYpoDIkLc1TtVzVrRJ8=;
-        b=QYi2siGRXy4UP9+BV8CnDZ3yrnm+4rw7QYuFCwJUmLlUwwBQVSt6eB+vothxTjOMvV
-         USdC/mvGNV7rn0IuDbFTThP63JYoWEd1SHbwpeORA7JjiUReLPuom23yNpN7PeikqC4d
-         Eg/rJ26QgtXgPjV4DpU/R50zhhcCGJzhyTq834tooyJPKWubbvJTV7PyaF6llvOlKw9L
-         C/zgyeSKdYYhnB+Dnv6Qfhne6DF8ahY5cXJC7l5Tje0cnlfUWaqihIBkSFMwuF8bbmT+
-         2yx/1c8Dp5jZM3ZQ2SA1hm+V8R93pNXiCXHaGEuC/GDXtoXG8DJClWIPLbIWTSQydo6f
-         8GHA==
-X-Gm-Message-State: AC+VfDzICVAQSYSU4e/SOULHzr7wNbrjm/1F16U33waKkwZYpKCjKhWl
-        kOlw13wS0u8RwME96jvpK0gA8Ou6cgxX3pCIRPrxAA==
-X-Google-Smtp-Source: ACHHUZ5bsNQpTQNAQO7r1mc69mmCaFHlXIZd6vtnZ7v0XG3sWHlGWJIsko8TTb833lC9heTEu1Kke0gt//Jr7u8OZAQ=
-X-Received: by 2002:a25:a349:0:b0:b9e:b9b4:bb12 with SMTP id
- d67-20020a25a349000000b00b9eb9b4bb12mr370346ybi.48.1686296960015; Fri, 09 Jun
- 2023 00:49:20 -0700 (PDT)
+        Fri, 9 Jun 2023 03:50:54 -0400
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63EF63A9C
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 00:50:05 -0700 (PDT)
+Received: from localhost (mdns.lwn.net [45.79.72.68])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 2465D4A2;
+        Fri,  9 Jun 2023 07:50:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 2465D4A2
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1686297005; bh=/BcCXmbco9SeK0eCgqg6VHWpw+U78pdn+NsHAzWOXYk=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=BUBHrycEKDrcJNrJVomFASxChWKEpBKGEi89BrCopM8lHdJKz60Ya0qg+YcxFnQKs
+         Y7jE3UFCvQpsCyAeQDxBt4kFSwo33KIse2Ra7oLZ1ctIApTxsGPeS/ieTAP/NzhPPO
+         5k71E+KFm1KP3ptOl37M/fJJBdv6Zh7Htj1CfnuKn9e5JbGnk46C7Vrom219h0p9NH
+         MouDQFG4l6w0iXtnA+1gTPbMFxquh06Xc14Q1ZUnvLAhFSgmmDc9BJV0UmNMNH5HHi
+         sNATjJ1KLIjDugcHk0ylbbQinESjEGvjEoTLBA9YbHks3wnDn68mSE9NE3Xp4+oZnm
+         r8WAfJj5EYgQw==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     =?utf-8?B?w43DsWlnbw==?= Huguet <ihuguet@redhat.com>,
+        ojeda@kernel.org, danny@kdrag0n.dev
+Cc:     masahiroy@kernel.org, jgg@nvidia.com, mic@digikod.net,
+        linux-kernel@vger.kernel.org, joe@perches.com,
+        linux@rasmusvillemoes.dk, willy@infradead.org,
+        mailhol.vincent@wanadoo.fr,
+        =?utf-8?B?w43DsWlnbw==?= Huguet <ihuguet@redhat.com>
+Subject: Re: [PATCH v4] Add .editorconfig file for basic formatting
+In-Reply-To: <20230601075333.14021-1-ihuguet@redhat.com>
+References: <20230601075333.14021-1-ihuguet@redhat.com>
+Date:   Fri, 09 Jun 2023 01:50:00 -0600
+Message-ID: <87sfb1oz13.fsf@meer.lwn.net>
 MIME-Version: 1.0
-References: <1686249772-26231-1-git-send-email-manikanta.guntupalli@amd.com>
-In-Reply-To: <1686249772-26231-1-git-send-email-manikanta.guntupalli@amd.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 9 Jun 2023 09:49:08 +0200
-Message-ID: <CACRpkda7TrNckpS5rLadv=eYRCDDN1qTBUp=jr+KfgoaQy8z7g@mail.gmail.com>
-Subject: Re: [PATCH V2] gpio: zynq: fix zynqmp_gpio not an immutable chip warning
-To:     Manikanta Guntupalli <manikanta.guntupalli@amd.com>
-Cc:     michal.simek@xilinx.com, michal.simek@amd.com, git@amd.com,
-        shubhrajyoti.datta@xilinx.com, srinivas.neeli@xilinx.com,
-        brgl@bgdev.pl, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        srinivas.goud@amd.com, manion05gk@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 8, 2023 at 8:43=E2=80=AFPM Manikanta Guntupalli
-<manikanta.guntupalli@amd.com> wrote:
+=C3=8D=C3=B1igo Huguet <ihuguet@redhat.com> writes:
 
-> Make the struct irq_chip const and flag it as IRQCHIP_IMMUTABLE,
-> call gpiochip_disable_irq() in the .irq_mask() callback and
-> gpiochip_enable_irq() in the .irq_unmask() callback to fix
-> "gpio gpiochip1: (zynqmp_gpio): not an immutable chip" warning.
+> EditorConfig is a specification to define the most basic code formatting
+> stuff, and it's supported by many editors and IDEs, either directly or
+> via plugins, including VSCode/VSCodium, Vim, emacs and more.
 >
-> Signed-off-by: Manikanta Guntupalli <manikanta.guntupalli@amd.com>
+> It allows to define formatting style related to indentation, charset,
+> end of lines and trailing whitespaces. It also allows to apply different
+> formats for different files based on wildcards, so for example it is
+> possible to apply different configs to *.{c,h}, *.py and *.rs.
+>
+> In linux project, defining a .editorconfig might help to those people
+> that work on different projects with different indentation styles, so
+> they cannot define a global style. Now they will directly see the
+> correct indentation on every fresh clone of the project.
+>
+> See https://editorconfig.org
+>
+> Co-developed-by: Danny Lin <danny@kdrag0n.dev>
+> Signed-off-by: Danny Lin <danny@kdrag0n.dev>
+> Signed-off-by: =C3=8D=C3=B1igo Huguet <ihuguet@redhat.com>
 
-This v2 looks good to me!
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+So I must confess to still being really nervous about installing a file
+that will silently reconfigure the editors of everybody working on the
+kernel source; I wish there were a straightforward way to do this as an
+opt-in thing.  We're talking about creating a flag-day behavioral change
+for, potentially, thousands of kernel developers.  Something tells me
+that we might just hear from a few of them.
 
-Yours,
-Linus Walleij
+I wonder if we should, instead, ship a file like this as something like
+Documentation/process/editorconfig, then provide a "make editorconfig"
+command that installs it in the top-level directory for those who want
+it?
+
+Or perhaps I'm worrying too much?
+
+Thanks,
+
+jon
