@@ -2,150 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B38DD72A215
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:24:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2CD172A218
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:25:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230282AbjFISYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 14:24:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39290 "EHLO
+        id S229798AbjFISZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 14:25:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbjFISYF (ORCPT
+        with ESMTP id S229506AbjFISZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 14:24:05 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC17935A9;
-        Fri,  9 Jun 2023 11:24:03 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-977d0ee1736so310313766b.0;
-        Fri, 09 Jun 2023 11:24:03 -0700 (PDT)
+        Fri, 9 Jun 2023 14:25:13 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B91035A9
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 11:25:12 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1b02fcde49aso8360915ad.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 11:25:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686335042; x=1688927042;
+        d=gmail.com; s=20221208; t=1686335111; x=1688927111;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=g+A8wixS0zjvyB9FSD1Erdd296FgN5bJlGC3/Xdlkho=;
-        b=jgNDUp5BePly7KqpLWqI5CHYUr1iXuk7PkNIWSIi9i8hk0Lj0f4LLl8feCzvtS2ahP
-         eQ7oGkdmWsAdXXjfmnosYFXZqoXR8c7Pn4eiNjrVouH9nWh7+GFim3wL9vrO/nbK6Cx2
-         Olr1mxHD+6F0HBxkMitvCNEX6YeVWponr+mjPi5cKQ5NvYUzFJTK5TrtewxaG5QxlcAX
-         ENk4X36LeMbtXxHny0HsHHxdfNmjOigp8L/MP+wmydf1VGw3GN63zGZgShBuMLZtTvbW
-         7ivgFxsml90jULinc8Ks+4k7bk53UD/KKU9Duuijr8+i1msMp9ZsFu0SIXoYkagOaHxp
-         xbFg==
+        bh=kR7meK9SrYWFcO0nvlLiL65rZmB26fYCU3wzB0PdsHQ=;
+        b=qglArcF5C7uMcpve+xn5t7ptCNi6uIwQC+132275NZaue9XGXvk2LlsydqyHbQF/U3
+         DqGDOaVyGxsv/CLoQQ+cJSGL2UeL8zir0ga1+Abo5JI2r+aP27hXfZWjVrVc7+nGlO9y
+         9u1OUn2sDg0x6cURn52ra0KfysNxyLV58Mot6UfubaxwPwWhFxaxu4rVAThwtIcnGxSz
+         ODRlWBtbE5Iw0YRgP4H7ajsqBrCHlBQaopXQVcszeTFYAEr7YX3PNDDmVOpAvonA45an
+         1Naz+Ou1NmT+z9LmSwdr2FPgcfQBJbPmXQm3FVE7RDniIvyB4w4ssrudcYVPa45nRg7l
+         sRUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686335042; x=1688927042;
+        d=1e100.net; s=20221208; t=1686335111; x=1688927111;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=g+A8wixS0zjvyB9FSD1Erdd296FgN5bJlGC3/Xdlkho=;
-        b=AfCttxPT9ofHeFlk+tROodtQmP8QoTqpB6g3bZK/1jo9kRxJzbrdPAHLBViyskNqme
-         CwtqrIVdK3NB989v2mf5bk341ipKAUd+NeOEs9PCIqTTln1NNPdKOAc/WQAgMnZb07yr
-         mmYqZk85z+LUfcrsgEvkKnCsnY7adJd6IN/kJzcu4FwV7ZiU+aPy7dCJ1M9xUIW2mikW
-         Ht8+b+2ktXmDM5Jo4oFjhucux61qohab0Obxw2Y3nqicGa90wc0pPmwDUeZFyhodpzqr
-         4qZ2QVPy55H7W4wEdmCnY23jYC4LgYsOlmPb212ZeD3qze0g8mBI1jX0vWn/ctgM/9fi
-         CuvA==
-X-Gm-Message-State: AC+VfDyXz02rEloB9Ta366NEd/Jm6YTV6NRy0YWq17D4k5FlPOzTcTqd
-        NKFRRlnKn1O2eqAhQ7q2aG7aIgTEWsf0vVgAnY8=
-X-Google-Smtp-Source: ACHHUZ41grNXcAaSN/FbUbD/K3aeEdP27CBX3nRFj/kMa6Hcz0aQbohBZXCBjHCNLTgPsIBWfvjirkFsOb5wWtHjXr8=
-X-Received: by 2002:a17:906:ef01:b0:94f:395b:df1b with SMTP id
- f1-20020a170906ef0100b0094f395bdf1bmr2458080ejs.21.1686335042073; Fri, 09 Jun
- 2023 11:24:02 -0700 (PDT)
+        bh=kR7meK9SrYWFcO0nvlLiL65rZmB26fYCU3wzB0PdsHQ=;
+        b=OWeGZ/oh2YFBfPfKN7P8Uq4sem3Xrt/B3UABNXOk6CTt8u9aZhI84MTqJdJf3dyOh3
+         3BR2ppqw00oXa6KwA7z3M41fAo3cWEQwaJphrtqZ8u9zzERRb3aCe3dJ4OguggWrc+lE
+         b7xlctL2iP+8i5iqJ2yQiF3SeONGSRkHJPisFsANSVOVu0HJ3scPUpkhaD+7nm/mBbR0
+         bUNl3iYe4C5pRhP8GfYrGJhxhYRALx7ZH6Hjc8osdLCaxwq9ZQJTDF26/C5DRaMvTZpY
+         cyz+SJ6z1P3r6mLKitb49Ka4BJyOFPX5xmgN+3x3wWBHb+4lIHOAjxQu1wkdC/9uLNDL
+         c0OQ==
+X-Gm-Message-State: AC+VfDwFS2O2nkFRVof1Q8nKiYwytRwuP9XX4RZguvdiZiAv2R8p/mwH
+        qk0b3688PNPnTdSyY5Pds9mlNADiEZolkMZR/JE=
+X-Google-Smtp-Source: ACHHUZ42DK2++9rk+pzDyjW4Qwrg6Mcv+XFGZIjR22iyoWNSTBK35PJUY7gUtZnBfRv3Wt8R1C0hwV6PYNzfF9SWCmQ=
+X-Received: by 2002:a17:903:41ce:b0:1b1:76c2:296a with SMTP id
+ u14-20020a17090341ce00b001b176c2296amr2041083ple.60.1686335111206; Fri, 09
+ Jun 2023 11:25:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAEf4Bzb2_THiWkqNRnbN5LsOif6+9=GY7LrtEbQf6o24cihhMQ@mail.gmail.com>
- <20230609093625.727490-1-zhangmingyi5@huawei.com> <CAKH8qBu0AiB_0SZgU5N8EOmm4=hp5BRe=Yp5PHbyT1ZbRjdeOw@mail.gmail.com>
-In-Reply-To: <CAKH8qBu0AiB_0SZgU5N8EOmm4=hp5BRe=Yp5PHbyT1ZbRjdeOw@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 9 Jun 2023 11:23:50 -0700
-Message-ID: <CAEf4BzZdpL3k5G4kY2t0xPs2YALz45O+MEmY672b409CvfL4NQ@mail.gmail.com>
-Subject: Re: [PATCH] libbpf:fix use empty function pointers in ringbuf_poll
-To:     Stanislav Fomichev <sdf@google.com>
-Cc:     zhangmingyi <zhangmingyi5@huawei.com>, andrii@kernel.org,
-        ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
-        davem@davemloft.net, edumazet@google.com, hsinweih@uci.edu,
-        jakub@cloudflare.com, john.fastabend@gmail.com,
-        kongweibin2@huawei.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, liuxin350@huawei.com,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzbot+49f6cef45247ff249498@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com, wuchangye@huawei.com,
-        xiesongyang@huawei.com, yanan@huawei.com
+References: <c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com> <59fd15dd-4d39-5ec-2043-1d5117f7f85@google.com>
+In-Reply-To: <59fd15dd-4d39-5ec-2043-1d5117f7f85@google.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Fri, 9 Jun 2023 11:24:59 -0700
+Message-ID: <CAHbLzkpQV6OX=WZevH_Gjr7BASSkdPfxRxOtjdhT-rGh2YR9MA@mail.gmail.com>
+Subject: Re: [PATCH v2 25/32] mm/gup: remove FOLL_SPLIT_PMD use of pmd_trans_unstable()
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 9:55=E2=80=AFAM Stanislav Fomichev <sdf@google.com> =
-wrote:
+On Thu, Jun 8, 2023 at 6:40=E2=80=AFPM Hugh Dickins <hughd@google.com> wrot=
+e:
 >
-> On Fri, Jun 9, 2023 at 2:38=E2=80=AFAM zhangmingyi <zhangmingyi5@huawei.c=
-om> wrote:
-> >
-> > On Fri, Jun 9, 2023 at 1:39 AM Andrii Nakryiko <andrii.nakryiko@gmail.c=
-om> wrote:
-> >
-> > > On Thu, Jun 8, 2023 at 9:27=E2=80=AFAM Stanislav Fomichev <sdf@google=
-.com> wrote:
-> > > >
-> > > > On Thu, Jun 8, 2023 at 6:00=E2=80=AFAM zhangmingyi <zhangmingyi5@hu=
-awei.com> wrote:
-> > > > >
-> > > > > On 06/06,Stanislav Fomichev wrote:
-> > > > >
-> > > > > > On 06/05, Xin Liu wrote:
-> > > > > > > From: zhangmingyi <zhangmingyi5@huawei.com>
-> > > > > >
-> > > > > > > The sample_cb of the ring_buffer__new interface can transfer =
-NULL. However,
-> > > > > > > the system does not check whether sample_cb is NULL during
-> > > > > > > ring_buffer__poll, null pointer is used.
-> > > > >
-> > > > > > What is the point of calling ring_buffer__new with sample_cb =
-=3D=3D NULL?
-> > > > >
-> > > > > Yes, as you said, passing sample_cb in ring_buffer__new to NULL d=
-oesn't
-> > > > > make sense, and few people use it that way, but that doesn't prev=
-ent this
-> > > > > from being a allowed and supported scenario. And when ring_buffer=
-__poll is
-> > > > > called, it leads to a segmentation fault (core dump), which I thi=
-nk needs
-> > > > > to be fixed to ensure the security quality of libbpf.
-> > > >
-> > > > I dunno. I'd argue that passing a NULL to ring_buffer__new is an AP=
-I
-> > > > misuse. Maybe ring_buffer__new should return -EINVAL instead when
-> > > > passed NULL sample_cb? Although, we don't usually have those checks
-> > > > for the majority of the arguments in libbpf...
-> > >
-> > > Right. I'd say we should add a proper doc comment specifying all
-> > > arguments and which ones are optional or not. And make it explicit
-> > > that callback is not optional. If we start checking every possible
-> > > pointer for NULL, libbpf will be littered with NULL checks, I'm not
-> > > sure that's good.
-> >
-> > I agree, we should add a proper doc comment specifying all
-> > arguments and which ones are optional or not.
-> > However, why does the external interface API in libbpf not verify input
-> > parameters or add verification where risky operations may exist?
-> > What's more, i think sample_cb=3DNULL is not strictly a mistake or
-> > prohibited use, and is meaningless.
+> There is now no reason for follow_pmd_mask()'s FOLL_SPLIT_PMD block to
+> distinguish huge_zero_page from a normal THP: follow_page_pte() handles
+> any instability, and here it's a good idea to replace any pmd_none(*pmd)
+> by a page table a.s.a.p, in the huge_zero_page case as for a normal THP;
+> and this removes an unnecessary possibility of -EBUSY failure.
 >
-> It's not really customary in C to do it? So maybe you can follow up
-> with the update to the doc?
-
-Yep, we do not check every `struct bpf_object *` pointer to be non-NULL.
-
-Having said that, I don't think it's such a big deal to make this
-callback optional by assigning a no-op callback.
-
-So let's definitely update doc comments to be explicit about one way
-or the other. For the callback, let's just not do it on every record.
-Just once during initialization would be better.
-
+> (Hmm, couldn't the normal THP case have hit an unstably refaulted THP
+> before?  But there are only two, exceptional, users of FOLL_SPLIT_PMD.)
 >
-> The kindergarten is over, you pass NULL you get SIGSEGV :-D
+> Signed-off-by: Hugh Dickins <hughd@google.com>
+
+Reviewed-by: Yang Shi <shy828301@gmail.com>
+
+> ---
+>  mm/gup.c | 19 ++++---------------
+>  1 file changed, 4 insertions(+), 15 deletions(-)
+>
+> diff --git a/mm/gup.c b/mm/gup.c
+> index bb67193c5460..4ad50a59897f 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -681,21 +681,10 @@ static struct page *follow_pmd_mask(struct vm_area_=
+struct *vma,
+>                 return follow_page_pte(vma, address, pmd, flags, &ctx->pg=
+map);
+>         }
+>         if (flags & FOLL_SPLIT_PMD) {
+> -               int ret;
+> -               page =3D pmd_page(*pmd);
+> -               if (is_huge_zero_page(page)) {
+> -                       spin_unlock(ptl);
+> -                       ret =3D 0;
+> -                       split_huge_pmd(vma, pmd, address);
+> -                       if (pmd_trans_unstable(pmd))
+> -                               ret =3D -EBUSY;
+> -               } else {
+> -                       spin_unlock(ptl);
+> -                       split_huge_pmd(vma, pmd, address);
+> -                       ret =3D pte_alloc(mm, pmd) ? -ENOMEM : 0;
+> -               }
+> -
+> -               return ret ? ERR_PTR(ret) :
+> +               spin_unlock(ptl);
+> +               split_huge_pmd(vma, pmd, address);
+> +               /* If pmd was left empty, stuff a page table in there qui=
+ckly */
+> +               return pte_alloc(mm, pmd) ? ERR_PTR(-ENOMEM) :
+>                         follow_page_pte(vma, address, pmd, flags, &ctx->p=
+gmap);
+>         }
+>         page =3D follow_trans_huge_pmd(vma, address, pmd, flags);
+> --
+> 2.35.3
+>
