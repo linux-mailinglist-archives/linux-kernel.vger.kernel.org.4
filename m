@@ -2,140 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C570A72A07F
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD6CC72A077
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:46:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbjFIQqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 12:46:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48950 "EHLO
+        id S229811AbjFIQpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 12:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbjFIQpv (ORCPT
+        with ESMTP id S229801AbjFIQpi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 12:45:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC491AE
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:44:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686329095;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lP5O6Y+WWlbHJraaUNqLEu0298uTs2XTBNqgvHhDjHo=;
-        b=WmnsYHgIj+AQ7N2tl8AxknWxPnsx7Ug1QbzYl7HCfimX5uzMwyc5GeYnOh7HD9KBtDxna8
-        9sGQz6ZPWVOSa4EIqCdQjShfs3kSCuKqLoaS9Z7saFfuriy6LT9dyLcUkyoRKgWw83Hg7p
-        vc251aVbIkrBYHiHFZ9yrqwNtjfZXd8=
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
- [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-451-kmyg0xy3NXiVEUpbebBo6A-1; Fri, 09 Jun 2023 12:44:54 -0400
-X-MC-Unique: kmyg0xy3NXiVEUpbebBo6A-1
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-1b03cfa7602so6733235ad.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 09:44:53 -0700 (PDT)
+        Fri, 9 Jun 2023 12:45:38 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436F73A8B
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:45:37 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-970056276acso300902966b.2
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 09:45:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686329136; x=1688921136;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+RIIh3RMuz6uU20aNEpxUR1/DLtTXsu5aO8Bkim9LaI=;
+        b=tpn8c0QxhvUPGeAk7v1bazUG5T044xyUVQ1ETJsq3If9/uxrr4p9KmDWY3eEeH0myR
+         nE5C3bR3AUYUwEGok1ulTVpMQRiiUBxMHzVm30zusfgoNAEvCF3/e36fULfj6mszLm0T
+         p1vGQE4g8YAlKBgViKAHZ5pLtG4VwewhBZ6Sg8XkxK2qboUlr/HN/w9G7nUVGPg6/jID
+         0sAV1ThUpunkTopIpG4xIoAtMr2fT+HIERj7I7Qo0qqufAucxB56V0qyC2GGJPkFZ9ev
+         1l/1Rxd6zGfRMGS8YTXXhEiX2WUOCK63apAuHhPZPo69m4Z2eEUA/46cnMw/Pzhy5RlY
+         EJVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686329093; x=1688921093;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lP5O6Y+WWlbHJraaUNqLEu0298uTs2XTBNqgvHhDjHo=;
-        b=aUpyDkc+BtnCwJv5T/QDyl2oYOVZg0Jbn7oEtmka0el+wC7PTi0OnY2N2HFtFQ7kbl
-         C/QuX64Lsu4Pv9lyFShoxJ4J3t73dF7v2XhKFsAhBNgHnIpBpWP0eL5Cw2cU+2UfQhDX
-         sQhboMbwqzucQnj+2MgSbjvzgWLJggrXYaXUU7HA5jL2IFb2eDQ/3eNRtFkv+nluBr8A
-         Q822JJl58ySuE0xkpH7E5r5eR3AOBpiiBlPQZdRuId+7tJWwCkloZyn2VnQTxdTLScPf
-         x7+UIdxhAoaR5tJeEY1gBQh7KhJLwWL8mm0/37pyvK87so929IkaagmGaR+Xmw4x57f1
-         ZnSg==
-X-Gm-Message-State: AC+VfDzKVzdksRgyxWwTf2STOBZFNVo3y6d78GNHd+FLMFbAGG50d6Tu
-        TRHkpf6EwLd3ow0SayrV5cCipzeVbbQH2neHX4nT0KLeZO9IW14CF6PLUGWBssRpIkqQCk4aofw
-        qMIsWdgW7oQ/ehqckDnzIrsJXSPEYEa/UPbTa4ryf
-X-Received: by 2002:a17:902:b905:b0:1af:e63f:5bb1 with SMTP id bf5-20020a170902b90500b001afe63f5bb1mr1282638plb.7.1686329092970;
-        Fri, 09 Jun 2023 09:44:52 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7zDVq695OK7McLR4vzNBftl0R3SL21TRjXzZOuBBU36wjdeP/MVpNAkO6JcixIuhfY6AAHiytBnKwzWzUI7o8=
-X-Received: by 2002:a17:902:b905:b0:1af:e63f:5bb1 with SMTP id
- bf5-20020a170902b90500b001afe63f5bb1mr1282622plb.7.1686329092671; Fri, 09 Jun
- 2023 09:44:52 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686329136; x=1688921136;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+RIIh3RMuz6uU20aNEpxUR1/DLtTXsu5aO8Bkim9LaI=;
+        b=cv2sRXGIZ4B2cOKgFClB8GYaZkUhOF9wwwBm9yBLPD8FxW1g3ebJXQWw8/es9AGI0t
+         NQFaCeTvYLqUr0F/oCvtMu7euv4UPFqzPKI5Fysdah3VWWIiU2+SwBwDN4WLniXecskS
+         2A2InoLl6WozHMg/tkSbqJA13r4p1+rQDGq/RExprZc6zLd7dfAJw8dsfabZ93FpXngR
+         o7X4aMyl2mUjMt3GzzXasDwjaSqSqUDnquY/m4Ovc1qoBZQf3O3wBz6XIlumUVuHikCD
+         XHJrgldKdBgBLcou6qdeyGXHnTBoItiHo2uFR7fyBXdYYi3CbDH0RZA67QXrfN84IkkU
+         1iAQ==
+X-Gm-Message-State: AC+VfDyGyCnk3RYct8ERdjIMr8Kfk+j2FbsRQZj799NwpksaVaSwjykz
+        Gv9tt78g8qHoiusPa2yXjm9TaQ==
+X-Google-Smtp-Source: ACHHUZ5yorw4a7hRPcReLDwKgBFnFTT04M+u87dM16NVU/TBES2+kKpiuq6DNAS02s3W6UOWXfI0jA==
+X-Received: by 2002:a17:907:6d0e:b0:973:f72f:dfac with SMTP id sa14-20020a1709076d0e00b00973f72fdfacmr1648380ejc.67.1686329135708;
+        Fri, 09 Jun 2023 09:45:35 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id l6-20020a1709065a8600b0097866bc5119sm1472179ejq.200.2023.06.09.09.45.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Jun 2023 09:45:35 -0700 (PDT)
+Message-ID: <84ccf4cc-072d-adbf-0361-95ceae13f333@linaro.org>
+Date:   Fri, 9 Jun 2023 18:45:33 +0200
 MIME-Version: 1.0
-References: <20230609125023.399942-1-jlayton@kernel.org> <20230609125023.399942-8-jlayton@kernel.org>
-In-Reply-To: <20230609125023.399942-8-jlayton@kernel.org>
-From:   Andreas Gruenbacher <agruenba@redhat.com>
-Date:   Fri, 9 Jun 2023 18:44:41 +0200
-Message-ID: <CAHc6FU4wyfQT7T75j2Sd9WNp=ag7hpDZGYkR=m73h2nOaH+AqQ@mail.gmail.com>
-Subject: Re: [PATCH 7/9] gfs2: update ctime when quota is updated
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Brad Warrum <bwarrum@linux.ibm.com>,
-        Ritu Agarwal <rituagar@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ian Kent <raven@themaw.net>,
-        "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
-        Jeremy Kerr <jk@ozlabs.org>, Ard Biesheuvel <ardb@kernel.org>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        Bob Peterson <rpeterso@redhat.com>,
-        Steve French <sfrench@samba.org>,
-        Paulo Alcantara <pc@manguebit.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Ruihan Li <lrh2000@pku.edu.cn>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        autofs@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, cluster-devel@redhat.com,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v12 1/2] spi: add loongson spi bindings
+Content-Language: en-US
+To:     zhuyinbo <zhuyinbo@loongson.cn>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+References: <20230608072819.25930-1-zhuyinbo@loongson.cn>
+ <20230608072819.25930-2-zhuyinbo@loongson.cn>
+ <6ebed84c-2b42-c981-7b3f-e71cc88e4c2c@linaro.org>
+ <4bf747c4-b767-b20c-e00f-724b50f44edb@loongson.cn>
+ <6bfc2a22-6901-0858-7b90-bc4c52c66810@linaro.org>
+ <bd2d7830-3ab6-0906-b06a-83d3e0a96749@loongson.cn>
+ <11ca2b90-544d-18c2-fb15-7909ca60507f@linaro.org>
+ <f6d4ecb5-e9df-346e-4aab-772fd01689c8@loongson.cn>
+ <a9952e76-1204-5bc7-7856-0c7f8a411d76@linaro.org>
+ <9c94397d-1e31-02fa-bdbe-af888c72eac4@loongson.cn>
+ <657f8d19-de83-8be6-4a9d-5f13b1df7383@linaro.org>
+ <b0e5e13e-6746-bd90-2a49-31ee6dd3e8a2@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <b0e5e13e-6746-bd90-2a49-31ee6dd3e8a2@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jeff,
+On 09/06/2023 05:13, zhuyinbo wrote:
+> 
+> 
+> 在 2023/6/8 下午9:26, Krzysztof Kozlowski 写道:
+>> On 08/06/2023 14:10, zhuyinbo wrote:
+>>>
+>>>
+>>> 在 2023/6/8 下午7:45, Krzysztof Kozlowski 写道:
+>>>> On 08/06/2023 13:42, zhuyinbo wrote:
+>>>>> --- a/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>>>>> +++ b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>>>>> @@ -16,6 +16,7 @@ properties:
+>>>>>       compatible:
+>>>>>         enum:
+>>>>>           - loongson,ls2k1000-spi
+>>>>> +      - loongson,ls2k0500-spi
+>>>>
+>>>> Aren't they compatible?
+>>>>
+>>>
+>>>
+>>> Are you saying that the spi driver is compatible with 2k0500 ?
+>>
+>> Didn't you say this through 11 previous revisions?
+> 
+> 
+> Yes, did I understand your meaning incorrectly ?
 
-On Fri, Jun 9, 2023 at 2:50=E2=80=AFPM Jeff Layton <jlayton@kernel.org> wro=
-te:
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> ---
->  fs/gfs2/quota.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/fs/gfs2/quota.c b/fs/gfs2/quota.c
-> index 1ed17226d9ed..6d283e071b90 100644
-> --- a/fs/gfs2/quota.c
-> +++ b/fs/gfs2/quota.c
-> @@ -869,7 +869,7 @@ static int gfs2_adjust_quota(struct gfs2_inode *ip, l=
-off_t loc,
->                 size =3D loc + sizeof(struct gfs2_quota);
->                 if (size > inode->i_size)
->                         i_size_write(inode, size);
-> -               inode->i_mtime =3D inode->i_atime =3D current_time(inode)=
-;
-> +               inode->i_mtime =3D inode->i_atime =3D inode->i_ctime =3D =
-current_time(inode);
+If they are compatible, then they are not part of one enum. They could
+not be as this would easily fail in testing of your DTS.
 
-I don't think we need to worry about the ctime of the quota inode as
-that inode is internal to the filesystem only.
-
->                 mark_inode_dirty(inode);
->                 set_bit(QDF_REFRESH, &qd->qd_flags);
->         }
-> --
-> 2.40.1
->
-
-Thanks,
-Andreas
+Best regards,
+Krzysztof
 
