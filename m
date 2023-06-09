@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF6C972923A
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E5917291B6
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:50:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239716AbjFIHty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 03:49:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54984 "EHLO
+        id S239276AbjFIHtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 03:49:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239118AbjFIHrq (ORCPT
+        with ESMTP id S239117AbjFIHrq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 9 Jun 2023 03:47:46 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A2C30C8;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A05B2D7F;
         Fri,  9 Jun 2023 00:47:43 -0700 (PDT)
 Date:   Fri, 09 Jun 2023 07:47:39 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686296860;
+        s=2020; t=1686296859;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BVqi+HwSBu5+RBoe6c7hBNQEOzIi/+hzXFyc/TgfZsk=;
-        b=T0KqIHNI96iAZ7E5n0vBVOTmf7XC/G7Nr9FyKYnGXYKS5h2emWqnu+ekfMkHiDyZeScsQd
-        uoJW0Rj2zinpR4R+LKO3VxuCEKIOxgC6h5x8RbAQW85NAPrk53jGXJbZb05TjqdQm0hQJ4
-        mVtm/or9DZtUayqp4XsxzrOoI3pLGj8kSiEqg4cK5IYXIGTT3NCRTijkzN8VA40392grSP
-        JhxCVkdl3QvdAlllXb8YxgNzSuSM5qBR8yPLqUTsDhkgTm9TJxOhFPp3Kl6eS4nUe6lEGW
-        +4ahAIKjBMVHuchCoOY3KRjHGmJYw3qHh16YM56HAWf8vPqyhiqgY+154CbGRA==
+        bh=9P87doE6Z0HH3lUedPUa2tyR5oQm9EuwPpj3rRLBwbI=;
+        b=KlKjnLkTGiNJn0Mnutx3SqgB1I0XrhaDHa9brf2j6U24v46bO0V2lfSyjJRvTqjDm9ZHDX
+        75fYUiDor5HavPUqh9mMBn9SjfMIS0BL+X4UH7JkOZkP3rFHymPJ1ZuWAh8Z2NuAtB1iKd
+        /69Hxw4HCUi+Y9yPpB5FW9jj185BSySqCWG/T7oZRSXYisAy10zOVWGbbCs6i/Dk8yDA82
+        kcDVhZqbmh2eFEHTZztfs0LgTKl5onG12a0L1GuYRh5r3u1wwlYIG7coTKjuwx0TQ/YArm
+        4QlvaIQVRenQgE1+bP+Cl/HMRd93dLkh3+UVDwkQSrX2zj5AAcRzK6uYhA9wwg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686296860;
+        s=2020e; t=1686296859;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BVqi+HwSBu5+RBoe6c7hBNQEOzIi/+hzXFyc/TgfZsk=;
-        b=TDssK2RHim3KS6VrACiWIfzr5P5MkOZmdPcJjc25UzDbzPoZmR1QlSacPto87J6Qy1kfl9
-        kp9Tzy1wF2JbR+DQ==
+        bh=9P87doE6Z0HH3lUedPUa2tyR5oQm9EuwPpj3rRLBwbI=;
+        b=Y2CRn8IEwyUA1qprseFGMQb2DMHoqIIHfhUyaNm9y9t192bnqrwmDJCq5C8RWjsR1mUho+
+        7MoK7asZaqqEi7CQ==
 From:   "tip-bot2 for Josh Poimboeuf" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: objtool/core] drm/vmwgfx: Add unwind hints around RBP clobber
-Cc:     kernel test robot <lkp@intel.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org,
+Subject: [tip: objtool/core] objtool: Tidy elf.h
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <4c795f2d87bc0391cf6543bcb224fa540b55ce4b.1685981486.git.jpoimboe@kernel.org>
-References: <4c795f2d87bc0391cf6543bcb224fa540b55ce4b.1685981486.git.jpoimboe@kernel.org>
+In-Reply-To: <b1490ed85951868219a6ece177a7cd30a6454d66.1685464332.git.jpoimboe@kernel.org>
+References: <b1490ed85951868219a6ece177a7cd30a6454d66.1685464332.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
-Message-ID: <168629685987.404.14910646503772478220.tip-bot2@tip-bot2>
+Message-ID: <168629685929.404.5936123077928755991.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,105 +66,155 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the objtool/core branch of tip:
 
-Commit-ID:     a9da8247627eefc73f909bf945031a5431a53993
-Gitweb:        https://git.kernel.org/tip/a9da8247627eefc73f909bf945031a5431a53993
+Commit-ID:     809373e17b2649948cc681dd1962b2736b22c7a6
+Gitweb:        https://git.kernel.org/tip/809373e17b2649948cc681dd1962b2736b22c7a6
 Author:        Josh Poimboeuf <jpoimboe@kernel.org>
-AuthorDate:    Mon, 05 Jun 2023 09:12:22 -07:00
+AuthorDate:    Tue, 30 May 2023 10:20:53 -07:00
 Committer:     Josh Poimboeuf <jpoimboe@kernel.org>
-CommitterDate: Wed, 07 Jun 2023 10:03:12 -07:00
+CommitterDate: Wed, 07 Jun 2023 10:03:13 -07:00
 
-drm/vmwgfx: Add unwind hints around RBP clobber
+objtool: Tidy elf.h
 
-VMware high-bandwidth hypercalls take the RBP register as input.  This
-breaks basic frame pointer convention, as RBP should never be clobbered.
+Reorganize elf.h a bit:
 
-So frame pointer unwinding is broken for the instructions surrounding
-the hypercalls.  Fortunately this doesn't break live patching with
-CONFIG_FRAME_POINTER, as it only unwinds from blocking tasks, and stack
-traces from preempted tasks are already marked unreliable anyway.
+- Move the prototypes higher up so they can be used by the inline
+  functions.
 
-However, for live patching with ORC, this could actually be a
-theoretical problem if vmw_port_hb_{in,out}() were still compiled with a
-frame pointer due to having an aligned stack.  In practice that hasn't
-seemed to be an issue since the objtool warnings have only been seen
-with CONFIG_FRAME_POINTER.
+- Move hash-related code to the bottom.
 
-Add unwind hint annotations to tell the ORC unwinder to mark stack
-traces as unreliable.
+- Remove the unused ELF_HASH_BITS macro.
 
-Fixes the following warnings:
+No functional changes.
 
-  vmlinux.o: warning: objtool: vmw_port_hb_in+0x1df: return with modified stack frame
-  vmlinux.o: warning: objtool: vmw_port_hb_out+0x1dd: return with modified stack frame
-
-Fixes: 89da76fde68d ("drm/vmwgfx: Add VMWare host messaging capability")
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/oe-kbuild-all/202305160135.97q0Elax-lkp@intel.com/
-Link: https://lore.kernel.org/r/4c795f2d87bc0391cf6543bcb224fa540b55ce4b.1685981486.git.jpoimboe@kernel.org
+Link: https://lore.kernel.org/r/b1490ed85951868219a6ece177a7cd30a6454d66.1685464332.git.jpoimboe@kernel.org
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- arch/x86/include/asm/unwind_hints.h     |  9 +++++++++
- drivers/gpu/drm/vmwgfx/vmwgfx_msg_x86.h | 16 ++++++++++++----
- 2 files changed, 21 insertions(+), 4 deletions(-)
+ tools/objtool/include/objtool/elf.h | 96 +++++++++++++---------------
+ 1 file changed, 47 insertions(+), 49 deletions(-)
 
-diff --git a/arch/x86/include/asm/unwind_hints.h b/arch/x86/include/asm/unwind_hints.h
-index 01cb969..85cc57c 100644
---- a/arch/x86/include/asm/unwind_hints.h
-+++ b/arch/x86/include/asm/unwind_hints.h
-@@ -76,9 +76,18 @@
+diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
+index 78e2d0f..b24f83e 100644
+--- a/tools/objtool/include/objtool/elf.h
++++ b/tools/objtool/include/objtool/elf.h
+@@ -83,8 +83,6 @@ struct reloc {
+ 	bool jump_table_start;
+ };
  
- #else
+-#define ELF_HASH_BITS	20
+-
+ struct elf {
+ 	Elf *elf;
+ 	GElf_Ehdr ehdr;
+@@ -110,53 +108,6 @@ struct elf {
+ 	struct symbol *symbol_data;
+ };
  
-+#define UNWIND_HINT_UNDEFINED \
-+	UNWIND_HINT(UNWIND_HINT_TYPE_UNDEFINED, 0, 0, 0)
+-#define OFFSET_STRIDE_BITS	4
+-#define OFFSET_STRIDE		(1UL << OFFSET_STRIDE_BITS)
+-#define OFFSET_STRIDE_MASK	(~(OFFSET_STRIDE - 1))
+-
+-#define for_offset_range(_offset, _start, _end)			\
+-	for (_offset = ((_start) & OFFSET_STRIDE_MASK);		\
+-	     _offset >= ((_start) & OFFSET_STRIDE_MASK) &&	\
+-	     _offset <= ((_end) & OFFSET_STRIDE_MASK);		\
+-	     _offset += OFFSET_STRIDE)
+-
+-static inline u32 sec_offset_hash(struct section *sec, unsigned long offset)
+-{
+-	u32 ol, oh, idx = sec->idx;
+-
+-	offset &= OFFSET_STRIDE_MASK;
+-
+-	ol = offset;
+-	oh = (offset >> 16) >> 16;
+-
+-	__jhash_mix(ol, oh, idx);
+-
+-	return ol;
+-}
+-
+-static inline u32 reloc_hash(struct reloc *reloc)
+-{
+-	return sec_offset_hash(reloc->sec, reloc->offset);
+-}
+-
+-/*
+- * Try to see if it's a whole archive (vmlinux.o or module).
+- *
+- * Note this will miss the case where a module only has one source file.
+- */
+-static inline bool has_multiple_files(struct elf *elf)
+-{
+-	return elf->num_files > 1;
+-}
+-
+-static inline int elf_class_addrsize(struct elf *elf)
+-{
+-	if (elf->ehdr.e_ident[EI_CLASS] == ELFCLASS32)
+-		return sizeof(u32);
+-	else
+-		return sizeof(u64);
+-}
+-
+ struct elf *elf_open_read(const char *name, int flags);
+ struct section *elf_create_section(struct elf *elf, const char *name, unsigned int sh_flags, size_t entsize, int nr);
+ 
+@@ -186,6 +137,24 @@ struct reloc *find_reloc_by_dest_range(const struct elf *elf, struct section *se
+ 				     unsigned long offset, unsigned int len);
+ struct symbol *find_func_containing(struct section *sec, unsigned long offset);
+ 
++/*
++ * Try to see if it's a whole archive (vmlinux.o or module).
++ *
++ * Note this will miss the case where a module only has one source file.
++ */
++static inline bool has_multiple_files(struct elf *elf)
++{
++	return elf->num_files > 1;
++}
 +
- #define UNWIND_HINT_FUNC \
- 	UNWIND_HINT(UNWIND_HINT_TYPE_FUNC, ORC_REG_SP, 8, 0)
- 
-+#define UNWIND_HINT_SAVE \
-+	UNWIND_HINT(UNWIND_HINT_TYPE_SAVE, 0, 0, 0)
++static inline int elf_class_addrsize(struct elf *elf)
++{
++	if (elf->ehdr.e_ident[EI_CLASS] == ELFCLASS32)
++		return sizeof(u32);
++	else
++		return sizeof(u64);
++}
 +
-+#define UNWIND_HINT_RESTORE \
-+	UNWIND_HINT(UNWIND_HINT_TYPE_RESTORE, 0, 0, 0)
-+
- #endif /* __ASSEMBLY__ */
+ #define for_each_sec(file, sec)						\
+ 	list_for_each_entry(sec, &file->elf->sections, list)
  
- #endif /* _ASM_X86_UNWIND_HINTS_H */
-diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_msg_x86.h b/drivers/gpu/drm/vmwgfx/vmwgfx_msg_x86.h
-index 0b74ca2..23899d7 100644
---- a/drivers/gpu/drm/vmwgfx/vmwgfx_msg_x86.h
-+++ b/drivers/gpu/drm/vmwgfx/vmwgfx_msg_x86.h
-@@ -105,10 +105,14 @@
-                         flags, magic, bp,		\
-                         eax, ebx, ecx, edx, si, di)	\
- ({							\
--        asm volatile ("push %%rbp;"			\
-+        asm volatile (					\
-+		UNWIND_HINT_SAVE			\
-+		"push %%rbp;"				\
-+		UNWIND_HINT_UNDEFINED			\
-                 "mov %12, %%rbp;"			\
-                 VMWARE_HYPERCALL_HB_OUT			\
--                "pop %%rbp;" :				\
-+                "pop %%rbp;"				\
-+		UNWIND_HINT_RESTORE :			\
-                 "=a"(eax),				\
-                 "=b"(ebx),				\
-                 "=c"(ecx),				\
-@@ -130,10 +134,14 @@
-                        flags, magic, bp,		\
-                        eax, ebx, ecx, edx, si, di)	\
- ({							\
--        asm volatile ("push %%rbp;"			\
-+        asm volatile (					\
-+		UNWIND_HINT_SAVE			\
-+		"push %%rbp;"				\
-+		UNWIND_HINT_UNDEFINED			\
-                 "mov %12, %%rbp;"			\
-                 VMWARE_HYPERCALL_HB_IN			\
--                "pop %%rbp" :				\
-+                "pop %%rbp;"				\
-+		UNWIND_HINT_RESTORE :			\
-                 "=a"(eax),				\
-                 "=b"(ebx),				\
-                 "=c"(ecx),				\
+@@ -198,4 +167,33 @@ struct symbol *find_func_containing(struct section *sec, unsigned long offset);
+ 		for_each_sec(file, __sec)				\
+ 			sec_for_each_sym(__sec, sym)
+ 
++#define OFFSET_STRIDE_BITS	4
++#define OFFSET_STRIDE		(1UL << OFFSET_STRIDE_BITS)
++#define OFFSET_STRIDE_MASK	(~(OFFSET_STRIDE - 1))
++
++#define for_offset_range(_offset, _start, _end)			\
++	for (_offset = ((_start) & OFFSET_STRIDE_MASK);		\
++	     _offset >= ((_start) & OFFSET_STRIDE_MASK) &&	\
++	     _offset <= ((_end) & OFFSET_STRIDE_MASK);		\
++	     _offset += OFFSET_STRIDE)
++
++static inline u32 sec_offset_hash(struct section *sec, unsigned long offset)
++{
++	u32 ol, oh, idx = sec->idx;
++
++	offset &= OFFSET_STRIDE_MASK;
++
++	ol = offset;
++	oh = (offset >> 16) >> 16;
++
++	__jhash_mix(ol, oh, idx);
++
++	return ol;
++}
++
++static inline u32 reloc_hash(struct reloc *reloc)
++{
++	return sec_offset_hash(reloc->sec, reloc->offset);
++}
++
+ #endif /* _OBJTOOL_ELF_H */
