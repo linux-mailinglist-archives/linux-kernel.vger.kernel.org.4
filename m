@@ -2,138 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A60A72A4E7
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 22:44:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2519B72A4E9
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 22:44:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232469AbjFIUoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 16:44:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45466 "EHLO
+        id S232035AbjFIUok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 16:44:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230070AbjFIUo1 (ORCPT
+        with ESMTP id S229523AbjFIUoc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 16:44:27 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A472D7C;
-        Fri,  9 Jun 2023 13:44:25 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-3090d3e9c92so2113570f8f.2;
-        Fri, 09 Jun 2023 13:44:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686343464; x=1688935464;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vH0nkJICH5SoZihWGavJs2/Bnil9QT2kDyKVokHxQ+Y=;
-        b=D8L/H1llciKeg2OaECls2piv/ZlGcZPz1fARREAdEPOEgkCvtZ4CHK8PsxWjTgI/TX
-         y9Nu22Sltg+JSRzvMTud6VPlG83KpTpsUOfMFPO1PJBTbKtLNLWkq7ELwZXTHVnjklgL
-         O6QZWHUygZx5p42j/aRcsEdTeTz718PEH/5OcjBj76Wd5Ziop5BwcMKLo9NyByVb/Mpq
-         vTpbzle6IUbyvgB88Pwi3ySHYCy34bCFZAHwaeSAzyrbtYpNq1KepLKlEKqiaR6O7qwE
-         jCUZkS84f3vPv3B+YjMzB9p6tIMFc3JA3y/wArk6FmTvMesQM7+YAeZDBjXRUuZUi8XM
-         NUYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686343464; x=1688935464;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vH0nkJICH5SoZihWGavJs2/Bnil9QT2kDyKVokHxQ+Y=;
-        b=f/6WxDQGfOtPKKwGSIMRsbfc18bO2pnwCBOZG2EDh9GkaCM/EaeUqwFjIyHnbg8K2s
-         zedev8ryv0d9vOOLHh7/GDAeNhV1wV2qQZvDe09Nh179vkE2WHZ0FniVOOMaAy+kFoBT
-         Hwn+IOa6yS64Iidp94seL2Krc7GS4mLi+/wkpVnvPbO7JkIIXu1egp4y/gQAV37NGzLz
-         eUV2VPAxfEra4MJr+BbO76edHWRXIbgG587UgHhkNCqBdSVnU65VQ2Z6tSkmU8ytTEJ6
-         bBXhQGTUqlFrwKaTqNXIYjt2Xjum8xffkl6GhPdBtP5IgTqXkqveJ2ejniVU8wKVhNZ8
-         Kpuw==
-X-Gm-Message-State: AC+VfDw05hJqtBD0deFx1heGhpWYAkXWiRNJAJJy5lmuCzO2WOTOa/l8
-        FEh6UTbabq1vNtGgb2Zw+iM=
-X-Google-Smtp-Source: ACHHUZ7zNI1VWszzFX6QGR4B6hdYDGcU3iIOW4+UBNrHCJzvjNIhjWN7Qei9tDrm/d/2h6PBBSYKMw==
-X-Received: by 2002:a5d:63ce:0:b0:306:4031:63c5 with SMTP id c14-20020a5d63ce000000b00306403163c5mr1948735wrw.51.1686343464260;
-        Fri, 09 Jun 2023 13:44:24 -0700 (PDT)
-Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
-        by smtp.gmail.com with ESMTPSA id z10-20020a05600c220a00b003f42ceb3bf4sm3652865wml.32.2023.06.09.13.44.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 13:44:23 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Doug Berger <opendmb@gmail.com>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        "G. Jaya Kumaran" <vineetha.g.jaya.kumaran@intel.com>,
-        Biao Huang <biao.huang@mediatek.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        David Wu <david.wu@rock-chips.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Sekhar Nori <nsekhar@ti.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH] dt-bindings: net: drop unneeded quotes
-Date:   Fri, 09 Jun 2023 22:44:22 +0200
-Message-ID: <3169693.5fSG56mABF@jernej-laptop>
-In-Reply-To: <20230609140713.64701-1-krzysztof.kozlowski@linaro.org>
-References: <20230609140713.64701-1-krzysztof.kozlowski@linaro.org>
+        Fri, 9 Jun 2023 16:44:32 -0400
+Received: from out-11.mta1.migadu.com (out-11.mta1.migadu.com [95.215.58.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E232D7C
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 13:44:30 -0700 (PDT)
+Date:   Fri, 9 Jun 2023 16:44:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1686343468;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=o69IPIN/viI4SWUaXunctnkielbnA1XTEOpw5H6g5Qo=;
+        b=WONNX+3yMGV0208hiCWY96K4M4G7bs5xxSy/gLqGycEC0ZHJQ97Yar6KK7TKe49P+wOF5J
+        0dugGwFZNlka2TqVuuXF4Bf3Q9lGKb/Iuvnqp847XvuomdpJLF9GXT7zekk8Wj9KM1tQGB
+        z2lRWu0FAUuas+FN0u9lz9S/f4hrpW8=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     axboe@kernel.dk, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] block: Rework bio_for_each_segment_all()
+Message-ID: <ZIOPJ7y7V9WtrQTH@moria.home.lan>
+References: <20230605212717.2570570-1-kent.overstreet@linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230605212717.2570570-1-kent.overstreet@linux.dev>
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne petek, 09. junij 2023 ob 16:07:12 CEST je Krzysztof Kozlowski napisal(a):
-> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> checking for this can be enabled in yamllint.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../devicetree/bindings/net/allwinner,sun7i-a20-gmac.yaml     | 2 +-
->  .../devicetree/bindings/net/allwinner,sun8i-a83t-emac.yaml    | 2 +-
+Jens - I've updated the branch at
+https://evilpiepirate.org/git/bcachefs.git block-for-bcachefs
 
-For Allwinner:
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-
-Best regards,
-Jernej
-
->  .../devicetree/bindings/net/amlogic,meson-dwmac.yaml          | 2 +-
->  Documentation/devicetree/bindings/net/brcm,bcmgenet.yaml      | 2 +-
->  Documentation/devicetree/bindings/net/intel,dwmac-plat.yaml   | 2 +-
->  Documentation/devicetree/bindings/net/mediatek-dwmac.yaml     | 2 +-
->  Documentation/devicetree/bindings/net/nxp,dwmac-imx.yaml      | 2 +-
->  Documentation/devicetree/bindings/net/rockchip-dwmac.yaml     | 2 +-
->  .../devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml        | 4 ++--
->  .../devicetree/bindings/net/toshiba,visconti-dwmac.yaml       | 2 +-
->  10 files changed, 11 insertions(+), 11 deletions(-)
-
-
-
+which now has the patches you'll want to take for now (bio iterator)
+first, only changes being bio_iter_all_end() based on Ming's feedback.
