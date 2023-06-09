@@ -2,66 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA819728FE1
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 08:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59349728FE3
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 08:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237857AbjFIGVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 02:21:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41850 "EHLO
+        id S237891AbjFIGVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 02:21:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237693AbjFIGVJ (ORCPT
+        with ESMTP id S237720AbjFIGVL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 02:21:09 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD391FE6
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 23:21:07 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-516a008e495so3094247a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 23:21:07 -0700 (PDT)
+        Fri, 9 Jun 2023 02:21:11 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656A92119
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 23:21:09 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-51492ae66a4so2133471a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 23:21:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1686291666; x=1688883666;
+        d=amarulasolutions.com; s=google; t=1686291667; x=1688883667;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tlm5X0f1SJIUHEa+Ch7CRBAmlhS5LXsyaOP8GZ1/KKI=;
-        b=Zn2wbcwo21fhOpg5eFi3fFexbvEY7Ul6UQIoI1MeNQzf5cOD48Pb9CySIeYGY3/Jju
-         r7AdVz3fWHqUZfj/p0Ek4p2HnCOJ+jHcldG9ZArs4G454NpdYB8sl6yLnYyTTWgzM56J
-         YRveOMviMIp2hQ/ahVfiS2GmRK+Xlv1GoA9b8=
+        bh=iGNFX6HEdIKRiw8NKvPwhXc8R+GQd9GHBG/7VCCQih4=;
+        b=M/5/NpTFFGCRpQ6Zin9qb9E+Y65G+15U8vBcdXBhKs2ziuqY9ne2OMuK1rKdp1YynY
+         oa6vtGFNCboTCqlpxK6MP3hC0Z8+ZlqlWgCvLTrWhND0vLpGIyWQJmPWuF6cogAOP2js
+         EClF5qAkMaZyWVM7yJWgvLRRy9WQ+t2GO8J3c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686291666; x=1688883666;
+        d=1e100.net; s=20221208; t=1686291667; x=1688883667;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tlm5X0f1SJIUHEa+Ch7CRBAmlhS5LXsyaOP8GZ1/KKI=;
-        b=Nhztwq1OVYlkf6nB9mZHrAlaOR5hOHmrfeyZWf3oSbmcLDTpfTUKSsHF1MCfgpBrxt
-         MZQdADINv+jjQWf5zB/CrIfKAuOahMOYUHNbBKW4LpXXwXo+9nm6Fx+kjeU4sJxO+u2U
-         TVkRL2xeJxwihkFR9AoGre4PRSioS30y86Gh+slp5VPNvxtipR3dU10V6spZ2tlFvk/R
-         huBuJjVqgZJHy33xvLkp+fLIYE74RfvGp7kwyl44/OTV5ITl7+nOr7iRXxNp+KXZcxiv
-         Swy7Kt8QO2dfaeFktO4JvOzNOTOtVKZIng0S/GyXEr+qnyvEGgUoZFaA5Q5I+nKQlyax
-         1G9A==
-X-Gm-Message-State: AC+VfDyKdgS+r7WguR3NtulvZvgsw22ZJJxJgYlX1e6kUW5BqQskrUKJ
-        tsTQ4lnZGvOoJlJMbzmtJuImT4dtRm+/UGo7MkAs7w==
-X-Google-Smtp-Source: ACHHUZ4xW5JNQUR9WpWc3Icd9H1a0H3sV6NT4RZVtX5z+P6Z7QibdOPH+DuK978r1/65E63K0G3P3g==
-X-Received: by 2002:a05:6402:270e:b0:514:9e81:6185 with SMTP id y14-20020a056402270e00b005149e816185mr4277430edd.16.1686291666238;
-        Thu, 08 Jun 2023 23:21:06 -0700 (PDT)
+        bh=iGNFX6HEdIKRiw8NKvPwhXc8R+GQd9GHBG/7VCCQih4=;
+        b=J9tSJFVoorGsisBpJUdlS3g4rZ+DSV24NCNewIKYjfvyqO+Dr89g6tQgz4iDfYdwHz
+         OeeL1nHp6Dq5ZSKxuLfdHGUr0jgdNJACD4vMq/OGeVazN+qaZHQKfE+KSqwBu7D2piXa
+         KK9e3sTa5KvAso9cW2jEXWKjnL2VsSyn4jcd8FVqdVnksQltI/wluK7MJb7jPLaiGIIG
+         1DKQ1XQzCW7gOvwKDaX7OSTmdJFBICZF7XNn0OVBkUhIezD7v8uncBZixZcAb10RrrBS
+         UhcShy2DJ8kxQShAnBk8F20jn2AOQZbu0uIgXQ1QVdfKouhgGNGW51Tmhbx/mRuOk1F2
+         FdxA==
+X-Gm-Message-State: AC+VfDy5K83GOV2OShSl60chIdIWvZpQ+BCP1fRTONxfKYc/ITYndCtG
+        /H7GWw1X/UQTLr2sggJrKiJVhPFtooWz+fzhqkm26w==
+X-Google-Smtp-Source: ACHHUZ6XFmSe2W3rNoo+VrpWUwTaMcErolR4cjDWNXAD6nl5w7ToPb4VYcUVV/18CrO8h0BLGMsYWg==
+X-Received: by 2002:aa7:c40b:0:b0:517:6ed9:6629 with SMTP id j11-20020aa7c40b000000b005176ed96629mr416496edq.21.1686291667668;
+        Thu, 08 Jun 2023 23:21:07 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-95-248-31-20.retail.telecomitalia.it. [95.248.31.20])
-        by smtp.gmail.com with ESMTPSA id m7-20020aa7d347000000b005149461b1e0sm1380058edr.25.2023.06.08.23.21.05
+        by smtp.gmail.com with ESMTPSA id m7-20020aa7d347000000b005149461b1e0sm1380058edr.25.2023.06.08.23.21.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 23:21:05 -0700 (PDT)
+        Thu, 08 Jun 2023 23:21:07 -0700 (PDT)
 From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     michael@amarulasolutions.com,
         Amarula patchwork <linux-amarula@amarulasolutions.com>,
         Dario Binacchi <dario.binacchi@amarulasolutions.com>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
         Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        dri-devel@lists.freedesktop.org,
         linux-arm-kernel@lists.infradead.org,
         linux-stm32@st-md-mailman.stormreply.com
-Subject: [PATCH v3 3/4] ARM: dts: stm32: support display on stm32f746-disco board
-Date:   Fri,  9 Jun 2023 08:20:49 +0200
-Message-Id: <20230609062050.2107143-4-dario.binacchi@amarulasolutions.com>
+Subject: [PATCH v3 4/4] drm/stm: add an option to change FB bpp
+Date:   Fri,  9 Jun 2023 08:20:50 +0200
+Message-Id: <20230609062050.2107143-5-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20230609062050.2107143-1-dario.binacchi@amarulasolutions.com>
 References: <20230609062050.2107143-1-dario.binacchi@amarulasolutions.com>
@@ -77,89 +80,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support to Rocktech RK043FN48H display on stm32f746-disco board.
+Boards that use the STM32F{4,7} series have limited amounts of RAM. The
+added parameter allows users to size, within certain limits, the memory
+footprint required by the framebuffer.
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+
 ---
 
-(no changes since v1)
+Changes in v3:
+- drop [4/6] dt-bindings: display: simple: add Rocktech RK043FN48H
+  Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next):
+  https://cgit.freedesktop.org/drm/drm-misc/commit/?id=c42a37a27c777d63961dd634a30f7c887949491a
+- drop [5/6] drm/panel: simple: add support for Rocktech RK043FN48H panel
+  Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next)
+  https://cgit.freedesktop.org/drm/drm-misc/commit/?id=13cdd12a9f934158f4ec817cf048fcb4384aa9dc
 
- arch/arm/boot/dts/stm32f746-disco.dts | 51 +++++++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
+ drivers/gpu/drm/stm/drv.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/stm32f746-disco.dts b/arch/arm/boot/dts/stm32f746-disco.dts
-index c11616ed5fc6..cda423b6a874 100644
---- a/arch/arm/boot/dts/stm32f746-disco.dts
-+++ b/arch/arm/boot/dts/stm32f746-disco.dts
-@@ -60,10 +60,41 @@ memory@c0000000 {
- 		reg = <0xC0000000 0x800000>;
- 	};
+diff --git a/drivers/gpu/drm/stm/drv.c b/drivers/gpu/drm/stm/drv.c
+index 422220df7d8c..65be2b442a6a 100644
+--- a/drivers/gpu/drm/stm/drv.c
++++ b/drivers/gpu/drm/stm/drv.c
+@@ -30,6 +30,11 @@
+ #define STM_MAX_FB_WIDTH	2048
+ #define STM_MAX_FB_HEIGHT	2048 /* same as width to handle orientation */
  
-+	reserved-memory {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		ranges;
++static uint stm_bpp = 16;
 +
-+		linux,cma {
-+			compatible = "shared-dma-pool";
-+			no-map;
-+			size = <0x80000>;
-+			linux,dma-default;
-+		};
-+	};
++MODULE_PARM_DESC(bpp, "bits-per-pixel (default: 16)");
++module_param_named(bpp, stm_bpp, uint, 0644);
 +
- 	aliases {
- 		serial0 = &usart1;
- 	};
+ static const struct drm_mode_config_funcs drv_mode_config_funcs = {
+ 	.fb_create = drm_gem_fb_create,
+ 	.atomic_check = drm_atomic_helper_check,
+@@ -93,6 +98,7 @@ static int drv_load(struct drm_device *ddev)
+ 	ddev->mode_config.min_height = 0;
+ 	ddev->mode_config.max_width = STM_MAX_FB_WIDTH;
+ 	ddev->mode_config.max_height = STM_MAX_FB_HEIGHT;
++	ddev->mode_config.preferred_depth = stm_bpp;
+ 	ddev->mode_config.funcs = &drv_mode_config_funcs;
+ 	ddev->mode_config.normalize_zpos = true;
  
-+	backlight: backlight {
-+		compatible = "gpio-backlight";
-+		gpios = <&gpiok 3 GPIO_ACTIVE_HIGH>;
-+		status = "okay";
-+	};
-+
-+	panel_rgb: panel-rgb {
-+		compatible = "rocktech,rk043fn48h";
-+		backlight = <&backlight>;
-+		enable-gpios = <&gpioi 12 GPIO_ACTIVE_HIGH>;
-+		status = "okay";
-+		port {
-+			panel_in_rgb: endpoint {
-+				remote-endpoint = <&ltdc_out_rgb>;
-+			};
-+		};
-+	};
-+
- 	usbotg_hs_phy: usb-phy {
- 		#phy-cells = <0>;
- 		compatible = "usb-nop-xceiv";
-@@ -99,6 +130,26 @@ &i2c1 {
- 	status = "okay";
- };
+@@ -203,7 +209,7 @@ static int stm_drm_platform_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto err_put;
  
-+&dma1 {
-+	status = "okay";
-+};
-+
-+&dma2 {
-+	status = "okay";
-+};
-+
-+&ltdc {
-+	pinctrl-0 = <&ltdc_pins_a>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+
-+	port {
-+		ltdc_out_rgb: endpoint {
-+			remote-endpoint = <&panel_in_rgb>;
-+		};
-+	};
-+};
-+
- &sdio1 {
- 	status = "okay";
- 	vmmc-supply = <&mmc_vcard>;
+-	drm_fbdev_dma_setup(ddev, 16);
++	drm_fbdev_dma_setup(ddev, stm_bpp);
+ 
+ 	return 0;
+ 
 -- 
 2.32.0
 
