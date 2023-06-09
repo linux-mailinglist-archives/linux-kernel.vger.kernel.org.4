@@ -2,167 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44A4472914E
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1FB9729259
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238654AbjFIHhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 03:37:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49306 "EHLO
+        id S239856AbjFIIL0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 9 Jun 2023 04:11:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239015AbjFIHhh (ORCPT
+        with ESMTP id S230391AbjFIIK5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 03:37:37 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 787C3359A;
-        Fri,  9 Jun 2023 00:37:25 -0700 (PDT)
-X-GND-Sasl: maxime.chevallier@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686296243;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2ihOk65xfSsNkRNf3ryEGeanTlCCQd6nVcfq+SRlpTg=;
-        b=gRBXEFH0TDa5+UcCAUk/+XG/gckNlFc1ozs+iKHc0rPNB4EDMqCnMbDDWr3fL+Jzzi+pi6
-        SJKv/wkMGCuLX6wANaOWTBGiJB6478ZSzL/xRCM116XgoEv3sn+d8otQAMD/1QCWte7ovA
-        T+yBNaFZLdR8jHCfWp4ojURcdOY4trG/GPVFc7d3Py3DXkAfsyGyNhukv8EUbygkv9l+OR
-        dUW5zOWcM8HL5gJ0IzEDt5xow4UwnA6A+fYbmXa/ES8WBA6me6InfutFioWt4K0ed/I3g8
-        w0geq4/muiZjjqV8/WdqdGjRYl9k0UA7+f0phCGrV7KC6JEbcpS0sz6fGeaPFA==
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4D4F1C0005;
-        Fri,  9 Jun 2023 07:37:21 +0000 (UTC)
-Date:   Fri, 9 Jun 2023 10:09:12 +0200
-From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, Horatiu.Vultur@microchip.com,
-        Allan.Nielsen@microchip.com, UNGLinuxDriver@microchip.com,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: Re: [PATCH net 2/2] net: phylink: use USXGMII control-word format
- to parse Q-USGMII word
-Message-ID: <20230609100912.70a2bbc1@pc-7.home>
-In-Reply-To: <ZIIQQXhbnnpZHGw8@shell.armlinux.org.uk>
-References: <20230608163415.511762-1-maxime.chevallier@bootlin.com>
-        <20230608163415.511762-4-maxime.chevallier@bootlin.com>
-        <ZIICtN5zrxvTuEwz@shell.armlinux.org.uk>
-        <20230608195330.476fca86@pc-7.home>
-        <ZIIQQXhbnnpZHGw8@shell.armlinux.org.uk>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Fri, 9 Jun 2023 04:10:57 -0400
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39BD1AB;
+        Fri,  9 Jun 2023 01:10:53 -0700 (PDT)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1q7XCp-002oBq-4N; Fri, 09 Jun 2023 10:10:47 +0200
+Received: from ip5b40320d.dynamic.kabel-deutschland.de ([91.64.50.13] helo=suse-laptop.fritz.box)
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1q7XCo-002gny-TQ; Fri, 09 Jun 2023 10:10:47 +0200
+Message-ID: <025fe4853ff0a258dafdf71075419a2b740cabbd.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH v6 11/19] sh: add <asm-generic/io.h> including
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org, arnd@arndb.de,
+        christophe.leroy@csgroup.eu, hch@lst.de, rppt@kernel.org,
+        willy@infradead.org, agordeev@linux.ibm.com,
+        wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
+        David.Laight@ACULAB.COM, shorne@gmail.com, deller@gmx.de,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org
+Date:   Fri, 09 Jun 2023 10:10:46 +0200
+In-Reply-To: <20230609075528.9390-12-bhe@redhat.com>
+References: <20230609075528.9390-1-bhe@redhat.com>
+         <20230609075528.9390-12-bhe@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.48.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 91.64.50.13
+X-ZEDAT-Hint: PO
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Russell,
+Hello Baoquan!
 
-On Thu, 8 Jun 2023 18:30:41 +0100
-"Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
+On Fri, 2023-06-09 at 15:55 +0800, Baoquan He wrote:
+> Also add macro definitions for port|mm io functions since SuperH
+> has its own implementation in arch/sh/kernel/iomap.c and
+> arch/sh/include/asm/io_noioport.h. These will conflict with the port|mm io
+> function definitions in include/asm-generic/io.h to cause compiling
+> errors like below:
 
-> On Thu, Jun 08, 2023 at 07:53:30PM +0200, Maxime Chevallier wrote:
-> > Hi Russell,
-> > 
-> > On Thu, 8 Jun 2023 17:32:52 +0100
-> > "Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
-> >   
-> > > On Thu, Jun 08, 2023 at 06:34:15PM +0200, Maxime Chevallier wrote:  
-> > > > diff --git a/include/uapi/linux/mdio.h b/include/uapi/linux/mdio.h
-> > > > index 256b463e47a6..1d20a9082507 100644
-> > > > --- a/include/uapi/linux/mdio.h
-> > > > +++ b/include/uapi/linux/mdio.h
-> > > > @@ -444,4 +444,7 @@ static inline __u16 mdio_phy_id_c45(int prtad, int devad)
-> > > >  #define MDIO_USXGMII_5000FULL		0x1a00	/* 5000Mbps full-duplex */
-> > > >  #define MDIO_USXGMII_LINK		0x8000	/* PHY link with copper-side partner */
-> > > >  
-> > > > +/* Usgmii control word is based on Usxgmii, masking away 2.5, 5 and 10Gbps */
-> > > > +#define MDIO_USGMII_SPD_MASK		0x0600    
-> > > 
-> > > This isn't correct:
-> > > 
-> > > 11:9	Speed: Bit 11, 10, 9:
-> > > 	1 1 1 to 011 = Reserved
-> > > 	0 1 0 = 1000 Mbps: 1000BASE-TX, 1000BASE-X
-> > > 	0 0 1 = 100 Mbps: 100BASE-TX, 100BASE-FX
-> > > 	0 0 0 = 10 Mbps: 10BASET, 10BASE2, 10BASE5
-> > > 
-> > > If we only look at bits 10 and 9, then we're interpreting the reserved
-> > > combinations as valid as well.  
-> > 
-> > That's why I rewrote the decoding helper instead of simply masking away
-> > the extra bit, so that we exclude the 0 1 1 combination ( 10G speed ).  
-> 
-> I don't think you've understood my comment properly. Here is what
-> the code is doing:
+What change does the "Also" refer to?
 
-Indeed :( thanks for the clarifications.
+Adrian
 
-> +#define MDIO_USGMII_SPD_MASK             0x0600
-> +       switch (lpa & MDIO_USGMII_SPD_MASK) {
-> #define MDIO_USXGMII_10                 0x0000  /* 10Mbps */
-> +       case MDIO_USXGMII_10:
-> +               state->speed = SPEED_10;
-> +               break;
-> #define MDIO_USXGMII_100                0x0200  /* 100Mbps */
-> +       case MDIO_USXGMII_100:
-> +               state->speed = SPEED_100;
-> +               break;
-> #define MDIO_USXGMII_1000               0x0400  /* 1000Mbps */
-> +       case MDIO_USXGMII_1000:
-> +               state->speed = SPEED_1000;
-> +               break;
-> +       default:
-> +               state->link = false;
-> +               return;
-> +       }
-> 
-> So, this will decode bits 11:9 as:
-> 
-> 000	10Mbps
-> 001	100Mbps
-> 010	1000Mgps
-> 011	link = false
-> 100	10Mbps
-> 101	100Mbps
-> 110	1000Mbps
-> 111	link = false
-> 
-> Whereas, USGMII says the last four are all reserved. Why does this
-> happen? Because the mask is defined as:
-> 
-> +#define MDIO_USGMII_SPD_MASK             0x0600
-> 
-> which only covers bits 10 and 9, masking off bit 11. However, bit 11
-> is _still_ part of the field, and if it's set, then it is a "reserved"
-> speed. We should not be just ignoring bit 11.
-> 
-> I hope that helps to clarify.
-> 
- Indeed, thanks... I'll respin with a proper implementation this time.
-
-Thanks for spotting this
-
-Maxime
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
