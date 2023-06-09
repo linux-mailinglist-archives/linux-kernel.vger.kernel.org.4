@@ -2,96 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97E92728E91
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 05:31:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B947B728E97
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 05:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233931AbjFIDb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 23:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60170 "EHLO
+        id S238077AbjFIDdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 23:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjFIDb0 (ORCPT
+        with ESMTP id S237665AbjFIDdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 23:31:26 -0400
-Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DCB30ED
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 20:31:23 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VkgUALR_1686281479;
-Received: from 30.97.48.228(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VkgUALR_1686281479)
-          by smtp.aliyun-inc.com;
-          Fri, 09 Jun 2023 11:31:20 +0800
-Message-ID: <7b0ac912-6606-0a76-608d-59f8e2b113ea@linux.alibaba.com>
-Date:   Fri, 9 Jun 2023 11:31:19 +0800
+        Thu, 8 Jun 2023 23:33:03 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43BD030F1
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 20:33:02 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id 46e09a7af769-6b2bdca0884so303395a34.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 20:33:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1686281580; x=1688873580;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6iwigF78U3EwOQGn53e2UyWPNzHupFHtA26oaO3R2wc=;
+        b=IUFu6gG5Y34+fr+pT0fZlm3gbhBerxiSZw2i1915MxIWtDQeIYZTwhIfxZmRHtIyiR
+         NFlOVNBDBv4/iHd9xqTHen6L7cwEJR2miWxty9rxd+mk6AtmzR3I1xxG5LAkyihtV0UE
+         3/jD4CNKGPbNmdD2KK8c1YBe88FwQhH58dTi9C94lOBqYZTDhOFWExKvxj5Kp+IXNOgU
+         zX89XwkY9Pgh5GQ5zDMDjn1C2akzPzmnPzODvfSMY1/G48ZUuRJTjtxkVvp/a53l/BsA
+         SRJ7B68f+Pab/mILI/Gop73OnxPKT98d3/ZDR6sz0msjAMQnDOI/J9Kzm9qPanig48z3
+         RfKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686281580; x=1688873580;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6iwigF78U3EwOQGn53e2UyWPNzHupFHtA26oaO3R2wc=;
+        b=Kb9GpBoa3bFNsWI6HcrJw+0Aj+ut2k6b8zpZvJAjR6vJqLnwHuyjllvA9fxy9QovR1
+         TR4CbfUHzqXoiGGivmMHmOozCYx5iFCnyJ0qkymfcc1O5drrRaY1r64z4BeKmCkm9e+y
+         8hZLEo8lr76ppVDhisFXhwdCw0RyjIGLLgECZm1ZiT484bmK87QyRo91kqAymvelL0mN
+         ukk9Fv0c0sOmiaYBSUsPfwBEuPiCwBkUJ/m2s03P94YF/Er/jhWpWhga4p+cpS8kXhpS
+         S2S7o41xwFhQmTE0rL3yf2v64Lr3s05/OchT2SxE9etHdBzDdjw8onqjR2XQe7HrrW4R
+         nGrA==
+X-Gm-Message-State: AC+VfDy/Ks/oZLOrs+zVE6hzGEXwECaywct4O02Kh3nwj5VrleZV4eBW
+        HNwaCOLvtrFN/Df2RJsuM0CoLA==
+X-Google-Smtp-Source: ACHHUZ4jpAKkv/P4I5GyogL5cyKUBbH9jdQo3rd8sW4sBbrGIyPOxPKXrqwUV/kK78Vqo7hkyQEMOA==
+X-Received: by 2002:a05:6830:3a0a:b0:6a6:6121:dc60 with SMTP id di10-20020a0568303a0a00b006a66121dc60mr317885otb.10.1686281580410;
+        Thu, 08 Jun 2023 20:33:00 -0700 (PDT)
+Received: from dread.disaster.area (pa49-179-79-151.pa.nsw.optusnet.com.au. [49.179.79.151])
+        by smtp.gmail.com with ESMTPSA id t1-20020aa79381000000b0064381853bfcsm1723703pfe.89.2023.06.08.20.32.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 20:32:59 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.96)
+        (envelope-from <david@fromorbit.com>)
+        id 1q7Srw-009XUr-2X;
+        Fri, 09 Jun 2023 13:32:56 +1000
+Date:   Fri, 9 Jun 2023 13:32:56 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Mike Snitzer <snitzer@kernel.org>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Joe Thornber <thornber@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Jason Wang <jasowang@redhat.com>,
+        Bart Van Assche <bvanassche@google.com>,
+        linux-kernel@vger.kernel.org, Joe Thornber <ejt@redhat.com>,
+        linux-block@vger.kernel.org, dm-devel@redhat.com,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Sarthak Kukreti <sarthakkukreti@chromium.org>,
+        linux-fsdevel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
+        linux-ext4@vger.kernel.org, Brian Foster <bfoster@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>
+Subject: Re: [PATCH v7 0/5] Introduce provisioning primitives
+Message-ID: <ZIKdaJNhSq9JfFDU@dread.disaster.area>
+References: <ZHFEfngPyUOqlthr@dread.disaster.area>
+ <CAJ0trDZJQwvAzngZLBJ1hB0XkQ1HRHQOdNQNTw9nK-U5i-0bLA@mail.gmail.com>
+ <ZHYB/6l5Wi+xwkbQ@redhat.com>
+ <CAJ0trDaUOevfiEpXasOESrLHTCcr=oz28ywJU+s+YOiuh7iWow@mail.gmail.com>
+ <ZHYWAGmKhwwmTjW/@redhat.com>
+ <CAG9=OMMnDfN++-bJP3jLmUD6O=Q_ApV5Dr392_5GqsPAi_dDkg@mail.gmail.com>
+ <ZHqOvq3ORETQB31m@dread.disaster.area>
+ <ZHti/MLnX5xGw9b7@redhat.com>
+ <ZH/k9ss2Cg9HYrEV@dread.disaster.area>
+ <ZIEXwTd17z0iYW4s@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: [PATCH v6 1/5] erofs: use absolute position in xattr iterator
-To:     Jingbo Xu <jefflexu@linux.alibaba.com>, chao@kernel.org,
-        huyue2@coolpad.com, linux-erofs@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20230608113020.66626-1-jefflexu@linux.alibaba.com>
- <20230608113020.66626-2-jefflexu@linux.alibaba.com>
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-In-Reply-To: <20230608113020.66626-2-jefflexu@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZIEXwTd17z0iYW4s@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 07, 2023 at 07:50:25PM -0400, Mike Snitzer wrote:
+> Do you think you're OK to scope out, and/or implement, the XFS changes
+> if you use v7 of this patchset as the starting point? (v8 should just
+> be v7 minus the dm-thin.c and dm-snap.c changes).  The thinp
+> support in v7 will work enough to allow XFS to issue REQ_OP_PROVISION
+> and/or fallocate (via mkfs.xfs) to dm-thin devices.
 
+Yup, XFS only needs blkdev_issue_provision() and
+bdev_max_provision_sectors() to be present.  filesystem code. The
+initial XFS provisioning detection and fallocate() support is just
+under 50 lines of new code...
 
-On 2023/6/8 19:30, Jingbo Xu wrote:
-> Replace blkaddr/ofs with pos in 'struct erofs_xattr_iter'.
-> 
-> After erofs_bread() is introduced to replace raw page cache APIs for
-> metadata I/Os handling, xattr_iter_fixup() is no longer needed anymore.
-> 
-> In addition, it is also unnecessary to check if the iterated position is
-> span over the block boundary as absolute offset is used instead of
-> blkaddr + offset pairs.
-> 
-> Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+Cheers,
 
-...
-
->   
-> @@ -399,9 +365,10 @@ static int shared_getxattr(struct inode *inode, struct getxattr_iter *it)
->   
->   	for (i = 0; i < vi->xattr_shared_count; ++i) {
->   		xsid = vi->xattr_shared_xattrs[i];
-> -		it->it.blkaddr = erofs_xattr_blkaddr(sb, xsid);
-> -		it->it.ofs = erofs_xattr_blkoff(sb, xsid);
-> -		it->it.kaddr = erofs_bread(&it->it.buf, it->it.blkaddr, EROFS_KMAP);
-> +		it->it.pos = erofs_pos(sb, EROFS_SB(sb)->xattr_blkaddr) +
-> +				       xsid * sizeof(__u32);
-
-					^ sizeof(__le32); ?
-
-> +		it->it.kaddr = erofs_bread(&it->it.buf,
-> +				erofs_blknr(sb, it->it.pos), EROFS_KMAP);
->   		if (IS_ERR(it->it.kaddr))
->   			return PTR_ERR(it->it.kaddr);
->   
-> @@ -604,9 +571,10 @@ static int shared_listxattr(struct listxattr_iter *it)
->   
->   	for (i = 0; i < vi->xattr_shared_count; ++i) {
->   		xsid = vi->xattr_shared_xattrs[i];
-> -		it->it.blkaddr = erofs_xattr_blkaddr(sb, xsid);
-> -		it->it.ofs = erofs_xattr_blkoff(sb, xsid);
-> -		it->it.kaddr = erofs_bread(&it->it.buf, it->it.blkaddr, EROFS_KMAP);
-> +		it->it.pos = erofs_pos(sb, EROFS_SB(sb)->xattr_blkaddr) +
-> +				       xsid * sizeof(__u32);
-
-					^ sizeof(__le32); ?
-
-
-Otherwise it looks good to me.
-
-Thanks,
-Gao Xiang
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
