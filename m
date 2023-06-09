@@ -2,134 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15D20729242
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E353E729241
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239601AbjFIIHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 04:07:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44108 "EHLO
+        id S239838AbjFIIHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 04:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240076AbjFIIGr (ORCPT
+        with ESMTP id S236470AbjFIIGu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 04:06:47 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA3B3AA4;
-        Fri,  9 Jun 2023 01:05:59 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Fri, 9 Jun 2023 04:06:50 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352DB3C00;
+        Fri,  9 Jun 2023 01:06:04 -0700 (PDT)
+Received: from localhost (mdns.lwn.net [45.79.72.68])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9C3446606F1F;
-        Fri,  9 Jun 2023 09:05:57 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686297958;
-        bh=C23uMLkfLKdYz/PwXDJEsdRNny6ubZDBihQ94h8gE24=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Ktpdm7Hc7GhzjkguSPs6WKKGOBLLdgzk/JGnMZOwNzTsc2lfGK0fBhH5DG8rz4njL
-         TSWQQaUbrc6Rn1a/LFAF2PoUvps9SbSubDFmR9ulsfk+44QsZiEydWxT5xC9sxJOhQ
-         M8dfFUhG/MDSVoQxhuKXbS4WKPgE7LzXy++I9f9STxBrlF5bePXuzg/0DMvjW/VGoT
-         Trbr75HIDPmkW3/ul1iUE7BLy1SQd04pb84cu33g9plguWDizLRc/CSvcqclcqSpYO
-         cuj8UrzrifKzuXIGhXEVpSL67YORfNQ1jDavVWM8tZ3F1Ro0O0Z9b1QzXT5SDa+4D+
-         ZG5tCQDxu/7cg==
-Message-ID: <631ec4da-a194-4de0-9f41-0b2d816c40ad@collabora.com>
-Date:   Fri, 9 Jun 2023 10:05:55 +0200
+        by ms.lwn.net (Postfix) with ESMTPSA id CA860218;
+        Fri,  9 Jun 2023 08:06:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net CA860218
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1686297963; bh=vCCZoyVJv/dG21uOzB2PPXR7mnqwnSl+JgF4RTz00ho=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=HYWVs0E+uZvrD2KTOWcZc9exCT37zc1JzeOP9bPEBmIRQnULCdL3gTvh9VwPaRUkQ
+         ywuIjrg2tNNaLKOVs8ykB+Gqx2utABkMLDx4YbDqy3QFg4fSbDCSG7K8oSOnsjc57o
+         Hq/8cYLZ6M441DCYyEeL+Jf7oCZsnkQFRm9ioqXBoa+8r0qfY6q7f0wsJIdvaqaH2X
+         Z2Js1dmjmchCAXAb0+wjf+Y8/mf/2IPTLq3QpMHp9vJwyM5ExNBjbBaxXfOit2OgxX
+         zvyIg9O8WvxcyjcwyLKk66llzhRKwkHQgfnPy58Fb7Beu1XVnfxPirMo1eam4RXQV7
+         JNf0RCN5qqclw==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Costa Shulyupin <costa.shul@redhat.com>, linux-doc@vger.kernel.org,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Costa Shulyupin <costa.shul@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:BPF [MISC]" <bpf@vger.kernel.org>
+Subject: Re: [PATCH v3] Documentation: subsystem-apis: Categorize remaining
+ subsystems
+In-Reply-To: <20230601145556.3927838-1-costa.shul@redhat.com>
+References: <ZHgM0qKWP3OusjUW@debian.me>
+ <20230601145556.3927838-1-costa.shul@redhat.com>
+Date:   Fri, 09 Jun 2023 02:05:59 -0600
+Message-ID: <87h6rhoyag.fsf@meer.lwn.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] mmc: mtk-sd: include bitfield header and fix incompatible
- pointer types
-Content-Language: en-US
-To:     Wenbin Mei <wenbin.mei@mediatek.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Ritesh Harjani <riteshh@codeaurora.org>,
-        Asutosh Das <asutoshd@codeaurora.org>,
-        Chaotian Jing <chaotian.jing@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        kernel test robot <lkp@intel.com>
-References: <20230609074840.4520-1-wenbin.mei@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230609074840.4520-1-wenbin.mei@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 09/06/23 09:48, Wenbin Mei ha scritto:
-> The following error appeared due to the patch:
-> 364dae3e80a4 "mmc: mtk-sd: reduce CIT for better performance"
-> 
-> drivers/mmc/host/mtk-sd.c: In function 'msdc_cqe_cit_cal':
-> drivers/mmc/host/cqhci.h:27:41: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
-> 
-> drivers/mmc/host/mtk-sd.c:2471:3: error: incompatible pointer types passing 'unsigned long *' to parameter of type 'uint64_t *' (aka 'unsigned long long *') [-Werror,-Wincompatible-pointer-types]
->      2471 |                 do_div(hclk_freq, 1000);
->           |                 ^~~~~~~~~~~~~~~~~~~~~~~
-> include/asm-generic/div64.h:238:22: note: expanded from macro 'do_div'
->       238 |                 __rem = __div64_32(&(n), __base);       \
-> include/asm-generic/div64.h:213:38: note: passing argument to parameter 'dividend' here
->       213 | extern uint32_t __div64_32(uint64_t *dividend, uint32_t divisor);
-> ...
-> 
-> This patch corrects the issue.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Wenbin Mei <wenbin.mei@mediatek.com>
-> Fixes: 364dae3e80a4 ("mmc: mtk-sd: reduce CIT for better performance")
+Costa Shulyupin <costa.shul@redhat.com> writes:
 
-Fixes tags go before others... anyway:
+> From: Bagas Sanjaya <bagasdotme@gmail.com>
+>
+> Add classes:
+> * Core subsystems
+> * Storage
+> * Networking
+> * Peripherals and devices
+> * Embedded systems
+> * Integrity
+> * Virtualization
+> * Miscellaneous
+>
+> There is a FIXME that says to organize subsystems listed in
+> subsystem-apis.rst. Fulfill it by categorize remaining subsytems
+> by purpose/themes, while sorting entries in each category.
+>
+> HID devices are already categorized in 3c591cc954d56e ("docs:
+> consolidate human interface subsystems").
+>
+> Signed-off-by: Costa Shulyupin <costa.shul@redhat.com>
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+So now that I've found a moment to look at stuff, I'm a bit confused
+here.  Up top, you have a From: line identifying Bagas as the author of
+this patch - but it lacks his signoff so I can't apply it.
 
-> ---
->   drivers/mmc/host/cqhci.h  | 1 +
->   drivers/mmc/host/mtk-sd.c | 5 ++---
->   2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/mmc/host/cqhci.h b/drivers/mmc/host/cqhci.h
-> index e35c655edefc..1a12e40a02e6 100644
-> --- a/drivers/mmc/host/cqhci.h
-> +++ b/drivers/mmc/host/cqhci.h
-> @@ -5,6 +5,7 @@
->   #define LINUX_MMC_CQHCI_H
->   
->   #include <linux/compiler.h>
-> +#include <linux/bitfield.h>
->   #include <linux/bitops.h>
->   #include <linux/spinlock_types.h>
->   #include <linux/types.h>
-> diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
-> index b582f19f82f2..99317fd9f084 100644
-> --- a/drivers/mmc/host/mtk-sd.c
-> +++ b/drivers/mmc/host/mtk-sd.c
-> @@ -2456,15 +2456,14 @@ static void msdc_cqe_cit_cal(struct msdc_host *host, u64 timer_ns)
->   	struct mmc_host *mmc = mmc_from_priv(host);
->   	struct cqhci_host *cq_host = mmc->cqe_private;
->   	u8 itcfmul;
-> -	unsigned long hclk_freq;
-> -	u64 value;
-> +	u64 hclk_freq, value;
->   
->   	/*
->   	 * On MediaTek SoCs the MSDC controller's CQE uses msdc_hclk as ITCFVAL
->   	 * so we multiply/divide the HCLK frequency by ITCFMUL to calculate the
->   	 * Send Status Command Idle Timer (CIT) value.
->   	 */
-> -	hclk_freq = clk_get_rate(host->h_clk);
-> +	hclk_freq = (u64)clk_get_rate(host->h_clk);
->   	itcfmul = CQHCI_ITCFMUL(cqhci_readl(cq_host, CQHCI_CAP));
->   	switch (itcfmul) {
->   	case 0x0:
+If this is *really* such a complex change that it needs a
+co-developed-by tag, please arrange that and the correct signoffs.
+Otherwise, please send a patch that's your work (which can certainly
+reflect suggestions from others) that is properly tagged.
+
+Thanks,
+
+jon
