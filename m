@@ -2,152 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D3B172A3F5
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 22:00:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F3172A3F1
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 22:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjFIUAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 16:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52436 "EHLO
+        id S229829AbjFIUAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 16:00:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbjFIUAm (ORCPT
+        with ESMTP id S229541AbjFIUAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 16:00:42 -0400
-Received: from smtp-fw-52004.amazon.com (smtp-fw-52004.amazon.com [52.119.213.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B6135AA;
-        Fri,  9 Jun 2023 13:00:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1686340840; x=1717876840;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=AwzwnMbVO3rl3y00p/gpeO98vFDZVAnUq22KZ6hErmQ=;
-  b=jyn13C1ZQ3xxp3pqtqBze7Ha+LvMkFcYL/Za6NNJBFmvXCy1xPwqo9K+
-   gY0qt6pcaOhIOCIe4XOBQL16p423n0BklEsh6YUwQCeqqzaz6drhML7++
-   qam99DOMOn8HLraLXFAq6zOzcfXFasIb2puOviIs01Sc0QhxGM0fNjMGQ
-   k=;
-X-IronPort-AV: E=Sophos;i="6.00,230,1681171200"; 
-   d="scan'208";a="136187882"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1e-m6i4x-b538c141.us-east-1.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-52004.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 20:00:37 +0000
-Received: from EX19MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1e-m6i4x-b538c141.us-east-1.amazon.com (Postfix) with ESMTPS id 84D72A11E1;
-        Fri,  9 Jun 2023 20:00:28 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWB001.ant.amazon.com (10.250.64.248) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Fri, 9 Jun 2023 20:00:27 +0000
-Received: from 88665a182662.ant.amazon.com (10.106.101.20) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.26;
- Fri, 9 Jun 2023 20:00:21 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <leitao@debian.org>
-CC:     <alex.aring@gmail.com>, <andrea.righi@canonical.com>,
-        <asml.silence@gmail.com>, <ast@kernel.org>, <axboe@kernel.dk>,
-        <courmisch@gmail.com>, <davem@davemloft.net>,
-        <dccp@vger.kernel.org>, <dsahern@kernel.org>,
-        <edumazet@google.com>, <hbh25y@gmail.com>,
-        <joannelkoong@gmail.com>, <kernelxing@tencent.com>,
-        <kuba@kernel.org>, <kuniyu@amazon.com>, <leit@fb.com>,
-        <linux-kernel@vger.kernel.org>, <linux-sctp@vger.kernel.org>,
-        <linux-wpan@vger.kernel.org>, <lucien.xin@gmail.com>,
-        <marcelo.leitner@gmail.com>, <martin.lau@kernel.org>,
-        <martineau@kernel.org>, <matthieu.baerts@tessares.net>,
-        <miquel.raynal@bootlin.com>, <mptcp@lists.linux.dev>,
-        <netdev@vger.kernel.org>, <pabeni@redhat.com>,
-        <stefan@datenfreihafen.org>, <willemb@google.com>,
-        <willemdebruijn.kernel@gmail.com>, <wojciech.drewek@intel.com>
-Subject: Re: [PATCH net-next v7] net: ioctl: Use kernel memory on protocol ioctl callbacks
-Date:   Fri, 9 Jun 2023 13:00:10 -0700
-Message-ID: <20230609200010.27991-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230609152800.830401-1-leitao@debian.org>
-References: <20230609152800.830401-1-leitao@debian.org>
+        Fri, 9 Jun 2023 16:00:33 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA44210D;
+        Fri,  9 Jun 2023 13:00:31 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 359JXQDX023055;
+        Fri, 9 Jun 2023 20:00:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=hNSFKWryMT4l8OSN2viRKRuPpy4F59qui6oi84nwnZc=;
+ b=hocPd0owKosziZRgIVGQxfUiVGYcXC6of1dJfsZlC2pQ6apE8NpgSbQs7qCkp83+DC1U
+ 0aKFDpCNrP2bdplAOCy87PAmtLaV/mw89V7a1LrzDRtD2O4i/TCxFx3CTZoR4ikGR/r2
+ IIx2teYx1jNEYGfPWcV3KUiGp2H8oGYKq2UIYupOqwjs9XKq0bsP/E1YByO21atZW1qu
+ rrgJcAxTdVr+RCNSM4i+E48ffL3EDqLABzutGIKBXSJn0aFEPEE9o2kqFgOZfMDDN6/+
+ pEeohxxG8DlH38JDoxK8QvgGlPInFJUukWQdVEi2WS5QMRfwwze75cjxly1XnC4TNb7g Bg== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r3vu4hstr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Jun 2023 20:00:18 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 359K0Hql030988
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 9 Jun 2023 20:00:17 GMT
+Received: from [10.134.65.165] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 9 Jun 2023
+ 13:00:16 -0700
+Message-ID: <5a026df6-05d2-42ef-21dd-e0f70071fc90@quicinc.com>
+Date:   Fri, 9 Jun 2023 13:00:16 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v13 16/24] virt: gunyah: Translate gh_rm_hyp_resource into
+ gunyah_resource
+Content-Language: en-US
+To:     Alex Elder <elder@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+CC:     Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230509204801.2824351-1-quic_eberman@quicinc.com>
+ <20230509204801.2824351-17-quic_eberman@quicinc.com>
+ <91d52a40-98c5-3d79-79af-7a21b41acfc4@linaro.org>
+From:   Elliot Berman <quic_eberman@quicinc.com>
+In-Reply-To: <91d52a40-98c5-3d79-79af-7a21b41acfc4@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.106.101.20]
-X-ClientProxiedBy: EX19D045UWC001.ant.amazon.com (10.13.139.223) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR
-        autolearn=no autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: -Fe6BvKa1-udwQSoo5shOSKtZwc-7S-E
+X-Proofpoint-ORIG-GUID: -Fe6BvKa1-udwQSoo5shOSKtZwc-7S-E
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-09_14,2023-06-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=978
+ lowpriorityscore=0 phishscore=0 priorityscore=1501 clxscore=1015
+ suspectscore=0 spamscore=0 mlxscore=0 adultscore=0 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306090167
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Breno Leitao <leitao@debian.org>
-Date: Fri,  9 Jun 2023 08:27:42 -0700
-> Most of the ioctls to net protocols operates directly on userspace
-> argument (arg). Usually doing get_user()/put_user() directly in the
-> ioctl callback.  This is not flexible, because it is hard to reuse these
-> functions without passing userspace buffers.
-> 
-> Change the "struct proto" ioctls to avoid touching userspace memory and
-> operate on kernel buffers, i.e., all protocol's ioctl callbacks is
-> adapted to operate on a kernel memory other than on userspace (so, no
-> more {put,get}_user() and friends being called in the ioctl callback).
-> 
-> This changes the "struct proto" ioctl format in the following way:
-> 
->     int                     (*ioctl)(struct sock *sk, int cmd,
-> -                                        unsigned long arg);
-> +                                        int *karg);
-> 
-> (Important to say that this patch does not touch the "struct proto_ops"
-> protocols)
-> 
-> So, the "karg" argument, which is passed to the ioctl callback, is a
-> pointer allocated to kernel space memory (inside a function wrapper).
-> This buffer (karg) may contain input argument (copied from userspace in
-> a prep function) and it might return a value/buffer, which is copied
-> back to userspace if necessary. There is not one-size-fits-all format
-> (that is I am using 'may' above), but basically, there are three type of
-> ioctls:
-> 
-> 1) Do not read from userspace, returns a result to userspace
-> 2) Read an input parameter from userspace, and does not return anything
->   to userspace
-> 3) Read an input from userspace, and return a buffer to userspace.
-> 
-> The default case (1) (where no input parameter is given, and an "int" is
-> returned to userspace) encompasses more than 90% of the cases, but there
-> are two other exceptions. Here is a list of exceptions:
-> 
-> * Protocol RAW:
->    * cmd = SIOCGETVIFCNT:
->      * input and output = struct sioc_vif_req
->    * cmd = SIOCGETSGCNT
->      * input and output = struct sioc_sg_req
->    * Explanation: for the SIOCGETVIFCNT case, userspace passes the input
->      argument, which is struct sioc_vif_req. Then the callback populates
->      the struct, which is copied back to userspace.
-> 
-> * Protocol RAW6:
->    * cmd = SIOCGETMIFCNT_IN6
->      * input and output = struct sioc_mif_req6
->    * cmd = SIOCGETSGCNT_IN6
->      * input and output = struct sioc_sg_req6
-> 
-> * Protocol PHONET:
->   * cmd == SIOCPNADDRESOURCE | SIOCPNDELRESOURCE
->      * input int (4 bytes)
->   * Nothing is copied back to userspace.
-> 
-> For the exception cases, functions sock_sk_ioctl_inout() will
-> copy the userspace input, and copy it back to kernel space.
-> 
-> The wrapper that prepare the buffer and put the buffer back to user is
-> sk_ioctl(), so, instead of calling sk->sk_prot->ioctl(), the callee now
-> calls sk_ioctl(), which will handle all cases.
-> 
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-> Reviewed-by: Willem de Bruijn <willemb@google.com>
-> Reviewed-by: David Ahern <dsahern@kernel.org>
 
-Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-Thanks!
+On 6/5/2023 12:49 PM, Alex Elder wrote:
+> On 5/9/23 3:47 PM, Elliot Berman wrote:
+>> When booting a Gunyah virtual machine, the host VM may gain capabilities
+>> to interact with resources for the guest virtual machine. Examples of
+>> such resources are vCPUs or message queues. To use those resources, we
+>> need to translate the RM response into a gunyah_resource structure which
+>> are useful to Linux drivers. Presently, Linux drivers need only to know
+>> the type of resource, the capability ID, and an interrupt.
+>>
+>> On ARM64 systems, the interrupt reported by Gunyah is the GIC interrupt
+>> ID number and always a SPI.
+>>
+>> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> 
+> Please zero the automatic variable in the place I suggest it.
+> I have two other comments/questions.  Otherwise, this looks good.
+> 
+> Reviewed-by: Alex Elder <elder@linaro.org>
+> 
+>> ---
+
+...
+
+>> +struct gh_resource *gh_rm_alloc_resource(struct gh_rm *rm, struct 
+>> gh_rm_hyp_resource *hyp_resource)
+>> +{
+>> +    struct gh_resource *ghrsc;
+>> +    int ret;
+>> +
+>> +    ghrsc = kzalloc(sizeof(*ghrsc), GFP_KERNEL);
+>> +    if (!ghrsc)
+>> +        return NULL;
+>> +
+>> +    ghrsc->type = hyp_resource->type;
+>> +    ghrsc->capid = le64_to_cpu(hyp_resource->cap_id);
+>> +    ghrsc->irq = IRQ_NOTCONNECTED;
+>> +    ghrsc->rm_label = le32_to_cpu(hyp_resource->resource_label);
+>> +    if (hyp_resource->virq) {
+>> +        struct gh_irq_chip_data irq_data = {
+>> +            .gh_virq = le32_to_cpu(hyp_resource->virq),
+>> +        };
+>> +
+>> +        ret = irq_domain_alloc_irqs(rm->irq_domain, 1, NUMA_NO_NODE, 
+>> &irq_data);
+>> +        if (ret < 0) {
+>> +            dev_err(rm->dev,
+>> +                "Failed to allocate interrupt for resource %d label: 
+>> %d: %d\n",
+>> +                ghrsc->type, ghrsc->rm_label, ghrsc->irq);
+> 
+> Is it reasonable to return in this case without indicating to the
+> caller that something is wrong?
+> 
+
+I wasn't sure what to do here since this is unexpected edge case. Not 
+returning would cause a client's "request_irq" to fail down the line if 
+the client was interested in the irq. I had picked not to return since 
+this error doesn't put us in an unrecoverable state. No one currently 
+wants to try to recover from that error, so I'm really just deferring 
+the real error handling until later.
+
+I can return ret here.
+
+>> +        } else {
+>> +            ghrsc->irq = ret;
+>> +        }
+>> +    }
+>> +
+>> +    return ghrsc;
+
+...
