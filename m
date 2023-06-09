@@ -2,55 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D48C728EC1
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 06:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F9D728EC0
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 06:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238310AbjFIEB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 00:01:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37764 "EHLO
+        id S238313AbjFIEBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 00:01:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238117AbjFIEBW (ORCPT
+        with ESMTP id S229503AbjFIEBQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 00:01:22 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0586230F2;
-        Thu,  8 Jun 2023 21:01:15 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E5FCDAB6;
-        Thu,  8 Jun 2023 21:02:00 -0700 (PDT)
-Received: from [10.163.44.201] (unknown [10.163.44.201])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E4B263F587;
-        Thu,  8 Jun 2023 21:01:07 -0700 (PDT)
-Message-ID: <78cb22e2-c46e-d62d-fefc-b7963737499e@arm.com>
-Date:   Fri, 9 Jun 2023 09:30:59 +0530
+        Fri, 9 Jun 2023 00:01:16 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F079430E1;
+        Thu,  8 Jun 2023 21:01:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686283272; x=1717819272;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=2EcSjpulKjk5XFbCfBa9nzXMzA3JLe/W3YU4+K6Ux5o=;
+  b=XKsh24D5v8v2GduTx/USiYMRPOgeQvy5ErDQqUZKOIISM7KII+n26c9u
+   mAy9MQilQY4wW3Y3PBzvUzUl+m1SCAUaOTb5UrGWBeWV/x2sfH67TYsp2
+   tNgc3gNcm5K/zO92x+nwg9rzj32Eba1tsizTQK9YyNhbWjUQ1smZxgMyv
+   m28LtgyAcf1TP0fIP+RXzsbk0Xl92FZPAEokRNVB08CkiWUC9XXIzMDwq
+   /YbrWT9u/cJURS8XRyG56zYtFizfyaZmtp9RWv6g8MSkuyn9m2mY4z0Nm
+   cBz3rnQOoKtUbd5YngauNbTU6m5XRnFxmLLkSbhzO7R0L71k8rqxh1DZy
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="337863856"
+X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
+   d="scan'208";a="337863856"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 21:01:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="687606956"
+X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
+   d="scan'208";a="687606956"
+Received: from rahmanma-mobl1.amr.corp.intel.com (HELO [10.251.4.72]) ([10.251.4.72])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 21:01:11 -0700
+Message-ID: <77187035-52c0-77b4-7c9e-d09ece77e0ce@linux.intel.com>
+Date:   Thu, 8 Jun 2023 21:01:11 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V11 05/10] arm64/perf: Add branch stack support in ARMV8
- PMU
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH v11 11/20] x86/virt/tdx: Fill out TDMRs to cover all TDX
+ memory regions
 Content-Language: en-US
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, catalin.marinas@arm.com,
-        Mark Brown <broonie@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-References: <20230531040428.501523-1-anshuman.khandual@arm.com>
- <20230531040428.501523-6-anshuman.khandual@arm.com>
- <ZH3PCqYt/UzoiVx3@FVFF77S0Q05N>
- <ba396c30-6719-1dfb-77c2-9f7e1715b57c@arm.com>
- <290b577c-4740-d2e2-d236-c8bbe2f907b9@arm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <290b577c-4740-d2e2-d236-c8bbe2f907b9@arm.com>
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-mm@kvack.org, dave.hansen@intel.com,
+        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
+        peterz@infradead.org, tglx@linutronix.de, seanjc@google.com,
+        pbonzini@redhat.com, david@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, ying.huang@intel.com,
+        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, chao.gao@intel.com, bagasdotme@gmail.com,
+        sagis@google.com, imammedo@redhat.com
+References: <cover.1685887183.git.kai.huang@intel.com>
+ <927ec9871721d2a50f1aba7d1cf7c3be50e4f49b.1685887183.git.kai.huang@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <927ec9871721d2a50f1aba7d1cf7c3be50e4f49b.1685887183.git.kai.huang@intel.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,267 +76,179 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 6/8/23 15:43, Suzuki K Poulose wrote:
-> On 06/06/2023 11:34, Anshuman Khandual wrote:
->>
->>
->> On 6/5/23 17:35, Mark Rutland wrote:
->>> On Wed, May 31, 2023 at 09:34:23AM +0530, Anshuman Khandual wrote:
->>>> This enables support for branch stack sampling event in ARMV8 PMU, checking
->>>> has_branch_stack() on the event inside 'struct arm_pmu' callbacks. Although
->>>> these branch stack helpers armv8pmu_branch_XXXXX() are just dummy functions
->>>> for now. While here, this also defines arm_pmu's sched_task() callback with
->>>> armv8pmu_sched_task(), which resets the branch record buffer on a sched_in.
->>>
->>> This generally looks good, but I have a few comments below.
->>>
->>> [...]
->>>
->>>> +static inline bool armv8pmu_branch_valid(struct perf_event *event)
->>>> +{
->>>> +    WARN_ON_ONCE(!has_branch_stack(event));
->>>> +    return false;
->>>> +}
->>>
->>> IIUC this is for validating the attr, so could we please name this
->>> armv8pmu_branch_attr_valid() ?
->>
->> Sure, will change the name and updated call sites.
->>
->>>
->>> [...]
->>>
->>>> +static int branch_records_alloc(struct arm_pmu *armpmu)
->>>> +{
->>>> +    struct pmu_hw_events *events;
->>>> +    int cpu;
->>>> +
->>>> +    for_each_possible_cpu(cpu) {
+On 6/4/23 7:27 AM, Kai Huang wrote:
+> Start to transit out the "multi-steps" to construct a list of "TD Memory
+> Regions" (TDMRs) to cover all TDX-usable memory regions.
 > 
-> Shouldn't this be supported_pmus ? i.e.
->     for_each_cpu(cpu, &armpmu->supported_cpus) {
+> The kernel configures TDX-usable memory regions by passing a list of
+> TDMRs "TD Memory Regions" (TDMRs) to the TDX module.  Each TDMR contains
+> the information of the base/size of a memory region, the base/size of the
+> associated Physical Address Metadata Table (PAMT) and a list of reserved
+> areas in the region.
 > 
-> 
->>>> +        events = per_cpu_ptr(armpmu->hw_events, cpu);
->>>> +        events->branches = kzalloc(sizeof(struct branch_records), GFP_KERNEL);
->>>> +        if (!events->branches)
->>>> +            return -ENOMEM;
-> 
-> Do we need to free the allocated branches already ?
+> Do the first step to fill out a number of TDMRs to cover all TDX memory
+> regions.  To keep it simple, always try to use one TDMR for each memory
+> region.  As the first step only set up the base/size for each TDMR.
 
-This gets fixed in the next patch via per-cpu allocation. I will
-move and fold the code block in here. Updated function will look
-like the following.
-
-static int branch_records_alloc(struct arm_pmu *armpmu)
-{
-        struct branch_records __percpu *records;
-        int cpu;
-
-        records = alloc_percpu_gfp(struct branch_records, GFP_KERNEL);
-        if (!records)
-                return -ENOMEM;
-
-        /*
-         * FIXME: Memory allocated via records gets completely
-         * consumed here, never required to be freed up later. Hence
-         * losing access to on stack 'records' is acceptable.
-         * Otherwise this alloc handle has to be saved some where.
-         */
-        for_each_possible_cpu(cpu) {
-                struct pmu_hw_events *events_cpu;
-                struct branch_records *records_cpu;
-
-                events_cpu = per_cpu_ptr(armpmu->hw_events, cpu);
-                records_cpu = per_cpu_ptr(records, cpu);
-                events_cpu->branches = records_cpu;
-        }
-        return 0;
-}
-
-Regarding the cpumask argument in for_each_cpu().
-
-- hw_events is a __percpu pointer in struct arm_pmu
-
-	- pmu->hw_events = alloc_percpu_gfp(struct pmu_hw_events, GFP_KERNEL)
-
-
-- 'records' above is being allocated via alloc_percpu_gfp()
-
-	- records = alloc_percpu_gfp(struct branch_records, GFP_KERNEL)
-
-If 'armpmu->supported_cpus' mask gets used instead of possible cpu mask,
-would not there be some dangling per-cpu branch_record allocated areas,
-that remain unsigned ? Assigning all of them back into hw_events should
-be harmless.
+As a first step?
 
 > 
->>>> +    }
+> Each TDMR must be 1G aligned and the size must be in 1G granularity.
+> This implies that one TDMR could cover multiple memory regions.  If a
+> memory region spans the 1GB boundary and the former part is already
+> covered by the previous TDMR, just use a new TDMR for the remaining
+> part.
+> 
+> TDX only supports a limited number of TDMRs.  Disable TDX if all TDMRs
+> are consumed but there is more memory region to cover.
+> 
+> There are fancier things that could be done like trying to merge
+> adjacent TDMRs.  This would allow more pathological memory layouts to be
+> supported.  But, current systems are not even close to exhausting the
+> existing TDMR resources in practice.  For now, keep it simple.
+> 
+> Signed-off-by: Kai Huang <kai.huang@intel.com>
+> ---
+> 
+> v10 -> v11:
+>  - No update
+> 
+> v9 -> v10:
+>  - No change.
+> 
+> v8 -> v9:
+> 
+>  - Added the last paragraph in the changelog (Dave).
+>  - Removed unnecessary type cast in tdmr_entry() (Dave).
 > 
 > 
-> May be:
->     int ret = 0;
+> ---
+>  arch/x86/virt/vmx/tdx/tdx.c | 94 ++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 93 insertions(+), 1 deletion(-)
 > 
->     for_each_cpu(cpu, &armpmu->supported_cpus) {
->         events = per_cpu_ptr(armpmu->hw_events, cpu);
->         events->branches = kzalloc(sizeof(struct         branch_records), GFP_KERNEL);
->        
->         if (!events->branches) {
->             ret = -ENOMEM;
->             break;
->         }
->     }
-> 
->     if (!ret)
->         return 0;
-> 
->     for_each_cpu(cpu, &armpmu->supported_cpus) {
->         events = per_cpu_ptr(armpmu->hw_events, cpu);
->         if (!events->branches)
->             break;
->         kfree(events->branches);
->     }
->     return ret;
->     
->>>> +    return 0;
->>>
->>> This leaks memory if any allocation fails, and the next patch replaces this
->>> code entirely.
->>
->> Okay.
->>
->>>
->>> Please add this once in a working state. Either use the percpu allocation
->>> trick in the next patch from the start, or have this kzalloc() with a
->>> corresponding kfree() in an error path.
->>
->> I will change branch_records_alloc() as suggested in the next patch's thread
->> and fold those changes here in this patch.
->>
->>>
->>>>   }
->>>>     static int armv8pmu_probe_pmu(struct arm_pmu *cpu_pmu)
->>>> @@ -1145,12 +1162,24 @@ static int armv8pmu_probe_pmu(struct arm_pmu *cpu_pmu)
->>>>       };
->>>>       int ret;
->>>>   +    ret = armv8pmu_private_alloc(cpu_pmu);
->>>> +    if (ret)
->>>> +        return ret;
->>>> +
->>>>       ret = smp_call_function_any(&cpu_pmu->supported_cpus,
->>>>                       __armv8pmu_probe_pmu,
->>>>                       &probe, 1);
->>>>       if (ret)
->>>>           return ret;
->>>>   +    if (arm_pmu_branch_stack_supported(cpu_pmu)) {
->>>> +        ret = branch_records_alloc(cpu_pmu);
->>>> +        if (ret)
->>>> +            return ret;
->>>> +    } else {
->>>> +        armv8pmu_private_free(cpu_pmu);
->>>> +    }
->>>
->>> I see from the next patch that "private" is four ints, so please just add that
->>> to struct arm_pmu under an ifdef CONFIG_ARM64_BRBE. That'll simplify this, and
->>> if we end up needing more space in future we can consider factoring it out.
->>
->> struct arm_pmu {
->>     ........................................
->>          /* Implementation specific attributes */
->>          void            *private;
->> }
->>
->> private pointer here creates an abstraction for given pmu implementation
->> to hide attribute details without making it known to core arm pmu layer.
->> Although adding ifdef CONFIG_ARM64_BRBE solves the problem as mentioned
->> above, it does break that abstraction. Currently arm_pmu layer is aware
->> about 'branch records' but not about BRBE in particular which the driver
->> adds later on. I suggest we should not break that abstraction.
->>
->> Instead a global 'static struct brbe_hw_attr' in drivers/perf/arm_brbe.c
->> can be initialized into arm_pmu->private during armv8pmu_branch_probe(),
->> which will also solve the allocation-free problem. Also similar helpers
->> armv8pmu_task_ctx_alloc()/free() could be defined to manage task context
->> cache i.e arm_pmu->pmu.task_ctx_cache independently.
->>
->> But now armv8pmu_task_ctx_alloc() can be called after pmu probe confirms
->> to have arm_pmu->has_branch_stack.
->>
->>>
->>>> +
->>>>       return probe.present ? 0 : -ENODEV;
->>>>   }
->>>
->>> It also seems odd to ceck probe.present *after* checking
->>> arm_pmu_branch_stack_supported().
->>
->> I will reorganize as suggested below.
->>
->>>
->>> With the allocation removed I think this can be written more clearly as:
->>>
->>> | static int armv8pmu_probe_pmu(struct arm_pmu *cpu_pmu)
->>> | {
->>> |         struct armv8pmu_probe_info probe = {
->>> |                 .pmu = cpu_pmu,
->>> |                 .present = false,
->>> |         };
->>> |         int ret;
->>> |
->>> |         ret = smp_call_function_any(&cpu_pmu->supported_cpus,
->>> |                                     __armv8pmu_probe_pmu,
->>> |                                     &probe, 1);
->>> |         if (ret)
->>> |                 return ret; > |
->>> |         if (!probe.present)
->>> |                 return -ENODEV;
->>> |
->>> |         if (arm_pmu_branch_stack_supported(cpu_pmu))
->>> |                 ret = branch_records_alloc(cpu_pmu);
->>> |
->>> |         return ret;
->>> | }
-> 
-> Could we not simplify this as below and keep the abstraction, since we
-> already have it ?
+> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
+> index 7a20c72361e7..fa9fa8bc581a 100644
+> --- a/arch/x86/virt/vmx/tdx/tdx.c
+> +++ b/arch/x86/virt/vmx/tdx/tdx.c
+> @@ -385,6 +385,93 @@ static void free_tdmr_list(struct tdmr_info_list *tdmr_list)
+>  			tdmr_list->max_tdmrs * tdmr_list->tdmr_sz);
+>  }
+>  
+> +/* Get the TDMR from the list at the given index. */
+> +static struct tdmr_info *tdmr_entry(struct tdmr_info_list *tdmr_list,
+> +				    int idx)
+> +{
+> +	int tdmr_info_offset = tdmr_list->tdmr_sz * idx;
+> +
+> +	return (void *)tdmr_list->tdmrs + tdmr_info_offset;
+> +}
+> +
+> +#define TDMR_ALIGNMENT		BIT_ULL(30)
+> +#define TDMR_PFN_ALIGNMENT	(TDMR_ALIGNMENT >> PAGE_SHIFT)
 
-No, there is an allocation dependency before the smp call context.
- 
-> 
->>> | static int armv8pmu_probe_pmu(struct arm_pmu *cpu_pmu)
->>> | {
->>> |         struct armv8pmu_probe_info probe = {
->>> |                 .pmu = cpu_pmu,
->>> |                 .present = false,
->>> |         };
->>> |         int ret;
->>> |
->>> |         ret = smp_call_function_any(&cpu_pmu->supported_cpus,
->>> |                                     __armv8pmu_probe_pmu,
->>> |                                     &probe, 1);
->>> |         if (ret)
->>> |                 return ret;
->>> |         if (!probe.present)
->>> |                 return -ENODEV;
->>> |
->>> |           if (!arm_pmu_branch_stack_supported(cpu_pmu))
->>> |             return 0;
->>> |
->>> |         ret = armv8pmu_private_alloc(cpu_pmu);
+This macro is never used. Maybe you can drop it from this patch.
 
-This needs to be allocated before each supported PMU gets probed via
-__armv8pmu_probe_pmu() inside smp_call_function_any() callbacks that
-unfortunately cannot do memory allocation.
+> +#define TDMR_ALIGN_DOWN(_addr)	ALIGN_DOWN((_addr), TDMR_ALIGNMENT)
+> +#define TDMR_ALIGN_UP(_addr)	ALIGN((_addr), TDMR_ALIGNMENT)
+> +
+> +static inline u64 tdmr_end(struct tdmr_info *tdmr)
+> +{
+> +	return tdmr->base + tdmr->size;
+> +}
+> +
+> +/*
+> + * Take the memory referenced in @tmb_list and populate the
+> + * preallocated @tdmr_list, following all the special alignment
+> + * and size rules for TDMR.
+> + */
+> +static int fill_out_tdmrs(struct list_head *tmb_list,
+> +			  struct tdmr_info_list *tdmr_list)
+> +{
+> +	struct tdx_memblock *tmb;
+> +	int tdmr_idx = 0;
+> +
+> +	/*
+> +	 * Loop over TDX memory regions and fill out TDMRs to cover them.
+> +	 * To keep it simple, always try to use one TDMR to cover one
+> +	 * memory region.
+> +	 *
+> +	 * In practice TDX1.0 supports 64 TDMRs, which is big enough to
+> +	 * cover all memory regions in reality if the admin doesn't use
+> +	 * 'memmap' to create a bunch of discrete memory regions.  When
+> +	 * there's a real problem, enhancement can be done to merge TDMRs
+> +	 * to reduce the final number of TDMRs.
+> +	 */
+> +	list_for_each_entry(tmb, tmb_list, list) {
+> +		struct tdmr_info *tdmr = tdmr_entry(tdmr_list, tdmr_idx);
+> +		u64 start, end;
+> +
+> +		start = TDMR_ALIGN_DOWN(PFN_PHYS(tmb->start_pfn));
+> +		end   = TDMR_ALIGN_UP(PFN_PHYS(tmb->end_pfn));
+> +
+> +		/*
+> +		 * A valid size indicates the current TDMR has already
+> +		 * been filled out to cover the previous memory region(s).
+> +		 */
+> +		if (tdmr->size) {
+> +			/*
+> +			 * Loop to the next if the current memory region
+> +			 * has already been fully covered.
+> +			 */
+> +			if (end <= tdmr_end(tdmr))
+> +				continue;
+> +
+> +			/* Otherwise, skip the already covered part. */
+> +			if (start < tdmr_end(tdmr))
+> +				start = tdmr_end(tdmr);
+> +
+> +			/*
+> +			 * Create a new TDMR to cover the current memory
+> +			 * region, or the remaining part of it.
+> +			 */
+> +			tdmr_idx++;
+> +			if (tdmr_idx >= tdmr_list->max_tdmrs) {
+> +				pr_warn("initialization failed: TDMRs exhausted.\n");
+> +				return -ENOSPC;
+> +			}
+> +
+> +			tdmr = tdmr_entry(tdmr_list, tdmr_idx);
+> +		}
+> +
+> +		tdmr->base = start;
+> +		tdmr->size = end - start;
+> +	}
+> +
+> +	/* @tdmr_idx is always the index of last valid TDMR. */
+> +	tdmr_list->nr_consumed_tdmrs = tdmr_idx + 1;
+> +
+> +	return 0;
+> +}
+> +
+>  /*
+>   * Construct a list of TDMRs on the preallocated space in @tdmr_list
+>   * to cover all TDX memory regions in @tmb_list based on the TDX module
+> @@ -394,10 +481,15 @@ static int construct_tdmrs(struct list_head *tmb_list,
+>  			   struct tdmr_info_list *tdmr_list,
+>  			   struct tdsysinfo_struct *sysinfo)
+>  {
+> +	int ret;
+> +
+> +	ret = fill_out_tdmrs(tmb_list, tdmr_list);
+> +	if (ret)
+> +		return ret;
+> +
+>  	/*
+>  	 * TODO:
+>  	 *
+> -	 *  - Fill out TDMRs to cover all TDX memory regions.
+>  	 *  - Allocate and set up PAMTs for each TDMR.
+>  	 *  - Designate reserved areas for each TDMR.
+>  	 *
 
->>> |         if (ret)
->>> |         return ret;
->>> |       
->>> |          ret = branch_records_alloc(cpu_pmu);
->>> |          if (ret)
->>> |          armv8pmu_private_free(cpu_pmu);
->>> |       
->>> |        return ret;
->>> | }
+Rest looks good to me.
 
-Changing the abstraction will cause too much code churn, this late in
-the development phase, which should be avoided IMHO.
+Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
