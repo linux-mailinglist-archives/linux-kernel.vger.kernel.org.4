@@ -2,348 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B1A72A02A
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E78E572A02C
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:28:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242192AbjFIQ1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 12:27:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40178 "EHLO
+        id S231796AbjFIQ1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 12:27:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242007AbjFIQ0z (ORCPT
+        with ESMTP id S231976AbjFIQ1v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 12:26:55 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291933A8C;
-        Fri,  9 Jun 2023 09:26:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686328009; x=1717864009;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=q2cuOexLZH4SnGBwsELA7mCsEQlEVUrKhgHRwoL0rJI=;
-  b=DUQgCQFuALj0CPIvZsu3CDrRNoUWDpgXlGfXVjXCF31FG0wWJzOdQnod
-   Pk3elIXAjSFourS2LWSqqpE27BeqczvRTX8SDk/bkrkbqunfk2vel5Tk6
-   LQCI/9m2ol5EsEOB3HDji+BqFZDKlw4Z4Dy1fDrxXaDe8D3j7mAWn2bfU
-   X2k1I8mC/75X9yguHHZRYf4uy/3x0gmV3eZynKpUL1+JVpdLbRoE+xuzX
-   236NiWnUzDvEfFFvVBrRlMqeT1hw2YejIWfyj2l9As4cGdUXHGxNVe/EI
-   pSE2bQziKSYI+3WsZlAa6JC1VaKcEc/lDvlce9u/184UT7i0uz2F+qqsT
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="355123928"
-X-IronPort-AV: E=Sophos;i="6.00,229,1681196400"; 
-   d="scan'208";a="355123928"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 09:26:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="800269728"
-X-IronPort-AV: E=Sophos;i="6.00,229,1681196400"; 
-   d="scan'208";a="800269728"
-Received: from a0cec87da3f2.jf.intel.com (HELO worker-node-1.jf.intel.com) ([10.165.55.163])
-  by FMSMGA003.fm.intel.com with ESMTP; 09 Jun 2023 09:26:45 -0700
-From:   Weilin Wang <weilin.wang@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Weilin Wang <weilin.wang@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Samantha Alt <samantha.alt@intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>
-Subject: [PATCH v2 3/3] perf test: Rerun failed metrics with longer workload
-Date:   Fri,  9 Jun 2023 09:26:25 -0700
-Message-Id: <20230609162625.100897-4-weilin.wang@intel.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230609162625.100897-1-weilin.wang@intel.com>
-References: <20230609162625.100897-1-weilin.wang@intel.com>
+        Fri, 9 Jun 2023 12:27:51 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246933AB1;
+        Fri,  9 Jun 2023 09:27:25 -0700 (PDT)
+X-GND-Sasl: alexis.lothore@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1686328044;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3zUqH0qaNcKfB3fn4Ga2+WqqZ6TvHzReJVMUaOXjOyY=;
+        b=Bkoinid12OBg/0k/Ja+YAFM8fbn0wbBDY4Y30w6KU7gufROQs+6DoG3Aq7ffjQYc8NLhtv
+        +ftUlEN+lQkYA0UlBcvzHZh4D8qTzpz0bkopCa4wFb9SfIKrYcymLgNsmFxUHzc/oO/2//
+        KCxcdsz047IgfVEDM8qW8V+XJ2jX64Icac31hzhQ1Y+eqrbYSHk47eGces9TsEkBKEmrM0
+        d0U2XgY8eUqdD3SjqVYZnHDKW2GsyhRl4m3CMfI7TL3kNjJHgwidv43Tl81BZY6j4BbpjS
+        8018w1zC0oodiIfL8TKAs5ToKOZ9YUVJlsB6IEfB3kdG5KLD09Yplo+UPNux1w==
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 51A6040005;
+        Fri,  9 Jun 2023 16:27:23 +0000 (UTC)
+Message-ID: <2c11201b-9cb5-cbf1-a53b-559dd6ab331e@bootlin.com>
+Date:   Fri, 9 Jun 2023 18:27:36 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH net-next 2/2] net: dsa: mv88e6xxx: implement egress tbf
+ qdisc for 6393x family
+Content-Language: en-US
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        paul.arola@telus.com, scott.roberts@telus.com
+References: <20230609141812.297521-1-alexis.lothore@bootlin.com>
+ <20230609141812.297521-1-alexis.lothore@bootlin.com>
+ <20230609141812.297521-3-alexis.lothore@bootlin.com>
+ <20230609141812.297521-3-alexis.lothore@bootlin.com>
+ <20230609145727.qt6qvyoheepstpz7@skbuf>
+From:   =?UTF-8?Q?Alexis_Lothor=c3=a9?= <alexis.lothore@bootlin.com>
+In-Reply-To: <20230609145727.qt6qvyoheepstpz7@skbuf>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rerun failed metrics with longer workload to avoid false failure because
-sometimes metric value test fails when running in very short amount of
-time.
+Hello Vladimir, thanks for the feedback,
 
-Signed-off-by: Weilin Wang <weilin.wang@intel.com>
----
- .../tests/shell/lib/perf_metric_validation.py | 129 +++++++++++-------
- 1 file changed, 83 insertions(+), 46 deletions(-)
+On 6/9/23 16:57, Vladimir Oltean wrote:
+> On Fri, Jun 09, 2023 at 04:18:12PM +0200, alexis.lothore@bootlin.com wrote:
+>> +int mv88e6393x_tbf_add(struct mv88e6xxx_chip *chip, int port,
+>> +		       struct tc_tbf_qopt_offload_replace_params *replace_params)
+>> +{
+>> +	int rate_kbps = DIV_ROUND_UP(replace_params->rate.rate_bytes_ps * 8, 1000);
+>> +	int overhead = DIV_ROUND_UP(replace_params->rate.overhead, 4);
+>> +	int rate_step, decrement_rate, err;
+>> +	u16 val;
+>> +
+>> +	if (rate_kbps < MV88E6393X_PORT_EGRESS_RATE_MIN_KBPS ||
+>> +	    rate_kbps >= MV88E6393X_PORT_EGRESS_RATE_MAX_KBPS)
+>> +		return -EOPNOTSUPP;
+>> +
+>> +	if (replace_params->rate.overhead > MV88E6393X_PORT_EGRESS_MAX_OVERHEAD)
+>> +		return -EOPNOTSUPP;
+> 
+> How does tbf react to the driver returning -EOPNOTSUPP? I see tbf_offload_change()
+> returns void and doesn't check the ndo_setup_tc() return code.
+> 
+> Should we resolve that so that the error code is propagated to the user?
 
-diff --git a/tools/perf/tests/shell/lib/perf_metric_validation.py b/tools/perf/tests/shell/lib/perf_metric_validation.py
-index e59941089350..fd39b50371d0 100644
---- a/tools/perf/tests/shell/lib/perf_metric_validation.py
-+++ b/tools/perf/tests/shell/lib/perf_metric_validation.py
-@@ -11,8 +11,9 @@ class Validator:
-         self.rulefname = rulefname
-         self.reportfname = reportfname
-         self.rules = None
--        self.collectlist=metrics
--        self.metrics = set(metrics)
-+        self.collectlist:str = metrics
-+        self.metrics = self.__set_metrics(metrics)
-+        self.skiplist = set()
-         self.tolerance = t
- 
-         self.workloads = [x for x in workload.split(",") if x]
-@@ -41,6 +42,12 @@ class Validator:
-         self.debug = debug
-         self.fullrulefname = fullrulefname
- 
-+    def __set_metrics(self, metrics=''):
-+        if metrics != '':
-+            return set(metrics.split(","))
-+        else:
-+            return set()
-+
-     def read_json(self, filename: str) -> dict:
-         try:
-             with open(Path(filename).resolve(), "r") as f:
-@@ -113,7 +120,7 @@ class Validator:
-         All future test(s) on this metric will fail.
- 
-         @param name: name of the metric
--        @returns: list with value found in self.results; list is empty when not value found.
-+        @returns: list with value found in self.results; list is empty when value is not found.
-         """
-         results = []
-         data = self.results[ridx] if ridx in self.results else self.results[0]
-@@ -123,7 +130,6 @@ class Validator:
-             elif name.replace('.', '1').isdigit():
-                 results.append(float(name))
-             else:
--                self.errlist.append("Metric '%s' is not collected or the value format is incorrect"%(name))
-                 self.ignoremetrics.add(name)
-         return results
- 
-@@ -138,27 +144,32 @@ class Validator:
-         Failure: when metric value is negative or not provided.
-         Metrics with negative value will be added into the self.failtests['PositiveValueTest'] and self.ignoremetrics.
-         """
--        negmetric = set()
--        missmetric = set()
-+        negmetric = dict()
-         pcnt = 0
-         tcnt = 0
-+        rerun = list()
-         for name, val in self.get_results().items():
--            if val is None or val == '':
--                missmetric.add(name)
--                self.errlist.append("Metric '%s' is not collected"%(name))
--            elif val < 0:
--                negmetric.add("{0}(={1:.4f})".format(name, val))
--                self.collectlist[0].append(name)
-+            if val < 0:
-+                negmetric[name] = val
-+                rerun.append(name)
-             else:
-                 pcnt += 1
-             tcnt += 1
-+        if len(rerun) > 0:
-+            second_results = dict()
-+            self.second_test(rerun, second_results)
-+            for name, val in second_results.items():
-+                if name not in negmetric: continue
-+                if val >= 0:
-+                    del negmetric[name]
-+                    pcnt += 1
- 
-         self.failtests['PositiveValueTest']['Total Tests'] = tcnt
-         self.failtests['PositiveValueTest']['Passed Tests'] = pcnt
--        if len(negmetric) or len(missmetric)> 0:
--            self.ignoremetrics.update(negmetric)
--            self.ignoremetrics.update(missmetric)
--            self.failtests['PositiveValueTest']['Failed Tests'].append({'NegativeValue':list(negmetric), 'MissingValue':list(missmetric)})
-+        if len(negmetric.keys()):
-+            self.ignoremetrics.update(negmetric.keys())
-+            negmessage = ["{0}(={1:.4f})".format(name, val) for name, val in negmetric.items()]
-+            self.failtests['PositiveValueTest']['Failed Tests'].append({'NegativeValue': negmessage})
- 
-         return
- 
-@@ -259,21 +270,36 @@ class Validator:
-         metrics = rule['Metrics']
-         passcnt = 0
-         totalcnt = 0
--        faillist = []
-+        faillist = list()
-+        failures = dict()
-+        rerun = list()
-         for m in metrics:
-             totalcnt += 1
-             result = self.get_value(m['Name'])
--            if len(result) > 0 and self.check_bound(result[0], lbv, ubv, t):
-+            if len(result) > 0 and self.check_bound(result[0], lbv, ubv, t) or m['Name'] in self.skiplist:
-                 passcnt += 1
-             else:
--                faillist.append({'MetricName':m['Name'], 'CollectedValue':result})
--                self.collectlist[0].append(m['Name'])
-+                failures[m['Name']] = result
-+                rerun.append(m['Name'])
-+
-+        if len(rerun) > 0:
-+            second_results = dict()
-+            self.second_test(rerun, second_results)
-+            for name, val in second_results.items():
-+                if name not in failures: continue
-+                if self.check_bound(val, lbv, ubv, t):
-+                    passcnt += 1
-+                    del failures[name]
-+                else:
-+                    failures[name] = val
-+                    self.results[0][name] = val
- 
-         self.totalcnt += totalcnt
-         self.passedcnt += passcnt
-         self.failtests['SingleMetricTest']['Total Tests'] += totalcnt
-         self.failtests['SingleMetricTest']['Passed Tests'] += passcnt
--        if len(faillist) != 0:
-+        if len(failures.keys()) != 0:
-+            faillist = [{'MetricName':name, 'CollectedValue':val} for name, val in failures.items()]
-             self.failtests['SingleMetricTest']['Failed Tests'].append({'RuleIndex':rule['RuleIndex'],
-                                                                        'RangeLower': rule['RangeLower'],
-                                                                        'RangeUpper': rule['RangeUpper'],
-@@ -316,7 +342,7 @@ class Validator:
-         return True
- 
-     # Start of Collector and Converter
--    def convert(self, data: list, idx: int):
-+    def convert(self, data: list, metricvalues:dict):
-         """
-         Convert collected metric data from the -j output to dict of {metric_name:value}.
-         """
-@@ -326,20 +352,29 @@ class Validator:
-                 if "metric-unit" in result and result["metric-unit"] != "(null)" and result["metric-unit"] != "":
-                     name = result["metric-unit"].split("  ")[1] if len(result["metric-unit"].split("  ")) > 1 \
-                         else result["metric-unit"]
--                    if idx not in self.results: self.results[idx] = dict()
--                    self.results[idx][name.lower()] = result["metric-value"]
-+                    metricvalues[name.lower()] = result["metric-value"]
-             except ValueError as error:
-                 continue
-         return
- 
--    def collect_perf(self, data_file: str, workload: str):
-+    def _run_perf(self, metric, workload: str):
-+        tool = 'perf'
-+        command = [tool, 'stat', '-j', '-M', f"{metric}", "-a"]
-+        wl = workload.split()
-+        command.extend(wl)
-+        print(" ".join(command))
-+        cmd = subprocess.run(command, stderr=subprocess.PIPE, encoding='utf-8')
-+        data = [x+'}' for x in cmd.stderr.split('}\n') if x]
-+        return data
-+
-+
-+    def collect_perf(self, workload: str):
-         """
-         Collect metric data with "perf stat -M" on given workload with -a and -j.
-         """
-         self.results = dict()
--        tool = 'perf'
-         print(f"Starting perf collection")
--        print(f"Workload: {workload}")
-+        print(f"Long workload: {workload}")
-         collectlist = dict()
-         if self.collectlist != "":
-             collectlist[0] = {x for x in self.collectlist.split(",")}
-@@ -353,17 +388,20 @@ class Validator:
-                     collectlist[rule["RuleIndex"]] = [",".join(list(set(metrics)))]
- 
-         for idx, metrics in collectlist.items():
--            if idx == 0: wl = "sleep 0.5".split()
--            else: wl = workload.split()
-+            if idx == 0: wl = "true"
-+            else: wl = workload
-             for metric in metrics:
--                command = [tool, 'stat', '-j', '-M', f"{metric}", "-a"]
--                command.extend(wl)
--                print(" ".join(command))
--                cmd = subprocess.run(command, stderr=subprocess.PIPE, encoding='utf-8')
--                data = [x+'}' for x in cmd.stderr.split('}\n') if x]
--                self.convert(data, idx)
--        self.collectlist = dict()
--        self.collectlist[0] = list()
-+                data = self._run_perf(metric, wl)
-+                if idx not in self.results: self.results[idx] = dict()
-+                self.convert(data, self.results[idx])
-+        return
-+
-+    def second_test(self, collectlist, second_results):
-+        workload = self.workloads[self.wlidx]
-+        for metric in collectlist:
-+            data = self._run_perf(metric, workload)
-+            self.convert(data, second_results)
-+
-     # End of Collector and Converter
- 
-     # Start of Rule Generator
-@@ -381,7 +419,7 @@ class Validator:
-                 if 'MetricName' not in m:
-                     print("Warning: no metric name")
-                     continue
--                name = m['MetricName']
-+                name = m['MetricName'].lower()
-                 self.metrics.add(name)
-                 if 'ScaleUnit' in m and (m['ScaleUnit'] == '1%' or m['ScaleUnit'] == '100%'):
-                     self.pctgmetrics.add(name.lower())
-@@ -391,14 +429,12 @@ class Validator:
- 
-         return
- 
--    def remove_unsupported_rules(self, rules, skiplist: set = None):
--        for m in skiplist:
--            self.metrics.discard(m)
-+    def remove_unsupported_rules(self, rules):
-         new_rules = []
-         for rule in rules:
-             add_rule = True
-             for m in rule["Metrics"]:
--                if m["Name"] not in self.metrics:
-+                if m["Name"] in self.skiplist or m["Name"] not in self.metrics:
-                     add_rule = False
-                     break
-             if add_rule:
-@@ -415,15 +451,15 @@ class Validator:
-         """
-         data = self.read_json(self.rulefname)
-         rules = data['RelationshipRules']
--        skiplist = set(data['SkipList'])
--        self.rules = self.remove_unsupported_rules(rules, skiplist)
-+        self.skiplist = set([name.lower() for name in data['SkipList']])
-+        self.rules = self.remove_unsupported_rules(rules)
-         pctgrule = {'RuleIndex':0,
-                     'TestType':'SingleMetricTest',
-                     'RangeLower':'0',
-                     'RangeUpper': '100',
-                     'ErrorThreshold': self.tolerance,
-                     'Description':'Metrics in percent unit have value with in [0, 100]',
--                    'Metrics': [{'Name': m} for m in self.pctgmetrics]}
-+                    'Metrics': [{'Name': m.lower()} for m in self.pctgmetrics]}
-         self.rules.append(pctgrule)
- 
-         # Re-index all rules to avoid repeated RuleIndex
-@@ -479,8 +515,9 @@ class Validator:
-             self.parse_perf_metrics()
-         self.create_rules()
-         for i in range(0, len(self.workloads)):
-+            self.wlidx = i
-             self._init_data()
--            self.collect_perf(self.datafname, self.workloads[i])
-+            self.collect_perf(self.workloads[i])
-             # Run positive value test
-             self.pos_val_test()
-             for r in self.rules:
+Indeed, checking some other TC Qdisc, some reports ndo_setup_tc errors (htb,
+taprio, ...) to caller, some others do not (red, ets...). I can give it a try
+and see the impact
+> 
+> Also, it would be nice to extend struct tc_tbf_qopt_offload with a
+> netlink extack, for the driver to state exactly the reason for the
+> offload failure.
+
+ACK, I will add the extack struct
+
+> 
+> Not sure if EOPNOTSUPP is the return code to use here for range checks,
+> rather than ERANGE.
+
+I was not sure about proper error codes on all those checks. Since all those
+errors are about what hardware can handle/can not handle, I felt like EOPNOTSUPP
+was the most relevant one. But indeed it may make more sense for user to get
+ERANGE here, I will update accordingly
+>> +
+>> +	/* Switch supports only max rate configuration. There is no
+>> +	 * configurable burst/max size nor latency.
+>> +	 * Formula defining registers value is:
+>> +	 * EgressRate = 8 * EgressDec / (16ns * desired Rate)
+>> +	 * EgressRate is a set of fixed values depending of targeted range
+>> +	 */
+>> +	if (rate_kbps < MBPS_TO_KBPS(1)) {
+>> +		decrement_rate = rate_kbps / 64;
+>> +		rate_step = MV88E6XXX_PORT_EGRESS_RATE_CTL1_STEP_64_KBPS;
+>> +	} else if (rate_kbps < MBPS_TO_KBPS(100)) {
+>> +		decrement_rate = rate_kbps / MBPS_TO_KBPS(1);
+>> +		rate_step = MV88E6XXX_PORT_EGRESS_RATE_CTL1_STEP_1_MBPS;
+>> +	} else if (rate_kbps < GBPS_TO_KBPS(1)) {
+>> +		decrement_rate = rate_kbps / MBPS_TO_KBPS(10);
+>> +		rate_step = MV88E6XXX_PORT_EGRESS_RATE_CTL1_STEP_10_MBPS;
+>> +	} else {
+>> +		decrement_rate = rate_kbps / MBPS_TO_KBPS(100);
+>> +		rate_step = MV88E6XXX_PORT_EGRESS_RATE_CTL1_STEP_100_MBPS;
+>> +	}
+>> +
+>> +	dev_dbg(chip->dev, "p%d: adding egress tbf qdisc with %dkbps rate",
+>> +		port, rate_kbps);
+>> +	val = decrement_rate;
+>> +	val |= (overhead << MV88E6XXX_PORT_EGRESS_RATE_CTL1_FRAME_OVERHEAD_SHIFT);
+>> +	err = mv88e6xxx_port_write(chip, port, MV88E6XXX_PORT_EGRESS_RATE_CTL1,
+>> +				   val);
+>> +	if (err)
+>> +		return err;
+>> +
+>> +	val = rate_step;
+>> +	/* Configure mode to bits per second mode, on layer 1 */
+>> +	val |= MV88E6XXX_PORT_EGRESS_RATE_CTL2_COUNT_L1_BYTES;
+>> +	err = mv88e6xxx_port_write(chip, port, MV88E6XXX_PORT_EGRESS_RATE_CTL2,
+>> +				   val);
+>> +	if (err)
+>> +		return err;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +int mv88e6393x_tbf_del(struct mv88e6xxx_chip *chip, int port)
+>> +{
+>> +	int err;
+>> +
+>> +	dev_dbg(chip->dev, "p%d: removing tbf qdisc", port);
+>> +	err = mv88e6xxx_port_write(chip, port, MV88E6XXX_PORT_EGRESS_RATE_CTL2,
+>> +				   0x0000);
+>> +	if (err)
+>> +		return err;
+>> +	return mv88e6xxx_port_write(chip, port, MV88E6XXX_PORT_EGRESS_RATE_CTL1,
+>> +				    0x0001);
+> 
+> I guess this should return void and proceed on errors, rather than exit early.
+> Maybe shout out loud that things went wrong.
+
+ACK
+
+> 
+>> +}
+>> +
+>> +static int mv88e6393x_tc_setup_qdisc_tbf(struct mv88e6xxx_chip *chip, int port,
+>> +					 struct tc_tbf_qopt_offload *qopt)
+>> +{
+>> +	/* Device only supports per-port egress rate limiting */
+>> +	if (qopt->parent != TC_H_ROOT)
+>> +		return -EOPNOTSUPP;
+>> +
+>> +	switch (qopt->command) {
+>> +	case TC_TBF_REPLACE:
+>> +		return mv88e6393x_tbf_add(chip, port, &qopt->replace_params);
+>> +	case TC_TBF_DESTROY:
+>> +		return mv88e6393x_tbf_del(chip, port);
+>> +	default:
+>> +		return -EOPNOTSUPP;
+>> +	}
+>> +
+>> +	return -EOPNOTSUPP;
+>> +}
+
 -- 
-2.39.1
+Alexis Lothoré, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
