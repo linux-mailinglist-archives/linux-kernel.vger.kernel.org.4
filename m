@@ -2,85 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62B1772A12B
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 19:24:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7327D72A130
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 19:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbjFIRYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 13:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39572 "EHLO
+        id S229872AbjFIRZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 13:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjFIRYh (ORCPT
+        with ESMTP id S229595AbjFIRZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 13:24:37 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A3BC1;
-        Fri,  9 Jun 2023 10:24:36 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 359EBq3n024991;
-        Fri, 9 Jun 2023 17:24:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=1b7hEhV9ZR3ErYyrh6dtfaDiEFYsrQqoxaoxl0F9tUw=;
- b=VN5rhGQ+B0W082XDVn0f+r7oKgbpgtHY0P5jI2cpfWMfWPNCpFnF/YuQO3hmWJ1CyxdG
- ydh3gsqOduhzdME6K8wDKULdnGOi9I4+a6juJno6TFKWHfBjOrOjdabALT7kiBY2Lw1C
- 5LJqKBzFJO0AuQqTc3qM+ZBRLx4E6dmlzXCiCo5hohQxo7Br9E96g2eRhpRYVGJhCsjD
- E6bJ3OgKAioNAM/aTDHhYlRosiL3yA+MCU99FS82xUSM81PQNJKYmM7nW76kr+8CBywB
- BWPq8n5CsNWHCigdTp0v4bD448GJUWsI3buNqRwn31tyPNxraBARlP451bc8NEeWgor0 bA== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r3nwet3kc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Jun 2023 17:24:29 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 359HOSMj007649
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 9 Jun 2023 17:24:28 GMT
-Received: from [10.71.110.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 9 Jun 2023
- 10:24:27 -0700
-Message-ID: <f49db16a-e470-aeb5-f161-be354b5817f5@quicinc.com>
-Date:   Fri, 9 Jun 2023 10:24:27 -0700
+        Fri, 9 Jun 2023 13:25:21 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1168BBF
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 10:25:20 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-652328c18d5so1623265b3a.1
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 10:25:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686331519; x=1688923519;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=r5rJBBk6g7dPavT51/fSEgNYpuC/HIxKt0os+wkL1Is=;
+        b=aPTQvorEkZAwVLlcAvgu7D3EofNcOAZudralCCqyDf4lbbe+Mz+tEb7N1HZ7qkyzUw
+         zMCVVfhP+eBgPZzIgwg8bvY5582MnjTew8F77x3mYB307GLEkhma/pZ9zsz7ETiDIa6Z
+         rVUnCAOQUfwxF0K6pMpQLOcyjYNtNdXbJtzTZsA1+lvAVx4EJ+qtroGxMOz/rUdMRtH/
+         4E8UFgEaa+nCMgnB/EluKc64/o+pwXMHDXMCn4s3FpV/J/07xaoFbifiA7mljSjxjhp+
+         PP0w/dgRiODnR4BSz00li59/jSHwJD/seCTCRkj3MznWDpLKHO3nE+PAMLOoM2qkwbmv
+         SJWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686331519; x=1688923519;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=r5rJBBk6g7dPavT51/fSEgNYpuC/HIxKt0os+wkL1Is=;
+        b=Sz4h56YH0ptbD0GKekKvzQ2VhIxpnpKJ1/Cyo18xveWTML+dJc/fCu4fO6NIvoDsaY
+         yn7uIjdfZzXqGjgEMo6Bgh515uTwfePRAYJXVbpNi0PSv5mae40Kwm6+xs7KWpKvkFZS
+         dCcQvXksSi8BAp7MjRmaVTwi+iF36LKd5SavODWI244zml71tTT7ptFsAnDHu+CzlX+k
+         RBwi6+m4AiudOP2KFFCNOwrasCifB4dtTq+fpc2Ms46jj4L/TXdkaxMrqwsXDtraZ+X7
+         C2YrWBeiyfQSJdl5mSRd+bmznlH2/RJIFH1fgiX7m8eS/prHjmydimjH/5lfcc9KsHwu
+         ug3w==
+X-Gm-Message-State: AC+VfDy74uVv8UoS6/nTQiSUmwQPgmVGNXb1BXzszGkzs85VKepUKVsl
+        JcMt70n9LnBcasfqN+5yLo+DzOIJAVc=
+X-Google-Smtp-Source: ACHHUZ6YhOddAdXr3ojY/T5gMg+pwkGyZYpfKkIO3+0AXEDYWjvOC0+2is6z4NSCropWFWT30mEAgg==
+X-Received: by 2002:a05:6a00:2d88:b0:652:bf4c:b5de with SMTP id fb8-20020a056a002d8800b00652bf4cb5demr1896465pfb.20.1686331519275;
+        Fri, 09 Jun 2023 10:25:19 -0700 (PDT)
+Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:1bc3:5645:d3d:e4be])
+        by smtp.gmail.com with ESMTPSA id j26-20020aa7929a000000b0064b0326494asm2886423pfa.150.2023.06.09.10.25.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 10:25:18 -0700 (PDT)
+From:   Max Filippov <jcmvbkbc@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>
+Subject: [PATCH v2] xtensa: drop bcopy implementation
+Date:   Fri,  9 Jun 2023 10:25:10 -0700
+Message-Id: <20230609172510.1944039-1-jcmvbkbc@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v5 2/5] drm/msm/dsi: Adjust pclk rate for compression
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-CC:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <20230405-add-dsc-support-v5-0-028c10850491@quicinc.com>
- <20230405-add-dsc-support-v5-2-028c10850491@quicinc.com>
- <js3mcglahq53mcyxa6deltjlu4xpc2pnafwz2rbk3dl4ovws2o@5xw2wzvfaj2v>
- <f34a03ce-6295-b5d1-bf42-a43cfb382ea3@linaro.org>
-From:   Jessica Zhang <quic_jesszhan@quicinc.com>
-In-Reply-To: <f34a03ce-6295-b5d1-bf42-a43cfb382ea3@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: s_3pfLppHfL3CrfFLx7JYXA5pA8Rwcin
-X-Proofpoint-ORIG-GUID: s_3pfLppHfL3CrfFLx7JYXA5pA8Rwcin
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-09_12,2023-06-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 mlxlogscore=999 phishscore=0 priorityscore=1501
- suspectscore=0 clxscore=1015 spamscore=0 adultscore=0 mlxscore=0
- lowpriorityscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306090145
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,188 +69,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+bcopy is not exported and there's no in-tree users of this function.
+Drop it.
 
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+Changes v1->v2:
+- also remove __HAVE_ARCH_BCOPY macro definition drom string.h
 
-On 6/9/2023 9:58 AM, Dmitry Baryshkov wrote:
-> On 08/06/2023 23:36, Marijn Suijten wrote:
->> Same title suggestion as earlier: s/adjust/reduce
->>
->> On 2023-05-22 18:08:56, Jessica Zhang wrote:
->>> Adjust the pclk rate to divide hdisplay by the compression ratio when 
->>> DSC
->>> is enabled.
->>>
->>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
->>> ---
->>>   drivers/gpu/drm/msm/dsi/dsi_host.c | 21 ++++++++++++++++++---
->>>   1 file changed, 18 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c 
->>> b/drivers/gpu/drm/msm/dsi/dsi_host.c
->>> index a448931af804..88f370dd2ea1 100644
->>> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
->>> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
->>> @@ -561,7 +561,18 @@ void dsi_link_clk_disable_v2(struct msm_dsi_host 
->>> *msm_host)
->>>       clk_disable_unprepare(msm_host->byte_clk);
->>>   }
->>> -static unsigned long dsi_get_pclk_rate(const struct drm_display_mode 
->>> *mode, bool is_bonded_dsi)
->>> +static unsigned long dsi_adjust_compressed_pclk(const struct 
->>> drm_display_mode *mode,
->>
->> Nit: adjust_pclk_for_compression
->>
->> As discussed before we realized that this change is more-or-less a hack,
->> since downstream calculates pclk quite differently - at least for
->> command-mode panels.  Do you still intend to land this patch this way,
->> or go the proper route by introducing the right math from the get-go?
->> Or is the math at least correct for video-mode panels?
-> 
-> Can we please postpone the cmd-vs-video discussion? Otherwise I will 
-> reserve myself a right to push a patch dropping CMD mode support until 
-> somebody comes with a proper way to handle CMD clock calculation.
-> 
-> 
-> It is off-topic for the sake of DSC 1.2 support. Yes, all CMD panel 
-> timings are a kind of a hack and should be improved. No, we can not do 
-> this as a part of this series. I think everybody agrees that with the 
-> current way of calculating CMD panel timings, this function does some 
-> kind of a trick.
-> 
->>
->> This function requires a documentation comment to explain that all.
->>
->>> +        const struct drm_dsc_config *dsc)
->>> +{
->>> +    int new_hdisplay = DIV_ROUND_UP(mode->hdisplay * 
->>> drm_dsc_get_bpp_int(dsc),
->>
->> This sounds like a prime candidate for msm_dsc_get_bytes_per_line(), if
->> bits_per_component==8 is assumed.  In fact, it then becomes identical
->> to the following line in dsi_host.c which you added previously:
->>
->>     hdisplay = DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 
->> 3);
-> 
-> This would imply a simple /3, but as far as I understand it is not 
-> correct here.
-> 
->>
->> If not, what is the difference between these two calculations?  Maybe
->> they both need to be in a properly-named helper.
->>
->>> +            dsc->bits_per_component * 3);
-> 
-> I hope to see a documentation patch to be posted, telling that this 
-> scales hdisplay and thus pclk by the factor of compressed_bpp / 
-> uncompressed_bpp.
-> 
-> This is not how it is usually done, but I would accept a separate 
-> documentation patch going over the calculation here and in 
-> dsi_timing_setup (and maybe other unobvious cases, if there is anything 
-> left).
-> 
->>
->> As we established in the drm/msm issue [2] there is currently a
->> confusion whether this /3 (and the /3 in dsi_timing_setup) come from the
->> ratio between dsi_get_bpp() and dsc->bpp or something else.  Can you
->> clarify that with constants and comments?
->>
->> [2]: https://gitlab.freedesktop.org/drm/msm/-/issues/24
->>
->>> +
->>> +    return (new_hdisplay + (mode->htotal - mode->hdisplay))
->>> +            * mode->vtotal * drm_mode_vrefresh(mode);
->>
->> As clarified in [1] I was not necessarily suggesting to move this math
->> to a separate helper, but to also use a few more properly-named
->> intermediate variables to not have multi-line math and self-documenting
->> code.  These lines could be split to be much more clear.
-> 
-> I think it's fine more or less. One pair of parenthesis is unnecessary, 
-> but that's mostly it. Maybe `new_htotal' variable would make some sense.
-> 
-> Also, please excuse me if this was discussed somewhere. This calculation 
-> means that only the displayed data is compressed, but porches are not 
-> touched. Correct?
+ arch/xtensa/include/asm/string.h |  3 ---
+ arch/xtensa/lib/memcopy.S        | 15 ---------------
+ 2 files changed, 18 deletions(-)
 
-Hi Dmitry,
+diff --git a/arch/xtensa/include/asm/string.h b/arch/xtensa/include/asm/string.h
+index 89b51a0c752f..ffce43513fa2 100644
+--- a/arch/xtensa/include/asm/string.h
++++ b/arch/xtensa/include/asm/string.h
+@@ -118,9 +118,6 @@ extern void *__memcpy(void *__to, __const__ void *__from, size_t __n);
+ extern void *memmove(void *__dest, __const__ void *__src, size_t __n);
+ extern void *__memmove(void *__dest, __const__ void *__src, size_t __n);
+ 
+-/* Don't build bcopy at all ...  */
+-#define __HAVE_ARCH_BCOPY
+-
+ #if defined(CONFIG_KASAN) && !defined(__SANITIZE_ADDRESS__)
+ 
+ /*
+diff --git a/arch/xtensa/lib/memcopy.S b/arch/xtensa/lib/memcopy.S
+index b20d206bcb71..98c3662bed8c 100644
+--- a/arch/xtensa/lib/memcopy.S
++++ b/arch/xtensa/lib/memcopy.S
+@@ -274,21 +274,6 @@ WEAK(memcpy)
+ 
+ ENDPROC(__memcpy)
+ 
+-/*
+- * void bcopy(const void *src, void *dest, size_t n);
+- */
+-
+-ENTRY(bcopy)
+-
+-	abi_entry_default
+-	# a2=src, a3=dst, a4=len
+-	mov	a5, a3
+-	mov	a3, a2
+-	mov	a2, a5
+-	j	.Lmovecommon	# go to common code for memmove+bcopy
+-
+-ENDPROC(bcopy)
+-
+ /*
+  * void *memmove(void *dst, const void *src, size_t len);
+  *
+-- 
+2.30.2
 
-Correct, we will apply the compression ratio to only the hdisplay but 
-keep the porches as is.
-
-> 
->>
->> [1]: 
->> https://lore.kernel.org/linux-arm-msm/u4x2vldkzsokfcpbkz3dtwcllbdk4ljcz6kzuaxt5frx6g76o5@uku6abewvye7/
->>
->>> +}
->>> +
->>> +static unsigned long dsi_get_pclk_rate(const struct drm_display_mode 
->>> *mode,
->>> +        const struct drm_dsc_config *dsc, bool is_bonded_dsi)
->>>   {
->>>       unsigned long pclk_rate;
->>> @@ -576,6 +587,10 @@ static unsigned long dsi_get_pclk_rate(const 
->>> struct drm_display_mode *mode, bool
->>>       if (is_bonded_dsi)
->>>           pclk_rate /= 2;
->>> +    /* If DSC is enabled, divide hdisplay by compression ratio */
->>> +    if (dsc)
->>> +        pclk_rate = dsi_adjust_compressed_pclk(mode, dsc);
-> 
-> Looking for the perfection, I'd also move the pclk adjustment to come 
-> before the is_bonded_dsi check.
-
-Acked.
-
-Thanks,
-
-Jessica Zhang
-
-> 
->>
->> The confusion with this comment (and the reason the aforementioned
->> discussion [2] carried on so long) stems from the fact a division makes
->> sense for a bit/byte clock, but not for a pixel clock: we still intend
->> to send the same number of pixels, just spending less bytes on them.  So
->> as you clarify the /3 above, can you also clarify that here or drop this
->> comment completely when the function is correctly documented instead?
->>
->> - Marijn
->>
->>> +
->>>       return pclk_rate;
->>>   }
->>> @@ -585,7 +600,7 @@ unsigned long dsi_byte_clk_get_rate(struct 
->>> mipi_dsi_host *host, bool is_bonded_d
->>>       struct msm_dsi_host *msm_host = to_msm_dsi_host(host);
->>>       u8 lanes = msm_host->lanes;
->>>       u32 bpp = dsi_get_bpp(msm_host->format);
->>> -    unsigned long pclk_rate = dsi_get_pclk_rate(mode, is_bonded_dsi);
->>> +    unsigned long pclk_rate = dsi_get_pclk_rate(mode, msm_host->dsc, 
->>> is_bonded_dsi);
->>>       unsigned long pclk_bpp;
->>>       if (lanes == 0) {
->>> @@ -604,7 +619,7 @@ unsigned long dsi_byte_clk_get_rate(struct 
->>> mipi_dsi_host *host, bool is_bonded_d
->>>   static void dsi_calc_pclk(struct msm_dsi_host *msm_host, bool 
->>> is_bonded_dsi)
->>>   {
->>> -    msm_host->pixel_clk_rate = dsi_get_pclk_rate(msm_host->mode, 
->>> is_bonded_dsi);
->>> +    msm_host->pixel_clk_rate = dsi_get_pclk_rate(msm_host->mode, 
->>> msm_host->dsc, is_bonded_dsi);
->>>       msm_host->byte_clk_rate = 
->>> dsi_byte_clk_get_rate(&msm_host->base, is_bonded_dsi,
->>>                               msm_host->mode);
->>>
->>> -- 
->>> 2.40.1
->>>
-> 
-> -- 
-> With best wishes
-> Dmitry
-> 
