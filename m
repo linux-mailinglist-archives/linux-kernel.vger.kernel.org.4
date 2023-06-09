@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B85B8728F8D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 07:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C76E728F86
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 07:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237577AbjFIF5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 01:57:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60352 "EHLO
+        id S237626AbjFIF5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 01:57:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjFIF5T (ORCPT
+        with ESMTP id S237467AbjFIF5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 01:57:19 -0400
+        Fri, 9 Jun 2023 01:57:25 -0400
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D554E2;
-        Thu,  8 Jun 2023 22:57:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C843580;
+        Thu,  8 Jun 2023 22:57:23 -0700 (PDT)
 Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3595j1Dm025569;
-        Fri, 9 Jun 2023 05:57:14 GMT
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3594KJEa017301;
+        Fri, 9 Jun 2023 05:57:18 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=9igNQMqScQzwAM38rX+zFe4504VutBol9OU+mBF+LP4=;
- b=Z1hemWxrAHUkOIpyf9wsTBfOTNXCl+30xy7yZWKVjCPeOx5pXxgqv3A5b2RCozT4sOh0
- hoiqX0UCYUS6L9hZkktFNWpmRskHlxwpKAJ7/HGNfa00AMFvBpkUCxq/duJvWf2vk4UX
- Ry6xwL68bc5/W8TLHb7KqwWcj2k2KMexCOwNM6+OJS4Ap6UP4X5Hfqqwr6FaayLVEJWJ
- cOY3P9rX3TAFdRjWazthLi60bw3L25BpShE3FH5nz5by00fE09H99HGPlDxm9vnfzsRD
- KmiWv71nvsrRNnrYudmVkLAajpZBKjvndyKbWhm7ktcSExsDlnAyBW0gLM6mt2FU+r27 gQ== 
+ bh=BN1wWHI99mxMl1HI3EqHgyXZZb2BAs+xAcph3wJ1gnE=;
+ b=etGVS3iMmmFvzZH7uCRDFAwLGoPkR8XDt2WkLY7wS2M8dxZzsBG2bSzoz8wSS2FsVLs0
+ fb6CPByw6NF4LOr5V7LwKO1QT1CoQTrWY/tch6YMi+ulB8gELsgTX5HHQdl8zqhORruU
+ xCPytjNzZFiSL61UllbtVr9pjKSa6VhkZblszvXT5BqyHbWLBX/4Vm5wBuU/zH6ZeMzw
+ luM0002akVYX6e0gkC/KuFtllHgfqwavoGP8jq6C/OJPx40PsYceW4IjeD7f/5+C6uDE
+ 2IQYALZyHW1F142H/9RGQ9YzEH5Uq/NvVEkYMgrH24DRjXuaOeXQnLpLNsTc3mtT8zRU wQ== 
 Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r3dkca1ba-1
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r3dkca1bd-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Jun 2023 05:57:13 +0000
+        Fri, 09 Jun 2023 05:57:18 +0000
 Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3595vC8n008607
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3595vH9k008727
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 9 Jun 2023 05:57:12 GMT
+        Fri, 9 Jun 2023 05:57:17 GMT
 Received: from varda-linux.qualcomm.com (10.80.80.8) by
  nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 8 Jun 2023 22:57:07 -0700
+ 15.2.986.42; Thu, 8 Jun 2023 22:57:12 -0700
 From:   Varadarajan Narayanan <quic_varada@quicinc.com>
 To:     <agross@kernel.org>, <andersson@kernel.org>,
         <konrad.dybcio@linaro.org>, <gregkh@linuxfoundation.org>,
@@ -49,9 +49,9 @@ To:     <agross@kernel.org>, <andersson@kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-clk@vger.kernel.org>
 CC:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Subject: [PATCH v15 2/5] clk: qcom: gcc-ipq9574: Add USB related clocks
-Date:   Fri, 9 Jun 2023 11:26:31 +0530
-Message-ID: <d1c5aa4a8535c645fdb06df62a562918516ba0c6.1686289721.git.quic_varada@quicinc.com>
+Subject: [PATCH v15 3/5] arm64: dts: qcom: ipq9574: Add USB related nodes
+Date:   Fri, 9 Jun 2023 11:26:32 +0530
+Message-ID: <37bd667c065b6c254c7e60ab4ad3a3afbe3b0fac.1686289721.git.quic_varada@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <cover.1686289721.git.quic_varada@quicinc.com>
 References: <cover.1686289721.git.quic_varada@quicinc.com>
@@ -62,8 +62,8 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01a.na.qualcomm.com (10.52.223.231)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: wUrSURsBrWc2jBJBvKP-KvBX6A5AewVp
-X-Proofpoint-GUID: wUrSURsBrWc2jBJBvKP-KvBX6A5AewVp
+X-Proofpoint-ORIG-GUID: Ts4ZlshaiSqaquKM93gMtLF6nyTqY6rd
+X-Proofpoint-GUID: Ts4ZlshaiSqaquKM93gMtLF6nyTqY6rd
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
  definitions=2023-06-09_03,2023-06-08_01,2023-05-22_02
@@ -82,91 +82,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the clocks needed for enabling USB in IPQ9574
+Add USB phy and controller related nodes
+
+SS PHY need two supplies and HS PHY needs three supplies. 0.925V
+and 3.3V are from fixed regulators and 1.8V is generated from
+PMIC's LDO
 
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Acked-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
 ---
+ Changes in v15:
+	- Introduce fixed regulators in the last patch instead of this one
+ Changes in v13:
+	- Move fixed regulator definitions from SoC dtsi to board dts
+	- Remove 'dr_mode' from SoC dtsi
+	- Move 'status' property to the end
  Changes in v12:
-	- Rebase qcom,ipq9574-gcc.h
-
+	- Rebase
+ Changes in v11:
+	- Rename dwc_0 -> usb_0_dwc3
  Changes in v10:
-	- Add 'const' for .hw.init = &(struct clk_init_data)
+	- Fix regulator definitions
+ Changes in v8:
+	- Change clocks order to match the bindings
+ Changes in v7:
+	- Change com_aux -> cfg_ahb
+ Changes in v6:
+	- Introduce fixed regulators for the phy
+	- Resolved all 'make dtbs_check' messages
+
+ Changes in v5:
+	- Fix additional comments
+	- Edit nodes to match with qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+	- 'make dtbs_check' giving the following messages since
+	  ipq9574 doesn't have power domains. Hope this is ok
+
+		/local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: phy@7d000: 'power-domains' is a required property
+        	From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+		/local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: usb@8a00000: 'power-domains' is a required property
+        	From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+
+ Changes in v4:
+	- Use newer bindings without subnodes
+	- Fix coding style issues
+
+ Changes in v3:
+	- Insert the nodes at proper location
 
  Changes in v2:
-	- Fixed coding style issues
+	- Fixed issues flagged by Krzysztof
+	- Fix issues reported by make dtbs_check
+	- Remove NOC related clocks (to be added with proper
+	  interconnect support)
 ---
- drivers/clk/qcom/gcc-ipq9574.c               | 37 ++++++++++++++++++++++++++++
- include/dt-bindings/clock/qcom,ipq9574-gcc.h |  2 ++
- 2 files changed, 39 insertions(+)
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi | 85 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 85 insertions(+)
 
-diff --git a/drivers/clk/qcom/gcc-ipq9574.c b/drivers/clk/qcom/gcc-ipq9574.c
-index 7b0505f..8e1a3ff 100644
---- a/drivers/clk/qcom/gcc-ipq9574.c
-+++ b/drivers/clk/qcom/gcc-ipq9574.c
-@@ -1969,6 +1969,41 @@ static struct clk_regmap_mux usb0_pipe_clk_src = {
- 	},
- };
+diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+index 0baeb10..feabc19 100644
+--- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
++++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+@@ -465,6 +465,91 @@
+ 			status = "disabled";
+ 		};
  
-+static struct clk_branch gcc_usb0_pipe_clk = {
-+	.halt_reg = 0x2c054,
-+	.halt_check = BRANCH_HALT_DELAY,
-+	.clkr = {
-+		.enable_reg = 0x2c054,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(const struct clk_init_data){
-+			.name = "gcc_usb0_pipe_clk",
-+			.parent_hws = (const struct clk_hw *[]) {
-+				&usb0_pipe_clk_src.clkr.hw
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
++		usb_0_qusbphy: phy@7b000 {
++			compatible = "qcom,ipq9574-qusb2-phy";
++			reg = <0x0007b000 0x180>;
++			#phy-cells = <0>;
 +
-+static struct clk_branch gcc_usb0_sleep_clk = {
-+	.halt_reg = 0x2c058,
-+	.clkr = {
-+		.enable_reg = 0x2c058,
-+		.enable_mask = BIT(0),
-+		.hw.init = &(const struct clk_init_data){
-+			.name = "gcc_usb0_sleep_clk",
-+			.parent_hws = (const struct clk_hw *[]) {
-+				&gcc_sleep_clk_src.clkr.hw
-+			},
-+			.num_parents = 1,
-+			.flags = CLK_SET_RATE_PARENT,
-+			.ops = &clk_branch2_ops,
-+		},
-+	},
-+};
++			clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
++				 <&xo_board_clk>;
++			clock-names = "cfg_ahb",
++				      "ref";
 +
- static const struct freq_tbl ftbl_sdcc_apps_clk_src[] = {
- 	F(144000, P_XO, 16, 12, 125),
- 	F(400000, P_XO, 12, 1, 5),
-@@ -3932,6 +3967,8 @@ static struct clk_regmap *gcc_ipq9574_clks[] = {
- 	[GCC_USB0_MOCK_UTMI_CLK] = &gcc_usb0_mock_utmi_clk.clkr,
- 	[USB0_PIPE_CLK_SRC] = &usb0_pipe_clk_src.clkr,
- 	[GCC_USB0_PHY_CFG_AHB_CLK] = &gcc_usb0_phy_cfg_ahb_clk.clkr,
-+	[GCC_USB0_PIPE_CLK] = &gcc_usb0_pipe_clk.clkr,
-+	[GCC_USB0_SLEEP_CLK] = &gcc_usb0_sleep_clk.clkr,
- 	[SDCC1_APPS_CLK_SRC] = &sdcc1_apps_clk_src.clkr,
- 	[GCC_SDCC1_APPS_CLK] = &gcc_sdcc1_apps_clk.clkr,
- 	[SDCC1_ICE_CORE_CLK_SRC] = &sdcc1_ice_core_clk_src.clkr,
-diff --git a/include/dt-bindings/clock/qcom,ipq9574-gcc.h b/include/dt-bindings/clock/qcom,ipq9574-gcc.h
-index 5a2961b..c7c914c 100644
---- a/include/dt-bindings/clock/qcom,ipq9574-gcc.h
-+++ b/include/dt-bindings/clock/qcom,ipq9574-gcc.h
-@@ -210,4 +210,6 @@
- #define GCC_SNOC_PCIE1_1LANE_S_CLK			201
- #define GCC_SNOC_PCIE2_2LANE_S_CLK			202
- #define GCC_SNOC_PCIE3_2LANE_S_CLK			203
-+#define GCC_USB0_PIPE_CLK				204
-+#define GCC_USB0_SLEEP_CLK				205
- #endif
++			resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
++			status = "disabled";
++		};
++
++		usb_0_qmpphy: phy@7d000 {
++			compatible = "qcom,ipq9574-qmp-usb3-phy";
++			reg = <0x0007d000 0xa00>;
++			#phy-cells = <0>;
++
++			clocks = <&gcc GCC_USB0_AUX_CLK>,
++				 <&xo_board_clk>,
++				 <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
++				 <&gcc GCC_USB0_PIPE_CLK>;
++			clock-names = "aux",
++				      "ref",
++				      "cfg_ahb",
++				      "pipe";
++
++			resets = <&gcc GCC_USB0_PHY_BCR>,
++				 <&gcc GCC_USB3PHY_0_PHY_BCR>;
++			reset-names = "phy",
++				      "phy_phy";
++
++			#clock-cells = <0>;
++			clock-output-names = "usb0_pipe_clk";
++
++			status = "disabled";
++		};
++
++		usb3: usb@8af8800 {
++			compatible = "qcom,ipq9574-dwc3", "qcom,dwc3";
++			reg = <0x08af8800 0x400>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges;
++
++			clocks = <&gcc GCC_SNOC_USB_CLK>,
++				 <&gcc GCC_USB0_MASTER_CLK>,
++				 <&gcc GCC_ANOC_USB_AXI_CLK>,
++				 <&gcc GCC_USB0_SLEEP_CLK>,
++				 <&gcc GCC_USB0_MOCK_UTMI_CLK>;
++
++			clock-names = "cfg_noc",
++				      "core",
++				      "iface",
++				      "sleep",
++				      "mock_utmi";
++
++			assigned-clocks = <&gcc GCC_USB0_MASTER_CLK>,
++					  <&gcc GCC_USB0_MOCK_UTMI_CLK>;
++			assigned-clock-rates = <200000000>,
++					       <24000000>;
++
++			interrupts-extended = <&intc GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "pwr_event";
++
++			resets = <&gcc GCC_USB_BCR>;
++			status = "disabled";
++
++			usb_0_dwc3: usb@8a00000 {
++				compatible = "snps,dwc3";
++				reg = <0x8a00000 0xcd00>;
++				clocks = <&gcc GCC_USB0_MOCK_UTMI_CLK>;
++				clock-names = "ref";
++				interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
++				phys = <&usb_0_qusbphy>, <&usb_0_qmpphy>;
++				phy-names = "usb2-phy", "usb3-phy";
++				tx-fifo-resize;
++				snps,is-utmi-l1-suspend;
++				snps,hird-threshold = /bits/ 8 <0x0>;
++				snps,dis_u2_susphy_quirk;
++				snps,dis_u3_susphy_quirk;
++			};
++		};
++
+ 		intc: interrupt-controller@b000000 {
+ 			compatible = "qcom,msm-qgic2";
+ 			reg = <0x0b000000 0x1000>,  /* GICD */
 -- 
 2.7.4
 
