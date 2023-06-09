@@ -2,349 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ED91729FB8
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E34729FC4
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242136AbjFIQKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 12:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56788 "EHLO
+        id S241383AbjFIQM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 12:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242134AbjFIQKu (ORCPT
+        with ESMTP id S241444AbjFIQMz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 12:10:50 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6CC635B3
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:10:43 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f619c2ba18so2430589e87.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 09:10:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686327042; x=1688919042;
-        h=content-transfer-encoding:in-reply-to:from:cc:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7A4fU6QoWxC0y2Sy3FIgTg9nFgE7RuqgyoUp2KWf0Go=;
-        b=XTRb6KWtvjOWlVe6ijBWSXNL5zPLJVAIKcPEDxX7UFHLqkCvY76bG3mzmi1sXlytUz
-         DftRWFb9+0I0QmyWzpszBUn4AtfS1FJym9LdbwQ24SJ5QyJpvQdfigbxeJ2XySzXxnCM
-         aw0a32JQsTgz9mfFwcmsHr1V5N81hU+6Yr9ECaIy6dm0L3Bm8qrYUOQRwaZb1Aad7f0d
-         VtbB0iON1neb4qmal8SWqe+CQRBGLskxXOHGhYk0yXaaRaTVOO8CAumS8nzdQBPRrsG7
-         zoS9BJAp6eWzAR8r09dElcaQEKo8EY4rTlzaYhqwH9J32xpUF3GqXzlgh91JQNb7T4zW
-         E+3w==
+        Fri, 9 Jun 2023 12:12:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A8930CD
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:12:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686327131;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=y4bm62kfkkLTnjUJmvlgyp+ign6wrzvvVnxHsSjlw0Y=;
+        b=L57/Q6T/MjON98tLl04U/JNeRC0jftZ71dzDJFlLzD+dzJVUil1Zypd0p0Hk73cxZbkThR
+        IemHx1bXSQl30SegB9UtNbTX6NLGzBE6WqOCHpG0tCeF1dS5O0wHQOPaFQHDbHiyj6dN+t
+        nLUYFAC0gxNlM78xGyowqEEeOPv3+lk=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-644-sjpRqg5RMZadSmgev_kipw-1; Fri, 09 Jun 2023 12:12:10 -0400
+X-MC-Unique: sjpRqg5RMZadSmgev_kipw-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f7678c74beso12418815e9.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 09:12:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686327042; x=1688919042;
-        h=content-transfer-encoding:in-reply-to:from:cc:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7A4fU6QoWxC0y2Sy3FIgTg9nFgE7RuqgyoUp2KWf0Go=;
-        b=Mt0VP4H4+IPzeZ7XIs1amFbwelHGeoJg7tj7qMokL6wBY2CEjky6aaom3XdIOKj/I0
-         edmomOU93B6jThwsJh36bOnbxnLyZ4+dvMIKPWjuwvm9RVOnSqsB4816n+yrvSZ7OwY8
-         Y2pYDUL7QTzQXjnToowrvERAoQ44FnUIKpuk/TI1OA/fKLJGSe0xY8yTMqw1HiMNqax6
-         cZxPOJzwWbQ10sq/YMm72+M6bcfUNEPguwAM0Rao7QJg/gwICGwcmWco4kODAiwLO7wW
-         56u5tUlwD60UEYnaQTr20iHy/xOVebRajCN1rdd/UuhE/fM/lUjt+UPSkBO8r5SYFM0/
-         I2uA==
-X-Gm-Message-State: AC+VfDzPOO5PkZVJYYU4qSod2pg3p1s5Me6dKvUeFunzMVV5gBHjFP0o
-        BW4hl7kNC51aGA8R5kQpY9yRyA==
-X-Google-Smtp-Source: ACHHUZ5ZGgSMiJfuI5fvPzb//LBZ0VtwD8E//F+BiE2R6HZ2SAPeeNmjeUuvenzCgUluIhSQRSB/mg==
-X-Received: by 2002:a19:671e:0:b0:4f4:3418:4726 with SMTP id b30-20020a19671e000000b004f434184726mr1117317lfc.56.1686327041951;
-        Fri, 09 Jun 2023 09:10:41 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id f14-20020a19ae0e000000b004f4e637db2fsm587260lfc.167.2023.06.09.09.10.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Jun 2023 09:10:41 -0700 (PDT)
-Message-ID: <f320f021-88c4-c5c9-0781-c82d0b88f67d@linaro.org>
-Date:   Fri, 9 Jun 2023 18:10:38 +0200
+        d=1e100.net; s=20221208; t=1686327129; x=1688919129;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y4bm62kfkkLTnjUJmvlgyp+ign6wrzvvVnxHsSjlw0Y=;
+        b=c91/7tPtSSjSlI9eh3cyXdtxVCo0eHug3Lt8SnEuD30ZtYNyT4xvz9x3zwhmzuib5Z
+         HwnZwIaujtYTtew1b9ticim4nORf+hfHF/+i8Z2I3iIlEoJRxqu2bVAnBYSghX7vDXoa
+         G9fkHKRGGqG7UQXkGo1y0MWCP8hA83nGM9ClY6rAmkmXaGhSkIef2alcN2apVUU/EdAs
+         b3wb1Tldv/NHjRuFNd2wi50Gdy8hfxccuWib7yGrJeb2siEOqdmpPiL/Sxe2mmLuXGt/
+         8rpsADXmywozV7P5oE0UDu2VPGYEKgzX4Bms0H3yyLnRS8YAEM+D469RQYT3zziQ0nA9
+         Svag==
+X-Gm-Message-State: AC+VfDy6Es5wVPPKihLCE+RaSE09K6T+8Sfoaw3kz5Rh3NEDm4pQQ4z2
+        abeCu9BxZ7C+0Ojq2Mo7wl/FpFQTqhzIAb6Pu40nLIZ+VJhAkMkcUEbRgoFLFjDHrJ17/dkTn8q
+        gR1QIrnahxmBLr6aQ/KtSORZM
+X-Received: by 2002:a7b:c84c:0:b0:3f6:76e:604b with SMTP id c12-20020a7bc84c000000b003f6076e604bmr1525962wml.0.1686327129333;
+        Fri, 09 Jun 2023 09:12:09 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5xm9yUTrC2OmG8c4yJjmFGfxA7jlxP+M4arKQJPvSSV953T9IiEEH9ysAY86JxwiufCmeo3g==
+X-Received: by 2002:a7b:c84c:0:b0:3f6:76e:604b with SMTP id c12-20020a7bc84c000000b003f6076e604bmr1525952wml.0.1686327129048;
+        Fri, 09 Jun 2023 09:12:09 -0700 (PDT)
+Received: from redhat.com ([2a06:c701:7403:2800:22a6:7656:500:4dab])
+        by smtp.gmail.com with ESMTPSA id x15-20020a5d650f000000b0030adfa48e1esm4815815wru.29.2023.06.09.09.12.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 09:12:08 -0700 (PDT)
+Date:   Fri, 9 Jun 2023 12:12:06 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Angus Chen <angus.chen@jaguarmicro.com>
+Cc:     "jasowang@redhat.com" <jasowang@redhat.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] vdpa/vp_vdpa: Check queue number of vdpa device from
+ add_config
+Message-ID: <20230609120939-mutt-send-email-mst@kernel.org>
+References: <20230608090124.1807-1-angus.chen@jaguarmicro.com>
+ <20230608154400-mutt-send-email-mst@kernel.org>
+ <TY2PR06MB34248F29ED36A5DBB4FE0E2E8551A@TY2PR06MB3424.apcprd06.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 5/12] percpu: Add {raw,this}_cpu_try_cmpxchg()
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-References: <20230531132323.587480729@infradead.org>
-Cc:     corbet@lwn.net, will@kernel.org, peterz@infradead.org,
-        boqun.feng@gmail.com, mark.rutland@arm.com,
-        catalin.marinas@arm.com, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
-        robin.murphy@arm.com, dwmw2@infradead.org,
-        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-crypto@vger.kernel.org, sfr@canb.auug.org.au,
-        mpe@ellerman.id.au, James.Bottomley@hansenpartnership.com,
-        deller@gmx.de, linux-parisc@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230531132323.587480729@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <TY2PR06MB34248F29ED36A5DBB4FE0E2E8551A@TY2PR06MB3424.apcprd06.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 31.05.2023 15:08, Peter Zijlstra wrote:
-> Add the try_cmpxchg() form to the per-cpu ops.
+On Fri, Jun 09, 2023 at 12:42:22AM +0000, Angus Chen wrote:
 > 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
-+CC Nathan, llvm list
-
-Hi all, this patch seems to break booting on Qualcomm ARM64 platforms
-when compiled with clang (GCC works fine) for some reason..:
-
-next-20230605 - works
-next-20230606 - doesn't
-
-grev -m 1 dc4e51fd9846 on next-20230606 - works again
-b4 shazam <this_msgid> -P 1-4 - still works
-b4 shazam <this_msgid> -P 5 - breaks
-
-Confirmed on at least Qualcomm QCM2290, SM8250.
-
-Checking the serial console, it hits a BUG_ON:
-
-[    0.000000] ------------[ cut here ]------------
-[    0.000000] kernel BUG at mm/vmalloc.c:1638!
-[    0.000000] Internal error: Oops - BUG: 00000000f2000800 [#1] SMP
-[    0.000000] Modules linked in:
-[    0.000000] CPU: 0 PID: 0 Comm: swapper/0 Not tainted [snip]
-[    0.000000] Hardware name: Qualcomm Technologies, Inc. Robotics RB1 (DT)
-[    0.000000] pstate: 000000c5 (nzcv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[    0.000000] pc : alloc_vmap_area+0xafc/0xb08
-[    0.000000] lr : alloc_vmap_area+0x9e4/0xb08
-[    0.000000] sp : ffffa50137f53c20
-[    0.000000] x29: ffffa50137f53c60 x28: ffffa50137f30c18 x27: 0000000000000000
-[    0.000000] x26: 0000000000007fff x25: ffff800080000000 x24: 000000000000cfff
-[    0.000000] x23: ffffffffffff8000 x22: ffffa50137fef970 x21: fffffbfff0000000
-[    0.000000] x20: ffff022982003208 x19: ffff0229820031f8 x18: ffffa50137f64f70
-[    0.000000] x17: ffffa50137fef980 x16: ffffa501375e6d08 x15: 0000000000000001
-[    0.000000] x14: ffffa5013831e1a0 x13: ffffa50137f30c18 x12: 0000000000402dc2
-[    0.000000] x11: 0000000000000000 x10: ffff022982003018 x9 : ffffa5013831e188
-[    0.000000] x8 : ffffcb55ff003228 x7 : 0000000000000000 x6 : 0000000000000048
-[    0.000000] x5 : 0000000000000000 x4 : ffffa50137f53bd0 x3 : ffffa50136490000
-[    0.000000] x2 : 0000000000000001 x1 : ffffa5013831e190 x0 : ffff022982003208
-[    0.000000] Call trace:
-[    0.000000]  alloc_vmap_area+0xafc/0xb08
-[    0.000000]  __get_vm_area_node+0x108/0x1e8
-[    0.000000]  __vmalloc_node_range+0x1fc/0x728
-[    0.000000]  __vmalloc_node+0x5c/0x70
-[    0.000000]  init_IRQ+0x90/0x11c
-[    0.000000]  start_kernel+0x1ac/0x3bc
-[    0.000000]  __primary_switched+0xc4/0xcc
-[    0.000000] Code: f000e300 91062000 943bd9ba 17ffff8f (d4210000)
-[    0.000000] ---[ end trace 0000000000000000 ]---
-[    0.000000] Kernel panic - not syncing: Attempted to kill the idle task!
-
-Compiled with clang 15.0.7 from Arch repos, with
-make ARCH=arm64 LLVM=1
-
-Konrad
->  include/asm-generic/percpu.h |  113 +++++++++++++++++++++++++++++++++++++++++--
->  include/linux/percpu-defs.h  |   19 +++++++
->  2 files changed, 128 insertions(+), 4 deletions(-)
 > 
-> --- a/include/asm-generic/percpu.h
-> +++ b/include/asm-generic/percpu.h
-> @@ -89,16 +89,37 @@ do {									\
->  	__ret;								\
->  })
->  
-> -#define raw_cpu_generic_cmpxchg(pcp, oval, nval)			\
-> +#define __cpu_fallback_try_cmpxchg(pcp, ovalp, nval, _cmpxchg)		\
-> +({									\
-> +	typeof(pcp) __val, __old = *(ovalp);				\
-> + 	__val = _cmpxchg(pcp, __old, nval);				\
-> +	if (__val != __old)						\
-> +		*(ovalp) = __val;					\
-> +	__val == __old;							\
-> +})
-> +
-> +#define raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval)			\
->  ({									\
->  	typeof(pcp) *__p = raw_cpu_ptr(&(pcp));				\
-> -	typeof(pcp) __ret;						\
-> -	__ret = *__p;							\
-> -	if (__ret == (oval))						\
-> +	typeof(pcp) __val = *__p, __old = *(ovalp);			\
-> +	bool __ret;							\
-> +	if (__val == __old) {						\
->  		*__p = nval;						\
-> +		__ret = true;						\
-> +	} else {							\
-> +		*(ovalp) = __val;					\
-> +		__ret = false;						\
-> +	}								\
->  	__ret;								\
->  })
->  
-> +#define raw_cpu_generic_cmpxchg(pcp, oval, nval)			\
-> +({									\
-> +	typeof(pcp) __old = (oval);					\
-> +	raw_cpu_generic_try_cmpxchg(pcp, &__old, nval);			\
-> +	__old;								\
-> +})
-> +
->  #define raw_cpu_generic_cmpxchg_double(pcp1, pcp2, oval1, oval2, nval1, nval2) \
->  ({									\
->  	typeof(pcp1) *__p1 = raw_cpu_ptr(&(pcp1));			\
-> @@ -170,6 +191,16 @@ do {									\
->  	__ret;								\
->  })
->  
-> +#define this_cpu_generic_try_cmpxchg(pcp, ovalp, nval)			\
-> +({									\
-> +	bool __ret;							\
-> +	unsigned long __flags;						\
-> +	raw_local_irq_save(__flags);					\
-> +	__ret = raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval);		\
-> +	raw_local_irq_restore(__flags);					\
-> +	__ret;								\
-> +})
-> +
->  #define this_cpu_generic_cmpxchg(pcp, oval, nval)			\
->  ({									\
->  	typeof(pcp) __ret;						\
-> @@ -282,6 +313,43 @@ do {									\
->  #define raw_cpu_xchg_8(pcp, nval)	raw_cpu_generic_xchg(pcp, nval)
->  #endif
->  
-> +#ifndef raw_cpu_try_cmpxchg_1
-> +#ifdef raw_cpu_cmpxchg_1
-> +#define raw_cpu_try_cmpxchg_1(pcp, ovalp, nval) \
-> +	__cpu_fallback_try_cmpxchg(pcp, ovalp, nval, raw_cpu_cmpxchg_1)
-> +#else
-> +#define raw_cpu_try_cmpxchg_1(pcp, ovalp, nval) \
-> +	raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
-> +#endif
-> +#endif
-> +#ifndef raw_cpu_try_cmpxchg_2
-> +#ifdef raw_cpu_cmpxchg_2
-> +#define raw_cpu_try_cmpxchg_2(pcp, ovalp, nval) \
-> +	__cpu_fallback_try_cmpxchg(pcp, ovalp, nval, raw_cpu_cmpxchg_2)
-> +#else
-> +#define raw_cpu_try_cmpxchg_2(pcp, ovalp, nval) \
-> +	raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
-> +#endif
-> +#endif
-> +#ifndef raw_cpu_try_cmpxchg_4
-> +#ifdef raw_cpu_cmpxchg_4
-> +#define raw_cpu_try_cmpxchg_4(pcp, ovalp, nval) \
-> +	__cpu_fallback_try_cmpxchg(pcp, ovalp, nval, raw_cpu_cmpxchg_4)
-> +#else
-> +#define raw_cpu_try_cmpxchg_4(pcp, ovalp, nval) \
-> +	raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
-> +#endif
-> +#endif
-> +#ifndef raw_cpu_try_cmpxchg_8
-> +#ifdef raw_cpu_cmpxchg_8
-> +#define raw_cpu_try_cmpxchg_8(pcp, ovalp, nval) \
-> +	__cpu_fallback_try_cmpxchg(pcp, ovalp, nval, raw_cpu_cmpxchg_8)
-> +#else
-> +#define raw_cpu_try_cmpxchg_8(pcp, ovalp, nval) \
-> +	raw_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
-> +#endif
-> +#endif
-> +
->  #ifndef raw_cpu_cmpxchg_1
->  #define raw_cpu_cmpxchg_1(pcp, oval, nval) \
->  	raw_cpu_generic_cmpxchg(pcp, oval, nval)
-> @@ -407,6 +475,43 @@ do {									\
->  #define this_cpu_xchg_8(pcp, nval)	this_cpu_generic_xchg(pcp, nval)
->  #endif
->  
-> +#ifndef this_cpu_try_cmpxchg_1
-> +#ifdef this_cpu_cmpxchg_1
-> +#define this_cpu_try_cmpxchg_1(pcp, ovalp, nval) \
-> +	__cpu_fallback_try_cmpxchg(pcp, ovalp, nval, this_cpu_cmpxchg_1)
-> +#else
-> +#define this_cpu_try_cmpxchg_1(pcp, ovalp, nval) \
-> +	this_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
-> +#endif
-> +#endif
-> +#ifndef this_cpu_try_cmpxchg_2
-> +#ifdef this_cpu_cmpxchg_2
-> +#define this_cpu_try_cmpxchg_2(pcp, ovalp, nval) \
-> +	__cpu_fallback_try_cmpxchg(pcp, ovalp, nval, this_cpu_cmpxchg_2)
-> +#else
-> +#define this_cpu_try_cmpxchg_2(pcp, ovalp, nval) \
-> +	this_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
-> +#endif
-> +#endif
-> +#ifndef this_cpu_try_cmpxchg_4
-> +#ifdef this_cpu_cmpxchg_4
-> +#define this_cpu_try_cmpxchg_4(pcp, ovalp, nval) \
-> +	__cpu_fallback_try_cmpxchg(pcp, ovalp, nval, this_cpu_cmpxchg_4)
-> +#else
-> +#define this_cpu_try_cmpxchg_4(pcp, ovalp, nval) \
-> +	this_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
-> +#endif
-> +#endif
-> +#ifndef this_cpu_try_cmpxchg_8
-> +#ifdef this_cpu_cmpxchg_8
-> +#define this_cpu_try_cmpxchg_8(pcp, ovalp, nval) \
-> +	__cpu_fallback_try_cmpxchg(pcp, ovalp, nval, this_cpu_cmpxchg_8)
-> +#else
-> +#define this_cpu_try_cmpxchg_8(pcp, ovalp, nval) \
-> +	this_cpu_generic_try_cmpxchg(pcp, ovalp, nval)
-> +#endif
-> +#endif
-> +
->  #ifndef this_cpu_cmpxchg_1
->  #define this_cpu_cmpxchg_1(pcp, oval, nval) \
->  	this_cpu_generic_cmpxchg(pcp, oval, nval)
-> --- a/include/linux/percpu-defs.h
-> +++ b/include/linux/percpu-defs.h
-> @@ -343,6 +343,21 @@ static __always_inline void __this_cpu_p
->  	pscr2_ret__;							\
->  })
->  
-> +#define __pcpu_size_call_return2bool(stem, variable, ...)		\
-> +({									\
-> +	bool pscr2_ret__;						\
-> +	__verify_pcpu_ptr(&(variable));					\
-> +	switch(sizeof(variable)) {					\
-> +	case 1: pscr2_ret__ = stem##1(variable, __VA_ARGS__); break;	\
-> +	case 2: pscr2_ret__ = stem##2(variable, __VA_ARGS__); break;	\
-> +	case 4: pscr2_ret__ = stem##4(variable, __VA_ARGS__); break;	\
-> +	case 8: pscr2_ret__ = stem##8(variable, __VA_ARGS__); break;	\
-> +	default:							\
-> +		__bad_size_call_parameter(); break;			\
-> +	}								\
-> +	pscr2_ret__;							\
-> +})
-> +
->  /*
->   * Special handling for cmpxchg_double.  cmpxchg_double is passed two
->   * percpu variables.  The first has to be aligned to a double word
-> @@ -426,6 +441,8 @@ do {									\
->  #define raw_cpu_xchg(pcp, nval)		__pcpu_size_call_return2(raw_cpu_xchg_, pcp, nval)
->  #define raw_cpu_cmpxchg(pcp, oval, nval) \
->  	__pcpu_size_call_return2(raw_cpu_cmpxchg_, pcp, oval, nval)
-> +#define raw_cpu_try_cmpxchg(pcp, ovalp, nval) \
-> +	__pcpu_size_call_return2bool(raw_cpu_try_cmpxchg_, pcp, ovalp, nval)
->  #define raw_cpu_cmpxchg_double(pcp1, pcp2, oval1, oval2, nval1, nval2) \
->  	__pcpu_double_call_return_bool(raw_cpu_cmpxchg_double_, pcp1, pcp2, oval1, oval2, nval1, nval2)
->  
-> @@ -513,6 +530,8 @@ do {									\
->  #define this_cpu_xchg(pcp, nval)	__pcpu_size_call_return2(this_cpu_xchg_, pcp, nval)
->  #define this_cpu_cmpxchg(pcp, oval, nval) \
->  	__pcpu_size_call_return2(this_cpu_cmpxchg_, pcp, oval, nval)
-> +#define this_cpu_try_cmpxchg(pcp, ovalp, nval) \
-> +	__pcpu_size_call_return2bool(this_cpu_try_cmpxchg_, pcp, ovalp, nval)
->  #define this_cpu_cmpxchg_double(pcp1, pcp2, oval1, oval2, nval1, nval2) \
->  	__pcpu_double_call_return_bool(this_cpu_cmpxchg_double_, pcp1, pcp2, oval1, oval2, nval1, nval2)
->  
+> > -----Original Message-----
+> > From: Michael S. Tsirkin <mst@redhat.com>
+> > Sent: Friday, June 9, 2023 3:45 AM
+> > To: Angus Chen <angus.chen@jaguarmicro.com>
+> > Cc: jasowang@redhat.com; virtualization@lists.linux-foundation.org;
+> > linux-kernel@vger.kernel.org
+> > Subject: Re: [PATCH v2] vdpa/vp_vdpa: Check queue number of vdpa device from
+> > add_config
+> > 
+> > On Thu, Jun 08, 2023 at 05:01:24PM +0800, Angus Chen wrote:
+> > > When add virtio_pci vdpa device,check the vqs number of device cap
+> > > and max_vq_pairs from add_config.
+> > > Simply starting from failing if the provisioned #qp is not
+> > > equal to the one that hardware has.
+> > >
+> > > Signed-off-by: Angus Chen <angus.chen@jaguarmicro.com>
+> > 
+> > I am not sure about this one. How does userspace know
+> > which values are legal?
+> Maybe we can print device cap of device in dev_err?
+
+No one reads these except kernel devs. Surely not userspace.
+
+> > 
+> > If there's no way then maybe we should just cap the value
+> > to what device can support but otherwise keep the device
+> > working.
+> We I use max_vqs pair to test vp_vdpa,it doesn't work as expect.
+> And there is no any hint of this.
+
+So things don't work either way just differently.
+Let's come up with a way for userspace to know what's legal
+so things can start working.
+
+
+> > 
+> > > ---
+> > > v1: Use max_vqs from add_config
+> > > v2: Just return fail if max_vqs from add_config is not same as device
+> > > 	cap. Suggested by jason.
+> > >
+> > >  drivers/vdpa/virtio_pci/vp_vdpa.c | 35 ++++++++++++++++++-------------
+> > >  1 file changed, 21 insertions(+), 14 deletions(-)
+> > >
+> > > diff --git a/drivers/vdpa/virtio_pci/vp_vdpa.c
+> > b/drivers/vdpa/virtio_pci/vp_vdpa.c
+> > > index 281287fae89f..c1fb6963da12 100644
+> > > --- a/drivers/vdpa/virtio_pci/vp_vdpa.c
+> > > +++ b/drivers/vdpa/virtio_pci/vp_vdpa.c
+> > > @@ -480,32 +480,39 @@ static int vp_vdpa_dev_add(struct
+> > vdpa_mgmt_dev *v_mdev, const char *name,
+> > >  	u64 device_features;
+> > >  	int ret, i;
+> > >
+> > > -	vp_vdpa = vdpa_alloc_device(struct vp_vdpa, vdpa,
+> > > -				    dev, &vp_vdpa_ops, 1, 1, name, false);
+> > > -
+> > > -	if (IS_ERR(vp_vdpa)) {
+> > > -		dev_err(dev, "vp_vdpa: Failed to allocate vDPA structure\n");
+> > > -		return PTR_ERR(vp_vdpa);
+> > > +	if (add_config->mask & BIT_ULL(VDPA_ATTR_DEV_NET_CFG_MAX_VQP)) {
+> > > +		if (add_config->net.max_vq_pairs != (v_mdev->max_supported_vqs /
+> > 2)) {
+> > > +			dev_err(&pdev->dev, "max vqs 0x%x should be equal to 0x%x
+> > which device has\n",
+> > > +				add_config->net.max_vq_pairs*2,
+> > v_mdev->max_supported_vqs);
+> > > +			return -EINVAL;
+> > > +		}
+> > >  	}
+> > >
+> > > -	vp_vdpa_mgtdev->vp_vdpa = vp_vdpa;
+> > > -
+> > > -	vp_vdpa->vdpa.dma_dev = &pdev->dev;
+> > > -	vp_vdpa->queues = vp_modern_get_num_queues(mdev);
+> > > -	vp_vdpa->mdev = mdev;
+> > > -
+> > >  	device_features = vp_modern_get_features(mdev);
+> > >  	if (add_config->mask & BIT_ULL(VDPA_ATTR_DEV_FEATURES)) {
+> > >  		if (add_config->device_features & ~device_features) {
+> > > -			ret = -EINVAL;
+> > >  			dev_err(&pdev->dev, "Try to provision features "
+> > >  				"that are not supported by the device: "
+> > >  				"device_features 0x%llx provisioned 0x%llx\n",
+> > >  				device_features, add_config->device_features);
+> > > -			goto err;
+> > > +			return -EINVAL;
+> > >  		}
+> > >  		device_features = add_config->device_features;
+> > >  	}
+> > > +
+> > > +	vp_vdpa = vdpa_alloc_device(struct vp_vdpa, vdpa,
+> > > +				    dev, &vp_vdpa_ops, 1, 1, name, false);
+> > > +
+> > > +	if (IS_ERR(vp_vdpa)) {
+> > > +		dev_err(dev, "vp_vdpa: Failed to allocate vDPA structure\n");
+> > > +		return PTR_ERR(vp_vdpa);
+> > > +	}
+> > > +
+> > > +	vp_vdpa_mgtdev->vp_vdpa = vp_vdpa;
+> > > +
+> > > +	vp_vdpa->vdpa.dma_dev = &pdev->dev;
+> > > +	vp_vdpa->queues = v_mdev->max_supported_vqs;
+> > > +	vp_vdpa->mdev = mdev;
+> > >  	vp_vdpa->device_features = device_features;
+> > >
+> > >  	ret = devm_add_action_or_reset(dev, vp_vdpa_free_irq_vectors, pdev);
+> > > --
+> > > 2.25.1
+> 
+
