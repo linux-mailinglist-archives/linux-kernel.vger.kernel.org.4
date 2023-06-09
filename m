@@ -2,132 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04614729F7E
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:00:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ED60729F82
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242032AbjFIQAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 12:00:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51034 "EHLO
+        id S242028AbjFIQBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 12:01:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241844AbjFIQAN (ORCPT
+        with ESMTP id S242013AbjFIQBD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 12:00:13 -0400
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B53495;
-        Fri,  9 Jun 2023 09:00:12 -0700 (PDT)
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-33d31ab00bdso8125075ab.3;
-        Fri, 09 Jun 2023 09:00:12 -0700 (PDT)
+        Fri, 9 Jun 2023 12:01:03 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F8335B1
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:01:01 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-9788faaca2dso318505066b.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 09:01:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686326459; x=1688918459;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JJHKGlV47afxhESmn4M8emdIU67tKEEb2KjyNS3Cyy8=;
+        b=YwxbeP9Z1jnP1x3v5Xf+YEUjQFZwEf032mOgVxMfemo1HoEhK5v/oJAT0gfnF0RU5F
+         2o08W8Ddz2BVJdDAVuKu2lGMYh6OkaHbWQnxGKwfIJkirJRbqH4ARKbys3ME1R1XKQ2i
+         tiHbXpHhvD7G1I2ed9MqQIOLDHU3YqkJ1LrqA2MleUw798uqxQ6PxuObwTcElplSF3SW
+         G9Xv7GocLoi+ylI6iQo1ljUz2J8OC/txFLLZXSetIxuqijFx5PlHX8vucxVHDvoghlvW
+         SEyzDgtoWpFG46I6zbZLfmvbPGuqF43g/uwkUBcNz2DRT60oz+4ShsbZAC1klp/jfdBF
+         NhzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686326411; x=1688918411;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eo6pQQz/UcpKzu+A/oD9rYPc78cI4TMDsCJ+p2y8fSM=;
-        b=lHEICqTh3xi06R1t+1JvQ8HKFopUJ/ODRiKqu+WaboZQMfRAnj+PnU1aDOsP1jvlAH
-         R3aC/Ws3VuNiAKAJSTxsh+d0a95zfFF/gmI6gFqWbkhOJXmalOdjOqOGA0YVt54OEls+
-         vqY1ucYwRG/AQjovySU0dsPYT722UaRGefNz8zWqxP9NeR55GPWxMdG1FBhFVU7Br3Ta
-         HFeBbJQstLoiIPynU1I//VqDwGFIafj+xhVqqu0oFB0aY2SmVnwbSm/LC1LNO74EhLOn
-         IWb/s7g0QCtTTYKOC2twXWhHndV16YJsi/nbkB/qHC9SnirwESZgspYQg/8xH5izYvR+
-         Od0A==
-X-Gm-Message-State: AC+VfDxhWBCSVQalZD7fCJKqlqlcXzfeXZjINilPs/nXl5eAW/60kAlD
-        cthZo3Ue+1y2xO+M/gcv9A==
-X-Google-Smtp-Source: ACHHUZ7Rd2jsilSxCBZZUMMDilUOPcReyXqGBLxY1gsq3rBmEkUqJq9D61+W8XkS3BSNrDKSXBytjw==
-X-Received: by 2002:a92:da87:0:b0:331:cd3:90a7 with SMTP id u7-20020a92da87000000b003310cd390a7mr1836991iln.17.1686326411170;
-        Fri, 09 Jun 2023 09:00:11 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id s8-20020a02cf28000000b003e9e5e1aacasm1061145jar.143.2023.06.09.09.00.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 09:00:10 -0700 (PDT)
-Received: (nullmailer pid 1133062 invoked by uid 1000);
-        Fri, 09 Jun 2023 16:00:08 -0000
-Date:   Fri, 9 Jun 2023 10:00:08 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Tim Harvey <tharvey@gateworks.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Li Yang <leoyang.li@nxp.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Conor Dooley <conor@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2 1/4] dt-bindings: mfd: gateworks-gsc: remove
- unnecessary fan-controller nodes
-Message-ID: <20230609160008.GA1132019-robh@kernel.org>
-References: <20230522193219.1477158-1-tharvey@gateworks.com>
+        d=1e100.net; s=20221208; t=1686326459; x=1688918459;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JJHKGlV47afxhESmn4M8emdIU67tKEEb2KjyNS3Cyy8=;
+        b=TZKVaz9Z3K138B3hIsEJUwsqx1y2qKYs5f5vKLvhV6qKe108m3st60mqiYb4b+XkDt
+         dY2xrbkRNp21dyJIO65QAyo2jGDMaPBJFdqjhRXq/8aDKySy2Xgm59rnp1e2WYDz2rp/
+         HBnHQ16UaC9G1FQhgWDvSzKf0Cj/NWrLWgrKm1eleiESN4BVPKhXtLhSWJoZ++uTlZMq
+         LaKjQ20D6IxFdGGYQz8RrI2sOqSYj1aa6ByWKhpryDkCaqCChmoQD9T0QoLjCH5a4AQL
+         GbFJxvrf0JF4lSBTEqUDa17CXuRLdXAjbfAKn+8xydxL9YEuHYpfuUOtOF1OhRa/Axu2
+         SG0Q==
+X-Gm-Message-State: AC+VfDxvp1pK/5lsVCqppgpMgzMoe3SLaqiHcGVvFrXrnldtuKFoipC1
+        rjmse4U1BOD0A+Q0rNlPSX2qTg==
+X-Google-Smtp-Source: ACHHUZ4MNMzOVPyOZds2RmjGMSDMu8ErQik4SCpzMcmtDR930mLUJy8Vxh/s1fzyIeO2OeXqSiaynQ==
+X-Received: by 2002:a17:907:7da9:b0:973:8cb7:4d81 with SMTP id oz41-20020a1709077da900b009738cb74d81mr2136036ejc.49.1686326459617;
+        Fri, 09 Jun 2023 09:00:59 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id h26-20020a170906829a00b00965c529f103sm1437369ejx.86.2023.06.09.09.00.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Jun 2023 09:00:59 -0700 (PDT)
+Message-ID: <949a2d21-eb14-3ef8-a7be-9c12152cd15a@linaro.org>
+Date:   Fri, 9 Jun 2023 18:00:57 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230522193219.1477158-1-tharvey@gateworks.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v5 1/2] dt-bindings: HID: i2c-hid: ilitek: Introduce
+ bindings for Ilitek ili9882t
+Content-Language: en-US
+To:     Cong Yang <yangcong5@huaqin.corp-partner.google.com>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, dmitry.torokhov@gmail.com, jikos@kernel.org,
+        benjamin.tissoires@redhat.com, dianders@chromium.org,
+        hsinyi@google.com
+Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230609063615.758676-1-yangcong5@huaqin.corp-partner.google.com>
+ <20230609063615.758676-2-yangcong5@huaqin.corp-partner.google.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230609063615.758676-2-yangcong5@huaqin.corp-partner.google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 12:32:16PM -0700, Tim Harvey wrote:
-> Remove the unnecessary #address-cells and #size-cells nodes from
-> the fan-controller. These are not needed as the fan controller does not
-> have any children.
+On 09/06/2023 08:36, Cong Yang wrote:
+> The ili9882t touch screen chip same as Elan eKTH6915 controller
+> has a reset gpio. The difference is that ili9882t needs to use
+> vccio-supply instead of vcc33-supply. Doug's series[1] allows panels
+> and touchscreens to power on/off together, let's add a phandle for this.
 > 
-> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-> v2:
->  - udpated commit log to explain why the nodes are unnessesary
->  - added Krzysztof's rb tag
->  - added Connor's ab tag
-> ---
->  .../devicetree/bindings/mfd/gateworks-gsc.yaml         | 10 ----------
->  1 file changed, 10 deletions(-)
+> [1]: https://lore.kernel.org/r/20230607215224.2067679-1-dianders@chromium.org
+> 
+> Signed-off-by: Cong Yang <yangcong5@huaqin.corp-partner.google.com>
 
-This is not going to get applied if you don't send it to Lee.
 
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml b/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
-> index acb9c54942d9..dc379f3ebf24 100644
-> --- a/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
-> @@ -122,12 +122,6 @@ patternProperties:
->        compatible:
->          const: gw,gsc-fan
->  
-> -      "#address-cells":
-> -        const: 1
-> -
-> -      "#size-cells":
-> -        const: 0
-> -
->        reg:
->          description: The fan controller base address
->          maxItems: 1
-> @@ -135,8 +129,6 @@ patternProperties:
->      required:
->        - compatible
->        - reg
-> -      - "#address-cells"
-> -      - "#size-cells"
->  
->  required:
->    - compatible
-> @@ -194,8 +186,6 @@ examples:
->              };
->  
->              fan-controller@2c {
-> -                #address-cells = <1>;
-> -                #size-cells = <0>;
->                  compatible = "gw,gsc-fan";
->                  reg = <0x2c>;
->              };
-> -- 
-> 2.25.1
-> 
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+If there is going to be new version, then:
+A nit, subject: drop second/last, redundant "bindings for". The
+"dt-bindings" prefix is already stating that these are bindings.
+
+
+---
+
+This is an automated instruction, just in case, because many review tags
+are being ignored. If you do not know the process, here is a short
+explanation:
+
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions, under or above your Signed-off-by tag. Tools like b4 can help
+here. However, there's no need to repost patches *only* to add the tags.
+The upstream maintainer will do that for acks received on the version
+they apply.
+
+https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+
+Best regards,
+Krzysztof
+
