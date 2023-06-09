@@ -2,177 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 259A1728F82
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 07:57:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 491AB728F92
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 07:58:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237909AbjFIF5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 01:57:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60412 "EHLO
+        id S237929AbjFIF6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 01:58:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236735AbjFIF5e (ORCPT
+        with ESMTP id S229697AbjFIF5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 01:57:34 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC66830E2;
-        Thu,  8 Jun 2023 22:57:33 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3595vTE8003569;
-        Fri, 9 Jun 2023 05:57:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=D0Fd++hZFXiLvHodQk/Vg9MFpsazfeAQUnvaBMDTxas=;
- b=fsplNjEA2tChAkWZpRGilmVHaAjBnabjKiFXiv/NHxCEbvjXVjLRW0nNQImSQYQByP5G
- mcVF4XgpShAw4YIZYiLEee0i5ZuT/nyhJsV6NPJNMy1UCWKRg3Cq9YvmcKasPo6FP/Vw
- VdyfdpBtyvJNKC6Od+UzBKbzK25oCEVUH1mbNX///BG6NcDTAv111OjeL9/i4UiS4GYo
- LS94doTxnP7UdXBfZzhRNLnthO18UmHHHqlGFpO1MoenYjuFRFSkHVLicTe+VhCpasCw
- k9FEeRNM8pDEpTgiQ9gbhGMrz6hVz7Thq1zXksHu/WlatiTlyR5mXtjA65HEsLI3yBGB bA== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r3nwersj0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Jun 2023 05:57:29 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3595vSj8010257
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 9 Jun 2023 05:57:28 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 8 Jun 2023 22:57:23 -0700
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <gregkh@linuxfoundation.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <quic_wcheng@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-CC:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Subject: [PATCH v15 5/5] arm64: dts: qcom: ipq9574: Enable USB
-Date:   Fri, 9 Jun 2023 11:26:34 +0530
-Message-ID: <5021dbf3a28ee073795e7580bfa019df465e16ed.1686289721.git.quic_varada@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1686289721.git.quic_varada@quicinc.com>
-References: <cover.1686289721.git.quic_varada@quicinc.com>
+        Fri, 9 Jun 2023 01:57:49 -0400
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E15830E7
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 22:57:44 -0700 (PDT)
+Received: by mail-il1-x12b.google.com with SMTP id e9e14a558f8ab-33e60900753so6432925ab.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 22:57:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686290263; x=1688882263;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=++2Zj1omCLLppu446gvNENuVYrBxM0BkVm2pcONPHCw=;
+        b=mJEksCrESHsJiex1or4mBAdTqS8mtSQXqx32WSM0EtiLydQdkeHaajbo2P1enf/Cdn
+         edR1ScgCRG7tUAhcANwXFfbPbctS63b2XcPB+5i5urD4A0q6IVqEnEoJOdYZv0+LIz8w
+         FVwJVbvpzk70BJ3yRMy08Y6qNeOIaIcohuVUfi5Yq8YcEJSowC0nOXR7jkGxEsrijIjQ
+         o2tCkl6kM9/vKV3KhABhJPzBLgtFcJCRATEBUkBsirD0Mdj1pPsKywUwKtzNZneAhKaP
+         +8jcAybypAjdMf81gHzS0yfIgS0zCw5TlKomlFBCGXy5lqY1jDgbwNXRHBostzpaTkQe
+         0jSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686290263; x=1688882263;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=++2Zj1omCLLppu446gvNENuVYrBxM0BkVm2pcONPHCw=;
+        b=isBrJrSgYp5m/b7P7Ez4VMTdbHT89xZYoYRINnLbeipH2A7JwltimMFV2EZ8Ca4jyk
+         2IrAn+ejTc/z4i6NktYTPpkp7LxL/nkdSnym7cCW9Y/dlytEqFcayiSi5IWlMkZfCycD
+         X1aSP8/kkan8rtntd7YLeYLERwFFeEgod0vBa1mgXiB4Ld1txbLsm3iQ89Jgk+8pvoiV
+         3nundMkUGfHa8n0pPCXAf5iiu7MOccKeaAxjRyQ2KRDf3YEUAY/J6TSfFffeL0hnsDh9
+         3cjHLZpXivaCw46gJYvTQuYvenenYsyq5REh7xN75S1I2bucT0YvnLr1nEC6FcMboV+5
+         fYOA==
+X-Gm-Message-State: AC+VfDxdZBb7WscfiPQe5ul+yG397wpZzlVRODQikNZevuRt3T65pPmd
+        wUmIOxHeNFPoPM2H89kCKDB2
+X-Google-Smtp-Source: ACHHUZ6GJJrdYE1QiP/Ozdl2rWOQLC5T3Eor5qKvghiCVz8mJ5Y0d+6D5hPCUlbt+nEN01EpI+suhg==
+X-Received: by 2002:a92:cbd2:0:b0:338:18f1:db72 with SMTP id s18-20020a92cbd2000000b0033818f1db72mr696567ilq.29.1686290263599;
+        Thu, 08 Jun 2023 22:57:43 -0700 (PDT)
+Received: from thinkpad ([117.202.186.138])
+        by smtp.gmail.com with ESMTPSA id e15-20020aa7824f000000b0063b96574b8bsm1888925pfn.220.2023.06.08.22.57.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 22:57:43 -0700 (PDT)
+Date:   Fri, 9 Jun 2023 11:27:37 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc:     tjoseph@cadence.com, lpieralisi@kernel.org, robh@kernel.org,
+        kw@linux.com, bhelgaas@google.com, nadeem@cadence.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, vigneshr@ti.com, srk@ti.com,
+        nm@ti.com
+Subject: Re: [PATCH v3] PCI: cadence: Fix Gen2 Link Retraining process
+Message-ID: <20230609055737.GA6847@thinkpad>
+References: <20230607091427.852473-1-s-vadapalli@ti.com>
+ <20230608154206.GI5672@thinkpad>
+ <67865af6-7ea4-63e3-6c35-4cd038f36af3@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: qeh4ogz572iPNQW8zV182fsk6v2z1JRl
-X-Proofpoint-ORIG-GUID: qeh4ogz572iPNQW8zV182fsk6v2z1JRl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-09_03,2023-06-08_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 mlxlogscore=601 phishscore=0 priorityscore=1501
- suspectscore=0 clxscore=1015 spamscore=0 adultscore=0 mlxscore=0
- lowpriorityscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306090051
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <67865af6-7ea4-63e3-6c35-4cd038f36af3@ti.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add regulator defines
-Turn on USB related nodes
-Provide vdd info
+On Fri, Jun 09, 2023 at 09:46:20AM +0530, Siddharth Vadapalli wrote:
+> Hello Mani,
+> 
+> Thank you for reviewing this patch.
+> 
+> On 08/06/23 21:12, Manivannan Sadhasivam wrote:
+> > On Wed, Jun 07, 2023 at 02:44:27PM +0530, Siddharth Vadapalli wrote:
+> >> The Link Retraining process is initiated to account for the Gen2 defect in
+> >> the Cadence PCIe controller in J721E SoC. The errata corresponding to this
+> >> is i2085, documented at:
+> >> https://www.ti.com/lit/er/sprz455c/sprz455c.pdf
+> >>
+> >> The existing workaround implemented for the errata waits for the Data Link
+> >> initialization to complete and assumes that the link retraining process
+> >> at the Physical Layer has completed. However, it is possible that the
+> >> Physical Layer training might be ongoing as indicated by the
+> >> PCI_EXP_LNKSTA_LT bit in the PCI_EXP_LNKSTA register.
+> >>
+> >> Fix the existing workaround, to ensure that the Physical Layer training
+> >> has also completed, in addition to the Data Link initialization.
+> >>
+> > 
+> > cdns_pcie_host_wait_for_link() function is called even for the non-quirky cases
+> > as well, so does this patch. But if your patch is only targeting the link
+> > retraining case, you should move the logic to cdns_pcie_retrain().
+> 
+> In the v2 version of this patch at:
+> https://lore.kernel.org/r/20230315070800.1615527-1-s-vadapalli@ti.com/
+> I had implemented it as suggested above by you. However, based on the discussion
+> with Bjorn at:
+> https://lore.kernel.org/r/20230509182416.GA1259841@bhelgaas/
+> it was agreed upon that waiting for two things in succession doesn't seem to be
+> the best way to implement it. Therefore, the cdns_pcie_host_training_complete()
+> function in the v2 patch is merged into the cdns_pcie_host_wait_for_link()
+> function in this patch.
+> 
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
----
- Changes in v15:
-	- Move fixed regulator defines from 'arm64: dts: qcom: ipq9574: Add USB related nodes' to this patch
+I think Bjorn's point was to make the wait_for_link() behavior same across
+drivers. While I agree with that, I'd like to know whether adding this wait for
+all cases (not just during link retraining quirk) adds up any latency or not.
 
- Changes in v13:
-	- s/fixed_/regulator_fixed_/
+Can you measure that?
 
- Changes in v11:
-	- Rename dwc_0 -> usb_0_dwc3
-	- Maintain sorted order for the usb nodes
+> > 
+> > 
+> >> Fixes: 4740b969aaf5 ("PCI: cadence: Retrain Link to work around Gen2 training defect")
+> >> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> >> Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
+> >> ---
+> >>
+> >> Hello,
+> >>
+> >> This patch is based on linux-next tagged next-20230606.
+> >>
+> >> v2:
+> >> https://lore.kernel.org/r/20230315070800.1615527-1-s-vadapalli@ti.com/
+> >> Changes since v2:
+> >> - Merge the cdns_pcie_host_training_complete() function with the
+> >>   cdns_pcie_host_wait_for_link() function, as suggested by Bjorn
+> >>   for the v2 patch.
+> >> - Add dev_err() to notify when Link Training fails, since this is a
+> >>   fatal error and proceeding from this point will almost always crash
+> >>   the kernel.
+> >>
+> >> v1:
+> >> https://lore.kernel.org/r/20230102075656.260333-1-s-vadapalli@ti.com/
+> >> Changes since v1:
+> >> - Collect Reviewed-by tag from Vignesh Raghavendra.
+> >> - Rebase on next-20230315.
+> >>
+> >> Regards,
+> >> Siddharth.
+> >>
+> >>  .../controller/cadence/pcie-cadence-host.c    | 20 +++++++++++++++++++
+> >>  1 file changed, 20 insertions(+)
+> >>
+> >> diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
+> >> index 940c7dd701d6..70a5f581ff4f 100644
+> >> --- a/drivers/pci/controller/cadence/pcie-cadence-host.c
+> >> +++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
+> >> @@ -12,6 +12,8 @@
+> >>  
+> >>  #include "pcie-cadence.h"
+> >>  
+> >> +#define LINK_RETRAIN_TIMEOUT HZ
+> >> +
+> >>  static u64 bar_max_size[] = {
+> >>  	[RP_BAR0] = _ULL(128 * SZ_2G),
+> >>  	[RP_BAR1] = SZ_2G,
+> >> @@ -80,8 +82,26 @@ static struct pci_ops cdns_pcie_host_ops = {
+> >>  static int cdns_pcie_host_wait_for_link(struct cdns_pcie *pcie)
+> >>  {
+> >>  	struct device *dev = pcie->dev;
+> >> +	unsigned long end_jiffies;
+> >> +	u16 link_status;
+> >>  	int retries;
+> >>  
+> >> +	/* Wait for link training to complete */
+> >> +	end_jiffies = jiffies + LINK_RETRAIN_TIMEOUT;
+> >> +	do {
+> >> +		link_status = cdns_pcie_rp_readw(pcie, CDNS_PCIE_RP_CAP_OFFSET + PCI_EXP_LNKSTA);
+> >> +		if (!(link_status & PCI_EXP_LNKSTA_LT))
+> >> +			break;
+> >> +		usleep_range(0, 1000);
+> >> +	} while (time_before(jiffies, end_jiffies));
+> >> +
+> >> +	if (!(link_status & PCI_EXP_LNKSTA_LT)) {
+> >> +		dev_info(dev, "Link training complete\n");
+> > 
+> > This info is not needed.
+> 
+> Sure. I will drop it in the v4 patch.
+> 
+> > 
+> >> +	} else {
+> >> +		dev_err(dev, "Fatal! Link training incomplete\n");
+> > 
+> > This could be, "Link retraining incomplete".
+> 
+> I added the word "Fatal" since Linux is almost always guaranteed to crash if the
+> link training doesn't complete before the PCI subsystem attempts to enumerate
+> the EP devices. Therefore, adding the word "Fatal" will help the users identify
+> what the cause of the crash is, which would otherwise be overlooked, unless the
+> critical nature of this error is conveyed to the user.
+> 
 
- Changes in v10:
-	- Provide vdd info
+Ok.
 
- Changes in v5:
-	- Move "host" mode specification to board dts
-	- Due to dependency with earlier patches board dts
-	  filename changed ipq9574-al02-c7.dts -> ipq9574-rdp433.dts
+- Mani
 
- Changes in v2:
-	- Fix node placement and coding style
-	- "ok" -> "okay"
----
- arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts | 41 +++++++++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+> > 
+> > - Mani
+> > 
+> >> +		return -ETIMEDOUT;
+> >> +	}
+> >> +
+> >>  	/* Check if the link is up or not */
+> >>  	for (retries = 0; retries < LINK_WAIT_MAX_RETRIES; retries++) {
+> >>  		if (cdns_pcie_link_up(pcie)) {
+> >> -- 
+> >> 2.25.1
+> >>
+> > 
+> 
+> -- 
+> Regards,
+> Siddharth.
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-index 8c2451c..877026c 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-+++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts
-@@ -21,6 +21,24 @@
- 	chosen {
- 		stdout-path = "serial0:115200n8";
- 	};
-+
-+	regulator_fixed_3p3: s3300 {
-+		compatible = "regulator-fixed";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		regulator-boot-on;
-+		regulator-always-on;
-+		regulator-name = "fixed_3p3";
-+	};
-+
-+	regulator_fixed_0p925: s0925 {
-+		compatible = "regulator-fixed";
-+		regulator-min-microvolt = <925000>;
-+		regulator-max-microvolt = <925000>;
-+		regulator-boot-on;
-+		regulator-always-on;
-+		regulator-name = "fixed_0p925";
-+	};
- };
- 
- &blsp1_uart2 {
-@@ -105,6 +123,29 @@
- 	};
- };
- 
-+&usb_0_dwc3 {
-+	dr_mode = "host";
-+};
-+
-+&usb_0_qmpphy {
-+	vdda-pll-supply = <&mp5496_l2>;
-+	vdda-phy-supply = <&regulator_fixed_0p925>;
-+
-+	status = "okay";
-+};
-+
-+&usb_0_qusbphy {
-+	vdd-supply = <&regulator_fixed_0p925>;
-+	vdda-pll-supply = <&mp5496_l2>;
-+	vdda-phy-dpdm-supply = <&regulator_fixed_3p3>;
-+
-+	status = "okay";
-+};
-+
-+&usb3 {
-+	status = "okay";
-+};
-+
- &xo_board_clk {
- 	clock-frequency = <24000000>;
- };
 -- 
-2.7.4
-
+மணிவண்ணன் சதாசிவம்
