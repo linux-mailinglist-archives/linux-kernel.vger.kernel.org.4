@@ -2,328 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E01727290F2
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C42572910C
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238681AbjFIH2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 03:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42594 "EHLO
+        id S238703AbjFIH3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 03:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbjFIH2V (ORCPT
+        with ESMTP id S234257AbjFIH3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 03:28:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8EF2D7C
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 00:27:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686295651;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=k8uL9RB2TZeMZAUxmhUna0m1Gfo0R9DVnwUW3ywqZ+c=;
-        b=SGkpVqx6vB4Q+F2tMmXgHhmILPkKC1bl4n3lPHov+CkAPFBDJklG6oRxNYK9FbT5lsN2Om
-        u9k69Hv4s43Lbyi0/wyFpJjz3GMVBJtR9xenh51FRsZQRzcLew655RFoJ3xRDeo4B9h4FN
-        nfAuxOFETkUpwuU4cA9I5C/kIHkwrik=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-480-rIo2R1KvPmeD3875NVveGw-1; Fri, 09 Jun 2023 03:27:30 -0400
-X-MC-Unique: rIo2R1KvPmeD3875NVveGw-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f7eb414fcbso6696705e9.2
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 00:27:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686295648; x=1688887648;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k8uL9RB2TZeMZAUxmhUna0m1Gfo0R9DVnwUW3ywqZ+c=;
-        b=NY5IbSATK0CTUyatypCwHkg6TaaK+GTC2k+q4ca5dlJ+JKzNbwq6uEjIdC1038N6cD
-         P0w5m+AhgjSsShIYThKPYixY/aujFIjGazV+apfTt9aEypi+caNR/X4HL6DGhO/8FVEj
-         fVT3x3+QbrvoRhpl21yra+6b6uZXciEEDbarnsOlmZjjKBVW9PTebx6OpeGoHtcWN5SH
-         sXA1YPNSbmjHPdh8ULo/DRXzgLGg4MXa0Jh6E9URaucyuEqOZbmFNsffOIZEKN1L9ahX
-         Fiz1Jz6XBoOE+z0AtjNBQvCjBD9jxh137hktiKWIS2Hc+BAPC4aRoGHLYbkrySw3jceb
-         RqZw==
-X-Gm-Message-State: AC+VfDwcF8XQtceSR2jCC3DEff4NTjTAQtdKBhpMpaIS78IA5bJSlfoV
-        2eoE9lSBCWipPktx5NmUPxxNiEcGFpXAthLEbiC3NdutPL9dSNEj82EH4Euuah7/8q7tpApiGH+
-        tPy+4KYz1CKsIBC+5tgu8a2yx25fCQx+T0EOiFP57tX9v60ZZaPA3/kxgvjD3Nrr0Io7uIPFrmH
-        B2Qg==
-X-Received: by 2002:a1c:4b09:0:b0:3f7:f2a1:482f with SMTP id y9-20020a1c4b09000000b003f7f2a1482fmr230028wma.11.1686295648269;
-        Fri, 09 Jun 2023 00:27:28 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4QrxmXCtI9za5XfR+IvU75+9yMq+VNOhenv+q0gG491TweVM4s+/FuocFYUmW+BenHFGmOXg==
-X-Received: by 2002:a1c:4b09:0:b0:3f7:f2a1:482f with SMTP id y9-20020a1c4b09000000b003f7f2a1482fmr230008wma.11.1686295647923;
-        Fri, 09 Jun 2023 00:27:27 -0700 (PDT)
-Received: from redhat.com ([2.55.4.169])
-        by smtp.gmail.com with ESMTPSA id x17-20020a1c7c11000000b003f809461162sm103677wmc.16.2023.06.09.00.27.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 00:27:27 -0700 (PDT)
-Date:   Fri, 9 Jun 2023 03:27:24 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>,
-        Suwan Kim <suwan.kim027@gmail.com>,
-        "Roberts, Martin" <martin.roberts@intel.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        virtualization@lists.linux-foundation.org,
-        linux-block@vger.kernel.org
-Subject: [PATCH v2] Revert "virtio-blk: support completion batching for the
- IRQ path"
-Message-ID: <336455b4f630f329380a8f53ee8cad3868764d5c.1686295549.git.mst@redhat.com>
+        Fri, 9 Jun 2023 03:29:42 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA49435A5;
+        Fri,  9 Jun 2023 00:29:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FTOVl/AGw5mnjS93Irb10Aulf+XeKKw6c0lcVH3w0qjFZAm717x61wXsoF5jdHnErcGc9oRmYaiMLGNBhNlEAV2NAErKyN3H/YNEur3IVvKww7ehfOZugBDs79SL1+6eN0fA4eXhlif2bxEFYgEVwrDDonfiX90AjWZueHdZdo/caMzo8hDB/lutj1QLADpnf+Y1sMFyPKHuUt4d/ctg3pefUE3OzfpNYv9wwn3kd/bqWWl3qVbLEUZ8GwVnKkFwwm0LY523JaY4LKQAClmW3MBiucIvTCmQkw7g98uZChB1uEH7Fox0f6QG1SUE5Y1r382T2t0Z7/LwSCv6guTltw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nwoRASAmGGeTdiaP3Td1Sxj0t86L0XjIBOjzPinfA1g=;
+ b=hn+dN1AO877Jn8Lp6U9pmzp9pSsChyZhhHlNOrF+MuJhFwcQSLAHyAeXNel/IsY4kWoa7qyM7LS6ojce/xW6tqic1nLZ26uz4fc81l7Oh8YCft8mApJU29YBcIgLHNDXXSMkB50L0yJT83NEWqCz48wutmBj06vkwYB5B5mZAoHXO9ACxMAuxeivJa2kaemVafDah5rTL9RtsgenC0u3MLzOTjbgb96xI0Rp3Tet4x71THXxWbFPeRL16uJwl6Qa5eGxz7zz1CmIAwV8pbh5RE7FlsEFuFmeAVsIyMTe4xjsrJxMk9KFiqnHzERXoOWggTxqhNGgVEly5xMW+22G3A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nwoRASAmGGeTdiaP3Td1Sxj0t86L0XjIBOjzPinfA1g=;
+ b=VpuwEfr5rZx+LWT0CKSNTX1xzZ3W5h2M9D28fpz8fqMbP7A4A0chS6j3tM782Ut7RPe2ZapwCkvZlrAIjxubHEDvrkG4iLQV4WorpfoRBVhSKEvjclAE3Q40bcx1a6tZijFOIfQxLfRbF8jMlnx2GcbiTuwDMe8xVVGyz0hu3NY=
+Received: from SA9PR03CA0018.namprd03.prod.outlook.com (2603:10b6:806:20::23)
+ by DM4PR12MB7504.namprd12.prod.outlook.com (2603:10b6:8:110::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Fri, 9 Jun
+ 2023 07:29:10 +0000
+Received: from SN1PEPF0002636E.namprd02.prod.outlook.com
+ (2603:10b6:806:20:cafe::79) by SA9PR03CA0018.outlook.office365.com
+ (2603:10b6:806:20::23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.19 via Frontend
+ Transport; Fri, 9 Jun 2023 07:29:10 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ SN1PEPF0002636E.mail.protection.outlook.com (10.167.241.139) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6477.19 via Frontend Transport; Fri, 9 Jun 2023 07:29:10 +0000
+Received: from equan-buildpc.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 9 Jun
+ 2023 02:29:04 -0500
+From:   Evan Quan <evan.quan@amd.com>
+To:     <rafael@kernel.org>, <lenb@kernel.org>,
+        <Alexander.Deucher@amd.com>, <Christian.Koenig@amd.com>,
+        <Xinhui.Pan@amd.com>, <airlied@gmail.com>, <daniel@ffwll.ch>,
+        <kvalo@kernel.org>, <nbd@nbd.name>, <lorenzo@kernel.org>,
+        <ryder.lee@mediatek.com>, <shayne.chen@mediatek.com>,
+        <sean.wang@mediatek.com>, <matthias.bgg@gmail.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <Mario.Limonciello@amd.com>, <Lijo.Lazar@amd.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
+        <linux-wireless@vger.kernel.org>, Evan Quan <evan.quan@amd.com>
+Subject: [PATCH V2 0/7] Support Wifi RFI interference mitigation feature
+Date:   Fri, 9 Jun 2023 15:28:39 +0800
+Message-ID: <20230609072846.1552238-1-evan.quan@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email 2.27.0.106.g8ac3dc51b1
-X-Mutt-Fcc: =sent
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN1PEPF0002636E:EE_|DM4PR12MB7504:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9ef9f042-ff53-4d7d-4465-08db68bb3792
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6p36yqkgt1Xm/jptj1/wqUMUsJX8D/lsMZNj537WQW/kpjqnb5ME54ZqQ2LDKft7QvSQNc/3tTz1chNiSzlOPpjktCe7ap8845IUVpHc9bdCh3lidQIA2Y+XIY4/L1d4LrqTeBFz+k/Oq+XmP6o8gXfEQfSziLjOvsYL6WZpykzxQ+6LcYXUIYmX11jADGLO9BQzXI5ddWrySIrYVY1QE+xV63nEg2IvlIsWMaW9eusGXq7bfbW2GQIpcc4hapCAag1tz3zQS78fw/p/sfdT+6dHHMSG3WlPVJncBPvxaCogsqKtkV+OCGP3mmwfqqSi6IzbGA0HixSFLqbnVU/4mB75kx7InR4f6jTPl+iuH8r5kzFjRVG4YY+ac3G0ZtKztDuSXFuPQtp3dstqGYN1QdSlgylb42mLNKfoB8mmr3Bm43f84y5Mcy14ZfWILTwUN10GhfDfbYRgFpwZJ1zcdhU2CNwqS3gNgE6jIplSa85BQpNz1s2ydDufxopVGeuLB9iJVvtlKNR4Y9P/DYYatUuZcOtHLpKz5yKKA368PewAq1pipj3z3lEqblY8JZH0bjDEN0nXn8YlSiP3WM1sV+61LzUrgeard/w4VSku3W+6HlmCgNaBXwJZGFfGN6wLihOf2UO8GTBbyigLDK5/19TETg9I1GRyCNZBg8CoS0lKYKBwj0DrOihgHD63b9nfVEOQNu4j6W02d1g3fN1uaQlCDIs/kcuWw1zhUQIiJ4oFUJnUP8Rx6k+SK9g1Knz2vkFJwPT2iT12WFUwCIPlQUnFIRKrVsK8TJGTTb+P2UE=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(376002)(39860400002)(346002)(451199021)(40470700004)(36840700001)(46966006)(70586007)(70206006)(7416002)(4326008)(6636002)(36756003)(40480700001)(5660300002)(44832011)(41300700001)(8936002)(8676002)(316002)(54906003)(110136005)(478600001)(40460700003)(2906002)(7696005)(83380400001)(6666004)(82310400005)(426003)(186003)(1076003)(26005)(336012)(36860700001)(2616005)(921005)(81166007)(356005)(16526019)(86362001)(47076005)(82740400003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 07:29:10.3094
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9ef9f042-ff53-4d7d-4465-08db68bb3792
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1PEPF0002636E.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7504
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 07b679f70d73483930e8d3c293942416d9cd5c13.
+Due to electrical and mechanical constraints in certain platform designs there may
+be likely interference of relatively high-powered harmonics of the (G-)DDR memory
+clocks with local radio module frequency bands used by Wifi 6/6e/7. To mitigate
+possible RFI interference producers can advertise the frequencies in use and
+consumers can use this information to avoid using these frequencies for
+sensitive features.
 
-This change appears to have broken things...
-We now see applications hanging during disk accesses.
-e.g.
-multi-port virtio-blk device running in h/w (FPGA)
-Host running a simple 'fio' test.
-[global]
-thread=1
-direct=1
-ioengine=libaio
-norandommap=1
-group_reporting=1
-bs=4K
-rw=read
-iodepth=128
-runtime=1
-numjobs=4
-time_based
-[job0]
-filename=/dev/vda
-[job1]
-filename=/dev/vdb
-[job2]
-filename=/dev/vdc
-...
-[job15]
-filename=/dev/vdp
+The whole patch set is based on 6.4-rc3. With some brief introductions as below:
+Patch1:     Core ACPI interfaces needed to support WBRF feature.
+Patch2:     Enable WBRF support for wifi subsystem.
+Patch3 - 7: Enable WBRF support for AMD graphics driver.
 
-i.e. 16 disks; 4 queues per disk; simple burst of 4KB reads
-This is repeatedly run in a loop.
+Evan Quan (5):
+  drm/amd/pm: update driver_if and ppsmc headers for coming wbrf feature
+  drm/amd/pm: setup the framework to support Wifi RFI mitigation feature
+  drm/amd/pm: add flood detection for wbrf events
+  drm/amd/pm: enable Wifi RFI mitigation feature support for SMU13.0.0
+  drm/amd/pm: enable Wifi RFI mitigation feature support for SMU13.0.7
 
-After a few, normally <10 seconds, fio hangs.
-With 64 queues (16 disks), failure occurs within a few seconds; with 8 queues (2 disks) it may take ~hour before hanging.
-Last message:
-fio-3.19
-Starting 8 threads
-Jobs: 1 (f=1): [_(7),R(1)][68.3%][eta 03h:11m:06s]
-I think this means at the end of the run 1 queue was left incomplete.
+Mario Limonciello (2):
+  drivers/acpi: Add support for Wifi band RF mitigations
+  wifi: mac80211: Add support for ACPI WBRF
 
-'diskstats' (run while fio is hung) shows no outstanding transactions.
-e.g.
-$ cat /proc/diskstats
-...
-252       0 vda 1843140071 0 14745120568 712568645 0 0 0 0 0 3117947 712568645 0 0 0 0 0 0
-252      16 vdb 1816291511 0 14530332088 704905623 0 0 0 0 0 3117711 704905623 0 0 0 0 0 0
-...
+ drivers/acpi/Kconfig                          |   7 +
+ drivers/acpi/Makefile                         |   2 +
+ drivers/acpi/acpi_wbrf.c                      | 215 ++++++++++++++++++
+ drivers/gpu/drm/amd/amdgpu/amdgpu.h           |  26 +++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c      |  63 +++++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c       |  19 ++
+ drivers/gpu/drm/amd/pm/swsmu/amdgpu_smu.c     | 204 +++++++++++++++++
+ drivers/gpu/drm/amd/pm/swsmu/inc/amdgpu_smu.h |  30 +++
+ .../inc/pmfw_if/smu13_driver_if_v13_0_0.h     |  14 +-
+ .../inc/pmfw_if/smu13_driver_if_v13_0_7.h     |  14 +-
+ .../pm/swsmu/inc/pmfw_if/smu_v13_0_0_ppsmc.h  |   3 +-
+ .../pm/swsmu/inc/pmfw_if/smu_v13_0_7_ppsmc.h  |   3 +-
+ drivers/gpu/drm/amd/pm/swsmu/inc/smu_types.h  |   3 +-
+ drivers/gpu/drm/amd/pm/swsmu/inc/smu_v13_0.h  |   3 +
+ .../gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c    |   9 +
+ .../drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c  |  60 +++++
+ .../drm/amd/pm/swsmu/smu13/smu_v13_0_7_ppt.c  |  59 +++++
+ drivers/gpu/drm/amd/pm/swsmu/smu_internal.h   |   3 +
+ include/linux/wbrf.h                          |  55 +++++
+ include/net/cfg80211.h                        |  18 ++
+ net/mac80211/Makefile                         |   2 +
+ net/mac80211/chan.c                           |   6 +
+ net/mac80211/main.c                           |   2 +
+ net/mac80211/wbrf.c                           | 183 +++++++++++++++
+ 24 files changed, 998 insertions(+), 5 deletions(-)
+ create mode 100644 drivers/acpi/acpi_wbrf.c
+ create mode 100644 include/linux/wbrf.h
+ create mode 100644 net/mac80211/wbrf.c
 
-Other stats (in the h/w, and added to the virtio-blk driver ([a]virtio_queue_rq(), [b]virtblk_handle_req(), [c]virtblk_request_done()) all agree, and show every request had a completion, and that virtblk_request_done() never gets called.
-e.g.
-PF= 0                         vq=0           1           2           3
-[a]request_count     -   839416590   813148916   105586179    84988123
-[b]completion1_count -   839416590   813148916   105586179    84988123
-[c]completion2_count -           0           0           0           0
-
-PF= 1                         vq=0           1           2           3
-[a]request_count     -   823335887   812516140   104582672    75856549
-[b]completion1_count -   823335887   812516140   104582672    75856549
-[c]completion2_count -           0           0           0           0
-
-i.e. the issue is after the virtio-blk driver.
-
-This change was introduced in kernel 6.3.0.
-I am seeing this using 6.3.3.
-If I run with an earlier kernel (5.15), it does not occur.
-If I make a simple patch to the 6.3.3 virtio-blk driver, to skip the blk_mq_add_to_batch()call, it does not fail.
-e.g.
-kernel 5.15 - this is OK
-virtio_blk.c,virtblk_done() [irq handler]
-                 if (likely(!blk_should_fake_timeout(req->q))) {
-                          blk_mq_complete_request(req);
-                 }
-
-kernel 6.3.3 - this fails
-virtio_blk.c,virtblk_handle_req() [irq handler]
-                 if (likely(!blk_should_fake_timeout(req->q))) {
-                          if (!blk_mq_complete_request_remote(req)) {
-                                  if (!blk_mq_add_to_batch(req, iob, virtblk_vbr_status(vbr), virtblk_complete_batch)) {
-                                           virtblk_request_done(req);    //this never gets called... so blk_mq_add_to_batch() must always succeed
-                                   }
-                          }
-                 }
-
-If I do, kernel 6.3.3 - this is OK
-virtio_blk.c,virtblk_handle_req() [irq handler]
-                 if (likely(!blk_should_fake_timeout(req->q))) {
-                          if (!blk_mq_complete_request_remote(req)) {
-                                   virtblk_request_done(req); //force this here...
-                                  if (!blk_mq_add_to_batch(req, iob, virtblk_vbr_status(vbr), virtblk_complete_batch)) {
-                                           virtblk_request_done(req);    //this never gets called... so blk_mq_add_to_batch() must always succeed
-                                   }
-                          }
-                 }
-
-Perhaps you might like to fix/test/revert this change...
-Martin
-
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202306090826.C1fZmdMe-lkp@intel.com/
-Cc: Suwan Kim <suwan.kim027@gmail.com>
-Reported-by: "Roberts, Martin" <martin.roberts@intel.com>
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
----
-
-Since v1:
-	fix build error
-
-Still completely untested as I'm traveling.
-Martin, Suwan, could you please test and report?
-Suwan if you have a better revert in mind pls post and
-I will be happy to drop this.
-
-Thanks!
-
-
- drivers/block/virtio_blk.c | 82 +++++++++++++++++---------------------
- 1 file changed, 37 insertions(+), 45 deletions(-)
-
-diff --git a/drivers/block/virtio_blk.c b/drivers/block/virtio_blk.c
-index 2b918e28acaa..b47358da92a2 100644
---- a/drivers/block/virtio_blk.c
-+++ b/drivers/block/virtio_blk.c
-@@ -348,63 +348,33 @@ static inline void virtblk_request_done(struct request *req)
- 	blk_mq_end_request(req, status);
- }
- 
--static void virtblk_complete_batch(struct io_comp_batch *iob)
--{
--	struct request *req;
--
--	rq_list_for_each(&iob->req_list, req) {
--		virtblk_unmap_data(req, blk_mq_rq_to_pdu(req));
--		virtblk_cleanup_cmd(req);
--	}
--	blk_mq_end_request_batch(iob);
--}
--
--static int virtblk_handle_req(struct virtio_blk_vq *vq,
--			      struct io_comp_batch *iob)
--{
--	struct virtblk_req *vbr;
--	int req_done = 0;
--	unsigned int len;
--
--	while ((vbr = virtqueue_get_buf(vq->vq, &len)) != NULL) {
--		struct request *req = blk_mq_rq_from_pdu(vbr);
--
--		if (likely(!blk_should_fake_timeout(req->q)) &&
--		    !blk_mq_complete_request_remote(req) &&
--		    !blk_mq_add_to_batch(req, iob, virtblk_vbr_status(vbr),
--					 virtblk_complete_batch))
--			virtblk_request_done(req);
--		req_done++;
--	}
--
--	return req_done;
--}
--
- static void virtblk_done(struct virtqueue *vq)
- {
- 	struct virtio_blk *vblk = vq->vdev->priv;
--	struct virtio_blk_vq *vblk_vq = &vblk->vqs[vq->index];
--	int req_done = 0;
-+	bool req_done = false;
-+	int qid = vq->index;
-+	struct virtblk_req *vbr;
- 	unsigned long flags;
--	DEFINE_IO_COMP_BATCH(iob);
-+	unsigned int len;
- 
--	spin_lock_irqsave(&vblk_vq->lock, flags);
-+	spin_lock_irqsave(&vblk->vqs[qid].lock, flags);
- 	do {
- 		virtqueue_disable_cb(vq);
--		req_done += virtblk_handle_req(vblk_vq, &iob);
-+		while ((vbr = virtqueue_get_buf(vblk->vqs[qid].vq, &len)) != NULL) {
-+			struct request *req = blk_mq_rq_from_pdu(vbr);
- 
-+			if (likely(!blk_should_fake_timeout(req->q)))
-+				blk_mq_complete_request(req);
-+			req_done = true;
-+		}
- 		if (unlikely(virtqueue_is_broken(vq)))
- 			break;
- 	} while (!virtqueue_enable_cb(vq));
- 
--	if (req_done) {
--		if (!rq_list_empty(iob.req_list))
--			iob.complete(&iob);
--
--		/* In case queue is stopped waiting for more buffers. */
-+	/* In case queue is stopped waiting for more buffers. */
-+	if (req_done)
- 		blk_mq_start_stopped_hw_queues(vblk->disk->queue, true);
--	}
--	spin_unlock_irqrestore(&vblk_vq->lock, flags);
-+	spin_unlock_irqrestore(&vblk->vqs[qid].lock, flags);
- }
- 
- static void virtio_commit_rqs(struct blk_mq_hw_ctx *hctx)
-@@ -1283,15 +1253,37 @@ static void virtblk_map_queues(struct blk_mq_tag_set *set)
- 	}
- }
- 
-+static void virtblk_complete_batch(struct io_comp_batch *iob)
-+{
-+	struct request *req;
-+
-+	rq_list_for_each(&iob->req_list, req) {
-+		virtblk_unmap_data(req, blk_mq_rq_to_pdu(req));
-+		virtblk_cleanup_cmd(req);
-+	}
-+	blk_mq_end_request_batch(iob);
-+}
-+
- static int virtblk_poll(struct blk_mq_hw_ctx *hctx, struct io_comp_batch *iob)
- {
- 	struct virtio_blk *vblk = hctx->queue->queuedata;
- 	struct virtio_blk_vq *vq = get_virtio_blk_vq(hctx);
-+	struct virtblk_req *vbr;
- 	unsigned long flags;
-+	unsigned int len;
- 	int found = 0;
- 
- 	spin_lock_irqsave(&vq->lock, flags);
--	found = virtblk_handle_req(vq, iob);
-+
-+	while ((vbr = virtqueue_get_buf(vq->vq, &len)) != NULL) {
-+		struct request *req = blk_mq_rq_from_pdu(vbr);
-+
-+		found++;
-+		if (!blk_mq_complete_request_remote(req) &&
-+		    !blk_mq_add_to_batch(req, iob, virtblk_vbr_status(vbr),
-+						virtblk_complete_batch))
-+			virtblk_request_done(req);
-+	}
- 
- 	if (found)
- 		blk_mq_start_stopped_hw_queues(vblk->disk->queue, true);
 -- 
-MST
+2.34.1
 
