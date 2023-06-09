@@ -2,150 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D020729D38
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88C00729D45
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:49:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241569AbjFIOrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 10:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33724 "EHLO
+        id S231760AbjFIOtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 10:49:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232122AbjFIOq7 (ORCPT
+        with ESMTP id S230431AbjFIOtX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 10:46:59 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA592685;
-        Fri,  9 Jun 2023 07:46:57 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-1a2d06d587eso781536fac.2;
-        Fri, 09 Jun 2023 07:46:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686322016; x=1688914016;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sdbxKBVcBVIgPeSRn3sb4Td/Dc7pVhPTKzbSHfxRLUA=;
-        b=DNZbTLKQPliTfstgbHegNTkVrvFD9wIBWPaL0NFQ1I88MwmBHg+WCO8HWfwtfhFxyL
-         qEk9VSMgQ9RCxCAGS83dDGAZiL/6nIGajfqph3NEHHw19OXDeTiSGCrss3O+kph8FksO
-         fTgGXiJczEcbuxO0RZ6qBbRq48gTUE9+lau9EdAjDv3V5K0UJ5HHmMCx1jQfGVcMB8L5
-         zmbiA+p1jw8kUuAONkOiEzq1acvq1zXWawi4lnVpEw5rfOYYfqlzCTJAysfhnE1gQr1I
-         5pWoUZ0a8zXSRpgiRvydhFnUrGeKL464wjAC6XibCEi0I/d816J/dTFSWrjoMG/0nYF2
-         9HMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686322016; x=1688914016;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sdbxKBVcBVIgPeSRn3sb4Td/Dc7pVhPTKzbSHfxRLUA=;
-        b=ApnyBg71rHtOnqfx8hHip6NF/qVnAOI+8KgeAe3whZFu+bZc0AU8pgBqPGq9pcys0i
-         B384hE5KadSC3DyyX1Ez3aeh+FdvgYi/R0Bmy0qJs+dfWVxVrmtvPVon90k+R3FvJsr7
-         tV2gyN0f4qUQLini7D3nloYHtyeg4yj6Qz6yO5Xdo5o5fFsJe+mQmMXCn63SI2eeW0Tm
-         I9kbR9L4YMrRV4FnlEaDV4kRHfDM4/avzC31euBqQmt5xN4tVI1cyMOTGpLQ0BhfLH5p
-         tfcFEYOvBuq5K/UA8O1NPyMCiD+Gqiehr5uZXk7AGYLYwg2qr4GB0TqNKudsByiAVd3j
-         p/Uw==
-X-Gm-Message-State: AC+VfDwxIfsDqC1I8n3sOu7DhFDoeEJ0G8Ube6dwxKrCS4LYL4xCSHLU
-        LNyRVHJQ7utJT0kKVCSq2qyGJ9P/KvENeHGfnsu+B4Ejy4Q=
-X-Google-Smtp-Source: ACHHUZ7J0l5veq+z1PgJ9eZh7SJrvdCaZgEm8srFRcMOKIil0mLDwk3fE22sVm0Zt9XOct9JtmMlMOwq65yRGatpAtk=
-X-Received: by 2002:a05:6870:42c6:b0:19e:e96a:4cb9 with SMTP id
- z6-20020a05687042c600b0019ee96a4cb9mr1272834oah.23.1686322015525; Fri, 09 Jun
- 2023 07:46:55 -0700 (PDT)
+        Fri, 9 Jun 2023 10:49:23 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E637C2738
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 07:49:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686322161; x=1717858161;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5aT0rjqFbe+Vm7sM5/iX2YZk1lMoLO2VmOKe2HIj6kI=;
+  b=H44GuICysKYVt1YrMHHW/myC3rdpGmefshCH4ZL/xj8GJ7qzKWk3jPnA
+   Dn7zQ4+w/P0yt2XqWqKEdlluTWiDeZmNijDuyw0u1PCKwhqMRJO0wz6kl
+   w7MjFzTOZ5gYI2xriz5dOPRRTMkMMk9K2oeh64j/oQ7qxnd36bd03CYqt
+   7cZfun3zAnRo5Nr3mds2Bb89IrgQCR0tll78wZk7Kof2/iKie2FkDzTji
+   v9uSOHtdbW8vCUJg2L2A3iXN6BJBy4nhh7OZSLAIjAkzKVh+y1Hm/gR5T
+   OSOh/iq3W2NxoioQMadfhzWIBAzqj8K/EfBSNiNSpRaPQJ9xC8S2QLMS1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="337970839"
+X-IronPort-AV: E=Sophos;i="6.00,229,1681196400"; 
+   d="scan'208";a="337970839"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 07:49:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="1040503245"
+X-IronPort-AV: E=Sophos;i="6.00,229,1681196400"; 
+   d="scan'208";a="1040503245"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 09 Jun 2023 07:49:19 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q7dQU-00096S-1J;
+        Fri, 09 Jun 2023 14:49:18 +0000
+Date:   Fri, 9 Jun 2023 22:48:39 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        akpm@linux-foundation.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        mgorman@techsingularity.net, vbabka@suse.cz, david@redhat.com,
+        baolin.wang@linux.alibaba.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: compaction: skip memory hole rapidly when isolating
+ migratable pages
+Message-ID: <202306092250.cp65gzkn-lkp@intel.com>
+References: <8cc668b77c8eb2fa78058b3d81386ebed9c5a9cd.1686294549.git.baolin.wang@linux.alibaba.com>
 MIME-Version: 1.0
-References: <ZBGNmXwQoW330Wr8@hovoldconsulting.com> <ZIHh95IeOPBTvB00@hovoldconsulting.com>
- <CAF6AEGv3y3C6nAq7nrkgbv5-9-tVgj+BtY1yU+fXXFFm_N7fcQ@mail.gmail.com> <ZILEBPQgqr1HomUQ@hovoldconsulting.com>
-In-Reply-To: <ZILEBPQgqr1HomUQ@hovoldconsulting.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Fri, 9 Jun 2023 07:46:44 -0700
-Message-ID: <CAF6AEGsHFpGEiOLxEqzxG2VU+i+h0uVQTHcpfD4sbk0GWN2+Vg@mail.gmail.com>
-Subject: Re: Adreno devfreq lockdep splat with 6.3-rc2
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8cc668b77c8eb2fa78058b3d81386ebed9c5a9cd.1686294549.git.baolin.wang@linux.alibaba.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 8, 2023 at 11:17=E2=80=AFPM Johan Hovold <johan@kernel.org> wro=
-te:
->
-> On Thu, Jun 08, 2023 at 02:17:45PM -0700, Rob Clark wrote:
-> > On Thu, Jun 8, 2023 at 7:12=E2=80=AFAM Johan Hovold <johan@kernel.org> =
-wrote:
->
-> > > Have you had a chance to look at this regression yet? It prevents us
-> > > from using lockdep on the X13s as it is disabled as soon as we start
-> > > the GPU.
-> >
-> > Hmm, curious what is different between x13s and sc7180/sc7280 things?
->
-> It seems like lockdep needs to hit the tear down path in order to
-> detect the circular lock dependency. Perhaps you don't hit that on your
-> sc7180/sc7280?
->
-> It is due to the fact that the panel is looked up way too late so that
-> bind fails unless the panel driver is already loaded when the msm drm
-> driver probes.
+Hi Baolin,
 
-Oh, this seems likely
+kernel test robot noticed the following build errors:
 
-> Manually loading the panel driver before msm makes the splat go away.
->
-> > Or did lockdep recently get more clever (or more annotation)?
->
-> I think this is indeed a new problem related to some of the devfreq work
-> you did in 6.3-rc1 (e.g. fadcc3ab1302 ("drm/msm/gpu: Bypass PM QoS
-> constraint for idle clamp")).
->
-> > I did spend some time a while back trying to bring some sense to
-> > devfreq/pm-qos/icc locking:
-> > https://patchwork.freedesktop.org/series/115028/
-> >
-> > but haven't had time to revisit that for a while
->
-> That's the series I link to below, but IIRC it did not look directly
-> applicable to the splat I see on X13s (e.g. does not involve
-> fs_reclaim).
+[auto build test ERROR on akpm-mm/mm-everything]
 
-Ahh, right, sorry I've not had time to do more than glance at the
-thread.. and yeah, that one is mostly just trying to solve the reclaim
-problem by moving allocations out from under the big-pm-qos-lock.
+url:    https://github.com/intel-lab-lkp/linux/commits/Baolin-Wang/mm-compaction-skip-memory-hole-rapidly-when-isolating-migratable-pages/20230609-174659
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/8cc668b77c8eb2fa78058b3d81386ebed9c5a9cd.1686294549.git.baolin.wang%40linux.alibaba.com
+patch subject: [PATCH] mm: compaction: skip memory hole rapidly when isolating migratable pages
+config: arm-randconfig-r025-20230609 (https://download.01.org/0day-ci/archive/20230609/202306092250.cp65gzkn-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
+        git fetch akpm-mm mm-everything
+        git checkout akpm-mm/mm-everything
+        b4 shazam https://lore.kernel.org/r/8cc668b77c8eb2fa78058b3d81386ebed9c5a9cd.1686294549.git.baolin.wang@linux.alibaba.com
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-As far as fadcc3ab1302 ("drm/msm/gpu: Bypass PM QoS constraint for
-idle clamp"), it should be just taking the lock that
-dev_pm_qos_update_request() would have indirectly, although I guess
-without some intervening lock?  We can't really avoid taking the
-devfreq lock, I don't think.  But I'd have to spend time I don't have
-right now digging into it..
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306092250.cp65gzkn-lkp@intel.com/
 
-BR,
--R
+All errors (new ones prefixed by >>):
 
-> > > On Wed, Mar 15, 2023 at 10:19:21AM +0100, Johan Hovold wrote:
-> > > >
-> > > > Since 6.3-rc2 (or possibly -rc1), I'm now seeing the below
-> > > > devfreq-related lockdep splat.
-> > > >
-> > > > I noticed that you posted a fix for something similar here:
-> > > >
-> > > >       https://lore.kernel.org/r/20230312204150.1353517-9-robdclark@=
-gmail.com
-> > > >
-> > > > but that particular patch makes no difference.
-> > > >
-> > > > From skimming the calltraces below and qos/devfreq related changes =
-in
-> > > > 6.3-rc1 it seems like this could be related to:
-> > > >
-> > > >       fadcc3ab1302 ("drm/msm/gpu: Bypass PM QoS constraint for idle=
- clamp")
->
-> Johan
+>> mm/compaction.c:235:27: error: call to undeclared function 'pfn_to_section_nr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           unsigned long start_nr = pfn_to_section_nr(start_pfn);
+                                    ^
+>> mm/compaction.c:237:6: error: call to undeclared function 'online_section_nr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           if (online_section_nr(start_nr))
+               ^
+>> mm/compaction.c:240:19: error: call to undeclared function 'next_online_section_nr'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           next_online_nr = next_online_section_nr(start_nr);
+                            ^
+>> mm/compaction.c:242:10: error: call to undeclared function 'section_nr_to_pfn'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+                   return section_nr_to_pfn(next_online_nr);
+                          ^
+   4 errors generated.
+
+
+vim +/pfn_to_section_nr +235 mm/compaction.c
+
+   231	
+   232	static unsigned long skip_hole_pageblock(unsigned long start_pfn)
+   233	{
+   234		unsigned long next_online_nr;
+ > 235		unsigned long start_nr = pfn_to_section_nr(start_pfn);
+   236	
+ > 237		if (online_section_nr(start_nr))
+   238			return -1UL;
+   239	
+ > 240		next_online_nr = next_online_section_nr(start_nr);
+   241		if (next_online_nr != -1UL)
+ > 242			return section_nr_to_pfn(next_online_nr);
+   243	
+   244		return -1UL;
+   245	}
+   246	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
