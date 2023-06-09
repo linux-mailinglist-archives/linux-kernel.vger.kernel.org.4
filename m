@@ -2,177 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 693FA7292C2
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:19:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E51FF72926B
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:15:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240466AbjFIITN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 04:19:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52476 "EHLO
+        id S240049AbjFIIPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 04:15:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240271AbjFIISY (ORCPT
+        with ESMTP id S238963AbjFIIPm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 04:18:24 -0400
-Received: from out-34.mta0.migadu.com (out-34.mta0.migadu.com [IPv6:2001:41d0:1004:224b::22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0AB12697
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 01:17:37 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1686298655;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EMn+msnIJXvC+06grZ542lhB8pLG9zNhZSiyiHhRbaA=;
-        b=QnAzENdGYWeYO57Spgjhk1adZxJY7gan2t4wYWPeZIaItdmJZDM8xOICqPyq/QELcJD9OY
-        hG30tKtjBO4CWu/+8SDMmqFoQybaFEZQceY8dbZCLKigPc6SX9awgQJwPEusZAlihLEw5W
-        Hw8FqnopH5nBR0yG+Weoe/3z4ob2VOY=
-From:   Qi Zheng <qi.zheng@linux.dev>
-To:     akpm@linux-foundation.org
-Cc:     david@fromorbit.com, tkhai@ya.ru, roman.gushchin@linux.dev,
-        vbabka@suse.cz, muchun.song@linux.dev, yujie.liu@intel.com,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>
-Subject: [PATCH 7/7] Revert "mm: vmscan: make global slab shrink lockless"
-Date:   Fri,  9 Jun 2023 08:15:18 +0000
-Message-Id: <20230609081518.3039120-8-qi.zheng@linux.dev>
-In-Reply-To: <20230609081518.3039120-1-qi.zheng@linux.dev>
-References: <20230609081518.3039120-1-qi.zheng@linux.dev>
+        Fri, 9 Jun 2023 04:15:42 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1681FDE;
+        Fri,  9 Jun 2023 01:15:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1686298539; x=1717834539;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Mb1slm/8ZxVzVyUF3XdtLt7ptCWTNk/wjWJvkjEJas8=;
+  b=LjoiXRrnaFPlyLY3sTSW1ycLJksoiJM8kAZ6whxDIYrOJ3GjZnisflb9
+   7p+ud1ujGM3IajGr16/+1CxyZ0mKItjyFxtWhzqf3MGfVZ9ARZMYPit5r
+   7ARdaqYnz7U7U3isucGsWTU46V/ShZ/aCtYFfzsf7oB/GZoY24abSFKXQ
+   Eva5z3yJ4CAv/I8qwAADssqyCiaehrZMu5GvRXhq7U/gVu0/U6MEjtZfQ
+   /A4S+0um3xB85j4RXGpupYs5B2XjyVUplEzjixeRJ7CHnShvvfAMxTzz5
+   HKyQlyJi/r9XfmyAvBdw9opMoTbIfTkqgzwGInXa4gecCt1Joil87N60T
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.00,228,1681164000"; 
+   d="scan'208";a="31359501"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 09 Jun 2023 10:15:37 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Fri, 09 Jun 2023 10:15:37 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Fri, 09 Jun 2023 10:15:37 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1686298537; x=1717834537;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Mb1slm/8ZxVzVyUF3XdtLt7ptCWTNk/wjWJvkjEJas8=;
+  b=onh31Dumrcp7hd3ZCvtI/QxzmzVrYVi5X75LN/evvJSPHyAMFsR9QAFS
+   2n/AvSCXYkWc88Sm4Nh4PST1Go/VT9StacaCDw6OnXiJlWd8u7k6l7L4C
+   T0jNMIJ77QK0P1smIi5+qMrMBgMB6ydf8HtKEdcwS5XtViuBEy9QaJnmg
+   dIpDMmhDsnEoxNDi9ZdlPIPwNdPKaPBF9m5LodOWpsiuLN9Weg6CWXL/p
+   K7sH4jH+HMu4qK3yjaXEydlss4MSUB44sf3bVNKEVqPKkrMLDIXoe7y3r
+   VJlbp6Q5ngC9vgFIcA+iriOGfImLUHwWsdOARrAWzzsXOQV35u8fxcKe0
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.00,228,1681164000"; 
+   d="scan'208";a="31359500"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 09 Jun 2023 10:15:37 +0200
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 5E7DC280087;
+        Fri,  9 Jun 2023 10:15:37 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux@ew.tq-group.com,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH 1/2] spi: dt-bindings: introduce linux,use-rt-queue flag
+Date:   Fri, 09 Jun 2023 10:15:37 +0200
+Message-ID: <3241150.44csPzL39Z@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <CACRpkdb=2fogk3bEa4fkPVYQivnvLh1F1TnBj7og43ak+F8gPw@mail.gmail.com>
+References: <20230602115201.415718-1-matthias.schiffer@ew.tq-group.com> <6a0abd6bba2f8f940e695dfa9fd0c5f8ee19064f.camel@ew.tq-group.com> <CACRpkdb=2fogk3bEa4fkPVYQivnvLh1F1TnBj7og43ak+F8gPw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qi Zheng <zhengqi.arch@bytedance.com>
+Hi all,
 
-This reverts commit f95bdb700bc6bb74e1199b1f5f90c613e152cfa7.
+Am Freitag, 9. Juni 2023, 09:41:14 CEST schrieb Linus Walleij:
+> On Wed, Jun 7, 2023 at 2:55=E2=80=AFPM Matthias Schiffer
+>=20
+> <matthias.schiffer@ew.tq-group.com> wrote:
+> > It is not clear to me what alternative options we currently have if we
+> > want a setting to be effective from the very beginning, before
+> > userspace is running. Of course adding a cmdline option would work, but
+> > that seems worse than having it in the DT in every possible way.
+>=20
+> A agree with Mark that a command line option isn't that bad. It's somethi=
+ng
+> that pertains to just the Linux kernel after all? And you can put that
+> command line option in the default device tree, in chosen, if you want.
 
-Kernel test robot reports -88.8% regression in stress-ng.ramfs.ops_per_sec
-test case [1], which is caused by commit f95bdb700bc6 ("mm: vmscan: make
-global slab shrink lockless"). The root cause is that SRCU has to be careful
-to not frequently check for SRCU read-side critical section exits. Therefore,
-even if no one is currently in the SRCU read-side critical section,
-synchronize_srcu() cannot return quickly. That's why unregister_shrinker()
-has become slower.
+I don't like the idea of a command line enabling realtime scheduling for al=
+l=20
+instances of the SPI controller driver or even all SPI controllers. Actuall=
+y=20
+this might be worse if a non-rt SPI bus is considered for RT scheduling.
+IMHO this should be configurable per SPI controller, e.g. a sysfs attribute.
 
-After discussion, we will try to use the refcount+RCU method [2] proposed
-by Dave Chinner to continue to re-implement the lockless slab shrink. So
-revert the shrinker_srcu related changes first.
+> No-one is going to
+> complain about that.
 
-[1]. https://lore.kernel.org/lkml/202305230837.db2c233f-yujie.liu@intel.com/
-[2]. https://lore.kernel.org/lkml/ZIJhou1d55d4H1s0@dread.disaster.area/
+IIRC someone (maybe Greg K-H) opposed pretty hard against (module) paramete=
+rs=20
+for (driver) configuration, but I can't find the post to back my statement.
 
-Reported-by: kernel test robot <yujie.liu@intel.com>
-Closes: https://lore.kernel.org/oe-lkp/202305230837.db2c233f-yujie.liu@intel.com
-Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
----
- mm/vmscan.c | 28 ++++++++++++++++------------
- 1 file changed, 16 insertions(+), 12 deletions(-)
+Best regards,
+Alexander
 
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index a008d7f2d0fc..5bf98d0a22c9 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -57,7 +57,6 @@
- #include <linux/khugepaged.h>
- #include <linux/rculist_nulls.h>
- #include <linux/random.h>
--#include <linux/srcu.h>
- 
- #include <asm/tlbflush.h>
- #include <asm/div64.h>
-@@ -191,7 +190,6 @@ int vm_swappiness = 60;
- 
- LIST_HEAD(shrinker_list);
- DECLARE_RWSEM(shrinker_rwsem);
--DEFINE_SRCU(shrinker_srcu);
- 
- #ifdef CONFIG_MEMCG
- static int shrinker_nr_max;
-@@ -742,7 +740,7 @@ void free_prealloced_shrinker(struct shrinker *shrinker)
- void register_shrinker_prepared(struct shrinker *shrinker)
- {
- 	down_write(&shrinker_rwsem);
--	list_add_tail_rcu(&shrinker->list, &shrinker_list);
-+	list_add_tail(&shrinker->list, &shrinker_list);
- 	shrinker->flags |= SHRINKER_REGISTERED;
- 	shrinker_debugfs_add(shrinker);
- 	up_write(&shrinker_rwsem);
-@@ -797,15 +795,13 @@ void unregister_shrinker(struct shrinker *shrinker)
- 		return;
- 
- 	down_write(&shrinker_rwsem);
--	list_del_rcu(&shrinker->list);
-+	list_del(&shrinker->list);
- 	shrinker->flags &= ~SHRINKER_REGISTERED;
- 	if (shrinker->flags & SHRINKER_MEMCG_AWARE)
- 		unregister_memcg_shrinker(shrinker);
- 	debugfs_entry = shrinker_debugfs_detach(shrinker, &debugfs_id);
- 	up_write(&shrinker_rwsem);
- 
--	synchronize_srcu(&shrinker_srcu);
--
- 	shrinker_debugfs_remove(debugfs_entry, debugfs_id);
- 
- 	kfree(shrinker->nr_deferred);
-@@ -825,7 +821,6 @@ void synchronize_shrinkers(void)
- {
- 	down_write(&shrinker_rwsem);
- 	up_write(&shrinker_rwsem);
--	synchronize_srcu(&shrinker_srcu);
- }
- EXPORT_SYMBOL(synchronize_shrinkers);
- 
-@@ -1036,7 +1031,6 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
- {
- 	unsigned long ret, freed = 0;
- 	struct shrinker *shrinker;
--	int srcu_idx;
- 
- 	/*
- 	 * The root memcg might be allocated even though memcg is disabled
-@@ -1048,10 +1042,10 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
- 	if (!mem_cgroup_disabled() && !mem_cgroup_is_root(memcg))
- 		return shrink_slab_memcg(gfp_mask, nid, memcg, priority);
- 
--	srcu_idx = srcu_read_lock(&shrinker_srcu);
-+	if (!down_read_trylock(&shrinker_rwsem))
-+		goto out;
- 
--	list_for_each_entry_srcu(shrinker, &shrinker_list, list,
--				 srcu_read_lock_held(&shrinker_srcu)) {
-+	list_for_each_entry(shrinker, &shrinker_list, list) {
- 		struct shrink_control sc = {
- 			.gfp_mask = gfp_mask,
- 			.nid = nid,
-@@ -1062,9 +1056,19 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
- 		if (ret == SHRINK_EMPTY)
- 			ret = 0;
- 		freed += ret;
-+		/*
-+		 * Bail out if someone want to register a new shrinker to
-+		 * prevent the registration from being stalled for long periods
-+		 * by parallel ongoing shrinking.
-+		 */
-+		if (rwsem_is_contended(&shrinker_rwsem)) {
-+			freed = freed ? : 1;
-+			break;
-+		}
- 	}
- 
--	srcu_read_unlock(&shrinker_srcu, srcu_idx);
-+	up_read(&shrinker_rwsem);
-+out:
- 	cond_resched();
- 	return freed;
- }
--- 
-2.30.2
+> Yours,
+> Linus Walleij
+>=20
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+
+
+=2D-=20
+TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Germ=
+any
+Amtsgericht M=C3=BCnchen, HRB 105018
+Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan Sch=
+neider
+http://www.tq-group.com/
+
 
