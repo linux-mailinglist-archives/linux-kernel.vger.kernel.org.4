@@ -2,97 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C4072A294
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:50:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFCFD72A29B
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:52:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231584AbjFISuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 14:50:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57462 "EHLO
+        id S230440AbjFISw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 14:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjFISuo (ORCPT
+        with ESMTP id S229589AbjFISwZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 14:50:44 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB59435B8
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 11:50:43 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-bacf5b89da7so2115000276.2
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 11:50:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686336643; x=1688928643;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ls8ASbqVf+OxfQ28gdwv86E0CDvCxuQPRXvTmaU1qZ8=;
-        b=BgYnhkcmYneC2cgdqH9vPsforrcVpoamZZpxmNymi1HhYM867JQFIqyJMfLNj1OA0o
-         NQxhNdWVWw2kpK9b9QIWfhosCBBZ4B2bkqiX3unz2elF0Yd6Y71kqEXDGCrefkPDUai/
-         dL+4UFs1CvOYimCjF5ECs0h3MPk89VlOj5i/TOhmz6QNh2pBmaW8i1UBqwlHkr5IGdwN
-         ti//h4UPqPvcuA73LNPEPpM9GamOEJanilhV7k6zGc5LCLAMSpm82jA5I0MhGgYoXeyI
-         y5wrk3ovnGstX9TU8PWz96LMy/xbUqzEGZhyp49j1fZNXcd0fWa/NJ5jwrkNQ28f/Jfd
-         sWAg==
+        Fri, 9 Jun 2023 14:52:25 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFAE83A80
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 11:52:23 -0700 (PDT)
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 4821A3F364
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 18:52:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1686336742;
+        bh=XIUOH9fKYodgmM7tuUwhzjs/OonZRb4P6PdUyTMxf7U=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=aSmTZFrQ0yXYYyi7m42Honrls2G0nfd5UQ35k83sZKvAb20poLiTkwSM/yMhylRAS
+         Q9a1LJWqsL4Bdk+7ndHjIINW+M/rLgye1OwGDdjeNMmo4i/MH73bwq1ZBqrlvqsQr7
+         dXqStO9tFUUNJz3NF9VNjAVT838s8y6bDjRIeztf5NbCNer+CoYwBgmmQMKVU80jG6
+         OSSQX3coDAbzv/ypuaSsL8IbarTnSsLtuh96KI/FQIBW/VTy1vZYQ2yQxvbr1XZMZ5
+         a2z0klzfAsH9FApUydV9EPS8gi34uFqPvqpgJ1zbjwVhMvCTee7YyhwVd3fqvnIDPO
+         VJuVEcTtg/hfw==
+Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-513f5318ff2so1652171a12.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 11:52:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686336643; x=1688928643;
+        d=1e100.net; s=20221208; t=1686336742; x=1688928742;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ls8ASbqVf+OxfQ28gdwv86E0CDvCxuQPRXvTmaU1qZ8=;
-        b=NIx0guK3STpWoXtwdOlN46oblwvI0ExIfwrvGzVSrBxmaNOidfHZQp+pj3EH0lqakj
-         3bXqJsUE/xgo4ijoDi7NMs/i+NvRpeNT3GLIPQpF/YKttEhhjmyxSJsGKfEGyW1XndGL
-         qk6RDYyAVQoEMVbB6qji/rwsjynrpstEyNnFV57Aok4i7+DBQV6c+OHPIgaZVZTFzMem
-         6+iekdN7SPgST5HpcRkdWQS9sFrolV5Ha+w1y/atBJNBGsnCZNxooDhN1zIETfYr2JI0
-         oOBxak/mme2LnnV3m6I7SRaQsEru/sdOiadsxWb2avZg1Ta6B6aUrizEq2VYZD5I49t2
-         TQgg==
-X-Gm-Message-State: AC+VfDxd9MpTWNccF90wULZklbWwGmkHz7KZLMyr3ForV2/w7rnyYt+7
-        8GP63cdPE+mYAlq8P7a8zJ2cv4FGeT5dZDXqeB4AXw==
-X-Google-Smtp-Source: ACHHUZ5mlzEP6duFB2RPppaJytP0jp8FV90GwtBIyaVVZeY0WsEB4K2kSrmJb1pVmexp2PI1D8rfhTnQWfgDoQCZK5c=
-X-Received: by 2002:a5b:712:0:b0:bac:a43e:88e9 with SMTP id
- g18-20020a5b0712000000b00baca43e88e9mr1736212ybq.44.1686336642462; Fri, 09
- Jun 2023 11:50:42 -0700 (PDT)
+        bh=XIUOH9fKYodgmM7tuUwhzjs/OonZRb4P6PdUyTMxf7U=;
+        b=ED1v0cEPpVwvbDljcgRaofopv84DN+krVOnF0xujssq43jSS0Ti5TMVHYNllBN1Hyj
+         BzgRTA0grLIhxzF/UBHdMZHJrGQ9TuHUvIAGeobkLgs/16MEsjeHEstPlaLB+Rum9iAZ
+         c/8hc4kKUX1K3WOeq/rzmkqKNkfGtkFMjmpFoe5YlB2N60mT8pHCg6xYscq1VVy0n4co
+         uaLdQav3e/Y+i6YH4wmdJ6RjwNk06UwZYvmxgNwqYTyZosA3IqDZ9X1pA2piSHA9Hwwq
+         1zqXgC0lSzoHS1DgSTHMdjEvyN2d4BMvjOsKrxnokAb9huI3cKIRnJle0OY8Z+HV8GF7
+         MQcQ==
+X-Gm-Message-State: AC+VfDzq3pyHTAc8ajXYmFp4ojgYiJLQs4oGR+bIUo/zHY/7KY7yABQW
+        bUjj6CJOwBsem1If5Sk4t4bbskn0EOcA4Ey1Sdn6xTW9GKDcDI65RhySw6rINIkq9mgERZzw9K4
+        PPEAA38sCHGjxevkY7heaSAPKpwJDx9pdtDtfcBMENH99/k/eFs+VX2RC+w==
+X-Received: by 2002:aa7:c712:0:b0:516:7b3f:545d with SMTP id i18-20020aa7c712000000b005167b3f545dmr1650139edq.30.1686336741872;
+        Fri, 09 Jun 2023 11:52:21 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4a/BNpz5crdS4/WBbkNUQ+6uqHPRKphn8HSDRV3PrtnLhklYiuyrCbSNH76Ha2yaPcIDV+DFwqHY27vzqcJek=
+X-Received: by 2002:aa7:c712:0:b0:516:7b3f:545d with SMTP id
+ i18-20020aa7c712000000b005167b3f545dmr1650126edq.30.1686336741589; Fri, 09
+ Jun 2023 11:52:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230609005158.2421285-1-surenb@google.com> <20230609005158.2421285-2-surenb@google.com>
- <877csdpfcq.fsf@yhuang6-desk2.ccr.corp.intel.com> <CAFj5m9K-Kyu-NV1q3eGeA8MOcC1XYgYyENnti-Qd8Mj-A6=Q5Q@mail.gmail.com>
-In-Reply-To: <CAFj5m9K-Kyu-NV1q3eGeA8MOcC1XYgYyENnti-Qd8Mj-A6=Q5Q@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Fri, 9 Jun 2023 11:50:31 -0700
-Message-ID: <CAJuCfpECOWgKx+PTsygNM9mryEf_So9QwCrPyBrS-tjbzCWjDA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/6] swap: remove remnants of polling from read_swap_cache_async
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     "Huang, Ying" <ying.huang@intel.com>, akpm@linux-foundation.org,
-        willy@infradead.org, hannes@cmpxchg.org, mhocko@suse.com,
-        josef@toxicpanda.com, jack@suse.cz, ldufour@linux.ibm.com,
-        laurent.dufour@fr.ibm.com, michel@lespinasse.org,
-        liam.howlett@oracle.com, jglisse@google.com, vbabka@suse.cz,
-        minchan@google.com, dave@stgolabs.net, punit.agrawal@bytedance.com,
-        lstoakes@gmail.com, hdanton@sina.com, apopple@nvidia.com,
-        peterx@redhat.com, david@redhat.com, yuzhao@google.com,
-        dhowells@redhat.com, hughd@google.com, viro@zeniv.linux.org.uk,
-        brauner@kernel.org, pasha.tatashin@soleen.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
+References: <20230609164324.497813-1-magali.lemes@canonical.com>
+ <20230609164324.497813-2-magali.lemes@canonical.com> <20230609105307.492cd1f2@kernel.org>
+In-Reply-To: <20230609105307.492cd1f2@kernel.org>
+From:   Magali Lemes do Sacramento <magali.lemes@canonical.com>
+Date:   Fri, 9 Jun 2023 15:52:10 -0300
+Message-ID: <CAO9q4O0KpMxukPLxvhyNj692vBSUzygdLQi3Ek1QUJbeYJhyag@mail.gmail.com>
+Subject: Re: [PATCH net v2 1/3] selftests: net: tls: check if FIPS mode is enabled
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        shuah@kernel.org, vfedorenko@novek.ru,
+        tianjia.zhang@linux.alibaba.com, andrei.gherzan@canonical.com,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 8, 2023 at 8:14=E2=80=AFPM Ming Lei <ming.lei@redhat.com> wrote=
-:
+Hi!
+
+On Fri, Jun 9, 2023 at 2:53=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wro=
+te:
 >
-> On Fri, Jun 9, 2023 at 9:58=E2=80=AFAM Huang, Ying <ying.huang@intel.com>=
- wrote:
+> On Fri,  9 Jun 2023 13:43:22 -0300 Magali Lemes wrote:
+> > diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftest=
+s/net/tls.c
+> > index e699548d4247..0725c60f227c 100644
+> > --- a/tools/testing/selftests/net/tls.c
+> > +++ b/tools/testing/selftests/net/tls.c
+> > @@ -25,6 +25,8 @@
+> >  #define TLS_PAYLOAD_MAX_LEN 16384
+> >  #define SOL_TLS 282
 > >
-> > + Ming Lei for confirmation.
+> > +static int fips_enabled =3D 0;
 >
-> Good catch, it isn't necessary to pass the polling parameter now.
+> No need to zero init static variables, but really instead of doing
+> the main() hack you should init this to a return value of a function.
+> And have that function read the value.
+>
 
-Thanks folks for reviewing and confirming!
+I'm not sure I understand what you mean here. I agree we want to avoid
+reading the /proc/sys/crypto/fips_enabled file for every test.
+However, correct me where I'm wrong, if we want to have fips_enabled
+as a static global variable I don't think we can directly initialize
+it from the return value of a function.
+Could you clarify that, please?
 
+Best regards,
+Magali
+
+> >  struct tls_crypto_info_keys {
+> >       union {
+> >               struct tls12_crypto_info_aes_gcm_128 aes128;
 >
-> Thanks,
+> > @@ -311,6 +317,9 @@ FIXTURE_SETUP(tls)
+> >       int one =3D 1;
+> >       int ret;
+> >
+> > +     if (fips_enabled && variant->fips_non_compliant)
+> > +             return;
 >
+> Eh, let me help you, this should really be part of the SETUP() function
+> but SETUP() doesn't currently handle SKIP(). So you'll need to add this
+> to your series:
+>
+> diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/=
+selftests/kselftest_harness.h
+> index d8bff2005dfc..3091c345452e 100644
+> --- a/tools/testing/selftests/kselftest_harness.h
+> +++ b/tools/testing/selftests/kselftest_harness.h
+> @@ -249,7 +249,7 @@
+>
+>  /**
+>   * FIXTURE_SETUP() - Prepares the setup function for the fixture.
+> - * *_metadata* is included so that EXPECT_* and ASSERT_* work correctly.
+> + * *_metadata* is included so that EXPECT_*, ASSERT_* etc. work correctl=
+y.
+>   *
+>   * @fixture_name: fixture name
+>   *
+> @@ -275,7 +275,7 @@
+>
+>  /**
+>   * FIXTURE_TEARDOWN()
+> - * *_metadata* is included so that EXPECT_* and ASSERT_* work correctly.
+> + * *_metadata* is included so that EXPECT_*, ASSERT_* etc. work correctl=
+y.
+>   *
+>   * @fixture_name: fixture name
+>   *
+> @@ -388,7 +388,7 @@
+>                 if (setjmp(_metadata->env) =3D=3D 0) { \
+>                         fixture_name##_setup(_metadata, &self, variant->d=
+ata); \
+>                         /* Let setup failure terminate early. */ \
+> -                       if (!_metadata->passed) \
+> +                       if (!_metadata->passed || _metadata->skip) \
+>                                 return; \
+>                         _metadata->setup_completed =3D true; \
+>                         fixture_name##_##test_name(_metadata, &self, vari=
+ant->data); \
