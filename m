@@ -2,109 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0DA1728D18
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 03:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AB3F728D1C
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 03:33:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237756AbjFIBbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 21:31:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42986 "EHLO
+        id S237768AbjFIBc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 21:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbjFIBbP (ORCPT
+        with ESMTP id S230094AbjFIBcx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 21:31:15 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9E730E5;
-        Thu,  8 Jun 2023 18:31:13 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id 46e09a7af769-6b29f53137cso245119a34.0;
-        Thu, 08 Jun 2023 18:31:13 -0700 (PDT)
+        Thu, 8 Jun 2023 21:32:53 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36972D4F
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 18:32:52 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-561b7729a12so35138137b3.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 18:32:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686274272; x=1688866272;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PqSIVqIbhvB4rmJOey1iHJ+X1yWJ58Fl1SFIwWhVA8w=;
-        b=jsUAJXrHmW4EpzF1ONbKjs3hnU8sOZKSA8s1tpTQA+xcSNpKPjVYPmPwN/lBKPHOSt
-         tZca40zD+Ss49oe38g3y5akjy1auIU8Hy7GgpuZxKLcPNU6BNk1tJ5PAuXHEZ6pnBJox
-         rLCVqlGT5zsdYEsI7l0AQg20hUMEfWMHHQLNbgk/Z68SS5rRUmGmHJ1ndXAV7Y6/JnQk
-         wILVdaMiwHbzgAOkmJe1/3cv9By5e7Gu+F8JS7DUDUDEz8+QjPUlDuaTf8KbDbqEropQ
-         EIP0nEu/FoDtUmogtkXcsD0xBjx9YEBoCt/lFp7TsHZ1WPRcQ+uPe/PiJ1Y5L2tgyZrP
-         fh+A==
+        d=google.com; s=20221208; t=1686274372; x=1688866372;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dPoyGlkGpegFUTFofVDIHWRBddk7VxC7U3Cl7g+dttQ=;
+        b=E4DRQK86HkB1M0oL3CGdKUO2AI9NqeHpyBpHLli2aF+Pqlit3JP/3FLe7keJkIgcP9
+         Ui3kDjUhzLuUpOKUr/BBsh3paM313vr/kZTbKcMrzy1rnCosbjtatNixhCUekN/A7pkf
+         A1U0Xx3rYpDhvjGoSHww7Px2zZjjdooHl41F3udSS11WEeWkhqn3r8hfZs7GDrCg2BMs
+         cW8rdWF1rLhD4DHvb+mCyaR83x60p+qcJdlOzarzjsn+EOUWDt8OE4eCU+8SOfMHlxy4
+         XQHaWxY2xWWX/2GxHjET5xLBgwJ5RGHZxlXYqQkMUK5vHAdHkIfUkQT70qyxIHs4Ypp2
+         ur1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686274272; x=1688866272;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PqSIVqIbhvB4rmJOey1iHJ+X1yWJ58Fl1SFIwWhVA8w=;
-        b=LryrT6scDbrgwdEPgpRKDlaQTIS6L+nao72S9rs2Pibnmq9VWXC+kTIcUdeKjuycYt
-         8wv+CiRVAE0BA6JIoReYQkUW6HCuQn9UdkyCMJNdK8Q0OSIrE97pJ5FY1WUyrgAJZ5+g
-         a7HEo3AAjhwawK7Ez03CHou3+KgfZ7i3IVvn+TasSFta3wlzVtowvtK2TgQ5Zd9a3o+w
-         q50+IgPOEUZDU2ee1ttP7b0S+5nSWsYpECh7MNNfihawh9bcKUB8CGdE/SckxhuwSxTR
-         CzEiKWOe9y+/Y5E8PqZYvxLu2xQ80pwYM3uL/v0WPQLhPjy9oqesubxb3z4Y6peOY/A+
-         Tpvg==
-X-Gm-Message-State: AC+VfDygnEAKiCfb3y94Ou/ae1A++vzDap1Hgl65Vl4mqN3w1yoqGL0/
-        LQFHnvgh7HWzTnj1L0CCWv2JHHzflQA=
-X-Google-Smtp-Source: ACHHUZ6gG30QgCfWIj0+/u7njvliCHLsh/OCuKU7WfVIO108gqyszdDpvJLLjmJmvkUNb5TMWxOCTA==
-X-Received: by 2002:a05:6808:1a06:b0:39c:7d2a:435c with SMTP id bk6-20020a0568081a0600b0039c7d2a435cmr232083oib.6.1686274272491;
-        Thu, 08 Jun 2023 18:31:12 -0700 (PDT)
-Received: from debian.me (subs32-116-206-28-24.three.co.id. [116.206.28.24])
-        by smtp.gmail.com with ESMTPSA id m8-20020a17090a4d8800b00259a750fc89sm3551439pjh.33.2023.06.08.18.31.11
+        d=1e100.net; s=20221208; t=1686274372; x=1688866372;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dPoyGlkGpegFUTFofVDIHWRBddk7VxC7U3Cl7g+dttQ=;
+        b=Uh+WYhBVaO3iX9ZXVhUlyoqw5HBkQgv2qPAEH4plapoYq4C9sFOJPhSEPiLvSovGRD
+         tXUdqtz8FJKCFAPQAeLnZjYUQPCY932797p4RPgVrm+PMjWn8tFNmk7/zgj7KLWpGqNt
+         QSMqI5kp9XPCwV7fOOyyxdIHEIRL3gaobMcqvsxcOFs02g80UMPGUPXAXehmsXx5VPru
+         fhStZjwdkm+vIurxB+QEXlM7Z4NEdx5HEtcrhX0OYpmeBqKLlbR1Ih4QiqvEhBdzG0IP
+         Bd/9n+BXRbhz0+IdC0Ljkx8znH7fB/vq3a0UPraBMhgZnYnty+Hizr9ReAHB322Xk9jL
+         vNFQ==
+X-Gm-Message-State: AC+VfDzmPjUcZF/wMPOq0ai/NBB+esdWgIASvALWHRHnFc1JqQPlpeuN
+        7xoSDh4YBoiP2Qck7BqpanDpvQ==
+X-Google-Smtp-Source: ACHHUZ6C2iTOD9MuiuvdKguC1n6gRPJbYpY/VQ3aTwN0L3f5aJC3JH3HR0E7O5S3i52MFj8yhumCLw==
+X-Received: by 2002:a81:4f4c:0:b0:561:1cb6:f3d6 with SMTP id d73-20020a814f4c000000b005611cb6f3d6mr549240ywb.0.1686274371904;
+        Thu, 08 Jun 2023 18:32:51 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id u195-20020a0debcc000000b00565c29cf592sm309752ywe.10.2023.06.08.18.32.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 18:31:11 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 7B4C6106A94; Fri,  9 Jun 2023 08:31:08 +0700 (WIB)
-Date:   Fri, 9 Jun 2023 08:31:08 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     YYang <iyysheng@gmail.com>, jdelvare@suse.com, linux@roeck-us.net,
-        corbet@lwn.net
-Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, YYang <iyysheng@gmai.com>
-Subject: Re: [PATCH] Documentation/hwmon: Fix description of
- devm_hwmon_device_unregister
-Message-ID: <ZIKA3MNR1t2HvnHo@debian.me>
-References: <20230608224231.1156-1-iyysheng@gmail.com>
+        Thu, 08 Jun 2023 18:32:51 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 18:32:47 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v2 19/32] mm/mremap: retry if either pte_offset_map_*lock()
+ fails
+In-Reply-To: <c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com>
+Message-ID: <65e5e84a-f04-947-23f2-b97d3462e1e@google.com>
+References: <c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="SkxO4Mw1tUNGMQAP"
-Content-Disposition: inline
-In-Reply-To: <20230608224231.1156-1-iyysheng@gmail.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+move_ptes() return -EAGAIN if pte_offset_map_lock() of old fails, or if
+pte_offset_map_nolock() of new fails: move_page_tables() retry if so.
 
---SkxO4Mw1tUNGMQAP
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+But that does need a pmd_none() check inside, to stop endless loop when
+huge shmem is truncated (thank you to syzbot); and move_huge_pmd() must
+tolerate that a page table might have been allocated there just before
+(of course it would be more satisfying to remove the empty page table,
+but this is not a path worth optimizing).
 
-On Fri, Jun 09, 2023 at 02:42:30AM +0400, YYang wrote:
-> From: YYang <iyysheng@gmai.com>
->=20
-> Use devm_hwmon_device_register_with_info to replace
-> hwmon_device_register_with_info in description of
-> devm_hwmon_device_unregister.
->=20
-> Signed-off-by: YYang <iyysheng@gmai.com>
+Signed-off-by: Hugh Dickins <hughd@google.com>
+---
+ mm/huge_memory.c |  5 +++--
+ mm/mremap.c      | 28 ++++++++++++++++++++--------
+ 2 files changed, 23 insertions(+), 10 deletions(-)
 
-Is your SoB address gmail one (sounds typo here)?
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 624671aaa60d..d4bd5fa7c823 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -1760,9 +1760,10 @@ bool move_huge_pmd(struct vm_area_struct *vma, unsigned long old_addr,
+ 
+ 	/*
+ 	 * The destination pmd shouldn't be established, free_pgtables()
+-	 * should have release it.
++	 * should have released it; but move_page_tables() might have already
++	 * inserted a page table, if racing against shmem/file collapse.
+ 	 */
+-	if (WARN_ON(!pmd_none(*new_pmd))) {
++	if (!pmd_none(*new_pmd)) {
+ 		VM_BUG_ON(pmd_trans_huge(*new_pmd));
+ 		return false;
+ 	}
+diff --git a/mm/mremap.c b/mm/mremap.c
+index b11ce6c92099..1fc47b4f38d7 100644
+--- a/mm/mremap.c
++++ b/mm/mremap.c
+@@ -133,7 +133,7 @@ static pte_t move_soft_dirty_pte(pte_t pte)
+ 	return pte;
+ }
+ 
+-static void move_ptes(struct vm_area_struct *vma, pmd_t *old_pmd,
++static int move_ptes(struct vm_area_struct *vma, pmd_t *old_pmd,
+ 		unsigned long old_addr, unsigned long old_end,
+ 		struct vm_area_struct *new_vma, pmd_t *new_pmd,
+ 		unsigned long new_addr, bool need_rmap_locks)
+@@ -143,6 +143,7 @@ static void move_ptes(struct vm_area_struct *vma, pmd_t *old_pmd,
+ 	spinlock_t *old_ptl, *new_ptl;
+ 	bool force_flush = false;
+ 	unsigned long len = old_end - old_addr;
++	int err = 0;
+ 
+ 	/*
+ 	 * When need_rmap_locks is true, we take the i_mmap_rwsem and anon_vma
+@@ -170,8 +171,16 @@ static void move_ptes(struct vm_area_struct *vma, pmd_t *old_pmd,
+ 	 * pte locks because exclusive mmap_lock prevents deadlock.
+ 	 */
+ 	old_pte = pte_offset_map_lock(mm, old_pmd, old_addr, &old_ptl);
+-	new_pte = pte_offset_map(new_pmd, new_addr);
+-	new_ptl = pte_lockptr(mm, new_pmd);
++	if (!old_pte) {
++		err = -EAGAIN;
++		goto out;
++	}
++	new_pte = pte_offset_map_nolock(mm, new_pmd, new_addr, &new_ptl);
++	if (!new_pte) {
++		pte_unmap_unlock(old_pte, old_ptl);
++		err = -EAGAIN;
++		goto out;
++	}
+ 	if (new_ptl != old_ptl)
+ 		spin_lock_nested(new_ptl, SINGLE_DEPTH_NESTING);
+ 	flush_tlb_batched_pending(vma->vm_mm);
+@@ -208,8 +217,10 @@ static void move_ptes(struct vm_area_struct *vma, pmd_t *old_pmd,
+ 		spin_unlock(new_ptl);
+ 	pte_unmap(new_pte - 1);
+ 	pte_unmap_unlock(old_pte - 1, old_ptl);
++out:
+ 	if (need_rmap_locks)
+ 		drop_rmap_locks(vma);
++	return err;
+ }
+ 
+ #ifndef arch_supports_page_table_move
+@@ -537,6 +548,7 @@ unsigned long move_page_tables(struct vm_area_struct *vma,
+ 		new_pmd = alloc_new_pmd(vma->vm_mm, vma, new_addr);
+ 		if (!new_pmd)
+ 			break;
++again:
+ 		if (is_swap_pmd(*old_pmd) || pmd_trans_huge(*old_pmd) ||
+ 		    pmd_devmap(*old_pmd)) {
+ 			if (extent == HPAGE_PMD_SIZE &&
+@@ -544,8 +556,6 @@ unsigned long move_page_tables(struct vm_area_struct *vma,
+ 					   old_pmd, new_pmd, need_rmap_locks))
+ 				continue;
+ 			split_huge_pmd(vma, old_pmd, old_addr);
+-			if (pmd_trans_unstable(old_pmd))
+-				continue;
+ 		} else if (IS_ENABLED(CONFIG_HAVE_MOVE_PMD) &&
+ 			   extent == PMD_SIZE) {
+ 			/*
+@@ -556,11 +566,13 @@ unsigned long move_page_tables(struct vm_area_struct *vma,
+ 					   old_pmd, new_pmd, true))
+ 				continue;
+ 		}
+-
++		if (pmd_none(*old_pmd))
++			continue;
+ 		if (pte_alloc(new_vma->vm_mm, new_pmd))
+ 			break;
+-		move_ptes(vma, old_pmd, old_addr, old_addr + extent, new_vma,
+-			  new_pmd, new_addr, need_rmap_locks);
++		if (move_ptes(vma, old_pmd, old_addr, old_addr + extent,
++			      new_vma, new_pmd, new_addr, need_rmap_locks) < 0)
++			goto again;
+ 	}
+ 
+ 	mmu_notifier_invalidate_range_end(&range);
+-- 
+2.35.3
 
---=20
-An old man doll... just what I always wanted! - Clara
-
---SkxO4Mw1tUNGMQAP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZIKA1wAKCRD2uYlJVVFO
-ozpvAP0ZNtMzsuVLNqpN2YGo0fQquHjfI80lWbvv+5Ntg7Eg7AEAnP02qG+MXcdp
-0YZUc2EMyxgYJVgnJzTDNc/Z/RhkvQs=
-=p3Nb
------END PGP SIGNATURE-----
-
---SkxO4Mw1tUNGMQAP--
