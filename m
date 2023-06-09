@@ -2,450 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D9E772A16F
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 19:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2008472A175
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 19:42:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbjFIRlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 13:41:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47676 "EHLO
+        id S229770AbjFIRmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 13:42:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjFIRlh (ORCPT
+        with ESMTP id S230499AbjFIRmD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 13:41:37 -0400
-Received: from finn.localdomain (finn.gateworks.com [108.161.129.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BB6E4E;
-        Fri,  9 Jun 2023 10:41:35 -0700 (PDT)
-Received: from 068-189-091-139.biz.spectrum.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
-        by finn.localdomain with esmtp (Exim 4.93)
-        (envelope-from <tharvey@gateworks.com>)
-        id 1q7g6o-006Chf-Hu; Fri, 09 Jun 2023 17:41:10 +0000
-From:   Tim Harvey <tharvey@gateworks.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tim Harvey <tharvey@gateworks.com>
-Subject: [PATCH v2 2/2] arm64: dts: freescale: Add imx8mm-venice-gw7905-0x
-Date:   Fri,  9 Jun 2023 10:41:07 -0700
-Message-Id: <20230609174107.3373182-2-tharvey@gateworks.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230609174107.3373182-1-tharvey@gateworks.com>
-References: <20230609174107.3373182-1-tharvey@gateworks.com>
+        Fri, 9 Jun 2023 13:42:03 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0B93AAC;
+        Fri,  9 Jun 2023 10:41:54 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Qd7fs2PVYz6J6ks;
+        Sat, 10 Jun 2023 01:41:25 +0800 (CST)
+Received: from localhost (10.126.170.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 9 Jun
+ 2023 18:41:52 +0100
+Date:   Fri, 9 Jun 2023 18:41:49 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Jonathan Cameron <jic23@kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        <marius.cristea@microchip.com>, <lars@metafoo.de>,
+        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: iio: adc: adding MCP3564 ADC
+Message-ID: <20230609184149.00002766@Huawei.com>
+In-Reply-To: <20230608193443.GA3261675-robh@kernel.org>
+References: <20230519160145.44208-1-marius.cristea@microchip.com>
+        <20230519160145.44208-2-marius.cristea@microchip.com>
+        <20230519-variably-direction-cfa9a034e844@spud>
+        <20230520161753.28a8c128@jic23-huawei>
+        <20230608193443.GA3261675-robh@kernel.org>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.170.42]
+X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Gateworks imx8mm-venice-gw7905-0x consists of a SOM + baseboard.
+On Thu, 8 Jun 2023 13:34:43 -0600
+Rob Herring <robh@kernel.org> wrote:
 
-The GW700x SOM contains the following:
- - i.MX8M Mini SoC
- - LPDDR4 memory
- - eMMC Boot device
- - Gateworks System Controller (GSC) with integrated EEPROM, button
-   controller, and ADC's
- - PMIC
- - SOM connector providing:
-  - FEC GbE MII
-  - 1x SPI
-  - 2x I2C
-  - 4x UART
-  - 2x USB 2.0
-  - 1x PCI
-  - 1x SDIO (4-bit 3.3V)
-  - 1x SDIO (4-bit 3.3V/1.8V)
-  - GPIO
+> On Sat, May 20, 2023 at 04:17:53PM +0100, Jonathan Cameron wrote:
+> > On Fri, 19 May 2023 19:29:15 +0100
+> > Conor Dooley <conor@kernel.org> wrote:
+> >   
+> > > Hey Marius,
+> > > 
+> > > On Fri, May 19, 2023 at 07:01:44PM +0300, marius.cristea@microchip.com wrote:  
+> > > > From: Marius Cristea <marius.cristea@microchip.com>
+> > > > 
+> > > > This is the device tree schema for iio driver for
+> > > > Microchip family of 153.6 ksps, Low-Noise 16/24-Bit
+> > > > Delta-Sigma ADCs with an SPI interface.    
+> > > 
+> > > Just one quick process bit, please try to CC all of the maintainers
+> > > listed by get_maintainer.pl - you unfortunately managed to miss 2 of the
+> > > 3 dt-binding maintainers :/ Perhaps you ran get_maintainer.pl using our
+> > > vendor tree?
+> > >   
+> > > > Signed-off-by: Marius Cristea <marius.cristea@microchip.com>
+> > > > ---    
+> > >   
+> > > > +  vref-supply:
+> > > > +    description:
+> > > > +      Some devices have a specific reference voltage supplied on a different
+> > > > +      pin to the other supplies. Needed to be able to establish channel scaling
+> > > > +      unless there is also an internal reference available (e.g. mcp3564r)    
+> > > 
+> > > Should this be marked as a required property for the non-r devices that
+> > > do not have an internal reference?
+> > >   
+> > > > +  microchip,hw-device-address:    
+> > > 
+> > > Hopefully Rob or Jonathan etc can chime in as to whether a common
+> > > property exists for this type of thing...
+> > >   
+> > Nope. This is a new one for me - there are devices that work on a daisy chain
+> > principle but I think this one works by encoding stuff in the actual message
+> > which is unusual for SPI.  
+> 
+> Not something I've seen either.
+> 
+> >   
+> > > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > > +    minimum: 0
+> > > > +    maximum: 3
+> > > > +    description:
+> > > > +      The address is set on a per-device basis by fuses in the factory,
+> > > > +      configured on request. If not requested, the fuses are set for 0x1.
+> > > > +      The device address is part of the device markings to avoid
+> > > > +      potential confusion. This address is coded on two bits, so four possible
+> > > > +      addresses are available when multiple devices are present on the same
+> > > > +      SPI bus with only one Chip Select line for all devices.    
+> 
+> What's this going to look like with more than one device? It would need 
+> to be incorporated into 'reg' and the unit-address to work. Something 
+> like this is 
+> 
+> spi {
+>   device0@0 {
+>     reg = <0>;
+>     microchip,hw-device-address = <0>;
+>   };
+> 
+>   device1@0 {
+>     reg = <0>;
+>     microchip,hw-device-address = <1>;
+>   };
+> };
+> 
+> That should throw warnings because you have 2 nodes at the same address 
+> which is not good practice.
+> 
+> I think you need a spi mux in here with the mux addresses being the 
+> microchip,hw-device-address values.
 
-The GW7905 Baseboard contains the following:
- - GPS
- - microSD
- - off-board I/O connector with I2C, SPI, GPIO
- - EERPOM
- - PCIe clock generator
- - 1x full-length miniPCIe socket with PCI/USB3 (via mux) and USB2.0
- - 1x half-length miniPCIe socket with USB2.0 and USB3.0
- - USB 3.0 HUB
- - USB Type-C with USB PD Sink capability and peripheral support
- - USB Type-C with USB 3.0 host support
+Something that looked like an spi-mux would be cute I'm not sure how
+easy it would be to make it work given need to modify the messages
+(rather sending extra ones before and after with a different chip select).
 
-Signed-off-by: Tim Harvey <tharvey@gateworks.com>
----
-v2 - no changes
----
- arch/arm64/boot/dts/freescale/Makefile        |   1 +
- .../dts/freescale/imx8mm-venice-gw7905-0x.dts |  28 ++
- .../dts/freescale/imx8mm-venice-gw7905.dtsi   | 303 ++++++++++++++++++
- 3 files changed, 332 insertions(+)
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-venice-gw7905-0x.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-venice-gw7905.dtsi
+It would be nice if it were somewhat generic - so binding included which
+bits would be replaced with the 'chip select' for the spi controller that
+represents the mux.
 
-diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index d94d464db03e..f13faf043d48 100644
---- a/arch/arm64/boot/dts/freescale/Makefile
-+++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -73,6 +73,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw7901.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw7902.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw7903.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw7904.dtb
-+dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw7905-0x.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-verdin-nonwifi-dahlia.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-verdin-nonwifi-dev.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mm-verdin-nonwifi-yavia.dtb
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7905-0x.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7905-0x.dts
-new file mode 100644
-index 000000000000..914753f062cd
---- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7905-0x.dts
-@@ -0,0 +1,28 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright 2023 Gateworks Corporation
-+ */
-+
-+/dts-v1/;
-+
-+#include "imx8mm.dtsi"
-+#include "imx8mm-venice-gw700x.dtsi"
-+#include "imx8mm-venice-gw7905.dtsi"
-+
-+/ {
-+	model = "Gateworks Venice GW7905-0x i.MX8MM Development Kit";
-+	compatible = "gateworks,imx8mm-gw7905-0x", "fsl,imx8mm";
-+
-+	chosen {
-+		stdout-path = &uart2;
-+	};
-+};
-+
-+/* Disable SOM interfaces not used on baseboard */
-+&fec1 {
-+	status = "disabled";
-+};
-+
-+&usdhc1 {
-+	status = "disabled";
-+};
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7905.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7905.dtsi
-new file mode 100644
-index 000000000000..9646eb9e4928
---- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7905.dtsi
-@@ -0,0 +1,303 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright 2023 Gateworks Corporation
-+ */
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/leds/common.h>
-+#include <dt-bindings/phy/phy-imx8-pcie.h>
-+
-+/ {
-+	led-controller {
-+		compatible = "gpio-leds";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_gpio_leds>;
-+
-+		led-0 {
-+			function = LED_FUNCTION_STATUS;
-+			color = <LED_COLOR_ID_GREEN>;
-+			gpios = <&gpio4 0 GPIO_ACTIVE_HIGH>;
-+			default-state = "on";
-+			linux,default-trigger = "heartbeat";
-+		};
-+
-+		led-1 {
-+			function = LED_FUNCTION_STATUS;
-+			color = <LED_COLOR_ID_RED>;
-+			gpios = <&gpio4 2 GPIO_ACTIVE_HIGH>;
-+			default-state = "off";
-+		};
-+	};
-+
-+	pcie0_refclk: pcie0-refclk {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <100000000>;
-+	};
-+
-+	pps {
-+		compatible = "pps-gpio";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_pps>;
-+		gpios = <&gpio4 5 GPIO_ACTIVE_HIGH>;
-+		status = "okay";
-+	};
-+
-+	reg_usb2_vbus: regulator-usb2-vbus {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_reg_usb2_en>;
-+		compatible = "regulator-fixed";
-+		regulator-name = "usb2_vbus";
-+		gpio = <&gpio1 8 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+	};
-+
-+	reg_usdhc2_vmmc: regulator-usdhc2 {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_reg_usdhc2_vmmc>;
-+		compatible = "regulator-fixed";
-+		regulator-name = "SD2_3P3V";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		gpio = <&gpio2 19 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
-+};
-+
-+/* off-board header */
-+&ecspi2 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_spi2>;
-+	cs-gpios = <&gpio5 13 GPIO_ACTIVE_LOW>;
-+	status = "okay";
-+};
-+
-+&gpio1 {
-+	gpio-line-names =
-+		"", "", "", "",
-+		"", "", "", "",
-+		"", "", "", "",
-+		"", "gpioa", "gpiob", "",
-+		"", "", "", "",
-+		"", "", "", "",
-+		"", "", "", "",
-+		"", "", "", "";
-+};
-+
-+&gpio4 {
-+	gpio-line-names =
-+		"", "", "", "pci_usb_sel",
-+		"", "", "", "pci_wdis#",
-+		"", "", "", "",
-+		"", "", "", "",
-+		"", "", "", "",
-+		"", "", "", "",
-+		"", "", "", "",
-+		"", "", "", "";
-+};
-+
-+&gpio5 {
-+	gpio-line-names =
-+		"", "", "", "",
-+		"gpioc", "gpiod", "", "",
-+		"", "", "", "",
-+		"", "", "", "",
-+		"", "", "", "",
-+		"", "", "", "",
-+		"", "", "", "",
-+		"", "", "", "";
-+};
-+
-+&i2c2 {
-+	clock-frequency = <400000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_i2c2>;
-+	status = "okay";
-+
-+	eeprom@52 {
-+		compatible = "atmel,24c32";
-+		reg = <0x52>;
-+		pagesize = <32>;
-+	};
-+};
-+
-+/* off-board header */
-+&i2c3 {
-+	clock-frequency = <400000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_i2c3>;
-+	status = "okay";
-+};
-+
-+&pcie_phy {
-+	fsl,refclk-pad-mode = <IMX8_PCIE_REFCLK_PAD_INPUT>;
-+	fsl,clkreq-unsupported;
-+	clocks = <&pcie0_refclk>;
-+	clock-names = "ref";
-+	status = "okay";
-+};
-+
-+&pcie0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_pcie0>;
-+	reset-gpio = <&gpio4 6 GPIO_ACTIVE_LOW>;
-+	status = "okay";
-+};
-+
-+/* GPS */
-+&uart1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_uart1>;
-+	status = "okay";
-+};
-+
-+/* USB1 - Type C front panel SINK port J14 */
-+&usbotg1 {
-+	dr_mode = "peripheral";
-+	status = "okay";
-+};
-+
-+/* USB2 4-port USB3.0 HUB:
-+ *  P1 - USBC connector (host only)
-+ *  P2 - USB2 test connector
-+ *  P3 - miniPCIe full card
-+ *  P4 - miniPCIe half card
-+ */
-+&usbotg2 {
-+	dr_mode = "host";
-+	vbus-supply = <&reg_usb2_vbus>;
-+	status = "okay";
-+};
-+
-+/* microSD */
-+&usdhc2 {
-+	pinctrl-names = "default", "state_100mhz", "state_200mhz";
-+	pinctrl-0 = <&pinctrl_usdhc2>, <&pinctrl_usdhc2_gpio>;
-+	pinctrl-1 = <&pinctrl_usdhc2_100mhz>, <&pinctrl_usdhc2_gpio>;
-+	pinctrl-2 = <&pinctrl_usdhc2_200mhz>, <&pinctrl_usdhc2_gpio>;
-+	cd-gpios = <&gpio2 12 GPIO_ACTIVE_LOW>;
-+	vmmc-supply = <&reg_usdhc2_vmmc>;
-+	bus-width = <4>;
-+	status = "okay";
-+};
-+
-+&iomuxc {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_hog>;
-+
-+	pinctrl_hog: hoggrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_GPIO1_IO13_GPIO1_IO13	0x40000040 /* GPIOA */
-+			MX8MM_IOMUXC_GPIO1_IO14_GPIO1_IO14	0x40000040 /* GPIOB */
-+			MX8MM_IOMUXC_SAI1_RXD1_GPIO4_IO3	0x40000106 /* PCI_USBSEL */
-+			MX8MM_IOMUXC_SAI1_RXD5_GPIO4_IO7	0x40000106 /* PCIE_WDIS# */
-+			MX8MM_IOMUXC_SPDIF_EXT_CLK_GPIO5_IO5	0x40000040 /* GPIOD */
-+			MX8MM_IOMUXC_SPDIF_RX_GPIO5_IO4		0x40000040 /* GPIOC */
-+		>;
-+	};
-+
-+	pinctrl_gpio_leds: gpioledgrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_SAI1_RXFS_GPIO4_IO0	0x6	/* LEDG */
-+			MX8MM_IOMUXC_SAI1_RXD0_GPIO4_IO2	0x6	/* LEDR */
-+		>;
-+	};
-+
-+	pinctrl_i2c2: i2c2grp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_I2C2_SCL_I2C2_SCL		0x400001c2
-+			MX8MM_IOMUXC_I2C2_SDA_I2C2_SDA		0x400001c2
-+		>;
-+	};
-+
-+	pinctrl_i2c3: i2c3grp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_I2C3_SCL_I2C3_SCL		0x400001c2
-+			MX8MM_IOMUXC_I2C3_SDA_I2C3_SDA		0x400001c2
-+		>;
-+	};
-+
-+	pinctrl_pcie0: pciegrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_SAI1_RXD4_GPIO4_IO6	0x106
-+		>;
-+	};
-+
-+	pinctrl_pps: ppsgrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_SAI1_RXD3_GPIO4_IO5	0x106
-+		>;
-+	};
-+
-+	pinctrl_reg_usb2_en: regusb2grp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_GPIO1_IO08_GPIO1_IO8	0x6	/* USBHUB_RST# (ext p/u) */
-+		>;
-+	};
-+
-+	pinctrl_reg_usdhc2_vmmc: regusdhc2vmmcgrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_SD2_RESET_B_GPIO2_IO19	0x40
-+		>;
-+	};
-+
-+	pinctrl_spi2: spi2grp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_ECSPI2_SCLK_ECSPI2_SCLK	0x140
-+			MX8MM_IOMUXC_ECSPI2_MOSI_ECSPI2_MOSI	0x140
-+			MX8MM_IOMUXC_ECSPI2_MISO_ECSPI2_MISO	0x140
-+			MX8MM_IOMUXC_ECSPI2_SS0_GPIO5_IO13	0x140
-+		>;
-+	};
-+
-+	pinctrl_uart1: uart1grp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_UART1_RXD_UART1_DCE_RX	0x140
-+			MX8MM_IOMUXC_UART1_TXD_UART1_DCE_TX	0x140
-+		>;
-+	};
-+
-+	pinctrl_usdhc2: usdhc2grp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_SD2_CLK_USDHC2_CLK		0x190
-+			MX8MM_IOMUXC_SD2_CMD_USDHC2_CMD		0x1d0
-+			MX8MM_IOMUXC_SD2_DATA0_USDHC2_DATA0	0x1d0
-+			MX8MM_IOMUXC_SD2_DATA1_USDHC2_DATA1	0x1d0
-+			MX8MM_IOMUXC_SD2_DATA2_USDHC2_DATA2	0x1d0
-+			MX8MM_IOMUXC_SD2_DATA3_USDHC2_DATA3	0x1d0
-+			MX8MM_IOMUXC_GPIO1_IO04_USDHC2_VSELECT	0xc0
-+		>;
-+	};
-+
-+	pinctrl_usdhc2_100mhz: usdhc2-100mhzgrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_SD2_CLK_USDHC2_CLK		0x194
-+			MX8MM_IOMUXC_SD2_CMD_USDHC2_CMD		0x1d4
-+			MX8MM_IOMUXC_SD2_DATA0_USDHC2_DATA0	0x1d4
-+			MX8MM_IOMUXC_SD2_DATA1_USDHC2_DATA1	0x1d4
-+			MX8MM_IOMUXC_SD2_DATA2_USDHC2_DATA2	0x1d4
-+			MX8MM_IOMUXC_SD2_DATA3_USDHC2_DATA3	0x1d4
-+			MX8MM_IOMUXC_GPIO1_IO04_USDHC2_VSELECT	0xc0
-+		>;
-+	};
-+
-+	pinctrl_usdhc2_200mhz: usdhc2-200mhzgrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_SD2_CLK_USDHC2_CLK		0x196
-+			MX8MM_IOMUXC_SD2_CMD_USDHC2_CMD		0x1d6
-+			MX8MM_IOMUXC_SD2_DATA0_USDHC2_DATA0	0x1d6
-+			MX8MM_IOMUXC_SD2_DATA1_USDHC2_DATA1	0x1d6
-+			MX8MM_IOMUXC_SD2_DATA2_USDHC2_DATA2	0x1d6
-+			MX8MM_IOMUXC_SD2_DATA3_USDHC2_DATA3	0x1d6
-+			MX8MM_IOMUXC_GPIO1_IO04_USDHC2_VSELECT	0xc0
-+		>;
-+	};
-+
-+	pinctrl_usdhc2_gpio: usdhc2gpiogrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_SD2_CD_B_GPIO2_IO12	0x1c4
-+		>;
-+	};
-+};
--- 
-2.25.1
+Jonathan
+
+
+> 
+> Rob
+> 
 
