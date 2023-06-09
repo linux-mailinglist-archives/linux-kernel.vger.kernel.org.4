@@ -2,75 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 159CC729CB2
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:22:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F2F8729CB5
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:24:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231135AbjFIOWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 10:22:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47932 "EHLO
+        id S239318AbjFIOYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 10:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239318AbjFIOWt (ORCPT
+        with ESMTP id S230431AbjFIOX7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 10:22:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3663830E7;
-        Fri,  9 Jun 2023 07:22:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C74D86189D;
-        Fri,  9 Jun 2023 14:22:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21A3DC433EF;
-        Fri,  9 Jun 2023 14:22:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686320568;
-        bh=PFEySzC7tACtP/XyP8fsFBTxk131P5gKr8Atqgb7dqo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=toM+LEM3YozmlHZ+XBE1mBW2qo9vKIHZXnT3Z9w+O8PouVRTFEeXOiTABtgF2FYs5
-         fecRrZ7+1u0/8h1veEVKzXPEuK3WXbwX1y6RVhgFxD3Aj6c27wT8ydpqcr2+v5iyu/
-         bOdPel0xByAwm/pI5BsjqNcvB0SDjKu/cWw1xwg0egDUkV9opK9g+P1tlEswQYPPq1
-         /LYOP/IPXu3ISRFIDS4eUCfNYGrFFqfc5qMemZLjC/HLBUV9cJzyZp8hj/yqfS0Kfb
-         /kOUg9QB1Iz6M0I+HroY6Bi+E0ygI3nnP8E4Z2OleuuVMDtZczKCZnNZEm8uZZ7VxM
-         8bRuhy49tzTJw==
-Date:   Fri, 9 Jun 2023 15:22:41 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
-        "jsnitsel@redhat.com" <jsnitsel@redhat.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "peterhuewe@gmx.de" <peterhuewe@gmx.de>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>
-Subject: Re: [Patch V10 2/3] tpm_tis-spi: Add hardware wait polling
-Message-ID: <3b5e149d-4d52-46f8-85f5-821aa7b99ae9@sirena.org.uk>
-References: <ZEaWQD_QTs2usVl8@orome>
- <5fae29cd-d5f4-4616-be1c-1cd4d5b9a538@sirena.org.uk>
- <ZEag1lAonYcmNFXk@orome>
- <DM4PR12MB5769BB69B97F77DBA9ED2935C3779@DM4PR12MB5769.namprd12.prod.outlook.com>
- <DM4PR12MB5769499349B6B936FE46BF0CC3419@DM4PR12MB5769.namprd12.prod.outlook.com>
- <ZHhW_wFvRWInR_iM@orome>
- <dec901be-4bef-43e0-a125-23c5c4e92789@sirena.org.uk>
- <ZHiQ44gAL3YEZPUh@orome>
- <c0cf893d-8bc5-4f4b-a326-bb10dd0c84de@sirena.org.uk>
- <CT86OCSDQS17.21FWH48JRKKI9@suppilovahvero>
+        Fri, 9 Jun 2023 10:23:59 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FA530CB;
+        Fri,  9 Jun 2023 07:23:58 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 359A35SA028075;
+        Fri, 9 Jun 2023 16:23:39 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=bj7M7t8bdQ08GXVPF25sRkD+ihWbmvO7R+gIAK9yWxE=;
+ b=m0DoBnS6trRvF1s4KiCAoQZUCLEAoZsgkHwNS6LkfGBQp6kGYGPN7fwaUZyBgrJDk2jZ
+ dFm5y+eEo5nutkVFTpPQP/8wUc6V7ZR1KBPQv9zlNgr8PX8e6qwfHc6ZG0R9LV8FPMmj
+ SEjvY+ZuWEzXYJ4ieV1+HHymQhZ8dtC1qMhdXLMPzIAlVTeWaXbLJ5mXLWzbIew7xYS4
+ bY5LP1Q7QAwE3FpHo3sKGoUe9RB3xCLaHsN0hJxWuFL0oS/G8N6HWKcIIVYWLF13gGUq
+ HMVhvXD/BQ4YFE0cxN+j9Uq068h3TGArRA2LTipHTDNDUlR1UtyAyGztvw2sr7qVS0L2 Ng== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3r3xsfb7aa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Jun 2023 16:23:39 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 63F4510002A;
+        Fri,  9 Jun 2023 16:23:38 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 532CB23695E;
+        Fri,  9 Jun 2023 16:23:38 +0200 (CEST)
+Received: from [10.129.178.187] (10.129.178.187) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Fri, 9 Jun
+ 2023 16:23:35 +0200
+Message-ID: <559a146a-237b-ce42-93e7-ed13cfbb209d@foss.st.com>
+Date:   Fri, 9 Jun 2023 16:23:35 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="O0OAEmr40Unwas+e"
-Content-Disposition: inline
-In-Reply-To: <CT86OCSDQS17.21FWH48JRKKI9@suppilovahvero>
-X-Cookie: Tom's hungry, time to eat lunch.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [Linux-stm32] [PATCH v3 2/4] ARM: dts: stm32: add pin map for
+ LTDC on stm32f7
+Content-Language: en-US
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        <linux-kernel@vger.kernel.org>
+CC:     <devicetree@vger.kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <michael@amarulasolutions.com>,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230609062050.2107143-1-dario.binacchi@amarulasolutions.com>
+ <20230609062050.2107143-3-dario.binacchi@amarulasolutions.com>
+From:   Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+In-Reply-To: <20230609062050.2107143-3-dario.binacchi@amarulasolutions.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.129.178.187]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-09_10,2023-06-09_01,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,39 +82,17 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---O0OAEmr40Unwas+e
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Fri, Jun 09, 2023 at 05:19:15PM +0300, Jarkko Sakkinen wrote:
-> On Thu Jun 1, 2023 at 3:40 PM EEST, Mark Brown wrote:
-> > On Thu, Jun 01, 2023 at 02:36:51PM +0200, Thierry Reding wrote:
-> > > On Thu, Jun 01, 2023 at 12:04:59PM +0100, Mark Brown wrote:
-> > > > On Thu, Jun 01, 2023 at 10:29:51AM +0200, Thierry Reding wrote:
-
-> > > Jarkko, can you pick this up for v6.5?
-
-> > No, I said that I had applied the SPI parts for v6.4 so there would be
-> > no blocker whenever people got round to reviewing the TPM side.
-
-> I'm totally cool with this: won't pick the patch then.
-
-I have no intention of applying the patch, I am expecting it to go via
-the TPM tree.
-
---O0OAEmr40Unwas+e
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSDNbAACgkQJNaLcl1U
-h9DFTwf/fxy+VHx3rPhTGHVI3g+3B5YfkGyIZZUUizJ4Y/FZtz0pzFEhcFBiThSp
-BDTAmG6rrS1bbseotnzkArMI0v0ts2BX+CqhaLxWAOHusEdDUS/xXXUzpZOHK6ZD
-+f7ELs4ANXHTVpYV3vDnMO0bcM/hjtljLj2GhG1FrAcEHP6l65aTrK+we6dR1kMG
-QlIIiLaq2DWTrpW9B//x8slCBbMmCNEWNnmGliBuBr83FiIPydVk8oDXlHZSfSd0
-90tNkdivHTNG9Dhs1c487cuIoirN+sevKt+ucutAk/mi1tteNzIlpVcLQoq54sOj
-0QgnqIAtXTSvNrPXRMKufHDpj3K0qA==
-=uu6t
------END PGP SIGNATURE-----
-
---O0OAEmr40Unwas+e--
+On 6/9/23 08:20, Dario Binacchi wrote:
+> Add pin configurations for using LTDC (LCD-tft Display Controller) on
+> stm32f746-disco board.
+>
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Reviewed-by: Raphaël Gallais-Pou <raphael.gallais-pou@foss.st.com>
+>
+> ---
+>
+> Changes in v3:
+> - rename ltdc-pins-a-0 to ltdc-0.
+>
+>  arch/arm/boot/dts/stm32f7-pinctrl.dtsi | 35 ++++++++++++++++++++++++++
+>  1 file changed, 35 insertions(+)
