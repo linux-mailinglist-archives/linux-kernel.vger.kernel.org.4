@@ -2,153 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58820729DB8
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 17:03:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF04729DBE
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 17:05:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241686AbjFIPDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 11:03:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44060 "EHLO
+        id S241316AbjFIPFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 11:05:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238987AbjFIPDq (ORCPT
+        with ESMTP id S241723AbjFIPEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 11:03:46 -0400
+        Fri, 9 Jun 2023 11:04:50 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B2A2D71
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 08:03:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FD4E210C
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 08:04:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686322979;
+        s=mimecast20190719; t=1686323049;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kliWk5KtWXn6tjlvUWVqn/LoEmMuT+sYK46zS+DbrRU=;
-        b=E0hapIaseMCdJwuWgijhtrHGHdxT3WTMJ0bWPLJno8lWtYKbxCCa5urwK1UtxufHjVmQps
-        kgonkV/MB4YYjpTqiR1FIDq1STJ3BUm/L2A0NXFt7WzfNNuLFTxkIp17pmiTtYgp4CtbJX
-        FmRNTmPOMkYoSp0qWf4Cuj6wJx+XwvQ=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-492-Jw_98FMyNiGviaVSbiH28A-1; Fri, 09 Jun 2023 11:02:58 -0400
-X-MC-Unique: Jw_98FMyNiGviaVSbiH28A-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-94a34e35f57so164776866b.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 08:02:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686322977; x=1688914977;
-        h=content-transfer-encoding:in-reply-to:references:to
-         :content-language:subject:cc:user-agent:mime-version:date:message-id
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kliWk5KtWXn6tjlvUWVqn/LoEmMuT+sYK46zS+DbrRU=;
-        b=NytM9t+52C+hYsu8Lb6ViLjozYdsT+WsVZCk6ItUI1yzO6DrG6Of0jvsistSEOX7ou
-         4mTDGoopOPIvUBKE6wswSePshXZC8zJBQQlP2Q+kaOmfRikql9K0ef5cq4DZJC8SW40O
-         OigMDPcJ52+4wJOfQ9BFlIVkmYYte0Yq7fme+OJBAc79pbxQKiS6EPW/eKYIPwfIs1gx
-         7GZZtA5rTpnwvz3COBd00Ycud8AGlYvhWnZBxhRwMTkZ1R1BzK2EvPya5HmG12D+kHPl
-         ZylKebn5/qXgTSnTQXedCjcCtOI+oV76lMpLM/9oMCxoUec3i3MlMMJ2gzLN4M/9O5Yg
-         Rh0w==
-X-Gm-Message-State: AC+VfDwtlTuicCJ1XXJ/I+CRG5ItdCZcqAnXb3d9P349YjYPFqed3w7r
-        SCgak2h3i0pNgS09d9/BES9qIGXtiRieblUcXwoaSMbhveBGu58e+y1zDZw7aia93zAveH4qOy3
-        tKJhfrvXUSUCUE0aABKFmczOv
-X-Received: by 2002:a17:907:a40d:b0:94f:1c90:cb71 with SMTP id sg13-20020a170907a40d00b0094f1c90cb71mr2135518ejc.65.1686322977197;
-        Fri, 09 Jun 2023 08:02:57 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7kIJT4Dw+mA4Q9GUBl8PP+/FekH+B7/fILEkXJGqguDJ8zV1PCspweiNi+i2gf5sACJchhag==
-X-Received: by 2002:a17:907:a40d:b0:94f:1c90:cb71 with SMTP id sg13-20020a170907a40d00b0094f1c90cb71mr2135493ejc.65.1686322976901;
-        Fri, 09 Jun 2023 08:02:56 -0700 (PDT)
-Received: from [192.168.42.222] (194-45-78-10.static.kviknet.net. [194.45.78.10])
-        by smtp.gmail.com with ESMTPSA id lf29-20020a170907175d00b009787062d21csm1396129ejc.77.2023.06.09.08.02.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Jun 2023 08:02:56 -0700 (PDT)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <4f1a0b7d-973f-80f5-cc39-74f09622ccef@redhat.com>
-Date:   Fri, 9 Jun 2023 17:02:54 +0200
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=+w+pZDopk4F8CHu/k4rB5TG5TqlSH5TY9yzQonWJ8Y4=;
+        b=imDbp2B1reYMVuvr8ZcwWX6efrMAH6afsTB/kQhReXnCBae7Th5MB/fnT/jH1pKl0Vnsq1
+        7UJuhDQJ0hUAlw6qWfYINVDYtsOY9c/ckj3HmaDsajoHidaCYhhqbOJC310gu/85lHCaT3
+        MAoFxzx/v3VPR2uIRoLaTyU3AIKu43I=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-288-zq0WDYJOMYmSGdON1cGHBA-1; Fri, 09 Jun 2023 11:04:06 -0400
+X-MC-Unique: zq0WDYJOMYmSGdON1cGHBA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B2EF23825BAB;
+        Fri,  9 Jun 2023 15:04:05 +0000 (UTC)
+Received: from vschneid.remote.csb (unknown [10.42.28.16])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A2B034087C62;
+        Fri,  9 Jun 2023 15:03:56 +0000 (UTC)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Leonardo Bras <leobras@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: [RFC PATCH 0/5] tracing/filters: filtering event fields with a cpumask
+Date:   Fri,  9 Jun 2023 16:03:19 +0100
+Message-Id: <20230609150324.143538-1-vschneid@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Cc:     brouer@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        linux-rdma@vger.kernel.org
-Subject: Re: [PATCH net-next v3 1/4] page_pool: frag API support for 32-bit
- arch with 64-bit DMA
-Content-Language: en-US
-To:     Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com
-References: <20230609131740.7496-1-linyunsheng@huawei.com>
- <20230609131740.7496-2-linyunsheng@huawei.com>
-In-Reply-To: <20230609131740.7496-2-linyunsheng@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi folks,
 
-On 09/06/2023 15.17, Yunsheng Lin wrote:
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-> index a7c526ee5024..cd4ac378cc63 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-> @@ -832,6 +832,15 @@ static int mlx5e_alloc_rq(struct mlx5e_params *params,
->   		/* Create a page_pool and register it with rxq */
->   		struct page_pool_params pp_params = { 0 };
->   
-> +		/* Return error here to aoivd writing to page->pp_frag_count in
-                                         ^^^^^
-Typo
+In the context of CPU isolation / NOHZ_FULL interference investigation, we now
+have the ipi_send_cpu and ipi_send_cpumask events. However, enabling these
+events without any filtering can yield pretty massive traces with a lot of
+uninteresting or irrelevant data (e.g. everything targeting housekeeping CPUs).
 
-> +		 * mlx5e_page_release_fragmented() for page->pp_frag_count is not
-> +		 * usable for arch with PAGE_POOL_DMA_USE_PP_FRAG_COUNT being true.
-> +		 */
-> +		if (PAGE_POOL_DMA_USE_PP_FRAG_COUNT) {
-> +			err = -EINVAL;
-> +			goto err_free_by_rq_type;
-> +		}
-> +
->   		pp_params.order     = 0;
->   		pp_params.flags     = PP_FLAG_DMA_MAP | PP_FLAG_DMA_SYNC_DEV | PP_FLAG_PAGE_FRAG;
->   		pp_params.pool_size = pool_size;
-> diff --git a/include/net/page_pool.h b/include/net/page_pool.h
-> index 126f9e294389..5c7f7501f300 100644
-> --- a/include/net/page_pool.h
-> +++ b/include/net/page_pool.h
-> @@ -33,6 +33,7 @@
->   #include <linux/mm.h> /* Needed by ptr_ring */
->   #include <linux/ptr_ring.h>
->   #include <linux/dma-direction.h>
-> +#include <linux/dma-mapping.h>
->   
->   #define PP_FLAG_DMA_MAP		BIT(0) /* Should page_pool do the DMA
->   					* map/unmap
-> @@ -50,6 +51,9 @@
->   				 PP_FLAG_DMA_SYNC_DEV |\
->   				 PP_FLAG_PAGE_FRAG)
->   
-> +#define PAGE_POOL_DMA_USE_PP_FRAG_COUNT	\
-> +		(sizeof(dma_addr_t) > sizeof(unsigned long))
-> +
+This series is about adding event filtering via a user-provided cpumask. This
+enables filtering using cpumask fields (e.g. ipi_send_cpumask) and extends this
+to scalar and the local CPU common fields.
 
-I have a problem with the name PAGE_POOL_DMA_USE_PP_FRAG_COUNT
-because it is confusing to read in an if-statement.
+With this, it becomes fairly easy to trace events both happening on and
+targeting CPUs of interest, e.g.:
 
-Proposals rename to:  DMA_OVERLAP_PP_FRAG_COUNT
-  Or:  MM_DMA_OVERLAP_PP_FRAG_COUNT
-  Or:  DMA_ADDR_OVERLAP_PP_FRAG_COUNT
+  trace-cmd record -e 'sched_switch' -f "CPU & MASK{$ISOLATED_CPUS}"         \
+		   -e 'sched_wakeup' -f "target_cpu & MASK{$ISOLATED_CPUS}"  \
+		   -e 'ipi_send_cpu' -f "cpu & MASK{$ISOLATED_CPUS}"         \
+		   -e 'ipi_send_cpumask' -f "cpumask & MASK{$ISOLATED_CPUS}" \
+		   hackbench
 
-Notice how I also removed the prefix PAGE_POOL_ because this is a 
-MM-layer constraint and not a property of page_pool.
+The MASK{} thing is a bit crude but seems to work well enough without break^C
+overhauling the predicate parsing logic.
 
+Cheers,
+Valentin
 
---Jesper
+Valentin Schneider (5):
+  tracing/filters: Dynamically allocate filter_pred.regex
+  tracing/filters: Enable filtering a cpumask field by another cpumask
+  tracing/filters: Enable filtering a scalar field by a cpumask
+  tracing/filters: Enable filtering the CPU common field by a cpumask
+  tracing/filters: Document cpumask filtering
+
+ Documentation/trace/events.rst     |  14 ++
+ include/linux/trace_events.h       |   1 +
+ kernel/trace/trace_events_filter.c | 228 +++++++++++++++++++++++++----
+ 3 files changed, 216 insertions(+), 27 deletions(-)
+
+--
+2.31.1
 
