@@ -2,74 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7775729E2B
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 17:18:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC0BC729E33
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 17:22:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241289AbjFIPSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 11:18:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53242 "EHLO
+        id S241358AbjFIPWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 11:22:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232115AbjFIPSd (ORCPT
+        with ESMTP id S231938AbjFIPW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 11:18:33 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138C51FF3;
-        Fri,  9 Jun 2023 08:18:31 -0700 (PDT)
-X-UUID: e221ff0006d811ee9cb5633481061a41-20230609
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=xPkoBcwjyYTSPz1LyWSxcaQhJhhX/FEj4bDi0Ufup8o=;
-        b=ZV1Sd2VVuMheYo3RXUK2/FFA55uR9m2ze6i3uv0KDi6njdAMg+7PGdQ+KSaptMQDJ3ReAuPq1DcejOzNDACREUKUzq/tZbORcHcgx3so2iXfbLJ0slNGMCRncbxQ8outYEaYoNJHW7LnqCOM6LHv4MkfbmYFO/yLUHVq54l+rmY=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.26,REQID:ce11577c-6216-4d3a-b278-4fc9d175a091,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:cb9a4e1,CLOUDID:8afd966e-2f20-4998-991c-3b78627e4938,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: e221ff0006d811ee9cb5633481061a41-20230609
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-        (envelope-from <powen.kao@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 163635738; Fri, 09 Jun 2023 23:18:27 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Fri, 9 Jun 2023 23:18:26 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Fri, 9 Jun 2023 23:18:26 +0800
-From:   Po-Wen Kao <powen.kao@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     <wsd_upstream@mediatek.com>, <peter.wang@mediatek.com>,
-        <stanley.chu@mediatek.com>, <powen.kao@mediatek.com>,
-        <alice.chao@mediatek.com>, <naomi.chu@mediatek.com>,
-        <chun-hung.wu@mediatek.com>, <cc.chou@mediatek.com>,
-        <eddie.huang@mediatek.com>
-Subject: [PATCH v1 2/2] scsi: ufs: core: Remove dedicated hwq for dev command
-Date:   Fri, 9 Jun 2023 23:17:56 +0800
-Message-ID: <20230609151758.19070-2-powen.kao@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230609151758.19070-1-powen.kao@mediatek.com>
-References: <20230609151758.19070-1-powen.kao@mediatek.com>
+        Fri, 9 Jun 2023 11:22:27 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B1330F7
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 08:22:24 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1686324143;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1naFavr92GwX5FkOX7e/quHSVxFZtV+4DxcoRTFPC6Q=;
+        b=UIfNsraeML09qxs86FX0zo6kBEbq1ALHAB85lj3ub1Z7X9LgnQy93k9XHTm/vilJEXs5Ir
+        llkKGj8FcmXONuq8zMP/hVC7hFa5CU+vP4szIJ++CqYUg0oG55tj3d8S+22215iQtMenKP
+        poQQCPOTBC2aU4N8SMoqmm81WBs542fnlCwbxiCLusR4bmhTo8oC87hUE+ThnFcD6cVPS3
+        n15LHd2SAbV+7UcxCJANo2DuWyNab0EXt6fvcDmOuHWK18eeATLenM8Ec8qFzuz//j2u/9
+        E75T7FSAqevWkJt0ON7ECFZADEA5vloKe26pANHLIPTCYQE+ZxjzSB6XGAFZPA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1686324143;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1naFavr92GwX5FkOX7e/quHSVxFZtV+4DxcoRTFPC6Q=;
+        b=ZzrSBncpCwezVe7wuseibyrYIlve0G2tEZyR0dnz2li0uUYOkSVjSxUhDMo+YnwSiUwc5V
+        jV4R5S8a5JJ7roAA==
+To:     Nikolay Borisov <nik.borisov@suse.com>, x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org, mhocko@suse.com, jslaby@suse.cz,
+        Nikolay Borisov <nik.borisov@suse.com>
+Subject: Re: [PATCH v2 3/4] x86/entry: Disable IA32 syscall if ia32_disabled
+ is true
+In-Reply-To: <20230609111311.4110901-4-nik.borisov@suse.com>
+References: <20230609111311.4110901-1-nik.borisov@suse.com>
+ <20230609111311.4110901-4-nik.borisov@suse.com>
+Date:   Fri, 09 Jun 2023 17:22:22 +0200
+Message-ID: <87edmkirtd.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,116 +57,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Based on
-"scsi: ufs: mcq: Fix the incorrect OCS value for the device command"
-which take care of OCS value of dev commands under mcq mode, we are
-safe to share first hwq for dev commnad and IO request
+On Fri, Jun 09 2023 at 14:13, Nikolay Borisov wrote:
+> First stage of disabling ia32 compat layer is to disable 32bit syscall
+> entry points. Legacy int 0x80 vector is disabled by zeroing out its gate
+> descriptor in the idt and the sysenter vector is disabled by re-using
+> the existing code in case IA32_EMULATION is disabled.
 
-Signed-off-by: Po-Wen Kao <powen.kao@mediatek.com>
----
- drivers/ufs/core/ufs-mcq.c     | 14 ++++----------
- drivers/ufs/core/ufshcd-priv.h |  1 -
- drivers/ufs/core/ufshcd.c      |  4 ++--
- 3 files changed, 6 insertions(+), 13 deletions(-)
+This describes WHAT the patch does without providing any context.
 
-diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
-index 785fc9762cad..9f70abbaa4ad 100644
---- a/drivers/ufs/core/ufs-mcq.c
-+++ b/drivers/ufs/core/ufs-mcq.c
-@@ -20,12 +20,10 @@
- #define MAX_QUEUE_SUP GENMASK(7, 0)
- #define UFS_MCQ_MIN_RW_QUEUES 2
- #define UFS_MCQ_MIN_READ_QUEUES 0
--#define UFS_MCQ_NUM_DEV_CMD_QUEUES 1
- #define UFS_MCQ_MIN_POLL_QUEUES 0
- #define QUEUE_EN_OFFSET 31
- #define QUEUE_ID_OFFSET 16
- 
--#define MAX_DEV_CMD_ENTRIES	2
- #define MCQ_CFG_MAC_MASK	GENMASK(16, 8)
- #define MCQ_QCFG_SIZE		0x40
- #define MCQ_ENTRY_SIZE_IN_DWORD	8
-@@ -115,8 +113,7 @@ struct ufs_hw_queue *ufshcd_mcq_req_to_hwq(struct ufs_hba *hba,
- 	u32 utag = blk_mq_unique_tag(req);
- 	u32 hwq = blk_mq_unique_tag_to_hwq(utag);
- 
--	/* uhq[0] is used to serve device commands */
--	return &hba->uhq[hwq + UFSHCD_MCQ_IO_QUEUE_OFFSET];
-+	return &hba->uhq[hwq];
- }
- 
- /**
-@@ -160,8 +157,7 @@ static int ufshcd_mcq_config_nr_queues(struct ufs_hba *hba)
- 	/* maxq is 0 based value */
- 	hba_maxq = FIELD_GET(MAX_QUEUE_SUP, hba->mcq_capabilities) + 1;
- 
--	tot_queues = UFS_MCQ_NUM_DEV_CMD_QUEUES + read_queues + poll_queues +
--			rw_queues;
-+	tot_queues = read_queues + poll_queues + rw_queues;
- 
- 	if (hba_maxq < tot_queues) {
- 		dev_err(hba->dev, "Total queues (%d) exceeds HC capacity (%d)\n",
-@@ -169,7 +165,7 @@ static int ufshcd_mcq_config_nr_queues(struct ufs_hba *hba)
- 		return -EOPNOTSUPP;
- 	}
- 
--	rem = hba_maxq - UFS_MCQ_NUM_DEV_CMD_QUEUES;
-+	rem = hba_maxq;
- 
- 	if (rw_queues) {
- 		hba->nr_queues[HCTX_TYPE_DEFAULT] = rw_queues;
-@@ -195,7 +191,7 @@ static int ufshcd_mcq_config_nr_queues(struct ufs_hba *hba)
- 	for (i = 0; i < HCTX_MAX_TYPES; i++)
- 		host->nr_hw_queues += hba->nr_queues[i];
- 
--	hba->nr_hw_queues = host->nr_hw_queues + UFS_MCQ_NUM_DEV_CMD_QUEUES;
-+	hba->nr_hw_queues = host->nr_hw_queues;
- 	return 0;
- }
- 
-@@ -445,8 +441,6 @@ int ufshcd_mcq_init(struct ufs_hba *hba)
- 
- 	/* The very first HW queue serves device commands */
- 	hba->dev_cmd_queue = &hba->uhq[0];
--	/* Give dev_cmd_queue the minimal number of entries */
--	hba->dev_cmd_queue->max_entries = MAX_DEV_CMD_ENTRIES;
- 
- 	host->host_tagset = 1;
- 	return 0;
-diff --git a/drivers/ufs/core/ufshcd-priv.h b/drivers/ufs/core/ufshcd-priv.h
-index aa88e60ea1f6..9566a95aeed9 100644
---- a/drivers/ufs/core/ufshcd-priv.h
-+++ b/drivers/ufs/core/ufshcd-priv.h
-@@ -84,7 +84,6 @@ int ufshcd_try_to_abort_task(struct ufs_hba *hba, int tag);
- void ufshcd_release_scsi_cmd(struct ufs_hba *hba,
- 			     struct ufshcd_lrb *lrbp);
- 
--#define UFSHCD_MCQ_IO_QUEUE_OFFSET	1
- #define SD_ASCII_STD true
- #define SD_RAW false
- int ufshcd_read_string_desc(struct ufs_hba *hba, u8 desc_index,
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index df8782981d8c..ad0ab668fecd 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -5504,7 +5504,7 @@ static int ufshcd_poll(struct Scsi_Host *shost, unsigned int queue_num)
- 	struct ufs_hw_queue *hwq;
- 
- 	if (is_mcq_enabled(hba)) {
--		hwq = &hba->uhq[queue_num + UFSHCD_MCQ_IO_QUEUE_OFFSET];
-+		hwq = &hba->uhq[queue_num];
- 
- 		return ufshcd_mcq_poll_cqe_lock(hba, hwq);
- 	}
-@@ -5558,7 +5558,7 @@ static void ufshcd_mcq_compl_pending_transfer(struct ufs_hba *hba,
- 
- 		utag = blk_mq_unique_tag(scsi_cmd_to_rq(cmd));
- 		hwq_num = blk_mq_unique_tag_to_hwq(utag);
--		hwq = &hba->uhq[hwq_num + UFSHCD_MCQ_IO_QUEUE_OFFSET];
-+		hwq = &hba->uhq[hwq_num];
- 
- 		if (force_compl) {
- 			ufshcd_mcq_compl_all_cqes_lock(hba, hwq);
--- 
-2.18.0
+> +	if ((IS_ENABLED(CONFIG_IA32_EMULATION) && ia32_disabled) ||
+> +	    !IS_ENABLED(CONFIG_IA32_EMULATION)) {
 
+I told you before that my brain based compiler complains about your
+patches not building with CONFIG_IA32_EMULATION=n. The above still fails
+to build.
+
+Aside of that this condition is convoluted and can be simplified to
+exactly a simple and understandable
+
+        if (foo)
+
+which is actually the obvious solution to make it compile in all
+configurations.
+
+It's not too much asked to flip the config switch which affects the code
+you are changing for a test.
+
+> @@ -226,6 +226,13 @@ void __init idt_setup_early_traps(void)
+>  void __init idt_setup_traps(void)
+>  {
+>  	idt_setup_from_table(idt_table, def_idts, ARRAY_SIZE(def_idts), true);
+> +
+> +	if (IS_ENABLED(CONFIG_IA32_EMULATION) && ia32_disabled) {
+
+Ditto.
+
+> +		gate_desc null_desc = {};
+
+Lacks a newline between declaration and code. It's documented to be
+required, no?
+
+> +		write_idt_entry(idt_table, IA32_SYSCALL_VECTOR, &null_desc);
+> +		clear_bit(IA32_SYSCALL_VECTOR, system_vectors);
+> +	}
+
+That aside, I asked you to split IA32_SYSCALL_VECTOR out of def_idts[]
+and handle it separately, no? If you disagree with me then reply to my
+review first instead of ignoring me silently.
+
+I don't care about you wasting your time, but I very much care about you
+wasting my time.
+
+Stop this right now before it becomes a habit.
+
+Thanks,
+
+        tglx
