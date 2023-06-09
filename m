@@ -2,146 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9706728FF9
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 08:31:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6E17728FFD
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 08:35:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238009AbjFIGbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 02:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46578 "EHLO
+        id S237663AbjFIGe4 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 9 Jun 2023 02:34:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbjFIGbn (ORCPT
+        with ESMTP id S230063AbjFIGey (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 02:31:43 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1BA9271D;
-        Thu,  8 Jun 2023 23:31:41 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 142875C0045;
-        Fri,  9 Jun 2023 02:31:41 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 09 Jun 2023 02:31:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1686292301; x=1686378701; bh=d2
-        x9IDXlPUYeZLqgaykZutUxT8s5eH1tQ1r8Y+8L+68=; b=S1IhnsGsOg4qXTaRCw
-        Ez9D7ShEyqZdz2NoMsIBloAFlPs4XPzcVsgvvMntgO7x7z/ipzlseiMPaWg0EXb3
-        P1q148lH/LMqXmtbCG7NN/f2+IVFX4QXGF33vGpL5GH4aY2cN46yeMHGeLPHZuLh
-        M5xdwSBJixJp0ciIYFMGSIka2O+en09ndebA0l/VE3R+yry/ibnonpaPOv3IIzoh
-        YympschJBbMtnh/9I1L/XCUrtF5L6BhkIdmoXvxL5O+LKkzy+fQMa+BXbiA11058
-        FUEqHM5wGrKvhicf5hwZCEc5Z777veTcz6QBhrbrXRRfZvvUaUc6X+CPYsdXksR6
-        jMHQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1686292301; x=1686378701; bh=d2x9IDXlPUYeZ
-        LqgaykZutUxT8s5eH1tQ1r8Y+8L+68=; b=CzexGceKdkTjt/E9FFoyUErukUTFg
-        d1eYVb+oFt06Lym/L6rOsMXMps+KOztRPWZvt1rGyxPzjqLe+XzX02ff8mYNmInC
-        1gnqgo8vOs3kHDG5d6CoXp3rc8IpNX1/DLJE3rRyBJfZteHk5JhvV9EGMyw/Hwgq
-        uyv6hKy8267g4jo85R9Ejx96epJe18q2xmwGarzNmLH4RpsW44j4HwxRhRE7wJsw
-        GbW5iX8dDPB5vuseqJ5cDRPR5D4teLyKDL608MsigBBwWrRFbqEs5WhwYTsQ/N7T
-        rcZITQ+JD6jkC7Sde/aJAMOBzz0PgiV7kJztD3Kt9DHOobds3LGAtR+MA==
-X-ME-Sender: <xms:TMeCZFsgGxRdZYIBtNZiEuG7X1EqZZ-jl-xMkAShzbUKdYLpcQE9VQ>
-    <xme:TMeCZOekePTuUpcwu9MrzX0CKoQEHVRxiZHjQ4ujA9TiKT-Mv8OLT0jVSyRy8k-2k
-    wEI3FoDskrrd76B9Q4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtjedguddtlecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:TMeCZIwY2slRXXTxQHr4Qk5M89tP05TFTN6VA8eGbtR6dDZwEtPsZw>
-    <xmx:TMeCZMOn3TGnwvRNFkPniN0JCK8LGWwHY3xDxKJj_J3J3MOj0IivmQ>
-    <xmx:TMeCZF9kIV695peYhJ1Bu_eVxkJ9pPeu7x3PmSs_XbbLoDE-D1HFIA>
-    <xmx:TceCZIn9-vehwY_yRzCpIyi511V_D7-13ibo9GBSdYzJvCSUngUBJg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 57799B60086; Fri,  9 Jun 2023 02:31:40 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
-Mime-Version: 1.0
-Message-Id: <7f77f31e-90ff-44ad-9646-9876f11eed13@app.fastmail.com>
-In-Reply-To: <20230609104037.56648990@canb.auug.org.au>
-References: <20230609104037.56648990@canb.auug.org.au>
-Date:   Fri, 09 Jun 2023 08:31:19 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Stephen Rothwell" <sfr@canb.auug.org.au>,
-        "David S . Miller" <davem@davemloft.net>
-Cc:     Netdev <netdev@vger.kernel.org>,
-        "David Howells" <dhowells@redhat.com>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>
-Subject: Re: linux-next: manual merge of the net-next tree with the asm-generic tree
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 9 Jun 2023 02:34:54 -0400
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F6E1BDF;
+        Thu,  8 Jun 2023 23:34:53 -0700 (PDT)
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-3f9b7345fb1so11342121cf.1;
+        Thu, 08 Jun 2023 23:34:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686292492; x=1688884492;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=757w/GYtIJVf5G6kf1fLOjt4zEb+gvb0ojwbx25/leo=;
+        b=d006ztU0hglG7pfECd2hAFCBq+OIN6ythZ/PJo0yErpl2PrTOFxvYv5PvNs8lrEDXN
+         p6ww89YjA9ATOpTMMqaqaOqhwPDSOWoBKxOulzOpjeWnqtT5BoVc7ZfURbVP5NEpsFpP
+         Qt3qGfR+AY4FApxdCwNxO9b+qsVEEa/cIUlcRx5lqOXRlOCv2pXTPOfnZmWsv0/floag
+         2nq+mHU8PIiEW1DJUBl89UsWHC2avIJMm2OY55WxnGWI0N6981S0S+OL7OARv7NZHUbx
+         AQsk0MJFb/THZFRdk0jLL5hWhAMfl0TM5UEx+hsncZAmtSZiiGMMCzUYsr9hM4DFM1lS
+         4fIA==
+X-Gm-Message-State: AC+VfDy4gWvVcplAtjgzkLEBBz53lu2Diws0DKZl7fZyZKHhjsoI86Os
+        JtpFxkBihiL5yCNg3NKkFpk3/CsO6KZZtmyX2WU=
+X-Google-Smtp-Source: ACHHUZ6pGhYq+nvvED5701ruXEf7KkgV0ZetViE2VkdBcVaZmnpIaMd5etFPL191/svPX4AFZPB/1htDKdd3nxfFRTg=
+X-Received: by 2002:ac8:5b96:0:b0:3f7:fe24:d8c1 with SMTP id
+ a22-20020ac85b96000000b003f7fe24d8c1mr820378qta.12.1686292492187; Thu, 08 Jun
+ 2023 23:34:52 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230609043240.43890-1-irogers@google.com>
+In-Reply-To: <20230609043240.43890-1-irogers@google.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Thu, 8 Jun 2023 23:34:41 -0700
+Message-ID: <CAM9d7ciyUQd4YBCxNsh_9CTCvNC5BQwezDcvrxM5M0fqS4+4MQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/4] Bring back vmlinux.h generation
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 9, 2023, at 02:40, Stephen Rothwell wrote:
-> Hi all,
->
-> Today's linux-next merge of the net-next tree got a conflict in:
->
->   fs/netfs/iterator.c
->
-> between commit:
->
->   ee5971613da3 ("netfs: Pass a pointer to virt_to_page()")
->
-> from the asm-generic tree and commit:
->
->   f5f82cd18732 ("Move netfs_extract_iter_to_sg() to lib/scatterlist.c")
->
-> from the net-next tree.
->
-> I fixed it up (I used the file from the former and applied the patch
-> below) and can carry the fix as necessary. This is now fixed as far as
-> linux-next is concerned, but any non trivial conflicts should be mentioned
-> to your upstream maintainer when your tree is submitted for merging.
-> You may also want to consider cooperating with the maintainer of the
-> conflicting tree to minimise any particularly complex conflicts.
->
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Fri, 9 Jun 2023 10:35:56 +1000
-> Subject: [PATCH] fix up for "Move netfs_extract_iter_to_sg() to 
-> lib/scatterlist.c"
->
-> interacting with "netfs: Pass a pointer to virt_to_page()"
->
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  lib/scatterlist.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/lib/scatterlist.c b/lib/scatterlist.c
-> index e97d7060329e..e86231a44c3d 100644
-> --- a/lib/scatterlist.c
-> +++ b/lib/scatterlist.c
-> @@ -1237,7 +1237,7 @@ static ssize_t extract_kvec_to_sg(struct iov_iter *iter,
->  			if (is_vmalloc_or_module_addr((void *)kaddr))
->  				page = vmalloc_to_page((void *)kaddr);
->  			else
-> -				page = virt_to_page(kaddr);
-> +				page = virt_to_page((void *)kaddr);
-> 
->  			sg_set_page(sg, page, len, off);
->  			sgtable->nents++;
+Hi Ian,
 
-The fix is correct, but I think this should just get applied
-in net-next directly, on top of the f5f82cd18732 commit, it
-will have no effect there but avoid the conflict.
+On Thu, Jun 8, 2023 at 9:32 PM Ian Rogers <irogers@google.com> wrote:
+>
+> Commit 760ebc45746b ("perf lock contention: Add empty 'struct rq' to
+> satisfy libbpf 'runqueue' type verification") inadvertently created a
+> declaration of 'struct rq' that conflicted with a generated
+> vmlinux.h's:
+>
+> ```
+> util/bpf_skel/lock_contention.bpf.c:419:8: error: redefinition of 'rq'
+> struct rq {};
+>        ^
+> /tmp/perf/util/bpf_skel/.tmp/../vmlinux.h:45630:8: note: previous definition is here
+> struct rq {
+>        ^
+> 1 error generated.
+> ```
+>
+> Fix the issue by moving the declaration to vmlinux.h. So this can't
+> happen again, bring back build support for generating vmlinux.h then
+> add build tests.
+>
+> v3. Address Namhyung's comments on filtering ELF files with readelf.
+> v2. Rebase on perf-tools-next. Add Andrii's acked-by. Add patch to
+>     filter out kernels that lack a .BTF section and cause the build to
+>     break.
+>
+> Ian Rogers (4):
+>   perf build: Add ability to build with a generated vmlinux.h
+>   perf bpf: Move the declaration of struct rq
+>   perf test: Add build tests for BUILD_BPF_SKEL
+>   perf build: Filter out BTF sources without a .BTF section
 
-    Arnd
+Acked-by: Namhyung Kim <namhyung@kernel.org>
+
+Thanks,
+Namhyung
+
+
+>
+>  tools/perf/Makefile.config                    |  4 ++
+>  tools/perf/Makefile.perf                      | 39 ++++++++++++++++++-
+>  tools/perf/tests/make                         |  4 ++
+>  tools/perf/util/bpf_skel/.gitignore           |  1 +
+>  .../perf/util/bpf_skel/lock_contention.bpf.c  |  2 -
+>  .../util/bpf_skel/{ => vmlinux}/vmlinux.h     | 10 +++++
+>  6 files changed, 57 insertions(+), 3 deletions(-)
+>  rename tools/perf/util/bpf_skel/{ => vmlinux}/vmlinux.h (90%)
+>
+> --
+> 2.41.0.162.gfafddb0af9-goog
+>
