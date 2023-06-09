@@ -2,31 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A12DD729D14
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:39:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8274A729D16
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:39:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241344AbjFIOjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 10:39:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57722 "EHLO
+        id S241542AbjFIOjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 10:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238011AbjFIOjS (ORCPT
+        with ESMTP id S231819AbjFIOjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 9 Jun 2023 10:39:18 -0400
 Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 686C5E43;
-        Fri,  9 Jun 2023 07:39:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EACA136;
+        Fri,  9 Jun 2023 07:39:17 -0700 (PDT)
 X-GND-Sasl: miquel.raynal@bootlin.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686321555;
+        t=1686321556;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=+5iuQIstEtDJEg7gekNXIRCPhM+FCXeq/OlIFGESoiE=;
-        b=LavNs/BZU4t+UhNZnxd3ATjI29/dD7MdKyM+g5RbvWPYNmm2j95f8OxqUuNHnzOXq6RJbr
-        nekM99xq2ecV7n5waBir65xEpQL5kqb6TkKl5WP23CsqKcrOGrOTKIejcwfXbprD2Mn6Jl
-        ScWPQbcLb6ICiz1s1nfFl28G2UUGse1Sbn0Y3M58qosRBjHE4Oe7nst+mUiUK5li6Va3NG
-        tcMFqZ930zb+5yp9f0VuQB/cq8KjRkDnV7H1spd1NtGk0hyZMrqudTxzYk7JJIzcXS4cmG
-        hv1Kf5r/sAey/sYLAn7zWY6LmrhCnse0VusJmDhXM9d0m98Njes/+vGVPKjJZg==
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EFPA+iF1oDnlDYWPONEIrlc2JlsGAiwXm8sKilpLnOk=;
+        b=pZ1jNqjSB01eYJK+iVJNl1WJucinc7z4V/+U4lwOOQ7cEr1056xU3pB8wk1R2R4FcYPGr9
+        baOzltFc4Al22YTf8cmCrOzjkCILsbE4hxLM3+bzv4qWznAs4sH8IzkKxFKjEwdJcmhUbt
+        TerWuex0XSyP+IP5PxjwAhK60e9FWkXz4WR8RiHQzCWnZ/GM/vhq1wtcHegOB5gB7IPa+8
+        ZDpanMlbzoe3U59GSJfCNxzi9+gcp3a4lljxbn1QwMUl4+kL3dzu0AfsOH95uSBl3jJYUY
+        HYl9d7+L5mvNd5vwhMe7N/9Dc9gcGpBANr9/9RfWu9bXOm5VhXtg+2P+rCaBYg==
 X-GND-Sasl: miquel.raynal@bootlin.com
 X-GND-Sasl: miquel.raynal@bootlin.com
 X-GND-Sasl: miquel.raynal@bootlin.com
@@ -34,8 +35,8 @@ X-GND-Sasl: miquel.raynal@bootlin.com
 X-GND-Sasl: miquel.raynal@bootlin.com
 X-GND-Sasl: miquel.raynal@bootlin.com
 X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5DE396000B;
-        Fri,  9 Jun 2023 14:39:13 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3D9B56000A;
+        Fri,  9 Jun 2023 14:39:15 +0000 (UTC)
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Nicolas Ferre <nicolas.ferre@microchip.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -44,12 +45,13 @@ Cc:     <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>, linux-pm@vger.kernel.org,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 0/2] Expose reset reason through sysfs
-Date:   Fri,  9 Jun 2023 16:39:10 +0200
-Message-Id: <20230609143912.849995-1-miquel.raynal@bootlin.com>
+Subject: [PATCH 1/2] power: reset: at91-reset: use driver structure as status parameter
+Date:   Fri,  9 Jun 2023 16:39:11 +0200
+Message-Id: <20230609143912.849995-2-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230609143912.849995-1-miquel.raynal@bootlin.com>
+References: <20230609143912.849995-1-miquel.raynal@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
@@ -62,33 +64,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+It is quite uncommon to use a driver helper with parameters like *pdev
+and __iomem *base. It is much cleaner and close to today's standards to
+provide the per-device driver structure and then access its
+internals. Let's do this with at91_resete_status() before making more
+modifications to this helper.
 
-Back in 2019, my colleague Kamel did try to upstream a small change in the at91 reset driver, in order to expose the reset reason through sysfs instead of expecting userland to grep through dmesg to get it. There was basically no strong reason opposed to it, besides minor changes which needed fixing. 4 years ago I am seeing again the need for such exposure, so here is Kamel's patch with the minor comments addressed, as well as a small cleanup just before.
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+---
+ drivers/power/reset/at91-reset.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Link: https://lore.kernel.org/lkml/00f4e9a2-f6bd-9242-cafd-9c0c4f4dc619@microchip.com/T/
-
-Cheers,
-Miquèl
-
-Changes in v2:
-* Collected Nicolas' Acked-by
-* Dropped the Xtal frequency information (as this may change between
-  platforms of course).
-
-Kamel Bouhara (1):
-  power: reset: at91-reset: add sysfs interface to the power on reason
-
-Miquel Raynal (1):
-  power: reset: at91-reset: use driver structure as status parameter
-
- .../testing/sysfs-platform-power-on-reason    | 10 +++++
- drivers/power/reset/at91-reset.c              | 45 +++++++++++++------
- include/linux/power/power_on_reason.h         | 19 ++++++++
- 3 files changed, 60 insertions(+), 14 deletions(-)
- create mode 100644 Documentation/ABI/testing/sysfs-platform-power-on-reason
- create mode 100644 include/linux/power/power_on_reason.h
-
+diff --git a/drivers/power/reset/at91-reset.c b/drivers/power/reset/at91-reset.c
+index 741e44a017c3..a8a6f3997768 100644
+--- a/drivers/power/reset/at91-reset.c
++++ b/drivers/power/reset/at91-reset.c
+@@ -149,11 +149,10 @@ static int at91_reset(struct notifier_block *this, unsigned long mode,
+ 	return NOTIFY_DONE;
+ }
+ 
+-static void __init at91_reset_status(struct platform_device *pdev,
+-				     void __iomem *base)
++static void __init at91_reset_status(struct at91_reset *reset)
+ {
++	u32 reg = readl(reset->rstc_base + AT91_RSTC_SR);
+ 	const char *reason;
+-	u32 reg = readl(base + AT91_RSTC_SR);
+ 
+ 	switch ((reg & AT91_RSTC_RSTTYP) >> 8) {
+ 	case RESET_TYPE_GENERAL:
 -- 
 2.34.1
 
