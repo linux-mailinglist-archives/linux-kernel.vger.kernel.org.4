@@ -2,115 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 140BF729A0A
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 14:31:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC4A2729A0E
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 14:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239852AbjFIMbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 08:31:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41040 "EHLO
+        id S240557AbjFIMb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 08:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230423AbjFIMbD (ORCPT
+        with ESMTP id S239186AbjFIMb0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 08:31:03 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D260F3AA1
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 05:30:25 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-19f31d6b661so663471fac.0
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 05:30:25 -0700 (PDT)
+        Fri, 9 Jun 2023 08:31:26 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226D430FD
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 05:30:49 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f63ab1ac4aso2115227e87.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 05:30:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20221208.gappssmtp.com; s=20221208; t=1686313816; x=1688905816;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OhY9F426/XZBDfWDG79w1KFjKHgE+TlbQzvvhGcm+pE=;
-        b=26w7TL8p4QsaCxqNELPKZl0nf/3DIA4tnu5Z8yBaaMHQs6nJdtoL1/IJwGh8Xnqrul
-         ceyIop0m88PtIMieJZNuYYbD/f2aPr+QAgKlDI4QCHaqKwiuAJdXHnqdd/Y4WTeV0kFF
-         +cy/Kl06Bx5/Zyi6ieZfFwUmWxzKs65SzA7ozL6+ye7vj6isA71BUY2ZZFcRKUgRZodv
-         RI2o0K3tz9AhHI4WOGQfYmNOTK61fDf27e3WzQtyXXB2KJrclrxX2QPz5GKoP1ag2Isg
-         Tu+rwCSeuKR7iKJdPxkioShwiSXaONWzCieOz4ysJSPBOlZBj3CblganCvCX44cWRMdj
-         aV/g==
+        d=ventanamicro.com; s=google; t=1686313843; x=1688905843;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8h26DQt30aCyEhPT/ooAbXH6FQid93QFBSmTC7V6R+4=;
+        b=A1lJFrFXashPyOVE6TwjfXwLaFl61XNjBlCsCbs7HxXdXlscKu2aQeb9jnMUEWsnFP
+         Gqa4zxdJoUevS4rlfUKzeXGooNKBl4E8McMllHfEube1l2jxq71XlpYKaEuc/AZTzZGU
+         FsJEx0y3rWxOwbP1p8DZ4JU1y29iK9r7H2K4jK3YiLEIbADb92nGDzMy8FKbGTP1EjBu
+         3917iiGGQ3TOwK7VW37L0tpiNLdcO/xRJYaSVn899cvVXqbC0NpJnY27H3fNnzr7Hp3R
+         YkdzhR8Zn3sKS5jyM7PVZnwGzGYfrvHrwJrvRUDWtwkbk8efwrHQ7bTVrSq6sPp2DS0N
+         OEaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686313816; x=1688905816;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OhY9F426/XZBDfWDG79w1KFjKHgE+TlbQzvvhGcm+pE=;
-        b=Ko7D7bZv5nedGiv32JWHjuv+a1/MOV4Ru/hMrrdSUhtU0aTRYm/e0oFNNW/gHXQIed
-         sOPrkNrYxiXGLspjSjW9QCZzHqc7ZkcJphHXoqkLAuf+i3KtGqD0WGheBpPTDtUl8BW8
-         tPpHKtGazBOduHOrojGsWBZA8RXQlRi9ZAayp0QAF3ce3THQhI4SyfEs1hqAb33ocARv
-         RH3N2JxElY4wnlBYvNKgolVx2kJ0kjWe3Sg/gvEQBV45I1gnm+5xUbVWMy54GVCcdseQ
-         sQW3g3EvxAYEtxggYQwoWuUbuPXCFkXt5CqtiGeWhKqlbgLOCzW0aZZGww/1U+5nGkBT
-         VHLA==
-X-Gm-Message-State: AC+VfDzyCl2uaswoVxDqhGGXWdmdaXkBdgeaEzUWI4gC+pGoR3W0meDm
-        aqeIHn3LgBkW2dxmGkim1d2yyA==
-X-Google-Smtp-Source: ACHHUZ5kvGC2hn93mlIb6ZW+E9FVsA6MSceqqKR66gjoxU7/dFds2zwbY1SlKYDD2PJoR8QyPj03Ww==
-X-Received: by 2002:a05:6870:e282:b0:19f:5c37:ab9d with SMTP id v2-20020a056870e28200b0019f5c37ab9dmr1164399oad.43.1686313816386;
-        Fri, 09 Jun 2023 05:30:16 -0700 (PDT)
-Received: from ?IPV6:2804:14d:5c5e:44fb:643a:b27d:4a69:3b94? ([2804:14d:5c5e:44fb:643a:b27d:4a69:3b94])
-        by smtp.gmail.com with ESMTPSA id p14-20020a056870a54e00b0017b21991355sm2052528oal.20.2023.06.09.05.30.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Jun 2023 05:30:16 -0700 (PDT)
-Message-ID: <ce770d0f-20b4-8040-8625-365758351998@mojatatu.com>
-Date:   Fri, 9 Jun 2023 09:30:11 -0300
+        d=1e100.net; s=20221208; t=1686313843; x=1688905843;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8h26DQt30aCyEhPT/ooAbXH6FQid93QFBSmTC7V6R+4=;
+        b=k1c4I2d88xz8Qldr0AzkoijIYI8ev3BTCT6IbZigJnbgDSVBaJPuGdjIEY4ObGfXnM
+         SHNb21bFi3vzgH2JBXUo6NEhCt4MrJV6ZDaZzJXKz4ebaLN9DFo6Wtu6l920P19hPV6k
+         RENOF5fty08bfN6E5pQhXTnaSSwFMzI2PNr6qN6pqnYhIionSwluA/h6/OdIrq8TiEHR
+         kaJmZIpIwRIa00yjVxCsLV/HJDgTRC5rcsQBbT5/FdkWY5ju/MRwb7UM25OV6HyiBWr9
+         HHse3LoZVDg9teLSh6ilO9KK7hfbAqKfzYajb8zVGQNUXn+YIVFqnwSvhRmqW3oqwZMu
+         QumQ==
+X-Gm-Message-State: AC+VfDw7fTdnp7Ts7foOLnVvs2IbQBOkbXYo2yFqdbuAeax5RRdk0/wq
+        RY+nOgq8luum2fx9Sj77sreQUA==
+X-Google-Smtp-Source: ACHHUZ7LLidgDgGdihFdLBcYHtdurgJJ/J4UsIY+yeDDqqFfP2vMmCiYedKW6YkV6nfEzVsYqhM/Ow==
+X-Received: by 2002:ac2:5bd0:0:b0:4f2:40dd:e2cf with SMTP id u16-20020ac25bd0000000b004f240dde2cfmr773184lfn.55.1686313843048;
+        Fri, 09 Jun 2023 05:30:43 -0700 (PDT)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id v26-20020aa7dbda000000b0050cc4461fc5sm1703120edt.92.2023.06.09.05.30.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 05:30:42 -0700 (PDT)
+Date:   Fri, 9 Jun 2023 14:30:41 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Haibo Xu <haibo1.xu@intel.com>
+Cc:     xiaobo55x@gmail.com, maz@kernel.org, oliver.upton@linux.dev,
+        seanjc@google.com, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Shuah Khan <shuah@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+Subject: Re: [PATCH v3 07/10] KVM: arm64: selftests: Finish generalizing
+ get-reg-list
+Message-ID: <20230609-b900162a66c26a004b751b1f@orel>
+References: <cover.1686275310.git.haibo1.xu@intel.com>
+ <450cb59db52ebeaa68f3d77f1bd995618f3612b8.1686275310.git.haibo1.xu@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] net/sched: act_pedit: Use kmemdup() to replace kmalloc +
- memcpy
-Content-Language: en-US
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, jhs@mojatatu.com
-Cc:     xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-References: <20230609070117.100507-1-jiapeng.chong@linux.alibaba.com>
-From:   Pedro Tammela <pctammela@mojatatu.com>
-In-Reply-To: <20230609070117.100507-1-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <450cb59db52ebeaa68f3d77f1bd995618f3612b8.1686275310.git.haibo1.xu@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/06/2023 04:01, Jiapeng Chong wrote:
-> ./net/sched/act_pedit.c:245:21-28: WARNING opportunity for kmemdup.
+On Fri, Jun 09, 2023 at 10:12:15AM +0800, Haibo Xu wrote:
+> From: Andrew Jones <ajones@ventanamicro.com>
 > 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=5478
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-
-LGTM,
-
-Reviewed-by: Pedro Tammela <pctammela@mojatatu.com>
-
+> Add some unfortunate #ifdeffery to ensure the common get-reg-list.c
+> can be compiled and run with other architectures. The next
+> architecture to support get-reg-list should now only need to provide
+> $(ARCH_DIR)/get-reg-list.c where arch-specific print_reg() and
+> vcpu_configs[] get defined.
+> 
+> Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
+> Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
 > ---
->   net/sched/act_pedit.c | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
+>  tools/testing/selftests/kvm/get-reg-list.c | 24 ++++++++++++++++++----
+>  1 file changed, 20 insertions(+), 4 deletions(-)
 > 
-> diff --git a/net/sched/act_pedit.c b/net/sched/act_pedit.c
-> index fc945c7e4123..8c4e7fddddbf 100644
-> --- a/net/sched/act_pedit.c
-> +++ b/net/sched/act_pedit.c
-> @@ -242,14 +242,12 @@ static int tcf_pedit_init(struct net *net, struct nlattr *nla,
->   	nparms->tcfp_flags = parm->flags;
->   	nparms->tcfp_nkeys = parm->nkeys;
->   
-> -	nparms->tcfp_keys = kmalloc(ksize, GFP_KERNEL);
-> +	nparms->tcfp_keys = kmemdup(parm->keys, ksize, GFP_KERNEL);
->   	if (!nparms->tcfp_keys) {
->   		ret = -ENOMEM;
->   		goto put_chain;
->   	}
->   
-> -	memcpy(nparms->tcfp_keys, parm->keys, ksize);
-> -
->   	for (i = 0; i < nparms->tcfp_nkeys; ++i) {
->   		u32 offmask = nparms->tcfp_keys[i].offmask;
->   		u32 cur = nparms->tcfp_keys[i].off;
+> diff --git a/tools/testing/selftests/kvm/get-reg-list.c b/tools/testing/selftests/kvm/get-reg-list.c
+> index 69bb91087081..c4bd5a5259da 100644
+> --- a/tools/testing/selftests/kvm/get-reg-list.c
+> +++ b/tools/testing/selftests/kvm/get-reg-list.c
+> @@ -98,6 +98,7 @@ void __weak print_reg(const char *prefix, __u64 id)
+>  	printf("\t0x%llx,\n", id);
+>  }
+>  
+> +#ifdef __aarch64__
+>  static void prepare_vcpu_init(struct vcpu_reg_list *c, struct kvm_vcpu_init *init)
+>  {
+>  	struct vcpu_reg_sublist *s;
+> @@ -120,6 +121,24 @@ static void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_reg_list *c)
+>  	}
+>  }
+>  
+> +static struct kvm_vcpu *vcpu_config_get_vcpu(struct vcpu_reg_list *c, struct kvm_vm *vm)
+> +{
+> +	struct kvm_vcpu_init init = { .target = -1, };
+> +	struct kvm_vcpu *vcpu;
+> +
+> +	prepare_vcpu_init(c, &init);
+> +	vcpu = __vm_vcpu_add(vm, 0);
+> +	aarch64_vcpu_setup(vcpu, &init);
+> +
+> +	return vcpu;
+> +}
+> +#else
+> +static struct kvm_vcpu *vcpu_config_get_vcpu(struct vcpu_reg_list *c, struct kvm_vm *vm)
+> +{
+> +	return __vm_vcpu_add(vm, 0);
+> +}
+> +#endif
+> +
+>  static void check_supported(struct vcpu_reg_list *c)
+>  {
+>  	struct vcpu_reg_sublist *s;
+> @@ -139,7 +158,6 @@ static bool print_filtered;
+>  
+>  static void run_test(struct vcpu_reg_list *c)
+>  {
+> -	struct kvm_vcpu_init init = { .target = -1, };
+>  	int new_regs = 0, missing_regs = 0, i, n;
+>  	int failed_get = 0, failed_set = 0, failed_reject = 0;
+>  	struct kvm_vcpu *vcpu;
+> @@ -149,9 +167,7 @@ static void run_test(struct vcpu_reg_list *c)
+>  	check_supported(c);
+>  
+>  	vm = vm_create_barebones();
+> -	prepare_vcpu_init(c, &init);
+> -	vcpu = __vm_vcpu_add(vm, 0);
+> -	aarch64_vcpu_setup(vcpu, &init);
+> +	vcpu = vcpu_config_get_vcpu(c, vm);
+>  	finalize_vcpu(vcpu, c);
 
+I just noticed that this has been modified from what I posted to leave
+the finalize_vcpu() call here, despite it now being inside the #ifdef
+__aarch64__. That breaks the purpose of the patch. Please make sure this
+file compiles for other architectures without requiring additional
+patches, which would keep the commit message honest. You can either
+revert this to what I posted, and then readd the finalize_vcpu() call in
+another patch, or you can add a finalize_vcpu() stub to the #else part
+of the ifdef in this patch.
+
+Also please don't modify patches authored by others without calling out
+the modifications somewhere, either the commit message or under the ---
+of the patch or in the cover letter.
+
+Thanks,
+drew
