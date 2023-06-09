@@ -2,54 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92F987291BC
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:50:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF6C972923A
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239583AbjFIHtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 03:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54972 "EHLO
+        id S239716AbjFIHty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 03:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239115AbjFIHrq (ORCPT
+        with ESMTP id S239118AbjFIHrq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 9 Jun 2023 03:47:46 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8821FEC;
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A2C30C8;
         Fri,  9 Jun 2023 00:47:43 -0700 (PDT)
-Date:   Fri, 09 Jun 2023 07:47:38 -0000
+Date:   Fri, 09 Jun 2023 07:47:39 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686296859;
+        s=2020; t=1686296860;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=SQyAldtrmSj2NV7EKTjOZmLpODWIu6tI0pJDC0ncpEw=;
-        b=ZFHZiuTsNf9JnzIFfL6gUuBG0KTdk98iONBOYJ+1CDLNbVAFqPQWccwGcNy2Xeu8GVNQI6
-        9ag7OhrMmte2L9CrsN4o5Gwo2vvu98WF9tKbdOoPsY7j2PIJHTwV/c0Og7ZjjAj2a7NZxr
-        RMZS4l0s5ORxotF7B+Q/eEb42mtQpLmdiHJ6v+kNBlf02SMAwgiL61xrmxR6qYeQA+jzse
-        LTL+FZ1AIRm4rzHmIbKkWxxRMxewdQ1F5dqGgxAi+/RrK/HXi6f4yR4fhHcc+QGCgLZnbW
-        fw0Tvqb2ob19QJtiN/wnDz3eBU1IH0pogOXrAl3Znno+lc2qGwSgVaA43N5ArA==
+        bh=BVqi+HwSBu5+RBoe6c7hBNQEOzIi/+hzXFyc/TgfZsk=;
+        b=T0KqIHNI96iAZ7E5n0vBVOTmf7XC/G7Nr9FyKYnGXYKS5h2emWqnu+ekfMkHiDyZeScsQd
+        uoJW0Rj2zinpR4R+LKO3VxuCEKIOxgC6h5x8RbAQW85NAPrk53jGXJbZb05TjqdQm0hQJ4
+        mVtm/or9DZtUayqp4XsxzrOoI3pLGj8kSiEqg4cK5IYXIGTT3NCRTijkzN8VA40392grSP
+        JhxCVkdl3QvdAlllXb8YxgNzSuSM5qBR8yPLqUTsDhkgTm9TJxOhFPp3Kl6eS4nUe6lEGW
+        +4ahAIKjBMVHuchCoOY3KRjHGmJYw3qHh16YM56HAWf8vPqyhiqgY+154CbGRA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686296859;
+        s=2020e; t=1686296860;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=SQyAldtrmSj2NV7EKTjOZmLpODWIu6tI0pJDC0ncpEw=;
-        b=GZeNQKylPeJTyt+3sFE681xMtYi/uTcuFPekEzqNfgfTahx1fABaHSpX9mmX9y31tiOkSQ
-        zpXclkEPKgKbX/DA==
+        bh=BVqi+HwSBu5+RBoe6c7hBNQEOzIi/+hzXFyc/TgfZsk=;
+        b=TDssK2RHim3KS6VrACiWIfzr5P5MkOZmdPcJjc25UzDbzPoZmR1QlSacPto87J6Qy1kfl9
+        kp9Tzy1wF2JbR+DQ==
 From:   "tip-bot2 for Josh Poimboeuf" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: objtool/core] objtool: Remove flags argument from elf_create_section()
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org,
+Subject: [tip: objtool/core] drm/vmwgfx: Add unwind hints around RBP clobber
+Cc:     kernel test robot <lkp@intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <515235d9cf62637a14bee37bfa9169ef20065471.1685464332.git.jpoimboe@kernel.org>
-References: <515235d9cf62637a14bee37bfa9169ef20065471.1685464332.git.jpoimboe@kernel.org>
+In-Reply-To: <4c795f2d87bc0391cf6543bcb224fa540b55ce4b.1685981486.git.jpoimboe@kernel.org>
+References: <4c795f2d87bc0391cf6543bcb224fa540b55ce4b.1685981486.git.jpoimboe@kernel.org>
 MIME-Version: 1.0
-Message-ID: <168629685863.404.11673063766415934535.tip-bot2@tip-bot2>
+Message-ID: <168629685987.404.14910646503772478220.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,175 +67,105 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the objtool/core branch of tip:
 
-Commit-ID:     2707579dfa615a5dda4aabb92e433f03a87b5ec5
-Gitweb:        https://git.kernel.org/tip/2707579dfa615a5dda4aabb92e433f03a87b5ec5
+Commit-ID:     a9da8247627eefc73f909bf945031a5431a53993
+Gitweb:        https://git.kernel.org/tip/a9da8247627eefc73f909bf945031a5431a53993
 Author:        Josh Poimboeuf <jpoimboe@kernel.org>
-AuthorDate:    Tue, 30 May 2023 10:20:54 -07:00
+AuthorDate:    Mon, 05 Jun 2023 09:12:22 -07:00
 Committer:     Josh Poimboeuf <jpoimboe@kernel.org>
-CommitterDate: Wed, 07 Jun 2023 10:03:13 -07:00
+CommitterDate: Wed, 07 Jun 2023 10:03:12 -07:00
 
-objtool: Remove flags argument from elf_create_section()
+drm/vmwgfx: Add unwind hints around RBP clobber
 
-Simplify the elf_create_section() interface a bit by removing the flags
-argument.  Most callers don't care about changing the section header
-flags.  If needed, they can be modified afterwards, just like any other
-section header field.
+VMware high-bandwidth hypercalls take the RBP register as input.  This
+breaks basic frame pointer convention, as RBP should never be clobbered.
 
-Link: https://lore.kernel.org/r/515235d9cf62637a14bee37bfa9169ef20065471.1685464332.git.jpoimboe@kernel.org
+So frame pointer unwinding is broken for the instructions surrounding
+the hypercalls.  Fortunately this doesn't break live patching with
+CONFIG_FRAME_POINTER, as it only unwinds from blocking tasks, and stack
+traces from preempted tasks are already marked unreliable anyway.
+
+However, for live patching with ORC, this could actually be a
+theoretical problem if vmw_port_hb_{in,out}() were still compiled with a
+frame pointer due to having an aligned stack.  In practice that hasn't
+seemed to be an issue since the objtool warnings have only been seen
+with CONFIG_FRAME_POINTER.
+
+Add unwind hint annotations to tell the ORC unwinder to mark stack
+traces as unreliable.
+
+Fixes the following warnings:
+
+  vmlinux.o: warning: objtool: vmw_port_hb_in+0x1df: return with modified stack frame
+  vmlinux.o: warning: objtool: vmw_port_hb_out+0x1dd: return with modified stack frame
+
+Fixes: 89da76fde68d ("drm/vmwgfx: Add VMWare host messaging capability")
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202305160135.97q0Elax-lkp@intel.com/
+Link: https://lore.kernel.org/r/4c795f2d87bc0391cf6543bcb224fa540b55ce4b.1685981486.git.jpoimboe@kernel.org
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- tools/objtool/check.c               | 17 ++++++++++-------
- tools/objtool/elf.c                 | 10 +++++-----
- tools/objtool/include/objtool/elf.h |  2 +-
- tools/objtool/orc_gen.c             |  4 ++--
- 4 files changed, 18 insertions(+), 15 deletions(-)
+ arch/x86/include/asm/unwind_hints.h     |  9 +++++++++
+ drivers/gpu/drm/vmwgfx/vmwgfx_msg_x86.h | 16 ++++++++++++----
+ 2 files changed, 21 insertions(+), 4 deletions(-)
 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index b11c25a..eaf6815 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -677,11 +677,14 @@ static int create_static_call_sections(struct objtool_file *file)
- 	list_for_each_entry(insn, &file->static_call_list, call_node)
- 		idx++;
+diff --git a/arch/x86/include/asm/unwind_hints.h b/arch/x86/include/asm/unwind_hints.h
+index 01cb969..85cc57c 100644
+--- a/arch/x86/include/asm/unwind_hints.h
++++ b/arch/x86/include/asm/unwind_hints.h
+@@ -76,9 +76,18 @@
  
--	sec = elf_create_section(file->elf, ".static_call_sites", SHF_WRITE,
-+	sec = elf_create_section(file->elf, ".static_call_sites",
- 				 sizeof(struct static_call_site), idx);
- 	if (!sec)
- 		return -1;
+ #else
  
-+	/* Allow modules to set the low bits of static_call_site::key */
-+	sec->sh.sh_flags |= SHF_WRITE;
++#define UNWIND_HINT_UNDEFINED \
++	UNWIND_HINT(UNWIND_HINT_TYPE_UNDEFINED, 0, 0, 0)
 +
- 	idx = 0;
- 	list_for_each_entry(insn, &file->static_call_list, call_node) {
+ #define UNWIND_HINT_FUNC \
+ 	UNWIND_HINT(UNWIND_HINT_TYPE_FUNC, ORC_REG_SP, 8, 0)
  
-@@ -763,7 +766,7 @@ static int create_retpoline_sites_sections(struct objtool_file *file)
- 	if (!idx)
- 		return 0;
++#define UNWIND_HINT_SAVE \
++	UNWIND_HINT(UNWIND_HINT_TYPE_SAVE, 0, 0, 0)
++
++#define UNWIND_HINT_RESTORE \
++	UNWIND_HINT(UNWIND_HINT_TYPE_RESTORE, 0, 0, 0)
++
+ #endif /* __ASSEMBLY__ */
  
--	sec = elf_create_section(file->elf, ".retpoline_sites", 0,
-+	sec = elf_create_section(file->elf, ".retpoline_sites",
- 				 sizeof(int), idx);
- 	if (!sec) {
- 		WARN("elf_create_section: .retpoline_sites");
-@@ -809,7 +812,7 @@ static int create_return_sites_sections(struct objtool_file *file)
- 	if (!idx)
- 		return 0;
- 
--	sec = elf_create_section(file->elf, ".return_sites", 0,
-+	sec = elf_create_section(file->elf, ".return_sites",
- 				 sizeof(int), idx);
- 	if (!sec) {
- 		WARN("elf_create_section: .return_sites");
-@@ -861,7 +864,7 @@ static int create_ibt_endbr_seal_sections(struct objtool_file *file)
- 	if (!idx)
- 		return 0;
- 
--	sec = elf_create_section(file->elf, ".ibt_endbr_seal", 0,
-+	sec = elf_create_section(file->elf, ".ibt_endbr_seal",
- 				 sizeof(int), idx);
- 	if (!sec) {
- 		WARN("elf_create_section: .ibt_endbr_seal");
-@@ -920,7 +923,7 @@ static int create_cfi_sections(struct objtool_file *file)
- 		idx++;
- 	}
- 
--	sec = elf_create_section(file->elf, ".cfi_sites", 0, sizeof(unsigned int), idx);
-+	sec = elf_create_section(file->elf, ".cfi_sites", sizeof(unsigned int), idx);
- 	if (!sec)
- 		return -1;
- 
-@@ -968,7 +971,7 @@ static int create_mcount_loc_sections(struct objtool_file *file)
- 	list_for_each_entry(insn, &file->mcount_loc_list, call_node)
- 		idx++;
- 
--	sec = elf_create_section(file->elf, "__mcount_loc", 0, addrsize, idx);
-+	sec = elf_create_section(file->elf, "__mcount_loc", addrsize, idx);
- 	if (!sec)
- 		return -1;
- 
-@@ -1013,7 +1016,7 @@ static int create_direct_call_sections(struct objtool_file *file)
- 	list_for_each_entry(insn, &file->call_list, call_node)
- 		idx++;
- 
--	sec = elf_create_section(file->elf, ".call_sites", 0, sizeof(unsigned int), idx);
-+	sec = elf_create_section(file->elf, ".call_sites", sizeof(unsigned int), idx);
- 	if (!sec)
- 		return -1;
- 
-diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
-index 500e929..7598c0a 100644
---- a/tools/objtool/elf.c
-+++ b/tools/objtool/elf.c
-@@ -1059,7 +1059,7 @@ static int elf_add_string(struct elf *elf, struct section *strtab, char *str)
- }
- 
- struct section *elf_create_section(struct elf *elf, const char *name,
--				   unsigned int sh_flags, size_t entsize, int nr)
-+				   size_t entsize, int nr)
- {
- 	struct section *sec, *shstrtab;
- 	size_t size = entsize * nr;
-@@ -1117,7 +1117,7 @@ struct section *elf_create_section(struct elf *elf, const char *name,
- 	sec->sh.sh_entsize = entsize;
- 	sec->sh.sh_type = SHT_PROGBITS;
- 	sec->sh.sh_addralign = 1;
--	sec->sh.sh_flags = SHF_ALLOC | sh_flags;
-+	sec->sh.sh_flags = SHF_ALLOC;
- 
- 	/* Add section name to .shstrtab (or .strtab for Clang) */
- 	shstrtab = find_section_by_name(elf, ".shstrtab");
-@@ -1153,7 +1153,7 @@ static struct section *elf_create_rel_reloc_section(struct elf *elf, struct sect
- 	strcpy(relocname, ".rel");
- 	strcat(relocname, base->name);
- 
--	sec = elf_create_section(elf, relocname, 0, sizeof(GElf_Rel), 0);
-+	sec = elf_create_section(elf, relocname, sizeof(GElf_Rel), 0);
- 	free(relocname);
- 	if (!sec)
- 		return NULL;
-@@ -1185,9 +1185,9 @@ static struct section *elf_create_rela_reloc_section(struct elf *elf, struct sec
- 	strcat(relocname, base->name);
- 
- 	if (addrsize == sizeof(u32))
--		sec = elf_create_section(elf, relocname, 0, sizeof(Elf32_Rela), 0);
-+		sec = elf_create_section(elf, relocname, sizeof(Elf32_Rela), 0);
- 	else
--		sec = elf_create_section(elf, relocname, 0, sizeof(GElf_Rela), 0);
-+		sec = elf_create_section(elf, relocname, sizeof(GElf_Rela), 0);
- 	free(relocname);
- 	if (!sec)
- 		return NULL;
-diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
-index b24f83e..2c28aee 100644
---- a/tools/objtool/include/objtool/elf.h
-+++ b/tools/objtool/include/objtool/elf.h
-@@ -109,7 +109,7 @@ struct elf {
- };
- 
- struct elf *elf_open_read(const char *name, int flags);
--struct section *elf_create_section(struct elf *elf, const char *name, unsigned int sh_flags, size_t entsize, int nr);
-+struct section *elf_create_section(struct elf *elf, const char *name, size_t entsize, int nr);
- 
- struct symbol *elf_create_prefix_symbol(struct elf *elf, struct symbol *orig, long size);
- 
-diff --git a/tools/objtool/orc_gen.c b/tools/objtool/orc_gen.c
-index 48efd1e..d5f750b 100644
---- a/tools/objtool/orc_gen.c
-+++ b/tools/objtool/orc_gen.c
-@@ -237,12 +237,12 @@ int orc_create(struct objtool_file *file)
- 		WARN("file already has .orc_unwind section, skipping");
- 		return -1;
- 	}
--	orc_sec = elf_create_section(file->elf, ".orc_unwind", 0,
-+	orc_sec = elf_create_section(file->elf, ".orc_unwind",
- 				     sizeof(struct orc_entry), nr);
- 	if (!orc_sec)
- 		return -1;
- 
--	sec = elf_create_section(file->elf, ".orc_unwind_ip", 0, sizeof(int), nr);
-+	sec = elf_create_section(file->elf, ".orc_unwind_ip", sizeof(int), nr);
- 	if (!sec)
- 		return -1;
- 
+ #endif /* _ASM_X86_UNWIND_HINTS_H */
+diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_msg_x86.h b/drivers/gpu/drm/vmwgfx/vmwgfx_msg_x86.h
+index 0b74ca2..23899d7 100644
+--- a/drivers/gpu/drm/vmwgfx/vmwgfx_msg_x86.h
++++ b/drivers/gpu/drm/vmwgfx/vmwgfx_msg_x86.h
+@@ -105,10 +105,14 @@
+                         flags, magic, bp,		\
+                         eax, ebx, ecx, edx, si, di)	\
+ ({							\
+-        asm volatile ("push %%rbp;"			\
++        asm volatile (					\
++		UNWIND_HINT_SAVE			\
++		"push %%rbp;"				\
++		UNWIND_HINT_UNDEFINED			\
+                 "mov %12, %%rbp;"			\
+                 VMWARE_HYPERCALL_HB_OUT			\
+-                "pop %%rbp;" :				\
++                "pop %%rbp;"				\
++		UNWIND_HINT_RESTORE :			\
+                 "=a"(eax),				\
+                 "=b"(ebx),				\
+                 "=c"(ecx),				\
+@@ -130,10 +134,14 @@
+                        flags, magic, bp,		\
+                        eax, ebx, ecx, edx, si, di)	\
+ ({							\
+-        asm volatile ("push %%rbp;"			\
++        asm volatile (					\
++		UNWIND_HINT_SAVE			\
++		"push %%rbp;"				\
++		UNWIND_HINT_UNDEFINED			\
+                 "mov %12, %%rbp;"			\
+                 VMWARE_HYPERCALL_HB_IN			\
+-                "pop %%rbp" :				\
++                "pop %%rbp;"				\
++		UNWIND_HINT_RESTORE :			\
+                 "=a"(eax),				\
+                 "=b"(ebx),				\
+                 "=c"(ecx),				\
