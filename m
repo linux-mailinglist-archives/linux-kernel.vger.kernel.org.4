@@ -2,79 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 858A772A5AA
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 23:55:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D4B72A61C
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 00:03:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232658AbjFIVzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 17:55:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37714 "EHLO
+        id S232726AbjFIWDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 18:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232643AbjFIVzJ (ORCPT
+        with ESMTP id S232498AbjFIWDi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 17:55:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF283A95
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 14:55:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 238EB63ECC
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 21:55:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 188C0C433EF;
-        Fri,  9 Jun 2023 21:55:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1686347706;
-        bh=xBEn2YpovwsA2cUhcZdWW5mSGnDboc9RS0DFVKUKbVU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=MMTTUELearoUJM5wv5+0Q0Qm5p+/CBLDe3v23EY4ysUMMRcbUIGHctKQADm0Lecfj
-         G0QsIHWPfCT9dHhcSFQM2KFtBvp93bhNHNmdMjhpcqyoTfIeJrMQ+FXUTLaEys5BBx
-         8Kcqa59yhXVblMMPQmPPqDWWScTDeUcUPkkVFEBA=
-Date:   Fri, 9 Jun 2023 14:55:05 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Oscar Salvador <osalvador@suse.de>
-Cc:     Alexander Potapenko <glider@google.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Eric Dumazet <edumazet@google.com>,
-        Waiman Long <longman@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Marco Elver <elver@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>
-Subject: Re: [PATCH v4 0/3] page_owner: print stacks and their counter
-Message-Id: <20230609145505.dc30b7712779d990aba64372@linux-foundation.org>
-In-Reply-To: <7718244879ff2b696ea9cbb744cb3805@suse.de>
-References: <20230421101415.5734-1-osalvador@suse.de>
-        <CAG_fn=UzFaHrM2X0_X=9aRPe5Wcmzj_snAbY=GJCj8__h9PxCg@mail.gmail.com>
-        <7718244879ff2b696ea9cbb744cb3805@suse.de>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 9 Jun 2023 18:03:38 -0400
+Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232DB3A85;
+        Fri,  9 Jun 2023 15:03:37 -0700 (PDT)
+Received: by mail-il1-f181.google.com with SMTP id e9e14a558f8ab-33b00ce51caso9566775ab.2;
+        Fri, 09 Jun 2023 15:03:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686348216; x=1688940216;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lbWnd1453WWYSB5tZKL9wA4jRIrmIbrZJ2ihOV5eBj0=;
+        b=TBHh6znyAU/BT3zhMBrlohsoeyzuaClSrcP/AF6GXv9EAcBNW5EA7CyMvAmfMi9Vsu
+         zV1gJ1eCucA6gt43nYxhDbYgZIRzMvQXUashjVt7rK776lq5w59K4JUfJz+0J5G3+f5e
+         1xlyznfLszm0GKz3I6AEsjTtJW/eXRc5F9CXf/R64szlHVADbm4mrzP+0rxy4PLagSyK
+         I8BhiMBX38lL5eeqeMISF8Yq6XkeuZd05rSGJFK5HijqbMftgNKuDKMVdO3BGas/Xfeu
+         bAxU+PZLYd4jjEUAJF8l9yNUKoAuYLviVy4oDJVWzWAi9OE97qKlc+qKRYI3pK8qdSQD
+         jHiw==
+X-Gm-Message-State: AC+VfDw3jnL0BMFtXgj02zfIskupu63ZzJSDoSE1MDWN4LQvejJnyWRP
+        7HKEMXqzVZrOFQnWsvPsyw==
+X-Google-Smtp-Source: ACHHUZ5g/3hAO2umBs2VXYQ0I2em+F4t0rg+2lA6/YO5SiWMldXnF+mwfMfvbJytyDA5GLeINIOA/g==
+X-Received: by 2002:a92:dc08:0:b0:33d:1c2b:b558 with SMTP id t8-20020a92dc08000000b0033d1c2bb558mr2366041iln.22.1686348216369;
+        Fri, 09 Jun 2023 15:03:36 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id g9-20020a926b09000000b0033e4937640esm1310594ilc.80.2023.06.09.15.03.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 15:03:35 -0700 (PDT)
+Received: (nullmailer pid 2542654 invoked by uid 1000);
+        Fri, 09 Jun 2023 22:03:33 -0000
+Date:   Fri, 9 Jun 2023 16:03:33 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     cong yang <yangcong5@huaqin.corp-partner.google.com>
+Cc:     Conor Dooley <conor@kernel.org>, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, dmitry.torokhov@gmail.com, jikos@kernel.org,
+        benjamin.tissoires@redhat.com, dianders@chromium.org,
+        hsinyi@google.com, linux-input@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: input: touchscreen: Add ilitek 9882T
+ touchscreen chip
+Message-ID: <20230609220333.GA2535896-robh@kernel.org>
+References: <20230605060524.1178164-1-yangcong5@huaqin.corp-partner.google.com>
+ <20230605060524.1178164-2-yangcong5@huaqin.corp-partner.google.com>
+ <20230605-anyway-grab-f7a35aa199fb@spud>
+ <CAHwB_NK_j1SJ1BBkVqafFM_+fWSyvwjCpMmHQxjLjnz_KHR=KA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHwB_NK_j1SJ1BBkVqafFM_+fWSyvwjCpMmHQxjLjnz_KHR=KA@mail.gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Apr 2023 05:54:59 +0200 Oscar Salvador <osalvador@suse.de> wrote:
-
-> > Given that no other stackdepot user needs these counters, maybe it
-> > should be cleaner to store an opaque struct along with the stack,
-> > passing its size to stack_depot_save(), and letting users access it
-> > directly using the stackdepot handler.
-> > 
-> > I am also wondering if a separate hashtable mapping handlers to
-> > counters would solve the problem for you?
+On Tue, Jun 06, 2023 at 10:06:05AM +0800, cong yang wrote:
+> Hi,Conor,
 > 
-> Let us see first if with the changes from above the code gets to a more
-> generic and clean stage, if not we can explore further options.
+> On Mon, Jun 5, 2023 at 6:20 PM Conor Dooley <conor@kernel.org> wrote:
+> >
+> > Hey Cong Yang,
+> >
+> > On Mon, Jun 05, 2023 at 02:05:23PM +0800, Cong Yang wrote:
+> > > Add an ilitek touch screen chip ili9882t.
+> >
+> > Could you add a comment here mentioning the relationship between these
+> > chips?
+> 
+> Okay, I will add in V3 version.
+> 
+> > On Mon, Jun 05, 2023 at 02:05:23PM +0800, Cong Yang wrote:
+> >
+> > > Signed-off-by: Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+> > > ---
+> > >  .../bindings/input/elan,ekth6915.yaml         | 23 ++++++++++++++++---
+> > >  1 file changed, 20 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/input/elan,ekth6915.yaml b/Documentation/devicetree/bindings/input/elan,ekth6915.yaml
+> > > index 05e6f2df604c..f0e7ffdce605 100644
+> > > --- a/Documentation/devicetree/bindings/input/elan,ekth6915.yaml
+> > > +++ b/Documentation/devicetree/bindings/input/elan,ekth6915.yaml
+> > > @@ -15,11 +15,14 @@ description:
+> > >
+> > >  properties:
+> > >    compatible:
+> > > -    items:
+> > > -      - const: elan,ekth6915
+> > > +    enum:
+> > > +      - elan,ekth6915
+> > > +      - ilitek,ili9882t
+> > >
+> > >    reg:
+> > > -    const: 0x10
+> > > +    enum:
+> > > +      - 0x10
+> > > +      - 0x41
+> >
+> > Is 0x10 only valid for the elan,ekth6915 & 0x41 for the ilitek one?
+> > If so, please add some enforcement of the values based on the
+> > compatible.
+> 
+> I don't think 0x10 is the only address for ekth6915,(nor is 0x41 the
+> only address for ili9882t). It depends on the hardware design.
 
-Alexander, does this approach sound reasonable to you?
+I'd just drop the values as we don't typically enforce 'reg' values.
 
-The overall feature seems useful, although I'm not seeing any positive
-reviewer feedback.
+Rob
