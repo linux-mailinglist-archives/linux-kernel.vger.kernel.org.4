@@ -2,96 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC39D728CAA
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 02:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 555AD728CB0
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 02:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbjFIAyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 20:54:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53912 "EHLO
+        id S230144AbjFIA5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 20:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbjFIAyr (ORCPT
+        with ESMTP id S229817AbjFIA5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 20:54:47 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9B41FDF
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 17:54:46 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-565e8d575cbso11502417b3.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 17:54:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686272085; x=1688864085;
-        h=mime-version:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=AvnCOrwuaY2rmzNJkT8k0FR/HXMryivthKZ2+5Yd/oA=;
-        b=ehhMhbujReyzXprCwJGokxPELOOtWqHbLZy6jzANpwrTDi9u2WU8c8eT1ezl9ksmIy
-         FfqczreRsJfirhVnyj9XiviHqrZ/DnneNsKKnwHoxIdjlkxon5ucnm2trLEavavwmXBN
-         eLvrXpYLZ7BdI9gurHhGeBbqhBziZ4dBH8PyxePC+KgF1GIqa1xdhaIBfVfHRFhEMY6z
-         N/PuSDKPB2MzctPZ4CMe9pffGdCxBhoJLAfQhqk/NnVXfSy1IW+r5TGwbg/hNkd+oDwj
-         DxG1pNC+HTNeMUFHjIjQp9ZHvK6689a6SMM5TX14jtR+2GgPRQMBY5Q6s43wZ7UE30xl
-         dNBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686272085; x=1688864085;
-        h=mime-version:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AvnCOrwuaY2rmzNJkT8k0FR/HXMryivthKZ2+5Yd/oA=;
-        b=Kvqs+Na1MX1162rUIqv79No/S0Bag8NWPYCTOs5pv+/g5ts8InxFlBrV2ummLP5oEu
-         rbwXezI0gbFwZvBSUbO9jEgcXclSuEmkiLmlJ/p3Vdlogw6J3xTpUeHFBTo+Iw3LxuyR
-         7cRjUDp0bu4APAXNTL1bQ7uD45x0GcH/o38aoHnsGzYuyajYJuNg3ragJMrsS+iLr4ye
-         w865R5khhN1rY9/z2qTrQeLEmoyYG/dCBu1PZotShtB2jgmQTW0B+q/qmTzwht6QMCsW
-         QFYnJOR0OG17pQ65ATJtuMk+tqk1PwFn+HmlL/DE9ChE23NiQnrECMZDUXZ0wyttDOMN
-         Q/Nw==
-X-Gm-Message-State: AC+VfDz/Df0SmwWEvrpBOJeZ2MdLg12pKkAULsFjyc/ivdUOohM68r6o
-        r6vkkwqJW2wc010EJnATLaf40g==
-X-Google-Smtp-Source: ACHHUZ5MPJ5k4pHNxx8mhyLhl95Gkyg3v8w0SxrGvKoC1NK5X/Y4iC1FPMnyKBLJ8H3lRDppJkpN+A==
-X-Received: by 2002:a81:5441:0:b0:565:f045:18c4 with SMTP id i62-20020a815441000000b00565f04518c4mr1554222ywb.4.1686272085320;
-        Thu, 08 Jun 2023 17:54:45 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id d63-20020a816842000000b0055a7ff0a5cdsm280518ywc.27.2023.06.08.17.54.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 17:54:44 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 17:54:33 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 00/32] mm: allow pte_offset_map[_lock]() to fail
-Message-ID: <c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com>
+        Thu, 8 Jun 2023 20:57:21 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EECDB1FDF;
+        Thu,  8 Jun 2023 17:57:19 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3590t9Hc016372;
+        Fri, 9 Jun 2023 00:57:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=2fKYjIDFEeEZLcNjFbw+D0NMeTE+q9kGiCeEcA4lLtk=;
+ b=W5JmTs/usrvuFDCJ/boNJ1+bM/NUW/khjxwYQgf50obhv04//qZZlo3NmdEKA/9xpdUh
+ yRuUItgWPQHM3/L6yA52JFCI195RjSFQJCJyxh5pVEB3JQbfl79nHJVBWC8qnF09uMua
+ eh/anWpMsLwyITadXg4XYK8is6P5RwlHykFbQMjwqaDnRPHwYRpIwKYz1itifh2kOMlJ
+ 46mN+KQBPDUPngNrpeckXiFa9RHBYzLkXTbxDik1wZVHpxHgvMwZaLuBzbTEi0gVuyUQ
+ KYXbX9DKEwQ0SvPKTn5FenKXP7uFgCYGu9TWYwK8csm4AQBrQTt16IcFND9DClq8c8bH 0g== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r3ceahrc7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Jun 2023 00:57:10 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3590v90K018969
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 9 Jun 2023 00:57:09 GMT
+Received: from [10.71.110.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 8 Jun 2023
+ 17:57:09 -0700
+Message-ID: <f63435ca-933a-52be-d879-1d9cc9441107@quicinc.com>
+Date:   Thu, 8 Jun 2023 17:56:47 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [Freedreno] [PATCH v5 2/5] drm/msm/dsi: Adjust pclk rate for
+ compression
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+CC:     <freedreno@lists.freedesktop.org>, Sean Paul <sean@poorly.run>,
+        "Abhinav Kumar" <quic_abhinavk@quicinc.com>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Rob Clark" <robdclark@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        <linux-arm-msm@vger.kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        David Airlie <airlied@gmail.com>
+References: <20230405-add-dsc-support-v5-0-028c10850491@quicinc.com>
+ <20230405-add-dsc-support-v5-2-028c10850491@quicinc.com>
+ <js3mcglahq53mcyxa6deltjlu4xpc2pnafwz2rbk3dl4ovws2o@5xw2wzvfaj2v>
+Content-Language: en-US
+From:   Jessica Zhang <quic_jesszhan@quicinc.com>
+In-Reply-To: <js3mcglahq53mcyxa6deltjlu4xpc2pnafwz2rbk3dl4ovws2o@5xw2wzvfaj2v>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: dgpT9CpmNtolv6oCYWIg6GyWsAc3tpoH
+X-Proofpoint-GUID: dgpT9CpmNtolv6oCYWIg6GyWsAc3tpoH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-08_18,2023-06-08_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1011 suspectscore=0 phishscore=0 lowpriorityscore=0
+ mlxlogscore=999 malwarescore=0 adultscore=0 spamscore=0 impostorscore=0
+ mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306090006
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,171 +88,186 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Here is v2 series of patches to mm, based on v6.4-rc5: preparing for
-v2 effective changes to follow, probably next week (when I hope s390
-will be sorted), affecting pte_offset_map() and pte_offset_map_lock().
-There are very few differences from v1: noted patch by patch below.
 
-This follows on from the v2 "arch: allow pte_offset_map[_lock]() to fail"
-https://lore.kernel.org/linux-mm/a4963be9-7aa6-350-66d0-2ba843e1af44@google.com/
-series of 23 posted on 2023-06-08,
-replaces the v1 "mm: allow pte_offset_map[_lock]() to fail"
-https://lore.kernel.org/linux-mm/68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com/
-series of 31 posted on 2023-05-21,
-which was followed by the v1 "mm: free retracted page table by RCU"
-https://lore.kernel.org/linux-mm/35e983f5-7ed3-b310-d949-9ae8b130cdab@google.com/
-series of 12 posted on 2023-05-28.
 
-The first two series are "independent":
-neither depends for build or correctness on the other, but both series
-must in before the third series is added to make the effective changes
-(and it may be preferred to hold that one until the following release).
+On 6/8/2023 1:36 PM, Marijn Suijten wrote:
+> Same title suggestion as earlier: s/adjust/reduce
 
-What is it all about?  Some mmap_lock avoidance i.e. latency reduction.
-Initially just for the case of collapsing shmem or file pages to THPs;
-but likely to be relied upon later in other contexts e.g. freeing of
-empty page tables (but that's not work I'm doing).  mmap_write_lock
-avoidance when collapsing to anon THPs?  Perhaps, but again that's not
-work I've done: a quick attempt was not as easy as the shmem/file case.
+Hi Marijn,
 
-I would much prefer not to have to make these small but wide-ranging
-changes for such a niche case; but failed to find another way, and
-have heard that shmem MADV_COLLAPSE's usefulness is being limited by
-that mmap_write_lock it currently requires.
+Acked.
 
-These changes (though of course not these exact patches) have been in
-Google's data centre kernel for three years now: we do rely upon them.
+> 
+> On 2023-05-22 18:08:56, Jessica Zhang wrote:
+>> Adjust the pclk rate to divide hdisplay by the compression ratio when DSC
+>> is enabled.
+>>
+>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+>> ---
+>>   drivers/gpu/drm/msm/dsi/dsi_host.c | 21 ++++++++++++++++++---
+>>   1 file changed, 18 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+>> index a448931af804..88f370dd2ea1 100644
+>> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
+>> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+>> @@ -561,7 +561,18 @@ void dsi_link_clk_disable_v2(struct msm_dsi_host *msm_host)
+>>   	clk_disable_unprepare(msm_host->byte_clk);
+>>   }
+>>   
+>> -static unsigned long dsi_get_pclk_rate(const struct drm_display_mode *mode, bool is_bonded_dsi)
+>> +static unsigned long dsi_adjust_compressed_pclk(const struct drm_display_mode *mode,
+> 
+> Nit: adjust_pclk_for_compression
 
-What is this preparatory series about?
+Acked.
 
-The current mmap locking will not be enough to guard against that
-tricky transition between pmd entry pointing to page table, and empty
-pmd entry, and pmd entry pointing to huge page: pte_offset_map() will
-have to validate the pmd entry for itself, returning NULL if no page
-table is there.  What to do about that varies: sometimes nearby error
-handling indicates just to skip it; but in many cases an ACTION_AGAIN or
-"goto again" is appropriate (and if that risks an infinite loop, then
-there must have been an oops, or pfn 0 mistaken for page table, before).
+> 
+> As discussed before we realized that this change is more-or-less a hack,
+> since downstream calculates pclk quite differently - at least for
+> command-mode panels.  Do you still intend to land this patch this way,
+> or go the proper route by introducing the right math from the get-go?
+> Or is the math at least correct for video-mode panels?
 
-Given the likely extension to freeing empty page tables, I have not
-limited this set of changes to a THP config; and it has been easier,
-and sets a better example, if each site is given appropriate handling:
-even where deeper study might prove that failure could only happen if
-the pmd table were corrupted.
+Sorry but can you please clarify what exactly is incorrect or different 
+about this math when compared to downstream? And, if you think that this 
+math is incorrect, what exactly has to be changed to make it the "right 
+math"?
 
-Several of the patches are, or include, cleanup on the way; and by the
-end, pmd_trans_unstable() and suchlike are deleted: pte_offset_map() and
-pte_offset_map_lock() then handle those original races and more.  Most
-uses of pte_lockptr() are deprecated, with pte_offset_map_nolock()
-taking its place.
+We've already shown step-by-step [1] not only how the resulting pclk 
+from the downstream code matches out upstream calculations, but also how 
+the inclusion of porches in the upstream math would make up for the fact 
+that upstream has no concept of transfer time [2].
 
-This posting is based on v6.4-rc5, but good for any v6.4-rc; and good
-for current mm-everything and linux-next, except for one minor clash in
-mm/memory.c do_swap_page(), where Ryan Roberts and I fixed the same goto.
+If the lack of transfer time in the upstream math is the issue, I 
+believe that that's not within the scope of this series, as transfer 
+time is not something specific to DSC.
 
-01/32 mm: use pmdp_get_lockless() without surplus barrier()
-      v2: add acks from Yu Zhao and PeterX
-02/32 mm/migrate: remove cruft from migration_entry_wait()s
-      v2: add review from Alistair
-03/32 mm/pgtable: kmap_local_page() instead of kmap_atomic()
-      v2: same as v1
-04/32 mm/pgtable: allow pte_offset_map[_lock]() to fail
-      v2: same as v1
-05/32 mm/filemap: allow pte_offset_map_lock() to fail
-      v2: same as v1
-06/32 mm/page_vma_mapped: delete bogosity in page_vma_mapped_walk()
-      v2: same as v1
-07/32 mm/page_vma_mapped: reformat map_pte() with less indentation
-      v2: same as v1
-08/32 mm/page_vma_mapped: pte_offset_map_nolock() not pte_lockptr()
-      v2: same as v1
-09/32 mm/pagewalkers: ACTION_AGAIN if pte_offset_map_lock() fails
-      v2: add review from SeongJae for mm/damon part
-10/32 mm/pagewalk: walk_pte_range() allow for pte_offset_map()
-      v2: same as v1
-11/32 mm/vmwgfx: simplify pmd & pud mapping dirty helpers
-      v2: same as v1
-12/32 mm/vmalloc: vmalloc_to_page() use pte_offset_kernel()
-      v2: add review from Lorenzo
-13/32 mm/hmm: retry if pte_offset_map() fails
-      v2: add review from Alistair
-14/32 fs/userfaultfd: retry if pte_offset_map() fails
-      v2: add ack from PeterX
-15/32 mm/userfaultfd: allow pte_offset_map_lock() to fail
-      v2: use -EAGAIN instead of -EFAULT from PeterX
-16/32 mm/debug_vm_pgtable,page_table_check: warn pte map fails
-      v2: same as v1
-17/32 mm/various: give up if pte_offset_map[_lock]() fails
-      v2: removed mm/swap_state.c mod to a separate patch 31/32
-18/32 mm/mprotect: delete pmd_none_or_clear_bad_unless_transhuge()
-      v2: same as v1
-19/32 mm/mremap: retry if either pte_offset_map_*lock() fails
-      v2: same as v1
-20/32 mm/madvise: clean up pte_offset_map_lock() scans
-      v2: same as v1
-21/32 mm/madvise: clean up force_shm_swapin_readahead()
-      v2: same as v1
-22/32 mm/swapoff: allow pte_offset_map[_lock]() to fail
-      v2: same as v1
-23/32 mm/mglru: allow pte_offset_map_nolock() to fail
-      v2: add ack from Yu Zhao
-24/32 mm/migrate_device: allow pte_offset_map_lock() to fail
-      v2: add review from Alistair
-25/32 mm/gup: remove FOLL_SPLIT_PMD use of pmd_trans_unstable()
-      v2: add comment on -EBUSY from Yang Shi
-26/32 mm/huge_memory: split huge pmd under one pte_offset_map()
-      v2: add review from Yang Shi
-27/32 mm/khugepaged: allow pte_offset_map[_lock]() to fail
-      v2: add review from Yang Shi
-28/32 mm/memory: allow pte_offset_map[_lock]() to fail
-      v2: same as v1
-29/32 mm/memory: handle_pte_fault() use pte_offset_map_nolock()
-      v2: same as v1
-30/32 mm/pgtable: delete pmd_trans_unstable() and friends
-      v2: same as v1
-31/32 mm/swap: swap_vma_readahead() do the pte_offset_map()
-      v2: new patch replacing last part of v1 17/31
-32/32 perf/core: Allow pte_offset_map() to fail
-      v2: same as v1 31/31
+Moreover, as stated in an earlier revision [3], there is no way to 
+validate DSC over DSI for video mode. As far as I know, we do not have a 
+way to validate video mode datapath for DSI in general.
 
- Documentation/mm/split_page_table_lock.rst |  17 ++-
- fs/proc/task_mmu.c                         |  32 ++---
- fs/userfaultfd.c                           |  21 +--
- include/linux/migrate.h                    |   4 +-
- include/linux/mm.h                         |  27 ++--
- include/linux/pgtable.h                    | 142 +++---------------
- include/linux/swap.h                       |  19 ---
- include/linux/swapops.h                    |  17 +--
- kernel/events/core.c                       |   4 +
- mm/damon/vaddr.c                           |  12 +-
- mm/debug_vm_pgtable.c                      |   9 +-
- mm/filemap.c                               |  25 ++--
- mm/gup.c                                   |  34 ++---
- mm/hmm.c                                   |   4 +-
- mm/huge_memory.c                           |  33 +++--
- mm/khugepaged.c                            |  83 ++++++-----
- mm/ksm.c                                   |  10 +-
- mm/madvise.c                               | 146 ++++++++++---------
- mm/mapping_dirty_helpers.c                 |  34 ++---
- mm/memcontrol.c                            |   8 +-
- mm/memory-failure.c                        |   8 +-
- mm/memory.c                                | 224 +++++++++++++----------------
- mm/mempolicy.c                             |   7 +-
- mm/migrate.c                               |  40 +++---
- mm/migrate_device.c                        |  31 +---
- mm/mincore.c                               |   9 +-
- mm/mlock.c                                 |   4 +
- mm/mprotect.c                              |  79 +++-------
- mm/mremap.c                                |  28 ++--
- mm/page_table_check.c                      |   2 +
- mm/page_vma_mapped.c                       |  97 +++++++------
- mm/pagewalk.c                              |  33 +++--
- mm/pgtable-generic.c                       |  56 ++++++++
- mm/swap_state.c                            |  45 +++---
- mm/swapfile.c                              |  38 ++---
- mm/userfaultfd.c                           |   8 ++
- mm/vmalloc.c                               |   3 +-
- mm/vmscan.c                                |  16 +--
- 38 files changed, 662 insertions(+), 747 deletions(-)
+[1] https://gitlab.freedesktop.org/drm/msm/-/issues/24#note_1936144
+[2] https://gitlab.freedesktop.org/drm/msm/-/issues/24#note_1945792
+[3] 
+https://patchwork.freedesktop.org/patch/535117/?series=117219&rev=1#comment_970492
 
-Hugh
+> 
+> This function requires a documentation comment to explain that all.
+> 
+>> +		const struct drm_dsc_config *dsc)
+>> +{
+>> +	int new_hdisplay = DIV_ROUND_UP(mode->hdisplay * drm_dsc_get_bpp_int(dsc),
+> 
+> This sounds like a prime candidate for msm_dsc_get_bytes_per_line(), if
+> bits_per_component==8 is assumed.  In fact, it then becomes identical
+> to the following line in dsi_host.c which you added previously:
+> 
+> 	hdisplay = DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 3);
+> 
+> If not, what is the difference between these two calculations?  Maybe
+> they both need to be in a properly-named helper.
+
+While the math technically matches up (assuming, also, that 
+mode->hdisplay == slice_width * slice_count for all cases), there are 
+conceptual differences between the pclk and hdisplay calculations.
+
+Just to reiterate what was already said on IRC:
+
+In the pclk calculation, we're multiplying pclk by the compression ratio 
+(which would be target_bpp / src_bpp) -- please note that here, we 
+calculate src_bpp by doing bpc * 3.
+
+In the hdisplay calculation, we calculate the bytes per line and divide 
+by 3 (bytes) to account for the fact that we can only process 3 bytes 
+per pclk cycle.
+
+So while I understand why you would want to put this behind a shared 
+helper, I think abstracting the pclk and hdisplay math away would 
+obfuscate the conceptual difference between the 2 calculations.
+
+> 
+>> +			dsc->bits_per_component * 3);
+> 
+> As we established in the drm/msm issue [2] there is currently a
+> confusion whether this /3 (and the /3 in dsi_timing_setup) come from the
+> ratio between dsi_get_bpp() and dsc->bpp or something else.  Can you
+> clarify that with constants and comments?
+
+Sure, we are planning to add a patch to the end of this series 
+documenting the math.
+
+> 
+> [2]: https://gitlab.freedesktop.org/drm/msm/-/issues/24
+> 
+>> +
+>> +	return (new_hdisplay + (mode->htotal - mode->hdisplay))
+>> +			* mode->vtotal * drm_mode_vrefresh(mode);
+> 
+> As clarified in [1] I was not necessarily suggesting to move this math
+> to a separate helper, but to also use a few more properly-named
+> intermediate variables to not have multi-line math and self-documenting
+> code.  These lines could be split to be much more clear.
+
+Acked.
+
+> 
+> [1]: https://lore.kernel.org/linux-arm-msm/u4x2vldkzsokfcpbkz3dtwcllbdk4ljcz6kzuaxt5frx6g76o5@uku6abewvye7/
+> 
+>> +}
+>> +
+>> +static unsigned long dsi_get_pclk_rate(const struct drm_display_mode *mode,
+>> +		const struct drm_dsc_config *dsc, bool is_bonded_dsi)
+>>   {
+>>   	unsigned long pclk_rate;
+>>   
+>> @@ -576,6 +587,10 @@ static unsigned long dsi_get_pclk_rate(const struct drm_display_mode *mode, bool
+>>   	if (is_bonded_dsi)
+>>   		pclk_rate /= 2;
+>>   
+>> +	/* If DSC is enabled, divide hdisplay by compression ratio */
+>> +	if (dsc)
+>> +		pclk_rate = dsi_adjust_compressed_pclk(mode, dsc);
+> 
+> The confusion with this comment (and the reason the aforementioned
+> discussion [2] carried on so long) stems from the fact a division makes
+> sense for a bit/byte clock, but not for a pixel clock: we still intend
+> to send the same number of pixels, just spending less bytes on them.  So
+> as you clarify the /3 above, can you also clarify that here or drop this
+> comment completely when the function is correctly documented instead?
+
+Acked.
+
+Thanks,
+
+Jessica Zhang
+
+> 
+> - Marijn
+> 
+>> +
+>>   	return pclk_rate;
+>>   }
+>>   
+>> @@ -585,7 +600,7 @@ unsigned long dsi_byte_clk_get_rate(struct mipi_dsi_host *host, bool is_bonded_d
+>>   	struct msm_dsi_host *msm_host = to_msm_dsi_host(host);
+>>   	u8 lanes = msm_host->lanes;
+>>   	u32 bpp = dsi_get_bpp(msm_host->format);
+>> -	unsigned long pclk_rate = dsi_get_pclk_rate(mode, is_bonded_dsi);
+>> +	unsigned long pclk_rate = dsi_get_pclk_rate(mode, msm_host->dsc, is_bonded_dsi);
+>>   	unsigned long pclk_bpp;
+>>   
+>>   	if (lanes == 0) {
+>> @@ -604,7 +619,7 @@ unsigned long dsi_byte_clk_get_rate(struct mipi_dsi_host *host, bool is_bonded_d
+>>   
+>>   static void dsi_calc_pclk(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+>>   {
+>> -	msm_host->pixel_clk_rate = dsi_get_pclk_rate(msm_host->mode, is_bonded_dsi);
+>> +	msm_host->pixel_clk_rate = dsi_get_pclk_rate(msm_host->mode, msm_host->dsc, is_bonded_dsi);
+>>   	msm_host->byte_clk_rate = dsi_byte_clk_get_rate(&msm_host->base, is_bonded_dsi,
+>>   							msm_host->mode);
+>>   
+>>
+>> -- 
+>> 2.40.1
+>>
