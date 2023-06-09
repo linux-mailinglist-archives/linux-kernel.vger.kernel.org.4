@@ -2,207 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82B7F729DBF
+	by mail.lfdr.de (Postfix) with ESMTP id CE45B729DC0
 	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 17:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241711AbjFIPFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 11:05:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44862 "EHLO
+        id S241760AbjFIPFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 11:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241764AbjFIPEw (ORCPT
+        with ESMTP id S231344AbjFIPFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 11:04:52 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5061C35A7
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 08:04:26 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f7fc9014fdso14224185e9.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 08:04:26 -0700 (PDT)
+        Fri, 9 Jun 2023 11:05:02 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 113811FEB;
+        Fri,  9 Jun 2023 08:05:01 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-30e3caa6aa7so1920364f8f.1;
+        Fri, 09 Jun 2023 08:05:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686323065; x=1688915065;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2WGZ/ed2vrJ5KRXftei7L+b/a8JlbJSLWIRO6uJ+BPA=;
-        b=mgm79aK5ZEyzsjL4fshBGIDqime5sfPSyhoXjr89GPPJML5PZXLCSy2RCsJHtbQVoc
-         joZsRl99ZwtTpryeLpdTql1KIdb+cwSF7FLYE8E1ut+OeiHO0XFgsLoco3dSKa/guzRq
-         +wSB5yi8UNqipIlEeUxnBtX2vpoUqwzYukPP9U2CA/OJFz8PoJ83g6D6hAk48fdjjn7W
-         uPw8t8MMAsNb0OInvMc3lssBS93yN+0IwT06zsZALOCy3cbFC9l4zDMIQnKSb65UvTtN
-         wq1TCSzd09ftW4qrg7rGlqfc37FNB0gWeTIsCq3Oz+t1ke8Uat1SrJevfsMmUA1fnAPh
-         6NXA==
+        d=gmail.com; s=20221208; t=1686323099; x=1688915099;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fm1RzwDp533yvq8IXnJJlJWRXI4ay4ojZpMj1ZL4i0Q=;
+        b=YaxCfluHQ/VIRRtKjub/lFepPWEjg5aqVNg6fyE16/08p6eeh+nT1n03hXXs9WAuwI
+         ux9q49U+AYXpmuozmMm9FbXRxTwSOkpF24kMLw2TGYmXHUs9yFZcDWm6F1heZzIX8h94
+         b+xSZ70WhLs29/9XXDLvOqW7qDvY7PYHkDTzsGsfsPQfvc5DcjW/t0OR9hvzQseH5PeA
+         epg7o7Pl39QvPyGnbocxl1DcvJmywV+iuWlxYPFXnrH81CqoIEOUU6vPHcfo3vJPh2WD
+         V2qVtWogwLUWj+HrQ1kGuMpJdKzHP0dlEqk37SOhbKf+qxzoUKuBVd92RzP81hWVdz1/
+         NHFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686323065; x=1688915065;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2WGZ/ed2vrJ5KRXftei7L+b/a8JlbJSLWIRO6uJ+BPA=;
-        b=VhtlW++qeqNYrPSH8/NZD1v/bHVmQD1nMi6mvWpNadDQVedh6P6KzL1EXeG1zDhXbE
-         TzOWaSPR97Jnu8iuziVE1WJ8XH3XhWZy7+3IArjRByfyITGaXUFrEJKIkIobsclihDCx
-         UzXk5Dz+gEb7hrr15AQYLevS2mHQuw88Wnfo/46Xkw+sMKradaIYnYqY88m8ixx6DrQb
-         Yv12dN7zuPIQBWAZs5rh3ABeeISlRuTbBiXzFa7RDLPH2FcyoajXBG7JS8mFc9ueMbdi
-         fqPeWV0SBqqwf5n1K/b8aFPudCCT1GmsoqO+lTMQcVDYspm968ngFAY14D/uoesqurqZ
-         AzFQ==
-X-Gm-Message-State: AC+VfDyAfjFljzZQ9Ms5deMKRNSftc8dpCBfLQZE32Yd2rBYiK1x6Uf0
-        wChPrnIF2m9guB65DnYRxxb10U3A3MrUQSDIO+E=
-X-Google-Smtp-Source: ACHHUZ7eaW16qzdTf8udY5wHHza5lq/L2Y9Nr39LRq/YBL3Qd2LXZ9BnBUzkteeXGvdPFEbRzMo11A==
-X-Received: by 2002:a05:600c:2212:b0:3f4:23b9:eed2 with SMTP id z18-20020a05600c221200b003f423b9eed2mr1198999wml.38.1686323064766;
-        Fri, 09 Jun 2023 08:04:24 -0700 (PDT)
-Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id m14-20020a7bce0e000000b003f602e2b653sm2905098wmc.28.2023.06.09.08.04.22
+        d=1e100.net; s=20221208; t=1686323099; x=1688915099;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fm1RzwDp533yvq8IXnJJlJWRXI4ay4ojZpMj1ZL4i0Q=;
+        b=SQh2eEv9a4wZ5Jrxf/V3vYAoN2vEMrncRxK6cBCl0d2Xq5govSv6atCvVYJU7vdljI
+         aOidACpyk9GaKJu+9d4fPJR4JYo95+D8MKHLm5zxmV/hX2rKVJCtFI3f4cM6zRTt7y+g
+         j+jBdHwGQXOd1rC5s7hzylRcYFaeuYGz3f9mmD7vsW0pCRFhMlpcWQ4mrmPoZNQ1M1MJ
+         yvQeAoBc0j/wtRYju/yI+aukpclgTJh9ACPvctRmndlkhWbqGGvjEnVKZHpCTEh2j5Tw
+         vDpdzAmdW4g2K75xmQkZ68yGdndP+LsXGb5BnsbVreTDEu+KrYNWDvdmDqpCVjnoB4ct
+         hGIQ==
+X-Gm-Message-State: AC+VfDyYGesfwU+hbMPL00eT5pYxwc/hnK58nfaRlLAsbJvB1CnSUJBS
+        o4kCFOGLXZ+hnGmzXIy1+HKuxwnUQig=
+X-Google-Smtp-Source: ACHHUZ5fWVo/td8zldlBcdi1ZwlsUd8/y1QFt87zTALroZtEvJ7WQMrgyIAgwsueFn8d5x5vlnZ8WQ==
+X-Received: by 2002:a5d:525b:0:b0:30a:f3ca:17ad with SMTP id k27-20020a5d525b000000b0030af3ca17admr1247470wrc.66.1686323099134;
+        Fri, 09 Jun 2023 08:04:59 -0700 (PDT)
+Received: from suse.localnet (host-95-252-166-216.retail.telecomitalia.it. [95.252.166.216])
+        by smtp.gmail.com with ESMTPSA id b5-20020adff905000000b0030aedb8156esm4636359wrr.102.2023.06.09.08.04.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 08:04:23 -0700 (PDT)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     vkoul@kernel.org, broonie@kernel.org, tiwai@suse.com
-Cc:     corbet@lwn.net, alsa-devel@alsa-project.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_plai@quicinc.com, quic_mohs@quicinc.com,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH v2] ALSA: compress: allow setting codec params after next track
-Date:   Fri,  9 Jun 2023 16:04:16 +0100
-Message-Id: <20230609150416.24525-1-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.21.0
+        Fri, 09 Jun 2023 08:04:57 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Benjamin LaHaise <bcrl@kvack.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Matthew Wilcox <matthew.wilcox@oracle.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
+        linux-kernel@vger.kernel.org, Jeff Moyer <jmoyer@redhat.com>,
+        Kent Overstreet <kent.overstreet@linux.dev>
+Subject: Re: [PATCH v3] fs/aio: Replace kmap{,_atomic}() with kmap_local_page()
+Date:   Fri, 09 Jun 2023 17:04:56 +0200
+Message-ID: <23757331.ouqheUzb2q@suse>
+In-Reply-To: <20230119162055.20944-1-fmdefrancesco@gmail.com>
+References: <20230119162055.20944-1-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For gapless playback it is possible that each track can have different
-codec profile with same decoder, for example we have WMA album,
-we may have different tracks as WMA v9, WMA v10 and so on
+On gioved=C3=AC 19 gennaio 2023 17:20:55 CEST Fabio M. De Francesco wrote:
+> The use of kmap() and kmap_atomic() are being deprecated in favor of
+> kmap_local_page().
 
-Or if DSP's like QDSP have abililty to switch decoders on single stream
-for each track, then this call could be used to set new codec parameters.
+According to a suggestion by Matthew, I just sent another patch which stops=
+=20
+allocating aio rings from ZONE_HIGHMEM.[1]
 
-Existing code does not allow to change this profile while doing gapless
-playback.
+Therefore, please drop this patch.
 
-Reuse existing SNDRV_COMPRESS_SET_PARAMS to set this new track params along
-some additional checks to enforce proper state machine.
+Since the purpose of the new patch is entirely different from this, I chang=
+ed=20
+the subject and reset the version number to v1.
 
-With this new changes now the user can call SNDRV_COMPRESS_SET_PARAMS
-anytime after setting next track and additional check in write should
-also ensure that params are set before writing new data.
+Thanks,
 
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
-Changes since v1/RFC:
-	- removed introduction of new IOCTL, as suggested.
-	- update the state-machine doc.
+=46abio
 
- .../sound/designs/compress-offload.rst        | 52 +++++++++----------
- sound/core/compress_offload.c                 | 10 ++--
- 2 files changed, 33 insertions(+), 29 deletions(-)
+[1] https://lore.kernel.org/lkml/20230609145937.17610-1-fmdefrancesco@gmail=
+=2Ecom/
+=20
+> There are two main problems with kmap(): (1) It comes with an overhead as
+> the mapping space is restricted and protected by a global lock for
+> synchronization and (2) it also requires global TLB invalidation when the
+> kmap=E2=80=99s pool wraps and it might block when the mapping space is fu=
+lly
+> utilized until a slot becomes available.
+>=20
+> With kmap_local_page() the mappings are per thread, CPU local, can take
+> page faults, and can be called from any context (including interrupts).
+> It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+> the tasks can be preempted and, when they are scheduled to run again, the
+> kernel virtual addresses are restored and still valid.
+>=20
+> The use of kmap_local_page() in fs/aio.c is "safe" in the sense that the
+> code don't hands the returned kernel virtual addresses to other threads
+> and there are no nesting which should be handled with the stack based
+> (LIFO) mappings/un-mappings order. Furthermore, the code between the old
+> kmap_atomic()/kunmap_atomic() did not depend on disabling page-faults
+> and/or preemption, so that there is no need to call pagefault_disable()
+> and/or preempt_disable() before the mappings.
+>=20
+> Therefore, replace kmap() and kmap_atomic() with kmap_local_page() in
+> fs/aio.c.
+>=20
+> Tested with xfstests on a QEMU/KVM x86_32 VM, 6GB RAM, booting a kernel
+> with HIGHMEM64GB enabled.
+>=20
+> Cc: "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>
+> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+> Reviewed-by: Jeff Moyer <jmoyer@redhat.com>
+> Reviewed-by: Kent Overstreet <kent.overstreet@linux.dev>
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> ---
 
-diff --git a/Documentation/sound/designs/compress-offload.rst b/Documentation/sound/designs/compress-offload.rst
-index 935f325dbc77..205cadcabe70 100644
---- a/Documentation/sound/designs/compress-offload.rst
-+++ b/Documentation/sound/designs/compress-offload.rst
-@@ -256,32 +256,32 @@ Gapless Playback SM
- For Gapless, we move from running state to partial drain and back, along
- with setting of meta_data and signalling for next track ::
- 
--
--                                        +----------+
--                compr_drain_notify()    |          |
--              +------------------------>|  RUNNING |
--              |                         |          |
--              |                         +----------+
--              |                              |
--              |                              |
--              |                              | compr_next_track()
--              |                              |
--              |                              V
--              |                         +----------+
--              |                         |          |
--              |                         |NEXT_TRACK|
--              |                         |          |
--              |                         +----------+
--              |                              |
--              |                              |
--              |                              | compr_partial_drain()
--              |                              |
--              |                              V
--              |                         +----------+
--              |                         |          |
--              +------------------------ | PARTIAL_ |
--                                        |  DRAIN   |
--                                        +----------+
-+                            +----------+
-+     compr_drain_notify()   |          | compr_set_params() iff next-track set.
-+  +------------------------>|  RUNNING |----------------------+
-+  |                         |          |                      |
-+  |                         +----------+                      |
-+  |                              |                            |
-+  |                              |                            |
-+  |                              | compr_next_track()         |
-+  |                              |                            V
-+  |                              V                            |
-+  |                         +----------+                      |
-+  |                         |          |                      |
-+  |                         |NEXT_TRACK|                      |
-+  |                         |          |                      |
-+  |                         +----------+                      |
-+  |                              |                            |
-+  |                              +----------------------------+
-+  |                              |
-+  |                              | compr_partial_drain()
-+  |                              |
-+  |                              V
-+  |                         +----------+
-+  |                         |          |
-+  +------------------------ | PARTIAL_ |
-+                            |  DRAIN   |
-+                            +----------+
- 
- Not supported
- =============
-diff --git a/sound/core/compress_offload.c b/sound/core/compress_offload.c
-index 243acad89fd3..fe67228e74b3 100644
---- a/sound/core/compress_offload.c
-+++ b/sound/core/compress_offload.c
-@@ -294,6 +294,9 @@ static ssize_t snd_compr_write(struct file *f, const char __user *buf,
- 	case SNDRV_PCM_STATE_SETUP:
- 	case SNDRV_PCM_STATE_PREPARED:
- 	case SNDRV_PCM_STATE_RUNNING:
-+		/* Make sure next track params are set before writing new data */
-+		if (stream->next_track)
-+			return -EPERM;
- 		break;
- 	default:
- 		mutex_unlock(&stream->device->lock);
-@@ -589,7 +592,8 @@ snd_compr_set_params(struct snd_compr_stream *stream, unsigned long arg)
- 	struct snd_compr_params *params;
- 	int retval;
- 
--	if (stream->runtime->state == SNDRV_PCM_STATE_OPEN) {
-+	if (stream->runtime->state == SNDRV_PCM_STATE_OPEN ||
-+	    (stream->runtime->state == SNDRV_PCM_STATE_RUNNING && stream->next_track)) {
- 		/*
- 		 * we should allow parameter change only when stream has been
- 		 * opened not in other cases
-@@ -615,7 +619,8 @@ snd_compr_set_params(struct snd_compr_stream *stream, unsigned long arg)
- 		stream->metadata_set = false;
- 		stream->next_track = false;
- 
--		stream->runtime->state = SNDRV_PCM_STATE_SETUP;
-+		if (stream->runtime->state == SNDRV_PCM_STATE_OPEN)
-+			stream->runtime->state = SNDRV_PCM_STATE_SETUP;
- 	} else {
- 		return -EPERM;
- 	}
-@@ -956,7 +961,6 @@ static int snd_compr_partial_drain(struct snd_compr_stream *stream)
- 		return retval;
- 	}
- 
--	stream->next_track = false;
- 	return snd_compress_wait_for_drain(stream);
- }
- 
--- 
-2.21.0
+
 
