@@ -2,120 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 282A8729822
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 13:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E77F2729827
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 13:26:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239612AbjFILZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 07:25:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34472 "EHLO
+        id S231245AbjFIL0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 07:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239415AbjFILZL (ORCPT
+        with ESMTP id S229462AbjFIL0J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 07:25:11 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F1130D8
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 04:24:44 -0700 (PDT)
-Received: from dggpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QczBb4gwjz18LrL;
-        Fri,  9 Jun 2023 19:19:51 +0800 (CST)
-Received: from [10.174.179.5] (10.174.179.5) by dggpemm500002.china.huawei.com
- (7.185.36.229) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 9 Jun
- 2023 19:24:41 +0800
-From:   Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Subject: [Question] report a race condition between CPU hotplug state machine
- and hrtimer 'sched_cfs_period_timer' for cfs bandwidth throttling
-To:     Thomas Gleixner <tglx@linutronix.de>, <vschneid@redhat.com>,
-        Phil Auld <pauld@redhat.com>, <vdonnefort@google.com>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        <wangxiongfeng2@huawei.com>, Wei Li <liwei391@huawei.com>,
-        "liaoyu (E)" <liaoyu15@huawei.com>, <zhangqiao22@huawei.com>
-Message-ID: <8e785777-03aa-99e1-d20e-e956f5685be6@huawei.com>
-Date:   Fri, 9 Jun 2023 19:24:40 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Fri, 9 Jun 2023 07:26:09 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533302D70
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 04:26:07 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-565e8d575cbso15641177b3.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 04:26:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686309966; x=1688901966;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QZXll2p6QZbov35TIhSw5cTUwAtSmPgNFTPxS/Tfy1g=;
+        b=ZOFLugWS4WDEBvyJpIL8RKZRU4WTqyWZWVLi6Bwhzw8GBxURqbAlQNTX8gzjUAT0ox
+         /dpd8SFYA5MdsTdNZUapdAB3KHBNoQ56Xl8wqUKHmpl6iXBeAfCAiZq0JxT00xMTO0PY
+         1l+28K3MSohUoWRpYTgQl/twHlyr7nrnlworbd98eniKBIQk1dinDmNuOhtLg9HOjq6m
+         rPUbP3OUFOZ6YCx4mXbBDtziSXWQ5I2+mWePD4+9ZmWWVOdlJKSIadDeFHapK7J3huKv
+         Hp2sUeRGvewP6S6KI74QGXjHtV6nL3V5MMxAbxPMFuZVip8zxsqFzklG4kkQDFKrD6fb
+         Jg2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686309966; x=1688901966;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QZXll2p6QZbov35TIhSw5cTUwAtSmPgNFTPxS/Tfy1g=;
+        b=TzWGTtR+FNKQ3HKZ+tA6p6+6zu6i4JhIHuQA+ddjYQlWXb++88tWupVjrIWhpsEt75
+         qGIaYVPKUTzHfdWZOHbLtq/Rmx4L1fOhpmxAAK5K1N3wwOyR24iEDTg6CTJW5hRckmW/
+         B9ziLz+OO2HLro+t0kDE+oQe8Xlucqr4uW8hrH+6zJ4r56Yo4a8eqyX/yYxhR+EGZ/cw
+         KqJOO/3p/eFXQPq/xph2XWNxETV7NfXkbwEp6sOWm8nhxIVJY6eB4UWIH4O2kiYfews8
+         ZFh/PKf9AYGC2fqwSNC9VnAHp3iRufJB3Wy43k5Yuvj10jLOeNXslylgqaVB78qzosyV
+         bG3Q==
+X-Gm-Message-State: AC+VfDxddUJmgkoYWnHjIIx917OIpRe7ju0zVWCRfdhWakFxakg20V2K
+        Gcynym567a79yU/dFC1sW4o9xPkmxiPgU4J7TMv2ug==
+X-Google-Smtp-Source: ACHHUZ7bp1ysdJMaMEi+eLtrGGAq1r8TEKctNxRIp5F2IxkCdI5JO2+zvf2/RVEDGhXRTX2bB0WMRC3r66YKEJzuyl8=
+X-Received: by 2002:a81:52d7:0:b0:561:f6eb:d18a with SMTP id
+ g206-20020a8152d7000000b00561f6ebd18amr1049606ywb.13.1686309966417; Fri, 09
+ Jun 2023 04:26:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.5]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500002.china.huawei.com (7.185.36.229)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230609101355.5220-1-wenbin.mei@mediatek.com> <20230609101355.5220-2-wenbin.mei@mediatek.com>
+In-Reply-To: <20230609101355.5220-2-wenbin.mei@mediatek.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 9 Jun 2023 13:25:30 +0200
+Message-ID: <CAPDyKFrdLdQakpcMAp8ehZZu27xdPQL_cb12tOkjN0-vPT0F-A@mail.gmail.com>
+Subject: Re: [PATCH v6 1/1] mmc: mtk-sd: reduce CIT for better performance
+To:     Wenbin Mei <wenbin.mei@mediatek.com>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Ritesh Harjani <riteshh@codeaurora.org>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Alexandre Mergnat <amergnat@baylibre.com>,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
- When I do some low power tests, the following hung task is printed.
+On Fri, 9 Jun 2023 at 12:14, Wenbin Mei <wenbin.mei@mediatek.com> wrote:
+>
+> CQHCI_SSC1 indicates to CQE the polling period to use when using periodic
+> SEND_QUEUE_STATUS(CMD13) polling.
+> Since MSDC CQE uses msdc_hclk as ITCFVAL, so driver should use hclk
+> frequency to get the actual time.
+> The default value 0x1000 that corresponds to 150us for MediaTek SoCs, let's
+> decrease it to 0x40 that corresponds to 2.35us, which can improve the
+> performance of some eMMC devices.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Wenbin Mei <wenbin.mei@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+> Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
 
-  Call trace:
-   __switch_to+0xd4/0x160
-   __schedule+0x38c/0x8c4
-   __cond_resched+0x24/0x50
-   unmap_kernel_range_noflush+0x210/0x240
-   kretprobe_trampoline+0x0/0xc8
-   __vunmap+0x70/0x31c
-   __vfree+0x34/0x8c
-   vfree+0x40/0x58
-   free_vm_stack_cache+0x44/0x74
-   cpuhp_invoke_callback+0xc4/0x71c
-   _cpu_down+0x108/0x284
-   kretprobe_trampoline+0x0/0xc8
-   suspend_enter+0xd8/0x8ec
-   suspend_devices_and_enter+0x1f0/0x360
-   pm_suspend.part.1+0x428/0x53c
-   pm_suspend+0x3c/0xa0
-   devdrv_suspend_proc+0x148/0x248 [drv_devmng]
-   devdrv_manager_set_power_state+0x140/0x680 [drv_devmng]
-   devdrv_manager_ioctl+0xcc/0x210 [drv_devmng]
-   drv_ascend_intf_ioctl+0x84/0x248 [drv_davinci_intf]
-   __arm64_sys_ioctl+0xb4/0xf0
-   el0_svc_common.constprop.0+0x140/0x374
-   do_el0_svc+0x80/0xa0
-   el0_svc+0x1c/0x28
-   el0_sync_handler+0x90/0xf0
-   el0_sync+0x168/0x180
+I have now replaced the v5 with v6, thanks! Applied for next.
 
-After some analysis, I found it is caused by the following race condition.
-
-1. A task running on CPU1 is throttled for cfs bandwidth. CPU1 starts the
-hrtimer cfs_bandwidth 'period_timer' and enqueue the hrtimer on CPU1's rbtree.
-2. Then the task is migrated to CPU2 and starts to offline CPU1. CPU1 starts
-CPUHP AP steps, and then the hrtimer 'period_timer' expires and re-enqueued on CPU1.
-3. CPU1 runs to take_cpu_down() and disable irq. After CPU1 finished CPUHP AP
-steps, CPU2 starts the rest CPUHP step.
-4. When CPU2 runs to free_vm_stack_cache(), it is sched out in __vunmap()
-because it run out of CPU quota. start_cfs_bandwidth() does not restart the
-hrtimer because 'cfs_b->period_active' is set.
-5. The task waits the hrtimer 'period_timer' to expire to wake itself up, but
-CPU1 has disabled irq and the hrtimer won't expire until it is migrated to CPU2
-in hrtimers_dead_cpu(). But the task is blocked and cannot proceed to
-hrtimers_dead_cpu() step. So the task hungs.
-
-    CPU1      			                 	 CPU2
-Task set cfs_quota
-start hrtimer cfs_bandwidth 'period_timer'
-						start to offline CPU1
-CPU1 start CPUHP AP step
-...
-'period_timer' expired and re-enqueued on CPU1
-...
-disable irq in take_cpu_down()
-...
-						CPU2 start the rest CPUHP steps
-						...
-					      sched out in free_vm_stack_cache()
-						wait for 'period_timer' expires
+Kind regards
+Uffe
 
 
-Appreciate it a lot if anyone can give some suggestion on how fix this problem !
-
-Thanks,
-Xiongfeng
-
-
+> ---
+> the previous patche link:
+> v5: https://patchwork.kernel.org/project/linux-mediatek/patch/20230606113249.28057-2-wenbin.mei@mediatek.com/
+> v4: https://patchwork.kernel.org/project/linux-mediatek/patch/20230605121442.23622-1-wenbin.mei@mediatek.com/
+> v3: https://patchwork.kernel.org/project/linux-mediatek/patch/20230605060107.22044-1-wenbin.mei@mediatek.com/
+> v2: https://patchwork.kernel.org/project/linux-mediatek/patch/20230510015851.11830-1-wenbin.mei@mediatek.com/
+> v1: https://patchwork.kernel.org/project/linux-mediatek/patch/20230419063048.10516-1-wenbin.mei@mediatek.com/
+> ---
+>  drivers/mmc/host/cqhci.h  |  3 +++
+>  drivers/mmc/host/mtk-sd.c | 46 +++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 49 insertions(+)
+>
+> diff --git a/drivers/mmc/host/cqhci.h b/drivers/mmc/host/cqhci.h
+> index ba9387ed90eb..1a12e40a02e6 100644
+> --- a/drivers/mmc/host/cqhci.h
+> +++ b/drivers/mmc/host/cqhci.h
+> @@ -5,6 +5,7 @@
+>  #define LINUX_MMC_CQHCI_H
+>
+>  #include <linux/compiler.h>
+> +#include <linux/bitfield.h>
+>  #include <linux/bitops.h>
+>  #include <linux/spinlock_types.h>
+>  #include <linux/types.h>
+> @@ -23,6 +24,8 @@
+>  /* capabilities */
+>  #define CQHCI_CAP                      0x04
+>  #define CQHCI_CAP_CS                   0x10000000 /* Crypto Support */
+> +#define CQHCI_CAP_ITCFMUL              GENMASK(15, 12)
+> +#define CQHCI_ITCFMUL(x)               FIELD_GET(CQHCI_CAP_ITCFMUL, (x))
+>
+>  /* configuration */
+>  #define CQHCI_CFG                      0x08
+> diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
+> index 8ce864169986..99317fd9f084 100644
+> --- a/drivers/mmc/host/mtk-sd.c
+> +++ b/drivers/mmc/host/mtk-sd.c
+> @@ -473,6 +473,7 @@ struct msdc_host {
+>         struct msdc_tune_para def_tune_para; /* default tune setting */
+>         struct msdc_tune_para saved_tune_para; /* tune result of CMD21/CMD19 */
+>         struct cqhci_host *cq_host;
+> +       u32 cq_ssc1_time;
+>  };
+>
+>  static const struct mtk_mmc_compatible mt2701_compat = {
+> @@ -2450,9 +2451,49 @@ static void msdc_hs400_enhanced_strobe(struct mmc_host *mmc,
+>         }
+>  }
+>
+> +static void msdc_cqe_cit_cal(struct msdc_host *host, u64 timer_ns)
+> +{
+> +       struct mmc_host *mmc = mmc_from_priv(host);
+> +       struct cqhci_host *cq_host = mmc->cqe_private;
+> +       u8 itcfmul;
+> +       u64 hclk_freq, value;
+> +
+> +       /*
+> +        * On MediaTek SoCs the MSDC controller's CQE uses msdc_hclk as ITCFVAL
+> +        * so we multiply/divide the HCLK frequency by ITCFMUL to calculate the
+> +        * Send Status Command Idle Timer (CIT) value.
+> +        */
+> +       hclk_freq = (u64)clk_get_rate(host->h_clk);
+> +       itcfmul = CQHCI_ITCFMUL(cqhci_readl(cq_host, CQHCI_CAP));
+> +       switch (itcfmul) {
+> +       case 0x0:
+> +               do_div(hclk_freq, 1000);
+> +               break;
+> +       case 0x1:
+> +               do_div(hclk_freq, 100);
+> +               break;
+> +       case 0x2:
+> +               do_div(hclk_freq, 10);
+> +               break;
+> +       case 0x3:
+> +               break;
+> +       case 0x4:
+> +               hclk_freq = hclk_freq * 10;
+> +               break;
+> +       default:
+> +               host->cq_ssc1_time = 0x40;
+> +               return;
+> +       }
+> +
+> +       value = hclk_freq * timer_ns;
+> +       do_div(value, 1000000000);
+> +       host->cq_ssc1_time = value;
+> +}
+> +
+>  static void msdc_cqe_enable(struct mmc_host *mmc)
+>  {
+>         struct msdc_host *host = mmc_priv(mmc);
+> +       struct cqhci_host *cq_host = mmc->cqe_private;
+>
+>         /* enable cmdq irq */
+>         writel(MSDC_INT_CMDQ, host->base + MSDC_INTEN);
+> @@ -2462,6 +2503,9 @@ static void msdc_cqe_enable(struct mmc_host *mmc)
+>         msdc_set_busy_timeout(host, 20 * 1000000000ULL, 0);
+>         /* default read data timeout 1s */
+>         msdc_set_timeout(host, 1000000000ULL, 0);
+> +
+> +       /* Set the send status command idle timer */
+> +       cqhci_writel(cq_host, host->cq_ssc1_time, CQHCI_SSC1);
+>  }
+>
+>  static void msdc_cqe_disable(struct mmc_host *mmc, bool recovery)
+> @@ -2803,6 +2847,8 @@ static int msdc_drv_probe(struct platform_device *pdev)
+>                 /* cqhci 16bit length */
+>                 /* 0 size, means 65536 so we don't have to -1 here */
+>                 mmc->max_seg_size = 64 * 1024;
+> +               /* Reduce CIT to 0x40 that corresponds to 2.35us */
+> +               msdc_cqe_cit_cal(host, 2350);
+>         }
+>
+>         ret = devm_request_irq(&pdev->dev, host->irq, msdc_irq,
+> --
+> 2.25.1
+>
