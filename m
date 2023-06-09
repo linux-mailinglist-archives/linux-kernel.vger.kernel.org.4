@@ -2,113 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE6D8729AC0
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 14:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33301729ACD
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 14:56:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239243AbjFIMzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 08:55:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56338 "EHLO
+        id S241215AbjFIM4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 08:56:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241213AbjFIMzU (ORCPT
+        with ESMTP id S241266AbjFIM4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 08:55:20 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3693A80
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 05:55:03 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f63006b4e3so2239903e87.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 05:55:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686315264; x=1688907264;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iWAc8s9mtYq9bvfxWICbMJo3RkYM/eJc1QSBr+x6G8Y=;
-        b=xfyZNLfaD0QTAnUJUAEH8T4GdANS45eqBTdyEnOUe0avgitAwOpNCO2K/wmbsrhWaP
-         MM1h8jbCTsc9hhjOcUkuFZZB1aNee0AuTns+EUVlJm4Syqpfkj605YC4O1ScWL167G0V
-         owsaOPVbtz3IwSpfkN8VuvrWeJZWsLQWmWWMmgoAmKnhBOAxRICBzCThvvkkj2lA5p5m
-         ZqcXfxZh6FDQY0zX4Ikc+nnQPNKv4DZRxhez7aUunmUSJeistB6MDu14OBefv1TpI0gr
-         f4tZ2dKvbRBKiCTfrvoepT68XTXKGzNCkSfF4E1SSIIfVvJdtSOJt+aBEgbIK95Ker13
-         XxgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686315264; x=1688907264;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iWAc8s9mtYq9bvfxWICbMJo3RkYM/eJc1QSBr+x6G8Y=;
-        b=WSOjOvQfR8G9ZRMcQ1jcTZIjNOkBjT1MhfKZ/EgtIfDyewtgCKekt373Q4yUo7u5pJ
-         94/gVJMSkT8/Situdi/mTaV0oCujyFqzW0JUGD3lxfedHknmuYiQfJ7afRDAicR4bp1k
-         hfWkuW0xmhIOK6+CxGPjM+RDS5wconIVn67zP0409TnEat9hMT1py0sEIMJkEPW9nxkj
-         7pL0OcM9sifieQvq4oEZ2JzAOa/51U0dxorEUdxSVQQ1X3VTnSH0zSQS8zcWmsW8a2sx
-         YSW+bgfbxDmZ2Ue9pBnQuPTXOm/x2CHHZ4Bcua2kWEjm0EqnkbIwHJSS3tpmQJj+k1zc
-         vwwQ==
-X-Gm-Message-State: AC+VfDxMLfUrVFinpMbripBPmYYc4HPHmOvGapLoYo3mc9howJn3ga1W
-        UipzpjeDt+ZsXJ6LMCekJzZjlA==
-X-Google-Smtp-Source: ACHHUZ6drSlhoDmee4FQUAtmNA+rg3NZmyqtbBNMYb8qCNApuq5hPUipIG1dmiNUk7AzPMw6LF++Sw==
-X-Received: by 2002:a19:ca59:0:b0:4f4:b05c:dbbc with SMTP id h25-20020a19ca59000000b004f4b05cdbbcmr834341lfj.63.1686315264003;
-        Fri, 09 Jun 2023 05:54:24 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id v4-20020ac25924000000b004f64409eef1sm534202lfi.246.2023.06.09.05.54.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Jun 2023 05:54:23 -0700 (PDT)
-Message-ID: <88b41c0f-e515-ce94-e4fd-befbeef53781@linaro.org>
-Date:   Fri, 9 Jun 2023 14:54:22 +0200
+        Fri, 9 Jun 2023 08:56:49 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0892E2D74
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 05:56:24 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qd1KQ2t5Qz4x3x;
+        Fri,  9 Jun 2023 22:55:54 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1686315355;
+        bh=6hU42edEeCSuu+D9dpO9GvNrSsgyCJqWaGuZfm40wB0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=EwB3F//8pFCLNpmDUVeIo8piNUnx0Gt2G0w+0UXSMJrP1U57KHSECjtlTuFqAYtZc
+         L+mvTbBkg/fnsaZ34YaMSb09wNzpJfePZNiPn518SIurg50xsYo5FIesgQldwcalbo
+         0javXPbZ1zQjFhXDiPPtmTttttkc3QYUc8dhiGvBO71eaQcOr4UUgB3MD891tkir1Z
+         xWzMVc/ot7HOLiZ0VIkY9jiO92sW7gQk/WZTIrHIwnHgvYrtHAw5ZwZyPyLoB28Ig6
+         ZKaHSoEHZaLDlAKDJA/gEfmY7sPUuranAuGb+v8HPgmOy/vAcB5oZJONcLz0LdoMMW
+         tuBc+47MFsM6g==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Marco Elver <elver@google.com>
+Cc:     Dmitry Vyukov <dvyukov@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
+        Rohan McLure <rmclure@linux.ibm.com>
+Subject: Re: [PATCH 1/3] kcsan: Don't expect 64 bits atomic builtins from 32
+ bits architectures
+In-Reply-To: <662d074e-58cf-3bde-f454-e58d04803f34@csgroup.eu>
+References: <cover.1683892665.git.christophe.leroy@csgroup.eu>
+ <d9c6afc28d0855240171a4e0ad9ffcdb9d07fceb.1683892665.git.christophe.leroy@csgroup.eu>
+ <CANpmjNMm-2Tdhp6rDzA7CYvotmmGmLUnZnA_35yLUvxHB=7s0g@mail.gmail.com>
+ <662d074e-58cf-3bde-f454-e58d04803f34@csgroup.eu>
+Date:   Fri, 09 Jun 2023 22:55:49 +1000
+Message-ID: <877cschk16.fsf@mail.lhotse>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH V4 0/4] Add camera clock controller support for SM8550
-Content-Language: en-US
-To:     Jagadeesh Kona <quic_jkona@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
-        Imran Shaik <quic_imrashai@quicinc.com>,
-        Ajit Pandey <quic_ajipan@quicinc.com>
-References: <20230609115058.9059-1-quic_jkona@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230609115058.9059-1-quic_jkona@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Christophe Leroy <christophe.leroy@csgroup.eu> writes:
+> Le 12/05/2023 =C3=A0 18:09, Marco Elver a =C3=A9crit=C2=A0:
+>> On Fri, 12 May 2023 at 17:31, Christophe Leroy
+>> <christophe.leroy@csgroup.eu> wrote:
+>>>
+>>> Activating KCSAN on a 32 bits architecture leads to the following
+>>> link-time failure:
+>>>
+>>>      LD      .tmp_vmlinux.kallsyms1
+>>>    powerpc64-linux-ld: kernel/kcsan/core.o: in function `__tsan_atomic6=
+4_load':
+>>>    kernel/kcsan/core.c:1273: undefined reference to `__atomic_load_8'
+>>>    powerpc64-linux-ld: kernel/kcsan/core.o: in function `__tsan_atomic6=
+4_store':
+>>>    kernel/kcsan/core.c:1273: undefined reference to `__atomic_store_8'
+...
+>>>
+>>> 32 bits architectures don't have 64 bits atomic builtins. Only
+>>> include DEFINE_TSAN_ATOMIC_OPS(64) on 64 bits architectures.
+>>>
+>>> Fixes: 0f8ad5f2e934 ("kcsan: Add support for atomic builtins")
+>>> Suggested-by: Marco Elver <elver@google.com>
+>>> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+>>=20
+>> Reviewed-by: Marco Elver <elver@google.com>
+>>=20
+>> Do you have your own tree to take this through with the other patches?
+>
+> I don't have my own tree but I guess that it can be taken by Michael for=
+=20
+> 6.5 via powerpc tree with acks from you and Max.
+>
+> Michael is that ok for you ?
 
+Yeah I can take it.
 
-On 9.06.2023 13:50, Jagadeesh Kona wrote:
-> Add bindings, driver and devicetree node for camera clock controller on
-> SM8550.
-> 
-> Jagadeesh Kona (4):
->   dt-bindings: clock: qcom: Add SM8550 camera clock controller
->   clk: qcom: camcc-sm8550: Add camera clock controller driver for SM8550
->   clk: qcom: camcc-sm8550: Add support for qdss, sleep and xo clocks
->   arm64: dts: qcom: sm8550: Add camera clock controller
-What's the final verdict on RINGOSC_L etc.?
-
-Konrad
-> 
->  .../bindings/clock/qcom,sm8450-camcc.yaml     |    8 +-
->  arch/arm64/boot/dts/qcom/sm8550.dtsi          |   15 +
->  drivers/clk/qcom/Kconfig                      |    7 +
->  drivers/clk/qcom/Makefile                     |    1 +
->  drivers/clk/qcom/camcc-sm8550.c               | 3585 +++++++++++++++++
->  include/dt-bindings/clock/qcom,sm8550-camcc.h |  187 +
->  6 files changed, 3801 insertions(+), 2 deletions(-)
->  create mode 100644 drivers/clk/qcom/camcc-sm8550.c
->  create mode 100644 include/dt-bindings/clock/qcom,sm8550-camcc.h
-> 
+cheers
