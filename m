@@ -2,298 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E52C572969E
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 12:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4C6729681
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 12:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240035AbjFIKPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 06:15:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54344 "EHLO
+        id S239043AbjFIKNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 06:13:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238335AbjFIKOI (ORCPT
+        with ESMTP id S238828AbjFIKNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 06:14:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADA9422D
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 03:02:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686304969;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3LFa2xxbJsqyZ30qpsSqRMBPDTmtcps3tB0X7zJ4/t0=;
-        b=DBe/FxwLpnnnoBqwaLIqBIBLW94xkfbiSedAMiaOVDfUgXgaTQqkFR/TOycXnFlAygi0R1
-        MMgra1vbHthkG3tGq2w2liiyHVWGvErfqsrITO2aqMT5aznAXRdBieWg0noVeSy009/X22
-        f59QQD3nPKg9Kawf7ioM1DuQS9eiGZ8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-104-0rQ0XTexPKWqfrAzgZR2CA-1; Fri, 09 Jun 2023 06:02:45 -0400
-X-MC-Unique: 0rQ0XTexPKWqfrAzgZR2CA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7C0C485A5BE;
-        Fri,  9 Jun 2023 10:02:44 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.51])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 22EF3145B965;
-        Fri,  9 Jun 2023 10:02:42 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     David Howells <dhowells@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Tom Herbert <tom@herbertland.com>,
-        Tom Herbert <tom@quantonium.net>
-Subject: [PATCH net-next 6/6] kcm: Send multiple frags in one sendmsg()
-Date:   Fri,  9 Jun 2023 11:02:21 +0100
-Message-ID: <20230609100221.2620633-7-dhowells@redhat.com>
-In-Reply-To: <20230609100221.2620633-1-dhowells@redhat.com>
-References: <20230609100221.2620633-1-dhowells@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 9 Jun 2023 06:13:12 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA514210;
+        Fri,  9 Jun 2023 03:02:39 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-973f78329e3so282575766b.3;
+        Fri, 09 Jun 2023 03:02:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686304957; x=1688896957;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1Sy3PFH0i16OR495KV2SRJ9doNRvKz2foyZHcs8gVG8=;
+        b=F0Ba6tXNsPudB2pZ2F0mCXv5biLezbUIw8pnUlcxQcn0zO0/VEvYGHXnDXJUsr5KUn
+         X+umIxtRTdq4m0rMvcjVwLXaZ3qhBU/O+YW/mdfjSkTpOJZj+95QQ7CqRftoc4AxB8WK
+         OUWZLytwgjVUYmYAGt2ILIPnI+tZiNHNx0yZnREMgQj/iq1/xOGXF2OSwDiHTDsec+/K
+         dSxaB3PTibkwdORlubFqcdhTHNKQ3b5DbYnYt3jPz7YsSUjhQgQ5nDhzcqMsJXIJmGtZ
+         QfkdUKqhrf9TJmRuCrmCDzr88II+qBqDm6UZeNn4ZgqfPHOiYckq9jO8CC2PT0pNlUZQ
+         rA8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686304957; x=1688896957;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1Sy3PFH0i16OR495KV2SRJ9doNRvKz2foyZHcs8gVG8=;
+        b=H+EkXjiqzsyhpxoLqapJ/zk1Wq8PYnBcOxwsaF3+5Clx9jGEi9XNH6WSOSObcZQ9uc
+         Yd6GPw/U1hEvONKCH2101Sqig35px7NZIRcTZhX/WIXk0rw8rbWOfYXstJd4pHeqpQKI
+         fdmaPQMCEWiXDqXg1cj4F922SrRiLEOfI0EWjctGYxLh01IksM2rAzS4W9kFWP6DjYxI
+         WqFEzxjQVZ3eDpr2NhP9vC66lISikdJERhQQHnKV4ZlIIM9bxTDnuIy6oFkQl301BkQW
+         sGIr9VglK60d/hucCjzu0vgppjrGEpTjNG1+IIbFy+XSJGMRCh104QQKYb2Le+8MnwKh
+         GFmg==
+X-Gm-Message-State: AC+VfDySGJqjGky7yJZxqI6QJdIEc37SBgG9UyfIKFFDb9lytOY1WHpL
+        3AG0uJnAFU+JR6nn2b+6WjaRPi7WSJs=
+X-Google-Smtp-Source: ACHHUZ7tlE78bo7phZxc+4W/jhKp9bIIfvPnF2aJ3QHzGcMGyBy3fuQPnAoGaDzXmhb8e0JU4L9dxA==
+X-Received: by 2002:a17:907:6e12:b0:977:ab43:731f with SMTP id sd18-20020a1709076e1200b00977ab43731fmr1639678ejc.66.1686304957254;
+        Fri, 09 Jun 2023 03:02:37 -0700 (PDT)
+Received: from felia.fritz.box ([2a02:810d:7e40:14b0:f180:ae6e:6e9a:f400])
+        by smtp.gmail.com with ESMTPSA id oq19-20020a170906cc9300b00977e0bcff1esm1123149ejb.10.2023.06.09.03.02.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 03:02:36 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Martin Kurbanov <mmkurbanov@sberdevices.ru>,
+        linux-leds@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] leds: fix config reference for AW200xx driver
+Date:   Fri,  9 Jun 2023 12:02:33 +0200
+Message-Id: <20230609100233.4111-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rewrite the AF_KCM transmission loop to send all the fragments in a single
-skb or frag_list-skb in one sendmsg() with MSG_SPLICE_PAGES set.  The list
-of fragments in each skb is conveniently a bio_vec[] that can just be
-attached to a BVEC iter.
+Commit 36a87f371b7a ("leds: Add AW20xx driver") adds config LEDS_AW200XX
+in drivers/leds/Kconfig, but then in drivers/leds/Makefile accidently
+refers to CONFIG_LEDS_W200XX; note the missing A!
 
-Note: I'm working out the size of each fragment-skb by adding up bv_len for
-all the bio_vecs in skb->frags[] - but surely this information is recorded
-somewhere?  For the skbs in head->frag_list, this is equal to
-skb->data_len, but not for the head.  head->data_len includes all the tail
-frags too.
+This typo makes it impossible to add the driver to a kernel build.
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Tom Herbert <tom@herbertland.com>
-cc: Tom Herbert <tom@quantonium.net>
-cc: "David S. Miller" <davem@davemloft.net>
-cc: Eric Dumazet <edumazet@google.com>
-cc: Jakub Kicinski <kuba@kernel.org>
-cc: Paolo Abeni <pabeni@redhat.com>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: netdev@vger.kernel.org
+Fix this wrong config reference.
+
+Fixes: 36a87f371b7a ("leds: Add AW20xx driver")
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
- include/net/kcm.h |   2 +-
- net/kcm/kcmsock.c | 126 ++++++++++++++++++----------------------------
- 2 files changed, 51 insertions(+), 77 deletions(-)
+ drivers/leds/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/net/kcm.h b/include/net/kcm.h
-index 2d704f8f4905..90279e5e09a5 100644
---- a/include/net/kcm.h
-+++ b/include/net/kcm.h
-@@ -47,9 +47,9 @@ struct kcm_stats {
- 
- struct kcm_tx_msg {
- 	unsigned int sent;
--	unsigned int fragidx;
- 	unsigned int frag_offset;
- 	unsigned int msg_flags;
-+	bool started_tx;
- 	struct sk_buff *frag_skb;
- 	struct sk_buff *last_skb;
- };
-diff --git a/net/kcm/kcmsock.c b/net/kcm/kcmsock.c
-index 3bcac1453f10..d75d775e9462 100644
---- a/net/kcm/kcmsock.c
-+++ b/net/kcm/kcmsock.c
-@@ -581,12 +581,10 @@ static void kcm_report_tx_retry(struct kcm_sock *kcm)
-  */
- static int kcm_write_msgs(struct kcm_sock *kcm)
- {
-+	unsigned int total_sent = 0;
- 	struct sock *sk = &kcm->sk;
- 	struct kcm_psock *psock;
--	struct sk_buff *skb, *head;
--	struct kcm_tx_msg *txm;
--	unsigned short fragidx, frag_offset;
--	unsigned int sent, total_sent = 0;
-+	struct sk_buff *head;
- 	int ret = 0;
- 
- 	kcm->tx_wait_more = false;
-@@ -600,78 +598,57 @@ static int kcm_write_msgs(struct kcm_sock *kcm)
- 		if (skb_queue_empty(&sk->sk_write_queue))
- 			return 0;
- 
--		kcm_tx_msg(skb_peek(&sk->sk_write_queue))->sent = 0;
--
--	} else if (skb_queue_empty(&sk->sk_write_queue)) {
--		return 0;
-+		kcm_tx_msg(skb_peek(&sk->sk_write_queue))->started_tx = false;
- 	}
- 
--	head = skb_peek(&sk->sk_write_queue);
--	txm = kcm_tx_msg(head);
--
--	if (txm->sent) {
--		/* Send of first skbuff in queue already in progress */
--		if (WARN_ON(!psock)) {
--			ret = -EINVAL;
--			goto out;
-+retry:
-+	while ((head = skb_peek(&sk->sk_write_queue))) {
-+		struct msghdr msg = {
-+			.msg_flags = MSG_DONTWAIT | MSG_SPLICE_PAGES,
-+		};
-+		struct kcm_tx_msg *txm = kcm_tx_msg(head);
-+		struct sk_buff *skb;
-+		unsigned int msize;
-+		int i;
-+
-+		if (!txm->started_tx) {
-+			psock = reserve_psock(kcm);
-+			if (!psock)
-+				goto out;
-+			skb = head;
-+			txm->frag_offset = 0;
-+			txm->sent = 0;
-+			txm->started_tx = true;
-+		} else {
-+			if (WARN_ON(!psock)) {
-+				ret = -EINVAL;
-+				goto out;
-+			}
-+			skb = txm->frag_skb;
- 		}
--		sent = txm->sent;
--		frag_offset = txm->frag_offset;
--		fragidx = txm->fragidx;
--		skb = txm->frag_skb;
--
--		goto do_frag;
--	}
--
--try_again:
--	psock = reserve_psock(kcm);
--	if (!psock)
--		goto out;
--
--	do {
--		skb = head;
--		txm = kcm_tx_msg(head);
--		sent = 0;
- 
--do_frag_list:
- 		if (WARN_ON(!skb_shinfo(skb)->nr_frags)) {
- 			ret = -EINVAL;
- 			goto out;
- 		}
- 
--		for (fragidx = 0; fragidx < skb_shinfo(skb)->nr_frags;
--		     fragidx++) {
--			struct bio_vec bvec;
--			struct msghdr msg = {
--				.msg_flags = MSG_DONTWAIT | MSG_SPLICE_PAGES,
--			};
--			skb_frag_t *frag;
--
--			frag_offset = 0;
--do_frag:
--			frag = &skb_shinfo(skb)->frags[fragidx];
--			if (WARN_ON(!skb_frag_size(frag))) {
--				ret = -EINVAL;
--				goto out;
--			}
-+		msize = 0;
-+		for (i = 0; i < skb_shinfo(skb)->nr_frags; i++)
-+			msize += skb_shinfo(skb)->frags[i].bv_len;
-+
-+		iov_iter_bvec(&msg.msg_iter, ITER_SOURCE,
-+			      skb_shinfo(skb)->frags, skb_shinfo(skb)->nr_frags,
-+			      msize);
-+		iov_iter_advance(&msg.msg_iter, txm->frag_offset);
- 
--			bvec_set_page(&bvec,
--				      skb_frag_page(frag),
--				      skb_frag_size(frag) - frag_offset,
--				      skb_frag_off(frag) + frag_offset);
--			iov_iter_bvec(&msg.msg_iter, ITER_SOURCE, &bvec, 1,
--				      bvec.bv_len);
-+		do {
- 			ret = sock_sendmsg(psock->sk->sk_socket, &msg);
- 			if (ret <= 0) {
- 				if (ret == -EAGAIN) {
- 					/* Save state to try again when there's
- 					 * write space on the socket
- 					 */
--					txm->sent = sent;
--					txm->frag_offset = frag_offset;
--					txm->fragidx = fragidx;
- 					txm->frag_skb = skb;
--
- 					ret = 0;
- 					goto out;
- 				}
-@@ -685,39 +662,36 @@ static int kcm_write_msgs(struct kcm_sock *kcm)
- 						   true);
- 				unreserve_psock(kcm);
- 
--				txm->sent = 0;
-+				txm->started_tx = false;
- 				kcm_report_tx_retry(kcm);
- 				ret = 0;
--
--				goto try_again;
-+				goto retry;
- 			}
- 
--			sent += ret;
--			frag_offset += ret;
-+			txm->sent += ret;
-+			txm->frag_offset += ret;
- 			KCM_STATS_ADD(psock->stats.tx_bytes, ret);
--			if (frag_offset < skb_frag_size(frag)) {
--				/* Not finished with this frag */
--				goto do_frag;
--			}
--		}
-+		} while (msg.msg_iter.count > 0);
- 
- 		if (skb == head) {
- 			if (skb_has_frag_list(skb)) {
--				skb = skb_shinfo(skb)->frag_list;
--				goto do_frag_list;
-+				txm->frag_skb = skb_shinfo(skb)->frag_list;
-+				txm->frag_offset = 0;
-+				continue;
- 			}
- 		} else if (skb->next) {
--			skb = skb->next;
--			goto do_frag_list;
-+			txm->frag_skb = skb->next;
-+			txm->frag_offset = 0;
-+			continue;
- 		}
- 
- 		/* Successfully sent the whole packet, account for it. */
-+		sk->sk_wmem_queued -= txm->sent;
-+		total_sent += txm->sent;
- 		skb_dequeue(&sk->sk_write_queue);
- 		kfree_skb(head);
--		sk->sk_wmem_queued -= sent;
--		total_sent += sent;
- 		KCM_STATS_INCR(psock->stats.tx_msgs);
--	} while ((head = skb_peek(&sk->sk_write_queue)));
-+	}
- out:
- 	if (!head) {
- 		/* Done with all queued messages. */
+diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
+index df6bf408212c..d71f1226540c 100644
+--- a/drivers/leds/Makefile
++++ b/drivers/leds/Makefile
+@@ -14,7 +14,7 @@ obj-$(CONFIG_LEDS_ADP5520)		+= leds-adp5520.o
+ obj-$(CONFIG_LEDS_AN30259A)		+= leds-an30259a.o
+ obj-$(CONFIG_LEDS_APU)			+= leds-apu.o
+ obj-$(CONFIG_LEDS_ARIEL)		+= leds-ariel.o
+-obj-$(CONFIG_LEDS_W200XX)		+= leds-aw200xx.o
++obj-$(CONFIG_LEDS_AW200XX)		+= leds-aw200xx.o
+ obj-$(CONFIG_LEDS_AW2013)		+= leds-aw2013.o
+ obj-$(CONFIG_LEDS_BCM6328)		+= leds-bcm6328.o
+ obj-$(CONFIG_LEDS_BCM6358)		+= leds-bcm6358.o
+-- 
+2.17.1
 
