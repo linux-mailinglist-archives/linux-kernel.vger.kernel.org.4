@@ -2,120 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 743AB728F32
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 07:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D83E728F37
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 07:07:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237618AbjFIFBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 01:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52538 "EHLO
+        id S229853AbjFIFHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 01:07:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbjFIFBW (ORCPT
+        with ESMTP id S229482AbjFIFHH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 01:01:22 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12CE5136;
-        Thu,  8 Jun 2023 22:01:20 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3594074K012343;
-        Fri, 9 Jun 2023 05:01:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=+lmLllNdpZLu18mucRy7I3nW1cwVeUd63T3A8mGUx+w=;
- b=Kgd0c5DD842ECMv1JX+CtRJFfWtZ1j2aSHLLrfxny0lSa+JMSM5CAmHISZMArrcOMZ9Q
- fKPzFyiO4pXVVsi7nmn65bbFUNugjNfN7vGPnIUUib2zJDAncgP/rJz0np6qaJoJxl7V
- uvBm950LloW8ajN42VE4kB+P0w9/e+1zU46cFcYTvgCRBnj3rW9SNO3vpO7vVpkwvEP2
- Akwno2mAqOtTt/GZ/KGhCyeFs+tqBloQ4Ub5ti/Uq9wsnc6NmBbKkV8/Pbk0XayC40wq
- jz9KyfydBvIj4EJ+kB3L/8vKHJF30HQXdlhK/ysu7GG/13s2EuZylJlBiVC7ane6u0Rb +A== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r3dkc9xda-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Jun 2023 05:01:02 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 359511I3032557
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 9 Jun 2023 05:01:01 GMT
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 8 Jun 2023 22:00:56 -0700
-Date:   Fri, 9 Jun 2023 10:30:52 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <tglx@linutronix.de>, <maz@kernel.org>, <mani@kernel.org>,
-        <robimarko@gmail.com>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v3 4/5] dt-bindings: cpufreq: cpufreq-qcom-hw: Add SDX75
- compatible
-Message-ID: <20230609050052.GA472607@hu-pkondeti-hyd.qualcomm.com>
-References: <1686138469-1464-1-git-send-email-quic_rohiagar@quicinc.com>
- <1686138469-1464-5-git-send-email-quic_rohiagar@quicinc.com>
+        Fri, 9 Jun 2023 01:07:07 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2105.outbound.protection.outlook.com [40.107.255.105])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC3C1984;
+        Thu,  8 Jun 2023 22:06:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=f/ve0L86bbJZ83j8DSAB/guJuHqJvVuDMwOM7tPcH8sVW7ZacsWPex+csSkaQI9KcFgFTNQIciz6JO5hFY5o1kJhpwjyR5GuNPl/8ktBNXe0f3XKsOoMA3Pk+l4NUaRdSzhIZ1NWmwu3+96k44kz4KKVMHROR1nTeYh4sJEGDdp3CYPS3aEuYmIYMprrwI6ruPnWorDbuJeQ1RaQAl+KdVzmdWihKw3T6+hefC+JIQoP1USI0T0ko/NAK3PLOIzabLnXfsalP8u7EPRULi+98CjxHM7WkPaihU9K3oEPE6jyzA6nXzxwm6tVZloosLSREkyEKwL48Hc3Y7V8ruyz6w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=naFHnu4NozN3tzktJ2dc0Buu5Hkl/08DjfQw7Lv0JFU=;
+ b=gPtcFCeCLSvro+ixVTxC3pA9psp5lI/AO2KRV4QYAfSk5aLW/qOhGDeWzA+h4Auio2qedaKdACA/5O69de1/P1mJ5593T/8jKzr0cbF5x2mQGQVTDskrvsD9bNeqeKbsFIiRgJIzikv/gdq79yWucMSS+P1mEWpP9qO4YY1Yss+7HLwKkLIpklXN4B8e29RgsygiBtAjrTewrL/LKH6pWQf1TqzucBl5BVdV773J3K4zHwPfvAKL82DqRMHiRZgDrs0Nria865dJPDTQiZV04oJ9Iru2uoqzCEM+cG6R0Bj8AdpUlS9fGRoYTW/Mut9ZUca2di3NFMwx4Ov2gfDZuw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=naFHnu4NozN3tzktJ2dc0Buu5Hkl/08DjfQw7Lv0JFU=;
+ b=cHGISQklVAW5WTCtgzvKSU6o/gbD5gSoqJXTRzOeTGAH3uP5xTRz0nDcPpUz1ETNCXUOr1ev4vmmLAqC7wXvDzAwWUJiw/6RxnMPTHHTEPCHT5w598amfW8ZD2STtdqGIhLBe0mFKjQZVyhaWMrB5zVxS80VnxiLfRyfLHRQV9g6Vp6xxXdWaLeqOkDRjbTtADi0nQZJ/1k6iNRkvzwbyGqOcnDuEoudvHoIiUmgRkN5NXnO1aiSTLNhyiexcd2qTyAvlg28T4C7S65DBO/CMbnQlY5oU2znl1YfzFuRFbxuSDq2EDymMnVhb49mkaoFk80yrYWOV5gDHGI3oInTQw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB6697.apcprd06.prod.outlook.com (2603:1096:400:451::6)
+ by SEYPR06MB5301.apcprd06.prod.outlook.com (2603:1096:101:82::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Fri, 9 Jun
+ 2023 05:06:50 +0000
+Received: from TYZPR06MB6697.apcprd06.prod.outlook.com
+ ([fe80::f652:a96b:482:409e]) by TYZPR06MB6697.apcprd06.prod.outlook.com
+ ([fe80::f652:a96b:482:409e%5]) with mapi id 15.20.6455.030; Fri, 9 Jun 2023
+ 05:06:50 +0000
+From:   Lu Hongfei <luhongfei@vivo.com>
+To:     Namjae Jeon <linkinjeon@kernel.org>,
+        Steve French <sfrench@samba.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Tom Talpey <tom@talpey.com>,
+        linux-cifs@vger.kernel.org (open list:KERNEL SMB3 SERVER (KSMBD)),
+        linux-kernel@vger.kernel.org (open list)
+Cc:     opensource.kernel@vivo.com, luhongfei@vivo.com
+Subject: [PATCH] fs: smb: server: Replace the ternary conditional operator with min()
+Date:   Fri,  9 Jun 2023 13:06:36 +0800
+Message-Id: <20230609050636.27669-1-luhongfei@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: TYWP286CA0011.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:178::18) To TYZPR06MB6697.apcprd06.prod.outlook.com
+ (2603:1096:400:451::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1686138469-1464-5-git-send-email-quic_rohiagar@quicinc.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: FOUsi5DUvSVpyvRY35Si6-6ltUglUcSS
-X-Proofpoint-GUID: FOUsi5DUvSVpyvRY35Si6-6ltUglUcSS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-09_02,2023-06-08_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- impostorscore=0 malwarescore=0 priorityscore=1501 bulkscore=0
- mlxlogscore=999 clxscore=1015 spamscore=0 lowpriorityscore=0 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306090043
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYZPR06MB6697:EE_|SEYPR06MB5301:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5be0bd39-1ba5-4df7-e17f-08db68a75521
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HMmiiyeWfCrtEZY9PqvvSK11D8Xl40awdfjlJVZTIkQCPdBKNcMcaYsPDJMZNgLNTvZRh6Mq4cJqJl/DuNO04eP4JdMTzwQzgEAddpnvILutvdpZFz/4fdmwIFw2pATPF9Hx0SkRAEoQvNXPKTQL8TyHtsAG7qb7NTP9HAreNMw/sZHp/8U7dUIsuiOTFdh24b5dP3+aqHNEZGNt2adYUwe03Tucy7NSY5wXI7fzmJU4xSAY/izuHk7lrvhUvq3kozQCLQ79Slvs0I1SWksSqyVCQyUDw5eYZ3vVQLK3aodHlXKFB7IF51U0O2bm/T/6iNuubRhBup3VvQUjD5OSA2IHAXawfBqljOFM+GTxxm3CIZILu+LaaZhLqAMWLNMaddwDaGwP4VRYqJLeSiUI46lUWPgQpYyKu+rX2EGtbbzu1Yeu3zBD4xAXiN3520VBldf/nfbOq0a2YAsH/0XDElqjJ/UWqry7jN63BrDOeexyMmeLWRChAeOWw2uGgtfYnIEGqbv1dzQfjCJKxhEOAPB3QtA9p7JFoyLbIwpO6dFS7UoeLcf4ozcZybeveO69c4sc9xTssAuw3FkNlTSug51+WJWzTdMwCvXG9djnhEjoJzEIac41oPZcungP3DMQ
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB6697.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(346002)(396003)(39860400002)(366004)(451199021)(66946007)(66476007)(66556008)(8936002)(8676002)(4326008)(107886003)(316002)(110136005)(2906002)(41300700001)(4744005)(478600001)(5660300002)(52116002)(6486002)(6512007)(26005)(6506007)(1076003)(83380400001)(6666004)(186003)(2616005)(86362001)(36756003)(38350700002)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xXd9iQezmAnwXXWwr+oduc/quJjeqbFfUx/f8LqZz8cXNXVN97BRdhHIQU4n?=
+ =?us-ascii?Q?uQ94qOf9XqnkmkCizumQ4Jutdd6ar+J6NBDxtFJ2GDtDITDgshpQQjCuQGBd?=
+ =?us-ascii?Q?09zfOkkuC54DKGrx0TuxbHfl+t5W71AutCBKPqMvvwchz/YvOmmb7VEUnh4j?=
+ =?us-ascii?Q?YYccPxmlDnDz863Eem/+mZ4osL2FCnMtSbOVcy7+EWnT1MZ91M01DjCUJESO?=
+ =?us-ascii?Q?K25ScxGLoHfxHLs/lx4h2oHracUr2aPsdeUddFiNxZu6o3mi3QdeXMjYL/km?=
+ =?us-ascii?Q?+38RHdvQmWBsneV3vpotoAaQYxGzMJpKVngATs5xaIF4KJh2Av2YgTUvzVpW?=
+ =?us-ascii?Q?YQTlOT/417aoIVoBwG7HI3z830oxP80jC4jdi7dBx/3zoUEGBdTQXbLQM5SA?=
+ =?us-ascii?Q?dJtTlh/GI/x6sbtf5Jx0V14Md/0GBin8LnrtKs4OaSqbRXUrnvN8U5V3qos6?=
+ =?us-ascii?Q?tE/8DYnSc+GGiQ2Vm2QUvvAzmwYJeVm7l34bdg6Tk1/o5CJDh7fU+66NJZ41?=
+ =?us-ascii?Q?mW6wCPBYocIbuipFHEu4duUsjQWnl/XtipXWK62trqHGCc21cE2gd/O0cc7W?=
+ =?us-ascii?Q?5u/BF/wHLHerk2Pe8EnwcYlJudhFUmSjqWlxilq02XhON7IdBW7dkoDXbuFu?=
+ =?us-ascii?Q?3RXcpPG2k2+z5URPj9mxUL9lboerDY/Jj6ay0GzieLps4aqYfsVmXrRfTKBB?=
+ =?us-ascii?Q?47Auqru71cgs/pAniTpF93GT+mWPSGmVaDzHuW8lenYEqq3OKnojsHh7HMQT?=
+ =?us-ascii?Q?Ex7lfppmy8u2uX5pS5hht7xdxhDaz2j2waXwF9klmq28QYFqXzMNtfeEOQZ3?=
+ =?us-ascii?Q?o/nJ4FDYOYLJG7+uUDvVP/OeTkT5NpaxhIVmWVZrmZf1RM7qL8/X5yPZF7IL?=
+ =?us-ascii?Q?8XHRkkiPEs2Dlqx0FfvtWyjFntAiQoXYOPBuNbgjnnoYqmcgZ1UQZMfjNUuP?=
+ =?us-ascii?Q?O8iXC0hOp6DAN1uJwXydvG8aWrhR7N+Uf19tMgVjY/9XNXEG1JQj0PnYf7Mn?=
+ =?us-ascii?Q?U1hHxJW+iojB4oxXTbjqH9OlQ0GzoIQIPJG7FF57d8NQVQGyt9eb6bzy3uFB?=
+ =?us-ascii?Q?QnGw/zJVrRu3RZkH2kSZHxi/3dBFoT+GlskAzBNs7Ztec8st79XSsU65owXs?=
+ =?us-ascii?Q?Z1WzCriE5O1xYmZVx2ngiQXfrgctqKo5IeCu3HhyneQYtjLhOjgTeigA7wuy?=
+ =?us-ascii?Q?B/5aAkhZIA0vIS4YOzv0kxo8IZzW6TkmQFDmibnef42pphxdBVQN8Abma0rA?=
+ =?us-ascii?Q?E7PzUqt7jYeTk0TZWxQTtjHT7lFpHMmo0IWz9bZiYiJxIsY8aDnNY22mxtfk?=
+ =?us-ascii?Q?pD/eT7li8v1K3VHmw90luaDbw2DycVwlBFlxeLE4XUzHk8UddnJKQ2SUfFSe?=
+ =?us-ascii?Q?McdYQZZ5kHq9FMzfH5R4RXVRgedDrA1N6w0XYPdiqGZ+RZM8gb1go8jrrPMt?=
+ =?us-ascii?Q?qlYtACtAnLed+BB6AaT8D+kMZMIb9qur7DNARlU6uthhGGBe0MnlHuHHzT7F?=
+ =?us-ascii?Q?GyKyZQCYWG86uAayucrYn3FYlsCSbI1A9qVU/RVf1LKzlDtlFHCsPcDP94zh?=
+ =?us-ascii?Q?N/njBU24lOhPyrFeOeQg/XgRCepmj1oDsaX3icbr?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5be0bd39-1ba5-4df7-e17f-08db68a75521
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB6697.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 05:06:50.2705
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: RuJat0taSjgvzWcK7X5JbZwU8Tl7469+pJmFXheOmmENadzweI9rVfi1fjQUQFn3Wepm9FLBxhWt5vwRDpzsDQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB5301
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 05:17:48PM +0530, Rohit Agarwal wrote:
-> Add compatible for EPSS CPUFREQ-HW on SDX75.
-> 
-> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-> index a6b3bb8..866ed2d 100644
-> --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-> @@ -36,6 +36,7 @@ properties:
->                - qcom,sa8775p-cpufreq-epss
->                - qcom,sc7280-cpufreq-epss
->                - qcom,sc8280xp-cpufreq-epss
-> +              - qcom,sdx75-cpufreq-epss
->                - qcom,sm6375-cpufreq-epss
->                - qcom,sm8250-cpufreq-epss
->                - qcom,sm8350-cpufreq-epss
+It would be better to replace the traditional ternary conditional
+operator with min() in compare_sids.
 
-This is a very basic question, not completely related to this patch.
-Apologies in advance.
+Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
+---
+ fs/smb/server/smbacl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-What is the rationale for adding a new soc string under compatible and
-using it in the new soc device tree? Is it meant for documentation purpose?
-i.e one know what all SoCs / boards supported by this device node.
+diff --git a/fs/smb/server/smbacl.c b/fs/smb/server/smbacl.c
+index 0a5862a61c77..a93ae72fe4ef
+--- a/fs/smb/server/smbacl.c
++++ b/fs/smb/server/smbacl.c
+@@ -97,7 +97,7 @@ int compare_sids(const struct smb_sid *ctsid, const struct smb_sid *cwsid)
+ 	/* compare all of the subauth values if any */
+ 	num_sat = ctsid->num_subauth;
+ 	num_saw = cwsid->num_subauth;
+-	num_subauth = num_sat < num_saw ? num_sat : num_saw;
++	num_subauth = min(num_sat, num_saw);
+ 	if (num_subauth) {
+ 		for (i = 0; i < num_subauth; ++i) {
+ 			if (ctsid->sub_auth[i] != cwsid->sub_auth[i]) {
+-- 
+2.39.0
 
-I ask this because, we don't add these compatible strings in the driver
-[1] which means there is not SoC specific handling and there is no
-module load assist (module alias matching by user space based on device
-presence).
-
-Thanks,
-Pavan
