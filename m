@@ -2,210 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 706B9729EBB
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 17:38:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 415E4729EBF
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 17:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241579AbjFIPie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 11:38:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36050 "EHLO
+        id S241737AbjFIPiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 11:38:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbjFIPib (ORCPT
+        with ESMTP id S230092AbjFIPit (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 11:38:31 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E6C30F7
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 08:38:30 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 730CE21A4B;
-        Fri,  9 Jun 2023 15:38:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1686325109; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qu4g/0lz+t2182vt8zT6T7jCYPp63y4X08mVeLVanZg=;
-        b=D++mz5CO/Xkn38Y6EGRhk9w2ysav8sDSr+ZKC6wVlTI6HdPYdc9hFESzYVhwiXM3Lta9xA
-        xKL/lRdmCYGnIb6uYh2tDEoqSf4QzhKYUtjtNi8QfDNpb7Fi657fu4OPF82Ag04/fvJLHs
-        xU67f/R54oYYAD7uVySeJ+tAjr7QEf0=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F1A2113A47;
-        Fri,  9 Jun 2023 15:38:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id GohIOXRHg2SNCAAAMHmgww
-        (envelope-from <jgross@suse.com>); Fri, 09 Jun 2023 15:38:28 +0000
-Message-ID: <79b26dac-b507-1c05-b499-784ca6ee3db0@suse.com>
-Date:   Fri, 9 Jun 2023 17:38:28 +0200
+        Fri, 9 Jun 2023 11:38:49 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F3E35A3
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 08:38:45 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-970056276acso291588366b.2
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 08:38:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686325124; x=1688917124;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jorRTe9x5lJeJhWfN/tUaEbK9cETxBDWnzXXAk2nPIU=;
+        b=LoTlSmKD8bjtAmd0AQnZrlssa8ZiOjN5pw90ZA+Nx4ze9+O4IXxvyRQJ12U+HCekvG
+         NuIpZEEqfYz/lIwanx4zEDhAHu4nRAWAfVElS61M04uvzM++LbvDq9CNl4vf91hJIdPZ
+         MaFmTMRgJbekFuzszLbGkriejLMK+WHquwo77er2yzrUuwirMAGYeoGnjKyLklLnr4j8
+         MsBfXGpFcgOKxtiD2bZv6fsDPuEprwkIUp4SrOaC5qDQVh0TgfDLkud021KMQ7xJARKo
+         J19bBo9p+IC9iSIoZLKFeccwg3VYNyZ3soF5xuFLrvJorMgcf1+Ee2n1ci0GD64UfQJL
+         vu7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686325124; x=1688917124;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jorRTe9x5lJeJhWfN/tUaEbK9cETxBDWnzXXAk2nPIU=;
+        b=EUVzmZXv1BjNzaMuSlyc4wbaFsYHXHgmW36n6nPdY6vT8IiO6ZYm4iHpW1Y8TgFx29
+         +6NK19oWKTAyDUbAlOvTGwSASVlvy13Gqb7dQhqvdxRg6B9QqihLO76b9ip7smFB6LzZ
+         17TUfX6lE7DYix3oZm0vaChtou98lOKgiqiw3D5r/bXyAFKDGRQNp1i0TwBc/LRz2eMY
+         3a21MLpQh1vJqGg6jYKEW6f8tGqF8/sWITkuVtITRercQ/CRVyy/3D4eHLJrWiPmoCUN
+         cqK266Bfyxxnxl08+B7y4Hun0NnNF8PoiqSIsfyoIgREox4UOUjYnggt423jTEyTaAHW
+         q66Q==
+X-Gm-Message-State: AC+VfDxPIqDGc2k8cB30uOGztmcfhyH2+ZL1WXcYjKNkG7OYmKWecVHR
+        NDi/4uGsPdiHx2KqFlEpVIUOGn2yr/ijeJjI3SI=
+X-Google-Smtp-Source: ACHHUZ7Wu5jmfQjkYkox8N1dR5VIsH+RE9uA5DNord0lEbqHRXmFw/c2UNSs/zPBWk9kJ5cszg9boQ==
+X-Received: by 2002:a17:906:fd85:b0:969:f54c:dee2 with SMTP id xa5-20020a170906fd8500b00969f54cdee2mr1905215ejb.26.1686325124285;
+        Fri, 09 Jun 2023 08:38:44 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id a12-20020a17090680cc00b0096f7105b3a6sm1418119ejx.189.2023.06.09.08.38.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Jun 2023 08:38:43 -0700 (PDT)
+Message-ID: <22e3c25e-487b-c02f-46f3-6d2ab2be8813@linaro.org>
+Date:   Fri, 9 Jun 2023 17:38:42 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/4] x86: always initialize xen-swiotlb when xen-pcifront
- is enabling
+ Thunderbird/102.11.2
+Subject: Re: [PATCH V2] dt-bindings: reset: convert the xlnx,zynqmp-reset.txt
+ to yaml
 Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?= 
-        <marmarek@invisiblethingslab.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, xen-devel@lists.xenproject.org,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-        nouveau@lists.freedesktop.org
-References: <20230518134253.909623-1-hch@lst.de>
- <20230518134253.909623-3-hch@lst.de> <ZGZr/xgbUmVqpOpN@mail-itl>
- <20230519040405.GA10818@lst.de> <ZGdLErBzi9MANL3i@mail-itl>
- <c5defff8-882e-3482-0de1-e50a4bcdfa99@suse.com>
- <20230607131257.GB19206@lst.de>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20230607131257.GB19206@lst.de>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------90t7m9Jx5Xk69a4ZuetOcZUR"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+To:     Piyush Mehta <piyush.mehta@amd.com>, p.zabel@pengutronix.de,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, michal.simek@amd.com, michal.simek@xilinx.com,
+        nava.manne@xilinx.com
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, siva.durga.prasad.paladugu@amd.com,
+        git@amd.com
+References: <20230609110447.151235-1-piyush.mehta@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230609110447.151235-1-piyush.mehta@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------90t7m9Jx5Xk69a4ZuetOcZUR
-Content-Type: multipart/mixed; boundary="------------csx4aCZJXTkhgehRBNI804YW";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Christoph Hellwig <hch@lst.de>
-Cc: =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?=
- <marmarek@invisiblethingslab.com>,
- Stefano Stabellini <sstabellini@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- Ben Skeggs <bskeggs@redhat.com>, Karol Herbst <kherbst@redhat.com>,
- Lyude Paul <lyude@redhat.com>, xen-devel@lists.xenproject.org,
- iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
- nouveau@lists.freedesktop.org
-Message-ID: <79b26dac-b507-1c05-b499-784ca6ee3db0@suse.com>
-Subject: Re: [PATCH 2/4] x86: always initialize xen-swiotlb when xen-pcifront
- is enabling
-References: <20230518134253.909623-1-hch@lst.de>
- <20230518134253.909623-3-hch@lst.de> <ZGZr/xgbUmVqpOpN@mail-itl>
- <20230519040405.GA10818@lst.de> <ZGdLErBzi9MANL3i@mail-itl>
- <c5defff8-882e-3482-0de1-e50a4bcdfa99@suse.com>
- <20230607131257.GB19206@lst.de>
-In-Reply-To: <20230607131257.GB19206@lst.de>
+On 09/06/2023 13:04, Piyush Mehta wrote:
+> Convert the binding to DT schema format. It also updates the
+> reset-controller description.
+> 
+> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+> ---
+> - Addressed the Krzysztof review comment:
+>  - Update DT binding to fix the dt_binding_check warning.
+> 
 
---------------csx4aCZJXTkhgehRBNI804YW
-Content-Type: multipart/mixed; boundary="------------IGSz9KXXZgxtj0Jz1Oxp28BQ"
+...
 
---------------IGSz9KXXZgxtj0Jz1Oxp28BQ
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+> diff --git a/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml b/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml
+> new file mode 100644
+> index 000000000000..a39b17599e05
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/reset/xlnx,zynqmp-reset.yaml
+> @@ -0,0 +1,64 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/reset/xlnx,zynqmp-reset.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Zynq UltraScale+ MPSoC and Versal reset binding
 
-T24gMDcuMDYuMjMgMTU6MTIsIENocmlzdG9waCBIZWxsd2lnIHdyb3RlOg0KPiBPbiBNb24s
-IE1heSAyMiwgMjAyMyBhdCAxMDozNzowOUFNICswMjAwLCBKdWVyZ2VuIEdyb3NzIHdyb3Rl
-Og0KPj4gSW4gbm9ybWFsIGNhc2VzIFBDSSBwYXNzdGhyb3VnaCBpbiBQViBndWVzdHMgcmVx
-dWlyZXMgdG8gc3RhcnQgdGhlIGd1ZXN0DQo+PiB3aXRoIGU4MjBfaG9zdD0xLiBTbyBpdCBz
-aG91bGQgYmUgcmF0aGVyIGVhc3kgdG8gbGltaXQgYWxsb2NhdGluZyB0aGUNCj4+IDY0TUIg
-aW4gUFYgZ3Vlc3RzIHRvIHRoZSBjYXNlcyB3aGVyZSB0aGUgbWVtb3J5IG1hcCBoYXMgbm9u
-LVJBTSByZWdpb25zDQo+PiBlc3BlY2lhbGx5IGluIHRoZSBmaXJzdCAxTUIgb2YgdGhlIG1l
-bW9yeS4NCj4+DQo+PiBUaGlzIHdpbGwgY292ZXIgZXZlbiBob3RwbHVnIGNhc2VzLiBUaGUg
-b25seSBjYXNlIG5vdCBjb3ZlcmVkIHdvdWxkIGJlIGENCj4+IGd1ZXN0IHN0YXJ0ZWQgd2l0
-aCBlODIwX2hvc3Q9MSBldmVuIGlmIG5vIFBDSSBwYXNzdGhyb3VnaCB3YXMgcGxhbm5lZC4N
-Cj4+IEJ1dCB0aGlzIHNob3VsZCBiZSByYXRoZXIgcmFyZSAoYXQgbGVhc3QgSSBob3BlIHNv
-KS4NCj4gDQo+IFNvIGlzIHRoaXMgYW4gQUNLIGZvciB0aGUgcGF0Y2ggYW5kIGNhbiB3ZSBn
-byBhaGVhZCB3aXRoIGl0Pw0KDQpBcyBsb25nIGFzIGFib3ZlIG1lbnRpb25lZCBjaGVjayBv
-ZiB0aGUgRTgyMCBtYXAgaXMgZG9uZSwgeWVzLg0KDQpJZiB5b3Ugd2FudCBJIGNhbiBzZW5k
-IGEgZGlmZiB0byBiZSBmb2xkZWQgaW50byB5b3VyIHBhdGNoIG9uIE1vbmRheS4NCg0KPiAN
-Cj4gKEknZCBzdGlsbCBsaWtlIHRvIG1lcmdlIHN3aW90bGIteGVuIGludG8gc3dpb3RsYiBl
-dmVudHVhbGx5LCBidXQgaXQncw0KPiBwcm9iYWJseSBub3QgZ29pbmcgdG8gaGFwcGVuIHRo
-aXMgbWVyZ2Ugd2luZG93KQ0KDQpXb3VsZCBiZSBuaWNlLg0KDQoNCkp1ZXJnZW4NCg==
---------------IGSz9KXXZgxtj0Jz1Oxp28BQ
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Drop "binding"
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+> +
+> +maintainers:
+> +  - Piyush Mehta <piyush.mehta@amd.com>
+> +
+> +description: |
+> +  The Zynq UltraScale+ MPSoC and Versal has several different resets.
+> +
+> +  The PS reset subsystem is responsible for handling the external reset
+> +  input to the device and that all internal reset requirements are met
+> +  for the system (as a whole) and for the functional units.
+> +
+> +  Please also refer to reset.txt in this directory for common reset
+> +  controller binding usage. Device nodes that need access to reset
+> +  lines should specify them as a reset phandle in their corresponding
+> +  node as specified in reset.txt.
+> +
+> +  For list of all valid reset indices for Zynq UltraScale+ MPSoC
+> +  <dt-bindings/reset/xlnx-zynqmp-resets.h>
+> +
+> +  For list of all valid reset indices for Versal
+> +  <dt-bindings/reset/xlnx-versal-resets.h>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - xlnx,zynqmp-reset
+> +      - xlnx,versal-reset
+> +
+> +  "#reset-cells":
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - "#reset-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/reset/xlnx-zynqmp-resets.h>
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+Drop, won't be needed after removing unrelated parts.
 
---------------IGSz9KXXZgxtj0Jz1Oxp28BQ--
+> +
+> +    firmware {
 
---------------csx4aCZJXTkhgehRBNI804YW--
+Drop
 
---------------90t7m9Jx5Xk69a4ZuetOcZUR
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+> +        zynqmp_firmware: zynqmp-firmware {
 
------BEGIN PGP SIGNATURE-----
+Drop, three level of indentations for that simple reset-controller...
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmSDR3QFAwAAAAAACgkQsN6d1ii/Ey/V
-CwgAgbJpH1odyDVntfaeroRGArp+yXBmzdpZp9I4wIu/Ioc/TgAnKzT9ol4v9FwCbFCNtECT6bMy
-Pwe7QnfTHA+qK3S8pfDZUY2mzZqbkCq9Er02jSPBjyWNLPYJZ+rZl5qGvVTjob6j32mguYM79XMM
-DBkGi9e1eJE/71mZHdpujEAF5bB5QwpzpTwcuSFxSXS/WLB+EFy/IsxldV773qErDnDapZSV0WRo
-ZC3r1FLrbq4PZjqGzyIW+k26Xh0ZT3gAsa9c9pyQtPJ5bSiT9aVas4uUcQki6EMkWSpQr8Jn3CSj
-f4WIfQQ/Lx6UKfC54bKshAISK3UDT7WTtR8zAGGDYw==
-=HTe9
------END PGP SIGNATURE-----
+> +            zynqmp_reset: reset-controller {
+> +                compatible = "xlnx,zynqmp-reset";
+> +                #reset-cells = <1>;
+> +            };
+> +        };
+> +    };
+> +
+> +    /* Specifying sata reset control of devices */
+> +    sata {
+> +        resets = <&zynqmp_reset ZYNQMP_RESET_SATA>;
+> +        reset-names = "sata_rst";
+> +    };
 
---------------90t7m9Jx5Xk69a4ZuetOcZUR--
+Drop this - not related.
+> +
+> +...
+
+Best regards,
+Krzysztof
+
