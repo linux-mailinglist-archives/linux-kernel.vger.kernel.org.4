@@ -2,116 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94DEF729D05
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64EE1729D10
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:38:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241515AbjFIOhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 10:37:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56542 "EHLO
+        id S241520AbjFIOi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 10:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238413AbjFIOhQ (ORCPT
+        with ESMTP id S241526AbjFIOiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 10:37:16 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5753E269A;
-        Fri,  9 Jun 2023 07:37:12 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1b246dd3390so8215305ad.2;
-        Fri, 09 Jun 2023 07:37:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686321431; x=1688913431;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SWIW6qqJd51uSzlmPSBiiIp+Xswi2pR+42bNT8oGIsQ=;
-        b=pxCWtpYRge3pwe27XGgdApJPJ8Iw7aNAl2IqLBDtpki1gj+vpMsBbZMSodkLyRk3Hs
-         xwDqhju+KmMxSv5E1OdnS8FuZkPtSqEusAP1yAG3vlV2aOEOq0I4mHEb7gi4em2/mhJ4
-         /o+60u3n8p1wSH0I4K3LA1miyRlk0ne/CzkQef5Y6lf1i1uN7WzSB3UU3SaU72hjquvQ
-         7c/tB4J65PHAwVTlIxLw769W/YeFB9hHyV8thAAPM/h8CjPI7CTnP5RnM82fVc9C7Tl9
-         9kS8U2x5fjIJAxHpdKdxVnYrjZifyVaK2aePVrdjSZ0PFRr7Id2jsV2x3kOCwqBFcfz3
-         SVAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686321431; x=1688913431;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SWIW6qqJd51uSzlmPSBiiIp+Xswi2pR+42bNT8oGIsQ=;
-        b=D0htRTYbpoUet9vffaus/w2XmBu17YgnUK0UUsneCJ9dpvJSGX4OwiXohwQUMBFXoJ
-         fOuazBzVaFWu/+Eb22B7NNIOCp+MeSH4Fhjg7wTLcAtVOml3jLlNLnWm9UixZRz/NyoS
-         rRPeIKkYGOcLorg58ewHU8PjlLSnhTbQVUHssGw0bW+aa1go2Rz+rtcTPwgMXC1N4qyx
-         NpR5H4CWEFCg+BP1/kmMyZ9fOVRj7TzdzlsE8PG2v/zVix5Quh+TFl0r9ePeHQtrURIE
-         QLVjUPDPpFGxLWwdalgk4F/1OqsaccwWhY+1GaoAo2KZn4UllAsV1vUfRNdU3mYhB7fV
-         6wlw==
-X-Gm-Message-State: AC+VfDz/SNfsuCGHnQCW3TGuyz0WnIe/PxOb/kXr/6PhOfb6KkPJsq2D
-        lXaLGCA5r+bwSJG5kzzIE54=
-X-Google-Smtp-Source: ACHHUZ5deXOSS0HUy8LZ8fKjZooRMCA/p/ysVl9XgLfbmmifLolNcr7GdZcEMRNdi1IlHXxvnSDiVQ==
-X-Received: by 2002:a17:903:120c:b0:1b0:3224:e53a with SMTP id l12-20020a170903120c00b001b03224e53amr1607974plh.20.1686321431215;
-        Fri, 09 Jun 2023 07:37:11 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s11-20020a170902ea0b00b001b23eb0b4bbsm3352652plg.147.2023.06.09.07.37.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Jun 2023 07:37:10 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <363c1fc1-5ed7-8a21-a627-58d1338c446f@roeck-us.net>
-Date:   Fri, 9 Jun 2023 07:37:08 -0700
+        Fri, 9 Jun 2023 10:38:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8471D358E;
+        Fri,  9 Jun 2023 07:38:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B92B8658AB;
+        Fri,  9 Jun 2023 14:38:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B7BAC433EF;
+        Fri,  9 Jun 2023 14:38:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686321501;
+        bh=f+fQv+upRjx2w7c5bcBW2it7gWiYnokP+mGVW6jLa4U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V4P4J6gaolPwKhAxmWgzUczzx90Q8+dfYX3FByErMoG6vnvQsgg1CelsVPrkXcUqD
+         GRXon+Q+VUjJLlb1gF2x/QJ0zc36IrDA3UNycSa5TplJnQgfoQZDFOxm81Pc2TXyfv
+         fPoNSG9l46OJ6fR3Sqj6K/Lr460OWxFb1XbiDUZHgBbq3GY6+kL0hKimbqU3h/OCki
+         dP2uU0r6a//Q2m4n1iqa3ZfVGyZNjgfaDizLVCpfMlgbW2Pbdlm6jn9iG7+bN9/+uw
+         z6KeN0qkHpdPN3HDvSzUr3LmQMCC2//VhRTilZKC9Fc6T+rkynROO7qE96caTewbJ4
+         XqxdoDu0uTvHg==
+Date:   Fri, 9 Jun 2023 22:38:03 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Tim Harvey <tharvey@gateworks.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Li Yang <leoyang.li@nxp.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] arm64: dts: imx8mp-venice-gw74xx: update to revB PCB
+Message-ID: <20230609143803.GC4199@dragon>
+References: <20230606152652.1447659-1-tharvey@gateworks.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     Joaquin Aramendia <samsagax@gmail.com>
-Cc:     derekjohn.clark@gmail.com, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230527012206.133464-1-samsagax@gmail.com>
- <8ae3e2ad-27ff-4339-88d4-504c2f59e501@roeck-us.net>
- <CABgtM3h8DXs0swGQth=dcE3J_W8k8iejvfFgjVSm9nKbRmxHDQ@mail.gmail.com>
- <820cef00-4768-46ae-c5a5-ea7c0dff71c5@roeck-us.net>
- <CABgtM3h0KMsOzZZvYKZLsFXn9A81V59ygSKizoF3TTkraMWr-Q@mail.gmail.com>
- <94f78001-13df-8c39-4771-7842dc94195e@roeck-us.net>
- <CABgtM3iOyCDgDY1gj-gJ4DXaXCY41FKzy-=miz0iiT8ywjbMHg@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] hwmon: (oxp-sensors) Add tt_toggle attribute on supported
- boards
-In-Reply-To: <CABgtM3iOyCDgDY1gj-gJ4DXaXCY41FKzy-=miz0iiT8ywjbMHg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230606152652.1447659-1-tharvey@gateworks.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/9/23 05:50, Joaquin Aramendia wrote:
->> Why don't you just attach the attribute to the platform device as I
->> had suggested earlier ?
+On Tue, Jun 06, 2023 at 08:26:52AM -0700, Tim Harvey wrote:
+> Update the imx8mp-venice-gw74xx for revB:
+>  - add CAN1
+>  - add TIS-TPM on SPI2
+>  - add FAN controller
+>  - fix PMIC I2C bus (revA PMIC I2C was non-functional so no need for
+>    backward compatible option)
+>  - M2 socket GPIO's moved
 > 
-> You mean I should do something like this in probe():
-> 
-> static int oxp_platform_probe(struct platform_device *pdev)
-> {
->    ...
-> 
-> switch (board) {
->      case aok_zoe_a1:
->      case oxp_mini_amd_a07:
->      case oxp_mini_amd_pro:
->          pdev->dev.groups = oxp_ec_groups;
-> }
->      hwdev = devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
->          &oxp_ec_chip_info, NULL);
-> ...
-> }
-> 
-> Would that work? Or even be correct?
+> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
 
+../arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts:402.4-17: Warning (reg_format): /soc@0/bus@30800000/i2c@30a20000/gsc@20/fan-controller@a:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
+arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dtb: Warning (pci_device_reg): Failed prerequisite 'reg_format'
+arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dtb: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
+arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dtb: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
+arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dtb: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
+../arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts:400.20-403.5: Warning (avoid_default_addr_size): /soc@0/bus@30800000/i2c@30a20000/gsc@20/fan-controller@a: Relying on default #address-cells value
+../arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts:400.20-403.5: Warning (avoid_default_addr_size): /soc@0/bus@30800000/i2c@30a20000/gsc@20/fan-controller@a: Relying on default #size-cells value
 
-No, that would not work, because the platform device already exists.
-It would have to be added in the init function, or if done in the probe
-function it would have to be added to the platform device with an
-explicit call to devm_device_add_group().
-
-Guenter
-
+Shawn
