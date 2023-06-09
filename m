@@ -2,96 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3821E72A06E
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:44:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6877D72A072
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbjFIQoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 12:44:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47834 "EHLO
+        id S229787AbjFIQo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 12:44:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbjFIQoD (ORCPT
+        with ESMTP id S229803AbjFIQoz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 12:44:03 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB743AAB
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:43:57 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-51475e981f0so3426470a12.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 09:43:57 -0700 (PDT)
+        Fri, 9 Jun 2023 12:44:55 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FCB3A97;
+        Fri,  9 Jun 2023 09:44:40 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b23f04e333so7588725ad.3;
+        Fri, 09 Jun 2023 09:44:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1686329035; x=1688921035;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bU7ZExiYZGpXxtSGpQ49waf+c1eFY7AbxM1kuBi0fpQ=;
-        b=YrnXySk3YXh/YlYz6ObsTiPCZR45zJXxRZ/715/SlhIvFmmND24w4AGX7Mwp8N2RTn
-         CSHfipaLqA2Y6Rto31jSd84jtyxj8p7izlY5VKEhvdbM8hlg2/NmZtsTjc6iaLy6zKf2
-         ih3thb5Bh+oWfvscRZcy7ttxCfhyweYsWyEu8=
+        d=gmail.com; s=20221208; t=1686329080; x=1688921080;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=EdaYmroOCsHHIxQ/Q7Hjtm846vg4ZSkKlVHycee4hiQ=;
+        b=fGFbD5PSbYF99UQlwiVez/cMM9upAZnvHfzE4RaHFwWfjw17nkaOCvOZpLpPtoQAij
+         xMoQyyojMpceSiBfMVxxKBtqFuAZ1bteNFeokFwvw4xdRiHFeo7p+uSe3Gvnf1zwTSZO
+         yRqJvkSXFzHblv8HanMN2qCueh7KW0d/pggBUjK2bRaOJvPc7Aj/Los949p1Qf6IXibb
+         4FMsBIqiYod1z7PxL/8aUilmdT8U4Lj57DDuYxgvKa7gZJ+6oISrKphYW46Nzxm5ZxXf
+         5dHPIbUsnTcGkjUh7t6nz0IzqyzC0aC0CfANwexff4iDtKpGIVpuEnnY/Oz92YpvXCaR
+         wLZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686329035; x=1688921035;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bU7ZExiYZGpXxtSGpQ49waf+c1eFY7AbxM1kuBi0fpQ=;
-        b=TJtmZ2LYv5Q4+RueR94MAUOXLgxxzKtk2kWaFLgiiKS/bcxEHVqkMs73oipy0g4QV5
-         El5aviOrtHrC1Qhr3piXodydPEvzIWiKQaPGOsUSJ3eqAEAelOz35uXttkgjZ/xvULY3
-         PBtPG2qk/4CCL7/QasNaZeId5/Qf4L5BNxV4ZqLGifBi71EoOCcBO7tvmDtSQSJ0x//8
-         Td1ci/IOntI47LbCTPRWrQaC8sxrJxN9+dAgzL4I89QEuPeDShDRhaVsXUYpquOv+rnF
-         +T82IEUhtygJ1t0gz0lJecpBt1S06j31Y0IaWJXG45lu6LJWkpeI4zSdWQa2bByEk2XS
-         KzDA==
-X-Gm-Message-State: AC+VfDwKwUSxgiKvJotzMFozsKTozpD+qoNIo2XyTIHYrMZU94w6L0hW
-        t040lAPaQP7zTpVvpJxe6oXHWfWzCPAqnNjeb1+21+FV
-X-Google-Smtp-Source: ACHHUZ5w/lA+8dZeCKjaWYjC9n5jomQi8br7OMIetL4J75dsbeM6oA/7VwiESPshh4KMMZmuILnCYg==
-X-Received: by 2002:a17:907:5ce:b0:978:6e73:e837 with SMTP id wg14-20020a17090705ce00b009786e73e837mr2396711ejb.4.1686329035243;
-        Fri, 09 Jun 2023 09:43:55 -0700 (PDT)
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com. [209.85.208.51])
-        by smtp.gmail.com with ESMTPSA id a12-20020a17090680cc00b0096f7105b3a6sm1478920ejx.189.2023.06.09.09.43.54
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Jun 2023 09:43:54 -0700 (PDT)
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5149b63151aso3423358a12.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 09:43:54 -0700 (PDT)
-X-Received: by 2002:a17:907:70a:b0:96f:a935:8997 with SMTP id
- xb10-20020a170907070a00b0096fa9358997mr2422134ejb.12.1686329034229; Fri, 09
- Jun 2023 09:43:54 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686329080; x=1688921080;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EdaYmroOCsHHIxQ/Q7Hjtm846vg4ZSkKlVHycee4hiQ=;
+        b=A+0mdWmagCOoRyLCpJILbdCCDtWufsT6f6cCIxuIx4mGihhQPH5ifO+UpGDYc57sk2
+         6n6fuu7+49Ow+NiRPTCBLhJCvEFyGxD6vop4QQwaOQKxTDV1s06s08UJE55v5LKwgnNm
+         IKAQl/HRJQJJjyWQl+Pai6Lk8FGbNhgIiBxn6TxNlfbME2UF4CJxJ1M1zwK0CiEs+9a9
+         4HrgcFM70BpbEPbiFYVjmspnHNpZCezNWPej9958NDmKl6FUERx+tj3cLskvdLYH0iMi
+         VMYQcxFRaglTZ8Q+GI2ET+W3XvhkfpuZqB9v9Y5BM8FpTqPYaalmbYYQEfS+/bJqpF02
+         jEEg==
+X-Gm-Message-State: AC+VfDyWN+qo8iEizZJtU2zM7/q/hamEXTRhfADQdz0vZsjpYoTSS14W
+        t6x31RQbohu7zjSb657Zi10=
+X-Google-Smtp-Source: ACHHUZ6l2kj86foQyBHiwjzuw87gKyWlXzVwE8Z1dgEyeSxEIoWlyLrFxaHRW1b7uUEAzA082BypKQ==
+X-Received: by 2002:a17:902:8b81:b0:1b1:9272:55f3 with SMTP id ay1-20020a1709028b8100b001b1927255f3mr1198845plb.66.1686329079895;
+        Fri, 09 Jun 2023 09:44:39 -0700 (PDT)
+Received: from krava (c-67-160-222-115.hsd1.ca.comcast.net. [67.160.222.115])
+        by smtp.gmail.com with ESMTPSA id p5-20020a170902bd0500b00186a2274382sm3514760pls.76.2023.06.09.09.44.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 09:44:39 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Fri, 9 Jun 2023 09:44:36 -0700
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Jackie Liu <liu.yun@linux.dev>
+Subject: Re: [PATCH RFC] ftrace: Show all functions with addresses in
+ available_filter_functions_addrs
+Message-ID: <ZINW9FqIoja76DRa@krava>
+References: <20230608212613.424070-1-jolsa@kernel.org>
+ <CAEf4BzbNakGzcycJJJqLsFwonOmya8=hKLD41TWX2zCJbh=r-Q@mail.gmail.com>
+ <20230608192748.435a1dbf@gandalf.local.home>
+ <CAEf4BzYkNHu7hiMYWQWs_gpYOfHL0FVuf-O0787Si2ze=PFX5w@mail.gmail.com>
+ <ZILhqvrjeFIPHauy@FVFF77S0Q05N>
 MIME-Version: 1.0
-References: <20230609144613.210272-1-brgl@bgdev.pl> <168632880867.22652.10987437416013616928.pr-tracker-bot@kernel.org>
-In-Reply-To: <168632880867.22652.10987437416013616928.pr-tracker-bot@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 9 Jun 2023 09:43:37 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whVcTX2hJ9VrpooL1ft34oB5kyrRsziM7cH94d8RGA_7g@mail.gmail.com>
-Message-ID: <CAHk-=whVcTX2hJ9VrpooL1ft34oB5kyrRsziM7cH94d8RGA_7g@mail.gmail.com>
-Subject: Re: [GIT PULL] gpio: fixes for v6.4-rc6
-To:     pr-tracker-bot@kernel.org,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZILhqvrjeFIPHauy@FVFF77S0Q05N>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hmm. I have no idea why you got duplicate replies from the
-pr-tracker-bot for the same pull request.
+On Fri, Jun 09, 2023 at 09:24:10AM +0100, Mark Rutland wrote:
+> On Thu, Jun 08, 2023 at 04:55:40PM -0700, Andrii Nakryiko wrote:
+> > On Thu, Jun 8, 2023 at 4:27 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+> > > On Thu, 8 Jun 2023 15:43:03 -0700 Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+> > > > On Thu, Jun 8, 2023 at 2:26 PM Jiri Olsa <jolsa@kernel.org> wrote:
+>  
+> > There are BPF tools that allow user to specify regex/glob of kernel
+> > functions to attach to. This regex/glob is checked against
+> > available_filter_functions to check which functions are traceable. All
+> > good. But then also it's important to have corresponding memory
+> > addresses for selected functions (for many reasons, e.g., to have
+> > non-ambiguous and fast attachment by address instead of by name, or
+> > for some post-processing based on captured IP addresses, etc). And
+> > that means that now we need to also parse /proc/kallsyms and
+> > cross-join it with data fetched from available_filter_functions.
+> > 
+> > All this is unnecessary if avalable_filter_functions would just
+> > provide function address in the first place. It's a huge
+> > simplification. And saves memory and CPU.
+> 
+> Do you need the address of the function entry-point or the address of the
+> patch-site within the function? Those can differ, and the rec->ip address won't
+> necessarily equal the address in /proc/kallsyms, so the pointer in
+> /proc/kallsyms won't (always) match the address we could print for the ftrace site.
+> 
+> On arm64, today we can have offsets of +0, +4, and +8, and within a single
+> kernel image different functions can have different offsets. I suspect in
+> future that we may have more potential offsets (e.g. due to changes for HW/SW
+> CFI).
 
-Konstantin?
+so we need that for kprobe_multi bpf link, which is based on fprobe,
+and that uses ftrace_set_filter_ips to setup the ftrace_ops filter
 
-               Linus
+and ftrace_set_filter_ips works fine with ip address being the address
+of the patched instruction (it's matched in ftrace_location)
 
-On Fri, Jun 9, 2023 at 9:40=E2=80=AFAM <pr-tracker-bot@kernel.org> wrote:
->
-> The pull request you sent on Fri,  9 Jun 2023 16:46:13 +0200:
->
-> > git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-=
-fixes-for-v6.4-rc6
->
-> has been merged into torvalds/linux.git:
+but right, I did not realize this.. it might cause confusion if people
+don't know it's patch-side addresses..  not sure if there's easy way to
+get real function address out of rec->ip, but it will also get more
+complicated on x86 when IBT is enabled, will check
+
+or we could just use patch-side addresses and reflect that in the file's
+name like 'available_filter_functions_patch_addrs' .. it's already long
+name ;-)
+
+jirka
