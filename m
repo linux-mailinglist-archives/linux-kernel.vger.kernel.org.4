@@ -2,99 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBD1F7296AA
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 12:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEA1A7296AB
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 12:18:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240939AbjFIKSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 06:18:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58408 "EHLO
+        id S241254AbjFIKSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 06:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238770AbjFIKRe (ORCPT
+        with ESMTP id S240000AbjFIKRf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 06:17:34 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C8B4C22
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 03:09:21 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-510d6b939bfso2882822a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 03:09:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686305360; x=1688897360;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Eqc/GRalmOX/Cpkh1a/xoLsbg/daV5DaountlO/f1vQ=;
-        b=wcaRhO6QN3tlsf2JnM+ZSo4mJKsailFT6iJfYjD1OZQ5iiap5M5MjbJgrvfNZkHecK
-         ZKaulST6j9eHS2TQCqqSRw3DlrfwhrOLJJcOf/cxKzo8WX0EDox2vEmotE3J/sqTGUOX
-         22e85cfTh3qhRQyCeP+5yvECj4CCUWF/gcGMrdeoLRxy+uVIsTuO9Gcx+wYjihA23yqA
-         Y91jofWfATzguUDEDZEjDTYLjihWEiy72KLl0gwn1vh0dBXXNi+P1zyJOYPIlkZvtxrK
-         2ncGFKj1HM18q+ZBovngL/zzClFjsI87iFzpDqNktj00aDMBlRT4XSlHB9vpIkyOVqKr
-         wMMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686305360; x=1688897360;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Eqc/GRalmOX/Cpkh1a/xoLsbg/daV5DaountlO/f1vQ=;
-        b=IqaTO3M9QIZjNA1TazFMWTdABBFs9OXLTny07DF42Gd0zKW77pGEZ5pd/aemgmTTI1
-         0mO+UcX/nZZdPL1fvxamnQmSM4RqOjFi2INM2J+ChRKiqKL5aaUK5jhk59JEzCqaulY7
-         OL0ksNqYSsBL7Ar71hHJ/wn2Y83FfHORsg3DHuuZM56zgdlaKNJCOQ/OO2yh45+/2pns
-         XOj1W91HgcUKqkksXr2krYwA2gKFF3sL1PVKELtfZaaLIhqFog9hc2MGqIU2Nm0hlalS
-         BPgrg8uCV96y2TWIofc/gueoniHhu1jTQG3VCissCDouMlTNy+ubZrhByGUXNAogeRlb
-         VG8A==
-X-Gm-Message-State: AC+VfDyLdS8ghd6dlLeWmQliwmdSzHLbeqeksnF/ApacSvLfwcNGMMGm
-        EzdU6iY0XjQ9/rpX7a0psxFjWg==
-X-Google-Smtp-Source: ACHHUZ5I+iWpj0MgD+gxarDbhhgIyHddx5lvZA28//Cy2f9fowQOYHaXvbmPuMlGFSt4g6l+CusWNQ==
-X-Received: by 2002:a17:907:94ca:b0:973:ad8f:ef9b with SMTP id dn10-20020a17090794ca00b00973ad8fef9bmr1385977ejc.5.1686305359815;
-        Fri, 09 Jun 2023 03:09:19 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id z8-20020a170906240800b0096b1206aa3fsm1096744eja.89.2023.06.09.03.09.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Jun 2023 03:09:19 -0700 (PDT)
-Message-ID: <d5bbc7ea-43c2-77fe-3d58-251e2488ad64@linaro.org>
-Date:   Fri, 9 Jun 2023 12:09:17 +0200
+        Fri, 9 Jun 2023 06:17:35 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F98E2;
+        Fri,  9 Jun 2023 03:09:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1686305371; x=1717841371;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=sZ+d+XIo8jNJHOQCGSyieJm0cQ0k+03KYRr/z3ZTOCg=;
+  b=ND9ROcZOVQDjghWgmrSXJ96WpcpDo/wtff5EhnMlcxVW+9bHAMqgQktw
+   SPNBH4CIgmCafgl/tissT0jbXpnpzD6bvVjA0ir2YyRu1R+vBDkuNiaaT
+   ctINMQmEQIWqc9BHpCb3z+Kh/umEN/aBF6HBlLXunyBnd0JJLHluKi6I1
+   JMVO/H1H8VUfE0awHd+tDsdOOAJU/vX0l+HVvySi/SDDTpi0BZ58PYVM+
+   XfRFI/2Ud5HEmthM4+xdl/HXwVRgjkbv4Z3ZmsTqCrxvm5BI06TL6FZRp
+   T+iFDu5r24KVWKN0eFOWXoiiiI+X/NwjiVzwvAZkCIRG4fUEV/jNEL/0P
+   w==;
+X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
+   d="scan'208";a="215332293"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Jun 2023 03:09:28 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 9 Jun 2023 03:09:27 -0700
+Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Fri, 9 Jun 2023 03:09:25 -0700
+Message-ID: <82f1d66a-b8cf-69bd-4783-e2c867c11828@microchip.com>
+Date:   Fri, 9 Jun 2023 12:09:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 1/8] pinctrl: qcom: qdf2xxx: drop ACPI_PTR
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 3/4] dt-bindings: power: reset: atmel,sama5d2-shdwc:
+ convert to yaml
 Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20230601152026.1182648-1-krzysztof.kozlowski@linaro.org>
- <CACRpkdZaj6FWLszvBid3C9LwVpiwhK=WsuJrcbMgppx80NbgjA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CACRpkdZaj6FWLszvBid3C9LwVpiwhK=WsuJrcbMgppx80NbgjA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>
+CC:     Claudiu Beznea <claudiu.beznea@microchip.com>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <alexandre.belloni@bootlin.com>, <sre@kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+References: <20230524123528.439082-1-claudiu.beznea@microchip.com>
+ <20230524123528.439082-4-claudiu.beznea@microchip.com>
+ <20230524-blizzard-hunting-4da815e634e2@spud>
+ <20230607204351.GA3984668-robh@kernel.org>
+ <20230607-refute-acrobat-3b3f645da71b@spud>
+ <CAL_JsqLyLs3Vfsd8LRd5_dUbzjE9LgMNnWa+8uP88Ab+E1oLfw@mail.gmail.com>
+ <20230608-tiptop-unfold-66c4b8f4e620@spud>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20230608-tiptop-unfold-66c4b8f4e620@spud>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/06/2023 09:12, Linus Walleij wrote:
-> On Thu, Jun 1, 2023 at 5:20 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
+On 08/06/2023 at 18:49, Conor Dooley wrote:
 > 
->> Driver can bind only via ACPI matching and acpi_device_id is there
->> unconditionally, so drop useless ACPI_PTR() macro.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> On Thu, Jun 08, 2023 at 08:38:10AM -0600, Rob Herring wrote:
 > 
-> Patches applied!
-> 
-> I had to manually update patch 7/8 to account for the IPQ5018 driver that
-> I just applied, but I think I figured it out, check the result!
+>> For reference, anything done by Arm, Linaro or NVIDIA employees is
+>> okay to relicense to dual license.
+> Ah cool, that's good to know, thanks.
+> Perhaps I should try to get a similar edict issued for Microchip ones.
+> @Nicolas, does that sound reasonable?
 
-Thanks, looks good!
+Well, we can work it out internally, indeed. But is there a public 
+statement about this somewhere?
 
-Best regards,
-Krzysztof
+Regards,
+   Nicolas
+-- 
+Nicolas Ferre
 
