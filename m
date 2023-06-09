@@ -2,222 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE031729D17
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:39:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A0D9729D1B
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241551AbjFIOj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 10:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
+        id S241558AbjFIOjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 10:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241079AbjFIOjU (ORCPT
+        with ESMTP id S240056AbjFIOjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 10:39:20 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99EAC269A;
-        Fri,  9 Jun 2023 07:39:18 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686321557;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=O/Gbxig3KHx3alSZjtr0kx9eZgIqHD/LRBPLbP6Mt5Y=;
-        b=BibnEOww0QBNScennSR5DSp34xDnk2kE/9mj92EqUnNRVtVhgZ0wNtltmPLBjVh9VzQKvS
-        C7fQ94nAoXDPc68JADBWh4uSPJnzTe6UVeYV6XNx2/NPOKCHiwthna5sDYgg4IaEUlmTK9
-        rnPIgMEkgUi8uv38t662BswGdGk9DlX6y36e9BzGVAFbOgBlLLm+EOSc4Jzqt4nLjEc8Rq
-        GOUt7LOEplO804qtYUWiVW1Btf2DrYlvw9sU5WrVf1do8jFS8tXOt+NWlfHHM/hmThhZBx
-        BjJ25cjuTT1BCrHU/8kDKbZrBeqNuwBY+AW/Gg/EFzCdIkEojRegwJCSqk+hYw==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3139A60009;
-        Fri,  9 Jun 2023 14:39:16 +0000 (UTC)
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, linux-pm@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Kamel Bouhara <kamel.bouhara@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 2/2] power: reset: at91-reset: add sysfs interface to the power on reason
-Date:   Fri,  9 Jun 2023 16:39:12 +0200
-Message-Id: <20230609143912.849995-3-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230609143912.849995-1-miquel.raynal@bootlin.com>
-References: <20230609143912.849995-1-miquel.raynal@bootlin.com>
+        Fri, 9 Jun 2023 10:39:42 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50B8359D;
+        Fri,  9 Jun 2023 07:39:34 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f6d38a140bso14485905e9.1;
+        Fri, 09 Jun 2023 07:39:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686321573; x=1688913573;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CkTk/I2vJ7u5Kgxyjnr/M7EFdjdjE5R1J++r5jqjZYk=;
+        b=dkNyG7XkCxcLXXvDrfl0Nk2GcQt1r6wldGM8N+9rl6hd7psFwlVLlMVe9sT2ypfetd
+         hjTn3HBDLw9T5+WcgPAbAo7FV0W6DOxa8RDNuqCzcjdnBdwGejh7tgUdHDvcNV/4oQhS
+         gK1WOQlWDEZgTKLhSRzVjn7gUubIJ2RmzYrQ8egF+8qPjt0hRXTgvYP/JST15ANuRMVB
+         Ntz0K8eiaSAJA7GmL1nI5M1ANmLRa39qkIb+05oWHywriz5uG/2oWhPA00QCYSTk+Jox
+         E7+yzCRKMRb0htjbG+jPtu8u5r3SXTyJhnMkc+bXevXsDw0V8Xniq88Ivmwt3wOzIdS1
+         zsVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686321573; x=1688913573;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CkTk/I2vJ7u5Kgxyjnr/M7EFdjdjE5R1J++r5jqjZYk=;
+        b=eWNcMCkEYP2CDq7xkmeVgF10UrMO9FsA0tAUOpW+4h09AVUAWMapvzMJyY/AerLbwf
+         LE522/lDIDvcV5xRJFH5Qg2wDUGaoSPHxlMWuSEQJvpdewH1H5Rhp5KzGWgjSWRH0dCI
+         3pY8iuie7yCOf542c6l7YeIqVPg1ZjRV82d2mjIuA3vdjVJOfBd0GjCPzK4vHj+hEPaZ
+         +tM2dn6GDox81nIFrocWiUHMd1jYL8EtiwFqRAXQmYHtLbMQJpKmQbYO0WDIgMDWuvr2
+         27E7pxtJjC4+/UcsIFhTavpBSp9IH+bM7+ZvZUx0uZdylYoj0I330MQWAszgK6KNpRmP
+         bhpQ==
+X-Gm-Message-State: AC+VfDwKEuhg8+KVH94iGKfbaHVzpNJTAdAsX0DOLEA4kA5ksgkdpZZa
+        beSGUDwllPC86gJfzawYOKc=
+X-Google-Smtp-Source: ACHHUZ4XeIuOaMJ3DqlHaX6FKCIBcclWXNEcRhBX/xprbU/C314K41du+V9pZsffr/MVyBXzjOYZ/w==
+X-Received: by 2002:a05:600c:3793:b0:3f7:2b61:4c98 with SMTP id o19-20020a05600c379300b003f72b614c98mr1625635wmr.13.1686321572880;
+        Fri, 09 Jun 2023 07:39:32 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id u3-20020a05600c210300b003f6028a4c85sm2901015wml.16.2023.06.09.07.39.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Jun 2023 07:39:31 -0700 (PDT)
+Message-ID: <ad9bc224-7e3a-49cb-40c7-c1fc0876599d@gmail.com>
+Date:   Fri, 9 Jun 2023 16:39:30 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v3 0/4] Add mt7986 thermal
+Content-Language: en-US, ca-ES, es-ES
+To:     Frank Wunderlich <linux@fw-web.de>,
+        linux-mediatek@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        "Hui.Liu" <hui.liu@mediatek.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Lala Lin <lala.lin@mediatek.com>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Daniel Golle <daniel@makrotopia.org>
+References: <20230530201235.22330-1-linux@fw-web.de>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230530201235.22330-1-linux@fw-web.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kamel Bouhara <kamel.bouhara@bootlin.com>
 
-Introduce a list of generic reset sources and use them to export the
-power on reason through sysfs. Update the ABI documentation to describe
-this new interface.
 
-Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-[Miquel Raynal: Follow-up on Kamel's work, 4 years later]
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
----
- .../testing/sysfs-platform-power-on-reason    | 10 +++++
- drivers/power/reset/at91-reset.c              | 42 +++++++++++++------
- include/linux/power/power_on_reason.h         | 19 +++++++++
- 3 files changed, 59 insertions(+), 12 deletions(-)
- create mode 100644 Documentation/ABI/testing/sysfs-platform-power-on-reason
- create mode 100644 include/linux/power/power_on_reason.h
+On 30/05/2023 22:12, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
+> 
+> This series add thermal related devicetree-nodes and necessary
+> dt-bindings.
+> 
+> I left pwm-fan for r3 for now as i cannot test this completely due to
+> missing 2 pin-jack and 3v3 pwm-level which my fan cannot handle (starts
+> spinning at ~3V). Only checked voltage of pwm there.
+> 
+> changes in v3:
+> - efuse compatibles into one line
+> 
+> changes in v2:
+> - drop highest 2 trip points as they are not yet used
+> - leave already applied patches
+> 
+> Daniel Golle (3):
+>    arm64: dts: mt7986: add thermal and efuse
+>    arm64: dts: mt7986: add thermal-zones
+>    arm64: dts: mt7986: add pwm-fan and cooling-maps to BPI-R3 dts
+> 
+> Frank Wunderlich (1):
+>    dt-bindings: nvmem: mediatek: efuse: add support for mt7986
+> 
+>   .../bindings/nvmem/mediatek,efuse.yaml        |  1 +
+>   .../dts/mediatek/mt7986a-bananapi-bpi-r3.dts  | 31 ++++++++++
+>   arch/arm64/boot/dts/mediatek/mt7986a.dtsi     | 62 +++++++++++++++++++
+>   3 files changed, 94 insertions(+)
+> 
 
-diff --git a/Documentation/ABI/testing/sysfs-platform-power-on-reason b/Documentation/ABI/testing/sysfs-platform-power-on-reason
-new file mode 100644
-index 000000000000..12020d017543
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-platform-power-on-reason
-@@ -0,0 +1,10 @@
-+What:		/sys/devices/platform/.../power_on_reason
-+Date:		October 2019
-+KernelVersion:	5.4
-+Contact:	Kamel Bouhara <kamel.bouhara@bootlin.com>
-+Description:	This file shows system power on reason. Possible sources are:
-+		General system power-on, RTC wakeup, watchdog timeout, software
-+		reset, user pressed reset button, CPU clock failure, oscillator
-+		failure, low power mode exit, unknown.
-+
-+		The file is read only.
-diff --git a/drivers/power/reset/at91-reset.c b/drivers/power/reset/at91-reset.c
-index a8a6f3997768..73cc6839a1c1 100644
---- a/drivers/power/reset/at91-reset.c
-+++ b/drivers/power/reset/at91-reset.c
-@@ -18,6 +18,7 @@
- #include <linux/platform_device.h>
- #include <linux/reboot.h>
- #include <linux/reset-controller.h>
-+#include <linux/power/power_on_reason.h>
- 
- #include <soc/at91/at91sam9_ddrsdr.h>
- #include <soc/at91/at91sam9_sdramc.h>
-@@ -149,44 +150,54 @@ static int at91_reset(struct notifier_block *this, unsigned long mode,
- 	return NOTIFY_DONE;
- }
- 
--static void __init at91_reset_status(struct at91_reset *reset)
-+static const char *at91_reset_reason(struct at91_reset *reset)
- {
- 	u32 reg = readl(reset->rstc_base + AT91_RSTC_SR);
- 	const char *reason;
- 
- 	switch ((reg & AT91_RSTC_RSTTYP) >> 8) {
- 	case RESET_TYPE_GENERAL:
--		reason = "general reset";
-+		reason = POWER_ON_REASON_GENERAL;
- 		break;
- 	case RESET_TYPE_WAKEUP:
--		reason = "wakeup";
-+		reason = POWER_ON_REASON_RTC;
- 		break;
- 	case RESET_TYPE_WATCHDOG:
--		reason = "watchdog reset";
-+		reason = POWER_ON_REASON_WATCHDOG;
- 		break;
- 	case RESET_TYPE_SOFTWARE:
--		reason = "software reset";
-+		reason = POWER_ON_REASON_SOFTWARE;
- 		break;
- 	case RESET_TYPE_USER:
--		reason = "user reset";
-+		reason = POWER_ON_REASON_USER;
- 		break;
- 	case RESET_TYPE_CPU_FAIL:
--		reason = "CPU clock failure detection";
-+		reason = POWER_ON_REASON_CPU_FAIL;
- 		break;
- 	case RESET_TYPE_XTAL_FAIL:
--		reason = "32.768 kHz crystal failure detection";
-+		reason = POWER_ON_REASON_XTAL_FAIL;
- 		break;
- 	case RESET_TYPE_ULP2:
--		reason = "ULP2 reset";
-+		reason = POWER_ON_REASON_LOW_POWER;
- 		break;
- 	default:
--		reason = "unknown reset";
-+		reason = POWER_ON_REASON_UNKNOWN;
- 		break;
- 	}
- 
--	dev_info(&pdev->dev, "Starting after %s\n", reason);
-+	return reason;
- }
- 
-+static ssize_t power_on_reason_show(struct device *dev,
-+				    struct device_attribute *attr, char *buf)
-+{
-+	struct platform_device *pdev = to_platform_device(dev);
-+	struct at91_reset *reset = platform_get_drvdata(pdev);
-+
-+	return sprintf(buf, "%s\n", at91_reset_reason(reset));
-+}
-+static DEVICE_ATTR_RO(power_on_reason);
-+
- static const struct of_device_id at91_ramc_of_match[] = {
- 	{
- 		.compatible = "atmel,at91sam9260-sdramc",
-@@ -391,7 +402,14 @@ static int __init at91_reset_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto disable_clk;
- 
--	at91_reset_status(pdev, reset->rstc_base);
-+	ret = device_create_file(&pdev->dev, &dev_attr_power_on_reason);
-+	if (ret) {
-+		dev_err(&pdev->dev, "Could not create sysfs entry\n");
-+		return ret;
-+	}
-+
-+	dev_info(&pdev->dev, "Starting after %s reset\n",
-+		 at91_reset_reason(reset));
- 
- 	return 0;
- 
-diff --git a/include/linux/power/power_on_reason.h b/include/linux/power/power_on_reason.h
-new file mode 100644
-index 000000000000..4b92eb0519c4
---- /dev/null
-+++ b/include/linux/power/power_on_reason.h
-@@ -0,0 +1,19 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Author: Kamel Bouhra <kamel.bouhara@bootlin.com>
-+ */
-+
-+#ifndef POWER_ON_REASON_H
-+#define POWER_ON_REASON_H
-+
-+#define POWER_ON_REASON_GENERAL "general"
-+#define POWER_ON_REASON_RTC "RTC wakeup"
-+#define POWER_ON_REASON_WATCHDOG "watchdog timeout"
-+#define POWER_ON_REASON_SOFTWARE "software"
-+#define POWER_ON_REASON_USER "user"
-+#define POWER_ON_REASON_CPU_FAIL "CPU clock failure"
-+#define POWER_ON_REASON_XTAL_FAIL "crystal oscillator failure"
-+#define POWER_ON_REASON_LOW_POWER "low power exit"
-+#define POWER_ON_REASON_UNKNOWN "unknown"
-+
-+#endif /* POWER_ON_REASON_H */
--- 
-2.34.1
-
+Applied 2-4, thanks!
