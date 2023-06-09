@@ -2,264 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E429672A023
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09DF272A026
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:26:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232429AbjFIQ0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 12:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39700 "EHLO
+        id S240648AbjFIQ0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 12:26:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231167AbjFIQ0W (ORCPT
+        with ESMTP id S242069AbjFIQ0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 12:26:22 -0400
-Received: from BN6PR00CU002.outbound.protection.outlook.com (mail-eastus2azon11021015.outbound.protection.outlook.com [52.101.57.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524752D5F;
-        Fri,  9 Jun 2023 09:26:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G0LgF3mSiJNAmfhUIPmpxLnB1Q12XrfbMGPa4COf2Wx9P5x0hDMGrse13gkQrAauoN6HtQrTAHLsNJWxxmCh0ZoQx/bmZtKdL3huxyW0aONRc8t6WGNSKEEKq/rT9vsOlu7M9v/nu+rTFk+e0jYyS3uXziDl6piOJj17gyuA9QgTCKB6GtBy8z6P5sNcfSGFDLC5zsj+r1ywdqPHIOIbPDN29TBRVb7r6omJopzEq614me/Fw80s1pn6uE+wDDR+DygMcrkRsilA3e4m4g8zXoeJjwdoybCghnqXFeZK4piAvvxN5UZB/zftOdTAr6fTLY9aKNyXgL/9v+scNP1P2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=w5bfv1H+CGDfbkwZ2cBIh4gyavf+5rvdrsvjYmkXPcQ=;
- b=UbSHC2S4qEpv2orM7/fqdeTuV/rFurX6AfUmJPBnhEnbt/0LvLVIVp5VxgESJ8BK7UenevwWBYav8rLfGdSp3FaJN+hOOqw8B7Njtr4m7CsyRiHacqXrQP06I41SkIJ7pnFFyM72NEeo6SOS08necWVDb7SxPAY7wjvdNu0UyCdfmb12JNOVbXwebq5IVVEcAHaf9dVc9xUCrnY741lTU4b8YMm/iq70UfBB/O8ZWxMWy7YFYckj+BBmGRNTYBY65BugM2bMOZ0/3yFnZ6x3u/wHIMCUhB3GAMcrcTe8s4AyoYUqnRMeJHciQxgoSdIQogbB2KzAO40Td4ievAZxUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=w5bfv1H+CGDfbkwZ2cBIh4gyavf+5rvdrsvjYmkXPcQ=;
- b=ESD3q6mug2xhtm8HdsTQDxE092V7RGn3UbAWxDyaDsrKHerKX2NiYuPh8x61pfYD+THdCy4ckUlKpXSUHnpT4Teux0HsZrnGhv2Lzcp4uK44kS7HywYXoJrBCoDgb0TxoE8Wih5KlIQto6LghytN2kbi5aaWoS94kih8vqisGns=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-Received: from BY5PR21MB1443.namprd21.prod.outlook.com (2603:10b6:a03:21f::18)
- by BY5PR21MB1474.namprd21.prod.outlook.com (2603:10b6:a03:21f::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.15; Fri, 9 Jun
- 2023 16:26:18 +0000
-Received: from BY5PR21MB1443.namprd21.prod.outlook.com
- ([fe80::4eff:a209:efda:81d4]) by BY5PR21MB1443.namprd21.prod.outlook.com
- ([fe80::4eff:a209:efda:81d4%6]) with mapi id 15.20.6500.016; Fri, 9 Jun 2023
- 16:26:17 +0000
-From:   Haiyang Zhang <haiyangz@microsoft.com>
-To:     linux-hyperv@vger.kernel.org, netdev@vger.kernel.org
-Cc:     haiyangz@microsoft.com, kys@microsoft.com, olaf@aepfle.de,
-        vkuznets@redhat.com, davem@davemloft.net, weiwan@google.com,
-        tim.gardner@canonical.com, corbet@lwn.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, dsahern@kernel.org,
-        atenart@kernel.org, bagasdotme@gmail.com, ykaliuta@redhat.com,
-        kuniyu@amazon.com, stephen@networkplumber.org,
-        simon.horman@corigine.com, maheshb@google.com,
-        liushixin2@huawei.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next] tcp: Make pingpong threshold tunable
-Date:   Fri,  9 Jun 2023 09:25:59 -0700
-Message-Id: <1686327959-13478-1-git-send-email-haiyangz@microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-Content-Type: text/plain
-X-ClientProxiedBy: MW4PR04CA0294.namprd04.prod.outlook.com
- (2603:10b6:303:89::29) To BY5PR21MB1443.namprd21.prod.outlook.com
- (2603:10b6:a03:21f::18)
+        Fri, 9 Jun 2023 12:26:35 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D51263A94
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:26:32 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-5689335d2b6so17105357b3.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 09:26:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686327992; x=1688919992;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kqmhgD0hzidkR7C4FG6ZaFcEzUFu8WFVvYV0gu30B4c=;
+        b=TpWGhj1go0f01Ili2y+lD2+R5W+Ad0HWc0ntIU994go70wqgsYE0Nbjoy5+25gjpdJ
+         HJWknYHWr5y/y7G73iIQZJ269NJ5e+84rcAcqX1VcSRYzXElE4lla3v4fDh90QKT5KL0
+         RrQs/yyErk3CZk0hVzl5gQhjpIwcbhGkMHipsQD9Qv7u4s36a8Zia4FXm+2aT74BFrP2
+         2V9mJrNVml0Kx+4g9wvMLhOjEJ+l9M2EGg/kgjmhGyFGZrPgCYYlxTODB/LfD1TRBVjp
+         R7QBMcLmvwCTJKQ/n3nzOjV9xqAWK8W+/Z4AgCUrGslkw7rOK6gp2v8PR7N90DjzBUiq
+         f3rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686327992; x=1688919992;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kqmhgD0hzidkR7C4FG6ZaFcEzUFu8WFVvYV0gu30B4c=;
+        b=CVZi9qw0wbZNADIYVMIOkvDopUL4B67ZdNA+zK1AIk3LybLYoOiDqJ8O33qMmiFEId
+         hnv5WRggZ+QnLJmqPEFi5RetcptLp7UTW652S9MhCWP/Y21T3X2EX1QgTuBHJ94r0lea
+         T48CmXwZF68PQLvuJLF9NVOEGlh35xnW1O/YYqxwIPfRNCY3sJuGBt5hQ1oodtM6v280
+         CuT3pCBRBqxYxj3VpBDSm9wzz+lr69uefsWjxqzfHG2GjTj2DHCOc5HmJRgsaa+Fqyj5
+         Ke1G331aS/Zm2AArh0veGwUvCpd4UXWUxgZIDcNbY97X+/y7AyHfbPzCvghvjQiUXs5/
+         uajA==
+X-Gm-Message-State: AC+VfDyyobh4kSNEAVXsDAxlfupA9qqbZ01DD06docEbSoEuc3IHx55Y
+        705pUH6kp1iBdv8/zbSf/9ZkH9xThYffmTp5dxgn0A==
+X-Google-Smtp-Source: ACHHUZ7lgaJdipRWewn4T/8Urmy4/1Lpe4YcOBI9261oG/aAVvlcVZ2sljI+94p6NxKfmsTVf8Wn8Euzot46J05NHs4=
+X-Received: by 2002:a81:838c:0:b0:561:c9c1:ce with SMTP id t134-20020a81838c000000b00561c9c100cemr1775388ywf.8.1686327991956;
+ Fri, 09 Jun 2023 09:26:31 -0700 (PDT)
 MIME-Version: 1.0
-Sender: LKML haiyangz <lkmlhyz@microsoft.com>
-X-MS-Exchange-MessageSentRepresentingType: 2
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR21MB1443:EE_|BY5PR21MB1474:EE_
-X-MS-Office365-Filtering-Correlation-Id: 27637225-4df6-4cde-43f0-08db69064010
-X-LD-Processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lCMfJfrt4VmHW74gLSp7kFMWk/ytLG43jidsRrgnfrEX+NUsHPZPqzYtyKYoq5OE+z8PCWJq9tDtS6+GekskppA+SUOz+9/nZq4NqNa4GgCvyxinby1qp9qCZUJELyDaYOTsK1Ud7PBUAylDPrOg1ldA4opTFiIIT1geSZrQHLSMqFwU8SGsCLgPf2DhoS7iAhuy5mHb5GYCvkrk6IVJLS3pIAD4ae/q31aXJwiIodtKah+U3knSDhmacJWhgglJbk/wDd++2LCZXmcw4BKBMhrz0O2LjUGDleSVHHvsPzn3AsXPlK8k28C8kl1zWFqmuFicCLNvZfAJoxHkWxXUe/vqzq7tW38gofchGsKWo37QkgkFdTCtvT61IrxA8cn7VGKvpA6d98n1tRgCCNhbrovZ34Q1Ar+20dIQZjrN6jgeO4dq+bdqwPjocKhFs59NyKaAHa0J6qWEYaPdQE4os85/qhXUBYHU7aTE0mByay7K4ISET33MQ9tD7nvjTWQUZ1WHHKLawOJQ+cTYMfY2vYdkOIXnmSPHs7lNbQbPVoVEZjqi9cd22ggv6hROfp1AxfcOdzE/5/ZcRuc7egDSl5M2LEHwo9OAh1QRnWo5SWWEC1lrSIkaKd7fEYPha7CaX5L1ch4vm8+enNQn3Tcs/2clPVOzsQfzsqkdRMkvlFw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR21MB1443.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(39860400002)(396003)(346002)(366004)(451199021)(8676002)(8936002)(478600001)(10290500003)(7846003)(6666004)(41300700001)(5660300002)(4326008)(316002)(6486002)(52116002)(6506007)(6512007)(26005)(186003)(7416002)(66556008)(66476007)(66946007)(2616005)(2906002)(83380400001)(38100700002)(38350700002)(82960400001)(82950400001)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6/3+KJxF+NpZx41J5hrmfAV6+CRz77iRmpN1ApA1zxoLVUQirrsKMzX0eSyq?=
- =?us-ascii?Q?Jd2mgAmoMNMrhrRrfC7tMQdewVLzy+5R2JTjO1U6quJWkkQ26GlrOR3FIK0G?=
- =?us-ascii?Q?q6FKril6XCHr8qL0qwYwQhQr0MCLN19KrhDvEuKk60Oj188kafYuBWL0D9Uj?=
- =?us-ascii?Q?uh7Y5bL397rXOUK4jOaJnNrpC8UMiLFi5SBz2xKdnggyb6ZQk9dqo/+HVPjQ?=
- =?us-ascii?Q?L1Rw4leEtK2gCgO3/RJoufYd1tw0xqaad0SP2Bzqqlaj+8uxNu8ixY30mA3P?=
- =?us-ascii?Q?9hpNhh/lcyE4VRGeDAXdAz+bPipOlNAhkLex/He6Zn//l862rFzAMN9+o6uF?=
- =?us-ascii?Q?/K6W5aY4B8Bsxee0J3snbtx2RHM/fJGsXV2JZgJrmG1S+bSWROgMDbR8uXJE?=
- =?us-ascii?Q?7wmNKSJAVd5V5cYEsc5GtZJ3XyxoBxxLQUHnOftEfsx7S3SQ7Bf8OULqLLx0?=
- =?us-ascii?Q?dMsgpuMf31JoaHfNNty5U3YxceQZxqVuCT9GQAGz45PTfRNdINzO6GvyF8Cd?=
- =?us-ascii?Q?SUUEiU/8nwhImDKADme5dd+XDlj6AxXgMIkAsOfKQwE1mlcxCR/R5sv6c5uZ?=
- =?us-ascii?Q?JcV/qgooDEbac0AnB7XA99ND1mHmnbTLGRKaMpeujchLMG7XXujJP601UHBh?=
- =?us-ascii?Q?TP4OT9TxDtv27N9UDf2jxs2tXvs8wJbUyhqzHDYuTf8NsyIzWxoKqWb8lGDa?=
- =?us-ascii?Q?mTJGozcBfeDqIQ8yMjqE9PyjOR7HlbnA5BixkR2AcvgemkXsPJ59El87zRRr?=
- =?us-ascii?Q?23vgNlikbPEbozTIPgKoupYTwLmkc3mU9ed6cU9vHW+7WoPot5q+yT0zL5y0?=
- =?us-ascii?Q?s4BTyMzeWNyoSFIfXg5WgBZYOMt0C/lnWpqVoKwyXKR510t5Fpcz4f2HPINk?=
- =?us-ascii?Q?N8cVwv6/liIF6Bc+zqM2nI6FxFBEk2D5Yt3Ca8xCrdoKEKaC+Nug8hb32qB5?=
- =?us-ascii?Q?HG8Bf2YK1V50BV/gK4jlA4Gpvbi/FDITmO8QBVYaJpzIf3cBPYgG52pjkgvr?=
- =?us-ascii?Q?40httRdTJypdTFw03tYBedLr8iLOMyZbz+4VZDgHQyATlzX6fVOKt5lpxQg6?=
- =?us-ascii?Q?g3oEx273NYZY8QGbYNOwoFuvVVZDwWR+wUnfXCCU3+rW9cK1vI0IHsknkQ95?=
- =?us-ascii?Q?Snf4jhec9ly+p/i62SN+SR2rdSqknoY/4ZLX8TSpAPjOr75+8m/E40ysqqGP?=
- =?us-ascii?Q?G7MZspxKBHub7FYZksUahhxjsZQpWcLqLehCz2+QVuPihOT1AA+VV+VVxLGM?=
- =?us-ascii?Q?KNUFc2XfjNjA6RZ+yf5LiUrXBzVEGSEgXeTNldnfG/7XCHu20JzT2WrNzwNK?=
- =?us-ascii?Q?lPB4NRbzoZF5f/mZXkFM3DAMIyUmMAFt9hs+KgjoUPNj30UHzjhPDN8Uh6nU?=
- =?us-ascii?Q?lLxa02yHIXRiTO0OEDVQoD126LPp4b2iQrT3TWf52ko6qdSluvWyAjlKAZYs?=
- =?us-ascii?Q?y3/GPgDk6EJcXfwM3yj5pzyepqT5+aQpQZKtPrC5LxX7kuWTOGdwiujWAJjQ?=
- =?us-ascii?Q?LVMtRkGjSY2fgn/+I6+ZLQhXoPvO5GY7QDkrDMB+mClTmCb8M72ZRHFXp1Zk?=
- =?us-ascii?Q?8zoOxZdoLMSEdDPtqvX54NadtUJyrjSiQW1TxI/1?=
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 27637225-4df6-4cde-43f0-08db69064010
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR21MB1443.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 16:26:17.8406
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9RHwuWVAAVbpUVo4zgg/QneIlPre0cXcCBGkvEvy1yDKUoE5aRKQmeBRiNF/oiogOGI8ucIUdqeyvX1IjYTXWg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR21MB1474
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <1686311249-6857-1-git-send-email-quic_krichai@quicinc.com> <1686311249-6857-4-git-send-email-quic_krichai@quicinc.com>
+In-Reply-To: <1686311249-6857-4-git-send-email-quic_krichai@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Fri, 9 Jun 2023 19:26:21 +0300
+Message-ID: <CAA8EJppPt8utWbF83dqMD4y2Of2ufwcpSPvdTyoDndkrbnZm3Q@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] PCI: qcom-ep: Add ICC bandwidth voting support
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Cc:     manivannan.sadhasivam@linaro.org, quic_vbadigan@quicinc.com,
+        quic_ramkri@quicinc.com, linux-arm-msm@vger.kernel.org,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "open list:PCIE ENDPOINT DRIVER FOR QUALCOMM" 
+        <linux-pci@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TCP pingpong threshold is 1 by default. But some applications, like SQL DB
-may prefer a higher pingpong threshold to activate delayed acks in quick
-ack mode for better performance.
+On Fri, 9 Jun 2023 at 14:47, Krishna chaitanya chundru
+<quic_krichai@quicinc.com> wrote:
+>
+> Add support to vote for ICC bandwidth based on the link speed and width.
+>
+> This patch is inspired from pcie-qcom driver to add basic interconnect
+> support.
+>
+> Link: https://lore.kernel.org/all/20221102090705.23634-1-johan+linaro@kernel.org/
 
-The pingpong threshold and related code were changed to 3 in the year
-2019, and reverted to 1 in the year 2022. There is no single value that
-fits all applications.
+This link should be a part of the cover letter, not the commit msg. If
+you want to refer to the previous commits, please use the standard
+reference: commit abcdefabc ("PCI: qcom: Make foo and bar").
 
-Add net.core.tcp_pingpong_thresh sysctl tunable, so it can be tuned for
-optimal performance based on the application needs.
+> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> ---
+>  drivers/pci/controller/dwc/pcie-qcom-ep.c | 68 +++++++++++++++++++++++++++++++
+>  1 file changed, 68 insertions(+)
+>
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom-ep.c b/drivers/pci/controller/dwc/pcie-qcom-ep.c
+> index 19b3283..baf831f 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom-ep.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom-ep.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/debugfs.h>
+>  #include <linux/delay.h>
+>  #include <linux/gpio/consumer.h>
+> +#include <linux/interconnect.h>
+>  #include <linux/mfd/syscon.h>
+>  #include <linux/phy/pcie.h>
+>  #include <linux/phy/phy.h>
+> @@ -28,6 +29,7 @@
+>  #define PARF_SYS_CTRL                          0x00
+>  #define PARF_DB_CTRL                           0x10
+>  #define PARF_PM_CTRL                           0x20
+> +#define PARF_PM_STTS                           0x24
+>  #define PARF_MHI_CLOCK_RESET_CTRL              0x174
+>  #define PARF_MHI_BASE_ADDR_LOWER               0x178
+>  #define PARF_MHI_BASE_ADDR_UPPER               0x17c
+> @@ -128,6 +130,9 @@
+>  /* DBI register fields */
+>  #define DBI_CON_STATUS_POWER_STATE_MASK                GENMASK(1, 0)
+>
+> +#define DBI_LINKCTRLSTATUS                     0x80
+> +#define DBI_LINKCTRLSTATUS_SHIFT               16
+> +
+>  #define XMLH_LINK_UP                           0x400
+>  #define CORE_RESET_TIME_US_MIN                 1000
+>  #define CORE_RESET_TIME_US_MAX                 1005
+> @@ -178,6 +183,8 @@ struct qcom_pcie_ep {
+>         struct phy *phy;
+>         struct dentry *debugfs;
+>
+> +       struct icc_path *icc_mem;
+> +
+>         struct clk_bulk_data *clks;
+>         int num_clks;
+>
+> @@ -253,9 +260,51 @@ static void qcom_pcie_dw_stop_link(struct dw_pcie *pci)
+>         disable_irq(pcie_ep->perst_irq);
+>  }
+>
+> +static void qcom_pcie_ep_icc_update(struct qcom_pcie_ep *pcie_ep)
+> +{
+> +       struct dw_pcie *pci = &pcie_ep->pci;
+> +       u32 offset, status, bw;
+> +       int speed, width;
+> +       int ret;
+> +
+> +       if (!pcie_ep->icc_mem)
+> +               return;
+> +
+> +       offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
+> +       status = readw(pci->dbi_base + offset + PCI_EXP_LNKSTA);
+> +
+> +       speed = FIELD_GET(PCI_EXP_LNKSTA_CLS, status);
+> +       width = FIELD_GET(PCI_EXP_LNKSTA_NLW, status);
+> +
+> +       switch (speed) {
+> +       case 1:
+> +               bw = MBps_to_icc(250);  /* BW for GEN1 per lane: 250MBps */
 
-Signed-off-by: Haiyang Zhang <haiyangz@microsoft.com>
----
- Documentation/admin-guide/sysctl/net.rst |  8 ++++++++
- include/net/inet_connection_sock.h       | 14 +++++++++++---
- net/core/sysctl_net_core.c               |  9 +++++++++
- net/ipv4/tcp.c                           |  2 ++
- net/ipv4/tcp_output.c                    | 17 +++++++++++++++--
- 5 files changed, 45 insertions(+), 5 deletions(-)
+Please extract these constants to the defines. This would save you
+from duplicating 250 below.
 
-diff --git a/Documentation/admin-guide/sysctl/net.rst b/Documentation/admin-guide/sysctl/net.rst
-index 4877563241f3..16f54be9461f 100644
---- a/Documentation/admin-guide/sysctl/net.rst
-+++ b/Documentation/admin-guide/sysctl/net.rst
-@@ -413,6 +413,14 @@ historical importance.
- 
- Default: 0
- 
-+tcp_pingpong_thresh
-+-------------------
-+
-+TCP pingpong threshold is 1 by default, but some application may need a higher
-+threshold for optimal performance.
-+
-+Default: 1, min: 1, max: 3
-+
- 2. /proc/sys/net/unix - Parameters for Unix domain sockets
- ----------------------------------------------------------
- 
-diff --git a/include/net/inet_connection_sock.h b/include/net/inet_connection_sock.h
-index c2b15f7e5516..e84e33ddae49 100644
---- a/include/net/inet_connection_sock.h
-+++ b/include/net/inet_connection_sock.h
-@@ -324,11 +324,11 @@ void inet_csk_update_fastreuse(struct inet_bind_bucket *tb,
- 
- struct dst_entry *inet_csk_update_pmtu(struct sock *sk, u32 mtu);
- 
--#define TCP_PINGPONG_THRESH	1
-+extern int tcp_pingpong_thresh;
- 
- static inline void inet_csk_enter_pingpong_mode(struct sock *sk)
- {
--	inet_csk(sk)->icsk_ack.pingpong = TCP_PINGPONG_THRESH;
-+	inet_csk(sk)->icsk_ack.pingpong = tcp_pingpong_thresh;
- }
- 
- static inline void inet_csk_exit_pingpong_mode(struct sock *sk)
-@@ -338,7 +338,15 @@ static inline void inet_csk_exit_pingpong_mode(struct sock *sk)
- 
- static inline bool inet_csk_in_pingpong_mode(struct sock *sk)
- {
--	return inet_csk(sk)->icsk_ack.pingpong >= TCP_PINGPONG_THRESH;
-+	return inet_csk(sk)->icsk_ack.pingpong >= tcp_pingpong_thresh;
-+}
-+
-+static inline void inet_csk_inc_pingpong_cnt(struct sock *sk)
-+{
-+	struct inet_connection_sock *icsk = inet_csk(sk);
-+
-+	if (icsk->icsk_ack.pingpong < U8_MAX)
-+		icsk->icsk_ack.pingpong++;
- }
- 
- static inline bool inet_csk_has_ulp(struct sock *sk)
-diff --git a/net/core/sysctl_net_core.c b/net/core/sysctl_net_core.c
-index 782273bb93c2..b5253567f2bd 100644
---- a/net/core/sysctl_net_core.c
-+++ b/net/core/sysctl_net_core.c
-@@ -653,6 +653,15 @@ static struct ctl_table net_core_table[] = {
- 		.proc_handler	= proc_dointvec_minmax,
- 		.extra1		= SYSCTL_ZERO,
- 	},
-+	{
-+		.procname	= "tcp_pingpong_thresh",
-+		.data		= &tcp_pingpong_thresh,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax,
-+		.extra1		= SYSCTL_ONE,
-+		.extra2		= SYSCTL_THREE,
-+	},
- 	{ }
- };
- 
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 53b7751b68e1..dcd143193d41 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -308,6 +308,8 @@ EXPORT_SYMBOL(tcp_have_smc);
- struct percpu_counter tcp_sockets_allocated ____cacheline_aligned_in_smp;
- EXPORT_SYMBOL(tcp_sockets_allocated);
- 
-+int tcp_pingpong_thresh __read_mostly = 1;
-+
- /*
-  * TCP splice context
-  */
-diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-index cfe128b81a01..576d21621778 100644
---- a/net/ipv4/tcp_output.c
-+++ b/net/ipv4/tcp_output.c
-@@ -167,12 +167,25 @@ static void tcp_event_data_sent(struct tcp_sock *tp,
- 	if (tcp_packets_in_flight(tp) == 0)
- 		tcp_ca_event(sk, CA_EVENT_TX_START);
- 
-+	/* If tcp_pingpong_thresh > 1, and
-+	 * this is the first data packet sent in response to the
-+	 * previous received data,
-+	 * and it is a reply for ato after last received packet,
-+	 * increase pingpong count.
-+	 */
-+	if (tcp_pingpong_thresh > 1 &&
-+	    before(tp->lsndtime, icsk->icsk_ack.lrcvtime) &&
-+	    (u32)(now - icsk->icsk_ack.lrcvtime) < icsk->icsk_ack.ato)
-+		inet_csk_inc_pingpong_cnt(sk);
-+
- 	tp->lsndtime = now;
- 
--	/* If it is a reply for ato after last received
-+	/* If tcp_pingpong_thresh == 1, and
-+	 * it is a reply for ato after last received
- 	 * packet, enter pingpong mode.
- 	 */
--	if ((u32)(now - icsk->icsk_ack.lrcvtime) < icsk->icsk_ack.ato)
-+	if (tcp_pingpong_thresh == 1 &&
-+	    (u32)(now - icsk->icsk_ack.lrcvtime) < icsk->icsk_ack.ato)
- 		inet_csk_enter_pingpong_mode(sk);
- }
- 
+> +               break;
+> +       case 2:
+> +               bw = MBps_to_icc(500);  /* BW for GEN2 per lane: 500MBps */
+> +               break;
+> +       case 3:
+> +               bw = MBps_to_icc(985);  /* BW for GEN3 per lane: 985MBps */
+> +               break;
+> +       default:
+> +               WARN_ON_ONCE(1);
+> +               fallthrough;
+> +       case 4:
+> +               bw = MBps_to_icc(1969); /* BW for GEN4 per lane:1969MBps */
+> +               break;
+> +       }
+> +
+> +       ret = icc_set_bw(pcie_ep->icc_mem, 0, width * bw);
+> +       if (ret) {
+> +               dev_err(pci->dev, "failed to set interconnect bandwidth: %d\n",
+> +                       ret);
+> +       }
+> +}
+> +
+>  static int qcom_pcie_enable_resources(struct qcom_pcie_ep *pcie_ep)
+>  {
+>         int ret;
+> +       struct dw_pcie *pci = &pcie_ep->pci;
+>
+>         ret = clk_bulk_prepare_enable(pcie_ep->num_clks, pcie_ep->clks);
+>         if (ret)
+> @@ -277,6 +326,20 @@ static int qcom_pcie_enable_resources(struct qcom_pcie_ep *pcie_ep)
+>         if (ret)
+>                 goto err_phy_exit;
+>
+> +       /*
+> +        * Some Qualcomm platforms require interconnect bandwidth constraints
+> +        * to be set before enabling interconnect clocks.
+> +        *
+> +        * Set an initial average bandwidth corresponding to GEN1x1(250 MBps)
+> +        * for the pcie to mem path.
+> +        */
+> +       ret = icc_set_bw(pcie_ep->icc_mem, 0, MBps_to_icc(250));
+> +       if (ret) {
+> +               dev_err(pci->dev, "failed to set interconnect bandwidth: %d\n",
+> +                       ret);
+> +               goto err_phy_exit;
+> +       }
+> +
+>         return 0;
+>
+>  err_phy_exit:
+> @@ -550,6 +613,10 @@ static int qcom_pcie_ep_get_resources(struct platform_device *pdev,
+>         if (IS_ERR(pcie_ep->phy))
+>                 ret = PTR_ERR(pcie_ep->phy);
+>
+> +       pcie_ep->icc_mem = devm_of_icc_get(dev, "pcie-mem");
+> +       if (IS_ERR(pcie_ep->icc_mem))
+> +               ret = PTR_ERR(pcie_ep->icc_mem);
+> +
+>         return ret;
+>  }
+>
+> @@ -572,6 +639,7 @@ static irqreturn_t qcom_pcie_ep_global_irq_thread(int irq, void *data)
+>         } else if (FIELD_GET(PARF_INT_ALL_BME, status)) {
+>                 dev_dbg(dev, "Received BME event. Link is enabled!\n");
+>                 pcie_ep->link_status = QCOM_PCIE_EP_LINK_ENABLED;
+> +               qcom_pcie_ep_icc_update(pcie_ep);
+>         } else if (FIELD_GET(PARF_INT_ALL_PM_TURNOFF, status)) {
+>                 dev_dbg(dev, "Received PM Turn-off event! Entering L23\n");
+>                 val = readl_relaxed(pcie_ep->parf + PARF_PM_CTRL);
+> --
+> 2.7.4
+>
+
+
 -- 
-2.25.1
-
+With best wishes
+Dmitry
