@@ -2,523 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BA5D729E84
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 17:30:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45A81729E86
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 17:30:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241505AbjFIPag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 11:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59538 "EHLO
+        id S241467AbjFIPaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 11:30:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236150AbjFIPac (ORCPT
+        with ESMTP id S241534AbjFIPam (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 11:30:32 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88FE01BC6
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 08:30:30 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-653436fcc1bso1622290b3a.2
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 08:30:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686324630; x=1688916630;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7UugMGksjZWRD0rlu0b/qOjgpa5w4C4cHJBLIFM0Pic=;
-        b=rfvX3V1rVbP5zXCFO1yVF99gOC9xdF4RoJeWxoxxSbmMTvjYsiMGIWTblXGU2zUSUr
-         ba3bRt6eV0xw8sqe/+B3NBWkjx+OqE/KbvROdBLk/lisebUHXxJRUyH3hmDGbK9eHHCs
-         zDhR1yTOC1J85ceFeU8IdIW9VVwX9/tnw0hBOovaPMKdPeWbBnZOz64D9tg62+sjat5P
-         z3CJzcN3oLWN5SOVpTJgaTeLg3ulHqJMynAzY3w8VWm/88AOZ6rnp3ayrHhdhS/xuvPC
-         ewPu3qPRm3QjaGkoxxhFGTg5vlCGE0VLkyuyLRfqeYpPYtE/bB+A/J3Z0RS4h+PiLeyF
-         Pxjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686324630; x=1688916630;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7UugMGksjZWRD0rlu0b/qOjgpa5w4C4cHJBLIFM0Pic=;
-        b=leECubOCEDZ0xAQ6em6laWnzU7uLjSoC1uP3HHBX4q/wQer9x23399e7a6m3oQtbBL
-         RCtR/EpWnwq4Y0521Wo4vJcuu45iKZRka4eqkvvQMyZ5NHkCqA/r//xcmqBlLZEsLozc
-         5urctg/I0Ps/y7BXlxh9AEMxOpBF0mJ9qj3ykszSYbYy5qVbuaauLJu2S04wnttoHWKz
-         VMCov9Bk0IpTVjAJI679fUizvjZj7D3z9JYsF2QaRtGbDctPW16/Xgj0Jy6JIUPDtjCO
-         po9xFIvII7MKH3N78Ngj18FTe9xz2GVT0pLyZ1/1QrHDQWSFkDezBeXPYWiSUr0V+ZbY
-         58QQ==
-X-Gm-Message-State: AC+VfDxSHA1uBJSlaycPKTTPJoUwN6lN7a5DSW7Qis4MLlbZ61i0lh32
-        K0hgpCwoPv3NGfKmuoTyC2Bw4GRJAAA=
-X-Google-Smtp-Source: ACHHUZ7ONfS7xv3ABS9pHDvhBNl1OxikPzOqxHCZG32O6Ito5N1Bzzgz+SaPpDVTfa2lxdbNBumwcQ==
-X-Received: by 2002:a17:90a:741:b0:259:3e7d:3b79 with SMTP id s1-20020a17090a074100b002593e7d3b79mr1176138pje.43.1686324629560;
-        Fri, 09 Jun 2023 08:30:29 -0700 (PDT)
-Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:1bc3:5645:d3d:e4be])
-        by smtp.gmail.com with ESMTPSA id 14-20020a17090a190e00b00259b729eea9sm3265997pjg.8.2023.06.09.08.30.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 08:30:28 -0700 (PDT)
-From:   Max Filippov <jcmvbkbc@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH v2] xtensa: add asm-prototypes.h
-Date:   Fri,  9 Jun 2023 08:30:21 -0700
-Message-Id: <20230609153021.1911455-1-jcmvbkbc@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Fri, 9 Jun 2023 11:30:42 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3532719B
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 08:30:37 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C1BA721A52;
+        Fri,  9 Jun 2023 15:30:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1686324635; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=d94E8AgYIhh2TcR8GAa4pqXaKEyMXrp9qtcGnxmJ05Q=;
+        b=FYARqL8+eFPf9B9O0l/vajm2HuBacoui0nQU6yR5BMtWOvEOdzC07XDO0HpVhAPLxOkTfl
+        o7GduvkREDwPMh0RYmFlGwmj3BOyFA4bOXtz1IKyDHM522GWwTb2c1uh+g990XJczdCYEn
+        Re+5TumIsxGtK0+6mUbdy/TQTi8C3p0=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1B4F213A47;
+        Fri,  9 Jun 2023 15:30:35 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 15IlBZtFg2TCBQAAMHmgww
+        (envelope-from <jgross@suse.com>); Fri, 09 Jun 2023 15:30:35 +0000
+Message-ID: <6d725c37-9612-ab87-3fea-04ab8b1086ed@suse.com>
+Date:   Fri, 9 Jun 2023 17:30:34 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3] iscsi_ibft: Fix finding the iBFT under Xen Dom 0
+Content-Language: en-US
+To:     konrad@darnok.org, Dave Hansen <dave.hansen@intel.com>
+Cc:     Ross Lagerwall <ross.lagerwall@citrix.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        xen-devel@lists.xenproject.org, Jan Beulich <jbeulich@suse.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Peter Jones <pjones@redhat.com>,
+        Konrad Rzeszutek Wilk <konrad@kernel.org>
+References: <20230605102840.1521549-1-ross.lagerwall@citrix.com>
+ <2e28fcdb-f0ff-dca4-3dc4-34b11cc7e469@intel.com>
+ <CAPbh3rtGXiQbzETmK3NdUt-R8D67+V907Rd+nX-OjQ6DNSfyWA@mail.gmail.com>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <CAPbh3rtGXiQbzETmK3NdUt-R8D67+V907Rd+nX-OjQ6DNSfyWA@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------YdUb71KwJ80UEkQ6kOl4hleq"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move assembly source prototypes from xtensa_ksyms.c to
-asm/asm-prototypes.h, move corresponding EXPORT_SYMBOLs to the assembly
-sources and enable HAVE_ASM_MODVERSIONS for xtensa.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------YdUb71KwJ80UEkQ6kOl4hleq
+Content-Type: multipart/mixed; boundary="------------Da5MB78BOV6dm0E1QoP0oX5u";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: konrad@darnok.org, Dave Hansen <dave.hansen@intel.com>
+Cc: Ross Lagerwall <ross.lagerwall@citrix.com>,
+ LKML <linux-kernel@vger.kernel.org>, xen-devel@lists.xenproject.org,
+ Jan Beulich <jbeulich@suse.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>,
+ Boris Ostrovsky <boris.ostrovsky@oracle.com>, Peter Jones
+ <pjones@redhat.com>, Konrad Rzeszutek Wilk <konrad@kernel.org>
+Message-ID: <6d725c37-9612-ab87-3fea-04ab8b1086ed@suse.com>
+Subject: Re: [PATCH v3] iscsi_ibft: Fix finding the iBFT under Xen Dom 0
+References: <20230605102840.1521549-1-ross.lagerwall@citrix.com>
+ <2e28fcdb-f0ff-dca4-3dc4-34b11cc7e469@intel.com>
+ <CAPbh3rtGXiQbzETmK3NdUt-R8D67+V907Rd+nX-OjQ6DNSfyWA@mail.gmail.com>
+In-Reply-To: <CAPbh3rtGXiQbzETmK3NdUt-R8D67+V907Rd+nX-OjQ6DNSfyWA@mail.gmail.com>
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
-Changes v1->v2:
-- move EXPORT_SYMBOLs from xtensa_ksyms.c to the assembly source files
+--------------Da5MB78BOV6dm0E1QoP0oX5u
+Content-Type: multipart/mixed; boundary="------------AalVfgcSf6WC5ftLUErmhx3J"
 
- arch/xtensa/Kconfig                      |  1 +
- arch/xtensa/include/asm/asm-prototypes.h | 29 ++++++++
- arch/xtensa/include/asm/asmmacro.h       |  1 +
- arch/xtensa/kernel/mcount.S              |  1 +
- arch/xtensa/kernel/xtensa_ksyms.c        | 92 +-----------------------
- arch/xtensa/lib/ashldi3.S                |  1 +
- arch/xtensa/lib/ashrdi3.S                |  1 +
- arch/xtensa/lib/bswapdi2.S               |  1 +
- arch/xtensa/lib/bswapsi2.S               |  1 +
- arch/xtensa/lib/checksum.S               |  2 +
- arch/xtensa/lib/divsi3.S                 |  1 +
- arch/xtensa/lib/lshrdi3.S                |  1 +
- arch/xtensa/lib/memcopy.S                |  4 ++
- arch/xtensa/lib/memset.S                 |  2 +
- arch/xtensa/lib/modsi3.S                 |  1 +
- arch/xtensa/lib/mulsi3.S                 |  1 +
- arch/xtensa/lib/strncpy_user.S           |  1 +
- arch/xtensa/lib/strnlen_user.S           |  1 +
- arch/xtensa/lib/udivsi3.S                |  1 +
- arch/xtensa/lib/umodsi3.S                |  1 +
- arch/xtensa/lib/umulsidi3.S              |  1 +
- arch/xtensa/lib/usercopy.S               |  1 +
- arch/xtensa/mm/misc.S                    |  5 ++
- 23 files changed, 60 insertions(+), 91 deletions(-)
- create mode 100644 arch/xtensa/include/asm/asm-prototypes.h
+--------------AalVfgcSf6WC5ftLUErmhx3J
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
-index 3c6e5471f025..46051edc5ed3 100644
---- a/arch/xtensa/Kconfig
-+++ b/arch/xtensa/Kconfig
-@@ -35,6 +35,7 @@ config XTENSA
- 	select HAVE_ARCH_KCSAN
- 	select HAVE_ARCH_SECCOMP_FILTER
- 	select HAVE_ARCH_TRACEHOOK
-+	select HAVE_ASM_MODVERSIONS
- 	select HAVE_CONTEXT_TRACKING_USER
- 	select HAVE_DEBUG_KMEMLEAK
- 	select HAVE_DMA_CONTIGUOUS
-diff --git a/arch/xtensa/include/asm/asm-prototypes.h b/arch/xtensa/include/asm/asm-prototypes.h
-new file mode 100644
-index 000000000000..b0da61812b85
---- /dev/null
-+++ b/arch/xtensa/include/asm/asm-prototypes.h
-@@ -0,0 +1,29 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __ASM_PROTOTYPES_H
-+#define __ASM_PROTOTYPES_H
-+
-+#include <asm/cacheflush.h>
-+#include <asm/checksum.h>
-+#include <asm/ftrace.h>
-+#include <asm/page.h>
-+#include <asm/string.h>
-+#include <asm/uaccess.h>
-+
-+#include <asm-generic/asm-prototypes.h>
-+
-+/*
-+ * gcc internal math functions
-+ */
-+long long __ashrdi3(long long, int);
-+long long __ashldi3(long long, int);
-+long long __bswapdi2(long long);
-+int __bswapsi2(int);
-+long long __lshrdi3(long long, int);
-+int __divsi3(int, int);
-+int __modsi3(int, int);
-+int __mulsi3(int, int);
-+unsigned int __udivsi3(unsigned int, unsigned int);
-+unsigned int __umodsi3(unsigned int, unsigned int);
-+unsigned long long __umulsidi3(unsigned int, unsigned int);
-+
-+#endif /* __ASM_PROTOTYPES_H */
-diff --git a/arch/xtensa/include/asm/asmmacro.h b/arch/xtensa/include/asm/asmmacro.h
-index e3474ca411ff..01bf7d9dbb19 100644
---- a/arch/xtensa/include/asm/asmmacro.h
-+++ b/arch/xtensa/include/asm/asmmacro.h
-@@ -11,6 +11,7 @@
- #ifndef _XTENSA_ASMMACRO_H
- #define _XTENSA_ASMMACRO_H
- 
-+#include <asm-generic/export.h>
- #include <asm/core.h>
- 
- /*
-diff --git a/arch/xtensa/kernel/mcount.S b/arch/xtensa/kernel/mcount.S
-index 51daaf4e0b82..309b3298258f 100644
---- a/arch/xtensa/kernel/mcount.S
-+++ b/arch/xtensa/kernel/mcount.S
-@@ -78,6 +78,7 @@ ENTRY(_mcount)
- #error Unsupported Xtensa ABI
- #endif
- ENDPROC(_mcount)
-+EXPORT_SYMBOL(_mcount)
- 
- ENTRY(ftrace_stub)
- 	abi_entry_default
-diff --git a/arch/xtensa/kernel/xtensa_ksyms.c b/arch/xtensa/kernel/xtensa_ksyms.c
-index a9aa90c995cd..62d81e76e18e 100644
---- a/arch/xtensa/kernel/xtensa_ksyms.c
-+++ b/arch/xtensa/kernel/xtensa_ksyms.c
-@@ -13,71 +13,10 @@
-  */
- 
- #include <linux/module.h>
--#include <linux/string.h>
--#include <linux/mm.h>
--#include <linux/interrupt.h>
--#include <asm/irq.h>
--#include <linux/in6.h>
--
--#include <linux/uaccess.h>
--#include <asm/cacheflush.h>
--#include <asm/checksum.h>
--#include <asm/dma.h>
--#include <asm/io.h>
--#include <asm/page.h>
--#include <asm/ftrace.h>
--#ifdef CONFIG_BLK_DEV_FD
--#include <asm/floppy.h>
--#endif
--#ifdef CONFIG_NET
--#include <net/checksum.h>
--#endif /* CONFIG_NET */
--
--
--/*
-- * String functions
-- */
--EXPORT_SYMBOL(memset);
--EXPORT_SYMBOL(memcpy);
--EXPORT_SYMBOL(memmove);
--EXPORT_SYMBOL(__memset);
--EXPORT_SYMBOL(__memcpy);
--EXPORT_SYMBOL(__memmove);
--#ifdef CONFIG_ARCH_HAS_STRNCPY_FROM_USER
--EXPORT_SYMBOL(__strncpy_user);
--#endif
--EXPORT_SYMBOL(clear_page);
--EXPORT_SYMBOL(copy_page);
-+#include <asm/pgtable.h>
- 
- EXPORT_SYMBOL(empty_zero_page);
- 
--/*
-- * gcc internal math functions
-- */
--extern long long __ashrdi3(long long, int);
--extern long long __ashldi3(long long, int);
--extern long long __bswapdi2(long long);
--extern int __bswapsi2(int);
--extern long long __lshrdi3(long long, int);
--extern int __divsi3(int, int);
--extern int __modsi3(int, int);
--extern int __mulsi3(int, int);
--extern unsigned int __udivsi3(unsigned int, unsigned int);
--extern unsigned int __umodsi3(unsigned int, unsigned int);
--extern unsigned long long __umulsidi3(unsigned int, unsigned int);
--
--EXPORT_SYMBOL(__ashldi3);
--EXPORT_SYMBOL(__ashrdi3);
--EXPORT_SYMBOL(__bswapdi2);
--EXPORT_SYMBOL(__bswapsi2);
--EXPORT_SYMBOL(__lshrdi3);
--EXPORT_SYMBOL(__divsi3);
--EXPORT_SYMBOL(__modsi3);
--EXPORT_SYMBOL(__mulsi3);
--EXPORT_SYMBOL(__udivsi3);
--EXPORT_SYMBOL(__umodsi3);
--EXPORT_SYMBOL(__umulsidi3);
--
- unsigned int __sync_fetch_and_and_4(volatile void *p, unsigned int v)
- {
- 	BUG();
-@@ -89,32 +28,3 @@ unsigned int __sync_fetch_and_or_4(volatile void *p, unsigned int v)
- 	BUG();
- }
- EXPORT_SYMBOL(__sync_fetch_and_or_4);
--
--/*
-- * Networking support
-- */
--EXPORT_SYMBOL(csum_partial);
--EXPORT_SYMBOL(csum_partial_copy_generic);
--
--/*
-- * Architecture-specific symbols
-- */
--EXPORT_SYMBOL(__xtensa_copy_user);
--EXPORT_SYMBOL(__invalidate_icache_range);
--
--/*
-- * Kernel hacking ...
-- */
--
--#if defined(CONFIG_VGA_CONSOLE) || defined(CONFIG_DUMMY_CONSOLE)
--// FIXME EXPORT_SYMBOL(screen_info);
--#endif
--
--#ifdef CONFIG_FUNCTION_TRACER
--EXPORT_SYMBOL(_mcount);
--#endif
--
--EXPORT_SYMBOL(__invalidate_dcache_range);
--#if XCHAL_DCACHE_IS_WRITEBACK
--EXPORT_SYMBOL(__flush_dcache_range);
--#endif
-diff --git a/arch/xtensa/lib/ashldi3.S b/arch/xtensa/lib/ashldi3.S
-index 67fb0da9e432..cd6b731215d3 100644
---- a/arch/xtensa/lib/ashldi3.S
-+++ b/arch/xtensa/lib/ashldi3.S
-@@ -26,3 +26,4 @@ ENTRY(__ashldi3)
- 	abi_ret_default
- 
- ENDPROC(__ashldi3)
-+EXPORT_SYMBOL(__ashldi3)
-diff --git a/arch/xtensa/lib/ashrdi3.S b/arch/xtensa/lib/ashrdi3.S
-index cbf052c512cc..07bc6e758020 100644
---- a/arch/xtensa/lib/ashrdi3.S
-+++ b/arch/xtensa/lib/ashrdi3.S
-@@ -26,3 +26,4 @@ ENTRY(__ashrdi3)
- 	abi_ret_default
- 
- ENDPROC(__ashrdi3)
-+EXPORT_SYMBOL(__ashrdi3)
-diff --git a/arch/xtensa/lib/bswapdi2.S b/arch/xtensa/lib/bswapdi2.S
-index d8e52e05eba6..5d94a9352887 100644
---- a/arch/xtensa/lib/bswapdi2.S
-+++ b/arch/xtensa/lib/bswapdi2.S
-@@ -19,3 +19,4 @@ ENTRY(__bswapdi2)
- 	abi_ret_default
- 
- ENDPROC(__bswapdi2)
-+EXPORT_SYMBOL(__bswapdi2)
-diff --git a/arch/xtensa/lib/bswapsi2.S b/arch/xtensa/lib/bswapsi2.S
-index 9c1de1344f79..fbfb8613d410 100644
---- a/arch/xtensa/lib/bswapsi2.S
-+++ b/arch/xtensa/lib/bswapsi2.S
-@@ -14,3 +14,4 @@ ENTRY(__bswapsi2)
- 	abi_ret_default
- 
- ENDPROC(__bswapsi2)
-+EXPORT_SYMBOL(__bswapsi2)
-diff --git a/arch/xtensa/lib/checksum.S b/arch/xtensa/lib/checksum.S
-index cf1bed1a5bd6..ffee6f94c8f8 100644
---- a/arch/xtensa/lib/checksum.S
-+++ b/arch/xtensa/lib/checksum.S
-@@ -169,6 +169,7 @@ ENTRY(csum_partial)
- 	j	5b		/* branch to handle the remaining byte */
- 
- ENDPROC(csum_partial)
-+EXPORT_SYMBOL(csum_partial)
- 
- /*
-  * Copy from ds while checksumming, otherwise like csum_partial
-@@ -346,6 +347,7 @@ EX(10f)	s8i	a8, a3, 1
- 	j	4b		/* process the possible trailing odd byte */
- 
- ENDPROC(csum_partial_copy_generic)
-+EXPORT_SYMBOL(csum_partial_copy_generic)
- 
- 
- # Exception handler:
-diff --git a/arch/xtensa/lib/divsi3.S b/arch/xtensa/lib/divsi3.S
-index b044b4744a8b..edb3c4ad971b 100644
---- a/arch/xtensa/lib/divsi3.S
-+++ b/arch/xtensa/lib/divsi3.S
-@@ -72,3 +72,4 @@ ENTRY(__divsi3)
- 	abi_ret_default
- 
- ENDPROC(__divsi3)
-+EXPORT_SYMBOL(__divsi3)
-diff --git a/arch/xtensa/lib/lshrdi3.S b/arch/xtensa/lib/lshrdi3.S
-index 129ef8d1725b..e432e1a40702 100644
---- a/arch/xtensa/lib/lshrdi3.S
-+++ b/arch/xtensa/lib/lshrdi3.S
-@@ -26,3 +26,4 @@ ENTRY(__lshrdi3)
- 	abi_ret_default
- 
- ENDPROC(__lshrdi3)
-+EXPORT_SYMBOL(__lshrdi3)
-diff --git a/arch/xtensa/lib/memcopy.S b/arch/xtensa/lib/memcopy.S
-index 98c3662bed8c..f60760396cee 100644
---- a/arch/xtensa/lib/memcopy.S
-+++ b/arch/xtensa/lib/memcopy.S
-@@ -273,6 +273,8 @@ WEAK(memcpy)
- 	abi_ret_default
- 
- ENDPROC(__memcpy)
-+EXPORT_SYMBOL(__memcpy)
-+EXPORT_SYMBOL(memcpy)
- 
- /*
-  * void *memmove(void *dst, const void *src, size_t len);
-@@ -536,3 +538,5 @@ WEAK(memmove)
- 	abi_ret_default
- 
- ENDPROC(__memmove)
-+EXPORT_SYMBOL(__memmove)
-+EXPORT_SYMBOL(memmove)
-diff --git a/arch/xtensa/lib/memset.S b/arch/xtensa/lib/memset.S
-index 59b1524fd601..262c3f39f945 100644
---- a/arch/xtensa/lib/memset.S
-+++ b/arch/xtensa/lib/memset.S
-@@ -142,6 +142,8 @@ EX(10f) s8i	a3, a5, 0
- 	abi_ret_default
- 
- ENDPROC(__memset)
-+EXPORT_SYMBOL(__memset)
-+EXPORT_SYMBOL(memset)
- 
- 	.section .fixup, "ax"
- 	.align	4
-diff --git a/arch/xtensa/lib/modsi3.S b/arch/xtensa/lib/modsi3.S
-index d00e77181e20..c5f4295c6868 100644
---- a/arch/xtensa/lib/modsi3.S
-+++ b/arch/xtensa/lib/modsi3.S
-@@ -60,6 +60,7 @@ ENTRY(__modsi3)
- 	abi_ret_default
- 
- ENDPROC(__modsi3)
-+EXPORT_SYMBOL(__modsi3)
- 
- #if !XCHAL_HAVE_NSA
- 	.section .rodata
-diff --git a/arch/xtensa/lib/mulsi3.S b/arch/xtensa/lib/mulsi3.S
-index 91a9d7c62f96..c6b4fd46bfa9 100644
---- a/arch/xtensa/lib/mulsi3.S
-+++ b/arch/xtensa/lib/mulsi3.S
-@@ -131,3 +131,4 @@ ENTRY(__mulsi3)
- 	abi_ret_default
- 
- ENDPROC(__mulsi3)
-+EXPORT_SYMBOL(__mulsi3)
-diff --git a/arch/xtensa/lib/strncpy_user.S b/arch/xtensa/lib/strncpy_user.S
-index 0731912227d3..9841d1694cdf 100644
---- a/arch/xtensa/lib/strncpy_user.S
-+++ b/arch/xtensa/lib/strncpy_user.S
-@@ -201,6 +201,7 @@ EX(10f)	s8i	a9, a11, 0
- 	abi_ret_default
- 
- ENDPROC(__strncpy_user)
-+EXPORT_SYMBOL(__strncpy_user)
- 
- 	.section .fixup, "ax"
- 	.align	4
-diff --git a/arch/xtensa/lib/strnlen_user.S b/arch/xtensa/lib/strnlen_user.S
-index 3d391dca3efb..cdcf57474164 100644
---- a/arch/xtensa/lib/strnlen_user.S
-+++ b/arch/xtensa/lib/strnlen_user.S
-@@ -133,6 +133,7 @@ EX(10f)	l32i	a9, a4, 0	# get word with first two bytes of string
- 	abi_ret_default
- 
- ENDPROC(__strnlen_user)
-+EXPORT_SYMBOL(__strnlen_user)
- 
- 	.section .fixup, "ax"
- 	.align	4
-diff --git a/arch/xtensa/lib/udivsi3.S b/arch/xtensa/lib/udivsi3.S
-index d2477e0786cf..59ea2dfc3f72 100644
---- a/arch/xtensa/lib/udivsi3.S
-+++ b/arch/xtensa/lib/udivsi3.S
-@@ -66,3 +66,4 @@ ENTRY(__udivsi3)
- 	abi_ret_default
- 
- ENDPROC(__udivsi3)
-+EXPORT_SYMBOL(__udivsi3)
-diff --git a/arch/xtensa/lib/umodsi3.S b/arch/xtensa/lib/umodsi3.S
-index 5f031bfa0354..d39a7e56a971 100644
---- a/arch/xtensa/lib/umodsi3.S
-+++ b/arch/xtensa/lib/umodsi3.S
-@@ -55,3 +55,4 @@ ENTRY(__umodsi3)
- 	abi_ret_default
- 
- ENDPROC(__umodsi3)
-+EXPORT_SYMBOL(__umodsi3)
-diff --git a/arch/xtensa/lib/umulsidi3.S b/arch/xtensa/lib/umulsidi3.S
-index 136081647942..8c7a94a0c5d0 100644
---- a/arch/xtensa/lib/umulsidi3.S
-+++ b/arch/xtensa/lib/umulsidi3.S
-@@ -228,3 +228,4 @@ ENTRY(__umulsidi3)
- #endif /* XCHAL_NO_MUL */
- 
- ENDPROC(__umulsidi3)
-+EXPORT_SYMBOL(__umulsidi3)
-diff --git a/arch/xtensa/lib/usercopy.S b/arch/xtensa/lib/usercopy.S
-index 16128c094c62..2c665c0b408e 100644
---- a/arch/xtensa/lib/usercopy.S
-+++ b/arch/xtensa/lib/usercopy.S
-@@ -283,6 +283,7 @@ EX(10f)	s8i	a6, a5,  0
- 	abi_ret(STACK_SIZE)
- 
- ENDPROC(__xtensa_copy_user)
-+EXPORT_SYMBOL(__xtensa_copy_user)
- 
- 	.section .fixup, "ax"
- 	.align	4
-diff --git a/arch/xtensa/mm/misc.S b/arch/xtensa/mm/misc.S
-index 0527bf6e3211..ec36f73c4765 100644
---- a/arch/xtensa/mm/misc.S
-+++ b/arch/xtensa/mm/misc.S
-@@ -47,6 +47,7 @@ ENTRY(clear_page)
- 	abi_ret_default
- 
- ENDPROC(clear_page)
-+EXPORT_SYMBOL(clear_page)
- 
- /*
-  * copy_page and copy_user_page are the same for non-cache-aliased configs.
-@@ -89,6 +90,7 @@ ENTRY(copy_page)
- 	abi_ret_default
- 
- ENDPROC(copy_page)
-+EXPORT_SYMBOL(copy_page)
- 
- #ifdef CONFIG_MMU
- /*
-@@ -367,6 +369,7 @@ ENTRY(__invalidate_icache_range)
- 	abi_ret_default
- 
- ENDPROC(__invalidate_icache_range)
-+EXPORT_SYMBOL(__invalidate_icache_range)
- 
- /*
-  * void __flush_invalidate_dcache_range(ulong start, ulong size)
-@@ -397,6 +400,7 @@ ENTRY(__flush_dcache_range)
- 	abi_ret_default
- 
- ENDPROC(__flush_dcache_range)
-+EXPORT_SYMBOL(__flush_dcache_range)
- 
- /*
-  * void _invalidate_dcache_range(ulong start, ulong size)
-@@ -411,6 +415,7 @@ ENTRY(__invalidate_dcache_range)
- 	abi_ret_default
- 
- ENDPROC(__invalidate_dcache_range)
-+EXPORT_SYMBOL(__invalidate_dcache_range)
- 
- /*
-  * void _invalidate_icache_all(void)
--- 
-2.30.2
+T24gMDkuMDYuMjMgMTc6MjcsIEtvbnJhZCBSemVzenV0ZWsgV2lsayB3cm90ZToNCj4gVXN1
+YWxseSBJIHB1dCBpdCBpbiBteSB0cmVlIChpYmZ0KSBidXQgc2luY2UgaXQgaXMgc28gc2lt
+cGxlIGFuZCB0aGUgdXNlciBpcyBYZW4gDQo+IGl0IHdvdWxkIG1ha2UgbW9yZSBzZW5zZSB0
+byBkbyBpdCB2aWEgdGhlIFhlbiB0cmVlIChKdWVyZ2VuKS4NCg0KV29ya3MgZm9yIG1lLg0K
+DQoNCkp1ZXJnZW4NCg0KPiANCj4gVGh4DQo+IA0KPiBPbiBGcmksIEp1biA5LCAyMDIzLCAx
+MToxNiBBTSBEYXZlIEhhbnNlbiA8ZGF2ZS5oYW5zZW5AaW50ZWwuY29tIA0KPiA8bWFpbHRv
+OmRhdmUuaGFuc2VuQGludGVsLmNvbT4+IHdyb3RlOg0KPiANCj4gICAgIE9uIDYvNS8yMyAw
+MzoyOCwgUm9zcyBMYWdlcndhbGwgd3JvdGU6DQo+ICAgICAgPiBUaGUgcmVzdWx0IG9mIHRo
+ZXNlIGNoYW5nZXMgaXMgdGhhdCBpdCBpcyBwb3NzaWJsZSB0byBib290IGEgZGlza2xlc3MN
+Cj4gICAgICA+IFhlbiArIERvbTAgcnVubmluZyBvZmYgYW4gaVNDU0kgZGlzayB3aGVyZWFz
+IHByZXZpb3VzbHkgaXQgd291bGQgZmFpbCB0bw0KPiAgICAgID4gZmluZCB0aGUgaUJGVCBh
+bmQgY29uc2VxdWVudGx5LCB0aGUgaVNDU0kgcm9vdCBkaXNrLg0KPiANCj4gICAgIEFja2Vk
+LWJ5OiBEYXZlIEhhbnNlbiA8ZGF2ZS5oYW5zZW5AbGludXguaW50ZWwuY29tDQo+ICAgICA8
+bWFpbHRvOmRhdmUuaGFuc2VuQGxpbnV4LmludGVsLmNvbT4+ICMgZm9yIHg4Ng0KPiANCj4g
+ICAgIFRoZSB3b3JrIGluIHRoaXMgcGF0Y2ggc2VlbXMgcHJldHR5IGV2ZW5seSBzcGxpdCBi
+ZXR3ZWVuIHg4NiBhbmQgaVNDU0kuDQo+ICAgICBBbnkgcHJlZmVyZW5jZXMgb24gd2hvIHBp
+Y2tzIGl0IHVwPw0KPiANCg0K
+--------------AalVfgcSf6WC5ftLUErmhx3J
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------AalVfgcSf6WC5ftLUErmhx3J--
+
+--------------Da5MB78BOV6dm0E1QoP0oX5u--
+
+--------------YdUb71KwJ80UEkQ6kOl4hleq
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmSDRZoFAwAAAAAACgkQsN6d1ii/Ey8g
+KAf9GS4tYCjeixFx5AZsFx6igVAUnOEQ0lKrYmt8EqYspuYkKQeZC4N2P/3v6rZYsDfgIDSr8+m6
+Xbm/dgVUXJszvjuONQylQD+xJ/wJe+OJntTZAcDo7Q97vnSjGHY3igFNcTq8FX7XCR++aQUZovQR
+EhgSCXDJzT8QoMKMW/yO8fXIWqZA4xWCfHsV/nb+uNlF7j785jVjnKGja2D1Y5I7sEXokwrqSSRN
+nLkyY3nFZZyeUkLfMWTzprf1CUT66AaQ0xma8UdkOdPx22jVoGLm6JcfNTKAq/5GviGE7yan/H9I
+9P09rAkpaiIgMJ+qCRkeX/7gP3tVAaPlZAgShaH/ag==
+=IhaL
+-----END PGP SIGNATURE-----
+
+--------------YdUb71KwJ80UEkQ6kOl4hleq--
