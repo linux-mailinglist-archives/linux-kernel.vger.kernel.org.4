@@ -2,50 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FF2072A238
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:31:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D14F72A239
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:31:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjFISbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 14:31:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44026 "EHLO
+        id S230071AbjFISbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 14:31:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbjFISa7 (ORCPT
+        with ESMTP id S229536AbjFISbH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 14:30:59 -0400
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281C93A8C;
-        Fri,  9 Jun 2023 11:30:56 -0700 (PDT)
-Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-777b0dd72d8so86815239f.1;
-        Fri, 09 Jun 2023 11:30:56 -0700 (PDT)
+        Fri, 9 Jun 2023 14:31:07 -0400
+Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8133435B7
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 11:31:05 -0700 (PDT)
+Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-77acb944bdfso92160039f.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 11:31:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686335455; x=1688927455;
+        d=1e100.net; s=20221208; t=1686335465; x=1688927465;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xJw31UEMSDw/4lxj847WRV5dzWgZULa7uFBez8wvxto=;
-        b=XRLgB/q8ZkYQ9wWg8nNexQhn0930cuuWzoHgMj6gIXnECxkymSoHsAhZaandmotfxy
-         4pxW1ZbLgY3/YX/M635ACp8cLFQh+XcthmqxgoX1vWAg5eVE3GmwxVkTfDQzke52HMPM
-         9XHMt/Unqy+5tZYO6UGBpSwq/wj8v3Ubj2JLh1T6RFBjEfWiIgIz8EU+gcyolQw2qEmo
-         lcROd6Bxrcb3+z8kcNs1NVYathO5937sxNGlQZkBKWps1YbSobRib1YFbFSHblMiL4qo
-         f53CqLbobe8CoSOwtGkEfhwGZBHB0i+fmArd8+8wPoT8fjX5fragSfQrOTd+mKww87Q5
-         ksaA==
-X-Gm-Message-State: AC+VfDybBu2V0k/IMDWqu386uZG3XrhSvWrIC94NLcGZMrA1oaly8Daj
-        MZ5hLhwCkzNVoaoE19yYhRweKxP+Yg==
-X-Google-Smtp-Source: ACHHUZ4D1oHdCaXmjUtw353Iv9+ZawqZOzIIypTlfHkcq4ahpCANEOxdjZNzTprXCDY1DgNPItWtWg==
-X-Received: by 2002:a6b:dc14:0:b0:774:9c2e:4ef5 with SMTP id s20-20020a6bdc14000000b007749c2e4ef5mr2227096ioc.6.1686335455180;
-        Fri, 09 Jun 2023 11:30:55 -0700 (PDT)
+        bh=XOkAktt4g0nx6LcgW7gCWAzTqQNaJuKZ2Hioy4cVgxI=;
+        b=K5soMjKJqC7j+Qh8Hg22hmQRFyROcrQ6kwFOlqfgKFIGK0a3tay5vChR3mTzgINafv
+         abefyvXFd0LudToK7acJJmbCJVfpLTBYgulU0S1b/pQfD1dyIzSd/5362ammvUhURO46
+         MVFu7w1iiHn9ZAZV7td5CwjW9qofpJgjQRtK5fUG1nFlO6NycD5+kOIi1Tdt0sfa9NKM
+         kiaLJVCsS647bUJBGxVjfUQXYDgFLjjDEvTJ8yVpfIw5E3E24UXnOnRj0XYIHMbNoakn
+         gICJNpx3HuxHVwDO+veJeT69JDcTXXDcSdwb63mPFqGbEEO2qREvHxXFcwHrs8qr9tKr
+         63Mw==
+X-Gm-Message-State: AC+VfDxOMur5Aa/vMzJEWI19bcm+I3mWj6owoqUzGj0DCGejMRIEPRLR
+        aHyt1L+fkRQmIfMDlcsyR6S83fr0GA==
+X-Google-Smtp-Source: ACHHUZ7nTbRNJnOsOtHprZKubwHVeXF1QQw+95j/zccwXR3WE8Axvi3A8qsmXX2tP4aRcDxo8aJaTw==
+X-Received: by 2002:a5e:dc45:0:b0:778:65fb:5e25 with SMTP id s5-20020a5edc45000000b0077865fb5e25mr2134840iop.4.1686335464768;
+        Fri, 09 Jun 2023 11:31:04 -0700 (PDT)
 Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id f7-20020a056638118700b00420d2a27e27sm1097043jas.84.2023.06.09.11.30.53
+        by smtp.gmail.com with ESMTPSA id x6-20020a5e8306000000b0077a1b6f73b9sm1221722iom.41.2023.06.09.11.31.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 11:30:54 -0700 (PDT)
-Received: (nullmailer pid 1765126 invoked by uid 1000);
-        Fri, 09 Jun 2023 18:30:53 -0000
+        Fri, 09 Jun 2023 11:31:04 -0700 (PDT)
+Received: (nullmailer pid 1765318 invoked by uid 1000);
+        Fri, 09 Jun 2023 18:31:02 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] i2c: mpc: Use of_property_read_reg() to parse "reg"
-Date:   Fri,  9 Jun 2023 12:30:44 -0600
-Message-Id: <20230609183044.1764951-1-robh@kernel.org>
+To:     Jeremy Kerr <jk@ozlabs.org>, Joel Stanley <joel@jms.id.au>,
+        Alistar Popple <alistair@popple.id.au>,
+        Eddie James <eajames@linux.ibm.com>
+Cc:     linux-fsi@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] fsi: Use of_property_read_reg() to parse "reg"
+Date:   Fri,  9 Jun 2023 12:30:56 -0600
+Message-Id: <20230609183056.1765183-1-robh@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -65,26 +67,83 @@ untranslated "reg" address value.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/i2c/busses/i2c-mpc.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/fsi/fsi-core.c | 39 +++++++++------------------------------
+ 1 file changed, 9 insertions(+), 30 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-mpc.c b/drivers/i2c/busses/i2c-mpc.c
-index cfd074ee6d54..595dce9218ad 100644
---- a/drivers/i2c/busses/i2c-mpc.c
-+++ b/drivers/i2c/busses/i2c-mpc.c
-@@ -316,9 +316,10 @@ static void mpc_i2c_setup_512x(struct device_node *node,
- 	if (node_ctrl) {
- 		ctrl = of_iomap(node_ctrl, 0);
- 		if (ctrl) {
-+			u64 addr;
- 			/* Interrupt enable bits for i2c-0/1/2: bit 24/26/28 */
--			pval = of_get_property(node, "reg", NULL);
--			idx = (*pval & 0xff) / 0x20;
-+			of_property_read_reg(node, 0, &addr, NULL);
-+			idx = (addr & 0xff) / 0x20;
- 			setbits32(ctrl, 1 << (24 + idx * 2));
- 			iounmap(ctrl);
- 		}
+diff --git a/drivers/fsi/fsi-core.c b/drivers/fsi/fsi-core.c
+index 0b927c9f4267..19c4d5b3bde9 100644
+--- a/drivers/fsi/fsi-core.c
++++ b/drivers/fsi/fsi-core.c
+@@ -16,6 +16,7 @@
+ #include <linux/idr.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
++#include <linux/of_address.h>
+ #include <linux/slab.h>
+ #include <linux/bitops.h>
+ #include <linux/cdev.h>
+@@ -415,28 +416,18 @@ EXPORT_SYMBOL_GPL(fsi_slave_release_range);
+ static bool fsi_device_node_matches(struct device *dev, struct device_node *np,
+ 		uint32_t addr, uint32_t size)
+ {
+-	unsigned int len, na, ns;
+-	const __be32 *prop;
+-	uint32_t psize;
++	u64 paddr, psize;
+ 
+-	na = of_n_addr_cells(np);
+-	ns = of_n_size_cells(np);
+-
+-	if (na != 1 || ns != 1)
+-		return false;
+-
+-	prop = of_get_property(np, "reg", &len);
+-	if (!prop || len != 8)
++	if (of_property_read_reg(np, 0, &paddr, &psize))
+ 		return false;
+ 
+-	if (of_read_number(prop, 1) != addr)
++	if (paddr != addr)
+ 		return false;
+ 
+-	psize = of_read_number(prop + 1, 1);
+ 	if (psize != size) {
+ 		dev_warn(dev,
+-			"node %s matches probed address, but not size (got 0x%x, expected 0x%x)",
+-			of_node_full_name(np), psize, size);
++			"node %pOF matches probed address, but not size (got 0x%llx, expected 0x%x)",
++			np, psize, size);
+ 	}
+ 
+ 	return true;
+@@ -653,24 +644,12 @@ static void fsi_slave_release(struct device *dev)
+ static bool fsi_slave_node_matches(struct device_node *np,
+ 		int link, uint8_t id)
+ {
+-	unsigned int len, na, ns;
+-	const __be32 *prop;
+-
+-	na = of_n_addr_cells(np);
+-	ns = of_n_size_cells(np);
+-
+-	/* Ensure we have the correct format for addresses and sizes in
+-	 * reg properties
+-	 */
+-	if (na != 2 || ns != 0)
+-		return false;
++	u64 addr;
+ 
+-	prop = of_get_property(np, "reg", &len);
+-	if (!prop || len != 8)
++	if (of_property_read_reg(np, 0, &addr, NULL))
+ 		return false;
+ 
+-	return (of_read_number(prop, 1) == link) &&
+-		(of_read_number(prop + 1, 1) == id);
++	return addr == (((u64)link << 32) | id);
+ }
+ 
+ /* Find a matching node for the slave at (link, id). Returns NULL if none
 -- 
 2.39.2
 
