@@ -2,193 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F563728F47
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 07:23:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEED2728F4B
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 07:30:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237179AbjFIFXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 01:23:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55140 "EHLO
+        id S230234AbjFIFax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 01:30:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236230AbjFIFXB (ORCPT
+        with ESMTP id S229482AbjFIFau (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 01:23:01 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2066.outbound.protection.outlook.com [40.107.101.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73BE2D7B;
-        Thu,  8 Jun 2023 22:22:59 -0700 (PDT)
+        Fri, 9 Jun 2023 01:30:50 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2051.outbound.protection.outlook.com [40.107.237.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C907E4E;
+        Thu,  8 Jun 2023 22:30:47 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dlIUczk2uM/uV6YBk6Q9nm9GsQgMqcRaIlFBbWztMX/2Lmug065uq9dzyjwPqdV8K7k6GyrT0UrsF+jmu6fCFWS/Xs9Lg3WguTsa8rlgV6+C+wSES7GrzrAtdZzjlDefFA8lBwu5v6fFqB1Irm16jvR+3ezdz5hiWhjPiU/njKqWGNLTf0b26V3/08hteYds6zZ/rkMNCZsvNUxc1ogQwHtHVByug34j6Fh43U50ewe1Pi0nG5GVskq0ID+RKmwGaYszgPYQN6MZU5Y/uqRTHmReZFPlFBNB9IEwuhYUptuI03Y/k3jVl+KrCQvo5Z4RG6A17ILPXb9Gkyf1xEX5XA==
+ b=lCDCgYYcC80NSi/g/Kvr7Z+EL42BfQWuiOLNopAYvrTjDEm2QD6NZXdw7NY9jCvCUnQimKnFO5zb5qLO+pLpvx1TfMsHqeIo1RhyFM4Uq/FRmukcbBokoBR3A0Vd3Ueb87exx87kF4Ow9i1xjVcoBNQzzap1y1FXXz09ggwVNY609GAfKTpFuqxx9wQQ0RsJLD0h038Fqq/tUfZtZyzlu8SOtD5OOtK7TbhSBiU1hN4Sqa6htb/7R0SMVn0aNjropIQnczzNlxJEQemh8xK03JlCEuUd2rsiF5obZ3L2eustgSECYzLtkFTIdG6wS7xPB54dP95beHIIb7FRJFLFdA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Q9N0Rqwjm/21Bopb2yvfCBbWWQJl8IaJBNeHgqoR/Jo=;
- b=oMMQYwx7nhW0ue6UB3zb9aUqaSL6df1IRpsv8o/2wYMULyVsu+q1LzZqeqqkpZ/2SueIJXi0XNVYZwI9ajc/zhOdK5Dxy5jLCelclBsrdcUM1xySgfAay9IhpWHZdBjjvW8fekAQNCKKoqkmWwClBYnhnWHMLMWmqyr9KfbAkifV2MuZj3QD7/MjuCvIP2qsSrjEuNyRLBw/dgEaWmiSPRMkQdMLBGlWYdSMgU3lg9YjPFKk5Ett1XNXb+j6kDutnPVjQpdCNkBlqSyn4WOLCUJZ8Pvnl/xo9hBxRVdCeUqYky/hqotz4mcU2dSZosqsnArN6PebBGfa93F5Tbu/sg==
+ bh=ULSyCCuYi9vs/qlEogmlmiqgZGb3rgD82dGnmVeb6Vs=;
+ b=RaaTFXrsBubRDPPdivHBv+sFsQybLgTymGGvF+7wAPRnddFi3r+qTmzYuolFeFuP4qOftUxNGzc4Z17w0TZRhOjmszGHMBtZi6vq8uf1QJwUJetGdEZlwXpj1VQm3A32khoIFGqXmtH9BfA53QjJHOsWKkcfc7M16A+BMtkohGA3uitUl+SYBQMNQS7WiisILBJ3IbH+0aGsv2jXV5bzofS1q7G1ULIW1JovWdpn5vNvUgXG4iA7EO2j/dT4nIYm05SwOLFnejVgq6qqUeb0/+7WNIWcuwLw3dNSsUGW3IBkL2U7+vF+dgcfnWPJCSMvEZZoq64wUuUNcW7CJdDuTA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Q9N0Rqwjm/21Bopb2yvfCBbWWQJl8IaJBNeHgqoR/Jo=;
- b=0Ay22+3d3YeExw6bGnqjgBLhUkwz9weXSd7X8hVwvNh69rQZ8NOpWB194apkbemLDjGnCaktbh8r8ehU4Q/+Z0sb82X2wi4S+Pxjb8PNSmLNMntg8kDyE2ppWy0ns2mcz2k/uqJJio5DjpH3gTOUAJuuxcwycVf7+p/Oxr7HLD4=
+ bh=ULSyCCuYi9vs/qlEogmlmiqgZGb3rgD82dGnmVeb6Vs=;
+ b=GowAsD++Urh1RqR3m46ce09AOhHp3Y5fOtGT29/DG5nLsEqoGAuCcJvvEn6J/KLPj1KEug6HYqNlvOy8/ZUekBytr+qPKLXPbpBRlJ8nbbD+MglsiLcow/7+0POEes6ojbITtO2WDty4MvGn/Bnk4iRttb+u+WikaL3/nf+03mk=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from IA1PR12MB6460.namprd12.prod.outlook.com (2603:10b6:208:3a8::13)
- by BY5PR12MB4036.namprd12.prod.outlook.com (2603:10b6:a03:210::16) with
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
+ by MN2PR12MB4061.namprd12.prod.outlook.com (2603:10b6:208:19a::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.41; Fri, 9 Jun
- 2023 05:22:54 +0000
-Received: from IA1PR12MB6460.namprd12.prod.outlook.com
- ([fe80::f8e1:805f:574:60e5]) by IA1PR12MB6460.namprd12.prod.outlook.com
- ([fe80::f8e1:805f:574:60e5%3]) with mapi id 15.20.6455.037; Fri, 9 Jun 2023
- 05:22:54 +0000
-Message-ID: <e5eda6ee-33db-ac89-4857-37cbeb3d6335@amd.com>
-Date:   Fri, 9 Jun 2023 10:52:39 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.0
-Subject: Re: arm: shmobile_defconfig: ld.lld: error: undefined symbol:
- lynx_pcs_destroy
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Fri, 9 Jun
+ 2023 05:30:44 +0000
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::b4a6:94bb:6895:645]) by PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::b4a6:94bb:6895:645%3]) with mapi id 15.20.6455.030; Fri, 9 Jun 2023
+ 05:30:44 +0000
+Message-ID: <7c7d9279-25b0-328e-af41-66c2096febaa@amd.com>
+Date:   Fri, 9 Jun 2023 11:00:28 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v5 28/34] perf pmus: Split pmus list into core and other
 Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        joyce.ooi@intel.com
-References: <CA+G9fYv0a-XxXfG6bNuPZGT=fzjtEfRGEYwk3n6M1WhEHUPo9g@mail.gmail.com>
- <CA+G9fYueN0xti1SDtYVZstPt104sUj06GfOzyqDNrd3s3xXBkA@mail.gmail.com>
- <CAMuHMdX7hqipiMCF9uxpU+_RbLmzyHeo-D0tCE_Hx8eTqQ7Pig@mail.gmail.com>
- <9fc1d064-7b97-9c1a-f76a-7be467994693@amd.com>
- <e5c92642-02cd-4020-ac1c-7562b1e03f7d@app.fastmail.com>
-From:   "Aithal, Srikanth" <sraithal@amd.com>
-In-Reply-To: <e5c92642-02cd-4020-ac1c-7562b1e03f7d@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Ian Rogers <irogers@google.com>
+Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Ming Wang <wangming01@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Dmitrii Dolgov <9erthalion6@gmail.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Ali Saidi <alisaidi@amazon.com>, Rob Herring <robh@kernel.org>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Kang Minchul <tegongkang@gmail.com>,
+        linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        Ravi Bangoria <ravi.bangoria@amd.com>
+References: <20230527072210.2900565-1-irogers@google.com>
+ <20230527072210.2900565-29-irogers@google.com>
+ <b8efdc75-253c-ad88-f82f-90c626a26592@amd.com>
+ <CAP-5=fXg-4NWOhOoTCfNm3aWp_rd6PWcq5NyZ7xwinbuDPUtZg@mail.gmail.com>
+From:   Ravi Bangoria <ravi.bangoria@amd.com>
+In-Reply-To: <CAP-5=fXg-4NWOhOoTCfNm3aWp_rd6PWcq5NyZ7xwinbuDPUtZg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN0PR01CA0009.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:4f::14) To IA1PR12MB6460.namprd12.prod.outlook.com
- (2603:10b6:208:3a8::13)
+X-ClientProxiedBy: PN2PR01CA0185.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:e8::12) To PH7PR12MB6588.namprd12.prod.outlook.com
+ (2603:10b6:510:210::10)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA1PR12MB6460:EE_|BY5PR12MB4036:EE_
-X-MS-Office365-Filtering-Correlation-Id: 55a2d8bf-cef0-4bd5-4a3a-08db68a993a2
+X-MS-TrafficTypeDiagnostic: PH7PR12MB6588:EE_|MN2PR12MB4061:EE_
+X-MS-Office365-Filtering-Correlation-Id: 54e30617-3fe1-4c49-8242-08db68aaabf4
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1lUf5+qm/ETCP2QvftfZK5FWyqK9VK55+GR/h/1zezbggrbYTl0ZG2h89bSxFABeUw61UPmznB9cFFrsDvgFlyMQBuLj20TztM5qF2hLk5chsh9j5u+yYpUzOcNYGs45w8iUj3Y48ME3MXscSAwFyt/GNkky7XcM5canOljOeqTe1Z8E2r0PRUPoUVBam/aTGAotL9ddGUDmcfF8WV4XF3LOPk4UKZ7ppof0GXKdL4wq3arUBVAitUz/wI4vkrP4CU7a/pxEKaQ+iClK/fgQA8kDHkK0taLsAPy/XvnB7zIclD967oqSSMHeg+gXL9Mean25fL+N7iyJiwIZcGrR4mv8QTzzyA3n40L/n8eCNN//g/lrdbyDE7wv86ulzuD+rN8p3Lvu/eIf/ZUDr1xjsO94AqvQq9aHl4yXSHi1GEv7fOK4g0IQh3ywjqdTB7T2dh+OeFXBE3CDJ6srn0LfUg9bY9IUtMUUvMXe1U4url+r8TUXHXLfksc1iBm+ilqGcUMDl4DFSdqKixqBA2HvkWbxSGXRFzssS2MvMW94ussVujhNPmyVVHnvHstXlNJtonnmyVUjwIZ8rq6uXQwOKeX1ObRxZn+udu1W/ZGI3FHA4TbhKR9HCE+FYuD7Zt44CdUGkbEkRnZBAX/br9JiXA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6460.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(136003)(396003)(376002)(346002)(451199021)(31686004)(66556008)(478600001)(66476007)(66946007)(966005)(54906003)(4326008)(110136005)(316002)(31696002)(36756003)(2616005)(6506007)(6512007)(53546011)(186003)(26005)(41300700001)(8676002)(5660300002)(8936002)(7416002)(2906002)(6486002)(6666004)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: ESt6fCeJPkK3OxAbfGT8Z1ZzLFif/d/Q24GX9uZ+X1y/tiLs0gK77KSKv5d/twBAMBNNyy7MEH0zxVjYR6+LpKWSWdMuzx20fJwyalrYXjiglr4r0sr20owRxMBIyEFqTbDF8SWm9Ia+EbpfIV24+y6uiCT932i78pp2DzWUhyVD/G7bOdaMw3bn0HtP0ZtebQLy6OIo9FZ6cf4dGy0Y589PvJq0PKsFXbGWKXeqSkMJHibDGd1gNltavbF1GKSou5x+46dzOc269jhRF6G/aBC+nkv/Woc1ViGrmwn7z0GwDBn3R2weOCtpTfoDE8eHAJ9N7mDWE71k8JbP4ps1EoZaYu3RDlk+EqzXwxlljLgLCXICxtGxp7O053guNvmi4wgEIhmxEYS/lTZCiYqmO6dIfPq7z9d+4sOS0Q1VkusHDyDOVqAEiW2a2o7BhyVXmdsux9X4t9ZFbqT36GuOn/XwuVpTiY3/u5TjqNaeSFfeHlJPhgZADwJ4VgaxHoVfATuUljLRijKMBBxpGnPl/5Ug1JGroaqU2O6upxHwyLB47VbIKC4yosm+3gQAyRn5YfIyUl1b3+go/d9aP1qOasD9fOX6JfiP0A/FFpTSZiV9GcMe2UXnWVIfZ0WSlazod4EeCJ4YpoqLAsrzIoc/Xg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(136003)(366004)(39860400002)(346002)(451199021)(6512007)(6506007)(53546011)(26005)(31686004)(186003)(2616005)(966005)(83380400001)(6666004)(2906002)(66556008)(66946007)(66476007)(16799955002)(6486002)(7416002)(44832011)(5660300002)(8936002)(38100700002)(7406005)(8676002)(86362001)(31696002)(36756003)(54906003)(41300700001)(478600001)(316002)(6916009)(4326008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?U2hOQmY0T1NOUTBtYmlaZENqSkNUbHZPVFpZMXl1ajZObjhTcWRVOEhaU05I?=
- =?utf-8?B?N1J6UUJ3ZUw4cFM3V3lpUnlzM1Fod3dlaGphQ1l4UGtyVlRRTkk5VEtKV1lE?=
- =?utf-8?B?UVB5Z3l2T1Fheis5eCtQQitYWmF3dXZoRVdwQ1c2MWp6MFdTRndjTkhzQitt?=
- =?utf-8?B?ME5iKzczK0c3MWxTVVFtTmZJZ0tLYi94Z2huRXhrMjFMWk1FVHd1SEdTOG1k?=
- =?utf-8?B?MUsySVBFc0oza21KMGJjYnJ4NUFpSkZYT2ROK1UxYVR3bWx2UFYySUQ1RjdR?=
- =?utf-8?B?a1htaTJwWktaSElVM3d5bE9HdkZ1ZzNTRHF5ckVoR0dYWi9VcllWRWtkWTlX?=
- =?utf-8?B?ZUh1N1NPOWJ0eG82dUtINDRlKzBNWFM2bmNiMHF1dVIwZXJ0R1pMd0tKTmRT?=
- =?utf-8?B?dW0wSmZndWRVdFdaT2dLRTNlSU1iRWp6a2ZHaHBMeTJZY3Y1OE5TdGh0WWJ5?=
- =?utf-8?B?MDdhM3hOK3JnQmRJcWJvZFBtNEluTHYzc2FvVTE5STFtMUJDeUpPdjJReXoz?=
- =?utf-8?B?TEdOTDRMNkJaSWQ0SW1kV1ZVQUV2U1BxWWZtRCt3dTljSFY2akVraStVL3l3?=
- =?utf-8?B?dXpjSFdBZmFqeXd4NjNtMmRoL0JWaXdZUWlsaXQ2MjV1L1Y0ZUM2R2ZhOE9I?=
- =?utf-8?B?SEhvc1daTU9wa0lTNlpGUDVEQS9WMUY4SHJpYmNEUFp6aFFyUllSMDAweTA4?=
- =?utf-8?B?aGpHc1pqMldEWEg4aDU2R3JraTJMdjRlQjg3Q2RyREFmNXdLS090c1QxNFZy?=
- =?utf-8?B?czV5dEJaTWtSM011K1ExRzllaHdPYy9BSUQ3OTdoMEI5MFFybXBjU0FSUkIx?=
- =?utf-8?B?QkU1c25iZndhU1BEeVJEUWRSczRIYklSTkNhZnYzR1p3dWRuUnNOREFERmtU?=
- =?utf-8?B?MW5tZTlDcW1Zb3pNMVhUUnp3Z2cydWorVGVLb2h0U25HS2EzU3NvV3JZWUtF?=
- =?utf-8?B?RjJPcFlvWnZ4UUpNbzRwZG12K3loaU1OKzlQSnppb2ZwdnlKcFZ4ci9tRDZR?=
- =?utf-8?B?Ni85dm1GVmkwN3podUNMZE92bks5dmZHdGd5d0ZFaHpIakhMMU02c3czZlRJ?=
- =?utf-8?B?cm1GZFV6U0JwTlhRUDk4N0t2aW9EZDFLUzdTWU42dEVXQjBQdWdOS2pJc1RN?=
- =?utf-8?B?NmdaTUZlNXAwZHVaTjgyMkJEOWhGOHQyYllrRjFacWxBS2JRRFliQWxlUlc2?=
- =?utf-8?B?KzdNdjNVSW5yZHpCRHRpbWNNY0VSM2JqZ3pYUXdVRUNHM2RuWEtZWmFoeERD?=
- =?utf-8?B?bngzR0NidXl0bXY2QlFSelVSRk5UQVNNcWlsTDN1dzJUUDFKTDY4Sm01NTY4?=
- =?utf-8?B?OTRDVWQ0OEdVZHlxY3B4L0VhdmYwbU1LZmcyYjdyZEN3aWF4N0tobVVCbzNJ?=
- =?utf-8?B?REdHaHhMSkNVQnJSeTdXMXZTU2RUaWt2V2FYTnhQRE5RYkZvM3RWNWJiVVpF?=
- =?utf-8?B?ZUh1MVV0ZlRRNEp2cy9FSjJPSjFicWhNT3BQN0xXS0RLRHkwbVZXaFlhOU9v?=
- =?utf-8?B?SER3ek5VeVdwQWdIVmNBQklFS3lOeFNCTEJ5bG1rRjhLaEYwNW9kYjhGRHQy?=
- =?utf-8?B?aXJNS3ZUNTFBOCt3SHZQSGkzRE5PUjMrcTY3bzFmTHRaSmNvZEdydldCSEZw?=
- =?utf-8?B?RHBUdTJJZjhlbGpVYnNCb1Y4VTUvNEJyaUFWZndaWklGTWppNlV2Yk14bXJi?=
- =?utf-8?B?SzQzRTIxTzF5QUhpYXZGemxlRWJkdkF2NWtuRm94Q0VFUzdTYU5xZXk2N29U?=
- =?utf-8?B?N2dKazhGYTk2b0FFamRqczFXRG1nTEgzR2NCNnBuc2tYWnE1QnFYNEdnc2JV?=
- =?utf-8?B?VzlNQmkvZFBsR0RwODF0YnlOcm9mbTJrNkVxZCtnUG1VY04wVGlidWZIa0Iw?=
- =?utf-8?B?QlpseXJCdjVaWkllZjBuTVZwcmFqL2tBZGhRWFhwQ0ppQjlzT013blVuNk5k?=
- =?utf-8?B?Rnh3YUVnZld5ZWR0d3NLb1Nnd3gwOTZMVmhkQnJnV2xSbS9oTmpaUGJSOTkx?=
- =?utf-8?B?WjBzZkhDSEtHQ2J6cGYreWdBdFlYZG9SbisrYjVRdy9QNHA3UFpaSjZOTUt3?=
- =?utf-8?B?ZmFjWFZiVUUzZXVaTDN5UTM0TVZwSUR4MmRvSTAyWG9TdG4vVjNOTU9PdmVC?=
- =?utf-8?Q?1VGVDxNhrlXGfHM68e9nEBs07?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WkVJcUwxcmlZdWxEd0ZUeWt4UVFjZEl0OVkxSisxQmxuV1B1RTd5dG9BeFRo?=
+ =?utf-8?B?dGdGdzJrWXE1M1VqdWUyWU1WbWFaM0VHZUMvMHpYSU1HTzdxVHJLTHpxZnVn?=
+ =?utf-8?B?UllVUzdWZkd6SFFneTlnSEtYb3JQNTAvaEpKTmVXOTYvS3lUMGpQYzRLMGMr?=
+ =?utf-8?B?bDljc1RYemZtbmtKUDZkVW90WXBaNnFDL0toc1lycG15RkRQSC9YQkJBZ1FD?=
+ =?utf-8?B?NzRsT29tUVo3Z01GMlVUbk9kdDFmK0NjR3RkZ2ExbUM0ZXlxb3VVNUZUUVYz?=
+ =?utf-8?B?cDgxb2Z4MWo4WnlieTZFRFN4TUNTTXpVNUdzNDFVL0ZsVkhPSytBRVR1K1Yr?=
+ =?utf-8?B?Q1BLVW90d3FoVkZJOXFHMGZOM3pmdUZKL3lMMW5WVUYzcjMwODF4SElhK0pQ?=
+ =?utf-8?B?b2w4NHJMTXlOM3d1aTBRMmlvZjJCTWxSc3RzWG9ZbVFCZ1gxclpVb1RETFN6?=
+ =?utf-8?B?UW1oZW9yM1AxOU4xSU9hc2N5T3B6c2RJRk5oemRHRU1jSWl6ZWFWQU9GdFlw?=
+ =?utf-8?B?UERjSm5jR21UUjltNlZhaVQ0eGQveDBPd3BzdUlmNUlDcSt5cCtNRDQ2cENU?=
+ =?utf-8?B?OUJWbk9vZXBjRDBqZmJSWWpnSDAzYllzcytYWFhuandXdDhvbzhveEh3YjE2?=
+ =?utf-8?B?bGtNS3BUelgyRnBIUjladklpbUQvRUl4bmlyenVkU2RNdkZSQzUxK3VrRjZh?=
+ =?utf-8?B?dnVmc24xNkVnbHZUUGVPNnFXQ284VmZCYm0ycHFIOVdsbzhqK201TUhneGlK?=
+ =?utf-8?B?SWp0VXU1NHNTNUhNK1BlYTF6bHorUGpNU3IzQ1V2djBORG1WYWxWS2t2RUxl?=
+ =?utf-8?B?SWU0ZkwrR2xLMEFqc1RxRCtHNEZIcWpiNjYwbEJzUUc0eS82RTdmT05ld2Fx?=
+ =?utf-8?B?ZWV0TUVZMEVqcnpxVlVmbGJDWUllOHVlU3p3OGxJdU0yYk1mUzluUGt6MmRI?=
+ =?utf-8?B?Zmd6OEk1a1BlMzQyM0JGY1RrS3hBVGdjSjQyNnppQ2VKSzhWU3hGTWN0K2pv?=
+ =?utf-8?B?cUs3aUMzdnFyRVBvd2lPcWx5dnNGMExuQVltRGhVaWU1ODBhbmwzOHBtbUlG?=
+ =?utf-8?B?Wks0cVJPcFNSYkVZQWUzZUlKMzlhVkdjeXZiVTRudnN2ZVE4dmI4WTl4OHNt?=
+ =?utf-8?B?YWF3Yzc5YnZWOXg3RDEyZlpHV1lUZ2tsSG9ac3ZWeTN3ZlFCYUxTdUkyQjNO?=
+ =?utf-8?B?Tms0U1ExL0grZ0lxbnJubkFMK3MvdnI0YmY3ZGZSTUZYdGFSZVFVdlhVcmxT?=
+ =?utf-8?B?b09qakVHbFk4bWM3SmlTRERCL2prdFgxM3JDY0NmMzRMcklveFVFVmlqd1FO?=
+ =?utf-8?B?c1VQLzBndXRxSjhzL3pLaThSeFJEbXNWaFY4TUZqUW5GNVM3UDFhenRBeWpk?=
+ =?utf-8?B?T1J0ak45WEdKV25xWUJOazNBNkpJL0dEeS9TbjRLVnQ0SVd5bDhKRFloWjVi?=
+ =?utf-8?B?QndaKzZ1eDhMQWFlRFk5d2ZnaU1PZ09pUlp4OVc5UUtQeW8xM1lvUXdjNE5o?=
+ =?utf-8?B?TTV2M3Vnayt0akk0OXc1ZmxhVU1pcnNuQ3BmTEV6ZlNLK01ITEtUckFvOWJn?=
+ =?utf-8?B?ODRNeGwrZGhHNTFrVXNGU0RHOGtQdVhvc0x1emxEOWw0Z2NwRzJFdmp2M0d6?=
+ =?utf-8?B?ZXVjQ0ZDeit2aU5XQ01weVd0ZlZxWHZ4UTRRRGY3bkVWMk9QckMyTlhveGQy?=
+ =?utf-8?B?NWZYbXkyOGtlSnVtQUZWSkcrQjFXeVd4cVFDUkxqSkNybmlVQkxyZ2t0b2k2?=
+ =?utf-8?B?UkFxZlJvS2hUUXZMNGMvQ0FKM1dISDlGdWJ2WFlZZ09WTG9yT2RXS29qMGFy?=
+ =?utf-8?B?dFdqNDNxWllNYUNxVXZ2S2JFY2Y5SVhRcktoZWNkdDBjaDVmYlhtNFUreGlm?=
+ =?utf-8?B?TzJlZ3FWZk9qWVhVbXhaVjBIb0VTSEdFdHZwTzZMUkg0a0diTytjYzN1Smxl?=
+ =?utf-8?B?NGIvOEdoWGE2T1U4QTdwSXM0MXZ0ekoyUEtJME9uZkd3b2lOWXZSYUtSVVRq?=
+ =?utf-8?B?NDdtdmdHdWJDWWFZa0pXR0NKeStneEhIWDc2UmdIemE5TGx6NXVKVTJISTVL?=
+ =?utf-8?B?ajhOUG1yb05SNC9BZ0I2blZRWG8xNFJyS2l5OVRwM2tSOEJiTVZ6MTJZdEhE?=
+ =?utf-8?Q?rVY+ttXhz4vTzcWXg1oNtEIP1?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 55a2d8bf-cef0-4bd5-4a3a-08db68a993a2
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6460.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 54e30617-3fe1-4c49-8242-08db68aaabf4
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 05:22:54.2320
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 05:30:44.5408
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AXRwU+wpGt7uIcUZ+wvBP0ZwbIDSLqVKQ3i4u4CzZdHl5flOYQsjCTkbQEUzfnpFff9vHqw1m37syOauxZYkfA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4036
-X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-MS-Exchange-CrossTenant-UserPrincipalName: /uE2YXhGb/Whfi5WM755x+l4ydXEYVRlRIulq9dUNGxhZEb0UQ0d+hdPjg66nNt7j2GP5n6He7l061FNd1Ks/A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4061
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SCC_BODY_URI_ONLY,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/7/2023 7:29 PM, Arnd Bergmann wrote:
-> On Wed, Jun 7, 2023, at 15:27, Aithal, Srikanth wrote:
->> On 6/6/2023 2:31 PM, Geert Uytterhoeven wrote:
->>> On Tue, Jun 6, 2023 at 10:53 AM Naresh Kamboju
->>> <naresh.kamboju@linaro.org> wrote:
->>>> On Tue, 6 Jun 2023 at 14:17, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->>>>> Following build regressions found while building arm shmobile_defconfig on
->>>>> Linux next-20230606.
->>>>>
->>>>> Regressions found on arm:
->>>>>
->>>>>    - build/clang-16-shmobile_defconfig
->>>>>    - build/gcc-8-shmobile_defconfig
->>>>>    - build/gcc-12-shmobile_defconfig
->>>>>    - build/clang-nightly-shmobile_defconfig
->>>>
->>>> And mips defconfig builds failed.
->>>> Regressions found on mips:
->>>>
->>>>     - build/clang-16-defconfig
->>>>     - build/gcc-12-defconfig
->>>>     - build/gcc-8-defconfig
->>>>     - build/clang-nightly-defconfig
+On 09-Jun-23 10:10 AM, Ian Rogers wrote:
+> On Thu, Jun 8, 2023 at 9:01 PM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
+>>
+>> Hi Ian,
+> 
+> Hi Ravi,
+> 
+>> On 27-May-23 12:52 PM, Ian Rogers wrote:
+>>> Split the pmus list into core and other. This will later allow for
+>>> the core and other pmus to be populated separately.
 >>>
->>> Please give my fix a try:
->>> https://lore.kernel.org/linux-renesas-soc/7b36ac43778b41831debd5c30b5b37d268512195.1686039915.git.geert+renesas@glider.be
->> On x86 as well seeing couple of issues related to same, not on defconfig
->> though..
+>>> Signed-off-by: Ian Rogers <irogers@google.com>
+>>> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+>>> ---
+>>>  tools/perf/util/pmus.c | 52 ++++++++++++++++++++++++++++++------------
+>>>  1 file changed, 38 insertions(+), 14 deletions(-)
+>>>
+>>> diff --git a/tools/perf/util/pmus.c b/tools/perf/util/pmus.c
+>>> index 58ff7937e9b7..4ef4fecd335f 100644
+>>> --- a/tools/perf/util/pmus.c
+>>> +++ b/tools/perf/util/pmus.c
+>>> @@ -12,13 +12,19 @@
+>>>  #include "pmu.h"
+>>>  #include "print-events.h"
+>>>
+>>> -static LIST_HEAD(pmus);
+>>> +static LIST_HEAD(core_pmus);
+>>> +static LIST_HEAD(other_pmus);
 >>
->> ERROR: modpost: "lynx_pcs_destroy"
->> [drivers/net/ethernet/stmicro/stmmac/stmmac.ko] undefined!
->> ERROR: modpost: "lynx_pcs_destroy"
->> [drivers/net/ethernet/altera/altera_tse.ko] undefined!
->> make[1]: *** [scripts/Makefile.modpost:136: Module.symvers] Error 1
->> make: *** [Makefile:1984: modpost] Error 2
->>
->> Among above issues stmmac issue would be resolved with above mentioned fix.
+>> AMD ibs_fetch// and ibs_op// PMUs are per SMT-thread and are independent of
+>> core hw pmu. I wonder where does IBS fit. Currently it's part of other_pmus.
+>> So, is it safe to assume that other_pmus are not just uncore pmus? In that
+>> case shall we add a comment here?
 > 
-> I sent out my version of the build fixups for altera and stmmac now.
-Thanks, tested with next-20230608 and it builds fine.
-Tested-by: sraithal@amd.com
-> 
->       Arnd
+> I'm a fan of comments. The code has landed in perf-tools-next:
+> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/pmus.c?h=perf-tools-next
+> Do you have any suggestions on wording? I've had limited success
+> adding glossary terms, for example, offcore vs uncore:
+> https://perf.wiki.kernel.org/index.php/Glossary#Offcore
+> I think offcore is a more interconnect related term, but I'd prefer
+> not to be inventing the definitions. I'd like it if we could be less
+> ambiguous in the code and provide useful information on the wiki, so
+> help appreciated :-)
 
+Does this look good?
+
+/*
+ * core_pmus:  A PMU belongs to core_pmus if it's name is "cpu" or it's sysfs
+ *             directory contains "cpus" file. All PMUs belonging to core_pmus
+ *             must have pmu->is_core=1. If there are more than one PMUs in
+ *             this list, perf interprets it as a heterogeneous platform.
+ * other_pmus: All other PMUs which are not part of core_pmus list. Does not
+ *             matter whether it is a per SMT-thread or outside of the core in
+ *             hw. i.e. PMUs belonging to other_pmus must have pmu->is_core=0
+ *             but pmu->is_uncore could be 0 or 1.
+ */
+static LIST_HEAD(core_pmus);
+static LIST_HEAD(other_pmus);
+
+Thanks,
+Ravi
