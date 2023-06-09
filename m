@@ -2,62 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1027672934E
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BFD9729365
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240885AbjFIIgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 04:36:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40650 "EHLO
+        id S240777AbjFIIir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 04:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240830AbjFIIgA (ORCPT
+        with ESMTP id S240625AbjFIIig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 04:36:00 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CF930E3;
-        Fri,  9 Jun 2023 01:35:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686299752; x=1717835752;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SrqOqEQbozaVAjlR+PMI9fwjHqDp6IjKyh5d/Z9Nh0E=;
-  b=NnLniI0tUCGdXwvYMJt0scSkhyTGi4r/EVItaieB8Regf1TmQ/sJ6+hQ
-   sVJjat3b0FZ+U+53sIZ0vn05rbQFBNGZsCo3F0x1ietunaUuSTWSGJRms
-   ntiIDhiwgDt68b/YXTNj1b7i60IqJbG6eGb1c2bKOw3sHRTevlCfs1Ork
-   xzWimhEDMZJA8kJ7qMbA+G6WhYjAmEiEtRYDKH18LsB291SQQRWksMSUQ
-   S+IWq75+80ICsesQxmLWHQeD5KkqLzxKM7aSyArrXLqY2hfK4hFtdJF93
-   48oxZ7gn+P8b6OSrVF1VMSQRRh559b0bhy9ophaxqolPSwEAxJ8NApg3G
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="443918029"
-X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
-   d="scan'208";a="443918029"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 01:35:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="775415722"
-X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
-   d="scan'208";a="775415722"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga008.fm.intel.com with ESMTP; 09 Jun 2023 01:35:45 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 018D534C; Fri,  9 Jun 2023 11:35:52 +0300 (EEST)
-Date:   Fri, 9 Jun 2023 11:35:52 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Raag Jadav <raag.jadav@intel.com>
-Cc:     linus.walleij@linaro.org, andriy.shevchenko@linux.intel.com,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mallikarjunappa.sangannavar@intel.com, pandith.n@intel.com
-Subject: Re: [PATCH v2 3/4] pinctrl: intel: simplify exit path of set_mux hook
-Message-ID: <20230609083552.GM45886@black.fi.intel.com>
-References: <20230609082539.24311-1-raag.jadav@intel.com>
- <20230609082539.24311-4-raag.jadav@intel.com>
+        Fri, 9 Jun 2023 04:38:36 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2E69E30D8;
+        Fri,  9 Jun 2023 01:38:11 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1q7Xca-0004UX-00; Fri, 09 Jun 2023 10:37:24 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id A3D56C02EE; Fri,  9 Jun 2023 10:36:29 +0200 (CEST)
+Date:   Fri, 9 Jun 2023 10:36:29 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, corbet@lwn.net
+Subject: Re: [PATCH 1/3] MIPS: Rework smt cmdline parameters
+Message-ID: <20230609083629.GA9563@alpha.franken.de>
+References: <20230521223124.21911-1-jiaxun.yang@flygoat.com>
+ <20230521223124.21911-2-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230609082539.24311-4-raag.jadav@intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <20230521223124.21911-2-jiaxun.yang@flygoat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,18 +43,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 01:55:38PM +0530, Raag Jadav wrote:
-> Simplify exit path of ->set_mux() hook and save a few bytes.
+On Sun, May 21, 2023 at 11:31:22PM +0100, Jiaxun Yang wrote:
+> Provide a generic smt parameters interface aligned with s390
+> to allow users to limit smt usage and threads per core.
 > 
-> add/remove: 0/0 grow/shrink: 0/1 up/down: 0/-22 (-22)
-> Function                                     old     new   delta
-> intel_pinmux_set_mux                         242     220     -22
-> Total: Before=10453, After=10431, chg -0.21%
+> It replaced previous undocumented "nothreads" parameter for
+> smp-cps which is ambiguous and does not cover smp-mt.
 > 
-> Signed-off-by: Raag Jadav <raag.jadav@intel.com>
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 > ---
->  drivers/pinctrl/intel/pinctrl-intel.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
+>  .../admin-guide/kernel-parameters.txt          |  4 ++--
+>  arch/mips/include/asm/smp.h                    |  2 ++
+>  arch/mips/kernel/smp-cps.c                     | 13 +------------
+>  arch/mips/kernel/smp-mt.c                      |  3 ++-
+>  arch/mips/kernel/smp.c                         | 18 ++++++++++++++++++
+>  5 files changed, 25 insertions(+), 15 deletions(-)
 
-This adds one more line so it is not simplifying ;-) I think the
-original code looks better.
+applied to mips-next.
+
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
