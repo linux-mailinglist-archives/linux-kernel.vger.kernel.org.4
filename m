@@ -2,255 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F8A672A01F
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:23:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E429672A023
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:26:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242137AbjFIQXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 12:23:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38166 "EHLO
+        id S232429AbjFIQ0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 12:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242123AbjFIQW6 (ORCPT
+        with ESMTP id S231167AbjFIQ0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 12:22:58 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4E43C18
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:22:41 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-568900c331aso19133047b3.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 09:22:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686327761; x=1688919761;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mwQzu1mHmg5s3RKGFVLiYioIdNZ9wrhFOjBtuF+UR3o=;
-        b=OeqWZw34Y6D3kTo5yYID2yBZzJAAQtqpAjCwfyz2PBcyKOWEGB/dLXjUD+499rrI0n
-         1J3XHsBf/izlVlQK1sRykEQSKROn6Hl4Xq7+rh5QHQpNSLNnEIsG37BPydK+BpsRhPsR
-         tf6k2z1MQkyTXtU2A8vHyifUVpFv1ssnBx1+CS6lXoi5wSvMUbhhodAWfTqjQGmecKGQ
-         b05Wq1s6maRCr1AuqWMKXOQY23dOW3wv21iL9cWzvhnFhnYqLYK9wkLtOThpaXsKHXad
-         7LG0W3fFsODO6cW+MHJ1MMF3KQ1xuEn7ouIW7S8Pz8Zdx/4rcUAuqb85jmwP8gdGcu3E
-         WBtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686327761; x=1688919761;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mwQzu1mHmg5s3RKGFVLiYioIdNZ9wrhFOjBtuF+UR3o=;
-        b=XN9zwKWCGRo17iWjIWmHMlrcToWvKUUsTGxlPM7EUarsutKKkLyD4T3ySSRMCb1m5d
-         mpuEJh2DOywUzRNWJBM2xukMLFh5NFSMeO97t4qzbUn0XysCnW5C+b2khKIXpktDxr6l
-         9AVg3aIAU3xLGA63Rk9tvSr7ImEWH1w8iT+DJjBeWxcL4QCxXyg6PGYSm8iTgTgRppO2
-         /6lvQWJPNFAwHGXjt3qYw2b3vjZskokInzvpLCp7Y8FzfCguW9I5H3EsCPpWE5A1E1/Z
-         AZ96ZOiJVhcPe0GkphvYUbXkJyE/z2AVsAC7TA48ChXrkoXaFhoObqT2MwDowmmpLPpD
-         plbQ==
-X-Gm-Message-State: AC+VfDxrjHO+6316FXgZ+iUSomQNsfrXd23YuLCSZJLsgKT8HxAQ7zhK
-        W5TcW+tfYiq0dz3VHrCwFbv5VnXUyRnanb0Xy+Ix+w==
-X-Google-Smtp-Source: ACHHUZ7DcgGfw00xFeO5tg+xstcf0mM87ob4gA9UhI4JskArhrXvT7uOKL98JgUrv1OrQJ5y7tNmkHSsuMQI+Z6RFrg=
-X-Received: by 2002:a81:4744:0:b0:565:e48d:32cf with SMTP id
- u65-20020a814744000000b00565e48d32cfmr1431353ywa.7.1686327760864; Fri, 09 Jun
- 2023 09:22:40 -0700 (PDT)
+        Fri, 9 Jun 2023 12:26:22 -0400
+Received: from BN6PR00CU002.outbound.protection.outlook.com (mail-eastus2azon11021015.outbound.protection.outlook.com [52.101.57.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524752D5F;
+        Fri,  9 Jun 2023 09:26:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=G0LgF3mSiJNAmfhUIPmpxLnB1Q12XrfbMGPa4COf2Wx9P5x0hDMGrse13gkQrAauoN6HtQrTAHLsNJWxxmCh0ZoQx/bmZtKdL3huxyW0aONRc8t6WGNSKEEKq/rT9vsOlu7M9v/nu+rTFk+e0jYyS3uXziDl6piOJj17gyuA9QgTCKB6GtBy8z6P5sNcfSGFDLC5zsj+r1ywdqPHIOIbPDN29TBRVb7r6omJopzEq614me/Fw80s1pn6uE+wDDR+DygMcrkRsilA3e4m4g8zXoeJjwdoybCghnqXFeZK4piAvvxN5UZB/zftOdTAr6fTLY9aKNyXgL/9v+scNP1P2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=w5bfv1H+CGDfbkwZ2cBIh4gyavf+5rvdrsvjYmkXPcQ=;
+ b=UbSHC2S4qEpv2orM7/fqdeTuV/rFurX6AfUmJPBnhEnbt/0LvLVIVp5VxgESJ8BK7UenevwWBYav8rLfGdSp3FaJN+hOOqw8B7Njtr4m7CsyRiHacqXrQP06I41SkIJ7pnFFyM72NEeo6SOS08necWVDb7SxPAY7wjvdNu0UyCdfmb12JNOVbXwebq5IVVEcAHaf9dVc9xUCrnY741lTU4b8YMm/iq70UfBB/O8ZWxMWy7YFYckj+BBmGRNTYBY65BugM2bMOZ0/3yFnZ6x3u/wHIMCUhB3GAMcrcTe8s4AyoYUqnRMeJHciQxgoSdIQogbB2KzAO40Td4ievAZxUg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=w5bfv1H+CGDfbkwZ2cBIh4gyavf+5rvdrsvjYmkXPcQ=;
+ b=ESD3q6mug2xhtm8HdsTQDxE092V7RGn3UbAWxDyaDsrKHerKX2NiYuPh8x61pfYD+THdCy4ckUlKpXSUHnpT4Teux0HsZrnGhv2Lzcp4uK44kS7HywYXoJrBCoDgb0TxoE8Wih5KlIQto6LghytN2kbi5aaWoS94kih8vqisGns=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+Received: from BY5PR21MB1443.namprd21.prod.outlook.com (2603:10b6:a03:21f::18)
+ by BY5PR21MB1474.namprd21.prod.outlook.com (2603:10b6:a03:21f::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.15; Fri, 9 Jun
+ 2023 16:26:18 +0000
+Received: from BY5PR21MB1443.namprd21.prod.outlook.com
+ ([fe80::4eff:a209:efda:81d4]) by BY5PR21MB1443.namprd21.prod.outlook.com
+ ([fe80::4eff:a209:efda:81d4%6]) with mapi id 15.20.6500.016; Fri, 9 Jun 2023
+ 16:26:17 +0000
+From:   Haiyang Zhang <haiyangz@microsoft.com>
+To:     linux-hyperv@vger.kernel.org, netdev@vger.kernel.org
+Cc:     haiyangz@microsoft.com, kys@microsoft.com, olaf@aepfle.de,
+        vkuznets@redhat.com, davem@davemloft.net, weiwan@google.com,
+        tim.gardner@canonical.com, corbet@lwn.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, dsahern@kernel.org,
+        atenart@kernel.org, bagasdotme@gmail.com, ykaliuta@redhat.com,
+        kuniyu@amazon.com, stephen@networkplumber.org,
+        simon.horman@corigine.com, maheshb@google.com,
+        liushixin2@huawei.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next] tcp: Make pingpong threshold tunable
+Date:   Fri,  9 Jun 2023 09:25:59 -0700
+Message-Id: <1686327959-13478-1-git-send-email-haiyangz@microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+Content-Type: text/plain
+X-ClientProxiedBy: MW4PR04CA0294.namprd04.prod.outlook.com
+ (2603:10b6:303:89::29) To BY5PR21MB1443.namprd21.prod.outlook.com
+ (2603:10b6:a03:21f::18)
 MIME-Version: 1.0
-References: <20230609115058.9059-1-quic_jkona@quicinc.com> <20230609115058.9059-3-quic_jkona@quicinc.com>
-In-Reply-To: <20230609115058.9059-3-quic_jkona@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Fri, 9 Jun 2023 19:22:29 +0300
-Message-ID: <CAA8EJpr-iKMzYP7HVQV8pzXbxzLvBaq38aovJ5Ffny18yXvJZg@mail.gmail.com>
-Subject: Re: [PATCH V4 2/4] clk: qcom: camcc-sm8550: Add camera clock
- controller driver for SM8550
-To:     Jagadeesh Kona <quic_jkona@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
-        Imran Shaik <quic_imrashai@quicinc.com>,
-        Ajit Pandey <quic_ajipan@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Sender: LKML haiyangz <lkmlhyz@microsoft.com>
+X-MS-Exchange-MessageSentRepresentingType: 2
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR21MB1443:EE_|BY5PR21MB1474:EE_
+X-MS-Office365-Filtering-Correlation-Id: 27637225-4df6-4cde-43f0-08db69064010
+X-LD-Processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: lCMfJfrt4VmHW74gLSp7kFMWk/ytLG43jidsRrgnfrEX+NUsHPZPqzYtyKYoq5OE+z8PCWJq9tDtS6+GekskppA+SUOz+9/nZq4NqNa4GgCvyxinby1qp9qCZUJELyDaYOTsK1Ud7PBUAylDPrOg1ldA4opTFiIIT1geSZrQHLSMqFwU8SGsCLgPf2DhoS7iAhuy5mHb5GYCvkrk6IVJLS3pIAD4ae/q31aXJwiIodtKah+U3knSDhmacJWhgglJbk/wDd++2LCZXmcw4BKBMhrz0O2LjUGDleSVHHvsPzn3AsXPlK8k28C8kl1zWFqmuFicCLNvZfAJoxHkWxXUe/vqzq7tW38gofchGsKWo37QkgkFdTCtvT61IrxA8cn7VGKvpA6d98n1tRgCCNhbrovZ34Q1Ar+20dIQZjrN6jgeO4dq+bdqwPjocKhFs59NyKaAHa0J6qWEYaPdQE4os85/qhXUBYHU7aTE0mByay7K4ISET33MQ9tD7nvjTWQUZ1WHHKLawOJQ+cTYMfY2vYdkOIXnmSPHs7lNbQbPVoVEZjqi9cd22ggv6hROfp1AxfcOdzE/5/ZcRuc7egDSl5M2LEHwo9OAh1QRnWo5SWWEC1lrSIkaKd7fEYPha7CaX5L1ch4vm8+enNQn3Tcs/2clPVOzsQfzsqkdRMkvlFw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR21MB1443.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(39860400002)(396003)(346002)(366004)(451199021)(8676002)(8936002)(478600001)(10290500003)(7846003)(6666004)(41300700001)(5660300002)(4326008)(316002)(6486002)(52116002)(6506007)(6512007)(26005)(186003)(7416002)(66556008)(66476007)(66946007)(2616005)(2906002)(83380400001)(38100700002)(38350700002)(82960400001)(82950400001)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6/3+KJxF+NpZx41J5hrmfAV6+CRz77iRmpN1ApA1zxoLVUQirrsKMzX0eSyq?=
+ =?us-ascii?Q?Jd2mgAmoMNMrhrRrfC7tMQdewVLzy+5R2JTjO1U6quJWkkQ26GlrOR3FIK0G?=
+ =?us-ascii?Q?q6FKril6XCHr8qL0qwYwQhQr0MCLN19KrhDvEuKk60Oj188kafYuBWL0D9Uj?=
+ =?us-ascii?Q?uh7Y5bL397rXOUK4jOaJnNrpC8UMiLFi5SBz2xKdnggyb6ZQk9dqo/+HVPjQ?=
+ =?us-ascii?Q?L1Rw4leEtK2gCgO3/RJoufYd1tw0xqaad0SP2Bzqqlaj+8uxNu8ixY30mA3P?=
+ =?us-ascii?Q?9hpNhh/lcyE4VRGeDAXdAz+bPipOlNAhkLex/He6Zn//l862rFzAMN9+o6uF?=
+ =?us-ascii?Q?/K6W5aY4B8Bsxee0J3snbtx2RHM/fJGsXV2JZgJrmG1S+bSWROgMDbR8uXJE?=
+ =?us-ascii?Q?7wmNKSJAVd5V5cYEsc5GtZJ3XyxoBxxLQUHnOftEfsx7S3SQ7Bf8OULqLLx0?=
+ =?us-ascii?Q?dMsgpuMf31JoaHfNNty5U3YxceQZxqVuCT9GQAGz45PTfRNdINzO6GvyF8Cd?=
+ =?us-ascii?Q?SUUEiU/8nwhImDKADme5dd+XDlj6AxXgMIkAsOfKQwE1mlcxCR/R5sv6c5uZ?=
+ =?us-ascii?Q?JcV/qgooDEbac0AnB7XA99ND1mHmnbTLGRKaMpeujchLMG7XXujJP601UHBh?=
+ =?us-ascii?Q?TP4OT9TxDtv27N9UDf2jxs2tXvs8wJbUyhqzHDYuTf8NsyIzWxoKqWb8lGDa?=
+ =?us-ascii?Q?mTJGozcBfeDqIQ8yMjqE9PyjOR7HlbnA5BixkR2AcvgemkXsPJ59El87zRRr?=
+ =?us-ascii?Q?23vgNlikbPEbozTIPgKoupYTwLmkc3mU9ed6cU9vHW+7WoPot5q+yT0zL5y0?=
+ =?us-ascii?Q?s4BTyMzeWNyoSFIfXg5WgBZYOMt0C/lnWpqVoKwyXKR510t5Fpcz4f2HPINk?=
+ =?us-ascii?Q?N8cVwv6/liIF6Bc+zqM2nI6FxFBEk2D5Yt3Ca8xCrdoKEKaC+Nug8hb32qB5?=
+ =?us-ascii?Q?HG8Bf2YK1V50BV/gK4jlA4Gpvbi/FDITmO8QBVYaJpzIf3cBPYgG52pjkgvr?=
+ =?us-ascii?Q?40httRdTJypdTFw03tYBedLr8iLOMyZbz+4VZDgHQyATlzX6fVOKt5lpxQg6?=
+ =?us-ascii?Q?g3oEx273NYZY8QGbYNOwoFuvVVZDwWR+wUnfXCCU3+rW9cK1vI0IHsknkQ95?=
+ =?us-ascii?Q?Snf4jhec9ly+p/i62SN+SR2rdSqknoY/4ZLX8TSpAPjOr75+8m/E40ysqqGP?=
+ =?us-ascii?Q?G7MZspxKBHub7FYZksUahhxjsZQpWcLqLehCz2+QVuPihOT1AA+VV+VVxLGM?=
+ =?us-ascii?Q?KNUFc2XfjNjA6RZ+yf5LiUrXBzVEGSEgXeTNldnfG/7XCHu20JzT2WrNzwNK?=
+ =?us-ascii?Q?lPB4NRbzoZF5f/mZXkFM3DAMIyUmMAFt9hs+KgjoUPNj30UHzjhPDN8Uh6nU?=
+ =?us-ascii?Q?lLxa02yHIXRiTO0OEDVQoD126LPp4b2iQrT3TWf52ko6qdSluvWyAjlKAZYs?=
+ =?us-ascii?Q?y3/GPgDk6EJcXfwM3yj5pzyepqT5+aQpQZKtPrC5LxX7kuWTOGdwiujWAJjQ?=
+ =?us-ascii?Q?LVMtRkGjSY2fgn/+I6+ZLQhXoPvO5GY7QDkrDMB+mClTmCb8M72ZRHFXp1Zk?=
+ =?us-ascii?Q?8zoOxZdoLMSEdDPtqvX54NadtUJyrjSiQW1TxI/1?=
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 27637225-4df6-4cde-43f0-08db69064010
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR21MB1443.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 16:26:17.8406
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9RHwuWVAAVbpUVo4zgg/QneIlPre0cXcCBGkvEvy1yDKUoE5aRKQmeBRiNF/oiogOGI8ucIUdqeyvX1IjYTXWg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR21MB1474
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 9 Jun 2023 at 14:52, Jagadeesh Kona <quic_jkona@quicinc.com> wrote:
->
-> Add support for the camera clock controller for camera clients to be
-> able to request for camcc clocks on SM8550 platform.
->
-> Co-developed-by: Taniya Das <quic_tdas@quicinc.com>
-> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
-> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
-> ---
-> Changes since V3:
->  - No changes
-> Changes since V2:
->  - No changes
-> Changes since V1:
->  - Sorted the PLL names in proper order
->  - Updated all PLL configurations to lower case hex
->  - Reused evo ops instead of adding new ops for ole pll
->  - Moved few clocks to separate patch to fix patch too long error
->
->  drivers/clk/qcom/Kconfig        |    7 +
->  drivers/clk/qcom/Makefile       |    1 +
->  drivers/clk/qcom/camcc-sm8550.c | 3405 +++++++++++++++++++++++++++++++
->  3 files changed, 3413 insertions(+)
->  create mode 100644 drivers/clk/qcom/camcc-sm8550.c
->
-> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-> index 9cd1f05d436b..85efed78dc9a 100644
-> --- a/drivers/clk/qcom/Kconfig
-> +++ b/drivers/clk/qcom/Kconfig
-> @@ -756,6 +756,13 @@ config SM_CAMCC_8450
->           Support for the camera clock controller on SM8450 devices.
->           Say Y if you want to support camera devices and camera functionality.
->
-> +config SM_CAMCC_8550
-> +       tristate "SM8550 Camera Clock Controller"
-> +       select SM_GCC_8550
-> +       help
-> +         Support for the camera clock controller on SM8550 devices.
-> +         Say Y if you want to support camera devices and camera functionality.
-> +
->  config SM_DISPCC_6115
->         tristate "SM6115 Display Clock Controller"
->         depends on ARM64 || COMPILE_TEST
-> diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
-> index 75d035150118..97c8cefc2fd0 100644
-> --- a/drivers/clk/qcom/Makefile
-> +++ b/drivers/clk/qcom/Makefile
-> @@ -101,6 +101,7 @@ obj-$(CONFIG_SDX_GCC_75) += gcc-sdx75.o
->  obj-$(CONFIG_SM_CAMCC_6350) += camcc-sm6350.o
->  obj-$(CONFIG_SM_CAMCC_8250) += camcc-sm8250.o
->  obj-$(CONFIG_SM_CAMCC_8450) += camcc-sm8450.o
-> +obj-$(CONFIG_SM_CAMCC_8550) += camcc-sm8550.o
->  obj-$(CONFIG_SM_DISPCC_6115) += dispcc-sm6115.o
->  obj-$(CONFIG_SM_DISPCC_6125) += dispcc-sm6125.o
->  obj-$(CONFIG_SM_DISPCC_6350) += dispcc-sm6350.o
-> diff --git a/drivers/clk/qcom/camcc-sm8550.c b/drivers/clk/qcom/camcc-sm8550.c
-> new file mode 100644
-> index 000000000000..85f0c1e09b2b
-> --- /dev/null
-> +++ b/drivers/clk/qcom/camcc-sm8550.c
-> @@ -0,0 +1,3405 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2023, Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +#include <linux/clk-provider.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/pm_runtime.h>
-> +#include <linux/regmap.h>
-> +
-> +#include <dt-bindings/clock/qcom,sm8550-camcc.h>
-> +
-> +#include "clk-alpha-pll.h"
-> +#include "clk-branch.h"
-> +#include "clk-rcg.h"
-> +#include "clk-regmap.h"
-> +#include "common.h"
-> +#include "gdsc.h"
-> +#include "reset.h"
-> +
-> +enum {
-> +       DT_IFACE,
-> +       DT_BI_TCXO,
-> +};
-> +
-> +enum {
-> +       P_BI_TCXO,
-> +       P_CAM_CC_PLL0_OUT_EVEN,
-> +       P_CAM_CC_PLL0_OUT_MAIN,
-> +       P_CAM_CC_PLL0_OUT_ODD,
-> +       P_CAM_CC_PLL1_OUT_EVEN,
-> +       P_CAM_CC_PLL2_OUT_EVEN,
-> +       P_CAM_CC_PLL2_OUT_MAIN,
-> +       P_CAM_CC_PLL3_OUT_EVEN,
-> +       P_CAM_CC_PLL4_OUT_EVEN,
-> +       P_CAM_CC_PLL5_OUT_EVEN,
-> +       P_CAM_CC_PLL6_OUT_EVEN,
-> +       P_CAM_CC_PLL7_OUT_EVEN,
-> +       P_CAM_CC_PLL8_OUT_EVEN,
-> +       P_CAM_CC_PLL9_OUT_EVEN,
-> +       P_CAM_CC_PLL9_OUT_ODD,
-> +       P_CAM_CC_PLL10_OUT_EVEN,
-> +       P_CAM_CC_PLL11_OUT_EVEN,
-> +       P_CAM_CC_PLL12_OUT_EVEN,
-> +};
-> +
-> +static const struct pll_vco lucid_ole_vco[] = {
-> +       { 249600000, 2300000000, 0 },
-> +};
-> +
-> +static const struct pll_vco rivian_ole_vco[] = {
-> +       { 777000000, 1285000000, 0 },
-> +};
-> +
-> +static const struct alpha_pll_config cam_cc_pll0_config = {
-> +       /* .l includes RINGOSC_CAL_L_VAL, CAL_L_VAL, L_VAL fields */
-> +       .l = 0x4444003e,
+TCP pingpong threshold is 1 by default. But some applications, like SQL DB
+may prefer a higher pingpong threshold to activate delayed acks in quick
+ack mode for better performance.
 
-I'd still insist on not touching the config.l field semantics.
+The pingpong threshold and related code were changed to 3 in the year
+2019, and reverted to 1 in the year 2022. There is no single value that
+fits all applications.
 
-> +       .alpha = 0x8000,
-> +       .config_ctl_val = 0x20485699,
-> +       .config_ctl_hi_val = 0x00182261,
-> +       .config_ctl_hi1_val = 0x82aa299c,
-> +       .test_ctl_val = 0x00000000,
-> +       .test_ctl_hi_val = 0x00000003,
-> +       .test_ctl_hi1_val = 0x00009000,
-> +       .test_ctl_hi2_val = 0x00000034,
-> +       .user_ctl_val = 0x00008400,
-> +       .user_ctl_hi_val = 0x00000005,
-> +};
-> +
+Add net.core.tcp_pingpong_thresh sysctl tunable, so it can be tuned for
+optimal performance based on the application needs.
 
-[skipped the rest, LGTM]
+Signed-off-by: Haiyang Zhang <haiyangz@microsoft.com>
+---
+ Documentation/admin-guide/sysctl/net.rst |  8 ++++++++
+ include/net/inet_connection_sock.h       | 14 +++++++++++---
+ net/core/sysctl_net_core.c               |  9 +++++++++
+ net/ipv4/tcp.c                           |  2 ++
+ net/ipv4/tcp_output.c                    | 17 +++++++++++++++--
+ 5 files changed, 45 insertions(+), 5 deletions(-)
 
-> +
-> +static struct platform_driver cam_cc_sm8550_driver = {
-> +       .probe = cam_cc_sm8550_probe,
-> +       .driver = {
-> +               .name = "cam_cc-sm8550",
-> +               .of_match_table = cam_cc_sm8550_match_table,
-> +       },
-> +};
-> +
-> +static int __init cam_cc_sm8550_init(void)
-> +{
-> +       return platform_driver_register(&cam_cc_sm8550_driver);
-> +}
-> +subsys_initcall(cam_cc_sm8550_init);
-
-As it was pointed out, this driver is built as a module by default.
-Please perform the tesing and cleanup before sending the driver and
-use module_platform_driver.
-
-> +
-> +static void __exit cam_cc_sm8550_exit(void)
-> +{
-> +       platform_driver_unregister(&cam_cc_sm8550_driver);
-> +}
-> +module_exit(cam_cc_sm8550_exit);
-> +
-> +MODULE_DESCRIPTION("QTI CAMCC SM8550 Driver");
-> +MODULE_LICENSE("GPL");
-> --
-> 2.40.1
->
-
-
+diff --git a/Documentation/admin-guide/sysctl/net.rst b/Documentation/admin-guide/sysctl/net.rst
+index 4877563241f3..16f54be9461f 100644
+--- a/Documentation/admin-guide/sysctl/net.rst
++++ b/Documentation/admin-guide/sysctl/net.rst
+@@ -413,6 +413,14 @@ historical importance.
+ 
+ Default: 0
+ 
++tcp_pingpong_thresh
++-------------------
++
++TCP pingpong threshold is 1 by default, but some application may need a higher
++threshold for optimal performance.
++
++Default: 1, min: 1, max: 3
++
+ 2. /proc/sys/net/unix - Parameters for Unix domain sockets
+ ----------------------------------------------------------
+ 
+diff --git a/include/net/inet_connection_sock.h b/include/net/inet_connection_sock.h
+index c2b15f7e5516..e84e33ddae49 100644
+--- a/include/net/inet_connection_sock.h
++++ b/include/net/inet_connection_sock.h
+@@ -324,11 +324,11 @@ void inet_csk_update_fastreuse(struct inet_bind_bucket *tb,
+ 
+ struct dst_entry *inet_csk_update_pmtu(struct sock *sk, u32 mtu);
+ 
+-#define TCP_PINGPONG_THRESH	1
++extern int tcp_pingpong_thresh;
+ 
+ static inline void inet_csk_enter_pingpong_mode(struct sock *sk)
+ {
+-	inet_csk(sk)->icsk_ack.pingpong = TCP_PINGPONG_THRESH;
++	inet_csk(sk)->icsk_ack.pingpong = tcp_pingpong_thresh;
+ }
+ 
+ static inline void inet_csk_exit_pingpong_mode(struct sock *sk)
+@@ -338,7 +338,15 @@ static inline void inet_csk_exit_pingpong_mode(struct sock *sk)
+ 
+ static inline bool inet_csk_in_pingpong_mode(struct sock *sk)
+ {
+-	return inet_csk(sk)->icsk_ack.pingpong >= TCP_PINGPONG_THRESH;
++	return inet_csk(sk)->icsk_ack.pingpong >= tcp_pingpong_thresh;
++}
++
++static inline void inet_csk_inc_pingpong_cnt(struct sock *sk)
++{
++	struct inet_connection_sock *icsk = inet_csk(sk);
++
++	if (icsk->icsk_ack.pingpong < U8_MAX)
++		icsk->icsk_ack.pingpong++;
+ }
+ 
+ static inline bool inet_csk_has_ulp(struct sock *sk)
+diff --git a/net/core/sysctl_net_core.c b/net/core/sysctl_net_core.c
+index 782273bb93c2..b5253567f2bd 100644
+--- a/net/core/sysctl_net_core.c
++++ b/net/core/sysctl_net_core.c
+@@ -653,6 +653,15 @@ static struct ctl_table net_core_table[] = {
+ 		.proc_handler	= proc_dointvec_minmax,
+ 		.extra1		= SYSCTL_ZERO,
+ 	},
++	{
++		.procname	= "tcp_pingpong_thresh",
++		.data		= &tcp_pingpong_thresh,
++		.maxlen		= sizeof(int),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec_minmax,
++		.extra1		= SYSCTL_ONE,
++		.extra2		= SYSCTL_THREE,
++	},
+ 	{ }
+ };
+ 
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index 53b7751b68e1..dcd143193d41 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -308,6 +308,8 @@ EXPORT_SYMBOL(tcp_have_smc);
+ struct percpu_counter tcp_sockets_allocated ____cacheline_aligned_in_smp;
+ EXPORT_SYMBOL(tcp_sockets_allocated);
+ 
++int tcp_pingpong_thresh __read_mostly = 1;
++
+ /*
+  * TCP splice context
+  */
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index cfe128b81a01..576d21621778 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -167,12 +167,25 @@ static void tcp_event_data_sent(struct tcp_sock *tp,
+ 	if (tcp_packets_in_flight(tp) == 0)
+ 		tcp_ca_event(sk, CA_EVENT_TX_START);
+ 
++	/* If tcp_pingpong_thresh > 1, and
++	 * this is the first data packet sent in response to the
++	 * previous received data,
++	 * and it is a reply for ato after last received packet,
++	 * increase pingpong count.
++	 */
++	if (tcp_pingpong_thresh > 1 &&
++	    before(tp->lsndtime, icsk->icsk_ack.lrcvtime) &&
++	    (u32)(now - icsk->icsk_ack.lrcvtime) < icsk->icsk_ack.ato)
++		inet_csk_inc_pingpong_cnt(sk);
++
+ 	tp->lsndtime = now;
+ 
+-	/* If it is a reply for ato after last received
++	/* If tcp_pingpong_thresh == 1, and
++	 * it is a reply for ato after last received
+ 	 * packet, enter pingpong mode.
+ 	 */
+-	if ((u32)(now - icsk->icsk_ack.lrcvtime) < icsk->icsk_ack.ato)
++	if (tcp_pingpong_thresh == 1 &&
++	    (u32)(now - icsk->icsk_ack.lrcvtime) < icsk->icsk_ack.ato)
+ 		inet_csk_enter_pingpong_mode(sk);
+ }
+ 
 -- 
-With best wishes
-Dmitry
+2.25.1
+
