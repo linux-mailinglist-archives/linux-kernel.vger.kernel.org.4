@@ -2,164 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5FFC72A164
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 19:39:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4640772A168
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 19:40:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbjFIRjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 13:39:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46684 "EHLO
+        id S231161AbjFIRkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 13:40:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjFIRjp (ORCPT
+        with ESMTP id S229537AbjFIRkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 13:39:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17331B5;
-        Fri,  9 Jun 2023 10:39:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A041665A69;
-        Fri,  9 Jun 2023 17:39:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FC02C433D2;
-        Fri,  9 Jun 2023 17:39:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686332383;
-        bh=BjBmi5dvVDfL4eANifiLaJ+b0e1ynq0rCl7TNY5H4N0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Z8kWRYHlLhrnNe4Jk1duaUAYu2RvNE9vnJfWWl7S84jq3lSfVChTV8WfIhWZXAa4h
-         B5xcBvwP9ZGSnznI8aU4SoG69k5uK92JLJSHujMBLukkKgYPbQ226cX70cYHwhJc5c
-         fjlmJtrZBknwi53/WPaDSS6Ov3npJs0WK9+v5bYwiuXvJvBuayYUuTmAcRNmsxOkUu
-         FGyKGiDt7+abWdUlQmtBSTHdthAgwMUG8ENTr6WN0xeRMYlXSsj+QcuFYlrxw0cyEj
-         HnHRCZmZypsbQ1trGqquC8cdK0XDtCoRbaDTA+dW+/9Y7WZYFNqnBevXv5DaXaO33C
-         FzL4nvCknUHiw==
-Date:   Fri, 9 Jun 2023 12:39:40 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc:     tjoseph@cadence.com, lpieralisi@kernel.org, robh@kernel.org,
-        kw@linux.com, bhelgaas@google.com, nadeem@cadence.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, vigneshr@ti.com, srk@ti.com,
-        nm@ti.com
-Subject: Re: [PATCH v3] PCI: cadence: Fix Gen2 Link Retraining process
-Message-ID: <20230609173940.GA1252506@bhelgaas>
+        Fri, 9 Jun 2023 13:40:18 -0400
+Received: from mail-40130.protonmail.ch (mail-40130.protonmail.ch [185.70.40.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D2D30F1
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 10:40:16 -0700 (PDT)
+Date:   Fri, 09 Jun 2023 17:40:04 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1686332413; x=1686591613;
+        bh=6/Y7CL3SycH5fGS6a/sM9Q9CKvQ3tqAcFpzGZckwOSY=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=U096p8rXomejIuyeT+ERL5Z5pO/zC4eSv/OnUJT7oxAI+S4c4ekQjhAvcQkpyROvU
+         CFQOGqOI/pXXeBDOmle/dD7ouscyZxAMBazE1jqN0VyldPcyMY+zrs6sgKGNapINYI
+         bFRzEjBvnAXDsTitDgPnQEnHBB/OfqvS6M9GpR5raaENEoFQzNHLm/s7SWPyxgsZlX
+         iUFr0ve/pf6MJN2hWfFOeVxPVN21fr2fKRzBEWIrbceZqFSHWPsEUSOG8dZAFr6r7E
+         U74nYciRJMc4ARSM13/oR1KZL8njQMfM9Cl8XYoTC1iEXI1iFnpMaL4ibIPut+Qzw6
+         aFFTqTgu2kqfg==
+To:     krzysztof.kozlowski@linaro.org
+From:   Raymond Hackley <raymondhackley@protonmail.com>
+Cc:     broonie@kernel.org, davem@davemloft.net,
+        devicetree@vger.kernel.org, edumazet@google.com,
+        jk@codeconstruct.com.au, kuba@kernel.org, lgirdwood@gmail.com,
+        linux-kernel@vger.kernel.org, michael@walle.cc,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        raymondhackley@protonmail.com, robh+dt@kernel.org,
+        u.kleine-koenig@pengutronix.de
+Subject: Re: [PATCH v2 2/2] NFC: nxp-nci: Add pad supply voltage pvdd-supply
+Message-ID: <20230609173935.84424-1-raymondhackley@protonmail.com>
+In-Reply-To: <e2bb439c-9b72-991b-00f6-0b5e7602efd9@linaro.org>
+References: <20230609154033.3511-1-raymondhackley@protonmail.com> <20230609154200.3620-1-raymondhackley@protonmail.com> <e2bb439c-9b72-991b-00f6-0b5e7602efd9@linaro.org>
+Feedback-ID: 49437091:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230607091427.852473-1-s-vadapalli@ti.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 02:44:27PM +0530, Siddharth Vadapalli wrote:
-> The Link Retraining process is initiated to account for the Gen2 defect in
-> the Cadence PCIe controller in J721E SoC. The errata corresponding to this
-> is i2085, documented at:
-> https://www.ti.com/lit/er/sprz455c/sprz455c.pdf
-> 
-> The existing workaround implemented for the errata waits for the Data Link
-> initialization to complete and assumes that the link retraining process
-> at the Physical Layer has completed. However, it is possible that the
-> Physical Layer training might be ongoing as indicated by the
-> PCI_EXP_LNKSTA_LT bit in the PCI_EXP_LNKSTA register.
-> 
-> Fix the existing workaround, to ensure that the Physical Layer training
-> has also completed, in addition to the Data Link initialization.
-> 
-> Fixes: 4740b969aaf5 ("PCI: cadence: Retrain Link to work around Gen2 training defect")
-> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-> Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
-> ---
-> 
-> Hello,
-> 
-> This patch is based on linux-next tagged next-20230606.
-> 
-> v2:
-> https://lore.kernel.org/r/20230315070800.1615527-1-s-vadapalli@ti.com/
-> Changes since v2:
-> - Merge the cdns_pcie_host_training_complete() function with the
->   cdns_pcie_host_wait_for_link() function, as suggested by Bjorn
->   for the v2 patch.
-> - Add dev_err() to notify when Link Training fails, since this is a
->   fatal error and proceeding from this point will almost always crash
->   the kernel.
-> 
-> v1:
-> https://lore.kernel.org/r/20230102075656.260333-1-s-vadapalli@ti.com/
-> Changes since v1:
-> - Collect Reviewed-by tag from Vignesh Raghavendra.
-> - Rebase on next-20230315.
-> 
-> Regards,
-> Siddharth.
-> 
->  .../controller/cadence/pcie-cadence-host.c    | 20 +++++++++++++++++++
->  1 file changed, 20 insertions(+)
-> 
-> diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
-> index 940c7dd701d6..70a5f581ff4f 100644
-> --- a/drivers/pci/controller/cadence/pcie-cadence-host.c
-> +++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
-> @@ -12,6 +12,8 @@
->  
->  #include "pcie-cadence.h"
->  
-> +#define LINK_RETRAIN_TIMEOUT HZ
-> +
->  static u64 bar_max_size[] = {
->  	[RP_BAR0] = _ULL(128 * SZ_2G),
->  	[RP_BAR1] = SZ_2G,
-> @@ -80,8 +82,26 @@ static struct pci_ops cdns_pcie_host_ops = {
->  static int cdns_pcie_host_wait_for_link(struct cdns_pcie *pcie)
->  {
->  	struct device *dev = pcie->dev;
-> +	unsigned long end_jiffies;
-> +	u16 link_status;
->  	int retries;
->  
-> +	/* Wait for link training to complete */
-> +	end_jiffies = jiffies + LINK_RETRAIN_TIMEOUT;
-> +	do {
-> +		link_status = cdns_pcie_rp_readw(pcie, CDNS_PCIE_RP_CAP_OFFSET + PCI_EXP_LNKSTA);
-> +		if (!(link_status & PCI_EXP_LNKSTA_LT))
-> +			break;
-> +		usleep_range(0, 1000);
-> +	} while (time_before(jiffies, end_jiffies));
-> +
-> +	if (!(link_status & PCI_EXP_LNKSTA_LT)) {
-> +		dev_info(dev, "Link training complete\n");
-> +	} else {
-> +		dev_err(dev, "Fatal! Link training incomplete\n");
-> +		return -ETIMEDOUT;
-> +	}
+Hi Krzysztof,
 
-Can I have a brown paper bag, please?  I totally blew it here, and I'm
-sorry.
+On Friday, June 9th, 2023 at 3:46 PM, Krzysztof Kozlowski <krzysztof.kozlow=
+ski@linaro.org> wrote:
 
-You took my advice by combining this with the existing
-cdns_pcie_host_wait_for_link(), but I think my advice was poor because
-(a) now this additional wait is not clearly connected with the
-erratum, and (b) it affects devices that don't have the erratum.
 
-IIUC, this is all part of a workaround for the i2085 erratum.  The
-original workaround, 4740b969aaf5 ("PCI: cadence: Retrain Link to work
-around Gen2 training defect"), added this:
+> On 09/06/2023 17:42, Raymond Hackley wrote:
+>
+> > PN547/553, QN310/330 chips on some devices require a pad supply voltage
+> > (PVDD). Otherwise, the NFC won't power up.
+> >
+> > Implement support for pad supply voltage pvdd-supply that is enabled by
+> > the nxp-nci driver so that the regulator gets enabled when needed.
+> >
+> > Signed-off-by: Raymond Hackley raymondhackley@protonmail.com
+> > ---
+> > drivers/nfc/nxp-nci/i2c.c | 42 +++++++++++++++++++++++++++++++++++++++
+> > 1 file changed, 42 insertions(+)
+> >
+> > diff --git a/drivers/nfc/nxp-nci/i2c.c b/drivers/nfc/nxp-nci/i2c.c
+> > index d4c299be7949..1b8877757cee 100644
+> > --- a/drivers/nfc/nxp-nci/i2c.c
+> > +++ b/drivers/nfc/nxp-nci/i2c.c
+> > @@ -35,6 +35,7 @@ struct nxp_nci_i2c_phy {
+> >
+> > struct gpio_desc *gpiod_en;
+> > struct gpio_desc *gpiod_fw;
+> > + struct regulator *pvdd;
+> >
+> > int hard_fault; /*
+> > * < 0 if hardware error occurred (e.g. i2c err)
+> > @@ -263,6 +264,22 @@ static const struct acpi_gpio_mapping acpi_nxp_nci=
+_gpios[] =3D {
+> > { }
+> > };
+> >
+> > +static void nxp_nci_i2c_poweroff(void *data)
+> > +{
+> > + struct nxp_nci_i2c_phy *phy =3D data;
+> > + struct device *dev =3D &phy->i2c_dev->dev;
+> > + struct regulator *pvdd =3D phy->pvdd;
+> > + int r;
+> > +
+> > + if (!IS_ERR(pvdd) && regulator_is_enabled(pvdd)) {
+>
+>
+> Why do you need these checks? This should be called in correct context,
+> so when regulator is valid and enabled. If you have such checks it
+> suggests that code is buggy and this is being called in wrong contexts.
+>
 
-  if (!ret && rc->quirk_retrain_flag)
-    ret = cdns_pcie_retrain(pcie);
+First condition !IS_ERR(pvdd) is to check if pvdd exists.
+Some devices, msm8916-samsung-serranove for example, doesn't need pvdd or
+have it bound in the device tree:
 
-I think the wait for link train to complete should also be in
-cdns_pcie_retrain() so it's clearly connected with the quirk, which
-also means we'd only do the wait for devices with the erratum.
+https://github.com/torvalds/linux/commit/ab0f0987e035f908d670fed7d86efa6fac=
+66c0bb
 
-Which is EXACTLY what your first patch did, and I missed it.  I am
-very sorry.  I guess maybe I thought cdns_pcie_retrain() was a
-general-purpose thing, but in fact it's only used for this quirk.
+Without !IS_ERR(pvdd), checking it with regulator_is_enabled(pvdd):
 
-Bjorn
+[   50.161882] 8<--- cut here ---
+[   50.161906] Unable to handle kernel paging request at virtual address ff=
+fffff9 when read
+[   50.161916] [fffffff9] *pgd=3Daffff841, *pte=3D00000000, *ppte=3D0000000=
+0
+[   50.161938] Internal error: Oops: 27 [#1] PREEMPT SMP ARM
+
+Or disabling it directly with regulator_disable(pvdd):
+
+[   69.439827] 8<--- cut here ---
+[   69.439841] Unable to handle kernel NULL pointer dereference at virtual =
+address 00000045 when read
+[   69.439852] [00000045] *pgd=3D00000000
+[   69.439864] Internal error: Oops: 5 [#1] PREEMPT SMP ARM
+
+Second condition regulator_is_enabled(pvdd) is to make sure that pvdd is
+disabled with balance.
+
+Similar checks can be found here:
+
+https://elixir.bootlin.com/linux/v6.4-rc5/source/drivers/staging/greybus/ar=
+che-apb-ctrl.c#L208
+
+> > + r =3D regulator_disable(pvdd);
+> > + if (r < 0)
+> > + dev_warn(dev,
+> > + "Failed to disable regulator pvdd: %d\n",
+> > + r);
+>
+>
+> Weird wrapping. Why r is wrapped?
+>
+> > + }
+> > +}
+> > +
+> > static int nxp_nci_i2c_probe(struct i2c_client *client)
+> > {
+> > struct device *dev =3D &client->dev;
+> > @@ -298,6 +315,29 @@ static int nxp_nci_i2c_probe(struct i2c_client *cl=
+ient)
+> > return PTR_ERR(phy->gpiod_fw);
+> > }
+> >
+> > + phy->pvdd =3D devm_regulator_get_optional(dev, "pvdd");
+> > + if (IS_ERR(phy->pvdd)) {
+> > + r =3D PTR_ERR(phy->pvdd);
+> > + if (r !=3D -ENODEV)
+> > + return dev_err_probe(dev, r,
+> > + "Failed to get regulator pvdd\n");
+> > + } else {
+> > + r =3D regulator_enable(phy->pvdd);
+> > + if (r < 0) {
+> > + nfc_err(dev,
+> > + "Failed to enable regulator pvdd: %d\n",
+> > + r);
+>
+>
+> Weird wrapping. Why r is wrapped?
+>
+> > + return r;
+> > + }
+> > + }
+> > +
+> > + r =3D devm_add_action_or_reset(dev, nxp_nci_i2c_poweroff, phy);
+> > + if (r < 0) {
+> > + nfc_err(dev, "Failed to install poweroff handler: %d\n",
+> > + r);
+>
+>
+> Weird wrapping. Why r is wrapped?
+>
+> Just move it to the success path of enabling regulator.
+>
+
+Yes. This will be fixed in v3.
+
+> > + return r;
+> > + }
+> > +
+> > r =3D nxp_nci_probe(phy, &client->dev, &i2c_phy_ops,
+> > NXP_NCI_I2C_MAX_PAYLOAD, &phy->ndev);
+> > if (r < 0)
+> > @@ -319,6 +359,8 @@ static void nxp_nci_i2c_remove(struct i2c_client *c=
+lient)
+> >
+> > nxp_nci_remove(phy->ndev);
+> > free_irq(client->irq, phy);
+> > +
+> > + nxp_nci_i2c_poweroff(phy);
+>
+>
+> Why? This code is buggy...
+>
+
+I don't have a good reason to keep it and will drop it in v3.
+
+Regards,
+Raymond
+
+>
+>
+> Best regards,
+> Krzysztof
+
