@@ -2,75 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AE6F729C3A
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5744729C43
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240087AbjFIOHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 10:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
+        id S240463AbjFIOHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 10:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239993AbjFIOHB (ORCPT
+        with ESMTP id S240127AbjFIOHJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 10:07:01 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56E230FA
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 07:06:59 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-977c89c47bdso327468266b.2
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 07:06:59 -0700 (PDT)
+        Fri, 9 Jun 2023 10:07:09 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E590E35B1
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 07:07:03 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-51493ec65d8so3203117a12.2
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 07:07:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686319618; x=1688911618;
+        d=linaro.org; s=google; t=1686319622; x=1688911622;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=S+gTfGn7TaIBs9hEgWlQrwBiTp9lBdTvG7X0pROImyc=;
-        b=PlQ1222JKcEFzMZMIGHcyZODR1iBaDG+sKGLnO/4dTSM5ErbfWHKSVxS6He4Th1ql1
-         62w6cAHtkoStO3dtW1qv/U0wgcdgoc/lzBYR+XKskT4g+zoZcUxQp627ekr7BkRlP2fw
-         DYxDfSDs3XyyjF0kObvQSyS9hhNJo9Bir7giXaKzSznZvHt+4TCfBDFjBMkWAOPUJI8C
-         u/l5D3G2mCZdbWT6dMpT2glcmi1tbrL/R64KjIgzrUhCuzPDOGSaFgnCsxNwnBetO8ac
-         DdtNxtIBVVJ2x6DmUu2QxqHwcmybiWrI7ivVDywdqV6BQsiE83U1reT2DWITSQQnxklX
-         SLSw==
+        bh=E9uMQ0sfqZ2sQ8GreRUpH89gA6dhVg8HRnZ9nNzOC5U=;
+        b=wnzZoyqu+R5uWVV5c2SmCaaKcEtjCYLxh7x7XZdJRpl1l3mWEPqGa0s9zBwqqJYi2f
+         p1fgEf5EUa1on/lQLgGyhH2F2v+jUguBBBcFns7QGE2G/yVo89TKQZ+jh+7aJsRQsU+x
+         zg8x2XPvO/8RXDzVjkg/ETZ5d+0JFvgMBHZk9A3bmG74ceRu/lBeZxuao5KSRoCs1tVK
+         LeaTPlEMQ7aVF8CSCNsJ+n+Re6pTqxnFP7TaFUYhuWudZA+dUTmwuPC2v6chH892QlKq
+         SlsAZTGIlNyAqWV45BsQIngMiI1B0/EU/l0bJrJREMBjs0qKp84jeA2rkNGQmgfJg66C
+         Cj7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686319618; x=1688911618;
+        d=1e100.net; s=20221208; t=1686319622; x=1688911622;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=S+gTfGn7TaIBs9hEgWlQrwBiTp9lBdTvG7X0pROImyc=;
-        b=VgZIbsDI3WiPSHbnvMKnLl7nguUmU588NgDVZ2OPU24zZHKe9ogpEFXBnxvsztyee8
-         KPtATPu7rHWz0JiO+oWZKMSMzXy4Ibk2COg+0rrcj6kfMcAqUPux2gwW+62aDTP0ceZJ
-         2TocpY3Bdji/PSVBttvOBiDIuOo48vJPgNBmsLIl+Cs2OgnHh4RfcjbTGmBG6qZU+ogW
-         BknjbAcOktg+uEbaS3iSAV865BEq6vgNaw1v7bF28RTlN/aG8aQSbpqUk1Gfh0R6ZqK8
-         fPFaqlFbun6o/8rmXZPZ2zrgJfraJSqrGKp0ouMxOEffIiksMOGYmDzNwWKKoLzffbLA
-         pHBg==
-X-Gm-Message-State: AC+VfDyd06mIcHfor8nlw+PHFAZQXwlznQI0S30om5obqPg3EUfxGGLy
-        r95NIwFVdq0WuDX55Q8AKLGRtw==
-X-Google-Smtp-Source: ACHHUZ4z7w0ie6vX0HXHFCYiRPPXpxdhkptjD+y8x2PS5/YtCpgN8rvfwcZmtEvsglS53aEMOR3RMg==
-X-Received: by 2002:a17:906:99c4:b0:974:6216:8dd2 with SMTP id s4-20020a17090699c400b0097462168dd2mr2327448ejn.27.1686319618453;
-        Fri, 09 Jun 2023 07:06:58 -0700 (PDT)
+        bh=E9uMQ0sfqZ2sQ8GreRUpH89gA6dhVg8HRnZ9nNzOC5U=;
+        b=IzWW0pplLpU73YvgNkGSerGXivrmPKp4+z99+pK7a91LzGvfz0RIrp93kJHGZ9wVBN
+         jnzSANi0Nju7hq5FGKo5r6Ol/wn5vJG0KvNznS+B9Be5erUdNxHjDS+zIwAxXN0fcPLe
+         +FpcSFCYHBHfW+Y5cFRacMFFPc5rTuVS1f5b48WjSZeR8CslMw0Ut1QWiUYig1e+bZGr
+         JTYb90vb/V7ZUGR7SiZgKUkZmB1sAd+CgO+DNbDsowFlHDX59OJUxoNwCEuRHhFfLob0
+         kQp9HxtqHdW1KedH8V1BHc4qDXnWcQ+35MaBHi9UTAWOSbH0XCTLbJRsj8J6+6ChtHdV
+         UB9g==
+X-Gm-Message-State: AC+VfDyEfEXi5VU8sm1ziazhi/BTqWdrlOPSv2CkEVaqhy6BTBMDwC/N
+        hcRh4YJm/nne8z7aSxns/A2fOw==
+X-Google-Smtp-Source: ACHHUZ5DkXFiMm5CGgSQmITXmQLTvumkIiZtW5dSbMjJW9/TR74LmfVF2cvMFqNWQc10JQoD0Ezg9A==
+X-Received: by 2002:aa7:c910:0:b0:514:960e:6 with SMTP id b16-20020aa7c910000000b00514960e0006mr1388561edt.10.1686319622321;
+        Fri, 09 Jun 2023 07:07:02 -0700 (PDT)
 Received: from krzk-bin.. ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id o10-20020a170906860a00b00977cc10caefsm1336407ejx.104.2023.06.09.07.06.55
+        by smtp.gmail.com with ESMTPSA id f8-20020a05640214c800b00516a29dfa68sm1818429edx.90.2023.06.09.07.06.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 07:06:58 -0700 (PDT)
+        Fri, 09 Jun 2023 07:07:01 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+To:     James Schulman <james.schulman@cirrus.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
+        Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>,
+        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: spmi: mtk,spmi-mtk-pmif: drop unneeded quotes
-Date:   Fri,  9 Jun 2023 16:06:54 +0200
-Message-Id: <20230609140655.64529-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] ASoC: dt-bindings: cirrus,cs35l45: drop unneeded quotes
+Date:   Fri,  9 Jun 2023 16:06:58 +0200
+Message-Id: <20230609140658.64557-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,22 +83,58 @@ checking for this can be enabled in yamllint.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/devicetree/bindings/spmi/mtk,spmi-mtk-pmif.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../devicetree/bindings/sound/cirrus,cs35l45.yaml      | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/spmi/mtk,spmi-mtk-pmif.yaml b/Documentation/devicetree/bindings/spmi/mtk,spmi-mtk-pmif.yaml
-index e4f465abcfe9..ac99883a3f29 100644
---- a/Documentation/devicetree/bindings/spmi/mtk,spmi-mtk-pmif.yaml
-+++ b/Documentation/devicetree/bindings/spmi/mtk,spmi-mtk-pmif.yaml
-@@ -14,7 +14,7 @@ description: |+
-   for multiple SoCs to control a single SPMI master.
- 
- allOf:
--  - $ref: "spmi.yaml"
-+  - $ref: spmi.yaml
- 
- properties:
-   compatible:
+diff --git a/Documentation/devicetree/bindings/sound/cirrus,cs35l45.yaml b/Documentation/devicetree/bindings/sound/cirrus,cs35l45.yaml
+index 2ab74f995685..4c9acb8d4c4c 100644
+--- a/Documentation/devicetree/bindings/sound/cirrus,cs35l45.yaml
++++ b/Documentation/devicetree/bindings/sound/cirrus,cs35l45.yaml
+@@ -62,7 +62,7 @@ patternProperties:
+           GPIO pin direction. Valid only when 'gpio-ctrl' is 1
+             0 = Output
+             1 = Input
+-        $ref: "/schemas/types.yaml#/definitions/uint32"
++        $ref: /schemas/types.yaml#/definitions/uint32
+         minimum: 0
+         maximum: 1
+         default: 1
+@@ -71,7 +71,7 @@ patternProperties:
+           GPIO level. Valid only when 'gpio-ctrl' is 1 and 'gpio-dir' is 0
+             0 = Low
+             1 = High
+-        $ref: "/schemas/types.yaml#/definitions/uint32"
++        $ref: /schemas/types.yaml#/definitions/uint32
+         minimum: 0
+         maximum: 1
+         default: 0
+@@ -80,7 +80,7 @@ patternProperties:
+           GPIO level. Valid only when 'gpio-ctrl' is 1 and 'gpio-dir' is 0
+             0 = CMOS
+             1 = Open Drain
+-        $ref: "/schemas/types.yaml#/definitions/uint32"
++        $ref: /schemas/types.yaml#/definitions/uint32
+         minimum: 0
+         maximum: 1
+         default: 0
+@@ -90,7 +90,7 @@ patternProperties:
+           and 'gpio-dir' is 0
+             0 = Non-inverted, Active High
+             1 = Inverted, Active Low
+-        $ref: "/schemas/types.yaml#/definitions/uint32"
++        $ref: /schemas/types.yaml#/definitions/uint32
+         minimum: 0
+         maximum: 1
+         default: 0
+@@ -114,7 +114,7 @@ patternProperties:
+             0 = High impedance input
+             1 = Pin acts as a GPIO, direction controlled by 'gpio-dir'
+             2-7 = Reserved
+-        $ref: "/schemas/types.yaml#/definitions/uint32"
++        $ref: /schemas/types.yaml#/definitions/uint32
+         minimum: 0
+         maximum: 7
+         default: 0
 -- 
 2.34.1
 
