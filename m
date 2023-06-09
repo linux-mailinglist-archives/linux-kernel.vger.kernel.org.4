@@ -2,194 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A917372A54A
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 23:22:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B8D72A551
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 23:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232087AbjFIVWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 17:22:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54612 "EHLO
+        id S232241AbjFIVY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 17:24:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231996AbjFIVWB (ORCPT
+        with ESMTP id S232204AbjFIVYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 17:22:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4751335A3;
-        Fri,  9 Jun 2023 14:22:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CF10B65C48;
-        Fri,  9 Jun 2023 21:21:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3062CC433EF;
-        Fri,  9 Jun 2023 21:21:56 +0000 (UTC)
-Date:   Fri, 9 Jun 2023 17:21:53 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Russell King <linux@armlinux.org.uk>
-Cc:     Donglin Peng <pengdonglin@sangfor.com.cn>, mhiramat@kernel.org,
-        linux@armlinux.org.uk, mark.rutland@arm.com, will@kernel.org,
-        catalin.marinas@arm.com, rmk+kernel@armlinux.org.uk,
-        palmer@dabbelt.com, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, tglx@linutronix.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, bp@alien8.de,
-        hpa@zytor.com, chenhuacai@kernel.org, zhangqing@loongson.cn,
-        kernel@xen0n.name, mingo@redhat.com, peterz@infradead.org,
-        xiehuan09@gmail.com, dinghui@sangfor.com.cn,
-        huangcun@sangfor.com.cn, dolinux.peng@gmail.com,
-        linux-trace-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 3/8] ARM: ftrace: Enable HAVE_FUNCTION_GRAPH_RETVAL
-Message-ID: <20230609172153.73b0ef9d@gandalf.local.home>
-In-Reply-To: <c61eb9290c3e817d4d70c429c0e987e3ec51a3c4.1680954589.git.pengdonglin@sangfor.com.cn>
-References: <cover.1680954589.git.pengdonglin@sangfor.com.cn>
-        <c61eb9290c3e817d4d70c429c0e987e3ec51a3c4.1680954589.git.pengdonglin@sangfor.com.cn>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 9 Jun 2023 17:24:23 -0400
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96E63A84
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 14:24:21 -0700 (PDT)
+Received: by mail-ua1-x935.google.com with SMTP id a1e0cc1a2514c-789de11638fso876713241.1
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 14:24:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686345861; x=1688937861;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sdR22/Dn+oev7vk8t/Tr492RL20kdJqWTXPUPVdb0hc=;
+        b=h9Pl7EDgw/Oko95ySXm+jEVrLDh6BI0Mz9RBRez1O17wSPKof+RGRKEuBxXijTHsg9
+         KbHURV/X4usXW336ls6rI03yl5Gc2aTSGqpfR9M9Y1x7U5PTAYccFxxjJ5zWkyumLRC8
+         v4N0cdigRRSgQ/IPnouF2x/UBBUAwqW+tiQBYnhdMZKFdJq5Us8bO7PPLc7MFSnALLHM
+         JC3BOyAjeeVzIn8IhXT7T4u4iBer+G9UyvUmTv9NPNfTHbNuV2QiBz7PB9tEbAWLya/8
+         fzCqkdlTl12uaUIc0GRwrtb4URRNgDEHw5cHmE/msKYWYcK+rRt4azPCdoQzZC0cHRvo
+         U7uA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686345861; x=1688937861;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sdR22/Dn+oev7vk8t/Tr492RL20kdJqWTXPUPVdb0hc=;
+        b=JCOZ9zdTgG+hDhaGu+qvOXYcyqFz1zDfxMWO7Z/80kZMbFGGG3mwQZkZf8j2U/nVxN
+         F/PscoIBK7l0BmfIxUOvFthb9dwW/UZp6hEddQ55rlO1vjAJSrjP4cEYyxihScV6IwVY
+         iopecP1TuKtj7IjlIpf176ORbYwHnfvoHxWaFDAsMXjsu3mf9bqxeKQsg93jqUfNXKr2
+         Lp9txZZuvFLvfepKGNtN2WBaKqhoRgl3oj5ZzPbl48LXvcKGLMDwhiIDbUy+/MJDCXZH
+         6hE6lsPvosodf1/vBwAFJzuywZR41kQKPdMQ4rB8gJbZ9kvPVgj2KLw0siwuFrmwAdIM
+         lekA==
+X-Gm-Message-State: AC+VfDwyK0gRog3gEHTDIJtvG0xvAODsQsaWbNH7/yD9ThV8ZfVy3OvR
+        xmIuvUxbLR19pNSw8oF6jTYXtQxIdCUeQWuCPMEK7A==
+X-Google-Smtp-Source: ACHHUZ5OXoFL30kGabu8C3ICNTZRa+j1RaV03HiGdItV9KOMMZLD5Lt7ZJOLWtozoUcQeacTby9geMSyvFoSBzASxqk=
+X-Received: by 2002:a67:efd4:0:b0:43b:131f:1b50 with SMTP id
+ s20-20020a67efd4000000b0043b131f1b50mr2184071vsp.24.1686345860593; Fri, 09
+ Jun 2023 14:24:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230608142428.256985-1-masahiroy@kernel.org> <20230608142428.256985-2-masahiroy@kernel.org>
+In-Reply-To: <20230608142428.256985-2-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 9 Jun 2023 14:23:02 -0700
+Message-ID: <CAKwvOdnvxxPFbJ3bPu9-WqrQD4nS2vd2X-5=mgeruTrgTPm=zw@mail.gmail.com>
+Subject: Re: [PATCH v7 01/11] Revert "[PATCH] uml: export symbols added by GCC hardened"
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-um@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 8, 2023 at 7:24=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.or=
+g> wrote:
+>
+> This reverts commit cead61a6717a9873426b08d73a34a325e3546f5d.
+>
+> It exported __stack_smash_handler and __guard, while they may not be
+> defined by anyone.
+>
+> The code *declares* __stack_smash_handler and __guard. It does not
+> create weak symbols. When the stack-protector is disabled, they are
+> left undefined, but yet exported.
+>
+> If a loadable module tries to access non-existing symbols, bad things
+> (a page fault, NULL pointer dereference, etc.) will happen. So, the
+> current code is wrong.
+>
+> If the code were written as follows, it would *define* them as weak
+> symbols so modules would be able to get access to them.
+>
+>   void (*__stack_smash_handler)(void *) __attribute__((weak));
+>   EXPORT_SYMBOL(__stack_smash_handler);
+>
+>   long __guard __attribute__((weak));
+>   EXPORT_SYMBOL(__guard);
+>
+> In fact, modpost forbids exporting undefined symbols. It shows an error
+> message if it detects such a mistake.
+>
+>   ERROR: modpost: "..." [...] was exported without definition
+>
+> Unfortunately, it is checked only when the code is built as modular.
+> The problem described above has been unnoticed for a long time because
+> arch/um/os-Linux/user_syms.c is always built-in.
+>
+> With a planned change in Kbuild, exporting undefined symbols will always
+> result in a build error instead of a run-time error. It is a good thing,
+> but we need to fix the breakage in advance.
+>
+> One fix is to *define* weak symbols as shown above. An alternative is
+> to export them conditionally as follows:
+>
+>   #ifdef CONFIG_STACKPROTECTOR
+>   extern void __stack_smash_handler(void *);
+>   EXPORT_SYMBOL(__stack_smash_handler);
+>
+>   external long __guard;
+>   EXPORT_SYMBOL(__guard);
+>   #endif
+>
+> This is what other architectures do; EXPORT_SYMBOL(__stack_chk_guard)
+> is guarded by #ifdef CONFIG_STACKPROTECTOR.
+>
+> However, adding the #ifdef guard is not sensible because UML cannot
+> enable the stack-protector in the first place! (Please note UML does
+> not select HAVE_STACKPROTECTOR in Kconfig.)
+>
+> So, the code is already broken (and unused) in multiple ways.
+>
+> Just remove.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-Hi Russell,
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-I noticed that this patch set only went to the linux-arm-kernel mailing
-list but did not include you in the Cc.
-
-Could you give an ack to this patch, and I can take it through my tree?
-
-The full patch set went to linux-arm-kernel where I'm sure you have access
-to.
-
-Thanks!
-
--- Steve
-
-
-On Sat,  8 Apr 2023 05:42:17 -0700
-Donglin Peng <pengdonglin@sangfor.com.cn> wrote:
-
-> The previous patch ("function_graph: Support recording and printing
-> the return value of function") has laid the groundwork for the for
-> the funcgraph-retval, and this modification makes it available on
-> the ARM platform.
-> 
-> We introduce a new structure called fgraph_ret_regs for the ARM platform
-> to hold return registers and the frame pointer. We then fill its content
-> in the return_to_handler and pass its address to the function
-> ftrace_return_to_handler to record the return value.
-> 
-> Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>
 > ---
-> v10:
->  - Use CONFIG_FUNCTION_GRAPH_TRACER to control fgraph_ret_regs definition
-> 
-> v9:
->  - Fix stack pointer align issues
->  - Update the commit message
-> 
-> v8:
->  - Modify the control range of CONFIG_HAVE_FUNCTION_GRAPH_RETVAL
-> ---
->  arch/arm/Kconfig               |  1 +
->  arch/arm/include/asm/ftrace.h  | 22 ++++++++++++++++++++++
->  arch/arm/kernel/asm-offsets.c  |  8 +++++++-
->  arch/arm/kernel/entry-ftrace.S | 10 ++++++----
->  4 files changed, 36 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-> index e24a9820e12f..73061379855a 100644
-> --- a/arch/arm/Kconfig
-> +++ b/arch/arm/Kconfig
-> @@ -98,6 +98,7 @@ config ARM
->  	select HAVE_FAST_GUP if ARM_LPAE
->  	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
->  	select HAVE_FUNCTION_ERROR_INJECTION
-> +	select HAVE_FUNCTION_GRAPH_RETVAL if HAVE_FUNCTION_GRAPH_TRACER
->  	select HAVE_FUNCTION_GRAPH_TRACER
->  	select HAVE_FUNCTION_TRACER if !XIP_KERNEL
->  	select HAVE_GCC_PLUGINS
-> diff --git a/arch/arm/include/asm/ftrace.h b/arch/arm/include/asm/ftrace.h
-> index 7e9251ca29fe..3c457902b355 100644
-> --- a/arch/arm/include/asm/ftrace.h
-> +++ b/arch/arm/include/asm/ftrace.h
-> @@ -77,4 +77,26 @@ static inline bool arch_syscall_match_sym_name(const char *sym,
->  
->  #endif /* ifndef __ASSEMBLY__ */
->  
-> +#ifndef __ASSEMBLY__
-> +#ifdef CONFIG_FUNCTION_GRAPH_TRACER
-> +struct fgraph_ret_regs {
-> +	/* r0 - r3 */
-> +	unsigned long regs[4];
-> +
-> +	unsigned long fp;
-> +	unsigned long __unused;
-> +};
-> +
-> +static inline unsigned long fgraph_ret_regs_return_value(struct fgraph_ret_regs *ret_regs)
-> +{
-> +	return ret_regs->regs[0];
-> +}
-> +
-> +static inline unsigned long fgraph_ret_regs_frame_pointer(struct fgraph_ret_regs *ret_regs)
-> +{
-> +	return ret_regs->fp;
-> +}
-> +#endif /* ifdef CONFIG_FUNCTION_GRAPH_TRACER */
-> +#endif
-> +
->  #endif /* _ASM_ARM_FTRACE */
-> diff --git a/arch/arm/kernel/asm-offsets.c b/arch/arm/kernel/asm-offsets.c
-> index 38121c59cbc2..18bb85115b21 100644
-> --- a/arch/arm/kernel/asm-offsets.c
-> +++ b/arch/arm/kernel/asm-offsets.c
-> @@ -23,6 +23,7 @@
->  #include <asm/suspend.h>
->  #include <asm/vdso_datapage.h>
->  #include <asm/hardware/cache-l2x0.h>
-> +#include <asm/ftrace.h>
->  #include <linux/kbuild.h>
->  #include <linux/arm-smccc.h>
->  #include "signal.h"
-> @@ -170,5 +171,10 @@ int main(void)
->    DEFINE(KEXEC_INDIR_PAGE,	offsetof(struct kexec_relocate_data, kexec_indirection_page));
->    DEFINE(KEXEC_MACH_TYPE,	offsetof(struct kexec_relocate_data, kexec_mach_type));
->    DEFINE(KEXEC_R2,		offsetof(struct kexec_relocate_data, kexec_r2));
-> -  return 0; 
-> +#ifdef CONFIG_FUNCTION_GRAPH_TRACER
-> +  BLANK();
-> +  DEFINE(FGRET_REGS_SIZE,	sizeof(struct fgraph_ret_regs));
-> +  BLANK();
-> +#endif
-> +  return 0;
->  }
-> diff --git a/arch/arm/kernel/entry-ftrace.S b/arch/arm/kernel/entry-ftrace.S
-> index 3e7bcaca5e07..d41a1676608c 100644
-> --- a/arch/arm/kernel/entry-ftrace.S
-> +++ b/arch/arm/kernel/entry-ftrace.S
-> @@ -257,11 +257,13 @@ ENDPROC(ftrace_graph_regs_caller)
->  
->  #ifdef CONFIG_FUNCTION_GRAPH_TRACER
->  ENTRY(return_to_handler)
-> -	stmdb	sp!, {r0-r3}
-> -	add	r0, sp, #16		@ sp at exit of instrumented routine
-> +	mov	ip, sp				@ sp at exit of instrumented routine
-> +	stmdb	sp!, {r0-r3, ip, lr}		@ fill fgraph_ret_regs
-> +	mov	r0, sp
->  	bl	ftrace_return_to_handler
-> -	mov	lr, r0			@ r0 has real ret addr
-> -	ldmia	sp!, {r0-r3}
-> +	mov	lr, r0				@ r0 has real ret addr
-> +	ldmia	sp, {r0-r3}
-> +	add	sp, sp, #FGRET_REGS_SIZE	@ restore stack pointer
->  	ret	lr
->  ENDPROC(return_to_handler)
+>
+> Changes in v7:
+>   - New patch
+>
+>  arch/um/os-Linux/user_syms.c | 7 -------
+>  1 file changed, 7 deletions(-)
+>
+> diff --git a/arch/um/os-Linux/user_syms.c b/arch/um/os-Linux/user_syms.c
+> index 9b62a9d352b3..a310ae27b479 100644
+> --- a/arch/um/os-Linux/user_syms.c
+> +++ b/arch/um/os-Linux/user_syms.c
+> @@ -37,13 +37,6 @@ EXPORT_SYMBOL(vsyscall_ehdr);
+>  EXPORT_SYMBOL(vsyscall_end);
 >  #endif
+>
+> -/* Export symbols used by GCC for the stack protector. */
+> -extern void __stack_smash_handler(void *) __attribute__((weak));
+> -EXPORT_SYMBOL(__stack_smash_handler);
+> -
+> -extern long __guard __attribute__((weak));
+> -EXPORT_SYMBOL(__guard);
+> -
+>  #ifdef _FORTIFY_SOURCE
+>  extern int __sprintf_chk(char *str, int flag, size_t len, const char *fo=
+rmat);
+>  EXPORT_SYMBOL(__sprintf_chk);
+> --
+> 2.39.2
+>
 
+
+--=20
+Thanks,
+~Nick Desaulniers
