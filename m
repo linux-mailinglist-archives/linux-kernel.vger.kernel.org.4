@@ -2,109 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3115729302
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:27:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E124729319
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240385AbjFII0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 04:26:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57852 "EHLO
+        id S239170AbjFII1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 04:27:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240604AbjFIIYu (ORCPT
+        with ESMTP id S241423AbjFIIZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 04:24:50 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D08D3C3E;
-        Fri,  9 Jun 2023 01:23:34 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-30adc51b65cso1439197f8f.0;
-        Fri, 09 Jun 2023 01:23:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686299012; x=1688891012;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hESlPtiMkKprbYVZWF5WJWN2aGL5r7t0ApI5+mmRyB0=;
-        b=BQyDsaqkDyBWYVZF/AVcBKzt2B1IFlTWk9a2CX+OmiEwmU7p4VG3sfQ/1wLolnbXmj
-         CMBy9TA6yNyhQoL5ZP9U+b/Vk38QvvEnJZIUWuRs2l2qr5Wf8g5R1XEANbVzOGJffFcX
-         7nNar+XWU+5xgPih6aVJIhvjvqbl8v/XJt6kZciF2F15JedwKSkmg7Ee2MmbQ+vobj6M
-         DUdtxK/JBNoMXBfKBYveCiho7nQHzmep3uPpiGOScv4SRyxhBZwqcE8U1Qjf/cuNoPCQ
-         V2fLHiclsWPc0dDcN3N6CqwRfFZiGOxAq/IthD/cR0VP67I4LgiVrV3njkl56AmrelNC
-         bBOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686299012; x=1688891012;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hESlPtiMkKprbYVZWF5WJWN2aGL5r7t0ApI5+mmRyB0=;
-        b=QkDpp0n7Gb6J3sH3Y7zAYYTGcX04/EMP0oeibyx8jr4ON37AiN/RNd69oKXv+KYxa9
-         BsfcM5iAr97hKuZBtUnY/B1GtuumY48M2VZslF6Oj0R/lBjViTY6saPZU+DSgOciv3gI
-         yEQW2RCDPYLyiOpMFXkG33kgTkbQt+ifglxek8FTh3rwC3j/lvMcPVKZKX2unrhQyozK
-         91FUtIGYDksAbDs9AGFqAHENrQp+vdZraKC/g/rSqevneM4ZHkdGEVbbgF4ZDBGy94S/
-         xDJqXSBnoaWV2eJs9BctW0123hv9u9pyc5G+eMwwgmoLNbEOwcf2g1jBVVdxUS51iyM2
-         1IvQ==
-X-Gm-Message-State: AC+VfDxsO+ifKlls1pUj53ikl3nnCdGruWFP7HBlIyzRK2HuNeJ3AmzM
-        7OnBIqjz3ajX7qpcO+5JCl8=
-X-Google-Smtp-Source: ACHHUZ4CRzvbhWxHia89K6HWPpQFgfp0h45TKT5cng/bUltErsyatSXCh71jmSFAwQhCw0mLEr2rPA==
-X-Received: by 2002:a05:6000:4cf:b0:30e:56d9:d7ad with SMTP id h15-20020a05600004cf00b0030e56d9d7admr476807wri.71.1686299012331;
-        Fri, 09 Jun 2023 01:23:32 -0700 (PDT)
-Received: from debian ([63.135.72.41])
-        by smtp.gmail.com with ESMTPSA id m7-20020a056000008700b0030fa166d8a1sm1126605wrx.34.2023.06.09.01.23.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 01:23:32 -0700 (PDT)
-Date:   Fri, 9 Jun 2023 09:23:30 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
-        rwarsow@gmx.de
-Subject: Re: [PATCH 5.10 000/120] 5.10.183-rc1 review
-Message-ID: <ZILhgiQl0Twzknr5@debian>
-References: <20230607200900.915613242@linuxfoundation.org>
+        Fri, 9 Jun 2023 04:25:53 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F5073C0A;
+        Fri,  9 Jun 2023 01:24:51 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1q7XQE-0004Jv-09; Fri, 09 Jun 2023 10:24:38 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id DC8F7C02EE; Fri,  9 Jun 2023 10:23:32 +0200 (CEST)
+Date:   Fri, 9 Jun 2023 10:23:32 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Paul Burton <paulburton@kernel.org>,
+        Siarhei Volkau <lis8215@gmail.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, list@opendingux.net,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH 4/4] MIPS: DTS: qi_lb60: Don't use unit address for
+ regulators
+Message-ID: <20230609082332.GJ8160@alpha.franken.de>
+References: <20230604122655.69698-1-paul@crapouillou.net>
+ <20230604122655.69698-4-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230607200900.915613242@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230604122655.69698-4-paul@crapouillou.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Sun, Jun 04, 2023 at 02:26:55PM +0200, Paul Cercueil wrote:
+> The regulators don't have any "reg" property, and therefore shouldn't
+> use an unit address in their node names.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: Conor Dooley <conor+dt@kernel.org>
+> Cc: devicetree@vger.kernel.org
+> ---
+>  arch/mips/boot/dts/ingenic/qi_lb60.dts | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-On Wed, Jun 07, 2023 at 10:15:16PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.183 release.
-> There are 120 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+applied to mips-next.
 
-Build test (gcc version 11.3.1 20230511):
-mips: 63 configs -> no failure
-arm: 104 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
-
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/3821
-[2]. https://openqa.qa.codethink.co.uk/tests/3822
-
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+Thomas.
 
 -- 
-Regards
-Sudip
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
