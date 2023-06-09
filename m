@@ -2,52 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A31F272954E
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D5A272955A
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241646AbjFIJdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 05:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52742 "EHLO
+        id S238729AbjFIJej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 05:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239878AbjFIJcd (ORCPT
+        with ESMTP id S241642AbjFIJeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 05:32:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D57C59E5
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 02:27:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9069461ADB
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:27:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6742C433D2;
-        Fri,  9 Jun 2023 09:27:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686302829;
-        bh=cWZeV8HVLa+sC4JHhjCUy+s2S2gLf+9/1DXpIeyFYsQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O621Fiivi0bNAlMfCzAZm3alagGposqSf3GowogB11NpioSBflfNUX3/X+cotI8Ec
-         qUOU2AydPs08XSDckyNlqZ3qNnNiP7l7IBIH4WprlD2BgU/cfu/AjVqt3u8lhmzTER
-         Bz0ihGJ9/VQ/iuLOUFzQW2Sf1NvQ5ARk/wQv9c8PiqyXCHukNQWYnXL4DMOLF6qjfC
-         8RBeh8sXTOOGUF4mx9rSRBJfDS4euptL8Z7WnAwonzceqCeU+HC43QM14foBvr7GhR
-         l5BHSgv/zZjpWN51zU9D+SRGveNcHsWbAIqFQ8tmjL2TTf8GHcwnSwMda+F+TsQY8M
-         HiMJlbpvJR6cA==
-Date:   Fri, 9 Jun 2023 10:27:03 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     axboe@kernel.dk, festevam@gmail.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] block: fix rootwait= again
-Message-ID: <7523e53a-9124-4129-8fa5-2adda1a7cb61@sirena.org.uk>
-References: <20230609051737.328930-1-hch@lst.de>
+        Fri, 9 Jun 2023 05:34:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3BB576B0
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 02:27:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686302863;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pmcy3J55zT63aAIMqIuRpUjqhj86xl68Bl2D1HlN7pE=;
+        b=Q7TET2/mXXEDVuFkiFkarQ7wJSTNitqsK9cxo1V4vNtytDzplLzkD3DGmUuoL4Ugl05eGx
+        LSry6JMUiqTcVgykg1jldaJlJvWXAkHBHMhyNoFb2yg/yajcPHFqCEXwbFkZbAiAT8wGtG
+        NwY6UYUc1ZIf6O96Arwmp4oXvMo165s=
+Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com
+ [209.85.128.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-625-o8LG9R8nOXir4v5aMD9_-Q-1; Fri, 09 Jun 2023 05:27:40 -0400
+X-MC-Unique: o8LG9R8nOXir4v5aMD9_-Q-1
+Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-5693861875fso22905577b3.1
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 02:27:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686302859; x=1688894859;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pmcy3J55zT63aAIMqIuRpUjqhj86xl68Bl2D1HlN7pE=;
+        b=FMC+qdcl4uRfQEiw3s0+IeLN+SE7Nl/ZsGqAO3CnZfGXrpLreCYogqGv3TqkSLLmT0
+         uU8RrUjw7hnU+/V1RcSV7QXCfog7YxZra3JqB68lDM92ZWBLzPlALqP+sEKAtINOXA8x
+         DotsdLRJy4giOuUzeT42ClNHZeJvneuH6y0trE0TLXnnDypEHJ+dLaoHu3jKt9djhSxw
+         LpJWmPDYUXtI6TUQcLdhOw8EGDCmKTjyRsGbnTLr+FwsxHNjMXY0/9WBy4p4X3bg0Nrp
+         FDSvSFuOazmCAUZRWXAfWzBRFq3LBX41+6n+TLYKpzdxA/W7PSpJfVPjbPE7TqIp+t74
+         utQw==
+X-Gm-Message-State: AC+VfDw6fUdsAncMPU6vso4uiOpnWYx8vaNKYUaEnEEEhEx37KLdE65T
+        hufOXEoJkeVNgrFTKoU3Y0NDm9LlynkYxF6283GaP4mF4beAfFFK8vrCJIqHT2+uTPm44h4F3Dj
+        eSt8QhAWRozG0V98GVJQg51DXBeknULufH8TsRD2X
+X-Received: by 2002:a81:8397:0:b0:561:8fef:13ce with SMTP id t145-20020a818397000000b005618fef13cemr723940ywf.37.1686302859564;
+        Fri, 09 Jun 2023 02:27:39 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4QBet5uUGDZzHtkvGQ4KbpSa5IpEdM6hVVs73Fec1WoTv6J/MyP1ycHtEm9hSo9hbresvIJlkjf42Viv0F/aQ=
+X-Received: by 2002:a81:8397:0:b0:561:8fef:13ce with SMTP id
+ t145-20020a818397000000b005618fef13cemr723918ywf.37.1686302859245; Fri, 09
+ Jun 2023 02:27:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="p39CFgCe1xZpy2i7"
-Content-Disposition: inline
-In-Reply-To: <20230609051737.328930-1-hch@lst.de>
-X-Cookie: Tom's hungry, time to eat lunch.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230607215224.2067679-1-dianders@chromium.org>
+ <20230607144931.v2.8.Ib1a98309c455cd7e26b931c69993d4fba33bbe15@changeid>
+ <y3l4x3kv7jgog3miexati5wbveaynnryzqvj6sc4ul6625f2if@w7nqgojfavfw> <CAD=FV=W-fXpm4JCczrNgAS2M9u2VLd2jAkJvE9XJgQpvoE5rjA@mail.gmail.com>
+In-Reply-To: <CAD=FV=W-fXpm4JCczrNgAS2M9u2VLd2jAkJvE9XJgQpvoE5rjA@mail.gmail.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Fri, 9 Jun 2023 11:27:27 +0200
+Message-ID: <CAO-hwJ+3M1iYgaAFEtf-63U20ccGfdiRoi3197YoZmyvMYsGzQ@mail.gmail.com>
+Subject: Re: [PATCH v2 08/10] HID: i2c-hid: Support being a panel follower
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-input@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        linux-kernel@vger.kernel.org, hsinyi@google.com,
+        cros-qcom-dts-watchers@chromium.org, devicetree@vger.kernel.org,
+        yangcong5@huaqin.corp-partner.google.com,
+        linux-arm-msm@vger.kernel.org,
+        Chris Morgan <macroalpha82@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,36 +95,168 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 8, 2023 at 6:43=E2=80=AFPM Doug Anderson <dianders@chromium.org=
+> wrote:
+>
+> Hi,
+>
+> On Thu, Jun 8, 2023 at 8:37=E2=80=AFAM Benjamin Tissoires
+> <benjamin.tissoires@redhat.com> wrote:
+> >
+> >
+> > On Jun 07 2023, Douglas Anderson wrote:
+> > >
+> > > As talked about in the patch ("drm/panel: Add a way for other devices
+> > > to follow panel state"), we really want to keep the power states of a
+> > > touchscreen and the panel it's attached to in sync with each other. I=
+n
+> > > that spirit, add support to i2c-hid to be a panel follower. This will
+> > > let the i2c-hid driver get informed when the panel is powered on and
+> > > off. From there we can match the i2c-hid device's power state to that
+> > > of the panel.
+> > >
+> > > NOTE: this patch specifically _doesn't_ use pm_runtime to keep track
+> > > of / manage the power state of the i2c-hid device, even though my
+> > > first instinct said that would be the way to go. Specific problems
+> > > with using pm_runtime():
+> > > * The initial power up couldn't happen in a runtime resume function
+> > >   since it create sub-devices and, apparently, that's not good to do
+> > >   in your resume function.
+> > > * Managing our power state with pm_runtime meant fighting to make the
+> > >   right thing happen at system suspend to prevent the system from
+> > >   trying to resume us only to suspend us again. While this might be
+> > >   able to be solved, it added complexity.
+> > > Overall the code without pm_runtime() ended up being smaller and
+> > > easier to understand.
+> >
+> > Generally speaking, I'm not that happy when we need to coordinate with
+> > other subsystems for bringing up resources...
+>
+> Yeah, I'd agree that it's not amazingly elegant. Unfortunately, I
+> couldn't find any existing clean frameworks that would do what was
+> needed, which is (presumably) why this problem hasn't been solved
+> before. I could try to come up with a grand abstraction / new
+> framework, but that doesn't seem like a great choice either unless we
+> expect more users...
+>
+>
+> > Anyway, a remark inlined (at least):
+> >
+> > >
+> > > Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> > > ---
+> > >
+> > > Changes in v2:
+> > > - i2c_hid_core_panel_prepared() and ..._unpreparing() are now static.
+> > >
+> > >  drivers/hid/i2c-hid/i2c-hid-core.c | 82 ++++++++++++++++++++++++++++=
++-
+> > >  1 file changed, 81 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/hid/i2c-hid/i2c-hid-core.c b/drivers/hid/i2c-hid=
+/i2c-hid-core.c
+> > > index fa8a1ca43d7f..368db3ae612f 100644
+> > > --- a/drivers/hid/i2c-hid/i2c-hid-core.c
+> > > +++ b/drivers/hid/i2c-hid/i2c-hid-core.c
+> > > @@ -38,6 +38,8 @@
+> > >  #include <linux/mutex.h>
+> > >  #include <asm/unaligned.h>
+> > >
+> > > +#include <drm/drm_panel.h>
+> > > +
+> > >  #include "../hid-ids.h"
+> > >  #include "i2c-hid.h"
+> > >
+> > > @@ -107,6 +109,8 @@ struct i2c_hid {
+> > >       struct mutex            reset_lock;
+> > >
+> > >       struct i2chid_ops       *ops;
+> > > +     struct drm_panel_follower panel_follower;
+> > > +     bool                    is_panel_follower;
+> > >  };
+> > >
+> > >  static const struct i2c_hid_quirks {
+> > > @@ -1058,6 +1062,34 @@ static int i2c_hid_core_initial_power_up(struc=
+t i2c_hid *ihid)
+> > >       return ret;
+> > >  }
+> > >
+> > > +static int i2c_hid_core_panel_prepared(struct drm_panel_follower *fo=
+llower)
+> > > +{
+> > > +     struct i2c_hid *ihid =3D container_of(follower, struct i2c_hid,=
+ panel_follower);
+> > > +     struct hid_device *hid =3D ihid->hid;
+> > > +
+> > > +     /*
+> > > +      * hid->version is set on the first power up. If it's still zer=
+o then
+> > > +      * this is the first power on so we should perform initial powe=
+r up
+> > > +      * steps.
+> > > +      */
+> > > +     if (!hid->version)
+> > > +             return i2c_hid_core_initial_power_up(ihid);
+> > > +
+> > > +     return i2c_hid_core_resume(ihid);
+> > > +}
+> > > +
+> > > +static int i2c_hid_core_panel_unpreparing(struct drm_panel_follower =
+*follower)
+> > > +{
+> > > +     struct i2c_hid *ihid =3D container_of(follower, struct i2c_hid,=
+ panel_follower);
+> > > +
+> > > +     return i2c_hid_core_suspend(ihid);
+> > > +}
+> > > +
+> > > +static const struct drm_panel_follower_funcs i2c_hid_core_panel_foll=
+ower_funcs =3D {
+> > > +     .panel_prepared =3D i2c_hid_core_panel_prepared,
+> > > +     .panel_unpreparing =3D i2c_hid_core_panel_unpreparing,
+> > > +};
+> >
+> > Can we make that above block at least behind a Kconfig?
+> >
+> > i2c-hid is often used for touchpads, and the notion of drm panel has
+> > nothing to do with them. So I'd be more confident if we could disable
+> > that code if not required.
+>
+> Happy to put it behind a Kconfig. I'll plan on that for v3. I'll stub
+> the functions out if there is no Kconfig, but plan to still leave
+> structure members just to avoid uglifying the sources too much.
+>
+>
+> > Actually, I'd be even more happier if it were in a different compilatio=
+n
+> > unit. Not necessary a different module, but at least a different file.
+>
+> I suspect that it's not worth it, but I'll do this if you feel
+> strongly about it.
+>
+> I guess the simplest way I can think of to move this to its own file
+> would be to put the whole private data structure (struct i2c_hid) in a
+> private header file and then add prototypes for i2c_hid_core_resume()
+> and i2c_hid_core_suspend() there. Then I could add something like
+> i2c_hid_core_handle_panel_follower() that would have all the
+> registration logic. I'd still need special cases in the core
+> suspend/resume/remove code unless I add a level of abstraction. While
+> the level of abstraction is more "pure", it also would make the code
+> harder to follow.
+>
+> Unless I hear a strong opinion (or if this series changes
+> significantly), I'll plan to keep things in the same file and just use
+> a Kconfig.
+>
 
---p39CFgCe1xZpy2i7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Right, a separate file might not be the best then :(
 
-On Fri, Jun 09, 2023 at 07:17:37AM +0200, Christoph Hellwig wrote:
-> The previous rootwait fix added an -EINVAL return to a completely
-> bogus superflous branch, fix this.
->=20
-> Fixes: 1341c7d2ccf4 ("block: fix rootwait=3D")
-> Reported-by: Mark Brown <broonie@kernel.org>
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> Tested-by: Fabio Estevam <festevam@gmail.com>
+Do you envision this to be used on the ACPI side of i2c-hid? Because
+if this is OF only, then maybe it would be interesting to put it there
+(in i2c-hid-of.c), instead of having it in the core. IIRC i2c-hid-of
+also has ways to set up/down regulators, so maybe it'll be better
+there?
 
-Tested-by: Mark Brown <broonie@kernel.org>
+Cheers,
+Benjamin
 
---p39CFgCe1xZpy2i7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSC8GcACgkQJNaLcl1U
-h9ACcwf8Dyy/hwK4ZQmupvSHm2MQ1uRUi8Z/Fem2XexPsIbiTKLAMWIZ9tN66l3K
-NwCuQyuAqQPPfF35xXf7zsSqoQ7olnSQ1jvpk9POtGbSalS8JcZSBF8I3BqdqTnb
-ZxAkjKrM1ayNQCmb1F0mQJlhpmAB76VnWvrnx5J1lpwc0CaxYWDZdyqHPm6gOz3b
-0zZM6i8zeOjddkb9DMRvXMj9Bu7ZppIPAR//MJPgf4UfwN2zL0VlNZ89GZud9VFo
-48TXju3e/+t9+b4VT1pWBnf2zDyqylHieJCOYUUeyB2x/mUZufH1HPPt6J/LNpgz
-JwBp9RsJTDM4vWz+jpfVJ7ShClDHbQ==
-=W8xq
------END PGP SIGNATURE-----
-
---p39CFgCe1xZpy2i7--
