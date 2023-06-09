@@ -2,272 +2,290 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 555AD728CB0
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 02:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 803ED728CBB
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 03:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230144AbjFIA5Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 20:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54656 "EHLO
+        id S230281AbjFIA7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 20:59:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbjFIA5V (ORCPT
+        with ESMTP id S230049AbjFIA7n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 20:57:21 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EECDB1FDF;
-        Thu,  8 Jun 2023 17:57:19 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3590t9Hc016372;
-        Fri, 9 Jun 2023 00:57:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=2fKYjIDFEeEZLcNjFbw+D0NMeTE+q9kGiCeEcA4lLtk=;
- b=W5JmTs/usrvuFDCJ/boNJ1+bM/NUW/khjxwYQgf50obhv04//qZZlo3NmdEKA/9xpdUh
- yRuUItgWPQHM3/L6yA52JFCI195RjSFQJCJyxh5pVEB3JQbfl79nHJVBWC8qnF09uMua
- eh/anWpMsLwyITadXg4XYK8is6P5RwlHykFbQMjwqaDnRPHwYRpIwKYz1itifh2kOMlJ
- 46mN+KQBPDUPngNrpeckXiFa9RHBYzLkXTbxDik1wZVHpxHgvMwZaLuBzbTEi0gVuyUQ
- KYXbX9DKEwQ0SvPKTn5FenKXP7uFgCYGu9TWYwK8csm4AQBrQTt16IcFND9DClq8c8bH 0g== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r3ceahrc7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Jun 2023 00:57:10 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3590v90K018969
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 9 Jun 2023 00:57:09 GMT
-Received: from [10.71.110.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 8 Jun 2023
- 17:57:09 -0700
-Message-ID: <f63435ca-933a-52be-d879-1d9cc9441107@quicinc.com>
-Date:   Thu, 8 Jun 2023 17:56:47 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [Freedreno] [PATCH v5 2/5] drm/msm/dsi: Adjust pclk rate for
- compression
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-CC:     <freedreno@lists.freedesktop.org>, Sean Paul <sean@poorly.run>,
-        "Abhinav Kumar" <quic_abhinavk@quicinc.com>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Rob Clark" <robdclark@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        <linux-arm-msm@vger.kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        David Airlie <airlied@gmail.com>
-References: <20230405-add-dsc-support-v5-0-028c10850491@quicinc.com>
- <20230405-add-dsc-support-v5-2-028c10850491@quicinc.com>
- <js3mcglahq53mcyxa6deltjlu4xpc2pnafwz2rbk3dl4ovws2o@5xw2wzvfaj2v>
-Content-Language: en-US
-From:   Jessica Zhang <quic_jesszhan@quicinc.com>
-In-Reply-To: <js3mcglahq53mcyxa6deltjlu4xpc2pnafwz2rbk3dl4ovws2o@5xw2wzvfaj2v>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: dgpT9CpmNtolv6oCYWIg6GyWsAc3tpoH
-X-Proofpoint-GUID: dgpT9CpmNtolv6oCYWIg6GyWsAc3tpoH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-08_18,2023-06-08_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- clxscore=1011 suspectscore=0 phishscore=0 lowpriorityscore=0
- mlxlogscore=999 malwarescore=0 adultscore=0 spamscore=0 impostorscore=0
- mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306090006
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 8 Jun 2023 20:59:43 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C6C26B9
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 17:59:40 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-565d1b86a64so16231377b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 17:59:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686272379; x=1688864379;
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0D7F9pDbG9FXqs6+iQJrvOEyVDkJYxW5kzmn8NxTXSM=;
+        b=BDzc1aMRHWXMiLk4E+pANQvv85EBP8Fbmqip6g4XnCghOWEy+T3hHMA98y7gu3MrzJ
+         m9ZUmOHYqjH9lz2cLAdIslB62deMkVm5FAytrF1l0ADpuk18V34OtWN8S0hJyOMsYZKG
+         DZ3FeQwAgU/HrpcxXBWW2H8tt/UuIX4ypLlLVKfqSh3rXART4r4Tw/QKjnEtg7JS8CHS
+         CWcIW0q6hoRoggptEjKDZYq373BjG6IuT0/lhqlLaPYC66B04C52gE09wIc5hlW88owA
+         Gr5feq82Y0tlKosId/vUE/V228jTsXcOxUsj2CaGmnAfl6wsi8uq3/SNbii3CwrF5QN8
+         PobQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686272379; x=1688864379;
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0D7F9pDbG9FXqs6+iQJrvOEyVDkJYxW5kzmn8NxTXSM=;
+        b=b+lbdOGYRR/KJOWIS8Qu1mDb9GjhFDH6NMkvnnv07htb+P1JBSX6iRNs9LfgvAnnbP
+         2jruQ4Y7shx/gSJHzpC/PA/ZqRPYW3P2nWtD3SKbmrnT+atvTHYIV6aeQFttuv3O/CzY
+         OhDvjXlwkD2M9KJgIZyfX4R5RmtXH1nc0L8brTBtLdcQTgbVWJaMiJfSIT1Wc0l0eJbb
+         yJsVxVGDc9Mi2Wmc5x47oCFtBdPiy1lofHerZVi8oj0M/hWClGsia5QzOOpEs1U/6PIc
+         Xkt8b4deRF/eDLn3lQM3LKQT4jhmW7b6816JPfqbCUZrZ6WLb4HAJYNKM2I7OR07dAk0
+         HsDQ==
+X-Gm-Message-State: AC+VfDysAoGTcwiR8nMiLV9sSZMYrzOBICcQ1wPHnhs3X3w5/ustCQE+
+        Lsy+GGNuWWTx+nTbkTC1fpfb202ALQI=
+X-Google-Smtp-Source: ACHHUZ4+oKNZvW2k4pUHaG+wjpqVYAXO5ZmY9/JryBcaWXlbxmXfyr05oUuxiW1jF2Vui38QPi/ByPbILxk=
+X-Received: from yuzhao.bld.corp.google.com ([2620:15c:183:200:f582:c9e5:6c95:4461])
+ (user=yuzhao job=sendgmr) by 2002:a81:ae60:0:b0:565:e712:422c with SMTP id
+ g32-20020a81ae60000000b00565e712422cmr809562ywk.1.1686272379675; Thu, 08 Jun
+ 2023 17:59:39 -0700 (PDT)
+Date:   Thu,  8 Jun 2023 18:59:35 -0600
+In-Reply-To: <20230526234435.662652-1-yuzhao@google.com>
+Message-Id: <20230609005935.42390-1-yuzhao@google.com>
+Mime-Version: 1.0
+References: <20230526234435.662652-1-yuzhao@google.com>
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Subject: kvm/arm64: Spark benchmark
+From:   Yu Zhao <yuzhao@google.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Alistair Popple <apopple@nvidia.com>,
+        Anup Patel <anup@brainfault.org>,
+        Ben Gardon <bgardon@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Gavin Shan <gshan@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michael Larabel <michael@michaellarabel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
+        linux-trace-kernel@vger.kernel.org, x86@kernel.org,
+        linux-mm@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+TLDR
+====
+Apache Spark spent 12% less time sorting four billion random integers twenty times (in ~4 hours) after this patchset [1].
 
+Hardware
+========
+HOST $ lscpu
+Architecture:           aarch64
+  CPU op-mode(s):       32-bit, 64-bit
+  Byte Order:           Little Endian
+CPU(s):                 128
+  On-line CPU(s) list:  0-127
+Vendor ID:              ARM
+  Model name:           Neoverse-N1
+    Model:              1
+    Thread(s) per core: 1
+    Core(s) per socket: 64
+    Socket(s):          2
+    Stepping:           r3p1
+    Frequency boost:    disabled
+    CPU max MHz:        2800.0000
+    CPU min MHz:        1000.0000
+    BogoMIPS:           50.00
+    Flags:              fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp ssbs
+Caches (sum of all):
+  L1d:                  8 MiB (128 instances)
+  L1i:                  8 MiB (128 instances)
+  L2:                   128 MiB (128 instances)
+NUMA:
+  NUMA node(s):         2
+  NUMA node0 CPU(s):    0-63
+  NUMA node1 CPU(s):    64-127
+Vulnerabilities:
+  Itlb multihit:        Not affected
+  L1tf:                 Not affected
+  Mds:                  Not affected
+  Meltdown:             Not affected
+  Mmio stale data:      Not affected
+  Retbleed:             Not affected
+  Spec store bypass:    Mitigation; Speculative Store Bypass disabled via prctl
+  Spectre v1:           Mitigation; __user pointer sanitization
+  Spectre v2:           Mitigation; CSV2, BHB
+  Srbds:                Not affected
+  Tsx async abort:      Not affected
 
-On 6/8/2023 1:36 PM, Marijn Suijten wrote:
-> Same title suggestion as earlier: s/adjust/reduce
+HOST $ numactl -H
+available: 2 nodes (0-1)
+node 0 cpus: 0-63
+node 0 size: 257730 MB
+node 0 free: 1447 MB
+node 1 cpus: 64-127
+node 1 size: 256877 MB
+node 1 free: 256093 MB
+node distances:
+node   0   1
+  0:  10  20
+  1:  20  10
 
-Hi Marijn,
+HOST $ cat /sys/class/nvme/nvme0/model
+INTEL SSDPF21Q800GB
 
-Acked.
+HOST $ cat /sys/class/nvme/nvme0/numa_node
+0
 
-> 
-> On 2023-05-22 18:08:56, Jessica Zhang wrote:
->> Adjust the pclk rate to divide hdisplay by the compression ratio when DSC
->> is enabled.
->>
->> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
->> ---
->>   drivers/gpu/drm/msm/dsi/dsi_host.c | 21 ++++++++++++++++++---
->>   1 file changed, 18 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
->> index a448931af804..88f370dd2ea1 100644
->> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
->> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
->> @@ -561,7 +561,18 @@ void dsi_link_clk_disable_v2(struct msm_dsi_host *msm_host)
->>   	clk_disable_unprepare(msm_host->byte_clk);
->>   }
->>   
->> -static unsigned long dsi_get_pclk_rate(const struct drm_display_mode *mode, bool is_bonded_dsi)
->> +static unsigned long dsi_adjust_compressed_pclk(const struct drm_display_mode *mode,
-> 
-> Nit: adjust_pclk_for_compression
+Software
+========
+HOST $ cat /etc/lsb-release
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=22.04
+DISTRIB_CODENAME=jammy
+DISTRIB_DESCRIPTION="Ubuntu 22.04.1 LTS"
 
-Acked.
+HOST $ uname -a
+Linux arm 6.4.0-rc4 #1 SMP Sat Jun  3 05:30:06 UTC 2023 aarch64 aarch64 aarch64 GNU/Linux
 
-> 
-> As discussed before we realized that this change is more-or-less a hack,
-> since downstream calculates pclk quite differently - at least for
-> command-mode panels.  Do you still intend to land this patch this way,
-> or go the proper route by introducing the right math from the get-go?
-> Or is the math at least correct for video-mode panels?
+HOST $ cat /proc/swaps
+Filename				Type		Size		Used		Priority
+/dev/nvme0n1p2                          partition	466838356	116922112	-2
 
-Sorry but can you please clarify what exactly is incorrect or different 
-about this math when compared to downstream? And, if you think that this 
-math is incorrect, what exactly has to be changed to make it the "right 
-math"?
+HOST $ cat /sys/kernel/mm/lru_gen/enabled
+0x000b
 
-We've already shown step-by-step [1] not only how the resulting pclk 
-from the downstream code matches out upstream calculations, but also how 
-the inclusion of porches in the upstream math would make up for the fact 
-that upstream has no concept of transfer time [2].
+HOST $ cat /sys/kernel/mm/transparent_hugepage/enabled
+always madvise [never]
 
-If the lack of transfer time in the upstream math is the issue, I 
-believe that that's not within the scope of this series, as transfer 
-time is not something specific to DSC.
+HOST $ cat /sys/kernel/mm/transparent_hugepage/defrag
+always defer defer+madvise madvise [never]
 
-Moreover, as stated in an earlier revision [3], there is no way to 
-validate DSC over DSI for video mode. As far as I know, we do not have a 
-way to validate video mode datapath for DSI in general.
+HOST $ qemu-system-aarch64 --version
+QEMU emulator version 6.2.0 (Debian 1:6.2+dfsg-2ubuntu6.6)
+Copyright (c) 2003-2021 Fabrice Bellard and the QEMU Project developers
 
-[1] https://gitlab.freedesktop.org/drm/msm/-/issues/24#note_1936144
-[2] https://gitlab.freedesktop.org/drm/msm/-/issues/24#note_1945792
-[3] 
-https://patchwork.freedesktop.org/patch/535117/?series=117219&rev=1#comment_970492
+GUEST $ cat /etc/lsb-release
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=22.04
+DISTRIB_CODENAME=jammy
+DISTRIB_DESCRIPTION="Ubuntu 22.04.2 LTS"
 
-> 
-> This function requires a documentation comment to explain that all.
-> 
->> +		const struct drm_dsc_config *dsc)
->> +{
->> +	int new_hdisplay = DIV_ROUND_UP(mode->hdisplay * drm_dsc_get_bpp_int(dsc),
-> 
-> This sounds like a prime candidate for msm_dsc_get_bytes_per_line(), if
-> bits_per_component==8 is assumed.  In fact, it then becomes identical
-> to the following line in dsi_host.c which you added previously:
-> 
-> 	hdisplay = DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 3);
-> 
-> If not, what is the difference between these two calculations?  Maybe
-> they both need to be in a properly-named helper.
+GUEST $ java --version
+openjdk 17.0.7 2023-04-18
+OpenJDK Runtime Environment (build 17.0.7+7-Ubuntu-0ubuntu122.04.2)
+OpenJDK 64-Bit Server VM (build 17.0.7+7-Ubuntu-0ubuntu122.04.2, mixed mode, sharing)
 
-While the math technically matches up (assuming, also, that 
-mode->hdisplay == slice_width * slice_count for all cases), there are 
-conceptual differences between the pclk and hdisplay calculations.
+GUEST $ spark-shell --version
+Welcome to
+      ____              __
+     / __/__  ___ _____/ /__
+    _\ \/ _ \/ _ `/ __/  '_/
+   /___/ .__/\_,_/_/ /_/\_\   version 3.4.0
+      /_/
 
-Just to reiterate what was already said on IRC:
+Using Scala version 2.12.17, OpenJDK 64-Bit Server VM, 17.0.7
+Branch HEAD
+Compiled by user xinrong.meng on 2023-04-07T02:18:01Z
+Revision 87a5442f7ed96b11051d8a9333476d080054e5a0
+Url https://github.com/apache/spark
+Type --help for more information.
 
-In the pclk calculation, we're multiplying pclk by the compression ratio 
-(which would be target_bpp / src_bpp) -- please note that here, we 
-calculate src_bpp by doing bpc * 3.
+Procedure
+=========
+HOST $ sudo numactl -N 0 -m 0 qemu-system-aarch64 \
+    -M virt,accel=kvm -cpu host -smp 64 -m 300g -nographic -nic user \
+    -bios /usr/share/qemu-efi-aarch64/QEMU_EFI.fd \
+    -drive if=virtio,format=raw,file=/dev/nvme0n1p1
 
-In the hdisplay calculation, we calculate the bytes per line and divide 
-by 3 (bytes) to account for the fact that we can only process 3 bytes 
-per pclk cycle.
+GUEST $ cat gen.scala
+import java.io._
+import scala.collection.mutable.ArrayBuffer
 
-So while I understand why you would want to put this behind a shared 
-helper, I think abstracting the pclk and hdisplay math away would 
-obfuscate the conceptual difference between the 2 calculations.
+object GenData {
+    def main(args: Array[String]): Unit = {
+        val file = new File("/dev/shm/dataset.txt")
+        val writer = new BufferedWriter(new FileWriter(file))
+        val buf = ArrayBuffer(0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L)
+        for(_ <- 0 until 400000000) {
+            for (i <- 0 until 10) {
+                buf.update(i, scala.util.Random.nextLong())
+            }
+            writer.write(s"${buf.mkString(",")}\n")
+        }
+        writer.close()
+    }
+}
+GenData.main(Array())
 
-> 
->> +			dsc->bits_per_component * 3);
-> 
-> As we established in the drm/msm issue [2] there is currently a
-> confusion whether this /3 (and the /3 in dsi_timing_setup) come from the
-> ratio between dsi_get_bpp() and dsc->bpp or something else.  Can you
-> clarify that with constants and comments?
+GUEST $ cat sort.scala
+import java.time.temporal.ChronoUnit
+import org.apache.spark.sql.SparkSession
 
-Sure, we are planning to add a patch to the end of this series 
-documenting the math.
+object SparkSort {
+    def main(args: Array[String]): Unit = {
+        val spark = SparkSession.builder().getOrCreate()
+        val file = sc.textFile("/dev/shm/dataset.txt", 64)
+        val results = file.flatMap(_.split(",")).map(x => (x, 1)).sortByKey().takeOrdered(10)
+        results.foreach(println)
+        spark.stop()
+    }
+}
+SparkSort.main(Array())
 
-> 
-> [2]: https://gitlab.freedesktop.org/drm/msm/-/issues/24
-> 
->> +
->> +	return (new_hdisplay + (mode->htotal - mode->hdisplay))
->> +			* mode->vtotal * drm_mode_vrefresh(mode);
-> 
-> As clarified in [1] I was not necessarily suggesting to move this math
-> to a separate helper, but to also use a few more properly-named
-> intermediate variables to not have multi-line math and self-documenting
-> code.  These lines could be split to be much more clear.
+GUEST $ cat run_spark.sh
+export SPARK_LOCAL_DIRS=/dev/shm/
 
-Acked.
+spark-shell <gen.scala
 
-> 
-> [1]: https://lore.kernel.org/linux-arm-msm/u4x2vldkzsokfcpbkz3dtwcllbdk4ljcz6kzuaxt5frx6g76o5@uku6abewvye7/
-> 
->> +}
->> +
->> +static unsigned long dsi_get_pclk_rate(const struct drm_display_mode *mode,
->> +		const struct drm_dsc_config *dsc, bool is_bonded_dsi)
->>   {
->>   	unsigned long pclk_rate;
->>   
->> @@ -576,6 +587,10 @@ static unsigned long dsi_get_pclk_rate(const struct drm_display_mode *mode, bool
->>   	if (is_bonded_dsi)
->>   		pclk_rate /= 2;
->>   
->> +	/* If DSC is enabled, divide hdisplay by compression ratio */
->> +	if (dsc)
->> +		pclk_rate = dsi_adjust_compressed_pclk(mode, dsc);
-> 
-> The confusion with this comment (and the reason the aforementioned
-> discussion [2] carried on so long) stems from the fact a division makes
-> sense for a bit/byte clock, but not for a pixel clock: we still intend
-> to send the same number of pixels, just spending less bytes on them.  So
-> as you clarify the /3 above, can you also clarify that here or drop this
-> comment completely when the function is correctly documented instead?
+start=$SECONDS
 
-Acked.
+for ((i=0; i<20; i++))
+do
+	spark-3.4.0-bin-hadoop3/bin/spark-shell --master "local[64]" --driver-memory 160g <sort.scala
+done
 
-Thanks,
+echo "wall time: $((SECONDS - start))"
 
-Jessica Zhang
+Results
+=======
+                       Before [1]    After    Change
+----------------------------------------------------
+Wall time (seconds)    14455         12865    -12%
 
-> 
-> - Marijn
-> 
->> +
->>   	return pclk_rate;
->>   }
->>   
->> @@ -585,7 +600,7 @@ unsigned long dsi_byte_clk_get_rate(struct mipi_dsi_host *host, bool is_bonded_d
->>   	struct msm_dsi_host *msm_host = to_msm_dsi_host(host);
->>   	u8 lanes = msm_host->lanes;
->>   	u32 bpp = dsi_get_bpp(msm_host->format);
->> -	unsigned long pclk_rate = dsi_get_pclk_rate(mode, is_bonded_dsi);
->> +	unsigned long pclk_rate = dsi_get_pclk_rate(mode, msm_host->dsc, is_bonded_dsi);
->>   	unsigned long pclk_bpp;
->>   
->>   	if (lanes == 0) {
->> @@ -604,7 +619,7 @@ unsigned long dsi_byte_clk_get_rate(struct mipi_dsi_host *host, bool is_bonded_d
->>   
->>   static void dsi_calc_pclk(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
->>   {
->> -	msm_host->pixel_clk_rate = dsi_get_pclk_rate(msm_host->mode, is_bonded_dsi);
->> +	msm_host->pixel_clk_rate = dsi_get_pclk_rate(msm_host->mode, msm_host->dsc, is_bonded_dsi);
->>   	msm_host->byte_clk_rate = dsi_byte_clk_get_rate(&msm_host->base, is_bonded_dsi,
->>   							msm_host->mode);
->>   
->>
->> -- 
->> 2.40.1
->>
+Notes
+=====
+[1] "mm: rmap: Don't flush TLB after checking PTE young for page
+    reference" was included so that the comparison is apples to
+    Apples.
+    https://lore.kernel.org/r/20220706112041.3831-1-21cnbao@gmail.com/
