@@ -2,74 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 724C7728E3C
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 05:02:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52AAB728E3E
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 05:02:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237774AbjFIDCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 23:02:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51660 "EHLO
+        id S237972AbjFIDC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 23:02:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233413AbjFIDCQ (ORCPT
+        with ESMTP id S229751AbjFIDCR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 23:02:16 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B779430E7
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 20:02:13 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-656bc570a05so291607b3a.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 20:02:13 -0700 (PDT)
+        Thu, 8 Jun 2023 23:02:17 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF48E30E6
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 20:02:16 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-2568cb87a0dso211803a91.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 20:02:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1686279733; x=1688871733;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tEeS6rlmxEW8bVfn3DmLa8XY88lnp07ncI3qbuOPVsI=;
-        b=UY9lwCfiP8GnQ0yBTojtmnJjz7xLqFdz4/gz6Xo4w9y9w/LCD7d6MrvKYtR+GTAUQV
-         kwvmWtsulCUOMlfrQ5o6t6wxFCVjbiGmkNA2QIWamiFAPRDwDqEsZsx9ykO2eX5fXl2c
-         +YHvOYpdoYtftg8t874hBkSWS+f9RenW1X9QVKxsFS7838XycZS0x2tMpxuU2nFlWnPP
-         jzD1MWkb7qsQiwrNz5MP5P0P41x09/zgcOPdLSMojonCU58lAFDRZjh9MNpIJyaJm+xS
-         YRInlgNrNkS6ZLdVjO+QWqoZRhybPKvJCtahiTbSQhi2Vwp0OFkpTrjBGHSYZaYqhbfQ
-         SyOQ==
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1686279736; x=1688871736;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EE3DCAhezkDxz5vIdXbfcFIbXdDrZcSNl8SsaCm92RM=;
+        b=JbXYANjlm9TVIqjkjB0E1B2F4ITp4Ry0RYZfFmm/xNpsjReVVd5NTrdx32LQdnLbxw
+         BXznJMtAhTUfcW4zNLga6oOd6Tn3s61MceiKMniH+WdWG9mwdgtYkeKciLw5tCSos0ua
+         lvwCiKmNQZz9w+Mbsv/0sxVdvY8+J/Z3umoz8YukD4A2Sp/w1vni/iG1/ZBZp8LtzQF5
+         sX68mGw7w9YOVU77hXLdgAK1+seHWwKnUq/fYOTdQX4s/O9pcXr0ROxaPTdxWwHyOein
+         cd6k9WAHJBdIMKb3AHkGyO2fTCTcSB6ao1V+Oi82ZA1QOYXis2cgvTM0SJ8sDY2IacO2
+         g/oQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686279733; x=1688871733;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tEeS6rlmxEW8bVfn3DmLa8XY88lnp07ncI3qbuOPVsI=;
-        b=SzgrwPhftGlAszh2Dz9uSSzHp+85RBvk91TXdYmdVSjIPXb/b5PSNyJP6bZvSD8sgP
-         GkVUiXNNaFqaY4TsjqwTqzLRHKh6ut8imsxwPV8Q+O3sFJG/k8cdXAz/kGz9qAeMOE0k
-         MDtF5BCieJl7NLoltXm2hIM/tiW/dN8TROKo5BtnFf6hpl5ZvdK8+hY7NKrgSDlTHVlI
-         RezhcnKylShCHV0YJxrqzkIyYTcAJJQee6OdxtoBnkaHnbDvR2Xj4BHzFVT7lmyk65Cj
-         V846k4JaYTELgeSrgPDVG0FPNx5CD65KDZ0GQVt5v7g7GQwx87lNC5XyOwCBvVLE1CGU
-         oe4A==
-X-Gm-Message-State: AC+VfDzV1Mtid/FjPEKhOZKhJvEydGdzksv7UKHLjJpHJEH8lQTI5Xs6
-        GE3LhLIPKzxjdTgJ33abo/epsA==
-X-Google-Smtp-Source: ACHHUZ5X2wCUGMHCSmURL2qsiu6cMZfXWWt4NRYPP7XBKh++q2QsceLCfIoMttOcEyybQTfD+hvSqg==
-X-Received: by 2002:a05:6a00:ad6:b0:643:a903:f1b8 with SMTP id c22-20020a056a000ad600b00643a903f1b8mr162438pfl.1.1686279732935;
-        Thu, 08 Jun 2023 20:02:12 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id j11-20020aa783cb000000b006475f831838sm1707433pfn.30.2023.06.08.20.02.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 20:02:11 -0700 (PDT)
-Message-ID: <2a424ca6-5d5d-5e81-fd3a-b25cdd25c690@kernel.dk>
-Date:   Thu, 8 Jun 2023 21:02:10 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH liburing v1 0/2] Fixes for io_uring_for_each_cqe
-Content-Language: en-US
+        d=1e100.net; s=20221208; t=1686279736; x=1688871736;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EE3DCAhezkDxz5vIdXbfcFIbXdDrZcSNl8SsaCm92RM=;
+        b=Yo54YPP+dnX+8/JP5GxKKV+66e/QRIOkeQkGvCeswX8B0GVzWtjlj5iSopypAVwkfa
+         FKMqQ7CKCN8aYWh9iLh5vl1ndB7BX9q2YzGCOs2vriIW6zOp+/DzZwFGGama83dLQ1b9
+         9sPrzrMVVOQVTPPT7XPiMAHQVAsmgutpo+peNrRG/nQe9TWjg6mkRB4yBTAXhZe6nXri
+         N2A5Gm0fIYEVgfD9MD8coKiokcCQVJ00P3CtZpUxCinekE2XuYqYnU56t8pcSz3SZq/2
+         l1SztCM7CbCSJTvbfaHpWjJlx7Mect0NeE+HGpWyRTrq6H3U7KlycRNNjcG9mbzCZLg2
+         PPjA==
+X-Gm-Message-State: AC+VfDwcwqOHctf5iRdjQVqZ0U5Z8EeEAlbfJ3UsojaSFQxlca3pVurc
+        ys66medd2g0nscMfXWIvzlGKVA==
+X-Google-Smtp-Source: ACHHUZ5lZx2YCvaNmBBfnEToX7VOG1Agyyp37Lb2WnJQZY/tIT4W0txlkLU5n5DbL2v/DIlZAl4Kxw==
+X-Received: by 2002:a17:902:e807:b0:1ae:8595:14b with SMTP id u7-20020a170902e80700b001ae8595014bmr242592plg.6.1686279736459;
+        Thu, 08 Jun 2023 20:02:16 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id u7-20020a17090282c700b001ac5b0a959bsm2088769plz.24.2023.06.08.20.02.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 20:02:15 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
 To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
 Cc:     Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
         GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
         Pavel Begunkov <asml.silence@gmail.com>,
         io-uring Mailing List <io-uring@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20230609015403.3523811-1-ammarfaizi2@gnuweeb.org>
-From:   Jens Axboe <axboe@kernel.dk>
 In-Reply-To: <20230609015403.3523811-1-ammarfaizi2@gnuweeb.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+References: <20230609015403.3523811-1-ammarfaizi2@gnuweeb.org>
+Subject: Re: [PATCH liburing v1 0/2] Fixes for io_uring_for_each_cqe
+Message-Id: <168627973530.474576.3838052998706625567.b4-ty@kernel.dk>
+Date:   Thu, 08 Jun 2023 21:02:15 -0600
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-c6835
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,9 +75,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/8/23 7:54 PM, Ammar Faizi wrote:
-> Hi Jens,
-> 
+
+On Fri, 09 Jun 2023 08:54:01 +0700, Ammar Faizi wrote:
 > Please consider taking these last-minute fixes for liburing-2.4
 > release. There are two patches in this series:
 > 
@@ -87,20 +84,18 @@ On 6/8/23 7:54 PM, Ammar Faizi wrote:
 > 
 >   - Fix the return value. io_uring_for_each_cqe() doesn't return an int.
 > 
->   - Fix the title, it was io_uring_wait_cqes(), it should be
->     io_uring_for_each_cqe().
-> 
->   - Fix typo: s/io_uring_for_each_cqes/io_uring_for_each_cqe/.
-> 
-> ## 2. Explicitly tell it's a macro and add an example
-> 
-> Let the reader directly know that it's not a function, but a macro.
-> Also, give a simple example of its usage.
+> [...]
 
-Applied, even though not super critical for release. But this should
-be it, I'll announce 2.4 tomorrow.
+Applied, thanks!
 
+[1/2] man/io_uring_for_each_cqe: Fix return value, title, and typo
+      commit: c8d06ed9bcbf2ae294242f9caacecfa01bf138b2
+[2/2] man/io_uring_for_each_cqe: Explicitly tell it's a macro and add an example
+      commit: 298c083d75ecde5a8833366167b3b6abff0c8d39
+
+Best regards,
 -- 
 Jens Axboe
+
 
 
