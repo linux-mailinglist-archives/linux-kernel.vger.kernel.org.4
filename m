@@ -2,201 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED109729C19
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:00:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FD76729C20
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231338AbjFIOAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 10:00:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60972 "EHLO
+        id S239165AbjFIOBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 10:01:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238747AbjFIOAG (ORCPT
+        with ESMTP id S238631AbjFIOBk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 10:00:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776013586;
-        Fri,  9 Jun 2023 07:00:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E4CE86583E;
-        Fri,  9 Jun 2023 14:00:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0080C433D2;
-        Fri,  9 Jun 2023 14:00:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686319201;
-        bh=7c8iZ2yP/v4AYl5cJEmJEM3+CrT+t567kSbCNVEG2oc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LRco8CZIE6PhnD83OXDfzGvZWWpbkWEQAlhL0DwE7OQSQXT+Yofr3T245q1Ra+dhh
-         QYSpbA2wXqhoaofA0qGP8obPX/S2OxkCOPdQLEfB3TJDF50et/iRgFU+Gzb8OvMWV4
-         atfgw6fjni8b3ece870+NeCB38JWLN+l01B7AXi22obve/vJxma6VxS8A9Y/01WuvZ
-         LhtJZ+Dn+rQwYIWN4ZFIAYkrHsSSsq3BW/vILChegT6vL5+GHaa8fN33U7F4K63GDI
-         Ib8gIMgM6OrgU2MV4RbhpZVXgXTq7pJVv95TZ7evbqHIGzrmUrgptbM5I6qM7cWZlf
-         PRHLWv6Dqc24g==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 40B4B40692; Fri,  9 Jun 2023 10:59:58 -0300 (-03)
-Date:   Fri, 9 Jun 2023 10:59:58 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH 1/3] perf list: Check if libpfm4 event is supported
-Message-ID: <ZIMwXt3Sv7wRry83@kernel.org>
-References: <20230608232400.3056312-1-namhyung@kernel.org>
- <20230608232400.3056312-2-namhyung@kernel.org>
- <CAP-5=fVmhdnRipBFZz++OzYB_8tMSQjPXQ1L9pJ1WZHTdErsBQ@mail.gmail.com>
+        Fri, 9 Jun 2023 10:01:40 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B193580
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 07:01:38 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f7fc9014fdso13485585e9.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 07:01:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686319297; x=1688911297;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3dMKLfxyfO6GRRSI5mpAvE1qLvloyaEdkSgeCZ5iq4U=;
+        b=efajulzotRym0OO0p2vBcircrcKWduJ7YSzbFR3qQjOSgZWpb0Qdz/SNKCWOh2A/r2
+         yuqugaKknpK0cVzFHNnCL871IVsouSLd//AMkWGTmcWrMkFyPBln0uQNq48HOFFcohA0
+         UvRgyNbS7//k8MKCtxeTBP/vglxeQcSK7PESRjA1rkuE/vi2QV+yequ/qNvIaOPcqyAZ
+         Ahuo7FryBnT7Fnq1s3gz9cFcOeKXR3aN0mz62KAd5teBCBd7lOtzyJW20IyHFusi0HWu
+         HF4RWMN0eG3bwzlUC5RjPBB/AlSFKLc5vO+6yWmszPtGQNuKYeGOSfwIGsW2E+4GBCJ0
+         WpMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686319297; x=1688911297;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3dMKLfxyfO6GRRSI5mpAvE1qLvloyaEdkSgeCZ5iq4U=;
+        b=YGl1n7K5KA/7dU7nEtRdPUeixtFEF+m08UdgdnWvtWhFZhpvuXYD+T9AzTk00DueFr
+         7q4ff/PrK568cDRLHVNlS4tvdSCo7zt/pSSlruncvad57k9vNiZWsUrDsHWcvDBqJq2s
+         3NcRmTHdxCA2q/rW5l+N0ZRSXDPGTRQf6n05jFTjOs3D52/Hf6KoyY3tnz3lfnX8VtFz
+         xh8Ep8/04eYqGo8v4J5MU8kiEAh1SVwbjUaw5W++7a7Dx+1AxDZh140fxhHF/d+eqQsw
+         DB1rTb+S9djeTX8ht4JTwQj73J5KbskfDr9xh/SEPX69nGAQesdInN5esWzRGkrOHDy8
+         7N2A==
+X-Gm-Message-State: AC+VfDykSTbNxEbhUGxl6qvwvDm4IBmYL+H+FiFyrhtHD9Y6HFEzz41k
+        ukcubkXU/vK94R18EZrYcYz8Xw==
+X-Google-Smtp-Source: ACHHUZ5IGHDLRT/F8ZiBNtbhtA6enQaJjbrsANjPa9s/JYdZAAOsgVsifgcve4BhUYpVZxJAkggcKQ==
+X-Received: by 2002:a1c:7c0a:0:b0:3f4:2492:a91f with SMTP id x10-20020a1c7c0a000000b003f42492a91fmr1046811wmc.27.1686319297138;
+        Fri, 09 Jun 2023 07:01:37 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id f13-20020a056000036d00b0030aefa3a957sm4568403wrf.28.2023.06.09.07.01.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 07:01:35 -0700 (PDT)
+Date:   Fri, 9 Jun 2023 17:01:31 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Franziska Naepelt <franziska.naepelt@googlemail.com>,
+        keyrings@vger.kernel.org, dhowells@redhat.com, dwmw2@infradead.org,
+        linux-kernel@vger.kernel.org,
+        Franziska Naepelt <franziska.naepelt@gmail.com>,
+        kernel test robot <lkp@intel.com>,
+        Linux SPDX Licenses <linux-spdx@vger.kernel.org>,
+        Linux Kernel Janitors <kernel-janitors@vger.kernel.org>
+Subject: Re: [PATCH v2] certs/extract-cert: Fix checkpatch issues
+Message-ID: <c464c4ee-038c-47bf-857a-b11a89680e82@kadam.mountain>
+References: <20230601190508.56610-1-franziska.naepelt@gmail.com>
+ <20230602085902.59006-1-franziska.naepelt@gmail.com>
+ <ZH8mhIrjyBvTF4oZ@debian.me>
+ <e39efb7f-5d8f-4433-83b3-8eea8a6c0486@kadam.mountain>
+ <CT5NH4XXIYQF.5XXJE6JA5FZP@suppilovahvero>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fVmhdnRipBFZz++OzYB_8tMSQjPXQ1L9pJ1WZHTdErsBQ@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CT5NH4XXIYQF.5XXJE6JA5FZP@suppilovahvero>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Jun 08, 2023 at 04:38:06PM -0700, Ian Rogers escreveu:
-> On Thu, Jun 8, 2023 at 4:24 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> >
-> > Some of its event info cannot be used directly due to missing default
-> > attributes.  Let's check if the event is supported before printing
-> > like we do for hw and cache events.
-> >
-> > Cc: Stephane Eranian <eranian@google.com>
-> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> 
-> Acked-by: Ian Rogers <irogers>@google.com>
+On Tue, Jun 06, 2023 at 05:51:09PM +0300, Jarkko Sakkinen wrote:
+> It's not a "punishment". It's more like that I really have to take the
+> time to read the prose...
 
-Thanks, applied the series.
+The thing about imperative tense is that it was used as a punishment on
+me once five years ago.  I wrote a quite bad commit message and a senior
+maintainer told me to re-write it properly and I realized that it was
+true.  My commit message was bad.  So I wrote a proper commit message.
+And then he yelled at me, "Can't you follow simple directions and write
+it in imperative tense like the documentation says?  Are you a
+shithead?"
 
-- Arnaldo
+So then I swore I would never talk to him again or to anyone who
+enforced the imperative tense rule.  That has only happened once in the
+intervening years.  I told the maintainer, "Fine.  Re-write the commit
+message however you like and give me Reported-by credit."  This was a
+cheeky response and it made the maintainer enraged.  I guess he thought
+that my boss would force me to fix the bug or something?  I felt bad for
+the Intel developer who had to fix my bug instead because I knew that
+the maintainer was going to be super angry if he gave me reported-by
+credit so I had put him in a bind.  I almost re-wrote the commit message
+so that he wouldn't have to deal with that.  Maybe this is how mothers
+feel when they try to take abuse from an angry husband instead of
+letting their kids suffer.  But I am a bad mother and I left.
 
- 
-> Thanks,
-> Ian
-> 
-> > ---
-> >  tools/perf/util/pfm.c | 58 +++++++++++++++++++++++++++++++++++++------
-> >  1 file changed, 50 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/tools/perf/util/pfm.c b/tools/perf/util/pfm.c
-> > index 076aecc22c16..4c1024c343dd 100644
-> > --- a/tools/perf/util/pfm.c
-> > +++ b/tools/perf/util/pfm.c
-> > @@ -13,6 +13,8 @@
-> >  #include "util/pmus.h"
-> >  #include "util/pfm.h"
-> >  #include "util/strbuf.h"
-> > +#include "util/cpumap.h"
-> > +#include "util/thread_map.h"
-> >
-> >  #include <string.h>
-> >  #include <linux/kernel.h>
-> > @@ -123,6 +125,36 @@ int parse_libpfm_events_option(const struct option *opt, const char *str,
-> >         return -1;
-> >  }
-> >
-> > +static bool is_libpfm_event_supported(const char *name, struct perf_cpu_map *cpus,
-> > +                                     struct perf_thread_map *threads)
-> > +{
-> > +       struct perf_pmu *pmu;
-> > +       struct evsel *evsel;
-> > +       struct perf_event_attr attr = {};
-> > +       bool result = true;
-> > +       int ret;
-> > +
-> > +       ret = pfm_get_perf_event_encoding(name, PFM_PLM0|PFM_PLM3,
-> > +                                         &attr, NULL, NULL);
-> > +       if (ret != PFM_SUCCESS)
-> > +               return false;
-> > +
-> > +       pmu = perf_pmus__find_by_type((unsigned int)attr.type);
-> > +       evsel = parse_events__add_event(0, &attr, name, /*metric_id=*/NULL, pmu);
-> > +       if (evsel == NULL)
-> > +               return false;
-> > +
-> > +       evsel->is_libpfm_event = true;
-> > +
-> > +       if (evsel__open(evsel, cpus, threads) < 0)
-> > +               result = false;
-> > +
-> > +       evsel__close(evsel);
-> > +       evsel__delete(evsel);
-> > +
-> > +       return result;
-> > +}
-> > +
-> >  static const char *srcs[PFM_ATTR_CTRL_MAX] = {
-> >         [PFM_ATTR_CTRL_UNKNOWN] = "???",
-> >         [PFM_ATTR_CTRL_PMU] = "PMU",
-> > @@ -146,6 +178,8 @@ print_libpfm_event(const struct print_callbacks *print_cb, void *print_state,
-> >  {
-> >         int j, ret;
-> >         char topic[80], name[80];
-> > +       struct perf_cpu_map *cpus = perf_cpu_map__empty_new(1);
-> > +       struct perf_thread_map *threads = thread_map__new_by_tid(0);
-> >
-> >         strbuf_setlen(buf, 0);
-> >         snprintf(topic, sizeof(topic), "pfm %s", pinfo->name);
-> > @@ -185,14 +219,15 @@ print_libpfm_event(const struct print_callbacks *print_cb, void *print_state,
-> >                                     ainfo.name, ainfo.desc);
-> >                 }
-> >         }
-> > -       print_cb->print_event(print_state,
-> > -                       pinfo->name,
-> > -                       topic,
-> > -                       name, info->equiv,
-> > -                       /*scale_unit=*/NULL,
-> > -                       /*deprecated=*/NULL, "PFM event",
-> > -                       info->desc, /*long_desc=*/NULL,
-> > -                       /*encoding_desc=*/buf->buf);
-> > +
-> > +       if (is_libpfm_event_supported(name, cpus, threads)) {
-> > +               print_cb->print_event(print_state, pinfo->name, topic,
-> > +                                     name, info->equiv,
-> > +                                     /*scale_unit=*/NULL,
-> > +                                     /*deprecated=*/NULL, "PFM event",
-> > +                                     info->desc, /*long_desc=*/NULL,
-> > +                                     /*encoding_desc=*/buf->buf);
-> > +       }
-> >
-> >         pfm_for_each_event_attr(j, info) {
-> >                 pfm_event_attr_info_t ainfo;
-> > @@ -215,6 +250,10 @@ print_libpfm_event(const struct print_callbacks *print_cb, void *print_state,
-> >                         print_attr_flags(buf, &ainfo);
-> >                         snprintf(name, sizeof(name), "%s::%s:%s",
-> >                                  pinfo->name, info->name, ainfo.name);
-> > +
-> > +                       if (!is_libpfm_event_supported(name, cpus, threads))
-> > +                               continue;
-> > +
-> >                         print_cb->print_event(print_state,
-> >                                         pinfo->name,
-> >                                         topic,
-> > @@ -225,6 +264,9 @@ print_libpfm_event(const struct print_callbacks *print_cb, void *print_state,
-> >                                         /*encoding_desc=*/buf->buf);
-> >                 }
-> >         }
-> > +
-> > +       perf_cpu_map__put(cpus);
-> > +       perf_thread_map__put(threads);
-> >  }
-> >
-> >  void print_libpfm_events(const struct print_callbacks *print_cb, void *print_state)
-> > --
-> > 2.41.0.162.gfafddb0af9-goog
-> >
+My boss would never have forced me to deal with that.  When he left for
+a different company he said, "Dan, I'm transitioning and XXX is taking
+over me and I have told him all your weirdness so he is prepared."  And
+it was a huge comfort to me because I know what my weakness are.
 
--- 
+You people on this thread all seem super nice.  And you're right that we
+should always try to be improve every aspect of our craft.
 
-- Arnaldo
+When Jarkko talked about people who write too long commit messages, I
+thought about one developer in particular who writes too long commit
+messages.  He writes in imperative tense.  He takes everything so
+seriously and he's never seen a rule without following it.  His patches
+are always right.  People have told him that his commit messages are bad
+and too long and those people are right.  But they need to shut up.  The
+good things that he does and the bad things that he does are all part of
+the same package.  He can't change and I don't want him to feel anything
+but welcome.
+
+It's hard to be a good kernel developer without being at least slightly
+obsessive.  Both developers and maintainers are that way.  And I deal
+with a lot of people and accomodating maintainers you disagree with is
+part of the job.
+
+So long as everyone is kind to each other.  That's the main thing.
+
+regards,
+dan carpenter
