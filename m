@@ -2,291 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E5472A00E
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D61F72A00A
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:20:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242116AbjFIQUt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 12:20:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35064 "EHLO
+        id S242161AbjFIQUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 12:20:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242187AbjFIQTt (ORCPT
+        with ESMTP id S238452AbjFIQUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 12:19:49 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C0C2D44
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:19:27 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-565c7399afaso18199717b3.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 09:19:27 -0700 (PDT)
+        Fri, 9 Jun 2023 12:20:23 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5C33A9D
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:20:14 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f642a24568so2496500e87.2
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 09:20:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20221208.gappssmtp.com; s=20221208; t=1686327564; x=1688919564;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aAnp8nk8Drs+fq4PdxH7Z2zYNvsqX1dlZYid/tf+cvs=;
-        b=SLp7IGyKSJoCTguMmsNixX9DK6sIfLRmf/EiprLy0WjCbpPucAcellFr4CPKJGGFXu
-         Gh6PQn7NuEez3HFUfq0voV7Yfx4MB66r3eFCUY9aGHefS1LzJRmajyg6sh8kNgLpGhOW
-         rc9AhbRUCNiHEvoCWubcC7/fPGRRDluLIi2ZxqwJSZfEBIAUTsDxW+TjbZIajZv/Q7+l
-         ko5dX7ZYTayX3egnEQLj+d0LiYStVSTTLRS+CRdj088jycaT8+UU8bKJBLUevkF7A3Jj
-         3SyMSrv7dWr+FzaJkU2W6j5xZqZmGdCx+foxgz3cQF/Df6rQTfngZ4zH20ksb62WtdHi
-         0MXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686327564; x=1688919564;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=linaro.org; s=google; t=1686327612; x=1688919612;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=aAnp8nk8Drs+fq4PdxH7Z2zYNvsqX1dlZYid/tf+cvs=;
-        b=kwusLqGDa3+pWjGDtjH2Hv47mT2Yryo2qgqWYM4krLAqKOdgLE7Mzv/oNFKcQprPeM
-         zmyu+OqlPCP/DcDNgTrfhPDxInp97Yh7SMjwXjyoYo3V4sK9cPOTFB2UCDjWYtlu41Kt
-         LkJCd3/aKX7SUvxcYji76+pYkUCUl/mirdf6vFQ1ECPwhRAebt3GzUqL232EsH8QzeOV
-         0yGIpGtltyn2H4GVtRWUDhheRyz+FxaZ2LsF2sccHEXEGGXDW9SpxMZTDgYhHBHoGsdn
-         S8rHGvJ6/kXn/6AgBxW1xL1ToNmo+yOL4ILuJp3jREGxY8zez8RZuOSuJOBbOHLOWDtl
-         tuBw==
-X-Gm-Message-State: AC+VfDyhHtj22Gx9hCrP6pPAa/2eezL6fPE0gCs5COPUuTdEtcP+J/lI
-        c2X9wQg1r7V9Go1Mp8q8GU8eK8NOCuUrz7eyBMFVTA==
-X-Google-Smtp-Source: ACHHUZ4xbcwQos5stjR3+NPVH/GCf1ZFjClpbdt0fY+rge7tSC352F82rfJVp2d0njY9tuSktNEtB/iP5FzdgEbmth4=
-X-Received: by 2002:a81:9145:0:b0:567:c388:3552 with SMTP id
- i66-20020a819145000000b00567c3883552mr1892389ywg.6.1686327564258; Fri, 09 Jun
- 2023 09:19:24 -0700 (PDT)
+        bh=usUa91lFTwm78ZcJqDITECIX6IQZqVVPZb/qreiSqx0=;
+        b=ot7OR9FGvlcYcZD5e+cFOOoEF/WG2TryjkzKF7Y7nyRNcMhYN0MPV79TOo+C+dmXVR
+         lvY31ZIut1OfKvPeIw1e4q0ma1wj7mAjXEFWSFt7BORxCehJmy+esFpQFKx8xRPe5RPa
+         s4oATGJiDMXjJbGLGJxsRdaGE8LN2xwnUjHvb003d2AHf4bECiPk6MM3tIZC1gDgtqIo
+         S8rUIbK2/DPKp88G24eIsWO5PYwE1Plm80C+bNKFkMHjM0r4iYDPMwaUxCptdVMLIqDT
+         NdWzm185jBe4dLSFadFllbTJ1U8CNLjkqheJd96W2zGVd0ou9BREA0NHohLbIw/KL3G4
+         vHgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686327612; x=1688919612;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=usUa91lFTwm78ZcJqDITECIX6IQZqVVPZb/qreiSqx0=;
+        b=PX+RRxF6VKMfjzgGXc6JNt2jJVKdJjnL8SX8MJpYj19pNJmCffJNz04cOL3ASLdNLu
+         vekr9ENf60dc/eBHsRu0Ei2Zkn+319b6pfqAeAHXs7zocR6TCfIBEbcxle+QKhLmux+l
+         iwA1PQwk9PRiu3gP9dy8bYXAhgr8U4r30COj7rxTAnD5Cyz+Uhs6uxEOXqnG3IGWb9Wf
+         HwAQKyqYV20HjVuEaiVbDowZZW1VXTz8LCnEE5PUOccQ3ylSr7ID2tJITHgYxtPrimQJ
+         lye40S192OMtbwKIX9h/LOrNXeiDJ7LUQ/y/8Xykkx8f5h0lpKu6nKxjv0lXoWblXbkM
+         qeHw==
+X-Gm-Message-State: AC+VfDzpg3LBS7mJ6VPevStBWo1LfOxzL3fyCK3yB7bfsbCI1O36iiuj
+        CDBT4KnXKhz3zHlvpRFCLKXDyg==
+X-Google-Smtp-Source: ACHHUZ5JUKhb5xLWhhwfP9hIde5UuYkLpVxnT1k61JKzExG1On60bR+Hs2VUE0a/47NYIgSj/pTTUg==
+X-Received: by 2002:a19:5009:0:b0:4f3:b588:48d0 with SMTP id e9-20020a195009000000b004f3b58848d0mr1249482lfb.14.1686327612574;
+        Fri, 09 Jun 2023 09:20:12 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id a1-20020a056512020100b004f138c4de81sm594947lfo.149.2023.06.09.09.20.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Jun 2023 09:20:12 -0700 (PDT)
+Message-ID: <90b04e1b-8f3b-982e-bab2-36c09cc1d53d@linaro.org>
+Date:   Fri, 9 Jun 2023 18:20:09 +0200
 MIME-Version: 1.0
-References: <20230602103750.2290132-1-vladimir.oltean@nxp.com>
- <20230602103750.2290132-6-vladimir.oltean@nxp.com> <CAM0EoM=P9+wNnNQ=ky96rwCx1z20fR21EWEdx+Na39NCqqG=3A@mail.gmail.com>
- <20230609121043.ekfvbgjiko7644t7@skbuf>
-In-Reply-To: <20230609121043.ekfvbgjiko7644t7@skbuf>
-From:   Jamal Hadi Salim <jhs@mojatatu.com>
-Date:   Fri, 9 Jun 2023 12:19:12 -0400
-Message-ID: <CAM0EoMmkSZCePo1Y49iMk=9oYKR8xfVDncWF0E4xRhp2ER2PRQ@mail.gmail.com>
-Subject: Re: [PATCH RESEND net-next 5/5] net/sched: taprio: dump class stats
- for the actual q->qdiscs[]
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>,
-        Peilin Ye <yepeilin.cs@gmail.com>,
-        Pedro Tammela <pctammela@mojatatu.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Content-Language: en-US
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>, corbet@lwn.net,
+        will@kernel.org, boqun.feng@gmail.com, mark.rutland@arm.com,
+        catalin.marinas@arm.com, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, joro@8bytes.org, suravee.suthikulpanit@amd.com,
+        robin.murphy@arm.com, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-s390@vger.kernel.org,
+        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-crypto@vger.kernel.org, sfr@canb.auug.org.au,
+        mpe@ellerman.id.au, James.Bottomley@hansenpartnership.com,
+        deller@gmx.de, linux-parisc@vger.kernel.org, llvm@lists.linux.dev
+References: <20230531132323.587480729@infradead.org>
+ <f320f021-88c4-c5c9-0781-c82d0b88f67d@linaro.org>
+ <20230609161340.GA4019185@dev-arch.thelio-3990X>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: Re: [PATCH v2 5/12] percpu: Add {raw,this}_cpu_try_cmpxchg()
+In-Reply-To: <20230609161340.GA4019185@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 8:10=E2=80=AFAM Vladimir Oltean <vladimir.oltean@nxp=
-.com> wrote:
->
-> On Thu, Jun 08, 2023 at 02:44:46PM -0400, Jamal Hadi Salim wrote:
-> > Other than the refcount issue i think the approach looks reasonable to
-> > me. The stats before/after you are showing below though are
-> > interesting; are you showing a transient phase where packets are
-> > temporarily in the backlog. Typically the backlog is a transient phase
-> > which lasts a very short period. Maybe it works differently for
-> > taprio? I took a quick look at the code and do see to decrement the
-> > backlog in the dequeue, so if it is not transient then some code path
-> > is not being hit.
->
-> It's a fair concern. The thing is that I put very aggressive time slots
-> in the schedule that I'm testing with, and my kernel has a lot of
-> debugging stuff which bogs it down (kasan, kmemleak, lockdep, DMA API
-> debug etc). Not to mention that the CPU isn't the fastest to begin with.
->
-> The way taprio works is that there's a hrtimer which fires at the
-> expiration time of the current schedule entry and sets up the gates for
-> the next one. Each schedule entry has a gate for each traffic class
-> which determines what traffic classes are eligible for dequeue() and
-> which ones aren't.
->
-> The dequeue() procedure, though also invoked by the advance_schedule()
-> hrtimer -> __netif_schedule(), is also time-sensitive. By the time
-> taprio_dequeue() runs, taprio_entry_allows_tx() function might return
-> false when the system is so bogged down that it wasn't able to make
-> enough progress to dequeue() an skb in time. When that happens, there is
-> no mechanism, currently, to age out packets that stood too much in the
-> TX queues (what does "too much" mean?).
->
-> Whereas enqueue() is technically not time-sensitive, i.e. you can
-> enqueue whenever you want and the Qdisc will dequeue whenever it can.
-> Though in practice, to make this scheduling technique useful, the user
-> space enqueue should also be time-aware (though you can't capture this
-> with ping).
->
-> If I increase all my sched-entry intervals by a factor of 100, the
-> backlog issue goes away and the system can make forward progress.
->
-> So yeah, sorry, I didn't pay too much attention to the data I was
-> presenting for illustrative purposes.
->
-
-So it seems to me it is a transient phase and that at some point the
-backlog will clear up and the sent stats will go up. Maybe just say so
-in your commit or show the final result after the packet is gone.
-
-I have to admit, I dont know much about taprio - that's why i am
-asking all these leading questions. You spoke of gates etc and thats
-klingon to me; but iiuc there's some time sensitive stuff that needs
-to be sent out within a deadline. Q: What should happen to skbs that
-are no longer valid?
-On the aging thing which you say is missing, shouldnt the hrtimer or
-schedule kick not be able to dequeue timestamped packets and just drop
-them?
-
-cheers,
-jamal
 
 
+On 9.06.2023 18:13, Nathan Chancellor wrote:
+> Hi Konrad,
+> 
+> On Fri, Jun 09, 2023 at 06:10:38PM +0200, Konrad Dybcio wrote:
+>>
+>>
+>> On 31.05.2023 15:08, Peter Zijlstra wrote:
+>>> Add the try_cmpxchg() form to the per-cpu ops.
+>>>
+>>> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+>>> ---
+>> +CC Nathan, llvm list
+>>
+>> Hi all, this patch seems to break booting on Qualcomm ARM64 platforms
+>> when compiled with clang (GCC works fine) for some reason..:
+>>
+>> next-20230605 - works
+>> next-20230606 - doesn't
+>>
+>> grev -m 1 dc4e51fd9846 on next-20230606 - works again
+>> b4 shazam <this_msgid> -P 1-4 - still works
+>> b4 shazam <this_msgid> -P 5 - breaks
+>>
+>> Confirmed on at least Qualcomm QCM2290, SM8250.
+>>
+>> Checking the serial console, it hits a BUG_ON:
+>>
+>> [    0.000000] ------------[ cut here ]------------
+>> [    0.000000] kernel BUG at mm/vmalloc.c:1638!
+>> [    0.000000] Internal error: Oops - BUG: 00000000f2000800 [#1] SMP
+>> [    0.000000] Modules linked in:
+>> [    0.000000] CPU: 0 PID: 0 Comm: swapper/0 Not tainted [snip]
+>> [    0.000000] Hardware name: Qualcomm Technologies, Inc. Robotics RB1 (DT)
+>> [    0.000000] pstate: 000000c5 (nzcv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>> [    0.000000] pc : alloc_vmap_area+0xafc/0xb08
+>> [    0.000000] lr : alloc_vmap_area+0x9e4/0xb08
+>> [    0.000000] sp : ffffa50137f53c20
+>> [    0.000000] x29: ffffa50137f53c60 x28: ffffa50137f30c18 x27: 0000000000000000
+>> [    0.000000] x26: 0000000000007fff x25: ffff800080000000 x24: 000000000000cfff
+>> [    0.000000] x23: ffffffffffff8000 x22: ffffa50137fef970 x21: fffffbfff0000000
+>> [    0.000000] x20: ffff022982003208 x19: ffff0229820031f8 x18: ffffa50137f64f70
+>> [    0.000000] x17: ffffa50137fef980 x16: ffffa501375e6d08 x15: 0000000000000001
+>> [    0.000000] x14: ffffa5013831e1a0 x13: ffffa50137f30c18 x12: 0000000000402dc2
+>> [    0.000000] x11: 0000000000000000 x10: ffff022982003018 x9 : ffffa5013831e188
+>> [    0.000000] x8 : ffffcb55ff003228 x7 : 0000000000000000 x6 : 0000000000000048
+>> [    0.000000] x5 : 0000000000000000 x4 : ffffa50137f53bd0 x3 : ffffa50136490000
+>> [    0.000000] x2 : 0000000000000001 x1 : ffffa5013831e190 x0 : ffff022982003208
+>> [    0.000000] Call trace:
+>> [    0.000000]  alloc_vmap_area+0xafc/0xb08
+>> [    0.000000]  __get_vm_area_node+0x108/0x1e8
+>> [    0.000000]  __vmalloc_node_range+0x1fc/0x728
+>> [    0.000000]  __vmalloc_node+0x5c/0x70
+>> [    0.000000]  init_IRQ+0x90/0x11c
+>> [    0.000000]  start_kernel+0x1ac/0x3bc
+>> [    0.000000]  __primary_switched+0xc4/0xcc
+>> [    0.000000] Code: f000e300 91062000 943bd9ba 17ffff8f (d4210000)
+>> [    0.000000] ---[ end trace 0000000000000000 ]---
+>> [    0.000000] Kernel panic - not syncing: Attempted to kill the idle task!
+>>
+>> Compiled with clang 15.0.7 from Arch repos, with
+>> make ARCH=arm64 LLVM=1
+> 
+> Thanks a lot for testing with LLVM, submitting this report, and doing a
+> bisect.
+No, thank *you* for making it even possible ;)
 
-cheers,
-jamal
+I sent a patch to fix this a couple of days ago and Peter pushed
+> it to -tip today, so it should be in the next -next release:
+> 
+> https://git.kernel.org/tip/093d9b240a1fa261ff8aeb7c7cc484dedacfda53
+Amazing, I can boot the most recent next-20230609 with it again!
 
-> > Aside: I realize you are busy - but if you get time and provide some
-> > sample tc command lines for testing we could help create the tests for
-> > you, at least the first time. The advantage of putting these tests in
-> > tools/testing/selftests/tc-testing/ is that there are test tools out
-> > there that run these tests and so regressions are easier to catch
-> > sooner.
->
-> Yeah, ok. The script posted in a reply on the cover letter is still what
-> I'm working with. The things it intends to capture are:
-> - attaching a custom Qdisc to one of taprio's classes doesn't fail
-> - attaching taprio to one of taprio's classes fails
-> - sending packets through one queue increases the counters (any counters)
->   of just that queue
->
-> All the above, replicated once for the software scheduling case and once
-> for the offload case. Currently netdevsim doesn't attempt to emulate
-> taprio offload.
->
-> Is there a way to skip tests? I may look into tdc, but I honestly don't
-> have time for unrelated stuff such as figuring out why my kernel isn't
-> configured for the other tests to pass - and it seems that once one test
-> fails, the others are completely skipped, see below.
->
-> Also, by which rule are the test IDs created?
->
-> root@debian:~# cd selftests/tc-testing/
-> root@debian:~/selftests/tc-testing# ./tdc.sh
-> considering category qdisc
->  -- ns/SubPlugin.__init__
-> Test 0582: Create QFQ with default setting
-> Test c9a3: Create QFQ with class weight setting
-> Test d364: Test QFQ with max class weight setting
-> Test 8452: Create QFQ with class maxpkt setting
-> Test 22df: Test QFQ class maxpkt setting lower bound
-> Test 92ee: Test QFQ class maxpkt setting upper bound
-> Test d920: Create QFQ with multiple class setting
-> Test 0548: Delete QFQ with handle
-> Test 5901: Show QFQ class
-> Test 0385: Create DRR with default setting
-> Test 2375: Delete DRR with handle
-> Test 3092: Show DRR class
-> Test 3460: Create CBQ with default setting
-> exit: 2
-> exit: 0
-> Error: Specified qdisc kind is unknown.
->
->
-> -----> teardown stage *** Could not execute: "$TC qdisc del dev $DUMMY ha=
-ndle 1: root"
->
-> -----> teardown stage *** Error message: "Error: Invalid handle.
-> "
-> returncode 2; expected [0]
->
-> -----> teardown stage *** Aborting test run.
->
->
-> <_io.BufferedReader name=3D3> *** stdout ***
->
->
-> <_io.BufferedReader name=3D5> *** stderr ***
-> "-----> teardown stage" did not complete successfully
-> Exception <class '__main__.PluginMgrTestFail'> ('teardown', 'Error: Speci=
-fied qdisc kind is unknown.\n', '"-----> teardown stage" did not complete s=
-uccessfully') (caught in test_runner, running test 14 3460 Create CBQ with =
-default setting stage teardown)
-> ---------------
-> traceback
->   File "/root/selftests/tc-testing/./tdc.py", line 495, in test_runner
->     res =3D run_one_test(pm, args, index, tidx)
->   File "/root/selftests/tc-testing/./tdc.py", line 434, in run_one_test
->     prepare_env(args, pm, 'teardown', '-----> teardown stage', tidx['tear=
-down'], procout)
->   File "/root/selftests/tc-testing/./tdc.py", line 245, in prepare_env
->     raise PluginMgrTestFail(
-> ---------------
-> accumulated output for this test:
-> Error: Specified qdisc kind is unknown.
-> ---------------
->
-> All test results:
->
-> 1..336
-> ok 1 0582 - Create QFQ with default setting
-> ok 2 c9a3 - Create QFQ with class weight setting
-> ok 3 d364 - Test QFQ with max class weight setting
-> ok 4 8452 - Create QFQ with class maxpkt setting
-> ok 5 22df - Test QFQ class maxpkt setting lower bound
-> ok 6 92ee - Test QFQ class maxpkt setting upper bound
-> ok 7 d920 - Create QFQ with multiple class setting
-> ok 8 0548 - Delete QFQ with handle
-> ok 9 5901 - Show QFQ class
-> ok 10 0385 - Create DRR with default setting
-> ok 11 2375 - Delete DRR with handle
-> ok 12 3092 - Show DRR class
-> ok 13 3460 - Create CBQ with default setting # skipped - "-----> teardown=
- stage" did not complete successfully
->
-> ok 14 0592 - Create CBQ with mpu # skipped - skipped - previous teardown =
-failed 14 3460
->
-> ok 15 4684 - Create CBQ with valid cell num # skipped - skipped - previou=
-s teardown failed 14 3460
->
-> ok 16 4345 - Create CBQ with invalid cell num # skipped - skipped - previ=
-ous teardown failed 14 3460
->
-> ok 17 4525 - Create CBQ with valid ewma # skipped - skipped - previous te=
-ardown failed 14 3460
->
-> ok 18 6784 - Create CBQ with invalid ewma # skipped - skipped - previous =
-teardown failed 14 3460
->
-> ok 19 5468 - Delete CBQ with handle # skipped - skipped - previous teardo=
-wn failed 14 3460
->
-> ok 20 492a - Show CBQ class # skipped - skipped - previous teardown faile=
-d 14 3460
->
-> ok 21 9903 - Add mqprio Qdisc to multi-queue device (8 queues) # skipped =
-- skipped - previous teardown failed 14 3460
->
-> ok 22 453a - Delete nonexistent mqprio Qdisc # skipped - skipped - previo=
-us teardown failed 14 3460
->
-> ok 23 5292 - Delete mqprio Qdisc twice # skipped - skipped - previous tea=
-rdown failed 14 3460
->
-> ok 24 45a9 - Add mqprio Qdisc to single-queue device # skipped - skipped =
-- previous teardown failed 14 3460
->
-> ok 25 2ba9 - Show mqprio class # skipped - skipped - previous teardown fa=
-iled 14 3460
->
-> ok 26 4812 - Create HHF with default setting # skipped - skipped - previo=
-us teardown failed 14 3460
->
-> ok 27 8a92 - Create HHF with limit setting # skipped - skipped - previous=
- teardown failed 14 3460
->
-> ok 28 3491 - Create HHF with quantum setting # skipped - skipped - previo=
-us teardown failed 14 3460
-> (...)
+Konrad
+> 
+> Cheers,
+> Nathan
