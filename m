@@ -2,139 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D2E7295AC
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:41:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 412A57295C1
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:45:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241808AbjFIJls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 05:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33508 "EHLO
+        id S241149AbjFIJpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 05:45:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241771AbjFIJlR (ORCPT
+        with ESMTP id S241872AbjFIJop (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 05:41:17 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A80D76B4;
-        Fri,  9 Jun 2023 02:36:00 -0700 (PDT)
-X-GND-Sasl: repk@triplefau.lt
-X-GND-Sasl: repk@triplefau.lt
-X-GND-Sasl: repk@triplefau.lt
-X-GND-Sasl: repk@triplefau.lt
-X-GND-Sasl: repk@triplefau.lt
-X-GND-Sasl: repk@triplefau.lt
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E5ECC24000C;
-        Fri,  9 Jun 2023 09:34:55 +0000 (UTC)
-From:   Remi Pommarel <repk@triplefau.lt>
-To:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Kalle Valo <kvalo@kernel.org>,
-        Jouni Malinen <jouni@codeaurora.org>
-Cc:     linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Remi Pommarel <repk@triplefau.lt>
-Subject: [PATCH] ath9k: Fix possible stall on ath9k_txq_list_has_key()
-Date:   Fri,  9 Jun 2023 11:37:44 +0200
-Message-Id: <20230609093744.1985-1-repk@triplefau.lt>
-X-Mailer: git-send-email 2.40.0
+        Fri, 9 Jun 2023 05:44:45 -0400
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9081BFF
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 02:39:50 -0700 (PDT)
+Received: by mail-vs1-xe2d.google.com with SMTP id ada2fe7eead31-43dc3f77accso517566137.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 02:39:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1686303550; x=1688895550;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OZOvjl+KYnuwjPj8wMvZkMia9UoF/x6M2Pm8GzNj1fU=;
+        b=HTewIAYg8quf786duI/CctcxA7gPrI2VugNo0oh1CvFgRXeezqSxn/G2tzv6nbA5nr
+         KGSya9okyuMEBET7DW1QschhzujiYprvRtM2dXCWdO8EFZgbc0LzHQzx0nBEvozGCo0d
+         p//9u1NrJ6wG0OM+phgZMV6sE8nKY9yb0ryKm2WH9ZmTEg4uD0BujMVAcGr5wcMlWvy8
+         AOKLeEVMQm2QQmPVWBeNmY6HQKwzBZA37bno5fkZYynw71l2y1LTyuZn8FdUUTUzHhXb
+         iYm4HV/kXqvHHeruvbE/Zk43KLw3xkC/d4qqRmoeWrgyZMJR0aSrIchxFYTU3TtLmKbO
+         RhoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686303550; x=1688895550;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OZOvjl+KYnuwjPj8wMvZkMia9UoF/x6M2Pm8GzNj1fU=;
+        b=h8M2tkIG7loY28vCm0Hj2iR5SeKl+SRtMQCrWhZy8Oyyka3Q3efT7Rsfhdvs2RHMmT
+         7jCSgA24tVlQE8WbDA9lCuUEL1oo1rPD29YxxA4hEplRXu83rk8E/H6BeYxG+SWoXBEQ
+         mjTdjzJqm0V09+yt+iDI0Jg3TK+gJ9yK5VDV0PTA2x6jCqKM5QeWSucj03RN9JDANiAY
+         kbkA3UVkCZOWKB922WSfouM4Gc5CivcIMZG0AABMcJDjLwGSikJg3siOILwliuW7VCnh
+         jrPPpaIKcLyYh04EKNjfKM+3lQ4zhFLrn0Rh+Qxik6Xa38OSyWTu1XSaqvbGjhDOGcQR
+         Ic3A==
+X-Gm-Message-State: AC+VfDwoTGzJFx3iwSeGptqAoJkg/jNYKuUYQEcp4YpCsM++IR5j9wn9
+        qgpDxtJoQ2oRhSL/NSNZfRa/VAArwtJSGXJuk/rxSp/zwRaswLkR
+X-Google-Smtp-Source: ACHHUZ6ookoq9XF4FuMkQPAWhkCYvNPv8RIYZ7pD5vhFYy92iWzbLEsqF15OSs9k96UjYo8p4ePG3CBGpIhQJ4oDpec=
+X-Received: by 2002:a05:6102:408:b0:430:e0:ac2e with SMTP id
+ d8-20020a056102040800b0043000e0ac2emr498462vsq.15.1686303549994; Fri, 09 Jun
+ 2023 02:39:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230605125810.61456-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230605125810.61456-1-andriy.shevchenko@linux.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Fri, 9 Jun 2023 11:38:59 +0200
+Message-ID: <CAMRc=Mf_TamPbL2m2RnV9NNwXKe=P=7cbZy0YJkFw6e=L64xNg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] gpiolib: Do not unexport GPIO on freeing
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On EDMA capable hardware, ath9k_txq_list_has_key() can enter infinite
-loop if it is called while all txq_fifos have packets that use different
-key that the one we are looking for. Fix it by exiting the loop if all
-txq_fifos have been checked already.
+On Mon, Jun 5, 2023 at 2:58=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> Since the legacy exporting is gone with 2f804aca4832 ("gpiolib:
+> Kill unused GPIOF_EXPORT and Co") there is no need to unexport
+> GPIO on freeing. Remove that call.
+>
+> Note, the other users of this functionality do that explicitly,
+> except one SH and one OMAP boardfile which don't free GPIO anyways,
+> so it is safe to drop the call.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+> v2: mentioned OMAP boardfile as well
+>  drivers/gpio/gpiolib.c | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+> index a8da38ee721a..7a9c9934365a 100644
+> --- a/drivers/gpio/gpiolib.c
+> +++ b/drivers/gpio/gpiolib.c
+> @@ -2117,8 +2117,6 @@ static bool gpiod_free_commit(struct gpio_desc *des=
+c)
+>
+>         might_sleep();
+>
+> -       gpiod_unexport(desc);
+> -
+>         spin_lock_irqsave(&gpio_lock, flags);
+>
+>         gc =3D desc->gdev->chip;
+> --
+> 2.40.0.1.gaa8946217a0b
+>
 
-Because this loop is called under spin_lock_bh() (see ath_txq_lock) it
-causes the following rcu stall:
+Ah, you already sent a v2. I applied this one.
 
-rcu: INFO: rcu_sched self-detected stall on CPU
-ath10k_pci 0000:01:00.0: failed to read temperature -11
-rcu:    1-....: (5254 ticks this GP) idle=189/1/0x4000000000000002 softirq=8442983/8442984 fqs=2579
-        (t=5257 jiffies g=17983297 q=334)
-Task dump for CPU 1:
-task:hostapd         state:R  running task     stack:    0 pid:  297 ppid:   289 flags:0x0000000a
-Call trace:
- dump_backtrace+0x0/0x170
- show_stack+0x1c/0x24
- sched_show_task+0x140/0x170
- dump_cpu_task+0x48/0x54
- rcu_dump_cpu_stacks+0xf0/0x134
- rcu_sched_clock_irq+0x8d8/0x9fc
- update_process_times+0xa0/0xec
- tick_sched_timer+0x5c/0xd0
- __hrtimer_run_queues+0x154/0x320
- hrtimer_interrupt+0x120/0x2f0
- arch_timer_handler_virt+0x38/0x44
- handle_percpu_devid_irq+0x9c/0x1e0
- handle_domain_irq+0x64/0x90
- gic_handle_irq+0x78/0xb0
- call_on_irq_stack+0x28/0x38
- do_interrupt_handler+0x54/0x5c
- el1_interrupt+0x2c/0x4c
- el1h_64_irq_handler+0x14/0x1c
- el1h_64_irq+0x74/0x78
- ath9k_txq_has_key+0x1bc/0x250 [ath9k]
- ath9k_set_key+0x1cc/0x3dc [ath9k]
- drv_set_key+0x78/0x170
- ieee80211_key_replace+0x564/0x6cc
- ieee80211_key_link+0x174/0x220
- ieee80211_add_key+0x11c/0x300
- nl80211_new_key+0x12c/0x330
- genl_family_rcv_msg_doit+0xbc/0x11c
- genl_rcv_msg+0xd8/0x1c4
- netlink_rcv_skb+0x40/0x100
- genl_rcv+0x3c/0x50
- netlink_unicast+0x1ec/0x2c0
- netlink_sendmsg+0x198/0x3c0
- ____sys_sendmsg+0x210/0x250
- ___sys_sendmsg+0x78/0xc4
- __sys_sendmsg+0x4c/0x90
- __arm64_sys_sendmsg+0x28/0x30
- invoke_syscall.constprop.0+0x60/0x100
- do_el0_svc+0x48/0xd0
- el0_svc+0x14/0x50
- el0t_64_sync_handler+0xa8/0xb0
- el0t_64_sync+0x158/0x15c
-
-This rcu stall is hard to reproduce as is, but changing ATH_TXFIFO_DEPTH
-from 8 to 2 makes it reasonably easy to reproduce.
-
-Fixes: ca2848022c12 ("ath9k: Postpone key cache entry deletion for TXQ frames reference it")
-Signed-off-by: Remi Pommarel <repk@triplefau.lt>
----
- drivers/net/wireless/ath/ath9k/main.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/wireless/ath/ath9k/main.c b/drivers/net/wireless/ath/ath9k/main.c
-index a4197c14f0a9..7f9f06ea8a05 100644
---- a/drivers/net/wireless/ath/ath9k/main.c
-+++ b/drivers/net/wireless/ath/ath9k/main.c
-@@ -850,7 +850,7 @@ static bool ath9k_txq_list_has_key(struct list_head *txq_list, u32 keyix)
- static bool ath9k_txq_has_key(struct ath_softc *sc, u32 keyix)
- {
- 	struct ath_hw *ah = sc->sc_ah;
--	int i;
-+	int i, j;
- 	struct ath_txq *txq;
- 	bool key_in_use = false;
- 
-@@ -868,8 +868,9 @@ static bool ath9k_txq_has_key(struct ath_softc *sc, u32 keyix)
- 		if (sc->sc_ah->caps.hw_caps & ATH9K_HW_CAP_EDMA) {
- 			int idx = txq->txq_tailidx;
- 
--			while (!key_in_use &&
--			       !list_empty(&txq->txq_fifo[idx])) {
-+			for (j = 0; !key_in_use &&
-+			     !list_empty(&txq->txq_fifo[idx]) &&
-+			     j < ATH_TXFIFO_DEPTH; j++) {
- 				key_in_use = ath9k_txq_list_has_key(
- 					&txq->txq_fifo[idx], keyix);
- 				INCR(idx, ATH_TXFIFO_DEPTH);
--- 
-2.40.0
-
+Bart
