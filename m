@@ -2,115 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA3E8729386
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB38872936D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:40:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239269AbjFIIoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 04:44:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48054 "EHLO
+        id S234656AbjFIIkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 04:40:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239375AbjFIInm (ORCPT
+        with ESMTP id S241315AbjFIIkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 04:43:42 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E109C1725;
-        Fri,  9 Jun 2023 01:43:32 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Qcvk91pMCz4f3v4d;
-        Fri,  9 Jun 2023 16:43:29 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.104.67])
-        by APP4 (Coremail) with SMTP id gCh0CgBnHbEu5oJkNdspLQ--.1947S6;
-        Fri, 09 Jun 2023 16:43:29 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     hch@lst.de, axboe@kernel.dk, dgilbert@interlog.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, yukuai3@huawei.com,
-        yukuai1@huaweicloud.com, yi.zhang@huawei.com, yangerkun@huawei.com
-Subject: [PATCH v4 2/2] block: fix blktrace debugfs entries leakage
-Date:   Fri,  9 Jun 2023 16:39:13 +0800
-Message-Id: <20230609083913.2254980-3-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230609083913.2254980-1-yukuai1@huaweicloud.com>
-References: <20230609083913.2254980-1-yukuai1@huaweicloud.com>
+        Fri, 9 Jun 2023 04:40:18 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FBA6B9;
+        Fri,  9 Jun 2023 01:39:53 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f6255ad8aeso1877390e87.2;
+        Fri, 09 Jun 2023 01:39:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686299991; x=1688891991;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U7KaDvTnSiAOhtxrXI9e8hMyb073N1sL1o/KOoe1nTE=;
+        b=SfbPH9cruR9dotCW+msb0IPgb0ZkIkiwSYD6FkssF3SKcA03WufipUvsO93SujLTgR
+         VDYAIbYSy2N6zKdy8zBPoEeoowKMrvZZ1j2qiib8zRWJk3Yy068xuaSuC5/NAbqFT4ny
+         DMCqiL4bAE1TyK0qUGJb2BhDsBbUEupZ4JjQwZMA17pObSI9FllmDfhtFGZB31RVw/KQ
+         Nt6o3FBL27+SHSggzJTkDuvRCFJnJgzQUCz8zohGAK9c0A3yn1i2ZKQNeIUKHt4ShLli
+         eqomdVDcOi1p1Nj+BsdoRjzwFbgbkuj8jZIE7+Xz1tqICwMVx0Tj3iQtxn7e7BalX2YH
+         oi+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686299991; x=1688891991;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=U7KaDvTnSiAOhtxrXI9e8hMyb073N1sL1o/KOoe1nTE=;
+        b=jByHbs+1O4mFTMlf5qLRbu6+DfhSsNu6z/OSID0meSKj3Kh8SFDjkNKNth6f1qTL82
+         54rzaRB22E6P9drPUERkU3HYDPGLo3cJIhF/auyynNXdbNLrZV8/nvYyKXTnD2W6Fc1u
+         CWIMCQ2ERiLhvLQJONRQjiENWUiARhZGKd81vY7Bg2gwV/j1pk7osYWXdfjGhgTZOSH/
+         5dadOmdRje8RT9g62VuMORNW34bbLINtXXz0seyEq0Efyyq2Fks7FUzah7r0dqY3R4uY
+         fFBjPzUKxGPUvyLu4twtU6e5qaF5iiuigSSiAAapo3IBvJ9Aby9J6PwgDnBwRTETunHr
+         Cs3g==
+X-Gm-Message-State: AC+VfDxquSo/ijOTxQymhhB1bdTyisOAIfzTRXhuk16j2utYOFrdy4vZ
+        K2ABCNGUQSRXP1vDlju41Pg=
+X-Google-Smtp-Source: ACHHUZ5b2lXvg8Y2AGqYGWqPf+6jSt6zYXUwI8SAye1fksrRg33WvFhKbs2Bqa0QwlMR1jDaSfubYA==
+X-Received: by 2002:ac2:505a:0:b0:4f4:db63:239f with SMTP id a26-20020ac2505a000000b004f4db63239fmr522757lfm.24.1686299991486;
+        Fri, 09 Jun 2023 01:39:51 -0700 (PDT)
+Received: from localhost.localdomain (bba-2-50-150-163.alshamil.net.ae. [2.50.150.163])
+        by smtp.gmail.com with ESMTPSA id d6-20020adffd86000000b0030ae87bd3e3sm3810587wrr.18.2023.06.09.01.39.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 01:39:50 -0700 (PDT)
+From:   Yongsheng Yang <iyysheng@gmail.com>
+To:     corbet@lwn.net
+Cc:     iyysheng@gmai.com, iyysheng@gmail.com, jdelvare@suse.com,
+        linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux@roeck-us.net
+Subject: Re: [PATCH] Documentation/hwmon: Fix description of devm_hwmon_device_unregister
+Date:   Fri,  9 Jun 2023 12:39:35 +0400
+Message-ID: <20230609083935.1340-1-iyysheng@gmail.com>
+X-Mailer: git-send-email 2.41.0.windows.1
+In-Reply-To: <871qilqglv.fsf@meer.lwn.net>
+References: <871qilqglv.fsf@meer.lwn.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBnHbEu5oJkNdspLQ--.1947S6
-X-Coremail-Antispam: 1UD129KBjvJXoW7uw4fWFyxGF1fury7Zr4DXFb_yoW8Ar48pa
-        9xCr4YkrW0vr4avFyDu3W7XF18Ga95WryxAr9agF1avr17Crs8XrZ2vrWIgrWrArZ29FZ8
-        W3WUGr9xArWkXaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBE14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-        x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2
-        xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v2
-        6r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2
-        Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_
-        Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMI
-        IF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUHbyAUUUUU
-        =
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+> YYang <iyysheng@gmail.com> writes:
+> 
+> > From: YYang <iyysheng@gmai.com>
+> >
+> > Use devm_hwmon_device_register_with_info to replace
+> > hwmon_device_register_with_info in description of
+> > devm_hwmon_device_unregister.
+> >
+> > Signed-off-by: YYang <iyysheng@gmai.com>
+> > ---
+> >  Documentation/hwmon/hwmon-kernel-api.rst | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
+> > index c2d1e0299d8d..6cacf7daf25c 100644
+> > --- a/Documentation/hwmon/hwmon-kernel-api.rst
+> > +++ b/Documentation/hwmon/hwmon-kernel-api.rst
+> > @@ -66,7 +66,7 @@ hwmon_device_register_with_info.
+> >  
+> >  devm_hwmon_device_unregister does not normally have to be called. It is only
+> >  needed for error handling, and only needed if the driver probe fails after
+> > -the call to hwmon_device_register_with_info and if the automatic (device
+> > +the call to devm_hwmon_device_register_with_info and if the automatic (device
+> >  managed) removal would be too late.
+> 
+> If, while you're at it, you add the trailing parentheses() to the
+> function name, then the docs build will automatically make a cross-link
+> to the documentation.
+> 
+> Thanks,
+> 
+> jon
 
-Commit 99d055b4fd4b ("block: remove per-disk debugfs files in
-blk_unregister_queue") moves blk_trace_shutdown() from
-blk_release_queue() to blk_unregister_queue(), this is safe if blktrace
-is created through sysfs, however, there is a regression in corner
-case.
+Sure, I have modfied the commit message and post the updated version. Thanks
+for your advice.
 
-blktrace can still be enabled after del_gendisk() through ioctl if
-the disk is opened before del_gendisk(), and if blktrace is not shutdown
-through ioctl before closing the disk, debugfs entries will be leaked.
+Thanks
 
-Fix this problem by shutdown blktrace in disk_release(), this is safe
-because blk_trace_remove() is reentrant.
-
-Fixes: 99d055b4fd4b ("block: remove per-disk debugfs files in blk_unregister_queue")
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
- block/genhd.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/block/genhd.c b/block/genhd.c
-index 3537b7d7c484..fd2a6819be3c 100644
---- a/block/genhd.c
-+++ b/block/genhd.c
-@@ -25,8 +25,9 @@
- #include <linux/pm_runtime.h>
- #include <linux/badblocks.h>
- #include <linux/part_stat.h>
--#include "blk-throttle.h"
-+#include <linux/blktrace_api.h>
- 
-+#include "blk-throttle.h"
- #include "blk.h"
- #include "blk-mq-sched.h"
- #include "blk-rq-qos.h"
-@@ -1171,6 +1172,10 @@ static void disk_release(struct device *dev)
- 	might_sleep();
- 	WARN_ON_ONCE(disk_live(disk));
- 
-+	mutex_lock(&disk->queue->debugfs_mutex);
-+	blk_trace_shutdown(disk->queue);
-+	mutex_unlock(&disk->queue->debugfs_mutex);
-+
- 	/*
- 	 * To undo the all initialization from blk_mq_init_allocated_queue in
- 	 * case of a probe failure where add_disk is never called we have to
--- 
-2.39.2
-
+Yongsheng
