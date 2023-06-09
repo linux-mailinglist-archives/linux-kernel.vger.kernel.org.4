@@ -2,119 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8734C72A160
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 19:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A19EA72A15E
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 19:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231147AbjFIRiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 13:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45782 "EHLO
+        id S229778AbjFIRh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 13:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjFIRiN (ORCPT
+        with ESMTP id S229595AbjFIRhz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 13:38:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6172830E4;
-        Fri,  9 Jun 2023 10:38:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B6E4665A69;
-        Fri,  9 Jun 2023 17:38:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E869CC433D2;
-        Fri,  9 Jun 2023 17:38:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686332291;
-        bh=icNiG/63HCTnQQ5c7BPDl+cCQASiXnUyqyp2rJM4Z+M=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=QQAxK5mux0Cu/S+yYYc9+esD1cUQI12juAHSMPfsDDV4kq76xpRT6V8Rnak9r/aAN
-         rM95uz0eT5Di99BELMhORwpctdUPcgSZ8vxVG1FDk6gQ1/4FWddnv3yuVpBNLghQOS
-         8WXNqrnwfyjVPLXJE5+M20YwFmecXdNbYzNeLgcZocjJSe9zxXlRo+vZuT173xSk8V
-         jmGyLeOGEgy5Nv6jrW+Duy9D+tGRiyoBTwBdC/xHcS3tSI1/BeiMXEWNtvh/+dOpzp
-         y3pdd80GkO6weVLcku+iEcmvXGY92Efao9TkCysF/sly30U0pdYwB9o2r1//6OYG+V
-         RSv5B8c8zGJUg==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+        Fri, 9 Jun 2023 13:37:55 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD87DE4E;
+        Fri,  9 Jun 2023 10:37:52 -0700 (PDT)
+X-GND-Sasl: alexis.lothore@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1686332271;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MQ4UWZI119Iu57pHOjYmAYSbWSzI2+ZEVxuwq6FNsuI=;
+        b=mO/OT8X4tcThPPSE1PqmZdLmTaSOyoq1g7YjekEN/Ni3Rykt6kECY4LCqekesRIC9+PG+L
+        pm0HxrJqT2kBpulKFVwfe6kmrqeP1cbPtFtxCBV3i+x5IXKCred26TIYpoEqvK4HmnsAy+
+        Hp8XJyUGMbwDtC5mFrXYcPHqyRlEFQE5bvDod7yqNl9qiOpL1xTacNjEi9ch+rYMXHz07b
+        qizwFTsx5p+rGkB0xf2c5A0pFH8JHykQR+fyu9Y+nVJ2/5ReKradFxieLZl2e77P/ma3R6
+        iLSiyXyhZx9Cm/HYKtAXIjQ1nHkddrnnUnSO1C8dTm0M1QptNNNycS7wwj0nEQ==
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+X-GND-Sasl: alexis.lothore@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2D736FF802;
+        Fri,  9 Jun 2023 17:37:50 +0000 (UTC)
+Message-ID: <bb799b06-8ca8-8a29-3873-af09c859ae88@bootlin.com>
+Date:   Fri, 9 Jun 2023 19:38:13 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH net-next 2/2] net: dsa: mv88e6xxx: implement egress tbf
+ qdisc for 6393x family
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        paul.arola@telus.com, scott.roberts@telus.com
+References: <20230609141812.297521-1-alexis.lothore@bootlin.com>
+ <20230609141812.297521-3-alexis.lothore@bootlin.com>
+ <d196f8c7-19f7-4a7c-9024-e97001c21b90@lunn.ch>
+ <dbec77de-ee34-e281-3dd4-2332116a0910@bootlin.com>
+ <176f073a-b5ab-4d8a-8850-fcd8eff65aa7@lunn.ch>
+From:   =?UTF-8?Q?Alexis_Lothor=c3=a9?= <alexis.lothore@bootlin.com>
+In-Reply-To: <176f073a-b5ab-4d8a-8850-fcd8eff65aa7@lunn.ch>
 Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 09 Jun 2023 20:38:07 +0300
-Message-Id: <CT8AWM6PDMMX.RAF5C6RS1P95@suppilovahvero>
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Tianjia Zhang" <tianjia.zhang@linux.alibaba.com>,
-        "David Howells" <dhowells@redhat.com>,
-        "David Woodhouse" <dwmw2@infradead.org>,
-        <keyrings@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] sign-file: simplify main function implementation
-X-Mailer: aerc 0.14.0
-References: <20230525084343.56824-1-tianjia.zhang@linux.alibaba.com>
-In-Reply-To: <20230525084343.56824-1-tianjia.zhang@linux.alibaba.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu May 25, 2023 at 11:43 AM EEST, Tianjia Zhang wrote:
-> use_signed_attrs is an unnecessary variable, deleting this variable
-> can simplify the code.
->
-> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-> ---
->  scripts/sign-file.c | 12 ++----------
->  1 file changed, 2 insertions(+), 10 deletions(-)
->
-> diff --git a/scripts/sign-file.c b/scripts/sign-file.c
-> index 94267cf72197..377d586762f9 100644
-> --- a/scripts/sign-file.c
-> +++ b/scripts/sign-file.c
-> @@ -224,7 +224,6 @@ int main(int argc, char **argv)
->  	bool raw_sig =3D false;
->  	unsigned char buf[4096];
->  	unsigned long module_size, sig_size;
-> -	unsigned int use_signed_attrs;
->  	const EVP_MD *digest_algo;
->  	EVP_PKEY *private_key;
->  #ifndef USE_PKCS7
-> @@ -242,12 +241,6 @@ int main(int argc, char **argv)
-> =20
->  	key_pass =3D getenv("KBUILD_SIGN_PIN");
-> =20
-> -#ifndef USE_PKCS7
-> -	use_signed_attrs =3D CMS_NOATTR;
-> -#else
-> -	use_signed_attrs =3D PKCS7_NOATTR;
-> -#endif
-> -
->  	do {
->  		opt =3D getopt(argc, argv, "sdpk");
->  		switch (opt) {
-> @@ -340,8 +333,7 @@ int main(int argc, char **argv)
-> =20
->  		ERR(!CMS_add1_signer(cms, x509, private_key, digest_algo,
->  				     CMS_NOCERTS | CMS_BINARY |
-> -				     CMS_NOSMIMECAP | use_keyid |
-> -				     use_signed_attrs),
-> +				     CMS_NOSMIMECAP | CMS_NOATTR | use_keyid),
->  		    "CMS_add1_signer");
->  		ERR(CMS_final(cms, bm, NULL, CMS_NOCERTS | CMS_BINARY) < 0,
->  		    "CMS_final");
-> @@ -349,7 +341,7 @@ int main(int argc, char **argv)
->  #else
->  		pkcs7 =3D PKCS7_sign(x509, private_key, NULL, bm,
->  				   PKCS7_NOCERTS | PKCS7_BINARY |
-> -				   PKCS7_DETACHED | use_signed_attrs);
-> +				   PKCS7_DETACHED | PKCS7_NOATTR);
->  		ERR(!pkcs7, "PKCS7_sign");
->  #endif
-> =20
-> --=20
-> 2.24.3 (Apple Git-128)
+On 6/9/23 19:16, Andrew Lunn wrote:
+>> Yes, I can do that (or maybe -EINVAL to match Vladimir's comment ?). I think
+>> it's worth mentioning that I encountered an issue regarding those values during
+>> tests: I use tc program to set the tbf, and I observed that tc does not even
+>> reach kernel to set the qdisc if we pass no burst/latency value OR if we set it
+>> to 0. So tc enforces right on userspace side non-zero value for those
+>> parameters, and I have passed random values and ignored them on kernel side.
+> 
+> That is not good. Please take a look around and see if any other
+> driver offloads TBF, and what they do with burst.
+> 
+>> Checking available doc about tc-tbf makes me feel like that indeed a TBF qdisc
+>> command without burst or latency value makes no sense, except my use case can
+>> not have such values. That's what I struggled a bit to find a proper qdisc to
+>> match hardware cap. I may fallback to a custom netlink program to improve testing.
+> 
+> We don't really want a custom application, since we want users to use
+> TC to set this up.
+> 
+> Looking at the 6390 datasheet, Queue Counter Registers, mode 8 gives
+> the number of egress buffers for a port. You could validate that the
+> switch has at least the requested number of buffers assigned to the
+> port? There is quite a bit you can configure, so maybe there is a way
+> to influence the number of buffers, so you can actually implement the
+> burst parameter?
 
-I'm sorry but I don't see how this makes our lives better.
+Thanks for the pointers. I will check the egress buffers configuration and see
+if I can come up with something better
 
-If, however, this was part of a larger patch, it might make sense, if
-there was a real functional change concerning the same code blocks.
+> 
+>       Andrew
 
-BR, Jarkko
+-- 
+Alexis Lothoré, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
