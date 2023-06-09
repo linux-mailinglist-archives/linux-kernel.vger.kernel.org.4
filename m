@@ -2,184 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A193729D70
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:55:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68902729D74
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241724AbjFIOyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 10:54:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36828 "EHLO
+        id S229705AbjFIOzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 10:55:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241648AbjFIOyg (ORCPT
+        with ESMTP id S241616AbjFIOyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 10:54:36 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2089.outbound.protection.outlook.com [40.107.102.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAE2359C
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 07:54:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TvQw11cN1iTSr0SKcJ4SHrBP2ngscc0r66ea+tNoiie4F4RY/crWRkX3V/eUM6jDIYj7tWgGQppJFNXTYPe9HOeeT40K+cOi2anm8FDPhKds/xbvW6ZEFH0PcTlIWlBvYqtS5Gr/bOtTElB8IZ7riOswkMdBPvnvqFiSn2Zry0QLP7wXCFHopeXwiXNpieOcEkCXa8enS3ZkBVmuKOv2oYXu/viRkuyD1TLfASGTwlYVNzsDqwe4+izYgdWP3KGMl+uqcehNUvMJwI9WwIal2/SQMhK8aHW0sgmVTbx712RTzXEyQMe9x4db7kECa8OCLN3TzwixVe8PDYeflOqfVQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SC+YV4Sgfwo8OHcszvKt0afV4qQxDY5hGQdrcwfN8+A=;
- b=UD0ekq3KBSXoKgmFrRnWZD5ZDJtNqCDW7tDymIA3HBu+Jmw3Virt+Xrydb/HpHzVN76nwIj3Utvi9hCkOry6AYJVCf61oyEyvt5wnXZuyl6/6tbzzmS/YYlLJpaZeB8Iz/QBubwue/m7cedvbc7cOvmUToD4LnBX2Dn/Ynv7PRVXgNRbRYZxDQfa2GZHT7vv96gpeYTC8GgV/22buM6mVky4h5GXyI6rMD2x9L91y8be0kZmsg68BVvhLctRjcq/YGxZYxYH6M0ZMS3DSe75ampV4GUINVepE0TZQk1LW0TxmTVVDDzncRCjKpP90fIPWAIjnE8AnMj05O8ZpXlkBQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SC+YV4Sgfwo8OHcszvKt0afV4qQxDY5hGQdrcwfN8+A=;
- b=bIe6o8lqIEmUdw3Wc1pyjZkjZaVqzfsEoUShWKWSChkMMk7cS6Ovq1GSuxNMVwZmGCDHi30hrlCJDfhpAiScQzKsGtpi+cYszdRv0YOzeV6WN7bcAtV+8lAjIDZ8D5udriKF6P/S3n++g5KWkiKljQv5qTsLNYJlBs79HwmPdfk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
- by BL3PR12MB6595.namprd12.prod.outlook.com (2603:10b6:208:38e::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.42; Fri, 9 Jun
- 2023 14:54:26 +0000
-Received: from CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::4666:2db3:db1e:810c]) by CO6PR12MB5427.namprd12.prod.outlook.com
- ([fe80::4666:2db3:db1e:810c%7]) with mapi id 15.20.6455.037; Fri, 9 Jun 2023
- 14:54:26 +0000
-Message-ID: <3f71e132-8b9b-8f54-973c-ad9403369c1a@amd.com>
-Date:   Fri, 9 Jun 2023 10:54:22 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [RESEND 11/15] drm/amd/display/amdgpu_dm/amdgpu_dm_helpers: Move
- SYNAPTICS_DEVICE_ID into CONFIG_DRM_AMD_DC_DCN ifdef
-To:     Lee Jones <lee@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-References: <20230609081732.3842341-1-lee@kernel.org>
- <20230609081732.3842341-12-lee@kernel.org>
-Content-Language: en-US
-From:   Harry Wentland <harry.wentland@amd.com>
-In-Reply-To: <20230609081732.3842341-12-lee@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: YQBPR0101CA0057.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c00:1::34) To CO6PR12MB5427.namprd12.prod.outlook.com
- (2603:10b6:5:358::13)
+        Fri, 9 Jun 2023 10:54:37 -0400
+Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E41733A97;
+        Fri,  9 Jun 2023 07:54:34 -0700 (PDT)
+Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-777a2ef8d45so76973039f.2;
+        Fri, 09 Jun 2023 07:54:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686322474; x=1688914474;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QL/Lam7XSRby/6zHuK8ihMzigScvLNfSZKDbqyqBYWA=;
+        b=FbPcnG4GwCCrW3SGjMQjmkKU3oTjWz+33jXNW8Jmblwww0oi8S5Om8tYjl+90sTxcs
+         +Qv82KCUpCvhmDnf/nxNixPjYzDxOLQn5+H1ez4EhKo1VHuX7Rh6xoktFBRvIlqfWebG
+         hz8jpqqC05+ZbRy5uOQuCw8t66ML1PdbI6VDybIsaZshkswVUlVaAv6tMRuH27+vgWac
+         5ejknrGRAsY77mAq6OO5BozrkvQJACh7QbrPRg/eJCvYEojhB6MEcYLfXtPb80FCpl93
+         dNUS/LXkuWZXjX/qpyMKx3jdrOJQuxvf/T8E5ak4HUK7WZ4FlVaXqwD0zLCpFuYqZ4Tp
+         aENw==
+X-Gm-Message-State: AC+VfDzWEaj+m7LhuaUMPmQDJsxSzdwQBYD/oVnxzt30qOZfPU3uLNrE
+        vkfDHBtWbYqAxWeC4vnJRQ==
+X-Google-Smtp-Source: ACHHUZ5HUe2/EJqtSSvqF99Jez8LUfwrnSAZkcHuhlvuSAuxzKlXfZZXQ7vt+b4u5NJerQklab+UoQ==
+X-Received: by 2002:a6b:770e:0:b0:774:9a92:f1c9 with SMTP id n14-20020a6b770e000000b007749a92f1c9mr1616726iom.19.1686322474036;
+        Fri, 09 Jun 2023 07:54:34 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id d11-20020a02a48b000000b0041a9c4e0f1csm1005631jam.109.2023.06.09.07.54.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 07:54:33 -0700 (PDT)
+Received: (nullmailer pid 915546 invoked by uid 1000);
+        Fri, 09 Jun 2023 14:54:31 -0000
+Date:   Fri, 9 Jun 2023 08:54:31 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Pavel Machek <pavel@ucw.cz>, linux-pm@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [RFC PATCH 1/1] fdt: Mark "/reserved-memory" nodes as nosave if
+ !reusable
+Message-ID: <20230609145431.GA887298-robh@kernel.org>
+References: <20230530080425.18612-1-alexghiti@rivosinc.com>
+ <20230530080425.18612-2-alexghiti@rivosinc.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|BL3PR12MB6595:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9dde8987-5763-44bd-16b2-08db68f96bba
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EqWRpxU6MhWdoQjJGf4TXkdBu1JTgYMZ2HkblSbCzBIlu8DRAL0hjOX5mVbYFF0Kd1V7aBtiLR/xRu9X6ld5TK3nPHFzwMNbp0vV/ZSQ9JGqmPCnURi19DcFjDs5O4QFLDvU+ku+KxybfyUQO6iDgdn40emVQzQ1QbeAfHiAUKU82LcVtasHxV39Bc4Z9CGM0O07Va9iWdW3YM1aZMrn9CN2+JJbpAX5fSQMmPafVIerk/D3TNGniMxjKME255qGJmRNG7VntfBE8CjJYQPWYIVk/uMkQ8eAmpMOJuRGzZ1H4SJJvzMphpKHtLwHrdDIE1II3UxFQ6evLJJAYxxxUS8hUl7LkmdQKV0abRjIzCplJdSEW9ZSr6O8wawIOEgQGdBkIB1ErGTIzzxV4E7qjRGDRz6moZtlGeTcnZCIevYdawrA17FbBXgrALIfur+luzYFtu5K6dpvgd+ThzoqqD2E9NdNvZx/epVp8apeVIyloGs4rB44Ne/aTf3AzH2UySaA2yoqEEmTApLg5/gDp9ZZuMgdnvfPseEpS59grN5tnwaO/My8MJ76SAVTCTziP8+TLaYJSRESGX3z8ZKj0KxNi77ofdiRI4z2xLo3gS1Kx26Wsg/lbe1fI9gdKsUxU3poH75BSbv3+xr43H5gyg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(39860400002)(376002)(346002)(136003)(451199021)(2906002)(31686004)(44832011)(66574015)(83380400001)(5660300002)(8936002)(8676002)(54906003)(316002)(36756003)(66946007)(66556008)(41300700001)(4326008)(6916009)(478600001)(6486002)(6666004)(66476007)(186003)(31696002)(2616005)(86362001)(38100700002)(6512007)(6506007)(26005)(53546011)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TDBlMEFvOGs1OUZnY3ByYmlxQ1VWT3dDZE5mcXUzZHllMzhRdytab1J6dzZv?=
- =?utf-8?B?UW5BT0NOb0RUT2t3YzJnbS9XdE5CV3VpVTVVSnFQQUowenhIZkx1VmR5ZHZm?=
- =?utf-8?B?MCtOQnY1UHFqY0ZxRFpuQjhHMnU5MjZ2Qk9sbVlxVGJBVVJBb3UrN0FjQWdh?=
- =?utf-8?B?VXBnUHRINHRvU1VSWlIvM3VaaS9STGdMUGwvd1dSbmxyRzQxSit3Y2YvYzhF?=
- =?utf-8?B?T2tsKzlBeDIzUml1UTBnakE3RVpIYmxQNFIzZEJHcHBqZ1BnRm5HbTFyUlVo?=
- =?utf-8?B?SGRLaUdOc2NlTnpoZUxLcmxMMmREcGplZ3U1KzljdStYWUFvWG5xdCtmWFlr?=
- =?utf-8?B?Y1BaS0RnQ045cHZNMEorUzlyYTBRUTY1Unc1Z05sc0FBMm5LSytNMWEzY3VP?=
- =?utf-8?B?UjE3TUE5L00vQU1tNm1SWkZNZE9xSXRUNlhkSFBKS042dmtneHpFdTU2MUZt?=
- =?utf-8?B?Y2duV25KbXJ5SG53OEF6eElQTEE2NUdjbzNKdk1ha3F4MDFFSllJczNSdmhr?=
- =?utf-8?B?b1lEQ2dCZVpVQWNSUDFSYWx4bHA1ZXUrbExWcjh1OVZudDN0ZXc3d1pTdC8x?=
- =?utf-8?B?dWlmQzJ1YUpZZFo0WHJqQXlzYUF6YzZnSzdBcjhtZEtHQUN3S3czWWE0c1ZW?=
- =?utf-8?B?NXhvTnJ6RDNKMXJGUFJUNXFWS0NHc0RJZ1lIY1BiOG84ekFLYk1IMWN2M2xz?=
- =?utf-8?B?T0RIeThMVEhlOUdaMXE2allyeHJPYjhmeU1yMUVZcitDaXZWcUNjUWwwcHU0?=
- =?utf-8?B?WXQrOUtyR0JGd1YybCtadzIxcUFiV3AyeGYxSndFTzFHQ2t5N0ZvZnFOVXhY?=
- =?utf-8?B?MUtyZmg2azMwVTA5OEJLOC9tTDRpSW5CTXBWM0ZnZ0N4cDJrRy9xSHNld2hi?=
- =?utf-8?B?aWlaMWI5N04vNGorUk4wTThQMFdOWnRpY1NqaS80RWl4aDZ3SFZpc0FQWmZm?=
- =?utf-8?B?clYzTTM1ME4vbE0vWk5PRGsvdDJNRWRIK0FhQnphcjNVWUNqd3c3czgzQ3Az?=
- =?utf-8?B?RFY0cVFKa2plVFdKS09WUHB0alpxcDRzYVlPc3FYekZ1cVA2ZVFGSUlKZk1U?=
- =?utf-8?B?Y2FwaS9YOUJZRlZmZ1hYU2t6THRiYUNnZ0JYWTVsUXl5amRXbmhaZWdKanRJ?=
- =?utf-8?B?cjk1MWxFSlJ3TUxHenhIbFJYRXdJTVc3T1R0QzdiRzJrayt5OG5INDdNQytV?=
- =?utf-8?B?cDlrV0M5Z0pIL1hrM01CYm11eXg2MTRhWU9SbUsxVGxXZytKUjlFa3F1QzF5?=
- =?utf-8?B?SmhPc1pBTkVJTkorbEQ1Z2E0Z2R0L0pHMXVxYzlhWndSTnRBaTgvTFVBektI?=
- =?utf-8?B?OHBHdmRqVjVxS0NuQWQyODBybVdUM2pjM3VQTFRxNmhoWjlaQS92MDNCamhT?=
- =?utf-8?B?RzFBeEkybHE2b1NhVlZ0YVZtTkNIOFY5MG1WUWNIdnBURCtsOCs2VDVQR1hG?=
- =?utf-8?B?MXVaSVlHR25NaW40eGQvOHA1QkNjazBBdWdqVjMvNFFvZjVLZmttdU1OMVRr?=
- =?utf-8?B?YXNYMXg2QjF5ZjNoWHRPVlVuUW9XVEtIbUdtL0w4bGdWTlB0dytieVNYRTEy?=
- =?utf-8?B?bUpEcnJKY1dxSGVGZ0pZYmg4WVptcWdWMDZtTklnWUhWNHR5M3k2WTFTdnA0?=
- =?utf-8?B?eDFlNjJjSlh5ZzBHYWhpWnhPdDVPSnJjZVd4eTcvS01qZjlRdnBMMEJWcjVs?=
- =?utf-8?B?OUVPZ1pYNzZzcFZNMDNMcVZHYjdBNU4wd05sQkhzeGJDeTRFcjUyaUlCVnI1?=
- =?utf-8?B?VzhZM20rZW5DZ1k4QjVndm9iR2JHamtHRnZHT1dZNlZXb21DcFlMSXpHb1pR?=
- =?utf-8?B?TzRLbTgyV0oxRGkvYUI0VzdMeFluUkliTWxDMUFiNGhvblpIUzNIS2Zydzlz?=
- =?utf-8?B?YXNBWExRYzBUODZENjMyK3pucENHdUtCUTcvVm0xdU5QTG9MU0I4T0M0NU5X?=
- =?utf-8?B?NEQzUVhrY24yMEZIaDcwQW0reDlhaFFHdTlReExYMW1YcTkvazFWNTJSczV2?=
- =?utf-8?B?WlQzaldsaVJINll6QjYzejNwVEZyQllnR3dCVmZ0MWRLOXBSUnlnd3ArSFpV?=
- =?utf-8?B?OEpzaUZjdm4weHdsdWtsTnpTTjRMWWNYY0V5Tm56YUdVamdIcFJRTytIVWg1?=
- =?utf-8?Q?ucI9DNZMQq4V46qlA20opF4Iy?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9dde8987-5763-44bd-16b2-08db68f96bba
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 14:54:26.8480
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HKD44Gqsd4iuJwBPBVtN0F57qAKtM85dTX07HAnge0kPlfWwISLUW7hPpc/t3MgesAhG62bsumXomjzbtFZFag==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6595
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530080425.18612-2-alexghiti@rivosinc.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/9/23 04:17, Lee Jones wrote:
-> Fixes the following W=1 kernel build warning(s):
+On Tue, May 30, 2023 at 10:04:25AM +0200, Alexandre Ghiti wrote:
+> The hibernation process will access those reserved memory regions if
+> they are part of the linear mapping, but as described in
+> devicetree/bindings/reserved-memory/reserved-memory.yaml,
+> "/reserved-memory" nodes should not be used as normal memory, unless they
+> are marked as reusable which means the kernel can access it at some point.
 > 
->  drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm_helpers.c:48:22: warning: ‘SYNAPTICS_DEVICE_ID’ defined but not used [-Wunused-const-variable=]
+> Otherwise those regions are only used by drivers which should do what's
+> necessary when the hibernation process is started, or they can contain
+> the firmware reserved memory regions which should not be accessed at all.
+
+Hibernation is only one case. Speculative accesses could also occur. I 
+think some of the memory debugging stuff will walk memory as well. If 
+something can't be accessed, it better have 'no-map'.
+
 > 
-> Cc: Harry Wentland <harry.wentland@amd.com>
-> Cc: Leo Li <sunpeng.li@amd.com>
-> Cc: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-> Cc: Alex Deucher <alexander.deucher@amd.com>
-> Cc: "Christian König" <christian.koenig@amd.com>
-> Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
-> Cc: David Airlie <airlied@gmail.com>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: amd-gfx@lists.freedesktop.org
-> Cc: dri-devel@lists.freedesktop.org
-> Signed-off-by: Lee Jones <lee@kernel.org>
-
-Reviewed-by: Harry Wentland <harry.wentland@amd.com>
-
-Harry
-
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
 > ---
->  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  arch/riscv/kernel/setup.c |  2 +
+
+How is this specific to Risc-V? Hint, it's not.
+
+>  drivers/of/fdt.c          | 77 +++++++++++++++++++++++++++++++++++++++
+>  include/linux/of_fdt.h    |  1 +
+>  3 files changed, 80 insertions(+)
 > 
-> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-> index 09e056a647087..cd20cfc049969 100644
-> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_helpers.c
-> @@ -44,9 +44,6 @@
->  #include "dm_helpers.h"
->  #include "ddc_service_types.h"
->  
-> -/* MST Dock */
-> -static const uint8_t SYNAPTICS_DEVICE_ID[] = "SYNA";
-> -
->  /* dm_helpers_parse_edid_caps
->   *
->   * Parse edid caps
-> @@ -702,6 +699,9 @@ static void apply_synaptics_fifo_reset_wa(struct drm_dp_aux *aux)
->  	DC_LOG_DC("Done apply_synaptics_fifo_reset_wa\n");
+> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+> index 36b026057503..642f1035b5ce 100644
+> --- a/arch/riscv/kernel/setup.c
+> +++ b/arch/riscv/kernel/setup.c
+> @@ -299,6 +299,8 @@ void __init setup_arch(char **cmdline_p)
+>  	if (IS_ENABLED(CONFIG_RISCV_ISA_ZICBOM) &&
+>  	    riscv_isa_extension_available(NULL, ZICBOM))
+>  		riscv_noncoherent_supported();
+> +
+> +	early_init_fdt_nosave_reserved_mem();
 >  }
 >  
-> +/* MST Dock */
-> +static const uint8_t SYNAPTICS_DEVICE_ID[] = "SYNA";
+>  static int __init topology_init(void)
+> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+> index bf502ba8da95..863de7e6b10c 100644
+> --- a/drivers/of/fdt.c
+> +++ b/drivers/of/fdt.c
+> @@ -26,6 +26,7 @@
+>  #include <linux/serial_core.h>
+>  #include <linux/sysfs.h>
+>  #include <linux/random.h>
+> +#include <linux/suspend.h>
+>  
+>  #include <asm/setup.h>  /* for COMMAND_LINE_SIZE */
+>  #include <asm/page.h>
+> @@ -494,6 +495,43 @@ static int __init early_init_dt_reserve_memory(phys_addr_t base,
+>  	return memblock_reserve(base, size);
+>  }
+>  
+> +/*
+> + * __reserved_mem_nosave_reg() - Make all memory described in 'reg' property as
+> + * nosave, unless it is "reusable".
+> + */
+> +static void __init __reserved_mem_nosave_reg(unsigned long node,
+> +					     const char *uname)
+> +{
+> +	int t_len = (dt_root_addr_cells + dt_root_size_cells) * sizeof(__be32);
+> +	phys_addr_t base, size;
+> +	int len;
+> +	const __be32 *prop;
+> +	bool reusable;
 > +
->  static uint8_t write_dsc_enable_synaptics_non_virtual_dpcd_mst(
->  		struct drm_dp_aux *aux,
->  		const struct dc_stream_state *stream,
-
+> +	prop = of_get_flat_dt_prop(node, "reg", &len);
+> +	if (!prop)
+> +		return;
+> +
+> +	if (len && len % t_len != 0) {
+> +		pr_err("Reserved memory: invalid reg property in '%s', skipping node.\n",
+> +		       uname);
+> +		return;
+> +	}
+> +
+> +	reusable = of_get_flat_dt_prop(node, "reusable", NULL) != NULL;
+> +
+> +	while (len >= t_len) {
+> +		base = dt_mem_next_cell(dt_root_addr_cells, &prop);
+> +		size = dt_mem_next_cell(dt_root_size_cells, &prop);
+> +
+> +		if (size && !reusable)
+> +			register_nosave_region(phys_to_pfn(base),
+> +					       phys_to_pfn(base + size));
+> +
+> +		len -= t_len;
+> +	}
+> +}
+> +
+>  /*
+>   * __reserved_mem_reserve_reg() - reserve all memory described in 'reg' property
+>   */
+> @@ -596,6 +634,38 @@ static int __init fdt_scan_reserved_mem(void)
+>  	return 0;
+>  }
+>  
+> +/*
+> + * fdt_nosave_reserved_mem() - scan a single FDT node to mark reserved memory
+> + * as nosave.
+> + */
+> +static int __init fdt_nosave_reserved_mem(void)
+> +{
+> +	int node, child;
+> +	const void *fdt = initial_boot_params;
+> +
+> +	node = fdt_path_offset(fdt, "/reserved-memory");
+> +	if (node < 0)
+> +		return -ENODEV;
+> +
+> +	if (__reserved_mem_check_root(node) != 0) {
+> +		pr_err("Reserved memory: unsupported node format, ignoring\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	fdt_for_each_subnode(child, fdt, node) {
+> +		const char *uname;
+> +
+> +		if (!of_fdt_device_is_available(fdt, child))
+> +			continue;
+> +
+> +		uname = fdt_get_name(fdt, child, NULL);
+> +
+> +		__reserved_mem_nosave_reg(child, uname);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  /*
+>   * fdt_reserve_elfcorehdr() - reserves memory for elf core header
+>   *
+> @@ -649,6 +719,13 @@ void __init early_init_fdt_scan_reserved_mem(void)
+>  	fdt_init_reserved_mem();
+>  }
+>  
+> +void __init early_init_fdt_nosave_reserved_mem(void)
+> +{
+> +#ifdef CONFIG_HIBERNATION
+> +	fdt_nosave_reserved_mem();
+> +#endif
+> +}
+> +
+>  /**
+>   * early_init_fdt_reserve_self() - reserve the memory used by the FDT blob
+>   */
+> diff --git a/include/linux/of_fdt.h b/include/linux/of_fdt.h
+> index d69ad5bb1eb1..55eb5a0f7305 100644
+> --- a/include/linux/of_fdt.h
+> +++ b/include/linux/of_fdt.h
+> @@ -63,6 +63,7 @@ extern int early_init_dt_scan_memory(void);
+>  extern void early_init_dt_check_for_usable_mem_range(void);
+>  extern int early_init_dt_scan_chosen_stdout(void);
+>  extern void early_init_fdt_scan_reserved_mem(void);
+> +extern void early_init_fdt_nosave_reserved_mem(void);
+>  extern void early_init_fdt_reserve_self(void);
+>  extern void early_init_dt_add_memory_arch(u64 base, u64 size);
+>  extern u64 dt_mem_next_cell(int s, const __be32 **cellp);
+> -- 
+> 2.39.2
+> 
