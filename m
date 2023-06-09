@@ -2,135 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEEC2729A30
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 14:42:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6281E729A36
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 14:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240656AbjFIMmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 08:42:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48270 "EHLO
+        id S239126AbjFIMoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 08:44:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231244AbjFIMmk (ORCPT
+        with ESMTP id S231332AbjFIMoH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 08:42:40 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D3AF210A;
-        Fri,  9 Jun 2023 05:42:39 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 67B61AB6;
-        Fri,  9 Jun 2023 05:43:24 -0700 (PDT)
-Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.38.153])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2D34D3F6C4;
-        Fri,  9 Jun 2023 05:42:37 -0700 (PDT)
-Date:   Fri, 9 Jun 2023 13:42:34 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, catalin.marinas@arm.com,
-        Mark Brown <broonie@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH V11 06/10] arm64/perf: Enable branch stack events via
- FEAT_BRBE
-Message-ID: <ZIMeOt6XdhjPdXHC@FVFF77S0Q05N.cambridge.arm.com>
-References: <20230531040428.501523-1-anshuman.khandual@arm.com>
- <20230531040428.501523-7-anshuman.khandual@arm.com>
- <ZH3mhorKNo77hsv5@FVFF77S0Q05N>
- <cd1d272b-4794-d0d8-af43-aba4b7484b22@arm.com>
+        Fri, 9 Jun 2023 08:44:07 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77DEB213C
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 05:44:06 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b1ac373c9eso18729951fa.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 05:44:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686314645; x=1688906645;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NSxaUXxA3v6MfdCS97GJnnnNUnfVhHSbVUVcWDve3k8=;
+        b=vy2vU1HTzFwFufF7h/CIoAsybtmqfBgDGxdQ9Mpwws5NBsO+6dMmuBGTvouGE8rpKC
+         ISzjhZ7eS7qXEaypOi1SO4/oKIWG175WT4oVZoXloUPnRXY57aUh0CnGzUnKvmr/CYhA
+         xzztK6uDYtYKS71FFI2Q326ZNxFBdyOMh+gvlGeJYACI1k4PWe0LdscAYlXAQt+fm0+d
+         wmjHwjw3S+nWZ6eOaU+LlkfmIiPBLqhXmz/ZG3YQZd+e4IAWjp9ZBOJI/Oieki4PrUBA
+         pYH7DbW0Ep07l+oJ1nSuAuNKfk/5KsP4hFATSwHBo3/CTE4ER1YQtIXQe1FddBvF1mmn
+         p2cA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686314645; x=1688906645;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NSxaUXxA3v6MfdCS97GJnnnNUnfVhHSbVUVcWDve3k8=;
+        b=CHR4+87mE2nQVQjWrTMrpBEW5PrNefjH9xKmzy5O2VrZe6xt83ckH9vyGYKJLyV1ny
+         G84O4MJCDjp2scFm9Ya729TaBiV6L+fHZG3wZ1UeN5jHu+dj5IxpBG+mXrigYquiyZjV
+         A8DYRBxvaZgBkhgPioqAX3YO1A5yTjZBpYaU7MOy8AEcHHH6LtKXkWr/MA48jz4QdLSO
+         0I23dzPIOG1oANVD2k5tUDaoPnNm0ZQLFMys6ieoTqqnWP9nuviepOh/XG5kwlGOeFqa
+         Tw9pBafc2tD543mLfYBqWjgoHPomML+pfrZjze5k77Oj0jndEAXK8LW0tjREkN5wypr0
+         e/Ig==
+X-Gm-Message-State: AC+VfDyAbq1qDXv26e/4Ocy5jeThxKO6ynFEFKWpc9FXGY8WI4E2g9vv
+        7NT8gZlYg3A1KBk+5zhCuPgh4Q==
+X-Google-Smtp-Source: ACHHUZ5r9nHEVEUyM8k1U2LrMpaQODEgErzJkwTgFw4Q8Gxu08FLt2WMKm0+f5gvel+hQdGiS9wz7g==
+X-Received: by 2002:a2e:7217:0:b0:2b1:b095:c5cd with SMTP id n23-20020a2e7217000000b002b1b095c5cdmr1017784ljc.0.1686314644659;
+        Fri, 09 Jun 2023 05:44:04 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id d21-20020a2eb055000000b002aeee2a093csm381661ljl.59.2023.06.09.05.44.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Jun 2023 05:44:04 -0700 (PDT)
+Message-ID: <6d99ffb5-a72a-168f-858f-8fa01f7593f3@linaro.org>
+Date:   Fri, 9 Jun 2023 14:44:02 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cd1d272b-4794-d0d8-af43-aba4b7484b22@arm.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH V3 3/5] clk: qcom: camcc-sm8550: Add camera clock
+ controller driver for SM8550
+Content-Language: en-US
+To:     Jagadeesh Kona <quic_jkona@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Taniya Das <quic_tdas@quicinc.com>,
+        Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
+        Imran Shaik <quic_imrashai@quicinc.com>,
+        Ajit Pandey <quic_ajipan@quicinc.com>
+References: <20230601143430.5595-1-quic_jkona@quicinc.com>
+ <20230601143430.5595-4-quic_jkona@quicinc.com>
+ <95bd4c66-08c6-15f3-db6c-97f820fe5517@linaro.org>
+ <cf60ea04-057b-7856-3a30-775051cefa26@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <cf60ea04-057b-7856-3a30-775051cefa26@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 10:17:19AM +0530, Anshuman Khandual wrote:
-> On 6/5/23 19:13, Mark Rutland wrote:
-> >> +/*
-> >> + * A branch record with BRBINFx_EL1.LASTFAILED set, implies that all
-> >> + * preceding consecutive branch records, that were in a transaction
-> >> + * (i.e their BRBINFx_EL1.TX set) have been aborted.
-> >> + *
-> >> + * Similarly BRBFCR_EL1.LASTFAILED set, indicate that all preceding
-> >> + * consecutive branch records up to the last record, which were in a
-> >> + * transaction (i.e their BRBINFx_EL1.TX set) have been aborted.
-> >> + *
-> >> + * --------------------------------- -------------------
-> >> + * | 00 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX success]
-> >> + * --------------------------------- -------------------
-> >> + * | 01 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX success]
-> >> + * --------------------------------- -------------------
-> >> + * | 02 | BRBSRC | BRBTGT | BRBINF | | TX = 0 | LF = 0 |
-> >> + * --------------------------------- -------------------
-> >> + * | 03 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX failed]
-> >> + * --------------------------------- -------------------
-> >> + * | 04 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX failed]
-> >> + * --------------------------------- -------------------
-> >> + * | 05 | BRBSRC | BRBTGT | BRBINF | | TX = 0 | LF = 1 |
-> >> + * --------------------------------- -------------------
-> >> + * | .. | BRBSRC | BRBTGT | BRBINF | | TX = 0 | LF = 0 |
-> >> + * --------------------------------- -------------------
-> >> + * | 61 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX failed]
-> >> + * --------------------------------- -------------------
-> >> + * | 62 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX failed]
-> >> + * --------------------------------- -------------------
-> >> + * | 63 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX failed]
-> >> + * --------------------------------- -------------------
-> >> + *
-> >> + * BRBFCR_EL1.LASTFAILED == 1
-> >> + *
-> >> + * BRBFCR_EL1.LASTFAILED fails all those consecutive, in transaction
-> >> + * branches records near the end of the BRBE buffer.
-> >> + *
-> >> + * Architecture does not guarantee a non transaction (TX = 0) branch
-> >> + * record between two different transactions. So it is possible that
-> >> + * a subsequent lastfailed record (TX = 0, LF = 1) might erroneously
-> >> + * mark more than required transactions as aborted.
-> >> + */
-> > Linux doesn't currently support TME (and IIUC no-one has built it), so can't we
-> > delete the transaction handling for now? We can add a comment with somehing like:
-> > 
-> > /*
-> >  * TODO: add transaction handling for TME.
-> >  */
-> > 
-> > Assuming no-one has built TME, we might also be able to get an architectural
-> > fix to disambiguate the boundary between two transactions, and avoid the
-> > problem described above.
-> > 
-> > [...]
-> > 
+
+
+On 9.06.2023 13:49, Jagadeesh Kona wrote:
+> Hi Dmitry,
 > 
-> OR can leave this unchanged for now. Then update it if and when the relevant
-> architectural fix comes in. The current TME branch records handling here, is
-> as per the current architectural specification.
+> Thanks for your review!
+> 
+> On 6/1/2023 8:21 PM, Dmitry Baryshkov wrote:
+>> On 01/06/2023 17:34, Jagadeesh Kona wrote:
+>>> Add support for the camera clock controller for camera clients to be
+>>> able to request for camcc clocks on SM8550 platform.
+>>>
+>>> Co-developed-by: Taniya Das <quic_tdas@quicinc.com>
+>>> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+>>> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
+>>> ---
+>>> Changes since V2:
+>>>   - No changes
+>>> Changes since V1:
+>>>   - Sorted the PLL names in proper order
+>>>   - Updated all PLL configurations to lower case hex
+>>>   - Reused evo ops instead of adding new ops for ole pll
+>>>   - Moved few clocks to separate patch to fix patch too long error
+>>>
+>>>   drivers/clk/qcom/Kconfig        |    7 +
+>>>   drivers/clk/qcom/Makefile       |    1 +
+>>>   drivers/clk/qcom/camcc-sm8550.c | 3405 +++++++++++++++++++++++++++++++
+>>>   3 files changed, 3413 insertions(+)
+>>>   create mode 100644 drivers/clk/qcom/camcc-sm8550.c
+>>>
+>>
+>> [skipped]
+>>
+>>> +
+>>> +static struct platform_driver cam_cc_sm8550_driver = {
+>>> +    .probe = cam_cc_sm8550_probe,
+>>> +    .driver = {
+>>> +        .name = "cam_cc-sm8550",
+>>> +        .of_match_table = cam_cc_sm8550_match_table,
+>>> +    },
+>>> +};
+>>> +
+>>> +static int __init cam_cc_sm8550_init(void)
+>>> +{
+>>> +    return platform_driver_register(&cam_cc_sm8550_driver);
+>>> +}
+>>> +subsys_initcall(cam_cc_sm8550_init);
+>>> +
+>>> +static void __exit cam_cc_sm8550_exit(void)
+>>> +{
+>>> +    platform_driver_unregister(&cam_cc_sm8550_driver);
+>>> +}
+>>> +module_exit(cam_cc_sm8550_exit);
+>>
+>> Please convert this to use module_platform_driver
+>>
+> 
+> We still have to evaluate if module_platform_driver() works for us in all scenarios. We will post a cleanup patch once we conclude on module_platform_driver().
+With the arm64 defconfig, CCI and CAMSS are compiled in as modules. Since
+they are not boot-critical components, this will likely not change.
 
-My rationale for deleting it is that it cannot be used and cannot be tested,
-since the kernel doesn't support TME, and there are no TME implementations out
-there. If and when we support TME in the kernel, this is very likely to have
-bit-rotted.
-
-I'd be happy to link to the current version, e.g.
-
-/*
- * TODO: add transaction handling for FEAT_TME. See:
- *
- * https://lore.kernel.org/linux-arm-kernel/20230531040428.501523-7-anshuman.khandual@arm.com/
- */
-
-I do appreciate that time and effort has gone into writing this, but IMO it's
-more distracting than helpful at present, and deleting it makes this easier to
-review and maintain.
-
-Thanks,
-Mark.
+Konrad
+> 
+>>> +
+>>> +MODULE_DESCRIPTION("QTI CAMCC SM8550 Driver");
+>>> +MODULE_LICENSE("GPL");
+>>
+> 
+> Thanks & Regards,
+> Jagadeesh
