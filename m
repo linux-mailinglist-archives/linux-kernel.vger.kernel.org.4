@@ -2,105 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7DAE72994C
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 14:13:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C0A7729950
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 14:14:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240110AbjFIMN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 08:13:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58346 "EHLO
+        id S239458AbjFIMOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 08:14:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232145AbjFIMNY (ORCPT
+        with ESMTP id S231183AbjFIMOd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 08:13:24 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B352AEB
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 05:13:23 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-97668583210so258733166b.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 05:13:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686312802; x=1688904802;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/d+dHBgEekjDSHClTJsQ6wFO80YgJRYqTq5jLwHrLwA=;
-        b=ypCdboJHyF8Pl/ysbJkoYgLbs2KgBOkv6jkgGU15xvwv23HstfZfrsJpg3tC1MEEuz
-         vXmsyfIHbJSOHw3ZFkrvJooHvlXZN2EMJ8xsL2krSz5bWH5IZwiqmMvvw9Qc0sSy30vD
-         NmqHwwxnfIoReQ4ETAfHr5AdQJ2M5iARlfood5WIeTn8qAk9NBXlbuPplX6UMwgJGrL5
-         kASZo4ZlpTQE5zwrRUKwOgB1ygNTimN3wYxxF54lXaeqr/qaccSB26ev+k4Voe5O6/CE
-         fP7zDagujvUUHxFk7N8/5CMjkBKJ8IbqJMASia8SWduXSrKaejVH9jyhSMqygHKbz3VE
-         kK6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686312802; x=1688904802;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/d+dHBgEekjDSHClTJsQ6wFO80YgJRYqTq5jLwHrLwA=;
-        b=DyC5MumTkC3C2YbmPlmyE0+P0nORyWgjE6z6YkP5Fkfl3YK+m6STqexc6oR/8mlhph
-         NtPBzpQlbYgOC4loBUdb5dnsJHFJlWD07qBmOZO13pev6KkZbj6xwopX/tQj9dPGKJ0p
-         VA4LUKpCDDhCGjdBN76X3lqTlwsSHSPkkeu+gT/j/5o0es9eHX0W/xSRscVmp76Xbii6
-         FIsSWvfDS34UwSsmGZjWrNIep3mbpXeCVNBSyb/9Rr+nno3akrK+lJxHtPNm4tfTGMY2
-         sA2hd//5RZgXZlD8bV67m1jId6MuFF5P5gy0SZQiQGKPqKclHXJ2RGisTd/En+b1K2SU
-         7ZvQ==
-X-Gm-Message-State: AC+VfDwDCgbjvscy6BPK0SjHpiATAMtsxwuFRpupeo/YnSSEQTPGzl0V
-        SlR0FSzaI9OTQccjbw/CB1VGvOZkM4Q9heNPhqQ=
-X-Google-Smtp-Source: ACHHUZ448AEQ91mBl1jmqqcGkRQTF/d2BTQKH4v4bK07JoAJsj99mIAC7VHg/3tDLGCNWOO1iKpbXA==
-X-Received: by 2002:a17:907:d9e:b0:974:630a:fbac with SMTP id go30-20020a1709070d9e00b00974630afbacmr1485064ejc.18.1686312802221;
-        Fri, 09 Jun 2023 05:13:22 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id e26-20020a1709062c1a00b00974556e50a6sm1223271ejh.114.2023.06.09.05.13.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Jun 2023 05:13:21 -0700 (PDT)
-Message-ID: <3106c4a1-ce5b-a9c4-5cf4-6adead7fce80@linaro.org>
-Date:   Fri, 9 Jun 2023 14:13:19 +0200
+        Fri, 9 Jun 2023 08:14:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8AC61A2
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 05:14:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E02961F3E
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 12:14:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30DC8C433D2;
+        Fri,  9 Jun 2023 12:14:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686312871;
+        bh=uEkHK/OWnkh6TBr8Tflth6P5jYUmDTQTMsMjbj0gNak=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=SETVrGFe66DeI9nDQrp9PDzhE14TlMnCnBvWMHQ/nPJb9roX+1jNaMI5zJsNhhxVq
+         HmIvOmR3qqU3ZNKi+qgWOB/19H5DVN+M4CP5I8Cb9EoSIOmZ7/AFy5J+ex8OOqve9m
+         K9Wo2iLgFdPQrsGvtnXVMJ33IVIaTtF1hvugL6gEqhl094LyGYjgAgGOwzLrUdzFDi
+         aWKa98PyqnFvhdmgV/SWzbhwqAo8Y2RTotx+gEMXiRKCxRwUAHJZeDpSRRK0ar8fCC
+         LESA1UpBK1eJ003zMU1EZ/DgfneDbojR3eLLXssIcpjNKKF3gmEt9/R2GyqN03HQGm
+         868D2dF3WfNdw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Claudiu Beznea <Claudiu.Beznea@microchip.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Walker Chen <walker.chen@starfivetech.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230608135750.11041-1-walker.chen@starfivetech.com>
+References: <20230608135750.11041-1-walker.chen@starfivetech.com>
+Subject: Re: [PATCH v2 0/2] Fix error check and cleanup for JH7110 TDM
+Message-Id: <168631286990.42950.16318348817986270915.b4-ty@kernel.org>
+Date:   Fri, 09 Jun 2023 13:14:29 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v5 1/2] dt-bindings: arm: aspeed: add Inventec
- starscream-bmc
-Content-Language: en-US
-To:     =?UTF-8?B?Q2hlbi5QSiDpmbPmn4/ku7sgVEFP?= <Chen.PJ@inventec.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        "soc@kernel.org" <soc@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>
-Cc:     =?UTF-8?B?WWUuVmljIOiRieWuh+a4hSBUQU8=?= <ye.vic@inventec.com>,
-        =?UTF-8?B?SHVhbmcuQWxhbmcg6buD6Iux6YOOIFRBTw==?= 
-        <Huang.Alang@inventec.com>
-References: <b039b1b2673644af84db8f803bc7d156@inventec.com>
- <c5f1fbb0e6754394af41eb5083f64d89@inventec.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <c5f1fbb0e6754394af41eb5083f64d89@inventec.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-bfdf5
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/06/2023 13:52, Chen.PJ 陳柏任 TAO wrote:
-> Document the new compatibles used on Inventec starscream-bmc
+On Thu, 08 Jun 2023 21:57:48 +0800, Walker Chen wrote:
+> Some minor issues were found during addtional testing and static
+> analysis. The first patch fix the error check for the return value of
+> devm_reset_control_array_get_exclusive(). The second patch drop some
+> unused macros.
 > 
-> Signed-off-by: Chen PJ <Chen.pj@inventec.com>
-> ---
+> Fixes: fd4762b6b5cf ("ASoC: starfive: Add JH7110 TDM driver")
+> 
+> [...]
 
-Any reason to ignore what I wrote?
+Applied to
 
-https://lore.kernel.org/all/2e06e7db-64f9-51f8-adf1-b240f30a2608@linaro.org/
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-You got there clear instruction, didn't you?
+Thanks!
 
-Best regards,
-Krzysztof
+[1/2] ASoC: starfive: Fix an error check in jh7110_tdm_clk_reset_get()
+      commit: 3582cf94ff49469ffe78e96014550f7d4e466fbd
+[2/2] ASoC: starfive: Remove some unused macros
+      commit: 8bd81864533bd02d6922deadeed643c813dfe142
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
