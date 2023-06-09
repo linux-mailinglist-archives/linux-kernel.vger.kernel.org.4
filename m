@@ -2,80 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E333672968B
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 12:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACA14729693
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 12:15:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238937AbjFIKO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 06:14:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54730 "EHLO
+        id S235699AbjFIKPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 06:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238737AbjFIKNo (ORCPT
+        with ESMTP id S238770AbjFIKOZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 06:13:44 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93854449C;
-        Fri,  9 Jun 2023 03:03:34 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 976646606F2A;
-        Fri,  9 Jun 2023 11:03:32 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686305013;
-        bh=khZyG/R8U1t7JEcowzVSPSrEZtbLOgq9/SS+pXH+uAE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=bAnPi8rYRzm0Ov9Y6DWS8snsDPf0Qahbsn674loqZ2n0U4SBUppDPGuTV90PM9hrF
-         0SiX2kE8I1Y9jNEWll3wnk0Or5NK5tIMOTAERHl/dtdQ17U9iBVJ8nkD3pqQuCUkeI
-         gz5le12kx1WV0FQus/OP/VUFeTUL+TApa7ATkerY2XtmztGY9WFCrI3XARfR94MZcO
-         AL1487JBw8tHFdAMN5JVSji487xbbvcN8wogMNuAbWOgBFHPXtWdAJPlQwNq7RW3Vt
-         uxCDFBhyL2kagMwXCJSQ0gKZ4BtV/HIxxjET/5ztrRX2HA+7hIYiLqk9/HOYm9TbLx
-         1pXoJC51DPSFw==
-Message-ID: <4c22be0f-7368-1a49-d5fe-a6e1c27bd662@collabora.com>
-Date:   Fri, 9 Jun 2023 12:03:30 +0200
+        Fri, 9 Jun 2023 06:14:25 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8299F46B7;
+        Fri,  9 Jun 2023 03:04:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686305051; x=1717841051;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1RKRKUCNJ3tof7WGhe5Q8dWpADSieMLQT+y0st2q+DQ=;
+  b=SwhsDyYxQjBBBC0AVtpbkkTwNTiCmnvCywD4e4hJ8TBNGNWB3zhuG5of
+   si42nDks/XSyw7NANZRO6BSed4Jw5a+i/pGh3GnZcdaZTxH+bDcPlMPc6
+   PDOsgEw7g7RqC/rls0kmrTyeXeLftVi8bvI6QS9N+xQj+fKt2UEYwDseG
+   LkwoaGrSvvrB29lbtLZUmF4puWEANGz7lm4lfTrgd4we8ol+JNJ5P2DNb
+   UGrOQ8/4SjUOi9SAN7fhRHwHpadSMtoW1XVxyX9F7qDACL1yuIoIboS+K
+   L8a+J0/6xAoxkI7Qbxw5PuAffvYlkgPph2i39G9xuDrujo9/6Yfg6jcA0
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="385922158"
+X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
+   d="scan'208";a="385922158"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 03:04:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="823013867"
+X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
+   d="scan'208";a="823013867"
+Received: from mbahx-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.249.43.216])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 03:03:54 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 30D58104C0F; Fri,  9 Jun 2023 13:03:52 +0300 (+03)
+Date:   Fri, 9 Jun 2023 13:03:52 +0300
+From:   kirill.shutemov@linux.intel.com
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-mm@kvack.org, dave.hansen@intel.com, tony.luck@intel.com,
+        peterz@infradead.org, tglx@linutronix.de, seanjc@google.com,
+        pbonzini@redhat.com, david@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, ying.huang@intel.com,
+        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
+        sagis@google.com, imammedo@redhat.com
+Subject: Re: [PATCH v11 16/20] x86/virt/tdx: Initialize all TDMRs
+Message-ID: <20230609100352.6gnn5foahnppibmm@box.shutemov.name>
+References: <cover.1685887183.git.kai.huang@intel.com>
+ <7bd7d0c6196deb58b54d6e629603775844b1307d.1685887183.git.kai.huang@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 7/9] regulator: mt6358: Add output voltage fine tuning to
- fixed regulators
-Content-Language: en-US
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230609083009.2822259-1-wenst@chromium.org>
- <20230609083009.2822259-8-wenst@chromium.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230609083009.2822259-8-wenst@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7bd7d0c6196deb58b54d6e629603775844b1307d.1685887183.git.kai.huang@intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 09/06/23 10:30, Chen-Yu Tsai ha scritto:
-> The "fixed" LDO regulators found on the MT6358 and MT6366 PMICs have
-> either no voltage selection register, or only one valid setting.
-> However these do have a fine voltage calibration setting that can
-> slightly boost the output voltage from 0 mV to 100 mV, in 10 mV
-> increments.
+On Mon, Jun 05, 2023 at 02:27:29AM +1200, Kai Huang wrote:
+> After the global KeyID has been configured on all packages, initialize
+> all TDMRs to make all TDX-usable memory regions that are passed to the
+> TDX module become usable.
 > 
-> Add support for this by changing these into linear range regulators.
+> This is the last step of initializing the TDX module.
 > 
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+> Initializing TDMRs can be time consuming on large memory systems as it
+> involves initializing all metadata entries for all pages that can be
+> used by TDX guests.  Initializing different TDMRs can be parallelized.
+> For now to keep it simple, just initialize all TDMRs one by one.  It can
+> be enhanced in the future.
+> 
+> Signed-off-by: Kai Huang <kai.huang@intel.com>
+> Reviewed-by: Isaku Yamahata <isaku.yamahata@intel.com>
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
