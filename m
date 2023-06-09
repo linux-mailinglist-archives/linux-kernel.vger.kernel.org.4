@@ -2,150 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34D2E72A234
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FF2072A238
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbjFISaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 14:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43268 "EHLO
+        id S229914AbjFISbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 14:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjFISaO (ORCPT
+        with ESMTP id S230071AbjFISa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 14:30:14 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F91F3A81;
-        Fri,  9 Jun 2023 11:30:13 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-5149429c944so3509644a12.0;
-        Fri, 09 Jun 2023 11:30:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686335411; x=1688927411;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LQo5qsgPUcGmlyO2rsvI2X/zOsK6NI/XGYG2Pjs5ocQ=;
-        b=PBfGgDhGmwDrb3XoBCsHhl1vgR0qXNPyBZOCH0smqKcmnUxY3qoafT5S+OBe3EvfPJ
-         JcsuczB/nksBDdysKtvq/YQjIprYBv8pKopIWmBb9lRj/z9UuunQ91hpld1ybv1yzZw7
-         sIW/wympb6rkv4YEarGkw7fJDB3zS+gssOBv1AXzrd8iJeDVKKHFAGuJrrGHjowDN8/u
-         /ehZGM7ASvyZeZ/eV1isDwlmkRXczPgizAgaRgj7kwuckZA+j1BZXkRDNJtBUDn4yHDV
-         opJNYf2OIwhgU0xQeJYu5TfmW+iQ387X3BuaD8mS2eqGB2rX0H//adVaFKFw16UQPGE1
-         mkeQ==
+        Fri, 9 Jun 2023 14:30:59 -0400
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281C93A8C;
+        Fri,  9 Jun 2023 11:30:56 -0700 (PDT)
+Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-777b0dd72d8so86815239f.1;
+        Fri, 09 Jun 2023 11:30:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686335411; x=1688927411;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LQo5qsgPUcGmlyO2rsvI2X/zOsK6NI/XGYG2Pjs5ocQ=;
-        b=DFIaZZE/Kmz4Yh9yqVnA1GL+MIsKb2cSfzf5Oo78zAHkw9xbPreTqjsjMNifrrXpwh
-         FzKUhlhGIzFum1Cy0BpElfs4DE4u8UvHopiPOnefAEgnK8PoFzprNkEv1HLS+7VLarH5
-         wOBwOJheFjpz2uYnARF+VWlCWkRciLWl/hWUgm8PG36PmzPNUz4Eq8J7V/Uvl1/FWE8w
-         fol2cwlzkwJisz144UOvC5SzUJi9okcK2Fz0c8Hc2vxj1836aY2OA4Pn4JAmBUMg2qlB
-         idxkn/4enLIy2jB9yQ4ntbLYbL1s65LUiO3+WjFHhrbQa/y6HTU6Aa3gACAS2u7shIKO
-         rs0g==
-X-Gm-Message-State: AC+VfDwSr8WGN90Az4SHDx8pp2kew3Mtp2a2obdmDhCEZoPKgRQOn1+a
-        UxXyMDa2oiXQuOuv7zAXDADgYOo7cT3ELYNY+4HmVX3RmUM=
-X-Google-Smtp-Source: ACHHUZ7P/m3FTYaf26T03r8XIjRSHEPKt+H8rxF2AlOg8srGmGahQc1w2H60obas9zD3lQxQxFkWqbYdkVFC4ASERmw=
-X-Received: by 2002:a17:906:fe4d:b0:973:93e3:bc9a with SMTP id
- wz13-20020a170906fe4d00b0097393e3bc9amr2292627ejb.6.1686335411415; Fri, 09
- Jun 2023 11:30:11 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686335455; x=1688927455;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xJw31UEMSDw/4lxj847WRV5dzWgZULa7uFBez8wvxto=;
+        b=XRLgB/q8ZkYQ9wWg8nNexQhn0930cuuWzoHgMj6gIXnECxkymSoHsAhZaandmotfxy
+         4pxW1ZbLgY3/YX/M635ACp8cLFQh+XcthmqxgoX1vWAg5eVE3GmwxVkTfDQzke52HMPM
+         9XHMt/Unqy+5tZYO6UGBpSwq/wj8v3Ubj2JLh1T6RFBjEfWiIgIz8EU+gcyolQw2qEmo
+         lcROd6Bxrcb3+z8kcNs1NVYathO5937sxNGlQZkBKWps1YbSobRib1YFbFSHblMiL4qo
+         f53CqLbobe8CoSOwtGkEfhwGZBHB0i+fmArd8+8wPoT8fjX5fragSfQrOTd+mKww87Q5
+         ksaA==
+X-Gm-Message-State: AC+VfDybBu2V0k/IMDWqu386uZG3XrhSvWrIC94NLcGZMrA1oaly8Daj
+        MZ5hLhwCkzNVoaoE19yYhRweKxP+Yg==
+X-Google-Smtp-Source: ACHHUZ4D1oHdCaXmjUtw353Iv9+ZawqZOzIIypTlfHkcq4ahpCANEOxdjZNzTprXCDY1DgNPItWtWg==
+X-Received: by 2002:a6b:dc14:0:b0:774:9c2e:4ef5 with SMTP id s20-20020a6bdc14000000b007749c2e4ef5mr2227096ioc.6.1686335455180;
+        Fri, 09 Jun 2023 11:30:55 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id f7-20020a056638118700b00420d2a27e27sm1097043jas.84.2023.06.09.11.30.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 11:30:54 -0700 (PDT)
+Received: (nullmailer pid 1765126 invoked by uid 1000);
+        Fri, 09 Jun 2023 18:30:53 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] i2c: mpc: Use of_property_read_reg() to parse "reg"
+Date:   Fri,  9 Jun 2023 12:30:44 -0600
+Message-Id: <20230609183044.1764951-1-robh@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230608212613.424070-1-jolsa@kernel.org> <CAEf4BzbNakGzcycJJJqLsFwonOmya8=hKLD41TWX2zCJbh=r-Q@mail.gmail.com>
- <20230608192748.435a1dbf@gandalf.local.home> <CAEf4BzYkNHu7hiMYWQWs_gpYOfHL0FVuf-O0787Si2ze=PFX5w@mail.gmail.com>
- <ZILhqvrjeFIPHauy@FVFF77S0Q05N> <ZINW9FqIoja76DRa@krava>
-In-Reply-To: <ZINW9FqIoja76DRa@krava>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 9 Jun 2023 11:29:59 -0700
-Message-ID: <CAEf4BzbgsLOoLKyscq6S95QeehVoAzOnQ=xmsFz8dfEUAnhObw@mail.gmail.com>
-Subject: Re: [PATCH RFC] ftrace: Show all functions with addresses in available_filter_functions_addrs
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Jackie Liu <liu.yun@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 9:44=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrote=
-:
->
-> On Fri, Jun 09, 2023 at 09:24:10AM +0100, Mark Rutland wrote:
-> > On Thu, Jun 08, 2023 at 04:55:40PM -0700, Andrii Nakryiko wrote:
-> > > On Thu, Jun 8, 2023 at 4:27=E2=80=AFPM Steven Rostedt <rostedt@goodmi=
-s.org> wrote:
-> > > > On Thu, 8 Jun 2023 15:43:03 -0700 Andrii Nakryiko <andrii.nakryiko@=
-gmail.com> wrote:
-> > > > > On Thu, Jun 8, 2023 at 2:26=E2=80=AFPM Jiri Olsa <jolsa@kernel.or=
-g> wrote:
-> >
-> > > There are BPF tools that allow user to specify regex/glob of kernel
-> > > functions to attach to. This regex/glob is checked against
-> > > available_filter_functions to check which functions are traceable. Al=
-l
-> > > good. But then also it's important to have corresponding memory
-> > > addresses for selected functions (for many reasons, e.g., to have
-> > > non-ambiguous and fast attachment by address instead of by name, or
-> > > for some post-processing based on captured IP addresses, etc). And
-> > > that means that now we need to also parse /proc/kallsyms and
-> > > cross-join it with data fetched from available_filter_functions.
-> > >
-> > > All this is unnecessary if avalable_filter_functions would just
-> > > provide function address in the first place. It's a huge
-> > > simplification. And saves memory and CPU.
-> >
-> > Do you need the address of the function entry-point or the address of t=
-he
-> > patch-site within the function? Those can differ, and the rec->ip addre=
-ss won't
-> > necessarily equal the address in /proc/kallsyms, so the pointer in
-> > /proc/kallsyms won't (always) match the address we could print for the =
-ftrace site.
-> >
-> > On arm64, today we can have offsets of +0, +4, and +8, and within a sin=
-gle
-> > kernel image different functions can have different offsets. I suspect =
-in
-> > future that we may have more potential offsets (e.g. due to changes for=
- HW/SW
-> > CFI).
->
-> so we need that for kprobe_multi bpf link, which is based on fprobe,
-> and that uses ftrace_set_filter_ips to setup the ftrace_ops filter
->
-> and ftrace_set_filter_ips works fine with ip address being the address
-> of the patched instruction (it's matched in ftrace_location)
->
-> but right, I did not realize this.. it might cause confusion if people
-> don't know it's patch-side addresses..  not sure if there's easy way to
-> get real function address out of rec->ip, but it will also get more
-> complicated on x86 when IBT is enabled, will check
+Use the recently added of_property_read_reg() helper to get the
+untranslated "reg" address value.
 
-ok, sorry, I'm confused. Two questions:
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ drivers/i2c/busses/i2c-mpc.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-1. when attaching kprobe_multi, does bpf() syscall expect function
-address or (func+offset_of_mcount) address? I hope it's the former,
-just function's address?
+diff --git a/drivers/i2c/busses/i2c-mpc.c b/drivers/i2c/busses/i2c-mpc.c
+index cfd074ee6d54..595dce9218ad 100644
+--- a/drivers/i2c/busses/i2c-mpc.c
++++ b/drivers/i2c/busses/i2c-mpc.c
+@@ -316,9 +316,10 @@ static void mpc_i2c_setup_512x(struct device_node *node,
+ 	if (node_ctrl) {
+ 		ctrl = of_iomap(node_ctrl, 0);
+ 		if (ctrl) {
++			u64 addr;
+ 			/* Interrupt enable bits for i2c-0/1/2: bit 24/26/28 */
+-			pval = of_get_property(node, "reg", NULL);
+-			idx = (*pval & 0xff) / 0x20;
++			of_property_read_reg(node, 0, &addr, NULL);
++			idx = (addr & 0xff) / 0x20;
+ 			setbits32(ctrl, 1 << (24 + idx * 2));
+ 			iounmap(ctrl);
+ 		}
+-- 
+2.39.2
 
-2. If rec->ip is not function's address, can we somehow adjust the
-value to be a function address before printing it?
-
-In short, I think it's confusing to have addresses with +0 or +4 or +8
-offsets. It would be great if we can just keep it +0 at the interface
-level (when attach and in available_filter_functions_addrs).
-
->
-> or we could just use patch-side addresses and reflect that in the file's
-> name like 'available_filter_functions_patch_addrs' .. it's already long
-> name ;-)
->
-> jirka
