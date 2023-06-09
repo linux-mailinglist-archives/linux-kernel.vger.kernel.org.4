@@ -2,91 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8AC729B76
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 15:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E2DD729AF6
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 15:04:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241266AbjFINUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 09:20:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44250 "EHLO
+        id S240217AbjFINEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 09:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241476AbjFINUh (ORCPT
+        with ESMTP id S238814AbjFINEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 09:20:37 -0400
-X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 09 Jun 2023 06:20:22 PDT
-Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7BF4E3C16;
-        Fri,  9 Jun 2023 06:20:22 -0700 (PDT)
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 62C8672C90B;
-        Fri,  9 Jun 2023 16:03:52 +0300 (MSK)
-Received: from glebfm.altlinux.org (flight.tilaa.cloud [84.22.108.118])
-        by imap.altlinux.org (Postfix) with ESMTPSA id 020EB36D070B;
-        Fri,  9 Jun 2023 16:03:51 +0300 (MSK)
-Date:   Fri, 9 Jun 2023 13:03:39 +0000
-From:   Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>
-To:     Josh Triplett <josh@joshtriplett.org>
-Cc:     Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        linux-kernel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        "Dmitry V. Levin" <ldv@altlinux.org>
-Subject: Re: [PATCH v3] ext4: Add a uapi header for ext4 userspace APIs
-Message-ID: <ZIMjGKQdalBAeyQJ@glebfm.altlinux.org>
-References: <680175260970d977d16b5cc7e7606483ec99eb63.1680402881.git.josh@joshtriplett.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <680175260970d977d16b5cc7e7606483ec99eb63.1680402881.git.josh@joshtriplett.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 9 Jun 2023 09:04:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B052D72;
+        Fri,  9 Jun 2023 06:04:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97BBB61234;
+        Fri,  9 Jun 2023 13:04:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC01EC433EF;
+        Fri,  9 Jun 2023 13:04:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686315874;
+        bh=90rVHTRs/3F5on7zL7vvDRpDwafaR4yvoFsAW9sVsUU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ct18ILo60TPRsRZeRF0MA6HqVV541momQ/jF4nftPln9ac11WPptBUohnWBmUvWqE
+         vnbarfiPcuydHingkmODEEfgyBqMNPOYeP2WxeWyeZBtXUQLPWlTQiK3YoRCoQuOkz
+         ykp2yROWej+XaTRvcPNC1Mj4JCwFi/idPxZcvWKMzoJB4BmjIGu9z7nSlgQ6TTTjIl
+         qP4PTzdDzoU3b8crpqEvZ0W3ktzTOLFYBKjsvJzANfoNoi8mgwX007iMF+sc9WNoo4
+         c5+GV/8GYH3NerKeEbysr3Xjw/+GD6dgRglU5pvXYup5qB/zjHokXJytURgg3jzfRS
+         C5Xro19M414WQ==
+Received: from 152.5.30.93.rev.sfr.net ([93.30.5.152] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1q7bn5-0045UR-GR;
+        Fri, 09 Jun 2023 14:04:31 +0100
+Date:   Fri, 09 Jun 2023 14:04:27 +0100
+Message-ID: <873530okh0.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Anup Patel <anup@brainfault.org>,
+        Ben Gardon <bgardon@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Gavin Shan <gshan@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michael Larabel <michael@michaellarabel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
+        linux-trace-kernel@vger.kernel.org, x86@kernel.org,
+        linux-mm@google.com
+Subject: Re: kvm/arm64: Spark benchmark
+In-Reply-To: <20230609005935.42390-1-yuzhao@google.com>
+References: <20230526234435.662652-1-yuzhao@google.com>
+        <20230609005935.42390-1-yuzhao@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 93.30.5.152
+X-SA-Exim-Rcpt-To: yuzhao@google.com, akpm@linux-foundation.org, pbonzini@redhat.com, apopple@nvidia.com, anup@brainfault.org, bgardon@google.com, bp@alien8.de, catalin.marinas@arm.com, chao.p.peng@linux.intel.com, christophe.leroy@csgroup.eu, dave.hansen@linux.intel.com, farosas@linux.ibm.com, cuigaosheng1@huawei.com, gshan@redhat.com, hpa@zytor.com, mingo@redhat.com, james.morse@arm.com, Jason@zx2c4.com, jgg@ziepe.ca, corbet@lwn.net, mhiramat@kernel.org, mpe@ellerman.id.au, michael@michaellarabel.com, rppt@kernel.org, npiggin@gmail.com, oliver.upton@linux.dev, paulus@ozlabs.org, peterx@redhat.com, seanjc@google.com, rostedt@goodmis.org, suzuki.poulose@arm.com, tglx@linutronix.de, thuth@redhat.com, will@kernel.org, yuzenghui@huawei.com, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org, linux-trace-kernel@vger.kernel.org, x86@kernel.org, linux-m
+ m@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Sun, Apr 02, 2023 at 11:37:42AM +0900, Josh Triplett wrote:
-> Create a uapi header include/uapi/linux/ext4.h, move the ioctls and
-> associated data structures to the uapi header, and include it from
-> fs/ext4/ext4.h.
+On Fri, 09 Jun 2023 01:59:35 +0100,
+Yu Zhao <yuzhao@google.com> wrote:
 > 
-> Signed-off-by: Josh Triplett <josh@joshtriplett.org>
-> ---
-> 
-> Sorry for the churn; I didn't encounter these errors in local
-> test builds.
-> 
-> v2:
-> - Add UAPI header to MAINTAINERS
-> - Fix include paths in UAPI header
-> - Formatting fix for EXT4_IOC_SHUTDOWN
-> 
-> v3:
-> - Leave compat ioctls in the private ext4.h header. It appears that some other
->   UAPI headers already follow this pattern, with compat defined privately. For
->   instance, quota and ethtool both follow that pattern.
+> TLDR
+> ====
+> Apache Spark spent 12% less time sorting four billion random integers twenty times (in ~4 hours) after this patchset [1].
 
-Do you intend to keep the compat ioctl definitions in the private header?
+Why are the 3 architectures you have considered being evaluated with 3
+different benchmarks? I am not suspecting you to have cherry-picked
+the best results, but I'd really like to see a variety of benchmarks
+that exercise this stuff differently.
 
-[...]
-> --- /dev/null
-> +++ b/include/uapi/linux/ext4.h
-[...]
-> +/*
-> + * ioctl commands in 32 bit emulation
-> + */
-> +#define EXT4_IOC32_GETVERSION		_IOR('f', 3, int)
-> +#define EXT4_IOC32_SETVERSION		_IOW('f', 4, int)
-> +#define EXT4_IOC32_GETRSVSZ		_IOR('f', 5, int)
-> +#define EXT4_IOC32_SETRSVSZ		_IOW('f', 6, int)
-> +#define EXT4_IOC32_GROUP_EXTEND		_IOW('f', 7, unsigned int)
-> +#define EXT4_IOC32_GROUP_ADD		_IOW('f', 8, struct compat_ext4_new_group_input)
+Thanks,
 
-It appears that the ioctl definition for EXT4_IOC32_GROUP_ADD is provided,
-but there is no corresponding definition for the
-compat_ext4_new_group_input structure nowhere in the uapi headers.
+	M.
 
 -- 
-glebfm
+Without deviation from the norm, progress is not possible.
