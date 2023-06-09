@@ -2,109 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 412A57295C1
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:45:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CF047295C4
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241149AbjFIJpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 05:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39152 "EHLO
+        id S241750AbjFIJpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 05:45:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241872AbjFIJop (ORCPT
+        with ESMTP id S241740AbjFIJpU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 05:44:45 -0400
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9081BFF
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 02:39:50 -0700 (PDT)
-Received: by mail-vs1-xe2d.google.com with SMTP id ada2fe7eead31-43dc3f77accso517566137.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 02:39:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1686303550; x=1688895550;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OZOvjl+KYnuwjPj8wMvZkMia9UoF/x6M2Pm8GzNj1fU=;
-        b=HTewIAYg8quf786duI/CctcxA7gPrI2VugNo0oh1CvFgRXeezqSxn/G2tzv6nbA5nr
-         KGSya9okyuMEBET7DW1QschhzujiYprvRtM2dXCWdO8EFZgbc0LzHQzx0nBEvozGCo0d
-         p//9u1NrJ6wG0OM+phgZMV6sE8nKY9yb0ryKm2WH9ZmTEg4uD0BujMVAcGr5wcMlWvy8
-         AOKLeEVMQm2QQmPVWBeNmY6HQKwzBZA37bno5fkZYynw71l2y1LTyuZn8FdUUTUzHhXb
-         iYm4HV/kXqvHHeruvbE/Zk43KLw3xkC/d4qqRmoeWrgyZMJR0aSrIchxFYTU3TtLmKbO
-         RhoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686303550; x=1688895550;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OZOvjl+KYnuwjPj8wMvZkMia9UoF/x6M2Pm8GzNj1fU=;
-        b=h8M2tkIG7loY28vCm0Hj2iR5SeKl+SRtMQCrWhZy8Oyyka3Q3efT7Rsfhdvs2RHMmT
-         7jCSgA24tVlQE8WbDA9lCuUEL1oo1rPD29YxxA4hEplRXu83rk8E/H6BeYxG+SWoXBEQ
-         mjTdjzJqm0V09+yt+iDI0Jg3TK+gJ9yK5VDV0PTA2x6jCqKM5QeWSucj03RN9JDANiAY
-         kbkA3UVkCZOWKB922WSfouM4Gc5CivcIMZG0AABMcJDjLwGSikJg3siOILwliuW7VCnh
-         jrPPpaIKcLyYh04EKNjfKM+3lQ4zhFLrn0Rh+Qxik6Xa38OSyWTu1XSaqvbGjhDOGcQR
-         Ic3A==
-X-Gm-Message-State: AC+VfDwoTGzJFx3iwSeGptqAoJkg/jNYKuUYQEcp4YpCsM++IR5j9wn9
-        qgpDxtJoQ2oRhSL/NSNZfRa/VAArwtJSGXJuk/rxSp/zwRaswLkR
-X-Google-Smtp-Source: ACHHUZ6ookoq9XF4FuMkQPAWhkCYvNPv8RIYZ7pD5vhFYy92iWzbLEsqF15OSs9k96UjYo8p4ePG3CBGpIhQJ4oDpec=
-X-Received: by 2002:a05:6102:408:b0:430:e0:ac2e with SMTP id
- d8-20020a056102040800b0043000e0ac2emr498462vsq.15.1686303549994; Fri, 09 Jun
- 2023 02:39:09 -0700 (PDT)
+        Fri, 9 Jun 2023 05:45:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE2544B1
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 02:40:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4401660FCB
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:39:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AE65C433D2;
+        Fri,  9 Jun 2023 09:39:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686303552;
+        bh=hTpVqffufJ2N9o+Xz7ZN9/2MFzyD4BhvJJarsHNu0uM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iLjOAh08xhYEYFZiJ9MbOZr/TxhFmbxiNjjAW3BehX6L9WfJr1G03oOZmwk4HFnkF
+         gk3ARNCfg28FGUCMG3n8OdfLJ4mHvE39aMVa/0u9jsDnTFXmyzVCR0+T54Vuypye61
+         3kfiDToJvVoPwW57mwZ4s4CvYLZa0IdUC1Or+OLp34Fmh2JA9+0JeUiNvU7q4JF8NG
+         wWXdkTk112vTlfrqvCo05QW8zI6DyIQx9JCrzVht6LgjpQBHYh4zcMxKsPMdDeNLQe
+         YjxgbJZZKd26ciO3jr2zHZNdR6r8PTYaDHJMrpU65Na42scniQEED35IL/DkT7PXl5
+         of9pBjlFBmJRg==
+Date:   Fri, 9 Jun 2023 10:39:05 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>, kernel@collabora.com,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] Revert "ASoC: mediatek: mt8192-mt6359: Remove " Jack"
+ from Headphone pin name"
+Message-ID: <b463d2b1-6822-4c37-82dd-d92c196bda64@sirena.org.uk>
+References: <20230608221050.217968-1-nfraprado@collabora.com>
+ <1bb65d99-d1dc-7a73-12c0-e7f4cba3525a@collabora.com>
 MIME-Version: 1.0
-References: <20230605125810.61456-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230605125810.61456-1-andriy.shevchenko@linux.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 9 Jun 2023 11:38:59 +0200
-Message-ID: <CAMRc=Mf_TamPbL2m2RnV9NNwXKe=P=7cbZy0YJkFw6e=L64xNg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] gpiolib: Do not unexport GPIO on freeing
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pFXW2BxSqw1fbALo"
+Content-Disposition: inline
+In-Reply-To: <1bb65d99-d1dc-7a73-12c0-e7f4cba3525a@collabora.com>
+X-Cookie: Tom's hungry, time to eat lunch.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 5, 2023 at 2:58=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> Since the legacy exporting is gone with 2f804aca4832 ("gpiolib:
-> Kill unused GPIOF_EXPORT and Co") there is no need to unexport
-> GPIO on freeing. Remove that call.
->
-> Note, the other users of this functionality do that explicitly,
-> except one SH and one OMAP boardfile which don't free GPIO anyways,
-> so it is safe to drop the call.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-> v2: mentioned OMAP boardfile as well
->  drivers/gpio/gpiolib.c | 2 --
->  1 file changed, 2 deletions(-)
->
-> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-> index a8da38ee721a..7a9c9934365a 100644
-> --- a/drivers/gpio/gpiolib.c
-> +++ b/drivers/gpio/gpiolib.c
-> @@ -2117,8 +2117,6 @@ static bool gpiod_free_commit(struct gpio_desc *des=
-c)
->
->         might_sleep();
->
-> -       gpiod_unexport(desc);
-> -
->         spin_lock_irqsave(&gpio_lock, flags);
->
->         gc =3D desc->gdev->chip;
-> --
-> 2.40.0.1.gaa8946217a0b
->
 
-Ah, you already sent a v2. I applied this one.
+--pFXW2BxSqw1fbALo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Bart
+On Fri, Jun 09, 2023 at 09:37:33AM +0200, AngeloGioacchino Del Regno wrote:
+
+> That commit is made to bring consistency in naming across MediaTek (with
+> other) sound card drivers.. I'm not sure whether the right solution would
+> be to revert this one, or to make a small change in the UCM, counting that
+> we'd be able to add more shared names around, finally reducing the config
+> length by sharing actual configurations across various SoCs.
+
+> Any opinion?
+
+It's ABI so if people are noticing it the old behaviour needs to stay.
+
+--pFXW2BxSqw1fbALo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSC8zkACgkQJNaLcl1U
+h9BBjAf/Xltwx3g3VOYglckofoEdSEFXheLQnLngKL2QRHoUV6sNUNWRicnS8zc6
+v6bLadZRd52Ia/2A2nLZ9GbPAdsCXVsm0YDK3bUZofcy6bdCH3C/TfeuWnWz7Lvd
+PnKcfjhycCrYTN6F6JD1RxicvGb3yrIaskdMnTSHHf0tQ9vUhrCXkeiDPv0OD4TC
+IYewZzQHPYa5IEOrnqDZA2nCxtr6v/1aaru9WanYB2bREybfScV5WDcezCA1oAp0
+UaCziy+G8wqmeowzfVP9FVTdFiAojOB3C8AljbB4yB0mEiaQ5vtB85ynoS9T4UZo
+kB1xatM8U/AVx1LtXp9dW3eaTotTzw==
+=bEmH
+-----END PGP SIGNATURE-----
+
+--pFXW2BxSqw1fbALo--
