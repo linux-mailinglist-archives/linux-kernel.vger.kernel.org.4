@@ -2,216 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C196F72A57A
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 23:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BED7972A515
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 23:04:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232466AbjFIVn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 17:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33632 "EHLO
+        id S231244AbjFIVEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 17:04:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbjFIVnz (ORCPT
+        with ESMTP id S229530AbjFIVEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 17:43:55 -0400
-X-Greylist: delayed 2559 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 09 Jun 2023 14:43:54 PDT
-Received: from mx0a-00010702.pphosted.com (mx0a-00010702.pphosted.com [148.163.156.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6EB35BE
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 14:43:54 -0700 (PDT)
-Received: from pps.filterd (m0239462.ppops.net [127.0.0.1])
-        by mx0b-00010702.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 359IUQNd031404;
-        Fri, 9 Jun 2023 16:01:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ni.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=PPS11062020;
- bh=MOeO1TAeQ2XFAhwSWjOvTHqY3o27mG4Iumq4TQTeykM=;
- b=xC3qjdsISf0B6kYw/KMQohvt+exr/HYRAM3HVZhlA1VX569nH11dA9m2OCscXDwP5WIL
- GrjPmxi3ohw/KWjgu+OVYPW6uO53Ylw/MfYK3aiPqr7EB8Nt9uQXqzMazjIXGJx+7Gru
- jBb24N2FjuOtSN9lanmGTVH3qV8EbVttSz6Yhkgp5rYru6iwMaeZL5Qz4YUuy5v0TzPA
- jxi8RDPO5gWPGq9XbJSY+BLrVmOnNn/EoeFqSdvvHUN4HtMBsgbcmrMTncY0yRfdDXqN
- Z5Pg7fFlORFJN+UUh/QqkEjT32WBuE6NSF3wKRi+8PQLthitkAoPfFhO6d1i6y4OgqJn Jw== 
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2176.outbound.protection.outlook.com [104.47.57.176])
-        by mx0b-00010702.pphosted.com (PPS) with ESMTPS id 3r2aykxn0x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Jun 2023 16:01:11 -0500
+        Fri, 9 Jun 2023 17:04:21 -0400
+Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2064.outbound.protection.outlook.com [40.107.241.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5FC358E;
+        Fri,  9 Jun 2023 14:04:18 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SIXivHBLKhRcO7Eqbdi63CMq3HmU6RXzN6msb21aZRKG1I5xtk5GAxN6t2LAhzRbEdwnzvrfa77GxIWZn03OC0BXXpg2njW+NZF/7AJQJbJ3dwhompbSfCit3I9GwD8+jY3MRdPLdtgkrlr1eLb7+pF7CbOVVkFgYLmCNRhSUSmyUrlmL6TWptaWzMjwiTfep4P0ImYYDLarEOGKBt8wIYfSwXSSKdHJEp0gfIA0RTdEVGD6H2MPo8JREzFHlNyN9kWK/wWlPAnu/duJ4C6R4T3dL9R3cKPwAr6aqvxoZUmbpC54Wo1q5r49Xtc/DX6H1aKpxwqZpeINUwI8Ei8k1w==
+ b=eqpBynF0JNtS3v/KconJ6zXao/hyfjPoi6+bx3YgzZ9lYSw1U6pk82c9/5IIriWYYxFXuLJTjwmdjuO5Acc4TAE3I08iqanIfJoZnhAV/Fu/rR8xnGAp+IAnYVSo7Gd7EivyVO2QycqsiXu+pJm0Stn0HxkuIfap6Am9S+f3XCq7uI32qPW2UtcKcIMtyzdTswRIR4Bf1XvmzBjTBmFdUshWbrIyTkIDondcluED/2Q8QRPzy+9taKnf0NnJeuEEsnbxU1dUeLvnSxcD3T+Nq3VO8eRxQDjUWqM2LEMjavlJueMPqzikkaipl+1m5mErBjxTW9ReJxiOJLsi1C8QFQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MOeO1TAeQ2XFAhwSWjOvTHqY3o27mG4Iumq4TQTeykM=;
- b=Dj2IN7dkPniD3huTj+yJLNjscE4jQNclhOlC6JNtOEbGL3LN8RRsJQAZmabZENbBQm+23kSWkMz+sKSs1akZGQpfIucteK7eA8qf8sbOTuY6M8L0A5kPXD7VwT04E2sXeGzcziJ18a0/8ObiSSSUVGOD97SyKDYOpEmCz8oAgjZDTm/Stg+7B1xmapfz0qM1zYrM5d36eFZ8f17PxGN0Iu4HXR7yAKgP0VnYJECh7v1Sxw0Zmhok/UR++JZfkDq9pXtBey3BPak/WCVsSUL8ko+Zjtiwia7DTcRcdQOxCTst2McyAnDRcbEZoYNENea7hIB3K6A53r15eBElWRBQkA==
+ bh=H2jdjcuNyFUKWFm4EMWdqKR6ASTe7qlr2IBFsbHVWNA=;
+ b=jsD01sSYE5hp5CJYGV4vnIeA3txFM0V1Wx6/0d30b4pKD1vhNKmQkb4o6/TrObolq/McOV4tosY/0KRhF7gYgGlRrCHnikpeCYvYZ0FXbzhSzvUNXa2RBgIiWdAXaTPwIBxikY4TUaEA+aMvFMc0fVx690PQDbbduLOkGPKISCgZLRYrrWKbl8rhgg+LefIWS9/V/hKOihzwCN+JBuP5ePRT2P4ZPBzDxco1xUGmUXZBuzgrQVn0HLtHJQ7AcDiZ/bTfM++qWIRI47+iUgrzn9OxdLVaDluop5TcQSPJkTQNZatzPqqe8sKOQCRASx9gF2kHINRW0JGMDpuOSGV6Pw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=ni.com; dmarc=pass action=none header.from=ni.com; dkim=pass
- header.d=ni.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=nio365.onmicrosoft.com; s=selector2-nio365-onmicrosoft-com;
+ smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
+ dkim=pass header.d=siemens.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MOeO1TAeQ2XFAhwSWjOvTHqY3o27mG4Iumq4TQTeykM=;
- b=Fo6GRDTikNJOVZR5hDR+bt3olnZtx4y7j7xcQ6plQDVe1Vv9bygFaHlS7VkDB3x+ZNOiUJzLgDQfUbDIK8wfxf+IYR8BZMG2J1BgZ0SpDQ3+xOPUAs0+ctTCvGdJdlTGgSk6p0QFiSRGWGVzDKJ3yJRhyD1MVFXi95aJkubaFUU=
-Received: from SN6PR04MB4879.namprd04.prod.outlook.com (2603:10b6:805:9b::29)
- by SA0PR04MB7225.namprd04.prod.outlook.com (2603:10b6:806:ee::21) with
+ bh=H2jdjcuNyFUKWFm4EMWdqKR6ASTe7qlr2IBFsbHVWNA=;
+ b=Ehe+RFt5baxR7VejwxWu3D6dHVpaDcjqBMGK1tJc5czr6PnG18S1C8fnVsgChj+OBrkNyIXsQFUVLY82HmKybdj8mQTlperFG6ZmZJPbVBmOq8z8DsoDw6JG3uKrNBLGDTdjKT03UZKCyzE3MwC3tAC0HPQpC2qe8t2n0dQu/QHJ7NA50tg8UEkFD/QPIW9q8YgEcahXj4su5JStjr+94csAoO3+epSN+4iskuzTsiAJwcXDaexHevOI0OdQ6zBiGGO05aeIH/r+cE5bU2oGX7RI1k//ZvHclKzTcqMbm1AhOoLU59kmFbjmcrnxxj1UXrxdEAAN0j5hhi+2riuW1g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siemens.com;
+Received: from AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:588::19)
+ by AS8PR10MB7428.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:5ac::5) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.41; Fri, 9 Jun
- 2023 21:00:57 +0000
-Received: from SN6PR04MB4879.namprd04.prod.outlook.com
- ([fe80::f64d:f407:7c9c:4af0]) by SN6PR04MB4879.namprd04.prod.outlook.com
- ([fe80::f64d:f407:7c9c:4af0%5]) with mapi id 15.20.6455.037; Fri, 9 Jun 2023
- 21:00:57 +0000
-Message-ID: <38f38f66-0fd5-4e6c-4839-8272cef77046@ni.com>
-Date:   Fri, 9 Jun 2023 16:00:55 -0500
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.19; Fri, 9 Jun
+ 2023 21:04:16 +0000
+Received: from AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::53c2:174a:8b13:ce94]) by AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::53c2:174a:8b13:ce94%3]) with mapi id 15.20.6455.037; Fri, 9 Jun 2023
+ 21:04:16 +0000
+Message-ID: <da84b6b1-a9d8-ce46-16a9-e1a2d495240c@siemens.com>
+Date:   Fri, 9 Jun 2023 23:04:12 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [RFC PATCH] pps: Increase PPS_MAX_SOURCES value.
-To:     Rodolfo Giometti <giometti@enneenne.com>
-Cc:     linux-kernel@vger.kernel.org, brenda.streiff@ni.com
-References: <20230605203147.694716-1-charlie.johnston@ni.com>
- <fe435e68-8e05-9078-0fe6-63ef7cce2fc9@enneenne.com>
- <b794bccc-0233-4d78-df6f-bf7c688a7d7d@ni.com>
- <70ce864c-ca13-4fc4-fcb5-9b7f91579a90@enneenne.com>
+From:   Jan Kiszka <jan.kiszka@siemens.com>
+Subject: [PATCH] rtc: pcf-8563: Report previously detected low-voltage via
+ RTC_VL_BACKUP_LOW
 Content-Language: en-US
-From:   Charlie Johnston <charlie.johnston@ni.com>
-In-Reply-To: <70ce864c-ca13-4fc4-fcb5-9b7f91579a90@enneenne.com>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SA9PR13CA0030.namprd13.prod.outlook.com
- (2603:10b6:806:21::35) To SN6PR04MB4879.namprd04.prod.outlook.com
- (2603:10b6:805:9b::29)
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR0P281CA0250.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:af::20) To AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:20b:588::19)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR04MB4879:EE_|SA0PR04MB7225:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8b660a3b-76df-4738-8a14-08db692c9efd
+X-MS-TrafficTypeDiagnostic: AS4PR10MB6181:EE_|AS8PR10MB7428:EE_
+X-MS-Office365-Filtering-Correlation-Id: 615d9b18-8006-4f68-34d6-08db692d15db
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: L5nqDWbvJryFgFHOXpkCRb6+6JfOG4hldsuzSzKGVhvEIG2hG+O9z5libYaukDwVagY4rd4VyApAPyduWpsBiMPkY/9DyGEn3BJh02p18MMT/ET0A0eMFYWuCLisr/DXSdcXKvicoAzEpPxmiewixL3wTvPkDLLjE35/s01oHBaKM7ofGgfCj1xsd6/0As9tCjMgNOqcJzzhL1wwcAAOuSfyh0+pXhbueT3GxgVSHzczSEQ9UxstMR5VcKoNUiJWz7dJ6SgoSIfx/tLTpOlBNtJONxXEnyDH1dHoV8IHIShPxbFCcJcBUZ1SN+T6iq13EWSpJofu0DX4FWEuM5Clk53p3FDdsLnl/BtG3CW2u08R+Ib+tPb4LX6k85bfrtV6BXVax80vwa/3tbHaBgt7GZzscGPPz0K6D/BiiuiOHeEbvAZ53wZbvz45pXY7fxLJFCnvQSrWACQP7plCX0J9EMt8kI48/hzsJ7HW/txvartpSBVRL1W8E62kTFAgFDSZT2pc+uyBMwOmuHzKFR/0CA5CZu5AFr5Pi+bNDBQ5K9UfNmvgHNULqWqo6hzupwXRXxlN/QexywAGFPBajsDkOtgVYTKAuq8S4Er4JCUS6FncambMDZGR+Y/N85VvyKFkarbGqFoy2ZdP4kEXl8tCeg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR04MB4879.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(346002)(136003)(376002)(396003)(451199021)(478600001)(66556008)(36756003)(4326008)(66946007)(66476007)(38100700002)(6916009)(31696002)(8936002)(8676002)(44832011)(86362001)(5660300002)(41300700001)(2906002)(316002)(83380400001)(2616005)(26005)(53546011)(6512007)(6506007)(186003)(31686004)(6486002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: aVJMD+guSdgVHVNSrowqlUfxZ9gaYHSbrF/Py/Tr5zCqHxnPRWGzLT3lp5LJMsOLh5NTJA5tCJg5ocRNZCoheEUIJvH+B7Of64oV19efHkkMSobxo00BtXdbLYRG+QAX4HrZu5SXM6t+euQo7Hyzr47ZdxahrRl6ejP10igRH0STdlaMKxCnX+14iHePcXkkut1lPH2j3Mi/zoeiT9+McBFn1oF33k9PhwXronT+uwtnhRIlCtH84SFIFmu4JV3WvOuKhRn/Nr6QMziA+0jkQQkmBHzESmTqAkmLfEYM+kwf2EeZqxPpgqTkz14OYOi9G2BLNZlru7Svk0Eyz1XMClZxE/UZf+V20dzftNeu/rd8eD6JgRah42Z9/QujTDY1+o7TBjmwAKoGbocIF3yoIhhyPoZcOUWOoYjWEVT9bnIBHAM15PqOV+ixMcEZ5aQXWZOxy+r1b/AJrD3ixvNakK6qSNVFlljiPB/4D+lnBNMasLfwzZ2WTZ/EcfgytFQQb9BkC1qiGqQalytihpc9ApCTDOwB675qE8EqFEzWA8O3XkzDpOrS6iy/SoMx26x6q7DM4VuYIrAXwM0oy3QSGM1REXKbqrTm/gGMuuKzqYkK6+gE3awc096wXke4fNqcY6T9fjMs+8sLZBvRVJPr2Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(396003)(366004)(346002)(376002)(451199021)(44832011)(5660300002)(38100700002)(82960400001)(186003)(26005)(83380400001)(6506007)(2616005)(6512007)(478600001)(110136005)(2906002)(86362001)(6486002)(31696002)(36756003)(66946007)(66556008)(8676002)(4326008)(31686004)(66476007)(8936002)(6666004)(41300700001)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RW1iTGhGTUhERTVzZW9RTStRNkgzMkdMZEtLSVlid2RkTGxaRUQwbmlPR01M?=
- =?utf-8?B?R1RXMmNiVWE0TGtXYjJJUjc0WUlxT2YrM0R3K2lQcUZKUG5RYkd2SWVEcDNs?=
- =?utf-8?B?SXNnNjBMenZGcU9vQjNQdWNuU3FzeW9jNlpZVzVqTEpHMmRNYnllWk0zeWcv?=
- =?utf-8?B?Q3IzZWNSWk9SUkZTTHI4N3BKK1BQbGdqZUtpU1dEOVhDUDRHNjFOeThNaDYv?=
- =?utf-8?B?RXhTRHVTRVpxMmpMMmkxWnFMRjYwN3VwelZOOGxGL0ROTGtpczRJWjF2bFNS?=
- =?utf-8?B?c3hoUkRucmRlcG8zbXQ1Y25OVm1JNHpGQTJhcU5uaEczV3hOSE1SMmhpYU5u?=
- =?utf-8?B?bkFId2dxbnJRT0kzakswaXExT2RXUVZMTkhjWEtjTHFiUWhXeUxPVVFHNUdQ?=
- =?utf-8?B?ZGZyYUlxVzZFS3ZsNUZQVTJ0ZUEvNHZFZHR1bmhZTkVPVEdRU1owWHV1SXJt?=
- =?utf-8?B?OG5MbER5b0daNGo5dGQ0elhzSXpKdEM1TkkwR09sRlF2c2NzMmo3dmUzdjc4?=
- =?utf-8?B?Wmw5Rnd0R0o5WkRvakF6ZlN6ZGF6b25leVpRMmdidUJiaE1JUTNwSitIRFow?=
- =?utf-8?B?ZHh1dmd4Z3RadmtPVWhPd2s3Q1JiVnZmK3hjMENVaXpaR2haclBPN1JmZ1p1?=
- =?utf-8?B?UklGeDlNTTNJbm5qaFJvVnNSNEE4aW1PTVcrV1A5WUF3Vy9WeUZNYk5GQUJp?=
- =?utf-8?B?Zkh2WDBhdWJOVERETVdBdWNJb0ovTjh2SStVQWtURm9kYlVDNHNPcjl2bWJC?=
- =?utf-8?B?ZW5nNzI5VzhBVHUwTGYwVzl1RWI2eE8zNFBqWVhNWGh4dGtOYTBnZ0FmOWVu?=
- =?utf-8?B?eVo0WFhSL0JnL2JIL2h0WDBranYrSWIwem9aMEhlb0dkWnE0Zk9rRVE5QTZh?=
- =?utf-8?B?ajdkRXVaM3hOc2FwcW9TcXZ0UWllOVJoN0dpM2ZzUFVaWExKd2dtYkNNaWRG?=
- =?utf-8?B?aVFkM0JIQjdpY1U1aGJzdXJMNXFGRmpWbTAzN0VnOFN4YWFuZkMzZ0FLbk4v?=
- =?utf-8?B?YXpUUVpuQWoxcnpTelN3Q2ZMUEw4ZHBPT2YzNGhpdHJGK09zSk9wWS8raVdS?=
- =?utf-8?B?YW1Ta2FBbFB5U25tdXhqMmZVS3JMTEtaZTh1RjBNQWVWcjNVRXdtRm80emFO?=
- =?utf-8?B?YkI2My9lMGQ1MmxNSVduYnh1VXAzVm9zMCs4QnRzeERpVTFOVndIOUNXRCtV?=
- =?utf-8?B?OFg2WnVwT1RGUXpSNjBNN1ZFeldOZHc4VXdSQnBlWmwwVDExTTZjVktWdUp2?=
- =?utf-8?B?MkFVMHJGVEpKbU1oZ0J2M29XTFZWT2U3S3lLbVllS1dRNzZFa3VVNmxjWkp6?=
- =?utf-8?B?Qnc4N2NLRFczM3prZll4NTkzRVNTUnAxZGFyQk4rY3Uyd3hFUm9FTFRZUkxC?=
- =?utf-8?B?cU9Rd09KcUNRSkFYYUJKdkdKUzlvWnF3K0J4dzlxUnFWTVp1ZktheDhqOUxq?=
- =?utf-8?B?UzF0SGtaSk90VTZZbjhCTWZPTUdkN2ZNWkUwUk5ZQjNFdVY3NWRqcWlMeEFi?=
- =?utf-8?B?cUhoeDJQeGRLaUFldGVDNFF3OWVZaUNlS3Q0WlM1L1lnRjVqRmFjY1dZT3FN?=
- =?utf-8?B?QldQQjljQjhZMEFkY25NZ1NidlAvenptbWFsYjNzVEJlSnVuU2RkYVZBQVhN?=
- =?utf-8?B?TUNlTnJsalNnZ3Y4TXluSFRIQ3pzcWM5WnAwODBFNlEvMXBxb01yZm9MZmVo?=
- =?utf-8?B?UzZnQ0JTUW9JQ095WTFsMGZEdmlPVXB4Ui83ajF3cUxPL2FMOGtvVk1nZzJp?=
- =?utf-8?B?NlV1cEl4R1pFdXc1QkZ0dHpuODQzMllvOWQwQVJVUDV5U2l6aU1qbkROeWtP?=
- =?utf-8?B?aXk4dTRyY01BcWZMcXdmdDhRUnBPMlpSWG1GOFZmTnJaaE5RQ2MwR25Vam1m?=
- =?utf-8?B?aDBtemtIMDlWcFk2RFJzVWlLQS80cUYzbG16QXZ2Wk5CNzdxd25jTXZwM1h5?=
- =?utf-8?B?RkFPdmFqSTVZOWo5TWE3aXpURkdXeFMybmdmOWEzWGUwRkU1TGlOazllVFla?=
- =?utf-8?B?TVFqSUhMWmo2TWw4VEdMWGJPaC9yTzUyVlJnbE0wRStVOHgycHVVYUlyc1Rt?=
- =?utf-8?B?OCs3MXhOWlc3SnZNd2hjZkdpK2R2OGNpeEZiRnFSY3VuaXpwdEV5T3hZM2Fm?=
- =?utf-8?B?TGlQMXpwYkt3RWw3TDdlak0ybHVrNDhWaHNycDdvbFBVeUQ4ZkI5WkZkd29Y?=
- =?utf-8?B?bVE9PQ==?=
-X-OriginatorOrg: ni.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8b660a3b-76df-4738-8a14-08db692c9efd
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR04MB4879.namprd04.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aTNZRWZEeWtKbUNpUlRvKzhLekpKcHNpeEpGVUNnd2xWRzhSd2wrZHN5Ukc0?=
+ =?utf-8?B?OFFTWit2anBkbmN0RDR1bnM3L2NrVjZWaWtNYUZGMEI0QXo5N1JQY09FdlRI?=
+ =?utf-8?B?c2Urcm1VNU5YYXZObEV2Q1R5NS9aeWs1Z3MrSnJkQzhGZGtqWHZQdUVpSlZO?=
+ =?utf-8?B?Z1o3WHA1Y1lua3Y4c3RuNUtaSGxTbzNiVDBiSWFYb2x2Zm5mRk81dUt0alla?=
+ =?utf-8?B?RmV4Q1RJeFN4b1Z4dHdwYkpGUUZnUk9nUWdZUDJCRmE5d3huZFRpQ0tBelRL?=
+ =?utf-8?B?QWhLa0tsM2FJdlNmVG5KNFhWVWxXZWpBV3JMZitqb0QxOUltRGh6Ny8zd3hP?=
+ =?utf-8?B?NkRJdGprY3BaTEt2QlBCVU5aQk9yV1BBclRxK1lhQzZPMkd5T2ZET3hieE1B?=
+ =?utf-8?B?ZFczMWFtak5DcW10b3ZMN2FOcC9hZ3MxY2JGQVM4QU9qTlUzaGdNdk02ZCtn?=
+ =?utf-8?B?a3hNTm5LRFUxR0RUMWZreCtXMmpaNE1TYzZCM2g3WExIc1lSTVFjVEtTakJD?=
+ =?utf-8?B?VGQvZTNjaXEzcFdIbWtKSUdIdFdobHFubGZVUVNOeVlUejBFcGxzUVN4dkd3?=
+ =?utf-8?B?cUVDREJhSjNXK1ozK0lOUERWYTgwdlZzM0d1eXdob2VrT3NrMG95RGdFZUY3?=
+ =?utf-8?B?MlJVdnZLbGQ3NlRGTUdpbVlJWW9QTXM0WWhtazZhc3pzNGVBcU0xZGNGVTR4?=
+ =?utf-8?B?SlZoSTRIRmtEUHFSV1ZESVhiL2hKN0ZaSG5HTkxiRURhZlhjZk5JTmpnMmtr?=
+ =?utf-8?B?dDU1ZFlCTm41WFBESC9GN0Fwd2d6dW5DRGRhMzBXbmViNWgrRC80clhtbUhB?=
+ =?utf-8?B?VXgzYWpXY0pEaUpDWXhDU0VjaGpYVW94S1cvUmg4T0d3OW9Hc2IzeHFHbS9Y?=
+ =?utf-8?B?dGZTSnpZMFo0Q2ZPNlljS3p5RWdMZzc3OUdROW5OOVVGblFVYlZtTnV0OWpS?=
+ =?utf-8?B?ZjJKQjkvZlh5UjlQR0JsblhuTjNlRWF0dlJCdEhlRCtxMU1uYWR6MlhlK2kv?=
+ =?utf-8?B?a28zeCtFTlpGOW9ieVI1Z2xMWWI3VTNSdzYyTkRlYUFBZm9CWHVyTEV3ZXp2?=
+ =?utf-8?B?NXdINUYzUHJmNE9JdzR1SWFDUzVmUGlIZUhoQmtucmFXUldJeUhyRGk3dG9S?=
+ =?utf-8?B?UTZnYkFSemZmaEsxUzRQem1xYVFpaVRoZk9CelRoZVBjU0ZPQ0lUb1NKNHBJ?=
+ =?utf-8?B?dmlPK29UY0xaMktTRmhyMVlheG1lSVNUNlV0VDBwZ01zTTZyVDRYZmt2MndW?=
+ =?utf-8?B?V3ZXNkJEbytkcE5JbG1PMHR2UE5XQXdBTEFYbTRONWpXTkozVjZ5SU9ERWdG?=
+ =?utf-8?B?ajFkRXJpMFhNeGYvbnVjN1BtZnNGY3dHbG5iOWo3R2NHZ0Nya05IZks5Ykdl?=
+ =?utf-8?B?Yk1XWTJhcXpmZjArd0liZ3Q0S1puSkVPNlNZc2hpTXlFRkpxeEI2RUpxb2hL?=
+ =?utf-8?B?U2k5QzFETUVKcEkwZFQ4RUZOOGh2SVlZd0tSNVlZbDVzRG56ak9xT0RlMkdl?=
+ =?utf-8?B?ZXMzRnVjK3VuZ3NOd21VY0tXMVVNL0pzbk5MdXBSK0RybXk0eWQ2aXRZVUl0?=
+ =?utf-8?B?aVBpcTUwckVLdmVGTks1a3g3dHRiSUJsNDZCM25XTjVrTHhMeWNCcDZGUEhI?=
+ =?utf-8?B?bDkwVkxZL0thWEtTd2t4VjkrdGthMldrOGZvM0dTZGtlQVd5Q3NBWEhybHlN?=
+ =?utf-8?B?YXZiWFdabXM2eWNNZVNCemZpdEY0Sjk3NmZ6cnplcjIzZE1EN2pZbkhUSEt2?=
+ =?utf-8?B?SzZTa1d3Ukd5M1NXSDR4UU5manIrMlBCZlh2THNIMDVSZUFuMkFzTjFuS1V6?=
+ =?utf-8?B?M1JDNzhCdmhqQUs0dTYydUZrTjhaWTlEMkZnNk9RSjEvUmtmcDRJeVlxbm5y?=
+ =?utf-8?B?OHp1alFtcWtVV1FoQ3hOaEc3UmNrVVJaMEZtekVldVRLclFvdG5iaE1ONWdv?=
+ =?utf-8?B?Z2lFZEZpL0Y3L0luWDkxRVphVzZHandUdjFZOTA2S1RtWDAzZWJ0VjlCaitH?=
+ =?utf-8?B?L2Rab2tzS05aaEI2SUZTSW9PNGJDZUR3OU1tR3JHT1hGeFhzZDh3dzhyeXlB?=
+ =?utf-8?B?dnN2NHNzQnp3YXlpSEd4b1FDV095b3RxMTNyTFE5Ty94OUFxQS9hRkNacE1k?=
+ =?utf-8?B?THlobzl4ZHBuOVZYcUtRckJBSUljenpEN29EaElnYXEvQUI2b3RsVStNUmxR?=
+ =?utf-8?B?R1E9PQ==?=
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 615d9b18-8006-4f68-34d6-08db692d15db
+X-MS-Exchange-CrossTenant-AuthSource: AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 21:00:57.1641
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 21:04:16.5681
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 87ba1f9a-44cd-43a6-b008-6fdb45a5204e
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qdBjhMjn+ABFsjWr46I3U5gGIpIT1aOQh15TnuGfj+e4fAa/y5tIsZZiO5elpHu5/0fXW5+6rkNAcsfC3RVVjg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR04MB7225
-X-Proofpoint-ORIG-GUID: Ac5X0eHmF1yR_hEmo9YES5paikNx8nk4
-X-Proofpoint-GUID: Ac5X0eHmF1yR_hEmo9YES5paikNx8nk4
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-09_15,2023-06-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_policy_notspam policy=outbound_policy score=30
- priorityscore=1501 phishscore=0 impostorscore=0 bulkscore=0
- mlxlogscore=877 spamscore=0 malwarescore=0 clxscore=1015 adultscore=0
- lowpriorityscore=0 mlxscore=0 suspectscore=0 classifier=spam adjust=30
- reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306090177
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: jkg4RELARfWSW2V/vvynImkJOQP8noe9zxoouFJA+2ZLclEDibtIRsgHUKyxaiDNkvCF5m3uFz0l+6x7uNJ+Qw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR10MB7428
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/9/23 02:30, Rodolfo Giometti wrote:
-> On 08/06/23 00:07, Charlie Johnston wrote:
->> On 6/7/23 02:33, Rodolfo Giometti wrote:
->>> On 05/06/23 22:31, Charlie Johnston wrote:
->>>> For consistency with what ptp uses for minors, this
->>>> change sets PPS_MAX_SOURCES to MINORMASK + 1.
->>>>
->>>> The PPS_MAX_SOURCES value is currently set to 16. In
->>>> some cases this was not sufficient for a system. For
->>>> example, a system with multiple (4+) PCIe cards each
->>>> with 4 PTP-capable ethernet interfaces could run out
->>>> of the available PPS major:minors if each interface
->>>> registers a PPS source.
->>>>
->>>> Signed-off-by: Charlie Johnston <charlie.johnston@ni.com>
->>>> ---
->>>>    include/uapi/linux/pps.h | 2 +-
->>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/include/uapi/linux/pps.h b/include/uapi/linux/pps.h
->>>> index 009ebcd8ced5..85f472330da8 100644
->>>> --- a/include/uapi/linux/pps.h
->>>> +++ b/include/uapi/linux/pps.h
->>>> @@ -26,7 +26,7 @@
->>>>    #include <linux/types.h>
->>>>      #define PPS_VERSION        "5.3.6"
->>>> -#define PPS_MAX_SOURCES        16        /* should be enough... */
->>>> +#define PPS_MAX_SOURCES        (MINORMASK + 1)
->>>>      /* Implementation note: the logical states ``assert'' and ``clear''
->>>>     * are implemented in terms of the chip register, i.e. ``assert''
->>>
->>> I have just one question: are you sure that it's safe to call idr_alloc(..., 0, (MINORMASK + 1), ...)?
->>>
->>> Ciao,
->>>
->>> Rodolfo
->>>
->>
->> Thanks for taking a look!
->>
->> My understanding is that idr_alloc(..., start, end, ...) can take any end value up to INT_MAX. It also handles any values <= 0 by treating them as equal to INT_MAX + 1 since the end value is non-inclusive. I can't think of any reason using MINORMASK + 1 here would be an issue since it's much less than the maximum value idr_alloc() allows.
->>
->> A number of drivers (e.g. ptp) just explicitly use a start and end value of 0, but I don't think that change would fit here.
-> 
-> I see and maybe I should replace the usage of idr_*() with ida_*() as PTP does...
-> 
-> However the right-thing(TM) to do here should be dropping PPS_MAX_SOURCES at all!
-> 
-> Let me go deeper in this issue. I'm going to produce a patch set in next days. Have you any chances to test it?
-> 
-> Ciao,
-> 
-> Rodolfo
-> 
+From: Jan Kiszka <jan.kiszka@siemens.com>
 
-I'll have to check when the system we used for testing is available again (not easy to find a system with 20+ Ethernet ports) but I'd be happy to test a patch!
+The VL bit in the seconds register remains set only until seconds are
+written under main power. As this often happens during boot-up after
+picking up a network time, make sure to preserve the low battery state
+across this, caching it and returning it via the RTC_VL_BACKUP_LOW bit.
 
-I know an increase to PPS_MAX_SOURCES was tested on that system.
+To permit userspace clearing this state during runtime, also implement
+RTC_VL_CLR that works against the cached state.
 
-Thanks,
-Charlie
+This is emulating RTCs which have a battery voltage check that works
+under main power as well.
+
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+---
+ drivers/rtc/rtc-pcf8563.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/rtc/rtc-pcf8563.c b/drivers/rtc/rtc-pcf8563.c
+index 7e720472213c..f8c6cdb9a39d 100644
+--- a/drivers/rtc/rtc-pcf8563.c
++++ b/drivers/rtc/rtc-pcf8563.c
+@@ -81,6 +81,7 @@ struct pcf8563 {
+ #ifdef CONFIG_COMMON_CLK
+ 	struct clk_hw		clkout_hw;
+ #endif
++	bool low_bat;
+ };
+ 
+ static int pcf8563_read_block_data(struct i2c_client *client, unsigned char reg,
+@@ -207,6 +208,7 @@ static int pcf8563_rtc_read_time(struct device *dev, struct rtc_time *tm)
+ 		return err;
+ 
+ 	if (buf[PCF8563_REG_SC] & PCF8563_SC_LV) {
++		pcf8563->low_bat = true;
+ 		dev_err(&client->dev,
+ 			"low voltage detected, date/time is not reliable.\n");
+ 		return -EINVAL;
+@@ -277,6 +279,8 @@ static int pcf8563_rtc_set_time(struct device *dev, struct rtc_time *tm)
+ static int pcf8563_rtc_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
+ {
+ 	struct i2c_client *client = to_i2c_client(dev);
++	struct pcf8563 *pcf8563 = i2c_get_clientdata(client);
++	unsigned int state = 0;
+ 	int ret;
+ 
+ 	switch (cmd) {
+@@ -284,9 +288,16 @@ static int pcf8563_rtc_ioctl(struct device *dev, unsigned int cmd, unsigned long
+ 		ret = i2c_smbus_read_byte_data(client, PCF8563_REG_SC);
+ 		if (ret < 0)
+ 			return ret;
+-
+-		return put_user(ret & PCF8563_SC_LV ? RTC_VL_DATA_INVALID : 0,
+-				(unsigned int __user *)arg);
++		if (ret & PCF8563_SC_LV) {
++			state |= RTC_VL_DATA_INVALID;
++			pcf8563->low_bat = true;
++		}
++		if (pcf8563->low_bat)
++			state |= RTC_VL_BACKUP_LOW;
++		return put_user(state, (unsigned int __user *)arg);
++	case RTC_VL_CLR:
++		pcf8563->low_bat = false;
++		return 0;
+ 	default:
+ 		return -ENOIOCTLCMD;
+ 	}
+-- 
+2.35.3
