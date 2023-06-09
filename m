@@ -2,85 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6386729D87
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:57:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34BB3729D8D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241765AbjFIO5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 10:57:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39778 "EHLO
+        id S240514AbjFIO5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 10:57:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241761AbjFIO5F (ORCPT
+        with ESMTP id S241713AbjFIO51 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 10:57:05 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726533C26
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 07:56:41 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-19f2fb9b1cdso608589fac.0
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 07:56:41 -0700 (PDT)
+        Fri, 9 Jun 2023 10:57:27 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D1C3C0B;
+        Fri,  9 Jun 2023 07:56:59 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-51493ec65d8so3293634a12.2;
+        Fri, 09 Jun 2023 07:56:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20221208.gappssmtp.com; s=20221208; t=1686322600; x=1688914600;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mNjEF1zb+JpJdY0weZ4OdAOu0yke/I9t8R3uYm6sLTw=;
-        b=yqu1Gt/I72W8rGCMTbNxP4nxyhxODNNERehop1YFjTuhAXJzp3uvoX/x6Zqn80ZPsP
-         qPNKqE0PRLSNo9svzye/a1X7FjDNhWzOUX+2yPywDUpNtdZd/TITx3Ce2a77ghBWrL9U
-         EmSNrEfZYGTeblSWGgITvKbFQLgD9LROEfaw65vEhd231ogFe7GnM79ShBz8kCsPyZaH
-         cdkBTFk7A522ggTbqdCnOhpuWmX4QnN7G4NRlIwBcPXt41WPTGi7ZtUuiGXlFu6e5sm+
-         Rb3YsG0S3J8oSiUu0dFlFvTTfDMUk5BkxDdgpUI1gDHvHUXH96EzUxGV6KBzx01Lb3Nt
-         SjLw==
+        d=gmail.com; s=20221208; t=1686322616; x=1688914616;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jzFk5e6FU4vaw3ghwnQ+N3gSwXd4BJt0wdQ5gDBNr9g=;
+        b=di+OCGvnTt3zZGp8y7OX50WkKcMQa9Owlgdq/OFmMbS5PcXhxwx8jGcCjrHwMOwdwb
+         2dRnOCyP7Yr7pwY+4pr12w+kuebNlmSrsnjxiUe9NMVmuW/MSNRJSMTTAmT9S0cRHhgO
+         mwNBjqX/l2j2in+OoaxKsZkY2Bo8CWH5V7l9kgChx/Y8lsq/mXlSSnLthIObc+P4PFEx
+         PkaPgAElcbe07UWAWZ+ygxobn8kiCW89v+FzIo3cFsrfXjYTfqFfFwSx/FDXYkpjIHDD
+         VXqhbEtN2J6IViE5n7HdH/YdIRfekzA/m1xvgBSnbJGATvE28+fr0K9IaI7eDp2eW7Ib
+         kvEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686322600; x=1688914600;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mNjEF1zb+JpJdY0weZ4OdAOu0yke/I9t8R3uYm6sLTw=;
-        b=cJF+mWZnSntF1FYV0ZqHPbk7UMnKAiM20DD6IozoFq2r6hERD/iY+64uXlhNPS1ibH
-         1pKt+mvBBl+qwtkFIqH/1XNire/dNhEPaht9n2plp/FLgKUKvT1m7xrL3gYaeKEn2Dtf
-         orM0OvEzwFBvGpOS1YH/2w88NmXqbtwHZlI+VftQOWL/yGkqZUpHmPz1SQW5uCDuYiva
-         XdwrYIWXEE6rIOynDUG5+S7AXAvQ97ZELlvNo/2n75CfofkZg5VBaMQO4HSoufzIu/cn
-         QEE+3/tEOwAarg3Wx4WtT12NbtsQ7eUS7xXXnbKSPetc4proWDjbb4aNs21mMMMxg/6H
-         j+pg==
-X-Gm-Message-State: AC+VfDyDwzrBEDHOZFL5RgoAD3fwYwfmRS4IdO2g5HpgBkLX5k5dH5nf
-        c7ZbAWAUgJ+lCeJxxujydd+MfQ==
-X-Google-Smtp-Source: ACHHUZ5lyjIg3/k8ishXP5lVr7SzW3xDk6gDIW+APpNABj3FGwxCpQmA/zWxRkbdHKZaShP8U7SZcw==
-X-Received: by 2002:a05:6870:fc84:b0:19f:7c4c:38b4 with SMTP id ly4-20020a056870fc8400b0019f7c4c38b4mr1554940oab.15.1686322600226;
-        Fri, 09 Jun 2023 07:56:40 -0700 (PDT)
-Received: from ?IPV6:2804:7f1:e2c0:9e83:b7c7:f418:cfcf:f0dd? ([2804:7f1:e2c0:9e83:b7c7:f418:cfcf:f0dd])
-        by smtp.gmail.com with ESMTPSA id a21-20020a056870d19500b001a3093ec23fsm2236633oac.32.2023.06.09.07.56.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Jun 2023 07:56:39 -0700 (PDT)
-Message-ID: <facdfceb-fe2e-795b-ea89-1b67478eb533@mojatatu.com>
-Date:   Fri, 9 Jun 2023 11:56:35 -0300
+        d=1e100.net; s=20221208; t=1686322616; x=1688914616;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jzFk5e6FU4vaw3ghwnQ+N3gSwXd4BJt0wdQ5gDBNr9g=;
+        b=jfJ4H23ru36G90j9vRYpDgATqB4BbPt+RIv9WIev187NH1qrBSkoNN18ZkUYV4cg0O
+         7KHyJA/Z+kDbXHrDduI8XPrfo9iw+mDsLhhFTOMIIpQ55bqEekkCFAsR58Z/AMxBIRqi
+         Mc3ibZ6qPkkJHCCCtK2/H8JSy+1kVlTwCeO3d8duvx686xHJyQFQlzMSdFjvH/59pc3t
+         DqtJYW+RtgQx/uyocuBD88JTBVQoxO5PBac52Qfva9axw61keTQrnoTsyZvZX+ELmU3w
+         5ikcuXkVuLkHTfNn6bl8cKDLo2cQlAMAG7nsw6QwKwJcJME8NIHZhNC7LhgEL1oRnaJn
+         butg==
+X-Gm-Message-State: AC+VfDyY+CuWkoF44h7/M9mkQ29c65eBYjigTxfs3Jh3CzFrouhNodf1
+        h8lphQ7nj3hO1f2GhBpE2hA=
+X-Google-Smtp-Source: ACHHUZ7yLGXKZjTTcs9Ynq0E0QrqpmUdMDFWRMwHf0aGznb9knf83o8w0SHxzJ4YlIg0N+jvjRiqXw==
+X-Received: by 2002:a17:907:9802:b0:973:cb21:8479 with SMTP id ji2-20020a170907980200b00973cb218479mr2193199ejc.70.1686322615963;
+        Fri, 09 Jun 2023 07:56:55 -0700 (PDT)
+Received: from PCBABN.skidata.net ([91.230.2.244])
+        by smtp.gmail.com with ESMTPSA id x10-20020a1709060eea00b009745edfb7cbsm1388188eji.45.2023.06.09.07.56.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 07:56:55 -0700 (PDT)
+From:   Benjamin Bara <bbara93@gmail.com>
+To:     dave.stevenson@raspberrypi.com
+Cc:     bbara93@gmail.com, benjamin.bara@skidata.com,
+        jacopo.mondi@ideasonboard.com, laurent.pinchart@ideasonboard.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        mani@kernel.org, mchehab@kernel.org
+Subject: [PATCH 2/2] media: i2c: imx290: Add support for V4L2_CID_VTOTAL
+Date:   Fri,  9 Jun 2023 16:56:48 +0200
+Message-Id: <20230609145648.1960398-1-bbara93@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <CAPY8ntCx8QLX_jqtJeWzCQkApSR_+RY7jMM5pDNA7zewJa+eiA@mail.gmail.com>
+References: <CAPY8ntCx8QLX_jqtJeWzCQkApSR_+RY7jMM5pDNA7zewJa+eiA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH RESEND net-next 5/5] net/sched: taprio: dump class stats
- for the actual q->qdiscs[]
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>,
-        Peilin Ye <yepeilin.cs@gmail.com>,
-        Pedro Tammela <pctammela@mojatatu.com>
-References: <20230602103750.2290132-1-vladimir.oltean@nxp.com>
- <20230602103750.2290132-6-vladimir.oltean@nxp.com>
- <CAM0EoM=P9+wNnNQ=ky96rwCx1z20fR21EWEdx+Na39NCqqG=3A@mail.gmail.com>
- <20230609121043.ekfvbgjiko7644t7@skbuf>
-Content-Language: en-US
-From:   Victor Nogueira <victor@mojatatu.com>
-In-Reply-To: <20230609121043.ekfvbgjiko7644t7@skbuf>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -89,124 +76,195 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/06/2023 09:10, Vladimir Oltean wrote:
-> On Thu, Jun 08, 2023 at 02:44:46PM -0400, Jamal Hadi Salim wrote:
->> Other than the refcount issue i think the approach looks reasonable to
->> me. The stats before/after you are showing below though are
->> interesting; are you showing a transient phase where packets are
->> temporarily in the backlog. Typically the backlog is a transient phase
->> which lasts a very short period. Maybe it works differently for
->> taprio? I took a quick look at the code and do see to decrement the
->> backlog in the dequeue, so if it is not transient then some code path
->> is not being hit.
-> 
-> It's a fair concern. The thing is that I put very aggressive time slots
-> in the schedule that I'm testing with, and my kernel has a lot of
-> debugging stuff which bogs it down (kasan, kmemleak, lockdep, DMA API
-> debug etc). Not to mention that the CPU isn't the fastest to begin with.
-> 
-> The way taprio works is that there's a hrtimer which fires at the
-> expiration time of the current schedule entry and sets up the gates for
-> the next one. Each schedule entry has a gate for each traffic class
-> which determines what traffic classes are eligible for dequeue() and
-> which ones aren't.
-> 
-> The dequeue() procedure, though also invoked by the advance_schedule()
-> hrtimer -> __netif_schedule(), is also time-sensitive. By the time
-> taprio_dequeue() runs, taprio_entry_allows_tx() function might return
-> false when the system is so bogged down that it wasn't able to make
-> enough progress to dequeue() an skb in time. When that happens, there is
-> no mechanism, currently, to age out packets that stood too much in the
-> TX queues (what does "too much" mean?).
-> 
-> Whereas enqueue() is technically not time-sensitive, i.e. you can
-> enqueue whenever you want and the Qdisc will dequeue whenever it can.
-> Though in practice, to make this scheduling technique useful, the user
-> space enqueue should also be time-aware (though you can't capture this
-> with ping).
-> 
-> If I increase all my sched-entry intervals by a factor of 100, the
-> backlog issue goes away and the system can make forward progress.
-> 
-> So yeah, sorry, I didn't pay too much attention to the data I was
-> presenting for illustrative purposes.
-> 
->> Aside: I realize you are busy - but if you get time and provide some
->> sample tc command lines for testing we could help create the tests for
->> you, at least the first time. The advantage of putting these tests in
->> tools/testing/selftests/tc-testing/ is that there are test tools out
->> there that run these tests and so regressions are easier to catch
->> sooner.
-> 
-> Yeah, ok. The script posted in a reply on the cover letter is still what
-> I'm working with. The things it intends to capture are:
-> - attaching a custom Qdisc to one of taprio's classes doesn't fail
-> - attaching taprio to one of taprio's classes fails
-> - sending packets through one queue increases the counters (any counters)
->    of just that queue
-> 
-> All the above, replicated once for the software scheduling case and once
-> for the offload case. Currently netdevsim doesn't attempt to emulate
-> taprio offload.
-> 
-> Is there a way to skip tests? I may look into tdc, but I honestly don't
-> have time for unrelated stuff such as figuring out why my kernel isn't
-> configured for the other tests to pass - and it seems that once one test
-> fails, the others are completely skipped, see below.
+Hi Dave,
 
-You can tell tdc to run a specific test file by providing the "-f" option.
-For example, if you want to run only taprio tests, you can issue the
-following command:
+thanks for the feedback!
 
-./tdc.py -f tc-tests/qdiscs/taprio.json
+On Fri, 9 Jun 2023 at 16:21, Dave Stevenson <dave.stevenson@raspberrypi.com> wrote:
+> On Fri, 9 Jun 2023 at 14:16, Benjamin Bara <bbara93@gmail.com> wrote:
+> >
+> > From: Benjamin Bara <benjamin.bara@skidata.com>
+> >
+> > The new V4L2_CID_VTOTAL control represents the VMAX register.
+> > Implementing it simplifies calculations in user space, as it is
+> > independent of the current mode (format height), meaning its value does
+> > not change with format changes.
+>
+> I know Laurent suggested this change[1] so that (AIUI) exposure max
+> limits are easier to compute around mode changes.
+>
+> I'm currently seeing this as a fair amount of boilerplate to be added
+> to all drivers so that two controls provide effectively the same
+> information, and I'm not convinced it saves any significant effort in
+> userspace. Can you (or Laurent) detail exactly what the issue is that
+> the new control solves?
 
-This is also described in tdc's README.
+Sure. My main problem with the current blanking controls is that it is
+not clear what should happen in case of a format switch. I guess the
+expected case is that the vertical blanking should stay constant, but
+that might be implemented differently.
+If so, this results in a change of the total frame duration. If we
+switch to "total", a format switch would result to the same (required)
+frame rate, as the blanking would be reduced instead. I guess this
+represents the typical "use case" better, and clarifies implementation
+things. Currently, it seems a little bit odd or unnecessary complicated
+to me that I have to modify a blanking time and need to know the current
+format to be able to achieve a certain frame rate. But maybe Laurent has
+other issues.
 
-> Also, by which rule are the test IDs created?
+> Do we need to do the same for HBLANK as well, or do we live with an
+> asymmetrical set of controls.
 
-When creating a test case in tdc, you must have an ID field.
-What we do to generate the IDs is leave the "id" field as an
-empty string on the test case description, for example:
+I can add that in a v2 too, IMHO it makes sense to replace both
+blankings with totals. So one can set HTOTAL to min and VTOTAL to the
+required frame rate (simpler calculation now) and has the guarantee that
+the frame rate stays constant during format switches (if the pixel rate
+is high enough of course). I will then also adapt the doc accordingly.
 
+Hope this clarifies it.
 
-{
-     "id": "",
-     "name": "My dummy test case",
-     ...
-}
+Regards,
+Benjamin
 
-and run the following:
-
-./tdc.py -i
-
-This will automatically fill up the "id" field in the JSON
-with an appropriate ID.
-
-> root@debian:~# cd selftests/tc-testing/
-> root@debian:~/selftests/tc-testing# ./tdc.sh
-> considering category qdisc
->   -- ns/SubPlugin.__init__
-> Test 0582: Create QFQ with default setting
-> Test c9a3: Create QFQ with class weight setting
-> Test d364: Test QFQ with max class weight setting
-> Test 8452: Create QFQ with class maxpkt setting
-> Test 22df: Test QFQ class maxpkt setting lower bound
-> Test 92ee: Test QFQ class maxpkt setting upper bound
-> Test d920: Create QFQ with multiple class setting
-> Test 0548: Delete QFQ with handle
-> Test 5901: Show QFQ class
-> Test 0385: Create DRR with default setting
-> Test 2375: Delete DRR with handle
-> Test 3092: Show DRR class
-> Test 3460: Create CBQ with default setting
-> exit: 2
-> exit: 0
-> Error: Specified qdisc kind is unknown.
-
-As you stated, this likely means you are missing a config option.
-However you can just ask tdc to run a specific test file to avoid this.
-
-> (...)
-
-cheers,
-Victor
+> Thanks
+>   Dave
+>
+> [1] https://lists.libcamera.org/pipermail/libcamera-devel/2023-June/038170.html
+>
+> > Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
+> > ---
+> >  drivers/media/i2c/imx290.c | 47 ++++++++++++++++++++++++++++++++++------------
+> >  1 file changed, 35 insertions(+), 12 deletions(-)
+> >
+> > diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
+> > index 5ea25b7acc55..42938400efb0 100644
+> > --- a/drivers/media/i2c/imx290.c
+> > +++ b/drivers/media/i2c/imx290.c
+> > @@ -255,6 +255,7 @@ struct imx290 {
+> >         struct v4l2_ctrl *link_freq;
+> >         struct v4l2_ctrl *hblank;
+> >         struct v4l2_ctrl *vblank;
+> > +       struct v4l2_ctrl *vtotal;
+> >         struct v4l2_ctrl *exposure;
+> >         struct {
+> >                 struct v4l2_ctrl *hflip;
+> > @@ -782,8 +783,7 @@ static void imx290_exposure_update(struct imx290 *imx290,
+> >  {
+> >         unsigned int exposure_max;
+> >
+> > -       exposure_max = imx290->vblank->val + mode->height -
+> > -                      IMX290_EXPOSURE_OFFSET;
+> > +       exposure_max = imx290->vtotal->val - IMX290_EXPOSURE_OFFSET;
+> >         __v4l2_ctrl_modify_range(imx290->exposure, 1, exposure_max, 1,
+> >                                  exposure_max);
+> >  }
+> > @@ -794,7 +794,7 @@ static int imx290_set_ctrl(struct v4l2_ctrl *ctrl)
+> >                                              struct imx290, ctrls);
+> >         const struct v4l2_mbus_framefmt *format;
+> >         struct v4l2_subdev_state *state;
+> > -       int ret = 0, vmax;
+> > +       int ret = 0;
+> >
+> >         /*
+> >          * Return immediately for controls that don't need to be applied to the
+> > @@ -803,10 +803,22 @@ static int imx290_set_ctrl(struct v4l2_ctrl *ctrl)
+> >         if (ctrl->flags & V4L2_CTRL_FLAG_READ_ONLY)
+> >                 return 0;
+> >
+> > -       if (ctrl->id == V4L2_CID_VBLANK) {
+> > -               /* Changing vblank changes the allowed range for exposure. */
+> > +       /* Changing vtotal changes the allowed range for exposure. */
+> > +       if (ctrl->id == V4L2_CID_VTOTAL)
+> >                 imx290_exposure_update(imx290, imx290->current_mode);
+> > -       }
+> > +
+> > +       /*
+> > +        * vblank and vtotal depend on each other, therefore also update the
+> > +        * other one.
+> > +        */
+> > +       if (ctrl->id == V4L2_CID_VBLANK &&
+> > +           imx290->vtotal->val != ctrl->val + imx290->current_mode->height)
+> > +               __v4l2_ctrl_s_ctrl(imx290->vtotal,
+> > +                                  ctrl->val + imx290->current_mode->height);
+> > +       if (ctrl->id == V4L2_CID_VTOTAL &&
+> > +           imx290->vblank->val != ctrl->val - imx290->current_mode->height)
+> > +               __v4l2_ctrl_s_ctrl(imx290->vblank,
+> > +                                  ctrl->val - imx290->current_mode->height);
+> >
+> >         /* V4L2 controls values will be applied only when power is already up */
+> >         if (!pm_runtime_get_if_in_use(imx290->dev))
+> > @@ -821,9 +833,14 @@ static int imx290_set_ctrl(struct v4l2_ctrl *ctrl)
+> >                 break;
+> >
+> >         case V4L2_CID_VBLANK:
+> > -               ret = imx290_write(imx290, IMX290_VMAX,
+> > -                                  ctrl->val + imx290->current_mode->height,
+> > -                                  NULL);
+> > +               /* vblank is updated by vtotal. */
+> > +               break;
+> > +
+> > +       case V4L2_CID_VTOTAL:
+> > +               ret = imx290_write(imx290, IMX290_VMAX, ctrl->val, NULL);
+> > +               if (ret)
+> > +                       goto err;
+> > +
+> >                 /*
+> >                  * Due to the way that exposure is programmed in this sensor in
+> >                  * relation to VMAX, we have to reprogramme it whenever VMAX is
+> > @@ -834,9 +851,8 @@ static int imx290_set_ctrl(struct v4l2_ctrl *ctrl)
+> >                 ctrl = imx290->exposure;
+> >                 fallthrough;
+> >         case V4L2_CID_EXPOSURE:
+> > -               vmax = imx290->vblank->val + imx290->current_mode->height;
+> >                 ret = imx290_write(imx290, IMX290_SHS1,
+> > -                                  vmax - ctrl->val - 1, NULL);
+> > +                                  imx290->vtotal->val - ctrl->val - 1, NULL);
+> >                 break;
+> >
+> >         case V4L2_CID_TEST_PATTERN:
+> > @@ -880,6 +896,7 @@ static int imx290_set_ctrl(struct v4l2_ctrl *ctrl)
+> >                 break;
+> >         }
+> >
+> > +err:
+> >         pm_runtime_mark_last_busy(imx290->dev);
+> >         pm_runtime_put_autosuspend(imx290->dev);
+> >
+> > @@ -911,11 +928,14 @@ static void imx290_ctrl_update(struct imx290 *imx290,
+> >         unsigned int vblank_max = IMX290_VMAX_MAX - mode->height;
+> >
+> >         __v4l2_ctrl_s_ctrl(imx290->link_freq, mode->link_freq_index);
+> > +       __v4l2_ctrl_s_ctrl(imx290->vblank, imx290->vtotal->val - mode->height);
+> >
+> >         __v4l2_ctrl_modify_range(imx290->hblank, hblank_min, hblank_max, 1,
+> >                                  hblank_min);
+> >         __v4l2_ctrl_modify_range(imx290->vblank, vblank_min, vblank_max, 1,
+> >                                  vblank_min);
+> > +       __v4l2_ctrl_modify_range(imx290->vtotal, mode->vmax_min,
+> > +                                IMX290_VMAX_MAX, 1, mode->vmax_min);
+> >  }
+> >
+> >  static int imx290_ctrl_init(struct imx290 *imx290)
+> > @@ -947,7 +967,7 @@ static int imx290_ctrl_init(struct imx290 *imx290)
+> >
+> >         /*
+> >          * Correct range will be determined through imx290_ctrl_update setting
+> > -        * V4L2_CID_VBLANK.
+> > +        * V4L2_CID_VTOTAL.
+> >          */
+> >         imx290->exposure = v4l2_ctrl_new_std(&imx290->ctrls, &imx290_ctrl_ops,
+> >                                              V4L2_CID_EXPOSURE, 1, 65535, 1,
+> > @@ -983,6 +1003,9 @@ static int imx290_ctrl_init(struct imx290 *imx290)
+> >
+> >         imx290->vblank = v4l2_ctrl_new_std(&imx290->ctrls, &imx290_ctrl_ops,
+> >                                            V4L2_CID_VBLANK, 1, 1, 1, 1);
+> > +       imx290->vtotal = v4l2_ctrl_new_std(&imx290->ctrls, &imx290_ctrl_ops,
+> > +                                          V4L2_CID_VTOTAL, 1, IMX290_VMAX_MAX,
+> > +                                          1, 1);
+> >
+> >         imx290->hflip = v4l2_ctrl_new_std(&imx290->ctrls, &imx290_ctrl_ops,
+> >                                           V4L2_CID_HFLIP, 0, 1, 1, 0);
+> >
+> > --
+> > 2.34.1
+> >
