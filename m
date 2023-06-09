@@ -2,136 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A96272A0B4
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 655EE72A0B7
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:56:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbjFIQzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 12:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54570 "EHLO
+        id S230058AbjFIQzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 12:55:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjFIQzt (ORCPT
+        with ESMTP id S229920AbjFIQzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 12:55:49 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C671993
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:55:48 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-543b599054dso815100a12.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 09:55:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686329748; x=1688921748;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JUDu/7DgpcEGYUfH66KF8LpEOa4YLrtNbTWtCaGIav4=;
-        b=ONSRNQw5ZwRQNGUqQHq+j4pU5Ha8C0gKwcZ3tD5oLOjzGBRHgFACfAQprE0Q+TYg/P
-         lf+3dNuqjPAt+6bwiyXizp0lNbypl7beDWmiXlNGIWMkLLAjabVD1wTly667BXz+g/1/
-         L0qmBswoM4J2Qj7ObeKL7y1aiscGksRuGZGH+y0qRi/2Z2Sd22x2JWyc8VPhIiC75xmV
-         um25gWcuJx/L65W+dXsFYQdrBRAaW8fT9PQY1fIL/dI8i3qz+DerYhTj+/L4zpj2zMjx
-         FEriPApZU9uFQzNGhOvbKQRUGKr0Cqa6V3KXZjEuijTtKk53SdH5gRt/Bbqu82iTjBaU
-         oKGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686329748; x=1688921748;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JUDu/7DgpcEGYUfH66KF8LpEOa4YLrtNbTWtCaGIav4=;
-        b=Jo/fhVkSQ3EnvWUF28XgYTzstXmkxT8WUGwyq5APOieds5nt4ffma8sZ006pHkNUQB
-         f2vH/WmLXhtVL23Og6fr/mL5dvC8hq4yFmMnrNlyHS4RRy4XUF3I7Db+SPxhNiJuZg9f
-         Utb4HE3zyNOL0J+zmttAXf6ohEO1HQutUUVPD7eblcX0uRpCUqKMbe1CPCoLnVD2LRxG
-         U55dhZZbPAbPX9W41bTuOPfm1D4mEA4aDVhgPYSpqtUqZky7uNt2sc4q7jSsAhetIbnr
-         4+7dt0WVCgeXvCGlnDfEgoJyIPQqBLebNRqjWH/LdhMdQiBwu2T18bDYa6Bmu6z1sL3g
-         2HgQ==
-X-Gm-Message-State: AC+VfDyPytY/Jx+2/F+b6++VG9E/1kd/zBP2QaImFQcELL2xcf2a2V1h
-        CojoVAOkxZA26/brS0TTj1UZ6IRu6xW/kxLZI9bGhg==
-X-Google-Smtp-Source: ACHHUZ6HxN+lrJGAlL2C5V8qEiwPCFNyTuGmy18Ac5XNglz/yS9yLUF2jkuplc7nJeYWFDXq58+6+ZWVXbHGpZ6st18=
-X-Received: by 2002:a17:90a:ca97:b0:256:3191:640f with SMTP id
- y23-20020a17090aca9700b002563191640fmr6690924pjt.4.1686329747571; Fri, 09 Jun
- 2023 09:55:47 -0700 (PDT)
+        Fri, 9 Jun 2023 12:55:50 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 101883A88;
+        Fri,  9 Jun 2023 09:55:48 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 4B65F5C0056;
+        Fri,  9 Jun 2023 12:55:46 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Fri, 09 Jun 2023 12:55:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1686329746; x=1686416146; bh=jO2lbJWjlD3AhgpqUQ7r9uAT+WfB1wgKDIz
+        85pj33i8=; b=CFe8GJvCu68K0tqO7GAJP6Ph6cIOC2pvsTRjyaNHLMrLHIqfIrj
+        YNX4nMFHKqrYV/DXSlCwpi/YUqseg+9pvjoePMDxNbtwMAYglhGHcinU27Lv4Nge
+        iprtLLfS05YW420koXxSramZzljJ13kMSyGpcQDKMLu+l2UpLKoIW7JUnoBCC9w5
+        3WvQIwc30hDHL3STx5A28AG2gToQmSA/81lgiZGC1aVYYYhhynIITnwaqL0kUcit
+        UhqG2xxdv1xqUDE5CCezw2JSimg7m0Kw4MwAkbJSKmeaGTvh3NFF6JEgdWq7uHem
+        vm82rr1PCA10l657SPM1nZh1AJkv1cwWAsg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1686329746; x=1686416146; bh=jO2lbJWjlD3Ah
+        gpqUQ7r9uAT+WfB1wgKDIz85pj33i8=; b=w8IbCCCTVKAFYoq8dgC972pYva5Rb
+        mmPzwOwxgvYmOjUrELKiPGAM6xKit7KvVC5+LMnxgjZkkmXhX1BMtuM2vE7mcPAk
+        GUqBi3l7H46V8uaxggrhYHTiA+8rd8QGK4hoNe2gFaEUH0ZKdpuXoyZ8a4V2r3Ff
+        IQDBDuoVWMv/DvmZpg2ksqgOXP5ejpSurUM3D16H09COGtmlebrbEamBJ6dslAX0
+        E49uxqb41lq3OyLIbhztPb7oS54B1kP5qaV+P/G5OMka82JA2Ht8ZO3dqTj1P1kq
+        9/IbitskUvdGmOc2M5SWosWh4pucYOXQ5ISBq/itbcv/bowxxPPCfBhrQ==
+X-ME-Sender: <xms:kVmDZC9XOZM6ptkjSOu_HzwPcmVSxza92St4hphFJ7JJRn_TvOzYbQ>
+    <xme:kVmDZCt1CJ2HeRiSmUgAO84fKWAqR7_0tMIbF-CrMahSVI9FsYmjcKo2852XRBJaG
+    B9JD3erOYWGja8>
+X-ME-Received: <xmr:kVmDZIDd4roaVuvmRuTBFsW_9uyshMMr_FHPRXnUlemwKv8uKEj-qReXJ98>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtkedguddtjecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpeffvghm
+    ihcuofgrrhhivgcuqfgsvghnohhurhcuoeguvghmihesihhnvhhishhisghlvghthhhinh
+    hgshhlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpedvjeetgeekhfetudfhgfetffeg
+    fffguddvgffhffeifeeikeektdehgeetheffleenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpeguvghmihesihhnvhhishhisghlvghthhhinhhg
+    shhlrggsrdgtohhm
+X-ME-Proxy: <xmx:kVmDZKe7fNwLf_sshCBl8TDwl2n7fLQAEwQz93RdgWpXrtJnN4lmeQ>
+    <xmx:kVmDZHO06_1FTNq7mRU6Rkx6aJ9L1U4fwwe96uRP-7r4tPQsPH66ww>
+    <xmx:kVmDZEnDZXZLxSX7nDYzpAzBEhRJ6GQyNrKk1n0v0LPOIj5Od2DURw>
+    <xmx:klmDZDDm9qAHm16nDZgjqB1d0yGKjkRzPWSz64opTfCUZmIeyAtEIw>
+Feedback-ID: iac594737:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 9 Jun 2023 12:55:44 -0400 (EDT)
+Date:   Fri, 9 Jun 2023 12:55:39 -0400
+From:   Demi Marie Obenour <demi@invisiblethingslab.com>
+To:     Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
+        Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org
+Subject: Re: [PATCH v2 13/16] xen-blkback: Implement diskseq checks
+Message-ID: <ZINZj8ubQj7yFxdR@itl-email>
+References: <20230530203116.2008-1-demi@invisiblethingslab.com>
+ <20230530203116.2008-14-demi@invisiblethingslab.com>
+ <ZH7tizoYl8YVFN9B@Air-de-Roger>
+ <ZH9mZGbM32CDmKGF@itl-email>
+ <ZIA9uBJxx2gqA4Cq@Air-de-Roger>
+ <ZICs+WYCPYdu2yoI@itl-email>
+ <ZIGRXrSGmgLF/07O@Air-de-Roger>
+ <ZIH0yQCICZRpliSc@itl-email>
+ <ZINBqToBZVdfmr0e@Air-de-Roger>
 MIME-Version: 1.0
-References: <CAEf4Bzb2_THiWkqNRnbN5LsOif6+9=GY7LrtEbQf6o24cihhMQ@mail.gmail.com>
- <20230609093625.727490-1-zhangmingyi5@huawei.com>
-In-Reply-To: <20230609093625.727490-1-zhangmingyi5@huawei.com>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Fri, 9 Jun 2023 09:55:36 -0700
-Message-ID: <CAKH8qBu0AiB_0SZgU5N8EOmm4=hp5BRe=Yp5PHbyT1ZbRjdeOw@mail.gmail.com>
-Subject: Re: [PATCH] libbpf:fix use empty function pointers in ringbuf_poll
-To:     zhangmingyi <zhangmingyi5@huawei.com>
-Cc:     andrii.nakryiko@gmail.com, andrii@kernel.org, ast@kernel.org,
-        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        edumazet@google.com, hsinweih@uci.edu, jakub@cloudflare.com,
-        john.fastabend@gmail.com, kongweibin2@huawei.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, liuxin350@huawei.com,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzbot+49f6cef45247ff249498@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com, wuchangye@huawei.com,
-        xiesongyang@huawei.com, yanan@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Ii0jDpZ9bgT07th0"
+Content-Disposition: inline
+In-Reply-To: <ZINBqToBZVdfmr0e@Air-de-Roger>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 2:38=E2=80=AFAM zhangmingyi <zhangmingyi5@huawei.com=
-> wrote:
->
-> On Fri, Jun 9, 2023 at 1:39 AM Andrii Nakryiko <andrii.nakryiko@gmail.com=
-> wrote:
->
-> > On Thu, Jun 8, 2023 at 9:27=E2=80=AFAM Stanislav Fomichev <sdf@google.c=
-om> wrote:
-> > >
-> > > On Thu, Jun 8, 2023 at 6:00=E2=80=AFAM zhangmingyi <zhangmingyi5@huaw=
-ei.com> wrote:
-> > > >
-> > > > On 06/06,Stanislav Fomichev wrote:
-> > > >
-> > > > > On 06/05, Xin Liu wrote:
-> > > > > > From: zhangmingyi <zhangmingyi5@huawei.com>
-> > > > >
-> > > > > > The sample_cb of the ring_buffer__new interface can transfer NU=
-LL. However,
-> > > > > > the system does not check whether sample_cb is NULL during
-> > > > > > ring_buffer__poll, null pointer is used.
-> > > >
-> > > > > What is the point of calling ring_buffer__new with sample_cb =3D=
-=3D NULL?
-> > > >
-> > > > Yes, as you said, passing sample_cb in ring_buffer__new to NULL doe=
-sn't
-> > > > make sense, and few people use it that way, but that doesn't preven=
-t this
-> > > > from being a allowed and supported scenario. And when ring_buffer__=
-poll is
-> > > > called, it leads to a segmentation fault (core dump), which I think=
- needs
-> > > > to be fixed to ensure the security quality of libbpf.
-> > >
-> > > I dunno. I'd argue that passing a NULL to ring_buffer__new is an API
-> > > misuse. Maybe ring_buffer__new should return -EINVAL instead when
-> > > passed NULL sample_cb? Although, we don't usually have those checks
-> > > for the majority of the arguments in libbpf...
-> >
-> > Right. I'd say we should add a proper doc comment specifying all
-> > arguments and which ones are optional or not. And make it explicit
-> > that callback is not optional. If we start checking every possible
-> > pointer for NULL, libbpf will be littered with NULL checks, I'm not
-> > sure that's good.
->
-> I agree, we should add a proper doc comment specifying all
-> arguments and which ones are optional or not.
-> However, why does the external interface API in libbpf not verify input
-> parameters or add verification where risky operations may exist?
-> What's more, i think sample_cb=3DNULL is not strictly a mistake or
-> prohibited use, and is meaningless.
 
-It's not really customary in C to do it? So maybe you can follow up
-with the update to the doc?
+--Ii0jDpZ9bgT07th0
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 9 Jun 2023 12:55:39 -0400
+From: Demi Marie Obenour <demi@invisiblethingslab.com>
+To: Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
+Cc: Jens Axboe <axboe@kernel.dk>, Alasdair Kergon <agk@redhat.com>,
+	Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
+	Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>,
+	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+	xen-devel@lists.xenproject.org
+Subject: Re: [PATCH v2 13/16] xen-blkback: Implement diskseq checks
 
-The kindergarten is over, you pass NULL you get SIGSEGV :-D
+On Fri, Jun 09, 2023 at 05:13:45PM +0200, Roger Pau Monn=C3=A9 wrote:
+> On Thu, Jun 08, 2023 at 11:33:26AM -0400, Demi Marie Obenour wrote:
+> > On Thu, Jun 08, 2023 at 10:29:18AM +0200, Roger Pau Monn=C3=A9 wrote:
+> > > On Wed, Jun 07, 2023 at 12:14:46PM -0400, Demi Marie Obenour wrote:
+> > > > On Wed, Jun 07, 2023 at 10:20:08AM +0200, Roger Pau Monn=C3=A9 wrot=
+e:
+> > > > > On Tue, Jun 06, 2023 at 01:01:20PM -0400, Demi Marie Obenour wrot=
+e:
+> > > > > > On Tue, Jun 06, 2023 at 10:25:47AM +0200, Roger Pau Monn=C3=A9 =
+wrote:
+> > > > > > > On Tue, May 30, 2023 at 04:31:13PM -0400, Demi Marie Obenour =
+wrote:
+> > > > > > > Also, you tie this logic to the "physical-device" watch, which
+> > > > > > > strictly implies that the "diskseq" node must be written to x=
+enstore
+> > > > > > > before the "physical-device" node.  This seems fragile, but I=
+ don't
+> > > > > > > see much better optiono since the "diskseq" is optional.
+> > > > > >=20
+> > > > > > What about including the diskseq in the "physical-device" node?=
+  Perhaps
+> > > > > > use diskseq@major:minor syntax?
+> > > > >=20
+> > > > > Hm, how would you know whether the blkback instance in the kernel
+> > > > > supports the diskseq syntax in physical-device?
+> > > >=20
+> > > > That=E2=80=99s what the next patch is for =F0=9F=99=82.
+> > >=20
+> > > Hm, I think we should separate diskseq support from the notify open
+> > > stuff: it's possible a different (non-Linux) backend wants to
+> > > implement open notify support but doesn't have diskseq.
+> >=20
+> > I like this idea!  What about having blkback set diskseq to zero?
+> > Userspace could then replace it with the actual value.
+>=20
+> I think it would be better if we used a sysfs node, because blkfront
+> has no business is knowing whether diskseq is supported by the
+> backend or not.
+>=20
+> xenstore should be reserved to features exposed between blkfront and
+> blkback if possible.  I know we haven't been very good at this
+> however.
+>=20
+> > > > > Can you fetch a disk using a diskseq identifier?
+> > > >=20
+> > > > Not yet, although I have considered adding this ability.  It would =
+be
+> > > > one step towards a =E2=80=9Cdiskseqfs=E2=80=9D that userspace could=
+ use to open a device
+> > > > by diskseq.
+> > > >=20
+> > > > > Why I understand that this is an extra safety check in order to a=
+ssert
+> > > > > blkback is opening the intended device, is this attempting to fix=
+ some
+> > > > > existing issue?
+> > > >=20
+> > > > Yes, it is.  I have a block script (written in C) that validates the
+> > > > device it has opened before passing the information to blkback.  It=
+ uses
+> > > > the diskseq to do this, but for that protection to be complete, blk=
+back
+> > > > must also be aware of it.
+> > >=20
+> > > But if your block script opens the device, and keeps it open until
+> > > blkback has also taken a reference to it, there's no way such device
+> > > could be removed and recreated in the window you point out above, as
+> > > there's always a reference on it taken?
+> >=20
+> > This assumes that the block script is not killed in the meantime,
+> > which is not a safe assumption due to timeouts and the OOM killer.
+>=20
+> Doesn't seem very reliable to use with delete-on-close either then.
+
+That=E2=80=99s actually the purpose of delete-on-close!  It ensures that if=
+ the
+block script gets killed, the device is automatically cleaned up.
+
+> > > > > I'm not sure I see how the major:minor numbers would point to a
+> > > > > different device than the one specified by the toolstack unless t=
+he
+> > > > > admin explicitly messes with the devices before blkback has got t=
+ime
+> > > > > to open them.  But then the admin can already do pretty much
+> > > > > everything it wants with the system.
+> > > >=20
+> > > > Admins typically refer to e.g. device-mapper devices by name, not by
+> > > > major:minor number.  If a device is destroyed and recreated right a=
+s the
+> > > > block script is running, this race condition can occur.
+> > >=20
+> > > Right, but what about this device recreation happening after the admin
+> > > has written the guest config file but before the call to (lib)xl
+> > > happens?  blkback would also end up using a different device than
+> > > indented, and your proposed approach doesn't fix this.  The only way =
+to
+> > > solve this would be to reference devices by UUID (iow: diskseq)
+> > > directly in the guest config file.
+> >=20
+> > That would be a good idea, but it is orthogonal to this patch.  My
+> > script opens the device and uses various means to check that it did
+> > open the correct device.  It then passes the diskseq to blkback.
+>=20
+> How you do this with losetup?  I guess there's an atomic way to setup
+> a loop device and get its diskseq?
+
+It can=E2=80=99t be done with losetup.  I use a C program that directly
+issues ioctls to /dev/loop-control and /dev/loop*.  Doing this with
+device-mapper requires kernel patches that have been submitted but are
+not yet upstream.
+
+> > > Then the block script will open the device by diskseq and pass the
+> > > major:minor numbers to blkback.
+> >=20
+> > Alternatively, the toolstack could write both the diskseq and
+> > major:minor numbers and be confident that it is referring to the
+> > correct device, no matter how long ago it got that information.
+> > This could be quite useful for e.g. one VM exporting a device to
+> > another VM by calling losetup(8) and expecting a human to make a
+> > decision based on various properties about the device.  In this
+> > case there is no upper bound on the race window.
+>=20
+> Instead of playing with xenstore nodes, it might be better to simply
+> have blkback export on sysfs the diskseq of the opened device, and let
+> the block script check whether that's correct or not.  That implies
+> less code in the kernel side, and doesn't pollute xenstore.
+
+This would require that blkback delay exposing the device to the
+frontend until the block script has checked that the diskseq is correct.
+Much simpler for the block script to provide the diskseq in xenstore.
+If you want to avoid an extra xenstore node, I can make the diskseq part
+of the physical-device node.
+--=20
+Sincerely,
+Demi Marie Obenour (she/her/hers)
+Invisible Things Lab
+
+--Ii0jDpZ9bgT07th0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmSDWY8ACgkQsoi1X/+c
+IsG4QxAA2SL5LAC2MiiRag652Tx+P83kIuMlP80Tw9d8diHvH0RXigUlTyFfvfWs
+I9kGjhjt+uLbxPwlyKxkEh4V6DqUjfOE7UP1gfIDy7e1kTJAv09LT/lXII5Bw/0f
+YihsdqSa9TwI19LxinadkWk213EgtmZPGE0jp6r6DU897mzg6mHsL94mo5PxmAMM
+MRRhQRABTHhggZLCx/JghFfb+C8CXO9mf88vAvClPwTs4BAYZrZG1R2g+Z6i8mHb
+y5Hk2++ImNB3FNT8j+dZKT9NdEqAXg8CHaOB5XsMcd4FFAeiFkFOCWr4n/4tRxAJ
+nJMgOIfAYFguSHz8UY2tenMh460dbtlKaE2YTKiS9vpCw7AZ+hSQIW/pysiTT0DO
+ZrLu3Vri6iWiDWOFx9gpoPR13/j07vlJyCG8Xo6yc4E/JPqUXKZrg8pZtiPmaLe7
+XLp+aLPyxTEGQqteROkZe6ZxdawI/DLcmHEc9xbR1iBtWCkBK0J9r5tg/N5nySKE
+RB40g9w94ZDkFTBDKZ1PrKWgu3FydVA+hZDMXJuNdl6XLOaGZQuaRUAw1pkB3ING
+/wxwQAFqkQCO51XPGKnNX3kwSJkedsMTYcLN8dtcsZ69IXq0sBpsbScVTjyYlVqE
+kQL6JEfCjZLiTQIVnwoSmcFmtun9Z+cS3t4RSeLUJHFuM9pJ/mo=
+=SvFi
+-----END PGP SIGNATURE-----
+
+--Ii0jDpZ9bgT07th0--
