@@ -2,75 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E510772908B
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C28A2729091
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:09:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238585AbjFIHBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 03:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
+        id S230093AbjFIHJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 03:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237823AbjFIHBh (ORCPT
+        with ESMTP id S229493AbjFIHJT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 03:01:37 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E5B26AD;
-        Fri,  9 Jun 2023 00:01:31 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R851e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0Vkh.u4r_1686294078;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0Vkh.u4r_1686294078)
-          by smtp.aliyun-inc.com;
-          Fri, 09 Jun 2023 15:01:27 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     jhs@mojatatu.com
-Cc:     xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] net/sched: act_pedit: Use kmemdup() to replace kmalloc + memcpy
-Date:   Fri,  9 Jun 2023 15:01:17 +0800
-Message-Id: <20230609070117.100507-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 9 Jun 2023 03:09:19 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BE72718
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 00:09:15 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3E4CB1FDF9;
+        Fri,  9 Jun 2023 07:09:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1686294554; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=8gJh5J2J4uoAudOUl7nDN4Xelp0NPxKbIJetpIdXexM=;
+        b=w/Jog4W+WcRO6S1mtgeOS5fBO5QkDLbFqj+eVhedQ4VsSCeRxZeF0o/dop6CmMftEaKvuw
+        hyg5luPSz5w3cjHfQ4rj2MPiqeNUyHT48ZRa2sfDHBEWEfJNZAcw4HZOr2G5O69zmkMrvn
+        9Ildbf1tjp2WXVvBlzMj1Hq0t5NuQEQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1686294554;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=8gJh5J2J4uoAudOUl7nDN4Xelp0NPxKbIJetpIdXexM=;
+        b=XTAi1rzIetTYtMunZIHsoKmYduw4FW2uZn8u/wMyd6uk1dH5BHjCJ1sSEBxMPju5S03tLF
+        VqLN915cy/2y6qCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1B54F139C8;
+        Fri,  9 Jun 2023 07:09:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id LaeiBRrQgmSdQQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 09 Jun 2023 07:09:14 +0000
+Date:   Fri, 09 Jun 2023 09:09:13 +0200
+Message-ID: <87bkhpcdt2.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] sound fixes for 6.4-rc6
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-./net/sched/act_pedit.c:245:21-28: WARNING opportunity for kmemdup.
+Linus,
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=5478
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+please pull sound fixes for v6.4-rc6 from:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.4-rc6
+
+The topmost commit is b752a385b584d385683c65cb76a1298f1379a88c
+
+----------------------------------------------------------------
+
+sound fixes for 6.4-rc6
+
+Lots of small fixes, and almost all are device-specific.
+A few of them are the fixes for the old regressions by the fast
+kctl lookups (introduced around 5.19).  Others are ASoC simple-card
+fixes, selftest compile warning fixes, ASoC AMD quirks, various
+ASoC codec fixes as well as usual HD-audio quirks.
+
+----------------------------------------------------------------
+
+Ai Chao (1):
+      ALSA: hda/realtek: Add a quirk for HP Slim Desktop S01
+
+Chancel Liu (1):
+      ASoC: fsl_sai: Enable BCI bit if SAI works on synchronous mode with BYP asserted
+
+Chris Chiu (1):
+      ALSA: hda/realtek: Enable 4 amplifiers instead of 2 on a HP platform
+
+Edson Juliano Drosdeck (1):
+      ASoC: nau8824: Add quirk to active-high jack-detect
+
+Herve Codina (1):
+      ASoC: simple-card: Add missing of_node_put() in case of error
+
+Jaroslav Kysela (1):
+      ALSA: ice1712,ice1724: fix the kcontrol->id initialization
+
+Mirsad Goran Todorovac (1):
+      selftests: alsa: pcm-test: Fix compiler warnings about the format
+
+RenHai (1):
+      ALSA: hda/realtek: Add Lenovo P3 Tower platform
+
+Richard Fitzgerald (1):
+      ASoC: cs35l56: Remove NULL check from cs35l56_sdw_dai_set_stream()
+
+Robert Hancock (1):
+      ASoC: simple-card-utils: fix PCM constraint error check
+
+Ryan Lee (2):
+      ASoC: max98363: Removed 32bit support
+      ASoC: max98363: limit the number of channel to 1
+
+Sayed, Karimuddin (1):
+      ALSA: hda/realtek: Add "Intel Reference board" and "NUC 13" SSID in the ALC256
+
+Sicong Jiang (1):
+      ASoC: amd: yc: Add Thinkpad Neo14 to quirks list for acp6x
+
+Srinivas Kandagatla (3):
+      ASoC: codecs: wsa883x: do not set can_multi_write flag
+      ASoC: codecs: wsa881x: do not set can_multi_write flag
+      ASoC: codecs: wcd938x-sdw: do not set can_multi_write flag
+
+Stefan Binding (1):
+      ALSA: hda/realtek: Add quirks for Asus ROG 2024 laptops using CS35L41
+
+Takashi Iwai (4):
+      ALSA: ymfpci: Fix kctl->id initialization
+      ALSA: cmipci: Fix kctl->id initialization
+      ALSA: gus: Fix kctl->id initialization
+      ALSA: hda: Fix kctl->id initialization
+
+Tim Crawford (1):
+      ALSA: hda/realtek: Add quirk for Clevo NS50AU
+
+Trevor Wu (2):
+      ASoC: mediatek: mt8188: fix use-after-free in driver remove path
+      ASoC: mediatek: mt8195: fix use-after-free in driver remove path
+
+Vijendar Mukunda (1):
+      ASoC: amd: ps: fix for acp_lock access in pdm driver
+
 ---
- net/sched/act_pedit.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/net/sched/act_pedit.c b/net/sched/act_pedit.c
-index fc945c7e4123..8c4e7fddddbf 100644
---- a/net/sched/act_pedit.c
-+++ b/net/sched/act_pedit.c
-@@ -242,14 +242,12 @@ static int tcf_pedit_init(struct net *net, struct nlattr *nla,
- 	nparms->tcfp_flags = parm->flags;
- 	nparms->tcfp_nkeys = parm->nkeys;
- 
--	nparms->tcfp_keys = kmalloc(ksize, GFP_KERNEL);
-+	nparms->tcfp_keys = kmemdup(parm->keys, ksize, GFP_KERNEL);
- 	if (!nparms->tcfp_keys) {
- 		ret = -ENOMEM;
- 		goto put_chain;
- 	}
- 
--	memcpy(nparms->tcfp_keys, parm->keys, ksize);
--
- 	for (i = 0; i < nparms->tcfp_nkeys; ++i) {
- 		u32 offmask = nparms->tcfp_keys[i].offmask;
- 		u32 cur = nparms->tcfp_keys[i].off;
--- 
-2.20.1.7.g153144c
+ sound/isa/gus/gus_pcm.c                       |  2 +-
+ sound/pci/cmipci.c                            |  6 ++--
+ sound/pci/hda/hda_codec.c                     |  6 +++-
+ sound/pci/hda/patch_realtek.c                 | 13 +++++++-
+ sound/pci/ice1712/aureon.c                    |  7 ++--
+ sound/pci/ice1712/ice1712.c                   | 14 +++++---
+ sound/pci/ice1712/ice1724.c                   | 16 +++++----
+ sound/pci/ymfpci/ymfpci_main.c                |  6 ++--
+ sound/soc/amd/ps/pci-ps.c                     |  3 +-
+ sound/soc/amd/ps/ps-pdm-dma.c                 | 10 +++---
+ sound/soc/amd/yc/acp6x-mach.c                 |  7 ++++
+ sound/soc/codecs/cs35l56.c                    |  3 --
+ sound/soc/codecs/max98363.c                   |  4 +--
+ sound/soc/codecs/nau8824.c                    | 24 ++++++++++++++
+ sound/soc/codecs/wcd938x-sdw.c                |  1 -
+ sound/soc/codecs/wsa881x.c                    |  1 -
+ sound/soc/codecs/wsa883x.c                    |  1 -
+ sound/soc/fsl/fsl_sai.c                       | 11 +++++--
+ sound/soc/fsl/fsl_sai.h                       |  1 +
+ sound/soc/generic/simple-card-utils.c         |  2 +-
+ sound/soc/generic/simple-card.c               |  1 +
+ sound/soc/mediatek/mt8188/mt8188-afe-clk.c    |  7 ----
+ sound/soc/mediatek/mt8188/mt8188-afe-clk.h    |  1 -
+ sound/soc/mediatek/mt8188/mt8188-afe-pcm.c    |  4 ---
+ sound/soc/mediatek/mt8188/mt8188-audsys-clk.c | 47 ++++++++++++++-------------
+ sound/soc/mediatek/mt8188/mt8188-audsys-clk.h |  1 -
+ sound/soc/mediatek/mt8195/mt8195-afe-clk.c    |  5 ---
+ sound/soc/mediatek/mt8195/mt8195-afe-clk.h    |  1 -
+ sound/soc/mediatek/mt8195/mt8195-afe-pcm.c    |  4 ---
+ sound/soc/mediatek/mt8195/mt8195-audsys-clk.c | 47 ++++++++++++++-------------
+ sound/soc/mediatek/mt8195/mt8195-audsys-clk.h |  1 -
+ tools/testing/selftests/alsa/pcm-test.c       | 10 +++---
+ 32 files changed, 151 insertions(+), 116 deletions(-)
 
