@@ -2,161 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82310729BB3
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 15:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18D5C729BBA
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 15:39:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238871AbjFINhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 09:37:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51528 "EHLO
+        id S239957AbjFINja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 09:39:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231134AbjFINhn (ORCPT
+        with ESMTP id S238922AbjFINj3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 09:37:43 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2109.outbound.protection.outlook.com [40.107.7.109])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2AD930F1
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 06:37:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Fn6umusNfgauDOnOBusESZrD0NT2eJb5cg9HyyUEDAFHsJ/PldcWiVacY0zNGiig21TyLc4pVBd50LW1NAmTre4oxh1D4ssMBN/eC7mH62n1oGdW/mfIMAPc79HX5eTCRPtITteDGI5Yw8bOtEYpbhGbK/Pc+Yup9/ZtplCNt64qLzgqM71U6BGWIvkO8FUV83rCdC+nVPLcNLhAsdlvhvV1f2WJRu7B+VHbOIaGr1OnvxkXrRftNMYDr4MtD6UuMNEaBbShqII7gQGLCv17DNw+vn2oVGIlHT4joPE+I71mjpjDnIiVT4QG17co1CSV2ulg5C71k7l8J9r9/eB+Hg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=W9muQsvMZZ8Ouo6IKnwCyN8HwUqv/hXXj5EW/vkwaq0=;
- b=MoEYSVxFhaW/k56BnL7Cc9nAKH79MMrNcxtNQE4++4jqM+72I4aJlxXXSxaLtTm0CAc8ozyueeg1sSr+EfqvKQZRVnhIbRf+SyUHgPm1x2+xOb+8pY6Yajdq6Z3SV7ND8PxozKfsjNLJ3wVJvgRM1QbSStM7Ye4WNFgKT7pVQbdtL1s1+7oSIDigAUrW8FYFSo2fpPc5LT4VXabYrHBEu/u9lQbUutBdgYNmgMEgHYtX8U7gWoxlRxYF+YvWJeVPgxZsbmZyMAaS6FpqDt+jPwU7qD9or58ZSv6oUP5BBDYv9QDdBoaZdLRGLQhj1FVDQ+yycHeQnZuixZzIwLxw9w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=habana.ai; dmarc=pass action=none header.from=habana.ai;
- dkim=pass header.d=habana.ai; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=habana.ai;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=W9muQsvMZZ8Ouo6IKnwCyN8HwUqv/hXXj5EW/vkwaq0=;
- b=ooLqyvYBGLGoFw26vu/yCwNO5fv+W5BsADavQFkUoiphb7M3PD0gJzUTgFhh96pLt24iQvHlaXAwfdXVILaFrhm68llkfCIKqeqy6k6G+UJ8oylHcDpoXaJSVvVKiu6BFwHpmiCcorpr4ELbRR9Qihc4wv+PF9CPB6y94Nd7eUiC/xkUVe93xLSfrp+UrgulQO/ibaXHFY+dE1DQK0viYNw1Yq87u8PnJcjNBG58mNENtvmWu0V02mjC7HHJUbCDUeS5bqnsG4RBcfsvA6GXHGah3QqJ5hvOZD362V8dE9bgSEI3Vh6hmCXHR0jWGFHHaY2jDfNvGJ8QjHBuxtkXJg==
-Received: from DU2PR02MB7573.eurprd02.prod.outlook.com (2603:10a6:10:2d8::6)
- by AM7PR02MB6324.eurprd02.prod.outlook.com (2603:10a6:20b:1bd::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Fri, 9 Jun
- 2023 13:37:39 +0000
-Received: from DU2PR02MB7573.eurprd02.prod.outlook.com
- ([fe80::f04b:e404:488b:2352]) by DU2PR02MB7573.eurprd02.prod.outlook.com
- ([fe80::f04b:e404:488b:2352%7]) with mapi id 15.20.6455.039; Fri, 9 Jun 2023
- 13:37:39 +0000
-From:   Tomer Tayar <ttayar@habana.ai>
-To:     Arnd Bergmann <arnd@kernel.org>, Oded Gabbay <ogabbay@kernel.org>
-CC:     Arnd Bergmann <arnd@arndb.de>, Ofir Bitton <obitton@habana.ai>,
-        Ohad Sharabi <osharabi@habana.ai>,
-        Dafna Hirschfeld <dhirschfeld@habana.ai>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] accel/habanalabs: add more debugfs stub helpers
-Thread-Topic: [PATCH] accel/habanalabs: add more debugfs stub helpers
-Thread-Index: AQHZmsrdhRP7Ov+8dUeEuqVMN+BLXK+CeYYA
-Date:   Fri, 9 Jun 2023 13:37:38 +0000
-Message-ID: <b3a3e2f8-51d8-f8ce-95ce-1180f80cc2d2@habana.ai>
-References: <20230609120636.3969045-1-arnd@kernel.org>
-In-Reply-To: <20230609120636.3969045-1-arnd@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=habana.ai;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DU2PR02MB7573:EE_|AM7PR02MB6324:EE_
-x-ms-office365-filtering-correlation-id: 6affc0e5-fc0b-4c43-fc77-08db68eeb152
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 4MpNQOr6i/3dgXbOC0J96mJ+tl6PDxGQeDi+96OBrMtMDDNRytSWXd8ry7xdJOIS32heI+wIvQBBS+qYkZP/H5ZZvDDYuMjisCyYbkqjhPXkg0g5RmfzL5AzQpeKTEmMxTZ90NPKFfFVeYpb69x4Y6qBimq0Wdir/WX58hh8Hdiu+HPC3X/HR27zltw+x/ylvLQTpjOcw1LL18scqIzTAPBIzyquAmHSS7XhMRSeuuNAVG6RG5WCgE0aa8NF5yYjWHHslKtXnjX4IkHQBHHqAi01SgvS9x2MWYVfyJnGJlXBcA7Zm2IDmhHuXrl1F6pyfFB1bvsaYXljXlxhiebTrqlAfuc/5rGwVA/vFW2zXIWyWy+YjgZi2cPSDXpetFMUoYkPfFywpaU3wRh286QIk6ovnnUjOqWF1EUCc7XjWGHSXt3B/cKJpvlntkPKo24eiKq5JE2DUnwMqTs5bfMBjy4f5oKbbhQvKVrsPAhRhCnj9oKNgv4YpMzT4PO4nzBQyHqXi8g3n/yWCLgDuUwln7CokhCTuXUd6n7CouOjEBNxN8vj8EviqVPX1nh1Wnnu/IUE7ERua+aVfHy6IvUK8kXB2asiuUsswmTaW7UJZjYAcPK7eU3G18t2DK9Q/Hl8mpkkNHymt3J/4/XQlxN26BpnSxVZEd9dMDhlHCY8h31YPkXvld8keC94i8xOLWvK
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR02MB7573.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39840400004)(376002)(136003)(346002)(396003)(451199021)(478600001)(6506007)(6512007)(26005)(31686004)(54906003)(110136005)(186003)(82960400001)(2906002)(2616005)(38070700005)(41300700001)(71200400001)(122000001)(64756008)(66946007)(66476007)(66556008)(66446008)(91956017)(76116006)(38100700002)(4326008)(53546011)(5660300002)(31696002)(316002)(36756003)(8936002)(8676002)(86362001)(6486002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UFJWWHNQbmp4Q1JCK1hSV004aStpUWI1SzE3U05ldFpocjhvYk0xRmdOekdp?=
- =?utf-8?B?c3QwQ0EyOHVUN2JPamR4MHBNbFQ4V083MnR1RVl6cjNNVkZiZkdIZG9qWHk0?=
- =?utf-8?B?UG5hVXJCNjlleE03L1VhZVRGQmZQdEgvYWg1ajZ1RXpWTTd5L0pRVDhnbVlC?=
- =?utf-8?B?WTdpc0tFSDg3UkVTZC9tUVJyd2hKY2pHdnBzNTZ5RkkzUzZFd0JDSEZQUE9q?=
- =?utf-8?B?ejNlekJYdFJIQ2FRMktRcHlSL0dnRndKQStyTXU0UURTQXZzZjRVam1oM0xo?=
- =?utf-8?B?Wkhoc2x1YU5xNlllRVJONHBIWkg4ZCtRSDFTb1F4bnFlMFMyQmNUMDlxQzda?=
- =?utf-8?B?cE1uWDVjNWdiOS91dVlja1R5VVQ0aStzQ1FsaTBQVWhRRnpPZkpXd3k1eU4r?=
- =?utf-8?B?cWltQ1pPR0VkdFVZcFYycENtaCtINWdOdmZyZlB3bXJuOGJHcHF1ZUlmM3di?=
- =?utf-8?B?SmdnMVdld2s3eW5jRHlySmtHSDhHTmtPeDgrZjFzaElnZWsvZGZTOUxPR0Vq?=
- =?utf-8?B?dVVjK2FSUGVDdG5xMmRvN2NleUVKNkI3c09jaGtselVGVjV3VXdZeGw0SWNM?=
- =?utf-8?B?YzRPd2ttQXZDSHdBZ3NWYWNldS9UaXMyb2srNTBqN0pGaGhPZjg0Nkg2dzBq?=
- =?utf-8?B?TGI5ekJxcHVSTVhlRExSWTYxWnJTbmFoSFdQUjB2MkcyY1l4T3JTQWhDZ055?=
- =?utf-8?B?ZDMrM2p5c29jakIxY0o5TlBSakcyRnBNK1lSWmhtK1YvNC8wV1NBemdhaFRO?=
- =?utf-8?B?YmdDZDZSRTJhcXZ2MzkzQzZrakt4cEEraTBjTnRlc2hxZGsvYTZtRDZlaGI3?=
- =?utf-8?B?OXFJVndxMEQwakVHKy9nTkRSWm1MN2x1ZDlUL1ZtSnNYd0ZlaXBrclB0eDAr?=
- =?utf-8?B?SUZSWEVHRldIV1BSemRKUHRkVVI5aFcyWk9ndmEvWS96eThuY29pWG80a1JZ?=
- =?utf-8?B?R3BnQmhWdmw5ZnlQOTR3cWUzT2tRWEJoQnI3VVl6MHEwZEw3d0oxQjdmMmh2?=
- =?utf-8?B?cDZqa1lSSjdOaytVVHJuSzNkNmQ2RkhtQlM3UFoxNDY3eTdsT1dJNWZFNFBh?=
- =?utf-8?B?OVUyczllTjRoZEVoeGpQKys0Z3dIMEo1U2NMdWM0VDhzWnI5cG9HU0VOUnJZ?=
- =?utf-8?B?SHJXMktXM1ViMTZ3Z3loT0J3NThYbHNJL09XZEFPSkdoVVpTaGtoaVJQNTlP?=
- =?utf-8?B?aVVad2Z4WmJtTWVEMDJ3S2xPSjl5RWFsVWU2d3Avb0NWcXJKQXN3NXM0ayts?=
- =?utf-8?B?Y2w1Um04NUYvbnhMd25PTjQ5TU83Q1g0WEdycHc3a0dhR1ZKOTF3TlVaVDFq?=
- =?utf-8?B?ZEdibkdHc1ZuaXpickdheEprZmdMbFRuajJ4V2FYcWdDam9MTkJmYThYYWtH?=
- =?utf-8?B?dnVLL3lwVVl4QkhqdUE3SlNJRStxVjFoMTZLRjFuYnZYS2ZEcmFhTllydGVz?=
- =?utf-8?B?V0R5S0tuUjhWa3luRlJnOWlBMkx1Nm1UejdoR2w0YUhaZkNtNThudVpJM3Ns?=
- =?utf-8?B?UkZUSm04VzFpNSs2YThLSzBRN0VHUkp4TyswaFFPM2oyVS91TXZlTzFkMEp2?=
- =?utf-8?B?NFQzUjJDRm1xSU00dzZnMzhuTllvQXpBZDA1MnFpS29oMEl5TEVqbW4vMDdP?=
- =?utf-8?B?RGNidDk3aGdTTkpTZjAzWmlNdUtxaWFtcFRHRk05aDdYWjkrQWtTZlV1aEx2?=
- =?utf-8?B?QTJLbVFqWitSaFJKcUVyMTh4aTlGNC9yOVZHN0xaRlpoQ2kwNVBuVXhVUU1n?=
- =?utf-8?B?WFpNa05qL0N6NHJjMTB6YnVJRmNHYWVGVVUzczAzRVJSM3FGM1Y3Ritma25x?=
- =?utf-8?B?ZS9PWUNOOTBGTXJxeEZsek9xSXJ6d0lsK2x4dEd3a3FOZG1EZ3VNRk5kd1Bo?=
- =?utf-8?B?dkNtUkZ4TENleVJGUVhMcExFKzB1QnRNL2JuYjJOMHBtUUgzaG9yejFlbTF4?=
- =?utf-8?B?czdPbTZ4UkR2Y0gxdHpHYXVvckYyMkxkdng3M1JZZ2xGdnc0OXd2YnV0cHli?=
- =?utf-8?B?eTBGN2ZFSkRaSnVIWXhENnlmSFg5VktvRzdzdzlVUVQrK1lVQzdsL2Q5VVJT?=
- =?utf-8?B?UEZLeC9TS1ZNYi9SNkVhWThnS3VoeE9HRmo2Si9KQ3hZL1NNTUYrTC9GYzl0?=
- =?utf-8?Q?g5zg=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <91632F005801B84FB53EF8A447A4E7EC@eurprd02.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Fri, 9 Jun 2023 09:39:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1E530F1;
+        Fri,  9 Jun 2023 06:39:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E527A60A09;
+        Fri,  9 Jun 2023 13:39:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C55D1C433EF;
+        Fri,  9 Jun 2023 13:39:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686317967;
+        bh=ysACDiqv15WSMXirEWH3zL+zB9JT9lU1CCHgbJhy5TE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Q491ic/RaHa+u/BYxn7wQszigsvRP+P1XgWnsp1LVSiiDa4mvI4Xji+qtIq8FstIU
+         MEewjMnx+h3oKO3CAt3N47Aq/KcAy8AQpwf27CUDtfHPHOEY9Nh1mhgAWek+ZhyXZl
+         Jin0GrVesqAewd3dZuIllGKzlIguXJQeyiIn8ZJ4=
+Date:   Fri, 9 Jun 2023 15:39:24 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Xianting Tian <xianting.tian@linux.alibaba.com>
+Cc:     arei.gonglei@huawei.com, mst@redhat.com, jasowang@redhat.com,
+        xuanzhuo@linux.alibaba.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, amit@kernel.org, arnd@arndb.de,
+        marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        linux-bluetooth@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xianting Tian <tianxianting.txt@alibaba-inc.com>
+Subject: Re: [PATCH 1/3] virtio-crypto: fixup potential cpu stall when free
+ unused bufs
+Message-ID: <2023060924-skinning-reset-e256@gregkh>
+References: <20230609131817.712867-1-xianting.tian@linux.alibaba.com>
+ <20230609131817.712867-2-xianting.tian@linux.alibaba.com>
 MIME-Version: 1.0
-X-OriginatorOrg: habana.ai
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR02MB7573.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6affc0e5-fc0b-4c43-fc77-08db68eeb152
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jun 2023 13:37:38.9480
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 0d4d4539-213c-4ed8-a251-dc9766ba127a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: gSWD3bTKSyuZGodQ8Mon6YpS1JXWEMBKEf4jHQp05cuaxpD+OID8V5X+zbui8bZyhMiEICmW7tkzvYjfc5Y19Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR02MB6324
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230609131817.712867-2-xianting.tian@linux.alibaba.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMDkvMDYvMjAyMyAxNTowNiwgQXJuZCBCZXJnbWFubiB3cm90ZToNCj4gRnJvbTogQXJuZCBC
-ZXJnbWFubiA8YXJuZEBhcm5kYi5kZT4NCj4NCj4gVHdvIGZ1bmN0aW9ucyBnb3QgYWRkZWQgd2l0
-aCBub3JtYWwgcHJvdG90eXBlcyBmb3IgZGVidWdmcywgYnV0IG5vdA0KPiBhbHRlcm5hdGl2ZSB3
-aGVuIGJ1aWxkaW5nIHdpdGhvdXQgaXQ6DQo+DQo+IGRyaXZlcnMvYWNjZWwvaGFiYW5hbGFicy9j
-b21tb24vZGV2aWNlLmM6IEluIGZ1bmN0aW9uICdobF9kZXZpY2VfaW5pdCc6DQo+IGRyaXZlcnMv
-YWNjZWwvaGFiYW5hbGFicy9jb21tb24vZGV2aWNlLmM6MjE3NzoxNDogZXJyb3I6IGltcGxpY2l0
-IGRlY2xhcmF0aW9uIG9mIGZ1bmN0aW9uICdobF9kZWJ1Z2ZzX2RldmljZV9pbml0JzsgZGlkIHlv
-dSBtZWFuICdobF9kZWJ1Z2ZzX2luaXQnPyBbLVdlcnJvcj1pbXBsaWNpdC1mdW5jdGlvbi1kZWNs
-YXJhdGlvbl0NCj4gZHJpdmVycy9hY2NlbC9oYWJhbmFsYWJzL2NvbW1vbi9kZXZpY2UuYzoyMzA1
-Ojk6IGVycm9yOiBpbXBsaWNpdCBkZWNsYXJhdGlvbiBvZiBmdW5jdGlvbiAnaGxfZGVidWdmc19k
-ZXZpY2VfZmluaSc7IGRpZCB5b3UgbWVhbiAnaGxfZGVidWdmc19yZW1vdmVfZmlsZSc/IFstV2Vy
-cm9yPWltcGxpY2l0LWZ1bmN0aW9uLWRlY2xhcmF0aW9uXQ0KPg0KPiBBZGQgc3R1YnMgZm9yIHRo
-ZXNlIGFzIHdlbGwuDQo+DQo+IEZpeGVzOiA1NTMzMTFmYzdiNzZlICgiYWNjZWwvaGFiYW5hbGFi
-czogZXhwb3NlIGRlYnVnZnMgZmlsZXMgbGF0ZXIiKQ0KPiBTaWduZWQtb2ZmLWJ5OiBBcm5kIEJl
-cmdtYW5uIDxhcm5kQGFybmRiLmRlPg0KDQpUaGFua3MsDQpSZXZpZXdlZC1ieTogVG9tZXIgVGF5
-YXIgPHR0YXlhckBoYWJhbmEuYWk+DQoNCj4gLS0tDQo+ICAgZHJpdmVycy9hY2NlbC9oYWJhbmFs
-YWJzL2NvbW1vbi9oYWJhbmFsYWJzLmggfCA5ICsrKysrKysrKw0KPiAgIDEgZmlsZSBjaGFuZ2Vk
-LCA5IGluc2VydGlvbnMoKykNCj4NCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvYWNjZWwvaGFiYW5h
-bGFicy9jb21tb24vaGFiYW5hbGFicy5oIGIvZHJpdmVycy9hY2NlbC9oYWJhbmFsYWJzL2NvbW1v
-bi9oYWJhbmFsYWJzLmgNCj4gaW5kZXggZDkyYmEyZTMwZTMxMC4uMmYwMjdkNWE4MjA2NCAxMDA2
-NDQNCj4gLS0tIGEvZHJpdmVycy9hY2NlbC9oYWJhbmFsYWJzL2NvbW1vbi9oYWJhbmFsYWJzLmgN
-Cj4gKysrIGIvZHJpdmVycy9hY2NlbC9oYWJhbmFsYWJzL2NvbW1vbi9oYWJhbmFsYWJzLmgNCj4g
-QEAgLTM5ODAsNiArMzk4MCwxNSBAQCBzdGF0aWMgaW5saW5lIHZvaWQgaGxfZGVidWdmc19maW5p
-KHZvaWQpDQo+ICAgew0KPiAgIH0NCj4gICANCj4gK3N0YXRpYyBpbmxpbmUgaW50IGhsX2RlYnVn
-ZnNfZGV2aWNlX2luaXQoc3RydWN0IGhsX2RldmljZSAqaGRldikNCj4gK3sNCj4gKwlyZXR1cm4g
-MDsNCj4gK30NCj4gKw0KPiArc3RhdGljIGlubGluZSB2b2lkIGhsX2RlYnVnZnNfZGV2aWNlX2Zp
-bmkoc3RydWN0IGhsX2RldmljZSAqaGRldikNCj4gK3sNCj4gK30NCj4gKw0KPiAgIHN0YXRpYyBp
-bmxpbmUgdm9pZCBobF9kZWJ1Z2ZzX2FkZF9kZXZpY2Uoc3RydWN0IGhsX2RldmljZSAqaGRldikN
-Cj4gICB7DQo+ICAgfQ0KDQoNCg==
+On Fri, Jun 09, 2023 at 09:18:15PM +0800, Xianting Tian wrote:
+> From: Xianting Tian <tianxianting.txt@alibaba-inc.com>
+> 
+> Cpu stall issue may happen if device is configured with multi queues
+> and large queue depth, so fix it.
+> 
+> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+> ---
+>  drivers/crypto/virtio/virtio_crypto_core.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/crypto/virtio/virtio_crypto_core.c b/drivers/crypto/virtio/virtio_crypto_core.c
+> index 1198bd306365..94849fa3bd74 100644
+> --- a/drivers/crypto/virtio/virtio_crypto_core.c
+> +++ b/drivers/crypto/virtio/virtio_crypto_core.c
+> @@ -480,6 +480,7 @@ static void virtcrypto_free_unused_reqs(struct virtio_crypto *vcrypto)
+>  			kfree(vc_req->req_data);
+>  			kfree(vc_req->sgs);
+>  		}
+> +		cond_resched();
+
+that's not "fixing a stall", it is "call the scheduler because we are
+taking too long".  The CPU isn't stalled at all, just busy.
+
+Are you sure this isn't just a bug in the code?  Why is this code taking
+so long that you have to force the scheduler to run?  This is almost
+always a sign that something else needs to be fixed instead.
+
+thanks,
+
+greg k-h
