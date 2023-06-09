@@ -2,105 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72B8A7297CC
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 13:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECFEC7297D5
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 13:08:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbjFILHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 07:07:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53694 "EHLO
+        id S238426AbjFILIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 07:08:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237371AbjFILHC (ORCPT
+        with ESMTP id S229737AbjFILI2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 07:07:02 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126302113;
-        Fri,  9 Jun 2023 04:07:01 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id 98e67ed59e1d1-2565b864f9aso491130a91.1;
-        Fri, 09 Jun 2023 04:07:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686308820; x=1688900820;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=p9Kp49qcxB2W/Gx/r6msDIk3UxITI3+DTECoDc55ia0=;
-        b=XH0RYKJglDJSo+LUgfbk7Lirkr5mNmGpbJX1n0pLDknKqm0t5b873l5/KlTaoaDD5y
-         d7QYPMTJvEZN9IoD0Nj7b+mIw3Ag29u0gelrFQVdzqRAc9tykFS0an2cmFc8X4PkH+CU
-         uiNTqcwQ2clV+eatSPfSSNwZLIKXa8kvG9HhGITNWD2mmC08LhPpLtXhguktlHsMyHbo
-         u8od/c5kD8b4nsnDQDmuzCoaP6tjPLBY553qCG04qlb4g5W9SxKw+sfbsArLu+UIi8Id
-         X8COKAxOl4IhNPZngfbh/mNH4JZ5UYrX6v2VmNH73jfCkjXJeTGqUrbHCUPxYFP6hI95
-         0IYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686308820; x=1688900820;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p9Kp49qcxB2W/Gx/r6msDIk3UxITI3+DTECoDc55ia0=;
-        b=YrCIdxw6uNTGQB7/IJgGB6NOkdhfNwktrBQsFvw9h+4lvued4p0nGX9KiDd7W3itse
-         qmabe3b1DbK5prPBl/QnjFP4qHpOQLl/kyBOCExy6D8ctNIi1a2RsAhQABX2TXqYZuES
-         t/M7KIzqeT1v6cKYDOsKR7idN9sj+wWOD+F82YDSmLCo0m2GvcRTA1ibYkCiH0Ey67Gj
-         M5GhxsWTGBA1CbiwjJxZcYVlZLa3yLQHZdXZEF5wBgmpuxpWea1qsdD276eJ6mYwmqi0
-         EUCq7Js1coHmpMF8Ra/eqoiU+ItGCd4hkCy54Ptm/+q+aQyAMwpnnVaob32Sfoy7tH3K
-         LXLg==
-X-Gm-Message-State: AC+VfDwJ3FHXIJIs1EpoAdtOms48W7uxmj3vejOdIfNCVe2ItBBvt6fU
-        TcQNXAJ5GOdAPtGYkP2EPx4=
-X-Google-Smtp-Source: ACHHUZ69iuycrMPAsL6r820Mk8A8KabO+WlKUAKOfAWMN+/OE9BN5aN5Lh0/htRWag2WEwxd0cl8UQ==
-X-Received: by 2002:a17:90a:1908:b0:256:9b75:84cf with SMTP id 8-20020a17090a190800b002569b7584cfmr703254pjg.6.1686308820385;
-        Fri, 09 Jun 2023 04:07:00 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 3-20020a17090a194300b00253305f36c4sm4785820pjh.18.2023.06.09.04.06.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 04:06:59 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 9 Jun 2023 04:06:58 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.15 000/159] 5.15.116-rc1 review
-Message-ID: <b979807a-a437-4d3f-98f9-989da52abb30@roeck-us.net>
-References: <20230607200903.652580797@linuxfoundation.org>
+        Fri, 9 Jun 2023 07:08:28 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2DC441FDC;
+        Fri,  9 Jun 2023 04:08:24 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8BxLusnCINk0QoBAA--.3209S3;
+        Fri, 09 Jun 2023 19:08:23 +0800 (CST)
+Received: from [10.20.42.43] (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxTMonCINk_uIKAA--.24411S3;
+        Fri, 09 Jun 2023 19:08:23 +0800 (CST)
+Message-ID: <0ee84d8a-d2c9-07d0-b738-61fc7c568444@loongson.cn>
+Date:   Fri, 9 Jun 2023 19:08:23 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230607200903.652580797@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4 4/4] PCI/VGA: Replace full MIT license text with SPDX
+ identifier
+Content-Language: en-US
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <20230609103321.629192-1-suijingfeng@loongson.cn>
+ <20230609103321.629192-4-suijingfeng@loongson.cn> <87cz24rjgb.fsf@intel.com>
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+Organization: Loongson
+In-Reply-To: <87cz24rjgb.fsf@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8BxTMonCINk_uIKAA--.24411S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj93XoWxZr4rZr4DJFW3Cr1kuw17Jwc_yoW5Xry7pr
+        ySk3Z7CF4UXryxGrnFkr43tFy7X393AF47KFy7WFyS9rnFywn3Kr4qqr1rta43AFZ2k3yF
+        vFy7XrWUWFnrZFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUPmb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVWxJr0_GcWln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
+        6r1DMcIj6I8E87Iv67AKxVW8Jr0_Cr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
+        xGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAK
+        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrV
+        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI
+        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267
+        AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr1j
+        6F4UJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU8
+        T7K3UUUUU==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 10:15:03PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.116 release.
-> There are 159 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 09 Jun 2023 20:07:31 +0000.
-> Anything received after that time might be too late.
-> 
+Hi,
 
-Build results:
-	total: 155 pass: 155 fail: 0
-Qemu test results:
-	total: 499 pass: 498 fail: 1
-Failed tests:
-	arm:kudo-bmc:multi_v7_defconfig:npcm:usb0.1:nuvoton-npcm730-kudo:rootfs
+On 2023/6/9 18:58, Jani Nikula wrote:
+> On Fri, 09 Jun 2023, Sui Jingfeng <suijingfeng@loongson.cn> wrote:
+>> Per Documentation/process/license-rules.rst, the SPDX MIT identifier is
+>> equivalent to including the entire MIT license text from
+>> LICENSES/preferred/MIT.
+>>
+>> Replace the MIT license text with the equivalent SPDX identifier.
+>>
+>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+>> ---
+>>   include/linux/vgaarb.h | 30 +-----------------------------
+>>   1 file changed, 1 insertion(+), 29 deletions(-)
+>>
+>> diff --git a/include/linux/vgaarb.h b/include/linux/vgaarb.h
+>> index 6d5465f8c3f2..341245205e1c 100644
+>> --- a/include/linux/vgaarb.h
+>> +++ b/include/linux/vgaarb.h
+>> @@ -1,32 +1,4 @@
+>> -/*
+>> - * The VGA aribiter manages VGA space routing and VGA resource decode to
+>> - * allow multiple VGA devices to be used in a system in a safe way.
+> Why is this being removed?
+>
+>> - *
+>> - * (C) Copyright 2005 Benjamin Herrenschmidt <benh@kernel.crashing.org>
+>> - * (C) Copyright 2007 Paulo R. Zanoni <przanoni@gmail.com>
+>> - * (C) Copyright 2007, 2009 Tiago Vignatti <vignatti@freedesktop.org>
+> Replacing the license text with SPDX is fine, removing copyright notices
+> is not.
 
-The test failure is spurious and not new. I observe it randomly on
-multi_v7_defconfig builds, primarily on npcm platforms. There is no error
-message, just a stalled boot. I have been trying to bisect for a while,
-but I have not been successful so far. No immediate concern; I just wanted
-to mention it in case someone else hits the same or a similar problem.
+Sorry, I'm mindless
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+I should keep the copyright notices(original authors) there.
 
-Guenter
+I will respin this patch. Thanks for pointed out.
+
+> BR,
+> Jani.
+>
+>> - *
+>> - * Permission is hereby granted, free of charge, to any person obtaining a
+>> - * copy of this software and associated documentation files (the "Software"),
+>> - * to deal in the Software without restriction, including without limitation
+>> - * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+>> - * and/or sell copies of the Software, and to permit persons to whom the
+>> - * Software is furnished to do so, subject to the following conditions:
+>> - *
+>> - * The above copyright notice and this permission notice (including the next
+>> - * paragraph) shall be included in all copies or substantial portions of the
+>> - * Software.
+>> - *
+>> - * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+>> - * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+>> - * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+>> - * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+>> - * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+>> - * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+>> - * DEALINGS
+>> - * IN THE SOFTWARE.
+>> - *
+>> - */
+>> +/* SPDX-License-Identifier: MIT */
+>>   
+>>   #ifndef LINUX_VGA_H
+>>   #define LINUX_VGA_H
+
+-- 
+Jingfeng
+
