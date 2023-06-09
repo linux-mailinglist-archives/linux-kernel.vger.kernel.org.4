@@ -2,64 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 017EA72A327
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 21:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECC9572A32A
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 21:34:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231492AbjFITds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 15:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42804 "EHLO
+        id S229694AbjFITeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 15:34:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbjFITdq (ORCPT
+        with ESMTP id S229454AbjFITeJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 15:33:46 -0400
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B8B2D44;
-        Fri,  9 Jun 2023 12:33:46 -0700 (PDT)
-Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-33b3cfb9495so9284855ab.2;
-        Fri, 09 Jun 2023 12:33:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686339225; x=1688931225;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rMoUuVCoy8iPi5l41BbPCFeIaC3DlfQ2sHoobxu0rd4=;
-        b=ZtkZ3qDX+p1flp8mOZ5JocGwjrh9j8wWAmeMehGXb5lKuO0UjHWEP/BucywwG2QNCH
-         Ll6OWk1RyzoQwvEcvS9edGerud6DeXl5U+rBKiRWjHPtyer2pivXBamWXw7NYE9Im+2w
-         j/jUy4ftWPgfF5OF4nAl18xvYEtw91fPEZZouNUdCEEBqEJs/ORdWSmieFQqzBlUPlbX
-         t3lYVp2fdaCpJBhEB/R/+fvwb3uGy2IwfRXNVhd9ZCtUjatKAoS5AvFRNTGtegrJH8y3
-         UkyzMikfQdoUelESVU8qpmVI9dGexSW7FT4NtD1f8psPrKbDkwxzXxfkgfMC1j0eWYBx
-         cSpA==
-X-Gm-Message-State: AC+VfDwIt4Jumy+qGMroxheORktZRE9Z5wdYik6sjYmZ4LVVOHPuy5XU
-        54DmxXqxbvN1rF353lUCqQq/Qicfjg==
-X-Google-Smtp-Source: ACHHUZ4pduV4nm+kOOf2LCKJZuG86VPl6p4jzzFbmjKFwp6EFkNLZ/0POAfMsLj1enQS0YlNO+g2ng==
-X-Received: by 2002:a92:c149:0:b0:338:c685:83d1 with SMTP id b9-20020a92c149000000b00338c68583d1mr2607823ilh.10.1686339225462;
-        Fri, 09 Jun 2023 12:33:45 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id i8-20020a056e02054800b003248469e5easm1264744ils.43.2023.06.09.12.33.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 12:33:44 -0700 (PDT)
-Received: (nullmailer pid 1963853 invoked by uid 1000);
-        Fri, 09 Jun 2023 19:33:43 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>
-Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] PCI: iproc: Use of_property_read_bool() for boolean properties
-Date:   Fri,  9 Jun 2023 13:33:25 -0600
-Message-Id: <20230609193326.1963542-1-robh@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Fri, 9 Jun 2023 15:34:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66E330D0;
+        Fri,  9 Jun 2023 12:34:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 63DE465B5A;
+        Fri,  9 Jun 2023 19:34:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D79B9C433D2;
+        Fri,  9 Jun 2023 19:34:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686339247;
+        bh=UOspDcDfDFm6QPopNaAEG0ZWyNsc8e+X/dvLCTYWW0M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tQhS0eRyklovhz/AoC7U2GE5HgQOiLjzRFTt+o3ZaiC9tr6qYM1CkWJP4Qlm+9q3T
+         RU7NiJBJajGB8cdlIO6VDE/oX6e9S0Psnue96fn9fVTt/qm9oYckEGCvjh7fupaWJb
+         z5B6WvqusQ2SyRSWlfR/INpEVwIo9Ih/tAm7bAMMapz7rWhm4weStrlmQBdfYBR0b+
+         A6VdWdYb/CqXYW+7MhULJgXactJgbkDgDdeGCGzcJC15rZOgeFhyKlcCqSMS6Zz6OU
+         DHBLH7R2RphkCQgxo65P81CvZPnd18r6ml2ajIJ50/vxrLThnaYzMLgIyTwYakVJ6k
+         3grAPwoG3v1wg==
+Date:   Fri, 9 Jun 2023 20:34:01 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Raymond Hackley <raymondhackley@protonmail.com>,
+        davem@davemloft.net, devicetree@vger.kernel.org,
+        edumazet@google.com, jk@codeconstruct.com.au, kuba@kernel.org,
+        lgirdwood@gmail.com, linux-kernel@vger.kernel.org,
+        michael@walle.cc, netdev@vger.kernel.org, pabeni@redhat.com,
+        robh+dt@kernel.org, u.kleine-koenig@pengutronix.de
+Subject: Re: [PATCH v2 2/2] NFC: nxp-nci: Add pad supply voltage pvdd-supply
+Message-ID: <a3d2dd4f-38ce-40ca-9085-893f808f817b@sirena.org.uk>
+References: <20230609154033.3511-1-raymondhackley@protonmail.com>
+ <20230609154200.3620-1-raymondhackley@protonmail.com>
+ <e2bb439c-9b72-991b-00f6-0b5e7602efd9@linaro.org>
+ <20230609173935.84424-1-raymondhackley@protonmail.com>
+ <7ad5d027-9b15-f59e-aa76-17e498cb7aba@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fhm/1UM3KQHYSisd"
+Content-Disposition: inline
+In-Reply-To: <7ad5d027-9b15-f59e-aa76-17e498cb7aba@linaro.org>
+X-Cookie: Tom's hungry, time to eat lunch.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,42 +64,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is preferred to use typed property access functions (i.e.
-of_property_read_<type> functions) rather than low-level
-of_get_property/of_find_property functions for reading properties.
-Convert reading boolean properties to of_property_read_bool().
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
-v2:
- - Commit msg: s/to to/to/
----
- drivers/pci/controller/pcie-iproc-msi.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+--fhm/1UM3KQHYSisd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/drivers/pci/controller/pcie-iproc-msi.c b/drivers/pci/controller/pcie-iproc-msi.c
-index fee036b07cd4..649fcb449f34 100644
---- a/drivers/pci/controller/pcie-iproc-msi.c
-+++ b/drivers/pci/controller/pcie-iproc-msi.c
-@@ -525,7 +525,7 @@ int iproc_msi_init(struct iproc_pcie *pcie, struct device_node *node)
- 	if (!of_device_is_compatible(node, "brcm,iproc-msi"))
- 		return -ENODEV;
- 
--	if (!of_find_property(node, "msi-controller", NULL))
-+	if (!of_property_read_bool(node, "msi-controller"))
- 		return -ENODEV;
- 
- 	if (pcie->msi)
-@@ -585,8 +585,7 @@ int iproc_msi_init(struct iproc_pcie *pcie, struct device_node *node)
- 		return -EINVAL;
- 	}
- 
--	if (of_find_property(node, "brcm,pcie-msi-inten", NULL))
--		msi->has_inten_reg = true;
-+	msi->has_inten_reg = of_property_read_bool(node, "brcm,pcie-msi-inten");
- 
- 	msi->nr_msi_vecs = msi->nr_irqs * EQ_LEN;
- 	msi->bitmap = devm_bitmap_zalloc(pcie->dev, msi->nr_msi_vecs,
--- 
-2.39.2
+On Fri, Jun 09, 2023 at 09:29:51PM +0200, Krzysztof Kozlowski wrote:
+> On 09/06/2023 19:40, Raymond Hackley wrote:
+> > On Friday, June 9th, 2023 at 3:46 PM, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
+> > Second condition regulator_is_enabled(pvdd) is to make sure that pvdd is
+> > disabled with balance.
+
+> So you have buggy code and to hide the bug you add checks? No, make the
+> code correct so the check is not needed.
+
+Specifically your driver should only ever call regulator_disable() to
+balance out regulator_enable() calls it made itself and it should know
+how many of those it has done.  regulator_is_enabled() should only ever
+be used during probe if for some reason it is important to figure out if
+the device is already powered for startup, this should be very unusual.
+If something else enabled the regualtor then whatever did that needs to
+undo those enables, not another driver.
+
+--fhm/1UM3KQHYSisd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSDfqgACgkQJNaLcl1U
+h9ABiwf9Hutr2zJvx9D17c4xS1JOiT2t+PozkRvq6t8oWu82/GhSKzCEl4qiJ48j
+KG9Dyy6j44XBO2sjM4X0ge6gjX7+3TPcFRd4WC5VtqmqNgyKQviRk8KBPT7g+9Le
+tA5btQ5ytvDJRNhvlAqi8FxkwAt3P+6DPVZGosDcJcaDwHa936TM1SAZnx6TP7y4
+vc0etFHfMt/+xL9hMRqxlCyL+dPo45wdsNOibWJu9mF15yDfDdJLfWW+d8qbRu9r
+V2o7YSG0k0Ukxpj5fgBiBgWfAsYKmYVzg15gTazoop0PHUGtonXk14vZt5bQQGkV
+s3SCRrQAOCNB7v0yl5nhK87ypCx31Q==
+=365c
+-----END PGP SIGNATURE-----
+
+--fhm/1UM3KQHYSisd--
