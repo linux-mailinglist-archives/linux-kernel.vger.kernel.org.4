@@ -2,111 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1193C729414
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:04:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D31F72941A
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:05:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240593AbjFIJD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 05:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60740 "EHLO
+        id S240498AbjFIJFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 05:05:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240331AbjFIJDs (ORCPT
+        with ESMTP id S241149AbjFIJEv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 05:03:48 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF7DB9
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 02:03:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686301427; x=1717837427;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=2PWm/0cQ42+zGqkyy6ebZ11SVlnNhp4ff28Vfl3WNXo=;
-  b=HMLvgmfYcuTxXCsPFHak+b7vGZaPmUAtoF3DrnSVY1KRxlruwjpVUN8k
-   yTuSXEJpzCLGVaPbPuCBej6Y5xD3RKEb/PivivG+CrBgQH6l7MbJf9ck5
-   Mq8jlf9pcB7T0k/koD0vA9ig7bYjCEYYP6QhMU9D6HtI9fDJqHqjz9mJ4
-   wo17eav0jX/4sIJYBvdVpYv1VQPWyntMrVjEbE+zoIT0u/EaEOOtJD0HB
-   mCouzVuugCtECAmb0qrGLpKhj5sNFeG9i/79ngzsyQJkAtiUoYLCXW505
-   /aqydULd0zMQE+PuWLiTVemwwEO55GqOm+qZSQpaCbY4QOEwhBTo9ffr1
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="355045901"
-X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
-   d="scan'208";a="355045901"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 02:03:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="660700480"
-X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
-   d="scan'208";a="660700480"
-Received: from skolhe-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.58.254])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 02:03:31 -0700
-From:   Jani Nikula <jani.nikula@intel.com>
-To:     Ralph Campbell <rcampbell@nvidia.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Ralph Campbell <rcampbell@nvidia.com>
-Subject: Re: [PATCH] drm/edid: Add quirk for OSVR HDK 2.0
-In-Reply-To: <20230609014207.2759720-1-rcampbell@nvidia.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230609014207.2759720-1-rcampbell@nvidia.com>
-Date:   Fri, 09 Jun 2023 12:03:26 +0300
-Message-ID: <87y1ktqa75.fsf@intel.com>
+        Fri, 9 Jun 2023 05:04:51 -0400
+Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7562198C;
+        Fri,  9 Jun 2023 02:04:27 -0700 (PDT)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1q7Y2Y-000vwE-78; Fri, 09 Jun 2023 17:04:15 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 09 Jun 2023 17:04:14 +0800
+Date:   Fri, 9 Jun 2023 17:04:14 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Jia Jie Ho <jiajie.ho@starfivetech.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] crypto: starfive - Add RSA algo support
+Message-ID: <ZILrDjVRdt/pyjvL@gondor.apana.org.au>
+References: <20230602025551.874280-1-jiajie.ho@starfivetech.com>
+ <20230602025551.874280-3-jiajie.ho@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230602025551.874280-3-jiajie.ho@starfivetech.com>
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
+        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 08 Jun 2023, Ralph Campbell <rcampbell@nvidia.com> wrote:
-> The OSVR virtual reality headset HDK 2.0 uses a different EDID
-> vendor and device identifier than the HDK 1.1 - 1.4 headsets.
-> Add the HDK 2.0 vendor and device identifier to the quirks table so
-> that window managers do not try to display the desktop screen on the
-> headset display.
-
-At some point in time we requested bugs to be filed about quirks, with
-EDIDs attached, so we could look at them later, and maybe remove the
-quirks.
-
-The headset non-desktop thing started off as a quirk, but since then
-we've added both Microsoft VSDB and DisplayID primary use as ways to
-indicate this without quirks.
-
-BR,
-Jani.
-
+On Fri, Jun 02, 2023 at 10:55:51AM +0800, Jia Jie Ho wrote:
 >
-> Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
-> Tested-by: Ralph Campbell <rcampbell@nvidia.com>
-> ---
->  drivers/gpu/drm/drm_edid.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> I don't know how many of these VR headsets are still around but I have a
-> working one and I saw and entry for HDK 1.x so I thought it would be good
-> to add HDK 2.0.
->
-> diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
-> index 0454da505687..3b8cc1fe05e8 100644
-> --- a/drivers/gpu/drm/drm_edid.c
-> +++ b/drivers/gpu/drm/drm_edid.c
-> @@ -230,6 +230,7 @@ static const struct edid_quirk {
->  
->  	/* OSVR HDK and HDK2 VR Headsets */
->  	EDID_QUIRK('S', 'V', 'R', 0x1019, EDID_QUIRK_NON_DESKTOP),
-> +	EDID_QUIRK('A', 'O', 'U', 0x1111, EDID_QUIRK_NON_DESKTOP),
->  };
->  
->  /*
+> +static inline void starfive_pka_irq_mask_clear(struct starfive_cryp_ctx *ctx)
+> +{
+> +	struct starfive_cryp_dev *cryp = ctx->cryp;
+> +	u32 stat;
+> +
+> +	reinit_completion(&cryp->pka_done);
+> +
+> +	stat = readl(cryp->base + STARFIVE_IE_MASK_OFFSET);
+> +	stat &= ~STARFIVE_IE_MASK_PKA_DONE;
+> +	writel(stat, cryp->base + STARFIVE_IE_MASK_OFFSET);
+> +}
 
+Shouldn't the order of reinit_completion and the register write
+be reversed? Otherwise what's to stop a spurious interrupt from
+completing pka_done prematurely?
+
+Cheers,
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
