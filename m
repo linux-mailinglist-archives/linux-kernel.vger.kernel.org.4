@@ -2,78 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 259D8728F3F
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 07:18:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57BDA728F44
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 07:23:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbjFIFRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 01:17:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54604 "EHLO
+        id S230455AbjFIFWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 01:22:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjFIFRq (ORCPT
+        with ESMTP id S229482AbjFIFWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 01:17:46 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BB82D68
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 22:17:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=FjYMyKYq6juQYF/VuiuxQCYPCQosF6Tr+IRKaAznDZc=; b=thuIu5DyMUNPC4p08f9hTDoNYd
-        M1u06I7ov1vrMXVobNEGB1QR/1iK7aOy159iYfK6/4YegJSyXl8mJo2O3MiduxP8sqRtOL5ujljmK
-        r6kru5Ay4JUI9KjZqtmr9leja1obZZolZDNCJl5C9vgNTgVydA+A5th/wI1JxySHK+Wy/rdYeb0/3
-        cJRhjlUai9tYpre+xEERURHGNiFaS8IcXyqy+H2fTKvPLBD923FDQSHRSsEDqyJRdwdAXphxh2/2T
-        +W87AXax2SGfLvVCP4Tm6VgRVojH4hIOYbusDIHFVJyYcW8uKjFuEMxfP6zr4oUxzBOr+Fxi3iqR2
-        Az7Lauzg==;
-Received: from [213.208.157.39] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q7UVK-00Bhez-0e;
-        Fri, 09 Jun 2023 05:17:42 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     axboe@kernel.dk
-Cc:     festevam@gmail.com, broonie@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] block: fix rootwait= again
-Date:   Fri,  9 Jun 2023 07:17:37 +0200
-Message-Id: <20230609051737.328930-1-hch@lst.de>
-X-Mailer: git-send-email 2.39.2
+        Fri, 9 Jun 2023 01:22:53 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F1A14272A;
+        Thu,  8 Jun 2023 22:22:47 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DA933AB6;
+        Thu,  8 Jun 2023 22:23:32 -0700 (PDT)
+Received: from [10.163.44.201] (unknown [10.163.44.201])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5262E3F587;
+        Thu,  8 Jun 2023 22:22:41 -0700 (PDT)
+Message-ID: <e960d5d5-07a8-2049-7d0a-07268ecfe36a@arm.com>
+Date:   Fri, 9 Jun 2023 10:52:37 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH V11 06/10] arm64/perf: Enable branch stack events via
+ FEAT_BRBE
+Content-Language: en-US
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, catalin.marinas@arm.com,
+        Mark Brown <broonie@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+References: <20230531040428.501523-1-anshuman.khandual@arm.com>
+ <20230531040428.501523-7-anshuman.khandual@arm.com>
+ <ZH3mhorKNo77hsv5@FVFF77S0Q05N>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <ZH3mhorKNo77hsv5@FVFF77S0Q05N>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The previous rootwait fix added an -EINVAL return to a completely
-bogus superflous branch, fix this.
+[...]
 
-Fixes: 1341c7d2ccf4 ("block: fix rootwait=")
-Reported-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Tested-by: Fabio Estevam <festevam@gmail.com>
----
- block/early-lookup.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 6/5/23 19:13, Mark Rutland wrote:
+>> +void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
+>> +{
+>> +	struct brbe_hw_attr *brbe_attr = (struct brbe_hw_attr *)cpuc->percpu_pmu->private;
+>> +	u64 brbfcr, brbcr;
+>> +	int idx, loop1_idx1, loop1_idx2, loop2_idx1, loop2_idx2, count;
+>> +
+>> +	brbcr = read_sysreg_s(SYS_BRBCR_EL1);
+>> +	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
+>> +
+>> +	/* Ensure pause on PMU interrupt is enabled */
+>> +	WARN_ON_ONCE(!(brbcr & BRBCR_EL1_FZP));
+>> +
+>> +	/* Pause the buffer */
+>> +	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+>> +	isb();
+>> +
+>> +	/* Determine the indices for each loop */
+>> +	loop1_idx1 = BRBE_BANK0_IDX_MIN;
+>> +	if (brbe_attr->brbe_nr <= BRBE_BANK_MAX_ENTRIES) {
+>> +		loop1_idx2 = brbe_attr->brbe_nr - 1;
+>> +		loop2_idx1 = BRBE_BANK1_IDX_MIN;
+>> +		loop2_idx2 = BRBE_BANK0_IDX_MAX;
+>> +	} else {
+>> +		loop1_idx2 = BRBE_BANK0_IDX_MAX;
+>> +		loop2_idx1 = BRBE_BANK1_IDX_MIN;
+>> +		loop2_idx2 = brbe_attr->brbe_nr - 1;
+>> +	}
+>> +
+>> +	/* Loop through bank 0 */
+>> +	select_brbe_bank(BRBE_BANK_IDX_0);
+>> +	for (idx = 0, count = loop1_idx1; count <= loop1_idx2; idx++, count++) {
+>> +		if (!capture_branch_entry(cpuc, event, idx))
+>> +			goto skip_bank_1;
+>> +	}
+>> +
+>> +	/* Loop through bank 1 */
+>> +	select_brbe_bank(BRBE_BANK_IDX_1);
+>> +	for (count = loop2_idx1; count <= loop2_idx2; idx++, count++) {
+>> +		if (!capture_branch_entry(cpuc, event, idx))
+>> +			break;
+>> +	}
+>> +
+>> +skip_bank_1:
+>> +	cpuc->branches->branch_stack.nr = idx;
+>> +	cpuc->branches->branch_stack.hw_idx = -1ULL;
+>> +	process_branch_aborts(cpuc);
+>> +
+>> +	/* Unpause the buffer */
+>> +	write_sysreg_s(brbfcr & ~BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+>> +	isb();
+>> +	armv8pmu_branch_reset();
+>> +}
+> The loop indicies are rather difficult to follow, and I think those can be made
+> quite a lot simpler if split out, e.g.
+> 
+> | int __armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
+> | {
+> | 	struct brbe_hw_attr *brbe_attr = (struct brbe_hw_attr *)cpuc->percpu_pmu->private;
+> | 	int nr_hw_entries = brbe_attr->brbe_nr;
+> | 	int idx;
 
-diff --git a/block/early-lookup.c b/block/early-lookup.c
-index 48ea3e982419cc..a5be3c68ed079c 100644
---- a/block/early-lookup.c
-+++ b/block/early-lookup.c
-@@ -181,7 +181,7 @@ static int __init devt_from_devname(const char *name, dev_t *devt)
- 	*p = '\0';
- 	*devt = blk_lookup_devt(s, part);
- 	if (*devt)
--		return -ENODEV;
-+		return 0;
- 
- 	/* try disk name without p<part number> */
- 	if (p < s + 2 || !isdigit(p[-2]) || p[-1] != 'p')
--- 
-2.39.2
+I guess idx needs an init to 0.
 
+> | 
+> | 	select_brbe_bank(BRBE_BANK_IDX_0);
+> | 	while (idx < nr_hw_entries && idx < BRBE_BANK0_IDX_MAX) {
+> | 		if (!capture_branch_entry(cpuc, event, idx))
+> | 			return idx;
+> | 		idx++;
+> | 	}
+> | 
+> | 	select_brbe_bank(BRBE_BANK_IDX_1);
+> | 	while (idx < nr_hw_entries && idx < BRBE_BANK1_IDX_MAX) {
+> | 		if (!capture_branch_entry(cpuc, event, idx))
+> | 			return idx;
+> | 		idx++;
+> | 	}
+> | 
+> | 	return idx;
+> | }
+
+These loops are better than the proposed one with indices, will update.
+
+> | 
+> | void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
+> | {
+> | 	u64 brbfcr, brbcr;
+> | 	int nr;
+> | 
+> | 	brbcr = read_sysreg_s(SYS_BRBCR_EL1);
+> | 	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
+> | 
+> | 	/* Ensure pause on PMU interrupt is enabled */
+> | 	WARN_ON_ONCE(!(brbcr & BRBCR_EL1_FZP));
+> | 
+> | 	/* Pause the buffer */
+> | 	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+> | 	isb();
+> | 
+> | 	nr = __armv8pmu_branch_read(cpus, event);
+> | 
+> | 	cpuc->branches->branch_stack.nr = nr;
+> | 	cpuc->branches->branch_stack.hw_idx = -1ULL;
+> | 	process_branch_aborts(cpuc);
+> | 
+> | 	/* Unpause the buffer */
+> | 	write_sysreg_s(brbfcr & ~BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+> | 	isb();
+> | 	armv8pmu_branch_reset();
+> | }
+> 
+> Looking at <linux/perf_event.h> I see:
+> 
+> | /*
+> |  * branch stack layout:
+> |  *  nr: number of taken branches stored in entries[]
+> |  *  hw_idx: The low level index of raw branch records
+> |  *          for the most recent branch.
+> |  *          -1ULL means invalid/unknown.
+> |  *
+> |  * Note that nr can vary from sample to sample
+> |  * branches (to, from) are stored from most recent
+> |  * to least recent, i.e., entries[0] contains the most
+> |  * recent branch.
+> |  * The entries[] is an abstraction of raw branch records,
+> |  * which may not be stored in age order in HW, e.g. Intel LBR.
+> |  * The hw_idx is to expose the low level index of raw
+> |  * branch record for the most recent branch aka entries[0].
+> |  * The hw_idx index is between -1 (unknown) and max depth,
+> |  * which can be retrieved in /sys/devices/cpu/caps/branches.
+> |  * For the architectures whose raw branch records are
+> |  * already stored in age order, the hw_idx should be 0.
+> |  */
+> | struct perf_branch_stack {
+> |         __u64                           nr;  
+> |         __u64                           hw_idx;
+> |         struct perf_branch_entry        entries[];
+> | };
+> 
+> ... which seems to indicate we should be setting hw_idx to 0, since IIUC our
+> records are in age order.
+Branch records are indeed in age order, sure will change hw_idx as 0. Earlier
+figured that there was no need for hw_idx and hence marked it as -1UL similar
+to other platforms like powerpc.
