@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B76AB728D6D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 04:04:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2189F728D6F
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 04:05:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232897AbjFICEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 22:04:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58426 "EHLO
+        id S238097AbjFICFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 22:05:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbjFICE3 (ORCPT
+        with ESMTP id S229817AbjFICFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 22:04:29 -0400
+        Thu, 8 Jun 2023 22:05:13 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6C230D2
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 19:04:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E58430D2
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 19:05:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 336C563F78
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 02:04:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E639C4339B
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 02:04:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C43786521E
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 02:05:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35EF9C433EF
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 02:05:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686276267;
-        bh=R8OkAj6OIkdcUXTCmDhI7Jf2XQIKaCplXivoSkeLxc8=;
+        s=k20201202; t=1686276312;
+        bh=KXYZnd2Dp+oBXwR3J88fqvQLX/aS78bYiYQ7cL2D2cg=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=eoCa+EplOc9QFhELnU3lDHZgCBC4dl6iAIYucHhu4MZ0w94r160zwlDPygePm23Z3
-         CfuN5VaStVkuaKOsWVbi6/iwNxzWWNSQO0fJvL3+o+/u1KshjV/zgdIFMTj0/FJYDB
-         +9zohW0Hyl9iW2BEfi98hPRunCujDIVBzMXVS519Tigk0kBeuQtMaDWh9QClFIG5N8
-         7Gxv3K07Z19e24Hly8Me7mYYMHxVMHsquA60NdB+upL+jwxSfi/nsel1OVcyPHoKM0
-         EZNdNW6LkO43t1SwuCEvkKZ/eLNDL5bB4ICzmLyJfi+F7QOJR1yWoKui0G+BBXvLFr
-         DWtAHRai9k8CA==
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-51493ec65d8so2277447a12.2
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 19:04:27 -0700 (PDT)
-X-Gm-Message-State: AC+VfDypk8pVqeYH6c9PmGTAXpZlzXLkJJ4QvkVDJXzeSQtNW/WjeGfz
-        ONFPGMyvV6YksI6yNd6B8KHVcR9GDtOo1qqGwic=
-X-Google-Smtp-Source: ACHHUZ6ruALU7GHn4PiFGkCL/kfW8XviX1EpOnZUIyrYeeP7EGXmHWTPIQh/1nrOTXfq/5zb3NIyawAHwi2Xjneh91c=
-X-Received: by 2002:a17:907:c15:b0:94e:48ac:9a51 with SMTP id
- ga21-20020a1709070c1500b0094e48ac9a51mr343743ejc.4.1686276265775; Thu, 08 Jun
- 2023 19:04:25 -0700 (PDT)
+        b=ocWlxdA22HW5Y8nH8e5dpZ5DdeWgU7owemTJsWKdqs5G4xLVQjFrIn+u043uSTGuG
+         rJDAbiNcOb7SI3vZS/CewQ2Qv4dU32P9qMd2LUBvUapaVl5Px+DrX+UVncg5aEiXmU
+         SgIz/vRtWWy/kFdqyfSLq589GPYWQHOA+wuf2rcKw3DBYHYoRxoKSObMom4R37QdtV
+         IGaoyt+REzz3Q+rjg8punU00RDoBuc91eniDEzJ5va2/Y7m2VV+ZJvcZdmmoMPXHkF
+         xtda0mUHwvbdD26Tw8hX87KNImsg1sAybasEpl8K0uabvJEZRF5ZX8QaBdZJ+N5kRd
+         cYIbuBK+CrPVw==
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-977ed383b8aso224605666b.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 19:05:12 -0700 (PDT)
+X-Gm-Message-State: AC+VfDx16vwAN4EpzU97m8+7HJfuhQWVOBuNb+OD8OQrmxFIIas+1lEz
+        vmRhrcTneD1lD6WJqYAymloij9ATS+60WfvqDkc=
+X-Google-Smtp-Source: ACHHUZ4zyM/rSM2b/SUwpwD733zbZ7T8VbxYv4UjXz0Yb8MS1FH4LzMcs4rZzh6/q+xpwBJh1+8Oqa504tsvbHAUGSc=
+X-Received: by 2002:a17:907:2d11:b0:96f:905e:6117 with SMTP id
+ gs17-20020a1709072d1100b0096f905e6117mr347987ejc.56.1686276310499; Thu, 08
+ Jun 2023 19:05:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230608130157.5871-1-zhangqing@loongson.cn>
-In-Reply-To: <20230608130157.5871-1-zhangqing@loongson.cn>
+References: <20230608022738.1861729-1-huqi@loongson.cn>
+In-Reply-To: <20230608022738.1861729-1-huqi@loongson.cn>
 From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Fri, 9 Jun 2023 10:04:13 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7yLgM7WAnubjkBx27E7UUTpMC+x93y=t6YkcEWBafFGQ@mail.gmail.com>
-Message-ID: <CAAhV-H7yLgM7WAnubjkBx27E7UUTpMC+x93y=t6YkcEWBafFGQ@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Avoid uninitialized alignment_mask
-To:     Qing Zhang <zhangqing@loongson.cn>
-Cc:     WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Colin King <colin.i.king@gmail.com>
+Date:   Fri, 9 Jun 2023 10:04:58 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4ve4injzQJNp5=y0qkE7szy6EwxNOnPzzFn0+aAGZgdg@mail.gmail.com>
+Message-ID: <CAAhV-H4ve4injzQJNp5=y0qkE7szy6EwxNOnPzzFn0+aAGZgdg@mail.gmail.com>
+Subject: Re: [PATCH v2] LoongArch: Fix function write_fcsr
+To:     Qi Hu <huqi@loongson.cn>
+Cc:     WANG Xuerui <kernel@xen0n.name>,
+        Qing Zhang <zhangqing@loongson.cn>,
+        Enze Li <lienze@kylinos.cn>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Miao HAO <haomiao19@mails.ucas.ac.cn>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -67,34 +69,30 @@ Queued, thanks.
 
 Huacai
 
-On Thu, Jun 8, 2023 at 9:02=E2=80=AFPM Qing Zhang <zhangqing@loongson.cn> w=
-rote:
+On Thu, Jun 8, 2023 at 10:27=E2=80=AFAM Qi Hu <huqi@loongson.cn> wrote:
 >
-> The hardware monitoring points for instruction fetching and
-> load/store operations need to align 4 bytes or 1/2/4/8 bytes respectively=
-.
+> Function "write_fcsr" uses wrong asm dest. Fix it!
 >
-> Reported-by: Colin King <colin.i.king@gmail.com>
-> Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
+> Reported-by: Miao HAO <haomiao19@mails.ucas.ac.cn>
+> Signed-off-by: Qi Hu <huqi@loongson.cn>
 > ---
->  arch/loongarch/kernel/hw_breakpoint.c | 2 ++
->  1 file changed, 2 insertions(+)
+>  arch/loongarch/include/asm/loongarch.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/arch/loongarch/kernel/hw_breakpoint.c b/arch/loongarch/kerne=
-l/hw_breakpoint.c
-> index 2406c95b34cc..021b59c248fa 100644
-> --- a/arch/loongarch/kernel/hw_breakpoint.c
-> +++ b/arch/loongarch/kernel/hw_breakpoint.c
-> @@ -396,6 +396,8 @@ int hw_breakpoint_arch_parse(struct perf_event *bp,
+> diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/incl=
+ude/asm/loongarch.h
+> index b3323ab5b78d..35e8a52fea11 100644
+> --- a/arch/loongarch/include/asm/loongarch.h
+> +++ b/arch/loongarch/include/asm/loongarch.h
+> @@ -1496,7 +1496,7 @@ __BUILD_CSR_OP(tlbidx)
+>  #define write_fcsr(dest, val) \
+>  do {   \
+>         __asm__ __volatile__(   \
+> -       "       movgr2fcsr      %0, "__stringify(dest)" \n"     \
+> +       "       movgr2fcsr      "__stringify(dest)", %0 \n"     \
+>         : : "r" (val)); \
+>  } while (0)
 >
->         if (hw->ctrl.type !=3D LOONGARCH_BREAKPOINT_EXECUTE)
->                 alignment_mask =3D 0x7;
-> +       else
-> +               alignment_mask =3D 0x3;
->         offset =3D hw->address & alignment_mask;
->
->         hw->address &=3D ~alignment_mask;
 > --
-> 2.20.1
->
+> 2.40.1
 >
