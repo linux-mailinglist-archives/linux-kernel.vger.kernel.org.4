@@ -2,60 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D08D7295C2
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:45:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 749D07295C6
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241809AbjFIJp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 05:45:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39004 "EHLO
+        id S241876AbjFIJqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 05:46:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241945AbjFIJo5 (ORCPT
+        with ESMTP id S241841AbjFIJpp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 05:44:57 -0400
+        Fri, 9 Jun 2023 05:45:45 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2E994228
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 02:40:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D5E46BB
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 02:40:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B9FA26562F
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:39:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9CD6C4339B;
-        Fri,  9 Jun 2023 09:39:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E61FD61470
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:40:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 54157C4339C;
+        Fri,  9 Jun 2023 09:40:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686303571;
-        bh=2RqJTUusjbxWp6JJrQrKAubtiwiOkGgS0OIMXhczqdE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bioFzmiax2w20nUH5t8K3WmPTjuTEYjWc+pOmXdEKvCYBMb2G6PElrCfIJ7O/PN8N
-         I2VIQFynxR44Yr8U2Spm9r+s/vWPA8nNidCtQ1K1Y8VrUWe3doiODxwvIFEZjYCwUZ
-         pY8II5CPyyjpUGgDMxEw05A5O+Har0+CWh9ws0LLofFGfVgG6UIny/xRVZ2ECBJfwD
-         q3c8IE4pfYsv/go7Hf7OnKLelbndA30iYvDVHo7BPprfwi7cSECAunXZiVh28x9PZ4
-         6yze7jJllH+gIvLVWJL5qs9A8gsPe90o6SzdkN3LYP9u+HT15sllyeszWlJ0iExyeN
-         nJJZp73+B9/Tg==
-Date:   Fri, 9 Jun 2023 10:39:25 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
-        <nfraprado@collabora.com>
-Cc:     kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] Revert "ASoC: mediatek: mt8192-mt6359: Remove " Jack"
- from Headphone pin name"
-Message-ID: <abe6e5f5-7373-44fc-90b6-2c01b1f1e96e@sirena.org.uk>
-References: <20230608221050.217968-1-nfraprado@collabora.com>
+        s=k20201202; t=1686303622;
+        bh=QsjPUpkRO5qwm0xSfCepOjD6AFakWYdIF5Oxfmz3lLo=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=AvozqRxhS8wdOWpuR2IwxLOVmHpV8OMtKTIHCUC7neJhPIcj0U3WCnCaV1SPs3fUx
+         ZtZZnEaSHZi9HFWOYU/soFQ6G4oIdQNGLu/G+elYUGPsNLyOzdbuJ77t4V8jdZHXlG
+         gw7fDR3K43wWua4e2M+DdiN5hiUnMse7FAMyAWthEcJcXVrFx2nzQ/tFDxk4y4BC0j
+         bw56vf5WHzup4oz75gN08d2YGHA4uthN6HDJnBVrVATIgLjNu31yd45rSLh5zweRwD
+         7yXv3q6PoIZUI846QY1ZA5zbTcw+9h5aTaUM6Db2LTl9qevFxUkmHKZqcaGPOvzIiy
+         ayHvQP5+3FhJg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3B998C43157;
+        Fri,  9 Jun 2023 09:40:22 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Vb2jlj/7oqDgwj74"
-Content-Disposition: inline
-In-Reply-To: <20230608221050.217968-1-nfraprado@collabora.com>
-X-Cookie: Tom's hungry, time to eat lunch.
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v3 0/2] net/ncsi: refactoring for GMA command
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168630362223.15762.16643998871572719262.git-patchwork-notify@kernel.org>
+Date:   Fri, 09 Jun 2023 09:40:22 +0000
+References: <20230607151742.6699-1-fr0st61te@gmail.com>
+In-Reply-To: <20230607151742.6699-1-fr0st61te@gmail.com>
+To:     Ivan Mikhaylov <fr0st61te@gmail.com>
+Cc:     sam@mendozajonas.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, vijaykhemka@fb.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -66,43 +59,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
---Vb2jlj/7oqDgwj74
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This series was applied to netdev/net-next.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-On Thu, Jun 08, 2023 at 06:10:48PM -0400, N=EDcolas F. R. A. Prado wrote:
-> This reverts commit cbbc0ec6dea09c815f1d1ef0abaf3f2ec89ff11f. That
-> commit removed the " Jack" suffix with the reasoning that it is
-> automatically added to the name of the kcontrol created, which is true,
+On Wed,  7 Jun 2023 18:17:40 +0300 you wrote:
+> Make one GMA function for all manufacturers, change ndo_set_mac_address
+> to dev_set_mac_address for notifiying net layer about MAC change which
+> ndo_set_mac_address doesn't do.
+> 
+> Changes from v1:
+> 	1. delete ftgmac100.txt changes about mac-address-increment
+> 	2. add convert to yaml from ftgmac100.txt
+> 	3. add mac-address-increment option for ethernet-controller.yaml
+> 
+> [...]
 
-Please submit patches using subject lines reflecting the style for the
-subsystem, this makes it easier for people to identify relevant patches.
-Look at what existing commits in the area you're changing are doing and
-make sure your subject lines visually resemble what they're doing.
-There's no need to resubmit to fix this alone.
+Here is the summary with links:
+  - [v3,1/2] net/ncsi: make one oem_gma function for all mfr id
+    https://git.kernel.org/netdev/net-next/c/74b449b98dcc
+  - [v3,2/2] net/ncsi: change from ndo_set_mac_address to dev_set_mac_address
+    https://git.kernel.org/netdev/net-next/c/790071347a0a
 
-Please include human readable descriptions of things like commits and
-issues being discussed in e-mail in your mails, this makes them much
-easier for humans to read especially when they have no internet access.
-I do frequently catch up on my mail on flights or while otherwise
-travelling so this is even more pressing for me than just being about
-making things a bit easier to read.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
---Vb2jlj/7oqDgwj74
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSC80wACgkQJNaLcl1U
-h9BJWwf/a4nq9jEGhBCy1pyCmPzoBI5oa1mVa3qi2EmesjaoCpgBYGoN2BT3fZ8m
-h0nrfOqJrpjCvv0zoVX6F6rMzFyGZxhEWmNa2DiLkXWEZcOB92i3sj6QQZX0RFoD
-HxqIGjNg44pfd7MkrTnqAtb09a8aOgdjVZmrNQIHS2Gq/XYrqL5je+pYKiyjs//D
-mKU455/DRQpzNZfmcdKeiSAmCkxJsqPV/COcMv25yWmmnzZB967MIF7As97Rcby3
-nQMMW4fJkrF2Qr6hyFlqirABm5OY/3ILTUprg5xPZHqSpShCG3sTB6j1vLHg6yYo
-H35FHE1W2vBzR0u/ECy3AmPSiCr3gg==
-=hy/b
------END PGP SIGNATURE-----
-
---Vb2jlj/7oqDgwj74--
