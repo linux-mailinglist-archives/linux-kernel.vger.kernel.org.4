@@ -2,150 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B5C72A05E
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:42:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F47972A062
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:43:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbjFIQm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 12:42:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46916 "EHLO
+        id S229556AbjFIQnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 12:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjFIQm2 (ORCPT
+        with ESMTP id S229516AbjFIQni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 12:42:28 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2062d.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe59::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C5A3A88
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:42:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YCn74W6oTKafdFplYyGGITWTFjy0y1+XVil81GgOgqC//ayfgsve7Brl0x5TxdAltVuRutslcq/ccx2XKSJPHyAKqtjq4npceBx32Ph8t/Zh8cBDmIHm5MwqcWjucf8Bx8RzO6qezwT5YopnoBhAnbATy5PA6M4QL0fEKJ3beE4mehtKdtFi0M4P7BMrRH8ixURpr9DSDf96WwgoWU1n0tPyOGPbzCLPlvGHIg5ygVNtfpHYVPSnBzErr8ecomjKTymVU91bDRZVfhXnnRY+QBkXQf6FKHS2gP4FhwrPehWZdNtym3cY/Upxxot79d0YLjPPbjUp0EyGbynQTzbWfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MHPtUkjWi081Krft7qmVvihs5tNcNkdVbKJftJWFc3Y=;
- b=NIFmxNtSCbP0CqZgWENemn2dghXIEb0ukPYruINW8c+ueUKn1Hg77FYZTEvSjt5wKS+aqxWsxCebcqMH1zRtFvGjJ8U+TMx4NgE1KqPOVrcuZ6haZvTIRPd2xK35f+q5Dxbjh4Jy2lY8mpJChpv17/9Rj4XS+m3O+Bygv/TiWN/FgbRZrjvy25zif4oWfifh2g425vubRpQ263OLxxJFnm3ImJT415R1RuIZodlyKBpPfl+y1WALgJjDDWYw9eRP/mjrrfbX1W5uckPMf2j/bEQDA4+k2eqTRRq3MFOdYilWNVPcE04AgjWUD9+FIKsH+g6d05qUStbbm0n/vtTGSA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=lists.freedesktop.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MHPtUkjWi081Krft7qmVvihs5tNcNkdVbKJftJWFc3Y=;
- b=NSrrP+qz16Ep0C2ej2gIC+3YpQPO3QIasFkEnVki3jM3YiDMtgZHZGvf3zLahWgA9d1O/zG5bvJy/F0CUmpTgSB19+gnvPkzkf4Z/MT4vNnsrrneoyL1JP/rYcZixvwuGjIGs8FZKOkcTpUaZpiB9ZNv9TVzesv9lt8M3Ievnos=
-Received: from CY5PR19CA0106.namprd19.prod.outlook.com (2603:10b6:930:83::29)
- by SA1PR12MB7039.namprd12.prod.outlook.com (2603:10b6:806:24e::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Fri, 9 Jun
- 2023 16:42:22 +0000
-Received: from CY4PEPF0000EE30.namprd05.prod.outlook.com
- (2603:10b6:930:83:cafe::12) by CY5PR19CA0106.outlook.office365.com
- (2603:10b6:930:83::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.27 via Frontend
- Transport; Fri, 9 Jun 2023 16:42:22 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000EE30.mail.protection.outlook.com (10.167.242.36) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6477.13 via Frontend Transport; Fri, 9 Jun 2023 16:42:22 +0000
-Received: from hamza-pc.localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 9 Jun
- 2023 11:42:20 -0500
-From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
-To:     <amd-gfx@lists.freedesktop.org>
-CC:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Hawking Zhang <Hawking.Zhang@amd.com>, Le Ma <le.ma@amd.com>,
-        Tao Zhou <tao.zhou1@amd.com>,
-        YiPeng Chai <YiPeng.Chai@amd.com>,
-        James Zhu <James.Zhu@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] drm/amd/amdgpu: enable W=1 for amdgpu
-Date:   Fri, 9 Jun 2023 12:42:06 -0400
-Message-ID: <20230609164207.430377-1-hamza.mahfooz@amd.com>
-X-Mailer: git-send-email 2.40.1
+        Fri, 9 Jun 2023 12:43:38 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC046F5
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:43:36 -0700 (PDT)
+Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com [209.85.210.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 79A2B3F18A
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 16:43:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1686329013;
+        bh=mEe8tT4KqhOTZhya2J7axmklktsnHYFZ6HxQsWtTxWI=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=ou3NGZf9RCA2jLfz4wWYT3FCT09AvZYG9sPA+JT7ahh3Mb5P9+rLFTWShIv2HSUet
+         JTIwriz4b6POUGvFJ8E0y7be6gkbAGRdhCst4aekLEOCHk+yJJW73RFJHpxj90jrj0
+         mO/97aWdEIr3Ptkp6wkfgF69DcgSCbNEjPX52Nn89VIR3KSaanvZBxpj5RlUDeWyrf
+         xxl5cr3DCQa/ZyRHHpWqvgl9VLc1rqCcyWiRh3ThCy+JlyphimjEyo6EcCaVcTIoo+
+         kbYskZPA6lLQQoQ8HJQ4LFYxtSWMHfaH0O0TQwJVkvcC4+OnitoEUWv35ZaX7FCEfn
+         k74hWV/DuzsFQ==
+Received: by mail-ot1-f69.google.com with SMTP id 46e09a7af769-6b1d9460ee1so1064739a34.1
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 09:43:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686329012; x=1688921012;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mEe8tT4KqhOTZhya2J7axmklktsnHYFZ6HxQsWtTxWI=;
+        b=J2TxTCOtsQ1eXkdGxKbuPZGBjs+QuImooyy4VpLUycape4PMYFwLOQDe1qc6tnwGeL
+         HK2eah6WqGa1w+MEc9rXhKGoFbhc26hvveErXZMsU1z6Fwq8RNrVBvpNYtjuEi3wG28u
+         eHe9FD1Av2pmXjEjXARO7th/6XbBZ9IRgJxe9TXIXIW0MZ3s46mFb7zvRF7GDhIoiVKE
+         l6PUQonTv4T9il3EvstfMbfILtWL0McYi86o6eiC1mA4mxfjPoU6zAI86UPCRxTNXaNK
+         iiHhIHeeh0yZXXXxsr3Y/fUwaxu8g2xImhVoQGZ1kp34joxwlU8mfATdBnvrnwdwC5oH
+         E3Ug==
+X-Gm-Message-State: AC+VfDznDTI+ZS299MRLxE5JxuDRigzP8X/kYnvyQIPEIORK+UD3oIE5
+        qrIDbsHPv1wkZEtqmOGktbTrZ9gFqziC6zoL/Y/XuHVcLXINXdSEr6W8PRR7A04/g/G5ZF1P9Mk
+        EzRy2/73ZpNtAhh9Y1JYJ/Cw56wSrKofblIyu4Z4ZaQ==
+X-Received: by 2002:a05:6870:d304:b0:19f:1c1d:a261 with SMTP id f4-20020a056870d30400b0019f1c1da261mr1618641oag.50.1686329012426;
+        Fri, 09 Jun 2023 09:43:32 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6msC6En9LztMQOX4P6tLcBxh/bpa27eShBUa/87DOTJVqzJmqp5gGZcqL0jdy1UI44JPu0Rg==
+X-Received: by 2002:a05:6870:d304:b0:19f:1c1d:a261 with SMTP id f4-20020a056870d30400b0019f1c1da261mr1618629oag.50.1686329012219;
+        Fri, 09 Jun 2023 09:43:32 -0700 (PDT)
+Received: from magali.. ([2804:14c:bbe3:4606:db64:8f3b:3c73:e436])
+        by smtp.gmail.com with ESMTPSA id g17-20020a056870c39100b001726cfeea97sm2360707oao.29.2023.06.09.09.43.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 09:43:31 -0700 (PDT)
+From:   Magali Lemes <magali.lemes@canonical.com>
+To:     davem@davemloft.net, dsahern@gmail.com, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
+        tianjia.zhang@linux.alibaba.com, vfedorenko@novek.ru
+Cc:     andrei.gherzan@canonical.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH net v2 0/3] Check if FIPS mode is enabled when running selftests
+Date:   Fri,  9 Jun 2023 13:43:21 -0300
+Message-Id: <20230609164324.497813-1-magali.lemes@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE30:EE_|SA1PR12MB7039:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1be8b222-a1c3-4be0-02c6-08db69087f6f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zBVnWriaQhsvc9gfoINUaNvc2Eond8NvJSZSNkcBvJS9iUx0C5z1dxQcIl/tJ5uD0IZ1lC4+3ZCumVAjghmN+u+SX/UL4tKauTx73Bsy4HgxmQfw2j8WzzTNXbHDibipJPzCrPNMkAd4o3M3bcEvMvxefF2Ng3D+loo8yC0Akd/Qge9vylk+dYNkES4FduPpyGJtE4KFOmbOTwcjGaGkiWCjs2ywhkvxebXhPThquLdXa6Q0LRs9S/Ee8ybZmnIpGFlTnjc05UC9jKHpG0uvBUgQFxVrO112QAtnJfbL7b48olsxQa7k+jEdOqykZ1k2kp4NN4D34AdnGWskaT9n9AjpAe05wtNSONxjClV92qoiPYYrHrY7ewFI3avJ7iLthfH1ABWRx+7t4q6xeGTf66D6SR9dqn7Ioks0+YdTalw1JzTcKAl1PFFQAwwSKkPUMMbc3Iy/ks1s/TuJQp8wvKsr1cohDTXmepMinDLxm+zALRHTaUNdGK4CvIU2OoVzXfStIaNjiT/OfYhy2yuBpu3ZKWEmvg/HvHVidnNlSjtM8ysh5ThLHJuVx0H3fW9ko16ZZcJoQrsQNLo8uljcx7urJjtoILPNPoWGsyym5y5L4vWkL7uT8yKzzRs8q0KQE0KSgvYi7xy1l3G5JPCxQMm3hTg0r5dmf+N7QDxR/9BvpDRo9Yb+WX4WEHzMH/iaIxVZ9XuDw/KffG3zuHrxtgMOZb4DpdC+NXuTWKzFT6UHmJjOmfHsyozAcpgtIPkmPoU/uIiTMNpmNyudREl8yJbQ58y+1sF4VaSojigkbU8HJ5zjewTaBZC4OqxTfKWL
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(346002)(376002)(396003)(451199021)(46966006)(40470700004)(36840700001)(2906002)(336012)(82310400005)(40460700003)(6666004)(16526019)(26005)(1076003)(47076005)(83380400001)(40480700001)(36860700001)(426003)(2616005)(86362001)(186003)(36756003)(356005)(82740400003)(81166007)(44832011)(54906003)(5660300002)(316002)(41300700001)(478600001)(4326008)(8936002)(70586007)(6916009)(8676002)(70206006)(16060500005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 16:42:22.0599
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1be8b222-a1c3-4be0-02c6-08db69087f6f
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000EE30.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7039
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have a clean build with W=1 as of
-commit 12a15dd589ac ("drm/amd/display/amdgpu_dm/amdgpu_dm_helpers: Move
-SYNAPTICS_DEVICE_ID into CONFIG_DRM_AMD_DC_DCN ifdef"). So, let's enable
-these checks unconditionally for the entire module to catch these errors
-during development.
+Some test cases from net/tls, net/fcnal-test and net/vrf-xfrm-tests
+that rely on cryptographic functions to work and use non-compliant FIPS
+algorithms fail in FIPS mode.
 
-Cc: Alex Deucher <alexander.deucher@amd.com>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
----
- drivers/gpu/drm/amd/amdgpu/Makefile | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+In order to allow these tests to pass in a wider set of kernels,
+ - for net/tls, skip the test variants that use the ChaCha20-Poly1305
+and SM4 algorithms, when FIPS mode is enabled;
+ - for net/fcnal-test, skip the MD5 tests, when FIPS mode is enabled;
+ - for net/vrf-xfrm-tests, replace the algorithms that are not
+FIPS-compliant with compliant ones.
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/Makefile b/drivers/gpu/drm/amd/amdgpu/Makefile
-index 86b833085f19..8d16f280b695 100644
---- a/drivers/gpu/drm/amd/amdgpu/Makefile
-+++ b/drivers/gpu/drm/amd/amdgpu/Makefile
-@@ -40,7 +40,18 @@ ccflags-y := -I$(FULL_AMD_PATH)/include/asic_reg \
- 	-I$(FULL_AMD_PATH)/amdkfd
- 
- subdir-ccflags-y := -Wextra
--subdir-ccflags-y += $(call cc-option, -Wunused-but-set-variable)
-+subdir-ccflags-y += -Wunused
-+subdir-ccflags-y += -Wmissing-prototypes
-+subdir-ccflags-y += -Wmissing-declarations
-+subdir-ccflags-y += -Wmissing-include-dirs
-+subdir-ccflags-y += -Wold-style-definition
-+subdir-ccflags-y += -Wmissing-format-attribute
-+# Need this to avoid recursive variable evaluation issues
-+cond-flags := $(call cc-option, -Wunused-but-set-variable) \
-+	$(call cc-option, -Wunused-const-variable) \
-+	$(call cc-option, -Wstringop-truncation) \
-+	$(call cc-option, -Wpacked-not-aligned)
-+subdir-ccflags-y += $(cond-flags)
- subdir-ccflags-y += -Wno-unused-parameter
- subdir-ccflags-y += -Wno-type-limits
- subdir-ccflags-y += -Wno-sign-compare
+Changes in v2:
+ - Add R-b tags.
+ - Put fips_non_compliant into the variants.
+ - Turn fips_enabled into a static global variable.
+ - Read /proc/sys/crypto/fips_enabled only once at main().
+
+v1: https://lore.kernel.org/netdev/20230607174302.19542-1-magali.lemes@canonical.com/
+
+Magali Lemes (3):
+  selftests: net: tls: check if FIPS mode is enabled
+  selftests: net: vrf-xfrm-tests: change authentication and encryption
+    algos
+  selftests: net: fcnal-test: check if FIPS mode is enabled
+
+ tools/testing/selftests/net/fcnal-test.sh     |  27 ++-
+ tools/testing/selftests/net/tls.c             | 175 +++++++++++++++++-
+ tools/testing/selftests/net/vrf-xfrm-tests.sh |  32 ++--
+ 3 files changed, 209 insertions(+), 25 deletions(-)
+
 -- 
-2.40.1
+2.34.1
 
