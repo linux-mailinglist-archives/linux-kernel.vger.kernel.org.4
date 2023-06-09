@@ -2,100 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0F372A1BF
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:00:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E78FA72A1CA
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:05:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbjFISAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 14:00:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57550 "EHLO
+        id S230407AbjFISFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 14:05:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjFISAE (ORCPT
+        with ESMTP id S230081AbjFISFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 14:00:04 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A3DD8;
-        Fri,  9 Jun 2023 11:00:02 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-256c8bed212so746635a91.3;
-        Fri, 09 Jun 2023 11:00:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686333601; x=1688925601;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SNb1MMHKODE+W69ko8eJiIRbDLaj/HDstcAoEpqfK+Q=;
-        b=dg0V5yQi2bkckFqDvdwYht29KbuZk08RXcEsyF2X3Ha58HuE6aUhmdK6vxDq5PmFHl
-         aDA4tDHvPzey4FIRZ/12YgWXj/flmLIt/t2++bNafoKmxtK+jcd7l60AQR+wsACNlBB4
-         ZywHGyd3VN2XVQHnp/mR1rdyU0JdhH87vZX3FuzhHWkRsMJtezV6nk7SurWCAEMJ6OGa
-         DONYUebJM8W/NcSsZPG9ptDaSv6aykWe8wG0B1YHcVOb3wsXLoDAAwylJb5+PJVUDfhV
-         OiflbFSY50YSygvNqe5eRbK2VWsQS9LrD1WzPnDXQjPWIEVXoAocXScOKhsb0z52oXNc
-         bgzg==
+        Fri, 9 Jun 2023 14:05:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA92A30F6
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 11:04:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686333852;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zAp0pJ+sm+Y3KQgNoeZPqvSvGD8UdvXtUGa2VdIgLpc=;
+        b=aJNKGZOw8YPM477A4bxP/3Z7lEVAexYT3oVpOkm2Pj4usItY/12xiin7zZwsntmKIUkpeq
+        a3Krw6WSv1ATdSkxztu1sHGMtnSuGlDlepV6K7chuyGFUcrnf6UioevWPhjNmwXmpIjfsj
+        wx+lRMI1MVEAAfGu6FxUGqQUQpjDOyk=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-402-FnenP1cqPmuqVcV9rHF8wg-1; Fri, 09 Jun 2023 14:04:04 -0400
+X-MC-Unique: FnenP1cqPmuqVcV9rHF8wg-1
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-75b337f2504so45960085a.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 11:04:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686333601; x=1688925601;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SNb1MMHKODE+W69ko8eJiIRbDLaj/HDstcAoEpqfK+Q=;
-        b=c/Px3VNJqnqNz1dmqgjynRytpnWsBJCatnO/kr+x3F/o/g4xSccA9JLTOfY/vni0se
-         cdDq3wpHarHQZa854bnreqJSQFHybygd8BrEqqsFuA3U7YBNr1JGx4z3erPWGeu2nGPD
-         q5iB+0zUJCJFRXv5hA14PxT1xgDN7RIz64POM3P1Mo1mKULQMZT3iJOZVD33vK/loCb2
-         uI6BG78HXRo6e/6fvq8C2EfGLzP3iDknw+eZB3lUoHHDv+jXMb6s/4kSNvW7vslNmmU4
-         V30blwobub1wpoy8v+1ZcSlQePhsMydfXSSckuhq3Rp+5Omor/9p49ZeXIL/5XLFhV4u
-         1eig==
-X-Gm-Message-State: AC+VfDxNQZx5Y4cgEBHLr2wDhLlIc3d4PBn5L9hMPNmo/NGswr5XDdqA
-        raKPfn6gEIbJV4WUhSgPzs6hTSxFYIkjW+xsH6Xigkbk
-X-Google-Smtp-Source: ACHHUZ4ILQUUCDhZ+t/b40Kl1SIxbljXOFMAD4tuRk40FkFxU8WGqfZZsMJuvBXR1UXt/At+05jD15Mrbgd6UEPJhi4=
-X-Received: by 2002:a17:90a:6309:b0:259:5494:db4a with SMTP id
- e9-20020a17090a630900b002595494db4amr1460435pjj.30.1686333601370; Fri, 09 Jun
- 2023 11:00:01 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686333843; x=1688925843;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zAp0pJ+sm+Y3KQgNoeZPqvSvGD8UdvXtUGa2VdIgLpc=;
+        b=h9vJHzh2p+u7j+7863yG/nUB7u2X6SxQ2oleat3aGorU7nVLKRYxvrbH3Y2AglJ/Ep
+         nM5cIGUDa/lSi8WnJ+w6Yf77nUW0bKGKMPXYItClGRdA4XnSKpNyZcgR/C//Ece3t3WQ
+         EWs2Kp1z0EhKHLfgrWeTYDqfevL+2/hEMAeEURUq2UGyCCTXXFL9ryXr4toUqxk8zYrX
+         aKcvtYp4Fb5TXqPc0dIl04IqzRun8iRJpTxOzCqjfGPeug+7GXEcC6b/c/ZU4uV7653G
+         cm0rfQmyaZUSeOobh6VM88LdhOL5k3fd1TPCtmAs+RFcBRiKV6BzV1wGHLsDgjFuuwKr
+         NLOA==
+X-Gm-Message-State: AC+VfDywWOPPaqFimqIenGcNnicyyyMuafeK76B89gNswV0C94GKDESK
+        UCvdvNjgR8t+synS2uZgfhg2Tp8JZIXLs0rYz58AUxZKucgPpu9fLQAZAQ6DWuEJNta75guFEnt
+        8wb/kE10fzft9fkO296COGLAT
+X-Received: by 2002:a05:620a:2541:b0:75b:23a1:69e2 with SMTP id s1-20020a05620a254100b0075b23a169e2mr2352403qko.2.1686333843404;
+        Fri, 09 Jun 2023 11:04:03 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4RtNMoxDtjGYkQZW5n83BGYz2gukU3kZCJd9ZjCOGjHFFrwfCXZgSNY8VDEKzXausmue5/Hg==
+X-Received: by 2002:a05:620a:2541:b0:75b:23a1:69e2 with SMTP id s1-20020a05620a254100b0075b23a169e2mr2352373qko.2.1686333843126;
+        Fri, 09 Jun 2023 11:04:03 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id o12-20020a05620a15cc00b0075b17afcc1esm1177922qkm.115.2023.06.09.11.04.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 11:04:02 -0700 (PDT)
+Date:   Fri, 9 Jun 2023 14:04:00 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pbonzini@redhat.com, maz@kernel.org,
+        seanjc@google.com, oliver.upton@linux.dev, aarcange@redhat.com,
+        david@redhat.com, hshuai@redhat.com, zhenyzha@redhat.com,
+        shan.gavin@gmail.com
+Subject: Re: [PATCH v2] KVM: Avoid illegal stage2 mapping on invalid memory
+ slot
+Message-ID: <ZINpkOCYoDBQYhdq@x1n>
+References: <20230609100420.521351-1-gshan@redhat.com>
 MIME-Version: 1.0
-References: <20230601112839.13799-1-dinghui@sangfor.com.cn>
- <135a45b2c388fbaf9db4620cb01b95230709b9ac.camel@gmail.com>
- <eed0cbf7-ff12-057e-e133-0ddf5e98ef68@sangfor.com.cn> <6110cf9f-c10e-4b9b-934d-8d202b7f5794@lunn.ch>
- <f7e23fe6-4d30-ef1b-a431-3ef6ec6f77ba@sangfor.com.cn> <6e28cea9-d615-449d-9c68-aa155efc8444@lunn.ch>
- <CAKgT0UdyykQL-BidjaNpjX99FwJTxET51U29q4_CDqmABUuVbw@mail.gmail.com>
- <ece228a3-5c31-4390-b6ba-ec3f2b6c5dcb@lunn.ch> <CAKgT0Uf+XaKCFgBRTn-viVsKkNE7piAuDpht=efixsAV=3JdFQ@mail.gmail.com>
- <44905acd-3ac4-cfe5-5e91-d182c1959407@sangfor.com.cn> <20230602225519.66c2c987@kernel.org>
- <5f0f2bab-ae36-8b13-2c6d-c69c6ff4a43f@sangfor.com.cn> <20230604104718.4bf45faf@kernel.org>
- <f6ad6281-df30-93cf-d057-5841b8c1e2e6@sangfor.com.cn> <20230605113915.4258af7f@kernel.org>
- <034f5393-e519-1e8d-af76-ae29677a1bf5@sangfor.com.cn> <CAKgT0UdX7cc-LVFowFrY7mSZMvN0xc+w+oH16GNrduLY-AddSA@mail.gmail.com>
- <9c1fecc1-7d17-c039-6bfa-c63be6fcf013@sangfor.com.cn> <20230609101301.39fcb12b@kernel.org>
-In-Reply-To: <20230609101301.39fcb12b@kernel.org>
-From:   Alexander Duyck <alexander.duyck@gmail.com>
-Date:   Fri, 9 Jun 2023 10:59:25 -0700
-Message-ID: <CAKgT0UeePd_+UwpGTT_v7nacf=yLoravtEZ2-gN4dpeWC5AsBg@mail.gmail.com>
-Subject: Re: [PATCH net-next] net: ethtool: Fix out-of-bounds copy to user
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Ding Hui <dinghui@sangfor.com.cn>, Andrew Lunn <andrew@lunn.ch>,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pengdonglin@sangfor.com.cn, huangcun@sangfor.com.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230609100420.521351-1-gshan@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 10:13=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
->
-> On Fri, 9 Jun 2023 23:25:34 +0800 Ding Hui wrote:
-> > drivers/net/ethernet/netronome/nfp/nfp_net_ethtool.c: .get_sset_count  =
-       =3D nfp_net_get_sset_count,
-> > drivers/net/ethernet/netronome/nfp/nfp_net_ethtool.c: .get_sset_count  =
-       =3D nfp_port_get_sset_count,
->
-> Not sure if your research is accurate, NFP does not change the number
-> of stats. The number depends on the device and the FW loaded, but those
-> are constant during a lifetime of a netdevice.
+On Fri, Jun 09, 2023 at 08:04:20PM +1000, Gavin Shan wrote:
+> We run into guest hang in edk2 firmware when KSM is kept as running on
+> the host. The edk2 firmware is waiting for status 0x80 from QEMU's pflash
+> device (TYPE_PFLASH_CFI01) during the operation of sector erasing or
+> buffered write. The status is returned by reading the memory region of
+> the pflash device and the read request should have been forwarded to QEMU
+> and emulated by it. Unfortunately, the read request is covered by an
+> illegal stage2 mapping when the guest hang issue occurs. The read request
+> is completed with QEMU bypassed and wrong status is fetched. The edk2
+> firmware runs into an infinite loop with the wrong status.
+> 
+> The illegal stage2 mapping is populated due to same page sharing by KSM
+> at (C) even the associated memory slot has been marked as invalid at (B)
+> when the memory slot is requested to be deleted. It's notable that the
+> active and inactive memory slots can't be swapped when we're in the middle
+> of kvm_mmu_notifier_change_pte() because kvm->mn_active_invalidate_count
+> is elevated, and kvm_swap_active_memslots() will busy loop until it reaches
+> to zero again. Besides, the swapping from the active to the inactive memory
+> slots is also avoided by holding &kvm->srcu in __kvm_handle_hva_range(),
+> corresponding to synchronize_srcu_expedited() in kvm_swap_active_memslots().
+> 
+>   CPU-A                    CPU-B
+>   -----                    -----
+>                            ioctl(kvm_fd, KVM_SET_USER_MEMORY_REGION)
+>                            kvm_vm_ioctl_set_memory_region
+>                            kvm_set_memory_region
+>                            __kvm_set_memory_region
+>                            kvm_set_memslot(kvm, old, NULL, KVM_MR_DELETE)
+>                              kvm_invalidate_memslot
+>                                kvm_copy_memslot
+>                                kvm_replace_memslot
+>                                kvm_swap_active_memslots        (A)
+>                                kvm_arch_flush_shadow_memslot   (B)
+>   same page sharing by KSM
+>   kvm_mmu_notifier_invalidate_range_start
+>         :
+>   kvm_mmu_notifier_change_pte
+>     kvm_handle_hva_range
+>     __kvm_handle_hva_range       (C)
+>         :
+>   kvm_mmu_notifier_invalidate_range_end
+> 
+> Fix the issue by skipping the invalid memory slot at (C) to avoid the
+> illegal stage2 mapping so that the read request for the pflash's status
+> is forwarded to QEMU and emulated by it. In this way, the correct pflash's
+> status can be returned from QEMU to break the infinite loop in the edk2
+> firmware.
+> 
+> Cc: stable@vger.kernel.org # v5.13+
+> Fixes: 3039bcc74498 ("KVM: Move x86's MMU notifier memslot walkers to generic code")
+> Reported-by: Shuai Hu <hshuai@redhat.com>
+> Reported-by: Zhenyu Zhang <zhenyzha@redhat.com>
+> Signed-off-by: Gavin Shan <gshan@redhat.com>
 
-Yeah, the value doesn't need to be a constant, it just need to be constant.
+Reviewed-by: Peter Xu <peterx@redhat.com>
 
-So for example in the ixgbe driver I believe we were using the upper
-limits on the Tx and Rx queues which last I recall are stored in the
-netdev itself.
+-- 
+Peter Xu
+
