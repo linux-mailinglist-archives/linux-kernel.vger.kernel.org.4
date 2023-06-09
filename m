@@ -2,69 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EDB972A55C
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 23:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E02DB72A560
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 23:32:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232383AbjFIV3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 17:29:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57406 "EHLO
+        id S232424AbjFIVcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 17:32:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232491AbjFIV3v (ORCPT
+        with ESMTP id S231274AbjFIVct (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 17:29:51 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A063A80
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 14:29:50 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-bc40d4145feso64930276.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 14:29:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686346189; x=1688938189;
-        h=mime-version:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=oQDHQv5QQ7F49jvnNaX5O624EPUVQF/yKUfjfHQuFnc=;
-        b=LePNwit0ABp1ENxorce8Sa7Bd4LjKtNLwa/pG6o1QxykmRLbH0P/yLOw/MmeYRuxBU
-         q6Jrud4gYRsmAksqaqXcQmg5APEXk5xOkWEcVkUt+7+I+m9sjJ/lfi3LTs2oaDj9qGtq
-         FqAAM5W7r38V/bKGdhcIRGRwyQYNBQJrUKdVY+GeNDUQUcUrQqxa+0OHKBldHawIOPw7
-         5UVSaZlkQwYT5bOtcT9zG3ykVFoXtoJMwxzBJABVSh98ICXyKXC30TEVoan1/9xKPduX
-         MeEUqzMSUINxKI7NBNQ1qRWak6K2y3wGJJpJOugPT1YrBnuhxTy/dMD/BQ0o3MPkCm45
-         NNIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686346189; x=1688938189;
-        h=mime-version:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oQDHQv5QQ7F49jvnNaX5O624EPUVQF/yKUfjfHQuFnc=;
-        b=TphduHqcz2sbbJyqDP4OpI9fU44v4TobUzxpGKK6opXkIJUr+fK0/igb7RmOSZvlLT
-         YZKhLWZ60GseMm4OovgQs3l+AHABo7Jk2pFViq+Hf8yNhsoCTXYYipJ4ySfIJibSy+eF
-         ptJ6eWwQrnvKZMubgXAPcSVrSH2Eh3bVWXiOBL4ACoARsaXKXHkQ6UYl/I2+zRbmwkMp
-         tkO/ChknBvjz9JWShCyzVvo19RnIflX6rUtmOOWUNlMRwfm4SmLJfrVJVYGD7Vp1FS3M
-         QbwEIL+Pw/GLocBM3IOb7Fz05fhNIqUPhqNZd2dQwLXMryAIdBM0gHTPX/F88Utz6G80
-         tI0A==
-X-Gm-Message-State: AC+VfDwQ5F2JxGL2p2hpyWxLz66hVSLycNwjsTBiVgx4ouaZiZO2OH0a
-        MM3O37paFEwwnztOfYxETQVhdg==
-X-Google-Smtp-Source: ACHHUZ6zVT6zy2xPQU6h6zNxSgG3a9+hAx3/LLoy1GtDkJTTgoju5XlmXUOBA28ACU3lez+R9dzHTA==
-X-Received: by 2002:a25:c78b:0:b0:ba8:f70:1eb9 with SMTP id w133-20020a25c78b000000b00ba80f701eb9mr2046657ybe.57.1686346189501;
-        Fri, 09 Jun 2023 14:29:49 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id f6-20020a5b0d46000000b00bc41075297fsm7249ybr.23.2023.06.09.14.29.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 14:29:49 -0700 (PDT)
-Date:   Fri, 9 Jun 2023 14:29:39 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Gregory Greenman <gregory.greenman@intel.com>
-cc:     Ariel Malamud <ariel.malamud@intel.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        regressions@lists.linux.dev
-Subject: [PATCH] wifi: iwlwifi: mvm: spin_lock_bh() to fix lockdep
- regression
-Message-ID: <79ffcc22-9775-cb6d-3ffd-1a517c40beef@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        Fri, 9 Jun 2023 17:32:49 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44753A81
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 14:32:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686346368; x=1717882368;
+  h=date:from:to:cc:subject:message-id;
+  bh=u66wYw2tCKemtqeQSghMLHBmvDjkuVSQAcSInYe5Jc4=;
+  b=SbMg+1THYNOz9REAPw25lBQlclD20Qut+EfikAJthgRfANYxsCh7CMbX
+   tJgyNKhai89hkj5M9msT5BqpjWuFWoC4sjxVhC98LFfMmYRmiUVj0hoqn
+   O5rsU/3mzi95JW8bd2oGL3sZQ1eiFedhUiNU3az4DACM2EyWgd9w4lR+2
+   ftzSmalqvEJy8xkq6ieKWQ5JYjVa6ilPJNKL467+QLoSmjFRoWpISDEmu
+   iycFgtB/zYz1uSvubzyLSuT23ddFtSz+adOj4qBeULfRrHvITfKTsZ+Yr
+   E5p3eysxJiU+uXr5bg6+wKIhBONsOAuVd/efCEK5wM6rg9WwGYZA8I69o
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="355181331"
+X-IronPort-AV: E=Sophos;i="6.00,230,1681196400"; 
+   d="scan'208";a="355181331"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 14:32:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="957291200"
+X-IronPort-AV: E=Sophos;i="6.00,230,1681196400"; 
+   d="scan'208";a="957291200"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 09 Jun 2023 14:32:47 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q7jix-0009QW-0W;
+        Fri, 09 Jun 2023 21:32:47 +0000
+Date:   Sat, 10 Jun 2023 05:32:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:objtool/core] BUILD SUCCESS
+ 301cf77e21317b3465c5e2bb0188df24bbf1c2e2
+Message-ID: <202306100536.wwhRkIbq-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,76 +60,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lockdep on 6.4-rc on ThinkPad X1 Carbon 5th says
-=====================================================
-WARNING: SOFTIRQ-safe -> SOFTIRQ-unsafe lock order detected
-6.4.0-rc5 #1 Not tainted
------------------------------------------------------
-kworker/3:1/49 [HC0[0]:SC0[4]:HE1:SE0] is trying to acquire:
-ffff8881066fa368 (&mvm_sta->deflink.lq_sta.rs_drv.pers.lock){+.+.}-{2:2}, at: rs_drv_get_rate+0x46/0xe7
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git objtool/core
+branch HEAD: 301cf77e21317b3465c5e2bb0188df24bbf1c2e2  x86/orc: Make the is_callthunk() definition depend on CONFIG_BPF_JIT=y
 
-and this task is already holding:
-ffff8881066f80a8 (&sta->rate_ctrl_lock){+.-.}-{2:2}, at: rate_control_get_rate+0xbd/0x126
-which would create a new lock dependency:
- (&sta->rate_ctrl_lock){+.-.}-{2:2} -> (&mvm_sta->deflink.lq_sta.rs_drv.pers.lock){+.+.}-{2:2}
+elapsed time: 728m
 
-but this new dependency connects a SOFTIRQ-irq-safe lock:
- (&sta->rate_ctrl_lock){+.-.}-{2:2}
-etc. etc. etc.
+configs tested: 89
+configs skipped: 96
 
-Changing the spin_lock() in rs_drv_get_rate() to spin_lock_bh() was not
-enough to pacify lockdep, but changing them all on pers.lock has worked.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Fixes: a8938bc881d2 ("wifi: iwlwifi: mvm: Add locking to the rate read flow")
-Signed-off-by: Hugh Dickins <hughd@google.com>
----
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r016-20230608   gcc  
+arm                  randconfig-r021-20230608   gcc  
+csky         buildonly-randconfig-r006-20230608   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r026-20230608   gcc  
+hexagon              randconfig-r006-20230608   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230608   gcc  
+i386                 randconfig-i002-20230608   gcc  
+i386                 randconfig-i003-20230608   gcc  
+i386                 randconfig-i004-20230608   gcc  
+i386                 randconfig-i005-20230608   gcc  
+i386                 randconfig-i006-20230608   gcc  
+i386                 randconfig-i011-20230608   clang
+i386                 randconfig-i012-20230608   clang
+i386                 randconfig-i013-20230608   clang
+i386                 randconfig-i014-20230608   clang
+i386                 randconfig-i015-20230608   clang
+i386                 randconfig-i016-20230608   clang
+i386                 randconfig-i051-20230608   gcc  
+i386                 randconfig-i052-20230608   gcc  
+i386                 randconfig-i053-20230608   gcc  
+i386                 randconfig-i054-20230608   gcc  
+i386                 randconfig-i055-20230608   gcc  
+i386                 randconfig-i056-20230608   gcc  
+i386                 randconfig-i061-20230608   gcc  
+i386                 randconfig-i062-20230608   gcc  
+i386                 randconfig-i063-20230608   gcc  
+i386                 randconfig-i064-20230608   gcc  
+i386                 randconfig-i065-20230608   gcc  
+i386                 randconfig-i066-20230608   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch    buildonly-randconfig-r005-20230608   gcc  
+loongarch                           defconfig   gcc  
+microblaze           randconfig-r025-20230608   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r001-20230608   clang
+openrisc     buildonly-randconfig-r002-20230608   gcc  
+openrisc             randconfig-r014-20230608   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r011-20230608   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+sh                               allmodconfig   gcc  
+sh                   randconfig-r022-20230608   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64              randconfig-r013-20230608   gcc  
+um                           x86_64_defconfig   clang
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230608   gcc  
+x86_64               randconfig-a002-20230608   gcc  
+x86_64               randconfig-a003-20230608   gcc  
+x86_64               randconfig-a004-20230608   gcc  
+x86_64               randconfig-a005-20230608   gcc  
+x86_64               randconfig-a006-20230608   gcc  
+x86_64               randconfig-a011-20230608   clang
+x86_64               randconfig-a012-20230608   clang
+x86_64               randconfig-a013-20230608   clang
+x86_64               randconfig-a014-20230608   clang
+x86_64               randconfig-a015-20230608   clang
+x86_64               randconfig-a016-20230608   clang
+x86_64               randconfig-x051-20230608   clang
+x86_64               randconfig-x052-20230608   clang
+x86_64               randconfig-x053-20230608   clang
+x86_64               randconfig-x054-20230608   clang
+x86_64               randconfig-x055-20230608   clang
+x86_64               randconfig-x056-20230608   clang
+x86_64               randconfig-x061-20230608   clang
+x86_64               randconfig-x062-20230608   clang
+x86_64               randconfig-x063-20230608   clang
+x86_64               randconfig-x064-20230608   clang
+x86_64               randconfig-x065-20230608   clang
+x86_64               randconfig-x066-20230608   clang
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
 
- drivers/net/wireless/intel/iwlwifi/mvm/rs.c |   12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
---- 6.4-rc5/drivers/net/wireless/intel/iwlwifi/mvm/rs.c
-+++ linux/drivers/net/wireless/intel/iwlwifi/mvm/rs.c
-@@ -2692,7 +2692,7 @@ static void rs_drv_get_rate(void *mvm_r,
- 
- 	lq_sta = mvm_sta;
- 
--	spin_lock(&lq_sta->pers.lock);
-+	spin_lock_bh(&lq_sta->pers.lock);
- 	iwl_mvm_hwrate_to_tx_rate_v1(lq_sta->last_rate_n_flags,
- 				     info->band, &info->control.rates[0]);
- 	info->control.rates[0].count = 1;
-@@ -2707,7 +2707,7 @@ static void rs_drv_get_rate(void *mvm_r,
- 		iwl_mvm_hwrate_to_tx_rate_v1(last_ucode_rate, info->band,
- 					     &txrc->reported_rate);
- 	}
--	spin_unlock(&lq_sta->pers.lock);
-+	spin_unlock_bh(&lq_sta->pers.lock);
- }
- 
- static void *rs_drv_alloc_sta(void *mvm_rate, struct ieee80211_sta *sta,
-@@ -3264,11 +3264,11 @@ void iwl_mvm_rs_tx_status(struct iwl_mvm
- 	/* If it's locked we are in middle of init flow
- 	 * just wait for next tx status to update the lq_sta data
- 	 */
--	if (!spin_trylock(&mvmsta->deflink.lq_sta.rs_drv.pers.lock))
-+	if (!spin_trylock_bh(&mvmsta->deflink.lq_sta.rs_drv.pers.lock))
- 		return;
- 
- 	__iwl_mvm_rs_tx_status(mvm, sta, tid, info, ndp);
--	spin_unlock(&mvmsta->deflink.lq_sta.rs_drv.pers.lock);
-+	spin_unlock_bh(&mvmsta->deflink.lq_sta.rs_drv.pers.lock);
- }
- 
- #ifdef CONFIG_MAC80211_DEBUGFS
-@@ -4117,9 +4117,9 @@ void iwl_mvm_rs_rate_init(struct iwl_mvm
- 	} else {
- 		struct iwl_mvm_sta *mvmsta = iwl_mvm_sta_from_mac80211(sta);
- 
--		spin_lock(&mvmsta->deflink.lq_sta.rs_drv.pers.lock);
-+		spin_lock_bh(&mvmsta->deflink.lq_sta.rs_drv.pers.lock);
- 		rs_drv_rate_init(mvm, sta, band);
--		spin_unlock(&mvmsta->deflink.lq_sta.rs_drv.pers.lock);
-+		spin_unlock_bh(&mvmsta->deflink.lq_sta.rs_drv.pers.lock);
- 	}
- }
- 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
