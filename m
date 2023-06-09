@@ -2,320 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28C76728D2F
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 03:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36F79728D30
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 03:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237845AbjFIBjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 21:39:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47458 "EHLO
+        id S237861AbjFIBkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 21:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237857AbjFIBjr (ORCPT
+        with ESMTP id S237849AbjFIBkJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 21:39:47 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E04111A2
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 18:39:45 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-97668583210so192338666b.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 18:39:45 -0700 (PDT)
+        Thu, 8 Jun 2023 21:40:09 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2B22D74
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 18:40:05 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-ba8151a744fso1359054276.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 18:40:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686274784; x=1688866784;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9iYUS5bFOEmlhAPq0qees0PGLSpWA6cqfqiwMD2OcAY=;
-        b=UsaB4v6S7+NwG7c6TdqKZTipJSs8KjjBaV/SaKlumYW3bed/3S90Tc97JIC/miYfEZ
-         FxaJVGm71lw97LLMz4k3gN+YNFmfArgiHArMdFvDbrf/Yl1FuGAkGFyEiX3PZ2niPAbF
-         eikStbzUOqWR1NQHcyqh8423WsRRVU6DG6ll8HaNOw9RejB4aStjz4vRdx/4fR9CEBDS
-         M+/CULOYsLwYRCTe3CNAHsNOBb3c4l5B2MZYZrxBtw30PfVhYZQdC+ThEs3xT6Er6AOy
-         vqtMNAGEoOjOP8DFQ84nClKY0AhzLB7zNe+z8Fr0l6+Qci3pHiLp5ijM1HDJfgSeO+7M
-         HKcQ==
+        d=google.com; s=20221208; t=1686274804; x=1688866804;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UwuVNK2fY7F7iaoH+tt2s4ap3NLwMgK8mAcGkUuV1QI=;
+        b=xtJR0sJIJzLTXBky/wVlZo29dNTxzgA54BszS4z+bL4XgGa67uu8WNTm+JM7XI/l9k
+         6m4Lc80dzOLZH5qTELBlC5YxGQJLyz1bh8ZNW1tEJ8D6xjLzQ+u4+WAilxn55/jW0XRb
+         Epze0ZHSodQnM7E7VM26/xnDCzhsJKvRWH4eXMeV0AMMehd09rxHboGfxvtXMtgKk1Z4
+         SnsamQypCiUjdvefoXG4abvyN6tDU3XIw1oNbEazjBhrMx+Kg+mHF/zkH+Ct85cC8hz5
+         iw1woW6T1GIXQ5NWzRO4+D6+WwHZuB7CFNtHE38x8bXk+v2L1K3lyzT2dxXGxy6c449H
+         V+iA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686274784; x=1688866784;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9iYUS5bFOEmlhAPq0qees0PGLSpWA6cqfqiwMD2OcAY=;
-        b=DmqcxQy/m6BpcEuDCRMgmX+DpWjyRHf1gLYfrG0v+uAs9HhPb6VdjuXR5qyS11ZYZ5
-         ypl59XkEyxHzkEtejBegxdxzKdiMH5vdK/P6Vhx6mZNBMlI+cWlcmfYSgQ30TCjNYL1l
-         LVGgU9wLRfMzqpc2Ojn/OhikSngNNb+tKYl2k9zyuwgWkS860QX/ebrv+qQqmuGmBsR1
-         ACoFWjB3BEmifPYzUs0pAMCR5CoA9oY4pr8oHV2mHb6OGiA8EJiBTyh8vll1Hd5mo0dE
-         P06A/iI10/w+RUoqY6RDXcmNTK9myXdRuLPNqMGQ7nvKtR6jUG0zSY/TIJCT5DHBHa4+
-         tYpw==
-X-Gm-Message-State: AC+VfDzvh72n5z4DfxSaQLWDhzd2ojSMaaVgdDX9xcHzdl+yenM3NUsK
-        TxFGzgwkQSyKg/Zr9i6kE4Rvabx0vCO5il4axFg=
-X-Google-Smtp-Source: ACHHUZ5kSLBtLK51wgxjCLmw3b4jfrjjs4x0SmhJdYYtLtUFqu0mtOsxxKrTqRh4Ec35lkGz2xL4pcK0Ghl5bUpIsMA=
-X-Received: by 2002:a17:907:60d3:b0:978:8937:19ba with SMTP id
- hv19-20020a17090760d300b00978893719bamr206993ejc.44.1686274784100; Thu, 08
- Jun 2023 18:39:44 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686274804; x=1688866804;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UwuVNK2fY7F7iaoH+tt2s4ap3NLwMgK8mAcGkUuV1QI=;
+        b=HHCUPVwH6Pu6J90z7bTkRR990AxFGLSltMLkiN/w1tlhkDCdReKZX1ywKT90oXKurf
+         tQ4PBPZYK3WdwWHAGfFZGpVuppKZOvqlVBUxtI75kvOFMom5yOIZbbqLJitXDRwkD0J1
+         nT3zqRd1ZpY8azVF0lv13D2KrSoOHhOHoewXt2qhuD6ces52u49a0JrLQuxAxQ7WtHJ3
+         jA2f+ktQTOdWGhy/vMNbomQ8AhyulxPjMH8Gf5A/olT7HawVPys6u2dOigSXKzf9mfnR
+         3PVKx6eIR55he04t5Sy6aXY04k9kL9mzuLEmOxLL5cVt3gSYY7R5mEC2Ij9Zt4J/vSVr
+         DZow==
+X-Gm-Message-State: AC+VfDxeMQyPB4hU6wkrOiIrFrCjrxcHKKwTBitmBdjwuQ52KeJjQkTC
+        UMri3ZeLisMoQLaP1kH06vxhfA==
+X-Google-Smtp-Source: ACHHUZ4q7dBjgPopIYtcorM5R7hyIrmP9CgiCOnb4btr582PPdFwrjvxsL7Fli0sAzIP7Ak/8SJsSA==
+X-Received: by 2002:a0d:f543:0:b0:561:ce93:b560 with SMTP id e64-20020a0df543000000b00561ce93b560mr1378798ywf.43.1686274804318;
+        Thu, 08 Jun 2023 18:40:04 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id t202-20020a8183d3000000b005619cfb1b88sm306230ywf.52.2023.06.08.18.40.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 18:40:03 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 18:39:59 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v2 25/32] mm/gup: remove FOLL_SPLIT_PMD use of
+ pmd_trans_unstable()
+In-Reply-To: <c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com>
+Message-ID: <59fd15dd-4d39-5ec-2043-1d5117f7f85@google.com>
+References: <c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com>
 MIME-Version: 1.0
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Fri, 9 Jun 2023 11:39:32 +1000
-Message-ID: <CAPM=9tweJxBYq_08o-ZtgXRgdRQYZCbFiN+VdunddCaA+UwSEw@mail.gmail.com>
-Subject: [git pull] drm fixes for 6.4-rc6
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Linux,
+There is now no reason for follow_pmd_mask()'s FOLL_SPLIT_PMD block to
+distinguish huge_zero_page from a normal THP: follow_page_pte() handles
+any instability, and here it's a good idea to replace any pmd_none(*pmd)
+by a page table a.s.a.p, in the huge_zero_page case as for a normal THP;
+and this removes an unnecessary possibility of -EBUSY failure.
 
-Bit busier and a bit more scattered than usual. amdgpu is the main
-one, with ivpu and msm having a few fixes, then i915, exynos, ast,
-lima, radeon with some misc bits, but overall nothing standing out.
+(Hmm, couldn't the normal THP case have hit an unstably refaulted THP
+before?  But there are only two, exceptional, users of FOLL_SPLIT_PMD.)
 
-Dave.
+Signed-off-by: Hugh Dickins <hughd@google.com>
+---
+ mm/gup.c | 19 ++++---------------
+ 1 file changed, 4 insertions(+), 15 deletions(-)
 
-drm-fixes-2023-06-09:
-drm fixes for 6.4-rc6
+diff --git a/mm/gup.c b/mm/gup.c
+index bb67193c5460..4ad50a59897f 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -681,21 +681,10 @@ static struct page *follow_pmd_mask(struct vm_area_struct *vma,
+ 		return follow_page_pte(vma, address, pmd, flags, &ctx->pgmap);
+ 	}
+ 	if (flags & FOLL_SPLIT_PMD) {
+-		int ret;
+-		page = pmd_page(*pmd);
+-		if (is_huge_zero_page(page)) {
+-			spin_unlock(ptl);
+-			ret = 0;
+-			split_huge_pmd(vma, pmd, address);
+-			if (pmd_trans_unstable(pmd))
+-				ret = -EBUSY;
+-		} else {
+-			spin_unlock(ptl);
+-			split_huge_pmd(vma, pmd, address);
+-			ret = pte_alloc(mm, pmd) ? -ENOMEM : 0;
+-		}
+-
+-		return ret ? ERR_PTR(ret) :
++		spin_unlock(ptl);
++		split_huge_pmd(vma, pmd, address);
++		/* If pmd was left empty, stuff a page table in there quickly */
++		return pte_alloc(mm, pmd) ? ERR_PTR(-ENOMEM) :
+ 			follow_page_pte(vma, address, pmd, flags, &ctx->pgmap);
+ 	}
+ 	page = follow_trans_huge_pmd(vma, address, pmd, flags);
+-- 
+2.35.3
 
-fb-helper:
-- Fill in fb-helper vars more correctly.
-
-amdgpu:
-- S0ix fixes
-- GPU reset fixes
-- SMU13 fixes
-- SMU11 fixes
-- Misc Display fixes
-- Revert RV/RV2/PCO clock counter changes
-- Fix Stoney xclk value
-- Fix reserved vram debug info
-
-radeon:
-- Fix a potential use after free
-
-i915:
-- CDCLK voltage fix for ADL-P
-- eDP wake sync pulse fix.
-- Two error handling fixes to selftests
-
-exynos:
-- Fix wrong return in Exynos vidi driver.
-- Fix use-after-free issue to Exynos g2d driver.
-
-ast:
-- resume and modeset fixes for ast.
-
-ivpu:
-- Assorted ivpu fixes.
-
-lima:
-- lima context destroy fix.
-
-msm:
-- Fix max segment size to address splat on newer a6xx
-- Disable PSR by default w/ modparam to re-enable, since there
-  still seems to be a lingering issue
-- Fix HPD issue
-- Fix issue with unitialized GMU mutex
-The following changes since commit 9561de3a55bed6bdd44a12820ba81ec416e705a7=
-:
-
-  Linux 6.4-rc5 (2023-06-04 14:04:27 -0400)
-
-are available in the Git repository at:
-
-  git://anongit.freedesktop.org/drm/drm tags/drm-fixes-2023-06-09
-
-for you to fetch changes up to 986c34b495810b38f365bb71665b77de60f15b2c:
-
-  Merge tag 'drm-msm-fixes-2023-06-08' of
-https://gitlab.freedesktop.org/drm/msm into drm-fixes (2023-06-09
-11:20:23 +1000)
-
-----------------------------------------------------------------
-drm fixes for 6.4-rc6
-
-fb-helper:
-- Fill in fb-helper vars more correctly.
-
-amdgpu:
-- S0ix fixes
-- GPU reset fixes
-- SMU13 fixes
-- SMU11 fixes
-- Misc Display fixes
-- Revert RV/RV2/PCO clock counter changes
-- Fix Stoney xclk value
-- Fix reserved vram debug info
-
-radeon:
-- Fix a potential use after free
-
-i915:
-- CDCLK voltage fix for ADL-P
-- eDP wake sync pulse fix.
-- Two error handling fixes to selftests
-
-exynos:
-- Fix wrong return in Exynos vidi driver.
-- Fix use-after-free issue to Exynos g2d driver.
-
-ast:
-- resume and modeset fixes for ast.
-
-ivpu:
-- Assorted ivpu fixes.
-
-lima:
-- lima context destroy fix.
-
-msm:
-- Fix max segment size to address splat on newer a6xx
-- Disable PSR by default w/ modparam to re-enable, since there
-  still seems to be a lingering issue
-- Fix HPD issue
-- Fix issue with unitialized GMU mutex
-
-----------------------------------------------------------------
-Abhinav Kumar (1):
-      drm/msm/dp: add module parameter for PSR
-
-Alex Deucher (3):
-      Revert "drm/amdgpu: change the reference clock for raven/raven2"
-      Revert "drm/amdgpu: Differentiate between Raven2 and
-Raven/Picasso according to revision id"
-      Revert "drm/amdgpu: switch to golden tsc registers for raven/raven2"
-
-Alvin Lee (1):
-      drm/amd/display: Reduce sdp bw after urgent to 90%
-
-Andi Shyti (1):
-      drm/i915/gt: Use the correct error value when kernel_context() fails
-
-Andrzej Kacprowski (2):
-      accel/ivpu: Do not trigger extra VPU reset if the VPU is idle
-      accel/ivpu: Fix sporadic VPU boot failure
-
-Chaitanya Kumar Borah (1):
-      drm/i915/display: Set correct voltage level for 480MHz CDCLK
-
-Chia-I Wu (1):
-      drm/amdgpu: fix xclk freq on CHIP_STONEY
-
-Dave Airlie (5):
-      Merge tag 'amd-drm-fixes-6.4-2023-06-07' of
-https://gitlab.freedesktop.org/agd5f/linux into drm-fixes
-      Merge tag 'drm-intel-fixes-2023-06-08' of
-git://anongit.freedesktop.org/drm/drm-intel into drm-fixes
-      Merge tag 'exynos-drm-fixes-for-v6.4-rc6' of
-git://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos into
-drm-fixes
-      Merge tag 'drm-misc-fixes-2023-06-08' of
-git://anongit.freedesktop.org/drm/drm-misc into drm-fixes
-      Merge tag 'drm-msm-fixes-2023-06-08' of
-https://gitlab.freedesktop.org/drm/msm into drm-fixes
-
-Dmitry Baryshkov (1):
-      drm/msm/a6xx: initialize GMU mutex earlier
-
-Erico Nunes (1):
-      drm/lima: fix sched context destroy
-
-Evan Quan (1):
-      drm/amd/pm: conditionally disable pcie lane switching for some
-sienna_cichlid SKUs
-
-Geert Uytterhoeven (1):
-      drm/fb-helper: Fix height, width, and accel_flags in fb_var
-
-Horatio Zhang (1):
-      drm/amdgpu: fix Null pointer dereference error in
-amdgpu_device_recover_vram
-
-Inki Dae (1):
-      drm/exynos: vidi: fix a wrong error return
-
-Jammy Huang (2):
-      drm/ast: Fix long time waiting on s3/s4 resume
-      drm/ast: Fix modeset failed on DisplayPort
-
-Jouni H=C3=B6gander (1):
-      drm/i915: Use 18 fast wake AUX sync len
-
-Kuogee Hsieh (1):
-      drm/msm/dp: enable HDP plugin/unplugged interrupts at hpd_enable/disa=
-ble
-
-Lijo Lazar (1):
-      drm/amd/pm: Fix power context allocation in SMU13
-
-Mario Limonciello (2):
-      drm/amd: Disallow s0ix without BIOS support again
-      drm/amd: Make lack of `ACPI_FADT_LOW_POWER_S0` or
-`CONFIG_AMD_PMC` louder during suspend path
-
-Min Li (2):
-      drm/exynos: fix race condition UAF in exynos_g2d_exec_ioctl
-      drm/radeon: fix race condition UAF in radeon_gem_set_domain_ioctl
-
-Randy Dunlap (1):
-      accel/ivpu: ivpu_ipc needs GENERIC_ALLOCATOR
-
-Rob Clark (1):
-      drm/msm: Set max segment size earlier
-
-Samson Tam (1):
-      drm/amd/display: add ODM case when looking for first split pipe
-
-Stanislaw Gruszka (2):
-      accel/ivpu: Reserve all non-command bo's using DMA_RESV_USAGE_BOOKKEE=
-P
-      accel/ivpu: Do not use mutex_lock_interruptible
-
-Tvrtko Ursulin (1):
-      drm/i915/selftests: Add some missing error propagation
-
-YiPeng Chai (1):
-      drm/amdgpu: change reserved vram info print
-
- drivers/accel/ivpu/Kconfig                         |  1 +
- drivers/accel/ivpu/ivpu_hw_mtl.c                   | 22 ++++--
- drivers/accel/ivpu/ivpu_hw_mtl_reg.h               |  1 +
- drivers/accel/ivpu/ivpu_ipc.c                      |  4 +-
- drivers/accel/ivpu/ivpu_job.c                      | 21 +++--
- drivers/accel/ivpu/ivpu_mmu.c                      | 22 ++----
- drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c           | 12 ++-
- drivers/gpu/drm/amd/amdgpu/amdgpu_object.c         | 10 +--
- drivers/gpu/drm/amd/amdgpu/amdgpu_vm_pt.c          |  1 -
- drivers/gpu/drm/amd/amdgpu/amdgpu_vram_mgr.c       |  7 +-
- drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c              | 35 --------
- drivers/gpu/drm/amd/amdgpu/soc15.c                 |  7 +-
- drivers/gpu/drm/amd/amdgpu/vi.c                    | 11 ++-
- drivers/gpu/drm/amd/display/dc/core/dc.c           | 36 ++++++++-
- drivers/gpu/drm/amd/display/dc/core/dc_resource.c  | 20 +++++
- .../gpu/drm/amd/display/dc/dml/dcn32/dcn32_fpu.c   |  2 +-
- .../drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c    | 92 +++++++++++++++++-=
-----
- drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c     |  4 +-
- drivers/gpu/drm/ast/ast_dp.c                       | 55 ++++---------
- drivers/gpu/drm/ast/ast_drv.h                      |  5 +-
- drivers/gpu/drm/ast/ast_main.c                     | 11 ++-
- drivers/gpu/drm/ast/ast_mode.c                     | 15 +++-
- drivers/gpu/drm/ast/ast_post.c                     |  3 +-
- drivers/gpu/drm/drm_fb_helper.c                    | 12 +--
- drivers/gpu/drm/exynos/exynos_drm_g2d.c            |  2 +-
- drivers/gpu/drm/exynos/exynos_drm_vidi.c           |  2 -
- drivers/gpu/drm/i915/display/intel_cdclk.c         | 30 ++++++-
- drivers/gpu/drm/i915/display/intel_dp_aux.c        |  2 +-
- .../gpu/drm/i915/gem/selftests/i915_gem_context.c  | 14 +++-
- drivers/gpu/drm/i915/gt/selftest_execlists.c       | 12 ++-
- drivers/gpu/drm/lima/lima_sched.c                  |  2 +-
- drivers/gpu/drm/msm/adreno/a6xx_gmu.c              |  2 -
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c              |  2 +
- drivers/gpu/drm/msm/dp/dp_catalog.c                | 15 +++-
- drivers/gpu/drm/msm/dp/dp_catalog.h                |  3 +-
- drivers/gpu/drm/msm/dp/dp_display.c                | 77 ++++++------------
- drivers/gpu/drm/msm/msm_drv.c                      |  4 +-
- drivers/gpu/drm/radeon/radeon_gem.c                |  4 +-
- 38 files changed, 342 insertions(+), 238 deletions(-)
