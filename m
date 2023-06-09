@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FED872902F
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 08:41:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FBE3729036
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 08:42:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbjFIGlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 02:41:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50990 "EHLO
+        id S238420AbjFIGly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 02:41:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238161AbjFIGlA (ORCPT
+        with ESMTP id S238499AbjFIGlh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 02:41:00 -0400
+        Fri, 9 Jun 2023 02:41:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD87EE46;
-        Thu,  8 Jun 2023 23:40:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CA53A9A;
+        Thu,  8 Jun 2023 23:41:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52E17653FB;
-        Fri,  9 Jun 2023 06:40:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA673C433EF;
-        Fri,  9 Jun 2023 06:40:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AEDA1653FB;
+        Fri,  9 Jun 2023 06:41:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 274D4C4339B;
+        Fri,  9 Jun 2023 06:41:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686292854;
-        bh=Cf07EHn+2ygljljf6QW1Bycn5NK78Qv5RlG+/QjF0Zs=;
+        s=k20201202; t=1686292878;
+        bh=SaFlvbKasVsUXdcHrpaqFf2oR236orijsGhSHOUvvxY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZvYyDffU+jBeev3oyYCtFZDIMpKQGiF7LUs1twTmKzK38jUhzCr5oe/fNFrzQrPpX
-         hj0M/GOKB+A8js/Y94za55fD3xymbDauakNflF44ev4j4yjfoVeWjo0tG1/ggxqUhC
-         vkDE8ug0cZG1e24/PgVTdqQ8y7ailNYhIt2vN9geUnAczoRVvxi4P6yF5RDjkiw6Uo
-         uaT0GJbXCEZTTqqX0DbAsE6/v8eGMoOqRLICqciePROpRJ0wRR54GlTCwaKW7McUMt
-         NOEjX6/mr3NKIRG8GYeh3ZZdbtwuHpSMJ79eue63Y5e1t3Wvd8TGH8acoCLY+p0Rul
-         JkhggiR1LPPTA==
-Date:   Fri, 9 Jun 2023 07:40:48 +0100
+        b=FhMROm0UXT15Z4DB45xcucBsiRCXgv0Coi0z6XANYw8xVAR/f1spIX80P5QJp7thX
+         I5SR0W6DBplwphakHuSgLW2i9Nd+vATV/sydY6FyMlbAlOG2oHiNQBU0pqOKoZNZb8
+         boO3u1IlLMGaZnitp4O8o6kvDA5u0yth2HNXsaLHOqc/tWIQtnvEbLW4+DlsM3Xqsl
+         FQPKDeIHMnmw85ZIh1CaYmqOscMc5p4pSq+UnYhZPgz2tAvuxe4f1iejFg2xZ9fbxP
+         xtiXcJcIucqbHsHg9hK+2vWkIKtu9L+bojq2Fa4bg3Ts13IzroE2NXi6wYE5HtVx6a
+         djOIEVrGhpMjQ==
+Date:   Fri, 9 Jun 2023 07:41:11 +0100
 From:   Lee Jones <lee@kernel.org>
 To:     AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
@@ -44,16 +44,16 @@ Cc:     pavel@ucw.cz, sean.wang@mediatek.com, robh+dt@kernel.org,
         kernel@collabora.com,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Alexandre Mergnat <amergnat@baylibre.com>
-Subject: Re: [PATCH v3 1/8] dt-bindings: leds: leds-mt6323: Document mt6331
+Subject: Re: [PATCH v3 2/8] dt-bindings: leds: leds-mt6323: Document mt6332
  compatible
-Message-ID: <20230609064048.GD3635807@google.com>
+Message-ID: <20230609064111.GE3635807@google.com>
 References: <20230601110813.2373764-1-angelogioacchino.delregno@collabora.com>
- <20230601110813.2373764-2-angelogioacchino.delregno@collabora.com>
+ <20230601110813.2373764-3-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230601110813.2373764-2-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230601110813.2373764-3-angelogioacchino.delregno@collabora.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -66,15 +66,15 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Thu, 01 Jun 2023, AngeloGioacchino Del Regno wrote:
 
-> Add mediatek,mt6331-led compatible for the LED controller found
-> in the MT6331 PMIC.
+> Add support for MT6332 LEDs/WLEDs with compatible "mediatek,mt6332-led".
 > 
 > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
+> Acked-by: Pavel Machek <pavel@ucw.cz>
 > ---
->  Documentation/devicetree/bindings/leds/leds-mt6323.txt | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  Documentation/devicetree/bindings/leds/leds-mt6323.txt | 1 +
+>  1 file changed, 1 insertion(+)
 
 Applied, thanks
 
