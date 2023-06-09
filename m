@@ -2,87 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAAE4729621
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC5D7729624
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:59:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240601AbjFIJ7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 05:59:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45662 "EHLO
+        id S231327AbjFIJ7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 05:59:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241905AbjFIJ54 (ORCPT
+        with ESMTP id S241900AbjFIJ6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 05:57:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93466359D
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 02:50:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A80D65646
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:50:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6FCFCC4339C;
-        Fri,  9 Jun 2023 09:50:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686304221;
-        bh=s86jmCAkr0JpuP7hM3Mlm+pM7W9Hp6NzmVs0bBk1hcE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=kNWlWuvnPGkiYAeI2o3iQl5iqneKNg9sGX4A5Ql9iBbvuz42bR5tSjyOAArnp1YiV
-         O//qX5so8lTXj6BZImw2A9RCii4ldLddN91R02gQb7xZZEKt5qw/TP8n53A+VTwDln
-         L0f4LgLygqGetaHm6dwCzUiYL+727agqVR3/jZiKysa5mJPZyujzeMkRE0eYlYMer4
-         nf5ofTAeKYCov32jodCOBY7l2i5GZOp10zR15xSxpZw6ycr2zjhnVjk6rrWqXHS6BI
-         7JTDNwXnb/qJ/1bA2nxfcYihPCj3RVOO4iKQtcejiIaikTBWwQivwudORLqYS1HiVb
-         8ucaSwZMM+kTA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4AECBC395EC;
-        Fri,  9 Jun 2023 09:50:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 9 Jun 2023 05:58:46 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F1D3AB2;
+        Fri,  9 Jun 2023 02:51:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686304271; x=1717840271;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=AvruXqThihYTdwzn7jJFQ7xk66jtEf/aSgqQmsYKfpM=;
+  b=DVt97gJNS+CKMH1Ws0aM6MNWaFOnG9wtNfKAXepJhK+Wqd027JWTJrJY
+   EWhSGrylWWbgG2EqHfw4eoHzfSCEtNB5h3JUraXehHpXj7STjn8A9vFOC
+   sE4XP0e32P1+MZwdonBu/SsK2siBZCLPc7fM8XtXhaliBh/uH2Ft+R28u
+   Zy7QxCPSyWa7Bz5miTQzFBRLtru7RkL9IUQKOIz2kIFf/h8kv4wLlqBzf
+   wGEsruILjzG8fw9R9wh+xBj7+HzmoR/M7NHNpah0AgTlKo9LXbNvD7IAu
+   l5iQQmhb5d65VCWcToA2DEHFT5jzg2w0RJrfP+mzbUWxm4w1vqmQWGgK4
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="342239922"
+X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
+   d="scan'208";a="342239922"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 02:51:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="713454261"
+X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
+   d="scan'208";a="713454261"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 02:51:08 -0700
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+        by kekkonen.fi.intel.com (Postfix) with ESMTP id 65F3011F9D2;
+        Fri,  9 Jun 2023 12:51:04 +0300 (EEST)
+Date:   Fri, 9 Jun 2023 09:51:04 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: Re: [PATCH v1 0/6] ACPI: scan: MIPI DiSco for Imaging support
+Message-ID: <ZIL2CPyNpy4xCfdn@kekkonen.localdomain>
+References: <13276375.uLZWGnKmhe@kreacher>
+ <CAJZ5v0gKaheHVfRcgFx_3JdBp9bw5nUQXYp9vZP4RVVXzdb7uw@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] octeontx2-af: Fix promiscuous mode
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168630422130.21394.15550149642866170439.git-patchwork-notify@kernel.org>
-Date:   Fri, 09 Jun 2023 09:50:21 +0000
-References: <20230608051625.2731378-1-rkannoth@marvell.com>
-In-Reply-To: <20230608051625.2731378-1-rkannoth@marvell.com>
-To:     Ratheesh Kannoth <rkannoth@marvell.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sgoutham@marvell.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, sbhatta@marvell.com,
-        gakula@marvell.com, schalla@marvell.com, hkelam@marvell.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAJZ5v0gKaheHVfRcgFx_3JdBp9bw5nUQXYp9vZP4RVVXzdb7uw@mail.gmail.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi Rafael,
 
-This patch was applied to netdev/net.git (main)
-by David S. Miller <davem@davemloft.net>:
-
-On Thu, 8 Jun 2023 10:46:25 +0530 you wrote:
-> CN10KB silicon introduced a new exact match feature,
-> which is used for DMAC filtering. The state of installed
-> DMAC filters in this exact match table is getting corrupted
-> when promiscuous mode is toggled. Fix this by not touching
-> Exact match related config when promiscuous mode is toggled.
+On Wed, May 24, 2023 at 08:06:09PM +0200, Rafael J. Wysocki wrote:
+> On Wed, May 24, 2023 at 1:48 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+> >
+> > Hi Folks,
+> >
+> > This basically is a re-write of a recent patch series from Sakari:
+> >
+> > https://lore.kernel.org/linux-acpi/20230329100951.1522322-1-sakari.ailus@linux.intel.com
+> >
+> > The general idea is the same - CSI-2 resource descriptors, introduced in
+> > ACPI 6.4 and defined by
+> >
+> > https://uefi.org/specs/ACPI/6.5/06_Device_Configuration.html#camera-serial-interface-csi-2-connection-resource-descriptor
+> >
+> > are found and used for creating a set of software nodes that represent the CSI-2
+> > connection graph.
+> >
+> > These software nodes need to be available before any scan handlers or ACPI drivers
+> > are bound to any struct acpi_device objects, so all of that is done at the early
+> > stage of ACPI device enumeration, but unnecessary ACPI namespace walks are avoided.
+> >
+> > The CSI-2 software nodes are populated with data extracted from the CSI-2 resource
+> > descriptors themselves and from device properties defined by the MIPI DiSco for
+> > Imaging specification (see https://www.mipi.org/specifications/mipi-disco-imaging).
+> >
+> > Patches [4,6/6] come from the original series directly, but the other patches have
+> > been changes substantially, so I've decided to re-start patch series versioning from
+> > scratch.
+> >
+> > This series is based on the patch at
+> >
+> > https://patchwork.kernel.org/project/linux-acpi/patch/12223415.O9o76ZdvQC@kreacher/
+> >
+> > applied on top of 6.4-rc3.
+> >
+> > Later on, I'll put all of this material into a special git branch for easier
+> > access.
 > 
-> Fixes: 2dba9459d2c9 ("octeontx2-af: Wrapper functions for MAC addr add/del/update/reset")
-> Signed-off-by: Ratheesh Kannoth <rkannoth@marvell.com>
-> 
-> [...]
+> The patches are now available from the acpi-mipi-disco-imaging branch
+> in the linux-pm.git tree at kernel.org.
 
-Here is the summary with links:
-  - [net] octeontx2-af: Fix promiscuous mode
-    https://git.kernel.org/netdev/net/c/c0e489372a29
+I've been doing some testing on this version.
 
-You are awesome, thank you!
+It oopses and that's relatively easy to fix by removing the kfree() that
+releases memory of the software nodes and properties.
+
+It doesn't work with that change either, it would seem like that the _CRS
+CSI2 data is (most of the time) released before it gets used for creating
+the software nodes, leading node registration to fail. This appears to be
+taking place in different processes --- there's a work queue.
+
+Moving the release of the _CRS CSI-2 resources to where they are no longer
+needed makes the system crash early at boot. I've yet to debug this
+further.
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Regards,
 
-
+Sakari Ailus
