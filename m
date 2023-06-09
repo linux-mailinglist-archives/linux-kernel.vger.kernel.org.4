@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49FB972991E
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 14:10:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A370729924
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 14:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236819AbjFIMJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 08:09:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55140 "EHLO
+        id S237810AbjFIMKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 08:10:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbjFIMJj (ORCPT
+        with ESMTP id S240168AbjFIMJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 08:09:39 -0400
+        Fri, 9 Jun 2023 08:09:52 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CBE180
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 05:08:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466631BFF
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 05:09:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686312529;
+        s=mimecast20190719; t=1686312547;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=bhTsvnKWHMyANiF+ypBvF6dWV6TA3YEIeRPL9ez0lTg=;
-        b=RjRJbiYwx6weEXtvPb3EETzTV8JV19kj9GV3kXkx/WuBFBd1RYnjBtrHe/Ui0i22YtnpY7
-        jbc02eXRdoSKQ3r2kOv5IPA5TvVYtzS8UmelxBVym3dRu14trnE32Lr1ehg3PMjWYl6+Ig
-        eBwIiO+Jb8uY6S0fZ4eMqWb9RlHzT1o=
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
- [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=JZR6reQCNcnuFfexOGBu5QAKgIdPCDJoW0kdpvy5S78=;
+        b=FgL+GMbx99llw55V9IJx3yEt2gX9QsOCpdkEmN2F634tHhGO95JOjrkpXM+cx9YcX+8mrr
+        Kx8FU61W8fiYQpzNIc3jG8pXT/3mEAmuWAcDKqESZPfQVhkYNFaMcSAu3xJ+SvPDAvEUou
+        OrAthAMdk6++4rFd3s8vRuEjFSjjea8=
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
+ [209.85.208.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-596-JrxcQYVZOZqFujDbtk0eaA-1; Fri, 09 Jun 2023 08:08:48 -0400
-X-MC-Unique: JrxcQYVZOZqFujDbtk0eaA-1
-Received: by mail-lj1-f200.google.com with SMTP id 38308e7fff4ca-2b216f624c0so1896281fa.0
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 05:08:47 -0700 (PDT)
+ us-mta-456-OKFfo6xmPBWkQbELgXooYw-1; Fri, 09 Jun 2023 08:09:05 -0400
+X-MC-Unique: OKFfo6xmPBWkQbELgXooYw-1
+Received: by mail-lj1-f198.google.com with SMTP id 38308e7fff4ca-2af1cf1a118so2388311fa.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 05:09:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686312526; x=1688904526;
+        d=1e100.net; s=20221208; t=1686312544; x=1688904544;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bhTsvnKWHMyANiF+ypBvF6dWV6TA3YEIeRPL9ez0lTg=;
-        b=LUk8eWDwSnWrfvFj6RXHfJxgH7vOXZPidQM8r7fNnys3wNjOM9MLKvyL3wdTtE9BS4
-         7RHJLLV9u3bDtJvukfPnfApnEG1qdC0VIMrK6mzpTZbYvRxU/DFKkGoAmhhHnh9YUXsA
-         CfWvX+64TSnt1dB/wUH/tgyDaiin6y5jp6SvmP6Ym5yNXcF/0HZ6s1fIZLhCBsp1sgKW
-         1gINjy61uTldCcVLGrctjQGxyLbLLoXhK/K8a45J6zpbSDD1TRBulr0GmXQFjhh5IE+l
-         LkXsXjthcAdEIIQ9ng5FUwZhHDtqi79zjlS6A+BVq1nW25RIsVTaeZsFA9NNa/xtvufa
-         RO9A==
-X-Gm-Message-State: AC+VfDz2qmN5Mj/pzKbd+Ze68hfASTrHVyfbtb9HpTOGZPHkiKOQ/9+b
-        a+ziU1gPuu0tJnLkowgGP5VTQUXkKxEA4u6QFnAyCStV2pJOtxjl9eylc043757fH42bjjm710F
-        tTkda651gccDJuYSfVFYiJ1w4acXLQQ/cZRqCVN2e
-X-Received: by 2002:a2e:a60a:0:b0:2b2:84:fae6 with SMTP id v10-20020a2ea60a000000b002b20084fae6mr840252ljp.5.1686312526806;
-        Fri, 09 Jun 2023 05:08:46 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5/u83dgJO9ijfmv0l+OO9YcGJ/L6qBK50cyPbNLbgarvaR6qFwIZEoR0L+ekfQ6ZkypevTiTMqJhUVw0mWglg=
-X-Received: by 2002:a2e:a60a:0:b0:2b2:84:fae6 with SMTP id v10-20020a2ea60a000000b002b20084fae6mr840247ljp.5.1686312526573;
- Fri, 09 Jun 2023 05:08:46 -0700 (PDT)
+        bh=JZR6reQCNcnuFfexOGBu5QAKgIdPCDJoW0kdpvy5S78=;
+        b=adHOEt4RrmPKiyjNL6jpFgGsgXqAjioJaEpbEZNFv/cyRrxNgvyDrstsAw6TkAnBTC
+         70bBigCroek86H+MJOMtYXDgegFDeTYzrKh4NWQ2bXhGYQ7YnrA7RpFi/FFBWqA3qqIe
+         YgboGMMehKPPhlgj7DHJMiFUMVz8vy+qp/Wd4JELjSGlJkqiWxhMgbj030lo3cMMJ5k9
+         KlxGoP85qWL14YDa5AOZrTf+ms8NfQY/OGgtUmgL/G+XfBzM7BqvBPW1wlOQ68NIvazk
+         ufaxV1iXKDzUatZDBStrdJ7gtf+pSSX0tPYNahO5KOl76FkDha2fuXeU2GBspm7zHeZu
+         vkcg==
+X-Gm-Message-State: AC+VfDwk0pBBCJQ+lZDBtuuR2JzJrHT8W+I/XNm/xJAMrtrbNL9j+97w
+        X50jLGDxi4s+QtjRqiViE6sMn00jMEbdnp/UhyhzGqfwsdrK5PGjuRkuBH9vqr7Ae1HzznCBrKx
+        yLlVl8vS/AWH8jTpN/LJJAJrOmwzFKbovcF0PJQMp
+X-Received: by 2002:a2e:b5dc:0:b0:2b1:c184:9afe with SMTP id g28-20020a2eb5dc000000b002b1c1849afemr882677ljn.4.1686312544288;
+        Fri, 09 Jun 2023 05:09:04 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5aYnP4o6U74L5gjhqD1XkB3Wdjtyd80ogwjUXJ8HiSsGCkFoeBk+bdCktf2s1Lm6D5wtU5M2VftptBu7vekhE=
+X-Received: by 2002:a2e:b5dc:0:b0:2b1:c184:9afe with SMTP id
+ g28-20020a2eb5dc000000b002b1c1849afemr882669ljn.4.1686312544004; Fri, 09 Jun
+ 2023 05:09:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230609081732.3842341-1-lee@kernel.org> <20230609081732.3842341-7-lee@kernel.org>
-In-Reply-To: <20230609081732.3842341-7-lee@kernel.org>
+References: <20230609081732.3842341-1-lee@kernel.org> <20230609081732.3842341-9-lee@kernel.org>
+In-Reply-To: <20230609081732.3842341-9-lee@kernel.org>
 From:   Karol Herbst <kherbst@redhat.com>
-Date:   Fri, 9 Jun 2023 14:08:35 +0200
-Message-ID: <CACO55ttQa-M3amPtFTG2JCC=wnJ7y6=JvZ9ak93tW-WtfXYUxg@mail.gmail.com>
-Subject: Re: [RESEND 06/15] drm/nouveau/nvkm/subdev/acr/lsfw: Remove unused
- variable 'loc'
+Date:   Fri, 9 Jun 2023 14:08:53 +0200
+Message-ID: <CACO55tt_ivgVYCbVpGRp4BcsC-CNB5i7Cy=wiMPKUSuXKsOgNg@mail.gmail.com>
+Subject: Re: [RESEND 08/15] drm/nouveau/nvkm/subdev/volt/gk20a: Demote
+ kerneldoc abuses
 To:     Lee Jones <lee@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, Ben Skeggs <bskeggs@redhat.com>,
         Lyude Paul <lyude@redhat.com>,
         David Airlie <airlied@gmail.com>,
         Daniel Vetter <daniel@ffwll.ch>,
-        Gourav Samaiya <gsamaiya@nvidia.com>,
         dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
@@ -83,53 +83,52 @@ On Fri, Jun 9, 2023 at 10:18=E2=80=AFAM Lee Jones <lee@kernel.org> wrote:
 >
 > Fixes the following W=3D1 kernel build warning(s):
 >
->  drivers/gpu/drm/nouveau/nvkm/subdev/acr/lsfw.c: In function =E2=80=98nvk=
-m_acr_lsfw_load_sig_image_desc_v2=E2=80=99:
->  drivers/gpu/drm/nouveau/nvkm/subdev/acr/lsfw.c:221:21: warning: variable=
- =E2=80=98loc=E2=80=99 set but not used [-Wunused-but-set-variable]
+>  drivers/gpu/drm/nouveau/nvkm/subdev/volt/gk20a.c:49: warning: This comme=
+nt starts with '/**', but isn't a kernel-doc comment. Refer Documentation/d=
+oc-guide/kernel-doc.rst
+>  drivers/gpu/drm/nouveau/nvkm/subdev/volt/gk20a.c:62: warning: This comme=
+nt starts with '/**', but isn't a kernel-doc comment. Refer Documentation/d=
+oc-guide/kernel-doc.rst
 >
 > Cc: Ben Skeggs <bskeggs@redhat.com>
 > Cc: Karol Herbst <kherbst@redhat.com>
 > Cc: Lyude Paul <lyude@redhat.com>
 > Cc: David Airlie <airlied@gmail.com>
 > Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: Gourav Samaiya <gsamaiya@nvidia.com>
 > Cc: dri-devel@lists.freedesktop.org
 > Cc: nouveau@lists.freedesktop.org
 > Signed-off-by: Lee Jones <lee@kernel.org>
+
+Reviewed-by: Karol Herbst <kherbst@redhat.com>
+
 > ---
->  drivers/gpu/drm/nouveau/nvkm/subdev/acr/lsfw.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+>  drivers/gpu/drm/nouveau/nvkm/subdev/volt/gk20a.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/acr/lsfw.c b/drivers/gpu=
-/drm/nouveau/nvkm/subdev/acr/lsfw.c
-> index f36a359d4531c..bd104a030243a 100644
-> --- a/drivers/gpu/drm/nouveau/nvkm/subdev/acr/lsfw.c
-> +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/acr/lsfw.c
-> @@ -218,7 +218,7 @@ nvkm_acr_lsfw_load_sig_image_desc_v2(struct nvkm_subd=
-ev *subdev,
->                 const struct firmware *hsbl;
->                 const struct nvfw_ls_hsbl_bin_hdr *hdr;
->                 const struct nvfw_ls_hsbl_hdr *hshdr;
-> -               u32 loc, sig, cnt, *meta;
-> +               u32 sig, cnt, *meta;
+> diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/volt/gk20a.c b/drivers/g=
+pu/drm/nouveau/nvkm/subdev/volt/gk20a.c
+> index 8c2faa9645111..ccac88da88648 100644
+> --- a/drivers/gpu/drm/nouveau/nvkm/subdev/volt/gk20a.c
+> +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/volt/gk20a.c
+> @@ -45,7 +45,7 @@ static const struct cvb_coef gk20a_cvb_coef[] =3D {
+>         /* 852 */ { 1608418, -21643, -269,     0,    763,  -48},
+>  };
 >
->                 ret =3D nvkm_firmware_load_name(subdev, path, "hs_bl_sig"=
-, ver, &hsbl);
->                 if (ret)
-> @@ -227,7 +227,6 @@ nvkm_acr_lsfw_load_sig_image_desc_v2(struct nvkm_subd=
-ev *subdev,
->                 hdr =3D nvfw_ls_hsbl_bin_hdr(subdev, hsbl->data);
->                 hshdr =3D nvfw_ls_hsbl_hdr(subdev, hsbl->data + hdr->head=
-er_offset);
->                 meta =3D (u32 *)(hsbl->data + hshdr->meta_data_offset);
-> -               loc =3D *(u32 *)(hsbl->data + hshdr->patch_loc);
-
-Ben: should we do anything with this value or is it safe to ignore?
-
->                 sig =3D *(u32 *)(hsbl->data + hshdr->patch_sig);
->                 cnt =3D *(u32 *)(hsbl->data + hshdr->num_sig);
+> -/**
+> +/*
+>   * cvb_mv =3D ((c2 * speedo / s_scale + c1) * speedo / s_scale + c0)
+>   */
+>  static inline int
+> @@ -58,7 +58,7 @@ gk20a_volt_get_cvb_voltage(int speedo, int s_scale, con=
+st struct cvb_coef *coef)
+>         return mv;
+>  }
 >
+> -/**
+> +/*
+>   * cvb_t_mv =3D
+>   * ((c2 * speedo / s_scale + c1) * speedo / s_scale + c0) +
+>   * ((c3 * speedo / s_scale + c4 + c5 * T / t_scale) * T / t_scale)
 > --
 > 2.41.0.162.gfafddb0af9-goog
 >
