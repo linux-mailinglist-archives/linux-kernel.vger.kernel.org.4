@@ -2,133 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BADE472A185
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 19:44:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E42F72A184
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 19:43:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbjFIRoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 13:44:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50090 "EHLO
+        id S229773AbjFIRn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 13:43:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjFIRnz (ORCPT
+        with ESMTP id S229503AbjFIRny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 13:43:55 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A6335B5;
-        Fri,  9 Jun 2023 10:43:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686332625; x=1717868625;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=o585FB0CLahAOlr8Uc0kwp+BKHOunEapgbz0gC3+Z9w=;
-  b=AdbECEfSdUz2CPuX36+cO8LIPCLUdMlJyDW143Lf9piEeOlFXes7dFoK
-   b3k0i3C548MooVeXBb5J6qiPL4TjLyQaRodjFLDVceGzaOuBQKVMbANHn
-   aOe+ipYGaWxaKu04//wJ4bG7URKioypaSr899P7BFJCHx6NA8ZyJdCQ+l
-   pjGVivgsZM2V71J/2cSoC+brBDaOk/zgeeiy+JaXrC3K2ffdeytygpIgO
-   c05bFL+LiQMkbXIJQKO6gRuuSAlsebfcPByCaq37TLD8oAFs7qpHF1Bp5
-   gN5PvTyYhEs83PFsUuYxAmS69G9kwgsHU/nMwyheDq4312PtczFDcjmCm
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="444025704"
-X-IronPort-AV: E=Sophos;i="6.00,230,1681196400"; 
-   d="scan'208";a="444025704"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 10:43:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="687825719"
-X-IronPort-AV: E=Sophos;i="6.00,230,1681196400"; 
-   d="scan'208";a="687825719"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 09 Jun 2023 10:43:38 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q7g9B-0009Ge-33;
-        Fri, 09 Jun 2023 17:43:37 +0000
-Date:   Sat, 10 Jun 2023 01:42:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, arnd@arndb.de, christophe.leroy@csgroup.eu,
-        hch@lst.de, rppt@kernel.org, willy@infradead.org,
-        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
-        schnelle@linux.ibm.com, David.Laight@aculab.com, shorne@gmail.com,
-        deller@gmx.de, Baoquan He <bhe@redhat.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
-Subject: Re: [PATCH v6 10/19] s390: mm: Convert to GENERIC_IOREMAP
-Message-ID: <202306100105.8GHnoMCP-lkp@intel.com>
-References: <20230609075528.9390-11-bhe@redhat.com>
+        Fri, 9 Jun 2023 13:43:54 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E6B5E35B3;
+        Fri,  9 Jun 2023 10:43:44 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.43:47690.1937665454
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
+        by 189.cn (HERMES) with SMTP id AEDBE100212;
+        Sat, 10 Jun 2023 01:43:39 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-75648544bd-7vx9t with ESMTP id 0877e90f4b584cbe94a878d807b39f22 for helgaas@kernel.org;
+        Sat, 10 Jun 2023 01:43:43 CST
+X-Transaction-ID: 0877e90f4b584cbe94a878d807b39f22
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <2cf50ad0-e4fa-17a3-3e22-7fd8d4a316ed@189.cn>
+Date:   Sat, 10 Jun 2023 01:43:39 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230609075528.9390-11-bhe@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [Intel-gfx] [PATCH v3 4/4] PCI/VGA: introduce is_boot_device
+ function callback to vga_client_register
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Sui Jingfeng <suijingfeng@loongson.cn>
+Cc:     Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        nouveau@lists.freedesktop.org,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, YiPeng Chai <YiPeng.Chai@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Ville Syrjala <ville.syrjala@linux.intel.com>,
+        Yi Liu <yi.l.liu@intel.com>, kvm@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, Jason Gunthorpe <jgg@ziepe.ca>,
+        Ben Skeggs <bskeggs@redhat.com>, linux-pci@vger.kernel.org,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Lijo Lazar <lijo.lazar@amd.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Bokun Zhang <Bokun.Zhang@amd.com>,
+        intel-gfx@lists.freedesktop.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        loongson-kernel@lists.loongnix.cn,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Yishai Hadas <yishaih@nvidia.com>, Li Yi <liyi@loongson.cn>,
+        Pan Xinhui <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian Konig <christian.koenig@amd.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>
+References: <20230609164850.GA1251187@bhelgaas>
+Content-Language: en-US
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <20230609164850.GA1251187@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Baoquan,
 
-kernel test robot noticed the following build errors:
+On 2023/6/10 00:48, Bjorn Helgaas wrote:
+> On Fri, Jun 09, 2023 at 10:27:39AM +0800, Sui Jingfeng wrote:
+>> On 2023/6/9 03:19, Bjorn Helgaas wrote:
+>>> On Thu, Jun 08, 2023 at 07:43:22PM +0800, Sui Jingfeng wrote:
+>>>> From: Sui Jingfeng <suijingfeng@loongson.cn>
+>>>>
+>>>> The vga_is_firmware_default() function is arch-dependent, which doesn't
+>>>> sound right. At least, it also works on the Mips and LoongArch platforms.
+>>>> Tested with the drm/amdgpu and drm/radeon drivers. However, it's difficult
+>>>> to enumerate all arch-driver combinations. I'm wrong if there is only one
+>>>> exception.
+>>>>
+>>>> With the observation that device drivers typically have better knowledge
+>>>> about which PCI bar contains the firmware framebuffer, which could avoid
+>>>> the need to iterate all of the PCI BARs.
+>>>>
+>>>> But as a PCI function at pci/vgaarb.c, vga_is_firmware_default() is
+>>>> probably not suitable to make such an optimization for a specific device.
+>>>>
+>>>> There are PCI display controllers that don't have a dedicated VRAM bar,
+>>>> this function will lose its effectiveness in such a case. Luckily, the
+>>>> device driver can provide an accurate workaround.
+>>>>
+>>>> Therefore, this patch introduces a callback that allows the device driver
+>>>> to tell the VGAARB if the device is the default boot device. This patch
+>>>> only intends to introduce the mechanism, while the implementation is left
+>>>> to the device driver authors. Also honor the comment: "Clients have two
+>>>> callback mechanisms they can use"
+>>> s/bar/BAR/ (several)
+>>>
+>>> Nothing here uses the callback.  I don't want to merge this until we
+>>> have a user.
+>> This is chicken and egg question.
+>>
+>> If you could help get this merge first, I will show you the first user.
+>>
+>>> I'm not sure why the device driver should know whether its device is
+>>> the default boot device.
+>> It's not that the device driver should know,
+>>
+>> but it's about that the device driver has the right to override.
+>>
+>> Device driver may have better approach to identify the default boot
+>> device.
+> The way we usually handle this is to include the new callback in the
+> same series as the first user of it.  That has two benefits:
+> (1) everybody can review the whole picture and possibly suggest
+> different approaches, and (2) when we merge the infrastructure,
+> we also merge a user of it at the same time, so the whole thing can be
+> tested and we don't end up with unused code.
 
-[auto build test ERROR on akpm-mm/mm-everything]
+OK, acceptable
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/asm-generic-iomap-h-remove-ARCH_HAS_IOREMAP_xx-macros/20230609-160014
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230609075528.9390-11-bhe%40redhat.com
-patch subject: [PATCH v6 10/19] s390: mm: Convert to GENERIC_IOREMAP
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20230610/202306100105.8GHnoMCP-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add akpm-mm https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git
-        git fetch akpm-mm mm-everything
-        git checkout akpm-mm/mm-everything
-        b4 shazam https://lore.kernel.org/r/20230609075528.9390-11-bhe@redhat.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash arch/s390/
+I will try to prepare the user code of this callback and respin the patch.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306100105.8GHnoMCP-lkp@intel.com/
+I may resend it with another patch set in the future, this series 
+already drop it,
 
-All errors (new ones prefixed by >>):
+see v5[1]
 
-   In file included from arch/s390/kernel/perf_cpum_sf.c:25:
-   include/asm-generic/io.h: In function 'ioremap':
->> include/asm-generic/io.h:1089:41: error: '_PAGE_IOREMAP' undeclared (first use in this function); did you mean 'VM_IOREMAP'?
-    1089 |         return ioremap_prot(addr, size, _PAGE_IOREMAP);
-         |                                         ^~~~~~~~~~~~~
-         |                                         VM_IOREMAP
-   include/asm-generic/io.h:1089:41: note: each undeclared identifier is reported only once for each function it appears in
+[1] https://patchwork.freedesktop.org/series/119134/
 
-
-vim +1089 include/asm-generic/io.h
-
-80b0ca98f91ddb Christoph Hellwig 2019-08-13  1083  
-2fe481688890d6 Baoquan He        2023-06-09  1084  #ifndef ioremap
-2fe481688890d6 Baoquan He        2023-06-09  1085  #define ioremap ioremap
-80b0ca98f91ddb Christoph Hellwig 2019-08-13  1086  static inline void __iomem *ioremap(phys_addr_t addr, size_t size)
-80b0ca98f91ddb Christoph Hellwig 2019-08-13  1087  {
-80b0ca98f91ddb Christoph Hellwig 2019-08-13  1088  	/* _PAGE_IOREMAP needs to be supplied by the architecture */
-80b0ca98f91ddb Christoph Hellwig 2019-08-13 @1089  	return ioremap_prot(addr, size, _PAGE_IOREMAP);
-80b0ca98f91ddb Christoph Hellwig 2019-08-13  1090  }
-2fe481688890d6 Baoquan He        2023-06-09  1091  #endif
-80b0ca98f91ddb Christoph Hellwig 2019-08-13  1092  #endif /* !CONFIG_MMU || CONFIG_GENERIC_IOREMAP */
-97c9801a15e5b0 Christoph Hellwig 2019-08-11  1093  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> Bjorn
