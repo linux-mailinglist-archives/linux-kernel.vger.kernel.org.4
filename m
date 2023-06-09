@@ -2,58 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B0BA72A6CD
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 01:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB47872A6DA
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 01:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231771AbjFIXnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 19:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
+        id S229679AbjFIXtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 19:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjFIXnC (ORCPT
+        with ESMTP id S229486AbjFIXtF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 19:43:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F26BF30FE;
-        Fri,  9 Jun 2023 16:43:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E9126344B;
-        Fri,  9 Jun 2023 23:43:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E86C2C433EF;
-        Fri,  9 Jun 2023 23:42:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686354179;
-        bh=DQaYRhed9iRGzYmdroHoIOdGjQzbLmn6nX4veiFuct8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=P5yrpJ4UJGyWtrVLoP7Sjiq/mj1e6t0YirUa8xOGE+sYl+N/9VR0k61OtBoQdWh9I
-         h8yqALxXWXq5u5SsXnwbMWE6We1c/89vNh/rgyhGx5pN+8yapriE2acVR9k4r+ykJY
-         cnO3OWmKcR6kskafc3NGIcysRmEmQGf0YYANpreo8/VzYUikJ8RQoSZCT7lKFxdSDn
-         s3icO6AUVWCQKep8uL4KaIHXkMS7kER0yAyDrulHt+KBNPoYj2HdfDvlHYP4T9vAoK
-         7PVYLNSJBiut8Ku+3rbayFS9afv6c7WBI/egGEGoZlKB+TOrdDcIXkI2/XWV2jX3tS
-         E1ccbuPrVnOvg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 772FFCE14D2; Fri,  9 Jun 2023 16:42:59 -0700 (PDT)
-Date:   Fri, 9 Jun 2023 16:42:59 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     SeongJae Park <sj@kernel.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>, corbet@lwn.net,
-        rcu@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] Docs/RCU/rculist_nulls: Drop unnecessary '_release'
- in insert function
-Message-ID: <46440869-644a-4982-b790-b71b43976c66@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <CAEXW_YQFqW2QcAuHZEhc_GaUaB-=QOS0WgUOizd=FYwtFQ8vag@mail.gmail.com>
- <20230609191206.30465-1-sj@kernel.org>
+        Fri, 9 Jun 2023 19:49:05 -0400
+Received: from out203-205-221-192.mail.qq.com (out203-205-221-192.mail.qq.com [203.205.221.192])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AA2E57
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 16:49:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1686354541;
+        bh=bpuiYw7aOu1hTubouULzt77m8lYy98Ok47YzdGnD6Bk=;
+        h=From:To:Cc:Subject:Date;
+        b=LrZBIqi4Iw8xbGi0h8bClEjDjWbh2gC9VLEc2rEn30f81oU4blqyspuM92g32DMa2
+         a8zjjAlhhl1OBH5HyNNJ43zody95bU9YvZBvMUySwnP5LaTTWBJYHb2n4OYUjAQnuk
+         3l25ZP+YN1zfYNVHFQbMAjDyZAampB4kZ4vlHYRA=
+Received: from localhost ([101.224.149.128])
+        by newxmesmtplogicsvrszc5-0.qq.com (NewEsmtp) with SMTP
+        id C3B3E632; Sat, 10 Jun 2023 07:48:59 +0800
+X-QQ-mid: xmsmtpt1686354539tdu6ve0y0
+Message-ID: <tencent_D656D683705F41324657ED3393C3384C7408@qq.com>
+X-QQ-XMAILINFO: NQR8mRxMnur9FKOmyCjEVaaztjBKmlj53eegGO13ZbfN/g5qTleK0aCa+9mAGG
+         lCiXFH6NvrwMhkmrYUf7BZei8wn3boTZUALlplZs04v8yx5DEAn1qTU7OtKAw7AcsJTisDEU7SQh
+         xkUkOWc4ExbmSL6iF8LuFHbHgBWk0jeweLFcdhrFEO+wDPHxeiJ5gpQo1fb+bxUdM/bu+IQIkbFy
+         WFkucEHn8FuZ+v1RCPHZJEKxnlECu2z4dEQF86aLIcu8j+U74rn2EhEbYJGgNY5UxbVTOC6jno3q
+         dncF3jGtn7jsT9UY91KrSF+UA90E83PIbxJ+0pKBOlhxbJyGiC+Emx2HofJgZWUu7fly2VkfNN/x
+         SA/2MPNOoIXeazMGGYFu0fnzCxHdn6MvFr3sn7THWM5PPJ2uDoWv7IsQ0FFs6R5Mq1KsPHfZVQw0
+         fVEG5PrA3PTdY+lQMZqzdOjINO9cPSB8BgODArwAlFCAR5Qa7uzhUSvWx94sXAGNzoeRbFf+SA11
+         GjZXSfQJo2CUunj96ljRWtry06JqaOJU4nagMMDZ/jLIU/EwQEg+IP9B3Y6jO59aPXOrMdTRSbf5
+         jDSJyErWvfet2tDPl+NNLrwTJUVQ+v47oacGmQ98t7BMs8J49d+to1vV8FLjjpZ83EyBKnyulN8s
+         4f6tpT3XfbZHn4geo/H8JWLc/oo5NhOxJkqyVd5F4K0W4tHa42OZqQPKyEJ3NE0kteVQMuWWxern
+         Q5zMV84tGZnpcYdd8ENvHOV6yE+4vvRk8Qc04vhkKjTdKlSziklGqmVS284aCuzz0biDC6xcgd1t
+         X++GxwD8uqWqTgqu9Rq0RoBWY7ossa3+cVcVGKV98fer2MtqmZybdgfKdEhtAlLBrBZLtchy5iWG
+         PEfdywNTlUSdonvQo2ZKd/pckfW2x96DZ12eU6I3/QVw2xItqnr2tMiAhuhJBtKq5f7G804TklTp
+         p8vHohUZdB/xnGUayWhMqoQ8XCgwl3
+From:   Woody Zhang <woodylab@foxmail.com>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Conor Dooley <conor.dooley@microchip.com>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Woody Zhang <woodylab@foxmail.com>
+Subject: [PATCH] riscv: move memblock_allow_resize() after lm is ready
+Date:   Sat, 10 Jun 2023 07:43:20 +0800
+X-OQ-MSGID: <20230609234319.839760-1-woodylab@foxmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230609191206.30465-1-sj@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,80 +66,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 07:12:06PM +0000, SeongJae Park wrote:
-> On Fri, 19 May 2023 14:52:50 -0400 Joel Fernandes <joel@joelfernandes.org> wrote:
-> 
-> > On Thu, May 18, 2023 at 6:40 PM SeongJae Park <sj@kernel.org> wrote:
-> > >
-> > > The document says we can avoid extra smp_rmb() in lockless_lookup() and
-> > > extra _release() in insert function when hlist_nulls is used.  However,
-> > > the example code snippet for the insert function is still using the
-> > > extra _release().  Drop it.
-> > >
-> > > Signed-off-by: SeongJae Park <sj@kernel.org>
-> > > ---
-> > >  Documentation/RCU/rculist_nulls.rst | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/Documentation/RCU/rculist_nulls.rst b/Documentation/RCU/rculist_nulls.rst
-> > > index 5cd6f3f8810f..463270273d89 100644
-> > > --- a/Documentation/RCU/rculist_nulls.rst
-> > > +++ b/Documentation/RCU/rculist_nulls.rst
-> > > @@ -191,7 +191,7 @@ scan the list again without harm.
-> > >    obj = kmem_cache_alloc(cachep);
-> > >    lock_chain(); // typically a spin_lock()
-> > >    obj->key = key;
-> > > -  atomic_set_release(&obj->refcnt, 1); // key before refcnt
-> > > +  atomic_set(&obj->refcnt, 1);
-> > >    /*
-> > >     * insert obj in RCU way (readers might be traversing chain)
-> > >     */
-> > 
-> > If write to ->refcnt of 1 is reordered with setting of ->key, what
-> > prevents the 'lookup algorithm' from doing a key match (obj->key ==
-> > key) before the refcount has been initialized?
-> > 
-> > Are we sure the reordering mentioned in the document is the same as
-> > the reordering prevented by the atomic_set_release()?
-> 
-> Paul, may I ask your opinion?
+The initial memblock metadata is accessed from kernel image mapping. The
+regions arrays need to "reallocated" from memblock and accessed through
+linear mapping to cover more memblock regions. So the resizing should
+not be allowed until linear mapping is ready. Note that there are
+memblock allocations when building linear mapping.
 
-The next line of code is this:
+Signed-off-by: Woody Zhang <woodylab@foxmail.com>
+---
+ arch/riscv/mm/init.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-	hlist_nulls_add_head_rcu(&obj->obj_node, list);
+diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+index 9e9da69720ce..8a33ecbb4d0f 100644
+--- a/arch/riscv/mm/init.c
++++ b/arch/riscv/mm/init.c
+@@ -258,7 +258,6 @@ static void __init setup_bootmem(void)
+ 	dma_contiguous_reserve(dma32_phys_limit);
+ 	if (IS_ENABLED(CONFIG_64BIT))
+ 		hugetlb_cma_reserve(PUD_SHIFT - PAGE_SHIFT);
+-	memblock_allow_resize();
+ }
+ 
+ #ifdef CONFIG_MMU
+@@ -1250,6 +1249,9 @@ static void __init setup_vm_final(void)
+ 	csr_write(CSR_SATP, PFN_DOWN(__pa_symbol(swapper_pg_dir)) | satp_mode);
+ 	local_flush_tlb_all();
+ 
++	/* Depend on that Linear Mapping is ready */
++	memblock_allow_resize();
++
+ 	pt_ops_set_late();
+ }
+ #else
+-- 
+2.39.2
 
-If I understand the code correctly, obj (and thus *obj) are not
-visible to readers before the hlist_nulls_add_head_rcu().  And
-hlist_nulls_add_head_rcu() uses rcu_assign_pointer() to ensure that
-initialization (including both ->key and ->refcnt) is ordered before
-list insertion.
-
-Except that this memory is being allocated from a slab cache that was
-created with SLAB_TYPESAFE_BY_RCU.  This means that there can be readers
-who gained a reference before this object was freed, and who still hold
-their references.
-
-Unfortunately, the implementation of try_get_ref() is not shown.  However,
-if ->refcnt is non-zero, this can succeed, and if it succeeds, we need
-the subsequent check of obj->key with key in the lookup algorithm to
-be stable.  For this check to be stable, try_get_ref() needs to use an
-atomic operation with at least acquire semantics (kref_get_unless_zero()
-would work), and this must pair with something in the initialization.
-
-So I don't see how it is safe to weaken that atomic_set_release() to
-atomic_set(), even on x86.
-
-Or am I missing something subtle here?
-
-							Thanx, Paul
-
-> Thanks,
-> SJ
-> 
-> > 
-> > For the other 3 patches, feel free to add:
-> > Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > 
-> > thanks,
-> > 
-> >  - Joel
