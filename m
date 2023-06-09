@@ -2,127 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72AEC729A38
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 14:44:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11536729A3B
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 14:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240531AbjFIMoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 08:44:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48870 "EHLO
+        id S240673AbjFIMo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 08:44:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239055AbjFIMoP (ORCPT
+        with ESMTP id S238873AbjFIMo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 08:44:15 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DFC8270F;
-        Fri,  9 Jun 2023 05:44:14 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-977cc662f62so260120566b.3;
-        Fri, 09 Jun 2023 05:44:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686314652; x=1688906652;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=b7QDAQq/Yt+bFUin4zRriBZQwbZHATNCIDd2rGGW2qI=;
-        b=RzAm0uMFzvRDdUqfG+0xGODQ94FDzGMPjIqzTf59CLjHZRlRY5iSj8X/LK7WNOs1LO
-         wrarbRpZ3OeOpR86HiqfQnOLkOCFLI9+CwuTVIGhWIp1HRKfEyP6Zqcywt7rxzdsLwAv
-         LGFjC2Gg/D9qNeeSrOOHkyG4m6VkXlxRtwVrNkVLtFKzJlPB3q5a4+99gynrn4ZH63UP
-         MSFKmSoKlmlMHEnAhe1L1gbnqfL6Wo1uGu7nngTFgpwhE75KiX0oyntLUeZANfR4yCGG
-         5IKML+XopTH/7Dl87+TbL98+AE/65c1gqOZRwDKbtwxyizHcrtW+hthN91kIeH7MxqqX
-         zaLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686314652; x=1688906652;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=b7QDAQq/Yt+bFUin4zRriBZQwbZHATNCIDd2rGGW2qI=;
-        b=P3VkTXu3tG+Mb/n0udW8hFJtBR0KTIWNnJzdRHjThpLr/9nFAK/LhNVkK0Sg/KC61x
-         QHmUWz57xou6GQWJ/j6gnLxQshQbLolC1DTVBgarrlZcjPHGAMuIBpSnWd7KbY3bO181
-         hZyALUFvf9+XXjM9APgWW2pH86H4+pwzNdewePBxSY61lLZgEwkfWBWT+myUS5cbqcLV
-         3b1KZXLoWTEWTJYNj8tCIghesS6tgVgHKi2C/PTmAOz/M8cp46WVFD1fJHqz1iW0At3F
-         LNOiK/YDQwKN5mrUYmEjEEqT8IW2RHpR1kvQWHdeA8hzmXKw/6qS1+yBbHGk6ZKZQIXz
-         Xkuw==
-X-Gm-Message-State: AC+VfDxjP4RgHcS0N5jvTHhEPQCPmugcyinLgnRWCz4vlIHzeS4IepN1
-        n7np4NBofJI283fQOKNJ7CDgR+NXFqU=
-X-Google-Smtp-Source: ACHHUZ4hsONfFw870igCx5XZ0nUCRMTK7zGjIfceAO6CPKtu1YJA02DGNKkAdNtIFnb0ipXfWr4C3w==
-X-Received: by 2002:a17:906:6a15:b0:973:e349:43c8 with SMTP id qw21-20020a1709066a1500b00973e34943c8mr1805852ejc.69.1686314652317;
-        Fri, 09 Jun 2023 05:44:12 -0700 (PDT)
-Received: from localhost (p200300e41f305300f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f30:5300:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id ke3-20020a17090798e300b00977cf84c42dsm1245584ejc.43.2023.06.09.05.44.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 05:44:11 -0700 (PDT)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] thermal: Allow selecting the bang-bang governor as default
-Date:   Fri,  9 Jun 2023 14:44:08 +0200
-Message-Id: <20230609124408.3788680-1-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        Fri, 9 Jun 2023 08:44:27 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0F01BC6;
+        Fri,  9 Jun 2023 05:44:25 -0700 (PDT)
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 359Cga8M008426;
+        Fri, 9 Jun 2023 12:44:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : content-type : mime-version; s=pp1;
+ bh=xvQu0AiyIjgiXGGDfx0WYJkuDdk/m9Wc+TbG/u0vKbI=;
+ b=apqmGBDYutGFPb/x+jkOmWnBlCXPZ5e2rV8j3cq5xvEpWCHfaUd707EHx04ZZ6MzkQ2q
+ Y2WbT3F0faiV8R0/RRUiQMvLTn7K7NpKrN8/zQ/usrxnBL7h9bgGfMfv6qUZF093gOxZ
+ k3RGuZBXQw7m5aDFAULvf80NhRv7FaMf/ZVso4/4UbyIVpvqZ7h6KuGSBZ8ClCa9Cd8k
+ Kc19vdpqSL7rGz1WGBrSRgzDBPsgIn2B1V/U575+oLmyGfr1NMZTdUq8b7OkwbrSZ3px
+ vrV4C2V0R1/CPPUMGZ/6yVGjoCFtmot514TqFs0u+nhfr3r653soZE86sME52mchJsNk FA== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r44aq818b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Jun 2023 12:44:24 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3593h4gL009532;
+        Fri, 9 Jun 2023 12:44:22 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3r2a769xv6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Jun 2023 12:44:22 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 359CiIRB21234198
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 9 Jun 2023 12:44:18 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ADA182004D;
+        Fri,  9 Jun 2023 12:44:18 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 77F7220043;
+        Fri,  9 Jun 2023 12:44:18 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Fri,  9 Jun 2023 12:44:18 +0000 (GMT)
+Date:   Fri, 9 Jun 2023 14:44:17 +0200
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: [GIT PULL] s390 updates for 6.4-rc6
+Message-ID: <ZIMeobQOfS8XyayA@tuxmaker.boeblingen.de.ibm.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 6NjOKPqenhPLWWu5n9F6FeWPJsvrCpkF
+X-Proofpoint-GUID: 6NjOKPqenhPLWWu5n9F6FeWPJsvrCpkF
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-09_08,2023-06-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ impostorscore=0 malwarescore=0 adultscore=0 suspectscore=0 spamscore=0
+ phishscore=0 priorityscore=1501 clxscore=1015 mlxlogscore=809 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306090106
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
+Hello Linus,
 
-For many setups the bang-bang governor is exactly what we want. Many
-ARM SoC-based devices use fans to cool down the entire SoC and that
-works well only with the bang-bang governor because it uses the
-hysteresis in order to let the fan run for a while to cool the SoC
-down below the trip point before switching it off again.
+please pull s390 changes for 6.4-rc6.
 
-The step-wise governor will behave strangely in these situations. It
-doesn't use the hysteresis, so it can lead to situations where the fan
-is turned on for only a very brief period and then is switched back off,
-only to get switched back on again very quickly because the SoC hasn't
-cooled down very much.
+Thank you,
+Alexander
 
-Signed-off-by: Thierry Reding <treding@nvidia.com>
----
- drivers/thermal/Kconfig        | 8 ++++++++
- drivers/thermal/thermal_core.h | 2 ++
- 2 files changed, 10 insertions(+)
+The following changes since commit 0f1cbf941d5949110adf70725a9614e622de8d99:
 
-diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-index 4cd7ab707315..19a4b33cb564 100644
---- a/drivers/thermal/Kconfig
-+++ b/drivers/thermal/Kconfig
-@@ -130,6 +130,14 @@ config THERMAL_DEFAULT_GOV_POWER_ALLOCATOR
- 	  system and device power allocation. This governor can only
- 	  operate on cooling devices that implement the power API.
- 
-+config THERMAL_DEFAULT_GOV_BANG_BANG
-+	bool "bang_bang"
-+	depends on THERMAL_GOV_BANG_BANG
-+	help
-+	  Use the bang_bang governor as default. This throttles the
-+	  devices one step at the time, taking into account the trip
-+	  point hysteresis.
-+
- endchoice
- 
- config THERMAL_GOV_FAIR_SHARE
-diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-index 3d4a787c6b28..17c1bbed734d 100644
---- a/drivers/thermal/thermal_core.h
-+++ b/drivers/thermal/thermal_core.h
-@@ -23,6 +23,8 @@
- #define DEFAULT_THERMAL_GOVERNOR       "user_space"
- #elif defined(CONFIG_THERMAL_DEFAULT_GOV_POWER_ALLOCATOR)
- #define DEFAULT_THERMAL_GOVERNOR       "power_allocator"
-+#elif defined(CONFIG_THERMAL_DEFAULT_GOV_BANG_BANG)
-+#define DEFAULT_THERMAL_GOVERNOR       "bang_bang"
- #endif
- 
- /* Initial state of a cooling device during binding */
--- 
-2.40.1
+  s390/iommu: get rid of S390_CCW_IOMMU and S390_AP_IOMMU (2023-05-01 14:11:28 -0300)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-6.4-3
+
+for you to fetch changes up to 03c5c83b70dca3729a3eb488e668e5044bd9a5ea:
+
+  s390/purgatory: disable branch profiling (2023-05-25 19:41:45 +0200)
+
+----------------------------------------------------------------
+s390 updates for 6.4-rc6
+
+- Avoid linker error for randomly generated config file that                  
+  has CONFIG_BRANCH_PROFILE_NONE enabled and make it similar                  
+  to riscv, x86 and also to commit 4bf3ec384edf ("s390: disable               
+  branch profiling for vdso").                                                
+
+- Currently, if the device is offline and all the channel paths are           
+  either configured or varied offline, the associated subchannel gets         
+  unregistered. Don't unregister the subchannel, instead unregister           
+  offline device.                                                             
+
+----------------------------------------------------------------
+Alexander Gordeev (1):
+  s390/purgatory: disable branch profiling
+
+Vineeth Vijayan (1):
+  s390/cio: unregister device when the only path is gone
+
+ arch/s390/purgatory/Makefile | 1 +
+ drivers/s390/cio/device.c    | 5 ++++-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/arch/s390/purgatory/Makefile b/arch/s390/purgatory/Makefile
+index 32573b4f9bd2..cc8cf5abea15 100644
+--- a/arch/s390/purgatory/Makefile
++++ b/arch/s390/purgatory/Makefile
+@@ -26,6 +26,7 @@ KBUILD_CFLAGS += -Wno-pointer-sign -Wno-sign-compare
+ KBUILD_CFLAGS += -fno-zero-initialized-in-bss -fno-builtin -ffreestanding
+ KBUILD_CFLAGS += -Os -m64 -msoft-float -fno-common
+ KBUILD_CFLAGS += -fno-stack-protector
++KBUILD_CFLAGS += -DDISABLE_BRANCH_PROFILING
+ KBUILD_CFLAGS += $(CLANG_FLAGS)
+ KBUILD_CFLAGS += $(call cc-option,-fno-PIE)
+ KBUILD_AFLAGS := $(filter-out -DCC_USING_EXPOLINE,$(KBUILD_AFLAGS))
+diff --git a/drivers/s390/cio/device.c b/drivers/s390/cio/device.c
+index d5c43e9b5128..c0d620ffea61 100644
+--- a/drivers/s390/cio/device.c
++++ b/drivers/s390/cio/device.c
+@@ -1376,6 +1376,7 @@ void ccw_device_set_notoper(struct ccw_device *cdev)
+ enum io_sch_action {
+ 	IO_SCH_UNREG,
+ 	IO_SCH_ORPH_UNREG,
++	IO_SCH_UNREG_CDEV,
+ 	IO_SCH_ATTACH,
+ 	IO_SCH_UNREG_ATTACH,
+ 	IO_SCH_ORPH_ATTACH,
+@@ -1408,7 +1409,7 @@ static enum io_sch_action sch_get_action(struct subchannel *sch)
+ 	}
+ 	if ((sch->schib.pmcw.pam & sch->opm) == 0) {
+ 		if (ccw_device_notify(cdev, CIO_NO_PATH) != NOTIFY_OK)
+-			return IO_SCH_UNREG;
++			return IO_SCH_UNREG_CDEV;
+ 		return IO_SCH_DISC;
+ 	}
+ 	if (device_is_disconnected(cdev))
+@@ -1470,6 +1471,7 @@ static int io_subchannel_sch_event(struct subchannel *sch, int process)
+ 	case IO_SCH_ORPH_ATTACH:
+ 		ccw_device_set_disconnected(cdev);
+ 		break;
++	case IO_SCH_UNREG_CDEV:
+ 	case IO_SCH_UNREG_ATTACH:
+ 	case IO_SCH_UNREG:
+ 		if (!cdev)
+@@ -1503,6 +1505,7 @@ static int io_subchannel_sch_event(struct subchannel *sch, int process)
+ 		if (rc)
+ 			goto out;
+ 		break;
++	case IO_SCH_UNREG_CDEV:
+ 	case IO_SCH_UNREG_ATTACH:
+ 		spin_lock_irqsave(sch->lock, flags);
+ 		sch_set_cdev(sch, NULL);
