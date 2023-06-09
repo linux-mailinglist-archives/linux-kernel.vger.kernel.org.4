@@ -2,52 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4515672A24A
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:32:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64B9672A24C
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:32:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbjFIScL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 14:32:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
+        id S231152AbjFISc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 14:32:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230458AbjFIScH (ORCPT
+        with ESMTP id S230400AbjFIScZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 14:32:07 -0400
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352B93A89
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 11:31:58 -0700 (PDT)
-Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-777ac169033so117846939f.0
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 11:31:58 -0700 (PDT)
+        Fri, 9 Jun 2023 14:32:25 -0400
+Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5CBF3A81
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 11:32:13 -0700 (PDT)
+Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-33b0cae115bso9025345ab.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 11:32:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686335517; x=1688927517;
+        d=1e100.net; s=20221208; t=1686335533; x=1688927533;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=tXMDtdWN6nJZldqwpEUd7GnDVKNRMg93Z/FFZjfMFDo=;
-        b=K0/pNO1NCb649ErGzLTp5cHVh2ITHTy9O+iR9Fr33DkYWQ+Iv+47fT/fKEbf6gnCd2
-         x2Ln5ob8qgfgSFYADpnPudUWLpzkWdKiZfFQMHIn3G/70CVESSBEucXQeHOHTKKbbru7
-         CfRxqfj/SxZOCX9PCr3+/B04LuVAwtZbgicmot2gq1HQiDaUgWf9b78bnHev3mrX2U2N
-         bpzu5k9htHVK8hA+8fLjoX+xod4XeVy6WAtUztfKu4cmaTUzsklVn/0XUWgk0jz9qE1K
-         hBEJ1MqzAJgJ05OLb2GRdUQofK/HIFh7mE8oWN8KjSF2VbfEYStJ+j6gWaO8wA6885Zo
-         LPjw==
-X-Gm-Message-State: AC+VfDxxNLMgt39/pqt/+CZFr61CtXrvA+2ZyHnNn3jt82/wOsed7J4+
-        DZvuarpVW7myjFTRlqJvfw==
-X-Google-Smtp-Source: ACHHUZ6BKEOfSW1H9tTyJANStK6mB/D2kcTclumsnvDTg5+rXrM1pBhCQZNmiN2c2Tm8s0XDxwJlew==
-X-Received: by 2002:a5d:925a:0:b0:777:de8a:79a with SMTP id e26-20020a5d925a000000b00777de8a079amr3556373iol.7.1686335517420;
-        Fri, 09 Jun 2023 11:31:57 -0700 (PDT)
+        bh=YlNAADpNJF/mKBUJMXBQL19JyS5QP2eSc/1ncOiaJgo=;
+        b=V31akDlWsyjIT7xBpjF3AeacnnttBI1toyF5AH+hGg2zQc1FiWUUvETztskHLQYlVJ
+         z+edPBSmzIGN5ntMoPRB15yKM8QPj95kbjddpOX+yBmuEV12Ap4QwBVV+7ZUk+1FTfx7
+         iVmKhhg/NMKUe+IPiWG/BODYKakCVvGo01S75whu/T9w0Bm/kmuN2jUfhFFnaiZt3wUg
+         eRXrLsAXkysVuhk0jhbwIl71yRQojIQoj5PYsCR+2KjCfLqe6XpF0ftSTBvOk8oKToFj
+         rgpsAU07bAYZZcVj2eKBuImCzwqkOoQ5/BPc8r416EHtFEOz/gFK0OwbdCDKFq/doGRi
+         bWvQ==
+X-Gm-Message-State: AC+VfDw6MhwMF58OFd7dshiqkz7pkZL0ibJvznnQKgGzvsGDVCtCjx0a
+        dQlE5oTl7Mivgz6qwlFKrLE0OwaSQA==
+X-Google-Smtp-Source: ACHHUZ65nio3oOXF55j2/m6pG2gB5Au1As9k+nXqcSl6Ga7kabOjC/bC5dTKzky/kBa7DkVQ2HKChg==
+X-Received: by 2002:a92:cc4a:0:b0:328:6412:df0e with SMTP id t10-20020a92cc4a000000b003286412df0emr2361677ilq.29.1686335533009;
+        Fri, 09 Jun 2023 11:32:13 -0700 (PDT)
 Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id y9-20020a02c009000000b004209b1863c4sm1097473jai.52.2023.06.09.11.31.56
+        by smtp.gmail.com with ESMTPSA id n6-20020a02a906000000b0041407c67451sm1091090jam.165.2023.06.09.11.32.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 11:31:56 -0700 (PDT)
-Received: (nullmailer pid 1766355 invoked by uid 1000);
-        Fri, 09 Jun 2023 18:31:55 -0000
+        Fri, 09 Jun 2023 11:32:12 -0700 (PDT)
+Received: (nullmailer pid 1766640 invoked by uid 1000);
+        Fri, 09 Jun 2023 18:32:10 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] powerpc: fsl: Use of_property_read_reg() to parse "reg"
-Date:   Fri,  9 Jun 2023 12:31:50 -0600
-Message-Id: <20230609183151.1766261-1-robh@kernel.org>
+To:     Lee Jones <lee@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] mfd: Use of_property_read_reg() to parse "reg"
+Date:   Fri,  9 Jun 2023 12:31:59 -0600
+Message-Id: <20230609183159.1766429-1-robh@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -67,95 +65,36 @@ untranslated "reg" address value.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- arch/powerpc/sysdev/fsl_rio.c | 14 +++-----------
- arch/powerpc/sysdev/fsl_rmu.c |  9 +--------
- 2 files changed, 4 insertions(+), 19 deletions(-)
+ drivers/mfd/mfd-core.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/arch/powerpc/sysdev/fsl_rio.c b/arch/powerpc/sysdev/fsl_rio.c
-index 18176d0df612..33ba1676ef5a 100644
---- a/arch/powerpc/sysdev/fsl_rio.c
-+++ b/arch/powerpc/sysdev/fsl_rio.c
-@@ -448,13 +448,11 @@ int fsl_rio_setup(struct platform_device *dev)
- 	struct rio_mport *port;
- 	struct rio_priv *priv;
- 	int rc = 0;
--	const u32 *dt_range, *cell, *port_index;
-+	const u32 *cell, *port_index;
- 	u32 active_ports = 0;
- 	struct device_node *np, *rmu_node;
--	int rlen;
- 	u32 ccsr;
- 	u64 range_start;
--	int aw;
- 	u32 i;
- 	static int tmp;
- 	struct device_node *rmu_np[MAX_MSG_UNIT_NUM] = {NULL};
-@@ -528,15 +526,12 @@ int fsl_rio_setup(struct platform_device *dev)
- 	dbell->bellirq = irq_of_parse_and_map(np, 1);
- 	dev_info(&dev->dev, "bellirq: %d\n", dbell->bellirq);
+diff --git a/drivers/mfd/mfd-core.c b/drivers/mfd/mfd-core.c
+index 695d50b3bac6..0ed7c0d7784e 100644
+--- a/drivers/mfd/mfd-core.c
++++ b/drivers/mfd/mfd-core.c
+@@ -102,7 +102,6 @@ static int mfd_match_of_node_to_dev(struct platform_device *pdev,
+ {
+ #if IS_ENABLED(CONFIG_OF)
+ 	struct mfd_of_node_entry *of_entry;
+-	const __be32 *reg;
+ 	u64 of_node_addr;
  
--	aw = of_n_addr_cells(np);
--	dt_range = of_get_property(np, "reg", &rlen);
--	if (!dt_range) {
-+	if (of_property_read_reg(np, 0, &range_start, NULL)) {
- 		pr_err("%pOF: unable to find 'reg' property\n",
- 			np);
- 		rc = -ENOMEM;
- 		goto err_pw;
- 	}
--	range_start = of_read_number(dt_range, aw);
- 	dbell->dbell_regs = (struct rio_dbell_regs *)(rmu_regs_win +
- 				(u32)range_start);
+ 	/* Skip if OF node has previously been allocated to a device */
+@@ -115,13 +114,10 @@ static int mfd_match_of_node_to_dev(struct platform_device *pdev,
+ 		goto allocate_of_node;
  
-@@ -556,15 +551,12 @@ int fsl_rio_setup(struct platform_device *dev)
- 	pw->dev = &dev->dev;
- 	pw->pwirq = irq_of_parse_and_map(np, 0);
- 	dev_info(&dev->dev, "pwirq: %d\n", pw->pwirq);
--	aw = of_n_addr_cells(np);
--	dt_range = of_get_property(np, "reg", &rlen);
--	if (!dt_range) {
-+	if (of_property_read_reg(np, 0, &range_start, NULL)) {
- 		pr_err("%pOF: unable to find 'reg' property\n",
- 			np);
- 		rc = -ENOMEM;
- 		goto err;
- 	}
--	range_start = of_read_number(dt_range, aw);
- 	pw->pw_regs = (struct rio_pw_regs *)(rmu_regs_win + (u32)range_start);
+ 	/* We only care about each node's first defined address */
+-	reg = of_get_address(np, 0, NULL, NULL);
+-	if (!reg)
++	if (of_property_read_reg(np, 0, &of_node_addr, NULL))
+ 		/* OF node does not contatin a 'reg' property to match to */
+ 		return -EAGAIN;
  
- 	/*set up ports node*/
-diff --git a/arch/powerpc/sysdev/fsl_rmu.c b/arch/powerpc/sysdev/fsl_rmu.c
-index 7a5e2e2b9d06..e27c275c9c2e 100644
---- a/arch/powerpc/sysdev/fsl_rmu.c
-+++ b/arch/powerpc/sysdev/fsl_rmu.c
-@@ -1067,9 +1067,6 @@ int fsl_rio_setup_rmu(struct rio_mport *mport, struct device_node *node)
- 	struct rio_priv *priv;
- 	struct fsl_rmu *rmu;
- 	u64 msg_start;
--	const u32 *msg_addr;
--	int mlen;
--	int aw;
- 
- 	if (!mport || !mport->priv)
- 		return -EINVAL;
-@@ -1086,16 +1083,12 @@ int fsl_rio_setup_rmu(struct rio_mport *mport, struct device_node *node)
- 	if (!rmu)
- 		return -ENOMEM;
- 
--	aw = of_n_addr_cells(node);
--	msg_addr = of_get_property(node, "reg", &mlen);
--	if (!msg_addr) {
-+	if (of_property_read_reg(node, 0, &msg_start, NULL)) {
- 		pr_err("%pOF: unable to find 'reg' property of message-unit\n",
- 			node);
- 		kfree(rmu);
- 		return -ENOMEM;
- 	}
--	msg_start = of_read_number(msg_addr, aw);
+-	of_node_addr = of_read_number(reg, of_n_addr_cells(np));
 -
- 	rmu->msg_regs = (struct rio_msg_regs *)
- 			(rmu_regs_win + (u32)msg_start);
- 
+ 	if (cell->of_reg != of_node_addr)
+ 		/* No match */
+ 		return -EAGAIN;
 -- 
 2.39.2
 
