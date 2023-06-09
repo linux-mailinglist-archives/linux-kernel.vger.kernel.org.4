@@ -2,187 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 875B77299B1
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 14:22:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3FDA7299C8
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 14:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240465AbjFIMWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 08:22:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33908 "EHLO
+        id S240571AbjFIMXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 08:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240212AbjFIMVo (ORCPT
+        with ESMTP id S240535AbjFIMW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 08:21:44 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E001A2;
-        Fri,  9 Jun 2023 05:21:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1686313305; x=1717849305;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=9ncIcj3gd8i50zq5ykvQL7thPizmXDbbeMftATY9VLU=;
-  b=RNuGqcDXU/uPRD531b42bVv3sz7IMKwG6Jrt+1TRsAWuzXghcCpsqdEK
-   Rql/LobN55rHQITg73WPzrpNIlJFM24ELH7UvR42L68l4f/KJmQD8PZlD
-   5EUz17qpGg+g1h5xIt45LwRdlpj90HUxVsFlZCz6a062bQifNp/pt436W
-   cY6ddS3+DGCCanHLdzITMyAyz9hLJd6ZXN32o4madi7mAcOn3Fl3wwoll
-   GG5vdb88Sq9TnAeyX6fOaaYm8gfA7XNiIjveKtUlTdAzzy2czNsy3FOlV
-   S9IwJZlXW8n62g1DZFt5nyyvKtU+l1EZp2rU2AwQ/SY4yXMUE/Gmeq8P2
-   A==;
-X-IronPort-AV: E=Sophos;i="6.00,229,1681196400"; 
-   d="scan'208";a="215345311"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Jun 2023 05:21:44 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 9 Jun 2023 05:21:41 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Fri, 9 Jun 2023 05:21:41 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JxoTud7pgPl5+EkNHVWn98j7CrPiEwpF5I9eRcGejlUZ9YNJ+3YeENAXPDVtSL955RBgcXRJbS2BsFQLdZLa+YglIF8UCKv4O3GUgc6BWP/P6BN3l79yJZ9iT9bauwIJNRaVCwzuXUJkf4tIP/JDVuRIXdr5tJEU1gWxVBpgJ0xdXD3+g6IhJqUwk7NeDoKctf/BPF15d32Mupi2ls2WnjJKpFQ45z7QJL9E/6g9eabdvHKy22u23k/OpKDgkmZaGgyfFOAxxT7A6iAyhp5SIAiPTHk6OOVoMMLsYI+uPoSvww/TbT3y0+mGQnibz4cqU6HnUw6GFlu8DtwooPfVuw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9ncIcj3gd8i50zq5ykvQL7thPizmXDbbeMftATY9VLU=;
- b=nnhCWIweAjNxEcR+1ohgN7Bu3FFSVVbZ5Ca+uQ3LR3kMAWUC32zBZz4rRvxa8T5LbsiszUBafUlqxBVTgONZSK1ULLUqjeCJBoNqWLn+VvT7OqFNjqzCw1mBkwnRbx2bIVEVIk7hKz/q+9Jf4HuvdAWuj4NmUbDotmeF4IIReWyuTI0VN1tb1f4M7yJr5wMste57H+wR96iSEfmQjAkcZMlgdJPI88GTuOZ3p/cSAqMGmEExCBODDiMLwnTpGA9scgZDJ2wq91eJ0aFZosIxC8ySTVxLz7rozOYPz1KBXNVBZRZE5T4XA3+q7ZNFTmkPPnfhIWrr7DgucK5o8M340Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9ncIcj3gd8i50zq5ykvQL7thPizmXDbbeMftATY9VLU=;
- b=s3Np7ZMN+jJm8PF0v7OL6T+ZVg/dBUPpJGkXmUuvzh10C/G5Zzr9zfKmobdvsSmBX11uKY5GLj2QSC/E4ilefV9zXZbDu9KI89tkWzb1Tw2KPVgP6mlO5cVd1wHfVvq8RXYlVV9LyeE+qJBwtrH6iYC07qJdBaOnC7TKEt7Diew=
-Received: from SJ2PR11MB7648.namprd11.prod.outlook.com (2603:10b6:a03:4c3::17)
- by SJ0PR11MB5895.namprd11.prod.outlook.com (2603:10b6:a03:42b::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.38; Fri, 9 Jun
- 2023 12:21:41 +0000
-Received: from SJ2PR11MB7648.namprd11.prod.outlook.com
- ([fe80::27bf:a69f:806f:67be]) by SJ2PR11MB7648.namprd11.prod.outlook.com
- ([fe80::27bf:a69f:806f:67be%5]) with mapi id 15.20.6433.024; Fri, 9 Jun 2023
- 12:21:41 +0000
-From:   <Claudiu.Beznea@microchip.com>
-To:     <krzysztof.kozlowski@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <daniel.lezcano@linaro.org>, <tglx@linutronix.de>,
-        <wim@linux-watchdog.org>, <linux@roeck-us.net>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-watchdog@vger.kernel.org>
-Subject: Re: [PATCH v3 1/3] dt-bindings: timer: atmel,at91sam9260-pit: convert
- to yaml
-Thread-Topic: [PATCH v3 1/3] dt-bindings: timer: atmel,at91sam9260-pit:
- convert to yaml
-Thread-Index: AQHZmszyykfNH4nxck+KJ4qLkcT+5w==
-Date:   Fri, 9 Jun 2023 12:21:41 +0000
-Message-ID: <897b1a45-dadc-eaa8-eb7d-c604ff723c2c@microchip.com>
-References: <20230530090758.1652329-1-claudiu.beznea@microchip.com>
- <20230530090758.1652329-2-claudiu.beznea@microchip.com>
- <46eced08-5bf6-3e4b-7a91-ff4d16c7dab9@linaro.org>
- <e816a8c2-e4fb-a608-f8e0-232135243c8a@microchip.com>
- <9e4a0756-8b42-81a7-5b5c-60c0ebea0d7f@linaro.org>
- <e8fd0340-da21-0cf7-7ec3-a3f278716c15@microchip.com>
- <5fc609e0-a70f-03e6-6ac2-db96a2ff7747@linaro.org>
-In-Reply-To: <5fc609e0-a70f-03e6-6ac2-db96a2ff7747@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ2PR11MB7648:EE_|SJ0PR11MB5895:EE_
-x-ms-office365-filtering-correlation-id: 4e0848d4-f1bc-41d6-9ff9-08db68e414c2
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: sFQT2snx0Qnhv2Y8Wc/Mdazibhg9hdVBDTTga9aC4d7RosH3qGOluL2VPcnNt2nYdr4TxdoEd8V/ofB5lzVrtGo+ZLGEE0LAveQVO8u4hK3icWkFJt4V8zmyQtAJ46uFMoUH9FtgRTfR1BccRaWbKOgvfN+pEyEdcUZ7mwdzH0203BOULGgwZFsy4cE9l2es3aEckO6rK7AlOJ+237oEAdLIp0CKkIOe2fhQ8csl2+eV2uD+jnCOxNK2vMDgjS/6EPgzjR/Y4GOKkNV3F7fdttEyxf0pGbIm2y++1l2CD+HtOQA/aJyL4TT1DL2334JAStHg5nUe4HAcKRQRX5URDJo7bW7sfrNXOeTMHS88pw9BOD2KOjIOr//aJLIcl0g1BctHGn4ElcEc1FGnltrSj+5Hr3CFXpGhcR7xcr+4vgULmXe5tL030F3Z/9NhLkojCIAA201K0JHKxWlc5cLKkS5IWkDCaBUHrCmGQ4k4cGLrS1EmVHDaV66wsydDGl2eVqg7HedUDasK/XL8k+70wo8gl1NzuDTH5YSG1xQAJDIHdUAB4CnyKKLBE9rI3XU2rnh/y4v3FSjxCHYP9zi8lciDAmUHpvXMsLJ/p+QYDID8UbLM3jIzL/h0oRGWAJ9C0GCXzBsmZ5LKnqrzZqvSByYP0a36jrzGpCm2p0Obz2OUJ6u4Wi+KVkHxZRotkxZbBOmsgEjwm3m9x3PowZdJ4Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7648.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(376002)(39860400002)(346002)(366004)(396003)(451199021)(66556008)(66476007)(66446008)(64756008)(66946007)(76116006)(478600001)(54906003)(110136005)(91956017)(8676002)(36756003)(8936002)(5660300002)(71200400001)(31686004)(4326008)(316002)(41300700001)(6486002)(38100700002)(53546011)(921005)(122000001)(186003)(6512007)(38070700005)(6506007)(26005)(7416002)(86362001)(31696002)(2616005)(4744005)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?emZkTld6REFEalhyNDJxOVF2N2NTZFRFRjkrTGZzWUoyUG5pK3IxNWRpTmNB?=
- =?utf-8?B?dXpLQ3BNNWJPeFVPcVJWbGk0V3ViWitUY0hkclc5NmFiWFpBZU95WkdQbk9q?=
- =?utf-8?B?M3g0WVRPY2pRYkZsWHBWNTZFWG1pM3Z6TUE2T2dZYnJ6bTVKMG51Z0FPL2R4?=
- =?utf-8?B?ZXlIMkFudlpVOEU1U0FlM1VCRkFIQURDSWhyeXF2cnVQYTJLRjdJd3BPOXBz?=
- =?utf-8?B?cGY2YmFHcDRYY1Jud09uOFBlMnNGOFMyUU5kL0FpMm5jTUgvQnc0SXhCMWNi?=
- =?utf-8?B?Qkw1RDZGNGdWazRiSWtCS3ZCNzVpZFRQK0FNdytpdkFHMWovTHdra2hTSVMx?=
- =?utf-8?B?cVVrSGhpb2RXLytjZHNYcUNjVUt6d2UrU1RYTlVTR0FsdmQ1SWpZTG1rSDhC?=
- =?utf-8?B?SmNFYmtqZlhLTlA2c0FVV2kxS3A3LzQ0Q3Byazl2Y3MyWnJ0dmpLWXI3SHd6?=
- =?utf-8?B?cmdHR1BJdHlyU3BldmsxNzhHTkh0SDNBTnIxajU0RlFVSUFGVTdLZVRhT2sx?=
- =?utf-8?B?S3pPV2dPaE5OR2hFdm8xcURMeE5WMHQ4dVpqeSs5YzVnTHZRRDVodXpMWWt2?=
- =?utf-8?B?NW12a0hIYTU0WFhwdC9ZZlRQMEdZQ1V2WVNHNS9HNnFseVc5SVlHcmZyQXhO?=
- =?utf-8?B?U1J6bzlHY3pNSVdCeFNYOUF1UzMvYXlVaGxxeUREZEl4UEpBRVRwMlJsMGJC?=
- =?utf-8?B?K1Y5Zldud0xIZjV0eHIybWpSVnEwMXpEL2pVMnV1Z0tXcWlqRjZ3U1hNc21v?=
- =?utf-8?B?akRZRGNWQkVXOU1paWxTd3BHSmc4UFgwYWNjNVRlVVBxSnBVbUIxem45aEsw?=
- =?utf-8?B?M0p1RCtRRy9VZWNuV3BtZW12LzUwYzBsYlFzSHJxTTFhN0dtb2Jkb05OMmMr?=
- =?utf-8?B?NCtncHpyS1cxRFQxQzVGU3VHQ3AzVDhHY1lPMlRmZXhyMEdXOWNMR3lvU3JN?=
- =?utf-8?B?R2tkL1JFRXRNMUp5dVV0akJCVG5BcXhLdnRBSnJ6TTlYUllPMlV1M0NDanVB?=
- =?utf-8?B?MHhZS2FFYVFNSjZDbThpYmI3NVU3eEV2ZDdXejdmVnNGVVBYT0R1WU9yeXc4?=
- =?utf-8?B?a2U4WXFiWDgzeXNVcmJjdkpJb1JxQzVNUXF0MUJlSE8xWDJqWlVMWm9jOXNx?=
- =?utf-8?B?YU1aZXBNcEwybEhEdm9tR1BTTVExMEhiZkJsOHdtejZidDhFcXI4MzA3Z1E2?=
- =?utf-8?B?WEIzSG9SamVHZ2NrdE5MUVc5Vm0wNTBLRGk2NDlIOU1vZGg5T21xUTREamtQ?=
- =?utf-8?B?aWduOEJYYkh1NzM4OUk3RHl0ZWdsTVVabjFvNXFVN1F0MjVoZExsWkVjV3Fa?=
- =?utf-8?B?NXdQck5ITXFzZFZIU01XTzRnQ2VsditDUWpoODBzeFpCeHhiVU9qTkRBYlRS?=
- =?utf-8?B?NWo4QWFBQlhMNTMyOHNWNy9xQUJtd1FiZWxNSnVKenc1SmZuQThUV3EvYnFu?=
- =?utf-8?B?eDJ6R2pueDRZRmVlMUNGblNZcHNySmdjdlNBc3hjc1E0bTlIUjMwdjh0eDll?=
- =?utf-8?B?TTJHamM0bXNoM1Z5RTlEeDBLRU12NStmd1JtSTc2NjVISW5VKzZ0cDV2MHh6?=
- =?utf-8?B?Ym9PVGhFS3hPTzFWSUZUcTBiZ2VEeC9BY2MrOEZTV0s2ZE5hN2k4S3RxdXpi?=
- =?utf-8?B?QkJ0RGNDWVF3bURMZTVpVkdvQ29oMDdYN3FkK2R1Yk1xeUhyb3pGZ3NmMmV6?=
- =?utf-8?B?VU42YlViYk1oRmhLenhJbmJJUklhMVY3ZzZkMUVjaU1wQk80eUdSaTROQk5x?=
- =?utf-8?B?QXhYUWpXVjBBb2JmSHU0WTI3bzQ2UFRuYVkzVzBPNEVrWkFzWU44QmJKWXR6?=
- =?utf-8?B?RjRKWFJQZkhNRHQ0aWtDMEcwa1VMNUpEdDg5YXNER1lDQnhETnA5QnhwalVh?=
- =?utf-8?B?SGdYTTlZMXlsYVZuSkJwVVVud25OUU4wd0tuOG43N1l0bGp4R0hOK25wQWVE?=
- =?utf-8?B?TkZpY3VjcUhSWEVuUVpFYU5iNVoxN3lHV2FRbUZ2dG1MSVZGNERLYU15UlJ2?=
- =?utf-8?B?Z2UrMlZxRjZPUUMyYUdnTjlRd0hEUVVkR29BYTRrRlNoRGdNZkJZUE1rTlFX?=
- =?utf-8?B?K1BlTUhSbkNCbThsQVlOS1QvM2FJQXVKWVo2TDcyWTIzcHEwL0ZFVi84VXdG?=
- =?utf-8?B?V1VqK08xWkNJZHZWckVvNHlFZGZEVG1BY3ZsZ2JvTDdaa3g0cmNJNmFwUkN6?=
- =?utf-8?B?MHc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <57F73C85590FA34995B966558C3B0210@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Fri, 9 Jun 2023 08:22:58 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8FE23AA2;
+        Fri,  9 Jun 2023 05:22:22 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8AxEel9GYNkBRYBAA--.1313S3;
+        Fri, 09 Jun 2023 20:22:21 +0800 (CST)
+Received: from [10.20.42.43] (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxReR6GYNkDyELAA--.33801S3;
+        Fri, 09 Jun 2023 20:22:18 +0800 (CST)
+Message-ID: <8e7fe36d-0d0d-bab4-9ace-a738d7a48111@loongson.cn>
+Date:   Fri, 9 Jun 2023 20:22:18 +0800
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7648.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4e0848d4-f1bc-41d6-9ff9-08db68e414c2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jun 2023 12:21:41.2867
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: a5pSDwvEh57meLvL2iMUFwcPNFHBQDec7Ab5tPazGLWR81a7gFzoqPd6bd4lklcLjnGHxWax4NRMw1Uy6+TTh2MVJHrMF5/l0iNTiHD8j6A=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5895
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [Intel-gfx] [PATCH v3 3/4] PCI/VGA: only deal with VGA class
+ devices
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Sui Jingfeng <15330273260@189.cn>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        Christian Konig <christian.koenig@amd.com>,
+        Pan Xinhui <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Lijo Lazar <lijo.lazar@amd.com>,
+        YiPeng Chai <YiPeng.Chai@amd.com>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
+        Bokun Zhang <Bokun.Zhang@amd.com>,
+        Ville Syrjala <ville.syrjala@linux.intel.com>,
+        Li Yi <liyi@loongson.cn>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        Yi Liu <yi.l.liu@intel.com>, kvm@vger.kernel.org,
+        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        loongson-kernel@lists.loongnix.cn, amd-gfx@lists.freedesktop.org,
+        linux-pci@vger.kernel.org
+References: <20230608191221.GA1209912@bhelgaas>
+Content-Language: en-US
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+Organization: Loongson
+In-Reply-To: <20230608191221.GA1209912@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxReR6GYNkDyELAA--.33801S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj93XoWxtFyUWw4rAr48JFykGFykZwc_yoW7ZF4Dpa
+        yrGayfKrWkWF17Cryav3WUZFy5u39Yya4fKr4Ykw1YkanxCryFqFyrKrW5A3W7JrZrGF10
+        vFWUt3W7Wa1qqagCm3ZEXasCq-sJn29KB7ZKAUJUUUUd529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUPlb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVWxJr0_GcWln4kS14v26r1q6r43M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q
+        6rW5McIj6I8E87Iv67AKxVW8Jr0_Cr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
+        xGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26rWY6Fy7MxAIw28IcxkI7VAK
+        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1q6r43MI8I3I0E5I8CrV
+        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWrXVW8Jr1l
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4U
+        JVWxJr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07
+        jK6wAUUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMDkuMDYuMjAyMyAxNToxOCwgS3J6eXN6dG9mIEtvemxvd3NraSB3cm90ZToNCj4gRVhURVJO
-QUwgRU1BSUw6IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5
-b3Uga25vdyB0aGUgY29udGVudCBpcyBzYWZlDQo+IA0KPiBPbiAwOS8wNi8yMDIzIDE0OjA5LCBD
-bGF1ZGl1LkJlem5lYUBtaWNyb2NoaXAuY29tIHdyb3RlOg0KPj4+Pj4NCj4+Pj4+IGludGVycnVw
-dHM/IFRoZXkgYXJlIHN0aWxsIHJlcXVpcmVkLCBzbyB3aHkgbm8gZGVzY3JpcHRpb24gaGVyZT8N
-Cj4+Pj4NCj4+Pj4gSXQgd2FzIGhlcmUgaW4gdGhlIHByZXZpb3VzIHZlcnNpb25zIGJ1dCBDb25v
-ciBzdWdnZXN0ZWQgdG8gcmVtb3ZlIGl0IGFzIGl0DQo+Pj4+IHdhcyBub3RoaW5nIHNwZWNpZmlj
-IGFib3V0IHRoaXMgZGVzY3JpcHRpb24uIEZvciB0aGUgaWYtdGhlbiBicmFuY2ggSSBrZXB0DQo+
-Pj4+IGl0IHRvIHNwZWNpZnkgdGhhdCB0aGUgaW50ZXJydXB0IGlzIHNoYXJlIHdpdGggb3RoZXIg
-ZGV2aWNlcy4gSW4gdGhpcw0KPj4+PiBicmFuY2ggdGhlIGludGVycnVwdCBpcyBvbmx5IGZvciB0
-aGUgdGltZXIgaXRzZWxmLiBXaXRoIHRoaXMsIHdvdWxkIHlvdQ0KPj4+PiBzdGlsbCBwcmVmZXIg
-dG8gYWRkIGl0IGJhY2s/DQo+Pj4NCj4+PiBJIGp1c3QgZG9uJ3QgdW5kZXJzdGFuZCB3aHkgaW50
-ZXJydXB0cyBhcmUgaW4gb25lIGFybSBvZiB0aGUgaWY6IGFuZCBub3QNCj4+PiBpbiB0aGUgb3Ro
-ZXIuDQo+Pj4NCj4+DQo+PiBBcyBwcmV2aW91c2x5IG1lbnRpb25lZCwgQ29ub3Igc3VnZ2VzdGVk
-IHRvIGhhdmUgaXQgbGlrZSB0aGlzLg0KPj4NCj4gDQo+IG9rDQoNCldvdWxkIHlvdSBzdGlsbCBw
-cmVmZXIgdG8gYWRkIGJhY2sgaW50ZXJydXB0IGRlc2NyaXB0aW9uIG9uIGJvdGggYnJhbmNoZXMN
-Cm9mIGlmPw0KDQo+IA0KPiBCZXN0IHJlZ2FyZHMsDQo+IEtyenlzenRvZg0KPiANCg0K
+Hi,
+
+On 2023/6/9 03:12, Bjorn Helgaas wrote:
+> Start with verb and capitalize to match ("Deal only with ...")
+>
+> On Thu, Jun 08, 2023 at 07:43:21PM +0800, Sui Jingfeng wrote:
+>> From: Sui Jingfeng <suijingfeng@loongson.cn>
+>>
+>> vgaarb only deal with the VGA devcie(pdev->class == 0x0300), so replace the
+>> pci_get_subsys() function with pci_get_class(). Filter the non pci display
+>> device out. There no need to process the non display PCI device.
+> s/non pci/non-PCI/
+> s/non display/non-display/
+>
+> This is fine, and I'll merge this, but someday I would like to get rid
+> of the bus_register_notifier() and call vga_arbiter_add_pci_device()
+> and vga_arbiter_del_pci_device() directly from the PCI core.
+
+Nice idea!
+
+
+But I'm wondering there are traps in this.
+
+The pci_notifier in vgaarb.c is still need on Mips platform.
+
+Because of loading order problems.
+
+On MIPS system, PCI devices are enumerated by pcibios_init(),
+
+which runs after vga_arb_device_init(). This is true until now.
+
+When vga_arb_device_init() function get called, it will capture nothing.
+
+On that time, the system have no PCI device enumerated.
+
+Because of this, there are various problems in the past.
+
+This is the reason we still need the notifier,
+
+we need a way to capture the PCI display device after vgaarb already 
+loaded(finished).
+
+
+On complex case, there are ASpeed BMC, loongson integrated display 
+controller,
+
+and radeon discrete video card co-exist on Loongson 3B4000 server.
+
+I have fixed various bug at our downstream(linux-4.19) environment.
+
+
+I have fixed a bug on downstream involved with aspeed bmc, by workaround[1].
+
+Chen Huacai grabbing my patch[1] and rewrite it, submit together with 
+him-self's.
+
+Its fine,  but those patch still look paleness in the front of Loongson 
+integrated display controller.
+
+Loongson integrated display controller don't has a dedicated VRAM bar.
+
+vga_is_firmware_default() will lose its effectiveness then.
+
+This is the reason we reveal our patch(0004 in this series) to face 
+upstream.
+
+Its not only for loongson integrated display controller through.
+
+Its not uncommon that ARM servers have A aspeed BMC and discrete amdgpu 
+or old radeon card.
+
+Let the device drivers gave us a hint probably can help to resolve 
+multi-video card co-exist
+
+problem.
+
+Consider that sometime user want to use integrate gpu, sometime user 
+want to use discrete gpu.
+
+Also, during driver developing(or debugging),
+
+driver writer may want override the default boot device.
+
+
+vgaarb probable shouldn't make the decision
+
+without giving the device driver a chance to override.
+
+
+Beside,  vga_is_firmware_default() only apply for PCI display device.
+
+On ARM64 system, there are a lot of platform device.
+
+If we move this function back to the device driver,
+
+it probably applicable for a platform display controller + one/two PCI 
+display devices case.
+
+
+We find a method at downstream during we get efifb works LoongArch platform.
+
+We can utilize the screen_info, screen_info say where's the firmware 
+framebuffer is located at.
+
+Drivers for specific hardware platform perhaps know more clearly than 
+vgaarb.
+
+if it is the default boot device.
+
+
+[1] 
+https://lore.kernel.org/all/20210514080025.1828197-6-chenhuacai@loongson.cn/
+
+> Or if you wanted to do that now, that would be even better :)
+>
+> Bjorn
+>
+>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+>> ---
+>>   drivers/pci/vgaarb.c | 22 ++++++++++++----------
+>>   1 file changed, 12 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/drivers/pci/vgaarb.c b/drivers/pci/vgaarb.c
+>> index 7f0347f4f6fd..b0bf4952a95d 100644
+>> --- a/drivers/pci/vgaarb.c
+>> +++ b/drivers/pci/vgaarb.c
+>> @@ -756,10 +756,6 @@ static bool vga_arbiter_add_pci_device(struct pci_dev *pdev)
+>>   	struct pci_dev *bridge;
+>>   	u16 cmd;
+>>   
+>> -	/* Only deal with VGA class devices */
+>> -	if ((pdev->class >> 8) != PCI_CLASS_DISPLAY_VGA)
+>> -		return false;
+>> -
+>>   	/* Allocate structure */
+>>   	vgadev = kzalloc(sizeof(struct vga_device), GFP_KERNEL);
+>>   	if (vgadev == NULL) {
+>> @@ -1499,7 +1495,9 @@ static int pci_notify(struct notifier_block *nb, unsigned long action,
+>>   	struct pci_dev *pdev = to_pci_dev(dev);
+>>   	bool notify = false;
+>>   
+>> -	vgaarb_dbg(dev, "%s\n", __func__);
+>> +	/* Only deal with VGA class devices */
+>> +	if ((pdev->class >> 8) != PCI_CLASS_DISPLAY_VGA)
+>> +		return 0;
+>>   
+>>   	/* For now we're only intereted in devices added and removed. I didn't
+>>   	 * test this thing here, so someone needs to double check for the
+>> @@ -1509,6 +1507,8 @@ static int pci_notify(struct notifier_block *nb, unsigned long action,
+>>   	else if (action == BUS_NOTIFY_DEL_DEVICE)
+>>   		notify = vga_arbiter_del_pci_device(pdev);
+>>   
+>> +	vgaarb_dbg(dev, "%s: action = %lu\n", __func__, action);
+>> +
+>>   	if (notify)
+>>   		vga_arbiter_notify_clients();
+>>   	return 0;
+>> @@ -1533,8 +1533,8 @@ static struct miscdevice vga_arb_device = {
+>>   
+>>   static int __init vga_arb_device_init(void)
+>>   {
+>> +	struct pci_dev *pdev = NULL;
+>>   	int rc;
+>> -	struct pci_dev *pdev;
+>>   
+>>   	rc = misc_register(&vga_arb_device);
+>>   	if (rc < 0)
+>> @@ -1545,11 +1545,13 @@ static int __init vga_arb_device_init(void)
+>>   	/* We add all PCI devices satisfying VGA class in the arbiter by
+>>   	 * default
+>>   	 */
+>> -	pdev = NULL;
+>> -	while ((pdev =
+>> -		pci_get_subsys(PCI_ANY_ID, PCI_ANY_ID, PCI_ANY_ID,
+>> -			       PCI_ANY_ID, pdev)) != NULL)
+>> +	while (1) {
+>> +		pdev = pci_get_class(PCI_CLASS_DISPLAY_VGA << 8, pdev);
+>> +		if (!pdev)
+>> +			break;
+>> +
+>>   		vga_arbiter_add_pci_device(pdev);
+>> +	};
+>>   
+>>   	pr_info("loaded\n");
+>>   	return rc;
+>> -- 
+>> 2.25.1
+>>
+-- 
+Jingfeng
+
