@@ -2,80 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6623A729D21
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:41:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F48E729D29
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241325AbjFIOlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 10:41:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59164 "EHLO
+        id S241256AbjFIOnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 10:43:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240870AbjFIOlQ (ORCPT
+        with ESMTP id S230431AbjFIOnA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 10:41:16 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE46CE43
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 07:41:15 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f7a8089709so19089215e9.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 07:41:15 -0700 (PDT)
+        Fri, 9 Jun 2023 10:43:00 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC54E43;
+        Fri,  9 Jun 2023 07:42:59 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f7378a75c0so13981575e9.3;
+        Fri, 09 Jun 2023 07:42:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686321674; x=1688913674;
+        d=gmail.com; s=20221208; t=1686321778; x=1688913778;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=CR0c0Jmte6FeApUkgHJzlSR9/4YGGRJ45CFKhUONxZs=;
-        b=ljyF103rTiR0ysRbp8iTZkhShz0Q4wQtsi4SiCh2Z9pCwZ+ITBYkoJFpAwLZ0L/DBf
-         dVde8h40DygaZTGXlquTqrFKGhS/fPQXkH3rfBZCFLnXegcLj7R4fwqdhKeSRXc9NGAK
-         pOSsUYKkoduu+yFfBsLJXfv2Al7tu01/P+iLRTw5r0H2F4h46VX6M0UKyfU7h4Mkb1Qk
-         X0fwqcjc2oruhg7mhpvmyucGXNcHgdB+BZhrMkFLM4f2A6UXmPJvRWIdXy75kRfn+1gF
-         TCOFRB20afPYt8QayEUeMFAfMVHHh8ca6M3sl1xH7PD5z9+F/QKbK+8wKI2NYF9ADAxa
-         bxQg==
+        bh=zO8ENOnSimS6n7gy9/kTHBLX2Up3InmL5+w7nO9x+a4=;
+        b=mFpiqwqWl2vdGhX6AJu3w1NHIIZoQi6trxq0Lqp+ylDiBSnZiasMfSJxrk8StXj146
+         bsFIpsnfeKf/pNWC/J7X6wDvXx3YJx06hGc/aoUNjRZBE/hojOLO4TolDHwlNlaktdLB
+         HgJSDRPKW625qqxAZHmsfjs0fqEDTf5DUQ51s+DY78dzKkpZzUuTrKbgfipgdJnAplvh
+         7yUqJSSwDnZ12P5iQD6U38lPC22hA1OGjLKncZsA/O9leoWMO2Znn9bIuG116hNxi/i/
+         i/D4QRmYjQ8FgsH9xDbo33qHBT4pcYmPKSkqW7tbbY8IkqOCwYxOFtLXo3VsmZ6XSx9b
+         mR2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686321674; x=1688913674;
+        d=1e100.net; s=20221208; t=1686321778; x=1688913778;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CR0c0Jmte6FeApUkgHJzlSR9/4YGGRJ45CFKhUONxZs=;
-        b=UB8OdnPi/ifZp678sJWwAK7Qp2wL9Z3ssY3PGL3HMqUpaHitL2r8UTaWMNyVF2Es3h
-         FzxqKPeVoBysVB/hcKIXQQh1UBDY0ie8e7mdEjdzCHm5JJJej7mzh4zBLxSKeIzvWE9d
-         O9l4dRvla7Et7cZsbTQWz/VjR3rjis9OhEtZ5bhHtKrslX3WvSaqqQvL5RMTmmRx1WcK
-         zYyIymGSGUhLdvyea4NLmcNojZPj1qegRHvvSbIpoR8tNQjVjzCjoMIF/RnpOg0DHQbu
-         G/mcKSZAmiwKXDL81WUWP95ZoCrIHjUmnt3gQotj9CH/Bj2gQ9ZglPzi9Emfie6gE9Is
-         MK5g==
-X-Gm-Message-State: AC+VfDyGFwxgyCII6ussq/rO8JoU1KkkGaan4LqW7Q/G1BhpaSIEDthn
-        B2v/JMFuuLxdSZkd/5vss7o/+k8zfgo=
-X-Google-Smtp-Source: ACHHUZ79Lfg6kM1VebrkIaLd3ziJZPC6iHeyxpXvPXdX4Z7/4UxGlL7mbxQG4cIZxJ4v2F+J48mv2Q==
-X-Received: by 2002:a5d:6104:0:b0:30a:e7cb:793 with SMTP id v4-20020a5d6104000000b0030ae7cb0793mr1363370wrt.15.1686321674019;
-        Fri, 09 Jun 2023 07:41:14 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id q25-20020a7bce99000000b003f17848673fsm2883516wmj.27.2023.06.09.07.41.12
+        bh=zO8ENOnSimS6n7gy9/kTHBLX2Up3InmL5+w7nO9x+a4=;
+        b=jupv8FwBpt5W/GU03ZIaNx+FF0tAzZEazn0pm4azyhOrINXUMZzLz0IHv70XFMoZN+
+         6AdQCIOv6JgVfhgFKfTMvpwFax03UqmN5a8FDi70FryeCPmOiEoY4v6pCWtboxWnO+TN
+         k/OkURQa88BJA/XR9ALSlo8uJQNYjugUnmxzs7yfSl7Snhy2bCx+B8wcHKj1qSl9XjI0
+         yE8ycxdWpsHw12b477U/ESXNk8Bo1jZO3W6kKJdw0zXB8thMcDc3SWpgYD0VnWU4Ba16
+         RFLYhoND7Y1J8DokiQ4SYSkHbUTLJiYIknpn55TqhOZxmwmcsR5A46mr0LlhGNInihSO
+         xrjA==
+X-Gm-Message-State: AC+VfDxo0wSvoo17fyoG8vwR/I5mhw6uw1xX/URO+eCr/Ct0ysi5YuI2
+        obpi1pS8+n1yqvs+eX6F6hk=
+X-Google-Smtp-Source: ACHHUZ7zRycn6Zhb+VOFkhu/NrKADDjabWSSsCk+2juGpn7Kl7FYm9QcZHMOp4VDrTurTF5Mu+KZFw==
+X-Received: by 2002:adf:fd43:0:b0:309:3df3:8e0f with SMTP id h3-20020adffd43000000b003093df38e0fmr1093526wrs.51.1686321778019;
+        Fri, 09 Jun 2023 07:42:58 -0700 (PDT)
+Received: from ?IPV6:2a10:bac0:b000:7727:c9f1:3163:7113:1dbf? ([2a10:bac0:b000:7727:c9f1:3163:7113:1dbf])
+        by smtp.gmail.com with ESMTPSA id x5-20020adff0c5000000b003078a3f3a24sm4637525wro.114.2023.06.09.07.42.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Jun 2023 07:41:13 -0700 (PDT)
-Message-ID: <1c52e05f-33bf-b182-dd4d-18aa43564e59@gmail.com>
-Date:   Fri, 9 Jun 2023 16:41:11 +0200
+        Fri, 09 Jun 2023 07:42:57 -0700 (PDT)
+Message-ID: <51f4c068-7dbc-6f7d-fa49-b98807b74bee@gmail.com>
+Date:   Fri, 9 Jun 2023 17:42:55 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v8 2/2] soc: mediatek: remove DDP_DOMPONENT_DITHER from
- enum
-Content-Language: en-US, ca-ES, es-ES
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        "Jason-JH.Lin" <jason-jh.lin@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Nathan Lu <nathan.lu@mediatek.com>,
-        Singo Chang <singo.chang@mediatek.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        Nancy Lin <nancy.lin@mediatek.com>,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230306080659.15261-1-jason-jh.lin@mediatek.com>
- <20230306080659.15261-3-jason-jh.lin@mediatek.com>
- <CAGXv+5EPktjMABhtWf9dL-25dAe=Mf4=BSMmE+=4m2WisDXXFQ@mail.gmail.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <CAGXv+5EPktjMABhtWf9dL-25dAe=Mf4=BSMmE+=4m2WisDXXFQ@mail.gmail.com>
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v11 06/20] x86/virt/tdx: Handle SEAMCALL running out of
+ entropy error
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-mm@kvack.org, dave.hansen@intel.com,
+        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
+        peterz@infradead.org, tglx@linutronix.de, seanjc@google.com,
+        pbonzini@redhat.com, david@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, ying.huang@intel.com,
+        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
+        sagis@google.com, imammedo@redhat.com
+References: <cover.1685887183.git.kai.huang@intel.com>
+ <9b3582c9f3a81ae68b32d9997fcd20baecb63b9b.1685887183.git.kai.huang@intel.com>
+From:   Nikolay Borisov <n.borisov.lkml@gmail.com>
+In-Reply-To: <9b3582c9f3a81ae68b32d9997fcd20baecb63b9b.1685887183.git.kai.huang@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -90,51 +87,51 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 31/05/2023 09:43, Chen-Yu Tsai wrote:
-> Hi Matthias,
+On 4.06.23 г. 17:27 ч., Kai Huang wrote:
+> Certain SEAMCALL leaf functions may return error due to running out of
+> entropy, in which case the SEAMCALL should be retried as suggested by
+> the TDX spec.
 > 
-> On Mon, Mar 6, 2023 at 4:07 PM Jason-JH.Lin <jason-jh.lin@mediatek.com> wrote:
->>
->> After mmsys and drm change DITHER enum to DDP_COMPONENT_DITHER0,
->> mmsys header can remove the useless DDP_COMPONENT_DITHER enum.
->>
->> Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
->> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
->> Acked-by: Matthias Brugger <matthias.bgg@gmail.com>
+> Handle this case in SEAMCALL common function.  Mimic the existing
+> rdrand_long() to retry RDRAND_RETRY_LOOPS times.
 > 
-> CK didn't pick up this patch. Since the other patch already got picked up
-> in v6.4-rc1, could you merge this for v6.5?
+> Signed-off-by: Kai Huang <kai.huang@intel.com>
+> ---
+> 
+> v10 -> v11:
+>   - New patch
+> 
+> ---
+>   arch/x86/virt/vmx/tdx/tdx.c | 15 ++++++++++++++-
+>   arch/x86/virt/vmx/tdx/tdx.h | 17 +++++++++++++++++
+>   2 files changed, 31 insertions(+), 1 deletion(-)
 > 
 
-Yes, I gave an acked-by as I thought that CK will take both of them. Anyway 
-applied now.
+<snip>
 
-Matthias
+> diff --git a/arch/x86/virt/vmx/tdx/tdx.h b/arch/x86/virt/vmx/tdx/tdx.h
+> index 48ad1a1ba737..55dbb1b8c971 100644
+> --- a/arch/x86/virt/vmx/tdx/tdx.h
+> +++ b/arch/x86/virt/vmx/tdx/tdx.h
+> @@ -4,6 +4,23 @@
+>   
+>   #include <linux/types.h>
+>   
+> +/*
+> + * This file contains both macros and data structures defined by the TDX
+> + * architecture and Linux defined software data structures and functions.
+> + * The two should not be mixed together for better readability.  The
+> + * architectural definitions come first.
+> + */
+> +
+> +/*
+> + * TDX SEAMCALL error codes
+> + */
+> +#define TDX_RND_NO_ENTROPY	0x8000020300000000ULL
 
-> 
-> Thanks
-> ChenYu
-> 
-> 
->> ---
->>   include/linux/soc/mediatek/mtk-mmsys.h | 3 +--
->>   1 file changed, 1 insertion(+), 2 deletions(-)
->>
->> diff --git a/include/linux/soc/mediatek/mtk-mmsys.h b/include/linux/soc/mediatek/mtk-mmsys.h
->> index dc2963a0a0f7..8eb5846985b4 100644
->> --- a/include/linux/soc/mediatek/mtk-mmsys.h
->> +++ b/include/linux/soc/mediatek/mtk-mmsys.h
->> @@ -27,8 +27,7 @@ enum mtk_ddp_comp_id {
->>          DDP_COMPONENT_CCORR,
->>          DDP_COMPONENT_COLOR0,
->>          DDP_COMPONENT_COLOR1,
->> -       DDP_COMPONENT_DITHER,
->> -       DDP_COMPONENT_DITHER0 = DDP_COMPONENT_DITHER,
->> +       DDP_COMPONENT_DITHER0,
->>          DDP_COMPONENT_DITHER1,
->>          DDP_COMPONENT_DP_INTF0,
->>          DDP_COMPONENT_DP_INTF1,
->> --
->> 2.18.0
->>
+Where is this return value documented, in TDX module 1.0 spec there are 
+only: 8000020[123]00000000 specified and there's 80000800 
+(TDX_KEY_GENERATION_FAILED) and its description mentions the possible 
+failure due to lack of entropy?
+
+<snip>
