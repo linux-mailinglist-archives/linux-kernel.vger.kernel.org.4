@@ -2,76 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 647D3728E5A
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 05:13:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11911728E5D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 05:13:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233332AbjFIDNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 23:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54946 "EHLO
+        id S234442AbjFIDN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 23:13:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233218AbjFIDNR (ORCPT
+        with ESMTP id S237663AbjFIDNY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 23:13:17 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7DD30E7
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 20:13:16 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-173-48-82-39.bstnma.fios.verizon.net [173.48.82.39])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 3593D9eW023654
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 8 Jun 2023 23:13:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1686280390; bh=kKz3TNI01xeiIHWRqVFV2zRQes4mge4CNRGnTAb7Z+M=;
-        h=Date:From:To:Cc:Subject;
-        b=oqJO11JezYfiVCTXQAt1tdldwLWcIZ5kvOYIrUA6vLoGY6PR3ptinzmrnQvzRUl2b
-         8kdKJqOcgOg3QXxj5EohmbFn4nx32V5xcN0RffjC2lg9Z5E/N8TGeGn3pV5sEfs5xm
-         y8Ho0cwCHyY1m0GR+DIhd2Dodc0quWtUCuGYX1ZtC6XIHPbCTsbsRdHcnkEqrUhsQU
-         IvZZ+4Mv11CV+m/+9T7gfrca05GR7LqNNpYgFvXn9qtiLO0zQ4m+l+jgj3OZT+4aoi
-         nTVco4xh/PdO3Ku3YkR7m1Yk9TYTKm4TXqbQroSiRHbsHSJAE/o9E0xd8G1pSxXcgG
-         4z/X9TAraBwrA==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 0824C15C00B0; Thu,  8 Jun 2023 23:13:09 -0400 (EDT)
-Date:   Thu, 8 Jun 2023 23:13:09 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] ext4 regression fix for 6.4-rc6
-Message-ID: <20230609031309.GA1458078@mit.edu>
+        Thu, 8 Jun 2023 23:13:24 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D976F30E7;
+        Thu,  8 Jun 2023 20:13:22 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8DxRunRmIJkr90AAA--.866S3;
+        Fri, 09 Jun 2023 11:13:21 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxGOXQmIJkzJsJAA--.29907S3;
+        Fri, 09 Jun 2023 11:13:20 +0800 (CST)
+Subject: Re: [PATCH v12 1/2] spi: add loongson spi bindings
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230608072819.25930-1-zhuyinbo@loongson.cn>
+ <20230608072819.25930-2-zhuyinbo@loongson.cn>
+ <6ebed84c-2b42-c981-7b3f-e71cc88e4c2c@linaro.org>
+ <4bf747c4-b767-b20c-e00f-724b50f44edb@loongson.cn>
+ <6bfc2a22-6901-0858-7b90-bc4c52c66810@linaro.org>
+ <bd2d7830-3ab6-0906-b06a-83d3e0a96749@loongson.cn>
+ <11ca2b90-544d-18c2-fb15-7909ca60507f@linaro.org>
+ <f6d4ecb5-e9df-346e-4aab-772fd01689c8@loongson.cn>
+ <a9952e76-1204-5bc7-7856-0c7f8a411d76@linaro.org>
+ <9c94397d-1e31-02fa-bdbe-af888c72eac4@loongson.cn>
+ <657f8d19-de83-8be6-4a9d-5f13b1df7383@linaro.org>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <b0e5e13e-6746-bd90-2a49-31ee6dd3e8a2@loongson.cn>
+Date:   Fri, 9 Jun 2023 11:13:20 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <657f8d19-de83-8be6-4a9d-5f13b1df7383@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxGOXQmIJkzJsJAA--.29907S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
+        nUUI43ZEXa7xR_UUUUUUUUU==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 9561de3a55bed6bdd44a12820ba81ec416e705a7:
 
-  Linux 6.4-rc5 (2023-06-04 14:04:27 -0400)
 
-are available in the Git repository at:
+在 2023/6/8 下午9:26, Krzysztof Kozlowski 写道:
+> On 08/06/2023 14:10, zhuyinbo wrote:
+>>
+>>
+>> 在 2023/6/8 下午7:45, Krzysztof Kozlowski 写道:
+>>> On 08/06/2023 13:42, zhuyinbo wrote:
+>>>> --- a/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>>>> +++ b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>>>> @@ -16,6 +16,7 @@ properties:
+>>>>       compatible:
+>>>>         enum:
+>>>>           - loongson,ls2k1000-spi
+>>>> +      - loongson,ls2k0500-spi
+>>>
+>>> Aren't they compatible?
+>>>
+>>
+>>
+>> Are you saying that the spi driver is compatible with 2k0500 ?
+> 
+> Didn't you say this through 11 previous revisions?
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git tags/ext4_for_linus_stable
 
-for you to fetch changes up to dea9d8f7643fab07bf89a1155f1f94f37d096a5e:
+Yes, did I understand your meaning incorrectly ?
 
-  ext4: only check dquot_initialize_needed() when debugging (2023-06-08 10:06:40 -0400)
+Thanks,
+Yinbo
+> 
+>> Yes.  and the 2k1000 spi hardware was same with 2k0500 common type spi
+>> hardware.
+>>
+>> but afterwards, it may be necessary to implement a clock drvier for
+>> 2k0500, because the spi driver was use "devm_clk_get_optional()" to
+>> get clock and not use "of_property_read_u32(np, "clock-frequency",
+>> &clk)",  But this seems to have nothing to do with bindings.
 
-----------------------------------------------------------------
-Fix an ext4 regression which breaks remounting r/w file systems that
-have the quota feature enabled.
-
-----------------------------------------------------------------
-Theodore Ts'o (2):
-      Revert "ext4: don't clear SB_RDONLY when remounting r/w until quota is re-enabled"
-      ext4: only check dquot_initialize_needed() when debugging
-
- fs/ext4/super.c | 6 +-----
- fs/ext4/xattr.c | 6 ++++--
- 2 files changed, 5 insertions(+), 7 deletions(-)
