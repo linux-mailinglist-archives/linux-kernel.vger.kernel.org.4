@@ -2,256 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B75F6729129
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2133729121
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:31:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238765AbjFIHaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 03:30:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43844 "EHLO
+        id S238824AbjFIHac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 03:30:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238748AbjFIH3s (ORCPT
+        with ESMTP id S238791AbjFIH3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 03:29:48 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E408D30E6
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 00:29:20 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-651f2f38634so1494839b3a.0
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 00:29:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686295760; x=1688887760;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TD+KUgBGAZpos34KVNAuisH6maHzuZAbYL+cYk7AnpI=;
-        b=W6ECPmFEywudFTGADngeW+8j6+RKfhMzOXW4JMxiaZhlyu+6dKLJveZYohzA7gk8N0
-         AkMgpbgmIfbZN1J9GhdzzkDX1+7MJh0oKuSRU+/09Ozmua9SOnTfqJSKU0rOAaTjLQRb
-         8ew0IxErShJiSYgM11P0AxrpUYhArPvNmzAN8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686295760; x=1688887760;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TD+KUgBGAZpos34KVNAuisH6maHzuZAbYL+cYk7AnpI=;
-        b=GVWmyxTSsZZdMInV/2HpcMEjtyP57yWIIU9L7qtZhvkcARPnGjTBymMwidyHI5jNH6
-         mSV9FU+xJw6GUDFOJVgYBGssQHWd/DtYQ0Ow3N/ziJg0jjOt6YfD+rh2tRkPD/NmM9aV
-         E8E0g14x/tKbHC4z204ohChTMRUs0De7upRwO9v1dx9DTXQI7FRnxExYz+y/S8yY8+YH
-         W+naUQv1HjiZQygQpKt5Y7l4GqMeqCa2GcTC8ggi/K9EELdk4YWy8TQf2VrUjRQ3I/yI
-         nQIK2s2k4DrMysU1+1692KwnAgpFx0X2yng5/ml2ANf++ETYBaMPD3scOK8ZfsfEDIXB
-         FJlQ==
-X-Gm-Message-State: AC+VfDx3lj0ReMvFxkO9x6vtRpyhfFQVF6+5WaLZZwuhe4b7XcTxSUDk
-        4CfuCAV4I8F91h+xrD/sMwmCZQ==
-X-Google-Smtp-Source: ACHHUZ7CXCPz6Rn/bdtxmBFup4pQKAtT7ra/3D7+Bw2zj9cvrvb/EnPtR1cjdyv3l+/SW2uZbtn23g==
-X-Received: by 2002:aa7:8896:0:b0:658:f86f:b18e with SMTP id z22-20020aa78896000000b00658f86fb18emr643979pfe.22.1686295760403;
-        Fri, 09 Jun 2023 00:29:20 -0700 (PDT)
-Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:c2ea:d8e4:1fe8:21f0])
-        by smtp.gmail.com with ESMTPSA id y9-20020a655a09000000b005287a0560c9sm2160283pgs.1.2023.06.09.00.29.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 00:29:20 -0700 (PDT)
-From:   Chen-Yu Tsai <wenst@chromium.org>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Subject: [PATCH v2 4/4] arm64: dts: mediatek: mt8186: Wire up GPU voltage/frequency scaling
-Date:   Fri,  9 Jun 2023 15:29:05 +0800
-Message-ID: <20230609072906.2784594-5-wenst@chromium.org>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-In-Reply-To: <20230609072906.2784594-1-wenst@chromium.org>
-References: <20230609072906.2784594-1-wenst@chromium.org>
+        Fri, 9 Jun 2023 03:29:53 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B37A30D0;
+        Fri,  9 Jun 2023 00:29:41 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 25C306606F2A;
+        Fri,  9 Jun 2023 08:29:39 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686295779;
+        bh=PRbx+c11bbggGiBNDUqRcT41XRfir2GfxWZ740uanE4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Y/M8YLKhHUIk0lyKmOMoE91zv+WLS+IQnS6wispM55ImFEp0zT5UzgR5IbvnTnUhy
+         CddTUpyrCVBYfVL0rOuVNXGlMOgWVVMq+QFEtEABVtBYYCzET4nDTmS1FEw72EZ+Mk
+         oDBKyS6Ytw8RThDhtyCYJhw7OsTICp7cLQqi72nHqc2ssXvB5z5hsf+OB10c8WgcaI
+         0FOPtxX+ZNKv7Uerz9tfRrm4lPokHlzTop0LIUKiqisDyw1eZRfza+Sc/ZhEfli4ay
+         5ki+YHL71d9WrP6+WzNxkOsxmdMcuG24srVT36XdSK31SKjbZilRJjGD8da16rf3Cw
+         YNxIj97ttJFqw==
+Message-ID: <a5597b19-eca8-10b0-1fe4-8f6e1d1d1adf@collabora.com>
+Date:   Fri, 9 Jun 2023 09:29:36 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 1/2] PCI: mediatek-gen3: Stop acquiring spinlocks in
+ {suspend,resume}_noirq
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     ryder.lee@mediatek.com, jianjun.wang@mediatek.com,
+        lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
+        bhelgaas@google.com, p.zabel@pengutronix.de,
+        matthias.bgg@gmail.com, linux-pci@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230608171507.GA1204894@bhelgaas>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230608171507.GA1204894@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the GPU's OPP table. This is from the downstream ChromeOS kernel,
-adapted to the new upstream opp-supported-hw binning format. Also add
-dynamic-power-coefficient for the GPU.
+Il 08/06/23 19:15, Bjorn Helgaas ha scritto:
+> On Thu, May 04, 2023 at 01:35:08PM +0200, AngeloGioacchino Del Regno wrote:
+>> In mtk_pcie_suspend_noirq() and mtk_pcie_resume_noirq() we are,
+>> respectively, disabling and enabling generation of interrupts and
+>> then saving and restoring the enabled interrupts register: since
+>> we're using noirq PM callbacks, that can be safely done without
+>> holding any spin lock.
+> 
+> Tangent: it's annoying that pcie-mediatek.c and pcie-mediatek-gen3.c
+> use identical "mtk_pcie_suspend_noirq()" names.  That makes browsing
+> harder than it needs to be.  But I see that you refer to
+> mediatek-gen3.
+> 
+>> +++ b/drivers/pci/controller/pcie-mediatek-gen3.c
+>> @@ -963,8 +963,6 @@ static void mtk_pcie_irq_save(struct mtk_gen3_pcie *pcie)
+>>   {
+>>   	int i;
+>>   
+>> -	raw_spin_lock(&pcie->irq_lock);
+>> -
+>>   	pcie->saved_irq_state = readl_relaxed(pcie->base + PCIE_INT_ENABLE_REG);
+>>   
+>>   	for (i = 0; i < PCIE_MSI_SET_NUM; i++) {
+>> @@ -973,16 +971,12 @@ static void mtk_pcie_irq_save(struct mtk_gen3_pcie *pcie)
+>>   		msi_set->saved_irq_state = readl_relaxed(msi_set->base +
+>>   					   PCIE_MSI_SET_ENABLE_OFFSET);
+>>   	}
+>> -
+>> -	raw_spin_unlock(&pcie->irq_lock);
+>>   }
+> 
+> Jianjun added mtk_pcie_irq_save() and mtk_pcie_irq_restore() with
+> d537dc125f07 ("PCI: mediatek-gen3: Add system PM support").
+> 
+> I suggest looking at other drivers and structuring mediatek-gen3
+> similarly, including using similar function names.  No other drivers
+> have a .*_pcie_irq_save() function.  Several have .*_pcie_host_init(),
+> and some of those do include some IRQ setup.
+> 
+> Bjorn
 
-Also add label for mfg1 power domain. This is to be used at the board
-level to add a regulator supply for the power domain.
+Hello Bjorn,
+thanks for the feedback!
 
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
----
- arch/arm64/boot/dts/mediatek/mt8186.dtsi | 140 ++++++++++++++++++++++-
- 1 file changed, 139 insertions(+), 1 deletion(-)
+Yes, I of course refer to the Gen3 driver... I'll check other drivers and
+will try to improve the consistency of this one with the others as soon as
+I have some bandwidth to perform the job.
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8186.dtsi b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-index 3762a70ccafb..f04ae70c470a 100644
---- a/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-@@ -647,6 +647,142 @@ clk32k: oscillator-32k {
- 		clock-output-names = "clk32k";
- 	};
- 
-+	gpu_opp_table: opp-table-gpu {
-+		compatible = "operating-points-v2";
-+
-+		opp-299000000 {
-+			opp-hz = /bits/ 64 <299000000>;
-+			opp-microvolt = <612500>;
-+			opp-supported-hw = <0xff>;
-+		};
-+
-+		opp-332000000 {
-+			opp-hz = /bits/ 64 <332000000>;
-+			opp-microvolt = <625000>;
-+			opp-supported-hw = <0xff>;
-+		};
-+
-+		opp-366000000 {
-+			opp-hz = /bits/ 64 <366000000>;
-+			opp-microvolt = <637500>;
-+			opp-supported-hw = <0xff>;
-+		};
-+
-+		opp-400000000 {
-+			opp-hz = /bits/ 64 <400000000>;
-+			opp-microvolt = <643750>;
-+			opp-supported-hw = <0xff>;
-+		};
-+
-+		opp-434000000 {
-+			opp-hz = /bits/ 64 <434000000>;
-+			opp-microvolt = <656250>;
-+			opp-supported-hw = <0xff>;
-+		};
-+
-+		opp-484000000 {
-+			opp-hz = /bits/ 64 <484000000>;
-+			opp-microvolt = <668750>;
-+			opp-supported-hw = <0xff>;
-+		};
-+
-+		opp-535000000 {
-+			opp-hz = /bits/ 64 <535000000>;
-+			opp-microvolt = <687500>;
-+			opp-supported-hw = <0xff>;
-+		};
-+
-+		opp-586000000 {
-+			opp-hz = /bits/ 64 <586000000>;
-+			opp-microvolt = <700000>;
-+			opp-supported-hw = <0xff>;
-+		};
-+
-+		opp-637000000 {
-+			opp-hz = /bits/ 64 <637000000>;
-+			opp-microvolt = <712500>;
-+			opp-supported-hw = <0xff>;
-+		};
-+
-+		opp-690000000 {
-+			opp-hz = /bits/ 64 <690000000>;
-+			opp-microvolt = <737500>;
-+			opp-supported-hw = <0xff>;
-+		};
-+
-+		opp-743000000 {
-+			opp-hz = /bits/ 64 <743000000>;
-+			opp-microvolt = <756250>;
-+			opp-supported-hw = <0xff>;
-+		};
-+
-+		opp-796000000 {
-+			opp-hz = /bits/ 64 <796000000>;
-+			opp-microvolt = <781250>;
-+			opp-supported-hw = <0xff>;
-+		};
-+
-+		opp-850000000 {
-+			opp-hz = /bits/ 64 <850000000>;
-+			opp-microvolt = <800000>;
-+			opp-supported-hw = <0xff>;
-+		};
-+
-+		opp-900000000-3 {
-+			opp-hz = /bits/ 64 <900000000>;
-+			opp-microvolt = <850000>;
-+			opp-supported-hw = <0x8>;
-+		};
-+
-+		opp-900000000-4 {
-+			opp-hz = /bits/ 64 <900000000>;
-+			opp-microvolt = <837500>;
-+			opp-supported-hw = <0x10>;
-+		};
-+
-+		opp-900000000-5 {
-+			opp-hz = /bits/ 64 <900000000>;
-+			opp-microvolt = <825000>;
-+			opp-supported-hw = <0x30>;
-+		};
-+
-+		opp-950000000-3 {
-+			opp-hz = /bits/ 64 <950000000>;
-+			opp-microvolt = <900000>;
-+			opp-supported-hw = <0x8>;
-+		};
-+
-+		opp-950000000-4 {
-+			opp-hz = /bits/ 64 <950000000>;
-+			opp-microvolt = <875000>;
-+			opp-supported-hw = <0x10>;
-+		};
-+
-+		opp-950000000-5 {
-+			opp-hz = /bits/ 64 <950000000>;
-+			opp-microvolt = <850000>;
-+			opp-supported-hw = <0x30>;
-+		};
-+
-+		opp-1000000000-3 {
-+			opp-hz = /bits/ 64 <1000000000>;
-+			opp-microvolt = <950000>;
-+			opp-supported-hw = <0x8>;
-+		};
-+
-+		opp-1000000000-4 {
-+			opp-hz = /bits/ 64 <1000000000>;
-+			opp-microvolt = <912500>;
-+			opp-supported-hw = <0x10>;
-+		};
-+
-+		opp-1000000000-5 {
-+			opp-hz = /bits/ 64 <1000000000>;
-+			opp-microvolt = <875000>;
-+			opp-supported-hw = <0x30>;
-+		};
-+	};
-+
- 	pmu-a55 {
- 		compatible = "arm,cortex-a55-pmu";
- 		interrupt-parent = <&gic>;
-@@ -765,7 +901,7 @@ mfg0: power-domain@MT8186_POWER_DOMAIN_MFG0 {
- 					#size-cells = <0>;
- 					#power-domain-cells = <1>;
- 
--					power-domain@MT8186_POWER_DOMAIN_MFG1 {
-+					mfg1: power-domain@MT8186_POWER_DOMAIN_MFG1 {
- 						reg = <MT8186_POWER_DOMAIN_MFG1>;
- 						mediatek,infracfg = <&infracfg_ao>;
- 						#address-cells = <1>;
-@@ -1558,6 +1694,8 @@ gpu: gpu@13040000 {
- 			#cooling-cells = <2>;
- 			nvmem-cells = <&gpu_speedbin>;
- 			nvmem-cell-names = "speed-bin";
-+			operating-points-v2 = <&gpu_opp_table>;
-+			dynamic-power-coefficient = <4687>;
- 			status = "disabled";
- 		};
- 
--- 
-2.41.0.162.gfafddb0af9-goog
-
+Thanks again,
+Angelo
