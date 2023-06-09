@@ -2,145 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCCBB72A119
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 19:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8E9372A11D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 19:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230364AbjFIRTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 13:19:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36528 "EHLO
+        id S230417AbjFIRUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 13:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230355AbjFIRTl (ORCPT
+        with ESMTP id S230407AbjFIRTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 13:19:41 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4593595
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 10:19:39 -0700 (PDT)
+        Fri, 9 Jun 2023 13:19:50 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93472C1
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 10:19:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686331179; x=1717867179;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=R+DPNYs3Odx4as87qA6r8oobE/bUElgTceoldri5s7o=;
-  b=icNZBXQLJtbnm0KNPhJsFktZjI6Guqv83S8ZhuOtLn9IzuR98Lkq8W6v
-   NOffLucCEGPg5c8CB0WBjYWxjK/fg72j/pGERa5NuSueL3gdEnx73BICp
-   J3WSs4yKrnLSgMM0htUcAOgB2vtVUmTqnhSc0a7N2O7FThEeZ2JFhNijn
-   D9TJpfdrh173dMonTKAxUGAV/SlbeCBYORtvqvGBP9pVZeT56NLjr15mV
-   5a7ln0Yre8dApzygDmt1aCsafgfPmp9ZgY4rCiWy3dZ3d6yijiRKkYDK9
-   ac78Efu4e3uzzDn5XqR+iDHnwbERtir90zanOkJeYYNvEE/PFHQ1XVZJT
+  t=1686331188; x=1717867188;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=sLL1ExYky3YPxQPfY55OOknhjNzKxT1NpucHwkVjiD8=;
+  b=oKVj3sbl4VaiD5Q7H5JApzSrVnWtUoT12dd3rvgoehs0E0EjiTcmpcdt
+   VvR9O5FB8n6Gt4MTijrmyoLqhqCc8V5KVIeddJxK4mXJFEiVHOM++ShAz
+   TX01itIRXtD+7tVYlU7ZYSiMHew93zKf/Gr3n8pYWRxUWMLbzDTnA2fnb
+   BtdwFIRK/DsXpFsKg/BKmBhFwB1eCZ2fCUdFkQ1cD+A0h0y5LWAk6JgAd
+   qUXa72XncOGAV2+mtlP6xo9cNVc8wveyQPy4VJqmKtTHKA8neE3RNvBeJ
+   XLbN8bZiJUhTWFV+91aMKKQ8MmeE7UgcpdeF/K7eWj3y6F0hfp+E/1NYl
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="444020531"
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="423527142"
 X-IronPort-AV: E=Sophos;i="6.00,229,1681196400"; 
-   d="scan'208";a="444020531"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 10:19:39 -0700
+   d="scan'208";a="423527142"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 10:19:48 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="687815968"
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="660826666"
 X-IronPort-AV: E=Sophos;i="6.00,229,1681196400"; 
-   d="scan'208";a="687815968"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 09 Jun 2023 10:19:37 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q7flw-0009FT-2Z;
-        Fri, 09 Jun 2023 17:19:36 +0000
-Date:   Sat, 10 Jun 2023 01:19:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jordy Zomer <jordyzomer@google.com>, linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, phil@philpotter.co.uk,
-        Jordy Zomer <jordyzomer@google.com>
-Subject: Re: [PATCH 1/1] cdrom: Fix spectre-v1 gadget
-Message-ID: <202306100143.yzdJpUid-lkp@intel.com>
-References: <20230609131355.71130-2-jordyzomer@google.com>
+   d="scan'208";a="660826666"
+Received: from unknown (HELO localhost) ([10.237.72.184])
+  by orsmga003.jf.intel.com with ESMTP; 09 Jun 2023 10:19:44 -0700
+From:   Alexander Shishkin <alexander.shishkin@linux.intel.com>
+To:     Alison Schofield <alison.schofield@intel.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        alexander.shishkin@linux.intel.com
+Subject: Re: [PATCH] x86/sev: Move sev_setup_arch() to mem_encrypt.c
+In-Reply-To: <ZHZGkulyli8MvXRR@aschofie-mobl2>
+References: <20230530121728.28854-1-alexander.shishkin@linux.intel.com>
+ <ZHZGkulyli8MvXRR@aschofie-mobl2>
+Date:   Fri, 09 Jun 2023 20:19:43 +0300
+Message-ID: <873530zh74.fsf@ubik.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230609131355.71130-2-jordyzomer@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jordy,
+Alison Schofield <alison.schofield@intel.com> writes:
 
-kernel test robot noticed the following build errors:
+> On Tue, May 30, 2023 at 03:17:28PM +0300, Alexander Shishkin wrote:
+>> Since commit 4d96f9109109b ("x86/sev: Replace occurrences of
+>> sev_active() with cc_platform_has()"), the SWIOTLB bounce buffer size
+>> adjustment and restricted virtio memory setting also inadvertently apply
+>> to TDX, which just happens to be what we want.
+>
+> Hi Alexander,
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.4-rc5 next-20230609]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Hi Alison,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jordy-Zomer/cdrom-Fix-spectre-v1-gadget/20230609-211545
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20230609131355.71130-2-jordyzomer%40google.com
-patch subject: [PATCH 1/1] cdrom: Fix spectre-v1 gadget
-config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20230610/202306100143.yzdJpUid-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git checkout linus/master
-        b4 shazam https://lore.kernel.org/r/20230609131355.71130-2-jordyzomer@google.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=alpha olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash drivers/
+> Can you offer more context on how this inadvertently applies?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306100143.yzdJpUid-lkp@intel.com/
+Yes, the code uses cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT) condition
+for setting the bounce buffer size and enabling restricted virtio
+memory, which is also true for TDX. I've added a bit about this to v2
+[0].
 
-All errors (new ones prefixed by >>):
+> One bit below...
+>> --- a/arch/x86/mm/mem_encrypt.c
+>> +++ b/arch/x86/mm/mem_encrypt.c
+>> @@ -12,6 +12,7 @@
+>>  #include <linux/swiotlb.h>
+>>  #include <linux/cc_platform.h>
+>>  #include <linux/mem_encrypt.h>
+>> +#include <linux/virtio_anchor.h>
+>
+> It looks like this #include can be removed from mem_encrypt_amd.c 
 
-   drivers/cdrom/cdrom.c: In function 'cdrom_ioctl_media_changed':
->> drivers/cdrom/cdrom.c:2333:15: error: implicit declaration of function 'array_index_mask_nospec' [-Werror=implicit-function-declaration]
-    2333 |         arg = array_index_mask_nospec(arg, cdi->capacity);
-         |               ^~~~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+Good catch! This is also addressed in v2.
 
+[0] https://lore.kernel.org/lkml/20230609171214.31846-1-alexander.shishkin@linux.intel.com/
 
-vim +/array_index_mask_nospec +2333 drivers/cdrom/cdrom.c
-
-  2314	
-  2315	static int cdrom_ioctl_media_changed(struct cdrom_device_info *cdi,
-  2316			unsigned long arg)
-  2317	{
-  2318		struct cdrom_changer_info *info;
-  2319		int ret;
-  2320	
-  2321		cd_dbg(CD_DO_IOCTL, "entering CDROM_MEDIA_CHANGED\n");
-  2322	
-  2323		if (!CDROM_CAN(CDC_MEDIA_CHANGED))
-  2324			return -ENOSYS;
-  2325	
-  2326		/* cannot select disc or select current disc */
-  2327		if (!CDROM_CAN(CDC_SELECT_DISC) || arg == CDSL_CURRENT)
-  2328			return media_changed(cdi, 1);
-  2329	
-  2330		if (arg >= cdi->capacity)
-  2331			return -EINVAL;
-  2332	
-> 2333		arg = array_index_mask_nospec(arg, cdi->capacity);
-  2334	
-  2335		info = kmalloc(sizeof(*info), GFP_KERNEL);
-  2336		if (!info)
-  2337			return -ENOMEM;
-  2338	
-  2339		ret = cdrom_read_mech_status(cdi, info);
-  2340		if (!ret)
-  2341			ret = info->slots[arg].change;
-  2342		kfree(info);
-  2343		return ret;
-  2344	}
-  2345	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+--
+Alex
