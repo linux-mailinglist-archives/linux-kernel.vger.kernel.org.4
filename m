@@ -2,113 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDB74729265
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:15:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9B11729267
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238369AbjFIIPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 04:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49698 "EHLO
+        id S239107AbjFIIPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 04:15:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240172AbjFIIPB (ORCPT
+        with ESMTP id S238963AbjFIIPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 04:15:01 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8C51FEC;
-        Fri,  9 Jun 2023 01:15:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=+cwenPjityAug3WNzlNqZYfDn0z0LVC2siDeul5t8mY=; b=FHSTN20504TR15rO6GosZftBSu
-        zs4/8pgg8bMheZAJHp/mN5JI7Xxu29i2YRxizdaaKCDLOGZOePbg8ZJ61mQLQdItOg+wL8yZb1178
-        QwNxoUU6gwGdMsLQnsUyfq4Fj+Yb8ngNWSsEhg6Pa4vY3WiTZuo+tlHSiZvEgvndGshzcyVXPpWs1
-        sTSFVahZEj1EIfwzVMg5Gop2HYGug8u/I2tXN3ml07pOq9ZK+MJKO04wJ4SBblFVRf1o7r1p5W8PB
-        41rheKlPkUk3Oo4I1JbZUfVauVggwIqZ0DigHG2KIw02y7hdsX9fKsB9rIeHWUYKS3X9pFmiii13w
-        XC77uYPw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q7XGV-00GLUF-Re; Fri, 09 Jun 2023 08:14:35 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id F30D4300155;
-        Fri,  9 Jun 2023 10:14:32 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id CDDA7241717B3; Fri,  9 Jun 2023 10:14:32 +0200 (CEST)
-Date:   Fri, 9 Jun 2023 10:14:32 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     keescook@chromium.org, gregkh@linuxfoundation.org,
-        pbonzini@redhat.com, linux-kernel@vger.kernel.org,
-        ojeda@kernel.org, ndesaulniers@google.com, mingo@redhat.com,
-        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        rcu@vger.kernel.org, tj@kernel.org, tglx@linutronix.de,
-        linux-toolchains@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] Lock and Pointer guards
-Message-ID: <20230609081432.GB1039598@hirez.programming.kicks-ass.net>
-References: <CAHk-=wi-RyoUhbChiVaJZoZXheAwnJ7OO=Gxe85BkPAd93TwDA@mail.gmail.com>
- <20230606134005.GE905437@hirez.programming.kicks-ass.net>
- <CAHk-=wgQ5m+SnWTYGHu0JgYXTk2dkGF+msX=ARfYoo3t1_fX9g@mail.gmail.com>
- <20230606180806.GA942082@hirez.programming.kicks-ass.net>
- <CAHk-=wgXN1YxGMUFeuC135aeUvqduF8zJJiZZingzS1Pao5h0A@mail.gmail.com>
- <20230607094101.GA964354@hirez.programming.kicks-ass.net>
- <20230608085248.GA1002251@hirez.programming.kicks-ass.net>
- <CAHk-=wj-BGgTF0YgY+L7_G8Jb0UO38Cd8dwrfMqFMEh93B3D7g@mail.gmail.com>
- <20230608200618.GA1020752@hirez.programming.kicks-ass.net>
- <CAHk-=wjcXuZ91WkKv0fuBcm+w7y=y=fNzW9EXfnYYSCFvuyhdA@mail.gmail.com>
+        Fri, 9 Jun 2023 04:15:16 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684902697;
+        Fri,  9 Jun 2023 01:15:12 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f7f6341b99so10636125e9.2;
+        Fri, 09 Jun 2023 01:15:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686298511; x=1688890511;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=K/umIzeMz8geuBnQ70Zs8Lyt2KL70GKQujvQXIJTU5I=;
+        b=KbhSHFa3fD+CZYTpEwafl5HoL6JuUzJZuMZpzscp3yLZVVozMf5fQ0nRfrR1PJ4b5K
+         Tbo6jc8my7YAH3S1zBQU2riLYK3wN78KMqQO+1/dGzFFcusd3Brk3TMm5NExTmpRzK1j
+         S/gDxOo1hkzvvzLwKh52hF84jmTaOQLaroUn3s1gIampmjQwQ1/quqd/Q99XEwrcjZwK
+         BVEP0l9e85LDkR0/p1u+fB72sOWWjEl3pBuHACQqQThNpnddoYpqdjoEn79eWHyvpuC4
+         UgC8eXdm7lH76nr9jKbLKFP3iFJTdm1VIRtVAQDl1HZkEs9i0UHsO0mxwEoFLwyRDtAx
+         +5+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686298511; x=1688890511;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K/umIzeMz8geuBnQ70Zs8Lyt2KL70GKQujvQXIJTU5I=;
+        b=J09/wI4wOjCvj5YR5JSzrPRP/KwP035j0JEzdp4LBQb4pNihSk3o+yavYrDQlazvfI
+         Ktr5LWkliY/B6MWxiweFfObDG9gw6fdldennfxBeclzxrSHNLbaZTZcM/m+YsxgqG5C9
+         /0Kb+GHkIwPkLfMfnkRMIt5Yt9WS/jGdRqaELcgFCSaZGwndCnhN2K90chuHUAYsJYes
+         gimfDw/TU9QsIEb6PFh36vvuq8ndWwGD1ieSYFvmZ9deJErk5CH6QgAo2FK6zFt3N9Ys
+         87B11gdsviWTPalZRD/4gCmo1mdeYO7AKBr4n3+YMnDLiJcxaxwaYzwRMqzViLyyQDC3
+         Q3Fw==
+X-Gm-Message-State: AC+VfDzAvvjjiZV41EFBH1yPiiuDZ5mrT2Ks7Q5X5/LCCZ3hyQTLcAqG
+        iqTBFJK1CnEi2IxHw4h5hQ0=
+X-Google-Smtp-Source: ACHHUZ6BmpVI5x5ggkMD0w0VWUNdDghA2OcdaPfkM0WhYLsbQuTeAyMgVWyqXMREJl7lSLDzS44VVg==
+X-Received: by 2002:a05:600c:2044:b0:3f7:e800:abc8 with SMTP id p4-20020a05600c204400b003f7e800abc8mr325327wmg.15.1686298510644;
+        Fri, 09 Jun 2023 01:15:10 -0700 (PDT)
+Received: from debian ([63.135.72.41])
+        by smtp.gmail.com with ESMTPSA id gy15-20020a05600c880f00b003f7f475c3bcsm2583686wmb.1.2023.06.09.01.15.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 01:15:10 -0700 (PDT)
+Date:   Fri, 9 Jun 2023 09:15:08 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
+        rwarsow@gmx.de
+Subject: Re: [PATCH 5.4 00/99] 5.4.246-rc1 review
+Message-ID: <ZILfjLdOLfXkBbYS@debian>
+References: <20230607200900.195572674@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=wjcXuZ91WkKv0fuBcm+w7y=y=fNzW9EXfnYYSCFvuyhdA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230607200900.195572674@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 07:25:27PM -0700, Linus Torvalds wrote:
-> On Thu, Jun 8, 2023 at 1:06 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> >         struct obj *p __free(kfree) = kmalloc(...);
-> 
-> Yeah, the above actually looks really good to me - I like the naming
-> here, and the use looks very logical to me.
-> 
-> Of course, maybe once I see the patches that use this I go "uhh", but
-> at least for now I think you've hit on a rather legible syntax.
-> 
-> I'm still a bit unsure of the "no_free_ptr(p)" naming, but at least
-> it's pretty clear about what it does.
-> 
-> So my only worry is that it's not pretty and to the point like your
-> "__free(kfree)" syntax.
-> 
-> But it feels workable and not misleading, so unless somebody can come
-> up with a better name, I think it's ok.
+Hi Greg,
 
-#define return_ptr(p) \
-	return no_free_ptr(p)
+On Wed, Jun 07, 2023 at 10:15:52PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.246 release.
+> There are 99 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+
+Build test (gcc version 11.3.1 20230511):
+mips: 65 configs -> no failure
+arm: 106 configs -> no failure
+arm64: 2 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
 
-	struct obj *p __free(kfree) = kmalloc(...);
-	if (!p)
-		return ERR_PTR(-ENOMEM);
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
 
-	...
+[1]. https://openqa.qa.codethink.co.uk/tests/3802
 
-	return_ptr(p);
 
-?
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
+-- 
+Regards
+Sudip
