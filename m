@@ -2,74 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B438A729571
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:37:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2AED729666
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 12:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241716AbjFIJhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 05:37:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58792 "EHLO
+        id S240419AbjFIKKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 06:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241617AbjFIJgz (ORCPT
+        with ESMTP id S241349AbjFIKKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 05:36:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4577A5270;
-        Fri,  9 Jun 2023 02:32:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 9 Jun 2023 06:10:18 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BE28695
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 02:59:16 -0700 (PDT)
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83E72655F0;
-        Fri,  9 Jun 2023 09:31:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51F6BC433EF;
-        Fri,  9 Jun 2023 09:31:22 +0000 (UTC)
-Date:   Fri, 9 Jun 2023 10:31:19 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Donglin Peng <pengdonglin@sangfor.com.cn>
-Cc:     mhiramat@kernel.org, rostedt@goodmis.org, linux@armlinux.org.uk,
-        mark.rutland@arm.com, will@kernel.org, rmk+kernel@armlinux.org.uk,
-        palmer@dabbelt.com, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, tglx@linutronix.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, bp@alien8.de,
-        hpa@zytor.com, chenhuacai@kernel.org, zhangqing@loongson.cn,
-        kernel@xen0n.name, mingo@redhat.com, peterz@infradead.org,
-        xiehuan09@gmail.com, dinghui@sangfor.com.cn,
-        huangcun@sangfor.com.cn, dolinux.peng@gmail.com,
-        linux-trace-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 4/8] arm64: ftrace: Enable HAVE_FUNCTION_GRAPH_RETVAL
-Message-ID: <ZILxZ6wrYUnnxT/E@arm.com>
-References: <cover.1680954589.git.pengdonglin@sangfor.com.cn>
- <c78366416ce93f704ae7000c4ee60eb4258c38f7.1680954589.git.pengdonglin@sangfor.com.cn>
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 7FC8C3F572
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:32:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1686303175;
+        bh=d5khlOcPOkR48ashhbagswr/xnjgstKG+L7ceqQR68I=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version;
+        b=t6MJJajGgpqhLtt2ZIK2Vrind5EIIpdL8fNbYVs7VFf0zyttJSFkc6tCUp9F3vRMq
+         meT9Ahciak7NE/P/GJfLTHFU4mq2spljEYmk0E7c/KPwsCzpOjUiZeYdVrpuJ3DI8P
+         dfW8WCTp5hYRXhWQuEFVyEp6E81zp+fUEoBxYZvYQlLnIyq79+ieYytla7giiHMlz0
+         XpAWF/TXM6t6eaplHF9oBKbBP5iiUZB3QD9CgbLlB4Dd8amhfOOF9XQ5D4MHh9teG/
+         8vNYKBU9sXHB4aISSk/VFp5ILxlO2yNEEkxWVcVKmdnJcFq1o+tGp8paKIT1fogCfp
+         E/UA+s5ZGVW4A==
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-977d4b0d9e3so134980666b.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 02:32:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686303172; x=1688895172;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=d5khlOcPOkR48ashhbagswr/xnjgstKG+L7ceqQR68I=;
+        b=X+vaUuOToqm1/QB97u0M4grgBi/UZZaxFfLVLYuLgqSui30pKpGTw3MAPODs2YF/hp
+         /2rUe8x3sK4O/vARajKXRG5uulfx5vOU40mzZokGywZ3+abpridJnyW+l+eoZM3njl0N
+         SYMkItLe/WRddcfiXEVGaUOW6FPsmuc7OOPwXV1IkeU7DWeyrl+mq/HYuK8BBWuWjjju
+         PthznQaYhMzGOPGeTUWGW9NJ4EntN0Af7B7gAR0ount108oMmlodTeJhLEmzFn3DjuY9
+         fE7xHk4CiWiYMCH/76AcqjAGAb9maMn1gmtiISnktwZXQzE44hZS9oVocWue1kMUvnhT
+         G+aw==
+X-Gm-Message-State: AC+VfDytV5bnBe/xTuikfk+C7OllSAHqpyxXmcWEKF67cpAs1TE1Xm4Q
+        LVPvCvAAqKDP79W/7w8HUiXZBKYzMt+czrHc6bodX+fczg9SDjtqZu5Cg35UMaJrc++v0JJsEbK
+        1JYy5zAZGhGTmreHu/lLRx+kLjPy8KZCICbXtJqTUxw==
+X-Received: by 2002:a17:907:2d0f:b0:965:6075:d0e1 with SMTP id gs15-20020a1709072d0f00b009656075d0e1mr1243440ejc.72.1686303171875;
+        Fri, 09 Jun 2023 02:32:51 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ59kDZebVrWioHVCJrl8ktxJliY7MnEjejxAd9hrZlN9hAJ/qDACsG7YUf21ymnpatNXrM/eQ==
+X-Received: by 2002:a17:907:2d0f:b0:965:6075:d0e1 with SMTP id gs15-20020a1709072d0f00b009656075d0e1mr1243429ejc.72.1686303171703;
+        Fri, 09 Jun 2023 02:32:51 -0700 (PDT)
+Received: from amikhalitsyn.local (dslb-002-205-064-187.002.205.pools.vodafone-ip.de. [2.205.64.187])
+        by smtp.gmail.com with ESMTPSA id e25-20020a170906081900b0094ee3e4c934sm1031248ejd.221.2023.06.09.02.32.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 02:32:51 -0700 (PDT)
+From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+To:     xiubli@redhat.com
+Cc:     brauner@kernel.org, stgraber@ubuntu.com,
+        linux-fsdevel@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
+        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v6 08/15] ceph: allow idmapped setattr inode op
+Date:   Fri,  9 Jun 2023 11:31:19 +0200
+Message-Id: <20230609093125.252186-9-aleksandr.mikhalitsyn@canonical.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230609093125.252186-1-aleksandr.mikhalitsyn@canonical.com>
+References: <20230609093125.252186-1-aleksandr.mikhalitsyn@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c78366416ce93f704ae7000c4ee60eb4258c38f7.1680954589.git.pengdonglin@sangfor.com.cn>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 08, 2023 at 05:42:18AM -0700, Donglin Peng wrote:
-> The previous patch ("function_graph: Support recording and printing
-> the return value of function") has laid the groundwork for the for
-> the funcgraph-retval, and this modification makes it available on
-> the ARM64 platform.
-> 
-> We introduce a new structure called fgraph_ret_regs for the ARM64
-> platform to hold return registers and the frame pointer. We then
-> fill its content in the return_to_handler and pass its address to
-> the function ftrace_return_to_handler to record the return value.
-> 
-> Reviewed-by: Mark Rutland <mark.rutland@arm.com>
-> Tested-by: Mark Rutland <mark.rutland@arm.com>
-> Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>
+From: Christian Brauner <christian.brauner@ubuntu.com>
 
-We fully trust Mark's reviews ;) but just in case you need an official
-maintainer ack:
+Enable __ceph_setattr() to handle idmapped mounts. This is just a matter
+of passing down the mount's idmapping.
 
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Xiubo Li <xiubli@redhat.com>
+Cc: Jeff Layton <jlayton@kernel.org>
+Cc: Ilya Dryomov <idryomov@gmail.com>
+Cc: ceph-devel@vger.kernel.org
+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+[ adapted to b27c82e12965 ("attr: port attribute changes to new types") ]
+Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+---
+v4:
+	- introduced fsuid/fsgid local variables
+v3:
+	- reworked as Christian suggested here:
+	https://lore.kernel.org/lkml/20230602-vorzeichen-praktikum-f17931692301@brauner/
+---
+ fs/ceph/inode.c | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
+
+diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
+index 9a4579da32f8..6a8aeb4b8fb8 100644
+--- a/fs/ceph/inode.c
++++ b/fs/ceph/inode.c
+@@ -2509,31 +2509,35 @@ int __ceph_setattr(struct mnt_idmap *idmap, struct inode *inode,
+ #endif /* CONFIG_FS_ENCRYPTION */
+ 
+ 	if (ia_valid & ATTR_UID) {
++		kuid_t fsuid = from_vfsuid(idmap, i_user_ns(inode), attr->ia_vfsuid);
++
+ 		dout("setattr %p uid %d -> %d\n", inode,
+ 		     from_kuid(&init_user_ns, inode->i_uid),
+ 		     from_kuid(&init_user_ns, attr->ia_uid));
+ 		if (issued & CEPH_CAP_AUTH_EXCL) {
+-			inode->i_uid = attr->ia_uid;
++			inode->i_uid = fsuid;
+ 			dirtied |= CEPH_CAP_AUTH_EXCL;
+ 		} else if ((issued & CEPH_CAP_AUTH_SHARED) == 0 ||
+-			   !uid_eq(attr->ia_uid, inode->i_uid)) {
++			   !uid_eq(fsuid, inode->i_uid)) {
+ 			req->r_args.setattr.uid = cpu_to_le32(
+-				from_kuid(&init_user_ns, attr->ia_uid));
++				from_kuid(&init_user_ns, fsuid));
+ 			mask |= CEPH_SETATTR_UID;
+ 			release |= CEPH_CAP_AUTH_SHARED;
+ 		}
+ 	}
+ 	if (ia_valid & ATTR_GID) {
++		kgid_t fsgid = from_vfsgid(idmap, i_user_ns(inode), attr->ia_vfsgid);
++
+ 		dout("setattr %p gid %d -> %d\n", inode,
+ 		     from_kgid(&init_user_ns, inode->i_gid),
+ 		     from_kgid(&init_user_ns, attr->ia_gid));
+ 		if (issued & CEPH_CAP_AUTH_EXCL) {
+-			inode->i_gid = attr->ia_gid;
++			inode->i_gid = fsgid;
+ 			dirtied |= CEPH_CAP_AUTH_EXCL;
+ 		} else if ((issued & CEPH_CAP_AUTH_SHARED) == 0 ||
+-			   !gid_eq(attr->ia_gid, inode->i_gid)) {
++			   !gid_eq(fsgid, inode->i_gid)) {
+ 			req->r_args.setattr.gid = cpu_to_le32(
+-				from_kgid(&init_user_ns, attr->ia_gid));
++				from_kgid(&init_user_ns, fsgid));
+ 			mask |= CEPH_SETATTR_GID;
+ 			release |= CEPH_CAP_AUTH_SHARED;
+ 		}
+@@ -2756,7 +2760,7 @@ int ceph_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
+ 	if (err)
+ 		return err;
+ 
+-	err = setattr_prepare(&nop_mnt_idmap, dentry, attr);
++	err = setattr_prepare(idmap, dentry, attr);
+ 	if (err != 0)
+ 		return err;
+ 
+@@ -2771,7 +2775,7 @@ int ceph_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
+ 	err = __ceph_setattr(idmap, inode, attr, NULL);
+ 
+ 	if (err >= 0 && (attr->ia_valid & ATTR_MODE))
+-		err = posix_acl_chmod(&nop_mnt_idmap, dentry, attr->ia_mode);
++		err = posix_acl_chmod(idmap, dentry, attr->ia_mode);
+ 
+ 	return err;
+ }
+-- 
+2.34.1
+
