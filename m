@@ -2,166 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5752C728DAC
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 04:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99638728DB6
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 04:18:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237917AbjFICNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 22:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37550 "EHLO
+        id S237539AbjFICR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 22:17:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231985AbjFICNH (ORCPT
+        with ESMTP id S231985AbjFICRy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 22:13:07 -0400
-Received: from mail-yw1-x1142.google.com (mail-yw1-x1142.google.com [IPv6:2607:f8b0:4864:20::1142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EAEC2;
-        Thu,  8 Jun 2023 19:13:06 -0700 (PDT)
-Received: by mail-yw1-x1142.google.com with SMTP id 00721157ae682-565ba6aee5fso11570407b3.1;
-        Thu, 08 Jun 2023 19:13:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686276786; x=1688868786;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8HQ09RtNhYQYMRgz/MTAZNRoEGBp5c2gpBzsaLR5f3I=;
-        b=aY7rhVzIqhc8rRrSvdWjL++Ruj8VXk+nq1eI9XtJEgMala846+hHzLolKOEa/9DquL
-         mnWdrvO53Rza8Ax3i2fe3z9osN1rZ6fj9EqhArQmTiLRT7n4IVFJ/AG2ihrhQVNXWXFd
-         FGjYrMpFUzpBmAif8t1Zid1TrNkA4yZbuzDhyEA0bAd1pe5TXiA2fYahxH8odd4RDNfU
-         X6D+CphhpLlPOcCHwAf5O7yjpTOIaH1j29vQd8pHUXcOZ7D7/ftNwNmwI4SiaavWXWPp
-         lrZGsxoomIaRpoC1/FN6zuhdw3OkUvLVE6sn3Gu5q/P57VN4u4v6vczSdn1AI8oUnw+0
-         916Q==
+        Thu, 8 Jun 2023 22:17:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C34C2
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 19:17:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686277027;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kgOrLEw+CGqbzexB3hSoqE0ZkI0YLrxw+EejRuKoWQE=;
+        b=IsmGcg6vkYv5UL1k0/shSxVwrLmoqd+1MjOE9S5CeR1KcAX7SPN04+xdghMCDRYSeMe9/o
+        3QdJILRH2TIl9sdz1QCFR2Yd1ffMUH93r0iJERq06a1SeSoQyJ+06HFLWxjSBv9rM7uaEQ
+        RWVKM9PQInydK3SboFSa+zEEc+I23dc=
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
+ [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-538-_wzu3TntNG2ibX5tsACN3Q-1; Thu, 08 Jun 2023 22:17:05 -0400
+X-MC-Unique: _wzu3TntNG2ibX5tsACN3Q-1
+Received: by mail-lj1-f197.google.com with SMTP id 38308e7fff4ca-2b1acd44a31so9035261fa.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 19:17:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686276786; x=1688868786;
+        d=1e100.net; s=20221208; t=1686277024; x=1688869024;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8HQ09RtNhYQYMRgz/MTAZNRoEGBp5c2gpBzsaLR5f3I=;
-        b=TL0Ncx4XGEyuD4ANezFuZPLJnt0WXoZYmnYE7JcsVqc+RtZGBUZUDiWQile92wISzl
-         bzLDkh81CtbiJbuq4osTbNJwQ+lvKl5cnlR8XyEAiJdYvtx16YVrjJok0SqX2KAnkAQ/
-         FRwmvYh5B2p6P0uKe3bqKAcBJdRPFmtcz0r30p+0z22B0RG1W00YAzJkyI0VWNTngQMM
-         AQpB4s1zhMgR6/74nQc6+LsemYEc9LS/0+ExUdjw3k0V2tzK8C1UOispB+v+q08dsg2m
-         jCdcjG/NCy1FE3THi3YqO8mxhzhgm30OQHsbY6VbVUH2+CREr6rezOIreX50kwcSM3MY
-         YRdw==
-X-Gm-Message-State: AC+VfDzyPbGZ66bB9re7QVfDeIqNoD1OTeakuc8OOKdvt29uI6p+qtPa
-        Jm0wBnDcy6m1S5tCzDZw0rWb0dTfTdVKnA1bLkc=
-X-Google-Smtp-Source: ACHHUZ7wEN7jKHN8aai/Vmkar0NZOKCS7ngl3dgGIN2ITfEyr/8jTJsgR0Oz9pRRHLns3ngWO+h+YHz9OvFcQNa0B5E=
-X-Received: by 2002:a81:91d5:0:b0:565:9d27:c5e0 with SMTP id
- i204-20020a8191d5000000b005659d27c5e0mr55157ywg.2.1686276785727; Thu, 08 Jun
- 2023 19:13:05 -0700 (PDT)
+        bh=kgOrLEw+CGqbzexB3hSoqE0ZkI0YLrxw+EejRuKoWQE=;
+        b=Op8tf8XtvnPW3usmxolyD7G0kGUWGCLWdZ0kRxjhKdZUIRUnAkmOjoVyHSyPiYbXMU
+         ao+SvVyMga7sWz9ADPaYBwRxLjie3PXK+7bhxXL/9+RGVlqy+P3YEGQuClYm4jM6lkO0
+         rGiWvrgsY+bX56cOuJthJrWTR1zNPVkoURCHiqHMVfc+CBDD4X5K8iOckkOvFtzu2zze
+         SWvHZzuOYwwISp1iXQDhu8PWS+RPA4/9eUdzIqkD7hxWma4RviUI4qIGjFsrhpXRbA2m
+         OcM7TH3izTxqEZlCP3mCNUvXKyiQripdzvnY0+oJQmD5MRAc2T9P0CvniJHU9NZsZpxg
+         RzZg==
+X-Gm-Message-State: AC+VfDz9bbD1uR8tQIHpa4tuBcf9g7ZYKY2FOQsiFVrBrbw0XKPFMzBk
+        nGbGuu198yex0E6IAPGb0yzzY9jwvWbgaKtciJagLVWQt7bmVJvNutJ1cFRewcgctRjoFyMo/SY
+        MjqAxr6MLWIjju52cainl0fsIIU1ReJ/l8LyBy9NhEnP1Lxrs
+X-Received: by 2002:a2e:b163:0:b0:2b0:a4b1:df6 with SMTP id a3-20020a2eb163000000b002b0a4b10df6mr123923ljm.49.1686277023829;
+        Thu, 08 Jun 2023 19:17:03 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4/8wdm9HnZ2Nlq0u+xmMq+q13VRX7hsdmKW7Maw8V8eVTx/FWCzW2thzAyQ/MvYC6Xa3LumlbBLVc0Z0sDrGE=
+X-Received: by 2002:a2e:b163:0:b0:2b0:a4b1:df6 with SMTP id
+ a3-20020a2eb163000000b002b0a4b10df6mr123915ljm.49.1686277023521; Thu, 08 Jun
+ 2023 19:17:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230607125911.145345-1-imagedong@tencent.com>
- <20230607125911.145345-2-imagedong@tencent.com> <4ca27e23-b027-0e39-495b-2ba3376342cc@meta.com>
-In-Reply-To: <4ca27e23-b027-0e39-495b-2ba3376342cc@meta.com>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Fri, 9 Jun 2023 10:12:54 +0800
-Message-ID: <CADxym3a=_FF3NUG3-210GQN0JSvbcsGdYRiVwBEQzGTtqN3kVQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/3] bpf, x86: allow function arguments up to
- 12 for TRACING
-To:     Yonghong Song <yhs@meta.com>
-Cc:     alexei.starovoitov@gmail.com, davem@davemloft.net,
-        dsahern@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, x86@kernel.org, imagedong@tencent.com,
-        benbjiang@tencent.com, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20230606085643-mutt-send-email-mst@kernel.org>
+ <CAGxU2F7fkgL-HpZdj=5ZEGNWcESCHQpgRAYQA3W2sPZaoEpNyQ@mail.gmail.com>
+ <20230607054246-mutt-send-email-mst@kernel.org> <CACGkMEuUapKvUYiJiLwtsN+x941jafDKS9tuSkiNrvkrrSmQkg@mail.gmail.com>
+ <20230608020111-mutt-send-email-mst@kernel.org> <CACGkMEt4=3BRVNX38AD+mJU8v3bmqO-CdNj5NkFP-SSvsuy2Hg@mail.gmail.com>
+ <5giudxjp6siucr4l3i4tggrh2dpqiqhhihmdd34w3mq2pm5dlo@mrqpbwckpxai>
+ <CACGkMEtqn1dbrQZn3i-W_7sVikY4sQjwLRC5xAhMnyqkc3jwOw@mail.gmail.com>
+ <lw3nmkdszqo6jjtneyp4kjlmutooozz7xj2fqyxgh4v2ralptc@vkimgnbfafvi>
+ <CACGkMEt1yRV9qOLBqtQQmJA_UoRLCpznT=Gvd5D51Uaz2jakHA@mail.gmail.com> <20230608102259-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20230608102259-mutt-send-email-mst@kernel.org>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Fri, 9 Jun 2023 10:16:50 +0800
+Message-ID: <CACGkMEvirfb8g0ev=b0CjpL5_SPJabqiQKxdwuRNqG2E=N7iGA@mail.gmail.com>
+Subject: Re: [PATCH] vhost-vdpa: filter VIRTIO_F_RING_PACKED feature
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Stefano Garzarella <sgarzare@redhat.com>,
+        Shannon Nelson <shannon.nelson@amd.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
+        Tiwei Bie <tiwei.bie@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 5:07=E2=80=AFAM Yonghong Song <yhs@meta.com> wrote:
+On Thu, Jun 8, 2023 at 10:23=E2=80=AFPM Michael S. Tsirkin <mst@redhat.com>=
+ wrote:
 >
->
->
-> On 6/7/23 5:59 AM, menglong8.dong@gmail.com wrote:
-> > From: Menglong Dong <imagedong@tencent.com>
+> On Thu, Jun 08, 2023 at 05:29:58PM +0800, Jason Wang wrote:
+> > On Thu, Jun 8, 2023 at 5:21=E2=80=AFPM Stefano Garzarella <sgarzare@red=
+hat.com> wrote:
+> > >
+> > > On Thu, Jun 08, 2023 at 05:00:00PM +0800, Jason Wang wrote:
+> > > >On Thu, Jun 8, 2023 at 4:00=E2=80=AFPM Stefano Garzarella <sgarzare@=
+redhat.com> wrote:
+> > > >>
+> > > >> On Thu, Jun 08, 2023 at 03:46:00PM +0800, Jason Wang wrote:
+> > > >>
+> > > >> [...]
+> > > >>
+> > > >> >> > > > > I have a question though, what if down the road there
+> > > >> >> > > > > is a new feature that needs more changes? It will be
+> > > >> >> > > > > broken too just like PACKED no?
+> > > >> >> > > > > Shouldn't vdpa have an allowlist of features it knows h=
+ow
+> > > >> >> > > > > to support?
+> > > >> >> > > >
+> > > >> >> > > > It looks like we had it, but we took it out (by the way, =
+we were
+> > > >> >> > > > enabling packed even though we didn't support it):
+> > > >> >> > > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/=
+linux.git/commit/?id=3D6234f80574d7569444d8718355fa2838e92b158b
+> > > >> >> > > >
+> > > >> >> > > > The only problem I see is that for each new feature we ha=
+ve to modify
+> > > >> >> > > > the kernel.
+> > > >> >> > > > Could we have new features that don't require handling by=
+ vhost-vdpa?
+> > > >> >> > > >
+> > > >> >> > > > Thanks,
+> > > >> >> > > > Stefano
+> > > >> >> > >
+> > > >> >> > > Jason what do you say to reverting this?
+> > > >> >> >
+> > > >> >> > I may miss something but I don't see any problem with vDPA co=
+re.
+> > > >> >> >
+> > > >> >> > It's the duty of the parents to advertise the features it has=
+. For example,
+> > > >> >> >
+> > > >> >> > 1) If some kernel version that is packed is not supported via
+> > > >> >> > set_vq_state, parents should not advertise PACKED features in=
+ this
+> > > >> >> > case.
+> > > >> >> > 2) If the kernel has support packed set_vq_state(), but it's =
+emulated
+> > > >> >> > cvq doesn't support, parents should not advertise PACKED as w=
+ell
+> > > >> >> >
+> > > >> >> > If a parent violates the above 2, it looks like a bug of the =
+parents.
+> > > >> >> >
+> > > >> >> > Thanks
+> > > >> >>
+> > > >> >> Yes but what about vhost_vdpa? Talking about that not the core.
+> > > >> >
+> > > >> >Not sure it's a good idea to workaround parent bugs via vhost-vDP=
+A.
+> > > >>
+> > > >> Sorry, I'm getting lost...
+> > > >> We were talking about the fact that vhost-vdpa doesn't handle
+> > > >> SET_VRING_BASE/GET_VRING_BASE ioctls well for packed virtqueue bef=
+ore
+> > > >> that series [1], no?
+> > > >>
+> > > >> The parents seem okay, but maybe I missed a few things.
+> > > >>
+> > > >> [1] https://lore.kernel.org/virtualization/20230424225031.18947-1-=
+shannon.nelson@amd.com/
+> > > >
+> > > >Yes, more below.
+> > > >
+> > > >>
+> > > >> >
+> > > >> >> Should that not have a whitelist of features
+> > > >> >> since it interprets ioctls differently depending on this?
+> > > >> >
+> > > >> >If there's a bug, it might only matter the following setup:
+> > > >> >
+> > > >> >SET_VRING_BASE/GET_VRING_BASE + VDUSE.
+> > > >> >
+> > > >> >This seems to be broken since VDUSE was introduced. If we really =
+want
+> > > >> >to backport something, it could be a fix to filter out PACKED in
+> > > >> >VDUSE?
+> > > >>
+> > > >> mmm it doesn't seem to be a problem in VDUSE, but in vhost-vdpa.
+> > > >> I think VDUSE works fine with packed virtqueue using virtio-vdpa
+> > > >> (I haven't tried), so why should we filter PACKED in VDUSE?
+> > > >
+> > > >I don't think we need any filtering since:
+> > > >
+> > > >PACKED features has been advertised to userspace via uAPI since
+> > > >6234f80574d7569444d8718355fa2838e92b158b. Once we relax in uAPI, it
+> > > >would be very hard to restrict it again. For the userspace that trie=
+s
+> > > >to negotiate PACKED:
+> > > >
+> > > >1) if it doesn't use SET_VRING_BASE/GET_VRING_BASE, everything works=
+ well
+> > > >2) if it uses SET_VRING_BASE/GET_VRING_BASE. it might fail or break =
+silently
+> > > >
+> > > >If we backport the fixes to -stable, we may break the application at
+> > > >least in the case 1).
+> > >
+> > > Okay, I see now, thanks for the details!
+> > >
+> > > Maybe instead of "break silently", we can return an explicit error fo=
+r
+> > > SET_VRING_BASE/GET_VRING_BASE in stable branches.
+> > > But if there are not many cases, we can leave it like that.
 > >
-> > For now, the BPF program of type BPF_PROG_TYPE_TRACING can only be used
-> > on the kernel functions whose arguments count less than 6. This is not
-> > friendly at all, as too many functions have arguments count more than 6=
-.
->
-> Since you already have some statistics, maybe listed in the commit messag=
-e.
->
+> > A second thought, if we need to do something for stable. is it better
+> > if we just backport Shannon's series to stable?
 > >
-> > Therefore, let's enhance it by increasing the function arguments count
-> > allowed in arch_prepare_bpf_trampoline(), for now, only x86_64.
+> > >
+> > > I was just concerned about how does the user space understand that it
+> > > can use SET_VRING_BASE/GET_VRING_BASE for PACKED virtqueues in a give=
+n
+> > > kernel or not.
 > >
-> > For the case that we don't need to call origin function, which means
-> > without BPF_TRAMP_F_CALL_ORIG, we need only copy the function arguments
-> > that stored in the frame of the caller to current frame. The arguments
-> > of arg6-argN are stored in "$rbp + 0x18", we need copy them to
-> > "$rbp - regs_off + (6 * 8)".
+> > My understanding is that if packed is advertised, the application
+> > should assume SET/GET_VRING_BASE work.
+> >
+> > Thanks
 >
-> Maybe I missed something, could you explain why it is '$rbp + 0x18'?
 >
-> In the current upstream code, we have
+> Let me ask you this. This is a bugfix yes?
+
+Not sure since it may break existing user space applications which
+make it hard to be backported to -stable.
+
+Before the fix, PACKED might work if SET/GET_VRING_BASE is not used.
+After the fix, PACKED won't work at all.
+
+Thanks
+
+What is the appropriate Fixes
+> tag?
 >
->          /* Generated trampoline stack layout:
->           *
->           * RBP + 8         [ return address  ]
->           * RBP + 0         [ RBP             ]
->           *
->           * RBP - 8         [ return value    ]  BPF_TRAMP_F_CALL_ORIG or
->           *
-> BPF_TRAMP_F_RET_FENTRY_RET flags
->           *
->           *                 [ reg_argN        ]  always
->           *                 [ ...             ]
->           * RBP - regs_off  [ reg_arg1        ]  program's ctx pointer
->           *
->           * RBP - nregs_off [ regs count      ]  always
->           *
->           * RBP - ip_off    [ traced function ]  BPF_TRAMP_F_IP_ARG flag
->           *
->           * RBP - run_ctx_off [ bpf_tramp_run_ctx ]
->           */
->
-> Next on-stack argument will be RBP + 16, right?
+> > >
+> > > Thanks,
+> > > Stefano
+> > >
 >
 
-Sorry for the confusing, it seems there should be
-some comments here.
-
-It's not the next on-stack argument, but the next next on-stack
-argument. The call chain is:
-
-caller -> origin call -> trampoline
-
-So, we have to skip the "RIP" in the stack frame of "origin call",
-which means RBP + 16 + 8. To be clear, there are only 8-byte
-in the stack frame of "origin call".
-
-Thanks!
-Menglong Dong
-
-
-> >
-> > For the case with BPF_TRAMP_F_CALL_ORIG, we need prepare the arguments
-> > in stack before call origin function, which means we need alloc extra
-> > "8 * (arg_count - 6)" memory in the top of the stack. Note, there shoul=
-d
-> > not be any data be pushed to the stack before call the origin function.
-> > Then, we have to store rbx with 'mov' instead of 'push'.
-> >
-> > We use EMIT3_off32() or EMIT4() for "lea" and "sub". The range of the
-> > imm in "lea" and "sub" is [-128, 127] if EMIT4() is used. Therefore,
-> > we use EMIT3_off32() instead if the imm out of the range.
-> >
-> > It works well for the FENTRY and FEXIT, I'm not sure if there are other
-> > complicated cases.
->
-> MODIFY_RETURN is also impacted by this patch.
->
-> >
-> > Reviewed-by: Jiang Biao <benbjiang@tencent.com>
-> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> [...]
