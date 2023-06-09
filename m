@@ -2,114 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC0BC729E33
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 17:22:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 094AF729E37
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 17:22:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241358AbjFIPWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 11:22:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54140 "EHLO
+        id S241459AbjFIPWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 11:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231938AbjFIPW1 (ORCPT
+        with ESMTP id S241269AbjFIPWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 11:22:27 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B1330F7
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 08:22:24 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686324143;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1naFavr92GwX5FkOX7e/quHSVxFZtV+4DxcoRTFPC6Q=;
-        b=UIfNsraeML09qxs86FX0zo6kBEbq1ALHAB85lj3ub1Z7X9LgnQy93k9XHTm/vilJEXs5Ir
-        llkKGj8FcmXONuq8zMP/hVC7hFa5CU+vP4szIJ++CqYUg0oG55tj3d8S+22215iQtMenKP
-        poQQCPOTBC2aU4N8SMoqmm81WBs542fnlCwbxiCLusR4bmhTo8oC87hUE+ThnFcD6cVPS3
-        n15LHd2SAbV+7UcxCJANo2DuWyNab0EXt6fvcDmOuHWK18eeATLenM8Ec8qFzuz//j2u/9
-        E75T7FSAqevWkJt0ON7ECFZADEA5vloKe26pANHLIPTCYQE+ZxjzSB6XGAFZPA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686324143;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1naFavr92GwX5FkOX7e/quHSVxFZtV+4DxcoRTFPC6Q=;
-        b=ZzrSBncpCwezVe7wuseibyrYIlve0G2tEZyR0dnz2li0uUYOkSVjSxUhDMo+YnwSiUwc5V
-        jV4R5S8a5JJ7roAA==
-To:     Nikolay Borisov <nik.borisov@suse.com>, x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org, mhocko@suse.com, jslaby@suse.cz,
-        Nikolay Borisov <nik.borisov@suse.com>
-Subject: Re: [PATCH v2 3/4] x86/entry: Disable IA32 syscall if ia32_disabled
- is true
-In-Reply-To: <20230609111311.4110901-4-nik.borisov@suse.com>
-References: <20230609111311.4110901-1-nik.borisov@suse.com>
- <20230609111311.4110901-4-nik.borisov@suse.com>
-Date:   Fri, 09 Jun 2023 17:22:22 +0200
-Message-ID: <87edmkirtd.ffs@tglx>
+        Fri, 9 Jun 2023 11:22:30 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0493586
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 08:22:28 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9786c67ec32so323939966b.1
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 08:22:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686324147; x=1688916147;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GgdpsFvlSHfvL616lpSzlLkpCKPLET85+hweuPq7lJc=;
+        b=FzyLHKGcr/Xw1q9ffKxueV/CMkIQ9Sh16XHXg/11EsJ+JRZrZplrMeYCYt/aNFUs3X
+         RdPmw7diWOrISV+qzlcK3NoKC95i/SRsMIBtshckxVTJ0Pa4KOVFSkpu/BNhxNnTmGrp
+         alRKlSV192nhtWZ4bqi5NyFGNRovkaWhK7ajlUrPgtYKXYULL0QBtwNpGn1BKpoU0q+k
+         lfz5KqSMv39OjRz6M8rRoeoEU3DhWBc00/qCbus0vPV02PfoEjgJURxLnUCDqJz5gmNI
+         V9HAuk0Zf3E4SV+MY2IKl7tR7OrAqZsFakwO9UUejmT6ygjkv7xuF7XZ1w7vCx2CHA76
+         k0+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686324147; x=1688916147;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GgdpsFvlSHfvL616lpSzlLkpCKPLET85+hweuPq7lJc=;
+        b=kPrH+wEaZa0yZ26IL2Og8a3WaZhzNPtKmr9PWlL1pRwxKunwMxPCpU4rFdhxaYJii8
+         qpyrvgTIiU9e/pNJmjz96wSAjpajCJmSsJv+6fxNRGwr0MLifpwJwCSRW5GGLNo8r1DQ
+         CJTIOeNUhzPaz07qmCIe9j6r1SES2WwKOsG7wyv7KmtGz/5931w2JE8ROhES8r9S01+0
+         5RIGnMnXoceBpKuLMVTHBCmKb7yzSK5azwYV4sJkvGQRK3Ds3i7NB1UbacG9dwnA9Ljt
+         E6JFeBL642ayEWxjtsp5FnzGtehmnawaOsMfeOqicIowZp8/2TqukxpKOzVZNg5WoWA1
+         fZkA==
+X-Gm-Message-State: AC+VfDwWGwnyw5BVhMsGgUNpuy1gorgEXvD9b7PmjkLrJBfkO8o0yQSV
+        p1iSx00dKTmFLWbkow7Wu8k0jA==
+X-Google-Smtp-Source: ACHHUZ7q69XNyD0Ob8QMei1RaexdonLE4GtsIMKFsMTA3rAxns1PVZy9ZARL+DMqns9sNRl+z541mA==
+X-Received: by 2002:a17:907:25cc:b0:94f:6218:191d with SMTP id ae12-20020a17090725cc00b0094f6218191dmr2079991ejc.32.1686324146722;
+        Fri, 09 Jun 2023 08:22:26 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id v19-20020a170906565300b00969e9fef151sm1421651ejr.97.2023.06.09.08.22.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Jun 2023 08:22:26 -0700 (PDT)
+Message-ID: <2fe0c7f9-55fc-ae63-3631-8526a0212ccd@linaro.org>
+Date:   Fri, 9 Jun 2023 17:22:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v4 2/9] virt: geniezone: Add GenieZone hypervisor support
+To:     Yi-De Wu <yi-de.wu@mediatek.com>,
+        Yingshiuan Pan <yingshiuan.pan@mediatek.com>,
+        Ze-Yu Wang <ze-yu.wang@mediatek.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        David Bradil <dbrazdil@google.com>,
+        Jade Shih <jades.shih@mediatek.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Ivan Tseng <ivan.tseng@mediatek.com>,
+        My Chuang <my.chuang@mediatek.com>,
+        Shawn Hsiao <shawn.hsiao@mediatek.com>,
+        PeiLun Suei <peilun.suei@mediatek.com>,
+        Liju Chen <liju-clr.chen@mediatek.com>,
+        Willix Yeh <chi-shen.yeh@mediatek.com>
+References: <20230609085214.31071-1-yi-de.wu@mediatek.com>
+ <20230609085214.31071-3-yi-de.wu@mediatek.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230609085214.31071-3-yi-de.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09 2023 at 14:13, Nikolay Borisov wrote:
-> First stage of disabling ia32 compat layer is to disable 32bit syscall
-> entry points. Legacy int 0x80 vector is disabled by zeroing out its gate
-> descriptor in the idt and the sysenter vector is disabled by re-using
-> the existing code in case IA32_EMULATION is disabled.
+On 09/06/2023 10:52, Yi-De Wu wrote:
+> From: "Yingshiuan Pan" <yingshiuan.pan@mediatek.com>
+> 
+> GenieZone is MediaTek hypervisor solution, and it is running in EL2
+> stand alone as a type-I hypervisor. This patch exports a set of ioctl
+> interfaces for userspace VMM (e.g., crosvm) to operate guest VMs
+> lifecycle (creation and destroy) on GenieZone.
 
-This describes WHAT the patch does without providing any context.
+...
 
-> +	if ((IS_ENABLED(CONFIG_IA32_EMULATION) && ia32_disabled) ||
-> +	    !IS_ENABLED(CONFIG_IA32_EMULATION)) {
-
-I told you before that my brain based compiler complains about your
-patches not building with CONFIG_IA32_EMULATION=n. The above still fails
-to build.
-
-Aside of that this condition is convoluted and can be simplified to
-exactly a simple and understandable
-
-        if (foo)
-
-which is actually the obvious solution to make it compile in all
-configurations.
-
-It's not too much asked to flip the config switch which affects the code
-you are changing for a test.
-
-> @@ -226,6 +226,13 @@ void __init idt_setup_early_traps(void)
->  void __init idt_setup_traps(void)
->  {
->  	idt_setup_from_table(idt_table, def_idts, ARRAY_SIZE(def_idts), true);
+> +static int gzvm_drv_probe(void)
+> +{
+> +	int ret;
 > +
-> +	if (IS_ENABLED(CONFIG_IA32_EMULATION) && ia32_disabled) {
-
-Ditto.
-
-> +		gate_desc null_desc = {};
-
-Lacks a newline between declaration and code. It's documented to be
-required, no?
-
-> +		write_idt_entry(idt_table, IA32_SYSCALL_VECTOR, &null_desc);
-> +		clear_bit(IA32_SYSCALL_VECTOR, system_vectors);
+> +	if (gzvm_arch_probe() != 0) {
+> +		pr_err("Not found available conduit\n");
+> +		return -ENODEV;
 > +	}
+> +
+> +	ret = misc_register(&gzvm_dev);
+> +	if (ret)
+> +		return ret;
+> +	gzvm_debug_dev = &gzvm_dev;
+> +
+> +	return 0;
+> +}
+> +
+> +static int gzvm_drv_remove(void)
+> +{
+> +	destroy_all_vm();
+> +	misc_deregister(&gzvm_dev);
+> +	return 0;
+> +}
+> +
+> +static int gzvm_dev_init(void)
+> +{
+> +	return gzvm_drv_probe();
 
-That aside, I asked you to split IA32_SYSCALL_VECTOR out of def_idts[]
-and handle it separately, no? If you disagree with me then reply to my
-review first instead of ignoring me silently.
+So for every system and architecture you want to: probe, run some SMC
+and then print error that it is not othe system you wanted.
 
-I don't care about you wasting your time, but I very much care about you
-wasting my time.
+I don't think this is what we want. You basically pollute all of other
+users just to have your hypervisor guest additions...
 
-Stop this right now before it becomes a habit.
 
-Thanks,
+Best regards,
+Krzysztof
 
-        tglx
