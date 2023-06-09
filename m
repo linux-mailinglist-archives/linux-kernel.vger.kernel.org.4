@@ -2,227 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E94ED729C67
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91A4E729C6D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241144AbjFIOJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 10:09:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37518 "EHLO
+        id S239937AbjFIOKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 10:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241119AbjFIOIo (ORCPT
+        with ESMTP id S232138AbjFIOKU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 10:08:44 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252DA3A97
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 07:08:24 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-514924ca903so2767783a12.2
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 07:08:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686319676; x=1688911676;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mq7aAwDqysJigrIwiPTPGrjCxNlaNxkTWBW8tf7ilDM=;
-        b=EtANPXp4onPWBknX5WJBLtooHfbRoWWViCbQKANAWyFWyPSdn0u8M2XTRGGfBfGhjs
-         HNvim90blRGkfBJ9qzeZJHpMSDggmFPdih9nlsSI5f8d+bWTWWfyrPptDP+vf2XpvJat
-         8GMjRGdvxs8GoB9S1N/iZBe1o4qxgcz0w+ZYrnGPruxNgr+vob2CgnrYo2HchlBmDmHt
-         gq3oTenmYs7oe6PuUMPXucY9m0tHL6uX28XfhIGrJ+oiQgSgS27x39/RrOEsTVaf4kbW
-         ab4t5Tk9q/Wq2MWdh0tavLRjFHYjLYWQXq8kjd4mjX8dDzlrq++fcn7xjBCT9xIHOM+L
-         Y0ZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686319676; x=1688911676;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Mq7aAwDqysJigrIwiPTPGrjCxNlaNxkTWBW8tf7ilDM=;
-        b=g6JHPAJ4NxuKwyFOAEpZ/mvhhQ44jZwQHht+DnhldwzoRTDzqgiThqvZaPPWmK7j0A
-         Mrtw7OKsDEAAvSbagiRbcTXGEGynEPezJ9um6hchvzTtejUaZY4yQDJfho+eimYCtbBg
-         cjeQat5+109gUik3CYPcrjvbtvbAHQqyXPNUw2LAarSN1msBmB5Jzm9sO7F6oqBaqDRd
-         Z6cJ9dDktMYY30LNo8yYcBGhK89u1wyPjG6ef0GGws7P3iwW4Zojd4BOB3Fdw6w4bfEh
-         Ez0wx/92hcg0F18oaAF99BjjnD2gMJKuFGi/zCFC+fAMjQFHaYehdZVrt4o+Uf6R9ItQ
-         0UHQ==
-X-Gm-Message-State: AC+VfDwsIJ/QPugqp0buKNGGPFTTVsJUMizkNEEOuBJ6sxGn6ktrd+wf
-        ddYyYyA0GogPFHDHW8iSyJHSjw==
-X-Google-Smtp-Source: ACHHUZ6pY04whzkXSsILutSBFFXAvABTLYt6ob8jR/zTu+34kkmTKfsoZaSGBGmQui82Fa1SLCC16A==
-X-Received: by 2002:aa7:da8a:0:b0:510:f44c:4b71 with SMTP id q10-20020aa7da8a000000b00510f44c4b71mr1207523eds.27.1686319676550;
-        Fri, 09 Jun 2023 07:07:56 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id k10-20020aa7c38a000000b005027d31615dsm1793994edq.62.2023.06.09.07.07.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 07:07:56 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Fri, 9 Jun 2023 10:10:20 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D050D4200;
+        Fri,  9 Jun 2023 07:09:50 -0700 (PDT)
+Date:   Fri, 09 Jun 2023 14:09:19 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1686319760;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JDj8IzLM0Jtl37BLKjWXAZXxtw67psPlf3t0DxPDuDo=;
+        b=P4IQbUFdfX6NtRDMfJE594Kla40bSHV2mCGURzdZa7NY9jPt5CxfcCK5h56MEpFRozC912
+        7pDXQNY7odH1DtpU7Qkue04i91DgbXmpr7GgewpiSCQpBYbcvgH/+ud3241nY8JXUXzVNg
+        uBKYwK8kG7d4Hj71qOK8UJ8r+quqWQqP5jOUkACG6yQug1hVmNLdQqosdz936zvefdHiDi
+        EIh4XFruUpvD+QS5lGsWOgY3obKVKIEu5UDen314L4a4j8nFz4siDrxBzzoieLqA0ONW+B
+        dqCzPbvUgocmUkSni/4L3G2yQ8ihhfQ/FZ7Jhq7+mwo66HLAkrj+PwILi25uJA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1686319760;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JDj8IzLM0Jtl37BLKjWXAZXxtw67psPlf3t0DxPDuDo=;
+        b=pNN28+o7WNi7tymYMweYJRysbpH6XrDXBwrh5FbrLBsUm1XGI8N30ZuI4z5JTLri2YBtv2
+        whrxyDv/oBF6NdDg==
+From:   "tip-bot2 for Arnd Bergmann" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cc] virt: sevguest: Add CONFIG_CRYPTO dependency
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: arm: drop unneeded quotes and use absolute /schemas path
-Date:   Fri,  9 Jun 2023 16:07:54 +0200
-Message-Id: <20230609140754.65158-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230117171416.2715125-1-arnd@kernel.org>
+References: <20230117171416.2715125-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Message-ID: <168631975954.404.17946185529019055660.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-checking for this can be enabled in yamllint.  Also absolute path
-starting with /schemas is preferred.
+The following commit has been merged into the x86/cc branch of tip:
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Commit-ID:     84b9b44b99780d35fe72ac63c4724f158771e898
+Gitweb:        https://git.kernel.org/tip/84b9b44b99780d35fe72ac63c4724f158771e898
+Author:        Arnd Bergmann <arnd@arndb.de>
+AuthorDate:    Tue, 17 Jan 2023 18:13:56 +01:00
+Committer:     Borislav Petkov (AMD) <bp@alien8.de>
+CommitterDate: Fri, 09 Jun 2023 15:53:07 +02:00
+
+virt: sevguest: Add CONFIG_CRYPTO dependency
+
+This driver fails to link when CRYPTO is disabled, or in a loadable
+module:
+
+  WARNING: unmet direct dependencies detected for CRYPTO_GCM
+  WARNING: unmet direct dependencies detected for CRYPTO_AEAD2
+    Depends on [m]: CRYPTO [=m]
+    Selected by [y]:
+    - SEV_GUEST [=y] && VIRT_DRIVERS [=y] && AMD_MEM_ENCRYPT [=y]
+
+x86_64-linux-ld: crypto/aead.o: in function `crypto_register_aeads':
+
+Fixes: fce96cf04430 ("virt: Add SEV-SNP guest driver")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Link: https://lore.kernel.org/r/20230117171416.2715125-1-arnd@kernel.org
 ---
- .../bindings/arm/arm,vexpress-juno.yaml        | 10 +++++-----
- .../devicetree/bindings/arm/cpus.yaml          | 18 +++++++++---------
- .../devicetree/bindings/arm/psci.yaml          |  2 +-
- 3 files changed, 15 insertions(+), 15 deletions(-)
+ drivers/virt/coco/sev-guest/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml b/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml
-index 09c319f803ba..cdd65881fcdd 100644
---- a/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml
-+++ b/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml
-@@ -122,14 +122,14 @@ properties:
-   arm,vexpress,position:
-     description: When daughterboards are stacked on one site, their position
-       in the stack be be described this attribute.
--    $ref: '/schemas/types.yaml#/definitions/uint32'
-+    $ref: /schemas/types.yaml#/definitions/uint32
-     minimum: 0
-     maximum: 3
- 
-   arm,vexpress,dcc:
-     description: When describing tiles consisting of more than one DCC, its
-       number can be specified with this attribute.
--    $ref: '/schemas/types.yaml#/definitions/uint32'
-+    $ref: /schemas/types.yaml#/definitions/uint32
-     minimum: 0
-     maximum: 3
- 
-@@ -180,13 +180,13 @@ patternProperties:
-               - const: simple-bus
-           arm,v2m-memory-map:
-             description: This describes the memory map type.
--            $ref: '/schemas/types.yaml#/definitions/string'
-+            $ref: /schemas/types.yaml#/definitions/string
-             enum:
-               - rs1
-               - rs2
- 
-           arm,hbi:
--            $ref: '/schemas/types.yaml#/definitions/uint32'
-+            $ref: /schemas/types.yaml#/definitions/uint32
-             description: This indicates the ARM HBI (Hardware Board ID), this is
-               ARM's unique board model ID, visible on the PCB's silkscreen.
- 
-@@ -197,7 +197,7 @@ patternProperties:
-               property, describing the physical location of the children nodes.
-               0 means motherboard site, while 1 and 2 are daughterboard sites, and
-               0xf means "sisterboard" which is the site containing the main CPU tile.
--            $ref: '/schemas/types.yaml#/definitions/uint32'
-+            $ref: /schemas/types.yaml#/definitions/uint32
-             minimum: 0
-             maximum: 15
- 
-diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
-index 64b58238e3a1..9e6a45eea4e5 100644
---- a/Documentation/devicetree/bindings/arm/cpus.yaml
-+++ b/Documentation/devicetree/bindings/arm/cpus.yaml
-@@ -197,7 +197,7 @@ properties:
-       - qcom,scorpion
- 
-   enable-method:
--    $ref: '/schemas/types.yaml#/definitions/string'
-+    $ref: /schemas/types.yaml#/definitions/string
-     oneOf:
-       # On ARM v8 64-bit this property is required
-       - enum:
-@@ -246,8 +246,8 @@ properties:
- 
-   cpu-release-addr:
-     oneOf:
--      - $ref: '/schemas/types.yaml#/definitions/uint32'
--      - $ref: '/schemas/types.yaml#/definitions/uint64'
-+      - $ref: /schemas/types.yaml#/definitions/uint32
-+      - $ref: /schemas/types.yaml#/definitions/uint64
-     description:
-       The DT specification defines this as 64-bit always, but some 32-bit Arm
-       systems have used a 32-bit value which must be supported.
-@@ -255,7 +255,7 @@ properties:
-         property value of "spin-table".
- 
-   cpu-idle-states:
--    $ref: '/schemas/types.yaml#/definitions/phandle-array'
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-     items:
-       maxItems: 1
-     description: |
-@@ -271,7 +271,7 @@ properties:
-   cci-control-port: true
- 
-   dynamic-power-coefficient:
--    $ref: '/schemas/types.yaml#/definitions/uint32'
-+    $ref: /schemas/types.yaml#/definitions/uint32
-     description:
-       A u32 value that represents the running time dynamic
-       power coefficient in units of uW/MHz/V^2. The
-@@ -308,7 +308,7 @@ properties:
-       PM domain provider, must be "psci".
- 
-   qcom,saw:
--    $ref: '/schemas/types.yaml#/definitions/phandle'
-+    $ref: /schemas/types.yaml#/definitions/phandle
-     description: |
-       Specifies the SAW* node associated with this CPU.
- 
-@@ -318,7 +318,7 @@ properties:
-       * arm/msm/qcom,saw2.txt
- 
-   qcom,acc:
--    $ref: '/schemas/types.yaml#/definitions/phandle'
-+    $ref: /schemas/types.yaml#/definitions/phandle
-     description: |
-       Specifies the ACC* node associated with this CPU.
- 
-@@ -329,7 +329,7 @@ properties:
-       * arm/msm/qcom,kpss-acc.txt
- 
-   rockchip,pmu:
--    $ref: '/schemas/types.yaml#/definitions/phandle'
-+    $ref: /schemas/types.yaml#/definitions/phandle
-     description: |
-       Specifies the syscon node controlling the cpu core power domains.
- 
-@@ -339,7 +339,7 @@ properties:
-       the cpu-core power-domains.
- 
-   secondary-boot-reg:
--    $ref: '/schemas/types.yaml#/definitions/uint32'
-+    $ref: /schemas/types.yaml#/definitions/uint32
-     description: |
-       Required for systems that have an "enable-method" property value of
-       "brcm,bcm11351-cpu-method", "brcm,bcm23550" or "brcm,bcm-nsp-smp".
-diff --git a/Documentation/devicetree/bindings/arm/psci.yaml b/Documentation/devicetree/bindings/arm/psci.yaml
-index 3a2c908ff282..0c5381e081bd 100644
---- a/Documentation/devicetree/bindings/arm/psci.yaml
-+++ b/Documentation/devicetree/bindings/arm/psci.yaml
-@@ -100,7 +100,7 @@ properties:
- 
- patternProperties:
-   "^power-domain-":
--    $ref: "../power/power-domain.yaml#"
-+    $ref: /schemas/power/power-domain.yaml#
- 
-     type: object
-     description: |
--- 
-2.34.1
-
+diff --git a/drivers/virt/coco/sev-guest/Kconfig b/drivers/virt/coco/sev-guest/Kconfig
+index f9db079..da2d7ca 100644
+--- a/drivers/virt/coco/sev-guest/Kconfig
++++ b/drivers/virt/coco/sev-guest/Kconfig
+@@ -2,6 +2,7 @@ config SEV_GUEST
+ 	tristate "AMD SEV Guest driver"
+ 	default m
+ 	depends on AMD_MEM_ENCRYPT
++	select CRYPTO
+ 	select CRYPTO_AEAD2
+ 	select CRYPTO_GCM
+ 	help
