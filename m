@@ -2,83 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 104BB728FE8
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 08:23:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C49A728FE9
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 08:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237953AbjFIGXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 02:23:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43762 "EHLO
+        id S237795AbjFIGXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 02:23:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237765AbjFIGXb (ORCPT
+        with ESMTP id S238099AbjFIGXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 02:23:31 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3117A30FE
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 23:23:04 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f624daccd1so1676481e87.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 23:23:04 -0700 (PDT)
+        Fri, 9 Jun 2023 02:23:38 -0400
+Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1073730FD
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 23:23:35 -0700 (PDT)
+Received: by mail-oo1-xc36.google.com with SMTP id 006d021491bc7-5523bd97c64so1616679eaf.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 23:23:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686291782; x=1688883782;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ahb0lPOTs+JWWPyDMbaPFJT91yAHGxqRHu+CdUV2gP4=;
-        b=Eke/dopk+z/dH0caUgvJ/beKIOT4JjX/KQ94l40rseaCcLN0bOjEVG74QTHKfFqjkW
-         dJABbRaIWUyv61Yjb+54q3zhRtl8HbYgl9g9ZNTROqaonzZDeULX+LtQld1EhFLT/Gbv
-         yMqjOwjU3YufETwnSSuDe7vGlHEH5haeuwHyBBnI4RKe1OE+kDCrZpvjP3PHrhxeHBtC
-         1LbMLJEPETmuXa1JSfg2gnE7XLZpq307s6UHw0FfpsUVGSQiJOJ2gmNapT3U8kRp8xIt
-         m58dd5l78sikdlSMvZorFmcfJ8Eywv6XbCEqUH8pYOHIB0dCxMtDWPDww21C0nyKsAqi
-         HT6w==
+        d=gmail.com; s=20221208; t=1686291815; x=1688883815;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HDfpwEbtdkwWsjyogcTfCoQzLF0dQnPR2AN0SNtNzSA=;
+        b=gL+b3BWErI97pjMfxFnrNvc5M9TCMvXlvxQWb2fuR/TEERVDKRfnYfN9O41OYnqh0Q
+         CxttWnz2ZIrkZlJefPIU+tzsUQJ2LzdU3RG4wwP+KEuwJih7VvVBEyHPviURJ2BfsZ2x
+         4bOZZH9pRfO83VkCREuNaJ7+GxHJl7k6grz+imOut19Qv4UaNg5wQPe5g95Gkh4oU/15
+         0MnOJpwukK5kPhoqQy7TtVo4tJsI7n9rhn9vM7Ze9tQUw+7rTywwulpyrRPgsb7VE4z4
+         1VdAYzgB/rasZpPHA3pWD6y8gRBA7WPXrVf222JGkVsN9mSLWyMNbBBaGDa1JLNM5r66
+         w+WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686291782; x=1688883782;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ahb0lPOTs+JWWPyDMbaPFJT91yAHGxqRHu+CdUV2gP4=;
-        b=dcURJRw5gZe0kxFdAVlMgwcOsckycB6PNa5ltYWgyigFwQ4GCMYEjvW5y7cOmHyJlU
-         4u5TBmSKPRkfxPXs0fPTY09o36Srjj4jTtON3Ax7hbNQ3zs2Oa3Ta02t5Wg1P3U7MuEe
-         nhGBiU4hVoAMFJQ3l94Zl1QR6PybKuPYbPAHX1aGbgQNBhkgkCaMd/pZ6nhYTHxrFtSY
-         3EAGi63f9PqVyVtcjRcjRQewYzDaY2mXsSojFsQX8nkr3ibDVaZMv8JLK0vJZpiemPKh
-         GXTQXAKtywavaQQrCs8MPKhCVGJBxOqLbQsLm4MSVFJLPnpahXN8eYNB3WxlVi+zx3j1
-         vYZw==
-X-Gm-Message-State: AC+VfDxAmBEhj9FnGv/aGnNWAisy6hycBPDVmOxoB+0fC4dARDEtmQSr
-        EOmZ5clXlonEmZUQ3phRRC3zJuPjCxfF2v9Z9aCGYg==
-X-Google-Smtp-Source: ACHHUZ5/Xgu3TuG4gH2BiHgtC5fGqWSnnE4lx/DOdjsaDRJH9VCdJ127BsqBmVezD46td6Izk71WYd8Xz/xUcgg/fj4=
-X-Received: by 2002:a05:6512:3123:b0:4f3:a723:1dc6 with SMTP id
- p3-20020a056512312300b004f3a7231dc6mr203488lfd.52.1686291782326; Thu, 08 Jun
- 2023 23:23:02 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686291815; x=1688883815;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HDfpwEbtdkwWsjyogcTfCoQzLF0dQnPR2AN0SNtNzSA=;
+        b=OscgXhrSSzvsCPmxir4qobgZro83nVVEIYSvqUdhEvSurxD9KYYcod309KWaGKs4A3
+         IE3cgEMpN0yTRTuoYakMU74/xFWZYIVnXq5LlU5Pkfsw2eHTyL0ksyq7kbVt7Abh0Qe4
+         3s0BwO3AwT5LtrGPCQHxCFdxxONm4m0zv9fJCTikr4vh84ZhrmZP0y06pWWwAso28PB2
+         IoiSIav9xTMofgSIz0pyoyofswaxZHaYjbDrKm6qCESX2xQrKpdHgB+wbXtK7bAWoJb4
+         MmwENSv3+AQ4M4jvd46Iac0h8UpAntCTvdW8oli5SagCj4FD3/gKc13OKeQWADrCAFGH
+         z34Q==
+X-Gm-Message-State: AC+VfDyZfXfFlp8B5IMjwDisj2jAzcAN363NV97Y4/j10MuCI81vU0ie
+        uloRWnGo6UdxrE2E5WtCkODeRWdAZatvUakLh6feir7PPzJhWpMD
+X-Google-Smtp-Source: ACHHUZ4nAu7DmWhMVHG3ShSe+qV5/1hVFvE6AJ31IqIf+UD+MuQMqp8xzrc2bI5iVp3kfijUALnwIqfh6nepnqQ2UPo=
+X-Received: by 2002:aca:d843:0:b0:39a:3dbd:d26d with SMTP id
+ p64-20020acad843000000b0039a3dbdd26dmr2139177oig.5.1686291814948; Thu, 08 Jun
+ 2023 23:23:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230526010748.1222-1-masahisa.kojima@linaro.org>
- <4ff09002-e871-38b9-43ec-227a64bac731@siemens.com> <CAC_iWjJJ5E9Q1or5yTiDynzv_WAYH-g+N24aRdu9rvcsbWqnrg@mail.gmail.com>
- <CAFA6WYNFYB1LiOFB_iwTsdD5PmnDdSbtDSH2J4FVFPx3uik8rQ@mail.gmail.com>
- <CAC_iWj+E7-XK6dCeSn4205K0O3EZCLxCaC+adu-14ST6sdudfA@mail.gmail.com>
- <76da826f-b608-6add-5401-6de818b180e3@siemens.com> <CAFA6WYPCDRjFzsUMU=SNzEt88nT7Fcm1eOFL8z4HiQO+=2JeVA@mail.gmail.com>
- <cc6bd203-83ea-c247-0986-7fec6f327ee8@siemens.com> <CAC_iWjKZNHJxq4VMFnV7oQngwBBCQveh=s34u1LZ59YUqViPbw@mail.gmail.com>
- <CAC_iWjJMv68yLC606SBhMmBYkR4wVC8SvUcPvNM=RX_qL=9Bvw@mail.gmail.com>
- <b9b8c1d3-fc8e-df94-d12b-a9e3debf3418@siemens.com> <CAC_iWj+cP4RfDNu_n-ZOp7A62W34drLpPszN_hrkqF_aPTLtMg@mail.gmail.com>
- <871ece13-7d6e-44d4-3bda-317658202f6f@siemens.com> <CAC_iWjKgCJWgKU8tC3Nfn-0CgwGhw89B3JpTgsjkjDDOcWZEdw@mail.gmail.com>
- <CAMj1kXGbXdbDr6DbyuziSFuxMgAimjNnkhqy8C-S5AbxdnixuQ@mail.gmail.com> <e0c71d88-ec5d-a348-0a53-ec6cea298b60@siemens.com>
-In-Reply-To: <e0c71d88-ec5d-a348-0a53-ec6cea298b60@siemens.com>
-From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Date:   Fri, 9 Jun 2023 09:22:26 +0300
-Message-ID: <CAC_iWjJs7pw-iF-tRL6MpJ7O1PL0riJ7aD2DkpB0F9cDMaxuiw@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] efi: Add tee-based EFI variable driver
-To:     Jan Kiszka <jan.kiszka@siemens.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-efi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        "Su, Bao Cheng (RC-CN DF FA R&D)" <baocheng.su@siemens.com>
+References: <20230606093135.GA9077@didi-ThinkCentre-M930t-N000>
+ <ZIJbvCcaqjzNteWs@slm.duckdns.org> <CAEQmJ=gLCzoxUR9Eas+w9=bV7Tg5SZNb+TufanNXnPxR8cn5iQ@mail.gmail.com>
+In-Reply-To: <CAEQmJ=gLCzoxUR9Eas+w9=bV7Tg5SZNb+TufanNXnPxR8cn5iQ@mail.gmail.com>
+From:   Yuanhan Zhang <zyhtheonly@gmail.com>
+Date:   Fri, 9 Jun 2023 14:23:23 +0800
+Message-ID: <CAEQmJ=gy=ORK9hnxLYL9x_bbJTVozvtpiCfMexROTmYH7ctTBA@mail.gmail.com>
+Subject: Re: [PATCH] workqueue: introduce queue_work_cpumask to queue work
+ onto a given cpumask
+To:     Tejun Heo <tj@kernel.org>
+Cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
+        pmladek@suse.com, zyhtheonly@yeah.net, zwp10758@gmail.com,
+        tiozhang@didiglobal.com, fuyuanli@didiglobal.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,133 +72,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jan,
+// I resend this to put it into the same thread, sorry for the confusion.
 
-On Fri, 9 Jun 2023 at 09:16, Jan Kiszka <jan.kiszka@siemens.com> wrote:
->
-> On 08.06.23 15:52, Ard Biesheuvel wrote:
-> > On Thu, 8 Jun 2023 at 08:22, Ilias Apalodimas
-> > <ilias.apalodimas@linaro.org> wrote:
-> >>
-> >> Hi Jan
-> >>
-> >>
-> >> On Wed, 7 Jun 2023 at 22:46, Jan Kiszka <jan.kiszka@siemens.com> wrote:
-> >>>
-> >>> On 07.06.23 20:17, Ilias Apalodimas wrote:
-> >>>> On Wed, 7 Jun 2023 at 20:14, Jan Kiszka <jan.kiszka@siemens.com> wrote:
-> >>>>>
-> >>>>> On 07.06.23 18:59, Ilias Apalodimas wrote:
-> >>>>>> On Wed, 7 Jun 2023 at 19:09, Ilias Apalodimas
-> >>>>>> <ilias.apalodimas@linaro.org> wrote:
-> >>>>>>>
-> >>>>>>> Hi Jan,
-> >>>>>>>
-> >>>>>>> [...]
-> >>>>>>>>>>> No I don't, this will work reliably without the need to remount the efivarfs.
-> >>>>>>>>>>> As you point out you will still have this dependency if you end up
-> >>>>>>>>>>> building them as modules and you manage to mount the efivarfs before
-> >>>>>>>>>>> those get inserted.  Does anyone see a reasonable workaround?
-> >>>>>>>>>>> Deceiving the kernel and making the bootloader set the RT property bit
-> >>>>>>>>>>> to force the filesystem being mounted as rw is a nasty hack that we
-> >>>>>>>>>>> should avoid.  Maybe adding a kernel command line parameter that says
-> >>>>>>>>>>> "Ignore the RTPROP I know what I am doing"?  I don't particularly love
-> >>>>>>>>>>> this either, but it's not unreasonable.
-> >>>>>>>>>>
-> >>>>>>>>>> In the context of https://github.com/OP-TEE/optee_os/issues/6094,
-> >>>>>>>>>> basically this issue mapped on reboot/shutdown, I would really love to
-> >>>>>>>>>> see the unhandy tee-supplicant daemon to be overcome.
-> >>>>>>>>>
-> >>>>>>>>> I have seen this error before and it has been on my todo list. So I
-> >>>>>>>>> have tried to fix it here [1]. Feel free to test it and let me know if
-> >>>>>>>>> you see any further issues.
-> >>>>>>>>>
-> >>>>>>>>> [1] https://lkml.org/lkml/2023/6/7/927
-> >>>>>>>>>
-> >>>>>>>>
-> >>>>>>>> Ah, nice, will test ASAP!
-> >>>>>>>>
-> >>>>>>>> Meanwhile more food: I managed to build a firmware that was missing
-> >>>>>>>> STMM. But the driver loaded, and I got this:
-> >>>>>>>
-> >>>>>>> Thanks for the testing. I'll try to reproduce it locally and get back to you
-> >>>>>>
-> >>>>>> Can you provide a bit more info on how that was triggered btw? I would
-> >>>>>> be helpful to know
-> >>>>>>
-> >>>>>> - OP-TEE version
-> >>>>>
-> >>>>> Today's master, 145953d55.
-> >>>>>
-> >>>>>> - was it compiled as a module or built-in?
-> >>>>>
-> >>>>> Sorry, not sure anymore, switching back and forth right now. I think it
-> >>>>> was built-in.
-> >>>>>
-> >>>>>> - was the supplicant running?
-> >>>>>
-> >>>>> Yes.
-> >>>>>
-> >>>>
-> >>>> Ok thanks, that helps.  I guess this also means U-Boot was compiled to
-> >>>> store the variables in a file in the ESP instead of the RPMB right?
-> >>>> Otherwise, I can't see how the device booted in the first place.
-> >>>
-> >>> U-Boot was not configured to perform secure booting in this case. It had
-> >>> RPMB support enabled, just didn't have to use it.
-> >>
-> >> In your initial mail you said you managed to build a firmware without
-> >> StMM.  If U-boot isn't reconfigured accordingly -- iow skip the EFI
-> >> variable storage in an RPMB, the EFI subsystem will fail to start.
-> >>
-> >> In any case, I don't think the ooops you are seeing is not connected
-> >> to this patchset.  Looking at the kernel EFI stub we only set the
-> >> SetVariableRT if the RTPROP table is set accordingly by the firmware.
-> >> U-Boot never sets the EFI_RT_SUPPORTED_SET_VARIABLE property since it
-> >> can't support it.  What you are doing is remount the efivarfs as rw
-> >> and then trying to set a variable, but the callback for it is  NULL.
-> >> I think you'll be able to replicate the same behavior on the kernel
-> >> without even inserting the new module.
->
-> Might be true. I'll try to look into that again when the other dust settled.
->
-> >
-> > I have dropped this series from efi/next for now, given that it
-> > obviously has problems in its current state.
-> >
-> > The risk of merging this now and fixing it later is that it may cause
-> > regressions for early adopters that rely on the behavior we are
-> > introducing here. Better to get this in shape first.
->
-> On the one side, I'm sorry having ruined the merge, but my gut feeling
-> is as well that this really needs to be reworked to get rid of the
-> unfortunate tee-supplicant daemon. So far, we have to start the daemon
-> from initrd, write a systemd service to adopt that instance, and make
-> ftpm modular to remove it before terminating tee-supplicant (e.g. on
-> system shutdown) - Sumit's patch didn't help there.
->
+> Can you elaborate the intended use cases?
 
-No worries, the whole functionality is intrusive, so I prefer going
-through some iterations until everyone is happy.  OTOH the
-'supplicant' problem isn't going away soon.  We will try to move it to
-the kernel but that has some difficulties as well and it's going to
-take some time.  In any case, we've lived with the supplicant for
-quite some time and the ftpm module has a similar set of problems.
-IOW there are kernel modules that depend on it.
-From a functionality point of view nothing will change if the
-supplicant gets moved to kernel space.  It  will just make distros
-life easier and remove the supplicant dependency.  I've attached a
-patch that solves both the kernel panic and the fortunate side-effect
-is that you don't have to remount the efivarfs.  If people like it, I
-can send it as a fix
+Hi Tejun,
+
+Thanks for your reply! Please let me use myself as an example to explain th=
+is.
+
+In my scenario, I have 7 cpus on my machine (actually it is uma, so
+queue_work_node
+or using UNBOUND do not works for me), and for some unlucky reasons
+there are always some irqs running on cpu 0 and cpu 6, since I'm using arm6=
+4
+with irqs tuning into FIFO threads, those threaded irqs are always running =
+on
+cpu 0 and 6 too (for affinity). And this would not be fixed easily in
+short terms :(
+
+So in order to help async init for better boot times for my devices,
+I'd like to prevent
+works from running on cpu 0 and 6. With queue_work_cpumask(), it would be s=
+imply
+done by:
+
+...
+cpumask_clear_cpu(0, cpumask);  // actually I use sysfs to parse my cpumask
+cpumask_clear_cpu(6, cpumask);
+queue_work_cpumask(cpumask, my_wq, &my_work->work);
+...
 
 
+> The code seems duplicated too. Could you do a little refactoring and make
+> they (queue_work_cpumask() & queue_work_node()) share some code?
 
-Thanks
-/Ilias
-> Jan
+Hi Lai,
+
+Thanks for your advice!
+
+I do the refactoring in PATCH v2, there are some changes:
+1. removed WARN_ONCE in previous code
+  1). queue_work_node works well in UNBOUND since we have unbound_pwq_by_no=
+de()
+       in __queue_work() to choose the right node.
+  2). queue_work_cpumask does not work in UNBOUND since list
+numa_pwq_tbl is designed
+       to be per numa node. I comment on this in this patch.
+2. remove the previous workqueue_select_cpu_near and let queue_work_node() =
+use
+    queue_work_on() and queue_work_cpumask().
+
+I test this patch with 100,000 queue_work_cpumask() &
+queue_work_node() with randomly
+inputs cpumask & node, it works as expected on my machines (80 cores
+x86_64 & 7 cores ARM64
+& 16 cores ARM64).
+
+Please help review, thanks a lot!
+
+Thanks,
+Tio Zhang
+
+
+Yuanhan Zhang <zyhtheonly@gmail.com> =E4=BA=8E2023=E5=B9=B46=E6=9C=889=E6=
+=97=A5=E5=91=A8=E4=BA=94 14:07=E5=86=99=E9=81=93=EF=BC=9A
 >
-> --
-> Siemens AG, Technology
-> Competence Center Embedded Linux
+> // I resend this to put it into the same thread, sorry for the confusion.
 >
+> > Can you elaborate the intended use cases?
+>
+> Hi Tejun,
+>
+> Thanks for your reply! Please let me use myself as an example to explain =
+this.
+>
+> In my scenario, I have 7 cpus on my machine (actually it is uma, so queue=
+_work_node
+> or using UNBOUND do not works for me), and for some unlucky reasons
+> there are always some irqs running on cpu 0 and cpu 6, since I'm using ar=
+m64
+> with irqs tuning into FIFO threads, those threaded irqs are always runnin=
+g on
+> cpu 0 and 6 too (for affinity). And this would not be fixed easily in sho=
+rt terms :(
+>
+> So in order to help async init for better boot times for my devices, I'd =
+like to prevent
+> works from running on cpu 0 and 6. With queue_work_cpumask(), it would be=
+ simply
+> done by:
+>
+> ...
+> cpumask_clear_cpu(0, cpumask);  // actually I use sysfs to parse my cpuma=
+sk
+> cpumask_clear_cpu(6, cpumask);
+> queue_work_cpumask(cpumask, my_wq, &my_work->work);
+> ...
+>
+>
+> > The code seems duplicated too. Could you do a little refactoring and ma=
+ke
+> > they (queue_work_cpumask() & queue_work_node()) share some code?
+>
+> Hi Lai,
+>
+> Thanks for your advice!
+>
+> I do the refactoring in PATCH v2, there are some changes:
+> 1. removed WARN_ONCE in previous code
+>   1). queue_work_node works well in UNBOUND since we have unbound_pwq_by_=
+node()
+>        in __queue_work() to choose the right node.
+>   2). queue_work_cpumask does not work in UNBOUND since list numa_pwq_tbl=
+ is designed
+>        to be per numa node. I comment on this in this patch.
+> 2. remove the previous workqueue_select_cpu_near and let queue_work_node(=
+) use
+>     queue_work_on() and queue_work_cpumask().
+>
+> I test this patch with 100,000 queue_work_cpumask() & queue_work_node() w=
+ith randomly
+> inputs cpumask & node, it works as expected on my machines (80 cores x86_=
+64 & 7 cores ARM64
+> & 16 cores ARM64).
+>
+> Please help review, thanks a lot!
+>
+> Thanks,
+> Tio Zhang
