@@ -2,121 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2E772A59B
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 23:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF5972A5A3
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 23:54:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232566AbjFIVw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 17:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36914 "EHLO
+        id S232640AbjFIVyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 17:54:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjFIVwy (ORCPT
+        with ESMTP id S229475AbjFIVym (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 17:52:54 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4A22685;
-        Fri,  9 Jun 2023 14:52:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686347573; x=1717883573;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=izJ4f9F65dVTOY3ec3XppLSc9XRNMCow5CmFkhoSG/Y=;
-  b=h9ywdeFY44JjAfgzrCLBAn5dlNf1tLfUPPyl7uVslvwI2QZC4SZ0bSUi
-   JrQ0FhErcVIROENrLOsLQslF6FhnJahusWqLJleiLHyCERhITzkLpNRes
-   SWoI3uMdPG9GmGat3+73+H7WfEOUeem+7O+DQdMguz5lv3fIdi2EtlUkT
-   m/bwlK1IKlP9tthPhw2vqmxzjKfaE66LynPhpQWrj71qYPpunu4jyM+hW
-   MI8liqrqhJ5ak5ortLmL1o6Z2DNcMvmS73fwmZM54jPQnL6hsDCLMZ3H0
-   HXIXi8Pcc2N5GJC7DBRlkMMeplACBH49nmqNN905lDXaNi4zZHvJtZOn4
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="444066207"
-X-IronPort-AV: E=Sophos;i="6.00,230,1681196400"; 
-   d="scan'208";a="444066207"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 14:52:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="957297138"
-X-IronPort-AV: E=Sophos;i="6.00,230,1681196400"; 
-   d="scan'208";a="957297138"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 09 Jun 2023 14:52:49 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q7k2K-0009RN-24;
-        Fri, 09 Jun 2023 21:52:48 +0000
-Date:   Sat, 10 Jun 2023 05:52:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yu Kuai <yukuai1@huaweicloud.com>, hch@lst.de, axboe@kernel.dk,
-        dgilbert@interlog.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     oe-kbuild-all@lists.linux.dev, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
-        yangerkun@huawei.com
-Subject: Re: [PATCH v4 1/2] scsi: sg: fix blktrace debugfs entries leakage
-Message-ID: <202306100517.8BoUnWma-lkp@intel.com>
-References: <20230609083913.2254980-2-yukuai1@huaweicloud.com>
+        Fri, 9 Jun 2023 17:54:42 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E92C30E5
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 14:54:41 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-651ffcc1d3dso1851673b3a.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 14:54:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1686347680; x=1688939680;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=XPZ0YqKq/WukCdmDJhCk3d2gnOJ/ZDLhdj7edRPgO8w=;
+        b=XHHFqA3tiwTZUVmH7k9BBAvuQvOWW75TqAUVUB/G39E6gqX/g7gOjIpPYpkEosbzqX
+         LwLiArJqyjpFU/RGWoqqTb/uI5O2alZ87zLySjRx+AjMNcqtx3KWHuBhrdJ63zObXRoc
+         V52RNIciwCIc8yNLHDOwMpnU16UZkYNfzdka6VBL1ZsdMrR6ZsaJVOOmeTmZWfq1FU59
+         lvvFcK20p51KgbAP2ynIseP8j1AEJSRLDv20I1cvNEAMPv48n0VQfSq41bL9C8WWwB8x
+         qKQdmwuoSRhkmFjEl+NQHTvy4fKBOo+hu4PUWS2xdqcXB0ugiPYzQGHuWh27OuXZ8Jyt
+         YgIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686347680; x=1688939680;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XPZ0YqKq/WukCdmDJhCk3d2gnOJ/ZDLhdj7edRPgO8w=;
+        b=Z9sLqzSwo4k24N+bycMJM9Nob7RB8im0TCemkQ55B+5JqPg/I6/oSuJmESMRXJLzA0
+         78RT4k+zaDiPAG9rIiup6pgGffbAbtr9Nh7mZ3LvWMRlOZgAWfREuKoLbU/14XJfH+4f
+         qmeo2QVWiIWQzyuJSehVKY0zzK4iS+8JhFM7pvUfOHvhSXOXX7/Uny3x0bzvdpXyxbwl
+         3FwW4eLKJwXoRfXH0EHGSHUD2rSpGX9UwBi6o468a2UzpQTSBvQtMbWORuN3EetnmBg1
+         ESsejHAWzDhY71mnrd/zI3RHTpIIIkFz4WrQ05XCyhm342JgbIlTIMF6w8vLd/u0GkTl
+         55+w==
+X-Gm-Message-State: AC+VfDx9NkFA64s5a+tCdhE9FIbFQiwO4EvQaIVt8frQEprYQA+Fkn2m
+        GFl6kgD5jq1ILV4vDKiM2GKOmg==
+X-Google-Smtp-Source: ACHHUZ7+SuqJnp9//p1l5K264TTrLPu0q5rjuOaTTocEpZo7EWHXy5jYhcLfVXBXsWNsGfhXyK1I1w==
+X-Received: by 2002:a05:6a20:c183:b0:10c:7c72:bdf9 with SMTP id bg3-20020a056a20c18300b0010c7c72bdf9mr1976311pzb.29.1686347680562;
+        Fri, 09 Jun 2023 14:54:40 -0700 (PDT)
+Received: from dread.disaster.area (pa49-179-79-151.pa.nsw.optusnet.com.au. [49.179.79.151])
+        by smtp.gmail.com with ESMTPSA id u5-20020aa78385000000b0064d4d11b8bfsm3064066pfm.59.2023.06.09.14.54.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 14:54:40 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.96)
+        (envelope-from <david@fromorbit.com>)
+        id 1q7k44-009qQ3-0w;
+        Sat, 10 Jun 2023 07:54:36 +1000
+Date:   Sat, 10 Jun 2023 07:54:36 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Mike Snitzer <snitzer@redhat.com>
+Cc:     Sarthak Kukreti <sarthakkukreti@chromium.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Joe Thornber <thornber@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Jason Wang <jasowang@redhat.com>,
+        Bart Van Assche <bvanassche@google.com>,
+        linux-kernel@vger.kernel.org, Joe Thornber <ejt@redhat.com>,
+        linux-block@vger.kernel.org, dm-devel@redhat.com,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        linux-fsdevel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
+        linux-ext4@vger.kernel.org, Brian Foster <bfoster@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>
+Subject: Re: [PATCH v7 0/5] Introduce provisioning primitives
+Message-ID: <ZIOfnPFucQMpQAJ/@dread.disaster.area>
+References: <CAJ0trDZJQwvAzngZLBJ1hB0XkQ1HRHQOdNQNTw9nK-U5i-0bLA@mail.gmail.com>
+ <ZHYB/6l5Wi+xwkbQ@redhat.com>
+ <CAJ0trDaUOevfiEpXasOESrLHTCcr=oz28ywJU+s+YOiuh7iWow@mail.gmail.com>
+ <ZHYWAGmKhwwmTjW/@redhat.com>
+ <CAG9=OMMnDfN++-bJP3jLmUD6O=Q_ApV5Dr392_5GqsPAi_dDkg@mail.gmail.com>
+ <ZHqOvq3ORETQB31m@dread.disaster.area>
+ <ZHti/MLnX5xGw9b7@redhat.com>
+ <CAG9=OMNv80fOyVixEY01XESnOFzYyfj9j8etHMq_Ap52z4UWNQ@mail.gmail.com>
+ <ZIESXNF5anyvJEjm@redhat.com>
+ <ZIOMLfMjugGf4C2T@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230609083913.2254980-2-yukuai1@huaweicloud.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZIOMLfMjugGf4C2T@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yu,
+On Fri, Jun 09, 2023 at 04:31:41PM -0400, Mike Snitzer wrote:
+> On Wed, Jun 07 2023 at  7:27P -0400,
+> Mike Snitzer <snitzer@kernel.org> wrote:
+> 
+> > On Mon, Jun 05 2023 at  5:14P -0400,
+> > Sarthak Kukreti <sarthakkukreti@chromium.org> wrote:
+> > 
+> > > On Sat, Jun 3, 2023 at 8:57 AM Mike Snitzer <snitzer@kernel.org> wrote:
+> > > >
+> > > > We all just need to focus on your proposal and Joe's dm-thin
+> > > > reservation design...
+> > > >
+> > > > [Sarthak: FYI, this implies that it doesn't really make sense to add
+> > > > dm-thinp support before Joe's design is implemented.  Otherwise we'll
+> > > > have 2 different responses to REQ_OP_PROVISION.  The one that is
+> > > > captured in your patchset isn't adequate to properly handle ensuring
+> > > > upper layer (like XFS) can depend on the space being available across
+> > > > snapshot boundaries.]
+> > > >
+> > > Ack. Would it be premature for the rest of the series to go through
+> > > (REQ_OP_PROVISION + support for loop and non-dm-thinp device-mapper
+> > > targets)? I'd like to start using this as a reference to suggest
+> > > additions to the virtio-spec for virtio-blk support and start looking
+> > > at what an ext4 implementation would look like.
+> > 
+> > Please drop the dm-thin.c and dm-snap.c changes.  dm-snap.c would need
+> > more work to provide the type of guarantee XFS requires across
+> > snapshot boundaries. I'm inclined to _not_ add dm-snap.c support
+> > because it is best to just use dm-thin.
+> > 
+> > And FYI even your dm-thin patch will be the starting point for the
+> > dm-thin support (we'll keep attribution to you for all the code in a
+> > separate patch).
+> > 
+> > > Fair points, I certainly don't want to derail this conversation; I'd
+> > > be happy to see this work merged sooner rather than later.
+> > 
+> > Once those dm target changes are dropped I think the rest of the
+> > series is fine to go upstream now.  Feel free to post a v8.
+> 
+> FYI, I've made my latest code available in this
+> 'dm-6.5-provision-support' branch (based on 'dm-6.5'):
+> https://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm.git/log/?h=dm-6.5-provision-support
+> 
+> It's what v8 should be plus the 2 dm-thin patches (that I don't think
+> should go upstream yet, but are theoretically useful for Dave and
+> Joe).
+> 
+> The "dm thin: complete interface for REQ_OP_PROVISION support" commit
+> establishes all the dm-thin interface I think is needed.  The FIXME in
+> process_provision_bio() (and the patch header) cautions against upper
+> layers like XFS using this dm-thinp support quite yet.
+> 
+> Otherwise we'll have the issue where dm-thinp's REQ_OP_PROVISION
+> support initially doesn't provide the guarantee that XFS needs across
+> snapshots (which is: snapshots inherit all previous REQ_OP_PROVISION).
 
-kernel test robot noticed the following build errors:
+Just tag it with EXPERIMENTAL on recpetion of the first
+REQ_OP_PROVISION for the device (i.e. dump a log warning), like I'll
+end up doing with XFS when it detects provisioning support at mount
+time.
 
-[auto build test ERROR on axboe-block/for-next]
-[also build test ERROR on mkp-scsi/for-next linus/master v6.4-rc5 next-20230609]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+We do this all the time to allow merging new features before they
+are fully production ready - EXPERIMENTAL means you can expect it to
+mostly work, except when it doesn't, and you know that when it
+breaks you get to report the bug, help triage it and as a bonus you
+get to keep the broken bits!
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yu-Kuai/scsi-sg-fix-blktrace-debugfs-entries-leakage/20230609-164641
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-patch link:    https://lore.kernel.org/r/20230609083913.2254980-2-yukuai1%40huaweicloud.com
-patch subject: [PATCH v4 1/2] scsi: sg: fix blktrace debugfs entries leakage
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20230610/202306100517.8BoUnWma-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add axboe-block https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git
-        git fetch axboe-block for-next
-        git checkout axboe-block/for-next
-        b4 shazam https://lore.kernel.org/r/20230609083913.2254980-2-yukuai1@huaweicloud.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+$ git grep EXPERIMENTAL fs/xfs
+fs/xfs/Kconfig:   This feature is considered EXPERIMENTAL.  Use with caution!
+fs/xfs/Kconfig:   This feature is considered EXPERIMENTAL.  Use with caution!
+fs/xfs/scrub/scrub.c: "EXPERIMENTAL online scrub feature in use. Use at your own risk!");
+fs/xfs/xfs_fsops.c:     "EXPERIMENTAL online shrink feature in use. Use at your own risk!");
+fs/xfs/xfs_super.c:     xfs_warn(mp, "DAX enabled. Warning: EXPERIMENTAL, use at your own risk");
+fs/xfs/xfs_super.c:     "EXPERIMENTAL Large extent counts feature in use. Use at your own risk!");
+fs/xfs/xfs_xattr.c: "EXPERIMENTAL logged extended attributes feature in use. Use at your own risk!");
+$
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306100517.8BoUnWma-lkp@intel.com/
+IOWs, I'll be adding a:
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+"EXPERIMENTAL block device provisioning in use. Use at your own risk!"
 
-ERROR: modpost: "devm_ioremap_resource" [drivers/dma/qcom/hdma.ko] undefined!
-ERROR: modpost: "devm_platform_ioremap_resource" [drivers/dma/fsl-edma.ko] undefined!
-ERROR: modpost: "devm_platform_ioremap_resource" [drivers/dma/idma64.ko] undefined!
-ERROR: modpost: "iounmap" [drivers/tty/ipwireless/ipwireless.ko] undefined!
-ERROR: modpost: "ioremap" [drivers/tty/ipwireless/ipwireless.ko] undefined!
-ERROR: modpost: "devm_platform_ioremap_resource" [drivers/char/xillybus/xillybus_of.ko] undefined!
-ERROR: modpost: "devm_memremap" [drivers/misc/open-dice.ko] undefined!
-ERROR: modpost: "devm_memunmap" [drivers/misc/open-dice.ko] undefined!
->> ERROR: modpost: "blk_trace_shutdown" [drivers/scsi/sg.ko] undefined!
-ERROR: modpost: "iounmap" [drivers/net/ethernet/8390/pcnet_cs.ko] undefined!
-WARNING: modpost: suppressed 14 unresolved symbol warnings because there were too many)
+warning to XFS, and it won't get removed until both the XFS and
+dm-thinp support is solid and production ready....
 
+Cheers,
+
+Dave.
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Dave Chinner
+david@fromorbit.com
