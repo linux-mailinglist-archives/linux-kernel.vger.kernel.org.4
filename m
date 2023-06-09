@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DF90728E67
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 05:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E5A6728E62
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 05:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238172AbjFIDP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 23:15:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55746 "EHLO
+        id S237081AbjFIDPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 23:15:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237506AbjFIDPK (ORCPT
+        with ESMTP id S235269AbjFIDPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 23:15:10 -0400
+        Thu, 8 Jun 2023 23:15:03 -0400
 Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809A330F3
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 20:15:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF50E30E7
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 20:15:02 -0700 (PDT)
 Received: from cwcc.thunk.org (pool-173-48-82-39.bstnma.fios.verizon.net [173.48.82.39])
         (authenticated bits=0)
         (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 3593ElI1024536
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 3593El9L024530
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 8 Jun 2023 23:14:48 -0400
+        Thu, 8 Jun 2023 23:14:47 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1686280489; bh=ZbkQv99SKWdS1oKE/cmlbVEVCgfWmkP7O/305UFGCCc=;
+        t=1686280488; bh=bi5YUImZsrQre+HL6PNbB7PVoPRHILL6mBkAHMmvEd0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=gf9UOpPE3OfousdpIh1t5J7FhOjFpyymp1L2s+YrXEB49Ww2h1wfPjzA+PzvRBxfY
-         WDv+WyKgTHLRYaH5hny+lJc4/MqtsU5PcG30/tXtRYel5wKIIOUyIcT7t5d+vJji4M
-         qaW8nVE4sqEy5mpxf7RcSy5C6EEMLXqAeLInAGlO1YiZGyk4mYmlpHLhpP96QKmwI3
-         gTWP8ZFn69CyZAJ/MWR0HI+uAguAc1aitt5OL4IkhD3uh4b1dkhNNeit8OuLoQ+JHB
-         k2NoM4lRg35Hk5TOZstDc+U0MMQ2+368TzSe9Emy7ElPucMumHXKISclNow5DpwxGa
-         5gTg6/I/ZA+DQ==
+        b=h21FJYYihyi0JmJwLYLNfQ+JEABe8wREGlFlklmw5Nj8lF7FN1JNVxY0AnDxylz/o
+         lMk8ZCHI24ryObO4VnttT2Bu04WV71QEh0ub/SwM240XD3eVtxItim2K1bXMu0xxPo
+         M3YcI6x5oGefJ0LwKnj3kjNaPD1W2u/dvBDozw9j2wMNuOa6gyjh6knuae6TCnp/g/
+         7Zjz0foe4XcecQrxxyt46Z+11DTCL05J77PlhvYZzMEUuQvivC0uB0HAeoZw0HHtkz
+         jzMsJYLUMprrCYsL1Y6kxpUNd4XiLiBkK3CZJNe0vfREtz0L+0y61ufZbTSE5FrAKC
+         SBZtS6R5TmrCg==
 Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id C9FAE15C02DC; Thu,  8 Jun 2023 23:14:46 -0400 (EDT)
+        id CD7C515C02DF; Thu,  8 Jun 2023 23:14:46 -0400 (EDT)
 From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     linux-ext4@vger.kernel.org, Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Cc:     "Theodore Ts'o" <tytso@mit.edu>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>, Kemeng Shi <shikemeng@huaweicloud.com>
-Subject: Re: [PATCH v2 00/12] multiblock allocator improvements
-Date:   Thu,  8 Jun 2023 23:14:43 -0400
-Message-Id: <168628045803.1458216.14609598386869495524.b4-ty@mit.edu>
+To:     adilger.kernel@dilger.ca, ojaswin@linux.ibm.com,
+        Kemeng Shi <shikemeng@huaweicloud.com>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 00/19] Fixes, cleanups and unit test for mballoc
+Date:   Thu,  8 Jun 2023 23:14:45 -0400
+Message-Id: <168628045802.1458216.6038952360450376953.b4-ty@mit.edu>
 X-Mailer: git-send-email 2.31.0
-In-Reply-To: <cover.1685449706.git.ojaswin@linux.ibm.com>
-References: <cover.1685449706.git.ojaswin@linux.ibm.com>
+In-Reply-To: <20230603150327.3596033-1-shikemeng@huaweicloud.com>
+References: <20230603150327.3596033-1-shikemeng@huaweicloud.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -58,43 +57,57 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Tue, 30 May 2023 18:03:38 +0530, Ojaswin Mujoo wrote:
-> ** Changed since v1 [2] **
-> 
->  1. Rebase over Kemeng's recent mballoc patchset [3]
->  2. Picked up Kemeng's RVB on patch 1/12
-> 
->  [2] https://lore.kernel.org/all/cover.1685009579.git.ojaswin@linux.ibm.com/
->  [3] https://lore.kernel.org/all/20230417110617.2664129-1-shikemeng@huaweicloud.com/
+On Sat, 03 Jun 2023 23:03:08 +0800, Kemeng Shi wrote:
+> v3->v4:
+> 1. Collect Reviewed-by from Ojaswin
+> 2. Do improve as Ojaswin kindly suggested: Fix typo in commit,
+> WARN if try to clear bit of uninitialized group and improve
+> refactoring of AGGRESSIVE_CHECK code.
+> 3. Fix conflic on patch 16
+> 4. Improve git log in patch 16,17
 > 
 > [...]
 
 Applied, thanks!
 
-[01/12] Revert "ext4: remove ac->ac_found > sbi->s_mb_min_to_scan dead check in ext4_mb_check_limits"
-        commit: 3582e74599d376bc18cae123045cd295360d885b
-[02/12] ext4: mballoc: Remove useless setting of ac_criteria
-        commit: fb665804fd62e600b5c2350ea69295261ce8374d
-[03/12] ext4: Remove unused extern variables declaration
-        commit: 3086ed54c0e65c60b0fb142e181e7dd4e3b7b1e0
-[04/12] ext4: Convert mballoc cr (criteria) to enum
-        commit: eb7d4a8b9510887fb690a6b912d80cb0bce21387
-[05/12] ext4: Add per CR extent scanned counter
-        commit: 9e97d81a1fa105b80583b5152e4b9cb794734585
-[06/12] ext4: Add counter to track successful allocation of goal length
-        commit: af97bca67ff63191d44023f895b6033eb7d3423a
-[07/12] ext4: Avoid scanning smaller extents in BG during CR1
-        commit: caf886aecd608a8ef05ab10957cf4b9fd9564712
-[08/12] ext4: Don't skip prefetching BLOCK_UNINIT groups
-        commit: bf912c937ed41c4581d77806b003f22625eee0b5
-[09/12] ext4: Ensure ext4_mb_prefetch_fini() is called for all prefetched BGs
-        commit: 64f6fb876cedc30fc1430b96eb442bd84bc61459
-[10/12] ext4: Abstract out logic to search average fragment list
-        commit: 1918cdc99d125c275dcdd4527520c78bb1a3c1ef
-[11/12] ext4: Add allocation criteria 1.5 (CR1_5)
-        commit: 7b748ea2a6ad2bda304553b5cf8745f542af6b34
-[12/12] ext4: Give symbolic names to mballoc criterias
-        commit: c9f19daa1824a73218526650a9aade17536527c8
+[01/19] ext4: fix wrong unit use in ext4_mb_normalize_request
+        commit: cc891ea78ad04df2fedd419c23237cdc5a5dda62
+[02/19] ext4: fix unit mismatch in ext4_mb_new_blocks_simple
+        commit: abf6b44598cc3aa8684ff3fa5605a5a0104d69e7
+[03/19] ext4: fix wrong unit use in ext4_mb_find_by_goal
+        commit: ae04f8c997b0043e429e484019560417ffdb416f
+[04/19] ext4: treat stripe in block unit
+        commit: 7e1fb2de7d72fbb354c8ed883be34daf95cf3121
+[05/19] ext4: add EXT4_MB_HINT_GOAL_ONLY test in ext4_mb_use_preallocated
+        commit: 4423c2f31548dd464ab56a716eb5868d7f599417
+[06/19] ext4: remove ext4_block_group and ext4_block_group_offset declaration
+        commit: 61896327e1c69492c5433aa60516a9256f0781b0
+[07/19] ext4: try all groups in ext4_mb_new_blocks_simple
+        commit: 7de4b9d4409a267abe088cbd5b06fba849626d62
+[08/19] ext4: get block from bh before pass it to ext4_free_blocks_simple in ext4_free_blocks
+        commit: 9c90b9af90f233c66ce7e1a30e6477f9f8b482dc
+[09/19] ext4: remove unsed parameter and unnecessary forward declaration of ext4_mb_new_blocks_simple
+        commit: e8a7cea1d0a43b78c934425b8640c8764b39772a
+[10/19] ext4: fix wrong unit use in ext4_mb_clear_bb
+        commit: 99101b01b1b63aaee4d573f4c857738171b455bf
+[11/19] ext4: fix wrong unit use in ext4_mb_new_blocks
+        commit: bec857ed03e324d2b111e920f467d201c900c8ed
+[12/19] ext4: factor out codes to update block bitmap and group descriptor on disk from ext4_mb_mark_bb
+        commit: 80b9027c69d439d5fce276245f10c51153fa5301
+[13/19] ext4: call ext4_mb_mark_group_bb in ext4_free_blocks_simple
+        commit: 60ba685c5998aa8f8f0b4dd1bd8653062ee720dd
+[14/19] ext4: extent ext4_mb_mark_group_bb to support allocation under journal
+        commit: b989e0b98798c235a3f8b3b424590c4721c861a5
+[15/19] ext4: call ext4_mb_mark_group_bb in ext4_mb_mark_diskspace_used
+        commit: 2df9dcb865f335eea4edb4ce03f0e0bbb63a7d86
+[16/19] ext4: call ext4_mb_mark_group_bb in ext4_mb_clear_bb
+        commit: d83b42442e9d1f7a4a418c34514c7a7f3282f39a
+[17/19] ext4: call ext4_mb_mark_group_bb in ext4_group_add_blocks
+        commit: 797f324727ba1c07208431deec8d3ccf5ef4c3c6
+[18/19] ext4: add some kunit stub for mballoc kunit test
+        commit: b8eb90a9a9c2ceddd93bf5cbc16bbec69a2af0f5
+[19/19] ext4: add first unit test for ext4_mb_new_blocks_simple in mballoc
+        commit: d21e7bd66903c8f1f7264e63f310a463086d7bd2
 
 Best regards,
 -- 
