@@ -2,175 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E391728C47
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 02:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E498728C4C
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 02:15:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237052AbjFIAOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 20:14:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40532 "EHLO
+        id S237535AbjFIAPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 20:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbjFIAOD (ORCPT
+        with ESMTP id S229981AbjFIAPW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 20:14:03 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0362D68;
-        Thu,  8 Jun 2023 17:14:02 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b00ecabdf2so2698305ad.2;
-        Thu, 08 Jun 2023 17:14:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686269641; x=1688861641;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=TsTE3qmxIV7pG9azb/NVqbAFzY56xIALD3o7FLY1GW8=;
-        b=XjnlrHuVLqvBaR6lTNTwM/UYSJ4Z0+uyzIaJixshSWSguI3Dx77ZE6c33YZVD7UB//
-         yaXNDXgjPX+uIP8KPtW7Izj/t5NTp78Og9Jzt8TZlT6qjHgoMzxQXYw6U9D53Fr2WZfR
-         w19lMJcknE4ScXne3h44D93yhSXgWfDTjlEiXiiW/qfLqEXxIa3bZ+AmO+mUa7JT/qZ2
-         yoHhYQsNTwgo1TdmJSKwI7vRgl1HpzrwAIFHFyQi518bu9t0L/wfPzfaZGSKCtB2c8P8
-         G8p1y9UQJ+8eBbCkRAiaY5xN5nsm7KuNge+qS186ModIPFBUk+/zfo4ci/2YXmKJBu3w
-         WmIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686269641; x=1688861641;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TsTE3qmxIV7pG9azb/NVqbAFzY56xIALD3o7FLY1GW8=;
-        b=LqApAMJrnsuIlg9HqBsLwNNL0ou1SbtjrIZuIj/tBKeAiz4QpozwMSJYSB5DV1pCF3
-         nJwC00fB4m5z+H60MoCF7yf6hkgc+rLB8GeZ1FhYlkXzmm80Wq+KNL3iMUMbCCYqpdT2
-         /C4t9UpR/o7T4UrEEj24m5PfW1GAvSq5uLvSvAFlsWHPZyl02Q1kVOqG4JGaqzFZKDct
-         LLCp9J0XQxMfbOhgrmAk01MxsCOntJVSgXwtLn9HBBSt+VpoeXrxpb9AEn4bWd8L8BDH
-         1c2PXURXIU7yJNBLxnE+DQeVcfnc71vZWU4sO6T9Xk2T9P0Ns/CwbhqkPzL4s8URlZR2
-         pziQ==
-X-Gm-Message-State: AC+VfDw0SbXURzcQWP2lp0pqVJ9PKn1QuCg0C4q1j8S6dGLmrJW4bli2
-        Lk9wPlC2QoSRftlTaxWUi7c=
-X-Google-Smtp-Source: ACHHUZ4Mh9UGZY5QhTCUEZsaIgVIl2TyYkb9IKjwX68B38is0xZbxtvRI2M8Ce+jngvNWl6Xif3EKw==
-X-Received: by 2002:a17:903:44c:b0:1b2:43a5:a5e5 with SMTP id iw12-20020a170903044c00b001b243a5a5e5mr7407916plb.34.1686269641307;
-        Thu, 08 Jun 2023 17:14:01 -0700 (PDT)
-Received: from krava (c-67-160-222-115.hsd1.ca.comcast.net. [67.160.222.115])
-        by smtp.gmail.com with ESMTPSA id p5-20020a170902bd0500b00186a2274382sm1968478pls.76.2023.06.08.17.14.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 17:14:00 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Thu, 8 Jun 2023 17:13:57 -0700
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Jackie Liu <liu.yun@linux.dev>
-Subject: Re: [PATCH RFC] ftrace: Show all functions with addresses in
- available_filter_functions_addrs
-Message-ID: <ZIJuxc34CBu/zpuN@krava>
-References: <20230608212613.424070-1-jolsa@kernel.org>
- <CAEf4BzbNakGzcycJJJqLsFwonOmya8=hKLD41TWX2zCJbh=r-Q@mail.gmail.com>
- <20230608192748.435a1dbf@gandalf.local.home>
- <CAEf4BzYkNHu7hiMYWQWs_gpYOfHL0FVuf-O0787Si2ze=PFX5w@mail.gmail.com>
+        Thu, 8 Jun 2023 20:15:22 -0400
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9229C2D68;
+        Thu,  8 Jun 2023 17:15:21 -0700 (PDT)
+Received: from [172.27.2.41] ([73.231.166.163])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 3590EBwb1069072
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Thu, 8 Jun 2023 17:14:11 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 3590EBwb1069072
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2023051001; t=1686269655;
+        bh=eETL6+MlMl0BOovD6hR1LxTwJy34pjipmc6N88BiyoY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=nkA2WU9VUv+xW1YPZFGnwcSq6G/5AFtmFSKNwIjsqdU8yMvYEqjQNTyqX7SwXiVdH
+         NBPYrXo3KQQt3sVa827d69La1n74ytlWcVlVajaL8C9Aa/GJKWLmPC3I3k3ZRoQWtF
+         HHHDwZTANxoHh6iphKSW5D6CL/SzDM9gNwVtD3aUxeaG202qL0zCOAk9RggyxHAG7G
+         pSI3NZy+HlPZ5+e0J6tLFutQ8N4LVDO6Qp1aGpHVuSIPQEJGVUEXBQFICFnTAJYA7E
+         rz8EFfbtzKrUHpXLd2ssOwJTlvTo9yTLlglJt1XEYPXrhhZ3S8xKGXp9RyefMhXdW+
+         BEz71wLR4dAwQ==
+Message-ID: <98718c79-d589-3689-3c59-6ca158148641@zytor.com>
+Date:   Thu, 8 Jun 2023 17:14:10 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzYkNHu7hiMYWQWs_gpYOfHL0FVuf-O0787Si2ze=PFX5w@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: Direct rdtsc call side-effect
+Content-Language: en-US
+To:     David Laight <David.Laight@ACULAB.COM>,
+        "'Thomas Gleixner'" <tglx@linutronix.de>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Steven Noonan <steven@uplinklabs.net>,
+        "kernel@collabora.com" <kernel@collabora.com>
+References: <6719fb05-382c-8ec4-ccda-72798906a54b@collabora.com>
+ <87mt1jeax1.ffs@tglx> <353732783fde46919fdcf698c326b7ed@AcuMS.aculab.com>
+ <87jzwi55qo.ffs@tglx> <a39d90e45212461bb31738b7156b60a6@AcuMS.aculab.com>
+ <4ea6e82c-4761-e0c9-3e75-8ec39eecb30a@zytor.com>
+ <cabfcf8a8840410399d2bfc1202e77ce@AcuMS.aculab.com>
+From:   "H. Peter Anvin" <hpa@zytor.com>
+In-Reply-To: <cabfcf8a8840410399d2bfc1202e77ce@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 04:55:40PM -0700, Andrii Nakryiko wrote:
-> On Thu, Jun 8, 2023 at 4:27 PM Steven Rostedt <rostedt@goodmis.org> wrote:
-> >
-> > On Thu, 8 Jun 2023 15:43:03 -0700
-> > Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> >
-> > > On Thu, Jun 8, 2023 at 2:26 PM Jiri Olsa <jolsa@kernel.org> wrote:
-> > > >
-> > > >
-> > > > hi,
-> > > > when ftrace based tracers we need to cross check available_filter_functions
-> > > > with /proc/kallsyms. For example for kprobe_multi bpf link (based on fprobe)
-> > > > we need to make sure that symbol regex resolves to traceable symbols and
-> > > > that we get proper addresses for them.
-> >
-> > I forgot, what was the problem with doing the above?
+On 6/6/23 01:23, David Laight wrote:
 > 
-> More code, more memory, more CPU to parse all the text files. Parsing
-> kallsyms is quite expensive, so avoiding this would be great.
+> IIRC the x86 performance counters aren't dependent on anything
+> so they tend to execute much earlier than you want.
+> OTOH rdtsc is likely to be synchronising and affect what follows.
+> ISTR using rdtsc to wait for instructions to complete and then
+> the performance clock counter to see how long it took.
+> 
 
-yes, reading both kallsyms and available_filter_functions parsing often
-shows up in perf profiles
+RDPMC and RDTSC have the same (lack of) synchronization guarantees; you 
+need to fence them appropriately for your application no matter what.
 
-> 
-> >
-> > > >
-> > > > Looks like on the last last LSF/MM/BPF there was an agreement to add new
-> > > > file that will have available_filter_functions symbols plus addresses.
-> > > >
-> > > > This RFC is to kick off the discussion, I'm not sure Steven wants to do
-> > > > that differently ;-)
-> >
-> > I'm not totally against this, but I'd like to know the full issue its
-> > solving. Perhaps I need to know more about what is being done, and what is
-> > needed too.
-> 
-> There are BPF tools that allow user to specify regex/glob of kernel
-> functions to attach to. This regex/glob is checked against
-> available_filter_functions to check which functions are traceable. All
-> good. But then also it's important to have corresponding memory
-> addresses for selected functions (for many reasons, e.g., to have
-> non-ambiguous and fast attachment by address instead of by name, or
-> for some post-processing based on captured IP addresses, etc). And
-> that means that now we need to also parse /proc/kallsyms and
-> cross-join it with data fetched from available_filter_functions.
-> 
-> All this is unnecessary if avalable_filter_functions would just
-> provide function address in the first place. It's a huge
-> simplification. And saves memory and CPU.
-> 
-> >
-> > > >
-> > > > thanks,
-> > > > jirka
-> > > >
-> > > >
-> > > > ---
-> > > > Adding new available_filter_functions_addrs file that shows all available
-> > > > functions (same as available_filter_functions) together with addresses,
-> > > > like:
-> > > >
-> > > >   # cat available_filter_functions_addrs | head
-> > >
-> > > nit: can we have some more succinct name, like "traceable_funcs" or
-> >
-> >
-> > It's to match avaliable_filter_functions
-> 
-> it's minor, I'm fine with whatever name, I'm searching for it in my
-> history every single time anyways :)
-> 
-> >
-> > Another way is to add a tracing option to make the address show up in the
-> > available_filter_functions file. That would be my preferred choice.
-> >
-> >   echo 1 > options/available_filter_addrs
-> >
-> > Or something like that.
-> 
-> This would modify behavior for entire system, right? I think this is
-> very bad. Just because one application is aware of this option and
-> wants to turn this on, doesn't mean that all other applications that
-> might also use available_filter_functions should immediately break on
-> that machine.
-> 
-> Please, let's have a separate file. There is no downside to that.
+	-hpa
 
-+1 for file, AFAIU the option would change that globaly so we could race
-with another app and break each other
-
-jirka
