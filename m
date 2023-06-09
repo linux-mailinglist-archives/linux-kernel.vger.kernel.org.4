@@ -2,99 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 217A9728CD9
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 03:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D23F728CDF
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 03:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235551AbjFIBJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 21:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60374 "EHLO
+        id S236671AbjFIBKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 21:10:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjFIBJc (ORCPT
+        with ESMTP id S229520AbjFIBKL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 21:09:32 -0400
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56462125
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 18:09:31 -0700 (PDT)
-Received: by mail-ua1-x935.google.com with SMTP id a1e0cc1a2514c-786470fd7a3so464537241.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 18:09:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686272970; x=1688864970;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lc/g6LXQOs93yTgCiGczTkkFK+sAgodNjTysgahDEVw=;
-        b=UcfhhEB8JVYtSaYNjeXN56wB9MqyMQtCQGtprQFTqjfYjEL7E7V3Iy94OMfqel1oXO
-         QZIcQiOjvsa3e98AoL/nIYiIeV2XwYtBY8pjjhbDjSLvNRXQUNuQ1CEyYWBCd3xYPZVP
-         trZtykP/Mof04N1VHc0lVHbgyp1EiW4pew5nO8aSYUb++iO0ncGeIIIiQK3p/c+W0yHU
-         AAa6tsu0E2vKcj4HqLxwkHvPM9meFiA6K3qv+5vTGLBRG4cfgXg5/75cLxanqJajUo8o
-         cFN/FNCedO3dWchgzF6syrkwFnGXauAim52zAU4uX164Btb5VfynbXsQAJloguXMP3eG
-         dROw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686272970; x=1688864970;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lc/g6LXQOs93yTgCiGczTkkFK+sAgodNjTysgahDEVw=;
-        b=axaT44TRtnT5adueFlXqt2Nb0labDw9oSj/8uTSjE6Num/DSgY8HVkgAwxHrXVhUh1
-         o1KmDlILMXr+7jvdHL1QKGS2+TuKcwaNJHYJ6lydsfPBnqV5k/cNq91dB+pdx+NZCybi
-         QpQWOqcpPlJT0AZc0ZbD17msch3lglKJOpiXw1R62MGBQWRt6kGOnuUUHUNOa6/kdUi8
-         bMZYiDpdzgFPInEjimAfWRbfGFXVflqGZR1kbWZp/KUQ6i85DPlzD5muelK9a9+Yw02s
-         NIJwO4R+FRNRTgZ5zedua5EyO7oa9PlikcqdtPuHLcZfv++nPB+hY0ThDARn92xoIl7J
-         kk+Q==
-X-Gm-Message-State: AC+VfDzqbQjqY1eaTSYdb/eYyQjbSVlfErPC4Ot9zSQUzlDCU8RFqtrz
-        3oj6WheFZNs1fVR5LDplA5gtdg==
-X-Google-Smtp-Source: ACHHUZ5C3ZXPkFDl7beNnC8Wxo2aSMU5SCcCj/7iCu4IfWqU05s5B/rb2VYjxSOJxyLyi/equlOn5A==
-X-Received: by 2002:a67:f490:0:b0:43b:1dfa:2534 with SMTP id o16-20020a67f490000000b0043b1dfa2534mr162704vsn.10.1686272970295;
-        Thu, 08 Jun 2023 18:09:30 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id n11-20020a25400b000000b00bb393903508sm603507yba.14.2023.06.08.18.09.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 18:09:29 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 18:09:25 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 03/32] mm/pgtable: kmap_local_page() instead of
- kmap_atomic()
-In-Reply-To: <c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com>
-Message-ID: <d74dc4b3-6a76-446f-8f5-52ae271fa07d@google.com>
-References: <c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com>
+        Thu, 8 Jun 2023 21:10:11 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15139184;
+        Thu,  8 Jun 2023 18:10:10 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3590owfq015222;
+        Fri, 9 Jun 2023 01:10:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=hiGut6rrSUcFTqgS1myzvumeJRGvO6I72US1btNCRos=;
+ b=CMdsRg3fw0c/T2FGH6qUcqRTjdcUaJ5LvSd0AFgBmh+qooHxt6v/aMEV5ko95gFLL3iU
+ a8//h+nsFMY4m+UGjRM20KocQpBvxz94OnFcm8+Cp6h4I3zoVBMlFYMVxqQzJ9erNxSW
+ keomJOxR+irwWJCS/yAIGbRwsQ9iQpMc/RqmObTQ9eDMoN142a3I6lWk1EHVP0meLsSL
+ x5WF8UcrNgLWA9vEcry9DezVO/Fvbo3IzqfOP7ZTnoZ/MPVbrmbjCwTbU8KwoVM6sogX
+ UpLZIneaZmEAvbjbVVAjq4TCO9VOJxGrrnKS1H+QnGWKDMvS47SwDN5im6lPnkcapwJ+ Vg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r39kua5f1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Jun 2023 01:10:02 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3591A1S7027141
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 9 Jun 2023 01:10:01 GMT
+Received: from [10.110.51.236] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 8 Jun 2023
+ 18:09:58 -0700
+Message-ID: <f11fc3c1-4b19-3186-9c56-b1bac221cf83@quicinc.com>
+Date:   Thu, 8 Jun 2023 18:09:57 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [Freedreno] [PATCH v5 2/5] drm/msm/dsi: Adjust pclk rate for
+ compression
+Content-Language: en-US
+To:     Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+CC:     <freedreno@lists.freedesktop.org>, Sean Paul <sean@poorly.run>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        "Daniel Vetter" <daniel@ffwll.ch>, <linux-arm-msm@vger.kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        David Airlie <airlied@gmail.com>
+References: <20230405-add-dsc-support-v5-0-028c10850491@quicinc.com>
+ <20230405-add-dsc-support-v5-2-028c10850491@quicinc.com>
+ <js3mcglahq53mcyxa6deltjlu4xpc2pnafwz2rbk3dl4ovws2o@5xw2wzvfaj2v>
+ <f63435ca-933a-52be-d879-1d9cc9441107@quicinc.com>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <f63435ca-933a-52be-d879-1d9cc9441107@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ks0JNKazTgj4uWgNWOqW6lnI0_CPKRSB
+X-Proofpoint-ORIG-GUID: ks0JNKazTgj4uWgNWOqW6lnI0_CPKRSB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-08_18,2023-06-08_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ mlxscore=0 mlxlogscore=999 lowpriorityscore=0 phishscore=0 bulkscore=0
+ priorityscore=1501 suspectscore=0 impostorscore=0 adultscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306090009
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,31 +89,205 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pte_offset_map() was still using kmap_atomic(): update it to the
-preferred kmap_local_page() before making further changes there, in case
-we need this as a bisection point; but I doubt it can cause any trouble.
 
-Signed-off-by: Hugh Dickins <hughd@google.com>
----
- include/linux/pgtable.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-index 8ec27fe69dc8..94235ff2706e 100644
---- a/include/linux/pgtable.h
-+++ b/include/linux/pgtable.h
-@@ -96,9 +96,9 @@ static inline pte_t *pte_offset_kernel(pmd_t *pmd, unsigned long address)
- 
- #if defined(CONFIG_HIGHPTE)
- #define pte_offset_map(dir, address)				\
--	((pte_t *)kmap_atomic(pmd_page(*(dir))) +		\
-+	((pte_t *)kmap_local_page(pmd_page(*(dir))) +		\
- 	 pte_index((address)))
--#define pte_unmap(pte) kunmap_atomic((pte))
-+#define pte_unmap(pte) kunmap_local((pte))
- #else
- #define pte_offset_map(dir, address)	pte_offset_kernel((dir), (address))
- #define pte_unmap(pte) ((void)(pte))	/* NOP */
--- 
-2.35.3
+On 6/8/2023 5:56 PM, Jessica Zhang wrote:
+> 
+> 
+> On 6/8/2023 1:36 PM, Marijn Suijten wrote:
+>> Same title suggestion as earlier: s/adjust/reduce
+> 
+> Hi Marijn,
+> 
+> Acked.
+> 
+>>
+>> On 2023-05-22 18:08:56, Jessica Zhang wrote:
+>>> Adjust the pclk rate to divide hdisplay by the compression ratio when 
+>>> DSC
+>>> is enabled.
+>>>
+>>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+>>> ---
+>>>   drivers/gpu/drm/msm/dsi/dsi_host.c | 21 ++++++++++++++++++---
+>>>   1 file changed, 18 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c 
+>>> b/drivers/gpu/drm/msm/dsi/dsi_host.c
+>>> index a448931af804..88f370dd2ea1 100644
+>>> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
+>>> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+>>> @@ -561,7 +561,18 @@ void dsi_link_clk_disable_v2(struct msm_dsi_host 
+>>> *msm_host)
+>>>       clk_disable_unprepare(msm_host->byte_clk);
+>>>   }
+>>> -static unsigned long dsi_get_pclk_rate(const struct drm_display_mode 
+>>> *mode, bool is_bonded_dsi)
+>>> +static unsigned long dsi_adjust_compressed_pclk(const struct 
+>>> drm_display_mode *mode,
+>>
+>> Nit: adjust_pclk_for_compression
+> 
+> Acked.
+> 
+>>
+>> As discussed before we realized that this change is more-or-less a hack,
+>> since downstream calculates pclk quite differently - at least for
+>> command-mode panels.  Do you still intend to land this patch this way,
+>> or go the proper route by introducing the right math from the get-go?
+>> Or is the math at least correct for video-mode panels?
+> 
+> Sorry but can you please clarify what exactly is incorrect or different 
+> about this math when compared to downstream? And, if you think that this 
+> math is incorrect, what exactly has to be changed to make it the "right 
+> math"?
+> 
 
+Agree with Jessica, just calling the math a hack without explaining why 
+you think it is so is not justified especially when a great detail of 
+explanation was given on the bug. Sorry but its a bit harsh on the 
+developers.
+
+> We've already shown step-by-step [1] not only how the resulting pclk 
+> from the downstream code matches out upstream calculations, but also how 
+> the inclusion of porches in the upstream math would make up for the fact 
+> that upstream has no concept of transfer time [2].
+> 
+> If the lack of transfer time in the upstream math is the issue, I 
+> believe that that's not within the scope of this series, as transfer 
+> time is not something specific to DSC.
+> 
+> Moreover, as stated in an earlier revision [3], there is no way to 
+> validate DSC over DSI for video mode. As far as I know, we do not have a 
+> way to validate video mode datapath for DSI in general.
+> 
+> [1] https://gitlab.freedesktop.org/drm/msm/-/issues/24#note_1936144
+> [2] https://gitlab.freedesktop.org/drm/msm/-/issues/24#note_1945792
+> [3] 
+> https://patchwork.freedesktop.org/patch/535117/?series=117219&rev=1#comment_970492
+> 
+>>
+>> This function requires a documentation comment to explain that all.
+>>
+>>> +        const struct drm_dsc_config *dsc)
+>>> +{
+>>> +    int new_hdisplay = DIV_ROUND_UP(mode->hdisplay * 
+>>> drm_dsc_get_bpp_int(dsc),
+>>
+>> This sounds like a prime candidate for msm_dsc_get_bytes_per_line(), if
+>> bits_per_component==8 is assumed.  In fact, it then becomes identical
+>> to the following line in dsi_host.c which you added previously:
+>>
+>>     hdisplay = DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 
+>> 3);
+>>
+>> If not, what is the difference between these two calculations?  Maybe
+>> they both need to be in a properly-named helper.
+> 
+> While the math technically matches up (assuming, also, that 
+> mode->hdisplay == slice_width * slice_count for all cases), there are 
+> conceptual differences between the pclk and hdisplay calculations.
+> 
+> Just to reiterate what was already said on IRC:
+> 
+> In the pclk calculation, we're multiplying pclk by the compression ratio 
+> (which would be target_bpp / src_bpp) -- please note that here, we 
+> calculate src_bpp by doing bpc * 3.
+> 
+> In the hdisplay calculation, we calculate the bytes per line and divide 
+> by 3 (bytes) to account for the fact that we can only process 3 bytes 
+> per pclk cycle.
+> 
+> So while I understand why you would want to put this behind a shared 
+> helper, I think abstracting the pclk and hdisplay math away would 
+> obfuscate the conceptual difference between the 2 calculations.
+> 
+>>
+>>> +            dsc->bits_per_component * 3);
+>>
+>> As we established in the drm/msm issue [2] there is currently a
+>> confusion whether this /3 (and the /3 in dsi_timing_setup) come from the
+>> ratio between dsi_get_bpp() and dsc->bpp or something else.  Can you
+>> clarify that with constants and comments?
+> 
+> Sure, we are planning to add a patch to the end of this series 
+> documenting the math.
+> 
+>>
+>> [2]: https://gitlab.freedesktop.org/drm/msm/-/issues/24
+>>
+>>> +
+>>> +    return (new_hdisplay + (mode->htotal - mode->hdisplay))
+>>> +            * mode->vtotal * drm_mode_vrefresh(mode);
+>>
+>> As clarified in [1] I was not necessarily suggesting to move this math
+>> to a separate helper, but to also use a few more properly-named
+>> intermediate variables to not have multi-line math and self-documenting
+>> code.  These lines could be split to be much more clear.
+> 
+> Acked.
+> 
+>>
+>> [1]: 
+>> https://lore.kernel.org/linux-arm-msm/u4x2vldkzsokfcpbkz3dtwcllbdk4ljcz6kzuaxt5frx6g76o5@uku6abewvye7/
+>>
+>>> +}
+>>> +
+>>> +static unsigned long dsi_get_pclk_rate(const struct drm_display_mode 
+>>> *mode,
+>>> +        const struct drm_dsc_config *dsc, bool is_bonded_dsi)
+>>>   {
+>>>       unsigned long pclk_rate;
+>>> @@ -576,6 +587,10 @@ static unsigned long dsi_get_pclk_rate(const 
+>>> struct drm_display_mode *mode, bool
+>>>       if (is_bonded_dsi)
+>>>           pclk_rate /= 2;
+>>> +    /* If DSC is enabled, divide hdisplay by compression ratio */
+>>> +    if (dsc)
+>>> +        pclk_rate = dsi_adjust_compressed_pclk(mode, dsc);
+>>
+>> The confusion with this comment (and the reason the aforementioned
+>> discussion [2] carried on so long) stems from the fact a division makes
+>> sense for a bit/byte clock, but not for a pixel clock: we still intend
+>> to send the same number of pixels, just spending less bytes on them.  So
+>> as you clarify the /3 above, can you also clarify that here or drop this
+>> comment completely when the function is correctly documented instead?
+> 
+> Acked.
+> 
+> Thanks,
+> 
+> Jessica Zhang
+> 
+>>
+>> - Marijn
+>>
+>>> +
+>>>       return pclk_rate;
+>>>   }
+>>> @@ -585,7 +600,7 @@ unsigned long dsi_byte_clk_get_rate(struct 
+>>> mipi_dsi_host *host, bool is_bonded_d
+>>>       struct msm_dsi_host *msm_host = to_msm_dsi_host(host);
+>>>       u8 lanes = msm_host->lanes;
+>>>       u32 bpp = dsi_get_bpp(msm_host->format);
+>>> -    unsigned long pclk_rate = dsi_get_pclk_rate(mode, is_bonded_dsi);
+>>> +    unsigned long pclk_rate = dsi_get_pclk_rate(mode, msm_host->dsc, 
+>>> is_bonded_dsi);
+>>>       unsigned long pclk_bpp;
+>>>       if (lanes == 0) {
+>>> @@ -604,7 +619,7 @@ unsigned long dsi_byte_clk_get_rate(struct 
+>>> mipi_dsi_host *host, bool is_bonded_d
+>>>   static void dsi_calc_pclk(struct msm_dsi_host *msm_host, bool 
+>>> is_bonded_dsi)
+>>>   {
+>>> -    msm_host->pixel_clk_rate = dsi_get_pclk_rate(msm_host->mode, 
+>>> is_bonded_dsi);
+>>> +    msm_host->pixel_clk_rate = dsi_get_pclk_rate(msm_host->mode, 
+>>> msm_host->dsc, is_bonded_dsi);
+>>>       msm_host->byte_clk_rate = 
+>>> dsi_byte_clk_get_rate(&msm_host->base, is_bonded_dsi,
+>>>                               msm_host->mode);
+>>>
+>>> -- 
+>>> 2.40.1
+>>>
