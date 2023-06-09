@@ -2,128 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C200672A13E
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 19:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41DD672A15A
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 19:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbjFIRaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 13:30:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41616 "EHLO
+        id S230503AbjFIRgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 13:36:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjFIRaD (ORCPT
+        with ESMTP id S230487AbjFIRgk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 13:30:03 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2045.outbound.protection.outlook.com [40.107.243.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54DC430F1
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 10:30:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ExBSp18Ojy9R8s++jeHlrYsY7LXX0k18DPMJbQ2Wnf8Fop2MpJJYmelSHGHiQy+2tY/cNucn281QmZhmupZx2GKJrwtwS+S0PJD4PT+tSSaVjjAh9fRrnT02RezMOLDpY15l0SLSaP6jwSQfWZ9qTuxMmEdisuMa+VAAlZf6ousagRbyyOW4A64/7ovgAT+I4W0wR6ydVu89hN7kq8/px8u5/6OqdsydfHiYl3tYCvE4VrlviJV9ZGCYbetOOz+AEOPkIm/Yuyx0MMNgcB1gWcRROzPAKyoAyOYx/eLm7oTTa+ivQ8WpD5uDlYmF9vUVu11ZwaQBOvLlm4BQuP7ACA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KQXDtsK71Oyvnkv/hgTRdMyO2lIhXtd6FwnGBMus6LM=;
- b=f8Tymvfokzc8dZTUhPFShS/OOgTVdf9+YjnJ43T8RUb0kMAkT8bJViECq8yMubISkC8y2e27setwQ8KTWTrxVny0njdCWCezVCAvPXykBd4a+L9TdJqLofis7Z5T/sQuX0m0Azr0PoHVssOrjBoZN01n9G14qezsAiFCiub29nL1Cpii1djBk4keFbySDjX7J77W3X4Cq6CI3v0iiWIneTvlewBktnvqo9q6DShclo14D/Hn8kIpJ1zCYFGfRAh6L5RfszTSne+Y4iM0kIBd0OIiB4lk9cdSiI8AYvUbvSbfwBSUWhvQkX94chnGBA4vkfuuyV9NsETRkJq0/+WBUw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KQXDtsK71Oyvnkv/hgTRdMyO2lIhXtd6FwnGBMus6LM=;
- b=kWmq5nBqxWIlywGCrQdQNpMztN8238lsJIWfKA+hm+5MxqUgktJ6qzR7v3eOGWA+U0vIW39PVjs38ccjqtA6xKZM9D6/iSK7OrJ5FWlWTVkc/rf7VSpLYf6Bux85wWGJlQaduaOuNhXI7L/GtgnSKASW93Q4WWU6eeyAuVQz+k15P/AG2XbeLN3q6rjS0gSKmKZio1u8rTr98rbOsiLP5dUz4YB8Ucjv6o4vek0YkNL8YYbWGC2FnP9JY62sgl20Z3Elk0JINipYC9euv90Fvx1eKtgEqeZHGWuU8GrkqFcTiaiF+Kllgqmua82dADTgRMSsIOuyB9CXN7hRWd3kRg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN0PR12MB6150.namprd12.prod.outlook.com (2603:10b6:208:3c6::11)
- by BN9PR12MB5273.namprd12.prod.outlook.com (2603:10b6:408:11e::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.34; Fri, 9 Jun
- 2023 17:29:59 +0000
-Received: from MN0PR12MB6150.namprd12.prod.outlook.com
- ([fe80::a029:8008:ffa4:8ef6]) by MN0PR12MB6150.namprd12.prod.outlook.com
- ([fe80::a029:8008:ffa4:8ef6%7]) with mapi id 15.20.6455.030; Fri, 9 Jun 2023
- 17:29:59 +0000
-Message-ID: <09cc666a-bc52-44b3-230c-26dc705c5a56@nvidia.com>
-Date:   Fri, 9 Jun 2023 10:29:56 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] drm/edid: Add quirk for OSVR HDK 2.0
-Content-Language: en-US
-To:     Jani Nikula <jani.nikula@intel.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-References: <20230609014207.2759720-1-rcampbell@nvidia.com>
- <87y1ktqa75.fsf@intel.com>
-From:   Ralph Campbell <rcampbell@nvidia.com>
-In-Reply-To: <87y1ktqa75.fsf@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0354.namprd03.prod.outlook.com
- (2603:10b6:a03:39c::29) To MN0PR12MB6150.namprd12.prod.outlook.com
- (2603:10b6:208:3c6::11)
+        Fri, 9 Jun 2023 13:36:40 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC65E4E;
+        Fri,  9 Jun 2023 10:36:39 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id E44551FE10;
+        Fri,  9 Jun 2023 17:36:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1686332197;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XsENri2S9pvn1qva5u81VJpotBG57Jbvi1S1O6Xiv0Y=;
+        b=FvNeMT2sAHqgex5YwtzgiL4bKlfJoNay15IlruWRKOQJvJBsFslyRdcwVa+o7uDnJP/1aI
+        wX9zXMMrpH2MjP6PCbl84d4vP22vXorx9g1LYxWQ+94cqiB3p0DGGTum9cmboclRsE4yQD
+        B1UBinfgFKvSVw9uZo9F5Dw4Keg4Jgk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1686332197;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XsENri2S9pvn1qva5u81VJpotBG57Jbvi1S1O6Xiv0Y=;
+        b=TziDihUDDOcgL9DY4Ncl70gVbdcQ2NItiJhfQjuD0ICNx/PPBR2p/IZ7J4/bFRYP0UNExU
+        HzmxMv9z+eFb5RBg==
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 9C38F2C141;
+        Fri,  9 Jun 2023 17:36:37 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id ABCDBDA85A; Fri,  9 Jun 2023 19:30:21 +0200 (CEST)
+Date:   Fri, 9 Jun 2023 19:30:21 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     David Sterba <dsterba@suse.cz>,
+        syzbot <syzbot+a694851c6ab28cbcfb9c@syzkaller.appspotmail.com>,
+        clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [btrfs?] INFO: task hung in btrfs_sync_file (2)
+Message-ID: <20230609173021.GD12828@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+References: <00000000000086021605fd1b484c@google.com>
+ <20230606142405.GI25292@twin.jikos.cz>
+ <ZH+3DJQC8CUSs+/x@dread.disaster.area>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6150:EE_|BN9PR12MB5273:EE_
-X-MS-Office365-Filtering-Correlation-Id: 97fbd32b-3e82-47df-7c7c-08db690f2658
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GLPf7uzm0SyZxMxgMpeQsLaS2APj6LyatL7/LqivJhSxS6uwEBkzbTr+oP6R9EKl6y7xUWkGMIvfCJDE9Shsj5SqtrJg3jcXDp0Lgau2mz1PzeHN2mS4iH1xbJI8yUi0cIHPofgnAnxkP0KFTgdP0x2cQCVPIVmfvIdBcHJtFXSv+RgKJBJucB0bDlIb17vqQbNUBdt8jcnTuroK7pL+vaPQ/3wHbK9CzdxNIrAyVKs2Lx54iBjPmfrS3Cqrbe/iGO6iB/JAc4rvzVo9aVWHjVfNUTU6GWztazK7BB7wh02BFhuIeHu6siJ2Piamc26Vaqgo/qG2MF17iVqavi0V0ozpk7UifGpA52etkGjIqxCw2TGyuQx0SQO8st7fQ+m/8QfpERS+MggQyKcJK7Ps+fK177tiXsTPRLTCNIRL2zmFj1g8BWbZRGHTXZ/tWixza+kP7nWGAWtf4Q28vadkkuMppkk0bPd/UaAetdnH0SrMK8l60TuuFthGlyPaWqj6LxYFQ2rv4QRXH74gFPuIDFMeEOYxWXa7iNvr0xSwdGz3OOrC2dPKzwUyQ2L+Rkb/vtZMnL7yN4JC2/4EpGYssB5e7bVpTTHM9vmjvdi1XQAtLHnJIC3hf1S9jB6JEnQekgeP3mpR3+EqvUwBAE4lSQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6150.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(136003)(396003)(366004)(376002)(451199021)(41300700001)(478600001)(6666004)(186003)(83380400001)(8676002)(8936002)(45080400002)(316002)(6506007)(6512007)(31686004)(26005)(4326008)(66946007)(66476007)(66556008)(38100700002)(53546011)(31696002)(2906002)(5660300002)(36756003)(54906003)(86362001)(6486002)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VU1CbS9EaFB5UmJyT1VmSy9FallTWE4xWjIrS3NIWUg1MERkS01HdnhZcjVT?=
- =?utf-8?B?ZzZxZHF0LytRUFBXSDFrNlpPUVJaYi9yU29qcVRFc3FiVXhxdmhLMERHKys4?=
- =?utf-8?B?TmlmWXhLWDcvL0RXdE93eUFiQmJ5cEtvb1Fqa2JEZVRkOEFmWGRSdmdOL1g4?=
- =?utf-8?B?S3h0Qi9uM2NDSTJGaXhieEE1Q2ZsRkR0UkN6Nit5MkNFdEE1OGhXcXNzeTdT?=
- =?utf-8?B?UEw1Ym5DcnYxa1U5dlJlSEp5T294WEp5VGVKTFhOMXdKeVZtMENCdW5CQnJq?=
- =?utf-8?B?dCt2R3RMMnhLb2d0eXZMcGpPbndnK2ZxeGF4OVpyVVdvNWdKRWJNZFRYKzE4?=
- =?utf-8?B?Q0ZybHRRZmoyQy9ja0RjNmM1aEVSNmZ5dlRldWhDKzdnKzMrTkVRTkRYdDl4?=
- =?utf-8?B?ZnlZem1qSUFkdlhDMy9FQU9ERVRXRUhXSzFzckRjZndSS2E5VmRob1k0RFVk?=
- =?utf-8?B?Y1JyZ2NhV3BacDZWeUx4ZHRzOURYenlKcGJiSC8yYXVBcUhrWU9CMDZPdmlu?=
- =?utf-8?B?UE9vMVZiajZIc2Z1bTY1MWFJb2cvd2NnVS9zN01EUFFteGE5ZTZxMWhVWGJR?=
- =?utf-8?B?WjZQcklvbTY1eXIwY2k0NjAzcEx6eFdNT1MvU2FuaFplUG5NS2k0S2pGYzkw?=
- =?utf-8?B?UkVGTTltTFZ0bS9TWlNhNkt1YjVWaHZ4cCtWZVFrWmptTGt5TkMyV2dkekFl?=
- =?utf-8?B?QktSazZqQmdkYm9qcFp0WWZyMDFYQW5iZVpwMEJkZHA3UUpESVRMU3BaeEg4?=
- =?utf-8?B?L28yU292RXpaL2tJbDlBcXZGaEFJK2kycEJ4MDB4OEZ3REJnWHJiRExFYWh1?=
- =?utf-8?B?TnU0MURwTk80N2pDSjVHT05LVmJyMkpPc2dYVnBTZ2FrMVBiNWZLTngvN2Nu?=
- =?utf-8?B?cE0yYTh5Y29Pa05uZzZHOVdRZEtOQjVjdUtTRWtBUGs3WTdaamIvNlhGSmly?=
- =?utf-8?B?S3E2UkNHK1EzTnpvdkFnUThnTU83Y2JvTmh3NHRsaytYTnRxTzZYTWdYT1lR?=
- =?utf-8?B?UlVvdXZlTk1ocXIzbU5sS1BtWmtRZ1VaY29xZ0NpOWZrYTZqMVlWU3hBeWZU?=
- =?utf-8?B?clBxT0kwRmZFQ3JCRmJXekxiYmluRXVWeXRLb0RYMTU4RitlTkJLUlBWWDdT?=
- =?utf-8?B?cEJlWmczUk50d2U3b2l6M0RpMmx6dERyc3RvVDJ4bmdvNXlnOGJjVnlVZk1P?=
- =?utf-8?B?TW9wSFlkZkFMbkkrRjdHd2NBTmxFTm14UVFpdVlrTUlLNEw4Q29OekpJbE5k?=
- =?utf-8?B?RDZxRitBMERvZ284Y1ZreUpvT0xyQXB2MjdwOEw3L1drRG9lc1lSMFNSY1FX?=
- =?utf-8?B?cHErRGZ3MnRVdzNhRlhwbCtsdEFmeExORU1USlVKUkpOMG1WdXBGb29mZnZ3?=
- =?utf-8?B?eUdGeHV6VTN5UEJWYkRnb1J0OU9kNmNjcFppd2QvNGJKaUxERGt0UENpRlZw?=
- =?utf-8?B?dHkwSUlMZ2R3TTFMVXpNVGNPNHBQdk5tMW5oQUtUVjE3ajF1SVZyWGx2K0I3?=
- =?utf-8?B?VE02OUZ3WEdVU2R2cDZLRC9vN3VVTlIrQlF3aWJCMGJRWGt2Y2R6M1F0cXpG?=
- =?utf-8?B?Wmh1akVLSnRzNzlDNndPeVhTVUg3OC9JdEtVaE84N0UxdklrQm96MUlNMDVU?=
- =?utf-8?B?dGd6TFZDVm1sQjJ6NmMrenhYdElrZDAwQTE1ek9OcnBkZTdVaUlDUUQwMmxq?=
- =?utf-8?B?cytETjUrTkNtZldoSzNONE9RbjQ1VjdWbmh4Y0JGZjJCeEM0S1ZFSFJoTFl5?=
- =?utf-8?B?THFJcUo1RFA4UGRSRUNFclJoOXlEc0lvdVl4clV3OTBEbTJXNGZBRE9pcXcx?=
- =?utf-8?B?SDRkWHJFK0wrU0x3NTVCT3RDOC9HMEJGUHBTUUh5bmJiOWNYT1gwSmpzVC9n?=
- =?utf-8?B?M1RSLzE1ZklBQVVCVDdVa1VzZUc0clAra3dHZDVncWZzMDMwdVhGa00zVjFi?=
- =?utf-8?B?Mnh4dm1NejhPZFhoc3ZUK2tHUmpXYzI1eStoczhPeGJ1UkhyZGV0ejlqL1B5?=
- =?utf-8?B?cDg2azhGbktyZldvaFVESlZWMmhackx6Mm1ZcnQzSWhpcUo5VWNiYTBlcE9B?=
- =?utf-8?B?MytjRCsvSGtjZFEyaStWalBoNTRwMHlLWmpPV2NySFFuN0gwNkpRRzI1a3Jw?=
- =?utf-8?Q?2KjXg1puAgw/x9x6IqNTd1nX7?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 97fbd32b-3e82-47df-7c7c-08db690f2658
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6150.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 17:29:59.4012
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aInh310XFhprHV3bxWOU21Q1en5etRs2VCC1FKizpBslH3//DAHpv5vfStvm1C3nHchFlqW0aaYqLS5PgF7SGw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5273
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZH+3DJQC8CUSs+/x@dread.disaster.area>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -131,50 +69,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 07, 2023 at 08:45:32AM +1000, Dave Chinner wrote:
+> On Tue, Jun 06, 2023 at 04:24:05PM +0200, David Sterba wrote:
+> > On Thu, Jun 01, 2023 at 06:15:06PM -0700, syzbot wrote:
+> > > RIP: 0010:rep_movs_alternative+0x33/0xb0 arch/x86/lib/copy_user_64.S:56
+> > > Code: 46 83 f9 08 73 21 85 c9 74 0f 8a 06 88 07 48 ff c7 48 ff c6 48 ff c9 75 f1 c3 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 8b 06 <48> 89 07 48 83 c6 08 48 83 c7 08 83 e9 08 74 df 83 f9 08 73 e8 eb
+> > > RSP: 0018:ffffc9000becf728 EFLAGS: 00050206
+> > > RAX: 0000000000000000 RBX: 0000000000000038 RCX: 0000000000000038
+> > > RDX: fffff520017d9efb RSI: ffffc9000becf7a0 RDI: 0000000020000120
+> > > RBP: 0000000020000120 R08: 0000000000000000 R09: fffff520017d9efa
+> > > R10: ffffc9000becf7d7 R11: 0000000000000001 R12: ffffc9000becf7a0
+> > > R13: 0000000020000158 R14: 0000000000000000 R15: ffffc9000becf7a0
+> > >  copy_user_generic arch/x86/include/asm/uaccess_64.h:112 [inline]
+> > >  raw_copy_to_user arch/x86/include/asm/uaccess_64.h:133 [inline]
+> > >  _copy_to_user lib/usercopy.c:41 [inline]
+> > >  _copy_to_user+0xab/0xc0 lib/usercopy.c:34
+> > >  copy_to_user include/linux/uaccess.h:191 [inline]
+> > >  fiemap_fill_next_extent+0x217/0x370 fs/ioctl.c:144
+> > >  emit_fiemap_extent+0x18e/0x380 fs/btrfs/extent_io.c:2616
+> > >  fiemap_process_hole+0x516/0x610 fs/btrfs/extent_io.c:2874
+> > 
+> > and extent enumeration from FIEMAP, this would qualify as a stress on
+> > the inode
+> 
+> FWIW, when I've seen this sort of hang on XFS in past times, it's
+> been caused by a corrupt extent list or a circular reference in a
+> btree that the fuzzing introduced. Hence FIEMAP just keeps going
+> around in circles and never gets out of the loop to drop the inode
+> lock....
 
-On 6/9/23 02:03, Jani Nikula wrote:
-> On Thu, 08 Jun 2023, Ralph Campbell <rcampbell@nvidia.com> wrote:
->> The OSVR virtual reality headset HDK 2.0 uses a different EDID
->> vendor and device identifier than the HDK 1.1 - 1.4 headsets.
->> Add the HDK 2.0 vendor and device identifier to the quirks table so
->> that window managers do not try to display the desktop screen on the
->> headset display.
-> At some point in time we requested bugs to be filed about quirks, with
-> EDIDs attached, so we could look at them later, and maybe remove the
-> quirks.
->
-> The headset non-desktop thing started off as a quirk, but since then
-> we've added both Microsoft VSDB and DisplayID primary use as ways to
-> indicate this without quirks.
->
-> BR,
-> Jani.
-
-If you want me to file a bug, I can do that and I have the EDID too.
-Where would I file it?
-
-I did see the DisplayID 2.0 code. This headset is no longer being
-manufactured so updating the EDID is not practical.
-
->> Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
->> Tested-by: Ralph Campbell <rcampbell@nvidia.com>
->> ---
->>   drivers/gpu/drm/drm_edid.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> I don't know how many of these VR headsets are still around but I have a
->> working one and I saw and entry for HDK 1.x so I thought it would be good
->> to add HDK 2.0.
->>
->> diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
->> index 0454da505687..3b8cc1fe05e8 100644
->> --- a/drivers/gpu/drm/drm_edid.c
->> +++ b/drivers/gpu/drm/drm_edid.c
->> @@ -230,6 +230,7 @@ static const struct edid_quirk {
->>   
->>   	/* OSVR HDK and HDK2 VR Headsets */
->>   	EDID_QUIRK('S', 'V', 'R', 0x1019, EDID_QUIRK_NON_DESKTOP),
->> +	EDID_QUIRK('A', 'O', 'U', 0x1111, EDID_QUIRK_NON_DESKTOP),
->>   };
->>   
->>   /*
+Thanks for the info. The provided reproducer was able to get the VM
+stuck in a few hours so there is some problem. The generated image does
+not show any obvious problem so it's either lack of 'check' capability
+or the problem happens at run time.
