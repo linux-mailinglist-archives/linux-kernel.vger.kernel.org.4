@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C01C729D7E
+	by mail.lfdr.de (Postfix) with ESMTP id 500F6729D7D
 	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:56:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241709AbjFIO4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 10:56:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38866 "EHLO
+        id S241323AbjFIO4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 10:56:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240274AbjFIO40 (ORCPT
+        with ESMTP id S241670AbjFIO40 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 9 Jun 2023 10:56:26 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942E535A7
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 07:55:58 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f735259fa0so18463205e9.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 07:55:58 -0700 (PDT)
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FA330C5
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 07:55:59 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f732d37d7cso18366685e9.2
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 07:55:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686322541; x=1688914541;
+        d=linaro.org; s=google; t=1686322542; x=1688914542;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hHdZfsXP57Mm/02dFH23BtlU4BZ6K+unFALB3eZT2XI=;
-        b=hECgauk1lv9bUI/qzxcc7onysVmt8iROVx6nXi/YCoc83NhbFoD/4qrdkus6CWQeow
-         17XOJnERd4wS2pC9Jtj5Z0LvbO36dq8e7vFaP8wMVLS3ZksVs2+8vlHqAfHCdsM8IeYb
-         kWxbAUioeWrEo98dX43/VwdaqSD/KMsyqBIJ1SVJ9PQSOP0qflDSJtl3ytD+0abDkaM8
-         dDW/IHhRlRiYvQ0fhPJA/JfbyB5nqsKeBHDju8yUK/ttUrUZ4XiCAAIad3mORYijf6Bw
-         4NUfuoHOHGUS5tN3dkeIk3q/SjCML4ET/V5bL3+tddwKzcaJaMDWjfdNwDA78wiPIFPT
-         Z9dA==
+        bh=5oas5yfZUch+KwTs6sPoo3Z/Mjm/SkzsGldUfkoryZM=;
+        b=D3IZ+Fe4GQ9c1/S5GhPhqwZWsWHCROvNIelKWbl7B6W+K3B83uRz9KpjGJ/nz7Sgy7
+         h3TSNUDTlut2ncpzSvtVP2EPV8V68Ap/q0b7Z0kiWDZXut1DYWWWLtLUSKtcDWRgnh8m
+         ZCliVAH1s/Cu3HVOns0vrJQ7hJbnnVTZigFMH0iRA+tSU/0dsYPUArT/RIUx38iFHjmG
+         gjLira3Tr8WALzgWQ00XFQDvfe7XYcWzG+NhS8Xng9d6RoLKHYrkdsb1oTNn/aComHlo
+         YeZaMropnRmZs+QJzFunYs9ygx9f6hQ27z6otilxXEYY94WzNIVVj7t9mnRkyTiFhpyX
+         9OUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686322541; x=1688914541;
+        d=1e100.net; s=20221208; t=1686322542; x=1688914542;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hHdZfsXP57Mm/02dFH23BtlU4BZ6K+unFALB3eZT2XI=;
-        b=kNwfNFBPYugOWJGt76SLs+8NjwfHnwpN3VyamoCL8LevNyoaqvh9k9DaU5lBLBlKLz
-         aHbZcqejkt7NUCNuhZ4TKrUV+ifPSg0Wa4jITBlkoUO3SAqXuQ5oxYZ6gR9cnuERYq7G
-         fhFlmtVvZJ8y1d4zFZVC4tiyFWx1/pazP9UYJIuECwUsjSNjpaw3i3x2oYEdSdWwZJ9L
-         Bu1pgQgpwZAa1ne93XWlwACPS6cXkxU1iCAP92CEmSfOhxXJN1uhPgqfgHWVpI0HaEIz
-         P6HtQKTsl+MjFW67wCI7jVA0GvMGKHYPLYOcyy559WbpgEVI4OKSKj6ys5+rI69RPgLY
-         BwAA==
-X-Gm-Message-State: AC+VfDyNvMBf3KtMbeAIA/aaaDWZTlXcm8WZwgTuUneFajxYgvoYifAX
-        GrzSALxPw/LIVVIfMoarUnKIuQ==
-X-Google-Smtp-Source: ACHHUZ5DrewvI0+n2J+g2WI68Cm64oCnaD/7RuLUe7THX5lmRHb6ogXTyKEQqJRdaPOPKIZ/0Vk9Dg==
-X-Received: by 2002:a05:600c:2901:b0:3f7:39ed:c9a4 with SMTP id i1-20020a05600c290100b003f739edc9a4mr1475841wmd.30.1686322541228;
-        Fri, 09 Jun 2023 07:55:41 -0700 (PDT)
+        bh=5oas5yfZUch+KwTs6sPoo3Z/Mjm/SkzsGldUfkoryZM=;
+        b=h7CTKvSWJuUoG+YnZPcQXtBoYKyfx4nHYrxjwPQRbt6YJNQMLLT8wzlqtOaoHlST8c
+         0J1lnmabrdzqFpwEdem0dpNTT34wQBMYBW4NrADkrHPna2lT9m+vzGblAPsFKoQv+kuk
+         Gn9+hSvqpKGg23OC5BthaaoTObOuyOFnSnQu+TsHsP5ICuZ1ygFRO1ktRTy3TnuactzI
+         Jx5qGt3aE9/lhjKHz2xeUY5Io1dpvdGcbvEjLWlrikZ7/IoNYrW/XNTtH+egeGj3ozIp
+         L9gAUKZfRYYNpi3FGbbBF51loFdyflOPK79pHHkTXgd4W0p1LBXYhprg+Z3GeRAQBJg4
+         yYAg==
+X-Gm-Message-State: AC+VfDzIOwNjSf0ERMqOuzDSTU+zq0KdH24D6X2wNs/qSYW7x3f8tClH
+        YPWt7OD5qymP4sYd6p9fVhiELw==
+X-Google-Smtp-Source: ACHHUZ5VX5XFlF2Ps/n+HZ9WOvmRQVv13Bgxps4vrqIBIKOroweQSDzrmfUDOu38QCXMi4tv11j5tg==
+X-Received: by 2002:a05:600c:2245:b0:3f7:33cf:707f with SMTP id a5-20020a05600c224500b003f733cf707fmr1448347wmm.35.1686322542463;
+        Fri, 09 Jun 2023 07:55:42 -0700 (PDT)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id c21-20020a05600c0ad500b003f7310a3ffasm2946632wmr.2.2023.06.09.07.54.26
+        by smtp.gmail.com with ESMTPSA id c21-20020a05600c0ad500b003f7310a3ffasm2946632wmr.2.2023.06.09.07.55.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 07:54:27 -0700 (PDT)
+        Fri, 09 Jun 2023 07:55:41 -0700 (PDT)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     broonie@kernel.org
 Cc:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
         ckeepax@opensource.cirrus.com, kuninori.morimoto.gx@renesas.com,
         linux-kernel@vger.kernel.org, pierre-louis.bossart@linux.intel.com,
         alsa-devel@alsa-project.org,
-        Mohammad Rafi Shaik <quic_mohs@quicinc.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH v2 06/11] ASoC: q6dsp: audioreach: Add gapless feature support
-Date:   Fri,  9 Jun 2023 15:54:02 +0100
-Message-Id: <20230609145407.18774-7-srinivas.kandagatla@linaro.org>
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Mohammad Rafi Shaik <quic_mohs@quicinc.com>
+Subject: [PATCH v2 07/11] ASoC: q6dsp: q6apm-dai: Add open/free compress DAI callbacks
+Date:   Fri,  9 Jun 2023 15:54:03 +0100
+Message-Id: <20230609145407.18774-8-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20230609145407.18774-1-srinivas.kandagatla@linaro.org>
 References: <20230609145407.18774-1-srinivas.kandagatla@linaro.org>
@@ -76,81 +76,205 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
-
-Add support for setting EOS delay command and receive the
-EOS response from ADSP, for seamless compress offload
-playback feature.
+Add q6apm open and free compress DAI callbacks to support compress
+offload playback.
+Include compress event handler callback also.
 
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 Co-developed-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
 Signed-off-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
 ---
- sound/soc/qcom/qdsp6/audioreach.c | 11 +++++++++++
- sound/soc/qcom/qdsp6/audioreach.h |  7 +++++++
- 2 files changed, 18 insertions(+)
+ sound/soc/qcom/qdsp6/q6apm-dai.c | 136 +++++++++++++++++++++++++++++++
+ sound/soc/qcom/qdsp6/q6apm.h     |   1 +
+ 2 files changed, 137 insertions(+)
 
-diff --git a/sound/soc/qcom/qdsp6/audioreach.c b/sound/soc/qcom/qdsp6/audioreach.c
-index 6d0f4c8505f1..fefab20aaf1c 100644
---- a/sound/soc/qcom/qdsp6/audioreach.c
-+++ b/sound/soc/qcom/qdsp6/audioreach.c
-@@ -787,6 +787,14 @@ static int audioreach_module_enable(struct q6apm_graph *graph,
- 	return audioreach_send_u32_param(graph, module, PARAM_ID_MODULE_ENABLE, enable);
+diff --git a/sound/soc/qcom/qdsp6/q6apm-dai.c b/sound/soc/qcom/qdsp6/q6apm-dai.c
+index 9fff41ee98eb..32df5db014d3 100644
+--- a/sound/soc/qcom/qdsp6/q6apm-dai.c
++++ b/sound/soc/qcom/qdsp6/q6apm-dai.c
+@@ -28,6 +28,8 @@
+ #define CAPTURE_MIN_PERIOD_SIZE		320
+ #define BUFFER_BYTES_MAX (PLAYBACK_MAX_NUM_PERIODS * PLAYBACK_MAX_PERIOD_SIZE)
+ #define BUFFER_BYTES_MIN (PLAYBACK_MIN_NUM_PERIODS * PLAYBACK_MIN_PERIOD_SIZE)
++#define COMPR_PLAYBACK_MAX_FRAGMENT_SIZE (128 * 1024)
++#define COMPR_PLAYBACK_MAX_NUM_FRAGMENTS (16 * 4)
+ #define SID_MASK_DEFAULT	0xF
+ 
+ enum stream_state {
+@@ -55,6 +57,7 @@ struct q6apm_dai_rtd {
+ 	enum stream_state state;
+ 	struct q6apm_graph *graph;
+ 	spinlock_t lock;
++	bool notify_on_drain;
+ };
+ 
+ struct q6apm_dai_data {
+@@ -132,6 +135,69 @@ static void event_handler(uint32_t opcode, uint32_t token, uint32_t *payload, vo
+ 	}
  }
  
-+static int audioreach_gapless_set_media_format(struct q6apm_graph *graph,
-+					       struct audioreach_module *module,
-+					       struct audioreach_module_config *cfg)
++static void event_handler_compr(uint32_t opcode, uint32_t token,
++				uint32_t *payload, void *priv)
 +{
-+	return audioreach_send_u32_param(graph, module, PARAM_ID_EARLY_EOS_DELAY,
-+					 EARLY_EOS_DELAY_MS);
++	struct q6apm_dai_rtd *prtd = priv;
++	struct snd_compr_stream *substream = prtd->cstream;
++	unsigned long flags;
++	uint32_t wflags = 0;
++	uint64_t avail;
++	uint32_t bytes_written, bytes_to_write;
++	bool is_last_buffer = false;
++
++	switch (opcode) {
++	case APM_CLIENT_EVENT_CMD_EOS_DONE:
++		spin_lock_irqsave(&prtd->lock, flags);
++		if (prtd->notify_on_drain) {
++			snd_compr_drain_notify(prtd->cstream);
++			prtd->notify_on_drain = false;
++		} else {
++			prtd->state = Q6APM_STREAM_STOPPED;
++		}
++		spin_unlock_irqrestore(&prtd->lock, flags);
++		break;
++	case APM_CLIENT_EVENT_DATA_WRITE_DONE:
++		spin_lock_irqsave(&prtd->lock, flags);
++		bytes_written = token >> APM_WRITE_TOKEN_LEN_SHIFT;
++		prtd->copied_total += bytes_written;
++		snd_compr_fragment_elapsed(substream);
++
++		if (prtd->state != Q6APM_STREAM_RUNNING) {
++			spin_unlock_irqrestore(&prtd->lock, flags);
++			break;
++		}
++
++		avail = prtd->bytes_received - prtd->bytes_sent;
++
++		if (avail > prtd->pcm_count) {
++			bytes_to_write = prtd->pcm_count;
++		} else {
++			if (substream->partial_drain || prtd->notify_on_drain)
++				is_last_buffer = true;
++			bytes_to_write = avail;
++		}
++
++		if (bytes_to_write) {
++			if (substream->partial_drain && is_last_buffer)
++				wflags |= APM_LAST_BUFFER_FLAG;
++
++			q6apm_write_async(prtd->graph,
++						bytes_to_write, 0, 0, wflags);
++
++			prtd->bytes_sent += bytes_to_write;
++
++			if (prtd->notify_on_drain && is_last_buffer)
++				audioreach_shared_memory_send_eos(prtd->graph);
++		}
++
++		spin_unlock_irqrestore(&prtd->lock, flags);
++		break;
++	default:
++		break;
++	}
 +}
 +
- static int audioreach_mfc_set_media_format(struct q6apm_graph *graph,
- 					   struct audioreach_module *module,
- 					   struct audioreach_module_config *cfg)
-@@ -1268,6 +1276,9 @@ int audioreach_set_media_format(struct q6apm_graph *graph, struct audioreach_mod
- 	case MODULE_ID_MFC:
- 		rc = audioreach_mfc_set_media_format(graph, module, cfg);
- 		break;
-+	case MODULE_ID_GAPLESS:
-+		rc = audioreach_gapless_set_media_format(graph, module, cfg);
-+		break;
- 	default:
- 		rc = 0;
- 	}
-diff --git a/sound/soc/qcom/qdsp6/audioreach.h b/sound/soc/qcom/qdsp6/audioreach.h
-index dc089879b501..e38111ffd7b9 100644
---- a/sound/soc/qcom/qdsp6/audioreach.h
-+++ b/sound/soc/qcom/qdsp6/audioreach.h
-@@ -27,6 +27,7 @@ struct q6apm_graph;
- #define MODULE_ID_AAC_DEC		0x0700101F
- #define MODULE_ID_FLAC_DEC		0x0700102F
- #define MODULE_ID_MP3_DECODE		0x0700103B
-+#define MODULE_ID_GAPLESS		0x0700104D
- #define MODULE_ID_DISPLAY_PORT_SINK	0x07001069
+ static int q6apm_dai_prepare(struct snd_soc_component *component,
+ 			     struct snd_pcm_substream *substream)
+ {
+@@ -387,6 +453,75 @@ static int q6apm_dai_pcm_new(struct snd_soc_component *component, struct snd_soc
+ 	return snd_pcm_set_fixed_buffer_all(rtd->pcm, SNDRV_DMA_TYPE_DEV, component->dev, size);
+ }
  
- #define APM_CMD_GET_SPF_STATE		0x01001021
-@@ -552,6 +553,8 @@ struct param_id_sal_limiter_enable {
- } __packed;
- 
- #define PARAM_ID_MFC_OUTPUT_MEDIA_FORMAT	0x08001024
-+#define PARAM_ID_EARLY_EOS_DELAY		0x0800114C
-+#define EARLY_EOS_DELAY_MS			150
- 
- struct param_id_mfc_media_format {
- 	uint32_t sample_rate;
-@@ -560,6 +563,10 @@ struct param_id_mfc_media_format {
- 	uint16_t channel_mapping[];
- } __packed;
- 
-+struct param_id_gapless_early_eos_delay_t {
-+	uint32_t early_eos_delay_ms;
-+} __packed;
++static int q6apm_dai_compr_open(struct snd_soc_component *component,
++				struct snd_compr_stream *stream)
++{
++	struct snd_soc_pcm_runtime *rtd = stream->private_data;
++	struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(rtd, 0);
++	struct snd_compr_runtime *runtime = stream->runtime;
++	struct q6apm_dai_rtd *prtd;
++	struct q6apm_dai_data *pdata;
++	struct device *dev = component->dev;
++	int ret, size;
++	int graph_id;
 +
- struct media_format {
- 	uint32_t data_format;
- 	uint32_t fmt_id;
++	graph_id = cpu_dai->driver->id;
++	pdata = snd_soc_component_get_drvdata(component);
++	if (!pdata)
++		return -EINVAL;
++
++	prtd = kzalloc(sizeof(*prtd), GFP_KERNEL);
++	if (prtd == NULL)
++		return -ENOMEM;
++
++	prtd->cstream = stream;
++	prtd->graph = q6apm_graph_open(dev, (q6apm_cb)event_handler_compr, prtd, graph_id);
++	if (IS_ERR(prtd->graph)) {
++		ret = PTR_ERR(prtd->graph);
++		kfree(prtd);
++		return ret;
++	}
++
++	runtime->private_data = prtd;
++	runtime->dma_bytes = BUFFER_BYTES_MAX;
++	size = COMPR_PLAYBACK_MAX_FRAGMENT_SIZE * COMPR_PLAYBACK_MAX_NUM_FRAGMENTS;
++	ret = snd_dma_alloc_pages(SNDRV_DMA_TYPE_DEV, dev, size, &prtd->dma_buffer);
++	if (ret)
++		return ret;
++
++	if (pdata->sid < 0)
++		prtd->phys = prtd->dma_buffer.addr;
++	else
++		prtd->phys = prtd->dma_buffer.addr | (pdata->sid << 32);
++
++	snd_compr_set_runtime_buffer(stream, &prtd->dma_buffer);
++	spin_lock_init(&prtd->lock);
++
++	q6apm_enable_compress_module(dev, prtd->graph, true);
++	return 0;
++}
++
++static int q6apm_dai_compr_free(struct snd_soc_component *component,
++				struct snd_compr_stream *stream)
++{
++	struct snd_compr_runtime *runtime = stream->runtime;
++	struct q6apm_dai_rtd *prtd = runtime->private_data;
++
++	q6apm_graph_stop(prtd->graph);
++	q6apm_unmap_memory_regions(prtd->graph, SNDRV_PCM_STREAM_PLAYBACK);
++	q6apm_graph_close(prtd->graph);
++	snd_dma_free_pages(&prtd->dma_buffer);
++	prtd->graph = NULL;
++	kfree(prtd);
++	runtime->private_data = NULL;
++
++	return 0;
++}
++static const struct snd_compress_ops q6apm_dai_compress_ops = {
++	.open		= q6apm_dai_compr_open,
++	.free		= q6apm_dai_compr_free,
++};
++
+ static const struct snd_soc_component_driver q6apm_fe_dai_component = {
+ 	.name		= DRV_NAME,
+ 	.open		= q6apm_dai_open,
+@@ -396,6 +531,7 @@ static const struct snd_soc_component_driver q6apm_fe_dai_component = {
+ 	.hw_params	= q6apm_dai_hw_params,
+ 	.pointer	= q6apm_dai_pointer,
+ 	.trigger	= q6apm_dai_trigger,
++	.compress_ops	= &q6apm_dai_compress_ops,
+ };
+ 
+ static int q6apm_dai_probe(struct platform_device *pdev)
+diff --git a/sound/soc/qcom/qdsp6/q6apm.h b/sound/soc/qcom/qdsp6/q6apm.h
+index 87d67faf5f1a..d187d88c0a8c 100644
+--- a/sound/soc/qcom/qdsp6/q6apm.h
++++ b/sound/soc/qcom/qdsp6/q6apm.h
+@@ -45,6 +45,7 @@
+ #define APM_WRITE_TOKEN_LEN_SHIFT              16
+ 
+ #define APM_MAX_SESSIONS			8
++#define APM_LAST_BUFFER_FLAG			BIT(30)
+ 
+ struct q6apm {
+ 	struct device *dev;
 -- 
 2.21.0
 
