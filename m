@@ -2,123 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 200A072A644
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 00:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E970072A647
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 00:33:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231841AbjFIWaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 18:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45380 "EHLO
+        id S230435AbjFIWde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 18:33:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbjFIWaY (ORCPT
+        with ESMTP id S229446AbjFIWdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 18:30:24 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0177B359D
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 15:30:22 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-568af2f6454so21145727b3.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 15:30:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686349822; x=1688941822;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+zT6sV+fvzmgBBI81QXgaF+Btrnt6GH7aWTnX6MCUB4=;
-        b=mXAcURqk+1SjmifAbWS+rzdBg3sJG/XNRZ8y8ysR8INkOv4gWnF+xs+y+SYfhtf6N/
-         RUzqMQwHktqLGXnFqUtsvhF5L9vLpFUwvm2N9epG17Y0Vp2wpI7ZrzX8JDonWRmiow43
-         mX+mucGCdEZRZwBSCuNbliPjS+zKIFFWb9/ic7yJM7pykYyKn+2kH4loCcZKtPEoA1iE
-         lVZoLXJDhsiAM0IcrGBlFgWLUzxo4jWTIDQDnDuTB/9r0dEv+ey0PgmSn+GZP+iXEtW9
-         SOuHwnTb87WF5tfCuyWfCUydVDBd/5vbNI4gxJKZAzwgeQAoWA573b3Zpk+zJz2L5oom
-         Ryow==
+        Fri, 9 Jun 2023 18:33:33 -0400
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415E8359D;
+        Fri,  9 Jun 2023 15:33:32 -0700 (PDT)
+Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-77493b3d18cso105554239f.0;
+        Fri, 09 Jun 2023 15:33:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686349822; x=1688941822;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+zT6sV+fvzmgBBI81QXgaF+Btrnt6GH7aWTnX6MCUB4=;
-        b=aymm8mDmMqPjTQ0uIWjuFy3QpZSo/p3uzfyivI17m/iG7qme8yCUUZd9lVF/ACfFd/
-         AkKjxfh2+IaLJL+vHiGJ+bNKQC2UTXJZi/7KiwowldTW96jWQzMZ+3FNDaZ+Zmlu+S2O
-         SXyOvZRnORCgvZB1idu7vosO4GctzFah+Bfsfpv2mz4tKzU4JdioA+2dbOtRN3plwXtw
-         NdwcY2Vs6O0xXKFR8oND5hRNhjMlEpHq0L84YR+sZZUNnTL1T32s0DGJrwFfz4um+Apo
-         UrrKcytZ74jiWmWAA3JklpYSraMKmq8Gl+WBCf3dQJw6aaO1aCxADEZbvvEAqY1UCn0N
-         ZMvA==
-X-Gm-Message-State: AC+VfDxaAOeBOcU9E52p2JopqF8O0jEFhOZ22qFgE/yxvu2Fog2FBGzV
-        mnHLvRsgBErYDJXyLm7YsqyZMS8yKr/66PX92wDeOA==
-X-Google-Smtp-Source: ACHHUZ5TZvpX4UfdCUpjEiPqY6QZGnmNogZwNLVZjipLgMlKuWApKPOOPeExrL9FO8ZqBOPgG6jGQ762Win+1tZG15A=
-X-Received: by 2002:a0d:d8cb:0:b0:559:e1b2:70c6 with SMTP id
- a194-20020a0dd8cb000000b00559e1b270c6mr2210211ywe.34.1686349821843; Fri, 09
- Jun 2023 15:30:21 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686350011; x=1688942011;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c0WBoWxkI9nrxvhvZXw6n4SD+pmXcoSXL1lzwCeKXhE=;
+        b=hcyOIVvtIDrPvAdBX/veNnymtId7cyHhm5UZ7LfkuSGyp7IMzHcI9B1ofXx38VloZR
+         DdcwVQXfV8xN1uJPLRBrQV0raxM16w/egOgMJ/gJ3yeddGwz8XAN4R8iX8lY++j56Xae
+         oFzSflfvP3TjzhiukcbtsqfL8mP/KswbhFvbQURdzhZXuBMVASAB2w/JYDw5AMrEeDrv
+         NLowlZcpwru809vTwgn/f2ZOHcCXNnXEehdtYEI/wp3lh319B79UWoALS7rf45RbgXJM
+         EjxEVT2OP1IAgaZ6pG8bd1RwWJz2Kyf53j/4ANXB/WiDeSb9yC7YfodWZIkqxctbOPjR
+         6amw==
+X-Gm-Message-State: AC+VfDxWAeaTGBp2CdiUjmtX4nxlLsrPjPTznDpJWrivn+btbWsk85MZ
+        nXHnUKm98rQnmaaYoZ9E+SDCsP8C9g==
+X-Google-Smtp-Source: ACHHUZ6BbkVRmVkwVKhgORRjLQOSvJ9FIaFA+aBYpozVeu1HCvclY8YaJL+qMwALQkj3LV8EdO6XfA==
+X-Received: by 2002:a6b:f101:0:b0:777:b493:beb4 with SMTP id e1-20020a6bf101000000b00777b493beb4mr3061988iog.12.1686350011380;
+        Fri, 09 Jun 2023 15:33:31 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id q12-20020a6bf20c000000b0077acde4332fsm1333829ioh.17.2023.06.09.15.33.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 15:33:30 -0700 (PDT)
+Received: (nullmailer pid 2576630 invoked by uid 1000);
+        Fri, 09 Jun 2023 22:33:29 -0000
+Date:   Fri, 9 Jun 2023 16:33:29 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        Andreas Kemnade <andreas@kemnade.info>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH] dt-bindings: vendor-prefixes: document TeeJet
+Message-ID: <168635000807.2576565.16340146117390993721.robh@kernel.org>
+References: <20230515155747.499371-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-References: <20230609005158.2421285-1-surenb@google.com> <20230609005158.2421285-5-surenb@google.com>
- <ZIOOmC26qh4EXUEX@x1n>
-In-Reply-To: <ZIOOmC26qh4EXUEX@x1n>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Fri, 9 Jun 2023 15:30:10 -0700
-Message-ID: <CAJuCfpHKUjAwgWbxvJQDyEnneRD03p2M6247Q6=3-oOq_FL7zA@mail.gmail.com>
-Subject: Re: [PATCH v2 4/6] mm: drop VMA lock before waiting for migration
-To:     Peter Xu <peterx@redhat.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
-        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
-        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
-        apopple@nvidia.com, ying.huang@intel.com, david@redhat.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        viro@zeniv.linux.org.uk, brauner@kernel.org,
-        pasha.tatashin@soleen.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230515155747.499371-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 1:42=E2=80=AFPM Peter Xu <peterx@redhat.com> wrote:
->
-> On Thu, Jun 08, 2023 at 05:51:56PM -0700, Suren Baghdasaryan wrote:
-> > migration_entry_wait does not need VMA lock, therefore it can be droppe=
-d
-> > before waiting. Introduce VM_FAULT_VMA_UNLOCKED to indicate that VMA
-> > lock was dropped while in handle_mm_fault().
-> > Note that once VMA lock is dropped, the VMA reference can't be used as
-> > there are no guarantees it was not freed.
->
-> Then vma lock behaves differently from mmap read lock, am I right?  Can w=
-e
-> still make them match on behaviors, or there's reason not to do so?
 
-I think we could match their behavior by also dropping mmap_lock here
-when fault is handled under mmap_lock (!(fault->flags &
-FAULT_FLAG_VMA_LOCK)).
-I missed the fact that VM_FAULT_COMPLETED can be used to skip dropping
-mmap_lock in do_page_fault(), so indeed, I might be able to use
-VM_FAULT_COMPLETED to skip vma_end_read(vma) for per-vma locks as well
-instead of introducing FAULT_FLAG_VMA_LOCK. I think that was your idea
-of reusing existing flags?
+On Mon, 15 May 2023 17:57:47 +0200, Krzysztof Kozlowski wrote:
+> Document TeeJet vendor prefix (used in am3517_mt_ventoux.dts board).
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Cc: Andreas Kemnade <andreas@kemnade.info>
+> ---
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
 
->
-> One reason is if they match they can reuse existing flags and there'll be
-> less confusing, e.g. this:
->
->   (fault->flags & FAULT_FLAG_VMA_LOCK) &&
->     (vm_fault_ret && (VM_FAULT_RETRY || VM_FAULT_COMPLETE))
->
-> can replace the new flag, iiuc.
->
-> Thanks,
->
-> --
-> Peter Xu
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kernel-team+unsubscribe@android.com.
->
+Applied, thanks!
+
