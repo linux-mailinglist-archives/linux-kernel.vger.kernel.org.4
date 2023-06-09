@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F3C272A1E8
+	by mail.lfdr.de (Postfix) with ESMTP id 9AF0772A1E9
 	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231373AbjFISOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 14:14:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60912 "EHLO
+        id S229588AbjFISO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 14:14:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231350AbjFISO3 (ORCPT
+        with ESMTP id S229597AbjFISOW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 14:14:29 -0400
-Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DEB33586;
-        Fri,  9 Jun 2023 11:14:28 -0700 (PDT)
-Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-33b22221da6so8724675ab.1;
-        Fri, 09 Jun 2023 11:14:28 -0700 (PDT)
+        Fri, 9 Jun 2023 14:14:22 -0400
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BEFD3586;
+        Fri,  9 Jun 2023 11:14:20 -0700 (PDT)
+Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-777ac791935so85734839f.2;
+        Fri, 09 Jun 2023 11:14:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686334467; x=1688926467;
+        d=1e100.net; s=20221208; t=1686334460; x=1688926460;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pE6BrZSZEIfHJZnlEnBPUpJidRJVROMBg6S+6nxssKs=;
-        b=NaavfIeun7ZQYhiKE7CJnbTTUp25hokJDnU9YN02pQbxBnF0PCeZTfFveeZH5SszAK
-         Z+BNB0gPub4i+lbXVzwQ9w5+Y/V8GOffiVud413F2jZU9fqWAAJBKa+rCmGIUOCFmU8r
-         kcbIZu8cWiZZ6TRz7BRhS9HRLlsAUbMYx2mA1Ym7xMNJr+UU38iOmHSFNmHZTicZQ7J+
-         KWOunWTQGcAnXckTZ6MQTkxgqORGI+N2PsZme85ciDiYYQc9Bbk1iaXcXFH4P1iQtD1W
-         ixc0XCe9XNdPBMXwHSKRnFzXDgFQNCXrR3dLykRCLoX5E24lhvVHs3z3P0k639/SoCpd
-         WX8Q==
-X-Gm-Message-State: AC+VfDytDToXLrXzRlC+7DdGFSBp6hsJ4UsHZkgKHcO1e4jZUlMryWb6
-        riGLn5Z4Qwi1mczgjOW5qQ==
-X-Google-Smtp-Source: ACHHUZ79dCkknd9S8Dmk8waSkwLRk4KiJg4v0cTkG2Eo4R+dz6RcXvl1Z+9Kd2mqw/rD2ad51NDMAA==
-X-Received: by 2002:a92:cd43:0:b0:33e:6837:c5fe with SMTP id v3-20020a92cd43000000b0033e6837c5femr2257114ilq.9.1686334467190;
-        Fri, 09 Jun 2023 11:14:27 -0700 (PDT)
+        bh=wUoI1otyq64V4OASVoH2qZ32EO4bebljBzF+Ld6+3L8=;
+        b=d/1ff/qxrBfChgRlwPEHKtWAbRXGBRI5VudXfeJGwRscwnN/zGO4P6/v/JRAhMfvk6
+         95JNXWQUreKajR2JugpIl/XhVYKK2W4Oik3blwh5oh9rRLeJ6U9MfUoHQfxOB+InROzP
+         /RvrBFSMhiCyWLbMisJjV9G6uNlWHhiOyQOlXHhWN4piN12yG/Pl+mZ5PBSfnNOC4kmU
+         90lMut8A+4alQc0/m0NiN1/E4g7QjHcMDope+ax5ZSHMA/cLat0o9mi6OISM8e/xKHeC
+         lZVjBe8gYDuPcp/yloLmS0kW8/6Ff71RxmJt6gJnZVvIIlM6P0nMabUt6LCJfehOUI9D
+         x2rg==
+X-Gm-Message-State: AC+VfDwYiWluvl0ZUGlPjbC7xLk7DVVb4b2aGIxxhl+4SaOZnwnMn8Zd
+        HNX5pXfinTaq85zQCjZMiQ==
+X-Google-Smtp-Source: ACHHUZ7avp6M8UuFQ9TiyWiTQa1MXln3O/GpP7V72IkCtX4OMsKNx1Tat1zvWXXVbv5Ss/EtNsYBgQ==
+X-Received: by 2002:a5e:df0b:0:b0:777:b4af:32a3 with SMTP id f11-20020a5edf0b000000b00777b4af32a3mr2346005ioq.14.1686334459878;
+        Fri, 09 Jun 2023 11:14:19 -0700 (PDT)
 Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id z9-20020a92cec9000000b0033a6e7ee4e3sm1223860ilq.1.2023.06.09.11.14.25
+        by smtp.gmail.com with ESMTPSA id l18-20020a02a892000000b0040f9af9237asm1114745jam.41.2023.06.09.11.14.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 11:14:26 -0700 (PDT)
-Received: (nullmailer pid 1681133 invoked by uid 1000);
+        Fri, 09 Jun 2023 11:14:19 -0700 (PDT)
+Received: (nullmailer pid 1681135 invoked by uid 1000);
         Fri, 09 Jun 2023 18:14:15 -0000
 From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 09 Jun 2023 12:13:47 -0600
-Subject: [PATCH v2 3/4] clk: mvebu: Iterate over possible CPUs instead of
- DT CPU nodes
+Date:   Fri, 09 Jun 2023 12:13:48 -0600
+Subject: [PATCH v2 4/4] clk: mvebu: Use of_address_to_resource()
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230327-mvebu-clk-fixes-v2-3-8333729ee45d@kernel.org>
+Message-Id: <20230327-mvebu-clk-fixes-v2-4-8333729ee45d@kernel.org>
 References: <20230327-mvebu-clk-fixes-v2-0-8333729ee45d@kernel.org>
 In-Reply-To: <20230327-mvebu-clk-fixes-v2-0-8333729ee45d@kernel.org>
 To:     Andrew Lunn <andrew@lunn.ch>,
@@ -69,63 +68,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rework iterating over DT CPU nodes to iterate over possible CPUs
-instead. There's no need to walk the DT CPU nodes again. Possible CPUs
-is equal to the number of CPUs defined in the DT. Using the "reg" value
-for an array index is fragile as it assumes "reg" is 0-N which often is
-not the case.
+Replace of_get_property() and of_translate_address() calls with a single
+call to of_address_to_resource().
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/clk/mvebu/clk-cpu.c | 14 +++-----------
- 1 file changed, 3 insertions(+), 11 deletions(-)
+ drivers/clk/mvebu/armada_ap_cp_helper.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/clk/mvebu/clk-cpu.c b/drivers/clk/mvebu/clk-cpu.c
-index c2af3395cf13..db2b38c21304 100644
---- a/drivers/clk/mvebu/clk-cpu.c
-+++ b/drivers/clk/mvebu/clk-cpu.c
-@@ -168,8 +168,8 @@ static void __init of_cpu_clk_setup(struct device_node *node)
- 	struct cpu_clk *cpuclk;
- 	void __iomem *clock_complex_base = of_iomap(node, 0);
- 	void __iomem *pmu_dfs_base = of_iomap(node, 1);
--	int ncpus = 0;
--	struct device_node *dn;
-+	int ncpus = num_possible_cpus();
-+	int cpu;
+diff --git a/drivers/clk/mvebu/armada_ap_cp_helper.c b/drivers/clk/mvebu/armada_ap_cp_helper.c
+index 6a930f697ee5..e7005de66327 100644
+--- a/drivers/clk/mvebu/armada_ap_cp_helper.c
++++ b/drivers/clk/mvebu/armada_ap_cp_helper.c
+@@ -16,15 +16,13 @@
+ char *ap_cp_unique_name(struct device *dev, struct device_node *np,
+ 			const char *name)
+ {
+-	const __be32 *reg;
+-	u64 addr;
++	struct resource res;
  
- 	if (clock_complex_base == NULL) {
- 		pr_err("%s: clock-complex base register not set\n",
-@@ -181,9 +181,6 @@ static void __init of_cpu_clk_setup(struct device_node *node)
- 		pr_warn("%s: pmu-dfs base register not set, dynamic frequency scaling not available\n",
- 			__func__);
+ 	/* Do not create a name if there is no clock */
+ 	if (!name)
+ 		return NULL;
  
--	for_each_of_cpu_node(dn)
--		ncpus++;
--
- 	cpuclk = kcalloc(ncpus, sizeof(*cpuclk), GFP_KERNEL);
- 	if (WARN_ON(!cpuclk))
- 		goto cpuclk_out;
-@@ -192,19 +189,14 @@ static void __init of_cpu_clk_setup(struct device_node *node)
- 	if (WARN_ON(!clks))
- 		goto clks_out;
- 
--	for_each_of_cpu_node(dn) {
-+	for_each_possible_cpu(cpu) {
- 		struct clk_init_data init;
- 		struct clk *clk;
- 		char *clk_name = kzalloc(5, GFP_KERNEL);
--		int cpu, err;
- 
- 		if (WARN_ON(!clk_name))
- 			goto bail_out;
- 
--		err = of_property_read_u32(dn, "reg", &cpu);
--		if (WARN_ON(err))
--			goto bail_out;
--
- 		sprintf(clk_name, "cpu%d", cpu);
- 
- 		cpuclk[cpu].parent_name = of_clk_get_parent_name(node, 0);
+-	reg = of_get_property(np, "reg", NULL);
+-	addr = of_translate_address(np, reg);
++	of_address_to_resource(np, 0, &res);
+ 	return devm_kasprintf(dev, GFP_KERNEL, "%llx-%s",
+-			      (unsigned long long)addr, name);
++			      (unsigned long long)res.start, name);
+ }
 
 -- 
 2.39.2
