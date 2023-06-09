@@ -2,73 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96CE1729CDA
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:27:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9A65729CD6
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:26:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241187AbjFIO1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 10:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50960 "EHLO
+        id S241435AbjFIO0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 10:26:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241437AbjFIO1R (ORCPT
+        with ESMTP id S241387AbjFIO0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 10:27:17 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B0B3C2A;
-        Fri,  9 Jun 2023 07:26:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686320799; x=1717856799;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9bI0m+ifES+6k8pQzzNX2KP969ALq4IZ/1G6tuuvLB4=;
-  b=K144sWYmy7kS/OcBx/NatGVj1PpWLxBtZHp22ZoTz6O4QTinr5LPDmgj
-   qZV1aRqJrUNnKIzdhGP89ybnzJlxJVODjC0FgtG5biHG9FDpi6vemlooa
-   TkzgjtlFHjf2qg+d1+/OmMwcdHVhnx6OdiyGz3dMC7MIYmbJGqNz5bH7d
-   KFmGV2ZGJQrQEs98UtHcTESAbbK1SRopfH94DClGbkbirVjH8SFJo07dV
-   6RVLzUPSQ2EYnwjv9nLbAbdSynMl5xuj8g2IhiZAqoCRv+/yg14fFZ8sQ
-   SuSCOo2pr5rTwLi804fLNikna74vUNWoPVT02USYWSSAz+hDr2ppHBusK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="355096131"
-X-IronPort-AV: E=Sophos;i="6.00,229,1681196400"; 
-   d="scan'208";a="355096131"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 07:25:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="780330340"
-X-IronPort-AV: E=Sophos;i="6.00,229,1681196400"; 
-   d="scan'208";a="780330340"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP; 09 Jun 2023 07:25:26 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1q7d3M-002Pzt-31;
-        Fri, 09 Jun 2023 17:25:24 +0300
-Date:   Fri, 9 Jun 2023 17:25:24 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Lee Jones <lee@kernel.org>
-Cc:     Henning Schild <henning.schild@siemens.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v4 1/4] leds: simatic-ipc-leds-gpio: add terminating
- entries to gpio tables
-Message-ID: <ZIM2VK9MlxGqBfDT@smile.fi.intel.com>
-References: <20230524124628.32295-1-henning.schild@siemens.com>
- <20230524124628.32295-2-henning.schild@siemens.com>
- <ZHHFMPEYNz9jBBRd@smile.fi.intel.com>
- <20230530171100.75e5b86c@md1za8fc.ad001.siemens.net>
- <ZHjLjU7WPv2W9SuJ@smile.fi.intel.com>
- <20230608173027.GL3572061@google.com>
+        Fri, 9 Jun 2023 10:26:39 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73443AA6;
+        Fri,  9 Jun 2023 07:26:03 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 359C2JBV013116;
+        Fri, 9 Jun 2023 16:25:40 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=gTMrkULiDs6QSP3inF3oO7QQrVUOWEej0DshuCInSWg=;
+ b=4lEc9csjyPqLA+Aqp0Q96Ee2hu3rzb8hhITf6UdCzHUSplrAffJmH+GOgh8iTkvwza6A
+ oLxgEZc8ZQ++9hX280NWudm5ZIIDXK00Vne1FpwRBhAenKVFEtqWXUF1250OeY82WQXz
+ PnYzNLzhqHhuVENo4XYNpzgeB4d639vVzIylRIwzzyWKYM7Q9qPG1+McbBDH5bgEUfTf
+ VhZa1s+2lDC9fohBVaIo0WsqFGV3FNSGNsF5t2IHG7Vv6aY7WaWsDrlTidhJeg2CTxbo
+ DWIqfh6si4Cqh+qk6x7e+joz18zu9+0aXVxD9bvMHWmGcQPbrh21ZGDm6mdKcQ0DpJ8W 0A== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3r3yseankg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Jun 2023 16:25:40 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C9BE610002A;
+        Fri,  9 Jun 2023 16:25:39 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BF599237D6E;
+        Fri,  9 Jun 2023 16:25:39 +0200 (CEST)
+Received: from [10.129.178.187] (10.129.178.187) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Fri, 9 Jun
+ 2023 16:25:37 +0200
+Message-ID: <a4c368ad-0dbf-4b75-3920-6a17465ce4b4@foss.st.com>
+Date:   Fri, 9 Jun 2023 16:25:36 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230608173027.GL3572061@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [Linux-stm32] [PATCH v3 3/4] ARM: dts: stm32: support display on
+ stm32f746-disco board
+Content-Language: en-US
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        <linux-kernel@vger.kernel.org>
+CC:     <devicetree@vger.kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <michael@amarulasolutions.com>,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230609062050.2107143-1-dario.binacchi@amarulasolutions.com>
+ <20230609062050.2107143-4-dario.binacchi@amarulasolutions.com>
+From:   Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+In-Reply-To: <20230609062050.2107143-4-dario.binacchi@amarulasolutions.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.129.178.187]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-09_10,2023-06-09_01,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,45 +81,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 06:30:27PM +0100, Lee Jones wrote:
-> On Thu, 01 Jun 2023, Andy Shevchenko wrote:
-> > On Tue, May 30, 2023 at 05:11:00PM +0200, Henning Schild wrote:
-> > > Am Sat, 27 May 2023 11:54:08 +0300
-> > > schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
-> > > 
-> > > > On Wed, May 24, 2023 at 02:46:25PM +0200, Henning Schild wrote:
-> > > > > The entries do not seem to be stricly needed when the number of
-> > > > > entries is given via the number of LEDs. But adding them is a
-> > > > > safeguard should anyone ever iterate over the tables to their end,
-> > > > > it also gets us in line with other drivers that register
-> > > > > "leds-gpio" tables.  
-> > > > 
-> > > > Reported-by?
-> > > > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > > 
-> > > I think we could do
-> > > 
-> > > Reported-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > > 
-> > > on merge. But i would not want to send the whole series again for that
-> > > one line.
-> > 
-> > Since you added it, `b4` will happily take it, I believe no manual work even
-> > needed for that, thank you!
-> 
-> b4 didn't pick this up.  Nor the whole-series Ack provided by Hans.
-> 
-> I added both manually.
 
-There is an option to take this
-
-  -t, --apply-cover-trailers
-                        Apply trailers sent to the cover letter to all patches
-
-have you tried it?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+On 6/9/23 08:20, Dario Binacchi wrote:
+> Add support to Rocktech RK043FN48H display on stm32f746-disco board.
+>
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Reviewed-by: Raphaël Gallais-Pou <raphael.gallais-pou@foss.st.com>
+> ---
+>
+> (no changes since v1)
+>
+>  arch/arm/boot/dts/stm32f746-disco.dts | 51 +++++++++++++++++++++++++++
+>  1 file changed, 51 insertions(+)
