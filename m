@@ -2,100 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9DD0729F09
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 17:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C359C729F0D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 17:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241861AbjFIPrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 11:47:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42542 "EHLO
+        id S241869AbjFIPsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 11:48:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241848AbjFIPro (ORCPT
+        with ESMTP id S241858AbjFIPsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 11:47:44 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E1D359A
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 08:47:40 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f624daccd1so2409427e87.0
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 08:47:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686325659; x=1688917659;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jzQBDIIZDrg/bwrGe939IqgF7MEUiwgzplodxJt/mqk=;
-        b=adenxAUV6Uxx2n6DmQx9ic03Z9zOZdFUcsILqt0a3nv9QfaSkg39xACAmo0ZwYkepH
-         qXcbqkOB3NrUgmgGiVBXi4eAPyjqY8Jefhf4GEb7RZaXzh2tAcEn5JzEtqhZcEYvY3b1
-         OfukAe+8w1RIYWf4ND+NXee+fDmPU9KwePg3AgguqeC1CG6mzhRhtOsLp94xWrFNqi8h
-         GfIphCUy5m73Zlr5NK6TrRrriESTLfCIYtOPeAGXyS9Il8FXzh+7vusYF/zUtD9sHldQ
-         6n+ruFaGGtr3EeZiy9pt9+G7+VVSd/49yDRuwFGhYWLo23M8jb16hK3Qzu2zpKdH0aXo
-         G5YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686325659; x=1688917659;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jzQBDIIZDrg/bwrGe939IqgF7MEUiwgzplodxJt/mqk=;
-        b=li0b0vL9AhxAmk4uR/xnBhltOFzGyniiS5bzan2IxifrS9/JVL53uzEgosau0A/+Nn
-         blDK2b8yVdTkkDqlIyJcsvTpxh2GAKZQNhLDiemYYPc0Yb/nM/saZrIKKLFAvfuKqD5k
-         Btt0IWMzQqgMaIhmCcA/nHCisRmsFCZzlZxL/OTU+8xdTyzkW0rnjvByAKzCQK08g76r
-         AuqbA/IaXIwR4qqxVkXP5Nw1n7ooOwTp44fwoGykoi/Bf1R8wNkJCrgSNhTmu3Nurths
-         4xeko7akQP8HD+Gdke5HNNJmqZ1JroDYPClwlwZE268E0oju8H8BJTDiMgG3ZtcnnlWE
-         GrfA==
-X-Gm-Message-State: AC+VfDyaUpDUAilehtiaxua5wDgkV1DuLaR7DAvw8/GZ9bOwZkUcIXfT
-        sSsvyprDUSKOKohPx65PYnpBdg==
-X-Google-Smtp-Source: ACHHUZ6rGvq+0qd9mBsLv2Jw1YAesA5rIjWjWnNLqb/ZezROn1ctvDQIK28pQqx+oDP7N7hlxlJZAg==
-X-Received: by 2002:a19:4312:0:b0:4f4:b28f:6b9c with SMTP id q18-20020a194312000000b004f4b28f6b9cmr1132934lfa.29.1686325659275;
-        Fri, 09 Jun 2023 08:47:39 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id c7-20020aa7df07000000b00514b854c399sm1905546edy.84.2023.06.09.08.47.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Jun 2023 08:47:38 -0700 (PDT)
-Message-ID: <e48aaec7-b46e-714a-1636-376a67b57669@linaro.org>
-Date:   Fri, 9 Jun 2023 17:47:36 +0200
+        Fri, 9 Jun 2023 11:48:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0313AB1;
+        Fri,  9 Jun 2023 08:47:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A62C06595D;
+        Fri,  9 Jun 2023 15:47:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5C31C433D2;
+        Fri,  9 Jun 2023 15:47:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686325673;
+        bh=q/+ziWKfSoKTfaJCIdi7IJNNRYQucnY20/ei4bv4HeM=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=gDizgEl950qzCEA1Bl4he4l+1lRCI7YdJ7gtg9qPg3vfmjA5aX+sRTrIaGxMVASaX
+         m/ctj62cBOHfFGL0zzIwy3SwCSAXtRCGLBfPQR7UddMogW2pMX9YY5fRiP7OeqqgYA
+         k73W+CjQgnNYF99578DvZbh+IL8a7uIZevjmbZ6vPGBlgAN6C7wtfwrt3EYlJ4smma
+         euCdB2KC1m1oX2ck+aQatLAychriAUgC6pUDp9PkHTwiK8xrN1W33NyYjpbojR46CO
+         EM8rxb6YY359kBT+qqzOgJuhA0D2aa7H1GJtSCxo5uCAx14qpnvl9KV0TejKA6aa+Z
+         ylWiX/Nl1uwwg==
+Date:   Fri, 9 Jun 2023 17:47:49 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Rahul Rameshbabu <rrameshbabu@nvidia.com>
+cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH RESEND v4 0/1] HID: nvidia-shield
+In-Reply-To: <20230608143450.12283-1-rrameshbabu@nvidia.com>
+Message-ID: <nycvar.YFH.7.76.2306091747250.5716@cbobk.fhfr.pm>
+References: <20230608143450.12283-1-rrameshbabu@nvidia.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] dt-bindings: trivial-devices: Add infineon,irps5401
-Content-Language: en-US
-To:     Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
-        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com
-Cc:     Alexander Steffen <Alexander.Steffen@infineon.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lakshmi Yadlapati <lakshmiy@us.ibm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Naresh Solanki <naresh.solanki@9elements.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vincent Tremblay <vincent@vtremblay.dev>,
-        devicetree@vger.kernel.org
-References: <9673fc919c6785879975fb1830d5026d3cfa658a.1686233049.git.michal.simek@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <9673fc919c6785879975fb1830d5026d3cfa658a.1686233049.git.michal.simek@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/06/2023 16:04, Michal Simek wrote:
-> Add Infineon IRPS5401 power supply to trivial devices. Driver has been
-> added long time ago by commit 9158411b96b1 ("hwmon: (pmbus) Add Infineon
-> IRPS5401 driver").
+On Thu, 8 Jun 2023, Rahul Rameshbabu wrote:
+
+> Hi.
 > 
-> Signed-off-by: Michal Simek <michal.simek@amd.com>
-> ---
+> This is an initial driver implementation for supporting NVIDIA SHIELD
+> peripherals. Currently supports the following functionality for the
+> THUNDERSTRIKE (SHIELD 2017) controller.
+> 
+>   - Haptics (ff_memless)
+>   - Serial number query (sysfs)
+>   - Hardware information query (sysfs)
+>   - Firmware version query (sysfs)
+> 
+> Changes:
+>   v3 -> v4:
+>      * Follow correct formatting rules for help section in drivers/hid/Kconfig.
+>      * Refactor configuration names to indicate Kconfig options are for NVIDIA
+>        devices.
+>   v2 -> v3:
+>      * Renamed drivers/hid/hid-shield.c -> drivers/hid/hid-nvidia-shield.c.
+>      * Added space between braces for terminating element in shield_devices
+>        array.
+>   v1 -> v2:
+>      * Declared thunderstrike_hostcmd_req_work_handler as static.
+>         Reported-by: kernel test robot <lkp@intel.com>
+>         Link: https://lore.kernel.org/oe-kbuild-all/202304011342.6Bh3cWhA-lkp@intel.com/
+>         Link: https://lore.kernel.org/oe-kbuild-all/202304020922.vsngJnBT-lkp@intel.com/
+> 
+> Rahul Rameshbabu (1):
+>   HID: nvidia-shield: Initial driver implementation with Thunderstrike
+>     support
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Now queued in hid.git#for-6.5/nvidia, sorry for the delay.
 
-Best regards,
-Krzysztof
+-- 
+Jiri Kosina
+SUSE Labs
 
