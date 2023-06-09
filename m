@@ -2,64 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A67729DD4
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 17:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB906729DC8
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 17:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231819AbjFIPHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 11:07:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46588 "EHLO
+        id S241830AbjFIPFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 11:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231344AbjFIPH0 (ORCPT
+        with ESMTP id S241770AbjFIPF0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 11:07:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F5635A9
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 08:06:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686323187;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HhCGDFDeE6330wjTb7+eVdOM5sDQ6eAc/Pd0Q124xLM=;
-        b=XCOLcq3N0RtxwxyMV5G1epM4iyIsgYU3nh8+nyKNMl/iWE5sY6W5gN/X/AOd630rY8Twk1
-        1schNugwd2LAlsa0rGpCN0YBoFjdPbCf8NZhjhmRD0bLIjcqiYGdbWHDrxvc+4KOy553Rt
-        sYJY0tWMiv2iWi533SEewGt5I1DdZms=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-609-Tk9tFEnVO-ePKnVkh1JcRA-1; Fri, 09 Jun 2023 11:04:26 -0400
-X-MC-Unique: Tk9tFEnVO-ePKnVkh1JcRA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4CDA43C0D1A5;
-        Fri,  9 Jun 2023 15:04:18 +0000 (UTC)
-Received: from vschneid.remote.csb (unknown [10.42.28.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id BD1BC4087C6A;
-        Fri,  9 Jun 2023 15:04:16 +0000 (UTC)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Leonardo Bras <leobras@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>
-Subject: [RFC PATCH 4/5] tracing/filters: Enable filtering the CPU common field by a cpumask
-Date:   Fri,  9 Jun 2023 16:03:23 +0100
-Message-Id: <20230609150324.143538-5-vschneid@redhat.com>
-In-Reply-To: <20230609150324.143538-1-vschneid@redhat.com>
-References: <20230609150324.143538-1-vschneid@redhat.com>
+        Fri, 9 Jun 2023 11:05:26 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51ADB3ABA;
+        Fri,  9 Jun 2023 08:05:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=coXBP4uiCO1t+RzMycgDz8wHMOO+2BU24l9WVlszhmU=; b=IUxZfN5FC1LT0jIoP/+NLUicEc
+        /pud5dqcB2gCRR1QrRAMe3A8L6Gnl4STN4rJTDvsfxQoL+lMC7CFNghTexSUPXvMgenH0eBswBqcz
+        p9PZo7KLHlJcUr/lRz21PVbCHgievGbtLp30vHD8mrPrm5jjzv7ujNoQetSrc0xu8kt+km9MEoA3z
+        FQjHACnI/1q9TjbkmViLNlHzrDmzCDyKrTkmRxlUnB9hFBwHpKsG4uhXPEsKcgTkdpVAPdDq6BWde
+        bQDH1/92Lq/SDT0ssqRgV8qNIdsQi0EOnSrSBnSZlhNxryba8njrnDQu+f2qQB8CRunapTSnO2XMg
+        8XxZ3ZIw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q7de7-00GhRR-CC; Fri, 09 Jun 2023 15:03:23 +0000
+Date:   Fri, 9 Jun 2023 16:03:23 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, mhocko@suse.com,
+        josef@toxicpanda.com, jack@suse.cz, ldufour@linux.ibm.com,
+        laurent.dufour@fr.ibm.com, michel@lespinasse.org,
+        liam.howlett@oracle.com, jglisse@google.com, vbabka@suse.cz,
+        minchan@google.com, dave@stgolabs.net, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, hdanton@sina.com, apopple@nvidia.com,
+        peterx@redhat.com, ying.huang@intel.com, david@redhat.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        viro@zeniv.linux.org.uk, brauner@kernel.org,
+        pasha.tatashin@soleen.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v2 5/6] mm: implement folio wait under VMA lock
+Message-ID: <ZIM/O54Q0waFq/tx@casper.infradead.org>
+References: <20230609005158.2421285-1-surenb@google.com>
+ <20230609005158.2421285-6-surenb@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230609005158.2421285-6-surenb@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,75 +60,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The tracing_cpumask lets us specify which CPUs are traced in a buffer
-instance, but doesn't let us do this on a per-event basis (unless one
-creates an instance per event).
+On Thu, Jun 08, 2023 at 05:51:57PM -0700, Suren Baghdasaryan wrote:
+>  static inline bool folio_lock_or_retry(struct folio *folio,
+> -		struct mm_struct *mm, unsigned int flags)
+> +		struct vm_area_struct *vma, unsigned int flags,
+> +		bool *lock_dropped)
 
-A previous commit added filtering scalar fields by a user-given cpumask,
-make this work with the CPU common field as well.
+I hate these double-return-value functions.
 
-This enables doing things like
+How about this for an API:
 
-$ trace-cmd record -e 'sched_switch' -f 'CPU & MASK{12-52}' \
-		   -e 'sched_wakeup' -f 'target_cpu & MASK{12-52}'
+vm_fault_t folio_lock_fault(struct folio *folio, struct vm_fault *vmf)
+{
+	might_sleep();
+	if (folio_trylock(folio))
+		return 0;
+	return __folio_lock_fault(folio, vmf);
+}
 
-Signed-off-by: Valentin Schneider <vschneid@redhat.com>
----
- kernel/trace/trace_events_filter.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+Then the users look like ...
 
-diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
-index 99e111c237a93..b3d2612d4670a 100644
---- a/kernel/trace/trace_events_filter.c
-+++ b/kernel/trace/trace_events_filter.c
-@@ -68,6 +68,7 @@ enum filter_pred_fn {
- 	FILTER_PRED_FN_PCHAR_USER,
- 	FILTER_PRED_FN_PCHAR,
- 	FILTER_PRED_FN_CPU,
-+	FILTER_PRED_FN_CPU_CPUMASK,
- 	FILTER_PRED_FN_CPUMASK,
- 	FILTER_PRED_FN_FUNCTION,
- 	FILTER_PRED_FN_,
-@@ -933,6 +934,13 @@ static int filter_pred_cpu(struct filter_pred *pred, void *event)
- 	}
- }
- 
-+static int filter_pred_cpu_cpumask(struct filter_pred *pred, void *event)
-+{
-+	int cpu = raw_smp_processor_id();
-+
-+	return do_filter_cpumask_scalar(pred->op, cpu, pred->mask);
-+}
-+
- /* Filter predicate for cpumasks. */
- static int filter_pred_cpumask(struct filter_pred *pred, void *event)
- {
-@@ -1436,6 +1444,8 @@ static int filter_pred_fn_call(struct filter_pred *pred, void *event)
- 		return filter_pred_pchar(pred, event);
- 	case FILTER_PRED_FN_CPU:
- 		return filter_pred_cpu(pred, event);
-+	case FILTER_PRED_FN_CPU_CPUMASK:
-+		return filter_pred_cpu_cpumask(pred, event);
- 	case FILTER_PRED_FN_CPUMASK:
- 		return filter_pred_cpumask(pred, event);
- 	case FILTER_PRED_FN_FUNCTION:
-@@ -1654,6 +1664,7 @@ static int parse_pred(const char *str, void *data,
- 		char *tmp;
- 
- 		if (field->filter_type != FILTER_CPUMASK &&
-+		    field->filter_type != FILTER_CPU &&
- 		    field->filter_type != FILTER_OTHER) {
- 			parse_error(pe, FILT_ERR_ILLEGAL_FIELD_OP, pos + i);
- 			goto err_free;
-@@ -1698,6 +1709,8 @@ static int parse_pred(const char *str, void *data,
- 		i++;
- 		if (field->filter_type == FILTER_CPUMASK) {
- 			pred->fn_num = FILTER_PRED_FN_CPUMASK;
-+		} else if (field->filter_type == FILTER_CPU) {
-+			pred->fn_num = FILTER_PRED_FN_CPU_CPUMASK;
- 		} else {
- 			switch (field->size) {
- 			case 8:
--- 
-2.31.1
+> @@ -3580,8 +3581,10 @@ static vm_fault_t remove_device_exclusive_entry(struct vm_fault *vmf)
+>  	if (!folio_try_get(folio))
+>  		return 0;
+>  
+> -	if (!folio_lock_or_retry(folio, vma->vm_mm, vmf->flags)) {
+> +	if (!folio_lock_or_retry(folio, vma, vmf->flags, &lock_dropped)) {
+>  		folio_put(folio);
+> +		if (lock_dropped && vmf->flags & FAULT_FLAG_VMA_LOCK)
+> +			return VM_FAULT_VMA_UNLOCKED | VM_FAULT_RETRY;
+>  		return VM_FAULT_RETRY;
+>  	}
 
+	ret = folio_lock_fault(folio, vmf);
+	if (ret)
+		return ret;
+
+> @@ -3837,9 +3840,9 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+>  		goto out_release;
+>  	}
+>  
+> -	locked = folio_lock_or_retry(folio, vma->vm_mm, vmf->flags);
+> -
+> -	if (!locked) {
+> +	if (!folio_lock_or_retry(folio, vma, vmf->flags, &lock_dropped)) {
+> +		if (lock_dropped && vmf->flags & FAULT_FLAG_VMA_LOCK)
+> +			ret |= VM_FAULT_VMA_UNLOCKED;
+>  		ret |= VM_FAULT_RETRY;
+>  		goto out_release;
+>  	}
+
+	ret |= folio_lock_fault(folio, vmf);
+	if (ret & VM_FAULT_RETRY)
+		goto out_release;
+
+ie instead of trying to reconstruct what __folio_lock_fault() did from
+its outputs, we just let folio_lock_fault() tell us what it did.
