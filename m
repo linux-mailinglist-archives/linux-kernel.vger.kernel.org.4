@@ -2,103 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E82A172A2D2
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 21:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F05E72A2DA
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 21:09:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbjFITGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 15:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33710 "EHLO
+        id S230217AbjFITIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 15:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbjFITGd (ORCPT
+        with ESMTP id S229776AbjFITIv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 15:06:33 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD60C3592
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 12:06:32 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-51458187be1so3651680a12.2
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 12:06:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1686337591; x=1688929591;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4+ONXQdK4a1fSmqiExKhyWkPlcAP+HPrxGCh1eVdlew=;
-        b=cVW5FwqKdsiNy0NAGkMdO7aRrUU+kamUFGT0NxsE7zEB9un9xkK8rTE9IQ0zvAil90
-         j39g/w3gG+hesvKwGpCwJHYZIgzoQeK/dxjca5UR7k4Qagr0gJL37i7lWFKVHX7s0qZt
-         +iU1hifj8CdPgFlPauUDbnJMP5HGMSPDEf2ts=
+        Fri, 9 Jun 2023 15:08:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C687383
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 12:08:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686337689;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=i5jvtYj4ss3gRxhJMAUhGD1nCKZcTExe3MbvBgI5pR8=;
+        b=Emyl6B7qyTyOgTC0m0+4AbWz93k8Mi7XfbWVZrRbLyjUN050/OJQ8zQEP9sBCa9vbIkLwp
+        33GgVXz9IxqgqQiT0Qu+bXp2F237hI+cMtGpcaUsNYmsPtGM9jwC54GTZlD2QhubefH/Bt
+        H9bTtKNb9HdI1l219jwUCnka5FXhCC0=
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
+ [209.85.216.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-192-XWIZrI_HMxKJqDWRxSn8LQ-1; Fri, 09 Jun 2023 15:08:07 -0400
+X-MC-Unique: XWIZrI_HMxKJqDWRxSn8LQ-1
+Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-256719f2381so946985a91.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 12:08:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686337591; x=1688929591;
+        d=1e100.net; s=20221208; t=1686337686; x=1688929686;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4+ONXQdK4a1fSmqiExKhyWkPlcAP+HPrxGCh1eVdlew=;
-        b=UbJJg4ifmXhBPV6kImsbOa7uV4JPNwJg+CRPLCT77PP43ZaE7vqGMFRCJYhpWUqWVJ
-         ORATMkoA05EXon/mB09NrfZyowQeO/2JG9Oc147od4BqPG0BMl5GcaElyCF11BKu/c+u
-         zrfqo80GZ0/trrcLWyi0nx9rsQLkBpcAF2GW5Dnv+pXbwXsTlWMSi050GhuqMdvTemi7
-         etFVauVk35yZCDtXnr3CkqRfx+KLBiixQvTKt9xlTxcv66aIea+eoZtjXDsuU4Fr6Y60
-         xkpLA9d6I8a/dJ/JjwZDgireH0UrL6q0g7vwa0rPFFdGmU5PZhoCDYwDD6Se2GqcNKS1
-         cYwQ==
-X-Gm-Message-State: AC+VfDz4qiWlq+LK+aRsaO9AQMOWtLW6ssDeq2gSYuthkDliUF39inFr
-        eJUqQC85ZedQruVOkeZWPTf9jDxygNAzQzrHXWbB/RYy
-X-Google-Smtp-Source: ACHHUZ48pQt7omxk90Rrr4w6mEx77fjUGN0JqERVc7JH7Qn2dL4w55BuRpHsTfv/v1c+Ylxk7GmmfQ==
-X-Received: by 2002:a17:907:2d91:b0:97a:bd0f:ac74 with SMTP id gt17-20020a1709072d9100b0097abd0fac74mr1754818ejc.26.1686337591216;
-        Fri, 09 Jun 2023 12:06:31 -0700 (PDT)
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
-        by smtp.gmail.com with ESMTPSA id cb14-20020a170906a44e00b00977da0f14ffsm1645805ejb.171.2023.06.09.12.06.29
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Jun 2023 12:06:30 -0700 (PDT)
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5169f614977so3643306a12.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 12:06:29 -0700 (PDT)
-X-Received: by 2002:a17:907:26c1:b0:978:930e:2279 with SMTP id
- bp1-20020a17090726c100b00978930e2279mr2489992ejc.52.1686337589586; Fri, 09
- Jun 2023 12:06:29 -0700 (PDT)
+        bh=i5jvtYj4ss3gRxhJMAUhGD1nCKZcTExe3MbvBgI5pR8=;
+        b=Ige22cw7vHZ2UTtpPepYR7Pr3d2dI3M2gnAj3z/vrbclqwYLrXRW6S7MJaXwEDGMSb
+         wvz0i0SeENAr23gxltQft//ILVECf4pqEiHEdr0ovEZhYU+PWaIJBgzAUwg1T6Sz8NOm
+         BzvR+96/d165WItOJkFrh0xXxuJyA7xhbjPAT9qwqQ099316qNbQJMhjsx2d5kLVII8/
+         gW59w4z3vZ2unhh8TYz0svyYpIG1Z36ryDECks4KhwFEc4bEgW8YAVYMZ3jg+bYtDmKD
+         4E9lgxQoCEO7tEyeYD+sqA++q8S99sil7JxxULJjTEdPB1FEkMDkOnG/mmd3wRGXzlP8
+         9DTg==
+X-Gm-Message-State: AC+VfDxfzR9fJklzJK4MWs5ShfpnDmYNjBFuz3AoM0fghv43Wb2iFxJ/
+        rx73WheUAwQVPe+0MbFPyOaJtCDwSM3ztIJFcIVD8AIIjbl+qpZOjPlfn9ac2kZU4Fj8FBLwO7T
+        FE2MYGrQimFdUJCu+t3nf9VOin9IO5LotzwoyIz7h
+X-Received: by 2002:a17:90a:10c9:b0:258:fdd9:585a with SMTP id b9-20020a17090a10c900b00258fdd9585amr2037495pje.3.1686337686126;
+        Fri, 09 Jun 2023 12:08:06 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5cAyDYi2RfVp9SHiYPSQK//kXAM3G4rYsNmvFEHNfZQZ4LOzUO+PWGwVGIScDeQVZKF1Vt9M1qUV2gBfdXHIo=
+X-Received: by 2002:a17:90a:10c9:b0:258:fdd9:585a with SMTP id
+ b9-20020a17090a10c900b00258fdd9585amr2037465pje.3.1686337685870; Fri, 09 Jun
+ 2023 12:08:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230607200903.652580797@linuxfoundation.org> <b979807a-a437-4d3f-98f9-989da52abb30@roeck-us.net>
- <d35b1ff1-e198-481c-b1be-9e22445efe06@roeck-us.net>
-In-Reply-To: <d35b1ff1-e198-481c-b1be-9e22445efe06@roeck-us.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 9 Jun 2023 12:06:12 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whA=HsyDFtgQnWMZP-08ddhMh1a88OZHCXf8N-iP6hFQw@mail.gmail.com>
-Message-ID: <CAHk-=whA=HsyDFtgQnWMZP-08ddhMh1a88OZHCXf8N-iP6hFQw@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/159] 5.15.116-rc1 review
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ido Schimmel <idosch@nvidia.com>
+References: <20230516191441.34377-1-wander@redhat.com> <20230517152632.GC1286@redhat.com>
+ <CAAq0SUkE_4qF5RuWE7MxnzcbchE4SHkyMvJxHAQeJ+=ZTEwdgg@mail.gmail.com>
+ <20230529122256.GA588@redhat.com> <CAAq0SUkjFiN3Xap-S2awymDqDWZceCnAWBQnESVMVya7RpFFUw@mail.gmail.com>
+ <20230601181359.GA23852@redhat.com> <CAAq0SUk3c5H8YCVAfRAU=pZFNLrA90mNMq=k5BohTutM7cfcvg@mail.gmail.com>
+ <20230602173302.GA32644@redhat.com> <CAAq0SU=A5j2-GF80Thi2vm8W+_AUquj6t+QK7cnWLz1jKEA4zg@mail.gmail.com>
+ <20230606203958.GC18866@redhat.com>
+In-Reply-To: <20230606203958.GC18866@redhat.com>
+From:   Wander Lairson Costa <wander@redhat.com>
+Date:   Fri, 9 Jun 2023 16:07:54 -0300
+Message-ID: <CAAq0SUnNNQr=k8ZJfKsaXgZUCCEFLj6=OCMwRenFCgB9yFKD=g@mail.gmail.com>
+Subject: Re: [PATCH v9] kernel/fork: beware of __put_task_struct calling context
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Brian Cain <bcain@quicinc.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Stafford Horne <shorne@gmail.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Yu Zhao <yuzhao@google.com>,
+        Alexey Gladkov <legion@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Yang Shi <shy828301@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Hu Chunyu <chuhu@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Luis Goncalves <lgoncalv@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 11:42=E2=80=AFAM Guenter Roeck <linux@roeck-us.net> =
-wrote:
+On Tue, Jun 6, 2023 at 5:40=E2=80=AFPM Oleg Nesterov <oleg@redhat.com> wrot=
+e:
 >
-> I managed to revise my bisect script sufficiently enough to get reliable
-> results. It looks like the culprit is commit 503e554782c9 (" debugobject:
-> Ensure pool refill (again)"); see bisect log below. Bisect on four
-> different systems all have the same result. After reverting this patch,
-> I do not see the problem anymore (again, confirmed on four different
-> systems).
+> On 06/05, Wander Lairson Costa wrote:
+> >
+> > Thanks. I found an unrelated earlier splat in the console code. That's
+> > why I couldn't reproduce it in the stock kernel.
+>
+> As expected...
+>
+> So... Not sure what can I say ;) can you verify that this patch doesn't s=
+olve
+> the issues with CONFIG_PROVE_RAW_LOCK_NESTING pointed out by Sebastian? U=
+sing
+> stress-ng or anything else.
+>
 
-Does this happen on mainline too? It's commit 0af462f19e63 in the upstream =
-tree.
+I managed to test it without a console. No issues happened in the stock ker=
+nel.
 
-It was in 6.4-rc1, and I see a clean result from you at least for
--rc2, so for some reason it sounds like upstream is ok. But I don't
-really see why that would be the case...
+> This is not that bad, unless I am totally confused the current code (with=
+out
+> your patch) has the same problem (otherwise we wouldn't need this fix).
+>
 
-                  Linus
+That's my understanding as well.
+
+> But perhaps you can make 2/2 which adds the DEFINE_WAIT_OVERRIDE_MAP() ha=
+ck
+> as Peter suggested?
+>
+
+Yes, sure. I would like to get the issue reproduced in practice to
+make sure I am really fixing the problem. But I can live with that.
+
+> Oleg.
+>
+
