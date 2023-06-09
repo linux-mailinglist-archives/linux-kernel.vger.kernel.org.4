@@ -2,80 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23E7F7290A3
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:13:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C1A17290A5
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237793AbjFIHNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 03:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35736 "EHLO
+        id S237823AbjFIHO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 03:14:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230135AbjFIHNW (ORCPT
+        with ESMTP id S230230AbjFIHOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 03:13:22 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E98DF271D;
-        Fri,  9 Jun 2023 00:13:19 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8DxSuoO0YJkZPIAAA--.2912S3;
-        Fri, 09 Jun 2023 15:13:18 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxKeUO0YJkIRYKAA--.30952S3;
-        Fri, 09 Jun 2023 15:13:18 +0800 (CST)
-Subject: Re: [PATCH v12 2/2] spi: loongson: add bus driver for the loongson
- spi controller
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230608072819.25930-1-zhuyinbo@loongson.cn>
- <20230608072819.25930-3-zhuyinbo@loongson.cn>
- <CAHp75VfrPX=VsXMry0Dg_Y4zgt59S=uY=rxCZzv8fBvr_w+i-g@mail.gmail.com>
- <CAHp75VfUg6wq1xSpGsQFQpYbK+tkA3NJBCjBMte6sB7fQBBvrw@mail.gmail.com>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <dc360396-de35-0eb7-3073-75deeb2d762c@loongson.cn>
-Date:   Fri, 9 Jun 2023 15:13:18 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Fri, 9 Jun 2023 03:14:24 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 647F2272A;
+        Fri,  9 Jun 2023 00:14:23 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 43818AB6;
+        Fri,  9 Jun 2023 00:15:08 -0700 (PDT)
+Received: from [10.163.44.201] (unknown [10.163.44.201])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B954E3F71E;
+        Fri,  9 Jun 2023 00:14:17 -0700 (PDT)
+Message-ID: <584cb976-4e21-5dc2-bce2-cd6c3b5d1613@arm.com>
+Date:   Fri, 9 Jun 2023 12:44:12 +0530
 MIME-Version: 1.0
-In-Reply-To: <CAHp75VfUg6wq1xSpGsQFQpYbK+tkA3NJBCjBMte6sB7fQBBvrw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH V11 05/10] arm64/perf: Add branch stack support in ARMV8
+ PMU
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, catalin.marinas@arm.com,
+        Mark Brown <broonie@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+References: <20230531040428.501523-1-anshuman.khandual@arm.com>
+ <20230531040428.501523-6-anshuman.khandual@arm.com>
+ <ZH3PCqYt/UzoiVx3@FVFF77S0Q05N>
+ <ba396c30-6719-1dfb-77c2-9f7e1715b57c@arm.com>
+ <290b577c-4740-d2e2-d236-c8bbe2f907b9@arm.com>
 Content-Language: en-US
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <290b577c-4740-d2e2-d236-c8bbe2f907b9@arm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxKeUO0YJkIRYKAA--.30952S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
-        nUUI43ZEXa7xR_UUUUUUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+[..]
+
+On 6/8/23 15:43, Suzuki K Poulose wrote:
+>>> | static int armv8pmu_probe_pmu(struct arm_pmu *cpu_pmu)
+>>> | {
+>>> |         struct armv8pmu_probe_info probe = {
+>>> |                 .pmu = cpu_pmu,
+>>> |                 .present = false,
+>>> |         };
+>>> |         int ret;
+>>> |
+>>> |         ret = smp_call_function_any(&cpu_pmu->supported_cpus,
+>>> |                                     __armv8pmu_probe_pmu,
+>>> |                                     &probe, 1);
+>>> |         if (ret)
+>>> |                 return ret;
+>>> |         if (!probe.present)
+>>> |                 return -ENODEV;
+>>> |
+>>> |           if (!arm_pmu_branch_stack_supported(cpu_pmu))
+>>> |             return 0;
+>>> |
+>>> |         ret = armv8pmu_private_alloc(cpu_pmu);
+>>> |         if (ret)
+>>> |         return ret;
+>>> |       
+>>> |          ret = branch_records_alloc(cpu_pmu);
+>>> |          if (ret)
+>>> |          armv8pmu_private_free(cpu_pmu);
+>>> |       
+>>> |        return ret;
+>>> | }
 
 
-在 2023/6/8 下午6:18, Andy Shevchenko 写道:
-> On Thu, Jun 8, 2023 at 1:15 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
->> On Thu, Jun 8, 2023 at 10:28 AM Yinbo Zhu <zhuyinbo@loongson.cn> wrote:
->>> +       ret = readb_poll_timeout(loongson_spi->base + LOONGSON_SPI_SPSR_REG, loongson_spi->spsr,
->>> +                       (loongson_spi->spsr & 0x1) != LOONGSON_SPI_SPSR_RFEMPTY, 1, MSEC_PER_SEC);
->>
->>                         (loongson_spi->spsr &
->> LOONGSON_SPI_SPSR_RFEMPTY) != LOONGSON_SPI_SPSR_RFEMPTY,
->>                         1, MSEC_PER_SEC);
-> 
-> Actually the last should be USEC_PER_MSEC, as the parameter is in microseconds.
+After splitting the task ctx cache management from pmu private data
+management, the above function will look something like this taking
+care of all error path freeing as well.
 
+static int armv8pmu_probe_pmu(struct arm_pmu *cpu_pmu)
+{
+        struct armv8pmu_probe_info probe = {
+                .pmu = cpu_pmu,
+                .present = false,
+        };
+        int ret;
 
-okay, I got it.
+        ret = armv8pmu_private_alloc(cpu_pmu);
+        if (ret)
+                return ret;
 
-Thanks
-> 
+        ret = smp_call_function_any(&cpu_pmu->supported_cpus,
+                                    __armv8pmu_probe_pmu,
+                                    &probe, 1);
+        if (ret)
+                goto probe_err;
 
+        if (!probe.present) {
+                ret = -ENODEV;
+                goto probe_err;
+        }
+
+        if (cpu_pmu->has_branch_stack) {
+                ret = armv8pmu_task_ctx_cache_alloc(cpu_pmu);
+                if (ret)
+                        goto probe_err;
+
+                ret = branch_records_alloc(cpu_pmu);
+                if (ret) {
+                        armv8pmu_task_ctx_cache_free(cpu_pmu);
+                        goto probe_err;
+                }
+                return 0;
+        }
+        armv8pmu_private_free(cpu_pmu);
+        return 0;
+
+probe_err:
+        armv8pmu_private_free(cpu_pmu);
+        return ret;
+}
