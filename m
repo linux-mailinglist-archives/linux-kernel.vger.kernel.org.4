@@ -2,163 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AAEA729D20
+	by mail.lfdr.de (Postfix) with ESMTP id 6623A729D21
 	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:41:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241121AbjFIOlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 10:41:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59158 "EHLO
+        id S241325AbjFIOlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 10:41:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbjFIOlP (ORCPT
+        with ESMTP id S240870AbjFIOlQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 10:41:15 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80865136;
-        Fri,  9 Jun 2023 07:41:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686321674; x=1717857674;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EoyR4lFdIWQ19KidrDL5ycKJHXLkSv6McCPFpDTTr7c=;
-  b=Gt5SSpvApMculddvk5rBX+d/71WAov08ZXQBuYDkCWL+MHPnNUHsKAZK
-   Bujn3HdLAEjRmQMrIgkYpwEZ6OYh7kcQnlutrxbq+dRbpSfsi1+bAHJXG
-   2EuOVJeoBt6PAqi8c/Fu6f20mfeCDP8UXGWOkY7mPRtF+k6dM0Admig/j
-   RfWK08k2lL52EVFEQPNt9vp75dStUssAOZ98Yw/vMnt0h52PqotkxDRrZ
-   Itv33isywNz2y3N2cMR23syndFsMnh1tExoEVqkAvxv8/+O2i21eJUqj+
-   iFBAz/kHF80mzJsD7SU+onAk7LM1vp4cPvI50F0PYxKbPwMQMJ08V7cJN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="347257423"
-X-IronPort-AV: E=Sophos;i="6.00,229,1681196400"; 
-   d="scan'208";a="347257423"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 07:41:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="854762977"
-X-IronPort-AV: E=Sophos;i="6.00,229,1681196400"; 
-   d="scan'208";a="854762977"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP; 09 Jun 2023 07:41:11 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1q7dIb-002QCi-33;
-        Fri, 09 Jun 2023 17:41:09 +0300
-Date:   Fri, 9 Jun 2023 17:41:09 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH] of: unittest: drop assertions for GPIO hog messages
-Message-ID: <ZIM6BQnjxGVenI1S@smile.fi.intel.com>
-References: <20230609143609.209373-1-brgl@bgdev.pl>
+        Fri, 9 Jun 2023 10:41:16 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE46CE43
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 07:41:15 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f7a8089709so19089215e9.1
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 07:41:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686321674; x=1688913674;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CR0c0Jmte6FeApUkgHJzlSR9/4YGGRJ45CFKhUONxZs=;
+        b=ljyF103rTiR0ysRbp8iTZkhShz0Q4wQtsi4SiCh2Z9pCwZ+ITBYkoJFpAwLZ0L/DBf
+         dVde8h40DygaZTGXlquTqrFKGhS/fPQXkH3rfBZCFLnXegcLj7R4fwqdhKeSRXc9NGAK
+         pOSsUYKkoduu+yFfBsLJXfv2Al7tu01/P+iLRTw5r0H2F4h46VX6M0UKyfU7h4Mkb1Qk
+         X0fwqcjc2oruhg7mhpvmyucGXNcHgdB+BZhrMkFLM4f2A6UXmPJvRWIdXy75kRfn+1gF
+         TCOFRB20afPYt8QayEUeMFAfMVHHh8ca6M3sl1xH7PD5z9+F/QKbK+8wKI2NYF9ADAxa
+         bxQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686321674; x=1688913674;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CR0c0Jmte6FeApUkgHJzlSR9/4YGGRJ45CFKhUONxZs=;
+        b=UB8OdnPi/ifZp678sJWwAK7Qp2wL9Z3ssY3PGL3HMqUpaHitL2r8UTaWMNyVF2Es3h
+         FzxqKPeVoBysVB/hcKIXQQh1UBDY0ie8e7mdEjdzCHm5JJJej7mzh4zBLxSKeIzvWE9d
+         O9l4dRvla7Et7cZsbTQWz/VjR3rjis9OhEtZ5bhHtKrslX3WvSaqqQvL5RMTmmRx1WcK
+         zYyIymGSGUhLdvyea4NLmcNojZPj1qegRHvvSbIpoR8tNQjVjzCjoMIF/RnpOg0DHQbu
+         G/mcKSZAmiwKXDL81WUWP95ZoCrIHjUmnt3gQotj9CH/Bj2gQ9ZglPzi9Emfie6gE9Is
+         MK5g==
+X-Gm-Message-State: AC+VfDyGFwxgyCII6ussq/rO8JoU1KkkGaan4LqW7Q/G1BhpaSIEDthn
+        B2v/JMFuuLxdSZkd/5vss7o/+k8zfgo=
+X-Google-Smtp-Source: ACHHUZ79Lfg6kM1VebrkIaLd3ziJZPC6iHeyxpXvPXdX4Z7/4UxGlL7mbxQG4cIZxJ4v2F+J48mv2Q==
+X-Received: by 2002:a5d:6104:0:b0:30a:e7cb:793 with SMTP id v4-20020a5d6104000000b0030ae7cb0793mr1363370wrt.15.1686321674019;
+        Fri, 09 Jun 2023 07:41:14 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id q25-20020a7bce99000000b003f17848673fsm2883516wmj.27.2023.06.09.07.41.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Jun 2023 07:41:13 -0700 (PDT)
+Message-ID: <1c52e05f-33bf-b182-dd4d-18aa43564e59@gmail.com>
+Date:   Fri, 9 Jun 2023 16:41:11 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230609143609.209373-1-brgl@bgdev.pl>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v8 2/2] soc: mediatek: remove DDP_DOMPONENT_DITHER from
+ enum
+Content-Language: en-US, ca-ES, es-ES
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        "Jason-JH.Lin" <jason-jh.lin@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Nathan Lu <nathan.lu@mediatek.com>,
+        Singo Chang <singo.chang@mediatek.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Nancy Lin <nancy.lin@mediatek.com>,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230306080659.15261-1-jason-jh.lin@mediatek.com>
+ <20230306080659.15261-3-jason-jh.lin@mediatek.com>
+ <CAGXv+5EPktjMABhtWf9dL-25dAe=Mf4=BSMmE+=4m2WisDXXFQ@mail.gmail.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <CAGXv+5EPktjMABhtWf9dL-25dAe=Mf4=BSMmE+=4m2WisDXXFQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 04:36:09PM +0200, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> These have now been demoted to debug and are normally hidden. Drop the
-> assertions entirely.
 
-Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-> Suggested-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
->  drivers/of/unittest.c | 28 ----------------------------
->  1 file changed, 28 deletions(-)
+On 31/05/2023 09:43, Chen-Yu Tsai wrote:
+> Hi Matthias,
 > 
-> diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
-> index 0060334a98a7..5386efeaf710 100644
-> --- a/drivers/of/unittest.c
-> +++ b/drivers/of/unittest.c
-> @@ -1844,26 +1844,10 @@ static void __init of_unittest_overlay_gpio(void)
->  	unittest(overlay_data_apply("overlay_gpio_02b", NULL),
->  		 "Adding overlay 'overlay_gpio_02b' failed\n");
->  
-> -	/*
-> -	 * messages are the result of the probes, after the
-> -	 * driver is registered
-> -	 */
-> -
-> -	EXPECT_BEGIN(KERN_DEBUG,
-> -		     "gpio-<<int>> (line-B-input): hogged as input\n");
-> -
-> -	EXPECT_BEGIN(KERN_DEBUG,
-> -		     "gpio-<<int>> (line-A-input): hogged as input\n");
-> -
->  	ret = platform_driver_register(&unittest_gpio_driver);
->  	if (unittest(ret == 0, "could not register unittest gpio driver\n"))
->  		return;
->  
-> -	EXPECT_END(KERN_DEBUG,
-> -		   "gpio-<<int>> (line-A-input): hogged as input\n");
-> -	EXPECT_END(KERN_DEBUG,
-> -		   "gpio-<<int>> (line-B-input): hogged as input\n");
-> -
->  	unittest(probe_pass_count + 2 == unittest_gpio_probe_pass_count,
->  		 "unittest_gpio_probe() failed or not called\n");
->  
-> @@ -1888,17 +1872,11 @@ static void __init of_unittest_overlay_gpio(void)
->  	probe_pass_count = unittest_gpio_probe_pass_count;
->  	chip_request_count = unittest_gpio_chip_request_count;
->  
-> -	EXPECT_BEGIN(KERN_DEBUG,
-> -		     "gpio-<<int>> (line-D-input): hogged as input\n");
-> -
->  	/* overlay_gpio_03 contains gpio node and child gpio hog node */
->  
->  	unittest(overlay_data_apply("overlay_gpio_03", NULL),
->  		 "Adding overlay 'overlay_gpio_03' failed\n");
->  
-> -	EXPECT_END(KERN_DEBUG,
-> -		   "gpio-<<int>> (line-D-input): hogged as input\n");
-> -
->  	unittest(probe_pass_count + 1 == unittest_gpio_probe_pass_count,
->  		 "unittest_gpio_probe() failed or not called\n");
->  
-> @@ -1935,17 +1913,11 @@ static void __init of_unittest_overlay_gpio(void)
->  	 *   - processing gpio for overlay_gpio_04b
->  	 */
->  
-> -	EXPECT_BEGIN(KERN_DEBUG,
-> -		     "gpio-<<int>> (line-C-input): hogged as input\n");
-> -
->  	/* overlay_gpio_04b contains child gpio hog node */
->  
->  	unittest(overlay_data_apply("overlay_gpio_04b", NULL),
->  		 "Adding overlay 'overlay_gpio_04b' failed\n");
->  
-> -	EXPECT_END(KERN_DEBUG,
-> -		   "gpio-<<int>> (line-C-input): hogged as input\n");
-> -
->  	unittest(chip_request_count + 1 == unittest_gpio_chip_request_count,
->  		 "unittest_gpio_chip_request() called %d times (expected 1 time)\n",
->  		 unittest_gpio_chip_request_count - chip_request_count);
-> -- 
-> 2.39.2
+> On Mon, Mar 6, 2023 at 4:07 PM Jason-JH.Lin <jason-jh.lin@mediatek.com> wrote:
+>>
+>> After mmsys and drm change DITHER enum to DDP_COMPONENT_DITHER0,
+>> mmsys header can remove the useless DDP_COMPONENT_DITHER enum.
+>>
+>> Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+>> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+>> Acked-by: Matthias Brugger <matthias.bgg@gmail.com>
+> 
+> CK didn't pick up this patch. Since the other patch already got picked up
+> in v6.4-rc1, could you merge this for v6.5?
 > 
 
--- 
-With Best Regards,
-Andy Shevchenko
+Yes, I gave an acked-by as I thought that CK will take both of them. Anyway 
+applied now.
 
+Matthias
 
+> 
+> Thanks
+> ChenYu
+> 
+> 
+>> ---
+>>   include/linux/soc/mediatek/mtk-mmsys.h | 3 +--
+>>   1 file changed, 1 insertion(+), 2 deletions(-)
+>>
+>> diff --git a/include/linux/soc/mediatek/mtk-mmsys.h b/include/linux/soc/mediatek/mtk-mmsys.h
+>> index dc2963a0a0f7..8eb5846985b4 100644
+>> --- a/include/linux/soc/mediatek/mtk-mmsys.h
+>> +++ b/include/linux/soc/mediatek/mtk-mmsys.h
+>> @@ -27,8 +27,7 @@ enum mtk_ddp_comp_id {
+>>          DDP_COMPONENT_CCORR,
+>>          DDP_COMPONENT_COLOR0,
+>>          DDP_COMPONENT_COLOR1,
+>> -       DDP_COMPONENT_DITHER,
+>> -       DDP_COMPONENT_DITHER0 = DDP_COMPONENT_DITHER,
+>> +       DDP_COMPONENT_DITHER0,
+>>          DDP_COMPONENT_DITHER1,
+>>          DDP_COMPONENT_DP_INTF0,
+>>          DDP_COMPONENT_DP_INTF1,
+>> --
+>> 2.18.0
+>>
