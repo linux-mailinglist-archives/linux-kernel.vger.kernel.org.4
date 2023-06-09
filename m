@@ -2,40 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C345F7294F9
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:25:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11D9372930F
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240905AbjFIJZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 05:25:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47758 "EHLO
+        id S240688AbjFII0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 04:26:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241632AbjFIJY7 (ORCPT
+        with ESMTP id S241652AbjFII0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 05:24:59 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9AC6D4C3D;
-        Fri,  9 Jun 2023 02:19:04 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1q7XQE-0004Jv-0C; Fri, 09 Jun 2023 10:24:38 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 73C6EC02EE; Fri,  9 Jun 2023 10:24:23 +0200 (CEST)
-Date:   Fri, 9 Jun 2023 10:24:23 +0200
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] MIPS: cpu-features: Use boot_cpu_type for CPU type based
- features
-Message-ID: <20230609082423.GM8160@alpha.franken.de>
-References: <20230607055122.26175-1-jiaxun.yang@flygoat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230607055122.26175-1-jiaxun.yang@flygoat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Fri, 9 Jun 2023 04:26:18 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A768B3AA7;
+        Fri,  9 Jun 2023 01:26:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686299162; x=1717835162;
+  h=from:to:cc:subject:date:message-id;
+  bh=oHaM0VhiJJoccfQrMVwCKCWjE/9E7rM4bgdOx9QJRqU=;
+  b=TvZjkULNAbmdOtoyttQc3G1jc4tBi34aUbYPwRgsfccES2WIMXQb3FX0
+   3GeKx6MfST+EMVWKM8bCo60106kH7cQ2+lnV0XChYldhHTe/g9YtiPnaQ
+   kOl/0hCmDivZELQDZiEVRXji+BmNdRdomktpzWn0FiEaDawlFXWJLRJoA
+   aARDDz+tpCkAlI6w0LhKHbi0ggZQoJ4yvtgaQxgpeYZnK/hm4cQ1Jj4JE
+   U+S0SsJhLCA0xUmHJH42p1cJZ8ys35IFRfB9d/887bQLDo7ScRVERhmX1
+   scdV5zXr1VkN4SVtFAEQEhu8SgYGUaDxlHKxo1nMAmxDLTLoW44t+znIQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="342222295"
+X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
+   d="scan'208";a="342222295"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 01:26:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="713424274"
+X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
+   d="scan'208";a="713424274"
+Received: from inesxmail01.iind.intel.com ([10.223.154.20])
+  by fmsmga007.fm.intel.com with ESMTP; 09 Jun 2023 01:25:59 -0700
+Received: from inlubt0316.iind.intel.com (inlubt0316.iind.intel.com [10.191.20.213])
+        by inesxmail01.iind.intel.com (Postfix) with ESMTP id 0416714359;
+        Fri,  9 Jun 2023 13:55:59 +0530 (IST)
+Received: by inlubt0316.iind.intel.com (Postfix, from userid 12101951)
+        id F17A517C; Fri,  9 Jun 2023 13:55:58 +0530 (IST)
+From:   Raag Jadav <raag.jadav@intel.com>
+To:     linus.walleij@linaro.org, mika.westerberg@linux.intel.com,
+        andriy.shevchenko@linux.intel.com
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mallikarjunappa.sangannavar@intel.com, pandith.n@intel.com,
+        Raag Jadav <raag.jadav@intel.com>
+Subject: [PATCH v2 0/4] Minor improvements for Intel pinctrl
+Date:   Fri,  9 Jun 2023 13:55:35 +0530
+Message-Id: <20230609082539.24311-1-raag.jadav@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,51 +63,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 01:51:22PM +0800, Jiaxun Yang wrote:
-> Some CPU feature macros were using current_cpu_type to mark feature
-> availability.
-> 
-> However current_cpu_type will use smp_processor_id, which is prohibited
-> under preemptable context.
-> 
-> Since those features are all uniform on all CPUs in a SMP system, use
-> boot_cpu_type instead of current_cpu_type to fix preemptable kernel.
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
->  arch/mips/include/asm/cpu-features.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/mips/include/asm/cpu-features.h b/arch/mips/include/asm/cpu-features.h
-> index 2a0b90077b50..8c6d4a87db37 100644
-> --- a/arch/mips/include/asm/cpu-features.h
-> +++ b/arch/mips/include/asm/cpu-features.h
-> @@ -125,7 +125,7 @@
->  ({									\
->  	int __res;							\
->  									\
-> -	switch (current_cpu_type()) {					\
-> +	switch (boot_cpu_type()) {					\
->  	case CPU_CAVIUM_OCTEON:						\
->  	case CPU_CAVIUM_OCTEON_PLUS:					\
->  	case CPU_CAVIUM_OCTEON2:					\
-> @@ -373,7 +373,7 @@
->  ({									\
->  	int __res;							\
->  									\
-> -	switch (current_cpu_type()) {					\
-> +	switch (boot_cpu_type()) {					\
->  	case CPU_M14KC:							\
->  	case CPU_74K:							\
->  	case CPU_1074K:							\
-> -- 
-> 2.39.2 (Apple Git-143)
+This series implements minor improvements for Intel pinctrl driver.
 
-applied to mips-next.
+The optimizations are as tested with gcc 7.5.0 with default -O2.
 
-Thomas.
+Raag Jadav (4):
+  pinctrl: intel: refine set_mux hook
+  pinctrl: intel: refine irq_set_type hook
+  pinctrl: intel: simplify exit path of set_mux hook
+  pinctrl: intel: simplify exit path of gpio_request_enable hook
+
+ drivers/pinctrl/intel/pinctrl-intel.c | 57 ++++++++++++++-------------
+ 1 file changed, 29 insertions(+), 28 deletions(-)
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+2.17.1
+
