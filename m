@@ -2,163 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EA4672936F
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:40:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E74D872936E
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240838AbjFIIk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 04:40:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45012 "EHLO
+        id S240791AbjFIIkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 04:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238462AbjFIIkZ (ORCPT
+        with ESMTP id S238462AbjFIIka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 04:40:25 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612722D7B
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 01:40:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686300001; x=1717836001;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8d8EZLl9aLDs76xNI8gDdKl0+/w1V8ZJkq3N24V7zo4=;
-  b=cbf2qvHXQnWpzOXp825hvpuB71vU9Wxcmx0WfTDEdhOoamKmy1bj9KsS
-   ZY55u94/cf2c3Ro/1AFZDkXCN+zMuKRK8tKW0c44p5bc2oc3eQh+U2RAs
-   AOXYdnXNISyW6uWsYIdhWfez9/lTvJNnMgSt3211bXgbGR3LFqhAhwx51
-   LvBHSPq1DPCdR7CylM7xvbYwVLsiZ5BjMuY1myn7dYvbdLEVY+1TaAWzG
-   0n8PJyzYmtSiT49q3g1smhbYMVynhTVgCLcsbDrTtCaxwViXbxr/0NrAw
-   fPjDnofk37WC+Ddfpy5IIkpwKzwXJBEAysazaDuyjlgGfSGQcExN/YzD6
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="337184615"
-X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
-   d="scan'208";a="337184615"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 01:40:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="713429673"
-X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
-   d="scan'208";a="713429673"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 09 Jun 2023 01:39:59 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q7Xf4-0008rc-2O;
-        Fri, 09 Jun 2023 08:39:58 +0000
-Date:   Fri, 9 Jun 2023 16:39:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Greg Ungerer <gerg@linux-m68k.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
-Subject: drivers/memstick/host/r592.c:83:9: sparse: sparse: incorrect type in
- assignment (different base types)
-Message-ID: <202306091608.zuOYo5EP-lkp@intel.com>
+        Fri, 9 Jun 2023 04:40:30 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D7530FD
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 01:40:07 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-53fb4ee9ba1so419284a12.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 01:40:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686300007; x=1688892007;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EeBp3LDqacG6dkXx6JUslaCBZFzIXO6+G11dxA8Ke/s=;
+        b=MHb8l0EgEXMRA16v/paq8cbTXztgj69apT6QbfIrMBjssZlOUe1Ik+GX+KX126LiuK
+         XRYVxXNM7FFT0HElUPko6MT9LwPKCYeltHPpDTnSYKzFQNql2n4EE/T4uanuEvP8iDIk
+         ksn8WJeaGIVaQqip0ntgnb8plHn4LWbhG3hxty+4g0LysUsiIMkkNKRYEGju6ZK+7A12
+         RKMxrMGwlv5UHg32EXkh40IwTEVRq8EPGBWWVUkh31Pp/X40z7Ph4yQdsHqPqlXR0SwQ
+         dia6IkrMRFpWxFdpO8SPTIIwiD4kg4iYRK8cPvdkVLOuJgv2O2E41iiLQgfpaAWlr7pc
+         vr1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686300007; x=1688892007;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EeBp3LDqacG6dkXx6JUslaCBZFzIXO6+G11dxA8Ke/s=;
+        b=dsJE1PhfTyI0dMceW/LZcEoCOkxtn1nBf63565jZGArM97ZYDlTiqcn/RcyaYdANet
+         oZCadjwzdMMUp3Il0GEGzACn6lkaXZYo9nSCzXZuEdGEmBsMPc1vsFGP9LCcbKEaOs3O
+         hm5a+CI/VLjQVDCBfsGIaER6vZGgI8sbbd2xo9K7cjAbiIWKLmpd394e1VwDOMCOBtcq
+         6PIWdM8T+I/n7h3T6Qg76Av0ng4yznQr4kAlR/z/T4Kk9gA8kKN/t9PI3JORK2jHQ7Rg
+         6jzggxSBTZiOgLSKF1FFXTyGH2dhEa0SK32mop2H5opYf/4Tjd6EzKqnUqAMDk03hMFH
+         NXCg==
+X-Gm-Message-State: AC+VfDxcMB68tfce5uBpOWOrhp+QJZPtvf8AQTXWNpPXOJ+NWmL7sr1T
+        YjAzbv64884rfKJGqWwWTKWFy+q9p6mh4r9LjTA=
+X-Google-Smtp-Source: ACHHUZ7bJ3jCLg4oTcEEJ/UTneBwOzhQYRw5k4G6xp2b8bpURPESSI8BdkY4VNnmPZ4i8w5L/9c5mY+GdGriQucAym0=
+X-Received: by 2002:a17:90b:4f44:b0:253:727e:4b41 with SMTP id
+ pj4-20020a17090b4f4400b00253727e4b41mr370270pjb.34.1686300006768; Fri, 09 Jun
+ 2023 01:40:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230606145611.704392-1-cerasuolodomenico@gmail.com>
+ <20230606145611.704392-2-cerasuolodomenico@gmail.com> <20230608165250.GG352940@cmpxchg.org>
+ <20230608170459.GH352940@cmpxchg.org> <20230608184516.GA356779@cmpxchg.org>
+In-Reply-To: <20230608184516.GA356779@cmpxchg.org>
+From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Date:   Fri, 9 Jun 2023 10:39:55 +0200
+Message-ID: <CA+CLi1gP6+tKrHSfUxBhLvYu=F7NMnuPp+gt-63cwonU4r25UA@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/7] mm: zswap: add pool shrinking mechanism
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     vitaly.wool@konsulko.com, minchan@kernel.org,
+        senozhatsky@chromium.org, yosryahmed@google.com,
+        linux-mm@kvack.org, ddstreet@ieee.org, sjenning@redhat.com,
+        nphamcs@gmail.com, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Thu, Jun 8, 2023 at 8:45=E2=80=AFPM Johannes Weiner <hannes@cmpxchg.org>=
+ wrote:
+>
+> On Thu, Jun 08, 2023 at 01:05:00PM -0400, Johannes Weiner wrote:
+> > On Thu, Jun 08, 2023 at 12:52:51PM -0400, Johannes Weiner wrote:
+> > > On Tue, Jun 06, 2023 at 04:56:05PM +0200, Domenico Cerasuolo wrote:
+> > > > @@ -584,14 +601,70 @@ static struct zswap_pool *zswap_pool_find_get=
+(char *type, char *compressor)
+> > > >   return NULL;
+> > > >  }
+> > > >
+> > > > +static int zswap_shrink(struct zswap_pool *pool)
+> > > > +{
+> > > > + struct zswap_entry *lru_entry, *tree_entry =3D NULL;
+> > > > + struct zswap_header *zhdr;
+> > > > + struct zswap_tree *tree;
+> > > > + int swpoffset;
+> > > > + int ret;
+> > > > +
+> > > > + /* get a reclaimable entry from LRU */
+> > > > + spin_lock(&pool->lru_lock);
+> > > > + if (list_empty(&pool->lru)) {
+> > > > +         spin_unlock(&pool->lru_lock);
+> > > > +         return -EINVAL;
+> > > > + }
+> > > > + lru_entry =3D list_last_entry(&pool->lru, struct zswap_entry, lru=
+);
+> > > > + list_del_init(&lru_entry->lru);
+> > > > + zhdr =3D zpool_map_handle(pool->zpool, lru_entry->handle, ZPOOL_M=
+M_RO);
+> > > > + tree =3D zswap_trees[swp_type(zhdr->swpentry)];
+> > > > + zpool_unmap_handle(pool->zpool, lru_entry->handle);
+> > > > + /*
+> > > > +  * Once the pool lock is dropped, the lru_entry might get freed. =
+The
+> > > > +  * swpoffset is copied to the stack, and lru_entry isn't deref'd =
+again
+> > > > +  * until the entry is verified to still be alive in the tree.
+> > > > +  */
+> > > > + swpoffset =3D swp_offset(zhdr->swpentry);
+> > > > + spin_unlock(&pool->lru_lock);
+> > > > +
+> > > > + /* hold a reference from tree so it won't be freed during writeba=
+ck */
+> > > > + spin_lock(&tree->lock);
+> > > > + tree_entry =3D zswap_entry_find_get(&tree->rbroot, swpoffset);
+> > > > + if (tree_entry !=3D lru_entry) {
+> > > > +         if (tree_entry)
+> > > > +                 zswap_entry_put(tree, tree_entry);
+> > > > +         spin_unlock(&tree->lock);
+> > > > +         return -EAGAIN;
+> > > > + }
+> > > > + spin_unlock(&tree->lock);
+> > > > +
+> > > > + ret =3D zswap_writeback_entry(pool->zpool, lru_entry->handle);
+> > > > +
+> > > > + spin_lock(&tree->lock);
+> > > > + if (ret) {
+> > > > +         spin_lock(&pool->lru_lock);
+> > > > +         list_move(&lru_entry->lru, &pool->lru);
+> > > > +         spin_unlock(&pool->lru_lock);
+> > > > + }
+> > > > + zswap_entry_put(tree, tree_entry);
+> > >
+> > > On re-reading this, I find the lru_entry vs tree_entry distinction
+> > > unnecessarily complicated. Once it's known that the thing coming off
+> > > the LRU is the same thing as in the tree, there is only "the entry".
+> > >
+> > > How about 'entry' and 'tree_entry', and after validation use 'entry'
+> > > throughout the rest of the function?
+> >
+> > Even better, safe the tree_entry entirely by getting the reference
+> > from the LRU already, and then just search the tree for a match:
+> >
+> >       /* Get an entry off the LRU */
+> >       spin_lock(&pool->lru_lock);
+> >       entry =3D list_last_entry();
+> >       list_del(&entry->lru);
+> >       zswap_entry_get(entry);
+> >       spin_unlock(&pool->lru_lock);
+> >
+> >       /* Check for invalidate() race */
+> >       spin_lock(&tree->lock);
+> >       if (entry !=3D zswap_rb_search(&tree->rbroot, swpoffset)) {
+> >               ret =3D -EAGAIN;
+> >               goto put_unlock;
+> >       }
+> >       spin_unlock(&tree->lock);
+>
+> Eh, brainfart. It needs the tree lock to bump the ref, of course.
+>
+> But this should work, right?
+>
+>         /* Check for invalidate() race */
+>         spin_lock(&tree->lock);
+>         if (entry !=3D zswap_rb_search(&tree->rbroot, swpoffset)) {
+>                 ret =3D -EAGAIN;
+>                 goto unlock;
+>         }
+>         zswap_entry_get(entry);
+>         spin_unlock(&tree->lock);
 
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   33f2b5785a2b6b0ed1948aafee60d3abb12f1e3a
-commit: d4aa8affa1e9e51c237a1ec47a97e96dce76c98c m68knommu: fix use of cpu_to_le() on IO access
-date:   2 years, 10 months ago
-config: m68k-randconfig-s041-20230608 (https://download.01.org/0day-ci/archive/20230609/202306091608.zuOYo5EP-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.3.0
-reproduce:
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d4aa8affa1e9e51c237a1ec47a97e96dce76c98c
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout d4aa8affa1e9e51c237a1ec47a97e96dce76c98c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=m68k SHELL=/bin/bash
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306091608.zuOYo5EP-lkp@intel.com/
-
-sparse warnings: (new ones prefixed by >>)
->> drivers/memstick/host/r592.c:83:9: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int volatile [usertype] @@     got restricted __be32 [usertype] @@
-   drivers/memstick/host/r592.c:83:9: sparse:     expected unsigned int volatile [usertype]
-   drivers/memstick/host/r592.c:83:9: sparse:     got restricted __be32 [usertype]
->> drivers/memstick/host/r592.c:83:9: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int volatile [usertype] @@     got restricted __be32 [usertype] @@
-   drivers/memstick/host/r592.c:83:9: sparse:     expected unsigned int volatile [usertype]
-   drivers/memstick/host/r592.c:83:9: sparse:     got restricted __be32 [usertype]
->> drivers/memstick/host/r592.c:83:9: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int volatile [usertype] @@     got restricted __be32 [usertype] @@
-   drivers/memstick/host/r592.c:83:9: sparse:     expected unsigned int volatile [usertype]
-   drivers/memstick/host/r592.c:83:9: sparse:     got restricted __be32 [usertype]
-   drivers/memstick/host/r592.c:75:16: sparse: sparse: cast to restricted __be32
-   drivers/memstick/host/r592.c:75:16: sparse: sparse: cast to restricted __be32
-
-vim +83 drivers/memstick/host/r592.c
-
-9263412501022f Maxim Levitsky 2011-03-25  42  
-9263412501022f Maxim Levitsky 2011-03-25  43  /**
-9263412501022f Maxim Levitsky 2011-03-25  44   * memstick_debug_get_tpc_name - debug helper that returns string for
-9263412501022f Maxim Levitsky 2011-03-25  45   * a TPC number
-9263412501022f Maxim Levitsky 2011-03-25  46   */
-9263412501022f Maxim Levitsky 2011-03-25 @47  const char *memstick_debug_get_tpc_name(int tpc)
-9263412501022f Maxim Levitsky 2011-03-25  48  {
-9263412501022f Maxim Levitsky 2011-03-25  49  	return tpc_names[tpc-1];
-9263412501022f Maxim Levitsky 2011-03-25  50  }
-9263412501022f Maxim Levitsky 2011-03-25  51  EXPORT_SYMBOL(memstick_debug_get_tpc_name);
-9263412501022f Maxim Levitsky 2011-03-25  52  
-9263412501022f Maxim Levitsky 2011-03-25  53  
-9263412501022f Maxim Levitsky 2011-03-25  54  /* Read a register*/
-9263412501022f Maxim Levitsky 2011-03-25  55  static inline u32 r592_read_reg(struct r592_device *dev, int address)
-9263412501022f Maxim Levitsky 2011-03-25  56  {
-9263412501022f Maxim Levitsky 2011-03-25  57  	u32 value = readl(dev->mmio + address);
-9263412501022f Maxim Levitsky 2011-03-25  58  	dbg_reg("reg #%02d == 0x%08x", address, value);
-9263412501022f Maxim Levitsky 2011-03-25  59  	return value;
-9263412501022f Maxim Levitsky 2011-03-25  60  }
-9263412501022f Maxim Levitsky 2011-03-25  61  
-9263412501022f Maxim Levitsky 2011-03-25  62  /* Write a register */
-9263412501022f Maxim Levitsky 2011-03-25  63  static inline void r592_write_reg(struct r592_device *dev,
-9263412501022f Maxim Levitsky 2011-03-25  64  							int address, u32 value)
-9263412501022f Maxim Levitsky 2011-03-25  65  {
-9263412501022f Maxim Levitsky 2011-03-25  66  	dbg_reg("reg #%02d <- 0x%08x", address, value);
-9263412501022f Maxim Levitsky 2011-03-25  67  	writel(value, dev->mmio + address);
-9263412501022f Maxim Levitsky 2011-03-25  68  }
-9263412501022f Maxim Levitsky 2011-03-25  69  
-9263412501022f Maxim Levitsky 2011-03-25  70  /* Reads a big endian DWORD register */
-9263412501022f Maxim Levitsky 2011-03-25  71  static inline u32 r592_read_reg_raw_be(struct r592_device *dev, int address)
-9263412501022f Maxim Levitsky 2011-03-25  72  {
-9263412501022f Maxim Levitsky 2011-03-25  73  	u32 value = __raw_readl(dev->mmio + address);
-9263412501022f Maxim Levitsky 2011-03-25  74  	dbg_reg("reg #%02d == 0x%08x", address, value);
-9263412501022f Maxim Levitsky 2011-03-25  75  	return be32_to_cpu(value);
-9263412501022f Maxim Levitsky 2011-03-25  76  }
-9263412501022f Maxim Levitsky 2011-03-25  77  
-9263412501022f Maxim Levitsky 2011-03-25  78  /* Writes a big endian DWORD register */
-9263412501022f Maxim Levitsky 2011-03-25  79  static inline void r592_write_reg_raw_be(struct r592_device *dev,
-9263412501022f Maxim Levitsky 2011-03-25  80  							int address, u32 value)
-9263412501022f Maxim Levitsky 2011-03-25  81  {
-9263412501022f Maxim Levitsky 2011-03-25  82  	dbg_reg("reg #%02d <- 0x%08x", address, value);
-9263412501022f Maxim Levitsky 2011-03-25 @83  	__raw_writel(cpu_to_be32(value), dev->mmio + address);
-9263412501022f Maxim Levitsky 2011-03-25  84  }
-9263412501022f Maxim Levitsky 2011-03-25  85  
-
-:::::: The code at line 83 was first introduced by commit
-:::::: 9263412501022fecef844907129ee2513b5a89de memstick: add driver for Ricoh R5C592 card reader
-
-:::::: TO: Maxim Levitsky <maximlevitsky@gmail.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+This should work indeed, it's much cleaner with just one local
+zswap_entry, will update!
