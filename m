@@ -2,73 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C301729870
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 13:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB123729873
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 13:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231382AbjFILs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 07:48:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40782 "EHLO
+        id S238759AbjFILtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 07:49:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231172AbjFILsx (ORCPT
+        with ESMTP id S231172AbjFILtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 07:48:53 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D06358B;
-        Fri,  9 Jun 2023 04:48:50 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 981665FD8E;
-        Fri,  9 Jun 2023 14:48:48 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1686311328;
-        bh=i8mNs2rF54Ol0kXxFcSbg3Rj4NqvtmjvBxJgpQRfSPo=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=Q1l9oXPeAJIm6jGSa7PBxKhYShkKytHT8QEWYzUuWbL0hPQZe+Yb2+gd+DWbuRzCi
-         ukswtpwIlfYtlogBMoLh0dN5S6QooTbhfVnq+Pzwx9tB4zaPUWAVrOywWB/7ttvRj3
-         MqhqWtFav0ojgOn7ukSYBc9n82vclzjSgeLEFponi1wdJvw6+Snxi8iqm56F7qQaIq
-         wLyu3Aok17REBop1qvsHizZf5+aFOW4+yRTvLGDQZCrYwk/VI1gvw7/1FNokj15gXq
-         1ZeXEaahADg9F4vRxXpljKbt1QTF4qTG1jVcTWdsMSF3rR0dqpF9WJ8q3Jur6ifVv3
-         2KDO+bqdWIWiA==
-Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Fri,  9 Jun 2023 14:48:48 +0300 (MSK)
-Date:   Fri, 9 Jun 2023 14:48:47 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-CC:     Jerome Brunet <jbrunet@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: Re: [PATCH 03/18] clk: meson: migrate a1 clock drivers out of
- hw_onecell_data to drop NR_CLKS
-Message-ID: <20230609114847.x24by2foebojbchq@CAB-WSD-L081021>
-References: <20230607-topic-amlogic-upstream-clkid-public-migration-v1-0-9676afa6b22c@linaro.org>
- <20230607-topic-amlogic-upstream-clkid-public-migration-v1-3-9676afa6b22c@linaro.org>
- <1jlegu9l5d.fsf@starbuckisacylon.baylibre.com>
- <638206ba-e2da-bb8e-a2e4-138af84648b4@linaro.org>
+        Fri, 9 Jun 2023 07:49:07 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7323595;
+        Fri,  9 Jun 2023 04:49:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686311346; x=1717847346;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/70ZyUQoDKt1Vqap5Dv3N/zlV9MR5BTiq0qKtGBfq6s=;
+  b=booTEdKXSxBLTAstEmumVZL6Epj5BdDiRrvzPTfdou5CPQewEDFTQzlT
+   vbrU+a2xrq1MToVXbB37di58mV7nCjd1GnKYBj1TwwZZyEaZksD5+TJPX
+   Qe6nxao+DI2POLZNaeYEHNjk9BWpN+6eb3G9X+SrLKHVMXOmwxlVAde+d
+   8zB11YH6N9jEvQb5uN1r2HxjPCMC+8iWLcESJgiw2ALXeoXTWT6WbL5re
+   iwVQNIHj47BTx2S0HrDy+Y0UeoLB8NSQmOwIEp1mo0ploshFou/1wBNp+
+   oMZc7t5T0AI+70VT5rkCU/2zRx7vQ1YTIMZlPeZdx2g4KO+ijWL+BHvxm
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="360064201"
+X-IronPort-AV: E=Sophos;i="6.00,229,1681196400"; 
+   d="scan'208";a="360064201"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 04:49:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="800193527"
+X-IronPort-AV: E=Sophos;i="6.00,229,1681196400"; 
+   d="scan'208";a="800193527"
+Received: from lmirabel-mobl1.ger.corp.intel.com (HELO intel.com) ([10.251.211.108])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 04:49:01 -0700
+Date:   Fri, 9 Jun 2023 13:48:53 +0200
+From:   Andi Shyti <andi.shyti@linux.intel.com>
+To:     Sui Jingfeng <suijingfeng@loongson.cn>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v5 1/4] PCI/VGA: Use unsigned type for the io_state
+ variable
+Message-ID: <ZIMRpbUHcW5qGFBU@ashyti-mobl2.lan>
+References: <20230609112417.632313-1-suijingfeng@loongson.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <638206ba-e2da-bb8e-a2e4-138af84648b4@linaro.org>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/09 07:08:00 #21465535
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+In-Reply-To: <20230609112417.632313-1-suijingfeng@loongson.cn>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,139 +71,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Neil,
+Hi Sui,
 
-On Thu, Jun 08, 2023 at 02:53:50PM +0200, Neil Armstrong wrote:
-> On 08/06/2023 14:45, Jerome Brunet wrote:
-> > > +struct meson_a1_pll_clks {
-> > > +	struct clk_hw **hw_clks;
-> > > +	unsigned int hw_clk_num;
-> > > +};
-> > > +
-> > > +static struct meson_a1_pll_clks a1_pll_clks = {
-> > > +	.hw_clks = a1_pll_hw_clks,
-> > > +	.hw_clk_num = ARRAY_SIZE(a1_pll_hw_clks),
-> > > +};
-> > > +
-> > > +static struct clk_hw *meson_a1_pll_hw_get(struct of_phandle_args *clkspec, void *clk_data)
-> > > +{
-> > > +	const struct meson_a1_pll_clks *data = clk_data;
-> > > +	unsigned int idx = clkspec->args[0];
-> > > +
-> > > +	if (idx >= data->hw_clk_num) {
-> > > +		pr_err("%s: invalid index %u\n", __func__, idx);
-> > > +		return ERR_PTR(-EINVAL);
-> > > +	}
-> > > +
-> > > +	return data->hw_clks[idx];
-> > > +}
-> > 
-> > I'd prefer to have a single struct type and and single custom
-> > callback for the different SoC please.
+On Fri, Jun 09, 2023 at 07:24:14PM +0800, Sui Jingfeng wrote:
+> The io_state variable in the vga_arb_write() function is declared with
+> unsigned int type, while the vga_str_to_iostate() function takes int *
+> type. To keep them consistent, replace the third argument of
+> vga_str_to_iostate() function with the unsigned int * type.
 > 
-> Sure, I've written a common code for that, but I have a hard time finding
-> a proper naming for it... so I choosed meson-clkc since it could have
-> more common helper code for duplicated code over the clk driver:
-> 
-> ===================================><============================================================================
-> diff --git a/drivers/clk/meson/Kconfig b/drivers/clk/meson/Kconfig
-> index 8ce846fdbe43..9070dcfd9e71 100644
-> --- a/drivers/clk/meson/Kconfig
-> +++ b/drivers/clk/meson/Kconfig
-> @@ -30,6 +30,9 @@ config COMMON_CLK_MESON_VID_PLL_DIV
->  	tristate
->  	select COMMON_CLK_MESON_REGMAP
-> 
-> +config COMMON_CLK_MESON_CLKC
-> +	tristate
-> +
->  config COMMON_CLK_MESON_AO_CLKC
->  	tristate
->  	select COMMON_CLK_MESON_REGMAP
-> diff --git a/drivers/clk/meson/Makefile b/drivers/clk/meson/Makefile
-> index d5288662881d..13c6db466986 100644
-> --- a/drivers/clk/meson/Makefile
-> +++ b/drivers/clk/meson/Makefile
-> @@ -1,6 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  # Amlogic clock drivers
-> 
-> +obj-$(CONFIG_COMMON_CLK_MESON_CLKC) += meson-clkc.o
->  obj-$(CONFIG_COMMON_CLK_MESON_AO_CLKC) += meson-aoclk.o
->  obj-$(CONFIG_COMMON_CLK_MESON_CPU_DYNDIV) += clk-cpu-dyndiv.o
->  obj-$(CONFIG_COMMON_CLK_MESON_DUALDIV) += clk-dualdiv.o
-> diff --git a/drivers/clk/meson/meson-clkc.c b/drivers/clk/meson/meson-clkc.c
-> new file mode 100644
-> index 000000000000..fa98b9d09011
-> --- /dev/null
-> +++ b/drivers/clk/meson/meson-clkc.c
-> @@ -0,0 +1,25 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Copyright (c) 2023 Neil Armstrong <neil.armstrong@linaro.org>
-> + */
-> +
-> +#include <linux/of_device.h>
-> +#include <linux/clk-provider.h>
-> +#include <linux/module.h>
-> +#include "meson-clkc.h"
-> +
-> +struct clk_hw *meson_clk_hw_get(struct of_phandle_args *clkspec, void *clk_hw_data)
-> +{
-> +	const struct meson_clk_hw_data *data = clk_hw_data;
-> +	unsigned int idx = clkspec->args[0];
-> +
-> +	if (idx >= data->num) {
-> +		pr_err("%s: invalid index %u\n", __func__, idx);
-> +		return ERR_PTR(-EINVAL);
-> +	}
-> +
-> +	return data->hws[idx];
-> +}
-> +EXPORT_SYMBOL_GPL(meson_clk_hw_get);
-> +
-> +MODULE_LICENSE("GPL v2");
-> diff --git a/drivers/clk/meson/meson-clkc.h b/drivers/clk/meson/meson-clkc.h
-> new file mode 100644
-> index 000000000000..e3bad2aa17eb
-> --- /dev/null
-> +++ b/drivers/clk/meson/meson-clkc.h
-> @@ -0,0 +1,19 @@
-> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
-> +/*
-> + * Copyright (c) 2023 Neil Armstrong <neil.armstrong@linaro.org>
-> + */
-> +
-> +#ifndef __MESON_HW_CLKC_H__
-> +#define __MESON_HW_CLKC_H__
-> +
-> +#include <linux/of_device.h>
-> +#include <linux/clk-provider.h>
-> +
-> +struct meson_clk_hw_data {
-> +	struct clk_hw	**hws;
-> +	unsigned int	num;
-> +};
-> +
-> +struct clk_hw *meson_clk_hw_get(struct of_phandle_args *clkspec, void *clk_hw_data);
-> +
-> +#endif
-> ===================================><============================================================================
-> 
-> If it's ok I'll send a v2 using this.
-> 
-> Thanks,
-> Neil
+> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
 
-In addition, I propose consolidating the probe() routine of the a1
-clocks into a common part, which can be utilized for s4 and other
-similar clocks. This solution was presented in the early a1 review
-stages of this patch set.
+Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com> 
 
-https://lore.kernel.org/linux-amlogic/20221201225703.6507-7-ddrokosov@sberdevices.ru/
+Andi
 
-Maybe, it can be generalized for the all meson clock controller drivers.
-
--- 
-Thank you,
-Dmitry
+> ---
+>  drivers/pci/vgaarb.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pci/vgaarb.c b/drivers/pci/vgaarb.c
+> index 5a696078b382..c1bc6c983932 100644
+> --- a/drivers/pci/vgaarb.c
+> +++ b/drivers/pci/vgaarb.c
+> @@ -77,7 +77,7 @@ static const char *vga_iostate_to_str(unsigned int iostate)
+>  	return "none";
+>  }
+>  
+> -static int vga_str_to_iostate(char *buf, int str_size, int *io_state)
+> +static int vga_str_to_iostate(char *buf, int str_size, unsigned int *io_state)
+>  {
+>  	/* we could in theory hand out locks on IO and mem
+>  	 * separately to userspace but it can cause deadlocks */
+> -- 
+> 2.25.1
