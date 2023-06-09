@@ -2,102 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A687293F2
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:56:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 579617293EF
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239156AbjFII4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 04:56:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54316 "EHLO
+        id S239250AbjFII4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 04:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241181AbjFIIzy (ORCPT
+        with ESMTP id S241079AbjFIIzq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 04:55:54 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33BD46A3
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 01:54:47 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-b9e6ec482b3so1564232276.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 01:54:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686300874; x=1688892874;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=isGRI57abFTSmMxuS25eHokD96Z3GdYwa9dpc4Kssx4=;
-        b=Iu1GCCLOrif/BHp9FDKqfy9yiMqyfzHGVY+jsx9g8ssylaQyUT8og48R7HciG34z7r
-         PaYLhyDBGSAD6oF5C6fWSOi4e1QWO+XqObftQy5+o+D1tJ1buQtL7LkjD7WM5s72VQUc
-         lwcZJgKVghfOWNQlGbHjDkKmjsyGkUTyNlupTwh+DpYm8rBdFKkaHs02bwB3j/PNMEEx
-         zOzUaQzshFup6aqoj1SuOxsvWP46GSWVy0ezaqNy1eHBKSBy5yZcjEocuvg7DM2NAfV9
-         7o86rQ6zx7rFyo2y8rL2HuHIJsZtFV/sVGfCYYtAg58/11KkJkENmhlWpVgSHtRQMBtM
-         XcHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686300874; x=1688892874;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=isGRI57abFTSmMxuS25eHokD96Z3GdYwa9dpc4Kssx4=;
-        b=Yf9+XIYx5BE1pmuBDmlnYN56xcOapfOz1dyy8e1j+VERy9vOBBTt8dAjMC9BLfHQG9
-         xpA0hh54IRlnNBuhQYdWt+RknclYxfjjaJnvbupjLHksplgjLur2GDJ7rIqM6Eshgz6x
-         lGF4SUaTxaS9jFaflCTTAYOM/lmJdk6UV7y6Hbmg5BFNsP4BQb/e+g9ktVfxJo7joIan
-         NeBuImxjM/wlOm8X4uPtmInokpQk7PmszN7iER5+QQ/dm59GDo+X/LE8Fbxb0jgSH7Jz
-         30ezPij6OdifxIL2K0qyj8YCOrw7oCYy1n9nzrYlNpgc3WALYt3jgy1DmDx5h+o8K3F7
-         phJQ==
-X-Gm-Message-State: AC+VfDwV8p3pzhJHOKXNI51+G4Z8fNrmwWM+urr3IsfVwWizNcmLy7kE
-        S7WoCWclv86lyDY3RzwvMEJ84Q3lZCB+9DwdXXybKQ==
-X-Google-Smtp-Source: ACHHUZ5zDWfO6N1U5NQqvAMibPOX2lX0OgH4TMaLHfMbiizukKMFPoR9Dqb9TNr7WchihMaBZlXa98pcYB02NUrAMiU=
-X-Received: by 2002:a25:20d4:0:b0:bb3:912d:60bc with SMTP id
- g203-20020a2520d4000000b00bb3912d60bcmr478687ybg.64.1686300874447; Fri, 09
- Jun 2023 01:54:34 -0700 (PDT)
+        Fri, 9 Jun 2023 04:55:46 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E47DC44B2
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 01:54:29 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1686300868;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yESK7y37bOjN3SANEmCGOV67A0u0f7lUiT19nPSlg4M=;
+        b=jNN1WoLiV8ZGE/w2aBcCzWEts/3/G2/blZSW4AUZRnDkdl9/15/4LKJLzjX+ZBHOScRrWL
+        68KSYL+V/Esx7DiJZA9tJZl803n4v95QOojdjfUxPoV6wDm/1qPaMUkYpN7K1Uugzj2OZd
+        sC9r2Ot9qCWGz8viHLnErWaV+oLUyss+CyCdzsL6n3I4/Mlo1HkLSOjWlvZ1bqBqJLE00L
+        49LXjLuvoKyPeUoxcoYxaBbz4Kifu2uqT+llPjM9z0sCtVypvAVACK46Iq5M3WO4qnGyuz
+        J/RIO5NTU8TsKlYKPpPDVMyicNyiWSYd7D4ntKYGCSy73c7+97uwQDLZAzRDiA==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1169960010;
+        Fri,  9 Jun 2023 08:54:26 +0000 (UTC)
+Date:   Fri, 9 Jun 2023 10:54:25 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Johan Jonker <jbx6244@gmail.com>
+Cc:     richard@nod.at, vigneshr@ti.com, heiko@sntech.de,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, yifeng.zhao@rock-chips.com
+Subject: Re: [PATCH v1 5/5] mtd: nand: add support for the Sandisk SDTNQGAMA
+ chip
+Message-ID: <20230609105425.60543d8b@xps-13>
+In-Reply-To: <c21a0de8-f8f6-a8f9-417b-eca99dc8b55b@gmail.com>
+References: <19bf714a-43f9-c30a-8197-91aaaf4a6e5d@gmail.com>
+        <c21a0de8-f8f6-a8f9-417b-eca99dc8b55b@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 9 Jun 2023 10:54:23 +0200
-Message-ID: <CACRpkdbUZ=V+C+kyu40hCtgtzDRVfKwdwaZ4uJhDPSuhwRrgEA@mail.gmail.com>
-Subject: [GIT PULL] pin control fix for v6.4
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi Johan,
 
-just a single patch for a driver so far this cycle.
-Not much to say about it.
+jbx6244@gmail.com wrote on Thu, 8 Jun 2023 18:31:04 +0200:
 
-Please pull it in!
+> Sandisk SDTNQGAMA is a 8GB size, 3.3V 8 bit chip with 16KB page size,
+> 1KB write size and 40 bit ecc support
+>=20
+> Signed-off-by: Pawe=C5=82 Jarosz <paweljarosz3691@gmail.com>
 
-Yours,
-Linus Walleij
+Pawel needs to be author of the patch or credited with a
+co-developped-by+SoB otherwise. The current SoB lines are invalid.
 
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b=
-:
+> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
+> ---
+>  drivers/mtd/nand/raw/nand_ids.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>=20
+> diff --git a/drivers/mtd/nand/raw/nand_ids.c b/drivers/mtd/nand/raw/nand_=
+ids.c
+> index dacc5529b..53c4118de 100644
+> --- a/drivers/mtd/nand/raw/nand_ids.c
+> +++ b/drivers/mtd/nand/raw/nand_ids.c
+> @@ -44,6 +44,9 @@ struct nand_flash_dev nand_flash_ids[] =3D {
+>  	{"TC58NVG6D2 64G 3.3V 8-bit",
+>  		{ .id =3D {0x98, 0xde, 0x94, 0x82, 0x76, 0x56, 0x04, 0x20} },
+>  		  SZ_8K, SZ_8K, SZ_2M, 0, 8, 640, NAND_ECC_INFO(40, SZ_1K) },
+> +	{"SDTNQGAMA 64G 3.3V 8-bit",
+> +		{ .id =3D {0x45, 0xde, 0x94, 0x93, 0x76, 0x57} },
+> +		  SZ_16K, SZ_8K, SZ_4M, 0, 6, 1280, NAND_ECC_INFO(40, SZ_1K) },
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+I guess you'll need a sandisk driver to reflect the missing timings?
 
-are available in the Git repository at:
+>  	{"SDTNRGAMA 64G 3.3V 8-bit",
+>  		{ .id =3D {0x45, 0xde, 0x94, 0x93, 0x76, 0x50} },
+>  		  SZ_16K, SZ_8K, SZ_4M, 0, 6, 1280, NAND_ECC_INFO(40, SZ_1K) },
+> --
+> 2.30.2
+>=20
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git
-tags/pinctrl-v6.4-2
 
-for you to fetch changes up to 5b10ff013e8a57f8845615ac2cc37edf7f6eef05:
-
-  pinctrl: meson-axg: add missing GPIOA_18 gpio group (2023-05-16
-15:02:01 +0200)
-
-----------------------------------------------------------------
-A single fix for the Meson driver, nothing else has surfaced
-so far this cycle.
-
-----------------------------------------------------------------
-Martin Hundeb=C3=B8ll (1):
-      pinctrl: meson-axg: add missing GPIOA_18 gpio group
-
- drivers/pinctrl/meson/pinctrl-meson-axg.c | 1 +
- 1 file changed, 1 insertion(+)
+Thanks,
+Miqu=C3=A8l
