@@ -2,186 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74184728D60
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 03:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54A74728D68
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 03:59:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236418AbjFIB53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 21:57:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55996 "EHLO
+        id S238150AbjFIB6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 21:58:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbjFIB51 (ORCPT
+        with ESMTP id S238101AbjFIB6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 21:57:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7727C30C8;
-        Thu,  8 Jun 2023 18:57:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0EB0A65189;
-        Fri,  9 Jun 2023 01:57:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DA3EC433D2;
-        Fri,  9 Jun 2023 01:57:22 +0000 (UTC)
-Date:   Thu, 8 Jun 2023 21:57:19 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Donglin Peng <pengdonglin@sangfor.com.cn>
-Cc:     mhiramat@kernel.org, linux@armlinux.org.uk, mark.rutland@arm.com,
-        will@kernel.org, catalin.marinas@arm.com,
-        rmk+kernel@armlinux.org.uk, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
-        tglx@linutronix.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        bp@alien8.de, hpa@zytor.com, chenhuacai@kernel.org,
-        zhangqing@loongson.cn, kernel@xen0n.name, mingo@redhat.com,
-        peterz@infradead.org, xiehuan09@gmail.com, dinghui@sangfor.com.cn,
-        huangcun@sangfor.com.cn, dolinux.peng@gmail.com,
-        linux-trace-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 3/8] ARM: ftrace: Enable HAVE_FUNCTION_GRAPH_RETVAL
-Message-ID: <20230608215719.7537ce38@gandalf.local.home>
-In-Reply-To: <c61eb9290c3e817d4d70c429c0e987e3ec51a3c4.1680954589.git.pengdonglin@sangfor.com.cn>
-References: <cover.1680954589.git.pengdonglin@sangfor.com.cn>
-        <c61eb9290c3e817d4d70c429c0e987e3ec51a3c4.1680954589.git.pengdonglin@sangfor.com.cn>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 8 Jun 2023 21:58:44 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A123730CD;
+        Thu,  8 Jun 2023 18:58:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686275921; x=1717811921;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=mpVamIpHuf/gQT+r5lR2dxcikhasXCd2orfPB6DhhTE=;
+  b=D5QVKQaE3vmEkF+tGveZkQK0PSCgHlrw5UvvGeH7x0YijMiET0fPczAK
+   MoOuImDOYIKOKMf+zo43B0ShtX1uXbEzfEFQ7sxpM9ZSrAD1EW/ZsBe2F
+   wCpluMK/eJv6akxgAofdgZSXDE1saW6fxHwuqBUAlPcvGJhjnqTiFXkCe
+   ZoiqelSlYvIdxA7OvxMu1OcY4wq6aO+dWF7mD+4Brhvkng1FvzmeifNkD
+   zApEsYl7C2kNxa6sqemqFRujpurZ1ENDkqdIrqo8zkrn7mmJ8GWBYg1DD
+   iEI5sJBQuwTl7dKQYyDs574dHpU+IZ+zhB6Iy42Z6bAkzSxyZnvm6zunH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="347136058"
+X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
+   d="scan'208";a="347136058"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 18:58:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="743316061"
+X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
+   d="scan'208";a="743316061"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 18:58:33 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
+        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
+        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
+        apopple@nvidia.com, peterx@redhat.com, david@redhat.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        viro@zeniv.linux.org.uk, brauner@kernel.org,
+        pasha.tatashin@soleen.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com, Ming Lei <ming.lei@redhat.com>
+Subject: Re: [PATCH v2 1/6] swap: remove remnants of polling from
+ read_swap_cache_async
+References: <20230609005158.2421285-1-surenb@google.com>
+        <20230609005158.2421285-2-surenb@google.com>
+Date:   Fri, 09 Jun 2023 09:57:25 +0800
+In-Reply-To: <20230609005158.2421285-2-surenb@google.com> (Suren
+        Baghdasaryan's message of "Thu, 8 Jun 2023 17:51:53 -0700")
+Message-ID: <877csdpfcq.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat,  8 Apr 2023 05:42:17 -0700
-Donglin Peng <pengdonglin@sangfor.com.cn> wrote:
++ Ming Lei for confirmation.
 
-> The previous patch ("function_graph: Support recording and printing
-> the return value of function") has laid the groundwork for the for
-> the funcgraph-retval, and this modification makes it available on
-> the ARM platform.
-> 
-> We introduce a new structure called fgraph_ret_regs for the ARM platform
-> to hold return registers and the frame pointer. We then fill its content
-> in the return_to_handler and pass its address to the function
-> ftrace_return_to_handler to record the return value.
-> 
-> Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>
+Suren Baghdasaryan <surenb@google.com> writes:
 
-I really don't want to add this without an ack from an arm maintainer.
+> Commit [1] introduced IO polling support during swapin to reduce
+> swap read latency for block devices that can be polled. However later
+> commit [2] removed polling support. Therefore it seems safe to remove
+> do_poll parameter in read_swap_cache_async and always call swap_readpage
+> with synchronous=false waiting for IO completion in folio_lock_or_retry.
+>
+> [1] commit 23955622ff8d ("swap: add block io poll in swapin path")
+> [2] commit 9650b453a3d4 ("block: ignore RWF_HIPRI hint for sync dio")
+>
+> Suggested-by: Huang Ying <ying.huang@intel.com>
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 
-I have the patches queued (for testing), but I may remove the ones that do
-not have the appropriate acks.
+Looks good to me!  Thanks!
 
--- Steve
-
+Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
 
 > ---
-> v10:
->  - Use CONFIG_FUNCTION_GRAPH_TRACER to control fgraph_ret_regs definition
-> 
-> v9:
->  - Fix stack pointer align issues
->  - Update the commit message
-> 
-> v8:
->  - Modify the control range of CONFIG_HAVE_FUNCTION_GRAPH_RETVAL
-> ---
->  arch/arm/Kconfig               |  1 +
->  arch/arm/include/asm/ftrace.h  | 22 ++++++++++++++++++++++
->  arch/arm/kernel/asm-offsets.c  |  8 +++++++-
->  arch/arm/kernel/entry-ftrace.S | 10 ++++++----
->  4 files changed, 36 insertions(+), 5 deletions(-)
-> 
-> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-> index e24a9820e12f..73061379855a 100644
-> --- a/arch/arm/Kconfig
-> +++ b/arch/arm/Kconfig
-> @@ -98,6 +98,7 @@ config ARM
->  	select HAVE_FAST_GUP if ARM_LPAE
->  	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
->  	select HAVE_FUNCTION_ERROR_INJECTION
-> +	select HAVE_FUNCTION_GRAPH_RETVAL if HAVE_FUNCTION_GRAPH_TRACER
->  	select HAVE_FUNCTION_GRAPH_TRACER
->  	select HAVE_FUNCTION_TRACER if !XIP_KERNEL
->  	select HAVE_GCC_PLUGINS
-> diff --git a/arch/arm/include/asm/ftrace.h b/arch/arm/include/asm/ftrace.h
-> index 7e9251ca29fe..3c457902b355 100644
-> --- a/arch/arm/include/asm/ftrace.h
-> +++ b/arch/arm/include/asm/ftrace.h
-> @@ -77,4 +77,26 @@ static inline bool arch_syscall_match_sym_name(const char *sym,
+>  mm/madvise.c    |  4 ++--
+>  mm/swap.h       |  1 -
+>  mm/swap_state.c | 12 +++++-------
+>  3 files changed, 7 insertions(+), 10 deletions(-)
+>
+> diff --git a/mm/madvise.c b/mm/madvise.c
+> index b5ffbaf616f5..b1e8adf1234e 100644
+> --- a/mm/madvise.c
+> +++ b/mm/madvise.c
+> @@ -215,7 +215,7 @@ static int swapin_walk_pmd_entry(pmd_t *pmd, unsigned long start,
+>  			continue;
 >  
->  #endif /* ifndef __ASSEMBLY__ */
+>  		page = read_swap_cache_async(entry, GFP_HIGHUSER_MOVABLE,
+> -					     vma, index, false, &splug);
+> +					     vma, index, &splug);
+>  		if (page)
+>  			put_page(page);
+>  	}
+> @@ -252,7 +252,7 @@ static void force_shm_swapin_readahead(struct vm_area_struct *vma,
+>  		rcu_read_unlock();
 >  
-> +#ifndef __ASSEMBLY__
-> +#ifdef CONFIG_FUNCTION_GRAPH_TRACER
-> +struct fgraph_ret_regs {
-> +	/* r0 - r3 */
-> +	unsigned long regs[4];
-> +
-> +	unsigned long fp;
-> +	unsigned long __unused;
-> +};
-> +
-> +static inline unsigned long fgraph_ret_regs_return_value(struct fgraph_ret_regs *ret_regs)
-> +{
-> +	return ret_regs->regs[0];
-> +}
-> +
-> +static inline unsigned long fgraph_ret_regs_frame_pointer(struct fgraph_ret_regs *ret_regs)
-> +{
-> +	return ret_regs->fp;
-> +}
-> +#endif /* ifdef CONFIG_FUNCTION_GRAPH_TRACER */
-> +#endif
-> +
->  #endif /* _ASM_ARM_FTRACE */
-> diff --git a/arch/arm/kernel/asm-offsets.c b/arch/arm/kernel/asm-offsets.c
-> index 38121c59cbc2..18bb85115b21 100644
-> --- a/arch/arm/kernel/asm-offsets.c
-> +++ b/arch/arm/kernel/asm-offsets.c
-> @@ -23,6 +23,7 @@
->  #include <asm/suspend.h>
->  #include <asm/vdso_datapage.h>
->  #include <asm/hardware/cache-l2x0.h>
-> +#include <asm/ftrace.h>
->  #include <linux/kbuild.h>
->  #include <linux/arm-smccc.h>
->  #include "signal.h"
-> @@ -170,5 +171,10 @@ int main(void)
->    DEFINE(KEXEC_INDIR_PAGE,	offsetof(struct kexec_relocate_data, kexec_indirection_page));
->    DEFINE(KEXEC_MACH_TYPE,	offsetof(struct kexec_relocate_data, kexec_mach_type));
->    DEFINE(KEXEC_R2,		offsetof(struct kexec_relocate_data, kexec_r2));
-> -  return 0; 
-> +#ifdef CONFIG_FUNCTION_GRAPH_TRACER
-> +  BLANK();
-> +  DEFINE(FGRET_REGS_SIZE,	sizeof(struct fgraph_ret_regs));
-> +  BLANK();
-> +#endif
-> +  return 0;
+>  		page = read_swap_cache_async(swap, GFP_HIGHUSER_MOVABLE,
+> -					     NULL, 0, false, &splug);
+> +					     NULL, 0, &splug);
+>  		if (page)
+>  			put_page(page);
+>  
+> diff --git a/mm/swap.h b/mm/swap.h
+> index 7c033d793f15..8a3c7a0ace4f 100644
+> --- a/mm/swap.h
+> +++ b/mm/swap.h
+> @@ -46,7 +46,6 @@ struct folio *filemap_get_incore_folio(struct address_space *mapping,
+>  struct page *read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
+>  				   struct vm_area_struct *vma,
+>  				   unsigned long addr,
+> -				   bool do_poll,
+>  				   struct swap_iocb **plug);
+>  struct page *__read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
+>  				     struct vm_area_struct *vma,
+> diff --git a/mm/swap_state.c b/mm/swap_state.c
+> index b76a65ac28b3..a3839de71f3f 100644
+> --- a/mm/swap_state.c
+> +++ b/mm/swap_state.c
+> @@ -517,15 +517,14 @@ struct page *__read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
+>   */
+>  struct page *read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
+>  				   struct vm_area_struct *vma,
+> -				   unsigned long addr, bool do_poll,
+> -				   struct swap_iocb **plug)
+> +				   unsigned long addr, struct swap_iocb **plug)
+>  {
+>  	bool page_was_allocated;
+>  	struct page *retpage = __read_swap_cache_async(entry, gfp_mask,
+>  			vma, addr, &page_was_allocated);
+>  
+>  	if (page_was_allocated)
+> -		swap_readpage(retpage, do_poll, plug);
+> +		swap_readpage(retpage, false, plug);
+>  
+>  	return retpage;
 >  }
-> diff --git a/arch/arm/kernel/entry-ftrace.S b/arch/arm/kernel/entry-ftrace.S
-> index 3e7bcaca5e07..d41a1676608c 100644
-> --- a/arch/arm/kernel/entry-ftrace.S
-> +++ b/arch/arm/kernel/entry-ftrace.S
-> @@ -257,11 +257,13 @@ ENDPROC(ftrace_graph_regs_caller)
+> @@ -620,7 +619,7 @@ struct page *swap_cluster_readahead(swp_entry_t entry, gfp_t gfp_mask,
+>  	struct swap_info_struct *si = swp_swap_info(entry);
+>  	struct blk_plug plug;
+>  	struct swap_iocb *splug = NULL;
+> -	bool do_poll = true, page_allocated;
+> +	bool page_allocated;
+>  	struct vm_area_struct *vma = vmf->vma;
+>  	unsigned long addr = vmf->address;
 >  
->  #ifdef CONFIG_FUNCTION_GRAPH_TRACER
->  ENTRY(return_to_handler)
-> -	stmdb	sp!, {r0-r3}
-> -	add	r0, sp, #16		@ sp at exit of instrumented routine
-> +	mov	ip, sp				@ sp at exit of instrumented routine
-> +	stmdb	sp!, {r0-r3, ip, lr}		@ fill fgraph_ret_regs
-> +	mov	r0, sp
->  	bl	ftrace_return_to_handler
-> -	mov	lr, r0			@ r0 has real ret addr
-> -	ldmia	sp!, {r0-r3}
-> +	mov	lr, r0				@ r0 has real ret addr
-> +	ldmia	sp, {r0-r3}
-> +	add	sp, sp, #FGRET_REGS_SIZE	@ restore stack pointer
->  	ret	lr
->  ENDPROC(return_to_handler)
->  #endif
-
+> @@ -628,7 +627,6 @@ struct page *swap_cluster_readahead(swp_entry_t entry, gfp_t gfp_mask,
+>  	if (!mask)
+>  		goto skip;
+>  
+> -	do_poll = false;
+>  	/* Read a page_cluster sized and aligned cluster around offset. */
+>  	start_offset = offset & ~mask;
+>  	end_offset = offset | mask;
+> @@ -660,7 +658,7 @@ struct page *swap_cluster_readahead(swp_entry_t entry, gfp_t gfp_mask,
+>  	lru_add_drain();	/* Push any new pages onto the LRU now */
+>  skip:
+>  	/* The page was likely read above, so no need for plugging here */
+> -	return read_swap_cache_async(entry, gfp_mask, vma, addr, do_poll, NULL);
+> +	return read_swap_cache_async(entry, gfp_mask, vma, addr, NULL);
+>  }
+>  
+>  int init_swap_address_space(unsigned int type, unsigned long nr_pages)
+> @@ -825,7 +823,7 @@ static struct page *swap_vma_readahead(swp_entry_t fentry, gfp_t gfp_mask,
+>  skip:
+>  	/* The page was likely read above, so no need for plugging here */
+>  	return read_swap_cache_async(fentry, gfp_mask, vma, vmf->address,
+> -				     ra_info.win == 1, NULL);
+> +				     NULL);
+>  }
+>  
+>  /**
