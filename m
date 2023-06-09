@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF407298FE
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 14:05:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED047298FC
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 14:05:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239805AbjFIMFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 08:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51970 "EHLO
+        id S239809AbjFIMFJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 08:05:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240217AbjFIME6 (ORCPT
+        with ESMTP id S240233AbjFIME7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 08:04:58 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F5D730FB
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 05:04:32 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-662f0feafb2so1317702b3a.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 05:04:32 -0700 (PDT)
+        Fri, 9 Jun 2023 08:04:59 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092C1185
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 05:04:35 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-51452556acdso543718a12.2
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 05:04:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1686312272; x=1688904272;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lp6OV13Bt/hNYfWu+dUWpmpBFuOi+D6XcFIiA8tjOKg=;
-        b=PRc3ZLG9xumYTe3iNTpYxXmSIfnSJd3hDh7S5Kbt9/Im5mvIeUsyviNVibu6klxK4i
-         A2qhQgXsIsD4vx5O6T/e9xkVtT6XySDs3rp6HVIU+P2iyuE/6ugFVGT+GJQTll5OkUnD
-         nrc65hI+bajJDfpIq0Yfm8XovTN0AiqZnU7deGI0gtJ8C8lqDPzdxBx47MVXwRmtj1OF
-         T3g2sr5SU8kShraGEVEpWfve2NHe5Q/eje488uWjHo2du6l4xBVDNYChX2pON9axAJd8
-         i96aK6DqlBqd7CvDHL8aMoabvlhd5FYQDMh6jDiaTfH9EPUe9ZzmC0CXSqgV1hYezvPc
-         JXQg==
+        d=bytedance.com; s=google; t=1686312274; x=1688904274;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h6we1XLVpJvFDKToAtCSdGG7AESFIveH8POVJHK7ygw=;
+        b=PC+79P6zld1xHv0iEHUypxLnb5f8t146nEumIY8vCPreM6HtGZs171xPu43YSEfAf/
+         8tXWLXLwlc9ooEQ0fJ6wWh/m089QFWFXnDemDLdCN5bCHqmnsrgAp5e+NsT6yw3mkXir
+         ONjMHZPTMPaCQHufwndsdcuzCIi3Z/SyDW63FuzJnKgNWFlnvj7rSG5G+1t0nZda0KAK
+         lJ80H5jIzAP1DLiE7cyVTtFL1ZkvrkP/2cU6O8ZxpsMwaVfyV5TyCHDVztVhJftPdBjD
+         VQj+jNKOkuTjUvSwWOZbkIWpLkhLxZJ7dtq0gV1dqRvurp41kzdhjk9GF0xDSl4gljnC
+         iOWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686312272; x=1688904272;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lp6OV13Bt/hNYfWu+dUWpmpBFuOi+D6XcFIiA8tjOKg=;
-        b=ZVbHZkMA5pOovsXD6M1BEGS6d23iK+bQWXJzrVeFFrzQZvCtkRXJCf1j5WzBKZ0nq1
-         9gKxvptu0JDo+YnZRPjSOc7Wq+ucjLJhUcYlYQZv3AXYfBvy965yilpGfAgqCZ4q15Bd
-         P3q9zFj/040JN1jyyhXFXR8AtRpNvUhk/EtRWbq7AyaMnq7PCSGrlwfo4bC/mRT5O3bc
-         qOLmWTO7HljwUEjvC43c2YkHjDVArz8jBKEa+JTQQU8YOlEG/cHM/i9I59wsiUN50w4T
-         pm0BlbaKJ/1m0YtNMOvC7RgRbSY2lpd2nrJf6BT6lTGp+Hj+GMD3WcB+2GPxg9Vzol/q
-         OCrw==
-X-Gm-Message-State: AC+VfDxUKPA7351v3Zo9hXZsyXwHZblhlWJ9IWN5F2c4Naf7tVeuhAm3
-        6X7mdcwhSQPhTHarxo+o2JmnSQ==
-X-Google-Smtp-Source: ACHHUZ4OD6GZXbvCpliG4gL749ujSXX9biD9kK3KxajdWPsOXlBfI8UPCGzSFWI56XgAwmROj6qpJg==
-X-Received: by 2002:a05:6a20:3947:b0:10c:2c30:4765 with SMTP id r7-20020a056a20394700b0010c2c304765mr2091168pzg.1.1686312271708;
-        Fri, 09 Jun 2023 05:04:31 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686312274; x=1688904274;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=h6we1XLVpJvFDKToAtCSdGG7AESFIveH8POVJHK7ygw=;
+        b=M6FZGKd0AnvfmmoZo4qmplVsKRppDRBjSu1Z7G0t1SoupaUtBx6ftcYvXDwmX1aUmo
+         Cquq5icrbBKHg8WqFZ84NJL1TasdGhWrtSrZByhtxQ1V8aLHcqGJx3t3QBrNPA091eM4
+         UDdenEWQ5b+3ZugBg9o4LYpNmb+k17dKy9k1gMBfp2lrHvZkoAVeDTB8bUKnjjs9wWRX
+         plj2FDk+w3vPXdK5jlhTuwY3D5LdB+mnJ9w2acKKyupbpdXgk4jUhG0dlzzaOwIYr6QU
+         c4oKpcXmw1NjU+Rb0juU68UaNlbMVboT6KGc9iROVY3z93qffYSb43B0Lk+TMrDAPkAv
+         ow2Q==
+X-Gm-Message-State: AC+VfDxRpsb5ziyRzVx8ZM299xgT3Eb7i3gAI8UKa3pKNj2zzhdO6shz
+        /5qScELYqPdYmj6QDbx3vK+caw==
+X-Google-Smtp-Source: ACHHUZ4c7S/hhzd9J/cuoih1FnFVo/eBjSB6PM9tKj0JZeYoff2Wj+X+185zSOQly4NC+px2oyVHDw==
+X-Received: by 2002:a17:90b:164c:b0:259:c73:65e6 with SMTP id il12-20020a17090b164c00b002590c7365e6mr816107pjb.23.1686312274507;
+        Fri, 09 Jun 2023 05:04:34 -0700 (PDT)
 Received: from localhost.localdomain ([139.177.225.249])
-        by smtp.gmail.com with ESMTPSA id v12-20020a65568c000000b00514256c05c2sm2619168pgs.7.2023.06.09.05.04.29
+        by smtp.gmail.com with ESMTPSA id v12-20020a65568c000000b00514256c05c2sm2619168pgs.7.2023.06.09.05.04.32
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 09 Jun 2023 05:04:31 -0700 (PDT)
+        Fri, 09 Jun 2023 05:04:34 -0700 (PDT)
 From:   Peng Zhang <zhangpeng.00@bytedance.com>
 To:     Liam.Howlett@oracle.com
 Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org,
         Peng Zhang <zhangpeng.00@bytedance.com>
-Subject: [PATCH v2 0/3] Optimize the fast path of mas_store()
-Date:   Fri,  9 Jun 2023 20:03:44 +0800
-Message-Id: <20230609120347.63936-1-zhangpeng.00@bytedance.com>
+Subject: [PATCH v2 1/3] maple_tree: add test for mas_wr_modify() fast path
+Date:   Fri,  9 Jun 2023 20:03:45 +0800
+Message-Id: <20230609120347.63936-2-zhangpeng.00@bytedance.com>
 X-Mailer: git-send-email 2.37.0 (Apple Git-136)
+In-Reply-To: <20230609120347.63936-1-zhangpeng.00@bytedance.com>
+References: <20230609120347.63936-1-zhangpeng.00@bytedance.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,25 +73,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add fast paths for mas_wr_append() and mas_wr_slot_store() respectively.
-The newly added fast path of mas_wr_append() is used in fork() and how
-much it benefits fork() depends on how many VMAs are duplicated.
+Add tests for all cases of mas_wr_append() and mas_wr_slot_store().
 
-Changes since v1:
- - Revise comment and commit log. [3/3]
- - Add test for mas_wr_modify() fast path. [1/3]
+Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
+---
+ lib/test_maple_tree.c | 65 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
 
-v1: https://lore.kernel.org/lkml/20230602075353.5917-1-zhangpeng.00@bytedance.com/
-
-Peng Zhang (3):
-  maple_tree: add test for mas_wr_modify() fast path
-  maple_tree: optimize mas_wr_append(), also improve duplicating VMAs
-  maple_tree: add a fast path case in mas_wr_slot_store()
-
- lib/maple_tree.c      | 69 ++++++++++++++++++++++++++++---------------
- lib/test_maple_tree.c | 65 ++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 111 insertions(+), 23 deletions(-)
-
+diff --git a/lib/test_maple_tree.c b/lib/test_maple_tree.c
+index 15d7b7bce7d6..9403472af3d7 100644
+--- a/lib/test_maple_tree.c
++++ b/lib/test_maple_tree.c
+@@ -1159,6 +1159,71 @@ static noinline void __init check_ranges(struct maple_tree *mt)
+ 	MT_BUG_ON(mt, !mt_height(mt));
+ 	mtree_destroy(mt);
+ 
++	/* Check in-place modifications */
++	mt_init_flags(mt, MT_FLAGS_ALLOC_RANGE);
++	/* Append to the start of last range */
++	mt_set_non_kernel(50);
++	for (i = 0; i <= 500; i++) {
++		val = i * 5 + 1;
++		val2 = val + 4;
++		check_store_range(mt, val, val2, xa_mk_value(val), 0);
++	}
++
++	/* Append to the last range without touching any boundaries */
++	for (i = 0; i < 10; i++) {
++		val = val2 + 5;
++		val2 = val + 4;
++		check_store_range(mt, val, val2, xa_mk_value(val), 0);
++	}
++
++	/* Append to the end of last range */
++	val = val2;
++	for (i = 0; i < 10; i++) {
++		val += 5;
++		MT_BUG_ON(mt, mtree_test_store_range(mt, val, ULONG_MAX,
++						     xa_mk_value(val)) != 0);
++	}
++
++	/* Overwriting the range and over a part of the next range */
++	for (i = 10; i < 30; i += 2) {
++		val = i * 5 + 1;
++		val2 = val + 5;
++		check_store_range(mt, val, val2, xa_mk_value(val), 0);
++	}
++
++	/* Overwriting a part of the range and over the next range */
++	for (i = 50; i < 70; i += 2) {
++		val2 = i * 5;
++		val = val2 - 5;
++		check_store_range(mt, val, val2, xa_mk_value(val), 0);
++	}
++
++	/*
++	 * Expand the range, only partially overwriting the previous and
++	 * next ranges
++	 */
++	for (i = 100; i < 130; i += 3) {
++		val = i * 5 - 5;
++		val2 = i * 5 + 1;
++		check_store_range(mt, val, val2, xa_mk_value(val), 0);
++	}
++
++	/*
++	 * Expand the range, only partially overwriting the previous and
++	 * next ranges, in RCU mode
++	 */
++	mt_set_in_rcu(mt);
++	for (i = 150; i < 180; i += 3) {
++		val = i * 5 - 5;
++		val2 = i * 5 + 1;
++		check_store_range(mt, val, val2, xa_mk_value(val), 0);
++	}
++
++	MT_BUG_ON(mt, !mt_height(mt));
++	mt_validate(mt);
++	mt_set_non_kernel(0);
++	mtree_destroy(mt);
++
+ 	/* Test rebalance gaps */
+ 	mt_init_flags(mt, MT_FLAGS_ALLOC_RANGE);
+ 	mt_set_non_kernel(50);
 -- 
 2.20.1
 
