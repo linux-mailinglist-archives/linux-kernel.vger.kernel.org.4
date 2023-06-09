@@ -2,148 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7499728C57
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 02:23:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 499B6728C5F
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 02:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236982AbjFIAXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 20:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42194 "EHLO
+        id S234297AbjFIA0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 20:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjFIAXB (ORCPT
+        with ESMTP id S229605AbjFIA0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 20:23:01 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0A22D72;
-        Thu,  8 Jun 2023 17:23:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686270180; x=1717806180;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=hfORcgQzuOPbSklLPJdOW8LVCo5d5Go2LF+sADUuhiU=;
-  b=KKj2g/8okkDMbg1JK1vlqBo5WO8T2Yg1lw+o3aF091wCdUalOduElHZE
-   /Dm25vHxeFMHoGjV6sWSn5Su2YITlWNga4vMxgXE7dDv2kaHbMS3GgBB+
-   DCsYj58YJHY0MfAkyw2mT/fLUsyKAEFZ2x91wIwyDoHDjHnn0rfnygqnq
-   udMIAAAlFmWvv9fmmv5e32stVYtfwOz2z395WKhNnSwHjmxOv0irJ/KtP
-   KzeYl+aU2ZmFXkRyjXDZ/qalA+IdSgFWcYDGP09H4ACBHSCXnlwt9A+rT
-   1DmVw/jx3J7LG0OkeF6IfOuLjqXQU3ZbmHyMi3UlFPQ34jSHNAptUCuBJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="421061871"
-X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
-   d="scan'208";a="421061871"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 17:22:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="884393196"
-X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
-   d="scan'208";a="884393196"
-Received: from yjiang5-mobl.amr.corp.intel.com (HELO localhost) ([10.144.161.97])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 17:22:57 -0700
-Date:   Thu, 8 Jun 2023 17:22:57 -0700
-From:   Yunhong Jiang <yunhong.jiang@linux.intel.com>
-To:     Andrew Cooper <andrew.cooper3@citrix.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [patch] x86/realmode: Make stack lock work in trampoline_compat()
-Message-ID: <20230609002257.GA3661@yjiang5-mobl.amr.corp.intel.com>
-References: <20230508185218.962208640@linutronix.de>
- <20230524204818.3tjlwah2euncxzmh@box.shutemov.name>
- <87y1lbl7r6.ffs@tglx>
- <87sfbhlwp9.ffs@tglx>
- <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name>
- <87bki3kkfi.ffs@tglx>
- <20230529203129.sthnhzgds7ynddxd@box.shutemov.name>
- <87h6rujdvl.ffs@tglx>
- <20230608233402.GA3430@yjiang5-mobl.amr.corp.intel.com>
- <a56a06c2-73fd-5295-3f6c-922ccb078488@citrix.com>
+        Thu, 8 Jun 2023 20:26:10 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2402D72;
+        Thu,  8 Jun 2023 17:26:09 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-652328c18d5so937427b3a.1;
+        Thu, 08 Jun 2023 17:26:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686270369; x=1688862369;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SsLHpUV3U4RHcYmttv82/JvsSyFIcyIPeIQmZazPerg=;
+        b=JVxMAS5Rql8+6bB8cFnlTJE1Y+0PDTB5UwnRSgYerzJLulSMpalR6I9yuAcrJp2oZG
+         pyktcLw+3fZ6jEQx9/pTy5xKcYdSTO4jgULDn0kS3QgFQ68O9oouVPSDfGhPGqyBtK/t
+         s1x53uaxxiVHwYGaLoSPg4ZRrcAxJdnrKLkRIiNMgAaDOr3ekZ6GOX2JWE8n721BeJc0
+         bKnKNdgd2P7ouW95NZPekHQaIYaoeLoJnIwoHhg6hi8gYOluOWmJ3vMGPgnWJMnyppgw
+         mOZpLLgzrdV1Yn213xCgdn6CtR/7I1GiyinI6EWoR/GgCQSLtIWI9wSG++l6V6XaYFDf
+         fF0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686270369; x=1688862369;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SsLHpUV3U4RHcYmttv82/JvsSyFIcyIPeIQmZazPerg=;
+        b=cOdvQkH4rbHr7hd7lWWnUgrOoQycWYLrPeawwpr9DFrHMWtY++BGOa0ta2wFIqb4DM
+         SzT5LmNPaJ1VIyQE8tiu+DqFw9NIkZRDrdyYG4mQ+dVqIcBog4jNIleDARgAPBho7zvr
+         SUpgaEn54jo4Vuuo51FwGpiDapuraPw+J1FI/aVkdSVYUo4G+X4TqmPBFW2kgINKcpwL
+         j1C+RbGwcOeBXV4JlOUF7DkWzMjr8KvwJ/0GF62NSeLMO6kLl7HAO4B2aefic2wL+ZyR
+         ybJklqLdhq0Udq94gh4k+dj7n9pbdtPL4LgAm1VDNAJYPdulKxqS/o9BYgtVOI3NVslQ
+         EndQ==
+X-Gm-Message-State: AC+VfDyhW+ZLiLqMsSGnm1gMqGeo1tdzMnJk38NGlZ8oNLH0KvABtRBh
+        06LYILpCyJYO6v2JUK8GfKM=
+X-Google-Smtp-Source: ACHHUZ5RHs5idAHmUIW80YZUdFMTvAyPG7GtZS73qmDLkqkEZVWKhZn3UsojLdEcAAL5NpXAKUMBew==
+X-Received: by 2002:a05:6a21:6d91:b0:10d:3ff2:452b with SMTP id wl17-20020a056a216d9100b0010d3ff2452bmr5743417pzb.18.1686270369049;
+        Thu, 08 Jun 2023 17:26:09 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s64-20020a635e43000000b0053efc8ac7e9sm1771643pgb.29.2023.06.08.17.26.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 17:26:08 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 8 Jun 2023 17:26:06 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 4.14 00/61] 4.14.317-rc1 review
+Message-ID: <2ec644ea-e58e-44da-9bc8-25cf9a942714@roeck-us.net>
+References: <20230607200835.310274198@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a56a06c2-73fd-5295-3f6c-922ccb078488@citrix.com>
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SCC_BODY_URI_ONLY,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230607200835.310274198@linuxfoundation.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 12:57:46AM +0100, Andrew Cooper wrote:
-> On 09/06/2023 12:34 am, Yunhong Jiang wrote:
-> > On Tue, May 30, 2023 at 12:46:22PM +0200, Thomas Gleixner wrote:
-> >> The stack locking and stack assignment macro LOAD_REALMODE_ESP fails to
-> >> work when invoked from the 64bit trampoline entry point:
-> >>
-> >> trampoline_start64
-> >>   trampoline_compat
-> >>     LOAD_REALMODE_ESP <- lock
-> > One possibly dumb question and hope get some hints.
+On Wed, Jun 07, 2023 at 10:15:14PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.14.317 release.
+> There are 61 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> There's a phrase.  "The only dumb question is the one not asked".
+> Responses should be made by Fri, 09 Jun 2023 20:07:31 +0000.
+> Anything received after that time might be too late.
 > 
-> If you have this question, there's an excellent chance that someone else
-> reading this thread has the same question.
-> 
-> >  The LOAD_REALMODE_ESP is
-> > defined under .code16 directive and will be used by 32-bit mode caller also. Is
-> > it ok because the instructions there will be same for both 16-bit and 32-bit? I
-> > checked
-> > https://ftp.gnu.org/old-gnu/Manuals/gas-2.9.1/html_chapter/as_16.html#SEC205 and
-> > don't find much information there.
-> 
-> The position of the LOAD_REALMODE_ESP .macro itself doesn't matter. 
-> It's just some text which gets pasted elsewhere.  Imagine it just the
-> same as running the C preprocessor on a file before compiling it.
-> 
-> As you note, some expansions of the macro are in .code16, and some are
-> not.  This does result in different bytes being emitted.  The default
-> operands size flips between .code16 and .code32, so there will be some
-> 0x66 prefixes in one mode, and not in others.
-> 
-> The important point is the l suffix on btsl, which forces it to be long
-> (32bit) irrespective of the default operand size.
-> 
-> So yes, it will work, but that's because gas is handling the differing
-> encodings automatically based on the default operand size where the
-> LOAD_REALMODE_ESP gets expanded.
-> 
-> Hope this helps,
-Thank you for the explaination, it's quite clear now.
-> 
-> ~Andrew
+
+Build results:
+	total: 168 pass: 167 fail: 1
+Failed builds:
+	x86_64:tools/perf
+Qemu test results:
+	total: 430 pass: 430 fail: 0
+
+I don't know what causes the perf build failure; there has been no change.
+I suspect it is because I recently switched from Ubuntu 20.04 to 22.04.
+I don't think it is worth bothering; I'll just stop build testing perf on
+that branch.
+
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+
+Guenter
