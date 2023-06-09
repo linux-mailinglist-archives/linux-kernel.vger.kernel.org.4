@@ -2,79 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E74572A10B
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 19:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FDCE72A111
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 19:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbjFIRPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 13:15:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34394 "EHLO
+        id S230162AbjFIRQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 13:16:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbjFIRPA (ORCPT
+        with ESMTP id S229662AbjFIRQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 13:15:00 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84F53AA3
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 10:14:52 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3f9d619103dso1031cf.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 10:14:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686330892; x=1688922892;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9+m9vgj+axxj/sV+0YTVNEhE062Nk+Gu6UrzhqyO0tA=;
-        b=5QVk/GVbkZi6vTXzW3g5GqMBVejzLD9NBNYpv4o72oGJn/J9ohwUsJFscyIffB9GKP
-         +Yr+wSrkRIkEkEzqdtiERJH3m/4E6PRftxA5rgxZFEKqw+CMnEVtfeeToSaYdMCAi+11
-         atr3F3ebDuu0FOPo7H6436wh9kni4AWX7hZL8sw27ndPGNpXaZVYEpEG2RJWzeFKCXZo
-         yZGzD5qAlvF9i2SCJab0sEELk04jVvwJoLtIHTdrNofSYUPqTDgJ5cTm27/h3OKfnFIT
-         A4j9IDF/+uE5PLdIG7gMqfl/Yp1BB/LQcI4ywhFwwLXApUnMP3oC7CFRTZ2qfS+7kyd3
-         2D+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686330892; x=1688922892;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9+m9vgj+axxj/sV+0YTVNEhE062Nk+Gu6UrzhqyO0tA=;
-        b=UpsuzTZ9JITm5HfGPs8mcCBS026WUIDWX9Y9LH6FOYDafX0fiv2S/HZvEJWPsG2t4+
-         lqJGOp75fFQQq32/RX7VKpXYnvAYms8bg33Bh1QV5EDxaSGgn9y7tkmxt4gM66Xsky+u
-         L6Y9XXsz1uhf1zrZA419MR6ZA8h3HwjqbTg5mikTgFzSJbah+Rmrot7204+tPeHkHnMT
-         2n2hYvw0Jf8rfHKVhKaawp++SNWk4PmgwOfqSMaUL8cfkov9MIzU3CLegnvtlj+rvRam
-         VfwCGeBJN3BVXzHClcfIhowfm1c1PWuOGfxNEVjNUr7oF1KDMp0QS76e2Bh3G4lBR/7Y
-         5LJg==
-X-Gm-Message-State: AC+VfDxqBG/3GEvIirLiQAlPiuB1F68KkZl29VwuGlWvw9XBY6fIpPAS
-        ZlOtbzZGtmqZc4E1K/U/BXXlLJz6h1XcTv16R2PVWQ==
-X-Google-Smtp-Source: ACHHUZ7kjPrLteDdzJ8Lax2PDdtS+UKrPLEFcXxTn/BvqDKFG1FGPoVwEG3yjdzRCEixe6dCEELWVtm1HPjzZ6K8efw=
-X-Received: by 2002:ac8:5784:0:b0:3e8:684b:195d with SMTP id
- v4-20020ac85784000000b003e8684b195dmr495097qta.10.1686330891802; Fri, 09 Jun
- 2023 10:14:51 -0700 (PDT)
+        Fri, 9 Jun 2023 13:16:17 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81097E4A;
+        Fri,  9 Jun 2023 10:16:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=fJHuQ8zacvpe7ZvXvHuaj0SxXvb3ZjOuhHjQXHcZ+tc=; b=mBz5wKWg4QpH7XJ7Um49Ge35eK
+        21DL30tvw1vdJEcJM4x7mEM3JRl7ClTuABp7L1eX3yXFf7YfJEZgfRS7KujAduEaLEAQb0DXL6X67
+        EUHo0181Ghca2uYi9fsz+QAV9TD8dPenVCHeaOxSPTVnGDFHgF+zUq+Psc0aMlyjd478=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1q7fiW-00FMuM-A0; Fri, 09 Jun 2023 19:16:04 +0200
+Date:   Fri, 9 Jun 2023 19:16:04 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Alexis =?iso-8859-1?Q?Lothor=E9?= <alexis.lothore@bootlin.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        paul.arola@telus.com, scott.roberts@telus.com
+Subject: Re: [PATCH net-next 2/2] net: dsa: mv88e6xxx: implement egress tbf
+ qdisc for 6393x family
+Message-ID: <176f073a-b5ab-4d8a-8850-fcd8eff65aa7@lunn.ch>
+References: <20230609141812.297521-1-alexis.lothore@bootlin.com>
+ <20230609141812.297521-3-alexis.lothore@bootlin.com>
+ <d196f8c7-19f7-4a7c-9024-e97001c21b90@lunn.ch>
+ <dbec77de-ee34-e281-3dd4-2332116a0910@bootlin.com>
 MIME-Version: 1.0
-References: <20230609013901.79250-1-wangkefeng.wang@huawei.com>
-In-Reply-To: <20230609013901.79250-1-wangkefeng.wang@huawei.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Fri, 9 Jun 2023 11:14:15 -0600
-Message-ID: <CAOUHufaiCjOnxKb0g1myg9sdZp=hVMhbCche=duTxf5+9y1UAA@mail.gmail.com>
-Subject: Re: [PATCH] mm: kill [add|del]_page_to_lru_list()
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Matthew Wilcox <willy@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dbec77de-ee34-e281-3dd4-2332116a0910@bootlin.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 8, 2023 at 7:23=E2=80=AFPM Kefeng Wang <wangkefeng.wang@huawei.=
-com> wrote:
->
-> Directly call lruvec_del_folio(), and drop unused page interfaces.
->
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> Yes, I can do that (or maybe -EINVAL to match Vladimir's comment ?). I think
+> it's worth mentioning that I encountered an issue regarding those values during
+> tests: I use tc program to set the tbf, and I observed that tc does not even
+> reach kernel to set the qdisc if we pass no burst/latency value OR if we set it
+> to 0. So tc enforces right on userspace side non-zero value for those
+> parameters, and I have passed random values and ignored them on kernel side.
 
-Acked-by: Yu Zhao <yuzhao@google.com>
+That is not good. Please take a look around and see if any other
+driver offloads TBF, and what they do with burst.
+
+> Checking available doc about tc-tbf makes me feel like that indeed a TBF qdisc
+> command without burst or latency value makes no sense, except my use case can
+> not have such values. That's what I struggled a bit to find a proper qdisc to
+> match hardware cap. I may fallback to a custom netlink program to improve testing.
+
+We don't really want a custom application, since we want users to use
+TC to set this up.
+
+Looking at the 6390 datasheet, Queue Counter Registers, mode 8 gives
+the number of egress buffers for a port. You could validate that the
+switch has at least the requested number of buffers assigned to the
+port? There is quite a bit you can configure, so maybe there is a way
+to influence the number of buffers, so you can actually implement the
+burst parameter?
+
+      Andrew
