@@ -2,295 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 640897293E6
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B5477293EE
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239568AbjFIIyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 04:54:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53462 "EHLO
+        id S240030AbjFIIzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 04:55:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241144AbjFIIxR (ORCPT
+        with ESMTP id S241090AbjFIIyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 04:53:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0813E173A;
-        Fri,  9 Jun 2023 01:53:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7442865525;
-        Fri,  9 Jun 2023 08:53:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86B8AC433D2;
-        Fri,  9 Jun 2023 08:53:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686300793;
-        bh=hDhJ5dTiTEaQ5xhEJqEwqqr0ZAnInuphMXzURUlqGdY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PBRG4/1XnRSuEnnyFHuoAj3qpcW/L4Fm6QInBRP+IKfWfWtEeQ+Tmd2JRDMYF3E59
-         5FzbAuu6ER3CiqXz7yahcO5b9oY57hkiYSyo5DuHz9FwWZJ95rXl/b/fSnqLXgQ229
-         nDLCypHq37e5UNs3P5A1uSntrJDnv80jw3dMY+aM=
-Date:   Fri, 9 Jun 2023 10:53:11 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dennis Zhou <dennis@kernel.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v2] mmc: inline the first mmc_scan() on mmc_start_host()
-Message-ID: <2023060922-nimbly-emblaze-bd6b@gregkh>
-References: <20230329202148.71107-1-dennis@kernel.org>
- <ZCTOMVjW+pnZVGsQ@snowbird>
- <CAPDyKFrcdJuyA9B-JDReacT2z1ircDoY4oTXZQ8AVFk6UEFYsw@mail.gmail.com>
- <ZCclEE6Qw3on7/eO@snowbird>
- <CAPDyKFqc33gUYXpY==jbNrOiba2_xUYLs-bv0RTYYU5d8T0VBA@mail.gmail.com>
- <CAPDyKFos3i60U0g0vJstetvLMyouiTpUP8-Jop_LMB9T-ZNU=w@mail.gmail.com>
- <ZII-vJWGb7F97S_A@V92F7Y9K0C.corp.robot.car>
- <2023060930-uphold-collie-3ec5@gregkh>
- <ZILRw9MBGNwH9NsG@V92F7Y9K0C.lan>
+        Fri, 9 Jun 2023 04:54:15 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E7AD30ED;
+        Fri,  9 Jun 2023 01:53:43 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4012FAB6;
+        Fri,  9 Jun 2023 01:54:28 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.25.215])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 501D23F71E;
+        Fri,  9 Jun 2023 01:53:41 -0700 (PDT)
+Date:   Fri, 9 Jun 2023 09:53:38 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Junhao He <hejunhao3@huawei.com>
+Cc:     will@kernel.org, jonathan.cameron@huawei.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-doc@vger.kernel.org, linuxarm@huawei.com,
+        yangyicong@huawei.com, shenyang39@huawei.com,
+        prime.zeng@hisilicon.com
+Subject: Re: [PATCH v4 1/3] drivers/perf: hisi: Add support for HiSilicon
+ H60PA and PAv3 PMU driver
+Message-ID: <ZILokkt17/yCPQQ2@FVFF77S0Q05N>
+References: <20230609075608.36559-1-hejunhao3@huawei.com>
+ <20230609075608.36559-2-hejunhao3@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZILRw9MBGNwH9NsG@V92F7Y9K0C.lan>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230609075608.36559-2-hejunhao3@huawei.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 12:16:19AM -0700, Dennis Zhou wrote:
-> Hi Greg,
+Hi,
+
+This generally looks ok, but I have a few minor comments.
+
+On Fri, Jun 09, 2023 at 03:56:06PM +0800, Junhao He wrote:
+> Compared to the original PA device, H60PA offers higher bandwidth.
+> The H60PA is a new device and we use HID to differentiate them.
 > 
-> On Fri, Jun 09, 2023 at 08:19:51AM +0200, Greg KH wrote:
-> > On Thu, Jun 08, 2023 at 01:49:00PM -0700, Dennis Zhou wrote:
-> > > On Fri, May 12, 2023 at 01:42:51PM +0200, Ulf Hansson wrote:
-> > > > + Linus,
-> > > > 
-> > > > Hi Dennis,
-> > > > 
-> > > > On Mon, 3 Apr 2023 at 11:50, Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > > > >
-> > > > > On Fri, 31 Mar 2023 at 20:23, Dennis Zhou <dennis@kernel.org> wrote:
-> > > > > >
-> > > > > > Hi Ulf,
-> > > > > >
-> > > > > > On Fri, Mar 31, 2023 at 02:43:10PM +0200, Ulf Hansson wrote:
-> > > > > > > On Thu, 30 Mar 2023 at 01:48, Dennis Zhou <dennis@kernel.org> wrote:
-> > > > > > > >
-> > > > > > > > When using dm-verity with a data partition on an emmc device, dm-verity
-> > > > > > > > races with the discovery of attached emmc devices. This is because mmc's
-> > > > > > > > probing code sets up the host data structure then a work item is
-> > > > > > > > scheduled to do discovery afterwards. To prevent this race on init,
-> > > > > > > > let's inline the first call to detection, __mm_scan(), and let
-> > > > > > > > subsequent detect calls be handled via the workqueue.
-> > > > > > >
-> > > > > > > In principle, I don't mind the changes in $subject patch, as long as
-> > > > > > > it doesn't hurt the overall initialization/boot time. Especially, we
-> > > > > > > may have more than one mmc-slot being used, so this needs to be well
-> > > > > > > tested.
-> > > > > > >
-> > > > > >
-> > > > > > I unfortunately don't have a device with multiple mmcs available. Is
-> > > > > > this something you could help me with?
-> > > > >
-> > > > > Yes, I can help to test. Allow me a few days to see what I can do.
-> > > > >
-> > > > > Note that, just having one eMMC and one SD card should work too. It
-> > > > > doesn't have to be multiple eMMCs.
-> > > > >
-> > > > > >
-> > > > > > > Although, more importantly, I fail to understand how this is going to
-> > > > > > > solve the race condition. Any I/O request to an eMMC or SD requires
-> > > > > > > the mmc block device driver to be up and running too, which is getting
-> > > > > > > probed from a separate module/driver that's not part of mmc_rescan().
-> > > > > >
-> > > > > > I believe the call chain is something like this:
-> > > > > >
-> > > > > > __mmc_rescan()
-> > > > > >     mmc_rescan_try_freq()
-> > > > > >         mmc_attach_mmc()
-> > > > > >             mmc_add_card()
-> > > > > >                 device_add()
-> > > > > >                     bus_probe_device()
-> > > > > >                         mmc_blk_probe()
-> > > > > >
-> > > > > > The initial calling of this is the host probe. So effectively if there
-> > > > > > is a card attached, we're inlining the device_add() call for the card
-> > > > > > attached rather than waiting for the workqueue item to kick off.
-> > > > > >
-> > > > > > dm is a part of late_initcall() while mmc is a module_init(), when built
-> > > > > > in becoming a device_initcall(). So this solves a race via the initcall
-> > > > > > chain. In the current state, device_initcall() finishes and we move onto
-> > > > > > the late_initcall() phase. But now, dm is racing with the workqueue to
-> > > > > > init the attached emmc device.
-> > > > >
-> > > > > You certainly have a point!
-> > > > >
-> > > > > This should work when the mmc blk module is built-in. Even if that
-> > > > > doesn't solve the entire problem, it should be a step in the right
-> > > > > direction.
-> > > > >
-> > > > > I will give it some more thinking and run some tests at my side, then
-> > > > > I will get back to you again.
-> > > > >
-> > > > > Kind regards
-> > > > > Uffe
-> > > > >
-> > > > > > >
-> > > > > > > >
-> > > > > > > > Signed-off-by: Dennis Zhou <dennis@kernel.org>
-> > > > > > > > ---
-> > > > > > > > Sigh.. fix missing static declaration.
-> > > > > > > >
-> > > > > > > >  drivers/mmc/core/core.c | 15 +++++++++++----
-> > > > > > > >  1 file changed, 11 insertions(+), 4 deletions(-)
-> > > > > > > >
-> > > > > > > > diff --git a/drivers/mmc/core/core.c b/drivers/mmc/core/core.c
-> > > > > > > > index 368f10405e13..fda7ee57dee3 100644
-> > > > > > > > --- a/drivers/mmc/core/core.c
-> > > > > > > > +++ b/drivers/mmc/core/core.c
-> > > > > > > > @@ -2185,10 +2185,8 @@ int mmc_card_alternative_gpt_sector(struct mmc_card *card, sector_t *gpt_sector)
-> > > > > > > >  }
-> > > > > > > >  EXPORT_SYMBOL(mmc_card_alternative_gpt_sector);
-> > > > > > > >
-> > > > > > > > -void mmc_rescan(struct work_struct *work)
-> > > > > > > > +static void __mmc_rescan(struct mmc_host *host)
-> > > > > > > >  {
-> > > > > > > > -       struct mmc_host *host =
-> > > > > > > > -               container_of(work, struct mmc_host, detect.work);
-> > > > > > > >         int i;
-> > > > > > > >
-> > > > > > > >         if (host->rescan_disable)
-> > > > > > > > @@ -2249,6 +2247,14 @@ void mmc_rescan(struct work_struct *work)
-> > > > > > > >                 mmc_schedule_delayed_work(&host->detect, HZ);
-> > > > > > > >  }
-> > > > > > > >
-> > > > > > > > +void mmc_rescan(struct work_struct *work)
-> > > > > > > > +{
-> > > > > > > > +       struct mmc_host *host =
-> > > > > > > > +               container_of(work, struct mmc_host, detect.work);
-> > > > > > > > +
-> > > > > > > > +       __mmc_rescan(host);
-> > > > > > > > +}
-> > > > > > > > +
-> > > > > > > >  void mmc_start_host(struct mmc_host *host)
-> > > > > > > >  {
-> > > > > > > >         host->f_init = max(min(freqs[0], host->f_max), host->f_min);
-> > > > > > > > @@ -2261,7 +2267,8 @@ void mmc_start_host(struct mmc_host *host)
-> > > > > > > >         }
-> > > > > > > >
-> > > > > > > >         mmc_gpiod_request_cd_irq(host);
-> > > > > > > > -       _mmc_detect_change(host, 0, false);
-> > > > > > > > +       host->detect_change = 1;
-> > > > > > > > +       __mmc_rescan(host);
-> > > > > > > >  }
-> > > > > > > >
-> > > > > > > >  void __mmc_stop_host(struct mmc_host *host)
-> > > > > > > > --
-> > > > > > > > 2.40.0
-> > > > > > > >
-> > > > 
-> > > > My apologies for the long delay. I finally managed to test this.
-> > > > 
-> > > > I decided to pick an old arm32 based platform. An ST-Ericsson HREF,
-> > > > based upon the ux500 SoC. It's quite good to use for these types of
-> > > > tests as it has two eMMCs soldered, an embedded SDIO (for WiFi) and an
-> > > > SD-card slot. So in total there are 4 devices that get probed.
-> > > > 
-> > > > The SDIO card isn't detected properly, but always fails in the similar
-> > > > way (thus I left it out from the below data). I tested both with and
-> > > > without an SD card inserted during boot, to get some more data to
-> > > > compare. These are the summary from my tests:
-> > > > 
-> > > > v6.4-rc1 without SD card:
-> > > > ~2.18s - MMC1 (eMMC)
-> > > > ~3.33s - MMC3 (eMMC)
-> > > > ~5.91s - kernel boot complete
-> > > > 
-> > > > v6.4-rc1 with an SD card:
-> > > > ~2.18s - MMC1 (eMMC)
-> > > > ~3.45s - MMC3 (eMMC)
-> > > > ~3.57s - MMC2 (SD)
-> > > > ~5.76s - kernel boot complete
-> > > > 
-> > > > v6.4-rc1 + patch without SD card:
-> > > > ~2.24s - MMC1 (eMMC)
-> > > > ~3.58s - MMC3 (eMMC)
-> > > > ~5.96s - kernel boot complete
-> > > > 
-> > > > v6.4-rc1 + patch with an SD card:
-> > > > ~2.24s - MMC1 (eMMC)
-> > > > ~3.73s - MMC2 (SD)
-> > > > ~3.98s - MMC3 (eMMC)
-> > > > ~6.73s - kernel boot complete
-> > > > 
-> > > > By looking at these results, I was kind of surprised. I was thinking
-> > > > that the asynchronous probe should address the parallelism problem.
-> > > > Then I discovered that it in fact, hasn't been enabled for the mmci
-> > > > driver that is being used for this platform. Huh, I was under the
-> > > > assumption that it has been enabled for all mmc hosts by now. :-)
-> > > > 
-> > > > Okay, so I am going to run another round of tests, with async probe
-> > > > enabled for the mmci driver too. I will let you know the results as
-> > > > soon as I can.
-> > > > 
-> > > > Kind regards
-> > > > Uffe
-> > > 
-> > > Hi Uffe,
-> > > 
-> > > Kindly this has been way too long for review. It's been over 3 months.
-> > > What's going on here?
-> > > 
-> > > I think there's a misunderstanding too. Without this fix, the machine
-> > > doesn't even boot. I'm not sure why perf is the blocking question here.
-> > 
-> > Well you can not degrade performance of existing machines that work
-> > today, right?  That would be a regression and it seems that you are
-> > doing that if I read the numbers above correctly.
-> > 
+> The events supported by PAv3 and PAv2 are different. They use the
+> same HID.
+
+That's a bit unfortunate -- doesn't that mean an older kernel that knows about
+v2 will try to probe v3 as v2? Presumably things will go wrong if it pokes the
+MMIO registers?
+
+I appreciate it may be too late to change that now, but it seems like something
+to consider in future (e.g. any changes not backwards compatible with v3 should
+use a new HID).
+
+> The PMU version register is used in the driver to
+> distinguish different versions.
 > 
-> I agree that we shouldn't degrade performance of existing machines, but
-> this is a timing bug on existing platforms that have a slow enough cpu
-> such that emmc doesn't finish probing before dm-verity progresses to
-> trying to read off the device. In my opinion it's a bit unfair to trade
-> performance in the common case for not supporting all use cases. I'm
-> just trying to get my machines to boot without having to carry my own
-> patch here.
-
-I think the users of the systems you are going to slow down will take
-objection to you slowing them down.  What if you were them, what would
-you want to see here?
-
-> As a path forward I can add a command line flag as a bool to handle this
-> and that should hopefully take care of the regresion aspect to this.
-
-command line flags are horrible and should never be used.  Why can't you
-dynamically detect this type of thing and handle it that way?
-
-And yes, we do hold off in supporting new hardware (and configurations)
-to prevent existing working ones from breaking or slowing down.
-
-What is forcing you to use dm-verity on this odd hardware?  Can you not
-use other configurations instead?
-
-> > > Greg, is there another tree I can run this through?
-> > 
-> > Why would you want to route around a maintainer just to get a patch that
-> > would have to be reverted applied?  :)
-> > 
+> For each H60PA PMU, except for the overflow interrupt register, other
+> functions of the H60PA PMU are the same as the original PA PMU module.
+> It has 8-programable counters and each counter is free-running.
+> Interrupt is supported to handle counter (64-bits) overflow.
 > 
-> What's your advice here as I don't feel like I'm getting adequate
-> traction with Ulf. I think I've generally been quite patient here
-> waiting > 3 months for this patch to be reviewed.
+> Signed-off-by: Junhao He <hejunhao3@huawei.com>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Reviewed-by: Yicong Yang <yangyicong@hisilicon.com>
+> ---
+>  drivers/perf/hisilicon/hisi_uncore_pa_pmu.c | 142 +++++++++++++++++---
+>  drivers/perf/hisilicon/hisi_uncore_pmu.h    |   9 ++
+>  2 files changed, 136 insertions(+), 15 deletions(-)
 
-Maintainers are overworked, that's normal.  I suggest helping out in
-reviewing other patches in the subsystem to reduce that burden.  After
-all, you are asking someone to do something for you without much in
-return, is that fair?
+> @@ -284,6 +302,15 @@ static int hisi_pa_pmu_init_data(struct platform_device *pdev,
+>  
+>  	pa_pmu->identifier = readl(pa_pmu->base + PA_PMU_VERSION);
+>  
+> +	/* When running on v3 or later, returns the largest version supported */
+> +	if (pa_pmu->identifier >= HISI_PMU_V3)
+> +		pa_pmu->dev_info = &pa_pmu_info[2];
+> +	else if (pa_pmu->identifier == HISI_PMU_V2)
+> +		pa_pmu->dev_info = &pa_pmu_info[1];
+> +
+> +	if (!pa_pmu->dev_info || !pa_pmu->dev_info->name)
+> +		return -EINVAL;
+> +
 
-thanks,
+Why does this use indices '2' and '1'? What happened to '0'?
 
-greg k-h
+It would be a bit clearer with something like:
+
+	enum pmu_dev_info_idx {
+		HISI_PMU_DEV_INFO_V2,
+		HISI_PMU_DEV_INFO_V3,
+		NR_HISI_PMU_DEV_INFO
+	}
+
+Then the above can be:
+
+	if (pa_pmu->identifier >= HISI_PMU_V3)
+		pa_pmu->dev_info = &pa_pmu_info[PMU_DEV_INFO_V3];
+	else if (pa_pmu->identifier == HISI_PMU_V2)
+		pa_pmu->dev_info = &pa_pmu_info[PMU_DEV_INFO_V2];
+	else
+		return -EINVAL;
+	
+	if (!pa_pmu->dev_info->name)
+		return -EINVAL;
+
+... and when you define the dev_info instances:
+
+> +static const struct hisi_pmu_dev_info hisi_h32pa[] = {
+> +	[1] = {
+> +		.name = "pa",
+> +		.attr_groups = hisi_pa_pmu_v2_attr_groups,
+> +		.private = &hisi_pa_pmu_regs,
+> +	},
+> +	[2] = {
+> +		.name = "pa",
+> +		.attr_groups = hisi_pa_pmu_v3_attr_groups,
+> +		.private = &hisi_pa_pmu_regs,
+> +	},
+> +	{}
+> +};
+
+... you could have:
+
+	static const struct hisi_pmu_dev_info hisi_h32pa[NR_HISI_PMU_DEV_INFO] = {
+		[HISI_PMU_DEV_INFO_V2] = {
+			.name = "pa",
+			.attr_groups = hisi_pa_pmu_v2_attr_groups,
+			.private = &hisi_pa_pmu_regs,
+		},
+		[HISI_PMU_DEV_INFO_V3] = {
+			.name = "pa",
+			.attr_groups = hisi_pa_pmu_v3_attr_groups,
+			.private = &hisi_pa_pmu_regs,
+		},
+	};
+
+... which would clearly match up with the probe path, and would ensure the
+arrays are always correctly sized if there's a v4, etc.
+
+> diff --git a/drivers/perf/hisilicon/hisi_uncore_pmu.h b/drivers/perf/hisilicon/hisi_uncore_pmu.h
+> index 07890a8e96ca..a8d6d6905f3f 100644
+> --- a/drivers/perf/hisilicon/hisi_uncore_pmu.h
+> +++ b/drivers/perf/hisilicon/hisi_uncore_pmu.h
+> @@ -24,6 +24,7 @@
+>  #define pr_fmt(fmt)     "hisi_pmu: " fmt
+>  
+>  #define HISI_PMU_V2		0x30
+> +#define HISI_PMU_V3		0x40
+>  #define HISI_MAX_COUNTERS 0x10
+>  #define to_hisi_pmu(p)	(container_of(p, struct hisi_pmu, pmu))
+>  
+> @@ -62,6 +63,13 @@ struct hisi_uncore_ops {
+>  	void (*disable_filter)(struct perf_event *event);
+>  };
+>  
+> +/* Describes the HISI PMU chip features information */
+> +struct hisi_pmu_dev_info {
+> +	const char *name;
+> +	const struct attribute_group **attr_groups;
+> +	void *private;
+> +};
+> +
+>  struct hisi_pmu_hwevents {
+>  	struct perf_event *hw_events[HISI_MAX_COUNTERS];
+>  	DECLARE_BITMAP(used_mask, HISI_MAX_COUNTERS);
+> @@ -72,6 +80,7 @@ struct hisi_pmu_hwevents {
+>  struct hisi_pmu {
+>  	struct pmu pmu;
+>  	const struct hisi_uncore_ops *ops;
+> +	const struct hisi_pmu_dev_info *dev_info;
+>  	struct hisi_pmu_hwevents pmu_events;
+>  	/* associated_cpus: All CPUs associated with the PMU */
+>  	cpumask_t associated_cpus;
+
+Will other hisi pmu drivers use the hisi_pmu_dev_info field in future?
+
+I ask because otherwise you could make this local to hisi_uncore_pa_pmu.c if
+you structured this as:
+
+struct hisi_pa_pmu {
+	struct hisi_pmu;
+	const char *name;
+	const struct attribute_group **attr_groups;
+	const struct hisi_pa_pmu_int_regs *regs;
+}
+
+... which would give you some additional type-safety.
+
+Thanks,
+Mark
