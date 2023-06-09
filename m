@@ -2,93 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 596B1729D64
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C91729D68
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240765AbjFIOx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 10:53:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36368 "EHLO
+        id S241613AbjFIOyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 10:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231841AbjFIOxy (ORCPT
+        with ESMTP id S241606AbjFIOyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 10:53:54 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B582D48;
-        Fri,  9 Jun 2023 07:53:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=VoWyh3blPPiSMX+LkkceKIME1iOgbcnQP9AkgDOvlUs=; b=DVSgC/LnAiRmpRoF+PC2QSQawU
-        6Mi8BAptpJH/Zzb5Nr584bueKOTp4DJ7j2IjBx3WbCFm+Fs+otVsfPLs0e252zJ+9V9pwA2FiZqvj
-        JnIXAxsmWb9nVhVsB7y544VrU6pAYqLCH/EBwPUqoPnT2T9gm47mDvtcfozCsmH/38TY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1q7dUj-00FM88-Oq; Fri, 09 Jun 2023 16:53:41 +0200
-Date:   Fri, 9 Jun 2023 16:53:41 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     alexis.lothore@bootlin.com
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        paul.arola@telus.com, scott.roberts@telus.com
-Subject: Re: [PATCH net-next 2/2] net: dsa: mv88e6xxx: implement egress tbf
- qdisc for 6393x family
-Message-ID: <d196f8c7-19f7-4a7c-9024-e97001c21b90@lunn.ch>
-References: <20230609141812.297521-1-alexis.lothore@bootlin.com>
- <20230609141812.297521-3-alexis.lothore@bootlin.com>
+        Fri, 9 Jun 2023 10:54:19 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA16C30F7
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 07:54:15 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f61d79b0f2so2450693e87.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 07:54:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686322454; x=1688914454;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QeftDeyvvysATSitJ+hgLelm68R1NmQyMnxNP/qXI28=;
+        b=KSOkzUtKrwVPxWpFH7oNQ7Fv+3X39paXhtnpEsPt+jAqXuCsDV9K4ANu1Hzlg03d1o
+         jVYB5dJdyl1nlnrZSu4WyJ2RnAl9gMmKFIZ469cV3tSOiCHeIRMjVrOHLafx5Wkq4oJM
+         xMoymFNVcUtkE+b1mnEiecCGzP7l8yCRVHeGq5lncuHOfaxXK+K77AdDU+jAwflnMobM
+         1Trb+ckh94xZwnPpyKHvplw/j+U0OGLIuj5rPfKvldMNHhUTN7N/zD7b541UB3nkaoOU
+         Jl9vIVpslY/2GcIGa2s3k6Ce60foTnSPlqsDR8r5KSYOPNr4pMwKUkdU3WcsAjcHJyL3
+         2Yug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686322454; x=1688914454;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QeftDeyvvysATSitJ+hgLelm68R1NmQyMnxNP/qXI28=;
+        b=HNDXqVQdnK4FB2lOahrj5oVh2Xd+uciAH6ZfOHesJdLDI735USxJn3QU+mBrRgBBGh
+         nAp6aLdVnxWZJS7O4m3GkHMrcd0bzjsn/zieOye1+JYbc5uVpbE6QF7jZOqNIkgmKM1i
+         7cO2/ZZTy2DNlV5v/0bWGiMObRsrh1XrJzjOWOOai7ecMAJNloyIFwn7HMRR94kWCVW4
+         pI0OUjYCWSqu9vrQ89ZpgRb07tKmP33/Oc0nVrTQ5fQLMXs8FRJF/OkyX9gzytwiHras
+         KoYwqFTmISyG1ROHs/Gk1d3xIBR2QLisUcu9f/GZMADjaCoRP8TtwFJv2mw+QehjHqSt
+         il2w==
+X-Gm-Message-State: AC+VfDy40VezhxyGV6s6AFdXGiLpB68wlXi++3el6dlXEX71onkvaSBu
+        VQijy2lzUIBwdqcHbQUTJGCI6w==
+X-Google-Smtp-Source: ACHHUZ7jY1rwqaF8movy77QYmPcO580cVoSBABEAOaV3TJjxtZk5cpIC4Dy6acTqJyBocb1nRz7Hjw==
+X-Received: by 2002:a19:5f16:0:b0:4f6:25a3:95ab with SMTP id t22-20020a195f16000000b004f625a395abmr1044393lfb.25.1686322453936;
+        Fri, 09 Jun 2023 07:54:13 -0700 (PDT)
+Received: from localhost.localdomain ([5.133.47.210])
+        by smtp.gmail.com with ESMTPSA id c21-20020a05600c0ad500b003f7310a3ffasm2946632wmr.2.2023.06.09.07.54.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 07:54:13 -0700 (PDT)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     broonie@kernel.org
+Cc:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
+        ckeepax@opensource.cirrus.com, kuninori.morimoto.gx@renesas.com,
+        linux-kernel@vger.kernel.org, pierre-louis.bossart@linux.intel.com,
+        alsa-devel@alsa-project.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH v2 00/11] ASoC: qcom: audioreach: add compress offload support
+Date:   Fri,  9 Jun 2023 15:53:56 +0100
+Message-Id: <20230609145407.18774-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230609141812.297521-3-alexis.lothore@bootlin.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +int mv88e6393x_tbf_add(struct mv88e6xxx_chip *chip, int port,
-> +		       struct tc_tbf_qopt_offload_replace_params *replace_params)
-> +{
-> +	int rate_kbps = DIV_ROUND_UP(replace_params->rate.rate_bytes_ps * 8, 1000);
-> +	int overhead = DIV_ROUND_UP(replace_params->rate.overhead, 4);
-> +	int rate_step, decrement_rate, err;
-> +	u16 val;
-> +
-> +	if (rate_kbps < MV88E6393X_PORT_EGRESS_RATE_MIN_KBPS ||
-> +	    rate_kbps >= MV88E6393X_PORT_EGRESS_RATE_MAX_KBPS)
-> +		return -EOPNOTSUPP;
-> +
-> +	if (replace_params->rate.overhead > MV88E6393X_PORT_EGRESS_MAX_OVERHEAD)
-> +		return -EOPNOTSUPP;
-> +
-> +	/* Switch supports only max rate configuration. There is no
-> +	 * configurable burst/max size nor latency.
+This patchset adds compressed offload support to Qualcomm audioreach drivers.
+Currently it supports AAC, MP3 and FALC along with gapless.
 
-Can you return -EOPNOTSUPP if these values are not 0? That should make
-it clear to the user they are not supported.
+Tested this on SM8450 and sc7280.
 
->  /* Offset 0x09: Egress Rate Control */
-> -#define MV88E6XXX_PORT_EGRESS_RATE_CTL1		0x09
-> +#define MV88E6XXX_PORT_EGRESS_RATE_CTL1				0x09
-> +#define MV88E6XXX_PORT_EGRESS_RATE_CTL1_STEP_64_KBPS		0x1E84
-> +#define MV88E6XXX_PORT_EGRESS_RATE_CTL1_STEP_1_MBPS		0x01F4
-> +#define MV88E6XXX_PORT_EGRESS_RATE_CTL1_STEP_10_MBPS		0x0032
-> +#define MV88E6XXX_PORT_EGRESS_RATE_CTL1_STEP_100_MBPS		0x0005
-> +#define MV88E6XXXw_PORT_EGRESS_RATE_CTL1_FRAME_OVERHEAD_SHIFT	8
+thanks,
+srini
 
-Are they above values specific to the 6393? Or will they also work for
-other families? You use the MV88E6XXX prefix which means they should
-be generic across all devices.
+Changes since v1:
+	- removed lots of code duplication
+	- moved ALSA patch out of this series.
 
-	Andrew
+Mohammad Rafi Shaik (4):
+  ASoC: qcom: SC7280: audioreach: Add sc7280 hardware param fixup
+    callback
+  ASoC: q6dsp: q6apm: add end of stream events
+  ASoC: q6dsp: audioreach: Add support to set compress format params
+  ASoC: q6dsp: audioreach: Add gapless feature support
+
+Srinivas Kandagatla (7):
+  ASoC: q6dsp: audioreach: add helper function to set u32 param
+  ASoC: q6dsp: audioreach: Add placeholder decoder for compress playback
+  ASoC: q6dsp: q6apm-dai: Add open/free compress DAI callbacks
+  ASoC: q6dsp: q6apm-dai: Add compress DAI and codec caps get callbacks
+  ASoC: q6dsp: q6apm-dai: Add trigger/pointer compress DAI callbacks
+  ASoC: q6dsp: q6apm-dai: Add compress set params and metadata DAI
+    callbacks
+  ASoC: q6dsp: q6apm-dai: Add mmap and copy compress DAI callbacks
+
+ sound/soc/qcom/qdsp6/audioreach.c | 248 ++++++++++-------
+ sound/soc/qcom/qdsp6/audioreach.h |  51 ++++
+ sound/soc/qcom/qdsp6/q6apm-dai.c  | 445 ++++++++++++++++++++++++++++++
+ sound/soc/qcom/qdsp6/q6apm.c      |  68 +++++
+ sound/soc/qcom/qdsp6/q6apm.h      |   6 +
+ sound/soc/qcom/sc7280.c           |  23 +-
+ 6 files changed, 745 insertions(+), 96 deletions(-)
+
+-- 
+2.21.0
+
