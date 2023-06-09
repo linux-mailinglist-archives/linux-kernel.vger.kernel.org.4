@@ -2,264 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98F8772A367
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 21:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78C8672A36B
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 21:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232018AbjFITuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 15:50:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48142 "EHLO
+        id S229923AbjFITue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 15:50:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231896AbjFITuT (ORCPT
+        with ESMTP id S232031AbjFITua (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 15:50:19 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4BD1FEC;
-        Fri,  9 Jun 2023 12:50:15 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 359JmZSR027255;
-        Fri, 9 Jun 2023 19:50:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=wJ9YsL7W5/uRql9g9hLhUuvRfqvi5U2DpIzDMRyuY24=;
- b=bpdhHglfmOl+rUc3Bh1rHXvvRS0RYoiWlPagMs3tJO36HKRwwDYlGjzchA0IRqEL6Ytu
- mAKREe1enrdhVx41bV7+wy2MNYzB4BBY8kS9HthglrAVE+bfH5XJ44SbtD5ROCFY8DOs
- v5t+uuGccUk1cewM8zSCXonUUFd/aI/W/M8KoLVHbWR0lb/LYHdnWxcf4AMhQfSwEdNT
- D8p9O3BnpwoaIhU9PaTB/GpgyHoGY5xTEgYikgXDCq/E8wRIA7AYkDSCanV3RP0z1D09
- 2aJ7xEruOv6z2vWaGspvSXhkNro6Yd4cY5h7l8UsXjXVn5vje0ZzHstlAjSvv0+RmLAi tQ== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r3vu4hsbc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Jun 2023 19:49:59 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 359JnwPC005250
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 9 Jun 2023 19:49:58 GMT
-Received: from [10.134.65.165] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 9 Jun 2023
- 12:49:57 -0700
-Message-ID: <c625a138-d27e-bbcb-8056-25abefb75152@quicinc.com>
-Date:   Fri, 9 Jun 2023 12:49:57 -0700
+        Fri, 9 Jun 2023 15:50:30 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A6835B6;
+        Fri,  9 Jun 2023 12:50:24 -0700 (PDT)
+Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id EECC16606F38;
+        Fri,  9 Jun 2023 20:50:19 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686340223;
+        bh=sT2pRLDd7z+EnfSme49Ke9q6MWh5t4ZyOMO6CUyMwM0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=atA08n8m54vjX8SBuJeS3IX0TrUn1O020hMGKaJHiQzkVm57wBUvh8VuKZA2+M1zX
+         AUIdD6zroJTMWm/k7oLKCjc1qFMvuD2aV95jDEKi8vEkqDrm1fU44qOGQb2ZeGarfK
+         I0HIGj4ZWTJzmDsQSnAeWNC0d2F8pJgR/SVvQqT0cR8gyNl2uz6mblbs5A7PlmnVn5
+         ltmRGEzJrK45v6t5JBUq+cl8F44x6Y37o1Cearg+Eq+v74N3uzFqEn8XrEP7G1halb
+         nPTP1IRxOBsy2mwrtUhDX9VWNG3maLm08mATRZsS2uNduFpsZ9+L+6wH061UHHYvkv
+         sZeu4/YIdPXCw==
+Date:   Fri, 9 Jun 2023 15:50:15 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>,
+        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Nathan Hebert <nhebert@chromium.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v4,3/4] media: mediatek: vcodec: move core context from
+ device to each instance
+Message-ID: <5d15905d-2a7b-4eb6-9f52-38303eaf5292@notapiano>
+References: <20230525014009.23345-1-yunfei.dong@mediatek.com>
+ <20230525014009.23345-4-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v13 17/24] gunyah: vm_mgr: Add framework for VM Functions
-Content-Language: en-US
-To:     Alex Elder <elder@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Jonathan Corbet <corbet@lwn.net>
-CC:     Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Will Deacon <will@kernel.org>, Andy Gross <agross@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230509204801.2824351-1-quic_eberman@quicinc.com>
- <20230509204801.2824351-18-quic_eberman@quicinc.com>
- <3dd82ec0-2a9a-3401-5385-965c624f9f32@linaro.org>
-From:   Elliot Berman <quic_eberman@quicinc.com>
-In-Reply-To: <3dd82ec0-2a9a-3401-5385-965c624f9f32@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: n9i9EZLoAwf-p1UluZlSCL4RXYHZG_Ok
-X-Proofpoint-ORIG-GUID: n9i9EZLoAwf-p1UluZlSCL4RXYHZG_Ok
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-09_14,2023-06-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
- lowpriorityscore=0 phishscore=0 priorityscore=1501 clxscore=1015
- suspectscore=0 spamscore=0 mlxscore=0 adultscore=0 malwarescore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306090165
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230525014009.23345-4-yunfei.dong@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, May 25, 2023 at 09:40:08AM +0800, Yunfei Dong wrote:
+[..]
+> --- a/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
+> +++ b/drivers/media/platform/mediatek/vcodec/vdec_msg_queue.c
+[..]
+> @@ -247,6 +229,8 @@ void vdec_msg_queue_deinit(struct vdec_msg_queue *msg_queue,
+>  
+>  		kfree(lat_buf->private_data);
+>  	}
+> +
+> +	cancel_work_sync(&msg_queue->core_work);
 
+Hi Yunfei,
 
-On 6/5/2023 12:49 PM, Alex Elder wrote:
-> On 5/9/23 3:47 PM, Elliot Berman wrote:
->> Introduce a framework for Gunyah userspace to install VM functions. VM
->> functions are optional interfaces to the virtual machine. vCPUs,
->> ioeventfs, and irqfds are examples of such VM functions and are
-> 
-> s/ioventfs/ioventfds/
-> 
-> Also, these aren't just examples of VM functions, they *are* the
-> VM functions implemented.
-> 
->> implemented in subsequent patches.
->>
->> A generic framework is implemented instead of individual ioctls to
->> create vCPUs, irqfds, etc., in order to simplify the VM manager core
->> implementation and allow dynamic loading of VM function modules.
-> 
-> This also allows the set of VM functions to be extended without
-> updating the API (like it or not).
-> 
->>
->> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
-> 
-> I have a few more comments, but this looks pretty good.
-> 
-> Reviewed-by: Alex Elder <elder@linaro.org>
-> 
->> ---
->>   Documentation/virt/gunyah/vm-manager.rst |  18 ++
->>   drivers/virt/gunyah/vm_mgr.c             | 216 ++++++++++++++++++++++-
->>   drivers/virt/gunyah/vm_mgr.h             |   4 +
->>   include/linux/gunyah_vm_mgr.h            |  87 +++++++++
->>   include/uapi/linux/gunyah.h              |  18 ++
->>   5 files changed, 340 insertions(+), 3 deletions(-)
->>   create mode 100644 include/linux/gunyah_vm_mgr.h
->>
->> diff --git a/Documentation/virt/gunyah/vm-manager.rst 
->> b/Documentation/virt/gunyah/vm-manager.rst
->> index 50d8ae7fabcd..3b51bab9d793 100644
->> --- a/Documentation/virt/gunyah/vm-manager.rst
->> +++ b/Documentation/virt/gunyah/vm-manager.rst
->> @@ -17,6 +17,24 @@ sharing userspace memory with a VM is done via the 
->> `GH_VM_SET_USER_MEM_REGION`_
->>   ioctl. The VM itself is configured to use the memory region via the
->>   devicetree.
->> +Gunyah Functions
->> +================
->> +
->> +Components of a Gunyah VM's configuration that need kernel 
->> configuration are
->> +called "functions" and are built on top of a framework. Functions are 
->> identified
->> +by a string and have some argument(s) to configure them. They are 
->> typically
->> +created by the `GH_VM_ADD_FUNCTION`_ ioctl.
-> 
-> Is a function *type* (e.g., VCPU or ioeventfd) identified by a string?
-> Or a function *instance* (e.g. four VCPUs)?  Or both?
-> 
+this hunk is causing warnings during boot and when exercising the decoder with
+fluster on mt8192-asurada-spherion. This deinit function is called on the
+v4l2 release callback, even though the work might not have been initialized as
+that only happens if/when the codec specific 'decode' callback is called (as a
+result of device_run m2m callback).
 
-Ah, this should be:
+Thanks,
+N�colas
 
-Function types are identified by an enum and have some argument(s)...
-
->> +
->> +Functions typically will always do at least one of these operations:
-> 
-> Typically, or always?
-> 
-
-Hmm, I didn't want to use a more absolute term like "always" since it 
-implies to me that the framework forces this somehow. A VM function 
-wouldn't do much interesting if it weren't interacting with the VM and 
-resource tickets/IO handlers are the ways for functions to interact with 
-VMs.
-
-I'll tweak the wording here.
-
->> +
->> +1. Create resource ticket(s). Resource tickets allow a function to 
->> register
->> +   itself as the client for a Gunyah resource (e.g. doorbell or vCPU) 
->> and
->> +   the function is given the pointer to the &struct gh_resource when the
->> +   VM is starting.
->> +
-> 
-> What I think this means is that tickets are used to allow functions
-> to be defined *before* the VM is actually started.  So once it starts,
-> the functions get added.  (I might have this slightly wrong, but in
-> any case I'm not sure the above sentence is very clear.)
-> 
-
-I'm going to remove the "and the function is given the pointer to..." 
-since I agree it is a bit confusing. I think it'll be clearer for me to 
-put it in the resource ticket kerneldoc where there's context of the 
-populate() callback in the resource ticket. I'll mention there that the 
-populate() callback may not be made until the VM is started which could 
-be a while.
-
->> +2. Register IO handler(s). IO handlers allow a function to handle 
->> stage-2 faults
->> +   from the virtual machine.
->> +
->>   Sample Userspace VMM
->>   ====================
->> diff --git a/drivers/virt/gunyah/vm_mgr.c b/drivers/virt/gunyah/vm_mgr.c
->> index a800061f56bf..56464451b262 100644
->> --- a/drivers/virt/gunyah/vm_mgr.c
->> +++ b/drivers/virt/gunyah/vm_mgr.c
->> @@ -6,10 +6,13 @@
->>   #define pr_fmt(fmt) "gh_vm_mgr: " fmt
->>   #include <linux/anon_inodes.h>
->> +#include <linux/compat.h>
->>   #include <linux/file.h>
->>   #include <linux/gunyah_rsc_mgr.h>
->> +#include <linux/gunyah_vm_mgr.h>
->>   #include <linux/miscdevice.h>
->>   #include <linux/module.h>
->> +#include <linux/xarray.h>
->>   #include <uapi/linux/gunyah.h>
->> @@ -17,6 +20,172 @@
->>   static void gh_vm_free(struct work_struct *work);
->> +static DEFINE_XARRAY(gh_vm_functions);
->> +
->> +static void gh_vm_put_function(struct gh_vm_function *fn)
->> +{
->> +    module_put(fn->mod);
->> +}
->> +
->> +static struct gh_vm_function *gh_vm_get_function(u32 type)
->> +{
->> +    struct gh_vm_function *fn;
->> +    int r;
->> +
->> +    fn = xa_load(&gh_vm_functions, type);
->> +    if (!fn) {
->> +        r = request_module("ghfunc:%d", type);
->> +        if (r)
->> +            return ERR_PTR(r > 0 ? -r : r);
-> 
-> Almost all callers of request_module() simply ignore the
-> return value.  What positive values are you expecting to
-> see here (and are you sure they're positive errno values)?
-> 
-
-I can ignore the return value here, too, to follow the convention.
-
-I had observed request_module can return modprobe's exit code.
-
->> +
->> +        fn = xa_load(&gh_vm_functions, type);
->> +    }
->> +
->> +    if (!fn || !try_module_get(fn->mod))
->> +        fn = ERR_PTR(-ENOENT);
->> +
->> +    return fn;
->> +}
-> 
-> . . .
+<4>[  496.164381] ------------[ cut here ]------------
+<4>[  496.169259] WARNING: CPU: 5 PID: 2338 at kernel/workqueue.c:3376 __flush_work.isra.0+0x23c/0x258
+<4>[  496.178299] Modules linked in: r8153_ecm cdc_ether usbnet r8152 mt7921e mt7921_common mt76_connac_lib mt76 mac80211 btusb btintel btmtk btrtl btbcm cfg80211 bluetooth uvcvideo mt8192_mt6359_rt1015_rt5682 uvc ecdh_generic snd_soc_mt8192_afe ecc videobuf2_vmalloc crct10dif_ce cros_usbpd_logger fuse ip_tables ipv6
+<4>[  496.206108] CPU: 5 PID: 2338 Comm: gst-launch-1.0 Tainted: G        W          6.4.0-rc5-next-20230607+ #475
+<4>[  496.216182] Hardware name: Google Spherion (rev0 - 3) (DT)
+<4>[  496.221915] pstate: 00400009 (nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+<4>[  496.229125] pc : __flush_work.isra.0+0x23c/0x258
+<4>[  496.233992] lr : __cancel_work_timer+0x14c/0x1c8
+<4>[  496.238859] sp : ffff8000896e3b00
+<4>[  496.242423] x29: ffff8000896e3b00 x28: ffff57c3d4079f80 x27: 0000000000000000
+<4>[  496.249807] x26: ffff57c3d4079f80 x25: ffffb76395b59dc8 x24: 0000000000000001
+<4>[  496.257191] x23: ffffb763928daab8 x22: ffff57c3d4079f80 x21: 0000000000000000
+<4>[  496.264575] x20: ffffb763955f6778 x19: ffff57c3cf06f4a0 x18: 0000000000000000
+<4>[  496.271958] x17: 000000040044ffff x16: 005000f2b5503510 x15: 0000000000000000
+<4>[  496.279342] x14: ffff57c3c03a1f80 x13: ffffa0616a2fc000 x12: 000000003464d91d
+<4>[  496.286726] x11: 0000000000000000 x10: 0000000000001b10 x9 : ffffb763928de61c
+<4>[  496.294110] x8 : ffff57c3d407baf0 x7 : 0000000000000000 x6 : ffff57c3d4079f80
+<4>[  496.301494] x5 : ffff57c3d4079f80 x4 : 0000000000000000 x3 : 0000000000000000
+<4>[  496.308878] x2 : ffff8000896e3bf0 x1 : 0000000000000011 x0 : 0000000000000000
+<4>[  496.316262] Call trace:
+<4>[  496.318958]  __flush_work.isra.0+0x23c/0x258
+<4>[  496.323477]  __cancel_work_timer+0x14c/0x1c8
+<4>[  496.327996]  cancel_work_sync+0x1c/0x30
+<4>[  496.332082]  vdec_msg_queue_deinit+0xac/0xc8
+<4>[  496.336604]  vdec_h264_slice_deinit+0x64/0xb8
+<4>[  496.341211]  vdec_if_deinit+0x3c/0x68
+<4>[  496.345123]  mtk_vcodec_dec_release+0x20/0x40
+<4>[  496.349729]  fops_vcodec_release+0x50/0xd8
+<4>[  496.354074]  v4l2_release+0x7c/0x100
+<4>[  496.357900]  __fput+0x80/0x270
+<4>[  496.361205]  ____fput+0x18/0x30
+<4>[  496.364595]  task_work_run+0x78/0xe0
+<4>[  496.368420]  do_notify_resume+0x29c/0x7f8
+<4>[  496.372680]  el0_svc+0xa4/0xb8
+<4>[  496.375987]  el0t_64_sync_handler+0xc0/0xc8
+<4>[  496.380423]  el0t_64_sync+0x1a8/0x1b0
+<4>[  496.384336] ---[ end trace 0000000000000000 ]---
