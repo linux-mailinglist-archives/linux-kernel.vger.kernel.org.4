@@ -2,126 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42474728F00
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 06:39:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E3F8728F05
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 06:39:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjFIEja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 00:39:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46348 "EHLO
+        id S229712AbjFIEjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 00:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbjFIEj1 (ORCPT
+        with ESMTP id S238051AbjFIEjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 00:39:27 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B70330EC
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 21:39:25 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id 5614622812f47-39c84863e7cso312376b6e.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 21:39:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686285565; x=1688877565;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2bcEflOU4iUVjcAk/wdq8BgKNM3U6s2M2OfqszliSE8=;
-        b=GmzTSyNHSEqe2Wm4Sz/AaNNuwPm4RZEJGpl6eGc6KmwuxjU5fU+CLR75jh7Avk3fep
-         1LRlZeh9e2sTz95yAxsGxfXmIcVOlpHZ//qu7nj4SSM+bH0+xXbAcD5lvQ5pWdNj/d2d
-         mdh1PPUsUbKpYUd7b6zvQ5MbrQ8JvwUsyaMYu74B4h6AdbFrhiG4pAahCRvogSvBKySh
-         Xgasz0tT3bUns/aFqabf1R6Ulv0K5GFTETDd+adFetaZnS9I7gp0SHzx8Yyh+5le8ytJ
-         igpZUqjZTh3ANWHxfGsW8OwwGF8Q7gQpirr5QVKaddlJzcuNTZ/3pUY+iDY2/UDeloX7
-         F4HA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686285565; x=1688877565;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2bcEflOU4iUVjcAk/wdq8BgKNM3U6s2M2OfqszliSE8=;
-        b=gvxhTKzHOU42Rq91OmxzM1/sUxuLrFsIA7HxNTbyA0yNXP7uDBdePHT7SmdI7q9izf
-         QfQc5ZDxEsQlWA70jIbcZ0EZc5Q0XRp/Wa/zIuVO7uXcbCRgvrljNbrW3N1T30CEV+nr
-         K53j8KjUMpaOqc+urP3obWPBzeGKV/aFyFq808VhuK4pAZ3lxWvSvrAASzlTn9houdTV
-         A2R6YUfJ6WncichBl3tALJwOO0SocifyLHeKXVc1wvUNqcAuPZpD95gaPSlMgP4z/Cb6
-         +OWfCZzJ6VvDrCc3V+a3KE5ZRI0NjWweADTbUgzbXNlspwUhfFKaisC7ESyhGiiKa/eL
-         Oq4w==
-X-Gm-Message-State: AC+VfDz11hOxjHrirwK5uWPHtQwRTUxE405czga0z/rYt8riqk7XMK79
-        c5LTv/ZqzOnP8l5ZOIvddYBOxw==
-X-Google-Smtp-Source: ACHHUZ4f3urZQiUQUFHTuUkleJmR9aUE5AHvJV+LrNRJat3QjIrPLAWNLGuGPzoB5sI6JReuh+wmbw==
-X-Received: by 2002:aca:101a:0:b0:398:59fe:6ee3 with SMTP id 26-20020aca101a000000b0039859fe6ee3mr451486oiq.54.1686285564707;
-        Thu, 08 Jun 2023 21:39:24 -0700 (PDT)
-Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id lk16-20020a17090b33d000b0025374fedab4sm3795283pjb.22.2023.06.08.21.39.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 21:39:24 -0700 (PDT)
-Date:   Fri, 9 Jun 2023 10:09:22 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Beata Michalska <beata.michalska@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-        mark.rutland@arm.com, will@kernel.org, rafael@kernel.org,
-        sudeep.holla@arm.com, ionela.voinescu@arm.com, sumitg@nvidia.com,
-        yang@os.amperecomputing.com, Len Brown <len.brown@intel.com>,
-        vincent.guittot@linaro.org
-Subject: Re: [PATCH] arm64: Provide an AMU-based version of
- arch_freq_get_on_cpu
-Message-ID: <20230609043922.eyyqutbwlofqaddz@vireshk-i7>
-References: <20230606155754.245998-1-beata.michalska@arm.com>
- <20230608051509.h4a6gn572mjgdusv@vireshk-i7>
- <20230608051816.2ww7ncg65qo7kcuk@vireshk-i7>
- <ZIHpd6unkOtYVEqP@e120325.cambridge.arm.com>
+        Fri, 9 Jun 2023 00:39:36 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C1230F1;
+        Thu,  8 Jun 2023 21:39:35 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3594JVM3025898;
+        Fri, 9 Jun 2023 04:39:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=AdSf+nxOWU8wHe///6FcmZs/IpVxpxCPCP6es/Dvi1s=;
+ b=CeYakn1JYqqFu+ge2bylCXj2PWPF4MPUqCsahlBLVzB12mgBE8bhO7h57mqJ0WaPaxV9
+ eYl/Ubc+gInqNl186Z3FuNnOn84ztZkYeHoTHT7EEuqmP6tiVqlUkUTbwRfKqRsuV8bd
+ 98pmgUHbvTNM0abCJJTccRBis8AkkOe261IgnyEuYLWXNkWubjWuzfhznYokv0jhqUsI
+ XeurOtecTpE+pICuLCxhkcF46Hr0NLhSjjOMgP0xidgXa5jefJyqE7+512Qb0mtd/2eZ
+ jh4UTWKMkRuXDDM0+JVV81ITeMSx4OofDQYLghvwMbtYKQ+DFzx5AnOPl1R5H4jF/nZ6 Lw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r39kuae4n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Jun 2023 04:39:31 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3594dUL9032544
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 9 Jun 2023 04:39:30 GMT
+Received: from [10.216.3.169] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 8 Jun 2023
+ 21:39:27 -0700
+Message-ID: <b95652b2-c93d-34b3-1d52-340f7590b857@quicinc.com>
+Date:   Fri, 9 Jun 2023 10:09:24 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZIHpd6unkOtYVEqP@e120325.cambridge.arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH 1/2] dt-bindings: arm: idle-states: Add
+ idle-state-disabled property
+Content-Language: en-US
+To:     Conor Dooley <conor.dooley@microchip.com>
+CC:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_lsrao@quicinc.com>,
+        <quic_mkshah@quicinc.com>, <devicetree@vger.kernel.org>
+References: <20230608085544.16211-1-quic_tnimkar@quicinc.com>
+ <20230608085544.16211-2-quic_tnimkar@quicinc.com>
+ <20230608-steadying-idealism-1f8a97db1491@wendy>
+From:   Tushar Nimkar <quic_tnimkar@quicinc.com>
+In-Reply-To: <20230608-steadying-idealism-1f8a97db1491@wendy>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 1pNJGaNN2yWtidvUjT0AUrC2_kIVTxfR
+X-Proofpoint-ORIG-GUID: 1pNJGaNN2yWtidvUjT0AUrC2_kIVTxfR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-09_02,2023-06-08_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ mlxscore=0 mlxlogscore=517 lowpriorityscore=0 phishscore=0 bulkscore=0
+ priorityscore=1501 suspectscore=0 impostorscore=0 adultscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306090040
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08-06-23, 15:45, Beata Michalska wrote:
-> For those CPUs that are in full dynticks mode , the arch_freq_scale_factor will
-> be basically useless (as there will be no regular sched_tick which eventually
-> calls topology_scale_freq_tick()), so the code below will look for any other
-> available CPU within current policy that could server as the source of the
-> counters. If there is none it will fallback to cpufreq driver to provide
-> current frequency.
+Thanks Conor for reviewing.
 
-Understood.
+On 6/8/2023 2:49 PM, Conor Dooley wrote:
+> Hey Tushar,
+> 
+> On Thu, Jun 08, 2023 at 02:25:42PM +0530, Tushar Nimkar wrote:
 
-> There is a little bit of ambiguity around both 'cpuinfo_cur_freq' and
-> 'scaling_cur_freq' and how those two are being handled on different platforms.
-> If I got things right, the first one is supposed to reflect the frequency as
-> obtained from  the hardware,
+> 
+> Firstly, you should CC the dt-bindings maintainers like
+> get_maintainer.pl would tell you.
+> Secondly, there are two 1/2 patches in this series.
+> 
+1. Sure, I will include dt maintainer in next version.
+2. Yes, one of the Patch 1/2 sent by mistake.
+I will remove in next version.
 
-Yes, this must be accurate, as much as possible.
+> 
+> Thirdly, this is operating system specific behaviour, tied to Linux, and
+> has no place in a binding.
+> 
+3. I will remove [echo N > 
+/sys/devices/system/cpu/cpuX/cpuidle/stateX/disable] command from 
+bindings document.
 
-> whereas the latter is more of a sw point of view on that,
+> Cheers,
+> Conor.
+> 
 
-Historically, it was more about the last frequency requested by the software.
-But that has changed, for example for X86 and now there is no limitation here
-which disallows one to report the more accurate one.
-
-> That could work, I guess. But then we would have 'cpuinfo_cur_freq' ==
-> 'scaling_cur_freq' for platforms that do provide arch_freq_get_on_cpu,
-> which might lead to more confusion as per what is the actual difference between
-> the two (?)
-
-The behavior should be same for all platforms. That's my primary concern here.
-If getting same freq from both these files is okay for X86, then it should be
-for ARM as well.
-
-If the X86 commit (f8475cef9008) wasn't already merged, I would have suggested
-to do this aperf/mperf thing only in cpuinfo_cur_freq() and not
-scaling_cur_freq().
-
-Maybe we can still revert back if there is no hard dependency here.
-
-Len / Rafael ?
-
-The question is if we should make scaling_cur_freq() to always return the last
-requested frequency and make cpuinfo_cur_freq() to return the most accurate one,
-preferably using aperf/mperf ?
-
--- 
-viresh
+Thanks,
+Tushar
