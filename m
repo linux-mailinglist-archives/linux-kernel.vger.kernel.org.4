@@ -2,95 +2,312 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A013D72A65A
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 00:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D9572A65C
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 00:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231844AbjFIWsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 18:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49882 "EHLO
+        id S231927AbjFIWsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 18:48:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjFIWsH (ORCPT
+        with ESMTP id S231909AbjFIWsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 18:48:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F16E1BD;
-        Fri,  9 Jun 2023 15:48:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E962665C7C;
-        Fri,  9 Jun 2023 22:48:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2831AC433D2;
-        Fri,  9 Jun 2023 22:48:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686350885;
-        bh=9YSajLIiu//vD45TQak0tIUptjVcaYp5b5akN0t5Ftw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bsQ8UmEqEv/TW1Aao/M294bQzvIgC+L2N/QeRe1S6b5XT152Kjon97fUQk5wzPM6Q
-         8dyKZrJ1fEHzxSbZmGkyAJsv/IZg4nj5rorjfFeYYAuzLfAcLbCv25rnxuzKq3p8iW
-         K1PLhtzxEyA0xpDQx+inY0UyEE5u8c90fSTZJN8rJBEEbKr5jWtYwzRW1Td2kCqA1U
-         rRzuaAnAAnNH2JoPjGsYVm5myFrpR1T0EWbOgGlag3XPmQPbWKRytqsJbJZDe2xsHp
-         5Z4n6Xs6VYe99SOb9m6+lDkPTsSi1IHOfpJMulQecn0NuSH2Q7GmJxih0TFZwkWOny
-         KO8q8DhK9O7GQ==
-Date:   Fri, 9 Jun 2023 15:48:03 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Omar Sandoval <osandov@osandov.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-debuggers@vger.kernel.org,
-        kernel-team@fb.com
-Subject: Re: [PATCH] x86/unwind/orc: add ELF section with ORC version number
-Message-ID: <20230609224803.275vqw345utsusah@treble>
-References: <5b70bc58ef70aab0a821111cd3201eeced8bab95.1686263379.git.osandov@osandov.com>
- <20230609220430.agw2rtswmjbquzom@treble>
- <ZIOmpuqLTJROYQt8@telecaster>
+        Fri, 9 Jun 2023 18:48:17 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E2FD1BD
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 15:48:16 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-565ba6aee5fso21201787b3.1
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 15:48:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686350895; x=1688942895;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F91PTYUlrDQnVkE7RKrpSVNT7i04Oh1Dw138WVZlpbs=;
+        b=JZTcd7Fed6d6MEyF97USXRMaHw+sgtWUBuHPeimUwjK1rzC5oe4wagRydts4z3MQRP
+         HyzZbp6IpjvDc+FfUHgjU/hoH7suGHRab9a3ft17mDJUCD3jjh5QixhFWwhvHVTHo1tu
+         dzILydbycNbIOph5HeQuN/Tm4GFapGcFDSaeexgGfG4tqSTbXQp8ststuYhd/MJe0r5/
+         ReRpAdq2AaUnI6V4KHZzcsmP8fs/qDxugMk2woF8/PGscOi9/OlUT4p29IyMwhRQKqvv
+         0cfzKSNyfvQneCU+6BWWe3Ce22UuSbQa695dXI2BZFNBBD3ERkBcLYKLaHeQrrTdvxK4
+         KwNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686350895; x=1688942895;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=F91PTYUlrDQnVkE7RKrpSVNT7i04Oh1Dw138WVZlpbs=;
+        b=j02mCm2xUsmW+7PhMjfOFwgr3OsWDqfmge42Ku6BM3LF9RkKJX07cMaR/7MJuQOUcc
+         1/A2O7Tcg/TVUGVlPt/Tf6PpshgCwtKuG+XdWCEHYB/bRmhgQu9S39OXh6skTrXVOrjN
+         AQMpUeQOYGWN5afzfnFOYbj9tRUguUN9ZRUu/e8iILh2UKegcgHprU5tqMR27oNxsDjO
+         ih9qhSx5jJAvEuSr8++QcR68xwNSWOs2CQyQDxbURoPl596DsToROK6RCiy6dPIhGTbD
+         XZbfPJjlWnNLSAG9mxnD8OmOXXwfRyCeSZXAn27pVp1S3xqYd4serSnFUR4rODj6Tz1e
+         cVhg==
+X-Gm-Message-State: AC+VfDx59G2CgB1KdzKWLR7gLrCa0yelM7y84PZQLRsZVQ/7U45KZDHk
+        CHKHAHB9Wsz0GVxXhr3811jOmGBtJgcu98v+9IbAog==
+X-Google-Smtp-Source: ACHHUZ7IehyvD2oNFYSCtq7c6XkZPgUtu1kE6jEc4HwjaLrjkXCid5g9Tc15PMbH0PVzztWJoCT3vSnzqPXbJmWISNA=
+X-Received: by 2002:a0d:ca92:0:b0:561:e873:9225 with SMTP id
+ m140-20020a0dca92000000b00561e8739225mr2499230ywd.27.1686350895117; Fri, 09
+ Jun 2023 15:48:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZIOmpuqLTJROYQt8@telecaster>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230609005158.2421285-1-surenb@google.com> <20230609005158.2421285-6-surenb@google.com>
+ <ZIORdizaMfvo01JO@x1n>
+In-Reply-To: <ZIORdizaMfvo01JO@x1n>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Fri, 9 Jun 2023 15:48:04 -0700
+Message-ID: <CAJuCfpERMyVp4EWTVTfJ5imRTo9h2MBj5QV1Y-AN9Qr1NzxoUg@mail.gmail.com>
+Subject: Re: [PATCH v2 5/6] mm: implement folio wait under VMA lock
+To:     Peter Xu <peterx@redhat.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
+        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
+        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
+        apopple@nvidia.com, ying.huang@intel.com, david@redhat.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        viro@zeniv.linux.org.uk, brauner@kernel.org,
+        pasha.tatashin@soleen.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 03:24:38PM -0700, Omar Sandoval wrote:
-> > Though, instead of
-> > using an incrementing version, Peter had the idea to hash the struct,
-> > like:
-> > 
-> >   awk '/^struct orc_entry {$/ { p=1 } p { print } /^}/ { p=0 }' arch/x86/include/asm/orc_types.h | sha1sum
-> > 
-> > That way we don't have to remember to bump the version number, and it
-> > would be more resilient to partial backports in distros.
-> > 
-> > Would something like that work for you?
-> 
-> Any sort of unique identifier works for me. One thing that the proposed
-> hash wouldn't catch is if ORC_REG_* or ORC_TYPE_* are ever renumbered
-> (i.e., the meanings of existing values change). It also wouldn't catch
-> if something about the .orc_unwind_ip section changed. But assuming
-> changes like that would be much rarer, it could be handled manually by
-> bumping a "salt" for the hash. E.g., by adding 'BEGIN { print <SALT> }'
-> to the awk script:
-> 
-> awk 'BEGIN { print 1 } /^struct orc_entry {$/ { p=1 } p { print } /^}/ { p=0 }' arch/x86/include/asm/orc_types.h | sha1sum
-> 
-> I'll defer to you guys whether it's easier to remember to bump a version
-> everytime or only in those rare cases.
+On Fri, Jun 9, 2023 at 1:54=E2=80=AFPM Peter Xu <peterx@redhat.com> wrote:
+>
+> On Thu, Jun 08, 2023 at 05:51:57PM -0700, Suren Baghdasaryan wrote:
+> > Follow the same pattern as mmap_lock when waiting for folio by dropping
+> > VMA lock before the wait and retrying once folio is available.
+> >
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > ---
+> >  include/linux/pagemap.h | 14 ++++++++++----
+> >  mm/filemap.c            | 43 ++++++++++++++++++++++-------------------
+> >  mm/memory.c             | 13 ++++++++-----
+> >  3 files changed, 41 insertions(+), 29 deletions(-)
+> >
+> > diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
+> > index a56308a9d1a4..6c9493314c21 100644
+> > --- a/include/linux/pagemap.h
+> > +++ b/include/linux/pagemap.h
+> > @@ -896,8 +896,8 @@ static inline bool wake_page_match(struct wait_page=
+_queue *wait_page,
+> >
+> >  void __folio_lock(struct folio *folio);
+> >  int __folio_lock_killable(struct folio *folio);
+> > -bool __folio_lock_or_retry(struct folio *folio, struct mm_struct *mm,
+> > -                             unsigned int flags);
+> > +bool __folio_lock_or_retry(struct folio *folio, struct vm_area_struct =
+*vma,
+> > +                        unsigned int flags, bool *lock_dropped);
+> >  void unlock_page(struct page *page);
+> >  void folio_unlock(struct folio *folio);
+> >
+> > @@ -1002,10 +1002,16 @@ static inline int folio_lock_killable(struct fo=
+lio *folio)
+> >   * __folio_lock_or_retry().
+> >   */
+> >  static inline bool folio_lock_or_retry(struct folio *folio,
+> > -             struct mm_struct *mm, unsigned int flags)
+> > +             struct vm_area_struct *vma, unsigned int flags,
+> > +             bool *lock_dropped)
+> >  {
+> >       might_sleep();
+> > -     return folio_trylock(folio) || __folio_lock_or_retry(folio, mm, f=
+lags);
+> > +     if (folio_trylock(folio)) {
+> > +             *lock_dropped =3D false;
+> > +             return true;
+> > +     }
+> > +
+> > +     return __folio_lock_or_retry(folio, vma, flags, lock_dropped);
+> >  }
+> >
+> >  /*
+> > diff --git a/mm/filemap.c b/mm/filemap.c
+> > index 7cb0a3776a07..838955635fbc 100644
+> > --- a/mm/filemap.c
+> > +++ b/mm/filemap.c
+> > @@ -1701,37 +1701,35 @@ static int __folio_lock_async(struct folio *fol=
+io, struct wait_page_queue *wait)
+> >
+> >  /*
+> >   * Return values:
+> > - * true - folio is locked; mmap_lock is still held.
+> > + * true - folio is locked.
+> >   * false - folio is not locked.
+> > - *     mmap_lock has been released (mmap_read_unlock(), unless flags h=
+ad both
+> > - *     FAULT_FLAG_ALLOW_RETRY and FAULT_FLAG_RETRY_NOWAIT set, in
+> > - *     which case mmap_lock is still held.
+> > - *     If flags had FAULT_FLAG_VMA_LOCK set, meaning the operation is =
+performed
+> > - *     with VMA lock only, the VMA lock is still held.
+> > + *
+> > + * lock_dropped indicates whether mmap_lock/VMA lock got dropped.
+> > + *     mmap_lock/VMA lock is dropped when function fails to lock the f=
+olio,
+> > + *     unless flags had both FAULT_FLAG_ALLOW_RETRY and FAULT_FLAG_RET=
+RY_NOWAIT
+> > + *     set, in which case mmap_lock/VMA lock is still held.
+>
+> This seems to be a separate change to have "lock_dropped", would it worth=
+ a
+> separate patch for it if needed?
 
-I think I'd prefer only bumping it in the rare cases, because we're
-going to end up forgetting either way ;-)
+Yes, Matthew asked for the same and also to change the function to
+return the flags directly which should make it cleaner. IOW when this
+function drops the lock it will include VM_FAULT_VMA_UNLOCKED flag in
+its return value. And that will be done in a separate patch.
 
-To catch REG/TYPE changes, we could forego awk and just hash the whole
-file, the only downside being that it might introduce unnecessary
-changes if we change a comment or something.  But the file changes
-rarely enough.
+>
+> I do agree it's confusing and it might be the reason of this change, but =
+I
+> think it may or may not help much.. as long as VM_FAULT_RETRY semantics
+> kept unchanged iiuc (it doesn't always imply mmap lock released, only if
+> !NOWAIT, which can be confusing too).
+>
+> Especially that doesn't seem like a must for the vma change.  IIUC to
+> support vma lock here we can simply keep everything as before, but only
+> release proper lock based on the fault flag should work.  But maybe I jus=
+t
+> missed something, so that relies on the answer to previous patch...
 
-Or we could tweak the awk to also print ORC_{REG,TYPE}_* pretty easily.
+That was my intention here, IOW I'm making the following replacement:
 
--- 
-Josh
+-             mmap_read_unlock(mm);
++             if (flags & FAULT_FLAG_VMA_LOCK)
++                     vma_end_read(vma);
++             else
++                     mmap_read_unlock(vma->vm_mm);
+
+Did I miss something which makes the function work differently between
+mmap_lock vs per-vma one?
+
+>
+> >   *
+> >   * If neither ALLOW_RETRY nor KILLABLE are set, will always return tru=
+e
+> > - * with the folio locked and the mmap_lock unperturbed.
+> > + * with the folio locked and the mmap_lock/VMA lock unperturbed.
+> >   */
+> > -bool __folio_lock_or_retry(struct folio *folio, struct mm_struct *mm,
+> > -                      unsigned int flags)
+> > +bool __folio_lock_or_retry(struct folio *folio, struct vm_area_struct =
+*vma,
+> > +                      unsigned int flags, bool *lock_dropped)
+> >  {
+> > -     /* Can't do this if not holding mmap_lock */
+> > -     if (flags & FAULT_FLAG_VMA_LOCK)
+> > -             return false;
+> > -
+> >       if (fault_flag_allow_retry_first(flags)) {
+> > -             /*
+> > -              * CAUTION! In this case, mmap_lock is not released
+> > -              * even though return 0.
+> > -              */
+> > -             if (flags & FAULT_FLAG_RETRY_NOWAIT)
+> > +             if (flags & FAULT_FLAG_RETRY_NOWAIT) {
+> > +                     *lock_dropped =3D false;
+> >                       return false;
+> > +             }
+> >
+> > -             mmap_read_unlock(mm);
+> > +             if (flags & FAULT_FLAG_VMA_LOCK)
+> > +                     vma_end_read(vma);
+> > +             else
+> > +                     mmap_read_unlock(vma->vm_mm);
+> >               if (flags & FAULT_FLAG_KILLABLE)
+> >                       folio_wait_locked_killable(folio);
+> >               else
+> >                       folio_wait_locked(folio);
+> > +             *lock_dropped =3D true;
+> >               return false;
+> >       }
+> >       if (flags & FAULT_FLAG_KILLABLE) {
+> > @@ -1739,13 +1737,18 @@ bool __folio_lock_or_retry(struct folio *folio,=
+ struct mm_struct *mm,
+> >
+> >               ret =3D __folio_lock_killable(folio);
+> >               if (ret) {
+> > -                     mmap_read_unlock(mm);
+> > +                     if (flags & FAULT_FLAG_VMA_LOCK)
+> > +                             vma_end_read(vma);
+> > +                     else
+> > +                             mmap_read_unlock(vma->vm_mm);
+> > +                     *lock_dropped =3D true;
+> >                       return false;
+> >               }
+> >       } else {
+> >               __folio_lock(folio);
+> >       }
+> >
+> > +     *lock_dropped =3D false;
+> >       return true;
+> >  }
+> >
+> > diff --git a/mm/memory.c b/mm/memory.c
+> > index c234f8085f1e..acb09a3aad53 100644
+> > --- a/mm/memory.c
+> > +++ b/mm/memory.c
+> > @@ -3568,6 +3568,7 @@ static vm_fault_t remove_device_exclusive_entry(s=
+truct vm_fault *vmf)
+> >       struct folio *folio =3D page_folio(vmf->page);
+> >       struct vm_area_struct *vma =3D vmf->vma;
+> >       struct mmu_notifier_range range;
+> > +     bool lock_dropped;
+> >
+> >       /*
+> >        * We need a reference to lock the folio because we don't hold
+> > @@ -3580,8 +3581,10 @@ static vm_fault_t remove_device_exclusive_entry(=
+struct vm_fault *vmf)
+> >       if (!folio_try_get(folio))
+> >               return 0;
+> >
+> > -     if (!folio_lock_or_retry(folio, vma->vm_mm, vmf->flags)) {
+> > +     if (!folio_lock_or_retry(folio, vma, vmf->flags, &lock_dropped)) =
+{
+> >               folio_put(folio);
+> > +             if (lock_dropped && vmf->flags & FAULT_FLAG_VMA_LOCK)
+> > +                     return VM_FAULT_VMA_UNLOCKED | VM_FAULT_RETRY;
+> >               return VM_FAULT_RETRY;
+> >       }
+> >       mmu_notifier_range_init_owner(&range, MMU_NOTIFY_EXCLUSIVE, 0,
+> > @@ -3704,7 +3707,7 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+> >       bool exclusive =3D false;
+> >       swp_entry_t entry;
+> >       pte_t pte;
+> > -     int locked;
+> > +     bool lock_dropped;
+> >       vm_fault_t ret =3D 0;
+> >       void *shadow =3D NULL;
+> >
+> > @@ -3837,9 +3840,9 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+> >               goto out_release;
+> >       }
+> >
+> > -     locked =3D folio_lock_or_retry(folio, vma->vm_mm, vmf->flags);
+> > -
+> > -     if (!locked) {
+> > +     if (!folio_lock_or_retry(folio, vma, vmf->flags, &lock_dropped)) =
+{
+> > +             if (lock_dropped && vmf->flags & FAULT_FLAG_VMA_LOCK)
+> > +                     ret |=3D VM_FAULT_VMA_UNLOCKED;
+> >               ret |=3D VM_FAULT_RETRY;
+> >               goto out_release;
+> >       }
+> > --
+> > 2.41.0.162.gfafddb0af9-goog
+> >
+>
+> --
+> Peter Xu
+>
