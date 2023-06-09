@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AED10729286
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:17:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2AAC729295
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:17:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240151AbjFIIR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 04:17:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51586 "EHLO
+        id S240198AbjFIIRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 04:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240131AbjFIIR1 (ORCPT
+        with ESMTP id S240167AbjFIIRc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 04:17:27 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02A2269A
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 01:16:54 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b1a7e31dcaso15774861fa.2
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 01:16:54 -0700 (PDT)
+        Fri, 9 Jun 2023 04:17:32 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F052737
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 01:16:57 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f7353993cbso11429955e9.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 01:16:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686298610; x=1688890610;
+        d=linaro.org; s=google; t=1686298611; x=1688890611;
         h=content-transfer-encoding:mime-version:date:message-id:subject
          :references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sbn/vidH7Q/LymlGmJYhGt3pz85OqWNGAZA4SRnTzBo=;
-        b=fK9Ln5svpVf7phjZS+mbqw7W8KLEUddvL82nQQBDjWef1EMHZyKJu5uSv0ylG497DS
-         77MDbGVz1ZJvyDJZ9TjECpi9s94vl0lFXkz6ecpCvDqgEUjDl/Upf0uiqbB0dWBChzOu
-         2ermRRb2EaSeuuAPz/RLtXhUUHu/O2eSGWzGcv6WqHiMuopaSxz2F5WTcJwHAEb+DXn/
-         xxURipHrESsmhHsJzbs8DTZxRnWA3ZeVb5Qx+rYMdnWqgWiCg8xCvdhSe1neH97i0MBQ
-         RTQRbC4I5/z9CibtNsSEzrWYEodFJ6Bb14j8xKSNI/Bo4vQX9JayOrs9SIFG4f8LVI20
-         qQJw==
+        bh=lYuIhDGuCC9opvLWfytZKMbJoZ2C+T9RI7zl7IlZO1c=;
+        b=L9Xw798jWqySjeSyCuN5WLGzZGM9mHf+L552ShJwvBJ3gecpRLasnxziivFuYJplRt
+         bzRi4gxZy7IPyiByAoLuPMBmo7moZjTwli8i8gqz51Dpw+zI/2H0lMDsPm/oX8G4F41U
+         nGuQsHbcGP+bRfEwv+m94GcXPA8dmCt+dM+rVbyzINgUFk/T9woZNh2xw9h7qj/rjSTx
+         eA/IEMOhycMhR/czG5F1IpVAMCWeprDeM9aD0UMTRlRxqNqm1CokZAnff/cu6m0zsxIJ
+         mVImESXWghJChwP1VeDjoQ8piIOqyy0IvFSKDCLv8D5nqERgn5oDkrUSnE78bAjKFuFh
+         MunA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686298610; x=1688890610;
+        d=1e100.net; s=20221208; t=1686298611; x=1688890611;
         h=content-transfer-encoding:mime-version:date:message-id:subject
          :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=sbn/vidH7Q/LymlGmJYhGt3pz85OqWNGAZA4SRnTzBo=;
-        b=F9d/a2A/0QktPYG39jg9NzX7S2OuofUBhWpx5bxdsO6L6+jBv5VbKX1ZoAoHc57nw0
-         LIB+DBG/w4zlhv8w87nIYOEkTc3VnRPWsZR8tICpTqXPHO6hAqDJJO3t1dovxwVrpKbH
-         ++vKxhK9k6+LR0EA1CSGe1xhi+m3/yKWQHyrkW4nK4NhynNKTzYW+9vNTRMny36yoz5c
-         mdhEG3OFT7x3wPT7lF8uftP1ztD9LQsRXiuNSfYeD7a+7IfHkiwfdw+agH4wGo0hg9EX
-         ZWS3K1RYwbni1h779vDQEH6JXRjrLDqMxGBgMuVJX4k3C+hmUe7tn/NDweUgEzJqw608
-         OAkw==
-X-Gm-Message-State: AC+VfDwiaEIbRMg5h4LDy9PiehloN6tJfC+jCsUxymIG9KTMzY30oXBf
-        iv+8G7JHviYC8ixC7wtKVB0wYw==
-X-Google-Smtp-Source: ACHHUZ72gjhpE6xfNIyCw1g194Gn1jxiJKWv4N13KPXnSFqysK5VlWgjRHhNj6J11ET014zr7Acx1Q==
-X-Received: by 2002:a19:4f52:0:b0:4f4:eeb4:ba70 with SMTP id a18-20020a194f52000000b004f4eeb4ba70mr424776lfk.32.1686298610392;
-        Fri, 09 Jun 2023 01:16:50 -0700 (PDT)
+        bh=lYuIhDGuCC9opvLWfytZKMbJoZ2C+T9RI7zl7IlZO1c=;
+        b=BFJ9zM10rlf7l+zn6ejb+Q/vkl6hMlGFIUs2mNXfLcyjh7O7YwvDPN4FiisHAjmEo5
+         ukUWE+fy8htWbA3HvPlchDPes1tj0XgP0B8vIAE6Gn7cOBQwdcaWPZNv0td6Vq2D/No2
+         9YYAvddQYdSUJLrCzf2Xs5IH8NAuvRcCagM1mZBxL1cZwfhVal3eWPCXE4IevUSMkehe
+         GG9Um+LJteSAnPnmkS0C7Jwi5v93z98S7Tk3yIfGHnGqV5jpcis4vPNIrUThgdOejvkV
+         /XTQ4jGB+JSpjvg2/4YKh4ihukwI/S/wdAM4cAbKr1sWsNK7y5807xKPsnwbq/58OEGk
+         g6pQ==
+X-Gm-Message-State: AC+VfDyAfGt/tEfGG1wg/g01TJUo3mIV1kt3+TgHhRuU2bsn1aN3BFDb
+        j5Iy87KXI1BZkBgAfcVEpnYNDg==
+X-Google-Smtp-Source: ACHHUZ5MaRYmFgAgHsM4aSp6otcol5L86L1080ihDuGUjqwqVtjgtl5fPm6KgfpUfbk92208u9+K2A==
+X-Received: by 2002:a1c:4b16:0:b0:3f4:2158:28a0 with SMTP id y22-20020a1c4b16000000b003f4215828a0mr916471wma.12.1686298611256;
+        Fri, 09 Jun 2023 01:16:51 -0700 (PDT)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id m6-20020adfdc46000000b0030e5bd253aasm3768435wrj.39.2023.06.09.01.16.49
+        by smtp.gmail.com with ESMTPSA id m6-20020adfdc46000000b0030e5bd253aasm3768435wrj.39.2023.06.09.01.16.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 01:16:49 -0700 (PDT)
+        Fri, 09 Jun 2023 01:16:50 -0700 (PDT)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
 To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org,
@@ -59,11 +59,11 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Kevin Hilman <khilman@baylibre.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-In-Reply-To: <20230510091129.151669-1-xianwei.zhao@amlogic.com>
-References: <20230510091129.151669-1-xianwei.zhao@amlogic.com>
-Subject: Re: [PATCH V4] arm64: dts: add support for C3 based Amlogic AW409
-Message-Id: <168629860953.1192110.7115363386706217680.b4-ty@linaro.org>
-Date:   Fri, 09 Jun 2023 10:16:49 +0200
+In-Reply-To: <20230515093237.2203171-1-xianwei.zhao@amlogic.com>
+References: <20230515093237.2203171-1-xianwei.zhao@amlogic.com>
+Subject: Re: [PATCH V5] arm64: dts: add support for C3 based Amlogic AW409
+Message-Id: <168629861051.1192110.13312431547309473090.b4-ty@linaro.org>
+Date:   Fri, 09 Jun 2023 10:16:50 +0200
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -71,7 +71,7 @@ X-Mailer: b4 0.12.2
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,7 +80,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On Wed, 10 May 2023 17:11:29 +0800, Xianwei Zhao wrote:
+On Mon, 15 May 2023 17:32:37 +0800, Xianwei Zhao wrote:
 > Amlogic C3 is an advanced edge AI processor designed for smart IP camera
 > applications.
 > 
