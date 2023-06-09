@@ -2,109 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECBB0729644
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 12:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 194B8729645
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 12:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241252AbjFIKGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 06:06:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52786 "EHLO
+        id S241642AbjFIKHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 06:07:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbjFIKF6 (ORCPT
+        with ESMTP id S241973AbjFIKG3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 06:05:58 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 848E565A1;
-        Fri,  9 Jun 2023 02:56:45 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1112)
-        id 2EE7820C1473; Fri,  9 Jun 2023 02:56:45 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2EE7820C1473
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1686304605;
-        bh=QCAfbAdMJ4hq/jLexUoenZqABGBc2UI5B4FxLEQLDhc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c71GVxoshBaJT+JmmEXKMETgHlQqie6/1B1zvQm1lko5kFta+orf/3fDmIvVdEoV7
-         0M/tCdICZ0MBaVddlp0ZN1wghI0x9kVsZHKQS/BiF0aP9wDd5qeNtY0fb0oDl+HE1d
-         dqckaHpOM92p4CC+HFBrVBYiIzZ+U72VdNtl2IzY=
-Date:   Fri, 9 Jun 2023 02:56:45 -0700
-From:   Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Tianyu Lan <ltykernel@gmail.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>
-Subject: Re: [PATCH 7/9] x86/hyperv: Initialize cpu and memory for SEV-SNP
- enlightened guest
-Message-ID: <20230609095645.GA21469@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <20230601151624.1757616-1-ltykernel@gmail.com>
- <20230601151624.1757616-8-ltykernel@gmail.com>
- <BYAPR21MB1688B4F74FF7B670267D32FAD750A@BYAPR21MB1688.namprd21.prod.outlook.com>
+        Fri, 9 Jun 2023 06:06:29 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354B46A45;
+        Fri,  9 Jun 2023 02:57:02 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id 41be03b00d2f7-544c0d768b9so624881a12.0;
+        Fri, 09 Jun 2023 02:57:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686304622; x=1688896622;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=oke8FEyU1i0vInWJA3warIdx+aSj1DpDAK4b5OQbzYc=;
+        b=gsVCyH+ob/XyG5y9XHqMLjYYC9ihsmBivd32oCTBxUsJsMqSVtacS+R+bPT9GQoQ65
+         lLf+Q7QScwo+MhDP+iDrVoVZDg/dIcbS/Xt7CUgkfAf8tIfpjg4Grp/zODcgR7dWKLhA
+         Xb6rbPccjDcd7XpTniKuh0trKPSghhlEc6gl1ogB4nf8EhoYFKa/F6vi78eeLGV3X8pv
+         z8bp7CHe6Dtj5KGezv9RRt1eWwtvcNrwPD5rxOBCspuOx8CfhFxIhPktiz3Shi58eeYc
+         Gaweg+KY1z8Gx4YQmNohFCrdYPixqzMK/Pzz9c9nw3NMohNnJkU8713qU1CP4u/JmtV/
+         U75Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686304622; x=1688896622;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oke8FEyU1i0vInWJA3warIdx+aSj1DpDAK4b5OQbzYc=;
+        b=amZlroH9KCV0VrPrkEEtYns7LMXUfgrn6N1ioKdHnwbNx+fO+qFdKP6U5EqqyjUXyA
+         V+3qHvBWZ6HXjp4cApH3f2WBq3h3fxmdOXPAS1lp9pHz4jl8G9J8TlDfc1RSs25sJ4H5
+         32OeDFBZk+Eiwkm8gM06ZgkWqHysy4P21/waMInP70cZ64w4pBsz9wpbbeisUAdnmBTM
+         sq105OnJAWaQle+mFaENtjmv0NoP67mh/DEZG3NDBz/itwNRhSnGvXNkim+Er+YsvKUo
+         MQjUitKwiMbxFiQsLsrKeMjz5I8HlVG8H9dmBVAzmR69XnFnKwLKr/v9SzMaqsRqUGxL
+         ku8A==
+X-Gm-Message-State: AC+VfDxDUquvfJBuKIqcePb+/1d+HudAHpYL1iXWYBm/iOrjwfUz/TBL
+        lSzu2yge68+VRN0eeQDcmTQ=
+X-Google-Smtp-Source: ACHHUZ7QCm+XPU0jpXw5sGKZfSRT2TqWVUo/oGqCiZgbT/hYu18UPhyCJss3Gct0XveFbDtAYLD9OA==
+X-Received: by 2002:a05:6a20:728b:b0:118:ed8a:af45 with SMTP id o11-20020a056a20728b00b00118ed8aaf45mr841972pzk.40.1686304622024;
+        Fri, 09 Jun 2023 02:57:02 -0700 (PDT)
+Received: from localhost.localdomain ([43.132.98.114])
+        by smtp.gmail.com with ESMTPSA id 26-20020a63175a000000b0053f3797fc4asm2603369pgx.0.2023.06.09.02.56.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 02:57:01 -0700 (PDT)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     andrii.nakryiko@gmail.com, alan.maguire@oracle.com
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
+Subject: [PATCH bpf-next v4 0/3] bpf, x86: allow function arguments up to 12 for TRACING
+Date:   Fri,  9 Jun 2023 17:56:50 +0800
+Message-Id: <20230609095653.1406173-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR21MB1688B4F74FF7B670267D32FAD750A@BYAPR21MB1688.namprd21.prod.outlook.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 01:51:35PM +0000, Michael Kelley (LINUX) wrote:
-> From: Tianyu Lan <ltykernel@gmail.com> Sent: Thursday, June 1, 2023 8:16 AM
-> > 
-> > Hyper-V enlightened guest doesn't have boot loader support.
-> > Boot Linux kernel directly from hypervisor with data(kernel
-> 
-> Add a space between "data" and "(kernel"
-> 
-> > image, initrd and parameter page) and memory for boot up that
-> > is initialized via AMD SEV PSP proctol LAUNCH_UPDATE_DATA
-> 
-> s/proctol/protocol/
-> 
-> > (Please refernce https://www.amd.com/system/files/TechDocs/55766_SEV-KM_API_Specification.pdf 1.3.1 Launch).
-> 
-> s/refernce/reference/
-> 
-> And the link above didn't work for me -- the "55766_SEV-KM_API_Specification.pdf"
-> part was separated from the rest of the URL, though it's possible the mangling
-> was done by Microsoft's email system.  Please double check that the URL is
-> correctly formatted with no spurious spaces.
-> 
-> Even better, maybe write this as:
-> 
-> Please reference Section 1.3.1 "Launch" of [1].
-> 
-> Then put the full link as [1] at the bottom of the commit message.
-> 
+From: Menglong Dong <imagedong@tencent.com>
 
-Tianyu: that document is SEV specific, and does not have the parts that SEV-SNP
-uses. For SNP this is the firmware ABI:
+For now, the BPF program of type BPF_PROG_TYPE_TRACING can only be used
+on the kernel functions whose arguments count less than 6. This is not
+friendly at all, as too many functions have arguments count more than 6.
+According to the current kernel version, below is a statistics of the
+function arguments count:
 
-https://www.amd.com/system/files/TechDocs/56860.pdf
+argument count | function count
+7              | 704
+8              | 270
+9              | 84
+10             | 47
+11             | 47
+12             | 27
+13             | 22
+14             | 5
+15             | 0
+16             | 1
 
-and the API I think you mean is SNP_LAUNCH_UPDATE.
+Therefore, let's enhance it by increasing the function arguments count
+allowed in arch_prepare_bpf_trampoline(), for now, only x86_64.
 
-It would also help to mention that the data at EN_SEV_SNP_PROCESSOR_INFO_ADDR
-is loaded as PAGE_TYPE_UNMEASURED.
+In the 1st patch, we make arch_prepare_bpf_trampoline() support to copy
+function arguments in stack for x86 arch. Therefore, the maximum
+arguments can be up to MAX_BPF_FUNC_ARGS for FENTRY and FEXIT.
 
-Thanks,
-Jeremi
+In the 2nd patch, we clean garbage value in upper bytes of the trampoline
+when we store the arguments from regs or on-stack into stack.
+
+And the 3rd patches are for the testcases of the 1st patch.
+
+Changes since v3:
+- try make the stack pointer 16-byte aligned. Not sure if I'm right :)
+- introduce clean_garbage() to clean the grabage when argument count is 7
+- use different data type in bpf_testmod_fentry_test{7,12}
+- add testcase for grabage values in ctx
+
+Changes since v2:
+- keep MAX_BPF_FUNC_ARGS still
+- clean garbage value in upper bytes in the 2nd patch
+- move bpf_fentry_test{7,12} to bpf_testmod.c and rename them to
+  bpf_testmod_fentry_test{7,12} meanwhile in the 3rd patch
+
+Changes since v1:
+- change the maximun function arguments to 14 from 12
+- add testcases (Jiri Olsa)
+- instead EMIT4 with EMIT3_off32 for "lea" to prevent overflow
+
+Menglong Dong (3):
+  bpf, x86: allow function arguments up to 12 for TRACING
+  bpf, x86: clean garbage value in the stack of trampoline
+  selftests/bpf: add testcase for FENTRY/FEXIT with 6+ arguments
+
+ arch/x86/net/bpf_jit_comp.c                   | 145 ++++++++++++++++--
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c   |  19 ++-
+ .../selftests/bpf/prog_tests/fentry_fexit.c   |   4 +-
+ .../selftests/bpf/prog_tests/fentry_test.c    |   2 +
+ .../selftests/bpf/prog_tests/fexit_test.c     |   2 +
+ .../testing/selftests/bpf/progs/fentry_test.c |  33 ++++
+ .../testing/selftests/bpf/progs/fexit_test.c  |  57 +++++++
+ 7 files changed, 245 insertions(+), 17 deletions(-)
+
+-- 
+2.40.1
+
