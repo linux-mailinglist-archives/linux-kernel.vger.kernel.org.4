@@ -2,129 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2D772A664
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 00:54:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF53F72A666
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 00:56:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232021AbjFIWys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 18:54:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51848 "EHLO
+        id S229808AbjFIW4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 18:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjFIWyq (ORCPT
+        with ESMTP id S229587AbjFIW4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 18:54:46 -0400
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C13199D;
-        Fri,  9 Jun 2023 15:54:45 -0700 (PDT)
-Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-777b4c9e341so102106639f.0;
-        Fri, 09 Jun 2023 15:54:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686351285; x=1688943285;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pT8d709lUwR0H+C5hIKfiTzNt8kqiCGgM0Vbs93RSBI=;
-        b=iVfnN24Gzrxa6cN2tsyP05ZbU5QbFBw0n0K6+9cCza2GZf2GG0QafUPAqajiP3SQA5
-         GVoByI+4Qjd7U9WnbnCGqYP5nmx9DjWGiS+b6KeRXyti0wVSC12Ms5B+FHpnHhfdvm7p
-         8IX7S+phQ6ukr4Zuao9Rm1VIzo8Ro+QYvMGpx3hpvl7wb/q4NI8jbiwNA2k1eJxE4HvG
-         FPn1BRn9WYqesWEOPBFJCXsIqlErOTWYDa6lP9rTKrPRP6kegO2x67SBYnaUMUBifHmw
-         uhkBVdHOIkOVXBe4k7FIa0YLWzVRdZ49h3dOKkWFLBJpzU/icKIUS0UySbj9H6V4R7NA
-         78NA==
-X-Gm-Message-State: AC+VfDwinI1aD2AA1cSKelwH9K7Hs3UIdbBG3Mf0eAh83u0xh/5niVT2
-        PajPRynLwK3C0Xqbf+rXPA==
-X-Google-Smtp-Source: ACHHUZ4hkrjWTx1JroAsVMcvyH4QcGLOHYyPwn37uUR6Q/8eLHeqERimu9M7VUet3JdIarbD7Tic1A==
-X-Received: by 2002:a5e:c017:0:b0:778:735c:9bed with SMTP id u23-20020a5ec017000000b00778735c9bedmr2869964iol.0.1686351284694;
-        Fri, 09 Jun 2023 15:54:44 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id p22-20020a02b396000000b00420af1d2ce0sm1241761jan.5.2023.06.09.15.54.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 15:54:43 -0700 (PDT)
-Received: (nullmailer pid 2601357 invoked by uid 1000);
-        Fri, 09 Jun 2023 22:54:42 -0000
-Date:   Fri, 9 Jun 2023 16:54:42 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
+        Fri, 9 Jun 2023 18:56:08 -0400
+Received: from finn.localdomain (finn.gateworks.com [108.161.129.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320921BE8;
+        Fri,  9 Jun 2023 15:56:05 -0700 (PDT)
+Received: from 068-189-091-139.biz.spectrum.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
+        by finn.localdomain with esmtp (Exim 4.93)
+        (envelope-from <tharvey@gateworks.com>)
+        id 1q7l1O-006CxG-Q7; Fri, 09 Jun 2023 22:55:54 +0000
+From:   Tim Harvey <tharvey@gateworks.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: crypto: intel,ixp4xx: drop unneeded quotes
-Message-ID: <20230609225442.GA2588193-robh@kernel.org>
-References: <20230609140745.65046-1-krzysztof.kozlowski@linaro.org>
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tim Harvey <tharvey@gateworks.com>
+Subject: [PATCH] arm64: dts: imx8mm: add imx8mm-venice-gw73xx-0x-rpidsi overlay for display
+Date:   Fri,  9 Jun 2023 15:55:52 -0700
+Message-Id: <20230609225552.3594111-1-tharvey@gateworks.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230609140745.65046-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 04:07:45PM +0200, Krzysztof Kozlowski wrote:
-> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
-> checking for this can be enabled in yamllint.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../devicetree/bindings/crypto/intel,ixp4xx-crypto.yaml         | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Add support for the following Raspberry Pi displays:
+ - DFROBOT DRF0678 7in 800x480 TFT DSI capacitive touch
+ - DFROBOT DRF0550 5in 800x480 TFT DSI capacitive touch
 
-You missed $id and $schema values.
+Both have the following hardware:
+ - FocalTech FT5406 10pt touch controller (with no interrupt)
+ - Powertip PH800480T013-IDF02 compatible panel
+ - Toshiba TC358762 compatible DSI to DBI bridge
+ - ATTINY based regulator used for backlight controller and panel enable
 
-Within drivers/crypto, there's also:
+Support is added via a device-tree overlay. The touch controller is not
+yet supported as polling mode is needed.
 
-diff --git a/Documentation/devicetree/bindings/crypto/amlogic,gxl-crypto.yaml b/Documentation/devicetree/bi
-ndings/crypto/amlogic,gxl-crypto.yaml
-index ecf98a9e72b2..948e11ebe4ee 100644
---- a/Documentation/devicetree/bindings/crypto/amlogic,gxl-crypto.yaml
-+++ b/Documentation/devicetree/bindings/crypto/amlogic,gxl-crypto.yaml
-@@ -19,8 +19,8 @@ properties:
- 
-   interrupts:
-     items:
--      - description: "Interrupt for flow 0"
--      - description: "Interrupt for flow 1"
-+      - description: Interrupt for flow 0
-+      - description: Interrupt for flow 1
- 
-   clocks:
-     maxItems: 1
+Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+---
+ arch/arm64/boot/dts/freescale/Makefile        |  2 +
+ .../imx8mm-venice-gw73xx-0x-rpidsi.dtso       | 87 +++++++++++++++++++
+ 2 files changed, 89 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rpidsi.dtso
 
-Can you add this in here. No reason to split this up more that 1 patch 
-per subsystem really. 
+diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+index 76269da9cc62..48f03fc9af04 100644
+--- a/arch/arm64/boot/dts/freescale/Makefile
++++ b/arch/arm64/boot/dts/freescale/Makefile
+@@ -149,6 +149,7 @@ imx8mm-venice-gw72xx-0x-rs232-rts-dtbs	:= imx8mm-venice-gw72xx-0x.dtb imx8mm-ven
+ imx8mm-venice-gw72xx-0x-rs422-dtbs	:= imx8mm-venice-gw72xx-0x.dtb imx8mm-venice-gw72xx-0x-rs422.dtbo
+ imx8mm-venice-gw72xx-0x-rs485-dtbs	:= imx8mm-venice-gw72xx-0x.dtb imx8mm-venice-gw72xx-0x-rs485.dtbo
+ imx8mm-venice-gw73xx-0x-imx219-dtbs	:= imx8mm-venice-gw73xx-0x.dtb imx8mm-venice-gw73xx-0x-imx219.dtbo
++imx8mm-venice-gw73xx-0x-rpidsi-dtbs	:= imx8mm-venice-gw73xx-0x.dtb imx8mm-venice-gw73xx-0x-rpidsi.dtbo
+ imx8mm-venice-gw73xx-0x-rs232-rts-dtbs	:= imx8mm-venice-gw73xx-0x.dtb imx8mm-venice-gw73xx-0x-rs232-rts.dtbo
+ imx8mm-venice-gw73xx-0x-rs422-dtbs	:= imx8mm-venice-gw73xx-0x.dtb imx8mm-venice-gw73xx-0x-rs422.dtbo
+ imx8mm-venice-gw73xx-0x-rs485-dtbs	:= imx8mm-venice-gw73xx-0x.dtb imx8mm-venice-gw73xx-0x-rs485.dtbo
+@@ -158,6 +159,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw72xx-0x-rs232-rts.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw72xx-0x-rs422.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw72xx-0x-rs485.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-imx219.dtb
++dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-rpidsi.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-rs232-rts.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-rs422.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-venice-gw73xx-0x-rs485.dtb
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rpidsi.dtso b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rpidsi.dtso
+new file mode 100644
+index 000000000000..45bf88fa7c16
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-rpidsi.dtso
+@@ -0,0 +1,87 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 Gateworks Corporation
++ */
++
++#include <dt-bindings/gpio/gpio.h>
++
++#include "imx8mm-pinfunc.h"
++
++/dts-v1/;
++/plugin/;
++
++&{/} {
++	compatible = "gw,imx8mm-gw73xx-0x", "fsl,imx8mm";
++
++	panel {
++		compatible = "powertip,ph800480t013-idf02";
++		power-supply = <&attiny>;
++		backlight = <&attiny>;
++
++		port {
++			panel_in: endpoint {
++				remote-endpoint = <&bridge_out>;
++			};
++		};
++	};
++};
++
++&i2c3 {
++	#address-cells = <1>;
++	#size-cells = <0>;
++
++	attiny: regulator@45 {
++		compatible = "raspberrypi,7inch-touchscreen-panel-regulator";
++		reg = <0x45>;
++	};
++};
++
++&lcdif {
++	status = "okay";
++};
++
++&mipi_dsi {
++	samsung,burst-clock-frequency = <891000000>;
++	samsung,esc-clock-frequency = <54000000>;
++	samsung,pll-clock-frequency = <27000000>;
++	#address-cells = <1>;
++	#size-cells = <0>;
++	status = "okay";
++
++	bridge@0 {
++		compatible = "toshiba,tc358762";
++		reg = <0>;
++		vddc-supply = <&attiny>;
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@0 {
++				reg = <0>;
++				bridge_in: endpoint {
++					remote-endpoint = <&dsi_out>;
++				};
++			};
++
++			port@1 {
++				reg = <1>;
++				bridge_out: endpoint {
++					remote-endpoint = <&panel_in>;
++				};
++			};
++		};
++	};
++
++	ports {
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		port@1 {
++			reg = <1>;
++			dsi_out: endpoint {
++				remote-endpoint = <&bridge_in>;
++			};
++		};
++	};
++};
+-- 
+2.34.1
 
-As I mentioned, I have a WIP tree[1] with yamllint checks enabled and 
-I scripted many of the changes. It was clean, but there's some new ones 
-since rebasing to v6.4-rc1:
-
-../Documentation/devicetree/bindings/hwmon/starfive,jh71x0-temp.yaml:30:16: [error] string value is redundantly quoted with any quotes (quoted-strings)
-../Documentation/devicetree/bindings/hwmon/starfive,jh71x0-temp.yaml:31:16: [error] string value is redundantly quoted with any quotes (quoted-strings)
-../Documentation/devicetree/bindings/hwmon/starfive,jh71x0-temp.yaml:42:16: [error] string value is redundantly quoted with any quotes (quoted-strings)
-../Documentation/devicetree/bindings/hwmon/starfive,jh71x0-temp.yaml:43:16: [error] string value is redundantly quoted with any quotes (quoted-strings)
-../Documentation/devicetree/bindings/sound/nvidia,tegra-audio-max9808x.yaml:38:11: [error] string value is redundantly quoted with any quotes (quoted-strings)
-../Documentation/devicetree/bindings/sound/nvidia,tegra-audio-max9808x.yaml:39:11: [error] string value is redundantly quoted with any quotes (quoted-strings)
-../Documentation/devicetree/bindings/sound/nvidia,tegra-audio-max9808x.yaml:40:11: [error] string value is redundantly quoted with any quotes (quoted-strings)
-../Documentation/devicetree/bindings/sound/nvidia,tegra-audio-max9808x.yaml:41:11: [error] string value is redundantly quoted with any quotes (quoted-strings)
-../Documentation/devicetree/bindings/sound/nvidia,tegra-audio-max9808x.yaml:42:11: [error] string value is redundantly quoted with any quotes (quoted-strings)
-../Documentation/devicetree/bindings/sound/nvidia,tegra-audio-max9808x.yaml:43:11: [error] string value is redundantly quoted with any quotes (quoted-strings)
-../Documentation/devicetree/bindings/sound/nvidia,tegra-audio-rt5631.yaml:34:11: [error] string value is redundantly quoted with any quotes (quoted-strings)
-../Documentation/devicetree/bindings/sound/nvidia,tegra-audio-rt5631.yaml:35:11: [error] string value is redundantly quoted with any quotes (quoted-strings)
-../Documentation/devicetree/bindings/sound/nvidia,tegra-audio-rt5631.yaml:36:11: [error] string value is redundantly quoted with any quotes (quoted-strings)
-../Documentation/devicetree/bindings/sound/nvidia,tegra-audio-rt5631.yaml:37:11: [error] string value is redundantly quoted with any quotes (quoted-strings)
-../Documentation/devicetree/bindings/sound/cirrus,cs35l45.yaml:65:15: [error] string value is redundantly quoted with any quotes (quoted-strings)
-../Documentation/devicetree/bindings/sound/cirrus,cs35l45.yaml:74:15: [error] string value is redundantly quoted with any quotes (quoted-strings)
-../Documentation/devicetree/bindings/sound/cirrus,cs35l45.yaml:83:15: [error] string value is redundantly quoted with any quotes (quoted-strings)
-../Documentation/devicetree/bindings/sound/cirrus,cs35l45.yaml:93:15: [error] string value is redundantly quoted with any quotes (quoted-strings)
-../Documentation/devicetree/bindings/sound/cirrus,cs35l45.yaml:117:15: [error] string value is redundantly quoted with any quotes (quoted-strings)
-
-Rob
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git/log/?h=dt/yamllint
