@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47B9D729128
+	by mail.lfdr.de (Postfix) with ESMTP id B75F6729129
 	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:31:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237593AbjFIHaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 03:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43824 "EHLO
+        id S238765AbjFIHaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 03:30:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238740AbjFIH3s (ORCPT
+        with ESMTP id S238748AbjFIH3s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 9 Jun 2023 03:29:48 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D3130E7
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 00:29:18 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-65055aa4ed7so1187065b3a.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 00:29:18 -0700 (PDT)
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E408D30E6
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 00:29:20 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-651f2f38634so1494839b3a.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 00:29:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686295758; x=1688887758;
+        d=chromium.org; s=google; t=1686295760; x=1688887760;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JFvJp9MKPzIyi6S8BZNnG0J1ZKcj9eDruvsl3ndG+x4=;
-        b=W3zHlgeCteyA5/h7T/zT/CEDMd7tW5H1gmub4yPa84VsY/FzktFNe2sABDAQkpwRh0
-         dCEdP3yZh7fS/tDIWFkE7o4AW0BOH42bT+87wVmCL/w3I5l+YCEFHsGT6xLrpxx9y5ER
-         i36Xt6lDg1HlB7E1sBMMx5SDeC4cqleCVRlMM=
+        bh=TD+KUgBGAZpos34KVNAuisH6maHzuZAbYL+cYk7AnpI=;
+        b=W6ECPmFEywudFTGADngeW+8j6+RKfhMzOXW4JMxiaZhlyu+6dKLJveZYohzA7gk8N0
+         AkMgpbgmIfbZN1J9GhdzzkDX1+7MJh0oKuSRU+/09Ozmua9SOnTfqJSKU0rOAaTjLQRb
+         8ew0IxErShJiSYgM11P0AxrpUYhArPvNmzAN8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686295758; x=1688887758;
+        d=1e100.net; s=20221208; t=1686295760; x=1688887760;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JFvJp9MKPzIyi6S8BZNnG0J1ZKcj9eDruvsl3ndG+x4=;
-        b=fEOIDTELZZlTkQrDjuQj7Eu67LlRuEq2DwOxDf3IW7L80D4E/SuWIH+QywJCyi1jBW
-         j2MzAa82kmT+3R52AblonDWP+7inq24F615XLZDEEyOtt1wJODMC4exIgTPYfiFmYiJU
-         g4ymyKH/bDGhhGHLTad89V3oe+U7eRmUoSaV5TcTVnXs27Fl3mU3Wq7Hze2tIWfnMwm3
-         zQQJz7BncHeqJl/XRgIr6jXlY1Jy/tGXCHpX/R4UbwTzHdbeQXBznEfN0EIUy4SC4LKF
-         zomNRyj3r2oV8WA4KJE2qV+eQMcxlOnA4LoahJSlofvh18KU1W0uvixmSpU1i7585lZS
-         xRCA==
-X-Gm-Message-State: AC+VfDz/TDuI/z351iwFP3UXvUyvF+bqNpk/xdS7BT3rXRvDmFSohbB6
-        WhIC1VJlEnZ6TDC3AH/y1dB7qg==
-X-Google-Smtp-Source: ACHHUZ4/R41ts0yq+D+izuk9QKrBsLXtoNV2EZbQA6MjNw8ibgUQYZmX3lZZXPG4B8U0fqhKZw9tvQ==
-X-Received: by 2002:a05:6a00:24d6:b0:646:59e4:94eb with SMTP id d22-20020a056a0024d600b0064659e494ebmr445628pfv.15.1686295758318;
-        Fri, 09 Jun 2023 00:29:18 -0700 (PDT)
+        bh=TD+KUgBGAZpos34KVNAuisH6maHzuZAbYL+cYk7AnpI=;
+        b=GVWmyxTSsZZdMInV/2HpcMEjtyP57yWIIU9L7qtZhvkcARPnGjTBymMwidyHI5jNH6
+         mSV9FU+xJw6GUDFOJVgYBGssQHWd/DtYQ0Ow3N/ziJg0jjOt6YfD+rh2tRkPD/NmM9aV
+         E8E0g14x/tKbHC4z204ohChTMRUs0De7upRwO9v1dx9DTXQI7FRnxExYz+y/S8yY8+YH
+         W+naUQv1HjiZQygQpKt5Y7l4GqMeqCa2GcTC8ggi/K9EELdk4YWy8TQf2VrUjRQ3I/yI
+         nQIK2s2k4DrMysU1+1692KwnAgpFx0X2yng5/ml2ANf++ETYBaMPD3scOK8ZfsfEDIXB
+         FJlQ==
+X-Gm-Message-State: AC+VfDx3lj0ReMvFxkO9x6vtRpyhfFQVF6+5WaLZZwuhe4b7XcTxSUDk
+        4CfuCAV4I8F91h+xrD/sMwmCZQ==
+X-Google-Smtp-Source: ACHHUZ7CXCPz6Rn/bdtxmBFup4pQKAtT7ra/3D7+Bw2zj9cvrvb/EnPtR1cjdyv3l+/SW2uZbtn23g==
+X-Received: by 2002:aa7:8896:0:b0:658:f86f:b18e with SMTP id z22-20020aa78896000000b00658f86fb18emr643979pfe.22.1686295760403;
+        Fri, 09 Jun 2023 00:29:20 -0700 (PDT)
 Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:c2ea:d8e4:1fe8:21f0])
-        by smtp.gmail.com with ESMTPSA id y9-20020a655a09000000b005287a0560c9sm2160283pgs.1.2023.06.09.00.29.16
+        by smtp.gmail.com with ESMTPSA id y9-20020a655a09000000b005287a0560c9sm2160283pgs.1.2023.06.09.00.29.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 00:29:18 -0700 (PDT)
+        Fri, 09 Jun 2023 00:29:20 -0700 (PDT)
 From:   Chen-Yu Tsai <wenst@chromium.org>
 To:     Matthias Brugger <matthias.bgg@gmail.com>,
         AngeloGioacchino Del Regno 
@@ -57,9 +57,9 @@ Cc:     Chen-Yu Tsai <wenst@chromium.org>, devicetree@vger.kernel.org,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>
-Subject: [PATCH v2 3/4] arm64: dts: mediatek: mt8186: Add GPU speed bin NVMEM cells
-Date:   Fri,  9 Jun 2023 15:29:04 +0800
-Message-ID: <20230609072906.2784594-4-wenst@chromium.org>
+Subject: [PATCH v2 4/4] arm64: dts: mediatek: mt8186: Wire up GPU voltage/frequency scaling
+Date:   Fri,  9 Jun 2023 15:29:05 +0800
+Message-ID: <20230609072906.2784594-5-wenst@chromium.org>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
 In-Reply-To: <20230609072906.2784594-1-wenst@chromium.org>
 References: <20230609072906.2784594-1-wenst@chromium.org>
@@ -75,39 +75,180 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On the MT8186, the chip is binned for different GPU voltages at the
-highest OPPs. The binning value is stored in the efuse.
+Add the GPU's OPP table. This is from the downstream ChromeOS kernel,
+adapted to the new upstream opp-supported-hw binning format. Also add
+dynamic-power-coefficient for the GPU.
 
-Add the NVMEM cell, and tie it to the GPU.
+Also add label for mfg1 power domain. This is to be used at the board
+level to add a regulator supply for the power domain.
 
 Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- arch/arm64/boot/dts/mediatek/mt8186.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
+ arch/arm64/boot/dts/mediatek/mt8186.dtsi | 140 ++++++++++++++++++++++-
+ 1 file changed, 139 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt8186.dtsi b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-index e2becf2fe79f..3762a70ccafb 100644
+index 3762a70ccafb..f04ae70c470a 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8186.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-@@ -1519,6 +1519,11 @@ efuse: efuse@11cb0000 {
- 			reg = <0 0x11cb0000 0 0x1000>;
- 			#address-cells = <1>;
- 			#size-cells = <1>;
-+
-+			gpu_speedbin: gpu-speed-bin@59c {
-+				reg = <0x59c 0x4>;
-+				bits = <0 3>;
-+			};
- 		};
+@@ -647,6 +647,142 @@ clk32k: oscillator-32k {
+ 		clock-output-names = "clk32k";
+ 	};
  
- 		mipi_tx0: dsi-phy@11cc0000 {
-@@ -1551,6 +1556,8 @@ gpu: gpu@13040000 {
- 					<&spm MT8186_POWER_DOMAIN_MFG3>;
- 			power-domain-names = "core0", "core1";
++	gpu_opp_table: opp-table-gpu {
++		compatible = "operating-points-v2";
++
++		opp-299000000 {
++			opp-hz = /bits/ 64 <299000000>;
++			opp-microvolt = <612500>;
++			opp-supported-hw = <0xff>;
++		};
++
++		opp-332000000 {
++			opp-hz = /bits/ 64 <332000000>;
++			opp-microvolt = <625000>;
++			opp-supported-hw = <0xff>;
++		};
++
++		opp-366000000 {
++			opp-hz = /bits/ 64 <366000000>;
++			opp-microvolt = <637500>;
++			opp-supported-hw = <0xff>;
++		};
++
++		opp-400000000 {
++			opp-hz = /bits/ 64 <400000000>;
++			opp-microvolt = <643750>;
++			opp-supported-hw = <0xff>;
++		};
++
++		opp-434000000 {
++			opp-hz = /bits/ 64 <434000000>;
++			opp-microvolt = <656250>;
++			opp-supported-hw = <0xff>;
++		};
++
++		opp-484000000 {
++			opp-hz = /bits/ 64 <484000000>;
++			opp-microvolt = <668750>;
++			opp-supported-hw = <0xff>;
++		};
++
++		opp-535000000 {
++			opp-hz = /bits/ 64 <535000000>;
++			opp-microvolt = <687500>;
++			opp-supported-hw = <0xff>;
++		};
++
++		opp-586000000 {
++			opp-hz = /bits/ 64 <586000000>;
++			opp-microvolt = <700000>;
++			opp-supported-hw = <0xff>;
++		};
++
++		opp-637000000 {
++			opp-hz = /bits/ 64 <637000000>;
++			opp-microvolt = <712500>;
++			opp-supported-hw = <0xff>;
++		};
++
++		opp-690000000 {
++			opp-hz = /bits/ 64 <690000000>;
++			opp-microvolt = <737500>;
++			opp-supported-hw = <0xff>;
++		};
++
++		opp-743000000 {
++			opp-hz = /bits/ 64 <743000000>;
++			opp-microvolt = <756250>;
++			opp-supported-hw = <0xff>;
++		};
++
++		opp-796000000 {
++			opp-hz = /bits/ 64 <796000000>;
++			opp-microvolt = <781250>;
++			opp-supported-hw = <0xff>;
++		};
++
++		opp-850000000 {
++			opp-hz = /bits/ 64 <850000000>;
++			opp-microvolt = <800000>;
++			opp-supported-hw = <0xff>;
++		};
++
++		opp-900000000-3 {
++			opp-hz = /bits/ 64 <900000000>;
++			opp-microvolt = <850000>;
++			opp-supported-hw = <0x8>;
++		};
++
++		opp-900000000-4 {
++			opp-hz = /bits/ 64 <900000000>;
++			opp-microvolt = <837500>;
++			opp-supported-hw = <0x10>;
++		};
++
++		opp-900000000-5 {
++			opp-hz = /bits/ 64 <900000000>;
++			opp-microvolt = <825000>;
++			opp-supported-hw = <0x30>;
++		};
++
++		opp-950000000-3 {
++			opp-hz = /bits/ 64 <950000000>;
++			opp-microvolt = <900000>;
++			opp-supported-hw = <0x8>;
++		};
++
++		opp-950000000-4 {
++			opp-hz = /bits/ 64 <950000000>;
++			opp-microvolt = <875000>;
++			opp-supported-hw = <0x10>;
++		};
++
++		opp-950000000-5 {
++			opp-hz = /bits/ 64 <950000000>;
++			opp-microvolt = <850000>;
++			opp-supported-hw = <0x30>;
++		};
++
++		opp-1000000000-3 {
++			opp-hz = /bits/ 64 <1000000000>;
++			opp-microvolt = <950000>;
++			opp-supported-hw = <0x8>;
++		};
++
++		opp-1000000000-4 {
++			opp-hz = /bits/ 64 <1000000000>;
++			opp-microvolt = <912500>;
++			opp-supported-hw = <0x10>;
++		};
++
++		opp-1000000000-5 {
++			opp-hz = /bits/ 64 <1000000000>;
++			opp-microvolt = <875000>;
++			opp-supported-hw = <0x30>;
++		};
++	};
++
+ 	pmu-a55 {
+ 		compatible = "arm,cortex-a55-pmu";
+ 		interrupt-parent = <&gic>;
+@@ -765,7 +901,7 @@ mfg0: power-domain@MT8186_POWER_DOMAIN_MFG0 {
+ 					#size-cells = <0>;
+ 					#power-domain-cells = <1>;
+ 
+-					power-domain@MT8186_POWER_DOMAIN_MFG1 {
++					mfg1: power-domain@MT8186_POWER_DOMAIN_MFG1 {
+ 						reg = <MT8186_POWER_DOMAIN_MFG1>;
+ 						mediatek,infracfg = <&infracfg_ao>;
+ 						#address-cells = <1>;
+@@ -1558,6 +1694,8 @@ gpu: gpu@13040000 {
  			#cooling-cells = <2>;
-+			nvmem-cells = <&gpu_speedbin>;
-+			nvmem-cell-names = "speed-bin";
+ 			nvmem-cells = <&gpu_speedbin>;
+ 			nvmem-cell-names = "speed-bin";
++			operating-points-v2 = <&gpu_opp_table>;
++			dynamic-power-coefficient = <4687>;
  			status = "disabled";
  		};
  
