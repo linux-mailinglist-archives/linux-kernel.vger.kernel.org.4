@@ -2,117 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D954F7293A2
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:49:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F187293AE
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:51:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239677AbjFIItI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 04:49:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50864 "EHLO
+        id S240189AbjFIIus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 04:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239106AbjFIIss (ORCPT
+        with ESMTP id S239851AbjFIIuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 04:48:48 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5710B9
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 01:48:47 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f6283d0d84so1854432e87.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 01:48:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686300526; x=1688892526;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zSGqb02gzoaEjtKR6JU66NNivYp/3SwH4FmhCExXxIE=;
-        b=rJc//ty17aedU5JQdky1ceN1yEvT+ypVHFV8MnwcfbRyjg4Hi5lmq4mt93HSVJwwYA
-         6OULR2YfWn1tkeiRjxX4t7FwXmfOdGi2vlqvfEqBcIj4OmI1v1Niwial/LIsLOAj8NFp
-         5blY6UoGvEPP5QzLaKqb8Y7/lULPmDIjI2eaKMB/T6AGRq6/Tjic5qHp4ateXgEZq22Z
-         GzwrxV7DIPYML7f4B50SXd1SNswEg4GOcdRJ4Vp+ieaEHcKxCm/7zwBNX9V8KsgWcLxo
-         eyfizkHCl99g5U81fg4IGjyUCQpSiNIxchJb6eXRoGXZgfqmWkH+9bMqNjz9xjRWCoYH
-         UoIw==
+        Fri, 9 Jun 2023 04:50:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E3F3B9
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 01:49:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686300572;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Emc5NZMXV0SIucAbT3Bsy8yUIVGNzCP8ASsJBgE9giM=;
+        b=eY2gIGPZUvMVnSRl+Y8fIcbJVTvbFNRX9Ntnvfh3BLwMo9whmtWVMpdjvf5RJZoWAImh2O
+        mWHI1CDh5yg68ms/dNZ39ogiP2has5MrdGwyyyC5Ih6QM9xNiDBtDHjAZTuD4AoKv+wZ6G
+        N4Xc/PdeLj9dw0heWCsJNt2YCoQDh3Q=
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
+ [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-166-wyKQlJDeNi6icIxgxnlinw-1; Fri, 09 Jun 2023 04:49:31 -0400
+X-MC-Unique: wyKQlJDeNi6icIxgxnlinw-1
+Received: by mail-lf1-f71.google.com with SMTP id 2adb3069b0e04-4f60dd5ab21so1246290e87.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 01:49:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686300526; x=1688892526;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zSGqb02gzoaEjtKR6JU66NNivYp/3SwH4FmhCExXxIE=;
-        b=ao4w42QDuPToMN9GAx03rO+RHfXqYi4sMvlg07vKBDXq34QrfPMdHwTmee9I/xJjlb
-         pCKZUpNjvnpbElpFRm4YuRddtjZO1+h6VsBwzoR9S5OcO70BecC7vM2f6UJ5rt77VimS
-         8yCg3cS0oZU7bYUHvtKVqPE/ReA9ltZTIP19z+OdpqolIhwHXa7CDE1hw2mSoJVkOV92
-         +2Yosbsce3mrjyj8aPNQy+eAc4kH/j3p11KFNO/GjTTBAIuuWJuHT2BAVK2gt3a2GNOu
-         Ic6e86yrk1amMGdRDR5ekFmjcrT4W4QeGC3Y/7Vgs201LkLdnd3kJadmY2PVatNEbJmZ
-         7qHg==
-X-Gm-Message-State: AC+VfDwalLxWpy2B0zJZ/UEVBGWApuiPR44sABmX5/v0eE1oMrBq3EZ5
-        GuXTR+vRuFM9X9s1QFMZeqA=
-X-Google-Smtp-Source: ACHHUZ45QRL6crB+3utek4atjv3kIidZdpGzBDG6SbAMc8bVK42uK/blVBB64NKZxVvw26ozHHbuDA==
-X-Received: by 2002:a05:6512:205:b0:4f2:74d3:8996 with SMTP id a5-20020a056512020500b004f274d38996mr390574lfo.8.1686300525546;
-        Fri, 09 Jun 2023 01:48:45 -0700 (PDT)
-Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
-        by smtp.gmail.com with ESMTPSA id f16-20020a1c6a10000000b003f60fb2addbsm1922377wmc.44.2023.06.09.01.48.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 01:48:44 -0700 (PDT)
-Date:   Fri, 9 Jun 2023 09:48:44 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Lu Hongfei <luhongfei@vivo.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "open list:VMALLOC" <linux-mm@kvack.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        opensource.kernel@vivo.com
-Subject: Re: [PATCH] mm/vmalloc: Replace the ternary conditional operator
- with min()
-Message-ID: <3fc87d60-4e81-4f49-95f0-0503ad5cdf35@lucifer.local>
-References: <20230609061309.42453-1-luhongfei@vivo.com>
- <832d7c69-ffd5-4764-8ffe-3a02bef0efb0@lucifer.local>
+        d=1e100.net; s=20221208; t=1686300569; x=1688892569;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Emc5NZMXV0SIucAbT3Bsy8yUIVGNzCP8ASsJBgE9giM=;
+        b=jeKHqNKesgYpod0R3uz5pHz9u/HDz+iZ0G6T72+mk1ZEKWMtNasPeYN7e3htyVS/Ni
+         wZEftsAls9LtzSTbGGzFWXrB+l5OA1wkvxl8zSOIIfIO4np7kzKW9Ena0lq9ca+tB0WA
+         azx7ta9n9HX+lBdmEVyC9ll++mxyEqZrybhQR2RWwokZKfA4+xa/RJbLrMNAhQc6eOyW
+         AFmrUkgEmtEMH8h7YuCkD07wAOppPvWcTkxBGjjn/bHZR7VAdsW29uY80nHvzhEitRiI
+         aqNzV3an9w98NO8wdXqzinZrpsOSLR5Z3jy5pjRIw463Cj8AaNRt+0RQu7tkEOi81ko6
+         6/wQ==
+X-Gm-Message-State: AC+VfDz49CBAwn+l49M/B/mX6n68VSDMCezu/GffP9Sjgr+wvmmPAAOe
+        cXLO6Xa13JMrfdHT5rMPB3lJRXSWlonrfyiHbXpMrLPTGH3vHFufCENgG2gqAtUWE9rJ07ktgPR
+        pzx0SZ+NjP3NLT+/wIupWSRSdgmREL41CSek3jIIWEfa7hMP+
+X-Received: by 2002:a05:6512:2f4:b0:4f6:56:c40e with SMTP id m20-20020a05651202f400b004f60056c40emr452667lfq.28.1686300569441;
+        Fri, 09 Jun 2023 01:49:29 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6BL3qWvDfPyUUitDGSioRWmk/YjuXZV+6gR2aY8EGxd/8s0Li32lrEjEs1c49mLh9Xf+SfRSiEVHgZ7SIyH64=
+X-Received: by 2002:a05:6512:2f4:b0:4f6:56:c40e with SMTP id
+ m20-20020a05651202f400b004f60056c40emr452648lfq.28.1686300569096; Fri, 09 Jun
+ 2023 01:49:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <832d7c69-ffd5-4764-8ffe-3a02bef0efb0@lucifer.local>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230601075333.14021-1-ihuguet@redhat.com> <87sfb1oz13.fsf@meer.lwn.net>
+In-Reply-To: <87sfb1oz13.fsf@meer.lwn.net>
+From:   =?UTF-8?B?w43DsWlnbyBIdWd1ZXQ=?= <ihuguet@redhat.com>
+Date:   Fri, 9 Jun 2023 10:49:17 +0200
+Message-ID: <CACT4oucYVtGPj+cJrkAKXiwW74VNqb1R3u9jYQ9XnU6-LVde7g@mail.gmail.com>
+Subject: Re: [PATCH v4] Add .editorconfig file for basic formatting
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     ojeda@kernel.org, danny@kdrag0n.dev, masahiroy@kernel.org,
+        jgg@nvidia.com, mic@digikod.net, linux-kernel@vger.kernel.org,
+        joe@perches.com, linux@rasmusvillemoes.dk, willy@infradead.org,
+        mailhol.vincent@wanadoo.fr
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 08:09:45AM +0100, Lorenzo Stoakes wrote:
-> On Fri, Jun 09, 2023 at 02:13:09PM +0800, Lu Hongfei wrote:
-> > It would be better to replace the traditional ternary conditional
-> > operator with min() in zero_iter
-> >
-> > Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
-> > ---
-> >  mm/vmalloc.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> > index 29077d61ff81..42df032e6c27
-> > --- a/mm/vmalloc.c
-> > +++ b/mm/vmalloc.c
-> > @@ -3571,7 +3571,7 @@ static size_t zero_iter(struct iov_iter *iter, size_t count)
-> >  	while (remains > 0) {
-> >  		size_t num, copied;
-> >
-> > -		num = remains < PAGE_SIZE ? remains : PAGE_SIZE;
-> > +		num = min(remains, PAGE_SIZE);
-
-OK, as per the pedantic test bot, you'll need to change this to:-
-
-num = min_t(size_t, remains, PAGE_SIZE);
-
-> >  		copied = copy_page_to_iter_nofault(ZERO_PAGE(0), 0, num, iter);
-> >  		remains -= copied;
-> >
-> > --
-> > 2.39.0
-> >
+On Fri, Jun 9, 2023 at 9:50=E2=80=AFAM Jonathan Corbet <corbet@lwn.net> wro=
+te:
 >
-> Looks good to me, thanks,
+> =C3=8D=C3=B1igo Huguet <ihuguet@redhat.com> writes:
 >
-> Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> > EditorConfig is a specification to define the most basic code formattin=
+g
+> > stuff, and it's supported by many editors and IDEs, either directly or
+> > via plugins, including VSCode/VSCodium, Vim, emacs and more.
+> >
+> > It allows to define formatting style related to indentation, charset,
+> > end of lines and trailing whitespaces. It also allows to apply differen=
+t
+> > formats for different files based on wildcards, so for example it is
+> > possible to apply different configs to *.{c,h}, *.py and *.rs.
+> >
+> > In linux project, defining a .editorconfig might help to those people
+> > that work on different projects with different indentation styles, so
+> > they cannot define a global style. Now they will directly see the
+> > correct indentation on every fresh clone of the project.
+> >
+> > See https://editorconfig.org
+> >
+> > Co-developed-by: Danny Lin <danny@kdrag0n.dev>
+> > Signed-off-by: Danny Lin <danny@kdrag0n.dev>
+> > Signed-off-by: =C3=8D=C3=B1igo Huguet <ihuguet@redhat.com>
+>
+> So I must confess to still being really nervous about installing a file
+> that will silently reconfigure the editors of everybody working on the
+> kernel source; I wish there were a straightforward way to do this as an
+> opt-in thing.  We're talking about creating a flag-day behavioral change
+> for, potentially, thousands of kernel developers.  Something tells me
+> that we might just hear from a few of them.
+>
+> I wonder if we should, instead, ship a file like this as something like
+> Documentation/process/editorconfig, then provide a "make editorconfig"
+> command that installs it in the top-level directory for those who want
+> it?
+>
+> Or perhaps I'm worrying too much?
 
-Please spin up a v2 with this change and then you can take my Reviewed-by tag :)
+This is a valid option, indeed, but In my opinion we are overlooking this.
 
-Cheers, Lorenzo
+Adding an .editorconfig will not silently reconfigure the editors of
+everyone because for most editors you need to install a plugin to use
+it. In my opinion, that's enough "opt-in". Here is the list of editors
+that have built-in support, and those that need a plugin install. I
+don't think that those with built-in support are widely used for
+kernel development, and many of them allow to disable the feature.
+
+I see this as the exact same case as adding a .clang-format file, as
+we already have. Some editors, either built-in or via plugin,
+automatically reformat code when this file is present. And it's far
+more "intrusive" than editorconfig.
+
+Also, note that, for those with editorconfig enabled in their editors,
+the editor would be enforcing formatting rules that are mandatory, not
+optional.
+
+Said that, if you still prefer to do it via `make editorconfig`, I can
+change it.
+
+>
+> Thanks,
+>
+> jon
+>
+
+
+--=20
+=C3=8D=C3=B1igo Huguet
+
