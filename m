@@ -2,319 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C278729401
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:00:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 574287293FE
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:00:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239094AbjFIJAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 05:00:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54954 "EHLO
+        id S239761AbjFIJAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 05:00:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241090AbjFII7b (ORCPT
+        with ESMTP id S241151AbjFII7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 04:59:31 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20BDC30D7;
-        Fri,  9 Jun 2023 01:59:04 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686301143;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3i5foLMcrgXrXot/tAraE/LNnZMOjWeP4zv/fyq3n1U=;
-        b=mbPIlV9myoX7WUARu4xrxGYecZWM9PixCsMofEoqAGfmTUNeis5zuNw8cJY5/R1KvjubNv
-        tEnrWfnw+Z+7yFOr2WXjSR2ZChGaX+VUr1Ifyi/Ft4HdkazkykuSgBnffouD0JGddB+TG4
-        Tfbs5XAZXjQrzrlEMs1DnXV1eSqVQKtHcicdzsF18gchIaO43XpOw34+xa4QDFXLl6+Lbv
-        J86cPCzZawtQijOQCLezspkUc5MD3vj0XzbZJQw9E09yluaZJcKOeQWllLkwhVqrF9y+ce
-        NdLpxPWa7y3W/I+ry6Tya654qtPwBTfYYmRn/PRLTUqlsjonBXNht/Ba5HC5QA==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 665A9E0002;
-        Fri,  9 Jun 2023 08:58:58 +0000 (UTC)
-Date:   Fri, 9 Jun 2023 10:58:57 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        Linux MTD List <linux-mtd@lists.infradead.org>,
-        f.fainelli@gmail.com, rafal@milecki.pl, kursad.oney@broadcom.com,
-        joel.peshkin@broadcom.com, computersforpeace@gmail.com,
-        anand.gore@broadcom.com, dregan@mail.com, kamal.dasu@broadcom.com,
-        tomer.yacoby@broadcom.com, dan.beygelman@broadcom.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH 05/12] dt-bindings: mtd: brcmnand: Updates for bcmbca
- SoCs
-Message-ID: <20230609105857.7256c02f@xps-13>
-In-Reply-To: <84e97108-29d4-5103-14f4-03e3c0eba165@broadcom.com>
-References: <20230606231252.94838-1-william.zhang@broadcom.com>
-        <20230606231252.94838-6-william.zhang@broadcom.com>
-        <20230607101452.4c265d7e@xps-13>
-        <84e97108-29d4-5103-14f4-03e3c0eba165@broadcom.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Fri, 9 Jun 2023 04:59:38 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359A72D4A
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 01:59:36 -0700 (PDT)
+Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com [209.85.219.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 654383F0F8
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 08:59:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1686301172;
+        bh=cTj4GjB/9BDLM3nhk88ZM05TgDh034XIKIkWicIblZI=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=UPEIm71ivdXScEOIPAC7GgUVXPcm0WlIrPV/bMuNNGOmDDTnUsQFrKG0bfBPjnnZQ
+         cSuWRawS2oUpwfB49VKanruhRHmErCOVT2A76yAJBHI0XIufZyCLX144zRgG5Z9LOp
+         4cAwqndEDzUNqangWaXmjLcpUxGESxarArnuPmqtAWk4atvfofabEzYeIu1uSs5uEc
+         kAT1gCWe5EtM17cloK+PAiNN0yD61rC9KYDSKfdoWlhKIBoRkAEVi/wLTWZNoq6BZf
+         LCXJv4d5yMPEFln0rI8pPRUQu/QRe3Uem1GHyPkODjZgRIPn+mKzXHOAqP0kmvjrqL
+         9T95dmiPT4+7g==
+Received: by mail-yb1-f199.google.com with SMTP id 3f1490d57ef6-bb0d11a56abso2278471276.2
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 01:59:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686301171; x=1688893171;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cTj4GjB/9BDLM3nhk88ZM05TgDh034XIKIkWicIblZI=;
+        b=QvxPfRrWP2OABVdrFH9H4ctC0n21sS5KBa8KFU6UzBiEgG9RmU9WYUfnqPYj3FeSC3
+         FQCW7FjD+BJDYlw6P+0sIEqTfK8jwUYgNRDCmA7Ur7AdbJgf9YA8yDWdOnZtExZJSCQ7
+         +kwe2kUuLrTpAtm/D6VVO77x3jTMVy1ZiaN7IQZEldhIyEVJOWkbaLCaY6+pdHsj5NCO
+         fgGrguZBa1Ip8Z/1ZMoUGrXIZ903Ket36DVq8EXV24L2YH4pjIdxN/KJ4YRYk9SGrKrb
+         2oBbwNNYVihvvlBNLY8MmUNkUY12gjT4zsl9f74UHjTNUyveqWAwu89b29536Y6NVJwL
+         7PAQ==
+X-Gm-Message-State: AC+VfDzUj7WlCvblJYA/8BIs9MxUJUGwKyqYwLe9bbKofnlqTTjtHcri
+        hKLfgNx0qp+GYSIYmpEiOHdDuvty+oBlafgD/ju0M0roJ7F8ZVueZDfwYpthXmVgF3dR0yLPn60
+        zIMjA26ugMl0U7F8wOc+LwLv+Kn4a7SqtqbfC0GFMHIgEXU1txQmLoLUtMg==
+X-Received: by 2002:a5b:804:0:b0:bac:9ba9:ada1 with SMTP id x4-20020a5b0804000000b00bac9ba9ada1mr453474ybp.28.1686301171350;
+        Fri, 09 Jun 2023 01:59:31 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ59zGfy4dc8gYfqdDXyKBfpVeg1LYolpGdxg+escyvURJkfZF5yKxZDvex7d5pDFzFcyR4N0J3pJDQefXNnAL0=
+X-Received: by 2002:a5b:804:0:b0:bac:9ba9:ada1 with SMTP id
+ x4-20020a5b0804000000b00bac9ba9ada1mr453466ybp.28.1686301171072; Fri, 09 Jun
+ 2023 01:59:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+References: <20230608154256.562906-1-aleksandr.mikhalitsyn@canonical.com> <f3864ed6-8c97-8a7a-f268-dab29eb2fb21@redhat.com>
+In-Reply-To: <f3864ed6-8c97-8a7a-f268-dab29eb2fb21@redhat.com>
+From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Date:   Fri, 9 Jun 2023 10:59:19 +0200
+Message-ID: <CAEivzxcRsHveuW3nrPnSBK6_2-eT4XPvza3kN2oogvnbVXBKvQ@mail.gmail.com>
+Subject: Re: [PATCH v5 00/14] ceph: support idmapped mounts
+To:     Xiubo Li <xiubli@redhat.com>
+Cc:     brauner@kernel.org, stgraber@ubuntu.com,
+        linux-fsdevel@vger.kernel.org, Ilya Dryomov <idryomov@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi William,
+On Fri, Jun 9, 2023 at 3:57=E2=80=AFAM Xiubo Li <xiubli@redhat.com> wrote:
+>
+>
+> On 6/8/23 23:42, Alexander Mikhalitsyn wrote:
+> > Dear friends,
+> >
+> > This patchset was originally developed by Christian Brauner but I'll co=
+ntinue
+> > to push it forward. Christian allowed me to do that :)
+> >
+> > This feature is already actively used/tested with LXD/LXC project.
+> >
+> > Git tree (based on https://github.com/ceph/ceph-client.git master):
 
-william.zhang@broadcom.com wrote on Wed, 7 Jun 2023 13:01:56 -0700:
+Hi Xiubo!
 
-> Hi Miquel,
->=20
-> On 06/07/2023 01:14 AM, Miquel Raynal wrote:
-> > Hi William,
-> >=20
-> > william.zhang@broadcom.com wrote on Tue,  6 Jun 2023 16:12:45 -0700:
-> >  =20
-> >> Use new compatiable brcm,nand-bcmbca to support BCMBCA broadband
-> >> product. The old compatible string is still kept in the driver so old
-> >> dtb can still work.
-> >>
-> >> Add brcm,nand-use-wp property to have an option for disabling this
-> >> feature on broadband board design that does not use write protection.
-> >> Add brcm,nand-ecc-use-strap to get ecc setting from board strap for
-> >> broadband board designs because they do not specify ecc setting in dts
-> >> but rather using the strap setting.
-> >>
-> >> Remove the requirement of interrupts and interrupt-names properties to
-> >> reflect the driver code.
-> >>
-> >> This patch also includes a few minor fixes to the BCM63xx compatibles
-> >> and add myself to the list of maintainers.
-> >>
-> >> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> >> ---
-> >>
-> >>   .../bindings/mtd/brcm,brcmnand.yaml           | 64 +++++++++++++----=
---
-> >>   1 file changed, 43 insertions(+), 21 deletions(-)
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml =
-b/Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml
-> >> index 1571024aa119..1fe1c166a9db 100644
-> >> --- a/Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml
-> >> +++ b/Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml
-> >> @@ -9,6 +9,7 @@ title: Broadcom STB NAND Controller
-> >>   maintainers:
-> >>     - Brian Norris <computersforpeace@gmail.com>
-> >>     - Kamal Dasu <kdasu.kdev@gmail.com>
-> >> +  - William Zhang <william.zhang@broadcom.com> =20
-> >>   >>   description: | =20
-> >>     The Broadcom Set-Top Box NAND controller supports low-level access=
- to raw NAND
-> >> @@ -18,9 +19,10 @@ description: |
-> >>     supports basic PROGRAM and READ functions, among other features. =
-=20
-> >>   >>     This controller was originally designed for STB SoCs (BCM7xxx=
-) but is now =20
-> >> -  available on a variety of Broadcom SoCs, including some BCM3xxx, BC=
-M63xx, and
-> >> -  iProc/Cygnus. Its history includes several similar (but not fully r=
-egister
-> >> -  compatible) versions.
-> >> +  available on a variety of Broadcom SoCs, including some BCM3xxx, MI=
-PS based
-> >> +  Broadband SoC (BCM63xx), ARM based Broadband SoC (BCMBCA) and iProc=
-/Cygnus.
-> >> +  Its history includes several similar (but not fully register compat=
-ible)
-> >> +  versions. =20
-> >>   >>     -- Additional SoC-specific NAND controller properties --
-> >>   >> @@ -53,9 +55,9 @@ properties: =20
-> >>                 - brcm,brcmnand-v7.2
-> >>                 - brcm,brcmnand-v7.3
-> >>             - const: brcm,brcmnand
-> >> -      - description: BCM63138 SoC-specific NAND controller
-> >> +      - description: BCMBCA SoC-specific NAND controller
-> >>           items:
-> >> -          - const: brcm,nand-bcm63138
-> >> +          - const: brcm,nand-bcmbca
-> >>             - enum:
-> >>                 - brcm,brcmnand-v7.0
-> >>                 - brcm,brcmnand-v7.1
-> >> @@ -65,11 +67,15 @@ properties:
-> >>             - const: brcm,nand-iproc
-> >>             - const: brcm,brcmnand-v6.1
-> >>             - const: brcm,brcmnand
-> >> -      - description: BCM63168 SoC-specific NAND controller
-> >> +      - description: BCM63xx SoC-specific NAND controller
-> >>           items:
-> >> -          - const: brcm,nand-bcm63168
-> >> -          - const: brcm,nand-bcm6368
-> >> -          - const: brcm,brcmnand-v4.0
-> >> +          - enum:
-> >> +              - brcm,nand-bcm63168
-> >> +              - brcm,nand-bcm6368
-> >> +          - enum:
-> >> +              - brcm,brcmnand-v2.1
-> >> +              - brcm,brcmnand-v2.2
-> >> +              - brcm,brcmnand-v4.0
-> >>             - const: brcm,brcmnand =20
-> >>   >>     reg: =20
-> >> @@ -111,6 +117,19 @@ properties:
-> >>         earlier versions of this core that include WP
-> >>       type: boolean =20
-> >>   >> +  brcm,nand-use-wp: =20
-> >> +    description:
-> >> +      Use this integer to indicate if board design uses
-> >> +      controller's write protection feature and connects its
-> >> +      NAND_WPb pin to nand chip's WP_L pin. Driver defaults to
-> >> +      use this feature when this property does not exist.
-> >> +      Set to 0 if WP pins are not connected and feature is not
-> >> +      used. Set to 1 if WP pins are connected and feature is used.
-> >> +      Set to 2 if WP pins are connected but disable this feature
-> >> +      through driver that sets controller to output high on NAND_WPb.
-> >> +    $ref: /schemas/types.yaml#/definitions/uint32
-> >> +    enum: [0, 1, 2] =20
-> >=20
-> > Perhaps strings would be welcome. I'll let binding maintainers say what
-> > they think of it.
-> >  =20
-> Practically there is really just use cases of 0 and 1. I could use a bool=
- flag but to keep consistent with the driver code and in case there is any =
-existing usage of 2.
->=20
-> >> +
-> >>   patternProperties:
-> >>     "^nand@[a-f0-9]$":
-> >>       type: object
-> >> @@ -136,13 +155,23 @@ patternProperties:
-> >>             layout.
-> >>           $ref: /schemas/types.yaml#/definitions/uint32 =20
-> >>   >> +      brcm,nand-ecc-use-strap: =20
-> >> +        description:
-> >> +          This flag is used by the driver to get the ecc strength and
-> >> +          spare area size from the SoC NAND boot strap setting. This
-> >> +          is commonly used by the BCMBCA SoC board design. If ecc
-> >> +          strength and spare area size are set by nand-ecc-strength
-> >> +          and brcm,nand-oob-sector-size in the dts, these settings
-> >> +          have precedence and override this flag.
-> >> +        $ref: /schemas/types.yaml#/definitions/flag =20
-> >=20
-> > How in practice do you access the strap value? Don't you need a phandle
-> > over a specific area in the SoC?
-> >  =20
-> The strap value is latched and stored in the NAND controller register so =
-there is no extra phandle needed.
+>
+> Could you rebase these patches to 'testing' branch ?
 
-Ok.
+Will do in -v6.
 
->=20
-> >> +
-> >>   allOf:
-> >>     - $ref: nand-controller.yaml#
-> >>     - if:
-> >>         properties:
-> >>           compatible:
-> >>             contains:
-> >> -            const: brcm,nand-bcm63138
-> >> +            const: brcm,nand-bcmbca
-> >>       then:
-> >>         properties:
-> >>           reg-names:
-> >> @@ -153,7 +182,9 @@ allOf:
-> >>         properties:
-> >>           compatible:
-> >>             contains:
-> >> -            const: brcm,nand-bcm6368
-> >> +            enum:
-> >> +              - brcm,nand-bcm63168
-> >> +              - brcm,nand-bcm6368
-> >>       then:
-> >>         properties:
-> >>           reg-names:
-> >> @@ -173,20 +204,12 @@ allOf:
-> >>               - const: nand
-> >>               - const: iproc-idm
-> >>               - const: iproc-ext
-> >> -  - if:
-> >> -      properties:
-> >> -        interrupts:
-> >> -          minItems: 2
-> >> -    then:
-> >> -      required:
-> >> -        - interrupt-names =20
-> >=20
-> > Why do you remove this? Removing "interrupts" from the required
-> > properties is fine, but constraining the interrupts property when it is
-> > relevant is still expected.
-> >  =20
-> There is no requirement for interrupt name even if it have two interrupts=
-. Driver code does not use interrupt name but the interrupt index instead.
+>
+> And you still have missed several places, for example the following cases=
+:
+>
+>
+>     1    269  fs/ceph/addr.c <<ceph_netfs_issue_op_inline>>
+>               req =3D ceph_mdsc_create_request(mdsc, CEPH_MDS_OP_GETATTR,
+> mode);
 
-It does not matter in this case how the driver uses the interrupts. If
-names have been provided once in the bindings, you could expect another
-project using the same bindings to use the interrupt names instead of
-the order. So you must keep the names. Just don't mark them required it
-they are.
++
 
->=20
-> >>   >>   unevaluatedProperties: false
-> >>   >>   required: =20
-> >>     - reg
-> >>     - reg-names
-> >> -  - interrupts =20
-> >=20
-> > This should be done in a separate patch.
-> >  =20
-> I thought this is also related to my update for bcmbca chips because they=
- don't need to interrupt and interrupt name.
+>     2    389  fs/ceph/dir.c <<ceph_readdir>>
+>               req =3D ceph_mdsc_create_request(mdsc, op, USE_AUTH_MDS);
 
-The fact that the driver does not use the interrupts does not mean they
-should not be described.=20
++
 
->=20
-> >>   >>   examples: =20
-> >>     - |
-> >> @@ -215,8 +238,7 @@ examples:
-> >>       };
-> >>     - |
-> >>       nand-controller@10000200 {
-> >> -        compatible =3D "brcm,nand-bcm63168", "brcm,nand-bcm6368",
-> >> -                     "brcm,brcmnand-v4.0", "brcm,brcmnand";
-> >> +        compatible =3D "brcm,nand-bcm6368", "brcm,brcmnand-v2.1", "br=
-cm,brcmnand";
-> >>           reg =3D <0x10000200 0x180>,
-> >>                 <0x100000b0 0x10>,
-> >>                 <0x10000600 0x200>; =20
-> >=20
-> >=20
-> > Thanks,
-> > Miqu=C3=A8l
-> >  =20
+>     3    789  fs/ceph/dir.c <<ceph_lookup>>
+>               req =3D ceph_mdsc_create_request(mdsc, op, USE_ANY_MDS);
 
+We don't have an idmapping passed to lookup from the VFS layer. As I
+mentioned before, it's just impossible now.
+
+I've checked all places with ceph_mdsc_create_request and passed
+idmapping everywhere if possible (in v6, that I will send soon).
+
+>     ...
+>
+>
+> For this requests you also need to set the real idmap.
 
 Thanks,
-Miqu=C3=A8l
+Alex
+
+>
+>
+> Thanks
+>
+> - Xiubo
+>
+>
+>
+> > v5: https://github.com/mihalicyn/linux/commits/fs.idmapped.ceph.v5
+> > current: https://github.com/mihalicyn/linux/tree/fs.idmapped.ceph
+> >
+> > In the version 3 I've changed only two commits:
+> > - fs: export mnt_idmap_get/mnt_idmap_put
+> > - ceph: allow idmapped setattr inode op
+> > and added a new one:
+> > - ceph: pass idmap to __ceph_setattr
+> >
+> > In the version 4 I've reworked the ("ceph: stash idmapping in mdsc requ=
+est")
+> > commit. Now we take idmap refcounter just in place where req->r_mnt_idm=
+ap
+> > is filled. It's more safer approach and prevents possible refcounter un=
+derflow
+> > on error paths where __register_request wasn't called but ceph_mdsc_rel=
+ease_request is
+> > called.
+> >
+> > Changelog for version 5:
+> > - a few commits were squashed into one (as suggested by Xiubo Li)
+> > - started passing an idmapping everywhere (if possible), so a caller
+> > UID/GID-s will be mapped almost everywhere (as suggested by Xiubo Li)
+> >
+> > I can confirm that this version passes xfstests.
+> >
+> > Links to previous versions:
+> > v1: https://lore.kernel.org/all/20220104140414.155198-1-brauner@kernel.=
+org/
+> > v2: https://lore.kernel.org/lkml/20230524153316.476973-1-aleksandr.mikh=
+alitsyn@canonical.com/
+> > tree: https://github.com/mihalicyn/linux/commits/fs.idmapped.ceph.v2
+> > v3: https://lore.kernel.org/lkml/20230607152038.469739-1-aleksandr.mikh=
+alitsyn@canonical.com/#t
+> > v4: https://lore.kernel.org/lkml/20230607180958.645115-1-aleksandr.mikh=
+alitsyn@canonical.com/#t
+> > tree: https://github.com/mihalicyn/linux/commits/fs.idmapped.ceph.v4
+> >
+> > Kind regards,
+> > Alex
+> >
+> > Original description from Christian:
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > This patch series enables cephfs to support idmapped mounts, i.e. the
+> > ability to alter ownership information on a per-mount basis.
+> >
+> > Container managers such as LXD support sharaing data via cephfs between
+> > the host and unprivileged containers and between unprivileged container=
+s.
+> > They may all use different idmappings. Idmapped mounts can be used to
+> > create mounts with the idmapping used for the container (or a different
+> > one specific to the use-case).
+> >
+> > There are in fact more use-cases such as remapping ownership for
+> > mountpoints on the host itself to grant or restrict access to different
+> > users or to make it possible to enforce that programs running as root
+> > will write with a non-zero {g,u}id to disk.
+> >
+> > The patch series is simple overall and few changes are needed to cephfs=
+.
+> > There is one cephfs specific issue that I would like to discuss and
+> > solve which I explain in detail in:
+> >
+> > [PATCH 02/12] ceph: handle idmapped mounts in create_request_message()
+> >
+> > It has to do with how to handle mds serves which have id-based access
+> > restrictions configured. I would ask you to please take a look at the
+> > explanation in the aforementioned patch.
+> >
+> > The patch series passes the vfs and idmapped mount testsuite as part of
+> > xfstests. To run it you will need a config like:
+> >
+> > [ceph]
+> > export FSTYP=3Dceph
+> > export TEST_DIR=3D/mnt/test
+> > export TEST_DEV=3D10.103.182.10:6789:/
+> > export TEST_FS_MOUNT_OPTS=3D"-o name=3Dadmin,secret=3D$password
+> >
+> > and then simply call
+> >
+> > sudo ./check -g idmapped
+> >
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >
+> > Alexander Mikhalitsyn (5):
+> >    fs: export mnt_idmap_get/mnt_idmap_put
+> >    ceph: pass idmap to __ceph_setattr
+> >    ceph: pass idmap to ceph_do_getattr
+> >    ceph: pass idmap to __ceph_setxattr
+> >    ceph: pass idmap to ceph_open/ioctl_set_layout
+> >
+> > Christian Brauner (9):
+> >    ceph: stash idmapping in mdsc request
+> >    ceph: handle idmapped mounts in create_request_message()
+> >    ceph: pass an idmapping to mknod/symlink/mkdir/rename
+> >    ceph: allow idmapped getattr inode op
+> >    ceph: allow idmapped permission inode op
+> >    ceph: allow idmapped setattr inode op
+> >    ceph/acl: allow idmapped set_acl inode op
+> >    ceph/file: allow idmapped atomic_open inode op
+> >    ceph: allow idmapped mounts
+> >
+> >   fs/ceph/acl.c                 |  8 ++++----
+> >   fs/ceph/addr.c                |  3 ++-
+> >   fs/ceph/caps.c                |  3 ++-
+> >   fs/ceph/dir.c                 |  4 ++++
+> >   fs/ceph/export.c              |  2 +-
+> >   fs/ceph/file.c                | 21 ++++++++++++++-----
+> >   fs/ceph/inode.c               | 38 +++++++++++++++++++++-------------=
+-
+> >   fs/ceph/ioctl.c               |  9 +++++++--
+> >   fs/ceph/mds_client.c          | 27 +++++++++++++++++++++----
+> >   fs/ceph/mds_client.h          |  1 +
+> >   fs/ceph/quota.c               |  2 +-
+> >   fs/ceph/super.c               |  6 +++---
+> >   fs/ceph/super.h               | 14 ++++++++-----
+> >   fs/ceph/xattr.c               | 18 +++++++++--------
+> >   fs/mnt_idmapping.c            |  2 ++
+> >   include/linux/mnt_idmapping.h |  3 +++
+> >   16 files changed, 111 insertions(+), 50 deletions(-)
+> >
+>
