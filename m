@@ -2,119 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3D98729E92
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 17:32:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 195B0729E96
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 17:33:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241365AbjFIPcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 11:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60802 "EHLO
+        id S241611AbjFIPdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 11:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241492AbjFIPcr (ORCPT
+        with ESMTP id S241588AbjFIPdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 11:32:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B0B2D7E;
-        Fri,  9 Jun 2023 08:32:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EFB565905;
-        Fri,  9 Jun 2023 15:32:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4774CC433EF;
-        Fri,  9 Jun 2023 15:32:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686324765;
-        bh=dlYetFzyhLMyF3NusrcGZAmOlPnFI4UTBMPTOwwT0Jo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=q6sMLpBsvPBcyzARdQoeTv3j/scpWnGVpxzpF7M8N075McuHpF8SqL0avX7acboOk
-         sTLk9SLd2KIgelmXfioJwSi6jQKY5BkC5iW9JGgNjLT4qp2FZVFa42OJ43grs1QTPy
-         Iw6fnPfqtmYb5fnD7ezMpB+iqS8jJk9uEcyiz+L4YAHSZREIoE6n9jpvIknNWpL1ML
-         OeW2Zl0+SrwDs741OXwStxiHgsAiaj9VyNzaJF2c+motjDd8r4luiar534amWvfGZe
-         hV6PDALEj/LFj8VEyuny/5y90mdPKlVvVXgby/gF+FsobOZ/bZPLXZXUUPfaBt6s71
-         u+9iLPsAoGMaA==
-Date:   Fri, 9 Jun 2023 17:32:42 +0200
-From:   "wsa@kernel.org" <wsa@kernel.org>
-To:     Andi Shyti <andi.shyti@kernel.org>
-Cc:     Robert Hancock <robert.hancock@calian.com>,
-        "michal.simek@amd.com" <michal.simek@amd.com>,
-        "shubhraj@xilinx.com" <shubhraj@xilinx.com>,
-        "marex@denx.de" <marex@denx.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] i2c: xiic: Don't try to handle more interrupt events
- after error
-Message-ID: <ZINGGmRLYEQ+NfkI@shikoro>
-Mail-Followup-To: "wsa@kernel.org" <wsa@kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Robert Hancock <robert.hancock@calian.com>,
-        "michal.simek@amd.com" <michal.simek@amd.com>,
-        "shubhraj@xilinx.com" <shubhraj@xilinx.com>,
-        "marex@denx.de" <marex@denx.de>,
-        "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230606182558.1301413-1-robert.hancock@calian.com>
- <20230606192453.zjzz4kt76kus5hr5@intel.intel>
- <c763371c710c9952154496026610e2ff583c173a.camel@calian.com>
- <20230606212053.bwpoxyost4fkpati@intel.intel>
+        Fri, 9 Jun 2023 11:33:08 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02B330C1
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 08:33:05 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-977d6aa3758so344239966b.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 08:33:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686324784; x=1688916784;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ur31KDmwW2Vamx0iLWm8eg6eZn3xEBjuZ8itz/0+GJ8=;
+        b=mdsstRzL1QzvciUaKcbVLGU5Xu4erVa66pzYFwSDmbTqK10o6fleyMabNyzGT2Vylr
+         zsKdcQQcxcccKeNdC7iRPc7v9j5B0cpKHto6OR1Zhl6ijtRroUJCbvb44JOBxPvOI0bc
+         C93vTwtSB1Sjlgh/zaI+HPLS2r+eqJLRT4PG2CmH40Zck2w3jxN9gANBo4S0nkD6NRy/
+         ACXeLJR0qtn5HU2RdtFkK/L+AFCqwZB2hpRFz7Nr5PVGjyyeIZ7c15hlBVuuyz1L68bf
+         FdCP86LpyK2HBGj0rP9yli/1eRC8ioYTEGOOob6vWkvYMiAIAqG586uZ2t4mIAUGkJxx
+         AKGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686324784; x=1688916784;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ur31KDmwW2Vamx0iLWm8eg6eZn3xEBjuZ8itz/0+GJ8=;
+        b=iD6XFggRrV5AOyUgmxU8nUAaIR3pIgesSWKFNtsTWg4PPKoMYFnD6XF7PaL7L2ugn0
+         3uwOpjPqX+o3JCuwJIXAVQilnsOVAwG9K46teMIsvnWDiSu4ihd46Nmdl+iqvRK8QB7V
+         q5CwBiejtfmEVe7GkhsbcpxI6WRx5jgSrHh3j4Rz3WC9NkM6ElWAjTSh2FEGdof1jP40
+         uYqCN/EI8hoRB4TS+E+eJNUeEC+Sl2QQu2kZ2IYsyOdIbUQmgVgWv5u33PVQuo846L/y
+         OGW9ey37MCoPydETSu0ezCyCXlX80A7uQmju9LtL2sUNlcsLZwBRfgT90fOAYFnUpYLA
+         wAOA==
+X-Gm-Message-State: AC+VfDzmQXvtgmD8m8X+InX+N+bReW1wEbnIb5eB723vHL/TtUZ1IBJY
+        AWinEPMb42LT3hFBpnuczjqUeA==
+X-Google-Smtp-Source: ACHHUZ6y/JtCqm1Lj+q+Mwlen94gR/wsS1Sunol9iGCi91EQ5CdAJ2o7vqnELK3VT2rNmemmAe/ldw==
+X-Received: by 2002:a17:906:dc8e:b0:968:4ce9:677a with SMTP id cs14-20020a170906dc8e00b009684ce9677amr2279333ejc.38.1686324784301;
+        Fri, 09 Jun 2023 08:33:04 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id e25-20020a170906081900b0094ee3e4c934sm1400632ejd.221.2023.06.09.08.33.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Jun 2023 08:33:03 -0700 (PDT)
+Message-ID: <b913e3a3-bc32-8d2f-c2a9-9c7e860b7b15@linaro.org>
+Date:   Fri, 9 Jun 2023 17:33:01 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="D5hvdBwwauKsvaEG"
-Content-Disposition: inline
-In-Reply-To: <20230606212053.bwpoxyost4fkpati@intel.intel>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v3 1/2] dt-bindings:iio:adc: add max14001
+Content-Language: en-US
+To:     Kim Seer Paller <kimseer.paller@analog.com>
+Cc:     jic23@kernel.org, lars@metafoo.de, lgirdwood@gmail.com,
+        broonie@kernel.org, Michael.Hennerich@analog.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20230608175517.40217-1-kimseer.paller@analog.com>
+ <20230608175517.40217-2-kimseer.paller@analog.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230608175517.40217-2-kimseer.paller@analog.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 08/06/2023 19:55, Kim Seer Paller wrote:
+> The MAX14001 is configurable, isolated 10-bit ADCs for multi-range
+> binary inputs.
 
---D5hvdBwwauKsvaEG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Subject: still missing spaces, no improvements.
 
+This is a friendly reminder during the review process.
 
-> I think the patch is correct and I will ack it:
->=20
-> Acked-by: Andi Shyti <andi.shyti@kernel.org>=20
->=20
-> I think, though, that this needs a proper fix and testing, in
-> order to cover all the possible combinations. The scenario you
-> highlighted is indeed one, but not only, potential situation that
-> could arise.
->=20
-> Can I just ask you to write a bit more in the comment to=20
-> highlight the possible failure?
+It seems my previous comments were not fully addressed. Maybe my
+feedback got lost between the quotes, maybe you just forgot to apply it.
+Please go back to the previous discussion and either implement all
+requested changes or keep discussing them.
 
-I tend to apply it to for-current because it improves the situation.
-Further improvements could be made incrementally? D'accord everyone?
+Thank you.
+
+With subject fixed:
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
---D5hvdBwwauKsvaEG
-Content-Type: application/pgp-signature; name="signature.asc"
+---
 
------BEGIN PGP SIGNATURE-----
+This is an automated instruction, just in case, because many review tags
+are being ignored. If you do not know the process, here is a short
+explanation:
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSDRhoACgkQFA3kzBSg
-KbZoTg//Qjf6/YplAMgDIXOGtvX0j5ZvkMC8lZGeyLubFKKP1Zm08Dh0fFLdS8XW
-OV+7j8ApDYQuWm1FHfdwncVBoq/Eo6UXcNhKxWmAU760DAmNeKzgoKFEGkqiKvcJ
-d//Qaxvk4o1FlwFIyPQxfsQjPwrCduYjITZlcf8JejsXLA97jeKuydyGOmQIVcJM
-24tg9759PONQiscAiNkzB9oo/0nu6FjLOQF4Nlo8Ob8JavO4WLCsDGrZWMJ5Mf5a
-uN/ma2sjm8K4BzipWD1sfe+kStCtCM+kIQ/ozHmfXKq4phD3DD4PGt+99gJuRfML
-4HMcVyYawsIIpqJgL11up0EMaQMFh3+1pNyOpdYtMKaEoYgzRecg5K/c9Q5FD1a1
-AU8O2FM8QW9xxWZ8+s3nIlz8BVs1nycbeodjFw9g4/p0HfykqjpjsFlYlfb2ilK2
-/psyP4gv9pjPvW4Sk0QLNrX+LrQqmVnxojT5XvasHS1MVgCQjLx9mJIvwmYpGzjW
-l6PvlDBq1BwDtS1gEAMwHWpiJrz69MsTQ5dmH1FqmZPG1BQq9d6Q+UWLqrq2CP/Q
-Y+xEGQpJ7amnIp755CQSuytNBt8bYLHMBYUdbvWUGGspmYcH2MDXTKkYRFYEyRqo
-Mo+XFKf66usxPdn+6Sv3wmPDvNTM/V93su8ip4oD/1oZujJyHg8=
-=dlC7
------END PGP SIGNATURE-----
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions, under or above your Signed-off-by tag. Tools like b4 can help
+here. However, there's no need to repost patches *only* to add the tags.
+The upstream maintainer will do that for acks received on the version
+they apply.
 
---D5hvdBwwauKsvaEG--
+https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+
+Best regards,
+Krzysztof
+
