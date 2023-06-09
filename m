@@ -2,147 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45D7972949D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:18:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C84887294AF
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239201AbjFIJSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 05:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43000 "EHLO
+        id S239902AbjFIJUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 05:20:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241437AbjFIJRo (ORCPT
+        with ESMTP id S240104AbjFIJTf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 05:17:44 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680232D51
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 02:13:09 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f122ff663eso1862301e87.2
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 02:13:09 -0700 (PDT)
+        Fri, 9 Jun 2023 05:19:35 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F70C527B;
+        Fri,  9 Jun 2023 02:14:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686301976; x=1688893976;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CVfeus2+E5nD4MhpBQlXT0XxTlLQBPr9RISFV3RUGtM=;
-        b=AN2CvSTAcyzxxXP5A80X6hk1bPtbBj4syuSk+akZk9+eiMcZcPN8HFIud39D1yRw5j
-         Bk3J1djy8D/1haJgaOh8Ki6MkZGfa5ZitdW3+q9aJQmewUuzxuHpjMbA4ElnlPcOzzIe
-         sQk4UTDj6b8Sb2dwOnmXAOFVK6TiyKo585/vPx48ht8qGe46M4zEXfEEtjwcd3ig2Xeh
-         vbelghPdA55FJPH/ZGDrnva8eqZt2uEwePGFEU8G1hz9f4ehbR6gZI7IXv1ig25undMr
-         7cCeep92+CS2qdS/nTQoZDeQRpBpS1jy/wKKK4i2yomM17QL5rXIbgDq36l8T7r/sUgA
-         VQqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686301976; x=1688893976;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CVfeus2+E5nD4MhpBQlXT0XxTlLQBPr9RISFV3RUGtM=;
-        b=HdHPVj6FAuageTQHJVa2EKhRfcgN8iQCDNNdigdFK4iyExT5K/99oXwEsT0mHrtFW5
-         zAt1tXBuNxOwj2j1lwudcgI5p3wDFtrP6Z+XvfxJv01Z9pVda8jQFayj0oEiVJdU5yUq
-         qKCedDhSYuWCMWqe+fbtMkF2AvCQXZCk9KtblbUQoCXVS0NSnPXVoPs8wJJnB/tqXkRl
-         awN/jicIo7PUkBD8mDRdC2t0CLWOuBth1Skqq2jhQFkGcff9nGjwwsrd7unsXvPV4eWY
-         D6AqEyNasBgDwT4+Txz2lsCGdiB/ofqabWSm2+S7HvexEMUWGk1iX9p9IeA3DjeTv3OR
-         IYkw==
-X-Gm-Message-State: AC+VfDyRpgc0t3u+mn8E/M74uGP2cDWyFFpwN1vDR+QS9aFWaIujX+2n
-        dpi1BpBv8L1ptnXs5XtAH4UYOw==
-X-Google-Smtp-Source: ACHHUZ5TX+tKPeytqOB6c1Nsnr7i1EoxWIdysEl5KLLT0ilTcM5fc1peAWtmRZn28O+QIzBawagDGg==
-X-Received: by 2002:a19:660a:0:b0:4f4:dfd4:33e7 with SMTP id a10-20020a19660a000000b004f4dfd433e7mr425372lfc.33.1686301975825;
-        Fri, 09 Jun 2023 02:12:55 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id q26-20020ac2511a000000b004f20d0ebe50sm478422lfb.94.2023.06.09.02.12.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Jun 2023 02:12:55 -0700 (PDT)
-Message-ID: <7ed52f34-b53a-09f8-4d51-dc5ca41827ce@linaro.org>
-Date:   Fri, 9 Jun 2023 11:12:53 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v8 01/18] dt-bindings: display/msm: gpu: Document GMU
- wrapper-equipped A6xx
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        freedreno@lists.freedesktop.org, Sean Paul <sean@poorly.run>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        devicetree@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, David Airlie <airlied@gmail.com>,
-        dri-devel@lists.freedesktop.org, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Clark <robdclark@chromium.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-kernel@vger.kernel.org,
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1686302066; x=1717838066;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=M0Vg0+c5NCYDzMzfqguWF8jTHv2kAMm/VATkAKR/L4c=;
+  b=Gv291v7SDpEZUJznxcVEaD1jQbG1dX/PTFRw3CoCfWzezt+XAYj0jvr6
+   sIPtCaiFIpjgGCrQgPndzBWsll20/9ijvGfJT+6S/mVQqwXBgHr47D4al
+   8mXxd0731cx/sKIFKsmAg27L10iFeM/0EOFyYhBpaFPR/PFP9c5XtT4KJ
+   mfZMUMjVnuuuPuWOJDGEsN6XeyItTiLnDVQkx5nnTUsOlwsHxbKx6VrSV
+   orUe+8Ts6UtQww2jVu+mm10g7aA25v869+vT5Lxq/39rYEHGwNxl+TFqg
+   TGIVwCz6V5zj8opiBmQ6HEKR9HwkIdEzYoyXOMiU1EwS43CrtIz8Cf2ky
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,228,1681164000"; 
+   d="scan'208";a="31361175"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 09 Jun 2023 11:13:39 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Fri, 09 Jun 2023 11:13:39 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Fri, 09 Jun 2023 11:13:39 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1686302019; x=1717838019;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=M0Vg0+c5NCYDzMzfqguWF8jTHv2kAMm/VATkAKR/L4c=;
+  b=KwglHQfwQw9R14jQqFuQ8UtL28WTqEyuvRvtVm0Nkr2psy8SDnKndoz9
+   BvBOS3AOiAZ/f/QIlChszpZLVBtml1b/I8zR71PI2okTP20nW7XnBEYN7
+   wRYQT5xbg+rEo5oh0fvmd/b7DpbwudwAdWy4Pqx8s+OixF7xoWJ9XrwA+
+   kyZWZSGOV5/LNi+YRvRlN53ArmFzIIb2pZQcak/X+78+MPPFYuQJ01x4J
+   cSC5yqZRQ6ZhY+707TXGj/9XRuXkET8PapSfa43wJiZog59JzV2MKL73T
+   a9wiaduRUD8zTKNk/kSTtgDuuo+A8P+Gyr5cCXaRfduJAR+JBJM1vt6mC
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,228,1681164000"; 
+   d="scan'208";a="31361174"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 09 Jun 2023 11:13:39 +0200
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 4D1D2280087;
+        Fri,  9 Jun 2023 11:13:39 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-References: <20230223-topic-gmuwrapper-v8-0-69c68206609e@linaro.org>
- <20230223-topic-gmuwrapper-v8-1-69c68206609e@linaro.org>
- <20230530122652.lct6tk6zseny6gxl@krzk-bin>
- <1ceeb56e-3efd-6858-358a-bd1976c625b1@linaro.org>
- <20230608205848.GA3424883-robh@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230608205848.GA3424883-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Conor Dooley <conor+dt@kernel.org>, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux@ew.tq-group.com
+Subject: Re: [PATCH 1/2] spi: dt-bindings: introduce linux,use-rt-queue flag
+Date:   Fri, 09 Jun 2023 11:13:39 +0200
+Message-ID: <4784636.LvFx2qVVIh@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <CACRpkda2yQefuUMn6Ot8Ns6nNgfC25i9nwmzwxOy5fUg=A44hQ@mail.gmail.com>
+References: <20230602115201.415718-1-matthias.schiffer@ew.tq-group.com> <3241150.44csPzL39Z@steina-w> <CACRpkda2yQefuUMn6Ot8Ns6nNgfC25i9nwmzwxOy5fUg=A44hQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Am Freitag, 9. Juni 2023, 10:42:04 CEST schrieb Linus Walleij:
+> On Fri, Jun 9, 2023 at 10:15=E2=80=AFAM Alexander Stein
+>=20
+> <alexander.stein@ew.tq-group.com> wrote:
+> > > A agree with Mark that a command line option isn't that bad. It's
+> > > something
+> > > that pertains to just the Linux kernel after all? And you can put that
+> > > command line option in the default device tree, in chosen, if you wan=
+t.
+> >=20
+> > I don't like the idea of a command line enabling realtime scheduling for
+> > all instances of the SPI controller driver or even all SPI controllers.
+> > Actually this might be worse if a non-rt SPI bus is considered for RT
+> > scheduling. IMHO this should be configurable per SPI controller,
+>=20
+> OK that's a fair point.
+>=20
+> I don't think command line arguments are necessarily global by
+> nature, AFAIK it's fine to invent something like pl022.4.rt_sched=3D1
+> where 4 is the instance number. Parsing it is just code.
+
+Now we are touching the topic of non-deterministic device names/numbers. Th=
+is=20
+gets worse if your SPI controller is attached to some other device, althoug=
+h=20
+RT capabilities are rather limited in that case anyway.
+
+> > e.g. a sysfs attribute.
+>=20
+> But it needs to be set before userspace is up :/
+
+Does it? IMHO a realtime system is allowed to use blocking mechanism (e.g.=
+=20
+dynamic memory allocatin and so on) during startup/configuration phase,=20
+ignoring any deadlines.
+Once it starts operating this is a no-go.
+This seems rather similar to configure scheduling priority for IRQ threads =
+on=20
+RT preempt systems. IIRC according to RT folks, this is considered an=20
+administration task, thus the responsibility of userspace.
+
+> I fully sympathize with this problem, because I have faced
+> similar problems myself.
+
+You mean RT-scheduling before userspace is up? Can you elaborate the issues=
+=20
+you see?
+
+> My fallback solution for this driver would be to keep using the
+> old DT property (which was merged when reviewing was
+> not as strict) if that works, or use undocumented DT properties,
+> it's not the end of the world but does leave the bad taste of
+> a work not finished.
+
+I was surprised to see the driver specific property for configuring RT sche=
+d=20
+as well. I assume the intention of this series is to support this feature f=
+or=20
+other SPI controller drivers as well. So some kind of feature has to be add=
+ed=20
+anyway.
+
+Best regards,
+Alexander
+
+> Yours,
+> Linus Walleij
 
 
-On 8.06.2023 22:58, Rob Herring wrote:
-> On Tue, May 30, 2023 at 03:35:09PM +0200, Konrad Dybcio wrote:
->>
->>
->> On 30.05.2023 14:26, Krzysztof Kozlowski wrote:
->>> On Mon, 29 May 2023 15:52:20 +0200, Konrad Dybcio wrote:
->>>> The "GMU Wrapper" is Qualcomm's name for "let's treat the GPU blocks
->>>> we'd normally assign to the GMU as if they were a part of the GMU, even
->>>> though they are not". It's a (good) software representation of the GMU_CX
->>>> and GMU_GX register spaces within the GPUSS that helps us programatically
->>>> treat these de-facto GMU-less parts in a way that's very similar to their
->>>> GMU-equipped cousins, massively saving up on code duplication.
->>>>
->>>> The "wrapper" register space was specifically designed to mimic the layout
->>>> of a real GMU, though it rather obviously does not have the M3 core et al.
->>>>
->>>> GMU wrapper-equipped A6xx GPUs require clocks and clock-names to be
->>>> specified under the GPU node, just like their older cousins. Account
->>>> for that.
->>>>
->>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>>> ---
->>>>  .../devicetree/bindings/display/msm/gpu.yaml       | 61 ++++++++++++++++++----
->>>>  1 file changed, 52 insertions(+), 9 deletions(-)
->>>>
->>>
->>> Running 'make dtbs_check' with the schema in this patch gives the
->>> following warnings. Consider if they are expected or the schema is
->>> incorrect. These may not be new warnings.
->> I think it'd be beneficial if the bot diffed the output of checks pre-
->> and post- patch.
-> 
-> Fix all the warnings and it will. ;)
-Nice one :P
+=2D-=20
+TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Germ=
+any
+Amtsgericht M=C3=BCnchen, HRB 105018
+Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan Sch=
+neider
+http://www.tq-group.com/
 
-Care to donate h/w to run the build 
-> twice every time?
-Personally that might be a bit difficult, but I'm pretty sure KernelCI
-farms don't run at full throttle 24/7, perpaps some of their capacity
-could be borrowed?
 
-> 
-> Really what I care about on these is when I keep getting changes to a 
-> schema and the list of warnings remains long and not getting fixed.
-> 
-> This case was less than useful with just the oneOf warning.
-Ack
-
-Konrad
-> 
-> Rob
