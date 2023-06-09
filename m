@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE098729223
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:03:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE9097291CC
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240068AbjFIIDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 04:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39452 "EHLO
+        id S238766AbjFIHzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 03:55:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230334AbjFIIDJ (ORCPT
+        with ESMTP id S239848AbjFIHzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 04:03:09 -0400
+        Fri, 9 Jun 2023 03:55:13 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 154354EFD
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 01:01:31 -0700 (PDT)
-X-QQ-mid: bizesmtp75t1686297183t5b49ol1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9B33AB2
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 00:54:53 -0700 (PDT)
+X-QQ-mid: bizesmtp75t1686297188t6m0bx24
 Received: from localhost.localdomain ( [58.240.82.166])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Fri, 09 Jun 2023 15:53:01 +0800 (CST)
+        id ; Fri, 09 Jun 2023 15:53:05 +0800 (CST)
 X-QQ-SSF: 01200000000000908000000A0000000
-X-QQ-FEAT: LE7C6P2vL8Slpzrm1XqX/NSEq4Gh8yu/0CJVEhG8vffk67PxM+PX5fPKMAlLY
-        cgVx+LApeHIIP4dPRnWhGhFCTTNr3/nY1V9COFfHlHFW3kufcVYPY5wQiaID8SLjuxaLa2E
-        uNUE3Nl33XPXZcR1sazoJ3lDRQ30XwbCdCW4r+ZJucfFTDmZpCIP74QOunzFYPg6xcoXQyE
-        r5zlMKRlUYcxQxsQYmrteRd1dE/L1azUwb5i68qYa04kwxAB2Aq+olALF7hzEyQk9Jvky04
-        BjIzBrbmsS/uJOC516TK+B+lockpx9YGn5dcNW7fLP+YGmzayoXwCx7bchmeld3f3gBgVRC
-        j6WpjWtsSXld/DrLKqb6MjXzfXcYREx6UdmcvNfMW7tFSSThGRKJJoUOie62w==
+X-QQ-FEAT: UMQM+3VOEYsTPC6jMH0yzyXH1849klDsTAUlAptToZKS6J3/4lSimAAJC/4Gj
+        WEUddFwIUU/2iF8bNZxbaQuHxqLUg5SxFyhEmhcPQC534imMFNhOcwHDyehWwvHQii490Zr
+        cnCZorPfAhuqS4hv4C3m/udby3n0mIAvc5zXEG/oeEmxLYGywlgqwxeD0xRGvWfw77lbRKV
+        Vu1L/Fe5f+BRDZPeTPFPWK33uLeuc9WQHaUcuJn8VUUGtDiWWO/JbsTAnVsRta3kqtiGwqe
+        jA1gbcit/YVp+S79o12TSH6qmlBAnmXWtCrNSplYOBBWlUdNVfYES64zkcDROxPzNplA+zD
+        d7eptdHA752wVCXgT2bSBhpDPTXeAiPDt448w1sOQRbijVWdOpLDcg/G0wjKQ==
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 15822184315123759459
+X-BIZMAIL-ID: 18318848536038158331
 From:   Song Shuai <songshuaishuai@tinylab.org>
 To:     catalin.marinas@arm.com, will@kernel.org, paul.walmsley@sifive.com,
         palmer@dabbelt.com, aou@eecs.berkeley.edu, chris@zankel.net,
@@ -38,9 +38,9 @@ To:     catalin.marinas@arm.com, will@kernel.org, paul.walmsley@sifive.com,
         ajones@ventanamicro.com
 Cc:     linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [PATCH V2 1/4] ARM: hibernate: remove WARN_ON in save_processor_state
-Date:   Fri,  9 Jun 2023 15:50:46 +0800
-Message-Id: <20230609075049.2651723-2-songshuaishuai@tinylab.org>
+Subject: [PATCH V2 2/4] arm64: hibernate: remove WARN_ON in save_processor_state
+Date:   Fri,  9 Jun 2023 15:50:47 +0800
+Message-Id: <20230609075049.2651723-3-songshuaishuai@tinylab.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20230609075049.2651723-1-songshuaishuai@tinylab.org>
 References: <20230609075049.2651723-1-songshuaishuai@tinylab.org>
@@ -70,21 +70,21 @@ So remove the unnecessary checking in save_processor_state.
 
 Signed-off-by: Song Shuai <songshuaishuai@tinylab.org>
 ---
- arch/arm/kernel/hibernate.c | 1 -
+ arch/arm64/kernel/hibernate.c | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm/kernel/hibernate.c b/arch/arm/kernel/hibernate.c
-index 2373020af965..84abccf3221a 100644
---- a/arch/arm/kernel/hibernate.c
-+++ b/arch/arm/kernel/hibernate.c
-@@ -33,7 +33,6 @@ int pfn_is_nosave(unsigned long pfn)
+diff --git a/arch/arm64/kernel/hibernate.c b/arch/arm64/kernel/hibernate.c
+index 788597a6b6a2..02870beb271e 100644
+--- a/arch/arm64/kernel/hibernate.c
++++ b/arch/arm64/kernel/hibernate.c
+@@ -99,7 +99,6 @@ int pfn_is_nosave(unsigned long pfn)
  
  void notrace save_processor_state(void)
  {
 -	WARN_ON(num_online_cpus() != 1);
- 	local_fiq_disable();
  }
  
+ void notrace restore_processor_state(void)
 -- 
 2.20.1
 
