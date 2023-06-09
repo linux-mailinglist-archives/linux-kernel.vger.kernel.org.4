@@ -2,134 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B8C3729B94
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 15:28:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19D2D729B98
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 15:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239421AbjFIN1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 09:27:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47892 "EHLO
+        id S240318AbjFIN31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 09:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbjFIN1m (ORCPT
+        with ESMTP id S232287AbjFIN30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 09:27:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6876C270B;
-        Fri,  9 Jun 2023 06:27:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 9 Jun 2023 09:29:26 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97369A3;
+        Fri,  9 Jun 2023 06:29:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1686317364; x=1717853364;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=JAIRug1n6Vg8kLavFuz85RwEkI8s8IGW/QfdDqdEKuk=;
+  b=cCYWzRYH0zxenAIaljMO5uvAOzlUkEaunpmZbNpfROBrQ6R2nzLhY49O
+   u55gFR2epFXuNlEyu+L8YIgVoG/Fno+QoQM31Hi9wqXqI0p7fdv9StCdF
+   D2qhI/M36uqKOc/gicypBdFrvB4+up7Q+csLymO8pW/Tgwq3o8C8EjBQT
+   /TeS0MpLRiMmh7mXGbdgGIbdjO0rImPvMKMYJihL3F4Na0m8k4bO68yNz
+   oqlSV3KB+Z29wxO2ZZYRC+K2b5TZbOJQyQQ0tJ6HkXmPP4OlkNC/2px1S
+   iqXRN/CAjsf4Wp8GSwbA1v+2Ryo/CTUY94Nvj0subB4i7WVA/nfciMKdh
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,229,1681164000"; 
+   d="scan'208";a="31366198"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 09 Jun 2023 15:29:22 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Fri, 09 Jun 2023 15:29:22 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Fri, 09 Jun 2023 15:29:22 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1686317362; x=1717853362;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=JAIRug1n6Vg8kLavFuz85RwEkI8s8IGW/QfdDqdEKuk=;
+  b=fgRyrcmCNO0A6Qryke9uewuR9hn7l7fhj1SRNuDna+je0OBjP58afA8u
+   aGLsKqP4x6moXWEacPeMl+l0u0+Rg6UxX9dHFCrFeeF9eNvXiG5CMwmmU
+   LWA6q3xVjCeEf+1gaSSn219x1WCG0erHA4zhGIgOm9LXZGhh1OkXfuf0/
+   XG/OrDFqfIl4USPEL+shJQMXY6byJ17wksXPGPWIvBSbZvNxndCTGnuHr
+   +Z1ZU0vU/jhDaemlMgwmauF/CYq10n3uyb2edEuByvb/T4JRirdZkAWd7
+   OKZqHYq/aCKMk1gG3ch9SkKKmMMP/b49E9mozcvGaMHMBbBHlbHPiEzZb
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,229,1681164000"; 
+   d="scan'208";a="31366197"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 09 Jun 2023 15:29:22 +0200
+Received: from steina-w.tq-net.de (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0577A60E8D;
-        Fri,  9 Jun 2023 13:27:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A7BCC433EF;
-        Fri,  9 Jun 2023 13:27:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686317260;
-        bh=oSuiJiclTzvMA00+ishDDZSJ5F4CCgIPlxz3qberOkU=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ctTfeKacHWo5l9K9DxzQOrtlTLoG85/EKA7MvHQ/F1/2q0zByBrbmyXzsM5xu9ZiB
-         z9wHdsdfD4pFeRxFcqVecbJ+Otm388ULgG+bsoled+ga5itRm8LLiC22OcTX19F+j+
-         6yIPcNN1B7m9Ur7wYkJS4IGiKr+2aBq5+dqDL6XT4Raq7b5xw0RxxqP1BRnkC/teoQ
-         1BBAFxOID86v/atOu3NX+L9wnqyt+99xF7OTaMcfAz05y5B3IH3bJDB665QOEe/kU6
-         AzdHw7nXRvFkJ5TMlrv7YVHd1aILHvSrpMhR/sNk7+XbKVcwqz4pHqjL+n9s6tGy8X
-         915cASV+pKXDw==
-Message-ID: <671ceeb2e019c11617a481739c2e17604456c48c.camel@kernel.org>
-Subject: Re: [PATCH 0/9] fs: add some missing ctime updates
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Brad Warrum <bwarrum@linux.ibm.com>,
-        Ritu Agarwal <rituagar@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Ian Kent <raven@themaw.net>,
-        "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
-        Jeremy Kerr <jk@ozlabs.org>, Ard Biesheuvel <ardb@kernel.org>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        Bob Peterson <rpeterso@redhat.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        Steve French <sfrench@samba.org>,
-        Paulo Alcantara <pc@manguebit.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Ruihan Li <lrh2000@pku.edu.cn>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        autofs@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, cluster-devel@redhat.com,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org
-Date:   Fri, 09 Jun 2023 09:27:36 -0400
-In-Reply-To: <2023060931-magazine-nickname-f386@gregkh>
-References: <20230609125023.399942-1-jlayton@kernel.org>
-         <2023060931-magazine-nickname-f386@gregkh>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id DE9BB280087;
+        Fri,  9 Jun 2023 15:29:21 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>, Marek Vasut <marex@denx.de>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux@ew.tq-group.com
+Subject: [PATCH 0/3] TQMa93xxLA support
+Date:   Fri,  9 Jun 2023 15:29:12 +0200
+Message-Id: <20230609132915.634338-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-06-09 at 15:10 +0200, Greg Kroah-Hartman wrote:
-> On Fri, Jun 09, 2023 at 08:50:14AM -0400, Jeff Layton wrote:
-> > While working on a patch series to change how we handle the ctime, I
-> > found a number of places that update the mtime without a corresponding
-> > ctime update. POSIX requires that when the mtime is updated that the
-> > ctime also be updated.
-> >=20
-> > Note that these are largely untested other than for compilation, so
-> > please review carefully. These are a preliminary set for the upcoming
-> > rework of how we handle the ctime.
-> >=20
-> > None of these seem to be very crucial, but it would be nice if
-> > various maintainers could pick these up for v6.5. Please let me know if
-> > you do.
-> >=20
-> > Jeff Layton (9):
-> >   ibmvmc: update ctime in conjunction with mtime on write
-> >   usb: update the ctime as well when updating mtime after an ioctl
-> >   autofs: set ctime as well when mtime changes on a dir
-> >   bfs: update ctime in addition to mtime when adding entries
-> >   efivarfs: update ctime when mtime changes on a write
-> >   exfat: ensure that ctime is updated whenever the mtime is
-> >   gfs2: update ctime when quota is updated
-> >   apparmor: update ctime whenever the mtime changes on an inode
-> >   cifs: update the ctime on a partial page write
-> >=20
-> >  drivers/misc/ibmvmc.c             |  2 +-
-> >  drivers/usb/core/devio.c          | 16 ++++++++--------
-> >  fs/autofs/root.c                  |  6 +++---
-> >  fs/bfs/dir.c                      |  2 +-
-> >  fs/efivarfs/file.c                |  2 +-
-> >  fs/exfat/namei.c                  |  8 ++++----
-> >  fs/gfs2/quota.c                   |  2 +-
-> >  fs/smb/client/file.c              |  2 +-
-> >  security/apparmor/apparmorfs.c    |  7 +++++--
-> >  security/apparmor/policy_unpack.c | 11 +++++++----
-> >  10 files changed, 32 insertions(+), 26 deletions(-)
-> >=20
-> > --=20
-> > 2.40.1
-> >=20
->=20
-> All of these need commit log messages, didn't checkpatch warn you about
-> that?
+Hi,
 
-It did, once I ran it. ;)
+this series adds initial support for TQMa93xxLA soldered on MBa93xxLA.
+As the name indicates this is an i.MX93 based SBC board. The initial support
+includes typical interfaces like UART, eMMC, I2C, Ethernet.
+Support for USB, LVDS and PMIC is still pending, which require additional
+patches.
+Patch 1 adds the compatible to dt bindings
+Patch 2 adds .dts[i] files for module and sbc board support
+Patch 3 adds more i.MX93 drivers to arm64 defconfig
 
-I'll repost the set with more elaborate changelogs.
---=20
-Jeff Layton <jlayton@kernel.org>
+Best regards,
+Alexander
+
+Alexander Stein (2):
+  arm64: dts: freescale: add initial device tree for MBa93xxLA SBC board
+  arm64: defconfig: Enable i.MX93 devices
+
+Markus Niebel (1):
+  dt: bindings: add bindings for TQMa93xxLA SOM
+
+ .../devicetree/bindings/arm/fsl.yaml          |  19 +
+ arch/arm64/boot/dts/freescale/Makefile        |   1 +
+ .../freescale/imx93-tqma9352-mba93xxla.dts    | 629 ++++++++++++++++++
+ .../boot/dts/freescale/imx93-tqma9352.dtsi    | 213 ++++++
+ arch/arm64/configs/defconfig                  |   4 +
+ 5 files changed, 866 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx93-tqma9352-mba93xxla.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx93-tqma9352.dtsi
+
+-- 
+2.34.1
+
