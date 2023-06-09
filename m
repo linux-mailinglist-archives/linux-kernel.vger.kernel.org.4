@@ -2,348 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2508729DB5
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 17:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58820729DB8
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 17:03:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241676AbjFIPCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 11:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43968 "EHLO
+        id S241686AbjFIPDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 11:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238987AbjFIPCu (ORCPT
+        with ESMTP id S238987AbjFIPDq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 11:02:50 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88061FEB;
-        Fri,  9 Jun 2023 08:02:48 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-30e5289105cso1441865f8f.1;
-        Fri, 09 Jun 2023 08:02:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686322967; x=1688914967;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=kyh0drEh7i0RL6QHKLUUjH8KeXIoQQqVsBzHXVqUBVY=;
-        b=AQQKvXj3Ij2Khufgucqv8n4/9NwTgCBuPOJBVHmAPHaC/zlnvcGySQaawyRvnxxOy/
-         yWzdFI6B9oPKRX48fB/qwWzlJj8keWB2x+6N7hoNhToz7RqkgTUun+Y2U8YYj2LyZruD
-         smKf+uSEvA6wjQMnT/Dg8PHZ1jv/rem/Npdk7Ek2CTjlKqueX/jAw/RP6IkqPDJTHGVN
-         Y46u2fQmL8jOD2gnXy/UCgopuBFE/2o5xu2POmuxaLlO3qHHpC49927psVf2kGiPvWtD
-         4foYVKlAE55EuVYA9U0c3SUX5zT3eTCTZgbZhMdKJnRAkvoxRDq9IQfQJfxDKsFffPw3
-         RDvA==
+        Fri, 9 Jun 2023 11:03:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B2A2D71
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 08:03:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686322979;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kliWk5KtWXn6tjlvUWVqn/LoEmMuT+sYK46zS+DbrRU=;
+        b=E0hapIaseMCdJwuWgijhtrHGHdxT3WTMJ0bWPLJno8lWtYKbxCCa5urwK1UtxufHjVmQps
+        kgonkV/MB4YYjpTqiR1FIDq1STJ3BUm/L2A0NXFt7WzfNNuLFTxkIp17pmiTtYgp4CtbJX
+        FmRNTmPOMkYoSp0qWf4Cuj6wJx+XwvQ=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-492-Jw_98FMyNiGviaVSbiH28A-1; Fri, 09 Jun 2023 11:02:58 -0400
+X-MC-Unique: Jw_98FMyNiGviaVSbiH28A-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-94a34e35f57so164776866b.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 08:02:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686322967; x=1688914967;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kyh0drEh7i0RL6QHKLUUjH8KeXIoQQqVsBzHXVqUBVY=;
-        b=i/YUf2Wz3c1xlEbhcAx+zQn6wuZt/9YjhoPK4CvvVZYM0p/5bIX3rMTYMOWSLIcUuy
-         CkNvCvZzKUORk3aOsFroQTRlDgSfHikorLpkSmKQ8ZhPzvXvtkmaSoXZ+HV8PAL1WAys
-         m7cZuqVIn6oUakw76grAhmAjd+34+WsPdWb/rRIXM0SexC93WAIiJ6aP9YhWnEH7u0zq
-         34e/8X6fc1BklQn4zt7fPAH7hAdv0TK3tjOtEcX76HXsYociJGjxM2956ByiU4TVrvlE
-         sN9ZXM6uDGFOSIT4v0Oktw7mcPuZZ025C+5YU+PECFatKoADs6f81pWJ23iGnXK0QJgo
-         qbow==
-X-Gm-Message-State: AC+VfDyLkLe8f5baSrorZksQ1WIcFWi/2F2SLti5a8kcSfIyQGxx0m2A
-        AcgjQFBI3CIoCmm3npDe5a8=
-X-Google-Smtp-Source: ACHHUZ5Xtm/6kx6UxB6YH2IychcCTwaDzV2MukX1cSBPGYJD4FvcY5t12A29LBE8dtSW27E7yOa8Qg==
-X-Received: by 2002:a5d:42cc:0:b0:30a:aeb3:f3b0 with SMTP id t12-20020a5d42cc000000b0030aaeb3f3b0mr4837660wrr.17.1686322966994;
-        Fri, 09 Jun 2023 08:02:46 -0700 (PDT)
-Received: from Ansuel-xps. (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
-        by smtp.gmail.com with ESMTPSA id 6-20020a05600c230600b003f41bb52834sm2949655wmo.38.2023.06.09.08.02.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 08:02:46 -0700 (PDT)
-Message-ID: <64833f16.050a0220.5c39c.20ce@mx.google.com>
-X-Google-Original-Message-ID: <ZIM/FHhE1v0+s2dT@Ansuel-xps.>
-Date:   Fri, 9 Jun 2023 17:02:44 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Robert Marko <robimarko@gmail.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, ilia.lin@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [RESEND PATCH v2 2/2] cpufreq: qcom-nvmem: add support for
- IPQ8064
-References: <20230530165807.642084-1-robimarko@gmail.com>
- <20230530165807.642084-2-robimarko@gmail.com>
- <3f1bfaf9-35ff-59ae-6756-84fc8900ed92@linaro.org>
- <647708e2.050a0220.514c7.feab@mx.google.com>
- <517f8b82-1230-985a-811a-2100f0dd339e@linaro.org>
- <6483353e.7b0a0220.65698.0e15@mx.google.com>
- <CAA8EJpqCiWFxVSbMLViJaVvAqVVu9Tx6SAUovDH9GraeTYH4HA@mail.gmail.com>
+        d=1e100.net; s=20221208; t=1686322977; x=1688914977;
+        h=content-transfer-encoding:in-reply-to:references:to
+         :content-language:subject:cc:user-agent:mime-version:date:message-id
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kliWk5KtWXn6tjlvUWVqn/LoEmMuT+sYK46zS+DbrRU=;
+        b=NytM9t+52C+hYsu8Lb6ViLjozYdsT+WsVZCk6ItUI1yzO6DrG6Of0jvsistSEOX7ou
+         4mTDGoopOPIvUBKE6wswSePshXZC8zJBQQlP2Q+kaOmfRikql9K0ef5cq4DZJC8SW40O
+         OigMDPcJ52+4wJOfQ9BFlIVkmYYte0Yq7fme+OJBAc79pbxQKiS6EPW/eKYIPwfIs1gx
+         7GZZtA5rTpnwvz3COBd00Ycud8AGlYvhWnZBxhRwMTkZ1R1BzK2EvPya5HmG12D+kHPl
+         ZylKebn5/qXgTSnTQXedCjcCtOI+oV76lMpLM/9oMCxoUec3i3MlMMJ2gzLN4M/9O5Yg
+         Rh0w==
+X-Gm-Message-State: AC+VfDwtlTuicCJ1XXJ/I+CRG5ItdCZcqAnXb3d9P349YjYPFqed3w7r
+        SCgak2h3i0pNgS09d9/BES9qIGXtiRieblUcXwoaSMbhveBGu58e+y1zDZw7aia93zAveH4qOy3
+        tKJhfrvXUSUCUE0aABKFmczOv
+X-Received: by 2002:a17:907:a40d:b0:94f:1c90:cb71 with SMTP id sg13-20020a170907a40d00b0094f1c90cb71mr2135518ejc.65.1686322977197;
+        Fri, 09 Jun 2023 08:02:57 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7kIJT4Dw+mA4Q9GUBl8PP+/FekH+B7/fILEkXJGqguDJ8zV1PCspweiNi+i2gf5sACJchhag==
+X-Received: by 2002:a17:907:a40d:b0:94f:1c90:cb71 with SMTP id sg13-20020a170907a40d00b0094f1c90cb71mr2135493ejc.65.1686322976901;
+        Fri, 09 Jun 2023 08:02:56 -0700 (PDT)
+Received: from [192.168.42.222] (194-45-78-10.static.kviknet.net. [194.45.78.10])
+        by smtp.gmail.com with ESMTPSA id lf29-20020a170907175d00b009787062d21csm1396129ejc.77.2023.06.09.08.02.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Jun 2023 08:02:56 -0700 (PDT)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <4f1a0b7d-973f-80f5-cc39-74f09622ccef@redhat.com>
+Date:   Fri, 9 Jun 2023 17:02:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAA8EJpqCiWFxVSbMLViJaVvAqVVu9Tx6SAUovDH9GraeTYH4HA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Cc:     brouer@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        linux-rdma@vger.kernel.org
+Subject: Re: [PATCH net-next v3 1/4] page_pool: frag API support for 32-bit
+ arch with 64-bit DMA
+Content-Language: en-US
+To:     Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com
+References: <20230609131740.7496-1-linyunsheng@huawei.com>
+ <20230609131740.7496-2-linyunsheng@huawei.com>
+In-Reply-To: <20230609131740.7496-2-linyunsheng@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 05:53:40PM +0300, Dmitry Baryshkov wrote:
-> On Fri, 9 Jun 2023 at 17:21, Christian Marangi <ansuelsmth@gmail.com> wrote:
-> >
-> > On Thu, Jun 01, 2023 at 06:07:17PM +0300, Dmitry Baryshkov wrote:
-> > > On 31/05/2023 04:36, Christian Marangi wrote:
-> > > > On Wed, May 31, 2023 at 05:03:01AM +0300, Dmitry Baryshkov wrote:
-> > > > > On 30/05/2023 19:58, Robert Marko wrote:
-> > > > > > From: Christian Marangi <ansuelsmth@gmail.com>
-> > > > > >
-> > > > > > IPQ8064 comes in 3 families:
-> > > > > > * IPQ8062 up to 1.0GHz
-> > > > > > * IPQ8064/IPQ8066/IPQ8068 up to 1.4GHz
-> > > > > > * IPQ8065/IPQ8069 up to 1.7Ghz
-> > > > > >
-> > > > > > So, in order to be able to share one OPP table, add support for
-> > > > > > IPQ8064 family based of SMEM SoC ID-s as speedbin fuse is always 0 on
-> > > > > > IPQ8064.
-> > > > > >
-> > > > > > Bit are set with the following logic:
-> > > > > > * IPQ8062 BIT 0
-> > > > > > * IPQ8064/IPQ8066/IPQ8068 BIT 1
-> > > > > > * IPQ8065/IPQ8069 BIT 2
-> > > > > >
-> > > > > > speed is never fused, only psv values are fused.
-> > > > > > Set speed to the versions to permit a unified opp table following
-> > > > > > this named opp:
-> > > > > >
-> > > > > > opp-microvolt-speed<SPEED_VALUE>-pvs<PSV_VALUE>-v0
-> > > > > >
-> > > > > > Example:
-> > > > > > - for ipq8062 psv2
-> > > > > >     opp-microvolt-speed0-pvs2-v0 = < 925000 878750 971250>
-> > > > > > - for ipq8064 psv2
-> > > > > >     opp-microvolt-speed2-pvs2-v0 = <925000 878750 971250>;
-> > > > > > - for ipq8065 psv2
-> > > > > >     opp-microvolt-speed4-pvs2-v0 = <950000 902500 997500>;
-> > > > > >
-> > > > > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > > > > > Signed-off-by: Robert Marko <robimarko@gmail.com>
-> > > > > > ---
-> > > > > >    drivers/cpufreq/qcom-cpufreq-nvmem.c | 73 +++++++++++++++++++++++++++-
-> > > > > >    1 file changed, 72 insertions(+), 1 deletion(-)
-> > > > > >
-> > > > > > diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> > > > > > index ce444b5962f2..c644138680ba 100644
-> > > > > > --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> > > > > > +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> > > > > > @@ -34,6 +34,10 @@
-> > > > > >    #define IPQ8074_HAWKEYE_VERSION              BIT(0)
-> > > > > >    #define IPQ8074_ACORN_VERSION                BIT(1)
-> > > > > > +#define IPQ8062_VERSION                BIT(0)
-> > > > > > +#define IPQ8064_VERSION                BIT(1)
-> > > > > > +#define IPQ8065_VERSION                BIT(2)
-> > > > >
-> > > > > I think it would be more logical to change these defines to consecutive enum
-> > > > > instead of BIT(n) values. Another (and better in my opinion) option is to
-> > > > > drop versions completely (and remove speedN from the opp names) and to have
-> > > > > per-SoC tables in per-SoC dtsi files. There are already separate
-> > > > > ipq8064.dtsi, ipq8062.dtsi and ipq8065.dtsi files. It makes little sense to
-> > > > > overcomplicate the OPP tables.
-> > > > >
-> > > >
-> > > > That is what was used downstream but it was also wrong and against the
-> > > > normal implementation of this driver itself.
-> > > >
-> > > > OPP have opp-supported-hw just for the task with the principle of
-> > > > declaring a single table in dtsi and automatically select the right one.
-> > > >
-> > > > Using the implementation downstream (opp table in each dtsi) is actually
-> > > > worse as ipq8065 have 1.4ghz and not 1.2ghz and that can correctly be
-> > > > handled with opp-supported-hw (and this change) or using delete-property
-> > > > in dtsi (that I don't really like and it's ugly)
-> > > >
-> > > > Also this implementation would match what is currently secribed for the
-> > > > use of OPP in the documentation.
-> > > >
-> > > > Hope you can understand the reason of this change, the intention is to
-> > > > clear and trying to use standard OPP stuff instead of hacks in the DTS.
-> > >
-> > > I'm fine with the opp-supported-hw part (I forgot that it is used by default
-> > > with the help of drv->versions). I do not like the idea of encoding the same
-> > > value into the -speedN part. If it is not needed, it's better be dropped
-> > > than using a semi-dummy value there.
-> > >
-> > > So, I'd suggest to define an enum, use BIT(enum_value) for drv->versions and
-> > > drop the speed%d part.
-> > >
-> > > Also, while we are at it, could you please define a schema for your opp
-> > > extensions? An example would make it easier to understand the bindings (and
-> > > will also provide a reference for possible other implementers).
-> > >
-> >
-> > Sorry for the delay in answering this.
-> >
-> > The speed part is still needed... since the voltage for each voltage
-> > change on the different SoC.
-> >
-> > Let me give you an example for one freq.
-> >
-> >                 opp-384000000 {
-> >                         opp-hz = /bits/ 64 <384000000>;
-> >                         opp-microvolt-speed0-pvs0-v0 = <1000000 950000 1050000>;
-> >                         opp-microvolt-speed0-pvs1-v0 = <925000 878750 971250>;
-> >                         opp-microvolt-speed0-pvs2-v0 = <875000 831250 918750>;
-> >                         opp-microvolt-speed0-pvs3-v0 = <800000 760000 840000>;
-> >                         opp-microvolt-speed2-pvs0-v0 = <1000000 950000 1050000>;
-> >                         opp-microvolt-speed2-pvs1-v0 = <925000 878750 971250>;
-> >                         opp-microvolt-speed2-pvs2-v0 = <875000 831250 918750>;
-> >                         opp-microvolt-speed2-pvs3-v0 = <800000 760000 840000>;
-> >                         opp-microvolt-speed4-pvs0-v0 = <975000 926250 1023750>;
-> >                         opp-microvolt-speed4-pvs1-v0 = <950000 902500 997500>;
-> >                         opp-microvolt-speed4-pvs2-v0 = <925000 878750 971250>;
-> >                         opp-microvolt-speed4-pvs3-v0 = <900000 855000 945000>;
-> >                         opp-microvolt-speed4-pvs4-v0 = <875000 831250 918750>;
-> >                         opp-microvolt-speed4-pvs5-v0 = <825000 783750 866250>;
-> >                         opp-microvolt-speed4-pvs6-v0 = <775000 736250 813750>;
-> >                         opp-supported-hw = <0x7>;
-> >                         clock-latency-ns = <100000>;
-> >                 };
-> 
-> What about (it will require changes to opp-v2-base.yaml):
-> 
-> opp-384000000-0 {
->     opp-hz = /bits/ 64 <384000000>;
->     opp-microvolt-pvs0-v0 = <1000000 950000 1050000>;
->     opp-microvolt-pvs1-v0 = <925000 878750 971250>;
->     opp-microvolt-pvs2-v0 = <875000 831250 918750>;
->     opp-microvolt-pvs3-v0 = <800000 760000 840000>;
->     opp-supported-hw = <0x1>;
->     clock-latency-ns = <100000>;
-> };
-> 
-> opp-384000000-1 {
->     opp-hz = /bits/ 64 <384000000>;
->     opp-microvolt-pvs0-v0 = <1000000 950000 1050000>;
->     opp-microvolt-pvs1-v0 = <925000 878750 971250>;
->     opp-microvolt-pvs2-v0 = <875000 831250 918750>;
->     opp-microvolt-pvs3-v0 = <800000 760000 840000>;
->    opp-supported-hw = <0x2>;
->     clock-latency-ns = <100000>;
-> };
-> 
-> opp-384000000-2 {
->     opp-hz = /bits/ 64 <384000000>;
->     opp-microvolt-pvs0-v0 = <975000 926250 1023750>;
->     opp-microvolt-pvs1-v0 = <950000 902500 997500>;
->     opp-microvolt-pvs2-v0 = <925000 878750 971250>;
->     opp-microvolt-pvs3-v0 = <900000 855000 945000>;
->     opp-microvolt-pvs4-v0 = <875000 831250 918750>;
->     opp-microvolt-pvs5-v0 = <825000 783750 866250>;
->     opp-microvolt-pvs6-v0 = <775000 736250 813750>;
->     opp-supported-hw = <0x4>;
->     clock-latency-ns = <100000>;
-> };
-> 
->
 
-Mhhhhhh is it really worth it? Would also require to modify the pattern
-currently used in the qcom-cpufreq-nvmem that is speedXX-pvsXX-vXX.
+On 09/06/2023 15.17, Yunsheng Lin wrote:
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> index a7c526ee5024..cd4ac378cc63 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+> @@ -832,6 +832,15 @@ static int mlx5e_alloc_rq(struct mlx5e_params *params,
+>   		/* Create a page_pool and register it with rxq */
+>   		struct page_pool_params pp_params = { 0 };
+>   
+> +		/* Return error here to aoivd writing to page->pp_frag_count in
+                                         ^^^^^
+Typo
 
-ipq806x is really krait cpu not correctly fused. I expect downstream the
-same pattern to be used widely with other krait based systems so the
-idea was to not reinvent the wheel. (introducing a different pattern
-also means additional condition in the schema)
+> +		 * mlx5e_page_release_fragmented() for page->pp_frag_count is not
+> +		 * usable for arch with PAGE_POOL_DMA_USE_PP_FRAG_COUNT being true.
+> +		 */
+> +		if (PAGE_POOL_DMA_USE_PP_FRAG_COUNT) {
+> +			err = -EINVAL;
+> +			goto err_free_by_rq_type;
+> +		}
+> +
+>   		pp_params.order     = 0;
+>   		pp_params.flags     = PP_FLAG_DMA_MAP | PP_FLAG_DMA_SYNC_DEV | PP_FLAG_PAGE_FRAG;
+>   		pp_params.pool_size = pool_size;
+> diff --git a/include/net/page_pool.h b/include/net/page_pool.h
+> index 126f9e294389..5c7f7501f300 100644
+> --- a/include/net/page_pool.h
+> +++ b/include/net/page_pool.h
+> @@ -33,6 +33,7 @@
+>   #include <linux/mm.h> /* Needed by ptr_ring */
+>   #include <linux/ptr_ring.h>
+>   #include <linux/dma-direction.h>
+> +#include <linux/dma-mapping.h>
+>   
+>   #define PP_FLAG_DMA_MAP		BIT(0) /* Should page_pool do the DMA
+>   					* map/unmap
+> @@ -50,6 +51,9 @@
+>   				 PP_FLAG_DMA_SYNC_DEV |\
+>   				 PP_FLAG_PAGE_FRAG)
+>   
+> +#define PAGE_POOL_DMA_USE_PP_FRAG_COUNT	\
+> +		(sizeof(dma_addr_t) > sizeof(unsigned long))
+> +
 
-If we really don't want to have big opp table in one dtsi I can consider
-redefining the same opp table in the different dtsi. (the
-opp-supported-hw was really needed for the 1.2ghz problem, if asked I
-can still split the table in the related dtsi but I don't really like
-it)
+I have a problem with the name PAGE_POOL_DMA_USE_PP_FRAG_COUNT
+because it is confusing to read in an if-statement.
 
-Anyway I'm open to both solution.
-If it's ok to change the pattern I would change it directly to something
-like opp-microvolt-pvs since even pvs version is always 0.
+Proposals rename to:  DMA_OVERLAP_PP_FRAG_COUNT
+  Or:  MM_DMA_OVERLAP_PP_FRAG_COUNT
+  Or:  DMA_ADDR_OVERLAP_PP_FRAG_COUNT
 
-I'm honestly against the idea of defining multiple opp-table for the
-same freq (and also change the base schema) since we can do the same
-thing by just overwriting the table in the other dtsi.
+Notice how I also removed the prefix PAGE_POOL_ because this is a 
+MM-layer constraint and not a property of page_pool.
 
-> > As you can see we use the speed value to match the different SoC and
-> > apply the correct voltage.
-> >
-> > Yes I will add the missing info in the schema.
-> >
-> > > >
-> > > > > > +
-> > > > > >    struct qcom_cpufreq_drv;
-> > > > > >    struct qcom_cpufreq_match_data {
-> > > > > > @@ -207,6 +211,69 @@ static int qcom_cpufreq_krait_name_version(struct device *cpu_dev,
-> > > > > >         return ret;
-> > > > > >    }
-> > > > > > +static int qcom_cpufreq_ipq8064_name_version(struct device *cpu_dev,
-> > > > > > +                                            struct nvmem_cell *speedbin_nvmem,
-> > > > > > +                                            char **pvs_name,
-> > > > > > +                                            struct qcom_cpufreq_drv *drv)
-> > > > > > +{
-> > > > > > +       int speed = 0, pvs = 0, pvs_ver = 0;
-> > > > > > +       int msm_id, ret = 0;
-> > > > > > +       u8 *speedbin;
-> > > > > > +       size_t len;
-> > > > > > +
-> > > > > > +       speedbin = nvmem_cell_read(speedbin_nvmem, &len);
-> > > > > > +
-> > > > > > +       if (IS_ERR(speedbin))
-> > > > > > +               return PTR_ERR(speedbin);
-> > > > > > +
-> > > > > > +       switch (len) {
-> > > > > > +       case 4:
-> > > > > > +               get_krait_bin_format_a(cpu_dev, &speed, &pvs, &pvs_ver,
-> > > > > > +                                      speedbin);
-> > > > > > +               break;
-> > > > > > +       default:
-> > > > > > +               dev_err(cpu_dev, "Unable to read nvmem data. Defaulting to 0!\n");
-> > > > > > +               ret = -ENODEV;
-> > > > > > +               goto len_error;
-> > > > > > +       }
-> > > > > > +
-> > > > > > +       ret = qcom_smem_get_soc_id(&msm_id);
-> > > > > > +       if (ret)
-> > > > > > +               return ret;
-> > > > > > +
-> > > > > > +       switch (msm_id) {
-> > > > > > +       case QCOM_ID_IPQ8062:
-> > > > > > +               drv->versions = IPQ8062_VERSION;
-> > > > > > +               break;
-> > > > > > +       case QCOM_ID_IPQ8064:
-> > > > > > +       case QCOM_ID_IPQ8066:
-> > > > > > +       case QCOM_ID_IPQ8068:
-> > > > > > +               drv->versions = IPQ8064_VERSION;
-> > > > > > +               break;
-> > > > > > +       case QCOM_ID_IPQ8065:
-> > > > > > +       case QCOM_ID_IPQ8069:
-> > > > > > +               drv->versions = IPQ8065_VERSION;
-> > > > > > +               break;
-> > > > > > +       default:
-> > > > > > +               dev_err(cpu_dev,
-> > > > > > +                       "SoC ID %u is not part of IPQ8064 family, limiting to 1.0GHz!\n",
-> > > > > > +                       msm_id);
-> > > > > > +               drv->versions = IPQ8062_VERSION;
-> > > > > > +               break;
-> > > > > > +       }
-> > > > > > +
-> > > > > > +       /*
-> > > > > > +        * IPQ8064 speed is never fused. Only psv values are fused.
-> > > > > > +        * Set speed to the versions to permit a unified opp table.
-> > > > > > +        */
-> > > > > > +       snprintf(*pvs_name, sizeof("speedXX-pvsXX-vXX"), "speed%d-pvs%d-v%d",
-> > > > > > +                drv->versions, pvs, pvs_ver);
-> > > > > > +
-> > > > > > +len_error:
-> > > > > > +       kfree(speedbin);
-> > > > > > +       return ret;
-> > > > > > +}
-> > > > > > +
-> > > > > >    static int qcom_cpufreq_ipq8074_name_version(struct device *cpu_dev,
-> > > > > >                                              struct nvmem_cell *speedbin_nvmem,
-> > > > > >                                              char **pvs_name,
-> 
-> 
-> -- 
-> With best wishes
-> Dmitry
 
--- 
-	Ansuel
+--Jesper
+
