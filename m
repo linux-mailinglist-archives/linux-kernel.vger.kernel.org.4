@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A65A729D6A
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C67AD729D6C
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:54:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241630AbjFIOy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 10:54:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36804 "EHLO
+        id S241627AbjFIOyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 10:54:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241616AbjFIOyX (ORCPT
+        with ESMTP id S241624AbjFIOyb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 10:54:23 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2B73A84
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 07:54:18 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f6d38a140bso14621065e9.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 07:54:17 -0700 (PDT)
+        Fri, 9 Jun 2023 10:54:31 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2420D30F1
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 07:54:22 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f7a8089709so19235525e9.1
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 07:54:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686322456; x=1688914456;
+        d=linaro.org; s=google; t=1686322460; x=1688914460;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1ViS6qF8cS4iDl2a+diQ/4R9Vhl6rQuGyv9+232yC8g=;
-        b=pYx6AAYX31qs1F2OdJbIgSLF5yMv3UfFa3oRnRll8KhhrmjwB3eEme0y1/+w3+P5bg
-         idMNOEjcnlLemtdf/DSiN/3bybugS+OpaCxhTS/w7CXjZ9OwnE6bm/G89LRJQFiV4yzD
-         hEJYKN0j72BaoMJuD/kUZbWg+yXlp1pUO+mmU40Y3H3kugF/792D1SskLtB9BFtflClQ
-         fesCobyMVy3iaixO7aJFfh7MzgsF2nVbuPn9CHQ+ZIRGcj8+fGjAvTvCZJypMro1e9sS
-         6Umvo4fTd8nEamBKl8wWca8/pKDVdU3YlnN5Vo80gFlB5Av89qsqtjwaQGSVX1FhoYit
-         mokw==
+        bh=RuQSolMY+GsunpVDUBYRLCP9uTfJjpPU4KcdicPOHq4=;
+        b=ONwJl09/bsLQmdUzwtjnMWbC7fFCwIu40+1GGEzwNKYAYTImxjdf80WVJenHhV6SZE
+         l4hyaIQb9uouf0Knk+bgqUpA18RhoQmWzHa7wGTm5DaL1kfmpeIfSfRyW1UzLp3TNe5M
+         gND5CHZmr7t5WkwjRCPDvGuC0Edq6WoaG+VBGf4QjCiqRI+E3F9BC/91d2r+CdYGCS6i
+         G17IodWT7T+WZtjs6mV8Dg2r0gO3rHNyRe2cAdPYHdyQ2n9s5t89eyCv0FdZ2gTN3MRX
+         GqPUaqQnWTqHRyJZ/jEBAx1d8jxCsWZ7kSYgZXoGyrwXvIHOkOCROW+CL57a6XTPXRqX
+         l03g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686322456; x=1688914456;
+        d=1e100.net; s=20221208; t=1686322460; x=1688914460;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1ViS6qF8cS4iDl2a+diQ/4R9Vhl6rQuGyv9+232yC8g=;
-        b=fD5gPrw+cza/e+zSOTGaRQva0KjSbOILzaIEDkp+ECEl9PvyLXOUhKbi6Hvu/2wKVh
-         c4fg2zzSAGgl5xUkUkp94bXbSV5GDUOet+6BxuMZWVn3Gl+pVpbBIn9XfKuAUiyWHXm0
-         5Lm9Ndk97jqtPd82gRP2EHkLCVVWtKzSvEwFthe5NqJ6KcwutxoW3QKrMQRVJQkRAxMv
-         tN0AzmQh8J0Ube2Gl2540RfOPe4WDZ/gDXoqJIn/idHBxWH4Sh8l2OlMJZLji5dBrnaA
-         3SU3cIuhKqA/ZyPogqgkMsmwWHNcXP3Sj5l/oWNYR1WB2X7VV6EtifaLNJL5oVlMwJ3P
-         ks6A==
-X-Gm-Message-State: AC+VfDyPxNZoR89Lx/yC+sMm/85hn6vTro7qEd1ytqP1KIvkzzC1WVpF
-        0dq4169jHFsOfzvtSCwIv+bUAA==
-X-Google-Smtp-Source: ACHHUZ6XJv+CElBwzddgkPF/3BDt6V+kN3w98q7v8ajDl+3UTsnaK0Y5g9kA2jnZsi6MOEamkqZNvQ==
-X-Received: by 2002:a05:600c:3b29:b0:3f7:ec1d:21b3 with SMTP id m41-20020a05600c3b2900b003f7ec1d21b3mr4169683wms.5.1686322455438;
-        Fri, 09 Jun 2023 07:54:15 -0700 (PDT)
+        bh=RuQSolMY+GsunpVDUBYRLCP9uTfJjpPU4KcdicPOHq4=;
+        b=f2u59xMfTKVLfyMcwbPATBvMZ4cBYeY6P9jmuI1XnyixGGZGEqMMXD+NYcyWxlNezq
+         1eemcVnP828RYzQYImwnIDyQugqBWP4A6Xa+VDd69Ct/WUjJPuw8MX5CEuFGfmoxC99m
+         MlyxW+qlHrAk+vr3b23xtFpNed4iWOt8F0tTn1Oe0XbEuOqlmnTT3A/vQmfTKV5rRdOW
+         BMzyELewYFJzb8WFwwJ6zbhLAG0Q56XLE1aGEFimdHel8wN6d808Y5oLwTMInuU+SLtO
+         K/UoOgb3fxVMwtzNMy+w8aDf8SO6OVNi0cdMpUngzfl7Pd6HSIqolkUMaP5mgPxFN3dy
+         qcmA==
+X-Gm-Message-State: AC+VfDzYCXhFo+h/PH7++a5FST0OPGRGjnnkaEb5hqIW8rYpJkcw9BHI
+        Gs3aazs6L64OzJbCe0FFCyw6jQ==
+X-Google-Smtp-Source: ACHHUZ5jmIwMMsS6bJUifZ1z8l17raD0V7Vbgzz65Isey3BWjeSbT6ZHcqCta3q3QBlg09+h3SCrMw==
+X-Received: by 2002:a1c:6a18:0:b0:3f7:e536:8f06 with SMTP id f24-20020a1c6a18000000b003f7e5368f06mr1341409wmc.26.1686322460491;
+        Fri, 09 Jun 2023 07:54:20 -0700 (PDT)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id c21-20020a05600c0ad500b003f7310a3ffasm2946632wmr.2.2023.06.09.07.54.14
+        by smtp.gmail.com with ESMTPSA id c21-20020a05600c0ad500b003f7310a3ffasm2946632wmr.2.2023.06.09.07.54.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 07:54:14 -0700 (PDT)
+        Fri, 09 Jun 2023 07:54:16 -0700 (PDT)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     broonie@kernel.org
 Cc:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
@@ -58,9 +58,9 @@ Cc:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
         alsa-devel@alsa-project.org,
         Mohammad Rafi Shaik <quic_mohs@quicinc.com>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH v2 01/11] ASoC: qcom: SC7280: audioreach: Add sc7280 hardware param fixup callback
-Date:   Fri,  9 Jun 2023 15:53:57 +0100
-Message-Id: <20230609145407.18774-2-srinivas.kandagatla@linaro.org>
+Subject: [PATCH v2 02/11] ASoC: q6dsp: q6apm: add end of stream events
+Date:   Fri,  9 Jun 2023 15:53:58 +0100
+Message-Id: <20230609145407.18774-3-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20230609145407.18774-1-srinivas.kandagatla@linaro.org>
 References: <20230609145407.18774-1-srinivas.kandagatla@linaro.org>
@@ -78,72 +78,29 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
 
-Add support to set backend params such as sampling rate and
-number of channels using backend params fixup callback.
-Also add no pcm check for hardware params constraints setting.
+EOS event from dsp is currently not sent to the dai drivers, add the
+missing callback.
 
 Signed-off-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
-Co-developed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- sound/soc/qcom/sc7280.c | 23 +++++++++++++++++++++--
- 1 file changed, 21 insertions(+), 2 deletions(-)
+ sound/soc/qcom/qdsp6/q6apm.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/sound/soc/qcom/sc7280.c b/sound/soc/qcom/sc7280.c
-index da7469a6a267..787dd49e03f6 100644
---- a/sound/soc/qcom/sc7280.c
-+++ b/sound/soc/qcom/sc7280.c
-@@ -14,6 +14,7 @@
- #include <sound/soc.h>
- #include <sound/rt5682s.h>
- #include <linux/soundwire/sdw.h>
-+#include <sound/pcm_params.h>
- 
- #include "../codecs/rt5682.h"
- #include "../codecs/rt5682s.h"
-@@ -196,8 +197,10 @@ static int sc7280_snd_hw_params(struct snd_pcm_substream *substream,
- 	struct sdw_stream_runtime *sruntime;
- 	int i;
- 
--	snd_pcm_hw_constraint_minmax(runtime, SNDRV_PCM_HW_PARAM_CHANNELS, 2, 2);
--	snd_pcm_hw_constraint_minmax(runtime, SNDRV_PCM_HW_PARAM_RATE, 48000, 48000);
-+	if (!rtd->dai_link->no_pcm) {
-+		snd_pcm_hw_constraint_minmax(runtime, SNDRV_PCM_HW_PARAM_CHANNELS, 2, 2);
-+		snd_pcm_hw_constraint_minmax(runtime, SNDRV_PCM_HW_PARAM_RATE, 48000, 48000);
-+	}
- 
- 	switch (cpu_dai->id) {
- 	case LPASS_CDC_DMA_TX3:
-@@ -358,6 +361,20 @@ static const struct snd_soc_dapm_widget sc7280_snd_widgets[] = {
- 	SND_SOC_DAPM_MIC("Headset Mic", NULL),
- };
- 
-+static int sc7280_snd_be_hw_params_fixup(struct snd_soc_pcm_runtime *rtd,
-+					 struct snd_pcm_hw_params *params)
-+{
-+	struct snd_interval *rate = hw_param_interval(params, SNDRV_PCM_HW_PARAM_RATE);
-+	struct snd_interval *channels = hw_param_interval(params, SNDRV_PCM_HW_PARAM_CHANNELS);
-+	struct snd_mask *fmt = hw_param_mask(params, SNDRV_PCM_HW_PARAM_FORMAT);
-+
-+	rate->min = rate->max = 48000;
-+	channels->min = channels->max = 2;
-+	snd_mask_set_format(fmt, SNDRV_PCM_FORMAT_S16_LE);
-+
-+	return 0;
-+}
-+
- static int sc7280_snd_platform_probe(struct platform_device *pdev)
- {
- 	struct snd_soc_card *card;
-@@ -387,6 +404,8 @@ static int sc7280_snd_platform_probe(struct platform_device *pdev)
- 	for_each_card_prelinks(card, i, link) {
- 		link->init = sc7280_init;
- 		link->ops = &sc7280_ops;
-+		if (link->no_pcm == 1)
-+			link->be_hw_params_fixup = sc7280_snd_be_hw_params_fixup;
- 	}
- 
- 	return devm_snd_soc_register_card(dev, card);
+diff --git a/sound/soc/qcom/qdsp6/q6apm.c b/sound/soc/qcom/qdsp6/q6apm.c
+index a7a3f973eb6d..b07fee8ccac1 100644
+--- a/sound/soc/qcom/qdsp6/q6apm.c
++++ b/sound/soc/qcom/qdsp6/q6apm.c
+@@ -497,6 +497,9 @@ static int graph_callback(struct gpr_resp_pkt *data, void *priv, int op)
+ 		}
+ 		break;
+ 	case DATA_CMD_WR_SH_MEM_EP_EOS_RENDERED:
++		client_event = APM_CLIENT_EVENT_CMD_EOS_DONE;
++		if (graph->cb)
++			graph->cb(client_event, hdr->token, data->payload, graph->priv);
+ 		break;
+ 	case GPR_BASIC_RSP_RESULT:
+ 		switch (result->opcode) {
 -- 
 2.21.0
 
