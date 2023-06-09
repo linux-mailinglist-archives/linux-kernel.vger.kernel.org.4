@@ -2,51 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFA6272A248
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:32:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4515672A24A
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:32:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbjFIScD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 14:32:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45064 "EHLO
+        id S230395AbjFIScL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 14:32:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230289AbjFIScA (ORCPT
+        with ESMTP id S230458AbjFIScH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 14:32:00 -0400
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A34FB3A8C;
-        Fri,  9 Jun 2023 11:31:50 -0700 (PDT)
-Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-77acb944bdfso92188939f.0;
-        Fri, 09 Jun 2023 11:31:50 -0700 (PDT)
+        Fri, 9 Jun 2023 14:32:07 -0400
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352B93A89
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 11:31:58 -0700 (PDT)
+Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-777ac169033so117846939f.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 11:31:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686335510; x=1688927510;
+        d=1e100.net; s=20221208; t=1686335517; x=1688927517;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=oSViwTkLOmC7b6AdgszW04O7q+R6AtCgFR4UO5Oh1QI=;
-        b=kY2lkOm7JTfJcs1x3GFl+Kh+jySxb6gEx6qkopho5r3tgIhYhkQ/B5rOv+xTxUfzIm
-         RHknOH/aL0/BeHi+70rIMxOdE2hl2Mba2eErGD9nUoV6obfLYLaq68lsQASnd3GLlcEP
-         10WqEKWHHt8JJFt6exqQQ0HtgcyV985Ptr8QZiL0lnpQu/wDVWUzZpqIihrPX4L94an/
-         MDV42Gvp6X1isJmwPBJYuiiEVYXsF785+f9JgrjHrl7ULvIUX0YqvXCSb+h01r75Ch/u
-         5xG1Bd3yFnD2qA2WBrbCMCrTYhSJ7obiTS4Cbls5aHlkW/SToKPHPt1aPZ7TxfhLbp7Y
-         7suw==
-X-Gm-Message-State: AC+VfDzokMJkF5u2MUBfjuH4YBWqhHIrLEEtdkK13wsMLmlnrpHhWEPz
-        mDRMtxxFQ4cHX5cHJ78jEvoEN/4N0Q==
-X-Google-Smtp-Source: ACHHUZ5HhG9e71Rqo27WUlJEXN9BCT5Vc2riQV41Sic5YdY/vlQMW/Y7qnVOwayKSsL3BK4pk2cQqw==
-X-Received: by 2002:a6b:e602:0:b0:777:a8f0:1fc5 with SMTP id g2-20020a6be602000000b00777a8f01fc5mr2100503ioh.5.1686335509950;
-        Fri, 09 Jun 2023 11:31:49 -0700 (PDT)
+        bh=tXMDtdWN6nJZldqwpEUd7GnDVKNRMg93Z/FFZjfMFDo=;
+        b=K0/pNO1NCb649ErGzLTp5cHVh2ITHTy9O+iR9Fr33DkYWQ+Iv+47fT/fKEbf6gnCd2
+         x2Ln5ob8qgfgSFYADpnPudUWLpzkWdKiZfFQMHIn3G/70CVESSBEucXQeHOHTKKbbru7
+         CfRxqfj/SxZOCX9PCr3+/B04LuVAwtZbgicmot2gq1HQiDaUgWf9b78bnHev3mrX2U2N
+         bpzu5k9htHVK8hA+8fLjoX+xod4XeVy6WAtUztfKu4cmaTUzsklVn/0XUWgk0jz9qE1K
+         hBEJ1MqzAJgJ05OLb2GRdUQofK/HIFh7mE8oWN8KjSF2VbfEYStJ+j6gWaO8wA6885Zo
+         LPjw==
+X-Gm-Message-State: AC+VfDxxNLMgt39/pqt/+CZFr61CtXrvA+2ZyHnNn3jt82/wOsed7J4+
+        DZvuarpVW7myjFTRlqJvfw==
+X-Google-Smtp-Source: ACHHUZ6BKEOfSW1H9tTyJANStK6mB/D2kcTclumsnvDTg5+rXrM1pBhCQZNmiN2c2Tm8s0XDxwJlew==
+X-Received: by 2002:a5d:925a:0:b0:777:de8a:79a with SMTP id e26-20020a5d925a000000b00777de8a079amr3556373iol.7.1686335517420;
+        Fri, 09 Jun 2023 11:31:57 -0700 (PDT)
 Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id k7-20020a5e8907000000b0076c8d04a612sm1194337ioj.1.2023.06.09.11.31.48
+        by smtp.gmail.com with ESMTPSA id y9-20020a02c009000000b004209b1863c4sm1097473jai.52.2023.06.09.11.31.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 11:31:49 -0700 (PDT)
-Received: (nullmailer pid 1766200 invoked by uid 1000);
-        Fri, 09 Jun 2023 18:31:48 -0000
+        Fri, 09 Jun 2023 11:31:56 -0700 (PDT)
+Received: (nullmailer pid 1766355 invoked by uid 1000);
+        Fri, 09 Jun 2023 18:31:55 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Damien Le Moal <dlemoal@kernel.org>
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ata: Use of_property_read_reg() to parse "reg"
-Date:   Fri,  9 Jun 2023 12:31:25 -0600
-Message-Id: <20230609183125.1765780-1-robh@kernel.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] powerpc: fsl: Use of_property_read_reg() to parse "reg"
+Date:   Fri,  9 Jun 2023 12:31:50 -0600
+Message-Id: <20230609183151.1766261-1-robh@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -66,89 +67,95 @@ untranslated "reg" address value.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/ata/pata_octeon_cf.c | 26 +++++++++-----------------
- drivers/ata/sata_svw.c       |  7 ++++---
- 2 files changed, 13 insertions(+), 20 deletions(-)
+ arch/powerpc/sysdev/fsl_rio.c | 14 +++-----------
+ arch/powerpc/sysdev/fsl_rmu.c |  9 +--------
+ 2 files changed, 4 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/ata/pata_octeon_cf.c b/drivers/ata/pata_octeon_cf.c
-index b1ce9f1761af..57b2166a6d5d 100644
---- a/drivers/ata/pata_octeon_cf.c
-+++ b/drivers/ata/pata_octeon_cf.c
-@@ -804,9 +804,7 @@ static int octeon_cf_probe(struct platform_device *pdev)
- 	struct resource *res_cs0, *res_cs1;
+diff --git a/arch/powerpc/sysdev/fsl_rio.c b/arch/powerpc/sysdev/fsl_rio.c
+index 18176d0df612..33ba1676ef5a 100644
+--- a/arch/powerpc/sysdev/fsl_rio.c
++++ b/arch/powerpc/sysdev/fsl_rio.c
+@@ -448,13 +448,11 @@ int fsl_rio_setup(struct platform_device *dev)
+ 	struct rio_mport *port;
+ 	struct rio_priv *priv;
+ 	int rc = 0;
+-	const u32 *dt_range, *cell, *port_index;
++	const u32 *cell, *port_index;
+ 	u32 active_ports = 0;
+ 	struct device_node *np, *rmu_node;
+-	int rlen;
+ 	u32 ccsr;
+ 	u64 range_start;
+-	int aw;
+ 	u32 i;
+ 	static int tmp;
+ 	struct device_node *rmu_np[MAX_MSG_UNIT_NUM] = {NULL};
+@@ -528,15 +526,12 @@ int fsl_rio_setup(struct platform_device *dev)
+ 	dbell->bellirq = irq_of_parse_and_map(np, 1);
+ 	dev_info(&dev->dev, "bellirq: %d\n", dbell->bellirq);
  
- 	bool is_16bit;
--	const __be32 *cs_num;
--	struct property *reg_prop;
--	int n_addr, n_size, reg_len;
-+	u64 reg;
- 	struct device_node *node;
- 	void __iomem *cs0;
- 	void __iomem *cs1 = NULL;
-@@ -834,15 +832,10 @@ static int octeon_cf_probe(struct platform_device *pdev)
- 	else
- 		is_16bit = false;
- 
--	n_addr = of_n_addr_cells(node);
--	n_size = of_n_size_cells(node);
--
--	reg_prop = of_find_property(node, "reg", &reg_len);
--	if (!reg_prop || reg_len < sizeof(__be32))
--		return -EINVAL;
--
--	cs_num = reg_prop->value;
--	cf_port->cs0 = be32_to_cpup(cs_num);
-+	rv = of_property_read_reg(node, 0, &reg, NULL);
-+	if (rv < 0)
-+		return rv;
-+	cf_port->cs0 = upper_32_bits(reg);
- 
- 	if (cf_port->is_true_ide) {
- 		struct device_node *dma_node;
-@@ -884,13 +877,12 @@ static int octeon_cf_probe(struct platform_device *pdev)
- 		cs1 = devm_ioremap(&pdev->dev, res_cs1->start,
- 					   resource_size(res_cs1));
- 		if (!cs1)
--			return rv;
--
--		if (reg_len < (n_addr + n_size + 1) * sizeof(__be32))
- 			return -EINVAL;
- 
--		cs_num += n_addr + n_size;
--		cf_port->cs1 = be32_to_cpup(cs_num);
-+		rv = of_property_read_reg(node, 1, &reg, NULL);
-+		if (rv < 0)
-+			return rv;
-+		cf_port->cs1 = upper_32_bits(reg);
+-	aw = of_n_addr_cells(np);
+-	dt_range = of_get_property(np, "reg", &rlen);
+-	if (!dt_range) {
++	if (of_property_read_reg(np, 0, &range_start, NULL)) {
+ 		pr_err("%pOF: unable to find 'reg' property\n",
+ 			np);
+ 		rc = -ENOMEM;
+ 		goto err_pw;
  	}
+-	range_start = of_read_number(dt_range, aw);
+ 	dbell->dbell_regs = (struct rio_dbell_regs *)(rmu_regs_win +
+ 				(u32)range_start);
  
- 	res_cs0 = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-diff --git a/drivers/ata/sata_svw.c b/drivers/ata/sata_svw.c
-index c47c3fb434d5..b3cc23d891d5 100644
---- a/drivers/ata/sata_svw.c
-+++ b/drivers/ata/sata_svw.c
-@@ -32,6 +32,7 @@
- #include <scsi/scsi.h>
- #include <linux/libata.h>
- #include <linux/of.h>
-+#include <linux/of_address.h>
+@@ -556,15 +551,12 @@ int fsl_rio_setup(struct platform_device *dev)
+ 	pw->dev = &dev->dev;
+ 	pw->pwirq = irq_of_parse_and_map(np, 0);
+ 	dev_info(&dev->dev, "pwirq: %d\n", pw->pwirq);
+-	aw = of_n_addr_cells(np);
+-	dt_range = of_get_property(np, "reg", &rlen);
+-	if (!dt_range) {
++	if (of_property_read_reg(np, 0, &range_start, NULL)) {
+ 		pr_err("%pOF: unable to find 'reg' property\n",
+ 			np);
+ 		rc = -ENOMEM;
+ 		goto err;
+ 	}
+-	range_start = of_read_number(dt_range, aw);
+ 	pw->pw_regs = (struct rio_pw_regs *)(rmu_regs_win + (u32)range_start);
  
- #define DRV_NAME	"sata_svw"
- #define DRV_VERSION	"2.3"
-@@ -319,10 +320,10 @@ static int k2_sata_show_info(struct seq_file *m, struct Scsi_Host *shost)
- 	/* Match it to a port node */
- 	index = (ap == ap->host->ports[0]) ? 0 : 1;
- 	for (np = np->child; np != NULL; np = np->sibling) {
--		const u32 *reg = of_get_property(np, "reg", NULL);
--		if (!reg)
-+		u64 reg;
-+		if (of_property_read_reg(np, 0, &reg, NULL))
- 			continue;
--		if (index == *reg) {
-+		if (index == reg) {
- 			seq_printf(m, "devspec: %pOF\n", np);
- 			break;
- 		}
+ 	/*set up ports node*/
+diff --git a/arch/powerpc/sysdev/fsl_rmu.c b/arch/powerpc/sysdev/fsl_rmu.c
+index 7a5e2e2b9d06..e27c275c9c2e 100644
+--- a/arch/powerpc/sysdev/fsl_rmu.c
++++ b/arch/powerpc/sysdev/fsl_rmu.c
+@@ -1067,9 +1067,6 @@ int fsl_rio_setup_rmu(struct rio_mport *mport, struct device_node *node)
+ 	struct rio_priv *priv;
+ 	struct fsl_rmu *rmu;
+ 	u64 msg_start;
+-	const u32 *msg_addr;
+-	int mlen;
+-	int aw;
+ 
+ 	if (!mport || !mport->priv)
+ 		return -EINVAL;
+@@ -1086,16 +1083,12 @@ int fsl_rio_setup_rmu(struct rio_mport *mport, struct device_node *node)
+ 	if (!rmu)
+ 		return -ENOMEM;
+ 
+-	aw = of_n_addr_cells(node);
+-	msg_addr = of_get_property(node, "reg", &mlen);
+-	if (!msg_addr) {
++	if (of_property_read_reg(node, 0, &msg_start, NULL)) {
+ 		pr_err("%pOF: unable to find 'reg' property of message-unit\n",
+ 			node);
+ 		kfree(rmu);
+ 		return -ENOMEM;
+ 	}
+-	msg_start = of_read_number(msg_addr, aw);
+-
+ 	rmu->msg_regs = (struct rio_msg_regs *)
+ 			(rmu_regs_win + (u32)msg_start);
+ 
 -- 
 2.39.2
 
