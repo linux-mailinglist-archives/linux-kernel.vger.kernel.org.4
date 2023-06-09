@@ -2,139 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44E6172A6A0
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 01:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ABA772A6A2
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 01:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231707AbjFIXN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 19:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57856 "EHLO
+        id S232206AbjFIXOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 19:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjFIXN2 (ORCPT
+        with ESMTP id S229517AbjFIXO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 19:13:28 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E9E2733
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 16:13:27 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-bc4651e3838so60475276.2
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 16:13:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686352406; x=1688944406;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tNcpfuKwkWgK3IRRAlBYgLVqh/K/TL7K2asXg32HVwg=;
-        b=BVvFdC6p8vxXeRH8ZFXVCbHgtvRrhfleqsquUfyLcJhRNXZFUS+msV4JPOF071/MbD
-         rsTJfNyPdvssmkBfz8bMNfgYX8GDdHCnOCcvt9ZxBMu1X03h0vsuM1fT9deZJru4z+Ce
-         yq29ysNYc0qu91HRckXgRt8bSEFg8nQTPLBAniErHWfHC6VwdBMp18JAYb+mjGKAwKEg
-         MWbtpf7Ck4PlxuDl15sCuMfnDbh0zgzmrF49Fp1tOATz8EfHMIBwh2QHsONaS4JM50Zh
-         5BD5XE8wLS9uGnxtRAZ8fHkKB7LATnva7EAkhSj0JugabycgaZ41IIqXFk6TofqXqxRn
-         FGQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686352406; x=1688944406;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tNcpfuKwkWgK3IRRAlBYgLVqh/K/TL7K2asXg32HVwg=;
-        b=jlHmsxECa5VEZYKDlmp1oB35zqToxHnQ5oJGKDJqBVP8/9OzUNdeWDtec7wpk5tfh9
-         NrMKU0UyT4/xPFb+w0YjNPtfHM0LQy/bqli6SUU/t568DaZTOLnK9ZGeyPH9xAry8Cg4
-         ngeIcS8suEmKmwx7FG17tmnG7/slpnO7b2o1DixHOLlxcwe6QSoKdmX2NbPhW/rZe0HD
-         x2ryKFxMtbX9lTVY2rVPfgnj8Fof12LQyJ+I9+Q41EWZQ5Qnj7O+BEqx3t1OI2tzCu4Z
-         30T4aGWTUYDaFPn3/YqVIJxWmTLNLZnR+XUXi1UVVxivCUMYoM4/FDtJfixOUKdgXwzy
-         eMXw==
-X-Gm-Message-State: AC+VfDx2S3s2GMBPpqB2uj0a+QNG2BtzkfDGGYvuD9y4qhcosOQa4l2m
-        /p2fFiI/Md4AZEE41wQa9g8xpADhmvCKz338jWZ96w==
-X-Google-Smtp-Source: ACHHUZ6Vqm4GjxxRug8nK9f0XXqMuqXKUc1gR5uhPb44ljDWuyyyVbqOqn+TE5wPgpyhH93fIv8CIt32lVuIs/gk+Mg=
-X-Received: by 2002:a25:add3:0:b0:bb3:a945:96cd with SMTP id
- d19-20020a25add3000000b00bb3a94596cdmr2302585ybe.50.1686352406080; Fri, 09
- Jun 2023 16:13:26 -0700 (PDT)
+        Fri, 9 Jun 2023 19:14:28 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A6C52D52;
+        Fri,  9 Jun 2023 16:14:27 -0700 (PDT)
+Received: from mercury (unknown [185.254.75.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 454A066058B2;
+        Sat, 10 Jun 2023 00:14:25 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686352465;
+        bh=OVbrpsZIR2JQ+RAVl4Mjyhs9Fy0GiztuJgn4U6+S2iE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=E6mkt8NU48/8Oxba+IYnNWl245e8TAwLRbESYRY5Yt7IYvMKsKZqjZItFUFUv5xcy
+         l+OW0A+nAZzWNr3sB/YLPWDsDWQtPgjIiNAT1fnZ9fA39O6ZKg+bs8ODPq4o8440XX
+         ZlvwkO1kcWDyJ/R6BCL8v6QGt/UVZ6FZcw3PK0f3yBxMkznFwDbuIfhLH5jB99mzLU
+         9kaSMdZuVxIFMd/Vx2BqO2fDrACyQ55TKJEBn+LXsRRm3cfJwYtyhtyXn/+1iBSFIb
+         bZ/DNjL9m21Mz/JENw+Hk0xyeGlTsQkybZmbfC1uudoFnig3LiZb5IiuBzG3Y8SNE4
+         vfYW6ssYdKv+g==
+Received: by mercury (Postfix, from userid 1000)
+        id 52FD11060921; Sat, 10 Jun 2023 01:14:22 +0200 (CEST)
+Date:   Sat, 10 Jun 2023 01:14:22 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 1/2] power: reset: at91-reset: use driver structure as
+ status parameter
+Message-ID: <20230609231422.taqokbmxojbfdn2v@mercury.elektranox.org>
+References: <20230609143912.849995-1-miquel.raynal@bootlin.com>
+ <20230609143912.849995-2-miquel.raynal@bootlin.com>
 MIME-Version: 1.0
-References: <1685531374-6091-1-git-send-email-quic_charante@quicinc.com>
- <20230531221955.GD102494@cmpxchg.org> <230e45e8-8cd8-3668-bbfa-a95212b4cb99@quicinc.com>
- <20230605180013.GD221380@cmpxchg.org> <f3f15b6a-8618-f755-f21c-4193c502e65c@quicinc.com>
- <CAJuCfpFB33GLbwvYspg966b6AGMopS3ca68hjL94kgpM7et7CQ@mail.gmail.com> <4543c4e5-43f1-bae2-245e-951437e4bd07@quicinc.com>
-In-Reply-To: <4543c4e5-43f1-bae2-245e-951437e4bd07@quicinc.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Fri, 9 Jun 2023 16:13:14 -0700
-Message-ID: <CAJuCfpE42OJZur-1u2hvvXmPkRdV1uOfK-Aqm2POmvrDpRwg0Q@mail.gmail.com>
-Subject: Re: [PATCH] mm: madvise: fix uneven accounting of psi
-To:     Charan Teja Kalla <quic_charante@quicinc.com>
-Cc:     Johannes Weiner <hannes@cmpxchg.org>, akpm@linux-foundation.org,
-        minchan@kernel.org, quic_pkondeti@quicinc.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ulw4km3dguudpisq"
+Content-Disposition: inline
+In-Reply-To: <20230609143912.849995-2-miquel.raynal@bootlin.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 5:42=E2=80=AFAM Charan Teja Kalla
-<quic_charante@quicinc.com> wrote:
->
-> Thanks Suren & Johannes,
->
-> On 6/7/2023 1:18 AM, Suren Baghdasaryan wrote:
-> > Hi Folks. Sorry for being late to the party.
-> > Yeah, userspace does not have a crystal ball to predict future user
-> > behavior, so there will always be pathological cases when usual
-> > assumptions and resulting madvise() would make things worse.
-> >
-> > I think this discussion can be split into several questions/issues:
-> > 1. Inconsistency in how madvise(MADV_PAGEOUT) would affect PSI
-> > calculation when the page is refaulted, based on the path it took
-> > before being evicted by madvise(). In your initial description case
-> > (a) is inconsistent with (b) and (c) and it's probably worth fixing.
-> > IMHO (a) should be made consistent with others, not the other way
-> > around. My reasoning is that page was expelled from the active list,
-> > so it was part of the active workingset.
-> >
-> That means we should be setting Workingset on the page while it is on
-> the active list and when it is being pageout through madvising. Right? I
-> see, this makes it consistent.
 
-This was my opinion but others might think otherwise, like I found out
-in some recent conversations. So, it would be great to get some more
-feedback before making the change.
+--ulw4km3dguudpisq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->
-> On the same note, discussing with Suren offline, Should the refaulted
-> madvise pages start always at the inactive list? If they are really
-> active, they get promoted anyway..
->
-> > 2. Whether refaults caused by incorrect madvise(MADV_PAGEOUT) should
-> > be counted as workingset refault and affect PSI.
-> > This one I think is trickier. IMHO it should be counted as workingset
-> > refault simply because it was refaulted and it was part of the
-> > workingset. Whether it should affect PSI, which is supposed to be an
-> > indicator of "pressure" is, I think, debatable. With madvise() in the
-> > mix, refault might happen without any real memory pressure... So, the
-> > answer is not obvious to me.
-> >
-> > 3. Should refaults caused by incorrect madvise(MADV_PAGEOUT) be
-> > distinguished from the ones which were evicted by kernel reclaim
-> > mechanisms.
-> > I can see use for that from userspace to detect incorrect madvise()
-> > and adjust its aggressiveness. I think the API might get a bit complex
-> > because of the need to associate refaults with specific madvise()/VMAs
-> > to understand which hint was incorrect and adjust the behavior.
-> > Instead what is the opinion about giving an MADV_PAGEOUT_INACTIVE
-> interface which does operate on a page only If it is on the inactive
-> list and !PageWorkingset ?
+Hi,
 
-IOW you want a less aggressive mechanism which can be used by the
-userspace to tell the kernel "I think these pages won't be used but
-I'm not 100% sure, so drop them only if they are inactive"?
- I don't know how much that will help when the madvise() ends up being
-wrong but maybe you can quickly experiment and tell us if the
-difference is substantial?
+On Fri, Jun 09, 2023 at 04:39:11PM +0200, Miquel Raynal wrote:
+> It is quite uncommon to use a driver helper with parameters like *pdev
+> and __iomem *base. It is much cleaner and close to today's standards to
+> provide the per-device driver structure and then access its
+> internals. Let's do this with at91_resete_status() before making more
+> modifications to this helper.
+>=20
+> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> ---
+>  drivers/power/reset/at91-reset.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/power/reset/at91-reset.c b/drivers/power/reset/at91-=
+reset.c
+> index 741e44a017c3..a8a6f3997768 100644
+> --- a/drivers/power/reset/at91-reset.c
+> +++ b/drivers/power/reset/at91-reset.c
+> @@ -149,11 +149,10 @@ static int at91_reset(struct notifier_block *this, =
+unsigned long mode,
+>  	return NOTIFY_DONE;
+>  }
+> =20
+> -static void __init at91_reset_status(struct platform_device *pdev,
+> -				     void __iomem *base)
+> +static void __init at91_reset_status(struct at91_reset *reset)
+>  {
+> +	u32 reg =3D readl(reset->rstc_base + AT91_RSTC_SR);
+>  	const char *reason;
+> -	u32 reg =3D readl(base + AT91_RSTC_SR);
+> =20
+>  	switch ((reg & AT91_RSTC_RSTTYP) >> 8) {
+>  	case RESET_TYPE_GENERAL:
 
->
-> > Hope my feedback is useful and if we can improve Android's userspace
-> > behavior, I'm happy to help make that happen.
-> Thanks...
+You also need to update the code calling this functions, otherwise
+the series is not bisectable.
+
+-- Sebastian
+
+--ulw4km3dguudpisq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSDskoACgkQ2O7X88g7
++pqnnhAAjBSbPqAOKOaaMhYoD0mevlwW1uP7DXSkKHiKfEvaBxnNIl+pcKpw6XAd
+kWR5G1HI9TDRI0sGO1rmiqElD5KkG2W9AG+N2XyQ29farZW8jgsYMKLR9o/SGkDe
+SszxTRocOF3zzWsb/RCokOjHL5QJuqvaVi37mdo6/6AyjJHRN9yx5T1zY4ZexASG
+xN81JWQYotuSK2yUy8wD22mmGrvHL2pAb75t3uqcVTjRvah3w9Mx4Bmc+9a9gvas
+xyHp2VOdPEh/wRYMNb6h67xW2nHKWMK+Ab4uNZdoSYvFAmXKUx4gedgsMQP4ArAf
+Y8OHQZmY8/bFc76SwJuZy9gD82z+iy+WLKcJFSdZmrJ1Bb/JexahHoMrLwan3wCd
+/EWvrPIxgEssdJ9RL/ZURBf9OzgtUSW3k4ciGvpIO46ZHLCHYmah64BqE5eDkAzr
+Pko47F+GgDHCD+KqkSIGiCM/9mmRF5FXGONZXg3paXgBaT1KtsD+VVhcdFXsM55W
+vzDRWE9wNlbd/B1kDs4h6QPCSHtzD0PvnRx8Ofd8yJFFOeh9g+zhQdtJQ9cXxTG+
+3rdzd1Z857Yvk6MpBTRBnC/eOkscsjIRRF2iJr0oKsQu920KS5tPP4u+JnIW6jNW
+rpqq4PNqFy/QhtcCO2xvPu/MvzEjYJ5lHX/3hB5yZeQIDyH3Yc4=
+=Bdzs
+-----END PGP SIGNATURE-----
+
+--ulw4km3dguudpisq--
