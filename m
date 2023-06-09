@@ -2,182 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1725C728EA8
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 05:43:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE0B5728EAC
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 05:47:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238184AbjFIDnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 23:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34836 "EHLO
+        id S238202AbjFIDrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 23:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjFIDnh (ORCPT
+        with ESMTP id S229574AbjFIDrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 23:43:37 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2047.outbound.protection.outlook.com [40.107.92.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADEDF5
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 20:43:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VDFirqgCATtiGyz5kXHl3mgmPJrgYODkA+RHkNJuhT6kI6dgv62XTHa6dNKuMXvqkofOUxAvhCtvIAKC7LtAJ/4vnM5jBSEaRoaewZocTgGQCER6p3xTffLo/6eJsH2RVCRZKKNhZ3HY6ycrDUBJOQAAg2b3e4zcJTquHjmV93nsH0rlMNQbWwNxVzfFlLvBhXHWD/VRCkrYoPOUvx8ZklGTzFB3wRREerUzJiSplj6hbdPSSHXnKdsyWfyged8/1kKuqj2snuS+vahgUAUoD/CtcNeMddHfShD0cqMI+LvQN52Ikm9THjTob0zE+e64atPQUx4J3HoFUxV5uTbCig==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pUxkXGFX2qxvWMjCIwpPPmHLmL5o3EtrE0zQDpPERss=;
- b=KRvBAVHItg9D2Y16c11ouVjUsn2mg+jE9mYNSOIIykBIJfO2ypkFxt5gUYFoiyD+hR6FTpy92JDBpZ8C4Mbz1bZVzRVpoVYddjvAczDaCZgrr85BG60z+Xo+wNHcyQ6CQpZZBlFa/FYG3ZrjZZsZI6lH2SxWE9m8AYozxeJniQs9CIh7XUDFpCjymOsdOjvcTyUwaWhZovp5339EhNFgBWdfvrT+EBwzkkZOyfsYRyvXON7zjDVHnz1+gAaYEe6DNzzsmWPz2e0YUp/exZPLty33wH3RNq5XAJSm1B78UB6Z6Z7DCyS5mPkctO7xBxTGbzNHfWevuY1P7CrVRXxDrw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pUxkXGFX2qxvWMjCIwpPPmHLmL5o3EtrE0zQDpPERss=;
- b=DiRR9M32qP9jRvxb3MoiwxHwI+kgUlgXp2W8xQO/B4IKxxqBy3u+CsfPtJFp6W/om1Z/sVIEY8s9HuOiErgNE4OieGeSLKf3wvGGzis+epLpSZZ0x+rqk61fATOwEeurz2E2mfF3lJDpLI+Xa/SyFgTYURTeQCtbxFHl2w99Rbo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MW2PR12MB2379.namprd12.prod.outlook.com (2603:10b6:907:9::24)
- by PH8PR12MB7205.namprd12.prod.outlook.com (2603:10b6:510:227::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.36; Fri, 9 Jun
- 2023 03:43:30 +0000
-Received: from MW2PR12MB2379.namprd12.prod.outlook.com
- ([fe80::88b4:a667:a7e7:1b2c]) by MW2PR12MB2379.namprd12.prod.outlook.com
- ([fe80::88b4:a667:a7e7:1b2c%2]) with mapi id 15.20.6455.039; Fri, 9 Jun 2023
- 03:43:30 +0000
-Message-ID: <fd5a27de-c8a9-892c-f413-66ea41221fdd@amd.com>
-Date:   Fri, 9 Jun 2023 09:13:15 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH 14/24] workqueue: Generalize unbound CPU pods
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Sandeep Dhavale <dhavale@google.com>, jiangshanlai@gmail.com,
-        torvalds@linux-foundation.org, peterz@infradead.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        joshdon@google.com, brho@google.com, briannorris@chromium.org,
-        nhuck@google.com, agk@redhat.com, snitzer@kernel.org,
-        void@manifault.com, kernel-team@android.com,
-        Swapnil Sapkal <swapnil.sapkal@amd.com>
-References: <20230519001709.2563-1-tj@kernel.org>
- <20230519001709.2563-15-tj@kernel.org>
- <CAB=BE-S=cxewXu7nqJY1DC5w9Bapar_C0cTjpZOQ-Qd5GGwYyw@mail.gmail.com>
- <c307ba94-0d8c-3cbf-19da-44ee31751428@amd.com>
- <ZIEBB-A1arYKSK2P@slm.duckdns.org>
- <fb3461cd-3fc2-189a-a86b-c638816a2440@amd.com>
- <ZIJbMQOu_k07jkFf@slm.duckdns.org>
-From:   K Prateek Nayak <kprateek.nayak@amd.com>
-In-Reply-To: <ZIJbMQOu_k07jkFf@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0013.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:95::9) To MW2PR12MB2379.namprd12.prod.outlook.com
- (2603:10b6:907:9::24)
+        Thu, 8 Jun 2023 23:47:07 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED983F5;
+        Thu,  8 Jun 2023 20:47:04 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.170])
+        by gateway (Coremail) with SMTP id _____8Ax0Oi3oIJkdeAAAA--.894S3;
+        Fri, 09 Jun 2023 11:47:03 +0800 (CST)
+Received: from [10.20.42.170] (unknown [10.20.42.170])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax6OS2oIJkTq4JAA--.29890S3;
+        Fri, 09 Jun 2023 11:47:02 +0800 (CST)
+Message-ID: <4cfe93cb-7713-f994-45c3-e99fe34a3f9e@loongson.cn>
+Date:   Fri, 9 Jun 2023 11:47:02 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW2PR12MB2379:EE_|PH8PR12MB7205:EE_
-X-MS-Office365-Filtering-Correlation-Id: fab74375-770b-406a-d2a2-08db689bb0b7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: d0GWanmNFhbQOpQmPRD4uTp3EyxPWEMT+gnfhN04evPdIMfJ5ZhiItc1L6teni5ekVjXwHj7n5IOIn8bCQVuIhlNvMPZmD0RoEOPn1wO54VDHYySZgrHOwomBapC/4Syt55O5D6peJONO71CWGQ272XxS/pS4Wdf5TWYYqxcaSgwGu94PrzmkQtxLp2I1dYga2oaxlfz1D7BPRD4bdohLTKg8aKW7GASupbBq5V2JziYTPYACeV8USXpngftKKf4G7iopilrKdpUT2PPysuUKoVJwfsb74te+cm1x+cLTB/8GmcFHSNVHOSZF5k6WhKzErLvuFkFogI2ZnVzC3cuvlt7BkRVLU4EEJ8n9Pfhu28pz9EVMgjdCeCNW70wFEXFIF3A9x9j5E2KQoP6/wTgLs+TZMDOJ8YMWTDlNPmW3fih+gtFKnSDlBhjVE0qFegIRLptz3110acMVo03sVKmGcHhvgjf4V8jOGaWewqugwWiS4rAJUEutwKUBeyvjfxRG4K1grIvS+4ro2ebL6BEoIb0vRu0ciTqDn98uTyGQndenMdalXKRj2KF6Xj2G2ds2aGbxF6k4x6+0UnDYWmnll8EgZ2g+bb1xbqK8xPfxLm/dcv597mP4v6D022J9eLyMIPje3NuFswHHXUUBQGv5g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB2379.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(366004)(39860400002)(376002)(136003)(451199021)(83380400001)(7416002)(478600001)(8676002)(8936002)(4326008)(86362001)(66476007)(66946007)(66556008)(31696002)(6916009)(5660300002)(38100700002)(41300700001)(316002)(6666004)(6486002)(36756003)(2906002)(54906003)(6512007)(186003)(26005)(6506007)(53546011)(2616005)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dzFPc3Q3STluOENaWlBDTnB2bFUwSXIvU2xNb3pldnBVWStXdTZ3YlFXQVlI?=
- =?utf-8?B?YVlROFJ1b05FKzc5R2t5TkIyVmJzK3V1TlUwR1NxWWVGZlJMRDdMUStncTdW?=
- =?utf-8?B?Z0cybGl0RDN1M0JVUmxnVkNPSHNGRkkzSkNlLzUzVzZUeEU1b3BHL05VRW1h?=
- =?utf-8?B?WUZjaGRTc2hwcnBBWjZock5LMzF5V0VQSEk0bEIxanVlSzM3RVRBczFmRWpw?=
- =?utf-8?B?OWpkQk9Jdm81WUl0ZXI0dFdpMTdKOHdLc1RzY2V3RkJVNlYxcFA0RndZWW1x?=
- =?utf-8?B?dE9hL2syckZ3amtNVlczbndZRklySE5FTVZpWXRyMm84eVc5OGJ2MlZGZFQ4?=
- =?utf-8?B?SEtUdjE0UktNdEhLeWN5UWlYSmdGaGpBQ1ZwQkVaeVdNQkVMR2tjVzBBNzR4?=
- =?utf-8?B?UXZpWnR2a1RFeWh6Vmx5WERRak1oRU9PNTNob2hOa1NITXJubkpnVHRKQ0My?=
- =?utf-8?B?bkVUemMxUHY3Qy9tUE5EZUVIUTlyditLYlNSUEt0RGNUSkNEQU84c1FJZzQv?=
- =?utf-8?B?RUtkRnJ3MHcwcW1jdjIwNmIwOFVzR2N2eTFmOFVTOEtVTDE3NzZjclNzcmxr?=
- =?utf-8?B?cUdNdGd6c1UrRE5sM3RJZDQ5aHlsNHRFUzFQZUNDQjJOOHFlbWNsVGlvd0w4?=
- =?utf-8?B?RU0reUpXS3VpVk5oOTBiN3FBRTErazQ4c1dvV1NaQ0hPZ3BkZWZKUEx4MU5E?=
- =?utf-8?B?NTBhM3I5cHBBT1RnTGhKQ09OK1RSZFhlcEJzcmIvYjFLVHl0QndyVnIrb3NX?=
- =?utf-8?B?U1Btc1pyZ3grQUFlRlArcUE4aFRFNWJSZlJlVXdPYW5XY1lnMkpZS1l1UGZh?=
- =?utf-8?B?V2pwS3pEamFpVlBUZFZDTW9zQlJMaVhGdU1iR1NGN2xWNElRSWJJK05tMkpj?=
- =?utf-8?B?dkdSelNnMVFYNFFMVUQ5UWc3M1lyeGxQRngrRWk5UHBneTk0ZTRFTTZ3dElS?=
- =?utf-8?B?L3hNUnBCUnNBWWhzL3NzL2RYanlUbmkwKzJYS3lFV1pHVGhDZ3FCdlVBbXRs?=
- =?utf-8?B?VEQ4THRBNndtTWZZMlFpb1dYKytPdDduOExuWDlpTkVGMXpRYnFvUExkNHZU?=
- =?utf-8?B?a3RFeVlvamlPUXk2UGVsZmlkYnJMVExRV2xGdTduRWsvK1ZEMjc0NE0xWjlt?=
- =?utf-8?B?SVZYTnI3NDJKSys1YUZyZVh2MndzMEpjalQ1SzFsVk5nUWhlbGNZSklKOE5l?=
- =?utf-8?B?RTQwZTRQSlBEYnM0R04yMWRFM1poTUlmVFFjZHNWQllWQUF1RWxjZlVJNDVs?=
- =?utf-8?B?N25aVzNwZTQxQ25PaG9YSHdWTVQ5SzRwOThMVVNIZkJxWDhjZGVlTk53bXZF?=
- =?utf-8?B?WFh2ZmtNT2ppbGszU1BXcHJCWngrRG4rakIrKzMxNHNkNWdMVEJXazdGdXpI?=
- =?utf-8?B?TTdHYkEzUkorUDNGVnpEcnBZYkZrKzJOanVYOXhrSHJvMHprMUZQdFkrZDVz?=
- =?utf-8?B?YlV3OWFsN2UzNzRmbW1ZbkZvT1dPcDd4RjNKVit5R2h0a00vdWRSd3FNVzg4?=
- =?utf-8?B?WlMzMFBtc0pBbkI5c3ExallWbGZqdmpneW85a0pYbytGa2RxWTFKQStJMnRE?=
- =?utf-8?B?cXhYOEhLcEhma0FEWjNSVHBuTnFSUDZ6N0JQSHpzUFROU3lweXp4bHkyNVlo?=
- =?utf-8?B?b1JYOG9vUkduVFFKVGQ0cDVUMG9uNWp5dXhISGgxeExTNWtiNGZxaCtmQURm?=
- =?utf-8?B?Z3p3UCtYWFRjYmJhSkdZQk9YQmFNSkgvS2xmWTJ4ZUZHcW1YZXM0bmxHbzN0?=
- =?utf-8?B?cnlFYWVsWWZtU1MxQjJyS0svZEtrcVZiV293dkw4bVIrc3R4Zk9rZ2E0U0o0?=
- =?utf-8?B?MXdWOGd4d0picTcwQ2dITUNGTERuNG5RSjdmMWtWaGk3U1VvSkJsd0ZmTlN4?=
- =?utf-8?B?WnVwcDU2QTNoeGZKd0M4VG40ZitqSld5Q0tyZUFTRS9rd2poOWhqWUlxQWtP?=
- =?utf-8?B?dktUUGUvTG81UjZLbFdTRW1EREduKzdZaXh2MTh2alMzNGYySFdXRllkcm04?=
- =?utf-8?B?R29Cc3hIU0hYS1llZEFjZDBCZVNUUlk5YUVGRVUxKzd6U0k4TnAvR1VuMnRa?=
- =?utf-8?B?eHlaU3lERERndDdrK0Z0bHBUQnllOXdyL0FQNEVXM2E2clRNbmpxSERlZ0cx?=
- =?utf-8?Q?100cjzvGl6xBYKin4UQMopLi5?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fab74375-770b-406a-d2a2-08db689bb0b7
-X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB2379.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 03:43:30.1094
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4SaqQTljDjopJYHuz/E9fhRYto+snop2bsRt3mngd9WVuwu4Gsdv9Yk8/hQO/YIQVzqicOgTwZUc75D3rADSJQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7205
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4] PCI: Align pci memory space base address with page
+ size
+Content-Language: en-US
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
+        loongarch@lists.linux.dev, loongson-kernel@lists.loongnix.cn
+References: <20230609022047.2195689-1-maobibo@loongson.cn>
+ <CAAhV-H7n1Z58h2qxCASDXMMQBDN6x_vq6bH_utVhB5boYoZDGQ@mail.gmail.com>
+From:   "bibo, mao" <maobibo@loongson.cn>
+In-Reply-To: <CAAhV-H7n1Z58h2qxCASDXMMQBDN6x_vq6bH_utVhB5boYoZDGQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Ax6OS2oIJkTq4JAA--.29890S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoW3Xr15ur1Uur4xXw1xWr4UAwc_yoWxZF4rpF
+        y5uFnxZryvkry8GrZrtw1UCwsxZ39I9F4YkrWUC3s3Gas7Xr9rtr9rZ3yUAFZ7Crs8Gry5
+        WFn5tr1UXan3J3gCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
+        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv
+        67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
+        AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
+        F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw
+        1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
+        xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
+        1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j1
+        YL9UUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Tejun,
 
-On 6/9/2023 4:20 AM, Tejun Heo wrote:
-> Hello,
+
+在 2023/6/9 10:29, Huacai Chen 写道:
+> Hi, Bibo,
 > 
-> On Thu, Jun 08, 2023 at 08:31:34AM +0530, K Prateek Nayak wrote:
->> [..snip..]
->> o I consistently see a WARN_ON_ONCE() in kick_pool() being hit when I
->>   run "sudo ./stress-ng --iomix 96 --timeout 1m". I've seen few
->>   different stack traces so far. Including all below just in case:
-> ...
->> This is the same WARN_ON_ONCE() you had added in the HEAD commit:
+> On Fri, Jun 9, 2023 at 10:20 AM Bibo Mao <maobibo@loongson.cn> wrote:
 >>
->>     $ scripts/faddr2line vmlinux kick_pool+0xdb
->>     kick_pool+0xdb/0xe0:
->>     kick_pool at kernel/workqueue.c:1130 (discriminator 1)
+>> Some PCI devices have only 4K memory space size, it is normal in general
+>> machines and aligned with page size. However some architectures which
+>> support different page size, default page size on LoongArch is 16K, and
+>> ARM64 supports page size varying from 4K to 64K. On machines where larger
+>> page size is use, memory space region of two different pci devices may be
+>> in one page. It is not safe with mmu protection, also VFIO pci device
+>> driver requires base address of pci memory space page aligned, so that it
+>> can be memory mapped to qemu user space when it is passed-through to vm.
 >>
->>     $ sed -n 1130,1132p kernel/workqueue.c
->>     if (!WARN_ON_ONCE(wake_cpu >= nr_cpu_ids))
->>         p->wake_cpu = wake_cpu;
->>     get_work_pwq(work)->stats[PWQ_STAT_REPATRIATED]++;
+>> It consumes more pci memory resource with page size alignment requirement,
+>> here extra option PCI_MEMRES_PAGE_ALIGN is added, it can be enabled by
+>> different architectures.
 >>
->> Let me know if you need any more data from my test setup.
->> P.S. The kernel is still up and running (~30min) despite hitting this
->> WARN_ON_ONCE() in my case :)
-> 
-> Okay, that was me being stupid and not initializing the new fields for
-> per-cpu workqueues. Can you please test the following branch? It should have
-> both bugs fixed properly.
-> 
->  git://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git affinity-scopes-v2
+>> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+>> ---
+>> Change history
+>> v4: add extra kernel option PCI_MEMRES_PAGE_ALIGN to set memory resource
+>>     page aligned.
+>>
+>> v3: move alignment requirement to generic pci code
+>>
+>> v2: add pci resource alignment requirement in arch specified function
+>>     pcibios_align_resource on arm64/LoongArch platforms
+>>
+>> ---
+>>  arch/loongarch/Kconfig  | 1 +
+>>  drivers/pci/Kconfig     | 3 +++
+>>  drivers/pci/setup-res.c | 7 +++++++
+>>  3 files changed, 11 insertions(+)
+>>
+>> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+>> index d38b066fc931..65b2f6ba9f8e 100644
+>> --- a/arch/loongarch/Kconfig
+>> +++ b/arch/loongarch/Kconfig
+>> @@ -142,6 +142,7 @@ config LOONGARCH
+>>         select PCI_LOONGSON
+>>         select PCI_MSI_ARCH_FALLBACKS
+>>         select PCI_QUIRKS
+>> +       select PCI_MEMRES_PAGE_ALIGN
+>>         select PERF_USE_VMALLOC
+>>         select RTC_LIB
+>>         select SMP
+>> diff --git a/drivers/pci/Kconfig b/drivers/pci/Kconfig
+>> index 9309f2469b41..9be5f85ff9dc 100644
+>> --- a/drivers/pci/Kconfig
+>> +++ b/drivers/pci/Kconfig
+>> @@ -128,6 +128,9 @@ config PCI_LOCKLESS_CONFIG
+>>  config PCI_BRIDGE_EMUL
+>>         bool
+>>
+>> +config PCI_MEMRES_PAGE_ALIGN
+>> +       bool
+>> +
+>>  config PCI_IOV
+>>         bool "PCI IOV support"
+>>         select PCI_ATS
+>> diff --git a/drivers/pci/setup-res.c b/drivers/pci/setup-res.c
+>> index 967f9a758923..6ad76734a670 100644
+>> --- a/drivers/pci/setup-res.c
+>> +++ b/drivers/pci/setup-res.c
+>> @@ -339,6 +339,13 @@ int pci_assign_resource(struct pci_dev *dev, int resno)
+>>                 return -EINVAL;
+>>         }
+>>
+>> +#ifdef CONFIG_PCI_MEMRES_PAGE_ALIGN
+>> +       /*
+>> +        * force minimum page alignment for vfio pci usage
+>> +        */
+>> +       if (res->flags & IORESOURCE_MEM)
+>> +               align = max_t(resource_size_t, PAGE_SIZE, align);
+>> +#endif
+> Does this really have its effect? The common version of
+> pcibios_align_resource() simply returns res->start, and doesn't care
+> about the 'align' parameter.
+yes, it works. The is output of command " lspci -vvv | grep Region" on my
+3C5000+7A2000 box. After the patch base address of all pci mem resource
+is aligned with 16K.
 
-I've not run into any panics or warnings with this one. Kernel has been
-stable for ~30min while running stress-ng iomix. We'll resume the testing
-with v2 :)
+output without the patch:
+        Region 0: Memory at e0045240000 (64-bit, non-prefetchable) [size=32K]
+        Region 0: Memory at e0045248000 (64-bit, non-prefetchable) [size=32K]
+        Region 0: Memory at e0045250000 (64-bit, non-prefetchable) [size=32K]
+        Region 0: Memory at e0045258000 (64-bit, non-prefetchable) [size=32K]
+        Region 0: Memory at e0045260000 (64-bit, non-prefetchable) [size=32K]
+        Region 0: Memory at e0045271400 (64-bit, non-prefetchable) [size=256]
+        Region 2: Memory at e0040000000 (64-bit, non-prefetchable) [size=64M]
+        Region 4: Memory at e0045200000 (64-bit, non-prefetchable) [size=64K]
+        Region 0: Memory at e0045210000 (64-bit, non-prefetchable) [size=64K]
+        Region 0: Memory at e0045220000 (64-bit, non-prefetchable) [size=64K]
+        Region 0: Memory at e0045230000 (64-bit, non-prefetchable) [size=64K]
+        Region 5: Memory at e0045271000 (32-bit, non-prefetchable) [size=1K]
+        Region 0: Memory at e0045268000 (64-bit, non-prefetchable) [size=4K]
+        Region 0: Memory at e0045269000 (64-bit, non-prefetchable) [size=4K]
+        Region 0: Memory at e004526a000 (64-bit, non-prefetchable) [size=4K]
+        Region 0: Memory at e004526b000 (64-bit, non-prefetchable) [size=4K]
+        Region 0: Memory at e004526c000 (64-bit, non-prefetchable) [size=4K]
+        Region 0: Memory at e004526d000 (64-bit, non-prefetchable) [size=4K]
+        Region 0: Memory at e004526e000 (64-bit, non-prefetchable) [size=4K]
+        Region 0: Memory at e004526f000 (64-bit, non-prefetchable) [size=4K]
+        Region 0: Memory at e0045270000 (64-bit, non-prefetchable) [size=4K]
+        Region 2: Memory at e0044000000 (64-bit, non-prefetchable) [size=16M]
+        Region 0: Memory at e0045100000 (64-bit, non-prefetchable) [size=1M]
+        Region 0: Memory at e0045000000 (64-bit, non-prefetchable) [size=16K]
 
-> 
-> If that doesn't crash, I'd love to hear how it affects the perf regressions
-> reported over that past few months.> 
-> Thanks.
-> 
+out put with the patch:
+        Region 0: Memory at e0045240000 (64-bit, non-prefetchable) [size=32K]
+        Region 0: Memory at e0045248000 (64-bit, non-prefetchable) [size=32K]
+        Region 0: Memory at e0045250000 (64-bit, non-prefetchable) [size=32K]
+        Region 0: Memory at e0045258000 (64-bit, non-prefetchable) [size=32K]
+        Region 0: Memory at e0045260000 (64-bit, non-prefetchable) [size=32K]
+        Region 0: Memory at e0045290000 (64-bit, non-prefetchable) [size=256]
+        Region 2: Memory at e0040000000 (64-bit, non-prefetchable) [size=64M]
+        Region 4: Memory at e0045200000 (64-bit, non-prefetchable) [size=64K]
+        Region 0: Memory at e0045210000 (64-bit, non-prefetchable) [size=64K]
+        Region 0: Memory at e0045220000 (64-bit, non-prefetchable) [size=64K]
+        Region 0: Memory at e0045230000 (64-bit, non-prefetchable) [size=64K]
+        Region 5: Memory at e004528c000 (32-bit, non-prefetchable) [size=1K]
+        Region 0: Memory at e0045268000 (64-bit, non-prefetchable) [size=4K]
+        Region 0: Memory at e004526c000 (64-bit, non-prefetchable) [size=4K]
+        Region 0: Memory at e0045270000 (64-bit, non-prefetchable) [size=4K]
+        Region 0: Memory at e0045274000 (64-bit, non-prefetchable) [size=4K]
+        Region 0: Memory at e0045278000 (64-bit, non-prefetchable) [size=4K]
+        Region 0: Memory at e004527c000 (64-bit, non-prefetchable) [size=4K]
+        Region 0: Memory at e0045280000 (64-bit, non-prefetchable) [size=4K]
+        Region 0: Memory at e0045284000 (64-bit, non-prefetchable) [size=4K]
+        Region 0: Memory at e0045288000 (64-bit, non-prefetchable) [size=4K]
+        Region 2: Memory at e0044000000 (64-bit, non-prefetchable) [size=16M]
+        Region 0: Memory at e0045100000 (64-bit, non-prefetchable) [size=1M]
+        Region 0: Memory at e0045000000 (64-bit, non-prefetchable) [size=16K]
 
---
-Thanks and Regards,
-Prateek
+Regards
+Bibo, Mao
+> 
+> Huacai
+>>         size = resource_size(res);
+>>         ret = _pci_assign_resource(dev, resno, size, align);
+>>
+>> --
+>> 2.27.0
+>>
+
