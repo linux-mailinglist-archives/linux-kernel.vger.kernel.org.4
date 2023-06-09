@@ -2,126 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EADFF729470
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:13:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03B31729468
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:13:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241136AbjFIJNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 05:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39898 "EHLO
+        id S241250AbjFIJMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 05:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240463AbjFIJNR (ORCPT
+        with ESMTP id S241436AbjFIJMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 05:13:17 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5F8724EE6;
-        Fri,  9 Jun 2023 02:08:54 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Dxi+rJ64JknfwAAA--.2936S3;
-        Fri, 09 Jun 2023 17:07:21 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxVeTG64JkiHMKAA--.31757S2;
-        Fri, 09 Jun 2023 17:07:19 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kselftest@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-Subject: [PATCH v5] selftests/clone3: Fix broken test under !CONFIG_TIME_NS
-Date:   Fri,  9 Jun 2023 17:07:05 +0800
-Message-Id: <1686301625-9477-1-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf8DxVeTG64JkiHMKAA--.31757S2
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7Kw48Jry3JF4kZryDJF1rXwc_yoW5JFyrpF
-        yxZw1DKFWFgF17tFyDZ3yqgFyrCF1kXrW8XF47Z34UAr1fXr97Xr4xKa48JryUKrWFvrWF
-        yFyfGF4xWr1UXagCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUU9Fb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        AVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
-        AKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v2
-        6r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
-        CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF
-        0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIx
-        AIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2
-        KfnxnUUI43ZEXa7IU8uuWJUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 9 Jun 2023 05:12:22 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE5449EA
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 02:07:59 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id e9e14a558f8ab-33d928a268eso244165ab.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 02:07:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686301639; x=1688893639;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vVqqNiTWipF9tqQGIXfWiYHdhPZGr5sY95HAiAKaa/c=;
+        b=hCpzPeWKrNa3kekE9t5+6tDGSGcCQNB3zp8QEUHG4S9aAMvfBGhQ4PfM93rGsuXPFa
+         XAdMHbYGoAgMHUdP7C86X3/YC5WBNHcO+tYLDQ7WJRH3KHMLAhAPceHEz5V+7a0eNz8n
+         6BdC2h3I6c52v+lOoNNkqwgFIRxI4y27BpE5+EQ5P94dTP6vMSPoEzHQ766ExdYHZyCe
+         bWLvSKay1lJ71VzY0BYjxm0cgMMSDA5XA4F8DOYu6EbSlK4V1KEpgo0701dPY9IADLJR
+         imqcGAwsIwdrHTunYAFWuUgoUTl9bxSM7r7RNzf7zJJvpJRLUZXM/8Sz3/X1hRhSW5jD
+         GJUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686301639; x=1688893639;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vVqqNiTWipF9tqQGIXfWiYHdhPZGr5sY95HAiAKaa/c=;
+        b=KR6Dr80aU8FJh3BLQ/2sZmKQfkPVsz5ccoZkrr+w2Yy04h7WII1yD9/EYwdOuQ/eg1
+         9lwvfttJ6r/uYXycxm1NWcGeBHI8NQTI2G7fLFQazu+CcU7zNIt8K8fd4m9R1Xq5AkHO
+         /efxIOOaCooOp6Tucn26pmnJ8NFyysJqRhfL6fa+/87w5DXox1BcB6jlnBFTpXeNYcZW
+         TjEC4L70fJIQNq0kpCKk+VmP8dAg6gWz4EJyohknowCRb7u5kF/WfKq2YuySDTo8a7Dm
+         k25LZnNqGFHgWqC/dWc4UB/HcI6elQJbRPsa7nGUca7S2wzfnk7iyTHh5ZjnzahJXkRi
+         desw==
+X-Gm-Message-State: AC+VfDzy+wFHdN92rhBB5kEw+DwfgARuUWxL/u2yCRCwjeW/KSD+qUJh
+        /7dVYyCbAcWxin2ufgXmhOdulHEAiNMws/txk3CzAg==
+X-Google-Smtp-Source: ACHHUZ5vmT2eOAYEGZtWaf9C1WLVOXwyQP5WUv2+r5yCqWBKuOI1tIBVQM0GgqzsQe0OOAWiCe5U+vDQbastTKW7LbQ=
+X-Received: by 2002:a05:6e02:1b01:b0:33d:ac65:f95e with SMTP id
+ i1-20020a056e021b0100b0033dac65f95emr341983ilv.12.1686301639383; Fri, 09 Jun
+ 2023 02:07:19 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230609082712.34889-1-wuyun.abel@bytedance.com>
+In-Reply-To: <20230609082712.34889-1-wuyun.abel@bytedance.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 9 Jun 2023 11:07:05 +0200
+Message-ID: <CANn89i+Qqq5nV0oRLh_KEHRV6VmSbS5PsSvayVHBi52FbB=sKA@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next] sock: Propose socket.urgent for sockmem isolation
+To:     Abel Wu <wuyun.abel@bytedance.com>
+Cc:     Tejun Heo <tj@kernel.org>, Christian Warloe <cwarloe@google.com>,
+        Wei Wang <weiwan@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Ahern <dsahern@kernel.org>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Yu Zhao <yuzhao@google.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Martin KaFai Lau <martin.lau@kernel.org>,
+        Xin Long <lucien.xin@gmail.com>,
+        Jason Xing <kernelxing@tencent.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        "open list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)" 
+        <cgroups@vger.kernel.org>,
+        "open list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)" 
+        <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When execute the following command to test clone3 on LoongArch:
+On Fri, Jun 9, 2023 at 10:28=E2=80=AFAM Abel Wu <wuyun.abel@bytedance.com> =
+wrote:
+>
+> This is just a PoC patch intended to resume the discussion about
+> tcpmem isolation opened by Google in LPC'22 [1].
+>
+> We are facing the same problem that the global shared threshold can
+> cause isolation issues. Low priority jobs can hog TCP memory and
+> adversely impact higher priority jobs. What's worse is that these
+> low priority jobs usually have smaller cpu weights leading to poor
+> ability to consume rx data.
+>
+> To tackle this problem, an interface for non-root cgroup memory
+> controller named 'socket.urgent' is proposed. It determines whether
+> the sockets of this cgroup and its descendants can escape from the
+> constrains or not under global socket memory pressure.
+>
+> The 'urgent' semantics will not take effect under memcg pressure in
+> order to protect against worse memstalls, thus will be the same as
+> before without this patch.
+>
+> This proposal doesn't remove protocal's threshold as we found it
+> useful in restraining memory defragment. As aforementioned the low
+> priority jobs can hog lots of memory, which is unreclaimable and
+> unmovable, for some time due to small cpu weight.
+>
+> So in practice we allow high priority jobs with net-memcg accounting
+> enabled to escape the global constrains if the net-memcg itselt is
+> not under pressure. While for lower priority jobs, the budget will
+> be tightened as the memory usage of 'urgent' jobs increases. In this
+> way we can finally achieve:
+>
+>   - Important jobs won't be priority inversed by the background
+>     jobs in terms of socket memory pressure/limit.
+>
+>   - Global constrains are still effective, but only on non-urgent
+>     jobs, useful for admins on policy decision on defrag.
+>
+> Comments/Ideas are welcomed, thanks!
+>
 
-  # cd tools/testing/selftests/clone3 && make && ./clone3
+This seems to go in a complete opposite direction than memcg promises.
 
-we can see the following error info:
+Can we fix memcg, so that :
 
-  # [5719] Trying clone3() with flags 0x80 (size 0)
-  # Invalid argument - Failed to create new process
-  # [5719] clone3() with flags says: -22 expected 0
-  not ok 18 [5719] Result (-22) is different than expected (0)
+Each group can use the memory it was provisioned (this includes TCP buffers=
+)
 
-This is because if CONFIG_TIME_NS is not set, but the flag
-CLONE_NEWTIME (0x80) is used to clone a time namespace, it
-will return -EINVAL in copy_time_ns().
-
-If kernel does not support CONFIG_TIME_NS, /proc/self/ns/time
-will be not exist, and then we should skip clone3() test with
-CLONE_NEWTIME.
-
-With this patch under !CONFIG_TIME_NS:
-
-  # cd tools/testing/selftests/clone3 && make && ./clone3
-  ...
-  # Time namespaces are not supported
-  ok 18 # SKIP Skipping clone3() with CLONE_NEWTIME
-  # Totals: pass:17 fail:0 xfail:0 xpass:0 skip:1 error:0
-
-Fixes: 515bddf0ec41 ("selftests/clone3: test clone3 with CLONE_NEWTIME")
-Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
-
-v5:
-  -- Rebase on the next branch of shuah/linux-kselftest.git
-     to avoid potential merge conflicts due to changes in the link:
-     https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=next&id=f8424c54d041
-  -- Update the commit message and send it as a single patch
-
-Here is the v4 patch:
-https://lore.kernel.org/loongarch/1685968410-5412-2-git-send-email-yangtiezhu@loongson.cn/
-
- tools/testing/selftests/clone3/clone3.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
-index e60cf4d..1c61e3c 100644
---- a/tools/testing/selftests/clone3/clone3.c
-+++ b/tools/testing/selftests/clone3/clone3.c
-@@ -196,7 +196,12 @@ int main(int argc, char *argv[])
- 			CLONE3_ARGS_NO_TEST);
- 
- 	/* Do a clone3() in a new time namespace */
--	test_clone3(CLONE_NEWTIME, 0, 0, CLONE3_ARGS_NO_TEST);
-+	if (access("/proc/self/ns/time", F_OK) == 0) {
-+		test_clone3(CLONE_NEWTIME, 0, 0, CLONE3_ARGS_NO_TEST);
-+	} else {
-+		ksft_print_msg("Time namespaces are not supported\n");
-+		ksft_test_result_skip("Skipping clone3() with CLONE_NEWTIME\n");
-+	}
- 
- 	/* Do a clone3() with exit signal (SIGCHLD) in flags */
- 	test_clone3(SIGCHLD, 0, -EINVAL, CLONE3_ARGS_NO_TEST);
--- 
-2.1.0
-
+Global tcp_memory can disappear (set tcp_mem to infinity)
