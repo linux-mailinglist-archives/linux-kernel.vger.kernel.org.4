@@ -2,167 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3553D7296B9
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 12:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C625D7296BF
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 12:23:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241469AbjFIKVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 06:21:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34236 "EHLO
+        id S238448AbjFIKXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 06:23:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241426AbjFIKU4 (ORCPT
+        with ESMTP id S240134AbjFIKWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 06:20:56 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB56527A
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 03:12:31 -0700 (PDT)
-Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com [209.85.219.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 4AEB23F36C
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 10:12:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1686305548;
-        bh=x/LSfzy08peg5Has0ch83FB0MT7KpddVcyNy/Fniu5c=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=Wq9Q+d/j5hGl2DjwYMXR16thBG6lOLEuJPhLRTWlR4//ip8GEttvIu+SDnXgbCbxy
-         fUCyt5zHBiiblDAFXjQw+xYUTwgQWTKjKKByLQHKgdJF04KEB5FBX6ZoWIvw/6+BRa
-         x+iKkqEHsQ3/H3f2iBc/sQEnXjs7M9Gq7d6k9WeYfCVZwbaTCpZf/ji1cwJ5MZrh1n
-         +mtL7lXNtRYG8vmxafoo6M2Bemm9aEUMBpUDWUpCs9O7MZOYzSqxB47gMZPwLzLJik
-         g50O+vkKQt+WHxS6FZQlCNs1IUARSVT/myLe3xmIBdaXXcO+at5DjWcxuzQ3Dwrl2G
-         cQe1kuISN58eA==
-Received: by mail-yb1-f198.google.com with SMTP id 3f1490d57ef6-ba82ed6e450so2195153276.2
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 03:12:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686305547; x=1688897547;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=x/LSfzy08peg5Has0ch83FB0MT7KpddVcyNy/Fniu5c=;
-        b=HsqREflfGlLZMakzHhqeTgVhLHCS7GjuWZsWDHye8Q6s3bbcPrFlOp1H73tVhtVTCK
-         6Bqlg0k85rcTZFbf8Bz4mRFOBcKbQ4OtvI5/NqGjM4LFOp+AyYEXa2duq58gcmPnG/fN
-         GLi1l/AiTkHTSJmn2QTtW26TsOyGXPtf7BfPXqLEPmncGLxJ+quYH1NCKAIMkYLnBZIl
-         97QdRtW+9wJ7YmqgvTOSFE1rTigByfsfBQ09jhDnlF9+XlQhkg5a1Ohi+GnVTb2L+DD0
-         JAiNTBBj7r04eHu1nI+sNUp5pUzz80gyA+Hl/HL8hedVOu2fYieLFg0b3VkoeWtaSu8C
-         Nk0w==
-X-Gm-Message-State: AC+VfDyo60WlrHzOm3jESpR5IAzf+XAJE8h3jMip9Egghm2bi7zBvyb8
-        s1JEQUbGL+eAoVzKFJvwQri7+7oOY3sear+5K775lWeQa8UFuWtTt9lp6KhPu2gTGJafufzGsjR
-        3SFKSuZNbOzI5NKjctR1drIQO2rVmPLnwDYKT8FE0SGLeZcF7JVql8uTY/w==
-X-Received: by 2002:a5b:2d1:0:b0:bbb:5379:1057 with SMTP id h17-20020a5b02d1000000b00bbb53791057mr611003ybp.37.1686305547145;
-        Fri, 09 Jun 2023 03:12:27 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5/3qzoKWt8hDAny2WmyojQZZsunUGWqY6SACiSO0yUcMPghu0JofawuvNMelaRZTvn+wgf9Vf6eEW9pN5zzT8=
-X-Received: by 2002:a5b:2d1:0:b0:bbb:5379:1057 with SMTP id
- h17-20020a5b02d1000000b00bbb53791057mr610994ybp.37.1686305546889; Fri, 09 Jun
- 2023 03:12:26 -0700 (PDT)
+        Fri, 9 Jun 2023 06:22:39 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19DDF7D9D;
+        Fri,  9 Jun 2023 03:14:07 -0700 (PDT)
+X-UUID: 5a8953f606ae11eeb20a276fd37b9834-20230609
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=l42hKMMDIs9Eyk2A0BXNEZnxcBa9exqXBo/kbVdtD3k=;
+        b=cd3knRzoJMCD1AGww/RgEMrthSoYcddrlrJnuWt19u2J8QGmRyZXY5iFU1lRXJO7l1YfxG/6iH2Qj7Nvc9gshmX+q0Y4wSHIB8cmsdbpjAGeOzLlXmxT0F5yfAMrDSDzgmv79IxpMA7/2bM2zP7PGbx3oWbxm9d6Nx9Kscws8WE=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.26,REQID:022e0129-69eb-4c7b-b481-fd28aa9ba658,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:95
+X-CID-INFO: VERSION:1.1.26,REQID:022e0129-69eb-4c7b-b481-fd28aa9ba658,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
+        :quarantine,TS:95
+X-CID-META: VersionHash:cb9a4e1,CLOUDID:f737926e-2f20-4998-991c-3b78627e4938,B
+        ulkID:2306091814039X4UYKXR,BulkQuantity:0,Recheck:0,SF:19|48|29|28|17,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OS
+        I:0,OSA:0,AV:0,LES:1,SPR:NO
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SDM,TF_CID_SPAM_ASC,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,
+        TF_CID_SPAM_SNR
+X-UUID: 5a8953f606ae11eeb20a276fd37b9834-20230609
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <wenbin.mei@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1209214270; Fri, 09 Jun 2023 18:14:00 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Fri, 9 Jun 2023 18:13:59 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Fri, 9 Jun 2023 18:13:58 +0800
+From:   Wenbin Mei <wenbin.mei@mediatek.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+CC:     Adrian Hunter <adrian.hunter@intel.com>,
+        Ritesh Harjani <riteshh@codeaurora.org>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        Chaotian Jing <chaotian.jing@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Alexandre Mergnat <amergnat@baylibre.com>,
+        Wenbin Mei <wenbin.mei@mediatek.com>,
+        <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH v6 0/1] mmc: mtk-sd: reduce CIT for better performance
+Date:   Fri, 9 Jun 2023 18:13:54 +0800
+Message-ID: <20230609101355.5220-1-wenbin.mei@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230608154256.562906-1-aleksandr.mikhalitsyn@canonical.com>
- <f3864ed6-8c97-8a7a-f268-dab29eb2fb21@redhat.com> <CAEivzxcRsHveuW3nrPnSBK6_2-eT4XPvza3kN2oogvnbVXBKvQ@mail.gmail.com>
- <20230609-alufolie-gezaubert-f18ef17cda12@brauner>
-In-Reply-To: <20230609-alufolie-gezaubert-f18ef17cda12@brauner>
-From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Date:   Fri, 9 Jun 2023 12:12:15 +0200
-Message-ID: <CAEivzxc_LW6mTKjk46WivrisnnmVQs0UnRrh6p0KxhqyXrErBQ@mail.gmail.com>
-Subject: Re: [PATCH v5 00/14] ceph: support idmapped mounts
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Xiubo Li <xiubli@redhat.com>, stgraber@ubuntu.com,
-        linux-fsdevel@vger.kernel.org, Ilya Dryomov <idryomov@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 12:00=E2=80=AFPM Christian Brauner <brauner@kernel.o=
-rg> wrote:
->
-> On Fri, Jun 09, 2023 at 10:59:19AM +0200, Aleksandr Mikhalitsyn wrote:
-> > On Fri, Jun 9, 2023 at 3:57=E2=80=AFAM Xiubo Li <xiubli@redhat.com> wro=
-te:
-> > >
-> > >
-> > > On 6/8/23 23:42, Alexander Mikhalitsyn wrote:
-> > > > Dear friends,
-> > > >
-> > > > This patchset was originally developed by Christian Brauner but I'l=
-l continue
-> > > > to push it forward. Christian allowed me to do that :)
-> > > >
-> > > > This feature is already actively used/tested with LXD/LXC project.
-> > > >
-> > > > Git tree (based on https://github.com/ceph/ceph-client.git master):
-> >
-> > Hi Xiubo!
-> >
-> > >
-> > > Could you rebase these patches to 'testing' branch ?
-> >
-> > Will do in -v6.
-> >
-> > >
-> > > And you still have missed several places, for example the following c=
-ases:
-> > >
-> > >
-> > >     1    269  fs/ceph/addr.c <<ceph_netfs_issue_op_inline>>
-> > >               req =3D ceph_mdsc_create_request(mdsc, CEPH_MDS_OP_GETA=
-TTR,
-> > > mode);
-> >
-> > +
-> >
-> > >     2    389  fs/ceph/dir.c <<ceph_readdir>>
-> > >               req =3D ceph_mdsc_create_request(mdsc, op, USE_AUTH_MDS=
-);
-> >
-> > +
-> >
-> > >     3    789  fs/ceph/dir.c <<ceph_lookup>>
-> > >               req =3D ceph_mdsc_create_request(mdsc, op, USE_ANY_MDS)=
-;
-> >
-> > We don't have an idmapping passed to lookup from the VFS layer. As I
-> > mentioned before, it's just impossible now.
->
-> ->lookup() doesn't deal with idmappings and really can't otherwise you
-> risk ending up with inode aliasing which is really not something you
-> want. IOW, you can't fill in inode->i_{g,u}id based on a mount's
-> idmapping as inode->i_{g,u}id absolutely needs to be a filesystem wide
-> value. So better not even risk exposing the idmapping in there at all.
+change v6:
+1. include bitfield header and fix incompatible pointer types
 
-Thanks for adding, Christian!
+change v5:
+1. add version change log and the previous patch link
+2. change comment in msdc_cqe_cit_cal() to increase readability.
+3. change the type of hclk_freq from "u64" to "unsigned long".
+4. don't open code FIELD_GET.
 
-I agree, every time when we use an idmapping we need to be careful with
-what we map. AFAIU, inode->i_{g,u}id should be based on the filesystem
-idmapping (not mount),
-but in this case, Xiubo want's current_fs{u,g}id to be mapped
-according to an idmapping.
-Anyway, it's impossible at now and IMHO, until we don't have any
-practical use case where
-UID/GID-based path restriction is used in combination with idmapped
-mounts it's not worth to
-make such big changes in the VFS layer.
+change v4:
+1. remove else case in msdc_cqe_cit_cal() function due to it doesn't need.
+2. fix build error.
 
-May be I'm not right, but it seems like UID/GID-based path restriction
-is not a widespread
-feature and I can hardly imagine it to be used with the container
-workloads (for instance),
-because it will require to always keep in sync MDS permissions
-configuration with the
-possible UID/GID ranges on the client. It looks like a nightmare for sysadm=
-in.
-It is useful when cephfs is used as an external storage on the host, but if=
- you
-share cephfs with a few containers with different user namespaces idmapping=
-...
+change v3:
+1. add msdc_cqe_cit_cal() function to calculate the CIT value.
 
-Kind regards,
-Alex
+change v2:
+1. add more comments.
+
