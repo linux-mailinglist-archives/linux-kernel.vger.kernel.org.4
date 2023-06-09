@@ -2,73 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1087729B32
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 15:13:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC464729B34
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 15:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240568AbjFINNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 09:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37292 "EHLO
+        id S241021AbjFINNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 09:13:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbjFINNF (ORCPT
+        with ESMTP id S240847AbjFINNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 09:13:05 -0400
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D7E132;
-        Fri,  9 Jun 2023 06:13:04 -0700 (PDT)
-Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-33be5dbb90cso7462645ab.0;
-        Fri, 09 Jun 2023 06:13:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686316384; x=1688908384;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=M9D35kaOS2C39e0x3xanvuuHggxbq1FnGkrcYzbCLtU=;
-        b=WzG6EWqQUviK0Lgqsexec2C/Fo1Hd59OLpbqa/3tXUBVQQwRctzGR3F8wC1B2hdTwd
-         0+Vfe/vcpS5fgadaTT4xsvIVIqkQUYNtrstjqvZ6oYLdmhheVU9Ou8Kw+QDJZPf+HcJx
-         ynvh9XiY1+k/ZJwvocenrIT6Ii0/5zsGRn6VmjZDd/eD4QIgzcUjzO82MhDqLi7TFg2Y
-         EIN6NuPEZ9Uq7DuigfL32acnzrGIyL1ZHHXX85WSqrqQrDi7jIZRcrWCopIkEC6oyIGN
-         18IuPTsyauQExZlUeLsJBYkhfkY5/1FO/TPh4J5NEz0qTobizh/rpjQTaaFKjxoeyEei
-         j1qw==
-X-Gm-Message-State: AC+VfDw3gK/ZwoDsmitBujmfSku7g0WZeD6yNZc8OoOJ6OnMDRAjo/BO
-        kPnbOK0a2zPZWZNCXQ8t+A==
-X-Google-Smtp-Source: ACHHUZ5j0wP0elCI9OCxxC/oYXvqyZN73d9plY1jTIgztDBrNxHCN2RK5U+QxwWY+4Ul4XsgZoOnag==
-X-Received: by 2002:a92:ddcf:0:b0:335:38b:e734 with SMTP id d15-20020a92ddcf000000b00335038be734mr1479493ilr.28.1686316383875;
-        Fri, 09 Jun 2023 06:13:03 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id z6-20020a92d186000000b0033d2eba1800sm1086619ilz.15.2023.06.09.06.13.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 06:13:02 -0700 (PDT)
-Received: (nullmailer pid 662840 invoked by uid 1000);
-        Fri, 09 Jun 2023 13:13:00 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+        Fri, 9 Jun 2023 09:13:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB922132
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 06:13:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 682BB65606
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 13:13:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 544B0C433D2;
+        Fri,  9 Jun 2023 13:13:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686316419;
+        bh=+VnayFfSog80+SfcQLo/aN70B9IZ1fltmM/q3daEanM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dppehOEhULYKtwlDBGDRMNHBFog+6wpSloX5J3u84l6PXjS+h5MUrwCY+547JOwuS
+         PV2o0Iv66CQiiSjzeEJBaWci6rGHnjq1AvRDuym+sTyFQnR69Qj3u64dP8VcHEotb2
+         PRoz42M2TXbV900kSGSy36CsvHLAXUcB+heFkimtEC53B/8XCxYGAu5iqJ7Xd7cdzm
+         ganV6GdFDAqDiSh0Y+IFgQJ7JEsntuiongiRPT/Oc7yLNTIRf0dTVYCWkZxmb2oCik
+         vSUZRLh9u/vVyhrWYkqKH9INxkO53NY7kz265tIHXZnHcQckhmVi4p+Pc1MhtLuOfW
+         zBYZY9GF+vNEw==
+Date:   Fri, 9 Jun 2023 14:13:34 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>
+Cc:     kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] Revert "ASoC: mediatek: mt8192-mt6359: Remove " Jack"
+ from Headphone pin name"
+Message-ID: <57a02e71-06f7-402b-9ec8-def5020d5ea0@sirena.org.uk>
+References: <20230608221050.217968-1-nfraprado@collabora.com>
+ <abe6e5f5-7373-44fc-90b6-2c01b1f1e96e@sirena.org.uk>
+ <ef54367a-a4f5-45af-aff1-08513c75c63c@notapiano>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        manivannan.sadhasivam@linaro.org,
-        =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        quic_vbadigan@quicinc.com, quic_ramkri@quicinc.com,
-        Bjorn Andersson <andersson@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        devicetree@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Andy Gross <agross@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>
-In-Reply-To: <1686311249-6857-2-git-send-email-quic_krichai@quicinc.com>
-References: <1686311249-6857-1-git-send-email-quic_krichai@quicinc.com>
- <1686311249-6857-2-git-send-email-quic_krichai@quicinc.com>
-Message-Id: <168631638078.662811.2470035951687478762.robh@kernel.org>
-Subject: Re: [PATCH v3 1/3] dt-bindings: PCI: qcom: ep: Add interconnects
- path
-Date:   Fri, 09 Jun 2023 07:13:00 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="E8+wg9sr5mfw0F8n"
+Content-Disposition: inline
+In-Reply-To: <ef54367a-a4f5-45af-aff1-08513c75c63c@notapiano>
+X-Cookie: Tom's hungry, time to eat lunch.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,49 +69,45 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Fri, 09 Jun 2023 17:17:26 +0530, Krishna chaitanya chundru wrote:
-> Some platforms may not boot if a device driver doesn't initialize
-> the interconnect path. Mostly it is handled by the bootloader but
-> we have starting to see cases where bootloader simply ignores them.
-> 
-> Add the "pcie-mem" interconnect path as a required property to the
-> bindings.
-> 
-> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-> ---
->  Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
+--E8+wg9sr5mfw0F8n
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+On Fri, Jun 09, 2023 at 09:08:47AM -0400, N=EDcolas F. R. A. Prado wrote:
+> On Fri, Jun 09, 2023 at 10:39:25AM +0100, Mark Brown wrote:
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml:206:1: [error] syntax error: found character '\t' that cannot start any token (syntax)
+> > Please submit patches using subject lines reflecting the style for the
+> > subsystem, this makes it easier for people to identify relevant patches.
+> > Look at what existing commits in the area you're changing are doing and
+> > make sure your subject lines visually resemble what they're doing.
+> > There's no need to resubmit to fix this alone.
 
-dtschema/dtc warnings/errors:
-make[1]: *** Deleting file 'Documentation/devicetree/bindings/pci/qcom,pcie-ep.example.dts'
-Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml:206:1: found a tab character where an indentation space is expected
-make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/pci/qcom,pcie-ep.example.dts] Error 1
-make[1]: *** Waiting for unfinished jobs....
-./Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml:206:1: found a tab character where an indentation space is expected
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml: ignoring, error parsing file
-make: *** [Makefile:1512: dt_binding_check] Error 2
+> just for my own reference in the future, what exactly should have been do=
+ne
+> differently in this commit? Are the subject line and commit reference in =
+the
+> message generated by 'git revert' no good? Or is this message from a bot =
+that
+> can't handle revert commits?
 
-doc reference errors (make refcheckdocs):
+Yes, what git revert generates by default are no good and you should
+edit it to look like a normal commit message with a standard subject
+line and standard way of referencing other commits.
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/1686311249-6857-2-git-send-email-quic_krichai@quicinc.com
+--E8+wg9sr5mfw0F8n
+Content-Type: application/pgp-signature; name="signature.asc"
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+-----BEGIN PGP SIGNATURE-----
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSDJX0ACgkQJNaLcl1U
+h9BY4wf/dGzg2Cru1Lxw8y9ddzXRSKRzYVlr6E4w9UIYuIwjnMAYZBK7vSyJgd6r
+Gbzug4aC6m8b04va9StPFEbF8FIlHMfhWV1Y6QDUUfbQW8Y3SXPKcCP2M8UBWzLH
+8fwIxMZbPMCuuOWEMqAepvYpaC6TIj8aVbjnkhQdGaU969ZeuYN5U69QkpcwdMTj
+1V4lkpFZw9bvlQelnboCzPBT4NDs0erRd0YVuST0S1RuEAFJaBnVri1BK4Dv8wYH
+yauo8qrsKtx9ILr/FvS1HiWpDZpToon33JoolQprrUvKdn6PAAXWcWWhY1BUZVsG
+bfvz8rHv3tufHWywiMHCIh83cxLEXA==
+=DCBe
+-----END PGP SIGNATURE-----
 
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+--E8+wg9sr5mfw0F8n--
