@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9585729D85
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:57:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF290729D82
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239771AbjFIO4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 10:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38892 "EHLO
+        id S241701AbjFIO4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 10:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241673AbjFIO41 (ORCPT
+        with ESMTP id S241679AbjFIO41 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 9 Jun 2023 10:56:27 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821193A84
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF453A86
         for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 07:56:00 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f7f6341bf9so18355205e9.1
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f7378a75c0so14125075e9.3
         for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 07:56:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686322545; x=1688914545;
+        d=linaro.org; s=google; t=1686322546; x=1688914546;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ceveTfOufM41Yk46cZA2HP7pP/eOM7y2Ye/vu65mbBg=;
-        b=wGdDdU1WbBehr6YeSjJKJn2UicuWUB0ZAFeXWFhjulmN7L79cudbUKwhzTXhSnQlQT
-         5OtYwrDbnPzojxezVf7Nb+lDxIKdUzmoixPSzbd/BE55bL0rHwk0ibyDuDkvrK2+c5yZ
-         ogHLqsEysKwz0f8Dw5JxGnyLcRHdHCb81BGP9H8WwEz/Rv/u+2PUMIG91z1HNx9JzjEq
-         H3+T6KT7Roh0qPnWvFCrGkkFeyZK7LH0cDSTzbmCkrDLd9N8mPami5oHqSiooVvp1UUz
-         8PvZynmeITTUIV0GtWt17uKYjSZKFWT4c8iQxCUWtngcNNwih7RPKHqqTMxhG0KBtsqN
-         42jg==
+        bh=kDTHAoTD8UW2CusT+8oVB9TCJ1eQ8kR6GrrvgY5ydt0=;
+        b=aipY2JLl8aF3VEwqPW5eGQ7DZc1TockTkm3/IVxpaQoBzqgYHuYkPghfaVRvHlNkcQ
+         5PAClx7cGJ+wIxWnjs24kNPL0LxWp79O+jjB7O3eOCpE3uzYOwnwH1VO/8TgfeA8ypgY
+         ve0PUnfSDnu1PcfZM4I64BeXjzC1xAZhOVOUOG0iwzqhRW52FqmS002ue8BJGpyntOj4
+         vG1L6YUx1SN4zWUua5kyuKEkPbSM42kw2udX06h/gt6QM6Q9M7pZO9hWcwG7oT+iUANY
+         NpQyIv307wwMxqLo6fUUqglHtHVRlOW0tXcmr0CBFp7kl+X65XLeRfQNBmNXJZWF3Xjq
+         tAEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686322545; x=1688914545;
+        d=1e100.net; s=20221208; t=1686322546; x=1688914546;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ceveTfOufM41Yk46cZA2HP7pP/eOM7y2Ye/vu65mbBg=;
-        b=iEj6BbmSSUJ817Dqs252WPy/U6Ys5OB8MHAJyyxTmWcEUqFVpLZ0RXD710tV2KmMFY
-         ZHJp0J0uF171fRnZmVMenpNqoOU0wjqjqIT+f2PDBczuyLCj9za77QkcPXOWPfbKF0CM
-         QI1zrUjp5AR55W783VpEtFFFRFQVBnmoVggZRdaEds6X0SzpNOOeR01iz7jAHbwtCLnw
-         HyA1LS85zI3hBfQHwxwnhe2sr4EFEDdOkZbUV7uAl9xh9riLmyVzUJopHPIZkuLaGJ4y
-         5hR0emF0BTl23ZXTDirSphCK2NVL85dT9/5Po2db4U4c8o6b3NsNhGFCiRLTMH4UYtWr
-         0Ryw==
-X-Gm-Message-State: AC+VfDzSc0V+WDCkJ64LgU9E9hbELgUCsaKWv8mJHA4cIg0Z8XRliQQV
-        3fRuyulwlPvZdRIQDCt5lyT/VA==
-X-Google-Smtp-Source: ACHHUZ4+xaJJt8ykggKW0Xc2YkxZCEXG9THMCFctHSJ1eSFC1V4U97xkSNUdkLqQXEYF4N2d4JWOPg==
-X-Received: by 2002:a05:600c:2901:b0:3f6:d2c:13f2 with SMTP id i1-20020a05600c290100b003f60d2c13f2mr1453507wmd.41.1686322545323;
-        Fri, 09 Jun 2023 07:55:45 -0700 (PDT)
+        bh=kDTHAoTD8UW2CusT+8oVB9TCJ1eQ8kR6GrrvgY5ydt0=;
+        b=LHL7jIOLK4mRmta1X5w5MEge4BvFcdfXDabQpAnfiKVLdQT8UW94Q9Z6FAkTNiEvwn
+         Xaz8JrosYNPj8asc2GTZUBKkqWSAxrqkik9YR97zkVegHzOiC8KY8Rb648nqpo5g/wAg
+         YfgCrv/2F0RLRjCexm5I5f1TFg80E4uHw6Qfox/a0opRf6qeX551ImeHBYd9fg8O7m/3
+         zQAoJEG1OIMX4iol2bhb/i9Pg7nZVQhNB9FtN5t13quL85LUcnY3zibqOMNQ/d2NbO8p
+         8d7oG0DB6vyDadHSRHIvo2KdPKyrHYrxtExWrIu+25GpCBQF+Ywm7Pk6lowEwlSDNLWi
+         TCMA==
+X-Gm-Message-State: AC+VfDw2b4S619eBrAw2CAWO4rh9jfZZUQNussN6a/EJ4PFh8lxnVIxl
+        a4/jakrO+zCVGf1JESEotO++PtH/hvVjcqkf4RA=
+X-Google-Smtp-Source: ACHHUZ6ZtNL/tW7OcVMfj1SrOwMGTN210HRaFxEhXm8zNWcifVgfdkWsHwmdxU9y8d5IVMVTQqg61Q==
+X-Received: by 2002:a05:600c:219a:b0:3f1:9b85:e305 with SMTP id e26-20020a05600c219a00b003f19b85e305mr1145537wme.34.1686322546589;
+        Fri, 09 Jun 2023 07:55:46 -0700 (PDT)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id c21-20020a05600c0ad500b003f7310a3ffasm2946632wmr.2.2023.06.09.07.55.44
+        by smtp.gmail.com with ESMTPSA id c21-20020a05600c0ad500b003f7310a3ffasm2946632wmr.2.2023.06.09.07.55.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 07:55:44 -0700 (PDT)
+        Fri, 09 Jun 2023 07:55:46 -0700 (PDT)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     broonie@kernel.org
 Cc:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
@@ -58,9 +58,9 @@ Cc:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
         alsa-devel@alsa-project.org,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Mohammad Rafi Shaik <quic_mohs@quicinc.com>
-Subject: [PATCH v2 09/11] ASoC: q6dsp: q6apm-dai: Add trigger/pointer compress DAI callbacks
-Date:   Fri,  9 Jun 2023 15:54:05 +0100
-Message-Id: <20230609145407.18774-10-srinivas.kandagatla@linaro.org>
+Subject: [PATCH v2 10/11] ASoC: q6dsp: q6apm-dai: Add compress set params and metadata DAI callbacks
+Date:   Fri,  9 Jun 2023 15:54:06 +0100
+Message-Id: <20230609145407.18774-11-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20230609145407.18774-1-srinivas.kandagatla@linaro.org>
 References: <20230609145407.18774-1-srinivas.kandagatla@linaro.org>
@@ -76,66 +76,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add q6apm trigger and pointer compress DAI callbacks to support
+Add q6apm compress DAI callbacks for setting params and metadata to support
 compress offload playback.
 
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 Co-developed-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
 Signed-off-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
 ---
- sound/soc/qcom/qdsp6/q6apm-dai.c | 67 ++++++++++++++++++++++++++++++++
- sound/soc/qcom/qdsp6/q6apm.h     |  1 +
- 2 files changed, 68 insertions(+)
+ sound/soc/qcom/qdsp6/q6apm-dai.c | 107 +++++++++++++++++++++++++++++++
+ 1 file changed, 107 insertions(+)
 
 diff --git a/sound/soc/qcom/qdsp6/q6apm-dai.c b/sound/soc/qcom/qdsp6/q6apm-dai.c
-index d43705bf523a..9543b79ce83d 100644
+index 9543b79ce83d..c67147e5388b 100644
 --- a/sound/soc/qcom/qdsp6/q6apm-dai.c
 +++ b/sound/soc/qcom/qdsp6/q6apm-dai.c
-@@ -568,11 +568,78 @@ static int q6apm_dai_compr_get_codec_caps(struct snd_soc_component *component,
+@@ -76,6 +76,8 @@ struct q6apm_dai_rtd {
+ 	enum stream_state state;
+ 	struct q6apm_graph *graph;
+ 	spinlock_t lock;
++	uint32_t initial_samples_drop;
++	uint32_t trailing_samples_drop;
+ 	bool notify_on_drain;
+ };
  
- 	return 0;
+@@ -632,6 +634,109 @@ static int q6apm_dai_compr_ack(struct snd_soc_component *component, struct snd_c
+ 	return count;
  }
-+
-+static int q6apm_dai_compr_pointer(struct snd_soc_component *component,
-+				   struct snd_compr_stream *stream,
-+				   struct snd_compr_tstamp *tstamp)
+ 
++static int q6apm_dai_compr_set_params(struct snd_soc_component *component,
++				      struct snd_compr_stream *stream,
++				      struct snd_compr_params *params)
 +{
 +	struct snd_compr_runtime *runtime = stream->runtime;
 +	struct q6apm_dai_rtd *prtd = runtime->private_data;
-+	unsigned long flags;
++	struct q6apm_dai_data *pdata;
++	struct audioreach_module_config cfg;
++	struct snd_codec *codec = &params->codec;
++	int dir = stream->direction;
++	int ret;
 +
-+	spin_lock_irqsave(&prtd->lock, flags);
-+	tstamp->copied_total = prtd->copied_total;
-+	tstamp->byte_offset = prtd->copied_total % prtd->pcm_size;
-+	spin_unlock_irqrestore(&prtd->lock, flags);
++	pdata = snd_soc_component_get_drvdata(component);
++	if (!pdata)
++		return -EINVAL;
++
++	prtd->periods = runtime->fragments;
++	prtd->pcm_count = runtime->fragment_size;
++	prtd->pcm_size = runtime->fragments * runtime->fragment_size;
++	prtd->bits_per_sample = 16;
++
++	prtd->pos = 0;
++
++	if (prtd->next_track != true) {
++		memcpy(&prtd->codec, codec, sizeof(*codec));
++
++		ret = q6apm_set_real_module_id(component->dev, prtd->graph, codec->id);
++		if (ret)
++			return ret;
++
++		cfg.direction = dir;
++		cfg.sample_rate = codec->sample_rate;
++		cfg.num_channels = 2;
++		cfg.bit_width = prtd->bits_per_sample;
++		cfg.fmt = codec->id;
++		memcpy(&cfg.codec, codec, sizeof(*codec));
++
++		ret = q6apm_graph_media_format_shmem(prtd->graph, &cfg);
++		if (ret < 0)
++			return ret;
++
++		ret = q6apm_graph_media_format_pcm(prtd->graph, &cfg);
++		if (ret)
++			return ret;
++
++		ret = q6apm_map_memory_regions(prtd->graph, SNDRV_PCM_STREAM_PLAYBACK,
++					       prtd->phys, (prtd->pcm_size / prtd->periods),
++					       prtd->periods);
++		if (ret < 0)
++			return -ENOMEM;
++
++		ret = q6apm_graph_prepare(prtd->graph);
++		if (ret)
++			return ret;
++
++		ret = q6apm_graph_start(prtd->graph);
++		if (ret)
++			return ret;
++
++	} else {
++		cfg.direction = dir;
++		cfg.sample_rate = codec->sample_rate;
++		cfg.num_channels = 2;
++		cfg.bit_width = prtd->bits_per_sample;
++		cfg.fmt = codec->id;
++		memcpy(&cfg.codec, codec, sizeof(*codec));
++
++		ret = audioreach_compr_set_param(prtd->graph,  &cfg);
++		if (ret < 0)
++			return ret;
++	}
++	prtd->state = Q6APM_STREAM_RUNNING;
 +
 +	return 0;
 +}
 +
-+static int q6apm_dai_compr_trigger(struct snd_soc_component *component,
-+			    struct snd_compr_stream *stream, int cmd)
++static int q6apm_dai_compr_set_metadata(struct snd_soc_component *component,
++					struct snd_compr_stream *stream,
++					struct snd_compr_metadata *metadata)
 +{
 +	struct snd_compr_runtime *runtime = stream->runtime;
 +	struct q6apm_dai_rtd *prtd = runtime->private_data;
 +	int ret = 0;
 +
-+	switch (cmd) {
-+	case SNDRV_PCM_TRIGGER_START:
-+	case SNDRV_PCM_TRIGGER_RESUME:
-+	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
-+		ret = q6apm_write_async(prtd->graph, prtd->pcm_count, 0, 0, NO_TIMESTAMP);
++	switch (metadata->key) {
++	case SNDRV_COMPRESS_ENCODER_PADDING:
++		prtd->trailing_samples_drop = metadata->value[0];
++		q6apm_remove_trailing_silence(component->dev, prtd->graph,
++					      prtd->trailing_samples_drop);
 +		break;
-+	case SNDRV_PCM_TRIGGER_STOP:
-+		break;
-+	case SNDRV_PCM_TRIGGER_SUSPEND:
-+	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
-+		break;
-+	case SND_COMPR_TRIGGER_NEXT_TRACK:
-+		prtd->next_track = true;
-+		break;
-+	case SND_COMPR_TRIGGER_DRAIN:
-+	case SND_COMPR_TRIGGER_PARTIAL_DRAIN:
-+		prtd->notify_on_drain = true;
++	case SNDRV_COMPRESS_ENCODER_DELAY:
++		prtd->initial_samples_drop = metadata->value[0];
++		q6apm_remove_initial_silence(component->dev, prtd->graph,
++					     prtd->initial_samples_drop);
 +		break;
 +	default:
 +		ret = -EINVAL;
@@ -145,43 +206,18 @@ index d43705bf523a..9543b79ce83d 100644
 +	return ret;
 +}
 +
-+static int q6apm_dai_compr_ack(struct snd_soc_component *component, struct snd_compr_stream *stream,
-+			size_t count)
-+{
-+	struct snd_compr_runtime *runtime = stream->runtime;
-+	struct q6apm_dai_rtd *prtd = runtime->private_data;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&prtd->lock, flags);
-+	prtd->bytes_received += count;
-+	spin_unlock_irqrestore(&prtd->lock, flags);
-+
-+	return count;
-+}
-+
  static const struct snd_compress_ops q6apm_dai_compress_ops = {
  	.open		= q6apm_dai_compr_open,
  	.free		= q6apm_dai_compr_free,
- 	.get_caps	= q6apm_dai_compr_get_caps,
- 	.get_codec_caps	= q6apm_dai_compr_get_codec_caps,
-+	.pointer	= q6apm_dai_compr_pointer,
-+	.trigger	= q6apm_dai_compr_trigger,
-+	.ack		= q6apm_dai_compr_ack,
+@@ -640,6 +745,8 @@ static const struct snd_compress_ops q6apm_dai_compress_ops = {
+ 	.pointer	= q6apm_dai_compr_pointer,
+ 	.trigger	= q6apm_dai_compr_trigger,
+ 	.ack		= q6apm_dai_compr_ack,
++	.set_params	= q6apm_dai_compr_set_params,
++	.set_metadata	= q6apm_dai_compr_set_metadata,
  };
  
  static const struct snd_soc_component_driver q6apm_fe_dai_component = {
-diff --git a/sound/soc/qcom/qdsp6/q6apm.h b/sound/soc/qcom/qdsp6/q6apm.h
-index d187d88c0a8c..8ee40732ce9e 100644
---- a/sound/soc/qcom/qdsp6/q6apm.h
-+++ b/sound/soc/qcom/qdsp6/q6apm.h
-@@ -46,6 +46,7 @@
- 
- #define APM_MAX_SESSIONS			8
- #define APM_LAST_BUFFER_FLAG			BIT(30)
-+#define NO_TIMESTAMP				0xFF00
- 
- struct q6apm {
- 	struct device *dev;
 -- 
 2.21.0
 
