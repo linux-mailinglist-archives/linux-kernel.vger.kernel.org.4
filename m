@@ -2,66 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41DD672A15A
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 19:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92FED72A141
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 19:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230503AbjFIRgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 13:36:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44736 "EHLO
+        id S229535AbjFIRcQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 9 Jun 2023 13:32:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230487AbjFIRgk (ORCPT
+        with ESMTP id S229436AbjFIRcN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 13:36:40 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC65E4E;
-        Fri,  9 Jun 2023 10:36:39 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id E44551FE10;
-        Fri,  9 Jun 2023 17:36:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1686332197;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XsENri2S9pvn1qva5u81VJpotBG57Jbvi1S1O6Xiv0Y=;
-        b=FvNeMT2sAHqgex5YwtzgiL4bKlfJoNay15IlruWRKOQJvJBsFslyRdcwVa+o7uDnJP/1aI
-        wX9zXMMrpH2MjP6PCbl84d4vP22vXorx9g1LYxWQ+94cqiB3p0DGGTum9cmboclRsE4yQD
-        B1UBinfgFKvSVw9uZo9F5Dw4Keg4Jgk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1686332197;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XsENri2S9pvn1qva5u81VJpotBG57Jbvi1S1O6Xiv0Y=;
-        b=TziDihUDDOcgL9DY4Ncl70gVbdcQ2NItiJhfQjuD0ICNx/PPBR2p/IZ7J4/bFRYP0UNExU
-        HzmxMv9z+eFb5RBg==
-Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
-        by relay2.suse.de (Postfix) with ESMTP id 9C38F2C141;
-        Fri,  9 Jun 2023 17:36:37 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id ABCDBDA85A; Fri,  9 Jun 2023 19:30:21 +0200 (CEST)
-Date:   Fri, 9 Jun 2023 19:30:21 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     David Sterba <dsterba@suse.cz>,
-        syzbot <syzbot+a694851c6ab28cbcfb9c@syzkaller.appspotmail.com>,
-        clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [btrfs?] INFO: task hung in btrfs_sync_file (2)
-Message-ID: <20230609173021.GD12828@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <00000000000086021605fd1b484c@google.com>
- <20230606142405.GI25292@twin.jikos.cz>
- <ZH+3DJQC8CUSs+/x@dread.disaster.area>
+        Fri, 9 Jun 2023 13:32:13 -0400
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9C5B5;
+        Fri,  9 Jun 2023 10:32:10 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-974539fd9f0so44081766b.0;
+        Fri, 09 Jun 2023 10:32:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686331928; x=1688923928;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Mz2NAkBwWInLTRnhBItxSjdZwAej06KnEQlNhNDiMzU=;
+        b=bdSEu8Uk88I4VIgFP778xgYl4y1kEMJMBApitRFZ9Ao+/jvXSg23SEbvu7MULKSkir
+         GjVPuxdNVKY1IljiTDCqN8xqeeNm2NeCyO0Mg3DGam1Nzn8PUv0874FXOPBW6z+2qAcm
+         n6r6M9gVJEzFkyZb2oGutb35JJH9/rz2e85+9aFZ9XqgZtOdyIYxCzvC3UE+1mZeLgqH
+         UuY7bXAXTlfYFKoyIMD9mOvM5zGDJuLcLytrRrc6Xdvxnot1bGRV0hpodwregrzRbSPZ
+         r+VCiNTp/7Z/EJUewdC2eI0MvR/KD4+Cu2tue3bJ4HbWXtrA6ZnAsHvcDqghqujTP1TU
+         +0sw==
+X-Gm-Message-State: AC+VfDw+3lkPBrKSeBaxO9P/Qz9DMeEg5UyvdMnIldPSZFT4E0p0P1kJ
+        PZWsu9WazetGZWMmlQztvqDrwDS6OFf7lOqikzmEN22G
+X-Google-Smtp-Source: ACHHUZ5OaGdB05ChwNZQ4cQ75bLTHgnrmXTnPEkkZPdRUy+ZUO6zSsEBqeNRBlA4zNxMgZnkabgDqFyCdAOU2Z02w9s=
+X-Received: by 2002:a17:906:7a41:b0:974:5de8:b5ce with SMTP id
+ i1-20020a1709067a4100b009745de8b5cemr1928770ejo.2.1686331927848; Fri, 09 Jun
+ 2023 10:32:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZH+3DJQC8CUSs+/x@dread.disaster.area>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+References: <13276375.uLZWGnKmhe@kreacher> <CAJZ5v0gKaheHVfRcgFx_3JdBp9bw5nUQXYp9vZP4RVVXzdb7uw@mail.gmail.com>
+ <ZIL2CPyNpy4xCfdn@kekkonen.localdomain>
+In-Reply-To: <ZIL2CPyNpy4xCfdn@kekkonen.localdomain>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 9 Jun 2023 19:31:53 +0200
+Message-ID: <CAJZ5v0j_a3RagmX3pRqof_2h6NRUwQffPmsZVx9oKP4KE6JOgw@mail.gmail.com>
+Subject: Re: [PATCH v1 0/6] ACPI: scan: MIPI DiSco for Imaging support
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,36 +63,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 08:45:32AM +1000, Dave Chinner wrote:
-> On Tue, Jun 06, 2023 at 04:24:05PM +0200, David Sterba wrote:
-> > On Thu, Jun 01, 2023 at 06:15:06PM -0700, syzbot wrote:
-> > > RIP: 0010:rep_movs_alternative+0x33/0xb0 arch/x86/lib/copy_user_64.S:56
-> > > Code: 46 83 f9 08 73 21 85 c9 74 0f 8a 06 88 07 48 ff c7 48 ff c6 48 ff c9 75 f1 c3 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 8b 06 <48> 89 07 48 83 c6 08 48 83 c7 08 83 e9 08 74 df 83 f9 08 73 e8 eb
-> > > RSP: 0018:ffffc9000becf728 EFLAGS: 00050206
-> > > RAX: 0000000000000000 RBX: 0000000000000038 RCX: 0000000000000038
-> > > RDX: fffff520017d9efb RSI: ffffc9000becf7a0 RDI: 0000000020000120
-> > > RBP: 0000000020000120 R08: 0000000000000000 R09: fffff520017d9efa
-> > > R10: ffffc9000becf7d7 R11: 0000000000000001 R12: ffffc9000becf7a0
-> > > R13: 0000000020000158 R14: 0000000000000000 R15: ffffc9000becf7a0
-> > >  copy_user_generic arch/x86/include/asm/uaccess_64.h:112 [inline]
-> > >  raw_copy_to_user arch/x86/include/asm/uaccess_64.h:133 [inline]
-> > >  _copy_to_user lib/usercopy.c:41 [inline]
-> > >  _copy_to_user+0xab/0xc0 lib/usercopy.c:34
-> > >  copy_to_user include/linux/uaccess.h:191 [inline]
-> > >  fiemap_fill_next_extent+0x217/0x370 fs/ioctl.c:144
-> > >  emit_fiemap_extent+0x18e/0x380 fs/btrfs/extent_io.c:2616
-> > >  fiemap_process_hole+0x516/0x610 fs/btrfs/extent_io.c:2874
-> > 
-> > and extent enumeration from FIEMAP, this would qualify as a stress on
-> > the inode
-> 
-> FWIW, when I've seen this sort of hang on XFS in past times, it's
-> been caused by a corrupt extent list or a circular reference in a
-> btree that the fuzzing introduced. Hence FIEMAP just keeps going
-> around in circles and never gets out of the loop to drop the inode
-> lock....
+Hi Sakari,
 
-Thanks for the info. The provided reproducer was able to get the VM
-stuck in a few hours so there is some problem. The generated image does
-not show any obvious problem so it's either lack of 'check' capability
-or the problem happens at run time.
+On Fri, Jun 9, 2023 at 11:51 AM Sakari Ailus
+<sakari.ailus@linux.intel.com> wrote:
+>
+> Hi Rafael,
+>
+> On Wed, May 24, 2023 at 08:06:09PM +0200, Rafael J. Wysocki wrote:
+> > On Wed, May 24, 2023 at 1:48 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+> > >
+> > > Hi Folks,
+> > >
+> > > This basically is a re-write of a recent patch series from Sakari:
+> > >
+> > > https://lore.kernel.org/linux-acpi/20230329100951.1522322-1-sakari.ailus@linux.intel.com
+> > >
+> > > The general idea is the same - CSI-2 resource descriptors, introduced in
+> > > ACPI 6.4 and defined by
+> > >
+> > > https://uefi.org/specs/ACPI/6.5/06_Device_Configuration.html#camera-serial-interface-csi-2-connection-resource-descriptor
+> > >
+> > > are found and used for creating a set of software nodes that represent the CSI-2
+> > > connection graph.
+> > >
+> > > These software nodes need to be available before any scan handlers or ACPI drivers
+> > > are bound to any struct acpi_device objects, so all of that is done at the early
+> > > stage of ACPI device enumeration, but unnecessary ACPI namespace walks are avoided.
+> > >
+> > > The CSI-2 software nodes are populated with data extracted from the CSI-2 resource
+> > > descriptors themselves and from device properties defined by the MIPI DiSco for
+> > > Imaging specification (see https://www.mipi.org/specifications/mipi-disco-imaging).
+> > >
+> > > Patches [4,6/6] come from the original series directly, but the other patches have
+> > > been changes substantially, so I've decided to re-start patch series versioning from
+> > > scratch.
+> > >
+> > > This series is based on the patch at
+> > >
+> > > https://patchwork.kernel.org/project/linux-acpi/patch/12223415.O9o76ZdvQC@kreacher/
+> > >
+> > > applied on top of 6.4-rc3.
+> > >
+> > > Later on, I'll put all of this material into a special git branch for easier
+> > > access.
+> >
+> > The patches are now available from the acpi-mipi-disco-imaging branch
+> > in the linux-pm.git tree at kernel.org.
+>
+> I've been doing some testing on this version.
+
+Thanks for testing!
+
+> It oopses and that's relatively easy to fix by removing the kfree() that
+> releases memory of the software nodes and properties.
+
+It would be good to check which of the patches introduces the crash.
+
+> It doesn't work with that change either, it would seem like that the _CRS
+> CSI2 data is (most of the time) released before it gets used for creating
+> the software nodes, leading node registration to fail. This appears to be
+> taking place in different processes --- there's a work queue.
+>
+> Moving the release of the _CRS CSI-2 resources to where they are no longer
+> needed makes the system crash early at boot. I've yet to debug this
+> further.
+
+OK, thanks!
+
+I think that the way to go would be to check if the results of the
+first patch are as expected and if so, move to the next one etc.
