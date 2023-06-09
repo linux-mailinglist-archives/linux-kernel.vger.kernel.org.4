@@ -2,204 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57BDA728F44
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 07:23:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F563728F47
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 07:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230455AbjFIFWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 01:22:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55084 "EHLO
+        id S237179AbjFIFXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 01:23:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjFIFWx (ORCPT
+        with ESMTP id S236230AbjFIFXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 01:22:53 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F1A14272A;
-        Thu,  8 Jun 2023 22:22:47 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DA933AB6;
-        Thu,  8 Jun 2023 22:23:32 -0700 (PDT)
-Received: from [10.163.44.201] (unknown [10.163.44.201])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5262E3F587;
-        Thu,  8 Jun 2023 22:22:41 -0700 (PDT)
-Message-ID: <e960d5d5-07a8-2049-7d0a-07268ecfe36a@arm.com>
-Date:   Fri, 9 Jun 2023 10:52:37 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V11 06/10] arm64/perf: Enable branch stack events via
- FEAT_BRBE
+        Fri, 9 Jun 2023 01:23:01 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2066.outbound.protection.outlook.com [40.107.101.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73BE2D7B;
+        Thu,  8 Jun 2023 22:22:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dlIUczk2uM/uV6YBk6Q9nm9GsQgMqcRaIlFBbWztMX/2Lmug065uq9dzyjwPqdV8K7k6GyrT0UrsF+jmu6fCFWS/Xs9Lg3WguTsa8rlgV6+C+wSES7GrzrAtdZzjlDefFA8lBwu5v6fFqB1Irm16jvR+3ezdz5hiWhjPiU/njKqWGNLTf0b26V3/08hteYds6zZ/rkMNCZsvNUxc1ogQwHtHVByug34j6Fh43U50ewe1Pi0nG5GVskq0ID+RKmwGaYszgPYQN6MZU5Y/uqRTHmReZFPlFBNB9IEwuhYUptuI03Y/k3jVl+KrCQvo5Z4RG6A17ILPXb9Gkyf1xEX5XA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Q9N0Rqwjm/21Bopb2yvfCBbWWQJl8IaJBNeHgqoR/Jo=;
+ b=oMMQYwx7nhW0ue6UB3zb9aUqaSL6df1IRpsv8o/2wYMULyVsu+q1LzZqeqqkpZ/2SueIJXi0XNVYZwI9ajc/zhOdK5Dxy5jLCelclBsrdcUM1xySgfAay9IhpWHZdBjjvW8fekAQNCKKoqkmWwClBYnhnWHMLMWmqyr9KfbAkifV2MuZj3QD7/MjuCvIP2qsSrjEuNyRLBw/dgEaWmiSPRMkQdMLBGlWYdSMgU3lg9YjPFKk5Ett1XNXb+j6kDutnPVjQpdCNkBlqSyn4WOLCUJZ8Pvnl/xo9hBxRVdCeUqYky/hqotz4mcU2dSZosqsnArN6PebBGfa93F5Tbu/sg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Q9N0Rqwjm/21Bopb2yvfCBbWWQJl8IaJBNeHgqoR/Jo=;
+ b=0Ay22+3d3YeExw6bGnqjgBLhUkwz9weXSd7X8hVwvNh69rQZ8NOpWB194apkbemLDjGnCaktbh8r8ehU4Q/+Z0sb82X2wi4S+Pxjb8PNSmLNMntg8kDyE2ppWy0ns2mcz2k/uqJJio5DjpH3gTOUAJuuxcwycVf7+p/Oxr7HLD4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from IA1PR12MB6460.namprd12.prod.outlook.com (2603:10b6:208:3a8::13)
+ by BY5PR12MB4036.namprd12.prod.outlook.com (2603:10b6:a03:210::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.41; Fri, 9 Jun
+ 2023 05:22:54 +0000
+Received: from IA1PR12MB6460.namprd12.prod.outlook.com
+ ([fe80::f8e1:805f:574:60e5]) by IA1PR12MB6460.namprd12.prod.outlook.com
+ ([fe80::f8e1:805f:574:60e5%3]) with mapi id 15.20.6455.037; Fri, 9 Jun 2023
+ 05:22:54 +0000
+Message-ID: <e5eda6ee-33db-ac89-4857-37cbeb3d6335@amd.com>
+Date:   Fri, 9 Jun 2023 10:52:39 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.4.0
+Subject: Re: arm: shmobile_defconfig: ld.lld: error: undefined symbol:
+ lynx_pcs_destroy
 Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, catalin.marinas@arm.com,
-        Mark Brown <broonie@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-References: <20230531040428.501523-1-anshuman.khandual@arm.com>
- <20230531040428.501523-7-anshuman.khandual@arm.com>
- <ZH3mhorKNo77hsv5@FVFF77S0Q05N>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <ZH3mhorKNo77hsv5@FVFF77S0Q05N>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        joyce.ooi@intel.com
+References: <CA+G9fYv0a-XxXfG6bNuPZGT=fzjtEfRGEYwk3n6M1WhEHUPo9g@mail.gmail.com>
+ <CA+G9fYueN0xti1SDtYVZstPt104sUj06GfOzyqDNrd3s3xXBkA@mail.gmail.com>
+ <CAMuHMdX7hqipiMCF9uxpU+_RbLmzyHeo-D0tCE_Hx8eTqQ7Pig@mail.gmail.com>
+ <9fc1d064-7b97-9c1a-f76a-7be467994693@amd.com>
+ <e5c92642-02cd-4020-ac1c-7562b1e03f7d@app.fastmail.com>
+From:   "Aithal, Srikanth" <sraithal@amd.com>
+In-Reply-To: <e5c92642-02cd-4020-ac1c-7562b1e03f7d@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: PN0PR01CA0009.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:4f::14) To IA1PR12MB6460.namprd12.prod.outlook.com
+ (2603:10b6:208:3a8::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA1PR12MB6460:EE_|BY5PR12MB4036:EE_
+X-MS-Office365-Filtering-Correlation-Id: 55a2d8bf-cef0-4bd5-4a3a-08db68a993a2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1lUf5+qm/ETCP2QvftfZK5FWyqK9VK55+GR/h/1zezbggrbYTl0ZG2h89bSxFABeUw61UPmznB9cFFrsDvgFlyMQBuLj20TztM5qF2hLk5chsh9j5u+yYpUzOcNYGs45w8iUj3Y48ME3MXscSAwFyt/GNkky7XcM5canOljOeqTe1Z8E2r0PRUPoUVBam/aTGAotL9ddGUDmcfF8WV4XF3LOPk4UKZ7ppof0GXKdL4wq3arUBVAitUz/wI4vkrP4CU7a/pxEKaQ+iClK/fgQA8kDHkK0taLsAPy/XvnB7zIclD967oqSSMHeg+gXL9Mean25fL+N7iyJiwIZcGrR4mv8QTzzyA3n40L/n8eCNN//g/lrdbyDE7wv86ulzuD+rN8p3Lvu/eIf/ZUDr1xjsO94AqvQq9aHl4yXSHi1GEv7fOK4g0IQh3ywjqdTB7T2dh+OeFXBE3CDJ6srn0LfUg9bY9IUtMUUvMXe1U4url+r8TUXHXLfksc1iBm+ilqGcUMDl4DFSdqKixqBA2HvkWbxSGXRFzssS2MvMW94ussVujhNPmyVVHnvHstXlNJtonnmyVUjwIZ8rq6uXQwOKeX1ObRxZn+udu1W/ZGI3FHA4TbhKR9HCE+FYuD7Zt44CdUGkbEkRnZBAX/br9JiXA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6460.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(136003)(396003)(376002)(346002)(451199021)(31686004)(66556008)(478600001)(66476007)(66946007)(966005)(54906003)(4326008)(110136005)(316002)(31696002)(36756003)(2616005)(6506007)(6512007)(53546011)(186003)(26005)(41300700001)(8676002)(5660300002)(8936002)(7416002)(2906002)(6486002)(6666004)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?U2hOQmY0T1NOUTBtYmlaZENqSkNUbHZPVFpZMXl1ajZObjhTcWRVOEhaU05I?=
+ =?utf-8?B?N1J6UUJ3ZUw4cFM3V3lpUnlzM1Fod3dlaGphQ1l4UGtyVlRRTkk5VEtKV1lE?=
+ =?utf-8?B?UVB5Z3l2T1Fheis5eCtQQitYWmF3dXZoRVdwQ1c2MWp6MFdTRndjTkhzQitt?=
+ =?utf-8?B?ME5iKzczK0c3MWxTVVFtTmZJZ0tLYi94Z2huRXhrMjFMWk1FVHd1SEdTOG1k?=
+ =?utf-8?B?MUsySVBFc0oza21KMGJjYnJ4NUFpSkZYT2ROK1UxYVR3bWx2UFYySUQ1RjdR?=
+ =?utf-8?B?a1htaTJwWktaSElVM3d5bE9HdkZ1ZzNTRHF5ckVoR0dYWi9VcllWRWtkWTlX?=
+ =?utf-8?B?ZUh1N1NPOWJ0eG82dUtINDRlKzBNWFM2bmNiMHF1dVIwZXJ0R1pMd0tKTmRT?=
+ =?utf-8?B?dW0wSmZndWRVdFdaT2dLRTNlSU1iRWp6a2ZHaHBMeTJZY3Y1OE5TdGh0WWJ5?=
+ =?utf-8?B?MDdhM3hOK3JnQmRJcWJvZFBtNEluTHYzc2FvVTE5STFtMUJDeUpPdjJReXoz?=
+ =?utf-8?B?TEdOTDRMNkJaSWQ0SW1kV1ZVQUV2U1BxWWZtRCt3dTljSFY2akVraStVL3l3?=
+ =?utf-8?B?dXpjSFdBZmFqeXd4NjNtMmRoL0JWaXdZUWlsaXQ2MjV1L1Y0ZUM2R2ZhOE9I?=
+ =?utf-8?B?SEhvc1daTU9wa0lTNlpGUDVEQS9WMUY4SHJpYmNEUFp6aFFyUllSMDAweTA4?=
+ =?utf-8?B?aGpHc1pqMldEWEg4aDU2R3JraTJMdjRlQjg3Q2RyREFmNXdLS090c1QxNFZy?=
+ =?utf-8?B?czV5dEJaTWtSM011K1ExRzllaHdPYy9BSUQ3OTdoMEI5MFFybXBjU0FSUkIx?=
+ =?utf-8?B?QkU1c25iZndhU1BEeVJEUWRSczRIYklSTkNhZnYzR1p3dWRuUnNOREFERmtU?=
+ =?utf-8?B?MW5tZTlDcW1Zb3pNMVhUUnp3Z2cydWorVGVLb2h0U25HS2EzU3NvV3JZWUtF?=
+ =?utf-8?B?RjJPcFlvWnZ4UUpNbzRwZG12K3loaU1OKzlQSnppb2ZwdnlKcFZ4ci9tRDZR?=
+ =?utf-8?B?Ni85dm1GVmkwN3podUNMZE92bks5dmZHdGd5d0ZFaHpIakhMMU02c3czZlRJ?=
+ =?utf-8?B?cm1GZFV6U0JwTlhRUDk4N0t2aW9EZDFLUzdTWU42dEVXQjBQdWdOS2pJc1RN?=
+ =?utf-8?B?NmdaTUZlNXAwZHVaTjgyMkJEOWhGOHQyYllrRjFacWxBS2JRRFliQWxlUlc2?=
+ =?utf-8?B?KzdNdjNVSW5yZHpCRHRpbWNNY0VSM2JqZ3pYUXdVRUNHM2RuWEtZWmFoeERD?=
+ =?utf-8?B?bngzR0NidXl0bXY2QlFSelVSRk5UQVNNcWlsTDN1dzJUUDFKTDY4Sm01NTY4?=
+ =?utf-8?B?OTRDVWQ0OEdVZHlxY3B4L0VhdmYwbU1LZmcyYjdyZEN3aWF4N0tobVVCbzNJ?=
+ =?utf-8?B?REdHaHhMSkNVQnJSeTdXMXZTU2RUaWt2V2FYTnhQRE5RYkZvM3RWNWJiVVpF?=
+ =?utf-8?B?ZUh1MVV0ZlRRNEp2cy9FSjJPSjFicWhNT3BQN0xXS0RLRHkwbVZXaFlhOU9v?=
+ =?utf-8?B?SER3ek5VeVdwQWdIVmNBQklFS3lOeFNCTEJ5bG1rRjhLaEYwNW9kYjhGRHQy?=
+ =?utf-8?B?aXJNS3ZUNTFBOCt3SHZQSGkzRE5PUjMrcTY3bzFmTHRaSmNvZEdydldCSEZw?=
+ =?utf-8?B?RHBUdTJJZjhlbGpVYnNCb1Y4VTUvNEJyaUFWZndaWklGTWppNlV2Yk14bXJi?=
+ =?utf-8?B?SzQzRTIxTzF5QUhpYXZGemxlRWJkdkF2NWtuRm94Q0VFUzdTYU5xZXk2N29U?=
+ =?utf-8?B?N2dKazhGYTk2b0FFamRqczFXRG1nTEgzR2NCNnBuc2tYWnE1QnFYNEdnc2JV?=
+ =?utf-8?B?VzlNQmkvZFBsR0RwODF0YnlOcm9mbTJrNkVxZCtnUG1VY04wVGlidWZIa0Iw?=
+ =?utf-8?B?QlpseXJCdjVaWkllZjBuTVZwcmFqL2tBZGhRWFhwQ0ppQjlzT013blVuNk5k?=
+ =?utf-8?B?Rnh3YUVnZld5ZWR0d3NLb1Nnd3gwOTZMVmhkQnJnV2xSbS9oTmpaUGJSOTkx?=
+ =?utf-8?B?WjBzZkhDSEtHQ2J6cGYreWdBdFlYZG9SbisrYjVRdy9QNHA3UFpaSjZOTUt3?=
+ =?utf-8?B?ZmFjWFZiVUUzZXVaTDN5UTM0TVZwSUR4MmRvSTAyWG9TdG4vVjNOTU9PdmVC?=
+ =?utf-8?Q?1VGVDxNhrlXGfHM68e9nEBs07?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 55a2d8bf-cef0-4bd5-4a3a-08db68a993a2
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6460.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 05:22:54.2320
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AXRwU+wpGt7uIcUZ+wvBP0ZwbIDSLqVKQ3i4u4CzZdHl5flOYQsjCTkbQEUzfnpFff9vHqw1m37syOauxZYkfA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4036
+X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SCC_BODY_URI_ONLY,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[...]
-
-On 6/5/23 19:13, Mark Rutland wrote:
->> +void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
->> +{
->> +	struct brbe_hw_attr *brbe_attr = (struct brbe_hw_attr *)cpuc->percpu_pmu->private;
->> +	u64 brbfcr, brbcr;
->> +	int idx, loop1_idx1, loop1_idx2, loop2_idx1, loop2_idx2, count;
->> +
->> +	brbcr = read_sysreg_s(SYS_BRBCR_EL1);
->> +	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
->> +
->> +	/* Ensure pause on PMU interrupt is enabled */
->> +	WARN_ON_ONCE(!(brbcr & BRBCR_EL1_FZP));
->> +
->> +	/* Pause the buffer */
->> +	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
->> +	isb();
->> +
->> +	/* Determine the indices for each loop */
->> +	loop1_idx1 = BRBE_BANK0_IDX_MIN;
->> +	if (brbe_attr->brbe_nr <= BRBE_BANK_MAX_ENTRIES) {
->> +		loop1_idx2 = brbe_attr->brbe_nr - 1;
->> +		loop2_idx1 = BRBE_BANK1_IDX_MIN;
->> +		loop2_idx2 = BRBE_BANK0_IDX_MAX;
->> +	} else {
->> +		loop1_idx2 = BRBE_BANK0_IDX_MAX;
->> +		loop2_idx1 = BRBE_BANK1_IDX_MIN;
->> +		loop2_idx2 = brbe_attr->brbe_nr - 1;
->> +	}
->> +
->> +	/* Loop through bank 0 */
->> +	select_brbe_bank(BRBE_BANK_IDX_0);
->> +	for (idx = 0, count = loop1_idx1; count <= loop1_idx2; idx++, count++) {
->> +		if (!capture_branch_entry(cpuc, event, idx))
->> +			goto skip_bank_1;
->> +	}
->> +
->> +	/* Loop through bank 1 */
->> +	select_brbe_bank(BRBE_BANK_IDX_1);
->> +	for (count = loop2_idx1; count <= loop2_idx2; idx++, count++) {
->> +		if (!capture_branch_entry(cpuc, event, idx))
->> +			break;
->> +	}
->> +
->> +skip_bank_1:
->> +	cpuc->branches->branch_stack.nr = idx;
->> +	cpuc->branches->branch_stack.hw_idx = -1ULL;
->> +	process_branch_aborts(cpuc);
->> +
->> +	/* Unpause the buffer */
->> +	write_sysreg_s(brbfcr & ~BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
->> +	isb();
->> +	armv8pmu_branch_reset();
->> +}
-> The loop indicies are rather difficult to follow, and I think those can be made
-> quite a lot simpler if split out, e.g.
+On 6/7/2023 7:29 PM, Arnd Bergmann wrote:
+> On Wed, Jun 7, 2023, at 15:27, Aithal, Srikanth wrote:
+>> On 6/6/2023 2:31 PM, Geert Uytterhoeven wrote:
+>>> On Tue, Jun 6, 2023 at 10:53 AM Naresh Kamboju
+>>> <naresh.kamboju@linaro.org> wrote:
+>>>> On Tue, 6 Jun 2023 at 14:17, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+>>>>> Following build regressions found while building arm shmobile_defconfig on
+>>>>> Linux next-20230606.
+>>>>>
+>>>>> Regressions found on arm:
+>>>>>
+>>>>>    - build/clang-16-shmobile_defconfig
+>>>>>    - build/gcc-8-shmobile_defconfig
+>>>>>    - build/gcc-12-shmobile_defconfig
+>>>>>    - build/clang-nightly-shmobile_defconfig
+>>>>
+>>>> And mips defconfig builds failed.
+>>>> Regressions found on mips:
+>>>>
+>>>>     - build/clang-16-defconfig
+>>>>     - build/gcc-12-defconfig
+>>>>     - build/gcc-8-defconfig
+>>>>     - build/clang-nightly-defconfig
+>>>
+>>> Please give my fix a try:
+>>> https://lore.kernel.org/linux-renesas-soc/7b36ac43778b41831debd5c30b5b37d268512195.1686039915.git.geert+renesas@glider.be
+>> On x86 as well seeing couple of issues related to same, not on defconfig
+>> though..
+>>
+>> ERROR: modpost: "lynx_pcs_destroy"
+>> [drivers/net/ethernet/stmicro/stmmac/stmmac.ko] undefined!
+>> ERROR: modpost: "lynx_pcs_destroy"
+>> [drivers/net/ethernet/altera/altera_tse.ko] undefined!
+>> make[1]: *** [scripts/Makefile.modpost:136: Module.symvers] Error 1
+>> make: *** [Makefile:1984: modpost] Error 2
+>>
+>> Among above issues stmmac issue would be resolved with above mentioned fix.
 > 
-> | int __armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
-> | {
-> | 	struct brbe_hw_attr *brbe_attr = (struct brbe_hw_attr *)cpuc->percpu_pmu->private;
-> | 	int nr_hw_entries = brbe_attr->brbe_nr;
-> | 	int idx;
-
-I guess idx needs an init to 0.
-
-> | 
-> | 	select_brbe_bank(BRBE_BANK_IDX_0);
-> | 	while (idx < nr_hw_entries && idx < BRBE_BANK0_IDX_MAX) {
-> | 		if (!capture_branch_entry(cpuc, event, idx))
-> | 			return idx;
-> | 		idx++;
-> | 	}
-> | 
-> | 	select_brbe_bank(BRBE_BANK_IDX_1);
-> | 	while (idx < nr_hw_entries && idx < BRBE_BANK1_IDX_MAX) {
-> | 		if (!capture_branch_entry(cpuc, event, idx))
-> | 			return idx;
-> | 		idx++;
-> | 	}
-> | 
-> | 	return idx;
-> | }
-
-These loops are better than the proposed one with indices, will update.
-
-> | 
-> | void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
-> | {
-> | 	u64 brbfcr, brbcr;
-> | 	int nr;
-> | 
-> | 	brbcr = read_sysreg_s(SYS_BRBCR_EL1);
-> | 	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
-> | 
-> | 	/* Ensure pause on PMU interrupt is enabled */
-> | 	WARN_ON_ONCE(!(brbcr & BRBCR_EL1_FZP));
-> | 
-> | 	/* Pause the buffer */
-> | 	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
-> | 	isb();
-> | 
-> | 	nr = __armv8pmu_branch_read(cpus, event);
-> | 
-> | 	cpuc->branches->branch_stack.nr = nr;
-> | 	cpuc->branches->branch_stack.hw_idx = -1ULL;
-> | 	process_branch_aborts(cpuc);
-> | 
-> | 	/* Unpause the buffer */
-> | 	write_sysreg_s(brbfcr & ~BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
-> | 	isb();
-> | 	armv8pmu_branch_reset();
-> | }
+> I sent out my version of the build fixups for altera and stmmac now.
+Thanks, tested with next-20230608 and it builds fine.
+Tested-by: sraithal@amd.com
 > 
-> Looking at <linux/perf_event.h> I see:
-> 
-> | /*
-> |  * branch stack layout:
-> |  *  nr: number of taken branches stored in entries[]
-> |  *  hw_idx: The low level index of raw branch records
-> |  *          for the most recent branch.
-> |  *          -1ULL means invalid/unknown.
-> |  *
-> |  * Note that nr can vary from sample to sample
-> |  * branches (to, from) are stored from most recent
-> |  * to least recent, i.e., entries[0] contains the most
-> |  * recent branch.
-> |  * The entries[] is an abstraction of raw branch records,
-> |  * which may not be stored in age order in HW, e.g. Intel LBR.
-> |  * The hw_idx is to expose the low level index of raw
-> |  * branch record for the most recent branch aka entries[0].
-> |  * The hw_idx index is between -1 (unknown) and max depth,
-> |  * which can be retrieved in /sys/devices/cpu/caps/branches.
-> |  * For the architectures whose raw branch records are
-> |  * already stored in age order, the hw_idx should be 0.
-> |  */
-> | struct perf_branch_stack {
-> |         __u64                           nr;  
-> |         __u64                           hw_idx;
-> |         struct perf_branch_entry        entries[];
-> | };
-> 
-> ... which seems to indicate we should be setting hw_idx to 0, since IIUC our
-> records are in age order.
-Branch records are indeed in age order, sure will change hw_idx as 0. Earlier
-figured that there was no need for hw_idx and hence marked it as -1UL similar
-to other platforms like powerpc.
+>       Arnd
+
