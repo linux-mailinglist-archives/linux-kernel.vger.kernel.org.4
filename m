@@ -2,131 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6877D72A072
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:45:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C570A72A07F
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 18:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbjFIQo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 12:44:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48852 "EHLO
+        id S229892AbjFIQqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 12:46:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbjFIQoz (ORCPT
+        with ESMTP id S229842AbjFIQpv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 12:44:55 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FCB3A97;
-        Fri,  9 Jun 2023 09:44:40 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b23f04e333so7588725ad.3;
-        Fri, 09 Jun 2023 09:44:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686329080; x=1688921080;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=EdaYmroOCsHHIxQ/Q7Hjtm846vg4ZSkKlVHycee4hiQ=;
-        b=fGFbD5PSbYF99UQlwiVez/cMM9upAZnvHfzE4RaHFwWfjw17nkaOCvOZpLpPtoQAij
-         xMoQyyojMpceSiBfMVxxKBtqFuAZ1bteNFeokFwvw4xdRiHFeo7p+uSe3Gvnf1zwTSZO
-         yRqJvkSXFzHblv8HanMN2qCueh7KW0d/pggBUjK2bRaOJvPc7Aj/Los949p1Qf6IXibb
-         4FMsBIqiYod1z7PxL/8aUilmdT8U4Lj57DDuYxgvKa7gZJ+6oISrKphYW46Nzxm5ZxXf
-         5dHPIbUsnTcGkjUh7t6nz0IzqyzC0aC0CfANwexff4iDtKpGIVpuEnnY/Oz92YpvXCaR
-         wLZQ==
+        Fri, 9 Jun 2023 12:45:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC491AE
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:44:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686329095;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lP5O6Y+WWlbHJraaUNqLEu0298uTs2XTBNqgvHhDjHo=;
+        b=WmnsYHgIj+AQ7N2tl8AxknWxPnsx7Ug1QbzYl7HCfimX5uzMwyc5GeYnOh7HD9KBtDxna8
+        9sGQz6ZPWVOSa4EIqCdQjShfs3kSCuKqLoaS9Z7saFfuriy6LT9dyLcUkyoRKgWw83Hg7p
+        vc251aVbIkrBYHiHFZ9yrqwNtjfZXd8=
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
+ [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-451-kmyg0xy3NXiVEUpbebBo6A-1; Fri, 09 Jun 2023 12:44:54 -0400
+X-MC-Unique: kmyg0xy3NXiVEUpbebBo6A-1
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-1b03cfa7602so6733235ad.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 09:44:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686329080; x=1688921080;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EdaYmroOCsHHIxQ/Q7Hjtm846vg4ZSkKlVHycee4hiQ=;
-        b=A+0mdWmagCOoRyLCpJILbdCCDtWufsT6f6cCIxuIx4mGihhQPH5ifO+UpGDYc57sk2
-         6n6fuu7+49Ow+NiRPTCBLhJCvEFyGxD6vop4QQwaOQKxTDV1s06s08UJE55v5LKwgnNm
-         IKAQl/HRJQJJjyWQl+Pai6Lk8FGbNhgIiBxn6TxNlfbME2UF4CJxJ1M1zwK0CiEs+9a9
-         4HrgcFM70BpbEPbiFYVjmspnHNpZCezNWPej9958NDmKl6FUERx+tj3cLskvdLYH0iMi
-         VMYQcxFRaglTZ8Q+GI2ET+W3XvhkfpuZqB9v9Y5BM8FpTqPYaalmbYYQEfS+/bJqpF02
-         jEEg==
-X-Gm-Message-State: AC+VfDyWN+qo8iEizZJtU2zM7/q/hamEXTRhfADQdz0vZsjpYoTSS14W
-        t6x31RQbohu7zjSb657Zi10=
-X-Google-Smtp-Source: ACHHUZ6l2kj86foQyBHiwjzuw87gKyWlXzVwE8Z1dgEyeSxEIoWlyLrFxaHRW1b7uUEAzA082BypKQ==
-X-Received: by 2002:a17:902:8b81:b0:1b1:9272:55f3 with SMTP id ay1-20020a1709028b8100b001b1927255f3mr1198845plb.66.1686329079895;
-        Fri, 09 Jun 2023 09:44:39 -0700 (PDT)
-Received: from krava (c-67-160-222-115.hsd1.ca.comcast.net. [67.160.222.115])
-        by smtp.gmail.com with ESMTPSA id p5-20020a170902bd0500b00186a2274382sm3514760pls.76.2023.06.09.09.44.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 09:44:39 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Fri, 9 Jun 2023 09:44:36 -0700
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Jackie Liu <liu.yun@linux.dev>
-Subject: Re: [PATCH RFC] ftrace: Show all functions with addresses in
- available_filter_functions_addrs
-Message-ID: <ZINW9FqIoja76DRa@krava>
-References: <20230608212613.424070-1-jolsa@kernel.org>
- <CAEf4BzbNakGzcycJJJqLsFwonOmya8=hKLD41TWX2zCJbh=r-Q@mail.gmail.com>
- <20230608192748.435a1dbf@gandalf.local.home>
- <CAEf4BzYkNHu7hiMYWQWs_gpYOfHL0FVuf-O0787Si2ze=PFX5w@mail.gmail.com>
- <ZILhqvrjeFIPHauy@FVFF77S0Q05N>
+        d=1e100.net; s=20221208; t=1686329093; x=1688921093;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lP5O6Y+WWlbHJraaUNqLEu0298uTs2XTBNqgvHhDjHo=;
+        b=aUpyDkc+BtnCwJv5T/QDyl2oYOVZg0Jbn7oEtmka0el+wC7PTi0OnY2N2HFtFQ7kbl
+         C/QuX64Lsu4Pv9lyFShoxJ4J3t73dF7v2XhKFsAhBNgHnIpBpWP0eL5Cw2cU+2UfQhDX
+         sQhboMbwqzucQnj+2MgSbjvzgWLJggrXYaXUU7HA5jL2IFb2eDQ/3eNRtFkv+nluBr8A
+         Q822JJl58ySuE0xkpH7E5r5eR3AOBpiiBlPQZdRuId+7tJWwCkloZyn2VnQTxdTLScPf
+         x7+UIdxhAoaR5tJeEY1gBQh7KhJLwWL8mm0/37pyvK87so929IkaagmGaR+Xmw4x57f1
+         ZnSg==
+X-Gm-Message-State: AC+VfDzKVzdksRgyxWwTf2STOBZFNVo3y6d78GNHd+FLMFbAGG50d6Tu
+        TRHkpf6EwLd3ow0SayrV5cCipzeVbbQH2neHX4nT0KLeZO9IW14CF6PLUGWBssRpIkqQCk4aofw
+        qMIsWdgW7oQ/ehqckDnzIrsJXSPEYEa/UPbTa4ryf
+X-Received: by 2002:a17:902:b905:b0:1af:e63f:5bb1 with SMTP id bf5-20020a170902b90500b001afe63f5bb1mr1282638plb.7.1686329092970;
+        Fri, 09 Jun 2023 09:44:52 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7zDVq695OK7McLR4vzNBftl0R3SL21TRjXzZOuBBU36wjdeP/MVpNAkO6JcixIuhfY6AAHiytBnKwzWzUI7o8=
+X-Received: by 2002:a17:902:b905:b0:1af:e63f:5bb1 with SMTP id
+ bf5-20020a170902b90500b001afe63f5bb1mr1282622plb.7.1686329092671; Fri, 09 Jun
+ 2023 09:44:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZILhqvrjeFIPHauy@FVFF77S0Q05N>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230609125023.399942-1-jlayton@kernel.org> <20230609125023.399942-8-jlayton@kernel.org>
+In-Reply-To: <20230609125023.399942-8-jlayton@kernel.org>
+From:   Andreas Gruenbacher <agruenba@redhat.com>
+Date:   Fri, 9 Jun 2023 18:44:41 +0200
+Message-ID: <CAHc6FU4wyfQT7T75j2Sd9WNp=ag7hpDZGYkR=m73h2nOaH+AqQ@mail.gmail.com>
+Subject: Re: [PATCH 7/9] gfs2: update ctime when quota is updated
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Brad Warrum <bwarrum@linux.ibm.com>,
+        Ritu Agarwal <rituagar@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ian Kent <raven@themaw.net>,
+        "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
+        Jeremy Kerr <jk@ozlabs.org>, Ard Biesheuvel <ardb@kernel.org>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Sungjong Seo <sj1557.seo@samsung.com>,
+        Bob Peterson <rpeterso@redhat.com>,
+        Steve French <sfrench@samba.org>,
+        Paulo Alcantara <pc@manguebit.com>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Tom Talpey <tom@talpey.com>,
+        John Johansen <john.johansen@canonical.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Ruihan Li <lrh2000@pku.edu.cn>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        autofs@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, cluster-devel@redhat.com,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 09:24:10AM +0100, Mark Rutland wrote:
-> On Thu, Jun 08, 2023 at 04:55:40PM -0700, Andrii Nakryiko wrote:
-> > On Thu, Jun 8, 2023 at 4:27 PM Steven Rostedt <rostedt@goodmis.org> wrote:
-> > > On Thu, 8 Jun 2023 15:43:03 -0700 Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> > > > On Thu, Jun 8, 2023 at 2:26 PM Jiri Olsa <jolsa@kernel.org> wrote:
->  
-> > There are BPF tools that allow user to specify regex/glob of kernel
-> > functions to attach to. This regex/glob is checked against
-> > available_filter_functions to check which functions are traceable. All
-> > good. But then also it's important to have corresponding memory
-> > addresses for selected functions (for many reasons, e.g., to have
-> > non-ambiguous and fast attachment by address instead of by name, or
-> > for some post-processing based on captured IP addresses, etc). And
-> > that means that now we need to also parse /proc/kallsyms and
-> > cross-join it with data fetched from available_filter_functions.
-> > 
-> > All this is unnecessary if avalable_filter_functions would just
-> > provide function address in the first place. It's a huge
-> > simplification. And saves memory and CPU.
-> 
-> Do you need the address of the function entry-point or the address of the
-> patch-site within the function? Those can differ, and the rec->ip address won't
-> necessarily equal the address in /proc/kallsyms, so the pointer in
-> /proc/kallsyms won't (always) match the address we could print for the ftrace site.
-> 
-> On arm64, today we can have offsets of +0, +4, and +8, and within a single
-> kernel image different functions can have different offsets. I suspect in
-> future that we may have more potential offsets (e.g. due to changes for HW/SW
-> CFI).
+Jeff,
 
-so we need that for kprobe_multi bpf link, which is based on fprobe,
-and that uses ftrace_set_filter_ips to setup the ftrace_ops filter
+On Fri, Jun 9, 2023 at 2:50=E2=80=AFPM Jeff Layton <jlayton@kernel.org> wro=
+te:
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> ---
+>  fs/gfs2/quota.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/fs/gfs2/quota.c b/fs/gfs2/quota.c
+> index 1ed17226d9ed..6d283e071b90 100644
+> --- a/fs/gfs2/quota.c
+> +++ b/fs/gfs2/quota.c
+> @@ -869,7 +869,7 @@ static int gfs2_adjust_quota(struct gfs2_inode *ip, l=
+off_t loc,
+>                 size =3D loc + sizeof(struct gfs2_quota);
+>                 if (size > inode->i_size)
+>                         i_size_write(inode, size);
+> -               inode->i_mtime =3D inode->i_atime =3D current_time(inode)=
+;
+> +               inode->i_mtime =3D inode->i_atime =3D inode->i_ctime =3D =
+current_time(inode);
 
-and ftrace_set_filter_ips works fine with ip address being the address
-of the patched instruction (it's matched in ftrace_location)
+I don't think we need to worry about the ctime of the quota inode as
+that inode is internal to the filesystem only.
 
-but right, I did not realize this.. it might cause confusion if people
-don't know it's patch-side addresses..  not sure if there's easy way to
-get real function address out of rec->ip, but it will also get more
-complicated on x86 when IBT is enabled, will check
+>                 mark_inode_dirty(inode);
+>                 set_bit(QDF_REFRESH, &qd->qd_flags);
+>         }
+> --
+> 2.40.1
+>
 
-or we could just use patch-side addresses and reflect that in the file's
-name like 'available_filter_functions_patch_addrs' .. it's already long
-name ;-)
+Thanks,
+Andreas
 
-jirka
