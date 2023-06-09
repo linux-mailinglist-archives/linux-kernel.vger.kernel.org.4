@@ -2,127 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22D4472A639
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 00:25:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 200A072A644
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 00:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbjFIWYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 18:24:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44326 "EHLO
+        id S231841AbjFIWaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 18:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjFIWYm (ORCPT
+        with ESMTP id S229831AbjFIWaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 18:24:42 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E27359D
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 15:24:41 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-53482b44007so909954a12.2
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 15:24:41 -0700 (PDT)
+        Fri, 9 Jun 2023 18:30:24 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0177B359D
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 15:30:22 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-568af2f6454so21145727b3.1
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 15:30:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=osandov-com.20221208.gappssmtp.com; s=20221208; t=1686349481; x=1688941481;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RjHkTs/1sQfg/6fnh81D5Wy2dtYUMRhDLSRX/atoCKk=;
-        b=4aSt66Xzk8RP2IwTk8XYQptRViNK0Pw2YdcTi/NOH23vkJGP5DbX9+rjptyVjZiuNO
-         qkSeFrkQDSB+kS8kCiqWd2XCdg3RId/UKPLl1p5h5QOX/8ej7DnQcvf3tLcNRDPzr7hO
-         eNW3YMV40UpArd0xPdNZJrHqAOKIP+7B8PXfi9RS+QW63BFNwYJGkhMAsrPEdMbF7Ccu
-         8cNv/HoD8vQTpKNDP1Ow3EGZ3SX6fQ2NUi37+q4nVlA8OodxJ/FGIEVjoQxCZKbcZBuQ
-         EiIAJAVHyYppuFluD6vrWyReojtebjLo7MJ9VC55+NYnKzYYBtw+LeRzy+shAWmlFqMy
-         NhnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686349481; x=1688941481;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1686349822; x=1688941822;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RjHkTs/1sQfg/6fnh81D5Wy2dtYUMRhDLSRX/atoCKk=;
-        b=j1o/WwITTa3DucixCazXQFg8fC8gRDDTuBSsZssToiHBU/OEisHYOXKvctQncm4AS5
-         pIKJe+VU5ywJ0CiG3GUoDjvn0z+5EhrSixFrr1YRMAiQxCkOdiE0k2uFLnnLnpWki7Bz
-         n8xbkpqdkSzqhlBrkm01rttIEHN4wL7m5nCnAJnth6Ge+kUzel/XPNbCNJt1y+QxBZv3
-         AW/ZfMz7L0YdZY2fsV35TWoDGxAE9Whne5vPHdpbPiaTszgIBRkOmvsPQzJVrF9M697z
-         aPSFsr/HHpVzIvjzkktbWGTPhx2ofH5ACzNABoS3jbgz46QEiAcBHYYuGc1YlwzCR5J5
-         QO+g==
-X-Gm-Message-State: AC+VfDxPsIG3kTbnQnQaaMUu1lpBx0Z70GNBeTG7Pbfx98dkqvmHRM8d
-        /VnorNmQjFjgatzj9E6CoNpwGA==
-X-Google-Smtp-Source: ACHHUZ4bUs89h66eeeq5/ioNpudHmJZZFyvF3fKQ2X4WOyT1P+7YX4wbCFMI2qelHrTpEP6DZ16jvg==
-X-Received: by 2002:a17:90a:1fc7:b0:258:de21:f237 with SMTP id z7-20020a17090a1fc700b00258de21f237mr1980381pjz.9.1686349480492;
-        Fri, 09 Jun 2023 15:24:40 -0700 (PDT)
-Received: from telecaster ([2620:10d:c090:400::5:eb84])
-        by smtp.gmail.com with ESMTPSA id qa2-20020a17090b4fc200b002310ed024adsm5162082pjb.12.2023.06.09.15.24.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 15:24:40 -0700 (PDT)
-Date:   Fri, 9 Jun 2023 15:24:38 -0700
-From:   Omar Sandoval <osandov@osandov.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-debuggers@vger.kernel.org,
-        kernel-team@fb.com
-Subject: Re: [PATCH] x86/unwind/orc: add ELF section with ORC version number
-Message-ID: <ZIOmpuqLTJROYQt8@telecaster>
-References: <5b70bc58ef70aab0a821111cd3201eeced8bab95.1686263379.git.osandov@osandov.com>
- <20230609220430.agw2rtswmjbquzom@treble>
+        bh=+zT6sV+fvzmgBBI81QXgaF+Btrnt6GH7aWTnX6MCUB4=;
+        b=mXAcURqk+1SjmifAbWS+rzdBg3sJG/XNRZ8y8ysR8INkOv4gWnF+xs+y+SYfhtf6N/
+         RUzqMQwHktqLGXnFqUtsvhF5L9vLpFUwvm2N9epG17Y0Vp2wpI7ZrzX8JDonWRmiow43
+         mX+mucGCdEZRZwBSCuNbliPjS+zKIFFWb9/ic7yJM7pykYyKn+2kH4loCcZKtPEoA1iE
+         lVZoLXJDhsiAM0IcrGBlFgWLUzxo4jWTIDQDnDuTB/9r0dEv+ey0PgmSn+GZP+iXEtW9
+         SOuHwnTb87WF5tfCuyWfCUydVDBd/5vbNI4gxJKZAzwgeQAoWA573b3Zpk+zJz2L5oom
+         Ryow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686349822; x=1688941822;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+zT6sV+fvzmgBBI81QXgaF+Btrnt6GH7aWTnX6MCUB4=;
+        b=aymm8mDmMqPjTQ0uIWjuFy3QpZSo/p3uzfyivI17m/iG7qme8yCUUZd9lVF/ACfFd/
+         AkKjxfh2+IaLJL+vHiGJ+bNKQC2UTXJZi/7KiwowldTW96jWQzMZ+3FNDaZ+Zmlu+S2O
+         SXyOvZRnORCgvZB1idu7vosO4GctzFah+Bfsfpv2mz4tKzU4JdioA+2dbOtRN3plwXtw
+         NdwcY2Vs6O0xXKFR8oND5hRNhjMlEpHq0L84YR+sZZUNnTL1T32s0DGJrwFfz4um+Apo
+         UrrKcytZ74jiWmWAA3JklpYSraMKmq8Gl+WBCf3dQJw6aaO1aCxADEZbvvEAqY1UCn0N
+         ZMvA==
+X-Gm-Message-State: AC+VfDxaAOeBOcU9E52p2JopqF8O0jEFhOZ22qFgE/yxvu2Fog2FBGzV
+        mnHLvRsgBErYDJXyLm7YsqyZMS8yKr/66PX92wDeOA==
+X-Google-Smtp-Source: ACHHUZ5TZvpX4UfdCUpjEiPqY6QZGnmNogZwNLVZjipLgMlKuWApKPOOPeExrL9FO8ZqBOPgG6jGQ762Win+1tZG15A=
+X-Received: by 2002:a0d:d8cb:0:b0:559:e1b2:70c6 with SMTP id
+ a194-20020a0dd8cb000000b00559e1b270c6mr2210211ywe.34.1686349821843; Fri, 09
+ Jun 2023 15:30:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230609220430.agw2rtswmjbquzom@treble>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230609005158.2421285-1-surenb@google.com> <20230609005158.2421285-5-surenb@google.com>
+ <ZIOOmC26qh4EXUEX@x1n>
+In-Reply-To: <ZIOOmC26qh4EXUEX@x1n>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Fri, 9 Jun 2023 15:30:10 -0700
+Message-ID: <CAJuCfpHKUjAwgWbxvJQDyEnneRD03p2M6247Q6=3-oOq_FL7zA@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] mm: drop VMA lock before waiting for migration
+To:     Peter Xu <peterx@redhat.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
+        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
+        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
+        apopple@nvidia.com, ying.huang@intel.com, david@redhat.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        viro@zeniv.linux.org.uk, brauner@kernel.org,
+        pasha.tatashin@soleen.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 03:04:30PM -0700, Josh Poimboeuf wrote:
-> On Thu, Jun 08, 2023 at 03:38:38PM -0700, Omar Sandoval wrote:
-> > Hi,
-> > 
-> > As mentioned in the commit message, the motivation for this patch is
-> > allowing drgn to continue to make use of ORC for kernel stack unwinding.
-> > 
-> > I want to make it clear that I don't want ORC to be stable ABI. The
-> > kernel is free to change the format as much as needed, I just need a way
-> > to detect the change. (drgn already pokes at many kernel internals and
-> > needs updates for most kernel versions anyways. We have a big test suite
-> > to catch changes we care about.)
-> > 
-> > I'm not at all married to (or proud of) this particular implementation;
-> > I'd be happy to use anything that lets me detect the format version in
-> > both cases mentioned in the commit message (ELF file or core dump +
-> > symbol table).
-> > 
-> > It'd be great if we could get a solution in before 6.4 is released. I
-> > would've reported this sooner, but I just got back from paternity leave
-> > last week.
-> 
-> Hi Omar,
-> 
-> Peter and I agree this seems fine in principle.
+On Fri, Jun 9, 2023 at 1:42=E2=80=AFPM Peter Xu <peterx@redhat.com> wrote:
+>
+> On Thu, Jun 08, 2023 at 05:51:56PM -0700, Suren Baghdasaryan wrote:
+> > migration_entry_wait does not need VMA lock, therefore it can be droppe=
+d
+> > before waiting. Introduce VM_FAULT_VMA_UNLOCKED to indicate that VMA
+> > lock was dropped while in handle_mm_fault().
+> > Note that once VMA lock is dropped, the VMA reference can't be used as
+> > there are no guarantees it was not freed.
+>
+> Then vma lock behaves differently from mmap read lock, am I right?  Can w=
+e
+> still make them match on behaviors, or there's reason not to do so?
 
-Glad to hear that!
+I think we could match their behavior by also dropping mmap_lock here
+when fault is handled under mmap_lock (!(fault->flags &
+FAULT_FLAG_VMA_LOCK)).
+I missed the fact that VM_FAULT_COMPLETED can be used to skip dropping
+mmap_lock in do_page_fault(), so indeed, I might be able to use
+VM_FAULT_COMPLETED to skip vma_end_read(vma) for per-vma locks as well
+instead of introducing FAULT_FLAG_VMA_LOCK. I think that was your idea
+of reusing existing flags?
 
-> Though, instead of
-> using an incrementing version, Peter had the idea to hash the struct,
-> like:
-> 
->   awk '/^struct orc_entry {$/ { p=1 } p { print } /^}/ { p=0 }' arch/x86/include/asm/orc_types.h | sha1sum
-> 
-> That way we don't have to remember to bump the version number, and it
-> would be more resilient to partial backports in distros.
-> 
-> Would something like that work for you?
-
-Any sort of unique identifier works for me. One thing that the proposed
-hash wouldn't catch is if ORC_REG_* or ORC_TYPE_* are ever renumbered
-(i.e., the meanings of existing values change). It also wouldn't catch
-if something about the .orc_unwind_ip section changed. But assuming
-changes like that would be much rarer, it could be handled manually by
-bumping a "salt" for the hash. E.g., by adding 'BEGIN { print <SALT> }'
-to the awk script:
-
-awk 'BEGIN { print 1 } /^struct orc_entry {$/ { p=1 } p { print } /^}/ { p=0 }' arch/x86/include/asm/orc_types.h | sha1sum
-
-I'll defer to you guys whether it's easier to remember to bump a version
-everytime or only in those rare cases.
-
-Thanks,
-Omar
+>
+> One reason is if they match they can reuse existing flags and there'll be
+> less confusing, e.g. this:
+>
+>   (fault->flags & FAULT_FLAG_VMA_LOCK) &&
+>     (vm_fault_ret && (VM_FAULT_RETRY || VM_FAULT_COMPLETE))
+>
+> can replace the new flag, iiuc.
+>
+> Thanks,
+>
+> --
+> Peter Xu
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kernel-team+unsubscribe@android.com.
+>
