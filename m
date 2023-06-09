@@ -2,85 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED0C472A4D3
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 22:42:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0217C72A4E3
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 22:44:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbjFIUmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 16:42:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44596 "EHLO
+        id S232445AbjFIUoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 16:44:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjFIUmx (ORCPT
+        with ESMTP id S232413AbjFIUoJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 16:42:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D822D7C
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 13:42:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686343325;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3+p+efMF1py6pEpvkihdBi8OztSv7Pz8tdWi2Iw9yIU=;
-        b=Ql1Q2gTLMWewSfgVXHb+IRl5Q5qpGrj9j/T3OX18cV8NnOwgXYD1LABz/ObqDPxqyIiJhp
-        gvQa1DOZGEgeB1klQE4Q/A/o9qVFqsigyHoyPb16La5XoDl8mMXX0r67Wxmvb5QfF2EF7E
-        EsLVRLLjwR8/PGUzLoTCQPezTCuo+j4=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-153-sNVN0syjOW2IN_2R-wjfsA-1; Fri, 09 Jun 2023 16:42:04 -0400
-X-MC-Unique: sNVN0syjOW2IN_2R-wjfsA-1
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-75b147a2548so47048285a.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 13:42:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686343323; x=1688935323;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3+p+efMF1py6pEpvkihdBi8OztSv7Pz8tdWi2Iw9yIU=;
-        b=eru35MHFK4CnndZPNLDxc7kP5c+S0OrUpUrYgPwM72GY6vk7YkCfWf/P8FmzD0cnjJ
-         UnOxa1NeyXPk9bXyMO7GI48NJnGcCkCyUVXOVnNNMoa84HiDAD8g2GUxno+g94diLblR
-         bLQhpnMK/hdJkysQv8XtyLkmFcsClZfsdQuP2/PWWd4660KeWgAUWCMS3MEJFL94K6Bp
-         KmX7qWdtMvebIKBFxn2ctGI4hTwWdmGvYHyF3MeRwvGB2TTVI04TzPVhzdoe6bBGi+vT
-         ldZpFFwwHUc4q7V+siHTahaF8hFeI8yd0oiMXDTHSrWaGBTHuFy2pjAgDJ5ILAbLetPL
-         iUyQ==
-X-Gm-Message-State: AC+VfDziL/MArygdmy8EqmelPmPbB5To1Rq+X3nh4AhPqnleLsD0nPsW
-        Jo2DG4J35vGYFaYuKxgWfvgQiOn+NyYYNz2dSq6OAJOGE6gwb1eVQZ7EqSvbpIJI9uCQy0T+fLn
-        CtjxJhx4Tk9c3igY1gwc25rxH
-X-Received: by 2002:a05:620a:46a8:b0:75b:23a1:69f0 with SMTP id bq40-20020a05620a46a800b0075b23a169f0mr2844976qkb.7.1686343323580;
-        Fri, 09 Jun 2023 13:42:03 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5MhYTYYAIL9lllr8F5q12r8SC+qD0eDeSyZp3uUsLxhZSNfrjXGqhTrE3LVMEEYGVFirie1g==
-X-Received: by 2002:a05:620a:46a8:b0:75b:23a1:69f0 with SMTP id bq40-20020a05620a46a800b0075b23a169f0mr2844938qkb.7.1686343323262;
-        Fri, 09 Jun 2023 13:42:03 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id x14-20020a05620a14ae00b007595614c17bsm1259288qkj.57.2023.06.09.13.42.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 13:42:02 -0700 (PDT)
-Date:   Fri, 9 Jun 2023 16:42:00 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
-        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
-        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
-        apopple@nvidia.com, ying.huang@intel.com, david@redhat.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        viro@zeniv.linux.org.uk, brauner@kernel.org,
-        pasha.tatashin@soleen.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Subject: Re: [PATCH v2 4/6] mm: drop VMA lock before waiting for migration
-Message-ID: <ZIOOmC26qh4EXUEX@x1n>
-References: <20230609005158.2421285-1-surenb@google.com>
- <20230609005158.2421285-5-surenb@google.com>
+        Fri, 9 Jun 2023 16:44:09 -0400
+Received: from mail-40140.protonmail.ch (mail-40140.protonmail.ch [185.70.40.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D922E30F1
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 13:44:07 -0700 (PDT)
+Date:   Fri, 09 Jun 2023 20:44:00 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1686343445; x=1686602645;
+        bh=pZVmlS0Dh4UwZm7Cf3ZnTS5MkKxcVS93i6YC2fAbp8s=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=OnePWlvYrdB3+LdTIJLj/ZvkKGb1GMsMBEwQVCo3UfKxMa7XhtUc9+2q6P3AZcv6b
+         N5yz9UYQvpEUIGdWWdsDA0Znin54iCHXYRbZQsxD3fpf+Xd3pl1fJ12rVoPyGnV8VO
+         YnB35ZNc0ldkrDHF+vkPTwq7FxkqNifQYvCSvEL4iqTt07/XCnhK1YMxJCt/fDMdlO
+         pP4205NPShQ+MKN1nOgwJcaye1qpTFzgfOauLqorGO5wKVYrRPfGbxBhxZns6Ae7ev
+         aVKBOYBw5GHoEuFvSV1uYF7zM796NEzHf5u1llfrnDDn8xOWke/QLLY63QpmmQvcx9
+         l497dnPOcNtTg==
+To:     krzysztof.kozlowski@linaro.org
+From:   Raymond Hackley <raymondhackley@protonmail.com>
+Cc:     broonie@kernel.org, davem@davemloft.net,
+        devicetree@vger.kernel.org, edumazet@google.com,
+        jk@codeconstruct.com.au, kuba@kernel.org, lgirdwood@gmail.com,
+        linux-kernel@vger.kernel.org, michael@walle.cc,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        raymondhackley@protonmail.com, robh+dt@kernel.org,
+        u.kleine-koenig@pengutronix.de
+Subject: Re: [PATCH v2 2/2] NFC: nxp-nci: Add pad supply voltage pvdd-supply
+Message-ID: <20230609204329.105189-1-raymondhackley@protonmail.com>
+In-Reply-To: <7ad5d027-9b15-f59e-aa76-17e498cb7aba@linaro.org>
+References: <20230609154033.3511-1-raymondhackley@protonmail.com> <20230609154200.3620-1-raymondhackley@protonmail.com> <e2bb439c-9b72-991b-00f6-0b5e7602efd9@linaro.org> <20230609173935.84424-1-raymondhackley@protonmail.com> <7ad5d027-9b15-f59e-aa76-17e498cb7aba@linaro.org>
+Feedback-ID: 49437091:user:proton
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230609005158.2421285-5-surenb@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,26 +55,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 05:51:56PM -0700, Suren Baghdasaryan wrote:
-> migration_entry_wait does not need VMA lock, therefore it can be dropped
-> before waiting. Introduce VM_FAULT_VMA_UNLOCKED to indicate that VMA
-> lock was dropped while in handle_mm_fault().
-> Note that once VMA lock is dropped, the VMA reference can't be used as
-> there are no guarantees it was not freed.
+Hi Krzysztof,
 
-Then vma lock behaves differently from mmap read lock, am I right?  Can we
-still make them match on behaviors, or there's reason not to do so?
+On Friday, June 9th, 2023 at 7:29 PM, Krzysztof Kozlowski <krzysztof.kozlow=
+ski@linaro.org> wrote:
 
-One reason is if they match they can reuse existing flags and there'll be
-less confusing, e.g. this:
+> > > Why do you need these checks? This should be called in correct contex=
+t,
+> > > so when regulator is valid and enabled. If you have such checks it
+> > > suggests that code is buggy and this is being called in wrong context=
+s.
+> >=20
+> > First condition !IS_ERR(pvdd) is to check if pvdd exists.
+> > Some devices, msm8916-samsung-serranove for example, doesn't need pvdd =
+or
+> > have it bound in the device tree:
+>=20
+>=20
+> If regulator is missing you should get a dummy.
+>=20
+> But anyway the code will not be executed if you don't get proper regulato=
+r.
+>=20
 
-  (fault->flags & FAULT_FLAG_VMA_LOCK) &&
-    (vm_fault_ret && (VM_FAULT_RETRY || VM_FAULT_COMPLETE))
+The current patch set is using devm_regulator_get_optional() instead of
+devm_regulator_get(), which doesn't get a dummy regulator.
 
-can replace the new flag, iiuc.
+> > https://github.com/torvalds/linux/commit/ab0f0987e035f908d670fed7d86efa=
+6fac66c0bb
+> >=20
+> > Without !IS_ERR(pvdd), checking it with regulator_is_enabled(pvdd):
+> >=20
+> > [ 50.161882] 8<--- cut here ---
+> > [ 50.161906] Unable to handle kernel paging request at virtual address =
+fffffff9 when read
+> > [ 50.161916] [fffffff9] *pgd=3Daffff841, *pte=3D00000000, *ppte=3D00000=
+000
+> > [ 50.161938] Internal error: Oops: 27 [#1] PREEMPT SMP ARM
+> >=20
+> > Or disabling it directly with regulator_disable(pvdd):
+> >=20
+> > [ 69.439827] 8<--- cut here ---
+> > [ 69.439841] Unable to handle kernel NULL pointer dereference at virtua=
+l address 00000045 when read
+> > [ 69.439852] [00000045] *pgd=3D00000000
+> > [ 69.439864] Internal error: Oops: 5 [#1] PREEMPT SMP ARM
+> >=20
+> > Second condition regulator_is_enabled(pvdd) is to make sure that pvdd i=
+s
+> > disabled with balance.
+>=20
+>=20
+> So you have buggy code and to hide the bug you add checks? No, make the
+> code correct so the check is not needed.
+>=20
 
-Thanks,
+Do you mean that I should use devm_regulator_get() instead in order to get
+a dummy regulator, so that it can disable pvdd without unnecessary checks?
+Actually there is v4 with those buggy codes and checks dropped.
+Please do let me know if I am understanding and doing it correctly. I would
+send it after proper period of cooldown.
 
--- 
-Peter Xu
+Regards,
+Raymond
 
