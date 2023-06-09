@@ -2,93 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6951729B02
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 15:05:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E7EB729B08
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 15:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240725AbjFINFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 09:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33664 "EHLO
+        id S231598AbjFINGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 09:06:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232498AbjFINFR (ORCPT
+        with ESMTP id S230305AbjFINGT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 09:05:17 -0400
-Received: from xry111.site (xry111.site [89.208.246.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9EF2D70;
-        Fri,  9 Jun 2023 06:05:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1686315913;
-        bh=hT63nSeqfXe+w/wcTH/EVqDDlEdDBDYjRZhYbxbpM9E=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=npo+qrCHsIrTavth6RFp9whOgzBlVXmzRzYXUH+dxBlx16fsDq62B5M0BsrtN4VtJ
-         1fdfpCWNVPfQBRPxlsk/T5jnywsDDxzlQF9T3tubgjW3v4DrYce6kTsX/rRJiWMx5i
-         hBEItCRBrPuBf/r8DMY+d6WFyBryIiRnxabHdAlU=
-Received: from [192.168.124.11] (unknown [113.140.11.3])
+        Fri, 9 Jun 2023 09:06:19 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B0D30CB
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 06:06:18 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id 48AE16638D;
-        Fri,  9 Jun 2023 09:05:09 -0400 (EDT)
-Message-ID: <5de9d69817138f2ccae0867b5ccb602dcfa007a3.camel@xry111.site>
-Subject: Re: [RFC PATCH] asm-generic: Unify uapi bitsperlong.h
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>, Arnd Bergmann <arnd@arndb.de>
-Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-s390@vger.kernel.org, llvm@lists.linux.dev,
-        linux-ia64@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-parisc@vger.kernel.org, x86@kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-alpha@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        loongson-kernel@lists.loongnix.cn
-Date:   Fri, 09 Jun 2023 21:05:07 +0800
-In-Reply-To: <ca4c4968-411d-4e2c-543e-ffb62413ddef@loongson.cn>
-References: <1683615903-10862-1-git-send-email-yangtiezhu@loongson.cn>
-         <b9624545-2c80-49a1-ac3c-39264a591f7b@app.fastmail.com>
-         <76d3be65-91df-7969-5303-38231a7df926@loongson.cn>
-         <a3a4f48a-07d4-4ed9-bc53-5d383428bdd2@app.fastmail.com>
-         <ca4c4968-411d-4e2c-543e-ffb62413ddef@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.2 
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qd1YJ2s0Tz4x3x;
+        Fri,  9 Jun 2023 23:06:12 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1686315972;
+        bh=ZwdtArgZhBZiJXxJG3SFap/Lyw4wRqeEqOCi/Ko2N+o=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=YeKUQ/BdMwGKCIH52MSQgeU3oixBIPV7DZy10o0jJ53/1rG/1MRuBgwM1Z44S+xBL
+         Hpny86yM/+VKCjyhjRtoCvCN8XbKkh4woU+s1GrHJbVm8RNh9vmGFJVQUGSHVN6FkD
+         TuV8uf5I5iZw/9dayZcbBc+d8P86iJ/Hlv5NAHgNYjjNBDbOeFBXvqEcr7JFmbtLmE
+         uoGd0EkNuEf2kOJUlRKs5TA4N2LVvhf1W4rzSeLlFgC/fjRj/mBe8EApzxq/0KeHwo
+         KGbJ5GvV3gFTf/74JWgMdw/C52Ke48rmrygu4J53JliPgsiEULWPDkvSgQ3nxg+up3
+         sruFt3Z+AzBqg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH] powerpc/signal32: Force inlining of
+ __unsafe_save_user_regs() and save_tm_user_regs_unsafe()
+In-Reply-To: <CT5FZBY14ZM4.OYXBJNXQU9A2@wheely>
+References: <7e469c8f01860a69c1ada3ca6a5e2aa65f0f74b2.1685955220.git.christophe.leroy@csgroup.eu>
+ <CT5FZBY14ZM4.OYXBJNXQU9A2@wheely>
+Date:   Fri, 09 Jun 2023 23:06:11 +1000
+Message-ID: <874jnghjjw.fsf@mail.lhotse>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-06-09 at 14:50 +0800, Tiezhu Yang wrote:
+"Nicholas Piggin" <npiggin@gmail.com> writes:
+> On Mon Jun 5, 2023 at 6:58 PM AEST, Christophe Leroy wrote:
+>> Looking at generated code for handle_signal32() shows calls to a
+>> function called __unsafe_save_user_regs.constprop.0 while user access
+>> is open.
+>>
+>> And that __unsafe_save_user_regs.constprop.0 function has two nops at
+>> the begining, allowing it to be traced, which is unexpected during
+>> user access open window.
+>>
+>> The solution could be to mark __unsafe_save_user_regs() no trace, but
+>> to be on the safe side the most efficient is to flag it __always_inline
+>> as already done for function __unsafe_restore_general_regs(). The
+>> function is relatively small and only called twice, so the size
+>> increase will remain in the noise.
+>>
+>> Do the same with save_tm_user_regs_unsafe() as it may suffer the
+>> same issue.
+>
+> Could you put a comment so someone doesn't uninline it later?
 
-/* snip */
+I think the "unsafe" in the name is probably sufficient to warn people
+off, but you never know. Still I'd happily take a patch to add comments :)
 
-> > > > In musl, the documentation states that at least gcc-3.4 or
-> > > > clang-3.2 are required, which probably predate the
-> > > > __SIZEOF_LONG__ macro.
+> Marking it notrace as well would be sufficient for a comment, if that works.
 
-Indeed, I've digged some history and __SIZEOF_LONG__ was added into GCC-
-4.3 (in 2008).  And I didn't realize the bitsperlong.h in tools
-directory is a copy from uapi.
+I nearly did that when applying, but I'm not sure it won't change the
+code generation, so I left it as-is.
 
-> > > > On the other hand, musl was only
-> > > > released in 2011, and building musl itself explicitly
-> > > > does not require kernel uapi headers, so this may not
-> > > > be too critical.
-
-> Only arm64, riscv and loongarch belong to the newer architectures
-> which are related with this change, I am not sure it is necessary
-> to "unify" uapi bitsperlong.h for them.
-
-At least it will stop the engineers working on "the next architecture"
-from adding an unneeded bitsperlong.h :).
-
-
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+cheers
