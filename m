@@ -2,145 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A61DD729B58
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 15:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1863729B5A
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 15:18:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238723AbjFINSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 09:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41428 "EHLO
+        id S240459AbjFINST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 09:18:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231135AbjFINSF (ORCPT
+        with ESMTP id S231135AbjFINSR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 09:18:05 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263DBA3;
-        Fri,  9 Jun 2023 06:18:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686316684; x=1717852684;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8UyLEibmXUqgyndyzdA99iRsyIpRFb+3EGRyOqrRvVk=;
-  b=Uc+/Oe1GCQnw/2KeIfC97kekGce7fN7vhFydgGKkaExiVb/LRIl+RLFr
-   VbDxG+/APYz/IiuioR++3ILVSbMabdZEVUVtBoPrzPJUNzJLugqCswNwW
-   BkKjU09FHiidCmSB9k7yhFGSmHCmM1rysyKSI++eYmiL4G9NpUvmZOu64
-   10sYxEv6ORyO9q7E4Z2Bfsz7m1UO4XYAYjPTMm/ziz7NHGZOqb076x9qT
-   LlMo647KCYPG6rOOk0hJpnlpnb1EcovOxciZACvKlokCge3kdXxi1fhm/
-   Ly0C3+6rzzzuQPz678WNJZqMe1RPHeRaCuLeP1wkXAEWnGVK1PQCWhC4R
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="421186418"
-X-IronPort-AV: E=Sophos;i="6.00,229,1681196400"; 
-   d="scan'208";a="421186418"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 06:18:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="743484861"
-X-IronPort-AV: E=Sophos;i="6.00,229,1681196400"; 
-   d="scan'208";a="743484861"
-Received: from mbahx-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.249.43.216])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 06:17:57 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id A7B32109B7B; Fri,  9 Jun 2023 16:17:54 +0300 (+03)
-Date:   Fri, 9 Jun 2023 16:17:54 +0300
-From:   kirill.shutemov@linux.intel.com
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, dave.hansen@intel.com, tony.luck@intel.com,
-        peterz@infradead.org, tglx@linutronix.de, seanjc@google.com,
-        pbonzini@redhat.com, david@redhat.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, ying.huang@intel.com,
-        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
-        sagis@google.com, imammedo@redhat.com
-Subject: Re: [PATCH v11 19/20] x86/mce: Improve error log of kernel space TDX
- #MC due to erratum
-Message-ID: <20230609131754.dhii5ctfwtzx667o@box.shutemov.name>
-References: <cover.1685887183.git.kai.huang@intel.com>
- <116cafb15625ac0bcda7b47143921d0c42061b69.1685887183.git.kai.huang@intel.com>
+        Fri, 9 Jun 2023 09:18:17 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6C030C5
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 06:18:16 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-30fa23e106bso345808f8f.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 06:18:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686316694; x=1688908694;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YgJZVog4QId8J7JaC0naUd6FnkaXXLTRPTgD1N+SRw8=;
+        b=AZUurjpf72+T14kiStwV5o9YWM8M1QeNhoASj9V+a4aq+TthkHWeZ4LSAy3ddbBzF/
+         yNo/JP5VJmrUCxErZi4CTSTJPAdF0/EHuwXfoaFIfUvhkUUskWTqHo+epj+q/1g6IWfZ
+         8gLSU50NZxIJoXEvFNONaKcPf1mkslm2p0B4ZuVp4U98uMvPxiZV/uV3uOk0sPQzEvOR
+         DsC7J1d4Xd9UML7hnEGCc1ARoV/RCa417uVeG+aA+cG7liKZlIPoDK5biFYydelGPTQW
+         bBw9FQrH/r89oT/IxTquuUA76iyKubgw79vWq2Fra3Y7/irJtiXB5shX5p66xL+kqcw1
+         iGIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686316694; x=1688908694;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YgJZVog4QId8J7JaC0naUd6FnkaXXLTRPTgD1N+SRw8=;
+        b=R/IH2a1vxKMg3FeXQSCvg+zMKLOJyuOXsCU3halRO9s3PhR//i0nXF/SujOavvUNEu
+         J8GZI/QI3jLzohoXerD94ddjUOfRr1C+sIBhBrd9eVQaTXPutf4UJRnZS+8F5aCOYSad
+         cqhgqtRdb8Y8K+9UrgbC3ZLM4zFBKlDuwDQYx0fAsnuSIvPIpO5G4ZrrmLtYDK6q1Zef
+         ddNDhL2kLxosMfj5XHBHOg7BBEWb3Gr5ZEtRz8okKoiyKU0w/2JlUcZNI0Jh/08LuuxR
+         6bpGnFROEbPCmU6IrYyQ6HexfLDztIi/7q/Zx6pAoBed3U29uyjsQuRQOIhyle+hpKis
+         oYYA==
+X-Gm-Message-State: AC+VfDxRa1a+4dfdjmzd26iA/c1wgAwe2OhO+thp7WFhkytl9uXVmjUL
+        dasrnjGN8+c+P3XTmjdo3Th39cK0haesNkDt84Q=
+X-Google-Smtp-Source: ACHHUZ4ywMdZHZ56LMGYH+4/KpYZ25kc85qDDM6ZC48F8rBycFCPBFhYHAfQYbzl4+AVAw9cyQWQbQ==
+X-Received: by 2002:a5d:51c6:0:b0:309:33c4:52e1 with SMTP id n6-20020a5d51c6000000b0030933c452e1mr772596wrv.64.1686316694583;
+        Fri, 09 Jun 2023 06:18:14 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id m6-20020a5d6246000000b0030e52d4c1bcsm4511387wrv.71.2023.06.09.06.18.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 06:18:13 -0700 (PDT)
+Date:   Fri, 9 Jun 2023 16:18:08 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Sai Krishna <saikrishnag@marvell.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sgoutham@marvell.com,
+        maciej.fijalkowski@intel.com,
+        Naveen Mamindlapalli <naveenm@marvell.com>
+Subject: Re: [net PATCH v2] octeontx2-af: Move validation of ptp pointer
+ before its usage
+Message-ID: <880d628e-18bf-44a1-a55f-ffbe1777dd2b@kadam.mountain>
+References: <20230609115806.2625564-1-saikrishnag@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <116cafb15625ac0bcda7b47143921d0c42061b69.1685887183.git.kai.huang@intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230609115806.2625564-1-saikrishnag@marvell.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 02:27:32AM +1200, Kai Huang wrote:
-> The first few generations of TDX hardware have an erratum.  Triggering
-> it in Linux requires some kind of kernel bug involving relatively exotic
-> memory writes to TDX private memory and will manifest via
-> spurious-looking machine checks when reading the affected memory.
-> 
-> == Background ==
-> 
-> Virtually all kernel memory accesses operations happen in full
-> cachelines.  In practice, writing a "byte" of memory usually reads a 64
-> byte cacheline of memory, modifies it, then writes the whole line back.
-> Those operations do not trigger this problem.
-> 
-> This problem is triggered by "partial" writes where a write transaction
-> of less than cacheline lands at the memory controller.  The CPU does
-> these via non-temporal write instructions (like MOVNTI), or through
-> UC/WC memory mappings.  The issue can also be triggered away from the
-> CPU by devices doing partial writes via DMA.
-> 
-> == Problem ==
-> 
-> A partial write to a TDX private memory cacheline will silently "poison"
-> the line.  Subsequent reads will consume the poison and generate a
-> machine check.  According to the TDX hardware spec, neither of these
-> things should have happened.
-> 
-> To add insult to injury, the Linux machine code will present these as a
-> literal "Hardware error" when they were, in fact, a software-triggered
-> issue.
-> 
-> == Solution ==
-> 
-> In the end, this issue is hard to trigger.  Rather than do something
-> rash (and incomplete) like unmap TDX private memory from the direct map,
-> improve the machine check handler.
-> 
-> Currently, the #MC handler doesn't distinguish whether the memory is
-> TDX private memory or not but just dump, for instance, below message:
-> 
->  [...] mce: [Hardware Error]: CPU 147: Machine Check Exception: f Bank 1: bd80000000100134
->  [...] mce: [Hardware Error]: RIP 10:<ffffffffadb69870> {__tlb_remove_page_size+0x10/0xa0}
->  	...
->  [...] mce: [Hardware Error]: Run the above through 'mcelog --ascii'
->  [...] mce: [Hardware Error]: Machine check: Data load in unrecoverable area of kernel
->  [...] Kernel panic - not syncing: Fatal local machine check
-> 
-> Which says "Hardware Error" and "Data load in unrecoverable area of
-> kernel".
-> 
-> Ideally, it's better for the log to say "software bug around TDX private
-> memory" instead of "Hardware Error".  But in reality the real hardware
-> memory error can happen, and sadly such software-triggered #MC cannot be
-> distinguished from the real hardware error.  Also, the error message is
-> used by userspace tool 'mcelog' to parse, so changing the output may
-> break userspace.
-> 
-> So keep the "Hardware Error".  The "Data load in unrecoverable area of
-> kernel" is also helpful, so keep it too.
-> 
-> Instead of modifying above error log, improve the error log by printing
-> additional TDX related message to make the log like:
-> 
->   ...
->  [...] mce: [Hardware Error]: Machine check: Data load in unrecoverable area of kernel
->  [...] mce: [Hardware Error]: Machine Check: Memory error from TDX private memory. May be result of CPU erratum.
+On Fri, Jun 09, 2023 at 05:28:06PM +0530, Sai Krishna wrote:
+> @@ -428,7 +427,7 @@ static int ptp_probe(struct pci_dev *pdev,
+>  	return 0;
+>  
+>  error_free:
+> -	devm_kfree(dev, ptp);
+> +	kfree(ptp);
 
-The message mentions one part of issue -- CPU erratum -- but misses the
-other required part -- kernel bug that makes kernel access the memory it
-not suppose to.
+Yeah.  It's strange any time we call devm_kfree()...  So there is
+something here which I have not understood.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+>  
+>  error:
+>  	/* For `ptp_get()` we need to differentiate between the case
+
+This probe function is super weird how it returns success on the failure
+path.  One concern, I had initially was that if anything returns
+-EPROBE_DEFER then we cannot recover.  That's not possible in the
+current code, but it makes me itch...  But here is a different crash.
+
+drivers/net/ethernet/marvell/octeontx2/af/ptp.c
+   432  error:
+   433          /* For `ptp_get()` we need to differentiate between the case
+   434           * when the core has not tried to probe this device and the case when
+   435           * the probe failed.  In the later case we pretend that the
+   436           * initialization was successful and keep the error in
+   437           * `dev->driver_data`.
+   438           */
+   439          pci_set_drvdata(pdev, ERR_PTR(err));
+   440          if (!first_ptp_block)
+   441                  first_ptp_block = ERR_PTR(err);
+
+first_ptp_block is NULL for unprobed, an error pointer for probe
+failure, or valid pointer.
+
+   442  
+   443          return 0;
+   444  }
+
+drivers/net/ethernet/marvell/octeontx2/af/ptp.c
+   201  struct ptp *ptp_get(void)
+   202  {
+   203          struct ptp *ptp = first_ptp_block;
+                            ^^^^^^^^^^^^^^^^^^^^^^
+
+   204  
+   205          /* Check PTP block is present in hardware */
+   206          if (!pci_dev_present(ptp_id_table))
+   207                  return ERR_PTR(-ENODEV);
+   208          /* Check driver is bound to PTP block */
+   209          if (!ptp)
+   210                  ptp = ERR_PTR(-EPROBE_DEFER);
+   211          else
+   212                  pci_dev_get(ptp->pdev);
+                                    ^^^^^^^^^
+if first_ptp_block is an error pointer this will Oops.
+
+   213  
+   214          return ptp;
+   215  }
+
+regards,
+dan carpenter
