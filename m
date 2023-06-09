@@ -2,76 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF54C72A4B5
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 22:26:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBC3F72A4B8
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 22:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbjFIU0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 16:26:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39262 "EHLO
+        id S231990AbjFIU1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 16:27:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbjFIU0e (ORCPT
+        with ESMTP id S231981AbjFIU1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 16:26:34 -0400
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2817FE47
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 13:26:24 -0700 (PDT)
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-62885649f6eso17028716d6.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 13:26:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1686342083; x=1688934083;
-        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=UO5tpUCHsQuF8yzD6o6Ld4Ywq/RClyFinBDy8ZYQoh0=;
-        b=X6qg4hwwtUck9PoKuGXCGSPvJ7EeKDPIcYKtFzTRKdgE/aRpcM57RWO7JRr7QS+fw0
-         0G1JM3hCWQvDfJWgg4XW6ECd5Rps7Y7NN4yJWI0gK64wv5NqWPDExA+rd+sZq0Zv24Wf
-         f4XnLCY+lOtNdKrWthn+dcGCUcE+7X3u7vyL4=
+        Fri, 9 Jun 2023 16:27:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0913C22
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 13:25:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686342350;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=S1ei889BxGPPugsDqX1JfgeIs0UpcqQ4un9cGqylfqQ=;
+        b=G1FHuL3/Tate6Yn9/VZGAF8L+AXWs8DaSI9zSUs7C2H6dRWxOcbX2Ve17uP158lPBc5RtL
+        eE7/oT81yLxYM2dCX05L4Z5xpbjfD5dNBfKTweJ0WPygIwM9AoIm5HWYyQjgmfhwVRIYn0
+        oIyjgVkoX7EpsAfGbaOrr6w/2xzyqjI=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-588-unmPAmoINrKX-C1KCMGQLg-1; Fri, 09 Jun 2023 16:25:46 -0400
+X-MC-Unique: unmPAmoINrKX-C1KCMGQLg-1
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-75b147a2548so46707285a.1
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 13:25:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686342083; x=1688934083;
-        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20221208; t=1686342346; x=1688934346;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UO5tpUCHsQuF8yzD6o6Ld4Ywq/RClyFinBDy8ZYQoh0=;
-        b=brk9RxwUw6C051u2HniKUxxxrfVoFNnHMXCpaj3jMEXraM6uOb1SAMz52g6ieeWIsW
-         vIVcidp0LD3nXEXFD5xZDuJpAkiHbP2z2V4vfhae7iW6jkh2cvEwTQltWFMlPH7lg2ks
-         R2wJcXtVvE9zycNsRoZST2AKsb1OpE65Dann30D7S5pTA1LfTitCyk0pysUVAjbvu7xs
-         KnmSD3KNa6l5LuhUWLe2H8iHPjRvgNVUsqIM6CjoaDBTiMGwd7NYH/PxgrTsOUz7oav0
-         bpLqZOJJfblbj1k/kORuDZpoTQWexioihnJ3XKuVJJC3J1pflBpuF3yUREGea/Cpqv/3
-         HFyQ==
-X-Gm-Message-State: AC+VfDzounu2vm8VKmwNqLDVRh6o4e1URe8OL5WwAIVbCcJwBb4ioc6j
-        MQ4QWMjtuvPBklrWhPQ8r/2/DQ==
-X-Google-Smtp-Source: ACHHUZ56EEBuTxoGCsiJc0G+d3B238VP+wSSqRte3Hw7T9qUhX2s1FP17OHOOKgjpBOk8lFetUA67w==
-X-Received: by 2002:a05:6214:d4a:b0:62b:3d45:7b7f with SMTP id 10-20020a0562140d4a00b0062b3d457b7fmr3082556qvr.44.1686342083248;
-        Fri, 09 Jun 2023 13:21:23 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id k13-20020a0cf58d000000b0061b731bf3c2sm1391560qvm.80.2023.06.09.13.21.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Jun 2023 13:21:22 -0700 (PDT)
-Message-ID: <41bc6765-db54-8072-7dd7-7884f8ac6790@broadcom.com>
-Date:   Fri, 9 Jun 2023 13:21:10 -0700
+        bh=S1ei889BxGPPugsDqX1JfgeIs0UpcqQ4un9cGqylfqQ=;
+        b=cYpJe1KoXtSiAMNlbCly2Sf9xZFfuEhZdjoXF8kGMRhenqzg5o3ZeBvf8IzLoAEPzF
+         XKAJ/br39ApWTmzdd4CLlwZQx1brnfKFFzbUSW3YwnwVdYBlLSKaQdOcd67W9piSvFfC
+         6eudoAgwvkgft6F8p7EJyZkpzk0Or1e3+cQOhGFYGN3/LIcpdkcJHSkxI9qHLx0q4VbD
+         b02Bn+JEuo6Ok/MdqLbWH4V3xUbM348pio6tn2jMdi6SJJIP6RI5UN86k7eZisxBXkE1
+         XlJvncdbTHM3mZkJSZSqs0pngaDSwkdxqpByRK7SqO7mx5SfhZLC4Q0EQCh6pWQ1zLEw
+         TriA==
+X-Gm-Message-State: AC+VfDz2irA+dL8UP+2qY6sA2ukYzYipUgjeVG/txgaeESxHqVcekzIz
+        Mdwccg7JhDeHxD/IU5c1dqt2a2tMD0X7YYMnEDNlhwWJoEFAPLmjV3Z/K+ZYr4cfGwOFI3fzJq2
+        2DweMU2AbMZOr++ttyNTDWgvX
+X-Received: by 2002:a05:620a:d96:b0:75e:da20:a10e with SMTP id q22-20020a05620a0d9600b0075eda20a10emr2473290qkl.3.1686342345880;
+        Fri, 09 Jun 2023 13:25:45 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5NKhOjdxMH+oNrmbK71omapsMn9RTBUV3pN0ZRaFOZ1AeSTm4AYfnaMXEmeLcoFLzuDlgt+w==
+X-Received: by 2002:a05:620a:d96:b0:75e:da20:a10e with SMTP id q22-20020a05620a0d9600b0075eda20a10emr2473280qkl.3.1686342345638;
+        Fri, 09 Jun 2023 13:25:45 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id b10-20020a05620a118a00b0075cc5e34e48sm1246914qkk.131.2023.06.09.13.25.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 13:25:45 -0700 (PDT)
+Date:   Fri, 9 Jun 2023 16:25:42 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
+        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
+        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
+        apopple@nvidia.com, ying.huang@intel.com, david@redhat.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        viro@zeniv.linux.org.uk, brauner@kernel.org,
+        pasha.tatashin@soleen.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v2 2/6] mm: handle swap page faults under VMA lock if
+ page is uncontended
+Message-ID: <ZIOKxoTlRzWQtQQR@x1n>
+References: <20230609005158.2421285-1-surenb@google.com>
+ <20230609005158.2421285-3-surenb@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2] PCI: iproc: Use of_property_read_bool() for boolean
- properties
-To:     Rob Herring <robh@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>
-Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20230609193326.1963542-1-robh@kernel.org>
-From:   Florian Fainelli <florian.fainelli@broadcom.com>
-In-Reply-To: <20230609193326.1963542-1-robh@kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000dc45cc05fdb81c2b"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230609005158.2421285-3-surenb@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,103 +90,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000dc45cc05fdb81c2b
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-
-On 6/9/23 12:33, Rob Herring wrote:
-> It is preferred to use typed property access functions (i.e.
-> of_property_read_<type> functions) rather than low-level
-> of_get_property/of_find_property functions for reading properties.
-> Convert reading boolean properties to of_property_read_bool().
+On Thu, Jun 08, 2023 at 05:51:54PM -0700, Suren Baghdasaryan wrote:
+> When page fault is handled under VMA lock protection, all swap page
+> faults are retried with mmap_lock because folio_lock_or_retry
+> implementation has to drop and reacquire mmap_lock if folio could
+> not be immediately locked.
+> Instead of retrying all swapped page faults, retry only when folio
+> locking fails.
+> Note that the only time do_swap_page calls synchronous swap_readpage
+> is when SWP_SYNCHRONOUS_IO is set, which is only set for
+> QUEUE_FLAG_SYNCHRONOUS devices: brd, zram and nvdimms (both btt and
+> pmem). Therefore we don't sleep in this path, and there's no need to
+> drop the mmap or per-vma lock.
+> Drivers implementing ops->migrate_to_ram might still rely on mmap_lock,
+> therefore fall back to mmap_lock in this case.
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> ---
+>  mm/filemap.c |  6 ++++++
+>  mm/memory.c  | 14 +++++++++-----
+>  2 files changed, 15 insertions(+), 5 deletions(-)
+> 
+> diff --git a/mm/filemap.c b/mm/filemap.c
+> index b4c9bd368b7e..7cb0a3776a07 100644
+> --- a/mm/filemap.c
+> +++ b/mm/filemap.c
+> @@ -1706,6 +1706,8 @@ static int __folio_lock_async(struct folio *folio, struct wait_page_queue *wait)
+>   *     mmap_lock has been released (mmap_read_unlock(), unless flags had both
+>   *     FAULT_FLAG_ALLOW_RETRY and FAULT_FLAG_RETRY_NOWAIT set, in
+>   *     which case mmap_lock is still held.
+> + *     If flags had FAULT_FLAG_VMA_LOCK set, meaning the operation is performed
+> + *     with VMA lock only, the VMA lock is still held.
+>   *
+>   * If neither ALLOW_RETRY nor KILLABLE are set, will always return true
+>   * with the folio locked and the mmap_lock unperturbed.
+> @@ -1713,6 +1715,10 @@ static int __folio_lock_async(struct folio *folio, struct wait_page_queue *wait)
+>  bool __folio_lock_or_retry(struct folio *folio, struct mm_struct *mm,
+>  			 unsigned int flags)
+>  {
+> +	/* Can't do this if not holding mmap_lock */
+> +	if (flags & FAULT_FLAG_VMA_LOCK)
+> +		return false;
 
-Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+If here what we need is the page lock, can we just conditionally release
+either mmap lock or vma lock depending on FAULT_FLAG_VMA_LOCK?
+
 -- 
-Florian
+Peter Xu
 
-
---000000000000dc45cc05fdb81c2b
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIQeQYJKoZIhvcNAQcCoIIQajCCEGYCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-gg3QMIIFDTCCA/WgAwIBAgIQeEqpED+lv77edQixNJMdADANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA5MTYwMDAwMDBaFw0yODA5MTYwMDAwMDBaMFsxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBS
-MyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
-vbCmXCcsbZ/a0fRIQMBxp4gJnnyeneFYpEtNydrZZ+GeKSMdHiDgXD1UnRSIudKo+moQ6YlCOu4t
-rVWO/EiXfYnK7zeop26ry1RpKtogB7/O115zultAz64ydQYLe+a1e/czkALg3sgTcOOcFZTXk38e
-aqsXsipoX1vsNurqPtnC27TWsA7pk4uKXscFjkeUE8JZu9BDKaswZygxBOPBQBwrA5+20Wxlk6k1
-e6EKaaNaNZUy30q3ArEf30ZDpXyfCtiXnupjSK8WU2cK4qsEtj09JS4+mhi0CTCrCnXAzum3tgcH
-cHRg0prcSzzEUDQWoFxyuqwiwhHu3sPQNmFOMwIDAQABo4IB2jCCAdYwDgYDVR0PAQH/BAQDAgGG
-MGAGA1UdJQRZMFcGCCsGAQUFBwMCBggrBgEFBQcDBAYKKwYBBAGCNxQCAgYKKwYBBAGCNwoDBAYJ
-KwYBBAGCNxUGBgorBgEEAYI3CgMMBggrBgEFBQcDBwYIKwYBBQUHAxEwEgYDVR0TAQH/BAgwBgEB
-/wIBADAdBgNVHQ4EFgQUljPR5lgXWzR1ioFWZNW+SN6hj88wHwYDVR0jBBgwFoAUj/BLf6guRSSu
-TVD6Y5qL3uLdG7wwegYIKwYBBQUHAQEEbjBsMC0GCCsGAQUFBzABhiFodHRwOi8vb2NzcC5nbG9i
-YWxzaWduLmNvbS9yb290cjMwOwYIKwYBBQUHMAKGL2h0dHA6Ly9zZWN1cmUuZ2xvYmFsc2lnbi5j
-b20vY2FjZXJ0L3Jvb3QtcjMuY3J0MDYGA1UdHwQvMC0wK6ApoCeGJWh0dHA6Ly9jcmwuZ2xvYmFs
-c2lnbi5jb20vcm9vdC1yMy5jcmwwWgYDVR0gBFMwUTALBgkrBgEEAaAyASgwQgYKKwYBBAGgMgEo
-CjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAN
-BgkqhkiG9w0BAQsFAAOCAQEAdAXk/XCnDeAOd9nNEUvWPxblOQ/5o/q6OIeTYvoEvUUi2qHUOtbf
-jBGdTptFsXXe4RgjVF9b6DuizgYfy+cILmvi5hfk3Iq8MAZsgtW+A/otQsJvK2wRatLE61RbzkX8
-9/OXEZ1zT7t/q2RiJqzpvV8NChxIj+P7WTtepPm9AIj0Keue+gS2qvzAZAY34ZZeRHgA7g5O4TPJ
-/oTd+4rgiU++wLDlcZYd/slFkaT3xg4qWDepEMjT4T1qFOQIL+ijUArYS4owpPg9NISTKa1qqKWJ
-jFoyms0d0GwOniIIbBvhI2MJ7BSY9MYtWVT5jJO3tsVHwj4cp92CSFuGwunFMzCCA18wggJHoAMC
-AQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUAMEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9v
-dCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWduMRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5
-MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEgMB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENB
-IC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzARBgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqG
-SIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0E
-XyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuul9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+J
-J5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJpij2aTv2y8gokeWdimFXN6x0FNx04Druci8u
-nPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTv
-riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
-QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
-UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
-M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
-Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
-14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
-a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
-XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
-RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
-UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
-MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
-BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
-9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
-AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
-UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
-KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
-nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
-Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
-VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
-ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
-CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
-MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
-d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
-hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
-bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
-BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
-KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
-kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
-2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
-3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
-NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
-AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
-LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEICDIv0N39E6HYhpc
-qCxn/ZoyiwHFanF7ClVNWg1y1mZPMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTIzMDYwOTIwMjEyM1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
-AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQDsZvd3VdMm2dNnrkaRhGlB+TQAoMQMIlxo
-oTo5/SKDFR8MWPLqEkMHfmymNaeDNCO1S22PKX6D2gqfvHHq7oZso+HIqWOnU2Ec83yHzAe8MXIf
-TE1Z8qgxcSmyntCmCUWwuWYMXFc4xcKklIPjoDYb/eP+Iu8tishFzYr/wcrICgiWhULKIaNRHGJc
-KzfyInBdclFdx6Oh677wutkRvqhd2mArTF8QMj9mvrvVTfR3SH1QK6+pfVin+25k5WsNORJtdxTD
-u+hBSqCWf+H0mLh47VOZA2z+AX34XZBgJyvfOl327y4rrWEibRnOzY3pbCY97eYbFQbA9Pljze0W
-c4uA
---000000000000dc45cc05fdb81c2b--
