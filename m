@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2D8D729879
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 13:49:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 108F772987E
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 13:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238762AbjFILtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 07:49:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41130 "EHLO
+        id S239188AbjFILuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 07:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbjFILth (ORCPT
+        with ESMTP id S238912AbjFILuD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 07:49:37 -0400
+        Fri, 9 Jun 2023 07:50:03 -0400
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190651A2;
-        Fri,  9 Jun 2023 04:49:36 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 359B76Hr007692;
-        Fri, 9 Jun 2023 11:49:30 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6173D3590;
+        Fri,  9 Jun 2023 04:50:02 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3599uOuo010046;
+        Fri, 9 Jun 2023 11:49:59 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
  mime-version : subject : to : cc : references : from : in-reply-to :
  content-type : content-transfer-encoding; s=qcppdkim1;
- bh=9iNEzxZcA2n7WfjPAMtIQuGjmo7X+UhXwONmGLbWsWo=;
- b=htTeTUFkKE04vFXgYrcK23c0FP7bhGOm9a5ZtZZao+aPVbJ492nuHBMSZzP1hCf4/obJ
- 70RTQ4cBoi1QyO/0C5SdK02xUK++p5WcT3gON9vACBIVk/LxIqWw1zWt7MLoKqiAUrCp
- BW1bUciH1VKLpstTho0xEYDyVNtdBZFM1/oe40AXtNHWhUNrmzSroTZ5O48brZeBk1HT
- nPw07obTI4dPG42vqOaDziqB77nvO/eP0HU7FxOuiAezpkiLZhe1xoEUSARtbC04ytV/
- gxbnuyX9nieFDRMuLMwPzeTa7/5fIcGuVHE6F+45EMJbrFaheTxJQOHSY3yWaI5tZGxU Vw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r3t70h0en-1
+ bh=Jga2722Mi2DM4rq7cV17hSX/VBsVj0rZDjjBtMwRB1s=;
+ b=d/iK/QloF2yGnGvjNgV8rArUMXCFkUCChlFOUay0PTrXW9bKXYaW2UNIPVbK7wUu+Eup
+ a+TZvCoZ/seXEanaz0ca8GVcwuvCcBXLOt1+6R9I9hdbVV1jIQa1x4vPWX3Jh9MADulf
+ Rc8SBWwX0Zv4Yc3Dakk66OIezhq05eGFrP0YKSuIy/mNonnX6JSP9OIy9ZHEWfAtj/wL
+ H+77sT2NiAKjRgEQ2H5+RjWNYdFsC6FxmFILS+j6Wdqrk9eYhlJYe3693oxRzDmm5yJ2
+ bm265Rt4bdneHUJlgGkJ8aVWEluLxkGYhDlz10CBu90v6zK+xan0m87LR9qhfKOr9kC5 JA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r3m5f1kjs-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Jun 2023 11:49:30 +0000
+        Fri, 09 Jun 2023 11:49:58 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 359BnTM1002529
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 359Bnwcq012734
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 9 Jun 2023 11:49:29 GMT
+        Fri, 9 Jun 2023 11:49:58 GMT
 Received: from [10.218.22.90] (10.80.80.8) by nalasex01a.na.qualcomm.com
  (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 9 Jun 2023
- 04:49:23 -0700
-Message-ID: <e9781cda-8eb4-99e0-8ed7-09c2534638e0@quicinc.com>
-Date:   Fri, 9 Jun 2023 17:19:19 +0530
+ 04:49:52 -0700
+Message-ID: <cf60ea04-057b-7856-3a30-775051cefa26@quicinc.com>
+Date:   Fri, 9 Jun 2023 17:19:49 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.1
-Subject: Re: [PATCH V3 2/5] clk: qcom: Remove support to set CAL_L field in
- lucid evo pll configure
+Subject: Re: [PATCH V3 3/5] clk: qcom: camcc-sm8550: Add camera clock
+ controller driver for SM8550
 To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Andy Gross <agross@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
@@ -63,10 +63,10 @@ CC:     Bjorn Andersson <andersson@kernel.org>,
         Imran Shaik <quic_imrashai@quicinc.com>,
         Ajit Pandey <quic_ajipan@quicinc.com>
 References: <20230601143430.5595-1-quic_jkona@quicinc.com>
- <20230601143430.5595-3-quic_jkona@quicinc.com>
- <1d29bc3f-12db-a676-56f8-b8c1a09063dc@linaro.org>
+ <20230601143430.5595-4-quic_jkona@quicinc.com>
+ <95bd4c66-08c6-15f3-db6c-97f820fe5517@linaro.org>
 From:   Jagadeesh Kona <quic_jkona@quicinc.com>
-In-Reply-To: <1d29bc3f-12db-a676-56f8-b8c1a09063dc@linaro.org>
+In-Reply-To: <95bd4c66-08c6-15f3-db6c-97f820fe5517@linaro.org>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Originating-IP: [10.80.80.8]
@@ -74,15 +74,15 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: njf2o6aYKAmo_2LT01s3Nfo0-MesG3mh
-X-Proofpoint-ORIG-GUID: njf2o6aYKAmo_2LT01s3Nfo0-MesG3mh
+X-Proofpoint-ORIG-GUID: galVBNoqHJtWC6UIJtQ0bOi3KHPmcHjI
+X-Proofpoint-GUID: galVBNoqHJtWC6UIJtQ0bOi3KHPmcHjI
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
  definitions=2023-06-09_08,2023-06-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- lowpriorityscore=0 mlxscore=0 spamscore=0 clxscore=1015 suspectscore=0
- bulkscore=0 malwarescore=0 priorityscore=1501 mlxlogscore=999 phishscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 mlxscore=0 impostorscore=0 bulkscore=0 adultscore=0
+ phishscore=0 clxscore=1015 priorityscore=1501 mlxlogscore=971
+ malwarescore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2305260000 definitions=main-2306090100
 X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
@@ -98,66 +98,64 @@ Hi Dmitry,
 
 Thanks for your review!
 
-On 6/1/2023 8:16 PM, Dmitry Baryshkov wrote:
+On 6/1/2023 8:21 PM, Dmitry Baryshkov wrote:
 > On 01/06/2023 17:34, Jagadeesh Kona wrote:
->> For lucid evo and ole pll's the CAL_L, RINGOSC_CAL_L and L_VAL are
->> part of the same register, hence update the l configuration value
->> to include these fields across all the chipsets.
+>> Add support for the camera clock controller for camera clients to be
+>> able to request for camcc clocks on SM8550 platform.
 >>
->> Since the l configuration value now includes both L and CAL_L fields,
->> there is no need to explicitly set CAL_L field again in lucid evo pll
->> configure, Hence remove support to explicity set CAL_L field for evo pll.
->>
->> Fixes: 260e36606a03 ("clk: qcom: clk-alpha-pll: add Lucid EVO PLL 
->> configuration interfaces")
+>> Co-developed-by: Taniya Das <quic_tdas@quicinc.com>
 >> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
 >> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
 >> ---
 >> Changes since V2:
->>   - Squashed update L val and remove explicit cal_l configuration to 
->> single patch
->>   - Updated L configuration for gpucc-sm8450 as well which was merged 
->> recently
+>>   - No changes
 >> Changes since V1:
->>   - Newly added.
+>>   - Sorted the PLL names in proper order
+>>   - Updated all PLL configurations to lower case hex
+>>   - Reused evo ops instead of adding new ops for ole pll
+>>   - Moved few clocks to separate patch to fix patch too long error
 >>
->>   drivers/clk/qcom/camcc-sm8450.c  | 24 ++++++++++++++++--------
->>   drivers/clk/qcom/clk-alpha-pll.c |  6 +-----
->>   drivers/clk/qcom/dispcc-sm8450.c |  6 ++++--
->>   drivers/clk/qcom/dispcc-sm8550.c |  6 ++++--
->>   drivers/clk/qcom/gpucc-sa8775p.c |  6 ++++--
->>   drivers/clk/qcom/gpucc-sm8450.c  |  6 ++++--
->>   6 files changed, 33 insertions(+), 21 deletions(-)
-> 
-> I'd say, this is still not a correct solution from my point of view. A 
-> correct solution would be to follow the existing code and use constants 
-> for the constant values (of CAL_L, and RINGOSC_CAL_L).
-> 
-
-Sure, will keep the existing code as is and will remove this patch in 
-the next series.
-
+>>   drivers/clk/qcom/Kconfig        |    7 +
+>>   drivers/clk/qcom/Makefile       |    1 +
+>>   drivers/clk/qcom/camcc-sm8550.c | 3405 +++++++++++++++++++++++++++++++
+>>   3 files changed, 3413 insertions(+)
+>>   create mode 100644 drivers/clk/qcom/camcc-sm8550.c
 >>
->> diff --git a/drivers/clk/qcom/camcc-sm8450.c 
->> b/drivers/clk/qcom/camcc-sm8450.c
->> index 51338a2884d2..6a5a08f88598 100644
->> --- a/drivers/clk/qcom/camcc-sm8450.c
->> +++ b/drivers/clk/qcom/camcc-sm8450.c
->> @@ -57,7 +57,8 @@ static const struct pll_vco rivian_evo_vco[] = {
->>   static const struct clk_parent_data pll_parent_data_tcxo = { .index 
->> = DT_BI_TCXO };
->>   static const struct alpha_pll_config cam_cc_pll0_config = {
->> -    .l = 0x3e,
->> +    /* .l includes CAL_L_VAL, L_VAL fields */
->> +    .l = 0x0044003e,
->>       .alpha = 0x8000,
->>       .config_ctl_val = 0x20485699,
->>       .config_ctl_hi_val = 0x00182261,
->> @@ -128,7 +129,8 @@ static struct clk_alpha_pll_postdiv 
->> cam_cc_pll0_out_odd = {
->>   };
+> 
+> [skipped]
+> 
+>> +
+>> +static struct platform_driver cam_cc_sm8550_driver = {
+>> +    .probe = cam_cc_sm8550_probe,
+>> +    .driver = {
+>> +        .name = "cam_cc-sm8550",
+>> +        .of_match_table = cam_cc_sm8550_match_table,
+>> +    },
+>> +};
+>> +
+>> +static int __init cam_cc_sm8550_init(void)
+>> +{
+>> +    return platform_driver_register(&cam_cc_sm8550_driver);
+>> +}
+>> +subsys_initcall(cam_cc_sm8550_init);
+>> +
+>> +static void __exit cam_cc_sm8550_exit(void)
+>> +{
+>> +    platform_driver_unregister(&cam_cc_sm8550_driver);
+>> +}
+>> +module_exit(cam_cc_sm8550_exit);
+> 
+> Please convert this to use module_platform_driver
+> 
 
-[skipped]
+We still have to evaluate if module_platform_driver() works for us in 
+all scenarios. We will post a cleanup patch once we conclude on 
+module_platform_driver().
+
+>> +
+>> +MODULE_DESCRIPTION("QTI CAMCC SM8550 Driver");
+>> +MODULE_LICENSE("GPL");
+> 
 
 Thanks & Regards,
 Jagadeesh
