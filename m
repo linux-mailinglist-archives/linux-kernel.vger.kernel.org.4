@@ -2,86 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18BC4729173
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:44:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 880D8729174
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238998AbjFIHn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 03:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52814 "EHLO
+        id S238968AbjFIHoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 03:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239093AbjFIHno (ORCPT
+        with ESMTP id S239090AbjFIHoN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 03:43:44 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7222697
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 00:43:37 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-569386b7861so38427937b3.0
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 00:43:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686296616; x=1688888616;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n22j43EkOQDg32COrHKfr3M00AZ/0ZWY6HKFgde4cL8=;
-        b=xigE4Ds2RloULZ1O7n6QdIj7g5n2MHKcla3NMyQcPNgn5oDy4jmszVsyLksPsHVQ2A
-         pdTgGqULLsN/GWX785OV8mjaD9L5iIIbCf1o2AOgNYz/kpjdiquJcXhSBq/KlSlfCHMD
-         FVE+ue6kL2EzWZnfjSkN1Zh0QzWQQuBmr30bqi9Sv+tSN7kzZl8ekeDQkNacQYhA6IKO
-         0rHZuBXwAke6tqomTNYQsdThwDv1LBeb1x7hDit7QKtvi6nwfoc3BAYGUrVXwg9QNVwU
-         6vYIEMjYU17LaHu0SAsyVKCP85LRm6VlMrbsXuCaVYuwSDzadNNSdruuUbIcUxM0FPoc
-         rlPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686296616; x=1688888616;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n22j43EkOQDg32COrHKfr3M00AZ/0ZWY6HKFgde4cL8=;
-        b=UYIN89IV/YWVGPhEPTKd+1XzpegxgLvObqa1hBdTs1FLoskGP4YQjDmDaPdeyx2EnM
-         fEh8MAmhd8qPXgRPivcyHYw0T2kl+hVGH9lUmSfkvcQzIyYkz2XW5D1Uwqi1fdRRTZb0
-         d/heLDL1q9/LaA0cexhPSBXb0byXVscsiKW/4DRDYcBZoKzAOAHQyCmXDEEkR56KH0dg
-         wRzi8YMgtBiPoeviUS+DxdaHyms6iSJAVwpmcVomfpIM841FieLTsOMiGMmbF9GUVzFf
-         jsTx8GIhOZBPK2GNJ4O96EszcGYjF7n76t7a4NGG4N0gm+esXFoyfl0vEcOZB7nGL+Ml
-         /+Dw==
-X-Gm-Message-State: AC+VfDzATJgytRMwXn3lfqkpaxWfMI9Q8QN9qhN1s1lyoGNXJQZPN7Uo
-        ihafNPgISrF+S/hWS05rJxHaeJY1YK/L+5fTZV5ERQ==
-X-Google-Smtp-Source: ACHHUZ4eBEjlmR18fNbl1nW/1npGfZv+hNlwu8HcpRXvf1ldNl8UG0FvJt/6U1xP960RjSZ6O50bzJ9dAxYnYf2TcFA=
-X-Received: by 2002:a25:11c6:0:b0:bac:ada7:140e with SMTP id
- 189-20020a2511c6000000b00bacada7140emr1128433ybr.9.1686296616503; Fri, 09 Jun
- 2023 00:43:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230607095829.1345-1-jiasheng@iscas.ac.cn>
-In-Reply-To: <20230607095829.1345-1-jiasheng@iscas.ac.cn>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 9 Jun 2023 09:43:25 +0200
-Message-ID: <CACRpkdYtQVcR_uw=wqeVtF+emDjS6rbFqB0RWPvNm8V7gB74Pw@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: npcm7xx: Add missing check for ioremap
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 9 Jun 2023 03:44:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4541FEB
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 00:44:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9ED5461FC5
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 07:44:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF07FC433D2;
+        Fri,  9 Jun 2023 07:44:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686296652;
+        bh=9W3yv9+UNkGc7TPUGVsDpkL0Oq0BCL1BMC/LGHkAQrI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GWJjBNaxOl0nAfFeFajFeE+8px32MH9qlNYNJPa9GWHTP1w7IYEPDyyKS3sfc2kV1
+         f7OQFMjKASqcumwyhqvPNb+C8ByDmpWYZFMmZK8TGf7dr6EfX3uEd124xIbNuXkiJI
+         G2h01u18NoVzmi74HN/UroV95kF4izIuboveyPdrPFAACilc530XHZC75LaBfkX2Fn
+         s3lPY38SZWNv3MVexW7Szg6amonZxi9zZCHZPcNEU9jDCIqK+/KbpNs73Jz67+9N5v
+         LsijJM77KHf0Ou5eTNEobtv8iO5WnjnthBOrTCMoNo77acDil0Dab5jWyyHDpkECGz
+         FOiFwh75T8Iig==
+Received: from 152.5.30.93.rev.sfr.net ([93.30.5.152] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1q7Wn3-0040E7-Je;
+        Fri, 09 Jun 2023 08:44:09 +0100
+Date:   Fri, 09 Jun 2023 08:44:07 +0100
+Message-ID: <878rctnkqg.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Chun-Tse Shao <ctshao@google.com>
+Cc:     linux-kernel@vger.kernel.org, yuzhao@google.com,
+        oliver.upton@linux.dev, James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Ben Gardon <bgardon@google.com>,
+        Gavin Shan <gshan@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+Subject: Re: [PATCH v1 3/3] KVM: arm64: Using rcu_read_lock() for kvm_pgtable_stage2_mkyoung()
+In-Reply-To: <20230608220558.39094-4-ctshao@google.com>
+References: <20230608220558.39094-1-ctshao@google.com>
+        <20230608220558.39094-4-ctshao@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 93.30.5.152
+X-SA-Exim-Rcpt-To: ctshao@google.com, linux-kernel@vger.kernel.org, yuzhao@google.com, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org, bgardon@google.com, gshan@redhat.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 7, 2023 at 11:58=E2=80=AFAM Jiasheng Jiang <jiasheng@iscas.ac.c=
-n> wrote:
+On Thu, 08 Jun 2023 23:05:41 +0100,
+Chun-Tse Shao <ctshao@google.com> wrote:
+> 
+> Access bit is RCU safe and can be set without taking kvm->mmu_lock().
 
-> Add check for ioremap() and return the error if it fails in order to
-> guarantee the success of ioremap().
->
-> Fixes: 3b588e43ee5c ("pinctrl: nuvoton: add NPCM7xx pinctrl and GPIO driv=
-er")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Please explain why. What happens when the page tables are *not* RCU
+controlled, such as in the pKVM case?
 
-Patch applied as nonurgent fix.
+> Replacing existing kvm->mmu_lock() with rcu_read_lock() for better
+> performance.
 
-Yours,
-Linus Walleij
+Please define "better performance", quote workloads, figures, HW setup
+and point to a reproducer. Please add a cover letter to your patch
+series explaining the context this happens in.
+
+Also, I'm getting increasingly annoyed by the lack of coordination
+between seamingly overlapping patch series (this, Yu's, Anish's and
+Vipin's), all from a single company.
+
+Surely you can talk to each other and devise a coordinated approach?
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
