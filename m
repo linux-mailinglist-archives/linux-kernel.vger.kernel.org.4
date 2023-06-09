@@ -2,424 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF252728FC6
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 08:19:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34BFE728FC9
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 08:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233850AbjFIGSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 02:18:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40762 "EHLO
+        id S237138AbjFIGUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 02:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbjFIGSl (ORCPT
+        with ESMTP id S237714AbjFIGT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 02:18:41 -0400
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2048.outbound.protection.outlook.com [40.107.247.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2D92119;
-        Thu,  8 Jun 2023 23:18:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SNAzJSrNZnTaGC58kOR8aU2qdnLmlUp6gsPhbrpPxqPNJv9bCFI9gmHAFiQZkzU0wqK/5u60B4+ZIDKUgJrhMtnh0AfvwOnUkYb8Kj7uOVQ9RHNdRjIb/cfq5m0NY5xTWa5yfudUxV/5fIaJkgeKocVLlLvtwIKvAdrc1zzYNWNDGJQEsbb+jTzdJngz+yf3WFYVrPuUwTM+nh9/7jnSk4UKr1gY75DUBbPgNRmc3PNuNOo6o/7u3gV3DdWVbLTQTNLp7zY8cs1ksR3qNYcqz9I5Le5SM5WHsD9eAUpGzhpNDc49ZZ2UEvGNsy5WZkpCY3BODfA3Dw69znN8gjV/cQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+8Dxv3MlJC2/xOHTZsehKp4hect5502q/c8yLrUy0ww=;
- b=MNx7qbHgk1prwW/huRQnd4JEh54bd0bRVVTjiVER+P3jxWNrMIqrwcifJVsdpPFRmpq+X89tDZ33tVMmXDUDSLbiN/7Nb95yfruY2aFLeffCi1rZIil6in+zdjrhFXo94dgtGXE0a4ksYLSvFylWQTMI3OjYLpUK/EJIGMxJqLihLAn64VOxBo1WzsIpX4N1sA5vxGyA4B/oaMyuzltxvKoFXna5LCeffCQlaLrU7dQnoWugRUKOQWU73SVoS8pHkXvk0iyTGatMvybEFsRTiKjmoF6uhU8hLkPgR+HXisKk38FWN9TKhuYrCAGz8eGMUcrpwAoeaEj+RJuHdVGbxA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+8Dxv3MlJC2/xOHTZsehKp4hect5502q/c8yLrUy0ww=;
- b=ncEzoWPyBLGZR3y3aHImuPnuhhqgYpW5Ohm/h9QsmJ8ujND/vRC105TVo5vT86+efBWxcx/6WSno/qElPhBSRNp5Hopo1ptU+IDraSXofFYOKmkGB0HJr7Vj/yBYcynRkl8t0U4ZyMUSZZAPXIf4Y0BK20PTeOooMGjsm8puujV1lnMY0MvdlVDbz++VkKW7lp2RoZDlypwxRn9w7yc2BkDw+HoHAGnz8YioCaARqjWhwQnYzF76UAf/VaLayMQsgjIWMWvPEF2F+w17Lrz1AUaN7dVXv6wTiLFvUXk1FnRfL+kqF43nJhayVesiA3I+P/jTQgw2iJiQWhymUZZPPg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-Received: from AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:588::19)
- by GV2PR10MB6236.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:150:7c::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Fri, 9 Jun
- 2023 06:18:36 +0000
-Received: from AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::53c2:174a:8b13:ce94]) by AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::53c2:174a:8b13:ce94%3]) with mapi id 15.20.6455.037; Fri, 9 Jun 2023
- 06:18:36 +0000
-Message-ID: <3eb9bf84-4cf0-6cfe-9ad3-f7eef7d775fb@siemens.com>
-Date:   Fri, 9 Jun 2023 08:18:32 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v5 3/3] efi: Add tee-based EFI variable driver
-Content-Language: en-US
-To:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Sumit Garg <sumit.garg@linaro.org>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-efi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        "Su, Bao Cheng (RC-CN DF FA R&D)" <baocheng.su@siemens.com>
-References: <20230526010748.1222-1-masahisa.kojima@linaro.org>
- <CAC_iWjJJ5E9Q1or5yTiDynzv_WAYH-g+N24aRdu9rvcsbWqnrg@mail.gmail.com>
- <CAFA6WYNFYB1LiOFB_iwTsdD5PmnDdSbtDSH2J4FVFPx3uik8rQ@mail.gmail.com>
- <CAC_iWj+E7-XK6dCeSn4205K0O3EZCLxCaC+adu-14ST6sdudfA@mail.gmail.com>
- <76da826f-b608-6add-5401-6de818b180e3@siemens.com>
- <CAFA6WYPCDRjFzsUMU=SNzEt88nT7Fcm1eOFL8z4HiQO+=2JeVA@mail.gmail.com>
- <cc6bd203-83ea-c247-0986-7fec6f327ee8@siemens.com>
- <CAC_iWjKZNHJxq4VMFnV7oQngwBBCQveh=s34u1LZ59YUqViPbw@mail.gmail.com>
- <CAC_iWjJMv68yLC606SBhMmBYkR4wVC8SvUcPvNM=RX_qL=9Bvw@mail.gmail.com>
- <b9b8c1d3-fc8e-df94-d12b-a9e3debf3418@siemens.com>
- <CAC_iWj+cP4RfDNu_n-ZOp7A62W34drLpPszN_hrkqF_aPTLtMg@mail.gmail.com>
- <871ece13-7d6e-44d4-3bda-317658202f6f@siemens.com>
- <CAC_iWjKgCJWgKU8tC3Nfn-0CgwGhw89B3JpTgsjkjDDOcWZEdw@mail.gmail.com>
- <CAMj1kXGbXdbDr6DbyuziSFuxMgAimjNnkhqy8C-S5AbxdnixuQ@mail.gmail.com>
- <CAC_iWjJ0uw_p9=6C+U+q8BNQgnDBgbDpcu8s8c80oB25i9y77w@mail.gmail.com>
-From:   Jan Kiszka <jan.kiszka@siemens.com>
-In-Reply-To: <CAC_iWjJ0uw_p9=6C+U+q8BNQgnDBgbDpcu8s8c80oB25i9y77w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0118.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a3::13) To AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:20b:588::19)
+        Fri, 9 Jun 2023 02:19:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31201FE6;
+        Thu,  8 Jun 2023 23:19:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39FEC61F4D;
+        Fri,  9 Jun 2023 06:19:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22F74C433D2;
+        Fri,  9 Jun 2023 06:19:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686291594;
+        bh=rYenQZcJ00i17NHmowq8OR4nZ3oLcojXfyMw7FepXj0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tTlMUimOBD6RM7QFRTDo/wB8rf6G9d8Z/wZ42CaPO3yJMTu6HX5uZjb6ghGSdpGSf
+         WH927+9XmwqtpCrBvTzTrerP84U+dPjAPisC1I6jMW6cWRvve+3vMe5Zd9EnGAzzST
+         p7IisharJdAwvl6Fc35v1W+wHzZaS/5EVYeDrt/g=
+Date:   Fri, 9 Jun 2023 08:19:51 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Dennis Zhou <dennis@kernel.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v2] mmc: inline the first mmc_scan() on mmc_start_host()
+Message-ID: <2023060930-uphold-collie-3ec5@gregkh>
+References: <20230329202148.71107-1-dennis@kernel.org>
+ <ZCTOMVjW+pnZVGsQ@snowbird>
+ <CAPDyKFrcdJuyA9B-JDReacT2z1ircDoY4oTXZQ8AVFk6UEFYsw@mail.gmail.com>
+ <ZCclEE6Qw3on7/eO@snowbird>
+ <CAPDyKFqc33gUYXpY==jbNrOiba2_xUYLs-bv0RTYYU5d8T0VBA@mail.gmail.com>
+ <CAPDyKFos3i60U0g0vJstetvLMyouiTpUP8-Jop_LMB9T-ZNU=w@mail.gmail.com>
+ <ZII-vJWGb7F97S_A@V92F7Y9K0C.corp.robot.car>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS4PR10MB6181:EE_|GV2PR10MB6236:EE_
-X-MS-Office365-Filtering-Correlation-Id: 110b7d9b-b0b5-4db8-eded-08db68b15ba3
-X-LD-Processed: 38ae3bcd-9579-4fd4-adda-b42e1495d55a,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0GEcL2qzXIlfqjd1h5Xpadz2vwk0bOmY15fsvWRAJBRt3qUUqxIhU4twY+4ViEbBVR180gj1DvEaO3kQ8+G4xCxzvtykSQ6J+j9eslD0MTh+Jw/zyNcY9XDVF8PHxfEvaNp3DyJFzkSuaELKOOhZYHilx7H2RlqcBOpwxlrnR60jHQ/rqOrJIygj6n3FNOD9WN6LCqkHhys9BkTvHkzYC6DG5pd6iyiAZnsUs88z1tT+QSTMQfZtM3c1xqhIp/wPA35JY9d1otMN/xOySWAW3e3cv2CNDj0owONeEYlDRWXKEkZGFGk5nJTWjNMuyQFEUal49yjqGcSt4qYrvOzFuFfAU74TKR/NMa7+LKFyfu8JaWMIF8UdXQYOiHxOG23OHF+hhV/sfSdVV5bQnnBb6wU7pqs8gSYPfwroBEUiDc5QU8Ou3HoqhzzZuAxmsjjNy9wzekH4Ac4bX1SBaNOv8GPs340iAu+lT7rFgzhbPc5ka8JL4OkJ04jLp8kHj8sPEJWMytKT29zmJY2kxRs50dmt6AvUtC3SGhjQxxYW94LVX+MwiUu5fiXLDzG78WK2CulpLP3IdI3MZFLkixS1y8gtu5kT8asP1xmgTcvPiCyGY+aHWzHGC1N6ZdU/WCnERggfYaJzts5g0ZskuS2PSA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(136003)(366004)(39860400002)(376002)(451199021)(6512007)(107886003)(26005)(6506007)(966005)(53546011)(36756003)(83380400001)(31696002)(86362001)(186003)(82960400001)(38100700002)(2616005)(44832011)(41300700001)(110136005)(316002)(2906002)(30864003)(54906003)(4326008)(478600001)(66476007)(66946007)(8936002)(8676002)(31686004)(7416002)(66899021)(6486002)(5660300002)(66556008)(6666004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZGFsWUNCY0xYK2FmNi95emZXMHo4NFJONFJscTJXaC9EeGdkRXVEc2Y1MHN6?=
- =?utf-8?B?RXJXQW5HTSs3NG1pOTg2ZTNJek5mZ0V3N1lrQnFlNnl4dnhGOUZ5ZVhGS2dp?=
- =?utf-8?B?QldIM1VwUllRTmZON3pOOG9uV0JwZ0pwWnIxVDhOL1VNb2ZSU2dxR2gxU0sr?=
- =?utf-8?B?Q0RjU2tyWUx0UHQvWGFrUTROQUU2dmRUUE5ZbnBJL2tCOEdqUklwdlE2aFBL?=
- =?utf-8?B?cFd1QjhKSHZrVXN0ZXdmU2wrRFpOckVIRXNhQXVITDlRRytQSUFranFJSDZX?=
- =?utf-8?B?VkNnckpkaGtseU56blVCa04vdVZGb0J6emliTzJEczhvVFhSVUsvVzBxN01C?=
- =?utf-8?B?SEd0eTJkdTZKZXhiQ1c0R0w1eEE3MEllWHhndEx6MkYyTlkvVWxwY1g1ci9X?=
- =?utf-8?B?YzBQaHRybEZVZlVQMkpEcnVtTDlGZCsrTFI2UElJdERZOVNaSWlxcENyL3FP?=
- =?utf-8?B?cmFpUTJON1JRNzYvMEh0VnpHVjV3YkYwZ2I4UDkrWU93MmloNkJWTEUzaEor?=
- =?utf-8?B?SkRRQkNxWExSUnkyWWRhaS9Za0tVbkF1Y1JkWVZpMDJlektpSEI3WDMrSWsr?=
- =?utf-8?B?WSs2ZDByYlY4WWh2SENtSFhBdFVSaklJSzFZVFlOWGpwak9ONWE3eHJIQnBj?=
- =?utf-8?B?RldmZU5vV3JvYkFBeklJQ21vaFg3NktPd0tqbWgvNmgzZ2FHazhFOHREc3dI?=
- =?utf-8?B?TWQ3U01xbU1taEJoNTU2VDh4WW5NMUIyMS9DejJkcWlNVmxTcXlCQ2psek5k?=
- =?utf-8?B?UStMblFVbXdqSnFoZUpuR0pQand2UnhFbGxhVTJ3cFlLUXQ4ZFA5V21CaEhE?=
- =?utf-8?B?UEo4L3VsRXdxdnhveWd0WEhiQ2FzeVVyZWtLSTU2eWZCUVNEK0FDdC9zT003?=
- =?utf-8?B?T29ndFZpQ3VHVTVNNTRVZzZoTGJidnlmVnYwMS9WelpGeFBYbEpjc3Q1OGZn?=
- =?utf-8?B?T2xkcTFEeEkvT1lYbWRBc3E3cGtpQjlqWmdRaHU1T2dDaXRXZHJFWlJ1bVdn?=
- =?utf-8?B?ZHpDU0hkeStqTG9TYUU2ZGwwZWs1WDYreEtxWjNVQlRqRjJJYTFkdWJFSVR1?=
- =?utf-8?B?RTIrQnlWbW5RRXREbGFQamVUNlhzdTloRTA1NWdhK20yTy9GQzZpZ291UWdH?=
- =?utf-8?B?cWlqSWhkUFYzR2pibXhkS1NBOUk1ME9kOUJnTUdhZEJ0VDdKQkpWMTN4N2Vv?=
- =?utf-8?B?dVdSM1FxY0pLR0d5L0VpNkJNSXVvMkl2V3lzN0xTTVpHZHRJR2RGdUxCdzBv?=
- =?utf-8?B?OU5yaUpWY3paaVNaVHNZazVkdE5weTJxdmNoM2dOSENNeThpbC95SEdodjdV?=
- =?utf-8?B?bEhjbFdwZ2lpcUs2aURPNm5tWkJhM2tKOWNuaTR2UmVBZFhTdXFkNUprajVq?=
- =?utf-8?B?S1Badk9hMkV1a0F1N2VrdU9RTG1YMUx3T3VIb0pyVWl3NXc5TnhtcjdJL1BZ?=
- =?utf-8?B?ZGFUandWYk9HYzVyVUlsbTBFZ2pZNXZaeEZnMlI0MkZvUWg4NmlnY0k3VTd4?=
- =?utf-8?B?YmdTRjdER0l3S0gzclNEQVIvbzlvREp6aDRnNmlFbGRzT3hnTGFxM2tFUWdw?=
- =?utf-8?B?dTVpQU1NSzJVY2hsNHdqSXpJbTQxaDYyN3h5dzZBNUdUd1Zibk1vTVQzMFFm?=
- =?utf-8?B?aFJ6SE9zVSs3T2xTNjZRMnBwN2RGWFVGVHh0eXhhemFURnd4Wi9FY3A4ODI3?=
- =?utf-8?B?VkZaSktKSFlJQ2tpRzRjcVVpQ3FqSkZ2RC9iZUpWMnNUQTM4YkdUM1FRajZz?=
- =?utf-8?B?bFk0Qys5TkJFeUVuNHdkdEFNOHdaeFFTR0owUktXcFlDL2FBb0hCOUtORkRw?=
- =?utf-8?B?T0hiQW1NOVBsbUVWa3NPcStYQ0NBcDE0OExKeHNXWkQ2OGlHTzRMbTkzelky?=
- =?utf-8?B?L1k3L25FbHNNd25yRHU2L010c0Y2MjM4dWZWZk9meDRoMWhxSVJLaUVPemRC?=
- =?utf-8?B?NzNjT0ptU0k0OE9Jb3pYTXA1aVV0Y2MvWldhTGUvMGU0RHVkVnN2NFgzVGg1?=
- =?utf-8?B?RC9JMnlyTVRlOFp4bjFEQ2dZOTRKYXV0MytUclF5THlsWjlpcUxBZENrMjRo?=
- =?utf-8?B?bjJHRm9JQzgzRktISWZDQzFMSVpBMkw4ZGRhSnlwVzJtcHN3Um5FQ1FDMVhU?=
- =?utf-8?B?RFZjaEg2V1MwYWJRWnhWRklxa2Exak1kT0JkVUc3Nm5YUXJwbTNCQlVrY0ow?=
- =?utf-8?B?Q0E9PQ==?=
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 110b7d9b-b0b5-4db8-eded-08db68b15ba3
-X-MS-Exchange-CrossTenant-AuthSource: AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 06:18:36.0932
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ttfAUhEqTWDzFfigCkZc5pb9zaEnQkHeBoTROfXZr97ocu3GO4xOxE7cI7EFh0iimAxbSAV54m7XsvDJ8tuuVw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR10MB6236
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZII-vJWGb7F97S_A@V92F7Y9K0C.corp.robot.car>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08.06.23 21:38, Ilias Apalodimas wrote:
-> On Thu, 8 Jun 2023 at 16:52, Ard Biesheuvel <ardb@kernel.org> wrote:
->>
->> On Thu, 8 Jun 2023 at 08:22, Ilias Apalodimas
->> <ilias.apalodimas@linaro.org> wrote:
->>>
->>> Hi Jan
->>>
->>>
->>> On Wed, 7 Jun 2023 at 22:46, Jan Kiszka <jan.kiszka@siemens.com> wrote:
->>>>
->>>> On 07.06.23 20:17, Ilias Apalodimas wrote:
->>>>> On Wed, 7 Jun 2023 at 20:14, Jan Kiszka <jan.kiszka@siemens.com> wrote:
->>>>>>
->>>>>> On 07.06.23 18:59, Ilias Apalodimas wrote:
->>>>>>> On Wed, 7 Jun 2023 at 19:09, Ilias Apalodimas
->>>>>>> <ilias.apalodimas@linaro.org> wrote:
->>>>>>>>
->>>>>>>> Hi Jan,
->>>>>>>>
->>>>>>>> [...]
->>>>>>>>>>>> No I don't, this will work reliably without the need to remount the efivarfs.
->>>>>>>>>>>> As you point out you will still have this dependency if you end up
->>>>>>>>>>>> building them as modules and you manage to mount the efivarfs before
->>>>>>>>>>>> those get inserted.  Does anyone see a reasonable workaround?
->>>>>>>>>>>> Deceiving the kernel and making the bootloader set the RT property bit
->>>>>>>>>>>> to force the filesystem being mounted as rw is a nasty hack that we
->>>>>>>>>>>> should avoid.  Maybe adding a kernel command line parameter that says
->>>>>>>>>>>> "Ignore the RTPROP I know what I am doing"?  I don't particularly love
->>>>>>>>>>>> this either, but it's not unreasonable.
->>>>>>>>>>>
->>>>>>>>>>> In the context of https://github.com/OP-TEE/optee_os/issues/6094,
->>>>>>>>>>> basically this issue mapped on reboot/shutdown, I would really love to
->>>>>>>>>>> see the unhandy tee-supplicant daemon to be overcome.
->>>>>>>>>>
->>>>>>>>>> I have seen this error before and it has been on my todo list. So I
->>>>>>>>>> have tried to fix it here [1]. Feel free to test it and let me know if
->>>>>>>>>> you see any further issues.
->>>>>>>>>>
->>>>>>>>>> [1] https://lkml.org/lkml/2023/6/7/927
->>>>>>>>>>
->>>>>>>>>
->>>>>>>>> Ah, nice, will test ASAP!
->>>>>>>>>
->>>>>>>>> Meanwhile more food: I managed to build a firmware that was missing
->>>>>>>>> STMM. But the driver loaded, and I got this:
->>>>>>>>
->>>>>>>> Thanks for the testing. I'll try to reproduce it locally and get back to you
->>>>>>>
->>>>>>> Can you provide a bit more info on how that was triggered btw? I would
->>>>>>> be helpful to know
->>>>>>>
->>>>>>> - OP-TEE version
->>>>>>
->>>>>> Today's master, 145953d55.
->>>>>>
->>>>>>> - was it compiled as a module or built-in?
->>>>>>
->>>>>> Sorry, not sure anymore, switching back and forth right now. I think it
->>>>>> was built-in.
->>>>>>
->>>>>>> - was the supplicant running?
->>>>>>
->>>>>> Yes.
->>>>>>
->>>>>
->>>>> Ok thanks, that helps.  I guess this also means U-Boot was compiled to
->>>>> store the variables in a file in the ESP instead of the RPMB right?
->>>>> Otherwise, I can't see how the device booted in the first place.
->>>>
->>>> U-Boot was not configured to perform secure booting in this case. It had
->>>> RPMB support enabled, just didn't have to use it.
->>>
->>> In your initial mail you said you managed to build a firmware without
->>> StMM.  If U-boot isn't reconfigured accordingly -- iow skip the EFI
->>> variable storage in an RPMB, the EFI subsystem will fail to start.
->>>
->>> In any case, I don't think the ooops you are seeing is not connected
->>> to this patchset.  Looking at the kernel EFI stub we only set the
->>> SetVariableRT if the RTPROP table is set accordingly by the firmware.
->>> U-Boot never sets the EFI_RT_SUPPORTED_SET_VARIABLE property since it
->>> can't support it.  What you are doing is remount the efivarfs as rw
->>> and then trying to set a variable, but the callback for it is  NULL.
->>> I think you'll be able to replicate the same behavior on the kernel
->>> without even inserting the new module.
->>>
->>
->> I have dropped this series from efi/next for now, given that it
->> obviously has problems in its current state.
->>
->> The risk of merging this now and fixing it later is that it may cause
->> regressions for early adopters that rely on the behavior we are
->> introducing here. Better to get this in shape first.
+On Thu, Jun 08, 2023 at 01:49:00PM -0700, Dennis Zhou wrote:
+> On Fri, May 12, 2023 at 01:42:51PM +0200, Ulf Hansson wrote:
+> > + Linus,
+> > 
+> > Hi Dennis,
+> > 
+> > On Mon, 3 Apr 2023 at 11:50, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > >
+> > > On Fri, 31 Mar 2023 at 20:23, Dennis Zhou <dennis@kernel.org> wrote:
+> > > >
+> > > > Hi Ulf,
+> > > >
+> > > > On Fri, Mar 31, 2023 at 02:43:10PM +0200, Ulf Hansson wrote:
+> > > > > On Thu, 30 Mar 2023 at 01:48, Dennis Zhou <dennis@kernel.org> wrote:
+> > > > > >
+> > > > > > When using dm-verity with a data partition on an emmc device, dm-verity
+> > > > > > races with the discovery of attached emmc devices. This is because mmc's
+> > > > > > probing code sets up the host data structure then a work item is
+> > > > > > scheduled to do discovery afterwards. To prevent this race on init,
+> > > > > > let's inline the first call to detection, __mm_scan(), and let
+> > > > > > subsequent detect calls be handled via the workqueue.
+> > > > >
+> > > > > In principle, I don't mind the changes in $subject patch, as long as
+> > > > > it doesn't hurt the overall initialization/boot time. Especially, we
+> > > > > may have more than one mmc-slot being used, so this needs to be well
+> > > > > tested.
+> > > > >
+> > > >
+> > > > I unfortunately don't have a device with multiple mmcs available. Is
+> > > > this something you could help me with?
+> > >
+> > > Yes, I can help to test. Allow me a few days to see what I can do.
+> > >
+> > > Note that, just having one eMMC and one SD card should work too. It
+> > > doesn't have to be multiple eMMCs.
+> > >
+> > > >
+> > > > > Although, more importantly, I fail to understand how this is going to
+> > > > > solve the race condition. Any I/O request to an eMMC or SD requires
+> > > > > the mmc block device driver to be up and running too, which is getting
+> > > > > probed from a separate module/driver that's not part of mmc_rescan().
+> > > >
+> > > > I believe the call chain is something like this:
+> > > >
+> > > > __mmc_rescan()
+> > > >     mmc_rescan_try_freq()
+> > > >         mmc_attach_mmc()
+> > > >             mmc_add_card()
+> > > >                 device_add()
+> > > >                     bus_probe_device()
+> > > >                         mmc_blk_probe()
+> > > >
+> > > > The initial calling of this is the host probe. So effectively if there
+> > > > is a card attached, we're inlining the device_add() call for the card
+> > > > attached rather than waiting for the workqueue item to kick off.
+> > > >
+> > > > dm is a part of late_initcall() while mmc is a module_init(), when built
+> > > > in becoming a device_initcall(). So this solves a race via the initcall
+> > > > chain. In the current state, device_initcall() finishes and we move onto
+> > > > the late_initcall() phase. But now, dm is racing with the workqueue to
+> > > > init the attached emmc device.
+> > >
+> > > You certainly have a point!
+> > >
+> > > This should work when the mmc blk module is built-in. Even if that
+> > > doesn't solve the entire problem, it should be a step in the right
+> > > direction.
+> > >
+> > > I will give it some more thinking and run some tests at my side, then
+> > > I will get back to you again.
+> > >
+> > > Kind regards
+> > > Uffe
+> > >
+> > > > >
+> > > > > >
+> > > > > > Signed-off-by: Dennis Zhou <dennis@kernel.org>
+> > > > > > ---
+> > > > > > Sigh.. fix missing static declaration.
+> > > > > >
+> > > > > >  drivers/mmc/core/core.c | 15 +++++++++++----
+> > > > > >  1 file changed, 11 insertions(+), 4 deletions(-)
+> > > > > >
+> > > > > > diff --git a/drivers/mmc/core/core.c b/drivers/mmc/core/core.c
+> > > > > > index 368f10405e13..fda7ee57dee3 100644
+> > > > > > --- a/drivers/mmc/core/core.c
+> > > > > > +++ b/drivers/mmc/core/core.c
+> > > > > > @@ -2185,10 +2185,8 @@ int mmc_card_alternative_gpt_sector(struct mmc_card *card, sector_t *gpt_sector)
+> > > > > >  }
+> > > > > >  EXPORT_SYMBOL(mmc_card_alternative_gpt_sector);
+> > > > > >
+> > > > > > -void mmc_rescan(struct work_struct *work)
+> > > > > > +static void __mmc_rescan(struct mmc_host *host)
+> > > > > >  {
+> > > > > > -       struct mmc_host *host =
+> > > > > > -               container_of(work, struct mmc_host, detect.work);
+> > > > > >         int i;
+> > > > > >
+> > > > > >         if (host->rescan_disable)
+> > > > > > @@ -2249,6 +2247,14 @@ void mmc_rescan(struct work_struct *work)
+> > > > > >                 mmc_schedule_delayed_work(&host->detect, HZ);
+> > > > > >  }
+> > > > > >
+> > > > > > +void mmc_rescan(struct work_struct *work)
+> > > > > > +{
+> > > > > > +       struct mmc_host *host =
+> > > > > > +               container_of(work, struct mmc_host, detect.work);
+> > > > > > +
+> > > > > > +       __mmc_rescan(host);
+> > > > > > +}
+> > > > > > +
+> > > > > >  void mmc_start_host(struct mmc_host *host)
+> > > > > >  {
+> > > > > >         host->f_init = max(min(freqs[0], host->f_max), host->f_min);
+> > > > > > @@ -2261,7 +2267,8 @@ void mmc_start_host(struct mmc_host *host)
+> > > > > >         }
+> > > > > >
+> > > > > >         mmc_gpiod_request_cd_irq(host);
+> > > > > > -       _mmc_detect_change(host, 0, false);
+> > > > > > +       host->detect_change = 1;
+> > > > > > +       __mmc_rescan(host);
+> > > > > >  }
+> > > > > >
+> > > > > >  void __mmc_stop_host(struct mmc_host *host)
+> > > > > > --
+> > > > > > 2.40.0
+> > > > > >
+> > 
+> > My apologies for the long delay. I finally managed to test this.
+> > 
+> > I decided to pick an old arm32 based platform. An ST-Ericsson HREF,
+> > based upon the ux500 SoC. It's quite good to use for these types of
+> > tests as it has two eMMCs soldered, an embedded SDIO (for WiFi) and an
+> > SD-card slot. So in total there are 4 devices that get probed.
+> > 
+> > The SDIO card isn't detected properly, but always fails in the similar
+> > way (thus I left it out from the below data). I tested both with and
+> > without an SD card inserted during boot, to get some more data to
+> > compare. These are the summary from my tests:
+> > 
+> > v6.4-rc1 without SD card:
+> > ~2.18s - MMC1 (eMMC)
+> > ~3.33s - MMC3 (eMMC)
+> > ~5.91s - kernel boot complete
+> > 
+> > v6.4-rc1 with an SD card:
+> > ~2.18s - MMC1 (eMMC)
+> > ~3.45s - MMC3 (eMMC)
+> > ~3.57s - MMC2 (SD)
+> > ~5.76s - kernel boot complete
+> > 
+> > v6.4-rc1 + patch without SD card:
+> > ~2.24s - MMC1 (eMMC)
+> > ~3.58s - MMC3 (eMMC)
+> > ~5.96s - kernel boot complete
+> > 
+> > v6.4-rc1 + patch with an SD card:
+> > ~2.24s - MMC1 (eMMC)
+> > ~3.73s - MMC2 (SD)
+> > ~3.98s - MMC3 (eMMC)
+> > ~6.73s - kernel boot complete
+> > 
+> > By looking at these results, I was kind of surprised. I was thinking
+> > that the asynchronous probe should address the parallelism problem.
+> > Then I discovered that it in fact, hasn't been enabled for the mmci
+> > driver that is being used for this platform. Huh, I was under the
+> > assumption that it has been enabled for all mmc hosts by now. :-)
+> > 
+> > Okay, so I am going to run another round of tests, with async probe
+> > enabled for the mmci driver too. I will let you know the results as
+> > soon as I can.
+> > 
+> > Kind regards
+> > Uffe
 > 
-> The ooops Jan was seeing is reproducible in the current code with
-> $ sudo mount -o remount,rw /sys/firmware/efi/efivars
-> $ sudo efi-updatevar -f PK.auth PK
+> Hi Uffe,
 > 
-> So the only real problem we are discussing here is users having to
-> remount the efivarfs once the module is inserted and the supplicant is
-> running right?  We could do something along the lines of the patch
-> below. That would solve both of the problems.
+> Kindly this has been way too long for review. It's been over 3 months.
+> What's going on here?
 > 
-> However, the patch changes the way efivarfs is mounted -- it's now
-> always mounted as RW.  What I am worried about is userspace tools that
-> rely on this.  I know fwupd uses it and looks for a RO mounted
-> efivarfs on it's initial checking, but since userspace apps are
-> already dealing with firmware that exposes SetVariableRT but always
-> returns EFI_UNSUPPORTED this should be safe ?(famous last words)
-> 
-> Jan can you please apply this and see if it solves your problem?
-> 
-> diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
-> index 4cc8d0e7d0fd..37accd9e885c 100644
-> --- a/drivers/firmware/efi/efi.c
-> +++ b/drivers/firmware/efi/efi.c
-> @@ -206,6 +206,13 @@ static bool generic_ops_supported(void)
->         return true;
->  }
-> 
-> +efi_status_t set_variable_int(efi_char16_t *name, efi_guid_t *vendor,
-> +                             u32 attributes, unsigned long data_size,
-> +                             void *data)
-> +{
-> +       return EFI_UNSUPPORTED;
-> +}
-> +
->  static int generic_ops_register(void)
->  {
->         if (!generic_ops_supported())
-> @@ -219,6 +226,9 @@ static int generic_ops_register(void)
->         if (efi_rt_services_supported(EFI_RT_SUPPORTED_SET_VARIABLE)) {
->                 generic_ops.set_variable = efi.set_variable;
->                 generic_ops.set_variable_nonblocking =
-> efi.set_variable_nonblocking;
-> +       } else {
-> +               generic_ops.set_variable = set_variable_int;
-> +               generic_ops.set_variable_nonblocking = set_variable_int;
->         }
->         return efivars_register(&generic_efivars, &generic_ops);
->  }
-> diff --git a/drivers/firmware/efi/vars.c b/drivers/firmware/efi/vars.c
-> index e9dc7116daf1..c75eff3f409d 100644
-> --- a/drivers/firmware/efi/vars.c
-> +++ b/drivers/firmware/efi/vars.c
-> @@ -123,7 +123,7 @@ EXPORT_SYMBOL_GPL(efivars_unregister);
-> 
->  bool efivar_supports_writes(void)
->  {
-> -       return __efivars && __efivars->ops->set_variable;
-> +       return __efivars && __efivars->ops->set_variable != set_variable_int;
->  }
->  EXPORT_SYMBOL_GPL(efivar_supports_writes);
-> 
-> diff --git a/fs/efivarfs/super.c b/fs/efivarfs/super.c
-> index e028fafa04f3..e40b5c4c5106 100644
-> --- a/fs/efivarfs/super.c
-> +++ b/fs/efivarfs/super.c
-> @@ -242,9 +242,6 @@ static int efivarfs_fill_super(struct super_block
-> *sb, struct fs_context *fc)
->         sb->s_d_op              = &efivarfs_d_ops;
->         sb->s_time_gran         = 1;
-> 
-> -       if (!efivar_supports_writes())
-> -               sb->s_flags |= SB_RDONLY;
-> -
->         inode = efivarfs_get_inode(sb, NULL, S_IFDIR | 0755, 0, true);
->         if (!inode)
->                 return -ENOMEM;
-> diff --git a/include/linux/efi.h b/include/linux/efi.h
-> index 58d1c271d3b0..ec0ac6ef50a3 100644
-> --- a/include/linux/efi.h
-> +++ b/include/linux/efi.h
-> @@ -1084,6 +1084,10 @@ int efivars_register(struct efivars *efivars,
->                      const struct efivar_operations *ops);
->  int efivars_unregister(struct efivars *efivars);
-> 
-> +efi_status_t set_variable_int(efi_char16_t *name, efi_guid_t *vendor,
-> +                             u32 attributes, unsigned long data_size,
-> +                             void *data);
-> +
->  void efivars_generic_ops_register(void);
->  void efivars_generic_ops_unregister(void);
-> 
-> apalos@hades:~/work/linux-next>;
-> apalos@hades:~/work/linux-next>git diff
-> diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
-> index 4cc8d0e7d0fd..37accd9e885c 100644
-> --- a/drivers/firmware/efi/efi.c
-> +++ b/drivers/firmware/efi/efi.c
-> @@ -206,6 +206,13 @@ static bool generic_ops_supported(void)
->         return true;
->  }
-> 
-> +efi_status_t set_variable_int(efi_char16_t *name, efi_guid_t *vendor,
-> +                             u32 attributes, unsigned long data_size,
-> +                             void *data)
-> +{
-> +       return EFI_UNSUPPORTED;
-> +}
-> +
->  static int generic_ops_register(void)
->  {
->         if (!generic_ops_supported())
-> @@ -219,6 +226,9 @@ static int generic_ops_register(void)
->         if (efi_rt_services_supported(EFI_RT_SUPPORTED_SET_VARIABLE)) {
->                 generic_ops.set_variable = efi.set_variable;
->                 generic_ops.set_variable_nonblocking =
-> efi.set_variable_nonblocking;
-> +       } else {
-> +               generic_ops.set_variable = set_variable_int;
-> +               generic_ops.set_variable_nonblocking = set_variable_int;
->         }
->         return efivars_register(&generic_efivars, &generic_ops);
->  }
-> diff --git a/drivers/firmware/efi/vars.c b/drivers/firmware/efi/vars.c
-> index e9dc7116daf1..c75eff3f409d 100644
-> --- a/drivers/firmware/efi/vars.c
-> +++ b/drivers/firmware/efi/vars.c
-> @@ -123,7 +123,7 @@ EXPORT_SYMBOL_GPL(efivars_unregister);
-> 
->  bool efivar_supports_writes(void)
->  {
-> -       return __efivars && __efivars->ops->set_variable;
-> +       return __efivars && __efivars->ops->set_variable != set_variable_int;
->  }
->  EXPORT_SYMBOL_GPL(efivar_supports_writes);
-> 
-> diff --git a/fs/efivarfs/super.c b/fs/efivarfs/super.c
-> index e028fafa04f3..e40b5c4c5106 100644
-> --- a/fs/efivarfs/super.c
-> +++ b/fs/efivarfs/super.c
-> @@ -242,9 +242,6 @@ static int efivarfs_fill_super(struct super_block
-> *sb, struct fs_context *fc)
->         sb->s_d_op              = &efivarfs_d_ops;
->         sb->s_time_gran         = 1;
-> 
-> -       if (!efivar_supports_writes())
-> -               sb->s_flags |= SB_RDONLY;
-> -
->         inode = efivarfs_get_inode(sb, NULL, S_IFDIR | 0755, 0, true);
->         if (!inode)
->                 return -ENOMEM;
-> diff --git a/include/linux/efi.h b/include/linux/efi.h
-> index 58d1c271d3b0..ec0ac6ef50a3 100644
-> --- a/include/linux/efi.h
-> +++ b/include/linux/efi.h
-> @@ -1084,6 +1084,10 @@ int efivars_register(struct efivars *efivars,
->                      const struct efivar_operations *ops);
->  int efivars_unregister(struct efivars *efivars);
-> 
-> +efi_status_t set_variable_int(efi_char16_t *name, efi_guid_t *vendor,
-> +                             u32 attributes, unsigned long data_size,
-> +                             void *data);
-> +
->  void efivars_generic_ops_register(void);
->  void efivars_generic_ops_unregister(void);
-> 
-> Thanks
-> /Ilias
+> I think there's a misunderstanding too. Without this fix, the machine
+> doesn't even boot. I'm not sure why perf is the blocking question here.
 
-As just written in my other reply: The root cause is the dependency on
-tee-supplicant daemon. That needs to be resolved, and then also r/w
-mounting will just work.
+Well you can not degrade performance of existing machines that work
+today, right?  That would be a regression and it seems that you are
+doing that if I read the numbers above correctly.
 
-Jan
+> Greg, is there another tree I can run this through?
 
--- 
-Siemens AG, Technology
-Competence Center Embedded Linux
+Why would you want to route around a maintainer just to get a patch that
+would have to be reverted applied?  :)
 
+thanks,
+
+greg k-h
