@@ -2,66 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8227C72A115
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 19:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C2DD72A117
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 19:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbjFIRSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 13:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36124 "EHLO
+        id S230333AbjFIRTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 13:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbjFIRSu (ORCPT
+        with ESMTP id S229622AbjFIRTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 13:18:50 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B406DC1
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 10:18:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=61PEQyEyFh/a5EC3ccv24KEyOK2K+luT3/KMWI7QFEY=; b=Q4VE+vp9G/IbsNK847JEcED+ef
-        xWL+lEiEcw3sxhZ9GKTxFTc2Zb7pGHkyvRB7p17c+PLAdha2q3jgdPyWuSmn+XY4zhN0azNN/X2Js
-        Bzztd4bvKls4LcyQCokC9Th/5D6Fzd9qs/2fEwsVES3mgosmIaV8sSfLgTQHdhk9XlxeIvtSYFWCi
-        DZvbNkdUOk8+byjrln4D4eTKMiRgg/qBQ+GSmPjHwMP3oW8NjQgsJ+HXEQMR57rkTOA+l4f2muWHk
-        LZbwOkqDDsT8xbsArWDoFirq2T/ACediM/GaH6PbNIfYVvgVfyerFBLxLbE3BPmT6AalcygHtlggm
-        Q4sYZoeQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q7fl1-00Gpjq-BV; Fri, 09 Jun 2023 17:18:39 +0000
-Date:   Fri, 9 Jun 2023 18:18:39 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: kill [add|del]_page_to_lru_list()
-Message-ID: <ZINe7xJPI3s6HJG4@casper.infradead.org>
-References: <20230609013901.79250-1-wangkefeng.wang@huawei.com>
+        Fri, 9 Jun 2023 13:19:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59928E46;
+        Fri,  9 Jun 2023 10:19:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA303602F3;
+        Fri,  9 Jun 2023 17:19:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42F0EC433EF;
+        Fri,  9 Jun 2023 17:19:27 +0000 (UTC)
+Date:   Fri, 9 Jun 2023 13:19:24 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Donglin Peng <pengdonglin@sangfor.com.cn>, mhiramat@kernel.org,
+        linux@armlinux.org.uk, mark.rutland@arm.com, will@kernel.org,
+        rmk+kernel@armlinux.org.uk, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
+        tglx@linutronix.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        bp@alien8.de, hpa@zytor.com, chenhuacai@kernel.org,
+        zhangqing@loongson.cn, kernel@xen0n.name, mingo@redhat.com,
+        peterz@infradead.org, xiehuan09@gmail.com, dinghui@sangfor.com.cn,
+        huangcun@sangfor.com.cn, dolinux.peng@gmail.com,
+        linux-trace-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 4/8] arm64: ftrace: Enable
+ HAVE_FUNCTION_GRAPH_RETVAL
+Message-ID: <20230609131924.5ff89413@gandalf.local.home>
+In-Reply-To: <ZILxZ6wrYUnnxT/E@arm.com>
+References: <cover.1680954589.git.pengdonglin@sangfor.com.cn>
+        <c78366416ce93f704ae7000c4ee60eb4258c38f7.1680954589.git.pengdonglin@sangfor.com.cn>
+        <ZILxZ6wrYUnnxT/E@arm.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230609013901.79250-1-wangkefeng.wang@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 09:39:01AM +0800, Kefeng Wang wrote:
-> Directly call lruvec_del_folio(), and drop unused page interfaces.
+On Fri, 9 Jun 2023 10:31:19 +0100
+Catalin Marinas <catalin.marinas@arm.com> wrote:
 
-Convert isolate_migratepages_block() to actually use folios and
-then we can kill the interfaces.
+> On Sat, Apr 08, 2023 at 05:42:18AM -0700, Donglin Peng wrote:
+> > The previous patch ("function_graph: Support recording and printing
+> > the return value of function") has laid the groundwork for the for
+> > the funcgraph-retval, and this modification makes it available on
+> > the ARM64 platform.
+> > 
+> > We introduce a new structure called fgraph_ret_regs for the ARM64
+> > platform to hold return registers and the frame pointer. We then
+> > fill its content in the return_to_handler and pass its address to
+> > the function ftrace_return_to_handler to record the return value.
+> > 
+> > Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+> > Tested-by: Mark Rutland <mark.rutland@arm.com>
+> > Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>  
+> 
+> We fully trust Mark's reviews ;) but just in case you need an official
+> maintainer ack:
+> 
+> Acked-by: Catalin Marinas <catalin.marinas@arm.com>
 
-> +++ b/mm/compaction.c
-> @@ -1145,7 +1145,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
->  			low_pfn += compound_nr(page) - 1;
->  
->  		/* Successfully isolated */
-> -		del_page_from_lru_list(page, lruvec);
-> +		lruvec_del_folio(lruvec, page_folio(page));
+Thanks Catalin, that does help.
 
-This kind of thing is not encouraged.  It's just churn and gets in
-the way of actual conversions.
+-- Steve
