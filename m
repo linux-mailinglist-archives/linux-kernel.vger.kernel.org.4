@@ -2,111 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E105972A2DE
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 21:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA5072A2E3
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 21:10:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229927AbjFITJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 15:09:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35186 "EHLO
+        id S231197AbjFITKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 15:10:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjFITJk (ORCPT
+        with ESMTP id S231144AbjFITKk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 15:09:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763B6210A;
-        Fri,  9 Jun 2023 12:09:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 139BB65B31;
-        Fri,  9 Jun 2023 19:09:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B053AC433D2;
-        Fri,  9 Jun 2023 19:09:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686337778;
-        bh=6dzCM0l3yez6xLMwZhhp3ZeNdCkNfftfdY4FRAKrm/k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=proX85yrQ4KXKICb6x2F9PlW27QVZSo9A7mG6/JFIM9ErnSvBws3NjbLxasa7fsEa
-         1u10sj69wI/XP2nOsZWYjjaf+fe/G9twt+fnnzA9qmaJhZRlAISTFeG0PMlMedhlPI
-         q2QljvcQgABuYZhv1n1qfYfWeZpWcedL7wwrMjAJ2zgLSSMjN//2P5iWSKZpRe0IY3
-         h4NwiUrTCQknKqp9S9bbC9lu/mb54+GoF/RD/i7od6hMpFZ/teNbX9fT19dHNqlMCj
-         pMGoM23FnT6lz/e0X5IUeETjz6icBp1b3pQPL2mYRw/jAjKq47aQ/XSOluGnJ3IhRU
-         R4eg7no5Itn3Q==
-From:   SeongJae Park <sj@kernel.org>
-To:     David Gow <davidgow@google.com>
-Cc:     Daniel Latypov <dlatypov@google.com>, brendanhiggins@google.com,
-        rmoar@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org, johannes@sipsolutions.net,
-        SeongJae Park <sj@kernel.org>
-Subject: Re: [PATCH] kunit: tool: undo type subscripts for subprocess.Popen
-Date:   Fri,  9 Jun 2023 19:09:36 +0000
-Message-Id: <20230609190936.30045-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <CABVgOSmUxDoWHWOaJYmayCE8FnfS5bUoAJoosO44x=gwKdtLng@mail.gmail.com>
-References: 
+        Fri, 9 Jun 2023 15:10:40 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B673A9E
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 12:10:37 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-bb15165ba06so2060463276.2
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 12:10:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686337836; x=1688929836;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LJ900G5ij4y/xYDI1jpd13Sc6P2wvNe0duR8GNRArV8=;
+        b=QfyL3qoBJKLLtm2liQhJFd0F3QPq7oedhrkFEUG0a1S5VO1Ot5UrGcY+/I59134gVM
+         QazOr3Z9EvDQXGisE8NGyHHpnYlDDkNQOyZUY6m1xvSEEUp5Lu9PMykhY9Z9KYeswDQo
+         ofore2Ow0b98fAdDhaeBEoZDNcYdkzPlgSc0Mr+InFILD0wRvDUQIuFpcoInPudheOIx
+         AAGKV9tH7aIVB5uglcsCEGoQwp9IIJoCoZvuTCLoqpg9DCNjGhPHANkq8fq08i9/beQ7
+         3hP+fDzl0t82qvEguizUTJc/AS064FC5pSKpgreWcJpluswLT5bAT5c8J/YEn7HcSOFS
+         xYpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686337836; x=1688929836;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LJ900G5ij4y/xYDI1jpd13Sc6P2wvNe0duR8GNRArV8=;
+        b=HlIg8RbDQbMPDms/21hmPw1nFrMD+XGVUBB39UBOTEHxJz/54181b3jM6ZTud2xcUP
+         GUX1GL5jmPPnO0+XLyTxY/QNRa5rel5xaEM9QwNMsIdecXQ3lKqrz/W1DbAuv+nUc6Q5
+         9g8xioJAu+q9X112a7RWAlcNoV2H0QlIZgkzQtD+i5c3K24M+BhrOoNH5g1b9KPSaUJ8
+         va5WEyaCG0pLl+Q/o52QW/eYyMFI4pOmxo8qZpLdhkALx5np1ob1Il/UdHG4lcLm65M5
+         1ZT2JNozaMc9hB3eGchO2BSL2BfH584H76X1HyLbe6ZSjxfDAlggZHB1IqGJZsjzLU5/
+         lyDQ==
+X-Gm-Message-State: AC+VfDwFIAQ+bTFk8lD5cx263M64yWguCgN9xb5plgToANsUg563T3Vp
+        ClH2Q4eEZD00We842YvwAy8a7347ARl4lOPENHR4Dw==
+X-Google-Smtp-Source: ACHHUZ5ETmM9CNHbxrtXFT8B+QGPBNspHfep2ZhFRWOXUKhbuqUHQDU1oTD19drFiTgk70dOzTRUdOtEZ3nSfvaxFOs=
+X-Received: by 2002:a05:6902:149:b0:ba7:ad38:5707 with SMTP id
+ p9-20020a056902014900b00ba7ad385707mr1781664ybh.50.1686337836352; Fri, 09 Jun
+ 2023 12:10:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20230609140745.65046-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230609140745.65046-1-krzysztof.kozlowski@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 9 Jun 2023 21:10:24 +0200
+Message-ID: <CACRpkdZzC7ttFbprrsaQgnUkdaEgSBA_Uw6fkhrHYi6LjJekjQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: crypto: intel,ixp4xx: drop unneeded quotes
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David and Brendan,
+On Fri, Jun 9, 2023 at 4:07=E2=80=AFPM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 
-On Tue, 2 May 2023 08:04:20 +0800 David Gow <davidgow@google.com> wrote:
+> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+> checking for this can be enabled in yamllint.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> [-- Attachment #1: Type: text/plain, Size: 1473 bytes --]
-> 
-> On Tue, 2 May 2023 at 02:16, 'Daniel Latypov' via KUnit Development
-> <kunit-dev@googlegroups.com> wrote:
-> >
-> > Writing `subprocess.Popen[str]` requires python 3.9+.
-> > kunit.py has an assertion that the python version is 3.7+, so we should
-> > try to stay backwards compatible.
-> >
-> > This conflicts a bit with commit 1da2e6220e11 ("kunit: tool: fix
-> > pre-existing `mypy --strict` errors and update run_checks.py"), since
-> > mypy complains like so
-> > > kunit_kernel.py:95: error: Missing type parameters for generic type "Popen"  [type-arg]
-> >
-> > Note: `mypy --strict --python-version 3.7` does not work.
-> >
-> > We could annotate each file with comments like
-> >   `# mypy: disable-error-code="type-arg"
-> > but then we might still get nudged to break back-compat in other files.
-> >
-> > This patch adds a `mypy.ini` file since it seems like the only way to
-> > disable specific error codes for all our files.
-> >
-> > Note: run_checks.py doesn't need to specify `--config_file mypy.ini`,
-> > but I think being explicit is better, particularly since most kernel
-> > devs won't be familiar with how mypy works.
-> >
-> > Fixes: 695e26030858 ("kunit: tool: add subscripts for type annotations where appropriate")
-> > Reported-by: SeongJae Park <sj@kernel.org>
-> > Link: https://lore.kernel.org/linux-kselftest/20230501171520.138753-1-sj@kernel.org
-> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> > ---
-> 
-> Thanks for jumping on this.
-> 
-> Looks good to me!
-> 
-> Reviewed-by: David Gow <davidgow@google.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Looks like this patch is still not merged in the mainline.  May I ask the ETA,
-or any concern if you have?
-
-
-Thanks,
-SJ
-
-> 
-> Cheers,
-> -- David
+Yours,
+Linus Walleij
