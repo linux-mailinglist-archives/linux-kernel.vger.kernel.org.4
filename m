@@ -2,141 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5048C72A29C
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7A3272A2A7
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:55:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231778AbjFISw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 14:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58204 "EHLO
+        id S231332AbjFISzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 14:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231699AbjFISwZ (ORCPT
+        with ESMTP id S229685AbjFISzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 14:52:25 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9649F3A99
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 11:52:24 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id ca18e2360f4ac-77ad566f7fbso18103539f.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 11:52:24 -0700 (PDT)
+        Fri, 9 Jun 2023 14:55:43 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367EE35B3
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 11:55:42 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-bab8f66d3a2so1997348276.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 11:55:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1686336744; x=1688928744;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IAAvnQrwpO2uhBKRf2o3+v9wcqIBSyrOwUbsNA3kLcs=;
-        b=cQ7cheuwuYxv3REKjdW8+HVI7nbwtLVhJaIdU55weF55CNRC115M4lcSna2mChpYoc
-         Bn4BtcJZA1bRmnXcdvBfgI7lk1Uq5g2yRqK61G4RM9gbJnEHKcum0DRr/NoP96dySpvb
-         n5cfpJ9xFLdtBi6dzy9cnrDznD3TtttAogVbQ=
+        d=google.com; s=20221208; t=1686336941; x=1688928941;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5fqmIPn7/SY3tNNptZ9MZAjCev2zdIK34rPEJNcoPJs=;
+        b=pSBFc37PG5mqrdURgSEq7HdUoo9vHzD7lyKhb1CDn4/n16j/q5B1BJ0y6H1tKBObhc
+         8RZT+6td4dTyXZuFu6FeMZ97TaHDu8XLCdS6QeHmInzWl42MSOpQwg8HuKz71iJlZ7EF
+         3RD7Fc/SWTNEw3muGL0Hc5uRGZ8TSzZNWH09gNmkovGMNIFuMTPlALfJDHP4+GPQ0DCp
+         OSXobLw+pHqC9UKqFHSszrNSrZnJi+VsiSpJzxAcZJ/EoYKW+djQsRRa+1IzDpGTvlOS
+         u5PmY3Q9vlvGT5ApN7zfmUYZemIUYZTwaxkVzZpCqU+2W0+E/0bL8TdyHX7NUMepnKSq
+         tq5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686336744; x=1688928744;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IAAvnQrwpO2uhBKRf2o3+v9wcqIBSyrOwUbsNA3kLcs=;
-        b=Mk9O5aYmp9iGPOVeCHH49xnLlIqwzrjRfsP8hIc1J1m2tykH0eoR5ODZ5+2Bb67iaW
-         eiWavQuVQbbbLIklkmoH8AQLxoUZch1EeC3ob1BTvIDBUvhyymLuWBwmbSpFfquNVTBT
-         fpdJ2osATYHkQfUqlYYAEKNlfXC4BA7/Q5Ysj0gHvWrsB58Ye8fE4ZtSHkiuZWkRVYiL
-         OpeuZDc3nQie2bOnaZFgY6FlBIjE42mue/e/v8mggN6HhRnHm0ByvjRmfAo8qBSVonmJ
-         jMOGo0FNzAPvI8+gmPoaZW8v+yXdQL1tcVD4wkV63c0KZwD/L8XEN+xLDSQMVTak2efb
-         6daQ==
-X-Gm-Message-State: AC+VfDwFXEuvEhDWZZAg9GDrPsw3OCa51tsUx28Azgxgno+90xF/6Y19
-        TCPMlShJb0nbIrBYEOrTlQoPXw==
-X-Google-Smtp-Source: ACHHUZ5YOtqqo6EDyYz9rHevK1XM92CNunTAygg+uI8VMp8yQvYpPXFa1pd0Sg19H5cLk2+cScUa3w==
-X-Received: by 2002:a6b:b245:0:b0:77a:b7b7:acfc with SMTP id b66-20020a6bb245000000b0077ab7b7acfcmr1743173iof.1.1686336743928;
-        Fri, 09 Jun 2023 11:52:23 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id h10-20020a0566380f8a00b0040f91082a4fsm1102435jal.75.2023.06.09.11.52.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Jun 2023 11:52:23 -0700 (PDT)
-Message-ID: <703a435a-d448-360d-9344-8b8614a5cb5a@linuxfoundation.org>
-Date:   Fri, 9 Jun 2023 12:52:22 -0600
+        d=1e100.net; s=20221208; t=1686336941; x=1688928941;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5fqmIPn7/SY3tNNptZ9MZAjCev2zdIK34rPEJNcoPJs=;
+        b=XujAq1OzO8A5owlL8k2sa718BVKXUnQlqVa5mVZNq+O50a0eEElIygb1/iw3RWaTqn
+         npLXRtlxLr1wl9Nl3LgL92Ubabg23zL9hOX4L2tyBGZslvNHT4m/rpmCS1KDQ3PvZbHh
+         rdUzC0NTLDHpcG05GO/M2QifDyIXgjWBmVoeCPRnJcDXGuJmuK6Q91fEyKMcuMWhFufQ
+         j9qw/v7bmUjCekvh5yeoHPUi8YDzLWLduCJoV0MIoZV+Wnq8Je5QeysdL9YEL2qeSaik
+         ZWwIu9/dItHzZjKOkUwQcbEcGKI6yvekQstbv/41tTVQaqMuQgZm/lIMbiGG/hR37Dkb
+         c9NQ==
+X-Gm-Message-State: AC+VfDwIbJmau5VCiRyi74Hu6ytT0NUZDOQo0zOK8bjnYXH3pd8isYxI
+        VnsJ6aMtQh8zGmpSW0ANAQCsT0zwGF5uJ/eJRJnlOQ==
+X-Google-Smtp-Source: ACHHUZ5J+yJhDkwtV6pUXStA7V8gQSqeAoQnRlmfDE34ExCN9C+jXf8DNwMSEgyyXAYsVrV5phpv5KN7CFndQfkYX1g=
+X-Received: by 2002:a25:4609:0:b0:bb3:a85c:759f with SMTP id
+ t9-20020a254609000000b00bb3a85c759fmr1630007yba.0.1686336940940; Fri, 09 Jun
+ 2023 11:55:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] selftests/cpufreq: Don't enable generic lock debugging
- options
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230605-kselftest-cpufreq-options-v1-1-d4621e0c7cbe@kernel.org>
- <20230607034540.ldjugl3g6ryyyi5q@vireshk-i7>
-Content-Language: en-US
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230607034540.ldjugl3g6ryyyi5q@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230609005158.2421285-1-surenb@google.com> <20230609005158.2421285-6-surenb@google.com>
+ <ZIM/O54Q0waFq/tx@casper.infradead.org> <CAJuCfpE4VYz-Z4_aS3d9-8FGtQ-F4f7adYcJqRk3P3Ks7WPgQA@mail.gmail.com>
+In-Reply-To: <CAJuCfpE4VYz-Z4_aS3d9-8FGtQ-F4f7adYcJqRk3P3Ks7WPgQA@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Fri, 9 Jun 2023 11:55:29 -0700
+Message-ID: <CAJuCfpG9JeHBKF0fzqR7xpDufpm7HVwgfbQVDeKYW24TWkpckw@mail.gmail.com>
+Subject: Re: [PATCH v2 5/6] mm: implement folio wait under VMA lock
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, mhocko@suse.com,
+        josef@toxicpanda.com, jack@suse.cz, ldufour@linux.ibm.com,
+        laurent.dufour@fr.ibm.com, michel@lespinasse.org,
+        liam.howlett@oracle.com, jglisse@google.com, vbabka@suse.cz,
+        minchan@google.com, dave@stgolabs.net, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, hdanton@sina.com, apopple@nvidia.com,
+        peterx@redhat.com, ying.huang@intel.com, david@redhat.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        viro@zeniv.linux.org.uk, brauner@kernel.org,
+        pasha.tatashin@soleen.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/6/23 21:45, Viresh Kumar wrote:
-> On 06-06-23, 15:11, Mark Brown wrote:
->> Currently the the config fragment for cpufreq enables a lot of generic
->> lock debugging.  While these options are useful when testing cpufreq
->> they aren't actually required to run the tests and are therefore out of
->> scope for the cpufreq fragement, they are more of a thing that it's good
->> to enable while doing testing than an actual requirement for cpufreq
->> testing specifically.  Having these debugging options enabled,
->> especially the mutex and spinlock instrumentation, mean that any build
->> that includes the cpufreq fragment is both very much larger than a
->> standard defconfig (eg, I'm seeing 35% on x86_64) and also slower at
->> runtime.
->>
->> This is causing real problems for CI systems.  In order to avoid
->> building large numbers of kernels they try to group kselftest fragments
->> together, frequently just grouping all the kselftest fragments into a
->> single block.  The increased size is an issue for memory constrained
->> systems and is also problematic for systems with fixed storage
->> allocations for kernel images (eg, typical u-boot systems) where it
->> frequently causes the kernel to overflow the storage space allocated for
->> kernels.  The reduced performance isn't too bad with real hardware but
->> can be disruptive on emulated platforms.
->>
->> In order to avoid these issues remove these generic instrumentation
->> options from the cpufreq fragment, bringing the cpufreq fragment into
->> line with other fragments which generally set requirements for testing
->> rather than nice to haves.
-> 
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
->   
->> Signed-off-by: Mark Brown <broonie@kernel.org>
->> ---
->>   tools/testing/selftests/cpufreq/config | 8 --------
->>   1 file changed, 8 deletions(-)
->>
->> diff --git a/tools/testing/selftests/cpufreq/config b/tools/testing/selftests/cpufreq/config
->> index 75e900793e8a..ce5068f5a6a2 100644
->> --- a/tools/testing/selftests/cpufreq/config
->> +++ b/tools/testing/selftests/cpufreq/config
->> @@ -5,11 +5,3 @@ CONFIG_CPU_FREQ_GOV_USERSPACE=y
->>   CONFIG_CPU_FREQ_GOV_ONDEMAND=y
->>   CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
->>   CONFIG_CPU_FREQ_GOV_SCHEDUTIL=y
->> -CONFIG_DEBUG_RT_MUTEXES=y
->> -CONFIG_DEBUG_PLIST=y
->> -CONFIG_DEBUG_SPINLOCK=y
->> -CONFIG_DEBUG_MUTEXES=y
->> -CONFIG_DEBUG_LOCK_ALLOC=y
->> -CONFIG_PROVE_LOCKING=y
->> -CONFIG_LOCKDEP=y
->> -CONFIG_DEBUG_ATOMIC_SLEEP=y
-> 
-> FWIW, I enabled these earlier as cpufreq core had a history of races
-> that are normally not caught without these enabled. But I think we
-> have come a long way from that and these can be removed now.
-> 
+On Fri, Jun 9, 2023 at 11:49=E2=80=AFAM Suren Baghdasaryan <surenb@google.c=
+om> wrote:
+>
+> On Fri, Jun 9, 2023 at 8:03=E2=80=AFAM Matthew Wilcox <willy@infradead.or=
+g> wrote:
+> >
+> > On Thu, Jun 08, 2023 at 05:51:57PM -0700, Suren Baghdasaryan wrote:
+> > >  static inline bool folio_lock_or_retry(struct folio *folio,
+> > > -             struct mm_struct *mm, unsigned int flags)
+> > > +             struct vm_area_struct *vma, unsigned int flags,
+> > > +             bool *lock_dropped)
+> >
+> > I hate these double-return-value functions.
+> >
+> > How about this for an API:
+> >
+> > vm_fault_t folio_lock_fault(struct folio *folio, struct vm_fault *vmf)
+> > {
+> >         might_sleep();
+> >         if (folio_trylock(folio))
+> >                 return 0;
+> >         return __folio_lock_fault(folio, vmf);
+> > }
+> >
+> > Then the users look like ...
+> >
+> > > @@ -3580,8 +3581,10 @@ static vm_fault_t remove_device_exclusive_entr=
+y(struct vm_fault *vmf)
+> > >       if (!folio_try_get(folio))
+> > >               return 0;
+> > >
+> > > -     if (!folio_lock_or_retry(folio, vma->vm_mm, vmf->flags)) {
+> > > +     if (!folio_lock_or_retry(folio, vma, vmf->flags, &lock_dropped)=
+) {
+> > >               folio_put(folio);
+> > > +             if (lock_dropped && vmf->flags & FAULT_FLAG_VMA_LOCK)
+> > > +                     return VM_FAULT_VMA_UNLOCKED | VM_FAULT_RETRY;
+> > >               return VM_FAULT_RETRY;
+> > >       }
+> >
+> >         ret =3D folio_lock_fault(folio, vmf);
+> >         if (ret)
+> >                 return ret;
+> >
+> > > @@ -3837,9 +3840,9 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+> > >               goto out_release;
+> > >       }
+> > >
+> > > -     locked =3D folio_lock_or_retry(folio, vma->vm_mm, vmf->flags);
+> > > -
+> > > -     if (!locked) {
+> > > +     if (!folio_lock_or_retry(folio, vma, vmf->flags, &lock_dropped)=
+) {
+> > > +             if (lock_dropped && vmf->flags & FAULT_FLAG_VMA_LOCK)
+> > > +                     ret |=3D VM_FAULT_VMA_UNLOCKED;
+> > >               ret |=3D VM_FAULT_RETRY;
+> > >               goto out_release;
+> > >       }
+> >
+> >         ret |=3D folio_lock_fault(folio, vmf);
+> >         if (ret & VM_FAULT_RETRY)
+> >                 goto out_release;
+> >
+> > ie instead of trying to reconstruct what __folio_lock_fault() did from
+> > its outputs, we just let folio_lock_fault() tell us what it did.
+>
+> Thanks for taking a look!
+> Ok, I think what you are suggesting is to have a new set of
+> folio_lock_fault()/__folio_lock_fault() functions which return
+> vm_fault_t directly, __folio_lock_fault() will use
+> __folio_lock_or_retry() internally and will adjust its return value
+> based on __folio_lock_or_retry()'s return and the lock releasing rules
+> described in the comments for __folio_lock_or_retry(). Is my
+> understanding correct?
 
-Thank you both. Applied to linux-kselftest next for Linux 6.5-rc1
-This gives us time to ensure the above mentioned races are no
-longer an issue.
-
-thanks,
--- Shuah
+Oh, after rereading I think you are suggesting to replace
+folio_lock_or_retry()/__folio_lock_or_retry() with
+folio_lock_fault()/__folio_lock_fault(), not to add them. Is that
+right?
