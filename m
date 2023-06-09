@@ -2,139 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF6D8729065
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 08:52:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F11AE729069
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 08:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbjFIGvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 02:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55600 "EHLO
+        id S238189AbjFIGwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 02:52:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjFIGvK (ORCPT
+        with ESMTP id S230303AbjFIGwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 02:51:10 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E0DA81BEB;
-        Thu,  8 Jun 2023 23:51:02 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8BxrOrVy4JkcfAAAA--.2919S3;
-        Fri, 09 Jun 2023 14:51:01 +0800 (CST)
-Received: from [10.130.0.149] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxZuTSy4Jk8QsKAA--.30794S3;
-        Fri, 09 Jun 2023 14:51:00 +0800 (CST)
-Subject: Re: [RFC PATCH] asm-generic: Unify uapi bitsperlong.h
-To:     Arnd Bergmann <arnd@arndb.de>
-References: <1683615903-10862-1-git-send-email-yangtiezhu@loongson.cn>
- <b9624545-2c80-49a1-ac3c-39264a591f7b@app.fastmail.com>
- <76d3be65-91df-7969-5303-38231a7df926@loongson.cn>
- <a3a4f48a-07d4-4ed9-bc53-5d383428bdd2@app.fastmail.com>
-Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-s390@vger.kernel.org, llvm@lists.linux.dev,
-        linux-ia64@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-parisc@vger.kernel.org, x86@kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-alpha@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        loongson-kernel@lists.loongnix.cn
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <ca4c4968-411d-4e2c-543e-ffb62413ddef@loongson.cn>
-Date:   Fri, 9 Jun 2023 14:50:58 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Fri, 9 Jun 2023 02:52:13 -0400
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EDFA26AD
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 23:52:11 -0700 (PDT)
+Received: by mail-vs1-xe33.google.com with SMTP id ada2fe7eead31-43b28436ebeso436331137.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 23:52:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1686293530; x=1688885530;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9oPjVT2mzKDJ4waTXYPCRAi/fQfEeCZ1ToGp8WVCS1k=;
+        b=AMrDv5qSazUL2j9KAPL4GXg47Jkk/zOqzKIynvCYX5v5HadY75+w9uGzjD8to31JYc
+         ahJNr3XMFzLPfZHnCcFbVCcAp9G6NToocd3vN96uhW1uc92U4f6OxUEguwIYqf1yOVSb
+         f9FbF6bCQ0gss7cJZ2iBSWFsExGEahkcIyk8M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686293530; x=1688885530;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9oPjVT2mzKDJ4waTXYPCRAi/fQfEeCZ1ToGp8WVCS1k=;
+        b=GsQW7IsqNusPZ0pyMh4lvMpx7fsv0lmrNApoUsvzsgl322c92SkPo5ca5GgRZrn8Y2
+         /Ur2PqkQpDMI9oueXkRiYwJJyW+VmXQ7xi8Dk8atIv3szI1DjIOaQaplSXM4ohE0gK9J
+         j2a4bZ/wXwWjg7dfAUq0LrAeEuapBnz06+PD1+VNBCZFlmqkwKyKqVkEXJnwJvdpxtZ4
+         nTc99kfWKtjCGUgvj4HsXAkm0iCEFqtcPX4RLUsBC1tPk6cn8fIDd3lvauRAlTjX6E9r
+         zTUXOs82um9PZqzIqhbyFTXVJ8MazVRO6IgC62OUnHakjxCjzMSLFsFCDiw5H426Pmnt
+         RVGg==
+X-Gm-Message-State: AC+VfDy6RiHlQWDiZUlqbcpiY3X969SBDjZ/RqVYIuztJlpdYovW00zt
+        V8obz57GnIBVUNZo0oBXfnM4ovmLBNZbDWXjKgDhGQ==
+X-Google-Smtp-Source: ACHHUZ5H0G+uDcpI9jSsgYQKUgPLvaqMo4qiM23ihIc/d00wCvHFaicn6AUMr4I7DJdUtBq/dv6BaaDq9XQepbS62H8=
+X-Received: by 2002:a67:f457:0:b0:434:70b4:b356 with SMTP id
+ r23-20020a67f457000000b0043470b4b356mr340620vsn.28.1686293530393; Thu, 08 Jun
+ 2023 23:52:10 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <a3a4f48a-07d4-4ed9-bc53-5d383428bdd2@app.fastmail.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8AxZuTSy4Jk8QsKAA--.30794S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7Cr1UWFy8Kr1kJFy7Kr47KFX_yoW5JFyrpF
-        4UGF1j9r4kAr1fAFn2yw4jqa4Fyws7KF1aq3s0gryxJFs0gFyrtry29w4agFWqvr18Jr4j
-        93yUXFy5uay0yFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUmlb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        AVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-        8JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AF
-        wI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxV
-        AFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
-        zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr
-        1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWU
-        CwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
-        nIWIevJa73UjIFyTuYvjxU7uc_DUUUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+References: <20230607090653.2468317-1-wenst@chromium.org> <20230607090653.2468317-3-wenst@chromium.org>
+ <6d5bd11c-6f57-adc9-b35c-78cb80882d52@collabora.com>
+In-Reply-To: <6d5bd11c-6f57-adc9-b35c-78cb80882d52@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 9 Jun 2023 14:51:59 +0800
+Message-ID: <CAGXv+5HnrYtMimwddNwf0723N_ihiQ_+WA=yCNWnxEneXwCo1Q@mail.gmail.com>
+Subject: Re: [PATCH 2/4] arm64: dts: mediatek: mt8186: Wire up CPU
+ frequency/voltage scaling
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 06/08/2023 08:56 PM, Arnd Bergmann wrote:
-> On Thu, Jun 8, 2023, at 09:04, Tiezhu Yang wrote:
->> On 05/09/2023 05:37 PM, Arnd Bergmann wrote:
->>> On Tue, May 9, 2023, at 09:05, Tiezhu Yang wrote:
->>>
->>> I think we are completely safe on the architectures that were
->>> added since the linux-3.x days (arm64, riscv, csky, openrisc,
->>> loongarch, nios2, and hexagon), but for the older ones there
->>> is a regression risk. Especially on targets that are not that
->>> actively maintained (sparc, alpha, ia64, sh, ...) there is
->>> a good chance that users are stuck on ancient toolchains.
->>> It's probably also a safe assumption that anyone with an older
->>> libc version won't be using the latest kernel headers, so
->>> I think we can still do this across architectures if both
->>> glibc and musl already require a compiler that is new enough,
->>> or alternatively if we know that the kernel headers require
->>> a new compiler for other reasons and nobody has complained.
->>>
->>> For glibc, it looks the minimum compiler version was raised
->>> from gcc-5 to gcc-8 four years ago, so we should be fine.
->>>
->>> In musl, the documentation states that at least gcc-3.4 or
->>> clang-3.2 are required, which probably predate the
->>> __SIZEOF_LONG__ macro. On the other hand, musl was only
->>> released in 2011, and building musl itself explicitly
->>> does not require kernel uapi headers, so this may not
->>> be too critical.
->>>
->>> There is also uClibc, but I could not find any minimum
->>> supported compiler version for that. Most commonly, this
->>> one is used for cross-build environments, so it's also
->>> less likely to have libc/gcc/headers being wildly out of
->>> sync. Not sure.
->>>
->>>       Arnd
->>>
->>> [1] https://sourceware.org/pipermail/libc-alpha/2019-January/101010.html
->>>
->>
->> Thanks Arnd for the detailed reply.
->> Any more comments? What should I do in the next step?
+On Thu, Jun 8, 2023 at 10:19=E2=80=AFPM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
 >
-> I think the summary is "it's probably fine", but I don't know
-> for sure, and it may not be worth the benefit.
+> Il 07/06/23 11:06, Chen-Yu Tsai ha scritto:
+> > This adds clocks, dynamic power coefficients, and OPP tables for the CP=
+U
+> > cores, so that everything required at the SoC level for CPU freqency an=
+d
+> > voltage scaling is available.
+> >
+> > Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+> > ---
+> >   arch/arm64/boot/dts/mediatek/mt8186.dtsi | 274 ++++++++++++++++++++++=
++
+> >   1 file changed, 274 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8186.dtsi b/arch/arm64/boot=
+/dts/mediatek/mt8186.dtsi
+> > index 1b754f7a0725..6735c1feb26d 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
+> > @@ -136,6 +136,240 @@ cci_opp_15: opp-1400000000 {
+> >               };
+> >       };
+> >
+> > +     cluster0_opp: opp-table-cluster0 {
+> > +             compatible =3D "operating-points-v2";
+> > +             opp-shared;
+> > +
+> > +             opp-500000000 {
+> > +                     opp-hz =3D /bits/ 64 <500000000>;
+> > +                     opp-microvolt =3D <600000>;
+> > +                     opp-level =3D <15>;
+>
+> As far as I remember we don't need opp-level, can you please recheck that
+> and in case remove the levels from all OPPs?
 
-Thank you, it is very clear now.
+Looks like we don't need it for any of the DVFS stuff. I'll remove it from
+all the OPP tables in all the patches.
 
-> Maybe you can prepare a v2 that only does this for the newer
-> architectures I mentioned above, with and an explanation and
-> link to my above reply in the file comments?
-
-Only arm64, riscv and loongarch belong to the newer architectures
-which are related with this change, I am not sure it is necessary
-to "unify" uapi bitsperlong.h for them.
-
-Anyway, let me try, I will send a new version, maybe this is going
-to progress in the right direction.
-
-Thanks,
-Tiezhu
-
+ChenYu
