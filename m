@@ -2,114 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2133729121
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:31:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5711A729142
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 09:36:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238824AbjFIHac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 03:30:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43838 "EHLO
+        id S238157AbjFIHfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 03:35:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238791AbjFIH3x (ORCPT
+        with ESMTP id S238954AbjFIHfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 03:29:53 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B37A30D0;
-        Fri,  9 Jun 2023 00:29:41 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 25C306606F2A;
-        Fri,  9 Jun 2023 08:29:39 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686295779;
-        bh=PRbx+c11bbggGiBNDUqRcT41XRfir2GfxWZ740uanE4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Y/M8YLKhHUIk0lyKmOMoE91zv+WLS+IQnS6wispM55ImFEp0zT5UzgR5IbvnTnUhy
-         CddTUpyrCVBYfVL0rOuVNXGlMOgWVVMq+QFEtEABVtBYYCzET4nDTmS1FEw72EZ+Mk
-         oDBKyS6Ytw8RThDhtyCYJhw7OsTICp7cLQqi72nHqc2ssXvB5z5hsf+OB10c8WgcaI
-         0FOPtxX+ZNKv7Uerz9tfRrm4lPokHlzTop0LIUKiqisDyw1eZRfza+Sc/ZhEfli4ay
-         5ki+YHL71d9WrP6+WzNxkOsxmdMcuG24srVT36XdSK31SKjbZilRJjGD8da16rf3Cw
-         YNxIj97ttJFqw==
-Message-ID: <a5597b19-eca8-10b0-1fe4-8f6e1d1d1adf@collabora.com>
-Date:   Fri, 9 Jun 2023 09:29:36 +0200
+        Fri, 9 Jun 2023 03:35:21 -0400
+X-Greylist: delayed 243 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 09 Jun 2023 00:34:55 PDT
+Received: from smtpcmd12131.aruba.it (smtpcmd12131.aruba.it [62.149.156.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222312D7B
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 00:34:55 -0700 (PDT)
+Received: from [192.168.1.56] ([79.0.204.227])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id 7Wa7qv0VqlVLu7Wa7q9kk8; Fri, 09 Jun 2023 09:30:48 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1686295848; bh=CxJiABjMAbHEoXWwETMmIKubD9O+HOaM3QhDPUauua8=;
+        h=Date:MIME-Version:Subject:To:From:Content-Type;
+        b=E+vEcnLwJYxXi0Gyfgvu4aL6dlENVtq+BAhgkDLKjlrs9Ho1kW6xARJmTC58uC6f6
+         tuHQD0lo550m+X4aWCOeXlkF9aTN/1H3Qwwex6HCzO+1GlbO84IaDfPYojItGHYDgB
+         0ecRVu3iuYk1ZmCfoHf/HhmuKnSm8i+eiB2PG4CH4AXDyJDKuXCW+FVIhe0W9RY6XJ
+         sUm4V4afDQq89PmQeNfNFRGFD+w3ObbNB5Q7zIWBT5YL1Z6BCEWBsaALCwyL1GZmEL
+         dSnb7A4HmQqYEn7i3UObtGOCyq5NfAg2O3iXWlClf+wqaRSi4yG/TZZC+zPbBLQ5kM
+         rrzuIVLKhfshw==
+Message-ID: <70ce864c-ca13-4fc4-fcb5-9b7f91579a90@enneenne.com>
+Date:   Fri, 9 Jun 2023 09:30:47 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 1/2] PCI: mediatek-gen3: Stop acquiring spinlocks in
- {suspend,resume}_noirq
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     ryder.lee@mediatek.com, jianjun.wang@mediatek.com,
-        lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
-        bhelgaas@google.com, p.zabel@pengutronix.de,
-        matthias.bgg@gmail.com, linux-pci@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230608171507.GA1204894@bhelgaas>
+ Thunderbird/102.11.0
+Subject: Re: [RFC PATCH] pps: Increase PPS_MAX_SOURCES value.
+To:     Charlie Johnston <charlie.johnston@ni.com>
+Cc:     linux-kernel@vger.kernel.org, brenda.streiff@ni.com
+References: <20230605203147.694716-1-charlie.johnston@ni.com>
+ <fe435e68-8e05-9078-0fe6-63ef7cce2fc9@enneenne.com>
+ <b794bccc-0233-4d78-df6f-bf7c688a7d7d@ni.com>
+From:   Rodolfo Giometti <giometti@enneenne.com>
 Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230608171507.GA1204894@bhelgaas>
+In-Reply-To: <b794bccc-0233-4d78-df6f-bf7c688a7d7d@ni.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfBdLcGhVejdbWjhVRfFbW9TqOI4aUuIGqmEZtbLbLD6zBuKR+yJw9CC89mX2Y2rUA89TSlbW31ngqQU0bK8bkj7HivK6TCS/WAToJCBqxZBmYIhF/lOw
+ Gb1JuAPRpGptuh9iKOrUHBN2dgjPrjfsnSQfKvnIdglqmICEKUStW81QX0FmGuDBIAfY5grXtC0hvmY/r0RLPnTbDyouChd7etAGeL9YSyiJx7hUV1d85/1J
+ ii1mrWOh28WkPoGm8UiGkE8WrNtXws8pAgIM0dVOhNM=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 08/06/23 19:15, Bjorn Helgaas ha scritto:
-> On Thu, May 04, 2023 at 01:35:08PM +0200, AngeloGioacchino Del Regno wrote:
->> In mtk_pcie_suspend_noirq() and mtk_pcie_resume_noirq() we are,
->> respectively, disabling and enabling generation of interrupts and
->> then saving and restoring the enabled interrupts register: since
->> we're using noirq PM callbacks, that can be safely done without
->> holding any spin lock.
+On 08/06/23 00:07, Charlie Johnston wrote:
+> On 6/7/23 02:33, Rodolfo Giometti wrote:
+>> On 05/06/23 22:31, Charlie Johnston wrote:
+>>> For consistency with what ptp uses for minors, this
+>>> change sets PPS_MAX_SOURCES to MINORMASK + 1.
+>>>
+>>> The PPS_MAX_SOURCES value is currently set to 16. In
+>>> some cases this was not sufficient for a system. For
+>>> example, a system with multiple (4+) PCIe cards each
+>>> with 4 PTP-capable ethernet interfaces could run out
+>>> of the available PPS major:minors if each interface
+>>> registers a PPS source.
+>>>
+>>> Signed-off-by: Charlie Johnston <charlie.johnston@ni.com>
+>>> ---
+>>>    include/uapi/linux/pps.h | 2 +-
+>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/include/uapi/linux/pps.h b/include/uapi/linux/pps.h
+>>> index 009ebcd8ced5..85f472330da8 100644
+>>> --- a/include/uapi/linux/pps.h
+>>> +++ b/include/uapi/linux/pps.h
+>>> @@ -26,7 +26,7 @@
+>>>    #include <linux/types.h>
+>>>      #define PPS_VERSION        "5.3.6"
+>>> -#define PPS_MAX_SOURCES        16        /* should be enough... */
+>>> +#define PPS_MAX_SOURCES        (MINORMASK + 1)
+>>>      /* Implementation note: the logical states ``assert'' and ``clear''
+>>>     * are implemented in terms of the chip register, i.e. ``assert''
+>>
+>> I have just one question: are you sure that it's safe to call idr_alloc(..., 0, (MINORMASK + 1), ...)?
+>>
+>> Ciao,
+>>
+>> Rodolfo
+>>
 > 
-> Tangent: it's annoying that pcie-mediatek.c and pcie-mediatek-gen3.c
-> use identical "mtk_pcie_suspend_noirq()" names.  That makes browsing
-> harder than it needs to be.  But I see that you refer to
-> mediatek-gen3.
+> Thanks for taking a look!
 > 
->> +++ b/drivers/pci/controller/pcie-mediatek-gen3.c
->> @@ -963,8 +963,6 @@ static void mtk_pcie_irq_save(struct mtk_gen3_pcie *pcie)
->>   {
->>   	int i;
->>   
->> -	raw_spin_lock(&pcie->irq_lock);
->> -
->>   	pcie->saved_irq_state = readl_relaxed(pcie->base + PCIE_INT_ENABLE_REG);
->>   
->>   	for (i = 0; i < PCIE_MSI_SET_NUM; i++) {
->> @@ -973,16 +971,12 @@ static void mtk_pcie_irq_save(struct mtk_gen3_pcie *pcie)
->>   		msi_set->saved_irq_state = readl_relaxed(msi_set->base +
->>   					   PCIE_MSI_SET_ENABLE_OFFSET);
->>   	}
->> -
->> -	raw_spin_unlock(&pcie->irq_lock);
->>   }
+> My understanding is that idr_alloc(..., start, end, ...) can take any end value up to INT_MAX. It also handles any values <= 0 by treating them as equal to INT_MAX + 1 since the end value is non-inclusive. I can't think of any reason using MINORMASK + 1 here would be an issue since it's much less than the maximum value idr_alloc() allows.
 > 
-> Jianjun added mtk_pcie_irq_save() and mtk_pcie_irq_restore() with
-> d537dc125f07 ("PCI: mediatek-gen3: Add system PM support").
-> 
-> I suggest looking at other drivers and structuring mediatek-gen3
-> similarly, including using similar function names.  No other drivers
-> have a .*_pcie_irq_save() function.  Several have .*_pcie_host_init(),
-> and some of those do include some IRQ setup.
-> 
-> Bjorn
+> A number of drivers (e.g. ptp) just explicitly use a start and end value of 0, but I don't think that change would fit here.
 
-Hello Bjorn,
-thanks for the feedback!
+I see and maybe I should replace the usage of idr_*() with ida_*() as PTP does...
 
-Yes, I of course refer to the Gen3 driver... I'll check other drivers and
-will try to improve the consistency of this one with the others as soon as
-I have some bandwidth to perform the job.
+However the right-thing(TM) to do here should be dropping PPS_MAX_SOURCES at all!
 
-Thanks again,
-Angelo
+Let me go deeper in this issue. I'm going to produce a patch set in next days. 
+Have you any chances to test it?
+
+Ciao,
+
+Rodolfo
+
+-- 
+GNU/Linux Solutions                  e-mail: giometti@enneenne.com
+Linux Device Driver                          giometti@linux.it
+Embedded Systems                     phone:  +39 349 2432127
+UNIX programming                     skype:  rodolfo.giometti
+
