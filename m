@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 802AF728CFC
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 03:19:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62101728CFD
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 03:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237541AbjFIBS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 21:18:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37396 "EHLO
+        id S237565AbjFIBUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 21:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbjFIBS4 (ORCPT
+        with ESMTP id S229692AbjFIBUK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 21:18:56 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1816319AC
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 18:18:55 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-ba86ea269e0so1277519276.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 18:18:55 -0700 (PDT)
+        Thu, 8 Jun 2023 21:20:10 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F8EB198C
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 18:20:09 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-565a022ef06so11190247b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 18:20:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686273534; x=1688865534;
+        d=google.com; s=20221208; t=1686273609; x=1688865609;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=s/wneZk+WXTrjMA3fZuua9PXiv3fUuHnEiWoD80tgK8=;
-        b=ngXLVdTpVyrnOmcx9sqd11fDN/DpMfDjRFc20sS67KuKXUBPfJVN7b54WivfwCCqcm
-         2w8p0+WuKxMdG7YLSaNER90dnOHjPSlvPspYoe5kIeMhFky06+Enxr+OKG3u1lmvAOqa
-         C+PVbym1M2SnYvLxMqSZg33YxKhOPm3FgR9jzQ+MnLfZGFUC2OJbbjuScpkVkepg/TEp
-         276YbysaG6RpeWzjjsraxwjBqi8YR2LoYFLfcozNIrD2bqcAOk2V+q1v/295yDeTTnP9
-         TfyYNMuGFwQjegWuOVfz1GKj11hEcBHgzfIvjlO8LY2ikBAtYqRoDenRCee7HmvBFb1A
-         njIw==
+        bh=W3t6elq9R4Rh1GonIcnIp9HMVNr0t0fb96tM78h+6lY=;
+        b=sbrAsg5WUYRFtaZIknvbQiG6/TYzlsI+0wgQgiUfJThncdOkuzQD0khSKs1V9z07r2
+         Tv51pW/PAoavvTS97xjUmu8LWWg94YJvp9vB5pfhhczalF5/DDl+Uv7HP4vGiWYqNo4X
+         NvPImQC1dON//ZIIaJuY80thsOcoTmEarD24++KqimOdduTFWASKv9w7+mCL83HP6Bjj
+         lCLJbqulD5C8g370KMX/kus7X70GOqLQ+qmTon2m/00V/c4ahLqm0Dsyh/zh31jb7WvE
+         PrxBXcgSpFRmWGUOtPIfuBbXHPk/T7GjZ0IZtugAqqqNtfJYQbkhOVtUktXosevWE1uY
+         kB2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686273534; x=1688865534;
+        d=1e100.net; s=20221208; t=1686273609; x=1688865609;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=s/wneZk+WXTrjMA3fZuua9PXiv3fUuHnEiWoD80tgK8=;
-        b=YMauREB2g/iRaGULaR5xRwXHQNiURkiWyM9zw8gV41v7LapBeB1Q4asogV3syiepZY
-         IIeeM1puuqXlhTpwsm4ZSfOLIPm2J0JoUwww824VOkPl+X2QX4sRVIdvDoXfWUFSSM/j
-         dJbFrZTyFifDHtmPBf24L9GyncP3pLXw8IGuGhTZeuv0J5hfYYggiYM7YdJugrhWhE7+
-         fMRsCVV+MZqIf/9ZCx23M0KPmq2ORQ83jyB8SP6Wf7fZaoJdHYSUr2ySrU4SH24IvYuz
-         4hDO8G4+s5w4xlphA/0RA6KZVoTPqtDtDboipD9n480up6Q8YVnylbeCJ8gZFwkH7wK2
-         WBOw==
-X-Gm-Message-State: AC+VfDwwuaul5n0n5OVStHTBr9NNgrTa7Ai/T59vbwC///rjjcF5XE+a
-        Fk7rOH5W1c0jI3/y11iMfeTwag==
-X-Google-Smtp-Source: ACHHUZ5bBUa+IZ+zQxwNmCb4pbZbizWCezt9RItrFgkqOHN09PZD1rbRUEyPvItVL/IZu/e+lOkb4A==
-X-Received: by 2002:a25:d757:0:b0:ba7:ff37:4603 with SMTP id o84-20020a25d757000000b00ba7ff374603mr1178588ybg.45.1686273534119;
-        Thu, 08 Jun 2023 18:18:54 -0700 (PDT)
+        bh=W3t6elq9R4Rh1GonIcnIp9HMVNr0t0fb96tM78h+6lY=;
+        b=VEa5VIp0wlE6NJvD1tAfgLPLAUKBG2xNrPxnKYIG6/e6sDUPxQOP0f4e3nqQaZBIy6
+         Bp2J/10wSkJ4fRb4NR0kIe80CNu2bqPtPpb7nd9gY8q7hQCN9r9bOuweNCu9IZsMJeJQ
+         sJLqazlPoPBnoYRws9sqdVTgfn4ljT+f/DPSGVT+TGchNjQcZnPaMzgB9JN6gpouXAad
+         5XBtzQRf32lLf5YZSBlKeq8TH6j7GQ+ociHdzSuB8oUt+uas4uuhXNJ0COFmLEURfl3m
+         BOZHZZda5lTNehPCZ9jGP8IDXgMOMcB7r6X/DbUWOxx2+eq0kUCZjnB+pJZ1nfBudtLA
+         rwtA==
+X-Gm-Message-State: AC+VfDyjGnwoLqU/iR8IeD7GsqbtJh0W+i3ZhaY009LM/nQC8QZJanuJ
+        DBcXsPNxb2NrSqXMwjhIEvM92g==
+X-Google-Smtp-Source: ACHHUZ6n8W5YFW3Tw+jdRjglpr2r72K5tunXYPvH/mLAwhgJM3++HeY9qf1iqDSmIO6b6XIA/ifN5Q==
+X-Received: by 2002:a0d:dd01:0:b0:568:b0f6:ce8a with SMTP id g1-20020a0ddd01000000b00568b0f6ce8amr1205033ywe.24.1686273608570;
+        Thu, 08 Jun 2023 18:20:08 -0700 (PDT)
 Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id v38-20020a25aba9000000b00b923b2935d9sm603286ybi.20.2023.06.08.18.18.50
+        by smtp.gmail.com with ESMTPSA id j77-20020a819250000000b00565862c5e90sm289860ywg.83.2023.06.08.18.20.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 18:18:53 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 18:18:49 -0700 (PDT)
+        Thu, 08 Jun 2023 18:20:07 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 18:20:04 -0700 (PDT)
 From:   Hugh Dickins <hughd@google.com>
 X-X-Sender: hugh@ripple.attlocal.net
 To:     Andrew Morton <akpm@linux-foundation.org>
@@ -84,10 +84,10 @@ cc:     Mike Kravetz <mike.kravetz@oracle.com>,
         Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
         Ryan Roberts <ryan.roberts@arm.com>,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 10/32] mm/pagewalk: walk_pte_range() allow for
- pte_offset_map()
+Subject: [PATCH v2 11/32] mm/vmwgfx: simplify pmd & pud mapping dirty
+ helpers
 In-Reply-To: <c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com>
-Message-ID: <3eba6f0-2b-fb66-6bb6-2ee8533e221@google.com>
+Message-ID: <d3379c7-65db-26d3-1764-8e866490925f@google.com>
 References: <c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -102,86 +102,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-walk_pte_range() has a no_vma option to serve walk_page_range_novma().
-I don't know of any problem, but it looks safer to check for init_mm,
-and use pte_offset_kernel() rather than pte_offset_map() in that case:
-pte_offset_map()'s pmdval validation is intended for userspace.
-
-Allow for its pte_offset_map() or pte_offset_map_lock() to fail, and
-retry with ACTION_AGAIN if so.  Add a second check for ACTION_AGAIN
-in walk_pmd_range(), to catch it after return from walk_pte_range().
-
-Remove the pmd_trans_unstable() check after split_huge_pmd() in
-walk_pmd_range(): walk_pte_range() now handles those cases safely
-(and they must fail powerpc's is_hugepd() check).
+wp_clean_pmd_entry() need not check pmd_trans_unstable() or pmd_none(),
+wp_clean_pud_entry() need not check pud_trans_unstable() or pud_none():
+it's just the ACTION_CONTINUE when trans_huge or devmap that's needed
+to prevent splitting, and we're hoping to remove pmd_trans_unstable().
+Is that PUD #ifdef necessary?  Maybe some configs are missing a stub.
 
 Signed-off-by: Hugh Dickins <hughd@google.com>
 ---
- mm/pagewalk.c | 33 +++++++++++++++++++++++----------
- 1 file changed, 23 insertions(+), 10 deletions(-)
+ mm/mapping_dirty_helpers.c | 34 +++++++++-------------------------
+ 1 file changed, 9 insertions(+), 25 deletions(-)
 
-diff --git a/mm/pagewalk.c b/mm/pagewalk.c
-index cb23f8a15c13..64437105fe0d 100644
---- a/mm/pagewalk.c
-+++ b/mm/pagewalk.c
-@@ -46,15 +46,27 @@ static int walk_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end,
- 	spinlock_t *ptl;
+diff --git a/mm/mapping_dirty_helpers.c b/mm/mapping_dirty_helpers.c
+index e1eb33f49059..87b4beeda4fa 100644
+--- a/mm/mapping_dirty_helpers.c
++++ b/mm/mapping_dirty_helpers.c
+@@ -128,19 +128,11 @@ static int wp_clean_pmd_entry(pmd_t *pmd, unsigned long addr, unsigned long end,
+ {
+ 	pmd_t pmdval = pmdp_get_lockless(pmd);
  
- 	if (walk->no_vma) {
--		pte = pte_offset_map(pmd, addr);
--		err = walk_pte_range_inner(pte, addr, end, walk);
--		pte_unmap(pte);
-+		/*
-+		 * pte_offset_map() might apply user-specific validation.
-+		 */
-+		if (walk->mm == &init_mm)
-+			pte = pte_offset_kernel(pmd, addr);
-+		else
-+			pte = pte_offset_map(pmd, addr);
-+		if (pte) {
-+			err = walk_pte_range_inner(pte, addr, end, walk);
-+			if (walk->mm != &init_mm)
-+				pte_unmap(pte);
-+		}
- 	} else {
- 		pte = pte_offset_map_lock(walk->mm, pmd, addr, &ptl);
--		err = walk_pte_range_inner(pte, addr, end, walk);
--		pte_unmap_unlock(pte, ptl);
-+		if (pte) {
-+			err = walk_pte_range_inner(pte, addr, end, walk);
-+			pte_unmap_unlock(pte, ptl);
-+		}
- 	}
+-	if (!pmd_trans_unstable(&pmdval))
+-		return 0;
 -
-+	if (!pte)
-+		walk->action = ACTION_AGAIN;
- 	return err;
+-	if (pmd_none(pmdval)) {
+-		walk->action = ACTION_AGAIN;
+-		return 0;
+-	}
+-
+-	/* Huge pmd, present or migrated */
+-	walk->action = ACTION_CONTINUE;
+-	if (pmd_trans_huge(pmdval) || pmd_devmap(pmdval))
++	/* Do not split a huge pmd, present or migrated */
++	if (pmd_trans_huge(pmdval) || pmd_devmap(pmdval)) {
+ 		WARN_ON(pmd_write(pmdval) || pmd_dirty(pmdval));
+-
++		walk->action = ACTION_CONTINUE;
++	}
+ 	return 0;
  }
  
-@@ -141,11 +153,8 @@ static int walk_pmd_range(pud_t *pud, unsigned long addr, unsigned long end,
- 		    !(ops->pte_entry))
- 			continue;
+@@ -156,23 +148,15 @@ static int wp_clean_pmd_entry(pmd_t *pmd, unsigned long addr, unsigned long end,
+ static int wp_clean_pud_entry(pud_t *pud, unsigned long addr, unsigned long end,
+ 			      struct mm_walk *walk)
+ {
++#ifdef CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD
+ 	pud_t pudval = READ_ONCE(*pud);
  
--		if (walk->vma) {
-+		if (walk->vma)
- 			split_huge_pmd(walk->vma, pmd, addr);
--			if (pmd_trans_unstable(pmd))
--				goto again;
--		}
+-	if (!pud_trans_unstable(&pudval))
+-		return 0;
+-
+-	if (pud_none(pudval)) {
+-		walk->action = ACTION_AGAIN;
+-		return 0;
+-	}
+-
+-#ifdef CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD
+-	/* Huge pud */
+-	walk->action = ACTION_CONTINUE;
+-	if (pud_trans_huge(pudval) || pud_devmap(pudval))
++	/* Do not split a huge pud */
++	if (pud_trans_huge(pudval) || pud_devmap(pudval)) {
+ 		WARN_ON(pud_write(pudval) || pud_dirty(pudval));
++		walk->action = ACTION_CONTINUE;
++	}
+ #endif
+-
+ 	return 0;
+ }
  
- 		if (is_hugepd(__hugepd(pmd_val(*pmd))))
- 			err = walk_hugepd_range((hugepd_t *)pmd, addr, next, walk, PMD_SHIFT);
-@@ -153,6 +162,10 @@ static int walk_pmd_range(pud_t *pud, unsigned long addr, unsigned long end,
- 			err = walk_pte_range(pmd, addr, next, walk);
- 		if (err)
- 			break;
-+
-+		if (walk->action == ACTION_AGAIN)
-+			goto again;
-+
- 	} while (pmd++, addr = next, addr != end);
- 
- 	return err;
 -- 
 2.35.3
 
