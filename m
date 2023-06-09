@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 473AC72A274
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 719B272A279
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231888AbjFISiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 14:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50412 "EHLO
+        id S231708AbjFISir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 14:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231841AbjFIShv (ORCPT
+        with ESMTP id S231938AbjFIShz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 14:37:51 -0400
+        Fri, 9 Jun 2023 14:37:55 -0400
 Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0868359A
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 11:37:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E583AB2
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 11:37:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686335847; x=1717871847;
+  t=1686335851; x=1717871851;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=DqKTca5gyr7Im4WSf8/P06PY9UT7NdBNnxnbcZy0OCE=;
-  b=Xc/2danfFPgfvQIqNzl2NRRTTEDEp60FaHLAUKJNOwzBuepjtEFKp6e4
-   Q4j8sG2Jx6XAIwUt3SOMM51xXI/4CK8UsGpVdmaE9xCiRtfaQUjEKAcYD
-   H47PbIbt1/9P51xxqCJLG5TAtMZMbXG1hPIj9wvGHHzzCuBR0fItngwir
-   oANSd1WQY2/CvX+N++7w4L+0bQHJD21hLGAWndbPRp+CQqX2Jomn0LY/3
-   i0RVhMevXAD6nsOscoH+JIiDoa6IkPey1DTvjsqkbIzbQfj/xTN60Or9p
-   T/g7IZoNGkNa2ZySIe5pvPN5SgbSOPpRV4MeeTK4iOuMA/2xiBaSrglwl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="338022216"
+  bh=cSHO1BH7WnTgrrvVGbc7GV85jY3NXc9iqn2mc1vIguw=;
+  b=RRK7GH/x94E81wUK/rhlA+HweDkoCEaS8Eo5/mTas+aKSqcnuat1YC8D
+   fqXRGsWKyNdrRbMJec4yMpeib+rtWRlr3GgJ1VU944dZlqgyhZt1S0dPm
+   Egn/XhyUp/B+zuiXlFeyzIYdVtgUx/kNWtPKb6pvFkf7FZlsxDOjFrKab
+   4Oe7B1MFQxuaF1L9m2MxQuj1jkbcmkl96lI7xUI5RK5o8+el2o0VY8fT5
+   hfh+1+3jWskUiJXm4UoTGOMub6e95SZDPdPfxcZH7p/cyirRPZ7isDZFs
+   wL+Ph8BUIAPujjkqKJOwvFKSP/1IMmVEWUl0e/q5guTginc5TVVfX6MTs
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="338022230"
 X-IronPort-AV: E=Sophos;i="6.00,230,1681196400"; 
-   d="scan'208";a="338022216"
+   d="scan'208";a="338022230"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 11:37:22 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 11:37:25 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="710444115"
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="710444135"
 X-IronPort-AV: E=Sophos;i="6.00,230,1681196400"; 
-   d="scan'208";a="710444115"
+   d="scan'208";a="710444135"
 Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 09 Jun 2023 11:37:20 -0700
+  by orsmga002.jf.intel.com with ESMTP; 09 Jun 2023 11:37:22 -0700
 From:   Alexander Shishkin <alexander.shishkin@linux.intel.com>
 To:     linux-kernel@vger.kernel.org, x86@kernel.org,
         Andy Lutomirski <luto@kernel.org>,
@@ -46,11 +46,10 @@ To:     linux-kernel@vger.kernel.org, x86@kernel.org,
         Ravi Shankar <ravi.v.shankar@intel.com>,
         Tony Luck <tony.luck@intel.com>,
         Sohil Mehta <sohil.mehta@intel.com>
-Cc:     Yian Chen <yian.chen@intel.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Subject: [PATCH v3 11/12] x86/cpu: Set LASS CR4 bit as pinning sensitive
-Date:   Fri,  9 Jun 2023 21:36:31 +0300
-Message-Id: <20230609183632.48706-12-alexander.shishkin@linux.intel.com>
+Cc:     Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Subject: [RFC v3 12/12] x86/efi: Disable LASS enforcement when switching to EFI MM
+Date:   Fri,  9 Jun 2023 21:36:32 +0300
+Message-Id: <20230609183632.48706-13-alexander.shishkin@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230609183632.48706-1-alexander.shishkin@linux.intel.com>
 References: <20230609183632.48706-1-alexander.shishkin@linux.intel.com>
@@ -66,31 +65,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yian Chen <yian.chen@intel.com>
+From: Sohil Mehta <sohil.mehta@intel.com>
 
-Security features such as LASS are not expected to be disabled once
-initialized. Add LASS to the CR4 pinned mask.
+[Code is experimental and not yet ready to be merged upstream]
 
-Signed-off-by: Yian Chen <yian.chen@intel.com>
+PeterZ suggested that EFI memory can be mapped in user virtual address
+space which would trigger LASS violation upon access. It isn't exactly
+clear how and when these user address mapping happen. It may be possible
+this is related to EFI mixed mode.
+Link:https://lore.kernel.org/lkml/Y73S56t%2FwDIGEPlK@hirez.programming.kicks-ass.net/
+
+stac()/clac() calls in the EFI MM enter and exit functions trigger
+objtool warnings due to switch_mm() not being classified as
+func_uaccess_safe. Refer Objtool warnings section #9 in the document
+tools/objtool/Documentation/objtool.txt. This would need to be resolved
+before even considering merging.
+
+Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
 Signed-off-by: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
 ---
- arch/x86/kernel/cpu/common.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/platform/efi/efi_64.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index f26c56fe9963..9ddc19c8832d 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -422,7 +422,7 @@ static __always_inline void setup_lass(struct cpuinfo_x86 *c)
- /* These bits should not change their value after CPU init is finished. */
- static const unsigned long cr4_pinned_mask =
- 	X86_CR4_SMEP | X86_CR4_SMAP | X86_CR4_UMIP |
--	X86_CR4_FSGSBASE | X86_CR4_CET;
-+	X86_CR4_FSGSBASE | X86_CR4_CET | X86_CR4_LASS;
- static DEFINE_STATIC_KEY_FALSE_RO(cr_pinning);
- static unsigned long cr4_pinned_bits __ro_after_init;
+diff --git a/arch/x86/platform/efi/efi_64.c b/arch/x86/platform/efi/efi_64.c
+index 232acf418cfb..20966efcd87a 100644
+--- a/arch/x86/platform/efi/efi_64.c
++++ b/arch/x86/platform/efi/efi_64.c
+@@ -473,9 +473,14 @@ void __init efi_dump_pagetable(void)
+  * while the EFI-mm is borrowed. mmgrab()/mmdrop() is not used because the mm
+  * can not change under us.
+  * It should be ensured that there are no concurrent calls to this function.
++ *
++ * Disable LASS enforcement temporarily when switching to EFI MM since it could
++ * be mapped into the low 64-bit virtual address space with address bit 63 set
++ * to 0.
+  */
+ void efi_enter_mm(void)
+ {
++	stac();
+ 	efi_prev_mm = current->active_mm;
+ 	current->active_mm = &efi_mm;
+ 	switch_mm(efi_prev_mm, &efi_mm, NULL);
+@@ -485,6 +490,7 @@ void efi_leave_mm(void)
+ {
+ 	current->active_mm = efi_prev_mm;
+ 	switch_mm(&efi_mm, efi_prev_mm, NULL);
++	clac();
+ }
  
+ static DEFINE_SPINLOCK(efi_runtime_lock);
 -- 
 2.39.2
 
