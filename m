@@ -2,163 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA2F72A541
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 23:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C1D72A543
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 23:18:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231966AbjFIVSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 17:18:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53632 "EHLO
+        id S232346AbjFIVSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 17:18:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjFIVSA (ORCPT
+        with ESMTP id S230247AbjFIVSY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 17:18:00 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B48135A3
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 14:17:58 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-3f9d619103dso8561cf.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 14:17:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686345477; x=1688937477;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kRAQr078BUUokwlWeruPfu3tXC8xw/eiJppeWzlI2XY=;
-        b=3FYxoqPq77YWBq1uXh5PHe0KR04muNees/64GTBJ3WLOoddlZZJOWQ9cCs1QmEc6jA
-         KTKvl5SIxzSAQ84C49Wp9W/PmWEKisRx/aTZ8dxyaVuWokCmQ1f0SXhS3205hWmUBWf0
-         JqyvxXyej0s+pxNiPsGjks7W83JbtWcDdw3IH4SEaz52jhKy0GI580f8KAV1JxxACOkT
-         YzsthLYJuDlIBxazBhBfwLMYaGXjqEUv2bnrkr4zq2If1RvB7US/VJsAngtbSL9Eh1BB
-         RvyfAuEl1sgzdM/YBgIcySSzylAIWRbgfYkwfzdMvPTtxjdqAGFdMvbF7QRJ68pPGD7q
-         PjIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686345477; x=1688937477;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kRAQr078BUUokwlWeruPfu3tXC8xw/eiJppeWzlI2XY=;
-        b=B6eBIDGTphLCD3L0R85mkaaXw4TCgnm00B34lJtVhedts5bXP9AJPPw1oXDK0s5m3o
-         PYNfeqUmSSXLH91J1wUx3En6n87GmMWy4V+lwCQiNnXvZgPMKmr6IOt3AJs7BrSyxrq1
-         hMbuKrIWEYH7Zl5wt5kEbXrSBJScbQ2k6gTAWB72lQpWCFMk2rZuMncJdbnlZ4B6OSaO
-         4Ms63yotcyTv7m0GfFMIxtFtXhudkZ7FfWapO3aEwZ/TgSJGfTLPBIkPaTk9PH3++bUr
-         ORkauBKhYVJhiYfRBFYpbHsdgYda2ZUlcyiQJ3rIbPDJMxjRuIQj0YBCOjnW7XpmCJFB
-         HUEA==
-X-Gm-Message-State: AC+VfDwsPIcc5Dd6YJFESE2kSWWyP6amFhs7y/1vtMRN8JWkBDSpA9fS
-        tK2qoMs25wCE84KUXt86tEHa/R4DOL1ZCp8R5v2M4g==
-X-Google-Smtp-Source: ACHHUZ7Mn1+bgpCnLIc/VkQ8WULvWZFq0p8HGTm7OUv0T7eX+3mfTWyw5RHUXrEDbgxLlANAQhZYqvg2Jlya4CHYamc=
-X-Received: by 2002:a05:622a:2c6:b0:3ef:2f55:2204 with SMTP id
- a6-20020a05622a02c600b003ef2f552204mr26088qtx.6.1686345477542; Fri, 09 Jun
- 2023 14:17:57 -0700 (PDT)
+        Fri, 9 Jun 2023 17:18:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D960C3A89;
+        Fri,  9 Jun 2023 14:18:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 77B4865C48;
+        Fri,  9 Jun 2023 21:18:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9CEBC433D2;
+        Fri,  9 Jun 2023 21:18:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686345494;
+        bh=A7ZSNdpgt4TEUjGBBbEBvk5Z6M9RP45arMggWse/pRA=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=Z8MkxbLUfCweTaqIx586AdDWCT3qLUVR2gR0OiEnGM6fMovsTxdOphf2Zu7zOS0mk
+         e0kIXKno996Kq3kZ5e7FznrbzRAL9deyMks1zFJ6GYeMykMpERzyRb+yEwH1W6wQ2e
+         /nQvvP93UCklBJ7Bk7PphF0YEUQ0r/Int3/XLAiaPY431dvKvk50N5GuAIvImM0e3+
+         2RZqNe1y9Mzf9f8b4wtC3pzg4idFOwvU6D9TG6OfO2IR3oeldCq12o/60ZhtkizKrB
+         foyuU3TytX5R4tU63QlceDWYGKHI52jJL5f9v+gI9Hsl11Q+X8LZaxlfS4UPD0Ws6R
+         YAARXD8HurcUQ==
+Date:   Fri, 09 Jun 2023 14:18:13 -0700
+From:   Kees Cook <kees@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>
+CC:     keescook@chromium.org, gregkh@linuxfoundation.org,
+        pbonzini@redhat.com, linux-kernel@vger.kernel.org,
+        ojeda@kernel.org, ndesaulniers@google.com, mingo@redhat.com,
+        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        rcu@vger.kernel.org, tj@kernel.org, tglx@linutronix.de,
+        linux-toolchains@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] Lock and Pointer guards
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CAHk-=wjcXuZ91WkKv0fuBcm+w7y=y=fNzW9EXfnYYSCFvuyhdA@mail.gmail.com>
+References: <20230530092342.GA149947@hirez.programming.kicks-ass.net> <20230606094251.GA907347@hirez.programming.kicks-ass.net> <CAHk-=wi-RyoUhbChiVaJZoZXheAwnJ7OO=Gxe85BkPAd93TwDA@mail.gmail.com> <20230606134005.GE905437@hirez.programming.kicks-ass.net> <CAHk-=wgQ5m+SnWTYGHu0JgYXTk2dkGF+msX=ARfYoo3t1_fX9g@mail.gmail.com> <20230606180806.GA942082@hirez.programming.kicks-ass.net> <CAHk-=wgXN1YxGMUFeuC135aeUvqduF8zJJiZZingzS1Pao5h0A@mail.gmail.com> <20230607094101.GA964354@hirez.programming.kicks-ass.net> <20230608085248.GA1002251@hirez.programming.kicks-ass.net> <CAHk-=wj-BGgTF0YgY+L7_G8Jb0UO38Cd8dwrfMqFMEh93B3D7g@mail.gmail.com> <20230608200618.GA1020752@hirez.programming.kicks-ass.net> <CAHk-=wjcXuZ91WkKv0fuBcm+w7y=y=fNzW9EXfnYYSCFvuyhdA@mail.gmail.com>
+Message-ID: <008C18B3-519A-40AF-B35C-1AA8BF1EF4FF@kernel.org>
 MIME-Version: 1.0
-References: <20230508142842.854564-1-apatel@ventanamicro.com>
- <20230508142842.854564-3-apatel@ventanamicro.com> <20230608182828.GA3183987-robh@kernel.org>
- <CAGETcx_4OH=EmSUL2-rwKa=1uoOj+AH_xn4PoPsc0kt_aU0WOg@mail.gmail.com> <CAK9=C2V1LH0739Nq5Ji7gGbgbyFtNAtBYR43fU7vr9omD5tKSA@mail.gmail.com>
-In-Reply-To: <CAK9=C2V1LH0739Nq5Ji7gGbgbyFtNAtBYR43fU7vr9omD5tKSA@mail.gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Fri, 9 Jun 2023 14:17:21 -0700
-Message-ID: <CAGETcx--aEEB6ag1qGcEeygPyZM9Q-T1NOY+wK911LGJGisN8Q@mail.gmail.com>
-Subject: Re: [PATCH v3 02/11] of/irq: Set FWNODE_FLAG_BEST_EFFORT for the
- interrupt controller DT nodes
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Rob Herring <robh@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, iommu@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 4:40=E2=80=AFAM Anup Patel <apatel@ventanamicro.com>=
- wrote:
+On June 8, 2023 7:25:27 PM PDT, Linus Torvalds <torvalds@linux-foundation=
+=2Eorg> wrote:
+>On Thu, Jun 8, 2023 at 1:06=E2=80=AFPM Peter Zijlstra <peterz@infradead=
+=2Eorg> wrote:
+>>
+>>         struct obj *p __free(kfree) =3D kmalloc(=2E=2E=2E);
 >
-> On Fri, Jun 9, 2023 at 1:35=E2=80=AFAM Saravana Kannan <saravanak@google.=
-com> wrote:
-> >
-> > On Thu, Jun 8, 2023 at 11:28=E2=80=AFAM Rob Herring <robh@kernel.org> w=
-rote:
-> > >
-> > > +Saravana
-> > >
-> > > On Mon, May 08, 2023 at 07:58:33PM +0530, Anup Patel wrote:
-> > > > The RISC-V APLIC interrupt controller driver is a regular platform
-> > > > driver so we need to ensure that it is probed as soon as possible.
-> > > > To achieve this, we mark the interrupt controller device nodes with
-> > > > FWNODE_FLAG_BEST_EFFORT (just like console DT node).
-> > > >
-> > > > Fixes: 8f486cab263c ("driver core: fw_devlink: Allow firmware to ma=
-rk devices as best effort")
-> > >
-> > > It is good practice to Cc the commit author of what you are fixing.
-> > >
-> > > > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > > > ---
-> > > >  drivers/of/irq.c | 10 ++++++++++
-> > > >  1 file changed, 10 insertions(+)
-> > > >
-> > > > diff --git a/drivers/of/irq.c b/drivers/of/irq.c
-> > > > index 174900072c18..94e1d9245cff 100644
-> > > > --- a/drivers/of/irq.c
-> > > > +++ b/drivers/of/irq.c
-> > > > @@ -535,6 +535,16 @@ void __init of_irq_init(const struct of_device=
-_id *matches)
-> > > >       INIT_LIST_HEAD(&intc_desc_list);
-> > > >       INIT_LIST_HEAD(&intc_parent_list);
-> > > >
-> > > > +     /*
-> > > > +      * We need interrupt controller platform drivers to work as s=
-oon
-> > >
-> > > If it's platform drivers/devices you care about, then perhaps this
-> > > should be done when platform devices are created.
-> > >
-> > > > +      * as possible so mark the interrupt controller device nodes =
-with
-> > > > +      * FWNODE_FLAG_BEST_EFFORT so that fw_delink knows not to del=
-ay
-> > > > +      * the probe of the interrupt controller device for suppliers
-> > > > +      * without drivers.
-> > > > +      */
-> > > > +     for_each_node_with_property(np, "interrupt-controller")
-> > >
-> > > This function only operates on nodes matching 'matches', but this
-> > > operates on everything.
-> > >
-> > > It does make sense that if we init an interrupt controller here, then=
- we
-> > > will surely want to probe its driver later on. So maybe just move
-> > > setting FWNODE_FLAG_BEST_EFFORT within
-> > > for_each_matching_node_and_match() below.
-> > >
-> > > > +             np->fwnode.flags |=3D FWNODE_FLAG_BEST_EFFORT;
-> > > > +
-> >
-> > Definite Nack. You are pretty much disabling fw_devlink for all
-> > interrupt controllers. There are plenty of examples of the IRQ drivers
-> > being needed very early on and still probing properly without the need
-> > for this flag. Please fix your driver/DT.
+>Yeah, the above actually looks really good to me - I like the naming
+>here, and the use looks very logical to me=2E
 >
-> Okay, I will try to set FWNODE_FLAG_BEST_EFFORT only for
-> APLIC device_node via IRQCHIP_DECLARE().
+>Of course, maybe once I see the patches that use this I go "uhh", but
+>at least for now I think you've hit on a rather legible syntax=2E
+>
+>I'm still a bit unsure of the "no_free_ptr(p)" naming, but at least
+>it's pretty clear about what it does=2E
+>
+>So my only worry is that it's not pretty and to the point like your
+>"__free(kfree)" syntax=2E
+>
+>But it feels workable and not misleading, so unless somebody can come
+>up with a better name, I think it's ok=2E
 
-No, my point is that you very likely don't need to use that flag.
+I like the proposed "take" naming, and before reading that reply I was goi=
+ng to suggest "keep"=2E *shrug*
 
-What exactly is the problem you are facing? Point to an example RISC-V
-dts (not dtsi) in upstream and give specifics please.
 
--Saravana
+--=20
+Kees Cook
