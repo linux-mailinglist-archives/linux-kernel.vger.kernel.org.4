@@ -2,131 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ABA772A6A2
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 01:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2102972A6A7
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 01:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232206AbjFIXOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 19:14:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58328 "EHLO
+        id S232291AbjFIXRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 19:17:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjFIXO2 (ORCPT
+        with ESMTP id S229517AbjFIXRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 19:14:28 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A6C52D52;
-        Fri,  9 Jun 2023 16:14:27 -0700 (PDT)
-Received: from mercury (unknown [185.254.75.28])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 454A066058B2;
-        Sat, 10 Jun 2023 00:14:25 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686352465;
-        bh=OVbrpsZIR2JQ+RAVl4Mjyhs9Fy0GiztuJgn4U6+S2iE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E6mkt8NU48/8Oxba+IYnNWl245e8TAwLRbESYRY5Yt7IYvMKsKZqjZItFUFUv5xcy
-         l+OW0A+nAZzWNr3sB/YLPWDsDWQtPgjIiNAT1fnZ9fA39O6ZKg+bs8ODPq4o8440XX
-         ZlvwkO1kcWDyJ/R6BCL8v6QGt/UVZ6FZcw3PK0f3yBxMkznFwDbuIfhLH5jB99mzLU
-         9kaSMdZuVxIFMd/Vx2BqO2fDrACyQ55TKJEBn+LXsRRm3cfJwYtyhtyXn/+1iBSFIb
-         bZ/DNjL9m21Mz/JENw+Hk0xyeGlTsQkybZmbfC1uudoFnig3LiZb5IiuBzG3Y8SNE4
-         vfYW6ssYdKv+g==
-Received: by mercury (Postfix, from userid 1000)
-        id 52FD11060921; Sat, 10 Jun 2023 01:14:22 +0200 (CEST)
-Date:   Sat, 10 Jun 2023 01:14:22 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 1/2] power: reset: at91-reset: use driver structure as
- status parameter
-Message-ID: <20230609231422.taqokbmxojbfdn2v@mercury.elektranox.org>
-References: <20230609143912.849995-1-miquel.raynal@bootlin.com>
- <20230609143912.849995-2-miquel.raynal@bootlin.com>
+        Fri, 9 Jun 2023 19:17:42 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345742D7E
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 16:17:42 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b02d0942caso10223415ad.1
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 16:17:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=osandov-com.20221208.gappssmtp.com; s=20221208; t=1686352661; x=1688944661;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7RWuX+kZ/I+FgoPe+JjGYufRY/zYD1Mu3QxCDrMKGlE=;
+        b=n6tk3kvmE4tmB8KJRAQbmvKm6tDzPxxBtgvVo40GnL8Z019gUykcAyYKe+2GJ/BCvB
+         mZfAt6QLb+TcGcFYLxzYksdcaGG0vipWUtab6Ff8EftrRZmNtRyJy3szqsraaTodiLwL
+         R1nNMxwL1wDrUOBfnQsEm2EZ5bRpWDvRVZrI9T7WmK4DXa5CImG3CLc5+0OIO19I0Y+7
+         aD6OfXyv9vpk7So7Bh/hmNxK/TVHQvJM0dTdGhGrwmJGd2idK3MLi3Tz+D+kFTTlCK20
+         clrboVuQKvzuNCFEPHCjKNutbBBTyEQZyTn1JAae7fZLGAImgFXKcq8p4OZvpPsg42TC
+         T5DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686352661; x=1688944661;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7RWuX+kZ/I+FgoPe+JjGYufRY/zYD1Mu3QxCDrMKGlE=;
+        b=bpXG7KUXPhvYBbOZS7CY/d9u+fMReR+fP39iW7pZwSd2X1hfJUJnh9mUgCGZhmg9Mx
+         hlmGRF8UcM/NdS1MY4cpRZYfAh3qj0MfuYy3//i4meetF3PgCOazkZBwYy31gCe1rXER
+         HCkNxQdG6QzHHSlgSy+ioWPuRCMiApSDW4WUdG52q+KTdAAAHB+SdrBlm3jjldI3GTuT
+         g/okUNJaPqxad4gSKIWczql+2a0MWRzkZwNMPGOKcMrOAkxbHAHnVLHpfq5rmSTYAKiK
+         991Uz4oQbi/qC4Bim/fn7yOAFSv5ztQA17kjHrAqHrKr/gAViBo1VMTJcNBuXwNvtn22
+         6vMw==
+X-Gm-Message-State: AC+VfDzgxC9teywPVV5m44PHiJtYVcc6SOfsrsF9U/wNkKXOq5YmTyUn
+        EUwbNjyoGhTix/Flq/qyWS/EdQ==
+X-Google-Smtp-Source: ACHHUZ7ihrkV19nTxaELivb9kdHmXDY6SEwTwsd6YpSswQGgsHzOKYi3wbTgq24gQqqtjJr6azf+yw==
+X-Received: by 2002:a17:903:1104:b0:1af:d225:9002 with SMTP id n4-20020a170903110400b001afd2259002mr308875plh.14.1686352661470;
+        Fri, 09 Jun 2023 16:17:41 -0700 (PDT)
+Received: from telecaster ([2620:10d:c090:400::5:eb84])
+        by smtp.gmail.com with ESMTPSA id j3-20020a170902da8300b001b045c9ababsm3756196plx.264.2023.06.09.16.17.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 16:17:41 -0700 (PDT)
+Date:   Fri, 9 Jun 2023 16:17:39 -0700
+From:   Omar Sandoval <osandov@osandov.com>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-debuggers@vger.kernel.org,
+        kernel-team@fb.com
+Subject: Re: [PATCH] x86/unwind/orc: add ELF section with ORC version number
+Message-ID: <ZIOzE4f2xr9CCA45@telecaster>
+References: <5b70bc58ef70aab0a821111cd3201eeced8bab95.1686263379.git.osandov@osandov.com>
+ <20230609220430.agw2rtswmjbquzom@treble>
+ <ZIOmpuqLTJROYQt8@telecaster>
+ <20230609224803.275vqw345utsusah@treble>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ulw4km3dguudpisq"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230609143912.849995-2-miquel.raynal@bootlin.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230609224803.275vqw345utsusah@treble>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jun 09, 2023 at 03:48:03PM -0700, Josh Poimboeuf wrote:
+> On Fri, Jun 09, 2023 at 03:24:38PM -0700, Omar Sandoval wrote:
+> > > Though, instead of
+> > > using an incrementing version, Peter had the idea to hash the struct,
+> > > like:
+> > > 
+> > >   awk '/^struct orc_entry {$/ { p=1 } p { print } /^}/ { p=0 }' arch/x86/include/asm/orc_types.h | sha1sum
+> > > 
+> > > That way we don't have to remember to bump the version number, and it
+> > > would be more resilient to partial backports in distros.
+> > > 
+> > > Would something like that work for you?
+> > 
+> > Any sort of unique identifier works for me. One thing that the proposed
+> > hash wouldn't catch is if ORC_REG_* or ORC_TYPE_* are ever renumbered
+> > (i.e., the meanings of existing values change). It also wouldn't catch
+> > if something about the .orc_unwind_ip section changed. But assuming
+> > changes like that would be much rarer, it could be handled manually by
+> > bumping a "salt" for the hash. E.g., by adding 'BEGIN { print <SALT> }'
+> > to the awk script:
+> > 
+> > awk 'BEGIN { print 1 } /^struct orc_entry {$/ { p=1 } p { print } /^}/ { p=0 }' arch/x86/include/asm/orc_types.h | sha1sum
+> > 
+> > I'll defer to you guys whether it's easier to remember to bump a version
+> > everytime or only in those rare cases.
+> 
+> I think I'd prefer only bumping it in the rare cases, because we're
+> going to end up forgetting either way ;-)
+> 
+> To catch REG/TYPE changes, we could forego awk and just hash the whole
+> file, the only downside being that it might introduce unnecessary
+> changes if we change a comment or something.  But the file changes
+> rarely enough.
+> 
+> Or we could tweak the awk to also print ORC_{REG,TYPE}_* pretty easily.
 
---ulw4km3dguudpisq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Printing ORC_{REG,TYPE}_* should cover almost everything, and if there's
+anything not covered, it can be handled manually, so that sounds good to
+me. I'll draft a patch doing that.
 
-Hi,
-
-On Fri, Jun 09, 2023 at 04:39:11PM +0200, Miquel Raynal wrote:
-> It is quite uncommon to use a driver helper with parameters like *pdev
-> and __iomem *base. It is much cleaner and close to today's standards to
-> provide the per-device driver structure and then access its
-> internals. Let's do this with at91_resete_status() before making more
-> modifications to this helper.
->=20
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> ---
->  drivers/power/reset/at91-reset.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/power/reset/at91-reset.c b/drivers/power/reset/at91-=
-reset.c
-> index 741e44a017c3..a8a6f3997768 100644
-> --- a/drivers/power/reset/at91-reset.c
-> +++ b/drivers/power/reset/at91-reset.c
-> @@ -149,11 +149,10 @@ static int at91_reset(struct notifier_block *this, =
-unsigned long mode,
->  	return NOTIFY_DONE;
->  }
-> =20
-> -static void __init at91_reset_status(struct platform_device *pdev,
-> -				     void __iomem *base)
-> +static void __init at91_reset_status(struct at91_reset *reset)
->  {
-> +	u32 reg =3D readl(reset->rstc_base + AT91_RSTC_SR);
->  	const char *reason;
-> -	u32 reg =3D readl(base + AT91_RSTC_SR);
-> =20
->  	switch ((reg & AT91_RSTC_RSTTYP) >> 8) {
->  	case RESET_TYPE_GENERAL:
-
-You also need to update the code calling this functions, otherwise
-the series is not bisectable.
-
--- Sebastian
-
---ulw4km3dguudpisq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSDskoACgkQ2O7X88g7
-+pqnnhAAjBSbPqAOKOaaMhYoD0mevlwW1uP7DXSkKHiKfEvaBxnNIl+pcKpw6XAd
-kWR5G1HI9TDRI0sGO1rmiqElD5KkG2W9AG+N2XyQ29farZW8jgsYMKLR9o/SGkDe
-SszxTRocOF3zzWsb/RCokOjHL5QJuqvaVi37mdo6/6AyjJHRN9yx5T1zY4ZexASG
-xN81JWQYotuSK2yUy8wD22mmGrvHL2pAb75t3uqcVTjRvah3w9Mx4Bmc+9a9gvas
-xyHp2VOdPEh/wRYMNb6h67xW2nHKWMK+Ab4uNZdoSYvFAmXKUx4gedgsMQP4ArAf
-Y8OHQZmY8/bFc76SwJuZy9gD82z+iy+WLKcJFSdZmrJ1Bb/JexahHoMrLwan3wCd
-/EWvrPIxgEssdJ9RL/ZURBf9OzgtUSW3k4ciGvpIO46ZHLCHYmah64BqE5eDkAzr
-Pko47F+GgDHCD+KqkSIGiCM/9mmRF5FXGONZXg3paXgBaT1KtsD+VVhcdFXsM55W
-vzDRWE9wNlbd/B1kDs4h6QPCSHtzD0PvnRx8Ofd8yJFFOeh9g+zhQdtJQ9cXxTG+
-3rdzd1Z857Yvk6MpBTRBnC/eOkscsjIRRF2iJr0oKsQu920KS5tPP4u+JnIW6jNW
-rpqq4PNqFy/QhtcCO2xvPu/MvzEjYJ5lHX/3hB5yZeQIDyH3Yc4=
-=Bdzs
------END PGP SIGNATURE-----
-
---ulw4km3dguudpisq--
+Thanks,
+Omar
