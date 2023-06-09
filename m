@@ -2,65 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E498728C4C
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 02:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7499728C57
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 02:23:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237535AbjFIAPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 20:15:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41178 "EHLO
+        id S236982AbjFIAXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 20:23:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbjFIAPW (ORCPT
+        with ESMTP id S229732AbjFIAXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 20:15:22 -0400
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9229C2D68;
-        Thu,  8 Jun 2023 17:15:21 -0700 (PDT)
-Received: from [172.27.2.41] ([73.231.166.163])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 3590EBwb1069072
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Thu, 8 Jun 2023 17:14:11 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 3590EBwb1069072
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2023051001; t=1686269655;
-        bh=eETL6+MlMl0BOovD6hR1LxTwJy34pjipmc6N88BiyoY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=nkA2WU9VUv+xW1YPZFGnwcSq6G/5AFtmFSKNwIjsqdU8yMvYEqjQNTyqX7SwXiVdH
-         NBPYrXo3KQQt3sVa827d69La1n74ytlWcVlVajaL8C9Aa/GJKWLmPC3I3k3ZRoQWtF
-         HHHDwZTANxoHh6iphKSW5D6CL/SzDM9gNwVtD3aUxeaG202qL0zCOAk9RggyxHAG7G
-         pSI3NZy+HlPZ5+e0J6tLFutQ8N4LVDO6Qp1aGpHVuSIPQEJGVUEXBQFICFnTAJYA7E
-         rz8EFfbtzKrUHpXLd2ssOwJTlvTo9yTLlglJt1XEYPXrhhZ3S8xKGXp9RyefMhXdW+
-         BEz71wLR4dAwQ==
-Message-ID: <98718c79-d589-3689-3c59-6ca158148641@zytor.com>
-Date:   Thu, 8 Jun 2023 17:14:10 -0700
+        Thu, 8 Jun 2023 20:23:01 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0A22D72;
+        Thu,  8 Jun 2023 17:23:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686270180; x=1717806180;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=hfORcgQzuOPbSklLPJdOW8LVCo5d5Go2LF+sADUuhiU=;
+  b=KKj2g/8okkDMbg1JK1vlqBo5WO8T2Yg1lw+o3aF091wCdUalOduElHZE
+   /Dm25vHxeFMHoGjV6sWSn5Su2YITlWNga4vMxgXE7dDv2kaHbMS3GgBB+
+   DCsYj58YJHY0MfAkyw2mT/fLUsyKAEFZ2x91wIwyDoHDjHnn0rfnygqnq
+   udMIAAAlFmWvv9fmmv5e32stVYtfwOz2z395WKhNnSwHjmxOv0irJ/KtP
+   KzeYl+aU2ZmFXkRyjXDZ/qalA+IdSgFWcYDGP09H4ACBHSCXnlwt9A+rT
+   1DmVw/jx3J7LG0OkeF6IfOuLjqXQU3ZbmHyMi3UlFPQ34jSHNAptUCuBJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="421061871"
+X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
+   d="scan'208";a="421061871"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 17:22:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="884393196"
+X-IronPort-AV: E=Sophos;i="6.00,228,1681196400"; 
+   d="scan'208";a="884393196"
+Received: from yjiang5-mobl.amr.corp.intel.com (HELO localhost) ([10.144.161.97])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 17:22:57 -0700
+Date:   Thu, 8 Jun 2023 17:22:57 -0700
+From:   Yunhong Jiang <yunhong.jiang@linux.intel.com>
+To:     Andrew Cooper <andrew.cooper3@citrix.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [patch] x86/realmode: Make stack lock work in trampoline_compat()
+Message-ID: <20230609002257.GA3661@yjiang5-mobl.amr.corp.intel.com>
+References: <20230508185218.962208640@linutronix.de>
+ <20230524204818.3tjlwah2euncxzmh@box.shutemov.name>
+ <87y1lbl7r6.ffs@tglx>
+ <87sfbhlwp9.ffs@tglx>
+ <20230529023939.mc2akptpxcg3eh2f@box.shutemov.name>
+ <87bki3kkfi.ffs@tglx>
+ <20230529203129.sthnhzgds7ynddxd@box.shutemov.name>
+ <87h6rujdvl.ffs@tglx>
+ <20230608233402.GA3430@yjiang5-mobl.amr.corp.intel.com>
+ <a56a06c2-73fd-5295-3f6c-922ccb078488@citrix.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: Direct rdtsc call side-effect
-Content-Language: en-US
-To:     David Laight <David.Laight@ACULAB.COM>,
-        "'Thomas Gleixner'" <tglx@linutronix.de>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     Steven Noonan <steven@uplinklabs.net>,
-        "kernel@collabora.com" <kernel@collabora.com>
-References: <6719fb05-382c-8ec4-ccda-72798906a54b@collabora.com>
- <87mt1jeax1.ffs@tglx> <353732783fde46919fdcf698c326b7ed@AcuMS.aculab.com>
- <87jzwi55qo.ffs@tglx> <a39d90e45212461bb31738b7156b60a6@AcuMS.aculab.com>
- <4ea6e82c-4761-e0c9-3e75-8ec39eecb30a@zytor.com>
- <cabfcf8a8840410399d2bfc1202e77ce@AcuMS.aculab.com>
-From:   "H. Peter Anvin" <hpa@zytor.com>
-In-Reply-To: <cabfcf8a8840410399d2bfc1202e77ce@AcuMS.aculab.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a56a06c2-73fd-5295-3f6c-922ccb078488@citrix.com>
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SCC_BODY_URI_ONLY,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,17 +104,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/6/23 01:23, David Laight wrote:
+On Fri, Jun 09, 2023 at 12:57:46AM +0100, Andrew Cooper wrote:
+> On 09/06/2023 12:34 am, Yunhong Jiang wrote:
+> > On Tue, May 30, 2023 at 12:46:22PM +0200, Thomas Gleixner wrote:
+> >> The stack locking and stack assignment macro LOAD_REALMODE_ESP fails to
+> >> work when invoked from the 64bit trampoline entry point:
+> >>
+> >> trampoline_start64
+> >>   trampoline_compat
+> >>     LOAD_REALMODE_ESP <- lock
+> > One possibly dumb question and hope get some hints.
 > 
-> IIRC the x86 performance counters aren't dependent on anything
-> so they tend to execute much earlier than you want.
-> OTOH rdtsc is likely to be synchronising and affect what follows.
-> ISTR using rdtsc to wait for instructions to complete and then
-> the performance clock counter to see how long it took.
+> There's a phrase.  "The only dumb question is the one not asked".
 > 
-
-RDPMC and RDTSC have the same (lack of) synchronization guarantees; you 
-need to fence them appropriately for your application no matter what.
-
-	-hpa
-
+> If you have this question, there's an excellent chance that someone else
+> reading this thread has the same question.
+> 
+> >  The LOAD_REALMODE_ESP is
+> > defined under .code16 directive and will be used by 32-bit mode caller also. Is
+> > it ok because the instructions there will be same for both 16-bit and 32-bit? I
+> > checked
+> > https://ftp.gnu.org/old-gnu/Manuals/gas-2.9.1/html_chapter/as_16.html#SEC205 and
+> > don't find much information there.
+> 
+> The position of the LOAD_REALMODE_ESP .macro itself doesn't matter. 
+> It's just some text which gets pasted elsewhere.  Imagine it just the
+> same as running the C preprocessor on a file before compiling it.
+> 
+> As you note, some expansions of the macro are in .code16, and some are
+> not.  This does result in different bytes being emitted.  The default
+> operands size flips between .code16 and .code32, so there will be some
+> 0x66 prefixes in one mode, and not in others.
+> 
+> The important point is the l suffix on btsl, which forces it to be long
+> (32bit) irrespective of the default operand size.
+> 
+> So yes, it will work, but that's because gas is handling the differing
+> encodings automatically based on the default operand size where the
+> LOAD_REALMODE_ESP gets expanded.
+> 
+> Hope this helps,
+Thank you for the explaination, it's quite clear now.
+> 
+> ~Andrew
