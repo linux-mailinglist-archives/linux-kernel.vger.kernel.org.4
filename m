@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEAAC729317
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:29:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD02772931F
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 10:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240878AbjFII1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 04:27:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57464 "EHLO
+        id S240943AbjFII1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 04:27:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241413AbjFIIZw (ORCPT
+        with ESMTP id S241431AbjFIIZz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 04:25:52 -0400
+        Fri, 9 Jun 2023 04:25:55 -0400
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 11DEB3C0B;
-        Fri,  9 Jun 2023 01:24:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CE89149EE;
+        Fri,  9 Jun 2023 01:24:53 -0700 (PDT)
 Received: from uucp (helo=alpha)
         by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1q7XQE-0004Jv-03; Fri, 09 Jun 2023 10:24:38 +0200
+        id 1q7XQE-0004Jv-04; Fri, 09 Jun 2023 10:24:38 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-        id 89068C02EE; Fri,  9 Jun 2023 10:21:25 +0200 (CEST)
-Date:   Fri, 9 Jun 2023 10:21:25 +0200
+        id 7DCFAC02EE; Fri,  9 Jun 2023 10:21:47 +0200 (CEST)
+Date:   Fri, 9 Jun 2023 10:21:47 +0200
 From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Franziska Naepelt <franziska.naepelt@googlemail.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Franziska Naepelt <franziska.naepelt@gmail.com>,
-        Ladislav Michl <oss-lists@triops.cz>
-Subject: Re: [PATCH v2] mips: Fix spacing issue
-Message-ID: <20230609082125.GD8160@alpha.franken.de>
-References: <20230530065949.22247-1-franziska.naepelt@gmail.com>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Manuel Lauss <manuel.lauss@gmail.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] MIPS: Alchemy: Enable PATA_PLATFORM support
+Message-ID: <20230609082147.GE8160@alpha.franken.de>
+References: <alpine.DEB.2.21.2306011327300.59991@angie.orcam.me.uk>
+ <alpine.DEB.2.21.2306011331530.59991@angie.orcam.me.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230530065949.22247-1-franziska.naepelt@gmail.com>
+In-Reply-To: <alpine.DEB.2.21.2306011331530.59991@angie.orcam.me.uk>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -43,50 +43,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 08:59:49AM +0200, Franziska Naepelt wrote:
-> Fix some indentation issues and remove the following checkpatch issue:
-> - ERROR: need consistent spacing around '-' (ctx:WxV)
+On Thu, Jun 01, 2023 at 01:56:19PM +0100, Maciej W. Rozycki wrote:
+> We have limited demand for platform PATA support across MIPS platforms:
 > 
-> Co-Developed-by: Ladislav Michl <oss-lists@triops.cz>
-> Signed-off-by: Franziska Naepelt <franziska.naepelt@gmail.com>
+> $ find arch/mips -type f | sort | xargs grep -l pata_platform_info
+> arch/mips/alchemy/devboards/db1200.c
+> arch/mips/alchemy/devboards/db1300.c
+> arch/mips/sibyte/swarm/platform.c
+> $ 
+> 
+> certainly not high enough to justify enabling support for PATA_PLATFORM 
+> port-wide.  SiByte platforms are handled selectively already, so just 
+> make a similar arrangement for Alchemy DB1XXX platforms.
+> 
+> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
 > ---
-> v2:
->  - Apply review remarks
+>  arch/mips/alchemy/Kconfig |    1 +
+>  1 file changed, 1 insertion(+)
 > 
->  arch/mips/sibyte/swarm/platform.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/mips/sibyte/swarm/platform.c b/arch/mips/sibyte/swarm/platform.c
-> index 484969db7713..339d77a0a08f 100644
-> --- a/arch/mips/sibyte/swarm/platform.c
-> +++ b/arch/mips/sibyte/swarm/platform.c
-> @@ -88,15 +88,15 @@ device_initcall(swarm_pata_init);
->  #define sb1250_dev_struct(num) \
->  	static struct resource sb1250_res##num = {		\
->  		.name = "SB1250 MAC " __stringify(num),		\
-> -		.flags = IORESOURCE_MEM,		\
-> -		.start = A_MAC_CHANNEL_BASE(num),	\
-> -		.end = A_MAC_CHANNEL_BASE(num + 1) -1,	\
-> +		.flags = IORESOURCE_MEM,			\
-> +		.start = A_MAC_CHANNEL_BASE(num),		\
-> +		.end = A_MAC_CHANNEL_BASE(num + 1) - 1,		\
->  	};\
->  	static struct platform_device sb1250_dev##num = {	\
-> -		.name = "sb1250-mac",			\
-> -	.id = num,					\
-> -	.resource = &sb1250_res##num,			\
-> -	.num_resources = 1,				\
-> +		.name = "sb1250-mac",				\
-> +		.id = num,					\
-> +		.resource = &sb1250_res##num,			\
-> +		.num_resources = 1,				\
->  	}
-> 
->  sb1250_dev_struct(0);
-> 
-> base-commit: 7877cb91f1081754a1487c144d85dc0d2e2e7fc4
-> --
-> 2.39.2 (Apple Git-143)
+> linux-mips-alchemy-pata-platform.diff
+> Index: linux-macro/arch/mips/alchemy/Kconfig
+> ===================================================================
+> --- linux-macro.orig/arch/mips/alchemy/Kconfig
+> +++ linux-macro/arch/mips/alchemy/Kconfig
+> @@ -14,6 +14,7 @@ config MIPS_DB1XXX
+>  	bool "Alchemy DB1XXX / PB1XXX boards"
+>  	select GPIOLIB
+>  	select HAVE_PCI
+> +	select HAVE_PATA_PLATFORM
+>  	select SYS_SUPPORTS_LITTLE_ENDIAN
+>  	select SYS_HAS_EARLY_PRINTK
+>  	help
 
 applied to mips-next.
 
