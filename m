@@ -2,483 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF52728D10
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 03:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F157728D12
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 03:28:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237706AbjFIB03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 21:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41210 "EHLO
+        id S237730AbjFIB2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 21:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237202AbjFIB01 (ORCPT
+        with ESMTP id S230002AbjFIB16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 21:26:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B3118D;
-        Thu,  8 Jun 2023 18:26:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4274652A1;
-        Fri,  9 Jun 2023 01:26:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C7C9C433D2;
-        Fri,  9 Jun 2023 01:26:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686273985;
-        bh=E7gyExAS/cvAO86R38JnW3fPXw6PrElO9fuzvoxsGrI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=b1TGJDBKjjaKzVb5VkI/RqFFp5unE0RwXjKSIh/y5Dd7VVYOeB3g2Pzm9keHpfxw2
-         8LVXpDYF3f9ytf8sDrfQYGP0W2N8FY1WaesZodif0X8O7gpHQt+Qq2V5ceZy5evL1r
-         ZaBQVlLM14rcpc05xs/HAYeU4aNoA2QWJJbJTGImNannxVgptl78Wg200rh4tU9sUn
-         vdcyLKR5AZPS7a9JxvqQ/+rqKhSTE82HjwtlUDNBZglPaeX99AQmLiejJEuqWlX0zq
-         ifjehDh8A1FSlA+OQpc3ny93wsAU99EgboOmoIn3YCSaGdiaCC9X0xqrbg8M527wle
-         JgWx40zAW/rOw==
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2b1a7e31dcaso12650231fa.2;
-        Thu, 08 Jun 2023 18:26:24 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzVpDViSVWEFuksAYY2KlBxIWVZQC7U+95QnOKmH6oPzrBcqWHu
-        AUgZ1TWFm8DQLXrslTqZnQpossb9Mhc4CjQ6pQ==
-X-Google-Smtp-Source: ACHHUZ4mbK7KCcvAS0lPnKAml65uyt9/S78fuLQ0/7LsylehrisF58SyKHzaBYI1C/QCxQzlV8h4rdqIkKPefp8EpJk=
-X-Received: by 2002:a2e:988b:0:b0:2a8:c858:fb9 with SMTP id
- b11-20020a2e988b000000b002a8c8580fb9mr133316ljj.29.1686273982942; Thu, 08 Jun
- 2023 18:26:22 -0700 (PDT)
+        Thu, 8 Jun 2023 21:27:58 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA24D1716
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 18:27:57 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-569fc874498so12183277b3.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 18:27:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686274077; x=1688866077;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MyPFy0gUSdpV3ibLKHHJg/J/UWoL9nTKOb5gbs61iKQ=;
+        b=OyAJimk3fc+/Li5me7PIcu882/+lDPwqec67fOflTDld8VWvm0ZySNcdoJgLTrD9rx
+         WoOLU/XWyP4MN+Eoi7KJZTv1R6ExtbK2SMofkB2PIt1uKNhRHeS+xx4hN9Wks9SB/Hkk
+         4gzmFYarU9qov9Uzj7o9h1zLdkAzYRq/b/kKfVItrvxfhKgU8iMFFvE5pQZ3kgV2up+L
+         hNFZoE2nbmMWdsnJ1XbGUBg6gK5gwmUXxa01pub4RN5ECsXTRQyDMvk6goIXaQohEPKU
+         wCMnLqlIXUxUsnIlKrzfLeDs5rhQwhiPDht5XmK01inAm6KH0sUkni/+00j7bluhyFK7
+         RwQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686274077; x=1688866077;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MyPFy0gUSdpV3ibLKHHJg/J/UWoL9nTKOb5gbs61iKQ=;
+        b=Amj2ZZfBE1zJhGKS+OgYIko1V49Q2o1WAKfytxdhRnAs8xzzASIGk+1gF91fxOcjQv
+         PceFjKd5LP/niU9HktHHRt3siGFClqGaZ/t8VwnjfWRkP1yOiT6Ibp17+WJG0D6cMova
+         ypgNNqAzjDNbZDFIIzD+mGgFxjzaf3Rs7RCzYS54TuHoZ7l+vICQxGc9T8GS0TYpIRl+
+         cbjv4aPn8wJ5wxxjOR0v/u2ErbCqYbHB4Y3+LQQuqRh3KQ+L2qpOQUDDAxmD6bW1cZVN
+         mEI+p3HYJcwTaXTQufoe0E13GDIb94fK3c9v0EW/sD541s+Dh/v5bBoWbfTXwJmwXWxP
+         q2lA==
+X-Gm-Message-State: AC+VfDy7O/TYRS44rJRIWXeM02EwnNdCecexC4FP4LE0hwZ8dSj8bwYf
+        TA+p2Lh2IIn6N9TG1srk7kSFbg==
+X-Google-Smtp-Source: ACHHUZ5jGBBEQ5gswQSXjac3sdwb/7+VqiRoKupCeGhVPyqG0jNqvRoD86vqt+pEd3PQOO1HZrsBzg==
+X-Received: by 2002:a81:8005:0:b0:569:74f3:ed2e with SMTP id q5-20020a818005000000b0056974f3ed2emr1337210ywf.22.1686274077005;
+        Thu, 08 Jun 2023 18:27:57 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id c205-20020a814ed6000000b005688ca40c4bsm291663ywb.61.2023.06.08.18.27.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 18:27:56 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 18:27:52 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v2 16/32] mm/debug_vm_pgtable,page_table_check: warn pte map
+ fails
+In-Reply-To: <c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com>
+Message-ID: <3ea9e4f-e5cf-d7d9-4c2-291b3c5a3636@google.com>
+References: <c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com>
 MIME-Version: 1.0
-References: <20230607061121.6732-1-shawn.sung@mediatek.com> <20230607061121.6732-5-shawn.sung@mediatek.com>
-In-Reply-To: <20230607061121.6732-5-shawn.sung@mediatek.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Fri, 9 Jun 2023 09:26:11 +0800
-X-Gmail-Original-Message-ID: <CAAOTY__5QhR7o3N-+vXjrC0bX=F6ABSGPyB-zowbHw5SJiZLfg@mail.gmail.com>
-Message-ID: <CAAOTY__5QhR7o3N-+vXjrC0bX=F6ABSGPyB-zowbHw5SJiZLfg@mail.gmail.com>
-Subject: Re: [PATCH v1 4/6] drm/mediatek: mt8188: Modify display driver for VDOSYS1
-To:     Hsiao Chien Sung <shawn.sung@mediatek.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Singo Chang <singo.chang@mediatek.com>,
-        Nancy Lin <nancy.lin@mediatek.com>,
-        Jason-JH Lin <jason-jh.lin@mediatek.com>,
-        Fei Shao <fshao@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Hsiao-chien:
+Failures here would be surprising: pte_advanced_tests() and
+pte_clear_tests() and __page_table_check_pte_clear_range() each
+issue a warning if pte_offset_map() or pte_offset_map_lock() fails.
 
-Hsiao Chien Sung <shawn.sung@mediatek.com> =E6=96=BC 2023=E5=B9=B46=E6=9C=
-=887=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=882:11=E5=AF=AB=E9=81=93=
-=EF=BC=9A
->
-> - Modify MUTEX and component preparation logic for better compatibility
-> - Adjust display module probe sequence to avoid probe deferral
->
-> Signed-off-by: Hsiao Chien Sung <shawn.sung@mediatek.com>
-> ---
->  drivers/gpu/drm/mediatek/mtk_disp_merge.c     |   3 +-
->  .../gpu/drm/mediatek/mtk_disp_ovl_adaptor.c   | 100 ++++++++++--------
->  drivers/gpu/drm/mediatek/mtk_drm_drv.c        |  28 ++++-
->  drivers/gpu/drm/mediatek/mtk_ethdr.c          |   1 +
->  drivers/gpu/drm/mediatek/mtk_mdp_rdma.c       |   1 +
->  5 files changed, 84 insertions(+), 49 deletions(-)
->
-> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_merge.c b/drivers/gpu/drm/=
-mediatek/mtk_disp_merge.c
-> index 6428b6203ffe..2a30e41c246f 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_disp_merge.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_disp_merge.c
-> @@ -104,7 +104,7 @@ void mtk_merge_stop_cmdq(struct device *dev, struct c=
-mdq_pkt *cmdq_pkt)
->         mtk_ddp_write(cmdq_pkt, 0, &priv->cmdq_reg, priv->regs,
->                       DISP_REG_MERGE_CTRL);
->
-> -       if (priv->async_clk)
-> +       if (!cmdq_pkt && priv->async_clk)
+Signed-off-by: Hugh Dickins <hughd@google.com>
+---
+ mm/debug_vm_pgtable.c | 9 ++++++++-
+ mm/page_table_check.c | 2 ++
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
-This is related to neither preparation logic nor probe sequence,
-separate this to another patch.
+diff --git a/mm/debug_vm_pgtable.c b/mm/debug_vm_pgtable.c
+index c54177aabebd..ee119e33fef1 100644
+--- a/mm/debug_vm_pgtable.c
++++ b/mm/debug_vm_pgtable.c
+@@ -138,6 +138,9 @@ static void __init pte_advanced_tests(struct pgtable_debug_args *args)
+ 		return;
+ 
+ 	pr_debug("Validating PTE advanced\n");
++	if (WARN_ON(!args->ptep))
++		return;
++
+ 	pte = pfn_pte(args->pte_pfn, args->page_prot);
+ 	set_pte_at(args->mm, args->vaddr, args->ptep, pte);
+ 	flush_dcache_page(page);
+@@ -619,6 +622,9 @@ static void __init pte_clear_tests(struct pgtable_debug_args *args)
+ 	 * the unexpected overhead of cache flushing is acceptable.
+ 	 */
+ 	pr_debug("Validating PTE clear\n");
++	if (WARN_ON(!args->ptep))
++		return;
++
+ #ifndef CONFIG_RISCV
+ 	pte = __pte(pte_val(pte) | RANDOM_ORVALUE);
+ #endif
+@@ -1377,7 +1383,8 @@ static int __init debug_vm_pgtable(void)
+ 	args.ptep = pte_offset_map_lock(args.mm, args.pmdp, args.vaddr, &ptl);
+ 	pte_clear_tests(&args);
+ 	pte_advanced_tests(&args);
+-	pte_unmap_unlock(args.ptep, ptl);
++	if (args.ptep)
++		pte_unmap_unlock(args.ptep, ptl);
+ 
+ 	ptl = pmd_lock(args.mm, args.pmdp);
+ 	pmd_clear_tests(&args);
+diff --git a/mm/page_table_check.c b/mm/page_table_check.c
+index f2baf97d5f38..b743a2f6bce0 100644
+--- a/mm/page_table_check.c
++++ b/mm/page_table_check.c
+@@ -246,6 +246,8 @@ void __page_table_check_pte_clear_range(struct mm_struct *mm,
+ 		pte_t *ptep = pte_offset_map(&pmd, addr);
+ 		unsigned long i;
+ 
++		if (WARN_ON(!ptep))
++			return;
+ 		for (i = 0; i < PTRS_PER_PTE; i++) {
+ 			__page_table_check_pte_clear(mm, addr, *ptep);
+ 			addr += PAGE_SIZE;
+-- 
+2.35.3
 
->                 reset_control_reset(priv->reset_ctl);
->  }
->
-> @@ -303,6 +303,7 @@ static int mtk_disp_merge_remove(struct platform_devi=
-ce *pdev)
->  }
->
->  static const struct of_device_id mtk_disp_merge_driver_dt_match[] =3D {
-> +       { .compatible =3D "mediatek,mt8188-disp-merge", },
-
-This is related to neither preparation logic nor probe sequence,
-separate this to another patch.
-
->         { .compatible =3D "mediatek,mt8195-disp-merge", },
->         {},
->  };
-> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c b/drivers/gp=
-u/drm/mediatek/mtk_disp_ovl_adaptor.c
-> index c0a38f5217ee..e1d8d4765af8 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
-> @@ -51,6 +51,7 @@ enum mtk_ovl_adaptor_comp_id {
->
->  struct ovl_adaptor_comp_match {
->         enum mtk_ovl_adaptor_comp_type type;
-> +       enum mtk_ddp_comp_id comp_id;
->         int alias_id;
->  };
->
-> @@ -67,19 +68,19 @@ static const char * const private_comp_stem[OVL_ADAPT=
-OR_TYPE_NUM] =3D {
->  };
->
->  static const struct ovl_adaptor_comp_match comp_matches[OVL_ADAPTOR_ID_M=
-AX] =3D {
-> -       [OVL_ADAPTOR_MDP_RDMA0] =3D { OVL_ADAPTOR_TYPE_RDMA, 0 },
-> -       [OVL_ADAPTOR_MDP_RDMA1] =3D { OVL_ADAPTOR_TYPE_RDMA, 1 },
-> -       [OVL_ADAPTOR_MDP_RDMA2] =3D { OVL_ADAPTOR_TYPE_RDMA, 2 },
-> -       [OVL_ADAPTOR_MDP_RDMA3] =3D { OVL_ADAPTOR_TYPE_RDMA, 3 },
-> -       [OVL_ADAPTOR_MDP_RDMA4] =3D { OVL_ADAPTOR_TYPE_RDMA, 4 },
-> -       [OVL_ADAPTOR_MDP_RDMA5] =3D { OVL_ADAPTOR_TYPE_RDMA, 5 },
-> -       [OVL_ADAPTOR_MDP_RDMA6] =3D { OVL_ADAPTOR_TYPE_RDMA, 6 },
-> -       [OVL_ADAPTOR_MDP_RDMA7] =3D { OVL_ADAPTOR_TYPE_RDMA, 7 },
-> -       [OVL_ADAPTOR_MERGE0]    =3D { OVL_ADAPTOR_TYPE_MERGE, 1 },
-> -       [OVL_ADAPTOR_MERGE1]    =3D { OVL_ADAPTOR_TYPE_MERGE, 2 },
-> -       [OVL_ADAPTOR_MERGE2]    =3D { OVL_ADAPTOR_TYPE_MERGE, 3 },
-> -       [OVL_ADAPTOR_MERGE3]    =3D { OVL_ADAPTOR_TYPE_MERGE, 4 },
-> -       [OVL_ADAPTOR_ETHDR0]    =3D { OVL_ADAPTOR_TYPE_ETHDR, 0 },
-> +       [OVL_ADAPTOR_MDP_RDMA0] =3D { OVL_ADAPTOR_TYPE_RDMA, DDP_COMPONEN=
-T_MDP_RDMA0, 0 },
-> +       [OVL_ADAPTOR_MDP_RDMA1] =3D { OVL_ADAPTOR_TYPE_RDMA, DDP_COMPONEN=
-T_MDP_RDMA1, 1 },
-> +       [OVL_ADAPTOR_MDP_RDMA2] =3D { OVL_ADAPTOR_TYPE_RDMA, DDP_COMPONEN=
-T_MDP_RDMA2, 2 },
-> +       [OVL_ADAPTOR_MDP_RDMA3] =3D { OVL_ADAPTOR_TYPE_RDMA, DDP_COMPONEN=
-T_MDP_RDMA3, 3 },
-> +       [OVL_ADAPTOR_MDP_RDMA4] =3D { OVL_ADAPTOR_TYPE_RDMA, DDP_COMPONEN=
-T_MDP_RDMA4, 4 },
-> +       [OVL_ADAPTOR_MDP_RDMA5] =3D { OVL_ADAPTOR_TYPE_RDMA, DDP_COMPONEN=
-T_MDP_RDMA5, 5 },
-> +       [OVL_ADAPTOR_MDP_RDMA6] =3D { OVL_ADAPTOR_TYPE_RDMA, DDP_COMPONEN=
-T_MDP_RDMA6, 6 },
-> +       [OVL_ADAPTOR_MDP_RDMA7] =3D { OVL_ADAPTOR_TYPE_RDMA, DDP_COMPONEN=
-T_MDP_RDMA7, 7 },
-> +       [OVL_ADAPTOR_MERGE0] =3D { OVL_ADAPTOR_TYPE_MERGE, DDP_COMPONENT_=
-MERGE1, 1 },
-> +       [OVL_ADAPTOR_MERGE1] =3D { OVL_ADAPTOR_TYPE_MERGE, DDP_COMPONENT_=
-MERGE2, 2 },
-> +       [OVL_ADAPTOR_MERGE2] =3D { OVL_ADAPTOR_TYPE_MERGE, DDP_COMPONENT_=
-MERGE3, 3 },
-> +       [OVL_ADAPTOR_MERGE3] =3D { OVL_ADAPTOR_TYPE_MERGE, DDP_COMPONENT_=
-MERGE4, 4 },
-> +       [OVL_ADAPTOR_ETHDR0] =3D { OVL_ADAPTOR_TYPE_ETHDR, DDP_COMPONENT_=
-ETHDR_MIXER, 0 },
->  };
->
->  void mtk_ovl_adaptor_layer_config(struct device *dev, unsigned int idx,
-> @@ -192,6 +193,8 @@ int mtk_ovl_adaptor_clk_enable(struct device *dev)
->
->         for (i =3D 0; i < OVL_ADAPTOR_MERGE0; i++) {
->                 comp =3D ovl_adaptor->ovl_adaptor_comp[i];
-> +               if (!comp)
-> +                       continue;
->                 ret =3D pm_runtime_get_sync(comp);
->                 if (ret < 0) {
->                         dev_err(dev, "Failed to enable power domain %d, e=
-rr %d\n", i, ret);
-> @@ -201,7 +204,8 @@ int mtk_ovl_adaptor_clk_enable(struct device *dev)
->
->         for (i =3D 0; i < OVL_ADAPTOR_ID_MAX; i++) {
->                 comp =3D ovl_adaptor->ovl_adaptor_comp[i];
-> -
-> +               if (!comp)
-> +                       continue;
->                 if (i < OVL_ADAPTOR_MERGE0)
->                         ret =3D mtk_mdp_rdma_clk_enable(comp);
->                 else if (i < OVL_ADAPTOR_ETHDR0)
-> @@ -219,6 +223,8 @@ int mtk_ovl_adaptor_clk_enable(struct device *dev)
->  clk_err:
->         while (--i >=3D 0) {
->                 comp =3D ovl_adaptor->ovl_adaptor_comp[i];
-> +               if (!comp)
-> +                       continue;
->                 if (i < OVL_ADAPTOR_MERGE0)
->                         mtk_mdp_rdma_clk_disable(comp);
->                 else if (i < OVL_ADAPTOR_ETHDR0)
-> @@ -229,8 +235,12 @@ int mtk_ovl_adaptor_clk_enable(struct device *dev)
->         i =3D OVL_ADAPTOR_MERGE0;
->
->  pwr_err:
-> -       while (--i >=3D 0)
-> -               pm_runtime_put(ovl_adaptor->ovl_adaptor_comp[i]);
-> +       while (--i >=3D 0) {
-> +               comp =3D ovl_adaptor->ovl_adaptor_comp[i];
-> +               if (!comp)
-> +                       continue;
-> +               pm_runtime_put(comp);
-> +       }
->
->         return ret;
->  }
-> @@ -243,7 +253,8 @@ void mtk_ovl_adaptor_clk_disable(struct device *dev)
->
->         for (i =3D 0; i < OVL_ADAPTOR_ID_MAX; i++) {
->                 comp =3D ovl_adaptor->ovl_adaptor_comp[i];
-> -
-> +               if (!comp)
-> +                       continue;
->                 if (i < OVL_ADAPTOR_MERGE0) {
->                         mtk_mdp_rdma_clk_disable(comp);
->                         pm_runtime_put(comp);
-> @@ -313,36 +324,26 @@ size_t mtk_ovl_adaptor_get_num_formats(struct devic=
-e *dev)
->
->  void mtk_ovl_adaptor_add_comp(struct device *dev, struct mtk_mutex *mute=
-x)
->  {
-> -       mtk_mutex_add_comp(mutex, DDP_COMPONENT_MDP_RDMA0);
-> -       mtk_mutex_add_comp(mutex, DDP_COMPONENT_MDP_RDMA1);
-> -       mtk_mutex_add_comp(mutex, DDP_COMPONENT_MDP_RDMA2);
-> -       mtk_mutex_add_comp(mutex, DDP_COMPONENT_MDP_RDMA3);
-> -       mtk_mutex_add_comp(mutex, DDP_COMPONENT_MDP_RDMA4);
-> -       mtk_mutex_add_comp(mutex, DDP_COMPONENT_MDP_RDMA5);
-> -       mtk_mutex_add_comp(mutex, DDP_COMPONENT_MDP_RDMA6);
-> -       mtk_mutex_add_comp(mutex, DDP_COMPONENT_MDP_RDMA7);
-> -       mtk_mutex_add_comp(mutex, DDP_COMPONENT_MERGE1);
-> -       mtk_mutex_add_comp(mutex, DDP_COMPONENT_MERGE2);
-> -       mtk_mutex_add_comp(mutex, DDP_COMPONENT_MERGE3);
-> -       mtk_mutex_add_comp(mutex, DDP_COMPONENT_MERGE4);
-> -       mtk_mutex_add_comp(mutex, DDP_COMPONENT_ETHDR_MIXER);
-> +       struct mtk_disp_ovl_adaptor *ovl_adaptor =3D dev_get_drvdata(dev)=
-;
-> +       int i;
-> +
-> +       for (i =3D 0; i < OVL_ADAPTOR_ID_MAX; i++) {
-> +               if (!ovl_adaptor->ovl_adaptor_comp[i])
-> +                       continue;
-> +               mtk_mutex_add_comp(mutex, comp_matches[i].comp_id);
-> +       }
->  }
->
->  void mtk_ovl_adaptor_remove_comp(struct device *dev, struct mtk_mutex *m=
-utex)
->  {
-> -       mtk_mutex_remove_comp(mutex, DDP_COMPONENT_MDP_RDMA0);
-> -       mtk_mutex_remove_comp(mutex, DDP_COMPONENT_MDP_RDMA1);
-> -       mtk_mutex_remove_comp(mutex, DDP_COMPONENT_MDP_RDMA2);
-> -       mtk_mutex_remove_comp(mutex, DDP_COMPONENT_MDP_RDMA3);
-> -       mtk_mutex_remove_comp(mutex, DDP_COMPONENT_MDP_RDMA4);
-> -       mtk_mutex_remove_comp(mutex, DDP_COMPONENT_MDP_RDMA5);
-> -       mtk_mutex_remove_comp(mutex, DDP_COMPONENT_MDP_RDMA6);
-> -       mtk_mutex_remove_comp(mutex, DDP_COMPONENT_MDP_RDMA7);
-> -       mtk_mutex_remove_comp(mutex, DDP_COMPONENT_MERGE1);
-> -       mtk_mutex_remove_comp(mutex, DDP_COMPONENT_MERGE2);
-> -       mtk_mutex_remove_comp(mutex, DDP_COMPONENT_MERGE3);
-> -       mtk_mutex_remove_comp(mutex, DDP_COMPONENT_MERGE4);
-> -       mtk_mutex_remove_comp(mutex, DDP_COMPONENT_ETHDR_MIXER);
-> +       struct mtk_disp_ovl_adaptor *ovl_adaptor =3D dev_get_drvdata(dev)=
-;
-> +       int i;
-> +
-> +       for (i =3D 0; i < OVL_ADAPTOR_ID_MAX; i++) {
-> +               if (!ovl_adaptor->ovl_adaptor_comp[i])
-> +                       continue;
-> +               mtk_mutex_remove_comp(mutex, comp_matches[i].comp_id);
-> +       }
->  }
->
->  void mtk_ovl_adaptor_connect(struct device *dev, struct device *mmsys_de=
-v, unsigned int next)
-> @@ -386,6 +387,15 @@ static int ovl_adaptor_comp_get_id(struct device *de=
-v, struct device_node *node,
->
->  static const struct of_device_id mtk_ovl_adaptor_comp_dt_ids[] =3D {
->         {
-> +               .compatible =3D "mediatek,mt8188-vdo1-rdma",
-> +               .data =3D (void *)OVL_ADAPTOR_TYPE_RDMA,
-> +       }, {
-> +               .compatible =3D "mediatek,mt8188-disp-merge",
-> +               .data =3D (void *)OVL_ADAPTOR_TYPE_MERGE,
-> +       }, {
-> +               .compatible =3D "mediatek,mt8188-disp-ethdr",
-> +               .data =3D (void *)OVL_ADAPTOR_TYPE_ETHDR,
-> +       }, {
-
-This is related to neither preparation logic nor probe sequence,
-separate this to another patch.
-
->                 .compatible =3D "mediatek,mt8195-vdo1-rdma",
->                 .data =3D (void *)OVL_ADAPTOR_TYPE_RDMA,
->         }, {
-> @@ -466,6 +476,9 @@ static int mtk_disp_ovl_adaptor_comp_bind(struct devi=
-ce *dev, struct device *mas
->  static void mtk_disp_ovl_adaptor_comp_unbind(struct device *dev, struct =
-device *master,
->                                              void *data)
->  {
-> +       struct mtk_disp_ovl_adaptor *priv =3D dev_get_drvdata(dev);
-> +
-> +       priv->children_bound =3D false;
->  }
->
->  static const struct component_ops mtk_disp_ovl_adaptor_comp_ops =3D {
-> @@ -483,6 +496,7 @@ static int mtk_disp_ovl_adaptor_master_bind(struct de=
-vice *dev)
->                 return dev_err_probe(dev, ret, "component_bind_all failed=
-!\n");
->
->         priv->children_bound =3D true;
-> +
-
-This is related to neither preparation logic nor probe sequence,
-separate this to another patch.
-
->         return 0;
->  }
->
-> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/med=
-iatek/mtk_drm_drv.c
-> index 6dcb4ba2466c..87dadd129c22 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> @@ -188,6 +188,12 @@ static const unsigned int mt8188_mtk_ddp_main[] =3D =
-{
->         DDP_COMPONENT_DP_INTF0,
->  };
->
-> +static const unsigned int mt8188_mtk_ddp_ext[] =3D {
-> +       DDP_COMPONENT_DRM_OVL_ADAPTOR,
-> +       DDP_COMPONENT_MERGE5,
-> +       DDP_COMPONENT_DP_INTF1,
-> +};
-> +
->  static const unsigned int mt8192_mtk_ddp_main[] =3D {
->         DDP_COMPONENT_OVL0,
->         DDP_COMPONENT_OVL_2L0,
-> @@ -287,6 +293,14 @@ static const struct mtk_mmsys_driver_data mt8186_mms=
-ys_driver_data =3D {
->  static const struct mtk_mmsys_driver_data mt8188_vdosys0_driver_data =3D=
- {
->         .main_path =3D mt8188_mtk_ddp_main,
->         .main_len =3D ARRAY_SIZE(mt8188_mtk_ddp_main),
-> +       .mmsys_dev_num =3D 2,
-> +};
-> +
-> +static const struct mtk_mmsys_driver_data mt8188_vdosys1_driver_data =3D=
- {
-> +       .ext_path =3D mt8188_mtk_ddp_ext,
-> +       .ext_len =3D ARRAY_SIZE(mt8188_mtk_ddp_ext),
-> +       .mmsys_id =3D 1,
-> +       .mmsys_dev_num =3D 2,
-
-This is related to neither preparation logic nor probe sequence,
-separate this to another patch.
-
->  };
->
->  static const struct mtk_mmsys_driver_data mt8192_mmsys_driver_data =3D {
-> @@ -327,6 +341,8 @@ static const struct of_device_id mtk_drm_of_ids[] =3D=
- {
->           .data =3D &mt8186_mmsys_driver_data},
->         { .compatible =3D "mediatek,mt8188-vdosys0",
->           .data =3D &mt8188_vdosys0_driver_data},
-> +       { .compatible =3D "mediatek,mt8188-vdosys1",
-> +         .data =3D &mt8188_vdosys1_driver_data},
-
-This is related to neither preparation logic nor probe sequence,
-separate this to another patch.
-
->         { .compatible =3D "mediatek,mt8192-mmsys",
->           .data =3D &mt8192_mmsys_driver_data},
->         { .compatible =3D "mediatek,mt8195-mmsys",
-> @@ -682,6 +698,8 @@ static const struct of_device_id mtk_ddp_comp_dt_ids[=
-] =3D {
->           .data =3D (void *)MTK_DISP_GAMMA, },
->         { .compatible =3D "mediatek,mt8183-disp-gamma",
->           .data =3D (void *)MTK_DISP_GAMMA, },
-> +       { .compatible =3D "mediatek,mt8188-disp-merge",
-> +         .data =3D (void *)MTK_DISP_MERGE },
-
-This is related to neither preparation logic nor probe sequence,
-separate this to another patch.
-
->         { .compatible =3D "mediatek,mt8195-disp-merge",
->           .data =3D (void *)MTK_DISP_MERGE },
->         { .compatible =3D "mediatek,mt2701-disp-mutex",
-> @@ -965,15 +983,15 @@ static struct platform_driver * const mtk_drm_drive=
-rs[] =3D {
->         &mtk_disp_ccorr_driver,
->         &mtk_disp_color_driver,
->         &mtk_disp_gamma_driver,
-> +       &mtk_disp_rdma_driver,
-> +       &mtk_mdp_rdma_driver,
->         &mtk_disp_merge_driver,
-> -       &mtk_disp_ovl_adaptor_driver,
-> +       &mtk_ethdr_driver,
->         &mtk_disp_ovl_driver,
-> -       &mtk_disp_rdma_driver,
-> +       &mtk_disp_ovl_adaptor_driver,
-> +       &mtk_dsi_driver,
->         &mtk_dpi_driver,
->         &mtk_drm_platform_driver,
-> -       &mtk_dsi_driver,
-> -       &mtk_ethdr_driver,
-> -       &mtk_mdp_rdma_driver,
-
-Why change the order?
-
->  };
->
->  static int __init mtk_drm_init(void)
-> diff --git a/drivers/gpu/drm/mediatek/mtk_ethdr.c b/drivers/gpu/drm/media=
-tek/mtk_ethdr.c
-> index 73dc4da3ba3b..b5a6b67f2db9 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_ethdr.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_ethdr.c
-> @@ -353,6 +353,7 @@ static int mtk_ethdr_remove(struct platform_device *p=
-dev)
->  }
->
->  static const struct of_device_id mtk_ethdr_driver_dt_match[] =3D {
-> +       { .compatible =3D "mediatek,mt8188-disp-ethdr"},
-
-This is related to neither preparation logic nor probe sequence,
-separate this to another patch.
-
->         { .compatible =3D "mediatek,mt8195-disp-ethdr"},
->         {},
->  };
-> diff --git a/drivers/gpu/drm/mediatek/mtk_mdp_rdma.c b/drivers/gpu/drm/me=
-diatek/mtk_mdp_rdma.c
-> index e06db6e56b5f..06d5c9abb515 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_mdp_rdma.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_mdp_rdma.c
-> @@ -323,6 +323,7 @@ static int mtk_mdp_rdma_remove(struct platform_device=
- *pdev)
->  }
->
->  static const struct of_device_id mtk_mdp_rdma_driver_dt_match[] =3D {
-> +       { .compatible =3D "mediatek,mt8188-vdo1-rdma", },
-
-This is related to neither preparation logic nor probe sequence,
-separate this to another patch.
-
-Regards,
-Chun-Kuang.
-
->         { .compatible =3D "mediatek,mt8195-vdo1-rdma", },
->         {},
->  };
-> --
-> 2.18.0
->
