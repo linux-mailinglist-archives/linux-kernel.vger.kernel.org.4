@@ -2,141 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E59672A290
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:50:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86C4072A294
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 20:50:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231250AbjFISuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 14:50:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57088 "EHLO
+        id S231584AbjFISuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 14:50:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjFISuI (ORCPT
+        with ESMTP id S229516AbjFISuo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 14:50:08 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1E13A81;
-        Fri,  9 Jun 2023 11:50:07 -0700 (PDT)
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 359IlA3R001149;
-        Fri, 9 Jun 2023 18:49:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=myGzGs2NawOBCwWz7+upUz/JwK6dQ3oOlKG8artjLsg=;
- b=Tlg2h+4k+8omqvp18PZBG69LYolCdOgFacEckvNHPvQX1jTTKCFC+TNkGivoe/AclTpa
- 22LLDWt8RrmwRfrpfwF8V0VnLFPr+eVUkU8F1F59DUjplMwvEVXnzq/ap+K0CmOJp2Xp
- FyuhXtuv4AEyjwxzUZLl3c8BQ9KZeaibZzT/riHzE21lSwv6N/VBCt/gL7HgGqvF4t1U
- pR3PRa4e46xwNcF/ixiLU1uJBzjYd5R61bXT/qg22tfnhJK+U8ppPCoL8v30d41gEbaj
- tcVPvYq0XYUrS1POto4RFDj6TLjLB5t/MBNEf5H9YOD/C7iLhafsqddfBiz8advqlaqu jg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r49nkr3av-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Jun 2023 18:49:45 +0000
-Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 359IniJb009506;
-        Fri, 9 Jun 2023 18:49:45 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r49nkr3ah-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Jun 2023 18:49:44 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 359IAhWv022632;
-        Fri, 9 Jun 2023 18:49:43 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([9.208.130.101])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3r2a77q2c2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Jun 2023 18:49:43 +0000
-Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
-        by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 359Ingwv6292016
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 9 Jun 2023 18:49:42 GMT
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 29E905805D;
-        Fri,  9 Jun 2023 18:49:42 +0000 (GMT)
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7A91358054;
-        Fri,  9 Jun 2023 18:49:40 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Fri,  9 Jun 2023 18:49:40 +0000 (GMT)
-Message-ID: <4afde78d-e138-9eee-50e0-dbd32f4dcfe0@linux.ibm.com>
-Date:   Fri, 9 Jun 2023 14:49:35 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v9 2/4] tpm: of: Make of-tree specific function commonly
- available
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Jerry Snitselaar <jsnitsel@redhat.com>
-Cc:     kexec@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, nayna@linux.ibm.com,
-        nasastry@in.ibm.com, mpe@ellerman.id.au,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Nageswara R Sastry <rnsastry@linux.ibm.com>,
-        Coiby Xu <coxu@redhat.com>
-References: <20230418134409.177485-1-stefanb@linux.ibm.com>
- <20230418134409.177485-3-stefanb@linux.ibm.com>
- <e4dcxwp63uisirxwanjwrhzrnve45wqnxhijfp4oq274r4neco@v2btoy43ue5h>
- <CT8BRJZS8RQU.9ICEA2UAFC7G@suppilovahvero>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <CT8BRJZS8RQU.9ICEA2UAFC7G@suppilovahvero>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: vnMB3zCx4Hhs6QhKY0JaE9KiteMDLAjg
-X-Proofpoint-ORIG-GUID: ekM5eMhdXay5_PWqimPauZQ9QWzNxbDb
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 9 Jun 2023 14:50:44 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB59435B8
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 11:50:43 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id 3f1490d57ef6-bacf5b89da7so2115000276.2
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 11:50:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686336643; x=1688928643;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ls8ASbqVf+OxfQ28gdwv86E0CDvCxuQPRXvTmaU1qZ8=;
+        b=BgYnhkcmYneC2cgdqH9vPsforrcVpoamZZpxmNymi1HhYM867JQFIqyJMfLNj1OA0o
+         NQxhNdWVWw2kpK9b9QIWfhosCBBZ4B2bkqiX3unz2elF0Yd6Y71kqEXDGCrefkPDUai/
+         dL+4UFs1CvOYimCjF5ECs0h3MPk89VlOj5i/TOhmz6QNh2pBmaW8i1UBqwlHkr5IGdwN
+         ti//h4UPqPvcuA73LNPEPpM9GamOEJanilhV7k6zGc5LCLAMSpm82jA5I0MhGgYoXeyI
+         y5wrk3ovnGstX9TU8PWz96LMy/xbUqzEGZhyp49j1fZNXcd0fWa/NJ5jwrkNQ28f/Jfd
+         sWAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686336643; x=1688928643;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ls8ASbqVf+OxfQ28gdwv86E0CDvCxuQPRXvTmaU1qZ8=;
+        b=NIx0guK3STpWoXtwdOlN46oblwvI0ExIfwrvGzVSrBxmaNOidfHZQp+pj3EH0lqakj
+         3bXqJsUE/xgo4ijoDi7NMs/i+NvRpeNT3GLIPQpF/YKttEhhjmyxSJsGKfEGyW1XndGL
+         qk6RDYyAVQoEMVbB6qji/rwsjynrpstEyNnFV57Aok4i7+DBQV6c+OHPIgaZVZTFzMem
+         6+iekdN7SPgST5HpcRkdWQS9sFrolV5Ha+w1y/atBJNBGsnCZNxooDhN1zIETfYr2JI0
+         oOBxak/mme2LnnV3m6I7SRaQsEru/sdOiadsxWb2avZg1Ta6B6aUrizEq2VYZD5I49t2
+         TQgg==
+X-Gm-Message-State: AC+VfDxd9MpTWNccF90wULZklbWwGmkHz7KZLMyr3ForV2/w7rnyYt+7
+        8GP63cdPE+mYAlq8P7a8zJ2cv4FGeT5dZDXqeB4AXw==
+X-Google-Smtp-Source: ACHHUZ5mlzEP6duFB2RPppaJytP0jp8FV90GwtBIyaVVZeY0WsEB4K2kSrmJb1pVmexp2PI1D8rfhTnQWfgDoQCZK5c=
+X-Received: by 2002:a5b:712:0:b0:bac:a43e:88e9 with SMTP id
+ g18-20020a5b0712000000b00baca43e88e9mr1736212ybq.44.1686336642462; Fri, 09
+ Jun 2023 11:50:42 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-09_14,2023-06-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=881 impostorscore=0 malwarescore=0 bulkscore=0 mlxscore=0
- phishscore=0 adultscore=0 suspectscore=0 priorityscore=1501 clxscore=1011
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306090155
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230609005158.2421285-1-surenb@google.com> <20230609005158.2421285-2-surenb@google.com>
+ <877csdpfcq.fsf@yhuang6-desk2.ccr.corp.intel.com> <CAFj5m9K-Kyu-NV1q3eGeA8MOcC1XYgYyENnti-Qd8Mj-A6=Q5Q@mail.gmail.com>
+In-Reply-To: <CAFj5m9K-Kyu-NV1q3eGeA8MOcC1XYgYyENnti-Qd8Mj-A6=Q5Q@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Fri, 9 Jun 2023 11:50:31 -0700
+Message-ID: <CAJuCfpECOWgKx+PTsygNM9mryEf_So9QwCrPyBrS-tjbzCWjDA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/6] swap: remove remnants of polling from read_swap_cache_async
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     "Huang, Ying" <ying.huang@intel.com>, akpm@linux-foundation.org,
+        willy@infradead.org, hannes@cmpxchg.org, mhocko@suse.com,
+        josef@toxicpanda.com, jack@suse.cz, ldufour@linux.ibm.com,
+        laurent.dufour@fr.ibm.com, michel@lespinasse.org,
+        liam.howlett@oracle.com, jglisse@google.com, vbabka@suse.cz,
+        minchan@google.com, dave@stgolabs.net, punit.agrawal@bytedance.com,
+        lstoakes@gmail.com, hdanton@sina.com, apopple@nvidia.com,
+        peterx@redhat.com, david@redhat.com, yuzhao@google.com,
+        dhowells@redhat.com, hughd@google.com, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, pasha.tatashin@soleen.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 8, 2023 at 8:14=E2=80=AFPM Ming Lei <ming.lei@redhat.com> wrote=
+:
+>
+> On Fri, Jun 9, 2023 at 9:58=E2=80=AFAM Huang, Ying <ying.huang@intel.com>=
+ wrote:
+> >
+> > + Ming Lei for confirmation.
+>
+> Good catch, it isn't necessary to pass the polling parameter now.
 
+Thanks folks for reviewing and confirming!
 
-On 6/9/23 14:18, Jarkko Sakkinen wrote:
-> On Thu May 25, 2023 at 1:56 AM EEST, Jerry Snitselaar wrote:
->> On Tue, Apr 18, 2023 at 09:44:07AM -0400, Stefan Berger wrote:
->>> Simplify tpm_read_log_of() by moving reusable parts of the code into
->>> an inline function that makes it commonly available so it can be
->>> used also for kexec support. Call the new of_tpm_get_sml_parameters()
->>> function from the TPM Open Firmware driver.
->>>
->>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
->>> Cc: Jarkko Sakkinen <jarkko@kernel.org>
->>> Cc: Jason Gunthorpe <jgg@ziepe.ca>
->>> Cc: Rob Herring <robh+dt@kernel.org>
->>> Cc: Frank Rowand <frowand.list@gmail.com>
->>> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
->>> Tested-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
->>> Tested-by: Coiby Xu <coxu@redhat.com>
->>> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
->>>
->>
->> Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
-> 
-> If I just pick tpm only patches they won't apply so maybe TPM changes
-> should be better separated if that is by any means possible.
-
-Per the comment here I am putting this series here on hold.
-https://lore.kernel.org/linux-integrity/20230418134409.177485-1-stefanb@linux.ibm.com/T/#m03745c2af2c46f19f329522fcb6ccb2bf2eaedc7
-
-
-BR,
-    Stefan
+>
+> Thanks,
+>
