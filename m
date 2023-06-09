@@ -2,84 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6552572A4C9
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 22:38:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1DE72A4CE
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 22:39:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232138AbjFIUiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 16:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43324 "EHLO
+        id S232282AbjFIUja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 16:39:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbjFIUiF (ORCPT
+        with ESMTP id S230047AbjFIUj2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 16:38:05 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7917330C8;
-        Fri,  9 Jun 2023 13:38:03 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-650c89c7e4fso2298172b3a.0;
-        Fri, 09 Jun 2023 13:38:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686343083; x=1688935083;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=4QbmTscgL0W4LNSr/7q9vHr3/nK0DxnmRxkiPOyTnLw=;
-        b=UPhpET1va9qipboE/8cau9bR3DIRjMvfr1w4qvTl2rexd1cpITZ+sdPHjkYag7SmZH
-         Sx4jSVMmVPAvwvR7iG0MMjrC3jfUGGFs8EpwgU5Qljm0idreDw6J6xOLB5TxhaNHXV76
-         G5SSCxF3zK/jG2hyCoqawCMCQKAnS5wqX6A+nXHTIGHt3KtUEI5ANpYYsS5fQSNhWoKN
-         JQwjpNsQQCvHpzG4oPJlRF5OzVo7zRKUzM/2MUJnqHac/n+X+qyPlCAByHgsuGfUXxf8
-         7b9XPCwIVZAZRvExJzEdLx7qgSkfIWdUZFBr7qW4P89bOMxKljMNXVgxk3r+7FGQPswz
-         lyGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686343083; x=1688935083;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4QbmTscgL0W4LNSr/7q9vHr3/nK0DxnmRxkiPOyTnLw=;
-        b=Yz0yRFampe4waQRHmU1dUMk60EXi+0vS8MbXaEr2+qKSNzBFrO2KoQcHPkmrVvH121
-         P6wtiv7HsFQI3pVHbQtcseAez5MeOK74IMvq8HT6IYtLTtgQPA5pYSB5FSwQxAPyBZ1I
-         lzqECdTBl9ZIHYUpIFLwgYqINvbd0PPvksjAGpG4KsofP0tp9a2Jxn7R6WIelQaIJ2iA
-         NJFP1xJsR9Xjl0xGmc5TJSvbAxybBysAbb7xjz4lay5g4uDQx7iPUQ2i90jxBNyZIk41
-         g2u49llqeb5ePNBny3UyzsvwoFV1/vFOVGvwSVMFqupoKw/5STMp2aobSp3RLaP8Ywr8
-         h0RQ==
-X-Gm-Message-State: AC+VfDyrYOslfp2cgtBpv0RRmFhl2/KS7B5K8Qj21uC9bnWCcs3FL5BG
-        ppOlBW80vzQuZ7XuxN2ng4Y3D47nkmg=
-X-Google-Smtp-Source: ACHHUZ7FXyMXhhyVc1ZQ6Dw3Um1qtKihPVk19SWQD+nko2L8uExkP/Clrxvh0ZFZydDCAdMQMQ22kQ==
-X-Received: by 2002:a05:6a00:24c9:b0:64d:4412:9923 with SMTP id d9-20020a056a0024c900b0064d44129923mr2899985pfv.3.1686343082568;
-        Fri, 09 Jun 2023 13:38:02 -0700 (PDT)
-Received: from krava (c-67-160-222-115.hsd1.ca.comcast.net. [67.160.222.115])
-        by smtp.gmail.com with ESMTPSA id p18-20020aa78612000000b006414b2c9efasm3034301pfn.123.2023.06.09.13.38.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 13:38:02 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Fri, 9 Jun 2023 13:37:59 -0700
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Jackie Liu <liu.yun@linux.dev>
-Subject: Re: [PATCH RFC] ftrace: Show all functions with addresses in
- available_filter_functions_addrs
-Message-ID: <ZIONp3IDiBe+WdeB@krava>
-References: <20230608212613.424070-1-jolsa@kernel.org>
- <CAEf4BzbNakGzcycJJJqLsFwonOmya8=hKLD41TWX2zCJbh=r-Q@mail.gmail.com>
- <20230608192748.435a1dbf@gandalf.local.home>
- <CAEf4BzYkNHu7hiMYWQWs_gpYOfHL0FVuf-O0787Si2ze=PFX5w@mail.gmail.com>
- <ZILhqvrjeFIPHauy@FVFF77S0Q05N>
- <ZINW9FqIoja76DRa@krava>
- <CAEf4BzbgsLOoLKyscq6S95QeehVoAzOnQ=xmsFz8dfEUAnhObw@mail.gmail.com>
+        Fri, 9 Jun 2023 16:39:28 -0400
+Received: from BN3PR00CU001.outbound.protection.outlook.com (mail-eastus2azon11020026.outbound.protection.outlook.com [52.101.56.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364052D7C;
+        Fri,  9 Jun 2023 13:39:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NAs20PerSiuKH/XLdXSJa3GUPV9dP0zO6OPbrLbcR2zDV1RX4JbAkogCeIQpPKy5l8PhbzexhCzl5Z0VieRxPVANW+Ezn8iYADiGkEagDJARSs1eI4CAjhsAOQB9qMPFbigG/EV7vgPNplKuJFsw1d20WeFnGF6PHXPJuEcYBv91znJqRS1H5MapsC5twd1+NC7w8LLj1+F7IoytS5rEWl4OqNmPdgNru521DYh2/OXRsASrWg22IfzrNLnM+UXNf/f/vqSAuvujSC0XMeDV8fe+cMTwvvJpbu8+J848Upjt4Ov8n2W2px160aE2+fKptg5P+Eolp1JMsG5+CdDwrA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7jPMz2tVI/FMbDhYJZsqHAhq/VD4UANM+LOK/VxDiFc=;
+ b=lC2KWW6D49lpwHsoYwVQA2IG2vst+jpkm8L9VIryT766VYoQpfM7+xaiTWVDu4d9+6pc8/btWVD/1oLuCqQyE62BQyXWjeJ9asixjsPiCjDF1TanpMOOTsLiCd45ndvQxyQQzr5IT/aRzLIjdp1TEAJyhC4SC6hEHET0DMlabou278GptLXZleatoCBnlgxUjPSDrtal04bFGu6ho7uA/KDpAM90GnJxKTrZ/0iNctctUpZi0KlMsZn0Dbz/Kg52pVjCC5QUvNlEb3mly/DEg3KzrWyVkKcxJZvo6OiNWPzESqOVolTJ9nD0UeoXE7SfygEJCrkp0H6EGOb1UuFT2w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7jPMz2tVI/FMbDhYJZsqHAhq/VD4UANM+LOK/VxDiFc=;
+ b=cfo5DGY7QFk9MKqi6+7t0PjcFw5h7E9Fv3itqYXLX3aet7w+5IuHHjFIXKjWRmTaK3QOkOlx0prT7Sl2UBq7O4Fgbqxj1NLbcdgSnl8x66bEs4oWJUYzMsX4mOquoAMCpn4wBl+Lk15NmxmWbmJ//w4I6E9wAozPZWFgxdM1pAc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+Received: from DM6PR21MB1370.namprd21.prod.outlook.com (2603:10b6:5:16b::28)
+ by MN0PR21MB3703.namprd21.prod.outlook.com (2603:10b6:208:3d2::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.12; Fri, 9 Jun
+ 2023 20:39:24 +0000
+Received: from DM6PR21MB1370.namprd21.prod.outlook.com
+ ([fe80::b7e9:4da1:3c23:35f]) by DM6PR21MB1370.namprd21.prod.outlook.com
+ ([fe80::b7e9:4da1:3c23:35f%5]) with mapi id 15.20.6500.016; Fri, 9 Jun 2023
+ 20:39:24 +0000
+From:   Michael Kelley <mikelley@microsoft.com>
+To:     kys@microsoft.com, martin.petersen@oracle.com,
+        longli@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        jejb@linux.ibm.com, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Cc:     mikelley@microsoft.com
+Subject: [PATCH 1/1] scsi: storvsc: Always set no_report_opcodes
+Date:   Fri,  9 Jun 2023 13:38:21 -0700
+Message-Id: <1686343101-18930-1-git-send-email-mikelley@microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+Content-Type: text/plain
+X-ClientProxiedBy: MW4PR03CA0148.namprd03.prod.outlook.com
+ (2603:10b6:303:8c::33) To DM6PR21MB1370.namprd21.prod.outlook.com
+ (2603:10b6:5:16b::28)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzbgsLOoLKyscq6S95QeehVoAzOnQ=xmsFz8dfEUAnhObw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR21MB1370:EE_|MN0PR21MB3703:EE_
+X-MS-Office365-Filtering-Correlation-Id: f205c07f-0083-446a-63e5-08db69299c7e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1MDPSV2CBGX9HRpEsDMd6P/r6xej0G4FtFirGXtAqPOg1PvNzR0fi8cixze+gJqhhYfT04AB94jhbfq7fAbzuFmzHOBigAIQsM6vGvJX9rz6A1w6f1dF2MfXrYlnJCP0BzX6YfPiG+U0FKe4+XW7WeqsC7lbJZ1HBQl+dkFRr5kexJfFBvETNfJrVubHzt3w1r0qBE9rWolcvJDsbYmHosJhk5404YzTAWRY0P/w0NIvbeueT+myUPYB90RsTeEDHw911hzh620QvywTmR7k3lUzufPkpevfKTlVjogbUwUjR0FmDwgKGQ62ce4YqP58oKpRcJ06ylHrmfZw0K+v/JMLv40tVPtu9eI0/CYvwVjGhT0A0dphJWqhEdSaGJOyOSNtMwdMXHWRWd1nqJo8Jzpey9w4Ga6ZTW6wytEMRjQbbvxU38vqpQ7BwtzfODwZ7I9yV64BI3mcFJbfcvPFjjrnc5h7rowN6QyASciQFF6hH8VnCmifsX2A3rWlIaOsa9UvTaC99xaoGanCA6KgSEXr/RbDN3IpIMJCnynB/Rj0h22CRN/rDIAA+gLqqPq0okLEv8YKx/HHDprmjNrOC59J52H2p6ed/8DtfPoc8gfgQyp8tvddEdYTGLK9Pwv1nPSfpdyPVdqy/q1cEGl1hTOHNPQ2e2HiuWiN6e53J8A=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR21MB1370.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(396003)(366004)(346002)(136003)(451199021)(10290500003)(66946007)(316002)(66556008)(107886003)(66476007)(478600001)(4326008)(36756003)(86362001)(83380400001)(6506007)(26005)(6512007)(186003)(8676002)(8936002)(2906002)(5660300002)(41300700001)(6666004)(52116002)(6486002)(82950400001)(82960400001)(2616005)(38100700002)(38350700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ADB8vGoJPDrZkTql1eSFuTegPPwMZnK+CS0A19qs2+hk73poBDNgfrMyZJjz?=
+ =?us-ascii?Q?iVg1wbLf7zzIto+AU22Opb5EbFJwk2HmVZI2CfG3ac2x1UuS3f3baU1EZv/+?=
+ =?us-ascii?Q?1Eq9RGZAXZwCqaU05lzjc03rGX9NW4oxtR5bruYObVy77VGDXy4qgPtOhHmG?=
+ =?us-ascii?Q?LIiwWepRnhYeAsS/xbEVcFv/ZK/UtKOcbr0Slalw8NZkf1nGKpGY/dPKGn8p?=
+ =?us-ascii?Q?MaGvd+ZsmCkge9buZztDN4v4dnaephGrEpcwsFgPZMkyC70punpFFL9eclKC?=
+ =?us-ascii?Q?sX0S6WJoXCf4Yu8MGDaUux/pM/mRRa2S7PTku2R1i+SFAH2O//vWlfHq2cwR?=
+ =?us-ascii?Q?jpEboIhv+6x1fvMepdkrBYbeDsHeOGPB0NGoObZfM0FSxiomPkB6eeaB76T8?=
+ =?us-ascii?Q?ionOg8oQHDsxk2bDIU4xF5crzLf9pN1PqV3Z5rMnPY9IczFANK/EyxCfXj9i?=
+ =?us-ascii?Q?j9DhnwrokUGIEPjNpfWZ+EZWL+0iGPWTBzUXmzUpUtRo1xP8XHfjmnyutGl2?=
+ =?us-ascii?Q?IXdnXjAgKySEkjnhCMKShvr/+3q55/THk2lbZOXizijqp2h6kNPWPL3c4J9O?=
+ =?us-ascii?Q?5TK3EVOLquuYsHxzfxh8YoMfDQMaRQadqIHQTRALEWMKn5XKosZ7YkHRBZ4p?=
+ =?us-ascii?Q?FbwDhCrwh/QZabx4TIdzKYxsbt3nUwrNT8QKjhpZe9CJT63DuKmbnRRLKh2D?=
+ =?us-ascii?Q?hYkMHGdtxLRL6mmCeH1wI5GiQ8hcydWqkMRStAhYIYgwUXxsxG4Gf86Tt4d+?=
+ =?us-ascii?Q?k3i8wnAbI6PcIOYGF5Ye2ldIzKg/VQtuByLxwzp7c0fMlWGtetzUngXlPXoq?=
+ =?us-ascii?Q?vs/K/TLCPoJI90GY6gfFNQjUj50VDRr9+JURJrHZwyrrxeJAyEEWY9r54ncq?=
+ =?us-ascii?Q?mDgjCmPSmRWfQ9ydR6f55J4H7xRJ87Uj3Dz/Qv5zhHUU2diyZ2cq332/TRi7?=
+ =?us-ascii?Q?ZGRkwwWrBBbyxsPuFvWqzo56T/eZzmuZkFTBs3+Vb8Wka260xXwvOVEunk2I?=
+ =?us-ascii?Q?S8G5Fjwhzg35w9+DNG75PFTcPiFJgDDr23G0G7zZzpKpj6qcJkIOMWy5aLDV?=
+ =?us-ascii?Q?wSVzG/OFUgd0g9yYludBTWgnr61e7eSRUdyh2SNvtB7u0KnbeWvHT4fO9zA7?=
+ =?us-ascii?Q?E8MoTOTIXsaPPDZOJiAYvxsMl1in1LyI00gSNvm6VJfs0GZZuVu4exeLk2Hr?=
+ =?us-ascii?Q?svtCGVSsXVIpWzHkCIm9yFEwd49gvq87xiAaRTqPJmdwVSI+2EofOvPJ0b3i?=
+ =?us-ascii?Q?NxhJ8ggHn8uJLwEuOghi0/VnYrt2Kpyn+80fWzRexsXLwqTGIiyabTj3uJUR?=
+ =?us-ascii?Q?JPc70yqld6OnNjmPhK4vyyn+qX7IUY7KIc+L49Zp4Lsr7uifA02wAIYYINpR?=
+ =?us-ascii?Q?KqXcCc64uicqcgpi9OY5uL5+lvLtMR+33O1mI+pkS5rmomeuQehQ9b91zM1h?=
+ =?us-ascii?Q?5ZXGMy0hcDpzEpKPMkEiTlkTrR7YLt76ddg8MAPQIt9YdZfY1eGN3fOwzHnS?=
+ =?us-ascii?Q?uCJgL9huqyuB/ZOigUv8MqJDNsBxrd2uTkcEWBNDENxdCwzJD60NF7pRsVNZ?=
+ =?us-ascii?Q?hfv7yd7LaHWUnslyUtXeNeu5beWmQwCJhcgfXej6?=
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f205c07f-0083-446a-63e5-08db69299c7e
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR21MB1370.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 20:39:24.4302
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FAHWKXNT2cLY3EdfhLmckjjONHic6XmiLMZTmwhqTMfWOqKumfRBQaU5yxgHb7EdP0a2SmPVRMfw5rZjrpdTKA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR21MB3703
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,100 +114,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 11:29:59AM -0700, Andrii Nakryiko wrote:
-> On Fri, Jun 9, 2023 at 9:44 AM Jiri Olsa <olsajiri@gmail.com> wrote:
-> >
-> > On Fri, Jun 09, 2023 at 09:24:10AM +0100, Mark Rutland wrote:
-> > > On Thu, Jun 08, 2023 at 04:55:40PM -0700, Andrii Nakryiko wrote:
-> > > > On Thu, Jun 8, 2023 at 4:27 PM Steven Rostedt <rostedt@goodmis.org> wrote:
-> > > > > On Thu, 8 Jun 2023 15:43:03 -0700 Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> > > > > > On Thu, Jun 8, 2023 at 2:26 PM Jiri Olsa <jolsa@kernel.org> wrote:
-> > >
-> > > > There are BPF tools that allow user to specify regex/glob of kernel
-> > > > functions to attach to. This regex/glob is checked against
-> > > > available_filter_functions to check which functions are traceable. All
-> > > > good. But then also it's important to have corresponding memory
-> > > > addresses for selected functions (for many reasons, e.g., to have
-> > > > non-ambiguous and fast attachment by address instead of by name, or
-> > > > for some post-processing based on captured IP addresses, etc). And
-> > > > that means that now we need to also parse /proc/kallsyms and
-> > > > cross-join it with data fetched from available_filter_functions.
-> > > >
-> > > > All this is unnecessary if avalable_filter_functions would just
-> > > > provide function address in the first place. It's a huge
-> > > > simplification. And saves memory and CPU.
-> > >
-> > > Do you need the address of the function entry-point or the address of the
-> > > patch-site within the function? Those can differ, and the rec->ip address won't
-> > > necessarily equal the address in /proc/kallsyms, so the pointer in
-> > > /proc/kallsyms won't (always) match the address we could print for the ftrace site.
-> > >
-> > > On arm64, today we can have offsets of +0, +4, and +8, and within a single
-> > > kernel image different functions can have different offsets. I suspect in
-> > > future that we may have more potential offsets (e.g. due to changes for HW/SW
-> > > CFI).
-> >
-> > so we need that for kprobe_multi bpf link, which is based on fprobe,
-> > and that uses ftrace_set_filter_ips to setup the ftrace_ops filter
-> >
-> > and ftrace_set_filter_ips works fine with ip address being the address
-> > of the patched instruction (it's matched in ftrace_location)
-> >
-> > but right, I did not realize this.. it might cause confusion if people
-> > don't know it's patch-side addresses..  not sure if there's easy way to
-> > get real function address out of rec->ip, but it will also get more
-> > complicated on x86 when IBT is enabled, will check
-> 
-> ok, sorry, I'm confused. Two questions:
-> 
-> 1. when attaching kprobe_multi, does bpf() syscall expect function
-> address or (func+offset_of_mcount) address? I hope it's the former,
-> just function's address?
+Hyper-V synthetic SCSI devices do not support the MAINTENANCE_IN SCSI
+command, so scsi_report_opcode() always fails, resulting in messages
+like this:
 
-it can be both, the fprobe/ftrace filter setup will take care of looking
-up and translating the provided address to the patch-side address
+hv_storvsc <guid>: tag#205 cmd 0xa3 status: scsi 0x2 srb 0x86 hv 0xc0000001
 
-> 
-> 2. If rec->ip is not function's address, can we somehow adjust the
-> value to be a function address before printing it?
+The recently added support for command duration limits calls
+scsi_report_opcode() four times as each device comes online, which
+significantly increases the number of messages logged in a system with
+many disks.
 
-that's tricky because on x86 with IBT we would need to read the first
-instruction and check if it's endbr to get the real address, like we
-do in get_entry_ip:
+Fix the problem by always marking Hyper-V synthetic SCSI devices as
+not supporting scsi_report_opcode(). With this setting, the
+MAINTENANCE_IN SCSI command is not issued and no messages are logged.
 
-	#ifdef CONFIG_X86_KERNEL_IBT
-	static unsigned long get_entry_ip(unsigned long fentry_ip)
-	{
-		u32 instr;
+Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+---
+ drivers/scsi/storvsc_drv.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-		/* Being extra safe in here in case entry ip is on the page-edge. */
-		if (get_kernel_nofault(instr, (u32 *) fentry_ip - 1))
-			return fentry_ip;
-		if (is_endbr(instr))
-			fentry_ip -= ENDBR_INSN_SIZE;
-		return fentry_ip;
-	}
-	#else
-	#define get_entry_ip(fentry_ip) fentry_ip
-	#endif
+diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
+index e6bc622..659196a 100644
+--- a/drivers/scsi/storvsc_drv.c
++++ b/drivers/scsi/storvsc_drv.c
+@@ -1567,6 +1567,8 @@ static int storvsc_device_configure(struct scsi_device *sdevice)
+ {
+ 	blk_queue_rq_timeout(sdevice->request_queue, (storvsc_timeout * HZ));
+ 
++	/* storvsc devices don't support MAINTENANCE_IN SCSI cmd */
++	sdevice->no_report_opcodes = 1;
+ 	sdevice->no_write_same = 1;
+ 
+ 	/*
+-- 
+1.8.3.1
 
-
-I'm not familiar with arm implementation, so I'm not sure if there's
-a way to do this
-
-but in any case Steven wants to keep the patch-side address:
-  https://lore.kernel.org/bpf/CAEf4BzbgsLOoLKyscq6S95QeehVoAzOnQ=xmsFz8dfEUAnhObw@mail.gmail.com/T/#m19a97bbc8f8236ad869c9f8ad0cc7dbce0722d92
-
-jirka
-
-> 
-> In short, I think it's confusing to have addresses with +0 or +4 or +8
-> offsets. It would be great if we can just keep it +0 at the interface
-> level (when attach and in available_filter_functions_addrs).
-> 
-> >
-> > or we could just use patch-side addresses and reflect that in the file's
-> > name like 'available_filter_functions_patch_addrs' .. it's already long
-> > name ;-)
-> >
-> > jirka
