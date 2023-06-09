@@ -2,121 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62B367294BB
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E49367294C7
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 11:21:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239715AbjFIJVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 05:21:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42940 "EHLO
+        id S241451AbjFIJVn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 9 Jun 2023 05:21:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230423AbjFIJUg (ORCPT
+        with ESMTP id S240531AbjFIJVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 05:20:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C50F59F0
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 02:15:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2B0C6557C
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 09:14:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 198E1C433EF;
-        Fri,  9 Jun 2023 09:14:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686302081;
-        bh=DptfuerpQuvFEU37yMHYofydyO+X8X2wLrda5zzTN3E=;
-        h=Date:From:To:Cc:Subject:From;
-        b=kT2Bc7HfIMxiczzL5A7WZygdjhNamVOeYcA1fEHADYX2Xm5T07GmBgpAiZVkpnYXu
-         B9OIPkM8ZFQSyNSke5uHzBPo4k2BNqvg7r5jS2wlULuqvbFrpGwnVuD+5jBm/CTpzJ
-         HZnt749JivaPLQAglV6/7mVDleseVNKy986P9/9MGJCRAkp1Ilvmj/Do0s4fclYc7N
-         nuurhr/TbU4ep1OenWlCZjjSiomBFHWsnS2RSF8VdtOqnukmA95kWVBtqihznz9Kw6
-         GuJqft7Y8d/vu5WFrmZVTgJ75g+phWeonqqoaaTKh9iPY9FUmhcj3WBYB2oicIwDtB
-         ZFrzMmmz/X6eA==
-Date:   Fri, 9 Jun 2023 10:14:36 +0100
-From:   Will Deacon <will@kernel.org>
-To:     joro@8bytes.org
-Cc:     iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, robin.murphy@arm.com,
-        kernel-team@android.com
-Subject: [GIT PULL] iommu/arm-smmu: Updates for 6.5
-Message-ID: <20230609091435.GA3741@willie-the-truck>
+        Fri, 9 Jun 2023 05:21:09 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D135FC9
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 02:15:53 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-311-q9nRy84GPH-DWMN5iDJwaQ-1; Fri, 09 Jun 2023 10:15:08 +0100
+X-MC-Unique: q9nRy84GPH-DWMN5iDJwaQ-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Fri, 9 Jun
+ 2023 10:15:05 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Fri, 9 Jun 2023 10:15:05 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Zhangjin Wu' <falcon@tinylab.org>,
+        "thomas@t-8ch.de" <thomas@t-8ch.de>
+CC:     "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "w@1wt.eu" <w@1wt.eu>
+Subject: RE: [PATCH v2 1/4] tools/nolibc: sys.h: add __syscall() and
+ __sysret() helpers
+Thread-Topic: [PATCH v2 1/4] tools/nolibc: sys.h: add __syscall() and
+ __sysret() helpers
+Thread-Index: AQHZmozMSUsfyUxi2UiZnouHjWtcta+CLgRA
+Date:   Fri, 9 Jun 2023 09:15:05 +0000
+Message-ID: <13d8756927914b578b076babc8b7f7fb@AcuMS.aculab.com>
+References: <9edb16b4-0d3f-4355-a7b1-684a28f9b4cb@t-8ch.de>
+ <20230609044230.165494-1-falcon@tinylab.org>
+In-Reply-To: <20230609044230.165494-1-falcon@tinylab.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Joerg,
+From: Zhangjin Wu
+> Sent: 09 June 2023 05:43
+> 
+> Hi, Thomas, David, Willy
+> 
+> > Hi David,
+> >
+> > On 2023-06-08 14:35:49+0000, David Laight wrote:
+> > > From: Zhangjin Wu
+> > > > Sent: 06 June 2023 09:10
+> > > >
+> > > > most of the library routines share the same code model, let's add two
+> > > > helpers to simplify the coding and shrink the code lines too.
+> > > >
+> > > ...
+> > > > +/* Syscall return helper, set errno as -ret when ret < 0 */
+> > > > +static inline __attribute__((always_inline)) long __sysret(long ret)
+> > > > +{
+> > > > +	if (ret < 0) {
+> > > > +		SET_ERRNO(-ret);
+> > > > +		ret = -1;
+> > > > +	}
+> > > > +	return ret;
+> > > > +}
+> > >
+> > > If that right?
+> > > I thought that that only the first few (1024?) negative values
+> > > got used as errno values.
+> > >
+> 
+> Thanks David, this question did inspire me to think about the syscalls
+> who returns pointers, we didn't touch them yet:
 
-Please pull these Arm SMMU updates for 6.5. There's the usual summary
-in the tag, but the most important thing is a crop of errata workarounds
-from Robin for Arm's MMU-700 SMMUv3 implementation.
+I'm also not sure whether lseek() is expected to return values
+that would be negative.
 
-Cheers,
+(I do remember having to patch out some checks (not Linux) in order to use:
+    echo -n xxxx | dd of=/dev/kmem oseek=nnn
+in order to patch a live kernel!)
 
-Will
+Technically read() and write() can do longer transfers, but
+Linux limits them to MAXINT.
+IIRC both BSD and SYSV allow drivers return all values (except -1)
+form ioctl().
 
---->8
+The check for -4095UL is probably reasonable.
 
-The following changes since commit 44c026a73be8038f03dbdeef028b642880cf1511:
+	David
 
-  Linux 6.4-rc3 (2023-05-21 14:05:48 -0700)
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git tags/arm-smmu-updates
-
-for you to fetch changes up to c5fb66a17a4362a8990e0d3d050c1c5a415dfc7e:
-
-  Merge branch 'for-joerg/arm-smmu/bindings' into for-joerg/arm-smmu/updates (2023-06-08 22:27:26 +0100)
-
-----------------------------------------------------------------
-Arm SMMU updates for 6.5
-
-- Device-tree binding updates:
-  * Add missing clocks for SC8280XP and SA8775 Adreno SMMUs
-  * Add two new Qualcomm SMMUs in SDX75 and SM6375
-
-- Workarounds for Arm MMU-700 errata:
-  * 1076982: Avoid use of SEV-based cmdq wakeup
-  * 2812531: Terminate command batches with a CMD_SYNC
-  * Enforce single-stage translation to avoid nesting-related errata
-
-- Set the correct level hint for range TLB invalidation on teardown
-
-----------------------------------------------------------------
-Bartosz Golaszewski (1):
-      dt-bindings: iommu: arm,smmu: enable clocks for sa8775p Adreno SMMU
-
-Bjorn Andersson (1):
-      dt-bindings: arm-smmu: Fix SC8280XP Adreno binding
-
-Konrad Dybcio (1):
-      dt-bindings: arm-smmu: Add SM6375 GPU SMMU
-
-Robin Murphy (5):
-      iommu/arm-smmu-v3: Work around MMU-600 erratum 1076982
-      iommu/arm-smmu-v3: Document MMU-700 erratum 2812531
-      iommu/arm-smmu-v3: Add explicit feature for nesting
-      iommu/arm-smmu-v3: Document nesting-related errata
-      iommu/arm-smmu-v3: Set TTL invalidation hint better
-
-Rohit Agarwal (1):
-      dt-bindings: arm-smmu: Add SDX75 SMMU compatible
-
-Will Deacon (1):
-      Merge branch 'for-joerg/arm-smmu/bindings' into for-joerg/arm-smmu/updates
-
- Documentation/arm64/silicon-errata.rst             |  4 ++
- .../devicetree/bindings/iommu/arm,smmu.yaml        | 12 +++--
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c        | 59 +++++++++++++++++++++-
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h        |  8 +++
- 4 files changed, 78 insertions(+), 5 deletions(-)
