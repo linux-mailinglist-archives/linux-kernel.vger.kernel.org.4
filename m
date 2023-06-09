@@ -2,101 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54CDF72A432
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 22:15:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA1972A435
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 22:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231131AbjFIUPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 16:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58782 "EHLO
+        id S231181AbjFIUP4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 16:15:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230327AbjFIUPn (ORCPT
+        with ESMTP id S230418AbjFIUPy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 16:15:43 -0400
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174A72D5F
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 13:15:41 -0700 (PDT)
-Received: by mail-vs1-xe2b.google.com with SMTP id ada2fe7eead31-43b54597d3cso620728137.2
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 13:15:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1686341740; x=1688933740;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=raGvAg29sSFwcM9RybsJx6+tqHFKznCftHEYSM8PqQ4=;
-        b=pPNHsRh9XiWRLgHB0psr+DFRlrIRviKoHNYjlD3Z2cAP6yYCcNYhAjkk4gy21UwZ5e
-         t8KNonsK5yKuN/oy7DksWVDxaBxUsNCI44HBD2rpaVVUxooIdgVaBZrHDpgV+eMLT+qs
-         9oy2zhNURd+ECpyD92bcnVa8viSrPWkhYVYzvQTIczSgH8rhBnzfth76pw2wfWL39z+N
-         CO92EIGZXp7n9l1uWigMJEUNLCsQa5Ct6RK3slYzQ6kviSoO8JybSKggVuS7Jmji6cGA
-         /E5MXZRmswlRVAkRh0doAjJdla9rKLboqyGYeW/WL0OzxLFrhhoGD2zt6zl/MBpyqvL0
-         7QVg==
+        Fri, 9 Jun 2023 16:15:54 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B82C30C0
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 13:15:52 -0700 (PDT)
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 43C393F36B
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 20:15:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1686341750;
+        bh=j0obZYvF5npFEANWqiJVq0rgTcDAftz4pIbks69KDts=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=h5fw4jEv17k092SY0FfBAPabV1qhDegVvjJoQlszVbm1VvK/eM4qEtZehCGrLNg4C
+         jcwGfvjECEeuQtt6174Fweu92NEc+9iauMuVfriDYTIMJjRy68JR1xFeTMNPQO5KwV
+         7qjtI6zzvO4SesljoV3mwU1+qYlxzjbKtPTC47thdOUDceGJXdRIPDQPgfppaP3BEr
+         /RmmBHA5TVWqJplOJiBkSDaAJETW8z1jv4aCNBYMVmyc8LM9G39QR3fMrxNe2ve853
+         8ALrEbPT2Z3ncEBLXTN7nYvSLF/LKrhPW+vcOyPbRUmN0FHCnLrsJRyVdx/YLs4mSu
+         9SJ+JvMYwUe/A==
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-9715654aba1so257614366b.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 13:15:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686341740; x=1688933740;
+        d=1e100.net; s=20221208; t=1686341749; x=1688933749;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=raGvAg29sSFwcM9RybsJx6+tqHFKznCftHEYSM8PqQ4=;
-        b=iloZb4gwEc02EJ7j+bte1RuG73hTJvgo18rmBVOskYxOzPjelUF+PG1/QgHBeURIQn
-         4Su2qjca6PyAqA1HuZ5wLBrOn+nWl9TUxO3zWKEgTnsfj9mn9wP/0GAv/Xm7nUjtg0+f
-         gOess29HuylCw7IrRK/2KFT4vGh7blaExW2SZf3Jv1hmpFpyDFMsG2jzazmSiLKiQvvp
-         JXYF8nQrVWPLLtwQfIOI5aqgLgGnGFJuhZre2XdgmAiVqBYZjtbc72w6aetsl0M0Nul8
-         SqyJX6Fxb8xmBtxeSDXgq331FJq86sYpuII7M94rVCQAGyTZbJVGmIMUnkcOxWE8DKlp
-         +SUA==
-X-Gm-Message-State: AC+VfDyLmCfF/RbJfc9nKIwb54URLMP2vecYYH2xqUqFEYT2ppFS+2Ov
-        5WuIpqv9VCKtiP/22DAS1Ejpg6/N76kMi/rdScZuhg==
-X-Google-Smtp-Source: ACHHUZ6buQWS9YCWGt3+h3H7ytmFRag705dKxxCwPKDrEa608VLfIidhHQ3FzwOdmHPVkkzqVsIHN/lz359RcfvV0DI=
-X-Received: by 2002:a67:f241:0:b0:43b:2551:5172 with SMTP id
- y1-20020a67f241000000b0043b25515172mr1263807vsm.24.1686341740176; Fri, 09 Jun
- 2023 13:15:40 -0700 (PDT)
+        bh=j0obZYvF5npFEANWqiJVq0rgTcDAftz4pIbks69KDts=;
+        b=SpWq9MMO56FpgI/4FRL1WBxwQ/B9Dhrp1G3TPhWuUEPuxnNnUV8MeNhxYgRV3wZpav
+         xz1tdIaULNpfVN2VBq1oRCssGxTnBaeJuy7DgYnFifMBNGYNP28MuaQEtvjn96cvOwSx
+         FPyLSw+Omo7CUf3ul3J83q6aTQ+eiIYOMIMxPcWhlUAdYcn2RPdRwyPwXTkODgMCA2BB
+         jlidhYQxcmN/l8i4bPNxkZlOkKmGG34KKy4A/XUHRAjNBQ42wZdSHv2XyqO8LyDFC3vt
+         9Cyx2mBYeq4xGQL1hck2Ot6IWErPXXCMZ1IlLRBrjN9V+kgWTOmGOUfnVHpMcoU6lgJM
+         wzuA==
+X-Gm-Message-State: AC+VfDxunrbp0Y5mp/j6+ubFShTgO7DXr3VRzbmoZ1POKY3ALTK7z+V1
+        tXH5ApnrAKiYySIDJ8HS2nP8okEA4fRcWQvb0fi+KSrUyJAaxbu4cgOCYbyFZn3EZYKt9uKlbgV
+        /cYXfMq9ibdcTy6ALsTR505yesUi6O5tibmOpsfuOPrZ5sqK47tQ4aUq47g==
+X-Received: by 2002:a17:907:2d25:b0:978:8685:71d5 with SMTP id gs37-20020a1709072d2500b00978868571d5mr3453874ejc.30.1686341749598;
+        Fri, 09 Jun 2023 13:15:49 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7voUPKBcau3WbBBCC3ecETNfAN9X7oKja2XDW+v2aCad+ilWsGH2OpuP96F3DEC902VAO+n3N1GLBO5MWkRNE=
+X-Received: by 2002:a17:907:2d25:b0:978:8685:71d5 with SMTP id
+ gs37-20020a1709072d2500b00978868571d5mr3453861ejc.30.1686341749377; Fri, 09
+ Jun 2023 13:15:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230609143609.209373-1-brgl@bgdev.pl> <CAL_JsqK77OW3n0PW6zP3FNdmuQHnDp9=wfX4E3ga-VW0_LRHHA@mail.gmail.com>
-In-Reply-To: <CAL_JsqK77OW3n0PW6zP3FNdmuQHnDp9=wfX4E3ga-VW0_LRHHA@mail.gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Fri, 9 Jun 2023 22:15:29 +0200
-Message-ID: <CAMRc=Mc7bbaDA1g3gn79XJZL6bTPGf9xZsB3=A4oiMUggzb4kA@mail.gmail.com>
-Subject: Re: [PATCH] of: unittest: drop assertions for GPIO hog messages
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230609164324.497813-1-magali.lemes@canonical.com>
+ <20230609164324.497813-2-magali.lemes@canonical.com> <20230609105307.492cd1f2@kernel.org>
+In-Reply-To: <20230609105307.492cd1f2@kernel.org>
+From:   Magali Lemes do Sacramento <magali.lemes@canonical.com>
+Date:   Fri, 9 Jun 2023 17:15:38 -0300
+Message-ID: <CAO9q4O1SctX1323-8JDO0=ovsLfNpv4EjOSdP_PwYDJ76tAQiQ@mail.gmail.com>
+Subject: Re: [PATCH net v2 1/3] selftests: net: tls: check if FIPS mode is enabled
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        shuah@kernel.org, vfedorenko@novek.ru,
+        tianjia.zhang@linux.alibaba.com, andrei.gherzan@canonical.com,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 7:01=E2=80=AFPM Rob Herring <robh+dt@kernel.org> wro=
+Hi, Jakub.
+
+On Fri, Jun 9, 2023 at 2:53=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wro=
 te:
 >
-> On Fri, Jun 9, 2023 at 8:36=E2=80=AFAM Bartosz Golaszewski <brgl@bgdev.pl=
-> wrote:
+> On Fri,  9 Jun 2023 13:43:22 -0300 Magali Lemes wrote:
+> > diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftest=
+s/net/tls.c
+> > index e699548d4247..0725c60f227c 100644
+> > --- a/tools/testing/selftests/net/tls.c
+> > +++ b/tools/testing/selftests/net/tls.c
+> > @@ -25,6 +25,8 @@
+> >  #define TLS_PAYLOAD_MAX_LEN 16384
+> >  #define SOL_TLS 282
 > >
-> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> >
-> > These have now been demoted to debug and are normally hidden. Drop the
-> > assertions entirely.
-> >
-> > Suggested-by: Rob Herring <robh@kernel.org>
-> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> > ---
-> >  drivers/of/unittest.c | 28 ----------------------------
-> >  1 file changed, 28 deletions(-)
+> > +static int fips_enabled =3D 0;
 >
-> Why is this a separate patch? Don't I get at least 5 days to
-> review/ack changes in drivers/of/?
+> No need to zero init static variables, but really instead of doing
+> the main() hack you should init this to a return value of a function.
+> And have that function read the value.
 >
+> >  struct tls_crypto_info_keys {
+> >       union {
+> >               struct tls12_crypto_info_aes_gcm_128 aes128;
+>
+> > @@ -311,6 +317,9 @@ FIXTURE_SETUP(tls)
+> >       int one =3D 1;
+> >       int ret;
+> >
+> > +     if (fips_enabled && variant->fips_non_compliant)
+> > +             return;
+>
+> Eh, let me help you, this should really be part of the SETUP() function
+> but SETUP() doesn't currently handle SKIP(). So you'll need to add this
+> to your series:
 
-Sorry, my bad, I queued the previous one through the GPIO tree after
-it was reviewed here thinking the unittests bits are trivial. I can
-back it out if you insist or you can ack this one and the end effect
-is the same? I will pay attention in the future.
-
-Bart
+May I add your Suggested-by tag to this upcoming patch in this patchset v3?
