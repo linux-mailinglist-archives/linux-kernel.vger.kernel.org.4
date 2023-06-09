@@ -2,162 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50BB072A1AD
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 19:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4351E72A1B5
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 19:56:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231311AbjFIRyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 13:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
+        id S231326AbjFIR4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 13:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231294AbjFIRyJ (ORCPT
+        with ESMTP id S229551AbjFIR4f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 13:54:09 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26DC35B5
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 10:54:02 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-3f98276f89cso13141cf.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 10:54:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686333242; x=1688925242;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=80A8FjuVOOa9xV5urorcQcKqtLHX/x3yj6q554YpmN4=;
-        b=3aDAkRb3lc+9oQjqGBI7DxxQhUAZCXyJz4umZdc4T+QCL+WhlmT6IcVLQeZPvpuc1t
-         WaMCCTXRNkd48dRGNKGZEyL3tawhP6gy7GZ/+mPabZRJ3ySOkh6qKrqMQU+9R2JSghhR
-         dMi9fNhDt+RgOePLbLSV32bwAdP1jAaW1MU5HJwdU/m9ss40PrWSVoklPyaec+qBNwwy
-         Ms+Eh1bui8+GG4xojnc/FFU18ZLKSBkS/7ywj8Tt5cWDQ5TF9MmwrGqNc/CtWDCgD5Jy
-         k1YFAWQYH2r9Yj8cnmBMYIc3RV/2HP2lIoMdSHUYdbCW5r/DjAPhCqjvIoRpkaw7fJrB
-         T36g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686333242; x=1688925242;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=80A8FjuVOOa9xV5urorcQcKqtLHX/x3yj6q554YpmN4=;
-        b=IttH77dCdaeYirEfden+guEcDfo4WXSVBtATKUwdLsbCZdZV3i6yrazSVz8sEm32Mz
-         GY6kdRXMBHbeFHRxUrEa9xG9m5ug+lBX4apO+4MIRhjRZ4RyzB5z+SX2ba05NAXr6O9Z
-         cP3MIwRhYsUgIByKUcUpSkHx7LoeV4r9k/H5sn6x8h5ofxyG2XfBJ0VWU+6Z/l/lvCb+
-         KowHzcr3fhThWXYr+Hue2koDFLLXhQuNmMANZ6Lc2ewzcGtJ6TyMzlb9oec4FLUFk7dt
-         jfxrbcyLhT+DdAK+VJdC1LPvotxgQWBU4LUAPoBMTjXc+KJcQ/hgWPW+CZx10oOHwHu1
-         l1jg==
-X-Gm-Message-State: AC+VfDyamUX1WZ6Q2Q5tFvcBiOaB6QegmntIj8/m/rGiNuIfxlSs51+s
-        ka9xopadyQrzVqB/nVymLtKj6/E4/mbT9bFzMyUtgA==
-X-Google-Smtp-Source: ACHHUZ7wpAp4kNm4XE+nmsNmT+6iKQaK3dMunm88OVGoM6QMdbZslAcsNjcQkvXXaVHYApeSLPpZAD6e/s+V0TxCxxU=
-X-Received: by 2002:ac8:5b04:0:b0:3e3:8c75:461 with SMTP id
- m4-20020ac85b04000000b003e38c750461mr368917qtw.6.1686333241816; Fri, 09 Jun
- 2023 10:54:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230609082712.34889-1-wuyun.abel@bytedance.com> <CANn89i+Qqq5nV0oRLh_KEHRV6VmSbS5PsSvayVHBi52FbB=sKA@mail.gmail.com>
-In-Reply-To: <CANn89i+Qqq5nV0oRLh_KEHRV6VmSbS5PsSvayVHBi52FbB=sKA@mail.gmail.com>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Fri, 9 Jun 2023 22:53:50 +0500
-Message-ID: <CALvZod4BuY=kHnQov6Ho+UT0_0oG6nEX1Z-pU-f4Yt9w7-=5Hg@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next] sock: Propose socket.urgent for sockmem isolation
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Abel Wu <wuyun.abel@bytedance.com>, Tejun Heo <tj@kernel.org>,
-        Christian Warloe <cwarloe@google.com>,
-        Wei Wang <weiwan@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        Fri, 9 Jun 2023 13:56:35 -0400
+Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2079.outbound.protection.outlook.com [40.107.247.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1C8D8;
+        Fri,  9 Jun 2023 10:56:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=E9rmT8oBThZujBNBZLyB/oLSJVV23c4VIRHDhxPCfWPVdnAdcG2JC18zaPBp91hFdcUXoIogwDvOySr9dxiYA9mS5frg7fcfNPOOBama40ykbuKFixav2SBikESKnC6wq1wRIyJtqp6U5f+N7OWiogCEmt8L0uSnvvBhVXTE4dHdqsDUc0k1GbBsRftFYsV+COg8QsGapCAxfVhWLEFa1yJi9MkywnQVZVU6J389ZbdGDuTGKI2QGBM1hhJVVew7n4NDObfZUophb3qxxl7za8jErp5BiGeXTSWgwTpGsSXUEJl9x7ZitIFVWXle7MdNhnJz0Lqzy6gCKTjPPmTzAA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aO+jXWPh7p1L91lGUjgBNeiLl7E2NA4OJUCosBLPgH0=;
+ b=mM+cS4rp1zOHZsPYfgVN5/q05ZKItT6wIBAMdVfBHA+ZBPXBWCazS8/jVGUQeWWprvBw/amuHWQUpX/AOZ5QMJq+ovbjVTV4R4YkeHjKYQHsZy1oXT3UYsLY5OHUDrKNfWJsdlvY809DRpRjxzec3BICz1SzOZCwfNZpWKvMPayfadzFrgP8KJYJyjbKkWlE3a/xEmOVtfkMJtGnVXQ+dO9JKmXh8zLHEAUMV41SGhqlodxkSiAexecbXmFOLf4cu0tNSiGgDkkXX3o9luwdVk4gWrZOmpOg6YYsDB9FJ5DKP0vW32ZEUJsAD6Rbv1wlbk7uW9PpHDjNFu4R5eWszA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aO+jXWPh7p1L91lGUjgBNeiLl7E2NA4OJUCosBLPgH0=;
+ b=H6HM9FlhpgWqFXn+eKxOmbMjGX99HUXTLeaAkhO1ZkMiw0hpGKOpzCjD4dh+pLtnZnAcyIVaMEYX7XXH4doquotwuXyklBi4u+wmsd6FTATrDZ3V9C0u1+y0xt6tQaoUkfjmi78l3fYSpRyxidFqUHFo7gdOuxQ5caMYFrB3nFI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
+ by PA4PR04MB7629.eurprd04.prod.outlook.com (2603:10a6:102:f2::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Fri, 9 Jun
+ 2023 17:56:30 +0000
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::c40e:d76:fd88:f460]) by AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::c40e:d76:fd88:f460%4]) with mapi id 15.20.6455.030; Fri, 9 Jun 2023
+ 17:56:28 +0000
+Date:   Fri, 9 Jun 2023 20:56:25 +0300
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Jamal Hadi Salim <jhs@mojatatu.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Ahern <dsahern@kernel.org>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Yu Zhao <yuzhao@google.com>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Xin Long <lucien.xin@gmail.com>,
-        Jason Xing <kernelxing@tencent.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        "open list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)" 
-        <cgroups@vger.kernel.org>,
-        "open list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)" 
-        <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>,
+        Peilin Ye <yepeilin.cs@gmail.com>,
+        Pedro Tammela <pctammela@mojatatu.com>
+Subject: Re: [PATCH RESEND net-next 5/5] net/sched: taprio: dump class stats
+ for the actual q->qdiscs[]
+Message-ID: <20230609175625.444p6q33xq5dmwfw@skbuf>
+References: <20230602103750.2290132-1-vladimir.oltean@nxp.com>
+ <20230602103750.2290132-6-vladimir.oltean@nxp.com>
+ <CAM0EoM=P9+wNnNQ=ky96rwCx1z20fR21EWEdx+Na39NCqqG=3A@mail.gmail.com>
+ <20230609121043.ekfvbgjiko7644t7@skbuf>
+ <CAM0EoMmkSZCePo1Y49iMk=9oYKR8xfVDncWF0E4xRhp2ER2PRQ@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAM0EoMmkSZCePo1Y49iMk=9oYKR8xfVDncWF0E4xRhp2ER2PRQ@mail.gmail.com>
+X-ClientProxiedBy: VI1PR0202CA0030.eurprd02.prod.outlook.com
+ (2603:10a6:803:14::43) To AM0PR04MB6452.eurprd04.prod.outlook.com
+ (2603:10a6:208:16d::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|PA4PR04MB7629:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1ca01f21-3757-435a-cd88-08db6912d9a4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +YtfU0wOqf/QAfmJDAQHTYEm13cueIpCQiGQUyWOouYQW83pMRovXQ0WgwQSAqBvuk8QIpJ79p6WHJqTFghRdGyHJTKaGYzLiU/gtiNxxMNj4rC88Lnq/J0ql8mDNx4fmtP/s/meTDvysQf6cVrl6LQAMbjGT7k5+8qaJ9+hA5dHUsgKV2U6bpeWIRJTO6lmblU57KMn8yqxsJ4RDTRKaaB2xQtQrOE8NIbRbk48IgIUAm2iD5GXCL60Ld/J4nQqGCMgCFMUErg978CxKisnVJkpliSWo7qDSspL0NKwzb4tGnE1FM/sVSTkmFU0u3q+Ms6i7BRbmStwerTLuS0Rbl/HXMVhZ1K0Wyv1baSWfIAZllUkUdKDnKZoe9cZ1DN/HwLxHByXFbEOOJrRRvNguKn+BSEFktwNVK4/Z6DAL+DDuI2CFoqDx2sM5geqOHF0TYpT5EOOrd+TsvqaTJSbepBoKms4yhHVKEWTgvg2UJUsV2uqs4i7xzMxDY+MQ7kzQBtXYeT175YIMrssZgOi//64jt8HiULwuR2VYf7DPm5kVuwZb5ijjT+1CJ0wYjsV
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(4636009)(346002)(136003)(396003)(39860400002)(376002)(366004)(451199021)(9686003)(26005)(6506007)(1076003)(6512007)(83380400001)(86362001)(38100700002)(186003)(33716001)(41300700001)(44832011)(54906003)(5660300002)(478600001)(66946007)(8936002)(4326008)(6916009)(2906002)(8676002)(316002)(6486002)(7416002)(66476007)(66556008)(6666004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GPFNndP7637i8a23tAX/l1VaM3WKs1xgNZiReIusfP2JyE9Mkubkh+HT2ph0?=
+ =?us-ascii?Q?PiQyH4B80RGcQoedqH7oHYltJ2xkHyYwzLBruqXT4eGjd1e3ybS2Jrm0Cfjq?=
+ =?us-ascii?Q?4TbUN5ZXpDSeJIXvd1z16IFCZP1mbep/kN6lxaJ1yOWBNm7CLRNPeheGgPHG?=
+ =?us-ascii?Q?paPZufifabZBhGvgc1gyOjQdtdiR9f9kddJlspCEJXYwBS/jHIGz9Eb5Y2FQ?=
+ =?us-ascii?Q?Qh3w2ZjTirH0NSq5Szpgm1NDU83ymVRKEhfnuAMU5TAQhUfALJqRmN7OByu6?=
+ =?us-ascii?Q?MRMt0bhlbHvPXkuFgZUnoUO6uBjt+bhkTIWrC1ICnIw99PeyrldV0LPTjsBW?=
+ =?us-ascii?Q?OwfuBYFPIG72xXo+mZZKj1aop+Uh2AaDiReNo933cfySHGSmhhW4p8p9/5ak?=
+ =?us-ascii?Q?mzddsspDAgmTD5UNcu+n0brQTLrEMhgD+jLdCYaE6Xpl9Fm7F9nt5+bvEyYt?=
+ =?us-ascii?Q?gfQLKxU9H7vlMVCUOiWTx3p6u5mnEKVf3Iz1kzAlqreH8iqLVsFfnIldSk3T?=
+ =?us-ascii?Q?U1RyQ/SNf/P2P0O9cg70loLEOzn7qtNr8UVU/1G4frqjQ/RAOr4GmBxxFXtp?=
+ =?us-ascii?Q?qyVMbZJ2joxIEx3eIyatXF1a4KXfwJ1Y9Szl2AAzktoLFhneoOPIgV9yvxcm?=
+ =?us-ascii?Q?WtNdHrN9FljLAI5Nq6nxV0gWOCO7QM5Drc4WMsWT3WNL0NjrlAMwX9488Ila?=
+ =?us-ascii?Q?2vj/GWWQKqbE/VPMKUXz1DVqdhERThHDaNKfpPN8Q3NMDt9iuDsd+EFQKAGO?=
+ =?us-ascii?Q?SIHRldkGWl/ns0dvLYiynTofk8CNeb/ZEb/ky/dYR7c/csuGJRZAl9JydZtm?=
+ =?us-ascii?Q?CKqxWAcIYvUsepQy11RAMuvy6gpROepv429vTn5iCaQ281MabmKNQHmJ56OR?=
+ =?us-ascii?Q?EbbxSG1Gnfa4+e1Ub1NtMAL9/49vH66xB7n3EWAyi7+ZKNXhAi6kaLnRGeHM?=
+ =?us-ascii?Q?cF3ej/OwNbUVkDION/SNHVFGy7raZ8ig3tLOGDKootnn3m+wdIS2tvkkvQHN?=
+ =?us-ascii?Q?uez5lc6+WGaetylCBxEA+sMl16KSqQ1QXjRQ9UVMyqIXeQIvu6X0vJmUI+bc?=
+ =?us-ascii?Q?6QZSp4ujcSpR6BoS1iK01PEne4XUNMooGA/6Nr4bz698/UgaropAEYtVy9Wh?=
+ =?us-ascii?Q?r+XYM2afByrG8W3fiaXoI1eSUZo+cRyRV9xtCfGlYNeL5wOSDj5FcN5ULP0O?=
+ =?us-ascii?Q?hZQ34y5rGgpl4GZQCoMxj2OVI/rus4q4wSwzXWGgl/bkPx3S9hRcgGMUC6Ff?=
+ =?us-ascii?Q?vuZUWm+uSs4lvFjXV2psfCRbfP1xqgqIpLv56rZld686KlkPE2v0JV9Ikxju?=
+ =?us-ascii?Q?YbOgrnV71yc7uzouBFMMj64txGeIliZTCck5XV0TDk77E2AmMmBWKVXtYP/i?=
+ =?us-ascii?Q?aGmNePm8qE9smDX9n8SwHIBCzuclpp27E/dK2bqp28nEZH1py5a7f8o1P7pE?=
+ =?us-ascii?Q?BnWkT5F3pbcYlrSsrQwmXEe6xOvVItMoenIOgslfNfC/7wbXIkPBoqqaJCsr?=
+ =?us-ascii?Q?dSCNYRV6bo9MlTkCxELCmcI3+45MlpoUyT8xTc3GXytvAYmVpg4xL7DLWGWA?=
+ =?us-ascii?Q?qsKumx+W4PptV8sWoyKCeLOMOe9nNpJb5AdZXjfoK8YTrjiu7y6pKR8W5AwS?=
+ =?us-ascii?Q?Bw=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1ca01f21-3757-435a-cd88-08db6912d9a4
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 17:56:28.6247
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: aMNtDY4NxUdFJGgSqpe6Y0L/GPYVKCOIR3xKPVa8jrFD7xteYzAtReP33HM+3fTKsqoOvh002AByj7dSonBnmg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7629
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 2:07=E2=80=AFPM Eric Dumazet <edumazet@google.com> w=
-rote:
->
-> On Fri, Jun 9, 2023 at 10:28=E2=80=AFAM Abel Wu <wuyun.abel@bytedance.com=
-> wrote:
-> >
-> > This is just a PoC patch intended to resume the discussion about
-> > tcpmem isolation opened by Google in LPC'22 [1].
-> >
-> > We are facing the same problem that the global shared threshold can
-> > cause isolation issues. Low priority jobs can hog TCP memory and
-> > adversely impact higher priority jobs. What's worse is that these
-> > low priority jobs usually have smaller cpu weights leading to poor
-> > ability to consume rx data.
-> >
-> > To tackle this problem, an interface for non-root cgroup memory
-> > controller named 'socket.urgent' is proposed. It determines whether
-> > the sockets of this cgroup and its descendants can escape from the
-> > constrains or not under global socket memory pressure.
-> >
-> > The 'urgent' semantics will not take effect under memcg pressure in
-> > order to protect against worse memstalls, thus will be the same as
-> > before without this patch.
-> >
-> > This proposal doesn't remove protocal's threshold as we found it
-> > useful in restraining memory defragment. As aforementioned the low
-> > priority jobs can hog lots of memory, which is unreclaimable and
-> > unmovable, for some time due to small cpu weight.
-> >
-> > So in practice we allow high priority jobs with net-memcg accounting
-> > enabled to escape the global constrains if the net-memcg itselt is
-> > not under pressure. While for lower priority jobs, the budget will
-> > be tightened as the memory usage of 'urgent' jobs increases. In this
-> > way we can finally achieve:
-> >
-> >   - Important jobs won't be priority inversed by the background
-> >     jobs in terms of socket memory pressure/limit.
-> >
-> >   - Global constrains are still effective, but only on non-urgent
-> >     jobs, useful for admins on policy decision on defrag.
-> >
-> > Comments/Ideas are welcomed, thanks!
-> >
->
-> This seems to go in a complete opposite direction than memcg promises.
->
-> Can we fix memcg, so that :
->
-> Each group can use the memory it was provisioned (this includes TCP buffe=
-rs)
->
-> Global tcp_memory can disappear (set tcp_mem to infinity)
+On Fri, Jun 09, 2023 at 12:19:12PM -0400, Jamal Hadi Salim wrote:
+> So it seems to me it is a transient phase and that at some point the
+> backlog will clear up and the sent stats will go up. Maybe just say so
+> in your commit or show the final result after the packet is gone.
 
-I agree with Eric and this is exactly how we at Google overcome the
-isolation issue. We have set tcp_mem to unlimited and enabled memcg
-accounting of network memory (by surgically incorporating v2 semantics
-of network memory accounting in our v1 environment).
+I will re-collect some stats where there is nothing backlogged.
 
-I do have one question though:
+> I have to admit, I dont know much about taprio - that's why i am
+> asking all these leading questions. You spoke of gates etc and thats
+> klingon to me; but iiuc there's some time sensitive stuff that needs
+> to be sent out within a deadline.
 
-> This proposal doesn't remove protocal's threshold as we found it
-> useful in restraining memory defragment.
+If sch_taprio.c is klingon to you, you can just imagine how sch_api.c
+reads to me :)
 
-Can you explain how you find the global tcp limit useful? What does
-memory defragment mean?
+> Q: What should happen to skbs that are no longer valid?
+> On the aging thing which you say is missing, shouldnt the hrtimer or
+> schedule kick not be able to dequeue timestamped packets and just drop
+> them?
+
+I think the skbs being "valid" is an application-defined metric (except
+in the txtime assist mode, where skbs do truly have a transmit deadline).
+The user space could reasonably enqueue 100 packets at a time, fully
+aware of the fact that the cycle length is 1 second and that there's
+only room in one cycle to send one packet, thus it would take 100
+seconds for all those packets to be dequeued and sent.
+
+It could also be that this isn't the case.
+
+I guess what could be auto-detected and warned about is when a cycle
+passes (sort of like an RCU grace period), the backlog was non-zero,
+the gates were open, but still, no skb was dequeued. After one cycle,
+the schedule repeats itself identically. But then do what? why drop?
+it's a system issue..
