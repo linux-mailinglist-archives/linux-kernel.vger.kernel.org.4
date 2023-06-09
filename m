@@ -2,58 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C0DA728F16
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 06:46:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5DFC728F18
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 06:47:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234560AbjFIEp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 00:45:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48734 "EHLO
+        id S237236AbjFIEre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 00:47:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236735AbjFIEpy (ORCPT
+        with ESMTP id S229726AbjFIErb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 00:45:54 -0400
-Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CE630EC
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 21:45:53 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id 7U0KqPBjCDGHG7U0Wq4YHb; Fri, 09 Jun 2023 06:45:52 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1686285952;
-        bh=PEZXQDap3pTmCCLCcgCzrjYNlvmhAuSx1kWCIhd8mYU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=MNXndMF/jixUheplVtvmjAeKNdqfUNPyGiPl/BQL6RB8FmYTuDSD0XJmujKY+yCAI
-         K8mm0h/Hajyw1zqBxN2m49rlL2K7GdkZHpirX8vjjktGce6QqrHJ2urq8Kbw1oFoI9
-         d2BG20yCDVqYhP+vEZa1utxMtwu9T7VINxnej2aA2xyqPiIjc0Df7W0qYLbgw211M0
-         6SmE2i5hucStjfdLlyJN2J+2o2udu9+UeBaAQOD3JcgLWLUWXt8cnfb29x4oS3XqIs
-         cqUPy0HgV5AHSz+16w13cITmb50wgy8gu8KfTMBW3Reosssbtncwh9BThkQOggKGQi
-         38sMb7mq0Pp+w==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 09 Jun 2023 06:45:52 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Thomas Abraham <thomas.abraham@linaro.org>,
-        Kukjin Kim <kgene.kim@samsung.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH 2/2] tty: serial: samsung_tty: Fix a memory leak in s3c24xx_serial_getclk() when iterating clk
-Date:   Fri,  9 Jun 2023 06:45:39 +0200
-Message-Id: <93bf8f574310256fcea50e5c5a62b5c37e20bb14.1686285892.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <e4359d5ef206f5b349c1d15a515a1205e78dda55.1686285892.git.christophe.jaillet@wanadoo.fr>
-References: <e4359d5ef206f5b349c1d15a515a1205e78dda55.1686285892.git.christophe.jaillet@wanadoo.fr>
+        Fri, 9 Jun 2023 00:47:31 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD69330ED;
+        Thu,  8 Jun 2023 21:47:29 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B5BEFAB6;
+        Thu,  8 Jun 2023 21:48:14 -0700 (PDT)
+Received: from [10.163.44.201] (unknown [10.163.44.201])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B22F53F587;
+        Thu,  8 Jun 2023 21:47:23 -0700 (PDT)
+Message-ID: <cd1d272b-4794-d0d8-af43-aba4b7484b22@arm.com>
+Date:   Fri, 9 Jun 2023 10:17:19 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH V11 06/10] arm64/perf: Enable branch stack events via
+ FEAT_BRBE
+Content-Language: en-US
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, catalin.marinas@arm.com,
+        Mark Brown <broonie@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+References: <20230531040428.501523-1-anshuman.khandual@arm.com>
+ <20230531040428.501523-7-anshuman.khandual@arm.com>
+ <ZH3mhorKNo77hsv5@FVFF77S0Q05N>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <ZH3mhorKNo77hsv5@FVFF77S0Q05N>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,46 +56,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the best clk is searched, we iterate over all possible clk.
+On 6/5/23 19:13, Mark Rutland wrote:
+>> +/*
+>> + * A branch record with BRBINFx_EL1.LASTFAILED set, implies that all
+>> + * preceding consecutive branch records, that were in a transaction
+>> + * (i.e their BRBINFx_EL1.TX set) have been aborted.
+>> + *
+>> + * Similarly BRBFCR_EL1.LASTFAILED set, indicate that all preceding
+>> + * consecutive branch records up to the last record, which were in a
+>> + * transaction (i.e their BRBINFx_EL1.TX set) have been aborted.
+>> + *
+>> + * --------------------------------- -------------------
+>> + * | 00 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX success]
+>> + * --------------------------------- -------------------
+>> + * | 01 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX success]
+>> + * --------------------------------- -------------------
+>> + * | 02 | BRBSRC | BRBTGT | BRBINF | | TX = 0 | LF = 0 |
+>> + * --------------------------------- -------------------
+>> + * | 03 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX failed]
+>> + * --------------------------------- -------------------
+>> + * | 04 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX failed]
+>> + * --------------------------------- -------------------
+>> + * | 05 | BRBSRC | BRBTGT | BRBINF | | TX = 0 | LF = 1 |
+>> + * --------------------------------- -------------------
+>> + * | .. | BRBSRC | BRBTGT | BRBINF | | TX = 0 | LF = 0 |
+>> + * --------------------------------- -------------------
+>> + * | 61 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX failed]
+>> + * --------------------------------- -------------------
+>> + * | 62 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX failed]
+>> + * --------------------------------- -------------------
+>> + * | 63 | BRBSRC | BRBTGT | BRBINF | | TX = 1 | LF = 0 | [TX failed]
+>> + * --------------------------------- -------------------
+>> + *
+>> + * BRBFCR_EL1.LASTFAILED == 1
+>> + *
+>> + * BRBFCR_EL1.LASTFAILED fails all those consecutive, in transaction
+>> + * branches records near the end of the BRBE buffer.
+>> + *
+>> + * Architecture does not guarantee a non transaction (TX = 0) branch
+>> + * record between two different transactions. So it is possible that
+>> + * a subsequent lastfailed record (TX = 0, LF = 1) might erroneously
+>> + * mark more than required transactions as aborted.
+>> + */
+> Linux doesn't currently support TME (and IIUC no-one has built it), so can't we
+> delete the transaction handling for now? We can add a comment with somehing like:
+> 
+> /*
+>  * TODO: add transaction handling for TME.
+>  */
+> 
+> Assuming no-one has built TME, we might also be able to get an architectural
+> fix to disambiguate the boundary between two transactions, and avoid the
+> problem described above.
+> 
+> [...]
+> 
 
-If we find a better match, the previous one, if any, needs to be freed.
-If a better match has already been found, we still need to free the new
-one, otherwise it leaks.
-
-Fixes: 5f5a7a5578c5 ("serial: samsung: switch to clkdev based clock lookup")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-This patch is speculative. Review with care.
-
-I think that some clk_put() are also missing somewhere else in the driver
-but won't be able to investigate further.
----
- drivers/tty/serial/samsung_tty.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
-index dd751e7010e3..c07877dd25fa 100644
---- a/drivers/tty/serial/samsung_tty.c
-+++ b/drivers/tty/serial/samsung_tty.c
-@@ -1488,10 +1488,18 @@ static unsigned int s3c24xx_serial_getclk(struct s3c24xx_uart_port *ourport,
- 			calc_deviation = -calc_deviation;
- 
- 		if (calc_deviation < deviation) {
-+			/*
-+			 * If we find a better clk, release the previous one, if
-+			 * any.
-+			 */
-+			if (!IS_ERR(*best_clk))
-+				clk_put(*best_clk);
- 			*best_clk = clk;
- 			best_quot = quot;
- 			*clk_num = cnt;
- 			deviation = calc_deviation;
-+		} else {
-+			clk_put(clk);
- 		}
- 	}
- 
--- 
-2.34.1
-
+OR can leave this unchanged for now. Then update it if and when the relevant
+architectural fix comes in. The current TME branch records handling here, is
+as per the current architectural specification.
