@@ -2,71 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41D5E729D01
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1309729D03
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:37:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241465AbjFIOg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 10:36:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55834 "EHLO
+        id S241496AbjFIOg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 10:36:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239211AbjFIOg0 (ORCPT
+        with ESMTP id S241359AbjFIOg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 10:36:26 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7268B358E
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 07:36:25 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f7368126a6so14349445e9.0
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 07:36:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1686321384; x=1688913384;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=43lTEtC/Bem8EYdjWbDkZc2zL5sUKt+AnLwz2BmdcmA=;
-        b=0VtrKRdmhXWitBnXXF9xDeRNJ3dweVRkZQaaW10r1f0KP4Hpi3sYGLH6KEEVr5K5t6
-         A22S3HrjE9KSXK9a0Pv/x6Zxv2VE6FUh2ws7S/3bd/6mceOURlef2UKBgd/I/2c8mVVt
-         JgchTX64J+kjV5VvsefMOR77eTSF1dyr/+AaV61VWx2GuwJN+FaXL7PgtRYgJ/M94SUN
-         HzZXrF3GNhDmG1Wq8PLGAnzUq8X14hSQNjVgBQNmyJSpVtQKQKRm+GrOLX5p7d83I6SZ
-         jQ+a4f0AcCJAKbK+Xfo/ou6603k1Dq102Q8cIpsG7GtdkUGUDVzAgOVH02l8z+0ldbOQ
-         bdeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686321384; x=1688913384;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=43lTEtC/Bem8EYdjWbDkZc2zL5sUKt+AnLwz2BmdcmA=;
-        b=MGe27wQuE5sTEl+1Dg4NAhsABA/Wo4JEI0C4A7HbujbXCUBTJZ4vAXsWt757HpMRDK
-         8jHI9pf0qf7s8vuG+T9eV4gHT0p4QhZbRspO3ntme0Tc8shYkx8TTXzhT4NUTw13BjtI
-         RQamGgY5Jxn8svYp10f4ya+dVxrMKz3JJodWvV/B/Lmk4QAX2vDxjNFJH2yI4fjOOvvl
-         AnPHnfFm73T6AISFSIP3WT3rPpUDw5IbZ9n/VdXkWaixjSUtS5DTyQYGuhvvNs9mmm0m
-         XALeMUD6OYy/ZokAbVosxRn4l7qFSJACjIUoAATsJIrTlhe+neyVHy7pwrF7VjBmsAOu
-         jHKw==
-X-Gm-Message-State: AC+VfDxkPHZ0gEuPx4NiPsPnFHr53u8N2P0MlMshuWX5+jCTC6Kl2dtb
-        KgVLUuIiQo7IMjdijUCBSOfqww==
-X-Google-Smtp-Source: ACHHUZ7PPK8je+1Y843D8izrp8IMhUWniL8Kr9ObTugoAauPwa+/VxLbPXj+/eteriBXrheYSONA5g==
-X-Received: by 2002:a7b:c40b:0:b0:3f4:27ff:7d48 with SMTP id k11-20020a7bc40b000000b003f427ff7d48mr1105081wmi.19.1686321383949;
-        Fri, 09 Jun 2023 07:36:23 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:5cfb:aa74:b923:261b])
-        by smtp.gmail.com with ESMTPSA id m19-20020a7bcb93000000b003f7f4b7f286sm2911846wmi.12.2023.06.09.07.36.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 07:36:23 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH] of: unittest: drop assertions for GPIO hog messages
-Date:   Fri,  9 Jun 2023 16:36:09 +0200
-Message-Id: <20230609143609.209373-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.39.2
+        Fri, 9 Jun 2023 10:36:58 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D2DE43;
+        Fri,  9 Jun 2023 07:36:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=m3NdTkg/3DxRk6TFjsN9Xni0yRQdVPltZMic4MOLBFE=; b=u5ciJ4oA9gS4p532LXtDx1+Pp1
+        DJEiCgOYRfujWkWwvxoJfauSb8A80bQq5Hw/DPlV1Um1XKt8z+ArlyMweXPkzRyhVzSakgk40onN+
+        MgS6I66yK0PVsNtD85Pl1a80lSwgbxaSw/KvvmJlJxYKvU+9JO1ZdJP2SJ6ot3uVVIig=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1q7dEO-00FLuH-PP; Fri, 09 Jun 2023 16:36:48 +0200
+Date:   Fri, 9 Jun 2023 16:36:48 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] leds: trigger: netdev: add additional mode for
+ unified tx/rx traffic
+Message-ID: <20b33e91-1058-4ddd-9502-9b2018594e96@lunn.ch>
+References: <20230609135103.14221-1-ansuelsmth@gmail.com>
+ <20230609135103.14221-4-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230609135103.14221-4-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,84 +52,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On Fri, Jun 09, 2023 at 03:51:03PM +0200, Christian Marangi wrote:
+> Add additional mode for unified tx/rx traffic. LED will blink on both tx
+> or rx traffic.
+> 
+> This is especially useful for PHY and Switch that supports LEDs hw
+> control that doesn't support split tx/rx traffic but supports blinking
+> on any kind of traffic in the link.
+> 
+> On mode set from sysfs we check if we have enabled split tx/rx mode and
+> reject enabling activity mode to prevent wrong and redundant
+> configuration.
 
-These have now been demoted to debug and are normally hidden. Drop the
-assertions entirely.
+TRIGGER_NETDEV_TX + TRIGGER_NETDEV_RX = TRIGGER_NETDEV_ACTIVITY:
 
-Suggested-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
- drivers/of/unittest.c | 28 ----------------------------
- 1 file changed, 28 deletions(-)
+When calling into the driver, it probably makes the drivers simpler if
+you do this simplification. Within the trigger code, keep them
+separate, because that is what the user has configured.
 
-diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
-index 0060334a98a7..5386efeaf710 100644
---- a/drivers/of/unittest.c
-+++ b/drivers/of/unittest.c
-@@ -1844,26 +1844,10 @@ static void __init of_unittest_overlay_gpio(void)
- 	unittest(overlay_data_apply("overlay_gpio_02b", NULL),
- 		 "Adding overlay 'overlay_gpio_02b' failed\n");
- 
--	/*
--	 * messages are the result of the probes, after the
--	 * driver is registered
--	 */
--
--	EXPECT_BEGIN(KERN_DEBUG,
--		     "gpio-<<int>> (line-B-input): hogged as input\n");
--
--	EXPECT_BEGIN(KERN_DEBUG,
--		     "gpio-<<int>> (line-A-input): hogged as input\n");
--
- 	ret = platform_driver_register(&unittest_gpio_driver);
- 	if (unittest(ret == 0, "could not register unittest gpio driver\n"))
- 		return;
- 
--	EXPECT_END(KERN_DEBUG,
--		   "gpio-<<int>> (line-A-input): hogged as input\n");
--	EXPECT_END(KERN_DEBUG,
--		   "gpio-<<int>> (line-B-input): hogged as input\n");
--
- 	unittest(probe_pass_count + 2 == unittest_gpio_probe_pass_count,
- 		 "unittest_gpio_probe() failed or not called\n");
- 
-@@ -1888,17 +1872,11 @@ static void __init of_unittest_overlay_gpio(void)
- 	probe_pass_count = unittest_gpio_probe_pass_count;
- 	chip_request_count = unittest_gpio_chip_request_count;
- 
--	EXPECT_BEGIN(KERN_DEBUG,
--		     "gpio-<<int>> (line-D-input): hogged as input\n");
--
- 	/* overlay_gpio_03 contains gpio node and child gpio hog node */
- 
- 	unittest(overlay_data_apply("overlay_gpio_03", NULL),
- 		 "Adding overlay 'overlay_gpio_03' failed\n");
- 
--	EXPECT_END(KERN_DEBUG,
--		   "gpio-<<int>> (line-D-input): hogged as input\n");
--
- 	unittest(probe_pass_count + 1 == unittest_gpio_probe_pass_count,
- 		 "unittest_gpio_probe() failed or not called\n");
- 
-@@ -1935,17 +1913,11 @@ static void __init of_unittest_overlay_gpio(void)
- 	 *   - processing gpio for overlay_gpio_04b
- 	 */
- 
--	EXPECT_BEGIN(KERN_DEBUG,
--		     "gpio-<<int>> (line-C-input): hogged as input\n");
--
- 	/* overlay_gpio_04b contains child gpio hog node */
- 
- 	unittest(overlay_data_apply("overlay_gpio_04b", NULL),
- 		 "Adding overlay 'overlay_gpio_04b' failed\n");
- 
--	EXPECT_END(KERN_DEBUG,
--		   "gpio-<<int>> (line-C-input): hogged as input\n");
--
- 	unittest(chip_request_count + 1 == unittest_gpio_chip_request_count,
- 		 "unittest_gpio_chip_request() called %d times (expected 1 time)\n",
- 		 unittest_gpio_chip_request_count - chip_request_count);
--- 
-2.39.2
+I know such a simplification will make the marvell PHY driver simpler.
 
+	Andrew
