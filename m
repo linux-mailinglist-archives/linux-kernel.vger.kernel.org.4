@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 499B6728C5F
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 02:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ED2A728C61
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 02:26:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234297AbjFIA0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 20:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42780 "EHLO
+        id S236788AbjFIA0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 20:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjFIA0K (ORCPT
+        with ESMTP id S234560AbjFIA0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 20:26:10 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2402D72;
-        Thu,  8 Jun 2023 17:26:09 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-652328c18d5so937427b3a.1;
-        Thu, 08 Jun 2023 17:26:09 -0700 (PDT)
+        Thu, 8 Jun 2023 20:26:45 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D3B72D7C;
+        Thu,  8 Jun 2023 17:26:44 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id af79cd13be357-75d509d425eso121107085a.1;
+        Thu, 08 Jun 2023 17:26:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686270369; x=1688862369;
+        d=gmail.com; s=20221208; t=1686270403; x=1688862403;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SsLHpUV3U4RHcYmttv82/JvsSyFIcyIPeIQmZazPerg=;
-        b=JVxMAS5Rql8+6bB8cFnlTJE1Y+0PDTB5UwnRSgYerzJLulSMpalR6I9yuAcrJp2oZG
-         pyktcLw+3fZ6jEQx9/pTy5xKcYdSTO4jgULDn0kS3QgFQ68O9oouVPSDfGhPGqyBtK/t
-         s1x53uaxxiVHwYGaLoSPg4ZRrcAxJdnrKLkRIiNMgAaDOr3ekZ6GOX2JWE8n721BeJc0
-         bKnKNdgd2P7ouW95NZPekHQaIYaoeLoJnIwoHhg6hi8gYOluOWmJ3vMGPgnWJMnyppgw
-         mOZpLLgzrdV1Yn213xCgdn6CtR/7I1GiyinI6EWoR/GgCQSLtIWI9wSG++l6V6XaYFDf
-         fF0A==
+        bh=CSvF1kXjBVqORXWJl1VpFJ19jMtWDkAEwUrdeGrCGho=;
+        b=oPworUcizTNCZLkeD6AE1X2GgLcgTHNCCglRnabdiC1JEGAwwMgh79DF3lRfuuYLSG
+         myyAqGZ36ZlEv48olY3uF8Z6F8622R63lbJiAOFXCNNUpYw4phOip9JvkhNxWBnL+ucB
+         qHvrgxQP8HOCobXfhb//7ao61G8m6ho9xfYLNqP6b6E3m6M75zzzpEs2EN1mHUoOhsLx
+         med046uB56EfM5awrGEZh6+yjW8WZIvjJC6XOVcdJkflh7ixpjb1z3rmqKTv9hr5BiNP
+         z1G05v34vlUesIdDQXK6/TuWXQq9c51Ki8KdfftYDANx/f9uuaHeKdRa9i41MgDiHNpH
+         jGeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686270369; x=1688862369;
+        d=1e100.net; s=20221208; t=1686270403; x=1688862403;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SsLHpUV3U4RHcYmttv82/JvsSyFIcyIPeIQmZazPerg=;
-        b=cOdvQkH4rbHr7hd7lWWnUgrOoQycWYLrPeawwpr9DFrHMWtY++BGOa0ta2wFIqb4DM
-         SzT5LmNPaJ1VIyQE8tiu+DqFw9NIkZRDrdyYG4mQ+dVqIcBog4jNIleDARgAPBho7zvr
-         SUpgaEn54jo4Vuuo51FwGpiDapuraPw+J1FI/aVkdSVYUo4G+X4TqmPBFW2kgINKcpwL
-         j1C+RbGwcOeBXV4JlOUF7DkWzMjr8KvwJ/0GF62NSeLMO6kLl7HAO4B2aefic2wL+ZyR
-         ybJklqLdhq0Udq94gh4k+dj7n9pbdtPL4LgAm1VDNAJYPdulKxqS/o9BYgtVOI3NVslQ
-         EndQ==
-X-Gm-Message-State: AC+VfDyhW+ZLiLqMsSGnm1gMqGeo1tdzMnJk38NGlZ8oNLH0KvABtRBh
-        06LYILpCyJYO6v2JUK8GfKM=
-X-Google-Smtp-Source: ACHHUZ5RHs5idAHmUIW80YZUdFMTvAyPG7GtZS73qmDLkqkEZVWKhZn3UsojLdEcAAL5NpXAKUMBew==
-X-Received: by 2002:a05:6a21:6d91:b0:10d:3ff2:452b with SMTP id wl17-20020a056a216d9100b0010d3ff2452bmr5743417pzb.18.1686270369049;
-        Thu, 08 Jun 2023 17:26:09 -0700 (PDT)
+        bh=CSvF1kXjBVqORXWJl1VpFJ19jMtWDkAEwUrdeGrCGho=;
+        b=Qth0Uuet2zOBVTGHIdB3Rw6cyqT/Jxuo6PxXQ43JEVi+2cNHpnE8S3p76WCeGlBFqC
+         Ad5ovNjlrmzF8lkpR5dFsCAzWeqR+VvcD99DhEBZO1MmvQTUmlGYVVfmDmHSrYAG/dQ9
+         mM5uiSyMp7SHoWSLwkzg0kybfQ5MzWzgmj0ic6f2GdJIDWJwP0PmGRi1IUjDhlZvNqnX
+         3Us+n8nvAUV82bujdCS5mtsaXk3FuQwln1K67rrZBNKAf4dcnk2mrpaXr0TyaM9oMJWY
+         54x2/HyYh0rWqeMOE8/T/C2jDpPSLcBJ7novNE/ForrFUxfyGeGdC8mlsSop4hEuSOMt
+         Rz+g==
+X-Gm-Message-State: AC+VfDyzhFskwrjeiJM5x7/oYEPWDL2opxc+RN8TSpAX6jjGN7iL0SFo
+        s5nTR6URPvquXNc+kDZI+M4=
+X-Google-Smtp-Source: ACHHUZ6P5gN19nyrCAbbXKebZIGih4YPKE/q4d35wzHys8hbCAw/pNlW9xliu/aGknBGts2UBFap9g==
+X-Received: by 2002:a05:620a:1b8c:b0:75b:23a1:469 with SMTP id dv12-20020a05620a1b8c00b0075b23a10469mr7109768qkb.47.1686270403571;
+        Thu, 08 Jun 2023 17:26:43 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s64-20020a635e43000000b0053efc8ac7e9sm1771643pgb.29.2023.06.08.17.26.08
+        by smtp.gmail.com with ESMTPSA id 30-20020a17090a001e00b0025043a8185dsm1884185pja.23.2023.06.08.17.26.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 17:26:08 -0700 (PDT)
+        Thu, 08 Jun 2023 17:26:43 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 8 Jun 2023 17:26:06 -0700
+Date:   Thu, 8 Jun 2023 17:26:41 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
@@ -60,13 +60,13 @@ Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
         lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
         f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
         srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 4.14 00/61] 4.14.317-rc1 review
-Message-ID: <2ec644ea-e58e-44da-9bc8-25cf9a942714@roeck-us.net>
-References: <20230607200835.310274198@linuxfoundation.org>
+Subject: Re: [PATCH 4.19 00/88] 4.19.285-rc1 review
+Message-ID: <a85cbe67-3e19-4bda-b6b1-b5ea08a5dfb4@roeck-us.net>
+References: <20230607200854.030202132@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230607200835.310274198@linuxfoundation.org>
+In-Reply-To: <20230607200854.030202132@linuxfoundation.org>
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -78,9 +78,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 10:15:14PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.14.317 release.
-> There are 61 patches in this series, all will be posted as a response
+On Wed, Jun 07, 2023 at 10:15:17PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.19.285 release.
+> There are 88 patches in this series, all will be posted as a response
 > to this one.  If anyone has any issues with these being applied, please
 > let me know.
 > 
@@ -89,16 +89,9 @@ On Wed, Jun 07, 2023 at 10:15:14PM +0200, Greg Kroah-Hartman wrote:
 > 
 
 Build results:
-	total: 168 pass: 167 fail: 1
-Failed builds:
-	x86_64:tools/perf
+	total: 155 pass: 155 fail: 0
 Qemu test results:
-	total: 430 pass: 430 fail: 0
-
-I don't know what causes the perf build failure; there has been no change.
-I suspect it is because I recently switched from Ubuntu 20.04 to 22.04.
-I don't think it is worth bothering; I'll just stop build testing perf on
-that branch.
+	total: 431 pass: 431 fail: 0
 
 Tested-by: Guenter Roeck <linux@roeck-us.net>
 
