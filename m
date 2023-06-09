@@ -2,309 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6467272970F
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 12:37:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CDAE72971A
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 12:39:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbjFIKhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 06:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38150 "EHLO
+        id S238240AbjFIKjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 06:39:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231130AbjFIKgZ (ORCPT
+        with ESMTP id S239926AbjFIKij (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 06:36:25 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C11942738;
-        Fri,  9 Jun 2023 03:34:46 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3598ZdTD021128;
-        Fri, 9 Jun 2023 10:34:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=XkLF+TfoAL7j5uqmjlX1JwwkmmWunUXnDAJGkXxXDIw=;
- b=IPXN+Eh3aVuK6LZN8HDrpblTjgh+MRVxW5WsdX9NYzzOOo6aJ5MjP/WkdmfBBeSUYe25
- z9NQt7ehqeIBqIie7RYfv2xBPSN252GhTcW7PEFwhgmXB4PZX89xGdLTmYwLfracvT89
- R32O1dGdSvg9lCKWCbXQ3udrjSWVBxFHuqRhhKKzfFEsNApA2HBPMqen+HiOHb6Hv+/U
- ISGXxH7CNQ3OONnAomK7BEYNIMym4TqcilXx8TvLboSuOsHT5QDLMXLLNK7LX9v6XNCK
- ZSH/2cAFieW2VlOXw0SRt6PG1nmTcfQC1wgiu5GzbIK78quA+W0AT7kMA821G1A8dhiQ pg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r3t70gved-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Jun 2023 10:34:43 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 359AYgBO021944
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 9 Jun 2023 10:34:42 GMT
-Received: from [10.201.206.212] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 9 Jun 2023
- 03:34:39 -0700
-Message-ID: <0d374348-4127-2c98-dc43-a1a474a2cafd@quicinc.com>
-Date:   Fri, 9 Jun 2023 16:04:36 +0530
+        Fri, 9 Jun 2023 06:38:39 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4BF4202
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 03:37:02 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1b04706c85fso6647065ad.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 03:37:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1686307021; x=1688899021;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=C/mMvigJL/P3XLjW5mZdClcY+WmwFZZzzoiJhKTDQkc=;
+        b=DkNUuTXB0JIT0AXio19/Jo3070HAKtDbCtYGrpkRTrTxcGxe0IBqINmdRq7ZK6co1y
+         iiCh++Uonsk7uWIL2TzvKebJ0+FSry8nq63iz7LAFNScMsbd88E64wizfp5Mbh+EEVn0
+         4TVj+Z94mfLDGGqOrDQZ4T6lYKa3ADJONQHmQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686307021; x=1688899021;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C/mMvigJL/P3XLjW5mZdClcY+WmwFZZzzoiJhKTDQkc=;
+        b=EkqlrSMisilqdg4a5aj8+sUQT5a4JfOXJPrfICfdCUy9KKomETSlR1e5/Wv50gYmQj
+         jBPxHOOPmMtG30ydmk5j+XmUdz3cmdl3sEzajEcqSu7ectRf5un55T9oG9owEEu0aJX/
+         RTH+AehrpEJkV2r/Kfm3Sq9Z7JMGMwjt/mDkuayCB17KS5AW4AXDUEeu7fco+gOmChma
+         b0nRKT0EZ9IYmuuDeffsL6wGZxTjaCkpZRnYai7JMiv9j+ej0/A12mP85EZ2TrknDfn5
+         Ku7AOeUrGaYdMyJ+ymnSKcDE1ZgWK4O7cBoR3R4gZY8iNeEIjRzcOIe1Iey5CRYLHv2y
+         F/0Q==
+X-Gm-Message-State: AC+VfDzGO8egof5P0nzUWfVZDIeUJrKP9N9tfszx3iLPodQjK0mUyDE5
+        QoetTyhsj1G4e+ytV6BfJL+W5PxvvIA10Inb+zU=
+X-Google-Smtp-Source: ACHHUZ4/tjNrUSzT1tnZZD6sxOJEB9j+rcJeEl5E91K3jwKxL+7t9skx3rdOFvvC+tUnYjjRfdQotA==
+X-Received: by 2002:a17:902:f547:b0:1af:fbb6:23b7 with SMTP id h7-20020a170902f54700b001affbb623b7mr914456plf.3.1686307020776;
+        Fri, 09 Jun 2023 03:37:00 -0700 (PDT)
+Received: from treapking.tpe.corp.google.com ([2401:fa00:1:10:6df7:6572:8bac:cbd6])
+        by smtp.gmail.com with ESMTPSA id p18-20020a170902ebd200b001acaf7e26bbsm2949733plg.53.2023.06.09.03.36.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 03:37:00 -0700 (PDT)
+From:   Pin-yen Lin <treapking@chromium.org>
+To:     Amitkumar Karwar <amitkarwar@gmail.com>,
+        Ganapathi Bhat <ganapathi017@gmail.com>,
+        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
+        Xinming Hu <huxinming820@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>
+Cc:     Brian Norris <briannorris@chromium.org>,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pin-yen Lin <treapking@chromium.org>
+Subject: [PATCH] wifi: mwifiex: Replace RX workqueues with kthreads
+Date:   Fri,  9 Jun 2023 18:35:01 +0800
+Message-ID: <20230609103651.313194-1-treapking@chromium.org>
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH V2 1/2] arm64: dts: qcom: ipq5332: enable GPIO based LEDs
- and Buttons
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230605052907.18837-1-quic_sridsn@quicinc.com>
- <20230605052907.18837-2-quic_sridsn@quicinc.com>
- <669d2745-c7fc-dff5-a6e6-c2c55b4428ee@linaro.org>
-Content-Language: en-US
-From:   Sridharan S N <quic_sridsn@quicinc.com>
-In-Reply-To: <669d2745-c7fc-dff5-a6e6-c2c55b4428ee@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 9H053G8DcHMQ-MB3eYPqAR20TGGoegAp
-X-Proofpoint-ORIG-GUID: 9H053G8DcHMQ-MB3eYPqAR20TGGoegAp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-09_06,2023-06-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- lowpriorityscore=0 mlxscore=0 spamscore=0 clxscore=1011 suspectscore=0
- bulkscore=0 malwarescore=0 priorityscore=1501 mlxlogscore=821 phishscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306090089
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This improves the RX throughput likely by better locality for the work
+loads.
 
-On 6/6/2023 6:27 PM, Konrad Dybcio wrote:
->
-> On 5.06.2023 07:29, Sridharan S N wrote:
->> Add support for wlan-2g LED on GPIO 36 and wps buttons on GPIO 35.
->>
->> Signed-off-by: Sridharan S N <quic_sridsn@quicinc.com>
->> ---
->> Changes in V2:
->> 	- Used the hypen in node name instead of underscore
->> 	- Dropped the status property
->>   
->>   arch/arm64/boot/dts/qcom/ipq5332-mi01.2.dts | 42 +++++++++++++++++++++
->>   arch/arm64/boot/dts/qcom/ipq5332-rdp442.dts | 42 +++++++++++++++++++++
->>   arch/arm64/boot/dts/qcom/ipq5332-rdp468.dts | 42 +++++++++++++++++++++
->>   3 files changed, 126 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/ipq5332-mi01.2.dts b/arch/arm64/boot/dts/qcom/ipq5332-mi01.2.dts
->> index 3af1d5556950..5bd4ff3ad86b 100644
->> --- a/arch/arm64/boot/dts/qcom/ipq5332-mi01.2.dts
->> +++ b/arch/arm64/boot/dts/qcom/ipq5332-mi01.2.dts
->> @@ -7,6 +7,8 @@
->>   
->>   /dts-v1/;
->>   
->> +#include <dt-bindings/gpio/gpio.h>
->> +#include <dt-bindings/input/input.h>
->>   #include "ipq5332.dtsi"
->>   
->>   / {
->> @@ -20,6 +22,32 @@
->>   	chosen {
->>   		stdout-path = "serial0";
->>   	};
->> +
->> +	gpio-keys {
->> +		compatible = "gpio-keys";
->> +		pinctrl-0 = <&gpio_keys_default>;
->> +		pinctrl-names = "default";
->> +
->> +		button-wps {
->> +			label = "wps";
->> +			linux,code = <KEY_WPS_BUTTON>;
->> +			gpios = <&tlmm 35 GPIO_ACTIVE_LOW>;
->> +			linux,input-type = <1>;
->> +			debounce-interval = <60>;
->> +		};
->> +	};
-> All of these changes seem very repetetive.. Are these devboards based
-> on a common design? Maybe ipq5332-rdp-common.dtsi would be beneficial
-> here?
-Will move all the common nodes to common dtsi in the next patch
-> Thanks,
-Sridharan
-> +
-> +	leds {
-> +		compatible = "gpio-leds";
-> +		pinctrl-0 = <&gpio_leds_default>;
-> +		pinctrl-names = "default";
-> +
-> +		led-0 {
-> +			gpios = <&tlmm 36 GPIO_ACTIVE_HIGH>;
-> +			linux,default-trigger = "phy0tx";
-> +			default-state = "off";
-> +		};
-> +	};
->   };
->   
->   &blsp1_uart0 {
-> @@ -57,6 +85,20 @@
->   /* PINCTRL */
->   
->   &tlmm {
-> +	gpio_keys_default: gpio-keys-default-state {
-> +		pins = "gpio35";
-> +		function = "gpio";
-> +		drive-strength = <8>;
-> +		bias-pull-up;
-> +	};
-> +
-> +	gpio_leds_default: gpio-leds-default-state {
-> +		pins = "gpio36";
-> +		function = "gpio";
-> +		drive-strength = <8>;
-> +		bias-pull-down;
-> +	};
-> +
->   	i2c_1_pins: i2c-1-state {
->   		pins = "gpio29", "gpio30";
->   		function = "blsp1_i2c0";
-> diff --git a/arch/arm64/boot/dts/qcom/ipq5332-rdp442.dts b/arch/arm64/boot/dts/qcom/ipq5332-rdp442.dts
-> index bcf3b31c20e3..36cbebb75c48 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq5332-rdp442.dts
-> +++ b/arch/arm64/boot/dts/qcom/ipq5332-rdp442.dts
-> @@ -7,6 +7,8 @@
->   
->   /dts-v1/;
->   
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/input/input.h>
->   #include "ipq5332.dtsi"
->   
->   / {
-> @@ -20,6 +22,32 @@
->   	chosen {
->   		stdout-path = "serial0";
->   	};
-> +
-> +	gpio-keys {
-> +		compatible = "gpio-keys";
-> +		pinctrl-0 = <&gpio_keys_default>;
-> +		pinctrl-names = "default";
-> +
-> +		button-wps {
-> +			label = "wps";
-> +			linux,code = <KEY_WPS_BUTTON>;
-> +			gpios = <&tlmm 35 GPIO_ACTIVE_LOW>;
-> +			linux,input-type = <1>;
-> +			debounce-interval = <60>;
-> +		};
-> +	};
-> +
-> +	leds {
-> +		compatible = "gpio-leds";
-> +		pinctrl-0 = <&gpio_leds_default>;
-> +		pinctrl-names = "default";
-> +
-> +		led-0 {
-> +			gpios = <&tlmm 36 GPIO_ACTIVE_HIGH>;
-> +			linux,default-trigger = "phy0tx";
-> +			default-state = "off";
-> +		};
-> +	};
->   };
->   
->   &blsp1_uart0 {
-> @@ -71,6 +99,20 @@
->   /* PINCTRL */
->   
->   &tlmm {
-> +	gpio_keys_default: gpio-keys-default-state {
-> +		pins = "gpio35";
-> +		function = "gpio";
-> +		drive-strength = <8>;
-> +		bias-pull-up;
-> +	};
-> +
-> +	gpio_leds_default: gpio-leds-default-state {
-> +		pins = "gpio36";
-> +		function = "gpio";
-> +		drive-strength = <8>;
-> +		bias-pull-down;
-> +	};
-> +
->   	i2c_1_pins: i2c-1-state {
->   		pins = "gpio29", "gpio30";
->   		function = "blsp1_i2c0";
-> diff --git a/arch/arm64/boot/dts/qcom/ipq5332-rdp468.dts b/arch/arm64/boot/dts/qcom/ipq5332-rdp468.dts
-> index 3b6a5cb8bf07..2d27f48f00c0 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq5332-rdp468.dts
-> +++ b/arch/arm64/boot/dts/qcom/ipq5332-rdp468.dts
-> @@ -7,6 +7,8 @@
->   
->   /dts-v1/;
->   
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/input/input.h>
->   #include "ipq5332.dtsi"
->   
->   / {
-> @@ -20,6 +22,32 @@
->   	chosen {
->   		stdout-path = "serial0";
->   	};
-> +
-> +	gpio-keys {
-> +		compatible = "gpio-keys";
-> +		pinctrl-0 = <&gpio_keys_default>;
-> +		pinctrl-names = "default";
-> +
-> +		button-wps {
-> +			label = "wps";
-> +			linux,code = <KEY_WPS_BUTTON>;
-> +			gpios = <&tlmm 35 GPIO_ACTIVE_LOW>;
-> +			linux,input-type = <1>;
-> +			debounce-interval = <60>;
-> +		};
-> +	};
-> +
-> +	leds {
-> +		compatible = "gpio-leds";
-> +		pinctrl-0 = <&gpio_leds_default>;
-> +		pinctrl-names = "default";
-> +
-> +		led-0 {
-> +			gpios = <&tlmm 36 GPIO_ACTIVE_HIGH>;
-> +			linux,default-trigger = "phy0tx";
-> +			default-state = "off";
-> +		};
-> +	};
->   };
->   
->   &blsp1_uart0 {
-> @@ -64,6 +92,20 @@
->   /* PINCTRL */
->   
->   &tlmm {
-> +	gpio_keys_default: gpio-keys-default-state {
-> +		pins = "gpio35";
-> +		function = "gpio";
-> +		drive-strength = <8>;
-> +		bias-pull-up;
-> +	};
-> +
-> +	gpio_leds_default: gpio-leds-default-state {
-> +		pins = "gpio36";
-> +		function = "gpio";
-> +		drive-strength = <8>;
-> +		bias-pull-down;
-> +	};
-> +
->   	sdc_default_state: sdc-default-state {
->   		clk-pins {
->   			pins = "gpio13";
+We tested this patch on Mediatek MT8173 Chromebooks, and it shows ~80%
+Rx throughput improvement on high data rate test cases.
+
+Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+---
+
+ .../wireless/marvell/mwifiex/11n_rxreorder.c  |  2 +-
+ .../net/wireless/marvell/mwifiex/cfg80211.c   |  2 +-
+ drivers/net/wireless/marvell/mwifiex/main.c   | 29 ++++++++-----------
+ drivers/net/wireless/marvell/mwifiex/main.h   |  5 ++--
+ 4 files changed, 17 insertions(+), 21 deletions(-)
+
+diff --git a/drivers/net/wireless/marvell/mwifiex/11n_rxreorder.c b/drivers/net/wireless/marvell/mwifiex/11n_rxreorder.c
+index 391793a16adc..431f6dc61f5b 100644
+--- a/drivers/net/wireless/marvell/mwifiex/11n_rxreorder.c
++++ b/drivers/net/wireless/marvell/mwifiex/11n_rxreorder.c
+@@ -198,7 +198,7 @@ mwifiex_del_rx_reorder_entry(struct mwifiex_private *priv,
+ 	priv->adapter->rx_locked = true;
+ 	if (priv->adapter->rx_processing) {
+ 		spin_unlock_bh(&priv->adapter->rx_proc_lock);
+-		flush_workqueue(priv->adapter->rx_workqueue);
++		kthread_flush_worker(priv->adapter->rx_thread);
+ 	} else {
+ 		spin_unlock_bh(&priv->adapter->rx_proc_lock);
+ 	}
+diff --git a/drivers/net/wireless/marvell/mwifiex/cfg80211.c b/drivers/net/wireless/marvell/mwifiex/cfg80211.c
+index bcd564dc3554..f985bff4e52c 100644
+--- a/drivers/net/wireless/marvell/mwifiex/cfg80211.c
++++ b/drivers/net/wireless/marvell/mwifiex/cfg80211.c
+@@ -872,7 +872,7 @@ static int mwifiex_deinit_priv_params(struct mwifiex_private *priv)
+ 	adapter->rx_locked = true;
+ 	if (adapter->rx_processing) {
+ 		spin_unlock_bh(&adapter->rx_proc_lock);
+-		flush_workqueue(adapter->rx_workqueue);
++		kthread_flush_worker(adapter->rx_thread);
+ 	} else {
+ 	spin_unlock_bh(&adapter->rx_proc_lock);
+ 	}
+diff --git a/drivers/net/wireless/marvell/mwifiex/main.c b/drivers/net/wireless/marvell/mwifiex/main.c
+index ea22a08e6c08..bab963f3db83 100644
+--- a/drivers/net/wireless/marvell/mwifiex/main.c
++++ b/drivers/net/wireless/marvell/mwifiex/main.c
+@@ -168,7 +168,7 @@ static void mwifiex_queue_rx_work(struct mwifiex_adapter *adapter)
+ 		spin_unlock_bh(&adapter->rx_proc_lock);
+ 	} else {
+ 		spin_unlock_bh(&adapter->rx_proc_lock);
+-		queue_work(adapter->rx_workqueue, &adapter->rx_work);
++		kthread_queue_work(adapter->rx_thread, &adapter->rx_work);
+ 	}
+ }
+ 
+@@ -526,9 +526,10 @@ static void mwifiex_terminate_workqueue(struct mwifiex_adapter *adapter)
+ 		adapter->workqueue = NULL;
+ 	}
+ 
+-	if (adapter->rx_workqueue) {
+-		destroy_workqueue(adapter->rx_workqueue);
+-		adapter->rx_workqueue = NULL;
++	if (adapter->rx_thread) {
++		kthread_flush_worker(adapter->rx_thread);
++		kthread_destroy_worker(adapter->rx_thread);
++		adapter->rx_thread = NULL;
+ 	}
+ }
+ 
+@@ -1394,7 +1395,7 @@ int is_command_pending(struct mwifiex_adapter *adapter)
+  *
+  * It handles the RX operations.
+  */
+-static void mwifiex_rx_work_queue(struct work_struct *work)
++static void mwifiex_rx_work_queue(struct kthread_work *work)
+ {
+ 	struct mwifiex_adapter *adapter =
+ 		container_of(work, struct mwifiex_adapter, rx_work);
+@@ -1554,13 +1555,10 @@ mwifiex_reinit_sw(struct mwifiex_adapter *adapter)
+ 	INIT_WORK(&adapter->main_work, mwifiex_main_work_queue);
+ 
+ 	if (adapter->rx_work_enabled) {
+-		adapter->rx_workqueue = alloc_workqueue("MWIFIEX_RX_WORK_QUEUE",
+-							WQ_HIGHPRI |
+-							WQ_MEM_RECLAIM |
+-							WQ_UNBOUND, 1);
+-		if (!adapter->rx_workqueue)
++		adapter->rx_thread = kthread_create_worker(0, "MWIFIEX_RX");
++		if (IS_ERR(adapter->rx_thread))
+ 			goto err_kmalloc;
+-		INIT_WORK(&adapter->rx_work, mwifiex_rx_work_queue);
++		kthread_init_work(&adapter->rx_work, mwifiex_rx_work_queue);
+ 	}
+ 
+ 	/* Register the device. Fill up the private data structure with
+@@ -1709,14 +1707,11 @@ mwifiex_add_card(void *card, struct completion *fw_done,
+ 	INIT_WORK(&adapter->main_work, mwifiex_main_work_queue);
+ 
+ 	if (adapter->rx_work_enabled) {
+-		adapter->rx_workqueue = alloc_workqueue("MWIFIEX_RX_WORK_QUEUE",
+-							WQ_HIGHPRI |
+-							WQ_MEM_RECLAIM |
+-							WQ_UNBOUND, 1);
+-		if (!adapter->rx_workqueue)
++		adapter->rx_thread = kthread_create_worker(0, "MWIFIEX_RX");
++		if (!adapter->rx_thread)
+ 			goto err_kmalloc;
+ 
+-		INIT_WORK(&adapter->rx_work, mwifiex_rx_work_queue);
++		kthread_init_work(&adapter->rx_work, mwifiex_rx_work_queue);
+ 	}
+ 
+ 	/* Register the device. Fill up the private data structure with relevant
+diff --git a/drivers/net/wireless/marvell/mwifiex/main.h b/drivers/net/wireless/marvell/mwifiex/main.h
+index b95886e1413e..3255f9a5c2d4 100644
+--- a/drivers/net/wireless/marvell/mwifiex/main.h
++++ b/drivers/net/wireless/marvell/mwifiex/main.h
+@@ -32,6 +32,7 @@
+ #include <linux/gfp.h>
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
++#include <linux/kthread.h>
+ #include <linux/of_gpio.h>
+ #include <linux/of_platform.h>
+ #include <linux/platform_device.h>
+@@ -886,8 +887,8 @@ struct mwifiex_adapter {
+ 	atomic_t tx_hw_pending;
+ 	struct workqueue_struct *workqueue;
+ 	struct work_struct main_work;
+-	struct workqueue_struct *rx_workqueue;
+-	struct work_struct rx_work;
++	struct kthread_worker *rx_thread;
++	struct kthread_work rx_work;
+ 	struct workqueue_struct *dfs_workqueue;
+ 	struct work_struct dfs_work;
+ 	bool rx_work_enabled;
+-- 
+2.41.0.162.gfafddb0af9-goog
+
