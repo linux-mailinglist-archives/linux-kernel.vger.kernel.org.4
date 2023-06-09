@@ -2,160 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94163729000
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 08:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B1A8729003
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 08:36:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237984AbjFIGf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 02:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47742 "EHLO
+        id S238060AbjFIGg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 02:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjFIGfY (ORCPT
+        with ESMTP id S237860AbjFIGg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 02:35:24 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 093C91BDF
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 23:35:23 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f63ab1ac4aso1697536e87.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 23:35:22 -0700 (PDT)
+        Fri, 9 Jun 2023 02:36:27 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D001BEB
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 23:36:25 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-53f832298acso388995a12.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 23:36:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686292521; x=1688884521;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dWLk5AcoN1nlHpTB7u7FTqD5LcrlUnshiREnF2lH0hA=;
-        b=SiyMbDstSJGUV5wBE0dpYExQgbaOi08fY3+NU4qvjtxBpyiifJ1mvtdFghvFrwEPAe
-         7Blad1GIxr5oIeEa6wGg/T+V4udWMlwAV77766KSvC5H1HGYODPSQiv7Pq+uu/Hcmymv
-         DUz/OjpR15fmetfDry4q5tdRTQ0Q7C0UCnYDwiPeqrDLyH53Frf0/YhKxROT4dFk3FaD
-         6r/ltgKr0U4ZUdbnqOVKMWxxylbKjOBIcv8jrfjpuRn418OfY8XPonxRyKfaG748TaIl
-         5YNcEi/4VpJci09XC9e6ZcSYBKNF0ps8LHeRnAT/oX8y6vmUuaVpOuZuFpSBAexLn4A8
-         lF8A==
+        d=huaqin-corp-partner-google-com.20221208.gappssmtp.com; s=20221208; t=1686292585; x=1688884585;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OArSVKdP8kKZATYp3NGYxhiynyocbj6EsYiLTo9tnQ0=;
+        b=ZJGfku3g8Z/kgfGN2s9BOlz/s/4Vqvp5qale9NSrkcJZAXxeQpaerp68KZeIgHPfI9
+         86FzYj8v1LucC/9p+b/uQ/VsCKuoJWWrhJvmaOWirupHubWwxBD4PLEEk8rK4LQczB5X
+         auCEszeK7jLlx/6Sh9gKkVEocQB86K7AZsbWHgE1oYY7Tmu4SybrcafnAo2lepd3T9Bl
+         rIyG74+3/DYq4/gWweEyXdtfrvhPCZlW2IxPX2vZKe8SW9zue85rTqeHJcndu0hBuCeh
+         S2quC+aQMVvwgITvqW7G5OhXes3J2edOdDFZAh77pVTz1dYOPcEwraG1z5eKLXciB6uW
+         d3mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686292521; x=1688884521;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1686292585; x=1688884585;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dWLk5AcoN1nlHpTB7u7FTqD5LcrlUnshiREnF2lH0hA=;
-        b=C+NIqxSZUJ/PiOfxCwcFnqhtwImoTzLZ4vGoHbzbSZ4QNHa2gyR9ZFiSrdpVauVHsZ
-         chPxdK7Vtav9sShI2aJ3UL+KEaAeUUsOwl21YEAu9RLtEWEdfyKFRg5Q1YwRv7wJh5tW
-         Knj48LKsmLowMnNuhh9a2B5CmSiSWiNK4HRs37NMFqguxVttRIlHoOtv0pG77lBN0mfi
-         Bmb9BAb4Oyv1ruJ6XZXzexkQb9GBhDPattLNOAVuOg4eZEJvCjuk90hx/F29xZ5I8tMm
-         ubLZVIYp5336a8NJQSUdGAMGcj47etTQoAG72RnD2zF3rHXA6WzvzBBjet3ZVAeQASaA
-         PDoQ==
-X-Gm-Message-State: AC+VfDz+60cZScasfIBN/ial2X67H35iUMdpJr4Nk+AS4bIUOBzDD0KS
-        K5zge/JPhh3JO+tZF2qAr1Ec1YHTCTlOM4etrU7LBQ==
-X-Google-Smtp-Source: ACHHUZ4p+rws/CPsQ3jx2AFOjwUCvIpAwSfanS70Dysxx2qLm3VsSeemyMFRzsDJsbFonBrMaSd/94BdvUxefkZW2bg=
-X-Received: by 2002:a05:6512:457:b0:4dd:9fd8:3a36 with SMTP id
- y23-20020a056512045700b004dd9fd83a36mr222016lfk.1.1686292521182; Thu, 08 Jun
- 2023 23:35:21 -0700 (PDT)
+        bh=OArSVKdP8kKZATYp3NGYxhiynyocbj6EsYiLTo9tnQ0=;
+        b=GqMkYw88iglamxhFUsHuq+NwdYoG44kh3kGiuHXBT2kgl/fho8K+yzY2INnuwJxGOa
+         BMlls92iIOaH2On8aD/5Q8YkzByoKS40UJ6x97F2e819K1spb9TEbNUu6Qx2OvJLkAgt
+         sU6fgKmFL/mjV44ioqCdWVgcemiOyDtoqpopcnJ6KyKfv3RnPPzkfdHiEmxzjIDMcgFm
+         skTFXW5dofFMLFL0M+cK+i0ph/Yn9OWwCdsCZiDof5++jbt54Isv068u9ExA7ODTZMRp
+         Ghh/rLt9QrgKibRWveqSeA2oc+ztN+dkYZMQux80S6CDWdjNHOyZmN64XVw9oRkmpi5Z
+         AR/Q==
+X-Gm-Message-State: AC+VfDw/anEJgYZxWrvYTWDnzNMAT98ONZINiUa3/euG/yHvopMzWYHW
+        pj6BW4TULJ8hHsU6EnA82GRCrA==
+X-Google-Smtp-Source: ACHHUZ52oahsoZDVkU6EF4yj3h0eG1pLsRBq3kv3+ADvE6u/W5sWKX9yU8ZR2vkCgKm/ciflmvhLEg==
+X-Received: by 2002:a17:903:493:b0:1b2:4df5:c00e with SMTP id jj19-20020a170903049300b001b24df5c00emr251138plb.35.1686292585194;
+        Thu, 08 Jun 2023 23:36:25 -0700 (PDT)
+Received: from yc.huaqin.com ([101.78.151.214])
+        by smtp.gmail.com with ESMTPSA id o15-20020a170902d4cf00b001b211283294sm2445709plg.163.2023.06.08.23.36.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 23:36:24 -0700 (PDT)
+From:   Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, dmitry.torokhov@gmail.com, jikos@kernel.org,
+        benjamin.tissoires@redhat.com, dianders@chromium.org,
+        hsinyi@google.com
+Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+Subject: [PATCH v5 0/2] Add ili9882t bindings and timing
+Date:   Fri,  9 Jun 2023 14:36:13 +0800
+Message-Id: <20230609063615.758676-1-yangcong5@huaqin.corp-partner.google.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230526010748.1222-1-masahisa.kojima@linaro.org>
- <CAC_iWjJJ5E9Q1or5yTiDynzv_WAYH-g+N24aRdu9rvcsbWqnrg@mail.gmail.com>
- <CAFA6WYNFYB1LiOFB_iwTsdD5PmnDdSbtDSH2J4FVFPx3uik8rQ@mail.gmail.com>
- <CAC_iWj+E7-XK6dCeSn4205K0O3EZCLxCaC+adu-14ST6sdudfA@mail.gmail.com>
- <76da826f-b608-6add-5401-6de818b180e3@siemens.com> <CAFA6WYPCDRjFzsUMU=SNzEt88nT7Fcm1eOFL8z4HiQO+=2JeVA@mail.gmail.com>
- <cc6bd203-83ea-c247-0986-7fec6f327ee8@siemens.com> <CAC_iWjKZNHJxq4VMFnV7oQngwBBCQveh=s34u1LZ59YUqViPbw@mail.gmail.com>
- <CAC_iWjJMv68yLC606SBhMmBYkR4wVC8SvUcPvNM=RX_qL=9Bvw@mail.gmail.com>
- <b9b8c1d3-fc8e-df94-d12b-a9e3debf3418@siemens.com> <CAC_iWj+cP4RfDNu_n-ZOp7A62W34drLpPszN_hrkqF_aPTLtMg@mail.gmail.com>
- <871ece13-7d6e-44d4-3bda-317658202f6f@siemens.com> <CAC_iWjKgCJWgKU8tC3Nfn-0CgwGhw89B3JpTgsjkjDDOcWZEdw@mail.gmail.com>
- <CAMj1kXGbXdbDr6DbyuziSFuxMgAimjNnkhqy8C-S5AbxdnixuQ@mail.gmail.com>
- <CAC_iWjJ0uw_p9=6C+U+q8BNQgnDBgbDpcu8s8c80oB25i9y77w@mail.gmail.com> <3eb9bf84-4cf0-6cfe-9ad3-f7eef7d775fb@siemens.com>
-In-Reply-To: <3eb9bf84-4cf0-6cfe-9ad3-f7eef7d775fb@siemens.com>
-From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Date:   Fri, 9 Jun 2023 09:34:45 +0300
-Message-ID: <CAC_iWjLdmmQ4+BVt_mOP5Ht9jDHQqoVV+-ATR-nDrmG37raGjQ@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] efi: Add tee-based EFI variable driver
-To:     Jan Kiszka <jan.kiszka@siemens.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-efi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        "Su, Bao Cheng (RC-CN DF FA R&D)" <baocheng.su@siemens.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jan,
+Add bindings for Ilitek. The ili9882t touch screen chip same as
+Elan eKTH6915 controller has a reset gpio. The difference is that
+ilitek9882 needs to use vccio-supply instead of vcc33-supply. 
+From Dmitry suggestion, it would make more sense to distinguish the
+binging of ili9882 and eKTH6915.
 
-[...]
+From The datasheet specifies there should be 60ms between touch SDA
+sleep and panel RESX. so we can add the 65 ms delay in i2c_hid_core_suspend.
 
-> > --- a/drivers/firmware/efi/vars.c
-> > +++ b/drivers/firmware/efi/vars.c
-> > @@ -123,7 +123,7 @@ EXPORT_SYMBOL_GPL(efivars_unregister);
-> >
-> >  bool efivar_supports_writes(void)
-> >  {
-> > -       return __efivars && __efivars->ops->set_variable;
-> > +       return __efivars && __efivars->ops->set_variable != set_variable_int;
-> >  }
-> >  EXPORT_SYMBOL_GPL(efivar_supports_writes);
-> >
-> > diff --git a/fs/efivarfs/super.c b/fs/efivarfs/super.c
-> > index e028fafa04f3..e40b5c4c5106 100644
-> > --- a/fs/efivarfs/super.c
-> > +++ b/fs/efivarfs/super.c
-> > @@ -242,9 +242,6 @@ static int efivarfs_fill_super(struct super_block
-> > *sb, struct fs_context *fc)
-> >         sb->s_d_op              = &efivarfs_d_ops;
-> >         sb->s_time_gran         = 1;
-> >
-> > -       if (!efivar_supports_writes())
-> > -               sb->s_flags |= SB_RDONLY;
-> > -
-> >         inode = efivarfs_get_inode(sb, NULL, S_IFDIR | 0755, 0, true);
-> >         if (!inode)
-> >                 return -ENOMEM;
-> > diff --git a/include/linux/efi.h b/include/linux/efi.h
-> > index 58d1c271d3b0..ec0ac6ef50a3 100644
-> > --- a/include/linux/efi.h
-> > +++ b/include/linux/efi.h
-> > @@ -1084,6 +1084,10 @@ int efivars_register(struct efivars *efivars,
-> >                      const struct efivar_operations *ops);
-> >  int efivars_unregister(struct efivars *efivars);
-> >
-> > +efi_status_t set_variable_int(efi_char16_t *name, efi_guid_t *vendor,
-> > +                             u32 attributes, unsigned long data_size,
-> > +                             void *data);
-> > +
-> >  void efivars_generic_ops_register(void);
-> >  void efivars_generic_ops_unregister(void);
-> >
-> > Thanks
-> > /Ilias
->
-> As just written in my other reply: The root cause is the dependency on
-> tee-supplicant daemon. That needs to be resolved, and then also r/w
-> mounting will just work.
+Changes in v5:
+- PATCH 1/2: Add panel as a required in property and examples.
+- PATCH 2/2: Set a NULL to ili9882t_chip_data for vcc33-supply, then not use vcc33 regulator.
+- Link to v4: https://lore.kernel.org/all/20230608130147.2835818-1-yangcong5@huaqin.corp-partner.google.com/
 
-That's partially true.  If we solve the dependency your problem will
-go away only if everything gets compiled as built in.  But if you have
-them as modules there's still a chance you mount the efivarfs before
-installing all the modules.  In that case, you'll end up with the same
-problem no?
+Changes in v4:
+- PATCH 1/2: Remove compatible items and add reset maxItems.
+- PATCH 1/2: Refer to the panel description in Doug serias[1].
+  [1] https://lore.kernel.org/all/20230607144931.v2.1.Id68e30343bb1e11470582a9078b086176cfec46b@changeid/ 
+- PATCH 2/2: Set a "null" to ili9882t_chip_data for vcc33-supply, then using dummy regulator.
+- Link to v3: https://lore.kernel.org/all/20230607133458.4075667-1-yangcong5@huaqin.corp-partner.google.com/
 
-That's why I think this patch (or a variation of it) is useful.  It
-solves the kernel panic you are seeing if you remount the efivarfs as
-RW and It unifies the way the kernel responds to userspace no matter
-what the firmware does with its setvariableRT service.
+Changes in v3:
+- PATCH 1/2: Introduce bindings for Ilitek.
+- Link to v2: https://lore.kernel.org/all/20230605060524.1178164-1-yangcong5@huaqin.corp-partner.google.com/
 
-Thanks
-/Ilias
->
-> Jan
->
-> --
-> Siemens AG, Technology
-> Competence Center Embedded Linux
->
+Changes in v2:
+- PATCH 1/2: fix ran make dt_binding_check warnings/errors.
+- PATCH 1/2: remove oneOf,just enum.
+- Link to v1: https://lore.kernel.org/all/20230602140948.2138668-1-yangcong5@huaqin.corp-partner.google.com/
+
+Cong Yang (2):
+  dt-bindings: HID: i2c-hid: ilitek: Introduce bindings for Ilitek
+    ili9882t
+  HID: i2c-hid: elan: Add ili9882t timing
+
+ .../bindings/input/ilitek,ili9882t.yaml       | 67 +++++++++++++++++++
+ drivers/hid/i2c-hid/i2c-hid-of-elan.c         | 50 ++++++++++----
+ 2 files changed, 105 insertions(+), 12 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/input/ilitek,ili9882t.yaml
+
+-- 
+2.25.1
+
