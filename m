@@ -2,72 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68902729D74
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1532B729D76
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 16:55:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbjFIOzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 10:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36994 "EHLO
+        id S241660AbjFIOzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 10:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241616AbjFIOyh (ORCPT
+        with ESMTP id S241826AbjFIOzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 10:54:37 -0400
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E41733A97;
-        Fri,  9 Jun 2023 07:54:34 -0700 (PDT)
-Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-777a2ef8d45so76973039f.2;
-        Fri, 09 Jun 2023 07:54:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686322474; x=1688914474;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QL/Lam7XSRby/6zHuK8ihMzigScvLNfSZKDbqyqBYWA=;
-        b=FbPcnG4GwCCrW3SGjMQjmkKU3oTjWz+33jXNW8Jmblwww0oi8S5Om8tYjl+90sTxcs
-         +Qv82KCUpCvhmDnf/nxNixPjYzDxOLQn5+H1ez4EhKo1VHuX7Rh6xoktFBRvIlqfWebG
-         hz8jpqqC05+ZbRy5uOQuCw8t66ML1PdbI6VDybIsaZshkswVUlVaAv6tMRuH27+vgWac
-         5ejknrGRAsY77mAq6OO5BozrkvQJACh7QbrPRg/eJCvYEojhB6MEcYLfXtPb80FCpl93
-         dNUS/LXkuWZXjX/qpyMKx3jdrOJQuxvf/T8E5ak4HUK7WZ4FlVaXqwD0zLCpFuYqZ4Tp
-         aENw==
-X-Gm-Message-State: AC+VfDzWEaj+m7LhuaUMPmQDJsxSzdwQBYD/oVnxzt30qOZfPU3uLNrE
-        vkfDHBtWbYqAxWeC4vnJRQ==
-X-Google-Smtp-Source: ACHHUZ5HUe2/EJqtSSvqF99Jez8LUfwrnSAZkcHuhlvuSAuxzKlXfZZXQ7vt+b4u5NJerQklab+UoQ==
-X-Received: by 2002:a6b:770e:0:b0:774:9a92:f1c9 with SMTP id n14-20020a6b770e000000b007749a92f1c9mr1616726iom.19.1686322474036;
-        Fri, 09 Jun 2023 07:54:34 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id d11-20020a02a48b000000b0041a9c4e0f1csm1005631jam.109.2023.06.09.07.54.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 07:54:33 -0700 (PDT)
-Received: (nullmailer pid 915546 invoked by uid 1000);
-        Fri, 09 Jun 2023 14:54:31 -0000
-Date:   Fri, 9 Jun 2023 08:54:31 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, linux-pm@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [RFC PATCH 1/1] fdt: Mark "/reserved-memory" nodes as nosave if
- !reusable
-Message-ID: <20230609145431.GA887298-robh@kernel.org>
-References: <20230530080425.18612-1-alexghiti@rivosinc.com>
- <20230530080425.18612-2-alexghiti@rivosinc.com>
+        Fri, 9 Jun 2023 10:55:01 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1253A88;
+        Fri,  9 Jun 2023 07:54:52 -0700 (PDT)
+Date:   Fri, 09 Jun 2023 14:54:49 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1686322490;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xqpL/bHF2qVquWuvqZqpUhbImgm41fmGiTri9EWuHqI=;
+        b=W5FaNMv5D3KNnY6MZvPPCNXHsjLzLe8CbNdR/reX7pOEq9giwX6I12bQsqXZT7Ca5Cxliv
+        7/YkDWxKlIAsnG5HROw7/uhK+cs+rXuWSBI3qDURWzSMN5yloH4ECTXmSXzYUHn1POj3nc
+        +8X8Lty7SE9MIPzfOYdU6L/SiJpRBq5/vr/OYtS0DS6B93/oB3lQK1XoxUCraaXn19qzM/
+        B7ZERyoxCPH0HblVtycxuZcjXnwXifQuifRh9jGEXeIYrScs4MCnQDZnvxMIcaxrhNF9Wd
+        Ywdn4thVD8lLmP3JI9V32V8sPGWGs0g8+0qwkjKaUJdU0oNd6Ug4z0F1Lh/ADQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1686322490;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xqpL/bHF2qVquWuvqZqpUhbImgm41fmGiTri9EWuHqI=;
+        b=WOLaw36qm+mSScfGwL7i/OZynqU0137rJKbOomGLfWOcGbQIgDaaFWKT6jy3nGqrB7syWk
+        Xo89epfgY1D3fDCA==
+From:   "tip-bot2 for Juergen Gross" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/mm] x86/mm: Remove Xen-PV leftovers from init_32.c
+Cc:     Juergen Gross <jgross@suse.com>, Ingo Molnar <mingo@kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230609055100.12633-1-jgross@suse.com>
+References: <20230609055100.12633-1-jgross@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530080425.18612-2-alexghiti@rivosinc.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Message-ID: <168632248969.404.6472440615064721846.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,166 +64,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 10:04:25AM +0200, Alexandre Ghiti wrote:
-> The hibernation process will access those reserved memory regions if
-> they are part of the linear mapping, but as described in
-> devicetree/bindings/reserved-memory/reserved-memory.yaml,
-> "/reserved-memory" nodes should not be used as normal memory, unless they
-> are marked as reusable which means the kernel can access it at some point.
-> 
-> Otherwise those regions are only used by drivers which should do what's
-> necessary when the hibernation process is started, or they can contain
-> the firmware reserved memory regions which should not be accessed at all.
+The following commit has been merged into the x86/mm branch of tip:
 
-Hibernation is only one case. Speculative accesses could also occur. I 
-think some of the memory debugging stuff will walk memory as well. If 
-something can't be accessed, it better have 'no-map'.
+Commit-ID:     78841cd185aa74bc92d3ac2c63a870395caaa086
+Gitweb:        https://git.kernel.org/tip/78841cd185aa74bc92d3ac2c63a870395caaa086
+Author:        Juergen Gross <jgross@suse.com>
+AuthorDate:    Fri, 09 Jun 2023 07:51:00 +02:00
+Committer:     Ingo Molnar <mingo@kernel.org>
+CommitterDate: Fri, 09 Jun 2023 11:00:21 +02:00
 
-> 
-> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> ---
->  arch/riscv/kernel/setup.c |  2 +
+x86/mm: Remove Xen-PV leftovers from init_32.c
 
-How is this specific to Risc-V? Hint, it's not.
+There are still some unneeded paravirt calls in arch/x86/mm/init_32.c.
 
->  drivers/of/fdt.c          | 77 +++++++++++++++++++++++++++++++++++++++
->  include/linux/of_fdt.h    |  1 +
->  3 files changed, 80 insertions(+)
-> 
-> diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-> index 36b026057503..642f1035b5ce 100644
-> --- a/arch/riscv/kernel/setup.c
-> +++ b/arch/riscv/kernel/setup.c
-> @@ -299,6 +299,8 @@ void __init setup_arch(char **cmdline_p)
->  	if (IS_ENABLED(CONFIG_RISCV_ISA_ZICBOM) &&
->  	    riscv_isa_extension_available(NULL, ZICBOM))
->  		riscv_noncoherent_supported();
-> +
-> +	early_init_fdt_nosave_reserved_mem();
->  }
->  
->  static int __init topology_init(void)
-> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-> index bf502ba8da95..863de7e6b10c 100644
-> --- a/drivers/of/fdt.c
-> +++ b/drivers/of/fdt.c
-> @@ -26,6 +26,7 @@
->  #include <linux/serial_core.h>
->  #include <linux/sysfs.h>
->  #include <linux/random.h>
-> +#include <linux/suspend.h>
->  
->  #include <asm/setup.h>  /* for COMMAND_LINE_SIZE */
->  #include <asm/page.h>
-> @@ -494,6 +495,43 @@ static int __init early_init_dt_reserve_memory(phys_addr_t base,
->  	return memblock_reserve(base, size);
->  }
->  
-> +/*
-> + * __reserved_mem_nosave_reg() - Make all memory described in 'reg' property as
-> + * nosave, unless it is "reusable".
-> + */
-> +static void __init __reserved_mem_nosave_reg(unsigned long node,
-> +					     const char *uname)
-> +{
-> +	int t_len = (dt_root_addr_cells + dt_root_size_cells) * sizeof(__be32);
-> +	phys_addr_t base, size;
-> +	int len;
-> +	const __be32 *prop;
-> +	bool reusable;
-> +
-> +	prop = of_get_flat_dt_prop(node, "reg", &len);
-> +	if (!prop)
-> +		return;
-> +
-> +	if (len && len % t_len != 0) {
-> +		pr_err("Reserved memory: invalid reg property in '%s', skipping node.\n",
-> +		       uname);
-> +		return;
-> +	}
-> +
-> +	reusable = of_get_flat_dt_prop(node, "reusable", NULL) != NULL;
-> +
-> +	while (len >= t_len) {
-> +		base = dt_mem_next_cell(dt_root_addr_cells, &prop);
-> +		size = dt_mem_next_cell(dt_root_size_cells, &prop);
-> +
-> +		if (size && !reusable)
-> +			register_nosave_region(phys_to_pfn(base),
-> +					       phys_to_pfn(base + size));
-> +
-> +		len -= t_len;
-> +	}
-> +}
-> +
->  /*
->   * __reserved_mem_reserve_reg() - reserve all memory described in 'reg' property
->   */
-> @@ -596,6 +634,38 @@ static int __init fdt_scan_reserved_mem(void)
->  	return 0;
->  }
->  
-> +/*
-> + * fdt_nosave_reserved_mem() - scan a single FDT node to mark reserved memory
-> + * as nosave.
-> + */
-> +static int __init fdt_nosave_reserved_mem(void)
-> +{
-> +	int node, child;
-> +	const void *fdt = initial_boot_params;
-> +
-> +	node = fdt_path_offset(fdt, "/reserved-memory");
-> +	if (node < 0)
-> +		return -ENODEV;
-> +
-> +	if (__reserved_mem_check_root(node) != 0) {
-> +		pr_err("Reserved memory: unsupported node format, ignoring\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	fdt_for_each_subnode(child, fdt, node) {
-> +		const char *uname;
-> +
-> +		if (!of_fdt_device_is_available(fdt, child))
-> +			continue;
-> +
-> +		uname = fdt_get_name(fdt, child, NULL);
-> +
-> +		__reserved_mem_nosave_reg(child, uname);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  /*
->   * fdt_reserve_elfcorehdr() - reserves memory for elf core header
->   *
-> @@ -649,6 +719,13 @@ void __init early_init_fdt_scan_reserved_mem(void)
->  	fdt_init_reserved_mem();
->  }
->  
-> +void __init early_init_fdt_nosave_reserved_mem(void)
-> +{
-> +#ifdef CONFIG_HIBERNATION
-> +	fdt_nosave_reserved_mem();
-> +#endif
-> +}
-> +
->  /**
->   * early_init_fdt_reserve_self() - reserve the memory used by the FDT blob
->   */
-> diff --git a/include/linux/of_fdt.h b/include/linux/of_fdt.h
-> index d69ad5bb1eb1..55eb5a0f7305 100644
-> --- a/include/linux/of_fdt.h
-> +++ b/include/linux/of_fdt.h
-> @@ -63,6 +63,7 @@ extern int early_init_dt_scan_memory(void);
->  extern void early_init_dt_check_for_usable_mem_range(void);
->  extern int early_init_dt_scan_chosen_stdout(void);
->  extern void early_init_fdt_scan_reserved_mem(void);
-> +extern void early_init_fdt_nosave_reserved_mem(void);
->  extern void early_init_fdt_reserve_self(void);
->  extern void early_init_dt_add_memory_arch(u64 base, u64 size);
->  extern u64 dt_mem_next_cell(int s, const __be32 **cellp);
-> -- 
-> 2.39.2
-> 
+Remove them.
+
+Signed-off-by: Juergen Gross <jgross@suse.com>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Link: https://lore.kernel.org/r/20230609055100.12633-1-jgross@suse.com
+---
+ arch/x86/mm/init_32.c | 17 ++---------------
+ 1 file changed, 2 insertions(+), 15 deletions(-)
+
+diff --git a/arch/x86/mm/init_32.c b/arch/x86/mm/init_32.c
+index d4e2648..b63403d 100644
+--- a/arch/x86/mm/init_32.c
++++ b/arch/x86/mm/init_32.c
+@@ -45,7 +45,6 @@
+ #include <asm/olpc_ofw.h>
+ #include <asm/pgalloc.h>
+ #include <asm/sections.h>
+-#include <asm/paravirt.h>
+ #include <asm/setup.h>
+ #include <asm/set_memory.h>
+ #include <asm/page_types.h>
+@@ -74,7 +73,6 @@ static pmd_t * __init one_md_table_init(pgd_t *pgd)
+ #ifdef CONFIG_X86_PAE
+ 	if (!(pgd_val(*pgd) & _PAGE_PRESENT)) {
+ 		pmd_table = (pmd_t *)alloc_low_page();
+-		paravirt_alloc_pmd(&init_mm, __pa(pmd_table) >> PAGE_SHIFT);
+ 		set_pgd(pgd, __pgd(__pa(pmd_table) | _PAGE_PRESENT));
+ 		p4d = p4d_offset(pgd, 0);
+ 		pud = pud_offset(p4d, 0);
+@@ -99,7 +97,6 @@ static pte_t * __init one_page_table_init(pmd_t *pmd)
+ 	if (!(pmd_val(*pmd) & _PAGE_PRESENT)) {
+ 		pte_t *page_table = (pte_t *)alloc_low_page();
+ 
+-		paravirt_alloc_pte(&init_mm, __pa(page_table) >> PAGE_SHIFT);
+ 		set_pmd(pmd, __pmd(__pa(page_table) | _PAGE_TABLE));
+ 		BUG_ON(page_table != pte_offset_kernel(pmd, 0));
+ 	}
+@@ -181,12 +178,10 @@ static pte_t *__init page_table_kmap_check(pte_t *pte, pmd_t *pmd,
+ 			set_pte(newpte + i, pte[i]);
+ 		*adr = (void *)(((unsigned long)(*adr)) + PAGE_SIZE);
+ 
+-		paravirt_alloc_pte(&init_mm, __pa(newpte) >> PAGE_SHIFT);
+ 		set_pmd(pmd, __pmd(__pa(newpte)|_PAGE_TABLE));
+ 		BUG_ON(newpte != pte_offset_kernel(pmd, 0));
+ 		__flush_tlb_all();
+ 
+-		paravirt_release_pte(__pa(pte) >> PAGE_SHIFT);
+ 		pte = newpte;
+ 	}
+ 	BUG_ON(vaddr < fix_to_virt(FIX_KMAP_BEGIN - 1)
+@@ -482,7 +477,6 @@ void __init native_pagetable_init(void)
+ 				pfn, pmd, __pa(pmd), pte, __pa(pte));
+ 		pte_clear(NULL, va, pte);
+ 	}
+-	paravirt_alloc_pmd(&init_mm, __pa(base) >> PAGE_SHIFT);
+ 	paging_init();
+ }
+ 
+@@ -491,15 +485,8 @@ void __init native_pagetable_init(void)
+  * point, we've been running on some set of pagetables constructed by
+  * the boot process.
+  *
+- * If we're booting on native hardware, this will be a pagetable
+- * constructed in arch/x86/kernel/head_32.S.  The root of the
+- * pagetable will be swapper_pg_dir.
+- *
+- * If we're booting paravirtualized under a hypervisor, then there are
+- * more options: we may already be running PAE, and the pagetable may
+- * or may not be based in swapper_pg_dir.  In any case,
+- * paravirt_pagetable_init() will set up swapper_pg_dir
+- * appropriately for the rest of the initialization to work.
++ * This will be a pagetable constructed in arch/x86/kernel/head_32.S.
++ * The root of the pagetable will be swapper_pg_dir.
+  *
+  * In general, pagetable_init() assumes that the pagetable may already
+  * be partially populated, and so it avoids stomping on any existing
