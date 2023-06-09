@@ -2,65 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE0B5728EAC
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 05:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1F3728EB3
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 05:53:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238202AbjFIDrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 23:47:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35356 "EHLO
+        id S238222AbjFIDxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 23:53:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjFIDrH (ORCPT
+        with ESMTP id S229537AbjFIDxn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 23:47:07 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED983F5;
-        Thu,  8 Jun 2023 20:47:04 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8Ax0Oi3oIJkdeAAAA--.894S3;
-        Fri, 09 Jun 2023 11:47:03 +0800 (CST)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax6OS2oIJkTq4JAA--.29890S3;
-        Fri, 09 Jun 2023 11:47:02 +0800 (CST)
-Message-ID: <4cfe93cb-7713-f994-45c3-e99fe34a3f9e@loongson.cn>
-Date:   Fri, 9 Jun 2023 11:47:02 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4] PCI: Align pci memory space base address with page
- size
+        Thu, 8 Jun 2023 23:53:43 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD461BE2;
+        Thu,  8 Jun 2023 20:53:42 -0700 (PDT)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3592MmaM005131;
+        Thu, 8 Jun 2023 20:53:15 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=s2048-2021-q4;
+ bh=O4ggu1nA10sjCipcwOJ5AV/6iItrZpMgdRTNDWMgEOQ=;
+ b=g9FYCSm8HAQQxo3TILSez4AJTHtoTZVkOFXVPQdN04JrBaSRB0v3C7ErdWS/A6NK26v1
+ AJ2gU1sXGgnRC7PeVyW+5wqjO4Z638c7YXeUdvSS/nEG6+7P+/ChgIe77qlZb/YhT9yR
+ G9Ni0OwV3h1czrR0GnHsFjHKw0+zB+jnP6RpL2g6n79uoQD7q8lUDZ3x6hKo1+YbDsoU
+ zg4MXrVIC9jvg1W58ogCbhZ7gBsehjlKFgt50uZwWVRGa6221xyXdI1TEaLTx5UoYUnY
+ tnumrGHtWDtUMXPzFhlrZlsq8sfZKKb1FVCO23PXjEpmgioNnsjfdLj3OXJ6uZvvuxAV Zg== 
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2107.outbound.protection.outlook.com [104.47.55.107])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3r36g60sak-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Jun 2023 20:53:15 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gAN+PulR8SIkhKfWrflZo0xb+cD2wTtGjgxXx0hY/oPfqa2eZ8x5GCjKbmAKH32kb16IJC2IVxyQ1c+YDL3UV3mAtqoNW36bCk+Ngqa6RHoPPS+BHgB9A4qWPXdSFn2WvM0+T18WMH8qJIvYNoYPCM6DYKPAXAp8tAHsvMm939be/xFEk8XFQPi6vzSt5Lf1T6cyG1hwILIrpdPl2SJCOX6b/JLD6SldBsCvjjPaBkFT1Us78iXgvC3fvqPQUlygfMmhVKeAr116DxC8QnvxQtVPh5H9F9s6k3lcwkkIS6fNPyxdAoj9376cBHkOa9vGE2gCZe068wHmaF167GCZVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=O4ggu1nA10sjCipcwOJ5AV/6iItrZpMgdRTNDWMgEOQ=;
+ b=YtxW74bhQiVgWgw18ig9kRdrai3ZdttxRIY2wkPFycaid4Af8w1x0uFYcaDtVf2u0VbxB3rfvS+mCR30iRTpc3aOJe7L5ansfA4NEhVOJEBqWw22X+0kwPSfCPIZXYujeVW17uK7r6OSOo7/5BQUVmFpiUNgxBI2ZSRDyGTg5/ro2QA/ZvMsBcrXZtn8+onPnqOQ348tV6SETQm6wnJR46YuyXkRZEVrzaJsKnbks1D1UV5x4WZu4s2yqXWRsfOoBtFoNvv8MMyxbjtBQOcIoO14+z4RlKAPRGVD7VVyOkOonI7SvhuRTvGHq0KcttgV6AKWA704ENZ4Rrdv8AHNCQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by PH0PR15MB4624.namprd15.prod.outlook.com (2603:10b6:510:8c::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Fri, 9 Jun
+ 2023 03:52:41 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::bf7d:a453:b8d9:cf0]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::bf7d:a453:b8d9:cf0%6]) with mapi id 15.20.6455.030; Fri, 9 Jun 2023
+ 03:52:41 +0000
+Message-ID: <49a8216a-4333-a044-ceea-c59980913966@meta.com>
+Date:   Thu, 8 Jun 2023 20:52:36 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.2
+Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: add a test for subprogram
+ extables
 Content-Language: en-US
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-        loongarch@lists.linux.dev, loongson-kernel@lists.loongnix.cn
-References: <20230609022047.2195689-1-maobibo@loongson.cn>
- <CAAhV-H7n1Z58h2qxCASDXMMQBDN6x_vq6bH_utVhB5boYoZDGQ@mail.gmail.com>
-From:   "bibo, mao" <maobibo@loongson.cn>
-In-Reply-To: <CAAhV-H7n1Z58h2qxCASDXMMQBDN6x_vq6bH_utVhB5boYoZDGQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Ax6OS2oIJkTq4JAA--.29890S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoW3Xr15ur1Uur4xXw1xWr4UAwc_yoWxZF4rpF
-        y5uFnxZryvkry8GrZrtw1UCwsxZ39I9F4YkrWUC3s3Gas7Xr9rtr9rZ3yUAFZ7Crs8Gry5
-        WFn5tr1UXan3J3gCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv
-        67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
-        AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
-        F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw
-        1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
-        xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
-        1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j1
-        YL9UUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Krister Johansen <kjlx@templeofstupid.com>, bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <cover.1686268304.git.kjlx@templeofstupid.com>
+ <9e3041e182a75f558f1132f915ddf2ee7e859c6e.1686268304.git.kjlx@templeofstupid.com>
+From:   Yonghong Song <yhs@meta.com>
+In-Reply-To: <9e3041e182a75f558f1132f915ddf2ee7e859c6e.1686268304.git.kjlx@templeofstupid.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BY5PR17CA0040.namprd17.prod.outlook.com
+ (2603:10b6:a03:167::17) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|PH0PR15MB4624:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2b6ff9c2-705b-4386-e6cc-08db689cf92d
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: S25UkXj2mto44E6New7x+mjZLjI+F/xMAQQrw+8VlwzwZbdrAhahPS9BGqjuzdEIsvYfTa8A4BJiOSKtGZOuPorJN3/G0BDb3hPrgF0P8hgMWZe3GE4wrcwKJvvvirpdWW2V8x11O4L1c0ZE5R7ahnHyZ2KX7c50kQt4If8krt/49iUK+qQOcvM89vYkHMariZ6Pk0EN5KVAx+LPZw21F94+rFZ1MyHHAhCgP7tqEqb382M42sfMgddTpebnQOL9hj17zXPyBTawfrVFDIDUXxNoIYWMrQbzuEhgYsUttGh7kp2mGB/K/PChmF1ZL4HRYpkvZHpVeQr9pxqaHP3M1HvXLC8L/H3LPWxSiP11DkKVvXdKkp+Inyaxs9yGAQMRDpES0DYbLoRmp+rvzHW9FtTba5ZSSUsdMfCPXinrusKR8UzB2b583T7NU/hpFU+cq5SDR2inX8vpHWh4SBzt+HE8F6SLev3APDwNqyrGoz+6mrsQtreLeIlD9MA4SWoz+V2mfjYaReIqxK5xSE3e8pdHzcHjGaYL2VNimHAbDEKq0V/EgEBFB6HXy0ST/qs/KbTxb/kOezitnvehqY+Zm8vURGzu/bs3ARU2/A7HHT+5yqIoq77Rl4hPzUTDvtIwOU2Ijao/UHn4mUn7YaWp1Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(396003)(136003)(39860400002)(346002)(451199021)(41300700001)(86362001)(83380400001)(7416002)(6486002)(478600001)(36756003)(316002)(8676002)(8936002)(66476007)(31696002)(4326008)(66946007)(66556008)(54906003)(5660300002)(38100700002)(6666004)(2906002)(6512007)(186003)(6506007)(31686004)(53546011)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OEQxd3JaNzhtN0E1QWRISjN0b0xCYXgzSXZsRitHUjBWRjVPTnV6cGpIck5q?=
+ =?utf-8?B?ekYyeVVoMko3ZEU0d2NWS3E1UUNiNWZ3dzRtMStLMk5UWmhkdWlqN3o2Ukhz?=
+ =?utf-8?B?anJ5WFhLQUFPYUg1VkNmN2UvZ0hGN05zZzV4NkVTYTJ4eGFsWmdHR3I2aUhU?=
+ =?utf-8?B?Mnh2YU55Zjh0Yjc0OEgvelpWbkVTSi83NVJJU2J6UXNEY21ldzQ3MzlESFpZ?=
+ =?utf-8?B?TWlxY2RhVmk0eFoxSFhZVjF3WHd0UzFpSjRGSDdhQmVuU0xSQ0I4aTU3OURG?=
+ =?utf-8?B?SEpRMW5vWnUzM2pyOER6YUN3Q3pNQnRIUE1ubXREZWZQejVWNTEzdjRBbXlN?=
+ =?utf-8?B?V3pDdEl6V2JDR0sycG5tMWVCbXdudFZZZ1JwMFVjMVYybUpNcHZQSE96Y2xS?=
+ =?utf-8?B?NlhHdERxYUlLa0ZpRHJIbXU2WVVnaG9LOElsYTdsMWJXei8zQVY0cytCT2hQ?=
+ =?utf-8?B?enRjckFQUnhCYkNmbi90dmdPZ0YxVjJQN015ZTZiZ2dNVHdzREFPeTM2Nmow?=
+ =?utf-8?B?ZWZ6WGdXYVFtRDUzOXUvOVNQZzNobUpKc0k4OEJqYWV5a1FzeXNXNVpBK0tP?=
+ =?utf-8?B?bzlTb3BZbWRqcHYzVXg4V2gzelg4cWhWNXhIT3kyUEVDM3RLSExvSGRKZnd5?=
+ =?utf-8?B?eno1WjRMZThxYTFYWWt4ZDJMT1RiYTZmYlBLN09GampFaDc4OTdFZ0VkeGps?=
+ =?utf-8?B?SXN3cUtJTDBOa3VMRFl5bkxsSmx4aWRYa21ZYytsZjdCMUpRamx4WlorNGZu?=
+ =?utf-8?B?NXNDSVEyUGFYVGNhUE9xRGxBdUF5OGtPTU9IS0lIOUhxZnM1c0VkTWV1MnBE?=
+ =?utf-8?B?VEdGTGVvUUpvZ2RKNEJxY1h6M1QzVXQzQitQVm5NcFpzKzRIbTVleThvSjlG?=
+ =?utf-8?B?VSszcW4ya0ZyVkwvK1ZKY1FRMmYxNFlRN3ZtczMrU2FGTUNIRHBZVzYrcGNV?=
+ =?utf-8?B?WkNFSDM1N2UvMHlHYWEvSG5JV0xpd2tBbk5EeTR5MnpXOHVKYjRKSWdBb2Z6?=
+ =?utf-8?B?Q2o5Q2lpVk9FT1FuTCtLck1ZU3VtWGUwckUySHVHTzl2NVZiK0tQTVhWUkF4?=
+ =?utf-8?B?L1NldkhONnY5akZHVGFFVDY2QjlRRk5ZWS8wbWNUWEdZQkFaQjYxWkxObG1p?=
+ =?utf-8?B?TGxiSkx4d3NmUWlzUUtJU0JScE9Sc29nZ3ZLbVBvS1ZKNmxpZW53aDFnVGVy?=
+ =?utf-8?B?b1pwbm5ISENWdGtWOW1FSkJQR2txdVdQTUFUKzlaV25ycUNiVGoxdVQycXZa?=
+ =?utf-8?B?NjlodzJKWEJUbndha2ttZTB1eURwZjRTb29IczJYQ3VSelpvZ1hLNW0zZndV?=
+ =?utf-8?B?MG4zcGxZdGU1SzF5SnJIVno5K2VpcDNtcDExTCtxcXhDczZYUUQxdW1kOWNm?=
+ =?utf-8?B?Y2ZydWphWjRTS3VXS3laRjRMMzgyam1UVWtpd015dTRCQzVIVlBvakYvOEZX?=
+ =?utf-8?B?SkNkamRzbkZxTjVYc1k0d0tvS016NUNxRUVaUGU1MnZsTFhNeW1VOVpCVm9u?=
+ =?utf-8?B?MGVaWlZqUVZHMExqajZUdjZjUWc0eGlyeUlXU0JlQU54b3JQQUxWR040eGE5?=
+ =?utf-8?B?aitHSVMyc1ZFdkR4enlVK3VFbnJpb0MwQ2tlYkM3R2oxcU9RQnFHQXBtWFgr?=
+ =?utf-8?B?dFg0VkhKYUNYQm82a0ltSFF5T1lvYnhoRjFRUUcySmNaVWI0bi95MlpNVVFv?=
+ =?utf-8?B?QmZueUdDZ3BFRkpKemxDODN1WWRBRldpbW1UTUJudFVLRFRJNmRhditoeXRB?=
+ =?utf-8?B?Zk5ucWk3OUtmTjhmUDVOS1QwTlBUeEZQcSszSzRNQkNYVzh6M2I0akZ2RVh0?=
+ =?utf-8?B?c2ttaWlwb2wzTjE4ZEhHL1Q2N2FleTM3eDdTTFV0Z0NvYUhxNmxjYndrM3Nv?=
+ =?utf-8?B?LzY1cjFPTVE5Y1BiaUliamQ2Z29MZlVKdFY1WlR5bUVlenJidmZ0VmVWSzYw?=
+ =?utf-8?B?V2h2K0tPYkRjemh6Q3Zyd3VDWW01TEdhbm5nUDdxOW1DUEZZUTZsQXVQaFpU?=
+ =?utf-8?B?RFE4SnlFQTVVM0Jmc0tYOGJPQmhwbFRSbjQxQ2RlMGl3UEZ0aWxkRlJkZWhu?=
+ =?utf-8?B?RjE5VDRUWnA4ZTExUjQyTzBGS3Jid3V6UXR6emFoMjBRelhzcG0wWjMxbm4v?=
+ =?utf-8?B?RVdzN2psQjVJcjFnYnRKMkxjNlE3UFU4OW5vNHJWUmtaa2lGVzZDWW9uZE5Q?=
+ =?utf-8?B?TUE9PQ==?=
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2b6ff9c2-705b-4386-e6cc-08db689cf92d
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 03:52:40.8996
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: H8wpTLZwA9GDDWCX1qUNh0jHVzV8dmmka+jJjzPq1XKFxURGvALbOhSBvyE68crK
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR15MB4624
+X-Proofpoint-ORIG-GUID: OBP3Xchy1-O1cRGMaRmK0esp2ZjxBL6D
+X-Proofpoint-GUID: OBP3Xchy1-O1cRGMaRmK0esp2ZjxBL6D
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-09_01,2023-06-08_01,2023-05-22_02
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -69,149 +155,132 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-在 2023/6/9 10:29, Huacai Chen 写道:
-> Hi, Bibo,
+On 6/8/23 5:11 PM, Krister Johansen wrote:
+> In certain situations a program with subprograms may have a NULL
+> extable entry.  This should not happen, and when it does, it turns a
+> single trap into multiple.  Add a test case for further debugging and to
+> prevent regressions.  N.b: without any other patches this can panic or
+> oops a kernel.
+
+It would be great if you can add the panic call stack in the commit message.
+
+Please also mention that three identical bpf programs in the test
+significantly increased the 'oops' chance. Just one program may
+not be able to trigger the issue.
+
 > 
-> On Fri, Jun 9, 2023 at 10:20 AM Bibo Mao <maobibo@loongson.cn> wrote:
->>
->> Some PCI devices have only 4K memory space size, it is normal in general
->> machines and aligned with page size. However some architectures which
->> support different page size, default page size on LoongArch is 16K, and
->> ARM64 supports page size varying from 4K to 64K. On machines where larger
->> page size is use, memory space region of two different pci devices may be
->> in one page. It is not safe with mmu protection, also VFIO pci device
->> driver requires base address of pci memory space page aligned, so that it
->> can be memory mapped to qemu user space when it is passed-through to vm.
->>
->> It consumes more pci memory resource with page size alignment requirement,
->> here extra option PCI_MEMRES_PAGE_ALIGN is added, it can be enabled by
->> different architectures.
->>
->> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
->> ---
->> Change history
->> v4: add extra kernel option PCI_MEMRES_PAGE_ALIGN to set memory resource
->>     page aligned.
->>
->> v3: move alignment requirement to generic pci code
->>
->> v2: add pci resource alignment requirement in arch specified function
->>     pcibios_align_resource on arm64/LoongArch platforms
->>
->> ---
->>  arch/loongarch/Kconfig  | 1 +
->>  drivers/pci/Kconfig     | 3 +++
->>  drivers/pci/setup-res.c | 7 +++++++
->>  3 files changed, 11 insertions(+)
->>
->> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
->> index d38b066fc931..65b2f6ba9f8e 100644
->> --- a/arch/loongarch/Kconfig
->> +++ b/arch/loongarch/Kconfig
->> @@ -142,6 +142,7 @@ config LOONGARCH
->>         select PCI_LOONGSON
->>         select PCI_MSI_ARCH_FALLBACKS
->>         select PCI_QUIRKS
->> +       select PCI_MEMRES_PAGE_ALIGN
->>         select PERF_USE_VMALLOC
->>         select RTC_LIB
->>         select SMP
->> diff --git a/drivers/pci/Kconfig b/drivers/pci/Kconfig
->> index 9309f2469b41..9be5f85ff9dc 100644
->> --- a/drivers/pci/Kconfig
->> +++ b/drivers/pci/Kconfig
->> @@ -128,6 +128,9 @@ config PCI_LOCKLESS_CONFIG
->>  config PCI_BRIDGE_EMUL
->>         bool
->>
->> +config PCI_MEMRES_PAGE_ALIGN
->> +       bool
->> +
->>  config PCI_IOV
->>         bool "PCI IOV support"
->>         select PCI_ATS
->> diff --git a/drivers/pci/setup-res.c b/drivers/pci/setup-res.c
->> index 967f9a758923..6ad76734a670 100644
->> --- a/drivers/pci/setup-res.c
->> +++ b/drivers/pci/setup-res.c
->> @@ -339,6 +339,13 @@ int pci_assign_resource(struct pci_dev *dev, int resno)
->>                 return -EINVAL;
->>         }
->>
->> +#ifdef CONFIG_PCI_MEMRES_PAGE_ALIGN
->> +       /*
->> +        * force minimum page alignment for vfio pci usage
->> +        */
->> +       if (res->flags & IORESOURCE_MEM)
->> +               align = max_t(resource_size_t, PAGE_SIZE, align);
->> +#endif
-> Does this really have its effect? The common version of
-> pcibios_align_resource() simply returns res->start, and doesn't care
-> about the 'align' parameter.
-yes, it works. The is output of command " lspci -vvv | grep Region" on my
-3C5000+7A2000 box. After the patch base address of all pci mem resource
-is aligned with 16K.
-
-output without the patch:
-        Region 0: Memory at e0045240000 (64-bit, non-prefetchable) [size=32K]
-        Region 0: Memory at e0045248000 (64-bit, non-prefetchable) [size=32K]
-        Region 0: Memory at e0045250000 (64-bit, non-prefetchable) [size=32K]
-        Region 0: Memory at e0045258000 (64-bit, non-prefetchable) [size=32K]
-        Region 0: Memory at e0045260000 (64-bit, non-prefetchable) [size=32K]
-        Region 0: Memory at e0045271400 (64-bit, non-prefetchable) [size=256]
-        Region 2: Memory at e0040000000 (64-bit, non-prefetchable) [size=64M]
-        Region 4: Memory at e0045200000 (64-bit, non-prefetchable) [size=64K]
-        Region 0: Memory at e0045210000 (64-bit, non-prefetchable) [size=64K]
-        Region 0: Memory at e0045220000 (64-bit, non-prefetchable) [size=64K]
-        Region 0: Memory at e0045230000 (64-bit, non-prefetchable) [size=64K]
-        Region 5: Memory at e0045271000 (32-bit, non-prefetchable) [size=1K]
-        Region 0: Memory at e0045268000 (64-bit, non-prefetchable) [size=4K]
-        Region 0: Memory at e0045269000 (64-bit, non-prefetchable) [size=4K]
-        Region 0: Memory at e004526a000 (64-bit, non-prefetchable) [size=4K]
-        Region 0: Memory at e004526b000 (64-bit, non-prefetchable) [size=4K]
-        Region 0: Memory at e004526c000 (64-bit, non-prefetchable) [size=4K]
-        Region 0: Memory at e004526d000 (64-bit, non-prefetchable) [size=4K]
-        Region 0: Memory at e004526e000 (64-bit, non-prefetchable) [size=4K]
-        Region 0: Memory at e004526f000 (64-bit, non-prefetchable) [size=4K]
-        Region 0: Memory at e0045270000 (64-bit, non-prefetchable) [size=4K]
-        Region 2: Memory at e0044000000 (64-bit, non-prefetchable) [size=16M]
-        Region 0: Memory at e0045100000 (64-bit, non-prefetchable) [size=1M]
-        Region 0: Memory at e0045000000 (64-bit, non-prefetchable) [size=16K]
-
-out put with the patch:
-        Region 0: Memory at e0045240000 (64-bit, non-prefetchable) [size=32K]
-        Region 0: Memory at e0045248000 (64-bit, non-prefetchable) [size=32K]
-        Region 0: Memory at e0045250000 (64-bit, non-prefetchable) [size=32K]
-        Region 0: Memory at e0045258000 (64-bit, non-prefetchable) [size=32K]
-        Region 0: Memory at e0045260000 (64-bit, non-prefetchable) [size=32K]
-        Region 0: Memory at e0045290000 (64-bit, non-prefetchable) [size=256]
-        Region 2: Memory at e0040000000 (64-bit, non-prefetchable) [size=64M]
-        Region 4: Memory at e0045200000 (64-bit, non-prefetchable) [size=64K]
-        Region 0: Memory at e0045210000 (64-bit, non-prefetchable) [size=64K]
-        Region 0: Memory at e0045220000 (64-bit, non-prefetchable) [size=64K]
-        Region 0: Memory at e0045230000 (64-bit, non-prefetchable) [size=64K]
-        Region 5: Memory at e004528c000 (32-bit, non-prefetchable) [size=1K]
-        Region 0: Memory at e0045268000 (64-bit, non-prefetchable) [size=4K]
-        Region 0: Memory at e004526c000 (64-bit, non-prefetchable) [size=4K]
-        Region 0: Memory at e0045270000 (64-bit, non-prefetchable) [size=4K]
-        Region 0: Memory at e0045274000 (64-bit, non-prefetchable) [size=4K]
-        Region 0: Memory at e0045278000 (64-bit, non-prefetchable) [size=4K]
-        Region 0: Memory at e004527c000 (64-bit, non-prefetchable) [size=4K]
-        Region 0: Memory at e0045280000 (64-bit, non-prefetchable) [size=4K]
-        Region 0: Memory at e0045284000 (64-bit, non-prefetchable) [size=4K]
-        Region 0: Memory at e0045288000 (64-bit, non-prefetchable) [size=4K]
-        Region 2: Memory at e0044000000 (64-bit, non-prefetchable) [size=16M]
-        Region 0: Memory at e0045100000 (64-bit, non-prefetchable) [size=1M]
-        Region 0: Memory at e0045000000 (64-bit, non-prefetchable) [size=16K]
-
-Regards
-Bibo, Mao
+> Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
+> ---
+>   .../bpf/prog_tests/subprogs_extable.c         | 31 +++++++++++++
+>   .../bpf/progs/test_subprogs_extable.c         | 46 +++++++++++++++++++
+>   2 files changed, 77 insertions(+)
+>   create mode 100644 tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
+>   create mode 100644 tools/testing/selftests/bpf/progs/test_subprogs_extable.c
 > 
-> Huacai
->>         size = resource_size(res);
->>         ret = _pci_assign_resource(dev, resno, size, align);
->>
->> --
->> 2.27.0
->>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c b/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
+> new file mode 100644
+> index 000000000000..2201988274a4
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
+> @@ -0,0 +1,31 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <test_progs.h>
+> +#include "test_subprogs_extable.skel.h"
+> +
+> +void test_subprogs_extable(void)
+> +{
+> +	const int READ_SZ = 456;
 
+There is no need to use uppercase for READ_SZ.
+Just do
+	const int read_sz = 456;
+is sufficient.
+
+> +	struct test_subprogs_extable *skel;
+> +	int err;
+> +
+> +	skel = test_subprogs_extable__open();
+> +	if (!ASSERT_OK_PTR(skel, "skel_open"))
+> +		return;
+> +
+> +	err = test_subprogs_extable__load(skel);
+> +	if (!ASSERT_OK(err, "skel_load"))
+> +		goto cleanup;
+
+You can combine the above open and load with a single one
+    test_subprogs_extable__open_and_load().
+
+> +
+> +	err = test_subprogs_extable__attach(skel);
+> +	if (!ASSERT_OK(err, "skel_attach"))
+> +		goto cleanup;
+> +
+> +	/* trigger tracepoint */
+> +	ASSERT_OK(trigger_module_test_read(READ_SZ), "trigger_read");
+
+I think we should at least ensure that the program is triggered. For 
+example, add a global variable 'triggered' in the program and
+triggered will be set to 1 in the program if the program is running.
+Here check
+	skel->bss->triggered
+must be 1.
+
+> +
+> +	test_subprogs_extable__detach(skel);
+> +
+> +cleanup:
+> +	test_subprogs_extable__destroy(skel);
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/test_subprogs_extable.c b/tools/testing/selftests/bpf/progs/test_subprogs_extable.c
+> new file mode 100644
+> index 000000000000..c3ff66bf4cbe
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/test_subprogs_extable.c
+> @@ -0,0 +1,46 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include "vmlinux.h"
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +
+> +struct {
+> +	__uint(type, BPF_MAP_TYPE_ARRAY);
+> +	__uint(max_entries, 8);
+> +	__type(key, __u32);
+> +	__type(value, __u64);
+> +} test_array SEC(".maps");
+> +
+> +static __u64 test_cb(struct bpf_map *map, __u32 *key, __u64 *val, void *data)
+> +{
+> +	return 1;
+> +}
+> +
+> +SEC("fexit/bpf_testmod_return_ptr")
+> +int BPF_PROG(handle_fexit_ret_subprogs, int arg, struct file *ret)
+> +{
+> +	*(volatile long *)ret;
+> +	*(volatile int *)&ret->f_mode;
+> +	bpf_for_each_map_elem(&test_array, test_cb, NULL, 0);
+> +	return 0;
+> +}
+> +
+> +SEC("fexit/bpf_testmod_return_ptr")
+> +int BPF_PROG(handle_fexit_ret_subprogs2, int arg, struct file *ret)
+> +{
+> +	*(volatile long *)ret;
+> +	*(volatile int *)&ret->f_mode;
+> +	bpf_for_each_map_elem(&test_array, test_cb, NULL, 0);
+> +	return 0;
+> +}
+> +
+> +SEC("fexit/bpf_testmod_return_ptr")
+> +int BPF_PROG(handle_fexit_ret_subprogs3, int arg, struct file *ret)
+> +{
+> +	*(volatile long *)ret;
+> +	*(volatile int *)&ret->f_mode;
+> +	bpf_for_each_map_elem(&test_array, test_cb, NULL, 0);
+> +	return 0;
+> +}
+> +
+> +char _license[] SEC("license") = "GPL";
