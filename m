@@ -2,118 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD33C72A705
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 02:28:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E831B72A71C
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 02:54:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232130AbjFJA2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 20:28:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48970 "EHLO
+        id S231630AbjFJAwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 20:52:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232076AbjFJA2Q (ORCPT
+        with ESMTP id S231154AbjFJAwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 20:28:16 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B59EF3A81;
-        Fri,  9 Jun 2023 17:28:15 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 5EA8D320098A;
-        Fri,  9 Jun 2023 20:28:12 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Fri, 09 Jun 2023 20:28:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        joshtriplett.org; h=cc:content-type:content-type:date:date:from
-        :from:in-reply-to:message-id:mime-version:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1686356891; x=1686443291; bh=Mm
-        xYjjMkckIeR2YerMD4Iu5F7+IlL0Yr7ofr4yjvAcg=; b=lokKzEX7D56w8/Dpbe
-        I7aJaADgN3uDvIqcEMC0j6ZOfWdY2sXGvnk4SY6/o4D/Apn2kbYwMyNmhJaOnL4f
-        WhJEbc/C2OiNJ2vCIpB7rrFfPVONA3QkNVEraFtkZIgZXW3tcrMz0TWI1yhtVZ8t
-        V1hVUJXHNs1CJGu+KI1TRVTCxXQYMQlQE39zE30+vfYHATjwimuomfnbYxltUPgg
-        uZ/u5FX5nw95+kIJ2lqXRxIdWYktkcaoU/sPTfRMCWJw9hLENBM0hwArtzmQ00jR
-        igdF2cBAwlgthNb2CCdqmYRdmBhSctD/cChy77PN7HFFLDHmqbi9mfTV2fTpGRFA
-        SL2Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1686356891; x=1686443291; bh=MmxYjjMkckIeR2YerMD4Iu5F7+IlL0Yr7of
-        r4yjvAcg=; b=L+z2PXoALAnUzFAatwQyd8AOEyG6BTxEkRsH/1aSEM3ixT9mGYs
-        8inBfwMPkCKM0+v0RCdgKJbJpJh+EjMlp9K3bon2EItpvFXtSkE8p8VSCKl8va8b
-        jmfZbk73bbZfrQk/FQVpkQE6wt8hWyO5OeqN/Gb9D1MteNV1kxk57n4v2J/WWgRC
-        +IMQTFwmqKApeGAIP3FN1NTpXCF/6KJ9CxgesEfxMJw8ZUIAtnm9qyuo/h1uYCau
-        9we5yqOIIuF7VySyPnb5XuY0DXe3Q27SDePJxiixfZVP9OH6BAELoNRAInQPZ3s+
-        AjVzXfj+P4BGwH6nZ8LCscpsx7a5BK28H6A==
-X-ME-Sender: <xms:m8ODZMzpl3Pj6x2DjzKDXN-IxjAhCWVXMMXhd1z9FaBR2aUtBa9h7g>
-    <xme:m8ODZATwwWuarKe8Nt6GqcuP2ATF7OdYwbdmKEQIs3zOgoT06l8lCOvlAtB4jEGES
-    Sb9L11QrUJIHSMZyJc>
-X-ME-Received: <xmr:m8ODZOUhR9K9UUvTH5588xA4tdq0gA2u0zDtW9pJeCI4d2lfCvrdAdV7OA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtledgfeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfggtggusehttdertddttddvnecuhfhrohhmpeflohhshhcuvfhr
-    ihhplhgvthhtuceojhhoshhhsehjohhshhhtrhhiphhlvghtthdrohhrgheqnecuggftrf
-    grthhtvghrnhepleelgeegtdejjeefuedvudefgefgkedtfeekheevueevvddvhfegfffg
-    vdfgffeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epjhhoshhhsehjohhshhhtrhhiphhlvghtthdrohhrgh
-X-ME-Proxy: <xmx:m8ODZKiYvIrF0iobGY7goVzeU2cIK9geLYL7afLqSOoer7i2UmvxyQ>
-    <xmx:m8ODZOCzlyqu6ZOQeEZBc1cU-6Vs6WeM7QcTnqFoeg13dr1_Jl6G_g>
-    <xmx:m8ODZLJymQFH6J3WqjHiGiM2ykwxnXgUbXKC0SdSCi8SiaSCOhI6gg>
-    <xmx:m8ODZB_8QWV8g3JTboAfgGlq3uxuXrMeO4twQxn0vTu2uLOuZ1Fewg>
-Feedback-ID: i83e94755:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 9 Jun 2023 20:28:10 -0400 (EDT)
-Date:   Fri, 9 Jun 2023 17:28:09 -0700
-From:   Josh Triplett <josh@joshtriplett.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] kbuild: deb-pkg: Include modules.builtin* even if non-modular
-Message-ID: <36a4014c73a52af27d930d3ca31d362b60f4461c.1686356364.git.josh@joshtriplett.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 9 Jun 2023 20:52:08 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C1C19D
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 17:52:07 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba8338f20bdso3214190276.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 17:52:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686358326; x=1688950326;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Wg++2gE8/jht9e+KkYaoylKtJ1FY+uAMq5VBMWkg2vI=;
+        b=vZa0uQJub1/SthRtIpRIUdBcECAOCf4iTZtfveOCEH2qhZXN6OXSLQU4rxA4XAuWzc
+         rrF2wOzq4rqLr6cV80saM9nYxWLvo2dzC2QqLpKrmAn1QFps3fMUVaLZpX+hs6doupWf
+         +pcjaEgSTskPgaJ+dIkjcli6C7/q6N210FLnQScBFO/2EXIWNa4dYsshbKQ4hJK7OqOp
+         K3eLXaGxkOgCzqdEkUJPZgzhf8YRFJ4BmCoXVPCvTSlou9mIQf835BE68v9uc1K8AR9K
+         naQ/WX8z5MCpfalOCjg4+ro4EyFf4vZOzWQX2gmnoKO08v9Kvq1jPYFGpDGQW6QQZ9aL
+         30zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686358326; x=1688950326;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Wg++2gE8/jht9e+KkYaoylKtJ1FY+uAMq5VBMWkg2vI=;
+        b=GlCtfm5ux38ZcYdM5jt9kPErNc6ZUEPbTyNDCHmUDMaTmfp169i895LFbKDI2qLL3w
+         elvcSJvBzYUXEecItpHIx1q+sW2E8oFFR1NNYIs5qc/z2bTTwEEy7dOUNQpTwZfk0v+t
+         1/XR9KRVlxQE7DCl616xEAkWXvjeKwooDvav6wYP701GKKmTu2BfDX05/Ga+YGxhBRZ8
+         Dfb+i/xZ4X43qlUTrGy3ba70qiWvSmN9m4chg/0eLmDLYEAjJge6Gp3yRLJ/YiA/xqF8
+         rfFpAFEa2QJYQ7GOaHycXneJszhoic6cJTxXauep3uyS8jQEQepPiBOA1KB3wR6cR84F
+         yppw==
+X-Gm-Message-State: AC+VfDxXyx2lDlvQLHXjDdEticbVQU2/bW6J9DZNJ2T62k+PfEtyCFYq
+        nWwna+rA9UqJEomXeLgcjcsWoT4pfA==
+X-Google-Smtp-Source: ACHHUZ69QKqtFpwkYTh0ifon5IJmXcPzuTd7nuUrM8iS0yUyytLtTaZAuHUDpCTiTnbU9TDufxE0QfX6wA==
+X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
+ (user=rmoar job=sendgmr) by 2002:a5b:b4a:0:b0:bac:f608:7113 with SMTP id
+ b10-20020a5b0b4a000000b00bacf6087113mr1547448ybr.4.1686358326518; Fri, 09 Jun
+ 2023 17:52:06 -0700 (PDT)
+Date:   Sat, 10 Jun 2023 00:51:43 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Message-ID: <20230610005149.1145665-1-rmoar@google.com>
+Subject: [RFC v1 0/6] kunit: Add test attributes API
+From:   Rae Moar <rmoar@google.com>
+To:     shuah@kernel.org, davidgow@google.com, dlatypov@google.com,
+        brendan.higgins@linux.dev
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        linux-hardening@vger.kernel.org, jstultz@google.com,
+        tglx@linutronix.de, sboyd@kernel.org, Rae Moar <rmoar@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Even for a non-modular kernel, the kernel builds modules.builtin and
-modules.builtin.modinfo, with information about the built-in modules.
-Tools such as initramfs-tools need these files to build a working
-initramfs on some systems, such as those requiring firmware.
+Hello everyone,
 
-Install modules.builtin and modules.builtin.modinfo into the linux-image
-package even for a non-modular kernel.
+This is an RFC patch series to propose the addition of a test attributes
+framework to KUnit.
 
-Signed-off-by: Josh Triplett <josh@joshtriplett.org>
----
- scripts/package/builddeb | 6 ++++++
- 1 file changed, 6 insertions(+)
+There has been interest in filtering out "slow" KUnit tests. Most notably,
+a new config, CONFIG_MEMCPY_SLOW_KUNIT_TEST, has been added to exclude
+particularly slow memcpy tests
+(https://lore.kernel.org/all/20230118200653.give.574-kees@kernel.org/).
 
-diff --git a/scripts/package/builddeb b/scripts/package/builddeb
-index 252faaa5561c..91261529f2c7 100755
---- a/scripts/package/builddeb
-+++ b/scripts/package/builddeb
-@@ -70,6 +70,12 @@ install_linux_image () {
- 			mkdir -p "${pdir}/usr/lib/uml/modules"
- 			mv "${pdir}/lib/modules/${KERNELRELEASE}" "${pdir}/usr/lib/uml/modules/${KERNELRELEASE}"
- 		fi
-+	elif [ -f modules.builtin ]; then
-+		mkdir -p "${pdir}/lib/modules/${KERNELRELEASE}"
-+		cp modules.builtin "${pdir}/lib/modules/${KERNELRELEASE}/modules.builtin"
-+		if [ -f modules.builtin.modinfo ]; then
-+			cp modules.builtin.modinfo "${pdir}/lib/modules/${KERNELRELEASE}/modules.builtin.modinfo"
-+		fi
- 	fi
- 
- 	# Install the kernel
+This proposed attributes framework would be used to save and access test
+associated data, including whether a test is slow. These attributes would
+be reportable (via KTAP and command line output) and some will be
+filterable.
+
+This framework is designed to allow for the addition of other attributes in
+the future. These attributes could include whether the test is flaky,
+associated test files, etc.
+
+Note that this could intersect with the discussions on how to format
+test-associated data in KTAP v2 that I am also involved in
+(https://lore.kernel.org/all/20230420205734.1288498-1-rmoar@google.com/).
+
+If the overall idea seems good, I'll make sure to add tests/documentation,
+and more patches marking existing tests as slow to the patch series.
+
+Thanks!
+Rae
+
+Rae Moar (6):
+  kunit: Add test attributes API structure
+  kunit: Add speed attribute
+  kunit: Add ability to filter attributes
+  kunit: tool: Add command line interface to filter and report
+    attributes
+  kunit: memcpy: Mark tests as slow using test attributes
+  kunit: time: Mark test as slow using test attributes
+
+ include/kunit/attributes.h             |  41 ++++
+ include/kunit/test.h                   |  62 ++++++
+ kernel/time/time_test.c                |   2 +-
+ lib/kunit/Makefile                     |   3 +-
+ lib/kunit/attributes.c                 | 280 +++++++++++++++++++++++++
+ lib/kunit/executor.c                   |  89 ++++++--
+ lib/kunit/executor_test.c              |   8 +-
+ lib/kunit/kunit-example-test.c         |   9 +
+ lib/kunit/test.c                       |  17 +-
+ lib/memcpy_kunit.c                     |   8 +-
+ tools/testing/kunit/kunit.py           |  34 ++-
+ tools/testing/kunit/kunit_kernel.py    |   6 +-
+ tools/testing/kunit/kunit_tool_test.py |  41 ++--
+ 13 files changed, 536 insertions(+), 64 deletions(-)
+ create mode 100644 include/kunit/attributes.h
+ create mode 100644 lib/kunit/attributes.c
+
+
+base-commit: fefdb43943c1a0d87e1b43ae4d03e5f9a1d058f4
 -- 
-2.40.1
+2.41.0.162.gfafddb0af9-goog
 
