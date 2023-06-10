@@ -2,112 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5020F72AE8E
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 22:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1B2D72AE90
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 22:09:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231657AbjFJUJi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 10 Jun 2023 16:09:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37956 "EHLO
+        id S231871AbjFJUJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 16:09:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbjFJUJh (ORCPT
+        with ESMTP id S231748AbjFJUJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 16:09:37 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5483358E
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 13:09:35 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-310-2DLACrxANTCZx5d8sgYTVQ-1; Sat, 10 Jun 2023 21:09:32 +0100
-X-MC-Unique: 2DLACrxANTCZx5d8sgYTVQ-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sat, 10 Jun
- 2023 21:09:28 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Sat, 10 Jun 2023 21:09:28 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Lorenzo Stoakes' <lstoakes@gmail.com>,
-        Lu Hongfei <luhongfei@vivo.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "open list:VMALLOC" <linux-mm@kvack.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "opensource.kernel@vivo.com" <opensource.kernel@vivo.com>
-Subject: RE: [PATCH] mm/vmalloc: Replace the ternary conditional operator with
- min()
-Thread-Topic: [PATCH] mm/vmalloc: Replace the ternary conditional operator
- with min()
-Thread-Index: AQHZmq9RsZ2mMErDwEmVNd3QmnYBSK+Ed3Zw
-Date:   Sat, 10 Jun 2023 20:09:28 +0000
-Message-ID: <f53f28de489f4c209776e404323ef5a1@AcuMS.aculab.com>
-References: <20230609061309.42453-1-luhongfei@vivo.com>
- <832d7c69-ffd5-4764-8ffe-3a02bef0efb0@lucifer.local>
- <3fc87d60-4e81-4f49-95f0-0503ad5cdf35@lucifer.local>
-In-Reply-To: <3fc87d60-4e81-4f49-95f0-0503ad5cdf35@lucifer.local>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Sat, 10 Jun 2023 16:09:48 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F047C3598;
+        Sat, 10 Jun 2023 13:09:46 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1686427785;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VN3pKad915lgXyIEKLmAqU9HFdxhV2U8JR5HtaJJWAo=;
+        b=ZJPuUMqPysjPBQOtwRD8hr8P3yWoBfFxIFRfQbmUhqrHISkVZgbVnK1l0yUcMF13n0ef88
+        A2mJqnviZJYpqgkQxY2B/Iddyx7txFX0h7NoqsWvq/aS5ZDorHIECmwNtSrRXy99v55CFX
+        vZk43IJuf1X9d6CQLl075CFuu5/Oys6EwYSawzk0iZamSVUjy9LANvOHsSKUag4l5ZR9nR
+        Q3HlMi8k3dy1cxqrx9MNhyByLxphQeKZcd+bAxaElUyTvpVkQJS4oaIFSPIPWBwG7gb0HL
+        AChWt/fe3Tma07iCZKUYsldPKXecOY2zpmpzjEFW0m1Ll51NyD0YY7gKE/Zb1A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1686427785;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VN3pKad915lgXyIEKLmAqU9HFdxhV2U8JR5HtaJJWAo=;
+        b=qeRl1VvSqXcJA/dkR81UjTvbzFNl35KrBMfEEJ9dLP6GgKhRJYWyergbo9UAvaIL3/t4PF
+        efaD08GmnCbVq0CA==
+To:     Michael Ellerman <mpe@ellerman.id.au>, linux-kernel@vger.kernel.org
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
+        ldufour@linux.ibm.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        mingo@redhat.com, x86@kernel.org
+Subject: Re: [PATCH 6/9] cpu/SMT: Allow enabling partial SMT states via sysfs
+In-Reply-To: <20230524155630.794584-6-mpe@ellerman.id.au>
+References: <20230524155630.794584-1-mpe@ellerman.id.au>
+ <20230524155630.794584-6-mpe@ellerman.id.au>
+Date:   Sat, 10 Jun 2023 22:09:44 +0200
+Message-ID: <87r0qj84fr.ffs@tglx>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lorenzo Stoakes
-> Sent: 09 June 2023 09:49
-> On Fri, Jun 09, 2023 at 08:09:45AM +0100, Lorenzo Stoakes wrote:
-> > On Fri, Jun 09, 2023 at 02:13:09PM +0800, Lu Hongfei wrote:
-> > > It would be better to replace the traditional ternary conditional
-> > > operator with min() in zero_iter
-> > >
-> > > Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
-> > > ---
-> > >  mm/vmalloc.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> > > index 29077d61ff81..42df032e6c27
-> > > --- a/mm/vmalloc.c
-> > > +++ b/mm/vmalloc.c
-> > > @@ -3571,7 +3571,7 @@ static size_t zero_iter(struct iov_iter *iter, size_t count)
-> > >  	while (remains > 0) {
-> > >  		size_t num, copied;
-> > >
-> > > -		num = remains < PAGE_SIZE ? remains : PAGE_SIZE;
-> > > +		num = min(remains, PAGE_SIZE);
-> 
-> OK, as per the pedantic test bot, you'll need to change this to:-
-> 
-> num = min_t(size_t, remains, PAGE_SIZE);
+On Thu, May 25 2023 at 01:56, Michael Ellerman wrote:
+> There is a hook which allows arch code to control how many threads per
 
-There has to be a valid reason why min/max have strong type checks.
-Using min_t() all the time is just subverting them and means that
-bugs are more likely than if the extra tests in min() were absent.
+Can you please write out architecture in changelogs and comments?
 
-The problem here is that size_t is 'unsigned int' but PAGE_SIZE
-'unsigned long'.
-A 'safe' change is min(remains + 0ULL, PAGE_SIZE).
+I know 'arch' is commonly used but while my brain parser tolerates
+'arch_' prefixes it raises an exception on 'arch' in prose as 'arch' is
+a regular word with a completely different meaning. Changelogs and
+comments are not space constraint.
 
-But, in reality, min/max should always be valid when one
-value is a constant between 0 and MAX_INT.
-The constant just needs forcing to 'signed int' (eg assigning
-to a temporary on that type) before the comparison (etc).
+> @@ -2505,20 +2505,38 @@ __store_smt_control(struct device *dev, struct device_attribute *attr,
+>  	if (cpu_smt_control == CPU_SMT_NOT_SUPPORTED)
+>  		return -ENODEV;
+>  
+> -	if (sysfs_streq(buf, "on"))
+> +	if (sysfs_streq(buf, "on")) {
+>  		ctrlval = CPU_SMT_ENABLED;
+> -	else if (sysfs_streq(buf, "off"))
+> +		num_threads = cpu_smt_max_threads;
+> +	} else if (sysfs_streq(buf, "off")) {
+>  		ctrlval = CPU_SMT_DISABLED;
+> -	else if (sysfs_streq(buf, "forceoff"))
+> +		num_threads = 1;
+> +	} else if (sysfs_streq(buf, "forceoff")) {
+>  		ctrlval = CPU_SMT_FORCE_DISABLED;
+> -	else
+> +		num_threads = 1;
+> +	} else if (kstrtoint(buf, 10, &num_threads) == 0) {
+> +		if (num_threads == 1)
+> +			ctrlval = CPU_SMT_DISABLED;
+> +		else if (num_threads > 1 && topology_smt_threads_supported(num_threads))
+> +			ctrlval = CPU_SMT_ENABLED;
+> +		else
+> +			return -EINVAL;
+> +	} else {
+>  		return -EINVAL;
+> +	}
+>  
+>  	ret = lock_device_hotplug_sysfs();
+>  	if (ret)
+>  		return ret;
+>  
+> -	if (ctrlval != cpu_smt_control) {
+> +	orig_threads = cpu_smt_num_threads;
+> +	cpu_smt_num_threads = num_threads;
+> +
+> +	if (num_threads > orig_threads) {
+> +		ret = cpuhp_smt_enable();
+> +	} else if (num_threads < orig_threads) {
+> +		ret = cpuhp_smt_disable(ctrlval);
+> +	} else if (ctrlval != cpu_smt_control) {
+>  		switch (ctrlval) {
+>  		case CPU_SMT_ENABLED:
+>  			ret = cpuhp_smt_enable();
 
-	David
+This switch case does not make sense anymore.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+The only situation which reaches this is when the control value goes
+from CPU_SMT_DISABLED to CPU_SMT_FORCE_DISABLED because that's not
+changing the number of threads.
 
+So something like this is completely sufficient:
+
+	if (num_threads > orig_threads)
+		ret = cpuhp_smt_enable();
+        else if (num_threads < orig_threads || ctrval == CPU_SMT_FORCE_DISABLED)
+		ret = cpuhp_smt_disable(ctrlval);
+
+No?
+
+Thanks,
+
+        tglx
