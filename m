@@ -2,151 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4FFD72AB51
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 14:03:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3018772AB5A
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 14:06:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234606AbjFJMDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 08:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60584 "EHLO
+        id S234664AbjFJMGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 08:06:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234623AbjFJMDE (ORCPT
+        with ESMTP id S231571AbjFJMGp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 08:03:04 -0400
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83033C03;
-        Sat, 10 Jun 2023 05:02:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1686398575; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=Jt67RW3LpsX437qzbwyzTuv4YTpXPAEoOTw9H/5lUoZ4QT0rFvnDFARLVKb8W49yI6
-    iQkcp3TAh+KSPyTk2Yzddq7S+B16/Sdw0BCn+ExtQF6y/HJ8NjOb/l0PJdZ+rmExcfc0
-    csez2pE9JceUCIW5icTFVwLV77ajIHlhLB/DqFyS6tJaFeSrJ5xLnVKorl1zABB8craZ
-    lR9SLiXq0MdOLnx/vfqcoC9opmYgMaufGAFpSs2TwDqHkkpLiCPZ+P3jTG+AvIKfW7JT
-    kf3N7dgVnQRbgQcAvjuxSXmOASyD/P4KgKVgPqyeKZk6+ngxOBzL9lICHaVsPDbMnF2e
-    36rQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686398575;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=WwUpwPZCGBkfo6RMlWcjfabHi4HKCDwaIPjOG5aOnqE=;
-    b=JadK6TdjjErfh+l0Y3QYRuSNOJEfeAajozvUrRvibodYqziOA55fitzfsab690EOsw
-    OOwNteTMJ3ApXp9vSuaNgi/UAET2cWe876ADx6prvhD4lhlTGJMVQTn6guy2e/I227Kx
-    2ob4Bp/Ht5etbh/ZzJaUHLPJd7CRsqA3tN9FnAiuV0gV6wQKuA3QKBaJrP8KjBWZk78g
-    l5ZbzsWsyOzZkukrdCOqfbn96OgyDt/jvx1dKCSX0vIOM1nCx6A9i/tMqhLHixzbyqed
-    I31RULwyjAS9VLyEJWJ/3pJUnwSHf4bUBuVgqKPwSeQq8yIc93a17+51a41YubXxFQm2
-    VXpQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686398575;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=WwUpwPZCGBkfo6RMlWcjfabHi4HKCDwaIPjOG5aOnqE=;
-    b=tsXbzlKH/qiSpLqp0BWlfinJtSbIxoz/18Ezesw72ArvIX5YMEFoTku7PzDKyDJFAu
-    3VpvPzeXF/SysqtQqgDVfOrLObFPy7G9WTUes7oSS6BXFr2AhuZmkWp5pFik71HrwyaT
-    9bZ9Zz3Y5QisXv7x5nkIAAn+8tUWudOpMa0ZCt3LQerq26TzGFVt5uLj+xyXoHGETP9a
-    wNcY+9xChajuaJHSbiVHqfHUH3gkPHHQiD2p+BlDA1PnG+V9JvYEzG9Bn0YxH+V5Nwfr
-    E1wXsk4tothRZhkFgN778UrmcUsO2l9wK667FcxLRB57RUCi+iE8YT6k1mVeMhbBtiwB
-    ImcQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686398575;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=WwUpwPZCGBkfo6RMlWcjfabHi4HKCDwaIPjOG5aOnqE=;
-    b=TWvm4umYMaGpPY4A3jkjaIzgtnjf0QwXvLxbJHvpCwG6K/KtBSKRp8MXi2DyOAXVgC
-    LsxIcBqm+IxCUWY+gkDQ==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA9J/h"
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.5.3 DYNA|AUTH)
-    with ESMTPSA id Z82ec2z5AC2sQG5
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Sat, 10 Jun 2023 14:02:54 +0200 (CEST)
-Date:   Sat, 10 Jun 2023 14:02:53 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Evan Green <evgreen@chromium.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v2 14/22] interconnect: qcom: msm8939: Hook up RPM bus
- clk definitions
-Message-ID: <ZIRmbfyPxpL7Jr95@gerhold.net>
-References: <20230526-topic-smd_icc-v2-0-e5934b07d813@linaro.org>
- <20230526-topic-smd_icc-v2-14-e5934b07d813@linaro.org>
+        Sat, 10 Jun 2023 08:06:45 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC8EF0;
+        Sat, 10 Jun 2023 05:06:44 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1686398803;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=f9vpJCOBmn1kjBZo6jMweDpG7dJUYQBav9b62qbm/4U=;
+        b=b+1BCKEBeAMrQlSxMKQfFZZ8rZxMHwUzK5Dnj4B9/V4H9acAcmPx4vpgfHColQQm1077GK
+        BsAQkoRDSSFgXCtyaP66+T4xwPXXJzoj5WpKf1iXz6CeVq7HzSMeyW82gNLqdXvLAxWNUj
+        Q2u/SffraBTFhhadv20Lvi5dqSXZni8TA6AaJgEOWpduper39lGfS5Pvxbu9rdxq3zjfqp
+        zst92Z7AUYF90RHm2SOgz+5myX8pnzXzgYk3cIPCBNKKxnQ4cQgZgRTZnw9eVQE88puyMJ
+        jYaDZ0BNyMnAFmkYF/VWGGFZ8OLm/hRSoodgh0a5mCJyfnFYd35W8ucSQwLlyQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1686398803;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=f9vpJCOBmn1kjBZo6jMweDpG7dJUYQBav9b62qbm/4U=;
+        b=8HR2GDgbKRZeHABXfPCtTuVbEXOHvgSTaMrXwWG/wJ4VTy69ODr85gl+ovj2r02i4QwaLm
+        vwYr071+yYSgvqAQ==
+To:     Arnd Bergmann <arnd@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Borislav Petkov <bp@suse.de>, Jann Horn <jannh@google.com>,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org
+Subject: Re: [PATCH] syscalls: add sys_ni_posix_timers prototype
+In-Reply-To: <20230607142925.3126422-1-arnd@kernel.org>
+References: <20230607142925.3126422-1-arnd@kernel.org>
+Date:   Sat, 10 Jun 2023 14:06:42 +0200
+Message-ID: <874jnfa5d9.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230526-topic-smd_icc-v2-14-e5934b07d813@linaro.org>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 10:19:19PM +0200, Konrad Dybcio wrote:
-> Assign the necessary definitions to migrate to the new bus clock
-> handling mechanism.
-> 
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Reviewed-by: Stephan Gerhold <stephan@gerhold.net>
-
+On Wed, Jun 07 2023 at 16:28, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The sys_ni_posix_timers() definition causes a warning when
+> the declaration is missing, so this needs to be added
+> along with the normal syscalls, outside of the #ifdef.
+>
+> kernel/time/posix-stubs.c:26:17: error: no previous prototype for 'sys_ni_posix_timers' [-Werror=missing-prototypes]
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->  drivers/interconnect/qcom/msm8939.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/interconnect/qcom/msm8939.c b/drivers/interconnect/qcom/msm8939.c
-> index 639566dce45a..94b11b590a8e 100644
-> --- a/drivers/interconnect/qcom/msm8939.c
-> +++ b/drivers/interconnect/qcom/msm8939.c
-> @@ -1284,6 +1284,7 @@ static const struct qcom_icc_desc msm8939_snoc = {
->  	.type = QCOM_ICC_NOC,
->  	.nodes = msm8939_snoc_nodes,
->  	.num_nodes = ARRAY_SIZE(msm8939_snoc_nodes),
-> +	.bus_clk_desc = &bus_1_clk,
->  	.regmap_cfg = &msm8939_snoc_regmap_config,
->  	.qos_offset = 0x7000,
->  };
-> @@ -1304,6 +1305,7 @@ static const struct qcom_icc_desc msm8939_snoc_mm = {
->  	.type = QCOM_ICC_NOC,
->  	.nodes = msm8939_snoc_mm_nodes,
->  	.num_nodes = ARRAY_SIZE(msm8939_snoc_mm_nodes),
-> +	.bus_clk_desc = &bus_2_clk,
->  	.regmap_cfg = &msm8939_snoc_regmap_config,
->  	.qos_offset = 0x7000,
->  };
-> @@ -1332,6 +1334,7 @@ static const struct qcom_icc_desc msm8939_bimc = {
->  	.type = QCOM_ICC_BIMC,
->  	.nodes = msm8939_bimc_nodes,
->  	.num_nodes = ARRAY_SIZE(msm8939_bimc_nodes),
-> +	.bus_clk_desc = &bimc_clk,
->  	.regmap_cfg = &msm8939_bimc_regmap_config,
->  	.qos_offset = 0x8000,
->  };
-> @@ -1403,6 +1406,7 @@ static const struct qcom_icc_desc msm8939_pcnoc = {
->  	.type = QCOM_ICC_NOC,
->  	.nodes = msm8939_pcnoc_nodes,
->  	.num_nodes = ARRAY_SIZE(msm8939_pcnoc_nodes),
-> +	.bus_clk_desc = &bus_0_clk,
->  	.regmap_cfg = &msm8939_pcnoc_regmap_config,
->  	.qos_offset = 0x7000,
->  };
-> 
-> -- 
-> 2.41.0
-> 
+> I missed sending this out in the initial submission of my Wmissing-prototype patches
+> ---
+>  arch/alpha/kernel/osf_sys.c | 2 --
+>  include/linux/syscalls.h    | 1 +
+>  kernel/time/posix-stubs.c   | 1 +
+>  3 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/alpha/kernel/osf_sys.c b/arch/alpha/kernel/osf_sys.c
+> index 2a9a877a05083..d98701ee36c6a 100644
+> --- a/arch/alpha/kernel/osf_sys.c
+> +++ b/arch/alpha/kernel/osf_sys.c
+> @@ -1014,8 +1014,6 @@ SYSCALL_DEFINE2(osf_settimeofday, struct timeval32 __user *, tv,
+>  	return do_sys_settimeofday64(tv ? &kts : NULL, tz ? &ktz : NULL);
+>  }
+>  
+> -asmlinkage long sys_ni_posix_timers(void);
+> -
+>  SYSCALL_DEFINE2(osf_utimes, const char __user *, filename,
+>  		struct timeval32 __user *, tvs)
+>  {
+> diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+> index 4627b9cf4b4d9..712f4e1dc6a69 100644
+> --- a/include/linux/syscalls.h
+> +++ b/include/linux/syscalls.h
+> @@ -1286,6 +1286,7 @@ asmlinkage long sys_ni_syscall(void);
+>  
+>  #endif /* CONFIG_ARCH_HAS_SYSCALL_WRAPPER */
+>  
+> +asmlinkage long sys_ni_posix_timers(void);
+>  
+>  /*
+>   * Kernel code should not call syscalls (i.e., sys_xyzyyz()) directly.
+> diff --git a/kernel/time/posix-stubs.c b/kernel/time/posix-stubs.c
+> index 828aeecbd1e8a..39769b2d1005e 100644
+> --- a/kernel/time/posix-stubs.c
+> +++ b/kernel/time/posix-stubs.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/posix-timers.h>
+>  #include <linux/time_namespace.h>
+>  #include <linux/compat.h>
+> +#include <linux/syscalls.h>
+
+That's already included. I'll fix it up while applying.
