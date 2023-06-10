@@ -2,54 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE7172AAD1
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 12:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4782B72AAD5
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 12:15:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231574AbjFJKLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 06:11:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43050 "EHLO
+        id S230505AbjFJKPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 06:15:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjFJKLX (ORCPT
+        with ESMTP id S229970AbjFJKPb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 06:11:23 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF5B30D7;
-        Sat, 10 Jun 2023 03:11:22 -0700 (PDT)
-Received: from fsav415.sakura.ne.jp (fsav415.sakura.ne.jp [133.242.250.114])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 35AAAgjH002919;
-        Sat, 10 Jun 2023 19:10:42 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav415.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav415.sakura.ne.jp);
- Sat, 10 Jun 2023 19:10:42 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav415.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 35AA9QW1002648
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Sat, 10 Jun 2023 19:09:27 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <b45fa2fd-a19d-7507-726c-66a47f532bf4@I-love.SAKURA.ne.jp>
-Date:   Sat, 10 Jun 2023 19:09:26 +0900
+        Sat, 10 Jun 2023 06:15:31 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69861359E
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 03:15:30 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-5148e4a2f17so4603742a12.1
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 03:15:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686392129; x=1688984129;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ocEa74Vi89cO2z8zXldBEe8uWhsWcgE3EnruaUyyG6A=;
+        b=iSskDd85C+HHzGDa4RdZtW28HtNbYcY25JR/exMSVHFY8SBHJU5j5WgJDz02bLK/u/
+         /IdE5incZ3qS8hAKZFNeYNzykmJPPDQkzXts3wJBOt9GfXnljNUsLb2GQhnvk9CHT9ZQ
+         LzpTro3TjXqfg0Kx+cGH4VlFelA1xCXbS5Y/IQRSoyrgl9lpXTFDXxkAINmNt+OTy8mA
+         6UGYqOyIhk8b8XiTQl7DcaOIxg1LOrOEUC5CGJ6iSzdMDtKYVXCmaJ1r/LUbr8WMsP5M
+         n4EdFN4QwTASmn3grJdr8N8d285mZmJ7NA62Yy228+VIWYyVlq9emYztq/4aYu4t5iu8
+         4nwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686392129; x=1688984129;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ocEa74Vi89cO2z8zXldBEe8uWhsWcgE3EnruaUyyG6A=;
+        b=W4n//92B/1IC4/hVjp+W1/AzCbz2dUUiQMyIIRAqPkVSTScO5W1+l/HX4eShildsEd
+         2gu1OakAc0/0muOWVsl8rT/ZS6ug09nuateMiOHmU1MJ0WZL1IgV65gQWtYmDn5Nihgi
+         WA67/RY59r82UG9u6md2FCLx+9AEQUxWREiE1gAF0DhjIROKi4sGP6l2O1TTsJLlr6Hu
+         dZfPJvuPgtH8rlBbatTkMlkHwRvb23xuXhtRxPvTQYJMayA1i5DXCmQs8hIcHiadx9eU
+         RhXR07atPGJ6r5SwPU82jkWHvH2uAv3cHHfkI2rsjGN0IFtZdbi1LwpIHHljmgssSFUO
+         7ofQ==
+X-Gm-Message-State: AC+VfDyM8LJQAX4/iE62QW7s/3pDmH9/wKCuC+HehLDO1U5LFdm4tUBk
+        Ex+qzuLkh2T7iBsnybfgioxMww==
+X-Google-Smtp-Source: ACHHUZ66HNdTn1UvKSjw6g9AWCTfaohbUacL1urDb1l3SqjgCzYuLKbLr2rnfvNY7TZayL953coajw==
+X-Received: by 2002:a05:6402:455:b0:510:ddad:fae6 with SMTP id p21-20020a056402045500b00510ddadfae6mr1066249edw.3.1686392128860;
+        Sat, 10 Jun 2023 03:15:28 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id g16-20020aa7d1d0000000b0050bc4600d38sm2711556edp.79.2023.06.10.03.15.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 10 Jun 2023 03:15:28 -0700 (PDT)
+Message-ID: <86d8e252-975f-5d48-4567-0911d5ef9a44@linaro.org>
+Date:   Sat, 10 Jun 2023 12:15:27 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
-Subject: Re: [syzbot] [tomoyo?] [fs?] INFO: rcu detected stall in newfstatat
- (3)
+Subject: Re: Regression: NULL pointer dereference after NFS_V4_2_READ_PLUS
+ (commit 7fd461c47)
 Content-Language: en-US
-To:     Sean Young <sean@mess.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-References: <0000000000009752a005fdc2d114@google.com>
-Cc:     linux-usb@vger.kernel.org,
-        syzbot <syzbot+96127c74434e19e4609d@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <0000000000009752a005fdc2d114@google.com>
+To:     Anna Schumaker <schumaker.anna@gmail.com>
+Cc:     Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <Anna.Schumaker@netapp.com>,
+        linux-nfs <linux-nfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <f591b13c-4600-e2a4-8efa-aac6ad828dd1@linaro.org>
+ <82526863-d07a-0a5d-2990-1555b1387f26@linaro.org>
+ <2C5E9725-F152-4D2E-882E-CF92A35481BF@hammerspace.com>
+ <7ba38377-7992-7f0f-d905-cceb42510f39@linaro.org>
+ <51430925-8046-7066-84ed-2ff0db835347@linaro.org>
+ <CAFX2Jf=5X3zyZEWQmD6Rg9jQAD7ccDbae5LQCwrAyPCVVoFumg@mail.gmail.com>
+ <2add1769-1458-b185-bc78-6d573f61b6fc@linaro.org>
+ <CAFX2JfnKy7juGQaDTzqosN9SF-zd+XrhSL9uh_Xg0GpJGDux-A@mail.gmail.com>
+ <32530c36-91d0-d351-0689-aed6a0975a4b@linaro.org>
+ <2f285607-cbf9-6abc-f436-edb6e9a3938b@linaro.org>
+ <CAFX2Jfmz7QqZBEdzbPUhPs0yctnXVaVF68tX1c57YX=6ki=0TA@mail.gmail.com>
+ <4fe39d77-eb7c-a578-aefa-45b76e2247c2@linaro.org>
+ <CAFX2JfmdRMsHPTySiw4vm7BwJfRZj3s0V3_v7NJ+XwMxBBSo9A@mail.gmail.com>
+ <a3683dd3-3f30-bb4c-539d-d1519de6e5bf@linaro.org>
+ <CAFX2JfnS9GVc4NaxKhr9E4y10NNv6SPgcv1yoeHTfEw5NvZgMg@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAFX2JfnS9GVc4NaxKhr9E4y10NNv6SPgcv1yoeHTfEw5NvZgMg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,40 +93,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Regarding drivers/media/rc/ directory, igorplugusb_callback() and irtoy_in_callback() and
-mceusb_dev_recv() are handling -EPROTO error, by calling usb_unlink_urb() and returning
-instead of calling usb_submit_urb() again. This indicates that lack of -EPROTO (and some
-other error codes) handling in usb_rx_callback_intf0() is causing infinite resubmit loop.
-So, which error codes does usb_rx_callback_intf0() need to handle?
+On 06/03/2023 18:09, Anna Schumaker wrote:
+> Hi Krzysztof,
+> 
+> On Tue, Feb 14, 2023 at 6:02 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 12/02/2023 15:05, Anna Schumaker wrote:
+>>>>> From ac2d6c501dbcdb306480edaee625b5496f1fb4f5 Mon Sep 17 00:00:00 2001
+>>>>> From: Anna Schumaker <Anna.Schumaker@Netapp.com>
+>>>>> Date: Fri, 10 Feb 2023 15:50:22 -0500
+>>>>> Subject: [PATCH] NFSv4.2: Rework scratch handling for READ_PLUS
+>>>>>
+>>>>
+>>>> Patch is corrupted - maybe mail program reformatted it when sending:
+>>>>
+>>>> Applying: NFSv4.2: Rework scratch handling for READ_PLUS
+>>>> error: corrupt patch at line 12
+>>>> Patch failed at 0001 NFSv4.2: Rework scratch handling for READ_PLUS
+>>>
+>>> That's weird. I wasn't expecting gmail to reformat the patch but I
+>>> guess it did. I've added it as an attachment so that shouldn't happen
+>>> again.
+>>
+>> Still null ptr (built on 420b2d4 with your patch):
+> 
+> We're through the merge window and at rc1 now, so I can spend more
+> time scratching my head over your bug again. We've come up with a
+> patch (attached) that adds a bunch of printks to show us what the
+> kernel thinks is going on. Do you mind trying it out and letting us
+> know what gets printed out? You'll need to make sure
+> CONFIG_NFS_V4_2_READ_PLUS is enabled when compiling the kernel.
 
-static void usb_rx_callback_intf0(struct urb *urb)
-{
-	dev_warn(ictx->dev, "imon %s: status(%d): ignored\n",
-		__func__, urb->status);
-	usb_submit_urb(ictx->rx_urb_intf0, GFP_ATOMIC);
-}
+The patch does not apply. I tried: v6.4-rc1, v6.4-rc5, next-20230609.
 
-#syz set subsystems: usb
-
-On 2023/06/10 18:07, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    d37537a1f7cf Merge 6.4-rc5 into usb-next
-> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> console output: https://syzkaller.appspot.com/x/log.txt?x=15d9b771280000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=9e12d6d7f5296037
-> dashboard link: https://syzkaller.appspot.com/bug?extid=96127c74434e19e4609d
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=153d7959280000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15bcb6b5280000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/752b1860c3b6/disk-d37537a1.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/6f9c9f2751b2/vmlinux-d37537a1.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/bf7433b7dd12/bzImage-d37537a1.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+96127c74434e19e4609d@syzkaller.appspotmail.com
+Best regards,
+Krzysztof
 
