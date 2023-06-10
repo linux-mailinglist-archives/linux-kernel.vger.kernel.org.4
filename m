@@ -2,48 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FFFA72AC5D
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 16:39:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F7C72AC5F
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 16:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235285AbjFJOjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 10:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42152 "EHLO
+        id S235474AbjFJOkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 10:40:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjFJOjk (ORCPT
+        with ESMTP id S229521AbjFJOkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 10:39:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B1030E8
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 07:39:39 -0700 (PDT)
+        Sat, 10 Jun 2023 10:40:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9081730EC;
+        Sat, 10 Jun 2023 07:40:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F207660E09
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 14:39:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D79E1C433EF;
-        Sat, 10 Jun 2023 14:39:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C47360F58;
+        Sat, 10 Jun 2023 14:40:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BE5FC4339B;
+        Sat, 10 Jun 2023 14:40:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686407978;
-        bh=9p5pjml/DlS80l3WRu22k7z7j0ax57mB6NquHaK1A3A=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Ec8pKuFED6LSAlp4dD8qdYGjwMXAmpSHnzqJGHs3J8WDF54GmWMFFwtnBT8zuBX8p
-         /Ei+sGzweSszA/0VFewK7Rl0ZIocYnkG3Ezlgp1FkQhN0KkGVVcKXWtFpkxtyD0SXu
-         7DLfdYfg1jXH4zw/06E2BjiYz5xdRFa+Uqy1Z0rAmGX5B+8RN6qnliPFzUuvplMH1F
-         36UduhFtb1Nqlz0zmmjYiIO8sEMcnO+u/G2oB1R1oFraJPrNN+Dr8op8kkawVBwFII
-         JGsUirWlKQoewIbcBEThcw+8KMPQ08YzM285tbDdk5sz9cZYWzEz1eld7rZE0xwujd
-         o73TesX477jBA==
-Date:   Sat, 10 Jun 2023 20:09:34 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL]: soundwire fixes for v6.4
-Message-ID: <ZISLJotNt4Lsk+pt@matsya>
+        s=k20201202; t=1686408002;
+        bh=b7Ik0zRfTsBIqeOl18BPqRgF8nNcLpxm1RVGGPM/mi0=;
+        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
+        b=SJeF4Jc2us5hwri8rSuscA8pOaSh+e84B/uiIsFUJLGTdjF8G6255kK7nqgP73LzL
+         ZcWO2le8RQ2JfhS08jYQLC9WcUyCNnrmVm+GZFRyN8XfBr2d5TaNLDG9NLawmgFCp7
+         KakpQK56b5oHFz605Mkuka+9cKYwNxx2be+B690/3RLmKtyFXBVHGaUvEVMYL4wtON
+         7lHwXQXDOwovRQWcszMynPtCmdPWpm/znY1fnjjw5I1fh9PPvrtvFC0iPX6Iz8UJFS
+         pNMeeiWNarOmKdd+aLuFWvg3CF5ohxk+SvXNfBfUIccMVv14rpx4/QPxpm3l5Eq5JT
+         vOvfy8Tak23WA==
+Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-39aa8a055e0so1304225b6e.0;
+        Sat, 10 Jun 2023 07:40:02 -0700 (PDT)
+X-Gm-Message-State: AC+VfDx+FErH92o+jHzgoMTeH5iDqaBLuWQ6R1i7KhZNvJ0AqXl3nEXL
+        DhjPvV8LSxsE1/QmqVumoBTm+phlXVpxgroDdIE=
+X-Google-Smtp-Source: ACHHUZ4DOzpCq7JDOBWrdPbgi6hfe6UmDzpD26BAdfRCKGpSkH0YDRsGo4+6lsGOiJ6goaElYnEVoOJ3Lb414oEtjJU=
+X-Received: by 2002:a05:6808:144c:b0:398:50f1:ad19 with SMTP id
+ x12-20020a056808144c00b0039850f1ad19mr1123404oiv.39.1686408001597; Sat, 10
+ Jun 2023 07:40:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="XBZJpgmYr66Huz/q"
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Received: by 2002:ac9:774b:0:b0:4df:6fd3:a469 with HTTP; Sat, 10 Jun 2023
+ 07:40:00 -0700 (PDT)
+In-Reply-To: <20230609050636.27669-1-luhongfei@vivo.com>
+References: <20230609050636.27669-1-luhongfei@vivo.com>
+From:   Namjae Jeon <linkinjeon@kernel.org>
+Date:   Sat, 10 Jun 2023 23:40:00 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd8=asCzeYTNoqyHO+-EyOMWqNLY2C69YjpqrKQyKapBNA@mail.gmail.com>
+Message-ID: <CAKYAXd8=asCzeYTNoqyHO+-EyOMWqNLY2C69YjpqrKQyKapBNA@mail.gmail.com>
+Subject: Re: [PATCH] fs: smb: server: Replace the ternary conditional operator
+ with min()
+To:     Lu Hongfei <luhongfei@vivo.com>
+Cc:     Steve French <sfrench@samba.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Tom Talpey <tom@talpey.com>,
+        "open list:KERNEL SMB3 SERVER (KSMBD)" <linux-cifs@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        opensource.kernel@vivo.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,75 +69,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+2023-06-09 14:06 GMT+09:00, Lu Hongfei <luhongfei@vivo.com>:
+> It would be better to replace the traditional ternary conditional
+> operator with min() in compare_sids.
+>
+> Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
+Acked-by: Namjae Jeon <linkinjeon@kernel.org>
 
---XBZJpgmYr66Huz/q
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hello Linus,
-
-Please pull to receive the fixes for soundwire subsytem. This fixes one
-core fix for missing flag clear, error patch handling in qcom driver and
-BIOS quirk for HP Spectre x360
-
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
-
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/soundwire.git tags/so=
-undwire-6.4-fixes
-
-for you to fetch changes up to 58d95889f3c2064c6139ee94bb0e4d86e1ad4eab:
-
-  soundwire: stream: Add missing clear of alloc_slave_rt (2023-06-08 17:08:=
-04 +0530)
-
-----------------------------------------------------------------
-soundwire fixes for 6.4
-
- - HP Spectre x360 soundwire DMI quirk
- - Error path handling for qcom driver
- - Core fix for missing clear of alloc_slave_rt
-
-----------------------------------------------------------------
-Charles Keepax (1):
-      soundwire: stream: Add missing clear of alloc_slave_rt
-
-Krzysztof Kozlowski (1):
-      soundwire: qcom: add proper error paths in qcom_swrm_startup()
-
-Pierre-Louis Bossart (1):
-      soundwire: dmi-quirks: add new mapping for HP Spectre x360
-
- drivers/soundwire/dmi-quirks.c |  7 +++++++
- drivers/soundwire/qcom.c       | 17 +++++++++++++----
- drivers/soundwire/stream.c     |  4 +++-
- 3 files changed, 23 insertions(+), 5 deletions(-)
-
---=20
-~Vinod
-
---XBZJpgmYr66Huz/q
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEE+vs47OPLdNbVcHzyfBQHDyUjg0cFAmSEiyYACgkQfBQHDyUj
-g0cB4Q/9FRl1FkXaZph+ValhzKgH2W5p4Eyydvfcte39aSEXcdbUCPV/Iy2lBoxe
-5QoDSrEhKrhhl1PELOQyXNRpF01+ytK30k44kAAWvegZtIY2H9VOcv/YA0Jg+uA4
-RYCRlj8hGeUUs+HhM/W5g+xxUGA4ZEWabNpKZvgHv11lK+xQsWs03N+ZO5ENcEQp
-LlleMQEShjQNsr7EdP2IpLCpnd5RhIhDRHYlbRNHnrmzmuAPjOxlJXYD7DPBXOmL
-st5rUTU8VRk8c7uMknLBLtYLduIACDkHKFP5PQE1K+/8Us8IpOXNgfRCyGzTBMSF
-1CohG8DIbWOwj6/PSTXH53HZOnIDAV6XCvizkCOYTuXVI1S9f556mrBOhtDHkozB
-Fs98XiLa+Y8d2QLJ5WdWe766DqrvufntbwTV0j9SgnVHqrlRyTM7Jf9t/3MLXKqh
-fPLV7oWmgtjY9nW11AboiKyBNcFOg4Z2aIPIkZaQ/O9sMNBdV0UGky7psS5pQpkO
-lF1U8SD4SdqS9ULSIUbANRKdCt3ZbRwuQhc/DUQscT5b07/pMzkd2fuhNP8hx1p1
-bZejnUsjeFmzAVQRBqMiwiaOpJf42RfEvvJJRtQicf0jMmreqXq2vaEVhhP8vGrN
-t3+pLbQgrAMYHdoqDsdj+GEvpg+a098PA9puQCHBnE99KHMY/m0=
-=zPsc
------END PGP SIGNATURE-----
-
---XBZJpgmYr66Huz/q--
+Thanks for your patch!
