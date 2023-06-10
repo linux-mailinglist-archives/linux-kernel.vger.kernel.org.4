@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23C9272A8DA
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 05:41:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8652972A8DB
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 05:46:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbjFJDlj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 23:41:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
+        id S230318AbjFJDql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 23:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjFJDlg (ORCPT
+        with ESMTP id S229461AbjFJDqi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 23:41:36 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A6CD8
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 20:41:34 -0700 (PDT)
+        Fri, 9 Jun 2023 23:46:38 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854921BF0
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 20:46:36 -0700 (PDT)
 Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QdNxF5lsczLmlc;
-        Sat, 10 Jun 2023 11:39:45 +0800 (CST)
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QdP1X3jC8zLq5N;
+        Sat, 10 Jun 2023 11:43:28 +0800 (CST)
 Received: from huawei.com (10.175.104.170) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Sat, 10 Jun
- 2023 11:41:31 +0800
+ 2023 11:46:31 +0800
 From:   Miaohe Lin <linmiaohe@huawei.com>
 To:     <akpm@linux-foundation.org>
 CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <linmiaohe@huawei.com>
-Subject: [PATCH] memory tier: remove unneeded !IS_ENABLED(CONFIG_MIGRATION) check
-Date:   Sat, 10 Jun 2023 11:41:14 +0800
-Message-ID: <20230610034114.981861-1-linmiaohe@huawei.com>
+Subject: [PATCH] mm: compaction: mark kcompactd_run() and kcompactd_stop() __meminit
+Date:   Sat, 10 Jun 2023 11:46:15 +0800
+Message-ID: <20230610034615.997813-1-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [10.175.104.170]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
  canpemm500002.china.huawei.com (7.192.104.244)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -46,27 +46,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-establish_demotion_targets() is defined while CONFIG_MIGRATION is
-enabled. There's no need to check it again.
+Add __meminit to kcompactd_run() and kcompactd_stop() to ensure they're
+default to __init when memory hotplug is not enabled.
 
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- mm/memory-tiers.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/compaction.h | 4 ++--
+ mm/compaction.c            | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
-index dd04f0ce5277..a516e303e304 100644
---- a/mm/memory-tiers.c
-+++ b/mm/memory-tiers.c
-@@ -366,7 +366,7 @@ static void establish_demotion_targets(void)
+diff --git a/include/linux/compaction.h b/include/linux/compaction.h
+index 57b16e69c19a..e94776496049 100644
+--- a/include/linux/compaction.h
++++ b/include/linux/compaction.h
+@@ -98,8 +98,8 @@ extern void compaction_defer_reset(struct zone *zone, int order,
+ bool compaction_zonelist_suitable(struct alloc_context *ac, int order,
+ 					int alloc_flags);
  
- 	lockdep_assert_held_once(&memory_tier_lock);
+-extern void kcompactd_run(int nid);
+-extern void kcompactd_stop(int nid);
++extern void __meminit kcompactd_run(int nid);
++extern void __meminit kcompactd_stop(int nid);
+ extern void wakeup_kcompactd(pg_data_t *pgdat, int order, int highest_zoneidx);
  
--	if (!node_demotion || !IS_ENABLED(CONFIG_MIGRATION))
-+	if (!node_demotion)
- 		return;
+ #else
+diff --git a/mm/compaction.c b/mm/compaction.c
+index 3398ef3a55fe..8859cc91062f 100644
+--- a/mm/compaction.c
++++ b/mm/compaction.c
+@@ -3086,7 +3086,7 @@ static int kcompactd(void *p)
+  * This kcompactd start function will be called by init and node-hot-add.
+  * On node-hot-add, kcompactd will moved to proper cpus if cpus are hot-added.
+  */
+-void kcompactd_run(int nid)
++void __meminit kcompactd_run(int nid)
+ {
+ 	pg_data_t *pgdat = NODE_DATA(nid);
  
- 	disable_all_demotion_targets();
+@@ -3104,7 +3104,7 @@ void kcompactd_run(int nid)
+  * Called by memory hotplug when all memory in a node is offlined. Caller must
+  * be holding mem_hotplug_begin/done().
+  */
+-void kcompactd_stop(int nid)
++void __meminit kcompactd_stop(int nid)
+ {
+ 	struct task_struct *kcompactd = NODE_DATA(nid)->kcompactd;
+ 
 -- 
 2.27.0
 
