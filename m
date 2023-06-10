@@ -2,101 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD5F72A826
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 04:12:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3D272A836
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 04:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232849AbjFJCMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 22:12:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
+        id S231317AbjFJCO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 22:14:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjFJCMJ (ORCPT
+        with ESMTP id S229497AbjFJCOy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 22:12:09 -0400
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E4035A9;
-        Fri,  9 Jun 2023 19:12:08 -0700 (PDT)
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-2565a9107d2so1203580a91.0;
-        Fri, 09 Jun 2023 19:12:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686363128; x=1688955128;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uono/nwyy6EGIB3S/PXdMtEwaggYlfpIknOEvbCtnJ4=;
-        b=UxlLTjG1QwkpLJVlI0Dsn428ZEpU0RdVaf61Qj9hrqOjHsrNaVnDoWnbH/yH4B/raU
-         DF6/Mza4cqkPEQBWcViDkU84GeTfSTpd1v1Kt4m00JPc7JPF73mjbeEp1RrJPpkoge+Q
-         e52Eo6tds8EIjK+zlaw6xFK2U1mO8aWUxnsNH3uFm7ZWGaKGC2UXCn9Vjzcc1gbpZy/i
-         xfnxgc6aR2UqfOgbHdsSdt/n89CaueXaSRf7gtKM+HyIl7Ig8ZgnphnPcVwnI3uQSiu5
-         h4CJLQcTlMJA5eq7waqspv+CgW9x2KyKK49E2Dgbo+2wg6PQfbnmLbqB+XOyymNyhjqf
-         qY/g==
-X-Gm-Message-State: AC+VfDzZ9hlp/Vt79NPY1qzvGwChCJOWuZvZ6Ijs/nMhMAXNI55JnOnG
-        0yYPTBmim5PhdsKFenOB5UzbpOh/VUnMtA==
-X-Google-Smtp-Source: ACHHUZ7kZJrNmG7xjdOyI7pxuUk8NTtD/i0/zWXZuSVbn+d7hXEyrJ5OvyyJkKllNX9KQXL6tEPrWA==
-X-Received: by 2002:a17:90a:7104:b0:255:d878:704a with SMTP id h4-20020a17090a710400b00255d878704amr2882029pjk.4.1686363127368;
-        Fri, 09 Jun 2023 19:12:07 -0700 (PDT)
-Received: from dev-linux.lan (cpe-70-95-21-110.san.res.rr.com. [70.95.21.110])
-        by smtp.gmail.com with ESMTPSA id pq8-20020a17090b3d8800b00258bb7e8b47sm5251594pjb.50.2023.06.09.19.12.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 19:12:07 -0700 (PDT)
-From:   Sukrut Bellary <sukrut.bellary@linux.com>
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     Sukrut Bellary <sukrut.bellary@linux.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH] accel/qaic: Fix dereferencing freed memory
-Date:   Fri,  9 Jun 2023 19:12:00 -0700
-Message-Id: <20230610021200.377452-1-sukrut.bellary@linux.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 9 Jun 2023 22:14:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F6C35A9;
+        Fri,  9 Jun 2023 19:14:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 298BB63C58;
+        Sat, 10 Jun 2023 02:14:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AB02C433D2;
+        Sat, 10 Jun 2023 02:14:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686363292;
+        bh=Ud+eEivIcnu7J9J5nBUGtGRWTzlzjz0B2BcKWne/ues=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mKHYPpgIX1YTbNSfiw5A8f90UWlgWb7/IZVKZG+ABIYeb0KpqSLo9v8Vyupgb1Cfo
+         5PIBdSN09SlwRgnVzJFjq9axGkX9gGs34Ahgo9X2NtViYiPBbJ7Vr8Gx2zHQZhMpFV
+         t+QO8Jpf+5t9GfUoBfsreQQSHhGjJ30Z0WyxKdTdB7TUGmYE18TG0MAFvfgM/QqSp4
+         8mK0dhCy8VIz2iPrsdWAkTSn0Vj/XYd2wQMRvThVzG41AnwoTTpDX2ILBKru1KdQwh
+         jqDvO+LVYMbEVtoJ9WcOTrJ52ONIuDWoXrPrKWM2+I+6oBBXvTicEbtQAFkGSHd8ko
+         gWTn0I5xx9UiQ==
+Date:   Fri, 9 Jun 2023 19:14:50 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Dongsoo Lee <letrhee@nsr.re.kr>
+Cc:     'Herbert Xu' <herbert@gondor.apana.org.au>,
+        linux-crypto@vger.kernel.org, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, letrhee@gmail.com
+Subject: Re: [PATCH v2 0/2] crypto: LEA block cipher implementation
+Message-ID: <20230610021450.GA872@sol.localdomain>
+References: <20230525121301.722682-1-letrhee@nsr.re.kr>
+ <ZHh1H3yKPU68J7Uv@gondor.apana.org.au>
+ <008d01d99518$33db63f0$9b922bd0$@nsr.re.kr>
+ <20230602213946.GD628@quark.localdomain>
+ <005601d99ac9$954f0c70$bfed2550$@nsr.re.kr>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <005601d99ac9$954f0c70$bfed2550$@nsr.re.kr>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-smatch warning:
-	drivers/accel/qaic/qaic_data.c:620 qaic_free_object() error:
-		dereferencing freed memory 'obj->import_attach'
+On Fri, Jun 09, 2023 at 08:57:36PM +0900, Dongsoo Lee wrote:
+> Unfortunately, currently, vendors trying to supply Linux-based data-at-rest
+> encryption products by utilizing the dm-crypt or the fscrypt modules to
+> government agencies or public institutions in Korea are experiencing great
+> difficulties.
 
-obj->import_attach is detached and freed using dma_buf_detach().
-But used after free to decrease the dmabuf ref count using
-dma_buf_put().
+Why are they having "great difficulties" when the kernel already supports two
+other "KCMVP-approved block ciphers", ARIA and SEED?  Why aren't they using
+dm-crypt with ARIA or SEED?
 
-Fixes: ff13be830333 ("accel/qaic: Add datapath")
-Signed-off-by: Sukrut Bellary <sukrut.bellary@linux.com>
----
- drivers/accel/qaic/qaic_data.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+> According to Korean regulations, the data transmitted and stored by
+> government agencies and public institutions must be protected using KCMVP
+> validated cryptographic modules.
 
-diff --git a/drivers/accel/qaic/qaic_data.c b/drivers/accel/qaic/qaic_data.c
-index e42c1f9ffff8..7cba4d680ea8 100644
---- a/drivers/accel/qaic/qaic_data.c
-+++ b/drivers/accel/qaic/qaic_data.c
-@@ -613,11 +613,13 @@ static int qaic_gem_object_mmap(struct drm_gem_object *obj, struct vm_area_struc
- static void qaic_free_object(struct drm_gem_object *obj)
- {
- 	struct qaic_bo *bo = to_qaic_bo(obj);
-+	struct dma_buf *dmabuf;
- 
- 	if (obj->import_attach) {
- 		/* DMABUF/PRIME Path */
-+		dmabuf = obj->import_attach->dmabuf;
- 		dma_buf_detach(obj->import_attach->dmabuf, obj->import_attach);
--		dma_buf_put(obj->import_attach->dmabuf);
-+		dma_buf_put(dmabuf);
- 	} else {
- 		/* Private buffer allocation path */
- 		qaic_free_sgt(bo->sgt);
--- 
-2.34.1
+And does LEA (or SEED or ARIA) support in Linux actually solve that problem?
+Just adding support for these algorithms to Linux does not mean that Linux
+automatically becomes a "KCMVP validated cryptographic module", right?  Do you
+have a complete plan that would actually solve the claimed problem?
 
+- Eric
