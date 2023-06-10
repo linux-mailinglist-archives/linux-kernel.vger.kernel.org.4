@@ -2,115 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A56F72ADA5
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 19:12:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D39072ADAB
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 19:24:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbjFJRLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 13:11:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58558 "EHLO
+        id S229598AbjFJRYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 13:24:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbjFJRLv (ORCPT
+        with ESMTP id S229441AbjFJRYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 13:11:51 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84C8359D;
-        Sat, 10 Jun 2023 10:11:46 -0700 (PDT)
-Received: from mercury (unknown [185.254.75.28])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4ABC76606EF5;
-        Sat, 10 Jun 2023 18:11:45 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686417105;
-        bh=GTCoI9gVT5Q9hQF9AbMQI6UBua8tpLElPPWw24KdOG4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PGnFPCSfquUqM+8KZiBnsFAYM9sr/+eCoL0ROcsNmS8mH9h/lAU4jHZWmmt4pultw
-         ZgT1P6a7SMYjaCa+Vfb9crZHLkwdVqKh7+uHn0QUgsft+owcEgvqCbln3PXXnc7iyH
-         KaeJ17DtpKZHM5zo65zSmmmZSula50dyNyQ7cAFY9N8tlLEpeOiXAEZJQ04f6oJjDF
-         X1TrzTgxQ6szCz1dByT2ANBCC6minjOKZdVBGJ4dA/gR7evMGHIz86wrZwS28nqTuk
-         HP4Y239iqAHblPTUEYhIMj139HH9ICqfYxG507uJVtfvOUH+IA4SuEzbABA8SmFVZ0
-         Gw9NFYglIL/5Q==
-Received: by mercury (Postfix, from userid 1000)
-        id AF4A81060921; Sat, 10 Jun 2023 19:11:42 +0200 (CEST)
-Date:   Sat, 10 Jun 2023 19:11:42 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Shreeya Patel <shreeya.patel@collabora.com>, jic23@kernel.org,
-        lars@metafoo.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        heiko@sntech.de, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, gustavo.padovan@collabora.com,
-        serge.broslavsky@collabora.com
-Subject: Re: [PATCH v2] dt-bindings: iio: rockchip: Fix 'oneOf' condition
- failed warning
-Message-ID: <20230610171142.dsezim4gcxr2b65u@mercury.elektranox.org>
-References: <20230610143601.173307-1-shreeya.patel@collabora.com>
- <c5243179-9baf-59ce-b979-c596dcf6692b@linaro.org>
+        Sat, 10 Jun 2023 13:24:44 -0400
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B373589;
+        Sat, 10 Jun 2023 10:24:42 -0700 (PDT)
+Received: by mail-qv1-xf31.google.com with SMTP id 6a1803df08f44-6260e771419so15016086d6.1;
+        Sat, 10 Jun 2023 10:24:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686417881; x=1689009881;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Zk1WLJV5QkFB4QM7WPYN5iwoIW9xxUosdBEEitZ4V5A=;
+        b=ZIp6jCT06zpNehaXWiaJDD5KCKoT5CThszCmRg4veyX891C8qsjnRr/S7UdOFdsfS7
+         mwqzyHMrE/Nu9XC779XaSG6zncWapMtwdZUUuZ5Yvzk4Hef9HbhPvQfPNdamIZ/UQ/wF
+         YJjUKjAvVAGrnYvUGmAstrF1qnFk/bob36UWeWpiZrq8/YSh5uoebAjVCKAQnm6ZqOFr
+         D+ZsOQTIqM38LEFrwTjIbdNqtHFDK+2pyiX5gW3jnLFmPJtleutQsuoi8KDUEd6aMmp/
+         XTmOxS8yqt9Jm5W1tPCpPkhoRWCS4uRbtr7qyR0fhsN2Yp1riC5woor5Ro2jMsebHHpR
+         Pz6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686417881; x=1689009881;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zk1WLJV5QkFB4QM7WPYN5iwoIW9xxUosdBEEitZ4V5A=;
+        b=g5uEesN1FibHFj6VzUCO76atJknUelfte9sJ0F5IiahE/HMeMGp4gQtdsf0FNWNGyI
+         v5fX+y2bQRTBHc4UxpBij+hkwJZH+tv3LSuzP7ZKBimOddkGI0OKCAoWa65KoS5aFMa3
+         IJsDHmwrfFFGMSECo0TlrJb4/7RXGIFAK1qNhx9gmLJDzg1x/bEJdTty5hIExizXKOsX
+         kd7Spp7tldHH2HyMtHF/tJ1iI6pqRWgalJk0fxSYbG5xYhX6CRgdxoqn6kVeT+4a/jhs
+         HrSLVqvktcN8Q5rmJVqN2IafinP5TFUppIAjMWEPbjx6ZTxjmayDSq/BICh6m6EZm9L7
+         fZYw==
+X-Gm-Message-State: AC+VfDxCK3yYxE7oMlDGQJ0Tnu5UUGOtd9NSrbcYda6qF/vSnRusNzi1
+        6HJ4FOvg6TqwPRBPlnp+e54=
+X-Google-Smtp-Source: ACHHUZ4jvqgsA1HufGLT8w1uSy08WFo0kLcE1pb0iEUMiabgGNfL03a0nPDs7x0qTX/ZxAjqEpnrow==
+X-Received: by 2002:a05:6214:2488:b0:56e:c066:3cd2 with SMTP id gi8-20020a056214248800b0056ec0663cd2mr5967750qvb.2.1686417881293;
+        Sat, 10 Jun 2023 10:24:41 -0700 (PDT)
+Received: from ?IPV6:2600:6c56:7d00:582f::64e? ([2600:6c56:7d00:582f::64e])
+        by smtp.googlemail.com with ESMTPSA id a20-20020a0ca994000000b0062de1ed9d15sm196600qvb.102.2023.06.10.10.24.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 10 Jun 2023 10:24:41 -0700 (PDT)
+Message-ID: <f6d023e4-c22b-32fe-f7c6-51a988c43864@gmail.com>
+Date:   Sat, 10 Jun 2023 12:24:39 -0500
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="f23o6klw7upsg4lg"
-Content-Disposition: inline
-In-Reply-To: <c5243179-9baf-59ce-b979-c596dcf6692b@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
+Content-Language: en-US
+To:     Eduardo Valentin <evalenti@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     eduval@amazon.com, rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+References: <20230607003721.834038-1-evalenti@kernel.org>
+ <f26ac9a9-60af-a0fe-fccc-25bcd306f5a1@linaro.org>
+ <ZICybSuZELhR1Ni5@uf8f119305bce5e.ant.amazon.com>
+From:   Russell Haley <yumpusamongus@gmail.com>
+In-Reply-To: <ZICybSuZELhR1Ni5@uf8f119305bce5e.ant.amazon.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/7/23 11:38, Eduardo Valentin wrote:
+>> Can you elaborate 'the timing requirement for the governors' ? I'm
+>> missing the point
+> 
+> 
+> The point is to avoid contention on the device update path.
+> Governor that use differential equations on temperature over time
+> will be very time sensitive. Step wise, power allocator, or any
+> PID will be very sensitive to time. So, If userspace is hitting
+> this API too often we can see cases where the updates needed to
+> service userspace may defer/delay the execution of the governor
+> logic.
+> 
+> Despite that, there is really no point to have more updates than
+> what was configured for the thermal zone to support. Say that
+> we configure a thermal zone to update itself every 500ms, yet
+> userspace keeps sending reads every 100ms, we do not need necessarily
+> to do a trip to the device every single time to update the temperature,
+> as per the design for the thermal zone.
 
---f23o6klw7upsg4lg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+A userspace governor might *also* use PID or filter multiple samples
+taken at high rate. I specifically switched my python fan control script
+from the Intel coretemp hwmon to the x86_pkg_tmp thermal zone because of
+the coretemp driver's annoying 1-second caching behavior.
 
-Hi,
-
-On Sat, Jun 10, 2023 at 06:30:57PM +0200, Krzysztof Kozlowski wrote:
-> On 10/06/2023 16:36, Shreeya Patel wrote:
-> > rk3588-saradc isn't compatible with the rk3399-saradc variant,
-> > hence, fix the following dtbs_check warning for 'oneOf' condition
-> > failure.
->=20
-> Are you sure it isn't compatible? According to your driver it is and
-> this change is not enough.
-
-The driver changes are still in the iio testing branch and not yet
-in linux-next. RK3588 ADC is not compatible with previous
-generations. It's trivial to see in Shreeya's driver patch:
-
-https://lore.kernel.org/all/20230603185340.13838-3-shreeya.patel@collabora.=
-com/
-
-Greetings,
-
--- Sebastian
-
---f23o6klw7upsg4lg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSErsoACgkQ2O7X88g7
-+pqdjA//fAN5NUk3NyyvjLVVAu3DIUPDIWnYahETYGCTp+c7Q5aVJ/ba/AifbEZ4
-r8EWHcqU6T6WwnWXsgTyEQrp22wmLpwR90TR6fMo2Coz6cGGh+z/fqYsQ6ndk0iF
-T2BcviSUpJ/Pcm7TPYMNrFVYp2r4Tik2cdJiTFpRkKMxGrv0A6XZ+/6Ulf59DaGT
-rU/tFrDr97nM/2uLEjdsWM249QmW6tV9qB9VpkHj5HSmwIuZkOe3tbTXvvUMxBj6
-qvq1VU8eKPbz30stpqJDsB/alqbQDmbMiv8A/mqEQKWqDEgWf1GjG1mTXraql+sB
-2BojWwTJOFNxlQGHXSn9l6aL7f+G1s4do5kf5ObxTViyfG48kjrbWtZxg7n9ZZaw
-fjJcMo+HRRIb+ywPjKpDGucgz9rb9o4W3OJn6Lh4koMUWZzQJR8CCFNgNHn8Z8Nr
-DNo+JNyhqCNwJb+pzXCGDY5gW/gdRtN+6pyTRzpx76AQpWGEa5yDy1DoT2mwNKLG
-bGw15HT6hG/oTS4sktYTreUU9bi1kcgHHQ0URTYrZeltyriUJDFMD90WGpJvogeM
-HiDVtwRcgaS2LCSs51nAxJRcdn+XuXHzpDDz2W3/EN7JotqnZibjo3A7t0LcR2rm
-k+89jth4jbuN1sKPjFIXV/adwv3Mf7N9H6KjX+nNuyO2B0/fo5c=
-=jpmA
------END PGP SIGNATURE-----
-
---f23o6klw7upsg4lg--
