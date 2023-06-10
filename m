@@ -2,155 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 676FA72AF67
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 00:14:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C32772AF69
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 00:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232446AbjFJWOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 18:14:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60466 "EHLO
+        id S232619AbjFJWOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 18:14:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbjFJWOA (ORCPT
+        with ESMTP id S232501AbjFJWOb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 18:14:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B21F35A9;
-        Sat, 10 Jun 2023 15:14:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9865161343;
-        Sat, 10 Jun 2023 22:13:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E500C433EF;
-        Sat, 10 Jun 2023 22:13:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686435239;
-        bh=vsMsWBUiczZVzHiGOeLpckG4GBKjVlgpysa4XpZAf7U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KxOTHhTfcUU/rljAc8qZk2jB4hsnkk8Hjkbt+QxRG4SQzRCjizYUh8ar8xJRcDMmW
-         03ArKh7Yne7zeZ6yyQIbXuDHJ/dQGEesZL2noyuw+RLe0PxSjGA463Psj9AovwkJL2
-         nZjLmIZxArunyPVjQVUpeSPN2PQ6xCuusLMDz9TqUAZAMFrUeN8s0vo0Ydq21cqH05
-         1tj63GIs/Xh0RX9666U4zCykkmpqDaWE3ME67m52vIOctHrtQhQO/40WVSMmUXcT3I
-         TF5/BBAulzN2vhTWSuwgHubLRMb7q4nQL7pNNXYVHK+Sv9g5cmLLV8Ca7ih16zeBG/
-         2eeUyhpP4cr8A==
-Date:   Sat, 10 Jun 2023 23:13:52 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Maxim Kiselev <bigunclemax@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v1 3/3] dt-bindings: thermal: sun8i: Add binding for
- D1/T113s THS controller
-Message-ID: <20230610-whimsical-unrushed-2f5b30349588@spud>
-References: <20230610141739.999268-1-bigunclemax@gmail.com>
- <20230610141739.999268-4-bigunclemax@gmail.com>
- <20230610-rehire-amid-2517f43504c0@spud>
- <CALHCpMiEmc8L=O86_x7-KkBHFwf2QpuP0M7ugz7dNPr71cpJmQ@mail.gmail.com>
- <20230610-enlarged-agonize-0e9219f9921d@spud>
- <20230610-crumpet-spender-4133090a4728@spud>
- <CALHCpMjFNvJAnd2_3-1n_L3QRz4eNc-Egm-BD6jcS6H694dSyg@mail.gmail.com>
+        Sat, 10 Jun 2023 18:14:31 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1466535A9;
+        Sat, 10 Jun 2023 15:14:29 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f7e7fc9fe6so29986385e9.3;
+        Sat, 10 Jun 2023 15:14:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686435267; x=1689027267;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=c2K/vXSH1Ru9AaenLQ5OAeVVoA6HlojAGRwcG2Pghjc=;
+        b=SGn5PIik8gN8dqE4k/E+IsJtqnyqDxb95wJKsl121SuxxSvea6ULwN8lU1NQgJM5q/
+         pARoJYhuzw/fL5YrZvYvGyycKPUPMqbz6bGf6200C+eCThOwLMtClp0QJVPnWayNb+9h
+         LFXJ3KX9dBayCjdiLtpgEmqBBscxvetE0NsdrHSISMKWTWcoY7rUTeK2fp1xJHq8RrMM
+         45jXAXi6kNCEG57HvxtzvmRGcq93JHeM1PcaGhSkPxjqnUyFYoBtuYb+gUCvWlmOyxym
+         DLpGmhwVaSryTBlQ7pyjzZcdf3IYbWx6ejRxPVr9LGRlcDexixKIWV2U3I9PEhjx5a57
+         +2Mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686435267; x=1689027267;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c2K/vXSH1Ru9AaenLQ5OAeVVoA6HlojAGRwcG2Pghjc=;
+        b=eYcAKMNqu/l9lwj4kQCPaRhWQmbXrfOYFwdbdl/5K1t5IQvXbEQbUEtIo4FUr52trw
+         EdNjTSIFP06iFEOHU0wQIiL8wGKWjZvDkC4k1SIrQqWCoBMXhEh0xy7QvhyZbIuAVxbT
+         6+h7IRCDqYEq7EmHAoOpXxV4t9pR6ygtk1LSfiqirMR8UloHk0yPKrtgW7NWejF8v/2r
+         gewrC6kmi2O2RX9Pk2Kgqx4uOcV72UJ86xbYbbUyvGS8JlZtzXWOntrjrvKEbx9p+5Of
+         jFe1661m4DnrXZfEZU00G9m+KJ9T0E0vyvCC5z9FlOvJ0R9N0H19DYyVhbT5ZgCTc1G+
+         3fmQ==
+X-Gm-Message-State: AC+VfDxWQnXQaQZed4pH2VCbSTcPdMFjVJLhKzKolZ+DWFH4zX874MEo
+        Qcx4u3THefydAychCO6cPDw=
+X-Google-Smtp-Source: ACHHUZ5eWA+QdMw7r2dwC1sGRE7jCl/a51OBoeOdvayFX/bkMTA6R/FI2DHP43FwKQ8kzRfloO/vQQ==
+X-Received: by 2002:a7b:c84c:0:b0:3f6:76e:604b with SMTP id c12-20020a7bc84c000000b003f6076e604bmr4180596wml.0.1686435267228;
+        Sat, 10 Jun 2023 15:14:27 -0700 (PDT)
+Received: from krava ([213.235.133.42])
+        by smtp.gmail.com with ESMTPSA id k15-20020a7bc40f000000b003f7f1b3aff1sm6742250wmi.26.2023.06.10.15.14.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Jun 2023 15:14:26 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Sun, 11 Jun 2023 00:14:23 +0200
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH v3 0/4] Bring back vmlinux.h generation
+Message-ID: <ZIT1v4oUKJreqd/I@krava>
+References: <20230609043240.43890-1-irogers@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="3iXLHNmcMAxY6UVf"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALHCpMjFNvJAnd2_3-1n_L3QRz4eNc-Egm-BD6jcS6H694dSyg@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230609043240.43890-1-irogers@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 08, 2023 at 09:32:36PM -0700, Ian Rogers wrote:
+> Commit 760ebc45746b ("perf lock contention: Add empty 'struct rq' to
+> satisfy libbpf 'runqueue' type verification") inadvertently created a
+> declaration of 'struct rq' that conflicted with a generated
+> vmlinux.h's:
+> 
+> ```
+> util/bpf_skel/lock_contention.bpf.c:419:8: error: redefinition of 'rq'
+> struct rq {};
+>        ^
+> /tmp/perf/util/bpf_skel/.tmp/../vmlinux.h:45630:8: note: previous definition is here
+> struct rq {
+>        ^
+> 1 error generated.
+> ```
+> 
+> Fix the issue by moving the declaration to vmlinux.h. So this can't
+> happen again, bring back build support for generating vmlinux.h then
+> add build tests.
+> 
+> v3. Address Namhyung's comments on filtering ELF files with readelf.
 
---3iXLHNmcMAxY6UVf
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 
-On Sat, Jun 10, 2023 at 11:31:03PM +0300, Maxim Kiselev wrote:
-> =D1=81=D0=B1, 10 =D0=B8=D1=8E=D0=BD. 2023=E2=80=AF=D0=B3. =D0=B2 21:01, C=
-onor Dooley <conor@kernel.org>:
->=20
-> ...
->=20
-> > > > > +  - |
-> > > > > +    thermal-sensor@2009400 {
-> > > > > +          compatible =3D "allwinner,sun20i-d1-ths";
-> > > > > +          reg =3D <0x02009400 0x400>;
-> > > > > +          interrupts =3D <0 90 0>;
-> > > > > +          clocks =3D <&ccu 0>;
-> > > > > +          clock-names =3D "bus";
-> > > > > +          resets =3D <&ccu 2>;
-> > > > > +          nvmem-cells =3D <&ths_calibration>;
-> > > > > +          nvmem-cell-names =3D "calibration";
-> > > > > +          #thermal-sensor-cells =3D <0>;
-> > > > >
-> > > > >> Is this calibration required, or optional, for the d1?
-> > > >
-> > > > Calibration data for the D1 is optional as for the H6.
-> > > > (But without it, the sensor data will be inaccurate).
-> > >
-> > > Okay. Modulo the signoff:
-> > > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> >
-> > Wait, that's not what I meant to say... Clearly turned my brain off for
-> > a moment. If it is not going to function correctly without the
-> > calibration data, why not make the calibration data required for the
-> > d1's ths?
->=20
-> I don't really know why, but the calibration data is optional for
-> other controllers.
-> So I just did it the same way.
-> Here is explanation comment about it from the driver:
->         /*
->          * Even if the external calibration data stored in sid is
->          * not accessible, the THS hardware can still work, although
->          * the data won't be so accurate.
->          *
->          * The default value of calibration register is 0x800 for
->          * every sensor, and the calibration value is usually 0x7xx
->          * or 0x8xx, so they won't be away from the default value
->          * for a lot.
->          *
->          * So here we do not return error if the calibration data is
->          * not available, except the probe needs deferring.
->          */
+jirka
 
-Wait, so if there is no calibration data then this thing will just defer
-probing, ad infinitum? Looks like everything other than the a33 has the
-cells in the dts, and the software seems to expect the cells.
-What am I missing?
-
-
-
---3iXLHNmcMAxY6UVf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIT1nwAKCRB4tDGHoIJi
-0uxwAQDbSA54Fod2Iv1WkrzMW6btFFimBhB2h3grpf16GJVr5gEA72NThqZR28DY
-gJomC3CeBsmnzL2M+76ZZxJhsvbFjwk=
-=h6lM
------END PGP SIGNATURE-----
-
---3iXLHNmcMAxY6UVf--
+> v2. Rebase on perf-tools-next. Add Andrii's acked-by. Add patch to
+>     filter out kernels that lack a .BTF section and cause the build to
+>     break.
+> 
+> Ian Rogers (4):
+>   perf build: Add ability to build with a generated vmlinux.h
+>   perf bpf: Move the declaration of struct rq
+>   perf test: Add build tests for BUILD_BPF_SKEL
+>   perf build: Filter out BTF sources without a .BTF section
+> 
+>  tools/perf/Makefile.config                    |  4 ++
+>  tools/perf/Makefile.perf                      | 39 ++++++++++++++++++-
+>  tools/perf/tests/make                         |  4 ++
+>  tools/perf/util/bpf_skel/.gitignore           |  1 +
+>  .../perf/util/bpf_skel/lock_contention.bpf.c  |  2 -
+>  .../util/bpf_skel/{ => vmlinux}/vmlinux.h     | 10 +++++
+>  6 files changed, 57 insertions(+), 3 deletions(-)
+>  rename tools/perf/util/bpf_skel/{ => vmlinux}/vmlinux.h (90%)
+> 
+> -- 
+> 2.41.0.162.gfafddb0af9-goog
+> 
