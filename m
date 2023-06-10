@@ -2,172 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0218972AD06
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 18:13:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DF6672AD0D
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 18:13:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231286AbjFJQN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 12:13:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34916 "EHLO
+        id S232363AbjFJQNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 12:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbjFJQM4 (ORCPT
+        with ESMTP id S230054AbjFJQND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 12:12:56 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB594491
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 09:12:34 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-30af159b433so2667838f8f.3
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 09:12:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1686413528; x=1689005528;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pwYMvVDtDeMxDpan+XQeqhiNTjyJ3BxX8xvun0+4810=;
-        b=YLQzMRZ1lO1BQlvkOaAElWb6EEYz7qAiLXE1NJI526f6ZfJlQsCHNnwBD63aNm/EmS
-         eH80JouKXGbLHungB+13HYoHRhkqTcGv9EJ0sQdN+Bgtq956IGIqv9Fc/1Gafs7PS+Dc
-         +VzcqhrdW0fyCzYCG0juZPpPz2iU1HASKc6CARhlkwo7GYiubdbp/Xo+J66GBXiFbQLI
-         sSDKmJiwSmz98SXm65vAdEihbVbJL7oBrO9kbr9JRrVZlha3a0xM1ASubBPHOzywJdU3
-         uMhskFgOJe8NtPlHJpdyqsPyXaYGq83RC5Xe1gqhKnGDSp3fhg+TwpIA/+R4MtGYi5ae
-         fIeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686413528; x=1689005528;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pwYMvVDtDeMxDpan+XQeqhiNTjyJ3BxX8xvun0+4810=;
-        b=O9SWQlCccY6o8uYkM5m3HUNAMgCXw29sQlhfqFl/UKeeJigGc90TWjtSH1O730BkXh
-         ZZw/fTEcXvLFEo7wT3XKdbz/alJQa/p3EJ+8rAD6lPFrFDcVWWnSA6aiBOCkmh0vDM2L
-         47/1yU6FmZsOi03iUZIzac3fBtNak2a/fTYfN7FXqIQhH6UYNjJ1Dla7cacMyG5LuCbQ
-         AvAGEyRk52H6yQsnkfEFW+DhoMLOxafdHsfxPkMEUkLpAJOKbcibjxsGLn1xSjM415Eh
-         hTtmRfM5DZxYeu+5LqJtl51IQkSkvuldZw345mtoXyU5QR9uUDvBj7FKd9WD9iowpafP
-         dS9g==
-X-Gm-Message-State: AC+VfDzEiM7f4yOtkSrIVybgHR72WPv8qunmTExu30eS6ceJEFya9IYs
-        6TiauNrmMM2aIN1NC/m/m/j8lA==
-X-Google-Smtp-Source: ACHHUZ6yqy6/s9krkQFTqNF4ENRu4006HuXc7bosbag+gxCH24WeaXJOz579H6GEDA0cDujFgzri5w==
-X-Received: by 2002:adf:f701:0:b0:30a:ea8a:7a6d with SMTP id r1-20020adff701000000b0030aea8a7a6dmr1560264wrp.16.1686413528543;
-        Sat, 10 Jun 2023 09:12:08 -0700 (PDT)
-Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id u9-20020a5d4349000000b003079c402762sm7431145wrr.19.2023.06.10.09.12.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Jun 2023 09:12:08 -0700 (PDT)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Sat, 10 Jun 2023 18:11:52 +0200
-Subject: [PATCH net 17/17] selftests: mptcp: join: skip mixed tests if not
- supported
+        Sat, 10 Jun 2023 12:13:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB473C35;
+        Sat, 10 Jun 2023 09:12:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2AA261589;
+        Sat, 10 Jun 2023 16:12:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74633C433B0;
+        Sat, 10 Jun 2023 16:12:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686413537;
+        bh=4mTrXdsYhf7nyFQ3z8yqygjtfuJD0iIWFZWiQEbc7UE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LwkMm9ovQ/+6/kPjFcx3NPsBl9PTGtracFGk3tVhBqLzEvPZob/VOC3T93g7QJXCM
+         ARp8n8MGPJ6/12Vr9RurQtZoF+/9J/O+5zBu2ITlt4XU/Vm9tb9JJq/3dpEQRKUKE1
+         MIELvj38ok+e0w0j+4b+y4CgMETmDUJE8GCc1wl8A5v3G0r8EqJk2EgFiiVKHf4A0s
+         Yu0vvsILq5anE4DoLEVudpvZsK1WeDoVVXcwbYmAxHE9UQHsowtm9Iayh9cWQHF1xm
+         1Kss0Rtkg7rOCi/eni6CtNpY/jOxcktd9FnC1dV7OAg3qOIN2LMIz1hVZnNINa9+wM
+         uk4QdCwWHE+9w==
+Date:   Sat, 10 Jun 2023 18:12:13 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Walter Harms <wharms@bfs.de>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] tty: serial: samsung_tty: Use abs() to simplify
+ some code
+Message-ID: <20230610161213.4zk2uodjb7j2x7st@intel.intel>
+References: <e4baf6039368f52e5a5453982ddcb9a330fc689e.1686412569.git.christophe.jaillet@wanadoo.fr>
+ <7bd165e82ed3675d4ddee343ab373031e995a126.1686412569.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230609-upstream-net-20230610-mptcp-selftests-support-old-kernels-part-3-v1-17-2896fe2ee8a3@tessares.net>
-References: <20230609-upstream-net-20230610-mptcp-selftests-support-old-kernels-part-3-v1-0-2896fe2ee8a3@tessares.net>
-In-Reply-To: <20230609-upstream-net-20230610-mptcp-selftests-support-old-kernels-part-3-v1-0-2896fe2ee8a3@tessares.net>
-To:     mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Florian Westphal <fw@strlen.de>,
-        Davide Caratti <dcaratti@redhat.com>,
-        Christoph Paasch <cpaasch@apple.com>,
-        Geliang Tang <geliangtang@gmail.com>,
-        Geliang Tang <geliang.tang@suse.com>
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        stable@vger.kernel.org
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2834;
- i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=PI3L9ABnerswxTMqx6UTE581B0kBCB3cu6Q+YqONX60=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkhKC/oSOXJtkmjY+HOVFkhrxqwZyGqCtAlqidW
- LDI+5gIZlyJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZISgvwAKCRD2t4JPQmmg
- c3IwD/48YMd8rDjzHYVBYD4HEfyc4z5nj3ogAwDh2ngzuk/Mjcow/1HLqoZV/fbF/bAYcUxjZ4K
- UvL0n3qPjbEH1ubK4XWLhgw2csjThEQq1zk9USJQqVqP88tZBQsZuEDxjwlfmkK4g1IJ/VD4UXt
- 5XJylV/IVb8qKni3FoidLF0aMtYOjZT7hXbjGsj98yFmpUNLH0H1A8Ng+M3QzIb5ZJCFuzFkdkY
- MtGTJPbQjZxpuu9P0aa1WmydhNbDZar8rNWp0c1NfzNEMv/WIbTY6NuOSUntikgHANbMeAxlKH0
- RvhfZ0n6ra/gQiz1WhEC4Yt4JBVgQBnbWwZQ3JkbvbaNatv4T140Sl/l7O3ETiBmJhF0IfR08mR
- qi+GcDjJLol3L45uWun6IFlNhCilDj7I2gDHgP5K8H8ahxmF/ppMOCY1wFaP+96EX6sIr9GoqLj
- NnHkwMlLcZopqktA2bJMyRQV4EzCM6/xg2Lz56YuqtUtAt6ZhN1fhQZLBDRmoTHYQzZH26/W5rF
- yq7tgYbB8ZKebHXNRZLGqVmsxDz480JmMeT0iEdkg39WVj/tMn5Wok/0q0IV4cAUnoCti3uRRAk
- jyiR4qgkHPuN1rmMSU1PSULgN+hUmUeR5YWAye5ZfXKTY4RTdOdIWkzZHCo0KNznSsAb56CrzMD
- gSvSCkmxAsN7wfA==
-X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7bd165e82ed3675d4ddee343ab373031e995a126.1686412569.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Selftests are supposed to run on any kernels, including the old ones not
-supporting all MPTCP features.
+Hi Christophe,
 
-One of them is the support of a mix of subflows in v4 and v6 by the
-in-kernel PM introduced by commit b9d69db87fb7 ("mptcp: let the
-in-kernel PM use mixed IPv4 and IPv6 addresses").
+On Sat, Jun 10, 2023 at 05:59:27PM +0200, Christophe JAILLET wrote:
+> Use abs() instead of hand-writing it.
+> 
+> Suggested-by: Walter Harms <wharms@bfs.de>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-It looks like there is no external sign we can use to predict the
-expected behaviour. Instead of accepting different behaviours and thus
-not really checking for the expected behaviour, we are looking here for
-a specific kernel version. That's not ideal but it looks better than
-removing the test because it cannot support older kernel versions.
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
 
-Link: https://github.com/multipath-tcp/mptcp_net-next/issues/368
-Fixes: ad3493746ebe ("selftests: mptcp: add test-cases for mixed v4/v6 subflows")
-Cc: stable@vger.kernel.org
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
----
- tools/testing/selftests/net/mptcp/mptcp_join.sh | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-index 281581d3c8eb..0ae8cafde439 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@ -2637,7 +2637,8 @@ v4mapped_tests()
- 
- mixed_tests()
- {
--	if reset "IPv4 sockets do not use IPv6 addresses"; then
-+	if reset "IPv4 sockets do not use IPv6 addresses" &&
-+	   continue_if mptcp_lib_kversion_ge 6.3; then
- 		pm_nl_set_limits $ns1 0 1
- 		pm_nl_set_limits $ns2 1 1
- 		pm_nl_add_endpoint $ns1 dead:beef:2::1 flags signal
-@@ -2646,7 +2647,8 @@ mixed_tests()
- 	fi
- 
- 	# Need an IPv6 mptcp socket to allow subflows of both families
--	if reset "simult IPv4 and IPv6 subflows"; then
-+	if reset "simult IPv4 and IPv6 subflows" &&
-+	   continue_if mptcp_lib_kversion_ge 6.3; then
- 		pm_nl_set_limits $ns1 0 1
- 		pm_nl_set_limits $ns2 1 1
- 		pm_nl_add_endpoint $ns1 10.0.1.1 flags signal
-@@ -2655,7 +2657,8 @@ mixed_tests()
- 	fi
- 
- 	# cross families subflows will not be created even in fullmesh mode
--	if reset "simult IPv4 and IPv6 subflows, fullmesh 1x1"; then
-+	if reset "simult IPv4 and IPv6 subflows, fullmesh 1x1" &&
-+	   continue_if mptcp_lib_kversion_ge 6.3; then
- 		pm_nl_set_limits $ns1 0 4
- 		pm_nl_set_limits $ns2 1 4
- 		pm_nl_add_endpoint $ns2 dead:beef:2::2 flags subflow,fullmesh
-@@ -2666,7 +2669,8 @@ mixed_tests()
- 
- 	# fullmesh still tries to create all the possibly subflows with
- 	# matching family
--	if reset "simult IPv4 and IPv6 subflows, fullmesh 2x2"; then
-+	if reset "simult IPv4 and IPv6 subflows, fullmesh 2x2" &&
-+	   continue_if mptcp_lib_kversion_ge 6.3; then
- 		pm_nl_set_limits $ns1 0 4
- 		pm_nl_set_limits $ns2 2 4
- 		pm_nl_add_endpoint $ns1 10.0.2.1 flags signal
-
--- 
-2.40.1
-
+Andi
