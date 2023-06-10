@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B7172AC31
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 16:18:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73C9872AC36
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 16:19:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235284AbjFJOS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 10:18:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34526 "EHLO
+        id S234853AbjFJOS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 10:18:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232422AbjFJOSY (ORCPT
+        with ESMTP id S233498AbjFJOSj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 10:18:24 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4183C3C15;
-        Sat, 10 Jun 2023 07:18:15 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f7f6341b99so20688945e9.2;
-        Sat, 10 Jun 2023 07:18:15 -0700 (PDT)
+        Sat, 10 Jun 2023 10:18:39 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D833ABB;
+        Sat, 10 Jun 2023 07:18:22 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f6dfc4dffaso20690955e9.0;
+        Sat, 10 Jun 2023 07:18:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686406693; x=1688998693;
+        d=gmail.com; s=20221208; t=1686406700; x=1688998700;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iADzhJzSziS7zTAopdQl1F1LJEpxTBMZdMAeH9fjzio=;
-        b=pkzfO/5sjuHYso+oiyL7XG0FVK9wYghdGfliIDHkuHEiBLv06cMTld/rPbe9ZcWq89
-         q5zfw/OPDhI5rl8hUlLsjSD/Y3sE0DDEpJXtoWttBEwADBgfV97tRv9SkNXEMh7sVweQ
-         iOgdA5YtlapviAswCw34D/Ex9EcTRe6FG98PT+Ygta0VcuxrnKxRD8afLvwDWVVaK0sL
-         6H82RYlSoRjAKTalAG1Pr+6X4qIpg8x5kues3GSMOIxOtK3bVT+r9oL6G7dMMZ6FAMUp
-         6u8yvU+TJvHddmSXZmzCR2YmUdWJXRTYJk0lXTsID5AHjF0kE2PlcO6JdJqMBkjFbgjq
-         lZVQ==
+        bh=vsgeyxXBjiNCCbFnpasARFFtGQuGGzV0SKK6yZWlTDw=;
+        b=Rj0iUZ2JsSMmbPNyoSYt7fdUnvvw9nf6RiHw08J+SEcYgRC/iwFSL9KNJbdd3Q+zbM
+         UBC8+ntx2FCVoagNvELVpTs8l6Xir7IwKaGrdYAIL0tJ+fAMzpdzLg+iKSGjxj2bZ2uU
+         2f+F9WMXgjBEbxxuWGWFMLjBDTjp+V5nkv501v7Ycyd/wQt8N5AgIehxPmoK+m5G2bAD
+         PBFsI5EgiiElObE7IEWbHxZrIKS1DsOwjT7UsMlDwOKRZBInEZW3GEkAqGjPoFNRdooa
+         /zPO+XaI3R+hFQtPY4OKj/DqUCFEdXfW+jvnYs9CznNbNvrEbmk27jmbHFW4IH67tYDV
+         luFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686406693; x=1688998693;
+        d=1e100.net; s=20221208; t=1686406700; x=1688998700;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iADzhJzSziS7zTAopdQl1F1LJEpxTBMZdMAeH9fjzio=;
-        b=CNriqzrgdG7rmg1R+sdtunsl9ScAuGP1eUnvguJAdP2lOJQlZctkwu7QevzkxMQF4g
-         PAIyeg94fsAxAlTKF97Uyoo68zA1MiHJlIoB0ZGsewHY6nfs8nEaQlwk+w+BTGZJozJE
-         8cwJHDSKyzmvweQ+jDu9lUhtq9TN5BsdA3dWIS2kkkDUBObqjFgMPSjqRbLJhdRZ9H49
-         Ef9MhdbFI7WaJlPjo0qJZiua4KVHPtPoTl0kX+bXHlIsrMvK5n3JXaQ7Vzfd+1xbewuL
-         uU7qoSq3xK36l6TgVISmSsS/e1oEEN0BBh6ApGwUA8kkCvBRsfcc3BufhySy8jb0Bmwa
-         TxfQ==
-X-Gm-Message-State: AC+VfDzEvIRdCYmzxg1WDIf7YgqrXjtQwZ7gftRsEEJl3Lpqj2I0+wvg
-        aqciRSb+dfm/EyVa6yymRQYDZFStzkFD+JcC
-X-Google-Smtp-Source: ACHHUZ6H/wa1UlSMhfTLRDVrB5/B+5RG6Gcpeun3sxfNKg2oFLWcPXNnSrhggzGAV8XE2nKtgJxfLA==
-X-Received: by 2002:a05:600c:290:b0:3f7:3991:e128 with SMTP id 16-20020a05600c029000b003f73991e128mr3027448wmk.2.1686406692941;
-        Sat, 10 Jun 2023 07:18:12 -0700 (PDT)
+        bh=vsgeyxXBjiNCCbFnpasARFFtGQuGGzV0SKK6yZWlTDw=;
+        b=IBSvVBO3o70oY3Y9QN166ZtbTJjue8hI71GokZvsteZr+My5HmjHqNzfeiW7mKa1XN
+         Un0DNXsjKOtqaB0DOmATLFgYx5Xq7JK708GRzBY41jdYZsnvFVujkhRM46wF5b8Pu6pL
+         6dkh2r9il37DoKcj9JZF5RFauvPfgR6JoX4MzOeQm+HIyPslXAuaa4D109Adki84oNp7
+         613zqkmRyu5XqItnNjeKlCB1JGEx21hB+UZ0EsrDu51iwYuc0Z6EiDphUCKpWcwF+5TE
+         6yj2KhJvUxCJmZVtiNTeBrqhfBb6BcyK8WN1nrCDXb1Hl+Xe0hNN2XfVutl5S+rYxHDm
+         HeMg==
+X-Gm-Message-State: AC+VfDwLrOl1kXD8fHwOjvAlOrlADlVpKdnClCYUbAlrLOwKriRIXjTo
+        nf4nLpkStLgoGRRf+oUzkFvsjQ7jvR2m99CJ
+X-Google-Smtp-Source: ACHHUZ4vkkb5KY+PTVEJLFWo4HPZMMW0IRT2iCexNNKegDN6VCG+CWKglNTWFqypntcWouyqTLcFrg==
+X-Received: by 2002:adf:f886:0:b0:30a:f0d8:e32e with SMTP id u6-20020adff886000000b0030af0d8e32emr1127222wrp.18.1686406700522;
+        Sat, 10 Jun 2023 07:18:20 -0700 (PDT)
 Received: from user-PC.. ([178.134.198.138])
-        by smtp.gmail.com with ESMTPSA id z10-20020a05600c220a00b003f735d6fa74sm5841488wml.9.2023.06.10.07.18.10
+        by smtp.gmail.com with ESMTPSA id z10-20020a05600c220a00b003f735d6fa74sm5841488wml.9.2023.06.10.07.18.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Jun 2023 07:18:12 -0700 (PDT)
+        Sat, 10 Jun 2023 07:18:20 -0700 (PDT)
 From:   Maksim Kiselev <bigunclemax@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Maxim Kiselev <bigunclemax@gmail.com>,
@@ -69,13 +69,12 @@ Cc:     Maxim Kiselev <bigunclemax@gmail.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-riscv@lists.infradead.org
-Subject: [PATCH v1 2/3] riscv: dts: allwinner: d1: Add thermal sensor and thermal zone
-Date:   Sat, 10 Jun 2023 17:17:33 +0300
-Message-Id: <20230610141739.999268-3-bigunclemax@gmail.com>
+Subject: [PATCH v1 3/3] dt-bindings: thermal: sun8i: Add binding for D1/T113s THS controller
+Date:   Sat, 10 Jun 2023 17:17:34 +0300
+Message-Id: <20230610141739.999268-4-bigunclemax@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230610141739.999268-1-bigunclemax@gmail.com>
 References: <20230610141739.999268-1-bigunclemax@gmail.com>
@@ -93,71 +92,71 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Maxim Kiselev <bigunclemax@gmail.com>
 
-This patch adds a thermal sensor controller node for the D1/T113s.
-Also it adds a THS calibration data cell and thermal zone.
+Add a binding for D1/T113s thermal sensor controller.
 
 Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
 Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
 ---
- .../boot/dts/allwinner/sunxi-d1s-t113.dtsi    | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ .../thermal/allwinner,sun8i-a83t-ths.yaml     | 20 ++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-index 922e8e0e2c09..b893f3325554 100644
---- a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-+++ b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-@@ -10,6 +10,7 @@
- #include <dt-bindings/reset/sun8i-de2.h>
- #include <dt-bindings/reset/sun20i-d1-ccu.h>
- #include <dt-bindings/reset/sun20i-d1-r-ccu.h>
-+#include <dt-bindings/thermal/thermal.h>
+diff --git a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
+index fbd4212285e2..001faa37fc27 100644
+--- a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
++++ b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
+@@ -16,6 +16,7 @@ properties:
+       - allwinner,sun8i-a83t-ths
+       - allwinner,sun8i-h3-ths
+       - allwinner,sun8i-r40-ths
++      - allwinner,sun20i-d1-ths
+       - allwinner,sun50i-a64-ths
+       - allwinner,sun50i-a100-ths
+       - allwinner,sun50i-h5-ths
+@@ -61,6 +62,7 @@ allOf:
+         compatible:
+           contains:
+             enum:
++              - allwinner,sun20i-d1-ths
+               - allwinner,sun50i-a100-ths
+               - allwinner,sun50i-h6-ths
  
- / {
- 	#address-cells = <1>;
-@@ -138,6 +139,19 @@ ccu: clock-controller@2001000 {
- 			#reset-cells = <1>;
- 		};
+@@ -84,7 +86,9 @@ allOf:
+       properties:
+         compatible:
+           contains:
+-            const: allwinner,sun8i-h3-ths
++            enum:
++              - allwinner,sun8i-h3-ths
++              - allwinner,sun20i-d1-ths
  
-+		ths: thermal-sensor@2009400 {
-+			compatible = "allwinner,sun20i-d1-ths";
-+			reg = <0x02009400 0x400>;
-+			interrupts = <SOC_PERIPHERAL_IRQ(58) IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&ccu CLK_BUS_THS>;
-+			clock-names = "bus";
-+			resets = <&ccu RST_BUS_THS>;
-+			nvmem-cells = <&ths_calibration>;
-+			nvmem-cell-names = "calibration";
-+			status = "disabled";
-+			#thermal-sensor-cells = <0>;
-+		};
-+
- 		dmic: dmic@2031000 {
- 			compatible = "allwinner,sun20i-d1-dmic",
- 				     "allwinner,sun50i-h6-dmic";
-@@ -365,6 +379,10 @@ sid: efuse@3006000 {
- 			reg = <0x3006000 0x1000>;
- 			#address-cells = <1>;
- 			#size-cells = <1>;
-+
-+			ths_calibration: thermal-sensor-calibration@14 {
-+				reg = <0x14 0x4>;
-+			};
- 		};
+     then:
+       properties:
+@@ -103,6 +107,7 @@ allOf:
+             enum:
+               - allwinner,sun8i-h3-ths
+               - allwinner,sun8i-r40-ths
++              - allwinner,sun20i-d1-ths
+               - allwinner,sun50i-a64-ths
+               - allwinner,sun50i-a100-ths
+               - allwinner,sun50i-h5-ths
+@@ -159,4 +164,17 @@ examples:
+          #thermal-sensor-cells = <1>;
+     };
  
- 		crypto: crypto@3040000 {
-@@ -843,4 +861,12 @@ rtc: rtc@7090000 {
- 			#clock-cells = <1>;
- 		};
- 	};
++  - |
++    thermal-sensor@2009400 {
++          compatible = "allwinner,sun20i-d1-ths";
++          reg = <0x02009400 0x400>;
++          interrupts = <0 90 0>;
++          clocks = <&ccu 0>;
++          clock-names = "bus";
++          resets = <&ccu 2>;
++          nvmem-cells = <&ths_calibration>;
++          nvmem-cell-names = "calibration";
++          #thermal-sensor-cells = <0>;
++    };
 +
-+	thermal-zones {
-+		cpu_thermal: cpu-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&ths 0>;
-+		};
-+	};
- };
+ ...
 -- 
 2.39.2
 
