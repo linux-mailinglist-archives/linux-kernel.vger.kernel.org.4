@@ -2,166 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5041B72A894
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 04:59:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C068E72A89A
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 05:00:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233594AbjFJC7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 22:59:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53902 "EHLO
+        id S233766AbjFJDAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 23:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233051AbjFJC7m (ORCPT
+        with ESMTP id S233682AbjFJDAt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 22:59:42 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F259830D6;
-        Fri,  9 Jun 2023 19:59:41 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 6E1B05C01A3;
-        Fri,  9 Jun 2023 22:59:41 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Fri, 09 Jun 2023 22:59:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1686365981; x=1686452381; bh=9jx1BPUbfc
-        VgExhjQbchVzVzEh8/1tbELFoG8PhPivY=; b=KzDj4AYYzePpimX6H5wkYZwkks
-        NHGbQDu8jIRMdcSSSgF3b3PCmK7D2vOotKxA1DfVlTP2e08oG9cNjOaC0kyc2A/A
-        Woeqakefd0epg23qLeX6igy3kxTwzSX6HLFhahqzHc+vqvIKm4sAeWi9aoNSXRR6
-        wCI5HfGLfst2I2vTH2hIA7ZxZ26JHuWYOCEEPQPqUdH0cH2Rrtx60UFtXGXkXHdo
-        oHHe5NzrKGAz0eOgRzDoxWrkDYMlWiOGDPj/JZbnnXGfaI+2MtyHouaGMcEBMaZV
-        jdSrar5Q0z3nIwuLL3W3Xx2b6XH6XjVb12K0C8yZS0BhFD3XVFZWGvJ79QUg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1686365981; x=
-        1686452381; bh=9jx1BPUbfcVgExhjQbchVzVzEh8/1tbELFoG8PhPivY=; b=Z
-        vSpafDBLwDL8H2CTo8lfIfv0lBZ6g4SdgNNNWgwt9+71cFO74vFRkfX5OQ0eun+2
-        V9U7u1FWaanTOidIYHn+FaDRXl+fpQTdsWaByWb8JDChI4RHKW0Er7WreEW70XSH
-        F7ovWDNSgioIcLiDVSE1DlAfe687KvI/kOFQUYI5cJrhQ5FVuqQj+0k+MXIqK2ZF
-        5YIcEJ5iqfquW6njaZXeLisvjATivHd3InKEgpO6av2xMmSPYJ9xVUx7M/y8yarE
-        v1ZhBTL4ViFGSyXf3rk89tTMCKeP0BpWjJ6L5NGJkGZn6HsrPPsYg/Mr1c8kHU06
-        REVYBioVQJyWfzr6tnZjw==
-X-ME-Sender: <xms:HeeDZCWV0SKnRdsuGWRSsQMu7GQI7-ysiwNLiOBZM6ZFaFT_yJ_T2Q>
-    <xme:HeeDZOnaTfv3AHrYlBdxpogXCqqlsJqyy25XXUF2UfuKje_bn9deU29hJr9wPX0EB
-    viI8zxkNbo_YBo>
-X-ME-Received: <xmr:HeeDZGbj_8bj6jZVBSKrCmevOYHC1UJpIHY58wEQ9MBMYdxsNSeAl9zIqtq3BmXQA5BjzkBP0Jo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtledgieegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepffgvmhhi
-    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
-    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepjeffjefggfeugeduvedvjeekgfeh
-    gffhhfffjeetkeelueefffetfffhtdduheetnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhs
-    lhgrsgdrtghomh
-X-ME-Proxy: <xmx:HeeDZJXiLPzcMxSY0hCAKbUMNmyUBS1fv5Tgj-Haa8sn4r-ZxG8NqQ>
-    <xmx:HeeDZMkbTgZg6NoNqlMUgE_TtOweBaMzwJZpqmojC0wcAPklBlaoFg>
-    <xmx:HeeDZOcGa0h3eIXBrgz7fX0jy5-BY_bRbkTS_mVGglLhXOxaRr0I7A>
-    <xmx:HeeDZLd3CRf4yDDakzxMu1xjRA1REUtQS01YtYNIVyK3lLSe2ZslAA>
-Feedback-ID: iac594737:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 9 Jun 2023 22:59:40 -0400 (EDT)
-From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Joe Perches <joe@perches.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Lee Jones <lee@kernel.org>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Demi Marie Obenour <demi@invisiblethingslab.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xen-devel@lists.xenproject.org
-Subject: [PATCH 4/4] Strict XenStore entry parsing
-Date:   Fri,  9 Jun 2023 22:57:59 -0400
-Message-Id: <20230610025759.1813-4-demi@invisiblethingslab.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230610025759.1813-1-demi@invisiblethingslab.com>
-References: <20230610025759.1813-1-demi@invisiblethingslab.com>
+        Fri, 9 Jun 2023 23:00:49 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438263C02;
+        Fri,  9 Jun 2023 20:00:30 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f122ff663eso2954557e87.2;
+        Fri, 09 Jun 2023 20:00:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686366028; x=1688958028;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FJq+2/RSaJ7fmkOcjKO3amG929XbfkZnl7QhpyxGlBk=;
+        b=Ym/6M4HGGdBtaElDK1B31w3o/7Z73YmWSrAu2i6jzVFCMwSarWiGTIrJH225I6J8s4
+         wgC2xYOZbIA2TOk0TPpxjhNGV4EWSsm4rjlRhZX6/Sjx2U3Ypr/ZssfhFUHNpHlheUgF
+         M7GS1oR/uEkdOXQkbb/tLBY6CnqQ5EzSx6LuxS2nOg5d4N2q9Oc7oYN/vZwKRxGcXCEX
+         HLLyGw4pms03SBZ9AquXz4xDgtRAZrEaHKKgmV9ws99mDct/2ZDMUaREgKLrqm00mk/6
+         VwXucoD3QNTvDweiRuCUw36WzkxnhbF07DVaeOyk+VBz0VmSfCcXbiBF79siBKdX0aWX
+         4QuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686366028; x=1688958028;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FJq+2/RSaJ7fmkOcjKO3amG929XbfkZnl7QhpyxGlBk=;
+        b=Xuw1TiCLpFuxafSZgrvTeWqs/rlaRDYMC6xtiLP+Gn1FB8/fCivxKG7FmGSu1vyHeo
+         pD1lSVEbY2xVzembDmq9PsWlsY8k+XXVJejPeGdoTBNYraLv3fYRllplewqKRFfZwz5n
+         3MrqL0n3YR0F5EBm+PPvnb3dWf+4Woyhht992vEEvS0PfuuIdy6faUKJu31FTG70fJox
+         pus2LgOTAd28SnmAqq8IjJpM7kH4JZTmPebbDPYwi6l8V7pfVhbwk76rp6g8WBry/nUK
+         Ooy1EiGRLGweoN0UpUbwStel4GXbLlaGUjDiFjzs+CXVqj+SNhMdI0xcFPWLxgO7VZAs
+         pOug==
+X-Gm-Message-State: AC+VfDxbxTJcwItuiOJS+sruz3PtR7AFSmwTPwR0jUnB9d4EAtZ6FRdS
+        B5dP4CNrA/F2lC+OmjqMTqqaOTQc6tJRT/BEfg==
+X-Google-Smtp-Source: ACHHUZ5Vvb14RxL9ukTvB26Pk6G2V/s1h6McJEpnMG+Lb4tEsfZjaoVEBV1zBwT8Tj+qS/9hiAGrvpEIa+Pm0DftQM8=
+X-Received: by 2002:a19:505b:0:b0:4f6:14d1:596d with SMTP id
+ z27-20020a19505b000000b004f614d1596dmr1647182lfj.61.1686366027294; Fri, 09
+ Jun 2023 20:00:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230610021553.1213-1-powen.kao@mediatek.com> <20230610021553.1213-3-powen.kao@mediatek.com>
+In-Reply-To: <20230610021553.1213-3-powen.kao@mediatek.com>
+From:   Stanley Chu <chu.stanley@gmail.com>
+Date:   Sat, 10 Jun 2023 11:00:16 +0800
+Message-ID: <CAGaU9a8-2zzBshfoN4zaZbfBu_EKMEH7S4o32DDUk7GJ2nkh5g@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] scsi: ufs: core: Remove dedicated hwq for dev command
+To:     Po-Wen Kao <powen.kao@mediatek.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        wsd_upstream@mediatek.com, peter.wang@mediatek.com,
+        stanley.chu@mediatek.com, alice.chao@mediatek.com,
+        naomi.chu@mediatek.com, chun-hung.wu@mediatek.com,
+        cc.chou@mediatek.com, eddie.huang@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This uses the newly-introduced strict version of sscanf().
+On Sat, Jun 10, 2023 at 10:17=E2=80=AFAM Po-Wen Kao <powen.kao@mediatek.com=
+> wrote:
+>
+> This patch depends on patch
+> "scsi: ufs: mcq: Fix the incorrect OCS value for the device command"
+> which take care of OCS value of dev commands under mcq mode.
+>
+> We are safe to share first hwq for dev commnad and IO request here.
+>
+> Tested-by: Po-Wen Kao <powen.kao@mediatek.com>
+> Signed-off-by: Po-Wen Kao <powen.kao@mediatek.com>
 
-Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
----
- drivers/xen/xenbus/xenbus_xs.c | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/xen/xenbus/xenbus_xs.c b/drivers/xen/xenbus/xenbus_xs.c
-index 12e02eb01f5991b31db451cc57037205359b347f..88e94269c9221d16d1a97e59399058e870675729 100644
---- a/drivers/xen/xenbus/xenbus_xs.c
-+++ b/drivers/xen/xenbus/xenbus_xs.c
-@@ -569,16 +569,20 @@ int xenbus_scanf(struct xenbus_transaction t,
- 		 const char *dir, const char *node, const char *fmt, ...)
- {
- 	va_list ap;
--	int ret;
-+	int ret = 0;
-+	unsigned int len;
- 	char *val;
- 
--	val = xenbus_read(t, dir, node, NULL);
-+	val = xenbus_read(t, dir, node, &len);
- 	if (IS_ERR(val))
- 		return PTR_ERR(val);
-+	if (strlen(val) != len)
-+		goto bad;
- 
- 	va_start(ap, fmt);
--	ret = vsscanf(val, fmt, ap);
-+	ret = vsscanf_strict(val, fmt, ap);
- 	va_end(ap);
-+bad:
- 	kfree(val);
- 	/* Distinctive errno. */
- 	if (ret == 0)
-@@ -636,15 +640,18 @@ int xenbus_gather(struct xenbus_transaction t, const char *dir, ...)
- 	while (ret == 0 && (name = va_arg(ap, char *)) != NULL) {
- 		const char *fmt = va_arg(ap, char *);
- 		void *result = va_arg(ap, void *);
-+		unsigned len;
- 		char *p;
- 
--		p = xenbus_read(t, dir, name, NULL);
-+		p = xenbus_read(t, dir, name, &len);
- 		if (IS_ERR(p)) {
- 			ret = PTR_ERR(p);
- 			break;
- 		}
--		if (fmt) {
--			if (sscanf(p, fmt, result) == 0)
-+		if (strlen(p) != len)
-+			ret = -EINVAL;
-+		else if (fmt) {
-+			if (sscanf_strict(p, fmt, result) <= 0)
- 				ret = -EINVAL;
- 			kfree(p);
- 		} else
--- 
-Sincerely,
-Demi Marie Obenour (she/her/hers)
-Invisible Things Lab
-
+Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
