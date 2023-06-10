@@ -2,156 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0054772AE68
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 21:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01FEE72AE6A
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 21:32:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbjFJT3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 15:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32946 "EHLO
+        id S229801AbjFJTby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 15:31:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjFJT3J (ORCPT
+        with ESMTP id S229675AbjFJTbw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 15:29:09 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0204A1;
-        Sat, 10 Jun 2023 12:29:08 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686425347;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sDQkh7R8r+JHj9kd12veOPhXBKEv0IeIaB7glt+ZYI8=;
-        b=p9xbwJKQY6jXUcbF8Lgy1JZGNjViLm/GvtbaM++XwToctffVSrcooTE2v+JwxTkYyhpOAQ
-        nY/ihBLFGT+WaliMQjN/5UiyllA0P64nGGmXXzCdH/Htp3mDsQrMgIU6Uf4Roe7grQrE/2
-        P3QZKbXU78fhqnz6USuGyNMWHsXw0vgOOYbmq3KxI6MzO0r4mCascfTiLYHM5pWlUv5xY4
-        7FgXjWPj5z64jPmtHxGrwIBGo1+RVbXkMivuBgwZ+Lb6KwndEaoEpgz6StZKJNIH887pTA
-        jqOw6zirjFcK8uPkoGOgko+4mCvhyjH96nEyF0FnbSFsF+ZeIjZCaUKrhkDXxA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686425347;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sDQkh7R8r+JHj9kd12veOPhXBKEv0IeIaB7glt+ZYI8=;
-        b=52BAwhEHpD49JPShPAmEv+ZR+kF3JuNFRlmL4BruoBGezmR48PQImdZZ63o2ITKnyHFFiV
-        rIPEcZcSlOlL+ICA==
-To:     linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
-        torvalds@linux-foundation.org, peterz@infradead.org,
-        npiggin@gmail.com, akpm@linux-foundation.org
-Subject: Re: +
- lazy-tlb-fix-hotplug-exit-race-with-mmu_lazy_tlb_shootdown.patch added to
- mm-hotfixes-unstable branch
-In-Reply-To: <20230525205253.E2FAEC433EF@smtp.kernel.org>
-References: <20230525205253.E2FAEC433EF@smtp.kernel.org>
-Date:   Sat, 10 Jun 2023 21:29:06 +0200
-Message-ID: <87v8fv86bh.ffs@tglx>
+        Sat, 10 Jun 2023 15:31:52 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922E9AD
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 12:31:50 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-133-ozbbM19YMVelK_WrTOSHKw-1; Sat, 10 Jun 2023 20:31:48 +0100
+X-MC-Unique: ozbbM19YMVelK_WrTOSHKw-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sat, 10 Jun
+ 2023 20:31:42 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Sat, 10 Jun 2023 20:31:42 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Rasmus Villemoes' <linux@rasmusvillemoes.dk>,
+        Petr Mladek <pmladek@suse.com>,
+        Kees Cook <keescook@chromium.org>
+CC:     Richard Weinberger <richard@nod.at>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Sergey Senozhatsky" <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        "Boqun Feng" <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?B?QmrDtnJuIFJveSBCYXJvbg==?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>
+Subject: RE: [RFC PATCH 0/1] Integer overflows while scanning for integers
+Thread-Topic: [RFC PATCH 0/1] Integer overflows while scanning for integers
+Thread-Index: AQHZmrqmhOoyRHuWh0WX/GnnSQjPva+ET1HA
+Date:   Sat, 10 Jun 2023 19:31:42 +0000
+Message-ID: <17e5e7c31b2347a6b87c6533c59899d0@AcuMS.aculab.com>
+References: <20230607223755.1610-1-richard@nod.at>
+ <202306071634.51BBAFD14@keescook> <ZIHzbBXlxEz6As9N@alley>
+ <9cd596d9-0ecb-29fc-fe18-f19b86a5ba44@rasmusvillemoes.dk>
+In-Reply-To: <9cd596d9-0ecb-29fc-fe18-f19b86a5ba44@rasmusvillemoes.dk>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 25 2023 at 13:52, Andrew Morton wrote:
+RnJvbTogUmFzbXVzIFZpbGxlbW9lcw0KPiBTZW50OiAwOSBKdW5lIDIwMjMgMTE6MTANCj4gDQo+
+IE9uIDA4LzA2LzIwMjMgMTcuMjcsIFBldHIgTWxhZGVrIHdyb3RlOg0KPiA+IE9uIFdlZCAyMDIz
+LTA2LTA3IDE2OjM2OjEyLCBLZWVzIENvb2sgd3JvdGU6DQo+IA0KPiA+IEl0IHNlZW1zIHRoYXQg
+dXNlcnNwYWNlIGltcGxlbWVudGF0aW9uIG9mIHNzY2FuZigpIGFuZCB2c3NjYW5mKCkNCj4gPiBy
+ZXR1cm5zIC1FUkFOR0UgaW4gdGhpcyBjYXNlLiBJdCBtaWdodCBiZSBhIHJlYXNvbmFibGUgc29s
+dXRpb24uDQo+IA0KPiBXZWxsLiBfU29tZV8gdXNlcnNwYWNlIGltcGxlbWVudGF0aW9uIGRvZXMg
+dGhhdC4gSXQncyBub3QgaW4gUE9TSVguDQo+IFdoaWxlICJtYW4gc2NhbmYiIGxpc3RzIHRoYXQg
+RVJBTkdFIGVycm9yLCBpdCBhbHNvIGV4cGxpY2l0bHkgc2F5cyB0aGF0Og0KPiANCj4gQ09ORk9S
+TUlORyBUTw0KPiAgICAgICAgVGhlIGZ1bmN0aW9ucyBmc2NhbmYoKSwgc2NhbmYoKSwgYW5kIHNz
+Y2FuZigpIGNvbmZvcm0gdG8gQzg5IGFuZA0KPiBDOTkgYW5kIFBPU0lYLjEtMjAwMS4gIFRoZXNl
+IHN0YW5kYXJkcyBkbyAgbm90ICBzcGVjaWZ5ICB0aGUNCj4gICAgICAgIEVSQU5HRSBlcnJvci4N
+Cj4gDQo+IEkgY2FuJ3QgZmlndXJlIG91dCB3aGF0IFBPU0lYIGFjdHVhbGx5IHNheXMgc2hvdWxk
+IG9yIGNvdWxkIGhhcHBlbiB3aXRoDQo+IHNzY2FuZigiOTk5OTk5OTk5OTk5OTkiLCAiJWkiLCAm
+eCk7DQoNClBvc3NpYmx5ICd1bmRlZmluZWQgYmVoYXZpb3VyJyAtIHRoZXkgbGlrZSB0aGF0IG9u
+ZS4NCg0KQnV0IEknbSBzdXJlIEkgcmVtZW1iZXIgdGhlIFRvRyAnVW5peCcgZGVmaW5pdGlvbiBu
+b3QgcmVxdWlyaW5nIHRoYXQNCid1dGlsaXRpZXMnIGNoZWNrIGZvciBvdmVyZmxvdyBvbiBudW1l
+cmljIGNvbW1hbmQgbGluZSBwYXJhbWV0ZXJzLg0KKEl0IG1pZ2h0IGV2ZW4gaGF2ZSBzYWlkIHRo
+ZXkgd291bGRuJ3QgY2hlY2suKQ0KU28gaXQgd2FzIHBlcmZlY3RseSB2YWxpZCBmb3IgYSBzdHVw
+aWRseSBvdXQgb2YgcmFuZ2UgdmFsdWUNCnRvIGJlIHRyZWF0ZWQgYXMgYSBkaWZmZXJlbnQgKHBv
+c3NpYmx5IHZhbGlkKSB2YWx1ZS4NCg0KV2hhdCBpcyBjbGVhcmx5IHdyb25nIGlzIHRvIGp1c3Qg
+c3RvcCBwcm9jZXNzaW5nIHRoZQ0KaW5wdXQgc3RyaW5nLg0Kc3NjYW5mKCI5OTk5OTk5OTk5OTk5
+OTk5OTk5c2NhbGUiLCAiJWklcyIsICZ4LCAmc2NhbGUpDQp3cml0aW5nIGFueSAnOScgdG8gc2Nh
+bGUgaXMgY2xlYXJseSBicm9rZW4uDQoNClBlcnNvbmFsbHkgSSBhdm9pZCBzY2FuZigpIC0gaXQg
+aXMgZmFyIHRvbyBlYXN5IGZvciBpdCB0byBkbw0Kc29tZXRoaW5nIHlvdSBkaWRuJ3QgcmVhbGx5
+IGludGVuZC4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJh
+bWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0
+cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
-Replying here as I wasn't cc'ed on the patch.
-
-> @@ -1030,6 +1031,8 @@ static int take_cpu_down(void *_param)
->  	enum cpuhp_state target = max((int)st->target, CPUHP_AP_OFFLINE);
->  	int err, cpu = smp_processor_id();
->  
-> +	idle_task_prepare_exit();
-> +
->  	/* Ensure this CPU doesn't handle any more interrupts. */
->  	err = __cpu_disable();
->  	if (err < 0)
-> --- a/kernel/sched/core.c~lazy-tlb-fix-hotplug-exit-race-with-mmu_lazy_tlb_shootdown
-> +++ a/kernel/sched/core.c
-> @@ -9373,19 +9373,33 @@ void sched_setnuma(struct task_struct *p
->   * Ensure that the idle task is using init_mm right before its CPU goes
->   * offline.
->   */
-> -void idle_task_exit(void)
-> +void idle_task_prepare_exit(void)
-
-This function name along with the above comment is completely
-misleading. It suggests this is about the idle task itself instead of
-making it clear that this ensures that the kernel threads of the
-outgoing CPU are not longer using a mm which is not init_mm.
-
-The callsite is arbitratily chosen too. Why does this have to be done
-from stomp machine context?
-
-There is zero reason to do so. The last hotplug state before teardown is
-CPUHP_AP_SCHED_WAIT_EMPTY. It invokes sched_cpu_wait_empty() in the
-context of the CPU hotplug thread of the outgoing CPU.
-
-sched_cpu_wait_empty() guarantees that there are no temporarily pinned
-(via migrate disable) user space tasks on that CPU anymore. The
-scheduler guarantees that there won't be user space tasks woken up on or
-migrated to that CPU because the CPU is not in the cpu_active mask.
-
-The stopper thread has absolutely nothing to do with that.
-
-So sched_cpu_wait_empty() is the obvious place to handle that:
-
-int sched_cpu_wait_empty(unsigned int cpu)
-{
-	balance_hotplug_wait();
-+	sched_force_init_mm();
-	return 0;
-}
-
-And then have:
-
-/*
- * Invoked on the outgoing CPU in context of the CPU hotplug thread
- * after ensuring that there are no user space tasks left on the CPU.
- *
- * If there is a lazy mm in use on the hotplug thread, drop it and
- * switch to init_mm.
- *
- * The reference count on init_mm is dropped in finish_cpu().
- */
-static void sched_force_init_mm(void)
-{
-
-No?
-
->  {
->  	struct mm_struct *mm = current->active_mm;
->  
-> -	BUG_ON(cpu_online(smp_processor_id()));
-> -	BUG_ON(current != this_rq()->idle);
-> +	WARN_ON(!irqs_disabled());
->  
->  	if (mm != &init_mm) {
-> -		switch_mm(mm, &init_mm, current);
-> +		mmgrab_lazy_tlb(&init_mm);
-> +		current->active_mm = &init_mm;
-> +		switch_mm_irqs_off(mm, &init_mm, current);
->  		finish_arch_post_lock_switch();
-> +		mmdrop_lazy_tlb(mm);
->  	}
-> +	/* finish_cpu() will mmdrop the init_mm ref after this CPU stops */
-> +}
-> +
-> +/*
-> + * After the CPU is offline, double check that it was previously switched to
-> + * init_mm. This call can be removed because the condition is caught in
-> + * finish_cpu() as well.
-
-So why adding it in the first place?
-
-The changelog mumbles something about reducing churn, but I fail to see
-that reduction. This adds 10 lines of pointless code and comments for
-zero value.
-
-Thanks,
-
-        tglx
