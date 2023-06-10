@@ -2,80 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28D8C72AF5E
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 00:05:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12EBC72AF5F
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 00:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232412AbjFJVrK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 10 Jun 2023 17:47:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57916 "EHLO
+        id S229707AbjFJWIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 18:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjFJVrG (ORCPT
+        with ESMTP id S229436AbjFJWIM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 17:47:06 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A0135A3
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 14:47:03 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-71-WwJFuWklNRioR6AeYR7C1A-1; Sat, 10 Jun 2023 22:47:00 +0100
-X-MC-Unique: WwJFuWklNRioR6AeYR7C1A-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sat, 10 Jun
- 2023 22:46:55 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Sat, 10 Jun 2023 22:46:55 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Nikolay Borisov' <nik.borisov@suse.com>,
-        "x86@kernel.org" <x86@kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mhocko@suse.com" <mhocko@suse.com>,
-        "jslaby@suse.cz" <jslaby@suse.cz>
-Subject: RE: [PATCH v2 0/4] Make IA32_EMULATION boot time overridable
-Thread-Topic: [PATCH v2 0/4] Make IA32_EMULATION boot time overridable
-Thread-Index: AQHZmsNlxcUUAdbQu0asg62sJKhJ1K+Ek7Zg
-Date:   Sat, 10 Jun 2023 21:46:55 +0000
-Message-ID: <930ebd9ac94843129781ec208a0dd69f@AcuMS.aculab.com>
-References: <20230609111311.4110901-1-nik.borisov@suse.com>
-In-Reply-To: <20230609111311.4110901-1-nik.borisov@suse.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 10 Jun 2023 18:08:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F9E3A87
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 15:08:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 401D761655
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 22:08:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B9C1C433D2;
+        Sat, 10 Jun 2023 22:08:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1686434890;
+        bh=MCsFvVy435UaO9a2k6Ch4D0TT3bNe+I9J5W8nx6Qeb8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kxN1UvBnTCZQG40Rtk8MCWrbWMEX/vfsaNnkp7tb4aTwwvgq/moKjS4R3oQ4+v0u9
+         L+46ZjVNWlrmWdkhMRJRzFFutZkW6pETOoy9rHjRDxoUBkdxzkcLOwG7bRrC3iSlpN
+         dR2fI0Wa6dWu/Wd2hWBsZMwfvGWemLvsZwZTfRTE=
+Date:   Sat, 10 Jun 2023 15:08:09 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     David Laight <David.Laight@aculab.com>,
+        Lu Hongfei <luhongfei@vivo.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "open list:VMALLOC" <linux-mm@kvack.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "opensource.kernel@vivo.com" <opensource.kernel@vivo.com>
+Subject: Re: [PATCH] mm/vmalloc: Replace the ternary conditional operator
+ with min()
+Message-Id: <20230610150809.babdc5a7919258f066c8637e@linux-foundation.org>
+In-Reply-To: <ba45584f-41a2-4d06-8443-e7e64375b07f@lucifer.local>
+References: <20230609061309.42453-1-luhongfei@vivo.com>
+        <832d7c69-ffd5-4764-8ffe-3a02bef0efb0@lucifer.local>
+        <3fc87d60-4e81-4f49-95f0-0503ad5cdf35@lucifer.local>
+        <f53f28de489f4c209776e404323ef5a1@AcuMS.aculab.com>
+        <ba45584f-41a2-4d06-8443-e7e64375b07f@lucifer.local>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nikolay Borisov
-> Sent: 09 June 2023 12:13
-> 
-> Here's the 2nd version of the patch which aims to make IA32_EMULATION essentially
-> a boot time option. The changes in this posting are:
+On Sat, 10 Jun 2023 22:06:35 +0100 Lorenzo Stoakes <lstoakes@gmail.com> wrote:
 
-Does it make any sense to be able to enable/disable it at run-time
-(through a sysctl).
-Perhaps only if enabled at boot - where it can be a 'soft disable'
-even though the cpu is initialised to allow the 32bit system calls.
+> > > OK, as per the pedantic test bot, you'll need to change this to:-
+> > >
+> > > num = min_t(size_t, remains, PAGE_SIZE);
 
-Remember, if you are root (and the system isn't hard locked down)
-it is pretty easy to change a global boolean variable.
-So it doesn't really affect the attack surface.
+PAGE_SIZE is a nuisance.  It _usually_ creates the need for a
+cast:
 
-	David
+hp2:/usr/src/linux-6.4-rc4> grep -r "min(.*PAGE_SIZE" . | wc -l 
+117
+hp2:/usr/src/linux-6.4-rc4> grep -r "min_t(.*PAGE_SIZE" . | wc -l 
+279
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Perhaps it should always have been size_t.  
 
+I suppose we could do
+
+#define PAGE_SIZE_T (size_t)PAGE_SIZE
+
+And use that where needed.  Mainly because I like the name ;)
