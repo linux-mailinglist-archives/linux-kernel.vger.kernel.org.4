@@ -2,77 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D82C072ADF2
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 19:55:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4013072AE14
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 20:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230517AbjFJRzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 13:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42032 "EHLO
+        id S231695AbjFJSPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 14:15:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjFJRze (ORCPT
+        with ESMTP id S229464AbjFJSPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 13:55:34 -0400
+        Sat, 10 Jun 2023 14:15:02 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F565193;
-        Sat, 10 Jun 2023 10:55:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C241FFE;
+        Sat, 10 Jun 2023 11:15:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A19DF61033;
-        Sat, 10 Jun 2023 17:55:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFE88C433D2;
-        Sat, 10 Jun 2023 17:55:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 30F6960DE1;
+        Sat, 10 Jun 2023 18:15:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 640AFC433EF;
+        Sat, 10 Jun 2023 18:14:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686419733;
-        bh=Z7CDYiZUhDciWFfHCWXIbPWCYecbEDUP0+fYC7qnEIE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=TAJ3nnNaH/YW5/D3Hcc7UM2mzrLOh4yB5AwCexral7DO+cJBaaer4N50jLHJxh0Ij
-         do27NCukKDieM4s9l33g5VChkQ5iAMItocYdHzhMMg/wgqN6NVeYhXhvgjMd4boT2y
-         y8VjTNay3js48W8Ame3xXUkYAZ0z2HhNpTyKxUayiF6QeGxYKb17dLPPGN+JpsP22r
-         fNQgrE180WTO4vCpUN6mFsj0imY6XkXs1sIUgYla/w/glfjpbW87yAF0ggFgQddkhV
-         PbFBVuCrGPRj4VrTLsDf6HJP3YPJmbq0Y63EvyOUvdlk+UXDFVUvQTZZPfhXfXHn5r
-         YdaNIyi3kKLVw==
-Date:   Sat, 10 Jun 2023 19:12:04 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Maksim Kiselev <bigunclemax@gmail.com>
-Cc:     linux-iio@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
+        s=k20201202; t=1686420900;
+        bh=GKPQxfUo7uZW5Gd24x7KvPKVI05y3+NdpM2kKSoZnSE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XJE5DuwsZcTBlN19+6/DEwAd9aFw3/uwDKB1+Me4H8zquGcujmwnBVUXlna8UmG7o
+         VdZugEjKVvh0AItKK8yDmgOlw56DHbMvCzerk6+vaqot5CjqwWFvr2geuOxlyqAR6I
+         6r1MNabOvEgXbNMax2dHuiuBbKkarVelFLl3P+McWD1uygZKak+dTiCYF/2lbidhwp
+         DAXbztcXHmm2A46MHSdYtKyRuZJyV0OpKXM/5U4G/hCYi0eUCmZ5kF9A+4rS1THnY1
+         lHCvDHTqy2+eKgCXBpZW3hWdLIRFvR+mrjFTQPp2wD9F1nxKnjQYCdHm3hXl1dVc3R
+         Q/QwKR9c2/UXg==
+Date:   Sat, 10 Jun 2023 19:14:55 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Javier Martinez Canillas <javierm@redhat.com>
+Cc:     devicetree@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        Ramona Bolboaca <ramona.bolboaca@analog.com>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Leonard =?UTF-8?B?R8O2aHJz?= <l.goehrs@pengutronix.de>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 1/3] iio: adc: Add Allwinner D1/T113s/R329/T507 SoCs
- GPADC
-Message-ID: <20230610191204.007c0159@jic23-huawei>
-In-Reply-To: <20230610122934.953106-2-bigunclemax@gmail.com>
-References: <20230610122934.953106-1-bigunclemax@gmail.com>
-        <20230610122934.953106-2-bigunclemax@gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+        linux-kernel@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 2/5] dt-bindings: display: ssd1307fb: Remove default
+ width and height values
+Message-ID: <20230610-unused-engaged-c1f4119cff08@spud>
+References: <20230609170941.1150941-1-javierm@redhat.com>
+ <20230609170941.1150941-3-javierm@redhat.com>
+ <20230610-opposite-quality-81d4a1561c88@spud>
+ <87r0qj19zs.fsf@minerva.mail-host-address-is-not-set>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="HYo4J/ldqvkCxGP1"
+Content-Disposition: inline
+In-Reply-To: <87r0qj19zs.fsf@minerva.mail-host-address-is-not-set>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -83,29 +64,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 10 Jun 2023 15:29:07 +0300
-Maksim Kiselev <bigunclemax@gmail.com> wrote:
 
-> From: Maxim Kiselev <bigunclemax@gmail.com>
-> 
-> The General Purpose ADC (GPADC) can convert the external signal into
-> a certain proportion of digital value, to realize the measurement of
-> analog signal, which can be applied to power detection and key detection.
-> 
-> Theoretically, this ADC can support up to 16 channels. All SoCs below
-> contain this GPADC IP. The only difference between them is the number
-> of available channels:
-> 
->  T113 - 1 channel
->  D1   - 2 channels
->  R329 - 4 channels
->  T507 - 4 channels
-> 
-> Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+--HYo4J/ldqvkCxGP1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Looks good to me. Just the issue Connor pointed out in the DT binding to resolve.
-Note that this will be cutting it fine for this cycle, but 'might'
-make it in if the stars align.  If not it will need to wait for next cycle.
+On Sat, Jun 10, 2023 at 07:51:35PM +0200, Javier Martinez Canillas wrote:
+> Conor Dooley <conor@kernel.org> writes:
+>=20
+> > On Fri, Jun 09, 2023 at 07:09:37PM +0200, Javier Martinez Canillas wrot=
+e:
+> >> A default resolution in the ssd130x driver isn't set to an arbitrary 9=
+6x16
+> >> anymore. Instead is set to a width and height that's controller depend=
+ent.
+> >
+> > Did that change to the driver not break backwards compatibility with
+> > existing devicetrees that relied on the default values to get 96x16?
+> >
+>=20
+> It would but I don't think it is an issue in pratice. Most users of these
+> panels use one of the multiple libraries on top of the spidev interface.
+>=20
+> For the small userbase that don't, I believe that they will use the rpif
+> kernel and ssd1306-overlay.dtbo DTB overlay, which defaults to width=3D128
+> and height=3D64 [1]. So those users will have to explicitly set a width a=
+nd
+> height for a 96x16 panel anyways.
+>=20
+> The intersection of users that have a 96x16 panel, assumed that default
+> and consider the DTB a stable ABI, and only update their kernel but not
+> the  DTB should be very small IMO.
 
-Jonathan
+It's the adding of new defaults that makes it a bit messier, since you
+can't even revert without potentially breaking a newer user. I'd be more
+inclined to require the properties, rather change their defaults in the
+binding, lest there are people relying on them.
+If you and the other knowledgeable folk in the area really do know such
+users do not exist then I suppose it is fine to do.
+
+--HYo4J/ldqvkCxGP1
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIS9nwAKCRB4tDGHoIJi
+0pU2AQDHz7mE6EbWFDwiRPNS1B2cx98/2aHLPV+NCbNKIozcTQD/Z67czcjETZHa
+LtdkpASNCb1wsRO4PqBs3OegWGbZIAM=
+=daWN
+-----END PGP SIGNATURE-----
+
+--HYo4J/ldqvkCxGP1--
