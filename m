@@ -2,97 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A366E72AD5A
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 18:36:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB36272AD5D
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 18:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbjFJQgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 12:36:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46704 "EHLO
+        id S229901AbjFJQgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 12:36:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbjFJQgo (ORCPT
+        with ESMTP id S229746AbjFJQgr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 12:36:44 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42F035A2
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 09:36:41 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-5169f614977so5009664a12.3
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 09:36:41 -0700 (PDT)
+        Sat, 10 Jun 2023 12:36:47 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343D33A85
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 09:36:44 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-974638ed5c5so592853166b.1
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 09:36:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686415000; x=1689007000;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ChqyHeRrx1nVl326X27+aLNZ73uhBHA6TjrlV6LTFN0=;
-        b=eAkbVNn+F21jKR0K2SApK2Ew17qzhUYCwH0JMkMVQv6ebasRECi6jjuxkaMIYlIqHg
-         0RgTKF8Efok9CUVfVzUZy44n529eOzL6nY8uG3z1PJE5GrUVNi0GUBa4w5cWYmaDU44l
-         QOJID9eJk83YiK/1PqVGlCBMs35KsHpWzYtLhfSqyoRqkTNBlGGyuJWc2oIYUHZXQ+PK
-         H049EXQQYuDBWDghftzEmjR9T9fxO9lNRGhA7dCYkpI7nLJamjE3+GLfPf0NjZwSKPWP
-         oBoEelKOzeBMbI/srSFYTHXgo1G3AE5lIIqGq/0i7G2L3ZGESCeog+TQ1sbhDC/BXO26
-         CwoA==
+        d=resnulli-us.20221208.gappssmtp.com; s=20221208; t=1686415002; x=1689007002;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=X8VbRFbQOuqhFAPglq3rUuEFETDHIQvOfBEZigyYE00=;
+        b=fcZwhYQXbZrGUCxD2cxWjeGu7RFEU0ScoH6Fu1j8oZlTPWxdTpxZpMcmjp2EzDf/9d
+         FfZHTb9Jegul55u7V0zCjPzL5GRZCoYWPuup8y0FgDEX/VE4abtLSaelCPLmqGhOFvXf
+         0hiMFMG0SHOUJHmTFAtrpSUozKDhB5uBNbxOAm1l9CSRT6MqowUWZKvUTc/wZ1A942wY
+         p8bL7na2XtF6nwgC4GwchfUxPf/wCWr8c/90iLSEeM82o53tpfNniHl2LweqNqiJTqEo
+         8La/4VPf8P1Wsh/9IK2QftfK8rl0/botcKtufVlRAOULG+cZ15IapPXlNaqykMscXVUg
+         hfOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686415000; x=1689007000;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ChqyHeRrx1nVl326X27+aLNZ73uhBHA6TjrlV6LTFN0=;
-        b=ciULuN/00HGYMqKAgnd5K0Ht8P6SGDatw1nkR8iQFH+cesH3FKHVIYuQ0PM+BuzDbY
-         L5h6l5mu7i+BJ6QDOhphFhItJRTeF2QKmtiEvwOhftggNhY6R053wPTz3yKLIp7UrTjf
-         VHBJltL12o2qf8Jg86v90iSxsHV3qZK3GmKDd+X3ZzymmcKFODPrA4pCsPgwlMGtuHxk
-         uYZ/xug2mYlt5puAITFLiyfh68RnMarwrZ307HA1ElCrH3PE5Losx8ZgLNDUiuzxJ5d9
-         7EdUSHrhbvZIt3DKc1cDNiV6pDgKNGULkyk7hyg2qThsNvOe5i5i/96ecbBfpsJ/YZ94
-         JKEQ==
-X-Gm-Message-State: AC+VfDzbaAIvDbT9e5Vg0gMXZeBb2WSUFotSr+aAwARqlvvFksSipUkj
-        SBSp9GQ4W17x/lB7qmQR+bhuww==
-X-Google-Smtp-Source: ACHHUZ4XN6pIjxR7yRxozoBIT5Qr1Le5EBSZdGnmDvjL/obHQXWl1dutrqrk21GYhUSo3FCUdx8QqA==
-X-Received: by 2002:a17:907:9622:b0:97c:46c7:d5eb with SMTP id gb34-20020a170907962200b0097c46c7d5ebmr4065890ejc.10.1686415000239;
-        Sat, 10 Jun 2023 09:36:40 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id r9-20020aa7d149000000b0051560edc8d4sm3029130edo.45.2023.06.10.09.36.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Jun 2023 09:36:39 -0700 (PDT)
-Message-ID: <6462074d-f27a-7953-c1cf-9fd405f97f10@linaro.org>
-Date:   Sat, 10 Jun 2023 18:36:38 +0200
+        d=1e100.net; s=20221208; t=1686415002; x=1689007002;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X8VbRFbQOuqhFAPglq3rUuEFETDHIQvOfBEZigyYE00=;
+        b=MJ6IRWyEA210WPrcq5NvVwn6fT69/TIlS+rctwuuaHCekIL2fP8QcQm9nyrNasWTCW
+         tq4dAkXzetUGszZAtwAvTo7Yd5OiJrSxU63Eca+6fl5ZYgl87PTDEKrWuVE9cOTL7mrg
+         e03jl/FG7eBiSWMDAg16eivuRZfRtA0wli1O3E0FaQL8r7CFMUOR3vdqANjWqGtuGjwk
+         ZCu3nZOgNjheUWQT8E5yqiWJm2h5T9kRyDM1acWELEnpTpRuAzQovAWtgFcIlfnaF8qy
+         x3N/KlsnCp9MY4hu3VV+H5YRGcfOQ/FIcN0wjJn56ZZsVB3SCttp+TfrQfpao8Fh1L5y
+         pjOg==
+X-Gm-Message-State: AC+VfDyzYsbr0trxkZTmUJHC0ERzeASgVJDAR89hQ6z719wSkXeDBrcW
+        pNKHmGNLVrxDsXDn7QGmSo7bXA==
+X-Google-Smtp-Source: ACHHUZ4Vwbn5FWH4cTwcJAta6H8LObUb+MmlwTVJNnxgyTP9w4AqfMkvEAq7AY8i3/cgxY1KiIKmkw==
+X-Received: by 2002:a17:906:58c5:b0:974:5e8b:fc28 with SMTP id e5-20020a17090658c500b009745e8bfc28mr5052733ejs.9.1686415002366;
+        Sat, 10 Jun 2023 09:36:42 -0700 (PDT)
+Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
+        by smtp.gmail.com with ESMTPSA id t16-20020a1709064f1000b0096f89fd4bf8sm2728669eju.122.2023.06.10.09.36.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Jun 2023 09:36:41 -0700 (PDT)
+Date:   Sat, 10 Jun 2023 18:36:40 +0200
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
+Cc:     kuba@kernel.org, vadfed@meta.com, jonathan.lemon@gmail.com,
+        pabeni@redhat.com, corbet@lwn.net, davem@davemloft.net,
+        edumazet@google.com, vadfed@fb.com, jesse.brandeburg@intel.com,
+        anthony.l.nguyen@intel.com, saeedm@nvidia.com, leon@kernel.org,
+        richardcochran@gmail.com, sj@kernel.org, javierm@redhat.com,
+        ricardo.canuelo@collabora.com, mst@redhat.com, tzimmermann@suse.de,
+        michal.michalik@intel.com, gregkh@linuxfoundation.org,
+        jacek.lawrynowicz@linux.intel.com, airlied@redhat.com,
+        ogabbay@kernel.org, arnd@arndb.de, nipun.gupta@amd.com,
+        axboe@kernel.dk, linux@zary.sk, masahiroy@kernel.org,
+        benjamin.tissoires@redhat.com, geert+renesas@glider.be,
+        milena.olech@intel.com, kuniyu@amazon.com, liuhangbin@gmail.com,
+        hkallweit1@gmail.com, andy.ren@getcruise.com, razor@blackwall.org,
+        idosch@nvidia.com, lucien.xin@gmail.com, nicolas.dichtel@6wind.com,
+        phil@nwl.cc, claudiajkang@gmail.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, linux-rdma@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, poros@redhat.com,
+        mschmidt@redhat.com, linux-clk@vger.kernel.org,
+        vadim.fedorenko@linux.dev
+Subject: Re: [RFC PATCH v8 08/10] ice: implement dpll interface to control cgu
+Message-ID: <ZISmmH0jqxZRB4VX@nanopsycho>
+References: <20230609121853.3607724-1-arkadiusz.kubalewski@intel.com>
+ <20230609121853.3607724-9-arkadiusz.kubalewski@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 1/2] dt-bindings: arm: Add Gateworks i.MX8M Mini
- gw73xx-2x board
-Content-Language: en-US
-To:     Tim Harvey <tharvey@gateworks.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230609174407.3373396-1-tharvey@gateworks.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230609174407.3373396-1-tharvey@gateworks.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230609121853.3607724-9-arkadiusz.kubalewski@intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/06/2023 19:44, Tim Harvey wrote:
-> Add DT compatible string for a Gateworks GW73xx-2x board based on
-> the i.MX8M Mini SoC from NXP.
-> 
-> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
-> ---
+Fri, Jun 09, 2023 at 02:18:51PM CEST, arkadiusz.kubalewski@intel.com wrote:
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+[...]
 
-Best regards,
-Krzysztof
 
+>+static int ice_dpll_mode_get(const struct dpll_device *dpll, void *priv,
+>+			     enum dpll_mode *mode,
+>+			     struct netlink_ext_ack *extack)
+>+{
+>+	*mode = DPLL_MODE_AUTOMATIC;
+
+I don't understand how the automatic mode could work with SyncE. The
+There is one pin exposed for one netdev. The SyncE daemon should select
+exacly one pin. How do you achieve that?
+Is is by setting DPLL_PIN_STATE_SELECTABLE on the pin-netdev you want to
+select and DPLL_PIN_STATE_DISCONNECTED on the rest?
+
+
+[...]
