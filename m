@@ -2,44 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2C8472A972
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 08:42:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87DCE72A976
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 08:45:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231807AbjFJGmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 02:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56946 "EHLO
+        id S231777AbjFJGpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 02:45:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbjFJGmB (ORCPT
+        with ESMTP id S229470AbjFJGpQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 02:42:01 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E28F23A89;
-        Fri,  9 Jun 2023 23:41:59 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QdSvx1Sj9zLq4l;
-        Sat, 10 Jun 2023 14:38:53 +0800 (CST)
-Received: from huawei.com (10.175.104.170) by canpemm500002.china.huawei.com
- (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Sat, 10 Jun
- 2023 14:41:56 +0800
-From:   Miaohe Lin <linmiaohe@huawei.com>
-To:     <longman@redhat.com>, <tj@kernel.org>, <hannes@cmpxchg.org>,
-        <lizefan.x@bytedance.com>
-CC:     <cgroups@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linmiaohe@huawei.com>
-Subject: [PATCH] cgroup/cpuset: remove unneeded header files
-Date:   Sat, 10 Jun 2023 14:41:38 +0800
-Message-ID: <20230610064138.1472319-1-linmiaohe@huawei.com>
-X-Mailer: git-send-email 2.23.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.170]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Sat, 10 Jun 2023 02:45:16 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158D63A89
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 23:45:14 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 660101F88F;
+        Sat, 10 Jun 2023 06:45:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1686379502; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QQxAygWC3o4SWLhSr0BUhB8jU9ddezv+f/hLeWta9R4=;
+        b=Rdke5+zz5s3ZzTk8OfYSGunHvAFU+5y7/9lliz9awwd+i53ADq4Z8ZZV0FKyR2JWNmCdyl
+        kkKWqYfNpRblE+W/8rgRzOZ4jL3hTDB83XjStYnUatdlIyXR/S+VMEmUKSjIw5aMLNZlOY
+        AngAoSdwkxTqF5WBywzUQXFSRGw23CM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1686379502;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QQxAygWC3o4SWLhSr0BUhB8jU9ddezv+f/hLeWta9R4=;
+        b=OmKxjKEMvltzYWLcTewvwttXADTdahULulCXc+N+b/YycfMIhzcdLOAuombPPVq6FzSDm4
+        gdRTATIPsrYRxBDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1872213398;
+        Sat, 10 Jun 2023 06:45:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Ji8JBe4bhGSTZAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Sat, 10 Jun 2023 06:45:02 +0000
+Date:   Sat, 10 Jun 2023 08:45:01 +0200
+Message-ID: <878rcrbytu.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Edson Juliano Drosdeck <edson.drosdeck@gmail.com>
+Cc:     tiwai@suse.com, perex@perex.cz, sbinding@opensource.cirrus.com,
+        tcrawford@system76.com, andy.chi@canonical.com, luke@ljones.dev,
+        tangmeng@uniontech.com, p.jungkamp@gmx.net, kasper93@gmail.com,
+        yangyuchi66@gmail.com, yangyingliang@huawei.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: hda/realtek: Add a quirk for Compaq N14JP6
+In-Reply-To: <20230609201058.523499-1-edson.drosdeck@gmail.com>
+References: <20230609201058.523499-1-edson.drosdeck@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,30 +72,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove some unnecessary header files. No functional change intended.
+On Fri, 09 Jun 2023 22:10:58 +0200,
+Edson Juliano Drosdeck wrote:
+> 
+> Add a quirk for Compaq N14JP6 to fixup ALC897 headset MIC no sound.
+> 
+> Signed-off-by: Edson Juliano Drosdeck <edson.drosdeck@gmail.com>
 
-Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
----
- kernel/cgroup/cpuset.c | 2 --
- 1 file changed, 2 deletions(-)
+Thanks, applied.
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index b0aee733b92b..58e6f18f01c1 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -37,12 +37,10 @@
- #include <linux/sched/deadline.h>
- #include <linux/sched/mm.h>
- #include <linux/sched/task.h>
--#include <linux/seq_file.h>
- #include <linux/security.h>
- #include <linux/spinlock.h>
- #include <linux/oom.h>
- #include <linux/sched/isolation.h>
--#include <linux/mutex.h>
- #include <linux/cgroup.h>
- #include <linux/wait.h>
- 
--- 
-2.27.0
 
+Takashi
