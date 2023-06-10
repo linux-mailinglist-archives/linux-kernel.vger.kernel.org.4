@@ -2,119 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 954EE72A93A
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 07:43:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47A8E72A93C
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 07:44:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232204AbjFJFnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 01:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47580 "EHLO
+        id S229876AbjFJFoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 01:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230493AbjFJFnN (ORCPT
+        with ESMTP id S229591AbjFJFoV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 01:43:13 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3227F3AA3
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 22:43:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=3E3RMUEpG9p/4/pgtUAbLe6jed5Tpov9MGa9vuVYHA8=; b=Oxl7XjHxrmWf42qVYof+9N6Wf7
-        JC7eJ9uHB8Bt3Hyz0awCV8sn5uARn6mzs5tj4QNBnow6urZ29s+lbe1UFURP8s6yoxjUecFNscYZa
-        wkMIk7rET0QmfuDr/jJJB4dyrijWSGy5z2zX6Ogy3mjAyCbLdIysmcJjVH1+6pybhoMtvVPfQjO10
-        2U9oMGWBOvonApyOEniQShJAQHGiAKg3Z629Hgo4wHZdTCdKsfVtvXSm4sAnt3vQMUht1DUJqoU3c
-        jRIK6n7AyrPptS+IlYSOfs+O2FIIJdXlIoq0IEAn+2flmJfP56jloShxeQwQnh4nS/3duOACqDuJU
-        OW60QsHQ==;
-Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q7rNX-00FJ2Y-0p;
-        Sat, 10 Jun 2023 05:43:11 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Juergen Gross <jgross@suse.com>,
-        Ajay Kaher <akaher@vmware.com>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        virtualization@lists.linux-foundation.org, x86@kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "Luke Nowakowski-Krijger" <lnowakow@eng.ucsd.edu>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCH] Documentation: virt: clean up paravirt_ops doc.
-Date:   Fri,  9 Jun 2023 22:43:10 -0700
-Message-ID: <20230610054310.6242-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.41.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 10 Jun 2023 01:44:21 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69BF53AA5
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 22:44:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686375860; x=1717911860;
+  h=date:from:to:cc:subject:message-id;
+  bh=2BRyDTTe6ACFutngeIsoL+3AubVJyTHGDBiL1AZLV0g=;
+  b=Pj4p2k3STk0ctjAhcC+d5iABhZEpO+c8gax5qZDnFEI9t5bX1x8sz4GZ
+   i6mazIFdhy7Q4qrwPURz9J++xk6fud0vDzdLa+/zfO91t/9II10XTbSA/
+   8ppOt1OYslP+SFDTlVFa1SYgfDe6GhPjA7X+1wQ2XxVZwqefzjGsZPRtu
+   BueUfJnSqdLYJCYZlc1FDJEjvZNc7I1nIhCpPTKOstt4XP8v7DrWBeBTx
+   aErPDc+ndORi/pGsAOgDq/8w2cjLo08XbOyJmCeqaBv50W8xxP3bTIDua
+   aLd9DDkzEFn/+cgSWcKBUkEvVAt/IhF2ZGLkaP1Gi8mqvM9g9QYPyCSrc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="357733630"
+X-IronPort-AV: E=Sophos;i="6.00,231,1681196400"; 
+   d="scan'208";a="357733630"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 22:44:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="713747082"
+X-IronPort-AV: E=Sophos;i="6.00,231,1681196400"; 
+   d="scan'208";a="713747082"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 09 Jun 2023 22:44:19 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q7rOc-0009nF-26;
+        Sat, 10 Jun 2023 05:44:18 +0000
+Date:   Sat, 10 Jun 2023 13:43:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/cc] BUILD SUCCESS
+ 84b9b44b99780d35fe72ac63c4724f158771e898
+Message-ID: <202306101319.PLh4S8uP-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clarify language. Clean up grammar. Hyphenate some words.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cc
+branch HEAD: 84b9b44b99780d35fe72ac63c4724f158771e898  virt: sevguest: Add CONFIG_CRYPTO dependency
 
-Change "low-ops" to "low-level" since "low-ops" isn't defined or even
-mentioned anywhere else in the kernel source tree.
+elapsed time: 825m
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Juergen Gross <jgross@suse.com>
-Cc: Ajay Kaher <akaher@vmware.com>
-Cc: Alexey Makhalov <amakhalov@vmware.com>
-Cc: VMware PV-Drivers Reviewers <pv-drivers@vmware.com>
-Cc: virtualization@lists.linux-foundation.org
-Cc: x86@kernel.org
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: "Luke Nowakowski-Krijger" <lnowakow@eng.ucsd.edu>
-Cc: Luis Chamberlain <mcgrof@kernel.org>
----
- Documentation/virt/paravirt_ops.rst |   16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+configs tested: 126
+configs skipped: 5
 
-diff -- a/Documentation/virt/paravirt_ops.rst b/Documentation/virt/paravirt_ops.rst
---- a/Documentation/virt/paravirt_ops.rst
-+++ b/Documentation/virt/paravirt_ops.rst
-@@ -5,31 +5,31 @@ Paravirt_ops
- ============
- 
- Linux provides support for different hypervisor virtualization technologies.
--Historically different binary kernels would be required in order to support
--different hypervisors, this restriction was removed with pv_ops.
-+Historically, different binary kernels would be required in order to support
-+different hypervisors; this restriction was removed with pv_ops.
- Linux pv_ops is a virtualization API which enables support for different
- hypervisors. It allows each hypervisor to override critical operations and
- allows a single kernel binary to run on all supported execution environments
- including native machine -- without any hypervisors.
- 
- pv_ops provides a set of function pointers which represent operations
--corresponding to low level critical instructions and high level
--functionalities in various areas. pv-ops allows for optimizations at run
--time by enabling binary patching of the low-ops critical operations
-+corresponding to low-level critical instructions and high-level
-+functionalities in various areas. pv_ops allows for optimizations at run
-+time by enabling binary patching of the low-level critical operations
- at boot time.
- 
- pv_ops operations are classified into three categories:
- 
- - simple indirect call
--   These operations correspond to high level functionality where it is
-+   These operations correspond to high-level functionality where it is
-    known that the overhead of indirect call isn't very important.
- 
- - indirect call which allows optimization with binary patch
--   Usually these operations correspond to low level critical instructions. They
-+   Usually these operations correspond to low-level critical instructions. They
-    are called frequently and are performance critical. The overhead is
-    very important.
- 
- - a set of macros for hand written assembly code
-    Hand written assembly codes (.S files) also need paravirtualization
--   because they include sensitive instructions or some of code paths in
-+   because they include sensitive instructions or some code paths in
-    them are very performance critical.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r031-20230608   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r011-20230608   gcc  
+arc                  randconfig-r043-20230609   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm          buildonly-randconfig-r001-20230608   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r046-20230609   clang
+arm64                            allyesconfig   gcc  
+arm64        buildonly-randconfig-r003-20230608   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+hexagon              randconfig-r041-20230609   clang
+hexagon              randconfig-r045-20230609   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r006-20230608   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230608   gcc  
+i386                 randconfig-i002-20230608   gcc  
+i386                 randconfig-i003-20230608   gcc  
+i386                 randconfig-i004-20230608   gcc  
+i386                 randconfig-i005-20230608   gcc  
+i386                 randconfig-i006-20230608   gcc  
+i386                 randconfig-i011-20230608   clang
+i386                 randconfig-i012-20230608   clang
+i386                 randconfig-i013-20230608   clang
+i386                 randconfig-i014-20230608   clang
+i386                 randconfig-i015-20230608   clang
+i386                 randconfig-i016-20230608   clang
+i386                 randconfig-i051-20230608   gcc  
+i386                 randconfig-i052-20230608   gcc  
+i386                 randconfig-i053-20230608   gcc  
+i386                 randconfig-i054-20230608   gcc  
+i386                 randconfig-i055-20230608   gcc  
+i386                 randconfig-i056-20230608   gcc  
+i386                 randconfig-i061-20230608   gcc  
+i386                 randconfig-i062-20230608   gcc  
+i386                 randconfig-i063-20230608   gcc  
+i386                 randconfig-i064-20230608   gcc  
+i386                 randconfig-i065-20230608   gcc  
+i386                 randconfig-i066-20230608   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r033-20230608   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k         buildonly-randconfig-r005-20230608   gcc  
+m68k                                defconfig   gcc  
+microblaze           randconfig-r004-20230608   gcc  
+microblaze           randconfig-r036-20230608   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r034-20230608   gcc  
+openrisc             randconfig-r015-20230608   gcc  
+openrisc             randconfig-r026-20230608   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r016-20230608   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r006-20230608   gcc  
+powerpc              randconfig-r012-20230608   clang
+powerpc              randconfig-r025-20230608   clang
+powerpc              randconfig-r032-20230608   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r002-20230608   gcc  
+riscv                randconfig-r042-20230609   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r005-20230608   gcc  
+s390                 randconfig-r013-20230608   clang
+s390                 randconfig-r014-20230608   clang
+s390                 randconfig-r023-20230608   clang
+s390                 randconfig-r035-20230608   gcc  
+s390                 randconfig-r044-20230609   gcc  
+sh                               allmodconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r003-20230608   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   clang
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r002-20230608   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230608   gcc  
+x86_64               randconfig-a002-20230608   gcc  
+x86_64               randconfig-a003-20230608   gcc  
+x86_64               randconfig-a004-20230608   gcc  
+x86_64               randconfig-a005-20230608   gcc  
+x86_64               randconfig-a006-20230608   gcc  
+x86_64               randconfig-a011-20230608   clang
+x86_64               randconfig-a012-20230608   clang
+x86_64               randconfig-a013-20230608   clang
+x86_64               randconfig-a014-20230608   clang
+x86_64               randconfig-a015-20230608   clang
+x86_64               randconfig-a016-20230608   clang
+x86_64               randconfig-r001-20230608   gcc  
+x86_64               randconfig-r021-20230608   clang
+x86_64               randconfig-x051-20230608   clang
+x86_64               randconfig-x052-20230608   clang
+x86_64               randconfig-x053-20230608   clang
+x86_64               randconfig-x054-20230608   clang
+x86_64               randconfig-x055-20230608   clang
+x86_64               randconfig-x056-20230608   clang
+x86_64               randconfig-x061-20230608   clang
+x86_64               randconfig-x062-20230608   clang
+x86_64               randconfig-x063-20230608   clang
+x86_64               randconfig-x064-20230608   clang
+x86_64               randconfig-x065-20230608   clang
+x86_64               randconfig-x066-20230608   clang
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
