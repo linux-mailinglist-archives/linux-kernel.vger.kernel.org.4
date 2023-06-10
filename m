@@ -2,130 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0519072AE40
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 21:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB92672AE43
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 21:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232110AbjFJTEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 15:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55312 "EHLO
+        id S230022AbjFJTEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 15:04:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbjFJTD7 (ORCPT
+        with ESMTP id S229552AbjFJTEk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 15:03:59 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07EB1993
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 12:03:58 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-173-48-82-39.bstnma.fios.verizon.net [173.48.82.39])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 35AJ3JH6017346
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 10 Jun 2023 15:03:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1686423802; bh=MRdeAGoLLRE9sWdpvf4/E+OTq0FKZdr66bFJsrMBcXc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=JEmc+TjEsuJn4N5+H7u0TN06G5VZPCbOXaQERpP7qT/lkbaoKishMEOEXhmghSSAt
-         gtst/EV8bANNtRJM6MdEohh4nY92iGJSbGgE40ZPAMsE22tEtUCzzPv6nHflf+Fmgx
-         nn7OkQ9aDq3UeOAUBKVhCPDBLGuOUouo2r0EhkV7ZeB5W4pTKDjWTX/kKahEcLZUne
-         Nwh8ZB+JlssLV3A2XwoOa7IzF5Q3G/+8jEvpfXrpqVJI1vRcbyorVr3T/g3HIY69qO
-         u5eAcvxDa6c8fjO7GqJdL2aSqQj4AT7OiNP+AsrwB1wTd4ur2ZRWjcCpI1Sjjy5hkp
-         kEgzlhpM8HGtQ==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id A24E115C00B0; Sat, 10 Jun 2023 15:03:19 -0400 (EDT)
-Date:   Sat, 10 Jun 2023 15:03:19 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Baokun Li <libaokun1@huawei.com>
-Cc:     linux-ext4@vger.kernel.org, adilger.kernel@dilger.ca, jack@suse.cz,
-        ritesh.list@gmail.com, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com, yukuai3@huawei.com
-Subject: Re: [PATCH v4 10/12] ext4: make ext4_es_insert_delayed_block()
- return void
-Message-ID: <20230610190319.GB1436857@mit.edu>
-References: <20230424033846.4732-1-libaokun1@huawei.com>
- <20230424033846.4732-11-libaokun1@huawei.com>
+        Sat, 10 Jun 2023 15:04:40 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9761993;
+        Sat, 10 Jun 2023 12:04:39 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-30aebe2602fso1943026f8f.3;
+        Sat, 10 Jun 2023 12:04:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686423878; x=1689015878;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P+YjzUo1B2S2csqhYjgytz5WXmvhzS96d+qxUFRdrfc=;
+        b=FiZkOzgUV4WCSgew0MvSsd/J2ST7V62H/PbPxj6U9tz3f2mwkjLLt3zw1HbDLtjF1W
+         O/shoVGScGEQ0UwqJTyWX/8EFv0CmSl15OH4qwVDN5umIYmpMyRs6A29TBgQTr6ITLk5
+         Z0h3jDWIJuCVp3hjL4rufQHX9lpEz45mPdFILSqbPM1q2cc/asJKuImPV2Nq16Fywuzl
+         DajsNuquw8QvP7Rh1m2qCXNj641jxEvMrTMxnNMNdGg+yZua95BioqffM5VNGhP4miZw
+         uzSKUmDWIkjSdDqkWT+Qb5tyiP1dCIlkTdt0+PMr8IMb/dTiudd0u1YfmH9E1C+us7X/
+         fj3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686423878; x=1689015878;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=P+YjzUo1B2S2csqhYjgytz5WXmvhzS96d+qxUFRdrfc=;
+        b=FCMvDzA33dJ07Na9BMemc4ibjVMvZ81xLARlTGYxV3LVvDUfffddTZd7WTfwT0/rSc
+         /+UYOWhDAL2IF+y0sIGGQXxYRs2ivokda3OUwU/7ZQQtDGcZ28sLtuvLtxz6qBJ0/+Kk
+         77rz+ytqfDNPD61jtnYomriP7UTIXGwYNfCva2S5l+tsGaBRuwoSG5UOu22qV4Vk6YL/
+         Nlp1Df0HdRJjl54EcH0js/paht3FRj/01DZNkhE8igB5I+NYQEw2Ul2p38N/PBWzOF+h
+         3EG3cZmLEVaJf3v6xhH/YdiUj4oWD2zlmRHrOBY5T+qLTGMSHBYSWrniKUCI9ul6AjfW
+         pr8A==
+X-Gm-Message-State: AC+VfDw1la0pGh+vvEdDnp1GFEYgg1NwSBNt3OuuYgZowORlAryAM6YK
+        wSsDmaW7ye6sjwtE95MZ6+Z7X8QshmncbECC
+X-Google-Smtp-Source: ACHHUZ7+FwyXPExmCGfTdhBoc8oJvU/zTiio5BdCHihsSEDTYpwdfYxIiMhA0liy4/BsVzbnEHqTuw==
+X-Received: by 2002:a5d:448a:0:b0:30d:8490:58 with SMTP id j10-20020a5d448a000000b0030d84900058mr1191214wrq.9.1686423877776;
+        Sat, 10 Jun 2023 12:04:37 -0700 (PDT)
+Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
+        by smtp.gmail.com with ESMTPSA id i1-20020adff301000000b002f28de9f73bsm7764607wro.55.2023.06.10.12.04.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Jun 2023 12:04:37 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     linux-kernel@vger.kernel.org,
+        Maksim Kiselev <bigunclemax@gmail.com>
+Cc:     Maksim Kiselev <bigunclemax@gmail.com>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v1 0/3] Add D1/T113s thermal sensor controller support
+Date:   Sat, 10 Jun 2023 21:04:34 +0200
+Message-ID: <4275249.ejJDZkT8p0@jernej-laptop>
+In-Reply-To: <20230610141739.999268-1-bigunclemax@gmail.com>
+References: <20230610141739.999268-1-bigunclemax@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230424033846.4732-11-libaokun1@huawei.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 11:38:44AM +0800, Baokun Li wrote:
-> diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-> index a0bfe77d5537..4221b2dafeb5 100644
-> --- a/fs/ext4/inode.c
-> +++ b/fs/ext4/inode.c
-> @@ -1641,9 +1641,8 @@ static void ext4_print_free_blocks(struct inode *inode)
->  static int ext4_insert_delayed_block(struct inode *inode, ext4_lblk_t lblk)
->  {
->  	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
-> -	int ret;
-> +	int ret = 0;
->  	bool allocated = false;
-> -	bool reserved = false;
->  
->  	/*
->  	 * If the cluster containing lblk is shared with a delayed,
+Dne sobota, 10. junij 2023 ob 16:17:31 CEST je Maksim Kiselev napisal(a):
+> This series adds support for Allwinner D1/T113s thermal sensor controller.
+> THIS controller is similar to the one on H6, but with only one sensor and
+> uses a different scale and offset values.
+> 
+> Maxim Kiselev (3):
+>   thermal: sun8i: Add D1/T113s THS controller support
+>   riscv: dts: allwinner: d1: Add thermal sensor and thermal zone
+>   dt-bindings: thermal: sun8i: Add binding for D1/T113s THS controller
 
-Unforuntately, the changes to ext4_insert_delayed_block() in this
-patch were buggy, and were causing tests to hang when running
-ext4/encrypt, ext4/bigalloc_4k, and ext4/bigalloc_1k test scenarios.
-A bisect using "gce-xfstests -c ext4/bigalloc_4k -C 5 generic/579"
-pinpointed the problem.
+As mentioned elsewhere, please fix SoB tags. Also binding patch should
+come before driver changes.
 
-The problem is that ext4_clu_mapped can return a positive value, and
-so there are times when we do need to release the space even though
-there are no errors.
+Best regards,
+Jernej
 
-So I've fixed up your commit with the following changes.  With this
-change, the test regressions go away.
+> 
+>  .../thermal/allwinner,sun8i-a83t-ths.yaml     | 20 +++++++++++++-
+>  .../boot/dts/allwinner/sunxi-d1s-t113.dtsi    | 26 +++++++++++++++++++
+>  drivers/thermal/sun8i_thermal.c               | 13 ++++++++++
+>  3 files changed, 58 insertions(+), 1 deletion(-)
+> 
+> 
 
-Cheers,
 
-						- Ted
 
-diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-index fa38092ef868..3a10427240cb 100644
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -1630,6 +1630,7 @@ static int ext4_insert_delayed_block(struct inode *inode, ext4_lblk_t lblk)
- 	struct ext4_sb_info *sbi = EXT4_SB(inode->i_sb);
- 	int ret = 0;
- 	bool allocated = false;
-+	bool reserved = false;
- 
- 	/*
- 	 * If the cluster containing lblk is shared with a delayed,
-@@ -1646,6 +1647,7 @@ static int ext4_insert_delayed_block(struct inode *inode, ext4_lblk_t lblk)
- 		ret = ext4_da_reserve_space(inode);
- 		if (ret != 0)   /* ENOSPC */
- 			goto errout;
-+		reserved = true;
- 	} else {   /* bigalloc */
- 		if (!ext4_es_scan_clu(inode, &ext4_es_is_delonly, lblk)) {
- 			if (!ext4_es_scan_clu(inode,
-@@ -1658,6 +1660,7 @@ static int ext4_insert_delayed_block(struct inode *inode, ext4_lblk_t lblk)
- 					ret = ext4_da_reserve_space(inode);
- 					if (ret != 0)   /* ENOSPC */
- 						goto errout;
-+					reserved = true;
- 				} else {
- 					allocated = true;
- 				}
-@@ -1668,6 +1671,9 @@ static int ext4_insert_delayed_block(struct inode *inode, ext4_lblk_t lblk)
- 	}
- 
- 	ext4_es_insert_delayed_block(inode, lblk, allocated);
-+	if (ret && reserved)
-+		ext4_da_release_space(inode, 1);
-+
- errout:
- 	return ret;
- }
+
