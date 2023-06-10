@@ -2,123 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A083272ABAA
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 15:24:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F63B72ABAD
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 15:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233178AbjFJNYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 09:24:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48988 "EHLO
+        id S234151AbjFJN1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 09:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbjFJNYp (ORCPT
+        with ESMTP id S230200AbjFJN1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 09:24:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE70DF;
-        Sat, 10 Jun 2023 06:24:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C105960C8C;
-        Sat, 10 Jun 2023 13:24:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ECF4C433D2;
-        Sat, 10 Jun 2023 13:24:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686403483;
-        bh=y5JXbimmOYI0fIpDE62FlLWehnn9LJPLg1gxezHS/z4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WJP9i19rG+2MMkDQoUdjuDR0vVgPj7arky5v4v0GQ8j1fSaO8+8stmlMiN55djKK5
-         IY6HMwpSHzHMeYAugoQX7DBde9NjCZ0K8ZxjMAIf8Nbcql2g/pRX7wCNlMT/6O3aN0
-         OTvYOTEkxb7ds4hVFUBjaYO17JLJZkQ6YkaD18mDeLmRRJ5ZnBAlDDZOgmQq3sddaa
-         OE68T4Xk2StDGin+ngGyntiw4m+R1EwiMcvNBdV96oj6cY7AD6ITfdJVW8dWRjSvr9
-         VnMc+5B6TeTFYcz9WJBTaztXelsjPDiVF8DMlE5+v5peu8+Q++/f2KVHbFKBqNAeyL
-         xb6P+t0mlfwqQ==
-Date:   Sat, 10 Jun 2023 15:24:39 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Piyush Malgujar <pmalgujar@marvell.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wsa@kernel.org, rric@kernel.org, jannadurai@marvell.com,
-        cchavva@marvell.com, Suneel Garapati <sgarapati@marvell.com>
-Subject: Re: [PATCH 3/3] i2c: octeon: Handle watchdog timeout
-Message-ID: <20230610132439.ydiuizoolplonvjf@intel.intel>
-References: <20230330133953.21074-1-pmalgujar@marvell.com>
- <20230330133953.21074-4-pmalgujar@marvell.com>
+        Sat, 10 Jun 2023 09:27:13 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D429DF;
+        Sat, 10 Jun 2023 06:27:11 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1b1806264e9so14561055ad.0;
+        Sat, 10 Jun 2023 06:27:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686403630; x=1688995630;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=feLkklU8QQo6+CqnfmR65iwQdI4nch86pSzF7/Ejl1U=;
+        b=d+9Gb4VoEz660buLe8D3IQUStOHnr0qf5rzb4NuYvReJxjuEjo7JPU16c8GAL/RPSB
+         SzSt/zLU5MsWlHMDKcF9p73jL0uW2vDG2+ilx4s1dnRM7eyGtUWlZgIAG5B03Cz6WQBt
+         BnbQHXaR8tc7+uOG11ya7AR7INdnqsIlVSxAqwNnWKrX2Wc1oqR41ZamiAfSTDCxZMvt
+         m+LbdqEregcxUowQ52mjQCh0uzC96qBEf52jZWbsykBJ2UBBUqC3fD5YHAzJs4EcPVqO
+         8FpAkz4xntPNx76IMn+FjKx1LvANjko+a80Bph4QWBBZOke27nhJv1sJGjmn69KyYU72
+         ZCBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686403630; x=1688995630;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=feLkklU8QQo6+CqnfmR65iwQdI4nch86pSzF7/Ejl1U=;
+        b=aSfd+LUIsqmauVYhqLk6z3AI6s/jQG5KGbRsAdMd4+LZ5SYtgvLEHL3nafDLlN7g9N
+         TCJvzBz+b+S70x2S4HXM59ZlHz0jlK3wYJ0Yg1/MHUr3mxVpI/wBBnXOBfMHBTOGugyS
+         hjIH18HjRucZ37nivY0TRr1nIjac5WqBjuaToL4l7+J6xxy6yirtipmrGur2tMOkTzXv
+         lXUA10k4CV0VRyHJB8oW1UZVy8HDmX+w+McyIaogpKhhtiPP/IQyMs3RB0lIqpRLhhSC
+         JoNNGDyf8lAz3OhOCcwFrnnTACCb9mpR/Itoyp/ptTKS2j1UfiDspe4Jr2hYuQKAoLEr
+         eOSQ==
+X-Gm-Message-State: AC+VfDz5GwVt/SE7HmEiRNKT6J7OkGiAaJPz4pHiBwa8eQCiP/3Cj4sc
+        gZWyKkDyZ9q5I+U+U+8dgKA=
+X-Google-Smtp-Source: ACHHUZ6HWDnN7NK+GM1TTa2LKHZOI2WxhV2/acudKOcg0T+xt4IlT9Dkj6c33tsA7jPnRZNWXsxcBw==
+X-Received: by 2002:a17:903:1208:b0:1af:aafb:64c8 with SMTP id l8-20020a170903120800b001afaafb64c8mr2118223plh.21.1686403630429;
+        Sat, 10 Jun 2023 06:27:10 -0700 (PDT)
+Received: from [192.168.43.80] (subs09b-223-255-225-238.three.co.id. [223.255.225.238])
+        by smtp.gmail.com with ESMTPSA id y20-20020a170902b49400b001a980a23804sm5010765plr.4.2023.06.10.06.27.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 10 Jun 2023 06:27:09 -0700 (PDT)
+Message-ID: <07d6e2e7-a50a-8cf4-5c5d-200551bd6687@gmail.com>
+Date:   Sat, 10 Jun 2023 20:27:02 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230330133953.21074-4-pmalgujar@marvell.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: Fwd: Waking up from resume locks up on sr device
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Joe Breuer <linux-kernel@jmbreuer.net>,
+        Linux Power Management <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Hardening <linux-hardening@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux SCSI <linux-scsi@vger.kernel.org>, bvanassche@acm.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>
+References: <2d1fdf6d-682c-a18d-2260-5c5ee7097f7d@gmail.com>
+ <5513e29d-955a-f795-21d6-ec02a2e2e128@gmail.com>
+ <ZIQ6bkau3j6qGef8@duo.ucw.cz>
+Content-Language: en-US
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <ZIQ6bkau3j6qGef8@duo.ucw.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Suneel and Piysh,
-
-On Thu, Mar 30, 2023 at 06:39:53AM -0700, Piyush Malgujar wrote:
-> From: Suneel Garapati <sgarapati@marvell.com>
+On 6/10/23 15:55, Pavel Machek wrote:
+> Hi!
 > 
-> Status code 0xF0 refers to expiry of TWSI controller
-> access watchdog and needs bus monitor reset using MODE
-> register.
 > 
-> Signed-off-by: Suneel Garapati <sgarapati@marvell.com>
-> Signed-off-by: Piyush Malgujar <pmalgujar@marvell.com>
-> ---
->  drivers/i2c/busses/i2c-octeon-core.c | 8 ++++++++
->  drivers/i2c/busses/i2c-octeon-core.h | 1 +
->  2 files changed, 9 insertions(+)
+>>> #regzbot introduced: v5.0..v6.4-rc5 https://bugzilla.kernel.org/show_bug.cgi?id=217530
+>>> #regzbot title: Waking up from resume locks up on SCSI CD/DVD drive
+>>>
+>> The reporter had found the culprit (via bisection), so:
+>>
+>> #regzbot introduced: a19a93e4c6a98c
+> Maybe cc the authors of that commit?
 > 
-> diff --git a/drivers/i2c/busses/i2c-octeon-core.c b/drivers/i2c/busses/i2c-octeon-core.c
-> index 7c49dc8ccbd2ef05fec675d282193b98f2b69835..3482db7165f243232937e0af148fe996858e9f2e 100644
-> --- a/drivers/i2c/busses/i2c-octeon-core.c
-> +++ b/drivers/i2c/busses/i2c-octeon-core.c
-> @@ -187,6 +187,7 @@ static int octeon_i2c_hlc_wait(struct octeon_i2c *i2c)
->  static int octeon_i2c_check_status(struct octeon_i2c *i2c, int final_read)
->  {
->  	u8 stat;
-> +	u64 mode;
->  
->  	/*
->  	 * This is ugly... in HLC mode the status is not in the status register
-> @@ -249,6 +250,13 @@ static int octeon_i2c_check_status(struct octeon_i2c *i2c, int final_read)
->  	case STAT_RXADDR_NAK:
->  	case STAT_AD2W_NAK:
->  		return -ENXIO;
-> +
-> +	case STAT_WDOG_TOUT:
-> +		mode = __raw_readq(i2c->twsi_base + MODE(i2c));
-> +		/* Set BUS_MON_RST to reset bus monitor */
-> +		mode |= BIT(3);
 
-Would be nice to have this masks all defined, but other than
-this:
+Ah! I forgot to do that! Thanks anyway.
 
-Acked-by: Andi Shyti <andi.shyti@kernel.org> 
+-- 
+An old man doll... just what I always wanted! - Clara
 
-Thanks,
-Andi
-
-> +		octeon_i2c_writeq_flush(mode, i2c->twsi_base + MODE(i2c));
-> +		return -EIO;
->  	default:
->  		dev_err(i2c->dev, "unhandled state: %d\n", stat);
->  		return -EIO;
-> diff --git a/drivers/i2c/busses/i2c-octeon-core.h b/drivers/i2c/busses/i2c-octeon-core.h
-> index 89d7d3bb8e30bd5787978d17d5a9b20ab0d41e22..a8d1bf9e89b8b0d21f52ff9f77f0ecf5263b5843 100644
-> --- a/drivers/i2c/busses/i2c-octeon-core.h
-> +++ b/drivers/i2c/busses/i2c-octeon-core.h
-> @@ -72,6 +72,7 @@
->  #define STAT_SLAVE_ACK		0xC8
->  #define STAT_AD2W_ACK		0xD0
->  #define STAT_AD2W_NAK		0xD8
-> +#define STAT_WDOG_TOUT		0xF0
->  #define STAT_IDLE		0xF8
->  
->  /* TWSI_INT values */
-> -- 
-> 2.17.1
-> 
