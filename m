@@ -2,153 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B334D72A8AF
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 05:13:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37A1E72A8BF
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 05:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233454AbjFJDNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 23:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58004 "EHLO
+        id S233779AbjFJDWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 23:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233785AbjFJDNM (ORCPT
+        with ESMTP id S233942AbjFJDVz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 23:13:12 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3773AB7;
-        Fri,  9 Jun 2023 20:13:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686366790; x=1717902790;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=K/BmCx3xgQXSMu5DlXt/VS1jZwsgoumqvowuEhTlSUE=;
-  b=g6pL+kK371pIBb1FC/14xXugmLBq95m4YATGW7Bavd1yEqfJ03jwhwt8
-   FvbmpM70Jrj6LZYauEm3c0GxXUD3XHhuCEh5gH+OOCPCpERZkZizHMt8y
-   N8tg7EYVTXUim2bR0CK9oOCYUGbO6Vk/OnuepIsWj3uHpeQKHZf6kCee7
-   ubN4wy94syuNMAaZUAX0NdYC7vCAktk/nTG6UGWnR00G2modDkpHFGMEH
-   C/R+5BiIIp7+5Bhz/od81Ogwkt+3+V26RncFA5ltC+/t9DLYNTclLusY9
-   UA60Vlu0ZKhk3KkSJS6fo4X+K2jemqnJ2De5Y88EJH+XMDevFY9XAAhKM
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="423604481"
-X-IronPort-AV: E=Sophos;i="6.00,231,1681196400"; 
-   d="scan'208";a="423604481"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 20:13:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="800420740"
-X-IronPort-AV: E=Sophos;i="6.00,231,1681196400"; 
-   d="scan'208";a="800420740"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by FMSMGA003.fm.intel.com with ESMTP; 09 Jun 2023 20:13:09 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 9 Jun 2023 20:13:09 -0700
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 9 Jun 2023 20:13:08 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Fri, 9 Jun 2023 20:13:08 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.107)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Fri, 9 Jun 2023 20:13:08 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OnjOlMMVG5P7GtRmkl9BInsgXif8Wwquty1NyLQALC225P7fQIP6bMzxqIWqQDuvnPmmhQ4Xt6e8q3Ij8S0+pAdVBY8bOp6uaYt/dmFcGhRlc+46G+iDrkbzMXELN8RDrBZTtyvKS1Qqsq4QX8XFNZ2Zy3cZmjsKz9rL2Tunl0yauz/HH6mWt8pbXuoA5fSLQO7jMC7lVbYYykBNpEmvFyl8P39KJi11YXH4eH5j9ra+L37QGuv/V0m5nCdS2pkUZI1vebtHTBOM66Y/WGYTkQVEDkgEzSYBeL2/8Hp8dKLSLomojfwxiDJ/K2FA+Fs9x9bJ8uoZhmYyJP+bCQVDGA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=i6HSgVIVcWy9ql9eG3w/MVCG+5nInpRk/a02b/nTbkg=;
- b=c2xAfqIGnJoZ5v5YCuXaj6/7KnnWmOW/2ZlO5HcNR3CNZ4pzYL/mn7PpSAmOnQ5EWwmAebOY42M0bzw5lfv/m19LZu7J41NpZfT9olzKZIZv4QaWaADC8OMOMuzKa+epsIt9MU/Fnvk0dIEUEOgXJDbffX2yxY6KZApEblVLfxd94auiXvDdzB9qkKDF7yoxnQmamxkJ0t4ua9/XxG309nwkdngyZN9HQ5MeY5mD0M0/3h4OKx2TZI+/gqAy3omwLysubZ4X87FucZR5FYRcoiUOFZqRMX1k7lEbaRwV9PaNQoMNdNvxfEo11dS/eXHsgptY27ssqQeM5J/9aGk2IA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
- by CH3PR11MB8363.namprd11.prod.outlook.com (2603:10b6:610:177::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.44; Sat, 10 Jun
- 2023 03:13:04 +0000
-Received: from PH8PR11MB8107.namprd11.prod.outlook.com
- ([fe80::95c6:c77e:733b:eee5]) by PH8PR11MB8107.namprd11.prod.outlook.com
- ([fe80::95c6:c77e:733b:eee5%5]) with mapi id 15.20.6455.030; Sat, 10 Jun 2023
- 03:13:04 +0000
-Date:   Fri, 9 Jun 2023 20:12:59 -0700
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     Terry Bowman <terry.bowman@amd.com>, <alison.schofield@intel.com>,
-        <vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
-        <bwidawsk@kernel.org>, <dan.j.williams@intel.com>,
-        <dave.jiang@intel.com>, <Jonathan.Cameron@huawei.com>,
-        <linux-cxl@vger.kernel.org>
-CC:     <terry.bowman@amd.com>, <rrichter@amd.com>,
-        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
-Subject: RE: [PATCH v5 21/26] cxl/pci: Update CXL error logging to use RAS
- register address
-Message-ID: <6483ea3b63b75_e067a294b0@dwillia2-xfh.jf.intel.com.notmuch>
-References: <20230607221651.2454764-1-terry.bowman@amd.com>
- <20230607221651.2454764-22-terry.bowman@amd.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230607221651.2454764-22-terry.bowman@amd.com>
-X-ClientProxiedBy: BYAPR08CA0055.namprd08.prod.outlook.com
- (2603:10b6:a03:117::32) To PH8PR11MB8107.namprd11.prod.outlook.com
- (2603:10b6:510:256::6)
+        Fri, 9 Jun 2023 23:21:55 -0400
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691673C3E;
+        Fri,  9 Jun 2023 20:21:53 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QdNXX2xQwz4f3jXd;
+        Sat, 10 Jun 2023 11:21:48 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.104.67])
+        by APP4 (Coremail) with SMTP id gCh0CgCX_7JM7INkl_BmLQ--.26241S4;
+        Sat, 10 Jun 2023 11:21:50 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     axboe@kernel.dk, kch@nvidia.com, bvanassche@acm.org,
+        damien.lemoal@opensource.wdc.com, vincent.fu@samsung.com,
+        kbusch@kernel.org
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
+        yangerkun@huawei.com
+Subject: [PATCH -next v2] null_blk: fix null-ptr-dereference while configuring 'power' and 'submit_queues'
+Date:   Sat, 10 Jun 2023 11:17:32 +0800
+Message-Id: <20230610031732.2610012-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|CH3PR11MB8363:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9abf01ec-82e3-4859-5447-08db69609aae
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1ygxSoKbkpfhcJIixQupX1kTz8aef54FjPXc4a3ElK7NTdHT80vhoyEhuKAhunqE0PxHO9JOE2Oc32+Q6KuUL6PjXU2v6iDE1q4nPB7flR0mRSGeLQA3TEGMeZTIJv/UR0Rt6oyj1ZIXWuYE4X25NR/OXwLG2KMLbpPGNdUXQ9zwFjcGkNgOdU6szB79SPBg7EJiTldJG0XBJKNOZkejQTwVGUpFDWE1mX/MoDI+RAV9Xsdq0BQwIR9bwAG52RBJbkJ6r9NzoIzgyqc8BH7/USH/dxK3nbgpWnNN0JUWWm3PfEXVAcaXmbemNjFxmojKdU/MZQm8p+NJb4wNKUibyivgriEqv761B/wWG9K7zQoLmgQt9U+WjPS7bKQmuDAhgLeyX9bpLfDJiMIq4UXTLCvBhrE25leS7q5iyPriPY9BJ1/tQpEloJqUMQLhLAHcfNrS8VwnL1UUDHBzsQHjW8HiYgLmnUj13Ipyc/mC8CocF/v1YzFLXcKUhzzTRH8mzv3aYIcPqV9NU4DLrpPwWHVZY/j8aglp768by6L/+qyY1eoYfyDPywaGvYE6xMK3
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(366004)(376002)(39860400002)(136003)(346002)(451199021)(15650500001)(2906002)(4744005)(5660300002)(6486002)(86362001)(6666004)(478600001)(41300700001)(82960400001)(6512007)(6506007)(26005)(4326008)(316002)(38100700002)(9686003)(66476007)(66946007)(66556008)(186003)(8936002)(8676002)(83380400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vWkLoFuHjp77wtY60QOnhV+a3hGnliprYaSqvevncOQHgWQ+v9awPzdKZtHv?=
- =?us-ascii?Q?j04W1gtndRgFwY1X5yFnm3Pv3t40wO2crrT8ukY36DXx+5lU3vTa++w9gHTb?=
- =?us-ascii?Q?Cp5Atzqoo+dvKzdUGnNOcLC5nzkCFNfEYiIumBUsIskldEk/MoqPq8bvl8nu?=
- =?us-ascii?Q?sfK9QLGgIqymLERH5/DVEEUnNGHgCXx3Gbc9o/Oy8ncB/kJa7Ho1wgywxU3w?=
- =?us-ascii?Q?kaJcXVl6Z3tGBXGKgICug9f8+8Z3xpiPBKzb92QGkXzFVIxwglfptW9bIM36?=
- =?us-ascii?Q?yWkQwXueiNrgsjskVeBCUV36AluTBqH3/GIR/8BCBft4pvIxnyqouUG/6A7B?=
- =?us-ascii?Q?F0nveHqmOrEtX98KcPksoX2h8MDbJeDR0mzvB8OQg9TyrYb7zT04AhL2vu/3?=
- =?us-ascii?Q?glvaO72E2IXMxP9aTpuZSySa46aqk4h3WxkDDBzJCBqDqj/5xajZzUd4NFnM?=
- =?us-ascii?Q?bmcaWYTPUEGvcC2/giqztnWJqHpbIGtGgcPLLsWSq9Q5FKQ7eIu8vajJjPMO?=
- =?us-ascii?Q?PfNFB7xdJMpOyDM7MOKAxHz11WTZdZeW9vZdD+llx2WMjuIIClsKf4XWeYFh?=
- =?us-ascii?Q?J6FoIxm10BD5O8Iw9eBi94LhPdcy9x62/wlq9fxBhgMBv0M4SPRjb7IChkJ0?=
- =?us-ascii?Q?c6j7mbVTI6Ba+9N7Z0KT99anbC0RRWKwXZXQ6eGUSCtnzAR6RGe+dTZ4LcwU?=
- =?us-ascii?Q?PKNTMCtwuSViK2d9elPJGbOHovW8P62AtmSHIiQMZfb3+NEvKW7j3wK1yMCS?=
- =?us-ascii?Q?+fU4AQZ8dWrMhkjEdPbMkGDh7f+7u2t20/9WTsyB98iaZDoF3oV0sQcBRFgQ?=
- =?us-ascii?Q?/5CQBSvnyMRafCMGuSSSLSHPmc8umX0npoPAXFvJpsh/Tusbp6NGYufCN+iM?=
- =?us-ascii?Q?+8bcKuk4v4I8Na0yOexphsEIdIlq+I97dR2v6EIb6gIa75XeUNdHLn/5MNQI?=
- =?us-ascii?Q?J++SMJGO31V9UzzMhIY6ygnSHol4nOTUL6aNCwalotYQ8t5W2MChDbya6vPu?=
- =?us-ascii?Q?udI3N3HlSkgKBIKMRfylE/j/p7PROICJi/Xw5jLfG1e3BI/nGeTeFOVVKirl?=
- =?us-ascii?Q?qrptN2VZcBVTAEZ1RfKwemS++tt2wjwPb6704vTX0WsRZl2bkWlrYIa4+k/j?=
- =?us-ascii?Q?jJKnmKPAIPPoblJO6f2Q3HT/mVw/iQBKxCSS7DVLBExW93H/e2KbqPJ7Sp91?=
- =?us-ascii?Q?qiZgpE0VuJLo8j1qmHD3Udmug5WLCr1cpXkblN8BBL5b8XJ6N11zgU7uM8G5?=
- =?us-ascii?Q?6nTayhpPh1Iq1DihiIJ0dmHBXWDr71tKPqAQQ+LWtawV2UluthUAhrDnRvGF?=
- =?us-ascii?Q?lyN0AAGvGbwOx01K7kEDbXN+ZNhuGkH/KosSU8sUscuQS6xveItWybGtNMbq?=
- =?us-ascii?Q?g2DWsWCL7zzKSp5Atcxj7dn6iHHx9icVq3iu8XQnsqvce6CerxA1Ep2QmHVG?=
- =?us-ascii?Q?Y0bFGY0EiPrDtVWjXggQV7WyJ1AEid8jfwv02HCO7PTWF5lI/IscTsMmsuk4?=
- =?us-ascii?Q?oW0U0BItud1iFS/dYgoRQt1KHfg3vZEcNfjWscC+2ScEtV0JD5cDOLMLlq/4?=
- =?us-ascii?Q?ycPIkfazS1z2igJxfiS6i2+c2dbdezKxHe7WipV56TFcPS4ibr6Ujo2UqY3H?=
- =?us-ascii?Q?dg=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9abf01ec-82e3-4859-5447-08db69609aae
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2023 03:13:03.8578
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: R+5l+wq64U/6/yiE4Cx2/gwi5stbL0OiSuWszlhE5RSXLr2GFkkg1pC85Y7QpVxuBNcqZ6/skpJLFl6MYIz1egVz2zPuw0undKa9zqbhH2U=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR11MB8363
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgCX_7JM7INkl_BmLQ--.26241S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxZr1xWFWrtF4UuF45Kr13XFb_yoW5tFyxpF
+        W5Ga1Yk348XF47Xw42qw1DGF9xAF4jvFyfGrWxG3yxCa4jvr1vvr1vyFW5XrW8G39xCrWY
+        qa1DJFs0kF4UWFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvF14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+        n2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFyl
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v2
+        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvj
+        fUoOJ5UUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -156,18 +62,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Terry Bowman wrote:
-> The CXL error handler currently only logs endpoint RAS status. The CXL
-> topology includes several components providing RAS details to be logged
-> during error handling.[1] Update the current handler's RAS logging to use a
-> RAS register address. This will allow for adding support to log other CXL
-> component's RAS details in the future.
-> 
-> [1] CXL3.0 Table 8-22 CXL_Capability_ID Assignment
-> 
-> Co-developed-by: Robert Richter <rrichter@amd.com>
-> Signed-off-by: Robert Richter <rrichter@amd.com>
-> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+From: Yu Kuai <yukuai3@huawei.com>
 
-Looks good.
+Writing 'power' and 'submit_queues' concurrently will trigger kernel
+panic:
+
+Test script:
+
+modprobe null_blk nr_devices=0
+mkdir -p /sys/kernel/config/nullb/nullb0
+while true; do echo 1 > submit_queues; echo 4 > submit_queues; done &
+while true; do echo 1 > power; echo 0 > power; done
+
+Test result:
+
+BUG: kernel NULL pointer dereference, address: 0000000000000148
+Oops: 0000 [#1] PREEMPT SMP
+RIP: 0010:__lock_acquire+0x41d/0x28f0
+Call Trace:
+ <TASK>
+ lock_acquire+0x121/0x450
+ down_write+0x5f/0x1d0
+ simple_recursive_removal+0x12f/0x5c0
+ blk_mq_debugfs_unregister_hctxs+0x7c/0x100
+ blk_mq_update_nr_hw_queues+0x4a3/0x720
+ nullb_update_nr_hw_queues+0x71/0xf0 [null_blk]
+ nullb_device_submit_queues_store+0x79/0xf0 [null_blk]
+ configfs_write_iter+0x119/0x1e0
+ vfs_write+0x326/0x730
+ ksys_write+0x74/0x150
+
+This is because del_gendisk() can concurrent with
+blk_mq_update_nr_hw_queues():
+
+nullb_device_power_store	nullb_apply_submit_queues
+ null_del_dev
+ del_gendisk
+				 nullb_update_nr_hw_queues
+				  if (!dev->nullb)
+				  // still set while gendisk is deleted
+				   return 0
+				  blk_mq_update_nr_hw_queues
+ dev->nullb = NULL
+
+Fix this problem by synchronize nullb_device_power_store() and
+nullb_update_nr_hw_queues() with a mutex.
+
+Fixes: 45919fbfe1c4 ("null_blk: Enable modifying 'submit_queues' after an instance has been configured")
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+---
+ drivers/block/null_blk/main.c | 29 ++++++++++++++++++++++-------
+ 1 file changed, 22 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/block/null_blk/main.c b/drivers/block/null_blk/main.c
+index b3fedafe301e..16c191cb85de 100644
+--- a/drivers/block/null_blk/main.c
++++ b/drivers/block/null_blk/main.c
+@@ -392,13 +392,25 @@ static int nullb_update_nr_hw_queues(struct nullb_device *dev,
+ static int nullb_apply_submit_queues(struct nullb_device *dev,
+ 				     unsigned int submit_queues)
+ {
+-	return nullb_update_nr_hw_queues(dev, submit_queues, dev->poll_queues);
++	int ret;
++
++	mutex_lock(&lock);
++	ret = nullb_update_nr_hw_queues(dev, submit_queues, dev->poll_queues);
++	mutex_unlock(&lock);
++
++	return ret;
+ }
+ 
+ static int nullb_apply_poll_queues(struct nullb_device *dev,
+ 				   unsigned int poll_queues)
+ {
+-	return nullb_update_nr_hw_queues(dev, dev->submit_queues, poll_queues);
++	int ret;
++
++	mutex_lock(&lock);
++	ret = nullb_update_nr_hw_queues(dev, dev->submit_queues, poll_queues);
++	mutex_unlock(&lock);
++
++	return ret;
+ }
+ 
+ NULLB_DEVICE_ATTR(size, ulong, NULL);
+@@ -444,28 +456,31 @@ static ssize_t nullb_device_power_store(struct config_item *item,
+ 	if (ret < 0)
+ 		return ret;
+ 
++	ret = count;
++	mutex_lock(&lock);
+ 	if (!dev->power && newp) {
+ 		if (test_and_set_bit(NULLB_DEV_FL_UP, &dev->flags))
+-			return count;
++			goto out;
++
+ 		ret = null_add_dev(dev);
+ 		if (ret) {
+ 			clear_bit(NULLB_DEV_FL_UP, &dev->flags);
+-			return ret;
++			goto out;
+ 		}
+ 
+ 		set_bit(NULLB_DEV_FL_CONFIGURED, &dev->flags);
+ 		dev->power = newp;
+ 	} else if (dev->power && !newp) {
+ 		if (test_and_clear_bit(NULLB_DEV_FL_UP, &dev->flags)) {
+-			mutex_lock(&lock);
+ 			dev->power = newp;
+ 			null_del_dev(dev->nullb);
+-			mutex_unlock(&lock);
+ 		}
+ 		clear_bit(NULLB_DEV_FL_CONFIGURED, &dev->flags);
+ 	}
+ 
+-	return count;
++out:
++	mutex_unlock(&lock);
++	return ret;
+ }
+ 
+ CONFIGFS_ATTR(nullb_device_, power);
+-- 
+2.39.2
+
