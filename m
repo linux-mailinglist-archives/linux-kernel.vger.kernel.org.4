@@ -2,98 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECCE472AADB
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 12:25:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD7172AADF
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 12:26:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231671AbjFJKZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 06:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45144 "EHLO
+        id S233268AbjFJK0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 06:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjFJKZD (ORCPT
+        with ESMTP id S230308AbjFJK0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 06:25:03 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC5735B8;
-        Sat, 10 Jun 2023 03:25:01 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b1c910ee19so29089101fa.3;
-        Sat, 10 Jun 2023 03:25:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686392699; x=1688984699;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=z1amQyhc+nv8NT2kKmm9VpSR6/WIVyNzgkj2D/x5YIs=;
-        b=HOoT5xmA7Ad3ui/OJhSgvvg519+/nfEH0TG2vAWtTAY31v6u3mKAHPz6jt0Rj1ljya
-         rK+Cx6VDwUda7pDQdhNz9d0EouRjMqYO4FzNWnNHA0CfX9xzsC1jVAHlS+TQIy96Syi8
-         Wa/EkwJNL6QwKsYbvZ7kUh3/4XTUgIPNEwNgNP3gxsaD5CRs90u46EkhEb43GNDPRReo
-         3XW+OScQiHd15GRdRpvt969zU6o4K0HxcRnY7cLMsU22dy7oCA4516U04WI7A8apYUew
-         u7WnuYeNGqjJFGUVZ7KYXsimFwXAGxvr1+UTLWsGS12ZBzJL1/syEtIhAOrMUoqSGVBz
-         hx8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686392699; x=1688984699;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z1amQyhc+nv8NT2kKmm9VpSR6/WIVyNzgkj2D/x5YIs=;
-        b=FZvtQvQZEjOEdB7aistbDD2tzfJuCg3OQ/my1QFy1vx0xG1lalJtVG2IXcpDpMel4Y
-         VGawKaOytRl2ThxB62JFxQOALCYpuZAnZtF8lRhzvEraxvmFDQmTTSWr8bjnV73cJTqY
-         Ey09+jSz6dFP+V48oGNGyAUq7Avn23Dfh/gV4Kz0R9dQON5c9p9W9xdn+muvuEHmjm0G
-         0Aj5doYfGXO1AncmjCVnF+9ZT1c0Pnh3z/HJs2Sq19w2IbbIwn1DAB6isoREFFxi351F
-         X1jkgE5fWxJgNifLPZj9kF6SJPpnpb4IaR/fgBTaVbfbRfANZ+bV9R/r1EIKHzwxVjtD
-         gv8Q==
-X-Gm-Message-State: AC+VfDwhM5ao9hbCFMteMeHyBQbPZQR/QIL4bBP83XUMWyyY1WqhwgEs
-        TVG5Qr6X4rPcucOVII4dKC+D3C9lJQ4=
-X-Google-Smtp-Source: ACHHUZ4ly3M+0uqFmfE4M46VDaXwNPpsVE7Bjwb2KKnTh4mooYPOtZj7fBlj2rBhLURtdYV9t7Ezyw==
-X-Received: by 2002:a2e:a0d6:0:b0:2b2:5d2:ce63 with SMTP id f22-20020a2ea0d6000000b002b205d2ce63mr470206ljm.35.1686392699015;
-        Sat, 10 Jun 2023 03:24:59 -0700 (PDT)
-Received: from [192.168.1.103] ([31.173.80.166])
-        by smtp.gmail.com with ESMTPSA id x13-20020a2e9c8d000000b002ad9a1bfa8esm791825lji.1.2023.06.10.03.24.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Jun 2023 03:24:58 -0700 (PDT)
-Subject: Re: [PATCH v6] sh: avoid using IRQ0 on SH3/4
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-kernel@vger.kernel.org
-References: <71105dbf-cdb0-72e1-f9eb-eeda8e321696@omp.ru>
- <983d701befce7fc0010c53d09be84f5c330bdf45.camel@physik.fu-berlin.de>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <837a586e-5e76-7a5b-a890-403ce26ea51b@gmail.com>
-Date:   Sat, 10 Jun 2023 13:24:56 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Sat, 10 Jun 2023 06:26:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB52535B8;
+        Sat, 10 Jun 2023 03:26:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50764614C5;
+        Sat, 10 Jun 2023 10:26:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1093CC433EF;
+        Sat, 10 Jun 2023 10:26:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686392770;
+        bh=nB2v+wNogxRDFx75EaOLKTain6XzdZBKWNiyoeWgOIs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vP47NAeTyrivQK0aPC01L0Hwn7icb59q+K63RFEmpZW0VO0b+KuMG78tzbpI0LouS
+         cyGW+ugiDwxj+ycMJ7R/hkdSezmSOrteVfbmB5CykaMLFCu/1zpGXL9STy9bEDoVnf
+         kyX3rlSwC+RwtXg6zqd4otB55WCR0vypSLu9ppLObkCluxnks+ZjmCeXKQDUPdD2FD
+         gxLiqyqldCTWNu2Cmy/dHYUjXvJ/GTrwQnXcDibBECZCwubxHrg3LEu66QVm72y2Lc
+         zosGGGQIBjgpXvwkHJpwhjdxxdCG/Q7OS37zVUeRE52mhaDIhQ9FYn6FUqFRntAQZb
+         3ONSsWM9C0n7w==
+Date:   Sat, 10 Jun 2023 12:26:07 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Thomas Abraham <thomas.abraham@linaro.org>,
+        Kukjin Kim <kgene.kim@samsung.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH 1/2] tty: serial: samsung_tty: Fix a memory leak in
+ s3c24xx_serial_getclk() in case of error
+Message-ID: <20230610102607.7nonyh5xhuhpyy6e@intel.intel>
+References: <e4359d5ef206f5b349c1d15a515a1205e78dda55.1686285892.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-In-Reply-To: <983d701befce7fc0010c53d09be84f5c330bdf45.camel@physik.fu-berlin.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e4359d5ef206f5b349c1d15a515a1205e78dda55.1686285892.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/10/23 7:32 AM, John Paul Adrian Glaubitz wrote:
+Hi Christophe,
 
->> IRQ0 is no longer returned by platform_get_irq() and its ilk -- they now
->> return -EINVAL instead.  However, the kernel code supporting SH3/4 based
->> SoCs still maps the IRQ #s starting at 0 -- modify that code to start the
->> IRQ #s from 16 instead.
->>
->> The patch should mostly affect the AP-SH4A-3A/AP-SH4AD-0A boards as they
->> indeed are using IRQ0 for the SMSC911x compatible Ethernet chip...
+On Fri, Jun 09, 2023 at 06:45:38AM +0200, Christophe JAILLET wrote:
+> If clk_get_rate() fails, the clk that has just been allocated needs to be
+> freed.
 > 
-> Do you mind if I remove the ellipsis at the end of this sentence when I merge
-> this later today? I think it makes no sense from a grammatical point of view.
+> Fixes: 5f5a7a5578c5 ("serial: samsung: switch to clkdev based clock lookup")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-   No, I don't mind. :-)
+As this is a fix, can you cc the stable kernel
 
-> Adrian
+Cc: <stable@vger.kernel.org> # v3.3+
 
-MBR, Sergey
+> ---
+>  drivers/tty/serial/samsung_tty.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
+> index 2a7520ad3abd..dd751e7010e3 100644
+> --- a/drivers/tty/serial/samsung_tty.c
+> +++ b/drivers/tty/serial/samsung_tty.c
+> @@ -1459,8 +1459,10 @@ static unsigned int s3c24xx_serial_getclk(struct s3c24xx_uart_port *ourport,
+>  			continue;
+>  
+>  		rate = clk_get_rate(clk);
+> -		if (!rate)
+> +		if (!rate) {
+> +			clk_put(clk);
+>  			continue;
 
+could you also print an error here?
+
+In any case:
+
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
+
+Andi
+
+> +		}
+>  
+>  		if (ourport->info->has_divslot) {
+>  			unsigned long div = rate / req_baud;
+> -- 
+> 2.34.1
+> 
