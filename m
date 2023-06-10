@@ -2,503 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D92E72AB94
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 14:58:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED7272AB97
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 14:59:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234267AbjFJM56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 08:57:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43930 "EHLO
+        id S232941AbjFJM7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 08:59:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbjFJM5z (ORCPT
+        with ESMTP id S229749AbjFJM7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 08:57:55 -0400
-Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E33184
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 05:57:52 -0700 (PDT)
-Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-77ac4ec0bb7so264708439f.0
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 05:57:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686401871; x=1688993871;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cgHCjAuH4DjYI9d8JVOK367/nLP8kHy5aJE3jwS5Mn4=;
-        b=ZLT5IqVifw66jZP9n6zzR98kfwP5YotepTGODcGQ4/KH8V9FaybYr5QwZTJTslG74v
-         UFCvrzGx/8QURJpe8sEyAg6rPimuzkTRfwBlF6eIoIv5Dl9KoRt7YpFV1TZEjt5MP92C
-         I2flD5wA4tTULpEkxSxn+L+SUtiQDoA7b/DzcpMNNF8fNqGpC+yyTcmDqfTxHnSJD070
-         FhrDLAVnPIyfcmdg0yYkTUOU9Ps2EfExi4qsrBvwbDbs+dVeOd4VohpJ7DlebPIMQhI2
-         tnFS+JAS65J/7YOvtdLWn8EgW10ornuPvGm1ddYktu8KkhfA40M+tf3/vPVLHbReQTrA
-         HNnw==
-X-Gm-Message-State: AC+VfDycj/YD+YS2XLWChn/mw9VlmH6/Fw1kUXr+8Z+KBJKrk8gVYlpC
-        j/672FrGAGBJ+f0VwVZ7xjR4ErBqgx1fgYhy9S9VtnynQs6S
-X-Google-Smtp-Source: ACHHUZ7Xd5V6//Vsj2DvVFxC+DKmJbyezyhA0icnL6gRGmyUcXzqX2HY0hOP2ioFuRd3ynTQ9VghGeHPlTiD9YItF6inLS55q+SW
+        Sat, 10 Jun 2023 08:59:44 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EEB1AB;
+        Sat, 10 Jun 2023 05:59:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686401983; x=1717937983;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ITLJwuiMSNZijdY4Cz6EusiXck7vPTOmLnkmQWskaI8=;
+  b=OShB4cayu10aFZla9A0oE9/QG63uiZ6GWDEPrfLgPV93QNywgAj6cBEo
+   KKBVu7Aatq0Wi+2JooeueON54gqju3Q/VgkeioLtd96581UVlsAqOKbsv
+   ORk05fn6N3BN9I/owLjhHmRPxjPwnZKUTEuQQ8iQZ+lG5P2LYXzH5ClN3
+   vILYp7Wjs0NyDNQG+Xzl1bPxPymmdQcehpF1dsmKd14Bim1Jgf4Tlyr5S
+   +absCNldqZJRq13EbA7aKP3MAYC9WMK7aDs2W9tfeetY4DjG2sazUUvU4
+   nfRbMenTM06cskmFSXONjS8MtyfstYj/tQBzFNjvSoSJK3VH1EioU7e0B
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10737"; a="338122799"
+X-IronPort-AV: E=Sophos;i="6.00,232,1681196400"; 
+   d="scan'208";a="338122799"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2023 05:59:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10737"; a="957451084"
+X-IronPort-AV: E=Sophos;i="6.00,232,1681196400"; 
+   d="scan'208";a="957451084"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 10 Jun 2023 05:59:38 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q7yBt-000A6A-2O;
+        Sat, 10 Jun 2023 12:59:37 +0000
+Date:   Sat, 10 Jun 2023 20:59:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Demi Marie Obenour <demi@invisiblethingslab.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Joe Perches <joe@perches.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Federico Vaga <federico.vaga@vaga.pv.it>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Lee Jones <lee@kernel.org>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Demi Marie Obenour <demi@invisiblethingslab.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xen-devel@lists.xenproject.org
+Subject: Re: [PATCH 2/4] vsscanf(): Return -ERANGE on integer overflow
+Message-ID: <202306102055.ZSJK8Xsj-lkp@intel.com>
+References: <20230610025759.1813-2-demi@invisiblethingslab.com>
 MIME-Version: 1.0
-X-Received: by 2002:a5e:c10c:0:b0:77a:c494:b4b8 with SMTP id
- v12-20020a5ec10c000000b0077ac494b4b8mr1883005iol.1.1686401871501; Sat, 10 Jun
- 2023 05:57:51 -0700 (PDT)
-Date:   Sat, 10 Jun 2023 05:57:51 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000007fe09705fdc6086c@google.com>
-Subject: [syzbot] [btrfs?] memory leak in add_block_entry
-From:   syzbot <syzbot+c563a3c79927971f950f@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230610025759.1813-2-demi@invisiblethingslab.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Demi,
 
-syzbot found the following issue on:
+kernel test robot noticed the following build warnings:
 
-HEAD commit:    f8dba31b0a82 Merge tag 'asym-keys-fix-for-linus-v6.4-rc5' ..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11aa7b15280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ee975febba574924
-dashboard link: https://syzkaller.appspot.com/bug?extid=c563a3c79927971f950f
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=173fab79280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10b4622d280000
+[auto build test WARNING on lee-mfd/for-mfd-next]
+[also build test WARNING on lee-leds/for-leds-next linus/master v6.4-rc5 next-20230609]
+[cannot apply to xen-tip/linux-next lee-mfd/for-mfd-fixes]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/4a6b265f7061/disk-f8dba31b.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/430b37c501c8/vmlinux-f8dba31b.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/112fa4e51bb8/bzImage-f8dba31b.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/11e3e386cf39/mount_0.gz
+url:    https://github.com/intel-lab-lkp/linux/commits/Demi-Marie-Obenour/vsscanf-Return-ERANGE-on-integer-overflow/20230610-110026
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
+patch link:    https://lore.kernel.org/r/20230610025759.1813-2-demi%40invisiblethingslab.com
+patch subject: [PATCH 2/4] vsscanf(): Return -ERANGE on integer overflow
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230610/202306102055.ZSJK8Xsj-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build):
+        git remote add lee-mfd https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git
+        git fetch lee-mfd for-mfd-next
+        git checkout lee-mfd/for-mfd-next
+        b4 shazam https://lore.kernel.org/r/20230610025759.1813-2-demi@invisiblethingslab.com
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/staging/media/atomisp/
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c563a3c79927971f950f@syzkaller.appspotmail.com
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306102055.ZSJK8Xsj-lkp@intel.com/
 
-BUG: memory leak
-unreferenced object 0xffff888109b51580 (size 96):
-  comm "syz-executor154", pid 5193, jiffies 4294972644 (age 19.050s)
-  hex dump (first 32 bytes):
-    00 10 10 00 00 00 00 00 00 10 00 00 00 00 00 00  ................
-    01 00 00 00 00 00 00 00 01 00 00 00 01 00 00 00  ................
-  backtrace:
-    [<ffffffff81545a34>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1057
-    [<ffffffff8213b65e>] kmalloc include/linux/slab.h:559 [inline]
-    [<ffffffff8213b65e>] kzalloc include/linux/slab.h:680 [inline]
-    [<ffffffff8213b65e>] add_block_entry+0x4e/0x320 fs/btrfs/ref-verify.c:271
-    [<ffffffff8213bcfe>] add_tree_block+0x9e/0x220 fs/btrfs/ref-verify.c:332
-    [<ffffffff8213d245>] btrfs_build_ref_tree+0x535/0x7c0 fs/btrfs/ref-verify.c:474
-    [<ffffffff8202b2f1>] open_ctree+0x12d1/0x2360 fs/btrfs/disk-io.c:3710
-    [<ffffffff81ff2e53>] btrfs_fill_super fs/btrfs/super.c:1156 [inline]
-    [<ffffffff81ff2e53>] btrfs_mount_root+0x583/0x710 fs/btrfs/super.c:1524
-    [<ffffffff816c406f>] legacy_get_tree+0x2f/0x90 fs/fs_context.c:610
-    [<ffffffff8165d7ac>] vfs_get_tree+0x2c/0x110 fs/super.c:1510
-    [<ffffffff81698e91>] fc_mount fs/namespace.c:1035 [inline]
-    [<ffffffff81698e91>] vfs_kern_mount.part.0+0xd1/0x120 fs/namespace.c:1065
-    [<ffffffff81698f20>] vfs_kern_mount+0x40/0x60 fs/namespace.c:1052
-    [<ffffffff81ff6e8d>] btrfs_mount+0x19d/0x620 fs/btrfs/super.c:1584
-    [<ffffffff816c406f>] legacy_get_tree+0x2f/0x90 fs/fs_context.c:610
-    [<ffffffff8165d7ac>] vfs_get_tree+0x2c/0x110 fs/super.c:1510
-    [<ffffffff816a0ac3>] do_new_mount fs/namespace.c:3039 [inline]
-    [<ffffffff816a0ac3>] path_mount+0xc53/0x10f0 fs/namespace.c:3369
-    [<ffffffff816a1702>] do_mount fs/namespace.c:3382 [inline]
-    [<ffffffff816a1702>] __do_sys_mount fs/namespace.c:3591 [inline]
-    [<ffffffff816a1702>] __se_sys_mount fs/namespace.c:3568 [inline]
-    [<ffffffff816a1702>] __x64_sys_mount+0x192/0x1e0 fs/namespace.c:3568
-    [<ffffffff84a16749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a16749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+All warnings (new ones prefixed by >>):
 
-BUG: memory leak
-unreferenced object 0xffff888109b51500 (size 96):
-  comm "syz-executor154", pid 5193, jiffies 4294972644 (age 19.050s)
-  hex dump (first 32 bytes):
-    00 30 50 00 00 00 00 00 00 10 00 00 00 00 00 00  .0P.............
-    01 00 00 00 00 00 00 00 01 00 00 00 01 00 00 00  ................
-  backtrace:
-    [<ffffffff81545a34>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1057
-    [<ffffffff8213b65e>] kmalloc include/linux/slab.h:559 [inline]
-    [<ffffffff8213b65e>] kzalloc include/linux/slab.h:680 [inline]
-    [<ffffffff8213b65e>] add_block_entry+0x4e/0x320 fs/btrfs/ref-verify.c:271
-    [<ffffffff8213bcfe>] add_tree_block+0x9e/0x220 fs/btrfs/ref-verify.c:332
-    [<ffffffff8213d245>] btrfs_build_ref_tree+0x535/0x7c0 fs/btrfs/ref-verify.c:474
-    [<ffffffff8202b2f1>] open_ctree+0x12d1/0x2360 fs/btrfs/disk-io.c:3710
-    [<ffffffff81ff2e53>] btrfs_fill_super fs/btrfs/super.c:1156 [inline]
-    [<ffffffff81ff2e53>] btrfs_mount_root+0x583/0x710 fs/btrfs/super.c:1524
-    [<ffffffff816c406f>] legacy_get_tree+0x2f/0x90 fs/fs_context.c:610
-    [<ffffffff8165d7ac>] vfs_get_tree+0x2c/0x110 fs/super.c:1510
-    [<ffffffff81698e91>] fc_mount fs/namespace.c:1035 [inline]
-    [<ffffffff81698e91>] vfs_kern_mount.part.0+0xd1/0x120 fs/namespace.c:1065
-    [<ffffffff81698f20>] vfs_kern_mount+0x40/0x60 fs/namespace.c:1052
-    [<ffffffff81ff6e8d>] btrfs_mount+0x19d/0x620 fs/btrfs/super.c:1584
-    [<ffffffff816c406f>] legacy_get_tree+0x2f/0x90 fs/fs_context.c:610
-    [<ffffffff8165d7ac>] vfs_get_tree+0x2c/0x110 fs/super.c:1510
-    [<ffffffff816a0ac3>] do_new_mount fs/namespace.c:3039 [inline]
-    [<ffffffff816a0ac3>] path_mount+0xc53/0x10f0 fs/namespace.c:3369
-    [<ffffffff816a1702>] do_mount fs/namespace.c:3382 [inline]
-    [<ffffffff816a1702>] __do_sys_mount fs/namespace.c:3591 [inline]
-    [<ffffffff816a1702>] __se_sys_mount fs/namespace.c:3568 [inline]
-    [<ffffffff816a1702>] __x64_sys_mount+0x192/0x1e0 fs/namespace.c:3568
-    [<ffffffff84a16749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a16749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-
-BUG: memory leak
-unreferenced object 0xffff888109b51480 (size 96):
-  comm "syz-executor154", pid 5193, jiffies 4294972644 (age 19.050s)
-  hex dump (first 32 bytes):
-    00 60 50 00 00 00 00 00 00 10 00 00 00 00 00 00  .`P.............
-    01 00 00 00 00 00 00 00 01 00 00 00 01 00 00 00  ................
-  backtrace:
-    [<ffffffff81545a34>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1057
-    [<ffffffff8213b65e>] kmalloc include/linux/slab.h:559 [inline]
-    [<ffffffff8213b65e>] kzalloc include/linux/slab.h:680 [inline]
-    [<ffffffff8213b65e>] add_block_entry+0x4e/0x320 fs/btrfs/ref-verify.c:271
-    [<ffffffff8213bcfe>] add_tree_block+0x9e/0x220 fs/btrfs/ref-verify.c:332
-    [<ffffffff8213d245>] btrfs_build_ref_tree+0x535/0x7c0 fs/btrfs/ref-verify.c:474
-    [<ffffffff8202b2f1>] open_ctree+0x12d1/0x2360 fs/btrfs/disk-io.c:3710
-    [<ffffffff81ff2e53>] btrfs_fill_super fs/btrfs/super.c:1156 [inline]
-    [<ffffffff81ff2e53>] btrfs_mount_root+0x583/0x710 fs/btrfs/super.c:1524
-    [<ffffffff816c406f>] legacy_get_tree+0x2f/0x90 fs/fs_context.c:610
-    [<ffffffff8165d7ac>] vfs_get_tree+0x2c/0x110 fs/super.c:1510
-    [<ffffffff81698e91>] fc_mount fs/namespace.c:1035 [inline]
-    [<ffffffff81698e91>] vfs_kern_mount.part.0+0xd1/0x120 fs/namespace.c:1065
-    [<ffffffff81698f20>] vfs_kern_mount+0x40/0x60 fs/namespace.c:1052
-    [<ffffffff81ff6e8d>] btrfs_mount+0x19d/0x620 fs/btrfs/super.c:1584
-    [<ffffffff816c406f>] legacy_get_tree+0x2f/0x90 fs/fs_context.c:610
-    [<ffffffff8165d7ac>] vfs_get_tree+0x2c/0x110 fs/super.c:1510
-    [<ffffffff816a0ac3>] do_new_mount fs/namespace.c:3039 [inline]
-    [<ffffffff816a0ac3>] path_mount+0xc53/0x10f0 fs/namespace.c:3369
-    [<ffffffff816a1702>] do_mount fs/namespace.c:3382 [inline]
-    [<ffffffff816a1702>] __do_sys_mount fs/namespace.c:3591 [inline]
-    [<ffffffff816a1702>] __se_sys_mount fs/namespace.c:3568 [inline]
-    [<ffffffff816a1702>] __x64_sys_mount+0x192/0x1e0 fs/namespace.c:3568
-    [<ffffffff84a16749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a16749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-
-BUG: memory leak
-unreferenced object 0xffff888109b51580 (size 96):
-  comm "syz-executor154", pid 5193, jiffies 4294972644 (age 20.200s)
-  hex dump (first 32 bytes):
-    00 10 10 00 00 00 00 00 00 10 00 00 00 00 00 00  ................
-    01 00 00 00 00 00 00 00 01 00 00 00 01 00 00 00  ................
-  backtrace:
-    [<ffffffff81545a34>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1057
-    [<ffffffff8213b65e>] kmalloc include/linux/slab.h:559 [inline]
-    [<ffffffff8213b65e>] kzalloc include/linux/slab.h:680 [inline]
-    [<ffffffff8213b65e>] add_block_entry+0x4e/0x320 fs/btrfs/ref-verify.c:271
-    [<ffffffff8213bcfe>] add_tree_block+0x9e/0x220 fs/btrfs/ref-verify.c:332
-    [<ffffffff8213d245>] btrfs_build_ref_tree+0x535/0x7c0 fs/btrfs/ref-verify.c:474
-    [<ffffffff8202b2f1>] open_ctree+0x12d1/0x2360 fs/btrfs/disk-io.c:3710
-    [<ffffffff81ff2e53>] btrfs_fill_super fs/btrfs/super.c:1156 [inline]
-    [<ffffffff81ff2e53>] btrfs_mount_root+0x583/0x710 fs/btrfs/super.c:1524
-    [<ffffffff816c406f>] legacy_get_tree+0x2f/0x90 fs/fs_context.c:610
-    [<ffffffff8165d7ac>] vfs_get_tree+0x2c/0x110 fs/super.c:1510
-    [<ffffffff81698e91>] fc_mount fs/namespace.c:1035 [inline]
-    [<ffffffff81698e91>] vfs_kern_mount.part.0+0xd1/0x120 fs/namespace.c:1065
-    [<ffffffff81698f20>] vfs_kern_mount+0x40/0x60 fs/namespace.c:1052
-    [<ffffffff81ff6e8d>] btrfs_mount+0x19d/0x620 fs/btrfs/super.c:1584
-    [<ffffffff816c406f>] legacy_get_tree+0x2f/0x90 fs/fs_context.c:610
-    [<ffffffff8165d7ac>] vfs_get_tree+0x2c/0x110 fs/super.c:1510
-    [<ffffffff816a0ac3>] do_new_mount fs/namespace.c:3039 [inline]
-    [<ffffffff816a0ac3>] path_mount+0xc53/0x10f0 fs/namespace.c:3369
-    [<ffffffff816a1702>] do_mount fs/namespace.c:3382 [inline]
-    [<ffffffff816a1702>] __do_sys_mount fs/namespace.c:3591 [inline]
-    [<ffffffff816a1702>] __se_sys_mount fs/namespace.c:3568 [inline]
-    [<ffffffff816a1702>] __x64_sys_mount+0x192/0x1e0 fs/namespace.c:3568
-    [<ffffffff84a16749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a16749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-
-BUG: memory leak
-unreferenced object 0xffff888109b51500 (size 96):
-  comm "syz-executor154", pid 5193, jiffies 4294972644 (age 20.200s)
-  hex dump (first 32 bytes):
-    00 30 50 00 00 00 00 00 00 10 00 00 00 00 00 00  .0P.............
-    01 00 00 00 00 00 00 00 01 00 00 00 01 00 00 00  ................
-  backtrace:
-    [<ffffffff81545a34>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1057
-    [<ffffffff8213b65e>] kmalloc include/linux/slab.h:559 [inline]
-    [<ffffffff8213b65e>] kzalloc include/linux/slab.h:680 [inline]
-    [<ffffffff8213b65e>] add_block_entry+0x4e/0x320 fs/btrfs/ref-verify.c:271
-    [<ffffffff8213bcfe>] add_tree_block+0x9e/0x220 fs/btrfs/ref-verify.c:332
-    [<ffffffff8213d245>] btrfs_build_ref_tree+0x535/0x7c0 fs/btrfs/ref-verify.c:474
-    [<ffffffff8202b2f1>] open_ctree+0x12d1/0x2360 fs/btrfs/disk-io.c:3710
-    [<ffffffff81ff2e53>] btrfs_fill_super fs/btrfs/super.c:1156 [inline]
-    [<ffffffff81ff2e53>] btrfs_mount_root+0x583/0x710 fs/btrfs/super.c:1524
-    [<ffffffff816c406f>] legacy_get_tree+0x2f/0x90 fs/fs_context.c:610
-    [<ffffffff8165d7ac>] vfs_get_tree+0x2c/0x110 fs/super.c:1510
-    [<ffffffff81698e91>] fc_mount fs/namespace.c:1035 [inline]
-    [<ffffffff81698e91>] vfs_kern_mount.part.0+0xd1/0x120 fs/namespace.c:1065
-    [<ffffffff81698f20>] vfs_kern_mount+0x40/0x60 fs/namespace.c:1052
-    [<ffffffff81ff6e8d>] btrfs_mount+0x19d/0x620 fs/btrfs/super.c:1584
-    [<ffffffff816c406f>] legacy_get_tree+0x2f/0x90 fs/fs_context.c:610
-    [<ffffffff8165d7ac>] vfs_get_tree+0x2c/0x110 fs/super.c:1510
-    [<ffffffff816a0ac3>] do_new_mount fs/namespace.c:3039 [inline]
-    [<ffffffff816a0ac3>] path_mount+0xc53/0x10f0 fs/namespace.c:3369
-    [<ffffffff816a1702>] do_mount fs/namespace.c:3382 [inline]
-    [<ffffffff816a1702>] __do_sys_mount fs/namespace.c:3591 [inline]
-    [<ffffffff816a1702>] __se_sys_mount fs/namespace.c:3568 [inline]
-    [<ffffffff816a1702>] __x64_sys_mount+0x192/0x1e0 fs/namespace.c:3568
-    [<ffffffff84a16749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a16749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-
-BUG: memory leak
-unreferenced object 0xffff888109b51480 (size 96):
-  comm "syz-executor154", pid 5193, jiffies 4294972644 (age 20.200s)
-  hex dump (first 32 bytes):
-    00 60 50 00 00 00 00 00 00 10 00 00 00 00 00 00  .`P.............
-    01 00 00 00 00 00 00 00 01 00 00 00 01 00 00 00  ................
-  backtrace:
-    [<ffffffff81545a34>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1057
-    [<ffffffff8213b65e>] kmalloc include/linux/slab.h:559 [inline]
-    [<ffffffff8213b65e>] kzalloc include/linux/slab.h:680 [inline]
-    [<ffffffff8213b65e>] add_block_entry+0x4e/0x320 fs/btrfs/ref-verify.c:271
-    [<ffffffff8213bcfe>] add_tree_block+0x9e/0x220 fs/btrfs/ref-verify.c:332
-    [<ffffffff8213d245>] btrfs_build_ref_tree+0x535/0x7c0 fs/btrfs/ref-verify.c:474
-    [<ffffffff8202b2f1>] open_ctree+0x12d1/0x2360 fs/btrfs/disk-io.c:3710
-    [<ffffffff81ff2e53>] btrfs_fill_super fs/btrfs/super.c:1156 [inline]
-    [<ffffffff81ff2e53>] btrfs_mount_root+0x583/0x710 fs/btrfs/super.c:1524
-    [<ffffffff816c406f>] legacy_get_tree+0x2f/0x90 fs/fs_context.c:610
-    [<ffffffff8165d7ac>] vfs_get_tree+0x2c/0x110 fs/super.c:1510
-    [<ffffffff81698e91>] fc_mount fs/namespace.c:1035 [inline]
-    [<ffffffff81698e91>] vfs_kern_mount.part.0+0xd1/0x120 fs/namespace.c:1065
-    [<ffffffff81698f20>] vfs_kern_mount+0x40/0x60 fs/namespace.c:1052
-    [<ffffffff81ff6e8d>] btrfs_mount+0x19d/0x620 fs/btrfs/super.c:1584
-    [<ffffffff816c406f>] legacy_get_tree+0x2f/0x90 fs/fs_context.c:610
-    [<ffffffff8165d7ac>] vfs_get_tree+0x2c/0x110 fs/super.c:1510
-    [<ffffffff816a0ac3>] do_new_mount fs/namespace.c:3039 [inline]
-    [<ffffffff816a0ac3>] path_mount+0xc53/0x10f0 fs/namespace.c:3369
-    [<ffffffff816a1702>] do_mount fs/namespace.c:3382 [inline]
-    [<ffffffff816a1702>] __do_sys_mount fs/namespace.c:3591 [inline]
-    [<ffffffff816a1702>] __se_sys_mount fs/namespace.c:3568 [inline]
-    [<ffffffff816a1702>] __x64_sys_mount+0x192/0x1e0 fs/namespace.c:3568
-    [<ffffffff84a16749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a16749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-
-BUG: memory leak
-unreferenced object 0xffff888109b51580 (size 96):
-  comm "syz-executor154", pid 5193, jiffies 4294972644 (age 22.400s)
-  hex dump (first 32 bytes):
-    00 10 10 00 00 00 00 00 00 10 00 00 00 00 00 00  ................
-    01 00 00 00 00 00 00 00 01 00 00 00 01 00 00 00  ................
-  backtrace:
-    [<ffffffff81545a34>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1057
-    [<ffffffff8213b65e>] kmalloc include/linux/slab.h:559 [inline]
-    [<ffffffff8213b65e>] kzalloc include/linux/slab.h:680 [inline]
-    [<ffffffff8213b65e>] add_block_entry+0x4e/0x320 fs/btrfs/ref-verify.c:271
-    [<ffffffff8213bcfe>] add_tree_block+0x9e/0x220 fs/btrfs/ref-verify.c:332
-    [<ffffffff8213d245>] btrfs_build_ref_tree+0x535/0x7c0 fs/btrfs/ref-verify.c:474
-    [<ffffffff8202b2f1>] open_ctree+0x12d1/0x2360 fs/btrfs/disk-io.c:3710
-    [<ffffffff81ff2e53>] btrfs_fill_super fs/btrfs/super.c:1156 [inline]
-    [<ffffffff81ff2e53>] btrfs_mount_root+0x583/0x710 fs/btrfs/super.c:1524
-    [<ffffffff816c406f>] legacy_get_tree+0x2f/0x90 fs/fs_context.c:610
-    [<ffffffff8165d7ac>] vfs_get_tree+0x2c/0x110 fs/super.c:1510
-    [<ffffffff81698e91>] fc_mount fs/namespace.c:1035 [inline]
-    [<ffffffff81698e91>] vfs_kern_mount.part.0+0xd1/0x120 fs/namespace.c:1065
-    [<ffffffff81698f20>] vfs_kern_mount+0x40/0x60 fs/namespace.c:1052
-    [<ffffffff81ff6e8d>] btrfs_mount+0x19d/0x620 fs/btrfs/super.c:1584
-    [<ffffffff816c406f>] legacy_get_tree+0x2f/0x90 fs/fs_context.c:610
-    [<ffffffff8165d7ac>] vfs_get_tree+0x2c/0x110 fs/super.c:1510
-    [<ffffffff816a0ac3>] do_new_mount fs/namespace.c:3039 [inline]
-    [<ffffffff816a0ac3>] path_mount+0xc53/0x10f0 fs/namespace.c:3369
-    [<ffffffff816a1702>] do_mount fs/namespace.c:3382 [inline]
-    [<ffffffff816a1702>] __do_sys_mount fs/namespace.c:3591 [inline]
-    [<ffffffff816a1702>] __se_sys_mount fs/namespace.c:3568 [inline]
-    [<ffffffff816a1702>] __x64_sys_mount+0x192/0x1e0 fs/namespace.c:3568
-    [<ffffffff84a16749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a16749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-
-BUG: memory leak
-unreferenced object 0xffff888109b51500 (size 96):
-  comm "syz-executor154", pid 5193, jiffies 4294972644 (age 22.400s)
-  hex dump (first 32 bytes):
-    00 30 50 00 00 00 00 00 00 10 00 00 00 00 00 00  .0P.............
-    01 00 00 00 00 00 00 00 01 00 00 00 01 00 00 00  ................
-  backtrace:
-    [<ffffffff81545a34>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1057
-    [<ffffffff8213b65e>] kmalloc include/linux/slab.h:559 [inline]
-    [<ffffffff8213b65e>] kzalloc include/linux/slab.h:680 [inline]
-    [<ffffffff8213b65e>] add_block_entry+0x4e/0x320 fs/btrfs/ref-verify.c:271
-    [<ffffffff8213bcfe>] add_tree_block+0x9e/0x220 fs/btrfs/ref-verify.c:332
-    [<ffffffff8213d245>] btrfs_build_ref_tree+0x535/0x7c0 fs/btrfs/ref-verify.c:474
-    [<ffffffff8202b2f1>] open_ctree+0x12d1/0x2360 fs/btrfs/disk-io.c:3710
-    [<ffffffff81ff2e53>] btrfs_fill_super fs/btrfs/super.c:1156 [inline]
-    [<ffffffff81ff2e53>] btrfs_mount_root+0x583/0x710 fs/btrfs/super.c:1524
-    [<ffffffff816c406f>] legacy_get_tree+0x2f/0x90 fs/fs_context.c:610
-    [<ffffffff8165d7ac>] vfs_get_tree+0x2c/0x110 fs/super.c:1510
-    [<ffffffff81698e91>] fc_mount fs/namespace.c:1035 [inline]
-    [<ffffffff81698e91>] vfs_kern_mount.part.0+0xd1/0x120 fs/namespace.c:1065
-    [<ffffffff81698f20>] vfs_kern_mount+0x40/0x60 fs/namespace.c:1052
-    [<ffffffff81ff6e8d>] btrfs_mount+0x19d/0x620 fs/btrfs/super.c:1584
-    [<ffffffff816c406f>] legacy_get_tree+0x2f/0x90 fs/fs_context.c:610
-    [<ffffffff8165d7ac>] vfs_get_tree+0x2c/0x110 fs/super.c:1510
-    [<ffffffff816a0ac3>] do_new_mount fs/namespace.c:3039 [inline]
-    [<ffffffff816a0ac3>] path_mount+0xc53/0x10f0 fs/namespace.c:3369
-    [<ffffffff816a1702>] do_mount fs/namespace.c:3382 [inline]
-    [<ffffffff816a1702>] __do_sys_mount fs/namespace.c:3591 [inline]
-    [<ffffffff816a1702>] __se_sys_mount fs/namespace.c:3568 [inline]
-    [<ffffffff816a1702>] __x64_sys_mount+0x192/0x1e0 fs/namespace.c:3568
-    [<ffffffff84a16749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a16749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-
-BUG: memory leak
-unreferenced object 0xffff888109b51480 (size 96):
-  comm "syz-executor154", pid 5193, jiffies 4294972644 (age 22.400s)
-  hex dump (first 32 bytes):
-    00 60 50 00 00 00 00 00 00 10 00 00 00 00 00 00  .`P.............
-    01 00 00 00 00 00 00 00 01 00 00 00 01 00 00 00  ................
-  backtrace:
-    [<ffffffff81545a34>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1057
-    [<ffffffff8213b65e>] kmalloc include/linux/slab.h:559 [inline]
-    [<ffffffff8213b65e>] kzalloc include/linux/slab.h:680 [inline]
-    [<ffffffff8213b65e>] add_block_entry+0x4e/0x320 fs/btrfs/ref-verify.c:271
-    [<ffffffff8213bcfe>] add_tree_block+0x9e/0x220 fs/btrfs/ref-verify.c:332
-    [<ffffffff8213d245>] btrfs_build_ref_tree+0x535/0x7c0 fs/btrfs/ref-verify.c:474
-    [<ffffffff8202b2f1>] open_ctree+0x12d1/0x2360 fs/btrfs/disk-io.c:3710
-    [<ffffffff81ff2e53>] btrfs_fill_super fs/btrfs/super.c:1156 [inline]
-    [<ffffffff81ff2e53>] btrfs_mount_root+0x583/0x710 fs/btrfs/super.c:1524
-    [<ffffffff816c406f>] legacy_get_tree+0x2f/0x90 fs/fs_context.c:610
-    [<ffffffff8165d7ac>] vfs_get_tree+0x2c/0x110 fs/super.c:1510
-    [<ffffffff81698e91>] fc_mount fs/namespace.c:1035 [inline]
-    [<ffffffff81698e91>] vfs_kern_mount.part.0+0xd1/0x120 fs/namespace.c:1065
-    [<ffffffff81698f20>] vfs_kern_mount+0x40/0x60 fs/namespace.c:1052
-    [<ffffffff81ff6e8d>] btrfs_mount+0x19d/0x620 fs/btrfs/super.c:1584
-    [<ffffffff816c406f>] legacy_get_tree+0x2f/0x90 fs/fs_context.c:610
-    [<ffffffff8165d7ac>] vfs_get_tree+0x2c/0x110 fs/super.c:1510
-    [<ffffffff816a0ac3>] do_new_mount fs/namespace.c:3039 [inline]
-    [<ffffffff816a0ac3>] path_mount+0xc53/0x10f0 fs/namespace.c:3369
-    [<ffffffff816a1702>] do_mount fs/namespace.c:3382 [inline]
-    [<ffffffff816a1702>] __do_sys_mount fs/namespace.c:3591 [inline]
-    [<ffffffff816a1702>] __se_sys_mount fs/namespace.c:3568 [inline]
-    [<ffffffff816a1702>] __x64_sys_mount+0x192/0x1e0 fs/namespace.c:3568
-    [<ffffffff84a16749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a16749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-
-BUG: memory leak
-unreferenced object 0xffff888109b51580 (size 96):
-  comm "syz-executor154", pid 5193, jiffies 4294972644 (age 22.440s)
-  hex dump (first 32 bytes):
-    00 10 10 00 00 00 00 00 00 10 00 00 00 00 00 00  ................
-    01 00 00 00 00 00 00 00 01 00 00 00 01 00 00 00  ................
-  backtrace:
-    [<ffffffff81545a34>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1057
-    [<ffffffff8213b65e>] kmalloc include/linux/slab.h:559 [inline]
-    [<ffffffff8213b65e>] kzalloc include/linux/slab.h:680 [inline]
-    [<ffffffff8213b65e>] add_block_entry+0x4e/0x320 fs/btrfs/ref-verify.c:271
-    [<ffffffff8213bcfe>] add_tree_block+0x9e/0x220 fs/btrfs/ref-verify.c:332
-    [<ffffffff8213d245>] btrfs_build_ref_tree+0x535/0x7c0 fs/btrfs/ref-verify.c:474
-    [<ffffffff8202b2f1>] open_ctree+0x12d1/0x2360 fs/btrfs/disk-io.c:3710
-    [<ffffffff81ff2e53>] btrfs_fill_super fs/btrfs/super.c:1156 [inline]
-    [<ffffffff81ff2e53>] btrfs_mount_root+0x583/0x710 fs/btrfs/super.c:1524
-    [<ffffffff816c406f>] legacy_get_tree+0x2f/0x90 fs/fs_context.c:610
-    [<ffffffff8165d7ac>] vfs_get_tree+0x2c/0x110 fs/super.c:1510
-    [<ffffffff81698e91>] fc_mount fs/namespace.c:1035 [inline]
-    [<ffffffff81698e91>] vfs_kern_mount.part.0+0xd1/0x120 fs/namespace.c:1065
-    [<ffffffff81698f20>] vfs_kern_mount+0x40/0x60 fs/namespace.c:1052
-    [<ffffffff81ff6e8d>] btrfs_mount+0x19d/0x620 fs/btrfs/super.c:1584
-    [<ffffffff816c406f>] legacy_get_tree+0x2f/0x90 fs/fs_context.c:610
-    [<ffffffff8165d7ac>] vfs_get_tree+0x2c/0x110 fs/super.c:1510
-    [<ffffffff816a0ac3>] do_new_mount fs/namespace.c:3039 [inline]
-    [<ffffffff816a0ac3>] path_mount+0xc53/0x10f0 fs/namespace.c:3369
-    [<ffffffff816a1702>] do_mount fs/namespace.c:3382 [inline]
-    [<ffffffff816a1702>] __do_sys_mount fs/namespace.c:3591 [inline]
-    [<ffffffff816a1702>] __se_sys_mount fs/namespace.c:3568 [inline]
-    [<ffffffff816a1702>] __x64_sys_mount+0x192/0x1e0 fs/namespace.c:3568
-    [<ffffffff84a16749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a16749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-
-BUG: memory leak
-unreferenced object 0xffff888109b51500 (size 96):
-  comm "syz-executor154", pid 5193, jiffies 4294972644 (age 22.440s)
-  hex dump (first 32 bytes):
-    00 30 50 00 00 00 00 00 00 10 00 00 00 00 00 00  .0P.............
-    01 00 00 00 00 00 00 00 01 00 00 00 01 00 00 00  ................
-  backtrace:
-    [<ffffffff81545a34>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1057
-    [<ffffffff8213b65e>] kmalloc include/linux/slab.h:559 [inline]
-    [<ffffffff8213b65e>] kzalloc include/linux/slab.h:680 [inline]
-    [<ffffffff8213b65e>] add_block_entry+0x4e/0x320 fs/btrfs/ref-verify.c:271
-    [<ffffffff8213bcfe>] add_tree_block+0x9e/0x220 fs/btrfs/ref-verify.c:332
-    [<ffffffff8213d245>] btrfs_build_ref_tree+0x535/0x7c0 fs/btrfs/ref-verify.c:474
-    [<ffffffff8202b2f1>] open_ctree+0x12d1/0x2360 fs/btrfs/disk-io.c:3710
-    [<ffffffff81ff2e53>] btrfs_fill_super fs/btrfs/super.c:1156 [inline]
-    [<ffffffff81ff2e53>] btrfs_mount_root+0x583/0x710 fs/btrfs/super.c:1524
-    [<ffffffff816c406f>] legacy_get_tree+0x2f/0x90 fs/fs_context.c:610
-    [<ffffffff8165d7ac>] vfs_get_tree+0x2c/0x110 fs/super.c:1510
-    [<ffffffff81698e91>] fc_mount fs/namespace.c:1035 [inline]
-    [<ffffffff81698e91>] vfs_kern_mount.part.0+0xd1/0x120 fs/namespace.c:1065
-    [<ffffffff81698f20>] vfs_kern_mount+0x40/0x60 fs/namespace.c:1052
-    [<ffffffff81ff6e8d>] btrfs_mount+0x19d/0x620 fs/btrfs/super.c:1584
-    [<ffffffff816c406f>] legacy_get_tree+0x2f/0x90 fs/fs_context.c:610
-    [<ffffffff8165d7ac>] vfs_get_tree+0x2c/0x110 fs/super.c:1510
-    [<ffffffff816a0ac3>] do_new_mount fs/namespace.c:3039 [inline]
-    [<ffffffff816a0ac3>] path_mount+0xc53/0x10f0 fs/namespace.c:3369
-    [<ffffffff816a1702>] do_mount fs/namespace.c:3382 [inline]
-    [<ffffffff816a1702>] __do_sys_mount fs/namespace.c:3591 [inline]
-    [<ffffffff816a1702>] __se_sys_mount fs/namespace.c:3568 [inline]
-    [<ffffffff816a1702>] __x64_sys_mount+0x192/0x1e0 fs/namespace.c:3568
-    [<ffffffff84a16749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a16749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-
-BUG: memory leak
-unreferenced object 0xffff888109b51480 (size 96):
-  comm "syz-executor154", pid 5193, jiffies 4294972644 (age 22.440s)
-  hex dump (first 32 bytes):
-    00 60 50 00 00 00 00 00 00 10 00 00 00 00 00 00  .`P.............
-    01 00 00 00 00 00 00 00 01 00 00 00 01 00 00 00  ................
-  backtrace:
-    [<ffffffff81545a34>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1057
-    [<ffffffff8213b65e>] kmalloc include/linux/slab.h:559 [inline]
-    [<ffffffff8213b65e>] kzalloc include/linux/slab.h:680 [inline]
-    [<ffffffff8213b65e>] add_block_entry+0x4e/0x320 fs/btrfs/ref-verify.c:271
-    [<ffffffff8213bcfe>] add_tree_block+0x9e/0x220 fs/btrfs/ref-verify.c:332
-    [<ffffffff8213d245>] btrfs_build_ref_tree+0x535/0x7c0 fs/btrfs/ref-verify.c:474
-    [<ffffffff8202b2f1>] open_ctree+0x12d1/0x2360 fs/btrfs/disk-io.c:3710
-    [<ffffffff81ff2e53>] btrfs_fill_super fs/btrfs/super.c:1156 [inline]
-    [<ffffffff81ff2e53>] btrfs_mount_root+0x583/0x710 fs/btrfs/super.c:1524
-    [<ffffffff816c406f>] legacy_get_tree+0x2f/0x90 fs/fs_context.c:610
-    [<ffffffff8165d7ac>] vfs_get_tree+0x2c/0x110 fs/super.c:1510
-    [<ffffffff81698e91>] fc_mount fs/namespace.c:1035 [inline]
-    [<ffffffff81698e91>] vfs_kern_mount.part.0+0xd1/0x120 fs/namespace.c:1065
-    [<ffffffff81698f20>] vfs_kern_mount+0x40/0x60 fs/namespace.c:1052
-    [<ffffffff81ff6e8d>] btrfs_mount+0x19d/0x620 fs/btrfs/super.c:1584
-    [<ffffffff816c406f>] legacy_get_tree+0x2f/0x90 fs/fs_context.c:610
-    [<ffffffff8165d7ac>] vfs_get_tree+0x2c/0x110 fs/super.c:1510
-    [<ffffffff816a0ac3>] do_new_mount fs/namespace.c:3039 [inline]
-    [<ffffffff816a0ac3>] path_mount+0xc53/0x10f0 fs/namespace.c:3369
-    [<ffffffff816a1702>] do_mount fs/namespace.c:3382 [inline]
-    [<ffffffff816a1702>] __do_sys_mount fs/namespace.c:3591 [inline]
-    [<ffffffff816a1702>] __se_sys_mount fs/namespace.c:3568 [inline]
-    [<ffffffff816a1702>] __x64_sys_mount+0x192/0x1e0 fs/namespace.c:3568
-    [<ffffffff84a16749>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a16749>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-
-executing program
-executing program
-executing program
+   In file included from drivers/staging/media/atomisp//pci/ia_css_acc_types.h:25,
+                    from drivers/staging/media/atomisp//pci/ia_css_pipe_public.h:29,
+                    from drivers/staging/media/atomisp//pci/ia_css_stream_public.h:25,
+                    from drivers/staging/media/atomisp//pci/runtime/binary/interface/ia_css_binary.h:23,
+                    from drivers/staging/media/atomisp//pci/runtime/debug/interface/ia_css_debug.h:25,
+                    from drivers/staging/media/atomisp/pci/isp/kernels/macc/macc_1.0/ia_css_macc.host.c:18:
+>> drivers/staging/media/atomisp//pci/hive_isp_css_include/platform_support.h:30: warning: "UCHAR_MAX" redefined
+      30 | #define UCHAR_MAX  (255)
+         | 
+   In file included from include/linux/limits.h:7,
+                    from drivers/staging/media/atomisp//pci/hive_isp_css_include/type_support.h:37,
+                    from drivers/staging/media/atomisp//pci/ia_css_types.h:27,
+                    from drivers/staging/media/atomisp/pci/isp/kernels/macc/macc_1.0/ia_css_macc.host.c:16:
+   include/vdso/limits.h:5: note: this is the location of the previous definition
+       5 | #define UCHAR_MAX       ((unsigned char)~0U)
+         | 
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+vim +/UCHAR_MAX +30 drivers/staging/media/atomisp//pci/hive_isp_css_include/platform_support.h
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/css2400/hive_isp_css_include/platform_support.h Mauro Carvalho Chehab 2020-04-19  27  
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/css2400/hive_isp_css_include/platform_support.h Mauro Carvalho Chehab 2020-04-19  28  #define UINT16_MAX USHRT_MAX
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/css2400/hive_isp_css_include/platform_support.h Mauro Carvalho Chehab 2020-04-19  29  #define UINT32_MAX UINT_MAX
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/css2400/hive_isp_css_include/platform_support.h Mauro Carvalho Chehab 2020-04-19 @30  #define UCHAR_MAX  (255)
+ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/css2400/hive_isp_css_include/platform_support.h Mauro Carvalho Chehab 2020-04-19  31  
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
