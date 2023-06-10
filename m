@@ -2,128 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A104872AD87
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 18:52:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1218F72AD8B
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 18:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbjFJQwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 12:52:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53918 "EHLO
+        id S230307AbjFJQ7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 12:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjFJQwK (ORCPT
+        with ESMTP id S229620AbjFJQ7C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 12:52:10 -0400
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1AA26B0;
-        Sat, 10 Jun 2023 09:52:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1686415926; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=S9tuWrHM9P+DwbMzIWWJRvgBYqviXieKUUL9XWt4RigB2zwzvZzUxrM25bXtcXNmwK
-    a61HYo2YnnwvVelVR088vIFhnxvyjXYtPzDUl+MkirujDfrP+c+/gI2UAXNXxuLYHVmT
-    JF242tHKxpooHcy9uLE0QRU8uSVDRhm9gIE14r4qHhXNj7gAxdbcVPz7p1cFiCynWOyi
-    UDDlfgZ8Vo65RPLqfBVM8F52ejJKA4FYzxzIi03e6MMRSI55qrkulhxMwYq0K/u0AYD2
-    T6ybeZ0H2plWb7K610RnRDXTwXaJ/RZzIf7CxHr00mRypcnjF6nZSLQIDX9nJwdunFJR
-    vPGw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686415926;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=QWIRPWXgw/uXm0KjKjXznsIUsIykKDfMwhJ/S2bPOrE=;
-    b=rmP7bcyR2HDLLSeUXXrqOffceZhKyAtQ796mxNZwt/I5WFVA47bJzWjP6mkob9+DIO
-    pkn0euJQcChYe2wyeEYsde+SsUt+QQRa4qebA7wBefpsZJbfuPROziY45KI3gGf1Zh6l
-    UmTaOO8opjRbZUczAOlGfyQ1wUv3Ticd73Y7lQZfO/pugycgW0eG8YfphXdSWtHpeLgi
-    qe4HGBwovlcnvEdRY+Drei+nRnRUkKH/b6yeoFNZgg0eNu4CORaoka5NpSSzyQqf5VPC
-    Eoah4zT5eEqfW7tuOGwssslziKHmv4xYy3ms2vRwbnJw3YcGsVDVrcVSX0uLRK7sxYNf
-    Ah2g==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686415926;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=QWIRPWXgw/uXm0KjKjXznsIUsIykKDfMwhJ/S2bPOrE=;
-    b=akLBgHXBJdPQyaTJRYWr6t0syQ93uLKt0Tm23WYuBJEhIYKYuwXdG6QYnSIGf+S8vT
-    c1auiMaL2j/YocueXoEuzlnkXZBsmAR0GtgiGB2qv40cG1zMh72kFp2rG1CzPk9w7YQh
-    kUql4Hl+f0vhqJTOxw5Asew6CKF6Hr7GHAAM89V/SKkK4DMGumULDH78WePhCHKLsI8/
-    tkGjhm1GyOW8mSVCw0jwL6LCDkUcnTiiy++4GCjs8IBzYrCsIR3s2PCFWZixC0oMPR8G
-    VARpiBFnKFLQlJUzTd4CrOsjb6rPteW2WEloIUGQcx1R5b6dgfApM3A7uU1PdMn8MS1r
-    N+XQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686415926;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=QWIRPWXgw/uXm0KjKjXznsIUsIykKDfMwhJ/S2bPOrE=;
-    b=zwSi5lfSpJ7AnKLDZ/74+CyGQVo0tfEBcaWhfcmtSIzkqc1NBTkM9M7EK/QKQ0T0Q5
-    wGdI+WRSM3T8x+wZFBDg==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA9J/h"
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.5.3 DYNA|AUTH)
-    with ESMTPSA id Z82ec2z5AGq6QY3
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Sat, 10 Jun 2023 18:52:06 +0200 (CEST)
-Date:   Sat, 10 Jun 2023 18:52:04 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org
-Subject: Re: [PATCH v2 05/12] dt-bindings: remoteproc: Add Qualcomm RPM
- processor/subsystem
-Message-ID: <ZISqNPnQgPNEsmxa@gerhold.net>
-References: <20230531-rpm-rproc-v2-0-56a4a00c8260@gerhold.net>
- <20230531-rpm-rproc-v2-5-56a4a00c8260@gerhold.net>
- <9cdf22cc-6509-b87e-e631-4e3633d1f542@linaro.org>
+        Sat, 10 Jun 2023 12:59:02 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1480B2D44
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 09:59:00 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-98-8BQbVs2MNh2fTOBXaJ3mkg-1; Sat, 10 Jun 2023 17:58:58 +0100
+X-MC-Unique: 8BQbVs2MNh2fTOBXaJ3mkg-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sat, 10 Jun
+ 2023 17:58:54 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Sat, 10 Jun 2023 17:58:54 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     David Laight <David.Laight@ACULAB.COM>,
+        'Zhangjin Wu' <falcon@tinylab.org>, "w@1wt.eu" <w@1wt.eu>
+CC:     "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "thomas@t-8ch.de" <thomas@t-8ch.de>
+Subject: RE: [PATCH v2 4/4] tools/nolibc: sys.h: apply __syscall() helper
+Thread-Topic: [PATCH v2 4/4] tools/nolibc: sys.h: apply __syscall() helper
+Thread-Index: AQHZmQJ1YTdtMnXhOkqSBnIhvL9uWq+EPW+ggAAJOcA=
+Date:   Sat, 10 Jun 2023 16:58:54 +0000
+Message-ID: <6dcd7c69f95f4fed8cc3d0add1f7d6e9@AcuMS.aculab.com>
+References: <ZIAB7bFYegCuXT9g@1wt.eu>
+ <20230607053920.667272-1-falcon@tinylab.org>
+ <0295105fe0744200bf2ef99e5bf7bc09@AcuMS.aculab.com>
+In-Reply-To: <0295105fe0744200bf2ef99e5bf7bc09@AcuMS.aculab.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9cdf22cc-6509-b87e-e631-4e3633d1f542@linaro.org>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 10, 2023 at 06:43:17PM +0200, Krzysztof Kozlowski wrote:
-> On 08/06/2023 09:10, Stephan Gerhold wrote:
-> > On Qualcomm platforms, most subsystems (e.g. audio/modem DSP) are
-> > described as remote processors in the device tree, with a dedicated
-> > node where properties and services related to them can be described.
-> > +
-> > +  smd-edge:
-> > +    $ref: /schemas/remoteproc/qcom,smd-edge.yaml#
-> > +    description:
-> > +      Qualcomm Shared Memory subnode which represents communication edge,
-> > +      channels and devices related to the RPM subsystem.
-> > +
-> > +  glink-rpm:
-> 
-> This should be "glink-edge", to be a bit more generic and match existing
-> smd-edge.
-> 
-
-I fully agree and I actually made that change at some point before
-sending v1. Unfortunately, it doesn't work: The node name "glink-edge"
-is already reserved by qcom,glink-edge.yaml. While it's very similar it
-has some subtle differences to glink-rpm-edge.yaml. For example, there
-is no qcom,remote-pid in the RPM variant which is required by the normal
-glink-edge.
-
-Would "glink-rpm-edge" sound better?
-
-Thanks,
-Stephan
+RnJvbTogRGF2aWQgTGFpZ2h0DQo+IFNlbnQ6IDEwIEp1bmUgMjAyMyAxNzozNA0KPiANCj4gRnJv
+bTogWmhhbmdqaW4gV3UNCj4gPiBTZW50OiAwNyBKdW5lIDIwMjMgMDY6MzkNCj4gLi4uDQo+ID4g
+QXMgYSBzdW1tYXJ5LCB3aWxsIHVzZSAnc3lzcmV0KCknIGFuZCBzb21ldGhpbmcgbGlrZToNCj4g
+Pg0KPiA+ICAgIHN0YXRpYyBfX2F0dHJpYnV0ZV9fKCh1bnVzZWQpKQ0KPiA+ICAgIGludCBjaGRp
+cihjb25zdCBjaGFyICpwYXRoKQ0KPiA+ICAgIHsNCj4gPiAgICAJcmV0dXJuIHN5c3JldChjaGRp
+cihwYXRoKSk7DQo+ID4gICAgfQ0KPiA+DQo+ID4gdG8gcmVuZXcgdGhlIHN5c2NhbGwgaGVscGVy
+IHBhdGNoc2V0LCBUaGFua3MgeW91IHZlcnkgbXVjaC4NCj4gDQo+IFdoaWxlIEknbSBhbGwgZm9y
+IHVzaW5nICdjcHAtbWFnaWMnIHRvIGFic3RyYWN0IGFuZCAoaG9wZWZ1bGx5KQ0KPiBzaW1wbGlm
+eSB0aGluZ3MuIFRva2VuLXBhc3RpbmcgdGhlIHN5c18gaGVyZSBkb2Vzbid0IHNlZW0gdG8gZ2Fp
+bg0KPiBhbnl0aGluZy4NCj4gQW55b25lIGdyZXBwaW5nIHRoZSBjb2RlIGZvciAnc3lzX2NoZGly
+JyBpcyBhbHNvIGdvaW5nIHRvDQo+IHdvbmRlciB3aGVyZSBpdCBpcyB1c2VkLg0KDQpJIHRoaW5r
+IEkndmUgc3BvdHRlZCBhIGxhdGVyIHZlcnNpb24gb2YgdGhlIHBhdGNoDQp0aGF0IGRvZXNuJ3Qg
+cGFzdGUgdGhlIHN5c18NCg0KPiBUaGVyZSBtaWdodCBiZSBzY29wZSBmb3Igc29tZXRoaW5nIGxp
+a2U6DQo+ICNkZWZpbmUgc3lzY2FsbF93cmFwcGVyKGZ1bmMsIHR5cGUpIFwNCj4gCXN0YXRpYyBf
+X2F0dHJpYnV0ZV9fKCh1bnVzZWQpKSBcDQo+IAlpbnQgZnVuYyh0eXBlICphcmcpIFwNCj4gCXsg
+XA0KPiAJCXJldHVybiBzeXNyZXQoc3lzXyNmdW5jKGFyZykpOyBcDQo+IAl9DQo+IGFuZCB0aGVu
+Og0KPiBzeXNjYWxsX3dyYXBwZXIoY2hkaXIsIGNvbnN0IGNoYXIgKikNCj4gd291bGQgZXhwYW5k
+IHRvIHRoZSBjb2RlIGFib3ZlLg0KPiANCj4gSSB0aGluayB5b3UnZCBuZWVkIHNlcGFyYXRlIGRl
+ZmluZXMgZm9yIGVhY2ggbnVtYmVyIG9mIGFyZ3VtZW50cy4NCg0KSXQgaXMgYWxzbyB3b3J0aCBw
+b2ludGluZyBvdXQgdGhhdCBvbmNlIHRoZSAnc3RhdGljIHVudXNlZCcNCmZ1bmN0aW9ucyBoYXZl
+IGJlZW4gZGVmaW5lZCwgYWxsIHRoZSAjZGVmaW5lICdnb29wJyB1c2VkIHRvDQpkZWZpbmUgdGhl
+bSBjYW4gYmUgc3VtbWFyaWx5ICN1bmRlZidlZC4NClRoYXQgKG1vc3RseSkgc29sdmVzIHRoZSBu
+YW1lc3BhY2UgcHJvYmxlbS4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtl
+c2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBV
+Sw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
