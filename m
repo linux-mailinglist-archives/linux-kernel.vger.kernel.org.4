@@ -2,150 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B5572A76A
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 03:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C53C072A76E
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 03:30:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233217AbjFJBV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 21:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34284 "EHLO
+        id S229657AbjFJB36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 21:29:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231938AbjFJBVY (ORCPT
+        with ESMTP id S229522AbjFJB34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 21:21:24 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A49830F9
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 18:21:23 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id A37AD3200914;
-        Fri,  9 Jun 2023 21:21:22 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Fri, 09 Jun 2023 21:21:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        joshtriplett.org; h=cc:cc:content-type:content-type:date:date
-        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1686360082; x=1686446482; bh=6g
-        2RVl+GpOZe2oQM/8nONsqThYPCh2VfCuomeQ/pDfE=; b=ixy4icfz8BrLovCkGr
-        M+huV0302OV6wUxAHuOR+c8W7vhfc09wvPnQtzl/nyMMZlhikc0m2JllT/wBCSx2
-        DJBNVVsDNBS3gHUHZKMqLwg2jxICrp1LeyH8cNponrqEcFay6AKG1VR0p0ZAlS+w
-        PsgX8lv7a3kWeh8no10JKcbzUDAfMX3VPG44LwghwXywN1GQGuGPSKmX/0+/zTbD
-        zl2S4VGjT1DEh8u6f++9vzvY/9zLESx9j27yQNmdW7GFwGyUcxvDDk2QahYmNfHI
-        2Wjja2kUQaViuSVi2W767xTAmi7+eM4EEueTCOiFHA+FdYTj4WwcJjjZBL/xESP0
-        Jw6A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1686360082; x=1686446482; bh=6g2RVl+GpOZe2oQM/8nONsqThYPCh2VfCuo
-        meQ/pDfE=; b=PQOIbIq42EKpMxvSNOdVfZdzdFqzS422zwnuMhi1KtYihXf+HQB
-        CDM/53QH55Z7zYu8XI9xwlYd4009UEIy2fa7ZYXyDh5RhrUJiUzu2ta760QrMh7T
-        zDU5OpVdxL+pa0RhzeXRHZOb3h9sO6WGBnTNL68z7ytYOfl5gGhI4zN4lJcbg/7v
-        +ozTSN6y1nQ22+30ITaBGSJJmLoIYYAPykTz3REh3f6TBbB+/fE8Ae0F5biK+DEN
-        IU6PbJMMTItpt69RMEJsl9ihkzxsGKGug3zHQ2NndV0II610u0xINkHKFJTIiGVq
-        YJogkUZEJuS1sUtoAP5RWW/algYrKYYW5iA==
-X-ME-Sender: <xms:EdCDZEnuqTpMeXgN36L4Zpip7N2TkMj0AhVmial-eRuINCtTvEwqlw>
-    <xme:EdCDZD0nsucEMJATGovBxCphseTFiBkD4EYRSPnnKGd03AcArxQvEbNAtXMmwjuLg
-    xmPkZEEdvg7SllfXvg>
-X-ME-Received: <xmr:EdCDZCrbt7-Xqe5cdGwbP1i45-TKH9bkp4oRMpfyse39EULVnc5-FV3wXA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtledggeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkgggtugesthdtredttddtvdenucfhrhhomheplfhoshhhucfv
-    rhhiphhlvghtthcuoehjohhshhesjhhoshhhthhrihhplhgvthhtrdhorhhgqeenucggtf
-    frrghtthgvrhhnpeduvdelheettdfgvddvleegueefudegudevffekjeegffefvdeikeeh
-    vdehleekhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehjohhshhesjhhoshhhthhrihhplhgvthhtrdhorhhg
-X-ME-Proxy: <xmx:EtCDZAl5y4vTebDsgAhVLsvibDfw1pcD7OXOOD3rzVRQKLUwOrQF6g>
-    <xmx:EtCDZC1j8PKzdSj7JDVgKCIM82hJUX4RmDxmTx8nYeK3wqnFcZDJGQ>
-    <xmx:EtCDZHtE1139yibXIvshqcC8i2L-6Zl2zQbSaB5zAAcEAKBJzKlegQ>
-    <xmx:EtCDZFSCdQ3yO6YBH2yuChoDRmOHEYmXWmDVcenxHdmeBept6IKQtw>
-Feedback-ID: i83e94755:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 9 Jun 2023 21:21:20 -0400 (EDT)
-Date:   Fri, 9 Jun 2023 18:21:19 -0700
-From:   Josh Triplett <josh@joshtriplett.org>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <muchun.song@linux.dev>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH] mm: hugetlb: Add Kconfig option to set default
- nr_overcommit_hugepages
-Message-ID: <88fc41edeb5667534cde344c9220fcdfc00047b1.1686359973.git.josh@joshtriplett.org>
+        Fri, 9 Jun 2023 21:29:56 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B48A30F2
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 18:29:55 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-565cdb77b01so21178057b3.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 18:29:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686360595; x=1688952595;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8FKJ3xPJEDetSK5auCGGcapjjk91ewFvgiFRw0hqYb0=;
+        b=tOtScZVwZNwDUDalvhpk5D8h1duHJC9b998fE1WumdZZRJbExd+da8AJdP3IZ5Wae/
+         5nb6O/f3+WMjQJEFgWrI+wFdIr3WJVKy361rNGexVno4GyofOLxRv1ED9LyOv0G6wFeB
+         +L352ZuS1kMGc/90BnLCPWkAVDvU27yfXKYtSLR6CaI8aVSeFy0dW9+txuuI0F2lbPLL
+         NC4qerfdGfI11b3wj41HVyB+zsVPrh3x3ibIqdsrqPV68CtMPa1de9kcnwc95D/rDVm6
+         9n6gjQcHxvlnY2Q+i64cRlcbQikt5Absa2MZ2QUQHi/nTePPVQFHvumqFwkSXlDNzeO6
+         NKBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686360595; x=1688952595;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8FKJ3xPJEDetSK5auCGGcapjjk91ewFvgiFRw0hqYb0=;
+        b=PIKFgYadZkor0cuqbOD0L+2ZqZIxqoJj+uuj4/fU/4PA9EtVXThvcd6p75sE60PgdB
+         nNgYgloouMGfn+VAjncC/dcFsBU3r7fP2ORVkqoOJ722jv98KlQtVN2DEZua4q0k+xG1
+         QcHor8GmLc5z61KjID4HKf+YKO0MZGfHW5eXV6uYey/BN3gFw4Fjay8VPtvEDrEdit29
+         XvLgPyW6vW0gtZW/xjRM+NopUxA2XEpPtkjhyGny+Ol088eoD33vwDROMuPt8ummvuEZ
+         BI9t7o9ob39bnTm7gd0cjaCKPhNaBuMvYyRL4/lEvCWSqSntXXVT38oFCERvoqhxYtEq
+         1T8Q==
+X-Gm-Message-State: AC+VfDxh7XMlY2xN6y+Z6c+mWGDQpHLjo1jY2zFzDyscGAxus0wWlZGp
+        0rlIiNsyAFU7h1lOIVJgA5kHNgxXDongWAipKk/jrw==
+X-Google-Smtp-Source: ACHHUZ5olS/VKLyw26AHgQlVBf0OLVFr6x8YW8avTg9PVS60xY2nu8cfesfDPnrAVmkdYUX3hVIVpz5CG9a0BKsTOWA=
+X-Received: by 2002:a0d:df97:0:b0:561:baee:ee8 with SMTP id
+ i145-20020a0ddf97000000b00561baee0ee8mr2916493ywe.32.1686360594592; Fri, 09
+ Jun 2023 18:29:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230609005158.2421285-1-surenb@google.com> <20230609005158.2421285-5-surenb@google.com>
+ <ZIOOmC26qh4EXUEX@x1n> <CAJuCfpHKUjAwgWbxvJQDyEnneRD03p2M6247Q6=3-oOq_FL7zA@mail.gmail.com>
+In-Reply-To: <CAJuCfpHKUjAwgWbxvJQDyEnneRD03p2M6247Q6=3-oOq_FL7zA@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Fri, 9 Jun 2023 18:29:43 -0700
+Message-ID: <CAJuCfpG3PrbGxpDAEkyGQXW88+otb=FsbrhPJ4ePN7Xhn0a+_A@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] mm: drop VMA lock before waiting for migration
+To:     Peter Xu <peterx@redhat.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
+        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
+        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
+        apopple@nvidia.com, ying.huang@intel.com, david@redhat.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        viro@zeniv.linux.org.uk, brauner@kernel.org,
+        pasha.tatashin@soleen.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The default kernel configuration does not allow any huge page allocation
-until after setting nr_hugepages or nr_overcommit_hugepages to a
-non-zero value; without setting those, mmap attempts with MAP_HUGETLB
-will always fail with -ENOMEM. nr_overcommit_hugepages allows userspace
-to attempt to allocate huge pages at runtime, succeeding if the kernel
-can find or assemble a free huge page.
+On Fri, Jun 9, 2023 at 3:30=E2=80=AFPM Suren Baghdasaryan <surenb@google.co=
+m> wrote:
+>
+> On Fri, Jun 9, 2023 at 1:42=E2=80=AFPM Peter Xu <peterx@redhat.com> wrote=
+:
+> >
+> > On Thu, Jun 08, 2023 at 05:51:56PM -0700, Suren Baghdasaryan wrote:
+> > > migration_entry_wait does not need VMA lock, therefore it can be drop=
+ped
+> > > before waiting. Introduce VM_FAULT_VMA_UNLOCKED to indicate that VMA
+> > > lock was dropped while in handle_mm_fault().
+> > > Note that once VMA lock is dropped, the VMA reference can't be used a=
+s
+> > > there are no guarantees it was not freed.
+> >
+> > Then vma lock behaves differently from mmap read lock, am I right?  Can=
+ we
+> > still make them match on behaviors, or there's reason not to do so?
+>
+> I think we could match their behavior by also dropping mmap_lock here
+> when fault is handled under mmap_lock (!(fault->flags &
+> FAULT_FLAG_VMA_LOCK)).
+> I missed the fact that VM_FAULT_COMPLETED can be used to skip dropping
+> mmap_lock in do_page_fault(), so indeed, I might be able to use
+> VM_FAULT_COMPLETED to skip vma_end_read(vma) for per-vma locks as well
+> instead of introducing FAULT_FLAG_VMA_LOCK. I think that was your idea
+> of reusing existing flags?
+Sorry, I meant VM_FAULT_VMA_UNLOCKED, not FAULT_FLAG_VMA_LOCK in the
+above reply.
 
-Provide a Kconfig option to make nr_overcommit_hugepages default to
-unlimited, which permits userspace to always attempt huge page
-allocation on a best-effort basis. This makes it easier and more
-worthwhile for random applications and libraries to opportunistically
-attempt MAP_HUGETLB allocations without special configuration.
+I took a closer look into using VM_FAULT_COMPLETED instead of
+VM_FAULT_VMA_UNLOCKED but when we fall back from per-vma lock to
+mmap_lock we need to retry with an indication that the per-vma lock
+was dropped. Returning (VM_FAULT_RETRY | VM_FAULT_COMPLETE) to
+indicate such state seems strange to me ("retry" and "complete" seem
+like contradicting concepts to be used in a single result). I could
+use VM_FAULT_COMPLETE when releasing mmap_lock since we don't use it
+in combination with VM_FAULT_RETRY and (VM_FAULT_RETRY |
+VM_FAULT_VMA_UNLOCKED) when dropping per-vma lock and falling back to
+mmap_lock. It still requires the new VM_FAULT_VMA_UNLOCKED flag but I
+think logically that makes more sense. WDYT?
 
-In particular, current versions of liburing with IORING_SETUP_NO_MMAP
-attempt to allocate the rings in a huge page. This seems likely to lead
-to more applications and libraries attempting to use huge pages.
-
-Signed-off-by: Josh Triplett <josh@joshtriplett.org>
----
- mm/Kconfig   | 14 ++++++++++++++
- mm/hugetlb.c |  2 ++
- 2 files changed, 16 insertions(+)
-
-diff --git a/mm/Kconfig b/mm/Kconfig
-index 7672a22647b4..32c13610c5c4 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -824,6 +824,20 @@ config READ_ONLY_THP_FOR_FS
- 
- endif # TRANSPARENT_HUGEPAGE
- 
-+config HUGEPAGE_OVERCOMMIT_DEFAULT_UNLIMITED
-+	bool "Allow huge page allocation attempts by default"
-+	depends on HUGETLB_PAGE
-+	help
-+	  By default, the kernel does not allow any huge page allocation until
-+	  after setting nr_hugepages or nr_overcommit_hugepages to a non-zero
-+	  value. nr_overcommit_hugepages allows userspace to attempt to
-+	  allocate huge pages at runtime, succeeding if the kernel can find or
-+	  assemble a free huge page.
-+
-+	  Enable this option to make nr_overcommit_hugepages default to
-+	  unlimited, which permits userspace to always attempt hugepage
-+	  allocation.
-+
- #
- # UP and nommu archs use km based percpu allocator
- #
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index f154019e6b84..65abbe254e10 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -4305,6 +4305,8 @@ void __init hugetlb_add_hstate(unsigned int order)
- 	mutex_init(&h->resize_lock);
- 	h->order = order;
- 	h->mask = ~(huge_page_size(h) - 1);
-+	if (IS_ENABLED(CONFIG_HUGEPAGE_OVERCOMMIT_DEFAULT_UNLIMITED))
-+		h->nr_overcommit_huge_pages = ULONG_MAX;
- 	for (i = 0; i < MAX_NUMNODES; ++i)
- 		INIT_LIST_HEAD(&h->hugepage_freelists[i]);
- 	INIT_LIST_HEAD(&h->hugepage_activelist);
--- 
-2.40.1
-
+>
+> >
+> > One reason is if they match they can reuse existing flags and there'll =
+be
+> > less confusing, e.g. this:
+> >
+> >   (fault->flags & FAULT_FLAG_VMA_LOCK) &&
+> >     (vm_fault_ret && (VM_FAULT_RETRY || VM_FAULT_COMPLETE))
+> >
+> > can replace the new flag, iiuc.
+> >
+> > Thanks,
+> >
+> > --
+> > Peter Xu
+> >
+> > --
+> > To unsubscribe from this group and stop receiving emails from it, send =
+an email to kernel-team+unsubscribe@android.com.
+> >
