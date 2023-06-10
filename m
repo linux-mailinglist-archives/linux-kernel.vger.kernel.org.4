@@ -2,98 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 735D272A8DD
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 05:47:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23C5472A8E0
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 05:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231183AbjFJDrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 23:47:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36164 "EHLO
+        id S232704AbjFJDsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 23:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjFJDrh (ORCPT
+        with ESMTP id S231821AbjFJDsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 23:47:37 -0400
-Received: from mail-m11875.qiye.163.com (mail-m11875.qiye.163.com [115.236.118.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A83272A;
-        Fri,  9 Jun 2023 20:47:34 -0700 (PDT)
-Received: from [IPV6:240e:3b7:3279:1440:9db:41ed:be98:62d0] (unknown [IPV6:240e:3b7:3279:1440:9db:41ed:be98:62d0])
-        by mail-m11875.qiye.163.com (Hmail) with ESMTPA id 9DE07280E6E;
-        Sat, 10 Jun 2023 11:47:27 +0800 (CST)
-Message-ID: <ffa3498a-4227-837c-b7b8-e00f4b327a80@sangfor.com.cn>
-Date:   Sat, 10 Jun 2023 11:47:40 +0800
+        Fri, 9 Jun 2023 23:48:06 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D6335B6;
+        Fri,  9 Jun 2023 20:48:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=pfiNKoPyYFFiWG12s6o0wQH5ZBbYeJyeN7rBA+gUHVc=; b=fe9oa4f536Hp+ucK8zG10Hzohb
+        cW0UJlLCOr6oEhU5P2th6t3FwRGpq5ickdoh8upFV0QzK9QNVEUT+KqE99wd3nOfkHJM5LLLbgtxm
+        /UaPIZ2SwchtjG7VthGK44kxMHXb+wz2l2EX/xzYADINDule6T7PqQGkd+XLIC0W2ni15rQbwrQ7V
+        Ha5POMbzxUMty/akIT0pKlLpABWUSH6NfbWpfjSbXVGOzktpkhIg9x9N1m8je4Y4vJ1fBbSzRUMlf
+        t3PgdljdVI2M/CRLS5bHz/yg4Y6hxLvDjSVeZs7XawsD9ltj6kEI7RWEOejaFsEmAQlD4zsTqaDYn
+        RPgKaqog==;
+Received: from c-71-59-149-187.hsd1.or.comcast.net ([71.59.149.187] helo=[10.0.0.152])
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q7pa5-00F6lb-2L;
+        Sat, 10 Jun 2023 03:48:01 +0000
+Message-ID: <8db150f5-0a37-5ee2-c221-9cf150420fc2@infradead.org>
+Date:   Fri, 9 Jun 2023 20:48:00 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
-Subject: Re: [PATCH net-next] net: ethtool: Fix out-of-bounds copy to user
-To:     Alexander Duyck <alexander.duyck@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pengdonglin@sangfor.com.cn,
-        huangcun@sangfor.com.cn
-References: <20230601112839.13799-1-dinghui@sangfor.com.cn>
- <6110cf9f-c10e-4b9b-934d-8d202b7f5794@lunn.ch>
- <f7e23fe6-4d30-ef1b-a431-3ef6ec6f77ba@sangfor.com.cn>
- <6e28cea9-d615-449d-9c68-aa155efc8444@lunn.ch>
- <CAKgT0UdyykQL-BidjaNpjX99FwJTxET51U29q4_CDqmABUuVbw@mail.gmail.com>
- <ece228a3-5c31-4390-b6ba-ec3f2b6c5dcb@lunn.ch>
- <CAKgT0Uf+XaKCFgBRTn-viVsKkNE7piAuDpht=efixsAV=3JdFQ@mail.gmail.com>
- <44905acd-3ac4-cfe5-5e91-d182c1959407@sangfor.com.cn>
- <20230602225519.66c2c987@kernel.org>
- <5f0f2bab-ae36-8b13-2c6d-c69c6ff4a43f@sangfor.com.cn>
- <20230604104718.4bf45faf@kernel.org>
- <f6ad6281-df30-93cf-d057-5841b8c1e2e6@sangfor.com.cn>
- <20230605113915.4258af7f@kernel.org>
- <034f5393-e519-1e8d-af76-ae29677a1bf5@sangfor.com.cn>
- <CAKgT0UdX7cc-LVFowFrY7mSZMvN0xc+w+oH16GNrduLY-AddSA@mail.gmail.com>
- <9c1fecc1-7d17-c039-6bfa-c63be6fcf013@sangfor.com.cn>
- <20230609101301.39fcb12b@kernel.org>
- <CAKgT0UeePd_+UwpGTT_v7nacf=yLoravtEZ2-gN4dpeWC5AsBg@mail.gmail.com>
-From:   Ding Hui <dinghui@sangfor.com.cn>
-In-Reply-To: <CAKgT0UeePd_+UwpGTT_v7nacf=yLoravtEZ2-gN4dpeWC5AsBg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkaSUxNVk0eTBhJQ0tKGk1CGFUTARMWGhIXJBQOD1
-        lXWRgSC1lBWUlPSx5BSBlMQUhJTEJBSk9PS0FCHxlBT0oeH0EZHkJDQU1JH0tZV1kWGg8SFR0UWU
-        FZT0tIVUpKS0hKTFVKS0tVS1kG
-X-HM-Tid: 0a88a36a888b2eb1kusn9de07280e6e
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Nk06LAw5HT1DTSM3MC0rMUoe
-        EBUwCyJVSlVKTUNNSE1DQ09DT0tDVTMWGhIXVR8SFRwTDhI7CBoVHB0UCVUYFBZVGBVFWVdZEgtZ
-        QVlJT0seQUgZTEFISUxCQUpPT0tBQh8ZQU9KHh9BGR5CQ0FNSR9LWVdZCAFZQU9IQ043Bg++
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Subject: Re: linux-next: Tree for Jun 9 (drivers/s390/char/uvdevice.o)
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Steffen Eiden <seiden@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        linux-s390@vger.kernel.org
+References: <20230609140618.532c4bcc@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230609140618.532c4bcc@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/10 1:59, Alexander Duyck wrote:
-> On Fri, Jun 9, 2023 at 10:13 AM Jakub Kicinski <kuba@kernel.org> wrote:
->>
->> On Fri, 9 Jun 2023 23:25:34 +0800 Ding Hui wrote:
->>> drivers/net/ethernet/netronome/nfp/nfp_net_ethtool.c: .get_sset_count         = nfp_net_get_sset_count,
->>> drivers/net/ethernet/netronome/nfp/nfp_net_ethtool.c: .get_sset_count         = nfp_port_get_sset_count,
->>
->> Not sure if your research is accurate, NFP does not change the number
->> of stats. The number depends on the device and the FW loaded, but those
->> are constant during a lifetime of a netdevice.
 
-Sorry, my research is rough indeed.
 
+On 6/8/23 21:06, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Yeah, the value doesn't need to be a constant, it just need to be constant.
+> Changes since 20230608:
 > 
-> So for example in the ixgbe driver I believe we were using the upper
-> limits on the Tx and Rx queues which last I recall are stored in the
-> netdev itself.
-> 
-Thanks to point that, the examples NFP and ixgbe do help me.
-            
+
+s390-linux-ld: drivers/s390/char/uvdevice.o: in function `cpu_feature_match_S390_CPU_FEATURE_UV_init':
+uvdevice.c:(.init.text+0xe0): undefined reference to `uv_info'
+
+
+
+# CONFIG_PROTECTED_VIRTUALIZATION_GUEST is not set
+
+Also, KVM is not set, so PGSTE is not set.
+
 -- 
-Thanks,
--dinghui
-
+~Randy
