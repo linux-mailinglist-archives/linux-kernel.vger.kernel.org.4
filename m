@@ -2,106 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA55572AB5C
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 14:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E24F72AB5F
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 14:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231893AbjFJMHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 08:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33892 "EHLO
+        id S232002AbjFJMOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 08:14:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbjFJMHy (ORCPT
+        with ESMTP id S229645AbjFJMON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 08:07:54 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D762D41;
-        Sat, 10 Jun 2023 05:07:53 -0700 (PDT)
-Date:   Sat, 10 Jun 2023 12:07:50 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686398871;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dqhTjGJVv+sS1VkVG+X2pGcGQAgiVCBQXPAZBUMN6Ao=;
-        b=Y15D8tDnkyRCi3gXRU1vsorwYCgpjMCrR73BurxgdazLR/hDzBeHaMFkyhuNkbfSeXByz6
-        ei8AVkGKGgXgFdBq4LOocb24vLEj88FRbzhRURNKZowDJzJJEirolzCg33TcMheFiI9YPD
-        ut29OEgjGNMyrGh7M2JnJd+M1q18q8o58dIuXT9IUKvwa4tX++UtzVweGMRRB5YivZStbm
-        dU8NK6euIF8abAnPuMbvRKijh1hdaP46E5/ZBTJ7oy2JGcGjD6LLiK2oQl3+lF6RnuBqsl
-        BEWMH/1SZIZNqj9HhOH90wwdJZmSlwWlDbGRKhWME/DCA4rBrrPKXZxuu+LxZA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686398871;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dqhTjGJVv+sS1VkVG+X2pGcGQAgiVCBQXPAZBUMN6Ao=;
-        b=b/6Rw6CMoR6krTYPNhe515S7zZ6SVtnX5+7ZNtVUCnD0ewBI0t0m9OQe0O2R+0bgIDMP/N
-        I0HEPzo/oO+3jSAw==
-From:   "tip-bot2 for Lukas Bulwahn" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] posix-timers: Refer properly to CONFIG_HIGH_RES_TIMERS
-Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230609094643.26253-1-lukas.bulwahn@gmail.com>
-References: <20230609094643.26253-1-lukas.bulwahn@gmail.com>
+        Sat, 10 Jun 2023 08:14:13 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78A62D4A;
+        Sat, 10 Jun 2023 05:14:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686399252; x=1717935252;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=8elPVM81BdGcGGAZYBdokG8hYC/1QRR+oygJ7EhpjR0=;
+  b=R6pTbErsvHXjNx/8KTvQ8+xilrinyIFAhWozcbTmVeJqiOM8UffKVuNe
+   FEtbyQ2Qk/fuhM5jEfhnfeUy+pD4LYr4BZvSUUIQNzpTEEs6SM5oIxSfV
+   c/44UQN3zeqdmmAUzS4vqdywKvpdax1fP3jJworlu9D9Rb1a209EwOEvz
+   aLvpS9l8i9QNMPZ1Dw75GHytse0mfnwew2PGOPE0EqBsIMjS4un6FLlIv
+   3wHR7z9R2uY9H/EvftVSOjX4EMGTmZNOf4UZw7Pv/KuKSSwUvOgYU+NLO
+   M2fvS8Tk4+hRN4GEH6uB0DWa7beDl7+EMBS/WAth+HfQjPTLlNq/ii/r5
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="338119665"
+X-IronPort-AV: E=Sophos;i="6.00,232,1681196400"; 
+   d="scan'208";a="338119665"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2023 05:14:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="884879484"
+X-IronPort-AV: E=Sophos;i="6.00,232,1681196400"; 
+   d="scan'208";a="884879484"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
+  by orsmga005.jf.intel.com with ESMTP; 10 Jun 2023 05:14:07 -0700
+Message-ID: <08830c11-5528-0c42-0bc3-89c3796611fe@linux.intel.com>
+Date:   Sat, 10 Jun 2023 20:13:03 +0800
 MIME-Version: 1.0
-Message-ID: <168639887089.404.4739586245713692955.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Cc:     baolu.lu@linux.intel.com, Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>, rex.zhang@intel.com,
+        xiaochen.shen@intel.com, narayan.ranganathan@intel.com
+Subject: Re: [PATCH v8 2/7] iommu: Move global PASID allocation from SVA to
+ core
+Content-Language: en-US
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        dmaengine@vger.kernel.org, vkoul@kernel.org
+References: <20230602182212.150825-1-jacob.jun.pan@linux.intel.com>
+ <20230602182212.150825-3-jacob.jun.pan@linux.intel.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230602182212.150825-3-jacob.jun.pan@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the timers/core branch of tip:
+On 6/3/23 2:22 AM, Jacob Pan wrote:
+> +ioasid_t iommu_alloc_global_pasid_dev(struct device *dev)
+> +{
+> +	int ret;
+> +	ioasid_t max;
+> +
+> +	max = dev->iommu->max_pasids;
+> +	/*
+> +	 * max_pasids is set up by vendor driver based on number of PASID bits
+> +	 * supported but the IDA allocation is inclusive.
+> +	 */
+> +	ret = ida_alloc_range(&iommu_global_pasid_ida, IOMMU_FIRST_GLOBAL_PASID, max - 1, GFP_KERNEL);
+> +	if (ret < 0)
+> +		return IOMMU_PASID_INVALID;
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(iommu_alloc_global_pasid_dev);
 
-Commit-ID:     0babddc4977904509287719c1314b9e04bec2307
-Gitweb:        https://git.kernel.org/tip/0babddc4977904509287719c1314b9e04bec2307
-Author:        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-AuthorDate:    Fri, 09 Jun 2023 11:46:43 +02:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Sat, 10 Jun 2023 13:58:35 +02:00
+"dev->iommu->max_pasids == 0" indicates no pasid support on the device.
+The code should return IOMMU_PASID_INVALID explicitly. Perhaps we can
+make this function like this:
 
-posix-timers: Refer properly to CONFIG_HIGH_RES_TIMERS
+ioasid_t iommu_alloc_global_pasid_dev(struct device *dev)
+{
+         int ret;
 
-Commit c78f261e5dcb ("posix-timers: Clarify posix_timer_fn() comments")
-turns an ifdef CONFIG_HIGH_RES_TIMERS into an conditional on
-"IS_ENABLED(CONFIG_HIGHRES_TIMERS)"; note that the new conditional refers
-to "HIGHRES_TIMERS" not "HIGH_RES_TIMERS" as before.
+         if (!dev->iommu->max_pasids)
+                 return IOMMU_PASID_INVALID;
 
-Fix this typo introduced in that refactoring.
+         /*
+          * max_pasids is set up by vendor driver based on number of 
+PASID bits
+          * supported but the IDA allocation is inclusive.
+          */
+         ret = ida_alloc_range(&iommu_global_pasid_ida, 
+IOMMU_FIRST_GLOBAL_PASID,
+                               dev->iommu->max_pasids - 1, GFP_KERNEL);
 
-Fixes: c78f261e5dcb ("posix-timers: Clarify posix_timer_fn() comments")
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/20230609094643.26253-1-lukas.bulwahn@gmail.com
+         return ret < 0 ? IOMMU_PASID_INVALID : ret;
+}
+EXPORT_SYMBOL_GPL(iommu_alloc_global_pasid_dev);
 
----
- kernel/time/posix-timers.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Other change in this series looks good to me.
 
-diff --git a/kernel/time/posix-timers.c b/kernel/time/posix-timers.c
-index 8bb0dcf..17fff68 100644
---- a/kernel/time/posix-timers.c
-+++ b/kernel/time/posix-timers.c
-@@ -356,7 +356,7 @@ static enum hrtimer_restart posix_timer_fn(struct hrtimer *timer)
- 			 * enabled as the periodic tick based timers are
- 			 * automatically aligned to the next tick.
- 			 */
--			if (IS_ENABLED(CONFIG_HIGHRES_TIMERS)) {
-+			if (IS_ENABLED(CONFIG_HIGH_RES_TIMERS)) {
- 				ktime_t kj = TICK_NSEC;
- 
- 				if (timr->it_interval < kj)
+I hope I can queue this series including above change as part of my VT-d
+update for v6.5 to Joerg if no objection.
+
+Let's try to re-enable this key feature of Intel idxd driver in v6.5.
+
+Best regards,
+baolu
