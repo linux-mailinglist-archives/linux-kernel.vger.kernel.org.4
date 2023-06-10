@@ -2,131 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C32772AF69
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 00:14:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1104672AF6B
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 00:16:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232619AbjFJWOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 18:14:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60676 "EHLO
+        id S232390AbjFJWP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 18:15:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232501AbjFJWOb (ORCPT
+        with ESMTP id S229533AbjFJWPz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 18:14:31 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1466535A9;
-        Sat, 10 Jun 2023 15:14:29 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f7e7fc9fe6so29986385e9.3;
-        Sat, 10 Jun 2023 15:14:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686435267; x=1689027267;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=c2K/vXSH1Ru9AaenLQ5OAeVVoA6HlojAGRwcG2Pghjc=;
-        b=SGn5PIik8gN8dqE4k/E+IsJtqnyqDxb95wJKsl121SuxxSvea6ULwN8lU1NQgJM5q/
-         pARoJYhuzw/fL5YrZvYvGyycKPUPMqbz6bGf6200C+eCThOwLMtClp0QJVPnWayNb+9h
-         LFXJ3KX9dBayCjdiLtpgEmqBBscxvetE0NsdrHSISMKWTWcoY7rUTeK2fp1xJHq8RrMM
-         45jXAXi6kNCEG57HvxtzvmRGcq93JHeM1PcaGhSkPxjqnUyFYoBtuYb+gUCvWlmOyxym
-         DLpGmhwVaSryTBlQ7pyjzZcdf3IYbWx6ejRxPVr9LGRlcDexixKIWV2U3I9PEhjx5a57
-         +2Mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686435267; x=1689027267;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c2K/vXSH1Ru9AaenLQ5OAeVVoA6HlojAGRwcG2Pghjc=;
-        b=eYcAKMNqu/l9lwj4kQCPaRhWQmbXrfOYFwdbdl/5K1t5IQvXbEQbUEtIo4FUr52trw
-         EdNjTSIFP06iFEOHU0wQIiL8wGKWjZvDkC4k1SIrQqWCoBMXhEh0xy7QvhyZbIuAVxbT
-         6+h7IRCDqYEq7EmHAoOpXxV4t9pR6ygtk1LSfiqirMR8UloHk0yPKrtgW7NWejF8v/2r
-         gewrC6kmi2O2RX9Pk2Kgqx4uOcV72UJ86xbYbbUyvGS8JlZtzXWOntrjrvKEbx9p+5Of
-         jFe1661m4DnrXZfEZU00G9m+KJ9T0E0vyvCC5z9FlOvJ0R9N0H19DYyVhbT5ZgCTc1G+
-         3fmQ==
-X-Gm-Message-State: AC+VfDxWQnXQaQZed4pH2VCbSTcPdMFjVJLhKzKolZ+DWFH4zX874MEo
-        Qcx4u3THefydAychCO6cPDw=
-X-Google-Smtp-Source: ACHHUZ5eWA+QdMw7r2dwC1sGRE7jCl/a51OBoeOdvayFX/bkMTA6R/FI2DHP43FwKQ8kzRfloO/vQQ==
-X-Received: by 2002:a7b:c84c:0:b0:3f6:76e:604b with SMTP id c12-20020a7bc84c000000b003f6076e604bmr4180596wml.0.1686435267228;
-        Sat, 10 Jun 2023 15:14:27 -0700 (PDT)
-Received: from krava ([213.235.133.42])
-        by smtp.gmail.com with ESMTPSA id k15-20020a7bc40f000000b003f7f1b3aff1sm6742250wmi.26.2023.06.10.15.14.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Jun 2023 15:14:26 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Sun, 11 Jun 2023 00:14:23 +0200
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH v3 0/4] Bring back vmlinux.h generation
-Message-ID: <ZIT1v4oUKJreqd/I@krava>
-References: <20230609043240.43890-1-irogers@google.com>
+        Sat, 10 Jun 2023 18:15:55 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3791435A9;
+        Sat, 10 Jun 2023 15:15:55 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1686435352;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ejqz0m9VjFELy9cEgnoQTo9qjHEOQ+IrkiWMVEjBzhc=;
+        b=gh6v9LMhGIqwDHTwxIyyBxfZPk5v6QiuvVyiGb08d1x9hWXgm7HPz5whju/xKJ9wlOI7Hq
+        AzRsW6Up0FcpiPVswqWqd0ZvefaVra9lEbuRn3Q6lYOOnX9Hs3CZL6UrswZqbat0AjKBMS
+        cZVRgh93L6Lm/nHBYVjh/yJIfRVgScNHfbBVKqMrnTJQdELnE/K7bFQjNtLyUVtE+3pnEZ
+        y6VvF3ogaAKwBQ0DuYu1V0Ld/3qws2+yTCS4X7g8oldBo9bJUqNoHqTfKEgX+gSNAmEvk6
+        mkD/mGIT4hBH7kqVTF2cAk7HWanYRLocwsKJkCEq8s9Jz4/U1o0cfzhjCXChOw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1686435352;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ejqz0m9VjFELy9cEgnoQTo9qjHEOQ+IrkiWMVEjBzhc=;
+        b=Q3sVALgdzN2U6GI78CLlYcdM+zv5eNsJJ01lzIOMRh7Kc1acgqpvUkHg8utt2KZSKqktdj
+        u7FmSJOEYiidbhDA==
+To:     Michael Ellerman <mpe@ellerman.id.au>, linux-kernel@vger.kernel.org
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
+        ldufour@linux.ibm.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        mingo@redhat.com, x86@kernel.org
+Subject: Re: [PATCH 4/9] cpu/SMT: Create topology_smt_threads_supported()
+In-Reply-To: <20230524155630.794584-4-mpe@ellerman.id.au>
+References: <20230524155630.794584-1-mpe@ellerman.id.au>
+ <20230524155630.794584-4-mpe@ellerman.id.au>
+Date:   Sun, 11 Jun 2023 00:15:52 +0200
+Message-ID: <878rcr7ylj.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230609043240.43890-1-irogers@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 09:32:36PM -0700, Ian Rogers wrote:
-> Commit 760ebc45746b ("perf lock contention: Add empty 'struct rq' to
-> satisfy libbpf 'runqueue' type verification") inadvertently created a
-> declaration of 'struct rq' that conflicted with a generated
-> vmlinux.h's:
-> 
-> ```
-> util/bpf_skel/lock_contention.bpf.c:419:8: error: redefinition of 'rq'
-> struct rq {};
->        ^
-> /tmp/perf/util/bpf_skel/.tmp/../vmlinux.h:45630:8: note: previous definition is here
-> struct rq {
->        ^
-> 1 error generated.
-> ```
-> 
-> Fix the issue by moving the declaration to vmlinux.h. So this can't
-> happen again, bring back build support for generating vmlinux.h then
-> add build tests.
-> 
-> v3. Address Namhyung's comments on filtering ELF files with readelf.
+On Thu, May 25 2023 at 01:56, Michael Ellerman wrote:
+> +/**
+> + * topology_smt_threads_supported - Check if the given number of SMT threads
+> + *				    is supported.
+> + *
+> + * @threads:	The number of SMT threads.
+> + */
+> +bool topology_smt_threads_supported(unsigned int threads)
+> +{
+> +	// Only support a single thread or all threads.
+> +	return threads == 1 || threads == smp_num_siblings;
+> +}
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
+You can make that a simple core function when cpu_smt_*_threads is
+consistent along the lines of my previous reply.
 
-jirka
+static bool cpu_smt_num_threads_valid(unsigned int threads)
+{
+        if (IS_ENABLED(CONFIG_SMT_NUM_THREADS_DYNAMIC))
+		return threads >= 1 && threads <= cpu_smt_max_threads;
+        return threads == 1 || threads == cpu_smt_max_threads;
+}
 
-> v2. Rebase on perf-tools-next. Add Andrii's acked-by. Add patch to
->     filter out kernels that lack a .BTF section and cause the build to
->     break.
-> 
-> Ian Rogers (4):
->   perf build: Add ability to build with a generated vmlinux.h
->   perf bpf: Move the declaration of struct rq
->   perf test: Add build tests for BUILD_BPF_SKEL
->   perf build: Filter out BTF sources without a .BTF section
-> 
->  tools/perf/Makefile.config                    |  4 ++
->  tools/perf/Makefile.perf                      | 39 ++++++++++++++++++-
->  tools/perf/tests/make                         |  4 ++
->  tools/perf/util/bpf_skel/.gitignore           |  1 +
->  .../perf/util/bpf_skel/lock_contention.bpf.c  |  2 -
->  .../util/bpf_skel/{ => vmlinux}/vmlinux.h     | 10 +++++
->  6 files changed, 57 insertions(+), 3 deletions(-)
->  rename tools/perf/util/bpf_skel/{ => vmlinux}/vmlinux.h (90%)
-> 
-> -- 
-> 2.41.0.162.gfafddb0af9-goog
-> 
+Or something like that.
+
+Thanks,
+
+        tglx
