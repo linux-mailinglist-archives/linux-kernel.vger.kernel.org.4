@@ -2,153 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E28BF72AF71
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 00:17:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E01D72AF72
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 00:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbjFJWRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 18:17:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33638 "EHLO
+        id S231681AbjFJWSv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 10 Jun 2023 18:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjFJWRn (ORCPT
+        with ESMTP id S229533AbjFJWSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 18:17:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ADC335A9;
-        Sat, 10 Jun 2023 15:17:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F085B61B3B;
-        Sat, 10 Jun 2023 22:17:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F1D3C433EF;
-        Sat, 10 Jun 2023 22:17:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686435461;
-        bh=iPCNRHIK3Pj5zhVltUCKRZCkjsC5p0Cp7eGGBoVlFUQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mcV/L+4qbM/r3gE394dVVDAhi7j1GmgOpTn9nPsaSlM2HjceDm/1/8qu7vSAM8W3h
-         ghJhSzA0xY2vVTtDOQSm/LHFvpyPFRloIgvCrt0ucQR9A25b/BgQsfVxhoRmB3kFZJ
-         pX1yjkK99Wgaxlcigw6PDSzzncRxNWFbUDeJTZbC3DMh8n9t/vLEZGJYh8er5oJKY3
-         StxCgC74J8W21eAQr0kb1tHEtXfio8eW/gbSUL75XhRoasU0joGxKQZc4fXdA4DkEk
-         QlFJLlLE9Q4FRFongl4R5tujxb3S5Zp5JieNIAmJOlzMwzikMaC5VEQryjFO5/69Ij
-         TS8msKVKdKvEQ==
-Date:   Sat, 10 Jun 2023 23:17:32 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Maksim Kiselev <bigunclemax@gmail.com>
-Cc:     linux-iio@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Heiko Stuebner <heiko.stuebner@vrull.eu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Ramona Bolboaca <ramona.bolboaca@analog.com>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        Leonard =?iso-8859-1?Q?G=F6hrs?= <l.goehrs@pengutronix.de>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v5 2/3] dt-bindings: iio: adc: Add Allwinner
- D1/T113s/R329/T507 SoCs GPADC
-Message-ID: <20230610-thinner-sector-795141d97f40@spud>
-References: <20230610202005.1118049-1-bigunclemax@gmail.com>
- <20230610202005.1118049-3-bigunclemax@gmail.com>
+        Sat, 10 Jun 2023 18:18:43 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A66B35A9
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 15:18:42 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-130-z7zOhKmQOuS4sGCuOuqKdg-1; Sat, 10 Jun 2023 23:18:39 +0100
+X-MC-Unique: z7zOhKmQOuS4sGCuOuqKdg-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sat, 10 Jun
+ 2023 23:18:34 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Sat, 10 Jun 2023 23:18:34 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Lorenzo Stoakes' <lstoakes@gmail.com>
+CC:     Lu Hongfei <luhongfei@vivo.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        "Christoph Hellwig" <hch@infradead.org>,
+        "open list:VMALLOC" <linux-mm@kvack.org>,
+        "open list" <linux-kernel@vger.kernel.org>,
+        "opensource.kernel@vivo.com" <opensource.kernel@vivo.com>
+Subject: RE: [PATCH] mm/vmalloc: Replace the ternary conditional operator with
+ min()
+Thread-Topic: [PATCH] mm/vmalloc: Replace the ternary conditional operator
+ with min()
+Thread-Index: AQHZmq9RsZ2mMErDwEmVNd3QmnYBSK+Ed3ZwgAABSICAAB600A==
+Date:   Sat, 10 Jun 2023 22:18:34 +0000
+Message-ID: <3e35b679f17a434b9da2ceffba086bfa@AcuMS.aculab.com>
+References: <20230609061309.42453-1-luhongfei@vivo.com>
+ <832d7c69-ffd5-4764-8ffe-3a02bef0efb0@lucifer.local>
+ <3fc87d60-4e81-4f49-95f0-0503ad5cdf35@lucifer.local>
+ <f53f28de489f4c209776e404323ef5a1@AcuMS.aculab.com>
+ <ba45584f-41a2-4d06-8443-e7e64375b07f@lucifer.local>
+In-Reply-To: <ba45584f-41a2-4d06-8443-e7e64375b07f@lucifer.local>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="SGD9UZV1OU3mbFIW"
-Content-Disposition: inline
-In-Reply-To: <20230610202005.1118049-3-bigunclemax@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Lorenzo Stoakes
+> Sent: 10 June 2023 22:07
+...
+> > > OK, as per the pedantic test bot, you'll need to change this to:-
+> > >
+> > > num = min_t(size_t, remains, PAGE_SIZE);
+> >
+> 
+> Ordinarily I wouldn't respond to this (I go into why I feel this is not
+> useful commentary below) but I am concerned Lu will take you seriously.
+> 
+> > There has to be a valid reason why min/max have strong type checks.
+> 
+> I really don't know what you mean by this? Yes there is a reason, I imagine
+> it's to avoid unfortunate and invalid type comparisons.
 
---SGD9UZV1OU3mbFIW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Indeed, the 'unfortunate conversion' is a negative value
+being converted to a large positive one.
+That doesn't require anything like the type checking that min/max do.
 
-On Sat, Jun 10, 2023 at 11:19:49PM +0300, Maksim Kiselev wrote:
-> From: Maxim Kiselev <bigunclemax@gmail.com>
->=20
-> Allwinner's D1/T113s/R329/T507 SoCs have a new general purpose ADC.
-> This ADC is the same for all of this SoCs. The only difference is
-> the number of available channels.
->=20
-> Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
+> This is not applicable here (explained below...)
+> 
+> > Using min_t() all the time is just subverting them and means that
+> > bugs are more likely than if the extra tests in min() were absent.
+> 
+> 'All the time' - are you just having a general whine + moan about perceived
+> kernel practices? Can you please keep it focused on the actual issues at
+> hand? I am not Linus and therefore not responsible for the entirety of the
+> kernel.
 
-Looks fine to me chief.
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+I see a general problem (that Linus ought to worried about)
+is that whenever min() reports a type error the answer is
+do immediately drop in a min_t() instead of looking at the
+type of the values and fixing them to that min() doesn't complain.
+(Or fixing min() so it doesn't object to a much larger class
+of comparisons.0
 
-> ---
->  .../iio/adc/allwinner,sun20i-d1-gpadc.yaml    | 91 +++++++++++++++++++
->  1 file changed, 91 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/adc/allwinner,s=
-un20i-d1-gpadc.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/iio/adc/allwinner,sun20i-d=
-1-gpadc.yaml b/Documentation/devicetree/bindings/iio/adc/allwinner,sun20i-d=
-1-gpadc.yaml
-> new file mode 100644
-> index 000000000000..43256ad2b7ed
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/iio/adc/allwinner,sun20i-d1-gpadc=
-=2Eyaml
-> @@ -0,0 +1,91 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/iio/adc/allwinner,sun20i-d1-gpadc.yam=
-l#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Allwinner D1 General Purpose ADC
-> +
-> +maintainers:
-> +  - Maksim Kiselev <bigunclemax@gmail.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - allwinner,sun20i-d1-gpadc
+...
+> > A 'safe' change is min(remains + 0ULL, PAGE_SIZE).
+> 
+> So now we're promoting an unsigned int (and sometimes unsigned long of
+> course) to an unsigned long long (for reasons unknown) and comparing it
+> with an unsigned long? Wouldn't this trigger the sensitive type check
+> anyway?
 
-btw, do you intend coming along later and adding some of the other ones,
-or do you only have the d1 yourself?
+PAGE size is defined to be 'long long' - so min() will be happy.
+The compiler will just DTRT, even if 'remains' is 32bit it will
+optimise away all the implied 64-bit extension.
 
-Cheers,
-Conor.
+Almost all the min_t() are min_t((some unsigned type),a,b).
+If the values are known to be positive then:
+#define min_unsigned(a, b) min((a) + 0u + 0ul + 0ull, (b) + 0u + 0ul + 0ull))
+will zero extend whatever type is supplied before the comparison.
+The compiler will just discard zero extensions.
 
---SGD9UZV1OU3mbFIW
-Content-Type: application/pgp-signature; name="signature.asc"
+> To be clear, I'd nack any such ridiculous change unless a hugely compelling
+> reason is given (you've not given any). That's horrific. And again, you've
+> not provided one single example of an _actual_ bug or situation where the
+> 'problem' you tiresomely raise would occur.
 
------BEGIN PGP SIGNATURE-----
+The (size_t) cast isn't in itself a problem - provided you've
+checked that it is larger than the types of both sides.
+But search the kernel and you'll find places when min_t((u8),a,b)
+is used.
+This all follows the same pattern of min() gave a warning so
+so use min_t().
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIT2fAAKCRB4tDGHoIJi
-0vPXAP9aQLXN+V9qv4WJvylU1e1YEs5nQZv59+ccPZXpauxUFAD6ApBn6gx6uIwZ
-WyzNup+1zJrn+/u59jc7JlHJQrKtzQQ=
-=c3Gc
------END PGP SIGNATURE-----
+...
+> > But, in reality, min/max should always be valid when one
+> > value is a constant between 0 and MAX_INT.
+> 
+> This is getting at a signed/unsigned comparison issue here afaict which is
+> not the one we're dealing with here.
 
---SGD9UZV1OU3mbFIW--
+But it is exactly what min() is checking for and almost why min()
+exists.
+A min_unsafe() that didn't try to do any checks would be better
+than train wreck that min_t() can create.
+
+...
+> Now since you kicked off this 'all the time' stuff I feel like I have been
+> given permission to make some broad comments myself...
+> 
+> David, I am not one to commit-shame being a minor contributor myself buuuut
+> I see 7,610 messages from you on lore and 4 commits, all from 4 years ago
+> (please correct me if I'm wrong).
+
+I don't work for google, intel, aws (etc).
+Getting patches accepted is surprisingly hard.
+
+I've been writing device driver and comms protocol stack code
+for best part of 40 years.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
