@@ -2,198 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6878A72A97E
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 08:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 588D172A982
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 08:50:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232262AbjFJGtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 02:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58210 "EHLO
+        id S232532AbjFJGus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 02:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbjFJGtn (ORCPT
+        with ESMTP id S230022AbjFJGup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 02:49:43 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72EAD3A8D;
-        Fri,  9 Jun 2023 23:49:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686379781; x=1717915781;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version:content-transfer-encoding;
-  bh=UiBaKKuIu48RRz7kin0VOWL4SjKi6DsOcDmvTbBe48o=;
-  b=GE5xsn8mMwhzkAcFerl9x7GXUERULvHJazT6PubSlF3LpV3RjvF0QHWJ
-   Ma6YG308e0EdyupMJcYuysosj1g+5hx78RmsIuSkbKfL1zzrhbzi1oHPJ
-   h2GSvyKCRyuESotwpzWZxpxxdoRWtmD0JRxkACsj5P02ijpIwxwHUqCXO
-   5y0paXnufyDhg75xjNQcs40u0GHIRgf55oA8kxXnjFkfMb0giEjy4r9/z
-   RfMbzyq0COBMl+WIcLr0jgEuDLsqRe6zh7S9skOqJ8HZN9qVzcn4qMs/r
-   40JYSF61zNAcM98az+lBy/3qNZjTbuQHq3S3CCehKpFhZDney6Z4DnqKG
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="360220140"
-X-IronPort-AV: E=Sophos;i="6.00,231,1681196400"; 
-   d="scan'208";a="360220140"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 23:49:40 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="661001719"
-X-IronPort-AV: E=Sophos;i="6.00,231,1681196400"; 
-   d="scan'208";a="661001719"
-Received: from mnovakov-mobl1.amr.corp.intel.com (HELO localhost) ([10.252.60.33])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 23:49:34 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>
-Cc:     Tao Zhou <tao.zhou1@amd.com>, Xiaojian Du <Xiaojian.Du@amd.com>,
-        linux-kbuild@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, Lijo Lazar <lijo.lazar@amd.com>,
-        Le Ma <le.ma@amd.com>, YiPeng Chai <YiPeng.Chai@amd.com>,
-        Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        James Zhu <James.Zhu@amd.com>,
-        Christian =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>
-Subject: Re: [PATCH] drm/amd/amdgpu: enable W=1 for amdgpu
-In-Reply-To: <CAK7LNAQArK=+Qy+yQU2qB-0pCKyWugsQ=VGXUzLUf+tPow5M_w@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230609164207.430377-1-hamza.mahfooz@amd.com>
- <20230609201754.GA3961359@dev-arch.thelio-3990X>
- <CAK7LNAQArK=+Qy+yQU2qB-0pCKyWugsQ=VGXUzLUf+tPow5M_w@mail.gmail.com>
-Date:   Sat, 10 Jun 2023 09:49:31 +0300
-Message-ID: <875y7vrev8.fsf@intel.com>
+        Sat, 10 Jun 2023 02:50:45 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664E43A96
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 23:50:44 -0700 (PDT)
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35A6m0OW026791;
+        Sat, 10 Jun 2023 06:50:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : content-type :
+ mime-version; s=pp1; bh=9KgI/yR+aq24mmtwuyPThyCJd707Xtg4oppDr5emJrk=;
+ b=qSpiITNSiCrg8oF8shIgfl5I73JO24kAnnyInJQ9LO49LoApYhh4cYTSExAPN4boQ/Gh
+ juUF5IKYiOSYZ44gBkCJ81fAsC14NuXMbROZn2mRPBIFsiVsHCMn0SAlvX15GL91PCU/
+ HxrNxK+aiOJ5ULYopYVdPAV+XMloXHHzlmm+q9TLZxpZ5g9HcaGIWKNvGEMnAZapblJ8
+ GMsULKsob/sMF+Upnif1Ty3xcQqP1pMW0Yx2LRT4a+0g51QkPl6sEMGYV2zCoUG22X/t
+ 2MqZ7fba6Ec90GoTOcxHcQ6kdEqo5OiHYdzKYH1fcSdps40oCjPkBwbQv8LPi/hVkV2Y ZQ== 
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r4m7h81qk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 10 Jun 2023 06:50:29 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35A6edlc009424;
+        Sat, 10 Jun 2023 06:50:27 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3r4gt4r2xn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 10 Jun 2023 06:50:27 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35A6oN1a59572534
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 10 Jun 2023 06:50:23 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B75D720043;
+        Sat, 10 Jun 2023 06:50:23 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F18A320040;
+        Sat, 10 Jun 2023 06:50:21 +0000 (GMT)
+Received: from tarunpc (unknown [9.43.84.45])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Sat, 10 Jun 2023 06:50:21 +0000 (GMT)
+From:   Tarun Sahu <tsahu@linux.ibm.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, muchun.song@linux.dev, mike.kravetz@oracle.com,
+        aneesh.kumar@linux.ibm.com, willy@infradead.org,
+        sidhartha.kumar@oracle.com, gerald.schaefer@linux.ibm.com,
+        linux-kernel@vger.kernel.org, jaypatel@linux.ibm.com
+Subject: Re: [PATCH v3] mm/folio: Avoid special handling for order value 0
+ in folio_set_order
+In-Reply-To: <20230609112944.fc08936beb29a18f7bfb5ae3@linux-foundation.org>
+References: <20230609162907.111756-1-tsahu@linux.ibm.com>
+ <20230609112944.fc08936beb29a18f7bfb5ae3@linux-foundation.org>
+Date:   Sat, 10 Jun 2023 12:20:20 +0530
+Message-ID: <87ilbverpv.fsf@linux.ibm.com>
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: n7mibCUA91808dtpVYJZBlKzMX6dDCmA
+X-Proofpoint-ORIG-GUID: n7mibCUA91808dtpVYJZBlKzMX6dDCmA
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-10_04,2023-06-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ adultscore=0 priorityscore=1501 impostorscore=0 lowpriorityscore=0
+ clxscore=1015 malwarescore=0 spamscore=0 mlxlogscore=952 bulkscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306100054
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 10 Jun 2023, Masahiro Yamada <masahiroy@kernel.org> wrote:
-> On Sat, Jun 10, 2023 at 5:17=E2=80=AFAM Nathan Chancellor <nathan@kernel.=
-org> wrote:
->>
->> + Masahiro and linux-kbuild
->>
->> On Fri, Jun 09, 2023 at 12:42:06PM -0400, Hamza Mahfooz wrote:
->> > We have a clean build with W=3D1 as of
->> > commit 12a15dd589ac ("drm/amd/display/amdgpu_dm/amdgpu_dm_helpers: Move
->> > SYNAPTICS_DEVICE_ID into CONFIG_DRM_AMD_DC_DCN ifdef"). So, let's enab=
-le
->> > these checks unconditionally for the entire module to catch these erro=
-rs
->> > during development.
->> >
->> > Cc: Alex Deucher <alexander.deucher@amd.com>
->> > Cc: Nathan Chancellor <nathan@kernel.org>
->> > Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
->>
->> I think this is fine, especially since it will help catch issues in
->> amdgpu quickly and hopefully encourage developers to fix their problems
->> before they make it to a tree with wider impact lika -next.
->>
->> However, this is now the third place that W=3D1 has been effectively
->> enabled (i915 and btrfs are the other two I know of) and it would be
->> nice if this was a little more unified, especially since it is not
->> uncommon for the warnings under W=3D1 to shift around and keeping them
->> unified will make maintainence over the longer term a little easier. I
->> am not sure if this has been brought up in the past and I don't want to
->> hold up this change but I suspect this sentiment of wanting to enable
->> W=3D1 on a per-subsystem basis is going to continue to grow.
->
->
->
-> I believe this patch is the right way because
-> we will be able to add a new warning option to
-> scripts/Makefile.extrawarn without fixing any code.
->
-> I remember somebody argued that drivers should be
-> able to do
->   subdir-ccflags-y +=3D $(W1_FLAGS)
+Hi Andrew,
 
-Personally, I think this would be the viable way to make the kernel free
-of W=3D1 warnings. Make it clean driver and subsystem at a time, with
-constant progress. Currently, there's haphazard fixing of issues, with
-new ones creeping back in, because kernel-wide W=3D1 is too verbose for
-most developers. It's whac-a-mole.
+TLDR: It is not bug fix, it is just cleanup.
 
-> However, if a new flag, -Wfoo, emits warnings
-> for drivers/gpu/drm/{i915,amd},
-> you cannot add it to W=3D1 until fixing the code.
+Andrew Morton <akpm@linux-foundation.org> writes:
 
-Or adding -Wno-foo where it breaks, until fixed.
+> On Fri,  9 Jun 2023 21:59:07 +0530 Tarun Sahu <tsahu@linux.ibm.com> wrote:
+>
+>> folio_set_order(folio, 0) is used in kernel at two places
+>> __destroy_compound_gigantic_folio and __prep_compound_gigantic_folio.
+>> Currently, It is called to clear out the folio->_folio_nr_pages and
+>> folio->_folio_order.
+>> 
+>> For __destroy_compound_gigantic_folio:
+>> In past, folio_set_order(folio, 0) was needed because page->mapping used
+>> to overlap with _folio_nr_pages and _folio_order. So if these fields were
+>> left uncleared during freeing gigantic hugepages, they were causing
+>> "BUG: bad page state" due to non-zero page->mapping. Now, After
+>> Commit a01f43901cfb ("hugetlb: be sure to free demoted CMA pages to
+>> CMA") page->mapping has explicitly been cleared out for tail pages. Also,
+>> _folio_order and _folio_nr_pages no longer overlaps with page->mapping.
+>> 
+>> So, folio_set_order(folio, 0) can be removed from freeing gigantic
+>> folio path (__destroy_compound_gigantic_folio).
+>
+> The above appears to be a code cleanup only?
+yes,
+>
+>> Another place, folio_set_order(folio, 0) is called inside
+>> __prep_compound_gigantic_folio during error path. Here,
+>> folio_set_order(folio, 0) can also be removed if we move
+>> folio_set_order(folio, order) after for loop.
+>> 
+>> The patch also moves _folio_set_head call in __prep_compound_gigantic_folio()
+>> such that we avoid clearing them in the error path.
+>
+> And the above also sounds like a code cleanup.
+yes
+>
+>> Also, as Mike pointed out:
+>> "It would actually be better to move the calls _folio_set_head and
+>> folio_set_order in __prep_compound_gigantic_folio() as suggested here. Why?
+>> In the current code, the ref count on the 'head page' is still 1 (or more)
+>> while those calls are made. So, someone could take a speculative ref on the
+>> page BEFORE the tail pages are set up."
+>> 
+>> This way, folio_set_order(folio, 0) is no more needed. And it will also
+>> helps removing the confusion of folio order being set to 0 (as _folio_order
+>> field is part of first tail page).
+>> 
+>> Testing: I have run LTP tests, which all passes. and also I have written
+>> the test in LTP which tests the bug caused by compound_nr and page->mapping
+>> overlapping.
+>
+> What bug?  Please describe the end-user visible effects of any bug.
+>
+> And if a bug is indeed fixed, please let's try to identify a Fixes:
+> target and let's decide whether a -stable backport is needed.
+>
+> Thanks.
+>
+No bug fixed here,
+The above cleanup modifies the code which touches the code path
+that a past patch had added to resolve the bug. The above test
+just check if the resolution is not affected.
 
-> If many drivers start to do likewise,
-> W=3D1 warning will not be W=3D1 any more.
-
-I don't know, is the goal to fix the warnings, or keep adding stuff to
-W=3D1 so that it'll always emit warnings? :p
-
-
-BR,
-Jani.
-
-> Another good thing for hard-coding warning options
-> is you can lift up a warning flag one by one.
->
->
-> Let's say you fixed the entire DRM subsystem so
-> it is -Wunused free now.
->
-> Then, you can move -Wunused to drivers/gpu/drm/Makefile,
-> while other warning options stay in drivers Makefiles.
->
->
->
->
->
->
->
->>
->> Regardless, for clang 11.1.0 to 16.0.5, I see no warnings when building
->> drivers/gpu/drm/amd/amdgpu/ with Arch Linux's configuration or
->> allmodconfig.
->>
->> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
->> Tested-by: Nathan Chancellor <nathan@kernel.org>
->>
->> > ---
->> >  drivers/gpu/drm/amd/amdgpu/Makefile | 13 ++++++++++++-
->> >  1 file changed, 12 insertions(+), 1 deletion(-)
->> >
->> > diff --git a/drivers/gpu/drm/amd/amdgpu/Makefile b/drivers/gpu/drm/amd=
-/amdgpu/Makefile
->> > index 86b833085f19..8d16f280b695 100644
->> > --- a/drivers/gpu/drm/amd/amdgpu/Makefile
->> > +++ b/drivers/gpu/drm/amd/amdgpu/Makefile
->> > @@ -40,7 +40,18 @@ ccflags-y :=3D -I$(FULL_AMD_PATH)/include/asic_reg \
->> >       -I$(FULL_AMD_PATH)/amdkfd
->> >
->> >  subdir-ccflags-y :=3D -Wextra
->> > -subdir-ccflags-y +=3D $(call cc-option, -Wunused-but-set-variable)
->> > +subdir-ccflags-y +=3D -Wunused
->> > +subdir-ccflags-y +=3D -Wmissing-prototypes
->> > +subdir-ccflags-y +=3D -Wmissing-declarations
->> > +subdir-ccflags-y +=3D -Wmissing-include-dirs
->> > +subdir-ccflags-y +=3D -Wold-style-definition
->> > +subdir-ccflags-y +=3D -Wmissing-format-attribute
->> > +# Need this to avoid recursive variable evaluation issues
->> > +cond-flags :=3D $(call cc-option, -Wunused-but-set-variable) \
->> > +     $(call cc-option, -Wunused-const-variable) \
->> > +     $(call cc-option, -Wstringop-truncation) \
->> > +     $(call cc-option, -Wpacked-not-aligned)
->> > +subdir-ccflags-y +=3D $(cond-flags)
->> >  subdir-ccflags-y +=3D -Wno-unused-parameter
->> >  subdir-ccflags-y +=3D -Wno-type-limits
->> >  subdir-ccflags-y +=3D -Wno-sign-compare
->> > --
->> > 2.40.1
->> >
-
---=20
-Jani Nikula, Intel Open Source Graphics Center
+>> https://github.com/linux-test-project/ltp/blob/master/testcases/kernel/mem/hugetlb/hugemmap/hugemmap32.c
+>> 
+>> Running on older kernel ( < 5.10-rc7) with the above bug this fails while
+>> on newer kernel and, also with this patch it passes.
+>> 
