@@ -2,140 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0766A72AA4E
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 10:31:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9542672AA50
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 10:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbjFJIbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 04:31:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52122 "EHLO
+        id S231247AbjFJIdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 04:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbjFJIbk (ORCPT
+        with ESMTP id S229867AbjFJIdx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 04:31:40 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E004F2718;
-        Sat, 10 Jun 2023 01:31:37 -0700 (PDT)
-X-GND-Sasl: alexandre.belloni@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686385896;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OK8Q4QRjn4O3LEpDvvgIC+0ZRQV/BQxETmAgTgYPCO4=;
-        b=BWM/pGjsGVLKFet0yE0Oc813Y+lJ4mUt1mo2P6/srAsGiMNPRquuzfFbFBdYg58xLvI5u4
-        gZHmp0dtrZ7YPXW5GrvbV1/jy1zt6/Vx4Umrt83vLzXHaAojtJLnaEAYRUjUbUJTjyUyAv
-        9Teqk4e2enhoNCBhDuZ++UdaIZNyKPvJzrLkoGrv3eOHMaiFuy5prYf+Rge8E7Xii+HUSG
-        7QK9c96p5CFgImZZ7MwK6ViOCPV/XkxZLf1XBYfa1mHYJQAOJVuxDyTnulpAjc4IKWPJdm
-        7MaiIKAPlPYzY2FL2mujx5bwn7CUm21IVnrpu9mBupkXIXlKcNZhzf5OY9+XkA==
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 25D07C0005;
-        Sat, 10 Jun 2023 08:31:36 +0000 (UTC)
-Date:   Sat, 10 Jun 2023 10:31:35 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Jan Kiszka <jan.kiszka@siemens.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] rtc: pcf-8563: Report previously detected low-voltage
- via RTC_VL_BACKUP_LOW
-Message-ID: <20230610083135e40dd2f6@mail.local>
-References: <da84b6b1-a9d8-ce46-16a9-e1a2d495240c@siemens.com>
+        Sat, 10 Jun 2023 04:33:53 -0400
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7AD30F9;
+        Sat, 10 Jun 2023 01:33:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686385977; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=mzasCzeVniEzTN+y/39+PDdNiCUBC6eMKYj4FWjNnjpNxK7FVFXcKmZq0JtPF708VYUkoog+YvLBKNBmM+wjQrxNX+rdLLrgFDT+whic/JInHrfnXkxtPzfd7ttYCd/Nx3ovrwGy5XWp93Gh7BTa+KPGROpIvpi6u9Zyj/OxMAs=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1686385977; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=vdOs5mAE/4Z92ZVApF6lsqm3ESAZtt4qbsdKymUSsy8=; 
+        b=gVBsM0+2FcnvG3bVzciwhnU06qjgwR4J4FOkyzxB5YzsCos/+tpCuNodm1gm9qvV/Wjjbvf9sU0IPcUZDq66ejBVwLsG8Mv69iXnoN/F8tIBk+/j2qa9p3ldTiiygCaf0GtiUU8bO/o6l4fDq6vS9FC00UhntqceeBN68BmIym8=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1686385977;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=vdOs5mAE/4Z92ZVApF6lsqm3ESAZtt4qbsdKymUSsy8=;
+        b=Dv2eB1Wtw+Fyp5d5/MP0TnVUpiWG6LUuYza4XoA/eq5ShXa4ujBXwpQ1ULLHRyV4
+        0R4TRWoVnLspsmhMCurtry5hTwJXsq/aLUAI35aHwdbeAteP44GfwSAExyBWDlAT0rF
+        h+aYRMUofnaN+9sjHCihcnV4t6Tw4Q55LYPJ8NEE=
+Received: from [192.168.99.249] (178-147-169-233.haap.dm.cosmote.net [178.147.169.233]) by mx.zohomail.com
+        with SMTPS id 1686385976069223.85040573382184; Sat, 10 Jun 2023 01:32:56 -0700 (PDT)
+Message-ID: <6a64db9e-ac6c-c571-fb8b-ae3aa2da07b7@arinc9.com>
+Date:   Sat, 10 Jun 2023 11:32:45 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <da84b6b1-a9d8-ce46-16a9-e1a2d495240c@siemens.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH net-next 27/30] net: dsa: mt7530: introduce BPDU trapping
+ for MT7530 switch
+Content-Language: en-US
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230522121532.86610-1-arinc.unal@arinc9.com>
+ <20230522121532.86610-28-arinc.unal@arinc9.com>
+ <20230526170223.gjdek6ob2w2kibzr@skbuf>
+ <f22d1ddd-b3a4-25da-b681-e0790913f526@arinc9.com>
+ <20230604092304.gkcdccgfda5hjitf@skbuf>
+ <cc21196b-a18a-ce3c-e3f3-4303abf4b9a3@arinc9.com>
+ <20230604124701.svt2r3aveyybajc3@skbuf>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <20230604124701.svt2r3aveyybajc3@skbuf>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Jan,
+On 4.06.2023 15:47, Vladimir Oltean wrote:
+> On Sun, Jun 04, 2023 at 12:39:33PM +0300, Arınç ÜNAL wrote:
+>> On 4.06.2023 12:23, Vladimir Oltean wrote:
+>>> On Sun, Jun 04, 2023 at 11:51:33AM +0300, Arınç ÜNAL wrote:
+>>>>> If the switch doesn't currently trap BPDUs, isn't STP broken?
+>>>>
+>>>> No, the BPDU_PORT_FW bits are 0 after reset. The MT7620 programming guide
+>>>> states that frames with 01:80:C2:00:00:00 MAC DA (which is how the BPDU
+>>>> distinction is being made) will follow the system default which means the
+>>>> BPDUs will be treated as normal multicast frames.
+>>>>
+>>>> Only if all 3 bits are set will the BPDUs be dropped.
+>>>
+>>> Right, if you don't trap BPDUs just to the CPU but flood them, I believe
+>>> the STP protocol won't behave properly with switching loops. Worth testing.
+>>
+>> I've got no interest spending time playing around with STP at the moment so
+>> I'm going to pass.
+> 
+> You can at the very least move it towards the beginning of the net-next patch
+> set, so that we can be sure it doesn't depend on the other refactoring work,
+> in case someone in the future makes a request for the patch to be backported
+> to stable.
 
-On 09/06/2023 23:04:12+0200, Jan Kiszka wrote:
-> From: Jan Kiszka <jan.kiszka@siemens.com>
-> 
-> The VL bit in the seconds register remains set only until seconds are
-> written under main power. As this often happens during boot-up after
-> picking up a network time, make sure to preserve the low battery state
-> across this, caching it and returning it via the RTC_VL_BACKUP_LOW bit.
-> 
-> To permit userspace clearing this state during runtime, also implement
-> RTC_VL_CLR that works against the cached state.
-> 
-> This is emulating RTCs which have a battery voltage check that works
-> under main power as well.
-> 
+Maybe I should submit this and LLDP trapping to net? Currently, the 
+MT7530 subdriver on the stable kernels treat LLDP frames and BPDUs as 
+regular multicast frames, therefore flooding them to user ports, which 
+is wrong. These patches could count as bug fixes.
 
-Emulating doesn't work well and I deliberately chose to not implement
-it. For example, in your scenario, if you boot twice without using
-VL_READ, you anyway have lost the information. This makes emulating
-unreliabl. The fix you need is in userspace where you have to ensure you
-read the status before setting the time.
-
-> Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
-> ---
->  drivers/rtc/rtc-pcf8563.c | 17 ++++++++++++++---
->  1 file changed, 14 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/rtc/rtc-pcf8563.c b/drivers/rtc/rtc-pcf8563.c
-> index 7e720472213c..f8c6cdb9a39d 100644
-> --- a/drivers/rtc/rtc-pcf8563.c
-> +++ b/drivers/rtc/rtc-pcf8563.c
-> @@ -81,6 +81,7 @@ struct pcf8563 {
->  #ifdef CONFIG_COMMON_CLK
->  	struct clk_hw		clkout_hw;
->  #endif
-> +	bool low_bat;
->  };
->  
->  static int pcf8563_read_block_data(struct i2c_client *client, unsigned char reg,
-> @@ -207,6 +208,7 @@ static int pcf8563_rtc_read_time(struct device *dev, struct rtc_time *tm)
->  		return err;
->  
->  	if (buf[PCF8563_REG_SC] & PCF8563_SC_LV) {
-> +		pcf8563->low_bat = true;
->  		dev_err(&client->dev,
->  			"low voltage detected, date/time is not reliable.\n");
->  		return -EINVAL;
-> @@ -277,6 +279,8 @@ static int pcf8563_rtc_set_time(struct device *dev, struct rtc_time *tm)
->  static int pcf8563_rtc_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
->  {
->  	struct i2c_client *client = to_i2c_client(dev);
-> +	struct pcf8563 *pcf8563 = i2c_get_clientdata(client);
-> +	unsigned int state = 0;
->  	int ret;
->  
->  	switch (cmd) {
-> @@ -284,9 +288,16 @@ static int pcf8563_rtc_ioctl(struct device *dev, unsigned int cmd, unsigned long
->  		ret = i2c_smbus_read_byte_data(client, PCF8563_REG_SC);
->  		if (ret < 0)
->  			return ret;
-> -
-> -		return put_user(ret & PCF8563_SC_LV ? RTC_VL_DATA_INVALID : 0,
-> -				(unsigned int __user *)arg);
-> +		if (ret & PCF8563_SC_LV) {
-> +			state |= RTC_VL_DATA_INVALID;
-> +			pcf8563->low_bat = true;
-> +		}
-> +		if (pcf8563->low_bat)
-> +			state |= RTC_VL_BACKUP_LOW;
-> +		return put_user(state, (unsigned int __user *)arg);
-> +	case RTC_VL_CLR:
-> +		pcf8563->low_bat = false;
-> +		return 0;
->  	default:
->  		return -ENOIOCTLCMD;
->  	}
-> -- 
-> 2.35.3
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Arınç
