@@ -2,83 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D50B72A876
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 04:34:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B161C72A877
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 04:34:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233206AbjFJCdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 22:33:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48674 "EHLO
+        id S233602AbjFJCeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 22:34:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbjFJCdv (ORCPT
+        with ESMTP id S233496AbjFJCeO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 22:33:51 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B265B35B5
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 19:33:49 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-517bdc9e81dso893862a12.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 19:33:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686364429; x=1688956429;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=V+TP2T19FLHbxj1l53UvgzYdwbtMohqVKDwqwF982rw=;
-        b=G1E1F9WSS4+1fkzUZ7Mp4inia74sPOxPgs88tlf7BBDNPK1OVmlabBpOoaA60N4hX7
-         b6xgY8/viGCwxWjSBVva4HA9vpmewqsvqUVyE44hlHwwe1UF7YtgQMx6YqBNu6L1L8Q4
-         m0tVnk8JtiXdiot4nv/qZua+iY93UX6Ym6pjMUTipeGvPLjHXIT1brPpYgQWdpPRMUp6
-         G8Ve9zJ6bopm9885SCTk0xYRbH8zS2J2l86TsFvSK7yKRGnavS3hRXEldQoCzdUXvUvL
-         RI+hdcRFc/8IMLjn0GhkQ+ZP/Ju/mPXLnT+DF5w5r2+CB/xLzmGRqFf3V7ioMcS/anBU
-         cCsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686364429; x=1688956429;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V+TP2T19FLHbxj1l53UvgzYdwbtMohqVKDwqwF982rw=;
-        b=jCA1HeIGCGSIC8wjy4fgZ84+igbMUtPW7lUzNw7ZNS5B0v/pMqZFlPxwQR4i5TKNy/
-         BOZ/HEWsOvT6XALTecx4YtQefIg0RINTXKyQZTK/iNKwXxw24LlzI8BSp3lk8Hdz7yMT
-         BHykz5Hwzj2YJk2wI+lEykS/XAGJqO0M3C1i/dRAGgcWgaJhTVoKzFOwTRKm1tz+TSbV
-         ZDkgvIdxFMrnCsJ833ReF6rjY4EFNRWXGY8nqbu9M9bqELn+4AFtALXo1fs3e1tb/uWi
-         H9jKOsqGcXKWpen2w2KgD6H4yR+KId15BTvlf+PmCEz9uTojdUYG5c2Yi3mnfOAO63Vo
-         uLlw==
-X-Gm-Message-State: AC+VfDxdLYvBIlCuN2ffLqBSQBfC2FqWRi7KJEtA4qmz18XnCcbQUQiE
-        r8lAFgigMmlUTJ4tkJ1sO8+1+g==
-X-Google-Smtp-Source: ACHHUZ6D23hSKxYpLazYa38zXVd1CIvdlcTn/RZJBWicF0Z3UOq5HXvM6qXYYtF5c2mZwM90IdZZTA==
-X-Received: by 2002:a05:6a20:1584:b0:10b:b166:8836 with SMTP id h4-20020a056a20158400b0010bb1668836mr2965108pzj.47.1686364428966;
-        Fri, 09 Jun 2023 19:33:48 -0700 (PDT)
-Received: from leoy-huanghe ([156.59.39.107])
-        by smtp.gmail.com with ESMTPSA id j26-20020aa7929a000000b0064b0326494asm3197288pfa.150.2023.06.09.19.33.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 19:33:48 -0700 (PDT)
-Date:   Sat, 10 Jun 2023 10:33:35 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     James Clark <james.clark@arm.com>
-Cc:     coresight@lists.linaro.org,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/5] perf cs-etm: Track exception level
-Message-ID: <20230610023335.GC174906@leoy-huanghe>
-References: <20230608105930.1389276-1-james.clark@arm.com>
- <20230608105930.1389276-5-james.clark@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        Fri, 9 Jun 2023 22:34:14 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75FA03ABA;
+        Fri,  9 Jun 2023 19:34:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686364451; x=1717900451;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=MyKq/t+R+9H4OzxvGDmtMYoeAE5pwt+TE/PTh0P0oqs=;
+  b=X+DN4cnAbGeENuydQlxyNqGt4gWon+OzLrkCnPmlFGszoa77gw4E3tSq
+   A11yVJJraDObJopv3her0PiSdK9GU8odGv1qaAou9KTV48Zn1K38tgT3E
+   RlUh+OoXtJnJSe3I8J4UXdNvo13j0l+YMWwPNUCjimxu+Ij6UruL3CiKA
+   0jj3HAague0JLLG0sCTpkVO4yK9f2S+gl9hsvbiFqjHtn9fndymXyxY/i
+   2Ofd70LzZOOjjHoaKsuZDN4mO+HYTUtOVfK6IXEmLq01Mph4lYolpt7fZ
+   omBmXLOruErRXmHz3OAGlCtDxBd4Qq4Niv1WWZGSMe7elZsAoU7D/SoJl
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="421316166"
+X-IronPort-AV: E=Sophos;i="6.00,231,1681196400"; 
+   d="scan'208";a="421316166"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 19:34:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="687960510"
+X-IronPort-AV: E=Sophos;i="6.00,231,1681196400"; 
+   d="scan'208";a="687960510"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga006.jf.intel.com with ESMTP; 09 Jun 2023 19:34:10 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 9 Jun 2023 19:34:09 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Fri, 9 Jun 2023 19:34:09 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.174)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Fri, 9 Jun 2023 19:34:09 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bdQ2zdHV2pLSNZEJ96mYynlRsoYh9w3t8IAyoJVLtpOOPIE9n66AfoSE+7SfW6ouaTPkH+2exRyOVr/lvGzXnUF/0eJzODR3p/50lySSQ99gElkpLOPeqIhn5Bzodc30pB4knvmd/FeEOLLV+4mCfF4UwD7IOSmH7E/f85rRMjKzHgT9TDzEtxfxb5cgiTE+zRQE3Q2M/nwDpMmxYJn5xeQEhFBRSmZqXN5+BCCzJyoQL5NhpSIFk9R0Hsvm6+euxj6H7mKPT7nN3PNwki+QWAqK9d5fKM5z+9XMDYk1Cq0w6j96ZYVJEfw0lCPo3ZUz+1VNwEvMgv1ZfezkicgCCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QNIN9ycqzNW1OuC9BqKSNVr8HInILT8j00FT9AdMtZg=;
+ b=JLGH3CBvhhhqZyNuHAgpc+MaL/VzFPZZURXivMfuew3ryGNv+jJGXoz+ljtuJlTLdmgW0SUDwbhWs8Wel1B3G9imDfzNC4msI6BeSyheTNratDUughuQXMudIjgyi26ICnXkYENefYo3g4qv3nvZVsMXNQFbiQits9v7nHviUh16gTKIgriw4fHiQVqjn3j/L0KbwczF/uHNAbliP4LR1yx/i8clyx/IiCkogn0s6Gh2XCkJjqZFfDUA8tsCbmpOABASVr1CGvWhpeoeNAWlSd+eJyggn1XVq9pGneiV2LiXovCPIDinN+U50i0FnkkWJebM6C1RK0q+laqxHtHqqA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
+ by PH0PR11MB5176.namprd11.prod.outlook.com (2603:10b6:510:3f::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Sat, 10 Jun
+ 2023 02:34:10 +0000
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::95c6:c77e:733b:eee5]) by PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::95c6:c77e:733b:eee5%5]) with mapi id 15.20.6455.030; Sat, 10 Jun 2023
+ 02:34:09 +0000
+Date:   Fri, 9 Jun 2023 19:34:05 -0700
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     Terry Bowman <terry.bowman@amd.com>, <alison.schofield@intel.com>,
+        <vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
+        <bwidawsk@kernel.org>, <dan.j.williams@intel.com>,
+        <dave.jiang@intel.com>, <Jonathan.Cameron@huawei.com>,
+        <linux-cxl@vger.kernel.org>
+CC:     <terry.bowman@amd.com>, <rrichter@amd.com>,
+        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
+Subject: RE: [PATCH v5 15/26] cxl/hdm: Use stored Component Register mappings
+ to map HDM decoder capability
+Message-ID: <6483e11d17b2b_e067a2944c@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20230607221651.2454764-1-terry.bowman@amd.com>
+ <20230607221651.2454764-16-terry.bowman@amd.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230608105930.1389276-5-james.clark@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+In-Reply-To: <20230607221651.2454764-16-terry.bowman@amd.com>
+X-ClientProxiedBy: SJ0PR13CA0012.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c0::17) To PH8PR11MB8107.namprd11.prod.outlook.com
+ (2603:10b6:510:256::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|PH0PR11MB5176:EE_
+X-MS-Office365-Filtering-Correlation-Id: f06d748a-05c8-4da7-88fa-08db695b2b6a
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: s7j5A8JKAgS08ZAxIAhQE1qA29FWBYHngXCwlIXUIHYB3x97bm3JjRT1JdwT+vZLqH0WOO4lXYfQE35pWqwkNpu2YE+lTg4WAw96Ptqrr+HKhYsHPrs42M1mSoaCDE/LmxwBD0TcmKKRVjAPXIKFdTDieLXWyJf04/8bx2NvDnw58hoiyQ7W8w64BVQvt4NYI+dfTX0Zw3t5JJaHjR1Gfd2fJ8W5cEBq80RlK1WRbmbv6Wil3rsiAkzTVKq+y7k/wqfIYiXPP464WsXQAh5qccOHkc7sWWkp7DoODTWkax1hViY+ovKkp/edRf/x2Sdu0sQUuaKnkbRCYOel0U2M4li9Qn3DU+VLjB4LRCAyCrzXN0AunOAHpl9IzxkrsQ+pWo/blThGXf/G0ziWyLBFIef5pOoFPfc/pSEmdNv183xAh+3JTfiRmJb3LQl+C9TkAQkwHonNv6CgZ+oeZu8vFpxUaK2Bbn8aO1s0YZXGbFGT0md1xZo6HLxha3i2CDSBtSBGONzMjyHKNywSbMqlLU1HMgrDSezaLs+uFrkVKeaQ7aQ/LU3BXrq8KP34xK3T
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(396003)(39860400002)(376002)(136003)(346002)(451199021)(26005)(9686003)(6506007)(6512007)(4326008)(66946007)(66476007)(66556008)(6486002)(6666004)(186003)(316002)(478600001)(4744005)(2906002)(5660300002)(8676002)(8936002)(82960400001)(86362001)(41300700001)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XdtaS03mQ2/zXLjimcEmWwDfnPrQZr9BG6ckVId/qcL/vWAPjwboiIhVHIgA?=
+ =?us-ascii?Q?oPPjE1XF9BkRvvJiJXpzi1LwOzHmrV4Dw6Zfwak3gIXHCgUhUSZj4op7QP3c?=
+ =?us-ascii?Q?PFnU+UZ0ummoSl8YiegCmYhoKUq3FQtCspW+VvmZ2329Ua6amssGM9ylyo20?=
+ =?us-ascii?Q?Ju2vpSKj8v6dx6GoVJi+AjL1SCYIjaPx4lBw0POjGHd/KNYnb4EnLPGmovgc?=
+ =?us-ascii?Q?B34LHFTeWu20Uj5/8KbxEVmRIhDnqLDkHfl9Jm2fabwbb00PBWI4q/01muOq?=
+ =?us-ascii?Q?FDW0z8eZiytlOiQ1MSQ+T6LZHd+rI2Tq4PpM+W9Nbp6wSGBioCgB9Uf+eZYJ?=
+ =?us-ascii?Q?RooQ8pvCa38Dbn/oH0CQGXS8ollt9/RD6jpguLtpx/8IK6gz/jVXSMXHG8FD?=
+ =?us-ascii?Q?ySFuIv2BaLuywxqcH5ErVL/5DNOvVDTPuG1WiXnkyXx9zhl2SbQqtXeMmAyC?=
+ =?us-ascii?Q?0Jqi+e8/zBioTX1Ik4miBDSyDfywlVpbjEOiymub7rm0LjXBi2BNCGCQUHEu?=
+ =?us-ascii?Q?qJvbH2gLAiO2ogR4sSYTQknfV9p+mcvSLDTmrkZBSW2bCcebBeKqP6lon5WY?=
+ =?us-ascii?Q?HJsdURUHHl/Ja4DQVP6oPa1kYkkPX6MTgC99i+Z708TkNOKGR+aEfJgzQTJD?=
+ =?us-ascii?Q?iQIRdN33Wym7g++VWeWkIhhwEO5C8zSTm80L+WhqCYF+5KJ6DwupMNKjGi9O?=
+ =?us-ascii?Q?t90UF/29WudPxVH0TlQC5KExHDnz0kFkpWXSDvZVpAIq3o9cO6/jG74uGwEO?=
+ =?us-ascii?Q?pss0i92fV1rUWEnD2J4lZ+WKzvYuhXIcSKBDjl9V1xpUwgXvXG6fgA9n5/4/?=
+ =?us-ascii?Q?8klXt9JHStMJe916eKqdl4XcBhEzfM69Xg5KMGg/jD1O9DZFyVyDPYvF2qhk?=
+ =?us-ascii?Q?YlTbHdMaTpQILHAqYMG276aLqrLPWsdfppBYpK3spZ8t9+qRNcKvFXdu7NGi?=
+ =?us-ascii?Q?LVHysFdVg3Du8SBoHPoTSlKfqROZjwcZTF12MzpXLUoO8X4em9N/iU3tQCK1?=
+ =?us-ascii?Q?/3AT1V/8usx8BI3dr9jtim4+fltRvebLUQVJUAb8IJfeyT/mxI5H8nLxmKEh?=
+ =?us-ascii?Q?B/Rxd1Dbyt3w71uYL4IFxA81o+3GcUuWg4j2CJ3EeMhS/r+edDzMXWf+8OgE?=
+ =?us-ascii?Q?mHbcsE0TxZLqQEpUld8jyFHjpBo98n2fAfOAqJs2mOMAXlihFhodrccTwNJ1?=
+ =?us-ascii?Q?obVeRzljjot7XlWVChw+EjXSDDNxxN0wKaelQBesp2SLtF6sTTCoZ6CK9d6I?=
+ =?us-ascii?Q?wv3FbgQKYyV0yJzGLCfYZM6IGignAsjrhRAO5p1B0upl90GX82FnZdRvDP/t?=
+ =?us-ascii?Q?8fHZ8eho+2f0SREb1FZ2gY6/DZTj9uxOh22I+PZ8brvDwSoQZcurPu/PiTut?=
+ =?us-ascii?Q?XiehzY7q5bA06evJshvOQurAakhh8cJyAlxeLa04FC12a0IMTxLeCo5QypAT?=
+ =?us-ascii?Q?3NlmLOKdnWPcZxldfeFzrzW84NYX+eexlwMZ7xezWRvfrOItULmolHY2NOAE?=
+ =?us-ascii?Q?kxIiDPXKzGujZUbNy/AA3TSnptv9uzdyyNrRYc2ssKnLa7V4/ijW/t+WrHbS?=
+ =?us-ascii?Q?PMC+d+wbdpaD6si2pjBHzxpDNZZCzc6G56JmCa9yn0tNZ8ad/BbdVVdFKuGh?=
+ =?us-ascii?Q?cA=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: f06d748a-05c8-4da7-88fa-08db695b2b6a
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2023 02:34:09.6018
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: h+yL9gtQEicU0wjvDQBa/mBL8FFENpKzLx3S2y7UdlSHxJzBmzMQi94AUVk/Ys97H8ctZ+2rirDQxxEWBKMfJKmJGt+pnKllyl84jOfBWEg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5176
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,261 +152,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 11:59:28AM +0100, James Clark wrote:
-> Currently we assume all trace belongs to the host machine so when
-> the decoder should be looking at the guest kernel maps it can crash
-> because it looks at the host ones instead.
+Terry Bowman wrote:
+> From: Robert Richter <rrichter@amd.com>
 > 
-> Avoid one scenario (guest kernel running at EL1) by assigning the
-> default guest machine to this trace. For userspace trace it's still not
-> possible to determine guest vs host, but the PIDs should help in this
-> case.
+> Now, that the Component Register mappings are stored, use them to
+> enable and map the HDM decoder capabilities. The Component Registers
+> do not need to be probed again for this, remove probing code.
 > 
-> Signed-off-by: James Clark <james.clark@arm.com>
-
-Reviewed-by: Leo Yan <leo.yan@linaro.org>
-
-Just input a thought for support both host and guest machines, seems to
-me, a feasibe solution is CoreSight can extend its capability to trace
-below system registers together:
-
-- VTTBR_EL2.vmid
-- CONTEXTIDR_EL2
-- CONTEXTIDR_EL1
-
-So:
-
-VTTBR_EL2.vmid == 0: host machine, CONTEXTIDR_EL2 is for tracing PID
-VTTBR_EL2.vmid != 0: guest machine, CONTEXTIDR_EL1 is for tracing PID
-
-So far we only can trace either CONTEXTIDR_EL2 (and it's even a bit
-mess that we save CONTEXTIDR_EL2 into 'elem->context.vmid') or
-CONTEXTIDR_EL1, this is the main reason it's hard for perf to
-distinguish host and guest.  I know you might have discussed this yet,
-here I just record some ideas in case later we can review it.
-
-Thanks,
-Leo
-
-> ---
->  .../perf/util/cs-etm-decoder/cs-etm-decoder.c |  7 +-
->  tools/perf/util/cs-etm.c                      | 75 +++++++++++++++----
->  tools/perf/util/cs-etm.h                      |  7 +-
->  3 files changed, 67 insertions(+), 22 deletions(-)
+> The HDM capability applies to Endpoints, USPs and VH Host Bridges. The
+> Endpoint's component register mappings are located in the cxlds and
+> else in the port's structure. Provide a helper function
+> cxl_port_get_comp_map() to locate the mappings depending on the
+> component's type.
 > 
-> diff --git a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
-> index 2af641d26866..44c49acd6bff 100644
-> --- a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
-> +++ b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
-> @@ -561,12 +561,13 @@ cs_etm_decoder__set_tid(struct cs_etm_queue *etmq,
->  		break;
->  	}
->  
-> +	if (cs_etm__etmq_set_tid_el(etmq, tid, trace_chan_id,
-> +				    elem->context.exception_level))
-> +		return OCSD_RESP_FATAL_SYS_ERR;
-> +
->  	if (tid == -1)
->  		return OCSD_RESP_CONT;
->  
-> -	if (cs_etm__etmq_set_tid(etmq, tid, trace_chan_id))
-> -		return OCSD_RESP_FATAL_SYS_ERR;
-> -
->  	/*
->  	 * A timestamp is generated after a PE_CONTEXT element so make sure
->  	 * to rely on that coming one.
-> diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
-> index e0904f276e89..916e86f003f4 100644
-> --- a/tools/perf/util/cs-etm.c
-> +++ b/tools/perf/util/cs-etm.c
-> @@ -14,7 +14,6 @@
->  #include <linux/types.h>
->  #include <linux/zalloc.h>
->  
-> -#include <opencsd/ocsd_if_types.h>
->  #include <stdlib.h>
->  
->  #include "auxtrace.h"
-> @@ -88,6 +87,8 @@ struct cs_etm_traceid_queue {
->  	union perf_event *event_buf;
->  	struct thread *thread;
->  	struct thread *prev_thread;
-> +	ocsd_ex_level prev_el;
-> +	ocsd_ex_level el;
->  	struct branch_stack *last_branch;
->  	struct branch_stack *last_branch_rb;
->  	struct cs_etm_packet *prev_packet;
-> @@ -482,6 +483,7 @@ static int cs_etm__init_traceid_queue(struct cs_etm_queue *etmq,
->  
->  	queue = &etmq->etm->queues.queue_array[etmq->queue_nr];
->  	tidq->trace_chan_id = trace_chan_id;
-> +	tidq->el = tidq->prev_el = ocsd_EL_unknown;
->  	tidq->thread = machine__findnew_thread(&etm->session->machines.host, -1,
->  					       queue->tid);
->  	tidq->prev_thread = machine__idle_thread(&etm->session->machines.host);
-> @@ -621,6 +623,7 @@ static void cs_etm__packet_swap(struct cs_etm_auxtrace *etm,
->  		tmp = tidq->packet;
->  		tidq->packet = tidq->prev_packet;
->  		tidq->prev_packet = tmp;
-> +		tidq->prev_el = tidq->el;
->  		thread__put(tidq->prev_thread);
->  		tidq->prev_thread = thread__get(tidq->thread);
->  	}
-> @@ -882,11 +885,43 @@ static bool cs_etm__evsel_is_auxtrace(struct perf_session *session,
->  	return evsel->core.attr.type == aux->pmu_type;
->  }
->  
-> -static u8 cs_etm__cpu_mode(struct cs_etm_queue *etmq, u64 address)
-> +static struct machine *cs_etm__get_machine(struct cs_etm_queue *etmq,
-> +					   ocsd_ex_level el)
->  {
-> -	struct machine *machine;
-> +	enum cs_etm_pid_fmt pid_fmt = cs_etm__get_pid_fmt(etmq);
->  
-> -	machine = &etmq->etm->session->machines.host;
-> +	/*
-> +	 * For any virtualisation based on nVHE (e.g. pKVM), or host kernels
-> +	 * running at EL1 assume everything is the host.
-> +	 */
-> +	if (pid_fmt == CS_ETM_PIDFMT_CTXTID)
-> +		return &etmq->etm->session->machines.host;
-> +
-> +	/*
-> +	 * Not perfect, but otherwise assume anything in EL1 is the default
-> +	 * guest, and everything else is the host. Distinguishing between guest
-> +	 * and host userspaces isn't currently supported either. Neither is
-> +	 * multiple guest support. All this does is reduce the likeliness of
-> +	 * decode errors where we look into the host kernel maps when it should
-> +	 * have been the guest maps.
-> +	 */
-> +	switch (el) {
-> +	case ocsd_EL1:
-> +		return machines__find_guest(&etmq->etm->session->machines,
-> +					    DEFAULT_GUEST_KERNEL_ID);
-> +	case ocsd_EL3:
-> +	case ocsd_EL2:
-> +	case ocsd_EL0:
-> +	case ocsd_EL_unknown:
-> +	default:
-> +		return &etmq->etm->session->machines.host;
-> +	}
-> +}
-> +
-> +static u8 cs_etm__cpu_mode(struct cs_etm_queue *etmq, u64 address,
-> +			   ocsd_ex_level el)
-> +{
-> +	struct machine *machine = cs_etm__get_machine(etmq, el);
->  
->  	if (address >= machine__kernel_start(machine)) {
->  		if (machine__is_host(machine))
-> @@ -896,10 +931,14 @@ static u8 cs_etm__cpu_mode(struct cs_etm_queue *etmq, u64 address)
->  	} else {
->  		if (machine__is_host(machine))
->  			return PERF_RECORD_MISC_USER;
-> -		else if (perf_guest)
-> +		else {
-> +			/*
-> +			 * Can't really happen at the moment because
-> +			 * cs_etm__get_machine() will always return
-> +			 * machines.host for any non EL1 trace.
-> +			 */
->  			return PERF_RECORD_MISC_GUEST_USER;
-> -		else
-> -			return PERF_RECORD_MISC_HYPERVISOR;
-> +		}
->  	}
->  }
->  
-> @@ -916,11 +955,12 @@ static u32 cs_etm__mem_access(struct cs_etm_queue *etmq, u8 trace_chan_id,
->  	if (!etmq)
->  		return 0;
->  
-> -	cpumode = cs_etm__cpu_mode(etmq, address);
->  	tidq = cs_etm__etmq_get_traceid_queue(etmq, trace_chan_id);
->  	if (!tidq)
->  		return 0;
->  
-> +	cpumode = cs_etm__cpu_mode(etmq, address, tidq->el);
-> +
->  	if (!thread__find_map(tidq->thread, cpumode, address, &al))
->  		return 0;
->  
-> @@ -1298,10 +1338,11 @@ cs_etm__get_trace(struct cs_etm_queue *etmq)
->  	return etmq->buf_len;
->  }
->  
-> -static void cs_etm__set_thread(struct cs_etm_auxtrace *etm,
-> -			       struct cs_etm_traceid_queue *tidq, pid_t tid)
-> +static void cs_etm__set_thread(struct cs_etm_queue *etmq,
-> +			       struct cs_etm_traceid_queue *tidq, pid_t tid,
-> +			       ocsd_ex_level el)
->  {
-> -	struct machine *machine = &etm->session->machines.host;
-> +	struct machine *machine = cs_etm__get_machine(etmq, el);
->  
->  	if (tid != -1) {
->  		thread__zput(tidq->thread);
-> @@ -1311,10 +1352,12 @@ static void cs_etm__set_thread(struct cs_etm_auxtrace *etm,
->  	/* Couldn't find a known thread */
->  	if (!tidq->thread)
->  		tidq->thread = machine__idle_thread(machine);
-> +
-> +	tidq->el = el;
->  }
->  
-> -int cs_etm__etmq_set_tid(struct cs_etm_queue *etmq,
-> -			 pid_t tid, u8 trace_chan_id)
-> +int cs_etm__etmq_set_tid_el(struct cs_etm_queue *etmq, pid_t tid,
-> +			    u8 trace_chan_id, ocsd_ex_level el)
->  {
->  	struct cs_etm_traceid_queue *tidq;
->  
-> @@ -1322,7 +1365,7 @@ int cs_etm__etmq_set_tid(struct cs_etm_queue *etmq,
->  	if (!tidq)
->  		return -EINVAL;
->  
-> -	cs_etm__set_thread(etmq->etm, tidq, tid);
-> +	cs_etm__set_thread(etmq, tidq, tid, el);
->  	return 0;
->  }
->  
-> @@ -1392,7 +1435,7 @@ static int cs_etm__synth_instruction_sample(struct cs_etm_queue *etmq,
->  	struct perf_sample sample = {.ip = 0,};
->  
->  	event->sample.header.type = PERF_RECORD_SAMPLE;
-> -	event->sample.header.misc = cs_etm__cpu_mode(etmq, addr);
-> +	event->sample.header.misc = cs_etm__cpu_mode(etmq, addr, tidq->el);
->  	event->sample.header.size = sizeof(struct perf_event_header);
->  
->  	/* Set time field based on etm auxtrace config. */
-> @@ -1451,7 +1494,7 @@ static int cs_etm__synth_branch_sample(struct cs_etm_queue *etmq,
->  	ip = cs_etm__last_executed_instr(tidq->prev_packet);
->  
->  	event->sample.header.type = PERF_RECORD_SAMPLE;
-> -	event->sample.header.misc = cs_etm__cpu_mode(etmq, ip);
-> +	event->sample.header.misc = cs_etm__cpu_mode(etmq, ip, tidq->prev_el);
->  	event->sample.header.size = sizeof(struct perf_event_header);
->  
->  	/* Set time field based on etm auxtrace config. */
-> diff --git a/tools/perf/util/cs-etm.h b/tools/perf/util/cs-etm.h
-> index 2f47f4ec5b27..7cca37887917 100644
-> --- a/tools/perf/util/cs-etm.h
-> +++ b/tools/perf/util/cs-etm.h
-> @@ -251,10 +251,11 @@ enum cs_etm_pid_fmt {
->  };
->  
->  #ifdef HAVE_CSTRACE_SUPPORT
-> +#include <opencsd/ocsd_if_types.h>
->  int cs_etm__get_cpu(u8 trace_chan_id, int *cpu);
-> -enum pid_fmt cs_etm__get_pid_fmt(struct cs_etm_queue *etmq);
-> -int cs_etm__etmq_set_tid(struct cs_etm_queue *etmq,
-> -			 pid_t tid, u8 trace_chan_id);
-> +enum cs_etm_pid_fmt cs_etm__get_pid_fmt(struct cs_etm_queue *etmq);
-> +int cs_etm__etmq_set_tid_el(struct cs_etm_queue *etmq, pid_t tid,
-> +			    u8 trace_chan_id, ocsd_ex_level el);
->  bool cs_etm__etmq_is_timeless(struct cs_etm_queue *etmq);
->  void cs_etm__etmq_set_traceid_queue_timestamp(struct cs_etm_queue *etmq,
->  					      u8 trace_chan_id);
-> -- 
-> 2.34.1
-> 
+> Signed-off-by: Robert Richter <rrichter@amd.com>
+> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+Looks good.
