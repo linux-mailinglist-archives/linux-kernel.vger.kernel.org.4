@@ -2,76 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D40C72AD61
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 18:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3E9872AD65
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 18:38:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbjFJQhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 12:37:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47060 "EHLO
+        id S229925AbjFJQiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 12:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbjFJQgz (ORCPT
+        with ESMTP id S229461AbjFJQiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 12:36:55 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3193A97
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 09:36:50 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-977cf86aae5so425534166b.0
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 09:36:50 -0700 (PDT)
+        Sat, 10 Jun 2023 12:38:14 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719ACC4
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 09:38:12 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-51640b9ed95so4928347a12.2
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 09:38:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686415009; x=1689007009;
+        d=linaro.org; s=google; t=1686415091; x=1689007091;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=s9TSyf1ASxYuSJlQ+UH4uk/uLAz+06/cWAcBLiOwXQw=;
-        b=l4+idekUo2R3qaEXZf31sAuFI5DCWxe4ezpojv3RNHiK971aW/uxN/SkMBYEOFbtvV
-         YMuJSmg9Rd9OhaBkBaTa6enedG+RAHAEa/HBELbprqMmtM+VYp2GMuqX2eYNX8cnJ+T1
-         W70v5oxLT08J/gkTY/ECjfXZJQ2lHj+9UrkyBevOQFx5HEiA7XBcS2Rx8uvJq4j/Nqov
-         devXgD2UABfKjXUkXiuGo0pUeOwlTrTeq1f85MPWIxUmZEPjAcE1XGpvuQpMNSbk9NH1
-         UBmi0WpR2PPQZRP3+F5eiNzhbvjFHyY+XuVQQqOJRkdDJ18EoC2ZyKbuQLame1o9M9SX
-         zzbA==
+        bh=Hp33yA5HcmdHo6uDlO7P+JfSf1kHY2kxoEjyxwdelr4=;
+        b=qpWBaIqFetal+BReZfUxUTyc6Jao3DQNWqNlxdw8JnRTnxNxho/XZvNQz6kE83BBO0
+         9AESFhLOtsmkcdaO7cEDKhjp9Euc9dxTmfFl+TDXNt28M4cbF48nxbDmz1V1HRp+KoDZ
+         HhU+EAzkqemptHxjze8XJi1TttEK+Gbrn2iRET14U+/o7BYIr/7ycjj4VhaPc63q52ZE
+         NDxzsSxac9XDEoVRh9Rrbd4b+b32RV2vVlFsI0z0+nzoP8+w+cHXQ2vUdz/jK7MO6xmH
+         2aP2X/06q+4APRPW1I4Ghzrjd9gMWPAwT/t410ZJIMRoflwn8M6B8+OQ4auePe3ImtRH
+         +MKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686415009; x=1689007009;
+        d=1e100.net; s=20221208; t=1686415091; x=1689007091;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=s9TSyf1ASxYuSJlQ+UH4uk/uLAz+06/cWAcBLiOwXQw=;
-        b=PtQYnClVnEPTl8TZcR/vBSfPEuGWgQMRJ4HnTTjIdPakNvntJ9wqiFyi3cDc74YGR6
-         PZQjXanbGBNAyl3kMmvkJRL0vvk5fbk7EtfCVTT0oZnx0DijvGWg5Neg3b+wlnyVw75U
-         S5p8AiHm4Pog7+6n5Q5YkdQkuPV5lFuebC8zbtJFWK8QNlA4tegSmMY1DgauS811vanY
-         mb4975FP97akmXBitbswxrFhiRbZAUE3A3J4yLA1K1ODYqf4IMmoDgEdsAadmNRLKi2M
-         rAdZ7u3sbBnPhkhyVFdnAuHyQjuzRKzKtKtpoDY7+K6NWR2LLAOozNu+ihsrEL2Y5G3f
-         nWTQ==
-X-Gm-Message-State: AC+VfDwVYj1M6QhGopAJWX7Rujp4QChBo+ThkT26iHXamVBBu3oTPl7F
-        8p6eYl49N+bhLFADuTYdUMuXc2uPfTDFA7ZlM/4=
-X-Google-Smtp-Source: ACHHUZ5t65TieFqQtj8koK/mLlS0PIsBePt/tLL8PzN3k07slDI1BUS4YqsKDnXwsw63KijHoadNwQ==
-X-Received: by 2002:a17:907:2cc2:b0:96f:8439:6143 with SMTP id hg2-20020a1709072cc200b0096f84396143mr4846949ejc.40.1686415009051;
-        Sat, 10 Jun 2023 09:36:49 -0700 (PDT)
+        bh=Hp33yA5HcmdHo6uDlO7P+JfSf1kHY2kxoEjyxwdelr4=;
+        b=fHbdbfyUMvNIw5pmRt3KDWSvuHc9VcRMDwaGa6GtF0qraKXtPoV8LPtW1pDKncIA3W
+         ghqZrkrvDVTH2eero6CVGexPc0QvWV4k8nnIO88X+jPFs2Ca7d0HeJ+FOv/zCK0Ia+mj
+         iuZChCh1sQpPiB1YmBsGhjnecGuX3WJV7DrqxzL7TLPOnUusz/06plZN9CokbqIezGa4
+         SQLGMhXp6nYdThdXvv/8V+1LBbVDt8YiSuJJ34O5NswdUnBfcLQJ3KX9pp9n033YUei5
+         A025pLD2a3k4i0tGzoRWB7vDJiCFktKPeJnUfzvV5RpOVODPTavjKecdhiFzxX04UAdK
+         6O/A==
+X-Gm-Message-State: AC+VfDzs8OEWiG7lEeT5V6AbLLtOTWcVvHeIW2EOVt1wstPh4uxGa1iW
+        NmOAf1/U7KpxmqcMAp3SUsSM/w==
+X-Google-Smtp-Source: ACHHUZ5WhgtdYTW5eL6c7P8syI3GQHp0HZckc2U6paAq8Szm4VAUQjVE2jDkIGK6LbHNiZyOsXRPdw==
+X-Received: by 2002:a05:6402:690:b0:505:4f7:8a50 with SMTP id f16-20020a056402069000b0050504f78a50mr1600989edy.5.1686415090961;
+        Sat, 10 Jun 2023 09:38:10 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id x7-20020a170906298700b00965b2d3968csm2791443eje.84.2023.06.10.09.36.47
+        by smtp.gmail.com with ESMTPSA id i9-20020aa7dd09000000b005163054e330sm2968446edv.87.2023.06.10.09.38.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Jun 2023 09:36:48 -0700 (PDT)
-Message-ID: <4e47443b-5ab9-7af3-6da7-840182768b1d@linaro.org>
-Date:   Sat, 10 Jun 2023 18:36:46 +0200
+        Sat, 10 Jun 2023 09:38:10 -0700 (PDT)
+Message-ID: <b18908cd-fe52-8f2d-2882-503460909936@linaro.org>
+Date:   Sat, 10 Jun 2023 18:38:08 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
-Subject: Re: [PATCH v2 1/2] dt-bindings: arm: Add Gateworks i.MX8M Mini
- GW7905-0x board
+Subject: Re: [PATCH 06/18] dt-bindings: clk: gxbb-clkc: expose all clock ids
 Content-Language: en-US
-To:     Tim Harvey <tharvey@gateworks.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230609174107.3373182-1-tharvey@gateworks.com>
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230607-topic-amlogic-upstream-clkid-public-migration-v1-0-9676afa6b22c@linaro.org>
+ <20230607-topic-amlogic-upstream-clkid-public-migration-v1-6-9676afa6b22c@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230609174107.3373182-1-tharvey@gateworks.com>
+In-Reply-To: <20230607-topic-amlogic-upstream-clkid-public-migration-v1-6-9676afa6b22c@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,12 +85,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/06/2023 19:41, Tim Harvey wrote:
-> Add DT compatible string for a Gateworks GW7905-0x board based on
-> the i.MX8M Mini from NXP.
+On 07/06/2023 12:56, Neil Armstrong wrote:
+> Due to a policy change in clock ID bindings handling, expose
+> all the "private" clock IDs to the public clock dt-bindings
+> to move out of the previous maintenance scheme.
 > 
-> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
-> ---
+> This refers to a discussion at [1] & [2] with Krzysztof about
+> the issue with the current maintenance.
+> 
+> It was decided to move every gxbb-clkc ID to the public clock
+> dt-bindings headers to be merged in a single tree so we
+> can safely add new clocks without having merge issues.
+> 
+> [1] https://lore.kernel.org/all/c088e01c-0714-82be-8347-6140daf56640@linaro.org/
+> [2] https://lore.kernel.org/all/2fabe721-7434-43e7-bae5-088a42ba128d@app.fastmail.com/
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 
 
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
