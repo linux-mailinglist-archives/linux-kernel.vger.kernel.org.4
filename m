@@ -2,119 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C43372ADE5
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 19:52:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3383572ADE9
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 19:53:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbjFJRwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 13:52:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40636 "EHLO
+        id S230418AbjFJRxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 13:53:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjFJRwc (ORCPT
+        with ESMTP id S230206AbjFJRxq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 13:52:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809C035BC
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 10:51:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686419505;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pKSaQZ4znfpr2ozE1Mb7MZQL8rtwbT4mvdyngtft6oE=;
-        b=QjiIlDm/HXKRBT/W8DcqrnZxfETPkb0/5iRWExYsLPBm8UZrsBRaTKJJT6LOLH4DTKdaez
-        cVqHqUY1EH1lf80IX299LQaHtYjkUWlMgaWkg4e04nccuhmhyIJh2NEhLq14nEMe0oDtwY
-        k1Ios4AkF2xqSOXXXnK5LelD7crjqvk=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-543-ost0nZJuMgmt-0PG9XT6wA-1; Sat, 10 Jun 2023 13:51:44 -0400
-X-MC-Unique: ost0nZJuMgmt-0PG9XT6wA-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f739cc1aafso12472255e9.1
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 10:51:44 -0700 (PDT)
+        Sat, 10 Jun 2023 13:53:46 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7B3198C
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 10:53:44 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b1ba50e50bso31705341fa.1
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 10:53:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686419623; x=1689011623;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gIEzVxcGjD9CVIf4I3Z3N+pdYEhzOZJwo+94D6dlc90=;
+        b=avuypdQbWhRDBnsYaWNoeHJSrw3yjmvuaUylUCZADfSHI6a01Rc/dPnkLpqsrDFYA/
+         6GurQcQ49HaDhV2ozrJEuNs9JtIyvCRpom6ADaQox1bQ8AlSy46YynYJlEgnt5aANeHS
+         SA2KDtaC91ZcVuLn9vBIQvhV0NK+wJDLcSLKkKF9pdbyTbr65FX/2j9PmHq996F6IzdG
+         G+7k2bSSLzTmvJo+NPU9ck1dEmfRD8N9KL67yLqK/JsTmYSPAVbbMuyPlW8tRc3dVzH7
+         UeQM8VMAFz0+/dR+zxN5V77ysYAX+NVufs0Ec0nYr+EImNAdFKE6ZVkGuJIJ/v6Bh46S
+         d6LQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686419503; x=1689011503;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pKSaQZ4znfpr2ozE1Mb7MZQL8rtwbT4mvdyngtft6oE=;
-        b=aXEi1FPG7U1KD91NYjZrHA1bSI3+aWLzLQWswaFFCKRjOt2YOUPyK2TgpEyByDz3mK
-         kKc+Vj404OFYMCauqm6fFuWBM5HUy7qDIE2m29MyiZreomSqDOcL1pj8dR6h/kDWrlt/
-         XFZhzQdJen5cECVj21v6gZO9dMe4YygmyBqziub1Y7ku217R3ZeUL3i+PVSJAXXnHN1z
-         LLbYHdzPg+SVmnSBwLzLKAg7RKfGPSgk2aF8K4QO6nCMUoqhXPWyW/Zmt1yTvWraKBQi
-         UCd6mkhFqf9zHQCF7fLa5pC7JsiRdy7L6lTus8QOw7lfdsHE8kZmCfL7cJ3CwxRahuaN
-         aQRg==
-X-Gm-Message-State: AC+VfDxWsPRW3c3Z1rO4oPSBan+P4jp5qlOUad5D+LLDRe1oc4sXwhAc
-        JyYhmOzsfNLnHAMLk3VynzwKSyAB2jwuJGDqmWxwQ5pqQNBRIkIeRmyfhgcs8owfoQLEvqTdoI+
-        NCjVhS9xgJlP4POlIJ41w2FcA
-X-Received: by 2002:a05:600c:2189:b0:3f7:81e9:2f02 with SMTP id e9-20020a05600c218900b003f781e92f02mr2985115wme.4.1686419503153;
-        Sat, 10 Jun 2023 10:51:43 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4oloD0EK/STe16UJZzvVaQXGexNAqmk7NaH1zGxsm7M2y6ZMJc4nxV7hPbfHGklvgtsvLviw==
-X-Received: by 2002:a05:600c:2189:b0:3f7:81e9:2f02 with SMTP id e9-20020a05600c218900b003f781e92f02mr2985110wme.4.1686419502754;
-        Sat, 10 Jun 2023 10:51:42 -0700 (PDT)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id g26-20020a7bc4da000000b003f60e143d38sm6287776wmk.11.2023.06.10.10.51.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Jun 2023 10:51:42 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     devicetree@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 2/5] dt-bindings: display: ssd1307fb: Remove default
- width and height values
-In-Reply-To: <20230610-opposite-quality-81d4a1561c88@spud>
-References: <20230609170941.1150941-1-javierm@redhat.com>
- <20230609170941.1150941-3-javierm@redhat.com>
- <20230610-opposite-quality-81d4a1561c88@spud>
-Date:   Sat, 10 Jun 2023 19:51:35 +0200
-Message-ID: <87r0qj19zs.fsf@minerva.mail-host-address-is-not-set>
+        d=1e100.net; s=20221208; t=1686419623; x=1689011623;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gIEzVxcGjD9CVIf4I3Z3N+pdYEhzOZJwo+94D6dlc90=;
+        b=itchZnTApwoVnaIDPvBUSLLZUTx7g/yu3Jx2U/TnyUqMQ6zfdpO7WbPWlIZjAadswR
+         567JfNmNI87VGb0QrT4KVCj1h6YJmhGoUUcNAG/gw8CSj/0DLQoBCcvFwk/8Wi6PeWCk
+         t6HIEsC8WiRvH/+zBjmjRZ3UWUw+MU9FQ1asYJbUT2b2qnkLa/uVxWDb/KRr45NahX1e
+         k37THzqrrXpJ/lSMHbkwmL3wKKWIVJu1evEoKWFwe3EWLxZenCRO4Vvw8wVCnZItrfLT
+         CfdYDyapeTMBbja7tsH7WfPog3uaihIJq3OlfWY7wlptTc1pZ5nIlaMm1rnJ7RcQzz3o
+         BKMQ==
+X-Gm-Message-State: AC+VfDzTO9++HgXauFO1DIm35CtLqyp/IzATTsfar9+jXz+RdPNARCwt
+        5eLBktgfhBdkcy+9j6szAAvsHg==
+X-Google-Smtp-Source: ACHHUZ5Zdfzr8CFUDI3hRBkQ5nKeKTTkx1v8rTzg1yj9ZMpNvVo+UG6snFwTJUNOau7ZjJwa7vtkmg==
+X-Received: by 2002:a2e:9202:0:b0:2b1:c011:976d with SMTP id k2-20020a2e9202000000b002b1c011976dmr779111ljg.27.1686419623130;
+        Sat, 10 Jun 2023 10:53:43 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id z11-20020a2e964b000000b002af8aaebce4sm932112ljh.8.2023.06.10.10.53.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 10 Jun 2023 10:53:42 -0700 (PDT)
+Message-ID: <d338d802-e1ee-cea1-2eff-e7da36b4829a@linaro.org>
+Date:   Sat, 10 Jun 2023 19:53:41 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Content-Language: en-US
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+References: <20230526-topic-smd_icc-v2-0-e5934b07d813@linaro.org>
+ <20230526-topic-smd_icc-v2-19-e5934b07d813@linaro.org>
+ <ZIS28eN1JEuXV2AT@gerhold.net>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: Re: [PATCH v2 19/22] interconnect: qcom: icc-rpm: Fix bucket number
+In-Reply-To: <ZIS28eN1JEuXV2AT@gerhold.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Conor Dooley <conor@kernel.org> writes:
 
-> On Fri, Jun 09, 2023 at 07:09:37PM +0200, Javier Martinez Canillas wrote:
->> A default resolution in the ssd130x driver isn't set to an arbitrary 96x16
->> anymore. Instead is set to a width and height that's controller dependent.
->
-> Did that change to the driver not break backwards compatibility with
-> existing devicetrees that relied on the default values to get 96x16?
->
 
-It would but I don't think it is an issue in pratice. Most users of these
-panels use one of the multiple libraries on top of the spidev interface.
+On 10.06.2023 19:46, Stephan Gerhold wrote:
+> On Fri, Jun 09, 2023 at 10:19:24PM +0200, Konrad Dybcio wrote:
+>> SMD RPM only provides two buckets, one each for the active-only and
+>> active-sleep RPM contexts. Use the correct constant to allocate and
+>> operate on them.
+>>
+>> Fixes: dcbce7b0a79c ("interconnect: qcom: icc-rpm: Support multiple buckets")
+>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>  drivers/interconnect/qcom/icc-rpm.c | 14 +++++++-------
+>>  1 file changed, 7 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+>> index 6d40815c5401..3ac47b818afe 100644
+>> --- a/drivers/interconnect/qcom/icc-rpm.c
+>> +++ b/drivers/interconnect/qcom/icc-rpm.c
+>> [...]
+>> @@ -275,7 +275,7 @@ static int qcom_icc_bw_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
+>>  	if (!tag)
+>>  		tag = QCOM_ICC_TAG_ALWAYS;
+>>  
+>> -	for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
+>> +	for (i = 0; i < QCOM_SMD_RPM_STATE_NUM; i++) {
+>>  		if (tag & BIT(i)) {
+> 
+> Hm, I think QCOM_ICC_NUM_BUCKETS is actually intentional here. There is
+> a hint about this in the description of the commit in your Fixes line:
+> 
+>> This patch studies the implementation from interconnect rpmh driver to
+>> support multiple buckets.  The rpmh driver provides three buckets for
+>> AMC, WAKE, and SLEEP; this driver only needs to use WAKE and SLEEP
+>> buckets, but we keep the same way with rpmh driver, this can allow us
+>> to reuse the DT binding and avoid to define duplicated data structures.
+> 
+> As far as I understand, the idea was to reuse the definitions in
+> qcom,icc.h and just ignore the AMC bucket for now. AFAIU AMC (or rather
+> the lack thereof) is basically caching: Sending requests without AMC bit
+> set is delayed until the next rpmh_flush() call that happens when
+> entering a deep idle state. It requires some work but I guess
+> theoretically one could implement exactly the same for RPM.
+That's trying to shove a cube into a circle-shaped hole.. AMC is a
+hardware (well, firmware.. you know what I mean) feature, which SMD
+RPM lacks. Plus it'd result in useless allocations.
 
-For the small userbase that don't, I believe that they will use the rpif
-kernel and ssd1306-overlay.dtbo DTB overlay, which defaults to width=128
-and height=64 [1]. So those users will have to explicitly set a width and
-height for a 96x16 panel anyways.
+> 
+> What you're actually doing here is not fixing the commit but changing
+> the bindings. On MSM8909 I defined the ICC path for CPU<->RAM like this:
+> 
+> 	interconnects = <&bimc MAS_APPS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
+> 			 &bimc SLV_EBI QCOM_ICC_TAG_ACTIVE_ONLY>;
+> 
+> Per definition in qcom,icc.h:
+> 
+> 	QCOM_ICC_TAG_ACTIVE_ONLY = (AMC | WAKE) = (BIT(0) | BIT(1))
+> 
+> Without your patch series this behaves correctly. It results in an
+> active-only vote.
+> 
+> The change of behavior is in PATCH 17/22 "interconnect: qcom: icc-rpm:
+> Control bus rpmcc from icc". It silently switches from
+> QCOM_ICC_BUCKET_WAKE (1) and QCOM_ICC_BUCKET_SLEEP (2) to
+> QCOM_SMD_RPM_ACTIVE_STATE (0) and QCOM_SMD_RPM_SLEEP_STATE (1).
+> 
+> In other words, QCOM_ICC_TAG_ACTIVE_ONLY (BIT(0) | BIT(1)) now results
+> in an active+sleep vote, not an active-only one. :)
+> 
+> There doesn't seem to be an upstream user of the ICC tags/buckets for
+> icc-rpm yet so personally I would be fine with changing it. However,
+> then qcom,icc.h should get a clear comment that it's rpmh-only and we
+> should define a new qcom,icc-rpm.h.
+Right, I'd argue the original commit was in the wrong here. It was trying
+to reuse bindings which were intended for a different hw architecture (and
+perhaps not described very well - there's no word of RPMh neither in the
+name nor in the defines themselves). That's an abuse in my view..
 
-The intersection of users that have a 96x16 panel, assumed that default
-and consider the DTB a stable ABI, and only update their kernel but not
-the  DTB should be very small IMO.
+I think introducing RPM-specific bindings and communicating the change
+clearly is the way to go. As you've noticed, there are no users so that
+should not be problematic at all.
 
-[1]: https://github.com/raspberrypi/linux/blob/rpi-6.1.y/arch/arm/boot/dts/overlays/ssd1306-overlay.dts
-
-> Cheers,
-> Conor.
->
-
--- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
-
+Konrad
+> 
+> Or perhaps we should just drop this patch and continue using
+> QCOM_ICC_BUCKET_WAKE and QCOM_ICC_BUCKET_SLEEP as before?
+> 
+> Thanks,
+> Stephan
