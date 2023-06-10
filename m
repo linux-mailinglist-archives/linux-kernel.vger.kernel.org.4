@@ -2,147 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ED7272AB97
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 14:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F32AB72AB9A
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 15:02:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232941AbjFJM7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 08:59:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44384 "EHLO
+        id S234512AbjFJNCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 09:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbjFJM7o (ORCPT
+        with ESMTP id S229749AbjFJNCF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 08:59:44 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EEB1AB;
-        Sat, 10 Jun 2023 05:59:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686401983; x=1717937983;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ITLJwuiMSNZijdY4Cz6EusiXck7vPTOmLnkmQWskaI8=;
-  b=OShB4cayu10aFZla9A0oE9/QG63uiZ6GWDEPrfLgPV93QNywgAj6cBEo
-   KKBVu7Aatq0Wi+2JooeueON54gqju3Q/VgkeioLtd96581UVlsAqOKbsv
-   ORk05fn6N3BN9I/owLjhHmRPxjPwnZKUTEuQQ8iQZ+lG5P2LYXzH5ClN3
-   vILYp7Wjs0NyDNQG+Xzl1bPxPymmdQcehpF1dsmKd14Bim1Jgf4Tlyr5S
-   +absCNldqZJRq13EbA7aKP3MAYC9WMK7aDs2W9tfeetY4DjG2sazUUvU4
-   nfRbMenTM06cskmFSXONjS8MtyfstYj/tQBzFNjvSoSJK3VH1EioU7e0B
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10737"; a="338122799"
-X-IronPort-AV: E=Sophos;i="6.00,232,1681196400"; 
-   d="scan'208";a="338122799"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2023 05:59:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10737"; a="957451084"
-X-IronPort-AV: E=Sophos;i="6.00,232,1681196400"; 
-   d="scan'208";a="957451084"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 10 Jun 2023 05:59:38 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q7yBt-000A6A-2O;
-        Sat, 10 Jun 2023 12:59:37 +0000
-Date:   Sat, 10 Jun 2023 20:59:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Demi Marie Obenour <demi@invisiblethingslab.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Joe Perches <joe@perches.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Lee Jones <lee@kernel.org>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Demi Marie Obenour <demi@invisiblethingslab.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xen-devel@lists.xenproject.org
-Subject: Re: [PATCH 2/4] vsscanf(): Return -ERANGE on integer overflow
-Message-ID: <202306102055.ZSJK8Xsj-lkp@intel.com>
-References: <20230610025759.1813-2-demi@invisiblethingslab.com>
+        Sat, 10 Jun 2023 09:02:05 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E2D3AB5;
+        Sat, 10 Jun 2023 06:02:03 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id d75a77b69052e-3f9b7345fb1so21319611cf.1;
+        Sat, 10 Jun 2023 06:02:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686402123; x=1688994123;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sid9PPnebkV661LCkg884rwv7/EfHsWnCoqGwZtAuUM=;
+        b=fhxZj4OkS8aCcj55qX+CEOfaluClflEKfym7Jqt7izDQ98GoAzcgVfN8X6JMvooPZK
+         0ta/WHHbhJEfBXjb1+e3wXKlw736PQX3wYQWAXt5z8cUL5snHW8aSouxy/cacofEfXWA
+         c39ENWDsvlInvQupPQ8aTho52yKUyt8OibHo7uMR1AFG/vX4MA2/jyC/kJoiclI6MdRn
+         11LRm4iSyPaBmRQ+C3ahGdej2hrrs2LS/dj9oJszuK8SoNwxqGD2aL2hkXJflXoLZRcM
+         kjlrnbW+NZbwQv3NzMHbLArhwUDsMVc1TZI36Ib4cJnsX4n5rN8KuUCMfioBukQAw/ak
+         PUSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686402123; x=1688994123;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sid9PPnebkV661LCkg884rwv7/EfHsWnCoqGwZtAuUM=;
+        b=cq20WDFAOUY/w38uPUvgndBJIltTad/3142JUFvQ8zfoyE9/BsLKVtX3x3MRVrr8Qb
+         uCNObSPWuNrZJCKzEMC2EWZ21IdMfM7cn+zJbBCn13wE0v6f5S3kLpgIdDEf8LqONZRr
+         vz2Uyx5KePkYCzosJuzdt16I78b1yLx7MgKC1ibN/n64sfNzxRf8jA1CdLhO9/97ujUt
+         HOVhGKHjTgDPz4W9/YqBVsA9cXw0rsXsXyoHrx+3O4ZYTU4edY1kAywEoITF3f7a/Zf5
+         /IaqF0kPE+Q6FXxw/r/lcMQzgOOGm0YQXA/rrPLOhYkJwDX2/IraBOVJQ8eXjos1SyL3
+         EgWw==
+X-Gm-Message-State: AC+VfDxpnLfF+WD1TJVdQy52v0TJpD98HdzmlD86KdzfcMxqK4oVJRTl
+        oYSNjKs+mpECpQjm3GSCyQj6D+eHgsJSLyXppFmc1TOEO2Y=
+X-Google-Smtp-Source: ACHHUZ6LKdPbTm5X31ZA/PsQ9OBswkcS6SK0d8zfA6V4BWnNfU7VbMmoITTr1LD2gSomxZ3X7g2Knha0VevdFa6pgHc=
+X-Received: by 2002:a05:6214:268e:b0:621:78a:dd84 with SMTP id
+ gm14-20020a056214268e00b00621078add84mr5238735qvb.47.1686402122252; Sat, 10
+ Jun 2023 06:02:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230610025759.1813-2-demi@invisiblethingslab.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230607153600.15816-1-osmtendev@gmail.com> <b7a3219e-4e0a-7a08-439a-a8a6e35271ca@linuxfoundation.org>
+In-Reply-To: <b7a3219e-4e0a-7a08-439a-a8a6e35271ca@linuxfoundation.org>
+From:   Osama Muhammad <osmtendev@gmail.com>
+Date:   Sat, 10 Jun 2023 18:01:51 +0500
+Message-ID: <CAK6rUAMODPLQeUawXMW_RNiJFdukOqdhS5GA5XRAq4U9bnQdNg@mail.gmail.com>
+Subject: Re: [PATCH v2] selftests: prctl: Add new prctl test for PR_SET_NAME
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     shuah@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Demi,
+Hi all,
 
-kernel test robot noticed the following build warnings:
+I looked into it and tried to use TASK_COMM_LEN in the test. Even
+though I included "linux/sched.h '', I was not able to compile the
+test because it couldn't find it in the header file.
+I dived deep into the issue and turns out header file mapped in
+/usr/include/linux/sched.h is actually mapped to
+/include/uapi/linux/sched.h[1] in linux source,
+where TASK_COMM_LEN is not even defined. Instead TASK_COMM_LEN is
+defined in /include/linux/sched.h which is not mapped to any header
+files in
+userspace(/(/usr/include/linux).
+I also tried to find the TASK_COM_LEN in /usr/include/linux/ but I
+couldn't find it. Following are the search results.
+grep -rnw '/usr/include/linux/' -e 'TASK_COMM_LEN"
+RESULTS OF COMMAND :- /usr/include/linux/taskstats.h:38:#define
+TS_COMM_LEN 32 /* should be >= TASK_COMM_LEN
+Based on this information, I have two questions:
+1. Would this require a fix to move 'TASK_COMM_LEN' macro from
+/include/linux/sched.h to UAPI headers /include/uapi/linux/sched.h.
+2. Is there any other way to access TASK_COMM_LEN in the selftest that
+I'm not aware of?
 
-[auto build test WARNING on lee-mfd/for-mfd-next]
-[also build test WARNING on lee-leds/for-leds-next linus/master v6.4-rc5 next-20230609]
-[cannot apply to xen-tip/linux-next lee-mfd/for-mfd-fixes]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[1]:-https://elixir.bootlin.com/linux/v5.15.116/source/include/uapi/linux/sched.h
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Demi-Marie-Obenour/vsscanf-Return-ERANGE-on-integer-overflow/20230610-110026
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-next
-patch link:    https://lore.kernel.org/r/20230610025759.1813-2-demi%40invisiblethingslab.com
-patch subject: [PATCH 2/4] vsscanf(): Return -ERANGE on integer overflow
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230610/202306102055.ZSJK8Xsj-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build):
-        git remote add lee-mfd https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git
-        git fetch lee-mfd for-mfd-next
-        git checkout lee-mfd/for-mfd-next
-        b4 shazam https://lore.kernel.org/r/20230610025759.1813-2-demi@invisiblethingslab.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/staging/media/atomisp/
+Thanks,
+Osama
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306102055.ZSJK8Xsj-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/staging/media/atomisp//pci/ia_css_acc_types.h:25,
-                    from drivers/staging/media/atomisp//pci/ia_css_pipe_public.h:29,
-                    from drivers/staging/media/atomisp//pci/ia_css_stream_public.h:25,
-                    from drivers/staging/media/atomisp//pci/runtime/binary/interface/ia_css_binary.h:23,
-                    from drivers/staging/media/atomisp//pci/runtime/debug/interface/ia_css_debug.h:25,
-                    from drivers/staging/media/atomisp/pci/isp/kernels/macc/macc_1.0/ia_css_macc.host.c:18:
->> drivers/staging/media/atomisp//pci/hive_isp_css_include/platform_support.h:30: warning: "UCHAR_MAX" redefined
-      30 | #define UCHAR_MAX  (255)
-         | 
-   In file included from include/linux/limits.h:7,
-                    from drivers/staging/media/atomisp//pci/hive_isp_css_include/type_support.h:37,
-                    from drivers/staging/media/atomisp//pci/ia_css_types.h:27,
-                    from drivers/staging/media/atomisp/pci/isp/kernels/macc/macc_1.0/ia_css_macc.host.c:16:
-   include/vdso/limits.h:5: note: this is the location of the previous definition
-       5 | #define UCHAR_MAX       ((unsigned char)~0U)
-         | 
-
-
-vim +/UCHAR_MAX +30 drivers/staging/media/atomisp//pci/hive_isp_css_include/platform_support.h
-
-ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/css2400/hive_isp_css_include/platform_support.h Mauro Carvalho Chehab 2020-04-19  27  
-ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/css2400/hive_isp_css_include/platform_support.h Mauro Carvalho Chehab 2020-04-19  28  #define UINT16_MAX USHRT_MAX
-ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/css2400/hive_isp_css_include/platform_support.h Mauro Carvalho Chehab 2020-04-19  29  #define UINT32_MAX UINT_MAX
-ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/css2400/hive_isp_css_include/platform_support.h Mauro Carvalho Chehab 2020-04-19 @30  #define UCHAR_MAX  (255)
-ad85094b293e40 drivers/staging/media/atomisp/pci/atomisp2/css2400/hive_isp_css_include/platform_support.h Mauro Carvalho Chehab 2020-04-19  31  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On Sat, 10 Jun 2023 at 02:43, Shuah Khan <skhan@linuxfoundation.org> wrote:
+>
+> On 6/7/23 09:36, Osama Muhammad wrote:
+> > This patch will add the new test, which covers the prctl call
+> > PR_SET_NAME command. The test tries to give a name using the PR_SET_NAME
+> > call and then confirm it that it changed correctly by using  PR_GET_NAME.
+> > It also tries to rename it with empty name.In the test PR_GET_NAME is
+> > tested by passing null pointer to it and check its behaviour.
+> >
+> > Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+> >
+> > ---
+> > changes since v1:
+> >       -Used TASK_COMM_LEN instead of using numerical value 16.
+>
+> Please add linux/sched.h here as an include to pull this.
+> It is good to add an explicit include as opposed taking
+> a chance on it being included from another include.
+>
+> thanks,
+> -- Shuah
