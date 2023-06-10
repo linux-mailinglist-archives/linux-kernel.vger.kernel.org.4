@@ -2,763 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 899DB72A74D
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 03:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4401972A765
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 03:20:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233539AbjFJBAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 21:00:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55578 "EHLO
+        id S232593AbjFJBUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 21:20:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233676AbjFJA7i (ORCPT
+        with ESMTP id S229542AbjFJBUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 20:59:38 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0128E30E5
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 17:58:52 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id 6a1803df08f44-62614a2ce61so18086216d6.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 17:58:52 -0700 (PDT)
+        Fri, 9 Jun 2023 21:20:33 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7640D30EC
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 18:20:31 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-53f7bef98b7so1260875a12.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 18:20:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1686358732; x=1688950732;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PT++VZNUMXEFhvCG58k2InRSiOzVfFUx6mXd86yXfnU=;
-        b=cSg5caQeIBvwWDH70orHwCvAFbiGeRsgy7S9WZEbKNb46uRN6NOw/fAZfIDTT2uLu2
-         k/B6hEhzqgUq+hpMt5uaaKnmjKPJWj4eDbN+Ac5lR/sQg/GcJLaNoyjnWOFb1yug8CoG
-         6UzllIeqddTDolRxdW70Yr2kPglZLUHgkn2t7T4zyPbqO4Q1RzltvqZ82VYva7xdrKJS
-         y9NI0E4SK2mdTgQvpNi+XNKubtAvr1xzXQKDbffZ1L6bL0kzhruFf1x1PsBKWPwhbGtv
-         PLavA8vJMIw38VpoaxgSIhT9fe1W8iy2xPzuLFEJWL4JffMwyonnNNh5CIxA8L0YG9BD
-         q/xw==
+        d=linaro.org; s=google; t=1686360031; x=1688952031;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=D/bmegFESSAApCqDdnEAielRRibxjNBPRiCDE3DA8lw=;
+        b=jHvDFR6kYXh80JC9eULwl/zj2STmYAFAzkKnqYanBcQbBWj3dJR4+WCBJwkT6urS6W
+         ZUYLCx3ciSA4O9SBVHHS3g6y9xEvFIGPz4vcn7JTJ/Mz58nNYzNWPriO5i9tUAfbG1Yz
+         67e8naAZpbw9Z72It+NJPyxmumb2GF5AyF3T+VqxAQH7LHxBv3Pl4kvco61vT7UYOYdc
+         hgjD63VDsdDkfcWhT+cA+iO1COLHX64ALZvkY7u+WuzOZUAbgguPP8o5c722RpqVyW7h
+         wP5pXhcznBo5EwjuhttHpyPtedKhNcO0d9VxG4Hu9ld9QIx06kqLzFQYXzIy5TpSmrkG
+         v18Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686358732; x=1688950732;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PT++VZNUMXEFhvCG58k2InRSiOzVfFUx6mXd86yXfnU=;
-        b=HXP6j17U5sHf/TnWhrecohbpzRRwFgUOfevo/YKiARlYBe82Jm9YZRwCbwuvue7146
-         tq6OHz6JBhJ2+C4qu2+EGGmeKkP5mj3s1MqSgSj2AlWATuE4Tp3QyvTtR+9G94FDjOX5
-         xyumE/Ia7gSNmufeHpF8iVQlx4sQkYSlgj1ppQSmaXAHEXjPpdXzb60ycBVaevfiSwhl
-         yss+XMKpTrW6CQrLGKA6do5Ez0q9AbBfH29ujym1BSg0frF3lf7nbVYBq8jvbtiqHOrh
-         Q/np4F80JuMdhrPLdunNo4uVcZW8UAZCTTHzjO5Tcx9pLBrth2QtyJRjOvf3rMgZrNf5
-         SA0Q==
-X-Gm-Message-State: AC+VfDzKFRATKzZz0GITssXStDSUSTxvOinLndxZeTp5pw8RCWhlnsVI
-        c42SrD8YBOMGjXQVtALm12c0Zw==
-X-Google-Smtp-Source: ACHHUZ713Od678QMcSR5DMuXIRgaRrbTL+iz+vtwxzFzmUW5LdfmeeUfZQzDanBF2yCyAiCHNyy7/Q==
-X-Received: by 2002:a05:6214:f61:b0:623:8d60:da60 with SMTP id iy1-20020a0562140f6100b006238d60da60mr3351561qvb.34.1686358731747;
-        Fri, 09 Jun 2023 17:58:51 -0700 (PDT)
-Received: from [172.17.0.4] ([130.44.212.126])
-        by smtp.gmail.com with ESMTPSA id x17-20020a0ce251000000b00606750abaf9sm1504075qvl.136.2023.06.09.17.58.51
+        d=1e100.net; s=20221208; t=1686360031; x=1688952031;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D/bmegFESSAApCqDdnEAielRRibxjNBPRiCDE3DA8lw=;
+        b=dQ67NxE7pi362f0WxkYBlDI1Y3tHvTombK26+QRrkRxS5d7aA8NXd/eFb5rPBh+SES
+         FblFaL1pVXpPcr1+3M+i2pnj0c2qEVKCpeAf6Oy8AxDIQeuvFmKY7I0nzzHGIUXwiBOC
+         FRukDe9+O+ZZzYiBMY8DT6PVzBPJqazNT5f7bd3QiX0qq02MaTh8l46fZvtrLi85WHDH
+         qveJr8DF09obWMR2ueWmOv8YGKusjSukGF2z7hraI5S1ZPqdxfRlwEMHkz4pqG3NmqZF
+         xt+8GYpifob1e1DDtDo0jwtF1gNqJ0xMPI0vF5rx8hUcsdMpayt3p9dPmouDAvoRSnnb
+         1QlA==
+X-Gm-Message-State: AC+VfDwYdj80JpuMB79BsaAseIz0sHRifGHbHyAsMa+BDSK981nyv45y
+        RnsZFv1V/zRJ++zw573Qbbm2oQ==
+X-Google-Smtp-Source: ACHHUZ4KBSke2iBZa+MPXMvoq9+3zaH1aAi/q3pr2imUy5kacQKczoOET10wqb7HLcOz675SNucZ7Q==
+X-Received: by 2002:a05:6a20:7350:b0:10d:5430:c8d6 with SMTP id v16-20020a056a20735000b0010d5430c8d6mr3682430pzc.0.1686360030640;
+        Fri, 09 Jun 2023 18:20:30 -0700 (PDT)
+Received: from leoy-huanghe ([156.59.39.102])
+        by smtp.gmail.com with ESMTPSA id u21-20020a656715000000b00476d1385265sm3198809pgf.25.2023.06.09.18.20.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 17:58:51 -0700 (PDT)
-From:   Bobby Eshleman <bobby.eshleman@bytedance.com>
-Date:   Sat, 10 Jun 2023 00:58:35 +0000
-Subject: [PATCH RFC net-next v4 8/8] tests: add vsock dgram tests
+        Fri, 09 Jun 2023 18:20:30 -0700 (PDT)
+Date:   Sat, 10 Jun 2023 09:20:20 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     coresight@lists.linaro.org, denik@chromium.org,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] perf cs-etm: Use previous thread for branch sample
+ source IP
+Message-ID: <20230610012020.GA174906@leoy-huanghe>
+References: <20230524131958.2139331-1-james.clark@arm.com>
+ <20230524131958.2139331-3-james.clark@arm.com>
+ <20230527090635.GB886420@leoy-yangtze.lan>
+ <630ab636-107d-4b12-5454-2ee91ad43543@arm.com>
+ <1e7aa657-6d1e-9e7c-95cb-b32d307abe93@arm.com>
+ <20230608102555.GB123723@leoy-huanghe>
+ <2e075792-7af8-209b-082b-48d687387463@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230413-b4-vsock-dgram-v4-8-0cebbb2ae899@bytedance.com>
-References: <20230413-b4-vsock-dgram-v4-0-0cebbb2ae899@bytedance.com>
-In-Reply-To: <20230413-b4-vsock-dgram-v4-0-0cebbb2ae899@bytedance.com>
-To:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>
-Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
-        Simon Horman <simon.horman@corigine.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        bpf@vger.kernel.org, Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Jiang Wang <jiang.wang@bytedance.com>
-X-Mailer: b4 0.12.2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2e075792-7af8-209b-082b-48d687387463@arm.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiang Wang <jiang.wang@bytedance.com>
+On Fri, Jun 09, 2023 at 12:00:27PM +0100, James Clark wrote:
+> On 08/06/2023 11:25, Leo Yan wrote:
+> > On Thu, Jun 08, 2023 at 10:34:42AM +0100, James Clark wrote:
 
-This patch adds tests for vsock datagram.
+[...]
 
-Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
-Signed-off-by: Jiang Wang <jiang.wang@bytedance.com>
----
- tools/testing/vsock/util.c       | 141 ++++++++++++-
- tools/testing/vsock/util.h       |   6 +
- tools/testing/vsock/vsock_test.c | 432 +++++++++++++++++++++++++++++++++++++++
- 3 files changed, 578 insertions(+), 1 deletion(-)
+> >>>>> @@ -616,6 +618,8 @@ static void cs_etm__packet_swap(struct cs_etm_auxtrace *etm,
+> >>>>>  		tmp = tidq->packet;
+> >>>>>  		tidq->packet = tidq->prev_packet;
+> >>>>>  		tidq->prev_packet = tmp;
+> >>>>> +		thread__put(tidq->prev_thread);
+> >>>>> +		tidq->prev_thread = thread__get(tidq->thread);
+> >>>>
+> >>>> Maybe cs_etm__packet_swap() is not the best place to update
+> >>>> "tidq->prev_thread", since swapping packet doesn't mean it's necessarily
+> >>>> thread switching; can we move this change into the cs_etm__set_thread()?
+> >>>>
+> >>>
+> >>> Yeah that might make more sense. I can move it there if we decide to
+> >>> keep this change.
+> >>>
+> >>
+> >> Unfortunately I don't think I can make this change. It seems like
+> >> putting the previous thread swap in  cs_etm__set_thread() has different
+> >> semantics to keeping all the swaps together in cs_etm__packet_swap().
+> > 
+> > Thanks for trying this.
+> > 
+> >> This is because if you swap the thread in cs_etm__packet_swap() the
+> >> previous packet and next packet can have the _same_ thread if there
+> >> happened to be no change. However if you only swap previous thread in
+> >> cs_etm__set_thread(), that means that the previous thread is always
+> >> different to the next one. This has a huge difference on the decoding
+> >> because two adjacent packets on the same thread will say they branched
+> >> from the previous thread that ran, not the previous thread on the
+> >> previous packet.
+> > 
+> > Seems to me, this is a synchronization issue between the field
+> > 'tidq->prev_thread' and 'tidq->prev_packet'.
+> > 
+> > It's still hard for me to understand "two adjacent packets on the same
+> > thread will say they branched from the previous thread that ran", IIUC,
+> > even we move thread swapping into cs_etm__set_thread(), if the two
+> > adjacent packets are in the same thread context, we can skip to update
+> > fields 'tidq->prev_thread' and 'tidq->prev_packet'.
+> > 
+> > So I am curious if below cs_etm__set_thread() works or not?
+> > 
+> > static void cs_etm__set_thread(struct cs_etm_auxtrace *etm,
+> > 			       struct cs_etm_traceid_queue *tidq, pid_t tid)
+> > {
+> > 	struct machine *machine = &etm->session->machines.host;
+> > 
+> > 	/* No context switching, bail out */
+> > 	if ((tidq->thread->tid != tid)
+> > 		return;
+> > 
+> > 	/* If tid is -1, we simply use idle thread context */
+> > 	if (tid == -1)
+> > 		goto find_idle_thread;
+> > 
+> > 	/*
+> > 	 * The new incoming tid is different from current thread,
+> > 	 * so it's to switch to the next thread context.
+> > 	 */
+> > 
+> > 	/* Swap thread contexts */
+> > 	thread__put(tidq->prev_thread);
+> > 	tidq->prev_thread = thread__get(tidq->thread);
+> > 
+> > 	/* Find thread context for new tid */
+> > 	thread__zput(tidq->thread);
+> > 	tidq->thread = machine__find_thread(machine, -1, tid);
+> > 
+> > find_idle_thread:
+> > 	/* Couldn't find a known thread */
+> > 	if (!tidq->thread)
+> > 		tidq->thread = machine__idle_thread(machine);
+> > }
+> > 
+> 
+> I tried this change but I still don't think it's giving the right
+> results. Tracking previous thread in cs_etm__set_thread() changes the
+> semantics of being "the thread for the previous packet" to being "the
+> previous different thread of an unknown old packet". If you imagine the
+> packets and thread changes are like this (where <d> is a discontinuity
+> packet):
+> 
+>     <--thread 1--> <--thread 2-------------------> <------thread 3-->
+> <d> <--packet 1--> <d> <--packet 2--> <packet 3--> <d> <--packet 4-->
+> 
+> Branches are generated using the last IP of the previous packet, and the
+> first IP of the next packet, ignoring everything in between as they are
+> just sequential instructions.
+> 
+> So assuming there are discontinuity packets between the thread switches
+> we should get:
+> 
+>   thread 1 branches from packet 1 to 0x0
+>   thread 2 branches from 0x0 to packet 2
+>   thread 2 branches from packet 2 to packet 3
+>   thread 2 branches from packet 3 to 0x0
+>   thread 3 branches from 0x0 to packet 4
+> 
+> By tracking the previous thread for each packet, packet 2 and 3 stay in
+> thread 2.
+> 
+> If we track the previous thread instead, then both packet 2 and 3 would
+> continue to look like they branch from thread 1 like this:
+> 
+>   thread ? branches from packet 1 to 0x0
+>   thread 1 branches from 0x0 to packet 2
+>   thread 1 branches from packet 2 to packet 3
+>   thread 1 branches from packet 3 to 0x0
+>   thread 2 branches from 0x0 to packet 4
 
-diff --git a/tools/testing/vsock/util.c b/tools/testing/vsock/util.c
-index 01b636d3039a..811e70d7cf1e 100644
---- a/tools/testing/vsock/util.c
-+++ b/tools/testing/vsock/util.c
-@@ -99,7 +99,8 @@ static int vsock_connect(unsigned int cid, unsigned int port, int type)
- 	int ret;
- 	int fd;
- 
--	control_expectln("LISTENING");
-+	if (type != SOCK_DGRAM)
-+		control_expectln("LISTENING");
- 
- 	fd = socket(AF_VSOCK, type, 0);
- 
-@@ -130,6 +131,11 @@ int vsock_seqpacket_connect(unsigned int cid, unsigned int port)
- 	return vsock_connect(cid, port, SOCK_SEQPACKET);
- }
- 
-+int vsock_dgram_connect(unsigned int cid, unsigned int port)
-+{
-+	return vsock_connect(cid, port, SOCK_DGRAM);
-+}
-+
- /* Listen on <cid, port> and return the first incoming connection.  The remote
-  * address is stored to clientaddrp.  clientaddrp may be NULL.
-  */
-@@ -211,6 +217,34 @@ int vsock_seqpacket_accept(unsigned int cid, unsigned int port,
- 	return vsock_accept(cid, port, clientaddrp, SOCK_SEQPACKET);
- }
- 
-+int vsock_dgram_bind(unsigned int cid, unsigned int port)
-+{
-+	union {
-+		struct sockaddr sa;
-+		struct sockaddr_vm svm;
-+	} addr = {
-+		.svm = {
-+			.svm_family = AF_VSOCK,
-+			.svm_port = port,
-+			.svm_cid = cid,
-+		},
-+	};
-+	int fd;
-+
-+	fd = socket(AF_VSOCK, SOCK_DGRAM, 0);
-+	if (fd < 0) {
-+		perror("socket");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	if (bind(fd, &addr.sa, sizeof(addr.svm)) < 0) {
-+		perror("bind");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	return fd;
-+}
-+
- /* Transmit one byte and check the return value.
-  *
-  * expected_ret:
-@@ -260,6 +294,57 @@ void send_byte(int fd, int expected_ret, int flags)
- 	}
- }
- 
-+/* Transmit one byte and check the return value.
-+ *
-+ * expected_ret:
-+ *  <0 Negative errno (for testing errors)
-+ *   0 End-of-file
-+ *   1 Success
-+ */
-+void sendto_byte(int fd, const struct sockaddr *dest_addr, int len, int expected_ret,
-+		 int flags)
-+{
-+	const uint8_t byte = 'A';
-+	ssize_t nwritten;
-+
-+	timeout_begin(TIMEOUT);
-+	do {
-+		nwritten = sendto(fd, &byte, sizeof(byte), flags, dest_addr,
-+				  len);
-+		timeout_check("write");
-+	} while (nwritten < 0 && errno == EINTR);
-+	timeout_end();
-+
-+	if (expected_ret < 0) {
-+		if (nwritten != -1) {
-+			fprintf(stderr, "bogus sendto(2) return value %zd\n",
-+				nwritten);
-+			exit(EXIT_FAILURE);
-+		}
-+		if (errno != -expected_ret) {
-+			perror("write");
-+			exit(EXIT_FAILURE);
-+		}
-+		return;
-+	}
-+
-+	if (nwritten < 0) {
-+		perror("write");
-+		exit(EXIT_FAILURE);
-+	}
-+	if (nwritten == 0) {
-+		if (expected_ret == 0)
-+			return;
-+
-+		fprintf(stderr, "unexpected EOF while sending byte\n");
-+		exit(EXIT_FAILURE);
-+	}
-+	if (nwritten != sizeof(byte)) {
-+		fprintf(stderr, "bogus sendto(2) return value %zd\n", nwritten);
-+		exit(EXIT_FAILURE);
-+	}
-+}
-+
- /* Receive one byte and check the return value.
-  *
-  * expected_ret:
-@@ -313,6 +398,60 @@ void recv_byte(int fd, int expected_ret, int flags)
- 	}
- }
- 
-+/* Receive one byte and check the return value.
-+ *
-+ * expected_ret:
-+ *  <0 Negative errno (for testing errors)
-+ *   0 End-of-file
-+ *   1 Success
-+ */
-+void recvfrom_byte(int fd, struct sockaddr *src_addr, socklen_t *addrlen,
-+		   int expected_ret, int flags)
-+{
-+	uint8_t byte;
-+	ssize_t nread;
-+
-+	timeout_begin(TIMEOUT);
-+	do {
-+		nread = recvfrom(fd, &byte, sizeof(byte), flags, src_addr, addrlen);
-+		timeout_check("read");
-+	} while (nread < 0 && errno == EINTR);
-+	timeout_end();
-+
-+	if (expected_ret < 0) {
-+		if (nread != -1) {
-+			fprintf(stderr, "bogus recvfrom(2) return value %zd\n",
-+				nread);
-+			exit(EXIT_FAILURE);
-+		}
-+		if (errno != -expected_ret) {
-+			perror("read");
-+			exit(EXIT_FAILURE);
-+		}
-+		return;
-+	}
-+
-+	if (nread < 0) {
-+		perror("read");
-+		exit(EXIT_FAILURE);
-+	}
-+	if (nread == 0) {
-+		if (expected_ret == 0)
-+			return;
-+
-+		fprintf(stderr, "unexpected EOF while receiving byte\n");
-+		exit(EXIT_FAILURE);
-+	}
-+	if (nread != sizeof(byte)) {
-+		fprintf(stderr, "bogus recvfrom(2) return value %zd\n", nread);
-+		exit(EXIT_FAILURE);
-+	}
-+	if (byte != 'A') {
-+		fprintf(stderr, "unexpected byte read %c\n", byte);
-+		exit(EXIT_FAILURE);
-+	}
-+}
-+
- /* Run test cases.  The program terminates if a failure occurs. */
- void run_tests(const struct test_case *test_cases,
- 	       const struct test_opts *opts)
-diff --git a/tools/testing/vsock/util.h b/tools/testing/vsock/util.h
-index fb99208a95ea..a69e128d120c 100644
---- a/tools/testing/vsock/util.h
-+++ b/tools/testing/vsock/util.h
-@@ -37,13 +37,19 @@ void init_signals(void);
- unsigned int parse_cid(const char *str);
- int vsock_stream_connect(unsigned int cid, unsigned int port);
- int vsock_seqpacket_connect(unsigned int cid, unsigned int port);
-+int vsock_dgram_connect(unsigned int cid, unsigned int port);
- int vsock_stream_accept(unsigned int cid, unsigned int port,
- 			struct sockaddr_vm *clientaddrp);
- int vsock_seqpacket_accept(unsigned int cid, unsigned int port,
- 			   struct sockaddr_vm *clientaddrp);
-+int vsock_dgram_bind(unsigned int cid, unsigned int port);
- void vsock_wait_remote_close(int fd);
- void send_byte(int fd, int expected_ret, int flags);
-+void sendto_byte(int fd, const struct sockaddr *dest_addr, int len, int expected_ret,
-+		 int flags);
- void recv_byte(int fd, int expected_ret, int flags);
-+void recvfrom_byte(int fd, struct sockaddr *src_addr, socklen_t *addrlen,
-+		   int expected_ret, int flags);
- void run_tests(const struct test_case *test_cases,
- 	       const struct test_opts *opts);
- void list_tests(const struct test_case *test_cases);
-diff --git a/tools/testing/vsock/vsock_test.c b/tools/testing/vsock/vsock_test.c
-index ac1bd3ac1533..ded82d39ee5d 100644
---- a/tools/testing/vsock/vsock_test.c
-+++ b/tools/testing/vsock/vsock_test.c
-@@ -1053,6 +1053,413 @@ static void test_stream_virtio_skb_merge_server(const struct test_opts *opts)
- 	close(fd);
- }
- 
-+static void test_dgram_sendto_client(const struct test_opts *opts)
-+{
-+	union {
-+		struct sockaddr sa;
-+		struct sockaddr_vm svm;
-+	} addr = {
-+		.svm = {
-+			.svm_family = AF_VSOCK,
-+			.svm_port = 1234,
-+			.svm_cid = opts->peer_cid,
-+		},
-+	};
-+	int fd;
-+
-+	/* Wait for the server to be ready */
-+	control_expectln("BIND");
-+
-+	fd = socket(AF_VSOCK, SOCK_DGRAM, 0);
-+	if (fd < 0) {
-+		perror("socket");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	sendto_byte(fd, &addr.sa, sizeof(addr.svm), 1, 0);
-+
-+	/* Notify the server that the client has finished */
-+	control_writeln("DONE");
-+
-+	close(fd);
-+}
-+
-+static void test_dgram_sendto_server(const struct test_opts *opts)
-+{
-+	union {
-+		struct sockaddr sa;
-+		struct sockaddr_vm svm;
-+	} addr = {
-+		.svm = {
-+			.svm_family = AF_VSOCK,
-+			.svm_port = 1234,
-+			.svm_cid = VMADDR_CID_ANY,
-+		},
-+	};
-+	int len = sizeof(addr.sa);
-+	int fd;
-+
-+	fd = socket(AF_VSOCK, SOCK_DGRAM, 0);
-+	if (fd < 0) {
-+		perror("socket");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	if (bind(fd, &addr.sa, sizeof(addr.svm)) < 0) {
-+		perror("bind");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	/* Notify the client that the server is ready */
-+	control_writeln("BIND");
-+
-+	recvfrom_byte(fd, &addr.sa, &len, 1, 0);
-+
-+	/* Wait for the client to finish */
-+	control_expectln("DONE");
-+
-+	close(fd);
-+}
-+
-+static void test_dgram_connect_client(const struct test_opts *opts)
-+{
-+	union {
-+		struct sockaddr sa;
-+		struct sockaddr_vm svm;
-+	} addr = {
-+		.svm = {
-+			.svm_family = AF_VSOCK,
-+			.svm_port = 1234,
-+			.svm_cid = opts->peer_cid,
-+		},
-+	};
-+	int ret;
-+	int fd;
-+
-+	/* Wait for the server to be ready */
-+	control_expectln("BIND");
-+
-+	fd = socket(AF_VSOCK, SOCK_DGRAM, 0);
-+	if (fd < 0) {
-+		perror("bind");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	ret = connect(fd, &addr.sa, sizeof(addr.svm));
-+	if (ret < 0) {
-+		perror("connect");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	send_byte(fd, 1, 0);
-+
-+	/* Notify the server that the client has finished */
-+	control_writeln("DONE");
-+
-+	close(fd);
-+}
-+
-+static void test_dgram_connect_server(const struct test_opts *opts)
-+{
-+	test_dgram_sendto_server(opts);
-+}
-+
-+static void test_dgram_multiconn_sendto_client(const struct test_opts *opts)
-+{
-+	union {
-+		struct sockaddr sa;
-+		struct sockaddr_vm svm;
-+	} addr = {
-+		.svm = {
-+			.svm_family = AF_VSOCK,
-+			.svm_port = 1234,
-+			.svm_cid = opts->peer_cid,
-+		},
-+	};
-+	int fds[MULTICONN_NFDS];
-+	int i;
-+
-+	/* Wait for the server to be ready */
-+	control_expectln("BIND");
-+
-+	for (i = 0; i < MULTICONN_NFDS; i++) {
-+		fds[i] = socket(AF_VSOCK, SOCK_DGRAM, 0);
-+		if (fds[i] < 0) {
-+			perror("socket");
-+			exit(EXIT_FAILURE);
-+		}
-+	}
-+
-+	for (i = 0; i < MULTICONN_NFDS; i++)
-+		sendto_byte(fds[i], &addr.sa, sizeof(addr.svm), 1, 0);
-+
-+	/* Notify the server that the client has finished */
-+	control_writeln("DONE");
-+
-+	for (i = 0; i < MULTICONN_NFDS; i++)
-+		close(fds[i]);
-+}
-+
-+static void test_dgram_multiconn_sendto_server(const struct test_opts *opts)
-+{
-+	union {
-+		struct sockaddr sa;
-+		struct sockaddr_vm svm;
-+	} addr = {
-+		.svm = {
-+			.svm_family = AF_VSOCK,
-+			.svm_port = 1234,
-+			.svm_cid = VMADDR_CID_ANY,
-+		},
-+	};
-+	int len = sizeof(addr.sa);
-+	int fd;
-+	int i;
-+
-+	fd = socket(AF_VSOCK, SOCK_DGRAM, 0);
-+	if (fd < 0) {
-+		perror("socket");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	if (bind(fd, &addr.sa, sizeof(addr.svm)) < 0) {
-+		perror("bind");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	/* Notify the client that the server is ready */
-+	control_writeln("BIND");
-+
-+	for (i = 0; i < MULTICONN_NFDS; i++)
-+		recvfrom_byte(fd, &addr.sa, &len, 1, 0);
-+
-+	/* Wait for the client to finish */
-+	control_expectln("DONE");
-+
-+	close(fd);
-+}
-+
-+static void test_dgram_multiconn_send_client(const struct test_opts *opts)
-+{
-+	int fds[MULTICONN_NFDS];
-+	int i;
-+
-+	/* Wait for the server to be ready */
-+	control_expectln("BIND");
-+
-+	for (i = 0; i < MULTICONN_NFDS; i++) {
-+		fds[i] = vsock_dgram_connect(opts->peer_cid, 1234);
-+		if (fds[i] < 0) {
-+			perror("socket");
-+			exit(EXIT_FAILURE);
-+		}
-+	}
-+
-+	for (i = 0; i < MULTICONN_NFDS; i++)
-+		send_byte(fds[i], 1, 0);
-+
-+	/* Notify the server that the client has finished */
-+	control_writeln("DONE");
-+
-+	for (i = 0; i < MULTICONN_NFDS; i++)
-+		close(fds[i]);
-+}
-+
-+static void test_dgram_multiconn_send_server(const struct test_opts *opts)
-+{
-+	union {
-+		struct sockaddr sa;
-+		struct sockaddr_vm svm;
-+	} addr = {
-+		.svm = {
-+			.svm_family = AF_VSOCK,
-+			.svm_port = 1234,
-+			.svm_cid = VMADDR_CID_ANY,
-+		},
-+	};
-+	int fd;
-+	int i;
-+
-+	fd = socket(AF_VSOCK, SOCK_DGRAM, 0);
-+	if (fd < 0) {
-+		perror("socket");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	if (bind(fd, &addr.sa, sizeof(addr.svm)) < 0) {
-+		perror("bind");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	/* Notify the client that the server is ready */
-+	control_writeln("BIND");
-+
-+	for (i = 0; i < MULTICONN_NFDS; i++)
-+		recv_byte(fd, 1, 0);
-+
-+	/* Wait for the client to finish */
-+	control_expectln("DONE");
-+
-+	close(fd);
-+}
-+
-+static void test_dgram_msg_bounds_client(const struct test_opts *opts)
-+{
-+	unsigned long recv_buf_size;
-+	int page_size;
-+	int msg_cnt;
-+	int fd;
-+
-+	fd = vsock_dgram_connect(opts->peer_cid, 1234);
-+	if (fd < 0) {
-+		perror("connect");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	/* Let the server know the client is ready */
-+	control_writeln("CLNTREADY");
-+
-+	msg_cnt = control_readulong();
-+	recv_buf_size = control_readulong();
-+
-+	/* Wait, until receiver sets buffer size. */
-+	control_expectln("SRVREADY");
-+
-+	page_size = getpagesize();
-+
-+	for (int i = 0; i < msg_cnt; i++) {
-+		unsigned long curr_hash;
-+		ssize_t send_size;
-+		size_t buf_size;
-+		void *buf;
-+
-+		/* Use "small" buffers and "big" buffers. */
-+		if (i & 1)
-+			buf_size = page_size +
-+					(rand() % (MAX_MSG_SIZE - page_size));
-+		else
-+			buf_size = 1 + (rand() % page_size);
-+
-+		buf_size = min(buf_size, recv_buf_size);
-+
-+		buf = malloc(buf_size);
-+
-+		if (!buf) {
-+			perror("malloc");
-+			exit(EXIT_FAILURE);
-+		}
-+
-+		memset(buf, rand() & 0xff, buf_size);
-+		/* Set at least one MSG_EOR + some random. */
-+
-+		send_size = send(fd, buf, buf_size, 0);
-+
-+		if (send_size < 0) {
-+			perror("send");
-+			exit(EXIT_FAILURE);
-+		}
-+
-+		if (send_size != buf_size) {
-+			fprintf(stderr, "Invalid send size\n");
-+			exit(EXIT_FAILURE);
-+		}
-+
-+		/* In theory the implementation isn't required to transmit
-+		 * these packets in order, so we use this SYNC control message
-+		 * so that server and client coordinate sending and receiving
-+		 * one packet at a time. The client sends a packet and waits
-+		 * until it has been received before sending another.
-+		 */
-+		control_writeln("PKTSENT");
-+		control_expectln("PKTRECV");
-+
-+		/* Send the server a hash of the packet */
-+		curr_hash = hash_djb2(buf, buf_size);
-+		control_writeulong(curr_hash);
-+		free(buf);
-+	}
-+
-+	control_writeln("SENDDONE");
-+	close(fd);
-+}
-+
-+static void test_dgram_msg_bounds_server(const struct test_opts *opts)
-+{
-+	const unsigned long msg_cnt = 16;
-+	unsigned long sock_buf_size;
-+	struct msghdr msg = {0};
-+	struct iovec iov = {0};
-+	char buf[MAX_MSG_SIZE];
-+	socklen_t len;
-+	int fd;
-+	int i;
-+
-+	fd = vsock_dgram_bind(VMADDR_CID_ANY, 1234);
-+
-+	if (fd < 0) {
-+		perror("bind");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	/* Set receive buffer to maximum */
-+	sock_buf_size = -1;
-+	if (setsockopt(fd, SOL_SOCKET, SO_RCVBUF,
-+		       &sock_buf_size, sizeof(sock_buf_size))) {
-+		perror("setsockopt(SO_RECVBUF)");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	/* Retrieve the receive buffer size */
-+	len = sizeof(sock_buf_size);
-+	if (getsockopt(fd, SOL_SOCKET, SO_RCVBUF,
-+		       &sock_buf_size, &len)) {
-+		perror("getsockopt(SO_RECVBUF)");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	/* Client ready to receive parameters */
-+	control_expectln("CLNTREADY");
-+
-+	control_writeulong(msg_cnt);
-+	control_writeulong(sock_buf_size);
-+
-+	/* Ready to receive data. */
-+	control_writeln("SRVREADY");
-+
-+	iov.iov_base = buf;
-+	iov.iov_len = sizeof(buf);
-+	msg.msg_iov = &iov;
-+	msg.msg_iovlen = 1;
-+
-+	for (i = 0; i < msg_cnt; i++) {
-+		unsigned long remote_hash;
-+		unsigned long curr_hash;
-+		ssize_t recv_size;
-+
-+		control_expectln("PKTSENT");
-+		recv_size = recvmsg(fd, &msg, 0);
-+		control_writeln("PKTRECV");
-+
-+		if (!recv_size)
-+			break;
-+
-+		if (recv_size < 0) {
-+			perror("recvmsg");
-+			exit(EXIT_FAILURE);
-+		}
-+
-+		curr_hash = hash_djb2(msg.msg_iov[0].iov_base, recv_size);
-+		remote_hash = control_readulong();
-+
-+		if (curr_hash != remote_hash) {
-+			fprintf(stderr, "Message bounds broken\n");
-+			exit(EXIT_FAILURE);
-+		}
-+	}
-+
-+	close(fd);
-+}
-+
- static struct test_case test_cases[] = {
- 	{
- 		.name = "SOCK_STREAM connection reset",
-@@ -1128,6 +1535,31 @@ static struct test_case test_cases[] = {
- 		.run_client = test_stream_virtio_skb_merge_client,
- 		.run_server = test_stream_virtio_skb_merge_server,
- 	},
-+	{
-+		.name = "SOCK_DGRAM client sendto",
-+		.run_client = test_dgram_sendto_client,
-+		.run_server = test_dgram_sendto_server,
-+	},
-+	{
-+		.name = "SOCK_DGRAM client connect",
-+		.run_client = test_dgram_connect_client,
-+		.run_server = test_dgram_connect_server,
-+	},
-+	{
-+		.name = "SOCK_DGRAM multiple connections using sendto",
-+		.run_client = test_dgram_multiconn_sendto_client,
-+		.run_server = test_dgram_multiconn_sendto_server,
-+	},
-+	{
-+		.name = "SOCK_DGRAM multiple connections using send",
-+		.run_client = test_dgram_multiconn_send_client,
-+		.run_server = test_dgram_multiconn_send_server,
-+	},
-+	{
-+		.name = "SOCK_DGRAM msg bounds",
-+		.run_client = test_dgram_msg_bounds_client,
-+		.run_server = test_dgram_msg_bounds_server,
-+	},
- 	{},
- };
- 
+Thanks a lot for writing very details, James!
 
--- 
-2.30.2
+Now it's much clear for me to understand the issue.
 
+> Everything gets shifted back by 1 thread. I don't see the issue of
+> keeping all the swap stuff together in one place. Maybe there is an
+> issue with the naming of prev_thread? It's not really the previous
+> thread, it's the previous _packets_ thread. It might be the same thread
+> as the current one if there was no switch:
+
+Agreed.  It makes sense for me to rename the thread variable as
+"prev_packet_thread", this would be better for reflecting the purpose.
+
+Here you are trying to change how to track thread contexts: rather than
+tracking thread context as a global variable and sharing it cross packets,
+we track the thread context as an associated info for every packet to
+avoid any mismatching between packets and threads (e.g. caused by
+discontinuity packets).
+
+My feeling is this part would be a bit difficult for maintenance, maybe
+you could add a comment when spin a new patch?  Thanks!
+
+Leo
+
+> diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
+> index ca01109c3fc4..f3c73c86010a 100644
+> --- a/tools/perf/util/cs-etm.c
+> +++ b/tools/perf/util/cs-etm.c
+> @@ -86,8 +86,8 @@ struct cs_etm_traceid_queue {
+>         size_t last_branch_pos;
+>         union perf_event *event_buf;
+>         struct thread *thread;
+> -       struct thread *prev_thread;
+> -       ocsd_ex_level prev_el;
+> +       struct thread *prev_packet_thread;
+> +       ocsd_ex_level prev_packet_el;
+>         ocsd_ex_level el;
+>         struct branch_stack *last_branch;
+> 
+> > Thanks,
+> > Leo
