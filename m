@@ -2,50 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D0D772AAB2
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 11:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC00872AAB6
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 11:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231365AbjFJJgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 05:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38840 "EHLO
+        id S231992AbjFJJmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 05:42:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbjFJJga (ORCPT
+        with ESMTP id S229649AbjFJJmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 05:36:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B342D269A;
-        Sat, 10 Jun 2023 02:36:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D05B60DF2;
-        Sat, 10 Jun 2023 09:36:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15454C433EF;
-        Sat, 10 Jun 2023 09:36:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686389788;
-        bh=dtFXjJ4EPNkKuSigVdaZavR/GvRvLG89WPfmQG7j23A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YiisBsLa1TvYU9BRRZcCvo9zMkaQ3ebrIl3b2MLAfzSgze21+bFIK95RfvP4BXAg9
-         TwXv+Tu76n7jDnXc8z3TWCoJPsgoSm6CEro4VOFCCIh4QsqAjDCI15FLcQJvd++quX
-         HfTwnU4OVjMWUyNe9xtWlDuuC7ICJsDZwaV//jFFf4KBYdAxfqQnKvd0We9cWGC1BY
-         OuM8SYZXk6HPlHxf2ku5xxLU4MCl9MZGhoEPa91dRbLf2UxGkxi49DeU+HD1+TkZzb
-         v9VLGjooSss/3jHckowVvBtDBukushLvidyrdquEdv6ZyRCMk+Y8iiPNw7bMtEZaUJ
-         uBiY0a8FamOvw==
-Date:   Sat, 10 Jun 2023 11:36:25 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: mpc: Use of_property_read_reg() to parse "reg"
-Message-ID: <20230610093625.gvgbt7g4xvnuuog6@intel.intel>
-References: <20230609183044.1764951-1-robh@kernel.org>
+        Sat, 10 Jun 2023 05:42:13 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6F32D41;
+        Sat, 10 Jun 2023 02:42:10 -0700 (PDT)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QdXxH0TdVzLmjK;
+        Sat, 10 Jun 2023 17:40:19 +0800 (CST)
+Received: from localhost.localdomain (10.67.174.95) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Sat, 10 Jun 2023 17:42:04 +0800
+From:   Yang Jihong <yangjihong1@huawei.com>
+To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@kernel.org>, <namhyung@kernel.org>, <irogers@google.com>,
+        <adrian.hunter@intel.com>, <linux-perf-users@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <yangjihong1@huawei.com>
+Subject: [PATCH] perf stat: Add missing newline in pr_error messages
+Date:   Sat, 10 Jun 2023 09:40:26 +0000
+Message-ID: <20230610094026.220687-1-yangjihong1@huawei.com>
+X-Mailer: git-send-email 2.30.GIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230609183044.1764951-1-robh@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.95]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,41 +49,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+The newline is missing for error messages in add_default_attributes()
 
-On Fri, Jun 09, 2023 at 12:30:44PM -0600, Rob Herring wrote:
-> Use the recently added of_property_read_reg() helper to get the
-> untranslated "reg" address value.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  drivers/i2c/busses/i2c-mpc.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-mpc.c b/drivers/i2c/busses/i2c-mpc.c
-> index cfd074ee6d54..595dce9218ad 100644
-> --- a/drivers/i2c/busses/i2c-mpc.c
-> +++ b/drivers/i2c/busses/i2c-mpc.c
-> @@ -316,9 +316,10 @@ static void mpc_i2c_setup_512x(struct device_node *node,
->  	if (node_ctrl) {
->  		ctrl = of_iomap(node_ctrl, 0);
->  		if (ctrl) {
-> +			u64 addr;
->  			/* Interrupt enable bits for i2c-0/1/2: bit 24/26/28 */
-> -			pval = of_get_property(node, "reg", NULL);
-> -			idx = (*pval & 0xff) / 0x20;
-> +			of_property_read_reg(node, 0, &addr, NULL);
+Before:
 
-because of_property_read_reg() can return error, can we check
-also the error value here?
+  # perf stat --topdown
+  Topdown requested but the topdown metric groups aren't present.
+  (See perf list the metric groups have names like TopdownL1)#
 
-Thanks,
-Andi
+After:
 
-> +			idx = (addr & 0xff) / 0x20;
->  			setbits32(ctrl, 1 << (24 + idx * 2));
->  			iounmap(ctrl);
->  		}
-> -- 
-> 2.39.2
-> 
+  # perf stat --topdown
+  Topdown requested but the topdown metric groups aren't present.
+  (See perf list the metric groups have names like TopdownL1)
+  #
+
+In addition, perf_stat_init_aggr_mode() and perf_stat_init_aggr_mode_file()
+have the same problem, fixed by the way.
+
+Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+---
+ tools/perf/builtin-stat.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+index b9ad32f21e57..78644ae538c4 100644
+--- a/tools/perf/builtin-stat.c
++++ b/tools/perf/builtin-stat.c
+@@ -1398,7 +1398,7 @@ static int perf_stat_init_aggr_mode(void)
+ 		stat_config.aggr_map = cpu_aggr_map__new(evsel_list->core.user_requested_cpus,
+ 							 get_id, /*data=*/NULL, needs_sort);
+ 		if (!stat_config.aggr_map) {
+-			pr_err("cannot build %s map", aggr_mode__string[stat_config.aggr_mode]);
++			pr_err("cannot build %s map\n", aggr_mode__string[stat_config.aggr_mode]);
+ 			return -1;
+ 		}
+ 		stat_config.aggr_get_id = aggr_mode__get_id(stat_config.aggr_mode);
+@@ -1650,7 +1650,7 @@ static int perf_stat_init_aggr_mode_file(struct perf_stat *st)
+ 	stat_config.aggr_map = cpu_aggr_map__new(evsel_list->core.user_requested_cpus,
+ 						 get_id, env, needs_sort);
+ 	if (!stat_config.aggr_map) {
+-		pr_err("cannot build %s map", aggr_mode__string[stat_config.aggr_mode]);
++		pr_err("cannot build %s map\n", aggr_mode__string[stat_config.aggr_mode]);
+ 		return -1;
+ 	}
+ 	stat_config.aggr_get_id = aggr_mode__get_id_file(stat_config.aggr_mode);
+@@ -1789,7 +1789,7 @@ static int add_default_attributes(void)
+ 		 * on an architecture test for such a metric name.
+ 		 */
+ 		if (!metricgroup__has_metric("transaction")) {
+-			pr_err("Missing transaction metrics");
++			pr_err("Missing transaction metrics\n");
+ 			return -1;
+ 		}
+ 		return metricgroup__parse_groups(evsel_list, "transaction",
+@@ -1805,7 +1805,7 @@ static int add_default_attributes(void)
+ 		int smi;
+ 
+ 		if (sysfs__read_int(FREEZE_ON_SMI_PATH, &smi) < 0) {
+-			pr_err("freeze_on_smi is not supported.");
++			pr_err("freeze_on_smi is not supported.\n");
+ 			return -1;
+ 		}
+ 
+@@ -1818,7 +1818,7 @@ static int add_default_attributes(void)
+ 		}
+ 
+ 		if (!metricgroup__has_metric("smi")) {
+-			pr_err("Missing smi metrics");
++			pr_err("Missing smi metrics\n");
+ 			return -1;
+ 		}
+ 
+@@ -1843,7 +1843,7 @@ static int add_default_attributes(void)
+ 
+ 		if (!max_level) {
+ 			pr_err("Topdown requested but the topdown metric groups aren't present.\n"
+-				"(See perf list the metric groups have names like TopdownL1)");
++				"(See perf list the metric groups have names like TopdownL1)\n");
+ 			return -1;
+ 		}
+ 		if (stat_config.topdown_level > max_level) {
+-- 
+2.30.GIT
+
