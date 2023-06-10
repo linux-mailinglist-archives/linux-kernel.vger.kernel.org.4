@@ -2,109 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6E772AF7A
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 00:22:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B83F972AF7C
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 00:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbjFJWWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 18:22:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34584 "EHLO
+        id S232220AbjFJWXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 18:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231463AbjFJWWG (ORCPT
+        with ESMTP id S229622AbjFJWXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 18:22:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CFA3584;
-        Sat, 10 Jun 2023 15:22:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE62061B5A;
-        Sat, 10 Jun 2023 22:22:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0A29C433EF;
-        Sat, 10 Jun 2023 22:21:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686435724;
-        bh=3G3f8N5bw9bPZuUwFvkGw5TpAvDPD5mrCfUFG44YYu8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kZmRw6nJZmmJ3oB1R9o7fjsIjUNKxvqYmiANiWgX+JFujKMSWN6+5RLD5wp8Z8qq2
-         Rwbk8inB0HFKfzbjZkRs6FK3aX84bAFlXvImKdNEnnDgdyjhWB6t2PwNsyoPUf0qfz
-         JlcTU4OYKLdgXyrYs55Ek0ziOGHUgF1aTB/f+YTnmxtDmvfgF4em3TcObTSBg0+Ckh
-         vteZDpHcjgGTfLI+Fn8aDcoi4UhtTOXSmnjDRvzWoI7GUqcQeZX7FwV9hRvKb6mlEI
-         86q76+kP5j4LvybWodauHSN21Gub5ZPZEjnRTmjvbyorGpNqh+AsNJn8Yvbl1W1P3x
-         c9OPUeAUdxZ5A==
-Date:   Sat, 10 Jun 2023 23:21:57 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Maksim Kiselev <bigunclemax@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 1/3] dt-bindings: thermal: sun8i: Add binding for
- D1/T113s THS controller
-Message-ID: <20230610-shaky-candy-5114b855e2eb@spud>
-References: <20230610204225.1133473-1-bigunclemax@gmail.com>
- <20230610204225.1133473-2-bigunclemax@gmail.com>
+        Sat, 10 Jun 2023 18:23:18 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222B23584
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 15:23:17 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-30af159b433so2859302f8f.3
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 15:23:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686435795; x=1689027795;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=W6uujsqxk2yhJUnZO8C8LMRZDFMVQxUsWZqX3BJiMYo=;
+        b=dqE0P6GdikJnbYFdQSRIi2KOgVqaDnasOeFyR7JM2mKAp2+dj8QCflKMZr6ElaYn2y
+         GUVRS50A9wAiwLMHfalqLzULubL7s+KOITKlPOhgMMds2NedshymH0QnPhsDvrcsaAmG
+         LEDm8puQhRiHft4VBQW17t74P7WyDGyzBzEsiftvuhCe1cSVeqhFQXxM9qjwuM3u+np/
+         WMBnlG+nFpJBh1xIHpSjO+TJvZ3Vyc3kbNQx0Ln0wzt7Q+hFY+0qh3A8KotjrEssuzoQ
+         XhTomxufEdzbT8DzkwUL8Nu7B+G7ohtOlfpfoMTCCbBTjAMyP3kE2m0CsqfNzQW3SlrM
+         9OGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686435795; x=1689027795;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W6uujsqxk2yhJUnZO8C8LMRZDFMVQxUsWZqX3BJiMYo=;
+        b=HMy0d1ERjmBD2ESqNcPFNldWNWsSSt2/x25kiSXkIrncFOFmdzBXAaSURwOMdy7Z6Z
+         xwTvu/gO3ZxT/bMzSTTKoGqS2Dmj0Ms0RUw+bV66IDliMT0RDOelLty0FDlMTV0Ka7wJ
+         UYWMckuW/HTnjx8gu1MJwqMxu+a72MHF1HlXsoh7ZJBKy9yATXEn2VPI7M5Sj8rNmZqM
+         V5CMep+9WtJOHTKf4hQYoAc8UIQoObyk0pV4Yxmokv7F7ilAwBkdm0SRjjAD6XqOSQC/
+         IsbhZjZGY6HFnrpLC0/+QsNjhZ3YeUB7m3NtlgixDydsioLUsDQIgZ9LXyQzRXmfNhlg
+         yROg==
+X-Gm-Message-State: AC+VfDyRZtiH00VNjHdo70+mtSAWwz3G0CNwn3Kk7o1XHC2E3NItAC1E
+        sveA/M3O5bHlkqhLSAc+mzGiy8wyQXQ=
+X-Google-Smtp-Source: ACHHUZ5bZ1sBnZaeM/asURPTfk2/lAvVnMr23APe2Et/y/Cg61gmXxb4Xy7tnYS2NdlK80vo63YpdQ==
+X-Received: by 2002:a5d:4208:0:b0:2d2:f3e3:115d with SMTP id n8-20020a5d4208000000b002d2f3e3115dmr2232033wrq.59.1686435795330;
+        Sat, 10 Jun 2023 15:23:15 -0700 (PDT)
+Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
+        by smtp.gmail.com with ESMTPSA id b14-20020a056000054e00b0030c2e3c7fb3sm7961901wrf.101.2023.06.10.15.23.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Jun 2023 15:23:14 -0700 (PDT)
+Date:   Sat, 10 Jun 2023 23:23:13 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     David Laight <David.Laight@aculab.com>,
+        Lu Hongfei <luhongfei@vivo.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        "open list:VMALLOC" <linux-mm@kvack.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "opensource.kernel@vivo.com" <opensource.kernel@vivo.com>
+Subject: Re: [PATCH] mm/vmalloc: Replace the ternary conditional operator
+ with min()
+Message-ID: <2489af27-0e6e-4005-b2c0-dd4e55d15154@lucifer.local>
+References: <20230609061309.42453-1-luhongfei@vivo.com>
+ <832d7c69-ffd5-4764-8ffe-3a02bef0efb0@lucifer.local>
+ <3fc87d60-4e81-4f49-95f0-0503ad5cdf35@lucifer.local>
+ <f53f28de489f4c209776e404323ef5a1@AcuMS.aculab.com>
+ <ba45584f-41a2-4d06-8443-e7e64375b07f@lucifer.local>
+ <20230610150809.babdc5a7919258f066c8637e@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="tsbDwtX3UkzIgwos"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230610204225.1133473-2-bigunclemax@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230610150809.babdc5a7919258f066c8637e@linux-foundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Jun 10, 2023 at 03:08:09PM -0700, Andrew Morton wrote:
+> On Sat, 10 Jun 2023 22:06:35 +0100 Lorenzo Stoakes <lstoakes@gmail.com> wrote:
+>
+> > > > OK, as per the pedantic test bot, you'll need to change this to:-
+> > > >
+> > > > num = min_t(size_t, remains, PAGE_SIZE);
+>
+> PAGE_SIZE is a nuisance.  It _usually_ creates the need for a
+> cast:
+>
+> hp2:/usr/src/linux-6.4-rc4> grep -r "min(.*PAGE_SIZE" . | wc -l
+> 117
+> hp2:/usr/src/linux-6.4-rc4> grep -r "min_t(.*PAGE_SIZE" . | wc -l
+> 279
+>
+> Perhaps it should always have been size_t.
+>
 
---tsbDwtX3UkzIgwos
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I mean I absolutely agree this not being size_t is a bit silly although I'm
+pretty convinced sizeof(size_t) == sizeof(unsigned long) in all kernel
+arches (correct me if I'm wrong).
 
-On Sat, Jun 10, 2023 at 11:42:18PM +0300, Maksim Kiselev wrote:
-> From: Maxim Kiselev <bigunclemax@gmail.com>
->=20
-> Add a binding for D1/T113s thermal sensor controller.
->=20
-> Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
+So I'd not be against this at all :)
 
-btw, please try not to resubmit patches while there's still some
-discussion on the previous version, as things are likely to get
-lost/muddled.
-One of the downsides of email!
+> I suppose we could do
+>
+> #define PAGE_SIZE_T (size_t)PAGE_SIZE
+>
+> And use that where needed.  Mainly because I like the name ;)
 
-Cheers,
-Conor.
-
---tsbDwtX3UkzIgwos
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIT3hQAKCRB4tDGHoIJi
-0pqaAP9XIUE94BjJUfjdeVAqkpCWVHs0k1o4amUxgGuGEWCJPgEA+CKVVZxSDEQm
-j92laT4D1unIJ2y7+HMuphbA7JSAvQ4=
-=mHXG
------END PGP SIGNATURE-----
-
---tsbDwtX3UkzIgwos--
+I'm not sure I love that name :P but it is kind of cute I guess!
