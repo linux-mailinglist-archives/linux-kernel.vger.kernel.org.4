@@ -2,64 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D361172AFB2
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 01:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B13C72AFB3
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 01:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232106AbjFJX2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 19:28:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43088 "EHLO
+        id S232738AbjFJXbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 19:31:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjFJX2t (ORCPT
+        with ESMTP id S229477AbjFJXbL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 19:28:49 -0400
-Received: from out203-205-221-233.mail.qq.com (out203-205-221-233.mail.qq.com [203.205.221.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A57C35BB
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 16:28:44 -0700 (PDT)
+        Sat, 10 Jun 2023 19:31:11 -0400
+Received: from out203-205-221-173.mail.qq.com (out203-205-221-173.mail.qq.com [203.205.221.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D531030F7
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 16:31:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1686439723;
-        bh=Fn02ERRTdshIy31ivri71MFDl08htZpi5ZW/1B1Yklk=;
+        s=s201512; t=1686439865;
+        bh=tXNXBoX/8GWPAzhXpR088r8mBroUaYWOvlVGNgeHP54=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=RoTQNaPnb3BqEhoxdgH5HaBTxxioANrHFnLd1LukIgrwv45hFloQWpxCw3Ucl5rFO
-         p01sv1k5JffRzrO7Ap0d6Md6efwMx2CVKruiBnk+d6JpC7Eqb2apy7nuWF0BBC5puP
-         ExC7dz8jMm4AVaRDu8/FbF1jxcImz719BYrXABwE=
+        b=QUIZZLNWsxy9FQkbR2yluVKdvB6uTBQTY+2lCOb5ht41ZWGLzPFsiAczavHRltlZ3
+         0fwpVj0ZUBPdLsCdiEck3xyq99dJk5CjGqkZ1WM7K95M9GQqb5qPyUwo2SSPve9MRL
+         jHrQt9O1OYxAqFpHZwSJJAwFHCFOKyH46fXtFgsc=
 Received: from localhost ([101.224.149.128])
-        by newxmesmtplogicsvrszc2-1.qq.com (NewEsmtp) with SMTP
-        id 6C88D4B4; Sun, 11 Jun 2023 07:27:08 +0800
-X-QQ-mid: xmsmtpt1686439628t5vxva631
-Message-ID: <tencent_06282B9141D32F1D19BE2BB41998E1612607@qq.com>
-X-QQ-XMAILINFO: MR/iVh5QLeie/ax1XRHrhBLZq6mCcLiuvDNt/91BzhUp23FvjncXJ7GelEe3vM
-         9OAGxznL5b2IhQ28j88ewmLPJ3lH3nD/j6FA1YP8aNEjbE0aYxSc602m22PyY5pTGqT17iolSgf+
-         IrqCx4Zi6HmEqVVPMapH0ioVbBJwLiiwVtiv5H4KOxgvH9AM5zb3nR1cHmfn6M7MGjdcodXvggSz
-         gOjRh1qmAXSZDviwLVUP7imhArz3DWJUVDrWFhWbF+muhLKzneucXXx3jmvC+LdPUGC+/D7ZQFLV
-         AUVbzoLaYy95K8y6wrJskoGPruHFjkqe1fSbBH8CDuWjX51RTYucuPkzaVfROFsRQCvO/D2Pb/eO
-         VcNyBBElLm0cC1ia5z0ACkysYN19UqskQ+teQRpSx5TNwnzHrL6+x65ek6j8UkUVCb0OIecbF6+L
-         l80g9Ylm7c6aHQXv0CozzrpJO+Aq7c+NX2lk8poCTzy9y5wVK1rOdRD6OifEVsnwW9h7EB8zVhqQ
-         MJ5kl8gAc2Dk2Akm6Q24MkToF7FIHSj4THhg+9n7/rTP0S/6qYIdOhOeXpNMsMCML5KBek7UUgqf
-         MgeqEeZUFkn2KXLQIkRN000bluhWfugfnziETRgnca2fD9O9PUaKISZWsaaImOB+7gOFwB4k9wPH
-         vmkVNNqTv8Y/KuQFQ6GVcYfYo6Di1bgQyfcQHkafGqtpLCMdma4eNTld0bQNX4vZdewtXL/m08YS
-         QAL0l1gmXF593b5xMriqDT8t/E4BthO2/HrhseEZnzScWyB9QH2hCX6H83R9JHHVE8NbZEjZN9ZD
-         7waUowtBucgKsyWtuM1ioqh07sAjQFSL2fOVfHnjYtAm/6kNluWJnUTJJX4HiJbNA/sxL7CSQyoU
-         pSpN3w7dotYXlUfdHAGFxZxD+yYRxxgPrV8JbvH2lZMhCqNrRORrG2WiqCNf+HWdVi7inHuS8HYa
-         d6MNI1w9TXpiNO/8u6eA==
-Date:   Sun, 11 Jun 2023 07:27:08 +0800
+        by newxmesmtplogicsvrsza12-0.qq.com (NewEsmtp) with SMTP
+        id 7C416E97; Sun, 11 Jun 2023 07:31:04 +0800
+X-QQ-mid: xmsmtpt1686439864tva22xybf
+Message-ID: <tencent_72C3F44CD3565F83575F5632D9574C331208@qq.com>
+X-QQ-XMAILINFO: N55MlACpQQDvPmFA5/PFp+NUprXsnOa3gaeg+T0xnTJErPckCigM5gNWVKebJn
+         Z0dB47tzM2nUg/kItl8WxsIjNkYDSHK4N8yC6Om9OrzKTGRQrCaNS4XbBM10EZHbkfuVQbXeDRCs
+         YQz1kdqebSWsVPgNi0w5DDHschLNwO2nBiCwbEZxiLN9A5s0lNsjSIFifyyt70hVadNYpsn/6GzF
+         EBENGowGgu1IAIcrvQp8+CpszIfeV3aIXWMYEkr8BvTrPzfiluExXEm1dYjMkQI63Huun2A+MSHs
+         y2GfDN23pwkOBrfWD05k1C9SLI9o3m4lz2qbIjkjVoaUySKePNOivS2FfIsQK81QnxfdId07OZCj
+         9PvQNtKeNpjzIMlhWaSqFcdjXPCfP+gY+RQpcVVNUHOqyd17qxrtE9Wwy48orR+JMYx9lmMkPL0D
+         faFQb8aCbk/YCrPRdC8RPJCzeK0k3JWOAoCfTQ7e+O+7ctlFHnNhGqQ4DTuWsd0jfM6NJb6WvwmG
+         he8VW0FMNSKboloBNI04CAPmohAESTgUO1jPuWPqJ1CVUAXq1k2qgM3lcyBvAEEx5P72oJqtchkd
+         iDUXjna4Xe/AHxiO7gY9KRe1D12RmxIFg3ESKsHRMnWpAlmqhdjoefjkG4wE05E4XHsXXxHAmVzV
+         0jdlcnZzwmG9F3wiPc/zXBkj++7SUz9C5gjD2nCtR8iMewQ/7syLuKtVWENmRGFQ0LgjelgjxGq1
+         XowJ6G09mS+DT6Q91z42+mEggtL2/+KqLDpsQCyptehxFDoi4uZCIsa+30N9e8pJgIxrFQv0dwN7
+         HmRPy2l3HnPmRo94+Fd/AC/1xt7y4lOrYIkG0vPd8+d1hA42nWzelpcFp+DGf/+oyH/bt+isyhUo
+         QrWfJsS3hUByijKI2z4DStf/Id5+Jrb+oTrsfM9jHbJyQjRNW3piqtGAKnjgc58w40T0wJZYOvqQ
+         EW15Wqlu7+VMYoBZQmbgItqozuu4ht
+Date:   Sun, 11 Jun 2023 07:31:03 +0800
 From:   Woody Zhang <woodylab@foxmail.com>
 To:     Conor Dooley <conor@kernel.org>
-Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] riscv: reserve DTB before possible memblock allocation
-X-OQ-MSGID: <ZIUGzGfoEivEICkQ@dev>
-References: <tencent_B15C0F1F3105597D0DCE7DADC96C5EB5CF0A@qq.com>
- <20230607-jogging-grudging-70dede86bc53@spud>
- <CAHVXubggydGfNu3OzcxWXREJbB+G9dmr9sFD7vXhVxbG-N58Pg@mail.gmail.com>
- <20230610-ability-mockup-f6aa71bad6a1@spud>
+Subject: Re: [PATCH] riscv: move memblock_allow_resize() after lm is ready
+X-OQ-MSGID: <ZIUHtxzmBi8h3JM+@dev>
+References: <tencent_D656D683705F41324657ED3393C3384C7408@qq.com>
+ <20230610-ultimate-moisture-630c7672358b@spud>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230610-ability-mockup-f6aa71bad6a1@spud>
+In-Reply-To: <20230610-ultimate-moisture-630c7672358b@spud>
 X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
@@ -71,53 +69,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 10, 2023 at 04:41:17PM +0100, Conor Dooley wrote:
->On Thu, Jun 08, 2023 at 09:49:44AM +0200, Alexandre Ghiti wrote:
->> On Wed, Jun 7, 2023 at 8:17 PM Conor Dooley <conor@kernel.org> wrote:
->> >
->> > +CC Alex, you should take a look at this patch.
->> >
->> > On Wed, Jun 07, 2023 at 09:35:19PM +0800, Woody Zhang wrote:
->> > > It's possible that early_init_fdt_scan_reserved_mem() allocates memory
->> > > from memblock for dynamic reserved memory in `/reserved-memory` node.
->> > > Any fixed reservation must be done before that to avoid potential
->> > > conflicts.
->> > >
->> > > Reserve the DTB in memblock just after early scanning it.
->> >
->> > The rationale makes sense to me, I am just wondering what compelling
->> > reason there is to move it away from the memblock_reserve()s for the
->> > initd and vmlinux? Moving it above early_init_fdt_scan_reserved_mem()
->> > should be the sufficient minimum & would keep things together.
+On Sat, Jun 10, 2023 at 04:44:19PM +0100, Conor Dooley wrote:
+>On Sat, Jun 10, 2023 at 07:43:20AM +0800, Woody Zhang wrote:
+>$subject: "riscv: move memblock_allow_resize() after lm is ready"
 >
->> Thanks Conor.
->> 
->> So the patch looks good to me.
->> 
->> But I find this fragile:
->> 
->> - we do not check memblock_reserve() return value to make sure the
->> reservation really happened (and quickly looking at the code, I'm not
->> even sure it returns an error if the region was already allocated).
->> - we have to make sure no memblock allocation happens before setup_bootmem().
->> - we also have to check that no fixed memblock_reserve() happens after.
->> 
->> The last 2 points may sound natural, but we'll have to take great care
->> when adding some code around here. I'm working on an "early boot
->> document" and I'll add something about that, but a runtime thing would
->> be way better IMO.
->> 
->> You can add:
->> 
->> Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+>s/lm/linear map/ if you resubmit, please.
+
+Thanks, will send a v2.
+
 >
->btw Alex/Woody, what is the appropriate Fixes tag here?
+>> The initial memblock metadata is accessed from kernel image mapping. The
+>> regions arrays need to "reallocated" from memblock and accessed through
+>> linear mapping to cover more memblock regions. So the resizing should
+>> not be allowed until linear mapping is ready. Note that there are
+>> memblock allocations when building linear mapping.
+>> 
+>> Signed-off-by: Woody Zhang <woodylab@foxmail.com>
+>
+>What commit does this fix?
 
-In ef69d2559fe9 ("riscv: Move early dtb mapping into the fixmap region"),
-Alex move early_init_fdt_scan_reserved_mem to setup_bootmem() to prevent
-memory allocations before of reservations. But it should not be put before
-DTB reservation.
+Fixes: 671f9a3e2e24 ("RISC-V: Setup initial page tables in two stages")
 
+Will add this tag in v2.
 
 Woody
 
