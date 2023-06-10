@@ -2,75 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B56E72AE07
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 20:01:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A47672AE0A
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 20:04:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231350AbjFJSBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 14:01:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
+        id S231432AbjFJSE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 14:04:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbjFJSBj (ORCPT
+        with ESMTP id S229799AbjFJSE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 14:01:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CDA2139;
-        Sat, 10 Jun 2023 11:01:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A30B619F9;
-        Sat, 10 Jun 2023 18:01:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6D94C433D2;
-        Sat, 10 Jun 2023 18:01:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686420098;
-        bh=lklu6izAOiwJ8VmIzzbqh8xtnkfI9N34tzyzoxGqvxY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FPUaIb2hwDOg/DAOeQYvD/9TjqUSW0Vlr6Su35DH5dxGtBiqUH/L8tY3BFeiq5SRJ
-         610Fc4ELRP0WLrYcNL3eubINLJdiUZaULSZNxu0HxEFTzvdrR0gsrZHAjGp5dfCBCb
-         Y0cFQmNPYtSasBbtF8t38jPGEwBPlVR6XtTjzFaNkIbOhu1KmvTpLPHiOTpZxnPo3h
-         1u8VZj2b3ltxYEi4VNLmgSSrH/3/GkUb67M4VKGHmZf+53Lmnwjy0S5j9sYK4p7ASv
-         u7Af0BBPnHAKg1WCa4O5odTGRRpMfrcl/Kp1IkxTyu244Oa1A1GjTkvfUG3BZ0ZmZU
-         0xf4lftXbfFlw==
-Date:   Sat, 10 Jun 2023 19:01:31 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Maxim Kiselev <bigunclemax@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v1 3/3] dt-bindings: thermal: sun8i: Add binding for
- D1/T113s THS controller
-Message-ID: <20230610-crumpet-spender-4133090a4728@spud>
-References: <20230610141739.999268-1-bigunclemax@gmail.com>
- <20230610141739.999268-4-bigunclemax@gmail.com>
- <20230610-rehire-amid-2517f43504c0@spud>
- <CALHCpMiEmc8L=O86_x7-KkBHFwf2QpuP0M7ugz7dNPr71cpJmQ@mail.gmail.com>
- <20230610-enlarged-agonize-0e9219f9921d@spud>
+        Sat, 10 Jun 2023 14:04:26 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515061734;
+        Sat, 10 Jun 2023 11:04:21 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 6835260210;
+        Sat, 10 Jun 2023 20:04:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1686420253; bh=a7kwb1zfYXMMAdqEu0rSxumVp5Tj+8Ey4XJUCAGXj3c=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=fBqLH6LLHPYfTBFFFB5RlL3Zs3BdIIhtsENnrmbblmiCEBLxjlaOs1sWCPzohkAQp
+         qOwGDQCPe70wKWm+/S2SZMclC7YD63EUIruqZb/hLrV1RYY33bOFOKXJBwF+uoTGvI
+         dm+0q4E/aGb0Ww4Q+rhcw1SEr3/CSMLWCWMP1N62oUh/SuLcPnS8Qu7aVHjs6FveCH
+         MBjfZEAGU+g+Ezxfe2+scRNWiXU2m1pCaPq9zXz5cOoWjaPoBr/hwjildP6a1bBX22
+         HBhoNghVLQawiABSyb/9QsuiUAowVeHHtETEwD9j0ZwoLrvFADpBCmnncOn6ZyDf5+
+         1TMHd433V3Pkg==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id hq02M9V8VEoC; Sat, 10 Jun 2023 20:04:10 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [77.237.113.62])
+        by domac.alu.hr (Postfix) with ESMTPSA id 069F26020C;
+        Sat, 10 Jun 2023 20:04:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1686420250; bh=a7kwb1zfYXMMAdqEu0rSxumVp5Tj+8Ey4XJUCAGXj3c=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ixSyeOn1pVjUjZV6EUrabQKc4uhuLgIVgcgmodf+j21Z+6UFBVMYtwxqPbl7dINxM
+         TiVa4plWWAIEFrTcoz1xGX+mXn+u+T+ZwWWrjXnMG4TUryZTFx96o6LAaTxtWnLQDV
+         q/zNyIJ0ZM1OFfX21hAf895JDFosgRPDdvK8oA47EucA389Imi5c6uVQza5cDZARG+
+         /HHoaHa2f9FtcJLtkk+uvi/fkU0Z0UPt6ocsDiJoUMkMP1rvE/4OQ9a00BmGApDiu1
+         GQ6L7uOMo8ZvDq2DjQ7A3+4Qerux53fBhvumQSc0081PYFzk6VbTrGe4gwrxjeeZbe
+         ypnCH9PqWzf9g==
+Message-ID: <a74fbb54-2594-fd37-c5fe-3a027d9a5ea3@alu.unizg.hr>
+Date:   Sat, 10 Jun 2023 20:04:02 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Y9leMd3iPIBr4SeW"
-Content-Disposition: inline
-In-Reply-To: <20230610-enlarged-agonize-0e9219f9921d@spud>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: POSSIBLE BUG: selftests/net/fcnal-test.sh: [FAIL][FIX TESTED] in
+ vrf "bind - ns-B IPv6 LLA" test
+To:     Guillaume Nault <gnault@redhat.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <b6191f90-ffca-dbca-7d06-88a9788def9c@alu.unizg.hr>
+ <ZHeN3bg28pGFFjJN@debian> <a379796a-5cd6-caa7-d11d-5ffa7419b90e@alu.unizg.hr>
+ <ZH84zGEODT97TEXG@debian> <48cfd903-ad2f-7da7-e5a6-a22392dc8650@alu.unizg.hr>
+ <ZH+BhFzvJkWyjBE0@debian> <a3b2891d-d355-dacd-24ec-af9f8aacac57@alu.unizg.hr>
+ <ZIC1r6IHOM5nr9QD@debian> <884d9eb7-0e8e-3e59-cf6d-2c6931da35ee@alu.unizg.hr>
+ <ZINPuawVp2KKoCjS@debian>
+Content-Language: en-US
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <ZINPuawVp2KKoCjS@debian>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,66 +77,166 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/9/23 18:13, Guillaume Nault wrote:
+> On Thu, Jun 08, 2023 at 07:37:15AM +0200, Mirsad Goran Todorovac wrote:
+>> On 6/7/23 18:51, Guillaume Nault wrote:
+>>> On Wed, Jun 07, 2023 at 12:04:52AM +0200, Mirsad Goran Todorovac wrote:
+>>>> [...]
+>>>> TEST: ping local, VRF bind - ns-A IP                                          [ OK ]
+>>>> TEST: ping local, VRF bind - VRF IP                                           [FAIL]
+>>>> TEST: ping local, VRF bind - loopback                                         [ OK ]
+>>>> TEST: ping local, device bind - ns-A IP                                       [FAIL]
+>>>> TEST: ping local, device bind - VRF IP                                        [ OK ]
+>>>> [...]
+>>>> TEST: ping local, VRF bind - ns-A IP                                          [ OK ]
+>>>> TEST: ping local, VRF bind - VRF IP                                           [FAIL]
+>>>> TEST: ping local, VRF bind - loopback                                         [ OK ]
+>>>> TEST: ping local, device bind - ns-A IP                                       [FAIL]
+>>>> TEST: ping local, device bind - VRF IP                                        [ OK ]
+>>>> [...]
+>>>
+>>> I have the same failures here. They don't seem to be recent.
+>>> I'll take a look.
+>>
+>> Certainly. I thought it might be something architecture-specific?
+>>
+>> I have reproduced it also on a Lenovo IdeaPad 3 with Ubuntu 22.10,
+>> but on Lenovo desktop with AlmaLinux 8.8 (CentOS fork), the result
+>> was "888/888 passed".
+> 
+> I've taken a deeper look at these failures. That's actually a problem in
+> ping. That's probably why you have different results depending on the
+> distribution.
 
---Y9leMd3iPIBr4SeW
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thank you for your work. I feel encouraged by your aim to get to the bottom
+of the problem ...
+  
+> The problem is that, for some versions, 'ping -I netdev ...' doesn't
+> bind the socket to 'netdev' if the IPv4 address to ping is set on that
+> same device. The VRF tests depend on this socket binding, so they fail
+> when ping refuses to bind. That was fixed upstream with commit
+> 92ce8ef21393 ("Revert "ping: do not bind to device when destination IP
+> is on device"") (https://github.com/iputils/iputils/commit/92ce8ef2139353da3bf55fe2280bd4abd2155c9f).
+> 
+> Long story short, the tests should pass with the latest upstream ping
+> version.
+> 
+> Alternatively, you can modify the commands run by fcnal-test.sh and
+> provide the -I option twice: one for setting the device binding and one
+> for setting the source IPv4 address. This way ping should accept to
+> bind its socket.
+> 
+> Something like (not tested):
+> 
+> -                run_cmd ping -c1 -w1 -I ${VRF} ${a}
+> +                run_cmd ping -c1 -w1 -I ${VRF} -I ${a} ${a}
+> [...]
+> -        run_cmd ping -c1 -w1 -I ${NSA_DEV} ${a}
+> +        run_cmd ping -c1 -w1 -I ${NSA_DEV} -I ${a} ${a}
 
-On Sat, Jun 10, 2023 at 06:59:29PM +0100, Conor Dooley wrote:
-> On Sat, Jun 10, 2023 at 06:30:48PM +0300, Maxim Kiselev wrote:
-> > =D1=81=D0=B1, 10 =D0=B8=D1=8E=D0=BD. 2023=E2=80=AF=D0=B3. =D0=B2 17:52,=
- Conor Dooley <conor@kernel.org>:
-> >=20
-> > ...
-> >=20
-> > >
-> > > Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
-> > > Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
-> > >
-> > >> Why do you have 2 sign-offs that are both you w/ different spellings?
-> >=20
-> > Sorry for that. I accidentally signed it twice.
-> >=20
-> > ...
-> >=20
-> > > +  - |
-> > > +    thermal-sensor@2009400 {
-> > > +          compatible =3D "allwinner,sun20i-d1-ths";
-> > > +          reg =3D <0x02009400 0x400>;
-> > > +          interrupts =3D <0 90 0>;
-> > > +          clocks =3D <&ccu 0>;
-> > > +          clock-names =3D "bus";
-> > > +          resets =3D <&ccu 2>;
-> > > +          nvmem-cells =3D <&ths_calibration>;
-> > > +          nvmem-cell-names =3D "calibration";
-> > > +          #thermal-sensor-cells =3D <0>;
-> > >
-> > >> Is this calibration required, or optional, for the d1?
-> >=20
-> > Calibration data for the D1 is optional as for the H6.
-> > (But without it, the sensor data will be inaccurate).
->=20
-> Okay. Modulo the signoff:
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+I have tested this and the fix appears to work:
 
-Wait, that's not what I meant to say... Clearly turned my brain off for
-a moment. If it is not going to function correctly without the
-calibration data, why not make the calibration data required for the
-d1's ths?
+#################################################################
+With VRF
 
-Cheers,
-Conor.
+SYSCTL: net.ipv4.raw_l3mdev_accept=1
 
---Y9leMd3iPIBr4SeW
-Content-Type: application/pgp-signature; name="signature.asc"
+TEST: ping out, VRF bind - ns-B IP                                            [ OK ]
+TEST: ping out, device bind - ns-B IP                                         [ OK ]
+TEST: ping out, vrf device + dev address bind - ns-B IP                       [ OK ]
+TEST: ping out, vrf device + vrf address bind - ns-B IP                       [ OK ]
+TEST: ping out, VRF bind - ns-B loopback IP                                   [ OK ]
+TEST: ping out, device bind - ns-B loopback IP                                [ OK ]
+TEST: ping out, vrf device + dev address bind - ns-B loopback IP              [ OK ]
+TEST: ping out, vrf device + vrf address bind - ns-B loopback IP              [ OK ]
+TEST: ping in - ns-A IP                                                       [ OK ]
+TEST: ping in - VRF IP                                                        [ OK ]
+TEST: ping local, VRF bind - ns-A IP                                          [ OK ]
+TEST: ping local, VRF bind - VRF IP                                           [ OK ]
+TEST: ping local, VRF bind - loopback                                         [ OK ]
+TEST: ping local, device bind - ns-A IP                                       [ OK ]
+TEST: ping local, device bind - VRF IP                                        [ OK ]
+TEST: ping local, device bind - loopback                                      [ OK ]
+TEST: ping out, vrf bind, blocked by rule - ns-B loopback IP                  [ OK ]
+TEST: ping out, device bind, blocked by rule - ns-B loopback IP               [ OK ]
+TEST: ping in, blocked by rule - ns-A loopback IP                             [ OK ]
+TEST: ping out, vrf bind, unreachable route - ns-B loopback IP                [ OK ]
+TEST: ping out, device bind, unreachable route - ns-B loopback IP             [ OK ]
+TEST: ping in, unreachable route - ns-A loopback IP                           [ OK ]
+SYSCTL: net.ipv4.ping_group_range=0 2147483647
 
------BEGIN PGP SIGNATURE-----
+SYSCTL: net.ipv4.raw_l3mdev_accept=1
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIS6ewAKCRB4tDGHoIJi
-0rexAP9jASDb8H99wbQ++SNJJrD6f2j8d4daxWokKAsYNldy5gEAlK+BUZY0DFLe
-BHRNoCoB9c0U6VXpkEMipQbMB/UvsgI=
-=6tgd
------END PGP SIGNATURE-----
+TEST: ping out, VRF bind - ns-B IP                                            [ OK ]
+TEST: ping out, device bind - ns-B IP                                         [ OK ]
+TEST: ping out, vrf device + dev address bind - ns-B IP                       [ OK ]
+TEST: ping out, vrf device + vrf address bind - ns-B IP                       [ OK ]
+TEST: ping out, VRF bind - ns-B loopback IP                                   [ OK ]
+TEST: ping out, device bind - ns-B loopback IP                                [ OK ]
+TEST: ping out, vrf device + dev address bind - ns-B loopback IP              [ OK ]
+TEST: ping out, vrf device + vrf address bind - ns-B loopback IP              [ OK ]
+TEST: ping in - ns-A IP                                                       [ OK ]
+TEST: ping in - VRF IP                                                        [ OK ]
+TEST: ping local, VRF bind - ns-A IP                                          [ OK ]
+TEST: ping local, VRF bind - VRF IP                                           [ OK ]
+TEST: ping local, VRF bind - loopback                                         [ OK ]
+TEST: ping local, device bind - ns-A IP                                       [ OK ]
+TEST: ping local, device bind - VRF IP                                        [ OK ]
+TEST: ping local, device bind - loopback                                      [ OK ]
+TEST: ping out, vrf bind, blocked by rule - ns-B loopback IP                  [ OK ]
+TEST: ping out, device bind, blocked by rule - ns-B loopback IP               [ OK ]
+TEST: ping in, blocked by rule - ns-A loopback IP                             [ OK ]
+TEST: ping out, vrf bind, unreachable route - ns-B loopback IP                [ OK ]
+TEST: ping out, device bind, unreachable route - ns-B loopback IP             [ OK ]
+TEST: ping in, unreachable route - ns-A loopback IP                           [ OK ]
 
---Y9leMd3iPIBr4SeW--
+###########################################################################
+
+This also works on the Lenovo IdeaPad 3 Ubuntu 22.10 laptop, but on the AlmaLinux 8.8
+Lenovo desktop I have a problem:
+
+[root@pc-mtodorov net]# grep FAIL ../fcnal-test-4.log
+TEST: ping local, VRF bind - ns-A IP                                          [FAIL]
+TEST: ping local, VRF bind - VRF IP                                           [FAIL]
+TEST: ping local, device bind - ns-A IP                                       [FAIL]
+TEST: ping local, VRF bind - ns-A IP                                          [FAIL]
+TEST: ping local, VRF bind - VRF IP                                           [FAIL]
+TEST: ping local, device bind - ns-A IP                                       [FAIL]
+[root@pc-mtodorov net]#
+
+Kernel is the recent one:
+
+[root@pc-mtodorov net]# uname -rms
+Linux 6.4.0-rc5-testnet-00003-g5b23878f7ed9 x86_64
+[root@pc-mtodorov net]#
+
+>> However, I have a question:
+>>
+>> In the ping + "With VRF" section, the tests with net.ipv4.raw_l3mdev_accept=1
+>> are repeated twice, while "No VRF" section has the versions:
+>>
+>> SYSCTL: net.ipv4.raw_l3mdev_accept=0
+>>
+>> and
+>>
+>> SYSCTL: net.ipv4.raw_l3mdev_accept=1
+>>
+>> The same happens with the IPv6 ping tests.
+>>
+>> In that case, it could be that we have only 2 actual FAIL cases,
+>> because the error is reported twice.
+>>
+>> Is this intentional?
+> 
+> I don't know why the non-VRF tests are run once with raw_l3mdev_accept=0
+> and once with raw_l3mdev_accept=1. Unless I'm missing something, this
+> option shouldn't affect non-VRF users. Maybe the objective is to make
+> sure that it really doesn't affect them. David certainly knows better.
+
+The problem appears to be that non-VRF tests are being ran with
+raw_l3mdev_accept={0|1}, while VRF tests w raw_l3mdev_accept={1|1} ...
+
+I will try to fix that, but I am not sure of the semantics either.
+
+Regards,
+Mirsad
