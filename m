@@ -2,60 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63FDF72AB3C
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 13:45:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED3B272AB44
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 13:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234473AbjFJLpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 07:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57624 "EHLO
+        id S231904AbjFJL6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 07:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbjFJLpg (ORCPT
+        with ESMTP id S229746AbjFJL6o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 07:45:36 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B00B1988
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 04:45:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686397535; x=1717933535;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=apyVGZglbhvHSI5NBgNcgQZasgi8FVe+iEk2aeRA8zM=;
-  b=Gl2SpMv86H7fux17/CdqTlJiNrGlLgRs6ORlJ5EV/RJHpdHTqjlqPdPl
-   Q+UyHDmmJcTr84TzWDMsXVKK0mRjiidKKzGaVTdrzAr+RdHeB0nFcaaSb
-   Lr3uU9MODqtZ0i8e2F/nwula8WW785zF3SyVdkkN0c/1l3bb0q9Ma903d
-   pvY2ydNnrNsTzFevOjvynQdDEr6GZkep3C5pYUY9QltAZNG4XiJoO5xRz
-   PaeUDnK9axfKne3EOzl4SsutuD+evW+O/JMZPEU/6Om+kuAZOEWr1MASX
-   z5nvBw6/V0byeud9Ob4yU9+3BosPZ6G5uokILv/dqWY7ijgg2cYIPCGEv
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="338117205"
-X-IronPort-AV: E=Sophos;i="6.00,232,1681196400"; 
-   d="scan'208";a="338117205"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2023 04:45:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="800492369"
-X-IronPort-AV: E=Sophos;i="6.00,232,1681196400"; 
-   d="scan'208";a="800492369"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 10 Jun 2023 04:45:33 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q7x2D-000A3k-0P;
-        Sat, 10 Jun 2023 11:45:33 +0000
-Date:   Sat, 10 Jun 2023 19:44:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Li Zhengyu <lizhengyu3@huawei.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: arch/riscv/kernel/elf_kexec.c:185:23: warning: variable
- 'kernel_start' set but not used
-Message-ID: <202306101945.6IFhByu9-lkp@intel.com>
+        Sat, 10 Jun 2023 07:58:44 -0400
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B6A26B2;
+        Sat, 10 Jun 2023 04:58:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686398320; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=ZuOvu58Ao0jzrlv2fZ27qBJaelH2eWzfvIP41z0l7xK/FgstuXK4jX9MJB7YLYPZko
+    Csjmu/DC53lLPfxrGCSOXPZ8AZ2yqmk+NjSU6yCKfHZv/uC8RKpUHwewjbLPmHs2KGiE
+    H0WbR2alwg0amB8kYQOeT6g09CDFD7zp7aN+0vSefom7qXlbD0aNfbnxJvsBtQOR6ltX
+    e5vCTppgU1h6+zdU5iLzcYO11uh2NrTGffIJQNKcrYK/6yN1FXCr6m7nBmKNdWRDzZxO
+    GoQfZclPXX4PU4iHVPxHaQ3xp6R/JsSSVZZ8hrM8FliUGeAT78VY70LcdfIqD92HEZC6
+    h0ZA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686398320;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=kTSb4VgNfKJxcHdVBzLF5HYwpgArnYykpI5cWhr4QCo=;
+    b=jqIUFlHyNeymdmRDMAE5j/FwRwuNiEKBR06qCYcT59aOLDtSzU6IO5Rd0wPjpLFey5
+    jsCBZkeRa+HM7zPF0vN5EgYhR4R4jfIrzo31j+ih/zR/xotMurAu+57+FB72O6GTxxmL
+    kjn929Y3RNMdfz+arEv/YzLrlVNuNu5PWmc/hpmj20jUXfAPoTrxQE3UUmpcpmrHgGmg
+    EkCClBzpwN08am3VVG36NXaiRVNWnN3oFAF8dUkItKSq/fFy1YGwEusFR4ArBRZaVoSI
+    iaU4BvTas1RtuvbX0lpCkQWqvS/ZdNvedJnZQeJq/XgBPH3WxQiM7CthDmdN+NWfYCWD
+    8azw==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686398320;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=kTSb4VgNfKJxcHdVBzLF5HYwpgArnYykpI5cWhr4QCo=;
+    b=U55HB3H9amJF8Ovk8dcXLavj0M90rAZ12YEs1l/fuz+wA7YgrOvi2hI1RGf0hkvxMB
+    MBU9u6bgdZDwXPMuru3y31ccFocqtq3K5xTWRt/gPQuW7BSVA7PBViRJSIDUm7nA/PGY
+    8OV3SzHYsERU/GQ3M227dcNTPFnXoVEnbWNP9+0OapJGtYw7ZLd0D762k95uOPRk7dMl
+    59ECmaVbSLZRrch7cfw4Efc5KGvaF/SlR1popVyDUJIrJJeuac7Y2m2J9eH9rTJRaK+J
+    29EpA9iMtFtiljj+4QXHfnW6L7bitOmbh0oTOhbXMzOOIl8Cus3Ot6C9M6cJw9y46gDM
+    Hmvw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686398320;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=kTSb4VgNfKJxcHdVBzLF5HYwpgArnYykpI5cWhr4QCo=;
+    b=r1c9h2NT3sVeF7stUm//hBkKxgSIfjOwJErPtWnHLOZOMe9pZNrecmy/80RFx1/Ncj
+    TidwmNg30oonLRwP/NDw==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA9J/h"
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.5.3 DYNA|AUTH)
+    with ESMTPSA id Z82ec2z5ABwdQFs
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Sat, 10 Jun 2023 13:58:39 +0200 (CEST)
+Date:   Sat, 10 Jun 2023 13:58:38 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 17/22] interconnect: qcom: icc-rpm: Control bus rpmcc
+ from icc
+Message-ID: <ZIRlbi_BXyuUWs-8@gerhold.net>
+References: <20230526-topic-smd_icc-v2-0-e5934b07d813@linaro.org>
+ <20230526-topic-smd_icc-v2-17-e5934b07d813@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+In-Reply-To: <20230526-topic-smd_icc-v2-17-e5934b07d813@linaro.org>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,150 +96,203 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Li,
+On Fri, Jun 09, 2023 at 10:19:22PM +0200, Konrad Dybcio wrote:
+> The sole purpose of bus clocks that were previously registered with
+> rpmcc was to convey the aggregated bandwidth to RPM. There's no good
+> reason to keep them outside the interconnect framework, as it only
+> adds to the plentiful complexity.
+> 
+> Add the required code to handle these clocks from within SMD RPM ICC.
+> 
+> RPM-owned bus clocks are no longer considered a thing, but sadly we
+> have to allow for the existence of HLOS-owned bus clocks, as some
+> (mostly older) SoCs (ab)use these for bus scaling (e.g. MSM8998 and
+> &mmcc AHB_CLK_SRC).
+> 
+> This in turn is trivially solved with a single *clk, which is filled
+> and used iff qp.bus_clk_desc is absent and we have a "bus" clock-names
+> entry in the DT node.
+> 
+> This change should(tm) be fully compatible with all sorts of old
+> Device Trees as far as the interconnect functionality goes (modulo
+> abusing bus clock handles, but that's a mistake in and of itself).
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  drivers/interconnect/qcom/icc-rpm.c | 116 +++++++++++++++++++-----------------
+>  drivers/interconnect/qcom/icc-rpm.h |  13 ++--
+>  drivers/interconnect/qcom/msm8996.c |   1 -
+>  drivers/interconnect/qcom/sdm660.c  |   1 -
+>  4 files changed, 66 insertions(+), 65 deletions(-)
+> 
+> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+> index b8ecf9538ab9..6d40815c5401 100644
+> --- a/drivers/interconnect/qcom/icc-rpm.c
+> +++ b/drivers/interconnect/qcom/icc-rpm.c
+> [...]
+> @@ -364,49 +363,50 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+>  			return ret;
+>  	}
+>  
+> -	for (i = 0; i < qp->num_bus_clks; i++) {
+> -		/*
+> -		 * Use WAKE bucket for active clock, otherwise, use SLEEP bucket
+> -		 * for other clocks.  If a platform doesn't set interconnect
+> -		 * path tags, by default use sleep bucket for all clocks.
+> -		 *
+> -		 * Note, AMC bucket is not supported yet.
+> -		 */
+> -		if (!strcmp(qp->bus_clks[i].id, "bus_a"))
+> -			bucket = QCOM_ICC_BUCKET_WAKE;
+> -		else
+> -			bucket = QCOM_ICC_BUCKET_SLEEP;
+> -
+> -		rate = icc_units_to_bps(max(agg_avg[bucket], agg_peak[bucket]));
+> -		do_div(rate, src_qn->buswidth);
+> -		rate = min_t(u64, rate, LONG_MAX);
 
-FYI, the error/warning still remains.
+^
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   64569520920a3ca5d456ddd9f4f95fc6ea9b8b45
-commit: 838b3e28488f702e2b5477b393f009b2639d2b1a RISC-V: Load purgatory in kexec_file
-date:   1 year, 1 month ago
-config: riscv-randconfig-r026-20230610 (https://download.01.org/0day-ci/archive/20230610/202306101945.6IFhByu9-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=838b3e28488f702e2b5477b393f009b2639d2b1a
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 838b3e28488f702e2b5477b393f009b2639d2b1a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
+> -
+> -		/*
+> -		 * Downstream checks whether the requested rate is zero, but it makes little sense
+> -		 * to vote for a value that's below the lower threshold, so let's not do so.
+> -		 */
+> -		if (bucket == QCOM_ICC_BUCKET_WAKE && qp->keep_alive)
+> -			rate = max(ICC_BUS_CLK_MIN_RATE, rate);
+> -
+> -		if (qp->bus_clk_rate[i] == rate)
+> -			continue;
+> -
+> -		ret = clk_set_rate(qp->bus_clks[i].clk, rate);
+> -		if (ret) {
+> -			pr_err("%s clk_set_rate error: %d\n",
+> -			       qp->bus_clks[i].id, ret);
+> +	/* Some providers don't have a bus clock to scale */
+> +	if (!qp->bus_clk_desc && !qp->bus_clk)
+> +		return 0;
+> +
+> +	/* Intentionally keep the rates in kHz as that's what RPM accepts */
+> +	active_rate = max(agg_avg[QCOM_SMD_RPM_ACTIVE_STATE],
+> +			  agg_peak[QCOM_SMD_RPM_ACTIVE_STATE]);
+> +	do_div(active_rate, src_qn->buswidth);
+> +
+> +	sleep_rate = max(agg_avg[QCOM_SMD_RPM_SLEEP_STATE],
+> +			 agg_peak[QCOM_SMD_RPM_SLEEP_STATE]);
+> +	do_div(sleep_rate, src_qn->buswidth);
+> +
+> +	/*
+> +	 * Downstream checks whether the requested rate is zero, but it makes little sense
+> +	 * to vote for a value that's below the lower threshold, so let's not do so.
+> +	 */
+> +	if (qp->keep_alive)
+> +		active_rate = max(ICC_BUS_CLK_MIN_RATE, active_rate);
+> +
+> +	/* Some providers have a non-RPM-owned bus clock - convert kHz->Hz for the CCF */
+> +	if (qp->bus_clk)
+> +		return clk_set_rate(qp->bus_clk, 1000ULL * max(active_rate, sleep_rate));
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306101945.6IFhByu9-lkp@intel.com/
+Something like the min_t(u64, rate, LONG_MAX)* that was there in the old
+code is still needed for the clk_set_rate(). The reason is that the rate
+parameter in clk_set_rate() is unsigned long (32-bit on ARM32) while you
+do the calculation in fixed u64. This can easily overflow and then the
+higher bits will just be cut off.
 
-All warnings (new ones prefixed by >>):
+Consider the following on ARM32:
 
-   arch/riscv/kernel/elf_kexec.c: In function 'elf_kexec_load':
->> arch/riscv/kernel/elf_kexec.c:185:23: warning: variable 'kernel_start' set but not used [-Wunused-but-set-variable]
-     185 |         unsigned long kernel_start;
-         |                       ^~~~~~~~~~~~
-   arch/riscv/kernel/elf_kexec.c: In function 'arch_kexec_apply_relocations_add':
-   arch/riscv/kernel/elf_kexec.c:352:9: error: unknown type name 'Elf_Rela'; did you mean 'Elf64_Rela'?
-     352 |         Elf_Rela *relas;
-         |         ^~~~~~~~
-         |         Elf64_Rela
-   In file included from include/linux/elf.h:7,
-                    from arch/riscv/kernel/elf_kexec.c:15:
-   arch/riscv/kernel/elf_kexec.c:370:44: error: request for member 'r_info' in something not a structure or union
-     370 |                 sym += ELF64_R_SYM(relas[i].r_info);
-         |                                            ^
-   include/uapi/linux/elf.h:163:43: note: in definition of macro 'ELF64_R_SYM'
-     163 | #define ELF64_R_SYM(i)                  ((i) >> 32)
-         |                                           ^
-   arch/riscv/kernel/elf_kexec.c:379:32: error: request for member 'r_offset' in something not a structure or union
-     379 |                 loc += relas[i].r_offset;
-         |                                ^
-   arch/riscv/kernel/elf_kexec.c:392:32: error: request for member 'r_addend' in something not a structure or union
-     392 |                 val += relas[i].r_addend;
-         |                                ^
-   arch/riscv/kernel/elf_kexec.c:394:51: error: request for member 'r_offset' in something not a structure or union
-     394 |                 addr = section->sh_addr + relas[i].r_offset;
-         |                                                   ^
-   arch/riscv/kernel/elf_kexec.c:396:47: error: request for member 'r_info' in something not a structure or union
-     396 |                 r_type = ELF64_R_TYPE(relas[i].r_info);
-         |                                               ^
-   include/uapi/linux/elf.h:164:43: note: in definition of macro 'ELF64_R_TYPE'
-     164 | #define ELF64_R_TYPE(i)                 ((i) & 0xffffffff)
-         |                                           ^
+	u64 rate = 1ULL << 32 = 4294967296ULL;
+	clk_set_rate(clk, rate);
 
+This actually does clk_set_rate(clk, 0) because the upper 32-bit will
+just be truncated. So the min() is needed to ensure that we really set
+the highest possible.
 
-vim +/kernel_start +185 arch/riscv/kernel/elf_kexec.c
+Also see commit a7d9436a6c85 ("interconnect: qcom: rpm: Prevent integer
+overflow in rate") [1].
 
-   174	
-   175	static void *elf_kexec_load(struct kimage *image, char *kernel_buf,
-   176				    unsigned long kernel_len, char *initrd,
-   177				    unsigned long initrd_len, char *cmdline,
-   178				    unsigned long cmdline_len)
-   179	{
-   180		int ret;
-   181		unsigned long old_kernel_pbase = ULONG_MAX;
-   182		unsigned long new_kernel_pbase = 0UL;
-   183		unsigned long initrd_pbase = 0UL;
-   184		unsigned long headers_sz;
- > 185		unsigned long kernel_start;
-   186		void *fdt, *headers;
-   187		struct elfhdr ehdr;
-   188		struct kexec_buf kbuf;
-   189		struct kexec_elf_info elf_info;
-   190		char *modified_cmdline = NULL;
-   191	
-   192		ret = kexec_build_elf_info(kernel_buf, kernel_len, &ehdr, &elf_info);
-   193		if (ret)
-   194			return ERR_PTR(ret);
-   195	
-   196		ret = elf_find_pbase(image, kernel_len, &ehdr, &elf_info,
-   197				     &old_kernel_pbase, &new_kernel_pbase);
-   198		if (ret)
-   199			goto out;
-   200		kernel_start = image->start;
-   201		pr_notice("The entry point of kernel at 0x%lx\n", image->start);
-   202	
-   203		/* Add the kernel binary to the image */
-   204		ret = riscv_kexec_elf_load(image, &ehdr, &elf_info,
-   205					   old_kernel_pbase, new_kernel_pbase);
-   206		if (ret)
-   207			goto out;
-   208	
-   209		kbuf.image = image;
-   210		kbuf.buf_min = new_kernel_pbase + kernel_len;
-   211		kbuf.buf_max = ULONG_MAX;
-   212	
-   213		/* Add elfcorehdr */
-   214		if (image->type == KEXEC_TYPE_CRASH) {
-   215			ret = prepare_elf_headers(&headers, &headers_sz);
-   216			if (ret) {
-   217				pr_err("Preparing elf core header failed\n");
-   218				goto out;
-   219			}
-   220	
-   221			kbuf.buffer = headers;
-   222			kbuf.bufsz = headers_sz;
-   223			kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
-   224			kbuf.memsz = headers_sz;
-   225			kbuf.buf_align = ELF_CORE_HEADER_ALIGN;
-   226			kbuf.top_down = true;
-   227	
-   228			ret = kexec_add_buffer(&kbuf);
-   229			if (ret) {
-   230				vfree(headers);
-   231				goto out;
-   232			}
-   233			image->elf_headers = headers;
-   234			image->elf_load_addr = kbuf.mem;
-   235			image->elf_headers_sz = headers_sz;
-   236	
-   237			pr_debug("Loaded elf core header at 0x%lx bufsz=0x%lx memsz=0x%lx\n",
-   238				 image->elf_load_addr, kbuf.bufsz, kbuf.memsz);
-   239	
-   240			/* Setup cmdline for kdump kernel case */
-   241			modified_cmdline = setup_kdump_cmdline(image, cmdline,
-   242							       cmdline_len);
-   243			if (!modified_cmdline) {
-   244				pr_err("Setting up cmdline for kdump kernel failed\n");
-   245				ret = -EINVAL;
-   246				goto out;
-   247			}
-   248			cmdline = modified_cmdline;
-   249		}
-   250	
+* I'm not sure why I used LONG_MAX instead of ULONG_MAX back then.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a7d9436a6c85fcb8843c910fd323dcd7f839bf63
+
+> [...]
+>  int qnoc_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> @@ -448,6 +448,18 @@ int qnoc_probe(struct platform_device *pdev)
+>  	if (!qp->intf_clks)
+>  		return -ENOMEM;
+>  
+> +	if (desc->bus_clk_desc) {
+> +		qp->bus_clk_desc = devm_kzalloc(dev, sizeof(*qp->bus_clk_desc),
+> +						GFP_KERNEL);
+> +		if (!qp->bus_clk_desc)
+> +			return -ENOMEM;
+> +
+> +		qp->bus_clk_desc = desc->bus_clk_desc;
+> +	} else if (!IS_ERR(devm_clk_get(dev, "bus"))) {
+> +		/* Some older SoCs may have a single non-RPM-owned bus clock. */
+> +		qp->bus_clk = devm_clk_get(dev, "bus");
+> +	}
+
+Hm, looks like you're requesting the clock twice? devm_clk_get()
+allocates memory internally so that's not ideal. It would be better to
+call it just once and store the result. Or do you actually want
+devm_clk_get_optional(dev, "bus") maybe? The error handling is a bit
+weird here.
+
+> [...]
+> @@ -490,13 +498,11 @@ int qnoc_probe(struct platform_device *pdev)
+>  	}
+>  
+>  regmap_done:
+> -	ret = devm_clk_bulk_get(dev, qp->num_bus_clks, qp->bus_clks);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = clk_bulk_prepare_enable(qp->num_bus_clks, qp->bus_clks);
+> -	if (ret)
+> -		return ret;
+
+I guess we need dt-binding updates so we can drop the clocks from the
+device tree? They're not valid anymore after you remove them from
+clk-smd-rpm.c so it would be good to drop them from the DTs to avoid
+confusion.
+
+> +	if (qp->bus_clk) {
+> +		ret = clk_prepare_enable(qp->bus_clk);
+> +		if (ret)
+> +			return ret;
+> +	}
+
+The clk_* APIs have internal NULL checks for optional clocks so you
+could also omit the if statement and call it unconditionally.
+
+>  
+>  	ret = devm_clk_bulk_get(dev, qp->num_intf_clks, qp->intf_clks);
+>  	if (ret)
+> @@ -566,7 +572,8 @@ int qnoc_probe(struct platform_device *pdev)
+>  	icc_provider_deregister(provider);
+>  err_remove_nodes:
+>  	icc_nodes_remove(provider);
+> -	clk_bulk_disable_unprepare(qp->num_bus_clks, qp->bus_clks);
+> +	if (qp->bus_clk)
+> +		clk_disable_unprepare(qp->bus_clk);
+>  
+
+Same here.
+
+>  	return ret;
+>  }
+> @@ -578,7 +585,8 @@ int qnoc_remove(struct platform_device *pdev)
+>  
+>  	icc_provider_deregister(&qp->provider);
+>  	icc_nodes_remove(&qp->provider);
+> -	clk_bulk_disable_unprepare(qp->num_bus_clks, qp->bus_clks);
+> +	if (qp->bus_clk)
+> +		clk_disable_unprepare(qp->bus_clk);
+>  
+
+And here.
+
+Thanks,
+Stephan
