@@ -2,146 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C84672ADDE
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 19:49:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C43372ADE5
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 19:52:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbjFJRtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 13:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39958 "EHLO
+        id S230048AbjFJRwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 13:52:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjFJRtU (ORCPT
+        with ESMTP id S229453AbjFJRwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 13:49:20 -0400
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2045.outbound.protection.outlook.com [40.107.105.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0A33598;
-        Sat, 10 Jun 2023 10:49:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eV8KIzulkrY6EZUnlvR3o0ZBj6S1H7hZH9TwFrYnb7dincWVIbBblXwSzHoNyRpUCzPipWREAbPGJkyoX+XuL2ERtog6k2Qxn/u4eJMRcaV9GsmtzMo4B9ySdseu7/yeUQ0i8I68nuQj/iy6DqUHyPbJ4HvuBE5Ke0JTgBWmOQeRW1ne3pJs7hPbevB9LwO3ojamzglSxRH4m78oeCJ6bC6mBO1LbLaamIseFFLveVGlxbQmO9wQPJRw4hxSm+kCngBiMj3vOu6roUDu6dMXShpwJlohIYSgc3AE/aRC9pODWuneRyMKdgDQNjwf7C6L/oISe3kJzN0rNQqw8PnlfA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k7ygBqSsENyI6AsrNVqAwcBO5n9Mu8wEhIApx3UlutQ=;
- b=LCrJpil560rPW7ddzbefGgG5+95bSQ8+N1Mke25ZLm/JnRWodN/2YEo4Ft9yg5xHhvkpvqL9tpoUFv/l8iUU22jaIrZNG/tb3rAMdRuJuaeNMqczVIdSRxav0TCrxOeeiMRp01cgxF802KVRr+xta6TSrSfvxP1DV4NkgqQ8qTRQXE589eXn3/s/meeYJ0fRlZJPEgoiiSgOttlAuTbjchnQpUv9rHP7QtC2oF8jvuOJL+h+fttuWA1EgqWSiVXWmhD0D49jpFsjwW3vZnXgdCz7I9iAiQimURJJzHbzV8b6qRKjqBZnU3MRbICCxyAy9t1LOHwHIzUWGu418WbvMg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k7ygBqSsENyI6AsrNVqAwcBO5n9Mu8wEhIApx3UlutQ=;
- b=DtwnbuU59jSgBA7IK0Ok5gbnsh+AjZXBmyWTuhbdvjM4pGnGbBXZ+K6xvgHD8ljYjKfMCe6hTTOMIEnFLcEHNwt1bOiKZ4bX3NGJBOpjdXkRVmeUNL8Or1WNZSlp50bUijraqYa1/evvA0mdFtkiGXCFRXYc3aq1sFN67kT4d0g=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
- by DU2PR04MB9067.eurprd04.prod.outlook.com (2603:10a6:10:2f2::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Sat, 10 Jun
- 2023 17:49:14 +0000
-Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
- ([fe80::c40e:d76:fd88:f460]) by AM0PR04MB6452.eurprd04.prod.outlook.com
- ([fe80::c40e:d76:fd88:f460%4]) with mapi id 15.20.6455.030; Sat, 10 Jun 2023
- 17:49:12 +0000
-Date:   Sat, 10 Jun 2023 20:49:11 +0300
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Victor Nogueira <victor@mojatatu.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>,
-        Peilin Ye <yepeilin.cs@gmail.com>,
-        Pedro Tammela <pctammela@mojatatu.com>
-Subject: Re: [PATCH RESEND net-next 5/5] net/sched: taprio: dump class stats
- for the actual q->qdiscs[]
-Message-ID: <20230610174911.vf637wy2fwjvbfvi@skbuf>
-References: <20230602103750.2290132-1-vladimir.oltean@nxp.com>
- <20230602103750.2290132-6-vladimir.oltean@nxp.com>
- <CAM0EoM=P9+wNnNQ=ky96rwCx1z20fR21EWEdx+Na39NCqqG=3A@mail.gmail.com>
- <20230609121043.ekfvbgjiko7644t7@skbuf>
- <facdfceb-fe2e-795b-ea89-1b67478eb533@mojatatu.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <facdfceb-fe2e-795b-ea89-1b67478eb533@mojatatu.com>
-X-ClientProxiedBy: VI1PR0902CA0044.eurprd09.prod.outlook.com
- (2603:10a6:802:1::33) To AM0PR04MB6452.eurprd04.prod.outlook.com
- (2603:10a6:208:16d::21)
+        Sat, 10 Jun 2023 13:52:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809C035BC
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 10:51:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686419505;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pKSaQZ4znfpr2ozE1Mb7MZQL8rtwbT4mvdyngtft6oE=;
+        b=QjiIlDm/HXKRBT/W8DcqrnZxfETPkb0/5iRWExYsLPBm8UZrsBRaTKJJT6LOLH4DTKdaez
+        cVqHqUY1EH1lf80IX299LQaHtYjkUWlMgaWkg4e04nccuhmhyIJh2NEhLq14nEMe0oDtwY
+        k1Ios4AkF2xqSOXXXnK5LelD7crjqvk=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-543-ost0nZJuMgmt-0PG9XT6wA-1; Sat, 10 Jun 2023 13:51:44 -0400
+X-MC-Unique: ost0nZJuMgmt-0PG9XT6wA-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f739cc1aafso12472255e9.1
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 10:51:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686419503; x=1689011503;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pKSaQZ4znfpr2ozE1Mb7MZQL8rtwbT4mvdyngtft6oE=;
+        b=aXEi1FPG7U1KD91NYjZrHA1bSI3+aWLzLQWswaFFCKRjOt2YOUPyK2TgpEyByDz3mK
+         kKc+Vj404OFYMCauqm6fFuWBM5HUy7qDIE2m29MyiZreomSqDOcL1pj8dR6h/kDWrlt/
+         XFZhzQdJen5cECVj21v6gZO9dMe4YygmyBqziub1Y7ku217R3ZeUL3i+PVSJAXXnHN1z
+         LLbYHdzPg+SVmnSBwLzLKAg7RKfGPSgk2aF8K4QO6nCMUoqhXPWyW/Zmt1yTvWraKBQi
+         UCd6mkhFqf9zHQCF7fLa5pC7JsiRdy7L6lTus8QOw7lfdsHE8kZmCfL7cJ3CwxRahuaN
+         aQRg==
+X-Gm-Message-State: AC+VfDxWsPRW3c3Z1rO4oPSBan+P4jp5qlOUad5D+LLDRe1oc4sXwhAc
+        JyYhmOzsfNLnHAMLk3VynzwKSyAB2jwuJGDqmWxwQ5pqQNBRIkIeRmyfhgcs8owfoQLEvqTdoI+
+        NCjVhS9xgJlP4POlIJ41w2FcA
+X-Received: by 2002:a05:600c:2189:b0:3f7:81e9:2f02 with SMTP id e9-20020a05600c218900b003f781e92f02mr2985115wme.4.1686419503153;
+        Sat, 10 Jun 2023 10:51:43 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4oloD0EK/STe16UJZzvVaQXGexNAqmk7NaH1zGxsm7M2y6ZMJc4nxV7hPbfHGklvgtsvLviw==
+X-Received: by 2002:a05:600c:2189:b0:3f7:81e9:2f02 with SMTP id e9-20020a05600c218900b003f781e92f02mr2985110wme.4.1686419502754;
+        Sat, 10 Jun 2023 10:51:42 -0700 (PDT)
+Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id g26-20020a7bc4da000000b003f60e143d38sm6287776wmk.11.2023.06.10.10.51.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Jun 2023 10:51:42 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     devicetree@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2 2/5] dt-bindings: display: ssd1307fb: Remove default
+ width and height values
+In-Reply-To: <20230610-opposite-quality-81d4a1561c88@spud>
+References: <20230609170941.1150941-1-javierm@redhat.com>
+ <20230609170941.1150941-3-javierm@redhat.com>
+ <20230610-opposite-quality-81d4a1561c88@spud>
+Date:   Sat, 10 Jun 2023 19:51:35 +0200
+Message-ID: <87r0qj19zs.fsf@minerva.mail-host-address-is-not-set>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|DU2PR04MB9067:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7ff138e3-c633-41f0-d043-08db69dafff0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: T+f9NfvBAHyXUxpx+DBnTXSb4+kOnvBg8G3BRQ+Bpg9oZmhqvIevKxdonUOAYJjlnP27rlRC6giZRbnUGYcQGsA3gNgFGtml1wHdq//sJ9kdzwiw97sMAA+ygx7Lm+Hz6xsVd7S3gN6YocJrvjT1TIgfYdUaZx/VRSmD0VlN/VNr+xjRkmF44Twi7QiHH66rZNtfwi0n2DBQd3lqKlPqfGxVg1FPrajDpXk2Ln17HmdUiD6vS+XefHw80w2HYpgAa2tRv2Opbu0r2GG2wXSTih7uC8Sd8O5HhT/JJTO1u8crzz5EjWlrcXkk32kAgtXTmqE2RYYMyggSRotg7U5OVuXnQn8gzOzVvZCPlwnFe3zniTthEOLJmD63hWgLfxBS0GX7GygwtFZHBwUh/PCbUKd+aS+ajGxhPRMIE8kjXdsmEgYVDUcFKdBs0MJxwCvcpj1hB3HIGGaRNFW3TLPXWWENIoXGayk77apTdBr0i0U2zwO3484HKIVOEcqgc3Hp1u+zZyRZwm0UEXkF99MdGeRNLcVSx+nR7EuVz7QLuGcJjfVEARBaHN64h5O97Zf714EYcd9NYylXD+/CDpF5bQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(4636009)(376002)(396003)(39850400004)(346002)(136003)(366004)(451199021)(44832011)(4326008)(66476007)(66556008)(66946007)(316002)(7416002)(41300700001)(186003)(4744005)(2906002)(110136005)(54906003)(478600001)(8676002)(8936002)(5660300002)(966005)(6486002)(1076003)(6512007)(6506007)(9686003)(33716001)(26005)(83380400001)(86362001)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gJ4zC9fHziGoLjs1iwCkPDifHqRdVY7BWH+G2e6XQKRz3wYfZ06x7y7YskjA?=
- =?us-ascii?Q?3lfs3xp0Q+jF9EvkILQgqa9Z5GY5QANp74tqyK+PvBc9vwqiXvwj//ChfiRX?=
- =?us-ascii?Q?j48SbkLFBl4gf1muKFnVSUdpDUZmsvoNPrZh8QbbK3s10Qsa+kar/K9azQYr?=
- =?us-ascii?Q?yzuPaJiTt4S2e+A87+6/j/V4iXjjTDGx69JsKctlqnjn/pVJCeH6czAb9Ohx?=
- =?us-ascii?Q?QNOELYfYaDsk7IobqQog/Ud3sNxIiftfXu4VnPzja3PlQ3eFVmVYhlcOMWVM?=
- =?us-ascii?Q?hMaoFry05Ki44sIEKNpexb8e+GNtzlp8d0YZq4BAB/YxYzaybWUMDuezhu23?=
- =?us-ascii?Q?/ETBzFs5Va+PtjcPuxGxSim6wo6hEYGG6Ne+iiPadE3EtWhIdENHLDcFELZJ?=
- =?us-ascii?Q?/qHuJDFxEq7oTg519XBJxAxJ0ft8AxLeAfs+rFC2vMRiXNNV4bUxssb4vke1?=
- =?us-ascii?Q?gCVY8dFJ9O8POPw6px4ytWy6pGXTIdg7x7VQnowf14UFq1soxGqT89X8VKFS?=
- =?us-ascii?Q?meFqXm0bRDMbeJ0yoIzq5foS8CNTQ2hYhH8T8SVseYvSv9n82moyhOGyJyEg?=
- =?us-ascii?Q?K9Xrdrld20RkSxGT79Xn06CzMQwEENxr51MZi3r9DH0pJssvYRGIB7ErUbmQ?=
- =?us-ascii?Q?h6ZzJQvl/zmXR+Hx8YHj8+ic69jPJJ96CUQSeiud2iHTMQZpAdQDWjrgN4Pq?=
- =?us-ascii?Q?a13UJhp0KN5slRqYJ9NNO4k5QLVVecqd7nueupmlKC3inOyWV0SpcMUl1IYd?=
- =?us-ascii?Q?U+iNYRtciU5fXIDR3Rw65SkkvO/KsxWQ6l33u9BFtnN28ynlfbJjPPrICYJ9?=
- =?us-ascii?Q?VabBPNMS2E9scWlClj8X4ZPgr6my6ZoP0N3Dw263mpPett44RTRBmcu8Sgr/?=
- =?us-ascii?Q?xy5fcPoS59GBFxAq4i1KxENo7catE9nqSavZX7Y3lZarW3T8iUtfg6rUUBUW?=
- =?us-ascii?Q?iAPpnNwfAJbIKq718eHJok9Cq4VfhjhJwhjVbuUQQ6rlH6fJxr/f8X1X8m+1?=
- =?us-ascii?Q?2Eiey4A5p/bPiGhtLUV6USIDiPnphL7FkTjXLstc2bBFrN97geFzXqwMivvl?=
- =?us-ascii?Q?vtvft3aRAqyhhLezI2Z0cwBO8pCKGE0R01G4N0exLmDPsCKDkAfe0gDvE4rJ?=
- =?us-ascii?Q?fSKq0kxv+A8/djTew4Iterv5HxgtDnEKIco+0USJOY7lnK9Y+5lZLAOS7VUJ?=
- =?us-ascii?Q?5P5YVTP8TqpCVkQeKnJH0MgErEcaJzgMvf52SylCTsIFTJHRdE/QheohyhQ7?=
- =?us-ascii?Q?yLN8WIrVURmCaufcm/sBkKlP6NV9EbaJjJxKCAvoThcZG7hL0cs6CJJntQNR?=
- =?us-ascii?Q?yGsyzsQr1wdo6VfoHYSrt1Z7ybXbs5Rrywo8OfRjdD8om5KZUoQzddhmYkBG?=
- =?us-ascii?Q?j6KvLNHx+b8kdv4jrcjuTPUJMKGYvfeqApGGNe4fOKcMYNuMyNypW01tgKwP?=
- =?us-ascii?Q?k0Z6fX9fAfcSAiHqqS5tc23Kr0v1CRvcuDf2JMA6Tmyzi/O/tKWiAlVJ+MVV?=
- =?us-ascii?Q?V44w7s91GMKH8KhNs0ZPcqkx9A1/ybHaLYITqLTvpu8lLsZVIsRa6XGnfM9u?=
- =?us-ascii?Q?7gQzY1V1PnhRR/7RXtmZmmi2wvlZLSL305GSeDw1nGQ/SAsWwTFccKtrpwJ/?=
- =?us-ascii?Q?Ww=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7ff138e3-c633-41f0-d043-08db69dafff0
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2023 17:49:12.3609
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zDwa8pHORNNNc5MEET+f6T8YCkeAG9WsH2y1MUAi9PlM08NfDVXjw80I4j8Ck/vYjViiKX4RldYtkm6unGv1AA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB9067
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 11:56:35AM -0300, Victor Nogueira wrote:
-> You can tell tdc to run a specific test file by providing the "-f" option.
-> For example, if you want to run only taprio tests, you can issue the
-> following command:
-> 
-> ./tdc.py -f tc-tests/qdiscs/taprio.json
+Conor Dooley <conor@kernel.org> writes:
 
-Thanks. I've been able to make some progress with this.
+> On Fri, Jun 09, 2023 at 07:09:37PM +0200, Javier Martinez Canillas wrote:
+>> A default resolution in the ssd130x driver isn't set to an arbitrary 96x16
+>> anymore. Instead is set to a width and height that's controller dependent.
+>
+> Did that change to the driver not break backwards compatibility with
+> existing devicetrees that relied on the default values to get 96x16?
+>
 
-Unfortunately the updated series conflicts with this in-flight patch
-set, so I wouldn't want to post it just yet.
-https://patchwork.kernel.org/project/netdevbpf/cover/20230609135917.1084327-1-vladimir.oltean@nxp.com/
+It would but I don't think it is an issue in pratice. Most users of these
+panels use one of the multiple libraries on top of the spidev interface.
 
-However, I did add taprio offload to the netdevsim driver so that this
-code path could be covered with tdc. I'd like Jamal and Paolo, who asked
-for it, to comment on whether this is what they were looking to see.
-https://github.com/vladimiroltean/linux/commits/sch-taprio-relationship-children-v2
+For the small userbase that don't, I believe that they will use the rpif
+kernel and ssd1306-overlay.dtbo DTB overlay, which defaults to width=128
+and height=64 [1]. So those users will have to explicitly set a width and
+height for a 96x16 panel anyways.
+
+The intersection of users that have a 96x16 panel, assumed that default
+and consider the DTB a stable ABI, and only update their kernel but not
+the  DTB should be very small IMO.
+
+[1]: https://github.com/raspberrypi/linux/blob/rpi-6.1.y/arch/arm/boot/dts/overlays/ssd1306-overlay.dts
+
+> Cheers,
+> Conor.
+>
+
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
+
