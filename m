@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7383372A867
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 04:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C65172A864
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 04:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233626AbjFJCYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 22:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45362 "EHLO
+        id S231316AbjFJCYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 22:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232349AbjFJCY0 (ORCPT
+        with ESMTP id S232756AbjFJCY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 22:24:26 -0400
+        Fri, 9 Jun 2023 22:24:27 -0400
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B653ABA;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E786935A9;
         Fri,  9 Jun 2023 19:24:25 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QdMGF5R6xz4f3mHp;
-        Sat, 10 Jun 2023 10:24:21 +0800 (CST)
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QdMGG1vCmz4f3mHw;
+        Sat, 10 Jun 2023 10:24:22 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.104.67])
-        by APP4 (Coremail) with SMTP id gCh0CgBH_rHT3oNkRsFjLQ--.44376S6;
+        by APP4 (Coremail) with SMTP id gCh0CgBH_rHT3oNkRsFjLQ--.44376S7;
         Sat, 10 Jun 2023 10:24:22 +0800 (CST)
 From:   Yu Kuai <yukuai1@huaweicloud.com>
 To:     hch@lst.de, axboe@kernel.dk, dgilbert@interlog.com,
@@ -27,20 +27,20 @@ To:     hch@lst.de, axboe@kernel.dk, dgilbert@interlog.com,
 Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-scsi@vger.kernel.org, yukuai3@huawei.com,
         yukuai1@huaweicloud.com, yi.zhang@huawei.com, yangerkun@huawei.com
-Subject: [PATCH v5 2/3] scsi: sg: fix blktrace debugfs entries leakage
-Date:   Sat, 10 Jun 2023 10:20:02 +0800
-Message-Id: <20230610022003.2557284-3-yukuai1@huaweicloud.com>
+Subject: [PATCH v5 3/3] block: fix blktrace debugfs entries leakage
+Date:   Sat, 10 Jun 2023 10:20:03 +0800
+Message-Id: <20230610022003.2557284-4-yukuai1@huaweicloud.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230610022003.2557284-1-yukuai1@huaweicloud.com>
 References: <20230610022003.2557284-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBH_rHT3oNkRsFjLQ--.44376S6
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kry3Zr4kJrWxuFyxtr4ruFg_yoW8ZFy5pF
-        W7Xa90krWUWr4UGw45Z34UZFySk3y0934rGFW7Kw1fWF4rJr90gFyktFyUX3W5ArZ5uFZ8
-        AFW3KF95GFnrJ3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: gCh0CgBH_rHT3oNkRsFjLQ--.44376S7
+X-Coremail-Antispam: 1UD129KBjvJXoW7uw4fWFyxGF1fury7Zr4DXFb_yoW8WFy5pa
+        9xur4YkrWqvr4YvFyDuw17XF18Ka95GryrJrySgF1Yvr17Crs8XrZ2vr40grWrArZI9FZ8
+        W3WUCr9xArWkXaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUUBK14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JrWl82xGYIkIc2
         x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
         Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
         8EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AI
@@ -51,7 +51,7 @@ X-Coremail-Antispam: 1UD129KBjvJXoW7Kry3Zr4kJrWxuFyxtr4ruFg_yoW8ZFy5pF
         Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x
         0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8
         JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIx
-        AIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbdOz7UUUUU=
+        AIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbJ73DUUUUU=
         =
 X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
 X-CFilter-Loop: Reflected
@@ -66,67 +66,50 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yu Kuai <yukuai3@huawei.com>
 
-sg_ioctl() support to enable blktrace, which will create debugfs entries
-"/sys/kernel/debug/block/sgx/", however, there is no guarantee that user
-will remove these entries through ioctl, and deleting sg device doesn't
-cleanup these blktrace entries.
+Commit 99d055b4fd4b ("block: remove per-disk debugfs files in
+blk_unregister_queue") moves blk_trace_shutdown() from
+blk_release_queue() to blk_unregister_queue(), this is safe if blktrace
+is created through sysfs, however, there is a regression in corner
+case.
 
-This problem can be fixed by cleanup blktrace while releasing
-request_queue, however, it's not a good idea to do this special handling
-in common layer just for sg device.
+blktrace can still be enabled after del_gendisk() through ioctl if
+the disk is opened before del_gendisk(), and if blktrace is not shutdown
+through ioctl before closing the disk, debugfs entries will be leaked.
 
-Fix this problem by shutdown bltkrace in sg_device_destroy(), where the
-device is deleted and all the users close the device, also grab a
-scsi_device reference from sg_add_device() to prevent scsi_device to be
-freed before sg_device_destroy();
+Fix this problem by shutdown blktrace in disk_release(), this is safe
+because blk_trace_remove() is reentrant.
 
+Fixes: 99d055b4fd4b ("block: remove per-disk debugfs files in blk_unregister_queue")
 Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
 ---
- drivers/scsi/sg.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ block/genhd.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-index 037f8c98a6d3..0adfbd77437f 100644
---- a/drivers/scsi/sg.c
-+++ b/drivers/scsi/sg.c
-@@ -1496,6 +1496,10 @@ sg_add_device(struct device *cl_dev)
- 	int error;
- 	unsigned long iflags;
+diff --git a/block/genhd.c b/block/genhd.c
+index 4e5fd6aaa883..5689f5b5187c 100644
+--- a/block/genhd.c
++++ b/block/genhd.c
+@@ -25,8 +25,9 @@
+ #include <linux/pm_runtime.h>
+ #include <linux/badblocks.h>
+ #include <linux/part_stat.h>
+-#include "blk-throttle.h"
++#include <linux/blktrace_api.h>
  
-+	error = scsi_device_get(scsidp);
-+	if (error)
-+		return error;
++#include "blk-throttle.h"
+ #include "blk.h"
+ #include "blk-mq-sched.h"
+ #include "blk-rq-qos.h"
+@@ -1148,6 +1149,8 @@ static void disk_release(struct device *dev)
+ 	might_sleep();
+ 	WARN_ON_ONCE(disk_live(disk));
+ 
++	blk_trace_remove(disk->queue);
 +
- 	error = -ENOMEM;
- 	cdev = cdev_alloc();
- 	if (!cdev) {
-@@ -1553,6 +1557,7 @@ sg_add_device(struct device *cl_dev)
- out:
- 	if (cdev)
- 		cdev_del(cdev);
-+	scsi_device_put(scsidp);
- 	return error;
- }
- 
-@@ -1560,6 +1565,7 @@ static void
- sg_device_destroy(struct kref *kref)
- {
- 	struct sg_device *sdp = container_of(kref, struct sg_device, d_ref);
-+	struct request_queue *q = sdp->device->request_queue;
- 	unsigned long flags;
- 
- 	/* CAUTION!  Note that the device can still be found via idr_find()
-@@ -1567,6 +1573,9 @@ sg_device_destroy(struct kref *kref)
- 	 * any other cleanup.
- 	 */
- 
-+	blk_trace_remove(q);
-+	scsi_device_put(sdp->device);
-+
- 	write_lock_irqsave(&sg_index_lock, flags);
- 	idr_remove(&sg_index_idr, sdp->index);
- 	write_unlock_irqrestore(&sg_index_lock, flags);
+ 	/*
+ 	 * To undo the all initialization from blk_mq_init_allocated_queue in
+ 	 * case of a probe failure where add_disk is never called we have to
 -- 
 2.39.2
 
