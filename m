@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA4772A8E7
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 05:51:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89DAC72A8E9
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 05:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233733AbjFJDvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 23:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37090 "EHLO
+        id S232983AbjFJDvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 23:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232766AbjFJDvD (ORCPT
+        with ESMTP id S232947AbjFJDvF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 23:51:03 -0400
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2143AA8;
-        Fri,  9 Jun 2023 20:51:01 -0700 (PDT)
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-626190df842so19634526d6.0;
-        Fri, 09 Jun 2023 20:51:01 -0700 (PDT)
+        Fri, 9 Jun 2023 23:51:05 -0400
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDE13ABF;
+        Fri,  9 Jun 2023 20:51:03 -0700 (PDT)
+Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-75d4b85b3ccso234266585a.2;
+        Fri, 09 Jun 2023 20:51:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686369061; x=1688961061;
+        d=1e100.net; s=20221208; t=1686369062; x=1688961062;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7fnYwuYaIS9dKMy4HedverGuGC//hnx9S7Ka8IPobdY=;
-        b=UHI9aRy4+WIJFi0zmfDkpuONYdKhfEfQmPJfIs8lP2QbfWlbNIhQdvN5L6s0EHoPOu
-         XMnBjUwgvOzxGejPJJOdeTT77Kihx7YSo0XzO6KcrDAadgJQ9WqRzDQVtcHs9lWEy4ZD
-         q1hJU5l9quKMdzgTKE+OFy7sEHSoRGliHPTqeyDmA25SD6f1omaerx7sxMaIrA23TYxO
-         R/xa0R0PwhWT0vL/bqIiC47a6DRzN6OiVAiCuTlDlw70aqm0IgyP3pS1CbtWQLYMla3w
-         K5kjdZz17TMSFUjYpFmaSQt0Piaj1l3ecagVh9Fic5EN7/Y1anzqtMgQL7Sp5tzDgz5b
-         nBNg==
-X-Gm-Message-State: AC+VfDwY4ejrOANIqILDIiMwabiaPr3aMMo9tRdNGshs+O04gi7iiYZx
-        keB+TUKOsWFNCskWXXW4rWSDWplH5qaLCV1f
-X-Google-Smtp-Source: ACHHUZ5KdANU/goYfo/oTCEnOde3f+Emr+BVtvTKFmvkRmSiqfEcOmSlPVpPNZv6hQnEiQMLBSMf4A==
-X-Received: by 2002:a05:6214:c2b:b0:621:3b88:7b09 with SMTP id a11-20020a0562140c2b00b006213b887b09mr3883590qvd.35.1686369060687;
-        Fri, 09 Jun 2023 20:51:00 -0700 (PDT)
+        bh=AgbyKA8QC3K+q2sl72LDjL4RrY6kZndZm/jjqQ5iNdY=;
+        b=Kz/ll/HtF6io3i0ST43NPilEmeUA2gTDSy1uJmmLyLpxAvunien8SETITsDk+z6jJX
+         B2m/abMZob+okJItLFa8kHLFyDQwYFOW0ov/FneFP8JkF1SadiHzjZYZVBCzIa0kvRXX
+         MFSEoVcLW0RGmE2Yf/6bq6Dmu4uzF3l1lkiQNcuEHIn4X5MEpJtuEyvU4PuZDnUv9MZN
+         U2t15v7a1gn8Vl+XhVLbQY1bIB+lz+aPLFn85MPi5Lo49PUVF/wNZOIqOc6CK31uAEw2
+         jzQt3oC8yZLAJ5ZQB6HBjgcGtlq00ED4aXsszXtK55qDcm612E64rXKzB+LzXWUOy4bW
+         vYgg==
+X-Gm-Message-State: AC+VfDz0ni/MMnkx0mwG/gDFgUPsJf95xuinZ++QMPwk2XWa8+RQAsnx
+        jYcbJZ+FKW9jrFXkfDFfjaspDgcM+DlmQ3sF
+X-Google-Smtp-Source: ACHHUZ7ARsRdT03avwV2EndKwbE42zpszYJoElKijFbVsOiOw9rik82Mkp41SMkbY9QE8y62Q0JfXw==
+X-Received: by 2002:a05:620a:45a9:b0:75e:d2d2:26c with SMTP id bp41-20020a05620a45a900b0075ed2d2026cmr3901966qkb.47.1686369062120;
+        Fri, 09 Jun 2023 20:51:02 -0700 (PDT)
 Received: from localhost ([2620:10d:c091:400::5:81d3])
-        by smtp.gmail.com with ESMTPSA id t18-20020a0cea32000000b005ef54657ea0sm1588317qvp.126.2023.06.09.20.50.59
+        by smtp.gmail.com with ESMTPSA id x14-20020ae9f80e000000b0074d60b697a6sm1469315qkh.12.2023.06.09.20.51.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 20:51:00 -0700 (PDT)
+        Fri, 09 Jun 2023 20:51:01 -0700 (PDT)
 From:   David Vernet <void@manifault.com>
 To:     bpf@vger.kernel.org
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
@@ -45,9 +45,9 @@ Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
         john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
         haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
         kernel-team@meta.com, tj@kernel.org
-Subject: [PATCH bpf-next 4/5] selftests/bpf: Update bpf_cpumask_any* tests to use bpf_cpumask_any_distribute*
-Date:   Fri,  9 Jun 2023 22:50:52 -0500
-Message-Id: <20230610035053.117605-4-void@manifault.com>
+Subject: [PATCH bpf-next 5/5] bpf/docs: Update documentation for new cpumask kfuncs
+Date:   Fri,  9 Jun 2023 22:50:53 -0500
+Message-Id: <20230610035053.117605-5-void@manifault.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230610035053.117605-1-void@manifault.com>
 References: <20230610035053.117605-1-void@manifault.com>
@@ -63,72 +63,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In a prior patch, we removed the bpf_cpumask_any() and
-bpf_cpumask_any_and() kfuncs, and replaced them with
-bpf_cpumask_any_distribute() and bpf_cpumask_any_distribute_and().
-The advertised semantics between the two kfuncs were identical, with the
-former always returning the first CPU, and the latter actually returning
-any CPU.
-
-This patch updates the selftests for these kfuncs to use the new names.
+We recently added the bpf_cpumask_first_and() kfunc, and changed
+bpf_cpumask_any() / bpf_cpumask_any_and() to
+bpf_cpumask_any_distribute() and bpf_cpumask_any_distribute_and()
+respectively. This patch adds an entry for the bpf_cpumask_first_and()
+kfunc, and updates the documentation for the *any* kfuncs to the new
+names.
 
 Signed-off-by: David Vernet <void@manifault.com>
 ---
- tools/testing/selftests/bpf/progs/cpumask_common.h  | 4 ++--
- tools/testing/selftests/bpf/progs/cpumask_success.c | 8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ Documentation/bpf/cpumasks.rst | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/cpumask_common.h b/tools/testing/selftests/bpf/progs/cpumask_common.h
-index b3493d5d263e..b15c588ace15 100644
---- a/tools/testing/selftests/bpf/progs/cpumask_common.h
-+++ b/tools/testing/selftests/bpf/progs/cpumask_common.h
-@@ -52,8 +52,8 @@ bool bpf_cpumask_subset(const struct cpumask *src1, const struct cpumask *src2)
- bool bpf_cpumask_empty(const struct cpumask *cpumask) __ksym;
- bool bpf_cpumask_full(const struct cpumask *cpumask) __ksym;
- void bpf_cpumask_copy(struct bpf_cpumask *dst, const struct cpumask *src) __ksym;
--u32 bpf_cpumask_any(const struct cpumask *src) __ksym;
--u32 bpf_cpumask_any_and(const struct cpumask *src1, const struct cpumask *src2) __ksym;
-+u32 bpf_cpumask_any_distribute(const struct cpumask *src) __ksym;
-+u32 bpf_cpumask_any_and_distribute(const struct cpumask *src1, const struct cpumask *src2) __ksym;
+diff --git a/Documentation/bpf/cpumasks.rst b/Documentation/bpf/cpumasks.rst
+index 41efd8874eeb..3139c7c02e79 100644
+--- a/Documentation/bpf/cpumasks.rst
++++ b/Documentation/bpf/cpumasks.rst
+@@ -351,14 +351,15 @@ In addition to the above kfuncs, there is also a set of read-only kfuncs that
+ can be used to query the contents of cpumasks.
  
- void bpf_rcu_read_lock(void) __ksym;
- void bpf_rcu_read_unlock(void) __ksym;
-diff --git a/tools/testing/selftests/bpf/progs/cpumask_success.c b/tools/testing/selftests/bpf/progs/cpumask_success.c
-index fbaf510f4ab5..674a63424dee 100644
---- a/tools/testing/selftests/bpf/progs/cpumask_success.c
-+++ b/tools/testing/selftests/bpf/progs/cpumask_success.c
-@@ -344,13 +344,13 @@ int BPF_PROG(test_copy_any_anyand, struct task_struct *task, u64 clone_flags)
- 	bpf_cpumask_set_cpu(1, mask2);
- 	bpf_cpumask_or(dst1, cast(mask1), cast(mask2));
+ .. kernel-doc:: kernel/bpf/cpumask.c
+-   :identifiers: bpf_cpumask_first bpf_cpumask_first_zero bpf_cpumask_test_cpu
++   :identifiers: bpf_cpumask_first bpf_cpumask_first_zero bpf_cpumask_first_and
++                 bpf_cpumask_test_cpu
  
--	cpu = bpf_cpumask_any(cast(mask1));
-+	cpu = bpf_cpumask_any_distribute(cast(mask1));
- 	if (cpu != 0) {
- 		err = 6;
- 		goto release_exit;
- 	}
+ .. kernel-doc:: kernel/bpf/cpumask.c
+    :identifiers: bpf_cpumask_equal bpf_cpumask_intersects bpf_cpumask_subset
+                  bpf_cpumask_empty bpf_cpumask_full
  
--	cpu = bpf_cpumask_any(cast(dst2));
-+	cpu = bpf_cpumask_any_distribute(cast(dst2));
- 	if (cpu < nr_cpus) {
- 		err = 7;
- 		goto release_exit;
-@@ -362,13 +362,13 @@ int BPF_PROG(test_copy_any_anyand, struct task_struct *task, u64 clone_flags)
- 		goto release_exit;
- 	}
+ .. kernel-doc:: kernel/bpf/cpumask.c
+-   :identifiers: bpf_cpumask_any bpf_cpumask_any_and
++   :identifiers: bpf_cpumask_any_distribute bpf_cpumask_any_and_distribute
  
--	cpu = bpf_cpumask_any(cast(dst2));
-+	cpu = bpf_cpumask_any_distribute(cast(dst2));
- 	if (cpu > 1) {
- 		err = 9;
- 		goto release_exit;
- 	}
+ ----
  
--	cpu = bpf_cpumask_any_and(cast(mask1), cast(mask2));
-+	cpu = bpf_cpumask_any_and_distribute(cast(mask1), cast(mask2));
- 	if (cpu < nr_cpus) {
- 		err = 10;
- 		goto release_exit;
 -- 
 2.40.1
 
