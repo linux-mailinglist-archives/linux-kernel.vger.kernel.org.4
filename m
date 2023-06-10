@@ -2,98 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C93772ACC5
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 18:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E93072ACCA
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 18:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235804AbjFJP7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 11:59:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59538 "EHLO
+        id S233264AbjFJQHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 12:07:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235723AbjFJP7r (ORCPT
+        with ESMTP id S231684AbjFJQHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 11:59:47 -0400
-Received: from smtp.smtpout.orange.fr (smtp-13.smtpout.orange.fr [80.12.242.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3047230D6
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 08:59:45 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id 80zwqFULNV4eY810CqBQ6F; Sat, 10 Jun 2023 17:59:44 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1686412784;
-        bh=x5Q7JFOBqrMC6o8LYzgUOOfoq0P2ZHbeu6tRAx/Ruf8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=YY/e99CuaAkuIPwh6/SwneGP1bgOzZ4odMId2zpnEkjSh3cZgft7aYxVRg6Wnj3Qr
-         hoAVzpPPXUhZ4doPh2Nf4+hQUrE01Ce/6zSCNAiKs8HMFrxxsP3bZWmqwx9+378vXp
-         fRqwQHcYiJ3v+WlDVbhROmisSkW5xwLzjf5w0F8enIwvJjpm5mvRPzCwUnYZC6pAav
-         FUMjzRH6n00FqPIoVyf67rr1tF0+nIXXxSnP2kCXbLHlUpcBKCl02JWpzHU+EsMhkD
-         jwVgmjma1/1IKVYO1C+ZbRdUX2XhcVVRqisluDxYBfB83SJvP8Atgi95U5FstO/v/5
-         LYkv4i5LVGZHw==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 10 Jun 2023 17:59:44 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Walter Harms <wharms@bfs.de>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH v2 3/3] tty: serial: samsung_tty: Use abs() to simplify some code
-Date:   Sat, 10 Jun 2023 17:59:27 +0200
-Message-Id: <7bd165e82ed3675d4ddee343ab373031e995a126.1686412569.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <e4baf6039368f52e5a5453982ddcb9a330fc689e.1686412569.git.christophe.jaillet@wanadoo.fr>
-References: <e4baf6039368f52e5a5453982ddcb9a330fc689e.1686412569.git.christophe.jaillet@wanadoo.fr>
+        Sat, 10 Jun 2023 12:07:23 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939A89E;
+        Sat, 10 Jun 2023 09:07:21 -0700 (PDT)
+Date:   Sat, 10 Jun 2023 16:07:11 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1686413232;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AvwYa+1b+gn3pQXI5Z99TCOGlSyQIK1HBe30/jd1Z+Q=;
+        b=pvjFyJivhN4uAWfYQmukt0u+GS2fjgzS8u/TrHL4PovjpM8aAftOaQwXPrl+ozxQJeJCi2
+        LXg+KWxtLi/2wc7stxMmnVPYhz9dj/HITi3U0ZUKcoxIiE1QqSJfdHonuA+5k8M1YxxEbQ
+        FHDQQUZA6pXDo+6GmKS87IQcYJc7wyNdEslwpttxowWW0KbMPt6gdn+8gAD8rv4mm9l6f0
+        05dwH8HlpvUGIyh7DnKPXHxtyT43bsR7L2vJ/gmBhUAuYfEt5NrLaAzyZKuQu5ldf6HRI3
+        frCRSU1H1a3JunFJxazT+KdTUwa5SVnoFc+2mHBrM02tx3jmLu3RDtl/R8qyYw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1686413232;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AvwYa+1b+gn3pQXI5Z99TCOGlSyQIK1HBe30/jd1Z+Q=;
+        b=fFl99LW+eDGiuTmU5lP39T73ZicCuZ2wPPS41L9mtsWerBfARzRjY4rj+t6IEtvbliJO+/
+        nHDHdMENDtiixQAQ==
+From:   "tip-bot2 for Arnd Bergmann" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: timers/core] posix-timers: Add sys_ni_posix_timers() prototype
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Kees Cook <keescook@chromium.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230607142925.3126422-1-arnd@kernel.org>
+References: <20230607142925.3126422-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Message-ID: <168641323120.404.166067010257758345.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use abs() instead of hand-writing it.
+The following commit has been merged into the timers/core branch of tip:
 
-Suggested-by: Walter Harms <wharms@bfs.de>
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Commit-ID:     ad0334ffa4f9ae3dacfd89dae578df97f18a5203
+Gitweb:        https://git.kernel.org/tip/ad0334ffa4f9ae3dacfd89dae578df97f18a5203
+Author:        Arnd Bergmann <arnd@arndb.de>
+AuthorDate:    Wed, 07 Jun 2023 16:28:45 +02:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Sat, 10 Jun 2023 17:57:30 +02:00
+
+posix-timers: Add sys_ni_posix_timers() prototype
+
+The sys_ni_posix_timers() definition causes a warning when the declaration
+is missing, so this needs to be added along with the normal syscalls,
+outside of the #ifdef.
+
+kernel/time/posix-stubs.c:26:17: error: no previous prototype for 'sys_ni_posix_timers' [-Werror=missing-prototypes]
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20230607142925.3126422-1-arnd@kernel.org
+
 ---
-v2: new patch
----
- drivers/tty/serial/samsung_tty.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ arch/alpha/kernel/osf_sys.c | 2 --
+ include/linux/syscalls.h    | 1 +
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
-index 0b37019820b4..b29e9dfd81a6 100644
---- a/drivers/tty/serial/samsung_tty.c
-+++ b/drivers/tty/serial/samsung_tty.c
-@@ -24,6 +24,7 @@
- #include <linux/dmaengine.h>
- #include <linux/dma-mapping.h>
- #include <linux/slab.h>
-+#include <linux/math.h>
- #include <linux/module.h>
- #include <linux/ioport.h>
- #include <linux/io.h>
-@@ -1485,9 +1486,7 @@ static unsigned int s3c24xx_serial_getclk(struct s3c24xx_uart_port *ourport,
- 		}
- 		quot--;
+diff --git a/arch/alpha/kernel/osf_sys.c b/arch/alpha/kernel/osf_sys.c
+index 2a9a877..d98701e 100644
+--- a/arch/alpha/kernel/osf_sys.c
++++ b/arch/alpha/kernel/osf_sys.c
+@@ -1014,8 +1014,6 @@ SYSCALL_DEFINE2(osf_settimeofday, struct timeval32 __user *, tv,
+ 	return do_sys_settimeofday64(tv ? &kts : NULL, tz ? &ktz : NULL);
+ }
  
--		calc_deviation = req_baud - baud;
--		if (calc_deviation < 0)
--			calc_deviation = -calc_deviation;
-+		calc_deviation = abs(req_baud - baud);
+-asmlinkage long sys_ni_posix_timers(void);
+-
+ SYSCALL_DEFINE2(osf_utimes, const char __user *, filename,
+ 		struct timeval32 __user *, tvs)
+ {
+diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+index 33a0ee3..24871f8 100644
+--- a/include/linux/syscalls.h
++++ b/include/linux/syscalls.h
+@@ -1280,6 +1280,7 @@ asmlinkage long sys_ni_syscall(void);
  
- 		if (calc_deviation < deviation) {
- 			/*
--- 
-2.34.1
-
+ #endif /* CONFIG_ARCH_HAS_SYSCALL_WRAPPER */
+ 
++asmlinkage long sys_ni_posix_timers(void);
+ 
+ /*
+  * Kernel code should not call syscalls (i.e., sys_xyzyyz()) directly.
