@@ -2,103 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4027172A71D
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 02:54:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A6872A735
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 02:59:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232952AbjFJAwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 20:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52408 "EHLO
+        id S233162AbjFJA7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 20:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232740AbjFJAwT (ORCPT
+        with ESMTP id S230044AbjFJA7M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 20:52:19 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1135E30E5
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 17:52:18 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-56536dd5f79so33262327b3.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 17:52:18 -0700 (PDT)
+        Fri, 9 Jun 2023 20:59:12 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550CE269A
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 17:58:45 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id 6a1803df08f44-6261a25e9b6so17412156d6.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 17:58:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686358337; x=1688950337;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KcmdgdtrOaPERzGMLLSgLUzQ9hHmsIkGLHU1LmoZfH8=;
-        b=22Hb/1PuiZ6DCILf0AAvPSn7RCceVmjHUMkry1uEt7SnQWVqm0GdauDWyayZNLHePk
-         treeEyNSuxwZnzIj1JdAE3QODBhN0LUH3X7GPduL7LWybzUeWhV2S0tIMW917YmYmdrk
-         uCGy0JI5whT0RAjzzYZI0O7rngpvEVwH8KfHyApXpcfFK57jGWcFz/1shb4TvOaF+QpR
-         vAuhIqxiS520cOmhta6uqhv5XKIBro6kTWqQK9CLNO9YICKTNoh0xDQt8QfcoR1zHTKM
-         UMLJhNgR4gn2Sewwd4+sflVmXIgvriDSlcI5c4hGOIumWhCEMZYgJTIbeFXcYhKJIYIj
-         5zbA==
+        d=bytedance.com; s=google; t=1686358724; x=1688950724;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2cTgA2QhKCUmFzlxsj9JpU4bWG7UYDuiM5WyYDPIkg4=;
+        b=dLF7z+tZblaKj8qNrPX91Y7xjsg+J5JkLmiZYvjhDAXHtXewod39Dz83gAjfKdwWNt
+         YQkx7tRWBTLL9HOucP6hTOnK134IGM8NSI2eF0IrjfochR1UMseQwUeZPoJGou56FT5p
+         GhjlIKASDPw7MoZ47M31OxTpwpdGJsXToAtCtMaFfTVHL1+7jiY7rEmhsrYakDRN2r1c
+         BAO7cFSt6UXTpfo73gWG5JjedCC2o6wD8GiNDdUHmXr+AV8LhOVaUeNcDMfHL+SRlMR7
+         fYrPc0ZDQqAJWP51llTEpj9IeD+KgBhI8QmBUCU/uHLFs4H9rlej/tdhDAWqtLSq8ZR4
+         9/lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686358337; x=1688950337;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KcmdgdtrOaPERzGMLLSgLUzQ9hHmsIkGLHU1LmoZfH8=;
-        b=Kdx+AJER3NJ4f9nocuTIJh3Qo2yL96awG7djZ/abOmvOdroxpe0SxSqd+hnJjS96vT
-         FoJjQ3bN19YxydNN4mFDMtq1rPyWoLw1pIJQGjM9WCnQcMH7JQXv3MuBmsPwHUxCYUyJ
-         VP/zcEmaxHIqmwAbihaED0+NTp4HXTfqHTCb2tsQCfp6e7mUyRYRNt6mKcX7+DTEY0Ki
-         JXc1UpI80LQ82UROMK1eccT/9kPnSJn9dm4qKzXjELqXlC9Iw019HhfUg2IsmmVhqM1M
-         vUWGbSOiM6S9hC9PguKPRIaQd9Azwu2lEVKsRc++TXcQUHZE3+wfnaXAf4XJgtMyNvIs
-         UKdA==
-X-Gm-Message-State: AC+VfDyG77c3ZFYHY1f94pMT/8fbP0EyU55QhEZFfnYucrQKk+oiG3fm
-        9bFKhhJztOxFYcMBWnDXh7onh+TIkg==
-X-Google-Smtp-Source: ACHHUZ50X9vGPEaRfFB8Zyfp7hAGjAAFOLWkJmhz9m0q7Z+GgI9UAkMD03XJMau7OkFzqamRls5gtUVd/A==
-X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
- (user=rmoar job=sendgmr) by 2002:a81:c14b:0:b0:561:b7fc:7445 with SMTP id
- e11-20020a81c14b000000b00561b7fc7445mr1706591ywl.1.1686358337108; Fri, 09 Jun
- 2023 17:52:17 -0700 (PDT)
-Date:   Sat, 10 Jun 2023 00:51:49 +0000
-In-Reply-To: <20230610005149.1145665-1-rmoar@google.com>
-Mime-Version: 1.0
-References: <20230610005149.1145665-1-rmoar@google.com>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Message-ID: <20230610005149.1145665-7-rmoar@google.com>
-Subject: [RFC v1 6/6] kunit: time: Mark test as slow using test attributes
-From:   Rae Moar <rmoar@google.com>
-To:     shuah@kernel.org, davidgow@google.com, dlatypov@google.com,
-        brendan.higgins@linux.dev
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        linux-hardening@vger.kernel.org, jstultz@google.com,
-        tglx@linutronix.de, sboyd@kernel.org, Rae Moar <rmoar@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1686358724; x=1688950724;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2cTgA2QhKCUmFzlxsj9JpU4bWG7UYDuiM5WyYDPIkg4=;
+        b=PvMNXFH5Zx/uNbfKT2avVwLt0ib3MqgFI4z8B3wgJiYEvrTvfDwYMqClL0k0JN/HwN
+         /IPhz63ZvBZ1o0zkfTfSPjq7BWTFGmKxm7inGkIO6og065Ynt745bQrK7+Gylnrr5UMb
+         wPon/oi61nmZGkb3kjs4/Vg/O3m9cMREb2vhPsqTCFyGgx6GWw3kL7/mjgdSDJBwNp3b
+         xP16+UAt4gbM3sFizS7iRe7linvMabBLuNBWCdJoNjDAez1CzBHrNAhMLmOoT2ePadqq
+         NvzIIBbdmBI6vfapMakBLdyKTWAevjDe5+JwcnXuQ9EK+4zFFb30ns5cJS7sHiV1VXIu
+         thBw==
+X-Gm-Message-State: AC+VfDxb9WErxK3EXGTuhqC1xKBRuEiYaOVExW7Qu6LE04fi5924q9+4
+        dPQL/TzNgxqTVZjkCdZbGn5iMg==
+X-Google-Smtp-Source: ACHHUZ4DIKu/OkJPy4kwhELFjDDLWpbuMdjS71pxQJMVpAWexe24zJlanlGVriRGhgfyXb7TPnKF/g==
+X-Received: by 2002:ad4:5aee:0:b0:626:2527:54a6 with SMTP id c14-20020ad45aee000000b00626252754a6mr3741754qvh.8.1686358724421;
+        Fri, 09 Jun 2023 17:58:44 -0700 (PDT)
+Received: from [172.17.0.4] ([130.44.212.126])
+        by smtp.gmail.com with ESMTPSA id x17-20020a0ce251000000b00606750abaf9sm1504075qvl.136.2023.06.09.17.58.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 17:58:44 -0700 (PDT)
+From:   Bobby Eshleman <bobby.eshleman@bytedance.com>
+Subject: [PATCH RFC net-next v4 0/8] virtio/vsock: support datagrams
+Date:   Sat, 10 Jun 2023 00:58:27 +0000
+Message-Id: <20230413-b4-vsock-dgram-v4-0-0cebbb2ae899@bytedance.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALPKg2QC/3WOQQrCMBBFryKzdiSmMUVXguAB3EoXSTq2QZpIE
+ kJL6d1Nu3Dn8s3/nzczRAqWIlx2MwTKNlrvCoj9DkyvXEdo28LAGa+YOFaoBebozRvbLqgBKy1
+ JK6mkoBOUkVaRUAflTL/OHCV0NKY1+gR62XFzPeFxv623X94U6G1MPkzbL5lvtX/azJEhq8/G1
+ IZIcrrqKVFbtHQwfoBmWZYvssY4TtwAAAA=
+To:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>
+Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
+        Simon Horman <simon.horman@corigine.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        bpf@vger.kernel.org, Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Jiang Wang <jiang.wang@bytedance.com>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mark the time KUnit test, time64_to_tm_test_date_range, as slow using test
-attributes.
+Hey all!
 
-This test ran relatively much slower than most other KUnit tests.
+This series introduces support for datagrams to virtio/vsock.
 
-By marking this test as slow, the test can now be filtered on using the
-KUnit test attribute filtering feature. Example: --filter "speed>slow".
-This will run only the tests that have speeds faster than slow. The slow
-attribute will also be outputted in KTAP.
+It is a spin-off (and smaller version) of this series from the summer:
+  https://lore.kernel.org/all/cover.1660362668.git.bobby.eshleman@bytedance.com/
 
-Signed-off-by: Rae Moar <rmoar@google.com>
+Please note that this is an RFC and should not be merged until
+associated changes are made to the virtio specification, which will
+follow after discussion from this series.
+
+Another aside, the v4 of the series has only been mildly tested with a
+run of tools/testing/vsock/vsock_test. Some code likely needs cleaning
+up, but I'm hoping to get some of the design choices agreed upon before
+spending too much time making it pretty.
+
+This series first supports datagrams in a basic form for virtio, and
+then optimizes the sendpath for all datagram transports.
+
+The result is a very fast datagram communication protocol that
+outperforms even UDP on multi-queue virtio-net w/ vhost on a variety
+of multi-threaded workload samples.
+
+For those that are curious, some summary data comparing UDP and VSOCK
+DGRAM (N=5):
+
+	vCPUS: 16
+	virtio-net queues: 16
+	payload size: 4KB
+	Setup: bare metal + vm (non-nested)
+
+	UDP: 287.59 MB/s
+	VSOCK DGRAM: 509.2 MB/s
+
+Some notes about the implementation...
+
+This datagram implementation forces datagrams to self-throttle according
+to the threshold set by sk_sndbuf. It behaves similar to the credits
+used by streams in its effect on throughput and memory consumption, but
+it is not influenced by the receiving socket as credits are.
+
+The device drops packets silently.
+
+As discussed previously, this series introduces datagrams and defers
+fairness to future work. See discussion in v2 for more context around
+datagrams, fairness, and this implementation.
+
+Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
 ---
- kernel/time/time_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in v4:
+- style changes
+  - vsock: use sk_vsock(vsk) in vsock_dgram_recvmsg instead of
+    &sk->vsk
+  - vsock: fix xmas tree declaration
+  - vsock: fix spacing issues
+  - virtio/vsock: virtio_transport_recv_dgram returns void because err
+    unused
+- sparse analysis warnings/errors
+  - virtio/vsock: fix unitialized skerr on destroy
+  - virtio/vsock: fix uninitialized err var on goto out
+  - vsock: fix declarations that need static
+  - vsock: fix __rcu annotation order
+- bugs
+  - vsock: fix null ptr in remote_info code
+  - vsock/dgram: make transport_dgram a fallback instead of first
+    priority
+  - vsock: remove redundant rcu read lock acquire in getname()
+- tests
+  - add more tests (message bounds and more)
+  - add vsock_dgram_bind() helper
+  - add vsock_dgram_connect() helper
 
-diff --git a/kernel/time/time_test.c b/kernel/time/time_test.c
-index 831e8e779ace..ca058c8af6ba 100644
---- a/kernel/time/time_test.c
-+++ b/kernel/time/time_test.c
-@@ -86,7 +86,7 @@ static void time64_to_tm_test_date_range(struct kunit *test)
- }
- 
- static struct kunit_case time_test_cases[] = {
--	KUNIT_CASE(time64_to_tm_test_date_range),
-+	KUNIT_CASE_SLOW(time64_to_tm_test_date_range),
- 	{}
- };
- 
+Changes in v3:
+- Support multi-transport dgram, changing logic in connect/bind
+  to support VMCI case
+- Support per-pkt transport lookup for sendto() case
+- Fix dgram_allow() implementation
+- Fix dgram feature bit number (now it is 3)
+- Fix binding so dgram and connectible (cid,port) spaces are
+  non-overlapping
+- RCU protect transport ptr so connect() calls never leave
+  a lockless read of the transport and remote_addr are always
+  in sync
+- Link to v2: https://lore.kernel.org/r/20230413-b4-vsock-dgram-v2-0-079cc7cee62e@bytedance.com
+
+---
+Bobby Eshleman (7):
+      vsock/dgram: generalize recvmsg and drop transport->dgram_dequeue
+      vsock: refactor transport lookup code
+      vsock: support multi-transport datagrams
+      vsock: make vsock bind reusable
+      virtio/vsock: add VIRTIO_VSOCK_F_DGRAM feature bit
+      virtio/vsock: support dgrams
+      vsock: Add lockless sendmsg() support
+
+Jiang Wang (1):
+      tests: add vsock dgram tests
+
+ drivers/vhost/vsock.c                   |  44 ++-
+ include/linux/virtio_vsock.h            |  13 +-
+ include/net/af_vsock.h                  |  52 ++-
+ include/uapi/linux/virtio_vsock.h       |   2 +
+ net/vmw_vsock/af_vsock.c                | 616 ++++++++++++++++++++++++++------
+ net/vmw_vsock/diag.c                    |  10 +-
+ net/vmw_vsock/hyperv_transport.c        |  42 ++-
+ net/vmw_vsock/virtio_transport.c        |  28 +-
+ net/vmw_vsock/virtio_transport_common.c | 226 +++++++++---
+ net/vmw_vsock/vmci_transport.c          | 152 ++++----
+ net/vmw_vsock/vsock_bpf.c               |  10 +-
+ net/vmw_vsock/vsock_loopback.c          |  13 +-
+ tools/testing/vsock/util.c              | 141 +++++++-
+ tools/testing/vsock/util.h              |   6 +
+ tools/testing/vsock/vsock_test.c        | 432 ++++++++++++++++++++++
+ 15 files changed, 1533 insertions(+), 254 deletions(-)
+---
+base-commit: 28cfea989d6f55c3d10608eba2a2bae609c5bf3e
+change-id: 20230413-b4-vsock-dgram-3b6eba6a64e5
+
+Best regards,
 -- 
-2.41.0.162.gfafddb0af9-goog
+Bobby Eshleman <bobby.eshleman@bytedance.com>
 
