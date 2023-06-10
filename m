@@ -2,143 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF5972AD1D
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 18:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE6772AD21
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 18:17:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbjFJQQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 12:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38752 "EHLO
+        id S229553AbjFJQRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 12:17:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjFJQQZ (ORCPT
+        with ESMTP id S229675AbjFJQQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 12:16:25 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFFCB30DD;
-        Sat, 10 Jun 2023 09:16:05 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-978863fb00fso500821666b.3;
-        Sat, 10 Jun 2023 09:16:05 -0700 (PDT)
+        Sat, 10 Jun 2023 12:16:54 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DAF3A86
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 09:16:27 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-ba818eb96dcso2564546276.0
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 09:16:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686413764; x=1689005764;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iykgIKjjxkQC0iF6CPvpsM3rMPFudjl8N64c3ex61jQ=;
-        b=Mtf6He6s/QN8TiwNWeLCZoj5CiJRnWMFhVFukaHoOI1KbHqGnhnl/J6wDRpo8I0fd7
-         DIE0pXHUYRQ3V6sInfXdt7i/M2x4DYfm9MCsS4fo7AUVLWkoRcYqtGM/fCiqkIcxYdK1
-         hKPPeMAplt+2UGvUJHY8QAbGKFZ4UwoBgox+l8MKei3qg7jHMoaHi+I0K3/rFClznYid
-         r+b3V7dhBx/iDlTLg8zODMYiBnvWUkpyKvEKaV9AuUUXpRs8HWqO6tamF444Wj3RH5YZ
-         /8ampRyNylIpDBzksaGvcLUrcJVkdhm5AgXJ0BytOlynw9ZYbdkGDmEAb37hG1QdS7AS
-         OSDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686413764; x=1689005764;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=gmail.com; s=20221208; t=1686413784; x=1689005784;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iykgIKjjxkQC0iF6CPvpsM3rMPFudjl8N64c3ex61jQ=;
-        b=k/z8WmKEL37VXrGQnZt1PXVpTSYOUDinJqCkPANbYvCLIN1VCzZEFlZgu9BspjDuqo
-         R6XrX+LeQHoIswk5pmkZKsimzIEBVN0O14w4MpMvB1m6lpV93gekwd0Yh9H7i9Y1vbRL
-         747Q/XoS388FS7ZiVojTsjzF2lUGD0h0VB0phmwGz8uuFxczj40nRnCnUZ9sp33hgdLk
-         yEkM5O0YYUvKcLJuXNUrfhu35kLGaoHU291turKq8Y7be9CUd/5UVryYfsaUOYarf9KZ
-         iuroTjndcr199S1/dNHSNT9r2HK4bpgOi/xlbdduwMWSjV1VccEBK6+C0FggQjjIb2Z5
-         mMuQ==
-X-Gm-Message-State: AC+VfDwOx+5MIOL+AIX3gXDRlLqslU52J1dKfk57oudqOTGf/rygUofz
-        fzsBll2dpOk4mCMyweeqM5+tH916rhzjdTqfiM0=
-X-Google-Smtp-Source: ACHHUZ5MSGxwbWWnndDcYjuv/3cdAQTV5Zw6a33v7H1CVdOEzhJP97/iR4Mnt8zGvf9ZP03fMF0YpgAyTbQP2Lse/UM=
-X-Received: by 2002:a17:907:7244:b0:97e:a9ed:16bb with SMTP id
- ds4-20020a170907724400b0097ea9ed16bbmr786437ejc.18.1686413763631; Sat, 10 Jun
- 2023 09:16:03 -0700 (PDT)
+        bh=txGjIaM3LfmxDV9bWB1cnjV5M3E57yF3rztzp8u5Chw=;
+        b=I7GHrL0NSbVXhJHd2O53g1s0VGCWl4UX7NDHYvPr5aXjxaCYaIT/NcUcXhy+ivBtR3
+         fLd+ACI0vCEQsDcWuru4h9+DmIyuc1L+2C6uHZSnohwUtCwly7TELsaSFo7KZjC7mYYg
+         Uv4Z6NJtmyIvjy2YO3xHzI3FFGAp6e8E43CxAIcvEduxT66Jv0NmNwV+jrspKrMuSxqf
+         u5OJjnix342MIw09cb7aw6QvDvMHGhEzxleeOVkscLU2HLCfr6BS5yBV55l6QjYxFaE7
+         D08+8Uc1OKCa02HSvihkuNWfcSfao8FU2zLFLB9jkuuPYIB6uSiMEkzyztmfNQvkq76B
+         mA1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686413784; x=1689005784;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=txGjIaM3LfmxDV9bWB1cnjV5M3E57yF3rztzp8u5Chw=;
+        b=Mpqb7Cf4pTH5eDNu2e0yYRHac5WEskWCJmUMIp1CrDwuoeW67Iz5EyMAuZzh9iuJ7w
+         T7DsWMSSniIFjB/lqO4XfDY84cGYIhWawvz8KPoRYguZgULzhaDJl2yXVS3DHcdZDYRR
+         U0+0z/CvEFlR9pZqzThgOs2kBggAku++TzxEeRT6K5GZpeGQNecqdZX/xF3EtAM7htis
+         HvVj653pTorDGFXZUb+DjmUJKpRyKatSKetUin9BqinAuWThpZ7M1dF1+9bi9+DI4kgs
+         k5HfbqJyZu5t2nI8sEkW+VyzIEiAIHmKPFYrSQzwuYJEt1BH990rpIObH8kM8cDPn1rm
+         2z+A==
+X-Gm-Message-State: AC+VfDyh3twCmsBqosEPjP1nrOSwb8anZETbR2txdkz9StCUQWDJvspD
+        Zn3IYQ9Y4W9bUoe7wrhPBbyPEDgjw4aZtIqnomo=
+X-Google-Smtp-Source: ACHHUZ66/WfEKCPYQpligvAJB/N6ziGUVjl8hSsuIDmtlRhps0eKtGx6/CVEFvwAA7lYyGn2MgwpoJksEcX4ayEuRIU=
+X-Received: by 2002:a25:7c41:0:b0:bac:854f:abbd with SMTP id
+ x62-20020a257c41000000b00bac854fabbdmr3447846ybc.64.1686413784290; Sat, 10
+ Jun 2023 09:16:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230610122934.953106-1-bigunclemax@gmail.com>
- <20230610122934.953106-3-bigunclemax@gmail.com> <20230610-ranged-outboard-2aaa0cc36cbd@spud>
- <CALHCpMhHxAdDMGmpD9i2Kt93XqyrW_ABzr7FZSE-0+54LwgzPw@mail.gmail.com> <20230610-enchanted-late-e545ab2d74a0@spud>
-In-Reply-To: <20230610-enchanted-late-e545ab2d74a0@spud>
-From:   Maxim Kiselev <bigunclemax@gmail.com>
-Date:   Sat, 10 Jun 2023 19:15:52 +0300
-Message-ID: <CALHCpMg=k8r4o+qhLi-e3qSUFZp_4N0F=U1vDazoDQgJwZs3tg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] dt-bindings: iio: adc: Add Allwinner
- D1/T113s/R329/T507 SoCs GPADC
-To:     Conor Dooley <conor@kernel.org>
-Cc:     linux-iio@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Ramona Bolboaca <ramona.bolboaca@analog.com>,
-        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Haibo Chen <haibo.chen@nxp.com>,
-        =?UTF-8?Q?Leonard_G=C3=B6hrs?= <l.goehrs@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
+Received: by 2002:a05:7010:a78f:b0:35e:3174:a199 with HTTP; Sat, 10 Jun 2023
+ 09:16:23 -0700 (PDT)
+Reply-To: werinammawussi@gmail.com
+From:   Werinam Mawussi <wedemmawussi@gmail.com>
+Date:   Sat, 10 Jun 2023 18:16:23 +0200
+Message-ID: <CAJHkjaBdb+z8_LveHx-HdWJmoM44+crm3VeL-ERt9xYHrvrU4Q@mail.gmail.com>
+Subject: Important Notification
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=5.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
+        *      blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [URIs: you.contact]
+        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:b2c listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5007]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [wedemmawussi[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.2 MONEY_FREEMAIL_REPTO Lots of money from someone using free
+        *      email?
+        *  1.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=D1=81=D0=B1, 10 =D0=B8=D1=8E=D0=BD. 2023=E2=80=AF=D0=B3. =D0=B2 18:53, Con=
-or Dooley <conor@kernel.org>:
->
-> On Sat, Jun 10, 2023 at 06:48:08PM +0300, Maxim Kiselev wrote:
-> > Hey,
-> >
-> > =D1=81=D0=B1, 10 =D0=B8=D1=8E=D0=BD. 2023=E2=80=AF=D0=B3. =D0=B2 18:06,=
- Conor Dooley <conor@kernel.org>:
-> >
-> > ...
-> >
-> > > >+
-> > > >+    required:
-> > > >+      - reg
-> > > >+
-> > > >+    additionalProperties: false
->
-> [1]
->
-> > > >+
-> > > >+required:
-> > > >+  - "#io-channel-cells"
-> > > >+  - clocks
-> > > >+  - compatible
-> > > >+  - interrupts
-> > > >+  - reg
-> > > >+  - resets
-> > > >+
-> > > >+unevaluatedProperties: false
-> > >
-> > > How come this one changed to unevaluatedProperties: false?
-> > > Wasn't it for the ADC that we previously discussed whether
-> > > additionalProperties: false was correct or not?
-> >
-> > Hmm, I changed it to `unevaluatedProperties: false` as you suggested
-> > in this message
-> > https://lore.kernel.org/lkml/20230604-afternoon-frighten-42222010557b@s=
-pud/
->
-> That was about the adc child nodes [1], not at the top level, no?
+I am bringing this notice to your attention in respect of the death of
+a client of mine that has the same surname as you and his fund valued
+at $19.9M to be paid to you.contact me at werinammawussi@gmail.com for
+more details.
 
-Indeed, I confused it, sorry.
+Yours Sincerely,
+Werinam Mawussi,
+Attorney At Law.
