@@ -2,117 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F32AB72AB9A
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 15:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7940072ABA3
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 15:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234512AbjFJNCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 09:02:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45008 "EHLO
+        id S231782AbjFJNNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 09:13:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbjFJNCF (ORCPT
+        with ESMTP id S230311AbjFJNNp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 09:02:05 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E2D3AB5;
-        Sat, 10 Jun 2023 06:02:03 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id d75a77b69052e-3f9b7345fb1so21319611cf.1;
-        Sat, 10 Jun 2023 06:02:03 -0700 (PDT)
+        Sat, 10 Jun 2023 09:13:45 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F04426B1;
+        Sat, 10 Jun 2023 06:13:44 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id d9443c01a7336-1b3b5a5134dso596415ad.2;
+        Sat, 10 Jun 2023 06:13:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686402123; x=1688994123;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sid9PPnebkV661LCkg884rwv7/EfHsWnCoqGwZtAuUM=;
-        b=fhxZj4OkS8aCcj55qX+CEOfaluClflEKfym7Jqt7izDQ98GoAzcgVfN8X6JMvooPZK
-         0ta/WHHbhJEfBXjb1+e3wXKlw736PQX3wYQWAXt5z8cUL5snHW8aSouxy/cacofEfXWA
-         c39ENWDsvlInvQupPQ8aTho52yKUyt8OibHo7uMR1AFG/vX4MA2/jyC/kJoiclI6MdRn
-         11LRm4iSyPaBmRQ+C3ahGdej2hrrs2LS/dj9oJszuK8SoNwxqGD2aL2hkXJflXoLZRcM
-         kjlrnbW+NZbwQv3NzMHbLArhwUDsMVc1TZI36Ib4cJnsX4n5rN8KuUCMfioBukQAw/ak
-         PUSQ==
+        d=gmail.com; s=20221208; t=1686402823; x=1688994823;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xsZHpFFEg1aiG9pWfwZJZiPP97oTmn5dJUzpJC9EWqY=;
+        b=Lhx3+goHLzT60FeyKoZ6DHIuzTkj3UxiIdQ1KMPp0aBK2bxWJ1sRcCob+LT9u1rEsf
+         p4+oQUxXGRoxTYqRAtP15/E2nN+/XqSjcVfEsM/5LXCw/GhkLiqcxiQVTGkxkp7TFZjs
+         21rlXwkHxFNgBxyOmBweFkidGSYPbmd17ftthCB9FdSow+LmbmObHW17eAvEvtPngdUF
+         7LYY6kvbXQMyEHZr92k58N+4pSafCiCkYZMnKrhGjvieZYsImTNFn+bfpYmaGWE+4WJd
+         AKvLXrEDtyti/IjjoKKq7yphIKGtR4uzAZxDT5gtcfi1ZKSfzbSBg7cGBFggMYL6lDy4
+         R63Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686402123; x=1688994123;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sid9PPnebkV661LCkg884rwv7/EfHsWnCoqGwZtAuUM=;
-        b=cq20WDFAOUY/w38uPUvgndBJIltTad/3142JUFvQ8zfoyE9/BsLKVtX3x3MRVrr8Qb
-         uCNObSPWuNrZJCKzEMC2EWZ21IdMfM7cn+zJbBCn13wE0v6f5S3kLpgIdDEf8LqONZRr
-         vz2Uyx5KePkYCzosJuzdt16I78b1yLx7MgKC1ibN/n64sfNzxRf8jA1CdLhO9/97ujUt
-         HOVhGKHjTgDPz4W9/YqBVsA9cXw0rsXsXyoHrx+3O4ZYTU4edY1kAywEoITF3f7a/Zf5
-         /IaqF0kPE+Q6FXxw/r/lcMQzgOOGm0YQXA/rrPLOhYkJwDX2/IraBOVJQ8eXjos1SyL3
-         EgWw==
-X-Gm-Message-State: AC+VfDxpnLfF+WD1TJVdQy52v0TJpD98HdzmlD86KdzfcMxqK4oVJRTl
-        oYSNjKs+mpECpQjm3GSCyQj6D+eHgsJSLyXppFmc1TOEO2Y=
-X-Google-Smtp-Source: ACHHUZ6LKdPbTm5X31ZA/PsQ9OBswkcS6SK0d8zfA6V4BWnNfU7VbMmoITTr1LD2gSomxZ3X7g2Knha0VevdFa6pgHc=
-X-Received: by 2002:a05:6214:268e:b0:621:78a:dd84 with SMTP id
- gm14-20020a056214268e00b00621078add84mr5238735qvb.47.1686402122252; Sat, 10
- Jun 2023 06:02:02 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686402823; x=1688994823;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xsZHpFFEg1aiG9pWfwZJZiPP97oTmn5dJUzpJC9EWqY=;
+        b=UNB7TrcDF+oucUTktGlArbZoZ7zpytqefwAJBxT2CasgPWgcOJtVpP3bKQvD1PLNwL
+         6PruJfuAbxEr4tl3q+zVZmGnUDphnQHv4LCpbHDfCXj13JVym195pOVmfljKJc6MudrH
+         1k7Sp5Ju9JMBT7KkiaP3aqRrl6mjuiFamLB2kY5aeJT4n16NLB0Hl9JzClEMj9x1NTK9
+         21Bvl0enPCH+paykFjceyGqi/1yNctTxjdqFxSur65lzobz4yLzKQE+aCrx2NBMYdPUv
+         /hmfvots/wbEGCQaodqRq3qhxzVOQYyHab0jHyvoSUXt1kmdOruAyMdtxK0u7LZFQ9qx
+         /dQQ==
+X-Gm-Message-State: AC+VfDxXkV8PzOw6u1aNlmOBeRLLzX/mBn1o8iyo3dRjpJOdE3mFQ1Ft
+        VnBDUGM1gOdKyvxbH020EgxcWBKDJ9EG0FBnwx4=
+X-Google-Smtp-Source: ACHHUZ5HXZMOmfbEv2/eWLiHRpM3NQeADEJCnzd539jzBqe8sDyS60Wc8qanH4oltZdQRMjKrxNtBg==
+X-Received: by 2002:a17:902:c411:b0:1af:b7cd:5961 with SMTP id k17-20020a170902c41100b001afb7cd5961mr2655583plk.1.1686402823481;
+        Sat, 10 Jun 2023 06:13:43 -0700 (PDT)
+Received: from ?IPv6:2409:8a55:301b:e120:20b4:84e8:2690:6d80? ([2409:8a55:301b:e120:20b4:84e8:2690:6d80])
+        by smtp.gmail.com with ESMTPSA id jj19-20020a170903049300b001aae64e9b36sm5001073plb.114.2023.06.10.06.13.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 10 Jun 2023 06:13:42 -0700 (PDT)
+Subject: Re: [PATCH net-next v3 1/4] page_pool: frag API support for 32-bit
+ arch with 64-bit DMA
+To:     Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     brouer@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        linux-rdma@vger.kernel.org
+References: <20230609131740.7496-1-linyunsheng@huawei.com>
+ <20230609131740.7496-2-linyunsheng@huawei.com>
+ <4f1a0b7d-973f-80f5-cc39-74f09622ccef@redhat.com>
+From:   Yunsheng Lin <yunshenglin0825@gmail.com>
+Message-ID: <1bbf2afa-91b2-a3d0-60e0-81cd386eb68d@gmail.com>
+Date:   Sat, 10 Jun 2023 21:13:21 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-References: <20230607153600.15816-1-osmtendev@gmail.com> <b7a3219e-4e0a-7a08-439a-a8a6e35271ca@linuxfoundation.org>
-In-Reply-To: <b7a3219e-4e0a-7a08-439a-a8a6e35271ca@linuxfoundation.org>
-From:   Osama Muhammad <osmtendev@gmail.com>
-Date:   Sat, 10 Jun 2023 18:01:51 +0500
-Message-ID: <CAK6rUAMODPLQeUawXMW_RNiJFdukOqdhS5GA5XRAq4U9bnQdNg@mail.gmail.com>
-Subject: Re: [PATCH v2] selftests: prctl: Add new prctl test for PR_SET_NAME
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     shuah@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <4f1a0b7d-973f-80f5-cc39-74f09622ccef@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On 2023/6/9 23:02, Jesper Dangaard Brouer wrote:
+...
 
-I looked into it and tried to use TASK_COMM_LEN in the test. Even
-though I included "linux/sched.h '', I was not able to compile the
-test because it couldn't find it in the header file.
-I dived deep into the issue and turns out header file mapped in
-/usr/include/linux/sched.h is actually mapped to
-/include/uapi/linux/sched.h[1] in linux source,
-where TASK_COMM_LEN is not even defined. Instead TASK_COMM_LEN is
-defined in /include/linux/sched.h which is not mapped to any header
-files in
-userspace(/(/usr/include/linux).
-I also tried to find the TASK_COM_LEN in /usr/include/linux/ but I
-couldn't find it. Following are the search results.
-grep -rnw '/usr/include/linux/' -e 'TASK_COMM_LEN"
-RESULTS OF COMMAND :- /usr/include/linux/taskstats.h:38:#define
-TS_COMM_LEN 32 /* should be >= TASK_COMM_LEN
-Based on this information, I have two questions:
-1. Would this require a fix to move 'TASK_COMM_LEN' macro from
-/include/linux/sched.h to UAPI headers /include/uapi/linux/sched.h.
-2. Is there any other way to access TASK_COMM_LEN in the selftest that
-I'm not aware of?
+>>                    PP_FLAG_DMA_SYNC_DEV |\
+>>                    PP_FLAG_PAGE_FRAG)
+>>   +#define PAGE_POOL_DMA_USE_PP_FRAG_COUNT    \
+>> +        (sizeof(dma_addr_t) > sizeof(unsigned long))
+>> +
+> 
+> I have a problem with the name PAGE_POOL_DMA_USE_PP_FRAG_COUNT
+> because it is confusing to read in an if-statement.
 
-[1]:-https://elixir.bootlin.com/linux/v5.15.116/source/include/uapi/linux/sched.h
+Actually, it is already in an if-statement before this patch:)
+Maybe starting to use it in the driver is confusing to you?
+If not, maybe we can keep it that for now, and change it when
+we come up with a better name.
 
-Thanks,
-Osama
+> 
+> Proposals rename to:  DMA_OVERLAP_PP_FRAG_COUNT
+>  Or:  MM_DMA_OVERLAP_PP_FRAG_COUNT
+>  Or:  DMA_ADDR_OVERLAP_PP_FRAG_COUNT
 
-On Sat, 10 Jun 2023 at 02:43, Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> On 6/7/23 09:36, Osama Muhammad wrote:
-> > This patch will add the new test, which covers the prctl call
-> > PR_SET_NAME command. The test tries to give a name using the PR_SET_NAME
-> > call and then confirm it that it changed correctly by using  PR_GET_NAME.
-> > It also tries to rename it with empty name.In the test PR_GET_NAME is
-> > tested by passing null pointer to it and check its behaviour.
-> >
-> > Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
-> >
-> > ---
-> > changes since v1:
-> >       -Used TASK_COMM_LEN instead of using numerical value 16.
->
-> Please add linux/sched.h here as an include to pull this.
-> It is good to add an explicit include as opposed taking
-> a chance on it being included from another include.
->
-> thanks,
-> -- Shuah
+It seems DMA_ADDR_OVERLAP_PP_FRAG_COUNT is better,
+and DMA_ADDR_UPPER_OVERLAP_PP_FRAG_COUNT seems more accurate if a
+longer macro name is not an issue here.
+
+> 
+> Notice how I also removed the prefix PAGE_POOL_ because this is a MM-layer constraint and not a property of page_pool.
+
+I am not sure if it is a MM-layer constraint yet.
+Do you mean 'MM-layer constraint' as 'struct page' not having
+enough space for page pool with 32-bit arch with 64-bit DMA?
+If that is the case, we may need a more generic name for that
+constraint instead of 'DMA_ADDR_OVERLAP_PP_FRAG_COUNT'?
+
+And a more generic name seems confusing for page pool too, as
+it doesn't tell that we only have that problem for 32-bit arch
+with 64-bit DMA.
+
+So if the above makes sense, it seems we may need to keep the
+PAGE_POOL_ prefix, which would be
+'PAGE_POOL_DMA_ADDR_UPPER_OVERLAP_PP_FRAG_COUNT' if the long
+name is not issue here.
+
+Anyway, naming is hard, we may need a seperate patch to explain
+it, which is not really related to this patchset IHMO, so I'd
+rather keep it as before if we can not come up with a name which
+is not confusing to most people.
+
+> 
+> 
+> --Jesper
+> 
+> 
