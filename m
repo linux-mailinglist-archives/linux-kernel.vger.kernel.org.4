@@ -2,70 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F2F472AA81
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 11:13:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD29772AA83
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 11:13:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231833AbjFJJNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 05:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33056 "EHLO
+        id S233816AbjFJJNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 05:13:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjFJJNE (ORCPT
+        with ESMTP id S229640AbjFJJNb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 05:13:04 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58EEF3A98
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 02:13:03 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-977c8423dccso769752466b.1
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 02:13:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686388382; x=1688980382;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=el5t90CX0KZg71r46Aq58k54+iI17+shn/UMUNopsqg=;
-        b=vyZHYGkzfoQFiksS2nO9MCLsI4oWI8oIDoMCiYbDQBfFmuFFn4A6OtLOy+DaTw8W6K
-         /jQURkeJNjvHhzUzaF+4Mntf/OsbwSdLEqt6U5alv05OJxgvqZRQbMliqb2NUF2/nRpo
-         qq36oSJhzCuqd2byp4w4TEFqx/5nsR+fQVsmMYPo2MijngwnxtwCdoCYSFIrCpMXhwe4
-         nStfU0z/j4rcTy/J61LeJxtBgoHFUR2TWIaAQkLxMevFdBgDj7bKv9DA7MLmxwyfr2UQ
-         TpC97pYtzE39afHUviXBsKzPB9vg+w88NrX7ecG1RCs9j4o9uE+S/DA9yP17ADNcwj32
-         7pGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686388382; x=1688980382;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=el5t90CX0KZg71r46Aq58k54+iI17+shn/UMUNopsqg=;
-        b=Kx8XS5e0ANZzOeHPnb7mEB5ezzJE46P5TQiBO5SaWsrU0935m2KegZKCckgd7PCQx/
-         Ev1slDKtRSTDzbQbCdEFrsF1zr1Tsl++QFLbYRB4SeOTGYxtXFAB7x0cDy/9EiKevavn
-         6Nkl2rmdL1cfWPtaQ/vL7+DIt6PVfu4+KhMpFtTorVP2Vp5+3ECsY6/NalgTxKxv363E
-         AdstJEVJYkTHBMX7g2K/V+Ls9tEV0vHGwp9cUOh9R/Snthx9piVmvGi3fibVj0AIu/AM
-         bAb6pX8MnWBFaqaEMI5CP27C7ir+a1GZ8DiytwUU4lkBp+K3GtJl4Rn2/NTC9rQa6sRn
-         NA0A==
-X-Gm-Message-State: AC+VfDxL6K2yPaeXL/02QcMeYb7g2rjbbtXYExYyiHB/1LzlfK002jCj
-        HGLfqXHRx0pp0voaLYrLUZdetA==
-X-Google-Smtp-Source: ACHHUZ4Dv2xzIY5s4ZpE8GvaEA/T+zxaJeqRlsL+nIBhW18zrjRMuyKw4lwlg0Drr7r2jioTo7bLpg==
-X-Received: by 2002:a17:907:7202:b0:970:28c:f960 with SMTP id dr2-20020a170907720200b00970028cf960mr4219760ejc.17.1686388381629;
-        Sat, 10 Jun 2023 02:13:01 -0700 (PDT)
-Received: from krzk-bin.. ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id b7-20020a170906038700b009787b18c253sm2347012eja.181.2023.06.10.02.13.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Jun 2023 02:13:01 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [GIT PULL] pinctrl: dt-bindings: qcom: for v6.5
-Date:   Sat, 10 Jun 2023 11:12:58 +0200
-Message-Id: <20230610091258.4903-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Sat, 10 Jun 2023 05:13:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF753AA7;
+        Sat, 10 Jun 2023 02:13:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 35A2661EFC;
+        Sat, 10 Jun 2023 09:13:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ADBEC433D2;
+        Sat, 10 Jun 2023 09:13:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686388409;
+        bh=H/Vfs0aEFdgQkIfSQThXTUsI3RD7onVbhwTrQTiazIE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nYYM3CA9Zn2yQwmIpZrpUWHKbgAvhbKUDWBzQgLon8OAJ6l68R/AZp0JckEm6rNUd
+         oJZEM7jal5mQbAyPfy+TQ164XW6h9bXXxwgKETgAa/VaC5yGZDOumOsKrdCsnhZ3RG
+         7rY6W1NqkKqsYUR6eQ3QN2iADX1wVhK2Qbl90f0HyJ+2ws/94/a16RQM01gVnMzHR3
+         BKGrSw+Op/gW4GX77RIJhOUncR0TflbCcovc5IRDc/Rx8IXhVbBdQFw47jKdDPNGom
+         ETSIs4mzB3HRGNk13MYCCE94wEH+/lRA8k76Pk00F8fpw2/2ZoQna/bQUdQeDaYE3R
+         wF4IsRJQbaSHw==
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-um@lists.infradead.org,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH v8 00/11] Unify <linux/export.h> and <asm/export.h>, remove EXPORT_DATA_SYMBOL(), faster TRIM_UNUSED_KSYMS
+Date:   Sat, 10 Jun 2023 18:13:09 +0900
+Message-Id: <20230610091320.1054554-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,33 +56,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+This patch set refactors modpost first to make it easier to
+add new code.
 
-are available in the Git repository at:
+My goals:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/qcom-pinctrl-6.5
+ - Refactors EXPORT_SYMBOL, <linux/export.h> and <asm/export.h>.
+   You can still put EXPORT_SYMBOL() in *.S file, very close to the definition,
+   but you do not need to care about whether it is a function or a data.
+   This removes EXPORT_DATA_SYMBOL().
 
-for you to fetch changes up to 647c16ac7b15fc8fe6ab679690ac2ffe7c53abd3:
+ - Re-implement TRIM_UNUSED_KSYMS in one-pass.
+   This makes the building faster.
 
-  dt-bindings: pinctrl: qcom,sm7150-tlmm: simplify with unevaluatedProperties (2023-05-12 18:23:51 +0200)
+ - Move the static EXPORT_SYMBOL check to modpost.
+   This also makes the building faster.
 
-----------------------------------------------------------------
-Qualcomm pinctrl Devicetree bindings changes for v6.5
+This patch set is applicable to linux-next 20230608.
 
-Simplify remaining bindings with usage of unevaluatedProperties.  This
-will have the same functional effect with less code.
+V7 fixed build errors reported for Xtensa.
 
-----------------------------------------------------------------
-Krzysztof Kozlowski (4):
-      dt-bindings: pinctrl: qcom,ipq9574-tlmm: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,sc8280xp-tlmm: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,qcm2290-tlmm: simplify with unevaluatedProperties
-      dt-bindings: pinctrl: qcom,sm7150-tlmm: simplify with unevaluatedProperties
+Previous version
+v7: https://lore.kernel.org/linux-kbuild/20230608142428.256985-1-masahiroy@kernel.org/T/#mbaddcee18c9a8cf0a9b1f3fc562d09526cb69540
+v6: https://lore.kernel.org/linux-kbuild/CAK7LNARjzGnj+sYX=_5yQ+8qoOQ2KB5N-_Ye53Ru3=XicezTYw@mail.gmail.com/T/#t
+v5: https://lore.kernel.org/linux-kbuild/CAK7LNARBiOywrMLbR=9N35sk19U0QM3xcPy7d1WqV-eyb4W23w@mail.gmail.com/T/#t
+v4: https://lore.kernel.org/linux-kbuild/CAK7LNASDzy9RERN6+q6WgR4ROYZQue=SBqgbcoYuVePByHtk6Q@mail.gmail.com/T/#t
+v3: https://lore.kernel.org/all/20220928063947.299333-1-masahiroy@kernel.org/
 
- .../devicetree/bindings/pinctrl/qcom,ipq9574-tlmm.yaml       | 11 +----------
- .../devicetree/bindings/pinctrl/qcom,qcm2290-tlmm.yaml       | 11 +----------
- .../devicetree/bindings/pinctrl/qcom,sc8280xp-tlmm.yaml      | 12 +-----------
- .../devicetree/bindings/pinctrl/qcom,sm7150-tlmm.yaml        | 11 +----------
- 4 files changed, 4 insertions(+), 41 deletions(-)
+
+Changes in v8:
+  - Fix the definition of ____EXPORT_SYMBOL() to v7.
+    It seems to cause a regression for xtensa. (reported by 0day bot)
+
+Changes in v7:
+  - New patch
+  - Fix sparse warning reported by 0day bot
+    https://lore.kernel.org/linux-kbuild/202305280830.Rj5ltc9M-lkp@intel.com/
+  - Remove *.usyms
+ - New patch
+
+Changes in v6:
+  - Fix build error on UML
+  - Make the symbol name in the warning more precise
+
+Changes in v5:
+  - Fix build error on ARM
+  - Clean up more
+
+Changes in v4:
+  - Version 3 did not work if a same name symbol exists in a different compilation unit
+    Fix it.
+
+Changes in v3:
+  - Move struct kernel_symbol to kernel/module/internal.h
+
+Changes in v2:
+  - Use KSYMTAB_FUNC and KSYMTAB_DATA for functions and data, respectively
+    This distinction is needed for ia64.
+
+Masahiro Yamada (11):
+  Revert "[PATCH] uml: export symbols added by GCC hardened"
+  modpost: pass struct module pointer to check_section_mismatch()
+  kbuild: generate KSYMTAB entries by modpost
+  ia64,export.h: replace EXPORT_DATA_SYMBOL* with EXPORT_SYMBOL*
+  modpost: check static EXPORT_SYMBOL* by modpost again
+  modpost: squash sym_update_namespace() into sym_add_exported()
+  modpost: use null string instead of NULL pointer for default namespace
+  kbuild: implement CONFIG_TRIM_UNUSED_KSYMS without recursion
+  modpost: merge two similar section mismatch warnings
+  modpost: show offset from symbol for section mismatch warnings
+  linux/export.h: rename 'sec' argument to 'license'
+
+ .gitignore                        |   2 -
+ Makefile                          |  22 +--
+ arch/ia64/include/asm/Kbuild      |   1 +
+ arch/ia64/include/asm/export.h    |   3 -
+ arch/ia64/kernel/head.S           |   2 +-
+ arch/ia64/kernel/ivt.S            |   2 +-
+ arch/um/os-Linux/user_syms.c      |   7 -
+ include/asm-generic/export.h      |  83 +----------
+ include/asm-generic/vmlinux.lds.h |   1 +
+ include/linux/export-internal.h   |  49 +++++++
+ include/linux/export.h            | 126 ++++------------
+ include/linux/pm.h                |  14 +-
+ kernel/module/internal.h          |  12 ++
+ scripts/Makefile.build            |  27 +---
+ scripts/Makefile.modpost          |   7 +
+ scripts/adjust_autoksyms.sh       |  73 ----------
+ scripts/basic/fixdep.c            |   3 +-
+ scripts/check-local-export        |  70 ---------
+ scripts/gen_autoksyms.sh          |  62 --------
+ scripts/gen_ksymdeps.sh           |  30 ----
+ scripts/mod/modpost.c             | 233 +++++++++++++++++++-----------
+ scripts/mod/modpost.h             |   1 +
+ scripts/remove-stale-files        |   4 +
+ 23 files changed, 268 insertions(+), 566 deletions(-)
+ delete mode 100644 arch/ia64/include/asm/export.h
+ delete mode 100755 scripts/adjust_autoksyms.sh
+ delete mode 100755 scripts/check-local-export
+ delete mode 100755 scripts/gen_autoksyms.sh
+ delete mode 100755 scripts/gen_ksymdeps.sh
+
+-- 
+2.39.2
+
