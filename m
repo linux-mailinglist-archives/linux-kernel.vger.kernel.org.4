@@ -2,206 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9870272AB0F
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 13:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6FFB72AB1F
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 13:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234352AbjFJLFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 07:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52814 "EHLO
+        id S231642AbjFJLWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 07:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjFJLFE (ORCPT
+        with ESMTP id S229639AbjFJLWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 07:05:04 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115622D55;
-        Sat, 10 Jun 2023 04:05:02 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-543a09ee32eso1240438a12.1;
-        Sat, 10 Jun 2023 04:05:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686395101; x=1688987101;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7dBfYYGBslBF4bmtNYVdnpM97g0oABxKKJJ2EhyCgIc=;
-        b=ClUo/umlDklAa2WkPhtQIVfQxie4UhuP+yU29/3nBXyslSFT/NMqkALeN2E5vb4Hpd
-         z1yAUWR7RQvceJvv9Ls/PRdG3c/fJl5caZwSmflS0INPA6YZzGZHY8D6bGy5UcObbDLZ
-         yRzASSDIgb76LkI5qykDIGzTIdoumee441eHZGDdpg/wfHvRHZ7bdGce/RrD1wS+N/Le
-         UPSJotv3xnhrRa9ukMWO46Zcgxm/cIpVSxps8UqVB64Hsqw9lgD10jHiNsjsvNdKx+y1
-         nwTqJ6Ok7wC+EpV65y+f6ussVrnfCFn0i7MyFjqeQQdXD9YB0UBcTVY6rlN2xJhe8CDT
-         RHlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686395101; x=1688987101;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7dBfYYGBslBF4bmtNYVdnpM97g0oABxKKJJ2EhyCgIc=;
-        b=e86yu/ZhCnizLg0VKByA7LD94OTQHlyzVGKT4E/Sn3WqVv9gUZy1OBCyNVoWXy9KWC
-         u8fq0gCpx0LufZatWNYAHFja+IVg/DTszdHDsx310rutMHFfphxfTuJws5fK+ekCrVPn
-         HCU/Df3uBm7DwuLuGj8AE3FHxXaPsHxNMgbSOtz+/o5BYl4Te9PZ9M/G4sRUuL3YiSDQ
-         ujTRC8LlHEp3T02vNEiB/Fx6g53smKkznK4lpYMvOfkROoKY2KNS3fUedtCEnny1CVb0
-         yP/KxbMFxhyrF5aLA8i/PJG6QGQdalhfVq7ZlZfJP2hgw9DEW9oEVvEdaBIIG3UPKruj
-         rBww==
-X-Gm-Message-State: AC+VfDyiJcDmveJHvj3mG6bMib1JDBAL/9k8qgP2Ho1nFjLlXfAlXTVU
-        v5yASVl5FwbbgiLUu0oC068=
-X-Google-Smtp-Source: ACHHUZ5SW6wDpsvTFfe6r3H/woWn1BXuXnXIr8wM3HUf02TTfApB95iqRZNOKPYHQ/ILteIP1oXnOQ==
-X-Received: by 2002:a17:90b:3658:b0:256:28ab:de61 with SMTP id nh24-20020a17090b365800b0025628abde61mr8716106pjb.11.1686395101118;
-        Sat, 10 Jun 2023 04:05:01 -0700 (PDT)
-Received: from smtpclient.apple ([2402:d0c0:2:a2a::1])
-        by smtp.gmail.com with ESMTPSA id y4-20020a17090a154400b00256395cb599sm6420477pja.38.2023.06.10.04.04.57
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 10 Jun 2023 04:05:00 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.400.51.1.1\))
-Subject: Re: [PATCH 4/4] Docs/RCU/rculist_nulls: Drop unnecessary '_release'
- in insert function
-From:   Alan Huang <mmpgouride@gmail.com>
-In-Reply-To: <4071FE01-BEB5-4BEE-A424-F50F0E0E3410@gmail.com>
-Date:   Sat, 10 Jun 2023 19:04:44 +0800
-Cc:     SeongJae Park <sj@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>, corbet@lwn.net,
-        rcu@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <F61F0ED7-D82B-412F-971F-691856539B6C@gmail.com>
-References: <CAEXW_YQFqW2QcAuHZEhc_GaUaB-=QOS0WgUOizd=FYwtFQ8vag@mail.gmail.com>
- <20230609191206.30465-1-sj@kernel.org>
- <46440869-644a-4982-b790-b71b43976c66@paulmck-laptop>
- <4071FE01-BEB5-4BEE-A424-F50F0E0E3410@gmail.com>
-To:     paulmck@kernel.org
-X-Mailer: Apple Mail (2.3731.400.51.1.1)
+        Sat, 10 Jun 2023 07:22:44 -0400
+Received: from m126.mail.126.com (m126.mail.126.com [220.181.12.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA1E33598;
+        Sat, 10 Jun 2023 04:22:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=ejXHl
+        lPedew2zZARz5FSqiDrl9loQ6Y6ONdoRA6fE/c=; b=Wn+/JbFHJNpWrtizXkBrS
+        iEka2EspdeI7gqIKk3QbwQN5QH7MnodgVHLzKs++E6lwNNF1Eyqfn8wElY7c5Rjn
+        pg2sl54ceQjw367UNoX2/Qzn1ncUyy30l23qJrQU47M2puFz30yNYVrynbVnB2ZO
+        Db97JuUImjn2eiYGBg8p/g=
+Received: from localhost.localdomain (unknown [202.112.238.192])
+        by zwqz-smtp-mta-g2-1 (Coremail) with SMTP id _____wC3vTnyWIRktQIrAA--.13080S2;
+        Sat, 10 Jun 2023 19:05:23 +0800 (CST)
+From:   Yi He <clangllvm@126.com>
+To:     ast@kernel.org
+Cc:     daniel@iogearbox.net, andrii@kernel.org, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        rostedt@goodmis.org, mhiramat@kernel.org, davem@davemloft.net,
+        kuba@kernel.org, hawk@kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+        Yi He <clangllvm@126.com>
+Subject: [PATCH] Add a sysctl option to disable bpf offensive helpers.
+Date:   Sat, 10 Jun 2023 11:05:18 +0000
+Message-Id: <20230610110518.123183-1-clangllvm@126.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wC3vTnyWIRktQIrAA--.13080S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxKrW3JryUGr4kXr43uw43GFg_yoW3tF18pF
+        97tryjyr40qF4IvrW7J3y8GryFkw4DXrW7Ca4kK3yfZF43XrZ2qr1kKF4agF1rZrZFg3ya
+        vws2vFW5ua1Ika7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRjFAdUUUUU=
+X-Originating-IP: [202.112.238.192]
+X-CM-SenderInfo: xfod0wpooyzqqrswhudrp/1tbiYBSKy1pELSXNFAAAs6
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Some eBPF helper functions have been long regarded as problematic[1].
+More than just used for powerful rootkit, these features can also be 
+exploited to harm the containers by perform various attacks to the 
+processes outside the container in the enrtire VM, such as process 
+DoS, information theft, and container escape.  
 
-> 2023=E5=B9=B46=E6=9C=8810=E6=97=A5 13:37=EF=BC=8CAlan Huang =
-<mmpgouride@gmail.com> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> Hi Paul,
->=20
->> 2023=E5=B9=B46=E6=9C=8810=E6=97=A5 07:42=EF=BC=8CPaul E. McKenney =
-<paulmck@kernel.org> =E5=86=99=E9=81=93=EF=BC=9A
->>=20
->> On Fri, Jun 09, 2023 at 07:12:06PM +0000, SeongJae Park wrote:
->>> On Fri, 19 May 2023 14:52:50 -0400 Joel Fernandes =
-<joel@joelfernandes.org> wrote:
->>>=20
->>>> On Thu, May 18, 2023 at 6:40=E2=80=AFPM SeongJae Park =
-<sj@kernel.org> wrote:
->>>>>=20
->>>>> The document says we can avoid extra smp_rmb() in =
-lockless_lookup() and
->>>>> extra _release() in insert function when hlist_nulls is used.  =
-However,
->>>>> the example code snippet for the insert function is still using =
-the
->>>>> extra _release().  Drop it.
->>>>>=20
->>>>> Signed-off-by: SeongJae Park <sj@kernel.org>
->>>>> ---
->>>>> Documentation/RCU/rculist_nulls.rst | 2 +-
->>>>> 1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>=20
->>>>> diff --git a/Documentation/RCU/rculist_nulls.rst =
-b/Documentation/RCU/rculist_nulls.rst
->>>>> index 5cd6f3f8810f..463270273d89 100644
->>>>> --- a/Documentation/RCU/rculist_nulls.rst
->>>>> +++ b/Documentation/RCU/rculist_nulls.rst
->>>>> @@ -191,7 +191,7 @@ scan the list again without harm.
->>>>>  obj =3D kmem_cache_alloc(cachep);
->>>>>  lock_chain(); // typically a spin_lock()
->>>>>  obj->key =3D key;
->>>>> -  atomic_set_release(&obj->refcnt, 1); // key before refcnt
->>>>> +  atomic_set(&obj->refcnt, 1);
->>>>>  /*
->>>>>   * insert obj in RCU way (readers might be traversing chain)
->>>>>   */
->>>>=20
->>>> If write to ->refcnt of 1 is reordered with setting of ->key, what
->>>> prevents the 'lookup algorithm' from doing a key match (obj->key =3D=3D=
+When a container is granted to run eBPF tracing programs (which 
+need CAP_SYS_ADMIN), it can use the eBPF KProbe programs to hijack the 
+process outside the contianer and to escape the containers. This kind 
+of risks is limited as privieleged containers are warned and can hardly
+ be accessed by the attackers.
 
->>>> key) before the refcount has been initialized?
->>>>=20
->>>> Are we sure the reordering mentioned in the document is the same as
->>>> the reordering prevented by the atomic_set_release()?
->>>=20
->>> Paul, may I ask your opinion?
->>=20
->> The next line of code is this:
->>=20
->> hlist_nulls_add_head_rcu(&obj->obj_node, list);
->>=20
->> If I understand the code correctly, obj (and thus *obj) are not
->> visible to readers before the hlist_nulls_add_head_rcu().  And
->> hlist_nulls_add_head_rcu() uses rcu_assign_pointer() to ensure that
->> initialization (including both ->key and ->refcnt) is ordered before
->> list insertion.
->>=20
->> Except that this memory is being allocated from a slab cache that was
->> created with SLAB_TYPESAFE_BY_RCU.  This means that there can be =
-readers
->> who gained a reference before this object was freed, and who still =
-hold
->> their references.
->>=20
->> Unfortunately, the implementation of try_get_ref() is not shown.  =
-However,
->> if ->refcnt is non-zero, this can succeed, and if it succeeds, we =
-need
->> the subsequent check of obj->key with key in the lookup algorithm to
->> be stable.  For this check to be stable, try_get_ref() needs to use =
-an
->> atomic operation with at least acquire semantics =
-(kref_get_unless_zero()
->> would work), and this must pair with something in the initialization.
->>=20
->> So I don't see how it is safe to weaken that atomic_set_release() to
->> atomic_set(), even on x86.
->=20
-> I totally agree, but only in the case of using hlist_nulls.
->=20
-> That means, atomic_set_release() is not enough in the case without =
-using hlist_nulls,
-> we must ensure that storing to obj->next (in hlist_add_head_rcu) is =
-ordered before storing
+Even without CAP_SYS_ADMIN, since Linux 5.6, programs with with CAP_BPF + 
+CAP_PERFMON can use dangerous eBPF helpers such as bpf_read_user to steal 
+sensitive data (e.g., sshd/nginx private key) in other containers. 
 
-Typo: not before, but after.
+Currently, eBPF users just enable CAP_SYS_ADMIN and also enable the offensive
+features. Since lots of eBPF tools are distributed via containers, attackers 
+may perform supply chain attacks to create and spread their eBPF malware, 
+To prevent the abuse of these helpers, we introduce a new sysctl option 
+(sysctl_offensive_bpf_disabled) to cofine the usages of five dangerous 
+helpers:
+- bpf_probe_write_user
+- bpf_probe_read_user
+- bpf_probe_read_kernel
+- bpf_send_signal
+- bpf_override_return
 
-> to obj->key. Otherwise, we can get the new =E2=80=98next' and the old =
-=E2=80=98key' in which case we can=E2=80=99t detect
-> an object movement(from one chain to another).
->=20
-> So, I=E2=80=99m afraid that the atomic_set_release() in insertion =
-algorithm without using hlist_nulls should=20
-> change back to:
->=20
-> smp_wmb();
-> atomic_set(&obj->refcnt, 1);
->=20
-> Thanks,
-> Alan
->=20
->>=20
->> Or am I missing something subtle here?
->>=20
->> Thanx, Paul
->>=20
->>> Thanks,
->>> SJ
->>>=20
->>>>=20
->>>> For the other 3 patches, feel free to add:
->>>> Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
->>>>=20
->>>> thanks,
->>>>=20
->>>> - Joel
+The default value of sysctl_offensive_bpf_disabled is 0, which means all the 
+five helpers are enabled. By setting sysctl_offensive_bpf_disabled to 1, 
+these helpers cannot be used util a reboot. By setting it to 2, these helpers
+ cannot be used but privieleged users can modify this flag to 0.
 
+For benign eBPF programs such as Cillium, they do not need these features and 
+can set the sysctl_offensive_bpf_disabled to 1 after initialization.
+
+
+
+[1] https://embracethered.com/blog/posts/2021/offensive-bpf/
+
+
+Signed-off-by: fripSide <clangllvm@126.com>
+---
+ include/linux/bpf.h                       |  2 ++
+ kernel/bpf/syscall.c                      | 33 +++++++++++++++++++++++
+ kernel/configs/android-recommended.config |  1 +
+ kernel/trace/bpf_trace.c                  | 21 ++++++++-------
+ tools/testing/selftests/bpf/config        |  1 +
+ 5 files changed, 48 insertions(+), 10 deletions(-)
+
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 456f33b9d205..61c723a589f8 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2043,6 +2043,8 @@ bpf_map_alloc_percpu(const struct bpf_map *map, size_t size, size_t align,
+ 
+ extern int sysctl_unprivileged_bpf_disabled;
+ 
++extern int sysctl_offensive_bpf_disabled;
++
+ static inline bool bpf_allow_ptr_leaks(void)
+ {
+ 	return perfmon_capable();
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 14f39c1e573e..6b8c8ee1ea22 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -58,6 +58,9 @@ static DEFINE_SPINLOCK(link_idr_lock);
+ int sysctl_unprivileged_bpf_disabled __read_mostly =
+ 	IS_BUILTIN(CONFIG_BPF_UNPRIV_DEFAULT_OFF) ? 2 : 0;
+ 
++int sysctl_offensive_bpf_disabled __read_mostly =
++	IS_BUILTIN(CONFIG_BPF_OFFENSIVE_BPF_OFF) ? 2 : 0;
++
+ static const struct bpf_map_ops * const bpf_map_types[] = {
+ #define BPF_PROG_TYPE(_id, _name, prog_ctx_type, kern_ctx_type)
+ #define BPF_MAP_TYPE(_id, _ops) \
+@@ -5385,6 +5388,27 @@ static int bpf_unpriv_handler(struct ctl_table *table, int write,
+ 	return ret;
+ }
+ 
++static int bpf_offensive_handler(struct ctl_table *table, int write,
++			      void *buffer, size_t *lenp, loff_t *ppos)
++{
++	int ret, offensive_enable = *(int *)table->data;
++	bool locked_state = offensive_enable == 1;
++	struct ctl_table tmp = *table;
++
++	if (write && !capable(CAP_SYS_ADMIN))
++		return -EPERM;
++
++	tmp.data = &offensive_enable;
++	ret = proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
++	if (write && !ret) {
++		if (locked_state && offensive_enable != 1)
++			return -EPERM;
++		*(int *)table->data = offensive_enable;
++	}
++
++	return ret;
++}
++
+ static struct ctl_table bpf_syscall_table[] = {
+ 	{
+ 		.procname	= "unprivileged_bpf_disabled",
+@@ -5395,6 +5419,15 @@ static struct ctl_table bpf_syscall_table[] = {
+ 		.extra1		= SYSCTL_ZERO,
+ 		.extra2		= SYSCTL_TWO,
+ 	},
++	{
++		.procname	= "offensive_bpf_disabled",
++		.data		= &sysctl_offensive_bpf_disabled,
++		.maxlen		= sizeof(sysctl_offensive_bpf_disabled),
++		.mode		= 0644,
++		.proc_handler	= bpf_offensive_handler,
++		.extra1		= SYSCTL_ZERO,
++		.extra2		= SYSCTL_TWO,
++	},
+ 	{
+ 		.procname	= "bpf_stats_enabled",
+ 		.data		= &bpf_stats_enabled_key.key,
+diff --git a/kernel/configs/android-recommended.config b/kernel/configs/android-recommended.config
+index e400fbbc8aba..cca75258af72 100644
+--- a/kernel/configs/android-recommended.config
++++ b/kernel/configs/android-recommended.config
+@@ -1,5 +1,6 @@
+ #  KEEP ALPHABETICALLY SORTED
+ # CONFIG_BPF_UNPRIV_DEFAULT_OFF is not set
++# CONFIG_BPF_OFFENSIVE_BPF_OFF is not set
+ # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
+ # CONFIG_INPUT_MOUSE is not set
+ # CONFIG_LEGACY_PTYS is not set
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 8deb22a99abe..5bdd0bee3e45 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1432,17 +1432,18 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 	case BPF_FUNC_get_prandom_u32:
+ 		return &bpf_get_prandom_u32_proto;
+ 	case BPF_FUNC_probe_write_user:
+-		return security_locked_down(LOCKDOWN_BPF_WRITE_USER) < 0 ?
+-		       NULL : bpf_get_probe_write_proto();
++		return (security_locked_down(LOCKDOWN_BPF_WRITE_USER) < 0 ||
++		       sysctl_offensive_bpf_disabled) ? NULL : bpf_get_probe_write_proto();
+ 	case BPF_FUNC_probe_read_user:
+-		return &bpf_probe_read_user_proto;
++		return sysctl_offensive_bpf_disabled ? NULL : &bpf_probe_read_user_proto;
+ 	case BPF_FUNC_probe_read_kernel:
+-		return security_locked_down(LOCKDOWN_BPF_READ_KERNEL) < 0 ?
+-		       NULL : &bpf_probe_read_kernel_proto;
++		return (security_locked_down(LOCKDOWN_BPF_READ_KERNEL) < 0 ||
++		       sysctl_offensive_bpf_disabled) ? NULL : &bpf_probe_read_kernel_proto;
+ 	case BPF_FUNC_probe_read_user_str:
+-		return &bpf_probe_read_user_str_proto;
++		return sysctl_offensive_bpf_disabled ? NULL : &bpf_probe_read_user_str_proto;
+ 	case BPF_FUNC_probe_read_kernel_str:
+-		return security_locked_down(LOCKDOWN_BPF_READ_KERNEL) < 0 ?
++		return (security_locked_down(LOCKDOWN_BPF_READ_KERNEL) < 0 ||
++		       sysctl_offensive_bpf_disabled) ?
+ 		       NULL : &bpf_probe_read_kernel_str_proto;
+ #ifdef CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+ 	case BPF_FUNC_probe_read:
+@@ -1459,9 +1460,9 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_cgrp_storage_delete_proto;
+ #endif
+ 	case BPF_FUNC_send_signal:
+-		return &bpf_send_signal_proto;
++		return sysctl_offensive_bpf_disabled ? NULL : &bpf_send_signal_proto;
+ 	case BPF_FUNC_send_signal_thread:
+-		return &bpf_send_signal_thread_proto;
++		return sysctl_offensive_bpf_disabled ? NULL : &bpf_send_signal_thread_proto;
+ 	case BPF_FUNC_perf_event_read_value:
+ 		return &bpf_perf_event_read_value_proto;
+ 	case BPF_FUNC_get_ns_current_pid_tgid:
+@@ -1527,7 +1528,7 @@ kprobe_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_get_stack_proto;
+ #ifdef CONFIG_BPF_KPROBE_OVERRIDE
+ 	case BPF_FUNC_override_return:
+-		return &bpf_override_return_proto;
++		return sysctl_offensive_bpf_disabled ? NULL : &bpf_override_return_proto;
+ #endif
+ 	case BPF_FUNC_get_func_ip:
+ 		return prog->expected_attach_type == BPF_TRACE_KPROBE_MULTI ?
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index 63cd4ab70171..1a15d7451f19 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -9,6 +9,7 @@ CONFIG_BPF_LSM=y
+ CONFIG_BPF_STREAM_PARSER=y
+ CONFIG_BPF_SYSCALL=y
+ # CONFIG_BPF_UNPRIV_DEFAULT_OFF is not set
++# CONFIG_BPF_OFFENSIVE_BPF_OFF is not set
+ CONFIG_CGROUP_BPF=y
+ CONFIG_CRYPTO_HMAC=y
+ CONFIG_CRYPTO_SHA256=y
+-- 
+2.34.1
 
