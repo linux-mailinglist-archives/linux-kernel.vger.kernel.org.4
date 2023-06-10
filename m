@@ -2,78 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C53C072A76E
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 03:30:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC3E372A770
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 03:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbjFJB36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 21:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35194 "EHLO
+        id S232922AbjFJBcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 21:32:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjFJB34 (ORCPT
+        with ESMTP id S229522AbjFJBcj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 21:29:56 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B48A30F2
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 18:29:55 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-565cdb77b01so21178057b3.0
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 18:29:55 -0700 (PDT)
+        Fri, 9 Jun 2023 21:32:39 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D83835BB
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 18:32:37 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-651ffcc1d3dso1976503b3a.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Jun 2023 18:32:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686360595; x=1688952595;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8FKJ3xPJEDetSK5auCGGcapjjk91ewFvgiFRw0hqYb0=;
-        b=tOtScZVwZNwDUDalvhpk5D8h1duHJC9b998fE1WumdZZRJbExd+da8AJdP3IZ5Wae/
-         5nb6O/f3+WMjQJEFgWrI+wFdIr3WJVKy361rNGexVno4GyofOLxRv1ED9LyOv0G6wFeB
-         +L352ZuS1kMGc/90BnLCPWkAVDvU27yfXKYtSLR6CaI8aVSeFy0dW9+txuuI0F2lbPLL
-         NC4qerfdGfI11b3wj41HVyB+zsVPrh3x3ibIqdsrqPV68CtMPa1de9kcnwc95D/rDVm6
-         9n6gjQcHxvlnY2Q+i64cRlcbQikt5Absa2MZ2QUQHi/nTePPVQFHvumqFwkSXlDNzeO6
-         NKBg==
+        d=linaro.org; s=google; t=1686360757; x=1688952757;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qMoAwEd9SlzlxTzlnGrB3GqIf4l0rMIqn94dDmyDoGA=;
+        b=OOm3OhgjZM+KfutyMsF6l5PCN2dehGk7rml7KOoEYV2LPG1G6PnhgikuF+d7n+Rfo0
+         srY09o5ZRTX4h+Edx0x979EiH4CeYQHvPdXrYoWpjZAbz4lFTuK6V+dkYYLXYxLoKJF7
+         Xjj5sXug6afD45tlamE69r4bKhD1YOZVgwrAldLc4ecC4WK6MCWn9vRto3q+xw+azMVD
+         BrIH4uR6n1OVuQqSBq2zHMo4NV1yx8gzika/0NV3i6V1AXMYp5iaTyCpgPI8oyAXN9bN
+         SgXXwfc5Y+kcNkNNRX0UrdRhBWTA8Zp8z80ym0R9tXvzrdUnbsyavLDJkEbeyqdlDo6p
+         A4ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686360595; x=1688952595;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8FKJ3xPJEDetSK5auCGGcapjjk91ewFvgiFRw0hqYb0=;
-        b=PIKFgYadZkor0cuqbOD0L+2ZqZIxqoJj+uuj4/fU/4PA9EtVXThvcd6p75sE60PgdB
-         nNgYgloouMGfn+VAjncC/dcFsBU3r7fP2ORVkqoOJ722jv98KlQtVN2DEZua4q0k+xG1
-         QcHor8GmLc5z61KjID4HKf+YKO0MZGfHW5eXV6uYey/BN3gFw4Fjay8VPtvEDrEdit29
-         XvLgPyW6vW0gtZW/xjRM+NopUxA2XEpPtkjhyGny+Ol088eoD33vwDROMuPt8ummvuEZ
-         BI9t7o9ob39bnTm7gd0cjaCKPhNaBuMvYyRL4/lEvCWSqSntXXVT38oFCERvoqhxYtEq
-         1T8Q==
-X-Gm-Message-State: AC+VfDxh7XMlY2xN6y+Z6c+mWGDQpHLjo1jY2zFzDyscGAxus0wWlZGp
-        0rlIiNsyAFU7h1lOIVJgA5kHNgxXDongWAipKk/jrw==
-X-Google-Smtp-Source: ACHHUZ5olS/VKLyw26AHgQlVBf0OLVFr6x8YW8avTg9PVS60xY2nu8cfesfDPnrAVmkdYUX3hVIVpz5CG9a0BKsTOWA=
-X-Received: by 2002:a0d:df97:0:b0:561:baee:ee8 with SMTP id
- i145-20020a0ddf97000000b00561baee0ee8mr2916493ywe.32.1686360594592; Fri, 09
- Jun 2023 18:29:54 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686360757; x=1688952757;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qMoAwEd9SlzlxTzlnGrB3GqIf4l0rMIqn94dDmyDoGA=;
+        b=Uoj5Atuw6RXPL4o4AJwIp/YJt93rZ5pwXMHo2stT5smDvvSQTIX1700vdkKlWftur/
+         oUQ8BajUDKLlcuFV11mxWLoDHEf4E5omgCCSneNQulcwxtBIN5fgcWFAjHChlEr5KFmf
+         4ZVzB1hU2RIYPKRZ9qWveBlMXVdojOjsAVSvzhJkMowcbtSU2CQ7G2W1Gc0T1r1TnKrp
+         2c5z1L627fJztIRjgL2lZaE3XIRqLzkqShuNZVADwD7w6fNbfuM6/rRd+1YKHngQW9QV
+         lp3gUQiAcQrrdL+VzkvCe/2WRG9cSXf+aBXYspuasUFyUyPECzdUqIt6CR3hwi3buHX2
+         GDTg==
+X-Gm-Message-State: AC+VfDxErjnJO3tvOg2swdXR9PDv1TYA9c5roEzk1c5xOuGm/9eH5eOw
+        4M3h1hZloZLV7dgQncxot/FlAQ==
+X-Google-Smtp-Source: ACHHUZ6F1bMqDS02GmSF45tEnoZN27ZPLrIBrde419+hbZHXY9r32fa9M8hlCOzYq5YAwpP4C88hEg==
+X-Received: by 2002:a05:6a20:8405:b0:10d:f812:e4b5 with SMTP id c5-20020a056a20840500b0010df812e4b5mr2858569pzd.35.1686360757014;
+        Fri, 09 Jun 2023 18:32:37 -0700 (PDT)
+Received: from leoy-huanghe ([156.59.39.102])
+        by smtp.gmail.com with ESMTPSA id p26-20020aa7861a000000b0063d24fcc2b7sm3210133pfn.1.2023.06.09.18.32.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 18:32:36 -0700 (PDT)
+Date:   Sat, 10 Jun 2023 09:32:28 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     coresight@lists.linaro.org,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/5] perf cs-etm: Make PID format accessible from
+ struct cs_etm_auxtrace
+Message-ID: <20230610013228.GB174906@leoy-huanghe>
+References: <20230608105930.1389276-1-james.clark@arm.com>
+ <20230608105930.1389276-4-james.clark@arm.com>
 MIME-Version: 1.0
-References: <20230609005158.2421285-1-surenb@google.com> <20230609005158.2421285-5-surenb@google.com>
- <ZIOOmC26qh4EXUEX@x1n> <CAJuCfpHKUjAwgWbxvJQDyEnneRD03p2M6247Q6=3-oOq_FL7zA@mail.gmail.com>
-In-Reply-To: <CAJuCfpHKUjAwgWbxvJQDyEnneRD03p2M6247Q6=3-oOq_FL7zA@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Fri, 9 Jun 2023 18:29:43 -0700
-Message-ID: <CAJuCfpG3PrbGxpDAEkyGQXW88+otb=FsbrhPJ4ePN7Xhn0a+_A@mail.gmail.com>
-Subject: Re: [PATCH v2 4/6] mm: drop VMA lock before waiting for migration
-To:     Peter Xu <peterx@redhat.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
-        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
-        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
-        apopple@nvidia.com, ying.huang@intel.com, david@redhat.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        viro@zeniv.linux.org.uk, brauner@kernel.org,
-        pasha.tatashin@soleen.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230608105930.1389276-4-james.clark@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,65 +87,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 3:30=E2=80=AFPM Suren Baghdasaryan <surenb@google.co=
-m> wrote:
->
-> On Fri, Jun 9, 2023 at 1:42=E2=80=AFPM Peter Xu <peterx@redhat.com> wrote=
-:
-> >
-> > On Thu, Jun 08, 2023 at 05:51:56PM -0700, Suren Baghdasaryan wrote:
-> > > migration_entry_wait does not need VMA lock, therefore it can be drop=
-ped
-> > > before waiting. Introduce VM_FAULT_VMA_UNLOCKED to indicate that VMA
-> > > lock was dropped while in handle_mm_fault().
-> > > Note that once VMA lock is dropped, the VMA reference can't be used a=
-s
-> > > there are no guarantees it was not freed.
-> >
-> > Then vma lock behaves differently from mmap read lock, am I right?  Can=
- we
-> > still make them match on behaviors, or there's reason not to do so?
->
-> I think we could match their behavior by also dropping mmap_lock here
-> when fault is handled under mmap_lock (!(fault->flags &
-> FAULT_FLAG_VMA_LOCK)).
-> I missed the fact that VM_FAULT_COMPLETED can be used to skip dropping
-> mmap_lock in do_page_fault(), so indeed, I might be able to use
-> VM_FAULT_COMPLETED to skip vma_end_read(vma) for per-vma locks as well
-> instead of introducing FAULT_FLAG_VMA_LOCK. I think that was your idea
-> of reusing existing flags?
-Sorry, I meant VM_FAULT_VMA_UNLOCKED, not FAULT_FLAG_VMA_LOCK in the
-above reply.
+On Thu, Jun 08, 2023 at 11:59:27AM +0100, James Clark wrote:
+> To avoid every user of PID format having to use their own static
+> local variable, cache it on initialisation and change the accessor to
+> take struct cs_etm_auxtrace.
+> 
+> Signed-off-by: James Clark <james.clark@arm.com>
 
-I took a closer look into using VM_FAULT_COMPLETED instead of
-VM_FAULT_VMA_UNLOCKED but when we fall back from per-vma lock to
-mmap_lock we need to retry with an indication that the per-vma lock
-was dropped. Returning (VM_FAULT_RETRY | VM_FAULT_COMPLETE) to
-indicate such state seems strange to me ("retry" and "complete" seem
-like contradicting concepts to be used in a single result). I could
-use VM_FAULT_COMPLETE when releasing mmap_lock since we don't use it
-in combination with VM_FAULT_RETRY and (VM_FAULT_RETRY |
-VM_FAULT_VMA_UNLOCKED) when dropping per-vma lock and falling back to
-mmap_lock. It still requires the new VM_FAULT_VMA_UNLOCKED flag but I
-think logically that makes more sense. WDYT?
-
->
-> >
-> > One reason is if they match they can reuse existing flags and there'll =
-be
-> > less confusing, e.g. this:
-> >
-> >   (fault->flags & FAULT_FLAG_VMA_LOCK) &&
-> >     (vm_fault_ret && (VM_FAULT_RETRY || VM_FAULT_COMPLETE))
-> >
-> > can replace the new flag, iiuc.
-> >
-> > Thanks,
-> >
-> > --
-> > Peter Xu
-> >
-> > --
-> > To unsubscribe from this group and stop receiving emails from it, send =
-an email to kernel-team+unsubscribe@android.com.
-> >
+Reviewed-by: Leo Yan <leo.yan@linaro.org>
