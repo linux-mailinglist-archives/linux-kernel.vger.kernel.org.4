@@ -2,131 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED56372AC1B
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 16:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A967272AC22
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 16:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235091AbjFJOGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 10:06:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60086 "EHLO
+        id S234424AbjFJOIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 10:08:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235101AbjFJOGC (ORCPT
+        with ESMTP id S232273AbjFJOID (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 10:06:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051B83A96
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 07:06:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D33F612F3
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 14:06:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 766B0C433D2;
-        Sat, 10 Jun 2023 14:05:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686405960;
-        bh=BCytfjaMmeBCddEcB7GoSbhAurC86JhfZMbj7EJid+E=;
-        h=From:Date:Subject:To:Cc:From;
-        b=E0vbBEBOGKeTGX09NfEhuqPCJ28K4Egcgdh1Qn5Ro+OX5i+nIbui0oXomQ8oesZIU
-         w+fyJjw1T3DYmphlujf4Pk7vVkFYpp6N/052/zsYQQjEWObtPUEjh0f5c8BOJfi9QM
-         QhCes3h0/dPbDK9dvAbFMePlqrPcvwy7JGLvf3OrPGN0zTBrbFeyuwqDrAeU/VZt/1
-         P5QqDw9jc37D98ZkXpjptIe3mpYb4XvLFMApp9f5Wnsp4kbPTV+wSOSe3cZv0JUGPo
-         yeN7+TdSkitmJOyWFQve1e8DrrU7Kc77VvUFj22gHqNGvuSmWx5ShS/Ag6V20KR+qx
-         z/mxM3QX6mHCA==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Sat, 10 Jun 2023 15:05:54 +0100
-Subject: [PATCH] regmap: Don't check for changes in regcache_set_val()
+        Sat, 10 Jun 2023 10:08:03 -0400
+Received: from smtp.smtpout.orange.fr (smtp-23.smtpout.orange.fr [80.12.242.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCE83A98
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 07:08:01 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id 7zFvqEITSUpIF7zFvq7zo5; Sat, 10 Jun 2023 16:07:54 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1686406074;
+        bh=onZOdKuEexl0Sa+UUGGCFHHveZEuWKTGR+4o43UMOtk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=cJQOUaxk3BRcXQiCiiZGOfpOEd+nbZH5RwZ1+h1QA7mZwjeSwcDwCXI82AUQYtLwe
+         PpGuxq/NT4cLnr34K7NfwMAP4dW0d9tGLYP80xd7lCAmPIpQ3l1oDuJL3ftIXLiPf5
+         Uv0ZORbP7vSnzqlbFmefaQUo6GSr9BiJ7lgt2xVBPf+TfEcqNKCwjOmEKzbILDeQpJ
+         hpnvWKPIAYTo/ywZ9X1PSGgrGJ3EJ41lywkrtRxzm46gTeQB5snVlASc0Y70+RC+Bt
+         TGeFg4sIP5XP1d8Ue9S0eZWiBhvo2RkjJ5ez/Ceq+14YDAYgrqsrYZ5Raj199HnWRt
+         BTdcdcGrvwaOw==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 10 Jun 2023 16:07:54 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <58d3f250-499d-5a18-6798-f9833cc2dbbd@wanadoo.fr>
+Date:   Sat, 10 Jun 2023 16:07:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230609-regcache-set-val-no-ret-v1-1-9a6932760cf8@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAEKDhGQC/x2N0QrCMAwAf2Xk2UC3iqi/Ij5kMV2D0koypjD27
- 3Y+3sFxK7iYisO1W8FkUddaGvSHDjhTmQT10RiGMMRwChc0mZg4C7rMuNALS21uxsh8jKmPZ0o
- ErR7JBUejwnnvP9Weu36bJP3+h7f7tv0AEkOOaIAAAAA=
-To:     linux-kernel@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-bfdf5
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2286; i=broonie@kernel.org;
- h=from:subject:message-id; bh=BCytfjaMmeBCddEcB7GoSbhAurC86JhfZMbj7EJid+E=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkhINGGU14EQGDpDnXk0qHOsvwLc0aIo1B8lchdyad
- yaaYmc2JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZISDRgAKCRAk1otyXVSH0OKsB/
- 9hdc7wHKaEL0Btp60/8LLGhWcXUbX/xPLiRE2bLGjbvJllys/gZ6+OGLEkzpH0C0GP6qq3MTUNWRov
- zB5GL6Qe4KqA5k7mzm4zduJp2j9pXR/WlgVAK1osqBoDesDWM0uuql24Yjt9qySM/hpHAP84vR9Yqi
- F0VOwqW5ygNEe8rYHJYr4gcEmhbSflrv43BEZI6fx3luOoBXTnNfl4krW40/wGbvR4XR5GMZxur5Wg
- +28BViDI7M1CugrzEfikMm069Qf/qkdr9MmvyOHnmqtk6ZN2nCQnrgKxVK4QY/LjxEOnPBbaVWtkGV
- YK96pQZBBp0Wl+wgdgG0me4hgLcsJ3
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/2] tty: serial: samsung_tty: Fix a memory leak in
+ s3c24xx_serial_getclk() in case of error
+To:     Andi Shyti <andi.shyti@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Thomas Abraham <thomas.abraham@linaro.org>,
+        Kukjin Kim <kgene.kim@samsung.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org
+References: <e4359d5ef206f5b349c1d15a515a1205e78dda55.1686285892.git.christophe.jaillet@wanadoo.fr>
+ <20230610102607.7nonyh5xhuhpyy6e@intel.intel>
+Content-Language: fr
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20230610102607.7nonyh5xhuhpyy6e@intel.intel>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The only user of regcache_set_val() ignores the return value so we may as
-well not bother checking if the value we are trying to set is the same as
-the value already stored.
+Le 10/06/2023 à 12:26, Andi Shyti a écrit :
+>> @@ -1459,8 +1459,10 @@ static unsigned int s3c24xx_serial_getclk(struct s3c24xx_uart_port *ourport,
+>>   			continue;
+>>   
+>>   		rate = clk_get_rate(clk);
+>> -		if (!rate)
+>> +		if (!rate) {
+>> +			clk_put(clk);
+>>   			continue;
+> 
+> could you also print an error here?
+> 
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/base/regmap/internal.h | 2 +-
- drivers/base/regmap/regcache.c | 8 ++------
- 2 files changed, 3 insertions(+), 7 deletions(-)
+Is:
+	dev_err(ourport->port.dev,
+		"Failed to get clock rate for %s.\n", clkname);
 
-diff --git a/drivers/base/regmap/internal.h b/drivers/base/regmap/internal.h
-index 9bd0dfd1e259..8a0a5adbfb5e 100644
---- a/drivers/base/regmap/internal.h
-+++ b/drivers/base/regmap/internal.h
-@@ -267,7 +267,7 @@ static inline const void *regcache_get_val_addr(struct regmap *map,
- 
- unsigned int regcache_get_val(struct regmap *map, const void *base,
- 			      unsigned int idx);
--bool regcache_set_val(struct regmap *map, void *base, unsigned int idx,
-+void regcache_set_val(struct regmap *map, void *base, unsigned int idx,
- 		      unsigned int val);
- int regcache_lookup_reg(struct regmap *map, unsigned int reg);
- int regcache_sync_val(struct regmap *map, unsigned int reg, unsigned int val);
-diff --git a/drivers/base/regmap/regcache.c b/drivers/base/regmap/regcache.c
-index 029564695dbb..3219ca4bd8d0 100644
---- a/drivers/base/regmap/regcache.c
-+++ b/drivers/base/regmap/regcache.c
-@@ -558,17 +558,14 @@ void regcache_cache_bypass(struct regmap *map, bool enable)
- }
- EXPORT_SYMBOL_GPL(regcache_cache_bypass);
- 
--bool regcache_set_val(struct regmap *map, void *base, unsigned int idx,
-+void regcache_set_val(struct regmap *map, void *base, unsigned int idx,
- 		      unsigned int val)
- {
--	if (regcache_get_val(map, base, idx) == val)
--		return true;
--
- 	/* Use device native format if possible */
- 	if (map->format.format_val) {
- 		map->format.format_val(base + (map->cache_word_size * idx),
- 				       val, 0);
--		return false;
-+		return;
- 	}
- 
- 	switch (map->cache_word_size) {
-@@ -601,7 +598,6 @@ bool regcache_set_val(struct regmap *map, void *base, unsigned int idx,
- 	default:
- 		BUG();
- 	}
--	return false;
- }
- 
- unsigned int regcache_get_val(struct regmap *map, const void *base,
+fine for you?
 
----
-base-commit: 9561de3a55bed6bdd44a12820ba81ec416e705a7
-change-id: 20230609-regcache-set-val-no-ret-3cc43f138afa
-
-Best regards,
--- 
-Mark Brown <broonie@kernel.org>
+CJ
 
