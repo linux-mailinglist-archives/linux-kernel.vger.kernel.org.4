@@ -2,245 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8825B72AB21
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 13:26:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 547B572AB25
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 13:36:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233977AbjFJL0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 07:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55570 "EHLO
+        id S234252AbjFJLgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 07:36:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjFJL0j (ORCPT
+        with ESMTP id S229483AbjFJLgI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 07:26:39 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16F53598
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 04:26:37 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686396395;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hLCkp1IrUM9tCSkyx7odsw98tKetwnQWSrTKw64gL8M=;
-        b=cS0pWFPubRHjtq48u1ypCkE36C4S3eA3c/+MV9gmWKPpqfsVp7Qs7mHfu5gsoIzsROsqZU
-        EiO6eUt+XP0u5yPAZVdUoUQjTuCVdDWR0BB/B48jmU1cjTLO69OrbJaSB0EELoteoewp2l
-        Gz+b9cMibuOiT/JwvUafcPH6/v06pEA2sDQ630jnCIQQlNKwqYqUj9dc3Vj17mxdliVln0
-        PYL7YhUgLCp5oR0VAxn2JReSnm9iScj9/Aw5Xevde0SWTjZwjXbgw4h4Bw9NR367qFOwx1
-        nVvfvmMVN2C6aEwT0xNLUpz5Nl7Td8amVePbrOLicQc2Uxs0jTi8SZZY5jhEAw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686396395;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hLCkp1IrUM9tCSkyx7odsw98tKetwnQWSrTKw64gL8M=;
-        b=n5oE553BjNV0MYg+zef/r0LuJfAWExDxsLbgXBC3XgBA4gfF3Mc9nJlvkev9KVU7iYwf+K
-        1s5iSjwUkixs47Aw==
-To:     Nikolay Borisov <nik.borisov@suse.com>, x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org, mhocko@suse.com, jslaby@suse.cz
-Subject: Re: [PATCH v2 3/4] x86/entry: Disable IA32 syscall if ia32_disabled
- is true
-In-Reply-To: <599dea2f-f158-fd67-2c62-d5372d1d18a0@suse.com>
-References: <20230609111311.4110901-1-nik.borisov@suse.com>
- <20230609111311.4110901-4-nik.borisov@suse.com> <87edmkirtd.ffs@tglx>
- <599dea2f-f158-fd67-2c62-d5372d1d18a0@suse.com>
-Date:   Sat, 10 Jun 2023 13:26:34 +0200
-Message-ID: <871qijimmt.ffs@tglx>
+        Sat, 10 Jun 2023 07:36:08 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736FA35AC;
+        Sat, 10 Jun 2023 04:36:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686396961; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=Wlh6Fee3sleiKNPPl5zqaNVVPre2TvHTs4ulzWrkUfYpq6GR/09PHgVW9h2bE7D6sA
+    pBti7ImnxKU+KgQdf/Rr4zIlN7rCGEZgAjnJS4NaH1uAjW4vBgLj1j4eLC4PqoekTWbL
+    iFtDuqrAURMFWig79t7tUNz2VizWFxFvINzRg7SY6/UmrMJeGI7bNPgNW/XMEBVI4cFE
+    WUwAMj6qA4NA7tcIZTitxx3lDZwJ/jsiu/f0QWofLF5C3jvHaAS66wmt+XRD9Zr9sVbk
+    hv8SGc2r+IJCUfvhWJKVivVNlQV312LTG1+SmgJKMwtan81RUbONo7UVXGK9CXKYMByk
+    cgoQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686396961;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=nDB1y1N2WopiUplThbjpnQ4XX807sJsuOewXiYz174Q=;
+    b=oU6g+HVTNvROF4pExWuoDEN7F2g4LQmmQy7DLg6Fk7XaP0943EmweCqGkDqADHcs/A
+    fMBGJ2ufxVwIm6LAKVsZEq06g5sS95n4tgfUJSpFYa6r4NryJwyKED/8BlXC8LSIECeT
+    b8N32s5H72mcpg/WvMe34pVkMZr4Ca5ePEkvVsL3hkj+3Aye+H3DySR/4Qp8EhWamLGx
+    jDKoT7R0YvVjO7TllobSQsXjvuPHYelLC3NQ8hBOa089Avw5fJJInZ6NH7REfbwadqS9
+    zrg2enI31JvDX0uy1FIFNi+VtgEUumjUpEElOEXLzsYkLZM34kDdrqfLgklbWCcKs663
+    W1hQ==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686396961;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=nDB1y1N2WopiUplThbjpnQ4XX807sJsuOewXiYz174Q=;
+    b=JQvk7RKorL08eGpU/0isyk7VkFSD/OU7lpRDMA8lkZ6G0QG+U36EUkoUfp9J3raPMN
+    5hWHCEPHny4nbxYpqvtXaCVSw9A1I3qYhyL2npsSUrdJvZ6MvLKodoNVT9XnHHmvjdpx
+    YX0i337vEeFs73jfYuafunphMsvJUg0wGQXk3DZo6SLNwX+wSn2eGCilg13kFLURJY61
+    4JN/Lm4QZrkxACrBaWKUwZwAI8adnk1L2A5KaWW/ZzSUFJyrf/wB1UZlSdTVaQqIgnuS
+    gz2jgCB7ldyzop/JIiTRSRqVDuNlDdu80xIzkx70E1zC2Nxiezsrss3iwh+NU7uSBCqX
+    eoXg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686396961;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=nDB1y1N2WopiUplThbjpnQ4XX807sJsuOewXiYz174Q=;
+    b=ozn3ARWpBUhJ+35pqEJmtGPaX5+bMeDC+BO/SY6Um1Lq847qVcFgQ1n/3hjZxHzOEX
+    qCKuFq4znFW3QnRqVgDA==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA9J/h"
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.5.3 DYNA|AUTH)
+    with ESMTPSA id Z82ec2z5ABa0QEI
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Sat, 10 Jun 2023 13:36:00 +0200 (CEST)
+Date:   Sat, 10 Jun 2023 13:35:53 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 04/22] clk: qcom: smd-rpm: Export clock scaling
+ availability
+Message-ID: <ZIRgGXwKD6mcgTRY@gerhold.net>
+References: <20230526-topic-smd_icc-v2-0-e5934b07d813@linaro.org>
+ <20230526-topic-smd_icc-v2-4-e5934b07d813@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230526-topic-smd_icc-v2-4-e5934b07d813@linaro.org>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09 2023 at 19:03, Nikolay Borisov wrote:
-> On 9.06.23 =D0=B3. 18:22 =D1=87., Thomas Gleixner wrote:
->>> +	if ((IS_ENABLED(CONFIG_IA32_EMULATION) && ia32_disabled) ||
->>> +	    !IS_ENABLED(CONFIG_IA32_EMULATION)) {
->>=20
->> Aside of that this condition is convoluted and can be simplified to
->> exactly a simple and understandable
->>=20
->>          if (foo)
->>=20
->> which is actually the obvious solution to make it compile in all
->> configurations.
->
-> I fail to see how this can be done the way you suggest given that=20
-> ia32_disabled is visible iff IA32_EMULATION is selected, this means an=20
-> #ifdef is mandatory so that ia32_disabled is checked when we know it=20
-> will exist as a symbol, the same applies for the entry_SYSCALL_compat=20
-> symbol which has to be used iff IA32_EMULATION is defined. I.e the=20
-> ignore code should also be duplicated in the #ifdef IA32_EMULATION &&=20
-> ia32_disabled and in the #else  condition.
+On Fri, Jun 09, 2023 at 10:19:09PM +0200, Konrad Dybcio wrote:
+> Before we issue a call to RPM through clk_smd_rpm_enable_scaling() the
+> clock rate requests will not be commited in hardware. This poses a
+> race threat since we're accessing the bus clocks directly from within
+> the interconnect framework.
+> 
+> Add a marker to indicate that we're good to go with sending new requests
+> and export it so that it can be referenced from icc.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  drivers/clk/qcom/clk-smd-rpm.c   | 9 +++++++++
+>  include/linux/soc/qcom/smd-rpm.h | 2 ++
+>  2 files changed, 11 insertions(+)
+> 
+> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
+> index 937cb1515968..482fe30ee6f0 100644
+> --- a/drivers/clk/qcom/clk-smd-rpm.c
+> +++ b/drivers/clk/qcom/clk-smd-rpm.c
+> @@ -151,6 +151,7 @@
+>  #define to_clk_smd_rpm(_hw) container_of(_hw, struct clk_smd_rpm, hw)
+>  
+>  static struct qcom_smd_rpm *rpmcc_smd_rpm;
+> +static bool smd_rpm_clk_scaling;
+>  
+>  struct clk_smd_rpm {
+>  	const int rpm_res_type;
+> @@ -385,6 +386,12 @@ static unsigned long clk_smd_rpm_recalc_rate(struct clk_hw *hw,
+>  	return r->rate;
+>  }
+>  
+> +bool qcom_smd_rpm_scaling_available(void)
+> +{
+> +	return smd_rpm_clk_scaling;
+> +}
+> +EXPORT_SYMBOL_GPL(qcom_smd_rpm_scaling_available);
+> +
+>  static int clk_smd_rpm_enable_scaling(void)
+>  {
+>  	int ret;
+> @@ -410,6 +417,8 @@ static int clk_smd_rpm_enable_scaling(void)
+>  		return ret;
+>  	}
+>  
+> +	smd_rpm_clk_scaling = true;
+> +
 
-That's wrong in every aspect. Neither the #ifdeffery nor the code
-duplication is mandatory.
-
-arch/x86/include/asm/XXXX.h
-
-#ifdef CONFIG_IA32_EMULATION
-extern bool __ia32_enabled;
-
-static inline bool ia32_enabled(void)
-{
-        return __ia32_enabled;
-}
-#else
-static inline bool ia32_enabled(void)
-{
-        return IS_ENABLED(CONFIG_X86_32);
-}
-#endif
-
-        if (ia32_enabled()) {
-           ...
-        } else {
-           ...
-        }
-
-Which avoids the #ifdeffery in the code _and_ the code duplication.
-
-All it needs aside of the above is to make sure that the other two
-things which the compiler complains about being undeclared in the
-EMULATION=3Dn case are treated differently in the relevant header
-file. It's not rocket science. See also below.
-
-If you chose $XXXX.h carefully it simply works for everything including
-asm/elf.h.
-
-I surely wouldn't have suggested it if it wouldn't be feasible and
-reasonably trivial. I wanted you to figure it out yourself instead of
-serving you the solution on a silver tablet. There are tons of examples
-in the code.
-
->>> @@ -226,6 +226,13 @@ void __init idt_setup_early_traps(void)
->>>   void __init idt_setup_traps(void)
->>>   {
->>>   	idt_setup_from_table(idt_table, def_idts, ARRAY_SIZE(def_idts), true=
-);
->>> +
->>> +	if (IS_ENABLED(CONFIG_IA32_EMULATION) && ia32_disabled) {
->>=20
->> Ditto.
->
-> This actually doesn't fail, because if IA32_EMULATION is n that=20
-> conditional expands to 'if (0 && ia32_disabled)' which is eliminated by=20
-> the compiler.
-
-Making uninformed claims does not make it more correct.
-
-This _cannot_ compile because the dead code elimination pass is not even
-reached due to ia32_disabled being undeclared.
-
-        declaration !=3D definition
-and
-        #ifdef CONSTANT !=3D if (CONSTANT)
-
-Compiler basics.
-
-You could have spared yourself the embarrassment and the lecture by
-compiling that file with IA32_EMULATION=3Dn or by carefully analysing the
-compile fail of cpu/common.c. That code is not any different:
-
->>> +	if ((IS_ENABLED(CONFIG_IA32_EMULATION) && ia32_disabled) ||
->>> +	    !IS_ENABLED(CONFIG_IA32_EMULATION)) {
-
-and the compiler also complains rightfully about ia32_disabled being
-undeclared _before_ complaining about entry_*_compat.
-
-So:
-
-// Declaration
-extern bool foo;
-
-       if (0 && foo)
-          ....
-
-compiles and links without ever defining 'foo'.
-
-While:
-
-#if 0
-extern bool foo;
-#endif
-
-        if (0 && foo)
-          ....
-
-already fails to compile due to -Werror
-
-See?
-
->>> +		gate_desc null_desc =3D {};
->>=20
->> Lacks a newline between declaration and code. It's documented to be
->> required, no?
->>=20
->>> +		write_idt_entry(idt_table, IA32_SYSCALL_VECTOR, &null_desc);
->>> +		clear_bit(IA32_SYSCALL_VECTOR, system_vectors);
->>> +	}
->>=20
->> That aside, I asked you to split IA32_SYSCALL_VECTOR out of def_idts[]
->> and handle it separately, no? If you disagree with me then reply to my
->> review first instead of ignoring me silently.
->
-> I tried doing this but it's no go since def_its is defined statically.=20
-> Since tha IA32_SYSCALL_VECTOR is the last one it can't simply be tacked=20
-> at the end of this array in a separate place. Hence the only viable=20
-> solution ( apart from making def_its a dynamically sized array) was to=20
-> simply overwrite IA32_SYSCALL_VECTOR in idt_table before it's being=20
-> loaded into the ldtr.
-
-Obviously we have fundamentally different interpretations of the phrase
-'split IA32_SYSCALL_VECTOR out of def_idts[] and handle it separately':
-
-This splits it out:
-
- def_idts[] =3D {
- ...=20
--#if defined(CONFIG_IA32_EMULATION)
--	SYSG(IA32_SYSCALL_VECTOR,	entry_INT80_compat),
--#elif defined(CONFIG_X86_32)
--	SYSG(IA32_SYSCALL_VECTOR,	entry_INT80_32),
--#endif
- };
-
-+ia32_idt[] =3D {
-+#if defined(CONFIG_IA32_EMULATION)
-+	SYSG(IA32_SYSCALL_VECTOR,	entry_INT80_compat),
-+#elif defined(CONFIG_X86_32)
-+	SYSG(IA32_SYSCALL_VECTOR,	entry_INT80_32),
-+#endif
-+};
-
-This handles it separately:
-
-	idt_setup_from_table(idt_table, def_idts, ARRAY_SIZE(def_idts), true);
-
-+	if (ia32_enabled())
-+		idt_setup_from_table(idt_table, ia32_idt,....);
-
-Which makes it bloody obvious what this is about.
-
-Are you still convinced that the only viable solution is clearing it
-after the fact?
-
-So please go and ensure that all config combinations work and that it
-builds and works for 32bit too. The latter fails to build because of
-including traps.h into an header for no reason.
-
-There is absolutely no urgency to get this into the tree, so please take
-your time and do not rush out the next half baken version of this,
-unless you aim for the fast path to my ignore list.
+If you move the platform_device_register_data(&rpdev->dev,
+"icc_smd_rpm", ...) from drivers/soc/qcom/smd-rpm.c to here you can
+avoid the race completely and drop this API. I think that would be
+cleaner. And it will likely probe much faster because probe deferral
+is slow. :)
 
 Thanks,
-
-        tglx
+Stephan
