@@ -2,69 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57EC372ABE8
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 15:54:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D6F872ABE9
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 15:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234771AbjFJNy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 09:54:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55000 "EHLO
+        id S233958AbjFJN4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 09:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbjFJNyY (ORCPT
+        with ESMTP id S231290AbjFJN4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 09:54:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA81CE57;
-        Sat, 10 Jun 2023 06:54:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 661CE6119D;
-        Sat, 10 Jun 2023 13:54:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 541DBC433D2;
-        Sat, 10 Jun 2023 13:54:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686405262;
-        bh=G4QwqKarePCCSH6s+XR3oDrzHCOvVUyer99pWwJDgVM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KTuEsvUxWEPhVaLkMsOVctzQ3wImqrKHrA+x3jspcPwKgZwpmAopn0F1xfzcQhJ3h
-         zar/sZ6Z+UPCLRDNzEODraEz/AVHRbRTCaYQHpLAoaSbCr47KFFMUK1rm3+FHjemxL
-         jyJvUaXpua6YA9TReA0Qnbs5ukqOAW1SmpWLKmVSWmGFBBeyRElowzpHnqD1pcv8CO
-         oR6a6+49wLhhLfxqDugAg8RXf1uh2VzA6BU2o8jY6qROsDGFzCACbwXhNPB+qTDFT4
-         u8jNI2J0mCqYm0YtETe7wjrP6K7n03ITvdz7/C68+HV/pbUH+NHkqfUQlWoAFwIK5u
-         4E5OKmKc8CtLA==
-Date:   Sat, 10 Jun 2023 15:54:19 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Tao Lan <taolan@huawei.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c-hix5hd2:  Add I2C_M_STOP flag support for
- i2c-hix5hd2 driver.
-Message-ID: <20230610135419.rh4xuldy6oykdhog@intel.intel>
-References: <20220930014507.5612-1-taolan@huawei.com>
+        Sat, 10 Jun 2023 09:56:40 -0400
+Received: from m1314.mail.163.com (m1314.mail.163.com [220.181.13.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DABD7E57
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 06:56:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
+        Message-ID; bh=yUY7h0UnstMQ6bUvfA8qtx9Sv5kFKo6NofOySg+bhrE=; b=X
+        vBwOrjR46e3U9PozOLlQ677t9p1E7hPmzuHTyJuunwSpGh0d0kXlvFn4vLUGniVj
+        DKTRz+WyzH9OlJ8rerBDmmWgZRYUNRapfo0doH6b+b63c7pvHS5CeP7q6SzQST+2
+        vVllPSb8wsHZkyZzXhdhyhl+ohxcS/V6JUVishVIag=
+Received: from jhrhhao$163.com ( [115.171.251.185] ) by ajax-webmail-wmsvr14
+ (Coremail) ; Sat, 10 Jun 2023 21:56:34 +0800 (CST)
+X-Originating-IP: [115.171.251.185]
+Date:   Sat, 10 Jun 2023 21:56:34 +0800 (CST)
+From:   jhrhhao <jhrhhao@163.com>
+To:     linux-kernel@vger.kernel.org
+Subject: test2
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20230109(dcb5de15)
+ Copyright (c) 2002-2023 www.mailtech.cn 163com
+X-NTES-SC: AL_QuyTBPibuksi4imYYekWm0YShus/X8G3svsl3IBfPZ00oSngwCQfc2RPG1fL1eWkNzmCqwOafAdy0NpKV6ZBZowk9gwMvLwn5642NpBi6Igw
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220930014507.5612-1-taolan@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <46a7b741.176c.188a59831db.Coremail.jhrhhao@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: DsGowAAHROgSgYRko4gcAA--.15366W
+X-CM-SenderInfo: hmkuxxldr6il2tof0z/xtbBiAyKnFaEFV2aCwABsY
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,BODY_SINGLE_WORD,
+        DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SCC_BODY_SINGLE_WORD,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Taolan,
-
-On Fri, Sep 30, 2022 at 01:45:07AM +0000, Tao Lan wrote:
-> From: taolan <taolan@huawei.com>
-> 
-> For compatibility, some devices need to work with controller between
-> messages using a stop.
-> 
-> Signed-off-by: taolan <taolan@huawei.com>
-
-Acked-by: Andi Shyti <andi.shyti@kernel.org> 
-
-Thanks,
-Andi
+dGVzdDIK
