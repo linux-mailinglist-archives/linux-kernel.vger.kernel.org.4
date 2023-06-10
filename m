@@ -2,118 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 877D672A9ED
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 09:32:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B62972A9F0
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 09:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbjFJHcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 03:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39830 "EHLO
+        id S232573AbjFJHf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 03:35:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbjFJHcn (ORCPT
+        with ESMTP id S229610AbjFJHf1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 03:32:43 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5176D35B0
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 00:32:41 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-97454836448so370006966b.2
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 00:32:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20221208.gappssmtp.com; s=20221208; t=1686382360; x=1688974360;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=l7M0YngHom5+WNuAaqS8ORg1O1Fioma4l8vDyZ5uMCE=;
-        b=FD2ljasmKR4FCNVKlrbvbiFQif9C0mf2yzEBy4Qx3/P9vPzkYiPKpRpLusAqq+LHU7
-         WwEwp25JWtWMjVCKxCuTx0YY3fuyrcT2TpwayU1x39KF3SCY/fcG2yn991d4FPSgfhla
-         r0KE1RndWSboXnv9iOkGlNuoupLmUH2YEGQmtcZGgLTcODd51dqFJM+aIHbP7c2tgf71
-         QGppQ21EIY9jI+eGnPzKAJaT7WZ3veTnSShuNlv/p4ciM6sXWwP8AVd0XK2uW1zlWrVD
-         fcLnhGqEwqo4wbPZy2gc35QP+i9fF+Jg8QnKyIoDm39/3JVCx0GpfJ/G8E4PGnuB3/uE
-         7LpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686382360; x=1688974360;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l7M0YngHom5+WNuAaqS8ORg1O1Fioma4l8vDyZ5uMCE=;
-        b=XqEa/dzVIlaowZirezjrhJMHUmnYMrWdEFRJR3U/7q1Tfus69fQ/PGQfHbeNz3d8DN
-         6p8H+xktCQoZjXeuBUZwyA4+Fsq1fc4VXiF17ryN3MPWeRYevUKYm7Sv5/ssUUnzKxm3
-         zqkLpjkPwb2MueSQZSATTJxKaOb/LgE28IGKHzRbugaBEUebG8CFx26lOiRsDeujYMVv
-         FUoOA6OCjYjQsIAEucj66+NGIPnZt9kRUMj/ZsbS8woombSEOPpJfAYspDdOxhpUceAU
-         miD4atuMP0gMH+IgsO43i+oWYN7wUbQHLarX8MYVHmMyYoq8wo47cZgoj5SFA/havW1p
-         aqpw==
-X-Gm-Message-State: AC+VfDx7lJ1ES01bgkORsHYWEVnoGPy3HzKooJwpfC0LXQd3g71W9T8S
-        Gci8AIkcyoD56k2nwtQzKZI5ww==
-X-Google-Smtp-Source: ACHHUZ6TNnOo+D3MGLaaLLt1WOqYeiIrCCME57vcIFwab6WYjt9d7cZidy6pJt20xNgdAB/dJoH9Sg==
-X-Received: by 2002:a17:907:7212:b0:978:8a30:aaf with SMTP id dr18-20020a170907721200b009788a300aafmr3607778ejc.64.1686382359799;
-        Sat, 10 Jun 2023 00:32:39 -0700 (PDT)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id f10-20020a170906824a00b00971433ed5fesm2223482ejx.184.2023.06.10.00.32.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Jun 2023 00:32:39 -0700 (PDT)
-Date:   Sat, 10 Jun 2023 09:32:38 +0200
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
-Cc:     kuba@kernel.org, vadfed@meta.com, jonathan.lemon@gmail.com,
-        pabeni@redhat.com, corbet@lwn.net, davem@davemloft.net,
-        edumazet@google.com, vadfed@fb.com, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, saeedm@nvidia.com, leon@kernel.org,
-        richardcochran@gmail.com, sj@kernel.org, javierm@redhat.com,
-        ricardo.canuelo@collabora.com, mst@redhat.com, tzimmermann@suse.de,
-        michal.michalik@intel.com, gregkh@linuxfoundation.org,
-        jacek.lawrynowicz@linux.intel.com, airlied@redhat.com,
-        ogabbay@kernel.org, arnd@arndb.de, nipun.gupta@amd.com,
-        axboe@kernel.dk, linux@zary.sk, masahiroy@kernel.org,
-        benjamin.tissoires@redhat.com, geert+renesas@glider.be,
-        milena.olech@intel.com, kuniyu@amazon.com, liuhangbin@gmail.com,
-        hkallweit1@gmail.com, andy.ren@getcruise.com, razor@blackwall.org,
-        idosch@nvidia.com, lucien.xin@gmail.com, nicolas.dichtel@6wind.com,
-        phil@nwl.cc, claudiajkang@gmail.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linux-rdma@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, poros@redhat.com,
-        mschmidt@redhat.com, linux-clk@vger.kernel.org,
-        vadim.fedorenko@linux.dev
-Subject: Re: [RFC PATCH v8 05/10] dpll: api header: Add DPLL framework base
- functions
-Message-ID: <ZIQnFqRBhmv3+SF8@nanopsycho>
-References: <20230609121853.3607724-1-arkadiusz.kubalewski@intel.com>
- <20230609121853.3607724-6-arkadiusz.kubalewski@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230609121853.3607724-6-arkadiusz.kubalewski@intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Sat, 10 Jun 2023 03:35:27 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DE0130F1
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 00:35:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686382524; x=1717918524;
+  h=date:from:to:cc:subject:message-id;
+  bh=A8rKzFZc6+/yCGqTOwezpagmCUU0j54/J8VRmCxY+W8=;
+  b=VCDrVyqiDysDnEolMKzcqIIUVLF7Wh8Yj8RdTAXyytVlfRljge2yuAxu
+   8Eu9wev6lwSFYrHIzpdXjgblktzmMt8QhtmPCtKLMsMngf3Y6ADT5avzU
+   gXP7tCkj5UKHgOkDhOYGu0F3e1bStt9DLjPFY9dWriVb8aZu5f8IWC4Ji
+   rklJ1Z7t1rJNDPQ6Whsh2lu20yqwy04ahSihiu/JhCDbU6HrK+DOgkA7Y
+   YzmGRv9mhWgqrovC3gMrd5roXU1VEBuYPbBm9L8xv05tWuLlRc8eGlGsH
+   Ats22aoxBi2k8qSdER3AsO1/DJyoHYIWalwRY0wCBFkwytmWPJv1Pafsb
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="361105157"
+X-IronPort-AV: E=Sophos;i="6.00,231,1681196400"; 
+   d="scan'208";a="361105157"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2023 00:35:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="713766617"
+X-IronPort-AV: E=Sophos;i="6.00,231,1681196400"; 
+   d="scan'208";a="713766617"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 10 Jun 2023 00:35:22 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q7t85-0009rc-2R;
+        Sat, 10 Jun 2023 07:35:21 +0000
+Date:   Sat, 10 Jun 2023 15:35:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
+ de2b5ae75f684f62994d74987d0ef1e8c22754a2
+Message-ID: <202306101517.lgAaOQ1B-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fri, Jun 09, 2023 at 02:18:48PM CEST, arkadiusz.kubalewski@intel.com wrote:
->From: Vadim Fedorenko <vadim.fedorenko@linux.dev>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
+branch HEAD: de2b5ae75f684f62994d74987d0ef1e8c22754a2  documentation/rcu: Fix typo
 
-[...]
+elapsed time: 734m
 
->+struct dpll_device_ops {
->+	int (*mode_get)(const struct dpll_device *dpll, void *dpll_priv,
->+			enum dpll_mode *mode, struct netlink_ext_ack *extack);
->+	int (*mode_set)(const struct dpll_device *dpll, void *dpll_priv,
->+			const enum dpll_mode mode,
->+			struct netlink_ext_ack *extack);
->+	bool (*mode_supported)(const struct dpll_device *dpll, void *dpll_priv,
->+			       const enum dpll_mode mode,
->+			       struct netlink_ext_ack *extack);
->+	int (*source_pin_idx_get)(const struct dpll_device *dpll,
->+				  void *dpll_priv,
->+				  u32 *pin_idx,
->+				  struct netlink_ext_ack *extack);
+configs tested: 45
+configs skipped: 2
 
-I'm pretty sure I wrote this to the last patchset version as well.
-You call this op from anywhere, it's a leftover, please remove it.
-In ptp_ocp remove it as well and implement the state_on_dpll pin op
-instead. I'm pretty sure no one tested ptp_ocp with this patchset
-version otherwise this would show-up :/
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-[...]
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                               defconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+sh                               allmodconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   clang
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
