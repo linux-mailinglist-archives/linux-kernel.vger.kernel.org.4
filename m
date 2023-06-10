@@ -2,137 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D69072AC73
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 17:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE3C72AC76
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 17:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232366AbjFJPEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 11:04:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46950 "EHLO
+        id S233239AbjFJPGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 11:06:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232738AbjFJPED (ORCPT
+        with ESMTP id S231961AbjFJPGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 11:04:03 -0400
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623923588;
-        Sat, 10 Jun 2023 08:04:02 -0700 (PDT)
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-53fbb3a013dso1698367a12.1;
-        Sat, 10 Jun 2023 08:04:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686409442; x=1689001442;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A+2DK6e0ExwNggdgQrYc3qCt4Ssgi+vxV8OCcu+bbSs=;
-        b=lPMithFBpiUQDFD5jZ5tlqr+fJOn87UxuGVH/+yaJA431UMlh8E4iusRY5K8XO16mH
-         n5fV3FVH2ryQxk75E3jAKqNz92oWUFBnBfjYi83YsjEXn9V6SYwJ/7WRA7uME3mB60ov
-         lYmmqHZJEpXPNaD2neYgHkDlwPcAA1zs75EDX58Ls0bQeZIV+vvhD5zbLjNDITxlazbd
-         /J5szCblSNbw5CebTLgAIY13JrCqsd4+ECeU76cYo6xT3tzbLFbh06ra/GA32RDV/NYE
-         gGiIoAg426p0LrCAWw7A39UXvUw9CAeDYq6+Zx/hwD4eEaH5eSBUv2cmxa2JnJU9SOjG
-         PJjA==
-X-Gm-Message-State: AC+VfDzY+/NXzZrueNXLr2g5T+bF2ZqLpiILg4WpcJtHvtgN0TkwYfro
-        mNNwXtqbInBdj1a7o0osZko=
-X-Google-Smtp-Source: ACHHUZ5t/ck9Yx8w0Ts2mCKfu3UlWc1gun1eU3jLZdNKvdus7uTM+1aYKzQpak5qo25X7YqamCyyBg==
-X-Received: by 2002:a17:903:3293:b0:1af:9b8a:9c79 with SMTP id jh19-20020a170903329300b001af9b8a9c79mr2086591plb.34.1686409441578;
-        Sat, 10 Jun 2023 08:04:01 -0700 (PDT)
-Received: from [192.168.3.219] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id u10-20020a170902bf4a00b001b2063d43a7sm5073944pls.249.2023.06.10.08.03.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Jun 2023 08:04:01 -0700 (PDT)
-Message-ID: <02e4f87a-80e8-dc5d-0d6e-46939f2c74ac@acm.org>
-Date:   Sat, 10 Jun 2023 08:03:59 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: Fwd: Waking up from resume locks up on sr device
-Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Damien Le Moal <dlemoal@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>,
+        Sat, 10 Jun 2023 11:06:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCC23588;
+        Sat, 10 Jun 2023 08:06:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DC1761044;
+        Sat, 10 Jun 2023 15:06:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77077C433D2;
+        Sat, 10 Jun 2023 15:06:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686409604;
+        bh=U1kzKQLjBw3U2CaamkV1OihnciwYdzX6lEiWfiY9w9g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mFMmIFLq9D+Je2P4zOq9Qj7TXnerOZE+WOuFadpjtM9DJ4TYvr6yTHF029wKeDHYJ
+         +VBXfC49Fg/P9rLKNCAqwr0Rl5ZbfP4RCJiSdX8KdtbpigM56PcwtXfas50SkoWObJ
+         qVT5XVDA9aut86TydiQr3HUPR7RKLYwENN5DSMI96yEi8iHEfkh9qtnKI3Ebv+ip/R
+         Q0CppC9gNDs0YQGA3YmW3qIGu1UZuKFwqFtytAlnbeie5oatbqDGGl++nk5AHT/PRw
+         SW4qw/cqIo1qxOgm82LFoxTTGk+zwIRvN4HNJA/Tqgh1aq6Y/rrHyrnB+S04S6wXeM
+         j5rBdXyTfBalQ==
+Date:   Sat, 10 Jun 2023 16:06:35 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Maksim Kiselev <bigunclemax@gmail.com>
+Cc:     linux-iio@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Joe Breuer <linux-kernel@jmbreuer.net>,
-        Linux Power Management <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Hardening <linux-hardening@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux SCSI <linux-scsi@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-References: <2d1fdf6d-682c-a18d-2260-5c5ee7097f7d@gmail.com>
- <5513e29d-955a-f795-21d6-ec02a2e2e128@gmail.com>
- <ZIQ6bkau3j6qGef8@duo.ucw.cz>
- <07d6e2e7-a50a-8cf4-5c5d-200551bd6687@gmail.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <07d6e2e7-a50a-8cf4-5c5d-200551bd6687@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Ramona Bolboaca <ramona.bolboaca@analog.com>,
+        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Haibo Chen <haibo.chen@nxp.com>,
+        Leonard =?iso-8859-1?Q?G=F6hrs?= <l.goehrs@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 2/3] dt-bindings: iio: adc: Add Allwinner
+ D1/T113s/R329/T507 SoCs GPADC
+Message-ID: <20230610-ranged-outboard-2aaa0cc36cbd@spud>
+References: <20230610122934.953106-1-bigunclemax@gmail.com>
+ <20230610122934.953106-3-bigunclemax@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="wh79gADhzXBzQ9SW"
+Content-Disposition: inline
+In-Reply-To: <20230610122934.953106-3-bigunclemax@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/10/23 06:27, Bagas Sanjaya wrote:
-> On 6/10/23 15:55, Pavel Machek wrote:
->>>> #regzbot introduced: v5.0..v6.4-rc5 https://bugzilla.kernel.org/show_bug.cgi?id=217530
->>>> #regzbot title: Waking up from resume locks up on SCSI CD/DVD drive
->>>>
->>> The reporter had found the culprit (via bisection), so:
->>>
->>> #regzbot introduced: a19a93e4c6a98c
->> Maybe cc the authors of that commit?
-> 
-> Ah! I forgot to do that! Thanks anyway.
 
-Hi Damien,
+--wh79gADhzXBzQ9SW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Why does the ATA code call scsi_rescan_device() before system resume has
-finished? Would ATA devices still work with the patch below applied?
+Hey,
 
-Thanks,
+On Sat, Jun 10, 2023 at 03:29:08PM +0300, Maksim Kiselev wrote:
+> From: Maxim Kiselev <bigunclemax@gmail.com>
+>=20
+> Allwinner's D1/T113s/R329/T507 SoCs have a new general purpose ADC.
+> This ADC is the same for all of this SoCs. The only difference is
+> the number of available channels.
+>=20
+> Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
+> ---
+>  .../iio/adc/allwinner,sun20i-d1-gpadc.yaml    | 91 +++++++++++++++++++
+>  1 file changed, 91 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/adc/allwinner,s=
+un20i-d1-gpadc.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/iio/adc/allwinner,sun20i-d=
+1-gpadc.yaml b/Documentation/devicetree/bindings/iio/adc/allwinner,sun20i-d=
+1-gpadc.yaml
+> new file mode 100644
+> index 000000000000..2b59844b7c07
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/iio/adc/allwinner,sun20i-d1-gpadc=
+=2Eyaml
+> @@ -0,0 +1,91 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/iio/adc/allwinner,sun20i-d1-gpadc.yam=
+l#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Allwinner D1 General Purpose ADC
+> +
+> +maintainers:
+> +  - Maksim Kiselev <bigunclemax@gmail.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - allwinner,sun20i-d1-gpadc
+> +
+> +  "#io-channel-cells":
+> +    const: 1
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +patternProperties:
+> +  "^channel@([0-15])$":
+> +    $ref: adc.yaml
+> +    type: object
+> +    description:
+> +      Represents the internal channels of the ADC.
+> +
+> +    properties:
+> +      reg:
+> +        items:
+> +          minimum: 0
+> +          maximum: 15
+> +
+> +    required:
+> +      - reg
+> +
+> +    additionalProperties: false
+> +
+> +required:
+> +  - "#io-channel-cells"
+> +  - clocks
+> +  - compatible
+> +  - interrupts
+> +  - reg
+> +  - resets
+> +
+> +unevaluatedProperties: false
 
-Bart.
+How come this one changed to unevaluatedProperties: false?
+Wasn't it for the ADC that we previously discussed whether
+additionalProperties: false was correct or not?
 
+Cheers,
+Conor.
 
-diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
-index 6a959c993dd8..be3971b7fd27 100644
---- a/drivers/scsi/scsi_scan.c
-+++ b/drivers/scsi/scsi_scan.c
-@@ -1629,6 +1629,20 @@ void scsi_rescan_device(struct device *dev)
-  {
-  	struct scsi_device *sdev = to_scsi_device(dev);
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/sun20i-d1-ccu.h>
+> +    #include <dt-bindings/reset/sun20i-d1-ccu.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    gpadc: adc@2009000 {
+> +        compatible =3D "allwinner,sun20i-d1-gpadc";
+> +        reg =3D <0x2009000 0x1000>;
+> +        clocks =3D <&ccu CLK_BUS_GPADC>;
+> +        resets =3D <&ccu RST_BUS_GPADC>;
+> +        interrupts =3D <73 IRQ_TYPE_LEVEL_HIGH>;
+> +        #io-channel-cells =3D <1>;
+> +
+> +        #address-cells =3D <1>;
+> +        #size-cells =3D <0>;
+> +
+> +        channel@0 {
+> +            reg =3D <0>;
+> +        };
+> +
+> +        channel@1 {
+> +            reg =3D <1>;
+> +        };
+> +    };
+> +...
+> --=20
+> 2.39.2
+>=20
 
-+#ifdef CONFIG_PM_SLEEP
-+	/*
-+	 * The ATA subsystem may call scsi_rescan_device() before resuming has
-+	 * finished. If this happens, prevent a deadlock on the device_lock()
-+	 * call by skipping rescanning.
-+	 */
-+	if (dev->power.is_suspended)
-+		return;
-+#endif
-+
-+	/*
-+	 * Serialize scsi_driver.rescan() calls and scsi_driver.gendrv.remove()
-+	 * calls.
-+	 */
-  	device_lock(dev);
+--wh79gADhzXBzQ9SW
+Content-Type: application/pgp-signature; name="signature.asc"
 
-  	scsi_attach_vpd(sdev);
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZISRewAKCRB4tDGHoIJi
+0t7lAQC3g8izalvV17+LOkuzC99K8K7gGKPcCDEWGDZSOQmmcgD+PmIbXH+W/Zd3
+WmLf5srpovGreGR+T+Diold6TDIk4ws=
+=rCnq
+-----END PGP SIGNATURE-----
+
+--wh79gADhzXBzQ9SW--
