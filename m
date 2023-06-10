@@ -2,447 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F8DC72AD40
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 18:22:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B60672AD45
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 18:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjFJQWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 12:22:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42324 "EHLO
+        id S229587AbjFJQYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 12:24:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbjFJQWR (ORCPT
+        with ESMTP id S229550AbjFJQYE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 12:22:17 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8916530EC
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 09:22:13 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9788faaca2dso472941366b.0
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 09:22:13 -0700 (PDT)
+        Sat, 10 Jun 2023 12:24:04 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD5DF30DD
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 09:24:02 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-51458187be1so4999610a12.2
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 09:24:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20221208.gappssmtp.com; s=20221208; t=1686414132; x=1689006132;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kx5pKruNSrU27aJ8jGqQPfU6y7ApLJM2wsxoi+1ZEN4=;
-        b=lmdjvR+23NrbWloMWGFrEdM7Gs4oUsnXjoqdfduB0a+TiRA56vu/8YfNlmcKUhHVBC
-         NYOOad07Uf6Uzgun9OvMZx9EgkC99LouNoeRXtQ4fiYyOJiHoO9uUcCblcKU7sbbcob0
-         eRyDlTOfvSSpmyFsUaHf4OamIYBHrlUQ2d1VdXnEWfysZ64Lit1MoB6JOc6tn8WdsPyY
-         IQk8Gji0H9ERvpPExfkcx1xWGYT/gR1RLssH6QYTp7gSnF89E/D0bkyo8P+6IfaeGD7Z
-         ohRwuvJMBWz556EEU76WcbeT6BsunEpw/cstI9xgVTEaSw+gZ5VXBliIT8Tmf5s5hSMA
-         bidw==
+        d=linaro.org; s=google; t=1686414241; x=1689006241;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pd1ySyif81ZEmdOhujalqY6qZNVl7+w+GriNkv4KMlE=;
+        b=VVq/OdkQygheYkFphc8bAXO43NV9AMvV4c2zje5mqNsortsMDAIpkbk+sjMS3dxLrm
+         1zBOCzoyT5n21Pk4MQv0WYFclihCDj/7SUE4RCK51mtZIMzKW7f9gP66PUmSkM7Q789X
+         fCbl8dkYUUP3ERrVmdWG8Qsc578/pn3uW5T1es7x75WpAYlf+Kx5KrEMXnp7GO9ZrHNN
+         E9he5iG8kx0hdoVf8pRYsuAw8pgpnxcwO9I14iAXjAUthy2uTKk7Jn1tVPr4oBwBo2d9
+         yjDeJB5nh35tkKSqc2CofnPrafiVgUl7AItHAGQAYiktZDONsE9n1mQV+ofW3M9XBBkr
+         WBag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686414132; x=1689006132;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kx5pKruNSrU27aJ8jGqQPfU6y7ApLJM2wsxoi+1ZEN4=;
-        b=S3WnD75hwy9dmrTqIf7dwiV8ZsHSQXe5oMqbJVkh08wneK/1Kb7kiegScL9Q6I0DRy
-         WCgWQ3vmsTYK/P9gDhO/7EXsoloraPSSpSLty7aNYVNPSzpdonL7mT6caAYoy4EgYEWY
-         c6uOeDKKJJOGhgTEetqMjZ/RQysJsETeHo6OXMXq0nsv+ScGnAyFbXUzrAGMtWs7Ro27
-         AaDAIr7Z0agWU9u7ypprLE4f7altHR/BO/d+pPO75CwjDgNwFQmi2/AO6rnEfhJz321J
-         QG6tJSQInNcgcAjHgZ+dGp9s1b/UOi1PtUa2eHJTnEnCdL7qGbNow3qZnKKxVaA2VXU4
-         gQaA==
-X-Gm-Message-State: AC+VfDwbgTLp6XM1Lua3UuxdDwuc0BYD40rVuA3nE0+8zw77l1ba7e7z
-        WRsJbDOTNEnNDVgayJkIxV0PSQ==
-X-Google-Smtp-Source: ACHHUZ44O/6CAD+E974nX8FE7PkvlcYhxH5tQj6WeQoLOh5GC1uEq4yf9xej6n0yI2WCBic22/NrLA==
-X-Received: by 2002:a17:907:1626:b0:96f:e7cf:5004 with SMTP id hb38-20020a170907162600b0096fe7cf5004mr4830407ejc.73.1686414131776;
-        Sat, 10 Jun 2023 09:22:11 -0700 (PDT)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id sa9-20020a170906eda900b00974612a9837sm2730051ejb.20.2023.06.10.09.22.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Jun 2023 09:22:10 -0700 (PDT)
-Date:   Sat, 10 Jun 2023 18:22:09 +0200
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
-Cc:     kuba@kernel.org, vadfed@meta.com, jonathan.lemon@gmail.com,
-        pabeni@redhat.com, corbet@lwn.net, davem@davemloft.net,
-        edumazet@google.com, vadfed@fb.com, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, saeedm@nvidia.com, leon@kernel.org,
-        richardcochran@gmail.com, sj@kernel.org, javierm@redhat.com,
-        ricardo.canuelo@collabora.com, mst@redhat.com, tzimmermann@suse.de,
-        michal.michalik@intel.com, gregkh@linuxfoundation.org,
-        jacek.lawrynowicz@linux.intel.com, airlied@redhat.com,
-        ogabbay@kernel.org, arnd@arndb.de, nipun.gupta@amd.com,
-        axboe@kernel.dk, linux@zary.sk, masahiroy@kernel.org,
-        benjamin.tissoires@redhat.com, geert+renesas@glider.be,
-        milena.olech@intel.com, kuniyu@amazon.com, liuhangbin@gmail.com,
-        hkallweit1@gmail.com, andy.ren@getcruise.com, razor@blackwall.org,
-        idosch@nvidia.com, lucien.xin@gmail.com, nicolas.dichtel@6wind.com,
-        phil@nwl.cc, claudiajkang@gmail.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linux-rdma@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, poros@redhat.com,
-        mschmidt@redhat.com, linux-clk@vger.kernel.org,
-        vadim.fedorenko@linux.dev
-Subject: Re: [RFC PATCH v8 02/10] dpll: spec: Add Netlink spec in YAML
-Message-ID: <ZISjMUcpmUTBXIOA@nanopsycho>
-References: <20230609121853.3607724-1-arkadiusz.kubalewski@intel.com>
- <20230609121853.3607724-3-arkadiusz.kubalewski@intel.com>
+        d=1e100.net; s=20221208; t=1686414241; x=1689006241;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pd1ySyif81ZEmdOhujalqY6qZNVl7+w+GriNkv4KMlE=;
+        b=JlDtHxiqlSXzmjMjtzWR77pDux4Dt7eYxkxtPonQzGWHOIaSW85egMfst0jR5+Diq4
+         RsfTstp6wz0rV2p9HxCtZWn44R4mqYUwPagE9OJDQJTkAqeyOf53VS9V3PuviB2NvAzR
+         WhBkfkoIlpzhe9bBCy2Fo3TrW7wCmV+54Dev6Ndgl0uqT7y29xwSAN1jpQSlfNW4RTZi
+         DryIkeaWSfWbyKYogPe1m+NcoOQJlyJyBGm+9EfjXNzbGXWhUFPNetjM1MkqrysECjeN
+         bXxfmHdurnJeyjkRtGWi96ysNSgRIm2SXVgaa+dUtFt5djf+rC6jTbY7SaoUzdpWJu+l
+         M52w==
+X-Gm-Message-State: AC+VfDzYV/V+Wg8wIvYH2B6qjUPICzGBNu85QsMPDgKFJ1Syo3iaG1Qs
+        alMBcpwnw6jx0xUuQgQLolz4Dg==
+X-Google-Smtp-Source: ACHHUZ6nS4XwTl4j51nPSZzPIzQZjvp6/dlONHlOpa6csHUiV8kK29gamWzpucZ3aDf7cbNFVOK6aA==
+X-Received: by 2002:aa7:d80f:0:b0:514:92d8:54b3 with SMTP id v15-20020aa7d80f000000b0051492d854b3mr1745962edq.12.1686414241023;
+        Sat, 10 Jun 2023 09:24:01 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id f14-20020a056402004e00b00514b3dd8638sm3006861edu.67.2023.06.10.09.23.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 10 Jun 2023 09:24:00 -0700 (PDT)
+Message-ID: <eb935f16-1f89-0be9-86c9-24e8a88c2d8b@linaro.org>
+Date:   Sat, 10 Jun 2023 18:23:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230609121853.3607724-3-arkadiusz.kubalewski@intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 1/2] tty: serial: samsung_tty: Fix a memory leak in
+ s3c24xx_serial_getclk() in case of error
+To:     Andi Shyti <andi.shyti@kernel.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Thomas Abraham <thomas.abraham@linaro.org>,
+        Kukjin Kim <kgene.kim@samsung.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org
+References: <e4359d5ef206f5b349c1d15a515a1205e78dda55.1686285892.git.christophe.jaillet@wanadoo.fr>
+ <20230610102607.7nonyh5xhuhpyy6e@intel.intel>
+ <58d3f250-499d-5a18-6798-f9833cc2dbbd@wanadoo.fr>
+ <20230610145429.uvmxxgxc5tc6x5b5@intel.intel>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230610145429.uvmxxgxc5tc6x5b5@intel.intel>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fri, Jun 09, 2023 at 02:18:45PM CEST, arkadiusz.kubalewski@intel.com wrote:
->Add a protocol spec for DPLL.
->Add code generated from the spec.
->
->Signed-off-by: Jakub Kicinski <kuba@kernel.org>
->Signed-off-by: Michal Michalik <michal.michalik@intel.com>
->Signed-off-by: Vadim Fedorenko <vadim.fedorenko@linux.dev>
->Signed-off-by: Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
->---
-> Documentation/netlink/specs/dpll.yaml | 466 ++++++++++++++++++++++++++
-> drivers/dpll/dpll_nl.c                | 161 +++++++++
-> drivers/dpll/dpll_nl.h                |  50 +++
-> include/uapi/linux/dpll.h             | 184 ++++++++++
-> 4 files changed, 861 insertions(+)
-> create mode 100644 Documentation/netlink/specs/dpll.yaml
-> create mode 100644 drivers/dpll/dpll_nl.c
-> create mode 100644 drivers/dpll/dpll_nl.h
-> create mode 100644 include/uapi/linux/dpll.h
->
->diff --git a/Documentation/netlink/specs/dpll.yaml b/Documentation/netlink/specs/dpll.yaml
->new file mode 100644
->index 000000000000..f7317003d312
->--- /dev/null
->+++ b/Documentation/netlink/specs/dpll.yaml
->@@ -0,0 +1,466 @@
->+# SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
->+
->+name: dpll
->+
->+doc: DPLL subsystem.
->+
->+definitions:
->+  -
->+    type: enum
->+    name: mode
->+    doc: |
->+      working-modes a dpll can support, differentiate if and how dpll selects
+On 10/06/2023 16:54, Andi Shyti wrote:
+> On Sat, Jun 10, 2023 at 04:07:51PM +0200, Christophe JAILLET wrote:
+>> Le 10/06/2023 à 12:26, Andi Shyti a écrit :
+>>>> @@ -1459,8 +1459,10 @@ static unsigned int s3c24xx_serial_getclk(struct s3c24xx_uart_port *ourport,
+>>>>   			continue;
+>>>>   		rate = clk_get_rate(clk);
+>>>> -		if (!rate)
+>>>> +		if (!rate) {
+>>>> +			clk_put(clk);
+>>>>   			continue;
+>>>
+>>> could you also print an error here?
+>>>
+>>
+>> Is:
+>> 	dev_err(ourport->port.dev,
+>> 		"Failed to get clock rate for %s.\n", clkname);
 
-s/working-modes/working modes/
-s/differentiate/differentiates/
-?
+Why do we need it? Most of other users of clk_get_rate() don't print.
+Probably because such condition is highly unlikely if not impossible.
+This makes simple function unnecessarily bigger...
 
+Best regards,
+Krzysztof
 
->+      one of its inputs to syntonize with it, valid values for DPLL_A_MODE
->+      attribute
->+    entries:
->+      -
->+        name: manual
->+        doc: input can be only selected by sending a request to dpll
->+        value: 1
->+      -
->+        name: automatic
->+        doc: highest prio, valid input, auto selected by dpll
-
-s/valid input, auto selected by dpll/input pin auto selected by dpll/
-?
-
-
->+      -
->+        name: holdover
->+        doc: dpll forced into holdover mode
->+      -
->+        name: freerun
->+        doc: dpll driven on system clk
-
-Thinking about modes "holdover" and "freerun".
-1) You don't use them anywhere in this patchset, please remove them
-   until they are needed. ptp_ocp and ice uses automatic, mlx5 uses
-   manual. Btw, are there any other unused parts of UAPI? If yes, could
-   you please remove them too?
-
-2) I don't think it is correct to have them.
-   a) to achieve holdover:
-      if state is LOCKED_HO_ACQ you just disconnect all input pins.
-   b) to achieve freerun:
-      if state LOCKED you just disconnect all input pins.
-   So don't mangle the mode with status.
-
-
->+    render-max: true
->+  -
->+    type: enum
->+    name: lock-status
->+    doc: |
->+      provides information of dpll device lock status, valid values for
->+      DPLL_A_LOCK_STATUS attribute
->+    entries:
->+      -
->+        name: unlocked
->+        doc: |
->+          dpll was not yet locked to any valid input (or is in mode:
->+            DPLL_MODE_FREERUN)
-
-Don't forget to remove the mention of mode freerun from here.
-
-
->+        value: 1
->+      -
->+        name: locked
->+        doc: |
->+          dpll is locked to a valid signal, but no holdover available
->+      -
->+        name: locked-ho-acq
->+        doc: |
->+          dpll is locked and holdover acquired
->+      -
->+        name: holdover
->+        doc: |
->+          dpll is in holdover state - lost a valid lock or was forced
->+          by selecting DPLL_MODE_HOLDOVER mode (latter possible only
->+          when dpll lock-state was already DPLL_LOCK_STATUS_LOCKED,
->+          if dpll lock-state was not DPLL_LOCK_STATUS_LOCKED, the
->+          dpll's lock-state shall remain DPLL_LOCK_STATUS_UNLOCKED
->+          even if DPLL_MODE_HOLDOVER was requested)
-
-Don't forget to remove the mention of mode holdover from here.
-
-
->+    render-max: true
->+  -
->+    type: const
->+    name: temp-divider
->+    value: 1000
->+    doc: |
->+      temperature divider allowing userspace to calculate the
->+      temperature as float with three digit decimal precision.
->+      Value of (DPLL_A_TEMP / DPLL_TEMP_DIVIDER) is integer part of
->+      temperature value.
->+      Value of (DPLL_A_TEMP % DPLL_TEMP_DIVIDER) is fractional part of
->+      temperature value.
->+  -
->+    type: enum
->+    name: type
->+    doc: type of dpll, valid values for DPLL_A_TYPE attribute
->+    entries:
->+      -
->+        name: pps
->+        doc: dpll produces Pulse-Per-Second signal
->+        value: 1
->+      -
->+        name: eec
->+        doc: dpll drives the Ethernet Equipment Clock
->+    render-max: true
->+  -
->+    type: enum
->+    name: pin-type
->+    doc: |
->+      defines possible types of a pin, valid values for DPLL_A_PIN_TYPE
->+      attribute
->+    entries:
->+      -
->+        name: mux
->+        doc: aggregates another layer of selectable pins
->+        value: 1
->+      -
->+        name: ext
->+        doc: external input
->+      -
->+        name: synce-eth-port
->+        doc: ethernet port PHY's recovered clock
->+      -
->+        name: int-oscillator
->+        doc: device internal oscillator
->+      -
->+        name: gnss
->+        doc: GNSS recovered clock
->+    render-max: true
->+  -
->+    type: enum
->+    name: pin-direction
->+    doc: |
->+      defines possible direction of a pin, valid values for
->+      DPLL_A_PIN_DIRECTION attribute
->+    entries:
->+      -
->+        name: input
->+        doc: pin used as a input of a signal
-
-I don't think I have any objections against "input", but out of
-curiosity, why you changed that from "source"?
-
-
->+        value: 1
->+      -
->+        name: output
->+        doc: pin used to output the signal
->+    render-max: true
->+  -
->+    type: const
->+    name: pin-frequency-1-hz
->+    value: 1
->+  -
->+    type: const
->+    name: pin-frequency-10-khz
->+    value: 10000
->+  -
->+    type: const
->+    name: pin-frequency-77_5-khz
->+    value: 77500
->+  -
->+    type: const
->+    name: pin-frequency-10-mhz
->+    value: 10000000
->+  -
->+    type: enum
->+    name: pin-state
->+    doc: |
->+      defines possible states of a pin, valid values for
->+      DPLL_A_PIN_STATE attribute
->+    entries:
->+      -
->+        name: connected
->+        doc: pin connected, active input of phase locked loop
->+        value: 1
->+      -
->+        name: disconnected
->+        doc: pin disconnected, not considered as a valid input
->+      -
->+        name: selectable
->+        doc: pin enabled for automatic input selection
->+    render-max: true
->+  -
->+    type: flags
->+    name: pin-caps
->+    doc: |
->+      defines possible capabilities of a pin, valid flags on
->+      DPLL_A_PIN_CAPS attribute
->+    entries:
->+      -
->+        name: direction-can-change
->+      -
->+        name: priority-can-change
->+      -
->+        name: state-can-change
->+
->+attribute-sets:
->+  -
->+    name: dpll
->+    enum-name: dpll_a
->+    attributes:
->+      -
->+        name: id
->+        type: u32
->+        value: 1
->+      -
->+        name: module-name
->+        type: string
->+      -
->+        name: clock-id
->+        type: u64
->+      -
->+        name: mode
->+        type: u8
->+        enum: mode
->+      -
->+        name: mode-supported
->+        type: u8
->+        enum: mode
->+        multi-attr: true
->+      -
->+        name: lock-status
->+        type: u8
->+        enum: lock-status
->+      -
->+        name: temp
->+        type: s32
->+      -
->+        name: type
->+        type: u8
->+        enum: type
->+      -
->+        name: pin-id
->+        type: u32
->+      -
->+        name: pin-board-label
->+        type: string
->+      -
->+        name: pin-panel-label
->+        type: string
->+      -
->+        name: pin-package-label
->+        type: string
-
-Wouldn't it make sense to add some small documentation blocks to the
-attrs? IDK.
-
-
->+      -
->+        name: pin-type
->+        type: u8
->+        enum: pin-type
->+      -
->+        name: pin-direction
->+        type: u8
->+        enum: pin-direction
->+      -
->+        name: pin-frequency
->+        type: u64
->+      -
->+        name: pin-frequency-supported
->+        type: nest
->+        multi-attr: true
->+        nested-attributes: pin-frequency-range
->+      -
->+        name: pin-frequency-min
->+        type: u64
->+      -
->+        name: pin-frequency-max
->+        type: u64
->+      -
->+        name: pin-prio
->+        type: u32
->+      -
->+        name: pin-state
->+        type: u8
->+        enum: pin-state
->+      -
->+        name: pin-dpll-caps
->+        type: u32
->+      -
->+        name: pin-parent
->+        type: nest
->+        multi-attr: true
->+        nested-attributes: pin-parent
->+  -
->+    name: pin-parent
->+    subset-of: dpll
->+    attributes:
->+      -
->+        name: id
->+        type: u32
->+      -
->+        name: pin-direction
->+        type: u8
->+      -
->+        name: pin-prio
->+        type: u32
->+      -
->+        name: pin-state
->+        type: u8
->+      -
->+        name: pin-id
->+        type: u32
->+
->+  -
->+    name: pin-frequency-range
->+    subset-of: dpll
->+    attributes:
->+      -
->+        name: pin-frequency-min
->+        type: u64
->+      -
->+        name: pin-frequency-max
->+        type: u64
-
-[...]
