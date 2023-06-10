@@ -2,150 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15A6372ADF9
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 19:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 657C172ADD7
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 19:42:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231265AbjFJR5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 13:57:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43298 "EHLO
+        id S230122AbjFJRmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 13:42:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231226AbjFJR5T (ORCPT
+        with ESMTP id S229512AbjFJRmq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 13:57:19 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928BDF0
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 10:57:18 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-651ffcc1d3dso2328364b3a.3
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 10:57:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686419838; x=1689011838;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7hPcol59mgRdncxA10mWzbwWyNDS1U6CMlrEINf4rH0=;
-        b=M7lMDEeQjaeDMgP3mpOPFqOB8+g8oUwg/hct6MT0buYO507vwhbc0cGARA8g1+ZGdS
-         c4w68BQO9rrpuXQdXWd3NEzZgKiqsImI1x+ATknwiicD29pKaN+LRmnnohwBOC2PPb6J
-         JGiWckbPe1CCPgayOALmXxUdUNSYul7Ot6ksxzvwtKAwfOzuN6aGW4AbVO+c9q2wKJ/s
-         HkS7L+Fnq6DXReht/nK5ONxOBycv9n+yQSVrwudylR5bvp6ezN4In5n5PViPVAE7tFAO
-         QhI6rnXApwakWXOflGeYaranr62z92Rk2fsry2ZCn5OkP+4o/IjH9ufye7dB8XbfUrsL
-         toyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686419838; x=1689011838;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7hPcol59mgRdncxA10mWzbwWyNDS1U6CMlrEINf4rH0=;
-        b=ACJgTV9aLL0j7GYn0V94q2DjSzaFMSjilXRt4sCbXFErgBnnGg0UniWNc5SXptM4xX
-         IW0eEZO9oGvnyqnil0y5Bp3Wgn4fAk5F+83xNxvPfwIUUfQINofGRiRLMl4eWxQCPbC9
-         kxk0MufYls2BLgeheTY5FV0GjpnoQR0ABFtvLnIRm7hes844tK1qR7VHzt4b5SqBfwiW
-         xZjGwK53BrFEnvuhuvxhoDFwYEBHqTulvj/XB9CM52QOtxARzoGdfi4c6zQP0GjaaqPG
-         60Jrgu5tcIsxbyzYGPfYfpUVWdXUEI8gstbXXtnak/a20Q7QrvHmB3W7QrE3BVSzbKqa
-         V2/w==
-X-Gm-Message-State: AC+VfDxHTjwFGDE4qrSVQng3Q89jwMlCWdy8M24LZw4R9tl6Gh65MJBg
-        im5DbRktif8lQYqgnJzUIsAm96h1UX0L3GFN
-X-Google-Smtp-Source: ACHHUZ6jEfXhhJNImqBBhqqU65fgDEkqcGUm+T2fCgxwUABlgXflTwWQDEjk2EgVDJQz5RpCqjWS3Q==
-X-Received: by 2002:a05:6a20:a20d:b0:10d:5390:ea90 with SMTP id u13-20020a056a20a20d00b0010d5390ea90mr3771281pzk.59.1686419837863;
-        Sat, 10 Jun 2023 10:57:17 -0700 (PDT)
-Received: from sumitra.com ([59.95.149.54])
-        by smtp.gmail.com with ESMTPSA id i21-20020aa78d95000000b0064d34ace753sm4438844pfr.114.2023.06.10.10.57.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Jun 2023 10:57:17 -0700 (PDT)
-Date:   Sat, 10 Jun 2023 10:57:12 -0700
-From:   Sumitra Sharma <sumitraartsy@gmail.com>
-To:     =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     Ira Weiny <ira.weiny@intel.com>, Fabio <fmdefrancesco@gmail.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: [PATCH v2] lib: Replace kmap() with kmap_local_page()
-Message-ID: <20230610175712.GA348514@sumitra.com>
+        Sat, 10 Jun 2023 13:42:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7553594;
+        Sat, 10 Jun 2023 10:42:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D678A60B07;
+        Sat, 10 Jun 2023 17:42:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA234C433EF;
+        Sat, 10 Jun 2023 17:42:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686418964;
+        bh=PahXCgyPj76KySfEBE99L6HcX3V7pO0Pti25w6elUbg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GAijoixuha5UwXmNzveDG/CArdpP5R3fMR4KZqIHapHWVoalTSdR7ynG7SjFszTGU
+         Tuhw6LFmFSuH+byUFgLEMIh5D1QLlsdp4AOrjqj/Mr33xdoRzhH5XK/V0+fo7Od0xz
+         xdjn0Lg5zBqamZKNwiTpOpB5zUPgL132+Se9iGJpkGOlce+ZNBB6RslUxE1lFvFRfS
+         FQCjcsG0NSndD9SFcph0M+NvyVxCTsxRo03e0Dk14fm+fAfrX8u9OEf3uudDq0/zps
+         K0zeNDpovJBDLn9+eedXInW2+Fas2J9EVIB+uQJqb44LIfYXA5IiHLxjv4rMZaWX6K
+         HQEEx5nHkfcnw==
+Date:   Sat, 10 Jun 2023 18:59:18 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     andy.shevchenko@gmail.com
+Cc:     George Stark <gnstark@sberdevices.ru>, lars@metafoo.de,
+        neil.armstrong@linaro.org, khilman@baylibre.com,
+        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
+        andriy.shevchenko@linux.intel.com, nuno.sa@analog.com,
+        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        kernel@sberdevices.ru
+Subject: Re: [PATCH v3] meson saradc: fix clock divider mask length
+Message-ID: <20230610185918.7c85b66e@jic23-huawei>
+In-Reply-To: <ZH-4qsNcLGiQFiSE@surfacebook>
+References: <20230606165357.42417-1-gnstark@sberdevices.ru>
+        <ZH-4qsNcLGiQFiSE@surfacebook>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kmap() has been deprecated in favor of the kmap_local_page()
-due to high cost, restricted mapping space, the overhead of
-a global lock for synchronization, and making the process
-sleep in the absence of free slots.
+On Wed, 7 Jun 2023 01:52:26 +0300
+andy.shevchenko@gmail.com wrote:
 
-kmap_local_page() is faster than kmap() and offers thread-local
-and CPU-local mappings, take pagefaults in a local kmap region
-and preserves preemption by saving the mappings of outgoing
-tasks and restoring those of the incoming one during a context
-switch.
+> Tue, Jun 06, 2023 at 07:53:57PM +0300, George Stark kirjoitti:
+> > According to datasheets of supported meson SOCs length of ADC_CLK_DIV  
+> 
+> the datasheets
+> 
+> > field is 6 bits long. Although all supported SOCs have the register  
+> 
+> 6-bit
+> 
+> > with that field documented later SOCs use external clock rather than
+> > ADC internal clock so this patch affects only meson8 family (S8* SOCs)  
+> 
+> s/SOC/SoC/g, and mind the grammar period at the end.
+> 
+> I believe Jonathan can fix when applying this, no need to resend unless
+> he asks for it.
+> 
+Indeed - done and applied to the fixes-togreg branch of iio.git + marked it
+for stable inclusion.
 
-The mappings are kept thread local in the functions
-“dmirror_do_read” and “dmirror_do_write” in test_hmm.c
+Thanks,
 
-Therefore, replace kmap() with kmap_local_page() and use
-mempcy_from/to_page() to avoid open coding kmap_local_page()
-+ memcpy() + kunmap_local().
+Jonathan
 
-Remove the unused variable “tmp”.
-
-
-Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-
-Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
----
-
-Changes in v2: 
-	- Change commit subject and description.
-	- Remove unnecessary type casting (char *).
-
-
- lib/test_hmm.c | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
-
-diff --git a/lib/test_hmm.c b/lib/test_hmm.c
-index 67e6f83fe0f8..717dcb830127 100644
---- a/lib/test_hmm.c
-+++ b/lib/test_hmm.c
-@@ -368,16 +368,13 @@ static int dmirror_do_read(struct dmirror *dmirror, unsigned long start,
- 	for (pfn = start >> PAGE_SHIFT; pfn < (end >> PAGE_SHIFT); pfn++) {
- 		void *entry;
- 		struct page *page;
--		void *tmp;
- 
- 		entry = xa_load(&dmirror->pt, pfn);
- 		page = xa_untag_pointer(entry);
- 		if (!page)
- 			return -ENOENT;
- 
--		tmp = kmap(page);
--		memcpy(ptr, tmp, PAGE_SIZE);
--		kunmap(page);
-+		memcpy_from_page(ptr, page, 0, PAGE_SIZE);
- 
- 		ptr += PAGE_SIZE;
- 		bounce->cpages++;
-@@ -437,16 +434,13 @@ static int dmirror_do_write(struct dmirror *dmirror, unsigned long start,
- 	for (pfn = start >> PAGE_SHIFT; pfn < (end >> PAGE_SHIFT); pfn++) {
- 		void *entry;
- 		struct page *page;
--		void *tmp;
- 
- 		entry = xa_load(&dmirror->pt, pfn);
- 		page = xa_untag_pointer(entry);
- 		if (!page || xa_pointer_tag(entry) != DPT_XA_TAG_WRITE)
- 			return -ENOENT;
- 
--		tmp = kmap(page);
--		memcpy(tmp, ptr, PAGE_SIZE);
--		kunmap(page);
-+		memcpy_to_page(page, 0, ptr, PAGE_SIZE);
- 
- 		ptr += PAGE_SIZE;
- 		bounce->cpages++;
--- 
-2.25.1
+> FWIW,
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> 
+> > Fixes: 3adbf3427330 ("iio: adc: add a driver for the SAR ADC found in Amlogic Meson SoCs")
+> > Signed-off-by: George Stark <GNStark@sberdevices.ru>
+> > ---
+> > Changelog:
+> > 
+> > v1 -> v2:
+> >     * Update commit message
+> > v2 -> v3:
+> >     * Update commit message
+> > ---
+> >  drivers/iio/adc/meson_saradc.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/iio/adc/meson_saradc.c b/drivers/iio/adc/meson_saradc.c
+> > index 85b6826cc10c..b93ff42b8c19 100644
+> > --- a/drivers/iio/adc/meson_saradc.c
+> > +++ b/drivers/iio/adc/meson_saradc.c
+> > @@ -72,7 +72,7 @@
+> >  	#define MESON_SAR_ADC_REG3_PANEL_DETECT_COUNT_MASK	GENMASK(20, 18)
+> >  	#define MESON_SAR_ADC_REG3_PANEL_DETECT_FILTER_TB_MASK	GENMASK(17, 16)
+> >  	#define MESON_SAR_ADC_REG3_ADC_CLK_DIV_SHIFT		10
+> > -	#define MESON_SAR_ADC_REG3_ADC_CLK_DIV_WIDTH		5
+> > +	#define MESON_SAR_ADC_REG3_ADC_CLK_DIV_WIDTH		6
+> >  	#define MESON_SAR_ADC_REG3_BLOCK_DLY_SEL_MASK		GENMASK(9, 8)
+> >  	#define MESON_SAR_ADC_REG3_BLOCK_DLY_MASK		GENMASK(7, 0)
+> >  
+> > -- 
+> > 2.38.4
+> >   
+> 
 
