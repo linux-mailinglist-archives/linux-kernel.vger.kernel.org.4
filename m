@@ -2,56 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E275C72ACA0
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 17:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDCF372ACA2
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 17:37:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235355AbjFJPf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 11:35:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54826 "EHLO
+        id S235523AbjFJPho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 11:37:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233128AbjFJPf1 (ORCPT
+        with ESMTP id S233128AbjFJPhm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 11:35:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B5241FDE;
-        Sat, 10 Jun 2023 08:35:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 26A9B60C5A;
-        Sat, 10 Jun 2023 15:35:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D158C433EF;
-        Sat, 10 Jun 2023 15:35:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686411325;
-        bh=SOMuFTGxbfhkKLDTX+IKvHvZ9WDdJT5FPXR+FGxWZx0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NHyXXmTi8i5XTZ7E8IBk/jsy+zx2iA2Vn+yGQTyV+qxfP9ED0U9TM1o/YKI28+sDs
-         S8gyTE/Z/kvuKxOqyWYI62H7DN1zNxptYHxNfDLCDY2866umNuL5TmwxkAMbkygcTf
-         zP2exY9NCFB3Sbn3gTzj0htWUzybqwMpdPItCEqw=
-Date:   Sat, 10 Jun 2023 17:35:22 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Qingsong Chen <changxian.cqs@antgroup.com>
-Cc:     linux-kernel@vger.kernel.org,
-        =?utf-8?B?55Sw5rSq5Lqu?= <tate.thl@antgroup.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH v3 0/3] Rust scatterlist abstractions
-Message-ID: <2023061001-immovable-mongoose-7546@gregkh>
-References: <20230610104909.3202958-1-changxian.cqs@antgroup.com>
- <2023061017-usable-bountiful-3f59@gregkh>
+        Sat, 10 Jun 2023 11:37:42 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C734A270B;
+        Sat, 10 Jun 2023 08:37:41 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b1fe3a1a73so30588881fa.1;
+        Sat, 10 Jun 2023 08:37:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686411460; x=1689003460;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hhK25wDVWu4aqu+48JlvJ7y91Ju+qS3b/ze2qAoWuAY=;
+        b=NwOa64ru20yDlvD/Rf+X5uGDMHzdtXmWZzJR6U1TTGMkZF+yu1BMWrf7IaLi6JkIMo
+         +bcRalU0ODH62O/wU/C69ExznFm7Xkn/9cJKdxDbwc+uTKjludHSrqW3dKRyzcQjvQvS
+         v1fL27NT8M7lex5O5RTGaGtt1MZ/u7eG7DkKKT1HhV09R7hU/j48qQiti+LLIKhvXcZJ
+         uAa2T//I0ESuwqKyxv7DZlTTTmte8zMFwoada1RKfNUVoIaO8JwlcEA3G3gKV62qgGrj
+         fadNmcvpWlcnqxE/xc9cYt3zWVJlPiO0US56BuJT9Xs6nOWOgrhT2TAXUrh9HceXnXrG
+         76iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686411460; x=1689003460;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hhK25wDVWu4aqu+48JlvJ7y91Ju+qS3b/ze2qAoWuAY=;
+        b=Y0Xhvr/EXpfts/5IGwzsiJopunFDaX1pvZSDo3MEtxtSNW6mhj4vtnHKZCSmRgSnEy
+         jgofrDLpGVyYp7OHBr8us9Sq7VVNjRvpvXIdzxTtc3mbLwg83jtpVVo5DOoewSXP1j0a
+         D2Onmo73kqntUEmAeISTKz0+LAnFzdjXWoJ9HjddLDzUA8ZzaE35hj6xNiFAFK+tEeZZ
+         puYhlu4rigIjNDX0bFf9rPk/oBEExwAlNeTaAjR/+b9jJ/2WBcqt2un8UNlXztHia+nT
+         +EL6S6K4u3zg0IUw3MOZ8y284GTahlOeqHJOK9TjtzJiFvQKfVFuVpgk7Et+f8ijmVKe
+         Yseg==
+X-Gm-Message-State: AC+VfDziOfbf1VA3IgFVZ6Hj7U563pwv2/ARNHVF2GM867bUWIBN+zyM
+        XMzxX8T1248frZOnBliR4Xi4qgC+dmXIJIgDWeCUDXy9xOs=
+X-Google-Smtp-Source: ACHHUZ7CoYgOiJDpVDgrHqK0Xjx8aaTwpwH0V+Xh4d2mCJ+axjf7vfEejO7uIwiY6O5jp/aPWBEHrmngS6KAFALPD+k=
+X-Received: by 2002:a2e:b163:0:b0:2b0:573a:3c69 with SMTP id
+ a3-20020a2eb163000000b002b0573a3c69mr599762ljm.23.1686411459699; Sat, 10 Jun
+ 2023 08:37:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2023061017-usable-bountiful-3f59@gregkh>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230610110518.123183-1-clangllvm@126.com>
+In-Reply-To: <20230610110518.123183-1-clangllvm@126.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Sat, 10 Jun 2023 08:37:28 -0700
+Message-ID: <CAADnVQLoDnBAhi+vOVL6+9KtLr30BLXptn0jtr3Sek2NmBTDww@mail.gmail.com>
+Subject: Re: [PATCH] Add a sysctl option to disable bpf offensive helpers.
+To:     Yi He <clangllvm@126.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-trace-kernel@vger.kernel.org,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,24 +85,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 10, 2023 at 05:33:47PM +0200, Greg KH wrote:
-> On Sat, Jun 10, 2023 at 06:49:06PM +0800, Qingsong Chen wrote:
-> > Hi All!
-> > 
-> > This is a version of scatterlist abstractions for Rust drivers.
-> > 
-> > Scatterlist is used for efficient management of memory buffers, which is
-> > essential for many kernel-level operations such as Direct Memory Access
-> > (DMA) transfers and crypto APIs.
-> > 
-> > This patch should be a good start to introduce the crypto APIs for Rust
-> > drivers and to develop cipher algorithms in Rust later.
-> 
-> I thought we were getting rid of the scatter list api for the crypto
-> drivers, so this shouldn't be needed going forward, right?  Why not just
-> use the direct apis instead?
+On Sat, Jun 10, 2023 at 4:21=E2=80=AFAM Yi He <clangllvm@126.com> wrote:
+>
+> Some eBPF helper functions have been long regarded as problematic[1].
+> More than just used for powerful rootkit, these features can also be
+> exploited to harm the containers by perform various attacks to the
+> processes outside the container in the enrtire VM, such as process
+> DoS, information theft, and container escape.
+>
+> When a container is granted to run eBPF tracing programs (which
+> need CAP_SYS_ADMIN), it can use the eBPF KProbe programs to hijack the
+> process outside the contianer and to escape the containers. This kind
+> of risks is limited as privieleged containers are warned and can hardly
+>  be accessed by the attackers.
+>
+> Even without CAP_SYS_ADMIN, since Linux 5.6, programs with with CAP_BPF +
+> CAP_PERFMON can use dangerous eBPF helpers such as bpf_read_user to steal
+> sensitive data (e.g., sshd/nginx private key) in other containers.
 
-See https://lore.kernel.org/r/ZH2hgrV6po9dkxi+@gondor.apana.org.au for
-the details of that (sorry I forgot the link first time...)
-
-greg k-h
+You can do the same completely without BPF and with just CAP_PERFMON.
+I'm not going to share how, because you'll write a "security paper"
+about insecure linux just like last time:
+https://lore.kernel.org/bpf/20230117151256.605977-1-clangllvm@126.com/
+Note, our answers didn't change. Look for security glory somewhere else.
