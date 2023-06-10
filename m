@@ -2,152 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7EF72AC3A
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 16:19:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8975C72AC40
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 16:24:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233498AbjFJOT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 10:19:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35428 "EHLO
+        id S233113AbjFJOYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 10:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233113AbjFJOTY (ORCPT
+        with ESMTP id S230263AbjFJOYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 10:19:24 -0400
-Received: from n169-112.mail.139.com (n169-112.mail.139.com [120.232.169.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB56A4234;
-        Sat, 10 Jun 2023 07:18:43 -0700 (PDT)
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM:                                                                                        
-X-RM-SPAM-FLAG: 00000000
-Received: from localhost.localdomain (unknown[183.194.158.241])
-        by rmsmtp-lg-appmail-22-12025 (RichMail) with SMTP id 2ef96484862f5b2-5a5f5;
-        Sat, 10 Jun 2023 22:18:26 +0800 (CST)
-X-RM-TRANSID: 2ef96484862f5b2-5a5f5
-From:   Shenghao Ding <13916275206@139.com>
-To:     broonie@kernel.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        lgirdwood@gmail.com, perex@perex.cz,
-        pierre-louis.bossart@linux.intel.com
-Cc:     kevin-lu@ti.com, shenghao-ding@ti.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, x1077012@ti.com, peeyush@ti.com,
-        navada@ti.com, gentuser@gmail.com, Ryan_Chu@wistron.com,
-        Sam_Wu@wistron.com, tiwai@suse.de,
-        Shenghao Ding <13916275206@139.com>
-Subject: [PATCH v5 4/4] ASoC: dt-bindings: Add tas2781 amplifier
-Date:   Sat, 10 Jun 2023 22:18:21 +0800
-Message-Id: <20230610141821.576926-1-13916275206@139.com>
-X-Mailer: git-send-email 2.34.1
+        Sat, 10 Jun 2023 10:24:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F01E5;
+        Sat, 10 Jun 2023 07:24:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 57C5160E26;
+        Sat, 10 Jun 2023 14:24:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACA2BC433D2;
+        Sat, 10 Jun 2023 14:24:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686407069;
+        bh=nrYgj3koXJKYAk0s0notSidtVGUhTbIO5OOV/U6xp1Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SAYLLruzhabh8clfFTd68mfgJB/Lnc8TWBL7aKyZhLhuzcFDKP2i6epz42IuMIe6z
+         PFjXdJ2d5zxSxBgFb8YnZYmt4VgyzKhyK+lwM4dfYPP+3g2hRthNKV0h2L9zhMp5E8
+         w8k3FpQYmS6TChWYixPxgCiX0l1J/wlv/jGxeWRJfzS7GP67BOksecQSxBAzXtce8k
+         JIpKpG+tOM4vO6o0EcS+NrGQP5NCq43Dt3eUp1T3TpYuv293B6ZswMHsHO1F4WmfZt
+         wstP8yTEc0mnEzHCrK6Pu4lhpMmS7uzUUP/F0rOULLE4dmyXSHHWUR5/S/jQBlLgHm
+         dq4amP0i03ItA==
+Date:   Sat, 10 Jun 2023 15:24:25 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/5] hwmon: Update single register drivers to use maple
+ tree register cache
+Message-ID: <da6696d1-7b3f-4366-a0a4-e2f7bafe8cbf@sirena.org.uk>
+References: <20230609-hwmon-maple-v1-0-8edacce86b28@kernel.org>
+ <e2c965e9-3bcb-5857-087a-9e457040ab88@roeck-us.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2Z8lOuw99vqriu3A"
+Content-Disposition: inline
+In-Reply-To: <e2c965e9-3bcb-5857-087a-9e457040ab88@roeck-us.net>
+X-Cookie: Sank heaven for leetle curls.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create tas2781.yaml for tas2781 driver.
 
-Signed-off-by: Shenghao Ding <13916275206@139.com>
+--2Z8lOuw99vqriu3A
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
----
-Changes in v5:
- - remove ti,broadcast-addr
- - remove address-cells
- - remove size-cells
- - put compatible item first in properties
- - change the maxItems of reg from 4 to 8
- - remove white space around <>
- - correct the reg format to <0x38>, <0x3a> etc
- - remove '\t' in the file
- - correct a comment in the example
----
- .../devicetree/bindings/sound/ti,tas2781.yaml | 73 +++++++++++++++++++
- 1 file changed, 73 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/sound/ti,tas2781.yaml
+On Sat, Jun 10, 2023 at 07:15:48AM -0700, Guenter Roeck wrote:
+> On 6/10/23 06:59, Mark Brown wrote:
+> > A number of hwmon drivers only support single register I/O and therefore
+> > gain no benefit from using the more modern maple tree register cache
+> > over the rbtree cache, convert them to maple tree.
 
-diff --git a/Documentation/devicetree/bindings/sound/ti,tas2781.yaml b/Documentation/devicetree/bindings/sound/ti,tas2781.yaml
-new file mode 100644
-index 000000000000..61db14a39630
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/ti,tas2781.yaml
-@@ -0,0 +1,73 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+# Copyright (C) 2022 - 2023 Texas Instruments Incorporated
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/ti,tas2781.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Texas Instruments TAS2781 SmartAMP
-+
-+maintainers:
-+  - Shenghao Ding <shenghao-ding@ti.com>
-+
-+description:
-+  The TAS2781 is a mono, digital input Class-D audio amplifier
-+  optimized for efficiently driving high peak power into small
-+  loudspeakers. Integrated an on-chip DSP supports Texas Instruments
-+  Smart Amp speaker protection algorithm. The integrated speaker
-+  voltage and current sense provides for real time
-+  monitoring of loudspeaker behavior.
-+
-+allOf:
-+  - $ref: dai-common.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - ti,tas2781
-+
-+  reg:
-+    description:
-+      I2C address, in multiple tas2781s case, all the i2c address
-+      aggreate as one Audio Device to support multiple audio slots.
-+    maxItems: 8
-+    items:
-+      minimum: 0x38
-+      maximum: 0x3f
-+
-+  reset-gpios:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  '#sound-dai-cells':
-+    const: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+   #include <dt-bindings/gpio/gpio.h>
-+   i2c {
-+     /* example with quad tas2781s, such as tablet or pad device */
-+     #address-cells = <1>;
-+     #size-cells = <0>;
-+     quad: codec@38 {
-+       compatible = "ti,tas2781";
-+       reg = <0x38>, /* Audio slot 0 */
-+             <0x3a>, /* Audio slot 1 */
-+             <0x39>, /* Audio slot 2 */
-+             <0x3b>; /* Audio slot 3 */
-+
-+       #sound-dai-cells = <1>;
-+       reset-gpios = <&gpio1 10 GPIO_ACTIVE_HIGH>;
-+       interrupt-parent = <&gpio1>;
-+       interrupts = <15>;
-+     };
-+   };
-+...
--- 
-2.34.1
+> "gain no benefit from using the more modern maple tree register cache
+> over the rbtree cache, convert them to maple tree."
 
+> Is that really what you wanted to say ?
 
+Sorry, other way around - gain no benefit from using rbtree over maple
+tree.
+
+--2Z8lOuw99vqriu3A
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSEh5gACgkQJNaLcl1U
+h9BJZQf/W7qio5KlQp7V3+r/EsLMiTpgToICRoR/AW99rDRdedLfuRW5mQgtJ9G7
+hoKa/FE7oN5/ol552pib04G+hFh7IxgtdLJz6pgtMC2DEHXGY2JXJDkEkWdqljt2
+wVRVUS36iJyWGu2X6zPQj2+QkmglHkHM0/SIHro72ZajKS5QIWpXiK9dIqPfQq04
+RnlEWjTalCR/QG1wjE9nK9FvbhRHj0+X50NKXsDivQUEr3clj1ELcPrjdS36yeAO
+wKEzjVUpt0Ub9li30FcQsDg4YpNDifzg9JCZInBE18UJPjn6QhwQ20cHoz+JhPpK
+KzLGIZH5V+HlT/phrQMaGq4oAnk7Gg==
+=ic+0
+-----END PGP SIGNATURE-----
+
+--2Z8lOuw99vqriu3A--
