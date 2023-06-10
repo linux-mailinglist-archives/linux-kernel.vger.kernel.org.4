@@ -2,53 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FE5C72AB82
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 14:43:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E2A72AB86
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 14:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232796AbjFJMnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 08:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40648 "EHLO
+        id S234497AbjFJMpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 08:45:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbjFJMm5 (ORCPT
+        with ESMTP id S229746AbjFJMpc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 08:42:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C3935A9;
-        Sat, 10 Jun 2023 05:42:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EAAC760FB8;
-        Sat, 10 Jun 2023 12:42:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B56DDC433D2;
-        Sat, 10 Jun 2023 12:42:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686400975;
-        bh=ckwO1x0lOe+QNBUQJXt0YVIEG7QS1hYKAomFlUxkfvE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OKdXfk1aq9PSxpkP/jU2KzLkalPK1rjRhuOsWTj+MMoYCNqdwSWV1oKd8ReKz35zb
-         kQTiWllj+QWnDf/xuJFwVDUCL0r7XFM0XZL58T/mUeKJ0hU7UgI8U96RhLfVW99/ey
-         peouAfFmdCd5DOxl69+2F5GrU72vG+Y5lmqBnf+YwpIioKh0Y6umvD9fvchQXsmhTH
-         a1CmGXIjIt3cIys234hW0kHBuo+G9qzt0mmlzGms3INCxwDGNQefNECt0dZ4DOSgz8
-         65cUIfwWpmfI0/ovsv60UiLTDigckW29NbnyrOebL+3FdbvGOAKNihwWjqhMJ4dS5w
-         oNectn8m5X3yQ==
-Date:   Sat, 10 Jun 2023 14:42:52 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Piyush Malgujar <pmalgujar@marvell.com>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wsa@kernel.org, rric@kernel.org, jannadurai@marvell.com,
-        cchavva@marvell.com, Suneel Garapati <sgarapati@marvell.com>
-Subject: Re: [PATCH 2/3] i2c: thunderx: Add support for High speed mode
-Message-ID: <20230610124252.o7qmwgavqyrkfhq6@intel.intel>
-References: <20230330133953.21074-1-pmalgujar@marvell.com>
- <20230330133953.21074-3-pmalgujar@marvell.com>
+        Sat, 10 Jun 2023 08:45:32 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5586A35A9;
+        Sat, 10 Jun 2023 05:45:31 -0700 (PDT)
+Date:   Sat, 10 Jun 2023 12:45:29 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1686401130;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XboSUGbdr0u3XL6PVEwK6uua1P2wr0tGpGmjuZRtSzw=;
+        b=APOAJCIxP8No2Xm40yAMANDmIkGb+N0E6CwzRD/CwFOIoSwCIiER0WmQEmz/VprFjX/RuC
+        lWygmV+LVQFev1sq/iVZ9y8naG/+VCG2Q0zBiHvjO7KS97RZ2ssgFYUVF2Q7ymXwiDOwvN
+        AFAnWlsVFqfLBmdDDTg5cTkpwlXr2Z5dEeae6jN5tG6UsfbyMQdjlyKMvXs0p23s9amt6b
+        BO8uwWoABvDoHFIcpdxb28a9GCkjFYD5RSTk+YbU9FF0kb8LKJmxPF+UdnHhl7sEyFB8wI
+        VoCvaUVAGyL5t8Su/h8jIwpUIws48H2vhaIUBsSPH2FlvWuI0VS/UFIXiiKVJQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1686401130;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XboSUGbdr0u3XL6PVEwK6uua1P2wr0tGpGmjuZRtSzw=;
+        b=D7ax3R2ue6vSHytfgqvV66ngUofx/6Z2TXV5wJqdXIdZRidkN/z2RHtCrWSUFu6LSMUgio
+        ydh8gC89sru3RrAg==
+From:   "tip-bot2 for Wen Yang" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: timers/core] tick/rcu: Fix bogus ratelimit condition
+Cc:     Wen Yang <wenyang.linux@foxmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <tencent_5AAA3EEAB42095C9B7740BE62FBF9A67E007@qq.com>
+References: <tencent_5AAA3EEAB42095C9B7740BE62FBF9A67E007@qq.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230330133953.21074-3-pmalgujar@marvell.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Message-ID: <168640112909.404.8400459838695123810.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,65 +65,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Suneel and Piyush,
+The following commit has been merged into the timers/core branch of tip:
 
-[...]
+Commit-ID:     5579a8a8f15bd08b731a015630daca6ccd0f8a14
+Gitweb:        https://git.kernel.org/tip/5579a8a8f15bd08b731a015630daca6ccd0f8a14
+Author:        Wen Yang <wenyang.linux@foxmail.com>
+AuthorDate:    Fri, 05 May 2023 00:12:53 +08:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Sat, 10 Jun 2023 14:36:17 +02:00
 
-> @@ -61,10 +61,19 @@ static int octeon_i2c_wait(struct octeon_i2c *i2c)
->  		return octeon_i2c_test_iflg(i2c) ? 0 : -ETIMEDOUT;
->  	}
->  
-> -	i2c->int_enable(i2c);
-> -	time_left = wait_event_timeout(i2c->queue, octeon_i2c_test_iflg(i2c),
-> -				       i2c->adap.timeout);
-> -	i2c->int_disable(i2c);
-> +	if (IS_LS_FREQ(i2c->twsi_freq)) {
-> +		i2c->int_enable(i2c);
-> +		time_left = wait_event_timeout(i2c->queue,
-> +					       octeon_i2c_test_iflg(i2c),
-> +					       i2c->adap.timeout);
-> +		i2c->int_disable(i2c);
-> +	} else {
-> +		time_left = 1000; /* 1ms */
-> +		do {
-> +			if (time_left--)
-> +				__udelay(1);
+tick/rcu: Fix bogus ratelimit condition
 
-Are you sure you want to wait 1ms with __udelay(). This is a bit
-dsruptive, can we use a more relaxed waiting method?
+The ratelimit logic in report_idle_softirq() is broken because the
+exit condition is always true:
 
-> +		} while (!octeon_i2c_test_iflg(i2c) && time_left);
-> +	}
+	static int ratelimit;
 
-[...]
+	if (ratelimit < 10)
+		return false;  ---> always returns here
 
->  	 * Find divisors to produce target frequency, start with large delta
->  	 * to cover wider range of divisors, note thp = TCLK half period.
->  	 */
-> -	int thp = 0x18, mdiv = 2, ndiv = 0, delta_hz = huge_delta;
-> +	int ds = 10, thp = 0x18, mdiv = 2, ndiv = 0, delta_hz = huge_delta;
+	ratelimit++;           ---> no chance to run
 
-unsigned?
+Make it check for >= 10 instead.
 
-[...]
+Fixes: 0345691b24c0 ("tick/rcu: Stop allowing RCU_SOFTIRQ in idle")
+Signed-off-by: Wen Yang <wenyang.linux@foxmail.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Link: https://lore.kernel.org/r/tencent_5AAA3EEAB42095C9B7740BE62FBF9A67E007@qq.com
 
-> +	if (octeon_i2c_is_otx2(to_pci_dev(i2c->dev))) {
-> +		u64 mode;
-> +
-> +		mode = __raw_readq(i2c->twsi_base + MODE(i2c));
-> +		/* Set REFCLK_SRC and HS_MODE in TWSX_MODE register */
-> +		if (!IS_LS_FREQ(i2c->twsi_freq))
-> +			mode |= BIT(4) | BIT(0);
-> +		else
-> +			mode &= ~(BIT(4) | BIT(0));
+---
+ kernel/time/tick-sched.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-would be nice to have this defined and with some meaning as
-comment.
-
-> +		octeon_i2c_writeq_flush(mode, i2c->twsi_base + MODE(i2c));
-> +	}
-
-Robert, any comment here?
-
-Thanks,
-Andi
+diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+index 5225467..8905505 100644
+--- a/kernel/time/tick-sched.c
++++ b/kernel/time/tick-sched.c
+@@ -1030,7 +1030,7 @@ static bool report_idle_softirq(void)
+ 			return false;
+ 	}
+ 
+-	if (ratelimit < 10)
++	if (ratelimit >= 10)
+ 		return false;
+ 
+ 	/* On RT, softirqs handling may be waiting on some lock */
