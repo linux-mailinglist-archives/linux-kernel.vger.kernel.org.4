@@ -2,66 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6290572AAA8
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 11:25:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B4EB72AAAD
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 11:28:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234156AbjFJJZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 05:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37010 "EHLO
+        id S234343AbjFJJ17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 05:27:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbjFJJZd (ORCPT
+        with ESMTP id S229649AbjFJJ15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 05:25:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF816210D;
-        Sat, 10 Jun 2023 02:25:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 847BE601D9;
-        Sat, 10 Jun 2023 09:25:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78196C433D2;
-        Sat, 10 Jun 2023 09:25:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686389131;
-        bh=5ObCuzkHbQXY0iZOA2ZfL1NpOhXO7BEV89T0/ACabBA=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=bfG0JuaY7zTdbEpyw8U1wbFyeaeHptIrAWxa/VzFvUUkqO7LySZr9nSSFgXsVaE31
-         8vBKlFFXCuUQNcKzRqCQwYSw7sjzNL/WEdX0NXGy5yrHTkVTN2cIfMzQFRHfdbqpqX
-         oDoP3YtVXVaIHTQE50BUEN9tx8nVUgEsH5w4o4gKTM36LE0/6MTyXJnARRjKXLHIzU
-         4XOM7EFlBwi4flM8B2iSjgH0mKTxv6tetRXanPPgqsaBjzowpLtqkNeo7J118dZg+B
-         DwLD5jtNY/c0YL5uCnkcSQRrr9N4WaOEMDqucNSVIWerTeCL9RXmefNcbekTjcm4ef
-         GI5X8v5rPOHew==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+        Sat, 10 Jun 2023 05:27:57 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FE8A8;
+        Sat, 10 Jun 2023 02:27:55 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QdXft5LCdz4f3prQ;
+        Sat, 10 Jun 2023 17:27:50 +0800 (CST)
+Received: from ubuntu1804.huawei.com (unknown [10.67.174.58])
+        by APP4 (Coremail) with SMTP id gCh0CgAHuKsWQoRkyQ97LQ--.26470S4;
+        Sat, 10 Jun 2023 17:27:51 +0800 (CST)
+From:   Xiu Jianfeng <xiujianfeng@huaweicloud.com>
+To:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        mkoutny@suse.com
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cuigaosheng1@huawei.com
+Subject: [PATCH v2] cgroup: Do not corrupt task iteration when rebinding subsystem
+Date:   Sat, 10 Jun 2023 17:26:43 +0800
+Message-Id: <20230610092643.139007-1-xiujianfeng@huaweicloud.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Sat, 10 Jun 2023 12:25:25 +0300
-Message-Id: <CT8V1XE69DQ3.2JLQ9S20PK9OW@suppilovahvero>
-Subject: Re: [PATCH v9 2/4] tpm: of: Make of-tree specific function commonly
- available
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Stefan Berger" <stefanb@linux.ibm.com>,
-        "Jerry Snitselaar" <jsnitsel@redhat.com>
-Cc:     <kexec@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <nayna@linux.ibm.com>,
-        <nasastry@in.ibm.com>, <mpe@ellerman.id.au>,
-        "Jason Gunthorpe" <jgg@ziepe.ca>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Frank Rowand" <frowand.list@gmail.com>,
-        "Mimi Zohar" <zohar@linux.ibm.com>,
-        "Nageswara R Sastry" <rnsastry@linux.ibm.com>,
-        "Coiby Xu" <coxu@redhat.com>
-X-Mailer: aerc 0.14.0
-References: <20230418134409.177485-1-stefanb@linux.ibm.com>
- <20230418134409.177485-3-stefanb@linux.ibm.com>
- <e4dcxwp63uisirxwanjwrhzrnve45wqnxhijfp4oq274r4neco@v2btoy43ue5h>
- <CT8BRJZS8RQU.9ICEA2UAFC7G@suppilovahvero>
- <4afde78d-e138-9eee-50e0-dbd32f4dcfe0@linux.ibm.com>
-In-Reply-To: <4afde78d-e138-9eee-50e0-dbd32f4dcfe0@linux.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgAHuKsWQoRkyQ97LQ--.26470S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxAr1DWr4DXF1rZw4ruFyfZwb_yoWrury8pF
+        15urW3Ar4kuw4jgw4Sy34293yFgayrWw4UKrWxJ3yayrnxAry2qF1Ikw1UuFyIyFZrGrnx
+        KF4Y9r1Y9w1DtaDanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvKb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
+        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Jr
+        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r12
+        6r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r
+        1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+        b7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMIIF
+        0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxh
+        VjvjDU0xZFpf9x07UR6wZUUUUU=
+X-CM-SenderInfo: x0lxyxpdqiv03j6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,42 +61,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri Jun 9, 2023 at 9:49 PM EEST, Stefan Berger wrote:
->
->
-> On 6/9/23 14:18, Jarkko Sakkinen wrote:
-> > On Thu May 25, 2023 at 1:56 AM EEST, Jerry Snitselaar wrote:
-> >> On Tue, Apr 18, 2023 at 09:44:07AM -0400, Stefan Berger wrote:
-> >>> Simplify tpm_read_log_of() by moving reusable parts of the code into
-> >>> an inline function that makes it commonly available so it can be
-> >>> used also for kexec support. Call the new of_tpm_get_sml_parameters()
-> >>> function from the TPM Open Firmware driver.
-> >>>
-> >>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> >>> Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> >>> Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> >>> Cc: Rob Herring <robh+dt@kernel.org>
-> >>> Cc: Frank Rowand <frowand.list@gmail.com>
-> >>> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> >>> Tested-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
-> >>> Tested-by: Coiby Xu <coxu@redhat.com>
-> >>> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-> >>>
-> >>
-> >> Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
-> >=20
-> > If I just pick tpm only patches they won't apply so maybe TPM changes
-> > should be better separated if that is by any means possible.
->
-> Per the comment here I am putting this series here on hold.
-> https://lore.kernel.org/linux-integrity/20230418134409.177485-1-stefanb@l=
-inux.ibm.com/T/#m03745c2af2c46f19f329522fcb6ccb2bf2eaedc7
+From: Xiu Jianfeng <xiujianfeng@huawei.com>
 
-OK, cool.
+We found a refcount UAF bug as follows:
 
-I've mentioned this in few other emails but say this here too:
-I was relocating for last couple of weeks, and thus some latency.
-If you choose to repost the series, I'm happy to review it, thanks
-:-)
+refcount_t: addition on 0; use-after-free.
+WARNING: CPU: 1 PID: 342 at lib/refcount.c:25 refcount_warn_saturate+0xa0/0x148
+Workqueue: events cpuset_hotplug_workfn
+Call trace:
+ refcount_warn_saturate+0xa0/0x148
+ __refcount_add.constprop.0+0x5c/0x80
+ css_task_iter_advance_css_set+0xd8/0x210
+ css_task_iter_advance+0xa8/0x120
+ css_task_iter_next+0x94/0x158
+ update_tasks_root_domain+0x58/0x98
+ rebuild_root_domains+0xa0/0x1b0
+ rebuild_sched_domains_locked+0x144/0x188
+ cpuset_hotplug_workfn+0x138/0x5a0
+ process_one_work+0x1e8/0x448
+ worker_thread+0x228/0x3e0
+ kthread+0xe0/0xf0
+ ret_from_fork+0x10/0x20
 
-BR, Jarkko
+then a kernel panic will be triggered as below:
+
+Unable to handle kernel paging request at virtual address 00000000c0000010
+Call trace:
+ cgroup_apply_control_disable+0xa4/0x16c
+ rebind_subsystems+0x224/0x590
+ cgroup_destroy_root+0x64/0x2e0
+ css_free_rwork_fn+0x198/0x2a0
+ process_one_work+0x1d4/0x4bc
+ worker_thread+0x158/0x410
+ kthread+0x108/0x13c
+ ret_from_fork+0x10/0x18
+
+The race that cause this bug can be shown as below:
+
+(hotplug cpu)                | (umount cpuset)
+mutex_lock(&cpuset_mutex)    | mutex_lock(&cgroup_mutex)
+cpuset_hotplug_workfn        |
+ rebuild_root_domains        |  rebind_subsystems
+  update_tasks_root_domain   |   spin_lock_irq(&css_set_lock)
+   css_task_iter_start       |    list_move_tail(&cset->e_cset_node[ss->id]
+   while(css_task_iter_next) |                  &dcgrp->e_csets[ss->id]);
+   css_task_iter_end         |   spin_unlock_irq(&css_set_lock)
+mutex_unlock(&cpuset_mutex)  | mutex_unlock(&cgroup_mutex)
+
+Inside css_task_iter_start/next/end, css_set_lock is hold and then
+released, so when iterating task(left side), the css_set may be moved to
+another list(right side), then it->cset_head points to the old list head
+and it->cset_pos->next points to the head node of new list, which can't
+be used as struct css_set.
+
+To fix this issue, switch from all css_sets to only scgrp's css_sets to
+patch in-flight iterators to preserve correct iteration, and then
+update it->cset_head as well.
+
+Reported-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+Link: https://www.spinics.net/lists/cgroups/msg37935.html
+Suggested-by: Michal Koutný <mkoutny@suse.com>
+Link: https://lore.kernel.org/all/20230526114139.70274-1-xiujianfeng@huaweicloud.com/
+Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+---
+v2: switch to solution suggested by Michal Koutný
+---
+ kernel/cgroup/cgroup.c | 20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 625d7483951c..eaeba38d963d 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -1798,7 +1798,7 @@ int rebind_subsystems(struct cgroup_root *dst_root, u16 ss_mask)
+ {
+ 	struct cgroup *dcgrp = &dst_root->cgrp;
+ 	struct cgroup_subsys *ss;
+-	int ssid, i, ret;
++	int ssid, ret;
+ 	u16 dfl_disable_ss_mask = 0;
+ 
+ 	lockdep_assert_held(&cgroup_mutex);
+@@ -1842,7 +1842,8 @@ int rebind_subsystems(struct cgroup_root *dst_root, u16 ss_mask)
+ 		struct cgroup_root *src_root = ss->root;
+ 		struct cgroup *scgrp = &src_root->cgrp;
+ 		struct cgroup_subsys_state *css = cgroup_css(scgrp, ss);
+-		struct css_set *cset;
++		struct css_set *cset, *cset_pos;
++		struct css_task_iter *it;
+ 
+ 		WARN_ON(!css || cgroup_css(dcgrp, ss));
+ 
+@@ -1860,9 +1861,22 @@ int rebind_subsystems(struct cgroup_root *dst_root, u16 ss_mask)
+ 		css->cgroup = dcgrp;
+ 
+ 		spin_lock_irq(&css_set_lock);
+-		hash_for_each(css_set_table, i, cset, hlist)
++		WARN_ON(!list_empty(&dcgrp->e_csets[ss->id]));
++		list_for_each_entry_safe(cset, cset_pos, &scgrp->e_csets[ss->id],
++					 e_cset_node[ss->id]) {
+ 			list_move_tail(&cset->e_cset_node[ss->id],
+ 				       &dcgrp->e_csets[ss->id]);
++			/*
++			 * all css_sets of scgrp together in same order to dcgrp,
++			 * patch in-flight iterators to preserve correct iteration.
++			 * since the iterator is always advanced right away and
++			 * finished when it->cset_pos meets it->cset_head, so only
++			 * update it->cset_head is enough here.
++			 */
++			list_for_each_entry(it, &cset->task_iters, iters_node)
++				if (it->cset_head == &scgrp->e_csets[ss->id])
++					it->cset_head = &dcgrp->e_csets[ss->id];
++		}
+ 		spin_unlock_irq(&css_set_lock);
+ 
+ 		if (ss->css_rstat_flush) {
+-- 
+2.17.1
+
