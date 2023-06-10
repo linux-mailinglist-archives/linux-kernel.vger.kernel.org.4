@@ -2,60 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4013072AE14
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 20:15:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3513272AE04
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 20:01:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231695AbjFJSPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 14:15:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48370 "EHLO
+        id S229538AbjFJSBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 14:01:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjFJSPC (ORCPT
+        with ESMTP id S229935AbjFJSBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 14:15:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C241FFE;
-        Sat, 10 Jun 2023 11:15:01 -0700 (PDT)
+        Sat, 10 Jun 2023 14:01:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6EE35A7;
+        Sat, 10 Jun 2023 11:01:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30F6960DE1;
-        Sat, 10 Jun 2023 18:15:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 640AFC433EF;
-        Sat, 10 Jun 2023 18:14:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DFCE61A27;
+        Sat, 10 Jun 2023 18:01:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E8F5C433D2;
+        Sat, 10 Jun 2023 18:01:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686420900;
-        bh=GKPQxfUo7uZW5Gd24x7KvPKVI05y3+NdpM2kKSoZnSE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XJE5DuwsZcTBlN19+6/DEwAd9aFw3/uwDKB1+Me4H8zquGcujmwnBVUXlna8UmG7o
-         VdZugEjKVvh0AItKK8yDmgOlw56DHbMvCzerk6+vaqot5CjqwWFvr2geuOxlyqAR6I
-         6r1MNabOvEgXbNMax2dHuiuBbKkarVelFLl3P+McWD1uygZKak+dTiCYF/2lbidhwp
-         DAXbztcXHmm2A46MHSdYtKyRuZJyV0OpKXM/5U4G/hCYi0eUCmZ5kF9A+4rS1THnY1
-         lHCvDHTqy2+eKgCXBpZW3hWdLIRFvR+mrjFTQPp2wD9F1nxKnjQYCdHm3hXl1dVc3R
-         Q/QwKR9c2/UXg==
-Date:   Sat, 10 Jun 2023 19:14:55 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     devicetree@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v2 2/5] dt-bindings: display: ssd1307fb: Remove default
- width and height values
-Message-ID: <20230610-unused-engaged-c1f4119cff08@spud>
-References: <20230609170941.1150941-1-javierm@redhat.com>
- <20230609170941.1150941-3-javierm@redhat.com>
- <20230610-opposite-quality-81d4a1561c88@spud>
- <87r0qj19zs.fsf@minerva.mail-host-address-is-not-set>
+        s=k20201202; t=1686420063;
+        bh=biYrgToGst6xjxcYYrSzkA+d1kchkIsGEDdT2rnJiNk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=FR+BRLRetNvogHjqPpJ5EXa7YWINouiHbh/Byt2KLW3YknsiJ5Zy76nt/TiUxIQWG
+         1PiBF0dDvlH4rGuEPw2akmviCBhvH3xegFFKnWs0vPxVImOwl6Yq/iqBU7zEGJ3lrv
+         fOBZmotk3k70Nf9G3H+IKL1HHTvyiUsJVAIV5lrwmIf+eRDiVBzfSiTBS2teHSWbWC
+         dud20dgbcS7AousQ49UwzptKVltIX1EtNXwAgwUY8bNtif2CGe5dRP88bwdYd3F30h
+         gtauZ6Kz8OgyKdbhFPVN2BKoB+swRWJDR36dxASq4XrIFly/L4b128n8vljwzOVaz+
+         FqhMCTt+rydiQ==
+Date:   Sat, 10 Jun 2023 19:17:38 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Kim Seer Paller <kimseer.paller@analog.com>
+Cc:     <lars@metafoo.de>, <lgirdwood@gmail.com>, <broonie@kernel.org>,
+        <Michael.Hennerich@analog.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v3 2/2] iio: adc: max14001: New driver
+Message-ID: <20230610191724.7455734b@jic23-huawei>
+In-Reply-To: <20230608175517.40217-3-kimseer.paller@analog.com>
+References: <20230608175517.40217-1-kimseer.paller@analog.com>
+        <20230608175517.40217-3-kimseer.paller@analog.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="HYo4J/ldqvkCxGP1"
-Content-Disposition: inline
-In-Reply-To: <87r0qj19zs.fsf@minerva.mail-host-address-is-not-set>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,55 +59,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 9 Jun 2023 01:55:17 +0800
+Kim Seer Paller <kimseer.paller@analog.com> wrote:
 
---HYo4J/ldqvkCxGP1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> The MAX14001 is configurable, isolated 10-bit ADCs for multi-range
+> binary inputs.
+> 
+> Signed-off-by: Kim Seer Paller <kimseer.paller@analog.com>
+The driver initialises a regmap then doesn't use it.
+Fine not to use it, but get rid of the setup code, structures and include
+as well. I assume this got forgotten after testing the code worked when it
+wasn't used.
 
-On Sat, Jun 10, 2023 at 07:51:35PM +0200, Javier Martinez Canillas wrote:
-> Conor Dooley <conor@kernel.org> writes:
->=20
-> > On Fri, Jun 09, 2023 at 07:09:37PM +0200, Javier Martinez Canillas wrot=
-e:
-> >> A default resolution in the ssd130x driver isn't set to an arbitrary 9=
-6x16
-> >> anymore. Instead is set to a width and height that's controller depend=
-ent.
-> >
-> > Did that change to the driver not break backwards compatibility with
-> > existing devicetrees that relied on the default values to get 96x16?
-> >
->=20
-> It would but I don't think it is an issue in pratice. Most users of these
-> panels use one of the multiple libraries on top of the spidev interface.
->=20
-> For the small userbase that don't, I believe that they will use the rpif
-> kernel and ssd1306-overlay.dtbo DTB overlay, which defaults to width=3D128
-> and height=3D64 [1]. So those users will have to explicitly set a width a=
-nd
-> height for a 96x16 panel anyways.
->=20
-> The intersection of users that have a 96x16 panel, assumed that default
-> and consider the DTB a stable ABI, and only update their kernel but not
-> the  DTB should be very small IMO.
+Other than that looks fine to me.
 
-It's the adding of new defaults that makes it a bit messier, since you
-can't even revert without potentially breaking a newer user. I'd be more
-inclined to require the properties, rather change their defaults in the
-binding, lest there are people relying on them.
-If you and the other knowledgeable folk in the area really do know such
-users do not exist then I suppose it is fine to do.
-
---HYo4J/ldqvkCxGP1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIS9nwAKCRB4tDGHoIJi
-0pU2AQDHz7mE6EbWFDwiRPNS1B2cx98/2aHLPV+NCbNKIozcTQD/Z67czcjETZHa
-LtdkpASNCb1wsRO4PqBs3OegWGbZIAM=
-=daWN
------END PGP SIGNATURE-----
-
---HYo4J/ldqvkCxGP1--
+Jonathan
+ 
