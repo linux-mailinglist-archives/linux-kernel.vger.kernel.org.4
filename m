@@ -2,105 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D39072ADAB
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 19:24:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22AEB72ADAD
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 19:25:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbjFJRYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 13:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60268 "EHLO
+        id S229965AbjFJRZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 13:25:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjFJRYo (ORCPT
+        with ESMTP id S229735AbjFJRZL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 13:24:44 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B373589;
-        Sat, 10 Jun 2023 10:24:42 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id 6a1803df08f44-6260e771419so15016086d6.1;
-        Sat, 10 Jun 2023 10:24:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686417881; x=1689009881;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Zk1WLJV5QkFB4QM7WPYN5iwoIW9xxUosdBEEitZ4V5A=;
-        b=ZIp6jCT06zpNehaXWiaJDD5KCKoT5CThszCmRg4veyX891C8qsjnRr/S7UdOFdsfS7
-         mwqzyHMrE/Nu9XC779XaSG6zncWapMtwdZUUuZ5Yvzk4Hef9HbhPvQfPNdamIZ/UQ/wF
-         YJjUKjAvVAGrnYvUGmAstrF1qnFk/bob36UWeWpiZrq8/YSh5uoebAjVCKAQnm6ZqOFr
-         D+ZsOQTIqM38LEFrwTjIbdNqtHFDK+2pyiX5gW3jnLFmPJtleutQsuoi8KDUEd6aMmp/
-         XTmOxS8yqt9Jm5W1tPCpPkhoRWCS4uRbtr7qyR0fhsN2Yp1riC5woor5Ro2jMsebHHpR
-         Pz6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686417881; x=1689009881;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zk1WLJV5QkFB4QM7WPYN5iwoIW9xxUosdBEEitZ4V5A=;
-        b=g5uEesN1FibHFj6VzUCO76atJknUelfte9sJ0F5IiahE/HMeMGp4gQtdsf0FNWNGyI
-         v5fX+y2bQRTBHc4UxpBij+hkwJZH+tv3LSuzP7ZKBimOddkGI0OKCAoWa65KoS5aFMa3
-         IJsDHmwrfFFGMSECo0TlrJb4/7RXGIFAK1qNhx9gmLJDzg1x/bEJdTty5hIExizXKOsX
-         kd7Spp7tldHH2HyMtHF/tJ1iI6pqRWgalJk0fxSYbG5xYhX6CRgdxoqn6kVeT+4a/jhs
-         HrSLVqvktcN8Q5rmJVqN2IafinP5TFUppIAjMWEPbjx6ZTxjmayDSq/BICh6m6EZm9L7
-         fZYw==
-X-Gm-Message-State: AC+VfDxCK3yYxE7oMlDGQJ0Tnu5UUGOtd9NSrbcYda6qF/vSnRusNzi1
-        6HJ4FOvg6TqwPRBPlnp+e54=
-X-Google-Smtp-Source: ACHHUZ4jvqgsA1HufGLT8w1uSy08WFo0kLcE1pb0iEUMiabgGNfL03a0nPDs7x0qTX/ZxAjqEpnrow==
-X-Received: by 2002:a05:6214:2488:b0:56e:c066:3cd2 with SMTP id gi8-20020a056214248800b0056ec0663cd2mr5967750qvb.2.1686417881293;
-        Sat, 10 Jun 2023 10:24:41 -0700 (PDT)
-Received: from ?IPV6:2600:6c56:7d00:582f::64e? ([2600:6c56:7d00:582f::64e])
-        by smtp.googlemail.com with ESMTPSA id a20-20020a0ca994000000b0062de1ed9d15sm196600qvb.102.2023.06.10.10.24.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Jun 2023 10:24:41 -0700 (PDT)
-Message-ID: <f6d023e4-c22b-32fe-f7c6-51a988c43864@gmail.com>
-Date:   Sat, 10 Jun 2023 12:24:39 -0500
+        Sat, 10 Jun 2023 13:25:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E7973592;
+        Sat, 10 Jun 2023 10:25:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F01D16097A;
+        Sat, 10 Jun 2023 17:25:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 754CCC433D2;
+        Sat, 10 Jun 2023 17:25:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686417909;
+        bh=+CGO6+qAMKLfPjunyiWqLb8FIpRIF17JdrAj2A38lbQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Guf3S4EcErxRdPDv1P4FruQrkdW3AAtM9QrK9OPiiciRmjTpUlIGA0ohCxpbwLqpV
+         gBPdZwXUy57hV28Ht4RHj4Tyc8H/IOZBvtJ960dCBXMdeoQ1Ak5vNAJiMLSbFDgUvl
+         SjwkfOcMODgKVUdsNn+DMGkptR1AMYB3L9CBPVEC0YmdsKrzHXHP0LORnfRtveBr7M
+         NXG3gEBjpO/AhwLIcISEdjB/pYqISUJwpJE2iLejQL1pnhssJ0TpLWoYlIjvTUIIP/
+         gjeMEuEnamAKxle46Vxo5iLT0OwydGFqiOZEAlDgk9vLMB4yaxtVyb/0xGDjnws52s
+         q2P6saDY/0Ctw==
+From:   Conor Dooley <conor@kernel.org>
+To:     palmer@dabbelt.com
+Cc:     conor@kernel.org, Conor Dooley <conor.dooley@microchip.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/6] dt-bindings: riscv: cpus: switch to unevaluatedProperties: false
+Date:   Sat, 10 Jun 2023 18:24:47 +0100
+Message-Id: <20230610-snaking-version-81ae5abb7573@spud>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
-Content-Language: en-US
-To:     Eduardo Valentin <evalenti@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     eduval@amazon.com, rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-References: <20230607003721.834038-1-evalenti@kernel.org>
- <f26ac9a9-60af-a0fe-fccc-25bcd306f5a1@linaro.org>
- <ZICybSuZELhR1Ni5@uf8f119305bce5e.ant.amazon.com>
-From:   Russell Haley <yumpusamongus@gmail.com>
-In-Reply-To: <ZICybSuZELhR1Ni5@uf8f119305bce5e.ant.amazon.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=972; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=/IRjjbSMe5wvcyT1lUiwzTIegPvYC2KIb2FTQX8vuGA=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDCktGx/IHfklX+DUwN6ZMHef0mKr4rVxgUaiVR6n3S9F2 f9zeeLTUcrCIMbBICumyJJ4u69Fav0flx3OPW9h5rAygQxh4OIUgIkcbmD4Z5gq1rNnv5voLV/n hv9Nygu/ftxWcc2wUIRHWfih+J9HaxgZlt94UDal7M+Ld7caDx2/dVJRyTrMqjPJ8Luv6iXJ9J4 OdgA=
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/7/23 11:38, Eduardo Valentin wrote:
->> Can you elaborate 'the timing requirement for the governors' ? I'm
->> missing the point
-> 
-> 
-> The point is to avoid contention on the device update path.
-> Governor that use differential equations on temperature over time
-> will be very time sensitive. Step wise, power allocator, or any
-> PID will be very sensitive to time. So, If userspace is hitting
-> this API too often we can see cases where the updates needed to
-> service userspace may defer/delay the execution of the governor
-> logic.
-> 
-> Despite that, there is really no point to have more updates than
-> what was configured for the thermal zone to support. Say that
-> we configure a thermal zone to update itself every 500ms, yet
-> userspace keeps sending reads every 100ms, we do not need necessarily
-> to do a trip to the device every single time to update the temperature,
-> as per the design for the thermal zone.
+From: Conor Dooley <conor.dooley@microchip.com>
 
-A userspace governor might *also* use PID or filter multiple samples
-taken at high rate. I specifically switched my python fan control script
-from the Intel coretemp hwmon to the x86_pkg_tmp thermal zone because of
-the coretemp driver's annoying 1-second caching behavior.
+Do the various bits needed to drop the additionalProperties: true that
+we currently have in riscv/cpu.yaml, to permit actually enforcing what
+people put in cpus nodes.
+
+CC: Rob Herring <robh+dt@kernel.org>
+CC: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC: Paul Walmsley <paul.walmsley@sifive.com>
+CC: Palmer Dabbelt <palmer@dabbelt.com>
+CC: linux-riscv@lists.infradead.org
+CC: devicetree@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
+
+Conor Dooley (6):
+  dt-bindings: riscv: cpus: add a ref the common cpu schema
+  dt-bindings: riscv: cpus: allow clocks property
+  dt-bindings: riscv: cpus: add a ref to thermal-cooling-cells
+  dt-bindings: riscv: cpus: permit operating-points-v2
+  dt-bindings: riscv: cpus: document cpu-supply
+  dt-bindings: riscv: cpus: switch to unevaluatedProperties: false
+
+ .../devicetree/bindings/riscv/cpus.yaml         | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
+
+-- 
+2.39.2
 
