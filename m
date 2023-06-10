@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 762F472ABCB
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 15:38:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9A1972ABD3
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 15:43:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234228AbjFJNik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 09:38:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51528 "EHLO
+        id S234505AbjFJNm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 09:42:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231594AbjFJNih (ORCPT
+        with ESMTP id S231594AbjFJNm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 09:38:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E8D630F5;
-        Sat, 10 Jun 2023 06:38:37 -0700 (PDT)
+        Sat, 10 Jun 2023 09:42:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3B030FC;
+        Sat, 10 Jun 2023 06:42:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 97FAE61501;
-        Sat, 10 Jun 2023 13:38:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D03EC433D2;
-        Sat, 10 Jun 2023 13:38:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DCB7461092;
+        Sat, 10 Jun 2023 13:42:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5F0FC433EF;
+        Sat, 10 Jun 2023 13:42:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686404316;
-        bh=AwoONQNzWLWoivRPJMx1eaD5Q2g82FrCBTF+KUQq6pU=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=Y9by2ZsEW6TBZ9IC3MltrDCdzvWq25cpe4AQFc2qfpAWN8c36D8LQgSoIOguI2qR9
-         KyXbccgH1GeW4cGej/2a+Gp/CL8PUq1So3ViB+DCR/MLT3wPmNe7m/jshN+g3OKaaw
-         wC+JgsKJ5I/Fh9o+JvkIsRurxZH3QcSlY9Cr4THqsLD+8mCsl4qbHwBBZBSLNHNRqK
-         mfJC4W6iBhkcmbx7sBtQzV9oCOUhtlZJpB5u6J5X/j9+diliSWIuoo68p12Dwu0u57
-         rEBve1sATLCM9A+Ra8Z/KwMZlkOoQIGIidVcRROcUu4k/iKQXX4wsDZJD602dUBmAw
-         qVJOpHxzVySkw==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     xuanzhenggang001@208suo.com
-Cc:     pkshih@realtek.com, linux-wireless@vger.kernel.org,
+        s=k20201202; t=1686404576;
+        bh=4CnAMZqLhB3FkoCz0upg8L2TqWndlHMaF4YqaZOWGP8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vCwAkfnJ2jOoiAgrgeUXJD4uhcWWdh44u3pmYTP9f2E4NPHeSGH+HWVNijxZmARzg
+         6vtJboiWbZ2LtpM/mTt69iPsv+M2HkiuC8OEXCUmRIaMDprqpGwdRdzYtAoBCd6atp
+         SP+YKYnu+epAS8DcdzNmVi4oCCF37qF3dQqT0oHFxfePRdh9AdNyLv9ymno4miM5m3
+         sumW1hAyTk7WosPTcQ+nVpQoCvMQyqk6RUG0LIVSJBJCaZfy1V2v3OIdD5qCMEhfgh
+         Ga3EWZR8RZqWpPfqvPkuC1M7boN3Vo+S9Jp66oam1Y3bYzzagzU9wjSZwL+amBfpMd
+         OmrzrGm1C1sfA==
+Date:   Sat, 10 Jun 2023 15:42:53 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     ye.xingchen@zte.com.cn
+Cc:     wsa+renesas@sang-engineering.com,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] wifi: rtw89: Remove unneeded variable
-References: <20230610131734.21134-1-denghuilong@cdjrlc.com>
-        <a4bd77fc102a60ebac4e036842015eac@208suo.com>
-Date:   Sat, 10 Jun 2023 16:38:30 +0300
-In-Reply-To: <a4bd77fc102a60ebac4e036842015eac@208suo.com> (xuanzhenggang's
-        message of "Sat, 10 Jun 2023 21:22:20 +0800")
-Message-ID: <87zg57fne1.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+Subject: Re: [PATCH] i2c: wmt: Use devm_platform_get_and_ioremap_resource()
+Message-ID: <20230610134253.jphhhsfgxixtildd@intel.intel>
+References: <202301281451442100100@zte.com.cn>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202301281451442100100@zte.com.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,18 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-xuanzhenggang001@208suo.com writes:
+Hi Ye,
 
-> Fix the following coccicheck warning:
->
-> drivers/net/wireless/realtek/rtw89/pci.c:239:5-8: Unneeded variable: "cnt".
->
-> Signed-off-by: Zhenggang Xuan <xuanzhenggang001@208suo.com>
+On Sat, Jan 28, 2023 at 02:51:44PM +0800, ye.xingchen@zte.com.cn wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
+> 
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
+> 
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+> ---
+>  drivers/i2c/busses/i2c-wmt.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-wmt.c b/drivers/i2c/busses/i2c-wmt.c
+> index 7d4bc8736079..4a3e3985e418 100644
+> --- a/drivers/i2c/busses/i2c-wmt.c
+> +++ b/drivers/i2c/busses/i2c-wmt.c
+> @@ -372,7 +372,6 @@ static int wmt_i2c_probe(struct platform_device *pdev)
+>  	struct device_node *np = pdev->dev.of_node;
+>  	struct wmt_i2c_dev *i2c_dev;
+>  	struct i2c_adapter *adap;
+> -	struct resource *res;
+>  	int err;
+>  	u32 clk_rate;
+> 
+> @@ -380,8 +379,7 @@ static int wmt_i2c_probe(struct platform_device *pdev)
+>  	if (!i2c_dev)
+>  		return -ENOMEM;
+> 
+> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	i2c_dev->base = devm_ioremap_resource(&pdev->dev, res);
+> +	i2c_dev->base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
 
-No HTML emails, please. I recommend using 'git send-email' tool for
-submitting patches, more info in the wiki below.
+It's also a cleaner way to handle the error when res is NULL.
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Thanks,
+Andi
+
+>  	if (IS_ERR(i2c_dev->base))
+>  		return PTR_ERR(i2c_dev->base);
+> 
+> -- 
+> 2.25.1
