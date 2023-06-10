@@ -2,95 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 670BD72AD9D
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 19:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7370972ADA0
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 19:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbjFJRKa convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 10 Jun 2023 13:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
+        id S229547AbjFJRK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 13:10:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjFJRK1 (ORCPT
+        with ESMTP id S229483AbjFJRKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 13:10:27 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461922D68
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 10:10:26 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-170-etAEtKpgMd2HFWTUOuLzjA-1; Sat, 10 Jun 2023 18:10:23 +0100
-X-MC-Unique: etAEtKpgMd2HFWTUOuLzjA-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sat, 10 Jun
- 2023 18:10:19 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Sat, 10 Jun 2023 18:10:19 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Chen-Yu Tsai' <wenst@chromium.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Liam Girdwood" <lgirdwood@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>
-CC:     "linux-actions@lists.infradead.org" 
-        <linux-actions@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: RE: [PATCH] regulator: Use bitfield values for range selectors
-Thread-Topic: [PATCH] regulator: Use bitfield values for range selectors
-Thread-Index: AQHZmd7Pe+BdgVqXZ0e5XsPeombenK+ER+4A
-Date:   Sat, 10 Jun 2023 17:10:19 +0000
-Message-ID: <ce04685b7c4840b683add0bdd4404da6@AcuMS.aculab.com>
-References: <20230608075651.3214540-1-wenst@chromium.org>
-In-Reply-To: <20230608075651.3214540-1-wenst@chromium.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Sat, 10 Jun 2023 13:10:54 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5062D7E;
+        Sat, 10 Jun 2023 10:10:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=6/ljHa1TetfsMxIoQmiJpKoOzClakUJOlS+VDPzR2rY=; b=srVZBakSpNNQn5PW8fikii/viR
+        cQvMUcdwiz8e0BBzSGPdHWzwnSkyfYlT3qGFSkBexJYzGzmnlqWH8ENxcfWyXEE9rWgI5CDxaOs23
+        4LY28r9gJENQWA+qUzzLrOrbs+mnkUXwc425rrZ4YGK5DcT0ZnEkwjWiABrxjt8jCK8Y=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1q826t-00FRzd-RI; Sat, 10 Jun 2023 19:10:43 +0200
+Date:   Sat, 10 Jun 2023 19:10:43 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Jianhui Zhao <zhaojh329@gmail.com>
+Cc:     hkallweit1@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: mdio: fix duplicate registrations for phy with c45
+ in __of_mdiobus_register()
+Message-ID: <b4d6eb7c-513a-4767-aedc-8d1b6ffd831f@lunn.ch>
+References: <20230610161308.3158-1-zhaojh329@gmail.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230610161308.3158-1-zhaojh329@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen-Yu Tsai
-> Sent: 08 June 2023 08:57
-> 
-> Right now the regulator helpers expect raw register values for the range
-> selectors. This is different from the voltage selectors, which are
-> normalized as bitfield values. This leads to a bit of confusion. Also,
-> raw values are harder to copy from datasheets or match up with them,
-> as datasheets will typically have bitfield values.
-> 
-> Make the helpers expect bitfield values, and convert existing users.
-> Include bitops.h explicitly for ffs(), and reorder the header include
-> statements. While at it, also replace module.h with export.h, since the
-> only use is EXPORT_SYMBOL_GPL.
-> 
-...
->  static const unsigned int atc260x_ldo_voltage_range_sel[] = {
-> -	0x0, 0x20,
-> +	0x0, 0x1,
->  };
+On Sun, Jun 11, 2023 at 12:13:08AM +0800, Jianhui Zhao wrote:
+> Maybe mdiobus_scan_bus_c45() is called in __mdiobus_register().
+> Thus it should skip already registered PHYs later.
 
-Is there any way the change can be done so that un-edited
-modules fail to compile?
-Otherwise the whole thing is an accident waiting to happen.
+Please could you expand on your commit message. I don't see what is
+going wrong here. What does your device tree look like? Do you have a
+PHY which responds to both C22 and C45?
 
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Thanks
+	Andrew
