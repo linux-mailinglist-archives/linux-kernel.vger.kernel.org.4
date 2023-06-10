@@ -2,105 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D78A72AC79
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 17:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D96672AC7B
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 17:07:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234915AbjFJPHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 11:07:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48004 "EHLO
+        id S234871AbjFJPHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 11:07:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231347AbjFJPHc (ORCPT
+        with ESMTP id S231347AbjFJPHr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 11:07:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B923A85;
-        Sat, 10 Jun 2023 08:07:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A653A60B52;
-        Sat, 10 Jun 2023 15:07:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F353AC433EF;
-        Sat, 10 Jun 2023 15:07:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686409651;
-        bh=OFXw4bB33vMAMP/mYtrrZ0SI5zDOVjnAgufarPsOhB8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UQGn99pnynaq9uYtEVwDAzPaCVqzhpd1OTSMw7uX9tK3QuRXZ/3SyX2snVoz9deYn
-         7JIz9eaQdi/2YoK9ihy4ys4AsvU2vMOZAOcHyT/MnFU+syHwKbrQa6aHt7CD0Oxi/S
-         SVJgm5WT8Cc/AlFzhxQ4q5M0GcxyZF6bgCsipuYWod8lBpXLgcBkaTRKoJXutecd7E
-         vyP26AP8w6pAscSqadEnLZMahfGbdA0ngXAi6tyB/G7E0lZtk5jWcwUw46TXUdgKUr
-         S8F00qKBUTtlJ22KSmOmOk7x+anwzyLdK18xOg2h2MtnkXuFYOSZWizcyQcjYxO4Qe
-         5woFdFEakuMCg==
-Date:   Sat, 10 Jun 2023 16:07:25 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Shreeya Patel <shreeya.patel@collabora.com>
-Cc:     jic23@kernel.org, lars@metafoo.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        heiko@sntech.de, sebastian.reichel@collabora.com,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, gustavo.padovan@collabora.com,
-        serge.broslavsky@collabora.com
-Subject: Re: [PATCH v2] dt-bindings: iio: rockchip: Fix 'oneOf' condition
- failed warning
-Message-ID: <20230610-agreed-aground-8a08f6854965@spud>
-References: <20230610143601.173307-1-shreeya.patel@collabora.com>
+        Sat, 10 Jun 2023 11:07:47 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C9B3AA8
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 08:07:45 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-652d1d3e040so2250657b3a.1
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 08:07:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=networkplumber-org.20221208.gappssmtp.com; s=20221208; t=1686409665; x=1689001665;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N+OwDas9lj8b/o3V8lkOk9a6MOfWBvvSjFJASd1oAkw=;
+        b=OOATwZuJz1XpIayU6qEWJsTjt3CY+4SMX0O0hFz4qhukDiqKsW+2HfODMVSjDY0PS8
+         dM86VQyjvRTSnncMd8NEQ1Y3ajqSyztqwK1L4AHsdyCggJCjMPhoHDYKqNNW/QTmsvkl
+         My6SqZzBK775E7qllyKf/D3HPM+CU0UogJlokXdyYcF3DIiOmW498DR8UJaYMOxa4taL
+         sO3cymRYwckFon9LanxHS8e9U/hC5GpwfPqq9UwNBxRTStvS4jMi3j+bn53NCB2HcAzM
+         zZwpBqsJYUp+qDWJUUO7vVRWb6hTATh/04CW99B7zboxr6WE5Dc4EPBPdzzm3JjPAp3M
+         PTTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686409665; x=1689001665;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=N+OwDas9lj8b/o3V8lkOk9a6MOfWBvvSjFJASd1oAkw=;
+        b=ZZdTHF9f756JhkzaP0cy2AeXeRX477dBI38Q5kt4Q/DCGec2LOcrO5Nd8xCA4SQOxC
+         B2VL16EnwEsjJXZ7c6Qe4PSai7is+tFcqzT2TKHGaKOi30LbaGJC1+ixoYf8JXtycHXm
+         orR5BTWoDi5OoDiNbWniJJi5rTKdbfCvQmJS+EaXRuFZ+TnDyn2VcVtsIL7QewYfVg+o
+         REH7jhPHN5UAjGljihANVtv7oRbMD65znffN0Y1VKhX2HNUudv7/9u5T+JfegMay/E0c
+         qpAANkK9XSVBi7PIsaD8yIo19e4XicSRqBKnbbFlyvf8jzWSPD6fvDFhULy/SX76+pXF
+         Up8Q==
+X-Gm-Message-State: AC+VfDwYXdOSdSDVvrnvVnIBpSIpH6KC9fw3/4D1GAqF6PgjYKBC5NjW
+        dqcK3c08NIcc9i3Xfk+G6VYsYg==
+X-Google-Smtp-Source: ACHHUZ4r4eCGoy6iuu0IW9XAISMqoeXHH/Fv2bhIfewU3fQ3CD19OKfSes9kinrORhYOGStJ4RF3lw==
+X-Received: by 2002:a05:6a00:22c4:b0:646:b165:1b29 with SMTP id f4-20020a056a0022c400b00646b1651b29mr5033723pfj.23.1686409665296;
+        Sat, 10 Jun 2023 08:07:45 -0700 (PDT)
+Received: from hermes.local (204-195-120-218.wavecable.com. [204.195.120.218])
+        by smtp.gmail.com with ESMTPSA id 5-20020aa79145000000b0064cb6206463sm4231318pfi.85.2023.06.10.08.07.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Jun 2023 08:07:45 -0700 (PDT)
+Date:   Sat, 10 Jun 2023 08:07:42 -0700
+From:   Stephen Hemminger <stephen@networkplumber.org>
+To:     Yi He <clangllvm@126.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, rostedt@goodmis.org, mhiramat@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH] Add a sysctl option to disable bpf offensive helpers.
+Message-ID: <20230610080742.5b51a721@hermes.local>
+In-Reply-To: <20230610110518.123183-1-clangllvm@126.com>
+References: <20230610110518.123183-1-clangllvm@126.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="HX7e/hojOdb6OlLG"
-Content-Disposition: inline
-In-Reply-To: <20230610143601.173307-1-shreeya.patel@collabora.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, 10 Jun 2023 11:05:18 +0000
+Yi He <clangllvm@126.com> wrote:
 
---HX7e/hojOdb6OlLG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Signed-off-by: fripSide <clangllvm@126.com>
 
-On Sat, Jun 10, 2023 at 08:06:01PM +0530, Shreeya Patel wrote:
-> rk3588-saradc isn't compatible with the rk3399-saradc variant,
-> hence, fix the following dtbs_check warning for 'oneOf' condition
-> failure.
->=20
-> DTC_CHK arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dtb
-> /home/shreeya/linux/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dtb:
-> 	saradc@fec10000: compatible: 'oneOf' conditional failed,
-> 	one must be fixed:
-> 	['rockchip,rk3588-saradc'] is too short
-> 	'rockchip,saradc' was expected
-> 	'rockchip,rk3066-tsadc' was expected
-> 	'rockchip,rk3399-saradc' was expected
->=20
-> Fixes: 2daf2ae9793d ("dt-bindings: iio: adc: Add rockchip,rk3588-saradc s=
-tring")
-> Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
-> Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-
-Cheers,
-Conor.
-
---HX7e/hojOdb6OlLG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZISRrQAKCRB4tDGHoIJi
-0q+iAQCBDXnjy5NryPeQQk7XL4f/lyuDEbE/4xBNyy6UWaXdmwD+L91PrMDYIF6a
-CaCNra/LYyBrWPHVG64IgrjYkvtNrwc=
-=3vCR
------END PGP SIGNATURE-----
-
---HX7e/hojOdb6OlLG--
+You need to use your legal name not a hacker alias
+in DCO since DCO is intended to be a legally binding assertion.
