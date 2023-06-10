@@ -2,197 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44D6072A87E
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 04:35:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2C072A87F
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 04:36:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233655AbjFJCfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 22:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49514 "EHLO
+        id S232966AbjFJCgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 22:36:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbjFJCfh (ORCPT
+        with ESMTP id S229846AbjFJCgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 22:35:37 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3369235B3;
-        Fri,  9 Jun 2023 19:35:36 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-65314ee05c6so2103964b3a.1;
-        Fri, 09 Jun 2023 19:35:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686364535; x=1688956535;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B+cQ2OwbycVyxFVqiOSniKxXaS+hWOW1t5Cl7Mhvz3A=;
-        b=Kb6eH8l3yhks8jc06qIZNQE1A8b6Q8s5z7YxYMQtG84G5idJNCwHY54K2aO+07BVS5
-         kVtoqyGLMuNUelZqpalq41FDA8pNkYCcXjCVGGBapbfFqUJ4WSsdkvz7PCNssfTj/Xa8
-         5MeFd1LjBHZo35Zu32oCkV1iO99HnUueFmuPioQlNu6KFlTDvjXnvErrqP+mmyAkZtbF
-         gka37/1OCMSyGaD6KC6epfW2C0i/wirz53++DZI0bR0cNqJfWjqW/1PpEyU5NZDpv7O0
-         CnKTY14bKBRCa5kXDZSvXPOsmMxbMOpwlAqTcIhkUC/6dIUhbTKPiD7sS5/BZgVX7Mvt
-         xkow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686364535; x=1688956535;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=B+cQ2OwbycVyxFVqiOSniKxXaS+hWOW1t5Cl7Mhvz3A=;
-        b=XRMb230QOqwq7aOVqVp4EQ/mssGd75/Hh08god+OrQ//ZVgyukOCSRUgBja138j3q0
-         F2lNaiXZWjWn2jif9Wfkgvr/348bklRcFMRalecCcS0+MRELeJoHzf/+VeMHe8kUzlZI
-         ZKY5Efi3OOcFK4stNFTQgoFGp8LB4ZAsQWHHmzjKmIpGTjAfV1Eu65eRNTIe+HU7p2sy
-         MFrQmVfIgO5Zsi57HZEV3ei0Ly88r3DOGQWH+2a8gCm3gtxjYmEz1wnXai0Xves86AYh
-         dbQ0NE+VynBBYykUx4QDfMwyACgGYGbYb1J/DIsMgp6y28S2aWkhAWHlnC1RJLcE5Qkw
-         8Cww==
-X-Gm-Message-State: AC+VfDyjD5MeFZF+zw1C+KCPVMBzTvNgY/B+MtemiDhCzGv+EG8NcKOH
-        EtCWSHFL6cj9bgzoUX7tIisLZUKCLxLqTJHQ32c=
-X-Google-Smtp-Source: ACHHUZ6rNnkh2m1Yt4Pj3/pGOqJ4UHP9zSc6CE3jFoWY+FrVfA5ENGv5ysmIcDXuIOSFDb9BxkKoP9BiytTg0kXa/dU=
-X-Received: by 2002:a05:6a20:e616:b0:105:94e5:f5c5 with SMTP id
- my22-20020a056a20e61600b0010594e5f5c5mr2595006pzb.56.1686364535616; Fri, 09
- Jun 2023 19:35:35 -0700 (PDT)
+        Fri, 9 Jun 2023 22:36:15 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56C735B6;
+        Fri,  9 Jun 2023 19:36:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686364574; x=1717900574;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=u/byKgqnsMu2FypQ4mOvwIXrylhPrs3PMsv80DwwuIE=;
+  b=YHmXa9QDiG0Ed/XE3Hltn2TzpCaVzRisiVn47u93EuYcAc3ZCFPbUkKz
+   bpluuF1uxTNZJofgnF4Y30JJMMxncg2RsWZws0URQP7nVdt/gK9SR+3cr
+   Eo+PvLI9JfMstQcvrYY3WrO5TZrJhtYnb2eq3vtoV446SGcpa+1eKunn7
+   HrSd2X2QYT2uzf0nnkZiBIdYQ2uGOtfhN6AASPiS6GMFiyIajzr56xbOB
+   FOhHVG3M29eYCLEJqY2TGn8vom2SQjzgQHm/LcxuTotgHF2k6PmT50uOM
+   x8CdgB9exQ9njVGt1VwTtVl36HDkCcGjqhed/BS5r3v85Ve+XzU2aIA3I
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="421316255"
+X-IronPort-AV: E=Sophos;i="6.00,231,1681196400"; 
+   d="scan'208";a="421316255"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2023 19:36:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10736"; a="687960666"
+X-IronPort-AV: E=Sophos;i="6.00,231,1681196400"; 
+   d="scan'208";a="687960666"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga006.jf.intel.com with ESMTP; 09 Jun 2023 19:36:14 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 9 Jun 2023 19:36:13 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 9 Jun 2023 19:36:13 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Fri, 9 Jun 2023 19:36:13 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.177)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Fri, 9 Jun 2023 19:36:12 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Yi9Dvh8H1xKB19aJan+OxocYIYzEt9aZRw0c+ENEFLbGSom4P2phRJrtCb3T2WklHN5sg04RxbaHqqZAzD+f1oJLGLi9EFDYFuDRY0CCv/JTq2S4l01GEgV8HhLjGj9a4OBFPI/Cr/57PQ2a+AV6GDl4Z5PrQiitLs+Zox3ew5QAlrUO68SCAo8Zkv8Rnb8GhEH38QaTTBmt0MqSAVYek4SM/QBl9H8cof2qINHsFzJJVtxY5WNcABsjZXqL1WchBdcb2N5SbWs38hanMnA9b8lxvcOGTF6d8TDA3328XopqIPShVn/XIoWMEGx/5nVa7xTGcyzxkw5W3jwaIB5vUg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4nm+urBfxwk+XrMAaQqF7glXGi/ywHWdf3TrEtUacag=;
+ b=ceWRXvQxa/vEvDLYxg+/Al1FYnB1xxHJ85K/rxbkY874ULi8NxJ+UQ0TJUkjfLtWuekD1+YpgiFIDb2YaoVMcGKzlL+/5FAi0AHG4iWXF35wooFPizC/ebFga1oBjYjHLgJ+8tVKZyMsdz5QokSXdAElh/5kQiWtq5qcknxKSmb/m9n2lCyfCoVaspo++ov7n6yQbANh2iDSA9PgF4yAWlXpS7cdp2V6Yvkra/V8YnqjbitY3gzGETEqaxjT22mh19SMSU4c48Jdi3mmOMeQL41MujDXJbjD0Jpp8n5fGhObpDmGEF7vdx43AJQiBzH9JXEmbiQfZCYyIMxxqczbYw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
+ by PH0PR11MB5176.namprd11.prod.outlook.com (2603:10b6:510:3f::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Sat, 10 Jun
+ 2023 02:36:08 +0000
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::95c6:c77e:733b:eee5]) by PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::95c6:c77e:733b:eee5%5]) with mapi id 15.20.6455.030; Sat, 10 Jun 2023
+ 02:36:08 +0000
+Date:   Fri, 9 Jun 2023 19:36:03 -0700
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     Terry Bowman <terry.bowman@amd.com>, <alison.schofield@intel.com>,
+        <vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
+        <bwidawsk@kernel.org>, <dan.j.williams@intel.com>,
+        <dave.jiang@intel.com>, <Jonathan.Cameron@huawei.com>,
+        <linux-cxl@vger.kernel.org>
+CC:     <terry.bowman@amd.com>, <rrichter@amd.com>,
+        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
+Subject: RE: [PATCH v5 16/26] cxl/port: Remove Component Register base
+ address from struct cxl_port
+Message-ID: <6483e193a46bb_e067a294cd@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20230607221651.2454764-1-terry.bowman@amd.com>
+ <20230607221651.2454764-17-terry.bowman@amd.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230607221651.2454764-17-terry.bowman@amd.com>
+X-ClientProxiedBy: SJ0PR13CA0236.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c1::31) To PH8PR11MB8107.namprd11.prod.outlook.com
+ (2603:10b6:510:256::6)
 MIME-Version: 1.0
-References: <cover.1686275310.git.haibo1.xu@intel.com> <73045958d9ab71d5266d012f1e13061afa8c5331.1686275310.git.haibo1.xu@intel.com>
- <20230609-05521f954b0485c69612f00b@orel>
-In-Reply-To: <20230609-05521f954b0485c69612f00b@orel>
-From:   Haibo Xu <xiaobo55x@gmail.com>
-Date:   Sat, 10 Jun 2023 10:35:24 +0800
-Message-ID: <CAJve8omPV_XgCSvw8POZwisb6uTOFMJU4FyAKArryui2SAsqtw@mail.gmail.com>
-Subject: Re: [PATCH v3 09/10] KVM: riscv: selftests: Skip some registers set operation
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Haibo Xu <haibo1.xu@intel.com>, maz@kernel.org,
-        oliver.upton@linux.dev, seanjc@google.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|PH0PR11MB5176:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2490c8d1-134a-4091-276a-08db695b71f4
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: W4TXpwotuzmg4pDWfbzWCvuPQNOoL+dMTxvWRnCW2pUdrHfkJ6/IdGk74LE8Ew1EDGBNz4JCsIy0AIVUI4sgvehD1LUgv6rjlzmyU6oUC7SDczbKk157DmPDyNzxrOxmr/9Tx6QsLtXJ1bo60FehgHnYkZ9/q+We5ITpwE+wPBs1yVRGgssbTas6s8Q9Fa/LVZCo/CJ+940jXOUitAELJ4GeqSz1DIwqEqne7e7vtNnYVAaMkP0Bj62fiQhfTpNbptUTiLFBzlI+DwoIcn1goAHFL9HtyTk0UXNRDfaqpz+cJkgHVC2I+a4GZl9s9PV4JBCNqYiDlnrpG070IZfV94PF7/aUEKnDNc0nZYMviFSonDS+NZYdB/flT6+08L+WivFrCzv1EK6FUzx/7lQliCMtvx4TcJsgXJBxvaHfgrxA8dDnZGeI0pQX3grocXwd7F3WSImVeLL4VoC4jgmggKgxIzw9yWubJzRal0G8fAaETTq97jt+2OtGcZRrbRbGwNO7ztVujddQakIL3C7gXr/gQVZyVRtbFyD+bFyhx6mH+hN23IU3aWw4NhqztMHZ
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(396003)(39860400002)(376002)(136003)(346002)(451199021)(26005)(9686003)(6506007)(6512007)(4326008)(66946007)(66476007)(66556008)(6486002)(6666004)(186003)(316002)(478600001)(4744005)(2906002)(5660300002)(8676002)(8936002)(82960400001)(86362001)(41300700001)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?s0lfvqXdVafvqnkPfZOAss/SEG/yAv3XNNgC73YkhIvVsPiFjp70Y59mmXbJ?=
+ =?us-ascii?Q?w8gvyeL8N3AmXzVekYeuosd6V9kBXpxl1If1cn/7RU4bEWh5eWxihN7JcTWf?=
+ =?us-ascii?Q?+twF6+IylwpxI4Oof7XE9ZCV3Eb8QnofIah0c04an+PInAyYziO1rzhEGOXi?=
+ =?us-ascii?Q?92gynbfqpH1aDn1kmQTuL8iWFaeqp6I6FBoJ7UDhsJuYgZQqNGM3fOSfhAWR?=
+ =?us-ascii?Q?cr7DRFlLKLkOQ0LznKN9Q2XeOXHoycuMLNM2cw4W5GtjcOEn1A+We5Syd7rH?=
+ =?us-ascii?Q?v4MWE9/1RfMe4y5oz3Sn+HxGutw72M3obszxYjzEQhYRaQBWBDmJ612amGlu?=
+ =?us-ascii?Q?RNtrJV5J2IS25L9uuA4dUUIkIbYk5sB9xH1uFz9Wb3G2jyh/Iyz3CyIKsZ6E?=
+ =?us-ascii?Q?8PKcswi0gkvpT8FyEhfMw2Kw9Xejju49LmVEkZuvqajpvbF2UoDOC//xycJb?=
+ =?us-ascii?Q?nFKu7gDK05/IaOF/WOUTB8lY0ZrWLeclSolNIAaito5OeSJava+NbUuKpfZz?=
+ =?us-ascii?Q?aFzzwygDjadA2n+OoLza/bXwQlX0N0uUD3FW6GVFw7TTV4Jj+8HC0cVWwbJh?=
+ =?us-ascii?Q?fZ7sz6jY3XcJa2l2WTaV3le4vZQ4T5iAJ5ONKJY9raAMxaMLR2ReScmMloiV?=
+ =?us-ascii?Q?dui0JjMZ+W8Gd9K3mYehDO8beu17in85VZHnwN2W/u2Gk1JWVfB5xH+Bih+i?=
+ =?us-ascii?Q?pT+t0nrpk3yEXGfnFiFix0VUx7eKThTTlsCbyik+D+bZGNXZrPlmSslCaZ/N?=
+ =?us-ascii?Q?n5A3qC2M//M1+EWUdrmxJdKxtLhcE6AvSBKXMZOG4Vv6c3AbgZ1/ZWnu7nCm?=
+ =?us-ascii?Q?LTgcnmOPFBiAm3/bLFeaGPmVVqFR/dUo/qRU0FP6zSEtQ7quXA3wz90nKHx9?=
+ =?us-ascii?Q?BpHqJasW9lYEV9QGi1ntBKlDVMhvHJDCzyzv5P2Hsfg20buhfedTjRGLY3he?=
+ =?us-ascii?Q?3Jxh46Jr2zYi1pLDuRiCotLmKZXVS4dlL3rw9f0f9ksT+9/QDkgkINhvM3w2?=
+ =?us-ascii?Q?1+OwP/E3EiwOq1blvQYZFaKZapMeM8q9rLTxJiR+pZCNH3KM7EBi34z4Imde?=
+ =?us-ascii?Q?s7p0PHTFtx88cQdKmuvkLonMHLdW7frM7GWXH4DWCg0lPrZC6iNidUkdOACl?=
+ =?us-ascii?Q?mKPIQ6lDtmJPJPa9BbMCPmc+BJ8dm6EvBI6TzJT+E7FSfD3URv7t1eDGUk5r?=
+ =?us-ascii?Q?3XRicv+dIIbKSPPR1NTMvVNgu1mWtTHcXuCRotiWyKqeigQOXo59/lSvn579?=
+ =?us-ascii?Q?dKGCk+hV8po1ByfTf1OgOyGkAHe2V503QsrpZ3TLN3oicUxDI1K177gDeYxt?=
+ =?us-ascii?Q?ssVYzdZU3dMIQAgkYqtrvOtbVtUc+J8FCM6D6RjF6DuYZgmGEelcN4z9GYO/?=
+ =?us-ascii?Q?o6lG4meVadyNyU7xjDJS+niTwXECFzVzkIxJynkwuKaqTLIUNdtZDe/l5DqC?=
+ =?us-ascii?Q?Ltqu2d21VtEcokCxO4KSXyYUZ1yYJuQRqom5nu1Kp08MKMWvep6xxw6rJHA2?=
+ =?us-ascii?Q?5MOp7jysr6yqNFeH2pXAY7hZB9eqjWWb1MP73p3EXm257SOVfDy3GNp3d1Hd?=
+ =?us-ascii?Q?YQngGq8i8nqgACct2yiGjhTz+q28u2ho68jx6IuJqfF+uh+oTexNgQo88D0l?=
+ =?us-ascii?Q?OQ=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2490c8d1-134a-4091-276a-08db695b71f4
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2023 02:36:08.0267
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xhN81MIuMftm1Fk9KMUY33YVtm/eZKmcEwCN1DvUt/I+Wryyu8qvrZPfOEZ+RWcvtnGSN8msnNOl8dOMA+94pnWu2Bjddh8dJoHTnuKO4fY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5176
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 5:24=E2=80=AFPM Andrew Jones <ajones@ventanamicro.co=
-m> wrote:
->
-> On Fri, Jun 09, 2023 at 10:12:17AM +0800, Haibo Xu wrote:
-> > Set operation on some riscv registers(mostly pesudo ones) was not
-> > supported and should be skipped in the get-reg-list test. Just
-> > reuse the rejects_set utilities to handle it in riscv.
-> >
-> > Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
-> > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> > ---
-> >  tools/testing/selftests/kvm/get-reg-list.c | 20 +++++++++++++-------
-> >  1 file changed, 13 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/kvm/get-reg-list.c b/tools/testing=
-/selftests/kvm/get-reg-list.c
-> > index c4bd5a5259da..abacb95c21c6 100644
-> > --- a/tools/testing/selftests/kvm/get-reg-list.c
-> > +++ b/tools/testing/selftests/kvm/get-reg-list.c
-> > @@ -211,16 +211,22 @@ static void run_test(struct vcpu_reg_list *c)
-> >                       ++failed_get;
-> >               }
-> >
-> > -             /* rejects_set registers are rejected after KVM_ARM_VCPU_=
-FINALIZE */
-> > +             /*
-> > +              * rejects_set registers are rejected after KVM_ARM_VCPU_=
-FINALIZE on aarch64,
-> > +              * or registers that should skip set operation on riscv.
-> > +              */
-> >               for_each_sublist(c, s) {
-> >                       if (s->rejects_set && find_reg(s->rejects_set, s-=
->rejects_set_n, reg.id)) {
-> >                               reject_reg =3D true;
-> > -                             ret =3D __vcpu_ioctl(vcpu, KVM_SET_ONE_RE=
-G, &reg);
-> > -                             if (ret !=3D -1 || errno !=3D EPERM) {
-> > -                                     printf("%s: Failed to reject (ret=
-=3D%d, errno=3D%d) ", config_name(c), ret, errno);
-> > -                                     print_reg(config_name(c), reg.id)=
-;
-> > -                                     putchar('\n');
-> > -                                     ++failed_reject;
-> > +                             if ((reg.id & KVM_REG_ARCH_MASK) =3D=3D K=
-VM_REG_ARM64) {
-> > +                                     ret =3D __vcpu_ioctl(vcpu, KVM_SE=
-T_ONE_REG, &reg);
-> > +                                     if (ret !=3D -1 || errno !=3D EPE=
-RM) {
-> > +                                             printf("%s: Failed to rej=
-ect (ret=3D%d, errno=3D%d) ",
-> > +                                                             config_na=
-me(c), ret, errno);
-> > +                                             print_reg(config_name(c),=
- reg.id);
-> > +                                             putchar('\n');
-> > +                                             ++failed_reject;
-> > +                                     }
->
-> Thinking about this some more, shouldn't we attempt the set ioctl for
-> riscv reject registers as well, but look for different error numbers?
->
+Terry Bowman wrote:
+> From: Robert Richter <rrichter@amd.com>
+> 
+> The Component Register base address @component_reg_phys is no longer
+> used after the rework of the Component Register setup which now uses
+> struct member @comp_map instead. Remove the base address.
+> 
+> Signed-off-by: Robert Richter <rrichter@amd.com>
+> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Yes, we can. Currently, 2 different errno(EOPNOTSUPP/EINVAL) would be
-reported for the rejected registers in risc-v.
-These 2 errnos can be handled specially like below:
-
-diff --git a/tools/testing/selftests/kvm/get-reg-list.c
-b/tools/testing/selftests/kvm/get-reg-list.c
-index 73f40e0842b8..f3f2c4519318 100644
---- a/tools/testing/selftests/kvm/get-reg-list.c
-+++ b/tools/testing/selftests/kvm/get-reg-list.c
-@@ -255,6 +255,15 @@ static void run_test(struct vcpu_reg_list *c)
-                                                putchar('\n');
-                                                ++failed_reject;
-                                        }
-+                } else {
-+                                       ret =3D __vcpu_ioctl(vcpu,
-KVM_SET_ONE_REG, &reg);
-+                                       if (ret !=3D -1 || (errno !=3D
-EINVAL && errno !=3D EOPNOTSUPP)) {
-+                                               printf("%s: Failed to
-reject (ret=3D%d, errno=3D%d) ",
-+
-config_name(c), ret, errno);
-+
-print_reg(config_name(c), reg.id);
-+                                               putchar('\n');
-+                                               ++failed_reject;
-+                                       }
-
-One possible issue for the above change is that when new registers
-that don't support sets were added, we need
-to add them to the reject registers list, or the test would fail.
-
-Initially, in the v1 patch, the design was to just skip the EOPNOTSUPP
-errno in set operations for all registers
-since it's a known errno for registers that don't support sets. This
-change cover all the registers even for future
-new ones.
-
-What's your opinion?
-
-Thanks,
-Haibo
-> Thanks,
-> drew
+Looks good.
