@@ -2,71 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 650D372ABD9
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 15:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 932AA72ABDC
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 15:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234250AbjFJNrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 09:47:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52992 "EHLO
+        id S231140AbjFJNs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 09:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230311AbjFJNrR (ORCPT
+        with ESMTP id S230311AbjFJNs4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 09:47:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F68FCA;
-        Sat, 10 Jun 2023 06:47:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 10 Jun 2023 09:48:56 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5160BC;
+        Sat, 10 Jun 2023 06:48:55 -0700 (PDT)
+Received: from localhost.localdomain (unknown [IPv6:2405:201:0:21ea:e49:10dd:40c0:e842])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 982E961092;
-        Sat, 10 Jun 2023 13:47:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 825D6C433D2;
-        Sat, 10 Jun 2023 13:47:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686404836;
-        bh=fFblAE/qGsp8PFZpy9/5e/2/gCXc7t2KJnm41+27ak4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TNr6O30E3b2aQrZRZCtBWlzl0F6N83CCRIzDiFzDEbWDH1hbe9H3yn4KQll1pfVW+
-         yRYsLvQ5iK6qMgcHWpqtdaEsHTxiSDZsKfCgZm5COMLJgRFhKrQIkghaxw3XBGclS8
-         B5QppcQqFG9heDSilAFwmXg9+bZxyon8Qq3owerLRL8D1fHBR2nkpurZdA06DOq1de
-         /Duit5TmMRV2r6Ny6vSToIVsuMNkhe0A2Wi0TlMLdnkNizoVnOCL8dfffozzbXYigB
-         QXObiUodEo6IIhKiQXU0ZBU2kMKLSurdfQC3W6YhGuAlcDuVdPUHaYOzXHSrCRZVvE
-         m8ksBba9dYjYw==
-Date:   Sat, 10 Jun 2023 15:47:12 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     ye.xingchen@zte.com.cn
-Cc:     linus.walleij@linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: versatile: Use
- devm_platform_get_and_ioremap_resource()
-Message-ID: <20230610134712.scw5nwp7pgpumybj@intel.intel>
-References: <202301191721230148862@zte.com.cn>
+        (Authenticated sender: shreeya)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C26476606EB4;
+        Sat, 10 Jun 2023 14:48:50 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686404934;
+        bh=YfRPMg6H1Vu6qLLPU55djOlkqrSJyxogmbIBi0tm8ps=;
+        h=From:To:Cc:Subject:Date:From;
+        b=WJP115exnOuhndKFVId7R5RsPwblkmS+fOkVi6XKBQDmRyYrYUfotabp/1I32VyNf
+         7zMgne2XdHARpVU4L/jt2fUr4fjIRNEnfOLaTsiZex+/QsXQ5gvclyPfssuIlijmM7
+         iXxySJGtfsUIaFryY7M+jQJaqhRiATDyTrtHo3UMVwB1dgLOTA5S1ct0t5nQfwRdW5
+         +0xPAIwXYWzUxX9E8lxckAham6PYTualXqqkm5aU/GTVER4NoQUGGz3u38gbppfP+3
+         m0yXZNCuiOpyEqpXAl5E1QqVryH53KnhFcLyuz7dfreMWE4FkczU1N7FRCw7bVbNbM
+         Lq7yvETSFPijw==
+From:   Shreeya Patel <shreeya.patel@collabora.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, heiko@sntech.de,
+        sebastian.reichel@collabora.com
+Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, gustavo.padovan@collabora.com,
+        serge.broslavsky@collabora.com,
+        Shreeya Patel <shreeya.patel@collabora.com>
+Subject: [PATCH] arm64: dts: rockchip: rock5b: Add saradc node
+Date:   Sat, 10 Jun 2023 19:18:41 +0530
+Message-Id: <20230610134841.172313-1-shreeya.patel@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202301191721230148862@zte.com.cn>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ye,
+Add ADC support for ROCK 5B.
 
-On Thu, Jan 19, 2023 at 05:21:23PM +0800, ye.xingchen@zte.com.cn wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
-> 
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
-> 
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+---
+ arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org> 
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+index 154b1089db77..181874905850 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+@@ -207,6 +207,11 @@ &pwm1 {
+ 	status = "okay";
+ };
+ 
++&saradc {
++	status = "okay";
++	vref-supply = <&avcc_1v8_s0>;
++};
++
+ &sdhci {
+ 	bus-width = <8>;
+ 	no-sdio;
+-- 
+2.30.2
 
-Thanks,
-Andi
