@@ -2,211 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B99872AA4C
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 10:30:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0766A72AA4E
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 10:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234069AbjFJIaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 04:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50636 "EHLO
+        id S229526AbjFJIbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 04:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234126AbjFJI3t (ORCPT
+        with ESMTP id S229867AbjFJIbk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 04:29:49 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33FA3C25
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 01:29:43 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f7024e66adso16565e9.1
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 01:29:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686385782; x=1688977782;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jzTIRaOl9jbX28R9GdkJlkdU8aU4nOrXebsSuS/IoxM=;
-        b=h9+spU3pu0Hn5yqnPvA32x7NoTxQYkoTG5e5Q3ZKpQIRIN07Kz4F757IxVguIUAnVm
-         kjKRx2Tm25171ub3jUKP1JfF65aLKky1/HjcealJgUXsTYCNlXeyUM1U2Ur14fmb0ysT
-         L2V9D0LN8RSeP1StpIVUggB0zCWLBOHuUg+0w1BpEt4ZFAk2JBOHN5/03uhd65zDrpli
-         6Xm+Ga14xRtj3uKlw22QgVZiEBtBYvWmpWfew9AC+rFCpx4iIpXGZ81wTuYS+CDHKZJm
-         0vZ7XamkMvDqtdHUPEZVCicz/JL2wH1eZcy+Z2rzm25RxfX/2cltutsfdVlqpaxXt+50
-         CaGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686385782; x=1688977782;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jzTIRaOl9jbX28R9GdkJlkdU8aU4nOrXebsSuS/IoxM=;
-        b=be21SxvqrxvXWXOItojcZ5ijXBe3RT5thst0Fx0RtgFl2TpvNMwkh/mCXvLE0NKDTS
-         k+7ryUXc5Ag2WURWuCT+wutBlKQueIrhIjdumhV7jb4nFnFRXbusNiVhBrhYFQoCV91G
-         g5nDur+kFadkDiRcRJBtje8t8i9QecEhSux4I1KYAKOkKOWqAaaoOH+swb1RcIwHVEBt
-         a1BqSlGHPvEEEP627mPewuLoKG6pDi8/Lmxfse9Ze7nquE6Ki3AQkvw+GvuovBtOFl5T
-         b5SCEjGikRJNJcmdc6DpDydOox5rHWiESTVO5/r9lSbfjoeyCQKhklRJnGyotIKnX5VF
-         ZylQ==
-X-Gm-Message-State: AC+VfDyoxEtkWQq/YWxM+nvZL3w9ANLxWIUhVUGxQd7x4OfjzuWU2wR0
-        wGtTUdor9hVSBFusGcFXein+MaOH4AWTBGBG3roJIA==
-X-Google-Smtp-Source: ACHHUZ7l/xkbZ/3SZrgGz3Hxf28+mzRqjWhycDRMBue72SKun5JYWhEmEYkti5zUxw9m/K+36PZSQlajx74iWIU5azc=
-X-Received: by 2002:a05:600c:3d86:b0:3f1:70d1:21a6 with SMTP id
- bi6-20020a05600c3d8600b003f170d121a6mr79504wmb.0.1686385782535; Sat, 10 Jun
- 2023 01:29:42 -0700 (PDT)
+        Sat, 10 Jun 2023 04:31:40 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E004F2718;
+        Sat, 10 Jun 2023 01:31:37 -0700 (PDT)
+X-GND-Sasl: alexandre.belloni@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1686385896;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OK8Q4QRjn4O3LEpDvvgIC+0ZRQV/BQxETmAgTgYPCO4=;
+        b=BWM/pGjsGVLKFet0yE0Oc813Y+lJ4mUt1mo2P6/srAsGiMNPRquuzfFbFBdYg58xLvI5u4
+        gZHmp0dtrZ7YPXW5GrvbV1/jy1zt6/Vx4Umrt83vLzXHaAojtJLnaEAYRUjUbUJTjyUyAv
+        9Teqk4e2enhoNCBhDuZ++UdaIZNyKPvJzrLkoGrv3eOHMaiFuy5prYf+Rge8E7Xii+HUSG
+        7QK9c96p5CFgImZZ7MwK6ViOCPV/XkxZLf1XBYfa1mHYJQAOJVuxDyTnulpAjc4IKWPJdm
+        7MaiIKAPlPYzY2FL2mujx5bwn7CUm21IVnrpu9mBupkXIXlKcNZhzf5OY9+XkA==
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 25D07C0005;
+        Sat, 10 Jun 2023 08:31:36 +0000 (UTC)
+Date:   Sat, 10 Jun 2023 10:31:35 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Jan Kiszka <jan.kiszka@siemens.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] rtc: pcf-8563: Report previously detected low-voltage
+ via RTC_VL_BACKUP_LOW
+Message-ID: <20230610083135e40dd2f6@mail.local>
+References: <da84b6b1-a9d8-ce46-16a9-e1a2d495240c@siemens.com>
 MIME-Version: 1.0
-References: <20230610005149.1145665-1-rmoar@google.com> <20230610005149.1145665-6-rmoar@google.com>
-In-Reply-To: <20230610005149.1145665-6-rmoar@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Sat, 10 Jun 2023 16:29:30 +0800
-Message-ID: <CABVgOSkKYzynFcAdSKbdbVjL0bYnXtgM8XbkkRc2+9mef1wCzQ@mail.gmail.com>
-Subject: Re: [RFC v1 5/6] kunit: memcpy: Mark tests as slow using test attributes
-To:     Rae Moar <rmoar@google.com>
-Cc:     shuah@kernel.org, dlatypov@google.com, brendan.higgins@linux.dev,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        linux-hardening@vger.kernel.org, jstultz@google.com,
-        tglx@linutronix.de, sboyd@kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000088e6b305fdc24924"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <da84b6b1-a9d8-ce46-16a9-e1a2d495240c@siemens.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000088e6b305fdc24924
-Content-Type: text/plain; charset="UTF-8"
+Hello Jan,
 
-On Sat, 10 Jun 2023 at 08:52, Rae Moar <rmoar@google.com> wrote:
->
-> Mark slow memcpy KUnit tests using test attributes.
->
-> Tests marked as slow are as follows: memcpy_large_test, memmove_test,
-> memmove_large_test, and memmove_overlap_test.
->
-> These tests were the slowest of the memcpy tests and relatively slower to
-> most other KUnit tests. Most of these tests are already skipped when
-> CONFIG_MEMCPY_SLOW_KUNIT_TEST is not enabled.
+On 09/06/2023 23:04:12+0200, Jan Kiszka wrote:
+> From: Jan Kiszka <jan.kiszka@siemens.com>
+> 
+> The VL bit in the seconds register remains set only until seconds are
+> written under main power. As this often happens during boot-up after
+> picking up a network time, make sure to preserve the low battery state
+> across this, caching it and returning it via the RTC_VL_BACKUP_LOW bit.
+> 
+> To permit userspace clearing this state during runtime, also implement
+> RTC_VL_CLR that works against the cached state.
+> 
+> This is emulating RTCs which have a battery voltage check that works
+> under main power as well.
+> 
 
-I assume the plan will be to eventually remove the
-CONFIG_MEMCPY_SLOW_KUNIT_TEST option and just rely on the "speed"
-attribute to filter these out. That has the disadvantage that the
-tests will still be built, but is probably the nicer long-term
-solution.
+Emulating doesn't work well and I deliberately chose to not implement
+it. For example, in your scenario, if you boot twice without using
+VL_READ, you anyway have lost the information. This makes emulating
+unreliabl. The fix you need is in userspace where you have to ensure you
+read the status before setting the time.
 
-I suppose we could remove it in this patch, too, but I suspect it
-makes more sense to have a deprecation period to make sure the
-attributes are working well. That being said, maybe add a note to the
-CONFIG_MEMCPY_SLOW_KUNIT_TEST help text to advertise this?
-
-
->
-> These tests can now be filtered on using the KUnit test attribute filtering
-> feature. Example: --filter "speed>slow". This will run only the tests that
-> have speeds faster than slow. The slow attribute will also be outputted in
-> KTAP.
->
-> Signed-off-by: Rae Moar <rmoar@google.com>
+> Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
 > ---
->  lib/memcpy_kunit.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/lib/memcpy_kunit.c b/lib/memcpy_kunit.c
-> index 887926f04731..440aee705ccc 100644
-> --- a/lib/memcpy_kunit.c
-> +++ b/lib/memcpy_kunit.c
-> @@ -551,10 +551,10 @@ static void strtomem_test(struct kunit *test)
->  static struct kunit_case memcpy_test_cases[] = {
->         KUNIT_CASE(memset_test),
->         KUNIT_CASE(memcpy_test),
-> -       KUNIT_CASE(memcpy_large_test),
-> -       KUNIT_CASE(memmove_test),
-> -       KUNIT_CASE(memmove_large_test),
-> -       KUNIT_CASE(memmove_overlap_test),
-> +       KUNIT_CASE_SLOW(memcpy_large_test),
-> +       KUNIT_CASE_SLOW(memmove_test),
-> +       KUNIT_CASE_SLOW(memmove_large_test),
-> +       KUNIT_CASE_SLOW(memmove_overlap_test),
->         KUNIT_CASE(strtomem_test),
->         {}
+>  drivers/rtc/rtc-pcf8563.c | 17 ++++++++++++++---
+>  1 file changed, 14 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/rtc/rtc-pcf8563.c b/drivers/rtc/rtc-pcf8563.c
+> index 7e720472213c..f8c6cdb9a39d 100644
+> --- a/drivers/rtc/rtc-pcf8563.c
+> +++ b/drivers/rtc/rtc-pcf8563.c
+> @@ -81,6 +81,7 @@ struct pcf8563 {
+>  #ifdef CONFIG_COMMON_CLK
+>  	struct clk_hw		clkout_hw;
+>  #endif
+> +	bool low_bat;
 >  };
-> --
-> 2.41.0.162.gfafddb0af9-goog
->
+>  
+>  static int pcf8563_read_block_data(struct i2c_client *client, unsigned char reg,
+> @@ -207,6 +208,7 @@ static int pcf8563_rtc_read_time(struct device *dev, struct rtc_time *tm)
+>  		return err;
+>  
+>  	if (buf[PCF8563_REG_SC] & PCF8563_SC_LV) {
+> +		pcf8563->low_bat = true;
+>  		dev_err(&client->dev,
+>  			"low voltage detected, date/time is not reliable.\n");
+>  		return -EINVAL;
+> @@ -277,6 +279,8 @@ static int pcf8563_rtc_set_time(struct device *dev, struct rtc_time *tm)
+>  static int pcf8563_rtc_ioctl(struct device *dev, unsigned int cmd, unsigned long arg)
+>  {
+>  	struct i2c_client *client = to_i2c_client(dev);
+> +	struct pcf8563 *pcf8563 = i2c_get_clientdata(client);
+> +	unsigned int state = 0;
+>  	int ret;
+>  
+>  	switch (cmd) {
+> @@ -284,9 +288,16 @@ static int pcf8563_rtc_ioctl(struct device *dev, unsigned int cmd, unsigned long
+>  		ret = i2c_smbus_read_byte_data(client, PCF8563_REG_SC);
+>  		if (ret < 0)
+>  			return ret;
+> -
+> -		return put_user(ret & PCF8563_SC_LV ? RTC_VL_DATA_INVALID : 0,
+> -				(unsigned int __user *)arg);
+> +		if (ret & PCF8563_SC_LV) {
+> +			state |= RTC_VL_DATA_INVALID;
+> +			pcf8563->low_bat = true;
+> +		}
+> +		if (pcf8563->low_bat)
+> +			state |= RTC_VL_BACKUP_LOW;
+> +		return put_user(state, (unsigned int __user *)arg);
+> +	case RTC_VL_CLR:
+> +		pcf8563->low_bat = false;
+> +		return 0;
+>  	default:
+>  		return -ENOIOCTLCMD;
+>  	}
+> -- 
+> 2.35.3
 
---00000000000088e6b305fdc24924
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-9IGQSBx2i4m+hGXJpET+MEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQCRI3Z4cAidgFcv
-Usqdz765x6KMZSfg/WtFrYg8ewsP2NpCxVM2+EhPyyEQ0k0DhtzdtGoI/Ug+jdFDyCKB9P2+EPLh
-iMjMnFILp7Zs4r18ECHlvZuDZfH9m0BchXIxu5jLIuQyKUWrCRDZZEDNr510ZhhVfYSFPA8ms1nk
-jyzYFOHYQyv5IfML/3IBFKlON5OZa+V8EZYULYcNkp03DdWglafj7SXZ1/XgAbVYrC381UvrsYN8
-jndVvoa1GWwe+NVlIIK7Q3uAjV3qLEDQpaNPg1rr0oAn6YmvTccjVMqj2YNwN+RHhKNzgRGxY5ct
-FaN+8fXZhRhpv3bVbAWuPZXoMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABAz5xDls09r2CKyYRqnNbMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBx
-KgQsYuTgf+qS+hzrdK1heflR/f6WiOGcozLpYoxf7TAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA2MTAwODI5NDJaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAlwp920U57djbxeZNiyow
-dltnEUR1IHf5X4EvRog+fV//5xcZNvOiM55Z+EP6mAzAB7N6GLqmCm98oaFQyZgpl4l0Otwp6aNF
-w/HeKAWM5ZToalU+scC7ob77uvVvkpOQW1nHSfxTFA7K6CaDgQ9s5/RRaBTsQK/gC+yc9rEfj9I2
-82EYmfPt+CRrzm9knV9c4XHwLJBYTA3Um8afo+d8d4UxMy3OzBskD84kXjiuaHwgAd/KZqHbRGZm
-0yIBX117wYUqgOfWxHm8OYFYPF6KQJUGdQ6rROsomRCL7JzK2/AM6yE0PUPkI/2lCSbTF4vP56Vp
-Dyb3/BDaToHyt+dF4g==
---00000000000088e6b305fdc24924--
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
