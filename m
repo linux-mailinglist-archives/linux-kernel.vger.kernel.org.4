@@ -2,55 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A348372ADF6
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 19:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF3D72ADF8
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 19:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbjFJR41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 13:56:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42742 "EHLO
+        id S230351AbjFJR5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 13:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbjFJR4Z (ORCPT
+        with ESMTP id S229436AbjFJR5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 13:56:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECE235A9;
-        Sat, 10 Jun 2023 10:56:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4339160C99;
-        Sat, 10 Jun 2023 17:56:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E53FCC433EF;
-        Sat, 10 Jun 2023 17:56:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686419781;
-        bh=NvPgEXsmIasY6Cjtsye1b9f6W2Pqjj+ESFnG02dWLhM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cttIOawKuYHVFDYDSNRgZobLOwHWT1cVx+rToonQQgjwie132EucELH7pNdhH+SSi
-         w7jfT8y9juYfm1SBt26b25YW2n6tkpOdohIFxQFaSZwZATVgXekCGGLkCmyiOuMDOX
-         jirw5s8dFFL5VYOSL30t3dL7izy3mdc4n18VC9vsiHHsAgLwftx++GZzNo1N33qBRA
-         sZzj2CioIsmLcwsanr2FuKaY75SjBdduae3VYu6cfpRULb/QkhTXzs+wgjRFIiWG8B
-         Yv8tRpqOm6ZUBZOVpeyFwf6H1+VtbgSiOauOEW2Wh+z1BreXOTdyicCaMVTcRkdrOh
-         ybYCT72dxJBVQ==
-From:   SeongJae Park <sj@kernel.org>
-To:     David Gow <davidgow@google.com>
-Cc:     SeongJae Park <sj@kernel.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        brendanhiggins@google.com, rmoar@google.com,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        johannes@sipsolutions.net
-Subject: Re: [PATCH] kunit: tool: undo type subscripts for subprocess.Popen
-Date:   Sat, 10 Jun 2023 17:56:18 +0000
-Message-Id: <20230610175618.82271-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <CABVgOS=wR0J9X1VaU4eOOb_VZRLV0nmj860B1pyq97EvCnbe2Q@mail.gmail.com>
-References: 
+        Sat, 10 Jun 2023 13:57:09 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED34BD;
+        Sat, 10 Jun 2023 10:57:08 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-30aea656e36so1946641f8f.1;
+        Sat, 10 Jun 2023 10:57:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686419827; x=1689011827;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=A0RlF2SCoY8DOBZFSAE7oSXdOZufl2PQqXGpj/ndfFo=;
+        b=qc3sSnbYwiTFPHv4KX+/zz30qPr0aKzhUV+yAYQhdIK/ubrS6U/MpjW47xI+xSqTlG
+         5c8MjhMI/vC+3L4Gc+5GT4yp1OpdrBR9+rxrv/QMgPfqkGRFiJzsuTbPh3srcAhQcJAE
+         Su91tgLfnhbg6P5EhPCN6hD2xIT/qB04aEvBAGIecIM19DulbPXr1N3xy448pn/JkVZF
+         XIH/l9UG+Hfynm7yYosycnIkhaLKPNovgVsz3CDhungzZYqB70GZwQZQRRkp66MXQ9TZ
+         jmjgL+b83qWQmSRk8Ce7FmnahwlpUZbT+6jZZ00x147TKDlkmI9NNwHQ0mB2JTbjlzBW
+         Ybiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686419827; x=1689011827;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A0RlF2SCoY8DOBZFSAE7oSXdOZufl2PQqXGpj/ndfFo=;
+        b=BFgGKQxiNu0HwCs3NXfv30L74ZbJOQ2Ld698m8FUk4lD56oPXyiQVgmYUdO+zJUH31
+         SHus4VcdKMYrgRBtDHQzX/Pvva5IWlJMcF5hyPh/38TCLh2RB9kHzvNw7cN527ydbrqd
+         Y15aJIil0DpLGD33h/jyXdy0kTr6dN8Aw4D6DUwwIDF3zp5jmO49IG3hZ3fSS4G307hW
+         plOY17sOYSabuLr3g5Wocivw2j0BbuVqJMKLUiTDVu99B8EjNF8jmcVniVkMJ8xO16SD
+         MQJp/iSdVcpBZl6S7B/cP0jAwGI4dr1nveQZpk9dPH0cEWjPecYVHeQxqEN4bY5bSgpZ
+         AxVg==
+X-Gm-Message-State: AC+VfDwzhIbwSy1S6sydjbZzCs7p/Sxbp6CECCfwtYnCjGAl4GXtUndU
+        o8YBoB5M0UapM9QNiggj+I8=
+X-Google-Smtp-Source: ACHHUZ7gB7Hp35URvk8Xu0h7QliavyRRbHC04YIotRJd45hFrnBxeGDG0NyzpoF50hot0UL4oO4PuQ==
+X-Received: by 2002:adf:fd87:0:b0:306:3021:2304 with SMTP id d7-20020adffd87000000b0030630212304mr1609781wrr.60.1686419827127;
+        Sat, 10 Jun 2023 10:57:07 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id e10-20020a056000194a00b0030497b3224bsm7613288wry.64.2023.06.10.10.57.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Jun 2023 10:57:06 -0700 (PDT)
+Date:   Sat, 10 Jun 2023 20:57:03 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net-next 27/30] net: dsa: mt7530: introduce BPDU trapping
+ for MT7530 switch
+Message-ID: <20230610175703.r2wlzfovl6fnebu2@skbuf>
+References: <20230522121532.86610-1-arinc.unal@arinc9.com>
+ <20230522121532.86610-28-arinc.unal@arinc9.com>
+ <20230526170223.gjdek6ob2w2kibzr@skbuf>
+ <f22d1ddd-b3a4-25da-b681-e0790913f526@arinc9.com>
+ <20230604092304.gkcdccgfda5hjitf@skbuf>
+ <cc21196b-a18a-ce3c-e3f3-4303abf4b9a3@arinc9.com>
+ <20230604124701.svt2r3aveyybajc3@skbuf>
+ <6a64db9e-ac6c-c571-fb8b-ae3aa2da07b7@arinc9.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+In-Reply-To: <6a64db9e-ac6c-c571-fb8b-ae3aa2da07b7@arinc9.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,75 +101,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 10 Jun 2023 12:15:55 +0800 David Gow <davidgow@google.com> wrote:
+On Sat, Jun 10, 2023 at 11:32:45AM +0300, Arınç ÜNAL wrote:
+> Maybe I should submit this and LLDP trapping to net? Currently, the MT7530
+> subdriver on the stable kernels treat LLDP frames and BPDUs as regular
+> multicast frames, therefore flooding them to user ports, which is wrong.
+> These patches could count as bug fixes.
 
-> [-- Attachment #1: Type: text/plain, Size: 2275 bytes --]
-> 
-> On Sat, 10 Jun 2023 at 03:09, SeongJae Park <sj@kernel.org> wrote:
-> >
-> > Hi David and Brendan,
-> >
-> > On Tue, 2 May 2023 08:04:20 +0800 David Gow <davidgow@google.com> wrote:
-> >
-> > > [-- Attachment #1: Type: text/plain, Size: 1473 bytes --]
-> > >
-> > > On Tue, 2 May 2023 at 02:16, 'Daniel Latypov' via KUnit Development
-> > > <kunit-dev@googlegroups.com> wrote:
-> > > >
-> > > > Writing `subprocess.Popen[str]` requires python 3.9+.
-> > > > kunit.py has an assertion that the python version is 3.7+, so we should
-> > > > try to stay backwards compatible.
-> > > >
-> > > > This conflicts a bit with commit 1da2e6220e11 ("kunit: tool: fix
-> > > > pre-existing `mypy --strict` errors and update run_checks.py"), since
-> > > > mypy complains like so
-> > > > > kunit_kernel.py:95: error: Missing type parameters for generic type "Popen"  [type-arg]
-> > > >
-> > > > Note: `mypy --strict --python-version 3.7` does not work.
-> > > >
-> > > > We could annotate each file with comments like
-> > > >   `# mypy: disable-error-code="type-arg"
-> > > > but then we might still get nudged to break back-compat in other files.
-> > > >
-> > > > This patch adds a `mypy.ini` file since it seems like the only way to
-> > > > disable specific error codes for all our files.
-> > > >
-> > > > Note: run_checks.py doesn't need to specify `--config_file mypy.ini`,
-> > > > but I think being explicit is better, particularly since most kernel
-> > > > devs won't be familiar with how mypy works.
-> > > >
-> > > > Fixes: 695e26030858 ("kunit: tool: add subscripts for type annotations where appropriate")
-> > > > Reported-by: SeongJae Park <sj@kernel.org>
-> > > > Link: https://lore.kernel.org/linux-kselftest/20230501171520.138753-1-sj@kernel.org
-> > > > Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> > > > ---
-> > >
-> > > Thanks for jumping on this.
-> > >
-> > > Looks good to me!
-> > >
-> > > Reviewed-by: David Gow <davidgow@google.com>
-> >
-> > Looks like this patch is still not merged in the mainline.  May I ask the ETA,
-> > or any concern if you have?
-> >
-> >
-> 
-> We've got this queued for 6.5 in the kselftest/kunit tree[1], so it
-> should land during the merge window. But I'll look into getting it
-> applied as a fix for 6.4, beforehand.
-
-Thank you for the kind answer, Gow!  I was thinking this would be treated as a
-fix, and hence merged into the mainline before next merge window.  I'm actually
-getting my personal test suite failures due to absence of this fix.  It's not a
-critical problem, but it would definitely better for me if this could be merged
-into the mainline as early as possible.
-
-
-Thanks,
-SJ
-
-> 
-> -- David
-> 
-> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=kunit&id=e30f65c4b3d671115bf2a9d9ef142285387f2aff
+Yes, I believe that trapping link-local frames only to the host
+constitutes "net.git" material.
