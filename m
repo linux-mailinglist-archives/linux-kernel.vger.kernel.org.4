@@ -2,194 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2635B72A911
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 06:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E43E72A92F
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 07:38:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbjFJE4U convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 10 Jun 2023 00:56:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44412 "EHLO
+        id S230187AbjFJFht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 01:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjFJE4S (ORCPT
+        with ESMTP id S229441AbjFJFhr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 00:56:18 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347CF3AAE;
-        Fri,  9 Jun 2023 21:56:17 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1q7qe6-003h2P-FM; Sat, 10 Jun 2023 06:56:14 +0200
-Received: from dynamic-092-224-243-210.92.224.pool.telefonica.de ([92.224.243.210] helo=[192.168.1.11])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1q7qe6-001Ksp-8Q; Sat, 10 Jun 2023 06:56:14 +0200
-Message-ID: <e1363a71503a799824e5cb6e4595b559cc2e5313.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH v6] sh: avoid using IRQ0 on SH3/4
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>, Rich Felker <dalias@libc.org>,
-        linux-sh@vger.kernel.org
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Sat, 10 Jun 2023 01:37:47 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66BAC3A9E;
+        Fri,  9 Jun 2023 22:37:46 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1b034ca1195so11757465ad.2;
+        Fri, 09 Jun 2023 22:37:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686375466; x=1688967466;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U3d5ANAanSkcTLSLsdt6pgoF350ZTs91qimdsozi44Q=;
+        b=C36H3GAdAT+/0SAEs+jCEjLM5cX+Y3I6LHJEBegbtRTvhR4DTL0qu+Gew2KR2KkJIc
+         x/Me26A+2pGGG0TIUDFiNs5UG3yzHDrXJAWwRS6hc8cUyUlrHNLssj1tSfZPE9ly27Gi
+         lHJETFPYpZiQoYpyI0n1OG0I53Ykr4Bvzu3sVmjxfIGfy5tQN+VnZKWHxL9PFJ16/Ba4
+         Gn8rOZYQnCkhSqdnevLu1h2bW2vE6/jtwXJKTi4gpMGE15++1tVq5/V0waWOl4oGPRl4
+         Opt4e0PkS+hcYjSBDoqeJFa4AClh8zR3jcrsSUSovW/r1zZoTsWq/3zWGomi+56s1Zbz
+         UfJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686375466; x=1688967466;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=U3d5ANAanSkcTLSLsdt6pgoF350ZTs91qimdsozi44Q=;
+        b=X/Y5YiXEBYzS/MSESklAe0FdW4hElzlNBN7RxZfc6CQxflcpdBkvNwy2I3MpupJaXW
+         /dHoBGNQp2kc9UQwUVja0sYmBqaetCJvxkPht5WmwyVVYAxHndJVsPD2LY5irMvb+ahZ
+         B5AIKIOl1e/XTUfX8y4lU1SD/CoFAOvHCnneQjLFCWJdblKpo47AaYL/2nYJKiN9RMe1
+         3bNU3Nvtd09JNPISfDUWUxHKaQO+od2FWaW0AAncIinTHEUlIpBH21qX4FR5pa7+DxXo
+         vBYwovR4FTXjPUtNUiBFGNudKTveIuXW+5gdSEPmDAN5TZqrwcp2X3CVZ8UwMS8n9vh5
+         l5AA==
+X-Gm-Message-State: AC+VfDy8lXZhnUEZ/dbsOwPu5qnhc8D5n22gJY7ItY6wvENhDBU5R10T
+        aF0Wscwa/w1KOmtmnzR6iLEqyncbHM6+oQ==
+X-Google-Smtp-Source: ACHHUZ6zqdovUzQYtmhPX7phFAqiJfcXHIomoUmonlBVS5JvZ1kSE4OArDduvyGIT8Hk++1PFxzRqw==
+X-Received: by 2002:a17:903:26c7:b0:1ab:1a73:7c7f with SMTP id jg7-20020a17090326c700b001ab1a737c7fmr891385plb.63.1686375465591;
+        Fri, 09 Jun 2023 22:37:45 -0700 (PDT)
+Received: from smtpclient.apple ([2402:d0c0:2:a2a::1])
+        by smtp.gmail.com with ESMTPSA id x15-20020a170902ec8f00b001b176ba9f17sm4137078plg.149.2023.06.09.22.37.41
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 09 Jun 2023 22:37:45 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.400.51.1.1\))
+Subject: Re: [PATCH 4/4] Docs/RCU/rculist_nulls: Drop unnecessary '_release'
+ in insert function
+From:   Alan Huang <mmpgouride@gmail.com>
+In-Reply-To: <46440869-644a-4982-b790-b71b43976c66@paulmck-laptop>
+Date:   Sat, 10 Jun 2023 13:37:28 +0800
+Cc:     SeongJae Park <sj@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>, corbet@lwn.net,
+        rcu@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Date:   Sat, 10 Jun 2023 06:56:13 +0200
-In-Reply-To: <71105dbf-cdb0-72e1-f9eb-eeda8e321696@omp.ru>
-References: <71105dbf-cdb0-72e1-f9eb-eeda8e321696@omp.ru>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.48.3 
-MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 92.224.243.210
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <4071FE01-BEB5-4BEE-A424-F50F0E0E3410@gmail.com>
+References: <CAEXW_YQFqW2QcAuHZEhc_GaUaB-=QOS0WgUOizd=FYwtFQ8vag@mail.gmail.com>
+ <20230609191206.30465-1-sj@kernel.org>
+ <46440869-644a-4982-b790-b71b43976c66@paulmck-laptop>
+To:     paulmck@kernel.org
+X-Mailer: Apple Mail (2.3731.400.51.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-06-01 at 23:22 +0300, Sergey Shtylyov wrote:
-> IRQ0 is no longer returned by platform_get_irq() and its ilk -- they now
-> return -EINVAL instead.  However, the kernel code supporting SH3/4 based
-> SoCs still maps the IRQ #s starting at 0 -- modify that code to start the
-> IRQ #s from 16 instead.
-> 
-> The patch should mostly affect the AP-SH4A-3A/AP-SH4AD-0A boards as they
-> indeed are using IRQ0 for the SMSC911x compatible Ethernet chip...
-> 
-> Fixes: ce753ad1549c ("platform: finally disallow IRQ0 in platform_get_irq() and its ilk")
-> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Tested-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> 
-> ---
-> The patch is against Linus Torvalds' 'linux.git' repo.
-> 
-> Changes in version 6:
-> - fixed up inconsistencies and did some rewording in the patch description.
-> 
-> Changes in version 5:
-> - updated the patch description and the "Fixes:" tag as the patch disallowing
->   the use of IRQ0 was merged meanwhile.
-> 
-> Changes in version 4:
-> - fixed up the off-chip base IRQ #s for the Dreamcast/Highlander/R2D/SE7724
->   boards.
-> 
-> Changes in version 3:
-> - added an appropriate Fixes: tag and added a passage about it to the patch
->   description;
-> - added actual cases of the boards using IRQ0 to the patch description;
-> - added Geert Uytterhoeven's and John Paul Adrian Glaubitz's tags;
-> - updated the link to point to the version 2 of the patch.
-> 
-> Changes in version 2:
-> - changed cmp/ge to cmp/hs in the assembly code.
-> 
->  arch/sh/include/mach-common/mach/highlander.h |    2 +-
->  arch/sh/include/mach-common/mach/r2d.h        |    2 +-
->  arch/sh/include/mach-dreamcast/mach/sysasic.h |    2 +-
->  arch/sh/include/mach-se/mach/se7724.h         |    2 +-
->  arch/sh/kernel/cpu/sh3/entry.S                |    4 ++--
->  include/linux/sh_intc.h                       |    6 +++---
->  6 files changed, 9 insertions(+), 9 deletions(-)
-> 
-> Index: linux/arch/sh/include/mach-common/mach/highlander.h
-> ===================================================================
-> --- linux.orig/arch/sh/include/mach-common/mach/highlander.h
-> +++ linux/arch/sh/include/mach-common/mach/highlander.h
-> @@ -176,7 +176,7 @@
->  #define IVDR_CK_ON	4		/* iVDR Clock ON */
->  #endif
->  
-> -#define HL_FPGA_IRQ_BASE	200
-> +#define HL_FPGA_IRQ_BASE	(200 + 16)
->  #define HL_NR_IRL		15
->  
->  #define IRQ_AX88796		(HL_FPGA_IRQ_BASE + 0)
-> Index: linux/arch/sh/include/mach-common/mach/r2d.h
-> ===================================================================
-> --- linux.orig/arch/sh/include/mach-common/mach/r2d.h
-> +++ linux/arch/sh/include/mach-common/mach/r2d.h
-> @@ -47,7 +47,7 @@
->  
->  #define IRLCNTR1	(PA_BCR + 0)	/* Interrupt Control Register1 */
->  
-> -#define R2D_FPGA_IRQ_BASE	100
-> +#define R2D_FPGA_IRQ_BASE	(100 + 16)
->  
->  #define IRQ_VOYAGER		(R2D_FPGA_IRQ_BASE + 0)
->  #define IRQ_EXT			(R2D_FPGA_IRQ_BASE + 1)
-> Index: linux/arch/sh/include/mach-dreamcast/mach/sysasic.h
-> ===================================================================
-> --- linux.orig/arch/sh/include/mach-dreamcast/mach/sysasic.h
-> +++ linux/arch/sh/include/mach-dreamcast/mach/sysasic.h
-> @@ -22,7 +22,7 @@
->     takes.
->  */
->  
-> -#define HW_EVENT_IRQ_BASE  48
-> +#define HW_EVENT_IRQ_BASE  (48 + 16)
->  
->  /* IRQ 13 */
->  #define HW_EVENT_VSYNC     (HW_EVENT_IRQ_BASE +  5) /* VSync */
-> Index: linux/arch/sh/include/mach-se/mach/se7724.h
-> ===================================================================
-> --- linux.orig/arch/sh/include/mach-se/mach/se7724.h
-> +++ linux/arch/sh/include/mach-se/mach/se7724.h
-> @@ -37,7 +37,7 @@
->  #define IRQ2_IRQ        evt2irq(0x640)
->  
->  /* Bits in IRQ012 registers */
-> -#define SE7724_FPGA_IRQ_BASE	220
-> +#define SE7724_FPGA_IRQ_BASE	(220 + 16)
->  
->  /* IRQ0 */
->  #define IRQ0_BASE	SE7724_FPGA_IRQ_BASE
-> Index: linux/arch/sh/kernel/cpu/sh3/entry.S
-> ===================================================================
-> --- linux.orig/arch/sh/kernel/cpu/sh3/entry.S
-> +++ linux/arch/sh/kernel/cpu/sh3/entry.S
-> @@ -470,9 +470,9 @@ ENTRY(handle_interrupt)
->  	mov	r4, r0		! save vector->jmp table offset for later
->  
->  	shlr2	r4		! vector to IRQ# conversion
-> -	add	#-0x10, r4
->  
-> -	cmp/pz	r4		! is it a valid IRQ?
-> +	mov	#0x10, r5
-> +	cmp/hs	r5, r4		! is it a valid IRQ?
->  	bt	10f
->  
->  	/*
-> Index: linux/include/linux/sh_intc.h
-> ===================================================================
-> --- linux.orig/include/linux/sh_intc.h
-> +++ linux/include/linux/sh_intc.h
-> @@ -13,9 +13,9 @@
->  /*
->   * Convert back and forth between INTEVT and IRQ values.
->   */
-> -#ifdef CONFIG_CPU_HAS_INTEVT
-> -#define evt2irq(evt)		(((evt) >> 5) - 16)
-> -#define irq2evt(irq)		(((irq) + 16) << 5)
-> +#ifdef CONFIG_CPU_HAS_INTEVT	/* Avoid IRQ0 (invalid for platform devices) */
-> +#define evt2irq(evt)		((evt) >> 5)
-> +#define irq2evt(irq)		((irq) << 5)
->  #else
->  #define evt2irq(evt)		(evt)
->  #define irq2evt(irq)		(irq)
+Hi Paul,
 
-Reviewed-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+> 2023=E5=B9=B46=E6=9C=8810=E6=97=A5 07:42=EF=BC=8CPaul E. McKenney =
+<paulmck@kernel.org> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> On Fri, Jun 09, 2023 at 07:12:06PM +0000, SeongJae Park wrote:
+>> On Fri, 19 May 2023 14:52:50 -0400 Joel Fernandes =
+<joel@joelfernandes.org> wrote:
+>>=20
+>>> On Thu, May 18, 2023 at 6:40=E2=80=AFPM SeongJae Park =
+<sj@kernel.org> wrote:
+>>>>=20
+>>>> The document says we can avoid extra smp_rmb() in lockless_lookup() =
+and
+>>>> extra _release() in insert function when hlist_nulls is used.  =
+However,
+>>>> the example code snippet for the insert function is still using the
+>>>> extra _release().  Drop it.
+>>>>=20
+>>>> Signed-off-by: SeongJae Park <sj@kernel.org>
+>>>> ---
+>>>> Documentation/RCU/rculist_nulls.rst | 2 +-
+>>>> 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>=20
+>>>> diff --git a/Documentation/RCU/rculist_nulls.rst =
+b/Documentation/RCU/rculist_nulls.rst
+>>>> index 5cd6f3f8810f..463270273d89 100644
+>>>> --- a/Documentation/RCU/rculist_nulls.rst
+>>>> +++ b/Documentation/RCU/rculist_nulls.rst
+>>>> @@ -191,7 +191,7 @@ scan the list again without harm.
+>>>>   obj =3D kmem_cache_alloc(cachep);
+>>>>   lock_chain(); // typically a spin_lock()
+>>>>   obj->key =3D key;
+>>>> -  atomic_set_release(&obj->refcnt, 1); // key before refcnt
+>>>> +  atomic_set(&obj->refcnt, 1);
+>>>>   /*
+>>>>    * insert obj in RCU way (readers might be traversing chain)
+>>>>    */
+>>>=20
+>>> If write to ->refcnt of 1 is reordered with setting of ->key, what
+>>> prevents the 'lookup algorithm' from doing a key match (obj->key =3D=3D=
 
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+>>> key) before the refcount has been initialized?
+>>>=20
+>>> Are we sure the reordering mentioned in the document is the same as
+>>> the reordering prevented by the atomic_set_release()?
+>>=20
+>> Paul, may I ask your opinion?
+>=20
+> The next line of code is this:
+>=20
+> hlist_nulls_add_head_rcu(&obj->obj_node, list);
+>=20
+> If I understand the code correctly, obj (and thus *obj) are not
+> visible to readers before the hlist_nulls_add_head_rcu().  And
+> hlist_nulls_add_head_rcu() uses rcu_assign_pointer() to ensure that
+> initialization (including both ->key and ->refcnt) is ordered before
+> list insertion.
+>=20
+> Except that this memory is being allocated from a slab cache that was
+> created with SLAB_TYPESAFE_BY_RCU.  This means that there can be =
+readers
+> who gained a reference before this object was freed, and who still =
+hold
+> their references.
+>=20
+> Unfortunately, the implementation of try_get_ref() is not shown.  =
+However,
+> if ->refcnt is non-zero, this can succeed, and if it succeeds, we need
+> the subsequent check of obj->key with key in the lookup algorithm to
+> be stable.  For this check to be stable, try_get_ref() needs to use an
+> atomic operation with at least acquire semantics =
+(kref_get_unless_zero()
+> would work), and this must pair with something in the initialization.
+>=20
+> So I don't see how it is safe to weaken that atomic_set_release() to
+> atomic_set(), even on x86.
+
+I totally agree, but only in the case of using hlist_nulls.
+
+That means, atomic_set_release() is not enough in the case without using =
+hlist_nulls,
+we must ensure that storing to obj->next (in hlist_add_head_rcu) is =
+ordered before storing
+to obj->key. Otherwise, we can get the new =E2=80=98next' and the old =
+=E2=80=98key' in which case we can=E2=80=99t detect
+an object movement(from one chain to another).
+
+So, I=E2=80=99m afraid that the atomic_set_release() in insertion =
+algorithm without using hlist_nulls should=20
+change back to:
+=09
+	smp_wmb();
+	atomic_set(&obj->refcnt, 1);
+
+Thanks,
+Alan
+
+>=20
+> Or am I missing something subtle here?
+>=20
+> Thanx, Paul
+>=20
+>> Thanks,
+>> SJ
+>>=20
+>>>=20
+>>> For the other 3 patches, feel free to add:
+>>> Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+>>>=20
+>>> thanks,
+>>>=20
+>>> - Joel
+
+
