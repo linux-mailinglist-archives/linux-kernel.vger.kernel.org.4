@@ -2,131 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4782B72AAD5
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 12:15:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8133B72AAD7
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 12:20:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230505AbjFJKPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 06:15:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43636 "EHLO
+        id S230359AbjFJKUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 06:20:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbjFJKPb (ORCPT
+        with ESMTP id S229639AbjFJKUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 06:15:31 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69861359E
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 03:15:30 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-5148e4a2f17so4603742a12.1
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 03:15:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686392129; x=1688984129;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ocEa74Vi89cO2z8zXldBEe8uWhsWcgE3EnruaUyyG6A=;
-        b=iSskDd85C+HHzGDa4RdZtW28HtNbYcY25JR/exMSVHFY8SBHJU5j5WgJDz02bLK/u/
-         /IdE5incZ3qS8hAKZFNeYNzykmJPPDQkzXts3wJBOt9GfXnljNUsLb2GQhnvk9CHT9ZQ
-         LzpTro3TjXqfg0Kx+cGH4VlFelA1xCXbS5Y/IQRSoyrgl9lpXTFDXxkAINmNt+OTy8mA
-         6UGYqOyIhk8b8XiTQl7DcaOIxg1LOrOEUC5CGJ6iSzdMDtKYVXCmaJ1r/LUbr8WMsP5M
-         n4EdFN4QwTASmn3grJdr8N8d285mZmJ7NA62Yy228+VIWYyVlq9emYztq/4aYu4t5iu8
-         4nwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686392129; x=1688984129;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ocEa74Vi89cO2z8zXldBEe8uWhsWcgE3EnruaUyyG6A=;
-        b=W4n//92B/1IC4/hVjp+W1/AzCbz2dUUiQMyIIRAqPkVSTScO5W1+l/HX4eShildsEd
-         2gu1OakAc0/0muOWVsl8rT/ZS6ug09nuateMiOHmU1MJ0WZL1IgV65gQWtYmDn5Nihgi
-         WA67/RY59r82UG9u6md2FCLx+9AEQUxWREiE1gAF0DhjIROKi4sGP6l2O1TTsJLlr6Hu
-         dZfPJvuPgtH8rlBbatTkMlkHwRvb23xuXhtRxPvTQYJMayA1i5DXCmQs8hIcHiadx9eU
-         RhXR07atPGJ6r5SwPU82jkWHvH2uAv3cHHfkI2rsjGN0IFtZdbi1LwpIHHljmgssSFUO
-         7ofQ==
-X-Gm-Message-State: AC+VfDyM8LJQAX4/iE62QW7s/3pDmH9/wKCuC+HehLDO1U5LFdm4tUBk
-        Ex+qzuLkh2T7iBsnybfgioxMww==
-X-Google-Smtp-Source: ACHHUZ66HNdTn1UvKSjw6g9AWCTfaohbUacL1urDb1l3SqjgCzYuLKbLr2rnfvNY7TZayL953coajw==
-X-Received: by 2002:a05:6402:455:b0:510:ddad:fae6 with SMTP id p21-20020a056402045500b00510ddadfae6mr1066249edw.3.1686392128860;
-        Sat, 10 Jun 2023 03:15:28 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id g16-20020aa7d1d0000000b0050bc4600d38sm2711556edp.79.2023.06.10.03.15.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Jun 2023 03:15:28 -0700 (PDT)
-Message-ID: <86d8e252-975f-5d48-4567-0911d5ef9a44@linaro.org>
-Date:   Sat, 10 Jun 2023 12:15:27 +0200
+        Sat, 10 Jun 2023 06:20:23 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1100F5
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 03:20:21 -0700 (PDT)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QdYmd1d5DztQpw;
+        Sat, 10 Jun 2023 18:17:53 +0800 (CST)
+Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
+ (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Sat, 10 Jun
+ 2023 18:20:18 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <akpm@linux-foundation.org>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH -next] mm: Remove unused vma_init_lock()
+Date:   Sat, 10 Jun 2023 18:19:56 +0800
+Message-ID: <20230610101956.20592-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: Regression: NULL pointer dereference after NFS_V4_2_READ_PLUS
- (commit 7fd461c47)
-Content-Language: en-US
-To:     Anna Schumaker <schumaker.anna@gmail.com>
-Cc:     Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <Anna.Schumaker@netapp.com>,
-        linux-nfs <linux-nfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <f591b13c-4600-e2a4-8efa-aac6ad828dd1@linaro.org>
- <82526863-d07a-0a5d-2990-1555b1387f26@linaro.org>
- <2C5E9725-F152-4D2E-882E-CF92A35481BF@hammerspace.com>
- <7ba38377-7992-7f0f-d905-cceb42510f39@linaro.org>
- <51430925-8046-7066-84ed-2ff0db835347@linaro.org>
- <CAFX2Jf=5X3zyZEWQmD6Rg9jQAD7ccDbae5LQCwrAyPCVVoFumg@mail.gmail.com>
- <2add1769-1458-b185-bc78-6d573f61b6fc@linaro.org>
- <CAFX2JfnKy7juGQaDTzqosN9SF-zd+XrhSL9uh_Xg0GpJGDux-A@mail.gmail.com>
- <32530c36-91d0-d351-0689-aed6a0975a4b@linaro.org>
- <2f285607-cbf9-6abc-f436-edb6e9a3938b@linaro.org>
- <CAFX2Jfmz7QqZBEdzbPUhPs0yctnXVaVF68tX1c57YX=6ki=0TA@mail.gmail.com>
- <4fe39d77-eb7c-a578-aefa-45b76e2247c2@linaro.org>
- <CAFX2JfmdRMsHPTySiw4vm7BwJfRZj3s0V3_v7NJ+XwMxBBSo9A@mail.gmail.com>
- <a3683dd3-3f30-bb4c-539d-d1519de6e5bf@linaro.org>
- <CAFX2JfnS9GVc4NaxKhr9E4y10NNv6SPgcv1yoeHTfEw5NvZgMg@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAFX2JfnS9GVc4NaxKhr9E4y10NNv6SPgcv1yoeHTfEw5NvZgMg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/03/2023 18:09, Anna Schumaker wrote:
-> Hi Krzysztof,
-> 
-> On Tue, Feb 14, 2023 at 6:02 AM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 12/02/2023 15:05, Anna Schumaker wrote:
->>>>> From ac2d6c501dbcdb306480edaee625b5496f1fb4f5 Mon Sep 17 00:00:00 2001
->>>>> From: Anna Schumaker <Anna.Schumaker@Netapp.com>
->>>>> Date: Fri, 10 Feb 2023 15:50:22 -0500
->>>>> Subject: [PATCH] NFSv4.2: Rework scratch handling for READ_PLUS
->>>>>
->>>>
->>>> Patch is corrupted - maybe mail program reformatted it when sending:
->>>>
->>>> Applying: NFSv4.2: Rework scratch handling for READ_PLUS
->>>> error: corrupt patch at line 12
->>>> Patch failed at 0001 NFSv4.2: Rework scratch handling for READ_PLUS
->>>
->>> That's weird. I wasn't expecting gmail to reformat the patch but I
->>> guess it did. I've added it as an attachment so that shouldn't happen
->>> again.
->>
->> Still null ptr (built on 420b2d4 with your patch):
-> 
-> We're through the merge window and at rc1 now, so I can spend more
-> time scratching my head over your bug again. We've come up with a
-> patch (attached) that adds a bunch of printks to show us what the
-> kernel thinks is going on. Do you mind trying it out and letting us
-> know what gets printed out? You'll need to make sure
-> CONFIG_NFS_V4_2_READ_PLUS is enabled when compiling the kernel.
+commit c7f8f31c00d1 ("mm: separate vma->lock from vm_area_struct")
+left this behind.
 
-The patch does not apply. I tried: v6.4-rc1, v6.4-rc5, next-20230609.
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+ include/linux/mm.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-Best regards,
-Krzysztof
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 0db09639dd2d..1970772c07bb 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -725,7 +725,6 @@ struct vm_area_struct *lock_vma_under_rcu(struct mm_struct *mm,
+ 
+ #else /* CONFIG_PER_VMA_LOCK */
+ 
+-static inline void vma_init_lock(struct vm_area_struct *vma) {}
+ static inline bool vma_start_read(struct vm_area_struct *vma)
+ 		{ return false; }
+ static inline void vma_end_read(struct vm_area_struct *vma) {}
+-- 
+2.34.1
 
