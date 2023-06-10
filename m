@@ -2,169 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5086B72ADDC
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 19:46:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C84672ADDE
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 19:49:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbjFJRqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 13:46:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39416 "EHLO
+        id S230291AbjFJRtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 13:49:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbjFJRqd (ORCPT
+        with ESMTP id S229456AbjFJRtU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 13:46:33 -0400
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39C23592;
-        Sat, 10 Jun 2023 10:46:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1686419187; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=fUeeLWR7YnRTKnToU7natYqSH5ieWF82K2mSOSnL8fjXZELFDMkOSKiJ4s3n49SyG6
-    1SS7eoStzQqStrHwvmONYJWxrPn1lU1uv2GmhID27XaCcs52jqJvbdRUpMdCMqNDg4CQ
-    pBgE365xVAdpGYk+j3y4UhquddgR2XuREs+4hIICohPe9FJfZfu7fTZkfAbFonZbu59V
-    +pTVHMHP61F8tkZx+qLwi+EJtrxbiMeql5vt30uz9Veb5qRBw1A4eG1ZK/ZBhEgytrN4
-    SlGC8wkNLfegvUzVNempFXXStCy5kn7hx3NbQ8Kkl34hwhPDOfnr9Wi8+QdghIQu234S
-    iCvw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686419187;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=oH0BizfUqIgRQXEwNc0Sz7uUUantI/rz95IfbtW4CCY=;
-    b=UIwEkX4rbnQ5XOMvX0lnTQL/b3Q5pqNx2rD/SirWP1DImDNkCSq/Tv3h48dFoqDhpZ
-    josn0KbeJmYkTvzzyBXu5VoG1w+H2Yp0jvxFiceUopx6Gz74Z9R+GC20OpQUEmNYMQUi
-    NgUqAK7+hRGnWCETi4DlPlUUryaJIY+3M1AsbRVJLrByKwLPVJWpR7ZzfESrWHGNXVs+
-    QEMzX7U9QZKvR2r6uDSHtCO+DGg1of5ugRSZ+q6/u1qDb1fPAS5rdOgNmboK1U1uclIp
-    vBXjvhUPO4pg01fDyBBIwlZ4ftxM7a6gnKrgRO/rnjtLwSg1bkcLCaOrmn6RoajKpXfs
-    pphA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686419187;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=oH0BizfUqIgRQXEwNc0Sz7uUUantI/rz95IfbtW4CCY=;
-    b=D2oa5zsiirWQyzRZHTEJFTfn1CqEbaDAPCT5K08CJUl8TOjpaTOoQbDPjFePBtyiVt
-    4lWZZcrB5XNZNM+RsC+R41IyeNEcjJ9BVuiTEiz+6cjEFmKx/V9nhX3bFerhj3br64oy
-    +o+UMFWHwmX/l5X3kjv3XwnWWB+ab6wJA4Q5in3rcZaeyTZ0UoyD5gF0Wf7hfTnXaL1V
-    Ty3jNFYmC6m8xvpA7LTUyEjqQifxkEcOb3CmiJfOUq8DYY+wNMwi/cJnhqmNAH3plwbv
-    P7dlqFtz5IazG+1hsED/n8kcQ3BXmkY/8ZvaYVqyusUDhSWbuUgKvr3gYSg/AyoQDOCu
-    u5UA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686419187;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=oH0BizfUqIgRQXEwNc0Sz7uUUantI/rz95IfbtW4CCY=;
-    b=PoK9ULrn+np78Qiop0zEDKZxLPrXA9MXDJt2WZU4q51xlOU64hOd0Vs2a8745WEfc4
-    D7uLdwko/+ontrwAYjCg==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA9J/h"
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.5.3 DYNA|AUTH)
-    with ESMTPSA id Z82ec2z5AHkRQaE
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Sat, 10 Jun 2023 19:46:27 +0200 (CEST)
-Date:   Sat, 10 Jun 2023 19:46:25 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Evan Green <evgreen@chromium.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v2 19/22] interconnect: qcom: icc-rpm: Fix bucket number
-Message-ID: <ZIS28eN1JEuXV2AT@gerhold.net>
-References: <20230526-topic-smd_icc-v2-0-e5934b07d813@linaro.org>
- <20230526-topic-smd_icc-v2-19-e5934b07d813@linaro.org>
-MIME-Version: 1.0
+        Sat, 10 Jun 2023 13:49:20 -0400
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2045.outbound.protection.outlook.com [40.107.105.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0A33598;
+        Sat, 10 Jun 2023 10:49:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eV8KIzulkrY6EZUnlvR3o0ZBj6S1H7hZH9TwFrYnb7dincWVIbBblXwSzHoNyRpUCzPipWREAbPGJkyoX+XuL2ERtog6k2Qxn/u4eJMRcaV9GsmtzMo4B9ySdseu7/yeUQ0i8I68nuQj/iy6DqUHyPbJ4HvuBE5Ke0JTgBWmOQeRW1ne3pJs7hPbevB9LwO3ojamzglSxRH4m78oeCJ6bC6mBO1LbLaamIseFFLveVGlxbQmO9wQPJRw4hxSm+kCngBiMj3vOu6roUDu6dMXShpwJlohIYSgc3AE/aRC9pODWuneRyMKdgDQNjwf7C6L/oISe3kJzN0rNQqw8PnlfA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=k7ygBqSsENyI6AsrNVqAwcBO5n9Mu8wEhIApx3UlutQ=;
+ b=LCrJpil560rPW7ddzbefGgG5+95bSQ8+N1Mke25ZLm/JnRWodN/2YEo4Ft9yg5xHhvkpvqL9tpoUFv/l8iUU22jaIrZNG/tb3rAMdRuJuaeNMqczVIdSRxav0TCrxOeeiMRp01cgxF802KVRr+xta6TSrSfvxP1DV4NkgqQ8qTRQXE589eXn3/s/meeYJ0fRlZJPEgoiiSgOttlAuTbjchnQpUv9rHP7QtC2oF8jvuOJL+h+fttuWA1EgqWSiVXWmhD0D49jpFsjwW3vZnXgdCz7I9iAiQimURJJzHbzV8b6qRKjqBZnU3MRbICCxyAy9t1LOHwHIzUWGu418WbvMg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k7ygBqSsENyI6AsrNVqAwcBO5n9Mu8wEhIApx3UlutQ=;
+ b=DtwnbuU59jSgBA7IK0Ok5gbnsh+AjZXBmyWTuhbdvjM4pGnGbBXZ+K6xvgHD8ljYjKfMCe6hTTOMIEnFLcEHNwt1bOiKZ4bX3NGJBOpjdXkRVmeUNL8Or1WNZSlp50bUijraqYa1/evvA0mdFtkiGXCFRXYc3aq1sFN67kT4d0g=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
+ by DU2PR04MB9067.eurprd04.prod.outlook.com (2603:10a6:10:2f2::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Sat, 10 Jun
+ 2023 17:49:14 +0000
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::c40e:d76:fd88:f460]) by AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::c40e:d76:fd88:f460%4]) with mapi id 15.20.6455.030; Sat, 10 Jun 2023
+ 17:49:12 +0000
+Date:   Sat, 10 Jun 2023 20:49:11 +0300
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Victor Nogueira <victor@mojatatu.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>,
+        Peilin Ye <yepeilin.cs@gmail.com>,
+        Pedro Tammela <pctammela@mojatatu.com>
+Subject: Re: [PATCH RESEND net-next 5/5] net/sched: taprio: dump class stats
+ for the actual q->qdiscs[]
+Message-ID: <20230610174911.vf637wy2fwjvbfvi@skbuf>
+References: <20230602103750.2290132-1-vladimir.oltean@nxp.com>
+ <20230602103750.2290132-6-vladimir.oltean@nxp.com>
+ <CAM0EoM=P9+wNnNQ=ky96rwCx1z20fR21EWEdx+Na39NCqqG=3A@mail.gmail.com>
+ <20230609121043.ekfvbgjiko7644t7@skbuf>
+ <facdfceb-fe2e-795b-ea89-1b67478eb533@mojatatu.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230526-topic-smd_icc-v2-19-e5934b07d813@linaro.org>
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <facdfceb-fe2e-795b-ea89-1b67478eb533@mojatatu.com>
+X-ClientProxiedBy: VI1PR0902CA0044.eurprd09.prod.outlook.com
+ (2603:10a6:802:1::33) To AM0PR04MB6452.eurprd04.prod.outlook.com
+ (2603:10a6:208:16d::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|DU2PR04MB9067:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7ff138e3-c633-41f0-d043-08db69dafff0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: T+f9NfvBAHyXUxpx+DBnTXSb4+kOnvBg8G3BRQ+Bpg9oZmhqvIevKxdonUOAYJjlnP27rlRC6giZRbnUGYcQGsA3gNgFGtml1wHdq//sJ9kdzwiw97sMAA+ygx7Lm+Hz6xsVd7S3gN6YocJrvjT1TIgfYdUaZx/VRSmD0VlN/VNr+xjRkmF44Twi7QiHH66rZNtfwi0n2DBQd3lqKlPqfGxVg1FPrajDpXk2Ln17HmdUiD6vS+XefHw80w2HYpgAa2tRv2Opbu0r2GG2wXSTih7uC8Sd8O5HhT/JJTO1u8crzz5EjWlrcXkk32kAgtXTmqE2RYYMyggSRotg7U5OVuXnQn8gzOzVvZCPlwnFe3zniTthEOLJmD63hWgLfxBS0GX7GygwtFZHBwUh/PCbUKd+aS+ajGxhPRMIE8kjXdsmEgYVDUcFKdBs0MJxwCvcpj1hB3HIGGaRNFW3TLPXWWENIoXGayk77apTdBr0i0U2zwO3484HKIVOEcqgc3Hp1u+zZyRZwm0UEXkF99MdGeRNLcVSx+nR7EuVz7QLuGcJjfVEARBaHN64h5O97Zf714EYcd9NYylXD+/CDpF5bQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(4636009)(376002)(396003)(39850400004)(346002)(136003)(366004)(451199021)(44832011)(4326008)(66476007)(66556008)(66946007)(316002)(7416002)(41300700001)(186003)(4744005)(2906002)(110136005)(54906003)(478600001)(8676002)(8936002)(5660300002)(966005)(6486002)(1076003)(6512007)(6506007)(9686003)(33716001)(26005)(83380400001)(86362001)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gJ4zC9fHziGoLjs1iwCkPDifHqRdVY7BWH+G2e6XQKRz3wYfZ06x7y7YskjA?=
+ =?us-ascii?Q?3lfs3xp0Q+jF9EvkILQgqa9Z5GY5QANp74tqyK+PvBc9vwqiXvwj//ChfiRX?=
+ =?us-ascii?Q?j48SbkLFBl4gf1muKFnVSUdpDUZmsvoNPrZh8QbbK3s10Qsa+kar/K9azQYr?=
+ =?us-ascii?Q?yzuPaJiTt4S2e+A87+6/j/V4iXjjTDGx69JsKctlqnjn/pVJCeH6czAb9Ohx?=
+ =?us-ascii?Q?QNOELYfYaDsk7IobqQog/Ud3sNxIiftfXu4VnPzja3PlQ3eFVmVYhlcOMWVM?=
+ =?us-ascii?Q?hMaoFry05Ki44sIEKNpexb8e+GNtzlp8d0YZq4BAB/YxYzaybWUMDuezhu23?=
+ =?us-ascii?Q?/ETBzFs5Va+PtjcPuxGxSim6wo6hEYGG6Ne+iiPadE3EtWhIdENHLDcFELZJ?=
+ =?us-ascii?Q?/qHuJDFxEq7oTg519XBJxAxJ0ft8AxLeAfs+rFC2vMRiXNNV4bUxssb4vke1?=
+ =?us-ascii?Q?gCVY8dFJ9O8POPw6px4ytWy6pGXTIdg7x7VQnowf14UFq1soxGqT89X8VKFS?=
+ =?us-ascii?Q?meFqXm0bRDMbeJ0yoIzq5foS8CNTQ2hYhH8T8SVseYvSv9n82moyhOGyJyEg?=
+ =?us-ascii?Q?K9Xrdrld20RkSxGT79Xn06CzMQwEENxr51MZi3r9DH0pJssvYRGIB7ErUbmQ?=
+ =?us-ascii?Q?h6ZzJQvl/zmXR+Hx8YHj8+ic69jPJJ96CUQSeiud2iHTMQZpAdQDWjrgN4Pq?=
+ =?us-ascii?Q?a13UJhp0KN5slRqYJ9NNO4k5QLVVecqd7nueupmlKC3inOyWV0SpcMUl1IYd?=
+ =?us-ascii?Q?U+iNYRtciU5fXIDR3Rw65SkkvO/KsxWQ6l33u9BFtnN28ynlfbJjPPrICYJ9?=
+ =?us-ascii?Q?VabBPNMS2E9scWlClj8X4ZPgr6my6ZoP0N3Dw263mpPett44RTRBmcu8Sgr/?=
+ =?us-ascii?Q?xy5fcPoS59GBFxAq4i1KxENo7catE9nqSavZX7Y3lZarW3T8iUtfg6rUUBUW?=
+ =?us-ascii?Q?iAPpnNwfAJbIKq718eHJok9Cq4VfhjhJwhjVbuUQQ6rlH6fJxr/f8X1X8m+1?=
+ =?us-ascii?Q?2Eiey4A5p/bPiGhtLUV6USIDiPnphL7FkTjXLstc2bBFrN97geFzXqwMivvl?=
+ =?us-ascii?Q?vtvft3aRAqyhhLezI2Z0cwBO8pCKGE0R01G4N0exLmDPsCKDkAfe0gDvE4rJ?=
+ =?us-ascii?Q?fSKq0kxv+A8/djTew4Iterv5HxgtDnEKIco+0USJOY7lnK9Y+5lZLAOS7VUJ?=
+ =?us-ascii?Q?5P5YVTP8TqpCVkQeKnJH0MgErEcaJzgMvf52SylCTsIFTJHRdE/QheohyhQ7?=
+ =?us-ascii?Q?yLN8WIrVURmCaufcm/sBkKlP6NV9EbaJjJxKCAvoThcZG7hL0cs6CJJntQNR?=
+ =?us-ascii?Q?yGsyzsQr1wdo6VfoHYSrt1Z7ybXbs5Rrywo8OfRjdD8om5KZUoQzddhmYkBG?=
+ =?us-ascii?Q?j6KvLNHx+b8kdv4jrcjuTPUJMKGYvfeqApGGNe4fOKcMYNuMyNypW01tgKwP?=
+ =?us-ascii?Q?k0Z6fX9fAfcSAiHqqS5tc23Kr0v1CRvcuDf2JMA6Tmyzi/O/tKWiAlVJ+MVV?=
+ =?us-ascii?Q?V44w7s91GMKH8KhNs0ZPcqkx9A1/ybHaLYITqLTvpu8lLsZVIsRa6XGnfM9u?=
+ =?us-ascii?Q?7gQzY1V1PnhRR/7RXtmZmmi2wvlZLSL305GSeDw1nGQ/SAsWwTFccKtrpwJ/?=
+ =?us-ascii?Q?Ww=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7ff138e3-c633-41f0-d043-08db69dafff0
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2023 17:49:12.3609
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zDwa8pHORNNNc5MEET+f6T8YCkeAG9WsH2y1MUAi9PlM08NfDVXjw80I4j8Ck/vYjViiKX4RldYtkm6unGv1AA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB9067
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 10:19:24PM +0200, Konrad Dybcio wrote:
-> SMD RPM only provides two buckets, one each for the active-only and
-> active-sleep RPM contexts. Use the correct constant to allocate and
-> operate on them.
+On Fri, Jun 09, 2023 at 11:56:35AM -0300, Victor Nogueira wrote:
+> You can tell tdc to run a specific test file by providing the "-f" option.
+> For example, if you want to run only taprio tests, you can issue the
+> following command:
 > 
-> Fixes: dcbce7b0a79c ("interconnect: qcom: icc-rpm: Support multiple buckets")
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  drivers/interconnect/qcom/icc-rpm.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-> index 6d40815c5401..3ac47b818afe 100644
-> --- a/drivers/interconnect/qcom/icc-rpm.c
-> +++ b/drivers/interconnect/qcom/icc-rpm.c
-> [...]
-> @@ -275,7 +275,7 @@ static int qcom_icc_bw_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
->  	if (!tag)
->  		tag = QCOM_ICC_TAG_ALWAYS;
->  
-> -	for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
-> +	for (i = 0; i < QCOM_SMD_RPM_STATE_NUM; i++) {
->  		if (tag & BIT(i)) {
+> ./tdc.py -f tc-tests/qdiscs/taprio.json
 
-Hm, I think QCOM_ICC_NUM_BUCKETS is actually intentional here. There is
-a hint about this in the description of the commit in your Fixes line:
+Thanks. I've been able to make some progress with this.
 
-> This patch studies the implementation from interconnect rpmh driver to
-> support multiple buckets.  The rpmh driver provides three buckets for
-> AMC, WAKE, and SLEEP; this driver only needs to use WAKE and SLEEP
-> buckets, but we keep the same way with rpmh driver, this can allow us
-> to reuse the DT binding and avoid to define duplicated data structures.
+Unfortunately the updated series conflicts with this in-flight patch
+set, so I wouldn't want to post it just yet.
+https://patchwork.kernel.org/project/netdevbpf/cover/20230609135917.1084327-1-vladimir.oltean@nxp.com/
 
-As far as I understand, the idea was to reuse the definitions in
-qcom,icc.h and just ignore the AMC bucket for now. AFAIU AMC (or rather
-the lack thereof) is basically caching: Sending requests without AMC bit
-set is delayed until the next rpmh_flush() call that happens when
-entering a deep idle state. It requires some work but I guess
-theoretically one could implement exactly the same for RPM.
-
-What you're actually doing here is not fixing the commit but changing
-the bindings. On MSM8909 I defined the ICC path for CPU<->RAM like this:
-
-	interconnects = <&bimc MAS_APPS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-			 &bimc SLV_EBI QCOM_ICC_TAG_ACTIVE_ONLY>;
-
-Per definition in qcom,icc.h:
-
-	QCOM_ICC_TAG_ACTIVE_ONLY = (AMC | WAKE) = (BIT(0) | BIT(1))
-
-Without your patch series this behaves correctly. It results in an
-active-only vote.
-
-The change of behavior is in PATCH 17/22 "interconnect: qcom: icc-rpm:
-Control bus rpmcc from icc". It silently switches from
-QCOM_ICC_BUCKET_WAKE (1) and QCOM_ICC_BUCKET_SLEEP (2) to
-QCOM_SMD_RPM_ACTIVE_STATE (0) and QCOM_SMD_RPM_SLEEP_STATE (1).
-
-In other words, QCOM_ICC_TAG_ACTIVE_ONLY (BIT(0) | BIT(1)) now results
-in an active+sleep vote, not an active-only one. :)
-
-There doesn't seem to be an upstream user of the ICC tags/buckets for
-icc-rpm yet so personally I would be fine with changing it. However,
-then qcom,icc.h should get a clear comment that it's rpmh-only and we
-should define a new qcom,icc-rpm.h.
-
-Or perhaps we should just drop this patch and continue using
-QCOM_ICC_BUCKET_WAKE and QCOM_ICC_BUCKET_SLEEP as before?
-
-Thanks,
-Stephan
+However, I did add taprio offload to the netdevsim driver so that this
+code path could be covered with tdc. I'd like Jamal and Paolo, who asked
+for it, to comment on whether this is what they were looking to see.
+https://github.com/vladimiroltean/linux/commits/sch-taprio-relationship-children-v2
