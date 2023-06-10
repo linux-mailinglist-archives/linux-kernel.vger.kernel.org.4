@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0658172AD6F
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 18:39:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6AA72AD74
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 18:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbjFJQiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 12:38:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48994 "EHLO
+        id S230148AbjFJQjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 12:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjFJQix (ORCPT
+        with ESMTP id S229993AbjFJQjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 12:38:53 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094A43C17
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 09:38:41 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-970056276acso424464266b.2
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 09:38:41 -0700 (PDT)
+        Sat, 10 Jun 2023 12:39:05 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC893C30
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 09:38:49 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-97458c97333so470216566b.2
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 09:38:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686415120; x=1689007120;
+        d=linaro.org; s=google; t=1686415128; x=1689007128;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=eGY+07fHtLZ1KBnWoGU3+DqFHhYsAN1rcupom6JoV8o=;
-        b=lU46AegLxXOrFth50v5CpwxnCgHudkiOYF1TdXjD6C7m9WeUbN0yntoNKzXDeJrFDO
-         pO6/klGWzrF2Etdkcy4rShvt5MG56euzWG3N2AlYG8J/OGv8sz0AGws5ccBBhIxEbZBg
-         HZ3qkbpgnnDC7SLikBur4gvN2G4K980RsZDuM3QOWZtEvcco1WZfxprgllit1jB8CIG9
-         JSTWcoa9NWFbN7enSwbnvQhknqPp5eW+Ov55KnqgBJohn+F17E8COANK/tz9KKl0msp8
-         irOuTNNIXiHhjwm8OdoZ+Z5J120vkkPC2zgjUmdAKIZ7P95Ybrre40xUd6n+WoFrmpyO
-         oKyQ==
+        bh=V/IK3y3lAajqv953jEwAcRgSDGZ5+ngtefnLO3SjzOE=;
+        b=Ce4WSK769ea8Oxg8QQjhmSAWOczAq9c/FzE7d2Qf5i3hWR/FlWJfP0CUrAsLbcjbya
+         cP/ROrfCjqLUwtbK9pEctvTHNrpGOu8tI7IUW9CZZtz8GqNfPlqfMGZHdtX+G2aDpL8H
+         iR5v9zz8FV3siaKI87lzSunQBRETu5Vs/d7J6agdaweoC6GkJUnhvRCLmvYc3atBKcD/
+         SXxSOHwj+u4x0ZM/xPNdemq7uXIlJl8bVE1r89aaoZb8K5MCtrzIZGX9HPy/WsMXIwmA
+         4QkcVzS5Y3G3xIG4cNcfjWPKdWPTOF2y/aGVoDpNlc7ldHs1QjEut9pnaOKNMGZ6at2c
+         q5bA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686415120; x=1689007120;
+        d=1e100.net; s=20221208; t=1686415128; x=1689007128;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eGY+07fHtLZ1KBnWoGU3+DqFHhYsAN1rcupom6JoV8o=;
-        b=dmofvhoOHKukRnVpOHCG9/GNULgb2KEoOb9XZnD5YbqFMTjsbGuzrpnLVQveywW4DZ
-         Y1GXcDFVF/GIkRwt1Nr27U/3fR3cUUkPsiyqcYWaGnomxE6e3hY4B3+gSzMIkg1QA6ZH
-         pmaB6YZkw4DXFoRPBl76jovoelDtkkWHbU0pOXgRymS0N0iscubw1teQrd3GfKkY2SDX
-         gdT6ZivkDImeCImrPAM9z3aw9GUimbohlw1kT9NRcNdRANpHO+6yCzHGnCLA8L1AAWaj
-         ftwCWwfK2r5gfD+COsL8GreNuNpryrqEDBFh0N5YB69EvaBDuar9Xpk5tFl5PEFsYFXX
-         qICQ==
-X-Gm-Message-State: AC+VfDyd9rG7POTChkRTd9Uvx5WJ9ag3tFuOtXoJQkphgAYWhe3CWlb4
-        RLB5AUS+KXUkJSrXMBbOW2QNVw==
-X-Google-Smtp-Source: ACHHUZ7vum1iNdxQLpebiV3c/Lp2Lb4W2rvQGgXBK7h1zcpBZK8iZshqTm+rVbCvvlDsv0NZ/GXJfQ==
-X-Received: by 2002:a17:907:7249:b0:978:6e73:e841 with SMTP id ds9-20020a170907724900b009786e73e841mr3704404ejc.35.1686415120467;
-        Sat, 10 Jun 2023 09:38:40 -0700 (PDT)
+        bh=V/IK3y3lAajqv953jEwAcRgSDGZ5+ngtefnLO3SjzOE=;
+        b=BayOeZx3ZIxd9zR7iuqtWU3q7h5wlhW4FigoALiL1pL8ee2ksf5hEZ7gLP8SDuXTQG
+         T+jiB/twGr5fn8NOZoUtLFfkaOt5BJqguV1ybUhR8L8M2t7dwika24xTlncymp+pg5uA
+         HSo9FkZcsnsRYiiIRBZ5aqwkvyX+uqGTvBGBJiZn4OtZE79VbbSxGVckYPMlYss8XGoq
+         0sNJayavaNzHwTfCa4wQivMdVZFuDI9UozRKgvHvNvOtIYINuulpHAN7k2q+WWQHADaD
+         honzi/6/MtPQ0WR3QHJqseFMSVVjct3921RjBGKeD03K1+lnrnptnWGYOMjWQ43d/5N8
+         Df3Q==
+X-Gm-Message-State: AC+VfDyi8ue9D/YurSPop/n6PSnZ3L4NZeF3FQpeIsQikd6+6cSKfSOQ
+        RS9h1GQXnh+QnAZj9ig/WY/syQ==
+X-Google-Smtp-Source: ACHHUZ7S4a5+MvZbWH/1o0Fq16e0+n0hmSgAsAmZmXouOm/2AQVgs8AxE/kvpVAABCdu1nDDjZg5iA==
+X-Received: by 2002:a17:907:7244:b0:974:55a2:cb0b with SMTP id ds4-20020a170907724400b0097455a2cb0bmr5084226ejc.55.1686415127691;
+        Sat, 10 Jun 2023 09:38:47 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id x22-20020aa7cd96000000b0050bca43ff55sm3047459edv.68.2023.06.10.09.38.39
+        by smtp.gmail.com with ESMTPSA id n21-20020aa7c795000000b0050dfd7de30dsm2985086eds.94.2023.06.10.09.38.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Jun 2023 09:38:40 -0700 (PDT)
-Message-ID: <4c91a18d-c1ab-f79f-b80b-d18b6e966e10@linaro.org>
-Date:   Sat, 10 Jun 2023 18:38:38 +0200
+        Sat, 10 Jun 2023 09:38:47 -0700 (PDT)
+Message-ID: <ada8dddb-9794-538d-19dd-992894580051@linaro.org>
+Date:   Sat, 10 Jun 2023 18:38:45 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
-Subject: Re: [PATCH 10/18] dt-bindings: clk: meson8b-clkc: expose all clock
- ids
+Subject: Re: [PATCH 11/18] dt-bindings: clk: amlogic,a1-peripherals-clkc:
+ expose all clock ids
 Content-Language: en-US
 To:     Neil Armstrong <neil.armstrong@linaro.org>,
         Jerome Brunet <jbrunet@baylibre.com>,
@@ -71,9 +71,9 @@ Cc:     linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org
 References: <20230607-topic-amlogic-upstream-clkid-public-migration-v1-0-9676afa6b22c@linaro.org>
- <20230607-topic-amlogic-upstream-clkid-public-migration-v1-10-9676afa6b22c@linaro.org>
+ <20230607-topic-amlogic-upstream-clkid-public-migration-v1-11-9676afa6b22c@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230607-topic-amlogic-upstream-clkid-public-migration-v1-10-9676afa6b22c@linaro.org>
+In-Reply-To: <20230607-topic-amlogic-upstream-clkid-public-migration-v1-11-9676afa6b22c@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -94,6 +94,9 @@ On 07/06/2023 12:56, Neil Armstrong wrote:
 > This refers to a discussion at [1] & [2] with Krzysztof about
 > the issue with the current maintenance.
 > 
+> It was decided to move every A1 peripherals ID to the public clock
+> dt-bindings headers to be merged in a single tree so we
+> can safely add new clocks without having merge issues.
 
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
