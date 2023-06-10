@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7CFB72AB87
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 14:45:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FEE872AB88
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 14:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232377AbjFJMpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 08:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41190 "EHLO
+        id S234694AbjFJMpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 08:45:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230403AbjFJMpd (ORCPT
+        with ESMTP id S232838AbjFJMpd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 10 Jun 2023 08:45:33 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567FE35B8;
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA70C35A9;
         Sat, 10 Jun 2023 05:45:32 -0700 (PDT)
 Date:   Sat, 10 Jun 2023 12:45:30 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686401130;
+        s=2020; t=1686401131;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=bEzxubQcnLZoG0m9coTklTKk4G+HNneq9lcmAgnyAkI=;
-        b=YZXtKb6hDLOPspLe39n+5awamNUWNAgrOUEtGHdClzzkePjpqKc8esCYe8aptUqjXggnZ2
-        jA70ULyI7ag5O94okQvgvXaF6X+85bzynm77X+NxugldWkhSO0LgqOJi4zsNRQwkj36ENh
-        yyPBFYj4lzwFlNGQg+DEKBdngdE41gUXKXKYtL9LyVSX43DVsZ9qUUrzJsi1kNlyOGBB0H
-        OxcJwlMAQVrK2pn2TQMrkkRMOFwDy+28hTd3AdgVnaiwmcNkgQ8iLc15RlBUIOI2UzzpOg
-        zNTpsdaT3hTwT+5VibOFK7tDzZ/j1j8pza9jQ4Tkj6t3EgzIJOdf2OOSvt1a3g==
+        bh=Kmq5gX6ZPbnBJQ6HB2titUQycKci8ucePYtjBr899Rc=;
+        b=ktPmw1LM6OYdzfPb8FmStksFLQ/1E6A45Q1W7sQ7C1aTE3Y72Z3Tn+TdRB6f1Gjl8mRguu
+        mfqzmjitA7jcP218qSe9q8+Hss7fc3oCRSI7Q8xuCIo8ZynXKjjArGAXmVUtsRaOwA7Jux
+        Q5m/XQtwF37JknvBijExXoy9pFc2mY/iIpOlP64I29SRbPRXImTEdgr5weoM3MF1D8diQh
+        /Zzb9g+3vLMreaTukWO11dmTOybkFld3MPyzWJHeoGLvGXoUNfeajNhOH1f4o00mwvqieB
+        JjDzXHWhURKU6IMNBjkGMRBcnZQsw8DJP+wqCfAJWHA2fvuLNRGICIvBqyoBhw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686401130;
+        s=2020e; t=1686401131;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=bEzxubQcnLZoG0m9coTklTKk4G+HNneq9lcmAgnyAkI=;
-        b=JmI8KGUhV2NpzYtEvUtDKaMSEE/+2ewN3BGzVkSCjEHBHtKklWCH5aIOj9vgv0asotATW9
-        hatTfgiqvkg2PyBA==
+        bh=Kmq5gX6ZPbnBJQ6HB2titUQycKci8ucePYtjBr899Rc=;
+        b=CHdyrVTOvBYphDkDcPWO8qrwqRlnONQ1vPs8AQVpKKyDxrfVFHnf19zmchnmbYIiWzLFG2
+        vnORkBjrZlD30jDw==
 From:   "tip-bot2 for Li zeming" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] alarmtimer: Remove unnecessary (void *) cast
+Subject: [tip: timers/core] alarmtimer: Remove unnecessary initialization of
+ variable 'ret'
 Cc:     Li zeming <zeming@nfschina.com>,
         Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230609182059.4509-1-zeming@nfschina.com>
-References: <20230609182059.4509-1-zeming@nfschina.com>
+In-Reply-To: <20230609182856.4660-1-zeming@nfschina.com>
+References: <20230609182856.4660-1-zeming@nfschina.com>
 MIME-Version: 1.0
-Message-ID: <168640113003.404.3362295823712498263.tip-bot2@tip-bot2>
+Message-ID: <168640113089.404.17920315921648070254.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,36 +68,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the timers/core branch of tip:
 
-Commit-ID:     f319c99c701853dd41c01209855790da288e38ab
-Gitweb:        https://git.kernel.org/tip/f319c99c701853dd41c01209855790da288e38ab
+Commit-ID:     ace380b014f338834d55082820a475e7c5b2c952
+Gitweb:        https://git.kernel.org/tip/ace380b014f338834d55082820a475e7c5b2c952
 Author:        Li zeming <zeming@nfschina.com>
-AuthorDate:    Sat, 10 Jun 2023 02:20:59 +08:00
+AuthorDate:    Sat, 10 Jun 2023 02:28:56 +08:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Sat, 10 Jun 2023 14:36:17 +02:00
 
-alarmtimer: Remove unnecessary (void *) cast
+alarmtimer: Remove unnecessary initialization of variable 'ret'
 
-Pointers of type void * do not require a type cast when they are assigned
-to a real pointer.
+ret is assigned before checked, so it does not need to initialize the
+variable
 
 Signed-off-by: Li zeming <zeming@nfschina.com>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/20230609182059.4509-1-zeming@nfschina.com
+Link: https://lore.kernel.org/r/20230609182856.4660-1-zeming@nfschina.com
 
 ---
  kernel/time/alarmtimer.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/kernel/time/alarmtimer.c b/kernel/time/alarmtimer.c
-index 09c9cde..8d9f13d 100644
+index 82b28ab..09c9cde 100644
 --- a/kernel/time/alarmtimer.c
 +++ b/kernel/time/alarmtimer.c
-@@ -751,7 +751,7 @@ static int alarm_timer_create(struct k_itimer *new_timer)
- static enum alarmtimer_restart alarmtimer_nsleep_wakeup(struct alarm *alarm,
- 								ktime_t now)
- {
--	struct task_struct *task = (struct task_struct *)alarm->data;
-+	struct task_struct *task = alarm->data;
+@@ -847,7 +847,7 @@ static int alarm_timer_nsleep(const clockid_t which_clock, int flags,
+ 	struct restart_block *restart = &current->restart_block;
+ 	struct alarm alarm;
+ 	ktime_t exp;
+-	int ret = 0;
++	int ret;
  
- 	alarm->data = NULL;
- 	if (task)
+ 	if (!alarmtimer_get_rtcdev())
+ 		return -EOPNOTSUPP;
