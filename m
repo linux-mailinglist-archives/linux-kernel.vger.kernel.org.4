@@ -2,162 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B526B72A8A0
-	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 05:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66D7E72A89C
+	for <lists+linux-kernel@lfdr.de>; Sat, 10 Jun 2023 05:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233051AbjFJDGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Jun 2023 23:06:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55876 "EHLO
+        id S230377AbjFJDEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Jun 2023 23:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjFJDGG (ORCPT
+        with ESMTP id S229471AbjFJDED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Jun 2023 23:06:06 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F7935B8;
-        Fri,  9 Jun 2023 20:06:04 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QdNBJ3Hsxz4f3kKc;
-        Sat, 10 Jun 2023 11:06:00 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.104.67])
-        by APP4 (Coremail) with SMTP id gCh0CgBnHbGX6INk2BFmLQ--.41501S4;
-        Sat, 10 Jun 2023 11:06:01 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     axboe@kernel.dk, bvanassche@acm.org, kch@nvidia.com,
-        damien.lemoal@opensource.wdc.com, hare@suse.de,
-        vincent.fu@samsung.com, akinobu.mita@gmail.com
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
-        yangerkun@huawei.com
-Subject: [PATCH -next] null_blk: fix null-ptr-dereference while configuring 'power' and 'submit_queues'
-Date:   Sat, 10 Jun 2023 11:01:43 +0800
-Message-Id: <20230610030143.2604480-1-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.39.2
+        Fri, 9 Jun 2023 23:04:03 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BEE53AAC
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Jun 2023 20:04:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=mWqXrhtPz+A1dQHqM74gcGN+9URs9BL4g+g+v5pzTIM=; b=wSu6tglFSuo2JOa7P8aMS1Py+9
+        f/y823Vvc0u9+MibscICf2Z2ilkfENMWi7/ZKOuDPM8q3syX7/FUVJBwf4a35ReQRxfasrDiJ9a7c
+        S+SbWVaG5H5+HgKj0+yhGu350fWIDUyPlithj28nA02LznRGNF30BMNQPjvtL/TKAzVcCdIkpozNi
+        NfJniKHfDEFtvG4Z1npjlyQ0B4qes7yr9JHHYkKk1GcknEE697UYkbmYC1QNjxxyXLBWxWKFNV7Ob
+        yqXVQ/j07p/Lo/SfI9j8tkBhUx/+G3TOxWku1SfNCSUfLyaAdIy1Ou9HhM1Zr26bbmwy/rgG28m23
+        Wakk/Crg==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q7otD-00F2br-2E;
+        Sat, 10 Jun 2023 03:03:43 +0000
+Message-ID: <aa8fecb1-d5e7-c7c6-a8ad-789fc0627e57@infradead.org>
+Date:   Fri, 9 Jun 2023 20:03:42 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v4 1/2] powerpc/legacy_serial: Handle SERIAL_8250_FSL=n
+ build failures
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Rob Herring <robh@kernel.org>, Liang He <windhl@126.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de
+References: <20230609133932.786117-1-u.kleine-koenig@pengutronix.de>
+ <20230609133932.786117-2-u.kleine-koenig@pengutronix.de>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230609133932.786117-2-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgBnHbGX6INk2BFmLQ--.41501S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxZr1xWFWrtF4UuF45Kr13XFb_yoW5Wr4rpF
-        Wqga1jkry8J3WUXa1q9r4DKF1rAF4qvFyxGryxG3sagF1qvryvy3WkAF15Xr48t397CrWa
-        v3ZrZrWft3WUXaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvF14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-        0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AK
-        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
-        fUoOJ5UUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
 
-Writing 'power' and 'submit_queues' concurrently will trigger kernel
-panic:
 
-Test script:
+On 6/9/23 06:39, Uwe Kleine-König wrote:
+> With SERIAL_8250=y and SERIAL_8250_FSL_CONSOLE=n the both
+> IS_ENABLED(CONFIG_SERIAL_8250) and IS_REACHABLE(CONFIG_SERIAL_8250)
+> evaluate to true and so fsl8250_handle_irq() is used. However this
+> function is only available if CONFIG_SERIAL_8250_CONSOLE=y (and thus
+> SERIAL_8250_FSL=y).
+> 
+> To prepare SERIAL_8250_FSL becoming tristate and being enabled in more
+> cases, check for IS_REACHABLE(CONFIG_SERIAL_8250_FSL) before making use
+> of fsl8250_handle_irq(). This check is correct with and without the
+> change to make SERIAL_8250_FSL modular.
+> 
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Fixes: 66eff0ef528b ("powerpc/legacy_serial: Warn about 8250 devices operated without active FSL workarounds")
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-modprobe null_blk nr_devices=0
-mkdir -p /sys/kernel/config/nullb/nullb0
-while true; do echo 1 > submit_queues; echo 4 > submit_queues; done &
-while true; do echo 1 > power; echo 0 > power; done
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Tested-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
 
-Test result:
+Thanks.
 
-BUG: kernel NULL pointer dereference, address: 0000000000000148
-Oops: 0000 [#1] PREEMPT SMP
-RIP: 0010:__lock_acquire+0x41d/0x28f0
-Call Trace:
- <TASK>
- lock_acquire+0x121/0x450
- down_write+0x5f/0x1d0
- simple_recursive_removal+0x12f/0x5c0
- blk_mq_debugfs_unregister_hctxs+0x7c/0x100
- blk_mq_update_nr_hw_queues+0x4a3/0x720
- nullb_update_nr_hw_queues+0x71/0xf0 [null_blk]
- nullb_device_submit_queues_store+0x79/0xf0 [null_blk]
- configfs_write_iter+0x119/0x1e0
- vfs_write+0x326/0x730
- ksys_write+0x74/0x150
+> ---
+>  arch/powerpc/kernel/legacy_serial.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/powerpc/kernel/legacy_serial.c b/arch/powerpc/kernel/legacy_serial.c
+> index fdbd85aafeb1..6ee65741dbd5 100644
+> --- a/arch/powerpc/kernel/legacy_serial.c
+> +++ b/arch/powerpc/kernel/legacy_serial.c
+> @@ -510,7 +510,7 @@ static void __init fixup_port_irq(int index,
+>  
+>  	if (IS_ENABLED(CONFIG_SERIAL_8250) &&
+>  	    of_device_is_compatible(np, "fsl,ns16550")) {
+> -		if (IS_REACHABLE(CONFIG_SERIAL_8250)) {
+> +		if (IS_REACHABLE(CONFIG_SERIAL_8250_FSL)) {
+>  			port->handle_irq = fsl8250_handle_irq;
+>  			port->has_sysrq = IS_ENABLED(CONFIG_SERIAL_8250_CONSOLE);
+>  		} else {
 
-This is because del_gendisk() can concurrent with
-blk_mq_update_nr_hw_queues():
-
-nullb_device_power_store	nullb_apply_submit_queues
- null_del_dev
- del_gendisk
-				 nullb_update_nr_hw_queues
-				  if (!dev->nullb)
-				  // still set while gendisk is deleted
-				   return 0
-				  blk_mq_update_nr_hw_queues
- dev->nullb = NULL
-
-Fix this problem by synchronize nullb_device_power_store() and
-nullb_update_nr_hw_queues() with a mutex.
-
-Fixes: 45919fbfe1c4 ("null_blk: Enable modifying 'submit_queues' after an instance has been configured")
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
- drivers/block/null_blk/main.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/block/null_blk/main.c b/drivers/block/null_blk/main.c
-index b3fedafe301e..21c668998d95 100644
---- a/drivers/block/null_blk/main.c
-+++ b/drivers/block/null_blk/main.c
-@@ -1810,6 +1810,7 @@ static void null_del_dev(struct nullb *nullb)
- 		return;
- 
- 	dev = nullb->dev;
-+	dev->nullb = NULL;
- 
- 	ida_simple_remove(&nullb_indexes, nullb->index);
- 
-@@ -1831,7 +1832,6 @@ static void null_del_dev(struct nullb *nullb)
- 	if (null_cache_active(nullb))
- 		null_free_device_storage(nullb->dev, true);
- 	kfree(nullb);
--	dev->nullb = NULL;
- }
- 
- static void null_config_discard(struct nullb *nullb)
-@@ -2087,7 +2087,6 @@ static int null_add_dev(struct nullb_device *dev)
- 		goto out;
- 	}
- 	nullb->dev = dev;
--	dev->nullb = nullb;
- 
- 	spin_lock_init(&nullb->lock);
- 
-@@ -2179,6 +2178,7 @@ static int null_add_dev(struct nullb_device *dev)
- 	if (rv)
- 		goto out_ida_free;
- 
-+	dev->nullb = nullb;
- 	mutex_lock(&lock);
- 	list_add_tail(&nullb->list, &nullb_list);
- 	mutex_unlock(&lock);
-@@ -2200,7 +2200,6 @@ static int null_add_dev(struct nullb_device *dev)
- 	cleanup_queues(nullb);
- out_free_nullb:
- 	kfree(nullb);
--	dev->nullb = NULL;
- out:
- 	return rv;
- }
 -- 
-2.39.2
-
+~Randy
