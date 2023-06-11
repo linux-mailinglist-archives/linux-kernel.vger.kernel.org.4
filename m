@@ -2,71 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3725272B238
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 16:05:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5782F72B241
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 16:07:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234063AbjFKOFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 10:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35994 "EHLO
+        id S234361AbjFKOHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 10:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233886AbjFKOFC (ORCPT
+        with ESMTP id S234326AbjFKOGz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 10:05:02 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D547359D
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 07:04:19 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f6da07ff00so35466985e9.3
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 07:04:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686492259; x=1689084259;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rgKld3plYHBwOAMsuA+zbtCm3Ym56oMGsuAqYXo/IA0=;
-        b=OPhWwjENjE7DqRi6Ke06tHDxGhGPmQhJ+VUveFyTMj9FtFfrS0idkhXdIi227FKPTC
-         A/v8ZJEuWlXOWhasKqe4B/0C6a6Nt1yy53V+bcwRDBsYTYXMCKgbj1YDt3aW57DLE0qq
-         zPwm1Dxvz+Gnp0oeq7VP0mlzxJDuVto2nhau6iaqOx+k3S1mwRilv0FSilh1SAfb9LBT
-         VB7t565EZqff3IykHnJ+8lAOPR8+QxljJIBXUo1ttY1w4jRI5OCQZ50qgvVKD8CZAp8u
-         1IiddqjH3yYsvh02MyKRyWN1jshsSdo5ltAfQGoqqsEeJWx616qOyP2AmG9kxIQQBW99
-         4O6w==
+        Sun, 11 Jun 2023 10:06:55 -0400
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2E92D5F;
+        Sun, 11 Jun 2023 07:05:10 -0700 (PDT)
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1b01d3bb571so16743425ad.2;
+        Sun, 11 Jun 2023 07:05:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686492259; x=1689084259;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rgKld3plYHBwOAMsuA+zbtCm3Ym56oMGsuAqYXo/IA0=;
-        b=Gr1kM2J0WGVA3PWcbn7LIfrdt5DQaKRhjIeD9NxELM0BKbjAMqlDd1YaRDJtEyFM2B
-         3mRMf9hUixyRt/PrUadLE87HCNivz835WPajBiFe0t9nAFWLSSd/+um1XS99mA1e8RPf
-         lBaUOZ48MNvbaBALascGGUEbXAtIb5Uydc4sVMsdrmYvvR5h/h2Gj9PHZ/ugPsqgSHQC
-         k6EzlHRs4ZwLC/j0HOZR0Sj0Wl9XyypwxvPDxMqYnetQLyP/ZFiCxcVBNEp6biyD9thC
-         +xFDlhly7f6dgk2GHpxDO9du7AGIuZ4PWSKRliATi3qwF+N7XLxTdnoZdQmQsy/xTkWY
-         c/7w==
-X-Gm-Message-State: AC+VfDw+1ect2vuxnljxv57/Y9eQQ5rc8ehzo6VPBGTli2erMqRPcGEF
-        BJAA+R4qn+SHNmUt4noijr4YQg==
-X-Google-Smtp-Source: ACHHUZ7BweNm1niR/ItvaXK3HTZDid0TjdjjA6nYGWUj1/ia4pl68ioSIeAJWyL8N+OcQoa5bAYqHw==
-X-Received: by 2002:a05:600c:225a:b0:3f7:3401:17ac with SMTP id a26-20020a05600c225a00b003f7340117acmr5235824wmm.5.1686492259051;
-        Sun, 11 Jun 2023 07:04:19 -0700 (PDT)
-Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id h17-20020a05600c28d100b003f080b2f9f4sm8567222wmd.27.2023.06.11.07.04.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jun 2023 07:04:18 -0700 (PDT)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Peng Fan <peng.fan@nxp.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 26/26] dt-bindings: nvmem: imx-ocotp: drop unneeded address/size-cells and children
-Date:   Sun, 11 Jun 2023 15:03:30 +0100
-Message-Id: <20230611140330.154222-27-srinivas.kandagatla@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230611140330.154222-1-srinivas.kandagatla@linaro.org>
-References: <20230611140330.154222-1-srinivas.kandagatla@linaro.org>
+        d=1e100.net; s=20221208; t=1686492262; x=1689084262;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=W3aNsVT2Zyjlv5yI6jAICSDyYxatshbbYQsLDjEFFKE=;
+        b=M/AsVNHHeocx9wcbxGIVwBp+NCQ6lhz412dwdg24i62OHNgBxqzo0OySToaliDvrJ5
+         NDFqL3mK2Q+wGI0t9bFmfEGJHyFzDUxp6JhCAqWmFAL6swl6aNCQ3GRqb+gjFTNay2YA
+         LjyWG3gHkByPTkz3hV3ucsoM4V07Vev6xgTYPqcCSbMFKiqoEn/GuF3EcYinXOL45GjK
+         7smX740UAe0yCQXTNZBzWAddBuCRlap4pj8NPL/InxGQXOCF+hTQxQm1whiTYyWFgHye
+         2TEasDQ+rBN2N8fvMBlYeuhBgZUmAGFbWeyE052TepE/TbXMIWfEfLDtMRM8sdJyDLGa
+         lFGA==
+X-Gm-Message-State: AC+VfDxI8EM1xS7zttydc64V87HXHwpSpjmwVpdwmrA26z89EUe5T8Xz
+        sFwYK3OiNsz7j/pl36/FG58=
+X-Google-Smtp-Source: ACHHUZ6odNRYSU945jpWDAuFs/i2irvaRQA2K8MvuiANF3UazTkEWAJQmXgYy/BEyEKMvRGsoi2CYg==
+X-Received: by 2002:a17:902:e885:b0:1b2:61eb:a735 with SMTP id w5-20020a170902e88500b001b261eba735mr5575807plg.38.1686492261981;
+        Sun, 11 Jun 2023 07:04:21 -0700 (PDT)
+Received: from [192.168.51.14] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id b4-20020a170902d50400b001ae0a4b1d3fsm6459966plg.153.2023.06.11.07.04.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Jun 2023 07:04:21 -0700 (PDT)
+Message-ID: <8fa21662-7e2d-07c1-aaca-649dead624cf@acm.org>
+Date:   Sun, 11 Jun 2023 07:04:20 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 2/2] scsi: ufs: core: Remove dedicated hwq for dev
+ command
+Content-Language: en-US
+To:     Po-Wen Kao <powen.kao@mediatek.com>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     wsd_upstream@mediatek.com, peter.wang@mediatek.com,
+        stanley.chu@mediatek.com, alice.chao@mediatek.com,
+        naomi.chu@mediatek.com, chun-hung.wu@mediatek.com,
+        cc.chou@mediatek.com, eddie.huang@mediatek.com
+References: <20230610021553.1213-1-powen.kao@mediatek.com>
+ <20230610021553.1213-3-powen.kao@mediatek.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230610021553.1213-3-powen.kao@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,57 +77,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On 6/9/23 19:15, Po-Wen Kao wrote:
+> This patch depends on patch
+> "scsi: ufs: mcq: Fix the incorrect OCS value for the device command"
+> which take care of OCS value of dev commands under mcq mode.
+> 
+> We are safe to share first hwq for dev commnad and IO request here.
 
-Referenced nvmem.yaml schema already defines address/size-cells and its
-children, so remove redundant entries.
-
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Peng Fan <peng.fan@nxp.com>
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
----
- .../devicetree/bindings/nvmem/imx-ocotp.yaml  | 21 -------------------
- 1 file changed, 21 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/nvmem/imx-ocotp.yaml b/Documentation/devicetree/bindings/nvmem/imx-ocotp.yaml
-index 7112d13c9bff..99e60d713dac 100644
---- a/Documentation/devicetree/bindings/nvmem/imx-ocotp.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/imx-ocotp.yaml
-@@ -47,12 +47,6 @@ properties:
-   reg:
-     maxItems: 1
- 
--  "#address-cells":
--    const: 1
--
--  "#size-cells":
--    const: 1
--
-   clocks:
-     maxItems: 1
- 
-@@ -62,21 +56,6 @@ required:
-   - compatible
-   - reg
- 
--patternProperties:
--  "^.*@[0-9a-f]+$":
--    type: object
--
--    properties:
--      reg:
--        maxItems: 1
--        description:
--          Offset and size in bytes within the storage device.
--
--    required:
--      - reg
--
--    additionalProperties: false
--
- unevaluatedProperties: false
- 
- examples:
--- 
-2.25.1
-
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
