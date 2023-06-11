@@ -2,163 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A61B272B04C
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 06:59:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F4572B052
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 07:06:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232604AbjFKE7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 00:59:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45232 "EHLO
+        id S232879AbjFKFGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 01:06:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjFKE7H (ORCPT
+        with ESMTP id S232828AbjFKFF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 00:59:07 -0400
-Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D235230E3
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 21:59:05 -0700 (PDT)
-Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-777a9ffdcd7so365696139f.0
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 21:59:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686459545; x=1689051545;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=un7th58fEnBwC+OFu0f9V7Zu6p9CM5Mc2hn3wVtyZWY=;
-        b=Q5GlRpsOKEhqFbpi9mgRynsqUYhw2Y12cmrPf0hIZikIWfFDUDEPlDMbytNbNgpmZR
-         W5u0u07Mm0s1yoZNtDN4ehgz+7xtkDhgMeeSei+h8hoDev/bD7mZxAB1E1FzcxHkOiDW
-         +YcRblC0s6aSAPyzXGaqlndDDkQvW1wK6/xLy7K4PEKsCPdljC4yIL4jGOE4gxRO2yIa
-         VWroXafzo5PPhG5ha7h1I4zA3rh4IhtBaRBXXR/59hRQq1YAxCc84CMGFA+/I2BlWqiJ
-         xC8+BhikGkxMGEstjh4x8JuL7HN9PXUObuzbiqDKeyISidJIVbrIqy8VpsUNzVcjVoAW
-         f2QQ==
-X-Gm-Message-State: AC+VfDwWaavPukMYZ1+XZbTtvg60aJDbONPnWSKdoQX6cCQEuwfvkZ45
-        TmO/VpddEKSmWjaNy306ypwtjtPSZcZXLLDFf7VJROEsdmwm
-X-Google-Smtp-Source: ACHHUZ4z5LBQRYRbj85KagIyc+Fgg2IO8mme8WldLcU/jJMr+sqKtwnCTB1PWB8A0dIDEXq/MdjmHpYBTrPizco5CzIYlOtWt2jK
+        Sun, 11 Jun 2023 01:05:57 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E9FF30ED
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 22:05:56 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-82-39.bstnma.fios.verizon.net [173.48.82.39])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 35B55WcK020420
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 11 Jun 2023 01:05:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1686459938; bh=Gcz8Ol8VHmMI1sjusnAtmgMOD7vVcKjcZv4cK0jFPtw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=bMJIukPmgW747dSbA6Q3FSgX0VlOlFN8NR9j5k2hPh7fAmqt57FAdOIhKlTjVcoq4
+         N0OAQPIBCtPXqiu1na9+RqklFc0H0AtF5Vtymtrwe38TBivWolxrUFUKubi9aq4n7l
+         iyTdGRGRKgj6CmgJjwHORuv0sWiXMMx5EIWkDbsPeVbxn21FGQhh8g81cyVQMVqlZx
+         EXC8QfMGzXJ15QkCv60a8+wgK9TkGrx73mMv2p/suJILOedH0eqQEOkJEMGEgmmbPr
+         aqanfyuoEmo6xzpwn9+0MCln2ne549hJGNllEtAj3m6LewGRksYpD4hUWIkxUDRijR
+         5Jx9isK9RfAxQ==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 9711515C00B0; Sun, 11 Jun 2023 01:05:32 -0400 (EDT)
+Date:   Sun, 11 Jun 2023 01:05:32 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Kemeng Shi <shikemeng@huaweicloud.com>
+Cc:     adilger.kernel@dilger.ca, ojaswin@linux.ibm.com,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 13/19] ext4: call ext4_mb_mark_group_bb in
+ ext4_free_blocks_simple
+Message-ID: <20230611050532.GE1436857@mit.edu>
+References: <20230603150327.3596033-1-shikemeng@huaweicloud.com>
+ <20230603150327.3596033-14-shikemeng@huaweicloud.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:9444:0:b0:41f:6a82:fc22 with SMTP id
- a62-20020a029444000000b0041f6a82fc22mr2457344jai.3.1686459545188; Sat, 10 Jun
- 2023 21:59:05 -0700 (PDT)
-Date:   Sat, 10 Jun 2023 21:59:05 -0700
-In-Reply-To: <0000000000002f18b905f6026455@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001e807e05fdd37619@google.com>
-Subject: Re: [syzbot] [ntfs?] UBSAN: shift-out-of-bounds in ntfs_read_inode_mount
-From:   syzbot <syzbot+c601e38d15ce8253186a@syzkaller.appspotmail.com>
-To:     anton@tuxera.com, linkinjeon@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ntfs-dev@lists.sourceforge.net,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230603150327.3596033-14-shikemeng@huaweicloud.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Sat, Jun 03, 2023 at 11:03:21PM +0800, Kemeng Shi wrote:
+> call ext4_mb_mark_group_bb in ext4_free_blocks_simple to:
+> 1. remove repeat code
+> 2. pair update of free_clusters in ext4_mb_new_blocks_simple.
+> 3. add missing ext4_lock_group/ext4_unlock_group protection.
+> 
+> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
+> Reviewed-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
 
-HEAD commit:    d8b213732169 Merge branch 'for-next/core', remote-tracking..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=12825c53280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=bd4213541e5ab26f
-dashboard link: https://syzkaller.appspot.com/bug?extid=c601e38d15ce8253186a
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=145b7343280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17d9d453280000
+Note: after bisecting, I've found that this commit is causing a OOPS
+when running "kvm-xfstests -c ext4/adv generic/468".  It appears to be
+an issue with the fast commit feature not playing nice with this
+patch.  The stack trace looks like this:
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/3d15de852c90/disk-d8b21373.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/ca6234ed6efc/vmlinux-d8b21373.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/0fc706ec33bb/Image-d8b21373.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/1a154c912743/mount_0.gz
+[    7.409663] ------------[ cut here ]------------
+[    7.409969] WARNING: CPU: 0 PID: 3069 at fs/ext4/mballoc.c:3801 ext4_mb_mark_group_bb+0x48e/0x4a0
+[    7.410480] CPU: 0 PID: 3069 Comm: mount Not tainted 6.4.0-rc5-xfstests-lockdep-00021-g60ba685c5998 #146
+[    7.411067] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+[    7.411639] RIP: 0010:ext4_mb_mark_group_bb+0x48e/0x4a0
+[    7.411968] Code: 48 c7 c7 35 b0 88 82 c6 05 16 f4 9b 01 01 e8 f9 16 c9 ff e9 7f fe ff ff 8b 45 08 c7 44 24 10 00 00 00 00 31 c9 e9 ef fc ff ff <0f> 0b e9 76 fc ff ff e8 96 64 b6 00 66 0f 1f 44 00 00 90 90 90 90
+[    7.413128] RSP: 0018:ffffc90003b0f9f8 EFLAGS: 00010246
+[    7.413458] RAX: 0000000000000003 RBX: 0000000000006002 RCX: 0000000000000001
+[    7.413902] RDX: ffff88800965b000 RSI: 0000000000000000 RDI: ffff88800d690100
+[    7.414346] RBP: ffffc90003b0fa68 R08: 000000000aebbd6e R09: 0000000000000246
+[    7.414791] R10: 00000000d148c994 R11: 00000000941da2bb R12: ffff88800d7fd000
+[    7.415234] R13: 0000000000000000 R14: ffff88800f3e4080 R15: ffff88800b5ca160
+[    7.415724] FS:  00007f3d04516840(0000) GS:ffff88807da00000(0000) knlGS:0000000000000000
+[    7.416227] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    7.416588] CR2: 00007ffcb3979ac8 CR3: 000000000f290003 CR4: 0000000000770ef0
+[    7.417032] PKRU: 55555554
+[    7.417205] Call Trace:
+[    7.417363]  <TASK>
+[    7.417502]  ? ext4_mb_mark_group_bb+0x48e/0x4a0
+[    7.417807]  ? __warn+0x80/0x170
+[    7.418051]  ? ext4_mb_mark_group_bb+0x48e/0x4a0
+[    7.418337]  ? report_bug+0x173/0x1d0
+[    7.418567]  ? handle_bug+0x3c/0x70
+[    7.418797]  ? exc_invalid_op+0x17/0x70
+[    7.419037]  ? asm_exc_invalid_op+0x1a/0x20
+[    7.419226]  ? ext4_mb_mark_group_bb+0x48e/0x4a0
+[    7.419437]  ? ext4_mb_mark_group_bb+0xae/0x4a0
+[    7.419708]  ext4_mb_mark_bb+0xc0/0x120
+[    7.419946]  ext4_ext_clear_bb+0x210/0x280
+[    7.420198]  ext4_fc_replay_inode+0xa1/0x380
+[    7.420466]  ext4_fc_replay+0x435/0x880
+[    7.420703]  ? __getblk_gfp+0x37/0x110
+[    7.420938]  ? jread+0x7a/0x180
+[    7.421138]  do_one_pass+0x7df/0x1040
+[    7.421365]  jbd2_journal_recover+0x150/0x250
+[    7.421637]  jbd2_journal_load+0xbe/0x190
+[    7.421886]  ext4_load_journal+0x214/0x610
+[    7.422152]  ext4_load_and_init_journal+0x29/0x380
+[    7.422490]  __ext4_fill_super+0x15ca/0x15e0
+[    7.422756]  ? __pfx_ext4_fill_super+0x10/0x10
+[    7.423032]  ext4_fill_super+0xcf/0x280
+[    7.423270]  get_tree_bdev+0x188/0x290
+[    7.423505]  vfs_get_tree+0x29/0xe0
+[    7.423723]  ? capable+0x37/0x70
+[    7.423927]  do_new_mount+0x174/0x300
+[    7.424157]  __x64_sys_mount+0x11a/0x150
+[    7.424401]  do_syscall_64+0x3b/0x90
+[    7.424624]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+[    7.424935] RIP: 0033:0x7f3d0475562a
+[    7.425160] Code: 48 8b 0d 69 18 0d 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 36 18 0d 00 f7 d8 64 89 01 48
+[    7.426298] RSP: 002b:00007ffcb397aaf8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
+[    7.426761] RAX: ffffffffffffffda RBX: 00007f3d04889264 RCX: 00007f3d0475562a
+[    7.427197] RDX: 0000558ea381db90 RSI: 0000558ea381dbb0 RDI: 0000558ea381dbd0
+[    7.427631] RBP: 0000558ea381d960 R08: 0000558ea381dbf0 R09: 00007f3d04827be0
+[    7.428063] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+[    7.428499] R13: 0000558ea381dbd0 R14: 0000558ea381db90 R15: 0000558ea381d960
+[    7.428941]  </TASK>
+[    7.429083] irq event stamp: 10951
+[    7.429296] hardirqs last  enabled at (10959): [<ffffffff811643c2>] __up_console_sem+0x52/0x60
+[    7.429824] hardirqs last disabled at (10966): [<ffffffff811643a7>] __up_console_sem+0x37/0x60
+[    7.430325] softirqs last  enabled at (10574): [<ffffffff8204a529>] __do_softirq+0x2d9/0x39e
+[    7.430839] softirqs last disabled at (10407): [<ffffffff810dcc57>] __irq_exit_rcu+0x87/0xb0
+[    7.431354] ---[ end trace 0000000000000000 ]---
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c601e38d15ce8253186a@syzkaller.appspotmail.com
-
-ntfs: (device loop0): parse_options(): Option utf8 is no longer supported, using option nls=utf8. Please use option nls=utf8 in the future and make sure utf8 is compiled either as a module or into the kernel.
-================================================================================
-UBSAN: shift-out-of-bounds in fs/ntfs/inode.c:1080:43
-shift exponent 267 is too large for 32-bit type 'unsigned int'
-CPU: 1 PID: 5969 Comm: syz-executor382 Not tainted 6.4.0-rc5-syzkaller-gd8b213732169 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
-Call trace:
- dump_backtrace+0x1b8/0x1e4 arch/arm64/kernel/stacktrace.c:233
- show_stack+0x2c/0x44 arch/arm64/kernel/stacktrace.c:240
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd0/0x124 lib/dump_stack.c:106
- dump_stack+0x1c/0x28 lib/dump_stack.c:113
- ubsan_epilogue lib/ubsan.c:217 [inline]
- __ubsan_handle_shift_out_of_bounds+0x2f4/0x36c lib/ubsan.c:387
- ntfs_read_locked_inode+0x35b4/0x38e0 fs/ntfs/inode.c:1080
- ntfs_read_inode_mount+0xbb0/0x2044 fs/ntfs/inode.c:2098
- ntfs_fill_super+0x13b4/0x2314 fs/ntfs/super.c:2863
- mount_bdev+0x274/0x370 fs/super.c:1380
- ntfs_mount+0x44/0x58 fs/ntfs/super.c:3057
- legacy_get_tree+0xd4/0x16c fs/fs_context.c:610
- vfs_get_tree+0x90/0x274 fs/super.c:1510
- do_new_mount+0x25c/0x8c4 fs/namespace.c:3039
- path_mount+0x590/0xe04 fs/namespace.c:3369
- do_mount fs/namespace.c:3382 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __arm64_sys_mount+0x45c/0x594 fs/namespace.c:3568
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
- el0_svc_common+0x138/0x244 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:191
- el0_svc+0x4c/0x160 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-================================================================================
-================================================================================
-UBSAN: shift-out-of-bounds in fs/ntfs/inode.c:1089:11
-shift exponent 255 is too large for 32-bit type 'unsigned int'
-CPU: 1 PID: 5969 Comm: syz-executor382 Not tainted 6.4.0-rc5-syzkaller-gd8b213732169 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
-Call trace:
- dump_backtrace+0x1b8/0x1e4 arch/arm64/kernel/stacktrace.c:233
- show_stack+0x2c/0x44 arch/arm64/kernel/stacktrace.c:240
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd0/0x124 lib/dump_stack.c:106
- dump_stack+0x1c/0x28 lib/dump_stack.c:113
- ubsan_epilogue lib/ubsan.c:217 [inline]
- __ubsan_handle_shift_out_of_bounds+0x2f4/0x36c lib/ubsan.c:387
- ntfs_read_locked_inode+0x35d0/0x38e0 fs/ntfs/inode.c:1089
- ntfs_read_inode_mount+0xbb0/0x2044 fs/ntfs/inode.c:2098
- ntfs_fill_super+0x13b4/0x2314 fs/ntfs/super.c:2863
- mount_bdev+0x274/0x370 fs/super.c:1380
- ntfs_mount+0x44/0x58 fs/ntfs/super.c:3057
- legacy_get_tree+0xd4/0x16c fs/fs_context.c:610
- vfs_get_tree+0x90/0x274 fs/super.c:1510
- do_new_mount+0x25c/0x8c4 fs/namespace.c:3039
- path_mount+0x590/0xe04 fs/namespace.c:3369
- do_mount fs/namespace.c:3382 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __arm64_sys_mount+0x45c/0x594 fs/namespace.c:3568
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
- el0_svc_common+0x138/0x244 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:191
- el0_svc+0x4c/0x160 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-================================================================================
-ntfs: (device loop0): check_mft_mirror(): $MFT and $MFTMirr (record 0) do not match.  Run ntfsfix or chkdsk.
-ntfs: (device loop0): load_system_files(): $MFTMirr does not match $MFT.  Mounting read-only.  Run ntfsfix and/or chkdsk.
-ntfs: (device loop0): map_mft_record(): Failed with error code 13.
-ntfs: (device loop0): ntfs_read_locked_inode(): Failed with error code -13.  Marking corrupt inode 0xa as bad.  Run chkdsk.
-ntfs: (device loop0): load_and_init_upcase(): Failed to load $UpCase from the volume. Using default.
-ntfs: (device loop0): map_mft_record(): Failed with error code 13.
-ntfs: (device loop0): ntfs_read_locked_inode(): Failed with error code -13.  Marking corrupt inode 0x4 as bad.  Run chkdsk.
-ntfs: (device loop0): load_and_init_attrdef(): Failed to initialize attribute definition table.
-ntfs: (device loop0): ntfs_fill_super(): Failed to load system files.
-
-
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
