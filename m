@@ -2,52 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 281D972B2AD
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 18:01:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B26172B2AF
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 18:02:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233825AbjFKQB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 12:01:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33536 "EHLO
+        id S230482AbjFKQCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 12:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233781AbjFKQBW (ORCPT
+        with ESMTP id S233781AbjFKQBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 12:01:22 -0400
-Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F66DA
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 09:01:18 -0700 (PDT)
-Date:   Sun, 11 Jun 2023 16:01:05 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-        s=protonmail; t=1686499276; x=1686758476;
-        bh=kYAUFYLzaiAX52hQfJ1MUOd0KMtIuNz3QI77YeCuRe4=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=Df1dBfWS+x56HZNpJC1DD90F2+NBfpRlehzNABiikAp5kvYzFP67yUtDPdVXQW0rw
-         e0axP3VrTTCwZoGEKOwGjCmUR/99oF/RenObRZEob935GlsGPsQnPvxyqB39Mw00fT
-         eGmUUCzHxd88VB8tbkyLDfNxweoCFLzicxsfjItwSlEZlUscDJ5/pjlPUTJ3WqQx54
-         n8vZ4nOlzViOhWac7cxOteuxnguSBzRh7JRlAeAYaKnZfoFl3y4/eBTxa4LwW7jh+T
-         W82aYRLp7DjjAhj0bCW7RGoxwAdM8HO7m6Z9G5m0EQYqgQxNYW8ADqKB5pun0tGCav
-         psKcGCwgoOcyw==
-To:     Alice Ryhl <aliceryhl@google.com>
-From:   Benno Lossin <benno.lossin@proton.me>
-Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH v2 6/8] rust: workqueue: implement `WorkItemPointer` for pointer types
-Message-ID: <E9xrq6_A6ATQnbV1U8f-DJTmDdXv2Xr_c0btYWfWA_eTBQnCzqJbI7DT1OG2FoHw8n71jUFqk014uJv06P1rx-179jMPJHrTSjf3Zj-HOuc=@proton.me>
-In-Reply-To: <20230601134946.3887870-7-aliceryhl@google.com>
-References: <20230601134946.3887870-1-aliceryhl@google.com> <20230601134946.3887870-7-aliceryhl@google.com>
-Feedback-ID: 71780778:user:proton
+        Sun, 11 Jun 2023 12:01:53 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5309C7;
+        Sun, 11 Jun 2023 09:01:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=eQiKgV73IgBgADqrP03dx8TvrgyjD34GIMENMF2shSc=; b=pZBI8m2IPwHYP/eRDEUM9Iww/2
+        afWTyO0lDzqpk7D6lphotaNog/E8mfWKOycg5HVUD8gGfNHXw8uICuj3FdE3osR1BKuo1i2L0Gts7
+        9pH+/MVU1JZZsKCf/iSnZj5s9IOEInPybfTRVU4QwlsTdZR2fej1wyOkdGswXRjPjz5M=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1q8NVi-00FVrz-A4; Sun, 11 Jun 2023 18:01:46 +0200
+Date:   Sun, 11 Jun 2023 18:01:46 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] leds: trigger: netdev: add additional specific
+ link duplex mode
+Message-ID: <bc342289-5008-490d-b98f-6826a11574b3@lunn.ch>
+References: <20230610041616.21141-1-ansuelsmth@gmail.com>
+ <20230610041616.21141-3-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230610041616.21141-3-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,163 +51,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01.06.23 15:49, Alice Ryhl wrote:
-> This implements the `WorkItemPointer` trait for the pointer types that
-> you are likely to use the workqueue with. The `Arc` type is for
-> reference counted objects, and the `Pin<Box<T>>` type is for objects
-> where the caller has exclusive ownership of the object.
->=20
-> Co-developed-by: Gary Guo <gary@garyguo.net>
-> Signed-off-by: Gary Guo <gary@garyguo.net>
-> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+>  static ssize_t device_name_show(struct device *dev,
+> @@ -230,6 +241,7 @@ static int set_device_name(struct led_netdev_data *trigger_data,
+>  
+>  	trigger_data->carrier_link_up = false;
+>  	trigger_data->link_speed = 0;
+> +	trigger_data->duplex = 0;
 
-I have a small nit below.
+/* Duplex, half or full. */
+#define DUPLEX_HALF		0x00
+#define DUPLEX_FULL		0x01
+#define DUPLEX_UNKNOWN		0xff
 
-Reviewed-by: Benno Lossin <benno.lossin@proton.me>
+You probably want to initialise it to DUPLEX_UNKNOWN, not DUPLEX_HALF.
 
-> ---
->   rust/kernel/workqueue.rs | 97 +++++++++++++++++++++++++++++++++++++++-
->   1 file changed, 96 insertions(+), 1 deletion(-)
->=20
-> diff --git a/rust/kernel/workqueue.rs b/rust/kernel/workqueue.rs
-> index dbf0aab29a85..f06a2f036d8b 100644
-> --- a/rust/kernel/workqueue.rs
-> +++ b/rust/kernel/workqueue.rs
-> @@ -28,8 +28,10 @@
->   //!
->   //! C header: [`include/linux/workqueue.h`](../../../../include/linux/w=
-orkqueue.h)
->=20
-> -use crate::{bindings, prelude::*, types::Opaque};
-> +use crate::{bindings, prelude::*, sync::Arc, types::Opaque};
-> +use alloc::boxed::Box;
->   use core::marker::{PhantomData, PhantomPinned};
-> +use core::pin::Pin;
->=20
->   /// A kernel work queue.
->   ///
-> @@ -323,6 +325,99 @@ unsafe fn raw_get_work(ptr: *mut Self) -> *mut $crat=
-e::workqueue::Work<$work_typ
->       )*};
->   }
->=20
-> +unsafe impl<T, const ID: u64> WorkItemPointer<ID> for Arc<T>
-> +where
-> +    T: WorkItem<ID, Pointer =3D Self>,
-> +    T: HasWork<T, ID>,
-> +{
-> +    unsafe extern "C" fn run(ptr: *mut bindings::work_struct) {
-> +        // SAFETY: The `__enqueue` method always uses a `work_struct` st=
-ored in a `Work<T, ID>`.
-> +        let ptr =3D ptr as *mut Work<T, ID>;
-> +        // SAFETY: This computes the pointer that `__enqueue` got from `=
-Arc::into_raw`.
-> +        let ptr =3D unsafe { T::work_container_of(ptr) };
-> +        // SAFETY: This pointer comes from `Arc::into_raw` and we've bee=
-n given back ownership.
-> +        let arc =3D unsafe { Arc::from_raw(ptr) };
-> +
-> +        T::run(arc)
-> +    }
-> +}
-> +
-> +unsafe impl<T, const ID: u64> RawWorkItem<ID> for Arc<T>
-> +where
-> +    T: WorkItem<ID, Pointer =3D Self>,
-> +    T: HasWork<T, ID>,
-> +{
-> +    type EnqueueOutput =3D Result<(), Self>;
-> +
-> +    unsafe fn __enqueue<F>(self, queue_work_on: F) -> Self::EnqueueOutpu=
-t
-> +    where
-> +        F: FnOnce(*mut bindings::work_struct) -> bool,
-> +    {
-> +        // Casting between const and mut is not a problem as long as the=
- pointer is a raw pointer.
-> +        let ptr =3D Arc::into_raw(self) as *mut T;
+There is also SPEED_UNKNOWN, which might be good to use, rather than
+0.
 
-I personally would prefer `cast_mut()` here.
-
---=20
-Cheers,
-Benno
-
-> +
-> +        // SAFETY: Pointers into an `Arc` point at a valid value.
-> +        let work_ptr =3D unsafe { T::raw_get_work(ptr) };
-> +        // SAFETY: `raw_get_work` returns a pointer to a valid value.
-> +        let work_ptr =3D unsafe { Work::raw_get(work_ptr) };
-> +
-> +        if queue_work_on(work_ptr) {
-> +            Ok(())
-> +        } else {
-> +            // SAFETY: The work queue has not taken ownership of the poi=
-nter.
-> +            Err(unsafe { Arc::from_raw(ptr) })
-> +        }
-> +    }
-> +}
-> +
-> +unsafe impl<T, const ID: u64> WorkItemPointer<ID> for Pin<Box<T>>
-> +where
-> +    T: WorkItem<ID, Pointer =3D Self>,
-> +    T: HasWork<T, ID>,
-> +{
-> +    unsafe extern "C" fn run(ptr: *mut bindings::work_struct) {
-> +        // SAFETY: The `__enqueue` method always uses a `work_struct` st=
-ored in a `Work<T, ID>`.
-> +        let ptr =3D ptr as *mut Work<T, ID>;
-> +        // SAFETY: This computes the pointer that `__enqueue` got from `=
-Arc::into_raw`.
-> +        let ptr =3D unsafe { T::work_container_of(ptr) };
-> +        // SAFETY: This pointer comes from `Arc::into_raw` and we've bee=
-n given back ownership.
-> +        let boxed =3D unsafe { Box::from_raw(ptr) };
-> +        // SAFETY: The box was already pinned when it was enqueued.
-> +        let pinned =3D unsafe { Pin::new_unchecked(boxed) };
-> +
-> +        T::run(pinned)
-> +    }
-> +}
-> +
-> +unsafe impl<T, const ID: u64> RawWorkItem<ID> for Pin<Box<T>>
-> +where
-> +    T: WorkItem<ID, Pointer =3D Self>,
-> +    T: HasWork<T, ID>,
-> +{
-> +    type EnqueueOutput =3D ();
-> +
-> +    unsafe fn __enqueue<F>(self, queue_work_on: F) -> Self::EnqueueOutpu=
-t
-> +    where
-> +        F: FnOnce(*mut bindings::work_struct) -> bool,
-> +    {
-> +        // SAFETY: We're not going to move `self` or any of its fields, =
-so its okay to temporarily
-> +        // remove the `Pin` wrapper.
-> +        let boxed =3D unsafe { Pin::into_inner_unchecked(self) };
-> +        let ptr =3D Box::into_raw(boxed);
-> +
-> +        // SAFETY: Pointers into a `Box` point at a valid value.
-> +        let work_ptr =3D unsafe { T::raw_get_work(ptr) };
-> +        // SAFETY: `raw_get_work` returns a pointer to a valid value.
-> +        let work_ptr =3D unsafe { Work::raw_get(work_ptr) };
-> +
-> +        if !queue_work_on(work_ptr) {
-> +            // SAFETY: This method requires exclusive ownership of the b=
-ox, so it cannot be in a
-> +            // workqueue.
-> +            unsafe { ::core::hint::unreachable_unchecked() }
-> +        }
-> +    }
-> +}
-> +
->   /// Returns the system work queue (`system_wq`).
->   ///
->   /// It is the one used by `schedule[_delayed]_work[_on]()`. Multi-CPU m=
-ulti-threaded. There are
-> --
-> 2.41.0.rc0.172.g3f132b7071-goog
->=20
-
+	Andrew
