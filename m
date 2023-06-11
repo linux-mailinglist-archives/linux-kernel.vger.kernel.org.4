@@ -2,155 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 376BD72B1AA
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 13:32:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9698572B1AE
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 13:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233642AbjFKLb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 07:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38554 "EHLO
+        id S231248AbjFKLdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 07:33:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbjFKLbx (ORCPT
+        with ESMTP id S230233AbjFKLdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 07:31:53 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 053E7BD;
-        Sun, 11 Jun 2023 04:31:52 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b3c0c476d1so3131785ad.1;
-        Sun, 11 Jun 2023 04:31:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686483111; x=1689075111;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ET+8jv1Sr4c8KNb9UT3DWTBXEn+DrM0MENG4Vij4uyQ=;
-        b=ByLAexixDGYoAAbP+TdnYMa5G8F/VvOmM2T7/k+wQ3cghFSNw4Kj2IASok17J7GtyC
-         pCfzHh4wSayC2NXfPUYE5UTGZGAvsxY0hoesHUUjSvY+EXJAg9ApMd/ncGMQ8Zpt2zo5
-         2dWmy69/WS7xsoZGYIbNEeHU1wTzK9gHgmOHmK5TVmSO//bspmX9a+Q4oiBHTTJIybS5
-         oLsqXrllscjmhjrL7peXQSqiWz/CugCFIORxjrW1urVFQzRXSdzR2nNPxSfGRevYccb6
-         jvg/uAW9JNITn/Y2P/ySuDZpDuzJQnuAIaagbCQMyiIaIeG1iJzNxF5hkMtCzUQG2zy5
-         Yiig==
+        Sun, 11 Jun 2023 07:33:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EDFA173B
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 04:32:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686483138;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=fvk9nsOU+Ghrao8Fb/Dy7MlM3Rdl5iJgFNPzrlJhwHU=;
+        b=NLeWky71Ag08I9v9ErIitvJ6lIwwgVs20IPjXbNxilCaOWYsPJKnb+YsbVdSI/sRc7me3v
+        U4+DbV/o+2yUzlg4KxkJIVonz7w+eWe4PzbPP8WlhLr3aP86BPna+967KmYtR5DJ6bpu6K
+        RXWddKxuxGnjvPUi78PyhN1l8rsWC1U=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-613-zi30w2TlPIqs5C0M7iQg8w-1; Sun, 11 Jun 2023 07:32:15 -0400
+X-MC-Unique: zi30w2TlPIqs5C0M7iQg8w-1
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-75eba2e48cfso248115585a.0
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 04:32:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686483111; x=1689075111;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ET+8jv1Sr4c8KNb9UT3DWTBXEn+DrM0MENG4Vij4uyQ=;
-        b=F25x8/9q6RvQzI5mpZMUirrQIWMaerufuyOkn3jVNhaxqin9zviZvTYc/GXb5/vUwB
-         ozd067vNTRMo3tf+itxhcD18YzpdAVfUyLG9sQJQXG1ewPuuzctpCUjGuTixOFCiBmkY
-         vToCJM2Y/uH/iXAa2mXsqikqT3GxYR8xECv3K/CoSyDff89m5agd8o0BsDf0N1Ew9RHY
-         WYq2wWUR8iGsnWeLLfmgH1B9pc+VgNYFgfkZpVHz5htOfi0hYqDSnWEPVtKEEoAZzMRw
-         VsPtuM9z2lO4papvOtkbu+DExHuYSpPVkbRUzbA2XNnan7M1SIF2zJe9h3+FrF6kVS8V
-         RAuA==
-X-Gm-Message-State: AC+VfDwCtHyr3ZTu+nsOro4GEhvuZPy8iA5Iqg3jMhZii+hLsR7M+6Kn
-        MZ6GZQACepJKtYSX3nJipRg=
-X-Google-Smtp-Source: ACHHUZ7cRXXUiwx/VGfZs4Qirpj+wNLdNsY/9ynhNKhbPawe6sObhyNHGvcYnjCovYAKTibn3tXS+Q==
-X-Received: by 2002:a17:902:8642:b0:1b0:348:2498 with SMTP id y2-20020a170902864200b001b003482498mr3561999plt.2.1686483111258;
-        Sun, 11 Jun 2023 04:31:51 -0700 (PDT)
-Received: from debian.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id jd4-20020a170903260400b001b3b83b7d4esm1417503plb.211.2023.06.11.04.31.49
+        d=1e100.net; s=20221208; t=1686483134; x=1689075134;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fvk9nsOU+Ghrao8Fb/Dy7MlM3Rdl5iJgFNPzrlJhwHU=;
+        b=KO8oEBd9VSIWqZoCRdKNsDrvEZf/HkIAmvcXf5Y9CeU/qXl3SapkCoXSdN5UTHVoG1
+         z6m5BQQ0ySGd4YksHvwF8tt2Y1ioQBCUAlivaibnkspSgpy1gTDUk8ODCa5sfVrD0vXp
+         sydErfcuAYXo3HJmlY4HCuKExuTLT8tmOM7OJwa5agI1E8k/FkigrS4jTcii9EfIJD/E
+         H5jyHw+2wxtjVdCjl1Qa60GNHofXAqAFEEZv9nWVwW6fmCI4+3afoR1hmXboyblDe/FB
+         70rOdO8AkRNXbrOefUO6T1mDs3atji+m5Eui+RM0YpKMHTqXzBuA3gCnOKUMTYV2X7Vr
+         CocA==
+X-Gm-Message-State: AC+VfDw1YSX+OgBSxlCrCnGgTdVJMTP3kirob7j9P7nNWUkkEkXJMH5C
+        lRokCv87x+m1WeklituCSt7uuz8gw9aDNLwvaEPSRDfmYh0+rgNaTONHUSxHC6vgoA3/Ww50q/F
+        zk6cexoJscbzraHEYtJ3pBQO/
+X-Received: by 2002:a05:620a:4903:b0:75e:dbfa:e221 with SMTP id ed3-20020a05620a490300b0075edbfae221mr15325329qkb.20.1686483134729;
+        Sun, 11 Jun 2023 04:32:14 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6vRb+f79/ygAXa3we8n0GBP8ylntMxHI3QIBUyoHCWYEcnmdtQzonemXCDV99sYqP6L8PJ1g==
+X-Received: by 2002:a05:620a:4903:b0:75e:dbfa:e221 with SMTP id ed3-20020a05620a490300b0075edbfae221mr15325311qkb.20.1686483134522;
+        Sun, 11 Jun 2023 04:32:14 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id z24-20020ae9c118000000b0074e0951c7e7sm2199166qki.28.2023.06.11.04.32.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jun 2023 04:31:50 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 18522106A3A; Sun, 11 Jun 2023 18:31:34 +0700 (WIB)
-Date:   Sun, 11 Jun 2023 18:31:34 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Joe Breuer <linux-kernel@jmbreuer.net>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Damien Le Moal <dlemoal@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Linux Power Management <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Hardening <linux-hardening@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux SCSI <linux-scsi@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: Re: Fwd: Waking up from resume locks up on sr device
-Message-ID: <ZIWwlptfVphjGz9u@debian.me>
-References: <2d1fdf6d-682c-a18d-2260-5c5ee7097f7d@gmail.com>
- <5513e29d-955a-f795-21d6-ec02a2e2e128@gmail.com>
- <ZIQ6bkau3j6qGef8@duo.ucw.cz>
- <07d6e2e7-a50a-8cf4-5c5d-200551bd6687@gmail.com>
- <02e4f87a-80e8-dc5d-0d6e-46939f2c74ac@acm.org>
- <b2cf6d96-a55a-d444-d22e-e9b3945ba43f@jmbreuer.net>
+        Sun, 11 Jun 2023 04:32:14 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     dhowells@redhat.com, jarkko@kernel.org, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com
+Cc:     keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] sysctl: set variable key_sysctls storage-class-specifier to static
+Date:   Sun, 11 Jun 2023 07:32:10 -0400
+Message-Id: <20230611113210.182652-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pJUn/uCZg2bV7nGQ"
-Content-Disposition: inline
-In-Reply-To: <b2cf6d96-a55a-d444-d22e-e9b3945ba43f@jmbreuer.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+smatch reports
+security/keys/sysctl.c:12:18: warning: symbol
+  'key_sysctls' was not declared. Should it be static?
 
---pJUn/uCZg2bV7nGQ
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This variable is only used in its defining file, so it should be static.
 
-On Sun, Jun 11, 2023 at 11:05:27AM +0200, Joe Breuer wrote:
-> I'm the reporter of this issue.
->=20
-> I just tried this patch against 6.3.4, and it completely fixes my
-> suspend/resume issue.
->=20
-> The optical drive stays usable after resume, even suspending/resuming dur=
-ing
-> playback of CDDA content works flawlessly and playback resumes seamlessly
-> after system resume.
->=20
-> So, from my perspective: Good one!
->=20
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ security/keys/sysctl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks for trying the fix and telling the result. But tl;dr:
+diff --git a/security/keys/sysctl.c b/security/keys/sysctl.c
+index b72b82bb20c6..b348e1679d5d 100644
+--- a/security/keys/sysctl.c
++++ b/security/keys/sysctl.c
+@@ -9,7 +9,7 @@
+ #include <linux/sysctl.h>
+ #include "internal.h"
+ 
+-struct ctl_table key_sysctls[] = {
++static struct ctl_table key_sysctls[] = {
+ 	{
+ 		.procname = "maxkeys",
+ 		.data = &key_quota_maxkeys,
+-- 
+2.27.0
 
-> A: http://en.wikipedia.org/wiki/Top_post
-> Q: Were do I find info about this thing called top-posting?
-> A: Because it messes up the order in which people normally read text.
-> Q: Why is top-posting such a bad thing?
-> A: Top-posting.
-> Q: What is the most annoying thing in e-mail?
->=20
-> A: No.
-> Q: Should I include quotations after my reply?
->=20
-> http://daringfireball.net/2007/07/on_top
-
-(while I'm removing the quoted context below your reply after the fact).
-
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---pJUn/uCZg2bV7nGQ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZIWwkAAKCRD2uYlJVVFO
-o0dcAQDBLvOwhF7MNiLJ3qtN+3ezvWqHj9xZ1JeN01prxbawGgD+NSKtGG1O0leF
-rjwIYm0dINVegT1HRoIZQ0flawMzpAg=
-=j2UP
------END PGP SIGNATURE-----
-
---pJUn/uCZg2bV7nGQ--
