@@ -2,139 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AD3C72B1E9
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 14:55:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1900A72B1ED
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 15:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233569AbjFKMzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 08:55:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51888 "EHLO
+        id S233606AbjFKNAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 09:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjFKMzG (ORCPT
+        with ESMTP id S229562AbjFKNAg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 08:55:06 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115F61B8;
-        Sun, 11 Jun 2023 05:55:02 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-528cdc9576cso1601444a12.0;
-        Sun, 11 Jun 2023 05:55:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686488101; x=1689080101;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qoVZW2bivguqn6AKKTwEgxPn9HvFkbakdebxI4R8tV4=;
-        b=gtmQflKPxdDbDPdvpsPwyeaf5S7ll6Ms/7Rpg3IA4lmv5WCLvxp+WxyAuUzKwDizPV
-         mLbCP6F05cPnee6XuCaoH/JnOxJ2U93Cirghre/EaTSvusqdkyX7cVjzyW/mCl9jsPf4
-         lU8TFD4rOT0LIpWVfgcuMUOrS8ZdJ1B8qtzO9o25g41Pk2vATLfn0erGTVrFwVoldqA+
-         XaR2XPmF4375dukxhHVYFeN0gXdoCyMai2GPo9WKhTP4pu0HlDHRBvZXaEn8AiCxRW8t
-         j3GUp/i3tsgG61SVlx1aXXZ5evrE1T2t7qxP3MQ0VwETzH7z9v4NUiKltgLxZtpIORFh
-         i7Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686488101; x=1689080101;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qoVZW2bivguqn6AKKTwEgxPn9HvFkbakdebxI4R8tV4=;
-        b=JX0oomnAiQeoWQUhDr3iIEEDm9aMbDtF8rAPSJH/RRM7nr1iUNXtT0MMazscf1DtT0
-         4GKdztBTgeZZapOCUcjhFscz0b0fhgtZx60izTmIFVqvdcaU9eqx6eASqv27+bLZHyha
-         xeLc3JtIUOo8chwD71ZGJzYv6lDJH8NYkMwKan8r0jxmRtdu9zB4xWwCZU2lj4CWZdP9
-         jBghLTDN7pd50hnS8n7QT919LBeu0+410loMrdWPmbJzZFbqbddwuT+QQnxaT7cCLRKa
-         ICPHryOYwJbfCaxHSE+BYANx58idpJj4T/pCEMzF0U7tanUKNRp04WB5eyFh6Iv6Wd/u
-         xC6w==
-X-Gm-Message-State: AC+VfDwAcSuFHC+rNRRQPUMnxgNelqS+zvoW8B60zhc2uO5f5zUt+TNh
-        qukk+jcr9j7mY6hr1ZOojhU=
-X-Google-Smtp-Source: ACHHUZ6r7U3mGgGJzSzAU+viZ5EAmnneQo/rSzsl1VQoHb5SWVmusE97aqBxjpoWwUdtvrHR67NIfA==
-X-Received: by 2002:a17:90a:617:b0:256:dbfb:9b5e with SMTP id j23-20020a17090a061700b00256dbfb9b5emr5669642pjj.29.1686488101339;
-        Sun, 11 Jun 2023 05:55:01 -0700 (PDT)
-Received: from debian.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id ms18-20020a17090b235200b0025bbe90d3cbsm1910806pjb.44.2023.06.11.05.55.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jun 2023 05:55:00 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id F0AD8106A3A; Sun, 11 Jun 2023 19:54:52 +0700 (WIB)
-Date:   Sun, 11 Jun 2023 19:54:52 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Shaomin Deng <dengshaomin@cdjrlc.com>, viro@zeniv.linux.org.uk,
-        brauner@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mao Zhu <zhumao001@208suo.com>
-Subject: Re: [PATCH] fs: Fix comment typo
-Message-ID: <ZIXEHHvkJVlmE_c4@debian.me>
-References: <20230611123314.5282-1-dengshaomin@cdjrlc.com>
+        Sun, 11 Jun 2023 09:00:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D23DE48;
+        Sun, 11 Jun 2023 06:00:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D16FE61130;
+        Sun, 11 Jun 2023 13:00:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E93EC433EF;
+        Sun, 11 Jun 2023 13:00:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686488434;
+        bh=w5GEviuZiSz6ulTNLoenUvOQvB5v/kxoYUOgOfhqU7g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BaAM7/6YXRn1g/lvATq61O+eRKqA4Ls7KaD2s8I4X4LfW6PIVpQMOgvdMYPf0m3a7
+         2gqzhFQFGsOnbRKivcBIk/nbuRPCTG0LqhTvg6bpgg3wTQ6gfeVcfoq8dWEAxS57Vk
+         lAYLfx27JXewKrZoeb9Yw6fDI6X0eRbBuXuLKxVKgjn94EZ0B2MFXwSdLXh4Yfgjbj
+         DIKMMNt3ZVLWNSM03fWoOvbRB5/Ylg4EA7CYqbaA1g9dQCgT+9IX15+7E+hDRGdqaD
+         MTMmTgMu+NAhOlzgRev/LeMRlxLQTh0cFoO1hzase3lwL9em0DrZsiyqGLYbLxecv5
+         7567EaTg46pfA==
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Jackie Liu <liu.yun@linux.dev>
+Subject: [PATCHv2] ftrace: Show all functions with addresses in available_filter_functions_addrs
+Date:   Sun, 11 Jun 2023 15:00:29 +0200
+Message-Id: <20230611130029.1202298-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+O3zIJTHyNTqGyBt"
-Content-Disposition: inline
-In-Reply-To: <20230611123314.5282-1-dengshaomin@cdjrlc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Adding new available_filter_functions_addrs file that shows all available
+functions (same as available_filter_functions) together with addresses,
+like:
 
---+O3zIJTHyNTqGyBt
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  # cat available_filter_functions_addrs | head
+  ffffffff81000770 __traceiter_initcall_level
+  ffffffff810007c0 __traceiter_initcall_start
+  ffffffff81000810 __traceiter_initcall_finish
+  ffffffff81000860 trace_initcall_finish_cb
+  ...
 
-On Sun, Jun 11, 2023 at 08:33:14AM -0400, Shaomin Deng wrote:
-> From: Mao Zhu <zhumao001@208suo.com>
->=20
-> Delete duplicated word in comment.
+Note displayed address is the patch-site address and can differ from
+/proc/kallsyms address.
 
-On what function?
+It's useful to have address avilable for traceable symbols, so we don't
+need to allways cross check kallsyms with available_filter_functions
+(or the other way around) and have all the data in single file.
 
->=20
-> Signed-off-by: Mao Zhu <zhumao001@208suo.com>
+For backwards compatibility reasons we can't change the existing
+available_filter_functions file output, but we need to add new file.
 
-You're carrying someone else's patch, so besides SoB from original
-author, you need to also have your own SoB.
+Suggested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+---
+ Documentation/trace/ftrace.rst |  6 ++++++
+ include/linux/ftrace.h         |  1 +
+ kernel/trace/ftrace.c          | 37 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 44 insertions(+)
 
-> ---
->  include/linux/fs.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/include/linux/fs.h b/include/linux/fs.h
-> index df6c1817906f..aa870b77cc2b 100644
-> --- a/include/linux/fs.h
-> +++ b/include/linux/fs.h
-> @@ -2675,7 +2675,7 @@ extern void evict_inodes(struct super_block *sb);
->  void dump_mapping(const struct address_space *);
-> =20
->  /*
-> - * Userspace may rely on the the inode number being non-zero. For exampl=
-e, glibc
-> + * Userspace may rely on the inode number being non-zero. For example, g=
-libc
->   * simply ignores files with zero i_ino in unlink() and other places.
->   *
->   * As an additional complication, if userspace was compiled with
+v2 changes:
+  - simplified address print [Steven]
+  - added doc entry for the new file
 
-I don't see the function name in above diff (dump_mapping() isn't the
-function I mean). Regardless, the fix LGTM.
+diff --git a/Documentation/trace/ftrace.rst b/Documentation/trace/ftrace.rst
+index 027437b745a0..e97573e3fc4a 100644
+--- a/Documentation/trace/ftrace.rst
++++ b/Documentation/trace/ftrace.rst
+@@ -324,6 +324,12 @@ of ftrace. Here is a list of some of the key files:
+ 	"set_graph_function", or "set_graph_notrace".
+ 	(See the section "dynamic ftrace" below for more details.)
+ 
++  available_filter_functions_addrs:
++
++	Similar to available_filter_functions, but with address displayed
++	for each function. The displayed address is the patch-site address
++	and can differ from /proc/kallsyms address.
++
+   dyn_ftrace_total_info:
+ 
+ 	This file is for debugging purposes. The number of functions that
+diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+index b23bdd414394..6e372575a8e9 100644
+--- a/include/linux/ftrace.h
++++ b/include/linux/ftrace.h
+@@ -633,6 +633,7 @@ enum {
+ 	FTRACE_ITER_MOD		= (1 << 5),
+ 	FTRACE_ITER_ENABLED	= (1 << 6),
+ 	FTRACE_ITER_TOUCHED	= (1 << 7),
++	FTRACE_ITER_ADDRS	= (1 << 8),
+ };
+ 
+ void arch_ftrace_update_code(int command);
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index 764668467155..b24c573934af 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -3861,6 +3861,9 @@ static int t_show(struct seq_file *m, void *v)
+ 	if (!rec)
+ 		return 0;
+ 
++	if (iter->flags & FTRACE_ITER_ADDRS)
++		seq_printf(m, "%lx ", rec->ip);
++
+ 	if (print_rec(m, rec->ip)) {
+ 		/* This should only happen when a rec is disabled */
+ 		WARN_ON_ONCE(!(rec->flags & FTRACE_FL_DISABLED));
+@@ -3996,6 +3999,30 @@ ftrace_touched_open(struct inode *inode, struct file *file)
+ 	return 0;
+ }
+ 
++static int
++ftrace_avail_addrs_open(struct inode *inode, struct file *file)
++{
++	struct ftrace_iterator *iter;
++	int ret;
++
++	ret = security_locked_down(LOCKDOWN_TRACEFS);
++	if (ret)
++		return ret;
++
++	if (unlikely(ftrace_disabled))
++		return -ENODEV;
++
++	iter = __seq_open_private(file, &show_ftrace_seq_ops, sizeof(*iter));
++	if (!iter)
++		return -ENOMEM;
++
++	iter->pg = ftrace_pages_start;
++	iter->flags = FTRACE_ITER_ADDRS;
++	iter->ops = &global_ops;
++
++	return 0;
++}
++
+ /**
+  * ftrace_regex_open - initialize function tracer filter files
+  * @ops: The ftrace_ops that hold the hash filters
+@@ -5916,6 +5943,13 @@ static const struct file_operations ftrace_touched_fops = {
+ 	.release = seq_release_private,
+ };
+ 
++static const struct file_operations ftrace_avail_addrs_fops = {
++	.open = ftrace_avail_addrs_open,
++	.read = seq_read,
++	.llseek = seq_lseek,
++	.release = seq_release_private,
++};
++
+ static const struct file_operations ftrace_filter_fops = {
+ 	.open = ftrace_filter_open,
+ 	.read = seq_read,
+@@ -6377,6 +6411,9 @@ static __init int ftrace_init_dyn_tracefs(struct dentry *d_tracer)
+ 	trace_create_file("available_filter_functions", TRACE_MODE_READ,
+ 			d_tracer, NULL, &ftrace_avail_fops);
+ 
++	trace_create_file("available_filter_functions_addrs", TRACE_MODE_READ,
++			d_tracer, NULL, &ftrace_avail_addrs_fops);
++
+ 	trace_create_file("enabled_functions", TRACE_MODE_READ,
+ 			d_tracer, NULL, &ftrace_enabled_fops);
+ 
+-- 
+2.40.1
 
-@cdjrlc.com developers: I'm really, really fed up with you ignoring
-review comments. It seems like you have issues on your mail setup. Fix
-your mailer! Until then, I just say NAK.
-
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---+O3zIJTHyNTqGyBt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZIXEGQAKCRD2uYlJVVFO
-o7seAP9+215GHU5WZCA77cMwS1Iq2tmRXpMWMURenHy1HQmDPgD+I183rge40np6
-c189kL3vpaibaUYDbla/LnSryNu4oA0=
-=KrJv
------END PGP SIGNATURE-----
-
---+O3zIJTHyNTqGyBt--
