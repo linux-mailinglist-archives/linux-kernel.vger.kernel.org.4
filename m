@@ -2,103 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 580EC72B1C8
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 14:08:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3C672B1CF
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 14:16:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbjFKMIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 08:08:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44500 "EHLO
+        id S232331AbjFKMQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 08:16:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjFKMIN (ORCPT
+        with ESMTP id S230233AbjFKMQF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 08:08:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD22E62
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 05:07:32 -0700 (PDT)
+        Sun, 11 Jun 2023 08:16:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D3DE7F
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 05:15:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686485251;
+        s=mimecast20190719; t=1686485717;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Z58VfawEkG4AD4FrE9MS4o9GTQRETweAw7Z1P68bgdU=;
-        b=PIlc46waZZ9bDMD+5QuvQiFwIkX15xKC1CR+IPt8U0gcy2crQBj13nIXwWlzLTm1wH99wE
-        K9azLGQR6C2NYUCYida0l/bVC49k+YPeCXxVECUb/xhHoLNGE7PPAGvcMUTpu3qAbmrg4k
-        mhwG9T3k3I/vxdNF7cmjn/GZ4ZRkzGU=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-594-b8trKt-sOHyzgF95caVdHw-1; Sun, 11 Jun 2023 08:07:30 -0400
-X-MC-Unique: b8trKt-sOHyzgF95caVdHw-1
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-75f7a6e92a4so55300985a.1
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 05:07:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686485250; x=1689077250;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Z58VfawEkG4AD4FrE9MS4o9GTQRETweAw7Z1P68bgdU=;
-        b=BGmnXuIbWdo6JqpummUX5gm9euxVrIu777cuNhQVJfqC4QYYpDxlw71nukm+8AfxiK
-         +paGoVjpe2YDQfx47DRwpMryvq+FsAzyW29vstmaZypCghmjly3IYradM5fRR+m2zfi1
-         ejxgZRzKu1EXGTIzYomTk8mQs36RVKauwfLPaWANu4lCnUrBtdl+yGgzWoBv3cZQrmPj
-         PaOhOT61gAmhVdRwW3PrpjETkbIx67n1T68B7HQd1lzpRO75esaz54D/1SrH97pf5NHc
-         ZbjBCMPSgS9nrq4GXEBkgKbUJJKU75LMJughNAQ4NlJzjJDh3lWJkcj68E6lGbXj0CnW
-         ZTIg==
-X-Gm-Message-State: AC+VfDz5pW/bwcwbK4BK5KZjJMzhdcBh8levtgZTH5zIvgML0XwyNjaW
-        +URVBj9cz8ROyIdSMTQsiLk/p3Fxr6OCMRD2jpniUwXhrb85QbpaLAEbRuKFumqgYmGMkcw5XxW
-        UqNb7u6GvEid+i0UmHndOmSaO
-X-Received: by 2002:a05:620a:8c16:b0:760:6d74:a95c with SMTP id qz22-20020a05620a8c1600b007606d74a95cmr2209843qkn.7.1686485250032;
-        Sun, 11 Jun 2023 05:07:30 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4bTsDwNHB0IlcStpaPGm7hD7NA2xjS6QujfNDUCS2WY21LjWZpujWvGqCwrwojYV04SAzHkQ==
-X-Received: by 2002:a05:620a:8c16:b0:760:6d74:a95c with SMTP id qz22-20020a05620a8c1600b007606d74a95cmr2209829qkn.7.1686485249829;
-        Sun, 11 Jun 2023 05:07:29 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id y1-20020a37e301000000b00759495bb52fsm2208898qki.39.2023.06.11.05.07.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jun 2023 05:07:29 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] sysctl: set variable sysctl_mount_point storage-class-specifier to static
-Date:   Sun, 11 Jun 2023 08:07:25 -0400
-Message-Id: <20230611120725.183182-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9hd3npbID10r5k6jMGmqFp5hgwno88O8I5Xi3MAI7ao=;
+        b=TVZ6008KX8Tx/bRDLLMLIh7eXygB/B0SU4KpFFXqp9rr8rfdNjPoKLJudrWBqg+E8LVUFm
+        mw5QfhqweUZtuSirz0Tm6weW08iSFDdeNwu1tnxbIGYRfZ7Dzxl0Jz4q9ebyhJFcE3flG8
+        NOc/j05ST18JDjKfqNyIRtXdNVxzi6o=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-519-adM4VlXgM1CNEOmtz42UUQ-1; Sun, 11 Jun 2023 08:15:12 -0400
+X-MC-Unique: adM4VlXgM1CNEOmtz42UUQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4CA9B8002BF;
+        Sun, 11 Jun 2023 12:15:12 +0000 (UTC)
+Received: from localhost (ovpn-12-34.pek2.redhat.com [10.72.12.34])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8810740CFD01;
+        Sun, 11 Jun 2023 12:15:11 +0000 (UTC)
+Date:   Sun, 11 Jun 2023 20:15:07 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
+        horms@kernel.org, thunder.leizhen@huawei.com,
+        John.p.donnelly@oracle.com, kexec@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v6 0/2] arm64: kdump: simplify the reservation behaviour
+ of crashkernel=,high
+Message-ID: <ZIW6y9IK+pqMSfoc@MiWiFi-R3L-srv>
+References: <20230515060259.830662-1-bhe@redhat.com>
+ <168633894002.3180904.11323833556978641615.b4-ty@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <168633894002.3180904.11323833556978641615.b4-ty@arm.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-smatch reports
-fs/proc/proc_sysctl.c:32:18: warning: symbol
-  'sysctl_mount_point' was not declared. Should it be static?
+Hi Catalin,
 
-This variable is only used in its defining file, so it should be static.
+On 06/09/23 at 08:30pm, Catalin Marinas wrote:
+> On Mon, 15 May 2023 14:02:57 +0800, Baoquan He wrote:
+> > In v5 patch, Catalin helped review and acked the patch. However, an
+> > uninitialized local varilable is warned out by static checker when Will
+> > tried to merge the patch. And Will complained the code flow in
+> > reserve_crashkernel() is hard to follow, required to refactor. While
+> > when I tried to do the refactory, I feel it's not easy, the existing
+> > several cases causes that.
+> > 
+> > [...]
+> 
+> Applied to arm64 (for-next/kdump).
+> 
+> I reworte some of the paragraphs in the documentation patch, removed
+> some sentences to make it easier to read (some details were pretty
+> obvious). Please have a look, if you think I missed something important,
+> just send a patch on top. Thanks.
+> 
+> [1/2] arm64: kdump: simplify the reservation behaviour of crashkernel=,high
+>       https://git.kernel.org/arm64/c/6c4dcaddbd36
+> [2/2] Documentation: add kdump.rst to present crashkernel reservation on arm64
+>       https://git.kernel.org/arm64/c/03dc0e05407f
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- fs/proc/proc_sysctl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Could you help add below code change into the document patch commit? I
+forgot adding it and got warning report from lkp test robot.
 
-diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
-index 2715e6114933..67872cbc0517 100644
---- a/fs/proc/proc_sysctl.c
-+++ b/fs/proc/proc_sysctl.c
-@@ -29,7 +29,7 @@ static const struct file_operations proc_sys_dir_file_operations;
- static const struct inode_operations proc_sys_dir_operations;
+https://lore.kernel.org/oe-kbuild-all/202306110549.ynH2Juok-lkp@intel.com/
+
+
+diff --git a/Documentation/arm64/index.rst b/Documentation/arm64/index.rst
+index ae21f8118830..dcfebddb6088 100644
+--- a/Documentation/arm64/index.rst
++++ b/Documentation/arm64/index.rst
+@@ -25,6 +25,7 @@ ARM64 Architecture
+     sve
+     tagged-address-abi
+     tagged-pointers
++    kdump
  
- /* Support for permanently empty directories */
--struct ctl_table sysctl_mount_point[] = {
-+static struct ctl_table sysctl_mount_point[] = {
- 	{.flags = SYSCTL_PERM_EMPTY_DIR }
- };
+     features
  
--- 
-2.27.0
 
