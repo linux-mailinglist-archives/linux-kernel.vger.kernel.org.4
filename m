@@ -2,90 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB08772AFCE
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 02:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2783572AFD1
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 02:37:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232347AbjFKAgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 20:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48660 "EHLO
+        id S233054AbjFKAhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 20:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230404AbjFKAgs (ORCPT
+        with ESMTP id S229622AbjFKAhb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 20:36:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7F1E1
-        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 17:36:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686443760;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=x89zI7MJ/ts8FOURhFSOQ5PbYCpR9HHm1ievjVbGHuc=;
-        b=iZ1znWdnOaUm/+fZMmbfx0FyuhpjDJbPzGAS0PViCOe1mpXWj8i+BPD1nc50Y3q/509qx7
-        dDadZBFVm2A0BdwzYZ/qwYZXlb7nhFcQSrwuPMRzhCZ50VGzg1BJggppD8T7nKCviXAZIs
-        aC7Z+gfnB1s9IxLxou8pw6SFByWq0rw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-205-Wf-VQU6rPy6HqqX_SbNZbg-1; Sat, 10 Jun 2023 20:35:59 -0400
-X-MC-Unique: Wf-VQU6rPy6HqqX_SbNZbg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8EAE1811E78;
-        Sun, 11 Jun 2023 00:35:58 +0000 (UTC)
-Received: from localhost (ovpn-12-34.pek2.redhat.com [10.72.12.34])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8E738140E956;
-        Sun, 11 Jun 2023 00:35:56 +0000 (UTC)
-Date:   Sun, 11 Jun 2023 08:35:52 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-        horms@kernel.org, thunder.leizhen@huawei.com,
-        John.p.donnelly@oracle.com, kexec@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v6 0/2] arm64: kdump: simplify the reservation behaviour
- of crashkernel=,high
-Message-ID: <ZIUW6Ho8Wfz5XoZV@MiWiFi-R3L-srv>
-References: <20230515060259.830662-1-bhe@redhat.com>
- <168633894002.3180904.11323833556978641615.b4-ty@arm.com>
+        Sat, 10 Jun 2023 20:37:31 -0400
+Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32A930F6;
+        Sat, 10 Jun 2023 17:37:29 -0700 (PDT)
+Received: from local
+        by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1q895E-0005Da-15;
+        Sun, 11 Jun 2023 00:37:28 +0000
+Date:   Sun, 11 Jun 2023 01:36:45 +0100
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sam Shih <Sam.Shih@mediatek.com>
+Subject: [PATCH net-next 4/8] net: ethernet: mtk_eth_soc: rely on num_devs
+ and remove MTK_MAC_COUNT
+Message-ID: <ZIUXHfzfA-QuyGuP@makrotopia.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <168633894002.3180904.11323833556978641615.b4-ty@arm.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/09/23 at 08:30pm, Catalin Marinas wrote:
-> On Mon, 15 May 2023 14:02:57 +0800, Baoquan He wrote:
-> > In v5 patch, Catalin helped review and acked the patch. However, an
-> > uninitialized local varilable is warned out by static checker when Will
-> > tried to merge the patch. And Will complained the code flow in
-> > reserve_crashkernel() is hard to follow, required to refactor. While
-> > when I tried to do the refactory, I feel it's not easy, the existing
-> > several cases causes that.
-> > 
-> > [...]
-> 
-> Applied to arm64 (for-next/kdump).
-> 
-> I reworte some of the paragraphs in the documentation patch, removed
-> some sentences to make it easier to read (some details were pretty
-> obvious). Please have a look, if you think I missed something important,
-> just send a patch on top. Thanks.
-> 
-> [1/2] arm64: kdump: simplify the reservation behaviour of crashkernel=,high
->       https://git.kernel.org/arm64/c/6c4dcaddbd36
-> [2/2] Documentation: add kdump.rst to present crashkernel reservation on arm64
->       https://git.kernel.org/arm64/c/03dc0e05407f
+From: Lorenzo Bianconi <lorenzo@kernel.org>
 
-Thanks a lot, Catalin. The rewriting looks great!
+Get rid of MTK_MAC_COUNT since it is a duplicated of eth->soc->num_devs.
+
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+---
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c | 28 ++++++++++-----------
+ drivers/net/ethernet/mediatek/mtk_eth_soc.h |  1 -
+ 2 files changed, 14 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+index f91b661379a94..45b6f85f0822c 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+@@ -963,7 +963,7 @@ static void mtk_stats_update(struct mtk_eth *eth)
+ {
+ 	int i;
+ 
+-	for (i = 0; i < MTK_MAC_COUNT; i++) {
++	for (i = 0; i < eth->soc->num_devs; i++) {
+ 		if (!eth->mac[i] || !eth->mac[i]->hw_stats)
+ 			continue;
+ 		if (spin_trylock(&eth->mac[i]->hw_stats->stats_lock)) {
+@@ -1468,7 +1468,7 @@ static int mtk_queue_stopped(struct mtk_eth *eth)
+ {
+ 	int i;
+ 
+-	for (i = 0; i < MTK_MAC_COUNT; i++) {
++	for (i = 0; i < eth->soc->num_devs; i++) {
+ 		if (!eth->netdev[i])
+ 			continue;
+ 		if (netif_queue_stopped(eth->netdev[i]))
+@@ -1482,7 +1482,7 @@ static void mtk_wake_queue(struct mtk_eth *eth)
+ {
+ 	int i;
+ 
+-	for (i = 0; i < MTK_MAC_COUNT; i++) {
++	for (i = 0; i < eth->soc->num_devs; i++) {
+ 		if (!eth->netdev[i])
+ 			continue;
+ 		netif_tx_wake_all_queues(eth->netdev[i]);
+@@ -1941,7 +1941,7 @@ static int mtk_poll_rx(struct napi_struct *napi, int budget,
+ 			 !(trxd.rxd4 & RX_DMA_SPECIAL_TAG))
+ 			mac = RX_DMA_GET_SPORT(trxd.rxd4) - 1;
+ 
+-		if (unlikely(mac < 0 || mac >= MTK_MAC_COUNT ||
++		if (unlikely(mac < 0 || mac >= eth->soc->num_devs ||
+ 			     !eth->netdev[mac]))
+ 			goto release_desc;
+ 
+@@ -2978,7 +2978,7 @@ static void mtk_dma_free(struct mtk_eth *eth)
+ 	const struct mtk_soc_data *soc = eth->soc;
+ 	int i;
+ 
+-	for (i = 0; i < MTK_MAC_COUNT; i++)
++	for (i = 0; i < soc->num_devs; i++)
+ 		if (eth->netdev[i])
+ 			netdev_reset_queue(eth->netdev[i]);
+ 	if (eth->scratch_ring) {
+@@ -3132,7 +3132,7 @@ static void mtk_gdm_config(struct mtk_eth *eth, u32 config)
+ 	if (MTK_HAS_CAPS(eth->soc->caps, MTK_SOC_MT7628))
+ 		return;
+ 
+-	for (i = 0; i < MTK_MAC_COUNT; i++) {
++	for (i = 0; i < eth->soc->num_devs; i++) {
+ 		u32 val = mtk_r32(eth, MTK_GDMA_FWD_CFG(i));
+ 
+ 		/* default setup the forward port to send frame to PDMA */
+@@ -3745,7 +3745,7 @@ static int mtk_hw_init(struct mtk_eth *eth, bool reset)
+ 	 * up with the more appropriate value when mtk_mac_config call is being
+ 	 * invoked.
+ 	 */
+-	for (i = 0; i < MTK_MAC_COUNT; i++) {
++	for (i = 0; i < eth->soc->num_devs; i++) {
+ 		struct net_device *dev = eth->netdev[i];
+ 
+ 		mtk_w32(eth, MAC_MCR_FORCE_LINK_DOWN, MTK_MAC_MCR(i));
+@@ -3950,7 +3950,7 @@ static void mtk_pending_work(struct work_struct *work)
+ 	mtk_prepare_for_reset(eth);
+ 
+ 	/* stop all devices to make sure that dma is properly shut down */
+-	for (i = 0; i < MTK_MAC_COUNT; i++) {
++	for (i = 0; i < eth->soc->num_devs; i++) {
+ 		if (!eth->netdev[i] || !netif_running(eth->netdev[i]))
+ 			continue;
+ 
+@@ -3966,7 +3966,7 @@ static void mtk_pending_work(struct work_struct *work)
+ 	mtk_hw_init(eth, true);
+ 
+ 	/* restart DMA and enable IRQs */
+-	for (i = 0; i < MTK_MAC_COUNT; i++) {
++	for (i = 0; i < eth->soc->num_devs; i++) {
+ 		if (!test_bit(i, &restart))
+ 			continue;
+ 
+@@ -3994,7 +3994,7 @@ static int mtk_free_dev(struct mtk_eth *eth)
+ {
+ 	int i;
+ 
+-	for (i = 0; i < MTK_MAC_COUNT; i++) {
++	for (i = 0; i < eth->soc->num_devs; i++) {
+ 		if (!eth->netdev[i])
+ 			continue;
+ 		free_netdev(eth->netdev[i]);
+@@ -4013,7 +4013,7 @@ static int mtk_unreg_dev(struct mtk_eth *eth)
+ {
+ 	int i;
+ 
+-	for (i = 0; i < MTK_MAC_COUNT; i++) {
++	for (i = 0; i < eth->soc->num_devs; i++) {
+ 		struct mtk_mac *mac;
+ 		if (!eth->netdev[i])
+ 			continue;
+@@ -4319,7 +4319,7 @@ static int mtk_add_mac(struct mtk_eth *eth, struct device_node *np)
+ 	}
+ 
+ 	id = be32_to_cpup(_id);
+-	if (id >= MTK_MAC_COUNT) {
++	if (id >= eth->soc->num_devs) {
+ 		dev_err(eth->dev, "%d is not a valid mac id\n", id);
+ 		return -EINVAL;
+ 	}
+@@ -4464,7 +4464,7 @@ void mtk_eth_set_dma_device(struct mtk_eth *eth, struct device *dma_dev)
+ 
+ 	rtnl_lock();
+ 
+-	for (i = 0; i < MTK_MAC_COUNT; i++) {
++	for (i = 0; i < eth->soc->num_devs; i++) {
+ 		dev = eth->netdev[i];
+ 
+ 		if (!dev || !(dev->flags & IFF_UP))
+@@ -4788,7 +4788,7 @@ static int mtk_remove(struct platform_device *pdev)
+ 	int i;
+ 
+ 	/* stop all devices to make sure that dma is properly shut down */
+-	for (i = 0; i < MTK_MAC_COUNT; i++) {
++	for (i = 0; i < eth->soc->num_devs; i++) {
+ 		if (!eth->netdev[i])
+ 			continue;
+ 		mtk_stop(eth->netdev[i]);
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+index 62981e00be7e7..2af7e46cadcbb 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+@@ -33,7 +33,6 @@
+ #define MTK_TX_DMA_BUF_LEN_V2	0xffff
+ #define MTK_QDMA_RING_SIZE	2048
+ #define MTK_DMA_SIZE		512
+-#define MTK_MAC_COUNT		2
+ #define MTK_RX_ETH_HLEN		(ETH_HLEN + ETH_FCS_LEN)
+ #define MTK_RX_HLEN		(NET_SKB_PAD + MTK_RX_ETH_HLEN + NET_IP_ALIGN)
+ #define MTK_DMA_DUMMY_DESC	0xffffffff
+-- 
+2.41.0
 
