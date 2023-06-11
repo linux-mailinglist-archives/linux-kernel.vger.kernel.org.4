@@ -2,107 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C970B72AFF6
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 03:59:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFCB572AFFA
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 04:02:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231171AbjFKB7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 21:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56802 "EHLO
+        id S231287AbjFKCCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 22:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjFKB7U (ORCPT
+        with ESMTP id S231325AbjFKCCL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 21:59:20 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D087CD9;
-        Sat, 10 Jun 2023 18:59:18 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b1afe57bdfso35244661fa.0;
-        Sat, 10 Jun 2023 18:59:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686448757; x=1689040757;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=LYs5rPa9oP57vlaop+owTExqq9+WAq3Isnwpx5mzptM=;
-        b=HW0T0k3XyB/TIhFtLRhqSaarGDJoXGHAAgFtPMcBHbX7mvZTEufbs6azhF0h9s7Uss
-         uuWsjOeMEaYoTDBuiAtUyPsMg4PigUKVoDolYpGWM+eZB9jnjOVas7Xoah331Xh4tcuH
-         0+W5BiDS9wbYzilMO+Gb7yehs+0k55hTMSLqnO7WNh1yqPn5yZYQKdVBO3D0nd6mEe+c
-         hLB02V2VKyevA/cV/se2m706JIdTZN1WJaXqXTYmN5ReARxhV0JtqzBRXjtjBc6a9pv/
-         HnFoSdhXK/4Bmdxq9L0VRyMMam1sPY6gbDwlPjBpQ5QaRh89bPw6Xq78zRBNKRragbpn
-         SSzg==
+        Sat, 10 Jun 2023 22:02:11 -0400
+Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7997B19BB
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 19:02:08 -0700 (PDT)
+Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-33fddc27743so8524735ab.3
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 19:02:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686448757; x=1689040757;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LYs5rPa9oP57vlaop+owTExqq9+WAq3Isnwpx5mzptM=;
-        b=T3D6zMc0IsM2fSdc0kviumLdOXW8zv/mlBa7w1PiYHX16x6eq8UGZfE696sjz9KBfH
-         1ZYCSGoCrA4p56cMwDsvAIcvRq0LhbFeF21SXtmdpgnvv2G03tvDCWS100jaVuVSd438
-         jUEOzgFNlx7h7aJ2kAgghL0PCloatyu9q6pkY4920Ru/o26boSfzE3COtiNSwgzWAMMx
-         nh2dI41N4XqsjvVisaICLSdRtEOsTXHM+N08Qnqk1a7+usnelV9aUIqovZplZjeYLFEc
-         EpDUIAKpo/b+wRHkYA93TEsdKPrzmTpNXmMXLokGY28Bk/no4mSRWqrjwTg8NNtuJiP4
-         LgGQ==
-X-Gm-Message-State: AC+VfDyTyxO/4WfLIUs0C4NQmgCPiGvtMMdUrqyYzMKycw41jjeidKVe
-        8pbacbIH1uE8uwylNmCyUmm5LpzNbBYlF92q0KPnfGUvrTaqKA==
-X-Google-Smtp-Source: ACHHUZ5rWtll5ZRcBCEkIjsZYMx/SS+KmkNfmQkBVuC5FyWlRJQNE592UCLssDqUCOoc8iTizKA4GV2ZwMo4gIp1Sqk=
-X-Received: by 2002:ac2:4985:0:b0:4f3:a485:919a with SMTP id
- f5-20020ac24985000000b004f3a485919amr2188425lfl.57.1686448756747; Sat, 10 Jun
- 2023 18:59:16 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686448928; x=1689040928;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FpII4Bfe57dn9nuKVaPGfYaTqGD4QFjQiwpbINU+W+8=;
+        b=GsMawo/79WlEndopqVMpKD1E+i2+gpYYIiBLGcE4GKwefxxLkZ4Qm06S0yB1KUvlsr
+         F1X4w49KOy9CyVuKsKhZPwKRLtXic+2o3vtaIfHvOIV6KhBSBOOieNeDfKGIbqAzaQPa
+         Kv6VIvvoiNLv2aqsqj1sDnspOgFbzumTKMfrHxtqqZU5MdtefKa3GGupmzBasYtRlb0Z
+         cCD3e9o1UppZJ+xJUmUX+ULzUHuzYSfzaYpk7u/BLn1MnjPIkfAmIaHiufbSY0C3gxlo
+         791PnoDnU35soQJctOuWdNvuWi0Bwsv1ly5eCEPWKEqNF9hKyE6aVu54qXiFV3ymSVJY
+         R11w==
+X-Gm-Message-State: AC+VfDykILiUGRwJ7jAeB/bcqcwmOdmwIkBqMOgDcpMyBVSY8fLFusTF
+        ptOwoHEk7RDANV0CVnWecz87S+FKtTsCeGO41heFVNYRZmhN
+X-Google-Smtp-Source: ACHHUZ5iWhJhLL+4nWkhhe23qDyFivueyJlcUSIdHpk2meCQJSr6USy+PIt1IMOZAL3RLrA4om5BggrM/Hr9MWFzYWOssS9tr93R
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Sat, 10 Jun 2023 20:59:05 -0500
-Message-ID: <CAH2r5msURVv3pndri8KF4iL74L8PJjMO6Rd7sWDuLanpmmRffg@mail.gmail.com>
-Subject: [GIT PULL] ksmbd server fixes
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Namjae Jeon <linkinjeon@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>
+X-Received: by 2002:a92:ce04:0:b0:335:908b:8f9 with SMTP id
+ b4-20020a92ce04000000b00335908b08f9mr2481753ilo.1.1686448927847; Sat, 10 Jun
+ 2023 19:02:07 -0700 (PDT)
+Date:   Sat, 10 Jun 2023 19:02:07 -0700
+In-Reply-To: <000000000000e55d2005fd59d6c9@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000046becb05fdd0fdef@google.com>
+Subject: Re: [syzbot] [ext4?] WARNING: locking bug in ext4_move_extents
+From:   syzbot <syzbot+7f4a6f7f7051474e40ad@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please pull the following changes since commit
-8828003759391029fc45c15ac346622cdae19b6d:
+syzbot has found a reproducer for the following issue on:
 
-  Merge tag '6.4-rc4-smb3-server-fixes' of git://git.samba.org/ksmbd
-(2023-06-01 08:27:34 -0400)
+HEAD commit:    d8b213732169 Merge branch 'for-next/core', remote-tracking..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=15e74543280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=bd4213541e5ab26f
+dashboard link: https://syzkaller.appspot.com/bug?extid=7f4a6f7f7051474e40ad
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=139801f1280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17a928ab280000
 
-are available in the Git repository at:
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/3d15de852c90/disk-d8b21373.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/ca6234ed6efc/vmlinux-d8b21373.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/0fc706ec33bb/Image-d8b21373.gz.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/a5ab37037d85/mount_0.gz
 
-  git://git.samba.org/ksmbd.git tags/6.4-rc5-smb3-server-fixes
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+7f4a6f7f7051474e40ad@syzkaller.appspotmail.com
 
-for you to fetch changes up to 1c1bcf2d3ea061613119b534f57507c377df20f9:
+loop0: detected capacity change from 0 to 512
+------------[ cut here ]------------
+Looking for class "&ei->i_data_sem" with key init_once.__key.775, but found a different class "&ei->i_data_sem" with the same key
+WARNING: CPU: 0 PID: 6198 at kernel/locking/lockdep.c:941 look_up_lock_class+0xec/0x158 kernel/locking/lockdep.c:938
+Modules linked in:
+CPU: 0 PID: 6198 Comm: syz-executor258 Not tainted 6.4.0-rc5-syzkaller-gd8b213732169 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
+pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : look_up_lock_class+0xec/0x158 kernel/locking/lockdep.c:938
+lr : look_up_lock_class+0xec/0x158 kernel/locking/lockdep.c:938
+sp : ffff800097187040
+x29: ffff800097187040 x28: dfff800000000000 x27: ffff800080edb4a4
+x26: ffff80009222c6e0 x25: ffff80009222c000 x24: 0000000000000000
+x23: 0000000000000000 x22: 0000000000000000 x21: ffff8000923bfc61
+x20: ffff0000e0293488 x19: ffff800090e7b1c0 x18: 0000000000000000
+x17: 0000000000000000 x16: ffff80008a43bfbc x15: 0000000000000002
+x14: 0000000000000000 x13: 0000000000000001 x12: 0000000000000001
+x11: 0000000000000000 x10: 0000000000000000 x9 : 5933e84718dc2000
+x8 : 5933e84718dc2000 x7 : 0000000000000001 x6 : 0000000000000001
+x5 : ffff800097186938 x4 : ffff80008df9ee80 x3 : ffff8000805974f4
+x2 : 0000000000000001 x1 : 0000000100000000 x0 : 0000000000000000
+Call trace:
+ look_up_lock_class+0xec/0x158 kernel/locking/lockdep.c:938
+ register_lock_class+0x8c/0x6a4 kernel/locking/lockdep.c:1290
+ __lock_acquire+0x184/0x7604 kernel/locking/lockdep.c:4965
+ lock_acquire+0x23c/0x71c kernel/locking/lockdep.c:5705
+ down_write_nested+0x58/0xcc kernel/locking/rwsem.c:1689
+ ext4_double_down_write_data_sem+0x3c/0x4c
+ ext4_move_extents+0x2b0/0xb44 fs/ext4/move_extent.c:621
+ __ext4_ioctl fs/ext4/ioctl.c:1352 [inline]
+ ext4_ioctl+0x3eb4/0x6910 fs/ext4/ioctl.c:1608
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __arm64_sys_ioctl+0x14c/0x1c8 fs/ioctl.c:856
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
+ el0_svc_common+0x138/0x244 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:191
+ el0_svc+0x4c/0x160 arch/arm64/kernel/entry-common.c:647
+ el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:665
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+irq event stamp: 6053
+hardirqs last  enabled at (6053): [<ffff80008099851c>] kasan_quarantine_put+0x1a0/0x1c8 mm/kasan/quarantine.c:240
+hardirqs last disabled at (6052): [<ffff8000809983b4>] kasan_quarantine_put+0x38/0x1c8 mm/kasan/quarantine.c:213
+softirqs last  enabled at (4378): [<ffff80008003437c>] local_bh_enable+0x10/0x34 include/linux/bottom_half.h:32
+softirqs last disabled at (4376): [<ffff800080034348>] local_bh_disable+0x10/0x34 include/linux/bottom_half.h:19
+---[ end trace 0000000000000000 ]---
 
-  ksmbd: validate smb request protocol id (2023-06-02 12:30:57 -0500)
 
-----------------------------------------------------------------
-Five smb3 server fixes, all also for stable
-- Fix four slab out of bounds warnings: improve checks for protocol id,
-   and for small packet length, and for create context parsing,
-   and for negotiate context parsing
-- Fix for incorrect dereferencing POSIX ACLs
-----------------------------------------------------------------
-Namjae Jeon (5):
-      ksmbd: fix out-of-bound read in deassemble_neg_contexts()
-      ksmbd: fix out-of-bound read in parse_lease_state()
-      ksmbd: fix posix_acls and acls dereferencing possible ERR_PTR()
-      ksmbd: check the validation of pdu_size in ksmbd_conn_handler_loop
-      ksmbd: validate smb request protocol id
-
- fs/smb/server/connection.c | 17 +++++++++++++++--
- fs/smb/server/oplock.c     | 66
-++++++++++++++++++++++++------------------------------------------
- fs/smb/server/smb2pdu.c    | 13 ++++++-------
- fs/smb/server/smb_common.c | 14 +++++++++++++-
- fs/smb/server/smbacl.c     |  4 ++--
- fs/smb/server/vfs.c        |  4 ++--
- 6 files changed, 62 insertions(+), 56 deletions(-)
-
--- 
-Thanks,
-
-Steve
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
