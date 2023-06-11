@@ -2,86 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AC1772B38A
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 21:13:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4FD972B39A
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 21:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233220AbjFKTNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 15:13:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36192 "EHLO
+        id S233504AbjFKTUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 15:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232029AbjFKTNi (ORCPT
+        with ESMTP id S232867AbjFKTUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 15:13:38 -0400
-Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897F6E42
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 12:13:37 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id 8QVJqgYTgW2Gf8QVJqB8l3; Sun, 11 Jun 2023 21:13:34 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1686510815;
-        bh=NLTw50Pn4eT2DY2L6hTAarrtdXqxHwq7g+N+LBxyYtc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=TeGZr7jAtdK7gqHvAhiQjrhvp/T/8uvQUb+4u9f1FwbIxAk37RtmHhsH6kYNi31Xm
-         ErgYLXOxy6xy6fFDAjOYN5HcpR6HNFoF2gnJDUD3Y4jXkfFliL0PHUst53UmJWZsS3
-         0T6KQtE/WjQpPY3ZglloXWPn89s2gXDA76OqFXiM1QuvGE1giDf97qm9+SeIPmRvLO
-         JGEYS1HUdWFLjf0+1P26WA7Ghe/PoRD2i0TiTvdYm/qUL2mObdBD7921yqOpltcBYU
-         eLVlqj5Klrv8HGUucMcqojrswD5hS0HhmVSp7k9y2tK5PBMJjgMpDq2bYOMGjNAr+5
-         5hn7j8h4YRWVA==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 11 Jun 2023 21:13:34 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <8a52595f-085b-3b68-0082-e9f9487dd331@wanadoo.fr>
-Date:   Sun, 11 Jun 2023 21:13:33 +0200
+        Sun, 11 Jun 2023 15:20:13 -0400
+Received: from post.baikalelectronics.com (post.baikalelectronics.com [213.79.110.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2E149E50;
+        Sun, 11 Jun 2023 12:20:10 -0700 (PDT)
+Received: from post.baikalelectronics.com (localhost.localdomain [127.0.0.1])
+        by post.baikalelectronics.com (Proxmox) with ESMTP id CE488E0DEA;
+        Sun, 11 Jun 2023 22:20:07 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        baikalelectronics.ru; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:from:from:message-id
+        :mime-version:reply-to:subject:subject:to:to; s=post; bh=AEHa2HO
+        GkDZaz3vpyrLYDX9p9lIkpfLjV3yOJPAIFJc=; b=AKJKFy0ALt57GSNVv8LB4hB
+        p75XMiW/Jd4ycD2ZrB4v7sJuZnixEjP2bAUQk6PzAh8x2R9LKyg4zlChvYyXE2vD
+        ZvmUNG0Xw53lfQm9fmjexKLWh1jBkhQK+CtqIBCGQ9BdEu2MZqOVesDrSSS5xLRR
+        B4fjtYW0OsmI08CivD04=
+Received: from mail.baikal.int (mail.baikal.int [192.168.51.25])
+        by post.baikalelectronics.com (Proxmox) with ESMTP id 98F6CE0DE3;
+        Sun, 11 Jun 2023 22:20:07 +0300 (MSK)
+Received: from localhost (10.8.30.10) by mail (192.168.51.25) with Microsoft
+ SMTP Server (TLS) id 15.0.1395.4; Sun, 11 Jun 2023 22:20:07 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Rob Herring <robh@kernel.org>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH RESEND v7 00/11] PCI: dwc: Relatively simple fixes and cleanups
+Date:   Sun, 11 Jun 2023 22:19:54 +0300
+Message-ID: <20230611192005.25636-1-Sergey.Semin@baikalelectronics.ru>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/2] hid-mcp2200 - updated hid-id.h
-Content-Language: fr, en-US
-To:     Johannes Roith <johannes@gnu-linux.rocks>, jikos@kernel.org
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230611164811.1388-1-johannes@gnu-linux.rocks>
- <20230611164811.1388-2-johannes@gnu-linux.rocks>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20230611164811.1388-2-johannes@gnu-linux.rocks>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.8.30.10]
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 11/06/2023 à 18:48, Johannes Roith a écrit :
-> Added Product ID for Microchip MCP2200 so the module can be compiled
-> correctly.
-> 
-> Signed-off-by: Johannes Roith <johannes@gnu-linux.rocks>
-> 
-> diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-> index 5d29abac2300..b48cb8224e0d 100644
-> --- a/drivers/hid/hid-ids.h
-> +++ b/drivers/hid/hid-ids.h
-> @@ -912,6 +912,7 @@
->   #define USB_DEVICE_ID_PICK16F1454_V2	0xf2f7
->   #define USB_DEVICE_ID_LUXAFOR		0xf372
->   #define USB_DEVICE_ID_MCP2221		0x00dd
-> +#define USB_DEVICE_ID_MCP2221		0x00df
+It turns out the recent DW PCIe-related patchset was merged in with
+several relatively trivial issues left unsettled (noted by Bjorn and
+Manivannan). All of these lefovers have been fixed in this patchset.
+Namely the series starts with two bug-fixes. The first one concerns the
+improper link-mode initialization in case if the CDM-check is enabled. The
+second unfortunate mistake I made in the IP-core version type helper. In
+particular instead of testing the IP-core version type the macro function
+referred to the just IP-core version which obviously wasn't what I
+intended.
 
-2 times USB_DEVICE_ID_MCP2221 with different values?
-USB_DEVICE_ID_MCP2200?
+Afterwards two @Mani-noted fixes follow. Firstly the dma-ranges related warning
+message is fixed to start with "DMA-ranges" word instead of "Dma-ranges".
+Secondly the Baikal-T1 PCIe Host driver is converted to perform the
+asynchronous probe type which saved us of about 15% of bootup time if no any
+PCIe peripheral device attached to the port.
 
-Also this one should be merged with patch 1/2 or sent before the other 
-one, otherwise  1/2 can't compile.
+Then the patchset contains the Baikal-T1 PCIe driver fix. The
+corresponding patch removes the false error message printed during the
+controller probe procedure. I accidentally added the unconditional
+dev_err_probe() method invocation. It was obviously wrong.
 
-CJ
+Then two trivial cleanups are introduced. The first one concerns the
+duplicated fast-link-mode flag unsetting. The second one implies
+dropping a redundant empty line from the dw_pcie_link_set_max_speed()
+function.
 
->   
->   #define USB_VENDOR_ID_MICROSOFT		0x045e
->   #define USB_DEVICE_ID_SIDEWINDER_GV	0x003b
+The series continues with a patch inspired by the last @Bjorn note
+regarding the generic resources request interface. As @Bjorn correctly
+said it would be nice to have the new interface used wider in the DW PCIe
+subsystem. Aside with the Baikal-T1 PCIe Host driver the Toshiba Visconti
+PCIe driver can be easily converted to using the generic clock names.
+That's what is done in the noted patch.
+
+The patchset is closed with a series of MAINTAINERS-list related patches.
+Firstly after getting the DW PCIe RP/EP DT-schemas refactored I forgot to
+update the MAINTAINER-list with the new files added in the framework of
+that procedure. All the snps,dw-pcie* schemas shall be maintained by the
+DW PCIe core driver maintainers. Secondly seeing how long it took for my
+patchsets to review and not having any comments from the original driver
+maintainers I'd suggest to add myself as the reviewer of the DW PCIe
+driver. Thus hopefully the new updates review process will be performed
+with much less latencies. For the same reason @Manivannan is added to the
+maintainers list of the DW PCIe/eDMA drivers as he already agreed to be
+in.
+
+Link: https://lore.kernel.org/linux-pci/20230217093956.27126-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v2:
+- Rebase onto the kernel 6.3-rc2.
+
+Link: https://lore.kernel.org/linux-pci/20230313200816.30105-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v3:
+- Drop the patch:
+  [PATCH v2 01/11] PCI: dwc: Fix port link CSR improper init if CDM check enabled
+  and rebase onto the already submitted by @Yoshihiro fix:
+  commit cdce67099117 ("PCI: dwc: Fix PORT_LINK_CONTROL update when CDM check enabled")
+- Just resend.
+
+Link: https://lore.kernel.org/linux-pci/20230411033928.30397-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v4:
+- Demote @Gustavo to being DW PCIe/eDMA drivers reviewer:
+  [PATCH v4 9/14] MAINTAINERS: Demote Gustavo Pimentel to DW PCIe core reviewer
+  [PATCH v4 12/14] MAINTAINERS: Demote Gustavo Pimentel to DW EDMA driver reviewer
+- Add Manivannan to the DW PCIe/eDMA drivers maintainers list:
+  [PATCH v4 10/14] MAINTAINERS: Add Manivannan to DW PCIe core maintainers list
+  [PATCH v4 13/14] MAINTAINERS: Add Manivannan to DW eDMA driver maintainers list
+
+Link: https://lore.kernel.org/linux-pci/20230414021832.13167-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v5:
+- Rebase onto the kernel 6.4-rc1.
+- Just resend.
+
+Link: https://lore.kernel.org/linux-pci/20230511190902.28896-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v6:
+- Remove Vinod and DMA-engine mailing-list from Cc-list since the
+  DMA-related patches have already been merged in.
+- Drop the next patches:
+  [PATCH RESEND v5 12/14] MAINTAINERS: Demote Gustavo Pimentel to DW EDMA driver reviewer
+  [PATCH RESEND v5 13/14] MAINTAINERS: Add Manivannan to DW eDMA driver maintainers list
+  [PATCH RESEND v5 14/14] MAINTAINERS: Add myself as the DW eDMA driver reviewer
+  since they are in the dmeengine next git-branch already.
+- Just resend.
+
+Link: https://lore.kernel.org/linux-pci/20230531112602.7222-1-Sergey.Semin@baikalelectronics.ru/
+Changelog v7:
+- Just resend.
+
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: linux-pci@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (11):
+  PCI: dwc: Fix erroneous version type test helper
+  PCI: dwc: Fix inbound iATU entries out-of-bounds warning message
+  PCI: bt1: Enable async probe type
+  PCI: bt1: Fix printing false error message
+  PCI: dwc: Drop duplicated fast-link-mode flag unsetting
+  PCI: dwc: Drop empty line from dw_pcie_link_set_max_speed()
+  PCI: visconti: Convert to using generic resources getter
+  MAINTAINERS: Add all generic DW PCIe RP/EP DT-schemas
+  MAINTAINERS: Demote Gustavo Pimentel to DW PCIe core reviewer
+  MAINTAINERS: Add Manivannan to DW PCIe core maintainers list
+  MAINTAINERS: Add myself as the DW PCIe core reviewer
+
+ MAINTAINERS                                   |  7 ++--
+ drivers/pci/controller/dwc/pcie-bt1.c         |  5 ++-
+ .../pci/controller/dwc/pcie-designware-host.c |  2 +-
+ drivers/pci/controller/dwc/pcie-designware.c  |  2 -
+ drivers/pci/controller/dwc/pcie-designware.h  |  7 +++-
+ drivers/pci/controller/dwc/pcie-visconti.c    | 37 +++++++++----------
+ 6 files changed, 31 insertions(+), 29 deletions(-)
+
+-- 
+2.40.0
+
 
