@@ -2,216 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68B9E72B2ED
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 18:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A10572B2F0
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 19:03:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232158AbjFKQ7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 12:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41246 "EHLO
+        id S232359AbjFKRC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 13:02:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231786AbjFKQ7W (ORCPT
+        with ESMTP id S229523AbjFKRCz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 12:59:22 -0400
-Received: from sonic311-30.consmr.mail.ne1.yahoo.com (sonic311-30.consmr.mail.ne1.yahoo.com [66.163.188.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52285E5F
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 09:59:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1686502758; bh=7DgmiJ22fK35rNDSjxBWlZUyMsVle3zhBPTayVRxagg=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=WlZvjTDlFW8Dge+gd1tlpy2eF6YGB8TV+StzVBR2hJE/BRtRxfyBmqKc3NKdxVPLKPyraFh73Y2lj7lUvActlXW4TCpUvpN/lJW2eQXM+eEn5zDzwFz+8YLBfpIwp07/SKJwsGJW/6j9q5jex6YhnQW7mpiCFFbbqecgV+pX/P0l4KoGUmOtkoMGXnJrNu8B6ktjwGpPu28V7W4PHKkSI98QhYOoyTywvvTLdPr3VqRbRXDKgfXOz1Pp/W9KBPFuF6YHkQWJW5ZCz4eDXGOZsaX01WbtQg0ZbW+eyD0wPaDDk0z+ou3xQgU5Kkmb+PTe2RrGIaxDejdEGhK3BWqifQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1686502758; bh=Bw/LP1AfuaenQ0zxwdibPZAH47OgxOVjpM6yDDmmHlq=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=kTuxdssiPuuJVLxUsysBhWHXN741iK7E6F/z6tAU0gbyw1PSQNP9NzU8vfUcpMalhyOKJnYxmoS5UEE2nLOsxVphsIWCfF7UsAJdGEgV/kV6Z47mw95tihV88imwQTPWXddRid3c0cUK6E6ZXf23i/XOKTVtxLdQmtxylRKiZXQaZWdZ0AYlIcS7yCuE5SplkvtJ9OLJPM/P6agxIDt6e+iKg+PtBPOou27TqCR1mZFXnCcP5Y344flZPXqylvQMH6KbtnLydXFU1gMAmwT7kniHHCfxmSHxniTdw5eVxnhw6Z9penxfUzAf3qZbKnY51avh7pHBF1mqFG4vfrieHQ==
-X-YMail-OSG: L.q6DH0VM1msMV_aMf1IXTl60njTH76ZX6CVdR2rTZWI.fi02qwrRdqY7t4QlR1
- ybQ2_iK3wO4D7UWTz.N5phjZ1HItKaFA6hQxTQd5vdxSBpNG5FROpV3WHLRlTKqtfMabF_39zYTP
- QgINTZG2KsTjYcimAEHM7sdYT1LkXPIFH9uYOINBTz6h1mp8GwCcpr6Yz3Ou8MlTyrTH10f.AJ1y
- uy.BcA4UMZyePvzlu09foH1.XFr5Cd0Anm7nSYRbUMNQtq7LZa143YVnAuO6CEPOYJZtvj4jNifk
- xjHEDj2xA.2EJEguY5A2uvdewg9VGWVuthJkASGb.491SebqIZeXQSESaC8Ntw0JX1gITJLAyRZI
- J9edhZFO6mKVqtuMA3Tu1zv9KW.3Q4dQbi1R3bZx2KzsqciOF0h5ewwjN93CaNMtMpGSSx3tqM8V
- g9P6_pcxbayv8AmKpfzi_X_ls9YxsNCJ7GiO5mrWFCWRJVHxLbZ.Qz35YWnOMP6gX85sd1KfEDxz
- CmWDsffx.OuoVX_LWN1A2.5ZVqqu0soMrcRYg8nwyX8Gweg2_qIfnf6K8p8B3kemuyRLEZg6wjO3
- 8lQEaNe.VFNFz0MfgKzGy_fw7Ty.p64yGxFLaozv_EoJZiUbqjqHY3zwOB6uGe5jh.p.BQ2ai1n.
- 8eATLaZUNlhZVg95JMSe.rq.ZxLw0lcjt.SZI0HlPhHP198M6i4t4a_x6HJUjYPlWk.LpykgtQ52
- 3Cg0QiipDh3ECZizT7EeRiIxO9IJGFDrYIuVLXm.fyU2JKH8oJEB.QTFSsR3bufCa8OanuJEyua4
- ozEvxi6lUR0q1OnSeqFxIXU8zDbzBxm5grFrX3K4W7skzTeQHiOAy0eA0Wyoz7GfC7tddedtjuPi
- shJNBR_fZRNnk0bhVAKC7Puk7GCfOUl0sv8TyRAXYNf0MVR2mFmVlKE9p95tKtWNC4TqHbq66X27
- gXeuZuHRxPjRFrdmV0ceaVLtKFBzHkDRBOxmKCfMaQ_XBMByq2SWnoBYdK2uwuBCklqdi9A8e0Nb
- NUBsD7nrTZNlWaSvioq2uhfSndGvjKa4pa1.SfHjhxSXgKRlg2mqvZmQj2mvhGdPjZ2Kp2zg24Oq
- igHS8ZmstUvCvHWhjSta3Vc5kuGCs0mMD8ZAl0EWFYtaf02L819JZVPA02Bt33yUhlhgM7jTl2vK
- 0X_GVLKGxgYygpzEMDu.fHnN8fCxXFjQwr.2g61uKWE6EPXXmWANWI0NUXJmw8f0599yLmjgiCXJ
- .pvZFSrbyVPtwkMvEehaQnel2YHSguKIBn0kLbw0u7VXNjREKPva.vNxm1DBwZqFnm8ubTZSDO0n
- 53W2H8jQLOf8iqJlizrVE9HYomUx4AiPFEfHdXEHgkW23adrFoa0OcjX5JF_49FFm.np4Y3G9EW8
- OVfafyn0Yt45XcAo.uP7VpykJ.vo98IAd29SQzhlu0AzL79UApfkBA8tU1nMRX9WCrV8tMfAB.V.
- N29FFQoICyOLudadxWbaWZMvTOZqkfWDBGemHZ8mKo0d3Op7hql_kO8NxoacA80zeS9mANQap5id
- Husp6EjloTOB0krz8oUaoFL55AcQ_T4A58LTqx4nWMjXRKFD4iIvFX70RWLL8Agv4KXo7DSDMYt6
- D3rRJo_W3vCgt__nWkDPl9lvVNQh4B3VxB3hDa4tZadUilbaAfC6n5tNw0Y3GVig8uv8fQ7OQ3aB
- 561Jd90WctFNC1xjCzj34Q6Qvq9enQlmIOEnQC.ITxD68OkWImZ7ii_dysHEbaD.KM3wyJRKhJri
- 3sRhW6Zig0jRJ9y9azhr5CuT8KDN8ntRAJ8RXc3x0nlzvzFUNQN6NQG4ANRfzxLeQsNJ66HGgIqu
- fKRcfA8J0mFm4bPecTytSWc1mbQszd11iGx5gGqPgpSllh9drLBoJVxSDnSAe65_azhz3vePzl6L
- tU0eR6CqMv.mxjfV_PSO_nfXdHH6BcXa9rKv4K1AhBftf0wF9_CSEJT5eMXu6XoqE6hj1abYgc0o
- Rrw9SMzMF6l4g7IcTZprTG_ZweRiQWXBlLXcDIO9QxlKEJSK4P8RpYt3jZufHF_U5vJkYf5fRB3u
- arKsV2E3TQ8LPAmzQ9MAe75VlJBmMCoHXGlsMIK_vUAEZ5zaF8C6OhYBQGtyIRG4UErIn1iTYAgv
- _NXhUUjpdRSWdp9OIYNXiUuk4mhkvhcl2JsCibzONAT7lbHYl5cgIYsZl90BV8TcDLOocgDaagMJ
- yuJIUc_DfXEcLGKqL.BleUPUT3gSzMEdR4j6pPoqjl0GuSTtkQ3uLTSRdVvklNK3yFbNf_L9l9BU
- O2zuT.3LXlq2.sw--
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 3d22b0d8-f4f9-4c6a-a046-6dd8537797e8
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Sun, 11 Jun 2023 16:59:18 +0000
-Received: by hermes--production-ne1-574d4b7954-xz2cn (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 73c567dd6e3213e09855c459a66d5812;
-          Sun, 11 Jun 2023 16:59:16 +0000 (UTC)
-Message-ID: <c8dcb3b7-33ab-5ecc-ef11-0c42cd792934@schaufler-ca.com>
-Date:   Sun, 11 Jun 2023 09:59:14 -0700
+        Sun, 11 Jun 2023 13:02:55 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD046E63;
+        Sun, 11 Jun 2023 10:02:54 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-2565a9107d2so2156160a91.0;
+        Sun, 11 Jun 2023 10:02:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686502974; x=1689094974;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EoCFwrEB0vvlfmLLlOSHa+piSHoEJ5gC+VXcVkiTQ0k=;
+        b=krayJ6uwWRTtbE+7Im6rE8BILvjlU83+RJsF2E+i5TO24DrKvzg4cLPYe6UAVudvJ8
+         Be2XUpr50dZfqxq+LOLvv9voaaTYvIsg6bkamBtggLW6ii/ugONs6LrjqwErtfpqOTZa
+         PiwTlhvtsVOkTwGOF95n9BTuGmVuZ/MJq/BI0R7GDa/sBKqzfdgtfXydrZvP3/bSh3u+
+         0SQ3KVrZjregxi2kG0glbTc0ncBKCVBt96zHMk/rfQELMGG2OuroUJPWcS7u2VpQfCpu
+         rqn2MzxuGIhhukFWNxv8pKJQVHYExePFXwlDLZAHqGcqOa0kTkw7dis8k8fXXqDk+HNd
+         VrMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686502974; x=1689094974;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EoCFwrEB0vvlfmLLlOSHa+piSHoEJ5gC+VXcVkiTQ0k=;
+        b=cLxtBtVvbT+KYE7u6g+mKG2Re60ZMiS/vmpxv2falcbPESBqjXXfkwAVM6fq81BNZN
+         GqUT233km3758bdAeGduHwBpdi1aQjNA9Qb7ORN3eK6Ellm0khzlO5KX6OHBdZf+xHbM
+         mk9k1L6PXb7HUd9v2fXUaH80JPdz9ZE/Dgk+UtecgPJmzVCutGZfzFq5kfarHtSJUGQm
+         sOj9CAwJcLxPVyj8MpPEnbAY1fGU+LEmKOqrj+bG08M4Oi1p0JNAWvHMjG+lLZrW3+b6
+         Q27cIbQq2RedKz0vbsRfJ4b5Q2ZqYKnoWfqbDsQUdD+g3P/nGmploh2PUwsjYhTKIZAt
+         dKKA==
+X-Gm-Message-State: AC+VfDwoPaeqrytsT1Qb+ADCsUfrcpnuCysK4vSaj5Fe0YTwnPqa/t/+
+        uRsWlavSNOtwY5zXePUDGHptTCrlft7hDb7X/VI=
+X-Google-Smtp-Source: ACHHUZ7l+4TR3OHAvJEjzr3koYOCUElOXrpQlwUfhbtqoGZqePk86Nn0jhaQ0PWxIazQbuM4n3xcpXjQwvLY4Nidj6c=
+X-Received: by 2002:a17:90a:7565:b0:25b:ba0c:ab7c with SMTP id
+ q92-20020a17090a756500b0025bba0cab7cmr3444582pjk.27.1686502974159; Sun, 11
+ Jun 2023 10:02:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v12 2/4] smack: Set the SMACK64TRANSMUTE xattr in
- smack_inode_init_security()
-Content-Language: en-US
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org
-Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
-        nicolas.bouchinet@clip-os.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Casey Schaufler <casey@schaufler-ca.com>
-References: <20230610075738.3273764-1-roberto.sassu@huaweicloud.com>
- <20230610075738.3273764-3-roberto.sassu@huaweicloud.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20230610075738.3273764-3-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.21516 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230506195325.876871-1-aford173@gmail.com> <CAOMZO5AwixYybR1am=V4m1AnTkum+0Wn0xegU_y6Po9Y--G0mA@mail.gmail.com>
+In-Reply-To: <CAOMZO5AwixYybR1am=V4m1AnTkum+0Wn0xegU_y6Po9Y--G0mA@mail.gmail.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Sun, 11 Jun 2023 12:02:42 -0500
+Message-ID: <CAHCN7xLPKa2hrBMC1kaJkxVL9NC+c1TWgcQHMBPefnvxGPTCwQ@mail.gmail.com>
+Subject: Re: [PATCH] clk: imx: composite-8m: Add imx8m_divider_determine_rate
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     linux-clk@vger.kernel.org, aford@beaconembedded.com,
+        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/10/2023 12:57 AM, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
+On Tue, Jun 6, 2023 at 1:45=E2=80=AFPM Fabio Estevam <festevam@gmail.com> w=
+rote:
 >
-> With the newly added ability of LSMs to supply multiple xattrs, set
-> SMACK64TRASMUTE in smack_inode_init_security(), instead of d_instantiate().
-> Do it by incrementing SMACK_INODE_INIT_XATTRS to 2 and by calling
-> lsm_get_xattr_slot() a second time, if the transmuting conditions are met.
->
-> The LSM infrastructure passes all xattrs provided by LSMs to the
-> filesystems through the initxattrs() callback, so that filesystems can
-> store xattrs in the disk.
->
-> After the change, the SMK_INODE_TRANSMUTE inode flag is always set by
-> d_instantiate() after fetching SMACK64TRANSMUTE from the disk. Before it
-> was done by smack_inode_post_setxattr() as result of the __vfs_setxattr()
-> call.
->
-> Removing __vfs_setxattr() also prevents invalidating the EVM HMAC, by
-> adding a new xattr without checking and updating the existing HMAC.
->
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> On Sat, May 6, 2023 at 4:53=E2=80=AFPM Adam Ford <aford173@gmail.com> wro=
+te:
+> >
+> > Currently, certain clocks are derrived as a divider from their
+> > parent clock.  For some clocks, even when CLK_SET_RATE_PARENT
+> > is set, the parent clock is not properly set which can lead
+> > to some relatively inaccurate clock values.
+> >
 
-Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
++ Maxime
 
-> ---
->  security/smack/smack.h     |  2 +-
->  security/smack/smack_lsm.c | 45 ++++++++++++++++++++++++--------------
->  2 files changed, 29 insertions(+), 18 deletions(-)
+> > Unlike imx/clk-composite-93 and imx/clk-divider-gate, it
+> > cannot rely on calling a standard determine_rate function,
+> > because the 8m composite clocks have a pre-divider and
+> > post-divider. Because of this, a custom determine_rate
+> > function is necessary to determine the maximum clock
+> > division which is equivalent to pre-divider * the
+> > post-divider.
+> >
+> > With this added, the system can attempt to adjust the parent rate
+> > when the proper flags are set which can lead to a more precise clock
+> > value.
+> >
+> > On the imx8mplus, no clock changes are present.
+> > On the Mini and Nano, this can help achieve more accurate
+> > lcdif clocks. When trying to get a pixel clock of 31.500MHz
+> > on an imx8m Nano, the clocks divided the 594MHz down, but
+> > left the parent rate untouched which caused a calulation error.
+> >
+> > Before:
+> > video_pll              594000000
+> >   video_pll_bypass     594000000
+> >     video_pll_out      594000000
+> >       disp_pixel       31263158
+> >         disp_pixel_clk 31263158
+> >
+> > Variance =3D -236842 Hz
+> >
+> > After this patch:
+> > video_pll               31500000
+> >   video_pll_bypass      31500000
+> >     video_pll_out       31500000
+> >       disp_pixel        31500000
+> >         disp_pixel_clk  31500000
+> >
+> > Variance =3D 0 Hz
+> >
+> > All other clocks rates and parent were the same.
+> > Similar results on imx8mm were found.
+> >
+> > Fixes: 690dccc4a0bf ("Revert "clk: imx: composite-8m: Add support to de=
+termine_rate"")
+> > Signed-off-by: Adam Ford <aford173@gmail.com>
 >
-> diff --git a/security/smack/smack.h b/security/smack/smack.h
-> index aa15ff56ed6..041688e5a77 100644
-> --- a/security/smack/smack.h
-> +++ b/security/smack/smack.h
-> @@ -128,7 +128,7 @@ struct task_smack {
->  
->  #define	SMK_INODE_INSTANT	0x01	/* inode is instantiated */
->  #define	SMK_INODE_TRANSMUTE	0x02	/* directory is transmuting */
-> -#define	SMK_INODE_CHANGED	0x04	/* smack was transmuted */
-> +#define	SMK_INODE_CHANGED	0x04	/* smack was transmuted (unused) */
->  #define	SMK_INODE_IMPURE	0x08	/* involved in an impure transaction */
->  
->  /*
-> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-> index 25ade3819af..679156601a1 100644
-> --- a/security/smack/smack_lsm.c
-> +++ b/security/smack/smack_lsm.c
-> @@ -52,7 +52,14 @@
->  #define SMK_RECEIVING	1
->  #define SMK_SENDING	2
->  
-> -#define SMACK_INODE_INIT_XATTRS 1
-> +/*
-> + * Smack uses multiple xattrs.
-> + * SMACK64 - for access control,
-> + * SMACK64TRANSMUTE - label initialization,
-> + * Not saved on files - SMACK64IPIN and SMACK64IPOUT,
-> + * Must be set explicitly - SMACK64EXEC and SMACK64MMAP
-> + */
-> +#define SMACK_INODE_INIT_XATTRS 2
->  
->  #ifdef SMACK_IPV6_PORT_LABELING
->  static DEFINE_MUTEX(smack_ipv6_lock);
-> @@ -935,7 +942,6 @@ static int smack_inode_init_security(struct inode *inode, struct inode *dir,
->  				     struct xattr *xattrs, int *xattr_count)
->  {
->  	struct task_smack *tsp = smack_cred(current_cred());
-> -	struct inode_smack *issp = smack_inode(inode);
->  	struct smack_known *skp = smk_of_task(tsp);
->  	struct smack_known *isp = smk_of_inode(inode);
->  	struct smack_known *dsp = smk_of_inode(dir);
-> @@ -963,6 +969,8 @@ static int smack_inode_init_security(struct inode *inode, struct inode *dir,
->  		if ((tsp->smk_task == tsp->smk_transmuted) ||
->  		    (may > 0 && ((may & MAY_TRANSMUTE) != 0) &&
->  		     smk_inode_transmutable(dir))) {
-> +			struct xattr *xattr_transmute;
-> +
->  			/*
->  			 * The caller of smack_dentry_create_files_as()
->  			 * should have overridden the current cred, so the
-> @@ -971,7 +979,18 @@ static int smack_inode_init_security(struct inode *inode, struct inode *dir,
->  			 */
->  			if (tsp->smk_task != tsp->smk_transmuted)
->  				isp = dsp;
-> -			issp->smk_flags |= SMK_INODE_CHANGED;
-> +			xattr_transmute = lsm_get_xattr_slot(xattrs,
-> +							     xattr_count);
-> +			if (xattr_transmute) {
-> +				xattr_transmute->value = kmemdup(TRANS_TRUE,
-> +								 TRANS_TRUE_SIZE,
-> +								 GFP_NOFS);
-> +				if (!xattr_transmute->value)
-> +					return -ENOMEM;
-> +
-> +				xattr_transmute->value_len = TRANS_TRUE_SIZE;
-> +				xattr_transmute->name = XATTR_SMACK_TRANSMUTE;
-> +			}
->  		}
->  
->  		xattr->value = kstrdup(isp->smk_known, GFP_NOFS);
-> @@ -3518,20 +3537,12 @@ static void smack_d_instantiate(struct dentry *opt_dentry, struct inode *inode)
->  			 * If there is a transmute attribute on the
->  			 * directory mark the inode.
->  			 */
-> -			if (isp->smk_flags & SMK_INODE_CHANGED) {
-> -				isp->smk_flags &= ~SMK_INODE_CHANGED;
-> -				rc = __vfs_setxattr(&nop_mnt_idmap, dp, inode,
-> -					XATTR_NAME_SMACKTRANSMUTE,
-> -					TRANS_TRUE, TRANS_TRUE_SIZE,
-> -					0);
-> -			} else {
-> -				rc = __vfs_getxattr(dp, inode,
-> -					XATTR_NAME_SMACKTRANSMUTE, trattr,
-> -					TRANS_TRUE_SIZE);
-> -				if (rc >= 0 && strncmp(trattr, TRANS_TRUE,
-> -						       TRANS_TRUE_SIZE) != 0)
-> -					rc = -EINVAL;
-> -			}
-> +			rc = __vfs_getxattr(dp, inode,
-> +					    XATTR_NAME_SMACKTRANSMUTE, trattr,
-> +					    TRANS_TRUE_SIZE);
-> +			if (rc >= 0 && strncmp(trattr, TRANS_TRUE,
-> +					       TRANS_TRUE_SIZE) != 0)
-> +				rc = -EINVAL;
->  			if (rc >= 0)
->  				transflag = SMK_INODE_TRANSMUTE;
->  		}
+
+Peng / Abel,
+
+Any suggestions on how we can move this forward?  Looking at the
+clk-composite-8m driver, imx8m_clk_composite_compute_dividers uses the
+max values which is basically what my patch does.  There was some
+discussion about making determine_rate mandatory for muxes[1] and this
+patch should help with this in addition to making it easier to sync
+more video resolutions on the 8m Mini and Nano.
+
+adam
+[1] - https://www.spinics.net/lists/alsa-devel/msg157914.html
+
+
+> This works fine on my imx8mm-evk, so:
+>
+> Tested-by: Fabio Estevam <festevam@gmail.com>
