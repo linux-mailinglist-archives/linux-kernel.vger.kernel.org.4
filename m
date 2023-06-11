@@ -2,209 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 768AC72B3B3
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 21:34:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74F3D72B3B8
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 21:37:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233254AbjFKTeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 15:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42578 "EHLO
+        id S233712AbjFKThq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 15:37:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjFKTeS (ORCPT
+        with ESMTP id S232058AbjFKThp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 15:34:18 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 454F7D8;
-        Sun, 11 Jun 2023 12:34:17 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b1a6a8e851so41120661fa.2;
-        Sun, 11 Jun 2023 12:34:17 -0700 (PDT)
+        Sun, 11 Jun 2023 15:37:45 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF5B2126
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 12:37:43 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id ca18e2360f4ac-77acb944bdfso233176139f.0
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 12:37:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686512055; x=1689104055;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9dHzxGucEvO+WvWW2cMpLxl9/XblvFiP+Ut6gaJ/P94=;
-        b=E8ZXMspp23irl2US2pX2pXlZGYnzbHA9WwVwDTxaQJ+rxWNSqn9Hc0WblcfvQsWhUk
-         woTqgqasIn80VbYXtOqsh8II+lzQSITHdLmYvwysC+8HcEwa+QmxWPqASnOCbU6Bgrkw
-         4GO2gRzMT5jcbOcrFsULMEZwW3gW10KJW9meOM5pKQORW5qlMp6N5wuo4QmXsqoKg14a
-         byVMlwx8KmD6JyA307S5Nfudye4N44jXaqxI0Rtig4JPUUtXM0ZkMPjLDRKcYHNofc8P
-         b5ihXVhPjf0bXioJWhpBjwO30pE1tQ/ntjm8b/kWHh27hKKEHweQxo8aVHfUh2bgeOGg
-         Jg0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686512055; x=1689104055;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1686512263; x=1689104263;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9dHzxGucEvO+WvWW2cMpLxl9/XblvFiP+Ut6gaJ/P94=;
-        b=XSFJ5xVOGmVyVZPNzUHxu1zVWjoTlesG6woEKLwFVRLhEiDUDhHoaH6G4E7RvqQWke
-         qCHxs5GCXzvDUR/gRzKhNrV61nRXuxuHA/tISZChONt3GL/sKkdfC6hfWNfrxfekp5Jw
-         ub38nfk8aXvRbpy9psjdqJd3jxmLS/pqnOkxuPcRwktBu5+Puf2qufQTp+EMQgodcQeo
-         /NMxe5GHudu+z73imebjjSX5t5x+d6aQLXdzXJzT6bgcPGpuRIu9yMHbKopVBGFGsq/E
-         pQPR7bRGIwXjN0G0oUDxhBIqkAB2slr95vsqaVSWDwnA9xmInlEtRhT9IG1C0kOmdcRz
-         6H1Q==
-X-Gm-Message-State: AC+VfDzcUpDgBQSXvj386gcuhM1XsYYC75JFJLmM8bHhnXLlws9Xf+P5
-        LNVgLUKbI7c3RfDUBK082bc=
-X-Google-Smtp-Source: ACHHUZ51U6QbOA8QM1YWM2eU3q4QiFEfFoY/F2BvlQIXNcS1CbAqJIT9F9Szl6ySK6fSf11t1duaxQ==
-X-Received: by 2002:a2e:3c0c:0:b0:2af:25cf:92ae with SMTP id j12-20020a2e3c0c000000b002af25cf92aemr2002532lja.22.1686512055116;
-        Sun, 11 Jun 2023 12:34:15 -0700 (PDT)
-Received: from mobilestation ([95.79.140.35])
-        by smtp.gmail.com with ESMTPSA id d21-20020a2eb055000000b002aeee2a093csm1411992ljl.59.2023.06.11.12.34.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jun 2023 12:34:14 -0700 (PDT)
-Date:   Sun, 11 Jun 2023 22:34:12 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Rob Herring <robh@kernel.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v7 00/11] PCI: dwc: Relatively simple fixes and
- cleanups
-Message-ID: <20230611193412.a5btmqlzk2oqommz@mobilestation>
-References: <20230611192005.25636-1-Sergey.Semin@baikalelectronics.ru>
+        bh=YM7OM9iK+U+PV5SZtotWJ9eP4Pea45UXoIm4m6gjQgw=;
+        b=fI/JS3uYbxcaUh8+namFMchJfNqzXabCbDqmSZUwXxXs72ORPtoJmidB4ksYDKPQjc
+         wwR6C4Q78yzT9T/aIBKJiwUwOmgfvtCn7cYp0ueW+Zv95l5Ca2/f5dOloPLlDmfnlurf
+         od85w+3THcorDk7r8x9UYM4OdxNapjiRMIGyE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686512263; x=1689104263;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YM7OM9iK+U+PV5SZtotWJ9eP4Pea45UXoIm4m6gjQgw=;
+        b=Sekm4qQh96bFSIeMfDZ/ERlTLOVgnS0TJn/TVkiSSDcQzBHfu5RLEHs/7XQZ1mMpLB
+         FAl7HuFVaBo08nVI1E2JxhHysF8Lezyn2VQmBjGWh03RPwsw27kc1fbf27Q6dxlZJWW6
+         KM6C0DwoFUiXGLMosIX1YEc/HHcoj7srIrPJsUudUqBfw6vABp5nD0JFi5q1Zwfj2T+c
+         glq/z0aI6cZ6ICfZXP46j57x8gsDaK0ks1/cC+U7mssyyjywkWPbQc/dGzVWdWR3O5S2
+         379wsRFU5XP54TGNcf1a0cTXclGyK5h5Qsa5PZI4WvQBO/Lc80+ya5SJu6zoS12Azkaw
+         242A==
+X-Gm-Message-State: AC+VfDxEuFV5Th4XVf2jInvnGR1pUZYkVlfx8mmprL3cKvHOKsbNLzgI
+        AdbaCYUxOM9w+IcIGW/BhyYHpwRqkoL0muE4fnk+vg==
+X-Google-Smtp-Source: ACHHUZ7thqAggR7Av1USvcj3PSsn7/WY2NPYsKDUZC2xNkkpn0rPjeFsgAStZf3RB4OqK/j85lSN+TBvP7MsIU6Fz40=
+X-Received: by 2002:a5e:9412:0:b0:779:89db:37b9 with SMTP id
+ q18-20020a5e9412000000b0077989db37b9mr6981251ioj.9.1686512263254; Sun, 11 Jun
+ 2023 12:37:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230611192005.25636-1-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230302095551.5510-1-quic_youghand@quicinc.com> <20230302095551.5510-2-quic_youghand@quicinc.com>
+In-Reply-To: <20230302095551.5510-2-quic_youghand@quicinc.com>
+From:   Abhishek Kumar <kuabhs@chromium.org>
+Date:   Sun, 11 Jun 2023 12:37:32 -0700
+Message-ID: <CACTWRwtz6HpszX4Dp2jJ5YmcZ2Mg2KxmyipfSQW4W-ELBkkCVw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] wifi: cfg80211: Add beacon hint notifier support
+To:     Youghandhar Chintala <quic_youghand@quicinc.com>
+Cc:     ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mpubbise@qti.qualcomm.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 11, 2023 at 10:19:54PM +0300, Serge Semin wrote:
-> It turns out the recent DW PCIe-related patchset was merged in with
-> several relatively trivial issues left unsettled (noted by Bjorn and
-> Manivannan). All of these lefovers have been fixed in this patchset.
-> Namely the series starts with two bug-fixes. The first one concerns the
-> improper link-mode initialization in case if the CDM-check is enabled. The
-> second unfortunate mistake I made in the IP-core version type helper. In
-> particular instead of testing the IP-core version type the macro function
-> referred to the just IP-core version which obviously wasn't what I
-> intended.
-> 
-> Afterwards two @Mani-noted fixes follow. Firstly the dma-ranges related warning
-> message is fixed to start with "DMA-ranges" word instead of "Dma-ranges".
-> Secondly the Baikal-T1 PCIe Host driver is converted to perform the
-> asynchronous probe type which saved us of about 15% of bootup time if no any
-> PCIe peripheral device attached to the port.
-> 
-> Then the patchset contains the Baikal-T1 PCIe driver fix. The
-> corresponding patch removes the false error message printed during the
-> controller probe procedure. I accidentally added the unconditional
-> dev_err_probe() method invocation. It was obviously wrong.
-> 
-> Then two trivial cleanups are introduced. The first one concerns the
-> duplicated fast-link-mode flag unsetting. The second one implies
-> dropping a redundant empty line from the dw_pcie_link_set_max_speed()
-> function.
-> 
-> The series continues with a patch inspired by the last @Bjorn note
-> regarding the generic resources request interface. As @Bjorn correctly
-> said it would be nice to have the new interface used wider in the DW PCIe
-> subsystem. Aside with the Baikal-T1 PCIe Host driver the Toshiba Visconti
-> PCIe driver can be easily converted to using the generic clock names.
-> That's what is done in the noted patch.
-> 
-> The patchset is closed with a series of MAINTAINERS-list related patches.
-> Firstly after getting the DW PCIe RP/EP DT-schemas refactored I forgot to
-> update the MAINTAINER-list with the new files added in the framework of
-> that procedure. All the snps,dw-pcie* schemas shall be maintained by the
-> DW PCIe core driver maintainers. Secondly seeing how long it took for my
-> patchsets to review and not having any comments from the original driver
-> maintainers I'd suggest to add myself as the reviewer of the DW PCIe
-> driver. Thus hopefully the new updates review process will be performed
-> with much less latencies. For the same reason @Manivannan is added to the
-> maintainers list of the DW PCIe/eDMA drivers as he already agreed to be
-> in.
-> 
-> Link: https://lore.kernel.org/linux-pci/20230217093956.27126-1-Sergey.Semin@baikalelectronics.ru/
-> Changelog v2:
-> - Rebase onto the kernel 6.3-rc2.
-> 
-> Link: https://lore.kernel.org/linux-pci/20230313200816.30105-1-Sergey.Semin@baikalelectronics.ru/
-> Changelog v3:
-> - Drop the patch:
->   [PATCH v2 01/11] PCI: dwc: Fix port link CSR improper init if CDM check enabled
->   and rebase onto the already submitted by @Yoshihiro fix:
->   commit cdce67099117 ("PCI: dwc: Fix PORT_LINK_CONTROL update when CDM check enabled")
-> - Just resend.
-> 
-> Link: https://lore.kernel.org/linux-pci/20230411033928.30397-1-Sergey.Semin@baikalelectronics.ru/
-> Changelog v4:
-> - Demote @Gustavo to being DW PCIe/eDMA drivers reviewer:
->   [PATCH v4 9/14] MAINTAINERS: Demote Gustavo Pimentel to DW PCIe core reviewer
->   [PATCH v4 12/14] MAINTAINERS: Demote Gustavo Pimentel to DW EDMA driver reviewer
-> - Add Manivannan to the DW PCIe/eDMA drivers maintainers list:
->   [PATCH v4 10/14] MAINTAINERS: Add Manivannan to DW PCIe core maintainers list
->   [PATCH v4 13/14] MAINTAINERS: Add Manivannan to DW eDMA driver maintainers list
-> 
-> Link: https://lore.kernel.org/linux-pci/20230414021832.13167-1-Sergey.Semin@baikalelectronics.ru/
-> Changelog v5:
-> - Rebase onto the kernel 6.4-rc1.
-> - Just resend.
-> 
+On Thu, Mar 2, 2023 at 1:57=E2=80=AFAM Youghandhar Chintala
+<quic_youghand@quicinc.com> wrote:
+>
+> There are connection failures in hidden SSID case when the device is
+> with default reg domain WW.
+> For WW reg domain most of the 5 GHz channels are passive. When device
+> listens to the beacon on that channel, the driver is updating its
+> channel flag but firmware is not aware of it and firmware is not
+> sending probes on that channels.
+> Due to this, we are seeing connection failures when the device is trying
+> to connect with hidden SSID AP.
+>
+> In the case of devices using the ath10k driver, it is required to update
+> the change in channel flags to firmware as well. Therefore, we need a
+> mechanism to notify the driver from the regulatory core regarding the
+> channel flag changes.
+> Adding a beacon hint notifier logic, so that drivers can register
+> callbacks to get notified whenever there is a change in channel flags.
+>
+> Signed-off-by: Youghandhar Chintala <quic_youghand@quicinc.com>
+> ---
+>  include/net/cfg80211.h | 7 +++++++
+>  net/wireless/reg.c     | 5 ++++-
+>  2 files changed, 11 insertions(+), 1 deletion(-)
+>
+> diff --git a/include/net/cfg80211.h b/include/net/cfg80211.h
+> index 11a370e64143..7a00f5317e1f 100644
+> --- a/include/net/cfg80211.h
+> +++ b/include/net/cfg80211.h
+> @@ -5096,6 +5096,10 @@ struct wiphy_iftype_akm_suites {
+>   * @reg_notifier: the driver's regulatory notification callback,
+>   *     note that if your driver uses wiphy_apply_custom_regulatory()
+>   *     the reg_notifier's request can be passed as NULL
+> + * @beacon_hint_notifier: the driver's beacon hint notification callback=
+,
+> + *     which will trigger when there is channel flag updates seen in
+> + *     beacon hints. The beacon_hint_notifier's request can be passed
+> + *     with chan context.
+>   * @regd: the driver's regulatory domain, if one was requested via
+>   *     the regulatory_hint() API. This can be used by the driver
+>   *     on the reg_notifier() if it chooses to ignore future
+> @@ -5386,6 +5390,9 @@ struct wiphy {
+>         void (*reg_notifier)(struct wiphy *wiphy,
+>                              struct regulatory_request *request);
+>
+> +       void (*beacon_hint_notifier)(struct wiphy *wiphy,
+> +                                    struct ieee80211_channel *chan);
+Is the second argument required. Your 2/2 patch does not use this
+argument and thus will cause build failure. If it is not used, I would
+recommend to drop it.
+> +
+>         /* fields below are read-only, assigned by cfg80211 */
+>
+>         const struct ieee80211_regdomain __rcu *regd;
+> diff --git a/net/wireless/reg.c b/net/wireless/reg.c
+> index c3d950d29432..2dc6880a28c5 100644
+> --- a/net/wireless/reg.c
+> +++ b/net/wireless/reg.c
+> @@ -2219,8 +2219,11 @@ static void handle_reg_beacon(struct wiphy *wiphy,=
+ unsigned int chan_idx,
+>                 channel_changed =3D true;
+>         }
+>
+> -       if (channel_changed)
+> +       if (channel_changed) {
+>                 nl80211_send_beacon_hint_event(wiphy, &chan_before, chan)=
+;
+> +               if (wiphy->beacon_hint_notifier)
+> +                       wiphy->beacon_hint_notifier(wiphy, chan);
+> +       }
+>  }
+>
+>  /*
+> --
+> 2.38.0
+>
 
-> Link: https://lore.kernel.org/linux-pci/20230511190902.28896-1-Sergey.Semin@baikalelectronics.ru/
-> Changelog v6:
-> - Remove Vinod and DMA-engine mailing-list from Cc-list since the
->   DMA-related patches have already been merged in.
-> - Drop the next patches:
->   [PATCH RESEND v5 12/14] MAINTAINERS: Demote Gustavo Pimentel to DW EDMA driver reviewer
->   [PATCH RESEND v5 13/14] MAINTAINERS: Add Manivannan to DW eDMA driver maintainers list
->   [PATCH RESEND v5 14/14] MAINTAINERS: Add myself as the DW eDMA driver reviewer
->   since they are in the dmeengine next git-branch already.
-> - Just resend.
-> 
-> Link: https://lore.kernel.org/linux-pci/20230531112602.7222-1-Sergey.Semin@baikalelectronics.ru/
-> Changelog v7:
-> - Just resend.
-
-I don't know how come v6 was marked as "Not Applicable" in patchwork.
-I tested it on both "next" and "controller/dwc" branches. Not a
-glimpse of any merge conflict. If there is some another branch I
-should have based the series on please tell me which one. Anyway here
-is v7 just in case if the previous patchset was lost.
-
--Serge(y)
-
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-> Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
-> Cc: linux-pci@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> 
-> Serge Semin (11):
->   PCI: dwc: Fix erroneous version type test helper
->   PCI: dwc: Fix inbound iATU entries out-of-bounds warning message
->   PCI: bt1: Enable async probe type
->   PCI: bt1: Fix printing false error message
->   PCI: dwc: Drop duplicated fast-link-mode flag unsetting
->   PCI: dwc: Drop empty line from dw_pcie_link_set_max_speed()
->   PCI: visconti: Convert to using generic resources getter
->   MAINTAINERS: Add all generic DW PCIe RP/EP DT-schemas
->   MAINTAINERS: Demote Gustavo Pimentel to DW PCIe core reviewer
->   MAINTAINERS: Add Manivannan to DW PCIe core maintainers list
->   MAINTAINERS: Add myself as the DW PCIe core reviewer
-> 
->  MAINTAINERS                                   |  7 ++--
->  drivers/pci/controller/dwc/pcie-bt1.c         |  5 ++-
->  .../pci/controller/dwc/pcie-designware-host.c |  2 +-
->  drivers/pci/controller/dwc/pcie-designware.c  |  2 -
->  drivers/pci/controller/dwc/pcie-designware.h  |  7 +++-
->  drivers/pci/controller/dwc/pcie-visconti.c    | 37 +++++++++----------
->  6 files changed, 31 insertions(+), 29 deletions(-)
-> 
-> -- 
-> 2.40.0
-> 
-> 
+Thanks
+Abhishek
