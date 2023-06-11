@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77BE472B2CC
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 18:10:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9502D72B2CF
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 18:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbjFKQKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 12:10:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35618 "EHLO
+        id S233618AbjFKQPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 12:15:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjFKQKh (ORCPT
+        with ESMTP id S229631AbjFKQPS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 12:10:37 -0400
-Received: from mail-40133.protonmail.ch (mail-40133.protonmail.ch [185.70.40.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B34C122
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 09:10:33 -0700 (PDT)
-Date:   Sun, 11 Jun 2023 16:10:20 +0000
+        Sun, 11 Jun 2023 12:15:18 -0400
+Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A076D122;
+        Sun, 11 Jun 2023 09:15:14 -0700 (PDT)
+Date:   Sun, 11 Jun 2023 16:15:08 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-        s=protonmail; t=1686499831; x=1686759031;
-        bh=zxyFrqdpRxMRW9fbF7nGynBR2bPyNahwL3W/ZczMeg8=;
+        s=protonmail; t=1686500112; x=1686759312;
+        bh=YurAWGLNntc/9cNT1yr91zktO+CDzXDduvn70G9oHJk=;
         h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
          Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
          Message-ID:BIMI-Selector;
-        b=kMHtDsmLgAV7qBQf+NxbbuUW6ydtGPd5f0mNAVeBN62NXb/xcPqiNYh49/l4Pe0i3
-         ZxCGYQbbNfsLA/2eMwK/gitrJNdCrVXmLC2w/wqN/lamjlg/4YnHdNBQ9v40BIoWwH
-         KIl/jIlD59nvfw5gbgnY5EhHggU1NNxYYciKhuBCQ8kmHKwvzeVxfWc1350Y9yevuk
-         1m/vPkif3VwEIBueJ4FGuawkiTXmoRvmt0irKlVtRvwOhah6oLXviuffZWgkXVnWUU
-         kW6qkyWYYVglHTFouc6h+L3iCumW89f92Grb4qOApMmN/gPMtvu/t8ch47Tk8QGSzR
-         tCzvkUb4QceDg==
+        b=eD9vhpBQFyrNxLvHBS+KjnkfsqlBaQtD6SYaN/FSQJeEF69cO7s1afaS0qwbKGcLU
+         nZmYRyYQoXCafeJnjVnyl7vImvupOgtg5n1xdIN2ZwHlYLJ6cZX09jGACKRRxIw7Fz
+         +E/vERafBFwkijur/6m5ueSUJww7wXAROsQW0MTQUeA9+ceTNamzPUc8gF/iDoBxBN
+         3vg6WaGmRjKk0YlAgHq8VAQ1xx8oqnJqWT3KQrPejPfhTxalqGM8FXyH5gfbdIgac4
+         em+C50eoEGDMcAe1gojAR6+9dMfL+BImcNeM128V8DmRuDSJg9RAVsBYZvs2b9ksYb
+         OGE3YxLYvixUw==
 To:     Alice Ryhl <aliceryhl@google.com>
 From:   Benno Lossin <benno.lossin@proton.me>
 Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
@@ -38,10 +38,10 @@ Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
         Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
         =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
         linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH v2 7/8] rust: workqueue: add `try_spawn` helper method
-Message-ID: <vvA9i666LTf-ordh9xwNJ8sJY_rixVHDe7Lj0TNdrOovU5pLdlohCs26P4mtB5iw6PozHStl_rOnRPxbD6luPP60lvfAHW4Y_RhGEFMZpYU=@proton.me>
-In-Reply-To: <20230601134946.3887870-8-aliceryhl@google.com>
-References: <20230601134946.3887870-1-aliceryhl@google.com> <20230601134946.3887870-8-aliceryhl@google.com>
+Subject: Re: [PATCH v2 8/8] rust: workqueue: add examples
+Message-ID: <kHwlRfK_EtV6I7xbaDgyCbR2Xz0cHmM4Sh_edMi-Wr0JaJNlvVEQH9ZOqWuSr5hBx6cu8nreQdIlWNrHLQ6ehUT4hWtgBalWeQpcVVlBOQ0=@proton.me>
+In-Reply-To: <20230601134946.3887870-9-aliceryhl@google.com>
+References: <20230601134946.3887870-1-aliceryhl@google.com> <20230601134946.3887870-9-aliceryhl@google.com>
 Feedback-ID: 71780778:user:proton
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
@@ -57,97 +57,149 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 01.06.23 15:49, Alice Ryhl wrote:
-> This adds a convenience method that lets you spawn a closure for
-> execution on a workqueue. This will be the most convenient way to use
-> workqueues, but it is fallible because it needs to allocate memory.
+> This adds two examples of how to use the workqueue. The first example
+> shows how to use it when you only have one `work_struct` field, and the
+> second example shows how to use it when you have multiple `work_struct`
+> fields.
 >=20
-> Co-developed-by: Gary Guo <gary@garyguo.net>
-> Signed-off-by: Gary Guo <gary@garyguo.net>
 > Signed-off-by: Alice Ryhl <aliceryhl@google.com>
 
 Reviewed-by: Benno Lossin <benno.lossin@proton.me>
+
+I really like that you added these examples!
+Is there some particular reason you decided to not use
+0 as the first index in the second example? (you can keep
+it this way)
 
 --=20
 Cheers,
 Benno
 
 > ---
->   rust/kernel/workqueue.rs | 43 ++++++++++++++++++++++++++++++++++++++++
->   1 file changed, 43 insertions(+)
+>   rust/kernel/workqueue.rs | 104 +++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 104 insertions(+)
 >=20
 > diff --git a/rust/kernel/workqueue.rs b/rust/kernel/workqueue.rs
-> index f06a2f036d8b..c302e8b8624b 100644
+> index c302e8b8624b..cefcf43ff40e 100644
 > --- a/rust/kernel/workqueue.rs
 > +++ b/rust/kernel/workqueue.rs
-> @@ -29,6 +29,7 @@
+> @@ -26,6 +26,110 @@
+>   //!  * The `WorkItemPointer` trait is implemented for the pointer type =
+that points at a something
+>   //!    that implements `WorkItem`.
+>   //!
+> +//! ## Example
+> +//!
+> +//! This example defines a struct that holds an integer and can be sched=
+uled on the workqueue. When
+> +//! the struct is executed, it will print the integer. Since there is on=
+ly one `work_struct` field,
+> +//! we do not need to specify ids for the fields.
+> +//!
+> +//! ```
+> +//! use kernel::prelude::*;
+> +//! use kernel::sync::Arc;
+> +//! use kernel::workqueue::{self, Work, WorkItem};
+> +//!
+> +//! #[pin_data]
+> +//! struct MyStruct {
+> +//!     value: i32,
+> +//!     #[pin]
+> +//!     work: Work<MyStruct>,
+> +//! }
+> +//!
+> +//! impl_has_work! {
+> +//!     impl HasWork<Self> for MyStruct { self.work }
+> +//! }
+> +//!
+> +//! impl MyStruct {
+> +//!     fn new(value: i32) -> Result<Arc<Self>> {
+> +//!         Arc::pin_init(pin_init!(MyStruct {
+> +//!             value,
+> +//!             work <- Work::new(),
+> +//!         }))
+> +//!     }
+> +//! }
+> +//!
+> +//! impl WorkItem for MyStruct {
+> +//!     type Pointer =3D Arc<MyStruct>;
+> +//!
+> +//!     fn run(this: Arc<MyStruct>) {
+> +//!         pr_info!("The value is: {}", this.value);
+> +//!     }
+> +//! }
+> +//!
+> +//! /// This method will enqueue the struct for execution on the system =
+workqueue, where its value
+> +//! /// will be printed.
+> +//! fn print_later(val: Arc<MyStruct>) {
+> +//!     let _ =3D workqueue::system().enqueue(val);
+> +//! }
+> +//! ```
+> +//!
+> +//! The following example shows how multiple `work_struct` fields can be=
+ used:
+> +//!
+> +//! ```
+> +//! use kernel::prelude::*;
+> +//! use kernel::sync::Arc;
+> +//! use kernel::workqueue::{self, Work, WorkItem};
+> +//!
+> +//! #[pin_data]
+> +//! struct MyStruct {
+> +//!     value_1: i32,
+> +//!     value_2: i32,
+> +//!     #[pin]
+> +//!     work_1: Work<MyStruct, 1>,
+> +//!     #[pin]
+> +//!     work_2: Work<MyStruct, 2>,
+> +//! }
+> +//!
+> +//! impl_has_work! {
+> +//!     impl HasWork<Self, 1> for MyStruct { self.work_1 }
+> +//!     impl HasWork<Self, 2> for MyStruct { self.work_2 }
+> +//! }
+> +//!
+> +//! impl MyStruct {
+> +//!     fn new(value_1: i32, value_2: i32) -> Result<Arc<Self>> {
+> +//!         Arc::pin_init(pin_init!(MyStruct {
+> +//!             value_1,
+> +//!             value_2,
+> +//!             work_1 <- Work::new(),
+> +//!             work_2 <- Work::new(),
+> +//!         }))
+> +//!     }
+> +//! }
+> +//!
+> +//! impl WorkItem<1> for MyStruct {
+> +//!     type Pointer =3D Arc<MyStruct>;
+> +//!
+> +//!     fn run(this: Arc<MyStruct>) {
+> +//!         pr_info!("The value is: {}", this.value_1);
+> +//!     }
+> +//! }
+> +//!
+> +//! impl WorkItem<2> for MyStruct {
+> +//!     type Pointer =3D Arc<MyStruct>;
+> +//!
+> +//!     fn run(this: Arc<MyStruct>) {
+> +//!         pr_info!("The second value is: {}", this.value_2);
+> +//!     }
+> +//! }
+> +//!
+> +//! fn print_1_later(val: Arc<MyStruct>) {
+> +//!     let _ =3D workqueue::system().enqueue::<Arc<MyStruct>, 1>(val);
+> +//! }
+> +//!
+> +//! fn print_2_later(val: Arc<MyStruct>) {
+> +//!     let _ =3D workqueue::system().enqueue::<Arc<MyStruct>, 2>(val);
+> +//! }
+> +//! ```
+> +//!
 >   //! C header: [`include/linux/workqueue.h`](../../../../include/linux/w=
 orkqueue.h)
 >=20
 >   use crate::{bindings, prelude::*, sync::Arc, types::Opaque};
-> +use alloc::alloc::AllocError;
->   use alloc::boxed::Box;
->   use core::marker::{PhantomData, PhantomPinned};
->   use core::pin::Pin;
-> @@ -87,6 +88,44 @@ pub fn enqueue<W, const ID: u64>(&self, w: W) -> W::En=
-queueOutput
->               })
->           }
->       }
-> +
-> +    /// Tries to spawn the given function or closure as a work item.
-> +    ///
-> +    /// This method can fail because it allocates memory to store the wo=
-rk item.
-> +    pub fn try_spawn<T: 'static + Send + FnOnce()>(&self, func: T) -> Re=
-sult<(), AllocError> {
-> +        let init =3D pin_init!(ClosureWork {
-> +            work <- Work::new(),
-> +            func: Some(func),
-> +        });
-> +
-> +        self.enqueue(Box::pin_init(init).map_err(|_| AllocError)?);
-> +        Ok(())
-> +    }
-> +}
-> +
-> +/// A helper type used in `try_spawn`.
-> +#[pin_data]
-> +struct ClosureWork<T> {
-> +    #[pin]
-> +    work: Work<ClosureWork<T>>,
-> +    func: Option<T>,
-> +}
-> +
-> +impl<T> ClosureWork<T> {
-> +    fn project(self: Pin<&mut Self>) -> &mut Option<T> {
-> +        // SAFETY: The `func` field is not structurally pinned.
-> +        unsafe { &mut self.get_unchecked_mut().func }
-> +    }
-> +}
-> +
-> +impl<T: FnOnce()> WorkItem for ClosureWork<T> {
-> +    type Pointer =3D Pin<Box<Self>>;
-> +
-> +    fn run(mut this: Pin<Box<Self>>) {
-> +        if let Some(func) =3D this.as_mut().project().take() {
-> +            (func)()
-> +        }
-> +    }
->   }
->=20
->   /// A raw work item.
-> @@ -325,6 +364,10 @@ unsafe fn raw_get_work(ptr: *mut Self) -> *mut $crat=
-e::workqueue::Work<$work_typ
->       )*};
->   }
->=20
-> +impl_has_work! {
-> +    impl<T> HasWork<Self> for ClosureWork<T> { self.work }
-> +}
-> +
->   unsafe impl<T, const ID: u64> WorkItemPointer<ID> for Arc<T>
->   where
->       T: WorkItem<ID, Pointer =3D Self>,
 > --
 > 2.41.0.rc0.172.g3f132b7071-goog
 >=20
