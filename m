@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81D8672B22D
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 16:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A167E72B22E
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 16:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233880AbjFKOER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 10:04:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34744 "EHLO
+        id S233817AbjFKOEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 10:04:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233724AbjFKOD5 (ORCPT
+        with ESMTP id S233754AbjFKOEA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 10:03:57 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE54210E2
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 07:03:55 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f7378a74faso24303575e9.0
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 07:03:55 -0700 (PDT)
+        Sun, 11 Jun 2023 10:04:00 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612E5E7C
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 07:03:57 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f7fc9014fdso24723985e9.3
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 07:03:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686492234; x=1689084234;
+        d=linaro.org; s=google; t=1686492235; x=1689084235;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HdOiX3FKcjlJJS2UzLSyrdBrswEWVUKPHD0bqmPS4vs=;
-        b=BwJ/g26lp9KQ8ao/kcZ7jHbAv8aRQA9Z7kesk+HAl/MqLTWrxLGVCrKxDmH2vpPkLI
-         KCGtb2rh4mlq4xqvzC2bLf/lgzBe+KytLa3dAvi1o4zwTE69r87IpkC9fnAj41JrHAdK
-         GpwMjRgB3urb+DKoYXWdFsWvWsTGeU78HCJRZhqtpaAhewIv/DSlRgoe9KIDhLH9yOCd
-         l8gCDJpg5UTbbrPme/kOedOKSw/tCeXMmBA3a7Fk3HGbfi/AZrIrbRX4u1vetNLR4GJR
-         ia+EYZ/ISYBxPh0IsidGrxSPHPEoJuXJp7UVh3etlpuomnYb9SZZYmRJz6tWPq7GIVSp
-         OVGg==
+        bh=YkkYoGg7O7g8BuRI7isftewyd52BKcFbodz8lfEfrU4=;
+        b=YN8DyzS+ZrSaiXqczhEpxt2mAkjYgIti/f/+MDWyuYdUg2Ehat2zDGjlQ408b9V35N
+         Bmy80cu2kk40DHSX/Kxksv7Ansap9jGqxSFou1pGmDdSJhnQ81z4F/YmabIY+06buipu
+         Z8gnpk1SnyOVFLpNAoJQR0fUAtVRt9+dI2pxSv7CQG3jktVKcf0gzPUIXcvMz3Z0dJ9A
+         hlRoEW2U9UMxqEqFSQbrZIPs8jN2OJ1l/KMppFfYkefefHg3KmBm4dRPx78BKwvl0bBy
+         3fGj6aTPXhqjDymRC+0pU0oDBp0aEBj6Zp4q1jRZEazSegnPev4Es4kWBvunbJTX1SBQ
+         gwjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686492234; x=1689084234;
+        d=1e100.net; s=20221208; t=1686492235; x=1689084235;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HdOiX3FKcjlJJS2UzLSyrdBrswEWVUKPHD0bqmPS4vs=;
-        b=OgnlJmq92ZTMEFjLz/0bzH5WUsgF/XB3aE2ySYp0vqoJE4Txp9KWx3nZTShRJtF5pp
-         VbyfiI89CdOip8ealzzuFghVwVxRTjy9svafFV2JEIxA4uwyQVPocyB6B+SGIwyvJR3G
-         esqIpmWUHbt3SHGNZNgLNjQW0fBVykI8Ue3qy69eZtFrmEz3kmpLTnAuCK37Buos/jN6
-         53BYYDIBzYcfP0hzhmf4DM9THaO/BUwZTz76UYtgGFY1xD2sowTHywbbQNZnoelPU2dU
-         CYffheOvUM2EUwg/kdM8pM5ASICu3LU7bDEyUXyUQOP1fgpdtfHXY5Gd1s7/KbrjjtmK
-         EGVQ==
-X-Gm-Message-State: AC+VfDwJycZtxQyo4YMAXWm91aDvBTAoi0ZFHRWHklqgvUzu0R9zAVFs
-        AxK4zFrmFO+WJoud/5crc7z3OQ==
-X-Google-Smtp-Source: ACHHUZ4MkKRLqdMNmJYfL4gL3SIhpZzeYHLmDqM8swFhyPRVUWMIZlxuqIO/Bklhq7V73jj2P02a1A==
-X-Received: by 2002:a05:600c:114c:b0:3f7:38dd:5e9f with SMTP id z12-20020a05600c114c00b003f738dd5e9fmr3972014wmz.28.1686492234206;
-        Sun, 11 Jun 2023 07:03:54 -0700 (PDT)
+        bh=YkkYoGg7O7g8BuRI7isftewyd52BKcFbodz8lfEfrU4=;
+        b=CZjVhmXYw9iKYYPXR1XpIOCaCdjPZd9G7HfCioFuudj2zcMNWs6N+a2WpW5x6CHM8K
+         sNJrFSOXUP6Kf2+mDN0uxNRORtV+P/KgsColC+DwR9chVV8wZa6VyIiG0ROVxUbIoBOC
+         lMVSaz34kflkyuxvhW8lPU2AxUmYoAbiyU5sB5AoRYG23lwyd1sMowMhI624OyqELL0h
+         Z9VuSHBszhPRLGqKt4tmEUd0GnRv/8SElLGudiGzbOQfWhPpn9V4sHs1m4eawb1Uyiv0
+         HDBCHx9EkryY8AUXLXGYv5zWF40pJtKq+gcSX+o1xViMj7Kvm/ZxguF9YDINUyetX+2R
+         4mHA==
+X-Gm-Message-State: AC+VfDw79M1Am0scJIz/VqqqotdWlcroc31BChGkxGfew8v5n6UmEXrW
+        cI0PFWGPmXqi7wsLr0tXI7/KFnZSTxmGG96aCEs=
+X-Google-Smtp-Source: ACHHUZ7rVZqy/vg/k6u+pYYYAWnHdu/6pckM6le3cmNPc9ihvqRBxrm8yScJe9njj9uyRo98n2huNw==
+X-Received: by 2002:a1c:ed15:0:b0:3f7:f584:579d with SMTP id l21-20020a1ced15000000b003f7f584579dmr4850036wmh.0.1686492235769;
+        Sun, 11 Jun 2023 07:03:55 -0700 (PDT)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id h17-20020a05600c28d100b003f080b2f9f4sm8567222wmd.27.2023.06.11.07.03.52
+        by smtp.gmail.com with ESMTPSA id h17-20020a05600c28d100b003f080b2f9f4sm8567222wmd.27.2023.06.11.07.03.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jun 2023 07:03:53 -0700 (PDT)
+        Sun, 11 Jun 2023 07:03:55 -0700 (PDT)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org,
         Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Vincent Legoll <vincent.legoll@gmail.com>,
         Heiko Stuebner <heiko@sntech.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 08/26] dt-bindings: nvmem: rockchip,otp: Add compatible for RK3588
-Date:   Sun, 11 Jun 2023 15:03:12 +0100
-Message-Id: <20230611140330.154222-9-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 09/26] nvmem: rockchip-otp: Add clks and reg_read to rockchip_data
+Date:   Sun, 11 Jun 2023 15:03:13 +0100
+Message-Id: <20230611140330.154222-10-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230611140330.154222-1-srinivas.kandagatla@linaro.org>
 References: <20230611140330.154222-1-srinivas.kandagatla@linaro.org>
@@ -77,112 +77,167 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 
-Document the OTP memory found on Rockchip RK3588 SoC.
+In preparation to support new Rockchip OTP memory devices with different
+clock configurations and register layout, extend rockchip_data struct
+with the related members: clks, num_clks, reg_read.
 
-Since RK3588 uses different clocks & resets configurations than PX30 /
-RK3308, provide the required changes in the binding to be able to handle
-both variants.
+Additionally, to avoid managing redundant driver data, drop num_clks
+member from rockchip_otp struct and update all references to point to
+the equivalent member in rockchip_data.
 
 Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Tested-by: Vincent Legoll <vincent.legoll@gmail.com>
 Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- .../bindings/nvmem/rockchip,otp.yaml          | 54 ++++++++++++++++---
- 1 file changed, 47 insertions(+), 7 deletions(-)
+ drivers/nvmem/rockchip-otp.c | 79 ++++++++++++++++++++++--------------
+ 1 file changed, 49 insertions(+), 30 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/nvmem/rockchip,otp.yaml b/Documentation/devicetree/bindings/nvmem/rockchip,otp.yaml
-index 4cd425ae2823..9c6eff788928 100644
---- a/Documentation/devicetree/bindings/nvmem/rockchip,otp.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/rockchip,otp.yaml
-@@ -9,33 +9,35 @@ title: Rockchip internal OTP (One Time Programmable) memory
- maintainers:
-   - Heiko Stuebner <heiko@sntech.de>
+diff --git a/drivers/nvmem/rockchip-otp.c b/drivers/nvmem/rockchip-otp.c
+index 9f53bcce2f87..b5a84b379da4 100644
+--- a/drivers/nvmem/rockchip-otp.c
++++ b/drivers/nvmem/rockchip-otp.c
+@@ -54,21 +54,19 @@
  
--allOf:
--  - $ref: nvmem.yaml#
+ #define OTPC_TIMEOUT			10000
+ 
++struct rockchip_data {
++	int size;
++	const char * const *clks;
++	int num_clks;
++	nvmem_reg_read_t reg_read;
++};
++
+ struct rockchip_otp {
+ 	struct device *dev;
+ 	void __iomem *base;
+-	struct clk_bulk_data	*clks;
+-	int num_clks;
++	struct clk_bulk_data *clks;
+ 	struct reset_control *rst;
+-};
 -
- properties:
-   compatible:
-     enum:
-       - rockchip,px30-otp
-       - rockchip,rk3308-otp
-+      - rockchip,rk3588-otp
+-/* list of required clocks */
+-static const char * const rockchip_otp_clocks[] = {
+-	"otp", "apb_pclk", "phy",
+-};
+-
+-struct rockchip_data {
+-	int size;
++	const struct rockchip_data *data;
+ };
  
-   reg:
-     maxItems: 1
+ static int rockchip_otp_reset(struct rockchip_otp *otp)
+@@ -132,29 +130,23 @@ static int rockchip_otp_ecc_enable(struct rockchip_otp *otp, bool enable)
+ 	return ret;
+ }
  
-   clocks:
--    maxItems: 3
-+    minItems: 3
-+    maxItems: 4
+-static int rockchip_otp_read(void *context, unsigned int offset,
+-			     void *val, size_t bytes)
++static int px30_otp_read(void *context, unsigned int offset,
++			 void *val, size_t bytes)
+ {
+ 	struct rockchip_otp *otp = context;
+ 	u8 *buf = val;
+-	int ret = 0;
+-
+-	ret = clk_bulk_prepare_enable(otp->num_clks, otp->clks);
+-	if (ret < 0) {
+-		dev_err(otp->dev, "failed to prepare/enable clks\n");
+-		return ret;
+-	}
++	int ret;
  
-   clock-names:
-+    minItems: 3
-     items:
-       - const: otp
-       - const: apb_pclk
-       - const: phy
-+      - const: arb
+ 	ret = rockchip_otp_reset(otp);
+ 	if (ret) {
+ 		dev_err(otp->dev, "failed to reset otp phy\n");
+-		goto disable_clks;
++		return ret;
+ 	}
  
-   resets:
--    maxItems: 1
-+    minItems: 1
-+    maxItems: 3
+ 	ret = rockchip_otp_ecc_enable(otp, false);
+ 	if (ret < 0) {
+ 		dev_err(otp->dev, "rockchip_otp_ecc_enable err\n");
+-		goto disable_clks;
++		return ret;
+ 	}
  
-   reset-names:
--    items:
--      - const: phy
-+    minItems: 1
-+    maxItems: 3
+ 	writel(OTPC_USE_USER | OTPC_USE_USER_MASK, otp->base + OTPC_USER_CTRL);
+@@ -174,8 +166,28 @@ static int rockchip_otp_read(void *context, unsigned int offset,
  
- required:
-   - compatible
-@@ -45,6 +47,44 @@ required:
-   - resets
-   - reset-names
- 
-+allOf:
-+  - $ref: nvmem.yaml#
+ read_end:
+ 	writel(0x0 | OTPC_USE_USER_MASK, otp->base + OTPC_USER_CTRL);
+-disable_clks:
+-	clk_bulk_disable_unprepare(otp->num_clks, otp->clks);
 +
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - rockchip,px30-otp
-+              - rockchip,rk3308-otp
-+    then:
-+      properties:
-+        clocks:
-+          maxItems: 3
-+        resets:
-+          maxItems: 1
-+        reset-names:
-+          items:
-+            - const: phy
++	return ret;
++}
 +
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - rockchip,rk3588-otp
-+    then:
-+      properties:
-+        clocks:
-+          minItems: 4
-+        resets:
-+          minItems: 3
-+        reset-names:
-+          items:
-+            - const: otp
-+            - const: apb
-+            - const: arb
++static int rockchip_otp_read(void *context, unsigned int offset,
++			     void *val, size_t bytes)
++{
++	struct rockchip_otp *otp = context;
++	int ret;
 +
- unevaluatedProperties: false
++	if (!otp->data || !otp->data->reg_read)
++		return -EINVAL;
++
++	ret = clk_bulk_prepare_enable(otp->data->num_clks, otp->clks);
++	if (ret < 0) {
++		dev_err(otp->dev, "failed to prepare/enable clks\n");
++		return ret;
++	}
++
++	ret = otp->data->reg_read(context, offset, val, bytes);
++
++	clk_bulk_disable_unprepare(otp->data->num_clks, otp->clks);
  
- examples:
+ 	return ret;
+ }
+@@ -189,8 +201,15 @@ static struct nvmem_config otp_config = {
+ 	.reg_read = rockchip_otp_read,
+ };
+ 
++static const char * const px30_otp_clocks[] = {
++	"otp", "apb_pclk", "phy",
++};
++
+ static const struct rockchip_data px30_data = {
+ 	.size = 0x40,
++	.clks = px30_otp_clocks,
++	.num_clks = ARRAY_SIZE(px30_otp_clocks),
++	.reg_read = px30_otp_read,
+ };
+ 
+ static const struct of_device_id rockchip_otp_match[] = {
+@@ -225,21 +244,21 @@ static int rockchip_otp_probe(struct platform_device *pdev)
+ 	if (!otp)
+ 		return -ENOMEM;
+ 
++	otp->data = data;
+ 	otp->dev = dev;
+ 	otp->base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(otp->base))
+ 		return PTR_ERR(otp->base);
+ 
+-	otp->num_clks = ARRAY_SIZE(rockchip_otp_clocks);
+-	otp->clks = devm_kcalloc(dev, otp->num_clks,
+-				     sizeof(*otp->clks), GFP_KERNEL);
++	otp->clks = devm_kcalloc(dev, data->num_clks, sizeof(*otp->clks),
++				 GFP_KERNEL);
+ 	if (!otp->clks)
+ 		return -ENOMEM;
+ 
+-	for (i = 0; i < otp->num_clks; ++i)
+-		otp->clks[i].id = rockchip_otp_clocks[i];
++	for (i = 0; i < data->num_clks; ++i)
++		otp->clks[i].id = data->clks[i];
+ 
+-	ret = devm_clk_bulk_get(dev, otp->num_clks, otp->clks);
++	ret = devm_clk_bulk_get(dev, data->num_clks, otp->clks);
+ 	if (ret)
+ 		return ret;
+ 
 -- 
 2.25.1
 
