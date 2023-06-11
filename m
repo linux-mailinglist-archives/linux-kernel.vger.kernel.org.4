@@ -2,46 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1439172B48B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 00:03:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FE7172B490
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 00:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbjFKWDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 18:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33214 "EHLO
+        id S231162AbjFKWQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 18:16:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjFKWDX (ORCPT
+        with ESMTP id S229441AbjFKWQT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 18:03:23 -0400
-Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [IPv6:2001:4b7a:2000:18::162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7832AE48;
-        Sun, 11 Jun 2023 15:03:22 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id BA2A01F9B4;
-        Mon, 12 Jun 2023 00:03:20 +0200 (CEST)
-Date:   Mon, 12 Jun 2023 00:03:19 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Jessica Zhang <quic_jesszhan@quicinc.com>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 6/6] drm/msm/dsi: Document DSC related pclk_rate and
- hdisplay calculations
-Message-ID: <6uiyqgggt2a3gkcihtyzr4rvq5igbe3ojpeiqnji22663bhh2l@3jifgk7bw4u5>
-References: <20230405-add-dsc-support-v6-0-95eab864d1b6@quicinc.com>
- <20230405-add-dsc-support-v6-6-95eab864d1b6@quicinc.com>
+        Sun, 11 Jun 2023 18:16:19 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682B5E4E;
+        Sun, 11 Jun 2023 15:16:17 -0700 (PDT)
+X-GND-Sasl: alexandre.belloni@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1686521775;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KicQDi51QCgJrB94zDjmeXvEyj1WexYw2XIAkZsTagU=;
+        b=Bg3FFq4z+LN3uDx0QYx6isOKDDG+0nHA83v1sJZhQysaFwUvQVRlOLZ/W4qZW+kOQ6BrHS
+        yk+BVB0c4ywyOXKFJOG5ITx7t32uJNysR7y/I/+n6sYie/mKuBtUJ2yVc3ziGHxJAWxYKA
+        RkeMaAjSLYX7vTKJIS8zGam+CyDBWpqrVx2SLJ97Xe095Fnm43zX9SHBzTEokoQxIoohGo
+        sAf+/ePBjsV8U59q0Cj5k6+xvft61wLq2xVnseVqYQ8o4mwmne926U4YRhtNva/Nc/SjY5
+        b3jSe5dP3kg1iSxD4cQ8GT5/NdjIZIxcAYwVqitgkJa0yXhyB8udrvrLHes5rw==
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 72D3760004;
+        Sun, 11 Jun 2023 22:16:15 +0000 (UTC)
+Date:   Mon, 12 Jun 2023 00:16:15 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Jan Kiszka <jan.kiszka@siemens.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] rtc: pcf-8563: Report previously detected low-voltage
+ via RTC_VL_BACKUP_LOW
+Message-ID: <202306112216153a75dfa3@mail.local>
+References: <da84b6b1-a9d8-ce46-16a9-e1a2d495240c@siemens.com>
+ <20230610083135e40dd2f6@mail.local>
+ <1d532c45-ee33-9729-f0ac-b59c2bec8d7d@siemens.com>
+ <202306111511569834cac2@mail.local>
+ <9ac4b2a5-7cc8-4fce-7ea0-61b26d6ef223@siemens.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230405-add-dsc-support-v6-6-95eab864d1b6@quicinc.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+In-Reply-To: <9ac4b2a5-7cc8-4fce-7ea0-61b26d6ef223@siemens.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -50,64 +59,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-09 15:57:18, Jessica Zhang wrote:
-> Add documentation comments explaining the pclk_rate and hdisplay math
-> related to DSC.
+On 11/06/2023 18:28:22+0200, Jan Kiszka wrote:
+> On 11.06.23 17:11, Alexandre Belloni wrote:
+> > On 11/06/2023 15:38:04+0200, Jan Kiszka wrote:
+> >> On 10.06.23 10:31, Alexandre Belloni wrote:
+> >>> Hello Jan,
+> >>>
+> >>> On 09/06/2023 23:04:12+0200, Jan Kiszka wrote:
+> >>>> From: Jan Kiszka <jan.kiszka@siemens.com>
+> >>>>
+> >>>> The VL bit in the seconds register remains set only until seconds are
+> >>>> written under main power. As this often happens during boot-up after
+> >>>> picking up a network time, make sure to preserve the low battery state
+> >>>> across this, caching it and returning it via the RTC_VL_BACKUP_LOW bit.
+> >>>>
+> >>>> To permit userspace clearing this state during runtime, also implement
+> >>>> RTC_VL_CLR that works against the cached state.
+> >>>>
+> >>>> This is emulating RTCs which have a battery voltage check that works
+> >>>> under main power as well.
+> >>>>
+> >>>
+> >>> Emulating doesn't work well and I deliberately chose to not implement
+> >>> it. For example, in your scenario, if you boot twice without using
+> >>> VL_READ, you anyway have lost the information. This makes emulating
+> >>> unreliabl. The fix you need is in userspace where you have to ensure you
+> >>> read the status before setting the time.
+> >>
+> >> Then let's make sure the bit is also set in the hardware register. Then
+> >> also the reboot issue (which is practically a minor one) is solved. The
+> >> current situation is far from optimal.
+> > 
+> > This doesn't work because then the time will be considered invalid. I'm
+> > not sure why you don't want to fix your userspace.
+> > 
 > 
-> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
-> ---
->  drivers/gpu/drm/msm/dsi/dsi_host.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+> Nope, that could be easily avoided in software. The actual problem is
+> that the VL bit is not settable (clear-on-write). And that means we
+> can't do anything about losing the low battery information across
+> reboots - but that's no difference to the situation with the existing
+> driver.
 > 
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> index fb1d3a25765f..aeaadc18bc7b 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> @@ -564,6 +564,13 @@ void dsi_link_clk_disable_v2(struct msm_dsi_host *msm_host)
->  static unsigned long dsi_adjust_pclk_for_compression(const struct drm_display_mode *mode,
->  		const struct drm_dsc_config *dsc)
->  {
-> +	/*
-> +	 * Adjust the pclk rate by calculating a new hdisplay proportional to
-> +	 * the compression ratio such that:
-> +	 *     new_hdisplay = old_hdisplay * target_bpp / source_bpp
-> +	 *
-> +	 * Porches need not be adjusted during compression.
-> +	 */
->  	int new_hdisplay = DIV_ROUND_UP(mode->hdisplay * drm_dsc_get_bpp_int(dsc),
->  			dsc->bits_per_component * 3);
+> There is no "fix" for userspace as there is no standard framework to
+> read-out the status early and retrieve it from there when the user asks
+> for it. That's best done in the kernel.
 
-I won't reiterate my original troubles with this logic and the comment
-as that has well been described in v5 replies.
-
-Just want to ask why this comment couldn't be added in patch 5/6
-immediately when the logic is introduced?  Now readers won't have a clue
-what is going on until they skip one patch ahead.
-
-Furthermore it is lacking any explanation that this is a workaround for
-cmd-mode, and that porches are currently used to represent "transfer
-time" until those calculations are implemented.  At that point there is
-no concept of "not adjusting porches for compressed signals" anymore.
-
->  
-> @@ -961,6 +968,9 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
->  
->  		/* Divide the display by 3 but keep back/font porch and
->  		 * pulse width same
-> +		 *
-> +		 * hdisplay will be divided by 3 here to account for the fact
-> +		 * that DPU sends 3 bytes per pclk cycle to DSI.
->  		 */
->  		h_total -= hdisplay;
->  		hdisplay = DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 3);
-
-Still very glad to have this, thank you for adding it.  Note that it
-only further undermines the pclk adjustments, as I just explained in v5
-review.
-
-- Marijn
+That's not true, nothing prevents userspace from reading the battery
+status before setting the time and destroying the information which is
+exactly what you should be doing.
 
 > 
-> -- 
-> 2.40.1
-> 
+> In that light, I still believe my patch is an improvement over the
+> current situation without making anything worse.
+
+The information goes from behaving deterministically to being unreliable
+which makes the situation worse.
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
