@@ -2,113 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 294B772B003
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 04:28:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 216B172B009
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 04:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231389AbjFKC2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 22:28:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33490 "EHLO
+        id S231154AbjFKC57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 22:57:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjFKC17 (ORCPT
+        with ESMTP id S229450AbjFKC54 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 22:27:59 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70750359D;
-        Sat, 10 Jun 2023 19:27:54 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-543d32eed7cso1230555a12.2;
-        Sat, 10 Jun 2023 19:27:54 -0700 (PDT)
+        Sat, 10 Jun 2023 22:57:56 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B2D94;
+        Sat, 10 Jun 2023 19:57:55 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id 98e67ed59e1d1-25bc612be7cso281115a91.1;
+        Sat, 10 Jun 2023 19:57:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686450474; x=1689042474;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1686452275; x=1689044275;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZZKyrk80GHGRjJOdJJel001FvO+j2KlRrTx+XA1IwaY=;
-        b=SShXsAlVmeCsuDtXoC4sUVjP18LPMX5YXeAyzaUykqPgqjdinAS9aVALm4NbO1tENU
-         Vp4dQgXCSDwH+qUoBfttSyBYTYTZPMWvUSAkKBWX8zlC6q3TmvR4q67zT5GFZgOgA973
-         WzAS0BkwQg77hZol7FWQfT2ebs7aA+3y4pRCwZumd1wInTQQohKXcvTnkPsVBvlfLr8x
-         71ovfgqOPS/0sWJvrXeLGzfzVYaxpToSe73LAIEkTIwP7dC+/DZuxPDPTMFgKKMed0y/
-         jpbWFAl40YRFaEvEIG9J58aJLwNf7M7QCo3Fpre208BwXo3PpYUE8jgsOklS+KKGVnew
-         RaHg==
+        bh=3awTdCuiTDqGcCqTnA1vhG9h33OMzW2smnHBjNchLQ4=;
+        b=TckykcnM+TV79nPeXp177kqrjpgOY4FkrcwcYeuPqodiuaw+ScINxVVsiVQNEOHGHS
+         18QB8pvNwIDhby0M6FHegcNl3lw00tqhxY6n6l/4bqwK6zqulxVLB5chNks5D1i0euks
+         /IeAj+ePxskUK92BhXhUxVAVaWu375F/ht0ldxG/d5c6g/AnLAXHKK79fwJxDPK7vUL4
+         1kOSXhrLIbDykoLjmdhVYk2Eahl65CvHZ4Whc1hbB7RfvkCKxOIgaIgUv6PrRqmpLfol
+         X7vpHESxxvIJ2t+G4V4q8Huj0IkAMGwvpb+hOgWTOMMQhEGSpjMjM9+dMHIoqw3iRZqv
+         ajPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686450474; x=1689042474;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ZZKyrk80GHGRjJOdJJel001FvO+j2KlRrTx+XA1IwaY=;
-        b=Z6vKJIG7xZkLm+v9v7aA0iNuALkTYV3u82iVlqhQ8xmR2Q9dsnxl10eTQqhUD5tRlV
-         PKE1NGpMLTu4S5H0ULOaj7hItqN6yKtQww1/sLxh7DqPdvr+8mDEB3fMCTMsEWDdd8rL
-         UpKJ4l840B6kWWl7isuEXs5G8DQP49ViJ3eWxe3peeQh2zCWgotSisxJDpQ+9ECpMXmp
-         PcdiAj6o1OsQlgYBkI33y1BZhIczNIt1oD3/SlVuI6pk5frgZ0gFT/gSRrEnX/noZeTe
-         a1Oo3kZdl/lWkK2k9sUPZ3DdKCelF1m7ioeeGl1CeANfMEFy3hnWWWHH+7MVd38WvIrV
-         QK0g==
-X-Gm-Message-State: AC+VfDz3oYJw7vHYt0fMCax4TJPz/3XFtxhUnsCPEgW2t6qXNNl92SSo
-        NDPmVWIz1afZfG76qs3meoqWTr+xLmZhbA==
-X-Google-Smtp-Source: ACHHUZ6HnAVMhp2lSn0I3LgkbxqGHsODoUKgxm2ScyRFWnbq0b/2evpKIWwkzHPOPOpKkT4UrbW10Q==
-X-Received: by 2002:a17:90b:3b90:b0:259:d0f2:3576 with SMTP id pc16-20020a17090b3b9000b00259d0f23576mr5008901pjb.19.1686450473758;
-        Sat, 10 Jun 2023 19:27:53 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-75.three.co.id. [180.214.233.75])
-        by smtp.gmail.com with ESMTPSA id z7-20020a170902708700b001ae3b51269dsm5566976plk.262.2023.06.10.19.27.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Jun 2023 19:27:53 -0700 (PDT)
-Message-ID: <17d7e7f8-ad8d-1696-32b7-3ff9fd4548c1@gmail.com>
-Date:   Sun, 11 Jun 2023 09:27:45 +0700
+        d=1e100.net; s=20221208; t=1686452275; x=1689044275;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=3awTdCuiTDqGcCqTnA1vhG9h33OMzW2smnHBjNchLQ4=;
+        b=Lc0VHDnAOCvhhxLOFNaTILzmlAdp5dzpa1fNXhrFwmZmS4PnPjF6dPeCK9khmeLIvc
+         nYxNsA181NRsIRd7HZTW3WN+j5ZvNK6S/UREPt19d85p2mw0OEMaNVwBqFjh12viEhs+
+         GmdTXUrYl9xfoVdUrFghdw95zMHlqL+4waJzDtDKEX4FODY6mYz7QA8K/zTVThQFN3BI
+         JtcsOPCFv93JyLhLUC7TovgC8U+kPFPvlxYMW0u9UVCiAMIR744A7PS3GuODzJTvCjJR
+         pL/iZ/FcH4lVa/9LbhgsiAIKpYSh2FO0GImH2bvW8mfiVr9A/O8VoGPt8m8DF70v+knE
+         vPxQ==
+X-Gm-Message-State: AC+VfDzz9KzgdxNeGv7orDhM0vIRyjRjWWqA6yR+Hzga8tJPpIUmijDu
+        +tFs2xpOPsuAtuIMunBOMnM=
+X-Google-Smtp-Source: ACHHUZ5igU8LxM8i9dOvfy1rRJgvc5Q9EpahmP8duc6vcfNYjF7LX0oE7VAXaub+CR6tB8iHg/SpAg==
+X-Received: by 2002:a17:90a:5b14:b0:25b:bcba:149f with SMTP id o20-20020a17090a5b1400b0025bbcba149fmr2303962pji.47.1686452274886;
+        Sat, 10 Jun 2023 19:57:54 -0700 (PDT)
+Received: from localhost.localdomain (124x33x176x97.ap124.ftth.ucom.ne.jp. [124.33.176.97])
+        by smtp.gmail.com with ESMTPSA id l7-20020a17090a150700b0025621aa4c6bsm1530319pja.25.2023.06.10.19.57.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Jun 2023 19:57:54 -0700 (PDT)
+Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+        Thomas.Kopp@microchip.com
+Cc:     Oliver Hartkopp <socketcan@hartkopp.net>, netdev@vger.kernel.org,
+        marex@denx.de, Simon Horman <simon.horman@corigine.com>,
+        linux-kernel@vger.kernel.org,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v5 0/3] can: length: fix definitions and add bit length calculation
+Date:   Sun, 11 Jun 2023 11:57:25 +0900
+Message-Id: <20230611025728.450837-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.39.3
+In-Reply-To: <20230507155506.3179711-1-mailhol.vincent@wanadoo.fr>
+References: <20230507155506.3179711-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Content-Language: en-US
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux ext4 Development <linux-ext4@vger.kernel.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Fwd: ext4_check_descriptors: Block bitmap for group 0 overlaps block
- group descriptors
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+When created in [1], frames length definitions were added to implement
+byte queue limits (bql). Because bql expects lengths in bytes, bit
+length definitions were not considered back then.
+    
+Recently, a need to refer to the exact frame length in bits, with CAN
+bit stuffing, appeared in [2].
 
-I notice a regression report on Bugzilla [1]. Quoting from it:
+This series introduces can_frame_bits(): a function-like macro that
+can calculate the exact size of a CAN(-FD) frame in bits with or
+without bitsuffing.
 
-> Hi,
-> 
-> Fail to mount a filesystem in kernel 6.4.0
-> 
-> The Filesystem is clean. fsck -fp reports no errors
-> 
-> # uname -a
-> Linux medusa.dds.de 6.4.0-rc5 #2 SMP PREEMPT_DYNAMIC Wed Jun  7 08:11:59 CEST 2023 x86_64 GNU/Linux
-> # mount /dev/bigvg/lv_dat /mnt
-> mount: /mnt: mount(2) system call failed: Structure needs cleaning.
->        dmesg(1) may have more information after failed mount system call.
-> 
-> Under Kernel 6.3.4 everything works with this Filesystem
+[1] commit 85d99c3e2a13 ("can: length: can_skb_get_frame_len(): introduce
+    function to get data length of frame in data link layer")
+Link: https://git.kernel.org/torvalds/c/85d99c3e2a13
 
-The reporter then pasted short dmesg snippet:
+[2] RE: [PATCH] can: mcp251xfd: Increase poll timeout
+Link: https://lore.kernel.org/linux-can/BL3PR11MB64846C83ACD04E9330B0FE66FB729@BL3PR11MB6484.namprd11.prod.outlook.com/
 
-> [  104.501659] EXT4-fs (dm-9): ext4_check_descriptors: Block bitmap for group 0 overlaps block group descriptors
-> [  104.501664] EXT4-fs (dm-9): group descriptors corrupted!
-> 
 
-See Bugzilla for the full thread and attached dumpe2fs, lspci, and systeminfo.
+* Changelog *
 
-Anyway, I'm adding it to regzbot:
+v4 -> v5:
 
-#regzbot introduced: v6.3..v6.4 https://bugzilla.kernel.org/show_bug.cgi?id=217534
-#regzbot title: Block bitmap for group 0 overlaps block group descriptors, causing mount failure
+  * In __can_cc_frame_bits() and __can_fd_frame_bits(), enclose
+    data_len in brackets to prevent operator precedence issues.
 
-Thanks.
+  * Add a note in can_frame_bits() documentation to explain that
+    data_len shall have no side effects.
 
-[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217534
+  * While at it, make CAN(FD)_FRAME_LEN_MAX definition fit on a single
+    line.
+
+  * A few typo/grammar small fixes in the commit descriptions.
+
+Link: https://lore.kernel.org/linux-can/20230601165625.100040-1-mailhol.vincent@wanadoo.fr/
+
+v3 -> v4:
+
+  * No functional changes.
+
+  * as reported by Simon Horman, fix typo in the documentation of
+    can_bitstuffing_len(): "bitstream_len" -> "destuffed_len".
+
+  * as reported by Thomas Kopp, fix several other typos:
+      - "indicatior" -> "indicator"
+      - "in on the wire" -> "on the wire"
+      - "bitsuffing" -> "bitstuffing".
+
+  * in CAN_FRAME_LEN_MAX comment: specify that only the dynamic
+    bitstuffing gets ignored but that the intermission is included.
+
+  * move the Suggested-by: Thomas Kopp tag from patch 2 to patch 3.
+
+  * add Reviewed-by: Thomas Kopp tag on the full series.
+
+  * add an additional line of comment for the @intermission argument
+    of can_frame_bits().
+
+Link: https://lore.kernel.org/linux-can/20230530144637.4746-1-mailhol.vincent@wanadoo.fr/
+
+v2 -> v3:
+
+  * turn can_frame_bits() and can_frame_bytes() into function-like
+    macros. The fact that inline functions can not be used to
+    initialize constant struct fields was bothering me. I did my best
+    to make the macro look as less ugly as possible.
+
+  * as reported by Simon Horman, add missing document for the is_fd
+    argument of can_frame_bits().
+
+Link: https://lore.kernel.org/linux-can/20230523065218.51227-1-mailhol.vincent@wanadoo.fr/
+
+v1 -> v2:
+
+  * as suggested by Thomas Kopp, add a new patch to the series to fix
+    the stuff bit count and the fixed stuff bits definitions
+
+  * and another patch to fix documentation of the Remote Request
+    Substitution (RRS).
+
+  * refactor the length definition. Instead of using individual macro,
+    rely on an inline function. One reason is to minimize the number
+    of definitions. Another reason is that because the dynamic bit
+    stuff is calculated differently for CAN and CAN-FD, it is just not
+    possible to multiply the existing CANFD_FRAME_OVERHEAD_SFF/EFF by
+    the overhead ratio to get the bitsuffing: for CAN-FD, the CRC
+    field is already stuffed by the fixed stuff bits and is out of
+    scope of the dynamic bitstuffing.
+
+Link: https://lore.kernel.org/linux-can/20230507155506.3179711-1-mailhol.vincent@wanadoo.fr/
+
+Vincent Mailhol (3):
+  can: length: fix bitstuffing count
+  can: length: fix description of the RRS field
+  can: length: refactor frame lengths definition to add size in bits
+
+ drivers/net/can/dev/length.c |  15 +-
+ include/linux/can/length.h   | 299 +++++++++++++++++++++++++----------
+ 2 files changed, 216 insertions(+), 98 deletions(-)
 
 -- 
-An old man doll... just what I always wanted! - Clara
+2.39.3
+
