@@ -2,55 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6879972B41F
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 23:18:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AFF872B420
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 23:19:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232892AbjFKVSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 17:18:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56920 "EHLO
+        id S232933AbjFKVTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 17:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjFKVSc (ORCPT
+        with ESMTP id S229455AbjFKVTG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 17:18:32 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489681B1
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 14:18:30 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-777a93b3277so365353139f.3
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 14:18:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686518309; x=1689110309;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=++zemBX/2RrOYOFOLtSc1QjMmPmCs+Z/n8b0jPh3c7o=;
-        b=TY1F8Fh8usnRTOG8sGnW6SRb8zPggFjwY7KiDIWj+8mv8PtXoyv05Vf02254d4dc0Q
-         wtmaHa8H/G3WsUBkHAOLGDWo4pbfB0DgKKElemDe0HT56f6YtZ7oW3bZ559ZCF4qDUwp
-         NoxoPXTA7QIkHiIPGZvD44ygSxA1dcytuoWsvIT/tjR1W/VM3puk+ZHlbkarIY5jG+Kx
-         oySAn7ohdC7j62PRgjZ3AqbzHpzKRycXkLGtLty9PeF/bSX64e/65/6ehH/HDPc3odps
-         xncjlr9+MCDHv7C0MLmo5y0RO8NcbepjnPwVlXlK56+P6wYqtebSYMAasDFtwkC/UGKO
-         4BXQ==
-X-Gm-Message-State: AC+VfDyrlvTk2jrSaAg8x1TZlxneH640F9gOl5Q/waHrE9UcoeW98agB
-        Co7NCNrGvg+iRCCyUgXX7rYnVVlxNbtxeVZTzKZh++YmWGgm
-X-Google-Smtp-Source: ACHHUZ5uexlpBPtPJccaNdHhmErmovEuc0aJEQv+DulBACxbzELH3wDT/Ehuljo6vWiQkQ7yLj0tlIJ2iLEPDZLXWLeSG1iJZatu
+        Sun, 11 Jun 2023 17:19:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1DB1A8
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 14:19:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7129D610AA
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 21:19:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ED08C433EF;
+        Sun, 11 Jun 2023 21:19:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686518344;
+        bh=vJKhxBrtVeUqjaQ+DatC3N3vE9uMZrzSqPG7aOAj+c4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Tkjqg9H9KAJtrazTsVyYB5RgBBFcw+wPyKoDnrpTeDOpGmmf/8J5YhhSpiRJBfY0S
+         fIXslX6UhqxgU1f98opuA9/Izz1kkmzL+CmQmjYT819ZKUvVXAS9/TOjVqnND5nX/b
+         gcoxMm8n3kHVrtHfYyYjiWGmy0UpVpLITNEGh1hRm9ckHt49ahODYB0/aJhA9o7oF7
+         rgd7jodV/czCqgQ6EpwVAVDeGKf1Wy21do3sbsUOxvdUSCjY52ojPgZe0IQtyVA7G8
+         vNDtAMPSjYV7HuYPfiMdTiw52S3hGhOeBVYB2Y/DJ8/9yA24bqM2UUqABbjZZ7S1CP
+         qiEPnM2rH25Gw==
+Date:   Sun, 11 Jun 2023 23:19:01 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Eric Dumazet <edumazet@google.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Arjan van de Ven <arjan@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Rik van Riel <riel@surriel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>
+Subject: Re: [PATCH v7 19/21] timer: Implement the hierarchical pull model
+Message-ID: <ZIY6RTUfGuEmn8Iz@localhost.localdomain>
+References: <20230524070629.6377-1-anna-maria@linutronix.de>
+ <20230524070629.6377-20-anna-maria@linutronix.de>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:fd15:0:b0:777:afc6:8da0 with SMTP id
- c21-20020a6bfd15000000b00777afc68da0mr2935869ioi.1.1686518309621; Sun, 11 Jun
- 2023 14:18:29 -0700 (PDT)
-Date:   Sun, 11 Jun 2023 14:18:29 -0700
-In-Reply-To: <000000000000da4f6b05eb9bf593@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c0951105fde12435@google.com>
-Subject: Re: [syzbot] [nilfs?] general protection fault in nilfs_clear_dirty_page
-From:   syzbot <syzbot+53369d11851d8f26735c@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, dsterba@suse.com, hch@lst.de,
-        konishi.ryusuke@gmail.com, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-nilfs@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        wqu@suse.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230524070629.6377-20-anna-maria@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,25 +69,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
+Le Wed, May 24, 2023 at 09:06:27AM +0200, Anna-Maria Behnsen a écrit :
+> +static bool tmigr_inactive_up(struct tmigr_group *group,
+> +			      struct tmigr_group *child,
+> +			      void *ptr)
+> +{
+> +	union tmigr_state curstate, newstate;
+> +	struct tmigr_walk *data = ptr;
+> +	bool walk_done;
+> +	u8 childmask;
+> +
+> +	childmask = data->childmask;
+> +	newstate = curstate = data->groupstate;
+> +
+> +retry:
+> +	walk_done = true;
+> +
+> +	/* Reset active bit when child is no longer active */
+> +	if (!data->childstate.active)
+> +		newstate.active &= ~childmask;
+> +
+> +	if (newstate.migrator == childmask) {
+> +		/*
+> +		 * Find a new migrator for the group, because child group
+> +		 * is idle!
+> +		 */
+> +		if (!data->childstate.active) {
+> +			unsigned long new_migr_bit, active = newstate.active;
+> +
+> +			new_migr_bit = find_first_bit(&active, BIT_CNT);
+> +
+> +			if (new_migr_bit != BIT_CNT) {
+> +				newstate.migrator = BIT(new_migr_bit);
+> +			} else {
+> +				newstate.migrator = TMIGR_NONE;
+> +
+> +				/* Changes need to be propagated */
+> +				walk_done = false;
+> +			}
+> +		}
+> +	}
+> +
+> +	newstate.seq++;
+> +
+> +	WARN_ON_ONCE((newstate.migrator != TMIGR_NONE) && !(newstate.active));
+> +
+> +	if (!atomic_try_cmpxchg(&group->migr_state, &curstate.state, newstate.state)) {
+> +		newstate.state = curstate.state;
+> +
+> +		/*
+> +		 * Something changed in child/parent group in the meantime,
+> +		 * reread the state of child and parent; Update of
+> +		 * data->childstate is required for event handling;
+> +		 */
+> +		if (child)
+> +			data->childstate.state = atomic_read(&child->migr_state);
+> +
+> +		goto retry;
+> +	}
+> +
+> +	data->groupstate = newstate;
+> +	data->remote = false;
+> +
+> +	/* Event Handling */
+> +	tmigr_update_events(group, child, data);
+> +
+> +	if (group->parent && (walk_done == false)) {
+> +		data->childmask = group->childmask;
+> +		data->childstate = newstate;
+> +		data->groupstate.state = atomic_read(&group->parent->migr_state);
+> +	}
+> +
+> +	/*
+> +	 * data->nextexp was set by tmigr_update_events() and contains the
+> +	 * expiry of first global event which needs to be handled
+> +	 */
+> +	if (data->nextexp != KTIME_MAX) {
+> +		WARN_ON_ONCE(group->parent);
+> +		/*
+> +		 * Toplevel path - If this cpu is about going offline wake
+> +		 * up some random other cpu so it will take over the
+> +		 * migrator duty and program its timer properly. Ideally
+> +		 * wake the cpu with the closest expiry time, but that's
+> +		 * overkill to figure out.
+> +		 */
+> +		if (!(this_cpu_ptr(&tmigr_cpu)->online)) {
+> +			unsigned int cpu = smp_processor_id();
+> +
+> +			cpu = cpumask_any_but(cpu_online_mask, cpu);
+> +			smp_send_reschedule(cpu);
 
-commit 4a445b7b6178d88956192c0202463063f52e8667
-Author: Qu Wenruo <wqu@suse.com>
-Date:   Sat Aug 13 08:06:53 2022 +0000
+Is that enough?
+Assume the following:
 
-    btrfs: don't merge pages into bio if their page offset is not contiguous
+* CPU 0 is idle and CPU 1 is the migrator
+* CPU 1 goes offline and send the above IPI to CPU 0.
+* CPU 0 doesn't have any global timer in its own queue, it calls
+  tmigr_cpu_deactivate() with KTIME_MAX. It's already ->idle, so it
+  returns ->wakeup that may be KTIME_MAX (also the call to tmigr_new_timer()
+  is ignored)
+* CPU 0 doesn't handle the idle migrator duty
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=17778475280000
-start commit:   022ce8862dff Merge tag 'i2c-for-6.4-rc6' of git://git.kern..
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=14f78475280000
-console output: https://syzkaller.appspot.com/x/log.txt?x=10f78475280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7474de833c217bf4
-dashboard link: https://syzkaller.appspot.com/bug?extid=53369d11851d8f26735c
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13e9d48b280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12d7fa63280000
+Or is there something else I'm missing?
 
-Reported-by: syzbot+53369d11851d8f26735c@syzkaller.appspotmail.com
-Fixes: 4a445b7b6178 ("btrfs: don't merge pages into bio if their page offset is not contiguous")
+I guess the effect should be mostly invisible due to the fact the hotplug
+BP process has to be carried by another active CPU afterward, which will take
+the migrator duty.
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+But still, it means you may have no migrator between CPUHP_AP_TMIGR_ONLINE and
+CPUHP_AP_IDLE_DEAD.
+
+Thanks.
