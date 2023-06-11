@@ -2,158 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C9F672B140
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 11:55:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E963072B147
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 12:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233226AbjFKJzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 05:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52672 "EHLO
+        id S233296AbjFKKBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 06:01:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjFKJzE (ORCPT
+        with ESMTP id S229483AbjFKKBS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 05:55:04 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3BBE56
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 02:55:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686477302; x=1718013302;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9xFoy8YY2bEQ2njjFFeAn0PsmVd441wz0nYBOh9GH98=;
-  b=YcQG3Btv9PUCrQ2tMZCIkjWLTBwtraJ92fm6M2rLFrw4xCl8TELOlIhp
-   Ceq3FJ6Yt0ZZIoxhVxPdpmuwK7r+H5qB4V/7XvgCEghzrXBt/XhQ2prmp
-   pZoi28X207SjvefDaha2/I18ij+XNmY9EYZVmejkj4yz16in6UyHgR4Xg
-   SkagBjRUIPIcbL8fH6HN135NfrLtngLcsqA9Q2xWHcLRvJ8l3U0JCFP8j
-   bK0dF2oAFkYJ3EnYLv2S6DiR0P/GW+L4irvnjuunxJYKzfil0XKWLcMCE
-   cM4CaR/rLT/J3YJIwzc7TRSngjHqRcB8Pv/g8xL5C9OzreBita/huDg4B
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10737"; a="444215437"
-X-IronPort-AV: E=Sophos;i="6.00,234,1681196400"; 
-   d="scan'208";a="444215437"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2023 02:55:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10737"; a="1040991129"
-X-IronPort-AV: E=Sophos;i="6.00,234,1681196400"; 
-   d="scan'208";a="1040991129"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 11 Jun 2023 02:54:57 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q8Hmi-000An6-2x;
-        Sun, 11 Jun 2023 09:54:56 +0000
-Date:   Sun, 11 Jun 2023 17:54:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     William Zhang <william.zhang@broadcom.com>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        Linux MTD List <linux-mtd@lists.infradead.org>
-Cc:     oe-kbuild-all@lists.linux.dev, f.fainelli@gmail.com,
-        rafal@milecki.pl, kursad.oney@broadcom.com,
-        joel.peshkin@broadcom.com, computersforpeace@gmail.com,
-        anand.gore@broadcom.com, dregan@mail.com, kamal.dasu@broadcom.com,
-        tomer.yacoby@broadcom.com, dan.beygelman@broadcom.com,
-        William Zhang <william.zhang@broadcom.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 10/12] mtd: rawnand: brcmnand: Add BCMBCA read data bus
- interface
-Message-ID: <202306111741.1Hs0TVE4-lkp@intel.com>
-References: <20230606231252.94838-11-william.zhang@broadcom.com>
+        Sun, 11 Jun 2023 06:01:18 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D2D9123
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 03:01:16 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-516a008e495so6890749a12.1
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 03:01:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20221208.gappssmtp.com; s=20221208; t=1686477675; x=1689069675;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=U7HN0f6TOWWkr11pJT0tfFyGZ1Me6eKxGL1ZqHz5p/E=;
+        b=CK+40rDIEO4qBWIjslHU71w2FzcpmL66yJ2ffo8QNiGyJVgjt2njdUY13r8vlWLyRh
+         bFzF3aspyFifeybgeAm5JsTbvM0Y0U+htlNyMhY4rZdso0DpijNINO8CzRHkG4h6vTm2
+         qDNewH1UtM2COGT2JZr0R53kucC4xe+Scno8vkuo9GrhvTpVhzxcRtNBK/Aq+CslaRWL
+         6hGnkuO6xqG3ciKigTB9qYkhGVxQ+wJ/f/yVK+VC1tnSVF3wpmP3pZLfGG23kH9vlrXt
+         mefPq9PTmMZ08D7NdNkgeJfPZ4BFv+VTpfc09VRr8QF7C3rGqDJ7tFv5INdS55jkARsQ
+         vZYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686477675; x=1689069675;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U7HN0f6TOWWkr11pJT0tfFyGZ1Me6eKxGL1ZqHz5p/E=;
+        b=Hi9H9NQRjg7lP2FAe38gX4NoZab8HpSe+PwPFB6jUT0Lj07TT+RM5u5iG/tM5YdKaL
+         qumtrV71i8IHzBqD8L2yt9P88qzXIHBFxK3R1m2Wy3XEdNzuavQzcMLy+9LSL0SfLgru
+         ZXTUbqytUbFNKGEp/3Vcpeq2PtR6X3cqvw7cW277NgzJEK54xJRfka0DEchxgWbUoBXe
+         oasPhGjSDMEULdIk2a/13+Msl/o0RWX3PypvM/Q/3lvY1Xs4pJZOT1SWsbZonMevZqHK
+         8y/Va5SFjArhkU59tIiKq+Y8Yht+koeWKo6CPkfMesp0Af1nFkrmyV0HCj5W8obJ82y6
+         hK9A==
+X-Gm-Message-State: AC+VfDxsDxs3YB+3eO/Nl27uODIbadRKfB7zWS2D7X4LPyIZEdIjzwah
+        EmMiFn1cvHKy8dSRiY8t1Oppfw==
+X-Google-Smtp-Source: ACHHUZ5gWuO7BIceLcmBKNYkMGao9xFPw4XyyBHtMY8YchWoEkZuudgzgArbFrxLghboz06yhmTvFA==
+X-Received: by 2002:a05:6402:520a:b0:516:a1d5:846f with SMTP id s10-20020a056402520a00b00516a1d5846fmr3286182edd.1.1686477674815;
+        Sun, 11 Jun 2023 03:01:14 -0700 (PDT)
+Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
+        by smtp.gmail.com with ESMTPSA id c7-20020aa7df07000000b00514b854c399sm3744198edy.84.2023.06.11.03.01.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 11 Jun 2023 03:01:13 -0700 (PDT)
+Date:   Sun, 11 Jun 2023 12:01:12 +0200
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
+Cc:     kuba@kernel.org, vadfed@meta.com, jonathan.lemon@gmail.com,
+        pabeni@redhat.com, corbet@lwn.net, davem@davemloft.net,
+        edumazet@google.com, vadfed@fb.com, jesse.brandeburg@intel.com,
+        anthony.l.nguyen@intel.com, saeedm@nvidia.com, leon@kernel.org,
+        richardcochran@gmail.com, sj@kernel.org, javierm@redhat.com,
+        ricardo.canuelo@collabora.com, mst@redhat.com, tzimmermann@suse.de,
+        michal.michalik@intel.com, gregkh@linuxfoundation.org,
+        jacek.lawrynowicz@linux.intel.com, airlied@redhat.com,
+        ogabbay@kernel.org, arnd@arndb.de, nipun.gupta@amd.com,
+        axboe@kernel.dk, linux@zary.sk, masahiroy@kernel.org,
+        benjamin.tissoires@redhat.com, geert+renesas@glider.be,
+        milena.olech@intel.com, kuniyu@amazon.com, liuhangbin@gmail.com,
+        hkallweit1@gmail.com, andy.ren@getcruise.com, razor@blackwall.org,
+        idosch@nvidia.com, lucien.xin@gmail.com, nicolas.dichtel@6wind.com,
+        phil@nwl.cc, claudiajkang@gmail.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, linux-rdma@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, poros@redhat.com,
+        mschmidt@redhat.com, linux-clk@vger.kernel.org,
+        vadim.fedorenko@linux.dev
+Subject: Re: [RFC PATCH v8 03/10] dpll: core: Add DPLL framework base
+ functions
+Message-ID: <ZIWbaLd87EMbkDAY@nanopsycho>
+References: <20230609121853.3607724-1-arkadiusz.kubalewski@intel.com>
+ <20230609121853.3607724-4-arkadiusz.kubalewski@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230606231252.94838-11-william.zhang@broadcom.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230609121853.3607724-4-arkadiusz.kubalewski@intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi William,
+Fri, Jun 09, 2023 at 02:18:46PM CEST, arkadiusz.kubalewski@intel.com wrote:
+>From: Vadim Fedorenko <vadim.fedorenko@linux.dev>
 
-kernel test robot noticed the following build warnings:
+[...]
 
-[auto build test WARNING on mtd/nand/next]
-[also build test WARNING on mtd/mtd/next mtd/mtd/fixes linus/master v6.4-rc5 next-20230609]
-[cannot apply to robh/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/William-Zhang/mtd-rawnand-brcmnand-Fix-ECC-level-field-setting-for-v7-2-controller/20230607-071834
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next
-patch link:    https://lore.kernel.org/r/20230606231252.94838-11-william.zhang%40broadcom.com
-patch subject: [PATCH 10/12] mtd: rawnand: brcmnand: Add BCMBCA read data bus interface
-config: arm-randconfig-s052-20230611 (https://download.01.org/0day-ci/archive/20230611/202306111741.1Hs0TVE4-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.3.0
-reproduce:
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/2fce7300f3e21ad0cb55442e1acfeaf60f41bf7d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review William-Zhang/mtd-rawnand-brcmnand-Fix-ECC-level-field-setting-for-v7-2-controller/20230607-071834
-        git checkout 2fce7300f3e21ad0cb55442e1acfeaf60f41bf7d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash drivers/mtd/nand/raw/brcmnand/
+>+ * dpll_xa_ref_dpll_first - find first record of given xarray
+>+ * @xa_refs: xarray
+>+ *
+>+ * Context: shall be called under a lock (dpll_lock)
+>+ * Return: first element on given xaaray
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306111741.1Hs0TVE4-lkp@intel.com/
+typo: xarray
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c:83:48: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *flash_cache @@     got void [noderef] __iomem *flash_cache @@
-   drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c:83:48: sparse:     expected void *flash_cache
-   drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c:83:48: sparse:     got void [noderef] __iomem *flash_cache
-   drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c:84:25: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c:84:25: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c:84:25: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c:86:25: sparse: sparse: cast removes address space '__iomem' of expression
->> drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c:86:25: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void const volatile [noderef] __iomem *from @@     got void * @@
-   drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c:86:25: sparse:     expected void const volatile [noderef] __iomem *from
-   drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c:86:25: sparse:     got void *
 
-vim +86 drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c
+>+ */
+>+struct dpll_pin_ref *dpll_xa_ref_dpll_first(struct xarray *xa_refs)
 
-    70	
-    71	static void bcmbca_read_data_bus(struct brcmnand_soc *soc,
-    72					 void __iomem *flash_cache,  u32 *buffer,
-    73					 int fc_words, bool is_param)
-    74	{
-    75		int i;
-    76	
-    77		if (!is_param) {
-    78			/*
-    79			 * memcpy can do unaligned aligned access depending on source
-    80			 * and dest address, which is incompatible with nand cache. Fallback
-    81			 * to the memcpy for io version
-    82			 */
-  > 83			if (bcmbca_nand_is_buf_aligned(flash_cache, buffer))
-    84				memcpy((void *)buffer, (void *)flash_cache, fc_words * 4);
-    85			else
-  > 86				memcpy_fromio((void *)buffer, (void *)flash_cache, fc_words * 4);
-    87		} else {
-    88			/* Flash cache has same endian as the host for parameter pages */
-    89			for (i = 0; i < fc_words; i++, buffer++)
-    90				*buffer = __raw_readl(flash_cache + i * 4);
-    91		}
-    92	}
-    93	
+[...]
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+>+/**
+>+ * dpll_device_get - find existing or create new dpll device
+>+ * @clock_id: clock_id of creator
+>+ * @device_idx: idx given by device driver
+>+ * @module: reference to registering module
+>+ *
+>+ * Get existing object of a dpll device, unique for given arguments.
+>+ * Create new if doesn't exist yet.
+>+ *
+>+ * Context: Acquires a lock (dpll_lock)
+>+ * Return:
+>+ * * valid dpll_device struct pointer if succeeded
+>+ * * ERR_PTR(-ENOMEM) - failed memory allocation
+
+Yeah, that is kind of obvious, isn't? Really, drop this pointless
+coments.
+
+
+>+ * * ERR_PTR(X) - failed allocation on dpll's xa
+>+ */
+>+struct dpll_device *
+>+dpll_device_get(u64 clock_id, u32 device_idx, struct module *module)
+
+[...]
+
+
+>+/**
+>+ * dpll_pin_register - register the dpll pin in the subsystem
+>+ * @dpll: pointer to a dpll
+>+ * @pin: pointer to a dpll pin
+>+ * @ops: ops for a dpll pin ops
+>+ * @priv: pointer to private information of owner
+>+ *
+>+ * Context: Acquires a lock (dpll_lock)
+>+ * Return:
+>+ * * 0 on success
+>+ * * -EINVAL - missing pin ops
+>+ * * -ENOMEM - failed to allocate memory
+
+Does not make sense to assign one errno to one specific error.
+Avoid tables like this.
+
+
+>+ */
+>+int
+>+dpll_pin_register(struct dpll_device *dpll, struct dpll_pin *pin,
+>+		  const struct dpll_pin_ops *ops, void *priv)
+>+{
+>+	int ret;
+>+
+>+	mutex_lock(&dpll_lock);
+>+	if (WARN_ON(!(dpll->module == pin->module &&
+>+		      dpll->clock_id == pin->clock_id)))
+>+		ret = -EFAULT;
+
+-EINVAL;
+
+
+>+	else
+>+		ret = __dpll_pin_register(dpll, pin, ops, priv);
+>+	mutex_unlock(&dpll_lock);
+>+
+>+	return ret;
+>+}
+
+[...]
