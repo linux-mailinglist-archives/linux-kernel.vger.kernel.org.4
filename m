@@ -2,78 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5223972B1E6
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 14:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AD3C72B1E9
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 14:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233517AbjFKMsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 08:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50694 "EHLO
+        id S233569AbjFKMzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 08:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjFKMs1 (ORCPT
+        with ESMTP id S229624AbjFKMzG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 08:48:27 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4F11734;
-        Sun, 11 Jun 2023 05:48:26 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id af79cd13be357-75d4aa85303so258914685a.2;
-        Sun, 11 Jun 2023 05:48:26 -0700 (PDT)
+        Sun, 11 Jun 2023 08:55:06 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115F61B8;
+        Sun, 11 Jun 2023 05:55:02 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-528cdc9576cso1601444a12.0;
+        Sun, 11 Jun 2023 05:55:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686487706; x=1689079706;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EFRTmqMoFnJZ0zC5NrP4IbLjA9BDp5g0LuXmguV3GvI=;
-        b=izQ81f8QJvGqEzwNDL8mrnj2MubcrUgkQaZievRf6k9xsbqSmqYNcIpM9XDBSDLVfg
-         GslTogZF4laXnu18uVPSBNSWnn/eAA+b/K9CPBb7A6UmYzYacpYZa+nduFCXzkX7nX4I
-         OxUuvelFtqFsv4PYQ27yX/tzd0LNQ8IXs7Ff5BrW9Tmtw1DFieK84WAdBnfnYgLVRcng
-         62O+jUIEcwzTa/wrTZuFNvDc/tZiRmXQ2lYTDuswdiAqoI3hy8DTtBO0v01lxGvyYPaH
-         +AvXTx9VhiynNyLzHMsa03HjnvqrwyGj3G4Nzotw5K5kSqegPL0M3GgoXVp9pKBV8vWm
-         n/+g==
+        d=gmail.com; s=20221208; t=1686488101; x=1689080101;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qoVZW2bivguqn6AKKTwEgxPn9HvFkbakdebxI4R8tV4=;
+        b=gtmQflKPxdDbDPdvpsPwyeaf5S7ll6Ms/7Rpg3IA4lmv5WCLvxp+WxyAuUzKwDizPV
+         mLbCP6F05cPnee6XuCaoH/JnOxJ2U93Cirghre/EaTSvusqdkyX7cVjzyW/mCl9jsPf4
+         lU8TFD4rOT0LIpWVfgcuMUOrS8ZdJ1B8qtzO9o25g41Pk2vATLfn0erGTVrFwVoldqA+
+         XaR2XPmF4375dukxhHVYFeN0gXdoCyMai2GPo9WKhTP4pu0HlDHRBvZXaEn8AiCxRW8t
+         j3GUp/i3tsgG61SVlx1aXXZ5evrE1T2t7qxP3MQ0VwETzH7z9v4NUiKltgLxZtpIORFh
+         i7Ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686487706; x=1689079706;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EFRTmqMoFnJZ0zC5NrP4IbLjA9BDp5g0LuXmguV3GvI=;
-        b=DG4d2/U0S+ACU264ESXu1Cy6V6xsBfuOGdHOr8QgmyrnpKP8X4wh+nB7QYy3kZfIVd
-         sSLaXvHs3ruQ9U4eYf4MvdHmaQ2Wq8B9uXLMx+bqQ43+0hwuiHE99k/eJmmGF94BjRrq
-         fcKC31MsGUf40mHpzrmt4WzAwo0lBo24YP61ym6Vs8ZSUi0WKNmH2Cbz6pZ2cmlVKGr2
-         raeDkVSmcQvVYyA71FNYDJX/vnNsqdVQriztu7Kv/sWidq8IVMnXzLwER7t6UxvjMAQo
-         fTbmzvOfyLdBxY6sOeS+hg2tk2QIO7GpRLVuzRIdk5pq5158XxtIWKpjCB820VUdJjIG
-         4jCw==
-X-Gm-Message-State: AC+VfDzMIeVVfhjPAJ3n8mMbSEMKcDakm2XJeqUo1HLFWBgFOgqK/8rb
-        Gw9deaL0MHub5R7w12/3m3c=
-X-Google-Smtp-Source: ACHHUZ55eyfAZm+Dbv/q06rZj5UlUL4YElzrurvDF5Db+vt62WUCn4+2ukbZefrCRLFcRbGpAkv6/w==
-X-Received: by 2002:a05:620a:190c:b0:75f:447:43a1 with SMTP id bj12-20020a05620a190c00b0075f044743a1mr5712660qkb.3.1686487705960;
-        Sun, 11 Jun 2023 05:48:25 -0700 (PDT)
-Received: from [10.1.97.4] (rrcs-24-39-76-222.nys.biz.rr.com. [24.39.76.222])
-        by smtp.gmail.com with ESMTPSA id t6-20020a05620a004600b0075ecdc937ffsm2228790qkt.41.2023.06.11.05.48.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 11 Jun 2023 05:48:25 -0700 (PDT)
-Message-ID: <98a35030-6dd3-795c-4381-1db4e94a18e4@gmail.com>
-Date:   Sun, 11 Jun 2023 07:48:23 -0500
+        d=1e100.net; s=20221208; t=1686488101; x=1689080101;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qoVZW2bivguqn6AKKTwEgxPn9HvFkbakdebxI4R8tV4=;
+        b=JX0oomnAiQeoWQUhDr3iIEEDm9aMbDtF8rAPSJH/RRM7nr1iUNXtT0MMazscf1DtT0
+         4GKdztBTgeZZapOCUcjhFscz0b0fhgtZx60izTmIFVqvdcaU9eqx6eASqv27+bLZHyha
+         xeLc3JtIUOo8chwD71ZGJzYv6lDJH8NYkMwKan8r0jxmRtdu9zB4xWwCZU2lj4CWZdP9
+         jBghLTDN7pd50hnS8n7QT919LBeu0+410loMrdWPmbJzZFbqbddwuT+QQnxaT7cCLRKa
+         ICPHryOYwJbfCaxHSE+BYANx58idpJj4T/pCEMzF0U7tanUKNRp04WB5eyFh6Iv6Wd/u
+         xC6w==
+X-Gm-Message-State: AC+VfDwAcSuFHC+rNRRQPUMnxgNelqS+zvoW8B60zhc2uO5f5zUt+TNh
+        qukk+jcr9j7mY6hr1ZOojhU=
+X-Google-Smtp-Source: ACHHUZ6r7U3mGgGJzSzAU+viZ5EAmnneQo/rSzsl1VQoHb5SWVmusE97aqBxjpoWwUdtvrHR67NIfA==
+X-Received: by 2002:a17:90a:617:b0:256:dbfb:9b5e with SMTP id j23-20020a17090a061700b00256dbfb9b5emr5669642pjj.29.1686488101339;
+        Sun, 11 Jun 2023 05:55:01 -0700 (PDT)
+Received: from debian.me ([103.124.138.155])
+        by smtp.gmail.com with ESMTPSA id ms18-20020a17090b235200b0025bbe90d3cbsm1910806pjb.44.2023.06.11.05.55.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 11 Jun 2023 05:55:00 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id F0AD8106A3A; Sun, 11 Jun 2023 19:54:52 +0700 (WIB)
+Date:   Sun, 11 Jun 2023 19:54:52 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Shaomin Deng <dengshaomin@cdjrlc.com>, viro@zeniv.linux.org.uk,
+        brauner@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mao Zhu <zhumao001@208suo.com>
+Subject: Re: [PATCH] fs: Fix comment typo
+Message-ID: <ZIXEHHvkJVlmE_c4@debian.me>
+References: <20230611123314.5282-1-dengshaomin@cdjrlc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] gpiolib: demote the hogging log messages to debug
-Content-Language: en-US
-From:   Frank Rowand <frowand.list@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Kent Gibson <warthog618@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20230605125248.279921-1-brgl@bgdev.pl>
- <CAL_JsqKczF9yYHWjqneBv-y+Qv+O7AkX4gwVG87+aPPazKxtDw@mail.gmail.com>
- <22a21176-f2e2-bce5-2223-97cb095162c5@gmail.com>
-In-Reply-To: <22a21176-f2e2-bce5-2223-97cb095162c5@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="+O3zIJTHyNTqGyBt"
+Content-Disposition: inline
+In-Reply-To: <20230611123314.5282-1-dengshaomin@cdjrlc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,66 +75,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/11/23 07:39, Frank Rowand wrote:
-> On 6/9/23 08:47, Rob Herring wrote:
->> On Mon, Jun 5, 2023 at 6:53 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->>>
->>> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->>>
->>> Drivers should be silent when they work correctly. There's no reason to
->>> emit info messages when GPIO lines are hogged. Demote the message to
->>> debug.
->>>
->>> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->>> Suggested-by: Kent Gibson <warthog618@gmail.com>
->>> ---
->>>  drivers/gpio/gpiolib.c |  2 +-
->>>  drivers/of/unittest.c  | 16 ++++++++--------
->>>  2 files changed, 9 insertions(+), 9 deletions(-)
->>>
->>> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
->>> index a7220e04a93e..e4515bda8915 100644
->>> --- a/drivers/gpio/gpiolib.c
->>> +++ b/drivers/gpio/gpiolib.c
->>> @@ -4243,7 +4243,7 @@ int gpiod_hog(struct gpio_desc *desc, const char *name,
->>>         /* Mark GPIO as hogged so it can be identified and removed later */
->>>         set_bit(FLAG_IS_HOGGED, &desc->flags);
->>>
->>> -       gpiod_info(desc, "hogged as %s%s\n",
->>> +       gpiod_dbg(desc, "hogged as %s%s\n",
->>>                 (dflags & GPIOD_FLAGS_BIT_DIR_OUT) ? "output" : "input",
->>>                 (dflags & GPIOD_FLAGS_BIT_DIR_OUT) ?
->>>                   (dflags & GPIOD_FLAGS_BIT_DIR_VAL) ? "/high" : "/low" : "");
->>> diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
->>> index 2191c0136531..0060334a98a7 100644
->>> --- a/drivers/of/unittest.c
->>> +++ b/drivers/of/unittest.c
->>> @@ -1849,19 +1849,19 @@ static void __init of_unittest_overlay_gpio(void)
->>>          * driver is registered
->>>          */
->>>
->>> -       EXPECT_BEGIN(KERN_INFO,
->>> +       EXPECT_BEGIN(KERN_DEBUG,
->>>                      "gpio-<<int>> (line-B-input): hogged as input\n");
->>
->> As debug messages are normally off, I think you can just remove these.
-> 
-> This patch is an example of exactly why the message level is the first parameter
-> passed to EXPECT_*().  The test results are then _always_ valid, not just
-> _normally_.
 
-One should never say never.  One should never say always. :-)
+--+O3zIJTHyNTqGyBt
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Yes, there is still the exception where debug can be enabled independently
-for drivers/gpio/gpiolib.c  vs for drivers/of/unittest.c.  And dynamic
-debug can make things even more wonky.
+On Sun, Jun 11, 2023 at 08:33:14AM -0400, Shaomin Deng wrote:
+> From: Mao Zhu <zhumao001@208suo.com>
+>=20
+> Delete duplicated word in comment.
 
--Frank
+On what function?
 
-> 
-> -Frank
-> 
->>
->> Rob
-> 
+>=20
+> Signed-off-by: Mao Zhu <zhumao001@208suo.com>
 
+You're carrying someone else's patch, so besides SoB from original
+author, you need to also have your own SoB.
+
+> ---
+>  include/linux/fs.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/include/linux/fs.h b/include/linux/fs.h
+> index df6c1817906f..aa870b77cc2b 100644
+> --- a/include/linux/fs.h
+> +++ b/include/linux/fs.h
+> @@ -2675,7 +2675,7 @@ extern void evict_inodes(struct super_block *sb);
+>  void dump_mapping(const struct address_space *);
+> =20
+>  /*
+> - * Userspace may rely on the the inode number being non-zero. For exampl=
+e, glibc
+> + * Userspace may rely on the inode number being non-zero. For example, g=
+libc
+>   * simply ignores files with zero i_ino in unlink() and other places.
+>   *
+>   * As an additional complication, if userspace was compiled with
+
+I don't see the function name in above diff (dump_mapping() isn't the
+function I mean). Regardless, the fix LGTM.
+
+@cdjrlc.com developers: I'm really, really fed up with you ignoring
+review comments. It seems like you have issues on your mail setup. Fix
+your mailer! Until then, I just say NAK.
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--+O3zIJTHyNTqGyBt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZIXEGQAKCRD2uYlJVVFO
+o7seAP9+215GHU5WZCA77cMwS1Iq2tmRXpMWMURenHy1HQmDPgD+I183rge40np6
+c189kL3vpaibaUYDbla/LnSryNu4oA0=
+=KrJv
+-----END PGP SIGNATURE-----
+
+--+O3zIJTHyNTqGyBt--
