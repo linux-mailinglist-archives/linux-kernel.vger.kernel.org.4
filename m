@@ -2,91 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D26F72B13C
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 11:47:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A01672B13D
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 11:51:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232871AbjFKJr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 05:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51534 "EHLO
+        id S229852AbjFKJvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 05:51:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231149AbjFKJrZ (ORCPT
+        with ESMTP id S229483AbjFKJvA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 05:47:25 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B2BE7F
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 02:47:24 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-514953b3aa6so4624951a12.1
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 02:47:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686476843; x=1689068843;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IntEEcMbVJXLbajRNOwZboTq/1i67BALysa6LjImK+s=;
-        b=aBYnS+VThRez9lznNmoyJRFgygrq8pGrQtYTP/2GSODlt++DFrf7QTtCV1GdBevEvj
-         DqvDObSCdV/2fD4UyafoyrBFjfP3Ryj1C99E18MCyqA8g46ZoiruZwhi2Z+3PtLIIhbX
-         cofRXISLK6gF3HEjLKFOdYxqnTFNe5OUveppumV9AWEwdvXwHoT45DP9dRhaHg6WlNNF
-         yATbwjNlWE1Ys9fOtfczxaLCiYqRfuOVOtEbx7FPhX/yWM0dZsT7kaLTCQcouA9jod0W
-         NOcy8JRNWESNDbj1q6JLTK+++II9rL8G1zpcbhrJAa903x3QJgodNE6yuC4jog6xWPl/
-         +hOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686476843; x=1689068843;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IntEEcMbVJXLbajRNOwZboTq/1i67BALysa6LjImK+s=;
-        b=STM4//f/9affoJ1CIZ2vovlPcd2QEXHUOVEB7oriSoT13LkbT7+Hp8bvZ2FexHBcci
-         VKIhM55IUbBXq/GDDqZf2bobXHf0ZOvXPU1x4cDQXvygBaLy29xk0ySjrP5G2wv64Ts4
-         sUsyvqUaJpXUWf0KtzTebWPU7qN+UzpopzSK3fvYQF4cBicqpL9iA5BLdWcuAvg4TrfV
-         2rQ/PVJyNyulEUlBsxJLGcU6/g8vmAm+JnPAtLJzLA0TqzJorOTz8H2dlq4EbqPJmy9d
-         XCPOIbI71pJtZ5xs+I500MmnIJ0leLVc51wduSkdxy08XNP9TFp/YFkyK2hKMKV2wTk/
-         IejQ==
-X-Gm-Message-State: AC+VfDzJ93sk/cmpKMEfIUQEcOzexa25otth376DUA+uq+oIUGafTbow
-        8doLTbarLaRfXoJpvQf0rZpEaY58oNZUO48oPCs=
-X-Google-Smtp-Source: ACHHUZ5lJ/s3LKjtd4cT7LjyGksIdUWZcHMOoBQ9KT88hyWBydYv1BVEo+MbrlPqC8iBaXlZBZlkZA==
-X-Received: by 2002:aa7:dcc8:0:b0:50c:2215:317e with SMTP id w8-20020aa7dcc8000000b0050c2215317emr2727440edu.15.1686476843126;
-        Sun, 11 Jun 2023 02:47:23 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id f9-20020a056402068900b0051495ce23absm3696998edy.10.2023.06.11.02.47.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 11 Jun 2023 02:47:22 -0700 (PDT)
-Message-ID: <7e1c9011-241c-71e2-7318-499114d66218@linaro.org>
-Date:   Sun, 11 Jun 2023 11:47:19 +0200
+        Sun, 11 Jun 2023 05:51:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0952E68
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 02:50:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5223261118
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 09:50:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB6E3C4339B
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 09:50:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686477058;
+        bh=jgmPc3VFPciiBOwfOr6D2N6SHwM4FCyXZkBC4lU756g=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=CEC67kSFEDlsGjc6n6f/8gQ3eqDc9NFsolfBJrkv0cTK0C8qWv07Zo57/WfWuaamI
+         MGG+g4eNKQDZSqwePnOXkeS2gbzf1lBQ5KOF/vH122LoweJUQx0YNWsbMUEPYrfraa
+         RDBQ/heBDfEC7bfhEysEQhxTKCJkD8myZehQg0rBoPhR/IAfN5fb/AseIGQsFWuQfk
+         B9q4up8jYrJ6pd6iwSZ3TeJ1iGnZtqpNDODg/haBFKgw4sUj0zqJ1Ijf693OIcNYZV
+         ncyl7k3mkiL/HlD8JQH4vcdXTF56wh9rcms/KRD7JUBkD3nmflNmgNB/r5wEsuJVlQ
+         9uwvt/+7/bMYA==
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-652a6bf4e6aso2661396b3a.2
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 02:50:58 -0700 (PDT)
+X-Gm-Message-State: AC+VfDx/O1WYudZsRtgwM20UCAoLD960PfqAr5R4VcU3yfYE4Bi4wKSU
+        4AQ4KrLY4tZhCM66u+7fvuxt1il1gvDSlErNq2k=
+X-Google-Smtp-Source: ACHHUZ7ZtYX6JFjreNiLVZ0dVifEH4YAGMivDTU1JOT0pyaqDXpnHueK7LrM6KrVv3wtY33XCkIIdlcVYlguwpNyBBo=
+X-Received: by 2002:a17:90b:118c:b0:253:6a05:1bce with SMTP id
+ gk12-20020a17090b118c00b002536a051bcemr4895092pjb.35.1686477058245; Sun, 11
+ Jun 2023 02:50:58 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v3 1/3] dt-bindings: thermal: sun8i: Add binding for
- D1/T113s THS controller
-Content-Language: en-US
-To:     Maksim Kiselev <bigunclemax@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-riscv@lists.infradead.org
-References: <20230610204225.1133473-1-bigunclemax@gmail.com>
- <20230610204225.1133473-2-bigunclemax@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230610204225.1133473-2-bigunclemax@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230609120636.3969045-1-arnd@kernel.org> <b3a3e2f8-51d8-f8ce-95ce-1180f80cc2d2@habana.ai>
+In-Reply-To: <b3a3e2f8-51d8-f8ce-95ce-1180f80cc2d2@habana.ai>
+From:   Oded Gabbay <ogabbay@kernel.org>
+Date:   Sun, 11 Jun 2023 12:50:31 +0300
+X-Gmail-Original-Message-ID: <CAFCwf122kE8sNksXivPA+E=BWzjroKowwqDJrHVMNj-o3oJq0A@mail.gmail.com>
+Message-ID: <CAFCwf122kE8sNksXivPA+E=BWzjroKowwqDJrHVMNj-o3oJq0A@mail.gmail.com>
+Subject: Re: [PATCH] accel/habanalabs: add more debugfs stub helpers
+To:     Tomer Tayar <ttayar@habana.ai>
+Cc:     Arnd Bergmann <arnd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Ofir Bitton <obitton@habana.ai>,
+        Ohad Sharabi <osharabi@habana.ai>,
+        Dafna Hirschfeld <dhirschfeld@habana.ai>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -95,70 +67,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/06/2023 22:42, Maksim Kiselev wrote:
-> From: Maxim Kiselev <bigunclemax@gmail.com>
-> 
-> Add a binding for D1/T113s thermal sensor controller.
-> 
-> Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
+On Fri, Jun 9, 2023 at 4:37=E2=80=AFPM Tomer Tayar <ttayar@habana.ai> wrote=
+:
+>
+> On 09/06/2023 15:06, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >
+> > Two functions got added with normal prototypes for debugfs, but not
+> > alternative when building without it:
+> >
+> > drivers/accel/habanalabs/common/device.c: In function 'hl_device_init':
+> > drivers/accel/habanalabs/common/device.c:2177:14: error: implicit decla=
+ration of function 'hl_debugfs_device_init'; did you mean 'hl_debugfs_init'=
+? [-Werror=3Dimplicit-function-declaration]
+> > drivers/accel/habanalabs/common/device.c:2305:9: error: implicit declar=
+ation of function 'hl_debugfs_device_fini'; did you mean 'hl_debugfs_remove=
+_file'? [-Werror=3Dimplicit-function-declaration]
+> >
+> > Add stubs for these as well.
+> >
+> > Fixes: 553311fc7b76e ("accel/habanalabs: expose debugfs files later")
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>
+> Thanks,
+> Reviewed-by: Tomer Tayar <ttayar@habana.ai>
 
-One patchset per day, not multiple within 15 minutes.
-
-> ---
->  .../thermal/allwinner,sun8i-a83t-ths.yaml     | 20 ++++++++++++++++++-
->  1 file changed, 19 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
-> index fbd4212285e2..001faa37fc27 100644
-> --- a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
-> @@ -16,6 +16,7 @@ properties:
->        - allwinner,sun8i-a83t-ths
->        - allwinner,sun8i-h3-ths
->        - allwinner,sun8i-r40-ths
-> +      - allwinner,sun20i-d1-ths
->        - allwinner,sun50i-a64-ths
->        - allwinner,sun50i-a100-ths
->        - allwinner,sun50i-h5-ths
-> @@ -61,6 +62,7 @@ allOf:
->          compatible:
->            contains:
->              enum:
-> +              - allwinner,sun20i-d1-ths
->                - allwinner,sun50i-a100-ths
->                - allwinner,sun50i-h6-ths
->  
-> @@ -84,7 +86,9 @@ allOf:
->        properties:
->          compatible:
->            contains:
-> -            const: allwinner,sun8i-h3-ths
-> +            enum:
-> +              - allwinner,sun8i-h3-ths
-> +              - allwinner,sun20i-d1-ths
->  
->      then:
->        properties:
-> @@ -103,6 +107,7 @@ allOf:
->              enum:
->                - allwinner,sun8i-h3-ths
->                - allwinner,sun8i-r40-ths
-> +              - allwinner,sun20i-d1-ths
->                - allwinner,sun50i-a64-ths
->                - allwinner,sun50i-a100-ths
->                - allwinner,sun50i-h5-ths
-> @@ -159,4 +164,17 @@ examples:
->           #thermal-sensor-cells = <1>;
->      };
->  
-> +  - |
-> +    thermal-sensor@2009400 {
-> +          compatible = "allwinner,sun20i-d1-ths";
-
-
-New compatible does not warrant new example. It's the same as previous.
-Drop it.
-
-Best regards,
-Krzysztof
-
+Thanks,
+Applied to -fixes.
+Oded
+>
+> > ---
+> >   drivers/accel/habanalabs/common/habanalabs.h | 9 +++++++++
+> >   1 file changed, 9 insertions(+)
+> >
+> > diff --git a/drivers/accel/habanalabs/common/habanalabs.h b/drivers/acc=
+el/habanalabs/common/habanalabs.h
+> > index d92ba2e30e310..2f027d5a82064 100644
+> > --- a/drivers/accel/habanalabs/common/habanalabs.h
+> > +++ b/drivers/accel/habanalabs/common/habanalabs.h
+> > @@ -3980,6 +3980,15 @@ static inline void hl_debugfs_fini(void)
+> >   {
+> >   }
+> >
+> > +static inline int hl_debugfs_device_init(struct hl_device *hdev)
+> > +{
+> > +     return 0;
+> > +}
+> > +
+> > +static inline void hl_debugfs_device_fini(struct hl_device *hdev)
+> > +{
+> > +}
+> > +
+> >   static inline void hl_debugfs_add_device(struct hl_device *hdev)
+> >   {
+> >   }
+>
+>
