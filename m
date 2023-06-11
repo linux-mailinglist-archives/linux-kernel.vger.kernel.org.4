@@ -2,81 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 429D672B493
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 00:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2085A72B496
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 00:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231817AbjFKWRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 18:17:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34524 "EHLO
+        id S231939AbjFKWZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 18:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbjFKWR2 (ORCPT
+        with ESMTP id S229512AbjFKWZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 18:17:28 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246C0E51
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 15:17:28 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-770222340cfso475346439f.3
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 15:17:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686521847; x=1689113847;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tb0ZpKp5Xcf7c2M/6Lg/dqUujad/vr5X4auVnTDjdJ0=;
-        b=QYpaX5Svo9tuYKMa1XoxlQmAwNYTImWIouwNfEWMYLIrWcQj+/KCxNT2G21rhqIFRZ
-         aTZbbVUpls5eH3pEjp3PbPfUmQ7WJtlhyVjEFyxyOVn0GnOO8dSfK1fZcO5o27mZZGkQ
-         BlZgIIE6Q8LkjatEbcW0q2VPMCNtxo+9EYXf7CUKzCQ96m7Hf2LI8tUjvKguwWjJdP/e
-         B4RlMg0wAeGZbpLtPOB9uBAazDZ8OmIpAYuthAGadSzs5JrTqxzdfTzs0y7mbwtTaq3+
-         Jn9Rhhpy1lRlyrBoLN0AoHOzpstoOlP1/smnhl55VF9WCJVfRy1efM17XzcdbzboOmzn
-         UMmQ==
-X-Gm-Message-State: AC+VfDwyMosLBAHP54ImvgZQmqmhxfCb+rd4OiY5z0Aqdc2PobYWpdL3
-        QfIZpfE3ReonCbVkibgLe3QjIo3gQVW+R9QrOZaALiLcerYk
-X-Google-Smtp-Source: ACHHUZ76jxhpMkdSOWymiIXSmAP6nlbvMNMejA6KYO29dhEW02hKZhueWLXvaOgfjmygw/0Wl9A7WAYJqR30bFmRG9ZnFevqGqT/
+        Sun, 11 Jun 2023 18:25:29 -0400
+X-Greylist: delayed 220 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 11 Jun 2023 15:25:26 PDT
+Received: from pb-smtp21.pobox.com (pb-smtp21.pobox.com [173.228.157.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E84139;
+        Sun, 11 Jun 2023 15:25:26 -0700 (PDT)
+Received: from pb-smtp21.pobox.com (unknown [127.0.0.1])
+        by pb-smtp21.pobox.com (Postfix) with ESMTP id EB5072C298;
+        Sun, 11 Jun 2023 18:21:44 -0400 (EDT)
+        (envelope-from tdavies@darkphysics.net)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=pobox.com; h=date:from
+        :to:cc:subject:message-id:mime-version:content-type; s=sasl; bh=
+        z+Ge1TsISNeopxsJaxZvRckLuWJjsX/bscizidOYUHY=; b=heK9KiFHa98/9xb4
+        Syl79BqHipP7Lfncug0ygiCXtGxjxFZzs/LbKGIRTItHGW6Vdst280cqrA2Y8QcF
+        o2xIp1zTreYsYEsmccLEZGou1O+35Kw+cyAxfTaqke52jsj1CSD6UH2i4WYwGc5I
+        dH+3B/SUiLhBYcS15Xtb1X3BkPc=
+Received: from pb-smtp21.sea.icgroup.com (unknown [127.0.0.1])
+        by pb-smtp21.pobox.com (Postfix) with ESMTP id E2BB22C297;
+        Sun, 11 Jun 2023 18:21:44 -0400 (EDT)
+        (envelope-from tdavies@darkphysics.net)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=darkphysics.net;
+ h=date:from:to:cc:subject:message-id:mime-version:content-type;
+ s=2019-09.pbsmtp; bh=z+Ge1TsISNeopxsJaxZvRckLuWJjsX/bscizidOYUHY=;
+ b=PwEIP3kNnqBbKve2G14PXwGOp/iZ8K1Iqj4naiQfNCPFmd9UlHLZFnen7JiGog0ylJYgKQLw04J06/i8b5g60IBYwDnwIPLVWBlXvmOlArRKXX+J3cum56pklDaPkHCrkGmTAuJgQjLIXoEIfxD3lrjROKHKvXx4XpLy4hqCFMg=
+Received: from oatmeal.darkphysics (unknown [76.146.178.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by pb-smtp21.pobox.com (Postfix) with ESMTPSA id C31E22C295;
+        Sun, 11 Jun 2023 18:21:41 -0400 (EDT)
+        (envelope-from tdavies@darkphysics.net)
+Date:   Sun, 11 Jun 2023 15:21:36 -0700
+From:   Tree Davies <tdavies@darkphysics.net>
+To:     anthony.l.nguyen@intel.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     tdavies@darkphysics.net, intel-wired-lan@lists.osuosl.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] net/e1000: Fix single statement blocks warning
+Message-ID: <ZIZI5czU2Qv5KrPA@oatmeal.darkphysics>
 MIME-Version: 1.0
-X-Received: by 2002:a02:735d:0:b0:420:cbe4:af62 with SMTP id
- a29-20020a02735d000000b00420cbe4af62mr2890400jae.5.1686521847528; Sun, 11 Jun
- 2023 15:17:27 -0700 (PDT)
-Date:   Sun, 11 Jun 2023 15:17:27 -0700
-In-Reply-To: <000000000000b0cabf05f90bcb15@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a0c29605fde1f706@google.com>
-Subject: Re: [syzbot] [ntfs3?] general protection fault in ni_readpage_cmpr
-From:   syzbot <syzbot+af224b63e76b2d869bc3@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org,
-        almaz.alexandrovich@paragon-software.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        neilb@suse.de, ntfs3@lists.linux.dev,
-        syzkaller-bugs@googlegroups.com, torvalds@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="luNyGatCr/pDLYsq"
+Content-Disposition: inline
+X-Pobox-Relay-ID: 57659C30-08A6-11EE-AE76-B31D44D1D7AA-45285927!pb-smtp21.pobox.com
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NO_DNS_FOR_FROM,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has bisected this issue to:
 
-commit 9fd472af84abd6da15376353c2283b3df9497646
-Author: NeilBrown <neilb@suse.de>
-Date:   Tue Mar 22 21:38:54 2022 +0000
+--luNyGatCr/pDLYsq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-    mm: improve cleanup when ->readpages doesn't process all pages
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1285d453280000
-start commit:   64569520920a Merge tag 'block-6.4-2023-06-09' of git://git..
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1185d453280000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1685d453280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3c980bfe8b399968
-dashboard link: https://syzkaller.appspot.com/bug?extid=af224b63e76b2d869bc3
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15835795280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16966d43280000
+--luNyGatCr/pDLYsq
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: attachment;
+	filename="0001-net-e1000-Fix-single-statement-blocks-warning.patch"
 
-Reported-by: syzbot+af224b63e76b2d869bc3@syzkaller.appspotmail.com
-Fixes: 9fd472af84ab ("mm: improve cleanup when ->readpages doesn't process all pages")
+From e92897ab5e93b8827d1654a0171bc53ab478ce49 Mon Sep 17 00:00:00 2001
+From: Tree Davies <tdavies@darkphysics.net>
+Date: Sun, 11 Jun 2023 14:41:31 -0700
+Subject: [PATCH] net/e1000: Fix single statement blocks warning
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+This patch fixes checkpatch.pl warning of type:
+WARNING: braces {} are not necessary for single statement blocks
+
+Signed-off-by: Tree Davies <tdavies@darkphysics.net>
+---
+ drivers/net/ethernet/intel/e1000/e1000_main.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/intel/e1000/e1000_main.c b/drivers/net/ethernet/intel/e1000/e1000_main.c
+index da6e303ad99b..accc2bd7c35c 100644
+--- a/drivers/net/ethernet/intel/e1000/e1000_main.c
++++ b/drivers/net/ethernet/intel/e1000/e1000_main.c
+@@ -259,9 +259,8 @@ static int e1000_request_irq(struct e1000_adapter *adapter)
+ 
+ 	err = request_irq(adapter->pdev->irq, handler, irq_flags, netdev->name,
+ 			  netdev);
+-	if (err) {
++	if (err)
+ 		e_err(probe, "Unable to allocate interrupt Error: %d\n", err);
+-	}
+ 
+ 	return err;
+ }
+-- 
+2.30.2
+
+
+--luNyGatCr/pDLYsq--
