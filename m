@@ -2,88 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11EE472B0F3
+	by mail.lfdr.de (Postfix) with ESMTP id 5CB0D72B0F5
 	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 11:02:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231608AbjFKI6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 04:58:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43944 "EHLO
+        id S233411AbjFKJCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 05:02:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbjFKI6j (ORCPT
+        with ESMTP id S231984AbjFKJCC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 04:58:39 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67636EC;
-        Sun, 11 Jun 2023 01:58:38 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1b3b5a5134dso3693685ad.2;
-        Sun, 11 Jun 2023 01:58:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686473918; x=1689065918;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EWZUFDSZ/fMZAMF0QPe7zZpxsyUC+/jDdvK69lb9eHE=;
-        b=kw1sDcMeRYxNNp7XO/lycGtVtMANOv8tx7yHtKn/tO3WhfGcXfTzA/f3EnVEBX49q8
-         9BLJlyZhYDmTFBTu0NKAJGlFqG7kqz9ur5qXR07a86rSrgGb7Mo1JYC+kBrMoG/Pj73S
-         a3fkyYNaGmDgKy3Dimm/DEiPdYvV8LfdtPg1qi47Zyq9iaCw4HvOQ0NgNPLuFwVm580R
-         4G1easP7UsK46aewJTjxuXMZgGhtcyI5WxrkRbxnxx/ePbp+vzm4LXFtLRk8cmac6cll
-         BYHgFfD3G2BC9BwBInoZbGvGkpTr4BtMaYrq5ltZ8OvGkL+Xjy5NHKtwkindZ/5kihD4
-         bgow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686473918; x=1689065918;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EWZUFDSZ/fMZAMF0QPe7zZpxsyUC+/jDdvK69lb9eHE=;
-        b=J7Z7Hp/iM9gbHqirRDhjcfDbb+rt8OuIQnvxWK3+x1yvZ6HjC2rm/Iy2sYgZJ3Tblk
-         TawVPWOsc6C+hiIjvLaUL6BUpaW8XHM3KwrXeScIpIjRg55Oi8u4l4SBf3xIqjld9HPr
-         E2NQPqFlRo9uAoeweRxbMwZmrPap2UG5u4u/2WltJldP/ipkd+Ocw4AgY9FdXn4BLana
-         +e6sGx+05l7lb0MD7bNS/GGrJiQX9gwqXs2ZclI8e21TzzdHg3cQymgyKNMUbkurg8OL
-         raeHUDwKD9pPvDjuNoyj3rmeVFkAogYs6Wqsd5gd9a1SBBtZoBpTSuVnILrRb4VXPFlE
-         +4rg==
-X-Gm-Message-State: AC+VfDz/KKIPVE/OLIH3FaWfyDNVZFmRzwh5sEqbU2QY45UNBLC+f/ob
-        xtr6xBzMBzcHysbNFNeR5q4=
-X-Google-Smtp-Source: ACHHUZ6fLRGLJOO/cw2i7Qt8yDZ2Ek6qUAg/tjjQXa2JZb7jn6L02rHAGJ6X0g4U6SyYZh3oNommzQ==
-X-Received: by 2002:a17:902:bf08:b0:1ac:a661:a4b0 with SMTP id bi8-20020a170902bf0800b001aca661a4b0mr3814826plb.57.1686473917727;
-        Sun, 11 Jun 2023 01:58:37 -0700 (PDT)
-Received: from localhost.localdomain ([103.116.245.58])
-        by smtp.gmail.com with ESMTPSA id jm18-20020a17090304d200b001ac6b926621sm6008371plb.292.2023.06.11.01.58.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jun 2023 01:58:37 -0700 (PDT)
-From:   Jianhui Zhao <zhaojh329@gmail.com>
-To:     zhaojh329@gmail.com
-Cc:     andrew@lunn.ch, davem@davemloft.net, edumazet@google.com,
-        hkallweit1@gmail.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com
-Subject: [PATCH] net: mdio: fix duplicate registrations for phy with c45 in __of_mdiobus_register()
-Date:   Sun, 11 Jun 2023 16:58:26 +0800
-Message-Id: <20230611085826.647536-1-zhaojh329@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230610161308.3158-1-zhaojh329@gmail.com>
-References: <20230610161308.3158-1-zhaojh329@gmail.com>
+        Sun, 11 Jun 2023 05:02:02 -0400
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D4C136;
+        Sun, 11 Jun 2023 02:02:00 -0700 (PDT)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4Qf82Y0Fglz9sVy;
+        Sun, 11 Jun 2023 11:01:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
+        s=MBO0001; t=1686474117;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zmHROG1BFGQTfzARMhb2o7aJ1gmtB/DTkUZB08H5fEQ=;
+        b=fYvtfYc1kj/ZC/3w74wnGHGNHOhdrjt9AXfQtb0mlXT1/0m48xzxOYH+DO/OkFIegb0+cB
+        uQVRJ1IwSqhkEFxcGdY5dDsJ/yR0/bPtXHX6M5MSuQMyuxKCyS4cQkMvT447MDsD15XFrk
+        /cfdzIpHKXGxM/01ybtEu4J11oMA2Vk30FWJtywLH/EN1EkssHG1B/uG+Yf+cs3lpMKkme
+        0Hz0/G74PJ9zrzBzZFQAD8WARIO6nma9DzVG+j0tOhrtDle3I39MODj3/7I/Aam+x+JMoI
+        p9hHVrarwWlBKyB7B/2MF0ZdAdx+K3xTPUUqAuBYCq5DyRlR9V6rwhOqyBwYwA==
+From:   Frank Oltmanns <frank@oltmanns.dev>
+To:     Andre Przywara <andre.przywara@arm.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Frank Oltmanns <frank@oltmanns.dev>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Roman Beranek <me@crly.cz>,
+        Samuel Holland <samuel@sholland.org>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: [PATCH v2 0/2] clk: sunxi-ng: Consider alternative parent rates when determining NKM clock rate
+Date:   Sun, 11 Jun 2023 11:01:41 +0200
+Message-ID: <20230611090143.132257-1-frank@oltmanns.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__of_mdiobus_register
-    __mdiobus_register
-        mdiobus_scan_bus_c45
-    of_mdiobus_child_is_phy
-        of_mdiobus_register_phy
-            fwnode_mdiobus_register_phy
-                is_c45 = fwnode_device_is_compatible(child, "ethernet-phy-ieee802.3-c45");
-                    get_phy_device
-						phy_device_create
+This is V2 of a patchset that enables NKM clocks to consider alternative parent
+rates and utilize this new feature to adjust the pll-video0 clock on Allwinner
+A64.
 
-This is the function call chain. If a phy is already registered in
-mdiobus_scan_bus_c45(), and it's compatible "ethernet-phy-ieee802.3-c45",
-thus it will duplicated call get_phy_device later.
+This allows to achieve an optimal rate for driving the board's panel.
+
+To provide some context, the clock structure involved in this process is as follows:
+    clock                       clock type
+    --------------------------------------
+    pll-video0                  ccu_nm
+       pll-mipi                 ccu_nkm
+          tcon0                 ccu_mux
+             tcon-data-clock    sun4i_dclk
+
+The divider between tcon0 and tcon-data-clock is fixed at 4. Therefore, in order
+to achieve a rate that closely matches the desired rate of the panel, pll-mipi
+needs to operate at a specific rate.
+
+Changes in V2:
+ - Move optimal parent rate calculation to dedicated function
+ - Choose a parent rate that does not to overshoot requested rate
+ - Add comments to ccu_nkm_find_best
+ - Make sure that best_parent_rate stays at original parent rate in the unlikely
+   case that all combinations overshoot.
+
+Link to V1:
+https://lore.kernel.org/lkml/20230605190745.366882-1-frank@oltmanns.dev/
+
+Frank Oltmanns (2):
+  clk: sunxi-ng: nkm: consider alternative parent rates when finding
+    rate
+  clk: sunxi-ng: a64: allow pll-mipi to set parent's rate
+
+ drivers/clk/sunxi-ng/ccu-sun50i-a64.c |  3 +-
+ drivers/clk/sunxi-ng/ccu_nkm.c        | 66 +++++++++++++++++++++++----
+ 2 files changed, 60 insertions(+), 9 deletions(-)
+
+-- 
+2.41.0
+
