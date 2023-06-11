@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8310472B234
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 16:05:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75F8E72B236
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 16:05:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234116AbjFKOFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 10:05:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35738 "EHLO
+        id S234255AbjFKOFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 10:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233990AbjFKOEw (ORCPT
+        with ESMTP id S234184AbjFKOE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 10:04:52 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C323226AD
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 07:04:04 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f6da07ff00so35465615e9.3
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 07:04:04 -0700 (PDT)
+        Sun, 11 Jun 2023 10:04:58 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C1930F6
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 07:04:15 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f735259fa0so34725595e9.1
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 07:04:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686492244; x=1689084244;
+        d=linaro.org; s=google; t=1686492246; x=1689084246;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uqrslVRpwmGjqb/smGQc76LFau+8yBY+SL3Icfvthho=;
-        b=GnGbTZ0Gyi3C5gdfIDhytuSqTXEsxDSf2i7tPpXp/qF6J3Bo0r95CJTDlOnVSZIlsA
-         lbO0J5GDuQY8PD07H6KCzN6oyyTm7JgOGi1I0tOFsW122bweajwV6q2TrzDvdgiYX336
-         6PtBSVsoa7zuJRvJwsD2MK0dW1ofelq/A3OUoun0IesJaZN5R790Gm4eyialKQ94O+hN
-         IXNkkXC/0pceePTx9zHNu4ryCiEuSWUJpt9umER6cm+qlgiruAKEiKMge+OqQTiS08JR
-         qn/WkvBL7dGxI0JfZxS2bT/RusgPMTsOctfBVG2qfjySMCHZKs3ZoeDRrKSpUQ9SN3Pt
-         /UUQ==
+        bh=rI+2Lk67Sh+745P6r5mm+b1Wragt6EBM0nsPxDRubR8=;
+        b=EIPaZ23yZRyDuF7jjQupcSQtiQgAevEdEIiUSNDqI3563bIaDEf2qnBdbK0Cax3Ukm
+         pQBDpNBqH78gYF/ZPLbjUHs0J7cV5AbiXA4N1BAQSW9FnL/Sq2qo+e300Qz6nm6/KiKU
+         D1wjrmDbyureiy7bfFZzl58YpdTFsgCiISkWPX1tjcVQnHARlOq5N+pxmEBsdeWfQ01Z
+         sQiOt08eSSaNCLj/vyjndjYmuHgbDJbqubPjFBkuZC/ztF4KxuUM7pUObu7Ee57LYuR6
+         R0avCPEbNjMc0ldTsqmPj3C1s1kOJb/IxiiKBX2ZQsrqdqaNiwxURBhoKIz49UAi1uCk
+         QCuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686492244; x=1689084244;
+        d=1e100.net; s=20221208; t=1686492246; x=1689084246;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uqrslVRpwmGjqb/smGQc76LFau+8yBY+SL3Icfvthho=;
-        b=kj5+s6QDU2BlEMaFCADCtNxCdY/noiOsgAad0sPhb5QNM206Rbn+4sClsX5xGZK4Oy
-         5tFkDoa9moCah6r247bdFFjIYZ3LvifOMf5zbNXKFRm0IdTiQmib7DSrRljPn5Qhrrae
-         CNadBtrBYhNp+k6lRCexm9+TLvoqBV0D0QFtJpRnUwS8hd9qVhLrXHfKFDKgdBx8dyfr
-         bvWLL57SuiJ+2FXCGbI8zslQLICLEXyiUim4ojdDYAqQjwIX2BaXUnFMUI5rS5JRa+5n
-         eAhhl0PqBxE6Xs4HUQzCrPP5Azehz7TnwCxEkocZ42nf4BEUgMS5XTrGi68OWW/5+hxF
-         FQtQ==
-X-Gm-Message-State: AC+VfDxLZ+5CWREHGkEHS3wdJ9IWwWLhN7wHPf/+BfE0J7ffCRB/Vjzd
-        fD7/vZutmkfxzVoJ3lp1yMc9lg==
-X-Google-Smtp-Source: ACHHUZ4nqr0SFl5XrFkPJ9Yk0gZ3tV1d0e3CcRp5UTc/5DwQ2XepiNMqQb5Ec9nfH35zu12wIxPgjg==
-X-Received: by 2002:a05:600c:b56:b0:3f7:3991:61e5 with SMTP id k22-20020a05600c0b5600b003f7399161e5mr6112307wmr.4.1686492244295;
-        Sun, 11 Jun 2023 07:04:04 -0700 (PDT)
+        bh=rI+2Lk67Sh+745P6r5mm+b1Wragt6EBM0nsPxDRubR8=;
+        b=Z3eJmd1DlHr9Q3apIQzW+Rw8f3FyB3Tm9Zvgs8VaQklkxpToC5f2inBIXNOoIXlf4Q
+         ps7ANFlS1rt+LIh//X0uXEuBPm9T7SI9SRLpIUClXQBXvbStsGfIJ2PPrU00IxU0tmu/
+         hLGp8spakrVFQTayYOtX5ZOFPxXABqZybw4uPD3OFXGyXaRIQqd5uSHhmzNMmxysBwXv
+         AgXtLk7Ux6TXR3GQs8YvY1VuqOOHVdcWqssZnVSKVO3RLPDp6LAAqERg6Q+I5Zcdk1lV
+         X5ji3nesPhNwdMoaERnQUdHyF0JBGga3J0xPca5xvtmlolJk8a5PDU28PJonjO+vt2m1
+         /Imw==
+X-Gm-Message-State: AC+VfDw28XWNXrjvcDnSWnnswamI2GYevs+hC72GgQUKXIDCj+2r0I1M
+        lFrH/Zr6XLtfewfslpM9Kcrz0A==
+X-Google-Smtp-Source: ACHHUZ5+C97G6W4g8TzY5qdmF65CPuj1A4Lw0Ejm7NSFDY0VhXHNI1cQLKVkkEK2bdsY7SiAhK8S0w==
+X-Received: by 2002:a05:600c:364b:b0:3f7:5e08:4012 with SMTP id y11-20020a05600c364b00b003f75e084012mr5373611wmq.36.1686492245867;
+        Sun, 11 Jun 2023 07:04:05 -0700 (PDT)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id h17-20020a05600c28d100b003f080b2f9f4sm8567222wmd.27.2023.06.11.07.04.02
+        by smtp.gmail.com with ESMTPSA id h17-20020a05600c28d100b003f080b2f9f4sm8567222wmd.27.2023.06.11.07.04.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jun 2023 07:04:03 -0700 (PDT)
+        Sun, 11 Jun 2023 07:04:05 -0700 (PDT)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 15/26] dt-bindings: nvmem: qcom,qfprom: drop unneeded address/size-cells
-Date:   Sun, 11 Jun 2023 15:03:19 +0100
-Message-Id: <20230611140330.154222-16-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 16/26] dt-bindings: nvmem: qcom,spmi-sdam: drop unneeded address/size-cells
+Date:   Sun, 11 Jun 2023 15:03:20 +0100
+Message-Id: <20230611140330.154222-17-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230611140330.154222-1-srinivas.kandagatla@linaro.org>
 References: <20230611140330.154222-1-srinivas.kandagatla@linaro.org>
@@ -81,26 +81,26 @@ remove redundant entries.
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml | 6 ------
+ Documentation/devicetree/bindings/nvmem/qcom,spmi-sdam.yaml | 6 ------
  1 file changed, 6 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml b/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
-index 8d8503dd934b..c898c67c243a 100644
---- a/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
-@@ -64,12 +64,6 @@ properties:
-   power-domains:
+diff --git a/Documentation/devicetree/bindings/nvmem/qcom,spmi-sdam.yaml b/Documentation/devicetree/bindings/nvmem/qcom,spmi-sdam.yaml
+index dce0c7d84ce7..cd980def97b8 100644
+--- a/Documentation/devicetree/bindings/nvmem/qcom,spmi-sdam.yaml
++++ b/Documentation/devicetree/bindings/nvmem/qcom,spmi-sdam.yaml
+@@ -25,12 +25,6 @@ properties:
+   reg:
      maxItems: 1
  
--  # Needed if any child nodes are present.
 -  "#address-cells":
 -    const: 1
+-
 -  "#size-cells":
 -    const: 1
 -
+   ranges: true
+ 
  required:
-   - compatible
-   - reg
 -- 
 2.25.1
 
