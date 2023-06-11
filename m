@@ -2,144 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE66872B130
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 11:37:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99BA472B139
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 11:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233060AbjFKJhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 05:37:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49746 "EHLO
+        id S233364AbjFKJqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 05:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjFKJhC (ORCPT
+        with ESMTP id S231149AbjFKJqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 05:37:02 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9C3B3
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 02:36:59 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-30aeee7c8a0so2361772f8f.1
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 02:36:59 -0700 (PDT)
+        Sun, 11 Jun 2023 05:46:16 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69C7F2
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 02:46:14 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-9786c67ec32so547611066b.1
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 02:46:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20221208.gappssmtp.com; s=20221208; t=1686476218; x=1689068218;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1RzKoavleYmYbGi4L50Fse1b510eueYfvrCoJAmsbxo=;
-        b=GQKny/Ocfst/o+Iz0zqLh9RYFAbp7j4h3MNYdU0ew61bb+vEXAkw3uBdHqUYfrK5kJ
-         Mmo+9ATeTsy6jpHk4rWHMICl+7C8UibYVaL2giyJyB3zqUMVLC/QsdxrQEEoQoKWfbmg
-         +Lo3EuyVmxQvNzDGtYq+41t3CP/zZbUuKl5HuNxk+qfYeEqSt+iG4NNUyH9OrtIhmVzp
-         UbDUe/olXXA6Cgx1+RhqGFa/0ms3SJiQnQIUOeMrysO1ozG9Z6Fm3bpD34jdKyrPq57H
-         uQUVcz7IhjPT78Bp0Ndtwiugfk5Sh0OhOyGLGcIUpuNxbBD92XvQm04DgjSD2PPpoNed
-         i66Q==
+        d=linaro.org; s=google; t=1686476773; x=1689068773;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kgj2E8ULVnK2Tdu4A0s7nIRfjHGYYKYecJtglfc2Rgk=;
+        b=jZVzqoFY7komMteaw86mZNCDGRSfWwZf+2JYLj/QEnP9wLpTt4Fl99AFTkfamxyjEc
+         P3O0uuI9JJwFNFEVTS00IyOXJnemS63PPzaAGq0f+ncpBLq1nixh0zaf5hDwASAIm9Tq
+         A1JSGsvwRzJ8rzGp761JUvT1X43LFthxlDZcWzXuOfPIyE+n+NS+Ilaphx8pdXdv7r3q
+         6LshwE1FYIpEAYWP0jzzgm3xtdZnvz0ciEnIKPBVmEuL1pdKHSR0YcoZPR3ZedArNn5H
+         4dXKrSMvzG6GE64zHkwrRgA+gDkniwTK3om5c6nz2fiVIjw/QloPVMdMQ4vs+tHaq5x6
+         1RVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686476218; x=1689068218;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1RzKoavleYmYbGi4L50Fse1b510eueYfvrCoJAmsbxo=;
-        b=it0hBKMFS2KryvE4Ymf3T5j16GD1IfVbR9vwbXo+I/1ouM4Yoz2u0ozV2BbfXCCJLB
-         X9bS3NcoK2E95EEtZS74yRaW72mKY3eO4+5ehYfd1mPH6/kbseGs8augyevJq8Y7Mhcw
-         lJpYJ5b1jBQDFP6pGpJYoq3jtzz9MuvFuJ0NPRoM2c23soIXsZEbNqNd0hDAkl9hCSYQ
-         aem7zCSagTngVCIGx7sI2XVom4kQQU76yzZi5THuukNjg/2kxr4Avi4TxB4JEPKaH/0d
-         fTsJJGiSfELj6VEg/YemWSUdZJRjDwtw11Y+znEVXSla8VNRvkC1fjYBMRr0B/JORzBc
-         9cBw==
-X-Gm-Message-State: AC+VfDwK+EFdsq94GSxm0wqXuagHB+7ThiM9WLPHkJUSQJcNulyoQy7K
-        Qr6TKnLq1jOGt71XRk98aa9gKA==
-X-Google-Smtp-Source: ACHHUZ5+nfn02bkuQTuCe1HVJNha7vkQ+Bf1+3Syh+Cs505sLe6+OvuIFC/T+1SNK4FODSOQZ+G7VQ==
-X-Received: by 2002:a5d:6e0c:0:b0:30e:47e2:7eca with SMTP id h12-20020a5d6e0c000000b0030e47e27ecamr2880966wrz.3.1686476218225;
-        Sun, 11 Jun 2023 02:36:58 -0700 (PDT)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id k20-20020a05600c0b5400b003f4266965fbsm7983801wmr.5.2023.06.11.02.36.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jun 2023 02:36:57 -0700 (PDT)
-Date:   Sun, 11 Jun 2023 11:36:56 +0200
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
-Cc:     kuba@kernel.org, vadfed@meta.com, jonathan.lemon@gmail.com,
-        pabeni@redhat.com, corbet@lwn.net, davem@davemloft.net,
-        edumazet@google.com, vadfed@fb.com, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, saeedm@nvidia.com, leon@kernel.org,
-        richardcochran@gmail.com, sj@kernel.org, javierm@redhat.com,
-        ricardo.canuelo@collabora.com, mst@redhat.com, tzimmermann@suse.de,
-        michal.michalik@intel.com, gregkh@linuxfoundation.org,
-        jacek.lawrynowicz@linux.intel.com, airlied@redhat.com,
-        ogabbay@kernel.org, arnd@arndb.de, nipun.gupta@amd.com,
-        axboe@kernel.dk, linux@zary.sk, masahiroy@kernel.org,
-        benjamin.tissoires@redhat.com, geert+renesas@glider.be,
-        milena.olech@intel.com, kuniyu@amazon.com, liuhangbin@gmail.com,
-        hkallweit1@gmail.com, andy.ren@getcruise.com, razor@blackwall.org,
-        idosch@nvidia.com, lucien.xin@gmail.com, nicolas.dichtel@6wind.com,
-        phil@nwl.cc, claudiajkang@gmail.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linux-rdma@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, poros@redhat.com,
-        mschmidt@redhat.com, linux-clk@vger.kernel.org,
-        vadim.fedorenko@linux.dev
-Subject: Re: [RFC PATCH v8 03/10] dpll: core: Add DPLL framework base
- functions
-Message-ID: <ZIWVuPMyKRPv6oyh@nanopsycho>
-References: <20230609121853.3607724-1-arkadiusz.kubalewski@intel.com>
- <20230609121853.3607724-4-arkadiusz.kubalewski@intel.com>
+        d=1e100.net; s=20221208; t=1686476773; x=1689068773;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kgj2E8ULVnK2Tdu4A0s7nIRfjHGYYKYecJtglfc2Rgk=;
+        b=cCWPJuhWS4PxXBQku603UTHbSEXfLbl9ld5qPjprhylxskrTd+ujoRQsajhH6FJQsN
+         LXmtFcPXQzANZivY6IU1daZrtEdBj4K2OKSF4N85sQimFhb8QU8tYOO/l+5rQLSPpTiN
+         1S9+Q1OBY2WQHx/cK8jHOln582n4mlc9tWvbtZoqq/MqqrqE/mwv4M97m3MR/u1VopSa
+         Q/Jq0oKwtqMZ8ikwsjNP1rigEQoDC62pEzZvw2b3iWRWYtZVjzHBU2gyOl0UBO5nuNGf
+         0E35YPAFFTyndOazbFHxPYI372QxE8IsDe7DHjoA8rv7z9mEG8UO+GkjS9ty+m+WPRHP
+         OGVg==
+X-Gm-Message-State: AC+VfDzswMupO6czFxp1kDzRpKpEVa/L+tIu9UM+cSVbeOBESPD89z2h
+        AmOtrF0OP4gWbtdJTvrnXcePgg==
+X-Google-Smtp-Source: ACHHUZ5rFvnEPdfaRg5ZSWf2Ja6DZrQv8duWnhdFSOc2DCo69LdKdJqe2hSqT2E0pyrAaiMALMhVlQ==
+X-Received: by 2002:a17:907:5c6:b0:974:1d8b:ca5e with SMTP id wg6-20020a17090705c600b009741d8bca5emr6689735ejb.14.1686476773245;
+        Sun, 11 Jun 2023 02:46:13 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id z20-20020a1709060f1400b00977e7f7d599sm3589682eji.71.2023.06.11.02.46.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Jun 2023 02:46:12 -0700 (PDT)
+Message-ID: <f132af34-e1b1-1278-316e-ac2c3cfbbbbc@linaro.org>
+Date:   Sun, 11 Jun 2023 11:46:09 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230609121853.3607724-4-arkadiusz.kubalewski@intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 1/3] dt-bindings: thermal: sun8i: Add binding for
+ D1/T113s THS controller
+To:     Maksim Kiselev <bigunclemax@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-riscv@lists.infradead.org
+References: <20230610203549.1127334-1-bigunclemax@gmail.com>
+ <20230610203549.1127334-2-bigunclemax@gmail.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230610203549.1127334-2-bigunclemax@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fri, Jun 09, 2023 at 02:18:46PM CEST, arkadiusz.kubalewski@intel.com wrote:
->From: Vadim Fedorenko <vadim.fedorenko@linux.dev>
+On 10/06/2023 22:35, Maksim Kiselev wrote:
+> From: Maxim Kiselev <bigunclemax@gmail.com>
+> 
+> Add a binding for D1/T113s thermal sensor controller.
+> 
+> Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
+> Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
 
-[...]
-
->+int dpll_device_register(struct dpll_device *dpll, enum dpll_type type,
->+			 const struct dpll_device_ops *ops, void *priv)
->+{
->+	struct dpll_device_registration *reg;
->+	bool first_registration = false;
->+
->+	if (WARN_ON(!ops))
->+		return -EINVAL;
->+	if (WARN_ON(type < DPLL_TYPE_PPS || type > DPLL_TYPE_MAX))
->+		return -EINVAL;
->+
->+	mutex_lock(&dpll_lock);
->+	reg = dpll_device_registration_find(dpll, ops, priv);
->+	if (reg) {
->+		mutex_unlock(&dpll_lock);
->+		return -EEXIST;
->+	}
->+
->+	reg = kzalloc(sizeof(*reg), GFP_KERNEL);
->+	if (!reg) {
->+		mutex_unlock(&dpll_lock);
->+		return -EEXIST;
->+	}
->+	reg->ops = ops;
->+	reg->priv = priv;
->+	dpll->type = type;
->+	first_registration = list_empty(&dpll->registration_list);
->+	list_add_tail(&reg->list, &dpll->registration_list);
->+	if (!first_registration) {
->+		mutex_unlock(&dpll_lock);
->+		return 0;
->+	}
->+
->+	xa_set_mark(&dpll_device_xa, dpll->id, DPLL_REGISTERED);
->+	mutex_unlock(&dpll_lock);
->+	dpll_device_create_ntf(dpll);
-
-This function is introduced in the next patch. Breaks bissection. Make
-sure you can compile the code after every patch applied.
+You are the same person, so use only one SoB.
 
 
 
->+
->+	return 0;
->+}
+Best regards,
+Krzysztof
 
-[...]
