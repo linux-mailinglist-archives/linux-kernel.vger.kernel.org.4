@@ -2,154 +2,409 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A10572B2F0
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 19:03:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2238572B2F7
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 19:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232359AbjFKRC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 13:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41806 "EHLO
+        id S231635AbjFKROW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 13:14:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjFKRCz (ORCPT
+        with ESMTP id S229449AbjFKROU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 13:02:55 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD046E63;
-        Sun, 11 Jun 2023 10:02:54 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-2565a9107d2so2156160a91.0;
-        Sun, 11 Jun 2023 10:02:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686502974; x=1689094974;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EoCFwrEB0vvlfmLLlOSHa+piSHoEJ5gC+VXcVkiTQ0k=;
-        b=krayJ6uwWRTtbE+7Im6rE8BILvjlU83+RJsF2E+i5TO24DrKvzg4cLPYe6UAVudvJ8
-         Be2XUpr50dZfqxq+LOLvv9voaaTYvIsg6bkamBtggLW6ii/ugONs6LrjqwErtfpqOTZa
-         PiwTlhvtsVOkTwGOF95n9BTuGmVuZ/MJq/BI0R7GDa/sBKqzfdgtfXydrZvP3/bSh3u+
-         0SQ3KVrZjregxi2kG0glbTc0ncBKCVBt96zHMk/rfQELMGG2OuroUJPWcS7u2VpQfCpu
-         rqn2MzxuGIhhukFWNxv8pKJQVHYExePFXwlDLZAHqGcqOa0kTkw7dis8k8fXXqDk+HNd
-         VrMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686502974; x=1689094974;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EoCFwrEB0vvlfmLLlOSHa+piSHoEJ5gC+VXcVkiTQ0k=;
-        b=cLxtBtVvbT+KYE7u6g+mKG2Re60ZMiS/vmpxv2falcbPESBqjXXfkwAVM6fq81BNZN
-         GqUT233km3758bdAeGduHwBpdi1aQjNA9Qb7ORN3eK6Ellm0khzlO5KX6OHBdZf+xHbM
-         mk9k1L6PXb7HUd9v2fXUaH80JPdz9ZE/Dgk+UtecgPJmzVCutGZfzFq5kfarHtSJUGQm
-         sOj9CAwJcLxPVyj8MpPEnbAY1fGU+LEmKOqrj+bG08M4Oi1p0JNAWvHMjG+lLZrW3+b6
-         Q27cIbQq2RedKz0vbsRfJ4b5Q2ZqYKnoWfqbDsQUdD+g3P/nGmploh2PUwsjYhTKIZAt
-         dKKA==
-X-Gm-Message-State: AC+VfDwoPaeqrytsT1Qb+ADCsUfrcpnuCysK4vSaj5Fe0YTwnPqa/t/+
-        uRsWlavSNOtwY5zXePUDGHptTCrlft7hDb7X/VI=
-X-Google-Smtp-Source: ACHHUZ7l+4TR3OHAvJEjzr3koYOCUElOXrpQlwUfhbtqoGZqePk86Nn0jhaQ0PWxIazQbuM4n3xcpXjQwvLY4Nidj6c=
-X-Received: by 2002:a17:90a:7565:b0:25b:ba0c:ab7c with SMTP id
- q92-20020a17090a756500b0025bba0cab7cmr3444582pjk.27.1686502974159; Sun, 11
- Jun 2023 10:02:54 -0700 (PDT)
+        Sun, 11 Jun 2023 13:14:20 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A13CE9;
+        Sun, 11 Jun 2023 10:14:18 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 2EE2992009C; Sun, 11 Jun 2023 19:14:16 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 202D892009B;
+        Sun, 11 Jun 2023 18:14:16 +0100 (BST)
+Date:   Sun, 11 Jun 2023 18:14:16 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Stefan Roese <sr@denx.de>, Jim Wilson <wilson@tuliptree.org>,
+        David Abdurachmanov <david.abdurachmanov@gmail.com>,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        linux-pci@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 7/7] PCI: Work around PCIe link training failures
+In-Reply-To: <20230504222048.GA887151@bhelgaas>
+Message-ID: <alpine.DEB.2.21.2306080224280.36323@angie.orcam.me.uk>
+References: <20230504222048.GA887151@bhelgaas>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-References: <20230506195325.876871-1-aford173@gmail.com> <CAOMZO5AwixYybR1am=V4m1AnTkum+0Wn0xegU_y6Po9Y--G0mA@mail.gmail.com>
-In-Reply-To: <CAOMZO5AwixYybR1am=V4m1AnTkum+0Wn0xegU_y6Po9Y--G0mA@mail.gmail.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Sun, 11 Jun 2023 12:02:42 -0500
-Message-ID: <CAHCN7xLPKa2hrBMC1kaJkxVL9NC+c1TWgcQHMBPefnvxGPTCwQ@mail.gmail.com>
-Subject: Re: [PATCH] clk: imx: composite-8m: Add imx8m_divider_determine_rate
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     linux-clk@vger.kernel.org, aford@beaconembedded.com,
-        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 6, 2023 at 1:45=E2=80=AFPM Fabio Estevam <festevam@gmail.com> w=
-rote:
->
-> On Sat, May 6, 2023 at 4:53=E2=80=AFPM Adam Ford <aford173@gmail.com> wro=
-te:
-> >
-> > Currently, certain clocks are derrived as a divider from their
-> > parent clock.  For some clocks, even when CLK_SET_RATE_PARENT
-> > is set, the parent clock is not properly set which can lead
-> > to some relatively inaccurate clock values.
-> >
+On Thu, 4 May 2023, Bjorn Helgaas wrote:
 
-+ Maxime
+> We talked about reusing pcie_retrain_link() earlier.  IIRC that didn't
+> work: ASPM needs to use PCI_EXP_LNKSTA_LT because not all devices
+> support PCI_EXP_LNKSTA_DLLLA, and you need PCI_EXP_LNKSTA_DLLLA
+> because the erratum makes PCI_EXP_LNKSTA_LT flap.
+> 
+> What if we made pcie_retrain_link() reusable by making it:
+> 
+>   bool pcie_retrain_link(struct pci_dev *pdev, u16 link_status_bit)
+> 
+> so ASPM could use pcie_retrain_link(link->pdev, PCI_EXP_LNKSTA_LT) and
+> you could use pcie_retrain_link(dev, PCI_EXP_LNKSTA_DLLLA)?
 
-> > Unlike imx/clk-composite-93 and imx/clk-divider-gate, it
-> > cannot rely on calling a standard determine_rate function,
-> > because the 8m composite clocks have a pre-divider and
-> > post-divider. Because of this, a custom determine_rate
-> > function is necessary to determine the maximum clock
-> > division which is equivalent to pre-divider * the
-> > post-divider.
-> >
-> > With this added, the system can attempt to adjust the parent rate
-> > when the proper flags are set which can lead to a more precise clock
-> > value.
-> >
-> > On the imx8mplus, no clock changes are present.
-> > On the Mini and Nano, this can help achieve more accurate
-> > lcdif clocks. When trying to get a pixel clock of 31.500MHz
-> > on an imx8m Nano, the clocks divided the 594MHz down, but
-> > left the parent rate untouched which caused a calulation error.
-> >
-> > Before:
-> > video_pll              594000000
-> >   video_pll_bypass     594000000
-> >     video_pll_out      594000000
-> >       disp_pixel       31263158
-> >         disp_pixel_clk 31263158
-> >
-> > Variance =3D -236842 Hz
-> >
-> > After this patch:
-> > video_pll               31500000
-> >   video_pll_bypass      31500000
-> >     video_pll_out       31500000
-> >       disp_pixel        31500000
-> >         disp_pixel_clk  31500000
-> >
-> > Variance =3D 0 Hz
-> >
-> > All other clocks rates and parent were the same.
-> > Similar results on imx8mm were found.
-> >
-> > Fixes: 690dccc4a0bf ("Revert "clk: imx: composite-8m: Add support to de=
-termine_rate"")
-> > Signed-off-by: Adam Ford <aford173@gmail.com>
->
+ This is somewhat more complicated, because of the inverted logic between 
+the two status bits.  Therefore I think a boolean flag is more adequate 
+with preparatory logic within the function itself.  This will tighten the 
+call interface as well.
 
-Peng / Abel,
+> Maybe do it two steps?
+> 
+>   1) Move pcie_retrain_link() just after pcie_wait_for_link() and make
+>   it take link->pdev instead of link.
+> 
+>   2) Add the bit parameter.
 
-Any suggestions on how we can move this forward?  Looking at the
-clk-composite-8m driver, imx8m_clk_composite_compute_dividers uses the
-max values which is basically what my patch does.  There was some
-discussion about making determine_rate mandatory for muxes[1] and this
-patch should help with this in addition to making it easier to sync
-more video resolutions on the 8m Mini and Nano.
+ Having compared the two pieces side by side now I think it makes sense.  
+While there are minor differences, most prominently the original code is 
+more aggressive than mine in polling the status bit, I think these details 
+are not significant enough to argue over them here.  And we can consider 
+switching to more modern `usleep_range' interface separately.
 
-adam
-[1] - https://www.spinics.net/lists/alsa-devel/msg157914.html
+ A minor pessimisation resulting is that LNKSTA has to be reread in the 
+caller after return from `pcie_retrain_link'; previously the last value 
+read in the poll loop could have been reused.
 
+> I'm OK with having pcie_retrain_link() in pci.c, but the surrounding
+> logic about restricting to 2.5GT/s, retraining, removing the
+> restriction, retraining again is stuff I'd rather have in quirks.c so
+> it doesn't clutter pci.c.
 
-> This works fine on my imx8mm-evk, so:
->
-> Tested-by: Fabio Estevam <festevam@gmail.com>
+ Well, it was there in quirks.c originally and I only moved this piece 
+following your earlier suggestion:
+
+> If we think the first part (attempting the retrain) is safe to do
+> whenever the link is down, maybe we should do that more directly as
+> part of the PCI core instead of as a quirk?
+
+as in here: <https://lore.kernel.org/r/20221109050418.GA529724@bhelgaas/>, 
+though if you did change your mind after all, I can move it back, sure.  
+It's not always that the first thought is the best, or sometimes good at 
+all.
+
+> I think it'd be good if the pci_device_add() path made clear that this
+> is a workaround for a problem, e.g.,
+> 
+>   void pci_device_add(struct pci_dev *dev, struct pci_bus *bus)
+>   {
+>     ...
+>     if (pcie_link_failed(dev))
+>       pcie_fix_link_train(dev);
+> 
+> where pcie_fix_link_train() could live in quirks.c (with a stub when
+> CONFIG_PCI_QUIRKS isn't enabled).  It *might* even be worth adding it
+> and the stub first because that's a trivial patch and wouldn't clutter
+> the probe.c git history with all the grotty details about ASM2824 and
+> this topology.
+
+ I have added a stub now, both as an intermediate step and ultimately for 
+!PCI_QUIRKS, but I disagree about having the check in pci.c and the fix in 
+quirks.c, because from the code structure's point of view it makes no 
+sense IMHO to have the check enabled and the fix disabled both at a time 
+for !PCI_QUIRKS, even if the compiler would actually optimise the check 
+away in that case.
+
+ Please let me know if you maintain your suggestion and if so, then why 
+you find it so important.  I think with the use of `pcie_retrain_link' 
+this code has become straightforward enough not to need to be split or 
+factored out any further (and while factoring out the conditionals only 
+would make some sense to me, it would require duplicating configuration 
+register accesses even further).
+
+> > +int pcie_downstream_link_retrain(struct pci_dev *dev)
+> > +{
+> > +	static const struct pci_device_id ids[] = {
+> > +		{ PCI_VDEVICE(ASMEDIA, 0x2824) }, /* ASMedia ASM2824 */
+> > +		{}
+> > +	};
+> > +	u16 lnksta, lnkctl2;
+> > +
+> > +	if (!pci_is_pcie(dev) || !pcie_downstream_port(dev) ||
+> > +	    !pcie_cap_has_lnkctl2(dev) || !dev->link_active_reporting)
+> > +		return -1;
+> > +
+> > +	pcie_capability_read_word(dev, PCI_EXP_LNKCTL2, &lnkctl2);
+> > +	pcie_capability_read_word(dev, PCI_EXP_LNKSTA, &lnksta);
+> > +	if ((lnksta & (PCI_EXP_LNKSTA_LBMS | PCI_EXP_LNKSTA_DLLLA)) ==
+> > +	    PCI_EXP_LNKSTA_LBMS) {
+> 
+> You go to some trouble to make sure PCI_EXP_LNKSTA_LBMS is set, and I
+> can't remember what the reason is.  If you make a preparatory patch
+> like this, it would give a place for that background, e.g.,
+
+ It has been already documented along with the code in question:
+
+ * With the ASM2824 we can rely on the otherwise optional Data Link Layer
+ * Link Active status bit and in the failed link training scenario it will
+ * be off along with the Link Bandwidth Management Status indicating that
+ * hardware has changed the link speed or width in an attempt to correct
+ * unreliable link operation.  For a port that has been left unconnected
+ * both bits will be clear.  [...]
+
+>   +bool pcie_link_failed(struct pci_dev *dev)
+>   +{
+>   +       u16 lnksta;
+>   +
+>   +       if (!pci_is_pcie(dev) || !pcie_downstream_port(dev) ||
+>   +           !pcie_cap_has_lnkctl2(dev) || !dev->link_active_reporting)
+>   +               return false;
+>   +
+>   +       pcie_capability_read_word(dev, PCI_EXP_LNKSTA, &lnksta);
+>   +       if ((lnksta & (PCI_EXP_LNKSTA_LBMS | PCI_EXP_LNKSTA_DLLLA)) ==
+>   +                       PCI_EXP_LNKSTA_LBMS)
+>   +               return true;
+>   +
+>   +       return false;
+>   +}
+> 
+> If this is a generic thing and checking PCI_EXP_LNKSTA_LBMS makes
+> sense for everybody, it could go in pci.c; otherwise it could go in
+> quirks.c as well.  I guess it's not *truly* generic anyway because it
+> only detects link training failures for devices that have LNKCTL2 and
+> link_active_reporting.
+
+ I do not have enough information to tell whether this is generic or not.  
+
+ Checking for PCI_EXP_LNKSTA_LBMS is important, because otherwise this 
+code would attempt to retrain every empty slot or otherwise unconnected 
+PCIe link, which we do not want to do and which would surely take a lot of 
+time with some of the larger systems, to say nothing of the log clutter 
+showing that there is something wrong with the system while indeed there 
+is nothing.
+
+ Out of all the ports whose data link layer is not in the DL_Active state 
+the LBMS bit is only set for the failed link in my system and I suspect it 
+is related to the link speed negotiation erratum causing unsuccessful link 
+training to repeat indefinitely.
+
+ By definition LBMS cannot be set for an unconnected link, because the bit 
+is only allowed to be set for an event observed that has happened with a 
+port reporting no DL_Down status at any time throughout the event, which 
+can only happen with the physical layer up, which of course cannot happen 
+for an unconnected link (of course I can imagine another erratum affecting 
+the LBMS bit, but that has not been reported yet).
+
+ While making sure I got all the details in the previous paragraph right I 
+have gone through a reference to the DL_Feature data link layer state (and 
+a potential need to disable it for interacting with a non-compliant legacy 
+downstream device), but neither device involved supports it, so it can't 
+possibly be the cause for the phenomenon observed.
+
+ IOW the LBMS bit serves the purpose of indicating that there is actually 
+a device down an inactive link (the state of the physical layer's LinkUp 
+bit is not directly accessible via software).  And one might argue that 
+the state where LBMS is set but DLLLA is clear (where actually supported) 
+after a device reset is indeed a generic sign of an odd link training 
+issue.
+
+ If you think it would make sense to include any piece of the text above 
+with the existing documentation, then I'll be happy to improve it.
+
+> > +	if (IS_ENABLED(CONFIG_PCI_QUIRKS) && (lnksta & PCI_EXP_LNKSTA_DLLLA) &&
+> > +	    (lnkctl2 & PCI_EXP_LNKCTL2_TLS) == PCI_EXP_LNKCTL2_TLS_2_5GT &&
+> > +	    pci_match_id(ids, dev)) {
+> > +		u32 lnkcap;
+> > +		u16 lnkctl;
+> > +
+> > +		pci_info(dev, "removing 2.5GT/s downstream link speed restriction\n");
+> > +		pcie_capability_read_dword(dev, PCI_EXP_LNKCAP, &lnkcap);
+> > +		pcie_capability_read_word(dev, PCI_EXP_LNKCTL, &lnkctl);
+> > +		lnkctl |= PCI_EXP_LNKCTL_RL;
+> > +		lnkctl2 &= ~PCI_EXP_LNKCTL2_TLS;
+> > +		lnkctl2 |= lnkcap & PCI_EXP_LNKCAP_SLS;
+> > +		pcie_capability_write_word(dev, PCI_EXP_LNKCTL2, lnkctl2);
+> > +		pcie_capability_write_word(dev, PCI_EXP_LNKCTL, lnkctl);
+> 
+> This starts a retrain; should we wait for training to complete?
+
+ Yep, why not, with `pcie_retrain_link' now updated it's trivial, and we 
+can then also verify the result (and do nothing about it except for 
+reporting, as it's supposed to never happen, so let's just wait and see).
+
+> If we put most of this into a pcie_fix_link_train() (separated from
+> detecting the *need* to fix something), could it be made to look
+> sort of like this?  (I suppose you'd want to return bool and rename
+> it that reads naturally, e.g., "pcie_link_forcibly_retrained()",
+> "pcie_link_retrained()", etc)
+
+ Ah, I concluded to make it return `bool' independently, having not seen 
+this suggestion of yours yet, so it seems like we're getting in sync, and 
+likewise I renamed the function to `pcie_failed_link_retrain' already.
+
+>   +void pcie_fix_link_train(struct pci_dev *dev)
+>   +{
+>   +       u16 lnkctl2;
+>   +       u32 lnkcap;
+>   +       bool linkup;
+>   +
+>   +       pci_info(dev, "attempting link retrain at 2.5GT/s\n");
+>   +       pcie_capability_read_word(dev, PCI_EXP_LNKCTL2, &lnkctl2);
+>   +       lnkctl2 &= ~PCI_EXP_LNKCTL2_TLS;
+>   +       lnkctl2 |= PCI_EXP_LNKCTL2_TLS_2_5GT;
+>   +       pcie_capability_write_word(dev, PCI_EXP_LNKCTL2, lnkctl2);
+>   +
+>   +       linkup = pcie_retrain_link(dev, PCI_EXP_LNKSTA_DLLLA);
+>   +       if (!linkup) {
+>   +               pci_info(dev, "retraining failed\n");
+>   +               return;
+>   +       }
+>   +
+>   +       if (LNKCAP supports only 2.5GT/s)
+>   +               return;
+>   +
+>   +       if (!pci_match_id(ids, dev))
+>   +               return;
+> 
+> Your comment said "if we know this is *safe*"; I can't remember if
+> pci_match_id() is there to avoid a known problem?
+
+ It's the other way round, the intent is to lift the speed restriction and 
+retrain for devices known to succeed and survive only.
+
+ It cannot be universally guaranteed that such a retrain will succeed even 
+if 2.5GT/s works, and moreover this piece is independent from the attempt 
+to recover made immediately above and will also run where the firmware has 
+clamped the speed of the link somehow, whether for this erratum or for 
+another reason (remember that the speed clamp is sticky, so it will have 
+survived our bus/interconnect hierarchy reset).
+
+ In particular Pali has reported (in an earlier discussion concerning this 
+erratum on the U-Boot mailing list) the existence of downstream devices 
+that lock up when a link retrain is attempted, so we don't want to request 
+one for an otherwise known-working link (retraining a dead link won't hurt 
+of course regardless, because at worst it'll just stay in its non-working 
+state, and we don't have a way to figure out what might be there anyway).  
+Cf. <https://lists.denx.de/pipermail/u-boot/2021-November/467201.html>.
+
+> > +/* Same as above, but called for a downstream device.  */
+> > +static int pcie_upstream_link_retrain(struct pci_dev *dev)
+> > +{
+> > +	struct pci_dev *bridge;
+> > +
+> > +	bridge = pci_upstream_bridge(dev);
+> > +	if (bridge)
+> > +		return pcie_downstream_link_retrain(bridge);
+> > +	else
+> > +		return -1;
+> > +}
+> > +
+> >  static int pci_acs_enable;
+> >  
+> >  /**
+> > @@ -1148,8 +1274,8 @@ void pci_resume_bus(struct pci_bus *bus)
+> >  
+> >  static int pci_dev_wait(struct pci_dev *dev, char *reset_type, int timeout)
+> >  {
+> > +	int retrain = 0;
+> >  	int delay = 1;
+> > -	u32 id;
+> >  
+> >  	/*
+> >  	 * After reset, the device should not silently discard config
+> > @@ -1163,21 +1289,37 @@ static int pci_dev_wait(struct pci_dev *
+> >  	 * Command register instead of Vendor ID so we don't have to
+> >  	 * contend with the CRS SV value.
+> >  	 */
+> > -	pci_read_config_dword(dev, PCI_COMMAND, &id);
+> > -	while (PCI_POSSIBLE_ERROR(id)) {
+> > +	for (;;) {
+> > +		u32 id;
+> > +
+> > +		pci_read_config_dword(dev, PCI_COMMAND, &id);
+> > +		if (!PCI_POSSIBLE_ERROR(id)) {
+> > +			if (delay > PCI_RESET_WAIT)
+> > +				pci_info(dev, "ready %dms after %s\n",
+> > +					 delay - 1, reset_type);
+> > +			break;
+> > +		}
+> > +
+> >  		if (delay > timeout) {
+> >  			pci_warn(dev, "not ready %dms after %s; giving up\n",
+> >  				 delay - 1, reset_type);
+> >  			return -ENOTTY;
+> >  		}
+> >  
+> > -		if (delay > PCI_RESET_WAIT)
+> > +		if (delay > PCI_RESET_WAIT) {
+> > +			if (!retrain) {
+> > +				retrain = 1;
+> > +				if (pcie_upstream_link_retrain(dev) == 0) {
+> > +					delay = 1;
+> > +					continue;
+> > +				}
+> > +			}
+> >  			pci_info(dev, "not ready %dms after %s; waiting\n",
+> >  				 delay - 1, reset_type);
+> > +		}
+> 
+> Thanks for fixing this in the reset path, too.  Can we move this part
+> to a separate patch?  It's related to the rest of the patch, but it
+> looks so much different that I think it would be easier to understand
+> by itself.
+
+ I think making a system halfway-fixed would make little sense, but with 
+the actual fix actually made last as you suggested I think this can be 
+split off, because it'll make no functional change by itself.
+
+ While at it I have verified that the initial value of `retrain' does not 
+have to be changed for the compiler to optimise away any code related to 
+it in the !PCI_QUIRKS case where `pcie_parent_link_retrain' gets optimised 
+away too, so we're good here.
+
+ I changed `retrain' to `bool' though and inverted the logic as I find it 
+more natural this way.
+
+> I think I might try to fold the pcie_upstream_link_retrain() directly
+> in here because the "upstream link retrain" in the function name
+> doesn't really make sense in PCIe terms.
+
+ Well, it does, as you can indeed request a retrain for an upstream port 
+device.  This is not however what this function does, so I agree it's 
+confusing.  I have replaced "upstream" with "parent" in the function name 
+then to avoid this ambiguity.
+
+ Otherwise I think factoring this piece out makes code more readable, as 
+it's already quite deeply nested in blocks, and the compiler will inline 
+it anyway, so I'd rather keep it as a separate function.
+
+ With the observations made I'll be posting a rewritten patch series now.  
+I realise there might still be issues outstanding, but this rewrite was 
+already humongous enough and I think it deserves a second pair of eyeballs 
+before massaging it any further.
+
+ And last but not least, thank you for waiting, it was quite a stretch for 
+me to fit this effort in among all the stuff currently on my table and all 
+the unforeseen events.
+
+  Maciej
