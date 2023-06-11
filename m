@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D8472B288
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 17:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 891EB72B28A
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 17:48:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229483AbjFKPrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 11:47:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55556 "EHLO
+        id S231793AbjFKPst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 11:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjFKPra (ORCPT
+        with ESMTP id S229624AbjFKPsr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 11:47:30 -0400
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F5113D
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 08:47:25 -0700 (PDT)
-Date:   Sun, 11 Jun 2023 15:47:08 +0000
+        Sun, 11 Jun 2023 11:48:47 -0400
+Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E0113D
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 08:48:42 -0700 (PDT)
+Date:   Sun, 11 Jun 2023 15:48:36 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
-        s=protonmail; t=1686498443; x=1686757643;
-        bh=y9BC09FC+aLMdCShoO0QsSLuTmOQtTkJuLlGOqMbhaI=;
+        s=protonmail; t=1686498520; x=1686757720;
+        bh=llThXYR/g/KbQkmoR17RlJfSDl2qAR2F4OAIJumA+eM=;
         h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
          Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
          Message-ID:BIMI-Selector;
-        b=juQfb6XQqeksTC+XxFH/VGlfGeWh0FjHxzZ8C9m8ydT4m0YIB8N8uo+Ae90BemlBm
-         yUU77QgH5mgfFDAll+fE252lnSNASVfnaoANrQZF3F5JcHrDOE9DftG2KhpktzAQue
-         geCjs9yCpyM/TyslZU++7RzhriXaZhtVCHUvTZ1KOlFOGFc0lxv4z/9tbhI2Eu9t0J
-         xP5Wnny556DuY9Rr9ovKDXSkqxoNqaxdc56JIYrsJUTXzv9ShogZ514fWvKPtVC/BM
-         2j45Xkwaad+9+dLOENEKRZbSPG7f0K4g92Wd5lyG+0CO2Z2B9eHlZvVcH2RdPjxol6
-         o/AnW21ivp7Kg==
+        b=g76RGSywGB6xjzPyW6VilVGaHlM7ho5EX2WpRqG99kgZWilxwRCfzqVLT2W6o274F
+         hRVuaInH2oI/6DujaUJjG0rCtWBNjKAiXjr/pLtr3oI29QAQsyihS0cyeCxReuQglm
+         VjbecqsZjI0HuPBP/V//q4BKPwUI1DksRhlJzo/48OHPKL9TsYoZFejq+xqjtWTwHr
+         uD7l55KIffo5GLfHE7qCj0Om49ZamNqoqTalUiDWqxDh5bJPZxmB/Moq8ZVLX1YTGH
+         qoXDjZzTfef0nzYthtmsnPo+6dkWGz3yMwN8E3e7sgVW8iXXLjiTq3WKBJDfC5DCnd
+         eEle7bJ7aInHQ==
 To:     Alice Ryhl <aliceryhl@google.com>
 From:   Benno Lossin <benno.lossin@proton.me>
 Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
@@ -40,10 +40,10 @@ Cc:     rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
         linux-kernel@vger.kernel.org, patches@lists.linux.dev,
         Wedson Almeida Filho <walmeida@microsoft.com>,
         Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Subject: Re: [PATCH v2 2/8] rust: add offset_of! macro
-Message-ID: <1tSKGQpv9YMkND4AD6xkmklwOysLXZpLWyHKRig89_8HbBhabheCU004aOkq1ixT1PpdN4SfGILlUaxwtU012ezdlZHmALZCEir0xtcifMc=@proton.me>
-In-Reply-To: <20230601134946.3887870-3-aliceryhl@google.com>
-References: <20230601134946.3887870-1-aliceryhl@google.com> <20230601134946.3887870-3-aliceryhl@google.com>
+Subject: Re: [PATCH v2 3/8] rust: sync: add `Arc::{from_raw, into_raw}`
+Message-ID: <IpzwVmcwX_B9GjTOYg1fc7xC6F3zXmdH-zopjNRU3nyHhQN8K1PT4sE6Xv9e4s4vPYnmKwl6GvMdWiJtk3Vr8ECz8I7OAdofoyyqAwbQ9WY=@proton.me>
+In-Reply-To: <20230601134946.3887870-4-aliceryhl@google.com>
+References: <20230601134946.3887870-1-aliceryhl@google.com> <20230601134946.3887870-4-aliceryhl@google.com>
 Feedback-ID: 71780778:user:proton
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
@@ -60,24 +60,16 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On 01.06.23 15:49, Alice Ryhl wrote:
 > From: Wedson Almeida Filho <walmeida@microsoft.com>
 >=20
-> This macro is used to compute the offset of a field in a struct.
+> These methods can be used to turn an `Arc` into a raw pointer and back,
+> in a way that preserves the metadata for fat pointers.
 >=20
-> This commit enables an unstable feature that is necessary for using
-> the macro in a constant. However, this is not a problem as the macro
-> will become available from the Rust standard library soon [1]. The
-> unstable feature can be disabled again once that happens.
+> This is done using the unstable ptr_metadata feature [1]. However, it
+> could also be done using the unstable pointer_byte_offsets feature [2],
+> which is likely to have a shorter path to stabilization than
+> ptr_metadata.
 >=20
-> The macro in this patch does not support sub-fields. That is, you cannot
-> write `offset_of!(MyStruct, field.sub_field)` to get the offset of
-> `sub_field` with `field`'s type being a struct with a field called
-> `sub_field`. This is because `field` might be a `Box<SubStruct>`, which
-> means that you would be trying to compute the offset to something in an
-> entirely different allocation. There's no easy way to fix the current
-> macro to support subfields, but the version being added to the standard
-> library should support it, so the limitation is temporary and not a big
-> deal.
->=20
-> Link: https://github.com/rust-lang/rust/issues/106655 [1]
+> Link: https://github.com/rust-lang/rust/issues/81513 [1]
+> Link: https://github.com/rust-lang/rust/issues/96283 [2]
 > Signed-off-by: Wedson Almeida Filho <walmeida@microsoft.com>
 > Co-developed-by: Alice Ryhl <aliceryhl@google.com>
 > Signed-off-by: Alice Ryhl <aliceryhl@google.com>
@@ -90,80 +82,97 @@ Cheers,
 Benno
 
 > ---
->   rust/kernel/lib.rs     | 35 +++++++++++++++++++++++++++++++++++
->   scripts/Makefile.build |  2 +-
->   2 files changed, 36 insertions(+), 1 deletion(-)
+>   rust/kernel/lib.rs      |  1 +
+>   rust/kernel/sync/arc.rs | 42 ++++++++++++++++++++++++++++++++++++++++-
+>   2 files changed, 42 insertions(+), 1 deletion(-)
 >=20
 > diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
-> index eaded02ffb01..7ea777b731e6 100644
+> index 7ea777b731e6..ad9142928fb1 100644
 > --- a/rust/kernel/lib.rs
 > +++ b/rust/kernel/lib.rs
-> @@ -14,6 +14,7 @@
->   #![no_std]
->   #![feature(allocator_api)]
->   #![feature(coerce_unsized)]
-> +#![feature(const_refs_to_cell)]
+> @@ -17,6 +17,7 @@
+>   #![feature(const_refs_to_cell)]
 >   #![feature(dispatch_from_dyn)]
 >   #![feature(new_uninit)]
+> +#![feature(ptr_metadata)]
 >   #![feature(receiver_trait)]
-> @@ -98,3 +99,37 @@ fn panic(info: &core::panic::PanicInfo<'_>) -> ! {
->       // instead of `!`. See <https://github.com/rust-lang/rust-bindgen/i=
-ssues/2094>.
->       loop {}
->   }
+>   #![feature(unsize)]
+>=20
+> diff --git a/rust/kernel/sync/arc.rs b/rust/kernel/sync/arc.rs
+> index a89843cacaad..684be9f73aca 100644
+> --- a/rust/kernel/sync/arc.rs
+> +++ b/rust/kernel/sync/arc.rs
+> @@ -24,7 +24,7 @@
+>   };
+>   use alloc::boxed::Box;
+>   use core::{
+> -    alloc::AllocError,
+> +    alloc::{AllocError, Layout},
+>       fmt,
+>       marker::{PhantomData, Unsize},
+>       mem::{ManuallyDrop, MaybeUninit},
+> @@ -212,6 +212,46 @@ unsafe fn from_inner(inner: NonNull<ArcInner<T>>) ->=
+ Self {
+>           }
+>       }
+>=20
+> +    /// Convert the [`Arc`] into a raw pointer.
+> +    ///
+> +    /// The raw pointer has ownership of the refcount that this Arc obje=
+ct owned.
+> +    pub fn into_raw(self) -> *const T {
+> +        let ptr =3D self.ptr.as_ptr();
+> +        core::mem::forget(self);
+> +        // SAFETY: The pointer is valid.
+> +        unsafe { core::ptr::addr_of!((*ptr).data) }
+> +    }
 > +
-> +/// Calculates the offset of a field from the beginning of the struct it=
- belongs to.
-> +///
-> +/// # Examples
-> +///
-> +/// ```
-> +/// #[repr(C)]
-> +/// struct Test {
-> +///     a: u64,
-> +///     b: u32,
-> +/// }
-> +///
-> +/// assert_eq!(kernel::offset_of!(Test, b), 8);
-> +/// ```
-> +#[macro_export]
-> +macro_rules! offset_of {
-> +    ($type:path, $field:ident) =3D> {{
-> +        let $type { $field: _, .. };
-> +        let tmp =3D ::core::mem::MaybeUninit::<$type>::uninit();
-> +        let outer =3D tmp.as_ptr();
-> +        // To avoid warnings when nesting `unsafe` blocks.
-> +        #[allow(unused_unsafe)]
-> +        // SAFETY: The pointer is valid and aligned, just not initialise=
-d; `addr_of` ensures that
-> +        // we don't actually read from `outer` (which would be UB) nor c=
-reate an intermediate
-> +        // reference.
-> +        let inner =3D unsafe { ::core::ptr::addr_of!((*outer).$field) } =
-as *const u8;
-> +        // To avoid warnings when nesting `unsafe` blocks.
-> +        #[allow(unused_unsafe)]
-> +        // SAFETY: The two pointers are within the same allocation block=
-.
-> +        unsafe {
-> +            inner.offset_from(outer as *const u8) as usize
-> +        }
-> +    }};
-> +}
-> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-> index 78175231c969..819510694769 100644
-> --- a/scripts/Makefile.build
-> +++ b/scripts/Makefile.build
-> @@ -277,7 +277,7 @@ $(obj)/%.lst: $(src)/%.c FORCE
->   # Compile Rust sources (.rs)
->   # ---------------------------------------------------------------------=
-------
->=20
-> -rust_allowed_features :=3D new_uninit
-> +rust_allowed_features :=3D const_refs_to_cell,new_uninit
->=20
->   rust_common_cmd =3D \
->   =09RUST_MODFILE=3D$(modfile) $(RUSTC_OR_CLIPPY) $(rust_flags) \
+> +    /// Recreates an [`Arc`] instance previously deconstructed via [`Arc=
+::into_raw`].
+> +    ///
+> +    /// This code relies on the `repr(C)` layout of structs as described=
+ in
+> +    /// <https://doc.rust-lang.org/reference/type-layout.html#reprc-stru=
+cts>.
+> +    ///
+> +    /// # Safety
+> +    ///
+> +    /// `ptr` must have been returned by a previous call to [`Arc::into_=
+raw`]. Additionally, it
+> +    /// can only be called once for each previous call to [`Arc::into_ra=
+w`].
+> +    pub unsafe fn from_raw(ptr: *const T) -> Self {
+> +        let refcount_layout =3D Layout::new::<bindings::refcount_t>();
+> +        // SAFETY: The caller guarantees that the pointer is valid.
+> +        let val_layout =3D unsafe { Layout::for_value(&*ptr) };
+> +        // SAFETY: We're computing the layout of a real struct that exis=
+ted when compiling this
+> +        // binary, so its layout is not so large that it can trigger ari=
+thmetic overflow.
+> +        let val_offset =3D unsafe { refcount_layout.extend(val_layout).u=
+nwrap_unchecked().1 };
+> +
+> +        // This preserves the metadata in the pointer, if any.
+> +        //
+> +        // Note that `*const T` and `*const ArcInner<T>` have the same m=
+etadata as documented at
+> +        // <https://doc.rust-lang.org/std/ptr/trait.Pointee.html>.
+> +        let metadata =3D core::ptr::metadata(ptr as *const ArcInner<T>);
+> +        let ptr =3D (ptr as *mut u8).wrapping_sub(val_offset) as *mut ()=
+;
+> +        let ptr =3D core::ptr::from_raw_parts_mut(ptr, metadata);
+> +
+> +        // SAFETY: By the safety requirements we know that `ptr` came fr=
+om `Arc::into_raw`, so the
+> +        // reference count held then will be owned by the new `Arc` obje=
+ct.
+> +        unsafe { Self::from_inner(NonNull::new_unchecked(ptr)) }
+> +    }
+> +
+>       /// Returns an [`ArcBorrow`] from the given [`Arc`].
+>       ///
+>       /// This is useful when the argument of a function call is an [`Arc=
+Borrow`] (e.g., in a method
 > --
 > 2.41.0.rc0.172.g3f132b7071-goog
 >=20
