@@ -2,109 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C3C672B1CF
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 14:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8321572B1D3
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 14:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232331AbjFKMQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 08:16:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45616 "EHLO
+        id S231649AbjFKM0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 08:26:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbjFKMQF (ORCPT
+        with ESMTP id S230087AbjFKM03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 08:16:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D3DE7F
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 05:15:19 -0700 (PDT)
+        Sun, 11 Jun 2023 08:26:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C43E9
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 05:25:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686485717;
+        s=mimecast20190719; t=1686486341;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9hd3npbID10r5k6jMGmqFp5hgwno88O8I5Xi3MAI7ao=;
-        b=TVZ6008KX8Tx/bRDLLMLIh7eXygB/B0SU4KpFFXqp9rr8rfdNjPoKLJudrWBqg+E8LVUFm
-        mw5QfhqweUZtuSirz0Tm6weW08iSFDdeNwu1tnxbIGYRfZ7Dzxl0Jz4q9ebyhJFcE3flG8
-        NOc/j05ST18JDjKfqNyIRtXdNVxzi6o=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-519-adM4VlXgM1CNEOmtz42UUQ-1; Sun, 11 Jun 2023 08:15:12 -0400
-X-MC-Unique: adM4VlXgM1CNEOmtz42UUQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4CA9B8002BF;
-        Sun, 11 Jun 2023 12:15:12 +0000 (UTC)
-Received: from localhost (ovpn-12-34.pek2.redhat.com [10.72.12.34])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8810740CFD01;
-        Sun, 11 Jun 2023 12:15:11 +0000 (UTC)
-Date:   Sun, 11 Jun 2023 20:15:07 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-        horms@kernel.org, thunder.leizhen@huawei.com,
-        John.p.donnelly@oracle.com, kexec@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v6 0/2] arm64: kdump: simplify the reservation behaviour
- of crashkernel=,high
-Message-ID: <ZIW6y9IK+pqMSfoc@MiWiFi-R3L-srv>
-References: <20230515060259.830662-1-bhe@redhat.com>
- <168633894002.3180904.11323833556978641615.b4-ty@arm.com>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=VzHpqAgwVyjsEyqlii/oXrS26otgDxyqE8QW1Ofzr/o=;
+        b=U+08OCPOGm8Llwq0gDgYlg8bWsTA3GZoIsOwoEa0oRlH9RECgWNyq+84zkoJrgaCaWEFX+
+        r1ia1Cbdmle9zeVlu/di7Qat7nUiMPGcSpZTgGqL85kExf6CWtjG9l5GGxZKqIFW+B2SX5
+        vd3F6Cy6z/gZYOX3N4+0n6UlyAosqRY=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-608-C_B1wJt9NgO1Ateq_XRs6g-1; Sun, 11 Jun 2023 08:25:40 -0400
+X-MC-Unique: C_B1wJt9NgO1Ateq_XRs6g-1
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-75ec66a016fso497284685a.2
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 05:25:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686486339; x=1689078339;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VzHpqAgwVyjsEyqlii/oXrS26otgDxyqE8QW1Ofzr/o=;
+        b=A8xb+bvtALBWJOVBnsUrWBNsd5PzC6+uOFJWwLiiHKosl7+STkOISPAIDCLilTZu39
+         GYArm0MLmk4MGYGROIZNRnd0My/2o3ZhGY96V+692f3/ihZThwgG5le9zB9Cpf9g1Plt
+         zFT+NxJ491uYhWn3eyB97Wragn5CY7ySKRWBPt7xUSwsjJv/I/Xob5RCo5xnduwRYogq
+         zHUSwSYaGbmX0bXwjuxEyyadJyBrS6nZpNAJutHuDblBMSBCeaa07tMhHVoapbY7jMO3
+         CEG5KEiFjX3Bhjmr8rUvadqCwbBtF3O+LBmuLvyq2kMewMy8ox51gzSCSE4W0jM7dyPe
+         U5JA==
+X-Gm-Message-State: AC+VfDyh7HzxA/3QoeMW711AIEF7Tg05mCxoXG3Ub9rAxjdgFLfsr+14
+        YATQq8vnmsqe/uIi5nOfwgID63xjykor1NX7rY3QVB9mIOqSw0CflLynnD5RriCuor5xn0PYBlC
+        h23WtkVRCB3ZP0oPllzi/rvCf
+X-Received: by 2002:a05:6214:c89:b0:62d:e8d0:b11a with SMTP id r9-20020a0562140c8900b0062de8d0b11amr1060440qvr.45.1686486339535;
+        Sun, 11 Jun 2023 05:25:39 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4h0ZiRL429pl1/04YC3gfIsts/6xKRPbTpu8Jc8MSofShrdwUH8ar8zAQIsfk8aKeD5gwR2g==
+X-Received: by 2002:a05:6214:c89:b0:62d:e8d0:b11a with SMTP id r9-20020a0562140c8900b0062de8d0b11amr1060417qvr.45.1686486339309;
+        Sun, 11 Jun 2023 05:25:39 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id l12-20020ad4452c000000b005ef5f8dc89esm2463910qvu.88.2023.06.11.05.25.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 11 Jun 2023 05:25:38 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com
+Cc:     linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] sched/fair: rename variable cpu_util eff_util
+Date:   Sun, 11 Jun 2023 08:25:35 -0400
+Message-Id: <20230611122535.183654-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <168633894002.3180904.11323833556978641615.b4-ty@arm.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Catalin,
+cppcheck reports
+kernel/sched/fair.c:7436:17: style: Local variable 'cpu_util' shadows outer function [shadowFunction]
+  unsigned long cpu_util;
+                ^
 
-On 06/09/23 at 08:30pm, Catalin Marinas wrote:
-> On Mon, 15 May 2023 14:02:57 +0800, Baoquan He wrote:
-> > In v5 patch, Catalin helped review and acked the patch. However, an
-> > uninitialized local varilable is warned out by static checker when Will
-> > tried to merge the patch. And Will complained the code flow in
-> > reserve_crashkernel() is hard to follow, required to refactor. While
-> > when I tried to do the refactory, I feel it's not easy, the existing
-> > several cases causes that.
-> > 
-> > [...]
-> 
-> Applied to arm64 (for-next/kdump).
-> 
-> I reworte some of the paragraphs in the documentation patch, removed
-> some sentences to make it easier to read (some details were pretty
-> obvious). Please have a look, if you think I missed something important,
-> just send a patch on top. Thanks.
-> 
-> [1/2] arm64: kdump: simplify the reservation behaviour of crashkernel=,high
->       https://git.kernel.org/arm64/c/6c4dcaddbd36
-> [2/2] Documentation: add kdump.rst to present crashkernel reservation on arm64
->       https://git.kernel.org/arm64/c/03dc0e05407f
+Clean this up by renaming the variable to eff_util
 
-Could you help add below code change into the document patch commit? I
-forgot adding it and got warning report from lkp test robot.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ kernel/sched/fair.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-https://lore.kernel.org/oe-kbuild-all/202306110549.ynH2Juok-lkp@intel.com/
-
-
-diff --git a/Documentation/arm64/index.rst b/Documentation/arm64/index.rst
-index ae21f8118830..dcfebddb6088 100644
---- a/Documentation/arm64/index.rst
-+++ b/Documentation/arm64/index.rst
-@@ -25,6 +25,7 @@ ARM64 Architecture
-     sve
-     tagged-address-abi
-     tagged-pointers
-+    kdump
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 6189d1a45635..7666dbc2b788 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -7433,7 +7433,7 @@ eenv_pd_max_util(struct energy_env *eenv, struct cpumask *pd_cpus,
+ 	for_each_cpu(cpu, pd_cpus) {
+ 		struct task_struct *tsk = (cpu == dst_cpu) ? p : NULL;
+ 		unsigned long util = cpu_util(cpu, p, dst_cpu, 1);
+-		unsigned long cpu_util;
++		unsigned long eff_util;
  
-     features
+ 		/*
+ 		 * Performance domain frequency: utilization clamping
+@@ -7442,8 +7442,8 @@ eenv_pd_max_util(struct energy_env *eenv, struct cpumask *pd_cpus,
+ 		 * NOTE: in case RT tasks are running, by default the
+ 		 * FREQUENCY_UTIL's utilization can be max OPP.
+ 		 */
+-		cpu_util = effective_cpu_util(cpu, util, FREQUENCY_UTIL, tsk);
+-		max_util = max(max_util, cpu_util);
++		eff_util = effective_cpu_util(cpu, util, FREQUENCY_UTIL, tsk);
++		max_util = max(max_util, eff_util);
+ 	}
  
+ 	return min(max_util, eenv->cpu_cap);
+-- 
+2.27.0
 
