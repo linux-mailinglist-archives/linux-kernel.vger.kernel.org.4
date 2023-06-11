@@ -2,66 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 908E272B171
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 12:40:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C040372B176
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 12:48:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233038AbjFKKkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 06:40:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58678 "EHLO
+        id S233314AbjFKKsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 06:48:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbjFKKkc (ORCPT
+        with ESMTP id S229720AbjFKKsf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 06:40:32 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FD21B1;
-        Sun, 11 Jun 2023 03:40:30 -0700 (PDT)
-X-GND-Sasl: maxime.chevallier@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686480028;
+        Sun, 11 Jun 2023 06:48:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1E0173A
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 03:47:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686480467;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=C55nMeIDtiQJBRlRcKRFLbxtCKPrKUT5Uj3r1tMKd3M=;
-        b=VXXXJ0grXoG5uje5MHKFDs6efk0qeKbQwieCwCx1NG18jdG2FVSZbbIgIc1EVxgz77GB5B
-        z5CX0xzDjrD4UlwcZBINJG767DR2N66m3UsH/4JfAB4qstQoTJtzDISUYKHyG9NN3FJ2Wm
-        iIQ8G0X3dKsUjZlYSGtWMV9ucCYNP7e3rrdWILpUff+zkvTzi999Iv0YH3mCWVaY3HduBp
-        vXDUy9xkuCN0I7xIP+9m/ePEKU29Z31OleAhZ1t5haUF4Q5c9dkkwqjUVk3TSKGCgfhqkA
-        ePdhX1KFqcgLphRumZGInKA6ixbzzM1Nza+1TeFtA3i15lPAse6bz+FB4g3w2g==
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8A424FF80A;
-        Sun, 11 Jun 2023 10:40:24 +0000 (UTC)
-From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
-To:     davem@davemloft.net
-Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        thomas.petazzoni@bootlin.com, Andrew Lunn <andrew@lunn.ch>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org,
-        Simon Horman <simon.horman@corigine.com>,
-        alexis.lothore@bootlin.com
-Subject: [PATCH net-next] net: altera_tse: fix init sequence to avoid races with register_netdev
-Date:   Sun, 11 Jun 2023 12:40:19 +0200
-Message-Id: <20230611104019.33793-1-maxime.chevallier@bootlin.com>
-X-Mailer: git-send-email 2.40.1
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j68gTnjgXVwXYZVMYqrbKZ59sLTdFoJLwLEaM6oQtU0=;
+        b=gkVcopoLdRPQNeCHRSTFc7g4kYf9VE4hgSuXmn7bq/9UTdmAQirc5/Qxy31QbRmP81N7rs
+        bGhs2HqE1ITPFywFe/ImO9P0B1fmwMfeOnqlAbM6wGcNdYmCTT74YhgNcQOXekucrgVwcg
+        c+91SQy/HVesmatvLzmozDIL9nnxmnM=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-646-fbDcIieQOSutatTMFW27IQ-1; Sun, 11 Jun 2023 06:47:46 -0400
+X-MC-Unique: fbDcIieQOSutatTMFW27IQ-1
+Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-51495d51e0fso2616463a12.2
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 03:47:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686480465; x=1689072465;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :to:subject:cc:user-agent:mime-version:date:message-id:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=j68gTnjgXVwXYZVMYqrbKZ59sLTdFoJLwLEaM6oQtU0=;
+        b=PbaqDgrkpCawXPwf0xQEm/WATxGg5O1R4SxvGU39YvJoErQrNJmOQkqgORLPr3YZ2K
+         R9qJxVHdhnNEu4HRPRHqX0CjG9kd8KnZrMmT+MwfrWodQlAn2fsTDGVy2MJq7yhstaVu
+         ZCpnx0bFhb4EqL/V0L0abPIjnOA1CfqMP3hqJusMlDaIPn4woqiVphxBs3xuCo9+GeqD
+         X7EkUCry2K+t0agScsoI2MR5IEbGmuE7YarwwEMv94cmaEWJRVkchmO/iBqeB08/y/nt
+         Q7qGRrVMHvTNstvczZ5JachtquBX6ToUvdU/JZuJlxOZVDYP8BSPekDdiXfWX++eHjd6
+         thSg==
+X-Gm-Message-State: AC+VfDynkuX0/1Jgbx3Qbx81IrmL0IrRPRJ4UQLMhZGR58O/RRk/frG+
+        uR7t54mCa9ISbD6NxgiixsJXO/X940QOPpTzK829pFUd9lv9rQBBHTc1njzO+fNSIDylr371qQh
+        HxUaVLyxIBG3aiVXt44giOIeb
+X-Received: by 2002:aa7:c6c3:0:b0:516:7b3f:545d with SMTP id b3-20020aa7c6c3000000b005167b3f545dmr2758976eds.30.1686480464914;
+        Sun, 11 Jun 2023 03:47:44 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ57qE8T9gh9Ypb/Kp13VH7CgAknx2ku8kmlUzRz5ru8rxbZEGZsSTjapnYql/AAy5jug9pyfg==
+X-Received: by 2002:aa7:c6c3:0:b0:516:7b3f:545d with SMTP id b3-20020aa7c6c3000000b005167b3f545dmr2758964eds.30.1686480464613;
+        Sun, 11 Jun 2023 03:47:44 -0700 (PDT)
+Received: from [192.168.42.222] (194-45-78-10.static.kviknet.net. [194.45.78.10])
+        by smtp.gmail.com with ESMTPSA id w8-20020aa7cb48000000b0051632dc69absm3776418edt.86.2023.06.11.03.47.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Jun 2023 03:47:43 -0700 (PDT)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <2c48652e-ace4-45c8-7a7d-5ec87d1b0b75@redhat.com>
+Date:   Sun, 11 Jun 2023 12:47:42 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Cc:     brouer@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        linux-rdma@vger.kernel.org
+Subject: Re: [PATCH net-next v3 1/4] page_pool: frag API support for 32-bit
+ arch with 64-bit DMA
+To:     Yunsheng Lin <yunshenglin0825@gmail.com>,
+        Jesper Dangaard Brouer <jbrouer@redhat.com>,
+        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com
+References: <20230609131740.7496-1-linyunsheng@huawei.com>
+ <20230609131740.7496-2-linyunsheng@huawei.com>
+ <4f1a0b7d-973f-80f5-cc39-74f09622ccef@redhat.com>
+ <1bbf2afa-91b2-a3d0-60e0-81cd386eb68d@gmail.com>
+Content-Language: en-US
+In-Reply-To: <1bbf2afa-91b2-a3d0-60e0-81cd386eb68d@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,60 +98,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As reported here[1], the init sequence in altera_tse can be racy should
-any operation on the registered netdev happen after netdev registration
-but before phylink initialization.
 
-Fix the registering order to avoid such races by making register_netdev
-the last step of the probing sequence.
+On 10/06/2023 15.13, Yunsheng Lin wrote:
+> On 2023/6/9 23:02, Jesper Dangaard Brouer wrote:
+> ...
+> 
+>>>                     PP_FLAG_DMA_SYNC_DEV |\
+>>>                     PP_FLAG_PAGE_FRAG)
+>>>    +#define PAGE_POOL_DMA_USE_PP_FRAG_COUNT    \
+>>> +        (sizeof(dma_addr_t) > sizeof(unsigned long))
+>>> +
+>>
+>> I have a problem with the name PAGE_POOL_DMA_USE_PP_FRAG_COUNT
+>> because it is confusing to read in an if-statement.
+> 
+> Actually, it is already in an if-statement before this patch:)
 
-[1]: https://lore.kernel.org/netdev/ZH9XK5yEGyoDMIs%2F@shell.armlinux.org.uk/
+I did notice, but I've had a problem with this name for a while.
+(see later, why this might be long in separate patch)
 
-Fixes: fef2998203e1 ("net: altera: tse: convert to phylink")
-Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
----
-This patch targets net-next as it fixes a commit that is in net-next
-too.
+> Maybe starting to use it in the driver is confusing to you?
+> If not, maybe we can keep it that for now, and change it when
+> we come up with a better name.
+> 
+>>
+>> Proposals rename to:  DMA_OVERLAP_PP_FRAG_COUNT
+>>   Or:  MM_DMA_OVERLAP_PP_FRAG_COUNT
+>>   Or:  DMA_ADDR_OVERLAP_PP_FRAG_COUNT
+> 
+> It seems DMA_ADDR_OVERLAP_PP_FRAG_COUNT is better,
+> and DMA_ADDR_UPPER_OVERLAP_PP_FRAG_COUNT seems more accurate if a
+> longer macro name is not an issue here.
+> 
 
- drivers/net/ethernet/altera/altera_tse_main.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+I like the shorter DMA_ADDR_OVERLAP_PP_FRAG_COUNT variant best.
 
-diff --git a/drivers/net/ethernet/altera/altera_tse_main.c b/drivers/net/ethernet/altera/altera_tse_main.c
-index 2e15800e5310..54f1b5ad84ce 100644
---- a/drivers/net/ethernet/altera/altera_tse_main.c
-+++ b/drivers/net/ethernet/altera/altera_tse_main.c
-@@ -1395,12 +1395,6 @@ static int altera_tse_probe(struct platform_device *pdev)
- 	spin_lock_init(&priv->rxdma_irq_lock);
- 
- 	netif_carrier_off(ndev);
--	ret = register_netdev(ndev);
--	if (ret) {
--		dev_err(&pdev->dev, "failed to register TSE net device\n");
--		goto err_register_netdev;
--	}
--
- 	platform_set_drvdata(pdev, ndev);
- 
- 	priv->revision = ioread32(&priv->mac_dev->megacore_revision);
-@@ -1449,12 +1443,16 @@ static int altera_tse_probe(struct platform_device *pdev)
- 		goto err_init_phylink;
- 	}
- 
-+	ret = register_netdev(ndev);
-+	if (ret) {
-+		dev_err(&pdev->dev, "failed to register TSE net device\n");
-+		return ret;
-+	}
-+
- 	return 0;
- err_init_phylink:
- 	lynx_pcs_destroy(priv->pcs);
- err_init_pcs:
--	unregister_netdev(ndev);
--err_register_netdev:
- 	netif_napi_del(&priv->napi);
- 	altera_tse_mdio_destroy(ndev);
- err_free_netdev:
--- 
-2.40.1
+>>
+>> Notice how I also removed the prefix PAGE_POOL_ because this is a
+>> MM-layer constraint and not a property of page_pool.
+> 
+> I am not sure if it is a MM-layer constraint yet.
+> Do you mean 'MM-layer constraint' as 'struct page' not having
+> enough space for page pool with 32-bit arch with 64-bit DMA?
+
+Yes.
+
+> If that is the case, we may need a more generic name for that
+> constraint instead of 'DMA_ADDR_OVERLAP_PP_FRAG_COUNT'?
+>
+
+I think this name is clear enough; the dma_addr_t is overlapping the 
+pp_frag_count.
+
+
+> And a more generic name seems confusing for page pool too, as
+> it doesn't tell that we only have that problem for 32-bit arch
+> with 64-bit DMA.
+> 
+> So if the above makes sense, it seems we may need to keep the
+> PAGE_POOL_ prefix, which would be
+> 'PAGE_POOL_DMA_ADDR_UPPER_OVERLAP_PP_FRAG_COUNT' if the long
+> name is not issue here.
+> 
+
+I think it gets too long now.
+
+Also I still disagree with PAGE_POOL_ prefix, if anything it is a
+property of 'struct page'.  Thus a prefix with PAGE_ make more sense to
+me, but it also gets too long (for my taste).
+
+> Anyway, naming is hard, we may need a seperate patch to explain
+> it, which is not really related to this patchset IHMO, so I'd
+> rather keep it as before if we can not come up with a name which
+> is not confusing to most people.
+> 
+
+Okay, lets do the (re)naming in another patch then.
+
+--Jesper
 
