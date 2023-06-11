@@ -2,84 +2,847 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA37C72B3FF
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 22:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91CAF72B404
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 22:49:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231982AbjFKUrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 16:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52262 "EHLO
+        id S232630AbjFKUtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 16:49:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjFKUrr (ORCPT
+        with ESMTP id S229441AbjFKUtK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 16:47:47 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DBCD8
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 13:47:46 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q8RyS-00027v-22; Sun, 11 Jun 2023 22:47:44 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q8RyQ-006jQU-Df; Sun, 11 Jun 2023 22:47:42 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q8RyP-00DIKg-Du; Sun, 11 Jun 2023 22:47:41 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Peter Rosin <peda@axentia.se>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH] mux: adg792a: Switch back to use i2c_driver's .probe()
-Date:   Sun, 11 Jun 2023 22:47:37 +0200
-Message-Id: <20230611204737.828617-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
+        Sun, 11 Jun 2023 16:49:10 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7559D8;
+        Sun, 11 Jun 2023 13:49:07 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f61735676fso4269504e87.2;
+        Sun, 11 Jun 2023 13:49:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686516546; x=1689108546;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lty8gxIqk8sr6kUdgq3qU9o+CiQnxtUoAeo9FsGunFo=;
+        b=e3oUMrdo1vDLqAg86jayNBbjZHEnpthBOTqSrEvc0yHHN9pRWavhXxOiIgej1bO1Ag
+         SFlhNZrP3FVefYl7inuDPZ3y4LXymdWAMA9R1bI8ZUEl1ybs+GStKHiWUlMwOVI3WmlA
+         DnTYQmLeBPJ0EFIHTSDMJoPoCX491hKhAjs+MJeDoSI4vlaACmwIn03TXifAcKyQ86Pv
+         6A8f278eC9dNO5VnRCujeGnSPo82ZwdPq61iYnOUu1iMz0hF8OGsw9C37eEQs4sKJePx
+         GR45rrG9XDP30LTRBTBUafj29tLnh/HPqr2AiAmcJQ6aVAEFWgVzPS7dGr382y/ctr0L
+         TOkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686516546; x=1689108546;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lty8gxIqk8sr6kUdgq3qU9o+CiQnxtUoAeo9FsGunFo=;
+        b=eYkfESmCP9covqJJMX79xRVZpXOqhO9eKvLt9U1XAjSIyyyI7xABVvnlZHXWnsCrvx
+         Km6sfRqdh4fPW3tNZfwq3J9bDjxBHV+9WboqXrQGmsknwj9WTAdKGdX1Wt2lyU+Pkoeg
+         k/CINYCBYrIPRjrlr0wUx95p9xnPeYMW0WV3IKWXcWdbYCGFrvveg6pmWwsQrVkbKpdc
+         rpd+gUTUJJ9d7YA19z/QAzKKGD6TUXods8N3+qTSWoOzB3vnqcOaDAaMbhZS+tTIZDqL
+         x0wcd61NBMXp3N4V5aO3MpvxLfg78XNWsGPlrIGXOfVWuoVnWEdZCC9JJiTuPj6EkCvx
+         jRgQ==
+X-Gm-Message-State: AC+VfDzSnEqe4Qc0DeC0mZPc9FneTF8u7KXXOZ8eF3kZ6hd7Zws3XXs0
+        6E81A83wR9BFyjh8aJ10wiY=
+X-Google-Smtp-Source: ACHHUZ6h/RQdou/GGlUyxO1u8heGMgYg/2XXfKtzDBbrjRDsuolURM8RLDQA54BCtNxXkwwqfblApA==
+X-Received: by 2002:a19:e05d:0:b0:4f3:a63f:6a96 with SMTP id g29-20020a19e05d000000b004f3a63f6a96mr2763704lfj.22.1686516545582;
+        Sun, 11 Jun 2023 13:49:05 -0700 (PDT)
+Received: from ?IPV6:2a00:1e88:c487:9300:dcc4:573f:aaf5:21af? ([2a00:1e88:c487:9300:dcc4:573f:aaf5:21af])
+        by smtp.gmail.com with ESMTPSA id b4-20020a056512024400b004f12c08fa4fsm1248532lfo.48.2023.06.11.13.49.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Jun 2023 13:49:05 -0700 (PDT)
+Message-ID: <92b3a6df-ded3-6470-39d1-fe0939441abc@gmail.com>
+Date:   Sun, 11 Jun 2023 23:49:02 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH RFC net-next v4 6/8] virtio/vsock: support dgrams
+Content-Language: en-US
+To:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>
+Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
+        Simon Horman <simon.horman@corigine.com>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        bpf@vger.kernel.org
+References: <20230413-b4-vsock-dgram-v4-0-0cebbb2ae899@bytedance.com>
+ <20230413-b4-vsock-dgram-v4-6-0cebbb2ae899@bytedance.com>
+From:   Arseniy Krasnov <oxffffaa@gmail.com>
+In-Reply-To: <20230413-b4-vsock-dgram-v4-6-0cebbb2ae899@bytedance.com>
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=978; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=y4hva+PgitW/U7eAqgv9+HU/FxY3KXgCgs+LNOqhnLg=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkhjLonctaeBic711T6V3z66PRv/YrtFUIjbzEE du7n2lj8zWJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZIYy6AAKCRCPgPtYfRL+ Tg/gCACr0OMSxV4lU9LXHcDoEgej/cchJQk+KCCx+i+Fv5idIvwvfRHgHFpu/ZYA81CdBDV6hL2 H1hT8y4fXbPqq3+QJQSz0u6soMKlvOLJ2ys97mvc2kSnwSNaltxfNV51A+thNtzguP9IP0N5bzT hh1bLUZyBGE6cnrnPxa6SCxiNHjTlEM0ICq5ri0pvjjjXo1PgVeDzsUY2syljVrspPK6YUemgbQ y/ALTIYpQMH781bVXJ0lmU7+lGtztlDXyHRBsZuhMuBdd5Nnu5rW2Nd71t+YTq628Doix5zok9Y TIZ1NILPQ6urWm4EsPJg/5rq06YImIGb1gEgTojEscwmND3F
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
-call-back type"), all drivers being converted to .probe_new() and then
-commit 03c835f498b5 ("i2c: Switch .probe() to not take an id parameter")
-convert back to (the new) .probe() to be able to eventually drop
-.probe_new() from struct i2c_driver.
+Hello Bobby!
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/mux/adg792a.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 10.06.2023 03:58, Bobby Eshleman wrote:
+> This commit adds support for datagrams over virtio/vsock.
+> 
+> Message boundaries are preserved on a per-skb and per-vq entry basis.
 
-diff --git a/drivers/mux/adg792a.c b/drivers/mux/adg792a.c
-index e8fc2fc1ab09..4da5aecb9fc6 100644
---- a/drivers/mux/adg792a.c
-+++ b/drivers/mux/adg792a.c
-@@ -143,7 +143,7 @@ static struct i2c_driver adg792a_driver = {
- 		.name		= "adg792a",
- 		.of_match_table = of_match_ptr(adg792a_of_match),
- 	},
--	.probe_new	= adg792a_probe,
-+	.probe		= adg792a_probe,
- 	.id_table	= adg792a_id,
- };
- module_i2c_driver(adg792a_driver);
+I'm a little bit confused about the following case: let vhost sends 4097 bytes
+datagram to the guest. Guest uses 4096 RX buffers in it's virtio queue, each
+buffer has attached empty skb to it. Vhost places first 4096 bytes to the first
+buffer of guests RX queue, and 1 last byte to the second buffer. Now IIUC guest
+has two skb in it rx queue, and user in guest wants to read data - does it read
+4097 bytes, while guest has two skb - 4096 bytes and 1 bytes? In seqpacket there is
+special marker in header which shows where message ends, and how it works here?
 
-base-commit: 53ab6975c12d1ad86c599a8927e8c698b144d669
--- 
-2.39.2
+Thanks, Arseniy
 
+> Messages are copied in whole from the user to an SKB, which in turn is
+> added to the scatterlist for the virtqueue in whole for the device.
+> Messages do not straddle skbs and they do not straddle packets.
+> Messages may be truncated by the receiving user if their buffer is
+> shorter than the message.
+> 
+> Other properties of vsock datagrams:
+> - Datagrams self-throttle at the per-socket sk_sndbuf threshold.
+> - The same virtqueue is used as is used for streams and seqpacket flows
+> - Credits are not used for datagrams
+> - Packets are dropped silently by the device, which means the virtqueue
+>   will still get kicked even during high packet loss, so long as the
+>   socket does not exceed sk_sndbuf.
+> 
+> Future work might include finding a way to reduce the virtqueue kick
+> rate for datagram flows with high packet loss.
+> 
+> Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+> ---
+>  drivers/vhost/vsock.c                   |  27 ++++-
+>  include/linux/virtio_vsock.h            |   5 +-
+>  include/net/af_vsock.h                  |   1 +
+>  include/uapi/linux/virtio_vsock.h       |   1 +
+>  net/vmw_vsock/af_vsock.c                |  58 +++++++--
+>  net/vmw_vsock/virtio_transport.c        |  23 +++-
+>  net/vmw_vsock/virtio_transport_common.c | 207 ++++++++++++++++++++++++--------
+>  net/vmw_vsock/vsock_loopback.c          |   8 +-
+>  8 files changed, 264 insertions(+), 66 deletions(-)
+> 
+> diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
+> index 8f0082da5e70..159c1a22c1a8 100644
+> --- a/drivers/vhost/vsock.c
+> +++ b/drivers/vhost/vsock.c
+> @@ -32,7 +32,8 @@
+>  enum {
+>  	VHOST_VSOCK_FEATURES = VHOST_FEATURES |
+>  			       (1ULL << VIRTIO_F_ACCESS_PLATFORM) |
+> -			       (1ULL << VIRTIO_VSOCK_F_SEQPACKET)
+> +			       (1ULL << VIRTIO_VSOCK_F_SEQPACKET) |
+> +			       (1ULL << VIRTIO_VSOCK_F_DGRAM)
+>  };
+>  
+>  enum {
+> @@ -56,6 +57,7 @@ struct vhost_vsock {
+>  	atomic_t queued_replies;
+>  
+>  	u32 guest_cid;
+> +	bool dgram_allow;
+>  	bool seqpacket_allow;
+>  };
+>  
+> @@ -394,6 +396,7 @@ static bool vhost_vsock_more_replies(struct vhost_vsock *vsock)
+>  	return val < vq->num;
+>  }
+>  
+> +static bool vhost_transport_dgram_allow(u32 cid, u32 port);
+>  static bool vhost_transport_seqpacket_allow(u32 remote_cid);
+>  
+>  static struct virtio_transport vhost_transport = {
+> @@ -410,10 +413,11 @@ static struct virtio_transport vhost_transport = {
+>  		.cancel_pkt               = vhost_transport_cancel_pkt,
+>  
+>  		.dgram_enqueue            = virtio_transport_dgram_enqueue,
+> -		.dgram_allow              = virtio_transport_dgram_allow,
+> +		.dgram_allow              = vhost_transport_dgram_allow,
+>  		.dgram_get_cid		  = virtio_transport_dgram_get_cid,
+>  		.dgram_get_port		  = virtio_transport_dgram_get_port,
+>  		.dgram_get_length	  = virtio_transport_dgram_get_length,
+> +		.dgram_payload_offset	  = 0,
+>  
+>  		.stream_enqueue           = virtio_transport_stream_enqueue,
+>  		.stream_dequeue           = virtio_transport_stream_dequeue,
+> @@ -446,6 +450,22 @@ static struct virtio_transport vhost_transport = {
+>  	.send_pkt = vhost_transport_send_pkt,
+>  };
+>  
+> +static bool vhost_transport_dgram_allow(u32 cid, u32 port)
+> +{
+> +	struct vhost_vsock *vsock;
+> +	bool dgram_allow = false;
+> +
+> +	rcu_read_lock();
+> +	vsock = vhost_vsock_get(cid);
+> +
+> +	if (vsock)
+> +		dgram_allow = vsock->dgram_allow;
+> +
+> +	rcu_read_unlock();
+> +
+> +	return dgram_allow;
+> +}
+> +
+>  static bool vhost_transport_seqpacket_allow(u32 remote_cid)
+>  {
+>  	struct vhost_vsock *vsock;
+> @@ -802,6 +822,9 @@ static int vhost_vsock_set_features(struct vhost_vsock *vsock, u64 features)
+>  	if (features & (1ULL << VIRTIO_VSOCK_F_SEQPACKET))
+>  		vsock->seqpacket_allow = true;
+>  
+> +	if (features & (1ULL << VIRTIO_VSOCK_F_DGRAM))
+> +		vsock->dgram_allow = true;
+> +
+>  	for (i = 0; i < ARRAY_SIZE(vsock->vqs); i++) {
+>  		vq = &vsock->vqs[i];
+>  		mutex_lock(&vq->mutex);
+> diff --git a/include/linux/virtio_vsock.h b/include/linux/virtio_vsock.h
+> index 73afa09f4585..237ca87a2ecd 100644
+> --- a/include/linux/virtio_vsock.h
+> +++ b/include/linux/virtio_vsock.h
+> @@ -216,7 +216,6 @@ void virtio_transport_notify_buffer_size(struct vsock_sock *vsk, u64 *val);
+>  u64 virtio_transport_stream_rcvhiwat(struct vsock_sock *vsk);
+>  bool virtio_transport_stream_is_active(struct vsock_sock *vsk);
+>  bool virtio_transport_stream_allow(u32 cid, u32 port);
+> -bool virtio_transport_dgram_allow(u32 cid, u32 port);
+>  int virtio_transport_dgram_get_cid(struct sk_buff *skb, unsigned int *cid);
+>  int virtio_transport_dgram_get_port(struct sk_buff *skb, unsigned int *port);
+>  int virtio_transport_dgram_get_length(struct sk_buff *skb, size_t *len);
+> @@ -247,4 +246,8 @@ void virtio_transport_put_credit(struct virtio_vsock_sock *vvs, u32 credit);
+>  void virtio_transport_deliver_tap_pkt(struct sk_buff *skb);
+>  int virtio_transport_purge_skbs(void *vsk, struct sk_buff_head *list);
+>  int virtio_transport_read_skb(struct vsock_sock *vsk, skb_read_actor_t read_actor);
+> +void virtio_transport_init_dgram_bind_tables(void);
+> +int virtio_transport_dgram_get_cid(struct sk_buff *skb, unsigned int *cid);
+> +int virtio_transport_dgram_get_port(struct sk_buff *skb, unsigned int *port);
+> +int virtio_transport_dgram_get_length(struct sk_buff *skb, size_t *len);
+>  #endif /* _LINUX_VIRTIO_VSOCK_H */
+> diff --git a/include/net/af_vsock.h b/include/net/af_vsock.h
+> index 7bedb9ee7e3e..c115e655b4f5 100644
+> --- a/include/net/af_vsock.h
+> +++ b/include/net/af_vsock.h
+> @@ -225,6 +225,7 @@ void vsock_for_each_connected_socket(struct vsock_transport *transport,
+>  				     void (*fn)(struct sock *sk));
+>  int vsock_assign_transport(struct vsock_sock *vsk, struct vsock_sock *psk);
+>  bool vsock_find_cid(unsigned int cid);
+> +struct sock *vsock_find_bound_dgram_socket(struct sockaddr_vm *addr);
+>  
+>  /**** TAP ****/
+>  
+> diff --git a/include/uapi/linux/virtio_vsock.h b/include/uapi/linux/virtio_vsock.h
+> index 9c25f267bbc0..27b4b2b8bf13 100644
+> --- a/include/uapi/linux/virtio_vsock.h
+> +++ b/include/uapi/linux/virtio_vsock.h
+> @@ -70,6 +70,7 @@ struct virtio_vsock_hdr {
+>  enum virtio_vsock_type {
+>  	VIRTIO_VSOCK_TYPE_STREAM = 1,
+>  	VIRTIO_VSOCK_TYPE_SEQPACKET = 2,
+> +	VIRTIO_VSOCK_TYPE_DGRAM = 3,
+>  };
+>  
+>  enum virtio_vsock_op {
+> diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+> index 7a3ca4270446..b0b18e7f4299 100644
+> --- a/net/vmw_vsock/af_vsock.c
+> +++ b/net/vmw_vsock/af_vsock.c
+> @@ -114,6 +114,7 @@
+>  static int __vsock_bind(struct sock *sk, struct sockaddr_vm *addr);
+>  static void vsock_sk_destruct(struct sock *sk);
+>  static int vsock_queue_rcv_skb(struct sock *sk, struct sk_buff *skb);
+> +static bool sock_type_connectible(u16 type);
+>  
+>  /* Protocol family. */
+>  struct proto vsock_proto = {
+> @@ -180,6 +181,8 @@ struct list_head vsock_connected_table[VSOCK_HASH_SIZE];
+>  EXPORT_SYMBOL_GPL(vsock_connected_table);
+>  DEFINE_SPINLOCK(vsock_table_lock);
+>  EXPORT_SYMBOL_GPL(vsock_table_lock);
+> +static struct list_head vsock_dgram_bind_table[VSOCK_HASH_SIZE];
+> +static DEFINE_SPINLOCK(vsock_dgram_table_lock);
+>  
+>  /* Autobind this socket to the local address if necessary. */
+>  static int vsock_auto_bind(struct vsock_sock *vsk)
+> @@ -202,6 +205,9 @@ static void vsock_init_tables(void)
+>  
+>  	for (i = 0; i < ARRAY_SIZE(vsock_connected_table); i++)
+>  		INIT_LIST_HEAD(&vsock_connected_table[i]);
+> +
+> +	for (i = 0; i < ARRAY_SIZE(vsock_dgram_bind_table); i++)
+> +		INIT_LIST_HEAD(&vsock_dgram_bind_table[i]);
+>  }
+>  
+>  static void __vsock_insert_bound(struct list_head *list,
+> @@ -230,8 +236,8 @@ static void __vsock_remove_connected(struct vsock_sock *vsk)
+>  	sock_put(&vsk->sk);
+>  }
+>  
+> -struct sock *vsock_find_bound_socket_common(struct sockaddr_vm *addr,
+> -					    struct list_head *bind_table)
+> +static struct sock *vsock_find_bound_socket_common(struct sockaddr_vm *addr,
+> +						   struct list_head *bind_table)
+>  {
+>  	struct vsock_sock *vsk;
+>  
+> @@ -248,6 +254,23 @@ struct sock *vsock_find_bound_socket_common(struct sockaddr_vm *addr,
+>  	return NULL;
+>  }
+>  
+> +struct sock *
+> +vsock_find_bound_dgram_socket(struct sockaddr_vm *addr)
+> +{
+> +	struct sock *sk;
+> +
+> +	spin_lock_bh(&vsock_dgram_table_lock);
+> +	sk = vsock_find_bound_socket_common(addr,
+> +					    &vsock_dgram_bind_table[VSOCK_HASH(addr)]);
+> +	if (sk)
+> +		sock_hold(sk);
+> +
+> +	spin_unlock_bh(&vsock_dgram_table_lock);
+> +
+> +	return sk;
+> +}
+> +EXPORT_SYMBOL_GPL(vsock_find_bound_dgram_socket);
+> +
+>  static struct sock *__vsock_find_bound_socket(struct sockaddr_vm *addr)
+>  {
+>  	return vsock_find_bound_socket_common(addr, vsock_bound_sockets(addr));
+> @@ -287,6 +310,14 @@ void vsock_insert_connected(struct vsock_sock *vsk)
+>  }
+>  EXPORT_SYMBOL_GPL(vsock_insert_connected);
+>  
+> +static void vsock_remove_dgram_bound(struct vsock_sock *vsk)
+> +{
+> +	spin_lock_bh(&vsock_dgram_table_lock);
+> +	if (__vsock_in_bound_table(vsk))
+> +		__vsock_remove_bound(vsk);
+> +	spin_unlock_bh(&vsock_dgram_table_lock);
+> +}
+> +
+>  void vsock_remove_bound(struct vsock_sock *vsk)
+>  {
+>  	spin_lock_bh(&vsock_table_lock);
+> @@ -338,7 +369,10 @@ EXPORT_SYMBOL_GPL(vsock_find_connected_socket);
+>  
+>  void vsock_remove_sock(struct vsock_sock *vsk)
+>  {
+> -	vsock_remove_bound(vsk);
+> +	if (sock_type_connectible(sk_vsock(vsk)->sk_type))
+> +		vsock_remove_bound(vsk);
+> +	else
+> +		vsock_remove_dgram_bound(vsk);
+>  	vsock_remove_connected(vsk);
+>  }
+>  EXPORT_SYMBOL_GPL(vsock_remove_sock);
+> @@ -720,11 +754,19 @@ static int __vsock_bind_connectible(struct vsock_sock *vsk,
+>  	return vsock_bind_common(vsk, addr, vsock_bind_table, VSOCK_HASH_SIZE + 1);
+>  }
+>  
+> -static int __vsock_bind_dgram(struct vsock_sock *vsk,
+> -			      struct sockaddr_vm *addr)
+> +static int vsock_bind_dgram(struct vsock_sock *vsk,
+> +			    struct sockaddr_vm *addr)
+>  {
+> -	if (!vsk->transport || !vsk->transport->dgram_bind)
+> -		return -EINVAL;
+> +	if (!vsk->transport || !vsk->transport->dgram_bind) {
+> +		int retval;
+> +
+> +		spin_lock_bh(&vsock_dgram_table_lock);
+> +		retval = vsock_bind_common(vsk, addr, vsock_dgram_bind_table,
+> +					   VSOCK_HASH_SIZE);
+> +		spin_unlock_bh(&vsock_dgram_table_lock);
+> +
+> +		return retval;
+> +	}
+>  
+>  	return vsk->transport->dgram_bind(vsk, addr);
+>  }
+> @@ -755,7 +797,7 @@ static int __vsock_bind(struct sock *sk, struct sockaddr_vm *addr)
+>  		break;
+>  
+>  	case SOCK_DGRAM:
+> -		retval = __vsock_bind_dgram(vsk, addr);
+> +		retval = vsock_bind_dgram(vsk, addr);
+>  		break;
+>  
+>  	default:
+> diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
+> index 1b7843a7779a..7160a3104218 100644
+> --- a/net/vmw_vsock/virtio_transport.c
+> +++ b/net/vmw_vsock/virtio_transport.c
+> @@ -63,6 +63,7 @@ struct virtio_vsock {
+>  
+>  	u32 guest_cid;
+>  	bool seqpacket_allow;
+> +	bool dgram_allow;
+>  };
+>  
+>  static u32 virtio_transport_get_local_cid(void)
+> @@ -413,6 +414,7 @@ static void virtio_vsock_rx_done(struct virtqueue *vq)
+>  	queue_work(virtio_vsock_workqueue, &vsock->rx_work);
+>  }
+>  
+> +static bool virtio_transport_dgram_allow(u32 cid, u32 port);
+>  static bool virtio_transport_seqpacket_allow(u32 remote_cid);
+>  
+>  static struct virtio_transport virtio_transport = {
+> @@ -465,6 +467,21 @@ static struct virtio_transport virtio_transport = {
+>  	.send_pkt = virtio_transport_send_pkt,
+>  };
+>  
+> +static bool virtio_transport_dgram_allow(u32 cid, u32 port)
+> +{
+> +	struct virtio_vsock *vsock;
+> +	bool dgram_allow;
+> +
+> +	dgram_allow = false;
+> +	rcu_read_lock();
+> +	vsock = rcu_dereference(the_virtio_vsock);
+> +	if (vsock)
+> +		dgram_allow = vsock->dgram_allow;
+> +	rcu_read_unlock();
+> +
+> +	return dgram_allow;
+> +}
+> +
+>  static bool virtio_transport_seqpacket_allow(u32 remote_cid)
+>  {
+>  	struct virtio_vsock *vsock;
+> @@ -658,6 +675,9 @@ static int virtio_vsock_probe(struct virtio_device *vdev)
+>  	if (virtio_has_feature(vdev, VIRTIO_VSOCK_F_SEQPACKET))
+>  		vsock->seqpacket_allow = true;
+>  
+> +	if (virtio_has_feature(vdev, VIRTIO_VSOCK_F_DGRAM))
+> +		vsock->dgram_allow = true;
+> +
+>  	vdev->priv = vsock;
+>  
+>  	ret = virtio_vsock_vqs_init(vsock);
+> @@ -750,7 +770,8 @@ static struct virtio_device_id id_table[] = {
+>  };
+>  
+>  static unsigned int features[] = {
+> -	VIRTIO_VSOCK_F_SEQPACKET
+> +	VIRTIO_VSOCK_F_SEQPACKET,
+> +	VIRTIO_VSOCK_F_DGRAM
+>  };
+>  
+>  static struct virtio_driver virtio_vsock_driver = {
+> diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+> index d5a3c8efe84b..bc9d459723f5 100644
+> --- a/net/vmw_vsock/virtio_transport_common.c
+> +++ b/net/vmw_vsock/virtio_transport_common.c
+> @@ -37,6 +37,35 @@ virtio_transport_get_ops(struct vsock_sock *vsk)
+>  	return container_of(t, struct virtio_transport, transport);
+>  }
+>  
+> +/* Requires info->msg and info->vsk */
+> +static struct sk_buff *
+> +virtio_transport_sock_alloc_send_skb(struct virtio_vsock_pkt_info *info, unsigned int size,
+> +				     gfp_t mask, int *err)
+> +{
+> +	struct sk_buff *skb;
+> +	struct sock *sk;
+> +	int noblock;
+> +
+> +	if (size < VIRTIO_VSOCK_SKB_HEADROOM) {
+> +		*err = -EINVAL;
+> +		return NULL;
+> +	}
+> +
+> +	if (info->msg)
+> +		noblock = info->msg->msg_flags & MSG_DONTWAIT;
+> +	else
+> +		noblock = 1;
+> +
+> +	sk = sk_vsock(info->vsk);
+> +	sk->sk_allocation = mask;
+> +	skb = sock_alloc_send_skb(sk, size, noblock, err);
+> +	if (!skb)
+> +		return NULL;
+> +
+> +	skb_reserve(skb, VIRTIO_VSOCK_SKB_HEADROOM);
+> +	return skb;
+> +}
+> +
+>  /* Returns a new packet on success, otherwise returns NULL.
+>   *
+>   * If NULL is returned, errp is set to a negative errno.
+> @@ -47,7 +76,8 @@ virtio_transport_alloc_skb(struct virtio_vsock_pkt_info *info,
+>  			   u32 src_cid,
+>  			   u32 src_port,
+>  			   u32 dst_cid,
+> -			   u32 dst_port)
+> +			   u32 dst_port,
+> +			   int *errp)
+>  {
+>  	const size_t skb_len = VIRTIO_VSOCK_SKB_HEADROOM + len;
+>  	struct virtio_vsock_hdr *hdr;
+> @@ -55,9 +85,21 @@ virtio_transport_alloc_skb(struct virtio_vsock_pkt_info *info,
+>  	void *payload;
+>  	int err;
+>  
+> -	skb = virtio_vsock_alloc_skb(skb_len, GFP_KERNEL);
+> -	if (!skb)
+> +	/* dgrams do not use credits, self-throttle according to sk_sndbuf
+> +	 * using sock_alloc_send_skb. This helps avoid triggering the OOM.
+> +	 */
+> +	if (info->vsk && info->type == VIRTIO_VSOCK_TYPE_DGRAM) {
+> +		skb = virtio_transport_sock_alloc_send_skb(info, skb_len, GFP_KERNEL, &err);
+> +	} else {
+> +		skb = virtio_vsock_alloc_skb(skb_len, GFP_KERNEL);
+> +		if (!skb)
+> +			err = -ENOMEM;
+> +	}
+> +
+> +	if (!skb) {
+> +		*errp = err;
+>  		return NULL;
+> +	}
+>  
+>  	hdr = virtio_vsock_hdr(skb);
+>  	hdr->type	= cpu_to_le16(info->type);
+> @@ -96,12 +138,14 @@ virtio_transport_alloc_skb(struct virtio_vsock_pkt_info *info,
+>  
+>  	if (info->vsk && !skb_set_owner_sk_safe(skb, sk_vsock(info->vsk))) {
+>  		WARN_ONCE(1, "failed to allocate skb on vsock socket with sk_refcnt == 0\n");
+> +		err = -EFAULT;
+>  		goto out;
+>  	}
+>  
+>  	return skb;
+>  
+>  out:
+> +	*errp = err;
+>  	kfree_skb(skb);
+>  	return NULL;
+>  }
+> @@ -183,7 +227,9 @@ EXPORT_SYMBOL_GPL(virtio_transport_deliver_tap_pkt);
+>  
+>  static u16 virtio_transport_get_type(struct sock *sk)
+>  {
+> -	if (sk->sk_type == SOCK_STREAM)
+> +	if (sk->sk_type == SOCK_DGRAM)
+> +		return VIRTIO_VSOCK_TYPE_DGRAM;
+> +	else if (sk->sk_type == SOCK_STREAM)
+>  		return VIRTIO_VSOCK_TYPE_STREAM;
+>  	else
+>  		return VIRTIO_VSOCK_TYPE_SEQPACKET;
+> @@ -239,11 +285,10 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
+>  
+>  		skb = virtio_transport_alloc_skb(info, skb_len,
+>  						 src_cid, src_port,
+> -						 dst_cid, dst_port);
+> -		if (!skb) {
+> -			ret = -ENOMEM;
+> +						 dst_cid, dst_port,
+> +						 &ret);
+> +		if (!skb)
+>  			break;
+> -		}
+>  
+>  		virtio_transport_inc_tx_pkt(vvs, skb);
+>  
+> @@ -583,14 +628,30 @@ virtio_transport_seqpacket_enqueue(struct vsock_sock *vsk,
+>  }
+>  EXPORT_SYMBOL_GPL(virtio_transport_seqpacket_enqueue);
+>  
+> -int
+> -virtio_transport_dgram_dequeue(struct vsock_sock *vsk,
+> -			       struct msghdr *msg,
+> -			       size_t len, int flags)
+> +int virtio_transport_dgram_get_cid(struct sk_buff *skb, unsigned int *cid)
+> +{
+> +	*cid = le64_to_cpu(virtio_vsock_hdr(skb)->src_cid);
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(virtio_transport_dgram_get_cid);
+> +
+> +int virtio_transport_dgram_get_port(struct sk_buff *skb, unsigned int *port)
+> +{
+> +	*port = le32_to_cpu(virtio_vsock_hdr(skb)->src_port);
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(virtio_transport_dgram_get_port);
+> +
+> +int virtio_transport_dgram_get_length(struct sk_buff *skb, size_t *len)
+>  {
+> -	return -EOPNOTSUPP;
+> +	/* The device layer must have already moved the data ptr beyond the
+> +	 * header for skb->len to be correct.
+> +	 */
+> +	WARN_ON(skb->data == skb->head);
+> +	*len = skb->len;
+> +	return 0;
+>  }
+> -EXPORT_SYMBOL_GPL(virtio_transport_dgram_dequeue);
+> +EXPORT_SYMBOL_GPL(virtio_transport_dgram_get_length);
+>  
+>  s64 virtio_transport_stream_has_data(struct vsock_sock *vsk)
+>  {
+> @@ -790,30 +851,6 @@ bool virtio_transport_stream_allow(u32 cid, u32 port)
+>  }
+>  EXPORT_SYMBOL_GPL(virtio_transport_stream_allow);
+>  
+> -int virtio_transport_dgram_get_cid(struct sk_buff *skb, unsigned int *cid)
+> -{
+> -	return -EOPNOTSUPP;
+> -}
+> -EXPORT_SYMBOL_GPL(virtio_transport_dgram_get_cid);
+> -
+> -int virtio_transport_dgram_get_port(struct sk_buff *skb, unsigned int *port)
+> -{
+> -	return -EOPNOTSUPP;
+> -}
+> -EXPORT_SYMBOL_GPL(virtio_transport_dgram_get_port);
+> -
+> -int virtio_transport_dgram_get_length(struct sk_buff *skb, size_t *len)
+> -{
+> -	return -EOPNOTSUPP;
+> -}
+> -EXPORT_SYMBOL_GPL(virtio_transport_dgram_get_length);
+> -
+> -bool virtio_transport_dgram_allow(u32 cid, u32 port)
+> -{
+> -	return false;
+> -}
+> -EXPORT_SYMBOL_GPL(virtio_transport_dgram_allow);
+> -
+>  int virtio_transport_connect(struct vsock_sock *vsk)
+>  {
+>  	struct virtio_vsock_pkt_info info = {
+> @@ -846,7 +883,34 @@ virtio_transport_dgram_enqueue(struct vsock_sock *vsk,
+>  			       struct msghdr *msg,
+>  			       size_t dgram_len)
+>  {
+> -	return -EOPNOTSUPP;
+> +	const struct virtio_transport *t_ops;
+> +	struct virtio_vsock_pkt_info info = {
+> +		.op = VIRTIO_VSOCK_OP_RW,
+> +		.msg = msg,
+> +		.vsk = vsk,
+> +		.type = VIRTIO_VSOCK_TYPE_DGRAM,
+> +	};
+> +	u32 src_cid, src_port;
+> +	struct sk_buff *skb;
+> +	int err;
+> +
+> +	if (dgram_len > VIRTIO_VSOCK_MAX_PKT_BUF_SIZE)
+> +		return -EMSGSIZE;
+> +
+> +	t_ops = virtio_transport_get_ops(vsk);
+> +	src_cid = t_ops->transport.get_local_cid();
+> +	src_port = vsk->local_addr.svm_port;
+> +
+> +	skb = virtio_transport_alloc_skb(&info, dgram_len,
+> +					 src_cid, src_port,
+> +					 remote_addr->svm_cid,
+> +					 remote_addr->svm_port,
+> +					 &err);
+> +
+> +	if (!skb)
+> +		return err;
+> +
+> +	return t_ops->send_pkt(skb);
+>  }
+>  EXPORT_SYMBOL_GPL(virtio_transport_dgram_enqueue);
+>  
+> @@ -903,6 +967,7 @@ static int virtio_transport_reset_no_sock(const struct virtio_transport *t,
+>  		.reply = true,
+>  	};
+>  	struct sk_buff *reply;
+> +	int err;
+>  
+>  	/* Send RST only if the original pkt is not a RST pkt */
+>  	if (le16_to_cpu(hdr->op) == VIRTIO_VSOCK_OP_RST)
+> @@ -915,9 +980,10 @@ static int virtio_transport_reset_no_sock(const struct virtio_transport *t,
+>  					   le64_to_cpu(hdr->dst_cid),
+>  					   le32_to_cpu(hdr->dst_port),
+>  					   le64_to_cpu(hdr->src_cid),
+> -					   le32_to_cpu(hdr->src_port));
+> +					   le32_to_cpu(hdr->src_port),
+> +					   &err);
+>  	if (!reply)
+> -		return -ENOMEM;
+> +		return err;
+>  
+>  	return t->send_pkt(reply);
+>  }
+> @@ -1137,6 +1203,21 @@ virtio_transport_recv_enqueue(struct vsock_sock *vsk,
+>  		kfree_skb(skb);
+>  }
+>  
+> +/* This function takes ownership of the skb.
+> + *
+> + * It either places the skb on the sk_receive_queue or frees it.
+> + */
+> +static void
+> +virtio_transport_recv_dgram(struct sock *sk, struct sk_buff *skb)
+> +{
+> +	if (sock_queue_rcv_skb(sk, skb)) {
+> +		kfree_skb(skb);
+> +		return;
+> +	}
+> +
+> +	sk->sk_data_ready(sk);
+> +}
+> +
+>  static int
+>  virtio_transport_recv_connected(struct sock *sk,
+>  				struct sk_buff *skb)
+> @@ -1300,7 +1381,8 @@ virtio_transport_recv_listen(struct sock *sk, struct sk_buff *skb,
+>  static bool virtio_transport_valid_type(u16 type)
+>  {
+>  	return (type == VIRTIO_VSOCK_TYPE_STREAM) ||
+> -	       (type == VIRTIO_VSOCK_TYPE_SEQPACKET);
+> +	       (type == VIRTIO_VSOCK_TYPE_SEQPACKET) ||
+> +	       (type == VIRTIO_VSOCK_TYPE_DGRAM);
+>  }
+>  
+>  /* We are under the virtio-vsock's vsock->rx_lock or vhost-vsock's vq->mutex
+> @@ -1314,40 +1396,52 @@ void virtio_transport_recv_pkt(struct virtio_transport *t,
+>  	struct vsock_sock *vsk;
+>  	struct sock *sk;
+>  	bool space_available;
+> +	u16 type;
+>  
+>  	vsock_addr_init(&src, le64_to_cpu(hdr->src_cid),
+>  			le32_to_cpu(hdr->src_port));
+>  	vsock_addr_init(&dst, le64_to_cpu(hdr->dst_cid),
+>  			le32_to_cpu(hdr->dst_port));
+>  
+> +	type = le16_to_cpu(hdr->type);
+> +
+>  	trace_virtio_transport_recv_pkt(src.svm_cid, src.svm_port,
+>  					dst.svm_cid, dst.svm_port,
+>  					le32_to_cpu(hdr->len),
+> -					le16_to_cpu(hdr->type),
+> +					type,
+>  					le16_to_cpu(hdr->op),
+>  					le32_to_cpu(hdr->flags),
+>  					le32_to_cpu(hdr->buf_alloc),
+>  					le32_to_cpu(hdr->fwd_cnt));
+>  
+> -	if (!virtio_transport_valid_type(le16_to_cpu(hdr->type))) {
+> +	if (!virtio_transport_valid_type(type)) {
+>  		(void)virtio_transport_reset_no_sock(t, skb);
+>  		goto free_pkt;
+>  	}
+>  
+> -	/* The socket must be in connected or bound table
+> -	 * otherwise send reset back
+> +	/* For stream/seqpacket, the socket must be in connected or bound table
+> +	 * otherwise send reset back.
+> +	 *
+> +	 * For datagrams, no reset is sent back.
+>  	 */
+>  	sk = vsock_find_connected_socket(&src, &dst);
+>  	if (!sk) {
+> -		sk = vsock_find_bound_socket(&dst);
+> -		if (!sk) {
+> -			(void)virtio_transport_reset_no_sock(t, skb);
+> -			goto free_pkt;
+> +		if (type == VIRTIO_VSOCK_TYPE_DGRAM) {
+> +			sk = vsock_find_bound_dgram_socket(&dst);
+> +			if (!sk)
+> +				goto free_pkt;
+> +		} else {
+> +			sk = vsock_find_bound_socket(&dst);
+> +			if (!sk) {
+> +				(void)virtio_transport_reset_no_sock(t, skb);
+> +				goto free_pkt;
+> +			}
+>  		}
+>  	}
+>  
+> -	if (virtio_transport_get_type(sk) != le16_to_cpu(hdr->type)) {
+> -		(void)virtio_transport_reset_no_sock(t, skb);
+> +	if (virtio_transport_get_type(sk) != type) {
+> +		if (type != VIRTIO_VSOCK_TYPE_DGRAM)
+> +			(void)virtio_transport_reset_no_sock(t, skb);
+>  		sock_put(sk);
+>  		goto free_pkt;
+>  	}
+> @@ -1363,12 +1457,18 @@ void virtio_transport_recv_pkt(struct virtio_transport *t,
+>  
+>  	/* Check if sk has been closed before lock_sock */
+>  	if (sock_flag(sk, SOCK_DONE)) {
+> -		(void)virtio_transport_reset_no_sock(t, skb);
+> +		if (type != VIRTIO_VSOCK_TYPE_DGRAM)
+> +			(void)virtio_transport_reset_no_sock(t, skb);
+>  		release_sock(sk);
+>  		sock_put(sk);
+>  		goto free_pkt;
+>  	}
+>  
+> +	if (sk->sk_type == SOCK_DGRAM) {
+> +		virtio_transport_recv_dgram(sk, skb);
+> +		goto out;
+> +	}
+> +
+>  	space_available = virtio_transport_space_update(sk, skb);
+>  
+>  	/* Update CID in case it has changed after a transport reset event */
+> @@ -1400,6 +1500,7 @@ void virtio_transport_recv_pkt(struct virtio_transport *t,
+>  		break;
+>  	}
+>  
+> +out:
+>  	release_sock(sk);
+>  
+>  	/* Release refcnt obtained when we fetched this socket out of the
+> diff --git a/net/vmw_vsock/vsock_loopback.c b/net/vmw_vsock/vsock_loopback.c
+> index e9de45a26fbd..68312aa8c972 100644
+> --- a/net/vmw_vsock/vsock_loopback.c
+> +++ b/net/vmw_vsock/vsock_loopback.c
+> @@ -46,6 +46,7 @@ static int vsock_loopback_cancel_pkt(struct vsock_sock *vsk)
+>  	return 0;
+>  }
+>  
+> +static bool vsock_loopback_dgram_allow(u32 cid, u32 port);
+>  static bool vsock_loopback_seqpacket_allow(u32 remote_cid);
+>  
+>  static struct virtio_transport loopback_transport = {
+> @@ -62,7 +63,7 @@ static struct virtio_transport loopback_transport = {
+>  		.cancel_pkt               = vsock_loopback_cancel_pkt,
+>  
+>  		.dgram_enqueue            = virtio_transport_dgram_enqueue,
+> -		.dgram_allow              = virtio_transport_dgram_allow,
+> +		.dgram_allow              = vsock_loopback_dgram_allow,
+>  		.dgram_get_cid		  = virtio_transport_dgram_get_cid,
+>  		.dgram_get_port		  = virtio_transport_dgram_get_port,
+>  		.dgram_get_length	  = virtio_transport_dgram_get_length,
+> @@ -98,6 +99,11 @@ static struct virtio_transport loopback_transport = {
+>  	.send_pkt = vsock_loopback_send_pkt,
+>  };
+>  
+> +static bool vsock_loopback_dgram_allow(u32 cid, u32 port)
+> +{
+> +	return true;
+> +}
+> +
+>  static bool vsock_loopback_seqpacket_allow(u32 remote_cid)
+>  {
+>  	return true;
+> 
