@@ -2,104 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9698572B1AE
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 13:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C58D72B1B2
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 13:41:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231248AbjFKLdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 07:33:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38918 "EHLO
+        id S231409AbjFKLlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 07:41:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbjFKLdF (ORCPT
+        with ESMTP id S229562AbjFKLlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 07:33:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EDFA173B
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 04:32:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686483138;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=fvk9nsOU+Ghrao8Fb/Dy7MlM3Rdl5iJgFNPzrlJhwHU=;
-        b=NLeWky71Ag08I9v9ErIitvJ6lIwwgVs20IPjXbNxilCaOWYsPJKnb+YsbVdSI/sRc7me3v
-        U4+DbV/o+2yUzlg4KxkJIVonz7w+eWe4PzbPP8WlhLr3aP86BPna+967KmYtR5DJ6bpu6K
-        RXWddKxuxGnjvPUi78PyhN1l8rsWC1U=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-613-zi30w2TlPIqs5C0M7iQg8w-1; Sun, 11 Jun 2023 07:32:15 -0400
-X-MC-Unique: zi30w2TlPIqs5C0M7iQg8w-1
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-75eba2e48cfso248115585a.0
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 04:32:15 -0700 (PDT)
+        Sun, 11 Jun 2023 07:41:44 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03AA419BB;
+        Sun, 11 Jun 2023 04:41:43 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-977cc662f62so488782966b.3;
+        Sun, 11 Jun 2023 04:41:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686483701; x=1689075701;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G4F42X28cPOOOe2ZAcaL8nHvp5WVPsAhFgmUSvRppkM=;
+        b=M9PRMX2XRt9dtsCQhJsPt9tR1m5I9V0B8MIwNQQ7VI+SGBIa9AVqeTIhK0M6bpDiSb
+         nRvYQOX4xatrKjOUNS4wVIO4+8APb+FjocpflVYNWYxFGHIV5dEyUfBSJR/pqpoyCqyh
+         0m0G8bKJ6IKNNBd44cqr/zktl2isAQrZyxOJxByQSQ984YvWJul1O7mjVNdA+K/bjpOH
+         1nLM0H9UE6G0gqXPIWuYj29ZfPNCCDIjMgKFauR33gQ7TWzy009QrDvXboFlWhIFi569
+         4C/uk1bCG9tnfEEb9cjJHtMP8Czoz+6Ow/tfP7PZEaTp0m4zjdE/wquOdIaJZVrYDNfs
+         yh9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686483134; x=1689075134;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fvk9nsOU+Ghrao8Fb/Dy7MlM3Rdl5iJgFNPzrlJhwHU=;
-        b=KO8oEBd9VSIWqZoCRdKNsDrvEZf/HkIAmvcXf5Y9CeU/qXl3SapkCoXSdN5UTHVoG1
-         z6m5BQQ0ySGd4YksHvwF8tt2Y1ioQBCUAlivaibnkspSgpy1gTDUk8ODCa5sfVrD0vXp
-         sydErfcuAYXo3HJmlY4HCuKExuTLT8tmOM7OJwa5agI1E8k/FkigrS4jTcii9EfIJD/E
-         H5jyHw+2wxtjVdCjl1Qa60GNHofXAqAFEEZv9nWVwW6fmCI4+3afoR1hmXboyblDe/FB
-         70rOdO8AkRNXbrOefUO6T1mDs3atji+m5Eui+RM0YpKMHTqXzBuA3gCnOKUMTYV2X7Vr
-         CocA==
-X-Gm-Message-State: AC+VfDw1YSX+OgBSxlCrCnGgTdVJMTP3kirob7j9P7nNWUkkEkXJMH5C
-        lRokCv87x+m1WeklituCSt7uuz8gw9aDNLwvaEPSRDfmYh0+rgNaTONHUSxHC6vgoA3/Ww50q/F
-        zk6cexoJscbzraHEYtJ3pBQO/
-X-Received: by 2002:a05:620a:4903:b0:75e:dbfa:e221 with SMTP id ed3-20020a05620a490300b0075edbfae221mr15325329qkb.20.1686483134729;
-        Sun, 11 Jun 2023 04:32:14 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6vRb+f79/ygAXa3we8n0GBP8ylntMxHI3QIBUyoHCWYEcnmdtQzonemXCDV99sYqP6L8PJ1g==
-X-Received: by 2002:a05:620a:4903:b0:75e:dbfa:e221 with SMTP id ed3-20020a05620a490300b0075edbfae221mr15325311qkb.20.1686483134522;
-        Sun, 11 Jun 2023 04:32:14 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id z24-20020ae9c118000000b0074e0951c7e7sm2199166qki.28.2023.06.11.04.32.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jun 2023 04:32:14 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     dhowells@redhat.com, jarkko@kernel.org, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com
-Cc:     keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] sysctl: set variable key_sysctls storage-class-specifier to static
-Date:   Sun, 11 Jun 2023 07:32:10 -0400
-Message-Id: <20230611113210.182652-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        d=1e100.net; s=20221208; t=1686483701; x=1689075701;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=G4F42X28cPOOOe2ZAcaL8nHvp5WVPsAhFgmUSvRppkM=;
+        b=Cg+cFn9kpW2rmRIyu3MHdIXajupFG4WRzUn4wkt1Z3md+BgI5P+MTaxdwBebhL7O+3
+         8qzaYY9CJrmO5F3CuQkEQudxIrAhCXWeUQqiPXlAye/+nCeWesJPz++dsCA5FP4DadBQ
+         +Se/pE3o5+YrszYTU+p9r8YE+vB1WHt0XC7grEIq8Gznbiq+E1PUOPKmWFg47TDS+YKn
+         20l1g+BR3l3srpA3Vcj1DywBbqMYuVcIzMsF0Afypx5SxCMjEK4aojLcQQ0e62sUYfHA
+         apd7TlrGWoud4rUw9yuVwYHNkdFq2k+lu0Byx6R1fkTxg5KTLj7+gTDpVhL/iumvevNG
+         dN+w==
+X-Gm-Message-State: AC+VfDzMAbUtCHwupGs+FZV4XulFmkZCFLx/BuYTy1ocH9ysc1T+p99S
+        m29JnmBV1ME3bQD1AV1NwgnMSCm67+RPPBcR
+X-Google-Smtp-Source: ACHHUZ7PoiVe7AbBq40hxFbakP4HF1ARLZGu43MozI4Fcmp73CNEaRCdXbh/WgW0zF2kawniy8Ek3w==
+X-Received: by 2002:a17:906:58d2:b0:96f:f19b:887a with SMTP id e18-20020a17090658d200b0096ff19b887amr7230557ejs.56.1686483700663;
+        Sun, 11 Jun 2023 04:41:40 -0700 (PDT)
+Received: from ?IPV6:2a02:908:825:7380:d41a:eda:b7e2:a0de? ([2a02:908:825:7380:d41a:eda:b7e2:a0de])
+        by smtp.gmail.com with ESMTPSA id f16-20020a170906825000b0096ace550467sm3780377ejx.176.2023.06.11.04.41.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Jun 2023 04:41:40 -0700 (PDT)
+Message-ID: <b99a5149-c3d6-2a9b-1298-576a1b4b22c1@gmail.com>
+Date:   Sun, 11 Jun 2023 13:41:39 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Content-Language: en-US
+To:     stable@vger.kernel.org
+Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev
+From:   Nils Kruse <nilskruse97@gmail.com>
+Subject: [PATCH] nvme-pci: Add quirk for Samsung PM9B1 256G and 512G SSD
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-smatch reports
-security/keys/sysctl.c:12:18: warning: symbol
-  'key_sysctls' was not declared. Should it be static?
+Add a quirk for Samsung PM9B1 256G and 512G that reports duplicate ids 
+for disk.
 
-This variable is only used in its defining file, so it should be static.
-
-Signed-off-by: Tom Rix <trix@redhat.com>
+Signed-off-by: Nils Kruse <nilskruse97@gmail.com>
 ---
- security/keys/sysctl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  drivers/nvme/host/pci.c | 3 ++-
+  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/security/keys/sysctl.c b/security/keys/sysctl.c
-index b72b82bb20c6..b348e1679d5d 100644
---- a/security/keys/sysctl.c
-+++ b/security/keys/sysctl.c
-@@ -9,7 +9,7 @@
- #include <linux/sysctl.h>
- #include "internal.h"
- 
--struct ctl_table key_sysctls[] = {
-+static struct ctl_table key_sysctls[] = {
- 	{
- 		.procname = "maxkeys",
- 		.data = &key_quota_maxkeys,
+diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+index 60f51155a6d2..de5e4c7e4bc9 100644
+--- a/drivers/nvme/host/pci.c
++++ b/drivers/nvme/host/pci.c
+@@ -3395,7 +3395,8 @@ static const struct pci_device_id nvme_id_table[] = {
+      { PCI_DEVICE(0x1d97, 0x2263),   /* SPCC */
+          .driver_data = NVME_QUIRK_DISABLE_WRITE_ZEROES, },
+      { PCI_DEVICE(0x144d, 0xa80b),   /* Samsung PM9B1 256G and 512G */
+-        .driver_data = NVME_QUIRK_DISABLE_WRITE_ZEROES, },
++        .driver_data = NVME_QUIRK_DISABLE_WRITE_ZEROES |
++                NVME_QUIRK_BOGUS_NID, },
+      { PCI_DEVICE(0x144d, 0xa809),   /* Samsung MZALQ256HBJD 256G */
+          .driver_data = NVME_QUIRK_DISABLE_WRITE_ZEROES, },
+      { PCI_DEVICE(0x1cc4, 0x6303),   /* UMIS RPJTJ512MGE1QDY 512G */
 -- 
-2.27.0
+2.41.0
+
 
