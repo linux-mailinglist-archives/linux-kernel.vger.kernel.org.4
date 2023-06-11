@@ -2,134 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A51372B258
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 16:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84F3172B25D
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 16:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231849AbjFKOt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 10:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45378 "EHLO
+        id S229493AbjFKO4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 10:56:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjFKOtz (ORCPT
+        with ESMTP id S229683AbjFKO4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 10:49:55 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795E3D2;
-        Sun, 11 Jun 2023 07:49:52 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f644dffd71so4076023e87.1;
-        Sun, 11 Jun 2023 07:49:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686494991; x=1689086991;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1906mKgeCYanoMO1G8TOrxbKSD0ibOzetQNq9L6r6Mg=;
-        b=THZjIIera9alBZPdSKz/hSJwZzuNrSUzFM08KE6sb5UWzK32dHSUdARGQNxnBKPLSb
-         jhme7FIiVGVc7Elz0lB6eUtWTWGcixMlZHrNTTki1M4stqteLc7F8VQJlZCTP8fYQ87Y
-         NzXHgZQHB3s+Fed76QMwjsKv2k2Mg65c1mQoGw9HioM4dU0Iqp4DlcsTk+qL3gzaMiM2
-         DF13PNLcm3wgG1YGj2ROCG5uE1rBhkxwMvwVvQNE7VAOmTt3pOkHpn0QbVMA1yzNX/l9
-         8dF92sD0fLWmG5qkXJsE8IXOhMYOo07xDpN8atuCxhCFMNowcAlq6OnJib+jFKxCKU3e
-         xKoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686494991; x=1689086991;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1906mKgeCYanoMO1G8TOrxbKSD0ibOzetQNq9L6r6Mg=;
-        b=hDcwClGx6HLZ27SDdnErGnn2lwe+G28niFKJTBbhWzJSH84kUO54KeNEH323zPoljY
-         Od+hNVQ/WqdU2DBIvyxSQ8SLDqIgmX+gxnjJ+5fpxH84W6TdUBmXdl3FUdoYBjnly+0H
-         Ul4HS4XUS2Rq9kzAxgux8YuH7eUc1tXQuKwNZni1TF5IPZ8/yAjPr2SuTK5sjHBhdXrp
-         Q69rymuMhaWIhNMkzXaREAqytlsWxUfoyeW2x9VyMfaX9GTUfAXmLDvHj74aqD/113hE
-         Wd/nVU11DsM/XBDA7B+RSEOv5+hMKbII5yWmetLffWl6m5+peGaqfbXWYHtpV+ThXdQH
-         jq0A==
-X-Gm-Message-State: AC+VfDyeUoPosdOk46to11VvNwI+xupMMaFodbfPpfiSto06ZshM/egs
-        Lojhoj/sQ2seo1EY6EYMtmF7YR57JqCtGGEkPQ==
-X-Google-Smtp-Source: ACHHUZ6DzhDPr6mRW/dRWjDarWeMJA0yjjZLskh65T9elHYEI8cOUdnqguMOAzN3gZ88cq0B0iLUIwdd99xtcXaNjQ4=
-X-Received: by 2002:a2e:8795:0:b0:2ac:819f:f73f with SMTP id
- n21-20020a2e8795000000b002ac819ff73fmr1554337lji.20.1686494989928; Sun, 11
- Jun 2023 07:49:49 -0700 (PDT)
+        Sun, 11 Jun 2023 10:56:12 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DAC1E73;
+        Sun, 11 Jun 2023 07:56:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=VHU0yG0KLgt9xY3b0m4xhDK4rKy+IHw9tgVCdD4Sx3M=; b=aIcmsvIN74KslwL3J9xVs9MAjH
+        9eMcXgSyocY4T0W1TzRlTides174S6JKaplLpy2Ugm5XlGAcEj4GpPSKIcGryZDrCYUkFRn7Q00/x
+        yCbknDyDShIsoagOJQJAlvV02jHJdPpkXgaSs+7G6g0B68CNxLjb3ez8yvYRS2cjSBSFq+reHj49W
+        5ertz3/GNdWsnOau5ZivUKAV4kPbFhZfYmWAtyXj9MX5g3lUTISXV0xicCpSA5QOAe5L8OfRNGZzf
+        pgXvuddRw3GfwomZ/MBb0Rse9pGJ3W/GvZsFZhHfBvB5ef1H8zA0vC56rUngi+ndDBCSDD9GrYZGW
+        eZiw0NSA==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q8MU9-001Aag-2D;
+        Sun, 11 Jun 2023 14:56:05 +0000
+Message-ID: <1c00f4aa-e696-a071-68a7-cdd62d8ba894@infradead.org>
+Date:   Sun, 11 Jun 2023 07:56:03 -0700
 MIME-Version: 1.0
-References: <20230610021553.1213-1-powen.kao@mediatek.com> <20230610021553.1213-2-powen.kao@mediatek.com>
- <0367b612-b6a5-8fb1-9cee-28de04b7ce81@acm.org>
-In-Reply-To: <0367b612-b6a5-8fb1-9cee-28de04b7ce81@acm.org>
-From:   Stanley Chu <chu.stanley@gmail.com>
-Date:   Sun, 11 Jun 2023 22:49:37 +0800
-Message-ID: <CAGaU9a_D_KUstcQkPXsxepCdcvn3Knv-mzBh_kJDoYHwP-ndVQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] scsi: ufs: mcq: Fix the incorrect OCS value for
- the device command
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     Po-Wen Kao <powen.kao@mediatek.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        wsd_upstream@mediatek.com, peter.wang@mediatek.com,
-        stanley.chu@mediatek.com, alice.chao@mediatek.com,
-        naomi.chu@mediatek.com, chun-hung.wu@mediatek.com,
-        cc.chou@mediatek.com, eddie.huang@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2] crypto: fcrypt: Fix block comment
+Content-Language: en-US
+To:     Franziska Naepelt <franziska.naepelt@googlemail.com>
+Cc:     davem@davemloft.net, franziska.naepelt@gmail.com,
+        herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bagasdotme@gmail.com
+References: <20230606111042.96855-1-franziska.naepelt@gmail.com>
+ <20230611105331.16570-1-franziska.naepelt@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230611105331.16570-1-franziska.naepelt@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bart,
+Hi--
 
-On Sun, Jun 11, 2023 at 10:04=E2=80=AFPM Bart Van Assche <bvanassche@acm.or=
-g> wrote:
->
-> On 6/9/23 19:15, Po-Wen Kao wrote:
-> > From: Stanley Chu <stanley.chu@mediatek.com>
-> >
-> > In MCQ mode, when a device command uses a hardware queue shared
-> > with other commands, a race condition may occur in the following scenar=
-io:
-> >
-> > 1. A device command is completed in CQx with CQE entry "e".
-> > 2. The interrupt handler copies the "cqe" pointer to "hba->dev_cmd.cqe"
-> >     and completes "hba->dev_cmd.complete".
-> > 3. The "ufshcd_wait_for_dev_cmd()" function is awakened and retrieves
-> >     the OCS value from "hba->dev_cmd.cqe".
-> >
-> > However, there is a possibility that the CQE entry "e" will be overwrit=
-ten
-> > by newly completed commands in CQx, resulting in an incorrect OCS value
-> > being received by "ufshcd_wait_for_dev_cmd()".
-> >
-> > To avoid this race condition, the OCS value should be immediately copie=
-d
-> > to the struct "lrb" of the device command. Then "ufshcd_wait_for_dev_cm=
-d()"
-> > can retrieve the OCS value from the struct "lrb".
->
-> Since with this patch applied ufs_dev_cmd.cqe is always NULL, please
-> remove the 'cqe' member from struct ufs_dev_cmd.
+On 6/11/23 03:53, Franziska Naepelt wrote:
+> Fix the following checkpatch issue:
+> - WARNING: Block comments use a trailing */ on a separate line
+> 
+> Signed-off-by: Franziska Naepelt <franziska.naepelt@gmail.com>
+> ---
+> v2:
+>  - Revert SPDX change to address only one logical change
+> ---
+>  crypto/fcrypt.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/crypto/fcrypt.c b/crypto/fcrypt.c
+> index 95a16e88899b..e9e119bab784 100644
+> --- a/crypto/fcrypt.c
+> +++ b/crypto/fcrypt.c
+> @@ -303,7 +303,8 @@ static int fcrypt_setkey(struct crypto_tfm *tfm, const u8 *key, unsigned int key
+>  
+>  #if BITS_PER_LONG == 64  /* the 64-bit version can also be used for 32-bit
+>  			  * kernels - it seems to be faster but the code is
+> -			  * larger */
+> +			  * larger
+> +			  */
 
-This patch removes the 'cqe' member from the struct ufs_dev_cmd, as
-shown in the code section below. Please let us know if anything else
-has been missed. Very appreciated.
+The comment doesn't begin with a /* on a line by itself either.
 
-diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index 9b2d1859f885..602615e6d1bf 100644
---- a/include/ufs/ufshcd.h
-+++ b/include/ufs/ufshcd.h
-@@ -225,7 +225,6 @@ struct ufs_dev_cmd {
-        struct mutex lock;
-        struct completion *complete;
-        struct ufs_query query;
--       struct cq_entry *cqe;
- };
+checkpatch isn't always correct.
+Maybe it isn't in this case.
 
-Thanks,
+I would either make it a correct multi-line comment or not make a change
+at all here.
 
-Stanley
+>  
+>  	u64 k;	/* k holds all 56 non-parity bits */
+>  
+> 
+> base-commit: 9561de3a55bed6bdd44a12820ba81ec416e705a7
+
+-- 
+~Randy
