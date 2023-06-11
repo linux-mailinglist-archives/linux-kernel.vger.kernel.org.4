@@ -2,139 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CFA972AFB8
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 01:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A78572AFBF
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 02:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232884AbjFJXv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 10 Jun 2023 19:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45016 "EHLO
+        id S232895AbjFKALP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 10 Jun 2023 20:11:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjFJXvy (ORCPT
+        with ESMTP id S229477AbjFKALO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 10 Jun 2023 19:51:54 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6F3198C;
-        Sat, 10 Jun 2023 16:51:51 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 01D4360174;
-        Sun, 11 Jun 2023 01:51:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1686441109; bh=v4wXQstgWeUzNRuDlXeZ8k492Buj4zZppclAsNx/yB4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Dii5rFne6vQCW9tPVWTBPZfQD9cKJZr0IX09PnedfUe59CevjhlVSnf7vnT5hKyk0
-         qKygj+FbvV1XkQ9bdwOMmgb1Bv+xfNhCHrrScFKSuGQ71wqdBl0E7bfZKPs+CdgSlA
-         ompFrtstnS1zKr0aBgGkDyodk3FzaDGHEj5Ok0dcjPgkSV/A7aJBBEtaTWagoFmYeC
-         92jOPmOLTyDpFeKhESZPWi2Kwbu6OhQ2MDD3n6L44EFBVEa3fnm6CtstSdrPGLfuG2
-         YwubeJBlc6g7n5zv8u9mdsHlPxoJyE4wYdQ526P18zpRGPyBk09rjugURRGOrMsbAY
-         B5xAM1+MVekyQ==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id IcQZa6_0euSK; Sun, 11 Jun 2023 01:51:46 +0200 (CEST)
-Received: from defiant.. (unknown [77.237.113.62])
-        by domac.alu.hr (Postfix) with ESMTPSA id CC09F60173;
-        Sun, 11 Jun 2023 01:51:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1686441105; bh=v4wXQstgWeUzNRuDlXeZ8k492Buj4zZppclAsNx/yB4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Ax0GnqZEGEiKjzWp2X8g3TpxfKrmXMmc4mK34qRy/toO5JyJKu0vIiWuOC7aUtO5z
-         MRQh5299/46M+zzYmF833FRbJd18AoO0eOpgQ6M8SZKxJ9u481JixJtcJS9hlGjqD4
-         Su3Kn/YHyKb2av43WHmUHaEjKqBOtI26zxOgMftraBQS3+sqQpJTqcMGbKnEovciaf
-         xcSvY1gzqqIQbl+JUU/dhm6Tj7rdMVEbT1zg9zSMrQ1YlKfON3j5NB5LfezKvUZoE9
-         u2NQd0fxmR1r7XMtO3rhPXyLRgd6vU6Y/t9vwxsRYs19FcZkUTf0xq8kNut4MYImXi
-         BA90bYGJKAzqQ==
-From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-To:     Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Subject: [PATCH v1 1/1] selftests: mm: uufd-unit-tests: remove a format warning in printf
-Date:   Sun, 11 Jun 2023 01:50:17 +0200
-Message-Id: <20230610235016.438460-1-mirsad.todorovac@alu.unizg.hr>
-X-Mailer: git-send-email 2.34.1
+        Sat, 10 Jun 2023 20:11:14 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6FFF2685
+        for <linux-kernel@vger.kernel.org>; Sat, 10 Jun 2023 17:11:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686442272; x=1717978272;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NLEnkKYTvfD8Hk/fURnxd0K/bfOpBwUqsmlz/17e4gQ=;
+  b=hYX0VWcU+QYnkMW+YmpNs7gTs7U6AUEfv0wA3vAaSxVZXSmGh9ErLtpb
+   UZ8R3ENpoC/3BivIWIL4pC+pv6gtA4qGW5s1+YGOPVn3kfzw9Kjak0qO8
+   TEM5O6WQrKh71pIBYKThG3Y25SQ7SkStTynUc4EfKB7VDPWGEYH/I/rOi
+   4UVA+oP9QV4OBN7/9+PpsPrSUVcVBRg23clF3lFY9O2n1RB0v/eS4SRfu
+   BNeTJS87/xayCJybiclMY3F+f2Fnhx62ZlgPVU67XWfEhALLqj8Uy3iJl
+   07Amx2YOxQ4krjoEYiHoTu5TrqU0tZeA5KDjfTc+4KxMDitcAkvsyTYE6
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10737"; a="361177707"
+X-IronPort-AV: E=Sophos;i="6.00,233,1681196400"; 
+   d="scan'208";a="361177707"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2023 17:11:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10737"; a="835031878"
+X-IronPort-AV: E=Sophos;i="6.00,233,1681196400"; 
+   d="scan'208";a="835031878"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 10 Jun 2023 17:11:10 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q88fk-000AVY-12;
+        Sun, 11 Jun 2023 00:11:08 +0000
+Date:   Sun, 11 Jun 2023 08:09:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+Subject: ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol
+ 'misaligned_access_speed'; recompile with -fPIC
+Message-ID: <202306110855.7TlBCIzI-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GCC 11.3.0 issued warnings about macros and types of arguments [edited]:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   022ce8862dff83c859089cd14bc4dca0733e2f90
+commit: 8dc2a7e8027fbeca0c7df81d4c82e735a59b5741 riscv: Fix relocatable kernels with early alternatives using -fno-pie
+date:   10 days ago
+config: riscv-randconfig-r022-20230611 (https://download.01.org/0day-ci/archive/20230611/202306110855.7TlBCIzI-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8dc2a7e8027fbeca0c7df81d4c82e735a59b5741
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 8dc2a7e8027fbeca0c7df81d4c82e735a59b5741
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-gcc -Wall -I ../tools/testing/selftests/../../.. \
-	-I ../tools/testing/selftests/../../../tools/include/uapi \
-	-isystem ../usr/include -no-pie uffd-unit-tests.c vm_util.c \
-	uffd-common.c -lrt -lpthread -o \
-	../tools/testing/selftests/mm/uffd-unit-tests
-uffd-unit-tests.c: In function ‘main’:
-uffd-unit-tests.c:1198:41: warning: format not a string literal and no \
-	format arguments [-Wformat-security]
- 1198 |                         uffd_test_start(test_name);
-      |                                         ^~~~~~~~~
-uffd-unit-tests.c:100:24: note: in definition of macro ‘uffd_test_start’
-  100 |                 printf(__VA_ARGS__);            \
-      |                        ^~~~~~~~~~~
-uffd-unit-tests.c:1205:33: warning: format not a string literal and no \
-	format arguments [-Wformat-security]
- 1205 |                                 uffd_test_skip(errmsg);
-      |                                 ^~~~~~~~~~~~~~
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306110855.7TlBCIzI-lkp@intel.com/
 
-The macros are defined as:
+All errors (new ones prefixed by >>):
 
- #define  uffd_test_start(...)  do {             \
-                printf("Testing ");             \
-                printf(__VA_ARGS__);            \
-                printf("... ");                 \
-                fflush(stdout);                 \
-        } while (0)
+>> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol 'misaligned_access_speed'; recompile with -fPIC
+   >>> defined in vmlinux.a(arch/riscv/kernel/cpufeature.o)
+   >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
+   >>>               arch/riscv/errata/thead/errata.o:(thead_feature_probe_func) in archive vmlinux.a
+--
+>> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symbol 'misaligned_access_speed'; recompile with -fPIC
+   >>> defined in vmlinux.a(arch/riscv/kernel/cpufeature.o)
+   >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
+   >>>               arch/riscv/errata/thead/errata.o:(thead_feature_probe_func) in archive vmlinux.a
+--
+>> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol 'riscv_cbom_block_size'; recompile with -fPIC
+   >>> defined in vmlinux.a(arch/riscv/mm/cacheflush.o)
+   >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
+   >>>               arch/riscv/errata/thead/errata.o:(thead_errata_patch_func) in archive vmlinux.a
+--
+>> ld.lld: error: relocation R_RISCV_LO12_S cannot be used against symbol 'riscv_cbom_block_size'; recompile with -fPIC
+   >>> defined in vmlinux.a(arch/riscv/mm/cacheflush.o)
+   >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
+   >>>               arch/riscv/errata/thead/errata.o:(thead_errata_patch_func) in archive vmlinux.a
+--
+>> ld.lld: error: relocation R_RISCV_HI20 cannot be used against symbol '__per_cpu_offset'; recompile with -fPIC
+   >>> defined in vmlinux.a(mm/percpu.o)
+   >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
+   >>>               arch/riscv/errata/thead/errata.o:(thead_feature_probe_func) in archive vmlinux.a
+--
+>> ld.lld: error: relocation R_RISCV_LO12_I cannot be used against symbol '__per_cpu_offset'; recompile with -fPIC
+   >>> defined in vmlinux.a(mm/percpu.o)
+   >>> referenced by errata.c:42 (arch/riscv/errata/thead/errata.c:42)
+   >>>               arch/riscv/errata/thead/errata.o:(thead_feature_probe_func) in archive vmlinux.a
 
- #define  uffd_test_skip(...)  do {              \
-                printf("skipped [reason: ");    \
-                printf(__VA_ARGS__);            \
-                printf("]\n");                  \
-                ksft_inc_xskip_cnt();           \
-        } while (0)
-
-Minor workaround, adding "%s" first argument to macro expansion calls seems
-to be the easiest way to eliminate the warnings.
-
-Cc: Peter Xu <peterx@redhat.com>
-Cc: linux-mm@kvack.org
-Cc: linux-kselftest@vger.kernel.org
-Fixes: 43759d44dc34 ("selftests/mm: add uffdio register ioctls test")
-Fixes: 16a45b57cbf2 ("selftests/mm: add framework for uffd-unit-test")
-Signed-off-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
----
- tools/testing/selftests/mm/uffd-unit-tests.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
-index 269c86768a02..d356dd271c84 100644
---- a/tools/testing/selftests/mm/uffd-unit-tests.c
-+++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-@@ -1195,14 +1195,14 @@ int main(int argc, char *argv[])
- 			snprintf(test_name, sizeof(test_name),
- 				 "%s on %s", test->name, mem_type->name);
- 
--			uffd_test_start(test_name);
-+			uffd_test_start("%s", test_name);
- 			if (!uffd_feature_supported(test)) {
- 				uffd_test_skip("feature missing");
- 				continue;
- 			}
- 			if (uffd_setup_environment(&args, test, mem_type,
- 						   &errmsg)) {
--				uffd_test_skip(errmsg);
-+				uffd_test_skip("%s", errmsg);
- 				continue;
- 			}
- 			test->uffd_fn(&args);
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
