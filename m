@@ -2,120 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FE7172B490
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 00:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 429D672B493
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 00:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231162AbjFKWQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 18:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34152 "EHLO
+        id S231817AbjFKWRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 18:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjFKWQT (ORCPT
+        with ESMTP id S229616AbjFKWR2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 18:16:19 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682B5E4E;
-        Sun, 11 Jun 2023 15:16:17 -0700 (PDT)
-X-GND-Sasl: alexandre.belloni@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686521775;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KicQDi51QCgJrB94zDjmeXvEyj1WexYw2XIAkZsTagU=;
-        b=Bg3FFq4z+LN3uDx0QYx6isOKDDG+0nHA83v1sJZhQysaFwUvQVRlOLZ/W4qZW+kOQ6BrHS
-        yk+BVB0c4ywyOXKFJOG5ITx7t32uJNysR7y/I/+n6sYie/mKuBtUJ2yVc3ziGHxJAWxYKA
-        RkeMaAjSLYX7vTKJIS8zGam+CyDBWpqrVx2SLJ97Xe095Fnm43zX9SHBzTEokoQxIoohGo
-        sAf+/ePBjsV8U59q0Cj5k6+xvft61wLq2xVnseVqYQ8o4mwmne926U4YRhtNva/Nc/SjY5
-        b3jSe5dP3kg1iSxD4cQ8GT5/NdjIZIxcAYwVqitgkJa0yXhyB8udrvrLHes5rw==
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 72D3760004;
-        Sun, 11 Jun 2023 22:16:15 +0000 (UTC)
-Date:   Mon, 12 Jun 2023 00:16:15 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Jan Kiszka <jan.kiszka@siemens.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] rtc: pcf-8563: Report previously detected low-voltage
- via RTC_VL_BACKUP_LOW
-Message-ID: <202306112216153a75dfa3@mail.local>
-References: <da84b6b1-a9d8-ce46-16a9-e1a2d495240c@siemens.com>
- <20230610083135e40dd2f6@mail.local>
- <1d532c45-ee33-9729-f0ac-b59c2bec8d7d@siemens.com>
- <202306111511569834cac2@mail.local>
- <9ac4b2a5-7cc8-4fce-7ea0-61b26d6ef223@siemens.com>
+        Sun, 11 Jun 2023 18:17:28 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 246C0E51
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 15:17:28 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-770222340cfso475346439f.3
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 15:17:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686521847; x=1689113847;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tb0ZpKp5Xcf7c2M/6Lg/dqUujad/vr5X4auVnTDjdJ0=;
+        b=QYpaX5Svo9tuYKMa1XoxlQmAwNYTImWIouwNfEWMYLIrWcQj+/KCxNT2G21rhqIFRZ
+         aTZbbVUpls5eH3pEjp3PbPfUmQ7WJtlhyVjEFyxyOVn0GnOO8dSfK1fZcO5o27mZZGkQ
+         BlZgIIE6Q8LkjatEbcW0q2VPMCNtxo+9EYXf7CUKzCQ96m7Hf2LI8tUjvKguwWjJdP/e
+         B4RlMg0wAeGZbpLtPOB9uBAazDZ8OmIpAYuthAGadSzs5JrTqxzdfTzs0y7mbwtTaq3+
+         Jn9Rhhpy1lRlyrBoLN0AoHOzpstoOlP1/smnhl55VF9WCJVfRy1efM17XzcdbzboOmzn
+         UMmQ==
+X-Gm-Message-State: AC+VfDwyMosLBAHP54ImvgZQmqmhxfCb+rd4OiY5z0Aqdc2PobYWpdL3
+        QfIZpfE3ReonCbVkibgLe3QjIo3gQVW+R9QrOZaALiLcerYk
+X-Google-Smtp-Source: ACHHUZ76jxhpMkdSOWymiIXSmAP6nlbvMNMejA6KYO29dhEW02hKZhueWLXvaOgfjmygw/0Wl9A7WAYJqR30bFmRG9ZnFevqGqT/
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9ac4b2a5-7cc8-4fce-7ea0-61b26d6ef223@siemens.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a02:735d:0:b0:420:cbe4:af62 with SMTP id
+ a29-20020a02735d000000b00420cbe4af62mr2890400jae.5.1686521847528; Sun, 11 Jun
+ 2023 15:17:27 -0700 (PDT)
+Date:   Sun, 11 Jun 2023 15:17:27 -0700
+In-Reply-To: <000000000000b0cabf05f90bcb15@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a0c29605fde1f706@google.com>
+Subject: Re: [syzbot] [ntfs3?] general protection fault in ni_readpage_cmpr
+From:   syzbot <syzbot+af224b63e76b2d869bc3@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org,
+        almaz.alexandrovich@paragon-software.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        neilb@suse.de, ntfs3@lists.linux.dev,
+        syzkaller-bugs@googlegroups.com, torvalds@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/06/2023 18:28:22+0200, Jan Kiszka wrote:
-> On 11.06.23 17:11, Alexandre Belloni wrote:
-> > On 11/06/2023 15:38:04+0200, Jan Kiszka wrote:
-> >> On 10.06.23 10:31, Alexandre Belloni wrote:
-> >>> Hello Jan,
-> >>>
-> >>> On 09/06/2023 23:04:12+0200, Jan Kiszka wrote:
-> >>>> From: Jan Kiszka <jan.kiszka@siemens.com>
-> >>>>
-> >>>> The VL bit in the seconds register remains set only until seconds are
-> >>>> written under main power. As this often happens during boot-up after
-> >>>> picking up a network time, make sure to preserve the low battery state
-> >>>> across this, caching it and returning it via the RTC_VL_BACKUP_LOW bit.
-> >>>>
-> >>>> To permit userspace clearing this state during runtime, also implement
-> >>>> RTC_VL_CLR that works against the cached state.
-> >>>>
-> >>>> This is emulating RTCs which have a battery voltage check that works
-> >>>> under main power as well.
-> >>>>
-> >>>
-> >>> Emulating doesn't work well and I deliberately chose to not implement
-> >>> it. For example, in your scenario, if you boot twice without using
-> >>> VL_READ, you anyway have lost the information. This makes emulating
-> >>> unreliabl. The fix you need is in userspace where you have to ensure you
-> >>> read the status before setting the time.
-> >>
-> >> Then let's make sure the bit is also set in the hardware register. Then
-> >> also the reboot issue (which is practically a minor one) is solved. The
-> >> current situation is far from optimal.
-> > 
-> > This doesn't work because then the time will be considered invalid. I'm
-> > not sure why you don't want to fix your userspace.
-> > 
-> 
-> Nope, that could be easily avoided in software. The actual problem is
-> that the VL bit is not settable (clear-on-write). And that means we
-> can't do anything about losing the low battery information across
-> reboots - but that's no difference to the situation with the existing
-> driver.
-> 
-> There is no "fix" for userspace as there is no standard framework to
-> read-out the status early and retrieve it from there when the user asks
-> for it. That's best done in the kernel.
+syzbot has bisected this issue to:
 
-That's not true, nothing prevents userspace from reading the battery
-status before setting the time and destroying the information which is
-exactly what you should be doing.
+commit 9fd472af84abd6da15376353c2283b3df9497646
+Author: NeilBrown <neilb@suse.de>
+Date:   Tue Mar 22 21:38:54 2022 +0000
 
-> 
-> In that light, I still believe my patch is an improvement over the
-> current situation without making anything worse.
+    mm: improve cleanup when ->readpages doesn't process all pages
 
-The information goes from behaving deterministically to being unreliable
-which makes the situation worse.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1285d453280000
+start commit:   64569520920a Merge tag 'block-6.4-2023-06-09' of git://git..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1185d453280000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1685d453280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3c980bfe8b399968
+dashboard link: https://syzkaller.appspot.com/bug?extid=af224b63e76b2d869bc3
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15835795280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16966d43280000
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Reported-by: syzbot+af224b63e76b2d869bc3@syzkaller.appspotmail.com
+Fixes: 9fd472af84ab ("mm: improve cleanup when ->readpages doesn't process all pages")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
