@@ -2,259 +2,713 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E1172B438
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 23:42:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52B7E72B43E
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 23:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233026AbjFKVmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 17:42:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59544 "EHLO
+        id S229562AbjFKVx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 17:53:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjFKVm2 (ORCPT
+        with ESMTP id S229464AbjFKVx1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 17:42:28 -0400
-Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [5.144.164.165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C458E48
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 14:42:26 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id B52161F969;
-        Sun, 11 Jun 2023 23:42:23 +0200 (CEST)
-Date:   Sun, 11 Jun 2023 23:42:22 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Jessica Zhang <quic_jesszhan@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 2/5] drm/msm/dsi: Adjust pclk rate for compression
-Message-ID: <hwckoabnvsqe4p52pwxchysbo7jdgsxuzibx2726pbdwziqa4h@mnwiaw7hjpf3>
-References: <20230405-add-dsc-support-v5-0-028c10850491@quicinc.com>
- <20230405-add-dsc-support-v5-2-028c10850491@quicinc.com>
- <js3mcglahq53mcyxa6deltjlu4xpc2pnafwz2rbk3dl4ovws2o@5xw2wzvfaj2v>
- <f34a03ce-6295-b5d1-bf42-a43cfb382ea3@linaro.org>
+        Sun, 11 Jun 2023 17:53:27 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3512CD
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 14:53:24 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9768fd99c0cso988573366b.0
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 14:53:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1686520403; x=1689112403;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=B0uh1ICDSHqNv0P6yk8gderJT5zJQoae361S5GrKjJ8=;
+        b=g05/IY+8ssZvJLGJ1ubtndoNszPqXbEMSWi1O3wQzYGjgTMrwTR2+TItN7MEDpm5J+
+         Z5vGnMfbNpGFp/lvza/tYtMS+SjNjWInDeSeg5mTZtVEWUkvTqmXPyNvbvurM0fjE2rx
+         mNEU6NkZ0YixYRsqd9FWNmMKCqdVuOcrEG4hU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686520403; x=1689112403;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B0uh1ICDSHqNv0P6yk8gderJT5zJQoae361S5GrKjJ8=;
+        b=BHiVSRTFAjDdQUgnE/PgfSIsMblp8LDTlItpUp1v6Th76N/VmBdXNgFNTA/F6nZ6WA
+         7ZPpvrFQb3YwBpvrMyvLLtpwfwrIvPvoqg3UdIoGCRJNFc6aPN65fUgizjmAvg4zBFpf
+         k2vDQLaukK7c5AXz54tenUbf74bEL8m0kkZogJwvOyhs0x06MJkDvsucVuOMbLsYK3uD
+         vvtxJtH4mwOR1SPYLeTRCHo2eXIUTwRjIEYzMImkwCNZsJk8iXZGqpfZC/hMcKAezLxY
+         uFXM6bDCK0P5riNE0dpMJdeqCqtB3WQUL0g1N2y+Q1/+01warcX5V8AvqPcZAygqHdZC
+         4Efg==
+X-Gm-Message-State: AC+VfDwfVYniaX12ZlXeQO5D5ofSRma0snTtrEqZ3L5wf2up8jgXKl0i
+        PyNEQ1Khghkw2GuKSlQOiKoRL7wyRIvG6bALh+w=
+X-Google-Smtp-Source: ACHHUZ6pIPsZ/QQ3H2I7bgYUER40IueFVlCk8yLzIUqzUOxtrBgRfC8cCIOOpf/sBg9x2nYUpSoX5w==
+X-Received: by 2002:a17:907:2da1:b0:973:84b0:b077 with SMTP id gt33-20020a1709072da100b0097384b0b077mr8348217ejc.33.1686520402307;
+        Sun, 11 Jun 2023 14:53:22 -0700 (PDT)
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
+        by smtp.gmail.com with ESMTPSA id gt26-20020a170906f21a00b009600ce4fb53sm4298528ejb.37.2023.06.11.14.53.21
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Jun 2023 14:53:21 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5169f920a9dso7647329a12.0
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 14:53:21 -0700 (PDT)
+X-Received: by 2002:aa7:d313:0:b0:50d:89d5:bf95 with SMTP id
+ p19-20020aa7d313000000b0050d89d5bf95mr3861542edq.20.1686520399817; Sun, 11
+ Jun 2023 14:53:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f34a03ce-6295-b5d1-bf42-a43cfb382ea3@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 11 Jun 2023 14:53:03 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgmbjQu3bVSa5JJhEymeQhkr7N3cjg-CoNLVituUnfW8w@mail.gmail.com>
+Message-ID: <CAHk-=wgmbjQu3bVSa5JJhEymeQhkr7N3cjg-CoNLVituUnfW8w@mail.gmail.com>
+Subject: Linux 6.4-rc6
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-09 19:58:00, Dmitry Baryshkov wrote:
-> On 08/06/2023 23:36, Marijn Suijten wrote:
-> > Same title suggestion as earlier: s/adjust/reduce
-> > 
-> > On 2023-05-22 18:08:56, Jessica Zhang wrote:
-> >> Adjust the pclk rate to divide hdisplay by the compression ratio when DSC
-> >> is enabled.
-> >>
-> >> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
-> >> ---
-> >>   drivers/gpu/drm/msm/dsi/dsi_host.c | 21 ++++++++++++++++++---
-> >>   1 file changed, 18 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> >> index a448931af804..88f370dd2ea1 100644
-> >> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-> >> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> >> @@ -561,7 +561,18 @@ void dsi_link_clk_disable_v2(struct msm_dsi_host *msm_host)
-> >>   	clk_disable_unprepare(msm_host->byte_clk);
-> >>   }
-> >>   
-> >> -static unsigned long dsi_get_pclk_rate(const struct drm_display_mode *mode, bool is_bonded_dsi)
-> >> +static unsigned long dsi_adjust_compressed_pclk(const struct drm_display_mode *mode,
-> > 
-> > Nit: adjust_pclk_for_compression
-> > 
-> > As discussed before we realized that this change is more-or-less a hack,
-> > since downstream calculates pclk quite differently - at least for
-> > command-mode panels.  Do you still intend to land this patch this way,
-> > or go the proper route by introducing the right math from the get-go?
-> > Or is the math at least correct for video-mode panels?
-> 
-> Can we please postpone the cmd-vs-video discussion?
+It's Sunday afternoon, and we all know what that means.
 
-If you had read Jessica's reply (and the discussions thus far) this
-patch is intended for CMD-mode:
+I don't think we've had anything hugely interesting happen the last
+week, and the whole 6.4 release really does feel like it's going
+fairly smoothly. Knock wood, famous last words, you know the drill.
 
-    Moreover, as stated in an earlier revision [3], there is no way to
-    validate DSC over DSI for video mode. As far as I know, we do not
-    have a way to validate video mode datapath for DSI in general.
+The diffstat and the commit logs all looks fairly normal. We've got
+perhaps a bit more filesystem changes than usual, mostly due to some
+xfs fixes. But even that looks larger than it is - it's mostly due to
+code movement, not because of any fundamentally big changes per se.
 
-Hence my hopefully-relevant question whether this workaround - to reduce
-the hdisplay portion that comprises the full pclk signal - is at the
-very least right for video mode?  After all, CMD mode doesn't have
-porches so it makes no sense to account for those (except that it
-currently pretends to represent the "transfer time").
+There's some architecture fixes too, but most of that is just arm64 dts fil=
+es.
 
-Furthermore there is *zero* documentation describing this workaround,
-not even in v6.
+And the bulk of things is driver updates, with gpu and networking
+being most noticeable. As is tradition. We have some other networking
+changes outside of drivers too.
 
-> Otherwise I will reserve myself a right to push a patch dropping CMD
-> mode support until somebody comes with a proper way to handle CMD
-> clock calculation.
+For people interested in the nitty-gritty details, the shortlog is
+appended, but nothing there looks all that interesting. Which is
+obviously just how I like it. The interesting stuff should happen
+during the merge window, and the later release candidates should be as
+boring as possible.
 
-Please do.  That should force me or someone else to submit the right
-calculations instead of repeatedly getting stuck in this loop of
-complaints and incomprehensible patches with no fix in sight.
+                  Linus
 
-> It is off-topic for the sake of DSC 1.2 support. Yes, all CMD panel 
-> timings are a kind of a hack and should be improved. No, we can not do 
-> this as a part of this series. I think everybody agrees that with the 
-> current way of calculating CMD panel timings, this function does some 
-> kind of a trick.
+---
 
-I understand that you want to be pragrmatic about this situation, but it
-seems wrong to build new math on top of fundamentally broken values.  If
-there's one thing I learned while contributing to mainline here, it is
-that sometimes things are fundamentally broken and you cannot
-ship/contribute a shiny new feature before first fixing the
-fundamentals.  What makes this different?
+Abel Vesa (1):
+      soc: qcom: Rename ice to qcom_ice to avoid module name conflict
 
-> > This function requires a documentation comment to explain that all.
-> > 
-> >> +		const struct drm_dsc_config *dsc)
-> >> +{
-> >> +	int new_hdisplay = DIV_ROUND_UP(mode->hdisplay * drm_dsc_get_bpp_int(dsc),
-> > 
-> > This sounds like a prime candidate for msm_dsc_get_bytes_per_line(), if
-> > bits_per_component==8 is assumed.  In fact, it then becomes identical
-> > to the following line in dsi_host.c which you added previously:
-> > 
-> > 	hdisplay = DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 3);
-> 
-> This would imply a simple /3, but as far as I understand it is not 
-> correct here.
+Abhinav Kumar (1):
+      drm/msm/dp: add module parameter for PSR
 
-If you read Jessica's comment on that duplicate line in v6, that is
-exactly what is happening:
+Adam Ford (1):
+      arm64: dts: imx8mn-beacon: Fix SPI CS pinmux
 
-    * hdisplay will be divided by 3 here to account for the fact
-    * that DPU sends 3 bytes per pclk cycle to DSI.
+Aditya Kumar Singh (1):
+      wifi: mac80211: fix switch count in EMA beacons
 
-That comment acknowledges that it is the same: but why isn't this?  Why
-is bits_per_component (number of bits per pixel component _in the source
-picture_) suddenly introduced in this pclk calculation while it is not
-used anywhere else? 
+Ai Chao (1):
+      ALSA: hda/realtek: Add a quirk for HP Slim Desktop S01
 
-> > If not, what is the difference between these two calculations?  Maybe
-> > they both need to be in a properly-named helper.
-> > 
-> >> +			dsc->bits_per_component * 3);
+Akihiro Suda (1):
+      net/ipv4: ping_group_range: allow GID from 2147483648 to 4294967294
 
-How is this different from dsi_get_bpp()?
+Alex Deucher (3):
+      Revert "drm/amdgpu: change the reference clock for raven/raven2"
+      Revert "drm/amdgpu: Differentiate between Raven2 and
+Raven/Picasso according to revision id"
+      Revert "drm/amdgpu: switch to golden tsc registers for raven/raven2"
 
-> I hope to see a documentation patch to be posted, telling that this 
-> scales hdisplay and thus pclk by the factor of compressed_bpp / 
-> uncompressed_bpp.
-> 
-> This is not how it is usually done, but I would accept a separate 
-> documentation patch going over the calculation here and in 
-> dsi_timing_setup (and maybe other unobvious cases, if there is anything 
-> left).
+Alexander Gordeev (1):
+      s390/purgatory: disable branch profiling
 
-I'd love to see additional documentation for existing logic, but the
-next revision of this patch could atomically add these comments while
-adding the logic (seems to not have been done for v6...)?
+Alexander Sverdlin (1):
+      net: dsa: lan9303: allow vid !=3D 0 in port_fdb_{add|del} methods
 
-> > As we established in the drm/msm issue [2] there is currently a
-> > confusion whether this /3 (and the /3 in dsi_timing_setup) come from the
-> > ratio between dsi_get_bpp() and dsc->bpp or something else.  Can you
-> > clarify that with constants and comments?
-> > 
-> > [2]: https://gitlab.freedesktop.org/drm/msm/-/issues/24
-> > 
-> >> +
-> >> +	return (new_hdisplay + (mode->htotal - mode->hdisplay))
-> >> +			* mode->vtotal * drm_mode_vrefresh(mode);
-> > 
-> > As clarified in [1] I was not necessarily suggesting to move this math
-> > to a separate helper, but to also use a few more properly-named
-> > intermediate variables to not have multi-line math and self-documenting
-> > code.  These lines could be split to be much more clear.
-> 
-> I think it's fine more or less. One pair of parenthesis is unnecessary, 
-> but that's mostly it. Maybe `new_htotal' variable would make some sense.
-> 
-> Also, please excuse me if this was discussed somewhere. This calculation 
-> means that only the displayed data is compressed, but porches are not 
-> touched. Correct?
+Alexandre Ghiti (2):
+      riscv: Fix kfence now that the linear mapping can be backed by PUD/P4=
+D/PGD
+      riscv: Check the virtual alignment before choosing a map size
 
-Porches don't exist in CMDmode (but they do in mainline, because
-transfer time is not calculated yet).  For video mode I don't know.
+Alvin Lee (1):
+      drm/amd/display: Reduce sdp bw after urgent to 90%
 
-> > [1]: https://lore.kernel.org/linux-arm-msm/u4x2vldkzsokfcpbkz3dtwcllbdk4ljcz6kzuaxt5frx6g76o5@uku6abewvye7/
-> > 
-> >> +}
-> >> +
-> >> +static unsigned long dsi_get_pclk_rate(const struct drm_display_mode *mode,
-> >> +		const struct drm_dsc_config *dsc, bool is_bonded_dsi)
-> >>   {
-> >>   	unsigned long pclk_rate;
-> >>   
-> >> @@ -576,6 +587,10 @@ static unsigned long dsi_get_pclk_rate(const struct drm_display_mode *mode, bool
-> >>   	if (is_bonded_dsi)
-> >>   		pclk_rate /= 2;
-> >>   
-> >> +	/* If DSC is enabled, divide hdisplay by compression ratio */
-> >> +	if (dsc)
-> >> +		pclk_rate = dsi_adjust_compressed_pclk(mode, dsc);
-> 
-> Looking for the perfection, I'd also move the pclk adjustment to come 
-> before the is_bonded_dsi check.
+Andi Shyti (2):
+      MAINTAINERS: Add myself as I2C host drivers maintainer
+      drm/i915/gt: Use the correct error value when kernel_context() fails
 
-Perfection?
+Andreas Gruenbacher (1):
+      gfs2: Don't get stuck writing page onto itself under direct I/O
 
-- Marijn
+Andrey Smetanin (1):
+      vhost_net: revert upend_idx only on retriable error
 
-> > The confusion with this comment (and the reason the aforementioned
-> > discussion [2] carried on so long) stems from the fact a division makes
-> > sense for a bit/byte clock, but not for a pixel clock: we still intend
-> > to send the same number of pixels, just spending less bytes on them.  So
-> > as you clarify the /3 above, can you also clarify that here or drop this
-> > comment completely when the function is correctly documented instead?
-> > 
-> > - Marijn
-> > 
-> >> +
-> >>   	return pclk_rate;
-> >>   }
-> >>   
-> >> @@ -585,7 +600,7 @@ unsigned long dsi_byte_clk_get_rate(struct mipi_dsi_host *host, bool is_bonded_d
-> >>   	struct msm_dsi_host *msm_host = to_msm_dsi_host(host);
-> >>   	u8 lanes = msm_host->lanes;
-> >>   	u32 bpp = dsi_get_bpp(msm_host->format);
-> >> -	unsigned long pclk_rate = dsi_get_pclk_rate(mode, is_bonded_dsi);
-> >> +	unsigned long pclk_rate = dsi_get_pclk_rate(mode, msm_host->dsc, is_bonded_dsi);
-> >>   	unsigned long pclk_bpp;
-> >>   
-> >>   	if (lanes == 0) {
-> >> @@ -604,7 +619,7 @@ unsigned long dsi_byte_clk_get_rate(struct mipi_dsi_host *host, bool is_bonded_d
-> >>   
-> >>   static void dsi_calc_pclk(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
-> >>   {
-> >> -	msm_host->pixel_clk_rate = dsi_get_pclk_rate(msm_host->mode, is_bonded_dsi);
-> >> +	msm_host->pixel_clk_rate = dsi_get_pclk_rate(msm_host->mode, msm_host->dsc, is_bonded_dsi);
-> >>   	msm_host->byte_clk_rate = dsi_byte_clk_get_rate(&msm_host->base, is_bonded_dsi,
-> >>   							msm_host->mode);
-> >>   
-> >>
-> >> -- 
-> >> 2.40.1
-> >>
-> 
-> -- 
-> With best wishes
-> Dmitry
-> 
+Andrzej Kacprowski (2):
+      accel/ivpu: Do not trigger extra VPU reset if the VPU is idle
+      accel/ivpu: Fix sporadic VPU boot failure
+
+Arnd Bergmann (1):
+      net: dsa: qca8k: add CONFIG_LEDS_TRIGGERS dependency
+
+Balint Dobszay (1):
+      firmware: arm_ffa: Set handle field to zero in memory descriptor
+
+Bartosz Golaszewski (2):
+      net: stmmac: dwmac-qcom-ethqos: fix a regression on EMAC < 3
+      MAINTAINERS: add Andy Shevchenko as reviewer for the GPIO subsystem
+
+Ben Hutchings (1):
+      lib: cpu_rmap: Fix potential use-after-free in irq_cpu_rmap_release()
+
+Benjamin Tissoires (1):
+      HID: hidpp: terminate retry loop on success
+
+Biju Das (1):
+      MAINTAINERS: Add entries for Renesas RZ/V2M I2C driver
+
+Bjorn Andersson (1):
+      arm64: dts: qcom: sc8280xp: Flush RSC sleep & wake votes
+
+Brett Creeley (2):
+      pds_core: Fix FW recovery detection
+      virtio_net: use control_buf for coalesce params
+
+Catalin Marinas (1):
+      arm64: Remove the ARCH_FORCE_MAX_ORDER config input prompt
+
+Chaitanya Kumar Borah (1):
+      drm/i915/display: Set correct voltage level for 480MHz CDCLK
+
+Chancel Liu (1):
+      ASoC: fsl_sai: Enable BCI bit if SAI works on synchronous mode
+with BYP asserted
+
+Charles Keepax (1):
+      soundwire: stream: Add missing clear of alloc_slave_rt
+
+Chia-I Wu (1):
+      drm/amdgpu: fix xclk freq on CHIP_STONEY
+
+Chris Chiu (1):
+      ALSA: hda/realtek: Enable 4 amplifiers instead of 2 on a HP platform
+
+Christian Heusel (1):
+      i2c: img-scb: Fix spelling mistake "innacurate" -> "inaccurate"
+
+Christophe JAILLET (1):
+      soc: qcom: ramp_controller: Fix an error handling path in
+qcom_ramp_controller_probe()
+
+Clark Wang (1):
+      spi: lpspi: disable lpspi module irq in DMA mode
+
+Claudiu Beznea (2):
+      ARM: at91: pm: fix imbalanced reference counter for ethernet devices
+      ARM: dts: at91: sama7g5ek: fix debounce delay property for shdwc
+
+Dan Carpenter (1):
+      soc: qcom: rmtfs: Fix error code in probe()
+
+Dan Schatzberg (1):
+      cgroup: Documentation: Clarify usage of memory limits
+
+Daniel Golle (1):
+      spi: mt65xx: make sure operations completed before unloading
+
+Darrick J. Wong (1):
+      xfs: fix broken logic when detecting mergeable bmap records
+
+Dave Chinner (9):
+      xfs: buffer pins need to hold a buffer reference
+      xfs: restore allocation trylock iteration
+      xfs: defered work could create precommits
+      xfs: fix AGF vs inode cluster buffer deadlock
+      xfs: fix double xfs_perag_rele() in xfs_filestream_pick_ag()
+      xfs: fix agf/agfl verification on v4 filesystems
+      xfs: validity check agbnos on the AGFL
+      xfs: validate block number being freed before adding to xefi
+      xfs: collect errors from inodegc for unlinked inode recovery
+
+David Howells (1):
+      afs: Fix setting of mtime when creating a file/dir/symlink
+
+David Zheng (1):
+      i2c: designware: fix idx_write_cnt in read loop
+
+Dmitry Baryshkov (1):
+      drm/msm/a6xx: initialize GMU mutex earlier
+
+Dmitry Torokhov (2):
+      Input: fix open count when closing inhibited device
+      Input: psmouse - fix OOB access in Elantech protocol
+
+Douglas Anderson (1):
+      arm64: dts: qcom: sc7180-lite: Fix SDRAM freq for misidentified
+sc7180-lite boards
+
+Dragos Tatulea (1):
+      vdpa/mlx5: Fix hang when cvq commands are triggered during
+device unregister
+
+Edson Juliano Drosdeck (1):
+      ASoC: nau8824: Add quirk to active-high jack-detect
+
+Eelco Chaudron (1):
+      net: openvswitch: fix upcall counter access before allocation
+
+Eric Dumazet (10):
+      bpf, sockmap: Avoid potential NULL dereference in
+sk_psock_verdict_data_ready()
+      net/ipv6: fix bool/int mismatch for skip_notify_on_dev_down
+      net/ipv6: convert skip_notify_on_dev_down sysctl to u8
+      net/sched: fq_pie: ensure reasonable TCA_FQ_PIE_QUANTUM values
+      tcp: gso: really support BIG TCP
+      rfs: annotate lockless accesses to sk->sk_rxhash
+      rfs: annotate lockless accesses to RFS sock flow table
+      net: sched: add rcu annotations around qdisc->qdisc_sleeping
+      net: sched: move rtm_tca_policy declaration to include file
+      net: sched: act_police: fix sparse errors in tcf_police_dump()
+
+Erico Nunes (1):
+      drm/lima: fix sched context destroy
+
+Evan Quan (1):
+      drm/amd/pm: conditionally disable pcie lane switching for some
+sienna_cichlid SKUs
+
+Fedor Pchelkin (2):
+      can: j1939: change j1939_netdev_lock type to mutex
+      can: j1939: avoid possible use-after-free when j1939_can_rx_register =
+fails
+
+Florian Fainelli (1):
+      net: bcmgenet: Fix EEE implementation
+
+Florian Westphal (1):
+      bpf: netfilter: Add BPF_NETFILTER bpf_attach_type
+
+Gavrilov Ilia (1):
+      netfilter: nf_tables: Add null check for nla_nest_start_noflag()
+in nft_dump_basechain_hook()
+
+Geert Uytterhoeven (2):
+      drm/fb-helper: Fix height, width, and accel_flags in fb_var
+      xfs: Fix undefined behavior of shift into sign bit
+
+Geliang Tang (5):
+      mptcp: only send RM_ADDR in nl_cmd_remove
+      selftests: mptcp: update userspace pm addr tests
+      mptcp: add address into userspace pm list
+      selftests: mptcp: update userspace pm subflow tests
+      mptcp: update userspace pm infos
+
+Gustavo A. R. Silva (1):
+      wifi: iwlwifi: mvm: Fix -Warray-bounds bug in iwl_mvm_wait_d3_notif()
+
+Hangyu Hua (1):
+      net: sched: fix possible refcount leak in tc_chain_tmplt_add()
+
+Hans de Goede (1):
+      Input: soc_button_array - add invalid acpi_index DMI quirk handling
+
+Hao Yao (1):
+      platform/x86: int3472: Avoid crash in unregistering regulator gpio
+
+Herve Codina (1):
+      ASoC: simple-card: Add missing of_node_put() in case of error
+
+Horatio Zhang (1):
+      drm/amdgpu: fix Null pointer dereference error in
+amdgpu_device_recover_vram
+
+Hsieh-Tseng Shen (1):
+      riscv: mm: Ensure prot of VM_WRITE and VM_EXEC must be readable
+
+Ilya Dryomov (2):
+      rbd: move RBD_OBJ_FLAG_COPYUP_ENABLED flag setting
+      rbd: get snapshot context after exclusive lock is ensured to be held
+
+Inki Dae (1):
+      drm/exynos: vidi: fix a wrong error return
+
+Ismael Ferreras Morezuelas (1):
+      Input: xpad - delete a Razer DeathAdder mouse VID/PID entry
+
+Jakub Kicinski (3):
+      netlink: specs: ethtool: fix random typos
+      eth: bnxt: fix the wake condition
+      eth: ixgbe: fix the wake condition
+
+Jammy Huang (2):
+      drm/ast: Fix long time waiting on s3/s4 resume
+      drm/ast: Fix modeset failed on DisplayPort
+
+Jan H=C3=B6ppner (1):
+      s390/dasd: Use correct lock while counting channel queue length
+
+Jaroslav Kysela (1):
+      ALSA: ice1712,ice1724: fix the kcontrol->id initialization
+
+Jeremy Sowden (1):
+      netfilter: nft_bitwise: fix register tracking
+
+Jiasheng Jiang (1):
+      net: systemport: Replace platform_get_irq with platform_get_irq_optio=
+nal
+
+Jiri Olsa (1):
+      bpf: Add extra path pointer check to d_path helper
+
+Jisheng Zhang (1):
+      arm64: mm: pass original fault address to handle_mm_fault() in
+PER_VMA_LOCK block
+
+Johan Hovold (2):
+      Bluetooth: fix debugfs registration
+      Bluetooth: hci_qca: fix debugfs registration
+
+Johannes Berg (6):
+      wifi: mac80211: use correct iftype HE cap
+      wifi: cfg80211: reject bad AP MLD address
+      wifi: mac80211: mlme: fix non-inheritence element
+      wifi: mac80211: don't translate beacon/presp addrs
+      wifi: cfg80211: fix locking in sched scan stop work
+      wifi: cfg80211: fix locking in regulatory disconnect
+
+John Sperbeck (1):
+      cgroup: always put cset in cgroup_css_set_put_fork
+
+Jouni H=C3=B6gander (1):
+      drm/i915: Use 18 fast wake AUX sync len
+
+KP Singh (1):
+      bpf: Fix UAF in task local storage
+
+Kent Gibson (2):
+      gpio: sim: fix memory corruption when adding named lines and unnamed =
+hogs
+      gpio: sim: quietly ignore configured lines outside the bank
+
+Konrad Dybcio (6):
+      arm64: dts: qcom: sm6375-pdx225: Fix remoteproc firmware paths
+      dt-bindings: power: qcom,rpmpd: Add SA8155P
+      arm64: dts: qcom: Split out SA8155P and use correct RPMh power domain=
+s
+      soc: qcom: rpmhpd: Add SA8155P power domains
+      dt-bindings: cache: qcom,llcc: Fix SM8550 description
+      arm64: dts: qcom: sm8550: Use the correct LLCC register scheme
+
+Krzysztof Kozlowski (16):
+      soc: qcom: icc-bwmon: fix incorrect error code passed to dev_err_prob=
+e()
+      soc: qcom: rpmh-rsc: drop redundant unsigned >=3D0 comparision
+      arm64: dts: qcom: sc8280xp: Revert "arm64: dts: qcom: sc8280xp:
+remove superfluous "input-enable""
+      arm64: dts: qcom: sc7280-idp: drop incorrect dai-cells from WCD938x S=
+DW
+      arm64: dts: qcom: sc7280-qcard: drop incorrect dai-cells from WCD938x=
+ SDW
+      arm64: dts: qcom: sm8250-xiaomi-elish-boe: fix panel compatible
+      arm64: dts: qcom: sm8250-xiaomi-elish-csot: fix panel compatible
+      ARM: dts: qcom: apq8026: remove superfluous "input-enable"
+      ARM: dts: qcom: mdm9615: remove superfluous "input-enable"
+      ARM: dts: qcom: msm8974: remove superfluous "input-enable"
+      arm64: dts: qcom: fix indentation
+      arm64: dts: qcom: use decimal for cache level
+      arm64: dts: qcom: add missing cache properties
+      ARM: dts: qcom: add missing cache properties
+      arm64: dts: qcom: sm8550: use uint16 for Soundwire interval
+      soundwire: qcom: add proper error paths in qcom_swrm_startup()
+
+Kuniyuki Iwashima (2):
+      netfilter: ipset: Add schedule point in call_ad().
+      ipv6: rpl: Fix Route of Death.
+
+Kuogee Hsieh (1):
+      drm/msm/dp: enable HDP plugin/unplugged interrupts at hpd_enable/disa=
+ble
+
+Lijo Lazar (1):
+      drm/amd/pm: Fix power context allocation in SMU13
+
+Linus Torvalds (1):
+      Linux 6.4-rc6
+
+Linus Walleij (1):
+      ARM: dts: Fix erroneous ADS touchscreen polarities
+
+Lorenzo Bianconi (2):
+      wifi: mt76: mt7615: fix possible race in mt7615_mac_sta_poll
+      wifi: mt76: mt7996: fix possible NULL pointer dereference in
+mt7996_mac_write_txwi()
+
+Luiz Augusto von Dentz (1):
+      Bluetooth: Fix use-after-free in hci_remove_ltk/hci_remove_irk
+
+Manish Chopra (1):
+      qed/qede: Fix scheduling while atomic
+
+Manivannan Sadhasivam (2):
+      EDAC/qcom: Remove superfluous return variable assignment in
+qcom_llcc_core_setup()
+      EDAC/qcom: Get rid of hardcoded register offsets
+
+Marek Beh=C3=BAn (1):
+      i2c: mv64xxx: Fix reading invalid status value in atomic mode
+
+Mario Limonciello (2):
+      drm/amd: Disallow s0ix without BIOS support again
+      drm/amd: Make lack of `ACPI_FADT_LOW_POWER_S0` or
+`CONFIG_AMD_PMC` louder during suspend path
+
+Martin Hundeb=C3=B8ll (1):
+      pinctrl: meson-axg: add missing GPIOA_18 gpio group
+
+Maximilian Luz (4):
+      platform/surface: aggregator: Make to_ssam_device_driver()
+respect constness
+      platform/surface: aggregator: Allow completion work-items to be
+executed in parallel
+      platform/surface: aggregator_tabletsw: Add support for book mode
+in KIP subsystem
+      platform/surface: aggregator_tabletsw: Add support for book mode
+in POS subsystem
+
+Maximilian Weigand (1):
+      Input: cyttsp5 - fix array length
+
+Michal Schmidt (1):
+      ice: make writes to /dev/gnssX synchronous
+
+Mike Christie (2):
+      vhost: Fix crash during early vhost_transport_send_pkt calls
+      vhost: Fix worker hangs due to missed wake up calls
+
+Min Li (2):
+      drm/exynos: fix race condition UAF in exynos_g2d_exec_ioctl
+      drm/radeon: fix race condition UAF in radeon_gem_set_domain_ioctl
+
+Min-Hua Chen (1):
+      net: sched: wrap tc_skip_wrapper with CONFIG_RETPOLINE
+
+Mirsad Goran Todorovac (1):
+      selftests: alsa: pcm-test: Fix compiler warnings about the format
+
+Namjae Jeon (5):
+      ksmbd: fix out-of-bound read in deassemble_neg_contexts()
+      ksmbd: fix out-of-bound read in parse_lease_state()
+      ksmbd: fix posix_acls and acls dereferencing possible ERR_PTR()
+      ksmbd: check the validation of pdu_size in ksmbd_conn_handler_loop
+      ksmbd: validate smb request protocol id
+
+Nitesh Shetty (1):
+      null_blk: Fix: memory release when memory_backed=3D1
+
+Oleksij Rempel (1):
+      can: j1939: j1939_sk_send_loop_abort(): improved error queue
+handling in J1939 Socket
+
+Pablo Neira Ayuso (1):
+      netfilter: nf_tables: out-of-bound check in chain blob
+
+Pauli Virtanen (4):
+      Bluetooth: ISO: consider right CIS when removing CIG at cleanup
+      Bluetooth: ISO: Fix CIG auto-allocation to select configurable CIG
+      Bluetooth: ISO: don't try to remove CIG if there are bound CIS left
+      Bluetooth: ISO: use correct CIS order in Set CIG Parameters event
+
+Pavan Chebbi (2):
+      bnxt_en: Fix bnxt_hwrm_update_rss_hash_cfg()
+      bnxt_en: Prevent kernel panic when receiving unexpected PHC_UPDATE ev=
+ent
+
+Pierre-Louis Bossart (1):
+      soundwire: dmi-quirks: add new mapping for HP Spectre x360
+
+Ping-Ke Shih (3):
+      wifi: rtw88: correct PS calculation for SUPPORTS_DYNAMIC_PS
+      wifi: rtw89: correct PS calculation for SUPPORTS_DYNAMIC_PS
+      wifi: rtw89: remove redundant check of entering LPS
+
+Prathu Baronia (1):
+      vhost: use kzalloc() instead of kmalloc() followed by memset()
+
+Qi Zheng (1):
+      cgroup: fix missing cpus_read_{lock,unlock}() in cgroup_transfer_task=
+s()
+
+Qingfang DENG (1):
+      neighbour: fix unaligned access to pneigh_entry
+
+Randy Dunlap (2):
+      accel/ivpu: ivpu_ipc needs GENERIC_ALLOCATOR
+      eeprom: at24: also select REGMAP
+
+RenHai (1):
+      ALSA: hda/realtek: Add Lenovo P3 Tower platform
+
+Rhys Rustad-Elliott (2):
+      bpf: Fix elem_size not being set for inner maps
+      selftests/bpf: Add access_inner_map selftest
+
+Richard Fitzgerald (1):
+      ASoC: cs35l56: Remove NULL check from cs35l56_sdw_dai_set_stream()
+
+Rijo Thomas (1):
+      tee: amdtee: Add return_origin to 'struct tee_cmd_load_ta'
+
+Rob Clark (1):
+      drm/msm: Set max segment size earlier
+
+Robert Hancock (1):
+      ASoC: simple-card-utils: fix PCM constraint error check
+
+Roberto Sassu (1):
+      KEYS: asymmetric: Copy sig and digest in public_key_verify_signature(=
+)
+
+Rong Tao (2):
+      tools/virtio: Fix arm64 ringtest compilation error
+      tools/virtio: Add .gitignore for ringtest
+
+Ross Zwisler (1):
+      tools/virtio: use canonical ftrace path
+
+Ruan Jinjie (1):
+      riscv: fix kprobe __user string arg print fault issue
+
+Russell King (Oracle) (1):
+      net: phylink: actually fix ksettings_set() ethtool call
+
+Ryan Lee (2):
+      ASoC: max98363: Removed 32bit support
+      ASoC: max98363: limit the number of channel to 1
+
+Samson Tam (1):
+      drm/amd/display: add ODM case when looking for first split pipe
+
+Sayed, Karimuddin (1):
+      ALSA: hda/realtek: Add "Intel Reference board" and "NUC 13" SSID
+in the ALC256
+
+Shannon Nelson (3):
+      vhost_vdpa: tell vqs about the negotiated
+      vhost: support PACKED when setting-getting vring_base
+      vhost_vdpa: support PACKED when setting-getting vring_base
+
+Sheng Zhao (1):
+      vduse: avoid empty string for dev name
+
+Shenwei Wang (2):
+      arm64: dts: imx8qm-mek: correct GPIOs for USDHC2 CD and WP signals
+      arm64: dts: imx8-ss-dma: assign default clock rate for lpuarts
+
+Sicong Jiang (1):
+      ASoC: amd: yc: Add Thinkpad Neo14 to quirks list for acp6x
+
+Simon Horman (1):
+      i2c: mchp-pci1xxxx: Avoid cast to incompatible function type
+
+Somnath Kotur (2):
+      bnxt_en: Query default VLAN before VNIC setup on a VF
+      bnxt_en: Implement .set_port / .unset_port UDP tunnel callbacks
+
+Sreekanth Reddy (1):
+      bnxt_en: Don't issue AP reset during ethtool's reset operation
+
+Srinivas Kandagatla (3):
+      ASoC: codecs: wsa883x: do not set can_multi_write flag
+      ASoC: codecs: wsa881x: do not set can_multi_write flag
+      ASoC: codecs: wcd938x-sdw: do not set can_multi_write flag
+
+Stanislaw Gruszka (2):
+      accel/ivpu: Reserve all non-command bo's using DMA_RESV_USAGE_BOOKKEE=
+P
+      accel/ivpu: Do not use mutex_lock_interruptible
+
+Stefan Binding (1):
+      ALSA: hda/realtek: Add quirks for Asus ROG 2024 laptops using CS35L41
+
+Stephan Gerhold (1):
+      spi: qup: Request DMA before enabling clocks
+
+Sungwoo Kim (1):
+      Bluetooth: L2CAP: Add missing checks for invalid DCID
+
+Takashi Iwai (4):
+      ALSA: ymfpci: Fix kctl->id initialization
+      ALSA: cmipci: Fix kctl->id initialization
+      ALSA: gus: Fix kctl->id initialization
+      ALSA: hda: Fix kctl->id initialization
+
+Theodore Ts'o (2):
+      Revert "ext4: don't clear SB_RDONLY when remounting r/w until
+quota is re-enabled"
+      ext4: only check dquot_initialize_needed() when debugging
+
+Thomas Gleixner (1):
+      MAINTAINERS: Add entry for debug objects
+
+Tian Lan (1):
+      blk-mq: fix blk_mq_hw_ctx active request accounting
+
+Tijs Van Buggenhout (1):
+      netfilter: conntrack: fix NULL pointer dereference in nf_confirm_cthe=
+lper
+
+Tim Crawford (1):
+      ALSA: hda/realtek: Add quirk for Clevo NS50AU
+
+Tom Lendacky (1):
+      x86/head/64: Switch to KERNEL_CS as soon as new GDT is installed
+
+Trevor Wu (2):
+      ASoC: mediatek: mt8188: fix use-after-free in driver remove path
+      ASoC: mediatek: mt8195: fix use-after-free in driver remove path
+
+Tvrtko Ursulin (1):
+      drm/i915/selftests: Add some missing error propagation
+
+Uwe Kleine-K=C3=B6nig (1):
+      i2c: sprd: Delete i2c adapter in .remove's error path
+
+Vijendar Mukunda (1):
+      ASoC: amd: ps: fix for acp_lock access in pdm driver
+
+Vikas Gupta (1):
+      bnxt_en: Skip firmware fatal error recovery if chip is not accessible
+
+Vineeth Vijayan (1):
+      s390/cio: unregister device when the only path is gone
+
+Vladislav Efanov (1):
+      batman-adv: Broken sync while rescheduling delayed work
+
+Wei Fang (2):
+      net: enetc: correct the statistics of rx bytes
+      net: enetc: correct rx_bytes statistics of XDP
+
+Weihao Gao (1):
+      Fix gitignore for recently added usptream self tests
+
+Wen Gu (1):
+      net/smc: Avoid to access invalid RMBs' MRs in SMCRv1 ADD LINK CONT
+
+Xiubo Li (1):
+      ceph: fix use-after-free bug for inodes when flushing capsnaps
+
+YiPeng Chai (1):
+      drm/amdgpu: change reserved vram info print
+
+Ying Hsu (1):
+      Bluetooth: Fix l2cap_disconnect_req deadlock
+
+Yonghong Song (1):
+      selftests/bpf: Fix sockopt_sk selftest
+
+Zhengping Jiang (1):
+      Bluetooth: hci_sync: add lock to protect HCI_UNREGISTER
