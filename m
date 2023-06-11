@@ -2,178 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C040372B176
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 12:48:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D21B72B17A
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 12:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233314AbjFKKsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 06:48:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59464 "EHLO
+        id S233414AbjFKKyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 06:54:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbjFKKsf (ORCPT
+        with ESMTP id S229720AbjFKKyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 06:48:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1E0173A
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 03:47:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686480467;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=j68gTnjgXVwXYZVMYqrbKZ59sLTdFoJLwLEaM6oQtU0=;
-        b=gkVcopoLdRPQNeCHRSTFc7g4kYf9VE4hgSuXmn7bq/9UTdmAQirc5/Qxy31QbRmP81N7rs
-        bGhs2HqE1ITPFywFe/ImO9P0B1fmwMfeOnqlAbM6wGcNdYmCTT74YhgNcQOXekucrgVwcg
-        c+91SQy/HVesmatvLzmozDIL9nnxmnM=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-646-fbDcIieQOSutatTMFW27IQ-1; Sun, 11 Jun 2023 06:47:46 -0400
-X-MC-Unique: fbDcIieQOSutatTMFW27IQ-1
-Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-51495d51e0fso2616463a12.2
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 03:47:45 -0700 (PDT)
+        Sun, 11 Jun 2023 06:54:33 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E9F10A;
+        Sun, 11 Jun 2023 03:54:31 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-5149390b20aso5838883a12.3;
+        Sun, 11 Jun 2023 03:54:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20221208; t=1686480869; x=1689072869;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oS+p5K9ZPN0t2dIaNX3pw7GDSatTHt0gmgbi2hdXeic=;
+        b=VuZu2nQm1xyCRJsyaNE76XLoEb+0FMA2dFnTMH+wMewpClKYGhLUqZOsEByPbG00pf
+         23netPh0fTJT/hg4OY+PgIoE0JHZh+KsVauzuxvBMjMx8w12dz8v1zFIiccM3dprmw5f
+         C5izVu6nH7HxwlmcPI5DTvMw8CLwIP/qXdOBAVc/Ob5prHKaDmcYnkCs6zJzDw4ySRaz
+         klH2YtGFRPEAjPlCd9yhNxC3SKB//sbxZz9vHLwAu4Tm/Wtl+q5MGddIM7SSCxvFuNq6
+         gGS1fgFUdWswRoQut9faNrUrnjdVig2Yn8ENQer9k2PBTgD7i5xCBGf7TMGJULCleYAL
+         9Wag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686480465; x=1689072465;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :to:subject:cc:user-agent:mime-version:date:message-id:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=j68gTnjgXVwXYZVMYqrbKZ59sLTdFoJLwLEaM6oQtU0=;
-        b=PbaqDgrkpCawXPwf0xQEm/WATxGg5O1R4SxvGU39YvJoErQrNJmOQkqgORLPr3YZ2K
-         R9qJxVHdhnNEu4HRPRHqX0CjG9kd8KnZrMmT+MwfrWodQlAn2fsTDGVy2MJq7yhstaVu
-         ZCpnx0bFhb4EqL/V0L0abPIjnOA1CfqMP3hqJusMlDaIPn4woqiVphxBs3xuCo9+GeqD
-         X7EkUCry2K+t0agScsoI2MR5IEbGmuE7YarwwEMv94cmaEWJRVkchmO/iBqeB08/y/nt
-         Q7qGRrVMHvTNstvczZ5JachtquBX6ToUvdU/JZuJlxOZVDYP8BSPekDdiXfWX++eHjd6
-         thSg==
-X-Gm-Message-State: AC+VfDynkuX0/1Jgbx3Qbx81IrmL0IrRPRJ4UQLMhZGR58O/RRk/frG+
-        uR7t54mCa9ISbD6NxgiixsJXO/X940QOPpTzK829pFUd9lv9rQBBHTc1njzO+fNSIDylr371qQh
-        HxUaVLyxIBG3aiVXt44giOIeb
-X-Received: by 2002:aa7:c6c3:0:b0:516:7b3f:545d with SMTP id b3-20020aa7c6c3000000b005167b3f545dmr2758976eds.30.1686480464914;
-        Sun, 11 Jun 2023 03:47:44 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ57qE8T9gh9Ypb/Kp13VH7CgAknx2ku8kmlUzRz5ru8rxbZEGZsSTjapnYql/AAy5jug9pyfg==
-X-Received: by 2002:aa7:c6c3:0:b0:516:7b3f:545d with SMTP id b3-20020aa7c6c3000000b005167b3f545dmr2758964eds.30.1686480464613;
-        Sun, 11 Jun 2023 03:47:44 -0700 (PDT)
-Received: from [192.168.42.222] (194-45-78-10.static.kviknet.net. [194.45.78.10])
-        by smtp.gmail.com with ESMTPSA id w8-20020aa7cb48000000b0051632dc69absm3776418edt.86.2023.06.11.03.47.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 11 Jun 2023 03:47:43 -0700 (PDT)
-From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
-X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
-Message-ID: <2c48652e-ace4-45c8-7a7d-5ec87d1b0b75@redhat.com>
-Date:   Sun, 11 Jun 2023 12:47:42 +0200
+        d=1e100.net; s=20221208; t=1686480869; x=1689072869;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oS+p5K9ZPN0t2dIaNX3pw7GDSatTHt0gmgbi2hdXeic=;
+        b=C4Z004DgTvZ4LgtZ9HuzB2uvKE1N6VdJOdZshDDVDG5pxUI0kbeYWKB33iwCVEvqcA
+         Fzp/qyglqqV25aESDkKeZG9NMmgIOtAK9pUFzFXETeVGXipVpJTjLE7LgDA2kyl7SvVe
+         H5xNLRUpoZnwCOkV518I7uZ3m/cqn2+Hjtpk/CgkGQZ5PT5nHuc54ba0qjwXixVpf7Tq
+         mcszloBnUQ8wB//BIjjHEjQDxiYhQYjILhGzRuYoSKpKFFLo87Y9fx2jnV7BuVe7Go51
+         yDu7JA0/u20I6jKk8pRsCxgd0StjC5x9uPSTdh5HiJPf/TO1WXUjo19iEwU/VPWpFi6a
+         2IQQ==
+X-Gm-Message-State: AC+VfDwbKeJgdVPhcPHdhg+LidiC7lHq/+m9SvdeoRseWDDu+eRFZ0ty
+        XQPJBd6fpZNOoBFoGk1csV4=
+X-Google-Smtp-Source: ACHHUZ6Rpaj4bofgZjbkn++4EsplD+KBgHKEoAj+vFUa042xtPz0Qg+q4mpy7vkE90YaU5vTbI/Tvw==
+X-Received: by 2002:a50:ef17:0:b0:516:4394:244f with SMTP id m23-20020a50ef17000000b005164394244fmr2840554eds.12.1686480869372;
+        Sun, 11 Jun 2023 03:54:29 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:810a:9640:26a8:84b0:69e6:a31a:4535])
+        by smtp.gmail.com with ESMTPSA id u13-20020a50eacd000000b005149b6ec1bdsm3795051edp.29.2023.06.11.03.54.28
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 11 Jun 2023 03:54:28 -0700 (PDT)
+From:   Franziska Naepelt <franziska.naepelt@googlemail.com>
+X-Google-Original-From: Franziska Naepelt <franziska.naepelt@gmail.com>
+To:     franziska.naepelt@googlemail.com
+Cc:     davem@davemloft.net, franziska.naepelt@gmail.com,
+        herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bagasdotme@gmail.com
+Subject: [PATCH v2] crypto: fcrypt: Fix block comment
+Date:   Sun, 11 Jun 2023 12:53:31 +0200
+Message-Id: <20230611105331.16570-1-franziska.naepelt@gmail.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
+In-Reply-To: <20230606111042.96855-1-franziska.naepelt@gmail.com>
+References: <20230606111042.96855-1-franziska.naepelt@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Cc:     brouer@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        linux-rdma@vger.kernel.org
-Subject: Re: [PATCH net-next v3 1/4] page_pool: frag API support for 32-bit
- arch with 64-bit DMA
-To:     Yunsheng Lin <yunshenglin0825@gmail.com>,
-        Jesper Dangaard Brouer <jbrouer@redhat.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com
-References: <20230609131740.7496-1-linyunsheng@huawei.com>
- <20230609131740.7496-2-linyunsheng@huawei.com>
- <4f1a0b7d-973f-80f5-cc39-74f09622ccef@redhat.com>
- <1bbf2afa-91b2-a3d0-60e0-81cd386eb68d@gmail.com>
-Content-Language: en-US
-In-Reply-To: <1bbf2afa-91b2-a3d0-60e0-81cd386eb68d@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Fix the following checkpatch issue:
+- WARNING: Block comments use a trailing */ on a separate line
 
-On 10/06/2023 15.13, Yunsheng Lin wrote:
-> On 2023/6/9 23:02, Jesper Dangaard Brouer wrote:
-> ...
-> 
->>>                     PP_FLAG_DMA_SYNC_DEV |\
->>>                     PP_FLAG_PAGE_FRAG)
->>>    +#define PAGE_POOL_DMA_USE_PP_FRAG_COUNT    \
->>> +        (sizeof(dma_addr_t) > sizeof(unsigned long))
->>> +
->>
->> I have a problem with the name PAGE_POOL_DMA_USE_PP_FRAG_COUNT
->> because it is confusing to read in an if-statement.
-> 
-> Actually, it is already in an if-statement before this patch:)
+Signed-off-by: Franziska Naepelt <franziska.naepelt@gmail.com>
+---
+v2:
+ - Revert SPDX change to address only one logical change
+---
+ crypto/fcrypt.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-I did notice, but I've had a problem with this name for a while.
-(see later, why this might be long in separate patch)
+diff --git a/crypto/fcrypt.c b/crypto/fcrypt.c
+index 95a16e88899b..e9e119bab784 100644
+--- a/crypto/fcrypt.c
++++ b/crypto/fcrypt.c
+@@ -303,7 +303,8 @@ static int fcrypt_setkey(struct crypto_tfm *tfm, const u8 *key, unsigned int key
+ 
+ #if BITS_PER_LONG == 64  /* the 64-bit version can also be used for 32-bit
+ 			  * kernels - it seems to be faster but the code is
+-			  * larger */
++			  * larger
++			  */
+ 
+ 	u64 k;	/* k holds all 56 non-parity bits */
+ 
 
-> Maybe starting to use it in the driver is confusing to you?
-> If not, maybe we can keep it that for now, and change it when
-> we come up with a better name.
-> 
->>
->> Proposals rename to:  DMA_OVERLAP_PP_FRAG_COUNT
->>   Or:  MM_DMA_OVERLAP_PP_FRAG_COUNT
->>   Or:  DMA_ADDR_OVERLAP_PP_FRAG_COUNT
-> 
-> It seems DMA_ADDR_OVERLAP_PP_FRAG_COUNT is better,
-> and DMA_ADDR_UPPER_OVERLAP_PP_FRAG_COUNT seems more accurate if a
-> longer macro name is not an issue here.
-> 
-
-I like the shorter DMA_ADDR_OVERLAP_PP_FRAG_COUNT variant best.
-
->>
->> Notice how I also removed the prefix PAGE_POOL_ because this is a
->> MM-layer constraint and not a property of page_pool.
-> 
-> I am not sure if it is a MM-layer constraint yet.
-> Do you mean 'MM-layer constraint' as 'struct page' not having
-> enough space for page pool with 32-bit arch with 64-bit DMA?
-
-Yes.
-
-> If that is the case, we may need a more generic name for that
-> constraint instead of 'DMA_ADDR_OVERLAP_PP_FRAG_COUNT'?
->
-
-I think this name is clear enough; the dma_addr_t is overlapping the 
-pp_frag_count.
-
-
-> And a more generic name seems confusing for page pool too, as
-> it doesn't tell that we only have that problem for 32-bit arch
-> with 64-bit DMA.
-> 
-> So if the above makes sense, it seems we may need to keep the
-> PAGE_POOL_ prefix, which would be
-> 'PAGE_POOL_DMA_ADDR_UPPER_OVERLAP_PP_FRAG_COUNT' if the long
-> name is not issue here.
-> 
-
-I think it gets too long now.
-
-Also I still disagree with PAGE_POOL_ prefix, if anything it is a
-property of 'struct page'.  Thus a prefix with PAGE_ make more sense to
-me, but it also gets too long (for my taste).
-
-> Anyway, naming is hard, we may need a seperate patch to explain
-> it, which is not really related to this patchset IHMO, so I'd
-> rather keep it as before if we can not come up with a name which
-> is not confusing to most people.
-> 
-
-Okay, lets do the (re)naming in another patch then.
-
---Jesper
+base-commit: 9561de3a55bed6bdd44a12820ba81ec416e705a7
+-- 
+2.39.2 (Apple Git-143)
 
