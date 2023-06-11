@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAC2472B227
-	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 16:04:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CDD572B228
+	for <lists+linux-kernel@lfdr.de>; Sun, 11 Jun 2023 16:04:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233660AbjFKOD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 10:03:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34614 "EHLO
+        id S233774AbjFKOEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 10:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231451AbjFKODs (ORCPT
+        with ESMTP id S233656AbjFKODt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 10:03:48 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7296E77
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 07:03:46 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f7378a75c0so24277615e9.3
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 07:03:46 -0700 (PDT)
+        Sun, 11 Jun 2023 10:03:49 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5B3E7A
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 07:03:48 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f6da07ff00so35463165e9.3
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 07:03:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686492225; x=1689084225;
+        d=linaro.org; s=google; t=1686492227; x=1689084227;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kqu6zhlo3BumjjZSy0hWitrlF9vYczNuvBx4wGI2+u4=;
-        b=ICfogWFj59zkdRMyVt7Ekmk8RsNiI8AFO+uUfDsCVEO2pasuegangeqiwkOH1LRNN+
-         nCM6Ji6gPEWtLFRvRo/rpTvt7LzZPugM7eyK2njepZoXfEGDRac0rBicTmQV1PzfE4Wf
-         m1F5WqD3vnyR7hGRHGC+9aM6MBijP5O5W6EVqlZmAFnEdC4Z0nuQbgum0fGirYdTMZsn
-         JQ2EfxA7751uYK7xscXvNcyU+PQIk4EGzvoRqymlDjfEDfymA/Pw5GA+6+lbeMnlyaOj
-         Jpk6Mxnbkk/Fpg62a+NtxBaT07lSVHHTo3SYOvg+dNLaH66PEHyMDqg60TSVC/xKa2xQ
-         QkSw==
+        bh=nlpWIDDoTMDzC7Jc26F5UZA31B7vwDV86ZZqiF0p8S8=;
+        b=Qc1/cFgGpeSUN7ZkGzby/fLmBnnLVcWG//gyWdXxeDM/zRAsTh7WDAA+sbhkdkH/cb
+         0jfMdGnffcI13iaWqG3kOfZKd5MVf8Ue79eBenE1yZEoliRf45QcHvSn2xN2oTACWae2
+         7qMT1O+FC3DfDG5TKKZcpNy975xveNdQMfHBH6SejuJ7JT3hpl9e7VFPdUyX7m11Gck8
+         WfTgJ4lIoHfVvfusu/djspZX37YxII711OUphEhlluYg17MWOqpPjvePj2FF43shkFm2
+         eGwLZL614ThjrCXZ4I+E7kcwK3nnRG41zYZFZbbi5t2AxEAJ/NPbd0+Ii4VgxBPWyIAe
+         izuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686492225; x=1689084225;
+        d=1e100.net; s=20221208; t=1686492227; x=1689084227;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kqu6zhlo3BumjjZSy0hWitrlF9vYczNuvBx4wGI2+u4=;
-        b=EQOJToyV5HkrxGYsK6VUSMjjCIdc7fWeWtrN+8azAth/nVKpVu0HManvA75rCYC/wf
-         XPXRg4XOmu8+Z1GgOaWhNmLDRDwwMaw6AMcTe8SC4kKdJQ8NK4Rv9DOLF8EFGvYWyxGA
-         nHWW1gbVu76NuyPUyWENGfsj5XSsXRBlifoMx89Qkpmxt6iSWG8HkQGHQMt2MCB+/Tyr
-         vCTXU9VNaPR4QjYkn6SGojE2UTlAvgunNYkpg6xcgkjcGagPIlUG/2/Uo/PiT7P46vMQ
-         Mu8EXFd4BUlyT5gq12j5n/DE7z5sAKJZTMaLtveqbWjY/LHhA8zWjNn/M29le+M0x1Js
-         k4Tw==
-X-Gm-Message-State: AC+VfDwMy+Wc9dsD9CEHTzKSSlpIRtsQFfMw0s82j3/6sohZGSIEW+nP
-        APlwtxhWLEKROW7ROU4cIC6LszI5r8f0HrykmFU=
-X-Google-Smtp-Source: ACHHUZ7TdYtD+zVewjIOT2sGaCk7+PbnnMLXaZudQ+mEk/0hTUmTJwN8LBhq2z8rb+zxieE2tZ7DVg==
-X-Received: by 2002:a05:600c:b54:b0:3f6:2ee:6993 with SMTP id k20-20020a05600c0b5400b003f602ee6993mr4796841wmr.4.1686492225188;
-        Sun, 11 Jun 2023 07:03:45 -0700 (PDT)
+        bh=nlpWIDDoTMDzC7Jc26F5UZA31B7vwDV86ZZqiF0p8S8=;
+        b=ikum5M945RK0SqgSPi4cCP6QmSveJJaOY0PH90P89lmyP5QkYnApE/hLZgKjMkyf8B
+         xJm119BpruBHTV9Mb044cqi4KnWG668I2qvcfTl9TH8Dj7yzLxWfZ1WGNlybiHjCtE3L
+         fSoLIE/kSvvVl6Ra9MZLTkhAq/u34JUUv9QA8GbT/ocuf8zuXFG+8g9O0qmAtVRaGFJJ
+         V3Tu+YfgMYkRe1JY2YZUuBK60auJgWNZKjcMCZ236BHDk4Hpd0Ayq7pTcHSlLB0JRhSG
+         Ft3ipZO5aDm54DS6IuR2USugaQaFnaXWmhn3GEO3Qq2UMPqE+lxwXkiKh9VRAJztG3Eq
+         n0xw==
+X-Gm-Message-State: AC+VfDzRmUEei17bjyPL68mhoCB5j8FwcoTPTP8fbYspJlKTVHFva1Gg
+        LTNCxtx7bpt2+t0kIqB+V5i5xnyLD+m03PGwq10=
+X-Google-Smtp-Source: ACHHUZ7ZtrepGg/0CXk4VvUKy3egFlmxyh4B1KAZmnxYJ0V46kzjVmSCasnCjJjS4n7aYIOzNlrT0g==
+X-Received: by 2002:a05:600c:2147:b0:3f4:16bc:bd19 with SMTP id v7-20020a05600c214700b003f416bcbd19mr5526149wml.23.1686492226979;
+        Sun, 11 Jun 2023 07:03:46 -0700 (PDT)
 Received: from localhost.localdomain ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id h17-20020a05600c28d100b003f080b2f9f4sm8567222wmd.27.2023.06.11.07.03.43
+        by smtp.gmail.com with ESMTPSA id h17-20020a05600c28d100b003f080b2f9f4sm8567222wmd.27.2023.06.11.07.03.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jun 2023 07:03:44 -0700 (PDT)
+        Sun, 11 Jun 2023 07:03:45 -0700 (PDT)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Richard Leitner <richard.leitner@skidata.com>,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        Rob Herring <robh@kernel.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: [PATCH 02/26] nvmem: imx-ocotp: Reverse MAC addresses on all i.MX derivates
-Date:   Sun, 11 Jun 2023 15:03:06 +0100
-Message-Id: <20230611140330.154222-3-srinivas.kandagatla@linaro.org>
+Subject: [PATCH 03/26] dt-bindings: nvmem: brcm,nvram: add #nvmem-cell-cells for MACs
+Date:   Sun, 11 Jun 2023 15:03:07 +0100
+Message-Id: <20230611140330.154222-4-srinivas.kandagatla@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230611140330.154222-1-srinivas.kandagatla@linaro.org>
 References: <20230611140330.154222-1-srinivas.kandagatla@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -74,73 +75,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
+From: Rafał Miłecki <rafal@milecki.pl>
 
-Not just i.MX8M, but all i.MX6/7 (and subtypes) need to reverse the
-MAC address read from fuses. Exceptions are i.MX6SLL and i.MX7ULP which
-do not support ethernet at all.
+Broadcom's NVRAM contains MACs for Ethernet interfaces. Those MACs are
+usually base addresses that are also used for calculating other MACs.
 
-Fixes: d0221a780cbc ("nvmem: imx-ocotp: add support for post processing")
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Tested-by: Richard Leitner <richard.leitner@skidata.com> # imx6q
+For example if a router vendor decided to use gmac0 it most likely
+programmed NVRAM of each unit with a proper "et0macaddr" value. That is
+a base.
+
+Ethernet interface is usually connected to switch port. Switch usually
+includes few LAN ports and a WAN port. MAC of WAN port gets calculated
+as relative address to the interface one. Offset varies depending on
+device model.
+
+Wireless MACs may also need to be calculated using relevant offsets.
+
+To support all those scenarios let MAC NVMEM cells be referenced with an
+index specifying MAC offset. Disallow additionalProperties while at it.
+
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+Reviewed-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 ---
- drivers/nvmem/imx-ocotp.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ .../devicetree/bindings/nvmem/brcm,nvram.yaml     | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/drivers/nvmem/imx-ocotp.c b/drivers/nvmem/imx-ocotp.c
-index fcea9c04be96..ab556c011f3e 100644
---- a/drivers/nvmem/imx-ocotp.c
-+++ b/drivers/nvmem/imx-ocotp.c
-@@ -97,7 +97,6 @@ struct ocotp_params {
- 	unsigned int bank_address_words;
- 	void (*set_timing)(struct ocotp_priv *priv);
- 	struct ocotp_ctrl_reg ctrl;
--	bool reverse_mac_address;
- };
+diff --git a/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml b/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
+index 36def7128fca..13412af7f046 100644
+--- a/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
++++ b/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
+@@ -36,14 +36,29 @@ properties:
+   et0macaddr:
+     type: object
+     description: First Ethernet interface's MAC address
++    properties:
++      "#nvmem-cell-cells":
++        description: The first argument is a MAC address offset.
++        const: 1
++    additionalProperties: false
  
- static int imx_ocotp_wait_for_busy(struct ocotp_priv *priv, u32 flags)
-@@ -545,7 +544,6 @@ static const struct ocotp_params imx8mq_params = {
- 	.bank_address_words = 0,
- 	.set_timing = imx_ocotp_set_imx6_timing,
- 	.ctrl = IMX_OCOTP_BM_CTRL_DEFAULT,
--	.reverse_mac_address = true,
- };
+   et1macaddr:
+     type: object
+     description: Second Ethernet interface's MAC address
++    properties:
++      "#nvmem-cell-cells":
++        description: The first argument is a MAC address offset.
++        const: 1
++    additionalProperties: false
  
- static const struct ocotp_params imx8mm_params = {
-@@ -553,7 +551,6 @@ static const struct ocotp_params imx8mm_params = {
- 	.bank_address_words = 0,
- 	.set_timing = imx_ocotp_set_imx6_timing,
- 	.ctrl = IMX_OCOTP_BM_CTRL_DEFAULT,
--	.reverse_mac_address = true,
- };
+   et2macaddr:
+     type: object
+     description: Third Ethernet interface's MAC address
++    properties:
++      "#nvmem-cell-cells":
++        description: The first argument is a MAC address offset.
++        const: 1
++    additionalProperties: false
  
- static const struct ocotp_params imx8mn_params = {
-@@ -561,7 +558,6 @@ static const struct ocotp_params imx8mn_params = {
- 	.bank_address_words = 0,
- 	.set_timing = imx_ocotp_set_imx6_timing,
- 	.ctrl = IMX_OCOTP_BM_CTRL_DEFAULT,
--	.reverse_mac_address = true,
- };
- 
- static const struct ocotp_params imx8mp_params = {
-@@ -569,7 +565,6 @@ static const struct ocotp_params imx8mp_params = {
- 	.bank_address_words = 0,
- 	.set_timing = imx_ocotp_set_imx6_timing,
- 	.ctrl = IMX_OCOTP_BM_CTRL_8MP,
--	.reverse_mac_address = true,
- };
- 
- static const struct of_device_id imx_ocotp_dt_ids[] = {
-@@ -624,8 +619,7 @@ static int imx_ocotp_probe(struct platform_device *pdev)
- 	imx_ocotp_nvmem_config.size = 4 * priv->params->nregs;
- 	imx_ocotp_nvmem_config.dev = dev;
- 	imx_ocotp_nvmem_config.priv = priv;
--	if (priv->params->reverse_mac_address)
--		imx_ocotp_nvmem_config.layout = &imx_ocotp_layout;
-+	imx_ocotp_nvmem_config.layout = &imx_ocotp_layout;
- 
- 	priv->config = &imx_ocotp_nvmem_config;
+ unevaluatedProperties: false
  
 -- 
 2.25.1
