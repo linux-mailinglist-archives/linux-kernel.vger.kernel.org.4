@@ -2,127 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46A5672C6C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:00:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72F3172C6DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:04:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234527AbjFLOAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 10:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46394 "EHLO
+        id S236534AbjFLOEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 10:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233871AbjFLOAp (ORCPT
+        with ESMTP id S232397AbjFLOEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 10:00:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41CA71B4
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 06:59:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686578380;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GKBfBKTeVMZb+dt8ekYcaXAyT4nwQrKdK59Oup6XbjM=;
-        b=G36P5n/+PwztKP0/O9iJc6P3m3+tsrp/GerrjZdk9xUaxU/31MVfgDcNB1mYXEZ0aFDBk2
-        FrL0AyX5BLKab29WPxUG4yHGDn3yR+t44f4g0kkcS6nYq9aKGLrlchx6VnP8lJJgDH1v9P
-        KzKx2WJxuMKd2BZ8k7/4zeALXT575xk=
-Received: from mail-vk1-f197.google.com (mail-vk1-f197.google.com
- [209.85.221.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-493-LwIUAKDzMZ-o8x7E8OwVSg-1; Mon, 12 Jun 2023 09:59:33 -0400
-X-MC-Unique: LwIUAKDzMZ-o8x7E8OwVSg-1
-Received: by mail-vk1-f197.google.com with SMTP id 71dfb90a1353d-4644c388212so105129e0c.0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 06:59:24 -0700 (PDT)
+        Mon, 12 Jun 2023 10:04:38 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA761AC;
+        Mon, 12 Jun 2023 07:04:38 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-3f9b8f1c2fdso29193681cf.2;
+        Mon, 12 Jun 2023 07:04:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686578677; x=1689170677;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8Nqk7opXz56V7mIpqm5KsGyT1vRoRc3GpMXEUFtGyL8=;
+        b=qM2YAKXVzfa2JaU+hOd5qfotCsKnAverw6L4epM9AS9ysVYswvh9HvnppUhzzBxjoU
+         OcsZl4cEW9fgB/kc6IyqHN0mWij4ps37xol30hDagJE/VyrUKgEvvWNQFQhKLSTty9RS
+         ChfTT3yp1DP1yrg34c05tKRfPcp5GtJxuPWpOs9wu+0z8XQ/Kqw0bFVRMIK/gYibPAtY
+         XyItUrHqIqoYawupgLcCVCm+oUoh14WZtIdQQsEgOIpFHoS408rZH5XT/oakJDy0iDwS
+         BH6dSVVyRONYDL4N+roBkjdLprotQVSFu+886KbZIBkrUDpSL9pl5WW9y5y4nrxTBzVA
+         nWkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686578363; x=1689170363;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GKBfBKTeVMZb+dt8ekYcaXAyT4nwQrKdK59Oup6XbjM=;
-        b=H9pBYthLSoOKNu8S2kZf3xYmgieKId9jO6oEuM00c52dOfQAb88bXVgYgP9JrnFGJG
-         xm+PsxsWcAQxaLMa2f27kJEb5oIzaqIKBkXQ/tkVal8ju85r0BJMpyXG/BMmGA5+7kv8
-         j/595FjNRlDasKQsSrrP+4HYsiswEYCkDobD3sgL+8Hm4S5yodlMqx5ho7XhFq+FdYJt
-         1wCWcQpSA7n5tJ9PqjqL4Sxg8vbWHGVkVRB2hpTgR3MbjwHe/hOZxA/CLhSXNK1e8XfC
-         79MAMidSrtNvvpp4Pa4C4KhuKe6US0ZA2Ta4SU6BJbVoAs2NVzd+kA+UA5eG8Sc43z2h
-         5SGw==
-X-Gm-Message-State: AC+VfDzsUhVecdlGzlp92mShd8VXGl55aTMFb6HxzNCt/SrKSssjpMZK
-        /bsgiiyFzQ8Ql6tDbmzcgn7oiPFT67ayVcR6kL9EeQ1Q8DnI2s5FsJ0KGwaloJrCgvhZ9RRk7Kq
-        +v54eNjmZmqxSCtwuVwLyOf8H
-X-Received: by 2002:ac5:c858:0:b0:457:3a45:38d2 with SMTP id g24-20020ac5c858000000b004573a4538d2mr3539469vkm.1.1686578363649;
-        Mon, 12 Jun 2023 06:59:23 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5TlkHrlSDfBgWo12KHaFjakxWZQ6CGtAWvz+eNVHFMNBM4VurWIdxp0q7dBJcjBu3sxsTD9w==
-X-Received: by 2002:ac5:c858:0:b0:457:3a45:38d2 with SMTP id g24-20020ac5c858000000b004573a4538d2mr3539453vkm.1.1686578363405;
-        Mon, 12 Jun 2023 06:59:23 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id t18-20020a0cea32000000b005ef54657ea0sm3221971qvp.126.2023.06.12.06.59.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 06:59:22 -0700 (PDT)
-Date:   Mon, 12 Jun 2023 09:59:19 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, akpm@linux-foundation.org,
-        hannes@cmpxchg.org, mhocko@suse.com, josef@toxicpanda.com,
-        jack@suse.cz, ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
-        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
-        apopple@nvidia.com, ying.huang@intel.com, david@redhat.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        viro@zeniv.linux.org.uk, brauner@kernel.org,
-        pasha.tatashin@soleen.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Subject: Re: [PATCH v2 2/6] mm: handle swap page faults under VMA lock if
- page is uncontended
-Message-ID: <ZIcktx8DPYxtV2Sd@x1n>
-References: <20230609005158.2421285-1-surenb@google.com>
- <20230609005158.2421285-3-surenb@google.com>
- <ZIOKxoTlRzWQtQQR@x1n>
- <ZIONJQGuhYiDnFdg@casper.infradead.org>
- <ZIOPeNAy7viKNU5Z@x1n>
- <CAJuCfpFAh2KOhpCQ-4b+pzY+1GxOGk=eqj6pBj04gc_8eqB6QQ@mail.gmail.com>
+        d=1e100.net; s=20221208; t=1686578677; x=1689170677;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8Nqk7opXz56V7mIpqm5KsGyT1vRoRc3GpMXEUFtGyL8=;
+        b=jDZ7lSXfH7GHbUhlY6AGAOVXVq1rjtT6Sr1IaFoIj8nMYsMPc5p54rPHG1QkBfpgN/
+         kSZQq7uqwFxG4rb+jfIuRN6OAXC48UpTbBUqfs4zvctfzEoMSMEDwDvK5xjZBhw71lC3
+         a2NqKHWKOJcRgWOjmroePG3004POMeL+A9V/LoQcG4dFSpaOk/ohagtQ0ASkCb26z8mi
+         L19JTIeIw72NUTOIwRaKpaWJTTNEcYiII/o5A8c8ZLvhfUsS98mJoVEJQpat8FSwcr6W
+         ONFo41ph9Amf3XE/J0L2Sh/WdHHszAC4GIXvTtPGj/taskN8eExjaOt8aanAFjZJRJvC
+         iCdw==
+X-Gm-Message-State: AC+VfDwlPCdVZI4WPsRK1AbdJEJCqGoZhCeqCtiVW55jhY9W976OBO9I
+        XbC9mUSLtFRlXwPA9XUyKf8uC39LSTRzPrgzPW8=
+X-Google-Smtp-Source: ACHHUZ6CYvg10zoi9HIkb5vFNGGCLbHuRoSN1oR+9KoFwQC8JaYcEXHz6j+v+/QBdVrhCGleFWwCy3z8rKKcBsoqLb4=
+X-Received: by 2002:a05:6214:e4d:b0:625:b849:f86 with SMTP id
+ o13-20020a0562140e4d00b00625b8490f86mr8613739qvc.14.1686578677154; Mon, 12
+ Jun 2023 07:04:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJuCfpFAh2KOhpCQ-4b+pzY+1GxOGk=eqj6pBj04gc_8eqB6QQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230612122926.107333-1-herve.codina@bootlin.com> <20230612122926.107333-4-herve.codina@bootlin.com>
+In-Reply-To: <20230612122926.107333-4-herve.codina@bootlin.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 12 Jun 2023 17:04:01 +0300
+Message-ID: <CAHp75VcwaHEzZxpGiVNtrDT=2kYqEiLOALUm_KFb+036XYO1wQ@mail.gmail.com>
+Subject: Re: [PATCH v3 03/12] iio: inkern: Check error explicitly in iio_channel_read_max()
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 03:34:34PM -0700, Suren Baghdasaryan wrote:
-> On Fri, Jun 9, 2023 at 1:45 PM Peter Xu <peterx@redhat.com> wrote:
-> >
-> > On Fri, Jun 09, 2023 at 09:35:49PM +0100, Matthew Wilcox wrote:
-> > > On Fri, Jun 09, 2023 at 04:25:42PM -0400, Peter Xu wrote:
-> > > > >  bool __folio_lock_or_retry(struct folio *folio, struct mm_struct *mm,
-> > > > >                    unsigned int flags)
-> > > > >  {
-> > > > > + /* Can't do this if not holding mmap_lock */
-> > > > > + if (flags & FAULT_FLAG_VMA_LOCK)
-> > > > > +         return false;
-> > > >
-> > > > If here what we need is the page lock, can we just conditionally release
-> > > > either mmap lock or vma lock depending on FAULT_FLAG_VMA_LOCK?
-> > >
-> > > See patch 5 ...
-> >
-> > Just reaching.. :)
-> >
-> > Why not in one shot, then?
-> 
-> I like small incremental changes, but I can squash them if that helps
-> in having a complete picture.
+On Mon, Jun 12, 2023 at 3:30=E2=80=AFPM Herve Codina <herve.codina@bootlin.=
+com> wrote:
+>
+> The current implementation returns the error code as part of the
+> default switch case.
+> This can lead to returning an incorrect positive value in case of
+> iio_avail_type enum entries evolution.
+>
+> In order to avoid this case, be more strict in error checking.
 
-Yes that'll be appreciated.  IMHO keeping changing semantics of
-FAULT_FLAG_VMA_LOCK for the folio lock function in the same small series is
-confusing.
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
--- 
-Peter Xu
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> ---
+>  drivers/iio/inkern.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/iio/inkern.c b/drivers/iio/inkern.c
+> index 872fd5c24147..f738db9a0c04 100644
+> --- a/drivers/iio/inkern.c
+> +++ b/drivers/iio/inkern.c
+> @@ -858,6 +858,9 @@ static int iio_channel_read_max(struct iio_channel *c=
+han,
+>                 val2 =3D &unused;
+>
+>         ret =3D iio_channel_read_avail(chan, &vals, type, &length, info);
+> +       if (ret < 0)
+> +               return ret;
+> +
+>         switch (ret) {
+>         case IIO_AVAIL_RANGE:
+>                 switch (*type) {
+> @@ -888,7 +891,7 @@ static int iio_channel_read_max(struct iio_channel *c=
+han,
+>                 return 0;
+>
+>         default:
+> -               return ret;
+> +               return -EINVAL;
+>         }
+>  }
+>
+> --
+> 2.40.1
+>
 
+
+--=20
+With Best Regards,
+Andy Shevchenko
