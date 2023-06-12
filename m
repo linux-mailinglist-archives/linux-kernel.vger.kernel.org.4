@@ -2,95 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B3472CC01
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:04:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 584B472CC03
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:05:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237241AbjFLREa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 13:04:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50918 "EHLO
+        id S237292AbjFLRFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 13:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237235AbjFLREZ (ORCPT
+        with ESMTP id S237169AbjFLRFs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 13:04:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B39E7D
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:04:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 12 Jun 2023 13:05:48 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 956D9E7B
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:05:47 -0700 (PDT)
+Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AFE8462BD0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 17:04:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39262C433D2;
-        Mon, 12 Jun 2023 17:04:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686589463;
-        bh=1VyguFfPpZTsnsIDdebfEZyQpsQaNIQOvtAByML+2og=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=IOf7sfePVU0WZP3YNWSxfmX6UGVS1YGrybYaFAUrOT+JakvWR+6PcxoXNP9iN6HpW
-         Npq7Jsw1MIjuWJ68MJgZt2y3Db+pxIEf1xVRlrXGdujBoHf8nOHeDL+nantwCTCNWS
-         u4hPSMydyAonZ9/iUvmRiMHXz/vlQoyP8yYz4Ck5qn6sSmqGyei4D3JuVG3Ag6T9gi
-         zZCJ8ZpVnnWetxzY5OpPczRZsLSjORecVMyfKUwJh563OZW8vAGuKfXaOCEWSHRsqp
-         s7l6cs+h7auMd5VzWqBJ4bE7jQ4YG5b5Xp7s00VLfhssD0HeyK1RLXvAbaOyLQNOV2
-         HtXbafNfX2O7A==
-From:   Mark Brown <broonie@kernel.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de
-In-Reply-To: <20230611203559.827168-1-u.kleine-koenig@pengutronix.de>
-References: <20230611203559.827168-1-u.kleine-koenig@pengutronix.de>
-Subject: Re: [PATCH] regulator: Switch two more i2c drivers back to use
- .probe()
-Message-Id: <168658946195.83451.5950252461383064153.b4-ty@kernel.org>
-Date:   Mon, 12 Jun 2023 18:04:21 +0100
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2D2E41EC008F;
+        Mon, 12 Jun 2023 19:05:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1686589546;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=iI3sumeUQaq1tz9CtWmsfggsFnd9M6EvrVjxwtdM0MI=;
+        b=F5iSPj2vDiaQzibJ+SRJ52T8+s0DK2jqmiDJqAhh4ll0LQ8hsIaceOwWaqE1OtRtd/3EUy
+        xxMX1HG5rzL5q4yeYYsmS2X1PPjNYza5gpQhZ6DWx1uFHeVSGwuVfBmCuE8SjKeQynBHWf
+        yDA//Rf4lN8RWM6upmuBT0aCKA1uIog=
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+        header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Twelo9z9i5Cc; Mon, 12 Jun 2023 17:05:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+        t=1686589544; bh=iI3sumeUQaq1tz9CtWmsfggsFnd9M6EvrVjxwtdM0MI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N00XqUTFv0qbMoKSk8ph1ucz5CIm0Ey/54kt1ZtzwKao2nOAq6jh8wXzDWt11aOoO
+         pehsrhEr+UCMudZIlyyYgaWrf/J3QrwlDqHr3G/ilYuR1tQjdDUEKviMXvLvlW2baj
+         nkvMuNUl1rp49eUoi1SkE0XxTtLO2Ru+tB99s4gAOSgvfhOatX3SAjGrsrbA7mz3iz
+         CQzLfnMo0AwpG/DVFyD+gjaxPefAjhgNJBmEaPWM8EnCt0yG1LUSERB5pGdyKvhbBG
+         4q78WQ+lsRTUv+zL/D7l0yNb6+3z8lI8CXfj6CSY42VTZurDw5p2WfKgoj0E+dEhhg
+         cwm1drRyEiI3i234YWi+1eMoQAvfNVVvLfRE36MCjHEwCP4XzVriRZwcMx1N5c6JrA
+         81FqOoyUgTEK23hlW51rVDQgDnDjSas0Iy/qA1GuojeZd3C1vy7FNF10oogddycZxU
+         ehOLcRIyJbKjcamW1swWeD6CPqhAZuPHo4K+wzu6/Oo1MxXa9ienJHxjEgVA4oenur
+         ppBsTkhviS9RacWXKF2Fe+bZjhtMaAbLOJlT6eqdQbxWRsllOaUcCVY52cGsynmC2e
+         jz2FOwnKlIE9UZfYysm9qUGMmP52JO6NnMmu67e1VCY0MQJOm/3FcH9QSCsk5+Q2a8
+         0SY9y1/ly6VjJJfNVWidMYm8=
+Received: from zn.tnic (p200300ea971dc5f0329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971d:c5f0:329c:23ff:fea6:a903])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+        (No client certificate requested)
+        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DCE2240E0035;
+        Mon, 12 Jun 2023 17:05:36 +0000 (UTC)
+Date:   Mon, 12 Jun 2023 19:05:32 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Breno Leitao <leitao@debian.org>
+Cc:     pawan.kumar.gupta@linux.intel.com,
+        Thomas Gleixner <tglx@linutronix.de>, paul@paul-moore.com,
+        leit@meta.com, x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpu/bugs: Disable CPU mitigations at compilation time
+Message-ID: <20230612170532.GOZIdQXLYZCGKZQFXv@fat_crate.local>
+References: <20230203120615.1121272-1-leitao@debian.org>
+ <87352z7xld.ffs@tglx>
+ <ZIcVoIAQbRl1GTo5@gmail.com>
+ <20230612133230.GJZIcebkHxd8QJs0Dv@fat_crate.local>
+ <ZIchqLWousxkCqyB@gmail.com>
+ <20230612135301.GKZIcjPY0xvbNsiVNd@fat_crate.local>
+ <ZIcoss0r/898/CpH@gmail.com>
+ <20230612160807.GNZIdC58KQ8IibZjrt@fat_crate.local>
+ <ZIdJs0F8Ow4sV27r@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.13-dev-bfdf5
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZIdJs0F8Ow4sV27r@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 11 Jun 2023 22:35:59 +0200, Uwe Kleine-König wrote:
-> The previous conversion back to .probe done in commit 964e186547b2
-> ("regulator: Switch i2c drivers back to use .probe()") was done based on
-> v6.3. Since then two more drivers were added which need to be convert
-> back in the same way before eventually .probe_new() can be dropped from
-> struct i2c_driver.
-> 
-> 
-> [...]
+On Mon, Jun 12, 2023 at 09:37:07AM -0700, Breno Leitao wrote:
+> I am not sure if these bugs (MDS, TAA) are speculations related. Pawan
+> could help us here.
 
-Applied to
+"Microarchitectural Data Sampling is a hardware vulnerability which allows
+unprivileged speculative access..."
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+"TAA is a hardware vulnerability that allows unprivileged speculative
+access to data which is available in various CPU..."
 
-Thanks!
+That's all in the tree.
 
-[1/1] regulator: Switch two more i2c drivers back to use .probe()
-      commit: d692cc619247addcb9336c220ea1face91b365f0
+Your grep no workie?
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+-- 
+Regards/Gruss,
+    Boris.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+https://people.kernel.org/tglx/notes-about-netiquette
