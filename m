@@ -2,123 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F265D72BC43
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E408672BC46
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:27:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234531AbjFLJ1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 05:27:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
+        id S234580AbjFLJ1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 05:27:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234703AbjFLJ0U (ORCPT
+        with ESMTP id S234608AbjFLJ0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 05:26:20 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD30344A9
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:20:23 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f7e4953107so64735e9.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:20:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686561622; x=1689153622;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=otJCdOhglUPqvCsRPiFCc48HcC5AAnpHmKD+QmYUjHs=;
-        b=Dyg6HMndIPLYMWfoGxl7n7NRxVRskxhBZOR6fEyrFNYbBgYFaP4qntq25Vrz9J2cft
-         zO+O4s577L+Coq4d1iky56D+LQ8F2yx6JBs25J17shPG3TcVaPhkEcCvT538duQbaOEY
-         Z0Iva64KK+4dPO0/ILD3vUYguScD+An4uEzXhZN7n6oAa0FVMIRmzVR4oTMD5VMKxzWR
-         FpsgzwcnpUWmZZGs0vBNVmdbIQ9ZFIq4PUHBvbwnmreK9YsSb9jjUDMYwrdEWDp3lBgV
-         NT8J81CPtLdpY7RyfOJpBDMIwKj/Vgt6r1t6rN4SAddonIJk8brpu5UF4FVUoDX06gJm
-         F8Vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686561622; x=1689153622;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=otJCdOhglUPqvCsRPiFCc48HcC5AAnpHmKD+QmYUjHs=;
-        b=Q6l5PhneTFvSmVTUaJupdazQ9Oknr1ZUaBX+wm7WmGHucRWFfU7jLfp2R9PeyBsMr1
-         upWr/UeuM+YUt6iba5m1xGqWIHDCoKBU6CuJikSppZwEqe4M0xEbyW5+6WGUHR6ayz5h
-         Hzp12wmdqRFqR1/FknhN0FovC0omT36eZja18Bz9G4iyVGBHwzlp5JJFAIaTqSLbT+NR
-         WnBFdSadcJRqGQHZFkNkwfyu6ClKuS7JqDkpfZ1gl8Dn4nHcpl6rr3htTVKj8klPnzL8
-         wCD9Y9NbctxM4Tm19HaELuSKc3hOFzBOJB4BUs7tKuee3JHGxpeDDKmnpuzASXIFJy+x
-         2n5g==
-X-Gm-Message-State: AC+VfDx52KD4vYbL992O7kOcOZJuVoLPOLcTP50e8iEPFYv0ldw8mtMa
-        SLX6sWttUo4hJvPWEiWnmXCvBg==
-X-Google-Smtp-Source: ACHHUZ4mNCOxZlSL9PDghMOkP1a2TYFkupsco7D0NYsOtKN5IjO/YfGXsn81zyhwoYWot+Qg5iB49g==
-X-Received: by 2002:a05:600c:3d86:b0:3f7:e463:a0d6 with SMTP id bi6-20020a05600c3d8600b003f7e463a0d6mr326701wmb.0.1686561622064;
-        Mon, 12 Jun 2023 02:20:22 -0700 (PDT)
-Received: from google.com (44.232.78.34.bc.googleusercontent.com. [34.78.232.44])
-        by smtp.gmail.com with ESMTPSA id x2-20020adfec02000000b002ffbf2213d4sm11974482wrn.75.2023.06.12.02.20.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 02:20:21 -0700 (PDT)
-Date:   Mon, 12 Jun 2023 09:20:16 +0000
-From:   Mostafa Saleh <smostafa@google.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     Oliver Upton <oliver.upton@linux.dev>, maz@kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, tabba@google.com,
-        kaleshsingh@google.com, catalin.marinas@arm.com,
-        yuzenghui@huawei.com, suzuki.poulose@arm.com, james.morse@arm.com
-Subject: Re: [PATCH] KVM: arm64: Use different pointer authentication keys
- for pKVM
-Message-ID: <ZIbjULC2p5aTZu8w@google.com>
-References: <20230516141531.791492-1-smostafa@google.com>
- <ZHEa+HAixbYijQTA@linux.dev>
- <ZHSJ38WATzgJF7SR@google.com>
- <20230608215525.GA2742@willie-the-truck>
+        Mon, 12 Jun 2023 05:26:35 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B7644B7;
+        Mon, 12 Jun 2023 02:20:32 -0700 (PDT)
+Date:   Mon, 12 Jun 2023 09:20:29 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1686561630;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=I5KgXB4wJLlgssofluB7u2dvkHMqsZiOXCz9D9xcZ48=;
+        b=RMjP6Qmzg52VUlHvm4UA6ucKB/GD/YAfMUf8MPEZudYERla/vK4DEoeiZTf1P0cR/PHC4H
+        FA17avXC9ijcmKnqViwhrv2WTcvGSb84eG0ZYdq3Mw/nUT0fvZBd/BJJG98Q+2IaUQXb+r
+        gddr4ybTjKBxwQhMYbH71zfWLZs3X9CEYcC6sy3CGjDUcU1BkrebI1jBs/yDAFLCavvPbc
+        0WXyO+5uVLR3F34R9YD55QXmXZqKYNUnZkapNu05VT2mIhRzKgsD7NUBNadFj31KnDXB7i
+        rb3NoreGuA8djDnOPZcQ4mxOyvIWRPVrTfyyKe4NioNwjOsMMRG1IpDa5+Hrzw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1686561630;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=I5KgXB4wJLlgssofluB7u2dvkHMqsZiOXCz9D9xcZ48=;
+        b=h8VjlF5aQ29oldHSUKV3lvM21tViNK4aRrvL6LjEXkitW+hdoMvBcapC6os5c+mby9qjwV
+        yMbdDKW/0Zd86xBA==
+From:   "tip-bot2 for Borislav Petkov (AMD)" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/microcode] x86/microcode: Add a "microcode=" command line option
+Cc:     "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230605141332.25948-2-bp@alien8.de>
+References: <20230605141332.25948-2-bp@alien8.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230608215525.GA2742@willie-the-truck>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <168656162970.404.6477920187705031691.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 10:55:26PM +0100, Will Deacon wrote:
-> On Mon, May 29, 2023 at 11:17:51AM +0000, Mostafa Saleh wrote:
-> > On Fri, May 26, 2023 at 08:47:52PM +0000, Oliver Upton wrote:
-> > > On Tue, May 16, 2023 at 02:15:31PM +0000, Mostafa Saleh wrote:
-> > > > When the kernel is compiled with CONFIG_ARM64_PTR_AUTH_KERNEL, it
-> > > > uses Armv8.3-Pauth for return address protection for the kernel code
-> > > > including nvhe code in EL2.
-> > > > 
-> > > > Same keys are used in both kernel(EL1) and nvhe code(EL2), this is
-> > > > fine for nvhe but not when running in protected mode(pKVM) as the host
-> > > > can't be trusted.
-> > > 
-> > > But we trust it enough to hand pKVM a fresh set of keys before firing
-> > > off? I understand there is some degree of initialization required to get
-> > > pKVM off the ground, but I question in this case if key handoff is
-> > > strictly necessary.
-> > >
-> > > There are potentially other sources of random directly available at EL2,
-> > > such as the SMCCC TRNG ABI or FEAT_RNG. Should pKVM prefer one of these
-> > > random implementations and only fall back to host-provided keys if
-> > > absolutely necessary?
-> > > 
-> > According to my understanding, the kernel is still completely trusted at
-> > this point (it sets the initial page table for the hypervisor), so I
-> > believe it should be fine to trust it for ptrauth keys. However, I agree,
-> > it would be better if the hypervisor can get its own keys through
-> > firmware/hardware if supported. I will add this in V2.
-> 
-> I appreciate the sentiment, but I think we should avoid adding additional
-> complexity here if it adds no security benefit. If nothing else, it adds
-> pointless overhead, but beyond that it gives the false illusion of a
-> security boundary.
-> 
-> Prior to deprivilege, the kernel can write to the hypervisor text, modify
-> its stage-1 page-table and change its data values. I think the pointer
-> auth keys are the least of our worries if it's compromised...
+The following commit has been merged into the x86/microcode branch of tip:
 
-Thanks a lot Will for explaining this.
+Commit-ID:     4a7349239418d78193e8d328f5eebd14a3f77bcd
+Gitweb:        https://git.kernel.org/tip/4a7349239418d78193e8d328f5eebd14a3f77bcd
+Author:        Borislav Petkov (AMD) <bp@alien8.de>
+AuthorDate:    Thu, 18 May 2023 03:02:29 +02:00
+Committer:     Borislav Petkov (AMD) <bp@alien8.de>
+CommitterDate: Mon, 12 Jun 2023 11:02:52 +02:00
 
-Oliver, what do you think for V2, about it including FEAT_RNG/TRNG in EL2?
+x86/microcode: Add a "microcode=" command line option
 
-Thanks,
-Mostafa
+It will be used to control microcode loader behavior. Add the first
+chicken bit: to control whether the AMD side should load microcode late
+on all logical SMT threads.
+
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Link: https://lore.kernel.org/r/20230605141332.25948-2-bp@alien8.de
+---
+ Documentation/admin-guide/kernel-parameters.txt |  7 +++-
+ arch/x86/kernel/cpu/microcode/amd.c             |  5 +-
+ arch/x86/kernel/cpu/microcode/core.c            | 44 ++++++++++++++++-
+ arch/x86/kernel/cpu/microcode/internal.h        | 16 ++++++-
+ 4 files changed, 71 insertions(+), 1 deletion(-)
+ create mode 100644 arch/x86/kernel/cpu/microcode/internal.h
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 9e5bab2..b88ff02 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -3228,6 +3228,13 @@
+ 
+ 	mga=		[HW,DRM]
+ 
++	microcode=	[X86] Control the behavior of the microcode
++			loader. Available options:
++
++			no_late_all - do not load on all SMT threads on
++			AMD. Loading on all logical threads is enabled by
++			default.
++
+ 	min_addr=nn[KMG]	[KNL,BOOT,IA-64] All physical memory below this
+ 			physical address is ignored.
+ 
+diff --git a/arch/x86/kernel/cpu/microcode/amd.c b/arch/x86/kernel/cpu/microcode/amd.c
+index 87208e4..76b5306 100644
+--- a/arch/x86/kernel/cpu/microcode/amd.c
++++ b/arch/x86/kernel/cpu/microcode/amd.c
+@@ -36,6 +36,8 @@
+ #include <asm/cpu.h>
+ #include <asm/msr.h>
+ 
++#include "internal.h"
++
+ static struct equiv_cpu_table {
+ 	unsigned int num_entries;
+ 	struct equiv_cpu_entry *entry;
+@@ -700,7 +702,8 @@ static enum ucode_state apply_microcode_amd(int cpu)
+ 	rdmsr(MSR_AMD64_PATCH_LEVEL, rev, dummy);
+ 
+ 	/* need to apply patch? */
+-	if (rev > mc_amd->hdr.patch_id) {
++	if ((rev > mc_amd->hdr.patch_id) ||
++	    (rev == mc_amd->hdr.patch_id && !(control & LATE_ALL_THREADS))) {
+ 		ret = UCODE_OK;
+ 		goto out;
+ 	}
+diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
+index 3afcf3d..5f3185d 100644
+--- a/arch/x86/kernel/cpu/microcode/core.c
++++ b/arch/x86/kernel/cpu/microcode/core.c
+@@ -40,11 +40,15 @@
+ #include <asm/cmdline.h>
+ #include <asm/setup.h>
+ 
++#include "internal.h"
++
+ #define DRIVER_VERSION	"2.2"
+ 
+ static struct microcode_ops	*microcode_ops;
+ static bool dis_ucode_ldr = true;
+ 
++unsigned long control = LATE_ALL_THREADS;
++
+ bool initrd_gone;
+ 
+ LIST_HEAD(microcode_cache);
+@@ -522,8 +526,32 @@ static ssize_t processor_flags_show(struct device *dev,
+ 	return sprintf(buf, "0x%x\n", uci->cpu_sig.pf);
+ }
+ 
++static ssize_t control_show(struct device *dev,
++			     struct device_attribute *attr, char *buf)
++{
++	return sprintf(buf, "0x%lx\n", control);
++}
++
++static ssize_t control_store(struct device *dev,
++			     struct device_attribute *attr,
++			     const char *buf, size_t count)
++{
++	unsigned long val;
++
++	if (kstrtoul(buf, 0, &val) < 0)
++		return -ERANGE;
++
++	if (val & CONTROL_FLAGS_MASK)
++		return -EINVAL;
++
++	control = val;
++
++	return count;
++}
++
+ static DEVICE_ATTR_RO(version);
+ static DEVICE_ATTR_RO(processor_flags);
++static DEVICE_ATTR_ADMIN_RW(control);
+ 
+ static struct attribute *mc_default_attrs[] = {
+ 	&dev_attr_version.attr,
+@@ -622,6 +650,7 @@ static struct attribute *cpu_root_microcode_attrs[] = {
+ #ifdef CONFIG_MICROCODE_LATE_LOADING
+ 	&dev_attr_reload.attr,
+ #endif
++	&dev_attr_control.attr,
+ 	NULL
+ };
+ 
+@@ -683,3 +712,18 @@ static int __init microcode_init(void)
+ }
+ fs_initcall(save_microcode_in_initrd);
+ late_initcall(microcode_init);
++
++static int __init parse_cmdline_param(char *str)
++{
++	if (!str)
++		return 0;
++
++	if (*str == '=')
++		str++;
++
++	if (!strcmp(str, "no_late_all"))
++		control &= ~LATE_ALL_THREADS;
++
++        return 1;
++}
++__setup("microcode", parse_cmdline_param);
+diff --git a/arch/x86/kernel/cpu/microcode/internal.h b/arch/x86/kernel/cpu/microcode/internal.h
+new file mode 100644
+index 0000000..5e3c5fc
+--- /dev/null
++++ b/arch/x86/kernel/cpu/microcode/internal.h
+@@ -0,0 +1,16 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __X86_MICROCODE_INTERNAL_H__
++#define __X86_MICROCODE_INTERNAL_H__
++
++extern unsigned long control;
++
++/* Loader control flags. */
++enum control_flags {
++	__LATE_ALL_THREADS = 0,
++	__CONTROL_FLAGS_NUM,
++};
++
++#define LATE_ALL_THREADS	BIT_ULL(__LATE_ALL_THREADS)
++#define CONTROL_FLAGS_MASK	~(BIT_ULL(__CONTROL_FLAGS_NUM) - 1)
++
++#endif /* __X86_MICROCODE_INTERNAL_H__ */
