@@ -2,143 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 120C072BCFB
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:48:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 010C972BD0B
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233727AbjFLJsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 05:48:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59336 "EHLO
+        id S233473AbjFLJuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 05:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234667AbjFLJre (ORCPT
+        with ESMTP id S235489AbjFLJtq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 05:47:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A1A524A
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:34:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686562382;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=j2zik9I6wtN0hN5lDN65C1IiqrhISpY0AugfFqCf2aE=;
-        b=EgE8UGyOoPhPfQP2mFHd3ulGQNziNlnkv+SOQ32drFAuSNy4PBi9+z9BWjks433iNvQ2ad
-        113h39HtXJXQcKv8nQQGpPPzxcCjAKwRLJdopAFsnYXEaIVxG7NTk3j3dJRKwcdrVpfxV4
-        //BEZDQJbtF1rDlBOn39DF7t2N5P9W4=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-481-xsj9x_AkObSIXBv9LqtriA-1; Mon, 12 Jun 2023 05:33:01 -0400
-X-MC-Unique: xsj9x_AkObSIXBv9LqtriA-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f7e7cfcae4so25594025e9.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:33:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686562380; x=1689154380;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j2zik9I6wtN0hN5lDN65C1IiqrhISpY0AugfFqCf2aE=;
-        b=Ci99ebkDVmLAT5BaLP479j+unm7jAuzg2OB/aneJWlRxADCg65Y3yXVsQFiIbzEt+F
-         yiVlemab3EaYr4BFTAcTLiu7mqFAhKDqj01ApGBAeS0RIp9uz0pgne7/FmbhZ90ISWBQ
-         fwC0gJi0kaZ33EDL3xY3+n8C/16cbw9Jp89am9/ZJgslp24ywsJ2uUr5lmIh0fWA5qw2
-         V9Tex+kte5Es9LPDt57+qCbFXS2psBuweVB5J8AvAmyzhYqOM16E2++MzhTLDCCsMrgh
-         GrfmcbNACeYBtVQUKnxVR/2FWGNNe17XAHzueezayAUbR2pnM5dRpG1+0pQ6FcphV1an
-         h7Aw==
-X-Gm-Message-State: AC+VfDw3BXu9UXVylTiX6SESHBlgZ9JalnVDoBOOwXoyMbMBguCCravn
-        jOOmgmKtElXfnSMCqlH3UYipRUoXG3S0d5yRdX2LCQBZ9ezAxBIzaFJonBFFPo/vkO+kD+/V3wc
-        RCNtEm2aSwiSpzkAZwwiCnSdv
-X-Received: by 2002:a1c:6a04:0:b0:3f6:143:7c4b with SMTP id f4-20020a1c6a04000000b003f601437c4bmr7194239wmc.6.1686562380176;
-        Mon, 12 Jun 2023 02:33:00 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4z8ERkPWmOW1qx+Uef6lYQlwqsm4Uqr2iyzMwAUJ3cV4HfE2QxGeOBqFvLloo/xVA2Hvg5Vw==
-X-Received: by 2002:a1c:6a04:0:b0:3f6:143:7c4b with SMTP id f4-20020a1c6a04000000b003f601437c4bmr7194224wmc.6.1686562379843;
-        Mon, 12 Jun 2023 02:32:59 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c74e:1600:4f67:25b2:3e8c:2a4e? (p200300cbc74e16004f6725b23e8c2a4e.dip0.t-ipconnect.de. [2003:cb:c74e:1600:4f67:25b2:3e8c:2a4e])
-        by smtp.gmail.com with ESMTPSA id f25-20020a7bcd19000000b003f7ff520a14sm10762632wmj.22.2023.06.12.02.32.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 02:32:59 -0700 (PDT)
-Message-ID: <3f943c78-bc8b-fd2f-50b1-5bd3501bc878@redhat.com>
-Date:   Mon, 12 Jun 2023 11:32:58 +0200
+        Mon, 12 Jun 2023 05:49:46 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A728276E9
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:35:18 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q8dvJ-0007lJ-Kv; Mon, 12 Jun 2023 11:33:17 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q8dvI-006r1G-Db; Mon, 12 Jun 2023 11:33:16 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q8dvH-00DTIu-Ns; Mon, 12 Jun 2023 11:33:15 +0200
+Date:   Mon, 12 Jun 2023 11:33:15 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Anson Huang <anson.huang@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: pwm: drop unneeded quotes
+Message-ID: <20230612093315.gbabepl5qg44xf5d@pengutronix.de>
+References: <20230609140709.64655-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] mm: vmscan: mark kswapd_run() and kswapd_stop() __meminit
-Content-Language: en-US
-To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20230606121813.242163-1-linmiaohe@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230606121813.242163-1-linmiaohe@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ywa6wsg5cd34k7qa"
+Content-Disposition: inline
+In-Reply-To: <20230609140709.64655-1-krzysztof.kozlowski@linaro.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06.06.23 14:18, Miaohe Lin wrote:
-> Add __meminit to kswapd_run() and kswapd_stop() to ensure they're default
-> to __init when memory hotplug is not enabled.
-> 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> ---
->   include/linux/swap.h | 4 ++--
->   mm/vmscan.c          | 4 ++--
->   2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/linux/swap.h b/include/linux/swap.h
-> index 2ddbfd85f6c7..b5f6f2916de1 100644
-> --- a/include/linux/swap.h
-> +++ b/include/linux/swap.h
-> @@ -460,8 +460,8 @@ static inline bool node_reclaim_enabled(void)
->   void check_move_unevictable_folios(struct folio_batch *fbatch);
->   void check_move_unevictable_pages(struct pagevec *pvec);
->   
-> -extern void kswapd_run(int nid);
-> -extern void kswapd_stop(int nid);
-> +extern void __meminit kswapd_run(int nid);
-> +extern void __meminit kswapd_stop(int nid);
->   
->   #ifdef CONFIG_SWAP
->   
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index 43dc5c90abbf..a8881571e0ed 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -7871,7 +7871,7 @@ unsigned long shrink_all_memory(unsigned long nr_to_reclaim)
->   /*
->    * This kswapd start function will be called by init and node-hot-add.
->    */
-> -void kswapd_run(int nid)
-> +void __meminit kswapd_run(int nid)
->   {
->   	pg_data_t *pgdat = NODE_DATA(nid);
->   
-> @@ -7892,7 +7892,7 @@ void kswapd_run(int nid)
->    * Called by memory hotplug when all memory in a node is offlined.  Caller must
->    * be holding mem_hotplug_begin/done().
->    */
-> -void kswapd_stop(int nid)
-> +void __meminit kswapd_stop(int nid)
->   {
->   	pg_data_t *pgdat = NODE_DATA(nid);
->   	struct task_struct *kswapd;
 
-kswapd_stop() is only called with CONFIG_MEMORY_HOTPLUG, so I'm 
-wondering if we even want to compiled that without CONFIG_MEMORY_HOTPLUG ...
+--ywa6wsg5cd34k7qa
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Anyhow,
+Hello,
 
-Acked-by: David Hildenbrand <david@redhat.com>
+On Fri, Jun 09, 2023 at 04:07:09PM +0200, Krzysztof Kozlowski wrote:
+> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+> checking for this can be enabled in yamllint.
 
--- 
-Cheers,
+in my book quoting everything instead of dropping quotes is the better
+option. While that policy adds more quotes, it prevents surprises like:
 
-David / dhildenb
+	$ yaml2json << EOF
+	> countrycodes:
+	>  - de
+	>  - fr
+	>  - no
+	>  - pl
+	> EOF
+	{
+	  "countrycodes": [
+	    "de",
+	    "fr",
+	    false,
+	    "pl"
+	  ]
+	}
 
+And if you use the "only-when-needed" rule of yamllint you have to write
+the above list as:
+
+	countrycodes:
+	 - de
+	 - fr
+	 - "no"
+	 - pl
+
+which is IMHO really ugly.
+
+Another culprit is "on" (which is used e.g. in github action workflows),
+so yamllint tells for example for
+https://github.com/pengutronix/microcom/blob/main/.github/workflows/build.y=
+ml:
+
+	  3:1       warning  truthy value should be one of [false, true]  (truthy)
+
+and there are still more surprises (e.g. version numbers might be
+subject to conversion to float). So at least in my bubble the general
+hint is to *always* quote strings. Note that required: true is also the
+default for yamllint's quoted-strings setting, proably for pitfalls like
+these.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--ywa6wsg5cd34k7qa
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSG5loACgkQj4D7WH0S
+/k6ArQf/b00Bh9jtwpjsQUidCR7aV3sXe4wGk2E2np3MSScx9uTV5nNd3PEwuDXA
+gyH3OxCa59XjEAv4ldnNRq0vzgzg/+C3QazJbBNgK52hrNNJWcq0qmEUEJb7s1Xo
+HwZuUlIBzijuWwXTganvs3MT8/gihXcJZFJh1pYpaBW1cAPIaOivtOVgBEkG8Clh
+1/MuNXFbwuOECYdB/+EVU/L18k0UvHzOcPMkoG8PiNe7Qlrc4SRoMHKoQ2ODTg+e
+KnajlqePGTyRrawgZYlyQikCpnCR8RIEfuVe+kpM3c6bU6nXXCituhHEJqW0Cetv
+O3CieA77s+5NvHqazJ19xF+pYDaVPg==
+=r9PT
+-----END PGP SIGNATURE-----
+
+--ywa6wsg5cd34k7qa--
