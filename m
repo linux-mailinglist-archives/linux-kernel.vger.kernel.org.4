@@ -2,72 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D096372BCD2
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC9F472BCD7
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232955AbjFLJge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 05:36:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54800 "EHLO
+        id S235321AbjFLJiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 05:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235983AbjFLJft (ORCPT
+        with ESMTP id S233371AbjFLJh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 05:35:49 -0400
-Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B888744BD
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:27:24 -0700 (PDT)
-Received: by mail-ua1-x934.google.com with SMTP id a1e0cc1a2514c-78cc6ec0ba1so994943241.0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:27:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686562043; x=1689154043;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uZ61BYiIXs/pR8R9VQFSM1kThwJZ0JutFXTW/ak4uso=;
-        b=AUQCxG3wBHmv9pmMjQBJnT9Xpncoq8k5UbLZrY2bt/wTlAR/hHCpezu/OHdjDrixyT
-         9WhssEdeFlS858XcOSxOMSO5UrZJ/gI6E0EJ+Lq6+kDHCLsLghxa9jSnSKQldMggk0Uz
-         sCuhPW+O/v/2ipzPspiruiZfGcQYXlVx2VLhM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686562043; x=1689154043;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uZ61BYiIXs/pR8R9VQFSM1kThwJZ0JutFXTW/ak4uso=;
-        b=WCedwa/NVUMTfpkSbxVuyGZkYBBE4kYei4dLg4nbp1n6fX8ucLcxtjNulSJFFe17Zx
-         7N5zH2sRshHFGMeabinEEN0z2mdD6YaNv++Fulx/O4bDN4plkU2mv3mBeLG87cqUq23D
-         Z0Y6IZtKs6ypT/XMqDHNh+rBBgCT1xAS5iQaSNMhnoH7WAusYrZ3dUtOnrfn4S80U5u2
-         sbh5QP6hbUqOT5D83IoVujsPBvmvv/KusrU4Zbm0XVuutntNXLu2DO8jd3Z3e3zXYv5I
-         SqGcsW4BG7qSa3YjEOfHZxkbaOQdsQ80SDCEQFyEaqXoq27o02SyxYchxdzDN946s7xA
-         0iMw==
-X-Gm-Message-State: AC+VfDxj1Lrjw4WjR0+sDtmwNDe0ym0rdhDgu8Umo9XbaDIndMGuJP/Q
-        /NGy7XGZuhAlQryl1mepyj19u1Ey/w400TusF7uwjg==
-X-Google-Smtp-Source: ACHHUZ63/0FutjMWIa2hW1hbOYJMT3/JrY6BNcAZ7xJddwUYYzpnmlEbrbSPTyWSd4ryo9nqj5JcASReEM40eYD/ShU=
-X-Received: by 2002:a1f:3f96:0:b0:44f:e32a:148 with SMTP id
- m144-20020a1f3f96000000b0044fe32a0148mr3013133vka.8.1686562043752; Mon, 12
- Jun 2023 02:27:23 -0700 (PDT)
+        Mon, 12 Jun 2023 05:37:28 -0400
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248326189
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:28:26 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:8f41:e69:ef53:9db3])
+        by michel.telenet-ops.be with bizsmtp
+        id 89UQ2A00B41JBE4069UQnQ; Mon, 12 Jun 2023 11:28:24 +0200
+Received: from geert (helo=localhost)
+        by ramsan.of.borg with local-esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1q8dqa-008cV2-D4;
+        Mon, 12 Jun 2023 11:28:24 +0200
+Date:   Mon, 12 Jun 2023 11:28:24 +0200 (CEST)
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     linux-kernel@vger.kernel.org
+cc:     linux-um@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: Build regressions/improvements in v6.4-rc6
+In-Reply-To: <20230612090911.1579029-1-geert@linux-m68k.org>
+Message-ID: <9c7f3e17-c1-1a3a-7e87-9b1ea25d9d7@linux-m68k.org>
+References: <CAHk-=wgmbjQu3bVSa5JJhEymeQhkr7N3cjg-CoNLVituUnfW8w@mail.gmail.com> <20230612090911.1579029-1-geert@linux-m68k.org>
 MIME-Version: 1.0
-References: <20230608075651.3214540-1-wenst@chromium.org> <ce04685b7c4840b683add0bdd4404da6@AcuMS.aculab.com>
- <CAGXv+5EtdhkMq916LLOfpz8ok_xump5tv+oeNBvPq-_3-93oqQ@mail.gmail.com> <0929093384864ff99c78800029ff5d76@AcuMS.aculab.com>
-In-Reply-To: <0929093384864ff99c78800029ff5d76@AcuMS.aculab.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Mon, 12 Jun 2023 17:27:12 +0800
-Message-ID: <CAGXv+5Hnrpv8kTU+0B9S4NyqALEz+DQOLfO3U7GwMZp9AoqLEw@mail.gmail.com>
-Subject: Re: [PATCH] regulator: Use bitfield values for range selectors
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        "linux-actions@lists.infradead.org" 
-        <linux-actions@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/mixed; boundary="8323329-85567032-1686562104=:2054603"
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,74 +43,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 3:48=E2=80=AFPM David Laight <David.Laight@aculab.c=
-om> wrote:
->
-> From: Chen-Yu Tsai
-> > Sent: 12 June 2023 04:39
-> >
-> > On Sun, Jun 11, 2023 at 1:10=E2=80=AFAM David Laight <David.Laight@acul=
-ab.com> wrote:
-> > >
-> > > From: Chen-Yu Tsai
-> > > > Sent: 08 June 2023 08:57
-> > > >
-> > > > Right now the regulator helpers expect raw register values for the =
-range
-> > > > selectors. This is different from the voltage selectors, which are
-> > > > normalized as bitfield values. This leads to a bit of confusion. Al=
-so,
-> > > > raw values are harder to copy from datasheets or match up with them=
-,
-> > > > as datasheets will typically have bitfield values.
-> > > >
-> > > > Make the helpers expect bitfield values, and convert existing users=
-.
-> > > > Include bitops.h explicitly for ffs(), and reorder the header inclu=
-de
-> > > > statements. While at it, also replace module.h with export.h, since=
- the
-> > > > only use is EXPORT_SYMBOL_GPL.
-> > > >
-> > > ...
-> > > >  static const unsigned int atc260x_ldo_voltage_range_sel[] =3D {
-> > > > -     0x0, 0x20,
-> > > > +     0x0, 0x1,
-> > > >  };
-> > >
-> > > Is there any way the change can be done so that un-edited
-> > > modules fail to compile?
-> > > Otherwise the whole thing is an accident waiting to happen.
-> >
-> > I think we could change the field name in the regulator description?
-> > But unsuspecting end users / developers might just edit the name and no=
-t
-> > see that the scheme has changed.
-> >
-> > Or we could add a sanity check at runtime that checks the values during
-> > regulator registration. How does that sound?
-> >
-> > Mark, is this something you'd like?
->
-> Can you change the name of the function the values are passed to?
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-    .set_voltage_sel =3D regulator_set_voltage_sel_pickable_regmap,
+--8323329-85567032-1686562104=:2054603
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8BIT
 
-This one, and
+On Mon, 12 Jun 2023, Geert Uytterhoeven wrote:
+> JFYI, when comparing v6.4-rc6[1] to v6.4-rc5[3], the summaries are:
+>  - build errors: +5/-6
 
-    .get_voltage_sel =3D regulator_get_voltage_sel_pickable_regmap,
+   + /kisskb/src/drivers/spi/spi-stm32-qspi.c: error: ‘op’ is used uninitialized [-Werror=uninitialized]:  => 523:27, 564:27
 
-which calls the helper regulator_range_selector_to_index() that actually
-uses the values.
+um-all{mod,yes}config
 
-Not sure how changing the helper names would help, or how it is different
-from changing the field name? The names are already quite long but spot
-on.
+Seen before
+(why did the type of quotes around 'op' in the compiler output change?)
 
-> Or maybe change the type to 'unsigned char' (assuming bit numbers
-> are small).
+   + /opt/cross/kisskb/br-mipsel-o32-full-2016.08-613-ge98b4dd/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/5.4.0/plugin/include/gimple.h: error: field ‘call_clobbered’ has incomplete type ‘pt_solution’:  => 284:22
+   + /opt/cross/kisskb/br-mipsel-o32-full-2016.08-613-ge98b4dd/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/5.4.0/plugin/include/gimple.h: error: field ‘call_used’ has incomplete type ‘pt_solution’:  => 283:22
+   + /opt/cross/kisskb/br-mipsel-o32-full-2016.08-613-ge98b4dd/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/5.4.0/plugin/include/gimple.h: error: ‘gimple_call_addr_fndecl’ was not declared in this scope; did you mean ‘gimple_call_set_fndecl’?:  => 2790:10
+   + /opt/cross/kisskb/br-mipsel-o32-full-2016.08-613-ge98b4dd/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/5.4.0/plugin/include/gimple.h: error: ‘is_gimple_reg’ was not declared in this scope; did you mean ‘is_gimple_assign’?:  => 2556:18
 
-That doesn't quite work if the range selector is in the upper four bits.
-The values would fit nevertheless.
+mipsel-gcc5/mips-allmodconfig
 
-ChenYu
+> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/858fd168a95c5b9669aac8db6c14a9aeab446375/ (151 out of 152 configs)
+> [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/9561de3a55bed6bdd44a12820ba81ec416e705a7/ (151 out of 152 configs)
+
+Gr{oetje,eeting}s,
+
+ 						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+ 							    -- Linus Torvalds
+--8323329-85567032-1686562104=:2054603--
