@@ -2,95 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A50172CE9C
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EDC972CE99
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:39:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235758AbjFLSjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 14:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57234 "EHLO
+        id S233767AbjFLSjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 14:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231951AbjFLSjj (ORCPT
+        with ESMTP id S231951AbjFLSjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 14:39:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82D75184
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:38:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686595131;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PDNy4tlrStiRvaxnMXQiYuj7Ms4xtJijYK3hHSTiCgM=;
-        b=H7qFbt2G/1zA73N8VaJp9BsN+Epzea+/mngAVCVxQtg0eLs7uU+UMfDKhxzzQEto5sEk+K
-        rnpk7My/iNBFXuxbcEjgmhp8coSZhe7nPmEQULO3vkrWRtS8qXZWWGkLWGzltbpBYiI6IS
-        t/SbjcM4qeUMi2jN5allx7QJWNysifw=
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
- [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-79-MHJYOlQhMFiGb0cJQ1nxbg-1; Mon, 12 Jun 2023 14:38:50 -0400
-X-MC-Unique: MHJYOlQhMFiGb0cJQ1nxbg-1
-Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-397f97f7966so3114343b6e.3
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:38:49 -0700 (PDT)
+        Mon, 12 Jun 2023 14:39:22 -0400
+Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42318E69
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:39:20 -0700 (PDT)
+Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-76c6c1b16d2so623138139f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:39:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686595129; x=1689187129;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PDNy4tlrStiRvaxnMXQiYuj7Ms4xtJijYK3hHSTiCgM=;
-        b=c8Q2Hjk133mUOkWuk4t3vwhBtSO690BE4EI/CrYFsYKjj0vIoi1/BQzKVvVIyyYca+
-         q2q2txxCPTKYUIxkHwGUauqIu6MPyLIdlLKG1l2ST957EUvzXSw7bLKuedwWLQZodeHy
-         XDQevtNTo+ju1Ylh5pYJu5h2weCbs2iFDP8g2AmnsPpPQBvbslEYXYGbrofHqk3MqBs8
-         IU/e/do7ujfPOkb4ZEtbI+C5pBTztwaFLbKr9Ssq7ZhzA1P1Fe+4ajRBWWSBgfnaQ2sj
-         DRCtallRc+b60gWKK+wemPTGAeoCrOmzCxUZrZQiHzBfEH1QLVmhGfwrDidOODoQF8E+
-         DiLA==
-X-Gm-Message-State: AC+VfDywsjk9heQ3pz38RwEcpVQOwWY9EBbi6+827LFrdG7fDJtBks2X
-        DQqB4px/yZ+jz7rfXtyoag6jrxaH99b01idrwgvgtKza9I8fqOEIisoZ5JLI4NRhj2j8KsQ/SPv
-        RBspRdTU5JasOuQycY3ug1NA0
-X-Received: by 2002:a05:6808:2090:b0:398:e4c:d5c2 with SMTP id s16-20020a056808209000b003980e4cd5c2mr6244353oiw.9.1686595129322;
-        Mon, 12 Jun 2023 11:38:49 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ658SXpBYoZENXQUCSYrl2GfGIsHYqLLYyBLRDeoekAAyN1j6b2/N1aFPTIPKR17gwesdJaxg==
-X-Received: by 2002:a05:6808:2090:b0:398:e4c:d5c2 with SMTP id s16-20020a056808209000b003980e4cd5c2mr6244337oiw.9.1686595129080;
-        Mon, 12 Jun 2023 11:38:49 -0700 (PDT)
-Received: from halaney-x13s ([2600:1700:1ff0:d0e0::45])
-        by smtp.gmail.com with ESMTPSA id t7-20020a815f07000000b0054f9e7fed7asm2663490ywb.137.2023.06.12.11.38.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 11:38:48 -0700 (PDT)
-Date:   Mon, 12 Jun 2023 13:38:39 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH 08/26] net: stmmac: dwmac-qcom-ethqos: use a helper
- variable for &pdev->dev
-Message-ID: <20230612183839.zcn5glnhptptmbt4@halaney-x13s>
-References: <20230612092355.87937-1-brgl@bgdev.pl>
- <20230612092355.87937-9-brgl@bgdev.pl>
+        d=1e100.net; s=20221208; t=1686595159; x=1689187159;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eON7cc11u21omHxGw6Vg5HORe0VkQcRAxXCDWieUCs4=;
+        b=Z4QWAZpDGKxzfpJxBR+kXv1hO0Ur5kx7W71s3KTp0BI4LeLRo7DCOIf39s/ONThxxV
+         0Ie8suZLzJhIzMAdQU+ZcRD4RGQbbObEy1UzfqQzzuNYluEpbXFNeMo7g12WZRUy19nj
+         ArhbaneRkJiGI6WSDOPyF+nkgYrkhcs5Kpg5xa15MgkgirCUpM3iz7cQIh71wHhnwXRL
+         LWsBvelW02haTwafBQ439Jne+14H/1Ocnc949PKkedv5eSElbXcesJSx7h8gpGv0jT2m
+         QNOv2+B72m8QjsUZclBqj9dwfxlA4VnlqFHS3DuYYmuIRVOWxuejcCFEsAkRq849z2Ls
+         k+9Q==
+X-Gm-Message-State: AC+VfDyp/arwGi+oGSOppbtNYPoFxvMZjfn2Zzo+R5k60p56ZLCqjirC
+        Tbhq+dho8R1Hee3/rwLSQThQRuFb0f6WKeEsTYUKF3RnLEO3
+X-Google-Smtp-Source: ACHHUZ7MqGYu/KAO2iw42HoWO85NlY5h+v56KszQcoRuI+0tMdJ6dpgyVd+hwNEY/zP8lm/3K5eUa4Q7vWN6jNNtf1n8P+5mn+/U
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230612092355.87937-9-brgl@bgdev.pl>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Received: by 2002:a02:330c:0:b0:41a:902f:70d0 with SMTP id
+ c12-20020a02330c000000b0041a902f70d0mr4580796jae.6.1686595159654; Mon, 12 Jun
+ 2023 11:39:19 -0700 (PDT)
+Date:   Mon, 12 Jun 2023 11:39:19 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005f0b2f05fdf309b3@google.com>
+Subject: [syzbot] [reiserfs?] kernel BUG in flush_journal_list
+From:   syzbot <syzbot+7cc52cbcdeb02a4b0828@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        paul@paul-moore.com, reiserfs-devel@vger.kernel.org,
+        roberto.sassu@huawei.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,110 +55,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 11:23:37AM +0200, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> Shrink code and avoid line breaks by using a helper variable for
-> &pdev->dev.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
->  .../stmicro/stmmac/dwmac-qcom-ethqos.c        | 48 ++++++++++---------
->  1 file changed, 26 insertions(+), 22 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-> index 28d2514a8795..e19d142630d3 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-> @@ -123,25 +123,26 @@ static void rgmii_updatel(struct qcom_ethqos *ethqos,
->  static void rgmii_dump(void *priv)
->  {
->  	struct qcom_ethqos *ethqos = priv;
-> +	struct device *dev = &ethqos->pdev->dev;
->  
-> -	dev_dbg(&ethqos->pdev->dev, "Rgmii register dump\n");
-> -	dev_dbg(&ethqos->pdev->dev, "RGMII_IO_MACRO_CONFIG: %x\n",
-> +	dev_dbg(dev, "Rgmii register dump\n");
-> +	dev_dbg(dev, "RGMII_IO_MACRO_CONFIG: %x\n",
->  		rgmii_readl(ethqos, RGMII_IO_MACRO_CONFIG));
-> -	dev_dbg(&ethqos->pdev->dev, "SDCC_HC_REG_DLL_CONFIG: %x\n",
-> +	dev_dbg(dev, "SDCC_HC_REG_DLL_CONFIG: %x\n",
->  		rgmii_readl(ethqos, SDCC_HC_REG_DLL_CONFIG));
-> -	dev_dbg(&ethqos->pdev->dev, "SDCC_HC_REG_DDR_CONFIG: %x\n",
-> +	dev_dbg(dev, "SDCC_HC_REG_DDR_CONFIG: %x\n",
->  		rgmii_readl(ethqos, SDCC_HC_REG_DDR_CONFIG));
-> -	dev_dbg(&ethqos->pdev->dev, "SDCC_HC_REG_DLL_CONFIG2: %x\n",
-> +	dev_dbg(dev, "SDCC_HC_REG_DLL_CONFIG2: %x\n",
->  		rgmii_readl(ethqos, SDCC_HC_REG_DLL_CONFIG2));
-> -	dev_dbg(&ethqos->pdev->dev, "SDC4_STATUS: %x\n",
-> +	dev_dbg(dev, "SDC4_STATUS: %x\n",
->  		rgmii_readl(ethqos, SDC4_STATUS));
-> -	dev_dbg(&ethqos->pdev->dev, "SDCC_USR_CTL: %x\n",
-> +	dev_dbg(dev, "SDCC_USR_CTL: %x\n",
->  		rgmii_readl(ethqos, SDCC_USR_CTL));
-> -	dev_dbg(&ethqos->pdev->dev, "RGMII_IO_MACRO_CONFIG2: %x\n",
-> +	dev_dbg(dev, "RGMII_IO_MACRO_CONFIG2: %x\n",
->  		rgmii_readl(ethqos, RGMII_IO_MACRO_CONFIG2));
-> -	dev_dbg(&ethqos->pdev->dev, "RGMII_IO_MACRO_DEBUG1: %x\n",
-> +	dev_dbg(dev, "RGMII_IO_MACRO_DEBUG1: %x\n",
->  		rgmii_readl(ethqos, RGMII_IO_MACRO_DEBUG1));
-> -	dev_dbg(&ethqos->pdev->dev, "EMAC_SYSTEM_LOW_POWER_DEBUG: %x\n",
-> +	dev_dbg(dev, "EMAC_SYSTEM_LOW_POWER_DEBUG: %x\n",
->  		rgmii_readl(ethqos, EMAC_SYSTEM_LOW_POWER_DEBUG));
->  }
->  
-> @@ -242,6 +243,7 @@ static const struct ethqos_emac_driver_data emac_v3_0_0_data = {
->  
->  static int ethqos_dll_configure(struct qcom_ethqos *ethqos)
->  {
-> +	struct device *dev = &ethqos->pdev->dev;
->  	unsigned int val;
->  	int retry = 1000;
->  
-> @@ -279,7 +281,7 @@ static int ethqos_dll_configure(struct qcom_ethqos *ethqos)
->  		retry--;
->  	} while (retry > 0);
->  	if (!retry)
-> -		dev_err(&ethqos->pdev->dev, "Clear CK_OUT_EN timedout\n");
-> +		dev_err(dev, "Clear CK_OUT_EN timedout\n");
->  
->  	/* Set CK_OUT_EN */
->  	rgmii_updatel(ethqos, SDCC_DLL_CONFIG_CK_OUT_EN,
-> @@ -296,7 +298,7 @@ static int ethqos_dll_configure(struct qcom_ethqos *ethqos)
->  		retry--;
->  	} while (retry > 0);
->  	if (!retry)
-> -		dev_err(&ethqos->pdev->dev, "Set CK_OUT_EN timedout\n");
-> +		dev_err(dev, "Set CK_OUT_EN timedout\n");
->  
->  	/* Set DDR_CAL_EN */
->  	rgmii_updatel(ethqos, SDCC_DLL_CONFIG2_DDR_CAL_EN,
-> @@ -322,12 +324,13 @@ static int ethqos_dll_configure(struct qcom_ethqos *ethqos)
->  
->  static int ethqos_rgmii_macro_init(struct qcom_ethqos *ethqos)
->  {
-> +	struct device *dev = &ethqos->pdev->dev;
->  	int phase_shift;
->  	int phy_mode;
->  	int loopback;
->  
->  	/* Determine if the PHY adds a 2 ns TX delay or the MAC handles it */
-> -	phy_mode = device_get_phy_mode(&ethqos->pdev->dev);
-> +	phy_mode = device_get_phy_mode(dev);
->  	if (phy_mode == PHY_INTERFACE_MODE_RGMII_ID ||
->  	    phy_mode == PHY_INTERFACE_MODE_RGMII_TXID)
->  		phase_shift = 0;
-> @@ -468,7 +471,7 @@ static int ethqos_rgmii_macro_init(struct qcom_ethqos *ethqos)
->  			      loopback, RGMII_IO_MACRO_CONFIG);
->  		break;
->  	default:
-> -		dev_err(&ethqos->pdev->dev,
-> +		dev_err(dev,
->  			"Invalid speed %d\n", ethqos->speed);
+Hello,
 
-nit: You could put this on the prior line now
+syzbot found the following issue on:
 
-With that in place, feel free to add:
+HEAD commit:    64569520920a Merge tag 'block-6.4-2023-06-09' of git://git..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=17a5713b280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7474de833c217bf4
+dashboard link: https://syzkaller.appspot.com/bug?extid=7cc52cbcdeb02a4b0828
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=121cc4ab280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15d27f95280000
 
-    Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/3239cb3f0553/disk-64569520.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/d90e42dca619/vmlinux-64569520.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/e0f88764a9f6/bzImage-64569520.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/c9148e64e137/mount_0.gz
 
+The issue was bisected to:
+
+commit d82dcd9e21b77d338dc4875f3d4111f0db314a7c
+Author: Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Fri Mar 31 12:32:18 2023 +0000
+
+    reiserfs: Add security prefix to xattr name in reiserfs_security_write()
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13f94263280000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=10054263280000
+console output: https://syzkaller.appspot.com/x/log.txt?x=17f94263280000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+7cc52cbcdeb02a4b0828@syzkaller.appspotmail.com
+Fixes: d82dcd9e21b7 ("reiserfs: Add security prefix to xattr name in reiserfs_security_write()")
+
+------------[ cut here ]------------
+kernel BUG at fs/reiserfs/journal.c:1452!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 4991 Comm: syz-executor756 Not tainted 6.4.0-rc5-syzkaller-00245-g64569520920a #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
+RIP: 0010:flush_journal_list+0x1c33/0x1c70 fs/reiserfs/journal.c:1452
+Code: dc 38 85 8c 48 c7 c1 c0 07 fc 8a e8 07 58 fb ff e8 d2 13 59 ff 0f 0b e8 cb 13 59 ff 0f 0b e8 c4 13 59 ff 0f 0b e8 bd 13 59 ff <0f> 0b e8 b6 13 59 ff 0f 0b e8 af 13 59 ff 0f 0b e8 a8 13 59 ff 0f
+RSP: 0018:ffffc900039ff5f0 EFLAGS: 00010293
+RAX: ffffffff82326be3 RBX: 0000000000000001 RCX: ffff888021d43b80
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffff82325675 R09: ffffed100e89fd06
+R10: 0000000000000000 R11: dffffc0000000001 R12: ffff8880744fe828
+R13: ffffc90003a930d8 R14: 1ffff1100e89fd05 R15: 1ffff9200075261d
+FS:  0000555555bbb300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000555555bc4628 CR3: 0000000019345000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ flush_older_journal_lists fs/reiserfs/journal.c:1318 [inline]
+ flush_journal_list+0xea7/0x1c70 fs/reiserfs/journal.c:1575
+ do_journal_end+0x3170/0x4770 fs/reiserfs/journal.c:4301
+ do_journal_release+0x47c/0x4d0 fs/reiserfs/journal.c:1940
+ journal_release+0x1f/0x30 fs/reiserfs/journal.c:1971
+ reiserfs_put_super+0x23b/0x4c0 fs/reiserfs/super.c:616
+ generic_shutdown_super+0x134/0x340 fs/super.c:500
+ kill_block_super+0x84/0xf0 fs/super.c:1407
+ deactivate_locked_super+0xa4/0x110 fs/super.c:331
+ cleanup_mnt+0x426/0x4c0 fs/namespace.c:1177
+ task_work_run+0x24a/0x300 kernel/task_work.c:179
+ ptrace_notify+0x2cd/0x380 kernel/signal.c:2371
+ ptrace_report_syscall include/linux/ptrace.h:411 [inline]
+ ptrace_report_syscall_exit include/linux/ptrace.h:473 [inline]
+ syscall_exit_work kernel/entry/common.c:252 [inline]
+ syscall_exit_to_user_mode_prepare kernel/entry/common.c:279 [inline]
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:284 [inline]
+ syscall_exit_to_user_mode+0x157/0x280 kernel/entry/common.c:297
+ do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f7d17bbaf57
+Code: 07 00 48 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 b8 a6 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff15fe9e38 EFLAGS: 00000202 ORIG_RAX: 00000000000000a6
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f7d17bbaf57
+RDX: 00007fff15fe9ef9 RSI: 000000000000000a RDI: 00007fff15fe9ef0
+RBP: 00007fff15fe9ef0 R08: 00000000ffffffff R09: 00007fff15fe9cd0
+R10: 0000555555bbc653 R11: 0000000000000202 R12: 00007fff15feaf60
+R13: 0000555555bbc5f0 R14: 00007fff15fe9e60 R15: 0000000000000001
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:flush_journal_list+0x1c33/0x1c70 fs/reiserfs/journal.c:1452
+Code: dc 38 85 8c 48 c7 c1 c0 07 fc 8a e8 07 58 fb ff e8 d2 13 59 ff 0f 0b e8 cb 13 59 ff 0f 0b e8 c4 13 59 ff 0f 0b e8 bd 13 59 ff <0f> 0b e8 b6 13 59 ff 0f 0b e8 af 13 59 ff 0f 0b e8 a8 13 59 ff 0f
+RSP: 0018:ffffc900039ff5f0 EFLAGS: 00010293
+RAX: ffffffff82326be3 RBX: 0000000000000001 RCX: ffff888021d43b80
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffff82325675 R09: ffffed100e89fd06
+R10: 0000000000000000 R11: dffffc0000000001 R12: ffff8880744fe828
+R13: ffffc90003a930d8 R14: 1ffff1100e89fd05 R15: 1ffff9200075261d
+FS:  0000555555bbb300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000000000045bd60 CR3: 0000000019345000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
