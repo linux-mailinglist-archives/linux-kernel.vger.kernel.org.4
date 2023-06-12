@@ -2,123 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE2172C29E
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:12:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C269972C2A2
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:13:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238330AbjFLLMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 07:12:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46662 "EHLO
+        id S238318AbjFLLNU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 12 Jun 2023 07:13:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237996AbjFLLMT (ORCPT
+        with ESMTP id S234917AbjFLLND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 07:12:19 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F3D5B91;
-        Mon, 12 Jun 2023 04:01:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=JWHXuE2v7XY71npjrwZZ/s4PnkNNKrmbBcmZ9MpyCUc=; b=Ugsm2iCmu+49vpJCbDSH3eFR13
-        6GUog7n5Q6IAxQfzp8M/UAga2BmCcqh27JOLQzrONBZ9wNcYa2+ODc2MF7T9kxESzQcffbbQd/Hja
-        ZOBkl0A4e+2WFfiYdYoYVQ4IsY+pxM0NSWi9PhzktV+RXaBXAvUoLFLpHXVkRs07m3yT2EI3I5xnR
-        Qe4KUX2ichqIgYbr0jiA5Td5enXcsHrpZ0k2HaYcPl6iBuOSCpf25QBRv/dOsWg0ZEy6DtFLKg/M9
-        RkfGiMO9+TJevYVckk/IISndMQgnVxN9LQwXQ1HphBawU90o2zSy77M1xUswzxeoBd15HMR7TXD+R
-        e7XyVXzg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:50682)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1q8fIE-0005aq-HQ; Mon, 12 Jun 2023 12:01:02 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1q8fIB-0004u0-G6; Mon, 12 Jun 2023 12:00:59 +0100
-Date:   Mon, 12 Jun 2023 12:00:59 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sam Shih <Sam.Shih@mediatek.com>
-Subject: Re: [PATCH net-next 3/8] net: ethernet: mtk_eth_soc: move MAX_DEVS
- in mtk_soc_data
-Message-ID: <ZIb6604WRJsevaWN@shell.armlinux.org.uk>
-References: <ZIUWxQ9H7hNSd6rJ@makrotopia.org>
+        Mon, 12 Jun 2023 07:13:03 -0400
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18687A93;
+        Mon, 12 Jun 2023 04:01:59 -0700 (PDT)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1q8fIS-00164Q-JP; Mon, 12 Jun 2023 13:01:16 +0200
+Received: from p57bd9486.dip0.t-ipconnect.de ([87.189.148.134] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1q8fIS-00087K-EX; Mon, 12 Jun 2023 13:01:16 +0200
+Message-ID: <cf997239b624431486ecba90a1f67d81d6c3fb13.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH v6] sh: avoid using IRQ0 on SH3/4
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 12 Jun 2023 13:01:15 +0200
+In-Reply-To: <f32a649e-3563-2485-234e-640f9dace105@omp.ru>
+References: <71105dbf-cdb0-72e1-f9eb-eeda8e321696@omp.ru>
+         <983d701befce7fc0010c53d09be84f5c330bdf45.camel@physik.fu-berlin.de>
+         <837a586e-5e76-7a5b-a890-403ce26ea51b@gmail.com>
+         <3fff103bcea3874cc7fd93c3a765ca642aa7f632.camel@physik.fu-berlin.de>
+         <f32a649e-3563-2485-234e-640f9dace105@omp.ru>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.48.3 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZIUWxQ9H7hNSd6rJ@makrotopia.org>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.148.134
+X-ZEDAT-Hint: PO
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 11, 2023 at 01:35:17AM +0100, Daniel Golle wrote:
-> @@ -1106,14 +1105,14 @@ struct mtk_eth {
->  	spinlock_t			tx_irq_lock;
->  	spinlock_t			rx_irq_lock;
->  	struct net_device		dummy_dev;
-> -	struct net_device		*netdev[MTK_MAX_DEVS];
-> -	struct mtk_mac			*mac[MTK_MAX_DEVS];
-> +	struct net_device		**netdev;
-> +	struct mtk_mac			**mac;
->  	int				irq[3];
->  	u32				msg_enable;
->  	unsigned long			sysclk;
->  	struct regmap			*ethsys;
->  	struct regmap			*infra;
-> -	struct phylink_pcs		*sgmii_pcs[MTK_MAX_DEVS];
-> +	struct phylink_pcs		**sgmii_pcs;
->  	struct regmap			*pctl;
->  	bool				hwlro;
->  	refcount_t			dma_refcnt;
+Hi Sergey!
 
-Is it really worth the extra allocations?
+On Mon, 2023-06-12 at 13:56 +0300, Sergey Shtylyov wrote:
+> > Applied to my for-next branch.
+> 
+>    Note that this was positioned as a fix.
 
-There's three pointers here per device. Let's talk about modern systems,
-so that's 8 bytes each, and if MTK_MAX_DEVS was two, that's 48 bytes in
-all. If we expanded the array to allow three, that would be 72 bytes.
+Hmm, it will be at least backported to the stable trees.
 
-If we allocate separately, then we're allocating 16 or 24 bytes three
-times depending on whether we want two or three of them.
+>    Where is your tree, BTW? :-)
 
-On arm64, I'm seeing the minimum slab size as 128 bytes, which means
-that's the minimum memory allocation. So, allocating three arrays will
-be 384 bytes in all, irrespective of whether we want two or three
-entries.
+https://git.kernel.org/pub/scm/linux/kernel/git/glaubitz/sh-linux.git
 
-That's a waste of about 5x the memory over just expanding the arrays!
-
-If you want to go down the route of dynamically allocating these, it
-would make better sense to combine them into a single structure that
-itself is an array, and thus requiring only one allocation. That
-reduces the wastage to about 56 bytes for three ports or 80 bytes
-for two.
-
-Thanks.
+Adrian
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
