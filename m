@@ -2,127 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7633C72BD0F
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC02E72BD17
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234153AbjFLJuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 05:50:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59248 "EHLO
+        id S233235AbjFLJvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 05:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231321AbjFLJuE (ORCPT
+        with ESMTP id S232833AbjFLJvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 05:50:04 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C8159E6
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:35:23 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1b1fdab9d68so218135ad.0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:35:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686562514; x=1689154514;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=29GQz4N1RuYE3YAahRNzsPBKqNihkCK7xJvEQHxVFP8=;
-        b=h5PXdrEXv3zRjkg/o1XhxWAB8orJ+9cw1KEkb5ZfVk54k7CDl58HC3ZT13QTFKKljA
-         9eyR3GgiTntD4bEDoiL8LfajNUDevgkS5amQXFd8KlyStubkhdnitkm9rN0DJ+/l+qMc
-         gKAhq08hcqqYwpLb6pNUFFLhk2ZIEmrh9c3G29zVIh04p+8SW9mHw4JP7I7rOgJlxJf4
-         CRfJhAqu9RlgloFE9x0RLhD7vOWOaqBSQef6WHA6qivk6f92tXVvTTXa24d7A+yEg84G
-         dBgYgR/IR6jiKQKRFqwB18u84Cf5RoMggL0CNWTi9cCY8ytvVP/ylbxOCFII3gTFDyEq
-         T3zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686562514; x=1689154514;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=29GQz4N1RuYE3YAahRNzsPBKqNihkCK7xJvEQHxVFP8=;
-        b=ixcRiKR30WreEZSm/oP0bbAtJtM7MvFJ7r2q92NkE5xgOKW9b1kTJFpSl6jc9rdIO+
-         Hjazt4Hj2BXe/2Dd2UkXmFhI3q/GjKJi08y8BVaW/XjU9z6HarIsK+GAAiOFeu8dFFRA
-         s36JUwIhG7JU3SSB2uz9XOIdsl+cuuGL/KxKkQ/GMSZGQ3Xnv+M2Wb/fPm05WawkC//U
-         IjAsm4bOnD7F38V2bKYW+QmP3/eQ8vxkEPodlRtwILVjFs9DBipSps9T/N6Lq5PobN0w
-         AbeZJvtAkjziXHE0fUyEMr+9yRTelb+H5O9SieoOYSehvV8lHTkz2OX+yTBk4+9APaLc
-         +4Fg==
-X-Gm-Message-State: AC+VfDwLz8wlbkf0UrdnkTAjzMjFV6Yp3QIOV/klzk00C9cwD21i7FVC
-        ufOsQYlOwMKOxQDAtj1wws3l5YSEhUWTmQoymRwhEg==
-X-Google-Smtp-Source: ACHHUZ6VSzU+28jYfHnh9y19cPzK91DF4XYimogK8gfXPdG66/VYDFjMtNdF9daKFihp7vh32DX1VfValI2Pu7/TNrw=
-X-Received: by 2002:a17:902:e849:b0:1b1:d1fe:e73 with SMTP id
- t9-20020a170902e84900b001b1d1fe0e73mr229259plg.8.1686562514065; Mon, 12 Jun
- 2023 02:35:14 -0700 (PDT)
+        Mon, 12 Jun 2023 05:51:08 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153798F7E
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:35:57 -0700 (PDT)
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35C9J1go017905;
+        Mon, 12 Jun 2023 09:35:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=eAd/ZbrDRWWwhMVabTIuXiM/RkSvKKwFTmIb0+8WaHQ=;
+ b=ET/lHAm+VdQl/AbvkIKN3V/eY0fT2XVttoZIyFHB8m0c84mdzZ3J61r/QgimBlIxJ+zU
+ Vd+71IBRKFDPe6xkfWacXEDyx8eeKU88Ht1aysNGyDIcXEM8h7PD1eY/11pZHUcD46eM
+ D9FXBQygpQg3JyArH6M9mmxdBLPZvGqy2erR3iDS7CYS4+Gt1J3UCtANDQ+CVP49fXAv
+ qq6Gia83Vu9hcqkR+UComjHWsvf1ryWT9n0c+sotxhSFE70Ek5S4pTMryo36tDIVBtK8
+ gF05Ue1CnUICiSUzAW8KdnCQQsuWnWvAgxskJZGVvMoD6/QcyEQeCRURmgUWFaqpyPjr nA== 
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r60m80bv8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Jun 2023 09:35:25 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35C4pESU007408;
+        Mon, 12 Jun 2023 09:35:23 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3r4gt4s0gk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Jun 2023 09:35:23 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35C9ZJah43450946
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 12 Jun 2023 09:35:19 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 809C32004E;
+        Mon, 12 Jun 2023 09:35:19 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EAA1A20040;
+        Mon, 12 Jun 2023 09:35:16 +0000 (GMT)
+Received: from tarunpc.in.ibm.com (unknown [9.199.157.25])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 12 Jun 2023 09:35:16 +0000 (GMT)
+From:   Tarun Sahu <tsahu@linux.ibm.com>
+To:     linux-mm@kvack.org
+Cc:     akpm@linux-foundation.org, muchun.song@linux.dev,
+        mike.kravetz@oracle.com, aneesh.kumar@linux.ibm.com,
+        willy@infradead.org, sidhartha.kumar@oracle.com,
+        gerald.schaefer@linux.ibm.com, linux-kernel@vger.kernel.org,
+        jaypatel@linux.ibm.com, tsahu@linux.ibm.com
+Subject: [PATCH] [mm-unstable] mm/folio: Replace set_compound_order with folio_set_order
+Date:   Mon, 12 Jun 2023 15:05:14 +0530
+Message-Id: <20230612093514.689846-1-tsahu@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: xO9wizThQfX7V6ZNG_HgVPesIQ6ZLK_J
+X-Proofpoint-GUID: xO9wizThQfX7V6ZNG_HgVPesIQ6ZLK_J
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <20230609131355.71130-1-jordyzomer@google.com> <20230609131355.71130-2-jordyzomer@google.com>
- <ZITKoBzJq+Y5Hi9Z@equinox>
-In-Reply-To: <ZITKoBzJq+Y5Hi9Z@equinox>
-From:   Jordy Zomer <jordyzomer@google.com>
-Date:   Mon, 12 Jun 2023 11:35:03 +0200
-Message-ID: <CABjM8Zf_xSNirWzMFVi816CuZAdRT-9edOpX0j526fQXNUm7xg@mail.gmail.com>
-Subject: Re: [PATCH 1/1] cdrom: Fix spectre-v1 gadget
-To:     Phillip Potter <phil@philpotter.co.uk>
-Cc:     linux-kernel@vger.kernel.org, pawan.kumar.gupta@linux.intel.com,
-        linux-block@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-12_06,2023-06-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ impostorscore=0 priorityscore=1501 malwarescore=0 spamscore=0
+ lowpriorityscore=0 mlxscore=0 clxscore=1015 mlxlogscore=565 suspectscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306120082
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks both! I assumed array_index_mask_nospec was the same as
-array_index_nospec. I'll send a V2 your way soon :)
+The patch [1] removed the need for special handling of order = 0
+in folio_set_order. Now, folio_set_order and set_compound_order becomes
+similar function. This patch removes the set_compound_order and uses
+folio_set_order instead.
 
+[1] https://lore.kernel.org/all/20230609183032.13E08C433D2@smtp.kernel.org/
 
-On Sat, Jun 10, 2023 at 9:10=E2=80=AFPM Phillip Potter <phil@philpotter.co.=
-uk> wrote:
->
-> On Fri, Jun 09, 2023 at 01:13:55PM +0000, Jordy Zomer wrote:
-> > This patch fixes a spectre-v1 gadget in cdrom.
-> > The gadget could be triggered by,
-> >  speculatviely bypassing the cdi->capacity check.
-> >
-> > Signed-off-by: Jordy Zomer <jordyzomer@google.com>
-> > ---
-> >  drivers/cdrom/cdrom.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
-> > index 416f723a2dbb..3c349bc0a269 100644
-> > --- a/drivers/cdrom/cdrom.c
-> > +++ b/drivers/cdrom/cdrom.c
-> > @@ -233,6 +233,7 @@
-> >
-> >  ----------------------------------------------------------------------=
----*/
-> >
-> > +#include "asm/barrier.h"
-> >  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> >
-> >  #define REVISION "Revision: 3.20"
-> > @@ -2329,6 +2330,8 @@ static int cdrom_ioctl_media_changed(struct cdrom=
-_device_info *cdi,
-> >       if (arg >=3D cdi->capacity)
-> >               return -EINVAL;
-> >
-> > +     arg =3D array_index_mask_nospec(arg, cdi->capacity);
-> > +
-> >       info =3D kmalloc(sizeof(*info), GFP_KERNEL);
-> >       if (!info)
-> >               return -ENOMEM;
-> > --
-> > 2.41.0.162.gfafddb0af9-goog
-> >
->
-> Hi Jordy,
->
-> Thanks for the patch, much appreciated. Sadly, as Pawan has already
-> pointed out, array_index_mask_nospec actually changes the behaviour of
-> this function, such that 'arg' would no longer be an array index.
->
-> In addition, it seems to have triggered the kernel test robot with an
-> alpha build error.
->
-> Regards,
-> Phil
+Signed-off-by: Tarun Sahu <tsahu@linux.ibm.com>
+---
+Moved folio_set_order to the top instead of moving prep_compound_head below
+to it so that git blame can show the proper change in prep_compound_head
+which is replacement of set_compound_order with folio_set_order.
+
+ include/linux/mm.h | 10 ----------
+ mm/internal.h      | 32 ++++++++++++++++----------------
+ 2 files changed, 16 insertions(+), 26 deletions(-)
+
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 27ce77080c79..61d75e0e5b40 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -1229,16 +1229,6 @@ static inline void folio_set_compound_dtor(struct folio *folio,
+ 
+ void destroy_large_folio(struct folio *folio);
+ 
+-static inline void set_compound_order(struct page *page, unsigned int order)
+-{
+-	struct folio *folio = (struct folio *)page;
+-
+-	folio->_folio_order = order;
+-#ifdef CONFIG_64BIT
+-	folio->_folio_nr_pages = 1U << order;
+-#endif
+-}
+-
+ /* Returns the number of bytes in this potentially compound page. */
+ static inline unsigned long page_size(struct page *page)
+ {
+diff --git a/mm/internal.h b/mm/internal.h
+index c59fe08c5b39..c460b2fde977 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -378,12 +378,27 @@ extern void memblock_free_pages(struct page *page, unsigned long pfn,
+ 					unsigned int order);
+ extern void __free_pages_core(struct page *page, unsigned int order);
+ 
++/*
++ * This will have no effect, other than possibly generating a warning, if the
++ * caller passes in a non-large folio.
++ */
++static inline void folio_set_order(struct folio *folio, unsigned int order)
++{
++	if (WARN_ON_ONCE(!order || !folio_test_large(folio)))
++		return;
++
++	folio->_folio_order = order;
++#ifdef CONFIG_64BIT
++	folio->_folio_nr_pages = 1U << order;
++#endif
++}
++
+ static inline void prep_compound_head(struct page *page, unsigned int order)
+ {
+ 	struct folio *folio = (struct folio *)page;
+ 
+ 	set_compound_page_dtor(page, COMPOUND_PAGE_DTOR);
+-	set_compound_order(page, order);
++	folio_set_order(folio, order);
+ 	atomic_set(&folio->_entire_mapcount, -1);
+ 	atomic_set(&folio->_nr_pages_mapped, 0);
+ 	atomic_set(&folio->_pincount, 0);
+@@ -419,21 +434,6 @@ extern void *memmap_alloc(phys_addr_t size, phys_addr_t align,
+ int split_free_page(struct page *free_page,
+ 			unsigned int order, unsigned long split_pfn_offset);
+ 
+-/*
+- * This will have no effect, other than possibly generating a warning, if the
+- * caller passes in a non-large folio.
+- */
+-static inline void folio_set_order(struct folio *folio, unsigned int order)
+-{
+-	if (WARN_ON_ONCE(!order || !folio_test_large(folio)))
+-		return;
+-
+-	folio->_folio_order = order;
+-#ifdef CONFIG_64BIT
+-	folio->_folio_nr_pages = 1U << order;
+-#endif
+-}
+-
+ #if defined CONFIG_COMPACTION || defined CONFIG_CMA
+ 
+ /*
+-- 
+2.31.1
+
