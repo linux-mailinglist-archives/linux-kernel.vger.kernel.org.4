@@ -2,217 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B92672BA5A
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 10:24:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A01772CB77
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 18:27:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231804AbjFLIYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 04:24:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59422 "EHLO
+        id S236322AbjFLQ12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 12:27:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbjFLIYD (ORCPT
+        with ESMTP id S233277AbjFLQ1Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 04:24:03 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6515DE67
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 01:23:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686558229; x=1718094229;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dZ3qa1vTh1///kMKUTog8YoVjT3GWLH4LbO4Sq0wlqk=;
-  b=N0/1gttRtXtYQdezO0OLcbvm6JGhQbHx+M6q4wngJr6orO2az8k+SPfR
-   ysMOODZFp2d3rLZXFVTIU18Km1m+vAIEFCpP6oUgeYkFP/Y0prZsFOKvq
-   GKJAdI9ipqhKBVsBCCAAJD1QpfDeWwDR5ELnKIQCzL4INM9w0+Ug7l4GJ
-   rcvsk5B/faYa4wiYHeCH8Q20r40P+FCYIPU4XsNzZr6XAq6ywWmAZSmyl
-   4kaGgh/auiIJb7F0ebrK7Xu9t7CoZguSlyTwgEijEWgFMrHBBAeQhWTsK
-   hj9si/WLPqRxVwWuAuxSNcZZw5E2bRH3zEbxKD4rdJ0kZyQi23I+CBB97
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="421572595"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="421572595"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 01:23:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="1041232251"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="1041232251"
-Received: from chenyu-dev.sh.intel.com ([10.239.62.164])
-  by fmsmga005.fm.intel.com with ESMTP; 12 Jun 2023 01:23:44 -0700
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>
-Cc:     Tim Chen <tim.c.chen@intel.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        Abel Wu <wuyun.abel@bytedance.com>,
-        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
-        Len Brown <len.brown@intel.com>,
-        Chen Yu <yu.chen.surf@gmail.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        linux-kernel@vger.kernel.org, Chen Yu <yu.c.chen@intel.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [RFC PATCH 4/4] sched/fair: Throttle the busiest group scanning in idle load balance
-Date:   Tue, 13 Jun 2023 00:19:13 +0800
-Message-Id: <e873d01af6340976ba8d344caf824fd122d0a93d.1686554037.git.yu.c.chen@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1686554037.git.yu.c.chen@intel.com>
-References: <cover.1686554037.git.yu.c.chen@intel.com>
+        Mon, 12 Jun 2023 12:27:25 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99DDF9
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 09:27:23 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-51458187be1so7984504a12.2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 09:27:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1686587242; x=1689179242;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q/KCMaMkVpL2TvKmUhvddPCRbVA7+Ro9TFJ9/0bVSYQ=;
+        b=DBjjI8tGBQJmsvuV68G7uwuS0d+9ZJj6MDCbyXVqlX165/bNf5/ieRafUeo55Aat6K
+         vpRMF/zsy4TnosMTKp4O8PUvEVOuTRZmf1QgccMsZjTjXTLkR4WMCRt7MyQdggWm52LE
+         SfBUe5sCUoProir4akrgM6w2i5ifPRPapkZss=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686587242; x=1689179242;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=q/KCMaMkVpL2TvKmUhvddPCRbVA7+Ro9TFJ9/0bVSYQ=;
+        b=YUx8ljtc8c8XBjztAClubMLubRM4ZmP6cUH+oDDcB21e8h15M+8S+mJ/LNfKVbx4bU
+         PpafJIzmDLWPTK4cxptb5bfOs9/gPn7A1hg+GKeAIGXDK5uW1XzFxYn/apXdkOJ7G5M+
+         6uq0Nmgzjm5KKMa2Fm/+XnTrnnNwDarHoRGmQzo0bEZZytLYL40Q12AdlzZOTzYkU4Go
+         dXuPd8Wup3eSePs+oW3JpNGGPQJV/C29deTCdex1p6H8CrobFRXgILH89ZVd4PesfoOm
+         Qne/+gNGghlFrpktJtt5xq+HWL+5flVVaiik00xZdzcLCMyoZWxFDOUcqzJrk5aCBNRj
+         ZESA==
+X-Gm-Message-State: AC+VfDx3ZvONn9kLrpoGPD9CCkyOv4ZQ+OKjL3wARmhwNlORBuXzF3dT
+        GdUZqPKBmELHFAKCvbDzYNKfKALqP2Wnf/bZmZ+OMX08
+X-Google-Smtp-Source: ACHHUZ5b18ITEIxTewzlDpbmTd6OzWEjW8CeFlZqzbXyl+8pslos3hvSAo6HeSdlJbUXGiAzJKENxQ==
+X-Received: by 2002:aa7:c30e:0:b0:514:91a9:fb88 with SMTP id l14-20020aa7c30e000000b0051491a9fb88mr4725041edq.42.1686587242073;
+        Mon, 12 Jun 2023 09:27:22 -0700 (PDT)
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com. [209.85.128.43])
+        by smtp.gmail.com with ESMTPSA id k10-20020aa7c38a000000b005027d31615dsm5205825edq.62.2023.06.12.09.27.21
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 09:27:21 -0700 (PDT)
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-3f6e1394060so32485385e9.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 09:27:21 -0700 (PDT)
+X-Received: by 2002:aa7:d14e:0:b0:50b:c3f0:fb9d with SMTP id
+ r14-20020aa7d14e000000b0050bc3f0fb9dmr5534541edo.41.1686586776585; Mon, 12
+ Jun 2023 09:19:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230612090713.652690195@infradead.org> <20230612093541.598260416@infradead.org>
+In-Reply-To: <20230612093541.598260416@infradead.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 12 Jun 2023 09:19:19 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh6JEk7wYECcMdbXHf5ST8PAkOyUXhE8x2kqT6to+Gn9Q@mail.gmail.com>
+Message-ID: <CAHk-=wh6JEk7wYECcMdbXHf5ST8PAkOyUXhE8x2kqT6to+Gn9Q@mail.gmail.com>
+Subject: Re: [PATCH v3 56/57] perf: Simplify perf_pmu_output_stop()
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     keescook@chromium.org, gregkh@linuxfoundation.org,
+        pbonzini@redhat.com, masahiroy@kernel.org, nathan@kernel.org,
+        ndesaulniers@google.com, nicolas@fjasle.eu,
+        catalin.marinas@arm.com, will@kernel.org, vkoul@kernel.org,
+        trix@redhat.com, ojeda@kernel.org, mingo@redhat.com,
+        longman@redhat.com, boqun.feng@gmail.com, dennis@kernel.org,
+        tj@kernel.org, cl@linux.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
+        42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
+        dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
+        john.johansen@canonical.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
+        rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
+        tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
+        luc.vanoostenryck@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Scanning the whole sched domain to find the busiest group is time costly
-during newidle_balance(). Limit the scan depth of newidle_balance()
-to only scan for a limited number of sched groups to find a relatively
-busy group, and pull from it. The scanning depth is suggested by
-the previous periodic load balance based on its overall utilization.
+This patch looks completely broken to me.
 
-Tested on top of sched/core v6.4-rc1,
-Sapphire Rapids with 2 x 56C/112T = 224 CPUs,
-cpufreq governor is set to performance, and C6 is disabled.
+You now do
 
-Overall some improvements were noticed when the system is underloaded
-from tbench/netperf, and no noticeable difference from hackbench/schbench.
-And the percentage of newidle_balance() has dropped accordingly.
+                if (err =3D=3D -EAGAIN)
+                        goto restart;
 
-[netperf]
+*within* the RCU-guarded section, and the "goto restart" will guard it agai=
+n.
 
-Launches $nr instances of:
-netperf -4 -H 127.0.0.1 -t $work_mode -c -C -l 100 &
+So no. Sending out a series of 57 patches that can have these kinds of
+bugs in it is not ok. By patch 56 (which just happened to come in
+fairly early for me), all sane peoples eyes have glazed over and they
+don't react to this kind of breakage any more.
 
-nr: 56, 112, 168, 224, 280, 336, 392, 448
-work_mode: TCP_RR UDP_RR
+                Linus
 
-throughput
-=======
-case                    load            baseline(std%)  compare%( std%)
-TCP_RR                  56-threads       1.00 (  1.98)  +18.45 ( 10.84)
-TCP_RR                  112-threads      1.00 (  3.79)   +0.92 (  4.72)
-TCP_RR                  168-threads      1.00 (  5.40)   -0.09 (  5.94)
-TCP_RR                  224-threads      1.00 ( 42.40)   -1.37 ( 41.42)
-TCP_RR                  280-threads      1.00 ( 15.95)   -0.30 ( 14.82)
-TCP_RR                  336-threads      1.00 ( 27.84)   -0.08 ( 28.91)
-TCP_RR                  392-threads      1.00 ( 41.85)   -0.56 ( 39.18)
-TCP_RR                  448-threads      1.00 ( 45.95)   +1.62 ( 52.54)
-UDP_RR                  56-threads       1.00 (  8.41)   +4.86 (  5.54)
-UDP_RR                  112-threads      1.00 (  9.11)   -0.68 (  9.92)
-UDP_RR                  168-threads      1.00 ( 10.48)   -0.15 ( 10.07)
-UDP_RR                  224-threads      1.00 ( 40.98)   -3.80 ( 40.01)
-UDP_RR                  280-threads      1.00 ( 23.50)   -0.53 ( 23.42)
-UDP_RR                  336-threads      1.00 ( 35.87)   +0.38 ( 33.43)
-UDP_RR                  392-threads      1.00 ( 49.47)   -0.27 ( 44.40)
-UDP_RR                  448-threads      1.00 ( 53.09)   +1.81 ( 59.98)
-
-[tbench]
-tbench -t 100 $job 127.0.0.1
-job: 56, 112, 168, 224, 280, 336, 392, 448
-
-throughput
-=========
-loopback                56-threads       1.00 (  1.12)   +1.41 (  0.43)
-loopback                112-threads      1.00 (  0.43)   +0.30 (  0.73)
-loopback                168-threads      1.00 (  6.88)   -5.73 (  7.74)
-loopback                224-threads      1.00 ( 12.99)  +31.32 (  0.22)
-loopback                280-threads      1.00 (  0.38)   -0.94 (  0.99)
-loopback                336-threads      1.00 (  0.13)   +0.06 (  0.18)
-loopback                392-threads      1.00 (  0.06)   -0.09 (  0.16)
-loopback                448-threads      1.00 (  0.10)   -0.13 (  0.18)
-
-[hackbench]
-
-hackbench -g $job --$work_type --pipe -l 200000 -s 100 -f 28
-and
-hackbench -g $job --$work_type -l 200000 -s 100 -f 28
-
-job: 1, 2, 4, 8
-work_type: process threads
-
-throughput
-=========
-case                    load            baseline(std%)  compare%( std%)
-process-pipe            1-groups         1.00 (  6.09)   +2.61 (  9.27)
-process-pipe            2-groups         1.00 (  7.15)   +6.22 (  5.59)
-process-pipe            4-groups         1.00 (  3.40)   +2.01 (  5.45)
-process-pipe            8-groups         1.00 (  0.44)   -1.57 (  0.70)
-process-sockets         1-groups         1.00 (  0.69)   +0.86 (  1.84)
-process-sockets         2-groups         1.00 (  5.04)   -6.31 (  0.60)
-process-sockets         4-groups         1.00 (  0.22)   +0.01 (  0.75)
-process-sockets         8-groups         1.00 (  0.49)   +0.46 (  0.49)
-threads-pipe            1-groups         1.00 (  1.96)   -4.86 (  6.90)
-threads-pipe            2-groups         1.00 (  3.02)   +0.21 (  2.72)
-threads-pipe            4-groups         1.00 (  4.83)   -1.08 (  6.41)
-threads-pipe            8-groups         1.00 (  3.86)   +4.19 (  3.82)
-threads-sockets         1-groups         1.00 (  2.20)   +1.65 (  1.85)
-threads-sockets         2-groups         1.00 (  3.09)   -0.36 (  2.14)
-threads-sockets         4-groups         1.00 (  0.99)   -2.54 (  1.86)
-threads-sockets         8-groups         1.00 (  0.27)   -0.01 (  0.79)
-
-[schbench]
-
-schbench -m $job -t 56 -r 30
-job: 1, 2, 4, 8
-3 iterations
-
-99.0th latency
-========
-case            	load    	baseline(std%)	compare%( std%)
-normal                  1-mthreads       1.00 (  1.10)   +0.88 (  0.84)
-normal                  2-mthreads       1.00 (  0.73)   +0.00 (  0.73)
-normal                  4-mthreads       1.00 (  1.46)   -0.60 (  2.74)
-normal                  8-mthreads       1.00 (  4.09)   +1.08 (  4.60)
-
-Suggested-by: Tim Chen <tim.c.chen@intel.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Chen Yu <yu.c.chen@intel.com>
----
- kernel/sched/fair.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index f999e838114e..272e6c224b96 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -10168,7 +10168,12 @@ static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sd
- 	struct sg_lb_stats *local = &sds->local_stat;
- 	struct sg_lb_stats tmp_sgs;
- 	unsigned long sum_util = 0;
--	int sg_status = 0;
-+	int sg_status = 0, nr_scan_ilb;
-+	bool ilb_util_enabled = sched_feat(ILB_UTIL) && env->idle == CPU_NEWLY_IDLE &&
-+	    sd_share && READ_ONCE(sd_share->ilb_total_capacity);
-+
-+	if (ilb_util_enabled)
-+		nr_scan_ilb = sd_share->ilb_nr_scan;
- 
- 	do {
- 		struct sg_lb_stats *sgs = &tmp_sgs;
-@@ -10186,6 +10191,14 @@ static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sd
- 
- 		update_sg_lb_stats(env, sds, sg, sgs, &sg_status);
- 
-+		if (ilb_util_enabled && --nr_scan_ilb <= 0) {
-+			/* borrow the statistic of previous periodic load balance */
-+			sds->total_load = READ_ONCE(sd_share->ilb_total_load);
-+			sds->total_capacity = READ_ONCE(sd_share->ilb_total_capacity);
-+
-+			break;
-+		}
-+
- 		if (local_group)
- 			goto next_group;
- 
--- 
-2.25.1
-
+On Mon, Jun 12, 2023 at 2:39=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
+>
+> --- a/kernel/events/core.c
+> +++ b/kernel/events/core.c
+> @@ -7977,7 +7977,8 @@ static void perf_pmu_output_stop(struct
+>         int err, cpu;
+>
+>  restart:
+> -       rcu_read_lock();
+> +       /* cannot have a label in front of a decl */;
+> +       guard(rcu)();
+>         list_for_each_entry_rcu(iter, &event->rb->event_list, rb_entry) {
+>                 /*
+>                  * For per-CPU events, we need to make sure that neither =
+they
+> @@ -7993,12 +7994,9 @@ static void perf_pmu_output_stop(struct
+>                         continue;
+>
+>                 err =3D cpu_function_call(cpu, __perf_pmu_output_stop, ev=
+ent);
+> -               if (err =3D=3D -EAGAIN) {
+> -                       rcu_read_unlock();
+> +               if (err =3D=3D -EAGAIN)
+>                         goto restart;
+> -               }
+>         }
+> -       rcu_read_unlock();
+>  }
