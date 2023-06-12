@@ -2,180 +2,445 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AED9272CB7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 18:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E606F72CB7E
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 18:27:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236808AbjFLQ1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 12:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60824 "EHLO
+        id S236717AbjFLQ14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 12:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236370AbjFLQ1a (ORCPT
+        with ESMTP id S236492AbjFLQ1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 12:27:30 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EE5E52
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 09:27:28 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id e9e14a558f8ab-33dbad61311so3138325ab.0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 09:27:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1686587248; x=1689179248;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4DamFb9KrPkrodrikB75BJEmIeuFQkyiO8xBxyfEiGU=;
-        b=DDASE38qvGW9uZSRU7BmI0kF7I5ApbcdKkQiChxsAdBBITf0JPe9Pcn8BX9f2HGfLw
-         LL5G7u7/XXc/iZCFWtjC/rJImW9/y5/kQ1f72m4hINAi7206kUip0v5z3J8Yku3SoM2E
-         DQyzfGDGQInH8uECwWRnQUyVeg74kkcYe+IpOKNSdLkLXS7kGjblwkMRM6xJ6OwZJ6Th
-         X/oVwHoDTpHJ0ODhhb/dgganv0XHfpQNnJPQK9Z/ix9L73rlG3zM2jqGnR0qYhKBd1/q
-         P3q+v88sqReFCK6j8UyjI08PMcVaXSBgIkicA4RkZSp2UQCWccV5vR1Shv8dqvdtcByy
-         4btA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686587248; x=1689179248;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4DamFb9KrPkrodrikB75BJEmIeuFQkyiO8xBxyfEiGU=;
-        b=RjEkF0ayC9BNh70FWDiHwoG24eIgvmA+K1TrLwXVGanAP6yqY+9IZWLSUzaY0kURW0
-         Iv8TLPS19mdcx+4JH6jNrJ8ecOyPcLAayQtmpJb+iAuxkuNl3hvdKPZbUN0ib6AEm4g3
-         7T0MZMo2ny6QRj6V9A+WftvEDoH6kz7icPev6PlCEMXhN7BHTn8+8NEoCPU81L0qY+6E
-         lJU1htnZAGKEIbyseKDJpwg6poo5Qis7mqdMpWTddI0oOzezyHZuxpkPbFCufLfvIbDj
-         px9bmHF5CKZ3KlOUTKEajfASmZ9qidcFLS5Qbs9ekENsUlbMlu420yTU8WG6IiwJJ90y
-         yidw==
-X-Gm-Message-State: AC+VfDy241IG9sAxb/6cmbWjOPQifF4oey7UD8dQJRY6bJ6g4wwNAJla
-        lZ0YaupWhCNCgkP4RhDgkPPvZA==
-X-Google-Smtp-Source: ACHHUZ5l1BeOj6wOnr+OY1oi25lCVCteIJ6FxXg1uuXpv9FAMywsS7cXbeXg6hNTzyqMQ3RZnYA1Mw==
-X-Received: by 2002:a05:6e02:1c0a:b0:330:a1eb:c5a4 with SMTP id l10-20020a056e021c0a00b00330a1ebc5a4mr6231479ilh.1.1686587247763;
-        Mon, 12 Jun 2023 09:27:27 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id e18-20020a926912000000b0033ba7c76f4bsm1230106ilc.44.2023.06.12.09.27.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 09:27:27 -0700 (PDT)
-Message-ID: <af31cadf-8c15-8d88-79fb-066dc87f0324@kernel.dk>
-Date:   Mon, 12 Jun 2023 10:27:25 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [6.5-rc5 regression] core dump hangs (was Re: [Bug report]
- fstests generic/051 (on xfs) hang on latest linux v6.5-rc5+)
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "Darrick J. Wong" <djwong@kernel.org>
-Cc:     Dave Chinner <david@fromorbit.com>, Zorro Lang <zlang@redhat.com>,
-        linux-xfs@vger.kernel.org,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>, linux-kernel@vger.kernel.org
-References: <20230611124836.whfktwaumnefm5z5@zlang-mailbox>
- <ZIZSPyzReZkGBEFy@dread.disaster.area>
- <20230612015145.GA11441@frogsfrogsfrogs>
- <ZIaBQnCKJ6NsqGhd@dread.disaster.area>
- <CAHk-=whJqZLKPR-cpX-V4wJTXVX-_tG5Vjuj2q9knvKGCPdfkg@mail.gmail.com>
- <20230612153629.GA11427@frogsfrogsfrogs>
- <CAHk-=wiN-JcUh4uhDNmA4hp26Mg+c2DTuzgWY2fZ6hytDtOMCg@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CAHk-=wiN-JcUh4uhDNmA4hp26Mg+c2DTuzgWY2fZ6hytDtOMCg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Mon, 12 Jun 2023 12:27:49 -0400
+Received: from mail.gnu-linux.rocks (unknown [82.165.184.165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F04A1739;
+        Mon, 12 Jun 2023 09:27:45 -0700 (PDT)
+Received: from localhost (ip5f5be8c3.dynamic.kabel-deutschland.de [95.91.232.195])
+        by mail.gnu-linux.rocks (Postfix) with ESMTPSA id 902AD4027B;
+        Mon, 12 Jun 2023 16:27:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnu-linux.rocks;
+        s=mail; t=1686587263;
+        bh=c/4JjmJ45ZkiQZgNYBFXe9OTRXvupIaPpAdcPeF4Qlk=;
+        h=Date:Subject:From:To:Cc:From;
+        b=d21DZCTcvAV7eVmnPtWr1W/JJyeD2Axbn5J2Y1vWesLZp2MW4YlwoesqpJUrkB/Y2
+         1Z5ORW/WMi+03NivX1guxwFd9q4rx7FJWvtX2n39EGRyZe8smwtyDYkjw6FaqHV6v8
+         xc3uGYQqR3uKXjt1PXF+78IQsQOwTZQKK1Y346nEqFdzKPPmD69QPVKzJijYEYyfCu
+         QUiwFeHGDYmz+DVKERb5FsXFJMe+QBAuXjkuT+LtlHusmy82dTas4RvPU3OWuoErAS
+         i3ozWiuf4mH8L6iHuavLAg5I3H8Wa48VPOPJk8BePSIfiT88sM8tj4giUpXkMha2yB
+         BpvNbT2U7oxZA==
+Date:   Mon, 12 Jun 2023 18:27:34 +0200
+Message-ID: <1365bda1dccfa4b6f146c5a0551a803d.johannes@gnu-linux.rocks>
+Subject: Re:Re: [PATCH 1/2] hid-mcp2200 added driver for MCP2200 GPIOs
+From:   johannes@gnu-linux.rocks
+To:     christophe.jaillet@wanadoo.fr
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PP_MIME_FAKE_ASCII_TEXT,
+        RDNS_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/12/23 9:56?AM, Linus Torvalds wrote:
-> On Mon, Jun 12, 2023 at 8:36?AM Darrick J. Wong <djwong@kernel.org> wrote:
->>
->>> Or maybe Darrick (who doesn't see the issue) is running on raw
->>> hardware, and you and Zorro are running in a virtual environment?
->>
->> Ahah, it turns out that liburing-dev isn't installed on the test fleet,
->> so fstests didn't get built with io_uring support.  That probably
->> explains why I don't see any of these hangs.
->>
->> Oh.  I can't *install* the debian liburing-dev package because it has
->> a versioned dependency on linux-libc-dev >= 5.1, which isn't compatible
->> with me having a linux-libc-dev-djwong package that contains the uapi
->> headers for the latest upstream kernel and Replaces: linux-libc-dev.
->> So either I have to create a dummy linux-libc-dev with adequate version
->> number that pulls in my own libc header package, or rename that package.
->>
->> <sigh> It's going to take me a while to research how best to split this
->> stupid knot.
-> 
-> Oh, no, that's great. It explains why you don't see the problem, and
-> Dave and Zorro do. Perfect.
-> 
-> No need for you to install any liburing packages, at least for this
-> issue. You'll probably want it eventually just for test coverage, but
-> for now it's the smoking gun we wanted - I was looking at why vhost
-> would be impacted, because that commit so intentionally *tried* to not
-> do anything at all to io_uring.
-> 
-> But it obviously failed. Which then in turn explains the bug.
-> 
-> Not that I see exactly where it went wrong yet, but at least we're
-> looking at the right thing. Adding Jens to the participants, in case
-> he sees what goes wrong.
-> 
-> Jens, commit f9010dbdce91 ("fork, vhost: Use CLONE_THREAD to fix
-> freezer/ps regression") seems to have broken core dumping with
-> io_uring threads, even though it tried very hard not to. See
-> 
->   https://lore.kernel.org/all/20230611124836.whfktwaumnefm5z5@zlang-mailbox/
-> 
-> for the beginning of this thread.
-> 
-> Honestly, that "try to not change io_uring" was my least favorite part
-> of that patch, because I really think we want to try to aim for these
-> user helper threads having as much infrastructure in common as
-> possible. And when it comes to core dumps, I do not believe that
-> waiting for the io_uring thread adds anything to the end result,
-> because the only reason we wait for it is to put in the thread
-> register state into the core dump, and for kernel helper threads, that
-> information just isn't useful. It's going to be the state that caused
-> the thread to be created, not anything that is worth saving in a core
-> dump for.
-> 
-> So I'd actually prefer to just simplify the logic entirely, and say
-> "PF_USER_WORKER tasks do not participate in core dumps, end of story".
-> io_uring didn't _care_, so including them wasn't a pain, but if the
-> vhost exit case can be delayed, I'd rather just say "let's do thig
-> thing for both io_uring and vhost, and not split those two cases up".
-> 
-> Anyway, I don't see exactly what goes wrong, but I feel better just
-> from this having been narrowed down to io_uring threads. I suspect
-> Jens actually might even have a core-dumping test-case somewhere,
-> since core dumping was a thing that io_uring ended up having some
-> issues with at one point.
+>Le 11/06/2023 à 18:48, Johannes Roith a écrit :
+>> Added a gpiochip compatible driver to control the 8 GPIOs of the MCP2200
+>> by using the HID interface.
+>> 
+>> Using GPIOs with alternative functions (GP0<->SSPND, GP1<->USBCFG,
+>> GP6<->RXLED, GP7<->TXLED) will reset the functions, if set (unset by
+>> default).
+>> 
+>> The driver was tested while also using the UART of the chip. Setting
+>> and reading the GPIOs has no effect on the UART communication. However,
+>> a reset is triggered after the CONFIGURE command. If the GPIO Direction
+>> is constantly changed, this will affect the communication at low baud
+>> rates. This is a hardware problem of the MCP2200 and is not caused by
+>> the driver.
+>> 
+>> Signed-off-by: Johannes Roith <johannes@gnu-linux.rocks>
+>
+>Hi,
+>
+>a few nits below, should it help the review.
+>
+>[...]
+>
+>> --- /dev/null
+>> +++ b/drivers/hid/hid-mcp2200.c
+>> @@ -0,0 +1,421 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * MCP2200 - Microchip USB to GPIO bridge
+>> + *
+>> + * Copyright (c) 2023, Johannes Roith <johannes@gnu-linux.rocks>
+>> + *
+>> + * Datasheet: https://ww1.microchip.com/downloads/en/DeviceDoc/22228A.pdf
+>> + * App Note for HID: https://ww1.microchip.com/downloads/en/DeviceDoc/93066A.pdf
+>> + */
+>> +#include <linux/module.h>
+>> +#include <linux/err.h>
+>> +#include <linux/mutex.h>
+>> +#include <linux/bitfield.h>
+>
+>Is this include needed?
+>
+>> +#include <linux/completion.h>
+>> +#include <linux/delay.h>
+>> +#include <linux/hid.h>
+>> +#include <linux/hidraw.h>
+>> +#include <linux/gpio/driver.h>
+>
+>Many maintainers prefer alphabetic order for includes.
+>
+>
+>> +#include "hid-ids.h"
+>> +
+>> +/* Commands codes in a raw output report */
+>> +enum {
+>> +	SET_CLEAR_OUTPUTS = 0x08,
+>> +	CONFIGURE = 0x10,
+>> +	READ_EE = 0x20,
+>> +	WRITE_EE = 0x40,
+>> +	READ_ALL = 0x80
+>> +};
+>
+>Does some
+>	#define xxx BIT(n)
+>would make more sense than this enum?
+>
+>> +
+>> +/* MCP GPIO direction encoding */
+>> +enum MCP_IO_DIR {
+>> +	MCP2200_DIR_OUT = 0x00,
+>> +	MCP2200_DIR_IN  = 0x01,
+>> +};
+>> +
+>> +/* Altternative pin assignments */
+>> +enum {
+>> +	TXLED = 2,
+>> +	RXLED = 3,
+>> +	USBCFG = 6,
+>> +	SSPND = 7,
+>> +
+>
+>Uneeded new line.
+>
+>> +};
+>> +
+>> +#define MCP_NGPIO 8
+>> +
+>
+>[...]
+>
+>> +/* this executes the READ_ALL cmd */
+>> +static int mcp_cmd_read_all(struct mcp2200 *mcp)
+>> +{
+>> +	struct mcp_read_all *read_all;
+>> +	int len, t;
+>> +
+>> +	reinit_completion(&mcp->wait_in_report);
+>> +	mutex_lock(&mcp->lock);
+>> +
+>> +	read_all = kzalloc(sizeof(struct mcp_read_all), GFP_KERNEL);
+>> +	if (!read_all)
+>> +		return -ENOMEM;
+>
+>Allocation could be deone before the lock.
+>
+>> +
+>> +	read_all->cmd = READ_ALL;
+>> +	len = hid_hw_output_report(mcp->hdev, (u8 *) read_all,
+>> +			sizeof(struct mcp_read_all));
+>> +
+>> +	if (len != sizeof(struct mcp_read_all))
+>
+>kfree(read_all); ?
+>(or move the call just below before the test)
+>
+>> +		return -EINVAL;
+>> +
+>> +	kfree(read_all);
+>> +	mutex_unlock(&mcp->lock);
+>
+>Mutex unlock could be done before kfree() or even before the "if 
+>(len..." a few lines above.
+>
+>> +	t = wait_for_completion_timeout(&mcp->wait_in_report, msecs_to_jiffies(4000));
+>> +	if (!t)
+>> +		return -ETIMEDOUT;
+>> +
+>> +	/* return status, negative value if wrong response was received */
+>> +	return mcp->status;
+>> +}
+>> +
+>> +static void mcp_set_multiple(struct gpio_chip *gc, unsigned long *mask,
+>> +				  unsigned long *bits)
+>> +{
+>> +	struct mcp2200 *mcp = gpiochip_get_data(gc);
+>> +	u8 value;
+>> +	int status;
+>> +	struct mcp_set_clear_outputs *cmd;
+>> +
+>> +	cmd = kzalloc(sizeof(struct mcp_set_clear_outputs), GFP_KERNEL);
+>> +	if (!cmd)
+>> +		return;
+>> +
+>> +	mutex_lock(&mcp->lock);
+>> +
+>> +	value = mcp->gpio_val & ~*mask;
+>> +	value |= (*mask & *bits);
+>> +
+>> +	cmd->cmd = SET_CLEAR_OUTPUTS;
+>> +	cmd->set_bmap = value;
+>> +	cmd->clear_bmap = ~(value);
+>> +
+>> +	status = hid_hw_output_report(mcp->hdev, (u8 *) cmd,
+>> +		       sizeof(struct mcp_set_clear_outputs));
+>> +	if (status == sizeof(struct mcp_set_clear_outputs))
+>> +		mcp->gpio_val = value;
+>> +
+>> +	kfree(cmd);
+>> +	mutex_unlock(&mcp->lock);
+>
+>Mutex unlock could be done before kfree().
+>
+>> +}
+>> +
+>> +static void mcp_set(struct gpio_chip *gc, unsigned int gpio_nr, int value)
+>> +{
+>> +	unsigned long mask = (1 << gpio_nr);
+>
+>Uneeded ()
+>Does using BIT makes sense here?
+>
+>> +	unsigned long bmap_value = (value<<gpio_nr);
+>
+>Uneeded () and missing spaces aoud <<
+>
+>> +
+>> +	mcp_set_multiple(gc, &mask, &bmap_value);
+>> +}
+>> +
+>> +static int mcp_get_multiple(struct gpio_chip *gc, unsigned long *mask,
+>> +		unsigned long *bits)
+>> +{
+>> +	u32 val;
+>> +	struct mcp2200 *mcp = gpiochip_get_data(gc);
+>> +	int status;
+>> +
+>> +	status = mcp_cmd_read_all(mcp);
+>> +	if (status != 0)
+>> +		return status;
+>> +
+>> +	val = mcp->gpio_inval;
+>> +	*bits = (val & *mask);
+>> +	return 0;
+>> +}
+>> +
+>> +static int mcp_get(struct gpio_chip *gc, unsigned int gpio_nr)
+>> +{
+>> +	unsigned long mask = 0, bits = 0;
+>
+>No need to init long (and maybe bits)
+>
+>> +
+>> +	mask = (1 << gpio_nr);
+>
+>Uneeded ()
+>Does using BIT makes sense here?
+>
+>> +	mcp_get_multiple(gc, &mask, &bits);
+>> +	return (bits > 0) ? 1 : 0;
+>> +}
+>> +
+>> +static int mcp_get_direction(struct gpio_chip *gc, unsigned int gpio_nr)
+>> +{
+>> +	struct mcp2200 *mcp = gpiochip_get_data(gc);
+>> +
+>> +	return (mcp->gpio_dir & (MCP2200_DIR_IN << gpio_nr))
+>> +		? GPIO_LINE_DIRECTION_IN : GPIO_LINE_DIRECTION_OUT;
+>> +}
+>> +
+>> +static int mcp_set_direction(struct gpio_chip *gc, unsigned int gpio_nr,
+>> +		enum MCP_IO_DIR io_direction)
+>> +{
+>> +	struct mcp2200 *mcp = gpiochip_get_data(gc);
+>> +	struct mcp_configure *conf;
+>> +	int status;
+>> +	/* after the configure cmd we will need to set the outputs again */
+>> +	unsigned long mask = ~(mcp->gpio_dir); /* only set outputs */
+>> +	unsigned long bits = mcp->gpio_val;
+>> +	/* Offsets of alternative pins in config_alt_pins, 0 is not used */
+>> +	u8 alt_pin_conf[8] = {SSPND, USBCFG, 0, 0, 0, 0, RXLED, TXLED};
+>> +	u8 config_alt_pins = mcp->config_alt_pins;
+>> +
+>> +	/* Read in the reset baudrate first, we need it later */
+>> +	status = mcp_cmd_read_all(mcp);
+>> +	if (status != 0)
+>> +		return status;
+>> +
+>> +	conf = kzalloc(sizeof(struct mcp_configure), GFP_KERNEL);
+>> +	if (!conf)
+>> +		return -ENOMEM;
+>> +	mutex_lock(&mcp->lock);
+>> +
+>> +	/* configure will reset the chip! */
+>> +	conf->cmd = CONFIGURE;
+>> +	conf->io_bmap = (mcp->gpio_dir & ~(1 << gpio_nr))
+>> +		| (io_direction << gpio_nr);
+>> +	/* Don't overwrite the reset parameters */
+>> +	conf->baud_h = mcp->baud_h;
+>> +	conf->baud_l = mcp->baud_l;
+>> +	conf->config_alt_options = mcp->config_alt_options;
+>> +	conf->io_default_val_bmap = mcp->gpio_reset_val;
+>> +	/* Adjust alt. func if necessary */
+>> +	if (alt_pin_conf[gpio_nr])
+>> +		config_alt_pins &= ~(1 << alt_pin_conf[gpio_nr]);
+>> +	conf->config_alt_pins = config_alt_pins;
+>> +
+>> +	status = hid_hw_output_report(mcp->hdev, (u8 *) conf,
+>> +			sizeof(struct mcp_set_clear_outputs));
+>> +	if (status == sizeof(struct mcp_set_clear_outputs)) {
+>> +		mcp->gpio_dir &= ~(1 << gpio_nr);
+>> +		mcp->config_alt_pins = config_alt_pins;
+>> +	} else {
+>> +		return -EIO;
+>> +	}
+>> +
+>> +	kfree(conf);
+>> +	mutex_unlock(&mcp->lock);
+>
+>Mutex unlock could be done before kfree().
+>
+>> +
+>> +	/* Configure CMD will clear all IOs -> rewrite them */
+>> +	mcp_set_multiple(gc, &mask, &bits);
+>> +	return 0;
+>> +}
+>> +
+>> +static int mcp_direction_input(struct gpio_chip *gc, unsigned int gpio_nr)
+>> +{
+>> +	return mcp_set_direction(gc, gpio_nr, MCP2200_DIR_IN);
+>> +}
+>> +
+>> +static int mcp_direction_output(struct gpio_chip *gc, unsigned int gpio_nr,
+>> +		int value)
+>> +{
+>> +	int ret;
+>> +	unsigned long mask, bmap_value;
+>> +
+>> +	mask = (1 << gpio_nr);
+>
+>Uneeded ()
+>Does using BIT makes sense here?
+>
+>> +	bmap_value = (value << gpio_nr);
+>
+>Uneeded ()
+>
+>> +
+>> +	ret = mcp_set_direction(gc, gpio_nr, MCP2200_DIR_OUT);
+>> +	if (ret == 0)
+>> +		mcp_set_multiple(gc, &mask, &bmap_value);
+>> +	return ret;
+>> +}
+>> +
+>> +
+>
+>No need for 2 new lines.
+>
+>[...]
+>
+>> +static int mcp2200_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>> +{
+>> +	int ret;
+>> +	struct mcp2200 *mcp;
+>> +
+>> +	mcp = devm_kzalloc(&hdev->dev, sizeof(*mcp), GFP_KERNEL);
+>> +	if (!mcp)
+>> +		return -ENOMEM;
+>> +
+>> +	ret = hid_parse(hdev);
+>> +	if (ret) {
+>> +		hid_err(hdev, "can't parse reports\n");
+>> +		return ret;
+>> +	}
+>> +
+>> +	/*
+>> +	 * This driver uses the .raw_event callback and therefore does not need any
+>> +	 * HID_CONNECT_xxx flags.
+>> +	 */
+>> +	ret = hid_hw_start(hdev, 0);
+>> +	if (ret) {
+>> +		hid_err(hdev, "can't start hardware\n");
+>> +		return ret;
+>> +	}
+>> +
+>> +	hid_info(hdev, "USB HID v%x.%02x Device [%s] on %s\n", hdev->version >> 8,
+>> +			hdev->version & 0xff, hdev->name, hdev->phys);
+>> +
+>> +	ret = hid_hw_open(hdev);
+>> +	if (ret) {
+>> +		hid_err(hdev, "can't open device\n");
+>> +		hid_hw_stop(hdev);
+>> +		return ret;
+>> +	}
+>> +
+>> +	mutex_init(&mcp->lock);
+>> +	init_completion(&mcp->wait_in_report);
+>> +	hid_set_drvdata(hdev, mcp);
+>> +	mcp->hdev = hdev;
+>> +
+>> +	ret = devm_add_action_or_reset(&hdev->dev, mcp2200_hid_unregister, hdev);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	mcp->gc = template_chip;
+>> +	mcp->gc.parent = &hdev->dev;
+>> +
+>> +	ret = gpiochip_add_data(&mcp->gc, mcp);
+>
+>devm_gpiochip_add_data() and no .remove function?
+>
+>> +	if (ret < 0) {
+>> +		dev_err(&hdev->dev, "Unable to register gpiochip\n");
+>
+>hid_err() to be consistent?
+>
+>> +		hid_hw_stop(hdev);
+>
+>hid_hw_stop() would be called twice. Once here and once because of the 
+>devm_add_action_or_reset() above.
+>
+>
+>Just my 2c,
+>
+>CJ
+>
+>> +		return ret;
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>
+>[...]
+>
 
-I'll take a look - at the exact same time as your email, someone just
-reported this issue separately on the liburing GH page as well. Tried
-myself, and yup, anything that ends up spawning an io-wq worker and then
-core dumps will now get stuck:
+Hi,
 
-[  136.271250] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-[  136.271711] task:ih              state:D stack:0     pid:736   ppid:727    flags:0x00000004
-[  136.272218] Call trace:
-[  136.272353]  __switch_to+0xb0/0xc8
-[  136.272555]  __schedule+0x528/0x584
-[  136.272757]  schedule+0x4c/0x90
-[  136.272936]  schedule_timeout+0x30/0xdc
-[  136.273179]  __wait_for_common+0x8c/0x118
-[  136.273407]  wait_for_completion_state+0x1c/0x30
-[  136.273686]  do_coredump+0x334/0x1000
-[  136.273898]  get_signal+0x19c/0x5d8
-[  136.274108]  do_notify_resume+0x10c/0xa0c
-[  136.274346]  el0_da+0x50/0x5c
-[  136.274555]  el0t_64_sync_handler+0xb8/0x134
-[  136.274812]  el0t_64_sync+0x168/0x16c
+thanks for your feedback. I have added most of it in my Kernel module. For the
+view things, I haven't added, I add a comment under your comment.
 
-Not good... I don't immediately see what the issue is, but I'll poke
-shortly after a few meetings.
+I am sorry for the error in hid-ids.h. It seems I forgot to run a git add hid-ids.h
+to rename the second USB_DEVICE_ID_MCP2221 into USB_DEVICE_ID_MCP2200. 
 
--- 
-Jens Axboe
+What do you think is the best way to deliver my driver? Should I create a new
+patch containg everything I have changed or should I go with the two already
+created patches, reorder them, fixing the error in hid-ids.h and adding a new
+patch including the comments from your review? This is my first contribution,
+that's why I am asking.
 
+Best regards,
+Johannes
