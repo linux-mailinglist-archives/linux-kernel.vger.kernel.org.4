@@ -2,84 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A04D72CC84
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31DC272CC81
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:27:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237428AbjFLR1X convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 12 Jun 2023 13:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37636 "EHLO
+        id S236544AbjFLR1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 13:27:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237374AbjFLR1J (ORCPT
+        with ESMTP id S237154AbjFLR1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 13:27:09 -0400
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 589C8107;
-        Mon, 12 Jun 2023 10:27:06 -0700 (PDT)
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-30fbaf12bbaso441816f8f.1;
-        Mon, 12 Jun 2023 10:27:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686590825; x=1689182825;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U+blguC2WbFz1aop25IT0egRp+jWYhhHvAbXh2rsQ/A=;
-        b=kzn7UCa2Zh8EEBtRt6HdE9kHlzv+y/KBkACyY9XPkLQ+FbsmxNKxLiQN8eDME9gtxx
-         mu8bxunGEyqP4IVElg64/3t1xJIY1l8/y9XNv76W0GMWxrMrp140/3iM5B/oyhLgHxm5
-         RIcGvz2k4tFbWYsNiZBsRCERQOJMDVNXuycivKzBxCk97fAiVJV0QJo/cTELISlvKPhc
-         M52TMZS9Yw4f6P/TNA3LtCsXhzftsIqQNqT41OdcxYauZhtgg53XXn5g0jsvo6yBNYLK
-         7U1Z4trU7JocE85B+iYkQ4kXSSV+2hUPn83lCKSuT5UxyNEJS/VBKe8ZVzaWqY7lbnkD
-         ye8w==
-X-Gm-Message-State: AC+VfDzjPWv09x/VbDsI/gb7Gki6v/XkkkrmDVutby4W/tK0AwNWXtXS
-        pQKFhwnERKAONFYaaUyKl6U2xlJCPabJAGj645S+LvNk
-X-Google-Smtp-Source: ACHHUZ5tqaxaXGpXNUsFFwTH4j3zwIwzjKa8AuxeigYxWQ6JdX+BGhVgG2D55Qj6mgLJ7ePBAapnUmx+imekqnQbsdM=
-X-Received: by 2002:a5d:48c7:0:b0:30a:d0a0:266e with SMTP id
- p7-20020a5d48c7000000b0030ad0a0266emr7096018wrs.2.1686590824776; Mon, 12 Jun
- 2023 10:27:04 -0700 (PDT)
+        Mon, 12 Jun 2023 13:27:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DE8130;
+        Mon, 12 Jun 2023 10:26:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A0721615A9;
+        Mon, 12 Jun 2023 17:26:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94AC2C4339B;
+        Mon, 12 Jun 2023 17:26:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686590818;
+        bh=VUk6jAV2ZmWBvmJdiUOnmOQgHuM9loH0DtxACEg8dHo=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=HfhcEvn06g9KDXJodkGT35AKIvXxDFE6+LTTf2dmZ3rsDZ6Coy6/xrgv/NnljQpXE
+         jjN4cx1wW6MaKRMjjNKkZj2aKkJvcI0yM6fDzqu9vMu5Q3C2jv3by8Veo0HT1gsTZx
+         twysmZi1dcLKfdB2ux4z5xsnNJrHoEonam1U98zbKE7KPVWtPzOgnSfQ6NEvSsOjsu
+         7lpMGpzRQf1NMj2iOjge55Zr5eo7TIWY2PXbx+eHtdB256+LPt8wgJJrqbX/DmETsi
+         JLTa1odyMSdiqffkGArngboKXqOB8TKB1gRfTPozQCrSwIk4AZwqTdMPqDxU0vJh3/
+         IexXsC9ttKhiQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     James Schulman <james.schulman@cirrus.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>,
+        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230609140658.64557-1-krzysztof.kozlowski@linaro.org>
+References: <20230609140658.64557-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH] ASoC: dt-bindings: cirrus,cs35l45: drop unneeded
+ quotes
+Message-Id: <168659081532.87413.3101629850429696766.b4-ty@kernel.org>
+Date:   Mon, 12 Jun 2023 18:26:55 +0100
 MIME-Version: 1.0
-References: <20230606095641.5357-1-TonyWWang-oc@zhaoxin.com>
-In-Reply-To: <20230606095641.5357-1-TonyWWang-oc@zhaoxin.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 12 Jun 2023 19:26:53 +0200
-Message-ID: <CAJZ5v0h539BYRN53perdsRViUqU2YG96abRuB2xpTHqYKfFvkw@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: acpi_pad: mark Zhaoxin CPUs NONSTOP TSC correctly
-To:     Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
-Cc:     rafael@kernel.org, lenb@kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, CobeChen@zhaoxin.com,
-        TimGuo@zhaoxin.com, LeoLiu-oc@zhaoxin.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-bfdf5
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 6, 2023 at 11:56 AM Tony W Wang-oc <TonyWWang-oc@zhaoxin.com> wrote:
->
-> Zhaoxin CPUs support NONSTOP TSC feature, so do not mark these CPUs
-> TSC unstable when use the acpi_pad driver.
->
-> Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
-> ---
->  drivers/acpi/acpi_pad.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/acpi/acpi_pad.c b/drivers/acpi/acpi_pad.c
-> index 02f1a1b1143c..7a453c5ff303 100644
-> --- a/drivers/acpi/acpi_pad.c
-> +++ b/drivers/acpi/acpi_pad.c
-> @@ -66,6 +66,7 @@ static void power_saving_mwait_init(void)
->         case X86_VENDOR_AMD:
->         case X86_VENDOR_INTEL:
->         case X86_VENDOR_ZHAOXIN:
-> +       case X86_VENDOR_CENTAUR:
->                 /*
->                  * AMD Fam10h TSC will tick in all
->                  * C/P/S0/S1 states when this bit is set.
-> --
+On Fri, 09 Jun 2023 16:06:58 +0200, Krzysztof Kozlowski wrote:
+> Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+> checking for this can be enabled in yamllint.
+> 
+> 
 
-Applied as 6.5 material, thanks!
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[1/1] ASoC: dt-bindings: cirrus,cs35l45: drop unneeded quotes
+      commit: 374b54532b1c94076799518cad5c33536eaf0c1b
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
