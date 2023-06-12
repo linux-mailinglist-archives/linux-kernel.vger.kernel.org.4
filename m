@@ -2,140 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FD1372C9A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:18:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B35672C9B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236539AbjFLPS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 11:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46542 "EHLO
+        id S234291AbjFLPTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 11:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234811AbjFLPSZ (ORCPT
+        with ESMTP id S237684AbjFLPTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 11:18:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 424068F;
-        Mon, 12 Jun 2023 08:18:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D295062889;
-        Mon, 12 Jun 2023 15:18:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D724C433AC;
-        Mon, 12 Jun 2023 15:18:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686583103;
-        bh=Xb1HsQlSrZkn1qAf6y9yA3U1APG6n0vq1EUnF8SnDe0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=fqXHTN/wQrrur4issS6zsCoMz5NmQnl7VT4HbZNJkSb2A6NQJCSmVt7iUx8Q29Xrc
-         NQiaky8PGWu3+fNiURrclPcr2WCAVXNErDnjaE/IrAXX852/8bVE6WWIUiLYd5+XRh
-         VCcF2EeWuwloOSjUpHRvV8EjxjBGktr+8vsHBqZdHfTU+TMjBL127g16HoSD/X+kNo
-         1FjV+EXhWH1Col98ixaEO8Kp+UqKgcQ8T7F6YxvFtKF4tmfxOLKtJ0T2UY3gBm1qLt
-         8a+BSr+defk/TtY0XAvgiDFVPLaiKWVhNthAkDg/oanNftBU64k/UiapGCs9IFExoT
-         QjklEWjQQU2qQ==
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2b1c5a6129eso51847821fa.2;
-        Mon, 12 Jun 2023 08:18:23 -0700 (PDT)
-X-Gm-Message-State: AC+VfDw34q3nJn/GXnPEzsnXnMunnE+wmoR8L6f+YbjH3dgm3rLLQ7kC
-        q438NUzdnaJhbXxzfe6W0x8gTh79E2w2ddySwA==
-X-Google-Smtp-Source: ACHHUZ6Qp/Vp5TeOAkJlOh2/kbCsJgPNg3Io8FKtSRoRf3G6btpi5WFRobLqjBxP13VeT3s5wljRrxAoMUiqzEK306c=
-X-Received: by 2002:a2e:9d8a:0:b0:2ad:95dd:8802 with SMTP id
- c10-20020a2e9d8a000000b002ad95dd8802mr2876142ljj.38.1686583101104; Mon, 12
- Jun 2023 08:18:21 -0700 (PDT)
+        Mon, 12 Jun 2023 11:19:30 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F9D1BF;
+        Mon, 12 Jun 2023 08:19:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686583168; x=1718119168;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PW9PXZwKMY7BWzJITAK+1Q8pomGm7fv3ToyFNWA8I7Y=;
+  b=KuEAXx9Mx4s3QaoSgI/lpIEGrZcQInPCsOvVu/87bnu9CljVHo7z29ZQ
+   pnk1pH1jBxXwh/mbgz6MBXopbUD5YMRh7k+uzWQ5gCO6ABeEiN8w3hgYv
+   hCHhjlWUzkverUrkbdX2QNyqA1aoliFfsdINkArokG6dfThfA5vK0OIZ3
+   ejGXDY4yUwNzK9Zq9Kho+vSyMs4uU693VQcAXPAtNMfTSs9uXJvgMsobe
+   3HsOCSLP+azqzvT1fLHtF/BSVa+3R+N8TpmOuObLYFVmULy526baymEWj
+   qaEqoHj2xNZcbLvH5EXPqf8vt8MGUWdEysFfLK8MD5Aq//P6nc50Cj1aa
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="360556257"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="360556257"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 08:19:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="741066735"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="741066735"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008.jf.intel.com with ESMTP; 12 Jun 2023 08:19:25 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1q8jKF-00397J-0c;
+        Mon, 12 Jun 2023 18:19:23 +0300
+Date:   Mon, 12 Jun 2023 18:19:22 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Damien Le Moal <dlemoal@kernel.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Subject: Re: [PATCH v2 3/3] ata: ahci_platform: Make code agnostic to OF/ACPI
+Message-ID: <ZIc3enu+EW93WjW7@smile.fi.intel.com>
+References: <20230609154900.43024-1-andriy.shevchenko@linux.intel.com>
+ <20230609154900.43024-4-andriy.shevchenko@linux.intel.com>
+ <ZIbgLIEylgZsxXAB@kekkonen.localdomain>
 MIME-Version: 1.0
-References: <1681366162-4949-1-git-send-email-xinlei.lee@mediatek.com> <1681366162-4949-3-git-send-email-xinlei.lee@mediatek.com>
-In-Reply-To: <1681366162-4949-3-git-send-email-xinlei.lee@mediatek.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Mon, 12 Jun 2023 23:18:09 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_-QwzY55V-dFcb2z69fRQwtoAat7ZKdScW29=3Lfe_LGA@mail.gmail.com>
-Message-ID: <CAAOTY_-QwzY55V-dFcb2z69fRQwtoAat7ZKdScW29=3Lfe_LGA@mail.gmail.com>
-Subject: Re: [PATCH 2/3] drm/mediatek: Add mt8188 dsi compatible to mtk_dsi.c
-To:     xinlei.lee@mediatek.com
-Cc:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@linux.ie,
-        daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        jitao.shi@mediatek.com, shuijing.li@mediatek.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZIbgLIEylgZsxXAB@kekkonen.localdomain>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Xinlei:
+On Mon, Jun 12, 2023 at 09:06:52AM +0000, Sakari Ailus wrote:
+> On Fri, Jun 09, 2023 at 06:49:00PM +0300, Andy Shevchenko wrote:
 
-Reorder this patch after patch "[3/3] drm/mediatek: dsi: Add dsi
-cmdq_ctl to send panel initial code"
+...
 
-Regards,
-Chun-Kuang.
+> > -	if (of_device_is_compatible(dev->of_node, "hisilicon,hisi-ahci"))
+> > +	if (device_is_compatible(dev, "hisilicon,hisi-ahci"))
+> >  		hpriv->flags |= AHCI_HFLAG_NO_FBS | AHCI_HFLAG_NO_NCQ;
+> >  
+> > -	port = acpi_device_get_match_data(dev);
+> > +	port = device_get_match_data(dev);
+> 
+> There are just a handful of users for acpi_device_get_match_data() in the
+> tree. The code could be moved to acpi_fwnode_device_get_match_data() after
+> coverting these. May be out of scope of this set though.
 
-<xinlei.lee@mediatek.com> =E6=96=BC 2023=E5=B9=B44=E6=9C=8813=E6=97=A5 =E9=
-=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=882:09=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> From: Xinlei Lee <xinlei.lee@mediatek.com>
->
-> Add the compatible because there are different definitions for cmdq
-> register bit control in mt8188.
->
-> Signed-off-by: Xinlei Lee <xinlei.lee@mediatek.com>
-> Signed-off-by: Jitao Shi <jitao.shi@mediatek.com>
-> ---
->  drivers/gpu/drm/mediatek/mtk_drm_drv.c | 2 ++
->  drivers/gpu/drm/mediatek/mtk_dsi.c     | 8 ++++++++
->  2 files changed, 10 insertions(+)
->
-> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/med=
-iatek/mtk_drm_drv.c
-> index a13b36ac03a1..9ba05961479d 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-> @@ -654,6 +654,8 @@ static const struct of_device_id mtk_ddp_comp_dt_ids[=
-] =3D {
->           .data =3D (void *)MTK_DSI },
->         { .compatible =3D "mediatek,mt8186-dsi",
->           .data =3D (void *)MTK_DSI },
-> +       { .compatible =3D "mediatek,mt8188-dsi",
-> +         .data =3D (void *)MTK_DSI },
->         { }
->  };
->
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediate=
-k/mtk_dsi.c
-> index 7d5250351193..500a3054282d 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> @@ -1208,6 +1208,12 @@ static const struct mtk_dsi_driver_data mt8186_dsi=
-_driver_data =3D {
->         .has_size_ctl =3D true,
->  };
->
-> +static const struct mtk_dsi_driver_data mt8188_dsi_driver_data =3D {
-> +       .reg_cmdq_off =3D 0xd00,
-> +       .has_shadow_ctl =3D true,
-> +       .has_size_ctl =3D true,
-> +};
-> +
->  static const struct of_device_id mtk_dsi_of_match[] =3D {
->         { .compatible =3D "mediatek,mt2701-dsi",
->           .data =3D &mt2701_dsi_driver_data },
-> @@ -1217,6 +1223,8 @@ static const struct of_device_id mtk_dsi_of_match[]=
- =3D {
->           .data =3D &mt8183_dsi_driver_data },
->         { .compatible =3D "mediatek,mt8186-dsi",
->           .data =3D &mt8186_dsi_driver_data },
-> +       { .compatible =3D "mediatek,mt8188-dsi",
-> +         .data =3D &mt8188_dsi_driver_data },
->         { },
->  };
->  MODULE_DEVICE_TABLE(of, mtk_dsi_of_match);
-> --
-> 2.18.0
->
+Why do we need that one if we can use device_get_match_data() directly?
+It will be also flexible in case one of OF code will need something like
+this (custom info structure for the respective compatible string).
+That said, I don't think we need to change to acpi_*() whatever.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
