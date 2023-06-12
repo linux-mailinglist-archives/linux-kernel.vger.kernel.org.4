@@ -2,445 +2,379 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E606F72CB7E
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 18:27:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B911E72CB82
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 18:29:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236717AbjFLQ14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 12:27:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32794 "EHLO
+        id S235874AbjFLQ3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 12:29:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236492AbjFLQ1t (ORCPT
+        with ESMTP id S232523AbjFLQ3w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 12:27:49 -0400
-Received: from mail.gnu-linux.rocks (unknown [82.165.184.165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F04A1739;
-        Mon, 12 Jun 2023 09:27:45 -0700 (PDT)
-Received: from localhost (ip5f5be8c3.dynamic.kabel-deutschland.de [95.91.232.195])
-        by mail.gnu-linux.rocks (Postfix) with ESMTPSA id 902AD4027B;
-        Mon, 12 Jun 2023 16:27:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnu-linux.rocks;
-        s=mail; t=1686587263;
-        bh=c/4JjmJ45ZkiQZgNYBFXe9OTRXvupIaPpAdcPeF4Qlk=;
-        h=Date:Subject:From:To:Cc:From;
-        b=d21DZCTcvAV7eVmnPtWr1W/JJyeD2Axbn5J2Y1vWesLZp2MW4YlwoesqpJUrkB/Y2
-         1Z5ORW/WMi+03NivX1guxwFd9q4rx7FJWvtX2n39EGRyZe8smwtyDYkjw6FaqHV6v8
-         xc3uGYQqR3uKXjt1PXF+78IQsQOwTZQKK1Y346nEqFdzKPPmD69QPVKzJijYEYyfCu
-         QUiwFeHGDYmz+DVKERb5FsXFJMe+QBAuXjkuT+LtlHusmy82dTas4RvPU3OWuoErAS
-         i3ozWiuf4mH8L6iHuavLAg5I3H8Wa48VPOPJk8BePSIfiT88sM8tj4giUpXkMha2yB
-         BpvNbT2U7oxZA==
-Date:   Mon, 12 Jun 2023 18:27:34 +0200
-Message-ID: <1365bda1dccfa4b6f146c5a0551a803d.johannes@gnu-linux.rocks>
-Subject: Re:Re: [PATCH 1/2] hid-mcp2200 added driver for MCP2200 GPIOs
-From:   johannes@gnu-linux.rocks
-To:     christophe.jaillet@wanadoo.fr
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PP_MIME_FAKE_ASCII_TEXT,
-        RDNS_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Mon, 12 Jun 2023 12:29:52 -0400
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050:0:465::101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B591AC;
+        Mon, 12 Jun 2023 09:29:48 -0700 (PDT)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4Qfxwm2QWLz9sW9;
+        Mon, 12 Jun 2023 18:29:44 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
+        s=MBO0001; t=1686587384;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=k4plmEPtSVMklcGSrwV5HtrBR9/n6elVmklImupI/4w=;
+        b=fVnqqHKuyRfNFWI18AAqJ8Qx70/T4FPGQbCI31Djj8aehq2gmxSo0xa8gaOgjzn0bHYygp
+        2swULNuQecIH1D6pObl7dEpSEsc8My8wlH6nOP454cZ6QUs1PNlp5+pdN72kxoIdT+qeOw
+        19oHKcPLB7D1wjNhrXA0fA9tjzdyJaF097Z4pdYEzsSPmYSrcnEKrsB1fXrgDpal5rn1+k
+        OpYKFgfuXo0wlZxBkZlFCrF+E4KmtaAOBtIWugLpOu5bcCW8GQ6jLQLWfHY4A/rWlBPSSb
+        bP4dh643+vbtDqrTMCpUut3M77Rp6zaDL9Nc8aYny7jYX6r++OIx4YJUaks2xA==
+References: <20230605190745.366882-1-frank@oltmanns.dev>
+ <20230605190745.366882-2-frank@oltmanns.dev>
+ <2bvcukogzhcdbfsrruylgw5fbezaqjpcojqaambfoiv5fc2upy@ffumn5sevbeb>
+ <875y7y1f0d.fsf@oltmanns.dev>
+ <sijbhopoxuw5wodyry3smg7tm4wzoc7k6xakt4qdvxqsok32mv@u7rh4dct5ya6>
+From:   Frank Oltmanns <frank@oltmanns.dev>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Andre Przywara <andre.przywara@arm.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Roman Beranek <me@crly.cz>,
+        Samuel Holland <samuel@sholland.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 1/2] clk: sunxi-ng: nkm: consider alternative parent
+ rates when finding rate
+In-reply-to: <sijbhopoxuw5wodyry3smg7tm4wzoc7k6xakt4qdvxqsok32mv@u7rh4dct5ya6>
+Date:   Mon, 12 Jun 2023 18:29:36 +0200
+Message-ID: <87a5x41w5r.fsf@oltmanns.dev>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Rspamd-Queue-Id: 4Qfxwm2QWLz9sW9
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->Le 11/06/2023 à 18:48, Johannes Roith a écrit :
->> Added a gpiochip compatible driver to control the 8 GPIOs of the MCP2200
->> by using the HID interface.
->> 
->> Using GPIOs with alternative functions (GP0<->SSPND, GP1<->USBCFG,
->> GP6<->RXLED, GP7<->TXLED) will reset the functions, if set (unset by
->> default).
->> 
->> The driver was tested while also using the UART of the chip. Setting
->> and reading the GPIOs has no effect on the UART communication. However,
->> a reset is triggered after the CONFIGURE command. If the GPIO Direction
->> is constantly changed, this will affect the communication at low baud
->> rates. This is a hardware problem of the MCP2200 and is not caused by
->> the driver.
->> 
->> Signed-off-by: Johannes Roith <johannes@gnu-linux.rocks>
+Hi Maxime,
+
+I'm sorry that the following mail is a bit long. I'm not sure, there is
+some kind of misunderstanding/miscommunication somewhere, I'm just not
+sure, where. :)
+
+This mail is aiming at finding the exact points where we apparently go
+down different paths.
+
+On 2023-06-12 at 14:19:05 +0200, Maxime Ripard <maxime@cerno.tech> wrote:
+> [[PGP Signed Part:Undecided]]
+> On Wed, Jun 07, 2023 at 09:39:35AM +0200, Frank Oltmanns wrote:
+>> Hi Maxime,
+>>
+>> On 2023-06-07 at 08:38:39 +0200, Maxime Ripard <maxime@cerno.tech> wrote:
+>> > [[PGP Signed Part:Undecided]]
+>> > On Mon, Jun 05, 2023 at 09:07:44PM +0200, Frank Oltmanns wrote:
+>> >> In case the CLK_SET_RATE_PARENT flag is set, consider using a different
+>> >> parent rate when determining a new rate.
+>> >>
+>> >> To find the best match for the requested rate, perform the following
+>> >> steps for each NKM combination:
+>> >>  - calculate the optimal parent rate,
+>> >>  - find the best parent rate that the parent clock actually supports
+>> >>  - use that parent rate to calculate the effective rate.
+>> >>
+>> >> In case the clk does not support setting the parent rate, use the same
+>> >> algorithm as before.
+>> >>
+>> >> Signed-off-by: Frank Oltmanns <frank@oltmanns.dev>
+>> >> ---
+>> >>  drivers/clk/sunxi-ng/ccu_nkm.c | 40 ++++++++++++++++++++++++++--------
+>> >>  1 file changed, 31 insertions(+), 9 deletions(-)
+>> >>
+>> >> diff --git a/drivers/clk/sunxi-ng/ccu_nkm.c b/drivers/clk/sunxi-ng/ccu_nkm.c
+>> >> index a0978a50edae..c71e237226f2 100644
+>> >> --- a/drivers/clk/sunxi-ng/ccu_nkm.c
+>> >> +++ b/drivers/clk/sunxi-ng/ccu_nkm.c
+>> >> @@ -16,10 +16,10 @@ struct _ccu_nkm {
+>> >>  	unsigned long	m, min_m, max_m;
+>> >>  };
+>> >>
+>> >> -static unsigned long ccu_nkm_find_best(unsigned long parent, unsigned long rate,
+>> >> -				       struct _ccu_nkm *nkm)
+>> >> +static unsigned long ccu_nkm_find_best(unsigned long *parent, unsigned long rate,
+>> >> +				       struct _ccu_nkm *nkm, struct clk_hw *parent_hw)
+>> >>  {
+>> >> -	unsigned long best_rate = 0;
+>> >> +	unsigned long best_rate = 0, best_parent_rate = 0, tmp_parent = *parent;
+>> >>  	unsigned long best_n = 0, best_k = 0, best_m = 0;
+>> >>  	unsigned long _n, _k, _m;
+>> >>
+>> >> @@ -28,12 +28,29 @@ static unsigned long ccu_nkm_find_best(unsigned long parent, unsigned long rate,
+>> >>  			for (_m = nkm->min_m; _m <= nkm->max_m; _m++) {
+>> >>  				unsigned long tmp_rate;
+>> >>
+>> >> -				tmp_rate = parent * _n * _k / _m;
+>> >> +				if (parent_hw) {
+>> >
+>> > NKM clocks always have a parent
+>> >
+>> > You should test if the CLK_SET_RATE_PARENT flag is set.
+>>
+>> ccu_nkm_find_best is called in the following two situations:
+>>  a. from ccu_nkm_set_rate when setting the rate
+>>  b. from ccu_nkm_round_rate when determining the rate
+>>
+>> In situation a. we never want ccu_nkm_find_best to try different parent
+>> rates because setting the parent rate is a done deal (at least that's my
+>> understanding).
+>>
+>> In situation b. we only want ccu_nkm_find_best to try different parent
+>> rates when, as you mentioned, the CLK_SET_RATE_PARENT flag is set.
 >
->Hi,
->
->a few nits below, should it help the review.
->
->[...]
->
->> --- /dev/null
->> +++ b/drivers/hid/hid-mcp2200.c
->> @@ -0,0 +1,421 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * MCP2200 - Microchip USB to GPIO bridge
->> + *
->> + * Copyright (c) 2023, Johannes Roith <johannes@gnu-linux.rocks>
->> + *
->> + * Datasheet: https://ww1.microchip.com/downloads/en/DeviceDoc/22228A.pdf
->> + * App Note for HID: https://ww1.microchip.com/downloads/en/DeviceDoc/93066A.pdf
->> + */
->> +#include <linux/module.h>
->> +#include <linux/err.h>
->> +#include <linux/mutex.h>
->> +#include <linux/bitfield.h>
->
->Is this include needed?
->
->> +#include <linux/completion.h>
->> +#include <linux/delay.h>
->> +#include <linux/hid.h>
->> +#include <linux/hidraw.h>
->> +#include <linux/gpio/driver.h>
->
->Many maintainers prefer alphabetic order for includes.
->
->
->> +#include "hid-ids.h"
->> +
->> +/* Commands codes in a raw output report */
->> +enum {
->> +	SET_CLEAR_OUTPUTS = 0x08,
->> +	CONFIGURE = 0x10,
->> +	READ_EE = 0x20,
->> +	WRITE_EE = 0x40,
->> +	READ_ALL = 0x80
->> +};
->
->Does some
->	#define xxx BIT(n)
->would make more sense than this enum?
->
->> +
->> +/* MCP GPIO direction encoding */
->> +enum MCP_IO_DIR {
->> +	MCP2200_DIR_OUT = 0x00,
->> +	MCP2200_DIR_IN  = 0x01,
->> +};
->> +
->> +/* Altternative pin assignments */
->> +enum {
->> +	TXLED = 2,
->> +	RXLED = 3,
->> +	USBCFG = 6,
->> +	SSPND = 7,
->> +
->
->Uneeded new line.
->
->> +};
->> +
->> +#define MCP_NGPIO 8
->> +
->
->[...]
->
->> +/* this executes the READ_ALL cmd */
->> +static int mcp_cmd_read_all(struct mcp2200 *mcp)
->> +{
->> +	struct mcp_read_all *read_all;
->> +	int len, t;
->> +
->> +	reinit_completion(&mcp->wait_in_report);
->> +	mutex_lock(&mcp->lock);
->> +
->> +	read_all = kzalloc(sizeof(struct mcp_read_all), GFP_KERNEL);
->> +	if (!read_all)
->> +		return -ENOMEM;
->
->Allocation could be deone before the lock.
->
->> +
->> +	read_all->cmd = READ_ALL;
->> +	len = hid_hw_output_report(mcp->hdev, (u8 *) read_all,
->> +			sizeof(struct mcp_read_all));
->> +
->> +	if (len != sizeof(struct mcp_read_all))
->
->kfree(read_all); ?
->(or move the call just below before the test)
->
->> +		return -EINVAL;
->> +
->> +	kfree(read_all);
->> +	mutex_unlock(&mcp->lock);
->
->Mutex unlock could be done before kfree() or even before the "if 
->(len..." a few lines above.
->
->> +	t = wait_for_completion_timeout(&mcp->wait_in_report, msecs_to_jiffies(4000));
->> +	if (!t)
->> +		return -ETIMEDOUT;
->> +
->> +	/* return status, negative value if wrong response was received */
->> +	return mcp->status;
->> +}
->> +
->> +static void mcp_set_multiple(struct gpio_chip *gc, unsigned long *mask,
->> +				  unsigned long *bits)
->> +{
->> +	struct mcp2200 *mcp = gpiochip_get_data(gc);
->> +	u8 value;
->> +	int status;
->> +	struct mcp_set_clear_outputs *cmd;
->> +
->> +	cmd = kzalloc(sizeof(struct mcp_set_clear_outputs), GFP_KERNEL);
->> +	if (!cmd)
->> +		return;
->> +
->> +	mutex_lock(&mcp->lock);
->> +
->> +	value = mcp->gpio_val & ~*mask;
->> +	value |= (*mask & *bits);
->> +
->> +	cmd->cmd = SET_CLEAR_OUTPUTS;
->> +	cmd->set_bmap = value;
->> +	cmd->clear_bmap = ~(value);
->> +
->> +	status = hid_hw_output_report(mcp->hdev, (u8 *) cmd,
->> +		       sizeof(struct mcp_set_clear_outputs));
->> +	if (status == sizeof(struct mcp_set_clear_outputs))
->> +		mcp->gpio_val = value;
->> +
->> +	kfree(cmd);
->> +	mutex_unlock(&mcp->lock);
->
->Mutex unlock could be done before kfree().
->
->> +}
->> +
->> +static void mcp_set(struct gpio_chip *gc, unsigned int gpio_nr, int value)
->> +{
->> +	unsigned long mask = (1 << gpio_nr);
->
->Uneeded ()
->Does using BIT makes sense here?
->
->> +	unsigned long bmap_value = (value<<gpio_nr);
->
->Uneeded () and missing spaces aoud <<
->
->> +
->> +	mcp_set_multiple(gc, &mask, &bmap_value);
->> +}
->> +
->> +static int mcp_get_multiple(struct gpio_chip *gc, unsigned long *mask,
->> +		unsigned long *bits)
->> +{
->> +	u32 val;
->> +	struct mcp2200 *mcp = gpiochip_get_data(gc);
->> +	int status;
->> +
->> +	status = mcp_cmd_read_all(mcp);
->> +	if (status != 0)
->> +		return status;
->> +
->> +	val = mcp->gpio_inval;
->> +	*bits = (val & *mask);
->> +	return 0;
->> +}
->> +
->> +static int mcp_get(struct gpio_chip *gc, unsigned int gpio_nr)
->> +{
->> +	unsigned long mask = 0, bits = 0;
->
->No need to init long (and maybe bits)
->
->> +
->> +	mask = (1 << gpio_nr);
->
->Uneeded ()
->Does using BIT makes sense here?
->
->> +	mcp_get_multiple(gc, &mask, &bits);
->> +	return (bits > 0) ? 1 : 0;
->> +}
->> +
->> +static int mcp_get_direction(struct gpio_chip *gc, unsigned int gpio_nr)
->> +{
->> +	struct mcp2200 *mcp = gpiochip_get_data(gc);
->> +
->> +	return (mcp->gpio_dir & (MCP2200_DIR_IN << gpio_nr))
->> +		? GPIO_LINE_DIRECTION_IN : GPIO_LINE_DIRECTION_OUT;
->> +}
->> +
->> +static int mcp_set_direction(struct gpio_chip *gc, unsigned int gpio_nr,
->> +		enum MCP_IO_DIR io_direction)
->> +{
->> +	struct mcp2200 *mcp = gpiochip_get_data(gc);
->> +	struct mcp_configure *conf;
->> +	int status;
->> +	/* after the configure cmd we will need to set the outputs again */
->> +	unsigned long mask = ~(mcp->gpio_dir); /* only set outputs */
->> +	unsigned long bits = mcp->gpio_val;
->> +	/* Offsets of alternative pins in config_alt_pins, 0 is not used */
->> +	u8 alt_pin_conf[8] = {SSPND, USBCFG, 0, 0, 0, 0, RXLED, TXLED};
->> +	u8 config_alt_pins = mcp->config_alt_pins;
->> +
->> +	/* Read in the reset baudrate first, we need it later */
->> +	status = mcp_cmd_read_all(mcp);
->> +	if (status != 0)
->> +		return status;
->> +
->> +	conf = kzalloc(sizeof(struct mcp_configure), GFP_KERNEL);
->> +	if (!conf)
->> +		return -ENOMEM;
->> +	mutex_lock(&mcp->lock);
->> +
->> +	/* configure will reset the chip! */
->> +	conf->cmd = CONFIGURE;
->> +	conf->io_bmap = (mcp->gpio_dir & ~(1 << gpio_nr))
->> +		| (io_direction << gpio_nr);
->> +	/* Don't overwrite the reset parameters */
->> +	conf->baud_h = mcp->baud_h;
->> +	conf->baud_l = mcp->baud_l;
->> +	conf->config_alt_options = mcp->config_alt_options;
->> +	conf->io_default_val_bmap = mcp->gpio_reset_val;
->> +	/* Adjust alt. func if necessary */
->> +	if (alt_pin_conf[gpio_nr])
->> +		config_alt_pins &= ~(1 << alt_pin_conf[gpio_nr]);
->> +	conf->config_alt_pins = config_alt_pins;
->> +
->> +	status = hid_hw_output_report(mcp->hdev, (u8 *) conf,
->> +			sizeof(struct mcp_set_clear_outputs));
->> +	if (status == sizeof(struct mcp_set_clear_outputs)) {
->> +		mcp->gpio_dir &= ~(1 << gpio_nr);
->> +		mcp->config_alt_pins = config_alt_pins;
->> +	} else {
->> +		return -EIO;
->> +	}
->> +
->> +	kfree(conf);
->> +	mutex_unlock(&mcp->lock);
->
->Mutex unlock could be done before kfree().
->
->> +
->> +	/* Configure CMD will clear all IOs -> rewrite them */
->> +	mcp_set_multiple(gc, &mask, &bits);
->> +	return 0;
->> +}
->> +
->> +static int mcp_direction_input(struct gpio_chip *gc, unsigned int gpio_nr)
->> +{
->> +	return mcp_set_direction(gc, gpio_nr, MCP2200_DIR_IN);
->> +}
->> +
->> +static int mcp_direction_output(struct gpio_chip *gc, unsigned int gpio_nr,
->> +		int value)
->> +{
->> +	int ret;
->> +	unsigned long mask, bmap_value;
->> +
->> +	mask = (1 << gpio_nr);
->
->Uneeded ()
->Does using BIT makes sense here?
->
->> +	bmap_value = (value << gpio_nr);
->
->Uneeded ()
->
->> +
->> +	ret = mcp_set_direction(gc, gpio_nr, MCP2200_DIR_OUT);
->> +	if (ret == 0)
->> +		mcp_set_multiple(gc, &mask, &bmap_value);
->> +	return ret;
->> +}
->> +
->> +
->
->No need for 2 new lines.
->
->[...]
->
->> +static int mcp2200_probe(struct hid_device *hdev, const struct hid_device_id *id)
->> +{
->> +	int ret;
->> +	struct mcp2200 *mcp;
->> +
->> +	mcp = devm_kzalloc(&hdev->dev, sizeof(*mcp), GFP_KERNEL);
->> +	if (!mcp)
->> +		return -ENOMEM;
->> +
->> +	ret = hid_parse(hdev);
->> +	if (ret) {
->> +		hid_err(hdev, "can't parse reports\n");
->> +		return ret;
->> +	}
->> +
->> +	/*
->> +	 * This driver uses the .raw_event callback and therefore does not need any
->> +	 * HID_CONNECT_xxx flags.
->> +	 */
->> +	ret = hid_hw_start(hdev, 0);
->> +	if (ret) {
->> +		hid_err(hdev, "can't start hardware\n");
->> +		return ret;
->> +	}
->> +
->> +	hid_info(hdev, "USB HID v%x.%02x Device [%s] on %s\n", hdev->version >> 8,
->> +			hdev->version & 0xff, hdev->name, hdev->phys);
->> +
->> +	ret = hid_hw_open(hdev);
->> +	if (ret) {
->> +		hid_err(hdev, "can't open device\n");
->> +		hid_hw_stop(hdev);
->> +		return ret;
->> +	}
->> +
->> +	mutex_init(&mcp->lock);
->> +	init_completion(&mcp->wait_in_report);
->> +	hid_set_drvdata(hdev, mcp);
->> +	mcp->hdev = hdev;
->> +
->> +	ret = devm_add_action_or_reset(&hdev->dev, mcp2200_hid_unregister, hdev);
->> +	if (ret)
->> +		return ret;
->> +
->> +	mcp->gc = template_chip;
->> +	mcp->gc.parent = &hdev->dev;
->> +
->> +	ret = gpiochip_add_data(&mcp->gc, mcp);
->
->devm_gpiochip_add_data() and no .remove function?
->
->> +	if (ret < 0) {
->> +		dev_err(&hdev->dev, "Unable to register gpiochip\n");
->
->hid_err() to be consistent?
->
->> +		hid_hw_stop(hdev);
->
->hid_hw_stop() would be called twice. Once here and once because of the 
->devm_add_action_or_reset() above.
->
->
->Just my 2c,
->
->CJ
->
->> +		return ret;
->> +	}
->> +
->> +	return 0;
->> +}
->
->[...]
+> It doesn't really matter though. The output of that function must be
+> stable and must return the same set of factors and parent rate for a
+> given target rate.
 >
 
-Hi,
+I'm not sure if we're talking about the same thing here. Of course the
+set of factors and parent rate for a given target rate will be different
+depending on the fact if we can or cannot adjust the parent rate,
+agreed?
 
-thanks for your feedback. I have added most of it in my Kernel module. For the
-view things, I haven't added, I add a comment under your comment.
+Let me compare my implementation to ccu_mp.
 
-I am sorry for the error in hid-ids.h. It seems I forgot to run a git add hid-ids.h
-to rename the second USB_DEVICE_ID_MCP2221 into USB_DEVICE_ID_MCP2200. 
+ccu_mp_round_rate either calls the function ccu_mp_find_best or
+ccu_mp_find_best_with_parent_adj, depending on CLK_SET_RATE_PARENT.
 
-What do you think is the best way to deliver my driver? Should I create a new
-patch containg everything I have changed or should I go with the two already
-created patches, reorder them, fixing the error in hid-ids.h and adding a new
-patch including the comments from your review? This is my first contribution,
-that's why I am asking.
+I'm basically doing the same thing, but (!) ccu_nkm_find_best and
+ccu_nkm_find_best_with_parent_adj would be almost identical. Therefore,
+I opted to extend ccu_nkm_find_best to also support the parent
+adjustment. If you look at V2 of this patch, you will see that the only
+diffences are an if statement (if (parent_hw)) with two lines of code in
+the if's body and the fact that we need to store the best parent rate.
 
-Best regards,
-Johannes
+If you prefer, I can split this into two separate functions like in
+ccu_mp. I think all the confusion is coming from the fact that I didn't.
+So apparently it was not a good idea to keep it as one function.
+
+Should I introduce ccu_nkm_find_best_with_parent_adj instead of using
+ccu_nkm_find_best for both cases?
+
+>
+> So you can call it as many times as you want, it doesn't really matter.
+
+Of course! What did I write that made you think, I thought otherwise?
+
+>
+>> So, what this patch does, it provides a NULL pointer as parent_hw when
+>> we don't want ccu_nkm_find_best to try alternative parent rates.
+>
+> At best, the argument is misleading then. You're not passing a pointer
+> to the parent, you're telling it whether it should look for other
+> parents or not. And it's not a pointer, it's a boolean.
+
+No, I'm using parent_hw and as a pointer a few lines below when calling
+clk_hw_round_rate. So I'd need a boolean AND a pointer. I always need
+the pointer if the boolean is true. I never need the pointer when the
+boolean is false. Therefore, I opted to choose to use the pointer for
+first being a boolean (in the if) and then being a pointer (when calling
+clk_hw_round_rate). This is the (hopefully easier to read) code from V2:
+
+        if (parent_hw) {
+                tmp_parent = optimal_parent_rate(rate, _n, _k, _m);
+                tmp_parent = clk_hw_round_rate(parent_hw, tmp_parent);
+        }
+
+
+>
+>> Is it ok if I add a comment to ccu_nkm_find_best that explains the
+>> function and explicitly also the parameters?
+>
+> Sure
+
+Done in V2.
+
+>
+>> I also thought about using two different functions for the two
+>> situations. I have no strong opinion which is better.
+>>
+>> However, I don't think we should hand over the flags to this function,
+>> because we'd still only need to provide the parent_hw if we want to
+>> find the optimal parent rate, so having two parametes for the same
+>> purpose seems redundant. Unless, there is a rule to not use NULL
+>> pointers.
+>
+> Again, the behaviour must be stable across all calling sites.
+
+No argument here.
+
+>
+>> >
+>> >> +					// We must round up the desired parent rate, because the
+>> >> +					// rounding down happens when calculating tmp_rate. If we
+>> >> +					// round down also here, we'd round down twice.
+>> >> +					unsigned long optimal_parent =
+>> >> +							(rate * _m + (_n * _k - 1)) / _n / _k;
+>> >
+>> > I assume the addition of n * k - 1 is to round up, but I'm not sure we
+>> > should hack around like that.
+>> >
+>> > You should compute the ideal parent rate for a given set of timings, and
+>> > then just call round_rate on it. If the parent wants to round it one way
+>> > or another, that's the parent concern.
+>>
+>> I admit that the comment explaining this is not doing the complexity of
+>> this issue any justice. Let me try to explain:
+>>
+>> Let's say for our panel the optimal rate for pll-mipi is 449064000. The
+>> best closest we can get is 449035712 with a parent rate of 217714285
+>> (n=11, k=3, m=16).
+>>
+>> Eventually, ccu_nkm_find_best is going to be called with 449035712 as
+>> the rate. If we don't round up, like I proposend, but instead calculate:
+>>   optimal_parent = rate * m / n / k
+>> (which is, I think, what you you're proposing) leading to an optimal
+>> parent of 217714284 (!). We can't get 217714284 from the parent (we
+>> could get 217714285, but we're not asking for that) so the parent rounds
+>> down.
+>>
+>> To make things worse, this story continues for the new "best rate" as
+>> well.
+>>
+>> In the end, ccu_nkm_find_best claims:
+>>  - the optimal rate for 449064000 is 449035712 (parent=217714285, n=11,
+>>    k=3, m=16)
+>>  - but ccu_nkm_find_best would claim that the optimal rate for 449035712
+>>    is 449018181 (parent=235200000, n=7, k=3, m=11)
+>>  - and finally, the optimal rate for 449018181 is 449018180
+>>    (parent=213818181, n=7, k=3, m=10)
+>>
+>> This doesn't seem right to me.
+>>
+>> But you're also right, in that we can't just always round up. In a
+>> hypothetical example that we request a parent rate of 450000000. With
+>> rounding up, we'd get an optimal parent rate of 218181819 for n=11, k=3,
+>> m=16. And let's now further claim that the parent could provide exactly
+>> that rate, we'd end up with a rate of 450000001. So, we'd overshoot,
+>> which (currently) is not acceptable.
+>>
+>> Hmm... I currently can't think of a clever way to solve this other than
+>> this:
+>>
+>>     optimal_parent = (rate * _m + (_n * _k - 1)) / _n / _k;
+>>     tmp_parent = clk_hw_round_rate(parent_hw, optimal_parent);
+>>     tmp_rate = tmp_parent * _n * _k / _m;
+>>     if (tmp_rate > rate) {
+>>         optimal_parent = rate * m / n / k
+>>         tmp_parent = clk_hw_round_rate(parent_hw, optimal_parent);
+>>         tmp_rate = tmp_parent * _n * _k / _m;
+>>     }
+>>     if (tmp_parent > optimal_parent)
+>>         continue;
+>>
+>> This seems ugly, but at least it should work in all cases. Any opinions?
+>
+> Again, you shouldn't work around the issue.
+>
+> It's very simple really: you already computed the optimal parent rate,
+
+No. I didn't. My assumption is: If ccu_nkm_find_best is asked for the
+best rate for rate = 449035712, it should try to include 449035712 in
+its candidates, agreed?
+
+Example 1:
+==========
+rate=449035712, n=11, k=3, m=16:
+We should as for a parent rate of 217714285, because:
+217714285 * 11 * 3 / 16 = 449035712
+
+How do we get from 449035712 to 217714285, you ask?
+
+      DIV_ROUND_UP(rate * m, n * k)
+
+Do you agree that we should ask the parent for 217714285 in case we want
+a rate of 449035712 and we're currently evaluating the case n=11, k=3,
+m=16?
+
+We should not ask for a parent rate of 217714284, because:
+217714284 * 11 * 3 / 16 = 449035710
+
+Example 2:
+==========
+rate=500000000, n=11, k=3, m=16:
+Here we should not ask the parent for
+      DIV_ROUND_UP(rate * m, n * k)
+because that would be 242424243.
+
+242424243 * 11 * 3 / 16 = 500000001
+
+We (the NKM clock, not the parent!) would overshoot (please see at the
+end of this mail, why (for now) I don't want to support overshooting in
+the NKM clock).
+
+Instead we should as for a parent rate of 242424242, because:
+242424242 * 11 * 3 / 16 = 499999999
+
+In conclusion, there are cases, where we (the NKM clock) have to ask the
+parent for
+      DIV_ROUND_UP(rate * m, n * k)
+And there are also cases, where we have to ask the parent for
+      rate * m / (n * k)
+
+This is what the code is trying to do. Maybe it's easier to look at V2
+because I extracted the calcultion of the optimal parent rate into a
+separate function hoping that this makes things clearer.
+
+Let me stress this: When calculating the optimal rate for the parent,
+I'm not making any assumptions here about how the PARENT clock rounds.
+In fact, I assume that the parent could be perfect and always provides
+the rate it is asked for. I only take into account how the nkm clock
+rounds.
+
+> you ask the parent to compute whatever is closest to that optimal parent
+> rate.
+>
+> It's the parent responsibility now. It's the parent decision to figure
+> out what "the closest" means, if it can change rate, if it has any range
+> limitation, etc. You can't work around that.
+>
+> What you actually want there is the parent to actually provide the
+> closest rate, even if it means overshooting.
+>
+
+I want to ask the parent for a rate, that would actually result in the
+rate that nkm_find_best was asked for. Are you asking me to instead ask
+the parent for a rate that doesn't fit that criterion?
+
+> That's fine, we have a flag
+> for that: CLK_(MUX|DIVIDER)_ROUND_CLOSEST. We just need to set it on the
+> parent and be done with it.
+
+This is a totally different issue. If you carefully look at ccu_mp, you
+will see that it would ignore cases when its parent had rounded up.
+ccu_nkm is no different. Teaching all of sunxi-ng's clocks to respect
+ROUND_CLOSEST is a totally different beast. For now, sunxi-ng always
+expects rounding down.
+
+I do not like mixing the two into one patchset. I hope that's a fair
+request? I tried to mix it and it was a nightmare! If you want, I can
+try tackling ROUND_CLOSEST afterwards. But I don't think it would help
+with this patchset, because we'd need to support both the ROUND_CLOSEST
+and ~ROUND_CLOSEST case. Covering one case seems already hard enough. :)
+
+Thank you for your patience,
+  Frank
+
+>
+> Maxime
+>
+> [[End of PGP Signed Part]]
