@@ -2,133 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D4F72BED8
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1319672BF67
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235000AbjFLKXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 06:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57922 "EHLO
+        id S232261AbjFLKnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 06:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233276AbjFLKXS (ORCPT
+        with ESMTP id S234902AbjFLKn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 06:23:18 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on20627.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8a::627])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88931250F;
-        Mon, 12 Jun 2023 03:02:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=V6kHQ5U2bY2cAj6Av2MNmY+jlvnw0oFlRhIAIjp9n6FkTPYG6d1PKb121JeGq/7KKlM8Ye88JlbDFwnvr3RHvmBRrd9PGRr0VIz+RTgzSsFBAz0ATlfEzGXXfVZcATLuaS/LKswSyBvzeOQXESYzCPVu2mRi4T5ziTAUgJsexDIo3wlLMhv0vypPFIh3noXROjv2IDvpyf6zPIYpBm5zT/0bm91NFinuxyiz4rkf9GYoUwaVKDsigkJYmkzg5sRHe/WP3DgnS0uC3ZJL8+gXPGI4zKyIDoMbqXamT7xbchdnN5cj6JhPpVkAEe7+6ljCAT+PJ9jt+cOFWRv+Iz0Gxw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EFI8992NbwPrXsxs1R+70pYZKmiiwXBSsjjsnEtvDMM=;
- b=RvzYwaQgNQWTY5/oGORoRcgeTov42/z86ojFBx2aS5np0+7gVP3KNI6TLpu+8U9EzNsmVh0iCI+i6VMoBp26gjKpwFA743jSOLwuGiN+HXA23y2SKtoVN40iSG74Mnf7sEMO7DCnWbX6FsHFYmWgS0H7hr3NdBD+ME0BF/LYCIHl1dVDDrE2W9IhNm3kanNlyAen0gqOdBOuRKN6EaeXyWoKFiSmk3yqYmJJL8QBC3iSpAwXBaeinRGMly9zTBOAlFOfKfCZzSbgZ2Ky3j/N4tibp7ub8KLv4bj2Cr7RNTP80dFuTxDgXJT6gaVd0qkK0nkp9HrY0IPAXhsDhKMerw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=gmail.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EFI8992NbwPrXsxs1R+70pYZKmiiwXBSsjjsnEtvDMM=;
- b=Uf8a0cWdUe3vFCFEde4R7VDiP6GGfugWJDaa55tpUyxEB568kb0uYZZwE2HvurYB6ecbthWuJa1tPPX5bAfHZdzr2MlmTMzk7W4hIejjNC5FwG3x8tCiyRJS0Pmjua/80Vaj+nsG8aZJKEJiAJwqvJFCDmoB85qkm9PKeEi6tgo=
-Received: from SJ0PR03CA0346.namprd03.prod.outlook.com (2603:10b6:a03:39c::21)
- by DS0PR12MB8573.namprd12.prod.outlook.com (2603:10b6:8:162::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Mon, 12 Jun
- 2023 10:00:53 +0000
-Received: from MWH0EPF000971E7.namprd02.prod.outlook.com
- (2603:10b6:a03:39c:cafe::35) by SJ0PR03CA0346.outlook.office365.com
- (2603:10b6:a03:39c::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.33 via Frontend
- Transport; Mon, 12 Jun 2023 10:00:52 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- MWH0EPF000971E7.mail.protection.outlook.com (10.167.243.75) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6500.22 via Frontend Transport; Mon, 12 Jun 2023 10:00:52 +0000
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Mon, 12 Jun
- 2023 05:00:47 -0500
-Received: from xhdsneeli40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.23 via Frontend
- Transport; Mon, 12 Jun 2023 05:00:45 -0500
-From:   Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
-To:     <richardcochran@gmail.com>, <netdev@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <vincent.cheng.xh@renesas.com>,
-        <harini.katakam@amd.com>, <git@amd.com>,
-        <sarath.babu.naidu.gaddam@amd.com>
-Subject: [PATCH] ptp: clockmatrix: Add Defer probe if firmware load fails
-Date:   Mon, 12 Jun 2023 15:30:44 +0530
-Message-ID: <20230612100044.979281-1-sarath.babu.naidu.gaddam@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 12 Jun 2023 06:43:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBE64EF5
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 03:27:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686565626;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Dqx/dOTiUNpv7HB25tV0EBriLdezn58c/nIheim7g30=;
+        b=HdBasNIG4B2vEwvM21hr8GYlsMUuIc8hF/ZpkfpnAjraEVvYMyJbEdbRfoOqxPtmDzv2jf
+        zeMqmZTXBhtyo2a6ghyCvdjn7l+G7R+mK6Wzbrb25VgVv/nyw6AnD8xiWsPU1r7sWmHo+Q
+        uVApoN2ocx189F5drhldNQXcNG2YyIk=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-148-htRKrI7AP-q_gW1uT6qMKw-1; Mon, 12 Jun 2023 06:01:24 -0400
+X-MC-Unique: htRKrI7AP-q_gW1uT6qMKw-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f7e8c24a92so15440505e9.0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 03:01:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686564083; x=1689156083;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Dqx/dOTiUNpv7HB25tV0EBriLdezn58c/nIheim7g30=;
+        b=e7NxwYNgW3kXfUIF+KAydZ6OFrPyzqL/mI/TvfcmxVpM8cYDy11a/bfslay8T0n+cm
+         h9p6lenm4TSp8Yd2nhAKHOIQnbMOBm5HDkZBebX/sNOIL6axOU72dA+mn/0McwqVYGGu
+         McH7Gz1DJ5za8DZ7HWiLAqIHEW2T8j08xOaxV28D0YmUNTRVO13mhG4GvJxLRXOp6TgG
+         gP3EQ7lEfzt5gzTGqsB3pHaMWjRSzdbLyb1LColp6n629ld6x0nlRu1DLNQx7v1zcXMH
+         iVjtvLJ/uu70U3DpUkSNEGQzloY7YfYmNNW7h9wtguGhCzpZoVXTCFWlEQUe1h2RV50e
+         Qyzw==
+X-Gm-Message-State: AC+VfDw6Fnnjj0uY4t9j9IbrMItr4NjcwO8F2P/HuWnkPhWQtOYLoFn/
+        6phbrtGHI4Is5u89b905Co/zsGLmo1hk36CZDvc4G/gPXLpiuViF8VBwirppxVdP9Cg3SS3+akV
+        hMPvQXp5W/ngLwYQrG/CPy4V9
+X-Received: by 2002:a1c:7203:0:b0:3f6:58ad:ed85 with SMTP id n3-20020a1c7203000000b003f658aded85mr5769396wmc.10.1686564082909;
+        Mon, 12 Jun 2023 03:01:22 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5xVh4pila2/w97ktJHiDUKA1oBeqlgc+boWkYF7WG/ABffiXi36f0T+EHeh5DRCOkNArJqtA==
+X-Received: by 2002:a1c:7203:0:b0:3f6:58ad:ed85 with SMTP id n3-20020a1c7203000000b003f658aded85mr5769375wmc.10.1686564082545;
+        Mon, 12 Jun 2023 03:01:22 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c74e:1600:4f67:25b2:3e8c:2a4e? (p200300cbc74e16004f6725b23e8c2a4e.dip0.t-ipconnect.de. [2003:cb:c74e:1600:4f67:25b2:3e8c:2a4e])
+        by smtp.gmail.com with ESMTPSA id n16-20020adfe350000000b0030e5b1fffc3sm12031233wrj.9.2023.06.12.03.01.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 03:01:21 -0700 (PDT)
+Message-ID: <b72118b0-47dc-86c4-15fb-fb5ea72bcf30@redhat.com>
+Date:   Mon, 12 Jun 2023 12:01:20 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCHv5] mm: skip CMA pages when they are not available
+Content-Language: en-US
+To:     Zhaoyang Huang <huangzhaoyang@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Minchan Kim <minchan@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ke.wang@unisoc.com
+References: <1685501461-19290-1-git-send-email-zhaoyang.huang@unisoc.com>
+ <20230609153519.ff01046ef0faff00a74bd5b0@linux-foundation.org>
+ <a562bae0-d779-620a-98bc-6102468aecae@redhat.com>
+ <CAGWkznFv=LjrjdqvepYtMP-e5JRp2wuWakd=CGLQQZ7aBx36Hg@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <CAGWkznFv=LjrjdqvepYtMP-e5JRp2wuWakd=CGLQQZ7aBx36Hg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000971E7:EE_|DS0PR12MB8573:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9971c17c-a61e-48d3-e040-08db6b2be84e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wkbTW7f0hYfQb0tHjhYgNicWnWWlVqe9sDp6SL/1UdLoKfNHk5E16ss/mF19vOd+Lh07CCPDeg4shAdQBcvc1tk1t4mKnbjc8LH1fHogJ8pykeqQI4bDKFnxIHmJCheSrE2pdVNfYF/A291myqBTw03mGH+btkOG53HoqYPZF1anOA1CJKC/TkrGpocU+nCgUSXLTGCRwm0RrCRgp7TMVXUhGXXpPUAIadIqrkPxvNR0y2dXWSQtvxf/jdppZDtd1VDAFCN4/qipdT9AJZqHH6C8M+zwl9sA8JJCaBmqivyUY2DCetASMmz5iwxD5I2b6lfVicbiU8FBr5M6yxdQ5GuH7IENMStBDatKlWrtRN3ftwVBIKG9Da6/eP9kXfOWHqSxdGI7ARHjDKu1VC2SrFobWUJPPEfXXoybAQYj88FzgVw6CFV/jA5LFYqkRLVMqp8hIkv1ef0gdcwoAZpsCbqk1k9sj1snLyqYEkDv/dCQw5bC3Q09bZFMvOwnDGirpAOSP3eHrkSR5cLsKq+fVNOeSjC2y3m1tfrQ7GdtiHErf1khzFFVX+IC5J1/VHy/0Gjdo/3d2V4kC1V9mzfBE7hU6rgFXa7K93kMMb0ZLAX13peTVANiPd6IHcG2bH47jbRttNKXoFts/o1mqiM/sBc33UuH3aYTascjjLIYlosuFM2NHXzeXJL91aUaD/DhhoX1F8BfaB5Lc/Md/VUSsCXMe3RCbx5io1/KqjWTnlbRrLs1G0hbiJKeb2fyE3rmL3x5ZkvkXFeAW3slB69SfQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(376002)(136003)(346002)(451199021)(40470700004)(46966006)(36840700001)(86362001)(103116003)(36756003)(110136005)(4326008)(478600001)(54906003)(70586007)(70206006)(316002)(40480700001)(8676002)(8936002)(41300700001)(5660300002)(4744005)(2906002)(82310400005)(356005)(81166007)(82740400003)(2616005)(336012)(426003)(1076003)(26005)(186003)(83380400001)(36860700001)(47076005)(40460700003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 10:00:52.6743
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9971c17c-a61e-48d3-e040-08db6b2be84e
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: MWH0EPF000971E7.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8573
-X-Spam-Status: No, score=1.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clock matrix driver can be probed before the rootfs containing
-firmware/initialization .bin is available. The current driver
-throws a warning and proceeds to execute probe even when firmware
-is not ready. Instead, defer probe and wait for the .bin file to
-be available.
+On 12.06.23 11:35, Zhaoyang Huang wrote:
+> On Mon, Jun 12, 2023 at 5:29 PM David Hildenbrand <david@redhat.com> wrote:
+>>
+>> On 10.06.23 00:35, Andrew Morton wrote:
+>>> On Wed, 31 May 2023 10:51:01 +0800 "zhaoyang.huang" <zhaoyang.huang@unisoc.com> wrote:
+>>>
+>>>> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+>>>>
+>>>> This patch fixes unproductive reclaiming of CMA pages by skipping them when they
+>>>> are not available for current context. It is arise from bellowing OOM issue, which
+>>>> caused by large proportion of MIGRATE_CMA pages among free pages.
+>>>>
+>>>> [   36.172486] [03-19 10:05:52.172] ActivityManager: page allocation failure: order:0, mode:0xc00(GFP_NOIO), nodemask=(null),cpuset=foreground,mems_allowed=0
+>>>> [   36.189447] [03-19 10:05:52.189] DMA32: 0*4kB 447*8kB (C) 217*16kB (C) 124*32kB (C) 136*64kB (C) 70*128kB (C) 22*256kB (C) 3*512kB (C) 0*1024kB 0*2048kB 0*4096kB = 35848kB
+>>>> [   36.193125] [03-19 10:05:52.193] Normal: 231*4kB (UMEH) 49*8kB (MEH) 14*16kB (H) 13*32kB (H) 8*64kB (H) 2*128kB (H) 0*256kB 1*512kB (H) 0*1024kB 0*2048kB 0*4096kB = 3236kB
+>>>> ...
+>>>> [   36.234447] [03-19 10:05:52.234] SLUB: Unable to allocate memory on node -1, gfp=0xa20(GFP_ATOMIC)
+>>>> [   36.234455] [03-19 10:05:52.234] cache: ext4_io_end, object size: 64, buffer size: 64, default order: 0, min order: 0
+>>>> [   36.234459] [03-19 10:05:52.234] node 0: slabs: 53,objs: 3392, free: 0
+>>>>
+>>>
+>>> We saw plenty of feedback for earlier versions, but now silence.  Does
+>>> this mean we're all OK with v5?
+>>
+>> The logic kind-of makes sense to me (but the kswapd special-casing
+>> already shows that it might be a bit fragile for future use), but I did
+>> not yet figure out if this actually fixes something or is a pure
+>> performance improvement.
+>>
+>> As we phrased it in the comment "It is waste of effort", but in the
+>> patch description "This patch fixes unproductive reclaiming" + a scary
+>> dmesg.
+>>
+>> Am I correct that this is a pure performance optimization (and the issue
+>> revealed itself in that OOM report), or does this actually *fix* something?
+>>
+>> If it's a performance improvement, it would be good to show that it is
+>> an actual improvement worth the churn ...
+> Sorry for the confusion. As for the OOM issue, the previous
+> commit(https://lkml.kernel.org/r/1683782550-25799-1-git-send-email-zhaoyang.huang@unisoc.com)
+> helps to decrease the fail rate from 12/20 to 2/20, which it turn to
+> be 0 when applying this patch.
 
-Signed-off-by: Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
----
- drivers/ptp/ptp_clockmatrix.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Thanks! Can we make that clearer in the patch description? I'm 
+struggling a bit my self to find the right words.
 
-diff --git a/drivers/ptp/ptp_clockmatrix.c b/drivers/ptp/ptp_clockmatrix.c
-index c9d451bf89e2..96328dfb7e55 100644
---- a/drivers/ptp/ptp_clockmatrix.c
-+++ b/drivers/ptp/ptp_clockmatrix.c
-@@ -2424,9 +2424,13 @@ static int idtcm_probe(struct platform_device *pdev)
- 
- 	err = idtcm_load_firmware(idtcm, &pdev->dev);
- 
--	if (err)
-+	if (err) {
- 		dev_warn(idtcm->dev, "loading firmware failed with %d", err);
- 
-+		if (err == -ENOENT)
-+			return -EPROBE_DEFER;
-+	}
-+
- 	wait_for_chip_ready(idtcm);
- 
- 	if (idtcm->tod_mask) {
+Something like
+
+"This change further decreases the chance for wrong OOMs in the presence 
+of a lot of CMA memory."
+
+?
+
+In any case
+
+Acked-by: David Hildenbrand <david@redhat.com>
+
 -- 
-2.25.1
+Cheers,
+
+David / dhildenb
 
