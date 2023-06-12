@@ -2,156 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3928B72D065
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DABD172CE72
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:31:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234957AbjFLUYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 16:24:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49968 "EHLO
+        id S238082AbjFLSbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 14:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233643AbjFLUYV (ORCPT
+        with ESMTP id S237745AbjFLSbL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 16:24:21 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902C819B;
-        Mon, 12 Jun 2023 13:24:19 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-653f9c7b3e4so3686652b3a.2;
-        Mon, 12 Jun 2023 13:24:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686601459; x=1689193459;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3BlD0eFxk9JA2Y17dTnj4ztqyoGe9HUFhDj3qpNJ2LU=;
-        b=lDIuYJhZVN6yQXu7zcbXsXJY4Gc88rqLJ74xnhgc0NuL3ARAZA8orYmKVSOLV43aML
-         ++W9C5mmmnpmHNORywokYEDEJmK0Ix+Z7XT8rjHZdNbT8L6hjBaYF9nPmI2brch6pRB8
-         kamIbnUjGAI9cXl5TC/W8/itcmL7xmN4+iE8cEauLUxBGX4rUAEKTbjRCpAvKkQTwLiq
-         vahbbb2JVxQ7VQ2ny8V5+ERuszx9MQI8jJtzvXD9Abu3+pjO/NgKj/TExAkBsXsmAfJD
-         VhzdKP1tMsyND3/qY/a4HMxEZn77+vl1ROrNiSBXHd8bwCROvilLDUcD9uBQwYXWJH4Q
-         0NAg==
+        Mon, 12 Jun 2023 14:31:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC011728
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:30:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686594625;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ytk4CBUD5ymgdb/TV8v27oVrKqeWA1Ac0y1484kVuMA=;
+        b=Ns2DTuh91AG7n9kAg7VJ675+fJ3EqI7ZPZhpG8UG1tmhhebeuzRJC4oqTHiGQKizRk6fly
+        A1L2Zdyk5Df+V6BBVreZlr9dWUuSchui9W2TRgWSVZ9ec/1wWPpbkDptOZCTI71a4RASsJ
+        ABdpwltxmK+D6g7rMXsCCVbCto6mMY8=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-557-KodHhvVXMCaNx7y8rqdjNg-1; Mon, 12 Jun 2023 14:30:24 -0400
+X-MC-Unique: KodHhvVXMCaNx7y8rqdjNg-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f7e6582938so87826145e9.0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:30:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686601459; x=1689193459;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3BlD0eFxk9JA2Y17dTnj4ztqyoGe9HUFhDj3qpNJ2LU=;
-        b=Mn2mcLe36ZEZddAGWqK2RS1fiw6cwRZjhEzw1IK1u3L+EBk2KbM7qIBn1M9YVgWz4d
-         5w73PomS0uHVNV7e1YkIzrZzwF+Qu42LhSBtm7W1T9ZyWFuAzAsa8l+zeP04vv1CNiOu
-         jf5Hquj74op+jfpUzFHM/scToHAkZyaoR7sFc4KuJijf7V4GlTCSwgcfcr74asE66Snx
-         2xmf+vBHqEantD9bf+QAkegnH1lg96u6O26SGQSFXi/s8oA9rmOf7mbJ/wLR4VdCrpg+
-         tPH41gMk1PJJpRQg/2TYzv/lwGv9T310wUJ3yCWriDG6hoP3Cj+iTThn7Qy0zjhqMSDH
-         cYJA==
-X-Gm-Message-State: AC+VfDwl02DvVdzNecEkZOkLdcp4EyPPrN08803EYjSkzlFiCUClHBjz
-        ele+Ma6kUINjSiu2CwNALvw=
-X-Google-Smtp-Source: ACHHUZ6dzH3pfkRpOOuFnjOjoVCxLb+7MvstvsH8N3/589NgjWFu+zcR7yMh4U9mwn9QhMlGy7yv1Q==
-X-Received: by 2002:a05:6a20:1445:b0:111:2f20:d48f with SMTP id a5-20020a056a20144500b001112f20d48fmr11620903pzi.53.1686601458890;
-        Mon, 12 Jun 2023 13:24:18 -0700 (PDT)
-Received: from localhost (ec2-52-8-182-0.us-west-1.compute.amazonaws.com. [52.8.182.0])
-        by smtp.gmail.com with ESMTPSA id x3-20020aa793a3000000b0063d47bfcdd5sm4254774pff.111.2023.06.12.13.24.18
+        d=1e100.net; s=20221208; t=1686594622; x=1689186622;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ytk4CBUD5ymgdb/TV8v27oVrKqeWA1Ac0y1484kVuMA=;
+        b=k+sGqTX+3gal38NBXVSASqbsuLT2GwoYoOPATHEfQSsit6H0SQA6InssREdaRo39PX
+         NU4YR+YkU9xG5k/Qlodi7r+gDfO3cG3XOiMF+FxJnctqndevpsNIHBuuQ9Uv8DHRwCZi
+         b1AAYV9y77lSGjY6z1zmfz6Swt+FdePpeyicyiwY8jhl0L0VePt7k1bNXUdM12FisTK0
+         0A4Mx2xHxx1mcxsA1LM/dJUU0gwCfVJYd+LbiH/yvwetxKBSt3xbGMREQjHJVAhLb6Ie
+         a2b7umztubm0U/Ozu8s8UXSGSbVQiyTq0b/cGwkFovjqaus3ITqEjWT1Ko36W23Iz5vn
+         b3Lg==
+X-Gm-Message-State: AC+VfDwB/26QnLktIzTXA2yrsqGQazhzgeiOjXD5zPeoTLe0K+7AjQfX
+        bWqTFIL8SejpXYIsJPirkLVsSXA6D0QNOUoSQILLTpoBlQfLC9NYDTGZmrf6S+6lwsbYuKfUiR/
+        e1K4fRw0so6a9PgiV+UQgBh4xUmyBZ6/S
+X-Received: by 2002:a05:600c:2297:b0:3f7:f544:4993 with SMTP id 23-20020a05600c229700b003f7f5444993mr8211865wmf.20.1686594622651;
+        Mon, 12 Jun 2023 11:30:22 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6f87goxu4tLEIjzoynyJtL5A/keJi5mHvAB0RC30rg0lgcZJDIaJ1gEOYrsjRA3uu+QEeiPA==
+X-Received: by 2002:a05:600c:2297:b0:3f7:f544:4993 with SMTP id 23-20020a05600c229700b003f7f5444993mr8211850wmf.20.1686594622317;
+        Mon, 12 Jun 2023 11:30:22 -0700 (PDT)
+Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id r15-20020adfda4f000000b002fe96f0b3acsm13271835wrl.63.2023.06.12.11.30.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 13:24:18 -0700 (PDT)
-Date:   Mon, 12 Jun 2023 18:30:04 +0000
-From:   Bobby Eshleman <bobbyeshleman@gmail.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@sberdevices.ru, oxffffaa@gmail.com
-Subject: Re: [RFC PATCH v4 03/17] vsock/virtio: support to send non-linear skb
-Message-ID: <ZIdkLI8TMMzIgI7d@bullseye>
-References: <20230603204939.1598818-1-AVKrasnov@sberdevices.ru>
- <20230603204939.1598818-4-AVKrasnov@sberdevices.ru>
+        Mon, 12 Jun 2023 11:30:21 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     Conor Dooley <conor@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     devicetree@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
+        linux-kernel@vger.kernel.org, Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        dri-devel@lists.freedesktop.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH v2 2/5] dt-bindings: display: ssd1307fb: Remove default
+ width and height values
+In-Reply-To: <20230612-parade-sauciness-16225ce0a643@spud>
+References: <20230609170941.1150941-1-javierm@redhat.com>
+ <20230609170941.1150941-3-javierm@redhat.com>
+ <20230610-opposite-quality-81d4a1561c88@spud>
+ <87r0qj19zs.fsf@minerva.mail-host-address-is-not-set>
+ <20230610-unused-engaged-c1f4119cff08@spud>
+ <87jzwa29ff.fsf@minerva.mail-host-address-is-not-set>
+ <d4828a3d-639a-a207-ff36-45c8c5d4d311@suse.de>
+ <20230612-parade-sauciness-16225ce0a643@spud>
+Date:   Mon, 12 Jun 2023 20:30:21 +0200
+Message-ID: <87h6rc354y.fsf@minerva.mail-host-address-is-not-set>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230603204939.1598818-4-AVKrasnov@sberdevices.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 03, 2023 at 11:49:25PM +0300, Arseniy Krasnov wrote:
-> For non-linear skb use its pages from fragment array as buffers in
-> virtio tx queue. These pages are already pinned by 'get_user_pages()'
-> during such skb creation.
-> 
-> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-> ---
->  net/vmw_vsock/virtio_transport.c | 37 ++++++++++++++++++++++++++------
->  1 file changed, 31 insertions(+), 6 deletions(-)
-> 
-> diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
-> index e95df847176b..6053d8341091 100644
-> --- a/net/vmw_vsock/virtio_transport.c
-> +++ b/net/vmw_vsock/virtio_transport.c
-> @@ -100,7 +100,9 @@ virtio_transport_send_pkt_work(struct work_struct *work)
->  	vq = vsock->vqs[VSOCK_VQ_TX];
->  
->  	for (;;) {
-> -		struct scatterlist hdr, buf, *sgs[2];
-> +		/* +1 is for packet header. */
-> +		struct scatterlist *sgs[MAX_SKB_FRAGS + 1];
-> +		struct scatterlist bufs[MAX_SKB_FRAGS + 1];
->  		int ret, in_sg = 0, out_sg = 0;
->  		struct sk_buff *skb;
->  		bool reply;
-> @@ -111,12 +113,35 @@ virtio_transport_send_pkt_work(struct work_struct *work)
->  
->  		virtio_transport_deliver_tap_pkt(skb);
->  		reply = virtio_vsock_skb_reply(skb);
-> +		sg_init_one(&bufs[0], virtio_vsock_hdr(skb), sizeof(*virtio_vsock_hdr(skb)));
-> +		sgs[out_sg++] = &bufs[0];
-> +
-> +		if (skb_is_nonlinear(skb)) {
-> +			struct skb_shared_info *si;
-> +			int i;
-> +
-> +			si = skb_shinfo(skb);
-> +
-> +			for (i = 0; i < si->nr_frags; i++) {
-> +				skb_frag_t *skb_frag = &si->frags[i];
-> +				void *va = page_to_virt(skb_frag->bv_page);
-> +
-> +				/* We will use 'page_to_virt()' for userspace page here,
-> +				 * because virtio layer will call 'virt_to_phys()' later
-> +				 * to fill buffer descriptor. We don't touch memory at
-> +				 * "virtual" address of this page.
-> +				 */
-> +				sg_init_one(&bufs[i + 1],
-> +					    va + skb_frag->bv_offset,
-> +					    skb_frag->bv_len);
-> +				sgs[out_sg++] = &bufs[i + 1];
-> +			}
-> +		} else {
-> +			if (skb->len > 0) {
-> +				sg_init_one(&bufs[1], skb->data, skb->len);
-> +				sgs[out_sg++] = &bufs[1];
-> +			}
->  
-> -		sg_init_one(&hdr, virtio_vsock_hdr(skb), sizeof(*virtio_vsock_hdr(skb)));
-> -		sgs[out_sg++] = &hdr;
-> -		if (skb->len > 0) {
-> -			sg_init_one(&buf, skb->data, skb->len);
-> -			sgs[out_sg++] = &buf;
->  		}
->  
->  		ret = virtqueue_add_sgs(vq, sgs, out_sg, in_sg, skb, GFP_KERNEL);
-> -- 
-> 2.25.1
-> 
+Conor Dooley <conor@kernel.org> writes:
 
-LGTM.
+> On Mon, Jun 12, 2023 at 09:47:12AM +0200, Thomas Zimmermann wrote:
+>> Am 11.06.23 um 01:18 schrieb Javier Martinez Canillas:
+>
+>> > But I will be OK to drop the "solomon,ssd130?fb-i2c" compatible strings
+>> > from the DRM driver and only match against the new "solomon,ssd130?-i2c"
+>> > compatible strings. And add a different DT binding schema for the ssd130x
+>> > driver, if that would mean being able to fix things like the one mentioned
+>> > in this patch.
+>
+> If there are different compatibles, then it can always be sorted out
+> later iff it turns out to be a problem, since new devicetrees should not
+> be using the deprecated compatibles anyway. I didn't realise that those
+> deprecated compatibles existed, thanks for your patience.
+>
 
-Reviewed-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+No worries, thanks for raising this question.
+
+>> > In my opinion, trying to always make the drivers backward compatible with
+>> > old DTBs only makes the drivers code more complicated for unclear benefit.
+>> > 
+>> > Usually this just ends being code that is neither used nor tested. Because
+>> > in practice most people update the DTBs and kernels, instead of trying to
+>> > make the DTB a stable ABI like firmware.
+>> > 
+>> 
+>> From my understanding, fixing the resolution is the correct thing to do
+>> here. Userspace needs to be able to handle these differences.
+>
+> Fixing meaning correcting, or fixing meaning using a fixed resolution?
+> Not clear to me what you mean, sorry.
+>
+
+Fixing meaning using as a default the correct maximum resolution for each
+OLED controller, rather than an arbitrary 96x16 resolution that was added
+just to be compatible with the panel that was tested the original driver.
+
+But after talking with Thomas and Maxime about this issue, I realized that
+it won't even cause an issue for theoretical users that may be relying on
+the previous default.
+
+Changing the default resolution to something smaller could cause an issue
+since a user expecting a bigger default would get their display output cut
+but changing to something bigger just means user-space being able to write
+more pixels than those that will be displayed.
+
+Because there isn't really a "resolution" configured in the chip, but just
+how many pixels a particular controller can drive. The new default is the
+maximum that each controller supports according to their documentation.
+
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
+
