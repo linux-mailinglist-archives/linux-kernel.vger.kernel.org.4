@@ -2,158 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31EBD72B561
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 04:25:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F59C72B563
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 04:25:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231910AbjFLCZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 22:25:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33772 "EHLO
+        id S233020AbjFLCZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 22:25:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjFLCZC (ORCPT
+        with ESMTP id S231922AbjFLCZX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 22:25:02 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260F812D;
-        Sun, 11 Jun 2023 19:25:00 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Qfb9z1xzVz4f3lwM;
-        Mon, 12 Jun 2023 10:24:55 +0800 (CST)
-Received: from [10.174.178.129] (unknown [10.174.178.129])
-        by APP2 (Coremail) with SMTP id Syh0CgD3Buj3gYZk2Z2qLQ--.63697S2;
-        Mon, 12 Jun 2023 10:24:57 +0800 (CST)
-Subject: Re: [PATCH v4 13/19] ext4: call ext4_mb_mark_group_bb in
- ext4_free_blocks_simple
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     adilger.kernel@dilger.ca, ojaswin@linux.ibm.com,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230603150327.3596033-1-shikemeng@huaweicloud.com>
- <20230603150327.3596033-14-shikemeng@huaweicloud.com>
- <20230611050532.GE1436857@mit.edu>
-From:   Kemeng Shi <shikemeng@huaweicloud.com>
-Message-ID: <cd236fdb-c48c-69b0-10a3-3df8a34f0a6e@huaweicloud.com>
-Date:   Mon, 12 Jun 2023 10:24:55 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.0
+        Sun, 11 Jun 2023 22:25:23 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CFB619A;
+        Sun, 11 Jun 2023 19:25:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686536719; x=1718072719;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=T9f0npRaN45vOVZJ7CQGVNcFZs7jlE5v/nyHXUvktuQ=;
+  b=AO1KSa4rx872msnNWAEAfgh70b/TDn0Dhq7Ca0NHUE8JHnotQJT43k0V
+   GGDgeDPKJuad4uaY/sOv+5244osJez56jdLgh36jbjrecrW7wuRdS/3CM
+   VfW7CmJWdtznNYMVkSjaaqsQTuk9TJNBc/Gbt0xYBLzFrwmrpKtbon/Rj
+   M8q5xek+pF9eqiO+kZ8zo58GRXLtceop9hj0eBSzzJMuXw/q3eSxb5gJm
+   t8ihRl3rIFYfiV59wZMlPJkXFU0Jg+vppLRVsHBvCJCdDZBW+qzmOPxKe
+   3Sp71ieUheekKzWBgPtiKTJ6wSjgM15b5veKHZQPtElswMpmwGeKmD6dx
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="355423702"
+X-IronPort-AV: E=Sophos;i="6.00,235,1681196400"; 
+   d="scan'208";a="355423702"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2023 19:25:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="705207731"
+X-IronPort-AV: E=Sophos;i="6.00,235,1681196400"; 
+   d="scan'208";a="705207731"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga007.jf.intel.com with ESMTP; 11 Jun 2023 19:25:18 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Sun, 11 Jun 2023 19:25:17 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Sun, 11 Jun 2023 19:25:17 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Sun, 11 Jun 2023 19:25:17 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.107)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Sun, 11 Jun 2023 19:25:17 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kke8uX98t3v5nS3HB78PmTL2EwgrCwVwSH1kpsv1dGN4bfE98gBDR6CgRd4uBhKHoopQaSQFDd+4SiCBoWwM/tOta2ucMJBBgm4EUFNGOHuU6GqzE1pZNtf/g6MvkxSV6+J7ETxfCfStd0Mixdoh1s0I53l0MzPLd72phY5ZQk9+gvkcfKjL9jnHvNeGJYuQm/ioPxHWGwIsA9moh3Pzu22rUsI/UpoPlEepf6njVfz7yZzDfi6itzaBeUiH+zdhrVsbxXYS6dbF3RdqVP1GuQZ6/xs8T1agMBc3L7PPCiLY1BlPH9BXcKZ/BFzcR6wSjV/ELndi/g55JTLTl8O1PQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=T9f0npRaN45vOVZJ7CQGVNcFZs7jlE5v/nyHXUvktuQ=;
+ b=eSkh5DvEsCNz8i7z8ORPpr0JKh3vcFdAVA5wiu6e90UQV18ilWhgWJiMhI8ZC5ImaaoldUeNOEVi4p3EG+5ru01Cy5sN5hf8XI7KCWyUqp42kZsadpyFh5niDDGTsebq3mEizpkphVOT4mHQZUhdwffUu6QPojWODHUiLjowJb86+T2nF4yUrmkPxa6H8ENQZ2MwDjJaNW+Rr90m+VsdrG0u26OX7VMJAkZ1Zn93mxIznJf5VxlbTk8Lzbl6NdFH2umEq7HS80Ic/yO5L38okwpPibSShDD28vhe8zO9kfClY3m8BUn9or9tqdQrGcVUDhX95a+9jcK3HKsAZMw8Xg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
+ by PH7PR11MB8276.namprd11.prod.outlook.com (2603:10b6:510:1af::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.39; Mon, 12 Jun
+ 2023 02:25:14 +0000
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::19b7:466f:32ac:b764]) by BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::19b7:466f:32ac:b764%3]) with mapi id 15.20.6455.043; Mon, 12 Jun 2023
+ 02:25:14 +0000
+From:   "Huang, Kai" <kai.huang@intel.com>
+To:     "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
+CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+Subject: Re: [PATCH v11 11/20] x86/virt/tdx: Fill out TDMRs to cover all TDX
+ memory regions
+Thread-Topic: [PATCH v11 11/20] x86/virt/tdx: Fill out TDMRs to cover all TDX
+ memory regions
+Thread-Index: AQHZlu+2r84uqtF1H0SFKn93tuC1FK+BjKSAgATvtoA=
+Date:   Mon, 12 Jun 2023 02:25:13 +0000
+Message-ID: <7313b6ccd2d3fdbcbb5cf4624bf15117fde7ed85.camel@intel.com>
+References: <cover.1685887183.git.kai.huang@intel.com>
+         <927ec9871721d2a50f1aba7d1cf7c3be50e4f49b.1685887183.git.kai.huang@intel.com>
+         <20230608230211.byot2fbo7skkfqxe@box>
+In-Reply-To: <20230608230211.byot2fbo7skkfqxe@box>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.48.2 (3.48.2-1.fc38) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|PH7PR11MB8276:EE_
+x-ms-office365-filtering-correlation-id: d498b0d0-4eb2-4342-6226-08db6aec4116
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: L+WIeqWiUstsQw0brhhhjwntktW/GMK+C5MgGtRmzT9VE4NV5AiMvzM77WLF/I9L5qTlJpu1bR5ffwLzyJK2wD8QjRLH4Td1hzWoYT82rruOH6zwDFnnAAQP5MrqMivylPLCUV67PEZ1b5yJGsfLOcXEZhhsS2RVCk0/l80piQPp8k7KMohFic7A3LtelNKpbIfZYAunWb2zLarqDQi8dHo9j4kEiG9WG/HfCv9GKEE4Yomxd0pjK8OD/TRRrdrkA0GZdrg31f8QBplFk/wXF933w276if6ztSfWjSYoDBtWQbUlC2btcJK0OECsOg2TXUXAyyjPRCMD69Byo12mdJxoEgMtTenM8606eiF8sOiu3bZcn08GEEde6bcFYkyYfJd6TGJXCOtWUPxNeJocQEZ/CTqckQPoqWhNOpSGxlWaO4RX/oHFLU8biLGZBXdXDL1RVBDJNNamcuJaZQXu5fIqMx9WZLWOPFS+zSOq6O3nNrSxwKH/DsyZiXbYQH4tmiFaHtcS9VMa9SR0p3yff0V8l37KZGtBdO5D21ztBq3+v04scZevET/fo6t3LbmlNCs7f2H0S176vejFFT4yf8MbDsh2HE8PNQdzivyhxMzqEh7k2kWRshN9LO/AK7AZ
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(39860400002)(346002)(376002)(136003)(396003)(451199021)(7416002)(82960400001)(478600001)(8676002)(558084003)(8936002)(316002)(54906003)(38070700005)(41300700001)(4326008)(86362001)(66946007)(76116006)(66556008)(66446008)(91956017)(122000001)(64756008)(6916009)(38100700002)(5660300002)(66476007)(36756003)(71200400001)(6486002)(2906002)(186003)(6506007)(2616005)(26005)(6512007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QWE2K0NmcXFQZmZuZFBhMm5VYkJYUWhNMnRaZHVYQ2xkSVMxblF3L0Y5S1lO?=
+ =?utf-8?B?TmFoYTRxYUxZUG1EU3JkSll2M0ZRdTMxSTZmVHFEMHBxYVZyazgyYWROM2Jy?=
+ =?utf-8?B?cFp5NVF5RGZWSnAyYlpNSVVoa2pHQVFPc0RhZ2s5dlRXZjhULytGemxobkNR?=
+ =?utf-8?B?WVNkK3R6L2VTb2hteEdyZkRkQlR0M1k5Y0ZkellTV0dEZ0F2aVpXK0hNaVpK?=
+ =?utf-8?B?V1lvYTlNRnp2bjVJNitBK0JvRTFONVNOdm90YWtzc3IvR2hEdkp4bkhUMkhj?=
+ =?utf-8?B?RDFSSURheDFIb3dRS0U0US9sWWhHVnVLUXE0ZzVpUnZBcEkrZHBoUUNtM2ZL?=
+ =?utf-8?B?MEliVko5bDVpczNsMjhmdlpxK2R0N3JZR3JSMXlDRjUzckJjRzUzZllDR3JP?=
+ =?utf-8?B?Y3pkYS9QMTlVc3ZTNlpjaWo1S2J1bWlHMjU5TVN5cmtZYzlqRm5VblFudzVv?=
+ =?utf-8?B?cTVMWFhXOGVVYnNSTGFlampMZkk4VzRTMjRORFBFeHpGakg1MW1GNFdjVm9G?=
+ =?utf-8?B?akRFdlVGT09Bclk5aEVJOVd1TFhXQ1RLRUttbW1CZ0ZLUVY1bUVNUUlMSWRi?=
+ =?utf-8?B?OS9Ea2R3ZWZONE52U3NhYUlzcHBJWmIwRDJyZFo1bmp4RG1DTmtGcGhvZVcv?=
+ =?utf-8?B?MDhSYjhUaHJwS2lPUkpSblp6R3FSemZTY3RmdmNyWUE5QjNTa2ZObVdyNmlS?=
+ =?utf-8?B?ejROamp5VTliajE1NW9JZzFuRkVQMURlcWJaWDdsZFM0SmlqTHJyc0tOaTdB?=
+ =?utf-8?B?WG5WaTVCT1lYcGxNcHVLRm03QTVqNW5kUHRDN29SVVk2S0N2QnFFaFNmZ0NZ?=
+ =?utf-8?B?NFBSQWVkUkxEcGIzaWl3UlMwYjJMOW96aDA0WjV6RzZYclhzZTM4L3hFOThx?=
+ =?utf-8?B?Vm96V2NLaWVhTUJKYmw5SHk0UTVMOFpISEx1U3dGZ3U5Sm9UaHpjZ2tTLzdl?=
+ =?utf-8?B?TlF3N1FUbXR6bkpDTjhSWUkzN2pRK1JjOGlmT05ZZWVwV1NpMG1LR21TejlF?=
+ =?utf-8?B?dUNreGZZc29rVi9ZZWZ1cS9nLzRjTS9JMzZzUEp1YldvNE16UlJpbGhONGpa?=
+ =?utf-8?B?R1FLTmkxUHpZYmVXdjRNNmlVTUtwbVJPQVgwMUJJZG1oQmJnVDlnVWl1VWxG?=
+ =?utf-8?B?dlQ3YURIdFV2RE1HRlZzVlJMeGhiNjZ1cVV5blo1b2tGRndKUEJVbGNkenEv?=
+ =?utf-8?B?MVUrajBTYzlJb01FcFRFcWo5THhESkdPZmVxcmptVTBjKzJ6dy9nT1dEMCsr?=
+ =?utf-8?B?Q1V4UFppTVhpTEJjeW1WNmYrU1dHckZSU1JBVU13c1AwcnV5U1N2Q05GaGVx?=
+ =?utf-8?B?OFRQZmlndVcremlWeVQrVzFDYUEwYjUvaVRMNlJ2Y2cxVVpVOHhpSFFyWFUv?=
+ =?utf-8?B?U3ljUEs3Tnc1dDFocmN5bU14MklHcGkwQ2I0dXVRdUxxUElPOFNjV2FPc1Vr?=
+ =?utf-8?B?NmhvT3F3Z043YVJDS2pLYUNXeUg0WUlhMTZ0MGk1bzVybkgrZ2pnLzRwUXJT?=
+ =?utf-8?B?TnhyYjVoeTFXeVM5S1V6MjBZSFRiYnc1VlJEaklZdTZHSUU0WE9LQXY3d3dx?=
+ =?utf-8?B?azNvQ2R3QmdZSFlOTGgwcGdlT08yV3BmZXZaTVRlNVVzSmhzV2trYi82OFNB?=
+ =?utf-8?B?UnQyV3F6UWE2QUZNL1BvZ1NZOGxWMm1UaTdEeDBVQWZ1WERlVUxZYVdLMDVs?=
+ =?utf-8?B?S0ZtQ3h1SXY3bnVzcUpRMTJZemx1bzdqZVEvYlVsZjBXMDh3Umt3WFMrbXFM?=
+ =?utf-8?B?RXJaZ0RWVTV0VHZ1WnBhN2R1SG5wZXNxS3MvdEhlYkpMRC9zaGIrRWxqZkRN?=
+ =?utf-8?B?TFJmdTI1QjIxZHVxV0xIMWdBMmU0ZGVycy96dWJTQjM4UTJOUGdtK3JEWm1I?=
+ =?utf-8?B?VEMzYkhLc0k3bGMrdk51RStXTTJuY0JRaUc0bHZHdzNpZWV5VW1uSEptb3Fj?=
+ =?utf-8?B?SnNCN2xPQkpWRlBEbWx0YUZDbzhXNjZ0RmxaK2hIZnA1YS92TWFKcjNEeXFY?=
+ =?utf-8?B?MEVveHVsbUsyeEJCSWs4RXIwalYwb2tZMWVZQXczelFCb2ZubTBSTXczakc3?=
+ =?utf-8?B?bUx1c3o4YzIveEE4Yy9pRXRGRWNuUzNWSzc0ZHE0N0dRdjNyOGVXVm9CSndy?=
+ =?utf-8?Q?TkuQ4Qphx0QbCKUvCgxfjPYbU?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <979DBAF81EC3354792AD7EBB6398E3E5@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <20230611050532.GE1436857@mit.edu>
-Content-Type: text/plain; charset=gbk
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: Syh0CgD3Buj3gYZk2Z2qLQ--.63697S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxtryUtw1UWFWxKFWxGFyUWrg_yoW7Xw47pr
-        15GFnxCr48G345AFsrJr1Yq348tw48A3WUXryfGr1xCF1kW34UXFy7tr4UCrykArW5ZFy3
-        tF1qqw40qryjqaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1CPfJUUUUU==
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d498b0d0-4eb2-4342-6226-08db6aec4116
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jun 2023 02:25:13.9308
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: SDf8Qe0Q4LYDM3wVwohVdev7dSHiUM1cP/DQKP+t6U/VyDecT8PXW3f/WN9xnrQxe9c+B8cA2VlXLG5IssnliQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB8276
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-on 6/11/2023 1:05 PM, Theodore Ts'o wrote:
-> On Sat, Jun 03, 2023 at 11:03:21PM +0800, Kemeng Shi wrote:
->> call ext4_mb_mark_group_bb in ext4_free_blocks_simple to:
->> 1. remove repeat code
->> 2. pair update of free_clusters in ext4_mb_new_blocks_simple.
->> 3. add missing ext4_lock_group/ext4_unlock_group protection.
->>
->> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
->> Reviewed-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-> 
-> Note: after bisecting, I've found that this commit is causing a OOPS
-> when running "kvm-xfstests -c ext4/adv generic/468".  It appears to be
-> an issue with the fast commit feature not playing nice with this
-> patch.  The stack trace looks like this:
-> 
-> [    7.409663] ------------[ cut here ]------------
-> [    7.409969] WARNING: CPU: 0 PID: 3069 at fs/ext4/mballoc.c:3801 ext4_mb_mark_group_bb+0x48e/0x4a0
-> [    7.410480] CPU: 0 PID: 3069 Comm: mount Not tainted 6.4.0-rc5-xfstests-lockdep-00021-g60ba685c5998 #146
-> [    7.411067] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
-> [    7.411639] RIP: 0010:ext4_mb_mark_group_bb+0x48e/0x4a0
-> [    7.411968] Code: 48 c7 c7 35 b0 88 82 c6 05 16 f4 9b 01 01 e8 f9 16 c9 ff e9 7f fe ff ff 8b 45 08 c7 44 24 10 00 00 00 00 31 c9 e9 ef fc ff ff <0f> 0b e9 76 fc ff ff e8 96 64 b6 00 66 0f 1f 44 00 00 90 90 90 90
-> [    7.413128] RSP: 0018:ffffc90003b0f9f8 EFLAGS: 00010246
-> [    7.413458] RAX: 0000000000000003 RBX: 0000000000006002 RCX: 0000000000000001
-> [    7.413902] RDX: ffff88800965b000 RSI: 0000000000000000 RDI: ffff88800d690100
-> [    7.414346] RBP: ffffc90003b0fa68 R08: 000000000aebbd6e R09: 0000000000000246
-> [    7.414791] R10: 00000000d148c994 R11: 00000000941da2bb R12: ffff88800d7fd000
-> [    7.415234] R13: 0000000000000000 R14: ffff88800f3e4080 R15: ffff88800b5ca160
-> [    7.415724] FS:  00007f3d04516840(0000) GS:ffff88807da00000(0000) knlGS:0000000000000000
-> [    7.416227] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [    7.416588] CR2: 00007ffcb3979ac8 CR3: 000000000f290003 CR4: 0000000000770ef0
-> [    7.417032] PKRU: 55555554
-> [    7.417205] Call Trace:
-> [    7.417363]  <TASK>
-> [    7.417502]  ? ext4_mb_mark_group_bb+0x48e/0x4a0
-> [    7.417807]  ? __warn+0x80/0x170
-> [    7.418051]  ? ext4_mb_mark_group_bb+0x48e/0x4a0
-> [    7.418337]  ? report_bug+0x173/0x1d0
-> [    7.418567]  ? handle_bug+0x3c/0x70
-> [    7.418797]  ? exc_invalid_op+0x17/0x70
-> [    7.419037]  ? asm_exc_invalid_op+0x1a/0x20
-> [    7.419226]  ? ext4_mb_mark_group_bb+0x48e/0x4a0
-> [    7.419437]  ? ext4_mb_mark_group_bb+0xae/0x4a0
-> [    7.419708]  ext4_mb_mark_bb+0xc0/0x120
-> [    7.419946]  ext4_ext_clear_bb+0x210/0x280
-> [    7.420198]  ext4_fc_replay_inode+0xa1/0x380
-> [    7.420466]  ext4_fc_replay+0x435/0x880
-> [    7.420703]  ? __getblk_gfp+0x37/0x110
-> [    7.420938]  ? jread+0x7a/0x180
-> [    7.421138]  do_one_pass+0x7df/0x1040
-> [    7.421365]  jbd2_journal_recover+0x150/0x250
-> [    7.421637]  jbd2_journal_load+0xbe/0x190
-> [    7.421886]  ext4_load_journal+0x214/0x610
-> [    7.422152]  ext4_load_and_init_journal+0x29/0x380
-> [    7.422490]  __ext4_fill_super+0x15ca/0x15e0
-> [    7.422756]  ? __pfx_ext4_fill_super+0x10/0x10
-> [    7.423032]  ext4_fill_super+0xcf/0x280
-> [    7.423270]  get_tree_bdev+0x188/0x290
-> [    7.423505]  vfs_get_tree+0x29/0xe0
-> [    7.423723]  ? capable+0x37/0x70
-> [    7.423927]  do_new_mount+0x174/0x300
-> [    7.424157]  __x64_sys_mount+0x11a/0x150
-> [    7.424401]  do_syscall_64+0x3b/0x90
-> [    7.424624]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
-> [    7.424935] RIP: 0033:0x7f3d0475562a
-> [    7.425160] Code: 48 8b 0d 69 18 0d 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 36 18 0d 00 f7 d8 64 89 01 48
-> [    7.426298] RSP: 002b:00007ffcb397aaf8 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
-> [    7.426761] RAX: ffffffffffffffda RBX: 00007f3d04889264 RCX: 00007f3d0475562a
-> [    7.427197] RDX: 0000558ea381db90 RSI: 0000558ea381dbb0 RDI: 0000558ea381dbd0
-> [    7.427631] RBP: 0000558ea381d960 R08: 0000558ea381dbf0 R09: 00007f3d04827be0
-> [    7.428063] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> [    7.428499] R13: 0000558ea381dbd0 R14: 0000558ea381db90 R15: 0000558ea381d960
-> [    7.428941]  </TASK>
-> [    7.429083] irq event stamp: 10951
-> [    7.429296] hardirqs last  enabled at (10959): [<ffffffff811643c2>] __up_console_sem+0x52/0x60
-> [    7.429824] hardirqs last disabled at (10966): [<ffffffff811643a7>] __up_console_sem+0x37/0x60
-> [    7.430325] softirqs last  enabled at (10574): [<ffffffff8204a529>] __do_softirq+0x2d9/0x39e
-> [    7.430839] softirqs last disabled at (10407): [<ffffffff810dcc57>] __irq_exit_rcu+0x87/0xb0
-> [    7.431354] ---[ end trace 0000000000000000 ]---
-> 
-> 
-Hi ted, sorry for this issue. This patch added a WARN_ON for case that we free block
-to uninitialized block group which should be invalid.
-We can simply remove the WARN_ON to allow free on uninitialized block group as old
-way for emergency fix and I will find out why we free blocks to uninitialized block
-group in fast commit code path and is it a valid behavior.
-
--- 
-Best wishes
-Kemeng Shi
-
+T24gRnJpLCAyMDIzLTA2LTA5IGF0IDAyOjAyICswMzAwLCBraXJpbGwuc2h1dGVtb3ZAbGludXgu
+aW50ZWwuY29tIHdyb3RlOg0KPiBPbiBNb24sIEp1biAwNSwgMjAyMyBhdCAwMjoyNzoyNEFNICsx
+MjAwLCBLYWkgSHVhbmcgd3JvdGU6DQo+ID4gKyNkZWZpbmUgVERNUl9BTElHTk1FTlQJCUJJVF9V
+TEwoMzApDQo+IA0KPiBOaXQ6IFNaXzFHIGNhbiBiZSBhIGxpdHRsZSBiaXQgbW9yZSByZWFkYWJs
+ZSBoZXJlLg0KDQpXaWxsIGRvLg0KDQo+IA0KPiBBbnl3YXk6DQo+IA0KPiBSZXZpZXdlZC1ieTog
+S2lyaWxsIEEuIFNodXRlbW92IDxraXJpbGwuc2h1dGVtb3ZAbGludXguaW50ZWwuY29tPg0KPiAN
+Cj4gDQoNClRoYW5rcy4NCg==
