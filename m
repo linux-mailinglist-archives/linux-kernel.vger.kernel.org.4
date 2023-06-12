@@ -2,86 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7DEC72BF1D
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C5972BF1B
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:32:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233740AbjFLKc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 06:32:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39866 "EHLO
+        id S229489AbjFLKcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 06:32:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232770AbjFLKcV (ORCPT
+        with ESMTP id S231359AbjFLKcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 12 Jun 2023 06:32:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C73376AD
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 03:12:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686564693;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JmpRAnV26AUF4s7IjPY/jpT3j5W5+5DIpLFBGjUK+sc=;
-        b=PzRY3Dakp03BW/sL58HBR4gAkyBSRl+425kO3SveRV9sOTGi1E9iSNpmafVnLd3TllkqJs
-        Nx7KZZtXGrvx4rWuGhEhzQMQ0BLcwgM0SqZNYfwa7Jjp8SZ8SFeBur3sy2eJ+BwlZamky1
-        1wgXUOyS2uUtZuw0TTMvXZNPdqJwRhw=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-509-UEksYC_GNwSvwPIciFn2iQ-1; Mon, 12 Jun 2023 06:11:31 -0400
-X-MC-Unique: UEksYC_GNwSvwPIciFn2iQ-1
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-30e3d670c4aso2404991f8f.3
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 03:11:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686564690; x=1689156690;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JmpRAnV26AUF4s7IjPY/jpT3j5W5+5DIpLFBGjUK+sc=;
-        b=M2r6Z0kbk/LdWhbXes99IxE87UloBpnfNsCeWrswBXPJRNBPBXu+EaBjqlkwEMK5tl
-         7nfHzHkN4ikjyPMDvULQD+fvZQ3OSmAUiQknvKvfrDwut0YpvVFv53Cgk9Ft0CsgHyKl
-         ak8R6If49VaHLfT0v8zjqNcqp4gtFIF8s16kDEoPxxJz3io46iRTPiOdp/rG0f6W18lF
-         Jw1sdVD5bKOOFp6+1DbB12JRlnu7ZzpU/bXazgbM+J2yVd7lmQxCOY2X/xIB6Xe6EIP1
-         /Wj2ezQKv5OKvEdP1PEgevLQkkv2Z5ltynx5qTX1hUDK/r7MDxelhYBR0x7ZlafmjZM+
-         tAMQ==
-X-Gm-Message-State: AC+VfDxOL4Dz2zwtKlJv+jKROyT8H9n6kx3cyXduNn/X2m9hYQDhbR2q
-        dcCicaOQ6G87MPEiM0ZqCfuuuLWLVM5MVrRGmzDcIGbJbCWfv4EO7G30+DP20IhYyORZbllzS0o
-        zggQao4MqxAqqlpJ3bHU1Vlva
-X-Received: by 2002:a5d:4ac8:0:b0:30e:2ff3:8c88 with SMTP id y8-20020a5d4ac8000000b0030e2ff38c88mr4564981wrs.35.1686564690588;
-        Mon, 12 Jun 2023 03:11:30 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5jBUUk+/WujpPvTO1qN/t91PuJs5FrOQ9Jv+cH2AOp+kP8w2wN8nq0M2EPsm7sAASVQtLN9g==
-X-Received: by 2002:a5d:4ac8:0:b0:30e:2ff3:8c88 with SMTP id y8-20020a5d4ac8000000b0030e2ff38c88mr4564968wrs.35.1686564690216;
-        Mon, 12 Jun 2023 03:11:30 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c74e:1600:4f67:25b2:3e8c:2a4e? (p200300cbc74e16004f6725b23e8c2a4e.dip0.t-ipconnect.de. [2003:cb:c74e:1600:4f67:25b2:3e8c:2a4e])
-        by smtp.gmail.com with ESMTPSA id k10-20020adff5ca000000b003077a19cf75sm11982305wrp.60.2023.06.12.03.11.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 03:11:29 -0700 (PDT)
-Message-ID: <044ec8f2-83e7-4bb5-fb26-72266b9d195c@redhat.com>
-Date:   Mon, 12 Jun 2023 12:11:28 +0200
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F1E527AB5;
+        Mon, 12 Jun 2023 03:13:45 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 83B282F4;
+        Mon, 12 Jun 2023 03:13:30 -0700 (PDT)
+Received: from [192.168.0.146] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 300A13F663;
+        Mon, 12 Jun 2023 03:12:37 -0700 (PDT)
+Message-ID: <65b7c83f-7fab-3f4e-bff8-9a60937dc207@arm.com>
+Date:   Mon, 12 Jun 2023 15:42:38 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] mm: compaction: skip memory hole rapidly when isolating
- migratable pages
+ Thunderbird/102.11.0
+Subject: Re: [PATCH V11 06/10] arm64/perf: Enable branch stack events via
+ FEAT_BRBE
 Content-Language: en-US
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        "Huang, Ying" <ying.huang@intel.com>
-Cc:     akpm@linux-foundation.org, mgorman@techsingularity.net,
-        vbabka@suse.cz, linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <8cc668b77c8eb2fa78058b3d81386ebed9c5a9cd.1686294549.git.baolin.wang@linux.alibaba.com>
- <87sfax6v7c.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <d8444045-9497-1073-5cf9-e2959197701d@linux.alibaba.com>
- <55e05ac0-041d-75eb-4707-e053dc3f2976@redhat.com>
- <337d90f3-7c95-d5b8-de30-fb72e441a18b@linux.alibaba.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <337d90f3-7c95-d5b8-de30-fb72e441a18b@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+To:     James Clark <james.clark@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, catalin.marinas@arm.com,
+        Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+References: <20230531040428.501523-1-anshuman.khandual@arm.com>
+ <20230531040428.501523-7-anshuman.khandual@arm.com>
+ <ZH3mhorKNo77hsv5@FVFF77S0Q05N>
+ <e960d5d5-07a8-2049-7d0a-07268ecfe36a@arm.com>
+ <ZIMfVsF50cODuOYx@FVFF77S0Q05N.cambridge.arm.com>
+ <510f88f2-574c-097f-7299-2842b1cf432d@arm.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <510f88f2-574c-097f-7299-2842b1cf432d@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,109 +59,198 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12.06.23 12:10, Baolin Wang wrote:
+
+
+On 6/9/23 19:04, James Clark wrote:
 > 
 > 
-> On 6/12/2023 5:54 PM, David Hildenbrand wrote:
->> On 12.06.23 11:36, Baolin Wang wrote:
+> On 09/06/2023 13:47, Mark Rutland wrote:
+>> On Fri, Jun 09, 2023 at 10:52:37AM +0530, Anshuman Khandual wrote:
+>>> [...]
 >>>
->>>
->>> On 6/12/2023 2:39 PM, Huang, Ying wrote:
->>>> Baolin Wang <baolin.wang@linux.alibaba.com> writes:
->>>>
->>>>> On some machines, the normal zone can have a large memory hole like
->>>>> below memory layout, and we can see the range from 0x100000000 to
->>>>> 0x1800000000 is a hole. So when isolating some migratable pages, the
->>>>> scanner can meet the hole and it will take more time to skip the large
->>>>> hole. From my measurement, I can see the isolation scanner will take
->>>>> 80us ~ 100us to skip the large hole [0x100000000 - 0x1800000000].
->>>>>
->>>>> So adding a new helper to fast search next online memory section
->>>>> to skip the large hole can help to find next suitable pageblock
->>>>> efficiently. With this patch, I can see the large hole scanning only
->>>>> takes < 1us.
->>>>>
->>>>> [    0.000000] Zone ranges:
->>>>> [    0.000000]   DMA      [mem 0x0000000040000000-0x00000000ffffffff]
->>>>> [    0.000000]   DMA32    empty
->>>>> [    0.000000]   Normal   [mem 0x0000000100000000-0x0000001fa7ffffff]
->>>>> [    0.000000] Movable zone start for each node
->>>>> [    0.000000] Early memory node ranges
->>>>> [    0.000000]   node   0: [mem 0x0000000040000000-0x0000000fffffffff]
->>>>> [    0.000000]   node   0: [mem 0x0000001800000000-0x0000001fa3c7ffff]
->>>>> [    0.000000]   node   0: [mem 0x0000001fa3c80000-0x0000001fa3ffffff]
->>>>> [    0.000000]   node   0: [mem 0x0000001fa4000000-0x0000001fa402ffff]
->>>>> [    0.000000]   node   0: [mem 0x0000001fa4030000-0x0000001fa40effff]
->>>>> [    0.000000]   node   0: [mem 0x0000001fa40f0000-0x0000001fa73cffff]
->>>>> [    0.000000]   node   0: [mem 0x0000001fa73d0000-0x0000001fa745ffff]
->>>>> [    0.000000]   node   0: [mem 0x0000001fa7460000-0x0000001fa746ffff]
->>>>> [    0.000000]   node   0: [mem 0x0000001fa7470000-0x0000001fa758ffff]
->>>>> [    0.000000]   node   0: [mem 0x0000001fa7590000-0x0000001fa7ffffff]
->>>>>
->>>>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->>>>> ---
->>>>>     include/linux/mmzone.h | 10 ++++++++++
->>>>>     mm/compaction.c        | 23 ++++++++++++++++++++++-
->>>>>     2 files changed, 32 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
->>>>> index 5a7ada0413da..87e6c535d895 100644
->>>>> --- a/include/linux/mmzone.h
->>>>> +++ b/include/linux/mmzone.h
->>>>> @@ -2000,6 +2000,16 @@ static inline unsigned long
->>>>> next_present_section_nr(unsigned long section_nr)
->>>>>         return -1;
->>>>>     }
->>>>> +static inline unsigned long next_online_section_nr(unsigned long
->>>>> section_nr)
+>>> On 6/5/23 19:13, Mark Rutland wrote:
+>>>>> +void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
 >>>>> +{
->>>>> +    while (++section_nr <= __highest_present_section_nr) {
->>>>> +        if (online_section_nr(section_nr))
->>>>> +            return section_nr;
->>>>> +    }
+>>>>> +	struct brbe_hw_attr *brbe_attr = (struct brbe_hw_attr *)cpuc->percpu_pmu->private;
+>>>>> +	u64 brbfcr, brbcr;
+>>>>> +	int idx, loop1_idx1, loop1_idx2, loop2_idx1, loop2_idx2, count;
 >>>>> +
->>>>> +    return -1UL;
+>>>>> +	brbcr = read_sysreg_s(SYS_BRBCR_EL1);
+>>>>> +	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
+>>>>> +
+>>>>> +	/* Ensure pause on PMU interrupt is enabled */
+>>>>> +	WARN_ON_ONCE(!(brbcr & BRBCR_EL1_FZP));
+>>>>> +
+>>>>> +	/* Pause the buffer */
+>>>>> +	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+>>>>> +	isb();
+>>>>> +
+>>>>> +	/* Determine the indices for each loop */
+>>>>> +	loop1_idx1 = BRBE_BANK0_IDX_MIN;
+>>>>> +	if (brbe_attr->brbe_nr <= BRBE_BANK_MAX_ENTRIES) {
+>>>>> +		loop1_idx2 = brbe_attr->brbe_nr - 1;
+>>>>> +		loop2_idx1 = BRBE_BANK1_IDX_MIN;
+>>>>> +		loop2_idx2 = BRBE_BANK0_IDX_MAX;
+>>>>> +	} else {
+>>>>> +		loop1_idx2 = BRBE_BANK0_IDX_MAX;
+>>>>> +		loop2_idx1 = BRBE_BANK1_IDX_MIN;
+>>>>> +		loop2_idx2 = brbe_attr->brbe_nr - 1;
+>>>>> +	}
+>>>>> +
+>>>>> +	/* Loop through bank 0 */
+>>>>> +	select_brbe_bank(BRBE_BANK_IDX_0);
+>>>>> +	for (idx = 0, count = loop1_idx1; count <= loop1_idx2; idx++, count++) {
+>>>>> +		if (!capture_branch_entry(cpuc, event, idx))
+>>>>> +			goto skip_bank_1;
+>>>>> +	}
+>>>>> +
+>>>>> +	/* Loop through bank 1 */
+>>>>> +	select_brbe_bank(BRBE_BANK_IDX_1);
+>>>>> +	for (count = loop2_idx1; count <= loop2_idx2; idx++, count++) {
+>>>>> +		if (!capture_branch_entry(cpuc, event, idx))
+>>>>> +			break;
+>>>>> +	}
+>>>>> +
+>>>>> +skip_bank_1:
+>>>>> +	cpuc->branches->branch_stack.nr = idx;
+>>>>> +	cpuc->branches->branch_stack.hw_idx = -1ULL;
+>>>>> +	process_branch_aborts(cpuc);
+>>>>> +
+>>>>> +	/* Unpause the buffer */
+>>>>> +	write_sysreg_s(brbfcr & ~BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+>>>>> +	isb();
+>>>>> +	armv8pmu_branch_reset();
 >>>>> +}
->>>>> +
->>>>>     /*
->>>>>      * These are _only_ used during initialisation, therefore they
->>>>>      * can use __initdata ...  They could have names to indicate
->>>>> diff --git a/mm/compaction.c b/mm/compaction.c
->>>>> index 3398ef3a55fe..3a55fdd20c49 100644
->>>>> --- a/mm/compaction.c
->>>>> +++ b/mm/compaction.c
->>>>> @@ -229,6 +229,21 @@ static void reset_cached_positions(struct zone
->>>>> *zone)
->>>>>                     pageblock_start_pfn(zone_end_pfn(zone) - 1);
->>>>>     }
->>>>> +static unsigned long skip_hole_pageblock(unsigned long start_pfn)
->>>>> +{
->>>>> +    unsigned long next_online_nr;
->>>>> +    unsigned long start_nr = pfn_to_section_nr(start_pfn);
->>>>> +
->>>>> +    if (online_section_nr(start_nr))
->>>>> +        return -1UL;
+>>>> The loop indicies are rather difficult to follow, and I think those can be made
+>>>> quite a lot simpler if split out, e.g.
 >>>>
->>>> Define a macro for the maigic "-1UL"?  Which is used for multiple times
->>>> in the patch.
+>>>> | int __armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
+>>>> | {
+>>>> | 	struct brbe_hw_attr *brbe_attr = (struct brbe_hw_attr *)cpuc->percpu_pmu->private;
+>>>> | 	int nr_hw_entries = brbe_attr->brbe_nr;
+>>>> | 	int idx;
 >>>
->>> I am struggling to find a readable macro for these '-1UL', since the
->>> '-1UL' in next_online_section_nr() indicates that it can not find an
->>> online section. However the '-1' in skip_hole_pageblock() indicates that
->>> it can not find an online pfn.
+>>> I guess idx needs an init to 0.
 >>
->> Maybe something like
+>> Yes, sorry, that should have been:
 >>
->> #define SECTION_NR_INVALID -1UL
+>> 	int idx = 0;
+>>
+>>>> | 
+>>>> | 	select_brbe_bank(BRBE_BANK_IDX_0);
+>>>> | 	while (idx < nr_hw_entries && idx < BRBE_BANK0_IDX_MAX) {
+>>>> | 		if (!capture_branch_entry(cpuc, event, idx))
+>>>> | 			return idx;
+>>>> | 		idx++;
+>>>> | 	}
+>>>> | 
+>>>> | 	select_brbe_bank(BRBE_BANK_IDX_1);
+>>>> | 	while (idx < nr_hw_entries && idx < BRBE_BANK1_IDX_MAX) {
+>>>> | 		if (!capture_branch_entry(cpuc, event, idx))
+>>>> | 			return idx;
+>>>> | 		idx++;
+>>>> | 	}
+>>>> | 
+>>>> | 	return idx;
+>>>> | }
+>>>
+>>> These loops are better than the proposed one with indices, will update.
+>>
+>> Great!
+>>
+>>>> | 
+>>>> | void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
+>>>> | {
+>>>> | 	u64 brbfcr, brbcr;
+>>>> | 	int nr;
+>>>> | 
+>>>> | 	brbcr = read_sysreg_s(SYS_BRBCR_EL1);
+>>>> | 	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
+>>>> | 
+>>>> | 	/* Ensure pause on PMU interrupt is enabled */
+>>>> | 	WARN_ON_ONCE(!(brbcr & BRBCR_EL1_FZP));
+>>>> | 
+>>>> | 	/* Pause the buffer */
+>>>> | 	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+>>>> | 	isb();
+>>>> | 
+>>>> | 	nr = __armv8pmu_branch_read(cpus, event);
+>>>> | 
+>>>> | 	cpuc->branches->branch_stack.nr = nr;
+>>>> | 	cpuc->branches->branch_stack.hw_idx = -1ULL;
+>>>> | 	process_branch_aborts(cpuc);
+>>>> | 
+>>>> | 	/* Unpause the buffer */
+>>>> | 	write_sysreg_s(brbfcr & ~BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+>>>> | 	isb();
+>>>> | 	armv8pmu_branch_reset();
+>>>> | }
+>>>>
+>>>> Looking at <linux/perf_event.h> I see:
+>>>>
+>>>> | /*
+>>>> |  * branch stack layout:
+>>>> |  *  nr: number of taken branches stored in entries[]
+>>>> |  *  hw_idx: The low level index of raw branch records
+>>>> |  *          for the most recent branch.
+>>>> |  *          -1ULL means invalid/unknown.
+>>>> |  *
+>>>> |  * Note that nr can vary from sample to sample
+>>>> |  * branches (to, from) are stored from most recent
+>>>> |  * to least recent, i.e., entries[0] contains the most
+>>>> |  * recent branch.
+>>>> |  * The entries[] is an abstraction of raw branch records,
+>>>> |  * which may not be stored in age order in HW, e.g. Intel LBR.
+>>>> |  * The hw_idx is to expose the low level index of raw
+>>>> |  * branch record for the most recent branch aka entries[0].
+>>>> |  * The hw_idx index is between -1 (unknown) and max depth,
+>>>> |  * which can be retrieved in /sys/devices/cpu/caps/branches.
+>>>> |  * For the architectures whose raw branch records are
+>>>> |  * already stored in age order, the hw_idx should be 0.
+>>>> |  */
+>>>> | struct perf_branch_stack {
+>>>> |         __u64                           nr;  
+>>>> |         __u64                           hw_idx;
+>>>> |         struct perf_branch_entry        entries[];
+>>>> | };
+>>>>
+>>>> ... which seems to indicate we should be setting hw_idx to 0, since IIUC our
+>>>> records are in age order.
+>>> Branch records are indeed in age order, sure will change hw_idx as 0. Earlier
+>>> figured that there was no need for hw_idx and hence marked it as -1UL similar
+>>> to other platforms like powerpc.
+>>
+>> That's fair enough; looking at power_pmu_bhrb_read() in
+>> arch/powerpc/perf/core-book3s.c, I see a comment:
+>>
+>> 	Branches are read most recent first (ie. mfbhrb 0 is
+>> 	the most recent branch).
+>>
+>> ... which suggests that should be 0 also, or that the documentation is wrong.
+>>
+>> Do you know how the perf tool consumes this?
+>>
+>> Thanks,
+>> Mark.
 > 
-> Actually we already have a NR_MEM_SECTIONS macro, which means it is an
-> invalid section if the section nr >= NR_MEM_SECTIONS. So using
-> NR_MEM_SECTIONS seems more suitable?
+> It looks like it's a unique ID/last position updated in the LBR FIFO and
+> it's used to stitch callchains together when the stack depth exceeds the
+> buffer size. Perf takes the previous one that got filled to the limit
+> and and the new one and stitches them together if the hw_idx matches.
 
-Indeed, that would also work!
+Right.
 
--- 
-Cheers,
+> 
+> There are some options in perf you need to provide to make it happen, so
+> I think for BRBE it doesn't matter what value is assigned to it. -1
+> seems to be a 'not used' value which we should probably set in case the
+> event is opened with PERF_SAMPLE_BRANCH_HW_INDEX
 
-David / dhildenb
+-1 indeed did seem like a "not used" option rather than an "unkwown" option.
+ 
+> 
+> You could also fail to open the event if PERF_SAMPLE_BRANCH_HW_INDEX is
+> set, and that would save writing out -1 every time for every branch
+> stack. Although it's not enabled by default, so maybe that's not necessary.
 
+Yeah blocking events with PERF_SAMPLE_BRANCH_HW_INDEX is not necessary IMHO.
