@@ -2,247 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 339F072C8D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:41:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA2FB72C8D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237999AbjFLOlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 10:41:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
+        id S238343AbjFLOmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 10:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235675AbjFLOlV (ORCPT
+        with ESMTP id S234576AbjFLOmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 10:41:21 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F082FBD
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 07:41:19 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bb85b2bac4eso6597660276.0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 07:41:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686580879; x=1689172879;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=r96CKlC+BBXhesVFXxXqygeyQq0poKy+xHh5QJBs4Hs=;
-        b=y5PvZbyvq4ur+SImkmV6DIR+nXay4q20zUtWROecR8NkFyPCbRlfzlSXb08VHyg/vM
-         dOWUJGqoSQckjKNyaz+pnvlIbc/677Wf4OzrLTPm1+LO4/mptCVJ4e/Uk+aHgUwJ+qSO
-         6q3pBgeV/DXdB2SrpAoZHsul6MRWS/ngRQx7PvnfSncRT+IhtiBjR2O5HaFqcuUji5y/
-         DOi2db5ZPa4WjG6g0fnovTI6kQ3PEcYEB8tswr99owkyAhvk3/tSEErpWrgDXQt9LTPZ
-         /nTtyzShFuyCqIkJg63tnvrN+wl2h1zgCd7ffB+m3fyoqhO7Xk893eGC+g3501H5ycqW
-         mSIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686580879; x=1689172879;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=r96CKlC+BBXhesVFXxXqygeyQq0poKy+xHh5QJBs4Hs=;
-        b=jolsEjZRM0vZFcIbSEdjEhfVy3sFcOV0QTalqGG5uBElmXv4zk5Liz+ikwtJn4Jfky
-         mjcnVdVoQydpOtMHe4Uezt0LvG8TyspMXMDxSpSrC5xZGvEIwgDVHknTixa9ZrPhy6N8
-         N/zZDCP53S5bIbKa77eD/Z9nxeebmRFrrMx8ZXBXX1E14QqLqNp5BfkvWzcU81KyqxFf
-         L5j7tOIwHnGwmu03ckmdnH5B0sA8uprBscX5ulCTX3NthqOJp5/Wgots4WnaNJwMVU/X
-         M6RE55kxKGSJq4fpQYsWQI/244bAjY3h1OAGfoN5PYmLvCWobLQf9bwQO/8TxpeqUdp5
-         3uZg==
-X-Gm-Message-State: AC+VfDzfBRK2X+NltHsgcp7Tw5fb5A4WSFW0iMOAJTmeJwtSu1oiwOFF
-        ATipT/j7H/37LMx/JrlN9z4sE5wbubc=
-X-Google-Smtp-Source: ACHHUZ6zdAuLarXFuermSwK+q6naBdSNEG8tLfWV/XWK13b5XH60U7w3+nxNcTpXxK1HrGqXhuWbcHMQm9g=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:bc2:0:b0:ba6:e7ee:bb99 with SMTP id
- 185-20020a250bc2000000b00ba6e7eebb99mr5041142ybl.12.1686580879112; Mon, 12
- Jun 2023 07:41:19 -0700 (PDT)
-Date:   Mon, 12 Jun 2023 07:41:16 -0700
-In-Reply-To: <20230608090348.414990-1-gshan@redhat.com>
-Mime-Version: 1.0
-References: <20230608090348.414990-1-gshan@redhat.com>
-Message-ID: <ZIcujNKVosLeQEqR@google.com>
-Subject: Re: [PATCH] KVM: Avoid illegal stage2 mapping on invalid memory slot
-From:   Sean Christopherson <seanjc@google.com>
-To:     Gavin Shan <gshan@redhat.com>
-Cc:     kvmarm@lists.linux.dev, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pbonzini@redhat.com,
-        oliver.upton@linux.dev, maz@kernel.org, hshuai@redhat.com,
-        zhenyzha@redhat.com, shan.gavin@gmail.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 12 Jun 2023 10:42:14 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2043.outbound.protection.outlook.com [40.107.243.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6AAD9E;
+        Mon, 12 Jun 2023 07:41:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MQ3LJkMT8wFlR6C+m0mo6g2OsO+VtE4awHsJc23AF3cQgYy+BuSapHs5d6g0mqar4MUikWoTce7VAYLcJs4yhdhnJQcW4fqZ+Xa/3GVxN/iYvkJ5VH/HE/DJ74cJiZ0NXoVyu54fD1hj8EVo+7iaXG2kBIW4JlyU7LJVoIkYhz5PDCeeRcfwQuOUHzfIZN+F6GlA2zA8psHPtJYFxS7NNsiHPtntRGAHbM6WihCtfWo6lly1LUGkVK1WRYCwwi3stgSwClR/ZXxXpQxDZDtpW/O0ffM+wU7xosJlI9dg75NiErGMNKGygTMYKNocOE3UVBhx4Rf6dXWYQ5/NO5LUBA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1RXzSGx9ZGWZVr7sLBR9whMNVX8Kj2bIeOL+cO549h0=;
+ b=ikcsMWGNoM+g5ph56tLqdchsbRCJKy+TGwnB2HzPs+cf74kfCn/l0Dq15zk7WrhXITBHgUwQ7qRVJBsiBWnJZGlCZkP7ZUeUpBOrbJ84LtDmSoUfD5ExKEIQnGyZpLYZrpjdmohzT/5LGDGS6WQPbJPzhSTfoA1ImlCGO5rG7dhrgJwjtBxjX0lBx36T52LCU+OB8GyEANmMXxZW5RiWX2nlXHd9173QMLn34fI4QUJI3MFjlIm7ZeqhUXntBYPZD7jTNgEu9d2q1SkHYuyEB8XHOSrTkxNYrbKZ+bx6f9LmQVRZ2tIare7RFzYrwWEqnnPAMntCi5+zP55eJnMVMQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1RXzSGx9ZGWZVr7sLBR9whMNVX8Kj2bIeOL+cO549h0=;
+ b=v1dNQ6t8uV2l48G1HvD+/jQWJypZNyrxQGVwakX3lgB672mAltBuQ+1Yx2gWj3eX+GoFB7sBIurTIPWXyfXPwUvWGjtQivW7lmZPet8mCd4kRwxeGC1l5nOP4GSIyWk6XjGlnOkzlEBScyFroipafM1IYBV5TPd9CL2OvcaBbVA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS0PR12MB6390.namprd12.prod.outlook.com (2603:10b6:8:ce::7) by
+ CH0PR12MB5027.namprd12.prod.outlook.com (2603:10b6:610:e2::19) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6455.46; Mon, 12 Jun 2023 14:41:49 +0000
+Received: from DS0PR12MB6390.namprd12.prod.outlook.com
+ ([fe80::f7fc:407f:3bae:bd96]) by DS0PR12MB6390.namprd12.prod.outlook.com
+ ([fe80::f7fc:407f:3bae:bd96%3]) with mapi id 15.20.6455.037; Mon, 12 Jun 2023
+ 14:41:49 +0000
+Message-ID: <a83b46e2-62db-65bc-204a-7f67c6ee556e@amd.com>
+Date:   Mon, 12 Jun 2023 09:41:47 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v5 19/26] cxl/pci: Add RCH downstream port AER register
+ discovery
+Content-Language: en-US
+To:     Dan Williams <dan.j.williams@intel.com>,
+        alison.schofield@intel.com, vishal.l.verma@intel.com,
+        ira.weiny@intel.com, bwidawsk@kernel.org, dave.jiang@intel.com,
+        Jonathan.Cameron@huawei.com, linux-cxl@vger.kernel.org
+Cc:     rrichter@amd.com, linux-kernel@vger.kernel.org, bhelgaas@google.com
+References: <20230607221651.2454764-1-terry.bowman@amd.com>
+ <20230607221651.2454764-20-terry.bowman@amd.com>
+ <6483e9801c0ae_e067a29432@dwillia2-xfh.jf.intel.com.notmuch>
+From:   Terry Bowman <Terry.Bowman@amd.com>
+In-Reply-To: <6483e9801c0ae_e067a29432@dwillia2-xfh.jf.intel.com.notmuch>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: DS0PR17CA0010.namprd17.prod.outlook.com
+ (2603:10b6:8:191::26) To DS0PR12MB6390.namprd12.prod.outlook.com
+ (2603:10b6:8:ce::7)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR12MB6390:EE_|CH0PR12MB5027:EE_
+X-MS-Office365-Filtering-Correlation-Id: 759eab8a-73fb-4539-48e3-08db6b53279e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0G1RQijC0/SmT7BUHQcCK074WcPDtDxu2Y+Xl+K0ulDNaFj1/mXsQCjJ8MgJF8Nk4wFQVwAmqJkHt8PDKk0R9egnC/KAOWlPRUu9cP80oqt+0mMfj8rjxkiZhtIpYHbycmovRAYq+02nn7nR3zLPg0v2pmMaSCguRwD44O/lBd2pKJdl2f6SiuR4OQ57SuiGVsqyeuPOFnfbBAHOxEvkRuk/l0TVz6Eg0fcWGEzPoedO0G/hqSmmZGWut36YMrSZNDEGd8AXtj+iQJ1QLjppYG9+Dq1pHkdFZ3ioz4Dwu/AYRLQzEE12LrtwJDj92qJMZ8E/HDyevoHR9ihl9U+/BQQGtnq8vKyn2E3+4zXIGfLWPcnj49hmGFm1IuWNqbx3FPAvHaBgLQc+7QoVIrfPOszWQGVGIAoYCVo8ta58ylvbrjpmG0Q+pZMoIBnxaxB83dt19cEwbbCAC4XwL6AU0Bc1bcdwns9KbCJU5znt56FlOiBRq0ERhXgKGdoVuNzZ1rCl2CPWCPwGniUeibJLTg+0F52fPzpV6wjgeFYiN1SaeauNajmmovR4lUxqLZDboAwGSp4dJHgBcVHQpyRvbJobAXbk/PS/Xd/NsCqJL9qM57KB4A08gkMOLYTdyzG8qonjaY8MHjpOTxYYs+M1QQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB6390.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(366004)(39860400002)(346002)(376002)(451199021)(6486002)(36756003)(83380400001)(2616005)(38100700002)(31696002)(86362001)(6512007)(53546011)(6506007)(26005)(186003)(2906002)(5660300002)(8676002)(7416002)(8936002)(316002)(41300700001)(31686004)(4326008)(66946007)(66556008)(66476007)(478600001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QVFzNDdhVnc5Q1pvTnV0ZFV4Z2dKbUVVU3V3NkRvdVBVWUdiL1BJbTFlK1Zk?=
+ =?utf-8?B?UDNlSklXTE9iUUdLRXVKanhzNmZKSDVkcjVZcHlzaWxFUzBIM1g4OEZ6RGF1?=
+ =?utf-8?B?WnV1VXlOT0NtK0xKVWpQS3VJWkxXUUxzNUkyUVYyNHA5WXB3SFc0OGZSRHhG?=
+ =?utf-8?B?aDRPZTdKZ1hLd2FYWlpwRm1iMEJEK01hT2ZCWVhib01BejJlSHJxc3RnTkNC?=
+ =?utf-8?B?d0NuQ0s0ejBjZlBtTGxrWVFKZUtPcDJyUnFtUVV5OGRkb3hXY0tDUkNPYUJ5?=
+ =?utf-8?B?Z0VqeXpjdUQwbmtMaFFlL09kVUtpc2QrWTZGZHdHOGNjWGhodVo3S01FYUIx?=
+ =?utf-8?B?cnJPM0JxMmdGb2hPSUVjajRVZk1SNGVqalhlYWJ5bHRBTXV4TGV5ZFJmallQ?=
+ =?utf-8?B?NVhKQkhlck12V3lTcEQvb05OMTlMYmVyWFkyanFUdysvWmxmTmg1VkJVK3Nk?=
+ =?utf-8?B?Um1ZYXgwS3h1ZVBsY1pwVjZ0eHZrUytUVmM5azFGaVlTWnlNMkllNW5uV1Fj?=
+ =?utf-8?B?V3FmUms2c1llYkhKQlpBT3lIS1ltYnFzbVJlWU1yekZJVDU0WkFwZ1UvQUNm?=
+ =?utf-8?B?UE5zMmt1N0NMdUxuY3B2ZUdORmNnZ3Z1KytabEhtRFNEVTdEc05FQXBiRjFC?=
+ =?utf-8?B?TGJ1WVFvQmYvZ2tHNm93dkM2aEVCbEhqY3p4QzR1M3V1TWFvVnRTVjZvazFn?=
+ =?utf-8?B?ekp6bHpXTlpGM1ZUaklEZTZtZGlzclp3MVRkTlBoU014b1cyY3BGVkdhVXlS?=
+ =?utf-8?B?NkRuOXZDQis0aVhUWjEwQ1gvUExwbk94YVZSbzRGODNzYkFyWXNwZmgySzhn?=
+ =?utf-8?B?ZW83aDJPQVZpalU1dHE2M0pBZEQxV1JRYWtIcGZwYUpDTDZqbDd6cmhmWUZK?=
+ =?utf-8?B?R21FOWF1YjU3RnpaM1N6UHV2MVNCV2tKSjNGVVlkMU14U2xNdTYzOHBWL3BM?=
+ =?utf-8?B?YlhUelpJVE8vekZ1SWlkUnEvV01iZFVLY1lpbTBDeHIzZk9UT3psV01icEh6?=
+ =?utf-8?B?SFFaZ1YvcVFKdVp6UERtNzVYVFNhSlc3MUVFazVpaDFOQXA1aHJNK1lnNGRQ?=
+ =?utf-8?B?MDhoZFNucUpyVk1peWFzUHZFdjVBWXBhYTU1Q24xNDROV1dEWjNlanlaY2Rn?=
+ =?utf-8?B?Z01wdXBLZEVFVE1sNGtBSDA2SEdvQ0VqTWtsWVFVVG5abVpuWWlhY0F2eTZQ?=
+ =?utf-8?B?emdNQjBWNWlRU2V5VnRJbzN0UVQ2L211enlDcnBYajV5UE54b3RKUTJMNi9N?=
+ =?utf-8?B?UGs3Qjh1VG5rVTgybnlGc0V5eHN5SXcvdnAxN1FjazVTeFp0TE54VW1oaEI1?=
+ =?utf-8?B?YUd0Ukt4bXZIa0d1TEtGWUFFOUEvM3VSditKWG55dDQ4MGFjQ1k4N0g4SWpK?=
+ =?utf-8?B?aUNsa1hPKzFHODJZOWV4TCtoYnBSUGZkTzEwM3BINWNqUjVaOEl5cE1wWml1?=
+ =?utf-8?B?SndjdzNId2ZpcnZaQ2Rndm9nWmhWekgydm5qOEx5RWN6Y0FNRDZuU0xXYzdw?=
+ =?utf-8?B?VE9wd3lWNllWVUFjZGdXTmdJaFROSTBteVBKTVBlWTNQTlgrTTd4MXl0c1Y4?=
+ =?utf-8?B?V0w1MDNFWkV2UU5xdDVMWlJjN3lRWG0zWFFMeng5WEpZYm1oNE50L0R6UFZX?=
+ =?utf-8?B?dllPUm5vdXJzdmFJNnFMRHpsK2NWR3lEaC9kQWNWMnoxQkRVNkYwbjJrVTRu?=
+ =?utf-8?B?M0k0VFhIVUVaS2dLQ3FacU1NYnlrdG9YK01adVhhaUhuekl2QU1sUGhZZkVS?=
+ =?utf-8?B?Nm5xQnpvNWZTRTcxckFBemdmRjgwd1JBSEFmMUk4RXJNVUtQVXRWWll6SUd0?=
+ =?utf-8?B?TE1aMFJjcThnaGpITlA0cHYvZXZGNjVPRjB3bVlMOEo3UVNadHFsaHJKS2RK?=
+ =?utf-8?B?cDdkaUh5ck5DVzQxMjJEc3o0b3lVNWUvcWcrTEtUb0x2NWlVaVhRR1R0QUN1?=
+ =?utf-8?B?V1NZbDFuM2pMa1Z0ZytVL2VuaTltQ3NveWVtN1ZlNGUrdGFKVjNvcmlKWUV5?=
+ =?utf-8?B?OENvK3o2MXRwRkpwcmpnZDlaOGJ3cVVDcHZyUFNSdUl2TkpSS0E1TVFVVmJT?=
+ =?utf-8?B?Z09lWjJvdGdwc2FHYVZFUGtnOUtlZHZUYmpOSXNROEpCeXgxa084cmNCdWZT?=
+ =?utf-8?Q?F9YNqQ0OWVoWbTqgLN988bwxO?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 759eab8a-73fb-4539-48e3-08db6b53279e
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB6390.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 14:41:49.5273
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +mb0DtU9RPd+cyKVC6lJ+qi0/w9AwqPDichUUuwgQWPePlVgSmMU7AaUUt7QBxuWqj4CrjH4pOXUICrGNBhVig==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5027
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023, Gavin Shan wrote:
-> We run into guest hang in edk2 firmware when KSM is kept as running
-> on the host. The edk2 firmware is waiting for status 0x80 from QEMU's
-> pflash device (TYPE_PFLASH_CFI01) during the operation for sector
-> erasing or buffered write. The status is returned by reading the
-> memory region of the pflash device and the read request should
-> have been forwarded to QEMU and emulated by it. Unfortunately, the
-> read request is covered by an illegal stage2 mapping when the guest
-> hang issue occurs. The read request is completed with QEMU bypassed and
-> wrong status is fetched.
+Hi Dan,
+
+I added a response inline below.
+
+On 6/9/23 22:09, Dan Williams wrote:
+> Terry Bowman wrote:
+>> Restricted CXL host (RCH) downstream port AER information is not currently
+>> logged while in the error state. One problem preventing the error logging
+>> is the AER and RAS registers are not accessible. The CXL driver requires
+>> changes to find RCH downstream port AER and RAS registers for purpose of
+>> error logging.
+>>
+>> RCH downstream ports are not enumerated during a PCI bus scan and are
+>> instead discovered using system firmware, ACPI in this case.[1] The
+>> downstream port is implemented as a Root Complex Register Block (RCRB).
+>> The RCRB is a 4k memory block containing PCIe registers based on the PCIe
+>> root port.[2] The RCRB includes AER extended capability registers used for
+>> reporting errors. Note, the RCH's AER Capability is located in the RCRB
+>> memory space instead of PCI configuration space, thus its register access
+>> is different. Existing kernel PCIe AER functions can not be used to manage
+>> the downstream port AER capabilities and RAS registers because the port was
+>> not enumerated during PCI scan and the registers are not PCI config
+>> accessible.
+>>
+>> Discover RCH downstream port AER extended capability registers. Use MMIO
+>> accesses to search for extended AER capability in RCRB register space.
+>>
+>> [1] CXL 3.0 Spec, 9.11.2 - System Firmware View of CXL 1.1 Hierarchy
+>> [2] CXL 3.0 Spec, 8.2.1.1 - RCH Downstream Port RCRB
+>>
+>> Co-developed-by: Robert Richter <rrichter@amd.com>
+>> Signed-off-by: Robert Richter <rrichter@amd.com>
+>> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+>> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+>> ---
+>>  drivers/cxl/core/regs.c | 51 +++++++++++++++++++++++++++++++++++++++++
+>>  1 file changed, 51 insertions(+)
+>>
+>> diff --git a/drivers/cxl/core/regs.c b/drivers/cxl/core/regs.c
+>> index ba2b1763042c..dd6c3c898cff 100644
+>> --- a/drivers/cxl/core/regs.c
+>> +++ b/drivers/cxl/core/regs.c
+>> @@ -408,6 +408,54 @@ int cxl_setup_regs(struct cxl_register_map *map)
+>>  }
+>>  EXPORT_SYMBOL_NS_GPL(cxl_setup_regs, CXL);
+>>  
+>> +static void __iomem *cxl_map_reg(struct device *dev, resource_size_t addr,
+>> +				resource_size_t length)
+>> +{
+>> +	struct resource *res;
+>> +
+>> +	if (WARN_ON_ONCE(addr == CXL_RESOURCE_NONE))
+>> +		return NULL;
+>> +
+>> +	res = request_mem_region(addr, length, dev_name(dev));
+>> +	if (!res)
+>> +		return NULL;
+>> +
+>> +	return ioremap(addr, length);
+>> +}
+>> +
+>> +static void cxl_unmap_reg(void __iomem *base, resource_size_t addr,
+>> +			 resource_size_t length)
+>> +{
+>> +	iounmap(base);
+>> +	release_mem_region(addr, length);
+>> +}
 > 
-> The illegal stage2 mapping is populated due to same page mering by
-> KSM at (C) even the associated memory slot has been marked as invalid
-> at (B).
-> 
->   CPU-A                    CPU-B
->   -----                    -----
->                            ioctl(kvm_fd, KVM_SET_USER_MEMORY_REGION)
->                            kvm_vm_ioctl_set_memory_region
->                            kvm_set_memory_region
->                            __kvm_set_memory_region
->                            kvm_set_memslot(kvm, old, NULL, KVM_MR_DELETE)
->                              kvm_invalidate_memslot
->                                kvm_copy_memslot
->                                kvm_replace_memslot
->                                kvm_swap_active_memslots        (A)
->                                kvm_arch_flush_shadow_memslot   (B)
->   same page merging by KSM
->   kvm_mmu_notifier_change_pte
->   kvm_handle_hva_range
->   __kvm_handle_hva_range       (C)
-> 
-> Fix the issue by skipping the invalid memory slot at (C) to avoid the
-> illegal stage2 mapping. Without the illegal stage2 mapping, the read
-> request for the pflash's status is forwarded to QEMU and emulated by
-> it. The correct pflash's status can be returned from QEMU to break
-> the infinite wait in edk2 firmware.
-> 
-> Cc: stable@vger.kernel.org # v5.13+
-> Fixes: 3039bcc74498 ("KVM: Move x86's MMU notifier memslot walkers to generic code")
+> Why redo the {request,release}_mem_region() and ioremap() vs handling
+> this inside of the existing mapping of the RCRB in this function?
 
-This Fixes isn't correct.  That change only affected x86, which doesn't have this
-bug.  And looking at commit cd4c71835228 ("KVM: arm64: Convert to the gfn-based MMU
-notifier callbacks"), arm64 did NOT skip invalid slots
+The intention was to follow the same pattern as existing {request,release} 
+functions but doesn't make much sense with only one user in this case. I'll 
+fold the {request,release} logic into cxl_rcrb_to_aer().
 
-        slots = kvm_memslots(kvm);
-
-        /* we only care about the pages that the guest sees */
-        kvm_for_each_memslot(memslot, slots) {
-                unsigned long hva_start, hva_end;
-                gfn_t gpa;
-
-                hva_start = max(start, memslot->userspace_addr);
-                hva_end = min(end, memslot->userspace_addr +
-                                        (memslot->npages << PAGE_SHIFT));
-                if (hva_start >= hva_end)
-                        continue;
-
-                gpa = hva_to_gfn_memslot(hva_start, memslot) << PAGE_SHIFT;
-                ret |= handler(kvm, gpa, (u64)(hva_end - hva_start), data);
-        }
-
-#define kvm_for_each_memslot(memslot, slots)                            \
-        for (memslot = &slots->memslots[0];                             \
-             memslot < slots->memslots + slots->used_slots; memslot++)  \
-                if (WARN_ON_ONCE(!memslot->npages)) {                   \
-                } else
-
-Unless I'm missing something, this goes all the way back to initial arm64 support
-added by commit d5d8184d35c9 ("KVM: ARM: Memory virtualization setup").
-
-> Reported-by: Shuai Hu <hshuai@redhat.com>
-> Reported-by: Zhenyu Zhang <zhenyzha@redhat.com>
-> Signed-off-by: Gavin Shan <gshan@redhat.com>
-> ---
->  virt/kvm/kvm_main.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 479802a892d4..7f81a3a209b6 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -598,6 +598,9 @@ static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
->  			unsigned long hva_start, hva_end;
->  
->  			slot = container_of(node, struct kvm_memory_slot, hva_node[slots->node_idx]);
-> +			if (slot->flags & KVM_MEMSLOT_INVALID)
-> +				continue;
-
-Skipping the memslot will lead to use-after-free.  E.g. if an invalidate_range_start()
-comes along between installing the invalid slot and zapping SPTEs, KVM will
-return from kvm_mmu_notifier_invalidate_range_start() without having dropped all
-references to the range.
-
-I.e.
-
-	kvm_copy_memslot(invalid_slot, old);
-	invalid_slot->flags |= KVM_MEMSLOT_INVALID;
-	kvm_replace_memslot(kvm, old, invalid_slot);
-
-	/*
-	 * Activate the slot that is now marked INVALID, but don't propagate
-	 * the slot to the now inactive slots. The slot is either going to be
-	 * deleted or recreated as a new slot.
-	 */
-	kvm_swap_active_memslots(kvm, old->as_id);
-
-
-==> invalidate_range_start()
-
-	/*
-	 * From this point no new shadow pages pointing to a deleted, or moved,
-	 * memslot will be created.  Validation of sp->gfn happens in:
-	 *	- gfn_to_hva (kvm_read_guest, gfn_to_pfn)
-	 *	- kvm_is_visible_gfn (mmu_check_root)
-	 */
-	kvm_arch_flush_shadow_memslot(kvm, old);
-
-And even for change_pte(), skipping the memslot is wrong, as KVM would then fail
-unmap the prior SPTE.  Of course, that can't happen in the current code base
-because change_pte() is wrapped with invalidate_range_{start,end}(), but that's
-more of a bug than a design choice (see c13fda237f08 "KVM: Assert that notifier
-count is elevated in .change_pte()" for details).  That's also why this doesn't
-show up on x86; x86 installs a SPTE for the change_pte() notifier iff an existing
-SPTE is present, which is never true due to the invalidation.
-
-I'd honestly love to just delete the change_pte() callback, but my opinion is more
-than a bit biased since we don't use KSM.  Assuming we keep change_pte(), the best
-option is probably to provide a wrapper around kvm_set_spte_gfn() to skip the
-memslot, but with a sanity check and comment explaining the dependency on there
-being no SPTEs due to the invalidation.  E.g.
-
----
- virt/kvm/kvm_main.c | 20 +++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
-
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 479802a892d4..b4987b49fac3 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -686,6 +686,24 @@ static __always_inline int kvm_handle_hva_range_no_flush(struct mmu_notifier *mn
- 
- 	return __kvm_handle_hva_range(kvm, &range);
- }
-+
-+static bool kvm_change_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
-+{
-+	/*
-+	 * Skipping invalid memslots is correct if and only change_pte() is
-+	 * surrounded by invalidate_range_{start,end}(), which is currently
-+	 * guaranteed by the primary MMU.  If that ever changes, KVM needs to
-+	 * unmap the memslot instead of skipping the memslot to ensure that KVM
-+	 * doesn't hold references to the old PFN.
-+	 */
-+	WARN_ON_ONCE(!READ_ONCE(kvm->mn_active_invalidate_count));
-+
-+        if (range->slot->flags & KVM_MEMSLOT_INVALID)
-+		return false;
-+
-+	return kvm_set_spte_gfn(kvm, range);
-+}
-+
- static void kvm_mmu_notifier_change_pte(struct mmu_notifier *mn,
- 					struct mm_struct *mm,
- 					unsigned long address,
-@@ -707,7 +725,7 @@ static void kvm_mmu_notifier_change_pte(struct mmu_notifier *mn,
- 	if (!READ_ONCE(kvm->mmu_invalidate_in_progress))
- 		return;
- 
--	kvm_handle_hva_range(mn, address, address + 1, pte, kvm_set_spte_gfn);
-+	kvm_handle_hva_range(mn, address, address + 1, pte, kvm_change_spte_gfn);
- }
- 
- void kvm_mmu_invalidate_begin(struct kvm *kvm, unsigned long start,
-
-base-commit: 94cdeebd82111d7b7da5bd4da053eed9e0f65d72
---
+Regards,
+Terry
