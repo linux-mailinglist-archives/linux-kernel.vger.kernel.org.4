@@ -2,128 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 653CD72D423
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 00:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F70872D426
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 00:08:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238700AbjFLWHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 18:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36428 "EHLO
+        id S238719AbjFLWID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 18:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238695AbjFLWHw (ORCPT
+        with ESMTP id S238721AbjFLWH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 18:07:52 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D09E1;
-        Mon, 12 Jun 2023 15:07:49 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35CM7kOH023457;
-        Mon, 12 Jun 2023 22:07:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=mY5Z1R+ihDJ1EUKQDtJ6kfoM3Poq9FSIVUXa0+sgZsI=;
- b=MsEv+qTTnsd5tfoOdxzFIWJCOPDplAVOdApmZTKsV+6JEr7G2HWvKKldACu3DfX3EgIC
- 7N3Ay0klDRYsK7AMnyoxrHbx05giLdbCN73++ziJmJ9jnJQHjhTuDRVIwzs77UugBIVV
- JQ/qt+iqwdnPgeJE3jMITLXU/9OAZUyAGh9HDkXxvBKUlI4ixuZ3unBC7upAJNBpt7fW
- X2BvsUscohiLswsPMvhEKfQBGsaGv1XD00ajgzPszTL2w3PnFNn1kB8FOw5UrWgppAbf
- 85mMSGBPOPw6XZLj5/b4ZAKlZS1hID3g8J0WqXzyQnFWWyN8Bq1gTbzzcOkx6L0vajvY sg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r690q08v9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jun 2023 22:07:46 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35CM7jW1009924
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jun 2023 22:07:45 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Mon, 12 Jun 2023 15:07:44 -0700
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] arm64: dts: qcom: sc8180x: Move DisplayPort for MMCX
-Date:   Mon, 12 Jun 2023 15:07:39 -0700
-Message-ID: <20230612220739.1886155-1-quic_bjorande@quicinc.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 12 Jun 2023 18:07:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08771EE;
+        Mon, 12 Jun 2023 15:07:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 901FB62EDC;
+        Mon, 12 Jun 2023 22:07:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C643C433D2;
+        Mon, 12 Jun 2023 22:07:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686607676;
+        bh=9iKK1p0kFNdxIbzsTtA0v3TwfLlhr6RY1S6PuLqz+yo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Lv+l3ef9XHrKF/2RB20fuyGBm2F7mHaqpMXlWr7I4FbQB2zt+sknQioXPSYaduVYT
+         oH/zOm9mTR6n5a4mMvlpVeIxpSF2vEo03SOGhtbd7ojc921NN1yA8WWeoNbwFu9CVI
+         aAvsrJwwrIbSxk849IANxD2VakGgaJ0L5+A21R36hLcXSr4KuhMPKicrir/y18Su5y
+         dbuqErHjLN0xqeExZ9f/QuYTlDq1MxLtpU5AYjWg7rnmFFWiO7s2NLgi1ba8TnCoYR
+         IsWaNwMMPt3x+T6i+29f+C95GTEVotQAbueM+lwxDhzD/7MClkwone/QlNh3D4PvRB
+         of5AoLwwSHinw==
+Message-ID: <61beeb4f-9341-e461-57bb-7394483409fa@kernel.org>
+Date:   Tue, 13 Jun 2023 07:07:53 +0900
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 1/3] ACPI: Move ACPI_DEVICE_CLASS() to
+ mod_devicetable.h
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, Len Brown <lenb@kernel.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+References: <20230609154900.43024-1-andriy.shevchenko@linux.intel.com>
+ <20230609154900.43024-2-andriy.shevchenko@linux.intel.com>
+ <CAJZ5v0i29u7RUnhatOANBgjdrH4uoWK_8VCHWK2UO7RS8L3H1A@mail.gmail.com>
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <CAJZ5v0i29u7RUnhatOANBgjdrH4uoWK_8VCHWK2UO7RS8L3H1A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: dl10Il--uvBP_JB21t7GCvPeGWqGvsIw
-X-Proofpoint-GUID: dl10Il--uvBP_JB21t7GCvPeGWqGvsIw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-12_16,2023-06-12_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=999 priorityscore=1501 spamscore=0 lowpriorityscore=0
- suspectscore=0 clxscore=1015 bulkscore=0 adultscore=0 phishscore=0
- malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306120190
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DisplayPort blocks are powered by MMCX and should be described as
-such to ensure that power votes are done on the right resource.
+On 6/10/23 02:32, Rafael J. Wysocki wrote:
+> On Fri, Jun 9, 2023 at 5:49 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+>>
+>> The data type of struct acpi_device_id is defined in the
+>> mod_devicetable.h. It's suboptimal to require user with
+>> the almost agnostic code to include acpi.h solely for the
+>> macro that affects the data type defined elsewhere.
+>>
+>> Taking into account the above and for the sake of consistency
+>> move ACPI_DEVICE_CLASS() to mod_devicetable.h.
+>>
+>> Note, that with CONFIG_ACPI=n the ID table will be filed with data
+>> but it does not really matter because either it won't be used, or
+>> won't be compiled in some cases (when guarded by respective ifdeffery).
+>>
+>> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> or please let me know if you want me to apply this.
 
-This also solves the problem that sync_state is unaware of the DP
-controllers needing MMCX to be kept alive during boot. As such this
-change also fixes occasionally seen crashes during boot due to
-undervoltage of MMCX.
+Probably better if you take the whole thing. But if needed, I can take this
+through the ata tree.
 
-Fixes: 494dec9b6f54 ("arm64: dts: qcom: sc8180x: Add display and gpu nodes")
-Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sc8180x.dtsi | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8180x.dtsi b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
-index 3de62e26d56a..a7668f9e68d6 100644
---- a/arch/arm64/boot/dts/qcom/sc8180x.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
-@@ -2969,7 +2969,7 @@ mdss_dp0: displayport-controller@ae90000 {
- 				#sound-dai-cells = <0>;
- 
- 				operating-points-v2 = <&dp0_opp_table>;
--				power-domains = <&rpmhpd SC8180X_CX>;
-+				power-domains = <&rpmhpd SC8180X_MMCX>;
- 
- 				status = "disabled";
- 
-@@ -3043,7 +3043,7 @@ mdss_dp1: displayport-controller@ae98000 {
- 				#sound-dai-cells = <0>;
- 
- 				operating-points-v2 = <&dp0_opp_table>;
--				power-domains = <&rpmhpd SC8180X_CX>;
-+				power-domains = <&rpmhpd SC8180X_MMCX>;
- 
- 				status = "disabled";
- 
-@@ -3117,7 +3117,7 @@ mdss_edp: displayport-controller@ae9a000 {
- 				#sound-dai-cells = <0>;
- 
- 				operating-points-v2 = <&edp_opp_table>;
--				power-domains = <&rpmhpd SC8180X_CX>;
-+				power-domains = <&rpmhpd SC8180X_MMCX>;
- 
- 				status = "disabled";
- 
 -- 
-2.25.1
+Damien Le Moal
+Western Digital Research
 
