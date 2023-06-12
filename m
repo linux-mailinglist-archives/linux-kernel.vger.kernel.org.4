@@ -2,69 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DACA672C988
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:15:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAAB572C98F
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:16:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238529AbjFLPPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 11:15:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43932 "EHLO
+        id S238379AbjFLPQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 11:16:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237099AbjFLPPI (ORCPT
+        with ESMTP id S234242AbjFLPQD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 11:15:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2A198;
-        Mon, 12 Jun 2023 08:15:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8481861E2D;
-        Mon, 12 Jun 2023 15:15:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A8ACC433D2;
-        Mon, 12 Jun 2023 15:15:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686582905;
-        bh=dGC149c5x01RTzK/Vu79dUHLei19YO73aaltgb70V8k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Yz7WOJ9+2MdrrAB7Pu166c9/NWzPb/G53ppcA3TywMNI0ghx0CvTLpr2SkwqeMS/l
-         zJuAc95rD8LjN4nwHGn0O7wmSH0uxEp+M9z56ZPfhIjkzMtVW7xYq7Bbbg9WuGKqIa
-         ViB9KeD13dEkiLDGZwqGZaaz4my+ePX5gH/HhI7XflKDZmweXD2VPXdgoPLlO475Ni
-         JATJY/Uea9wMGDT6BSa1Di3EBpewvTORQMx8sg2RwpoUf3Eb95VPiMAp/CMbNyu7QT
-         F3RzcJsHxY/yku5H8fFk1c26LoChFrHz+CySAOjRtJRxDDDnzxVKBxZU0NAmBJm7CD
-         lrHA6UZlJ/kuA==
-Date:   Mon, 12 Jun 2023 17:15:03 +0200
-From:   Maxime Ripard <mripard@kernel.org>
-To:     Sui Jingfeng <suijingfeng@loongson.cn>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
+        Mon, 12 Jun 2023 11:16:03 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F82498
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 08:16:01 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4E5FE1FB;
+        Mon, 12 Jun 2023 08:16:46 -0700 (PDT)
+Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.26])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 628073F5A1;
+        Mon, 12 Jun 2023 08:15:56 -0700 (PDT)
+From:   Ryan Roberts <ryan.roberts@arm.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        SeongJae Park <sj@kernel.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Mike Rapoport <rppt@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
         David Airlie <airlied@gmail.com>,
         Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH] drm: gem: add an option for supporting the dma-coherent
- hardware.
-Message-ID: <lebytp7civogcw3eluwja74g5w4jvpnjug7jp4ec5rzuch6wu6@inmzzvnaozuq>
-References: <20230607053053.345101-1-suijingfeng@loongson.cn>
- <d4378aad1cf179d308068ef6072c5c7ff2bf2502.camel@crapouillou.net>
- <6db23d14-652e-4b13-24cb-bfb92fa3faed@loongson.cn>
- <e9714a0c29b1c4268081827571ad2545b0e6d5ec.camel@crapouillou.net>
- <d5494751-0af0-42f6-bcad-f75415e4a6bd@loongson.cn>
- <2dd4c870a5605a79105fb621c97a5f59a18c8c24.camel@crapouillou.net>
- <ae085320-c93c-5d96-58ef-c5ee8b58c306@loongson.cn>
- <i2odidvev3ztxit4iv4ndxcuk4opckgs5fg4jjjfrq5nike35u@mlo7hshexe2n>
- <f9cef1ed-fc46-bad5-e2d7-b734aaeb16c1@loongson.cn>
+        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     Ryan Roberts <ryan.roberts@arm.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, damon@lists.linux.dev
+Subject: [PATCH v3 0/3] Encapsulate PTE contents from non-arch code
+Date:   Mon, 12 Jun 2023 16:15:42 +0100
+Message-Id: <20230612151545.3317766-1-ryan.roberts@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dtzbhhtxjptopns7"
-Content-Disposition: inline
-In-Reply-To: <f9cef1ed-fc46-bad5-e2d7-b734aaeb16c1@loongson.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,295 +76,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi All,
 
---dtzbhhtxjptopns7
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+(Including wider audience this time since changes touch a fair few subsystems)
 
-On Thu, Jun 08, 2023 at 04:17:52PM +0800, Sui Jingfeng wrote:
-> Hi,
->=20
-> On 2023/6/8 15:39, Maxime Ripard wrote:
-> > On Thu, Jun 08, 2023 at 01:18:38AM +0800, Sui Jingfeng wrote:
-> > > Hi,
-> > >=20
-> > > On 2023/6/8 00:12, Paul Cercueil wrote:
-> > > > Hi Sui,
-> > > >=20
-> > > > Le mercredi 07 juin 2023 =E0 22:38 +0800, Sui Jingfeng a =E9crit=A0:
-> > > > > Hi,=A0 welcome to discussion.
-> > > > >=20
-> > > > >=20
-> > > > > I have limited skills in manipulating English.
-> > > > >=20
-> > > > > It may not express what I'm really means in the short time.
-> > > > >=20
-> > > > > Part of word in the sentence may not as accurate as your.
-> > > > >=20
-> > > > > Well, please don't misunderstand, I'm not doing the rude to you.
-> > > > No problem.
-> > > >=20
-> > > > > I will explain it with more details.
-> > > > >=20
-> > > > > See below:
-> > > > >=20
-> > > > >=20
-> > > > > On 2023/6/7 20:09, Paul Cercueil wrote:
-> > > > > > Hi Sui,
-> > > > > >=20
-> > > > > > Le mercredi 07 juin 2023 =E0 18:30 +0800, Sui Jingfeng a =E9cri=
-t=A0:
-> > > > > > > Hi,
-> > > > > > >=20
-> > > > > > >=20
-> > > > > > > On 2023/6/7 17:36, Paul Cercueil wrote:
-> > > > > > > > Hi Sui,
-> > > > > > > >=20
-> > > > > > > > Le mercredi 07 juin 2023 =E0 13:30 +0800, Sui Jingfeng a =
-=E9crit=A0:
-> > > > > > > > > The single map_noncoherent member of struct
-> > > > > > > > > drm_gem_dma_object
-> > > > > > > > > may
-> > > > > > > > > not
-> > > > > > > > > sufficient for describing the backing memory of the GEM
-> > > > > > > > > buffer
-> > > > > > > > > object.
-> > > > > > > > >=20
-> > > > > > > > > Especially on dma-coherent systems, the backing memory is
-> > > > > > > > > both
-> > > > > > > > > cached
-> > > > > > > > > coherent for multi-core CPUs and dma-coherent for periphe=
-ral
-> > > > > > > > > device.
-> > > > > > > > > Say architectures like X86-64, LoongArch64, Loongson Mips=
-64,
-> > > > > > > > > etc.
-> > > > > > > > >=20
-> > > > > > > > > Whether a peripheral device is dma-coherent or not can be
-> > > > > > > > > implementation-dependent. The single map_noncoherent opti=
-on
-> > > > > > > > > is
-> > > > > > > > > not
-> > > > > > > > > enough
-> > > > > > > > > to reflect real hardware anymore. For example, the Loongs=
-on
-> > > > > > > > > LS3A4000
-> > > > > > > > > CPU
-> > > > > > > > > and LS2K2000/LS2K1000 SoC, peripheral device of such hard=
-ware
-> > > > > > > > > platform
-> > > > > > > > > allways snoop CPU's cache. Doing the allocation with
-> > > > > > > > > dma_alloc_coherent
-> > > > > > > > > function is preferred. The return buffer is cached, it sh=
-ould
-> > > > > > > > > not
-> > > > > > > > > using
-> > > > > > > > > the default write-combine mapping. While with the current
-> > > > > > > > > implement,
-> > > > > > > > > there
-> > > > > > > > > no way to tell the drm core to reflect this.
-> > > > > > > > >=20
-> > > > > > > > > This patch adds cached and coherent members to struct
-> > > > > > > > > drm_gem_dma_object.
-> > > > > > > > > which allow driver implements to inform the core. Introdu=
-cing
-> > > > > > > > > new
-> > > > > > > > > mappings
-> > > > > > > > > while keeping the original default behavior unchanged.
-> > > > > > > > Did you try to simply set the "dma-coherent" property to the
-> > > > > > > > device's
-> > > > > > > > node?
-> > > > > > > But this approach can only be applied for the device driver w=
-ith
-> > > > > > > DT
-> > > > > > > support.
-> > > > > > >=20
-> > > > > > > X86-64, Loongson ls3a4000 mips64, Loongson ls3a5000 CPU typic=
-ally
-> > > > > > > do
-> > > > > > > not
-> > > > > > > have DT support.
-> > > > > > >=20
-> > > > > > > They using ACPI to pass parameter from the firmware to Linux
-> > > > > > > kernel.
-> > > > > > >=20
-> > > > > > > You approach will lost the effectiveness on such a case.
-> > > > > > Well, I don't really know how ACPI handles it - but it should j=
-ust
-> > > > > > be a
-> > > > > > matter of setting dev->dma_coherent. That's basically what the =
-DT
-> > > > > > code
-> > > > > > does.
-> > > > > >=20
-> > > > > > Some MIPS boards set it in their setup code for instance.
-> > > > > >=20
-> > > > > This is a *strategy*, not a *mechanism*.
-> > > > >=20
-> > > > > In this case, DT is just used to describing the hardware.
-> > > > >=20
-> > > > > (It is actually a hardware feature describing language, the
-> > > > > granularity
-> > > > > is large)
-> > > > >=20
-> > > > > It does not changing the state of the hardware.
-> > > > >=20
-> > > > > It's your platform firmware or kernel setting up code who actuall=
-y do
-> > > > > such a things.
-> > > > >=20
-> > > > >=20
-> > > > > It's just that it works on *one* platform, it does not guarantee =
-it
-> > > > > will
-> > > > > works on others.
-> > > > If you add the "dma-coherent" property in a device node in DT, you
-> > > > effectively specify that the device is DMA-coherent; so you describe
-> > > > the hardware, which is what DT is for, and you are not changing the
-> > > > state of the hardware.
-> > > >=20
-> > > > Note that some MIPS platforms (arch/mips/alchemy/common/setup.c)
-> > > > default to DMA-coherent mapping; I believe you could do something
-> > > > similar with your Loongson LS3A4000 CPU and LS2K2000/LS2K1000 SoC.
-> > > >=20
-> > > The preblem is that device driver can have various demand.
-> > >=20
-> > > It probably want to create different kind of buffers for different th=
-ing
-> > > simultaneously.
-> > >=20
-> > > Say, one allocated with dma_alloc_coherent for command buffer or dma
-> > > descriptor
-> > >=20
-> > > another one allocated with=A0 dma_alloc_wc for uploading shader etc.
-> > >=20
-> > > also has the third one allocated with dma_alloc_noncoherent() for doi=
-ng some
-> > > else.
-> > And it will work just fine.
-> >=20
-> > struct device dma_coherent, or DT's dma-coherent property define that
-> > the device doesn't need any kind of cache maintenance, ever. If it's
-> > missing, we need to perform cache maintenance to keep coherency.
-> >=20
-> > dma_alloc_* functions provide guarantees to the driver. With
-> > dma_alloc_wc and dma_alloc_coherent, the buffer is coherent, and thus
-> > you don't need to perform cache maintenance operations by hand in the
-> > driver.
->=20
-> BO returned by dma_alloc_wc() doesn't works on some platform.
+This is the second half of v3 of a series to improve the encapsulation of pte
+entries by disallowing non-arch code from directly dereferencing pte_t pointers.
+Based on earlier feedback, I split the series in 2; the first part, fixes for
+existing bugs, was already posted at [3] and merged into mm-stable. This second
+part contains the conversion from direct dereferences to instead use
+ptep_get()/ptep_get_lockless().
 
-What do you mean by "it doesn't work" ? Because then, it's definitely
-the platform that's broken if it doesn't provide a coherent buffer.
+See the v1 cover letter at [1] for rationale for this work.
 
-> This may only guarantee for the CPU side. There is no guarantee for
-> the GPU side.
->=20
-> For example, the GPU always snoop CPU's cache. The GPU fetch data from
-> the CPU's cache if hit.
->=20
-> if not hit, the GPU fetch the data from the system RAM.
+Based on feedback at v2, I've removed the new ptep_deref() helper I originally
+added, and am now using the existing ptep_get() and ptep_get_lockless() helpers.
+Testing on Ampere Altra (arm64) showed no difference in performance when using
+ptep_deref() (*pte) vs ptep_get() (READ_ONCE(*pte)).
 
-Right, that's still a coherent buffer.
+Patches are based on mm-unstable (49e038b1919e) and a branch is available at [4]
+(Let me know if this is the wrong branch to target - I'm still not familiar with
+the details of the mm- dev process!). Note that Hugh Dickins's "mm: allow
+pte_offset_map[_lock]() to fail" (now in mm-unstable) patch set caused a number
+of conflicts which I've resolved. But due to that, you won't be able to apply
+these patches on top of Linus's tree. I have an alternate branch on top of
+v6.4-rc6 at [5].
 
-> But when call dma_alloc_wc(), the BO at cpu side is marked as write
-> combine property.
->=20
-> The write buffer within the CPU will gather the CPU side write access.
->=20
-> This is to say, there may have some data reside(stall) in the write buffe=
-r.
->=20
-> while the GPU will fetch data from the system RAM or CPU's cache.
->=20
-> the GPU will fetch wrong data.
+Changes since v2 [2]:
+   - Removed ptep_deref() helper
+   - Converted ptep_deref() callsites to use ptep_get[_lockless]()
 
-If that's the case, your buffer isn't coherent, and your platform
-probably breaks the expectations of the DMA API.
+Changes since v1 [1]:
+   - Fixed sh build bug reported by 0-day CI
 
-> This is the condition for our hardware, I don't know how does the ARM
-> platform guarantee
->=20
-> the coherency in this case.
->
-> If it relay on software to guarantee, then it is still non hardware
-> maintained coherency.
->=20
->=20
-> When it relay on software, I called it implement-dependent.
->=20
-> there are some archs without the implement or don't know how to implement.
->=20
->=20
-> If it can't even snoop cpu's cache, I don't believe it can snoop cpu's wr=
-ite
-> buffer.
->=20
-> I not sure dma api can do guarantee for all arch.
->=20
->=20
-> > With dma_alloc_noncoherent, the buffer is non-coherent and the driver
-> > needs to perform them when relevant.
-> >=20
-> > How those buffers are created is platform specific, but the guarantees
-> > provided *to the driver* are always there.
-> >=20
-> > A buffer allocated with dma_alloc_coherent might be provided by
-> > different means (at the hardware level with a coherency unit, by mapping
-> > it non-cacheable), but as far as the driver is concerned it's always
-> > going to be coherent.
-> >=20
-> > Similarly, a driver using dma_alloc_noncoherent will always require
-> > cache maintenance operations to use the API properly, even if the
-> > hardware provides coherency (in which case, those operations will be
-> > nop).
-> >=20
-> > So, yeah, like I was saying in the other mail, it looks like you're
-> > confusing a bunch of things. dma_alloc_* functions are about the driver
-> > expectations and guarantees. DT's dma-coherent property is about how we
-> > can implement them on a given platform.
->=20
-> That is ideal situation.
->=20
-> You don't have seen the actual bugs.
+[1] https://lore.kernel.org/linux-mm/20230511132113.80196-1-ryan.roberts@arm.com/
+[2] https://lore.kernel.org/linux-mm/20230518110727.2106156-1-ryan.roberts@arm.com/
+[3] https://lore.kernel.org/all/20230602092949.545577-1-ryan.roberts@arm.com/
+[4] https://gitlab.arm.com/linux-arm/linux-rr/-/tree/features/granule_perf/ptep_get-mm-unstable-lkml_v3
+[5] https://gitlab.arm.com/linux-arm/linux-rr/-/tree/features/granule_perf/ptep_get-v6.4-rc6-lkml_v3
 
-Probably not :)
+Thanks,
+Ryan
 
-> Yeah, I do have a bit confusing about the DMA api.
->=20
-> Maybe you and Paul can continue work on this.
+Ryan Roberts (3):
+  mm: ptdump should use ptep_get_lockless()
+  mm: Move ptep_get() and pmdp_get() helpers
+  mm: ptep_get() conversion
 
-As far as I'm concerned, there's nothing to fix but your platform
-support. I won't work on that.
+ .../drm/i915/gem/selftests/i915_gem_mman.c    |   8 +-
+ drivers/misc/sgi-gru/grufault.c               |   2 +-
+ drivers/vfio/vfio_iommu_type1.c               |   7 +-
+ drivers/xen/privcmd.c                         |   2 +-
+ fs/proc/task_mmu.c                            |  33 +++---
+ fs/userfaultfd.c                              |   6 +-
+ include/linux/hugetlb.h                       |   4 +
+ include/linux/mm_inline.h                     |   2 +-
+ include/linux/pgtable.h                       |  34 +++---
+ kernel/events/uprobes.c                       |   2 +-
+ mm/damon/ops-common.c                         |   2 +-
+ mm/damon/paddr.c                              |   2 +-
+ mm/damon/vaddr.c                              |  10 +-
+ mm/filemap.c                                  |   2 +-
+ mm/gup.c                                      |  21 ++--
+ mm/highmem.c                                  |  12 ++-
+ mm/hmm.c                                      |   2 +-
+ mm/huge_memory.c                              |   4 +-
+ mm/hugetlb.c                                  |   2 +-
+ mm/hugetlb_vmemmap.c                          |   6 +-
+ mm/kasan/init.c                               |   9 +-
+ mm/kasan/shadow.c                             |  10 +-
+ mm/khugepaged.c                               |  22 ++--
+ mm/ksm.c                                      |  22 ++--
+ mm/madvise.c                                  |   6 +-
+ mm/mapping_dirty_helpers.c                    |   4 +-
+ mm/memcontrol.c                               |   4 +-
+ mm/memory-failure.c                           |  26 ++---
+ mm/memory.c                                   | 100 ++++++++++--------
+ mm/mempolicy.c                                |   6 +-
+ mm/migrate.c                                  |  14 +--
+ mm/migrate_device.c                           |  15 +--
+ mm/mincore.c                                  |   2 +-
+ mm/mlock.c                                    |   6 +-
+ mm/mprotect.c                                 |   8 +-
+ mm/mremap.c                                   |   2 +-
+ mm/page_table_check.c                         |   4 +-
+ mm/page_vma_mapped.c                          |  27 +++--
+ mm/pgtable-generic.c                          |   2 +-
+ mm/ptdump.c                                   |   2 +-
+ mm/rmap.c                                     |  34 +++---
+ mm/sparse-vmemmap.c                           |   8 +-
+ mm/swap_state.c                               |   8 +-
+ mm/swapfile.c                                 |  20 ++--
+ mm/userfaultfd.c                              |   4 +-
+ mm/vmalloc.c                                  |   6 +-
+ mm/vmscan.c                                   |  14 +--
+ virt/kvm/kvm_main.c                           |  11 +-
+ 48 files changed, 316 insertions(+), 243 deletions(-)
 
-> But DT's dma-coherent property is definitely not a system level
-> solution.
->=20
-> drm/amdgpu, drm/radeon and drm/i915 don't support DT.
->=20
-> If ARM is dma-noncoherent, I suspect drm/amdgpu, drm/radeon will not
-> works on ARM.
->=20
-> there no function call dma_sync_for_device() dma_sync_for_cpu() etc
->=20
-> These driver assume dma-coherent hardware.
+--
+2.25.1
 
-No, these drivers assume they have a dma-coherent *buffer*. Which on
-devices that don't get hardware coherency mean that they probably get a
-non-cacheable buffer.
-
-Maxime
-
---dtzbhhtxjptopns7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZIc2dwAKCRDj7w1vZxhR
-xX+KAP0f01Nyls5VR0A4BOxlsfmnHMEa2CQZB8CAewfcNEhfwgD9GFfwHIQI4Wy1
-nJs179eAwl3YIf5EMc3ffWlphla2SQU=
-=SfdS
------END PGP SIGNATURE-----
-
---dtzbhhtxjptopns7--
