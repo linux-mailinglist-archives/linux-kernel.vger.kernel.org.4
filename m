@@ -2,98 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4AC672CD9E
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:15:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AD9572CDA8
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:16:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236791AbjFLSPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 14:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38584 "EHLO
+        id S237374AbjFLSQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 14:16:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231223AbjFLSPQ (ORCPT
+        with ESMTP id S237367AbjFLSQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 14:15:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D904A196
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:15:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E31C62CAE
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 18:15:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D88B3C4339B
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 18:15:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686593714;
-        bh=5VVyxM283nZurXcrJu3NkFtut1FZ/yTQ9dxSE9OavyA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DKOZ6Kp1scSEhJ5dYFZKi0n5vUjPdNQ4iRD119WiyOBSPKlZLFFGPAFGFrY9mzFTX
-         SCUzL9XyZT53mky/qSIW6wDoc9LrJEj1ahMve48G5Gs1cGYtbveKcYkQ2K/p8Jh80l
-         40BlVVwBktZi67sc/C38GltyfbyZWS6sUCwxRIBVm3riEhzW4iIW0pt5fxMUxvbjZS
-         hLnX2EPIHeTfBveLh9G5Tk2EzjdAkyXO3AFJtf0teTmEoIWdzTeIkRV6iWUzhqlmRC
-         kKtgRAyM4ngRIqDiIqX5/z1r0TRWPuXlHEc0BXSRjZ1xCRzAdLhPzYPqANr8LAJ/yV
-         Xn5SBiS6nxVMA==
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2b219ed9915so54907551fa.3
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:15:14 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxOtbaiVGDoPRbLmqG06Zyfriar/v08Jn7Zxolq/3ZGben+Fk8e
-        RCiAhKPUABd21uohEK48Jj2m826d73AINc4Hxg==
-X-Google-Smtp-Source: ACHHUZ6ovfpFOeZlPP4eF2X3MviCSbc9D8V33vQx/IVpA2iO/zgsRMO0jJiIqkYTV1Duqk7AccRU4D6T3M8xYOLaZqc=
-X-Received: by 2002:a2e:9ad1:0:b0:2a7:974d:a461 with SMTP id
- p17-20020a2e9ad1000000b002a7974da461mr3688248ljj.34.1686593712740; Mon, 12
- Jun 2023 11:15:12 -0700 (PDT)
+        Mon, 12 Jun 2023 14:16:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1C11B8
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:15:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686593721;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=t6mC2Gj4NTSoNkT1TGWH5FyPDTv10EwEaEEXjwoc+qg=;
+        b=Y3YDhyALb/nSrEbj/AILhyIQwZjLGG7A+0LNFbuXGMuCt6UPIJw2HHkVIaii/RUALTi2sN
+        27Vb72jvQx5yVlKIc7+TDmJKapyzi2tD9GsQlKqUKMP9aOxlznBX7GuFNFdSxmH2brS+lQ
+        loufeefW+CFgSdImALMHbIWEbEgPjQU=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-600-0_770P7BPiO_mYAL5LeyWw-1; Mon, 12 Jun 2023 14:15:12 -0400
+X-MC-Unique: 0_770P7BPiO_mYAL5LeyWw-1
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-62def166643so1985196d6.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:15:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686593711; x=1689185711;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t6mC2Gj4NTSoNkT1TGWH5FyPDTv10EwEaEEXjwoc+qg=;
+        b=hkMj9ymXxErrcn3BX4vWiVn18T13m03+VX+f1YSlxnQ7JyA+9G06MbP+x73s6SfWkK
+         S8Y1bYuCuOybP5+yI18V002JX18pYEkEmpDXeItY0vSMaeZhj0feFLZJgNRlTasY2ggx
+         bDciumBuncgWVRbptP6e8TNHWdbioLIj2PQqqup41SXLruwi1dMqb8xOyl0/vxcEpwT8
+         BE0uujk2FJa7Vy56hXHTNn9oCdBfUB3T14rE8IkaqE/4xz17y331ncDVmCT27+ziIZCJ
+         Ym0eagJZztKzC20Uft6uUEhdTOTi/st6xM5HoJTDU988qMdp1qp5kVq/OMEmKlYV8ns0
+         A48g==
+X-Gm-Message-State: AC+VfDzds8HpHgtKmZhcCvc0EVIkFZ35wQ3oB6e5HaN7x2sHex9pavbX
+        z7NPMca9WuPZR0CIpmaqr7JItexP6ZtYCZou/VZwUH5vIRYFant3x4zL8YIpxWSHXDWY3uXk0/v
+        sG4Ph9LixnDVFbH5NRJQkObz1yda1LusR
+X-Received: by 2002:ad4:5e89:0:b0:626:272b:28e9 with SMTP id jl9-20020ad45e89000000b00626272b28e9mr11413980qvb.24.1686593711638;
+        Mon, 12 Jun 2023 11:15:11 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6bESJW0vHksEPcPPYKyF5PSn9yIzTWoB+yYciwXrI3nT+mM8U9XGVRMWRepJDjc2th5lgO8w==
+X-Received: by 2002:ad4:5e89:0:b0:626:272b:28e9 with SMTP id jl9-20020ad45e89000000b00626272b28e9mr11413960qvb.24.1686593711414;
+        Mon, 12 Jun 2023 11:15:11 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id s5-20020a05621412c500b006255bcfca88sm3391563qvv.7.2023.06.12.11.15.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 11:15:10 -0700 (PDT)
+Date:   Mon, 12 Jun 2023 11:15:09 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] iommu/vt-d: Remove commented-out code
+Message-ID: <54wdooghiofgutm73l6klmr6kkalwxuw46l3kxqgccwkta3brz@dezrf7rslvl7>
+References: <20230609060514.15154-1-baolu.lu@linux.intel.com>
 MIME-Version: 1.0
-References: <20230410232647.1561308-1-robh@kernel.org> <CAL_JsqLeAvEVa8h3qywqESkqGG1O+9QWqA7fc1EJeDGkmAV7Fw@mail.gmail.com>
- <0ce32e34-d53b-4038-ef39-3b0f3e2f8a7f@loongson.cn>
-In-Reply-To: <0ce32e34-d53b-4038-ef39-3b0f3e2f8a7f@loongson.cn>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 12 Jun 2023 12:15:00 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKsa9KQxk6r=ZxtY30Mk5nk9ST5ejJ+8VXZ5vPJAGHMBg@mail.gmail.com>
-Message-ID: <CAL_JsqKsa9KQxk6r=ZxtY30Mk5nk9ST5ejJ+8VXZ5vPJAGHMBg@mail.gmail.com>
-Subject: Re: [PATCH] drm: etnaviv: Replace of_platform.h with explicit includes
-To:     Sui Jingfeng <suijingfeng@loongson.cn>
-Cc:     Lucas Stach <l.stach@pengutronix.de>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, etnaviv@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230609060514.15154-1-baolu.lu@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 11, 2023 at 12:49=E2=80=AFAM Sui Jingfeng <suijingfeng@loongson=
-.cn> wrote:
->
-> Reviewed-by: Sui Jingfeng <suijingfeng@loongson.cn>
->
->
-> On 2023/6/10 04:17, Rob Herring wrote:
-> > On Mon, Apr 10, 2023 at 5:26=E2=80=AFPM Rob Herring <robh@kernel.org> w=
-rote:
-> >> Etnaviv doesn't use anything from of_platform.h, but depends on
-> >> of.h, of_device.h, and platform_device.h which are all implicitly
-> >> included, but that is going to be removed soon.
-> >>
-> >> Signed-off-by: Rob Herring <robh@kernel.org>
-> >> ---
-> >>   drivers/gpu/drm/etnaviv/etnaviv_drv.c | 4 +++-
-> >>   1 file changed, 3 insertions(+), 1 deletion(-)
-> > Ping!
->
->
-> of_device.h already has 'linux/of.h' and 'linux/platform_device.h' includ=
-ed,
->
-> Would it be sufficient by simply including linux/of_device.h ?
+On Fri, Jun 09, 2023 at 02:05:14PM +0800, Lu Baolu wrote:
+> These lines of code were commented out when they were first added in commit
+> ba39592764ed ("Intel IOMMU: Intel IOMMU driver"). We do not want to restore
+> them because the VT-d spec has deprecated the read/write draining hit.
+> 
+> VT-d spec (section 11.4.2):
+> "
+>  Hardware implementation with Major Version 2 or higher (VER_REG), always
+>  performs required drain without software explicitly requesting a drain in
+>  IOTLB invalidation. This field is deprecated and hardware  will always
+>  report it as 1 to maintain backward compatibility with software.
+> "
+> 
+> Remove the code to make the code cleaner.
+> 
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 
-That's part of what I'm trying to remove. Standard practice is to not
-rely on implicit includes.
+Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
 
-Rob
+> ---
+>  drivers/iommu/intel/iommu.c | 10 +---------
+>  1 file changed, 1 insertion(+), 9 deletions(-)
+> 
+> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> index 4c0b7424c45e..e5c111ff4dd9 100644
+> --- a/drivers/iommu/intel/iommu.c
+> +++ b/drivers/iommu/intel/iommu.c
+> @@ -1312,15 +1312,7 @@ static void __iommu_flush_iotlb(struct intel_iommu *iommu, u16 did,
+>  			iommu->name, type);
+>  		return;
+>  	}
+> -	/* Note: set drain read/write */
+> -#if 0
+> -	/*
+> -	 * This is probably to be super secure.. Looks like we can
+> -	 * ignore it without any impact.
+> -	 */
+> -	if (cap_read_drain(iommu->cap))
+> -		val |= DMA_TLB_READ_DRAIN;
+> -#endif
+> +
+>  	if (cap_write_drain(iommu->cap))
+>  		val |= DMA_TLB_WRITE_DRAIN;
+>  
+> -- 
+> 2.34.1
+> 
+
