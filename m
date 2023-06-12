@@ -2,63 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33AD672B637
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 05:50:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CD7272B638
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 05:50:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234410AbjFLDtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 23:49:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59356 "EHLO
+        id S234178AbjFLDuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 23:50:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233892AbjFLDtw (ORCPT
+        with ESMTP id S234234AbjFLDuD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 23:49:52 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7EF1C5;
-        Sun, 11 Jun 2023 20:49:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=kyJKnbCUH7e9M4jkex7lERd255OqVBeiSs4l8Marj68=; b=UuetIcJzELE1oMx8UiT/9AGQvS
-        ipmZ9bb4s0HwrmE4bGLQ5PTRXFbMIAF49d2I77L2/fdmbkHUwCbwIITB4/kmdNjiNSAsulMDNE95t
-        owFFbdGOVp5LoTehwiL09162EJwSU8+H8qXEB8HVa/RwnlnNEv9olAD6BpT9mNihblBuahU5Ivz+9
-        EyTwLkAuplsccfEQqb0mt8k++I9mdCWbMWzYVjm+xw4hjDh82aPRzogVh/4fNRjBvm67KouvpHAjr
-        GOCbauiwS8Ja2dPt8Bq2SsV5TWWuJLIJq/yHskY618+DBgbOjCiLPDyb5/QlDVqIWSYF+agzGeBmV
-        xJMxR6hg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q8YYh-002TFR-2j;
-        Mon, 12 Jun 2023 03:49:35 +0000
-Date:   Sun, 11 Jun 2023 20:49:35 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Sergei Shtepa <sergei.shtepa@veeam.com>
-Cc:     axboe@kernel.dk, hch@infradead.org, corbet@lwn.net,
-        snitzer@kernel.org, viro@zeniv.linux.org.uk, brauner@kernel.org,
-        willy@infradead.org, dlemoal@kernel.org, wsa@kernel.org,
-        heikki.krogerus@linux.intel.com, ming.lei@redhat.com,
-        gregkh@linuxfoundation.org, linux-block@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v4 00/11] blksnap - block devices snapshots module
-Message-ID: <ZIaVz62ntyrhHdup@infradead.org>
-References: <20230609115206.4649-1-sergei.shtepa@veeam.com>
+        Sun, 11 Jun 2023 23:50:03 -0400
+Received: from out0-206.mail.aliyun.com (out0-206.mail.aliyun.com [140.205.0.206])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6DA136;
+        Sun, 11 Jun 2023 20:49:59 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R511e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047209;MF=changxian.cqs@antgroup.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---.TRZt.83_1686541792;
+Received: from 30.177.51.58(mailfrom:changxian.cqs@antgroup.com fp:SMTPD_---.TRZt.83_1686541792)
+          by smtp.aliyun-inc.com;
+          Mon, 12 Jun 2023 11:49:53 +0800
+Message-ID: <37513fcd-b371-cc2f-b7f9-e94b045d8c5c@antgroup.com>
+Date:   Mon, 12 Jun 2023 11:49:51 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230609115206.4649-1-sergei.shtepa@veeam.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.0
+Subject: Re: [PATCH v3 0/3] Rust scatterlist abstractions
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     <linux-kernel@vger.kernel.org>,
+        "=?UTF-8?B?55Sw5rSq5Lqu?=" <tate.thl@antgroup.com>,
+        "Miguel Ojeda" <ojeda@kernel.org>,
+        "Alex Gaynor" <alex.gaynor@gmail.com>,
+        "Wedson Almeida Filho" <wedsonaf@gmail.com>,
+        "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
+        "=?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?=" <bjorn3_gh@protonmail.com>,
+        "Benno Lossin" <benno.lossin@proton.me>,
+        <rust-for-linux@vger.kernel.org>
+References: <20230610104909.3202958-1-changxian.cqs@antgroup.com>
+ <2023061017-usable-bountiful-3f59@gregkh>
+ <2023061001-immovable-mongoose-7546@gregkh>
+From:   "Qingsong Chen" <changxian.cqs@antgroup.com>
+In-Reply-To: <2023061001-immovable-mongoose-7546@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sergei,
+On 6/10/23 11:35 PM, Greg KH wrote:
+> On Sat, Jun 10, 2023 at 05:33:47PM +0200, Greg KH wrote:
+>> On Sat, Jun 10, 2023 at 06:49:06PM +0800, Qingsong Chen wrote:
+>>> Hi All!
+>>>
+>>> This is a version of scatterlist abstractions for Rust drivers.
+>>>
+>>> Scatterlist is used for efficient management of memory buffers, which is
+>>> essential for many kernel-level operations such as Direct Memory Access
+>>> (DMA) transfers and crypto APIs.
+>>>
+>>> This patch should be a good start to introduce the crypto APIs for Rust
+>>> drivers and to develop cipher algorithms in Rust later.
+>>
+>> I thought we were getting rid of the scatter list api for the crypto
+>> drivers, so this shouldn't be needed going forward, right?  Why not just
+>> use the direct apis instead?
+> 
+> See https://lore.kernel.org/r/ZH2hgrV6po9dkxi+@gondor.apana.org.au for
+> the details of that (sorry I forgot the link first time...)
 
-what tree does this apply to?  New block infrastructure and drivers
-should be against Jen's for-6.5/block tree, and trying to apply the
-series against that seems to fail in patch 1 already.
+Thanks for the information. I agree that turning simple buffers into
+sg-bufs is not a good idea. If I were implementing a new cipher
+algorithm, I would definitely follow the `struct cipher_alg`, which
+takes simple `u8 *` pointer as parameter. However, if we'd like to
+utilize some existing ciphers, such as aead, we still need scatterlists
+to construct an `aead_request` for further operations, util changes are
+made to the underlying interface.
 
+Qingsong Chen
