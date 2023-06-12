@@ -2,380 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD1A872D0D0
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:41:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF44172D0C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233142AbjFLUl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 16:41:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59608 "EHLO
+        id S230403AbjFLUkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 16:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232279AbjFLUks (ORCPT
+        with ESMTP id S236681AbjFLUjz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 16:40:48 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911FA1718
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 13:40:46 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35CKOQGg002209;
-        Mon, 12 Jun 2023 20:40:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version;
- s=corp-2023-03-30; bh=566WjR9HOsaiTi90oG2qxgL9fq1TpDqi1DBa3zdZrq4=;
- b=s88SGnntgJmGn+MPF4muwVC94AFY2YTnhmSpHciXvH/IZmaSbcbUtIOkJx9Th3RsKk7b
- 3wKDkFWumq2HLXT+lIGJxRJaJw33EHXkbIpJj2vBxl3fAblzUDywtGb8TTnK/eDc8sxS
- p8hpvaZXfxB1LqnM8P8tEwBqg7OUOeWNjtrkHfJBlwG82ylGNoqC2Dl97LjWpQV9RtC4
- whQdtlak4MxzMcyobgYqlVTUdzDmu/C7zcTVtdIi8h/5vzGPgT8b5HAekU4aocYVGGWI
- AWnp3qt+mrHKCDmE9aPdx1+6wdH1EzYAwRTntY8wthCF5tz9ZNCi+McmH5c26Mgke5/b iw== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r4hqukv5b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 12 Jun 2023 20:40:26 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35CJd8Kw014064;
-        Mon, 12 Jun 2023 20:40:25 GMT
-Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam02lp2047.outbound.protection.outlook.com [104.47.51.47])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3r4fm31597-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 12 Jun 2023 20:40:25 +0000
+        Mon, 12 Jun 2023 16:39:55 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03AE7D3;
+        Mon, 12 Jun 2023 13:39:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686602394; x=1718138394;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=Hf46LasQNNtVyTHOLuyJdF8laqUnhNQ0OSMrvbcro28=;
+  b=AU6VW3q+nr9sxyGJ+3Y2Be8sEHH0ZBp9djWXcGYX31fe4nt12aT+6wVb
+   d0PHzadrKZPK1+NtZxLgPiPQO/RKYouFj/ch6P4hF8PJWGoqrtp4xATY0
+   7y+JMu66A1n9Uktz9vZvPWqjO6QgJpxKtH4K8uoqo3UZ2x7aQ2zaIQt7T
+   qIZ/GX9BbbB4EUbSmOOgdgz+5fQfyZyBJ4VW2KYUP2vr3ef5EQsmtvtcO
+   AnmW4aMtS7GskATRS+1awtVgQdlNXS9tgprZI+RjWdM7goM2uk++6/gXc
+   n178yGHi4HN4SB7SoWxhF69lKPE73LDXRHg/V5RzFhqwP2aLf1f/bmj7J
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="361520594"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="361520594"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 13:39:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="885583590"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="885583590"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga005.jf.intel.com with ESMTP; 12 Jun 2023 13:39:52 -0700
+Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 12 Jun 2023 13:39:52 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Mon, 12 Jun 2023 13:39:52 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.105)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Mon, 12 Jun 2023 13:39:52 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Hm2L81BeB3ccBfsgPP8tGY36kwj2U9s3v9SlYSunHcTJmN8AYFbiXn6lQmsh2Vqd2XyEGuT1gtqqAvXJGmgVEQfWNMfXAwI2j83Zi+ULCDQq/KZ7WfduOOzCiKzwoNLUwiwhu7HkeVIX9ecnXyTw8ZPiODbqI0dOU6YBknRU9i2rWzCm3n3qPs7kB/NwF3bz49+h3HjvfACobCMuF3emuXInbr05QmqFiYdB/tmZ45LNsIYFmm+STBhKG/tE7xhasQ7134KXGqHiLPA4oanyGrGo0z5Cw0RGOr7PMiUQAPqq34sbUnuGwt5tsXdpUF6U2FfB7lLUwE0vuGQy+Mugbw==
+ b=XiEF7LG+XLsvOKowylwa+WCaVK3jCRlpnNmSblMQhE5I0gBN1PBxd50OygTjyg7s2FUGA4NQIz7ge5KZ4rDkSjosppt0OdhhcwpyH6+l627d0dOWYeult7od3fjcgeLtD04q0lrfh41VY7Q9zxuceBBHugs62+6djYfOFuRBjTdpOXXA6iOqh+aN5yrtD41uQ2zMECV5bV/Y5tWNjW0Eic9cRDo/FvA++Kro9dZ5Xtuo00495+X7W+JvRS3XTfLIQ/9DwdDPnTdVzhzvBztkpD8cNhuwG4RbnIdUOhc52Z0H5hdhc6q1r44m8erLTQ3hBrtetOKGI/2V+tkXUvw77Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=566WjR9HOsaiTi90oG2qxgL9fq1TpDqi1DBa3zdZrq4=;
- b=kbTt5Wj12Hh33U9BzQ9XHwp908EVbSH9vMtCVpwAs4vtebzvpQsP8GZp0FcupWOcjanT2UTq+cxQFNev1wWUhQn2nZwv2hJOQLNvTXzH/OIKNCB9MkHmBoUEAejUiPBcLb+oCjyh0egeRFG//wT95x83bImKtEEB7kNJ3wQmIFHTpbjvVg/lYH5VlD1A7ZKDeWkk+rvhgdBMy1gShnrZ146rdVXNWQwoZgX7NUNZ2nBD95PqhAlN3CsVqC1da8C3p5ljxaP6lOqSAI68dOAG2AU0gfp0iUg+D2AjgqPJ3XDK7dgU4itHAiGuv8tgND2xgwqqyVtTgMc5Yqp7kh+1qw==
+ bh=oDEOzU7dsgzBsQeP5S5ihMHEtLWs07mCNZmUAVOuRNc=;
+ b=AbZ9eNWn/2OmiFYgmgRCFcM9fZCFGnCIwHzcRXSoDuYHAWjbvWVx8IsiCfHVfEdawGzWJ/Ai70xVsu7iV8KRKJlVRSyq6crYdXeJdT4HXv/W9nF2nh+wPtqgP9af9eADiixeXH7WG1ugN091cZzobQFR/lDzG8xb5Y6SiBXdrOR+CcKLSHmWixLWnQMj4DJJvw5NzbQKxCR1dB7V8NeKdS5JiwEFbUA+ZMfb5ptmgiSoQsvAtKQ8a2fllr/tBiT+V8jnW/WynymZwOqtcRDmcdV1F9ldJzT4nlY5Bng0hDQYrKO6ah/iP2YFE+PulORl5+WSlHo3FnOyaTNnuwpBow==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=566WjR9HOsaiTi90oG2qxgL9fq1TpDqi1DBa3zdZrq4=;
- b=O4w93raSfb3728A3uCHIarYUMVg5FyAAEDXMtg0R7BIQyyAJ80WRi767YwmnVXeeaCFQnF+KSs9mR/wGv54gziZVQ8QKdMEZPv2ALZ2HDZ6lsN7xsHb/f6gX9fI/aP776PgswQSH6z6EoYtpPuZD/dU6NpDhYXLqCSqq6FcY5no=
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
- by SA1PR10MB5868.namprd10.prod.outlook.com (2603:10b6:806:22b::18) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
+ by SA1PR11MB8325.namprd11.prod.outlook.com (2603:10b6:806:38c::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.44; Mon, 12 Jun
- 2023 20:40:23 +0000
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::998f:d221:5fb6:c67d]) by SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::998f:d221:5fb6:c67d%7]) with mapi id 15.20.6455.045; Mon, 12 Jun 2023
- 20:40:23 +0000
-From:   "Liam R. Howlett" <Liam.Howlett@oracle.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     maple-tree@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Peng Zhang <zhangpeng.00@bytedance.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Subject: [PATCH v2 09/16] maple_tree: Re-introduce entry to mas_preallocate() arguments
-Date:   Mon, 12 Jun 2023 16:39:46 -0400
-Message-Id: <20230612203953.2093911-10-Liam.Howlett@oracle.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230612203953.2093911-1-Liam.Howlett@oracle.com>
-References: <20230612203953.2093911-1-Liam.Howlett@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: YT2PR01CA0008.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:38::13) To SN6PR10MB3022.namprd10.prod.outlook.com
- (2603:10b6:805:d8::25)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Mon, 12 Jun
+ 2023 20:39:50 +0000
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::95c6:c77e:733b:eee5]) by PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::95c6:c77e:733b:eee5%5]) with mapi id 15.20.6455.030; Mon, 12 Jun 2023
+ 20:39:50 +0000
+Date:   Mon, 12 Jun 2023 13:39:47 -0700
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     Terry Bowman <terry.bowman@amd.com>, <alison.schofield@intel.com>,
+        <vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
+        <bwidawsk@kernel.org>, <dan.j.williams@intel.com>,
+        <dave.jiang@intel.com>, <Jonathan.Cameron@huawei.com>,
+        <linux-cxl@vger.kernel.org>
+CC:     <terry.bowman@amd.com>, <rrichter@amd.com>,
+        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
+Subject: RE: [PATCH v5 11/26] cxl/pci: Early setup RCH dport component
+ registers from RCRB
+Message-ID: <64878293e1b01_1433ac29446@dwillia2-xfh.jf.intel.com.notmuch>
+References: <20230607221651.2454764-1-terry.bowman@amd.com>
+ <20230607221651.2454764-12-terry.bowman@amd.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230607221651.2454764-12-terry.bowman@amd.com>
+X-ClientProxiedBy: BYAPR01CA0026.prod.exchangelabs.com (2603:10b6:a02:80::39)
+ To PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR10MB3022:EE_|SA1PR10MB5868:EE_
-X-MS-Office365-Filtering-Correlation-Id: cec6426c-3a27-4f87-57a9-08db6b853ee2
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|SA1PR11MB8325:EE_
+X-MS-Office365-Filtering-Correlation-Id: 36d8a09b-0b1b-492b-9fb4-08db6b852b1d
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: q6EPS6IEdfiQYbbm4yCq9ZiuY5pCRavKFx9MSuqYSUNyEEfKwPKQHNf3KyRftd9Ys5cjH+pGeSl66b7MfT1u4X4UHsIMMRiqD+5X8FjN0NgIjYbFhYi5KIke4mz1072svwC7iirGALKjVDlwzq55jgShwKObOTeOAA2NG8l8DKzrH0gJYWB+LZkeIk3gI5dQGbDFUHMsVh5VaQIaXTHap4IHAjKxKqxQwC4RHI1F8kNgOHJJ+wIGJbofq4d2afYm7AjSHO+d18K1a+dBytlyRrE6de/APQasnCq4kbWU9Mi/mt5uYHIC+nTxO0mxmjTV0cgd/XRnxGUYykZTtPafMVW3rBxnB2Z+WITwpuHwf6D+9fLCvZA5O3r+8sRUTLDJxNOjl4EgPDpPoypQ0+WMsIXJcRSr3Z9BLLnM41zxp3fWSo+hQ0gtByaaNDHyN9nQ43z6wS7/cXv5NQyvTUKEYsBkx3Gqbdlpi0+paoQXxeaoXWQCgrhdBVXeaUaqd3GMhk2+KJPMhyB7x9Wnn5SR/wPVUHrFhQLH1kvGmrrV4kZ7Y14l9wIQDiXXZV45TChO
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(346002)(39860400002)(136003)(396003)(376002)(451199021)(8936002)(8676002)(5660300002)(4326008)(6916009)(66946007)(66476007)(66556008)(316002)(54906003)(2906002)(41300700001)(6666004)(478600001)(6486002)(6506007)(26005)(1076003)(107886003)(6512007)(83380400001)(186003)(36756003)(2616005)(86362001)(38100700002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: iZxfXUZ2LsE+0/D/hdhZ/a4svwgp2IPZC9CKN1Z0tXawo3+AnblJ6AFvVKfLAqNcbXA/ZZQI7OegN0uT44ohTxFmjfxvdrK1MVyd0gYW5xoj9BY7m2HANp8cDEa71LQmr5KYcf2DowLpqS/mtZjv0fJmuC8Kbe1FVH5f1/0Hem/IiMWgiG84BvDoxSxRfaaPOejsO+/RLzLhPY0DB/yUfdvHZq/iPDWvy5AnzO9iGrJPrj9DjW0VRyEAG0GzOKCDt6iy4N2MIrgnkMjassN1vhZ0EfXwsjYeNVYPjlhYPsxHCBSPS7LsKu76tzaFU1d5lv8l5bzPNl1nlDTPx2SXPCPyPQyYK2NG1QEsKsvfCW6rkR+RCNJcGAD+RKtySNAIH4aDabf9VloZbrBMobh/mXKlxj0jE9+W3thabhcN7fxi9tG34cTX1tVReJJoKjm5+92DlxLBNKiUJkR/uXRUl8cjrZFro2dqwVC419wJvfxeSN9q6FBMMoG2KAadxkl8k5akNq9lrhSdGOTxNSKaBL+oYLzaTo1PDeI9NYsJb9wcosAgRF59s18UaI/6lfV8
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(39860400002)(396003)(366004)(136003)(346002)(451199021)(83380400001)(2906002)(86362001)(82960400001)(38100700002)(6506007)(41300700001)(6486002)(316002)(5660300002)(6666004)(8936002)(478600001)(8676002)(66476007)(9686003)(4326008)(6512007)(66946007)(26005)(66556008)(186003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?l0QCH4m2yJ6H6YXabrwcUWVhYuLHGXwtx1mE9VMEp9RncJg3AuIcfO+eylZJ?=
- =?us-ascii?Q?4FxT7wRywJHsCXUmzlo02pM6FaOrIGrOV81CbshGUX/hROTixyCrtHSomQtT?=
- =?us-ascii?Q?0NY9v6scoI8AQuddBefLNMvHc5Jp9gWkAJnOyxAj+WZdkE6OrqCL3gdmEpwp?=
- =?us-ascii?Q?SSiT4IPcYd54XeoxHMQJXdzvdY2nQ30ceOu9a1rUR+dVWxtpsOMXczON71jA?=
- =?us-ascii?Q?aKMVdgG1Ht7G+3jnqDXjkIcmkWFNTcO6+/X20il5n/lgIxhoHdqKsmi9g6n8?=
- =?us-ascii?Q?h2JzzLZyWr8lxOLUO0AixiZUBV3LzbIvG8GO54I+4ndF0lk4eK9yyCid5Q6B?=
- =?us-ascii?Q?PirX/g/zeOcT697NbslqI2EiZc5uQeeUIjUKt7xjD0wIi7HRS7gvgrci6PXw?=
- =?us-ascii?Q?ZTwYJmd0EzV5f5ntOh7D4LUD44uFmCw3G1PtDiY0JmwUXkfnblwki/l562ph?=
- =?us-ascii?Q?bfiZH8GhLRCV+FAv93miUZHcqwo0XaF3VWekTgAgf4XsDbkKJ42XreUVk28v?=
- =?us-ascii?Q?lSrMNzqUuOKIvqzUmF3oxGX2JYWp9SP/TPZ9uAxySFo3J2x8NBvl4LvPyu+L?=
- =?us-ascii?Q?iQc9zTeG0nwZWFCKWHbn27gWezHaVfqm3m1U+KAVtEjmzFSCMDeD2Pz/lWv6?=
- =?us-ascii?Q?tYvtb5B0EalbXpRj0AsV6Y5jO2S9BZJfaJ1psZ+hZiJ10HNuz8c3rrf3TjZA?=
- =?us-ascii?Q?WGHLmTyfKUGvde53K/XcUavp+t3HW2xWfk8z3A8f2Xou3xqcWAHzDwOklOub?=
- =?us-ascii?Q?Tu/+f7VFSruQ8CMUTw57LemOo30SAHpGfYTpHnZSrr6iYmLDaP71VS2XwxIU?=
- =?us-ascii?Q?EMTyi+69JZX2LpNflNnieI+Z4AJeWW4JWeZji5gFxnYOxXZkv/OMAUvcsylb?=
- =?us-ascii?Q?n7nyFnsN0C3Bt3RHYZZMGTzxlXK5I1+rjINiXLekCPaLlVThdoMDT0uo+YcT?=
- =?us-ascii?Q?/dVFZtX2wk5Q50D4eTI7PriBgum5+934NBBF4SzTGlKdypeUqUAvN73C/IV3?=
- =?us-ascii?Q?QWjlWX76WZBm0VdW4JZYoy4YECisvdEt6Z6iolUhY89j1/JRVV/vlWvU66Y4?=
- =?us-ascii?Q?LMcnWlla5NZv2OY5fKQ74C5kCqKQLQCaHlqdZVdZ/J7Ne5kBfoH2A9el66hW?=
- =?us-ascii?Q?xcqiQ5Yj5F2L5MsxfeOzNvOwp9P9rkqQjnkGOpd1yWIpEqiiDeJlLwClXNdP?=
- =?us-ascii?Q?wqUHe5ivYW0wVDpTrcMtXEIPfbK0Mw575EnaHu7Fir9EzPGESkJ1QLkCVoVk?=
- =?us-ascii?Q?RyX2NIfZGUdHg1e732CIiKxooVmaqOn3jKUICDFrJVpuZlTCnIXBERNSQnBG?=
- =?us-ascii?Q?ZBxOuiSGIOT/VXjqtNPgePrR2xjmbc5LIox2gweeSXWYZdCISRLmJJPQ4hVB?=
- =?us-ascii?Q?VCaXgYKGbttFeNZ3OgzSCT1EYMeMw7KxDjJRiRG8cC80tKFfhdk9zhdEQaLV?=
- =?us-ascii?Q?j/0SuRQkQvo72Xo5yjepA6y1FWAhsf8V0Fkh/M4fy/a79py4TxFPjpRHwLBw?=
- =?us-ascii?Q?X70lXLuQVW0m3sF6ASNJJZG/tXMuK3qH/1FuXaMrYXPGFQXdAR6BinCy1nDs?=
- =?us-ascii?Q?E0qI2uonA8MI7gS86CNu2SOP8ZhWa2disMe1XVRqTQCK+VvkSuljn72m23D3?=
- =?us-ascii?Q?JQ=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?46OAOXoTQK6kGORyFmOFyAsaybHpiC/Pmt0t9j/iZoSuiIwAvFMOkggPqv/2?=
- =?us-ascii?Q?a1FCqblm1JSFjSmAClUCXssg+vCxxLLB0VUgnGgGMVCnKghucmO9C2M1aGfB?=
- =?us-ascii?Q?b8KMBhpuwKtu5ICkj0MdIGZO5fgNWArd6j2axOoyrsB+bmm9tt1CMjLVEWL+?=
- =?us-ascii?Q?ghUNdAU1o/0ULnhnclUBpP/2LRur617+1/RKye+Fvf7FYIO8GdTncETt2PSX?=
- =?us-ascii?Q?eV8nM4kQOVIN+YiDGpxN109Z9W9+VbznpxdPbzXxTniysdrwieIrQFrbOhhz?=
- =?us-ascii?Q?MFOFmPFyQJsbNoozs7rUSYii3JaQpKTJgDQcXZaZcRgMv2/nTjxakyuYWDxD?=
- =?us-ascii?Q?FHnZqv3SJEnZ9Dwa04FsqhlYiDeh4+cZuDT3jygT3s4K+B3TUwJ+pVJuQuJn?=
- =?us-ascii?Q?BtnLAQY/jKdCg2RZ/BkGB8FgIIM24OJqEijtguJ+A0y+/ZQsEnycxsdZ/TiW?=
- =?us-ascii?Q?KbZ+cq6Oa2ZFlTXm8dfKoAZJduzGMlFq86pVUCINQkMr/G3KKfr3+Mxgkp0t?=
- =?us-ascii?Q?oS4ow+PpIJP+nwNT+OSAaR62cPshisSIPGthBjRmZStXnauHdLOIZOMUMgM4?=
- =?us-ascii?Q?U3Fmn5EAp+EhxFNFDlUOfAkEM7BA4qZfWFkT4zgtm5tSzjgLuQLzAlBEn7tq?=
- =?us-ascii?Q?g13rww25+zRYZ0ImtJ0fwLLOY6ZCA7gIku31sn4eXADEsaYsHLJQuny99m7U?=
- =?us-ascii?Q?VIiRNBRVW2krMudle+90eSKNweuZQHSVYxfNs7QW30fAqgv7438+X6daDQ5n?=
- =?us-ascii?Q?zIRhZOzKNGb9UrfIpKv3JBXRsULGZoluP2G86C0JNGq1wG8PWvrvjglQ6N9N?=
- =?us-ascii?Q?1uq0rr1kjO7X977koM3aaNkVkX++RCQeNmNS94SZWy2h4e3ZwVlE/F5XWB3f?=
- =?us-ascii?Q?jgV2hNdHZGIp9YHVFz9lROwQbGE4AJD25YfXofrGfzMWZKtt5+KbHlxG+Nrs?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cec6426c-3a27-4f87-57a9-08db6b853ee2
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?k8jKBRyeRQ4eSfHMjnlzuWex1lzB3bv68JnlYrL8B085t3L/JqJEqDy/0wlG?=
+ =?us-ascii?Q?omDuAU2Y2p78lOTIRwnR39aE/W0z2Iw4Q5dDpF38tpeb2DSHqqr1uAu1uhhU?=
+ =?us-ascii?Q?xmH44GARwdPXZBMP8DpZZ6FujaXsRUNH98/DOeLeT+jMIUIg067XvgGvhhrv?=
+ =?us-ascii?Q?VuLTVeCAaibB7LAzoxSk4KkzPfpzfCNHwu/2LlKLXZB0KPU4xVbybz1BjRnK?=
+ =?us-ascii?Q?TdjLTRgDWVnXwURlW8elljkHa3EyPo2UEWqME8tvaJVGod+NgafuTg7ch4GM?=
+ =?us-ascii?Q?s5IE9gU0Xa13b/1JfXmlA2XfxTR+HmVN0US36m8T+Bm9GykcPLnlL+yzZSqV?=
+ =?us-ascii?Q?Y7lLNiaTQEwNxMZRsohVKET89sJ9u76ycSi4uv5lEmSAjvy609gjhACJlqwW?=
+ =?us-ascii?Q?1sC9uFZcpbDUVbPHFOBFGdE3KGb6BA8Oj3ydTfpPT5Rgqgf6NjRxEixgm6jv?=
+ =?us-ascii?Q?JwQmWkC3x9weEr/wp9X5RLbvyekJs7uHYomCIEtMX/RczGyhGCOiDKon0aIV?=
+ =?us-ascii?Q?v203x1htiXOwaAnSnaN2Cbqlbm+H4GMImLj+Am8pTnAdL5EVo8KNZRVcGIh6?=
+ =?us-ascii?Q?bWiGepG2uYc13asrtf8bvt0DwRhhwIaY2DGFkIeZJ025mY2Gd3t89I14jTbv?=
+ =?us-ascii?Q?Q2jUdMqHpxamz7BhYcVArVMUgsMKekkkN1djmFOf/QcjeiU/PvSAKU0hoeHp?=
+ =?us-ascii?Q?6K4euO7QstPUWnJn1JMABr1xXhbzZEc4ZRNkla4SSyNBx19zY37MxjPpO+lw?=
+ =?us-ascii?Q?3UFbl5YDqWmTPb7AJFTlNaWG3Zsu2G9jLmhr6gB/V+hGPslemYjXm7btk6tf?=
+ =?us-ascii?Q?/9Dz/Iyjv/Pd6i6RvWei8Fl1fibK4u0ojLdcTy8wxCNn+USMPY9gra70AB7n?=
+ =?us-ascii?Q?Kd++6qVFISL+YTiTEy/uQzOTR8GzajfLPHnOOzrqalw4RSVsb2CltpFLUmoJ?=
+ =?us-ascii?Q?hPihxFzhgjS2Fsc3o4nYaknnPLn4NZKHMsMRB3g3APm9mJelPFhNtOUo6kKr?=
+ =?us-ascii?Q?Cniq6Ljcw9HGCaTokUAOZdpJwSD9EBv2KAi4I2TS5BrIgFcjcSv1FNteyZha?=
+ =?us-ascii?Q?MnpsNIbOXY115w0skEd4lmEcPhTX3qzIcxq4BKmTE3rKZkgG4oopLBSir7UT?=
+ =?us-ascii?Q?fM9r4KE+NScheDJQbdAMfTAB50gnPwPuypFWjsTkZB1ycRX1OGh8IL5J6DPk?=
+ =?us-ascii?Q?RtbFRLS0CdbgUMOKem4k2EvQkj7KLqyyUH//7BvLIV+FqPR+8m76f+mZ3L1z?=
+ =?us-ascii?Q?n5+W51/lJDtgffS+TNh4y5B3l3GiYJbgZ9vcjJrXpNFWpkQ1eGEJ1sdLUu7j?=
+ =?us-ascii?Q?f8N8P2RM/Tt6iOOQlfDV6Ujtdk27QhXuR2eEZVnAyj+a++YSSGcAMkM4gZUO?=
+ =?us-ascii?Q?QdWh+c2jLv2WCMEjJX/52xgJqMkDIZi51CUCE3OC3nUAAx1I0lzmyJTQWVvL?=
+ =?us-ascii?Q?EZ4y/nXTCFZ8WcovAUmXHurGOqnsk54HR8tIeM4b0AAtE4gCG758TysczMa5?=
+ =?us-ascii?Q?nBn8sc3lcWLa7wBOFmjZYqNV4QAtVtjCQAAHNj5FOXRxDypwjGdx+QE0jfF0?=
+ =?us-ascii?Q?NXcVd4Tx7Dv9OpdEbF/qAyHAtY8n18UOBIuJIEAI9bSxPMaIBhR8vw5og2PK?=
+ =?us-ascii?Q?tw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 36d8a09b-0b1b-492b-9fb4-08db6b852b1d
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 20:40:23.3659
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 20:39:50.3126
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kZcB1aUyHxXco7EeZPAEUzNmWN1F2S7I0LuK4OUI7ZXx6tMWL8vWi3rxofFOOuAMyYwZC4DMjlLohCQf1rwmUA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB5868
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-12_15,2023-06-12_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
- mlxscore=0 adultscore=0 spamscore=0 phishscore=0 bulkscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306120176
-X-Proofpoint-ORIG-GUID: ULVK4N_hTSzwuBw0zczigZ84pYV4HAkk
-X-Proofpoint-GUID: ULVK4N_hTSzwuBw0zczigZ84pYV4HAkk
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3Nt74v87esK/oiybu3e1lsQ+JnjJsr2gVc7CneAXKXMavYj3b4WHAwD9TIJusD/Q15Ld2D9p2EGyWKw9642jqg+xNwvfRTw4SVWB8tJFSyI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB8325
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current preallocation strategy is to preallocate the absolute
-worst-case allocation for a tree modification.  The entry (or NULL) is
-needed to know how many nodes are needed to write to the tree.  Start by
-adding the argument to the mas_preallocate() definition.
+Terry Bowman wrote:
+> From: Robert Richter <rrichter@amd.com>
+> 
+> CXL RAS capabilities must be enabled and accessible as soon as the CXL
+> endpoint is detected in the PCI hierarchy and bound to the cxl_pci
+> driver. This needs to be independent of other modules such as cxl_port
+> or cxl_mem.
+> 
+> CXL RAS capabilities reside in the Component Registers. For an RCH
+> this is determined by probing RCRB which is implemented very late once
+> the CXL Memory Device is created.
+> 
+> Change this by moving the RCRB probe to the cxl_pci driver. Do this by
+> using a new introduced function cxl_pci_find_port() similar to
+> cxl_mem_find_port() to determine the involved dport by the endpoint's
+> PCI handle. Plug this into the existing cxl_pci_setup_regs() function
+> to setup Component Registers. Probe the RCRB in case the Component
+> Registers cannot be located through the CXL Register Locator
+> capability.
+> 
+> This unifies code and early sets up the Component Registers at the
+> same time for both, VH and RCH mode. Only the cxl_pci driver is
+> involved for this. This allows an early mapping of the CXL RAS
+> capability registers.
+> 
+> Signed-off-by: Robert Richter <rrichter@amd.com>
+> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+[..]
+> diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
+> index 945ca0304d68..2975b232fcd1 100644
+> --- a/drivers/cxl/pci.c
+> +++ b/drivers/cxl/pci.c
+> @@ -274,13 +274,48 @@ static int cxl_pci_setup_mailbox(struct cxl_dev_state *cxlds)
+>  	return 0;
+>  }
+>  
+> +/* Extract RCRB, use same function interface as cxl_find_regblock(). */
+> +static int cxl_rcrb_get_comp_regs(struct pci_dev *pdev,
+> +				  enum cxl_regloc_type type,
+> +				  struct cxl_register_map *map)
+> +{
+> +	struct cxl_dport *dport;
+> +	resource_size_t component_reg_phys;
+> +
+> +	memset(map, 0, sizeof(*map));
+> +	map->dev = &pdev->dev;
+> +	map->resource = CXL_RESOURCE_NONE;
+> +
+> +	if (type != CXL_REGLOC_RBI_COMPONENT)
+> +		return -ENODEV;
+> +
+> +	if (!cxl_pci_find_port(pdev, &dport) || !dport->rch)
+> +		return -ENXIO;
 
-Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
----
- include/linux/maple_tree.h       |  2 +-
- lib/maple_tree.c                 |  3 ++-
- mm/internal.h                    |  2 +-
- mm/mmap.c                        |  4 ++--
- tools/testing/radix-tree/maple.c | 32 ++++++++++++++++----------------
- 5 files changed, 22 insertions(+), 21 deletions(-)
+I noticed while reviewing a later patch that this pattern leaks the port
+reference from cxl_pci_find_port().
 
-diff --git a/include/linux/maple_tree.h b/include/linux/maple_tree.h
-index ed50d8f459e6..e18ecbefc7f7 100644
---- a/include/linux/maple_tree.h
-+++ b/include/linux/maple_tree.h
-@@ -458,7 +458,7 @@ void *mas_find(struct ma_state *mas, unsigned long max);
- void *mas_find_range(struct ma_state *mas, unsigned long max);
- void *mas_find_rev(struct ma_state *mas, unsigned long min);
- void *mas_find_range_rev(struct ma_state *mas, unsigned long max);
--int mas_preallocate(struct ma_state *mas, gfp_t gfp);
-+int mas_preallocate(struct ma_state *mas, void *entry, gfp_t gfp);
- bool mas_is_err(struct ma_state *mas);
- 
- bool mas_nomem(struct ma_state *mas, gfp_t gfp);
-diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index 815c64f4c370..fa51abaab09b 100644
---- a/lib/maple_tree.c
-+++ b/lib/maple_tree.c
-@@ -5535,11 +5535,12 @@ EXPORT_SYMBOL_GPL(mas_store_prealloc);
- /**
-  * mas_preallocate() - Preallocate enough nodes for a store operation
-  * @mas: The maple state
-+ * @entry: The entry that will be stored
-  * @gfp: The GFP_FLAGS to use for allocations.
-  *
-  * Return: 0 on success, -ENOMEM if memory could not be allocated.
-  */
--int mas_preallocate(struct ma_state *mas, gfp_t gfp)
-+int mas_preallocate(struct ma_state *mas, void *entry, gfp_t gfp)
- {
- 	int ret;
- 
-diff --git a/mm/internal.h b/mm/internal.h
-index cdf06f680d6e..2691deca9699 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -1047,7 +1047,7 @@ static inline void vma_iter_config(struct vma_iterator *vmi,
-  */
- static inline int vma_iter_prealloc(struct vma_iterator *vmi)
- {
--	return mas_preallocate(&vmi->mas, GFP_KERNEL);
-+	return mas_preallocate(&vmi->mas, NULL, GFP_KERNEL);
- }
- 
- static inline void vma_iter_clear(struct vma_iterator *vmi,
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 8b3e58d6ac40..75b2a86e1faa 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -1982,7 +1982,7 @@ int expand_upwards(struct vm_area_struct *vma, unsigned long address)
- 		/* Check that both stack segments have the same anon_vma? */
- 	}
- 
--	if (mas_preallocate(&mas, GFP_KERNEL))
-+	if (mas_preallocate(&mas, vma, GFP_KERNEL))
- 		return -ENOMEM;
- 
- 	/* We must make sure the anon_vma is allocated. */
-@@ -2064,7 +2064,7 @@ int expand_downwards(struct vm_area_struct *vma, unsigned long address)
- 			return -ENOMEM;
- 	}
- 
--	if (mas_preallocate(&mas, GFP_KERNEL))
-+	if (mas_preallocate(&mas, vma, GFP_KERNEL))
- 		return -ENOMEM;
- 
- 	/* We must make sure the anon_vma is allocated. */
-diff --git a/tools/testing/radix-tree/maple.c b/tools/testing/radix-tree/maple.c
-index 03539d86cdf0..cfadc4b75d51 100644
---- a/tools/testing/radix-tree/maple.c
-+++ b/tools/testing/radix-tree/maple.c
-@@ -35383,7 +35383,7 @@ static noinline void __init check_prealloc(struct maple_tree *mt)
- 	for (i = 0; i <= max; i++)
- 		mtree_test_store_range(mt, i * 10, i * 10 + 5, &i);
- 
--	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL) != 0);
- 	allocated = mas_allocated(&mas);
- 	height = mas_mt_height(&mas);
- 	MT_BUG_ON(mt, allocated == 0);
-@@ -35392,18 +35392,18 @@ static noinline void __init check_prealloc(struct maple_tree *mt)
- 	allocated = mas_allocated(&mas);
- 	MT_BUG_ON(mt, allocated != 0);
- 
--	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL) != 0);
- 	allocated = mas_allocated(&mas);
- 	height = mas_mt_height(&mas);
- 	MT_BUG_ON(mt, allocated == 0);
- 	MT_BUG_ON(mt, allocated != 1 + height * 3);
--	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL) != 0);
- 	mas_destroy(&mas);
- 	allocated = mas_allocated(&mas);
- 	MT_BUG_ON(mt, allocated != 0);
- 
- 
--	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL) != 0);
- 	allocated = mas_allocated(&mas);
- 	height = mas_mt_height(&mas);
- 	MT_BUG_ON(mt, allocated == 0);
-@@ -35412,26 +35412,26 @@ static noinline void __init check_prealloc(struct maple_tree *mt)
- 	MT_BUG_ON(mt, mas_allocated(&mas) != allocated - 1);
- 	mn->parent = ma_parent_ptr(mn);
- 	ma_free_rcu(mn);
--	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL) != 0);
- 	mas_destroy(&mas);
- 	allocated = mas_allocated(&mas);
- 	MT_BUG_ON(mt, allocated != 0);
- 
--	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL) != 0);
- 	allocated = mas_allocated(&mas);
- 	height = mas_mt_height(&mas);
- 	MT_BUG_ON(mt, allocated == 0);
- 	MT_BUG_ON(mt, allocated != 1 + height * 3);
- 	mn = mas_pop_node(&mas);
- 	MT_BUG_ON(mt, mas_allocated(&mas) != allocated - 1);
--	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL) != 0);
- 	mas_destroy(&mas);
- 	allocated = mas_allocated(&mas);
- 	MT_BUG_ON(mt, allocated != 0);
- 	mn->parent = ma_parent_ptr(mn);
- 	ma_free_rcu(mn);
- 
--	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL) != 0);
- 	allocated = mas_allocated(&mas);
- 	height = mas_mt_height(&mas);
- 	MT_BUG_ON(mt, allocated == 0);
-@@ -35440,12 +35440,12 @@ static noinline void __init check_prealloc(struct maple_tree *mt)
- 	MT_BUG_ON(mt, mas_allocated(&mas) != allocated - 1);
- 	mas_push_node(&mas, mn);
- 	MT_BUG_ON(mt, mas_allocated(&mas) != allocated);
--	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL) != 0);
- 	mas_destroy(&mas);
- 	allocated = mas_allocated(&mas);
- 	MT_BUG_ON(mt, allocated != 0);
- 
--	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL) != 0);
- 	allocated = mas_allocated(&mas);
- 	height = mas_mt_height(&mas);
- 	MT_BUG_ON(mt, allocated == 0);
-@@ -35453,21 +35453,21 @@ static noinline void __init check_prealloc(struct maple_tree *mt)
- 	mas_store_prealloc(&mas, ptr);
- 	MT_BUG_ON(mt, mas_allocated(&mas) != 0);
- 
--	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL) != 0);
- 	allocated = mas_allocated(&mas);
- 	height = mas_mt_height(&mas);
- 	MT_BUG_ON(mt, allocated == 0);
- 	MT_BUG_ON(mt, allocated != 1 + height * 3);
- 	mas_store_prealloc(&mas, ptr);
- 	MT_BUG_ON(mt, mas_allocated(&mas) != 0);
--	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL) != 0);
- 	allocated = mas_allocated(&mas);
- 	height = mas_mt_height(&mas);
- 	MT_BUG_ON(mt, allocated == 0);
- 	MT_BUG_ON(mt, allocated != 1 + height * 3);
- 	mas_store_prealloc(&mas, ptr);
- 
--	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL) != 0);
- 	allocated = mas_allocated(&mas);
- 	height = mas_mt_height(&mas);
- 	MT_BUG_ON(mt, allocated == 0);
-@@ -35475,14 +35475,14 @@ static noinline void __init check_prealloc(struct maple_tree *mt)
- 	mas_store_prealloc(&mas, ptr);
- 	MT_BUG_ON(mt, mas_allocated(&mas) != 0);
- 	mt_set_non_kernel(1);
--	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL & GFP_NOWAIT) == 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL & GFP_NOWAIT) == 0);
- 	allocated = mas_allocated(&mas);
- 	height = mas_mt_height(&mas);
- 	MT_BUG_ON(mt, allocated != 0);
- 	mas_destroy(&mas);
- 
- 
--	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL) != 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL) != 0);
- 	allocated = mas_allocated(&mas);
- 	height = mas_mt_height(&mas);
- 	MT_BUG_ON(mt, allocated == 0);
-@@ -35490,7 +35490,7 @@ static noinline void __init check_prealloc(struct maple_tree *mt)
- 	mas_store_prealloc(&mas, ptr);
- 	MT_BUG_ON(mt, mas_allocated(&mas) != 0);
- 	mt_set_non_kernel(1);
--	MT_BUG_ON(mt, mas_preallocate(&mas, GFP_KERNEL & GFP_NOWAIT) == 0);
-+	MT_BUG_ON(mt, mas_preallocate(&mas, ptr, GFP_KERNEL & GFP_NOWAIT) == 0);
- 	allocated = mas_allocated(&mas);
- 	height = mas_mt_height(&mas);
- 	MT_BUG_ON(mt, allocated != 0);
--- 
-2.39.2
+I.e. this needs to do:
 
+	port = cxl_pci_find_port(...);
+	if (!port)
+		return -ENXIO;
+	if (!dport->rch)
+		goto out;
+	...
+out:
+	put_device(&port->dev);
