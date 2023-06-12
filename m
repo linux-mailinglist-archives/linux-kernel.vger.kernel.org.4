@@ -2,138 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A3DF72CB72
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 18:26:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3800F72CB76
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 18:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236167AbjFLQ0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 12:26:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59790 "EHLO
+        id S236177AbjFLQ1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 12:27:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233445AbjFLQ0U (ORCPT
+        with ESMTP id S233277AbjFLQ1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 12:26:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F8FE4A
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 09:25:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686587130;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EqwXplhA6elh/wvBFScazI5+BTtK4bRNV6UTAcVMSLo=;
-        b=QDl526gfS80DLDukjzr28BiopN3qfjRpev1xrUKRkkzKjO5obJiW7E54+pjNderk+41/Sz
-        B8n2z3Btr3CfyWlJR1fmdxWJgUFnwGpg0zY8jzXd229fBv39mwipudg3QQIL9RGdS9zSZU
-        gGRbEmMKJC5QljPSUy+bDDAzqK0jv3s=
-Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
- [209.85.210.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-240-L9VbadRiPGirau3DnLF1Rw-1; Mon, 12 Jun 2023 12:25:22 -0400
-X-MC-Unique: L9VbadRiPGirau3DnLF1Rw-1
-Received: by mail-ot1-f72.google.com with SMTP id 46e09a7af769-6b29945510fso209694a34.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 09:25:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686587121; x=1689179121;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EqwXplhA6elh/wvBFScazI5+BTtK4bRNV6UTAcVMSLo=;
-        b=Wu0LyQZfCpMcFt2+GRc+inMd8j+4FCoVUP1SfFYrG5VuHabdNo0omYtOAIb4idGP+2
-         9usDYCLEat1WWRRbcqHMI+nyL87+U9P4owuLixraE1hJjqfSD4tyM4msLgD3Q/2COA9I
-         kWqgwwbaDilH1AutnPmpxSMcRmCeNL72MZhTR16gkZERp3eeOl0r20lwd0ZFwMJ6B/W3
-         KL5fVhTuTfbmzwCqjUcwYtN/Im70jhgUBgm/c3sb9ZUzp9kWlpwVgDimXJ29+j9G81yj
-         vPY+Y9vhtBuM0KYkgYn3wXCZeIxVauxNZ0TkrZ/wzNISBLyIjlwFTeQa6UoamSrWJlvA
-         44tg==
-X-Gm-Message-State: AC+VfDzfTkwwbhsu10fSRmAUHghF03IRZcc1e7p1F4U+Z/7zhQ9E9sFz
-        mqqb+WvLWsXo/qKBNrd4Ydj88QdZZ2NEmPjGmCTPN0YhQUwke+ySjvrjwSggOvnAik2jloYr5NY
-        nqMPupT3HKFM5C/0u1u94Rhxs
-X-Received: by 2002:a05:6830:6116:b0:6b1:5075:87ec with SMTP id ca22-20020a056830611600b006b1507587ecmr5481302otb.1.1686587121464;
-        Mon, 12 Jun 2023 09:25:21 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6oDPJ4lumFhl21SxU7udUxydSD4vf4JJO9yBFnkI9xGni4BGh7usWoNwiiWtsG9588r15Cdw==
-X-Received: by 2002:a05:6830:6116:b0:6b1:5075:87ec with SMTP id ca22-20020a056830611600b006b1507587ecmr5481276otb.1.1686587121169;
-        Mon, 12 Jun 2023 09:25:21 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id j3-20020a0cf303000000b00627a6fd04ddsm3313829qvl.122.2023.06.12.09.25.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 09:25:20 -0700 (PDT)
-Date:   Mon, 12 Jun 2023 12:25:18 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Khalid Aziz <khalid.aziz@oracle.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org,
-        markhemm@googlemail.com, viro@zeniv.linux.org.uk, david@redhat.com,
-        mike.kravetz@oracle.com, andreyknvl@gmail.com,
-        dave.hansen@intel.com, luto@kernel.org, brauner@kernel.org,
-        arnd@arndb.de, ebiederm@xmission.com, catalin.marinas@arm.com,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, mhiramat@kernel.org, rostedt@goodmis.org,
-        vasily.averin@linux.dev, xhao@linux.alibaba.com, pcc@google.com,
-        neilb@suse.de, maz@kernel.org
-Subject: Re: [PATCH RFC v2 0/4]  Add support for sharing page tables across
- processes (Previously mshare)
-Message-ID: <ZIdG7rMDY6649hSp@x1n>
-References: <cover.1682453344.git.khalid.aziz@oracle.com>
+        Mon, 12 Jun 2023 12:27:01 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A3598;
+        Mon, 12 Jun 2023 09:27:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686587220; x=1718123220;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Uat8NMUncmqciNyRT9NRmiG7E1sO/Fvnt3OOx8fsnxw=;
+  b=dlvAq7Gtsz/y/mRHYTw1kzu+xyxA9XKOH63k9qcZ3wSeMZI7VMGpyNcG
+   UF3lhzm9RC80DuNbdf0ndwe5TT+0l/5fN/3adjRAIbtPQKPL/vMzD3O9h
+   prm4Tf/HdVC7LT4Y5npUREk9DK7dNIU4/WVcNGrEdn04jfrNIM0R5/uh3
+   q2vbHSjnWYU8oHtO4fbQQ+asF/HBwbed9a298vcQSsddaveatanxlUeU+
+   WUBiW6ID3knvyq/Z5JpJKoyxuhJSOlF5Tuizjxtan0Ski8qppCMhmJuvc
+   eTacdynFG6Xmx069Peqa12hm2eQDQMJlOXDv3t0xtsai4qZ8WFHjLzY5g
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="358089513"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="358089513"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 09:26:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="661638856"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="661638856"
+Received: from spmantha-mobl1.amr.corp.intel.com (HELO [10.209.43.2]) ([10.209.43.2])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 09:26:58 -0700
+Message-ID: <7bf4b9a6-d75b-8e96-14cf-79df2fae8694@intel.com>
+Date:   Mon, 12 Jun 2023 09:26:58 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <cover.1682453344.git.khalid.aziz@oracle.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH RFC v9 11/51] x86/traps: Define RMP violation #PF error
+ code
+Content-Language: en-US
+To:     Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org
+Cc:     linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        bp@alien8.de, vbabka@suse.cz, kirill@shutemov.name,
+        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
+        nikunj.dadhania@amd.com, liam.merwick@oracle.com,
+        zhi.a.wang@intel.com, Brijesh Singh <brijesh.singh@amd.com>
+References: <20230612042559.375660-1-michael.roth@amd.com>
+ <20230612042559.375660-12-michael.roth@amd.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230612042559.375660-12-michael.roth@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 10:49:47AM -0600, Khalid Aziz wrote:
-> This patch series adds a new flag to mmap() call - MAP_SHARED_PT.
+On 6/11/23 21:25, Michael Roth wrote:
+> From: Brijesh Singh <brijesh.singh@amd.com>
+> 
+> Bit 31 in the page fault-error bit will be set when processor encounters
+> an RMP violation.
+> 
+> While at it, use the BIT_ULL() macro.
+...
+>  enum x86_pf_error_code {
+> -	X86_PF_PROT	=		1 << 0,
+> -	X86_PF_WRITE	=		1 << 1,
+> -	X86_PF_USER	=		1 << 2,
+> -	X86_PF_RSVD	=		1 << 3,
+> -	X86_PF_INSTR	=		1 << 4,
+> -	X86_PF_PK	=		1 << 5,
+> -	X86_PF_SGX	=		1 << 15,
+> +	X86_PF_PROT	=		BIT(0),
+> +	X86_PF_WRITE	=		BIT(1),
+> +	X86_PF_USER	=		BIT(2),
+> +	X86_PF_RSVD	=		BIT(3),
+> +	X86_PF_INSTR	=		BIT(4),
+> +	X86_PF_PK	=		BIT(5),
+> +	X86_PF_SGX	=		BIT(15),
+> +	X86_PF_RMP	=		BIT(31),
+>  };
 
-Since hugetlb has this, it'll be very helpful if you can provide a
-comparison between this approach and hugetlb's - especially on the
-differences - and reasonings about those.
+It would be nice if the changelog "BIT_ULL()" matched the code "BIT()".  :)
 
-Merging anything like this definitely should also pave way for hugetlb's
-future, so it even seems to be an "requirement" of such patchset even
-though implicitily..  considering the "hotness" that hugetlb recently has
-on refactoring demand (if not a rewrite).
+With that fixed,
 
-Some high level questions:
-
-  - Why mmap() flag?
-
-    For this one, I agree it should be opt-in - sharing pgtable definitely
-    means sharing of a lot of privileges operating on current mm, so one
-    should be aware and be prepared to be messed up.
-
-    IIUC hugetlb doesn't do this but instead when something "racy" happens
-    itt just unshares by default.  To me opt-in makes more sense if to
-    start from zero, because I don't think by default a process wants to
-    leak its mm to others.
-
-    I think you mentioned allowing pgtable to be shared even for mprotect()
-    from one MM then all MMs can see; but if so then DONTNEED should really
-    do the same - when one MM DONTNEED it it should go away for all.  It
-    doesn't make a lot of sense to me to treat it differently with a
-    DONTNEED refcount anywhere..
-
-  - Can guest MM opt-out?
-
-    Should we allow guest MM to opt-out when they want?  It sounds like a
-    good thing to have to me, especially for file that sounds like as
-    simple as zapping the pgtable.  But then mmap flag will stop working
-    iiuc, so goes back to that question (e.g. what about madvise or prctl?).
-
-  - Why mm_struct to represent shared pgtable?
-
-    IIUC hugetlb used the pgtable page itself plus some refcounting (the
-    refcounting is racy with gup-fast that Jann used to point out, but
-    that's another story..).  My question is do you think that won't work?
-    Are there reasons to explain?  Why mm_struct is the structure you chose
-    for representing a shared pgtable?  Why per-file?
-
-Thanks,
-
--- 
-Peter Xu
+Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
 
