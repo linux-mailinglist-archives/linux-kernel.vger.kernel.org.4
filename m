@@ -2,110 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E2772D137
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:58:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ADDB72D135
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:58:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238740AbjFLU6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 16:58:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48348 "EHLO
+        id S238490AbjFLU6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 16:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238220AbjFLU6I (ORCPT
+        with ESMTP id S238410AbjFLU57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 16:58:08 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4405256;
-        Mon, 12 Jun 2023 13:53:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ib/BYS6PUvyGMIURzmXU2ExMoFjE66F8x1vPECql7zg=; b=uA1wKZOuSeYItA2kecWFqYWSNd
-        u7M4CIA1EUKLaMVVCftV+C4/9P5qDqEH8jIFCLDdUdqdXjCrYJLss9rux8ensn0+Xniyizrf7O7fL
-        3nn9eALfAWI9wSNLgQCcu8Poh6HuR2HcjNRzVN+ex9VNYT9VKsu+iSO4JIgfq7XKALrfCoOxNCSyt
-        YKoGW8eGb8gbbr/1uFnzmtEaoM0aZWERtxBTQNBUZOxeUJTWBPun00GJv5moHg9n2BxkfknZW/lcl
-        OR2eR2ftI9VyLdvhs6OFn0tk0jPkSCjLQgBcIqGyk65soJKY7kQ6aZNKHznqa6eIP6T2OzTDSEvhU
-        0YHPnv+Q==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:46250)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1q8oWi-0006LF-Ro; Mon, 12 Jun 2023 21:52:36 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1q8oWb-0005J4-4s; Mon, 12 Jun 2023 21:52:29 +0100
-Date:   Mon, 12 Jun 2023 21:52:29 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     arinc9.unal@gmail.com
-Cc:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net v4 0/7] net: dsa: mt7530: fix multiple CPU ports,
- BPDU and LLDP handling
-Message-ID: <ZIeFjdxctcR4yRLZ@shell.armlinux.org.uk>
-References: <20230612075945.16330-1-arinc.unal@arinc9.com>
- <ZIcDee2+Lz7nJ3j6@shell.armlinux.org.uk>
+        Mon, 12 Jun 2023 16:57:59 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B501FD8;
+        Mon, 12 Jun 2023 13:53:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686603218; x=1718139218;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=yZDu6jpDfsPrib6sgBtYsE6AHXoQX3x+qF2vtZtYuu8=;
+  b=f5bSwK5jYaxbiTFpAv2N6YmjgQxmtVXb61WZLIgT7zT/My0FLCfEsNMK
+   sI39WT+sxOXeIk5mcfS5cqPq1Rq13jqwCarmUjH+TNcafPr/8I6sq++Fn
+   qfIGgwyFC0NoOcSaR5DNDUmlSIghbYqvgzdG/rV+HsnWkMuZ8/JFoJamw
+   GW/WZDXha4JBDsQm4sCoy/0Sslryz+z/itq3i5o+r8MMLMnnl+8JtYePo
+   jwLyraAJ48lZvIIBgnq8UgDqBBoaxHIlDYnHZP5yYclqe9O0EYNNrMcxo
+   xwzUVLcFU864JqCNZHO6f6vJjmDQEsx4N24hV/NTlaXKuyXbeCgv464JX
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="386547617"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="386547617"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 13:52:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="711361022"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="711361022"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 12 Jun 2023 13:52:31 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1q8oWc-003Ipk-17;
+        Mon, 12 Jun 2023 23:52:30 +0300
+Date:   Mon, 12 Jun 2023 23:52:30 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Michal Wilczynski <michal.wilczynski@intel.com>,
+        linux-acpi@vger.kernel.org, rafael@kernel.org,
+        ilpo.jarvinen@linux.intel.com, hdegoede@redhat.com,
+        markgross@kernel.org, fengguang.wu@intel.com,
+        dvhart@linux.intel.com, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] platform/x86/dell/dell-rbtn: Fix resources leaking on
+ error path
+Message-ID: <ZIeFjkAAiS+TMa8g@smile.fi.intel.com>
+References: <20230612090250.1417940-1-michal.wilczynski@intel.com>
+ <20230612175205.eom2guabgfmnzrce@pali>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <ZIcDee2+Lz7nJ3j6@shell.armlinux.org.uk>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230612175205.eom2guabgfmnzrce@pali>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 12:37:29PM +0100, Russell King (Oracle) wrote:
-> Hi,
-> 
-> Please slow down your rate of patch submission - I haven't had a chance
-> to review the other patches yet (and I suspect no one else has.) Always
-> allow a bit of time for discussion.
-> 
-> Just because you receive one comment doesn't mean you need to rush to
-> get a new series out. Give it at least a few days because there may be
-> further discussion of the points raised.
-> 
-> Sending new versions quickly after previous comments significantly
-> increases reviewer workload.
+On Mon, Jun 12, 2023 at 07:52:05PM +0200, Pali Rohár wrote:
+> On Monday 12 June 2023 12:02:50 Michal Wilczynski wrote:
+> > Currently rbtn_add() in case of failure is leaking resources. Fix this
+> > by adding a proper rollback. While at it, remove unnecessary assignment
+> > of NULL to device->driver_data and unnecessary whitespace, plus add a
+> > break for the default case in a switch.
 
-And a very illustratory point is that I responded with a follow up to
-your reply on v2, hadn't noticed that you'd sent v4, and the comments
-I subsequently made on v2 apply to v4... and I haven't even looked at
-v3 yet.
+...
 
-This is precisely why you need to stop "I've received an email, I've
-made changes. Quick! Post the next version!" No, don't do that. Wait
-a while for further feedback before posting the next version,
-particularly if you've replied to reviewer comments - give the
-reviewer some time to respond before posting the next version.
+> Hello! I'm looking at rbtn_add() function and there is also code:
+> 
+> 	rbtn_data = devm_kzalloc(&device->dev, sizeof(*rbtn_data), GFP_KERNEL);
+> 	if (!rbtn_data)
+> 		return -ENOMEM;
+> 
+> which is called after rbtn_acquire(). So it looks like when kzalloc
+> fails then there is another leak...
 
-Thanks.
+Side note: In that case we would need a devm wrapper on acquire call.
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+With Best Regards,
+Andy Shevchenko
+
+
