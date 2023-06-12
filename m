@@ -2,199 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03C0672CD71
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB92572CD68
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237060AbjFLSEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 14:04:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33396 "EHLO
+        id S236935AbjFLSCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 14:02:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232414AbjFLSER (ORCPT
+        with ESMTP id S231678AbjFLSCs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 14:04:17 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75D6E67;
-        Mon, 12 Jun 2023 11:04:15 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3f86b426371so1263311cf.2;
-        Mon, 12 Jun 2023 11:04:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686593055; x=1689185055;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=APHh3Nys4coEeSeVUj0oYbJvBI1pNrqCMzlNnyXighg=;
-        b=RlK7II8xo4KN6uK+P4qhzADQcHADQU0gppNv539F+MhnKzEzKl8kGFT+Ezt4JxpxNz
-         7H/6mXli4RYeNG3JvnaHG+6pEY+/L6AhxTll8ico20yxchoZKOUg1s/qwQHyEtGLYNaO
-         CNIbdTO9hw6Mw6K0vzpoGDrUVcJOk6ebSmTL3/UxyfZalzNQPwzXkRbh72etZAQhjUmt
-         kKoWtLNSO+hisLiT3gnrY0zT1UN0bfHj8ag59Bdg3pzucOp/IyNtNhAlGiE+1zs0pW1P
-         SZQh8VyJa716lOLNnSBr5pFjltIYIowqnN2V9u9zM1TffiEnQ85BHYxD+NJBxpC9ikoN
-         ev8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686593055; x=1689185055;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=APHh3Nys4coEeSeVUj0oYbJvBI1pNrqCMzlNnyXighg=;
-        b=UfTX+TRyDPbCGtFKRB56ZIIoG7hARKg8AaFvzHR7lJ/Y1wrtBfQJnRXU8fs20JuW0G
-         iVqoD0f7H4jMWP5SlGo7jVZ0MbsD2VaqKfmlnyCbCK6q1tLNj4/e1SnBuA7IpvDOasvn
-         80+aixYy2KwlkF+of1if08GW/ScxVgxKktyRI61c3IwWOtdMqmO/3eaf1/7ZREPtwj6G
-         pJ+swxkhOi1edPlorRL5M5XxJUIMWEYJcEbPZDIujgd1LOtcNI1FObFjL29yxRrphpyf
-         Acjknf33Ri7GkfgH2eTrCkOQxdkZmQlWDjDM6HkFRRvzgv2wGEeGyJbvOIOIt6kdaoMN
-         4E2Q==
-X-Gm-Message-State: AC+VfDy0gUAjH1dlou8oiRrgwx7736F5hOXLrApuA3ISjSFptlnNfXCc
-        MEH37jB3nTHYNDHBadam9Hb7lDOkn3ueog==
-X-Google-Smtp-Source: ACHHUZ7ML49zNQagpfER6wDv/GUGVjh5/MoH60xXGePMiPJtC5YbXkHtPnkF3gTHEwLccMuOTIpyow==
-X-Received: by 2002:a05:622a:1aa9:b0:3f6:b1ad:97e with SMTP id s41-20020a05622a1aa900b003f6b1ad097emr13458092qtc.7.1686593055052;
-        Mon, 12 Jun 2023 11:04:15 -0700 (PDT)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id v6-20020ac87286000000b003f9baa693c7sm3559182qto.10.2023.06.12.11.04.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 11:04:14 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailauth.nyi.internal (Postfix) with ESMTP id F0CAF27C005B;
-        Mon, 12 Jun 2023 14:04:13 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Mon, 12 Jun 2023 14:04:14 -0400
-X-ME-Sender: <xms:G16HZMNVqrczWrJlBmlnmqA_k3VHCkZKlMPdezVbzttdNLWyMeO7AA>
-    <xme:G16HZC_STa5f_J1Ybm3vIOtNUX_iLnkPp03GgxwojQJDKxWUBr_Q46NhzKb6vWa5r
-    -nornpYBqdvPEKyjA>
-X-ME-Received: <xmr:G16HZDQQrZ5x6VPJNoKo17C11asfBTkCA-eOYIgUM-UuAnY6m9Ho6o41wZE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeduhedguddulecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
-    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:G16HZEsKElmlwO8YuPshs7AS1ebBAVUXDJnxxwDMfVVRxRO3KKyrbw>
-    <xmx:G16HZEeIVeVKGtqa1UMPTB_17IzjM2rVfekKaW8Fhyyyk4iJPLKq4A>
-    <xmx:G16HZI1sNTLC6pSjNuJVN7hWHveas8tMSgvQ6XiG4SAK3POvuTV5Ng>
-    <xmx:HV6HZCDb8rZpMmG2YODQuMZ_Pvj-i2G7rXcV5Kybq1j8UczScNQIKdIYfb0>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 12 Jun 2023 14:04:10 -0400 (EDT)
-Date:   Mon, 12 Jun 2023 11:02:28 -0700
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     torvalds@linux-foundation.org, keescook@chromium.org,
-        gregkh@linuxfoundation.org, pbonzini@redhat.com,
-        masahiroy@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
-        nicolas@fjasle.eu, catalin.marinas@arm.com, will@kernel.org,
-        vkoul@kernel.org, trix@redhat.com, ojeda@kernel.org,
-        mingo@redhat.com, longman@redhat.com, dennis@kernel.org,
-        tj@kernel.org, cl@linux.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, irogers@google.com, adrian.hunter@intel.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
-        42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
-        dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
-        john.johansen@canonical.com, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
-        rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
-        tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
-        luc.vanoostenryck@gmail.com
-Subject: Re: [PATCH v3 08/57] sched: Simplify wake_up_if_idle()
-Message-ID: <ZIddtMiTj8Kktq1z@boqun-archlinux>
-References: <20230612090713.652690195@infradead.org>
- <20230612093537.977924652@infradead.org>
+        Mon, 12 Jun 2023 14:02:48 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B83FE63;
+        Mon, 12 Jun 2023 11:02:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686592967; x=1718128967;
+  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=oe8Ey0rLI5aMtfcU82JWfELso1XEdXyzqck9HhvkkjY=;
+  b=KgnhfTtR7Qs1JBeeql73/gFMIVmlPr0WWbryRzalES4+doqMWBjEP6F9
+   lKHFxkuZR190/f2CTRWG00+aKqDBhxOreefMrTj8JF/Qb3bFZsIUHbHw6
+   DeygMzm2Pj2TRwnCFQ2kwEK/7DxRs2587gQTwPgeinX1dPnsFx2xLbRS3
+   cPXZ7AHRWaS0bwhNPvJxpLHcblcsv5KUv7qDmz/YuS+7qLuxSVQrbOHoG
+   kSVNVG0uSY5L7iF8Sw6/6Bm+8BGPLIJZ3egf2fRtSFbBn4JDODy9Ibi3b
+   MmL71dSK0zX7y9tLyMTdz+EaXLgrWp5l0nAD049PYUJL8zucsaBe5YfDb
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="360604070"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="360604070"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 11:02:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="824055755"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="824055755"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga002.fm.intel.com with ESMTP; 12 Jun 2023 11:02:38 -0700
+Received: from [10.54.75.144] (debox1-desk1.jf.intel.com [10.54.75.144])
+        by linux.intel.com (Postfix) with ESMTP id 437E6580D43;
+        Mon, 12 Jun 2023 11:02:38 -0700 (PDT)
+Message-ID: <fa84b0098551123f34a68b3c0d9c7aa12f592bbf.camel@linux.intel.com>
+Subject: Re: [PATCH V2 2/2] platform/x86/intel/pmc/mtl: Put devices in D3
+ during resume
+From:   "David E. Box" <david.e.box@linux.intel.com>
+Reply-To: david.e.box@linux.intel.com
+To:     Hans de Goede <hdegoede@redhat.com>, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Cc:     markgross@kernel.org, irenic.rajneesh@gmail.com,
+        ilpo.jarvinen@linux.intel.com, xi.pardee@intel.com,
+        rajvi.jingar@linux.intel.com
+Date:   Mon, 12 Jun 2023 11:02:38 -0700
+In-Reply-To: <e5fce103-fbb6-0eb6-f6ff-4bfeadd89c90@redhat.com>
+References: <20230607233849.239047-1-david.e.box@linux.intel.com>
+         <20230607233849.239047-2-david.e.box@linux.intel.com>
+         <e5fce103-fbb6-0eb6-f6ff-4bfeadd89c90@redhat.com>
+Organization: David E. Box
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-3.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230612093537.977924652@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 11:07:21AM +0200, Peter Zijlstra wrote:
-> Use guards to reduce gotos and simplify control flow.
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  kernel/sched/core.c  |   20 ++++++--------------
->  kernel/sched/sched.h |   15 +++++++++++++++
->  2 files changed, 21 insertions(+), 14 deletions(-)
-> 
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -3872,21 +3872,13 @@ static void __ttwu_queue_wakelist(struct
->  void wake_up_if_idle(int cpu)
->  {
->  	struct rq *rq = cpu_rq(cpu);
-> -	struct rq_flags rf;
->  
-> -	rcu_read_lock();
-> -
-> -	if (!is_idle_task(rcu_dereference(rq->curr)))
-> -		goto out;
-> -
-> -	rq_lock_irqsave(rq, &rf);
-> -	if (is_idle_task(rq->curr))
-> -		resched_curr(rq);
-> -	/* Else CPU is not idle, do nothing here: */
-> -	rq_unlock_irqrestore(rq, &rf);
-> -
-> -out:
-> -	rcu_read_unlock();
-> +	guard(rcu)();
-> +	if (is_idle_task(rcu_dereference(rq->curr))) {
-> +		guard(rq_lock)(rq);
+Hi Hans,
 
-We assume that irq must be disabled when this function called?
-Otherwise, I don't understand why this is not
+On Mon, 2023-06-12 at 11:42 +0200, Hans de Goede wrote:
+> Hi David,
+>=20
+> On 6/8/23 01:38, David E. Box wrote:
+> > An earlier commit placed some driverless devices in D3 during boot so t=
+hat
+> > they don't block package cstate entry on Meteor Lake. Also place these
+> > devices in D3 after resume from suspend.
+> >=20
+> > Fixes: 336ba968d3e3 ("platform/x86/intel/pmc/mtl: Put GNA/IPU/VPU devic=
+es in
+> > D3")
+> > Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+>=20
+> Thank you for your patch.
+>=20
+> There is one thing which has me worried here:
+>=20
+> What about when real proper drivers show up for these blocks?
+>=20
+> I know that at least some people will likely be using the out of tree IPU=
+6
+> driver with the IPU block.
+>=20
+> And having 2 different drivers poke at the hw state seems like a bad idea=
+ to
+> me.
+>=20
+> Maybe we can add a check if no driver is bound and only set the state to =
+D3 if
+> no driver is bound?
 
-	guard(rq_lock_irqsave)(rq);
+This check exists but is not shown in the patch. mtl_set_device_d3() gets t=
+he
+device lock and checks to see if dev.driver is NULL before putting in D3. T=
+his
+was checked with the GNA driver installed.
 
-?
+David
 
-Regards,
-Boqun
+>=20
+> Regards,
+>=20
+> Hans
+>=20
+>=20
+>=20
+> > ---
+> >=20
+> > V2 - rename mtl_fixup to mtl_d3_fixup. Call it from new mtl_resume
+> > =C2=A0=C2=A0=C2=A0=C2=A0 function, followed by the common resume. Sugge=
+sted by Ilpo.
+> >=20
+> > =C2=A0drivers/platform/x86/intel/pmc/mtl.c | 29 ++++++++++++++++++++---=
+-----
+> > =C2=A01 file changed, 21 insertions(+), 8 deletions(-)
+> >=20
+> > diff --git a/drivers/platform/x86/intel/pmc/mtl.c
+> > b/drivers/platform/x86/intel/pmc/mtl.c
+> > index e8cc156412ce..2b00ad9da621 100644
+> > --- a/drivers/platform/x86/intel/pmc/mtl.c
+> > +++ b/drivers/platform/x86/intel/pmc/mtl.c
+> > @@ -68,16 +68,29 @@ static void mtl_set_device_d3(unsigned int device)
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> > =C2=A0}
+> > =C2=A0
+> > -void mtl_core_init(struct pmc_dev *pmcdev)
+> > +/*
+> > + * Set power state of select devices that do not have drivers to D3
+> > + * so that they do not block Package C entry.
+> > + */
+> > +static void mtl_d3_fixup(void)
+> > =C2=A0{
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pmcdev->map =3D &mtl_reg_map=
+;
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pmcdev->core_configure =3D m=
+tl_core_configure;
+> > -
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Set power state of select=
+ devices that do not have drivers to D3
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * so that they do not block=
+ Package C entry.
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0mtl_set_device_d3(MTL_G=
+NA_PCI_DEV);
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0mtl_set_device_d3(MTL_I=
+PU_PCI_DEV);
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0mtl_set_device_d3(MTL_V=
+PU_PCI_DEV);
+> > =C2=A0}
+> > +
+> > +static int mtl_resume(struct pmc_dev *pmcdev)
+> > +{
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0mtl_d3_fixup();
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return pmc_core_resume_commo=
+n(pmcdev);
+> > +}
+> > +
+> > +void mtl_core_init(struct pmc_dev *pmcdev)
+> > +{
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pmcdev->map =3D &mtl_reg_map=
+;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pmcdev->core_configure =3D m=
+tl_core_configure;
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0mtl_d3_fixup();
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0pmcdev->resume =3D mtl_resum=
+e;
+> > +}
+>=20
 
-> +		if (is_idle_task(rq->curr))
-> +			resched_curr(rq);
-> +	}
->  }
->  
->  bool cpus_share_cache(int this_cpu, int that_cpu)
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -1678,6 +1678,21 @@ rq_unlock(struct rq *rq, struct rq_flags
->  	raw_spin_rq_unlock(rq);
->  }
->  
-> +DEFINE_LOCK_GUARD_1(rq_lock, struct rq,
-> +		    rq_lock(_T->lock, &_T->rf),
-> +		    rq_unlock(_T->lock, &_T->rf),
-> +		    struct rq_flags rf)
-> +
-> +DEFINE_LOCK_GUARD_1(rq_lock_irq, struct rq,
-> +		    rq_lock_irq(_T->lock, &_T->rf),
-> +		    rq_unlock_irq(_T->lock, &_T->rf),
-> +		    struct rq_flags rf)
-> +
-> +DEFINE_LOCK_GUARD_1(rq_lock_irqsave, struct rq,
-> +		    rq_lock_irqsave(_T->lock, &_T->rf),
-> +		    rq_unlock_irqrestore(_T->lock, &_T->rf),
-> +		    struct rq_flags rf)
-> +
->  static inline struct rq *
->  this_rq_lock_irq(struct rq_flags *rf)
->  	__acquires(rq->lock)
-> 
-> 
