@@ -2,120 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 124EC72CCE7
+	by mail.lfdr.de (Postfix) with ESMTP id 5E5CC72CCE8
 	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233006AbjFLRaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 13:30:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39956 "EHLO
+        id S235382AbjFLRaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 13:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236825AbjFLR33 (ORCPT
+        with ESMTP id S237415AbjFLR3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 13:29:29 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E8610B
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:29:27 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id ca18e2360f4ac-777a9ca9112so45574939f.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:29:27 -0700 (PDT)
+        Mon, 12 Jun 2023 13:29:32 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A047FB;
+        Mon, 12 Jun 2023 10:29:32 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-653fcd58880so3618536b3a.0;
+        Mon, 12 Jun 2023 10:29:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1686590967; x=1689182967;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20221208; t=1686590971; x=1689182971;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=TFWZn0n6OGSV4kVBbYftRZo2ty8H3Bci18vHV3tC0Uw=;
-        b=G8JD84g8f9Aeee5HTb3j/7SgOJh5Qn/aixcR5+GacNDkyxtuggQHLsYFnC6bEXjPzX
-         CFDBvYGcEzc1Ttl+IUa85nXJaOctQM+3Wy8xIs72fL9U/EZpbxXE0eJqLOsg7VKrMIC5
-         weokx/JiqIENqjn+LXa6+yAoNSa4c/vJ0Jsnyuao7rqrJ9O5YfZGoHB+GpSAFFK7rf5t
-         e3cgg3kcuwmy9bn41z6Fh0yOgs9hNIUGeYIWRQdX3YWh0zxo6BeyQp86i/LzYL50hqt3
-         RK/B1dfYGtQYx6zG0W9kb866p34EKPfBVuRjPGLhqy6GqZBIlr+JvIP15dv+x4wcQyQ9
-         QDCA==
+        bh=EhcWplw0MheBHEmIkzjsW91UZcSA6RHIkXpE9/7nU90=;
+        b=NKxzs0eIWy7UWWQrFowAJB+athTXNxT0R4kZFxHQbro1O9i4PXE+7x05SExYwpCPTr
+         JHkzRvDOKFeRoWfQDVr/o5ha52O5DGrJO1YdD8q66+WuCwJylvtGLjo87peWA4CQd8bP
+         aSUQ+9Am8E1n6lj+y3ObEjknyZTNkQ4Jl9/Eyb3psn19a8ydN+BdHGV6W76Zs5k79oc7
+         gHuxRwx1OUgW/tbZD34k4j0DV+yL/TsJDF3BhaaUZhw0NQUiJ0Z1Xl3V7e1WOx7//wox
+         EuUl2rPqyc6thx3A9zSsOg4E8rCUTxdhbAYscAk7NQ6vtMcl8+Q35+aYGA5jPdcdDswE
+         nkMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686590967; x=1689182967;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1686590971; x=1689182971;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TFWZn0n6OGSV4kVBbYftRZo2ty8H3Bci18vHV3tC0Uw=;
-        b=aOpR6+qHQ085iy/SwiSP6V/EIRZtbU+I7c5af2vOacc2FiRzZBNSJdUdLFgzvy1RyV
-         surFD0KaeUcGmzOH1KA4Bq7EsAUNwfjRXm5e8Jd9jAeovyLD2Oh8C9syK5xhu5f4u1d7
-         PxFJVT7eycNa8xZfNrh/L3cQdpUx8htxYPKPERvRV3E/n1pNxntnlW3KLwPi3KtZB4nI
-         Pz2jIHCJAqF1FhrluIA9pHenQsvmO7vLxxDoxidfFClIG5hE02Pvty4gi+YFpKdr7up9
-         SiZdb1EGEMi5mtQs1bYgoNgbQIGmgpozFqRudYQLkyPfHI64+LjPUdlITS0JAhLgbv8X
-         AChw==
-X-Gm-Message-State: AC+VfDyi6/wvg7Us17ebt5WJbvUHV9SsVtDMxsSLWsIWCWBtt1BZBZVN
-        e6f8ix8TeEaIwNZ2Gwb4aOzA3w==
-X-Google-Smtp-Source: ACHHUZ5bDIcReS9+YhyEZIK2CCIqFlbV7Kvzlpd9NEY+7ScY3yUVxP60SWtqVvazxqpp+hgdcN0Nww==
-X-Received: by 2002:a92:440e:0:b0:33b:e24b:ca46 with SMTP id r14-20020a92440e000000b0033be24bca46mr5234504ila.3.1686590967286;
-        Mon, 12 Jun 2023 10:29:27 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id t11-20020a92d14b000000b0033d2d6620b0sm3295648ilg.2.2023.06.12.10.29.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 10:29:26 -0700 (PDT)
-Message-ID: <ff34a007-fdd0-8575-8482-919ead39fc88@kernel.dk>
-Date:   Mon, 12 Jun 2023 11:29:25 -0600
+        bh=EhcWplw0MheBHEmIkzjsW91UZcSA6RHIkXpE9/7nU90=;
+        b=WqzCT1OLNRkGG11eTBCZTmfIg7JfHirc1ndFdvNlEwbt4B56rVpI5SiVkZcLewZ5DP
+         jC3meBHfkk2LFBlbXGESuudZUx1f00WjAf0a8nghgDoGQQcWF0GOp+Rt4FveV0nawQgL
+         SeVYVqXRc1KNr0IaPD+8Pgbw5f7EP9RGHsjOk+J9tTsoSNDD2aKJpAFhdFguk0quafLC
+         u6MgaZYlwziKEEu63Rjb+IxYZqQY+aj56Rbf1tE4e67x+fEor4RzvtmksITwLq/wNC18
+         1rL6kmYncD8SrSHId/P+imiiQP2p0Bbr6yzK+5QzAfysKyynWOY/Lhw+Md1+fU7sfefn
+         SP5Q==
+X-Gm-Message-State: AC+VfDwV86Fskaycs4GqN0UnHESx8VDTUHyDczNAXalmaqx0TFJL7LKE
+        RfyumQ4fx42QKXHVCUtvaMw=
+X-Google-Smtp-Source: ACHHUZ4NUcEcJJpcgpODDaZDZg7v27pbXFpSaNRkaWn+ixsVnrFVTIpoxb3MF5ex212EeZuO69aafA==
+X-Received: by 2002:a05:6a20:4417:b0:110:9210:f6ac with SMTP id ce23-20020a056a20441700b001109210f6acmr11156146pzb.37.1686590970988;
+        Mon, 12 Jun 2023 10:29:30 -0700 (PDT)
+Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
+        by smtp.gmail.com with ESMTPSA id v65-20020a632f44000000b00543e9e17207sm7808560pgv.30.2023.06.12.10.29.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 10:29:30 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 12 Jun 2023 07:29:33 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Xiu Jianfeng <xiujianfeng@huaweicloud.com>
+Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org, mkoutny@suse.com,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cuigaosheng1@huawei.com
+Subject: Re: [PATCH v2] cgroup: Do not corrupt task iteration when rebinding
+ subsystem
+Message-ID: <ZIdV_dDDKZazcO6p@slm.duckdns.org>
+References: <20230610092643.139007-1-xiujianfeng@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [6.5-rc5 regression] core dump hangs (was Re: [Bug report]
- fstests generic/051 (on xfs) hang on latest linux v6.5-rc5+)
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Zorro Lang <zlang@redhat.com>, linux-xfs@vger.kernel.org,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>, linux-kernel@vger.kernel.org
-References: <20230611124836.whfktwaumnefm5z5@zlang-mailbox>
- <ZIZSPyzReZkGBEFy@dread.disaster.area>
- <20230612015145.GA11441@frogsfrogsfrogs>
- <ZIaBQnCKJ6NsqGhd@dread.disaster.area>
- <CAHk-=whJqZLKPR-cpX-V4wJTXVX-_tG5Vjuj2q9knvKGCPdfkg@mail.gmail.com>
- <20230612153629.GA11427@frogsfrogsfrogs>
- <CAHk-=wiN-JcUh4uhDNmA4hp26Mg+c2DTuzgWY2fZ6hytDtOMCg@mail.gmail.com>
- <af31cadf-8c15-8d88-79fb-066dc87f0324@kernel.dk>
- <13d9e4f2-17c5-0709-0cc0-6f92bfe9f30d@kernel.dk>
- <CAHk-=wgdBfqyNHk0iNyYpEuBUdVgq1KMzHMuEqn=ADtfyK_pkQ@mail.gmail.com>
- <212a190c-f81e-2876-cf14-6d1e37d47192@kernel.dk>
- <CAHk-=wh0hrFjcU5C8uHvLBThrT5vQsFHb7Jk6HRP3LAJqdNx1A@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CAHk-=wh0hrFjcU5C8uHvLBThrT5vQsFHb7Jk6HRP3LAJqdNx1A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230610092643.139007-1-xiujianfeng@huaweicloud.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/12/23 10:57 AM, Linus Torvalds wrote:
-> On Mon, Jun 12, 2023 at 9:45 AM Jens Axboe <axboe@kernel.dk> wrote:
->>
->> You snipped the suspicion in my reply on why that exists, to avoid
->> io_wq_worker_sleeping() triggering.
+On Sat, Jun 10, 2023 at 05:26:43PM +0800, Xiu Jianfeng wrote:
+> From: Xiu Jianfeng <xiujianfeng@huawei.com>
 > 
-> I'm not seeing why triggering io_wq_worker_sleeping() should even be a
-> problem in the first place.
+> We found a refcount UAF bug as follows:
+...
+> To fix this issue, switch from all css_sets to only scgrp's css_sets to
+> patch in-flight iterators to preserve correct iteration, and then
+> update it->cset_head as well.
 > 
-> I suspect that is entirely historical too, and has to do with how it
-> used to do that
-> 
->         struct io_worker *worker = kthread_data(tsk);
->         struct io_wqe *wqe = worker->wqe;
-> 
-> back in the bad old days of kthreads.
-> 
-> But yeah, I don't know that code.
+> Reported-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+> Link: https://www.spinics.net/lists/cgroups/msg37935.html
+> Suggested-by: Michal Koutn� <mkoutny@suse.com>
+> Link: https://lore.kernel.org/all/20230526114139.70274-1-xiujianfeng@huaweicloud.com/
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
 
-Looks fine to me to just kill it indeed, whatever we did need this
-for is definitely no longer the case. I _think_ we used to have
-something in the worker exit that would potentially sleep which
-is why we killed it before doing that, now it just looks like dead
-code.
+Applied to cgroup/for-6.14-fixes w/ stable tag added.
+
+Thanks.
 
 -- 
-Jens Axboe
-
-
+tejun
