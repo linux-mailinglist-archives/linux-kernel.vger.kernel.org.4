@@ -2,65 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13A2672BF48
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:39:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E84672BF37
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbjFLKi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 06:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43942 "EHLO
+        id S233228AbjFLKgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 06:36:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234095AbjFLKil (ORCPT
+        with ESMTP id S229777AbjFLKgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 06:38:41 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FC125A15
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 03:21:54 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-80-JBvm8a2QMzWcyDGfkZf9HA-1; Mon, 12 Jun 2023 11:13:52 +0100
-X-MC-Unique: JBvm8a2QMzWcyDGfkZf9HA-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 12 Jun
- 2023 11:13:40 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Mon, 12 Jun 2023 11:13:40 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Chen-Yu Tsai' <wenst@chromium.org>
-CC:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        "linux-actions@lists.infradead.org" 
-        <linux-actions@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: RE: [PATCH] regulator: Use bitfield values for range selectors
-Thread-Topic: [PATCH] regulator: Use bitfield values for range selectors
-Thread-Index: AQHZmd7Pe+BdgVqXZ0e5XsPeombenK+ER+4AgAIyfwCAAFXbcIAAC1kAgAAcgoA=
-Date:   Mon, 12 Jun 2023 10:13:40 +0000
-Message-ID: <f5e6353f324343df8c289d8aed2a8930@AcuMS.aculab.com>
-References: <20230608075651.3214540-1-wenst@chromium.org>
- <ce04685b7c4840b683add0bdd4404da6@AcuMS.aculab.com>
- <CAGXv+5EtdhkMq916LLOfpz8ok_xump5tv+oeNBvPq-_3-93oqQ@mail.gmail.com>
- <0929093384864ff99c78800029ff5d76@AcuMS.aculab.com>
- <CAGXv+5Hnrpv8kTU+0B9S4NyqALEz+DQOLfO3U7GwMZp9AoqLEw@mail.gmail.com>
-In-Reply-To: <CAGXv+5Hnrpv8kTU+0B9S4NyqALEz+DQOLfO3U7GwMZp9AoqLEw@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 12 Jun 2023 06:36:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF03A262
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 03:18:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686564935;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vn9XmzFCfAP4xk0kJ7qaLU2v0x0cmbrEQEPzoMusjqE=;
+        b=LLFRwbzI7jxBGQsGpxC9vFmJ+zHf4Zs18kErS/H+NoDlg2KYdKNcHEvh0ptx4U3P/3/9zl
+        wgLJ9KuKi1FxLX5Ko8BVKpwva8iCnOPYuoIUF9iu5/qktHW/3ug9YR6EpaIzKVZ+rGkfpg
+        m+sN0z5JQ28lPNEcverJX3PHEKBXb9s=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-112-HMtFKm6qNWm2KYly_1mb_A-1; Mon, 12 Jun 2023 06:15:26 -0400
+X-MC-Unique: HMtFKm6qNWm2KYly_1mb_A-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f7e6582938so80226315e9.0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 03:15:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686564925; x=1689156925;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vn9XmzFCfAP4xk0kJ7qaLU2v0x0cmbrEQEPzoMusjqE=;
+        b=cb0dhrlDq0iVttsfk+XY2sStLoTXmTXoDSXSto/TAJxPJThbUqOqykSlnmiAEUH+Id
+         7LomjRCLq+Tb0O/szj68TWutdx6IIP2jl9KKZvpslXZuyIsQtJlLKiofOmr265fSuPsq
+         vnOMYYdFI3roN/idSNlwD6h81v9p9iBpbgpm0m7QWZuhOE+HqaWHd+c/X3oJnb1wTtVh
+         iJWDOMXlmmY1k2B3BFDwverKNMgeVZirJeFJu86HIISFqFuLzA41+S59wxfLesR16LUO
+         HF+qNdz86jNcWipSVIe3chT5NN8tdaiRrXQhfVjzZS076lQFNNjdHK/giE5BpVeFWf0M
+         E5ZA==
+X-Gm-Message-State: AC+VfDzDrtJzEyz8hybP4+JbOBYzjb9jW4wGCCtO6pnmWwHFp98e4mkZ
+        3firpS/ymTtuQDAm+bjOKz6/qGxg9K/hm4CUyqnK6ZEgw7XcrOko9WX7QXxZjiZ+7j1JrP86rye
+        cs73ueFN3zt2ofAoAsYbes4VC
+X-Received: by 2002:a7b:c40b:0:b0:3f4:447d:f74a with SMTP id k11-20020a7bc40b000000b003f4447df74amr7155824wmi.26.1686564924882;
+        Mon, 12 Jun 2023 03:15:24 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6Pf8lfoH+lNDNIWsX2aHUSVyvVZjeUUPuAyebO+YZ94ioVitDMCcKIM/IbQjf2Ui3o0ZV9PA==
+X-Received: by 2002:a7b:c40b:0:b0:3f4:447d:f74a with SMTP id k11-20020a7bc40b000000b003f4447df74amr7155808wmi.26.1686564924605;
+        Mon, 12 Jun 2023 03:15:24 -0700 (PDT)
+Received: from vschneid.remote.csb ([154.57.232.159])
+        by smtp.gmail.com with ESMTPSA id n5-20020a05600c294500b003f801c12c58sm10846852wmd.43.2023.06.12.03.15.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 03:15:24 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Li zeming <zeming@nfschina.com>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com
+Cc:     linux-kernel@vger.kernel.org, Li zeming <zeming@nfschina.com>
+Subject: Re: [PATCH] sched: core: Simplify cpuset_cpumask_can_shrink()
+In-Reply-To: <20230518203416.3323-1-zeming@nfschina.com>
+References: <20230518203416.3323-1-zeming@nfschina.com>
+Date:   Mon, 12 Jun 2023 11:15:23 +0100
+Message-ID: <xhsmhr0qhx9z8.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,44 +78,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogQ2hlbi1ZdSBUc2FpDQo+IFNlbnQ6IDEyIEp1bmUgMjAyMyAxMDoyNw0KPiBUbzogRGF2
-aWQgTGFpZ2h0IDxEYXZpZC5MYWlnaHRAQUNVTEFCLkNPTT4NCj4gQ2M6IE1hcmsgQnJvd24gPGJy
-b29uaWVAa2VybmVsLm9yZz47IExpYW0gR2lyZHdvb2QgPGxnaXJkd29vZEBnbWFpbC5jb20+OyBN
-YW5pdmFubmFuIFNhZGhhc2l2YW0NCj4gPG1hbmlAa2VybmVsLm9yZz47IENyaXN0aWFuIENpb2Nh
-bHRlYSA8Y3Jpc3RpYW4uY2lvY2FsdGVhQGdtYWlsLmNvbT47IE1hdHRpIFZhaXR0aW5lbg0KPiA8
-bWF6emllc2FjY291bnRAZ21haWwuY29tPjsgbGludXgtYWN0aW9uc0BsaXN0cy5pbmZyYWRlYWQu
-b3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBsaW51eC0NCj4gYXJtLWtlcm5lbEBs
-aXN0cy5pbmZyYWRlYWQub3JnDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0hdIHJlZ3VsYXRvcjogVXNl
-IGJpdGZpZWxkIHZhbHVlcyBmb3IgcmFuZ2Ugc2VsZWN0b3JzDQo+IA0KPiBPbiBNb24sIEp1biAx
-MiwgMjAyMyBhdCAzOjQ44oCvUE0gRGF2aWQgTGFpZ2h0IDxEYXZpZC5MYWlnaHRAYWN1bGFiLmNv
-bT4gd3JvdGU6DQo+ID4NCj4gPiBGcm9tOiBDaGVuLVl1IFRzYWkNCj4gPiA+IFNlbnQ6IDEyIEp1
-bmUgMjAyMyAwNDozOQ0KPiA+ID4NCj4gPiA+IE9uIFN1biwgSnVuIDExLCAyMDIzIGF0IDE6MTDi
-gK9BTSBEYXZpZCBMYWlnaHQgPERhdmlkLkxhaWdodEBhY3VsYWIuY29tPiB3cm90ZToNCj4gPiA+
-ID4NCj4gPiA+ID4gRnJvbTogQ2hlbi1ZdSBUc2FpDQo+ID4gPiA+ID4gU2VudDogMDggSnVuZSAy
-MDIzIDA4OjU3DQo+ID4gPiA+ID4NCj4gPiA+ID4gPiBSaWdodCBub3cgdGhlIHJlZ3VsYXRvciBo
-ZWxwZXJzIGV4cGVjdCByYXcgcmVnaXN0ZXIgdmFsdWVzIGZvciB0aGUgcmFuZ2UNCj4gPiA+ID4g
-PiBzZWxlY3RvcnMuIFRoaXMgaXMgZGlmZmVyZW50IGZyb20gdGhlIHZvbHRhZ2Ugc2VsZWN0b3Jz
-LCB3aGljaCBhcmUNCj4gPiA+ID4gPiBub3JtYWxpemVkIGFzIGJpdGZpZWxkIHZhbHVlcy4gVGhp
-cyBsZWFkcyB0byBhIGJpdCBvZiBjb25mdXNpb24uIEFsc28sDQo+ID4gPiA+ID4gcmF3IHZhbHVl
-cyBhcmUgaGFyZGVyIHRvIGNvcHkgZnJvbSBkYXRhc2hlZXRzIG9yIG1hdGNoIHVwIHdpdGggdGhl
-bSwNCj4gPiA+ID4gPiBhcyBkYXRhc2hlZXRzIHdpbGwgdHlwaWNhbGx5IGhhdmUgYml0ZmllbGQg
-dmFsdWVzLg0KPiA+ID4gPiA+DQo+ID4gPiA+ID4gTWFrZSB0aGUgaGVscGVycyBleHBlY3QgYml0
-ZmllbGQgdmFsdWVzLCBhbmQgY29udmVydCBleGlzdGluZyB1c2Vycy4NCj4gPiA+ID4gPiBJbmNs
-dWRlIGJpdG9wcy5oIGV4cGxpY2l0bHkgZm9yIGZmcygpLCBhbmQgcmVvcmRlciB0aGUgaGVhZGVy
-IGluY2x1ZGUNCj4gPiA+ID4gPiBzdGF0ZW1lbnRzLiBXaGlsZSBhdCBpdCwgYWxzbyByZXBsYWNl
-IG1vZHVsZS5oIHdpdGggZXhwb3J0LmgsIHNpbmNlIHRoZQ0KPiA+ID4gPiA+IG9ubHkgdXNlIGlz
-IEVYUE9SVF9TWU1CT0xfR1BMLg0KPiA+ID4gPiA+DQo+ID4gPiA+IC4uLg0KPiA+ID4gPiA+ICBz
-dGF0aWMgY29uc3QgdW5zaWduZWQgaW50IGF0YzI2MHhfbGRvX3ZvbHRhZ2VfcmFuZ2Vfc2VsW10g
-PSB7DQo+ID4gPiA+ID4gLSAgICAgMHgwLCAweDIwLA0KPiA+ID4gPiA+ICsgICAgIDB4MCwgMHgx
-LA0KPiA+ID4gPiA+ICB9Ow0KPiA+ID4gPg0KPiA+ID4gPiBJcyB0aGVyZSBhbnkgd2F5IHRoZSBj
-aGFuZ2UgY2FuIGJlIGRvbmUgc28gdGhhdCB1bi1lZGl0ZWQNCj4gPiA+ID4gbW9kdWxlcyBmYWls
-IHRvIGNvbXBpbGU/DQo+ID4gPiA+IE90aGVyd2lzZSB0aGUgd2hvbGUgdGhpbmcgaXMgYW4gYWNj
-aWRlbnQgd2FpdGluZyB0byBoYXBwZW4uDQo+ID4gPg0KPiA+ID4gSSB0aGluayB3ZSBjb3VsZCBj
-aGFuZ2UgdGhlIGZpZWxkIG5hbWUgaW4gdGhlIHJlZ3VsYXRvciBkZXNjcmlwdGlvbj8NCj4gPiA+
-IEJ1dCB1bnN1c3BlY3RpbmcgZW5kIHVzZXJzIC8gZGV2ZWxvcGVycyBtaWdodCBqdXN0IGVkaXQg
-dGhlIG5hbWUgYW5kIG5vdA0KPiA+ID4gc2VlIHRoYXQgdGhlIHNjaGVtZSBoYXMgY2hhbmdlZC4N
-Cg0KTG9va2luZyBhdCBpdCwgdGhhdCB3b3VsZCBzZWVtIHRvIGJlIG5lZWRlZC4NCg0KCURhdmlk
-DQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBG
-YXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2
-IChXYWxlcykNCg==
+On 19/05/23 04:34, Li zeming wrote:
+> Remove useless intermediate variable "ret" and its initialization.
+> Directly return dl_cpuset_cpumask_can_shrink() result.
+>
+
+FWIW, this sort of intermediate variable can and will be optimized away by
+the compiler. It's pretty obvious to see in the objdump (GCC 13.1):
+
+before/core.o: mainline core.o
+after/core.o:  patched core.o
+
+$ gdb -batch -ex 'disassemble cpuset_cpumask_can_shrink' before/core.o
+Dump of assembler code for function cpuset_cpumask_can_shrink:
+   0x000000000000b260 <+0>:	endbr64
+   0x000000000000b264 <+4>:	cmpq   $0x0,(%rdi)
+   0x000000000000b268 <+8>:	jne    0xb274 <cpuset_cpumask_can_shrink+20>
+   0x000000000000b26a <+10>:	mov    $0x1,%eax
+   0x000000000000b26f <+15>:	jmpq   0xb274 <cpuset_cpumask_can_shrink+20>
+   0x000000000000b274 <+20>:	jmpq   0xb279
+
+
+$ diff <(gdb -batch -ex 'disassemble cpuset_cpumask_can_shrink' before/core.o) \
+       <(gdb -batch -ex 'disassemble cpuset_cpumask_can_shrink' after/core.o)
+<nothing>
+
+Generally I think it's good to not be afraid to use intermediate variables
+if they improve readability, even if they have only one use (e.g. as
+parameter to a function with many arguments / long expressions used as
+parameters).
+
+In this case though, the intermediate variable really doesn't do much for
+readability :-)
+
+Reviewed-by: Valentin Schneider <vschneid@redhat.com>
+
+> Signed-off-by: Li zeming <zeming@nfschina.com>
+> ---
+>  kernel/sched/core.c | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
+>
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index a66960da3f5c..f3f2ece26291 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -9273,14 +9273,10 @@ void __init init_idle(struct task_struct *idle, int cpu)
+>  int cpuset_cpumask_can_shrink(const struct cpumask *cur,
+>                             const struct cpumask *trial)
+>  {
+> -	int ret = 1;
+> -
+>       if (cpumask_empty(cur))
+> -		return ret;
+> -
+> -	ret = dl_cpuset_cpumask_can_shrink(cur, trial);
+> +		return 1;
+>
+> -	return ret;
+> +	return dl_cpuset_cpumask_can_shrink(cur, trial);
+>  }
+>
+>  int task_can_attach(struct task_struct *p,
+> --
+> 2.18.2
 
