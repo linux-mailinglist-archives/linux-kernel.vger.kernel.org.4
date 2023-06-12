@@ -2,88 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C69B272CBCC
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 18:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2825172CBE0
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 18:52:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235547AbjFLQvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 12:51:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45138 "EHLO
+        id S237297AbjFLQwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 12:52:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjFLQvH (ORCPT
+        with ESMTP id S233617AbjFLQwR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 12:51:07 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D681B8
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 09:51:01 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f63ea7bfb6so5143722e87.3
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 09:51:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686588660; x=1689180660;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bc2XJlWre4e2gBDTdr+40bFjaee8RTH5UZuMdlZsuEU=;
-        b=eZRgWXqo4hq6/oz9ha7x5zEK9V63CWuGLWH1lCsWH+9SQalC9QrdW9+Z8Sm1vPaZQW
-         zjNDfoE6ARzQMwD+LgcM11ZFKqNHjtoz+e6al+L+ysHRyViWSg9iEGWzZDxB3xHFSiAL
-         YyQ7LU2QpfIixZ3vpyayhXQh+zlMwNl/Vuk1TEiBH7bWjHFTRbVcVAfCeCygiqzO3BXU
-         HdOIrIvijxV28fZ/XvnLZHMiz0XOdVl3768Q6DVJ/Zp68oUbRDTUzMEw17/bABFys7pQ
-         OSG5P2bTuU7z6msDQPCa4G7wqBEjVeeirRTCPaUG9r3ebjQdOhvysO5ex8DjjOzNDAmz
-         XoUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686588660; x=1689180660;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bc2XJlWre4e2gBDTdr+40bFjaee8RTH5UZuMdlZsuEU=;
-        b=EkROtIdKiz6C7pd77jpxOtxyGAv0i7ewT5X5yj35YVPzYihyUDTUhpiOIHQxXqjSmA
-         jGfITamrRFS7H2HB0je73hkDElctqbXB1Kci7PjBWSW8IUnp/PB+LdPQ5lZbx1T+iynB
-         oG7rzBFWFJL/x1NayLbW8we82njyiKdP5IamvlS3n0s99l+FXZeyaub12wqD49EHj/VY
-         VcksuQ3ESVh1D0qfrUeGbtvdrj6HtGzDNaAPX/eihJAXBIdhg3VWUxTjfHFXHdbKLqH5
-         bZ7/6aatfj4h9Cv3z7r45cZuO3FJpo+Tcu3uIqbNgTdHBmzpjJRJ6dSI7DgTgewSZ048
-         4nnQ==
-X-Gm-Message-State: AC+VfDwdWKJl17GY8OfnKSBSfVkYEudDl3lsVjRH479rg49yszWbBZLl
-        k4zeeZ8XlInzScxfdjmIPlG1Fg==
-X-Google-Smtp-Source: ACHHUZ6EkKBZ+W8P5v+lv3YaBBS6PyGdorCb5izxLPIOXCqPw9kHf6veSA7sPnKJFqZWW7ZxSuYXRA==
-X-Received: by 2002:a19:5f1c:0:b0:4f3:a69e:1d80 with SMTP id t28-20020a195f1c000000b004f3a69e1d80mr3863304lfb.0.1686588659862;
-        Mon, 12 Jun 2023 09:50:59 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id j4-20020ac253a4000000b004f262997496sm1479085lfh.76.2023.06.12.09.50.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 09:50:59 -0700 (PDT)
-Message-ID: <ce7c4402-b58e-b5df-c864-9f1a959132d0@linaro.org>
-Date:   Mon, 12 Jun 2023 18:50:57 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v3 1/2] arm64: dts: qcom: sm8550: fix low_svs RPMhPD
- labels
-Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        Mon, 12 Jun 2023 12:52:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD300E6F
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 09:51:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686588689;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=KUdFKCdBRtXD70pPEw8UKzishmgLHxiTnsybrG/P/8Q=;
+        b=LyT4Bx8HjK2zeDdlO3+4FRUOMjdfrRBwjYs687oYbXa02ne5vqikoz1fgLF4oosYfBbfK1
+        OYGj962QOQzLPe20JRFU1JzMoob4hEDkT7cafUEYLJiELX2oO30yMjN7Jqh9zwq5AGvDVn
+        Ht2eq/4H7c2tv1t01MKIxGMNesnvef8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-557-3Bd9b2jJP1qS--WMQacq3A-1; Mon, 12 Jun 2023 12:51:25 -0400
+X-MC-Unique: 3Bd9b2jJP1qS--WMQacq3A-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D2BFA85A5AA;
+        Mon, 12 Jun 2023 16:51:24 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.67])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1088720234B3;
+        Mon, 12 Jun 2023 16:51:21 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>, David Hildenbrand <david@redhat.com>,
+        kernel test robot <oliver.sang@intel.com>
+cc:     dhowells@redhat.com, Christoph Hellwig <hch@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-mm@kvack.org, oe-lkp@lists.linux.dev, lkp@intel.com,
         linux-kernel@vger.kernel.org
-References: <20230601-topic-sm8550-upstream-dp-v3-0-5f9ffdcb8369@linaro.org>
- <20230601-topic-sm8550-upstream-dp-v3-1-5f9ffdcb8369@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230601-topic-sm8550-upstream-dp-v3-1-5f9ffdcb8369@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Subject: [PATCH] block: Fix dio_bio_alloc() to set BIO_PAGE_PINNED
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <431928.1686588681.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Mon, 12 Jun 2023 17:51:21 +0100
+Message-ID: <431929.1686588681@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,43 +75,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+    =
 
+Fix dio_bio_alloc() to set BIO_PAGE_PINNED, not BIO_PAGE_REFFED, so that
+the bio code unpins the pinned pages rather than putting a ref on them.
 
-On 12.06.2023 17:26, Neil Armstrong wrote:
-> "low" was written "lov", fix this.
-> 
-> Fixes: 99d33ee61cb0 ("arm64: dts: qcom: sm8550: Add missing RPMhPD OPP levels")
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
-https://lore.kernel.org/linux-arm-msm/1d3c05f5-c1bd-6844-1788-8df0b863a02e@linaro.org/
+The issue was causing:
 
-somebody forgot to run `b4 trailers -u` :P
+        WARNING: CPU: 6 PID: 2220 at mm/gup.c:76 try_get_folio
 
-Konrad
->  arch/arm64/boot/dts/qcom/sm8550.dtsi | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> index 75cd374943eb..972df1ef86ee 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> @@ -3649,15 +3649,15 @@ rpmhpd_opp_min_svs: opp-48 {
->  						opp-level = <RPMH_REGULATOR_LEVEL_MIN_SVS>;
->  					};
->  
-> -					rpmhpd_opp_lov_svs_d2: opp-52 {
-> +					rpmhpd_opp_low_svs_d2: opp-52 {
->  						opp-level = <RPMH_REGULATOR_LEVEL_LOW_SVS_D2>;
->  					};
->  
-> -					rpmhpd_opp_lov_svs_d1: opp-56 {
-> +					rpmhpd_opp_low_svs_d1: opp-56 {
->  						opp-level = <RPMH_REGULATOR_LEVEL_LOW_SVS_D1>;
->  					};
->  
-> -					rpmhpd_opp_lov_svs_d0: opp-60 {
-> +					rpmhpd_opp_low_svs_d0: opp-60 {
->  						opp-level = <RPMH_REGULATOR_LEVEL_LOW_SVS_D0>;
->  					};
->  
-> 
+This can be caused by creating a file on a loopback UDF filesystem, openin=
+g
+it O_DIRECT and making two writes to it from the same source buffer.
+
+Fixes: 1ccf164ec866 ("block: Use iov_iter_extract_pages() and page pinning=
+ in direct-io.c")
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Closes: https://lore.kernel.org/oe-lkp/202306120931.a9606b88-oliver.sang@i=
+ntel.com
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Christoph Hellwig <hch@infradead.org>
+cc: David Hildenbrand <david@redhat.com>
+cc: Andrew Morton <akpm@linux-foundation.org>
+cc: Jens Axboe <axboe@kernel.dk>
+cc: Al Viro <viro@zeniv.linux.org.uk>
+cc: Matthew Wilcox <willy@infradead.org>
+cc: Jan Kara <jack@suse.cz>
+cc: Jeff Layton <jlayton@kernel.org>
+cc: Jason Gunthorpe <jgg@nvidia.com>
+cc: Logan Gunthorpe <logang@deltatee.com>
+cc: Hillf Danton <hdanton@sina.com>
+cc: Christian Brauner <brauner@kernel.org>
+cc: Linus Torvalds <torvalds@linux-foundation.org>
+cc: linux-fsdevel@vger.kernel.org
+cc: linux-block@vger.kernel.org
+cc: linux-kernel@vger.kernel.org
+cc: linux-mm@kvack.org
+---
+ fs/direct-io.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/fs/direct-io.c b/fs/direct-io.c
+index 14049204cac8..04e810826ee8 100644
+--- a/fs/direct-io.c
++++ b/fs/direct-io.c
+@@ -415,7 +415,8 @@ dio_bio_alloc(struct dio *dio, struct dio_submit *sdio=
+,
+ 	else
+ 		bio->bi_end_io =3D dio_bio_end_io;
+ 	/* for now require references for all pages */
+-	bio_set_flag(bio, BIO_PAGE_REFFED);
++	if (dio->need_unpin)
++		bio_set_flag(bio, BIO_PAGE_PINNED);
+ 	sdio->bio =3D bio;
+ 	sdio->logical_offset_in_bio =3D sdio->cur_page_fs_offset;
+ }
+
