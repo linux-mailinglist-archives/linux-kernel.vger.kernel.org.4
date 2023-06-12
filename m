@@ -2,204 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E2A972BA77
+	by mail.lfdr.de (Postfix) with ESMTP id 127DF72BA76
 	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 10:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232239AbjFLI1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 04:27:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59260 "EHLO
+        id S232342AbjFLI1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 04:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233624AbjFLIZa (ORCPT
+        with ESMTP id S233082AbjFLI0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 04:25:30 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58A43ABF;
-        Mon, 12 Jun 2023 01:24:39 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 888BB20462;
-        Mon, 12 Jun 2023 08:24:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1686558278; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/aAYHdkXBZ/E7sjjmPx9fP1mf8Z5RHaHuCNgT5tE+58=;
-        b=JCoH45X2G47FQUK6RPb8UYlFWQ0FS92BeAxrljBkrzTZ2w3e0SdvLXHAwETe4K7uHEBf+2
-        ouMuOhR/HUYO1JyuLdNMl9nTfudGh7fzrW7SEoQTGrLi6My3X8obiQsq1/C8GD1FMoCk8a
-        wKIHbLDHE2alUB8ISuwjtz8xSMmzMdU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1686558278;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/aAYHdkXBZ/E7sjjmPx9fP1mf8Z5RHaHuCNgT5tE+58=;
-        b=cwEWXJqGsE+Ay1jobUaIFjaieYeTAKxkMS+hjBr8Qq58VMehIqtUqP5ntvZ6bQBz0HlxL9
-        JQEASTEOzfRQdbDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7A789138EC;
-        Mon, 12 Jun 2023 08:24:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id oqTYHUbWhmTsdQAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 12 Jun 2023 08:24:38 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 0A4B3A0717; Mon, 12 Jun 2023 10:24:38 +0200 (CEST)
-Date:   Mon, 12 Jun 2023 10:24:38 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     jack@suse.cz, axboe@kernel.dk, qiulaibin@huawei.com,
-        andriy.shevchenko@linux.intel.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yi.zhang@huawei.com, yangerkun@huawei.com
-Subject: Re: [PATCH -next v2] blk-mq: fix potential io hang by wrong
- 'wake_batch'
-Message-ID: <20230612082438.qwt3gozbhts5jpm6@quack3>
-References: <20230610023043.2559121-1-yukuai1@huaweicloud.com>
+        Mon, 12 Jun 2023 04:26:31 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1BB10E7
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 01:25:54 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-5149c76f4dbso7289685a12.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 01:25:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686558353; x=1689150353;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FFeo7eqtN3fCmyQTtWielQM7xz42Mq4kjBmnboVmk4Y=;
+        b=YOWZoyzVVDwbAwL7zO9aI6GFmBEBBC9wQoCY2lhIabksMfnsFMDM79fEBVPKV+HsmN
+         KP6jkmqn2OJyj8qtAWTND9JWJ26XTj7+LKkwuYHJyaAOKk8ANE7ngVw9i6g+nJlGk6UA
+         dlrLcSIKGHHPB7s1suaR0ebh0VXSNEKqFrV5TynNYVVa7Gl/hJaAHc0NVXxoi1YIqh2t
+         B0DalHFUVBt7YQy9KFzoPnq+EeeAH17icsztVY30rfSR4USKqvANMY6cU43cUn+/eGTe
+         gpOPASvTRujvdh+yikfdVZ5ugyVGzZD+jfPX+dXV8GBAa/IzPQouSbPsWM0TYB/GhhAS
+         QAmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686558353; x=1689150353;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FFeo7eqtN3fCmyQTtWielQM7xz42Mq4kjBmnboVmk4Y=;
+        b=HqmxgLocYJAgRilr5DEYVtB3jX6zZb2K6w5quAv6PTZ1tFKVRgLvGsGNf7rVSUANVQ
+         UHt0t3zASXPOKzKaszz93clCM3DH+VyrGTIuQ+eo2dFqGtb4VPpIaBsofzOMG4Lwxrkn
+         GgsNLu8U71CaDJYHjq6TKE8CnsAKpRnmKYsK0dCAG1M2K05PomHY+sSlZ7kmKUA3EyUo
+         hm97Q/EgSI9WuC8fL3tK/hGQQZqgTqKr9VbTEgWOjzMRI6bMLHk+Y/X0TNvN9iT69Mso
+         7UJ26u+7sjescPrHQoHv6RGjyULgq7d7NY6FjTLYIBCYYh8GL4fMLvGq6y2t8nyuEvh1
+         YyBw==
+X-Gm-Message-State: AC+VfDz7Qs7eyJwC8MMlP112ZAs/rqZKZjz+JDqxfF53+Auib7TsSyUw
+        ojCKsS/cx7XejYhbZZjPBgSR3w==
+X-Google-Smtp-Source: ACHHUZ6ruFjU1gbk4CweBHpq54i0ElmXHeNzejKSJqMDXR758cQX1R+eDjjaMHhn/Wrl6GUSQpPhtA==
+X-Received: by 2002:aa7:d49a:0:b0:50b:fd52:2f4b with SMTP id b26-20020aa7d49a000000b0050bfd522f4bmr5469118edr.24.1686558352887;
+        Mon, 12 Jun 2023 01:25:52 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id u11-20020aa7d0cb000000b00514a97b6b80sm4784947edo.78.2023.06.12.01.25.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 01:25:52 -0700 (PDT)
+Message-ID: <ec466019-cdd2-d372-b4df-5edfe530e63d@linaro.org>
+Date:   Mon, 12 Jun 2023 10:25:50 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230610023043.2559121-1-yukuai1@huaweicloud.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v3 1/6] dt-bindings: clock: Add LPASSCC and reset
+ controller for SC8280XP
+Content-Language: en-US
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     johan+linaro@kernel.org, agross@kernel.org,
+        konrad.dybcio@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, conor+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230608125315.11454-1-srinivas.kandagatla@linaro.org>
+ <20230608125315.11454-2-srinivas.kandagatla@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230608125315.11454-2-srinivas.kandagatla@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat 10-06-23 10:30:43, Yu Kuai wrote:
-> From: Yu Kuai <yukuai3@huawei.com>
+On 08/06/2023 14:53, Srinivas Kandagatla wrote:
+> The LPASS (Low Power Audio Subsystem) clock controller provides reset
+> support when it is under the control of Q6DSP.
 > 
-> In __blk_mq_tag_busy/idle(), updating 'active_queues' and calculating
-> 'wake_batch' is not atomic:
+> Add support for those resets and adds IDs for clients to request the reset.
 > 
-> t1:			t2:
-> _blk_mq_tag_busy	blk_mq_tag_busy
-> inc active_queues
-> // assume 1->2
-> 			inc active_queues
-> 			// 2 -> 3
-> 			blk_mq_update_wake_batch
-> 			// calculate based on 3
-> blk_mq_update_wake_batch
-> /* calculate based on 2, while active_queues is actually 3. */
-> 
-> Fix this problem by protecting them wih 'tags->lock', this is not a hot
-> path, so performance should not be concerned. And now that all writers
-> are inside the lock, switch 'actives_queues' from atomic to unsigned
-> int.
-> 
-> Fixes: 180dccb0dba4 ("blk-mq: fix tag_get wait task can't be awakened")
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-
-Looks good. Feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
+> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
 > ---
-> Changes in v2:
->  - switch 'active_queues' from atomic to unsigned int.
-> 
->  block/blk-mq-debugfs.c |  2 +-
->  block/blk-mq-tag.c     | 15 ++++++++++-----
->  block/blk-mq.h         |  3 +--
->  include/linux/blk-mq.h |  3 +--
->  4 files changed, 13 insertions(+), 10 deletions(-)
-> 
-> diff --git a/block/blk-mq-debugfs.c b/block/blk-mq-debugfs.c
-> index 68165a50951b..c3b5930106b2 100644
-> --- a/block/blk-mq-debugfs.c
-> +++ b/block/blk-mq-debugfs.c
-> @@ -401,7 +401,7 @@ static void blk_mq_debugfs_tags_show(struct seq_file *m,
->  	seq_printf(m, "nr_tags=%u\n", tags->nr_tags);
->  	seq_printf(m, "nr_reserved_tags=%u\n", tags->nr_reserved_tags);
->  	seq_printf(m, "active_queues=%d\n",
-> -		   atomic_read(&tags->active_queues));
-> +		   READ_ONCE(tags->active_queues));
->  
->  	seq_puts(m, "\nbitmap_tags:\n");
->  	sbitmap_queue_show(&tags->bitmap_tags, m);
-> diff --git a/block/blk-mq-tag.c b/block/blk-mq-tag.c
-> index dfd81cab5788..cc57e2dd9a0b 100644
-> --- a/block/blk-mq-tag.c
-> +++ b/block/blk-mq-tag.c
-> @@ -38,6 +38,7 @@ static void blk_mq_update_wake_batch(struct blk_mq_tags *tags,
->  void __blk_mq_tag_busy(struct blk_mq_hw_ctx *hctx)
->  {
->  	unsigned int users;
-> +	struct blk_mq_tags *tags = hctx->tags;
->  
->  	/*
->  	 * calling test_bit() prior to test_and_set_bit() is intentional,
-> @@ -55,9 +56,11 @@ void __blk_mq_tag_busy(struct blk_mq_hw_ctx *hctx)
->  			return;
->  	}
->  
-> -	users = atomic_inc_return(&hctx->tags->active_queues);
-> -
-> -	blk_mq_update_wake_batch(hctx->tags, users);
-> +	spin_lock_irq(&tags->lock);
-> +	users = tags->active_queues + 1;
-> +	WRITE_ONCE(tags->active_queues, users);
-> +	blk_mq_update_wake_batch(tags, users);
-> +	spin_unlock_irq(&tags->lock);
->  }
->  
->  /*
-> @@ -90,9 +93,11 @@ void __blk_mq_tag_idle(struct blk_mq_hw_ctx *hctx)
->  			return;
->  	}
->  
-> -	users = atomic_dec_return(&tags->active_queues);
-> -
-> +	spin_lock_irq(&tags->lock);
-> +	users = tags->active_queues - 1;
-> +	WRITE_ONCE(tags->active_queues, users);
->  	blk_mq_update_wake_batch(tags, users);
-> +	spin_unlock_irq(&tags->lock);
->  
->  	blk_mq_tag_wakeup_all(tags, false);
->  }
-> diff --git a/block/blk-mq.h b/block/blk-mq.h
-> index 8c642e9f32f1..1743857e0b01 100644
-> --- a/block/blk-mq.h
-> +++ b/block/blk-mq.h
-> @@ -412,8 +412,7 @@ static inline bool hctx_may_queue(struct blk_mq_hw_ctx *hctx,
->  			return true;
->  	}
->  
-> -	users = atomic_read(&hctx->tags->active_queues);
-> -
-> +	users = READ_ONCE(hctx->tags->active_queues);
->  	if (!users)
->  		return true;
->  
-> diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
-> index 59b52ec155b1..f401067ac03a 100644
-> --- a/include/linux/blk-mq.h
-> +++ b/include/linux/blk-mq.h
-> @@ -739,8 +739,7 @@ struct request *blk_mq_alloc_request_hctx(struct request_queue *q,
->  struct blk_mq_tags {
->  	unsigned int nr_tags;
->  	unsigned int nr_reserved_tags;
-> -
-> -	atomic_t active_queues;
-> +	unsigned int active_queues;
->  
->  	struct sbitmap_queue bitmap_tags;
->  	struct sbitmap_queue breserved_tags;
-> -- 
-> 2.39.2
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
