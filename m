@@ -2,79 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5D272CA8C
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C28772CA87
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:44:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239686AbjFLPpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 11:45:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37572 "EHLO
+        id S239564AbjFLPoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 11:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239655AbjFLPpB (ORCPT
+        with ESMTP id S235037AbjFLPoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 11:45:01 -0400
-Received: from mailrelay3-1.pub.mailoutpod2-cph3.one.com (mailrelay3-1.pub.mailoutpod2-cph3.one.com [46.30.211.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2B119C
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 08:45:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=7bu+0WMycvl+xw/+UyWKXzBeoyi+ITWwP8OmM2m6w3U=;
-        b=J+MAAjazh0cqG8FTxXFAYorKfEJAfsolz5nI559Jg1dYWl+zBGxsqkJ6L6BZ/ycEKGG0o5rYcqZCD
-         kcppxqP96zS8pZRaW0AlxvZQddFQJ4FGG8xh7nLabP5jmbEiTmFPIxHZwE66kmSW9gc21kidZ3Sw6Q
-         kSVUE8Jr9ytkg1ujf3zUjU3RDlwieTz5o2Yaq49RAUoHl1oR4/a72L8kbTgORoVdZxXVv+FHfJyCyU
-         HBI5Dd92Attjse05uyKed0VvezEULHVIIhucSdj9Ses6OcByYncWv07UpbFe13TuZlfWCmJSGiQHmp
-         Cu6rXjFgT0n7g5Qrp36lNE7Xhnc7BgQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=7bu+0WMycvl+xw/+UyWKXzBeoyi+ITWwP8OmM2m6w3U=;
-        b=IC1PPDdgBDKI7zq8IJwwQGlbYUO3D4efEtYXAJFdx3LdaekNytlsyGPtFvhCi4WXxtdmi0mW6gEQ9
-         tHIWDuxDw==
-X-HalOne-ID: ef9b6055-0937-11ee-91ee-b90637070a9d
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay3 (Halon) with ESMTPSA
-        id ef9b6055-0937-11ee-91ee-b90637070a9d;
-        Mon, 12 Jun 2023 15:43:56 +0000 (UTC)
-Date:   Mon, 12 Jun 2023 17:43:54 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     daniel@ffwll.ch, javierm@redhat.com, deller@gmx.de,
-        geert+renesas@glider.be, lee@kernel.org,
-        daniel.thompson@linaro.org, jingoohan1@gmail.com,
-        dan.carpenter@linaro.org, michael.j.ruhl@intel.com,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-sh@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 34/38] fbdev/core: Add fb_device_{create,destroy}()
-Message-ID: <20230612154354.GA1243864@ravnborg.org>
-References: <20230612141352.29939-1-tzimmermann@suse.de>
- <20230612141352.29939-35-tzimmermann@suse.de>
+        Mon, 12 Jun 2023 11:44:17 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB8A10CB
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 08:44:13 -0700 (PDT)
+Received: from i53875b22.versanet.de ([83.135.91.34] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1q8ji9-0003ee-29; Mon, 12 Jun 2023 17:44:05 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     guoren@kernel.org, Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     linux-riscv@lists.infradead.org, samuel@sholland.org,
+        christoph.muellner@vrull.eu,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC 0/2] RISC-V: T-Head vector handling
+Date:   Mon, 12 Jun 2023 17:44:04 +0200
+Message-ID: <2408420.NG923GbCHz@diego>
+In-Reply-To: <mhng-ca852a2c-a1c7-4b14-a9a2-f2bd4541d6b7@palmer-ri-x1c9>
+References: <mhng-ca852a2c-a1c7-4b14-a9a2-f2bd4541d6b7@palmer-ri-x1c9>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230612141352.29939-35-tzimmermann@suse.de>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 04:08:12PM +0200, Thomas Zimmermann wrote:
-> Move the logic to create and destroy fbdev devices into the new
-> helpers fb_device_create() and fb_device_destroy().
+Hi,
+
+Am Montag, 12. Juni 2023, 17:29:49 CEST schrieb Palmer Dabbelt:
+> On Tue, 14 Mar 2023 22:29:41 PDT (-0700), Palmer Dabbelt wrote:
+> > On Tue, 28 Feb 2023 13:54:33 PST (-0800), heiko@sntech.de wrote:
+> >> From: Heiko Stuebner <heiko.stuebner@vrull.eu>
+> >>
+> >> As is widely known the T-Head C9xx cores used for example in the
+> >> Allwinner D1 implement an older non-ratified variant of the vector spec.
+> >>
+> >> While userspace will probably have a lot more problems implementing
+> >> support for both, on the kernel side the needed changes are actually
+> >> somewhat small'ish and can be handled via alternatives somewhat nicely.
+> >>
+> >> With this patchset I could run the same userspace program (picked from
+> >> some riscv-vector-test repository) that does some vector additions on
+> >> both qemu and a d1-nezha board. On both platforms it ran sucessfully and
+> >> even produced the same results.
+> >>
+> >>
+> >> As can be seen in the todo list, there are 2 places where the changed
+> >> SR_VS location still needs to be handled in the next revision
+> >> (assembly + ALTERNATIVES + constants + probably stringify resulted in
+> >>  some grey hair so far already)
+> >>
+> >>
+> >> ToDo:
+> >> - follow along with the base vector patchset
+> >> - handle SR_VS access in _save_context and _secondary_start_sbi
+> >>
+> >>
+> >> Heiko Stuebner (2):
+> >>   RISC-V: define the elements of the VCSR vector CSR
+> >>   RISC-V: add T-Head vector errata handling
+> >>
+> >>  arch/riscv/Kconfig.erratas           |  13 +++
+> >>  arch/riscv/errata/thead/errata.c     |  32 ++++++
+> >>  arch/riscv/include/asm/csr.h         |  31 +++++-
+> >>  arch/riscv/include/asm/errata_list.h |  62 +++++++++++-
+> >>  arch/riscv/include/asm/vector.h      | 139 +++++++++++++++++++++++++--
+> >>  5 files changed, 261 insertions(+), 16 deletions(-)
+> >
+> > I have no opposition to calling the T-Head vector stuff an errata
+> > against V, the RISC-V folks have already made it quite apparent that
+> > anything goes here.  I would like to get the standard V uABI sorted out
+> > first, though, as there's still a lot of moving pieces there.  It's kind
+> > of hard here as T-Head got thrown under the bus, but I'm not sure what
+> > else to do about it.
 > 
-> There was a call to fb_cleanup_device() in do_unregister_framebuffer()
-> that was too late. The device had already been removed at this point.
-> Move the call into fb_device_destroy().
-> 
-> Declare the helpers in the new internal header file  fb_internal.h, as
-> they are only used within the fbdev core module.
-> 
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
+> The V-1.0 support has been merged, so I think we're good to go.  Does 
+> someone mind re-spinning this against for-next so it lines up with all 
+> the new user interfaces?
+
+glad to hear that. I found the merge message now as well.
+Somehow I was only Cc'ed on individual patches but not on the
+cover-letter, so didn't realize the merge till now.
+
+I'll try to re-spin and adapt to the changes since the initial submission.
+
+Heiko
+
+
+ I'll try to re-spin and adapt to the changes that
+happened since the original submission.
+
+
+
