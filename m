@@ -2,59 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FF8672BE4B
+	by mail.lfdr.de (Postfix) with ESMTP id E122072BE4D
 	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235959AbjFLKDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 06:03:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36938 "EHLO
+        id S236822AbjFLKDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 06:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233879AbjFLKAp (ORCPT
+        with ESMTP id S236499AbjFLKAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 06:00:45 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A32A65B6
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:44:00 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35C9hhPI020031;
-        Mon, 12 Jun 2023 04:43:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1686563023;
-        bh=+j3kpM6JmiaJeOGR75MNiticsubrVsN46BXBpfEEQeU=;
-        h=From:To:CC:Subject:Date;
-        b=ehmMa3L/5/5lwCz+WXH4OQXinWWjlrydKHd1M3/sZO9SFp5bZA0cP12mFxGAKNE4b
-         TpKolgo7dCh2H96t5m6YD1CErCSi6bZ4Obn+DFSl2C94jEixfic4Fa6qDyqrmacw2v
-         SPNbUNuY/qhmJFtkBi/AaIWewXPw9yWqWviuDtVc=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35C9hhG0096034
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 12 Jun 2023 04:43:43 -0500
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 12
- Jun 2023 04:43:43 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 12 Jun 2023 04:43:43 -0500
-Received: from uda0500640.dal.design.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35C9heal117932;
-        Mon, 12 Jun 2023 04:43:41 -0500
-From:   Ravi Gunasekaran <r-gunasekaran@ti.com>
-To:     <catalin.marinas@arm.com>, <will@kernel.org>
-CC:     <arnd@arndb.de>, <krzysztof.kozlowski@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <r-gunasekaran@ti.com>
-Subject: [PATCH] arm64: defconfig: Enable HSR by default
-Date:   Mon, 12 Jun 2023 15:13:40 +0530
-Message-ID: <20230612094340.13865-1-r-gunasekaran@ti.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 12 Jun 2023 06:00:07 -0400
+Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9158B269A
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:43:46 -0700 (PDT)
+Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-33d34e7c905so46957705ab.2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:43:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686563026; x=1689155026;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fgWuun5672+ORe3ttQrL6TxxbK5Uws3qICHATbMGm/o=;
+        b=dohtUZospsIbYg3s0W66R0heAcGC2whtx8+g4yZ7/XWiVYvoe78G7AvC91yOHk01ge
+         fYwjYTRUh4weUrdRljWaM9wvZPz6BaaPRsFFTcQo9ph5ICEcLnBeWVrQxptYrj9wJCYR
+         zqgs/FsBPfxgWNFDyUi9I79MJcS8dsNzZKO1hVdtcm5PSuDg18SBF76Cdw8bMvDzuNCm
+         gtennEctKjcdv+PQmMKQx02LQqO0YDyFYAd5YoV0FXNdFq6+Ee3FbpRJXLzk3ouhNvtS
+         tbgTa+r0Fmi/ShmyZlrDQD6ZN+k0EIvpJheW71LsJakocOdRaNbGpW/zFLpn+fubJU1+
+         wTVQ==
+X-Gm-Message-State: AC+VfDwxCAqUtHysuq4GU01BXnRFVO0IITm6W/JcWYJwKrAfQHSdywGo
+        yu4/SVmpW52G1paepR/rvUZnPTAkLY2iwix+8T8Kq8l8xYEi
+X-Google-Smtp-Source: ACHHUZ6CzjZUI1p1eZ09tKwTgjz0mJ/wA5KXMzNddXs78re7fSkOCOH6JtddvvRetOkKurNc2eVgLt0uqCuAH2lQsxLKVy9oCUJ7
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a92:d0c3:0:b0:33b:a:3234 with SMTP id y3-20020a92d0c3000000b0033b000a3234mr3854150ila.5.1686563025889;
+ Mon, 12 Jun 2023 02:43:45 -0700 (PDT)
+Date:   Mon, 12 Jun 2023 02:43:45 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000cb2c305fdeb8e30@google.com>
+Subject: [syzbot] [crypto?] general protection fault in cryptd_hash_export
+From:   syzbot <syzbot+e79818f5c12416aba9de@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, dhowells@redhat.com,
+        herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,25 +55,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable HSR feature in kernel build.
+Hello,
 
-Signed-off-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
+syzbot found the following issue on:
+
+HEAD commit:    ded5c1a16ec6 Merge branch 'tools-ynl-gen-code-gen-improvem..
+git tree:       net-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=104cdef1280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=526f919910d4a671
+dashboard link: https://syzkaller.appspot.com/bug?extid=e79818f5c12416aba9de
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13c6193b280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16c7a795280000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ffd66beb6784/disk-ded5c1a1.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/e7336ae5a7bf/vmlinux-ded5c1a1.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/10ded02dc7e2/bzImage-ded5c1a1.xz
+
+The issue was bisected to:
+
+commit c662b043cdca89bf0f03fc37251000ac69a3a548
+Author: David Howells <dhowells@redhat.com>
+Date:   Tue Jun 6 13:08:56 2023 +0000
+
+    crypto: af_alg/hash: Support MSG_SPLICE_PAGES
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11cfc8d9280000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=13cfc8d9280000
+console output: https://syzkaller.appspot.com/x/log.txt?x=15cfc8d9280000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e79818f5c12416aba9de@syzkaller.appspotmail.com
+Fixes: c662b043cdca ("crypto: af_alg/hash: Support MSG_SPLICE_PAGES")
+
+general protection fault, probably for non-canonical address 0xdffffc0000000004: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000020-0x0000000000000027]
+CPU: 1 PID: 5003 Comm: syz-executor195 Not tainted 6.4.0-rc5-syzkaller-00929-gded5c1a16ec6 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
+RIP: 0010:crypto_shash_alg include/crypto/hash.h:827 [inline]
+RIP: 0010:crypto_shash_export include/crypto/hash.h:956 [inline]
+RIP: 0010:cryptd_hash_export+0x47/0xa0 crypto/cryptd.c:636
+Code: 00 fc ff df 4c 89 e2 48 c1 ea 03 80 3c 02 00 75 4e 48 b8 00 00 00 00 00 fc ff df 48 8b 5b 60 48 8d 7b 20 48 89 fa 48 c1 ea 03 <80> 3c 02 00 75 40 48 b8 00 00 00 00 00 fc ff df 48 8b 5b 20 48 8d
+RSP: 0018:ffffc90003acfd48 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000000004 RSI: ffffffff83e46723 RDI: 0000000000000020
+RBP: ffff888015a96528 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: ffffffff81d71db5 R12: ffff88802945bb08
+R13: 0000000000000001 R14: ffff88801aba6000 R15: ffff8880220c1648
+FS:  0000555556eb3300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020004e80 CR3: 0000000076861000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ crypto_ahash_export include/crypto/hash.h:523 [inline]
+ hash_accept+0x229/0x670 crypto/algif_hash.c:286
+ do_accept+0x380/0x510 net/socket.c:1871
+ __sys_accept4_file net/socket.c:1912 [inline]
+ __sys_accept4+0x9a/0x120 net/socket.c:1942
+ __do_sys_accept4 net/socket.c:1953 [inline]
+ __se_sys_accept4 net/socket.c:1950 [inline]
+ __x64_sys_accept4+0x97/0x100 net/socket.c:1950
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f6a9d4eac09
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff241f3198 EFLAGS: 00000246 ORIG_RAX: 0000000000000120
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f6a9d4eac09
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000004
+RBP: 00007f6a9d4aedb0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f6a9d4aee40
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:crypto_shash_alg include/crypto/hash.h:827 [inline]
+RIP: 0010:crypto_shash_export include/crypto/hash.h:956 [inline]
+RIP: 0010:cryptd_hash_export+0x47/0xa0 crypto/cryptd.c:636
+Code: 00 fc ff df 4c 89 e2 48 c1 ea 03 80 3c 02 00 75 4e 48 b8 00 00 00 00 00 fc ff df 48 8b 5b 60 48 8d 7b 20 48 89 fa 48 c1 ea 03 <80> 3c 02 00 75 40 48 b8 00 00 00 00 00 fc ff df 48 8b 5b 20 48 8d
+RSP: 0018:ffffc90003acfd48 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000000004 RSI: ffffffff83e46723 RDI: 0000000000000020
+RBP: ffff888015a96528 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: ffffffff81d71db5 R12: ffff88802945bb08
+R13: 0000000000000001 R14: ffff88801aba6000 R15: ffff8880220c1648
+FS:  0000555556eb3300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000555a4edc6008 CR3: 0000000076861000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess), 3 bytes skipped:
+   0:	df 4c 89 e2          	fisttps -0x1e(%rcx,%rcx,4)
+   4:	48 c1 ea 03          	shr    $0x3,%rdx
+   8:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
+   c:	75 4e                	jne    0x5c
+   e:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  15:	fc ff df
+  18:	48 8b 5b 60          	mov    0x60(%rbx),%rbx
+  1c:	48 8d 7b 20          	lea    0x20(%rbx),%rdi
+  20:	48 89 fa             	mov    %rdi,%rdx
+  23:	48 c1 ea 03          	shr    $0x3,%rdx
+* 27:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
+  2b:	75 40                	jne    0x6d
+  2d:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  34:	fc ff df
+  37:	48 8b 5b 20          	mov    0x20(%rbx),%rbx
+  3b:	48                   	rex.W
+  3c:	8d                   	.byte 0x8d
+
+
 ---
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 8d850be05835..c980268eaea4 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -138,6 +138,7 @@ CONFIG_IP_PNP_BOOTP=y
- CONFIG_IPV6=m
- CONFIG_NETFILTER=y
- CONFIG_BRIDGE_NETFILTER=m
-+CONFIG_HSR=m
- CONFIG_NF_CONNTRACK=m
- CONFIG_NF_CONNTRACK_EVENTS=y
- CONFIG_NETFILTER_XT_MARK=m
--- 
-2.17.1
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
