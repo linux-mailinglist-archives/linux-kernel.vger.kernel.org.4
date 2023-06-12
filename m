@@ -2,85 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 130E872BEF8
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 051A772BF5B
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbjFLK3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 06:29:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34098 "EHLO
+        id S232113AbjFLKmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 06:42:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232970AbjFLK3Z (ORCPT
+        with ESMTP id S232651AbjFLKlg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 06:29:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81593FCA0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 03:09:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 12 Jun 2023 06:41:36 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163C5319E5
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 03:25:59 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B541D62351
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:00:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 18DBCC433EF;
-        Mon, 12 Jun 2023 10:00:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686564020;
-        bh=hS6sKBbcl05rL+Hg5OoAlAezSooKe8fyP7LRjxSpgrY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Hl6ZddyhO0nweJnDSt0RKJ1VCG8zttVlQUUOMUQCM7sOzABx5wrTJb3BLO9B7w4ty
-         mz8g8FJSz6rkD6PxTGLmhGCke2u61qkw8fKIO7dcSj/YkAyYPD1BMjXVcLAEqzSUos
-         OteBGu2LZfK0AFsI4mEOivKHiOxATElKrn2W/J2q4bb/fxFMS6OrZGlRFr/gU/e6iL
-         BKrympG7nGIhRA2jpsXR2U81TiOlfOH0RMb13yAE9MaGf/aZ+fIbKaFvlq43cEOB5f
-         tFPLxize7aWp4+1zoVhVm+1zBZln39w39VnEtvPPIdlOkAja1Dyt9qoXDmsyls9jBv
-         yHbWOViegDrFw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EC34DE29F37;
-        Mon, 12 Jun 2023 10:00:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 45BF16605907;
+        Mon, 12 Jun 2023 11:00:25 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686564026;
+        bh=r44Dg4EqyihdbL+KAokT86pfSJw+jh/v00yaiQZ3zZg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=HJhMEH3H2HAFodc6o70V0xn35JJx7uqF3h2a+lWyuS7CagZrK9rwyB7WdIkbRzmq1
+         j3U737I8bsAcSX2vV5QUnHW2XwgN4ksx2zq7vuYY/PA0dVJ4LmUEVh3i1EfowdS+xT
+         VbcBI8v5BimBsr9OeBJYKOpHAjUDjOIpz3b76CTGgwECZDoBKG7iPVBWaK4YHOyA/7
+         R0vj6fzNepw0u2IGSQ+MzcwE1oq+ELBG7GhoV2W0tWkCLlAtvnUlGRhnW7C6/tII9W
+         GJPG4t9Kn/2e2TODGpTj8YntlVXMKb+IbwaZp5PCx7e5P9qwuDSL7f1nUwx1YJANvL
+         IFgFXczlxrlKA==
+Message-ID: <de0e99d6-dcd0-79f5-f3a4-14e25265c0a7@collabora.com>
+Date:   Mon, 12 Jun 2023 12:00:22 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] mdio: mdio-mux-mmioreg: Use of_property_read_reg()
- to parse "reg"
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168656401995.30960.7828853186504997403.git-patchwork-notify@kernel.org>
-Date:   Mon, 12 Jun 2023 10:00:19 +0000
-References: <20230609182615.1760266-1-robh@kernel.org>
-In-Reply-To: <20230609182615.1760266-1-robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 1/2] ASoC: mediatek: mt8173: Fix
+ snd_soc_component_initialize error path
+Content-Language: en-US
+To:     Ricardo Ribalda Delgado <ribalda@chromium.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Dan Carpenter <dan.carpenter@linaro.org>, stable@kernel.org
+References: <20230612-mt8173-fixup-v2-0-432aa99ce24d@chromium.org>
+ <20230612-mt8173-fixup-v2-1-432aa99ce24d@chromium.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230612-mt8173-fixup-v2-1-432aa99ce24d@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (main)
-by David S. Miller <davem@davemloft.net>:
-
-On Fri,  9 Jun 2023 12:26:16 -0600 you wrote:
-> Use the recently added of_property_read_reg() helper to get the
-> untranslated "reg" address value.
+Il 12/06/23 11:05, Ricardo Ribalda Delgado ha scritto:
+> If the second component fails to initialize, cleanup the first on.
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  drivers/net/mdio/mdio-mux-mmioreg.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+> Cc: stable@kernel.org
+> Fixes: f1b5bf07365d ("ASoC: mt2701/mt8173: replace platform to component")
+> Signed-off-by: Ricardo Ribalda Delgado <ribalda@chromium.org>
 
-Here is the summary with links:
-  - [net-next] mdio: mdio-mux-mmioreg: Use of_property_read_reg() to parse "reg"
-    https://git.kernel.org/netdev/net-next/c/b30a1f305b7b
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
 
