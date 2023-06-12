@@ -2,96 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEBF772CA47
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:35:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E2C572CA52
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237688AbjFLPes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 11:34:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59270 "EHLO
+        id S238100AbjFLPfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 11:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234742AbjFLPep (ORCPT
+        with ESMTP id S237962AbjFLPfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 11:34:45 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90AEA10C7;
-        Mon, 12 Jun 2023 08:34:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686584084; x=1718120084;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Eb3Mm09adN6K9gUBCgKSk4MjwnPUfaI+/HnXTw8x3W4=;
-  b=nVhOB+xgzMhBjN7BAhOIi+SMkUYePriThgZTKYloD1Tnh3fDUIXzM/04
-   O0DYJfp0dDB4mJkYpoKRWV4hk8LaaYPhzV49d/fORbs+ySidH+N7GJkgg
-   mTRkEZdBIfnEZALhkmt5YT3Bfidh63bvOGsuAfsN82wGQEKOHQECUUjOE
-   W/BzvJBY0C2dCFxwdmUtE8XbgFPAIQCEmXELhmdkyAWH1Sju7PP9H/TBS
-   0XVvolS+MNq7pZBKnkTgAZpqATUlVX6O5iUc5kYHd7FOtscmCC6aJf0Ho
-   Ma1ZupUEgQukd965KFM7FafrXXsBIXBCgnLiWU9ODGabqu7IqeEETPRrj
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="337712746"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="337712746"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 08:34:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="781252297"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="781252297"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP; 12 Jun 2023 08:34:39 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1q8jYy-0039IC-2J;
-        Mon, 12 Jun 2023 18:34:36 +0300
-Date:   Mon, 12 Jun 2023 18:34:36 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Demi Marie Obenour <demi@invisiblethingslab.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Lee Jones <lee@kernel.org>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org
-Subject: Re: [PATCH v3 0/4] Make sscanf() stricter
-Message-ID: <ZIc7DJME7yDfrOf+@smile.fi.intel.com>
-References: <20230610204044.3653-1-demi@invisiblethingslab.com>
+        Mon, 12 Jun 2023 11:35:50 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3368E10C3;
+        Mon, 12 Jun 2023 08:35:49 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EBF511FB;
+        Mon, 12 Jun 2023 08:36:33 -0700 (PDT)
+Received: from [10.57.27.113] (unknown [10.57.27.113])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2E9163F5A1;
+        Mon, 12 Jun 2023 08:35:46 -0700 (PDT)
+Message-ID: <16b08ba8-f23e-af24-881c-61fe4e4c92e1@arm.com>
+Date:   Mon, 12 Jun 2023 16:35:44 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230610204044.3653-1-demi@invisiblethingslab.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.1
+Subject: Re: [PATCH v5 03/13] coresight-tpdm: Introduce TPDM subtype to TPDM
+ driver
+To:     Tao Zhang <quic_taozha@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org
+References: <1686553666-5811-1-git-send-email-quic_taozha@quicinc.com>
+ <1686553666-5811-4-git-send-email-quic_taozha@quicinc.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <1686553666-5811-4-git-send-email-quic_taozha@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 10, 2023 at 04:40:40PM -0400, Demi Marie Obenour wrote:
-> Roger Pau Monné suggested making xenbus_scanf() stricter instead of
-> using a custom parser.  Christoph Hellwig asked why the normal vsscanf()
-> cannot be made stricter.  Richard Weinberger mentioned Linus Torvalds’s
-> suggestion of using ! to allow overflow.
+On 12/06/2023 08:07, Tao Zhang wrote:
+> Introduce the new subtype of "CORESIGHT_DEV_SUBTYPE_SOURCE_TPDM"
+> for TPDM components in driver.
+> 
+> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+> ---
+>   drivers/hwtracing/coresight/coresight-core.c | 1 +
+>   drivers/hwtracing/coresight/coresight-tpdm.c | 2 +-
+>   include/linux/coresight.h                    | 1 +
+>   3 files changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
+> index 118fcf2..23b18c2 100644
+> --- a/drivers/hwtracing/coresight/coresight-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-core.c
+> @@ -1093,6 +1093,7 @@ static int coresight_validate_source(struct coresight_device *csdev,
+>   
+>   	if (subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_PROC &&
+>   	    subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_SOFTWARE &&
+> +		subtype != CORESIGHT_DEV_SUBTYPE_SOURCE_TPDM &&
 
-As Rasmus articulated, NAK w.o. test cases being added to all parts where your
-changes touch.
-
--- 
-With Best Regards,
-Andy Shevchenko
+minor nit: Alignment. Please always double check your patch for
+styling issues.
 
 
+Otherwise looks good to me
+
+Suzuki
