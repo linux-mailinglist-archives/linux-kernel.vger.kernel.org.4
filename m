@@ -2,124 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC36172B54F
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 04:14:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F88872B552
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 04:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233266AbjFLCOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 22:14:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59406 "EHLO
+        id S232013AbjFLCQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 22:16:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbjFLCOv (ORCPT
+        with ESMTP id S229477AbjFLCQY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 22:14:51 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE079B;
-        Sun, 11 Jun 2023 19:14:50 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id 5614622812f47-39c84863e34so2188001b6e.2;
-        Sun, 11 Jun 2023 19:14:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686536087; x=1689128087;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RwR+Br//mM4TJi0nAuK5n5aI7xVUDVwbzD2JoLH3tEk=;
-        b=PXDJpBTHA65AcsByKj3qIbsDGTBrzv/cIP0WWsyYTbifSRsMn2EKrGuV6JrC1xx3v0
-         7ysn33KTQuyb1hoSAYtq5bU4rvsKiC3M8ZPITZUG6kYLIjvoEr+FIpyRjGlQOGz2m9N5
-         OGDo0U4P4nJHg6OOOWB75XuUh/2X+GzOFVhIe+X3E0r4mpLOgt4z53KlmDyY80B3oBUq
-         1Sfon+W614AYqd5wRse3I/xCmiUChfG/xJXExqkI7BxWYTa1sdIt+Pg8xYXbLfdyrety
-         9O7khHrt013zGI1GoSDkX+4/Arogi8iezBGs9Wnwcu/2PQuFHK9KTwpVDOhj2Rjdq/v2
-         g/uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686536087; x=1689128087;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RwR+Br//mM4TJi0nAuK5n5aI7xVUDVwbzD2JoLH3tEk=;
-        b=Us8jaA/CUZ4UHg/JC1qOaA9bTK+D1IkdBFFa5FjQ7NtgUb090xXHK6/pM8/5+FyzWr
-         dXdIis9ajp6CywE5xrMELLmESSawtUtDf1FgmbLcEuPGSJ4QRZVQOa9MCiK3Hq6S5ZHX
-         6CaVds/O8W6iyJcV5ZpernZOwJamkhamn5rpAXP4EWy9XEDbiBi571gnF/MFsRyc+S1D
-         tBnR2eRS4ZtNJpTFfVibDFaUc3dDo7DyGWVcHShUuqLQ+WaiNTgHAQKox0yQ2AlJRs6I
-         l8RaGo/ZtZ/H/kvRuFc6+ni3mXktoCXKOl9cajdyI1x+q7wifG9ykYeKtv3JxqSxCPj4
-         a4GQ==
-X-Gm-Message-State: AC+VfDzcX0eP/VHm1IwRaexI9OoIJ8his/6B0yP6E49dDLuE3SWpIq6t
-        wnBHLz/Oaempd8ozlM+rIEg=
-X-Google-Smtp-Source: ACHHUZ5PE9wOquTkUtuI0bCcH/TLGYln0KWz10kAgqXWDtg1dnOA4CtvNtkYx/b5z8NkvfZpBLNkew==
-X-Received: by 2002:aca:121a:0:b0:398:5478:b7fa with SMTP id 26-20020aca121a000000b003985478b7famr2676100ois.45.1686536086775;
-        Sun, 11 Jun 2023 19:14:46 -0700 (PDT)
-Received: from carrot.. (i220-108-176-104.s42.a014.ap.plala.or.jp. [220.108.176.104])
-        by smtp.gmail.com with ESMTPSA id az4-20020a170902a58400b001b1c3542f57sm6931347plb.103.2023.06.11.19.14.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jun 2023 19:14:46 -0700 (PDT)
-From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-nilfs@vger.kernel.org,
-        syzbot <syzbot+53369d11851d8f26735c@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: [PATCH] nilfs2: prevent general protection fault in nilfs_clear_dirty_page()
-Date:   Mon, 12 Jun 2023 11:14:56 +0900
-Message-Id: <20230612021456.3682-1-konishi.ryusuke@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <000000000000da4f6b05eb9bf593@google.com>
-References: <000000000000da4f6b05eb9bf593@google.com>
+        Sun, 11 Jun 2023 22:16:24 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04olkn2058.outbound.protection.outlook.com [40.92.73.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF891B8;
+        Sun, 11 Jun 2023 19:16:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=c2J+b0vdYqkB6YPFepAuhdjj3DsMboiqoizutHNnV5TzQHGKxjvgMM1YW4OJ+bg+y5uLHibV0Fuhkw4kHdFlHU71EBQorFhbaQFb6xGqvNh02y5ujYwcAnOXS8HrjBG0N8l1T5lJvdTCFljAae0hMSLplm/wpBMxkHQPwX70tQ3NA3jqDR5SWKyDuXLud827M8zeXuqVs2kbjkKxos1Ppq2LuSkwkyL+SramArWXjSgGr28TCB7TUhVlRIqaYdUyxAHMtU1H34hxty2Jg3pCgDs7crnM0MrO0AM1MKAYWVnHUspa5JPBagkGwp7qlytpMqmUn3fQcGHtlu1L0OCT0g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vBLd7KdQCfOOyvK4UM2GCbHHYivuqymItDssFwI4X2o=;
+ b=PwNXXscR5iHfaI8E8TJfDGCZCrxP1cHNX45L+mAuIZxFFih9rk2kdWOGcE7Nn5W4hYM7ZOrWJYDaH1STkAXW++1YzjEbb6BFG5HnUFjX0gU4kMNIukU9pkv7Bz7iF3C1xgvR4AbgbmYy/wotRmu2xJ2qAjQ1YQNx8wtTX4GKiekSR2suPBS2kCJU4PCBE26qWI/wec194Ag1wuUAgaLLWjCK52APtmy54Rv1iSb4p1838l5NLy9ekvUsI1Eih5Z7zPM2Gc/+hRsn4NRnjRzcLlZ1ji8wNwpLxWJUuWRYA+t3jOVUh3EXwtyoBCQp9cciWl/HVKe9mMWpTgdVGUYvgw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vBLd7KdQCfOOyvK4UM2GCbHHYivuqymItDssFwI4X2o=;
+ b=V7KJ5hCz/YsqCsThlkA3RD4uYQHPUkasqLvG43uR9g6FKEPNhDobmETGX67smTX5IuNB8Xv9z5u79EZxsnf24IVq4bv+vvT43+zNP6Tyr+xWu18TdmqXdq6DAm+sapcUmoSs1OOOVddhcjiraakIi8MPVfv6ddxwqVtoQzdfhB94+7ojbPRtamraD7ihyiiQmhT8q1bTYqcp07M5SxLAzA1twevaPX2Gw0iv72XKaHEg6akTwImnmi5d5Ab/3ZB+2Z7Nt3bgNDvBCEK0IkwuG3OF9yCmTnSHibkaSqXC7MbZNTN+RYmdbcfu/TuDUsgdWyNUIR7V74cpB9FHOnQv6Q==
+Received: from DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:383::21)
+ by AS4PR10MB5173.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:4c1::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.44; Mon, 12 Jun
+ 2023 02:16:20 +0000
+Received: from DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::628a:d617:46f:2a88]) by DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::628a:d617:46f:2a88%6]) with mapi id 15.20.6455.030; Mon, 12 Jun 2023
+ 02:16:20 +0000
+Message-ID: <DB4PR10MB62612F917CF1BF8FB03927609254A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+Date:   Mon, 12 Jun 2023 10:16:08 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+To:     jdelvare@suse.com, linux@roeck-us.net
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   JuenKit Yip <JuenKit_Yip@hotmail.com>
+Subject: [RFC] sht3x code modifcation
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TMN:  [vZmGsBdGRSCJFA2w9D3beEpA2aYUtmx7]
+X-ClientProxiedBy: TYAPR01CA0227.jpnprd01.prod.outlook.com
+ (2603:1096:404:11e::23) To DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:10:383::21)
+X-Microsoft-Original-Message-ID: <29238a02-b259-e834-a710-22b417bf4322@hotmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB4PR10MB6261:EE_|AS4PR10MB5173:EE_
+X-MS-Office365-Filtering-Correlation-Id: cebf2c11-332c-4bd8-e084-08db6aeb02ba
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BcTN7haFzfBqJxKKABahAFkSrLHollO1pN5Va44qWYbHJ/1DtdZxaYefhZzRmN5QjWBJ8PRls/jm6jCxe7xpFGPLagD2s/64m9uhYRdBmuNOvMtbnr5VR2z2YdyTSTPiXiEaYrODDedb+ARhQFqaHXGD1wCrb9cbWLYL/IV79Dve+mBp7KgI+P3p1cLVm0B3D2y8lTYsGUKqovWLKr/PFS+k0bEhkmse8XeQUah7hAaBYxHMrTS6h0MxW3Om3lKWHtu7KW48kk7PdnnYXyuKpyQr22R9k9AfjPseASrScGlX2XocEFR/c4O2sHasf5FN66R9Np+5VGHtUD2FdxB2pkQLpChzZ8hup8DQDDlUGezfZun2tRnD2XYKwPG46o8SpdotxLU2v9hpCMrWYs6GckdTQMVdME+p1qsqBp+qkA6pooyt4iCaEKQjeTQRQcVDyBO0RRbGJGPq8+yh+1ua96j04SXTimig3B4FVps3kosG76MXBqZtSJC4el+/i+VA7ZQh59GZ9++9MiD6aCJEAj4/xEP9FHKbDVIuBng6UIBB3Fsnebh7oCmKgaU7PlhI
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UG1BaU43SENSTUZGVUhCai84ZkZMbk8vK1phMXdrOGN1Wi8vOWIvUlJDUXVD?=
+ =?utf-8?B?NE9LeXI4UUhBc0htZzBCU1plNytEeExCQ015VjF3UnJTS1hPYk5sb3hzSjEw?=
+ =?utf-8?B?NXhoa0RJbFd5OGxKaGNSL0tqNG90Q1hXaWZqbTk2aE9UZzFjTm5kTTNvVzlT?=
+ =?utf-8?B?dlM0eVhZb1ZWSTQ1M2dlSExaS0RkSitRT3FkcjhneitIcG1MLytsMmI4dlAz?=
+ =?utf-8?B?UFE2SlZyZXp0SXJ1cm90Nm1yQXBscmFNcnFrMGxxdllCU0ZLUlNqeVlPbXZn?=
+ =?utf-8?B?ZUN1ZmNkc09ENWhleVZkTmlpaTQ2WHh1d0dmQWRSYXkrM3NXb2tCNlh6eUl2?=
+ =?utf-8?B?U2xCakdVUS9mR0l2QVRwYWpXSGRQTGZYOG1ZK2JBTjBrK1VSTWhHVWtyZENw?=
+ =?utf-8?B?UldTR2cvWGMzTzV4bGRiV095dFowQ1BhUEdHNnNOaEd3V1c1MjJoOFRjbmY3?=
+ =?utf-8?B?S1RPQmRUTWUveGM1NTc0L043aFVwU2Y0SHZ1VEdaditXQmNjaGYwUUVDRXU1?=
+ =?utf-8?B?RXNyWUExWi9XaE0vL3Q1ZVZnS0pGK1dtQXVlc2Nybk02dEIwVi9qVGE2QW5t?=
+ =?utf-8?B?STV5cW5Ja3dZdGlBVXhWUXREN1I2dTNzaHkwYStxSm0ycUFLRDdIVmhtYWg5?=
+ =?utf-8?B?enpzMVlNN0pJeExPZUJlcEpUQ3RxcjZtbnZtZmxMcGRzQi91UjQreVpCVUFR?=
+ =?utf-8?B?cjB4RmMzZ1YvOVBveVJwTTQ1R2FuMU02cW40ZkE3YmJsUDd2UkFacGlwbUVP?=
+ =?utf-8?B?YmZidUVaU2ZKTmFUZys5TGx3U1ZGdmR0ZnpiUmNTYmo5eTBJSkdkRllOTXpZ?=
+ =?utf-8?B?NnY0c3VoY0JyUXI2NFlDK1ZEUWxTL3pSdHJFSU5wTS96ejVpLzRzZkdYYTJt?=
+ =?utf-8?B?TzYvK3JsZVR6eVF3VUJaRlo0bGhOK2hTVytodWEvSGZiaU0vNmtCdzgxSTRh?=
+ =?utf-8?B?RlNLODhpWEhpT3lXM0owSTUwUE5JZU5vUkpQb3d2aVhoNkpzU04yN1loY0dx?=
+ =?utf-8?B?cHFlSGFTdkRKYkcwdVRIWXFSczNCK0VWOTQ0SnQ5TFcxb3cyR2x5OGYvYlNY?=
+ =?utf-8?B?Tm8vb0RFcE1odzVkWmNiRXFCR3lZSEtGZFVyeHRoOWFCRHpCRlBLdlZXdlV2?=
+ =?utf-8?B?RllacmhjcGJiYjllNUtBSzhrTWZoVGZVUTROQTFqckVsWHVGeEdHZzFrZFRZ?=
+ =?utf-8?B?bTdMd0p6MXdJVU9ySDQ1QlkxNDhlZFJMbUxRU09mUE1MQVBQL1dLdlM3dHN3?=
+ =?utf-8?B?eFkzaWRGdU1VVW1uUThwZDVNTFlpellMdm5ManVCc3RaZFltQitRUVhHb1BJ?=
+ =?utf-8?B?Y2w5YkRmVnBBOG5RYlphbVVFUk5CMWJPbC9BTUhQdGQwSjdySnFDWGYrZmJC?=
+ =?utf-8?B?cEY4OXFEOUlMTzlCZjhxZGZ6NnloVGdaMlN2aUxSc2xBb0xhVGJETmxIaGo2?=
+ =?utf-8?B?eVhOZWs5UFpFWlo4dUx6eUNuM1UrQ2p2UVBoaWt0MWxHdXhyVHBRMy83K3Zt?=
+ =?utf-8?B?d2JpNnh4Z1hGWFhzcERLemx6clEvQlVkNE43NCtZVUdXcDFidDNVM1dUYW1C?=
+ =?utf-8?B?cmtmdTBKclNlM0xYSkJSVVBBc0U5Nlg5WWxkUjViMzliK3czNkFHRHBSQ1Rx?=
+ =?utf-8?Q?npqT0LaNsrWBk3SkznGHDpqIVfOO2FKoXWV49TNJd2ng=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-6b909.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: cebf2c11-332c-4bd8-e084-08db6aeb02ba
+X-MS-Exchange-CrossTenant-AuthSource: DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 02:16:20.4247
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR10MB5173
+X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In a syzbot stress test that deliberately causes file system errors on
-nilfs2 with a corrupted disk image, it has been reported that
-nilfs_clear_dirty_page() called from nilfs_clear_dirty_pages() can cause
-a general protection fault.
+Hi All,
 
-In nilfs_clear_dirty_pages(), when looking up dirty pages from the page
-cache and calling nilfs_clear_dirty_page() for each dirty page/folio
-retrieved, the back reference from the argument page to "mapping" may have
-been changed to NULL (and possibly others).  It is necessary to check
-this after locking the page/folio.
+I was using sht3x driver in my linux device but I saw that it should be 
+put in IIO module properly.
 
-So, fix this issue by not calling nilfs_clear_dirty_page() on a page/folio
-after locking it in nilfs_clear_dirty_pages() if the back reference
-"mapping" from the page/folio is different from the "mapping" that held
-the page/folio just before.
+In fact, I am going to add medium-repeatabilty and device-tree support 
+on it, and planning to add more sysfs interface "repeatability". The 
+orginal version did not support to modify the repeatability after device 
+loaded.
 
-Signed-off-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Reported-by: syzbot+53369d11851d8f26735c@syzkaller.appspotmail.com
-Closes: https://lkml.kernel.org/r/000000000000da4f6b05eb9bf593@google.com
-Tested-by: Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Cc: stable@vger.kernel.org
----
- fs/nilfs2/page.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+If there is any comment or idea, kindly show it.
 
-diff --git a/fs/nilfs2/page.c b/fs/nilfs2/page.c
-index 5cf30827f244..b4e54d079b7d 100644
---- a/fs/nilfs2/page.c
-+++ b/fs/nilfs2/page.c
-@@ -370,7 +370,15 @@ void nilfs_clear_dirty_pages(struct address_space *mapping, bool silent)
- 			struct folio *folio = fbatch.folios[i];
- 
- 			folio_lock(folio);
--			nilfs_clear_dirty_page(&folio->page, silent);
-+
-+			/*
-+			 * This folio may have been removed from the address
-+			 * space by truncation or invalidation when the lock
-+			 * was acquired.  Skip processing in that case.
-+			 */
-+			if (likely(folio->mapping == mapping))
-+				nilfs_clear_dirty_page(&folio->page, silent);
-+
- 			folio_unlock(folio);
- 		}
- 		folio_batch_release(&fbatch);
--- 
-2.34.1
+
+Thanks
+
+Juen Kit Yip
 
