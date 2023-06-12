@@ -2,93 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2CA172C603
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 15:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F9672C614
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 15:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235151AbjFLNcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 09:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58264 "EHLO
+        id S236506AbjFLNfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 09:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbjFLNcm (ORCPT
+        with ESMTP id S236606AbjFLNfR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 09:32:42 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFCE1E9
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 06:32:41 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5A7661EC040F;
-        Mon, 12 Jun 2023 15:32:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1686576760;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=M8WvkyNjJkr8h4loqT04EVexnrcX1BJj9fmJ/m/uFNI=;
-        b=e+AGctKHAz89SxMfUQLQc5bEVMBiLdUbdqK37OdAF2i05S3nuP0dNpvGwiqBA1gwrqFetV
-        gK1RWbK5k3DduNjWfvbTWmXRdRknITsAFC8+iuAr1CltODuINMfvOSDukvtCx5rVQ0I1hl
-        WPWiDi2gVhBoEs7l+tbKHJMB/qigYBM=
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id zLpbemDgxUEP; Mon, 12 Jun 2023 13:32:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1686576758; bh=M8WvkyNjJkr8h4loqT04EVexnrcX1BJj9fmJ/m/uFNI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hasGth3iQ4VtIjSp/bvNzxnZejWQioNFjdnfunukaVAiNTqNOu43NETPM37dPSiIb
-         7xhYyoRFTqdjj2Dg/Z+blwtheiq6sBIdaNOrQIA6Y56v07mXK7KtbMi+KKmxCgZtHm
-         ANJI/kHGM3vtHKcuuN8XGHDaucLsAwii2CojYXrC25q5/Stg320mUcOWwecZJh6Xx9
-         HNEFs/FQ4m3di3h81jJoYz7mpWpomF3q0bRoecYQKoEGJRsIEa6jx9H76fEPS7n4hm
-         zmrcjaXnrf3yB5PMK055VNe0xT4m7V1RJlC2Vn1Ukx128K0DmAToQXEn4EBjHKnSFt
-         B+r5Yq19/Jlls44veBT6tVDAQJcdpWYfVsIB98tKxO89n6+Jwv4Y/YVTzp7cc7ilbw
-         Kvr9nVc8Z/GX7gR1P1BkCXa1lQgkFi4qc/nqkTnKSwKbOvGzPNUk0mBjqB/Fey8Pos
-         MK9hKs7QG2PE0glUIF0SPit6XRk0JWSpsbPVYBPU/QK+ht7f/1UVlhJv2Oq6bAiIwK
-         yLzWUfdHgnv0aHOHwndJrPMtqTIsPZK/8YFwuixe7pDOYsapv20LIyGUJeJsZm3mI/
-         9r5aWQ3+Y9gC19i5di3cREfukKxG8YQc1X7nU2XkJxzeAVFhBvLqxgjIq0wrchFn74
-         9Ie9ujvJuRs1gxgzJM1bRthk=
-Received: from zn.tnic (p200300ea971dc5f0329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971d:c5f0:329c:23ff:fea6:a903])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0377340E00EA;
-        Mon, 12 Jun 2023 13:32:30 +0000 (UTC)
-Date:   Mon, 12 Jun 2023 15:32:30 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Breno Leitao <leitao@debian.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        pawan.kumar.gupta@linux.intel.com, paul@paul-moore.com,
-        leit@meta.com, x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpu/bugs: Disable CPU mitigations at compilation time
-Message-ID: <20230612133230.GJZIcebkHxd8QJs0Dv@fat_crate.local>
-References: <20230203120615.1121272-1-leitao@debian.org>
- <87352z7xld.ffs@tglx>
- <ZIcVoIAQbRl1GTo5@gmail.com>
+        Mon, 12 Jun 2023 09:35:17 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90082135;
+        Mon, 12 Jun 2023 06:35:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686576913; x=1718112913;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=gvEVUUkCwjwDifIKSTm1C10zpa7qKE3wn/SiwKbdQ+M=;
+  b=P0RUWHPU0hr05SoDnCIGluTXViysK6iepT5f7uDwg7jbr0cTRZWjDOxH
+   gCWUYIoSNycOqpLh0I6L0QanW84PCXdyelBwluVsLIuXXdfTEuoPqh5IP
+   c/oqkvK/2dIIet3svY8+zeKLaYIEZQjbsUrscLyzKDseMCplySOa+Q0p5
+   xWRnqV5YSYwFmZPxhbu/Bxchd+ZV0LSBzRK10yQKS2cI2Os9Xxjx9OVVH
+   wFqDUG/haAPEERqHX7/7ewhNELRzXTbWx3yox80pVfcaeFTBCu9Z/lbbD
+   VLp851dr6aht74wJN8JYs/ylSghm9PsOEZzCemDl9dFPdflke0pH+yBRM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="421629476"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="421629476"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 06:34:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="741031113"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="741031113"
+Received: from dkhokhri-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.212.166.252])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 06:34:00 -0700
+Message-ID: <0642f96559182c76548990cac383fbb110f8d56b.camel@linux.intel.com>
+Subject: Re: [PATCH] HID: sensor-hub: Allow multi-function sensor devices
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Jiri Kosina <jikos@kernel.org>
+Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-input@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 12 Jun 2023 06:34:00 -0700
+In-Reply-To: <nycvar.YFH.7.76.2306120938360.5716@cbobk.fhfr.pm>
+References: <20230528092427.42332-1-daniel.thompson@linaro.org>
+         <nycvar.YFH.7.76.2306091742090.5716@cbobk.fhfr.pm>
+         <51dfdee66713e470d9a925ac5a8f8ae1da644462.camel@linux.intel.com>
+         <nycvar.YFH.7.76.2306120938360.5716@cbobk.fhfr.pm>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZIcVoIAQbRl1GTo5@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 05:54:56AM -0700, Breno Leitao wrote:
-> 1) We keep consistency with other CONFIG options. Linux already has a
-> CONFIG option to enable/disable mitigations for speculations
-> (CONFIG_SPECULATION_MITIGATIONS), so, this will be a similar one.
+On Mon, 2023-06-12 at 09:39 +0200, Jiri Kosina wrote:
+> On Sun, 11 Jun 2023, srinivas pandruvada wrote:
+> 
+> > > > The Lenovo Yoga C630 has a combined keyboard and accelerometer
+> > > > that 
+> > > > interfaces via i2c-hid. Currently this laptop either has a
+> > > > working 
+> > > > keyboard (if CONFIG_HID_SENSOR_HUB is disabled) or a working 
+> > > > accelerometer. only works on kernels. Put another way, most
+> > > > distro 
+> > > > kernels enable CONFIG_HID_SENSOR_HUB and therefore cannot work
+> > > > on 
+> > > > this device since the keyboard doesn't work!
+> > > > 
+> > > > Fix this by providing a richer connect mask during the probe.
+> > > > With 
+> > > > this change both keyboard and screen orientation sensors work 
+> > > > correctly.
+> > > > 
+> > > > Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
+> > > 
+> > > Srinivas, are you aware of any multi-function device that this
+> > > patch 
+> > > might break?
+> > I tried two systems, one with ISH and another with external hub.
+> > Didn't 
+> > break anything. I don't have 5+ years old systems, to confirm if it
+> > will 
+> > break something on older systems with external hub.
+> 
+> Thanks a lot. Can I take the above as an equivalent of
+> 
+>         Acked-by: Srinivas Pandruvada
+> <srinivas.pandruvada@linux.intel.com>
+Sure. 
+Acked-by: Srinivas Pandruvada<srinivas.pandruvada@linux.intel.com>
+> 
+Thanks,
+Srinivas
 
-So you can get what you want by disabling all those options there,
-right?
 
--- 
-Regards/Gruss,
-    Boris.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+
+> ? :)
+> 
+
