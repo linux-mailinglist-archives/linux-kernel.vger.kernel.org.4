@@ -2,57 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1281772C297
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD58E72C29B
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:12:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231652AbjFLLM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 07:12:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47476 "EHLO
+        id S237914AbjFLLMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 07:12:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238171AbjFLLMN (ORCPT
+        with ESMTP id S236745AbjFLLMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 07:12:13 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768B63C35
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 04:01:13 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bcef239a9fbso248000276.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 04:01:13 -0700 (PDT)
+        Mon, 12 Jun 2023 07:12:14 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26DE64491
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 04:01:14 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bacd408046cso6315626276.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 04:01:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686567650; x=1689159650;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=oEitCfAriDWfmoA4bhrw4hqcpbGa6CV2D5Xj8kSFQwo=;
-        b=s10DMNQqFJ/QQAl7ra+WJ13OkqdglOIDLUyx8p8mwzosA6ENOI0+YGwUQBweLr0KjL
-         QLbu4bGJEHYuvzGf3r8tqluWTreXMU3I7WlaEC408/Sq2DZ4kgVGd6hyuoLNRxkxgmOF
-         xXCzskn9iSzFJwPyi7yeVS8DH9+cqpvMtYTym39LOp29+nGsBXNwz2lT8SMa8j+UgyaA
-         HpearsgJcxOO2SnoD7hPWAwM/OcSHx6+3wMEd0yM7eUm/Q8P6mRnHKgQ7RNelPlj0iY3
-         H+STAA2L31hUyB7TJkVfPfEE/zPl2Ichbaaj76BQe3cl2cMNquXOt01Si44+Q41Zk0/s
-         4Wqw==
+        d=google.com; s=20221208; t=1686567654; x=1689159654;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vrffFIflVwj3iZ+X66V28jAT+UhtEyNmsUk1C8j7Lso=;
+        b=7yfLE6ekqah/BETX2ejMRMU2HbxV+1ZKcTluxq1DmcKbbDcbnGGdVLqdUTvDqm24Ps
+         jnPNtbmrm0WmOKyryH2cAteq3HcpL+ZVGXWX0XGs1BDHRXBf7rWUm/rp02EOYHMR8/Ul
+         Wzh0iE9doj+UPTtGcEzPoBlfmX/GKwKUos6zTdE0lGNBWJvjW/JRgNoXLQsXZNRZd3Kk
+         g5EdhuLvdBfPDDAGiCxtGqgmN4bgE71rjvmRD6ZO4JfPC8lsXoMGx8rEpk2n6mKw7LCX
+         IHJGAJUeR/KaaM7YCfDh6ddekBLuIhfi1wHiPQgaiJRdMMapnIsl8/9Mhx94G/khcbpt
+         x/OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686567650; x=1689159650;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oEitCfAriDWfmoA4bhrw4hqcpbGa6CV2D5Xj8kSFQwo=;
-        b=VlehQCMagLkfK5UL0ma1UCo4bPpFh63FLmi0fF791RBkW4k1ysbZ0gll9sgoM1pN5S
-         3SFi8YRWoQ8z0mTymclZWiU3mB3a5e36S0ziblkchjH4jH+yRYWxGzOREwBufgvOWgit
-         YeYXhO4dF2GH23Mu96ZGrFoVqh9SL/ygXGQk1wZTC6Kzz7LHNmInFs7FsOUgSxiZMFy5
-         Y1136nmY3/g6vInaEi5g1qrbEqQy5BwuRGOLrD4q4I8GGwh8mIxYURMHZw+JUj7RQrwz
-         DzebdtkJtNo2ujmdN1/Emt2zfhmPSCOaVylMafCcikjz4NI5I+ZfW+CN+O0KCpn4qWuF
-         jiyQ==
-X-Gm-Message-State: AC+VfDyByjVEtXIrL68Jz/lrI2o4t4zeXbii7zNm3iKCHd2oRBn5PpGE
-        gfbr+/kKR0mQ1n51D0SXnVhO0fVvIitYJTZnyPQY7JH4d7pkApaFlYDhmhuvr8OsaCHAmcT5fwq
-        6iQQUGLxUIkHT/dNVTz81n6kipCXcpFGKQY7MFEOcg6rrFNioIojhdlN0cxGn9JBln8KG5W33ld
-        et39zt
-X-Google-Smtp-Source: ACHHUZ5dPz5h3l8VBbwWhZdX2wJmXF3Tj8FRNLAt8kRVui3jGo+jXgioAL7jqgHXyKf/nfqaDW4EUqncKU0P06YG
+        d=1e100.net; s=20221208; t=1686567654; x=1689159654;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vrffFIflVwj3iZ+X66V28jAT+UhtEyNmsUk1C8j7Lso=;
+        b=axuw53g0f+zdHoHklfNkrpO7pI8zEev1dCeYHFOjOG5G1D3Lbc7zehhXerG930ivpP
+         l8LO9u6nmEtRjW1NUoDdi3cHvI9sRc+O5GNxsfqefeUc31ROEeGHHgopqJKi7JDlQ+8X
+         Ohhm3akJTSqYFE235Bnw7YS1UmwyMh2AjAzHKErbAIebY0LgbEGsVHARKzdWdDyqbQen
+         czBieausZrfcOa3NIqCE+7RV1JMsXol9AIvtH1u14vt5Pxv0iUlnTo9yWYnDYB1+0Rot
+         TMlvawurU2/wcEXw8hOZJrx6Kpe2DjX7v6I1C0w0wu2VowWtciK3cGPkYtTRAE0WEpyH
+         TmGg==
+X-Gm-Message-State: AC+VfDwZ3HFvBM/WClLWjRrbowLHDNnpYrTUgmdavbb4c7H7KBrXdEGM
+        gcShr1Vqcq6Xq2DWa3g5uzPgtWyW1klOLenmO8juWJwrFcCu+S0hJLT+vMQxbEhTf8iPIMX9OKR
+        0rGaFA2eJE3LJQFJ2dUIvaFZIys8aI1T3WsM4pP4gdeVUhTVjlvlkb0Zkajw07mfr87DsgIrf7n
+        U6y+K8
+X-Google-Smtp-Source: ACHHUZ5iSyB8OtDSmroULERNqS2J7iqvH+Z26zaoqRVFY4fcLIrlmcFQyV1IM49Lvy0ibAO0X44n3rDM5Rq0N9qM
 X-Received: from jordy-spec.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:f2f])
- (user=jordyzomer job=sendgmr) by 2002:a05:6902:38a:b0:ba8:381b:f764 with SMTP
- id f10-20020a056902038a00b00ba8381bf764mr4910110ybs.3.1686567649858; Mon, 12
- Jun 2023 04:00:49 -0700 (PDT)
-Date:   Mon, 12 Jun 2023 11:00:39 +0000
+ (user=jordyzomer job=sendgmr) by 2002:a5b:7c4:0:b0:bc5:2869:d735 with SMTP id
+ t4-20020a5b07c4000000b00bc52869d735mr3201011ybq.13.1686567653910; Mon, 12 Jun
+ 2023 04:00:53 -0700 (PDT)
+Date:   Mon, 12 Jun 2023 11:00:40 +0000
+In-Reply-To: <20230612110040.849318-1-jordyzomer@google.com>
 Mime-Version: 1.0
+References: <20230612110040.849318-1-jordyzomer@google.com>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Message-ID: <20230612110040.849318-1-jordyzomer@google.com>
-Subject: [PATCH v2 0/1] cdrom: Fix spectre-v1 gadget
+Message-ID: <20230612110040.849318-2-jordyzomer@google.com>
+Subject: [PATCH v2 1/1] cdrom: Fix spectre-v1 gadget
 From:   Jordy Zomer <jordyzomer@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     phil@philpotter.co.uk, Jordy Zomer <jordyzomer@google.com>
@@ -69,14 +71,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 This patch fixes a spectre-v1 gadget in cdrom.
 The gadget could be triggered by,
-speculatviely bypassing the cdi->capacity check.
+ speculatviely bypassing the cdi->capacity check.
 
-Jordy Zomer (1):
-  cdrom: Fix spectre-v1 gadget
-
+Signed-off-by: Jordy Zomer <jordyzomer@google.com>
+---
  drivers/cdrom/cdrom.c | 4 ++++
  1 file changed, 4 insertions(+)
 
+diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
+index 416f723a2dbb..ecf2b458c108 100644
+--- a/drivers/cdrom/cdrom.c
++++ b/drivers/cdrom/cdrom.c
+@@ -264,6 +264,7 @@
+ #include <linux/errno.h>
+ #include <linux/kernel.h>
+ #include <linux/mm.h>
++#include <linux/nospec.h>
+ #include <linux/slab.h> 
+ #include <linux/cdrom.h>
+ #include <linux/sysctl.h>
+@@ -2329,6 +2330,9 @@ static int cdrom_ioctl_media_changed(struct cdrom_device_info *cdi,
+ 	if (arg >= cdi->capacity)
+ 		return -EINVAL;
+ 
++	/* Prevent arg from speculatively bypassing the length check */
++	barrier_nospec();
++
+ 	info = kmalloc(sizeof(*info), GFP_KERNEL);
+ 	if (!info)
+ 		return -ENOMEM;
 -- 
 2.41.0.162.gfafddb0af9-goog
 
