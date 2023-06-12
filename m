@@ -2,146 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 101FF72CA7E
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:43:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDB3C72CA7F
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:43:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239266AbjFLPnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 11:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36282 "EHLO
+        id S237837AbjFLPnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 11:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233394AbjFLPnA (ORCPT
+        with ESMTP id S238599AbjFLPnB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 11:43:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2422610C7;
-        Mon, 12 Jun 2023 08:42:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 12 Jun 2023 11:43:01 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2410019C
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 08:42:59 -0700 (PDT)
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD27B60C78;
-        Mon, 12 Jun 2023 15:42:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19E05C433A0;
-        Mon, 12 Jun 2023 15:42:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686584578;
-        bh=V+v277y/LQOz1Bd9zPL2sVCJjEZLpKCmRiZipD29G+Y=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nV8jgN32EqcJ+FTLKjKQrdO+6UGgsibH0hBgFrN3I6uszPhudDY8fexRMZ/07CnjD
-         lw3+Zkm13jI3yKUkZjoMGfJ5pOyDmBMs5gf3zBW4D+b/N9gPaFIlklW/M1AXPbIuHi
-         lVO0uJpbVnBMPt0l1oOh8+Mn4xkaXfq7/BZ/WA2gDZ+YKD/68mkWciuq/aAA1ZQC8Z
-         XNXVERcMaX8v7+avRuFwq04OcQYlfy+QWbhL1dCi9y3fTIaweLBKD4Km0w0kHhGqJc
-         zkHM8IZbVti8WBdKOmSeBxI3JVIYXsaBs6M07c2k182ldn5Jb1SPHTdNQ+TRETs3PE
-         3hUWZDrc3poZg==
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-4f642a24555so5375902e87.3;
-        Mon, 12 Jun 2023 08:42:57 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwaeYwc9Fybhw004xuKb5HGn8yzJ0n57AtvcvcmH+FiT7NCNhPg
-        SiHS+kb9Smf9gyOuoEOEXkQ021rqlupQPIZEPA==
-X-Google-Smtp-Source: ACHHUZ6nK/lGP80l1yVoeQh4mg6RqY5XjAR5DaGsogZyrQ2YZ6G1K4uViCXSD8gcr66iTuqg+9qD1vtGZ+/MAR57VpI=
-X-Received: by 2002:a2e:b618:0:b0:2a8:eee0:59f3 with SMTP id
- r24-20020a2eb618000000b002a8eee059f3mr3172291ljn.41.1686584576044; Mon, 12
- Jun 2023 08:42:56 -0700 (PDT)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B0CF61EC064A;
+        Mon, 12 Jun 2023 17:42:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1686584577;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=8EspJ/Elh2px1mslQwXk5H0vcDjb0ivi0q1DuXHoGEw=;
+        b=mw9l3GboumJwxN7hVJTaNTpLrZIbSuXchYHCsMjSaXHMdS+MDX5cwLAcNJPDDuOR6foJsm
+        k4/KxMyjIpMwZ3EmVZesd6sQUHOcEmeMi6jbgfq492qMZWFVrA2ERe/GVjKkOE3uldVCCM
+        E8aVtLxuWdyVQmr78AmrzqTchrpw6ag=
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+        header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Uv3WVub-y1Qe; Mon, 12 Jun 2023 15:42:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+        t=1686584574; bh=8EspJ/Elh2px1mslQwXk5H0vcDjb0ivi0q1DuXHoGEw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iCz+qgyUP2+uOY6IZRk1sUqWx57vRP9T2Uv35Y9/R/vaapsEH4z8tA7aNRUNfmVgs
+         ymYxumb7qOvdIRFLL/fS8SA704fL8m6Zt2IUVELtYUo1ftm9VQsylTUmgZz2NvPR1x
+         vWZUTPodxe/D9YQoOLzBy8bvmxqqoWx8N9Gyqin5aDaX8d8VEI0dyUsk2JnpOfzvLI
+         a4PE/ywHMQYQdeR7LBlNPYnVo25/vskqLjq1WtMrA3OuGbRCGIgeOjRCwE6CBeQwB4
+         1j0AJ1d3TSIXi6XNHaF5j5x2Ymmlg3deZ6dlZ0dlu4LtorHQ15b4IqeVl73HJ/MSqO
+         JUorJwbwPdDZpcko6HqmkhwbVPQJzH67rjB0kvLAARaVZZ9D0mbMw0sBh/OKu+k6PG
+         1PU/hiy/upMQh96QrJ05vKHQVAmASVZmYbn+1KndilgLlh6e82fEE0VkXWiIPGpd8S
+         Uzd4RmS/mwrF+FHjYX1EUZAyfhx0ZLzu2o3d44AveVm/IfWqvB5a167vIWsoXtWAQY
+         u2IIUm5CT0an90FhV3BTIPHzD2TAH/OwspFJy+KwuH3wD0WQKGasZOm7rK6MfaKUbD
+         gk+aKsDxj7qWHIE9vurK49BXpeWibBhTM1lzJgTgvafymuG8Cyk3hxcuy1I/AGGd9L
+         +DJrj5YrT4e2Ozr5HtRvElYo=
+Received: from zn.tnic (p200300eA971Dc5f0329c23FffEA6A903.dip0.t-ipconnect.de [IPv6:2003:ea:971d:c5f0:329c:23ff:fea6:a903])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+        (No client certificate requested)
+        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A699140E0035;
+        Mon, 12 Jun 2023 15:42:51 +0000 (UTC)
+Date:   Mon, 12 Jun 2023 17:42:46 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] x86/microcode: Add a "microcode=" command line option
+Message-ID: <20230612154246.GLZIc89v6Q2THgsY8N@fat_crate.local>
+References: <20230605141332.25948-1-bp@alien8.de>
+ <20230605141332.25948-2-bp@alien8.de>
+ <87ilbs7lcr.ffs@tglx>
 MIME-Version: 1.0
-References: <20230605125248.279921-1-brgl@bgdev.pl> <CAL_JsqKczF9yYHWjqneBv-y+Qv+O7AkX4gwVG87+aPPazKxtDw@mail.gmail.com>
- <22a21176-f2e2-bce5-2223-97cb095162c5@gmail.com> <98a35030-6dd3-795c-4381-1db4e94a18e4@gmail.com>
-In-Reply-To: <98a35030-6dd3-795c-4381-1db4e94a18e4@gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 12 Jun 2023 09:42:43 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKDQy+tq7uDJ9impTr+uetkb7vz-K4BYX8bZBkpvZ=8uQ@mail.gmail.com>
-Message-ID: <CAL_JsqKDQy+tq7uDJ9impTr+uetkb7vz-K4BYX8bZBkpvZ=8uQ@mail.gmail.com>
-Subject: Re: [PATCH] gpiolib: demote the hogging log messages to debug
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Kent Gibson <warthog618@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <87ilbs7lcr.ffs@tglx>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 11, 2023 at 6:48=E2=80=AFAM Frank Rowand <frowand.list@gmail.co=
-m> wrote:
->
-> On 6/11/23 07:39, Frank Rowand wrote:
-> > On 6/9/23 08:47, Rob Herring wrote:
-> >> On Mon, Jun 5, 2023 at 6:53=E2=80=AFAM Bartosz Golaszewski <brgl@bgdev=
-.pl> wrote:
-> >>>
-> >>> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> >>>
-> >>> Drivers should be silent when they work correctly. There's no reason =
-to
-> >>> emit info messages when GPIO lines are hogged. Demote the message to
-> >>> debug.
-> >>>
-> >>> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> >>> Suggested-by: Kent Gibson <warthog618@gmail.com>
-> >>> ---
-> >>>  drivers/gpio/gpiolib.c |  2 +-
-> >>>  drivers/of/unittest.c  | 16 ++++++++--------
-> >>>  2 files changed, 9 insertions(+), 9 deletions(-)
-> >>>
-> >>> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-> >>> index a7220e04a93e..e4515bda8915 100644
-> >>> --- a/drivers/gpio/gpiolib.c
-> >>> +++ b/drivers/gpio/gpiolib.c
-> >>> @@ -4243,7 +4243,7 @@ int gpiod_hog(struct gpio_desc *desc, const cha=
-r *name,
-> >>>         /* Mark GPIO as hogged so it can be identified and removed la=
-ter */
-> >>>         set_bit(FLAG_IS_HOGGED, &desc->flags);
-> >>>
-> >>> -       gpiod_info(desc, "hogged as %s%s\n",
-> >>> +       gpiod_dbg(desc, "hogged as %s%s\n",
-> >>>                 (dflags & GPIOD_FLAGS_BIT_DIR_OUT) ? "output" : "inpu=
-t",
-> >>>                 (dflags & GPIOD_FLAGS_BIT_DIR_OUT) ?
-> >>>                   (dflags & GPIOD_FLAGS_BIT_DIR_VAL) ? "/high" : "/lo=
-w" : "");
-> >>> diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
-> >>> index 2191c0136531..0060334a98a7 100644
-> >>> --- a/drivers/of/unittest.c
-> >>> +++ b/drivers/of/unittest.c
-> >>> @@ -1849,19 +1849,19 @@ static void __init of_unittest_overlay_gpio(v=
-oid)
-> >>>          * driver is registered
-> >>>          */
-> >>>
-> >>> -       EXPECT_BEGIN(KERN_INFO,
-> >>> +       EXPECT_BEGIN(KERN_DEBUG,
-> >>>                      "gpio-<<int>> (line-B-input): hogged as input\n"=
-);
-> >>
-> >> As debug messages are normally off, I think you can just remove these.
-> >
-> > This patch is an example of exactly why the message level is the first =
-parameter
-> > passed to EXPECT_*().  The test results are then _always_ valid, not ju=
-st
-> > _normally_.
->
-> One should never say never.  One should never say always. :-)
->
-> Yes, there is still the exception where debug can be enabled independentl=
-y
-> for drivers/gpio/gpiolib.c  vs for drivers/of/unittest.c.  And dynamic
-> debug can make things even more wonky.
+On Mon, Jun 12, 2023 at 05:26:28PM +0200, Thomas Gleixner wrote:
+> Why is it suddenly required to prevent late loading on SMT threads?
 
-If we turned on debug messages for drivers/of/, the unittest would be
-hopelessly broken.
+The intent is, like a chicken bit, to revert to the *old* behavior which
+would not load on both threads. In *case* some old configuration of CPU
+and microcode cannot handle loading on both threads. Which is from
+Bulldozer onwards but I don't think anyone uses Bulldozer anymore.
 
-Debug messages are special compared to all the other levels as they
-are normally off whereas the rest are always on. For the unittest we
-should assume they are off.
+> That's the exact opposite of what e7ad18d1169c ("x86/microcode/AMD:
+> Apply the patch early on every logical thread") is doing.
 
-Rob
+No, see patch 1 - it does exactly the same what this commit does but for
+late loading.
+
+Bottomline: on AMD, we should load on both threads by default.
+
+> no_late_all is a horrible option name.
+
+Yeah, at the time dis_ucode_ldr was horrible too. I tried harder this
+time.
+
+What do you suggest?
+
+> Also the explanation is not mentioning that this is only relevant for
+> late loading.
+
+Huh, it has "late" in the name. :-)
+
+> Aside of that why is this a kernel side chicken bit and not communicated
+> by the microcode header?
+
+See above. This chicken bit is there, just in case, to help in the case
+where the user cannot do anything else. It should not be used, judging
+by all the combinations I've tested here.
+
+> How should an administrator know which microcode versions need this
+> treatment and which do not? How is that supposed to work on a fleet?
+
+None of them should need it. Thus, a chicken bit as a last option in
+production.
+
+> global variable name without a proper prefix. Moo.
+
+Lemme fix.
+
+> Where is the documentation which tells me what I'm supposed to write
+> into this file? Also this is a generic file, right?
+
+Lemme write some docs about it.
+
+> So what's the meaning for non AMD? I can write this bit into it
+> successfully and nothing happens, right?
+
+Yes, this bit is AMD-only.
+
+> Why ULL bits for a unsigned long variable?
+
+There's no BIT_UL() macro.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
