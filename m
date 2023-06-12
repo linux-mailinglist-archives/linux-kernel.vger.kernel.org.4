@@ -2,61 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD7972BEAF
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:19:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CEA472BE95
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233055AbjFLKTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 06:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52218 "EHLO
+        id S233717AbjFLKQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 06:16:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232953AbjFLKOO (ORCPT
+        with ESMTP id S234542AbjFLKPm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 06:14:14 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2040.outbound.protection.outlook.com [40.107.100.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B095FEF
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:55:45 -0700 (PDT)
+        Mon, 12 Jun 2023 06:15:42 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2048.outbound.protection.outlook.com [40.107.243.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397DB4C22
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:56:33 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LKMai5YlLnSk/84xYedaqhno6RuSW5Cv4bT+lPJwBIInzmeaHPSmJv3r20VeG4p1gCJetL0+T6ZSggaEi4v6MHz6r4A6FRle8ffzHxncLkIK2iPCcfjlQGhJO5dg/LMEpYSJRHjva+/DrJU4h+f81tTIv4DLc9KomEdidWFIU8nW0+RToi1Dw9URQCcnVZWWiR2mU4c8zPgbV35y5dkZma6KboyRGBVEfQFy6Ed0+rm+3L6Am1mu7uDSJKFCpG4bL++CHWiruylgPDfH2Dc9rw/TKCD+6QBDenK5kDhKEHAflVeZzjBcRxmLcpqNvaKFR0kdUeAX73raqxrRNEZRoQ==
+ b=FqWnKjhEmLS02nigvZnancpDuvjhzU7VYgJMOytYTmVdBgW6FujLHP3FYxoiSuAdPSXIF39YkET/qh17qC85ttmETUVuZB2VjpMQ5VFn7cEOGZGkXRzGeg2DLKMkmlmyKxVc9rJPX9GMMVRfwO5AUHEzozt5eZRSv7sZi+4XO4Vhz/BwCRyWUhCkHIxbohD3nFhoSycV7z65a/ZmpcJ8l40YaYv0F1rXWD6Gm2jDlcBgZgsdJBQhyIYb2FoQJCCSBoda4UqHCy+hXnEMz5OpL4+Ys1iqZlTU27tnf2Mdw7Rts5u5LYIffVkkV+lsIHM9uBvxAhMbqPMC6ujkRoDA2g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PrAlUYHeUtL4gjAn69ALnx0Pg3K5Pqzd2f5iFioh42E=;
- b=ah91c4aw6b8RIpTT5FWhuUdGvC8AFPvbnFOfJTtKQLWBdxCUHgnQIT7FM1GC5TvldEUhcCJUJxyYLQFVnlnNtBnMUhLJyBkwMtfJBsBhPEEGoSGUHmSYLIQRkc3icCzD+3DwguLsygzSI/73msRhun88KPeKj0c3iWsx9oFD6hl1aiXDcg7uHBD40HN6M5nvcazXIuXL6G89hUUJ6c7zxPNXTEwSEwSgPs3lzDc/FgJtOyYd9CvKB2mASbNT7axY6li7Tq1j/KDbjWmbO9apL/Dudx2aRTUzxdGsH3I8i7QbHihouTR3u6Hrvm5DdMqc81c/2R3hibz+xYgKj6REjg==
+ bh=inpX2LjsuHMkWbSLnz82y1+NSnshQjmZxdZ+pLLDCEc=;
+ b=TnPB6fQYeOJ/seOcrNK6xyHPqeISBey3H5ts4g2Qpdbn1Ke2jbfrTBWjGdxI131XpSU2Sq0reCE0kfzYtgGNfgfpS06uQ0BsFhaxcvUfs0kaQj56DWa57bBdpOWtZgmQ3ttVL20ZNDhjLtiGhseeSRpwEDbjhvVfxNDMRDYfYCtFNukB/mImR0XctnsnTszVM+5qLHyKaDznnkXCMMzNLsGzk6qAQADpdcjMVHxLZqnDJIuMp/MtQspMDohfX37ceO2oxTEeKtlkVZyGoD2XrxO0jo36WVCWvvq3b7xZs27i2Dze3zPWigr9NAHv+VFLqUEKnIXlud4TqFdpheGasA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PrAlUYHeUtL4gjAn69ALnx0Pg3K5Pqzd2f5iFioh42E=;
- b=qEAEp3Is8AuuYYnjdL9Ur40B9ckgWfVeOrQlL/nKGLzyZ6zRhOLiFWNJBEbHkK+VO8cWCIMhaanKp3Co/5s20QgYKM2t1dNdYb0MaHNoy8VbZY+m96hd0josQdKWxre6M3fDM0pcUkFRP+QfnZKYKa05zTvOOd3m6Fsg3wuw70g=
-Received: from MW4PR04CA0202.namprd04.prod.outlook.com (2603:10b6:303:86::27)
- by CH2PR12MB4056.namprd12.prod.outlook.com (2603:10b6:610:a5::19) with
+ bh=inpX2LjsuHMkWbSLnz82y1+NSnshQjmZxdZ+pLLDCEc=;
+ b=kNLrYMeqgwgter723WfqeBCNr06nJMbjMcR/aYlXR3Om9zFQGMfHsGAMdQ0BytvBVpPyRMEF6HItD0g2XF+tnBWXG6hHjSdt2s/hpU626Zj01tzUNybU7NzxFfMdm+O6PrexLr8bUK9Q2Qku/bhyfmQXSwL0L1S+3ttzdYuIsNY=
+Received: from CY8PR10CA0008.namprd10.prod.outlook.com (2603:10b6:930:4f::17)
+ by SJ2PR12MB8649.namprd12.prod.outlook.com (2603:10b6:a03:53c::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Mon, 12 Jun
- 2023 09:55:43 +0000
-Received: from CO1NAM11FT040.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:86:cafe::19) by MW4PR04CA0202.outlook.office365.com
- (2603:10b6:303:86::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.39; Mon, 12 Jun
+ 2023 09:56:16 +0000
+Received: from CY4PEPF0000E9D8.namprd05.prod.outlook.com
+ (2603:10b6:930:4f:cafe::16) by CY8PR10CA0008.outlook.office365.com
+ (2603:10b6:930:4f::17) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.34 via Frontend
- Transport; Mon, 12 Jun 2023 09:55:42 +0000
+ Transport; Mon, 12 Jun 2023 09:56:16 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
 Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT040.mail.protection.outlook.com (10.13.174.140) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6500.21 via Frontend Transport; Mon, 12 Jun 2023 09:55:42 +0000
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ CY4PEPF0000E9D8.mail.protection.outlook.com (10.167.241.83) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6500.22 via Frontend Transport; Mon, 12 Jun 2023 09:56:16 +0000
+Received: from SATLEXMB07.amd.com (10.181.41.45) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Mon, 12 Jun
- 2023 04:55:41 -0500
+ 2023 04:56:01 -0500
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB07.amd.com
+ (10.181.41.45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.6; Mon, 12 Jun
+ 2023 02:55:47 -0700
 Received: from vijendar-X570-GAMING-X.amd.com (10.180.168.240) by
  SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.23
- via Frontend Transport; Mon, 12 Jun 2023 04:55:37 -0500
+ via Frontend Transport; Mon, 12 Jun 2023 04:55:43 -0500
 From:   Vijendar Mukunda <Vijendar.Mukunda@amd.com>
 To:     <broonie@kernel.org>
 CC:     <alsa-devel@alsa-project.org>,
@@ -69,11 +73,10 @@ CC:     <alsa-devel@alsa-project.org>,
         Jaroslav Kysela <perex@perex.cz>,
         Takashi Iwai <tiwai@suse.com>,
         Syed Saba Kareem <Syed.SabaKareem@amd.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
         open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH V4 8/9] ASoC: amd: update comments in Kconfig file
-Date:   Mon, 12 Jun 2023 15:29:02 +0530
-Message-ID: <20230612095903.2113464-9-Vijendar.Mukunda@amd.com>
+Subject: [PATCH V4 9/9] ASoC: amd: ps: add acp_reset flag check in acp pci driver pm ops.
+Date:   Mon, 12 Jun 2023 15:29:03 +0530
+Message-ID: <20230612095903.2113464-10-Vijendar.Mukunda@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230612095903.2113464-1-Vijendar.Mukunda@amd.com>
 References: <20230612095903.2113464-1-Vijendar.Mukunda@amd.com>
@@ -82,23 +85,23 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT040:EE_|CH2PR12MB4056:EE_
-X-MS-Office365-Filtering-Correlation-Id: 31fd0ebf-3bda-4336-9fa3-08db6b2b2f5f
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D8:EE_|SJ2PR12MB8649:EE_
+X-MS-Office365-Filtering-Correlation-Id: c10dad78-bf12-4a54-78a6-08db6b2b4372
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tpWMXuhapSjNv2lB7Th2W8ngdnWMd0SLG1U19h5iYEkn29maOdhmKO0S/ESUKRwdOECLgzjUHdDesvhCv9W8e4j+SIGSuSmMmrFeitj5rPxOpe99sBoeR7+R7M2SZNGJ7hzN7iDeyNK2OCstYio44AzIVcoyjDxNepK4Fg/fjVMSUhlwSYHcVyennHMAGbRwX/L1Rh29KHoEuMUN8iOvGnttXXzM9+5xk8VrPQaYf86elcNjXEV2cGqx7gBSQEjTJRAyMF6mirJcYFfgiT6cIJX381tyWpWUqtvzHxfAV9/3wHQfBmXBDJAHmg8G8JLQxSY/SNu2X/v6lmvvdO4icUA7vGO8Vit8K4XiQXaDw/0VchK5na3yQFc4XHdNiYM3JJMFTs/SJ/nPsQMbVzzmHnCaamYQjL3KkNlu8q49LMV0AU6N1pMcinfnQDlc3GWX62uqY+hVzpRv3LbnZYVL2SgdkGxSw2J3L/vL9uq31p71OEtRJpm93Y7JJ1A6V5aM2khbX8M304Lr1GZ3VqAx/xq5sl2jyfwd1Yslkh0jMUsUQGVaKvY4EECp+dEZcfKsU388zWBZKa16ueZ9U41/GnUun68ENSRFc/kZq3RAZH0TMGBCUdt8pYHO9Gx59olaZ/pUJJe4g6cKeaaPnKKaHGb6uqjhQEvqegg4E40gCHpZ/sETJFqaEf+Pe8tv9kFMES0ND1OKYgDJ8voEsZdCTJWbEWQx1k8PcGLhGBVSqrr+K9wTMj+3qykbpq27jjrawbeR56zLDXdvQim1+pTLxQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(346002)(136003)(396003)(451199021)(36840700001)(46966006)(40470700004)(54906003)(5660300002)(4326008)(6916009)(8936002)(8676002)(41300700001)(316002)(4744005)(186003)(2906002)(15650500001)(478600001)(70206006)(70586007)(6666004)(7696005)(40460700003)(1076003)(82740400003)(356005)(81166007)(40480700001)(36860700001)(26005)(83380400001)(426003)(336012)(47076005)(36756003)(82310400005)(86362001)(2616005)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 728Q2gib57Dk0YkIcDHu8WMNSKOjxbv4gItGDeOQfz0Tck3HnqXLncSba1RRPlGVQL54OnLlobZvv699HYWHxM7NaLfdGfmbUqPrKjMukVCJyawxBcbzlm3mPyCR3hXIBkWjQL/pYnhpgoY0nUMRR8d2oDaLzinRDRx16uDcbET66Nn61mhNI7uHLLgc8VSHPUZGUXmow25PN19nkTzhnSCr8fQCbaMecb2L6NPzvtEtCxQ0O0Cu5PUazUKqVnEzJ+/1GDN4KLSklsjBRmD1Fu/escdcPm5hpvUx92xml5PmnE5CYPzBAScJJB6h/PNnoyn92OiLLdS7Wod3MpSaSz9WluRUDVE0KaOqjXjjWUSm2j+WqsA+T/M3XiTu+CRCCpSv7Vi2eHHHbyRBXOZEFGIzxWnlVgL38YUyT6JroK1Cln6UxpW5YgrIMrtdn/TW+jK7XjbBPpbGxTgEI+aHG5Re+6pay8nNH7wjH0lOzFZ6RrfWSuEFX4PyiGlE6exMiM7+UVxQOUfTPrm+KksjTMLYCSQ8iBZgyj1FvUpaC5CmQcTzc95fpRYqt6K3cAqhr2NhnkR+UH+QzWxfE5ik1eOUe8jxIpxh24II9davwh4afpezbmb+HNB0whySqwVEx0uwG5vs+myGPJr7HDE3jlGWsULwHnhL72u3zUqF2HCoIb9gOgqxazhFg/l9kda44MA6AhwhQiCLhKBTTD6iP3ic2VIjnKEtR6AzXHuP0GOqKxn8oRMq9QqKkpGYzXEwC7y6m/EXxjJWcN5O1f+dxA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(376002)(346002)(396003)(451199021)(40470700004)(36840700001)(46966006)(478600001)(70586007)(356005)(81166007)(82740400003)(36756003)(70206006)(4326008)(6916009)(54906003)(8936002)(8676002)(40480700001)(86362001)(5660300002)(2906002)(316002)(41300700001)(83380400001)(40460700003)(2616005)(336012)(426003)(47076005)(1076003)(26005)(186003)(6666004)(36860700001)(7696005)(82310400005)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 09:55:42.3431
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 09:56:16.0523
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 31fd0ebf-3bda-4336-9fa3-08db6b2b2f5f
+X-MS-Exchange-CrossTenant-Network-Message-Id: c10dad78-bf12-4a54-78a6-08db6b2b4372
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT040.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000E9D8.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4056
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8649
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -109,26 +112,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update comments in Kconfig file for Pink Sardine platform.
+AMD SoundWire manager supports different power modes.
+acp_reset flag will be set to false only when SoundWire manager power
+mode is selected as ClockStop Mode. For rest of the combinations
+(ACP PDM + SDW), acp_reset flag will be set to true.
+When acp_reset flag is set, acp de-init and acp init sequence should
+be invoked during suspend/resume callbacks.
 
 Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
 ---
- sound/soc/amd/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ sound/soc/amd/ps/pci-ps.c | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
 
-diff --git a/sound/soc/amd/Kconfig b/sound/soc/amd/Kconfig
-index 08e42082f5e9..2f0d444b21fa 100644
---- a/sound/soc/amd/Kconfig
-+++ b/sound/soc/amd/Kconfig
-@@ -136,7 +136,8 @@ config SND_SOC_AMD_PS
-         help
-           This option enables Audio Coprocessor i.e ACP v6.3 support on
-           AMD Pink sardine platform. By enabling this flag build will be
--          triggered for ACP PCI driver, ACP PDM DMA driver.
-+          triggered for ACP PCI driver, ACP PDM DMA driver, ACP SoundWire
-+          DMA driver.
-           Say m if you have such a device.
-           If unsure select "N".
+diff --git a/sound/soc/amd/ps/pci-ps.c b/sound/soc/amd/ps/pci-ps.c
+index ff734a90951b..5b46dc8573f8 100644
+--- a/sound/soc/amd/ps/pci-ps.c
++++ b/sound/soc/amd/ps/pci-ps.c
+@@ -669,24 +669,28 @@ static int snd_acp63_probe(struct pci_dev *pci,
+ static int __maybe_unused snd_acp63_suspend(struct device *dev)
+ {
+ 	struct acp63_dev_data *adata;
+-	int ret;
++	int ret = 0;
+ 
+ 	adata = dev_get_drvdata(dev);
+-	ret = acp63_deinit(adata->acp63_base, dev);
+-	if (ret)
+-		dev_err(dev, "ACP de-init failed\n");
++	if (adata->acp_reset) {
++		ret = acp63_deinit(adata->acp63_base, dev);
++		if (ret)
++			dev_err(dev, "ACP de-init failed\n");
++	}
+ 	return ret;
+ }
+ 
+ static int __maybe_unused snd_acp63_resume(struct device *dev)
+ {
+ 	struct acp63_dev_data *adata;
+-	int ret;
++	int ret = 0;
+ 
+ 	adata = dev_get_drvdata(dev);
+-	ret = acp63_init(adata->acp63_base, dev);
+-	if (ret)
+-		dev_err(dev, "ACP init failed\n");
++	if (adata->acp_reset) {
++		ret = acp63_init(adata->acp63_base, dev);
++		if (ret)
++			dev_err(dev, "ACP init failed\n");
++	}
+ 	return ret;
+ }
  
 -- 
 2.34.1
