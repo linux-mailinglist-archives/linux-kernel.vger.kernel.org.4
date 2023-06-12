@@ -2,77 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAD0072B9B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 10:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D74672BA3A
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 10:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231618AbjFLIF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 04:05:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39714 "EHLO
+        id S230404AbjFLIVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 04:21:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbjFLIEl (ORCPT
+        with ESMTP id S231364AbjFLIVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 04:04:41 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19BCB2712;
-        Mon, 12 Jun 2023 01:03:34 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 42A6D66058B2;
-        Mon, 12 Jun 2023 09:02:18 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686556939;
-        bh=+Kz9FdKEAFZlZj5XHqHtenKsDHyiRL5vhXgqLs0UwxY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=AypTttf2AQpkX7dg6uYrkGtGV3f8vwNCCTepbh8uxVTtD14/FSbndE4EcDJ0Misiz
-         MZWQhtlGeA03/QFnG86C+LD864VwaSgTbNNP2TRqaPC/K6xyEwV7cNQaYw/No+S7Tu
-         +lb3kU2+SMt8ScjEV9lTqfImNX/mmfCgBfn4WMxr0Y4ZyiN/gs7nWEa/UuhrquBAhf
-         HtNJwX0dQqVMNi/8HCfgciGDky7K/qttNFnUnIun8LKdKb0ml+fcneJvkxrOj+/XZK
-         /7dh6vxtHwZq2gMgfZR4RlevcuV7Asvtfx4UHOgNFHZKD7Pyt/lY1mH0lG4MWgSqYg
-         jeFcwhz9kRqrQ==
-Message-ID: <9a39cfa4-1142-4d06-319b-fd5d17c71e06@collabora.com>
-Date:   Mon, 12 Jun 2023 10:02:16 +0200
+        Mon, 12 Jun 2023 04:21:23 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E4210FC;
+        Mon, 12 Jun 2023 01:21:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686558070; x=1718094070;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NrB05QMo0F6HFzF4tpbs8kKozdr9ZYcXmHPgXhr98hk=;
+  b=HpeO5eF7oxNaS2z4GBROimv7fE9RrXB/HLdoG3hpChnQXWi/ZiRSCMrX
+   d8JhM0gIQr/jZ8xcQCCqc4O3TT9OwF3P9TgM8Qu4xSb0Dsb1xYvJ2c9Fl
+   XAWJ7yXiayZF8DuuzQ8plkRtlUekuZIbgQpZXRPNMqOhY8nQRwpeHF9PA
+   LVUQ3CkpIG0uRDzW/eCtSBQVqRHrvGpYamvrC4dYBYOGvnvMXXhrX9ZNv
+   rscMvcclEXQUcywm8ZvRRXchl9HKRIc/wJQH/p2E5UF2EtP3315SfIoFj
+   +yr4xc0OwvqvkIPDtWfS+fK+D/01XS545LadEMlRAri9zhfE8xVq9k0Mr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="355468919"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="355468919"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 01:02:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="740924079"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="740924079"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 01:02:47 -0700
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id DB904120BE1;
+        Mon, 12 Jun 2023 11:02:44 +0300 (EEST)
+Date:   Mon, 12 Jun 2023 08:02:44 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Damien Le Moal <dlemoal@kernel.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Subject: Re: [PATCH v2 3/3] ata: ahci_platform: Make code agnostic to OF/ACPI
+Message-ID: <ZIbRJGhikaYEkuay@kekkonen.localdomain>
+References: <20230609154900.43024-1-andriy.shevchenko@linux.intel.com>
+ <20230609154900.43024-4-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v4 8/9] virt: geniezone: Add dtb config support
-Content-Language: en-US
-To:     Yi-De Wu <yi-de.wu@mediatek.com>,
-        Yingshiuan Pan <yingshiuan.pan@mediatek.com>,
-        Ze-Yu Wang <ze-yu.wang@mediatek.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        David Bradil <dbrazdil@google.com>,
-        Jade Shih <jades.shih@mediatek.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Ivan Tseng <ivan.tseng@mediatek.com>,
-        My Chuang <my.chuang@mediatek.com>,
-        Shawn Hsiao <shawn.hsiao@mediatek.com>,
-        PeiLun Suei <peilun.suei@mediatek.com>,
-        Liju Chen <liju-clr.chen@mediatek.com>,
-        Willix Yeh <chi-shen.yeh@mediatek.com>
-References: <20230609085214.31071-1-yi-de.wu@mediatek.com>
- <20230609085214.31071-9-yi-de.wu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230609085214.31071-9-yi-de.wu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230609154900.43024-4-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,114 +73,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 09/06/23 10:52, Yi-De Wu ha scritto:
-> From: "Jerry Wang" <ze-yu.wang@mediatek.com>
-> 
-> Hypervisor might need to know the accurate address and size of dtb
-> passed from userspace. And then hypervisor would parse the dtb and get
-> vm information.
-> 
-> Signed-off-by: Jerry Wang <ze-yu.wang@mediatek.com>
-> Signed-off-by: Liju-clr Chen <liju-clr.chen@mediatek.com>
-> Signed-off-by: Yi-De Wu <yi-de.wu@mediatek.com>
-> ---
->   arch/arm64/geniezone/gzvm_arch_common.h |  2 ++
->   arch/arm64/geniezone/vm.c               |  8 ++++++++
->   drivers/virt/geniezone/gzvm_vm.c        |  8 ++++++++
->   include/linux/gzvm_drv.h                |  1 +
->   include/uapi/linux/gzvm.h               | 10 ++++++++++
->   5 files changed, 29 insertions(+)
-> 
-> diff --git a/arch/arm64/geniezone/gzvm_arch_common.h b/arch/arm64/geniezone/gzvm_arch_common.h
-> index 5cfeb4df84c5..ccd2a7516eeb 100644
-> --- a/arch/arm64/geniezone/gzvm_arch_common.h
-> +++ b/arch/arm64/geniezone/gzvm_arch_common.h
-> @@ -24,6 +24,7 @@ enum {
->   	GZVM_FUNC_PROBE,
->   	GZVM_FUNC_ENABLE_CAP,
->   	GZVM_FUNC_MEMREGION_PURPOSE,
-> +	GZVM_FUNC_SET_DTB_CONFIG,
->   	NR_GZVM_FUNC
->   };
->   
-> @@ -48,6 +49,7 @@ enum {
->   #define MT_HVC_GZVM_PROBE		GZVM_HCALL_ID(GZVM_FUNC_PROBE)
->   #define MT_HVC_GZVM_ENABLE_CAP		GZVM_HCALL_ID(GZVM_FUNC_ENABLE_CAP)
->   #define MT_HVC_GZVM_MEMREGION_PURPOSE	GZVM_HCALL_ID(GZVM_FUNC_MEMREGION_PURPOSE)
-> +#define MT_HVC_GZVM_SET_DTB_CONFIG	GZVM_HCALL_ID(GZVM_FUNC_SET_DTB_CONFIG)
->   #define GIC_V3_NR_LRS			16
->   
->   /**
-> diff --git a/arch/arm64/geniezone/vm.c b/arch/arm64/geniezone/vm.c
-> index e19a66d6a75d..6062fe85c70e 100644
-> --- a/arch/arm64/geniezone/vm.c
-> +++ b/arch/arm64/geniezone/vm.c
-> @@ -106,6 +106,14 @@ int gzvm_arch_memregion_purpose(struct gzvm *gzvm, struct gzvm_userspace_memory_
->   				    mem->flags, 0, 0, 0, &res);
->   }
->   
-> +int gzvm_arch_set_dtb_config(struct gzvm *gzvm, struct gzvm_dtb_config *cfg)
-> +{
-> +	struct arm_smccc_res res;
-> +
-> +	return gzvm_hypcall_wrapper(MT_HVC_GZVM_SET_DTB_CONFIG, gzvm->vm_id, cfg->dtb_addr,
-> +				    cfg->dtb_size, 0, 0, 0, 0, &res);
-> +}
-> +
->   static int gzvm_vm_arch_enable_cap(struct gzvm *gzvm, struct gzvm_enable_cap *cap,
->   				   struct arm_smccc_res *res)
->   {
-> diff --git a/drivers/virt/geniezone/gzvm_vm.c b/drivers/virt/geniezone/gzvm_vm.c
-> index 3b1cb715ef34..d379793deace 100644
-> --- a/drivers/virt/geniezone/gzvm_vm.c
-> +++ b/drivers/virt/geniezone/gzvm_vm.c
-> @@ -390,6 +390,14 @@ static long gzvm_vm_ioctl(struct file *filp, unsigned int ioctl,
->   		ret = gzvm_vm_ioctl_enable_cap(gzvm, &cap, argp);
->   		break;
->   	}
-> +	case GZVM_SET_DTB_CONFIG: {
-> +		struct gzvm_dtb_config cfg;
-> +
-> +		if (copy_from_user(&cfg, argp, sizeof(cfg)))
-> +			goto out;
-> +		ret = gzvm_arch_set_dtb_config(gzvm, &cfg);
-> +		break;
-> +	}
->   	default:
->   		ret = -ENOTTY;
->   	}
-> diff --git a/include/linux/gzvm_drv.h b/include/linux/gzvm_drv.h
-> index 288a339bf382..e920397e83d3 100644
-> --- a/include/linux/gzvm_drv.h
-> +++ b/include/linux/gzvm_drv.h
-> @@ -146,6 +146,7 @@ void gzvm_sync_hwstate(struct gzvm_vcpu *vcpu);
->   extern struct miscdevice *gzvm_debug_dev;
->   
->   int gzvm_arch_memregion_purpose(struct gzvm *gzvm, struct gzvm_userspace_memory_region *mem);
-> +int gzvm_arch_set_dtb_config(struct gzvm *gzvm, struct gzvm_dtb_config *args);
->   
->   int gzvm_init_ioeventfd(struct gzvm *gzvm);
->   int gzvm_ioeventfd(struct gzvm *gzvm, struct gzvm_ioeventfd *args);
-> diff --git a/include/uapi/linux/gzvm.h b/include/uapi/linux/gzvm.h
-> index 2af1b068947c..28354c17ed9c 100644
-> --- a/include/uapi/linux/gzvm.h
-> +++ b/include/uapi/linux/gzvm.h
-> @@ -265,4 +265,14 @@ struct gzvm_ioeventfd {
->   
->   #define GZVM_IOEVENTFD	_IOW(GZVM_IOC_MAGIC, 0x79, struct gzvm_ioeventfd)
->   
-> +struct gzvm_dtb_config {
+Hi Andy,
 
-kerneldoc please.
+On Fri, Jun 09, 2023 at 06:49:00PM +0300, Andy Shevchenko wrote:
+> With the help of a new device_is_compatible() make
+> the driver code agnostic to the OF/ACPI. This makes
+> it neater. As a side effect the header inclusions is
+> corrected (seems mod_devicetable.h was implicitly
+> included).
 
-> +	/* dtb address set by VMM (guset memory) */
-> +	__u64 dtb_addr;
-> +	/* dtb size */
-> +	__u64 dtb_size;
-> +};
-> +
-> +#define GZVM_SET_DTB_CONFIG       _IOW(GZVM_IOC_MAGIC, 0xff, \
-> +				       struct gzvm_dtb_config)
-> +
->   #endif /* __GZVM_H__ */
+You're wrapping the lines well before 75. Why?
 
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+
+-- 
+Sakari Ailus
