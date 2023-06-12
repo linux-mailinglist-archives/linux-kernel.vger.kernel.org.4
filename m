@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93FD972BEF6
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41C2D72BEC5
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232452AbjFLK3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 06:29:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34516 "EHLO
+        id S231859AbjFLKVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 06:21:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232382AbjFLK2x (ORCPT
+        with ESMTP id S235691AbjFLKUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 06:28:53 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A45B55A5
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 03:09:16 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-977e0fbd742so608736766b.2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 03:09:16 -0700 (PDT)
+        Mon, 12 Jun 2023 06:20:15 -0400
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E21CFBD
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:59:57 -0700 (PDT)
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-3f6e1394060so28170545e9.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:59:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686564476; x=1689156476;
+        d=linaro.org; s=google; t=1686563858; x=1689155858;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kw/rCadAAXL79CFLRSUQPy8XYxYwff3PlTHUSH33OfY=;
-        b=Yy86R/Oc3rNRR/mAuTmnPCqBwiae6LQSkw1kBHQr2oe0fE46/Ye6orTjnWq74wAnxG
-         I3LMyiWdUP71rYTx14TV+FlVv1U/nKhGC4wcWGHZUMmcS0b/noliqgPpt1vNlbv75KFK
-         qCF/PXEvPZLa8Jp9EfMVPyC647VJ20A2AFETBu96JB9FrDXFhMVj2QGb192lIbgbZUma
-         wruVg8RMqakGt9kc/TnMCVYtjWfw6WnYV+gs19GGNg6ccji3RLitdFn8mwDbXgwGBQnS
-         Tq0/YpT/v0+KdprcUeM6Yk9lXbK0X2ZLK0Q5mmW0S9+X9DUs6xlC9vXCHXc21TWGTmaD
-         f2hA==
+        bh=HbmC2tPXu7Plws9RR0tJzVAbqwrUbXt6C9ZgJTjEcFU=;
+        b=j34cukKZT24kOOcuyPjTpJHUQWs5DkfZPoalFxFvyR271AcnPvrYtaDLNJgtikED2x
+         c6754piIhGhCmSv1EVXVoYOCmtlQ6kq/l/D/lOXSMH+KK1s/aVFS75Pi54uWNbC63oIf
+         JJd9jMwj+Umfn2okDZYMP9CVtIbIaLjmKdpLPOeUGEWaOyjYck/cwqA9QdVuUXZx0FiE
+         W4X2eTJQNoslZ/VSVbqraBu7f7eAZqubDN4glzlold8ch/MytDZhSOG5Y43CHq9oUFmZ
+         ptQm87vQNVmc8AscaZQ114an7ErYtL2iiv5IwsltVX3plMMV9Nf1iYZGr66zjqJiLL8+
+         1rmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686564476; x=1689156476;
+        d=1e100.net; s=20221208; t=1686563858; x=1689155858;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kw/rCadAAXL79CFLRSUQPy8XYxYwff3PlTHUSH33OfY=;
-        b=kwpelxbx+JoJYAITy0MykAvctWRUq4HlvFyGpbNvvpLu1Z26NyWfLCwZEytv5Cvwn/
-         0wEKuI7oz0liLNQc823e0mL3QjKoKBxKgVDAnB4DyToPuEsx+9VR1eGg1IM8QSmivUao
-         R3+lYvhQ72FlkTcmj785D81zEGZbSCaLZGcxo+puFR6zWOqmAIUUC5RCwZ/jSbsCjV9V
-         wJupVFknQuR2OjmqZEPVLkrFBSUG4SCZ8LWcLC/6Zi+rArY59sRQO1ZqcnFczoFjJ7Ye
-         FhmsRk1AkaQ18BMkYUyphfFyZQ0lHsXt7js3MeYUpNcgH6RsCp1DHxtGsrgpUBEQPwNA
-         zTiQ==
-X-Gm-Message-State: AC+VfDzODXGyeFXKFi+7FNjta00bgo5parZlSw4t67xfwPZUkJlQJLIF
-        sArCA/LZew3Bh5lb9mAO16CKpYo+V2OsJcCkwEL8Rg==
-X-Google-Smtp-Source: ACHHUZ7Nj7K48LPwKpVkcBSYiTeTZq3O2zhydrN5rx9W1UNRx3vSxgd19cnaiULzsBS+PbW1vRvnVg==
-X-Received: by 2002:a5d:5486:0:b0:30f:bea9:bf17 with SMTP id h6-20020a5d5486000000b0030fbea9bf17mr2771768wrv.30.1686563857429;
-        Mon, 12 Jun 2023 02:57:37 -0700 (PDT)
+        bh=HbmC2tPXu7Plws9RR0tJzVAbqwrUbXt6C9ZgJTjEcFU=;
+        b=bMyO3BeAcguLbqALJPM9YHEQvEdybW7pvPra89p2eNn15KYY08qD3vjM52WlJ8y2lu
+         /9I42aWmj3vTmsLhOUsML0GhqMYS0/hC7cNfUiW2/nCvoxbObkj5Spuv/4vXIYiCcxTD
+         d1mWFSsDoGuMTv0c2w8mz5ztBq+xkZCOqnij0cMc8+o3JwkH5znhSTcG1SWCtLuaYU8E
+         4L65HH/3v+N3myBeqbUzXkthqX8BezO/wYi+USKHCoR6GwqVRT2blqmY5P+thJ4Z192d
+         SVskk7CLLKjm5yiFE3SQl9DhRpdekDooF7rV5L/WdH1CGfdmWFLld0Hn6KJ4ftdbns0q
+         HakA==
+X-Gm-Message-State: AC+VfDwOqsgndi6L1BZFYsg90GWCdIKhW3RfaoOlFOhnghqT8oLGgVb/
+        7/ualFpdpsprDx69OI44290RCw==
+X-Google-Smtp-Source: ACHHUZ4wOMKO/+1v6hwyByJVH407FFEtogM5Wm3YKD9oUk66xURxaa+0V8NVYtMGFEdZIW5PymzXWA==
+X-Received: by 2002:a5d:698b:0:b0:30f:bcf2:9b2 with SMTP id g11-20020a5d698b000000b0030fbcf209b2mr2475789wru.56.1686563858404;
+        Mon, 12 Jun 2023 02:57:38 -0700 (PDT)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id f25-20020a7bcd19000000b003f7ff520a14sm10829525wmj.22.2023.06.12.02.57.36
+        by smtp.gmail.com with ESMTPSA id f25-20020a7bcd19000000b003f7ff520a14sm10829525wmj.22.2023.06.12.02.57.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 02:57:37 -0700 (PDT)
+        Mon, 12 Jun 2023 02:57:38 -0700 (PDT)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Mon, 12 Jun 2023 11:57:20 +0200
-Subject: [PATCH v2 03/19] clk: meson: migrate meson-aoclk out of
+Date:   Mon, 12 Jun 2023 11:57:21 +0200
+Subject: [PATCH v2 04/19] clk: meson: migrate a1 clock drivers out of
  hw_onecell_data to drop NR_CLKS
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230607-topic-amlogic-upstream-clkid-public-migration-v2-3-38172d17c27a@linaro.org>
+Message-Id: <20230607-topic-amlogic-upstream-clkid-public-migration-v2-4-38172d17c27a@linaro.org>
 References: <20230607-topic-amlogic-upstream-clkid-public-migration-v2-0-38172d17c27a@linaro.org>
 In-Reply-To: <20230607-topic-amlogic-upstream-clkid-public-migration-v2-0-38172d17c27a@linaro.org>
 To:     Jerome Brunet <jbrunet@baylibre.com>,
@@ -73,26 +73,26 @@ Cc:     linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org,
         Neil Armstrong <neil.armstrong@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=11916;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=17870;
  i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=u0XTmnGJ7kpzwSNhseqUxfIkEBUoq9Fep+pYYL8Z2KA=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkhuwGPiKIs/zwlWbwuXV2xU1Kn8Cc40zOotivYKlK
- /VSHeJuJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZIbsBgAKCRB33NvayMhJ0UgJD/
- 9nNiaMTkKwHKUWNcnhTdO8LNn4pUIVSgpnEPDjQ4OL0pBG3c8IGaI72Ge8DzgqmgLBUKEMq2g0KsPe
- lnaQkIvPcPMcKszTEX1cT2fQ40sTSt2lcr2CtAXRpXmEycF+MBg+stk7XXMmpnRlq4jZCME1BUfLfn
- +PFlBScTNgrsASY2CX4Vi8isbE/bPtb1/kLlswNTK3xH+a+YXmQEh+X+AZLK5PObzGzjE7KSgPaB4k
- oHTPgIQDwFjRmi6sR37u7ByKBbzQd1k7CI2Ws4G0Ip7ZSoNNWzZUEGkL0sGDTzSVmPdQiQ/XdGV2QH
- SIfdqQ+8epX0hmp2pysLHKVBNdFBL2ZD04F7/WpYvk2WZhmkXuhpQisImZn1rd3Qo65KvBgZaN4UNO
- VfgmFJc5n4pwvz7AGE+IV1tQvwmI2wTE4lshN3DqGLVJsr7wmuyVenHLfI5feJ/TYVbWkdvTleni6a
- qD6/eLL6wW8ht58n+Cx4l/HiWnUv9WdQZLROtUMwKqK0U22lD8xNK0lWSbenHaGlNLO35MLKmTS4f1
- IkgD641bB3FDFqeAyp2lItKtv6NqxL6fdt8irIY8O/4Zx6Gc/ateEI6zPSaJT+3keCJTkcJg5QIT/y
- xXO/WyOUtUlHKfnAz9UArE2Lg0wOSyEp97DgLoYWaBQxdyh65+7GLhK3SLYg==
+ bh=ZLWNIGY2IJxgTN/Cyxq7KREpLST5U+rlCF56Wlhe7+M=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkhuwGBjisLHde571WUUjrihrnT8HjUkGNHj3j4vgA
+ yMwa416JAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZIbsBgAKCRB33NvayMhJ0fzHD/
+ 9klEUpui7IaMfUJFPVV0GUkG962ogoG4za2QgtF6tZabSwEQdxZAFAy1zxJp0rwkNrFvnreO79NA6o
+ EJawxL4JGuGEIiSAxquwXE5tuME2Q1GkrafcXRgT38U6XnMGcVyYCNq4bE31SIv3SB2uPvx1GwkNI2
+ QtUpYtgTGyhgn2Tfm8M+fTJq+uf560lX+Z6a5SIqWB+IkhtBPqSO7uJgkNSIZbmnB387IsfdvfKgli
+ AXDDRosXLM/rDB/2rqVeCW7SQIdKshu7W8Ftrw40mzMnHM/ZW0cfjhAOI3LWuI7WMPXLBs82nee9Ak
+ jHh7qHF/gzQxGjxnof5lv7iV/LrNSpMRKF+ASp2yCc2UQ/ruUmwrsvLhmKHcIQtH31+1t+2v4CYNBz
+ ViYEtXwM+iO1c0EGJGGB55Ibtmumo7HW9i7HZuGETi9eP3TS/WWmlej7ss7BxXelaaTYQS6N9uUKEb
+ CAlF/4g2XA5frJvozvzNmWaMr1wpUXA3Ddt+N/sfgWpICAcyDSRX0d5joPfSgHYWs86xLKE/Cf6RUB
+ jwg8R9u86+C8ZQbgR7G6n2LTjP8I5vTso9uR6kWm6mafYeib36s2718xkEMcVHKtI2qOT3BJ98UcDS
+ RFzMc2ZG/clG6FGW1MoiHepsgyE5fjzAEGVkWOSRnzTcewYyz9YPI9ldzeLw==
 X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
  fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -100,10 +100,10 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 The way hw_onecell_data is declared:
-  struct clk_hw_onecell_data {
-          unsigned int num;
-          struct clk_hw *hws[];
-  };
+struct clk_hw_onecell_data {
+	unsigned int num;
+	struct clk_hw *hws[];
+};
 
 makes it impossible to have the clk_hw table declared outside while
 using ARRAY_SIZE() to determine ".num" due to ".hws" being a flexible
@@ -111,305 +111,482 @@ array member.
 
 Completely move out of hw_onecell_data and add a custom
 devm_of_clk_add_hw_provider() "get" callback to retrieve the clk_hw
-from the meson_aoclk_data struct to finally get rid on the
-NR_CLKS define.
+in order to finally get rid on the NR_CLKS define.
 
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- drivers/clk/meson/Kconfig       |  1 +
- drivers/clk/meson/axg-aoclk.c   | 44 +++++++++++++-------------
- drivers/clk/meson/axg-aoclk.h   |  2 --
- drivers/clk/meson/g12a-aoclk.c  | 68 ++++++++++++++++++++---------------------
- drivers/clk/meson/g12a-aoclk.h  |  2 --
- drivers/clk/meson/gxbb-aoclk.c  | 10 +++---
- drivers/clk/meson/gxbb-aoclk.h  |  2 --
- drivers/clk/meson/meson-aoclk.c |  9 +++---
- drivers/clk/meson/meson-aoclk.h |  3 +-
- 9 files changed, 68 insertions(+), 73 deletions(-)
+ drivers/clk/meson/Kconfig          |   2 +
+ drivers/clk/meson/a1-peripherals.c | 323 +++++++++++++++++++------------------
+ drivers/clk/meson/a1-peripherals.h |   1 -
+ drivers/clk/meson/a1-pll.c         |  36 +++--
+ drivers/clk/meson/a1-pll.h         |   1 -
+ 5 files changed, 183 insertions(+), 180 deletions(-)
 
 diff --git a/drivers/clk/meson/Kconfig b/drivers/clk/meson/Kconfig
-index 5bf901da8a63..caadaf973317 100644
+index caadaf973317..7ae076cd9645 100644
 --- a/drivers/clk/meson/Kconfig
 +++ b/drivers/clk/meson/Kconfig
-@@ -36,6 +36,7 @@ config COMMON_CLK_MESON_CLKC_UTILS
- config COMMON_CLK_MESON_AO_CLKC
- 	tristate
+@@ -108,6 +108,7 @@ config COMMON_CLK_A1_PLL
+ 	tristate "Amlogic A1 SoC PLL controller support"
+ 	depends on ARM64
  	select COMMON_CLK_MESON_REGMAP
 +	select COMMON_CLK_MESON_CLKC_UTILS
- 	select RESET_CONTROLLER
- 
- config COMMON_CLK_MESON_EE_CLKC
-diff --git a/drivers/clk/meson/axg-aoclk.c b/drivers/clk/meson/axg-aoclk.c
-index af6db437bcd8..2d1dad8657e0 100644
---- a/drivers/clk/meson/axg-aoclk.c
-+++ b/drivers/clk/meson/axg-aoclk.c
-@@ -288,27 +288,24 @@ static struct clk_regmap *axg_aoclk_regmap[] = {
- 	&axg_aoclk_saradc_gate,
- };
- 
--static const struct clk_hw_onecell_data axg_aoclk_onecell_data = {
--	.hws = {
--		[CLKID_AO_REMOTE]	= &axg_aoclk_remote.hw,
--		[CLKID_AO_I2C_MASTER]	= &axg_aoclk_i2c_master.hw,
--		[CLKID_AO_I2C_SLAVE]	= &axg_aoclk_i2c_slave.hw,
--		[CLKID_AO_UART1]	= &axg_aoclk_uart1.hw,
--		[CLKID_AO_UART2]	= &axg_aoclk_uart2.hw,
--		[CLKID_AO_IR_BLASTER]	= &axg_aoclk_ir_blaster.hw,
--		[CLKID_AO_SAR_ADC]	= &axg_aoclk_saradc.hw,
--		[CLKID_AO_CLK81]	= &axg_aoclk_clk81.hw,
--		[CLKID_AO_SAR_ADC_SEL]	= &axg_aoclk_saradc_mux.hw,
--		[CLKID_AO_SAR_ADC_DIV]	= &axg_aoclk_saradc_div.hw,
--		[CLKID_AO_SAR_ADC_CLK]	= &axg_aoclk_saradc_gate.hw,
--		[CLKID_AO_CTS_OSCIN]	= &axg_aoclk_cts_oscin.hw,
--		[CLKID_AO_32K_PRE]	= &axg_aoclk_32k_pre.hw,
--		[CLKID_AO_32K_DIV]	= &axg_aoclk_32k_div.hw,
--		[CLKID_AO_32K_SEL]	= &axg_aoclk_32k_sel.hw,
--		[CLKID_AO_32K]		= &axg_aoclk_32k.hw,
--		[CLKID_AO_CTS_RTC_OSCIN] = &axg_aoclk_cts_rtc_oscin.hw,
--	},
--	.num = NR_CLKS,
-+static struct clk_hw *axg_aoclk_hw_clks[] = {
-+	[CLKID_AO_REMOTE]	= &axg_aoclk_remote.hw,
-+	[CLKID_AO_I2C_MASTER]	= &axg_aoclk_i2c_master.hw,
-+	[CLKID_AO_I2C_SLAVE]	= &axg_aoclk_i2c_slave.hw,
-+	[CLKID_AO_UART1]	= &axg_aoclk_uart1.hw,
-+	[CLKID_AO_UART2]	= &axg_aoclk_uart2.hw,
-+	[CLKID_AO_IR_BLASTER]	= &axg_aoclk_ir_blaster.hw,
-+	[CLKID_AO_SAR_ADC]	= &axg_aoclk_saradc.hw,
-+	[CLKID_AO_CLK81]	= &axg_aoclk_clk81.hw,
-+	[CLKID_AO_SAR_ADC_SEL]	= &axg_aoclk_saradc_mux.hw,
-+	[CLKID_AO_SAR_ADC_DIV]	= &axg_aoclk_saradc_div.hw,
-+	[CLKID_AO_SAR_ADC_CLK]	= &axg_aoclk_saradc_gate.hw,
-+	[CLKID_AO_CTS_OSCIN]	= &axg_aoclk_cts_oscin.hw,
-+	[CLKID_AO_32K_PRE]	= &axg_aoclk_32k_pre.hw,
-+	[CLKID_AO_32K_DIV]	= &axg_aoclk_32k_div.hw,
-+	[CLKID_AO_32K_SEL]	= &axg_aoclk_32k_sel.hw,
-+	[CLKID_AO_32K]		= &axg_aoclk_32k.hw,
-+	[CLKID_AO_CTS_RTC_OSCIN] = &axg_aoclk_cts_rtc_oscin.hw,
- };
- 
- static const struct meson_aoclk_data axg_aoclkc_data = {
-@@ -317,7 +314,10 @@ static const struct meson_aoclk_data axg_aoclkc_data = {
- 	.reset		= axg_aoclk_reset,
- 	.num_clks	= ARRAY_SIZE(axg_aoclk_regmap),
- 	.clks		= axg_aoclk_regmap,
--	.hw_data	= &axg_aoclk_onecell_data,
-+	.hw_clks 	= {
-+		.hws	= axg_aoclk_hw_clks,
-+		.num	= ARRAY_SIZE(axg_aoclk_hw_clks),
-+	},
- };
- 
- static const struct of_device_id axg_aoclkc_match_table[] = {
-diff --git a/drivers/clk/meson/axg-aoclk.h b/drivers/clk/meson/axg-aoclk.h
-index 3cc27e85170f..fe23dc53aa73 100644
---- a/drivers/clk/meson/axg-aoclk.h
-+++ b/drivers/clk/meson/axg-aoclk.h
-@@ -10,8 +10,6 @@
- #ifndef __AXG_AOCLKC_H
- #define __AXG_AOCLKC_H
- 
--#define NR_CLKS	17
--
- #include <dt-bindings/clock/axg-aoclkc.h>
- #include <dt-bindings/reset/axg-aoclkc.h>
- 
-diff --git a/drivers/clk/meson/g12a-aoclk.c b/drivers/clk/meson/g12a-aoclk.c
-index b52990e574d2..9b258c1bc2d1 100644
---- a/drivers/clk/meson/g12a-aoclk.c
-+++ b/drivers/clk/meson/g12a-aoclk.c
-@@ -411,39 +411,36 @@ static struct clk_regmap *g12a_aoclk_regmap[] = {
- 	&g12a_aoclk_saradc_gate,
- };
- 
--static const struct clk_hw_onecell_data g12a_aoclk_onecell_data = {
--	.hws = {
--		[CLKID_AO_AHB]		= &g12a_aoclk_ahb.hw,
--		[CLKID_AO_IR_IN]	= &g12a_aoclk_ir_in.hw,
--		[CLKID_AO_I2C_M0]	= &g12a_aoclk_i2c_m0.hw,
--		[CLKID_AO_I2C_S0]	= &g12a_aoclk_i2c_s0.hw,
--		[CLKID_AO_UART]		= &g12a_aoclk_uart.hw,
--		[CLKID_AO_PROD_I2C]	= &g12a_aoclk_prod_i2c.hw,
--		[CLKID_AO_UART2]	= &g12a_aoclk_uart2.hw,
--		[CLKID_AO_IR_OUT]	= &g12a_aoclk_ir_out.hw,
--		[CLKID_AO_SAR_ADC]	= &g12a_aoclk_saradc.hw,
--		[CLKID_AO_MAILBOX]	= &g12a_aoclk_mailbox.hw,
--		[CLKID_AO_M3]		= &g12a_aoclk_m3.hw,
--		[CLKID_AO_AHB_SRAM]	= &g12a_aoclk_ahb_sram.hw,
--		[CLKID_AO_RTI]		= &g12a_aoclk_rti.hw,
--		[CLKID_AO_M4_FCLK]	= &g12a_aoclk_m4_fclk.hw,
--		[CLKID_AO_M4_HCLK]	= &g12a_aoclk_m4_hclk.hw,
--		[CLKID_AO_CLK81]	= &g12a_aoclk_clk81.hw,
--		[CLKID_AO_SAR_ADC_SEL]	= &g12a_aoclk_saradc_mux.hw,
--		[CLKID_AO_SAR_ADC_DIV]	= &g12a_aoclk_saradc_div.hw,
--		[CLKID_AO_SAR_ADC_CLK]	= &g12a_aoclk_saradc_gate.hw,
--		[CLKID_AO_CTS_OSCIN]	= &g12a_aoclk_cts_oscin.hw,
--		[CLKID_AO_32K_PRE]	= &g12a_aoclk_32k_by_oscin_pre.hw,
--		[CLKID_AO_32K_DIV]	= &g12a_aoclk_32k_by_oscin_div.hw,
--		[CLKID_AO_32K_SEL]	= &g12a_aoclk_32k_by_oscin_sel.hw,
--		[CLKID_AO_32K]		= &g12a_aoclk_32k_by_oscin.hw,
--		[CLKID_AO_CEC_PRE]	= &g12a_aoclk_cec_pre.hw,
--		[CLKID_AO_CEC_DIV]	= &g12a_aoclk_cec_div.hw,
--		[CLKID_AO_CEC_SEL]	= &g12a_aoclk_cec_sel.hw,
--		[CLKID_AO_CEC]		= &g12a_aoclk_cec.hw,
--		[CLKID_AO_CTS_RTC_OSCIN] = &g12a_aoclk_cts_rtc_oscin.hw,
--	},
--	.num = NR_CLKS,
-+static struct clk_hw *g12a_aoclk_hw_clks[] = {
-+	[CLKID_AO_AHB]		= &g12a_aoclk_ahb.hw,
-+	[CLKID_AO_IR_IN]	= &g12a_aoclk_ir_in.hw,
-+	[CLKID_AO_I2C_M0]	= &g12a_aoclk_i2c_m0.hw,
-+	[CLKID_AO_I2C_S0]	= &g12a_aoclk_i2c_s0.hw,
-+	[CLKID_AO_UART]		= &g12a_aoclk_uart.hw,
-+	[CLKID_AO_PROD_I2C]	= &g12a_aoclk_prod_i2c.hw,
-+	[CLKID_AO_UART2]	= &g12a_aoclk_uart2.hw,
-+	[CLKID_AO_IR_OUT]	= &g12a_aoclk_ir_out.hw,
-+	[CLKID_AO_SAR_ADC]	= &g12a_aoclk_saradc.hw,
-+	[CLKID_AO_MAILBOX]	= &g12a_aoclk_mailbox.hw,
-+	[CLKID_AO_M3]		= &g12a_aoclk_m3.hw,
-+	[CLKID_AO_AHB_SRAM]	= &g12a_aoclk_ahb_sram.hw,
-+	[CLKID_AO_RTI]		= &g12a_aoclk_rti.hw,
-+	[CLKID_AO_M4_FCLK]	= &g12a_aoclk_m4_fclk.hw,
-+	[CLKID_AO_M4_HCLK]	= &g12a_aoclk_m4_hclk.hw,
-+	[CLKID_AO_CLK81]	= &g12a_aoclk_clk81.hw,
-+	[CLKID_AO_SAR_ADC_SEL]	= &g12a_aoclk_saradc_mux.hw,
-+	[CLKID_AO_SAR_ADC_DIV]	= &g12a_aoclk_saradc_div.hw,
-+	[CLKID_AO_SAR_ADC_CLK]	= &g12a_aoclk_saradc_gate.hw,
-+	[CLKID_AO_CTS_OSCIN]	= &g12a_aoclk_cts_oscin.hw,
-+	[CLKID_AO_32K_PRE]	= &g12a_aoclk_32k_by_oscin_pre.hw,
-+	[CLKID_AO_32K_DIV]	= &g12a_aoclk_32k_by_oscin_div.hw,
-+	[CLKID_AO_32K_SEL]	= &g12a_aoclk_32k_by_oscin_sel.hw,
-+	[CLKID_AO_32K]		= &g12a_aoclk_32k_by_oscin.hw,
-+	[CLKID_AO_CEC_PRE]	= &g12a_aoclk_cec_pre.hw,
-+	[CLKID_AO_CEC_DIV]	= &g12a_aoclk_cec_div.hw,
-+	[CLKID_AO_CEC_SEL]	= &g12a_aoclk_cec_sel.hw,
-+	[CLKID_AO_CEC]		= &g12a_aoclk_cec.hw,
-+	[CLKID_AO_CTS_RTC_OSCIN] = &g12a_aoclk_cts_rtc_oscin.hw,
- };
- 
- static const struct meson_aoclk_data g12a_aoclkc_data = {
-@@ -452,7 +449,10 @@ static const struct meson_aoclk_data g12a_aoclkc_data = {
- 	.reset		= g12a_aoclk_reset,
- 	.num_clks	= ARRAY_SIZE(g12a_aoclk_regmap),
- 	.clks		= g12a_aoclk_regmap,
--	.hw_data	= &g12a_aoclk_onecell_data,
-+	.hw_clks 	= {
-+		.hws	= g12a_aoclk_hw_clks,
-+		.num	= ARRAY_SIZE(g12a_aoclk_hw_clks),
-+	},
- };
- 
- static const struct of_device_id g12a_aoclkc_match_table[] = {
-diff --git a/drivers/clk/meson/g12a-aoclk.h b/drivers/clk/meson/g12a-aoclk.h
-index a67c8a7cd7c4..077bd25b94a1 100644
---- a/drivers/clk/meson/g12a-aoclk.h
-+++ b/drivers/clk/meson/g12a-aoclk.h
-@@ -24,8 +24,6 @@
- #define CLKID_AO_CEC_DIV	25
- #define CLKID_AO_CEC_SEL	26
- 
--#define NR_CLKS	29
--
- #include <dt-bindings/clock/g12a-aoclkc.h>
- #include <dt-bindings/reset/g12a-aoclkc.h>
- 
-diff --git a/drivers/clk/meson/gxbb-aoclk.c b/drivers/clk/meson/gxbb-aoclk.c
-index fce95cf89836..736c35d126f5 100644
---- a/drivers/clk/meson/gxbb-aoclk.c
-+++ b/drivers/clk/meson/gxbb-aoclk.c
-@@ -252,8 +252,7 @@ static struct clk_regmap *gxbb_aoclk[] = {
- 	&ao_cts_cec,
- };
- 
--static const struct clk_hw_onecell_data gxbb_aoclk_onecell_data = {
--	.hws = {
-+static struct clk_hw *gxbb_aoclk_hw_clks[] = {
- 		[CLKID_AO_REMOTE] = &remote_ao.hw,
- 		[CLKID_AO_I2C_MASTER] = &i2c_master_ao.hw,
- 		[CLKID_AO_I2C_SLAVE] = &i2c_slave_ao.hw,
-@@ -268,8 +267,6 @@ static const struct clk_hw_onecell_data gxbb_aoclk_onecell_data = {
- 		[CLKID_AO_32K] = &ao_32k.hw,
- 		[CLKID_AO_CTS_RTC_OSCIN] = &ao_cts_rtc_oscin.hw,
- 		[CLKID_AO_CLK81] = &ao_clk81.hw,
--	},
--	.num = NR_CLKS,
- };
- 
- static const struct meson_aoclk_data gxbb_aoclkc_data = {
-@@ -278,7 +275,10 @@ static const struct meson_aoclk_data gxbb_aoclkc_data = {
- 	.reset		= gxbb_aoclk_reset,
- 	.num_clks	= ARRAY_SIZE(gxbb_aoclk),
- 	.clks		= gxbb_aoclk,
--	.hw_data	= &gxbb_aoclk_onecell_data,
-+	.hw_clks 	= {
-+		.hws	= gxbb_aoclk_hw_clks,
-+		.num	= ARRAY_SIZE(gxbb_aoclk_hw_clks),
-+	},
- };
- 
- static const struct of_device_id gxbb_aoclkc_match_table[] = {
-diff --git a/drivers/clk/meson/gxbb-aoclk.h b/drivers/clk/meson/gxbb-aoclk.h
-index 1db16f9b37d4..94197b957512 100644
---- a/drivers/clk/meson/gxbb-aoclk.h
-+++ b/drivers/clk/meson/gxbb-aoclk.h
-@@ -7,8 +7,6 @@
- #ifndef __GXBB_AOCLKC_H
- #define __GXBB_AOCLKC_H
- 
--#define NR_CLKS	14
--
- #include <dt-bindings/clock/gxbb-aoclkc.h>
- #include <dt-bindings/reset/gxbb-aoclkc.h>
- 
-diff --git a/drivers/clk/meson/meson-aoclk.c b/drivers/clk/meson/meson-aoclk.c
-index 434cd8f9de82..e7a72bdd0db0 100644
---- a/drivers/clk/meson/meson-aoclk.c
-+++ b/drivers/clk/meson/meson-aoclk.c
-@@ -75,19 +75,18 @@ int meson_aoclkc_probe(struct platform_device *pdev)
- 		data->clks[clkid]->map = regmap;
- 
- 	/* Register all clks */
--	for (clkid = 0; clkid < data->hw_data->num; clkid++) {
--		if (!data->hw_data->hws[clkid])
-+	for (clkid = 0; clkid < data->hw_clks.num; clkid++) {
-+		if (!data->hw_clks.hws[clkid])
- 			continue;
- 
--		ret = devm_clk_hw_register(dev, data->hw_data->hws[clkid]);
-+		ret = devm_clk_hw_register(dev, data->hw_clks.hws[clkid]);
- 		if (ret) {
- 			dev_err(dev, "Clock registration failed\n");
- 			return ret;
- 		}
- 	}
- 
--	return devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get,
--		(void *) data->hw_data);
-+	return devm_of_clk_add_hw_provider(dev, meson_clk_hw_get, (void *)&data->hw_clks);
- }
- EXPORT_SYMBOL_GPL(meson_aoclkc_probe);
- MODULE_LICENSE("GPL v2");
-diff --git a/drivers/clk/meson/meson-aoclk.h b/drivers/clk/meson/meson-aoclk.h
-index 605b43855a69..308be3e4814a 100644
---- a/drivers/clk/meson/meson-aoclk.h
-+++ b/drivers/clk/meson/meson-aoclk.h
-@@ -17,6 +17,7 @@
- #include <linux/reset-controller.h>
- 
+ 	select COMMON_CLK_MESON_PLL
+ 	help
+ 	  Support for the PLL clock controller on Amlogic A113L based
+@@ -119,6 +120,7 @@ config COMMON_CLK_A1_PERIPHERALS
+ 	depends on ARM64
+ 	select COMMON_CLK_MESON_DUALDIV
+ 	select COMMON_CLK_MESON_REGMAP
++	select COMMON_CLK_MESON_CLKC_UTILS
+ 	help
+ 	  Support for the Peripherals clock controller on Amlogic A113L based
+ 	  device, A1 SoC Family. Say Y if you want A1 Peripherals clock
+diff --git a/drivers/clk/meson/a1-peripherals.c b/drivers/clk/meson/a1-peripherals.c
+index b320134fefeb..a5cab418736a 100644
+--- a/drivers/clk/meson/a1-peripherals.c
++++ b/drivers/clk/meson/a1-peripherals.c
+@@ -13,6 +13,7 @@
+ #include "a1-peripherals.h"
+ #include "clk-dualdiv.h"
  #include "clk-regmap.h"
 +#include "meson-clkc-utils.h"
  
- struct meson_aoclk_data {
- 	const unsigned int			reset_reg;
-@@ -24,7 +25,7 @@ struct meson_aoclk_data {
- 	const unsigned int			*reset;
- 	const int				num_clks;
- 	struct clk_regmap			**clks;
--	const struct clk_hw_onecell_data	*hw_data;
-+	struct meson_clk_hw_data		hw_clks;
+ static struct clk_regmap xtal_in = {
+ 	.data = &(struct clk_regmap_gate_data){
+@@ -1866,165 +1867,161 @@ static MESON_GATE(rom,		AXI_CLK_EN,	11);
+ static MESON_GATE(prod_i2c,	AXI_CLK_EN,	12);
+ 
+ /* Array of all clocks registered by this provider */
+-static struct clk_hw_onecell_data a1_periphs_clks = {
+-	.hws = {
+-		[CLKID_XTAL_IN]			= &xtal_in.hw,
+-		[CLKID_FIXPLL_IN]		= &fixpll_in.hw,
+-		[CLKID_USB_PHY_IN]		= &usb_phy_in.hw,
+-		[CLKID_USB_CTRL_IN]		= &usb_ctrl_in.hw,
+-		[CLKID_HIFIPLL_IN]		= &hifipll_in.hw,
+-		[CLKID_SYSPLL_IN]		= &syspll_in.hw,
+-		[CLKID_DDS_IN]			= &dds_in.hw,
+-		[CLKID_SYS]			= &sys.hw,
+-		[CLKID_CLKTREE]			= &clktree.hw,
+-		[CLKID_RESET_CTRL]		= &reset_ctrl.hw,
+-		[CLKID_ANALOG_CTRL]		= &analog_ctrl.hw,
+-		[CLKID_PWR_CTRL]		= &pwr_ctrl.hw,
+-		[CLKID_PAD_CTRL]		= &pad_ctrl.hw,
+-		[CLKID_SYS_CTRL]		= &sys_ctrl.hw,
+-		[CLKID_TEMP_SENSOR]		= &temp_sensor.hw,
+-		[CLKID_AM2AXI_DIV]		= &am2axi_dev.hw,
+-		[CLKID_SPICC_B]			= &spicc_b.hw,
+-		[CLKID_SPICC_A]			= &spicc_a.hw,
+-		[CLKID_MSR]			= &msr.hw,
+-		[CLKID_AUDIO]			= &audio.hw,
+-		[CLKID_JTAG_CTRL]		= &jtag_ctrl.hw,
+-		[CLKID_SARADC_EN]		= &saradc_en.hw,
+-		[CLKID_PWM_EF]			= &pwm_ef.hw,
+-		[CLKID_PWM_CD]			= &pwm_cd.hw,
+-		[CLKID_PWM_AB]			= &pwm_ab.hw,
+-		[CLKID_CEC]			= &cec.hw,
+-		[CLKID_I2C_S]			= &i2c_s.hw,
+-		[CLKID_IR_CTRL]			= &ir_ctrl.hw,
+-		[CLKID_I2C_M_D]			= &i2c_m_d.hw,
+-		[CLKID_I2C_M_C]			= &i2c_m_c.hw,
+-		[CLKID_I2C_M_B]			= &i2c_m_b.hw,
+-		[CLKID_I2C_M_A]			= &i2c_m_a.hw,
+-		[CLKID_ACODEC]			= &acodec.hw,
+-		[CLKID_OTP]			= &otp.hw,
+-		[CLKID_SD_EMMC_A]		= &sd_emmc_a.hw,
+-		[CLKID_USB_PHY]			= &usb_phy.hw,
+-		[CLKID_USB_CTRL]		= &usb_ctrl.hw,
+-		[CLKID_SYS_DSPB]		= &sys_dspb.hw,
+-		[CLKID_SYS_DSPA]		= &sys_dspa.hw,
+-		[CLKID_DMA]			= &dma.hw,
+-		[CLKID_IRQ_CTRL]		= &irq_ctrl.hw,
+-		[CLKID_NIC]			= &nic.hw,
+-		[CLKID_GIC]			= &gic.hw,
+-		[CLKID_UART_C]			= &uart_c.hw,
+-		[CLKID_UART_B]			= &uart_b.hw,
+-		[CLKID_UART_A]			= &uart_a.hw,
+-		[CLKID_SYS_PSRAM]		= &sys_psram.hw,
+-		[CLKID_RSA]			= &rsa.hw,
+-		[CLKID_CORESIGHT]		= &coresight.hw,
+-		[CLKID_AM2AXI_VAD]		= &am2axi_vad.hw,
+-		[CLKID_AUDIO_VAD]		= &audio_vad.hw,
+-		[CLKID_AXI_DMC]			= &axi_dmc.hw,
+-		[CLKID_AXI_PSRAM]		= &axi_psram.hw,
+-		[CLKID_RAMB]			= &ramb.hw,
+-		[CLKID_RAMA]			= &rama.hw,
+-		[CLKID_AXI_SPIFC]		= &axi_spifc.hw,
+-		[CLKID_AXI_NIC]			= &axi_nic.hw,
+-		[CLKID_AXI_DMA]			= &axi_dma.hw,
+-		[CLKID_CPU_CTRL]		= &cpu_ctrl.hw,
+-		[CLKID_ROM]			= &rom.hw,
+-		[CLKID_PROC_I2C]		= &prod_i2c.hw,
+-		[CLKID_DSPA_SEL]		= &dspa_sel.hw,
+-		[CLKID_DSPB_SEL]		= &dspb_sel.hw,
+-		[CLKID_DSPA_EN]			= &dspa_en.hw,
+-		[CLKID_DSPA_EN_NIC]		= &dspa_en_nic.hw,
+-		[CLKID_DSPB_EN]			= &dspb_en.hw,
+-		[CLKID_DSPB_EN_NIC]		= &dspb_en_nic.hw,
+-		[CLKID_RTC]			= &rtc.hw,
+-		[CLKID_CECA_32K]		= &ceca_32k_out.hw,
+-		[CLKID_CECB_32K]		= &cecb_32k_out.hw,
+-		[CLKID_24M]			= &clk_24m.hw,
+-		[CLKID_12M]			= &clk_12m.hw,
+-		[CLKID_FCLK_DIV2_DIVN]		= &fclk_div2_divn.hw,
+-		[CLKID_GEN]			= &gen.hw,
+-		[CLKID_SARADC_SEL]		= &saradc_sel.hw,
+-		[CLKID_SARADC]			= &saradc.hw,
+-		[CLKID_PWM_A]			= &pwm_a.hw,
+-		[CLKID_PWM_B]			= &pwm_b.hw,
+-		[CLKID_PWM_C]			= &pwm_c.hw,
+-		[CLKID_PWM_D]			= &pwm_d.hw,
+-		[CLKID_PWM_E]			= &pwm_e.hw,
+-		[CLKID_PWM_F]			= &pwm_f.hw,
+-		[CLKID_SPICC]			= &spicc.hw,
+-		[CLKID_TS]			= &ts.hw,
+-		[CLKID_SPIFC]			= &spifc.hw,
+-		[CLKID_USB_BUS]			= &usb_bus.hw,
+-		[CLKID_SD_EMMC]			= &sd_emmc.hw,
+-		[CLKID_PSRAM]			= &psram.hw,
+-		[CLKID_DMC]			= &dmc.hw,
+-		[CLKID_SYS_A_SEL]		= &sys_a_sel.hw,
+-		[CLKID_SYS_A_DIV]		= &sys_a_div.hw,
+-		[CLKID_SYS_A]			= &sys_a.hw,
+-		[CLKID_SYS_B_SEL]		= &sys_b_sel.hw,
+-		[CLKID_SYS_B_DIV]		= &sys_b_div.hw,
+-		[CLKID_SYS_B]			= &sys_b.hw,
+-		[CLKID_DSPA_A_SEL]		= &dspa_a_sel.hw,
+-		[CLKID_DSPA_A_DIV]		= &dspa_a_div.hw,
+-		[CLKID_DSPA_A]			= &dspa_a.hw,
+-		[CLKID_DSPA_B_SEL]		= &dspa_b_sel.hw,
+-		[CLKID_DSPA_B_DIV]		= &dspa_b_div.hw,
+-		[CLKID_DSPA_B]			= &dspa_b.hw,
+-		[CLKID_DSPB_A_SEL]		= &dspb_a_sel.hw,
+-		[CLKID_DSPB_A_DIV]		= &dspb_a_div.hw,
+-		[CLKID_DSPB_A]			= &dspb_a.hw,
+-		[CLKID_DSPB_B_SEL]		= &dspb_b_sel.hw,
+-		[CLKID_DSPB_B_DIV]		= &dspb_b_div.hw,
+-		[CLKID_DSPB_B]			= &dspb_b.hw,
+-		[CLKID_RTC_32K_IN]		= &rtc_32k_in.hw,
+-		[CLKID_RTC_32K_DIV]		= &rtc_32k_div.hw,
+-		[CLKID_RTC_32K_XTAL]		= &rtc_32k_xtal.hw,
+-		[CLKID_RTC_32K_SEL]		= &rtc_32k_sel.hw,
+-		[CLKID_CECB_32K_IN]		= &cecb_32k_in.hw,
+-		[CLKID_CECB_32K_DIV]		= &cecb_32k_div.hw,
+-		[CLKID_CECB_32K_SEL_PRE]	= &cecb_32k_sel_pre.hw,
+-		[CLKID_CECB_32K_SEL]		= &cecb_32k_sel.hw,
+-		[CLKID_CECA_32K_IN]		= &ceca_32k_in.hw,
+-		[CLKID_CECA_32K_DIV]		= &ceca_32k_div.hw,
+-		[CLKID_CECA_32K_SEL_PRE]	= &ceca_32k_sel_pre.hw,
+-		[CLKID_CECA_32K_SEL]		= &ceca_32k_sel.hw,
+-		[CLKID_DIV2_PRE]		= &fclk_div2_divn_pre.hw,
+-		[CLKID_24M_DIV2]		= &clk_24m_div2.hw,
+-		[CLKID_GEN_SEL]			= &gen_sel.hw,
+-		[CLKID_GEN_DIV]			= &gen_div.hw,
+-		[CLKID_SARADC_DIV]		= &saradc_div.hw,
+-		[CLKID_PWM_A_SEL]		= &pwm_a_sel.hw,
+-		[CLKID_PWM_A_DIV]		= &pwm_a_div.hw,
+-		[CLKID_PWM_B_SEL]		= &pwm_b_sel.hw,
+-		[CLKID_PWM_B_DIV]		= &pwm_b_div.hw,
+-		[CLKID_PWM_C_SEL]		= &pwm_c_sel.hw,
+-		[CLKID_PWM_C_DIV]		= &pwm_c_div.hw,
+-		[CLKID_PWM_D_SEL]		= &pwm_d_sel.hw,
+-		[CLKID_PWM_D_DIV]		= &pwm_d_div.hw,
+-		[CLKID_PWM_E_SEL]		= &pwm_e_sel.hw,
+-		[CLKID_PWM_E_DIV]		= &pwm_e_div.hw,
+-		[CLKID_PWM_F_SEL]		= &pwm_f_sel.hw,
+-		[CLKID_PWM_F_DIV]		= &pwm_f_div.hw,
+-		[CLKID_SPICC_SEL]		= &spicc_sel.hw,
+-		[CLKID_SPICC_DIV]		= &spicc_div.hw,
+-		[CLKID_SPICC_SEL2]		= &spicc_sel2.hw,
+-		[CLKID_TS_DIV]			= &ts_div.hw,
+-		[CLKID_SPIFC_SEL]		= &spifc_sel.hw,
+-		[CLKID_SPIFC_DIV]		= &spifc_div.hw,
+-		[CLKID_SPIFC_SEL2]		= &spifc_sel2.hw,
+-		[CLKID_USB_BUS_SEL]		= &usb_bus_sel.hw,
+-		[CLKID_USB_BUS_DIV]		= &usb_bus_div.hw,
+-		[CLKID_SD_EMMC_SEL]		= &sd_emmc_sel.hw,
+-		[CLKID_SD_EMMC_DIV]		= &sd_emmc_div.hw,
+-		[CLKID_SD_EMMC_SEL2]		= &sd_emmc_sel2.hw,
+-		[CLKID_PSRAM_SEL]		= &psram_sel.hw,
+-		[CLKID_PSRAM_DIV]		= &psram_div.hw,
+-		[CLKID_PSRAM_SEL2]		= &psram_sel2.hw,
+-		[CLKID_DMC_SEL]			= &dmc_sel.hw,
+-		[CLKID_DMC_DIV]			= &dmc_div.hw,
+-		[CLKID_DMC_SEL2]		= &dmc_sel2.hw,
+-		[NR_CLKS]			= NULL,
+-	},
+-	.num = NR_CLKS,
++static struct clk_hw *a1_periphs_hw_clks[] = {
++	[CLKID_XTAL_IN]			= &xtal_in.hw,
++	[CLKID_FIXPLL_IN]		= &fixpll_in.hw,
++	[CLKID_USB_PHY_IN]		= &usb_phy_in.hw,
++	[CLKID_USB_CTRL_IN]		= &usb_ctrl_in.hw,
++	[CLKID_HIFIPLL_IN]		= &hifipll_in.hw,
++	[CLKID_SYSPLL_IN]		= &syspll_in.hw,
++	[CLKID_DDS_IN]			= &dds_in.hw,
++	[CLKID_SYS]			= &sys.hw,
++	[CLKID_CLKTREE]			= &clktree.hw,
++	[CLKID_RESET_CTRL]		= &reset_ctrl.hw,
++	[CLKID_ANALOG_CTRL]		= &analog_ctrl.hw,
++	[CLKID_PWR_CTRL]		= &pwr_ctrl.hw,
++	[CLKID_PAD_CTRL]		= &pad_ctrl.hw,
++	[CLKID_SYS_CTRL]		= &sys_ctrl.hw,
++	[CLKID_TEMP_SENSOR]		= &temp_sensor.hw,
++	[CLKID_AM2AXI_DIV]		= &am2axi_dev.hw,
++	[CLKID_SPICC_B]			= &spicc_b.hw,
++	[CLKID_SPICC_A]			= &spicc_a.hw,
++	[CLKID_MSR]			= &msr.hw,
++	[CLKID_AUDIO]			= &audio.hw,
++	[CLKID_JTAG_CTRL]		= &jtag_ctrl.hw,
++	[CLKID_SARADC_EN]		= &saradc_en.hw,
++	[CLKID_PWM_EF]			= &pwm_ef.hw,
++	[CLKID_PWM_CD]			= &pwm_cd.hw,
++	[CLKID_PWM_AB]			= &pwm_ab.hw,
++	[CLKID_CEC]			= &cec.hw,
++	[CLKID_I2C_S]			= &i2c_s.hw,
++	[CLKID_IR_CTRL]			= &ir_ctrl.hw,
++	[CLKID_I2C_M_D]			= &i2c_m_d.hw,
++	[CLKID_I2C_M_C]			= &i2c_m_c.hw,
++	[CLKID_I2C_M_B]			= &i2c_m_b.hw,
++	[CLKID_I2C_M_A]			= &i2c_m_a.hw,
++	[CLKID_ACODEC]			= &acodec.hw,
++	[CLKID_OTP]			= &otp.hw,
++	[CLKID_SD_EMMC_A]		= &sd_emmc_a.hw,
++	[CLKID_USB_PHY]			= &usb_phy.hw,
++	[CLKID_USB_CTRL]		= &usb_ctrl.hw,
++	[CLKID_SYS_DSPB]		= &sys_dspb.hw,
++	[CLKID_SYS_DSPA]		= &sys_dspa.hw,
++	[CLKID_DMA]			= &dma.hw,
++	[CLKID_IRQ_CTRL]		= &irq_ctrl.hw,
++	[CLKID_NIC]			= &nic.hw,
++	[CLKID_GIC]			= &gic.hw,
++	[CLKID_UART_C]			= &uart_c.hw,
++	[CLKID_UART_B]			= &uart_b.hw,
++	[CLKID_UART_A]			= &uart_a.hw,
++	[CLKID_SYS_PSRAM]		= &sys_psram.hw,
++	[CLKID_RSA]			= &rsa.hw,
++	[CLKID_CORESIGHT]		= &coresight.hw,
++	[CLKID_AM2AXI_VAD]		= &am2axi_vad.hw,
++	[CLKID_AUDIO_VAD]		= &audio_vad.hw,
++	[CLKID_AXI_DMC]			= &axi_dmc.hw,
++	[CLKID_AXI_PSRAM]		= &axi_psram.hw,
++	[CLKID_RAMB]			= &ramb.hw,
++	[CLKID_RAMA]			= &rama.hw,
++	[CLKID_AXI_SPIFC]		= &axi_spifc.hw,
++	[CLKID_AXI_NIC]			= &axi_nic.hw,
++	[CLKID_AXI_DMA]			= &axi_dma.hw,
++	[CLKID_CPU_CTRL]		= &cpu_ctrl.hw,
++	[CLKID_ROM]			= &rom.hw,
++	[CLKID_PROC_I2C]		= &prod_i2c.hw,
++	[CLKID_DSPA_SEL]		= &dspa_sel.hw,
++	[CLKID_DSPB_SEL]		= &dspb_sel.hw,
++	[CLKID_DSPA_EN]			= &dspa_en.hw,
++	[CLKID_DSPA_EN_NIC]		= &dspa_en_nic.hw,
++	[CLKID_DSPB_EN]			= &dspb_en.hw,
++	[CLKID_DSPB_EN_NIC]		= &dspb_en_nic.hw,
++	[CLKID_RTC]			= &rtc.hw,
++	[CLKID_CECA_32K]		= &ceca_32k_out.hw,
++	[CLKID_CECB_32K]		= &cecb_32k_out.hw,
++	[CLKID_24M]			= &clk_24m.hw,
++	[CLKID_12M]			= &clk_12m.hw,
++	[CLKID_FCLK_DIV2_DIVN]		= &fclk_div2_divn.hw,
++	[CLKID_GEN]			= &gen.hw,
++	[CLKID_SARADC_SEL]		= &saradc_sel.hw,
++	[CLKID_SARADC]			= &saradc.hw,
++	[CLKID_PWM_A]			= &pwm_a.hw,
++	[CLKID_PWM_B]			= &pwm_b.hw,
++	[CLKID_PWM_C]			= &pwm_c.hw,
++	[CLKID_PWM_D]			= &pwm_d.hw,
++	[CLKID_PWM_E]			= &pwm_e.hw,
++	[CLKID_PWM_F]			= &pwm_f.hw,
++	[CLKID_SPICC]			= &spicc.hw,
++	[CLKID_TS]			= &ts.hw,
++	[CLKID_SPIFC]			= &spifc.hw,
++	[CLKID_USB_BUS]			= &usb_bus.hw,
++	[CLKID_SD_EMMC]			= &sd_emmc.hw,
++	[CLKID_PSRAM]			= &psram.hw,
++	[CLKID_DMC]			= &dmc.hw,
++	[CLKID_SYS_A_SEL]		= &sys_a_sel.hw,
++	[CLKID_SYS_A_DIV]		= &sys_a_div.hw,
++	[CLKID_SYS_A]			= &sys_a.hw,
++	[CLKID_SYS_B_SEL]		= &sys_b_sel.hw,
++	[CLKID_SYS_B_DIV]		= &sys_b_div.hw,
++	[CLKID_SYS_B]			= &sys_b.hw,
++	[CLKID_DSPA_A_SEL]		= &dspa_a_sel.hw,
++	[CLKID_DSPA_A_DIV]		= &dspa_a_div.hw,
++	[CLKID_DSPA_A]			= &dspa_a.hw,
++	[CLKID_DSPA_B_SEL]		= &dspa_b_sel.hw,
++	[CLKID_DSPA_B_DIV]		= &dspa_b_div.hw,
++	[CLKID_DSPA_B]			= &dspa_b.hw,
++	[CLKID_DSPB_A_SEL]		= &dspb_a_sel.hw,
++	[CLKID_DSPB_A_DIV]		= &dspb_a_div.hw,
++	[CLKID_DSPB_A]			= &dspb_a.hw,
++	[CLKID_DSPB_B_SEL]		= &dspb_b_sel.hw,
++	[CLKID_DSPB_B_DIV]		= &dspb_b_div.hw,
++	[CLKID_DSPB_B]			= &dspb_b.hw,
++	[CLKID_RTC_32K_IN]		= &rtc_32k_in.hw,
++	[CLKID_RTC_32K_DIV]		= &rtc_32k_div.hw,
++	[CLKID_RTC_32K_XTAL]		= &rtc_32k_xtal.hw,
++	[CLKID_RTC_32K_SEL]		= &rtc_32k_sel.hw,
++	[CLKID_CECB_32K_IN]		= &cecb_32k_in.hw,
++	[CLKID_CECB_32K_DIV]		= &cecb_32k_div.hw,
++	[CLKID_CECB_32K_SEL_PRE]	= &cecb_32k_sel_pre.hw,
++	[CLKID_CECB_32K_SEL]		= &cecb_32k_sel.hw,
++	[CLKID_CECA_32K_IN]		= &ceca_32k_in.hw,
++	[CLKID_CECA_32K_DIV]		= &ceca_32k_div.hw,
++	[CLKID_CECA_32K_SEL_PRE]	= &ceca_32k_sel_pre.hw,
++	[CLKID_CECA_32K_SEL]		= &ceca_32k_sel.hw,
++	[CLKID_DIV2_PRE]		= &fclk_div2_divn_pre.hw,
++	[CLKID_24M_DIV2]		= &clk_24m_div2.hw,
++	[CLKID_GEN_SEL]			= &gen_sel.hw,
++	[CLKID_GEN_DIV]			= &gen_div.hw,
++	[CLKID_SARADC_DIV]		= &saradc_div.hw,
++	[CLKID_PWM_A_SEL]		= &pwm_a_sel.hw,
++	[CLKID_PWM_A_DIV]		= &pwm_a_div.hw,
++	[CLKID_PWM_B_SEL]		= &pwm_b_sel.hw,
++	[CLKID_PWM_B_DIV]		= &pwm_b_div.hw,
++	[CLKID_PWM_C_SEL]		= &pwm_c_sel.hw,
++	[CLKID_PWM_C_DIV]		= &pwm_c_div.hw,
++	[CLKID_PWM_D_SEL]		= &pwm_d_sel.hw,
++	[CLKID_PWM_D_DIV]		= &pwm_d_div.hw,
++	[CLKID_PWM_E_SEL]		= &pwm_e_sel.hw,
++	[CLKID_PWM_E_DIV]		= &pwm_e_div.hw,
++	[CLKID_PWM_F_SEL]		= &pwm_f_sel.hw,
++	[CLKID_PWM_F_DIV]		= &pwm_f_div.hw,
++	[CLKID_SPICC_SEL]		= &spicc_sel.hw,
++	[CLKID_SPICC_DIV]		= &spicc_div.hw,
++	[CLKID_SPICC_SEL2]		= &spicc_sel2.hw,
++	[CLKID_TS_DIV]			= &ts_div.hw,
++	[CLKID_SPIFC_SEL]		= &spifc_sel.hw,
++	[CLKID_SPIFC_DIV]		= &spifc_div.hw,
++	[CLKID_SPIFC_SEL2]		= &spifc_sel2.hw,
++	[CLKID_USB_BUS_SEL]		= &usb_bus_sel.hw,
++	[CLKID_USB_BUS_DIV]		= &usb_bus_div.hw,
++	[CLKID_SD_EMMC_SEL]		= &sd_emmc_sel.hw,
++	[CLKID_SD_EMMC_DIV]		= &sd_emmc_div.hw,
++	[CLKID_SD_EMMC_SEL2]		= &sd_emmc_sel2.hw,
++	[CLKID_PSRAM_SEL]		= &psram_sel.hw,
++	[CLKID_PSRAM_DIV]		= &psram_div.hw,
++	[CLKID_PSRAM_SEL2]		= &psram_sel2.hw,
++	[CLKID_DMC_SEL]			= &dmc_sel.hw,
++	[CLKID_DMC_DIV]			= &dmc_div.hw,
++	[CLKID_DMC_SEL2]		= &dmc_sel2.hw,
  };
  
- struct meson_aoclk_reset_controller {
+ /* Convenience table to populate regmap in .probe */
+@@ -2190,6 +2187,11 @@ static struct regmap_config a1_periphs_regmap_cfg = {
+ 	.reg_stride = 4,
+ };
+ 
++static struct meson_clk_hw_data a1_periphs_clks = {
++	.hws = a1_periphs_hw_clks,
++	.num = ARRAY_SIZE(a1_periphs_hw_clks),
++};
++
+ static int meson_a1_periphs_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+@@ -2219,8 +2221,7 @@ static int meson_a1_periphs_probe(struct platform_device *pdev)
+ 					     clkid);
+ 	}
+ 
+-	return devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get,
+-					   &a1_periphs_clks);
++	return devm_of_clk_add_hw_provider(dev, meson_clk_hw_get, &a1_periphs_clks);
+ }
+ 
+ static const struct of_device_id a1_periphs_clkc_match_table[] = {
+diff --git a/drivers/clk/meson/a1-peripherals.h b/drivers/clk/meson/a1-peripherals.h
+index 526fc9ba5c9f..4d60456a95a9 100644
+--- a/drivers/clk/meson/a1-peripherals.h
++++ b/drivers/clk/meson/a1-peripherals.h
+@@ -108,6 +108,5 @@
+ #define CLKID_DMC_SEL		151
+ #define CLKID_DMC_DIV		152
+ #define CLKID_DMC_SEL2		153
+-#define NR_CLKS			154
+ 
+ #endif /* __A1_PERIPHERALS_H */
+diff --git a/drivers/clk/meson/a1-pll.c b/drivers/clk/meson/a1-pll.c
+index bd2f1d1ec6e4..25e6b567afd5 100644
+--- a/drivers/clk/meson/a1-pll.c
++++ b/drivers/clk/meson/a1-pll.c
+@@ -12,6 +12,7 @@
+ #include <linux/platform_device.h>
+ #include "a1-pll.h"
+ #include "clk-regmap.h"
++#include "meson-clkc-utils.h"
+ 
+ static struct clk_regmap fixed_pll_dco = {
+ 	.data = &(struct meson_clk_pll_data){
+@@ -268,22 +269,18 @@ static struct clk_regmap fclk_div7 = {
+ };
+ 
+ /* Array of all clocks registered by this provider */
+-static struct clk_hw_onecell_data a1_pll_clks = {
+-	.hws = {
+-		[CLKID_FIXED_PLL_DCO]	= &fixed_pll_dco.hw,
+-		[CLKID_FIXED_PLL]	= &fixed_pll.hw,
+-		[CLKID_FCLK_DIV2_DIV]	= &fclk_div2_div.hw,
+-		[CLKID_FCLK_DIV3_DIV]	= &fclk_div3_div.hw,
+-		[CLKID_FCLK_DIV5_DIV]	= &fclk_div5_div.hw,
+-		[CLKID_FCLK_DIV7_DIV]	= &fclk_div7_div.hw,
+-		[CLKID_FCLK_DIV2]	= &fclk_div2.hw,
+-		[CLKID_FCLK_DIV3]	= &fclk_div3.hw,
+-		[CLKID_FCLK_DIV5]	= &fclk_div5.hw,
+-		[CLKID_FCLK_DIV7]	= &fclk_div7.hw,
+-		[CLKID_HIFI_PLL]	= &hifi_pll.hw,
+-		[NR_PLL_CLKS]		= NULL,
+-	},
+-	.num = NR_PLL_CLKS,
++static struct clk_hw *a1_pll_hw_clks[] = {
++	[CLKID_FIXED_PLL_DCO]	= &fixed_pll_dco.hw,
++	[CLKID_FIXED_PLL]	= &fixed_pll.hw,
++	[CLKID_FCLK_DIV2_DIV]	= &fclk_div2_div.hw,
++	[CLKID_FCLK_DIV3_DIV]	= &fclk_div3_div.hw,
++	[CLKID_FCLK_DIV5_DIV]	= &fclk_div5_div.hw,
++	[CLKID_FCLK_DIV7_DIV]	= &fclk_div7_div.hw,
++	[CLKID_FCLK_DIV2]	= &fclk_div2.hw,
++	[CLKID_FCLK_DIV3]	= &fclk_div3.hw,
++	[CLKID_FCLK_DIV5]	= &fclk_div5.hw,
++	[CLKID_FCLK_DIV7]	= &fclk_div7.hw,
++	[CLKID_HIFI_PLL]	= &hifi_pll.hw,
+ };
+ 
+ static struct clk_regmap *const a1_pll_regmaps[] = {
+@@ -302,6 +299,11 @@ static struct regmap_config a1_pll_regmap_cfg = {
+ 	.reg_stride = 4,
+ };
+ 
++static struct meson_clk_hw_data a1_pll_clks = {
++	.hws = a1_pll_hw_clks,
++	.num = ARRAY_SIZE(a1_pll_hw_clks),
++};
++
+ static int meson_a1_pll_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+@@ -332,7 +334,7 @@ static int meson_a1_pll_probe(struct platform_device *pdev)
+ 					     clkid);
+ 	}
+ 
+-	return devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get,
++	return devm_of_clk_add_hw_provider(dev, meson_clk_hw_get,
+ 					   &a1_pll_clks);
+ }
+ 
+diff --git a/drivers/clk/meson/a1-pll.h b/drivers/clk/meson/a1-pll.h
+index 29726651b056..82570759e6a2 100644
+--- a/drivers/clk/meson/a1-pll.h
++++ b/drivers/clk/meson/a1-pll.h
+@@ -42,6 +42,5 @@
+ #define CLKID_FCLK_DIV3_DIV	3
+ #define CLKID_FCLK_DIV5_DIV	4
+ #define CLKID_FCLK_DIV7_DIV	5
+-#define NR_PLL_CLKS		11
+ 
+ #endif /* __A1_PLL_H */
 
 -- 
 2.34.1
