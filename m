@@ -2,82 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68FAF72CDC1
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D45472CDC4
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236582AbjFLSUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 14:20:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41558 "EHLO
+        id S237516AbjFLSUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 14:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237470AbjFLSUC (ORCPT
+        with ESMTP id S237513AbjFLSUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 14:20:02 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA20E8
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:19:59 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-51492ae66a4so6629918a12.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:19:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686593998; x=1689185998;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=C4cxOfKTTvDZcNfp7Q3cCq6cFjQ+nLVM01oDWqMRamI=;
-        b=a/yq5FtlV3i+LTkUI21h759UVdMobPe33EwC9V1kaTkfOEceXO8gcVEwppExH93p61
-         XmJM9aqDB9ob8SwguvAGhu1UEK9nyf90lRhsWtIjW0qaZoXMpjZQOr2t+n6aK3C+Pqtb
-         3P5lSHbH8eQXEuLH9BJvM3LxqC4H7LCiFCtV9uvD6MDuPOQ0dhMlEkAMxxThB3W6Mh8Z
-         pbCjeltU8snS7hMrKHfrruhn3V+qt+P9Uqk/4Mb86yXwfxmJ3beYwpLCPtRWQF/oJxW2
-         7UP4Xs3L917msGb2NwjGuttf7+f4boW+EuYoW4KfIuXgBoEOtJk1mEHUR+1diepscOJ/
-         ib7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686593998; x=1689185998;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C4cxOfKTTvDZcNfp7Q3cCq6cFjQ+nLVM01oDWqMRamI=;
-        b=Rl+XMrU8tPjnzt6WXiJWDHgUVGyPo6r98OLDPUJL7pZYpnAiY7TJt3yHaPaPg/rW7w
-         IO12rN+W6D7/XbblRdbLBmWBOQa693iQYUq+Zr93FTHoJx+JU3/MyLaUXKwB7LTgi79j
-         a2lIQjvaSalqoBJ9lxg8+ldGpCVRZvEpLpgC2iDDcLq0jGi1Syk2IqqErOVHUOeGucGE
-         kt96BmqA82pgmVgsCSkhYTna9BfiG8X/Rf/eMtdSyrkDlbIMpGn3HSh2LTaIlGmt82I5
-         FrwQVQBzHsjTwvbKkg8/leFYzWwSAY55grDvGLTGbXv7sZvApbateVJJK88kxAyDDZdS
-         f49Q==
-X-Gm-Message-State: AC+VfDyEtHGKCSB8ykaLNa5SlAz0ZfE8TZTwv/D8pKL2RhPAwUHZVdB5
-        ArDxaIggaNK32oYvxM6227wFew==
-X-Google-Smtp-Source: ACHHUZ6EnMu+AeLIi6226BV8ycsU3I7rA5S34eKhYzKJmE27e3+zJ4AJxKMBdeYLfK1LwtNfze4BPg==
-X-Received: by 2002:a17:907:9307:b0:973:ebbc:1d6a with SMTP id bu7-20020a170907930700b00973ebbc1d6amr10489039ejc.33.1686593997962;
-        Mon, 12 Jun 2023 11:19:57 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id a9-20020a17090680c900b0096f782f727esm5618321ejx.140.2023.06.12.11.19.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 11:19:57 -0700 (PDT)
-Message-ID: <73243db4-3caa-9746-0a78-223f512c9130@linaro.org>
-Date:   Mon, 12 Jun 2023 20:19:55 +0200
+        Mon, 12 Jun 2023 14:20:06 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5038E8
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:20:03 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8Dx_+vRYYdk1PkDAA--.8611S3;
+        Tue, 13 Jun 2023 02:20:01 +0800 (CST)
+Received: from [10.20.42.43] (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxjcrQYYdkO+gWAA--.57583S3;
+        Tue, 13 Jun 2023 02:20:00 +0800 (CST)
+Message-ID: <90fb836f-ba54-1d3c-965c-67f91ff89fb0@loongson.cn>
+Date:   Tue, 13 Jun 2023 02:20:00 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 05/12] dt-bindings: remoteproc: Add Qualcomm RPM
- processor/subsystem
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] drm: etnaviv: Replace of_platform.h with explicit
+ includes
 Content-Language: en-US
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org
-References: <20230531-rpm-rproc-v2-0-56a4a00c8260@gerhold.net>
- <20230531-rpm-rproc-v2-5-56a4a00c8260@gerhold.net>
- <9cdf22cc-6509-b87e-e631-4e3633d1f542@linaro.org>
- <ZISqNPnQgPNEsmxa@gerhold.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ZISqNPnQgPNEsmxa@gerhold.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+To:     Rob Herring <robh@kernel.org>
+Cc:     Lucas Stach <l.stach@pengutronix.de>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, etnaviv@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230410232647.1561308-1-robh@kernel.org>
+ <CAL_JsqLeAvEVa8h3qywqESkqGG1O+9QWqA7fc1EJeDGkmAV7Fw@mail.gmail.com>
+ <0ce32e34-d53b-4038-ef39-3b0f3e2f8a7f@loongson.cn>
+ <CAL_JsqKsa9KQxk6r=ZxtY30Mk5nk9ST5ejJ+8VXZ5vPJAGHMBg@mail.gmail.com>
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+Organization: Loongson
+In-Reply-To: <CAL_JsqKsa9KQxk6r=ZxtY30Mk5nk9ST5ejJ+8VXZ5vPJAGHMBg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxjcrQYYdkO+gWAA--.57583S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj9xXoWrZr4rWFWUXF1xGr13KrWkKrX_yoWDuFgE9F
+        1I9w4kWr4fGr97Ja90yFyDZr909ry3JF4DZ3Z5tFn3W3sayry5JrykCryrXa43WF1IkFnx
+        X3Z3AF93Ar1IgosvyTuYvTs0mTUanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvT
+        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+        cSsGvfJTRUUUbTAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+        vaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        WUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r1j6r4UM28EF7xvwVC2z280aVCY1x0267AKxVWU
+        JVW8JwAaw2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa02
+        0Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1l
+        Yx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI
+        0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4U
+        MxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI
+        0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE
+        14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20x
+        vaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWU
+        JVW8JbIYCTnIWIevJa73UjIFyTuYvjxU2G-eUUUUU
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,43 +73,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/06/2023 18:52, Stephan Gerhold wrote:
-> On Sat, Jun 10, 2023 at 06:43:17PM +0200, Krzysztof Kozlowski wrote:
->> On 08/06/2023 09:10, Stephan Gerhold wrote:
->>> On Qualcomm platforms, most subsystems (e.g. audio/modem DSP) are
->>> described as remote processors in the device tree, with a dedicated
->>> node where properties and services related to them can be described.
->>> +
->>> +  smd-edge:
->>> +    $ref: /schemas/remoteproc/qcom,smd-edge.yaml#
->>> +    description:
->>> +      Qualcomm Shared Memory subnode which represents communication edge,
->>> +      channels and devices related to the RPM subsystem.
->>> +
->>> +  glink-rpm:
+
+On 2023/6/13 02:15, Rob Herring wrote:
+> On Sun, Jun 11, 2023 at 12:49 AM Sui Jingfeng <suijingfeng@loongson.cn> wrote:
+>> Reviewed-by: Sui Jingfeng <suijingfeng@loongson.cn>
 >>
->> This should be "glink-edge", to be a bit more generic and match existing
->> smd-edge.
 >>
-> 
-> I fully agree and I actually made that change at some point before
-> sending v1. Unfortunately, it doesn't work: The node name "glink-edge"
-> is already reserved by qcom,glink-edge.yaml. While it's very similar it
-> has some subtle differences to glink-rpm-edge.yaml. For example, there
-> is no qcom,remote-pid in the RPM variant which is required by the normal
-> glink-edge.
+>> On 2023/6/10 04:17, Rob Herring wrote:
+>>> On Mon, Apr 10, 2023 at 5:26 PM Rob Herring <robh@kernel.org> wrote:
+>>>> Etnaviv doesn't use anything from of_platform.h, but depends on
+>>>> of.h, of_device.h, and platform_device.h which are all implicitly
+>>>> included, but that is going to be removed soon.
+>>>>
+>>>> Signed-off-by: Rob Herring <robh@kernel.org>
+>>>> ---
+>>>>    drivers/gpu/drm/etnaviv/etnaviv_drv.c | 4 +++-
+>>>>    1 file changed, 3 insertions(+), 1 deletion(-)
+>>> Ping!
+>>
+>> of_device.h already has 'linux/of.h' and 'linux/platform_device.h' included,
+>>
+>> Would it be sufficient by simply including linux/of_device.h ?
+> That's part of what I'm trying to remove. Standard practice is to not
+> rely on implicit includes.
 
-But the other variant has, so they are pretty similar. It could be one
-binding or some common part. Anyway we can as well drop the nodename
-from the qcom,glink-edge.yaml binding. Anyway the binding is referenced
-by each specific remote proc, so this nodename brings nothing.
+Ok, that's fine then.
 
-> Would "glink-rpm-edge" sound better?
-> 
-> Thanks,
-> Stephan
-> 
 
-Best regards,
-Krzysztof
+Tested-by: Sui Jingfeng <suijingfeng@loongson.cn>
+
+
+> Rob
+
+-- 
+Jingfeng
 
