@@ -2,67 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE26672D3AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 23:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22B1572D3AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 23:58:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237100AbjFLV6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 17:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59304 "EHLO
+        id S237905AbjFLV6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 17:58:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbjFLV6L (ORCPT
+        with ESMTP id S230095AbjFLV6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 17:58:11 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA551E41
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 14:58:10 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-54fb1bbc3f2so357801a12.0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 14:58:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686607090; x=1689199090;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/5eEw1L+15ry6U4Pjjiy2xa5UbjIi1vlwGFKCgVY01g=;
-        b=od+5GOwqnjdySkprgJDd461UY1jYfkrNx5K228+Gm0JYXuxu5dRXnEhs2uqKBoau/P
-         Cnq+b3yUVsuK6WbjZ+UEbxhf59qXkV1gnRojP5Sxt0PGau7jRFUHXQTSVYW8vvPoeRZM
-         oqzbZfL/e+WKNREciEdqjHl36r3nMByViRTDVUBp07MvCTa486Fm3u6uzTW761CeAryj
-         GBf6ClEl2/kHdm16qbSqlp+h22aXjW7d5wqaWtSwRmb8ZNP+kplXWdEdKO1pXRmMNsLG
-         UqXHaMUXNTu7gF8XPb71bC7cKl849Swbo69Mz7bZEUffE5TJe8ozck/4nZdv974RQAYA
-         1UXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686607090; x=1689199090;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/5eEw1L+15ry6U4Pjjiy2xa5UbjIi1vlwGFKCgVY01g=;
-        b=J7IjEVzi9Kd+brMR/tTnElgoqUCTOJ/sdm0x903an4TOY1cI7ngE8GQxtQ1gIrXjvD
-         g3pK+23VvWm539rP71VsbKLT0KuRvrFHfhxDTT375Fvvg/4/MWVEEiCFZaNgB76hHH5N
-         RhtfmtkS9+Os4j0e7J4eU5nDK8uhjLcoy55ksiKKRZga/8+OwdhkQnxgmgPZaE5Dcwge
-         GRXJjA1d85nEVQ+LsWYgAIboXue4lQR6Qf3P7Q4CUoXxfD0yR0wwE3vhkieVUtNK9o1w
-         B8HY71YxyDBBzC+WquOsvLSSjiNPgiv5bsqeNSnF8o4mqcy/zsyTY5b5QRxRFx+ILaO9
-         gkSQ==
-X-Gm-Message-State: AC+VfDwW/eSCqymUOzIpiqRgsbqoOc5auZXMcDqGD59Mn6Gow1Egkdvo
-        O9rR5nUjuXA6nQUkd4f8M1FxImCqXVtTr1GM7jE=
-X-Google-Smtp-Source: ACHHUZ79QtDxan/84RbUmRYJUrtnUMHFsswon5Y2H4Adu7u5YDjKAIXJ7GM6bZX6u/HGGeikemCFg5ReKX41QDldP+k=
-X-Received: by 2002:a17:90a:1a05:b0:255:8fd0:fbf4 with SMTP id
- 5-20020a17090a1a0500b002558fd0fbf4mr9578415pjk.5.1686607090068; Mon, 12 Jun
- 2023 14:58:10 -0700 (PDT)
+        Mon, 12 Jun 2023 17:58:16 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E015E57;
+        Mon, 12 Jun 2023 14:58:15 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35CLQcvP022484;
+        Mon, 12 Jun 2023 21:58:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=GvpUNUTqDJw6RO67A1tGd9vE8eGrmzVy7qyHvij5e3A=;
+ b=O9UaAIX6D6jaFWj7Qi5ePpWfV7VxDo4UAXVMUyUSvLE4j9pr4Ef6poXW0SdPzY3eylUp
+ 62IDDNwd/cOgNYS/6WK1aqaBBNI6yx/kffUHhBd4h4+Md9ZgxpGDDyGZXFUDRnG8IXJ3
+ /nYZ9GIShd//qe7wtbe+btHFh/4R15CySj7zrMc0/4d9gINFwvloHh4ZL0bMTjy7jK3X
+ LSzs36y7J9FBMkg/fDjPT1Rlsq6hUX1YMg3w5q4nQkKIrjPIml9U+ZdxWsrd5MaHiJQQ
+ LKK39JD+VWEulPNYj/dJb4KDt7Ajomv3K1wI8wv05Wolvwq3IW0SWh5ldv8SwQEkRa0W Tw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r60peseqn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Jun 2023 21:58:11 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35CLwA7q001795
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Jun 2023 21:58:10 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Mon, 12 Jun 2023 14:58:10 -0700
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        "Gokul krishna Krishnakumar" <quic_gokukris@quicinc.com>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] soc: qcom: mdt_loader: Fix split image detection
+Date:   Mon, 12 Jun 2023 14:58:04 -0700
+Message-ID: <20230612215804.1883458-1-quic_bjorande@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230610034114.981861-1-linmiaohe@huawei.com>
-In-Reply-To: <20230610034114.981861-1-linmiaohe@huawei.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Mon, 12 Jun 2023 14:57:58 -0700
-Message-ID: <CAHbLzkpnkZwmbigEp19dH+Q1tH_VWs6fuivKY=nNY7aUmTfEsg@mail.gmail.com>
-Subject: Re: [PATCH] memory tier: remove unneeded !IS_ENABLED(CONFIG_MIGRATION)
- check
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: OfPwkohd_37N73SZ8pnjdGfUxrDmsC6Z
+X-Proofpoint-ORIG-GUID: OfPwkohd_37N73SZ8pnjdGfUxrDmsC6Z
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-12_16,2023-06-12_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 lowpriorityscore=0 clxscore=1015 spamscore=0
+ adultscore=0 suspectscore=0 mlxlogscore=999 impostorscore=0 mlxscore=0
+ phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2306120188
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,34 +76,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 8:41=E2=80=AFPM Miaohe Lin <linmiaohe@huawei.com> wr=
-ote:
->
-> establish_demotion_targets() is defined while CONFIG_MIGRATION is
-> enabled. There's no need to check it again.
->
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+The enhanced detection introduced in commit '210d12c8197a ("soc: qcom:
+mdt_loader: Enhance split binary detection")' requires that all segments
+lies within the file on disk.
 
-Reviewed-by: Yang Shi <shy828301@gmail.com>
+But the Qualcomm firmware files consistently has a BSS-like segment at
+the end, with a p_offset aligned to the next 4k boundary. As the p_size
+is 0 and there's nothing to load, the image is not padded to cover this
+(empty) segment.
 
-> ---
->  mm/memory-tiers.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
-> index dd04f0ce5277..a516e303e304 100644
-> --- a/mm/memory-tiers.c
-> +++ b/mm/memory-tiers.c
-> @@ -366,7 +366,7 @@ static void establish_demotion_targets(void)
->
->         lockdep_assert_held_once(&memory_tier_lock);
->
-> -       if (!node_demotion || !IS_ENABLED(CONFIG_MIGRATION))
-> +       if (!node_demotion)
->                 return;
->
->         disable_all_demotion_targets();
-> --
-> 2.27.0
->
->
+Ignore zero-sized segments when determining if the image is split, to
+avoid this problem.
+
+Fixes: 210d12c8197a ("soc: qcom: mdt_loader: Enhance split binary detection")
+Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+---
+ drivers/soc/qcom/mdt_loader.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/soc/qcom/mdt_loader.c b/drivers/soc/qcom/mdt_loader.c
+index 9418993a3a92..6f177e46fa0f 100644
+--- a/drivers/soc/qcom/mdt_loader.c
++++ b/drivers/soc/qcom/mdt_loader.c
+@@ -275,6 +275,14 @@ static bool qcom_mdt_bins_are_split(const struct firmware *fw, const char *fw_na
+ 	phdrs = (struct elf32_phdr *)(ehdr + 1);
+ 
+ 	for (i = 0; i < ehdr->e_phnum; i++) {
++		/*
++		 * The size of the MDT file is not padded to include any
++		 * zero-sized segments at the end. Ignore these, as they should
++		 * not affect the decision about image being split or not.
++		 */
++		if (!phdrs[i].p_filesz)
++			continue;
++
+ 		seg_start = phdrs[i].p_offset;
+ 		seg_end = phdrs[i].p_offset + phdrs[i].p_filesz;
+ 		if (seg_start > fw->size || seg_end > fw->size)
+-- 
+2.25.1
+
