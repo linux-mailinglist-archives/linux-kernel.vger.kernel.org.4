@@ -2,453 +2,510 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93AB872C850
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FC9772C852
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:26:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237839AbjFLOZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 10:25:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33308 "EHLO
+        id S238764AbjFLO0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 10:26:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238696AbjFLOYm (ORCPT
+        with ESMTP id S239679AbjFLOZa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 10:24:42 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1FE268D
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 07:22:58 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-30fa23e106bso1977371f8f.3
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 07:22:58 -0700 (PDT)
+        Mon, 12 Jun 2023 10:25:30 -0400
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7071421F;
+        Mon, 12 Jun 2023 07:23:48 -0700 (PDT)
+Received: by mail-vs1-xe2b.google.com with SMTP id ada2fe7eead31-43b2c2947ceso781769137.3;
+        Mon, 12 Jun 2023 07:23:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686579771; x=1689171771;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3N5ixTiUlzWmpYmBD+1hlS/BQuXBGl9fax7Ta2e1qsU=;
-        b=IeaYOAY/ocIFff/KUtJuEnpY7ZO0aJ3N1CzM+p1jmf03pedayLTBm3ZCHzN4riEsVe
-         JdDCI/nAotUDIGCrU+ru21+hAugCl+Xap1foMWMTpT5iBgh7tiseYQ/LgJDEp0mADcJi
-         E9U1WPH/GKJcdbGLFbRemrbllEoEZvsjEB+gXXRw+IZ2Y9TIWDT8VURfj2vO6bPDsV2T
-         Q2oNzuAWOZVFynR5bKi9jo6YO2nwIvT2+qQxesrGRwFxN8EXqBsxkQZxtGYAnSgM+EX6
-         QEFHnFnHwH66dy6f/75PnojGj9FtN61F924fbUhkiNBZ+wEMzhTdI4tyFZvMbMZoaMgt
-         5Ytw==
+        d=gmail.com; s=20221208; t=1686579818; x=1689171818;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pAElZJWTZKtCyjwBqCa5bz8aeRRx4uwejBBuNcxb/pA=;
+        b=BP6Ce52ALdrFgHc35k2qFqALsvDMxzVCP02F23z1eSPjsCyvRvEbDYavqAGkz3kz+e
+         95foU5x8poYimo8U7OfiiLgkP+DW35b3oyacBWxP4bNuJGdw1DLgxet+j+tv2QAgRP7o
+         0P3dBDxWeCfd77mPbm5zxrY2UX7/Q+d4ZrVn5D0p8mKVpHSipMw4X6EpKVvYmXOFvrOq
+         IkqT0ps8Kf7gUf9eMnx+teBLbz0tWXWtjVHV3E1gGicoivMf27+v6aZ4MDrp6yUIl2XF
+         hM+6/9oUrq1NamAX+7c7ZaAfdeKDz44zvcUqb6PBHTzyJUrab9gTvzHSCay9w2sdmEqs
+         pvNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686579771; x=1689171771;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3N5ixTiUlzWmpYmBD+1hlS/BQuXBGl9fax7Ta2e1qsU=;
-        b=bgUioQOUkVoyRaZPkylxgsU7M1cSGaIwnXOowEXix4WcRftgm2gADcW+tdgu+0R/ny
-         vN6l1X5ue/t0pH1/96nHzPmoDZ10y7DOmqSjMZoYhINY78vefE2tLGtKPVJDPNMoYhsK
-         yOhCKc2fps/mAWwvm4FMlsPYemMTB0TjthCB8WVoIkgZk6aWCn8+M95D4Ap+E04LlXcE
-         ddHsgLNFV4xPHJ8ZP6VCcAxrqlwptxOCZiqwYH5MLstvPrHQ6bM3KS0ba9fRntPjPxia
-         HQ/yykdMpTNNTKAwF/pbyXWL0FbcrhSHk3pnArJU3Rj8YkNu5bY/kuJ9ZkKt6GL6sabl
-         O2Eg==
-X-Gm-Message-State: AC+VfDzDRCFKqiUdMbL679aojpphz+eF3sg+2GXlQI95kNVYvywa/pLi
-        vm4Jn/LafpDhlNn9eLAldI4RAQ==
-X-Google-Smtp-Source: ACHHUZ6g2+LR0jP9I3gwohIAJWscdF3YHz9hAhzSh7Dn6Lw8YMs0u4LwSLKz4FwoGqB13XVW7Zdq3Q==
-X-Received: by 2002:a5d:4ece:0:b0:305:ed26:8576 with SMTP id s14-20020a5d4ece000000b00305ed268576mr4008132wrv.9.1686579770854;
-        Mon, 12 Jun 2023 07:22:50 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:b5a8:28ff:af00:a97f? ([2a05:6e02:1041:c10:b5a8:28ff:af00:a97f])
-        by smtp.googlemail.com with ESMTPSA id v17-20020adfedd1000000b0030630de6fbdsm12550688wro.13.2023.06.12.07.22.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 07:22:50 -0700 (PDT)
-Message-ID: <af4d1e00-76d6-b71a-2ed1-562e6405306b@linaro.org>
-Date:   Mon, 12 Jun 2023 16:22:49 +0200
+        d=1e100.net; s=20221208; t=1686579818; x=1689171818;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pAElZJWTZKtCyjwBqCa5bz8aeRRx4uwejBBuNcxb/pA=;
+        b=NaiLpqvtzPMLWGcZMjg0QJVYFTMeL/xj3Se5WH7MBMVFMSpCgnu0bzAbTMKPnzVp6a
+         1fLzOz5swOxHX0M3mE/tiIXkXI/NJ9VNXO5EUxsy3iSlJDxwRbXUwvHOMqlhwbwUjC82
+         xiP8gt1NaVyyo2AYU/MJbzbZW8zyqIG1bZqKr9FgXrVVzA0lb/6lFgW8nM5ITrnjGXti
+         DMt4cu4B1o0mQkAYxQMGMaoDjsCFDsF9cLQr8AmG76+EhH48bFCk7Xd08qgSSUcOZJVr
+         2FXlSLyssLUUmGQq/nQmCCs0ErJokFABP67Xhntfsbr30+WrkxS3uXQ/owphGIOWaPbz
+         6GFw==
+X-Gm-Message-State: AC+VfDx6iAd230hDk2gCv4FzNWp+3WnUVUf+DNuyvzg2vxZuYpOt4B29
+        Ppi51/9CsRaqtmGG6g72yQThjZ7M/DQZT+pQLto=
+X-Google-Smtp-Source: ACHHUZ5jBYb6Tn9naltNOXlzcvmtmpF3VFB2vHEk56WLmqrRsmzyPsSq54+vQNmusJItbZnPLcUM8m5tpsQOqoQ7Hpg=
+X-Received: by 2002:a05:6102:521:b0:43b:159b:f2c5 with SMTP id
+ m1-20020a056102052100b0043b159bf2c5mr2672624vsa.32.1686579817954; Mon, 12 Jun
+ 2023 07:23:37 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v14 1/2] thermal: loongson-2: add thermal management
- support
-Content-Language: en-US
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
+References: <20230612122926.107333-1-herve.codina@bootlin.com> <20230612122926.107333-11-herve.codina@bootlin.com>
+In-Reply-To: <20230612122926.107333-11-herve.codina@bootlin.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 12 Jun 2023 17:23:02 +0300
+Message-ID: <CAHp75VcZPFAzB8Sw_m1J4cU=+_YKJ6Ru8o7tCiZ3Z0haQre-zg@mail.gmail.com>
+Subject: Re: [PATCH v3 10/12] ASoC: soc-dapm.h: Convert macros to return a
+ compound litteral
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn,
-        zhanghongchen <zhanghongchen@loongson.cn>
-References: <20230426062018.19755-1-zhuyinbo@loongson.cn>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230426062018.19755-1-zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Conor Dooley <conor+dt@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/04/2023 08:20, Yinbo Zhu wrote:
-> This patch adds the support for Loongson-2 thermal sensor controller,
-> which can support maximum 4 sensors, each sensor contains a sampling
-> register and a control register. The sampling register is used to obtain
-> the temperature in real time, the control register GATE field is used to
-> set the threshold of high or low temperature, when the input temperature
-> is higher than the high temperature threshold or lower than the low
-> temperature threshold, an interrupt will occur.
-> 
-> Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> ---
-> Change in v14:
-> 		1. Add back depends on COMPILE_TEST.
-> 		2. The implementation of devm_thermal_add_hwmon_sysfs has changed in
-> 		   recent community code that cause compile fail issue and this verison
-> 		   add a dev args in devm_thermal_add_hwmon_sysfs to fix compile issue.
-> Change in v13:
-> 		1. Add a description about that how works the sensor.
-> 		2. Drop the COMPILE_TEST.
-> 		3. Rework the help prograph in LOONGSON2_THERMAL Kconfig.
-> 		4. Drop the 'tzd' 'irq' and 'pdev' element in loongson2_thermal_data.
-> 		5. Drop the reset of variable in loongson2_thermal_set.
-> 		6. Drop the function loongson2_thermal_get_sensor_id.
-> 		7. Drop the function loongson2_thermal_alarm_irq.
-> 		8. Rework the devm_thermal_of_zone_register.
-> 		9. Pass 'tzd' instead of 'data' in devm_request_threaded_irq.
-> 		10. Drop the "data->tzd->tzp->no_hwmon = false".
-> 		11. Drop the loongson2_thermal_remove.
-> 		12. Add the sensor id in the of_device_id data field.
-> 		13. Drop the save and restore function.
-> Change in v12:
-> 		1. Fixup it about min and max.
-> 		2. Use dev_err_probe replace dev_err in devm_request_threaded_irq context.
-> Change in v11:
-> 		1. Add min() and max() to replace related code in function
-> 		   loongson2_thermal_set.
-> 		2. Add dev_err_probe to to replace related code for function
-> 		   return value use devm_thermal_of_zone_register.
-> 		3. Replace thermal_add_hwmon_sysfs with devm_thermal_add_hwmon_sysfs
-> 		   and use dev_warn replace dev_err in this context.
-> Change in v10:
-> 		1. Add all history change log information.
-> Change in v9:
-> 		1. Switch new API that use devm_thermal_of_zone_register
-> 		   to replace previous interfaces.
-> 		2. Add depend on LOONGARCH || COMPILE_TEST.
-> Change in v8:
->                  1. Replace string loongson2/Loongson2/LOONGSON2 with loongson-2/
->                     Loongson-2/LOONGSON-2 in Kconfig and commit log and MAINTAINERS
-> 		   files.
-> Change in v7:
-> 		1. Split the modification of patch 3 and merge it into this patch.
-> 		2. Remove the unless code annotation to fix the compile warning
-> 		   when compile C code with W=1.
-> Change in v6:
-> 		1. NO change, but other patch in this series of patches set has
-> 		   changes.
-> Change in v5:
-> 		1. NO change, but other patch in this series of patches set has
-> 		   changes.
-> Change in v4:
-> 		1. Fixup the compatible.
-> Change in v3:
-> 		1. Add a function to gain sensor id an remove dts id.
-> Change in v2:
-> 		1. Remove error msg printing when addr ioremap has error.
-> 		2. Make loongson2 thermal driver was built-in by default.
-> 		3. Replace ls2k with loongson2.
-> 		4. Remove CONFIG_PM_SLEEP and set pm function type was
-> 		   __maybe_unused.
-> 
->   MAINTAINERS                         |   7 ++
->   drivers/thermal/Kconfig             |  12 ++
->   drivers/thermal/Makefile            |   1 +
->   drivers/thermal/loongson2_thermal.c | 166 ++++++++++++++++++++++++++++
->   4 files changed, 186 insertions(+)
->   create mode 100644 drivers/thermal/loongson2_thermal.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 25a0981c74b6..b3a76acd2caf 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -12143,6 +12143,13 @@ S:	Maintained
->   F:	Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml
->   F:	drivers/pinctrl/pinctrl-loongson2.c
->   
-> +LOONGSON-2 SOC SERIES THERMAL DRIVER
-> +M:	zhanghongchen <zhanghongchen@loongson.cn>
-> +M:	Yinbo Zhu <zhuyinbo@loongson.cn>
-> +L:	linux-pm@vger.kernel.org
-> +S:	Maintained
-> +F:	drivers/thermal/loongson2_thermal.c
-> +
->   LOONGSON GPIO DRIVER
->   M:	Yinbo Zhu <zhuyinbo@loongson.cn>
->   L:	linux-gpio@vger.kernel.org
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index 4cd7ab707315..c4de94e972f4 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -502,4 +502,16 @@ config KHADAS_MCU_FAN_THERMAL
->   	  If you say yes here you get support for the FAN controlled
->   	  by the Microcontroller found on the Khadas VIM boards.
->   
-> +config LOONGSON2_THERMAL
-> +	tristate "Loongson-2 SoC series thermal driver"
-> +	depends on LOONGARCH || COMPILE_TEST
-> +	depends on OF
-> +	help
-> +	  Support for Thermal driver found on Loongson-2 SoC series platforms.
-> +	  The thermal driver realizes get_temp and set_trips function, which
-> +	  are used to obtain the temperature of the current node and set the
-> +	  temperature range to trigger the interrupt. When the input temperature
-> +	  is higher than the high temperature threshold or lower than the low
-> +	  temperature threshold, the interrupt will occur.
-> +
->   endif
-> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> index eed300e83d48..4edde4df647b 100644
-> --- a/drivers/thermal/Makefile
-> +++ b/drivers/thermal/Makefile
-> @@ -62,3 +62,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
->   obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
->   obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
->   obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)	+= khadas_mcu_fan.o
-> +obj-$(CONFIG_LOONGSON2_THERMAL)	+= loongson2_thermal.o
-> diff --git a/drivers/thermal/loongson2_thermal.c b/drivers/thermal/loongson2_thermal.c
-> new file mode 100644
-> index 000000000000..6a338e6e490e
-> --- /dev/null
-> +++ b/drivers/thermal/loongson2_thermal.c
-> @@ -0,0 +1,166 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Author: zhanghongchen <zhanghongchen@loongson.cn>
-> + *         Yinbo Zhu <zhuyinbo@loongson.cn>
-> + * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
-> + */
-> +
-> +#include <linux/cpufreq.h>
-
-Is it really needed ?
-
-> +#include <linux/delay.h>
-
-Is it really needed ?
-
-> +#include <linux/interrupt.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/io.h>
-> +#include <linux/of_device.h>
-> +#include <linux/thermal.h>
-> +#include "thermal_hwmon.h"
+On Mon, Jun 12, 2023 at 3:30=E2=80=AFPM Herve Codina <herve.codina@bootlin.=
+com> wrote:
 >
-> +#define LOONGSON2_SOC_MAX_SENSOR_NUM			4
-> +
-> +#define LOONGSON2_TSENSOR_CTRL_HI			0x0
-> +#define LOONGSON2_TSENSOR_CTRL_LO			0x8
-> +#define LOONGSON2_TSENSOR_STATUS			0x10
-> +#define LOONGSON2_TSENSOR_OUT				0x14
+> The SND_SOC_DAPM_* helpers family are used to build widgets array in a
+> static way.
+>
+> Convert them to return a compound litteral in order to use them in both
 
-Please use BIT() macros
+literal
 
-> +struct loongson2_thermal_data {
-> +	int id;
-> +	void __iomem *regs;
-> +};
+> static and dynamic way.
+> With this conversion, the different SND_SOC_DAPM_* parameters can be
+> computed by the code and the widget can be built based on this parameter
+> computation.
+>   static int create_widget(char *input_name)
+>   {
+>           struct snd_soc_dapm_widget widget;
+>           char name*;
+>           ...
+>           name =3D input_name;
+>           if (!name)
+>                   name =3D "default";
+>
+>           widget =3D SND_SOC_DAPM_INPUT(name);
+>           ...
+>   }
 
-It would make sense to replace the id by the precomputed register offset 
-value.
+Suggested-by:?
 
-> +static int loongson2_thermal_set(struct loongson2_thermal_data *data,
-> +					int low, int high, bool enable)
-> +{
-> +	u64 reg_ctrl = 0;
-> +	int reg_off = data->id * 2;
-> +
-> +	if (low > high)
-> +		return -EINVAL;
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-I don't think this is supposed to happen
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> ---
+>  include/sound/soc-dapm.h | 138 ++++++++++++++++++++++++++-------------
+>  1 file changed, 92 insertions(+), 46 deletions(-)
+>
+> diff --git a/include/sound/soc-dapm.h b/include/sound/soc-dapm.h
+> index 87f8e1793af1..2e38dff16779 100644
+> --- a/include/sound/soc-dapm.h
+> +++ b/include/sound/soc-dapm.h
+> @@ -42,36 +42,45 @@ struct soc_enum;
+>
+>  /* codec domain */
+>  #define SND_SOC_DAPM_VMID(wname) \
+> -{      .id =3D snd_soc_dapm_vmid, .name =3D wname, .kcontrol_news =3D NU=
+LL, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_vmid, .name =3D wname, .kcontrol_news =3D NU=
+LL, \
+>         .num_kcontrols =3D 0}
+>
+>  /* platform domain */
+>  #define SND_SOC_DAPM_SIGGEN(wname) \
+> -{      .id =3D snd_soc_dapm_siggen, .name =3D wname, .kcontrol_news =3D =
+NULL, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_siggen, .name =3D wname, .kcontrol_news =3D =
+NULL, \
+>         .num_kcontrols =3D 0, .reg =3D SND_SOC_NOPM }
+>  #define SND_SOC_DAPM_SINK(wname) \
+> -{      .id =3D snd_soc_dapm_sink, .name =3D wname, .kcontrol_news =3D NU=
+LL, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_sink, .name =3D wname, .kcontrol_news =3D NU=
+LL, \
+>         .num_kcontrols =3D 0, .reg =3D SND_SOC_NOPM }
+>  #define SND_SOC_DAPM_INPUT(wname) \
+> -{      .id =3D snd_soc_dapm_input, .name =3D wname, .kcontrol_news =3D N=
+ULL, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_input, .name =3D wname, .kcontrol_news =3D N=
+ULL, \
+>         .num_kcontrols =3D 0, .reg =3D SND_SOC_NOPM }
+>  #define SND_SOC_DAPM_OUTPUT(wname) \
+> -{      .id =3D snd_soc_dapm_output, .name =3D wname, .kcontrol_news =3D =
+NULL, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_output, .name =3D wname, .kcontrol_news =3D =
+NULL, \
+>         .num_kcontrols =3D 0, .reg =3D SND_SOC_NOPM }
+>  #define SND_SOC_DAPM_MIC(wname, wevent) \
+> -{      .id =3D snd_soc_dapm_mic, .name =3D wname, .kcontrol_news =3D NUL=
+L, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_mic, .name =3D wname, .kcontrol_news =3D NUL=
+L, \
+>         .num_kcontrols =3D 0, .reg =3D SND_SOC_NOPM, .event =3D wevent, \
+>         .event_flags =3D SND_SOC_DAPM_PRE_PMU | SND_SOC_DAPM_POST_PMD}
+>  #define SND_SOC_DAPM_HP(wname, wevent) \
+> -{      .id =3D snd_soc_dapm_hp, .name =3D wname, .kcontrol_news =3D NULL=
+, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_hp, .name =3D wname, .kcontrol_news =3D NULL=
+, \
+>         .num_kcontrols =3D 0, .reg =3D SND_SOC_NOPM, .event =3D wevent, \
+>         .event_flags =3D SND_SOC_DAPM_POST_PMU | SND_SOC_DAPM_PRE_PMD}
+>  #define SND_SOC_DAPM_SPK(wname, wevent) \
+> -{      .id =3D snd_soc_dapm_spk, .name =3D wname, .kcontrol_news =3D NUL=
+L, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_spk, .name =3D wname, .kcontrol_news =3D NUL=
+L, \
+>         .num_kcontrols =3D 0, .reg =3D SND_SOC_NOPM, .event =3D wevent, \
+>         .event_flags =3D SND_SOC_DAPM_POST_PMU | SND_SOC_DAPM_PRE_PMD}
+>  #define SND_SOC_DAPM_LINE(wname, wevent) \
+> -{      .id =3D snd_soc_dapm_line, .name =3D wname, .kcontrol_news =3D NU=
+LL, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_line, .name =3D wname, .kcontrol_news =3D NU=
+LL, \
+>         .num_kcontrols =3D 0, .reg =3D SND_SOC_NOPM, .event =3D wevent, \
+>         .event_flags =3D SND_SOC_DAPM_POST_PMU | SND_SOC_DAPM_PRE_PMD}
+>
+> @@ -82,93 +91,110 @@ struct soc_enum;
+>  /* path domain */
+>  #define SND_SOC_DAPM_PGA(wname, wreg, wshift, winvert,\
+>          wcontrols, wncontrols) \
+> -{      .id =3D snd_soc_dapm_pga, .name =3D wname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_pga, .name =3D wname, \
+>         SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
+>         .kcontrol_news =3D wcontrols, .num_kcontrols =3D wncontrols}
+>  #define SND_SOC_DAPM_OUT_DRV(wname, wreg, wshift, winvert,\
+>          wcontrols, wncontrols) \
+> -{      .id =3D snd_soc_dapm_out_drv, .name =3D wname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_out_drv, .name =3D wname, \
+>         SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
+>         .kcontrol_news =3D wcontrols, .num_kcontrols =3D wncontrols}
+>  #define SND_SOC_DAPM_MIXER(wname, wreg, wshift, winvert, \
+>          wcontrols, wncontrols)\
+> -{      .id =3D snd_soc_dapm_mixer, .name =3D wname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_mixer, .name =3D wname, \
+>         SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
+>         .kcontrol_news =3D wcontrols, .num_kcontrols =3D wncontrols}
+>  #define SND_SOC_DAPM_MIXER_NAMED_CTL(wname, wreg, wshift, winvert, \
+>          wcontrols, wncontrols)\
+> -{       .id =3D snd_soc_dapm_mixer_named_ctl, .name =3D wname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_mixer_named_ctl, .name =3D wname, \
+>         SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
+>         .kcontrol_news =3D wcontrols, .num_kcontrols =3D wncontrols}
+>  /* DEPRECATED: use SND_SOC_DAPM_SUPPLY */
+>  #define SND_SOC_DAPM_MICBIAS(wname, wreg, wshift, winvert) \
+> -{      .id =3D snd_soc_dapm_micbias, .name =3D wname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_micbias, .name =3D wname, \
+>         SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
+>         .kcontrol_news =3D NULL, .num_kcontrols =3D 0}
+>  #define SND_SOC_DAPM_SWITCH(wname, wreg, wshift, winvert, wcontrols) \
+> -{      .id =3D snd_soc_dapm_switch, .name =3D wname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_switch, .name =3D wname, \
+>         SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
+>         .kcontrol_news =3D wcontrols, .num_kcontrols =3D 1}
+>  #define SND_SOC_DAPM_MUX(wname, wreg, wshift, winvert, wcontrols) \
+> -{      .id =3D snd_soc_dapm_mux, .name =3D wname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_mux, .name =3D wname, \
+>         SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
+>         .kcontrol_news =3D wcontrols, .num_kcontrols =3D 1}
+>  #define SND_SOC_DAPM_DEMUX(wname, wreg, wshift, winvert, wcontrols) \
+> -{      .id =3D snd_soc_dapm_demux, .name =3D wname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_demux, .name =3D wname, \
+>         SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
+>         .kcontrol_news =3D wcontrols, .num_kcontrols =3D 1}
+>
+>  /* Simplified versions of above macros, assuming wncontrols =3D ARRAY_SI=
+ZE(wcontrols) */
+>  #define SOC_PGA_ARRAY(wname, wreg, wshift, winvert,\
+>          wcontrols) \
+> -{      .id =3D snd_soc_dapm_pga, .name =3D wname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_pga, .name =3D wname, \
+>         SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
+>         .kcontrol_news =3D wcontrols, .num_kcontrols =3D ARRAY_SIZE(wcont=
+rols)}
+>  #define SOC_MIXER_ARRAY(wname, wreg, wshift, winvert, \
+>          wcontrols)\
+> -{      .id =3D snd_soc_dapm_mixer, .name =3D wname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_mixer, .name =3D wname, \
+>         SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
+>         .kcontrol_news =3D wcontrols, .num_kcontrols =3D ARRAY_SIZE(wcont=
+rols)}
+>  #define SOC_MIXER_NAMED_CTL_ARRAY(wname, wreg, wshift, winvert, \
+>          wcontrols)\
+> -{       .id =3D snd_soc_dapm_mixer_named_ctl, .name =3D wname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_mixer_named_ctl, .name =3D wname, \
+>         SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
+>         .kcontrol_news =3D wcontrols, .num_kcontrols =3D ARRAY_SIZE(wcont=
+rols)}
+>
+>  /* path domain with event - event handler must return 0 for success */
+>  #define SND_SOC_DAPM_PGA_E(wname, wreg, wshift, winvert, wcontrols, \
+>         wncontrols, wevent, wflags) \
+> -{      .id =3D snd_soc_dapm_pga, .name =3D wname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_pga, .name =3D wname, \
+>         SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
+>         .kcontrol_news =3D wcontrols, .num_kcontrols =3D wncontrols, \
+>         .event =3D wevent, .event_flags =3D wflags}
+>  #define SND_SOC_DAPM_OUT_DRV_E(wname, wreg, wshift, winvert, wcontrols, =
+\
+>         wncontrols, wevent, wflags) \
+> -{      .id =3D snd_soc_dapm_out_drv, .name =3D wname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_out_drv, .name =3D wname, \
+>         SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
+>         .kcontrol_news =3D wcontrols, .num_kcontrols =3D wncontrols, \
+>         .event =3D wevent, .event_flags =3D wflags}
+>  #define SND_SOC_DAPM_MIXER_E(wname, wreg, wshift, winvert, wcontrols, \
+>         wncontrols, wevent, wflags) \
+> -{      .id =3D snd_soc_dapm_mixer, .name =3D wname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_mixer, .name =3D wname, \
+>         SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
+>         .kcontrol_news =3D wcontrols, .num_kcontrols =3D wncontrols, \
+>         .event =3D wevent, .event_flags =3D wflags}
+>  #define SND_SOC_DAPM_MIXER_NAMED_CTL_E(wname, wreg, wshift, winvert, \
+>         wcontrols, wncontrols, wevent, wflags) \
+> -{       .id =3D snd_soc_dapm_mixer, .name =3D wname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_mixer, .name =3D wname, \
+>         SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
+>         .kcontrol_news =3D wcontrols, \
+>         .num_kcontrols =3D wncontrols, .event =3D wevent, .event_flags =
+=3D wflags}
+>  #define SND_SOC_DAPM_SWITCH_E(wname, wreg, wshift, winvert, wcontrols, \
+>         wevent, wflags) \
+> -{      .id =3D snd_soc_dapm_switch, .name =3D wname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_switch, .name =3D wname, \
+>         SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
+>         .kcontrol_news =3D wcontrols, .num_kcontrols =3D 1, \
+>         .event =3D wevent, .event_flags =3D wflags}
+>  #define SND_SOC_DAPM_MUX_E(wname, wreg, wshift, winvert, wcontrols, \
+>         wevent, wflags) \
+> -{      .id =3D snd_soc_dapm_mux, .name =3D wname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_mux, .name =3D wname, \
+>         SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
+>         .kcontrol_news =3D wcontrols, .num_kcontrols =3D 1, \
+>         .event =3D wevent, .event_flags =3D wflags}
+> @@ -176,101 +202,121 @@ struct soc_enum;
+>  /* additional sequencing control within an event type */
+>  #define SND_SOC_DAPM_PGA_S(wname, wsubseq, wreg, wshift, winvert, \
+>         wevent, wflags) \
+> -{      .id =3D snd_soc_dapm_pga, .name =3D wname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_pga, .name =3D wname, \
+>         SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
+>         .event =3D wevent, .event_flags =3D wflags, \
+>         .subseq =3D wsubseq}
+>  #define SND_SOC_DAPM_SUPPLY_S(wname, wsubseq, wreg, wshift, winvert, wev=
+ent, \
+>         wflags) \
+> -{      .id =3D snd_soc_dapm_supply, .name =3D wname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_supply, .name =3D wname, \
+>         SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
+>         .event =3D wevent, .event_flags =3D wflags, .subseq =3D wsubseq}
+>
+>  /* Simplified versions of above macros, assuming wncontrols =3D ARRAY_SI=
+ZE(wcontrols) */
+>  #define SOC_PGA_E_ARRAY(wname, wreg, wshift, winvert, wcontrols, \
+>         wevent, wflags) \
+> -{      .id =3D snd_soc_dapm_pga, .name =3D wname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_pga, .name =3D wname, \
+>         SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
+>         .kcontrol_news =3D wcontrols, .num_kcontrols =3D ARRAY_SIZE(wcont=
+rols), \
+>         .event =3D wevent, .event_flags =3D wflags}
+>  #define SOC_MIXER_E_ARRAY(wname, wreg, wshift, winvert, wcontrols, \
+>         wevent, wflags) \
+> -{      .id =3D snd_soc_dapm_mixer, .name =3D wname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_mixer, .name =3D wname, \
+>         SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
+>         .kcontrol_news =3D wcontrols, .num_kcontrols =3D ARRAY_SIZE(wcont=
+rols), \
+>         .event =3D wevent, .event_flags =3D wflags}
+>  #define SOC_MIXER_NAMED_CTL_E_ARRAY(wname, wreg, wshift, winvert, \
+>         wcontrols, wevent, wflags) \
+> -{       .id =3D snd_soc_dapm_mixer, .name =3D wname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_mixer, .name =3D wname, \
+>         SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
+>         .kcontrol_news =3D wcontrols, .num_kcontrols =3D ARRAY_SIZE(wcont=
+rols), \
+>         .event =3D wevent, .event_flags =3D wflags}
+>
+>  /* events that are pre and post DAPM */
+>  #define SND_SOC_DAPM_PRE(wname, wevent) \
+> -{      .id =3D snd_soc_dapm_pre, .name =3D wname, .kcontrol_news =3D NUL=
+L, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_pre, .name =3D wname, .kcontrol_news =3D NUL=
+L, \
+>         .num_kcontrols =3D 0, .reg =3D SND_SOC_NOPM, .event =3D wevent, \
+>         .event_flags =3D SND_SOC_DAPM_PRE_PMU | SND_SOC_DAPM_PRE_PMD}
+>  #define SND_SOC_DAPM_POST(wname, wevent) \
+> -{      .id =3D snd_soc_dapm_post, .name =3D wname, .kcontrol_news =3D NU=
+LL, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_post, .name =3D wname, .kcontrol_news =3D NU=
+LL, \
+>         .num_kcontrols =3D 0, .reg =3D SND_SOC_NOPM, .event =3D wevent, \
+>         .event_flags =3D SND_SOC_DAPM_POST_PMU | SND_SOC_DAPM_POST_PMD}
+>
+>  /* stream domain */
+>  #define SND_SOC_DAPM_AIF_IN(wname, stname, wchan, wreg, wshift, winvert)=
+ \
+> -{      .id =3D snd_soc_dapm_aif_in, .name =3D wname, .sname =3D stname, =
+\
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_aif_in, .name =3D wname, .sname =3D stname, =
+\
+>         .channel =3D wchan, SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winve=
+rt), }
+>  #define SND_SOC_DAPM_AIF_IN_E(wname, stname, wchan, wreg, wshift, winver=
+t, \
+>                               wevent, wflags)                           \
+> -{      .id =3D snd_soc_dapm_aif_in, .name =3D wname, .sname =3D stname, =
+\
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_aif_in, .name =3D wname, .sname =3D stname, =
+\
+>         .channel =3D wchan, SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winve=
+rt), \
+>         .event =3D wevent, .event_flags =3D wflags }
+>  #define SND_SOC_DAPM_AIF_OUT(wname, stname, wchan, wreg, wshift, winvert=
+) \
+> -{      .id =3D snd_soc_dapm_aif_out, .name =3D wname, .sname =3D stname,=
+ \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_aif_out, .name =3D wname, .sname =3D stname,=
+ \
+>         .channel =3D wchan, SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winve=
+rt), }
+>  #define SND_SOC_DAPM_AIF_OUT_E(wname, stname, wchan, wreg, wshift, winve=
+rt, \
+>                              wevent, wflags)                            \
+> -{      .id =3D snd_soc_dapm_aif_out, .name =3D wname, .sname =3D stname,=
+ \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_aif_out, .name =3D wname, .sname =3D stname,=
+ \
+>         .channel =3D wchan, SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winve=
+rt), \
+>         .event =3D wevent, .event_flags =3D wflags }
+>  #define SND_SOC_DAPM_DAC(wname, stname, wreg, wshift, winvert) \
+> -{      .id =3D snd_soc_dapm_dac, .name =3D wname, .sname =3D stname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_dac, .name =3D wname, .sname =3D stname, \
+>         SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert) }
+>  #define SND_SOC_DAPM_DAC_E(wname, stname, wreg, wshift, winvert, \
+>                            wevent, wflags)                              \
+> -{      .id =3D snd_soc_dapm_dac, .name =3D wname, .sname =3D stname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_dac, .name =3D wname, .sname =3D stname, \
+>         SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
+>         .event =3D wevent, .event_flags =3D wflags}
+>
+>  #define SND_SOC_DAPM_ADC(wname, stname, wreg, wshift, winvert) \
+> -{      .id =3D snd_soc_dapm_adc, .name =3D wname, .sname =3D stname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_adc, .name =3D wname, .sname =3D stname, \
+>         SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), }
+>  #define SND_SOC_DAPM_ADC_E(wname, stname, wreg, wshift, winvert, \
+>                            wevent, wflags)                              \
+> -{      .id =3D snd_soc_dapm_adc, .name =3D wname, .sname =3D stname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_adc, .name =3D wname, .sname =3D stname, \
+>         SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
+>         .event =3D wevent, .event_flags =3D wflags}
+>  #define SND_SOC_DAPM_CLOCK_SUPPLY(wname) \
+> -{      .id =3D snd_soc_dapm_clock_supply, .name =3D wname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_clock_supply, .name =3D wname, \
+>         .reg =3D SND_SOC_NOPM, .event =3D dapm_clock_event, \
+>         .event_flags =3D SND_SOC_DAPM_PRE_PMU | SND_SOC_DAPM_POST_PMD }
+>
+>  /* generic widgets */
+>  #define SND_SOC_DAPM_REG(wid, wname, wreg, wshift, wmask, won_val, woff_=
+val) \
+> -{      .id =3D wid, .name =3D wname, .kcontrol_news =3D NULL, .num_kcont=
+rols =3D 0, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D wid, .name =3D wname, .kcontrol_news =3D NULL, .num_kcont=
+rols =3D 0, \
+>         .reg =3D wreg, .shift =3D wshift, .mask =3D wmask, \
+>         .on_val =3D won_val, .off_val =3D woff_val, }
+>  #define SND_SOC_DAPM_SUPPLY(wname, wreg, wshift, winvert, wevent, wflags=
+) \
+> -{      .id =3D snd_soc_dapm_supply, .name =3D wname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_supply, .name =3D wname, \
+>         SND_SOC_DAPM_INIT_REG_VAL(wreg, wshift, winvert), \
+>         .event =3D wevent, .event_flags =3D wflags}
+>  #define SND_SOC_DAPM_REGULATOR_SUPPLY(wname, wdelay, wflags)       \
+> -{      .id =3D snd_soc_dapm_regulator_supply, .name =3D wname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_regulator_supply, .name =3D wname, \
+>         .reg =3D SND_SOC_NOPM, .shift =3D wdelay, .event =3D dapm_regulat=
+or_event, \
+>         .event_flags =3D SND_SOC_DAPM_PRE_PMU | SND_SOC_DAPM_POST_PMD, \
+>         .on_val =3D wflags}
+>  #define SND_SOC_DAPM_PINCTRL(wname, active, sleep) \
+> -{      .id =3D snd_soc_dapm_pinctrl, .name =3D wname, \
+> +(struct snd_soc_dapm_widget) { \
+> +       .id =3D snd_soc_dapm_pinctrl, .name =3D wname, \
+>         .priv =3D (&(struct snd_soc_dapm_pinctrl_priv) \
+>                 { .active_state =3D active, .sleep_state =3D sleep,}), \
+>         .reg =3D SND_SOC_NOPM, .event =3D dapm_pinctrl_event, \
+> --
+> 2.40.1
+>
 
-> +	low = max(low, -40);
-> +	high = min(high, 125);
 
-You can use clamp() alternatively (your call)
-
-> +
-> +	low += 100;
-> +	high += 100;
-> +
-> +	reg_ctrl = low;
-> +	reg_ctrl |= enable ? 0x100 : 0;
-> +	writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
-> +
-> +	reg_ctrl = high;
-> +	reg_ctrl |= enable ? 0x100 : 0;
-> +	writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
-
-Is the 'enable' boolean really useful?
-
-Wouldn't be the sensor trip points disabled by default at reset time?
-
-If it is the case then we can get ride of this variable and make the 
-routine simpler
-
-> +	return 0;
-> +}
-> +
-> +static int loongson2_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
-> +{
-> +	u32 reg_val;
-> +	struct loongson2_thermal_data *data = tz->devdata;
-> +
-> +	reg_val = readl(data->regs + LOONGSON2_TSENSOR_OUT);
-
-Seems like there is no offset for the sensor id here ?
-
-> +	*temp = ((reg_val & 0xff) - 100) * 1000;
-
-Please use macros in units.h for conversion and change literals by macro
-
-> +	return 0;
-> +}
-> +
-> +static irqreturn_t loongson2_thermal_irq_thread(int irq, void *dev)
-> +{
-> +	struct thermal_zone_device *tzd = dev;
-> +	struct loongson2_thermal_data *data = tzd->devdata;
-
-The init function tells me whatever the sensor triggering the interrupt 
-we update the same thermal zone, not necessarily the one which reach the 
-trip point.
-
-> +	/* clear interrupt */
-> +	writeb(0x3, data->regs + LOONGSON2_TSENSOR_STATUS);
-
-Replace the literal value by a macro.
-
-> +	thermal_zone_device_update(tzd, THERMAL_EVENT_UNSPECIFIED);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int loongson2_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
-> +{
-> +	struct loongson2_thermal_data *data = tz->devdata;
-> +
-> +	return loongson2_thermal_set(data, low/1000, high/1000, true);
-
-Please use macros in units.h for conversion
-
-> +}
-> +
-> +static const struct thermal_zone_device_ops loongson2_of_thermal_ops = {
-> +	.get_temp = loongson2_thermal_get_temp,
-> +	.set_trips = loongson2_thermal_set_trips,
-> +};
-> +
-> +static int loongson2_thermal_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct resource *res;
-> +	struct loongson2_thermal_data *data;
-> +	struct thermal_zone_device *tzd;
-> +	int ret, irq, i;
-> +
-> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->id = (uintptr_t)device_get_match_data(dev);
-
-The changelog says there is up to 4 sensors on the controller but the 
-initialization code seems to handle only one.
-
-Either you skip this data at all and let the loop to fill the id when 
-the thermal zone successfully registered or you add a eg. a mask with 
-the sensor (eg. 0x3 for sensor 0 and 1) and use those value in the loop.
-
-
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	data->regs = devm_ioremap(dev, res->start, resource_size(res));
-> +	if (IS_ERR(data->regs))
-> +		return PTR_ERR(data->regs);
-> +
-> +	/* get irq */
-> +	irq = platform_get_irq(pdev, 0);
-> +	if (irq < 0)
-> +		return irq;
-> +
-> +	if (data->id > LOONGSON2_SOC_MAX_SENSOR_NUM - 1 || data->id < 0) {
-> +		dev_err(dev, "sensor id error,must be in <0 ~ %d>\n",
-> +				LOONGSON2_SOC_MAX_SENSOR_NUM - 1);
-> +		return -EINVAL;
-> +	}
-
-As this is coming from a static initialization, this test is not needed.
-
-> +	writeb(0xff, data->regs + LOONGSON2_TSENSOR_STATUS);
-
-Replace the literal value by a macro
-
-> +	loongson2_thermal_set(data, 0, 0, false);
-> +
-> +	for (i = 0; i < LOONGSON2_SOC_MAX_SENSOR_NUM; i++) {
-> +		tzd = devm_thermal_of_zone_register(dev, i, data,
-> +			&loongson2_of_thermal_ops);
-> +
-> +		if (!IS_ERR(tzd))
-> +			break;
-
-Assuming the loop aims to register all the supported thermal zones, the 
-conditions should be inverted.
-
-> +		if (PTR_ERR(tzd) != ENODEV)
-> +			continue;
- >
-> +		return dev_err_probe(dev, PTR_ERR(tzd), "failed to register");
-> +	}
-> +
-> +	ret = devm_request_threaded_irq(dev, irq, NULL, loongson2_thermal_irq_thread,
-> +			IRQF_ONESHOT, "loongson2_thermal", tzd);
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret, "failed to request alarm irq\n")
-
-So there is one interrupt but 4 sensors. I assume there is one interrupt 
-per controller but I don't see in the interrupt handler routine the code 
-to figure out which sensor triggered the interrupt.
-
-> +	if (devm_thermal_add_hwmon_sysfs(dev, tzd))
-> +		dev_warn(dev, "Failed to add hwmon sysfs attributes\n");
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id of_loongson2_thermal_match[] = {
-> +	{ .compatible = "loongson,ls2k-thermal", .data = (const void *)0},
-
-May be better to replace that with a structure pointer but it is up to 
-you to decide
-
-> +	{ /* end */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, of_loongson2_thermal_match);
-> +
-> +static struct platform_driver loongson2_thermal_driver = {
-> +	.driver = {
-> +		.name		= "loongson2_thermal",
-> +		.of_match_table = of_loongson2_thermal_match,
-> +	},
-> +	.probe	= loongson2_thermal_probe,
-> +};
-> +module_platform_driver(loongson2_thermal_driver);
-> +
-> +MODULE_DESCRIPTION("Loongson2 thermal driver");
-> +MODULE_LICENSE("GPL");
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+--=20
+With Best Regards,
+Andy Shevchenko
