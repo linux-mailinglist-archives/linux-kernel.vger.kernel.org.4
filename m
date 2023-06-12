@@ -2,63 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7B5772B702
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 07:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8057F72B6FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 07:01:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235663AbjFLEyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 00:54:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54200 "EHLO
+        id S235744AbjFLEz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 00:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235612AbjFLEx5 (ORCPT
+        with ESMTP id S236324AbjFLEzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 00:53:57 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2110710FE;
-        Sun, 11 Jun 2023 21:53:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686545633; x=1718081633;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=W7NVGgppUsr4ihy99XycTwP945ERD2p7hEVN1hnMYho=;
-  b=e/XD9W8J+SZeK1vgtv7AldZG2BMlykF/J8t0RJvRqMV1xrFqKqOXpIa1
-   dlarxpwdaBoGPCQmvcNV+UITmeRlnZBd8Fqu3Uo21iy90T8IGBfhO3/xF
-   zt0SOE9m9sf14q5MjOpks4NM7UAUyN6OJDUgFDpKu+MceCiwNrT+lB59E
-   Te9Q+4/84XhQbgb/UcKSFWtszZi0Ir7vdZg8Gu8uBaptqWtMTRiAAHISR
-   WFLPYnPFYS8Zz4kJBRg2f1MlR41KYqHq6RmCvosIgQ/+OiL4OD5x1a3OA
-   eTnvE/GCb8rlt5/SvZevD3tzUmXK+kfLp2fu+/w8sUPx2dCYbnDBnOqDq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="337579166"
-X-IronPort-AV: E=Sophos;i="6.00,235,1681196400"; 
-   d="scan'208";a="337579166"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2023 21:53:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="885272721"
-X-IronPort-AV: E=Sophos;i="6.00,235,1681196400"; 
-   d="scan'208";a="885272721"
-Received: from btakahas-mobl1.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.212.231.182])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2023 21:53:52 -0700
-Message-ID: <51dfdee66713e470d9a925ac5a8f8ae1da644462.camel@linux.intel.com>
-Subject: Re: [PATCH] HID: sensor-hub: Allow multi-function sensor devices
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-input@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Sun, 11 Jun 2023 21:53:51 -0700
-In-Reply-To: <nycvar.YFH.7.76.2306091742090.5716@cbobk.fhfr.pm>
-References: <20230528092427.42332-1-daniel.thompson@linaro.org>
-         <nycvar.YFH.7.76.2306091742090.5716@cbobk.fhfr.pm>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Mon, 12 Jun 2023 00:55:24 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A451984;
+        Sun, 11 Jun 2023 21:54:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=UR/qNgYvbFATim9cZ6J3Ui0/Qb
+        Z/qB/Di6msTuVRG0xWAvMD+ZDIS1PAQBU4jZ2UEd+V47TdYOMVSEfmA6ERb6FefX5TO477/pfnRf3
+        oRpEHmOTj9U+zN2rT1gA+qMO4WCeEVp8frrbRMKNX/O7fpmXr1WS27bj/FoAoh43Br5tAhh60vSup
+        cuqy+p5ACMPmWDhpvoEHEAtfqzWqbkVt0Wohz7JPXUL+81PVFpHTw2sfjGiJ3GuWmRt6IoGhc8eF/
+        3sy/dUxagvL2yODupuuSl6+2oTdqGB40MsWgclCxP4K7Qc1S7xjE1twqoV87diqAzEMY6M/J4yTd9
+        HSz7CYcA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q8ZYz-002aKv-0P;
+        Mon, 12 Jun 2023 04:53:57 +0000
+Date:   Sun, 11 Jun 2023 21:53:57 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
+        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
+        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
+        apopple@nvidia.com, peterx@redhat.com, ying.huang@intel.com,
+        david@redhat.com, yuzhao@google.com, dhowells@redhat.com,
+        hughd@google.com, viro@zeniv.linux.org.uk, brauner@kernel.org,
+        pasha.tatashin@soleen.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v2 1/6] swap: remove remnants of polling from
+ read_swap_cache_async
+Message-ID: <ZIak5RU9iyHL5RHH@infradead.org>
+References: <20230609005158.2421285-1-surenb@google.com>
+ <20230609005158.2421285-2-surenb@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230609005158.2421285-2-surenb@google.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,36 +63,6 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-06-09 at 17:43 +0200, Jiri Kosina wrote:
-> On Sun, 28 May 2023, Daniel Thompson wrote:
-> 
-> > The Lenovo Yoga C630 has a combined keyboard and accelerometer that
-> > interfaces via i2c-hid. Currently this laptop either has a working
-> > keyboard (if CONFIG_HID_SENSOR_HUB is disabled) or a working
-> > accelerometer.
-> > only works on kernels. Put another way, most distro kernels enable
-> > CONFIG_HID_SENSOR_HUB and therefore cannot work on this device
-> > since the
-> > keyboard doesn't work!
-> > 
-> > Fix this by providing a richer connect mask during the probe. With
-> > this
-> > change both keyboard and screen orientation sensors work correctly.
-> > 
-> > Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
-> 
-> Srinivas, are you aware of any multi-function device that this patch
-> might 
-> break?
-I tried two systems, one with ISH and another with external hub.
-Didn't break anything.
-I don't have 5+ years old systems, to confirm if it will break
-something on older systems with external hub.
+Looks good:
 
-Thanks,
-Srinivas
-
-> 
-> Thanks,
-> 
-
+Reviewed-by: Christoph Hellwig <hch@lst.de>
