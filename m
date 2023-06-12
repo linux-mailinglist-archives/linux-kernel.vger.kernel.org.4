@@ -2,115 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8685E72CB01
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 18:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5596872CB02
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 18:08:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232329AbjFLQH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 12:07:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
+        id S232770AbjFLQID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 12:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjFLQH4 (ORCPT
+        with ESMTP id S231779AbjFLQH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 12:07:56 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E64187
+        Mon, 12 Jun 2023 12:07:58 -0400
+Received: from smtpcmd13147.aruba.it (smtpcmd13147.aruba.it [62.149.156.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8670A130
         for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 09:07:55 -0700 (PDT)
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35CFprtR010773;
-        Mon, 12 Jun 2023 16:07:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=5LHI5t0StJcJrbHOtOpufQOCNbXC/Bb5sjF/Qx21CiQ=;
- b=toe3rVYt7CvozLKS4tCQ9kMNnEBbuqwyt142XMc9+OftOfB4ZrNV/olWoCLU4D2IJc5l
- +56DU7CymIcA5qiDA1IAjB9X1E3Y4HWT7WFNN0BSlnsJMMPTBBJBJUGqQcrBQ4WldfcJ
- s6dQF3SWBi1FMKwzLJ18AT9sOZ3PtWTazDlfkKH9swbr00wH2Q8GQ4JceV0VsQFk86Il
- nsaE8q9hN0HaQgwZPsxRk+7LuFUTyoZ7lYYE3ViUm0k2x/xrp+je0Qyi9YX+FLR5sKjA
- zM+InFVFUungmByZT5+EDcncyR2R/mfO//UPFOUgT9mBGa7EEoGe/LoiVYhtB3Q+h2rg bQ== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r66cn0gyq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jun 2023 16:07:53 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35C1mpvR017394;
-        Mon, 12 Jun 2023 16:07:51 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3r4gee1kh4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jun 2023 16:07:51 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35CG7nRO21365484
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 12 Jun 2023 16:07:49 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 42A562004F;
-        Mon, 12 Jun 2023 16:07:49 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 32BB02004E;
-        Mon, 12 Jun 2023 16:07:49 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Mon, 12 Jun 2023 16:07:49 +0000 (GMT)
-Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 55390)
-        id E8A17E12CB; Mon, 12 Jun 2023 18:07:48 +0200 (CEST)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] tracing: fix memcpy size when copying stack entries
-Date:   Mon, 12 Jun 2023 18:07:48 +0200
-Message-Id: <20230612160748.4082850-1-svens@linux.ibm.com>
-X-Mailer: git-send-email 2.39.2
+Received: from [192.168.1.56] ([79.0.204.227])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id 8k5AqyVHYzrnG8k5AqvqoC; Mon, 12 Jun 2023 18:07:53 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1686586073; bh=C9lVHEipiO2rrCzzjQikvmaiVgb86Ugo7xwo8BBwLEI=;
+        h=Date:MIME-Version:Subject:To:From:Content-Type;
+        b=dI9xtEsx7I/q9LipVhMy6AeyMKy9t2iBAgqNv2sUxFgbpW/3AYk2vQtS7lnzubwY5
+         h12p3zCn5000JWTMUIqviOv29aWdAjO/exAecYuUEOAaDA7YrzAKw9jOLoVWwEADfX
+         G5jaFMwReCVppn7n+re2gsD/axYNJDFSZtw660gSlxOqgHZxLGvSyEXvRBN7lbAZii
+         wWFSrbjDruGTttqbTZeqmiPjNZVqZRrNlqWJglXhgB6y5fiRULESCkY/buv1X0nI62
+         akdc2mrMa1F2ZMZXZFq20U4SRmtrrod5aPXAjuS7iySkSzd9fUNqs2UqdLPvuMt8ja
+         9c+SexGH/zszA==
+Message-ID: <5aff32cf-74ea-b632-9d4d-a01ca0d31821@enneenne.com>
+Date:   Mon, 12 Jun 2023 18:07:52 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [RFC PATCH] pps: Increase PPS_MAX_SOURCES value.
+Content-Language: en-US
+To:     Charlie Johnston <charlie.johnston@ni.com>
+Cc:     linux-kernel@vger.kernel.org, brenda.streiff@ni.com
+References: <20230605203147.694716-1-charlie.johnston@ni.com>
+ <fe435e68-8e05-9078-0fe6-63ef7cce2fc9@enneenne.com>
+ <b794bccc-0233-4d78-df6f-bf7c688a7d7d@ni.com>
+ <70ce864c-ca13-4fc4-fcb5-9b7f91579a90@enneenne.com>
+ <38f38f66-0fd5-4e6c-4839-8272cef77046@ni.com>
+From:   Rodolfo Giometti <giometti@enneenne.com>
+In-Reply-To: <38f38f66-0fd5-4e6c-4839-8272cef77046@ni.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: -wj8A83xApT9KRWtwZj54Y5oaG279GPw
-X-Proofpoint-ORIG-GUID: -wj8A83xApT9KRWtwZj54Y5oaG279GPw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-12_06,2023-06-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- lowpriorityscore=0 mlxscore=0 clxscore=1015 mlxlogscore=848
- impostorscore=0 malwarescore=0 priorityscore=1501 spamscore=0 adultscore=0
- suspectscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306120138
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CMAE-Envelope: MS4xfNHoWjjsDpVkUmd/TjHXIrjmHcri4vNat0TGanoRsRoOMzkR5nrRHbQGIHBudJwgES0nT2Rnxgqcr2dPao7ZocMFC3jp7JzSO/wJNwtMI0emnN1GUHC6
+ Vquc8MCzBQ9WoP5vhtdyDxB2ii3AuWzu6VhRV2Yy6lGORcGejJsHYuf54YhTeEaYzgvQt19webGzA7F+5XhBt4hYTyx591gwvJQP+408o/Hva2KBVGSjH4Tu
+ 4U6l0H58wBhejizaqu/Fxc2DAKFpjOpAFplm2anCLGk=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Noticed the following warning during boot:
+On 09/06/23 23:00, Charlie Johnston wrote:
+> On 6/9/23 02:30, Rodolfo Giometti wrote:
+>> On 08/06/23 00:07, Charlie Johnston wrote:
+>>> On 6/7/23 02:33, Rodolfo Giometti wrote:
+>>>> On 05/06/23 22:31, Charlie Johnston wrote:
+>>>>> For consistency with what ptp uses for minors, this
+>>>>> change sets PPS_MAX_SOURCES to MINORMASK + 1.
+>>>>>
+>>>>> The PPS_MAX_SOURCES value is currently set to 16. In
+>>>>> some cases this was not sufficient for a system. For
+>>>>> example, a system with multiple (4+) PCIe cards each
+>>>>> with 4 PTP-capable ethernet interfaces could run out
+>>>>> of the available PPS major:minors if each interface
+>>>>> registers a PPS source.
+>>>>>
+>>>>> Signed-off-by: Charlie Johnston <charlie.johnston@ni.com>
+>>>>> ---
+>>>>>     include/uapi/linux/pps.h | 2 +-
+>>>>>     1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/include/uapi/linux/pps.h b/include/uapi/linux/pps.h
+>>>>> index 009ebcd8ced5..85f472330da8 100644
+>>>>> --- a/include/uapi/linux/pps.h
+>>>>> +++ b/include/uapi/linux/pps.h
+>>>>> @@ -26,7 +26,7 @@
+>>>>>     #include <linux/types.h>
+>>>>>       #define PPS_VERSION        "5.3.6"
+>>>>> -#define PPS_MAX_SOURCES        16        /* should be enough... */
+>>>>> +#define PPS_MAX_SOURCES        (MINORMASK + 1)
+>>>>>       /* Implementation note: the logical states ``assert'' and ``clear''
+>>>>>      * are implemented in terms of the chip register, i.e. ``assert''
+>>>>
+>>>> I have just one question: are you sure that it's safe to call idr_alloc(..., 0, (MINORMASK + 1), ...)?
+>>>>
+>>>> Ciao,
+>>>>
+>>>> Rodolfo
+>>>>
+>>>
+>>> Thanks for taking a look!
+>>>
+>>> My understanding is that idr_alloc(..., start, end, ...) can take any end value up to INT_MAX. It also handles any values <= 0 by treating them as equal to INT_MAX + 1 since the end value is non-inclusive. I can't think of any reason using MINORMASK + 1 here would be an issue since it's much less than the maximum value idr_alloc() allows.
+>>>
+>>> A number of drivers (e.g. ptp) just explicitly use a start and end value of 0, but I don't think that change would fit here.
+>>
+>> I see and maybe I should replace the usage of idr_*() with ida_*() as PTP does...
+>>
+>> However the right-thing(TM) to do here should be dropping PPS_MAX_SOURCES at all!
+>>
+>> Let me go deeper in this issue. I'm going to produce a patch set in next days. Have you any chances to test it?
+>>
+>> Ciao,
+>>
+>> Rodolfo
+>>
+> MINORMASK
+> I'll have to check when the system we used for testing is available again (not easy to find a system with 20+ Ethernet ports) but I'd be happy to test a patch!
 
-[    2.316341] Testing tracer wakeup:
-[    2.383512] ------------[ cut here ]------------
-[    2.383517] memcpy: detected field-spanning write (size 104) of single field "&entry->caller" at kernel/trace/trace.c:3167 (size 64)
+Great! Please, let me know.
 
-The reason seems to be that the maximum number of entries is calculated
-from the size of the fstack->calls array which is 128. But later the same
-size is used to memcpy() the entries to entry->callers, which has only
-room for eight elements. Therefore use the minimum of both arrays as limit.
+> I know an increase to PPS_MAX_SOURCES was tested on that system.
 
-Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
----
- kernel/trace/trace.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I see and it seems that it's safer to set PPS_MAX_SOURCES to MINORMASK... so 
+please reproduce your patch with this simple modification, then I'm going to 
+produce a patch to drop the PPS_MAX_SOURCES define since it's not needed anymore.
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 64a4dde073ef..988d664c13ec 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -3146,7 +3146,7 @@ static void __ftrace_trace_stack(struct trace_buffer *buffer,
- 	barrier();
- 
- 	fstack = this_cpu_ptr(ftrace_stacks.stacks) + stackidx;
--	size = ARRAY_SIZE(fstack->calls);
-+	size = min(ARRAY_SIZE(entry->caller), ARRAY_SIZE(fstack->calls));
- 
- 	if (regs) {
- 		nr_entries = stack_trace_save_regs(regs, fstack->calls,
+After that you should test all these modifications in order to safely add them 
+to Linux.
+
+Ciao,
+
+Rodolfo
+
 -- 
-2.39.2
+GNU/Linux Solutions                  e-mail: giometti@enneenne.com
+Linux Device Driver                          giometti@linux.it
+Embedded Systems                     phone:  +39 349 2432127
+UNIX programming                     skype:  rodolfo.giometti
 
