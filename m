@@ -2,152 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D52972C96E
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:10:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC7072C971
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239398AbjFLPKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 11:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41030 "EHLO
+        id S237496AbjFLPKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 11:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239467AbjFLPJy (ORCPT
+        with ESMTP id S239683AbjFLPKK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 11:09:54 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD6AE41;
-        Mon, 12 Jun 2023 08:09:52 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35CDrdde003212;
-        Mon, 12 Jun 2023 15:09:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=We40rKMLG+MEC25B0HGY2atMNWzmRl6ol9yjTjBbbfY=;
- b=NntYswhdnF3o7j1hOEJqs6tPZKC/ueV3kPVbn26ZQ2xd7UZWsyMJxtdOUYjqNlQz/R5f
- boTx7AyP9HNQDQey/BscZcwWcv+hLMcH5DbIQBlQMnANGMWU3lYiVjI0y6eFaPUH2Lgu
- PmNF1LZlYDQx8tHa+vq86SWu6o0Pbm/gbSq9VFlc66JxPDvmUqV7lOTOQefisSsOTD99
- gNiTBozUOcRfviZ10rKtkcec45Hx7wjbRu3bHwTRM+AYUtqGFyenx5paFa1reIGHzw/p
- tCB3jKTosJSVWfDEZKjMLfJcRDdNl4LEX5eC2sbhYoL41R+mxKzzBRB7z1ro5AVJDEMc 6Q== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r4ggr3pdy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jun 2023 15:09:41 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35CF9ekQ003169
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jun 2023 15:09:40 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 12 Jun
- 2023 08:09:40 -0700
-Message-ID: <b5e5c141-b5df-e24d-8fa4-94297d561cec@quicinc.com>
-Date:   Mon, 12 Jun 2023 09:09:39 -0600
+        Mon, 12 Jun 2023 11:10:10 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBAB6186;
+        Mon, 12 Jun 2023 08:10:08 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1q8jBG-0006SE-QN; Mon, 12 Jun 2023 17:10:06 +0200
+Message-ID: <8065316b-0a3a-e7d5-28de-cc9fc9210ce5@leemhuis.info>
+Date:   Mon, 12 Jun 2023 17:10:06 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] accel/qaic: Fix dereferencing freed memory
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pranjal Ramajor Asha Kanojiya" <quic_pkanojiy@quicinc.com>,
-        Sukrut Bellary <sukrut.bellary@linux.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linaro-mm-sig@lists.linaro.org>, <linux-media@vger.kernel.org>
-References: <20230610021200.377452-1-sukrut.bellary@linux.com>
- <fc979a4e-c30a-2606-9eec-afbba4fdd774@amd.com>
- <e3a867a8-284b-7250-b1b2-1956f533f6b0@quicinc.com>
- <ff196b04-e8c5-52d9-852b-9a9cc7eecdd0@amd.com>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <ff196b04-e8c5-52d9-852b-9a9cc7eecdd0@amd.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 6P2l9VzzfQul7Cq_a4b7dSQKLSzsvKAl
-X-Proofpoint-ORIG-GUID: 6P2l9VzzfQul7Cq_a4b7dSQKLSzsvKAl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-12_06,2023-06-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
- mlxscore=0 mlxlogscore=999 malwarescore=0 phishscore=0 clxscore=1011
- priorityscore=1501 spamscore=0 bulkscore=0 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306120130
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: Sometimes DVB broken with commit 6769a0b7ee0c3b
+Content-Language: en-US, de-DE
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Hyunwoo Kim <imv4bel@gmail.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Thomas Voegtle <tv@lio96.de>, linux-kernel@vger.kernel.org
+References: <da5382ad-09d6-20ac-0d53-611594b30861@lio96.de>
+ <439d143b-1de7-6365-cf64-f1b44fd6d1cf@leemhuis.info>
+ <20230605113727.69e7f309@sal.lan>
+ <88d8a7c3-0018-cc9a-13aa-e3262e20e4aa@leemhuis.info>
+ <20230605190046.63c98b3e@sal.lan>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <20230605190046.63c98b3e@sal.lan>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1686582609;0188dfb9;
+X-HE-SMSGID: 1q8jBG-0006SE-QN
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/12/2023 7:21 AM, Christian König wrote:
-> Am 12.06.23 um 15:03 schrieb Pranjal Ramajor Asha Kanojiya:
->>
->>
->> On 6/12/2023 4:52 PM, Christian König wrote:
->>>
->>>
->>> Am 10.06.23 um 04:12 schrieb Sukrut Bellary:
->>>> smatch warning:
->>>>     drivers/accel/qaic/qaic_data.c:620 qaic_free_object() error:
->>>>         dereferencing freed memory 'obj->import_attach'
+On 05.06.23 20:00, Mauro Carvalho Chehab wrote:
+> Em Mon, 5 Jun 2023 12:44:43 +0200
+> Thorsten Leemhuis <regressions@leemhuis.info> escreveu:
+>> On 05.06.23 12:37, Mauro Carvalho Chehab wrote:
+>>> Em Mon, 5 Jun 2023 11:38:49 +0200
+>>> "Linux regression tracking (Thorsten Leemhuis)" <regressions@leemhuis.info> escreveu:
 >>>>
->>>> obj->import_attach is detached and freed using dma_buf_detach().
->>>> But used after free to decrease the dmabuf ref count using
->>>> dma_buf_put().
->>>>
->>>> Fixes: ff13be830333 ("accel/qaic: Add datapath")
->>>> Signed-off-by: Sukrut Bellary <sukrut.bellary@linux.com>
->>>> ---
->>>>   drivers/accel/qaic/qaic_data.c | 4 +++-
->>>>   1 file changed, 3 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/accel/qaic/qaic_data.c 
->>>> b/drivers/accel/qaic/qaic_data.c
->>>> index e42c1f9ffff8..7cba4d680ea8 100644
->>>> --- a/drivers/accel/qaic/qaic_data.c
->>>> +++ b/drivers/accel/qaic/qaic_data.c
->>>> @@ -613,11 +613,13 @@ static int qaic_gem_object_mmap(struct 
->>>> drm_gem_object *obj, struct vm_area_struc
->>>>   static void qaic_free_object(struct drm_gem_object *obj)
->>>>   {
->>>>       struct qaic_bo *bo = to_qaic_bo(obj);
->>>> +    struct dma_buf *dmabuf;
+>>>> On 30.05.23 13:12, Thomas Voegtle wrote:  
+>>>>>
+>>>>> I have the problem that sometimes my DVB card does not initialize
+>>>>> properly booting Linux 6.4-rc4.
+>>>>> This is not always, maybe in 3 out of 4 attempts.
+>>>>> When this happens somehow you don't see anything special in dmesg, but
+>>>>> the card just doesn't work.
+>>>>>
+>>>>> Reverting this helps:
+>>>>> commit 6769a0b7ee0c3b31e1b22c3fadff2bfb642de23f
+>>>>[...]
+>>>> Mauro: I wonder if this is something you or someone else has to look
+>>>> into, as Hyunwoo Kim posted a few times per months to Linux lists, but
+>>>> according  to a quick search on lore hasn't posted anything since ~two
+>>>> months now. :-/  
 >>>
->>> Maybe move that variable into the if.
->>>
->>>>       if (obj->import_attach) {
->>>>           /* DMABUF/PRIME Path */
->>>> +        dmabuf = obj->import_attach->dmabuf;
->>>>           dma_buf_detach(obj->import_attach->dmabuf, 
->>>> obj->import_attach);
->>>> -        dma_buf_put(obj->import_attach->dmabuf);
->>>> +        dma_buf_put(dmabuf);
->>>
->>> I strongly assume you are not using the GEM prime helpers for this?
->>>
->>> Christian.
+>>> Yeah, I was slow applying this one, as I was afraid of it to cause
+>>> troubles. The DVB frontend state machine is complex, and uses a
+>>> semaphore to update its state. There was some past attempts of
+>>> addressing some lifetime issues there that we ended needing to revert
+>>> or not being applied, as the fix caused more harm than good.
+>>> [...]  
 >>
->> Driver uses drm_gem_prime_fd_to_handle() helper function but it also 
->> registers for ->gem_prime_import() which is internally called by 
->> drm_gem_prime_fd_to_handle(). All the operations done in 
->> gem_prime_import() are undone here.
+>> Thx for the update. That's unfortunate, but how it is sometimes. Which
+>> leads to a follow-up question: is reverting the culprit temporarily an
+>> option? Or did those old use-after-free problems became known to be a
+>> problem we can't live with anymore for another few months?
 > 
-> Then why don't you use drm_prime_gem_destroy() which is the cleanup 
-> helper for imports created by ->gem_prime_import() ?
+> Reverting the patch seems to be the way to proceed. Then, work on another
+> way to address UAF. 
 > 
-> That looks pretty much identical to what you do here manually.
+> I'm not aware of dvb users complaining about troubles due to UAF, although 
+> it seems that there's now a CVE for it. So, maybe someone complained against
+> a distro Kernel, which caused the CVE to be opened.
+> 
+> So, while it is nice to have the lifetime issues fixed, last time I checked,
+> the USB dvb-usb/dvb-usb-v2 have some logic that usually prevents it to cause 
+> real issues during device removal, and unbinding DVB PCIe devices is 
+> something that users don't do in practice.
 
-I think destroy() wasn't used because we are new to DRM and sometimes 
-confused by the multitude of options.  I appreciate the suggestion and 
-will follow up to see if destroy() will work here, or identify what 
-would prevent the use of it.
+Thx for the explanation and handling this. I noticed you posted a
+revert, but it misses a fixes tag for the reverted commit and a Link: or
+Closes: tag to the report. I think Linus would very much welcome at
+least one of the latter in a situation like this (see [1] and [2]). I
+would, too, as then regzbot would have noticed the patch posting. But
+whatever, no big deal, let me tell regzbot about the latest progress
+manually:
 
--Jeff
+#regzbot monitor:
+https://lore.kernel.org/all/20230609082238.3671398-1-mchehab@kernel.org/
+#regzbot fix: Revert "media: dvb-core: Fix use-after-free on race
+condition at dvb_frontend"
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+[1] for details, see:
+https://lore.kernel.org/all/CAHk-=wjMmSZzMJ3Xnskdg4+GGz=5p5p+GSYyFBTh0f-DgvdBWg@mail.gmail.com/
+https://lore.kernel.org/all/CAHk-=wgs38ZrfPvy=nOwVkVzjpM3VFU1zobP37Fwd_h9iAD5JQ@mail.gmail.com/
+https://lore.kernel.org/all/CAHk-=wjxzafG-=J8oT30s7upn4RhBs6TX-uVFZ5rME+L5_DoJA@mail.gmail.com/
+
+[2] see Documentation/process/submitting-patches.rst
+(http://docs.kernel.org/process/submitting-patches.html) and
+Documentation/process/5.Posting.rst
+(https://docs.kernel.org/process/5.Posting.html)
+
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
