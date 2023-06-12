@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0523472C423
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 14:30:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D17772C428
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 14:30:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233964AbjFLMaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 08:30:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52690 "EHLO
+        id S234211AbjFLMae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 08:30:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233344AbjFLMaD (ORCPT
+        with ESMTP id S233676AbjFLMaW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 08:30:03 -0400
+        Mon, 12 Jun 2023 08:30:22 -0400
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92FA98;
-        Mon, 12 Jun 2023 05:30:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92E4E4E;
+        Mon, 12 Jun 2023 05:30:10 -0700 (PDT)
 X-GND-Sasl: herve.codina@bootlin.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686573000;
+        t=1686573009;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fxihK5WvOxWe3kLHHpt2g1PiNniemigSf5773LJSuNI=;
-        b=C8wzreCDiLenUXn7Nb6eOorDJJoB3hl00Lr0jwbMl1swMv5DC73t/KbiZ5RSaU1smiXbpB
-        SYGduS0pAUP4IVMsmy4gdjr0gqVLR5leEB9u+Ii0rGmz08o6Gn3wZpGDofnXXC97b1FnO6
-        jOJzc4sBnHMPyKlcJrYmXnI6X9XLzyTsQ6H0X82U/j/dnsYanuuHAYLyb2NGwRXqiiHdwY
-        1Pe28U2Bjgav0LDJRQhur5BSIep73UQzt1ImOzXwwDzmm2U2GdPwtccKjIqx9qZK2vFFOY
-        2jZbdZmLk0qITHHJEmpUTvUdzLSn8kylw09vCD4I4rrmsjEZJseDv1vUTMG16A==
+        bh=b7GpRi53x4asj1T+mG5YB9K5F5kbtkPlrvMMs/bfkeM=;
+        b=Rz+Ii9wfAJ84Hru5tWVZ2BHscLeDldbI7wxcUWvnboDxxaqAepsmlmzMDX9eCAB2TVZerH
+        vMam8AYocthmCfwmrQ5zzf/Y93M02RvKwhMsqypIx2AbNP2HGdaMCxVnlZ444fWwbIQEQE
+        /0corWxCLXrXGWmdJIQJRpTLjRtnkqRNuu143YDtSO4by62DLn4EhwHjh46lW7pdz21EUO
+        eisZ/tCTUrLPnY4dkmB116U0m3ruME+grhCRDdh0uHhfDnStL+8WwaudxayplAr5HRyChX
+        eF9a14vvZJSlCmiLVI+oJnJpAziN/1vjPf5Qt3/kgs0AN3BfNlPzjewLGrkRIQ==
 X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
@@ -46,8 +46,8 @@ X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPA id 4E632240018;
-        Mon, 12 Jun 2023 12:29:58 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id B5C65240008;
+        Mon, 12 Jun 2023 12:30:00 +0000 (UTC)
 From:   Herve Codina <herve.codina@bootlin.com>
 To:     Herve Codina <herve.codina@bootlin.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
@@ -66,9 +66,9 @@ Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v3 03/12] iio: inkern: Check error explicitly in iio_channel_read_max()
-Date:   Mon, 12 Jun 2023 14:29:17 +0200
-Message-Id: <20230612122926.107333-4-herve.codina@bootlin.com>
+Subject: [PATCH v3 04/12] iio: consumer.h: Fix raw values documentation notes
+Date:   Mon, 12 Jun 2023 14:29:18 +0200
+Message-Id: <20230612122926.107333-5-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230612122926.107333-1-herve.codina@bootlin.com>
 References: <20230612122926.107333-1-herve.codina@bootlin.com>
@@ -84,42 +84,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current implementation returns the error code as part of the
-default switch case.
-This can lead to returning an incorrect positive value in case of
-iio_avail_type enum entries evolution.
+The raw values notes mention 'ADC counts' and are not fully accurate.
 
-In order to avoid this case, be more strict in error checking.
+Reword the notes in order to remove the 'ADC counts' and describe the
+conversion needed between a raw value and a value in the standard units.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 ---
- drivers/iio/inkern.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ include/linux/iio/consumer.h | 25 +++++++++++++++----------
+ 1 file changed, 15 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/iio/inkern.c b/drivers/iio/inkern.c
-index 872fd5c24147..f738db9a0c04 100644
---- a/drivers/iio/inkern.c
-+++ b/drivers/iio/inkern.c
-@@ -858,6 +858,9 @@ static int iio_channel_read_max(struct iio_channel *chan,
- 		val2 = &unused;
+diff --git a/include/linux/iio/consumer.h b/include/linux/iio/consumer.h
+index 6802596b017c..f536820b9cf2 100644
+--- a/include/linux/iio/consumer.h
++++ b/include/linux/iio/consumer.h
+@@ -201,8 +201,9 @@ struct iio_dev
+  * @chan:		The channel being queried.
+  * @val:		Value read back.
+  *
+- * Note raw reads from iio channels are in adc counts and hence
+- * scale will need to be applied if standard units required.
++ * Note, if standard units are required, raw reads from iio channels
++ * need the offset (default 0) and scale (default 1) to be applied
++ * as (raw + offset) * scale.
+  */
+ int iio_read_channel_raw(struct iio_channel *chan,
+ 			 int *val);
+@@ -212,8 +213,9 @@ int iio_read_channel_raw(struct iio_channel *chan,
+  * @chan:		The channel being queried.
+  * @val:		Value read back.
+  *
+- * Note raw reads from iio channels are in adc counts and hence
+- * scale will need to be applied if standard units required.
++ * Note, if standard units are required, raw reads from iio channels
++ * need the offset (default 0) and scale (default 1) to be applied
++ * as (raw + offset) * scale.
+  *
+  * In opposit to the normal iio_read_channel_raw this function
+  * returns the average of multiple reads.
+@@ -281,8 +283,9 @@ int iio_read_channel_attribute(struct iio_channel *chan, int *val,
+  * @chan:		The channel being queried.
+  * @val:		Value being written.
+  *
+- * Note raw writes to iio channels are in dac counts and hence
+- * scale will need to be applied if standard units required.
++ * Note that for raw writes to iio channels, if the value provided is
++ * in standard units, the affect of the scale and offset must be removed
++ * as (value / scale) - offset.
+  */
+ int iio_write_channel_raw(struct iio_channel *chan, int val);
  
- 	ret = iio_channel_read_avail(chan, &vals, type, &length, info);
-+	if (ret < 0)
-+		return ret;
-+
- 	switch (ret) {
- 	case IIO_AVAIL_RANGE:
- 		switch (*type) {
-@@ -888,7 +891,7 @@ static int iio_channel_read_max(struct iio_channel *chan,
- 		return 0;
+@@ -292,8 +295,9 @@ int iio_write_channel_raw(struct iio_channel *chan, int val);
+  * @chan:		The channel being queried.
+  * @val:		Value read back.
+  *
+- * Note raw reads from iio channels are in adc counts and hence
+- * scale will need to be applied if standard units are required.
++ * Note, if standard units are required, raw reads from iio channels
++ * need the offset (default 0) and scale (default 1) to be applied
++ * as (raw + offset) * scale.
+  */
+ int iio_read_max_channel_raw(struct iio_channel *chan, int *val);
  
- 	default:
--		return ret;
-+		return -EINVAL;
- 	}
- }
- 
+@@ -308,8 +312,9 @@ int iio_read_max_channel_raw(struct iio_channel *chan, int *val);
+  * For ranges, three vals are always returned; min, step and max.
+  * For lists, all the possible values are enumerated.
+  *
+- * Note raw available values from iio channels are in adc counts and
+- * hence scale will need to be applied if standard units are required.
++ * Note, if standard units are required, raw available values from iio
++ * channels need the offset (default 0) and scale (default 1) to be applied
++ * as (raw + offset) * scale.
+  */
+ int iio_read_avail_channel_raw(struct iio_channel *chan,
+ 			       const int **vals, int *length);
 -- 
 2.40.1
 
