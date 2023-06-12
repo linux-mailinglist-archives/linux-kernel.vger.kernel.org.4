@@ -2,122 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C3972C405
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 14:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A4BB72C416
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 14:30:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbjFLM0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 08:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51792 "EHLO
+        id S232769AbjFLMaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 08:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232112AbjFLM0p (ORCPT
+        with ESMTP id S232089AbjFLM37 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 08:26:45 -0400
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C767C113;
-        Mon, 12 Jun 2023 05:26:42 -0700 (PDT)
-Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-77807e43b7cso285208939f.1;
-        Mon, 12 Jun 2023 05:26:42 -0700 (PDT)
+        Mon, 12 Jun 2023 08:29:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6011C8F
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 05:29:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686572951;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/dgg0OgOJU12ZjehTSKhsrI3f8hl+PZj/5z+qfu7sGs=;
+        b=N8+oW2ar9N1VBobdYGwAxnIZBf+VYjn2d9wv10lBsFqdnxTvJTo6F3EWcgrlare9i4NeoW
+        OOFI3zda7FKtz0GlCJuMOv5GgXnHbuoBqrRJbpRThuteFmjdSlspfkEUzKSxuDud5Xro9t
+        zxwqrkyPcDvwdjY1poTOoEX75SB2q2M=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-90-1C81iwXwOsK982tNaWzE2w-1; Mon, 12 Jun 2023 08:29:10 -0400
+X-MC-Unique: 1C81iwXwOsK982tNaWzE2w-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-30fb891c5e3so2963451f8f.2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 05:29:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686572802; x=1689164802;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=afhnT+300FfZkYOidp9N/Sw5yxdKK9IOWNs44Y93bLU=;
-        b=ZjLRm/FHiN9csZbtchauwfgZh6yDFDE51ieCkhAcoa3ze8IiZTexeZCK7Sroefi4uz
-         LH6HFZrCL19iqJVZe/5IxXQ960y7Q8fyRt9Gum60Y7GXlNH3b/yFI8pidDxUYU8lsC2K
-         83so6wfscjTPHNdfRa+/I9D7yhathumPaHMPu74NJ15DhzYN/4n+V7BM2t99EV2fhp59
-         V4sIPTSTZLeKEHbNE0z+0kAJ0ru1KDQpRLNTdDMrkINvnlbm4DGb4wSYVW0s19ta5qQJ
-         7Am0poH7CVUsmSEvhkosMAjHJQdjpQN5WPyEx66Xmq75naVjgS0rgkDvqc9u/ku8pxsh
-         O0ig==
-X-Gm-Message-State: AC+VfDyuQoX/vXkccoJSlFJFka+24cpTZfNaEYkKoL0dgonnHreVisA2
-        pexbmOqGVGgg5ofL1HzyLAsCV767cQ==
-X-Google-Smtp-Source: ACHHUZ7uB1cxJbWE6gfQCKWQayRPVguaF2In8F9NJzERrvmVFGkoow/Pp6V+OhOTY0JTkGm4jeBx2w==
-X-Received: by 2002:a6b:4401:0:b0:774:94e1:3aee with SMTP id r1-20020a6b4401000000b0077494e13aeemr7970492ioa.6.1686572801974;
-        Mon, 12 Jun 2023 05:26:41 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id m12-20020a056638224c00b00418a5e0e93esm2723243jas.162.2023.06.12.05.26.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 05:26:41 -0700 (PDT)
-Received: (nullmailer pid 4044374 invoked by uid 1000);
-        Mon, 12 Jun 2023 12:26:39 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20221208; t=1686572949; x=1689164949;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/dgg0OgOJU12ZjehTSKhsrI3f8hl+PZj/5z+qfu7sGs=;
+        b=bzyf8QkGaQoqVuzZszmiyoqPP46oB5TWhjTGVoTyL/l9WGibF5mJFeJKXYnOh4uTlz
+         99jSlyMDyXQ0aXyHjzNCfF3RCnNC9xY8yjlakoy+uGeawXRETr5QjjAny/7xIcD+nbin
+         WtBTwk6WCfgL0rKVVgDT+zIt3THVlNpj8p5T4KJXrB8XdJ2bvT150KPivSUMDtItD2HE
+         AebLcHtbLkJ2gVClTb8/aKbx+4JOddVjHwNEXVXFEY/94S0meYDQSyDyT2PEXUSQk7ig
+         +Q8S5US+Cxs9Fe9ua4sBLCqLVDJIurspkRLCretz7jSOZKbZndgHFVqv7H9TxRL0RA6t
+         VrGg==
+X-Gm-Message-State: AC+VfDxTi7nPIyNkIQ8ChP/NphWcJdaT3SKc/2MXVgEnsDLy6A5UYkq1
+        8ebEkYNQlR+MV2k/1/sedbtonQabWvt1Epj4V5zOxouU9spZOLh8x+bcdGgRDRZT7yPnklzXD6r
+        dGlht/TsVf3AuiO3cd80X+kpF
+X-Received: by 2002:a05:6000:46:b0:301:8551:446a with SMTP id k6-20020a056000004600b003018551446amr5487577wrx.2.1686572949305;
+        Mon, 12 Jun 2023 05:29:09 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7fBLeRHNV68IRWXYyURn+/HcT7IJFIXUfu/3QIa+LzCGdz9usgp/jdi45lJIFln4oX75UC+w==
+X-Received: by 2002:a05:6000:46:b0:301:8551:446a with SMTP id k6-20020a056000004600b003018551446amr5487541wrx.2.1686572948916;
+        Mon, 12 Jun 2023 05:29:08 -0700 (PDT)
+Received: from [10.32.176.150] (nat-pool-mxp-t.redhat.com. [149.6.153.186])
+        by smtp.googlemail.com with ESMTPSA id v18-20020a5d43d2000000b0030ae93bd196sm12301884wrr.21.2023.06.12.05.29.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 05:29:08 -0700 (PDT)
+Message-ID: <29924c50-cf96-13bb-ef84-4813caa3aef3@redhat.com>
+Date:   Mon, 12 Jun 2023 14:29:05 +0200
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Alessandro Zummo <a.zummo@towertech.it>
-In-Reply-To: <20230612113059.247275-3-linux@rasmusvillemoes.dk>
-References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
- <20230612113059.247275-3-linux@rasmusvillemoes.dk>
-Message-Id: <168657279982.4044345.9896354759743085279.robh@kernel.org>
-Subject: Re: [PATCH 2/8] dt-bindings: rtc: Move isil,isl12022 from
- trivial-rtc.yaml into own schema file
-Date:   Mon, 12 Jun 2023 06:26:39 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     torvalds@linux-foundation.org, keescook@chromium.org,
+        masahiroy@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
+        nicolas@fjasle.eu, catalin.marinas@arm.com, will@kernel.org,
+        vkoul@kernel.org, trix@redhat.com, ojeda@kernel.org,
+        mingo@redhat.com, longman@redhat.com, boqun.feng@gmail.com,
+        dennis@kernel.org, tj@kernel.org, cl@linux.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
+        adrian.hunter@intel.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, paulmck@kernel.org,
+        frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
+        42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
+        dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
+        john.johansen@canonical.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
+        rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
+        tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
+        luc.vanoostenryck@gmail.com
+References: <20230612090713.652690195@infradead.org>
+ <20230612093540.850386350@infradead.org>
+ <20230612094400.GG4253@hirez.programming.kicks-ass.net>
+ <2023061213-knapsack-moonlike-e595@gregkh>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v3 46/57] perf: Simplify pmu_dev_alloc()
+In-Reply-To: <2023061213-knapsack-moonlike-e595@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Mon, 12 Jun 2023 13:30:52 +0200, Rasmus Villemoes wrote:
-> Move the isil,isl12022 RTC bindings from trivial-rtc.yaml into its own
-> intersil,isl12022.yaml file, in preparation for adding more bindings.
+On 6/12/23 14:18, Greg KH wrote:
+> Yeah, it's a pain, but you are trying to hand-roll code that is not a
+> "normal" path for a struct device, sorry.
 > 
-> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> ---
->  .../bindings/rtc/intersil,isl12022.yaml       | 42 +++++++++++++++++++
->  .../devicetree/bindings/rtc/trivial-rtc.yaml  |  2 -
->  2 files changed, 42 insertions(+), 2 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml
-> 
+> I don't know if you really can encode all of that crazy logic in the
+> cleanup api, UNLESS you can "switch" the cleanup function at a point in
+> time (i.e. after device_add() is successful).  Is that possible?
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+What _could_ make sense is that device_add() completely takes ownership 
+of the given pointer, and takes care of calling put_device() on failure.
 
-yamllint warnings/errors:
+Then you can have
 
-dtschema/dtc warnings/errors:
-Traceback (most recent call last):
-  File "/usr/local/bin/dt-doc-validate", line 62, in <module>
-    ret |= check_doc(f)
-  File "/usr/local/bin/dt-doc-validate", line 31, in check_doc
-    for error in sorted(dtschema.DTValidator.iter_schema_errors(testtree), key=lambda e: e.linecol):
-  File "/usr/local/lib/python3.10/dist-packages/dtschema/lib.py", line 736, in iter_schema_errors
-    cls.annotate_error(error, meta_schema, error.schema_path)
-  File "/usr/local/lib/python3.10/dist-packages/dtschema/lib.py", line 712, in annotate_error
-    schema = schema[p]
-KeyError: 'type'
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/rtc/intersil,isl12022.yaml: 'maintainers' is a required property
-	hint: Metaschema for devicetree binding documentation
-	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
+	struct device *dev_struct __free(put_device) =
+		kzalloc(sizeof(struct device), GFP_KERNEL);
 
-doc reference errors (make refcheckdocs):
+	struct device *dev __free(device_del) =
+		device_add(no_free_ptr(dev_struct));
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230612113059.247275-3-linux@rasmusvillemoes.dk
+	/* dev_struct is NULL now */
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+	pmu->dev = no_free_ptr(dev);
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+Paolo
 
