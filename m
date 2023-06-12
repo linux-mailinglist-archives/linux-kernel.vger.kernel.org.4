@@ -2,98 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C9372BF5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:42:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2810172BF58
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:41:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234478AbjFLKmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 06:42:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47006 "EHLO
+        id S235038AbjFLKlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 06:41:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbjFLKld (ORCPT
+        with ESMTP id S234867AbjFLKlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 06:41:33 -0400
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3B6319DA
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 03:25:53 -0700 (PDT)
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2b1a3fa2cd2so47018731fa.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 03:25:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686565199; x=1689157199;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/LR3Gr3rH5sthOeyaX87Q0esSF88VmWVTqD2+1+ByAU=;
-        b=XjnrK2b9X+P5TCdO310r8Kghu6QQ16pn0kCVVy41mXSlubzhYjw9/IMRzzfjHcBhJN
-         q9prAxg0LJ9FSrV5UHC80EItzpCfr9R5GYA/ihU+zooBE9rZMr70cdwZZgeHldAAqVQN
-         PRn7255T8AFyWME0SBuIsqgJUezND0HSM49ZYQcliPc51+bkNrVcM5V89dy8P8yPrJPi
-         2hZSuuDg3Efsg6OqCaBRMB3hARfDU6BpUMz0N1fN3DEZ5yWZ6k0gGyVQbmI12hDNJMn5
-         MyuROJt+NePrtDq/oWsDCvCqcplmmBwyItgjJLugHIuwoBN0nX4RbwmzEGLY8jPza+7l
-         Hlqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686565199; x=1689157199;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/LR3Gr3rH5sthOeyaX87Q0esSF88VmWVTqD2+1+ByAU=;
-        b=DxyW1Nqp0y2PugyzGDc5yYHKgW09+GhkB3e5ebOyG2uD2nzoMGyyp0AI6Mbsfjws7t
-         apr5VJmFF7k81MvjOd9mPNgnYqeQvvdRQRm1bgLkQQJIFR35Vh3Yl1qTsfV2RWgtVxga
-         LcjboL3otB48LpxyeVvE1CFoNRGnUqwavPTCLGkCEnRWWud+jp92LKYvBnilRyb+2rq0
-         wJDtM4pCFxQ1bN2BWyREAK3dhayqUhYlfwGD/FwBJj41KX4fwds8vbyvlZqqt7/fDaJg
-         uUl/opF28YClizvwLOMrZJoobaTx5SanZNoTbcPaG6dhtjaw5dbBEpaWcxec0B4V54mm
-         7yGg==
-X-Gm-Message-State: AC+VfDx5o3E3y1iwmk79wi3VAwU/MJaEaGMwvLKiMsrrl2HhE14RjO5a
-        L3nH25QYFxe6igjRMDTs9nQbew==
-X-Google-Smtp-Source: ACHHUZ5g3d3/ktANczko05t2VH+3Q/oxm8IYN2AvfBJefgpvbwlceJyyCzKjZIiZN6b5n4bySqJxuA==
-X-Received: by 2002:a2e:9059:0:b0:2ac:7137:5f13 with SMTP id n25-20020a2e9059000000b002ac71375f13mr2882100ljg.9.1686565198692;
-        Mon, 12 Jun 2023 03:19:58 -0700 (PDT)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id n7-20020adff087000000b0030ae5a0516csm12004938wro.17.2023.06.12.03.19.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 03:19:58 -0700 (PDT)
-Message-ID: <53956869-19d8-7a38-aa60-db1273538912@linaro.org>
-Date:   Mon, 12 Jun 2023 11:19:57 +0100
+        Mon, 12 Jun 2023 06:41:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2ACC319CD
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 03:25:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47ABF615B9
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:25:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FF23C433EF;
+        Mon, 12 Jun 2023 10:25:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686565528;
+        bh=jkLBoeKvgVSf1iEiYP2KB3CxUSh6MqVHrDpEPu8ZLL0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kaMUAHHvXf1LUbuyW7bPq0DQ6R26GMRMLqJirt4UYlK5BG7G8cVzlJhiVrWdKn1K8
+         W8UOcwqG+S8RGcsnPd33yA8RkvPRfjUQDX8Avy3pYY7l+JykiH1dCGPVRFu4eTdqAn
+         alsJCpZoTItJIHh87aWEuto1DNVz1EfTbrq0Lu60=
+Date:   Mon, 12 Jun 2023 12:25:26 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jonathan McDowell <noodles@meta.com>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Kay Sievers <kay.sievers@vrfy.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] firmware: dmi: Don't restrict access to serial number /
+ UUID
+Message-ID: <2023061252-tapering-shrubs-4dd7@gregkh>
+References: <ZIbslWZev/Ayoug5@noodles-fedora.dhcp.thefacebook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 07/11] ASoC: q6dsp: q6apm-dai: Add open/free compress
- DAI callbacks
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com,
-        ckeepax@opensource.cirrus.com, kuninori.morimoto.gx@renesas.com,
-        linux-kernel@vger.kernel.org, pierre-louis.bossart@linux.intel.com,
-        alsa-devel@alsa-project.org,
-        Mohammad Rafi Shaik <quic_mohs@quicinc.com>
-References: <20230609145407.18774-1-srinivas.kandagatla@linaro.org>
- <20230609145407.18774-8-srinivas.kandagatla@linaro.org>
- <0db2eb29-2145-4ab7-b29e-ef662a15b632@sirena.org.uk>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <0db2eb29-2145-4ab7-b29e-ef662a15b632@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZIbslWZev/Ayoug5@noodles-fedora.dhcp.thefacebook.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 09/06/2023 18:29, Mark Brown wrote:
-> On Fri, Jun 09, 2023 at 03:54:03PM +0100, Srinivas Kandagatla wrote:
->> Add q6apm open and free compress DAI callbacks to support compress
->> offload playback.
->> Include compress event handler callback also.
->>
->> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
->> Co-developed-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
->> Signed-off-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
+On Mon, Jun 12, 2023 at 09:59:50AM +0000, Jonathan McDowell wrote:
+> The /sys/devices/virtual/dmi/id/*_serial + product_uuid files are
+> currently only readable by root. There's no clear rationale for this;
+> Windows + OS X both allow regular users to access the information, so
+> there appears to be no expectation on the manufacturer side that it
+> should be kept secret.
 > 
-> If you're sending the mail your signoff should really be last.
-thats true, I will fix this in next spin.
+> Having the information easily available helps with automated tools that
+> collect system information for the purposes of fault diagnosis/tracking
+> without requiring the tools have root access.
+> 
+> (I've tried to look for context on the initial patch submission about
+> why these were root-only but didn't find any; hopefully Lennart or Kay
+> can provide details if I'm missing something.)
 
--srini
+I think it was just generic "let's not expose anything that might be a
+secret", but if Windows exposes all of this to any user, then vendors
+are used to it, so it's not a big deal.
+
+thanks,
+
+greg k-h
