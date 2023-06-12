@@ -2,310 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B78972CDB8
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C74372CDBA
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:19:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235880AbjFLSS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 14:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40756 "EHLO
+        id S237439AbjFLSTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 14:19:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235401AbjFLSSr (ORCPT
+        with ESMTP id S236088AbjFLSS5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 14:18:47 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2694F199
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:18:46 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-974638ed5c5so954195166b.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:18:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686593924; x=1689185924;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sCegMuLmkgKKIjp12zoMl7g1gHWpAi0hnuD+7lSH5gI=;
-        b=W0PwfkbQCb8Bm4+yrRoaS10SzmZ/E6w3dBH2MJZaSU4s+TMcqUP0c70uBKSVBcXvVw
-         He3r4YwsoZxqql+2sWns7SdCIoRl1nc1M48/bcRc7/wkcBJMKE/KeVoXJNxgobME/sXH
-         AiyawVhAsxumUWDSyAu6Rvn348MnLPNOT59yN521h4YeTLOQYCG1NWOf218FTQuh2Yzx
-         TYjYshVzwgiWaJoJ9fMCIw0/B5RgA5fmrdHqLk2pBO6Uo2XwcZU2HvJ6wmUOIXr9P3ku
-         ghoZ23Jw/QVlbNDx8L3e6pIg4Ozc88Tf0CVvA9BhijHa9PNhGTP5BQ1J3r+2QQJQZqsl
-         fWSg==
+        Mon, 12 Jun 2023 14:18:57 -0400
+Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3535E8
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:18:56 -0700 (PDT)
+Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-77ac4ec0bb7so460232739f.0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:18:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686593924; x=1689185924;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sCegMuLmkgKKIjp12zoMl7g1gHWpAi0hnuD+7lSH5gI=;
-        b=ghrt7K4hQFVzrOuEGdnIPIriipDg2j8skPXwY4sA486cV6Py2AbyCwYR46uI/OVwjJ
-         UVlkUcHMK3uou6JYfq0IUtPeLd+Gdn4W2tZ4v3iwd6A0YvqsMkm9nsIUv7YKfK7c+9pw
-         Rd0w392/tSZe9tlz0Da7o96iNnFhXdau5pmMoXtnKCDoADjD8gi/wk0kPktiUZB3YO6x
-         +oyXDc3MGJzMQ/kVvg0/Lrjo9VCrP441DIfL3W4btgH70jkg8ud3a0kMiLvCvnFarqyJ
-         fOl2Cxi72t5hJkAIS/EnhNph5+ine4cybvKDmE8HkA1DNu2+tcsDj9LR+k+qxTGu2ep8
-         JO4w==
-X-Gm-Message-State: AC+VfDxDWEYKguVWVu+IwDvYqVb+vCKe7QWL9KuZ07MFmxVPzYrenyAa
-        3qY3ZkoaYGLqPEUThgosDStPNkr3kGt08I9TNlCMYYq7gID50XXShs/GvQ==
-X-Google-Smtp-Source: ACHHUZ5hiuYbW5oJPVtRwr2lj6pp5XmdmPS2jFgK2VzN0wQrX9wyQFh4mRlSLvXmrJ8K+zTu0FDI2hqQCnMq/AjMum4=
-X-Received: by 2002:a17:907:25ca:b0:971:55e2:82c3 with SMTP id
- ae10-20020a17090725ca00b0097155e282c3mr7708937ejc.20.1686593924390; Mon, 12
- Jun 2023 11:18:44 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686593936; x=1689185936;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JNVjzsp4Q/R2CWTBkS3HkSnT+cmZY3d7Ck+YqHTxaQ4=;
+        b=PqhW8j8yDqbBR4QFP1QBIHv58w+iowxyzm2cw0FlW2UfUB5y6glctYnZBl0D2e9Gku
+         +5dwRlkRKAvh+4avKXb6npsd8y/5ibFMQJIkPZcZvNLkRDqpVmNIEaphltk3LyO4UNQ0
+         zRDMrSaACm3WTr8W7+CU8KBn1/CiFjOi1nNgwEbUy1SlDG1eIXYEEhVI0KxYx60vqoAo
+         4N6ckk6sTJ3/eFby8iTikPoRILlJtUtY9PH8mRERqZ7BpT/6coxvzgMTAmzyRkorK0MU
+         qvCTnwOddeGTwl4226bWzQO3j1orkxaby3umVf8oac+sdbJ4Fy9uS9zWIcln36FHbQDX
+         +T0w==
+X-Gm-Message-State: AC+VfDyEMon5gQewKmnB72gn56oc4oNtrPHPIGcqg+gn1tQwejokOmqw
+        +OLfJcIU/0iDm58Vcm27dn/+JVD8WCzkrVQxD/6ShN+5uhay
+X-Google-Smtp-Source: ACHHUZ48aJTTbei/IPjlSAzi7Oev8nrti4c/FPklaMEgFKL6RI2JOZdjcLwEfJQUPCHWd9fcQuqZV5tLv1kW0hU+JWnSVlPCnyWW
 MIME-Version: 1.0
-References: <20230612093815.133504-1-cerasuolodomenico@gmail.com> <20230612093815.133504-2-cerasuolodomenico@gmail.com>
-In-Reply-To: <20230612093815.133504-2-cerasuolodomenico@gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Mon, 12 Jun 2023 11:18:07 -0700
-Message-ID: <CAJD7tkYYuy8n70tQXAgfi2ag5x2rWA77oxRd7yA+6w+Bbf3vqw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/7] mm: zswap: add pool shrinking mechanism
-To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Cc:     vitaly.wool@konsulko.com, minchan@kernel.org,
-        senozhatsky@chromium.org, linux-mm@kvack.org, ddstreet@ieee.org,
-        sjenning@redhat.com, nphamcs@gmail.com, hannes@cmpxchg.org,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com
+X-Received: by 2002:a5e:c10c:0:b0:77a:c494:b4b8 with SMTP id
+ v12-20020a5ec10c000000b0077ac494b4b8mr4397762iol.1.1686593936274; Mon, 12 Jun
+ 2023 11:18:56 -0700 (PDT)
+Date:   Mon, 12 Jun 2023 11:18:56 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000073c14105fdf2c0f0@google.com>
+Subject: [syzbot] [udf?] WARNING in udf_setsize (2)
+From:   syzbot <syzbot+db6df8c0f578bc11e50e@syzkaller.appspotmail.com>
+To:     jack@suse.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 2:38=E2=80=AFAM Domenico Cerasuolo
-<cerasuolodomenico@gmail.com> wrote:
->
-> Each zpool driver (zbud, z3fold and zsmalloc) implements its own shrink
-> function, which is called from zpool_shrink. However, with this commit,
-> a unified shrink function is added to zswap. The ultimate goal is to
-> eliminate the need for zpool_shrink once all zpool implementations have
-> dropped their shrink code.
->
-> To ensure the functionality of each commit, this change focuses solely
-> on adding the mechanism itself. No modifications are made to
-> the backends, meaning that functionally, there are no immediate changes.
-> The zswap mechanism will only come into effect once the backends have
-> removed their shrink code. The subsequent commits will address the
-> modifications needed in the backends.
->
-> Acked-by: Nhat Pham <nphamcs@gmail.com>
-> Tested-by: Yosry Ahmed <yosryahmed@google.com>
+Hello,
 
-Reviewed-by: Yosry Ahmed <yosryahmed@google.com>
+syzbot found the following issue on:
 
-> Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-> ---
->  mm/zswap.c | 97 +++++++++++++++++++++++++++++++++++++++++++++++++++---
->  1 file changed, 92 insertions(+), 5 deletions(-)
->
-> diff --git a/mm/zswap.c b/mm/zswap.c
-> index 9fa86265f6dd..0024ec5ed574 100644
-> --- a/mm/zswap.c
-> +++ b/mm/zswap.c
-> @@ -154,6 +154,12 @@ struct crypto_acomp_ctx {
->         struct mutex *mutex;
->  };
->
-> +/*
-> + * The lock ordering is zswap_tree.lock -> zswap_pool.lru_lock.
-> + * The only case where lru_lock is not acquired while holding tree.lock =
-is
-> + * when a zswap_entry is taken off the lru for writeback, in that case i=
-t
-> + * needs to be verified that it's still valid in the tree.
-> + */
->  struct zswap_pool {
->         struct zpool *zpool;
->         struct crypto_acomp_ctx __percpu *acomp_ctx;
-> @@ -163,6 +169,8 @@ struct zswap_pool {
->         struct work_struct shrink_work;
->         struct hlist_node node;
->         char tfm_name[CRYPTO_MAX_ALG_NAME];
-> +       struct list_head lru;
-> +       spinlock_t lru_lock;
->  };
->
->  /*
-> @@ -180,10 +188,12 @@ struct zswap_pool {
->   *            be held while changing the refcount.  Since the lock must
->   *            be held, there is no reason to also make refcount atomic.
->   * length - the length in bytes of the compressed page data.  Needed dur=
-ing
-> - *          decompression. For a same value filled page length is 0.
-> + *          decompression. For a same value filled page length is 0, and=
- both
-> + *          pool and lru are invalid and must be ignored.
->   * pool - the zswap_pool the entry's data is in
->   * handle - zpool allocation handle that stores the compressed page data
->   * value - value of the same-value filled pages which have same content
-> + * lru - handle to the pool's lru used to evict pages.
->   */
->  struct zswap_entry {
->         struct rb_node rbnode;
-> @@ -196,6 +206,7 @@ struct zswap_entry {
->                 unsigned long value;
->         };
->         struct obj_cgroup *objcg;
-> +       struct list_head lru;
->  };
->
->  struct zswap_header {
-> @@ -368,6 +379,12 @@ static void zswap_free_entry(struct zswap_entry *ent=
-ry)
->         if (!entry->length)
->                 atomic_dec(&zswap_same_filled_pages);
->         else {
-> +               /* zpool_evictable will be removed once all 3 backends ha=
-ve migrated */
-> +               if (!zpool_evictable(entry->pool->zpool)) {
-> +                       spin_lock(&entry->pool->lru_lock);
-> +                       list_del(&entry->lru);
-> +                       spin_unlock(&entry->pool->lru_lock);
-> +               }
->                 zpool_free(entry->pool->zpool, entry->handle);
->                 zswap_pool_put(entry->pool);
->         }
-> @@ -588,14 +605,72 @@ static struct zswap_pool *zswap_pool_find_get(char =
-*type, char *compressor)
->         return NULL;
->  }
->
-> +static int zswap_reclaim_entry(struct zswap_pool *pool)
-> +{
-> +       struct zswap_header *zhdr;
-> +       struct zswap_entry *entry;
-> +       struct zswap_tree *tree;
-> +       pgoff_t swpoffset;
-> +       int ret;
-> +
-> +       /* Get an entry off the LRU */
-> +       spin_lock(&pool->lru_lock);
-> +       if (list_empty(&pool->lru)) {
-> +               spin_unlock(&pool->lru_lock);
-> +               return -EINVAL;
-> +       }
-> +       entry =3D list_last_entry(&pool->lru, struct zswap_entry, lru);
-> +       list_del_init(&entry->lru);
-> +       zhdr =3D zpool_map_handle(pool->zpool, entry->handle, ZPOOL_MM_RO=
-);
-> +       tree =3D zswap_trees[swp_type(zhdr->swpentry)];
-> +       zpool_unmap_handle(pool->zpool, entry->handle);
-> +       /*
-> +        * Once the lru lock is dropped, the entry might get freed. The
-> +        * swpoffset is copied to the stack, and entry isn't deref'd agai=
-n
-> +        * until the entry is verified to still be alive in the tree.
-> +        */
-> +       swpoffset =3D swp_offset(zhdr->swpentry);
-> +       spin_unlock(&pool->lru_lock);
-> +
-> +       /* Check for invalidate() race */
-> +       spin_lock(&tree->lock);
-> +       if (entry !=3D zswap_rb_search(&tree->rbroot, swpoffset)) {
-> +               ret =3D -EAGAIN;
-> +               goto unlock;
-> +       }
-> +       /* Hold a reference to prevent a free during writeback */
-> +       zswap_entry_get(entry);
-> +       spin_unlock(&tree->lock);
-> +
-> +       ret =3D zswap_writeback_entry(pool->zpool, entry->handle);
-> +
-> +       spin_lock(&tree->lock);
-> +       if (ret) {
-> +               /* Writeback failed, put entry back on LRU */
-> +               spin_lock(&pool->lru_lock);
-> +               list_move(&entry->lru, &pool->lru);
-> +               spin_unlock(&pool->lru_lock);
-> +       }
-> +
-> +       /* Drop local reference */
-> +       zswap_entry_put(tree, entry);
-> +unlock:
-> +       spin_unlock(&tree->lock);
-> +       return ret ? -EAGAIN : 0;
-> +}
-> +
->  static void shrink_worker(struct work_struct *w)
->  {
->         struct zswap_pool *pool =3D container_of(w, typeof(*pool),
->                                                 shrink_work);
->         int ret, failures =3D 0;
->
-> +       /* zpool_evictable will be removed once all 3 backends have migra=
-ted */
->         do {
-> -               ret =3D zpool_shrink(pool->zpool, 1, NULL);
-> +               if (zpool_evictable(pool->zpool))
-> +                       ret =3D zpool_shrink(pool->zpool, 1, NULL);
-> +               else
-> +                       ret =3D zswap_reclaim_entry(pool);
->                 if (ret) {
->                         zswap_reject_reclaim_fail++;
->                         if (ret !=3D -EAGAIN)
-> @@ -659,6 +734,8 @@ static struct zswap_pool *zswap_pool_create(char *typ=
-e, char *compressor)
->          */
->         kref_init(&pool->kref);
->         INIT_LIST_HEAD(&pool->list);
-> +       INIT_LIST_HEAD(&pool->lru);
-> +       spin_lock_init(&pool->lru_lock);
->         INIT_WORK(&pool->shrink_work, shrink_worker);
->
->         zswap_pool_debug("created", pool);
-> @@ -1274,7 +1351,7 @@ static int zswap_frontswap_store(unsigned type, pgo=
-ff_t offset,
->         }
->
->         /* store */
-> -       hlen =3D zpool_evictable(entry->pool->zpool) ? sizeof(zhdr) : 0;
-> +       hlen =3D sizeof(zhdr);
->         gfp =3D __GFP_NORETRY | __GFP_NOWARN | __GFP_KSWAPD_RECLAIM;
->         if (zpool_malloc_support_movable(entry->pool->zpool))
->                 gfp |=3D __GFP_HIGHMEM | __GFP_MOVABLE;
-> @@ -1317,6 +1394,12 @@ static int zswap_frontswap_store(unsigned type, pg=
-off_t offset,
->                         zswap_entry_put(tree, dupentry);
->                 }
->         } while (ret =3D=3D -EEXIST);
-> +       /* zpool_evictable will be removed once all 3 backends have migra=
-ted */
-> +       if (entry->length && !zpool_evictable(entry->pool->zpool)) {
-> +               spin_lock(&entry->pool->lru_lock);
-> +               list_add(&entry->lru, &entry->pool->lru);
-> +               spin_unlock(&entry->pool->lru_lock);
-> +       }
->         spin_unlock(&tree->lock);
->
->         /* update stats */
-> @@ -1398,8 +1481,7 @@ static int zswap_frontswap_load(unsigned type, pgof=
-f_t offset,
->         /* decompress */
->         dlen =3D PAGE_SIZE;
->         src =3D zpool_map_handle(entry->pool->zpool, entry->handle, ZPOOL=
-_MM_RO);
-> -       if (zpool_evictable(entry->pool->zpool))
-> -               src +=3D sizeof(struct zswap_header);
-> +       src +=3D sizeof(struct zswap_header);
->
->         if (!zpool_can_sleep_mapped(entry->pool->zpool)) {
->                 memcpy(tmp, src, entry->length);
-> @@ -1432,6 +1514,11 @@ static int zswap_frontswap_load(unsigned type, pgo=
-ff_t offset,
->         if (!ret && zswap_exclusive_loads_enabled) {
->                 zswap_invalidate_entry(tree, entry);
->                 *exclusive =3D true;
-> +       } else if (entry->length && !zpool_evictable(entry->pool->zpool))=
- {
-> +               /* zpool_evictable will be removed once all 3 backends ha=
-ve migrated */
-> +               spin_lock(&entry->pool->lru_lock);
-> +               list_move(&entry->lru, &entry->pool->lru);
-> +               spin_unlock(&entry->pool->lru_lock);
->         }
->         spin_unlock(&tree->lock);
->
-> --
-> 2.34.1
->
+HEAD commit:    5f63595ebd82 Merge tag 'input-for-v6.4-rc5' of git://git.k..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1667baf1280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7474de833c217bf4
+dashboard link: https://syzkaller.appspot.com/bug?extid=db6df8c0f578bc11e50e
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/d12b9e46ffe8/disk-5f63595e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c9044ded7edd/vmlinux-5f63595e.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/09f0fd3926e8/bzImage-5f63595e.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+db6df8c0f578bc11e50e@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 8731 at fs/udf/inode.c:673 udf_setsize+0x1092/0x1480 fs/udf/inode.c:1275
+Modules linked in:
+CPU: 1 PID: 8731 Comm: syz-executor.4 Not tainted 6.4.0-rc5-syzkaller-00024-g5f63595ebd82 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
+RIP: 0010:udf_extend_file fs/udf/inode.c:672 [inline]
+RIP: 0010:udf_setsize+0x1092/0x1480 fs/udf/inode.c:1275
+Code: 00 00 00 00 fc ff df 74 0a e8 4a fc 8c fe e9 18 ff ff ff 4c 89 64 24 20 e8 3b fc 8c fe 4c 89 fb e9 a7 fd ff ff e8 2e fc 8c fe <0f> 0b e9 1b f6 ff ff 44 89 f9 80 e1 07 38 c1 0f 8c 2b f0 ff ff 4c
+RSP: 0018:ffffc90004fcfae0 EFLAGS: 00010293
+RAX: ffffffff82fe8302 RBX: 0000000000000800 RCX: ffff888035f93b80
+RDX: 0000000000000000 RSI: 0000000000001000 RDI: 0000000000000800
+RBP: ffffc90004fcfcd0 R08: ffffffff82fe7900 R09: ffffed100ea45358
+R10: 0000000000000000 R11: dffffc0000000001 R12: 1ffff920009f9f70
+R13: 0000000000000751 R14: 0000000000000009 R15: 0000000000001000
+FS:  00007f3365a37700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020001000 CR3: 00000000797b8000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ udf_setattr+0x370/0x540 fs/udf/file.c:239
+ notify_change+0xc8b/0xf40 fs/attr.c:483
+ do_truncate+0x220/0x300 fs/open.c:66
+ do_sys_ftruncate+0x2e4/0x380 fs/open.c:194
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f3364c8c169
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f3365a37168 EFLAGS: 00000246 ORIG_RAX: 000000000000004d
+RAX: ffffffffffffffda RBX: 00007f3364dac120 RCX: 00007f3364c8c169
+RDX: 0000000000000000 RSI: 0000000000000751 RDI: 0000000000000004
+RBP: 00007f3364ce7ca1 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fff6db1fcaf R14: 00007f3365a37300 R15: 0000000000022000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
