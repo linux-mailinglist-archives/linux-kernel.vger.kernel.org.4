@@ -2,68 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3679C72C8DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD50672C8D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236016AbjFLOmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 10:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52196 "EHLO
+        id S235499AbjFLOl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 10:41:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239373AbjFLOk2 (ORCPT
+        with ESMTP id S235771AbjFLOlW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 10:40:28 -0400
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF881B2;
-        Mon, 12 Jun 2023 07:40:26 -0700 (PDT)
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1b3c3f2d71eso8229425ad.2;
-        Mon, 12 Jun 2023 07:40:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686580826; x=1689172826;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V2k5h5v6QzCcR3eX2PETHxqpP7p+MsuD7VNAtY9j2X8=;
-        b=TVGdFhuZTTzkiM4eSi6ccUZHupcCJvGsUCyaYOQ/xxeY4j6RB8nxPwUtz8P1AQU30D
-         b4QDm9zzlIUTkZEPOKI9XCCPNyHXLJdS6FmCDPZogJ41ro+DYGqObDhtBdHg2zTHV0/X
-         CC2VFT0/aPjQnFSrc/MV6niM4QFDD1wk3QhB2z9AxpF88Ra0Vf2OOK30oWaXhAMnFXsk
-         RbElDzLc+9UV8fhLFU1ZUVlOFApOK8rZTaUSdYGTwmQC63Ffkpaa5PKto3prQDWsWmXL
-         nj5la0PIs+02DS1ogo6EKjeISzW+FPfeQDUQ1rL2HAvuyPD4WrNIl2kBHRvWJ1efxGJR
-         49Lw==
-X-Gm-Message-State: AC+VfDx3xcuJ2oYRnREM48C/AKiDWeTMqrJD1veHNccw2DCxxg9f2h07
-        qc7EBpofpXEDvCPdEE8x5so=
-X-Google-Smtp-Source: ACHHUZ6egE9KlLIhazWftG0Nc619mPVQjblmmoart7BaveADrHDJZm8cMpprlOORgCQGRmtObxAC3Q==
-X-Received: by 2002:a17:90b:388f:b0:255:6c5b:3660 with SMTP id mu15-20020a17090b388f00b002556c5b3660mr7826413pjb.20.1686580826113;
-        Mon, 12 Jun 2023 07:40:26 -0700 (PDT)
-Received: from [192.168.51.14] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id 6-20020a17090a030600b0024dfb8271a4sm8157323pje.21.2023.06.12.07.40.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 07:40:25 -0700 (PDT)
-Message-ID: <b3bbc7c7-d607-8ad8-03ed-3ce18c0274e1@acm.org>
-Date:   Mon, 12 Jun 2023 07:40:23 -0700
+        Mon, 12 Jun 2023 10:41:22 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD7EBE
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 07:41:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=3HQW4PKlH1HusP+FajQ9wyjam/OsW2rojrIuXgqtbYs=; b=cjPdsxz2FS7Erv2rgoBvEEZcwB
+        VkPI3+3uIZ4lOe7mwGc5AftfwiY4ps793EzOC/E3mpmeXI6SQhEryuBNtqquCYI/nQJqdzOFDy0sQ
+        OgW36gzzgUm6bH4zNb51Yks8Hd4ywzAN3CyRn88RRsG2YgV/R2oRdEyvaDDZmZwyYU4c8atNB6DRa
+        4HyhyCu5OxHhWCKdK95rzX5xjtl5712K9DVD9HZ6qD5BtH2jbKCkUU+UucSYKm/fxHY21TayBJnK2
+        XmkbEpyjjswd7KptaQl94PBMeX2srJf6zKU2AUWZ3R9yIGcgtNCQdjTm9qdS08MgcyKL/0EJc2Ifg
+        KiE2trfg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q8ijI-002jGU-FS; Mon, 12 Jun 2023 14:41:12 +0000
+Date:   Mon, 12 Jun 2023 15:41:12 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, jgowans@amazon.com, yuzhao@google.com
+Subject: Re: [PATCH -next 1/2] mm: compaction: convert to use a folio in
+ isolate_migratepages_block()
+Message-ID: <ZIcuiHIXsIXKHGFH@casper.infradead.org>
+References: <20230612143414.186389-1-wangkefeng.wang@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v1 0/4] ufs: Introduce MCQ Quirks for MediaTek host
-Content-Language: en-US
-To:     Po-Wen Kao <powen.kao@mediatek.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     wsd_upstream@mediatek.com, peter.wang@mediatek.com,
-        stanley.chu@mediatek.com, alice.chao@mediatek.com,
-        naomi.chu@mediatek.com, chun-hung.wu@mediatek.com,
-        cc.chou@mediatek.com, eddie.huang@mediatek.com
-References: <20230612085817.12275-1-powen.kao@mediatek.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20230612085817.12275-1-powen.kao@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230612143414.186389-1-wangkefeng.wang@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,13 +50,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/12/23 01:58, Po-Wen Kao wrote:
-> v1
-> Introduce quirks for non-standard part of UFSHCI and address Bart's comment
-> from last patch
-> https://lore.kernel.org/all/20230328103801.11198-1-powen.kao@mediatek.com/
+On Mon, Jun 12, 2023 at 10:34:13PM +0800, Kefeng Wang wrote:
+> @@ -959,7 +960,8 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+>  				 * Hugepage was successfully isolated and placed
+>  				 * on the cc->migratepages list.
+>  				 */
+> -				low_pfn += compound_nr(page) - 1;
+> +				folio = page_folio(page);
+> +				low_pfn += folio_nr_pages(folio) - 1;
+>  				goto isolate_success_no_list;
 
-For the entire series:
+Why is this safe?  That is, how do we know that the folio can't be
+dissolved under us at this point, then reallocated and hit the
+VM_BUG_ON_PGFLAGS(PageTail(page), page) in folio_flags() when we
+test folio_test_large()?
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+> @@ -1132,30 +1137,30 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+>  			 * and it's on LRU. It can only be a THP so the order
+>  			 * is safe to read and it's 0 for tail pages.
+>  			 */
+
+^^^ This comment needs to be updated too.
+
+> -		mod_node_page_state(page_pgdat(page),
+> -				NR_ISOLATED_ANON + page_is_file_lru(page),
+> -				thp_nr_pages(page));
+> +		lruvec_del_folio(lruvec, folio);
+> +		mod_node_page_state(folio_pgdat(folio),
+> +				NR_ISOLATED_ANON + folio_is_file_lru(folio),
+> +				folio_nr_pages(folio));
+
+		node_stat_mod_folio()
 
