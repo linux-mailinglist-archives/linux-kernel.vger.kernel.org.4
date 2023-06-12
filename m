@@ -2,141 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2C1972BC2C
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:25:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B81572BB15
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 10:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231310AbjFLJZ1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 12 Jun 2023 05:25:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44368 "EHLO
+        id S232192AbjFLIpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 04:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234552AbjFLJYu (ORCPT
+        with ESMTP id S230156AbjFLIpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 05:24:50 -0400
-X-Greylist: delayed 2008 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 12 Jun 2023 02:18:50 PDT
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E693525B;
-        Mon, 12 Jun 2023 02:18:49 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:58520)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1q8dAu-00GXSG-LO; Mon, 12 Jun 2023 02:45:20 -0600
-Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:39804 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1q8dAt-00FC9s-H1; Mon, 12 Jun 2023 02:45:20 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Dave Chinner <david@fromorbit.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Zorro Lang <zlang@redhat.com>, linux-xfs@vger.kernel.org,
-        Mike Christie <michael.christie@oracle.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>, linux-kernel@vger.kernel.org
-References: <20230611124836.whfktwaumnefm5z5@zlang-mailbox>
-        <ZIZSPyzReZkGBEFy@dread.disaster.area>
-        <20230612015145.GA11441@frogsfrogsfrogs>
-        <ZIaBQnCKJ6NsqGhd@dread.disaster.area>
-        <CAHk-=whJqZLKPR-cpX-V4wJTXVX-_tG5Vjuj2q9knvKGCPdfkg@mail.gmail.com>
-        <ZIaqMpGISWKgHLK6@dread.disaster.area>
-        <CAHk-=wgwJptCbaHwt+TpGgh04fTVAHd60AY3Jj1rX+Spf0fVyg@mail.gmail.com>
-        <ZIax1FLfNajWk25A@dread.disaster.area>
-        <CAHk-=wj0NuJaRNC4o6FVAJgKAFJ5HWcBV5VJw6RGV0ZahqOOZA@mail.gmail.com>
-Date:   Mon, 12 Jun 2023 03:45:12 -0500
-In-Reply-To: <CAHk-=wj0NuJaRNC4o6FVAJgKAFJ5HWcBV5VJw6RGV0ZahqOOZA@mail.gmail.com>
-        (Linus Torvalds's message of "Sun, 11 Jun 2023 23:11:28 -0700")
-Message-ID: <87r0qhrrvr.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 12 Jun 2023 04:45:42 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1F39BB;
+        Mon, 12 Jun 2023 01:45:40 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A9FB41FB;
+        Mon, 12 Jun 2023 01:46:25 -0700 (PDT)
+Received: from [192.168.1.3] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E37E53F663;
+        Mon, 12 Jun 2023 01:45:37 -0700 (PDT)
+Message-ID: <751cb217-4be0-ddfc-780b-87517a8e337a@arm.com>
+Date:   Mon, 12 Jun 2023 09:45:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-XM-SPF: eid=1q8dAt-00FC9s-H1;;;mid=<87r0qhrrvr.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=pass
-X-XM-AID: U2FsdGVkX19zDZ9UDOy2LwKxs184+u4u0p0/xsgHgcs=
-X-SA-Exim-Connect-IP: 68.110.29.46
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 2/2] perf/ring_buffer: Fix high-order allocations for AUX
+ space with correct MAX_ORDER limit
+Content-Language: en-US
+To:     Shuai Xue <xueshuai@linux.alibaba.com>,
+        alexander.shishkin@linux.intel.com, peterz@infradead.org,
+        kirill@shutemov.name
+Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
+        adrian.hunter@intel.com, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+References: <20230612052452.53425-1-xueshuai@linux.alibaba.com>
+ <20230612052452.53425-3-xueshuai@linux.alibaba.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <20230612052452.53425-3-xueshuai@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ;Linus Torvalds <torvalds@linux-foundation.org>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 544 ms - load_scoreonly_sql: 0.08 (0.0%),
-        signal_user_changed: 12 (2.3%), b_tie_ro: 11 (2.0%), parse: 1.32
-        (0.2%), extract_message_metadata: 18 (3.3%), get_uri_detail_list: 1.97
-        (0.4%), tests_pri_-2000: 20 (3.7%), tests_pri_-1000: 2.6 (0.5%),
-        tests_pri_-950: 1.30 (0.2%), tests_pri_-900: 1.09 (0.2%),
-        tests_pri_-200: 0.91 (0.2%), tests_pri_-100: 4.7 (0.9%),
-        tests_pri_-90: 94 (17.2%), check_bayes: 83 (15.3%), b_tokenize: 7
-        (1.3%), b_tok_get_all: 8 (1.4%), b_comp_prob: 2.6 (0.5%),
-        b_tok_touch_all: 62 (11.4%), b_finish: 0.96 (0.2%), tests_pri_0: 371
-        (68.2%), check_dkim_signature: 0.54 (0.1%), check_dkim_adsp: 2.7
-        (0.5%), poll_dns_idle: 0.50 (0.1%), tests_pri_10: 2.9 (0.5%),
-        tests_pri_500: 10 (1.9%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [6.5-rc5 regression] core dump hangs (was Re: [Bug report]
- fstests generic/051 (on xfs) hang on latest linux v6.5-rc5+)
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus Torvalds <torvalds@linux-foundation.org> writes:
-
-> On Sun, Jun 11, 2023 at 10:49 PM Dave Chinner <david@fromorbit.com> wrote:
->>
->> On Sun, Jun 11, 2023 at 10:34:29PM -0700, Linus Torvalds wrote:
->> >
->> > So that "!=" should obviously have been a "==".
->>
->> Same as without the condition - all the fsstress tasks hang in
->> do_coredump().
->
-> Ok, that at least makes sense. Your "it made things worse" made me go
-> "What?" until I noticed the stupid backwards test.
->
-> I'm not seeing anything else that looks odd in that commit
-> f9010dbdce91 ("fork, vhost: Use CLONE_THREAD to fix freezer/ps
-> regression").
->
-> Let's see if somebody else goes "Ahh" when they wake up tomorrow...
-
-It feels like there have been about half a dozen bugs pointed out in
-that version of the patch.  I am going to have to sleep before I can get
-as far as "Ahh"
-
-One thing that really stands out for me is.
-
-if (test_if_loop_should_continue) {
-	set_current_state(TASK_INTERRUPTIBLE);
-        schedule();
-}
-
-/* elsewhere */
-llist_add(...);
-wake_up_process()
-
-So it is possible that the code can sleep indefinitely waiting for a
-wake-up that has already come, because the order of set_current_state
-and the test are in the wrong order.
-
-Unfortunately I don't see what would effect a coredump on a process that
-does not trigger the vhost_worker code.
 
 
+On 12/06/2023 06:24, Shuai Xue wrote:
+> When perf-record with a large AUX area, e.g 2GB:
+> 
+>     #perf record -C 0 -m ,2G -e arm_spe_0// -- sleep 1
+> 
+> it reveals a WARNING with __alloc_pages:
+> 
+> [   48.888553] ------------[ cut here ]------------
+> [   48.888559] WARNING: CPU: 39 PID: 17438 at mm/page_alloc.c:5568 __alloc_pages+0x1ec/0x248
+> [   48.888569] Modules linked in: ip6table_filter(E) ip6_tables(E) iptable_filter(E) ebtable_nat(E) ebtables(E) vfat(E) fat(E) aes_ce_blk(E) aes_ce_cipher(E) crct10dif_ce(E) ghash_ce(E) sm4_ce_cipher(E) sm4(E) sha2_ce(E) sha256_arm64(E) sha1_ce(E) acpi_ipmi(E) sbsa_gwdt(E) sg(E) ipmi_si(E) ipmi_devintf(E) ipmi_msghandler(E) ip_tables(E) sd_mod(E) ast(E) drm_kms_helper(E) syscopyarea(E) sysfillrect(E) nvme(E) sysimgblt(E) i2c_algo_bit(E) nvme_core(E) drm_shmem_helper(E) ahci(E) t10_pi(E) libahci(E) drm(E) crc64_rocksoft(E) i40e(E) crc64(E) libata(E) i2c_core(E)
+> [   48.888610] CPU: 39 PID: 17438 Comm: perf Kdump: loaded Tainted: G            E      6.3.0-rc4+ #56
+> [   48.888613] Hardware name: Default Default/Default, BIOS 1.2.M1.AL.P.139.00 03/22/2023
+> [   48.888614] pstate: 23400009 (nzCv daif +PAN -UAO +TCO +DIT -SSBS BTYPE=--)
+> [   48.888616] pc : __alloc_pages+0x1ec/0x248
+> [   48.888619] lr : rb_alloc_aux_page+0x78/0xe0
+> [   48.888622] sp : ffff800037c5b9e0
+> [   48.888623] pmr_save: 000000e0
+> [   48.888624] x29: ffff800037c5b9e0 x28: ffff00082743b800 x27: 0000000000000000
+> [   48.888627] x26: 0000000000080000 x25: ffff000000000000 x24: ffff000860b21380
+> [   48.888629] x23: ffff8000093fd3c0 x22: ffff00081a4a2080 x21: 000000000000000b
+> [   48.888631] x20: 0000000000000000 x19: 000000000000000b x18: 0000000000000020
+> [   48.888634] x17: 0000000000000000 x16: ffff800008f05be8 x15: ffff00081a4a2610
+> [   48.888636] x14: 0000000000000000 x13: 323173656761705f x12: ffff00477fffeb90
+> [   48.888638] x11: 0000000000000000 x10: 0000000000000000 x9 : ffff8000083608a0
+> [   48.888641] x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0000000000000040
+> [   48.888643] x5 : 000000000007f400 x4 : 0000000000000000 x3 : 0000000000000000
+> [   48.888645] x2 : 0000000000000000 x1 : 0000000000000001 x0 : 0000000000012dc0
+> [   48.888648] Call trace:
+> [   48.888650]  __alloc_pages+0x1ec/0x248
+> [   48.888653]  rb_alloc_aux_page+0x78/0xe0
+> [   48.888654]  rb_alloc_aux+0x13c/0x298
+> [   48.888656]  perf_mmap+0x468/0x688
+> [   48.888659]  mmap_region+0x308/0x8a8
+> [   48.888662]  do_mmap+0x3c0/0x528
+> [   48.888664]  vm_mmap_pgoff+0xf4/0x1b8
+> [   48.888666]  ksys_mmap_pgoff+0x18c/0x218
+> [   48.888668]  __arm64_sys_mmap+0x38/0x58
+> [   48.888671]  invoke_syscall+0x50/0x128
+> [   48.888673]  el0_svc_common.constprop.0+0x58/0x188
+> [   48.888674]  do_el0_svc+0x34/0x50
+> [   48.888676]  el0_svc+0x34/0x108
+> [   48.888679]  el0t_64_sync_handler+0xb8/0xc0
+> [   48.888681]  el0t_64_sync+0x1a4/0x1a8
+> [   48.888686] ---[ end trace 0000000000000000 ]---
+> 
+> The problem is that the high-order pages for AUX area is allocated with
+> an order of MAX_ORDER. Obviously, this is a bogus.
+> 
+> Fix it with an order of MAX_ORDER - 1 at maximum.
+> 
+> Fixes: 0a4e38e64f5e ("perf: Support high-order allocations for AUX space")
+> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+> ---
+>  kernel/events/ring_buffer.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/events/ring_buffer.c b/kernel/events/ring_buffer.c
+> index 273a0fe..d6bbdb7 100644
+> --- a/kernel/events/ring_buffer.c
+> +++ b/kernel/events/ring_buffer.c
+> @@ -609,8 +609,8 @@ static struct page *rb_alloc_aux_page(int node, int order)
+>  {
+>  	struct page *page;
+>  
+> -	if (order > MAX_ORDER)
+> -		order = MAX_ORDER;
+> +	if (order >= MAX_ORDER)
+> +		order = MAX_ORDER - 1;
+>  
+>  	do {
+>  		page = alloc_pages_node(node, PERF_AUX_GFP, order);
 
-About the only thing I can image is if io_uring is involved.  Some of
-the PF_IO_WORKER code was changed, and the test
-"((t->flags & (PF_USER_WORKER | PF_IO_WORKER)) != PF_USER_WORKER)"
-was sprinkled around.
 
-That is the only code outside of vhost specific code that was changed.
+It seems like this was only just recently changed with this as the
+commit message (23baf83):
 
+   mm, treewide: redefine MAX_ORDER sanely
 
-Is io_uring involved in the cases that hang?
+  MAX_ORDER currently defined as number of orders page allocator
+  supports: user can ask buddy allocator for page order between 0 and
+  MAX_ORDER-1.
 
+  This definition is counter-intuitive and lead to number of bugs all
+  over the kernel.
 
-Eric
+  Change the definition of MAX_ORDER to be inclusive: the range of
+  orders user can ask from buddy allocator is 0..MAX_ORDER now.
+
+It might be worth referring to this in the commit message or adding a
+fixes: reference. Or maybe this new change isn't quite right?
+
+James
 
