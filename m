@@ -2,115 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CDA272CF0B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 21:13:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1303F72CF15
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 21:14:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237938AbjFLTNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 15:13:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45872 "EHLO
+        id S238073AbjFLTOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 15:14:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231755AbjFLTNs (ORCPT
+        with ESMTP id S231755AbjFLTOm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 15:13:48 -0400
-Received: from out-2.mta1.migadu.com (out-2.mta1.migadu.com [IPv6:2001:41d0:203:375::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4724AC0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 12:13:46 -0700 (PDT)
-Date:   Mon, 12 Jun 2023 21:13:41 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1686597223;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HxGQvsB7fcRIz73MLbhBAve1ENUGJm6b0AdpqTHIpqE=;
-        b=BmixyGpow9WXKsKoIICxCywoB6nARvJSBuFSil9BVrJYhdu91Q1xEeah/tdb+1jAUSeLgA
-        DJoR3p3DSTGXOA+gOefFf1+2ulTBBQGN6Q17ici9wHaPMcpuH6yrGJ1g1JgJUfc7Lz4s/l
-        2oaw+m2SXoKHlR5EDs3BwZxhcmhGBvM=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Mostafa Saleh <smostafa@google.com>
-Cc:     Will Deacon <will@kernel.org>, maz@kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, tabba@google.com,
-        kaleshsingh@google.com, catalin.marinas@arm.com,
-        yuzenghui@huawei.com, suzuki.poulose@arm.com, james.morse@arm.com
-Subject: Re: [PATCH] KVM: arm64: Use different pointer authentication keys
- for pKVM
-Message-ID: <ZIduZcSpeA5xw3Yn@linux.dev>
-References: <20230516141531.791492-1-smostafa@google.com>
- <ZHEa+HAixbYijQTA@linux.dev>
- <ZHSJ38WATzgJF7SR@google.com>
- <20230608215525.GA2742@willie-the-truck>
- <ZIbjULC2p5aTZu8w@google.com>
+        Mon, 12 Jun 2023 15:14:42 -0400
+Received: from smtp-8faa.mail.infomaniak.ch (smtp-8faa.mail.infomaniak.ch [83.166.143.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5547FED
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 12:14:40 -0700 (PDT)
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Qg1b23pH8zMq94q;
+        Mon, 12 Jun 2023 19:14:38 +0000 (UTC)
+Received: from unknown by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4Qg1b12W4MzMqmsh;
+        Mon, 12 Jun 2023 21:14:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1686597278;
+        bh=IyGVL/IDfihrZ3aEmE9iwusUGzsJURKRriLT2zxWZro=;
+        h=From:To:Cc:Subject:Date:From;
+        b=e3g9IqhKw1rGaPe68hX+Rw5YNj1RnNxL/Vjdw6KjhQnt6JRteAcyfr8t0+nm5Qy7l
+         EWO1ML1nD0yHNjfeENmIWHjkBweHDdMqouRltkE5PwslyW1nacJ8yD+8oKW/DGeKeM
+         0f9bXfRiKckLQOkzzsojx8g85/jhF1LobJ5QoTvU=
+From:   =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+To:     Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Richard Weinberger <richard@nod.at>
+Cc:     =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+        Christopher Obbard <chris.obbard@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack3000@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        James Morris <jmorris@namei.org>, Jeff Xu <jeffxu@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Paul Moore <paul@paul-moore.com>,
+        Ritesh Raj Sarraf <ritesh@collabora.com>,
+        Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sjoerd Simons <sjoerd@collabora.com>,
+        Willem de Bruijn <willemb@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: [PATCH v2 0/6] Landlock support for UML
+Date:   Mon, 12 Jun 2023 21:14:24 +0200
+Message-ID: <20230612191430.339153-1-mic@digikod.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZIbjULC2p5aTZu8w@google.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Infomaniak-Routing: alpha
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mostafa,
+Hi,
 
-Thank you for bumping this, I didn't see Will's reply.
+Commit cb2c7d1a1776 ("landlock: Support filesystem access-control")
+introduced a new ARCH_EPHEMERAL_INODES configuration, only enabled for
+User-Mode Linux.  The reason was that UML's hostfs managed inodes in an
+ephemeral way: from the kernel point of view, the same inode struct
+could be created several times while being used by user space because
+the kernel didn't hold references to inodes.  Because Landlock (and
+probably other subsystems) ties properties (i.e. access rights) to inode
+objects, it wasn't possible to create rules that match inodes and then
+allow specific accesses.
 
-On Mon, Jun 12, 2023 at 09:20:16AM +0000, Mostafa Saleh wrote:
-> On Thu, Jun 08, 2023 at 10:55:26PM +0100, Will Deacon wrote:
-> > I appreciate the sentiment, but I think we should avoid adding additional
-> > complexity here if it adds no security benefit. If nothing else, it adds
-> > pointless overhead, but beyond that it gives the false illusion of a
-> > security boundary.
-> > 
-> > Prior to deprivilege, the kernel can write to the hypervisor text, modify
-> > its stage-1 page-table and change its data values. I think the pointer
-> > auth keys are the least of our worries if it's compromised...
+This patch series fixes the way UML manages inodes according to the
+underlying filesystem.  They are now properly handles as for other
+filesystems, which enables to support Landlock (and probably other
+features).
 
-Ack -- well aware of the other issues there :) My whining as it relates
-to security was more focused at the changelog than the diff of the
-patch.
+Changes since v1:
+https://lore.kernel.org/r/20230309165455.175131-1-mic@digikod.net
+- Remove Cc stable@ (suggested by Richard).
+- Add Acked-by: Richard Weinberger to the first patch.
+- Split the test patch into two patches: one for the common
+  pseudo-filesystems, and another patch dedicated to hostfs.
+- Remove CONFIG_SECURITY_PATH because it is useless for merge_config.sh
+- Move CONFIG_HOSTFS to a new config.um file.
+- Fix commit message spelling and test warnings.
+- Improve prepare_layout_opt() with remove_path() call to avoid
+  cascading errors when some tested filesystems are not supported.
+- Remove cgroup-v1 tests because this filesystem cannot really be
+  mounted several times.
+- Add test coverage with and without kernel debug code, according to
+  GCC 12 and GCC 13.
 
-My tilt in terms of the functionality is more aimed at limiting the
-interactions between pKVM and the host before it deprivilege. Longer
-term, it'd be interesting to have pKVM capable of bootstrapping itself,
-such that it can possibly be used in other contexts. So, when I saw the
-patch I had questioned whether or not the dependency was strictly
-necessary.
+Regards,
 
-No reason to boil the ocean as part of this otherwise isolated change.
+Mickaël Salaün (6):
+  hostfs: Fix ephemeral inodes
+  selftests/landlock: Don't create useless file layouts
+  selftests/landlock: Add supports_filesystem() helper
+  selftests/landlock: Make mounts configurable
+  selftests/landlock: Add tests for pseudo filesystems
+  selftests/landlock: Add hostfs tests
 
-Tangent: Will you folks need random in EL2 at runtime?
+ arch/Kconfig                               |   7 -
+ arch/um/Kconfig                            |   1 -
+ fs/hostfs/hostfs.h                         |   1 +
+ fs/hostfs/hostfs_kern.c                    | 213 ++++++------
+ fs/hostfs/hostfs_user.c                    |   1 +
+ security/landlock/Kconfig                  |   2 +-
+ tools/testing/selftests/landlock/config    |   9 +-
+ tools/testing/selftests/landlock/config.um |   1 +
+ tools/testing/selftests/landlock/fs_test.c | 387 +++++++++++++++++++--
+ 9 files changed, 478 insertions(+), 144 deletions(-)
+ create mode 100644 tools/testing/selftests/landlock/config.um
 
-> Thanks a lot Will for explaining this.
-> 
-> Oliver, what do you think for V2, about it including FEAT_RNG/TRNG in EL2?
 
-The patch itself looks good to me. May I suggest something along these
-lines for the changelog? I can do it myself to avoid the need for a v2:
+base-commit: 858fd168a95c5b9669aac8db6c14a9aeab446375
+-- 
+2.41.0
 
-"""
-When the use of pointer authentication is enabled in the kernel it
-applies to both the kernel itself as well as KVM's nVHE hypervisor. The
-same keys are used for both the kernel and the nVHE hypervisor, which is
-less than desirable for pKVM as the host is not trusted at runtime.
-
-Naturally, the fix is to use a different set of keys for the hypervisor
-when running in protected mode. Have the host generate a new set of keys
-for the hypervisor before deprivileging the kernel. While there might be
-other sources of random directly available at EL2, this keeps the
-implementation simple, and the host is trusted anyways until it is
-deprivileged.
-
-Since the host and hypervisor no longer share a set of pointer
-authentication keys, start context switching them on the host entry/exit
-path exactly as we do for guest entry/exit. There is no need to handle
-CPU migration as the nVHE code is not migratable in the first place.
-"""
-
---
-Thanks,
-Oliver
