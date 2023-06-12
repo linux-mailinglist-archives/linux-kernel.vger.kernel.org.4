@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF39372B7BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 07:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D977172B7C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 07:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235946AbjFLFlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 01:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40942 "EHLO
+        id S236358AbjFLFl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 01:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235952AbjFLFkQ (ORCPT
+        with ESMTP id S236178AbjFLFk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 01:40:16 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911BC10FC
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 22:40:06 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-19f45faedfbso2489391fac.0
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 22:40:06 -0700 (PDT)
+        Mon, 12 Jun 2023 01:40:26 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45CA199C
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 22:40:15 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id 46e09a7af769-6b160f3f384so2127790a34.3
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 22:40:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1686548403; x=1689140403;
+        d=ventanamicro.com; s=google; t=1686548408; x=1689140408;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qy2FvnQ7sT+hFfzfZbK6StB7FDfBUwIcnd7vowD7Hdo=;
-        b=fKgyV64IuuDp42oIE6+vlEALvMZVYR6v+zRX2M6KBdp2U1Q4EEebp+gWJClqMF1XXk
-         OLG79st9/QNYq31F77kDNAqW5yxqzjZ/ljYG9ZCiIhBYqfERkkZZQkMmWp1DKH5TNdMY
-         vXwGTZP9VPOUhOKsd6hbPeiYhZlI/rvmafAKC/3+1ih6jsO+O29QAWjMS+laB5KoHEvV
-         GwwTRhkKPI0XRfYBv7/a6FrBe9Y+HxKOlxG2qFED5Y+OpmdtPrKVe6cF16ZoSPqwH9kV
-         zYhhgtK4v0R8WlZnF2eixvx1n0GVXz/t83u1plyp4pJ+FBjsPOuJFY+3CynImlF53wg4
-         93xg==
+        bh=eHI7epT+Fy97+emlJi+4eK1ecltNEEWPjySlfbPu41Y=;
+        b=BApsxhrkSkvg4Nuc+wVcIKW2mAFK+m8oqlApJR/Pyf0gk35EpIilg98AOGcECXxJm3
+         GXcLHjdMUhUs0r61Zqhylyyj6YZS1m9kXuKcBUwBr/0yZ8y+wfeEL16Y0RUp0Qu9QdMz
+         Ml1wUgBZ4eFUwsF4P//yGZh5JPy+O5HVQ3gz7E+ds5tSdI/T7PJCAa4wEyEkQyZSFZnF
+         8hbzRg8Jdh7dx4vmhrBa5CjPmxGQYC8NjPE7klnBCjgDlJMkxC6/4aX7SXoDztw5v7pG
+         pnB0bAaXNBvv5nOH9yKthfrhADpZTI8riylIigbFeISjnsPseo51igP1JbL1bJEBfLS2
+         48gQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686548403; x=1689140403;
+        d=1e100.net; s=20221208; t=1686548408; x=1689140408;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qy2FvnQ7sT+hFfzfZbK6StB7FDfBUwIcnd7vowD7Hdo=;
-        b=J9t2KN+bum8sFMMFm5XCacdeHsBEOqRyYl3ZJ+CdHoMEV37ZUvMQ/JmoUqjLfiLM8L
-         IJPWKhw2qe4QsbJGosWfBJE97XGCFM17dq1ceJWOmv2AbmxCAkDydbKYTKm8oQEBbE1K
-         pTYsMeZJ7TRa8DacbbkEBy0IVu0eBhMbNyBFU1h7cHg01C1+giJXyekme7GNO+plkF1H
-         witUo7HmW3+StuftM1DirKEGmcVo5GwHZH2Km6+0qjq8Y2a5G9mqxL+8LiHu2RIZqw9z
-         xGf1mhpbtC2Qwgh2l3Zj35sEioAaIR+1lx6y9/9t3Tij1BsmN5Gow+2UVq4rKS/kBZRK
-         khSg==
-X-Gm-Message-State: AC+VfDxIDxQ0sz5rJAQI+fZfT+2KicaH55ObAugzrhfFYxpNs40tc9mf
-        i8apnSk3rxQpxz6tOe0atA6r+g==
-X-Google-Smtp-Source: ACHHUZ5kPec2p3OADgxcfQzu4nQmjeX0kue8Qhu5qVqg39cFrxryxf6q488ZF3QT6feTgV7ykRUpYg==
-X-Received: by 2002:a05:6870:2207:b0:19f:5701:8c47 with SMTP id i7-20020a056870220700b0019f57018c47mr5001745oaf.9.1686548402860;
-        Sun, 11 Jun 2023 22:40:02 -0700 (PDT)
+        bh=eHI7epT+Fy97+emlJi+4eK1ecltNEEWPjySlfbPu41Y=;
+        b=ZdNt2gFvUYnQMKW5FzB/6so+criUevMv2yrZy1lZGmLb0BvFEDPRuqIiGDsZNen1VK
+         G4q3vG6gqfX5eNJ+XhkNzvG2ICGbb6AXsXDBxB8TA3oOmhiGodiqbPGKPaicEmLN2HgX
+         Pn+D5RkFC1oV8ENKYbmXOQtKzrVLJ4JbdPS9DlXh44B3reFj2qPFaODIjZPEuGZkMOW6
+         HhXnL7lTgP697rgS/X07urwW835oDteYY0fJ78yCpIWs7m+oFVJiO2aSb9sC7FWog04A
+         SeLtsbY3dxcnDDWTAcWnKUpSm2bMxiLyXq8Fw5YmGSlUFG6u0oV13Xp+KG8p5osU22VQ
+         hyHQ==
+X-Gm-Message-State: AC+VfDzBN+USDQ3j6FejX3Zo7bbQPwCe3EPx9UZM0mus1uI5/AcBPgDU
+        V18xIDgWsLxmLwyp08zD94+mUw==
+X-Google-Smtp-Source: ACHHUZ7kt3s8/ywPZS8qv4FAX83F7Jh9eu8CjXlTR1A+7Dg/pBBSl+o7XayiDbx0eQhHHiiRFxNWyw==
+X-Received: by 2002:a05:6830:1452:b0:6b0:c4ba:4940 with SMTP id w18-20020a056830145200b006b0c4ba4940mr6155737otp.21.1686548407951;
+        Sun, 11 Jun 2023 22:40:07 -0700 (PDT)
 Received: from anup-ubuntu-vm.localdomain ([103.97.165.210])
-        by smtp.gmail.com with ESMTPSA id lv19-20020a056871439300b001a30d846520sm5534869oab.7.2023.06.11.22.39.58
+        by smtp.gmail.com with ESMTPSA id lv19-20020a056871439300b001a30d846520sm5534869oab.7.2023.06.11.22.40.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jun 2023 22:40:02 -0700 (PDT)
+        Sun, 11 Jun 2023 22:40:07 -0700 (PDT)
 From:   Anup Patel <apatel@ventanamicro.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>,
         Atish Patra <atishp@atishpatra.org>
@@ -59,9 +59,9 @@ Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
         kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
         linux-kernel@vger.kernel.org, Anup Patel <apatel@ventanamicro.com>,
         Atish Patra <atishp@rivosinc.com>
-Subject: [PATCH v2 04/10] RISC-V: KVM: Set kvm_riscv_aia_nr_hgei to zero
-Date:   Mon, 12 Jun 2023 11:09:26 +0530
-Message-Id: <20230612053932.58604-5-apatel@ventanamicro.com>
+Subject: [PATCH v2 05/10] RISC-V: KVM: Skeletal in-kernel AIA irqchip support
+Date:   Mon, 12 Jun 2023 11:09:27 +0530
+Message-Id: <20230612053932.58604-6-apatel@ventanamicro.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230612053932.58604-1-apatel@ventanamicro.com>
 References: <20230612053932.58604-1-apatel@ventanamicro.com>
@@ -77,43 +77,270 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We hard-code the kvm_riscv_aia_nr_hgei to zero until IMSIC HW
-guest file support is added in KVM RISC-V.
+To incrementally implement in-kernel AIA irqchip support, we first
+add minimal skeletal support which only compiles but does not provide
+any functionality.
 
 Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 Reviewed-by: Atish Patra <atishp@rivosinc.com>
 ---
- arch/riscv/kvm/aia.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ arch/riscv/include/asm/kvm_aia.h  |  20 ++++++
+ arch/riscv/include/asm/kvm_host.h |   4 ++
+ arch/riscv/include/uapi/asm/kvm.h |   4 ++
+ arch/riscv/kvm/Kconfig            |   4 ++
+ arch/riscv/kvm/aia.c              |   8 +++
+ arch/riscv/kvm/vm.c               | 115 ++++++++++++++++++++++++++++++
+ 6 files changed, 155 insertions(+)
 
+diff --git a/arch/riscv/include/asm/kvm_aia.h b/arch/riscv/include/asm/kvm_aia.h
+index 0938e0cadf80..3bc0a0e47a15 100644
+--- a/arch/riscv/include/asm/kvm_aia.h
++++ b/arch/riscv/include/asm/kvm_aia.h
+@@ -45,6 +45,7 @@ struct kvm_vcpu_aia {
+ #define irqchip_in_kernel(k)		((k)->arch.aia.in_kernel)
+ 
+ extern unsigned int kvm_riscv_aia_nr_hgei;
++extern unsigned int kvm_riscv_aia_max_ids;
+ DECLARE_STATIC_KEY_FALSE(kvm_riscv_aia_available);
+ #define kvm_riscv_aia_available() \
+ 	static_branch_unlikely(&kvm_riscv_aia_available)
+@@ -116,6 +117,25 @@ static inline void kvm_riscv_vcpu_aia_deinit(struct kvm_vcpu *vcpu)
+ {
+ }
+ 
++static inline int kvm_riscv_aia_inject_msi_by_id(struct kvm *kvm,
++						 u32 hart_index,
++						 u32 guest_index, u32 iid)
++{
++	return 0;
++}
++
++static inline int kvm_riscv_aia_inject_msi(struct kvm *kvm,
++					   struct kvm_msi *msi)
++{
++	return 0;
++}
++
++static inline int kvm_riscv_aia_inject_irq(struct kvm *kvm,
++					   unsigned int irq, bool level)
++{
++	return 0;
++}
++
+ static inline void kvm_riscv_aia_init_vm(struct kvm *kvm)
+ {
+ }
+diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
+index ee0acccb1d3b..871432586a63 100644
+--- a/arch/riscv/include/asm/kvm_host.h
++++ b/arch/riscv/include/asm/kvm_host.h
+@@ -27,6 +27,8 @@
+ 
+ #define KVM_VCPU_MAX_FEATURES		0
+ 
++#define KVM_IRQCHIP_NUM_PINS		1024
++
+ #define KVM_REQ_SLEEP \
+ 	KVM_ARCH_REQ_FLAGS(0, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
+ #define KVM_REQ_VCPU_RESET		KVM_ARCH_REQ(1)
+@@ -318,6 +320,8 @@ int kvm_riscv_gstage_vmid_init(struct kvm *kvm);
+ bool kvm_riscv_gstage_vmid_ver_changed(struct kvm_vmid *vmid);
+ void kvm_riscv_gstage_vmid_update(struct kvm_vcpu *vcpu);
+ 
++int kvm_riscv_setup_default_irq_routing(struct kvm *kvm, u32 lines);
++
+ void __kvm_riscv_unpriv_trap(void);
+ 
+ unsigned long kvm_riscv_vcpu_unpriv_read(struct kvm_vcpu *vcpu,
+diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
+index f92790c9481a..332d4a274891 100644
+--- a/arch/riscv/include/uapi/asm/kvm.h
++++ b/arch/riscv/include/uapi/asm/kvm.h
+@@ -15,6 +15,7 @@
+ #include <asm/bitsperlong.h>
+ #include <asm/ptrace.h>
+ 
++#define __KVM_HAVE_IRQ_LINE
+ #define __KVM_HAVE_READONLY_MEM
+ 
+ #define KVM_COALESCED_MMIO_PAGE_OFFSET 1
+@@ -203,6 +204,9 @@ enum KVM_RISCV_SBI_EXT_ID {
+ #define KVM_REG_RISCV_SBI_MULTI_REG_LAST	\
+ 		KVM_REG_RISCV_SBI_MULTI_REG(KVM_RISCV_SBI_EXT_MAX - 1)
+ 
++/* One single KVM irqchip, ie. the AIA */
++#define KVM_NR_IRQCHIPS			1
++
+ #endif
+ 
+ #endif /* __LINUX_KVM_RISCV_H */
+diff --git a/arch/riscv/kvm/Kconfig b/arch/riscv/kvm/Kconfig
+index 28891e583259..dfc237d7875b 100644
+--- a/arch/riscv/kvm/Kconfig
++++ b/arch/riscv/kvm/Kconfig
+@@ -21,6 +21,10 @@ config KVM
+ 	tristate "Kernel-based Virtual Machine (KVM) support (EXPERIMENTAL)"
+ 	depends on RISCV_SBI && MMU
+ 	select HAVE_KVM_EVENTFD
++	select HAVE_KVM_IRQCHIP
++	select HAVE_KVM_IRQFD
++	select HAVE_KVM_IRQ_ROUTING
++	select HAVE_KVM_MSI
+ 	select HAVE_KVM_VCPU_ASYNC_IOCTL
+ 	select KVM_GENERIC_DIRTYLOG_READ_PROTECT
+ 	select KVM_GENERIC_HARDWARE_ENABLING
 diff --git a/arch/riscv/kvm/aia.c b/arch/riscv/kvm/aia.c
-index c78c06d99e39..3f97575707eb 100644
+index 3f97575707eb..18c442c15ff2 100644
 --- a/arch/riscv/kvm/aia.c
 +++ b/arch/riscv/kvm/aia.c
-@@ -408,7 +408,7 @@ int kvm_riscv_aia_alloc_hgei(int cpu, struct kvm_vcpu *owner,
+@@ -26,6 +26,7 @@ static DEFINE_PER_CPU(struct aia_hgei_control, aia_hgei);
+ static int hgei_parent_irq;
  
- 	raw_spin_unlock_irqrestore(&hgctrl->lock, flags);
+ unsigned int kvm_riscv_aia_nr_hgei;
++unsigned int kvm_riscv_aia_max_ids;
+ DEFINE_STATIC_KEY_FALSE(kvm_riscv_aia_available);
  
--	/* TODO: To be updated later by AIA in-kernel irqchip support */
-+	/* TODO: To be updated later by AIA IMSIC HW guest file support */
- 	if (hgei_va)
- 		*hgei_va = NULL;
- 	if (hgei_pa)
-@@ -610,6 +610,14 @@ int kvm_riscv_aia_init(void)
- 	if (kvm_riscv_aia_nr_hgei)
- 		kvm_riscv_aia_nr_hgei--;
+ static int aia_find_hgei(struct kvm_vcpu *owner)
+@@ -618,6 +619,13 @@ int kvm_riscv_aia_init(void)
+ 	 */
+ 	kvm_riscv_aia_nr_hgei = 0;
  
 +	/*
-+	 * Number of usable HGEI lines should be minimum of per-HART
-+	 * IMSIC guest files and number of bits in HGEIE
++	 * Find number of guest MSI IDs
 +	 *
 +	 * TODO: To be updated later by AIA IMSIC HW guest file support
 +	 */
-+	kvm_riscv_aia_nr_hgei = 0;
++	kvm_riscv_aia_max_ids = IMSIC_MAX_ID;
 +
  	/* Initialize guest external interrupt line management */
  	rc = aia_hgei_init();
  	if (rc)
+diff --git a/arch/riscv/kvm/vm.c b/arch/riscv/kvm/vm.c
+index 6ef15f78e80f..d2349326b2ce 100644
+--- a/arch/riscv/kvm/vm.c
++++ b/arch/riscv/kvm/vm.c
+@@ -55,6 +55,121 @@ void kvm_arch_destroy_vm(struct kvm *kvm)
+ 	kvm_riscv_aia_destroy_vm(kvm);
+ }
+ 
++int kvm_vm_ioctl_irq_line(struct kvm *kvm, struct kvm_irq_level *irql,
++			  bool line_status)
++{
++	if (!irqchip_in_kernel(kvm))
++		return -ENXIO;
++
++	return kvm_riscv_aia_inject_irq(kvm, irql->irq, irql->level);
++}
++
++int kvm_set_msi(struct kvm_kernel_irq_routing_entry *e,
++		struct kvm *kvm, int irq_source_id,
++		int level, bool line_status)
++{
++	struct kvm_msi msi;
++
++	if (!level)
++		return -1;
++
++	msi.address_lo = e->msi.address_lo;
++	msi.address_hi = e->msi.address_hi;
++	msi.data = e->msi.data;
++	msi.flags = e->msi.flags;
++	msi.devid = e->msi.devid;
++
++	return kvm_riscv_aia_inject_msi(kvm, &msi);
++}
++
++static int kvm_riscv_set_irq(struct kvm_kernel_irq_routing_entry *e,
++			     struct kvm *kvm, int irq_source_id,
++			     int level, bool line_status)
++{
++	return kvm_riscv_aia_inject_irq(kvm, e->irqchip.pin, level);
++}
++
++int kvm_riscv_setup_default_irq_routing(struct kvm *kvm, u32 lines)
++{
++	struct kvm_irq_routing_entry *ents;
++	int i, rc;
++
++	ents = kcalloc(lines, sizeof(*ents), GFP_KERNEL);
++	if (!ents)
++		return -ENOMEM;
++
++	for (i = 0; i < lines; i++) {
++		ents[i].gsi = i;
++		ents[i].type = KVM_IRQ_ROUTING_IRQCHIP;
++		ents[i].u.irqchip.irqchip = 0;
++		ents[i].u.irqchip.pin = i;
++	}
++	rc = kvm_set_irq_routing(kvm, ents, lines, 0);
++	kfree(ents);
++
++	return rc;
++}
++
++bool kvm_arch_can_set_irq_routing(struct kvm *kvm)
++{
++	return irqchip_in_kernel(kvm);
++}
++
++int kvm_set_routing_entry(struct kvm *kvm,
++			  struct kvm_kernel_irq_routing_entry *e,
++			  const struct kvm_irq_routing_entry *ue)
++{
++	int r = -EINVAL;
++
++	switch (ue->type) {
++	case KVM_IRQ_ROUTING_IRQCHIP:
++		e->set = kvm_riscv_set_irq;
++		e->irqchip.irqchip = ue->u.irqchip.irqchip;
++		e->irqchip.pin = ue->u.irqchip.pin;
++		if ((e->irqchip.pin >= KVM_IRQCHIP_NUM_PINS) ||
++		    (e->irqchip.irqchip >= KVM_NR_IRQCHIPS))
++			goto out;
++		break;
++	case KVM_IRQ_ROUTING_MSI:
++		e->set = kvm_set_msi;
++		e->msi.address_lo = ue->u.msi.address_lo;
++		e->msi.address_hi = ue->u.msi.address_hi;
++		e->msi.data = ue->u.msi.data;
++		e->msi.flags = ue->flags;
++		e->msi.devid = ue->u.msi.devid;
++		break;
++	default:
++		goto out;
++	}
++	r = 0;
++out:
++	return r;
++}
++
++int kvm_arch_set_irq_inatomic(struct kvm_kernel_irq_routing_entry *e,
++			      struct kvm *kvm, int irq_source_id, int level,
++			      bool line_status)
++{
++	if (!level)
++		return -EWOULDBLOCK;
++
++	switch (e->type) {
++	case KVM_IRQ_ROUTING_MSI:
++		return kvm_set_msi(e, kvm, irq_source_id, level, line_status);
++
++	case KVM_IRQ_ROUTING_IRQCHIP:
++		return kvm_riscv_set_irq(e, kvm, irq_source_id,
++					 level, line_status);
++	}
++
++	return -EWOULDBLOCK;
++}
++
++bool kvm_arch_irqchip_in_kernel(struct kvm *kvm)
++{
++	return irqchip_in_kernel(kvm);
++}
++
+ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+ {
+ 	int r;
 -- 
 2.34.1
 
