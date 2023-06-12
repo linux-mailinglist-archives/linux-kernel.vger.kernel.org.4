@@ -2,64 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC72872C867
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9495F72C817
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238963AbjFLO1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 10:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38096 "EHLO
+        id S237240AbjFLOVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 10:21:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238707AbjFLO11 (ORCPT
+        with ESMTP id S240114AbjFLOUu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 10:27:27 -0400
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7238C1FCC
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 07:25:23 -0700 (PDT)
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-30c4775d05bso3009519f8f.2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 07:25:23 -0700 (PDT)
+        Mon, 12 Jun 2023 10:20:50 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9A04486
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 07:18:29 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b3a6469623so11724265ad.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 07:18:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686579414; x=1689171414;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ls3j9MtBWNjJOSq/J3gcbrvP/tYri/hNMC8Wg4iBfps=;
+        b=cxGXGTs6Y3ySbrFX653AO+SW2J0hZ0DfCitImPkMyn4nUQ+JaIzLgtJ790NFCiArEB
+         zBjcageqV28JV13ZHsf8hZtqa/v3LZwIGOm0BEQkGxpQYYad3TH2hm5uuRrpgBWUaGPA
+         Gx/DKr7kpGk9cdpTT8ibLGYVA/iRfPjBtGKdedOmyMux0QqNCppIlZI4wUVQ4Rhpm6CB
+         N6x6ltxBCWjqtt2C97sDzwHiQh/sPMbhFQEHJ7pXPAPb6GWeUqc1YYdlhVhS85+tELY9
+         G8o/1KyKfLRF6DZOH7sSwrLThSbTxrraR6yTHKdpaSbJ8AXhRmG27BR7WKV2DFHWHaUr
+         NseA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686579886; x=1689171886;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=63/1cVX3TUUVbw84whvXkBRmPJLPt0qPyYpBKlpXx+Q=;
-        b=REfN4H4bGnJ4WQK8/yMc/bg9xGageBtD9dkolu6akkMi8R0/rfYVlRZJF6m7n0+0X+
-         rvU5tsnLlMmmI8+0mUOEbH0FeloMJ9JTmciNZobLCiOx3upRJ8buZdXY4acn8fzs46wM
-         HiGwJrAGgGGJf1sSYeD/yVt649dncDVeDBSTr2CjEENMEQzS8gymqPCGDwyPUFmLgywQ
-         X9sNlsozTs38ji0UoihLyAW2BEPkenzLTbgH8rgpzr1zPhN79Q58+z9eEoxKJ1Jx8m/e
-         SlQjX7qcEWjwXFGdQyJsSR4stcYmhLM6wXrMWp9lxs5MzR8oLMa2JGcjLnoGQrc7kenO
-         Nmow==
-X-Gm-Message-State: AC+VfDy8Vy7rpb62b+rePJ+MMs2Dwm6jNVfewl7mBpOVZ++zN8UoGGlb
-        jLP25Cp+5WP04RevuBzyVDC9GuNKJGfH3g==
-X-Google-Smtp-Source: ACHHUZ7A0f7fPwC6KF9lYPM6ob4/uCJkD8LSGubGbjKGs6mc5Wzy7tYqSiSCuVygXmKtV7Vedu/M8A==
-X-Received: by 2002:a1c:6a18:0:b0:3f7:19f9:4c4f with SMTP id f24-20020a1c6a18000000b003f719f94c4fmr6653437wmc.21.1686579380288;
-        Mon, 12 Jun 2023 07:16:20 -0700 (PDT)
-Received: from gmail.com (fwdproxy-cln-006.fbsv.net. [2a03:2880:31ff:6::face:b00c])
-        by smtp.gmail.com with ESMTPSA id d17-20020a5d6dd1000000b003095bd71159sm12722545wrz.7.2023.06.12.07.16.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 07:16:19 -0700 (PDT)
-Date:   Mon, 12 Jun 2023 07:16:18 -0700
-From:   Breno Leitao <leitao@debian.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        pawan.kumar.gupta@linux.intel.com, paul@paul-moore.com,
-        leit@meta.com, x86@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpu/bugs: Disable CPU mitigations at compilation time
-Message-ID: <ZIcoss0r/898/CpH@gmail.com>
-References: <20230203120615.1121272-1-leitao@debian.org>
- <87352z7xld.ffs@tglx>
- <ZIcVoIAQbRl1GTo5@gmail.com>
- <20230612133230.GJZIcebkHxd8QJs0Dv@fat_crate.local>
- <ZIchqLWousxkCqyB@gmail.com>
- <20230612135301.GKZIcjPY0xvbNsiVNd@fat_crate.local>
+        d=1e100.net; s=20221208; t=1686579414; x=1689171414;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ls3j9MtBWNjJOSq/J3gcbrvP/tYri/hNMC8Wg4iBfps=;
+        b=UiyCUE1rHKldPLKMfJwq7fTbMPJ5nU8g6UtjzXOB2PapRguMdsY2bEsGW76swUO+fd
+         cVqhq1lFbvE551dDGnpqlsl1YDt289YNAIcODKy25hVdp2QRl+5x3jMDSPbKQAT7GeAr
+         4r0KubTZDEJSgQOE9zClmkyh6t7P2X2eHFDBjuZmrFqu5K6MUlshzl2ecCgmFJsfe2Gs
+         sGkL2Xbd8DCzLdciu3Uu1COEBTc6Vx/+U7kUml4oLXE7Zay5jWXiz1S/4E/KqnNx9Qnt
+         yyOrsLyZI+KYqPSxTZOlKt8w5JHZ5wUl+kG535+pKh71f5Ka48FmtcezVHzMg6AsfPmG
+         UDkQ==
+X-Gm-Message-State: AC+VfDxiPIZzA1vDleOZ4ZhUPFmsTzCY99RsU5WrlO9gZyNHduBzfJay
+        ovv6ASKw6UEySiSLdGQ6ShGvvgmsYHQl5mg+a0j5rQ==
+X-Google-Smtp-Source: ACHHUZ4dL2M4zdpF8VCYq+IUPr3A/r6UbrjnzX6erX0UGLi2xr9QdhFRm3iUkJrNSNKf/SLO9K+ISaww1BQ8CkGPnR0=
+X-Received: by 2002:a17:902:f54e:b0:1aa:e5cd:647a with SMTP id
+ h14-20020a170902f54e00b001aae5cd647amr8370740plf.23.1686579414496; Mon, 12
+ Jun 2023 07:16:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230612135301.GKZIcjPY0xvbNsiVNd@fat_crate.local>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FSL_HELO_FAKE,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <20230523111114.18124-1-chevron_li@126.com> <CAPDyKFrAi04_4d-F+kNncE183ZZuD9ERL2qTb+M-nj_dNfojGA@mail.gmail.com>
+ <DM4PR16MB50042091C0D48F4832427F35EA51A@DM4PR16MB5004.namprd16.prod.outlook.com>
+In-Reply-To: <DM4PR16MB50042091C0D48F4832427F35EA51A@DM4PR16MB5004.namprd16.prod.outlook.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 12 Jun 2023 16:16:18 +0200
+Message-ID: <CAPDyKFo7MWvW25YBAELHA+8kZ8xFjX2Pkgusih_p4uVLxLEgQg@mail.gmail.com>
+Subject: Re: [PATCH V1 1/1] mmc: sdhci: fix DMA configure compatibility issue
+ when 64bit DMA mode is used.
+To:     "Chevron Li (WH)" <chevron.li@bayhubtech.com>
+Cc:     Chevron Li <chevron_li@126.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Shirley Her(SC)" <shirley.her@bayhubtech.com>,
+        "XiaoGuang Yu (WH)" <xiaoguang.yu@bayhubtech.com>,
+        "Shaper Liu (WH)" <shaper.liu@bayhubtech.com>,
+        "Justin Wang (WH)" <justin.wang@bayhubtech.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,11 +75,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 03:53:01PM +0200, Borislav Petkov wrote:
-> On Mon, Jun 12, 2023 at 06:46:16AM -0700, Breno Leitao wrote:
-> > MDS and TAA mitigations are disabled when `mitigations=off` parameter
-> > is passed, tho.
-> 
-> So add them to that menu.
+On Fri, 9 Jun 2023 at 03:58, Chevron Li (WH) <chevron.li@bayhubtech.com> wrote:
+>
+> Hi, Ulf,
+>
+> Yes, this patch fixes a real problem.
+>
+> BR,
+> Chevron
+>
+> > -----Original Message-----
+> > From: Ulf Hansson <ulf.hansson@linaro.org>
+> > Sent: Thursday, June 8, 2023 23:53
+> > To: Chevron Li <chevron_li@126.com>
+> > Cc: adrian.hunter@intel.com; linux-mmc@vger.kernel.org; linux-
+> > kernel@vger.kernel.org; Shirley Her(SC) <shirley.her@bayhubtech.com>;
+> > XiaoGuang Yu (WH) <xiaoguang.yu@bayhubtech.com>; Shaper Liu (WH)
+> > <shaper.liu@bayhubtech.com>; Justin Wang (WH)
+> > <justin.wang@bayhubtech.com>; Chevron Li (WH)
+> > <chevron.li@bayhubtech.com>
+> > Subject: Re: [PATCH V1 1/1] mmc: sdhci: fix DMA configure compatibility issue
+> > when 64bit DMA mode is used.
+> >
+> > On Tue, 23 May 2023 at 13:12, Chevron Li <chevron_li@126.com> wrote:
+> > >
+> > > From: Chevron Li <chevron.li@bayhubtech.com>
+> > >
+> > > Bayhub SD host has hardware limitation:
+> > > 1.The upper 32bit address is inhibited to be written at SD Host Register
+> > >   [03E][13]=0 (32bits addressing) mode, is admitted to be written only at
+> > >   SD Host Register [03E][13]=1 (64bits addressing) mode.
+> > > 2.Because of above item#1, need to configure SD Host Register [03E][13] to
+> > >   1(64bits addressing mode) before set 64bit ADMA system address's higher
+> > >   32bits SD Host Register [05F~05C] if 64 bits addressing mode is used.
+> > >
+> > > The hardware limitation is reasonable for below reasons:
+> > > 1.Normal flow should set DMA working mode first, then do
+> > >   DMA-transfer-related configuration, such as system address.
+> > > 2.The hardware limitation may avoid the software to configure wrong higher
+> > >   32bit address at 32bits addressing mode although it is redundant.
+> > >
+> > > The change that set 32bits/64bits addressing mode before set ADMA
+> > address,
+> > >   has no side-effect to other host IPs for below reason:
+> > > The setting order is reasonable and standard: DMA Mode setting first and
+> > >   then DMA address setting. It meets all DMA setting sequence.
+> > >
+> > > Signed-off-by: Chevron Li <chevron.li@bayhubtech.com>
+> >
+> > Applied for next, thanks!
+> >
+> > Is this material for stable kernels too, as it fixes a real problem, no?
+> Yes, it fixes a real problem.
 
-Sorry, to waht menu specifically?
+Okay, I have amended the patch by adding a stable tag to it!
+
+[...]
+
+Kind regards
+Uffe
