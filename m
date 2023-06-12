@@ -2,171 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D612672BA0B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 10:17:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D28672B984
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 10:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231329AbjFLIRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 04:17:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54188 "EHLO
+        id S229675AbjFLIA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 04:00:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230316AbjFLIQ7 (ORCPT
+        with ESMTP id S236468AbjFLIAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 04:16:59 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54671B3;
-        Mon, 12 Jun 2023 01:16:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686557815; x=1718093815;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ardrXUUaDCUC8rYZCEBB1Od/Uz+5UBeHiqci3S1ZWy0=;
-  b=YJKR9XUJKHPzbG3FpLGDi0XSCdvGHDU8DqE9SlJqmBWhIas7+sYoCZMI
-   rS+2ajFgNVl7fxdVSZNeHooLfUnQkLHsO3iRrv9qZ8/oGU4Gj0R7S4Lv4
-   5v8b0hoLDKbXb8a4reGGKWvbrUBsZaH5oFC/1fNILChjDeRfTLg6Um81d
-   6+tyuYgzkoNAaXOxkyKSFCIXOdP9lTTHIY2ehJU9HNJStHvDmv99AT2ja
-   6KGSpBIvhZQfe5P8IUXpB1OqZ3FaqQHFazrfYP1weQE5DcsqsufzEnmE9
-   y/flNQSybSOPiMDJ/pwChTPkEVk0aMWviE54HAIaT9FOXl1+nccOMn/yS
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="360457577"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="360457577"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 00:59:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="855514931"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="855514931"
-Received: from smizr3x-mobl3.ger.corp.intel.com (HELO box.shutemov.name) ([10.249.43.127])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 00:59:13 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 470A010CC1C; Mon, 12 Jun 2023 10:59:10 +0300 (+03)
-Date:   Mon, 12 Jun 2023 10:59:10 +0300
-From:   "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-Subject: Re: [PATCH v11 19/20] x86/mce: Improve error log of kernel space TDX
- #MC due to erratum
-Message-ID: <20230612075910.jqkiofjm6mkdl7cy@box.shutemov.name>
-References: <cover.1685887183.git.kai.huang@intel.com>
- <116cafb15625ac0bcda7b47143921d0c42061b69.1685887183.git.kai.huang@intel.com>
- <20230609131754.dhii5ctfwtzx667o@box.shutemov.name>
- <90aefcfd663c654197c5878e410f55cc4473eb79.camel@intel.com>
+        Mon, 12 Jun 2023 04:00:20 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9B31BCC;
+        Mon, 12 Jun 2023 00:59:53 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f735259fa0so40606075e9.1;
+        Mon, 12 Jun 2023 00:59:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686556792; x=1689148792;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PuMrlcx56+CnpFeWS2U/L2wPX3rDgcReVx0X+vMxKQY=;
+        b=dCqK7Xvqo1KgYDTh5DRgWt4XVwZtudUzFHHdWumQX7IRp1ous3MXslkHWa1v7McRWF
+         kTXuqXbMaL5cnbBYLM+Fm0B3TPQvFlVE2N1l7KwZx2WTYJ20aMqPvA2qUeOx3CIwW/hi
+         tzFwlqufSqp6aI6U0nfBbAsHjKZgnEKRLy6vALLFvKyFhzIkc2uBzwBzJaUGKPBYhfQw
+         PkbkjzAYtqyVvi6InVOnWzpE/SOtx7bgaeaHE4937dlym4JntxIFPOBKsShCJy6R33VF
+         kWOkuDvf/LLlNY0BnY3Gaixvh7PyA8HC8E7jZ9cFU9r78WyWzV478th5i1tRmbDJFUAy
+         8zUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686556792; x=1689148792;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PuMrlcx56+CnpFeWS2U/L2wPX3rDgcReVx0X+vMxKQY=;
+        b=Fhh1x0l10qOzAdXyZ9JaBWwJf9Gir3xNXu8hyFECcKEokRBv7Oiu9mly3rOSuFLXcY
+         SFa2ykSmhu/JGx1bANQyQIRdj5kc9UK4+XJ9BcglNzP6KcGnefi7B3V0D/0c0FkvlH+e
+         SO13Z6GZnqOd3Qbg18IO9TOS0/1KJ8a8yfAsKiRFTUyDuw3BbbGyIhFh1DAHA/fXu1Zj
+         98ZvgLppFApgnBkcVDe1hEupE16ACLyrp8EQ1YG2dl7nJRx5sWi9OFtuZsTJ79jI0Sfg
+         g/AHVb7xFSexjAD6rmBDVKFFBnUkJPIzCLwbn64XCmFeBbWwuD434R6Wl5MfoUYb1fCZ
+         bJKw==
+X-Gm-Message-State: AC+VfDyZ0V3L4ZXNehStBu+2kH7fSlX71twuecGYP5F3naK3lnn17jyc
+        grqUWFbIujqBBALh/hkRZZo=
+X-Google-Smtp-Source: ACHHUZ5nr3fG2wMVO6gw0M10OZlLC7C5kwkd9MI5dkGS963mAL16Zh+3ij93V3XA/Fy0dub8o/Urbw==
+X-Received: by 2002:a7b:c7c6:0:b0:3f7:dfdf:36ce with SMTP id z6-20020a7bc7c6000000b003f7dfdf36cemr6733913wmk.9.1686556791399;
+        Mon, 12 Jun 2023 00:59:51 -0700 (PDT)
+Received: from arinc9-Xeront.lan (178-147-169-233.haap.dm.cosmote.net. [178.147.169.233])
+        by smtp.gmail.com with ESMTPSA id y22-20020a7bcd96000000b003f7f2a1484csm10552195wmj.5.2023.06.12.00.59.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 00:59:51 -0700 (PDT)
+From:   arinc9.unal@gmail.com
+X-Google-Original-From: arinc.unal@arinc9.com
+To:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     Landen Chao <landen.chao@mediatek.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH net v4 0/7] net: dsa: mt7530: fix multiple CPU ports, BPDU and LLDP handling
+Date:   Mon, 12 Jun 2023 10:59:38 +0300
+Message-Id: <20230612075945.16330-1-arinc.unal@arinc9.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <90aefcfd663c654197c5878e410f55cc4473eb79.camel@intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 03:08:40AM +0000, Huang, Kai wrote:
-> On Fri, 2023-06-09 at 16:17 +0300, kirill.shutemov@linux.intel.com wrote:
-> > On Mon, Jun 05, 2023 at 02:27:32AM +1200, Kai Huang wrote:
-> > > The first few generations of TDX hardware have an erratum.  Triggering
-> > > it in Linux requires some kind of kernel bug involving relatively exotic
-> > > memory writes to TDX private memory and will manifest via
-> > > spurious-looking machine checks when reading the affected memory.
-> > > 
-> > > == Background ==
-> > > 
-> > > Virtually all kernel memory accesses operations happen in full
-> > > cachelines.  In practice, writing a "byte" of memory usually reads a 64
-> > > byte cacheline of memory, modifies it, then writes the whole line back.
-> > > Those operations do not trigger this problem.
-> > > 
-> > > This problem is triggered by "partial" writes where a write transaction
-> > > of less than cacheline lands at the memory controller.  The CPU does
-> > > these via non-temporal write instructions (like MOVNTI), or through
-> > > UC/WC memory mappings.  The issue can also be triggered away from the
-> > > CPU by devices doing partial writes via DMA.
-> > > 
-> > > == Problem ==
-> > > 
-> > > A partial write to a TDX private memory cacheline will silently "poison"
-> > > the line.  Subsequent reads will consume the poison and generate a
-> > > machine check.  According to the TDX hardware spec, neither of these
-> > > things should have happened.
-> > > 
-> > > To add insult to injury, the Linux machine code will present these as a
-> > > literal "Hardware error" when they were, in fact, a software-triggered
-> > > issue.
-> > > 
-> > > == Solution ==
-> > > 
-> > > In the end, this issue is hard to trigger.  Rather than do something
-> > > rash (and incomplete) like unmap TDX private memory from the direct map,
-> > > improve the machine check handler.
-> > > 
-> > > Currently, the #MC handler doesn't distinguish whether the memory is
-> > > TDX private memory or not but just dump, for instance, below message:
-> > > 
-> > >  [...] mce: [Hardware Error]: CPU 147: Machine Check Exception: f Bank 1: bd80000000100134
-> > >  [...] mce: [Hardware Error]: RIP 10:<ffffffffadb69870> {__tlb_remove_page_size+0x10/0xa0}
-> > >  	...
-> > >  [...] mce: [Hardware Error]: Run the above through 'mcelog --ascii'
-> > >  [...] mce: [Hardware Error]: Machine check: Data load in unrecoverable area of kernel
-> > >  [...] Kernel panic - not syncing: Fatal local machine check
-> > > 
-> > > Which says "Hardware Error" and "Data load in unrecoverable area of
-> > > kernel".
-> > > 
-> > > Ideally, it's better for the log to say "software bug around TDX private
-> > > memory" instead of "Hardware Error".  But in reality the real hardware
-> > > memory error can happen, and sadly such software-triggered #MC cannot be
-> > > distinguished from the real hardware error.  Also, the error message is
-> > > used by userspace tool 'mcelog' to parse, so changing the output may
-> > > break userspace.
-> > > 
-> > > So keep the "Hardware Error".  The "Data load in unrecoverable area of
-> > > kernel" is also helpful, so keep it too.
-> > > 
-> > > Instead of modifying above error log, improve the error log by printing
-> > > additional TDX related message to make the log like:
-> > > 
-> > >   ...
-> > >  [...] mce: [Hardware Error]: Machine check: Data load in unrecoverable area of kernel
-> > >  [...] mce: [Hardware Error]: Machine Check: Memory error from TDX private memory. May be result of CPU erratum.
-> > 
-> > The message mentions one part of issue -- CPU erratum -- but misses the
-> > other required part -- kernel bug that makes kernel access the memory it
-> > not suppose to.
-> > 
-> 
-> How about below?
-> 
-> "Memory error from TDX private memory. May be result of CPU erratum caused by
-> kernel bug."
+Hi.
 
-Fine, I guess.
+This patch series fixes hopefully all issues regarding multiple CPU ports
+and the handling of LLDP frames and BPDUs.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+I am adding me as a maintainer, I've got some code improvements on the way.
+I will keep an eye on this driver and the patches submitted for it in the
+future.
+
+Arınç
+
+v4: Make the patch logs and my comments in the code easier to understand.
+v3: Fix the from header on the patches. Write a cover letter.
+v2: Add patches to fix the handling of LLDP frames and BPDUs.
+
+Arınç ÜNAL (7):
+  net: dsa: mt7530: fix trapping frames with multiple CPU ports on MT7531
+  net: dsa: mt7530: fix trapping frames with multiple CPU ports on MT7530
+  net: dsa: mt7530: fix trapping frames on non-MT7621 SoC MT7530 switch
+  net: dsa: mt7530: fix handling of BPDUs on MT7530 switch
+  net: dsa: mt7530: fix handling of LLDP frames
+  net: dsa: introduce preferred_default_local_cpu_port and use on MT7530
+  MAINTAINERS: add me as maintainer of MEDIATEK SWITCH DRIVER
+
+ MAINTAINERS              |  5 +--
+ drivers/net/dsa/mt7530.c | 75 ++++++++++++++++++++++++++++++++++++-------
+ drivers/net/dsa/mt7530.h | 26 +++++++++------
+ include/net/dsa.h        |  8 +++++
+ net/dsa/dsa.c            | 24 +++++++++++++-
+ 5 files changed, 115 insertions(+), 23 deletions(-)
+
+
