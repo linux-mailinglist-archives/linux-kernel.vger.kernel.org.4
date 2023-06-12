@@ -2,99 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E34072C897
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:32:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1280872C8A2
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:34:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238796AbjFLOcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 10:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43246 "EHLO
+        id S238866AbjFLOeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 10:34:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237631AbjFLObz (ORCPT
+        with ESMTP id S238827AbjFLOdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 10:31:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C68112D7E
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 07:30:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 33D2260920
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 14:30:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9284C433EF;
-        Mon, 12 Jun 2023 14:30:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686580222;
-        bh=MULwLNbFf3P1vN4nmtQUTBxaihoJbd7UWOxYI11wmx8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pjP8Lhz9BhM1lrnsJQWL7UYsSnRPW89FswppbZCu7oLXhUrW8IZWzlIGESgT5NVrb
-         IAiPqzM+0apZaByh7t99Tbi+vRFAhM5C3kK1aaKSq34EFzTtWxY+YreS1F5QhmN/q9
-         mD8cHY6dmKyoXT9JxWuI222RT7PhUcg1YEXq39J9n/uJuuhe6dVMDoDlR/TH/YB/br
-         rLa03eGo7+t5bqDIAhCru2JidV/x16ET6R2fR7i9xSoG/DBpn02szUGGeoDAr2i98k
-         xGUplOrStwRk25dR6Xw/m/N7JgMAgL6r0J8SKzHblwFjmuLQZKYAVtN57k6K08eMKe
-         573+KY51eTzYA==
-Date:   Mon, 12 Jun 2023 16:30:13 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Eric Dumazet <edumazet@google.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Arjan van de Ven <arjan@infradead.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Rik van Riel <riel@surriel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        "Gautham R . Shenoy" <gautham.shenoy@amd.com>
-Subject: Re: [PATCH v7 19/21] timer: Implement the hierarchical pull model
-Message-ID: <ZIcr9Y5yTpJxzF-h@2a01cb0980221ec3a67fd23915238df5.ipv6.abo.wanadoo.fr>
-References: <20230524070629.6377-1-anna-maria@linutronix.de>
- <20230524070629.6377-20-anna-maria@linutronix.de>
- <ZICMBw-Fo-nzqGXb@2a01cb0980007dab8d6b2773c13fd2df.ipv6.abo.wanadoo.fr>
- <46bb6830-660-f9ff-db1c-f67d680ea8c@linutronix.de>
+        Mon, 12 Jun 2023 10:33:43 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D8910D9;
+        Mon, 12 Jun 2023 07:32:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=PwbnNapXRdevBF0hfE35KqBRaBpKqJIqHALduY4qOvE=; b=C7wViTvphkn9dIMtH5VQREhMUv
+        1+E8O8JuhmHiYk+T16MMJqF/5v+zETwS4qWgZQ13Iy3fitgN+Qsx70hNBOJcF3Z1ZrUcIS/ol7AHQ
+        E+wgpI0JDDsTgpeu07A5zlWT36Z2dhcbYcdjJMxUfz7cDnpognXwMNZmGzpoz1KO9VejzqKFfAxyS
+        AjqgPBwN1pR1bBUcDcvUSNZ4xL37g4gTaCk3BT6JU3ZTLCFXz6E2K7PmKBczz+eDYrBC596zadpdL
+        HNHKxVCFSCamSO+JSQsLkfdHzUYpwRIPqioTTKT8BKG1tlR/drnQiKyK2ajJ1DH+LA+ttEJeAM8Lb
+        KkA/wExw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q8ib4-004JET-0R;
+        Mon, 12 Jun 2023 14:32:42 +0000
+Date:   Mon, 12 Jun 2023 07:32:42 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Sergei Shtepa <sergei.shtepa@veeam.com>
+Cc:     axboe@kernel.dk, hch@infradead.org, corbet@lwn.net,
+        snitzer@kernel.org, viro@zeniv.linux.org.uk, brauner@kernel.org,
+        dchinner@redhat.com, willy@infradead.org, dlemoal@kernel.org,
+        linux@weissschuh.net, jack@suse.cz, ming.lei@redhat.com,
+        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v5 00/11] blksnap - block devices snapshots module
+Message-ID: <ZIcsijGWeyk/FjHs@infradead.org>
+References: <20230612135228.10702-1-sergei.shtepa@veeam.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <46bb6830-660-f9ff-db1c-f67d680ea8c@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230612135228.10702-1-sergei.shtepa@veeam.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Mon, Jun 12, 2023 at 02:29:25PM +0200, Anna-Maria Behnsen a écrit :
-> On Wed, 7 Jun 2023, Frederic Weisbecker wrote:
-> Right. It will never stop the propagation - but the condition could be
-> fulfilled when call site is tmigr_inactive_up(). My proposal for expanding
-> the comment is the following:
-> 
-> 	/*
-> 	 * Walking the hierarchy is required in any case when a
-> 	 * remote expiry was done before. This ensures to not lose
-> 	 * already queued events in non active groups (see section
-> 	 * "Required event and timerqueue update after remote
-> 	 * expiry" in documentation at the top).
-> 	 *
-> 	 * The two call sites which are executed without a remote expiry
-> 	 * before, are not prevented from propagating changes through
-> 	 * the hierarchy by the return:
-> 	 *  - When entering this path by tmigr_new_timer(), evt->ignore
-> 	 *    is never set.
-> 	 *  - tmigr_inactive_up() takes care of propagation by itself
-> 	 *    and ignores return value. But an immediate return is
-> 	 *    required because nothing has to be done in this level as
-> 	 *    event could be ignored.
-> 	 */
+I'm of course a little byassed by having spent a lot of my own time
+on this, but this version now looks ready to merge to me:
 
-Yes, very good!
+Acked-by: Christoph Hellwig <hch@lst.de>
 
-Thanks.
+But as Jens just merged my series to reopen the open flag we'll also
+need to fold this in:
+
+diff --git a/drivers/block/blksnap/diff_area.c b/drivers/block/blksnap/diff_area.c
+index 169fa003b6d66d..0848c947591508 100644
+--- a/drivers/block/blksnap/diff_area.c
++++ b/drivers/block/blksnap/diff_area.c
+@@ -128,7 +128,7 @@ void diff_area_free(struct kref *kref)
+ 	xa_destroy(&diff_area->chunk_map);
+ 
+ 	if (diff_area->orig_bdev) {
+-		blkdev_put(diff_area->orig_bdev, FMODE_READ | FMODE_WRITE);
++		blkdev_put(diff_area->orig_bdev, NULL);
+ 		diff_area->orig_bdev = NULL;
+ 	}
+ 
+@@ -214,7 +214,8 @@ struct diff_area *diff_area_new(dev_t dev_id, struct diff_storage *diff_storage)
+ 
+ 	pr_debug("Open device [%u:%u]\n", MAJOR(dev_id), MINOR(dev_id));
+ 
+-	bdev = blkdev_get_by_dev(dev_id, FMODE_READ | FMODE_WRITE, NULL, NULL);
++	bdev = blkdev_get_by_dev(dev_id, BLK_OPEN_READ | BLK_OPEN_WRITE, NULL,
++				 NULL);
+ 	if (IS_ERR(bdev)) {
+ 		int err = PTR_ERR(bdev);
+ 
+@@ -224,7 +225,7 @@ struct diff_area *diff_area_new(dev_t dev_id, struct diff_storage *diff_storage)
+ 
+ 	diff_area = kzalloc(sizeof(struct diff_area), GFP_KERNEL);
+ 	if (!diff_area) {
+-		blkdev_put(bdev, FMODE_READ | FMODE_WRITE);
++		blkdev_put(bdev, NULL);
+ 		return ERR_PTR(-ENOMEM);
+ 	}
+ 
+diff --git a/drivers/block/blksnap/diff_storage.c b/drivers/block/blksnap/diff_storage.c
+index 1787fa6931a816..f3814474b9804a 100644
+--- a/drivers/block/blksnap/diff_storage.c
++++ b/drivers/block/blksnap/diff_storage.c
+@@ -123,7 +123,7 @@ void diff_storage_free(struct kref *kref)
+ 	}
+ 
+ 	while ((storage_bdev = first_storage_bdev(diff_storage))) {
+-		blkdev_put(storage_bdev->bdev, FMODE_READ | FMODE_WRITE);
++		blkdev_put(storage_bdev->bdev, NULL);
+ 		list_del(&storage_bdev->link);
+ 		kfree(storage_bdev);
+ 	}
+@@ -138,7 +138,7 @@ static struct block_device *diff_storage_add_storage_bdev(
+ 	struct storage_bdev *storage_bdev, *existing_bdev = NULL;
+ 	struct block_device *bdev;
+ 
+-	bdev = blkdev_get_by_path(bdev_path, FMODE_READ | FMODE_WRITE,
++	bdev = blkdev_get_by_path(bdev_path, BLK_OPEN_READ | BLK_OPEN_WRITE,
+ 				  NULL, NULL);
+ 	if (IS_ERR(bdev)) {
+ 		pr_err("Failed to open device. errno=%ld\n", PTR_ERR(bdev));
+@@ -153,14 +153,14 @@ static struct block_device *diff_storage_add_storage_bdev(
+ 	spin_unlock(&diff_storage->lock);
+ 
+ 	if (existing_bdev->bdev == bdev) {
+-		blkdev_put(bdev, FMODE_READ | FMODE_WRITE);
++		blkdev_put(bdev, NULL);
+ 		return existing_bdev->bdev;
+ 	}
+ 
+ 	storage_bdev = kzalloc(sizeof(struct storage_bdev) +
+ 			       strlen(bdev_path) + 1, GFP_KERNEL);
+ 	if (!storage_bdev) {
+-		blkdev_put(bdev, FMODE_READ | FMODE_WRITE);
++		blkdev_put(bdev, NULL);
+ 		return ERR_PTR(-ENOMEM);
+ 	}
+ 
