@@ -2,349 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 819CC72BB38
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 10:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3B6772B90B
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 09:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230296AbjFLIwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 04:52:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51500 "EHLO
+        id S235610AbjFLHsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 03:48:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233555AbjFLIwC (ORCPT
+        with ESMTP id S235408AbjFLHsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 04:52:02 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51FB3109;
-        Mon, 12 Jun 2023 01:52:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686559920; x=1718095920;
-  h=from:date:subject:mime-version:content-transfer-encoding:
-   message-id:references:in-reply-to:to:cc;
-  bh=3rej1/z6cKyA2TVrH+5R9/jUoDY9kF6jAMzOdlkY4Xk=;
-  b=c9bmlI9CNm4a435tDmrGYz893HRNiiaOWMg+203Ci2za3lJzrVwTd3JI
-   1CTLOXIln8/w3WjfkGg8DX3uBvqURedYPcKF3HXP8+XHLnoh+2HC9pTpP
-   w1YYIF6WTXRyJ5uIu6iFPPv0bGSISqUX5EvlqUqfH6AyqArN/IPoegEpA
-   r2ohnAi0Zc7xyOZ8J0sEVq+BTg0F3uX2bC4g77F35IdaiqMX58KW7Cvkx
-   Hn8PryjVaTQlChoCGw/JSkRvxg9LJCfwaI+a7JIWNxjXjmzyABBMeHBrd
-   1YjQmW+oGWKrnWfwbX3a6vqTY04ELwVEn7zr/w/Vsja+K6NCWFJ2GZOm5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="347613316"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="347613316"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2023 23:56:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="835365324"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="835365324"
-Received: from apeer-mobl.amr.corp.intel.com (HELO [192.168.1.200]) ([10.251.3.238])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2023 23:56:22 -0700
-From:   Vishal Verma <vishal.l.verma@intel.com>
-Date:   Mon, 12 Jun 2023 00:55:59 -0600
-Subject: [PATCH v3 4/4] tools/testing/cxl: add firmware update emulation to
- CXL memdevs
+        Mon, 12 Jun 2023 03:48:37 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on20611.outbound.protection.outlook.com [IPv6:2a01:111:f400:7ea9::611])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3C5135;
+        Mon, 12 Jun 2023 00:48:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Qiu5Px8O3H2dc5kUt6GlGZXqafFbqbD1mhg8ZenH/IUhXXAuid/CtXQStMNUr4WN+r98cZMpb6e3hyQwm9nXp5evhb9Xqjy1SoS2VmZlujYFuuE0GWtQwYuOD6T7ITborp+M41oQ7vEMRnvmttdDMxe6/E3AcfVEUnOHHVWepDIdozOr8c7+NVduUQlbREEGbyMm/SXhgJOQcZonYMXt+Y7HuDa4DOFrzw9TrI01gMxR/TLkmQVGxJfqtRTJg0FwvEhTtt3O80pe6zJ6Psm1ox/mtoQYKn1z2nZXz7vaKb/oxIWRzlu3zCPke5MorTWjTh2sVboUs3UmX0iEE6sKXQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TbcwqmDv3skodkRl+W5jHLBina4Ut+FhTKwGR+RVfYo=;
+ b=PeZb95BIhB38C+cIylPxtIN1trqBP/llfFKqp1sXCob9o7+HPbVZuhdTrlmBLyD6/juMBamn+8IVzDF7rj9gwtM2H6dm0j8Sd82m+1vambkt3V/VmbgWJooywyL/WZ0RpPY3Q8j11syqt5TcSfMHjzUFFlFThmwNT8PBojVrZ/OG6Yq3Coa7cTS0MmP6vd6LUtQOBybRdLnGFblX/8LV68EExgGCVBZbr0nHKo3DR71Pp8lVO2VNlIYZT6crQRL183lNf1sxm3Fi0V7lSfW4OOr3jJkFz0Q4kVvhVTQHvenKj4/GxddO495kIX9KxLn3BYKNosxDmVByNjBRy72JRQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TbcwqmDv3skodkRl+W5jHLBina4Ut+FhTKwGR+RVfYo=;
+ b=KqSGRIlXWGZmtDSR43EtwRaGgqAEEbl2vl6UU2ongW746yEuH1EkxbxBmont1ylqv0S4s2Nzw5JkopRqHcMjIs1RsscUzQYFFDPv0BsLjCfXCWQ1Pm2/HfESbZSKuN5BagPi5JMvmpIjFiZLof0u0eNGry58p2SeEdu38o1UHYY=
+Received: from SN7PR12MB7201.namprd12.prod.outlook.com (2603:10b6:806:2a8::22)
+ by DM4PR12MB7525.namprd12.prod.outlook.com (2603:10b6:8:113::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Mon, 12 Jun
+ 2023 06:56:53 +0000
+Received: from SN7PR12MB7201.namprd12.prod.outlook.com
+ ([fe80::1909:e379:a444:39ec]) by SN7PR12MB7201.namprd12.prod.outlook.com
+ ([fe80::1909:e379:a444:39ec%3]) with mapi id 15.20.6455.030; Mon, 12 Jun 2023
+ 06:56:52 +0000
+From:   "Havalige, Thippeswamy" <thippeswamy.havalige@amd.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+CC:     "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "Gogada, Bharat Kumar" <bharat.kumar.gogada@amd.com>,
+        "Simek, Michal" <michal.simek@amd.com>,
+        "Yeleswarapu, Nagaradhesh" <nagaradhesh.yeleswarapu@amd.com>
+Subject: RE: [PATCH v4 3/3] PCI: xilinx-xdma: Add Xilinx XDMA Root Port driver
+Thread-Topic: [PATCH v4 3/3] PCI: xilinx-xdma: Add Xilinx XDMA Root Port
+ driver
+Thread-Index: AQHZk5tePph5nYWpdUq6vG3IWaiZ1K90nt0AgA1V0QA=
+Date:   Mon, 12 Jun 2023 06:56:52 +0000
+Message-ID: <SN7PR12MB7201F3C89AFB711A871BDA198B54A@SN7PR12MB7201.namprd12.prod.outlook.com>
+References: <20230531083825.985584-4-thippeswamy.havalige@amd.com>
+ <ZHd/7AaLaGyr1jNA@bhelgaas>
+In-Reply-To: <ZHd/7AaLaGyr1jNA@bhelgaas>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SN7PR12MB7201:EE_|DM4PR12MB7525:EE_
+x-ms-office365-filtering-correlation-id: f6c05135-9e07-4c3b-6c13-08db6b1233e1
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: FgQ3gaScCKkalmz8DNjzDySlQqveP8HHp9osSQRCWg66cGgvn/VrudwzPUJKevJgLtEjd0tyVR+KNx1uajaIPLeMvjehrTe3TJy968Cu40dSCkglLw6tALr01KnC6YaxlveCz6rE8kxBCo14Gz6ZDfyKFcGZpk2QngBQJCyh/6b7AevMYIM89J2hKGO0vp+YVJZHQdiNagw9TF8dfSs9fzgTMSVl4UeDcRwtJZKySkmGecJpL8ZEk89Sw1qx76E9PI5L2VWWhEx/Pvu8zsU37UMiK2+mvcUI+XwWCkIca3OAv/lQHpeuUL8ZRvCgHml6Dl4bNYZDgneHhwuywbFZMmitenCzOxIJX1yuYeUhNGWRblDH882sAHH5PGk6vXDPkcXLjaqqt6NeJqSr0a3svtfy1vMpmGf3BueR4Xly+pzBZFVzkBJ3ZAu1qi/dVotz4q6BKGLJFkaM4iaz67QufKuuNKzwQmNyeDWfbDcFK+LEo2fv8huPRuZ4UQK5M1UElZCBn/sE1J45cEvvFIAiiW+V2XmC3n4TgIG41dxJFlkTvpa+TeViDKB/u/yyvSIPcKV/3WZhJc8FzRV6BXP7LbpnWhywWwOT5e1H6soxpafKsEYXzs8f1MTs9urFkvE+
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR12MB7201.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(136003)(366004)(396003)(39860400002)(451199021)(66556008)(66476007)(66446008)(66946007)(316002)(71200400001)(64756008)(76116006)(6916009)(478600001)(4326008)(54906003)(38070700005)(33656002)(86362001)(9686003)(6506007)(26005)(186003)(83380400001)(41300700001)(5660300002)(8936002)(8676002)(2906002)(52536014)(7696005)(55016003)(38100700002)(122000001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?i2qYfsySmOIsm9+emHKIRM8A7d40SE60Uh8uKsI8S7e6SEnm19oHzCKMc350?=
+ =?us-ascii?Q?yOvqm/vRt+ugC9EkqzSeV3XnzAZ+aLFq/ir+OrxjmBmGJyfZ28+EhfdMilqd?=
+ =?us-ascii?Q?GI0UG7P3BKsnVxHAIb2Kigbfwl/bCxhlyq9Nty1A0llmt+PGl5PwFwxAdtaL?=
+ =?us-ascii?Q?wA6/KwAUQ4nJ/aa6sk4zg9MjSjb6KIhcdZ3efRTCtxTDqMHepqQ8B+OltMTu?=
+ =?us-ascii?Q?hpcj0lBOCUE2OMnDhrpvjz7Esdk0b/JxPw9m2EVb5irU9gyE+gdUr2uLPecL?=
+ =?us-ascii?Q?Y7PoVwqGFUgIfJf82wuBHA1c0HUku4r0ZEHFhcvxszEvC4o2SF60GmeJXkvF?=
+ =?us-ascii?Q?QG3sTLEuQviOzfTdcdrzjroyaHOzSfel7z85RLsF7yohl3GK4ZsXtBr6cInk?=
+ =?us-ascii?Q?3JP7iSBrdjIEwn90TJD29HocjiLiREy7IJD6DfkSCAvm7+OL7enzglQbnodf?=
+ =?us-ascii?Q?eZ3fBqxdCNm13NzzskPbLXOmj4bGAgFxRB2E3g0yoC9W6/2ATDLXROtvV+Aa?=
+ =?us-ascii?Q?iYOmz7GluDeGOFetfXEEkOD97m7kaH5KmfBMm2AXaaXtb2nRMxGzcFSNJSSB?=
+ =?us-ascii?Q?iKOBrIUu1QWa5R6xffmmO/p15WUiVtmq1cyrMMGw65qpx4K1z5H2tfFS3WR9?=
+ =?us-ascii?Q?Ber81zVHqjoAhPYbltyam+VPzVwQhcfMr7619taXq/ZJl6eTR05l3siodqP3?=
+ =?us-ascii?Q?H14VOoQSLVFFEIbr/SsNk+9CWiqWHQVbeESFAo1uPHMKOfV7Ar85AghYRbcm?=
+ =?us-ascii?Q?KJ9AgljmS/izb9Zlc3dxe2po5VoN8Ld1VIU/iLdZfSortoKwKl3JEDC+CoDd?=
+ =?us-ascii?Q?sbgM59QwOzerGXhP0/J3ajRjxqpaCz3Ksf9OlmN9x0WzfBJTJFCdNoMWYS/s?=
+ =?us-ascii?Q?iuSApd+x8+vgs0nG+ovSMroU8BXuQ3Prp8SNihd3UlqsJuyxWZ3Q9inFgp6k?=
+ =?us-ascii?Q?jCt3iqtIBbtYc7f+0eNG0c52liBL1fXT1W5opfNnAj2RvOnspRD1MDurhBNf?=
+ =?us-ascii?Q?NiUqrU6MaudYbXGHcoRq2rwPVimzy5Q/hw7ZUWdO4HC94n0sHjJ/5F7sopqo?=
+ =?us-ascii?Q?Vai4UcfAlF81WJUYjwqKxWII/6+j7CpVd6c7jXM2xz9Bddat5OBhBaOtqvkS?=
+ =?us-ascii?Q?hYyWuM/60ADaEmpNZ8+MnixO6lbJCk7v0Zyp6uDNIFw/mcDetENkXbzxBfyv?=
+ =?us-ascii?Q?ySyVYmsGpjaisdZyVLr3VPWnMhmeyUGugMBaZDFsON33lw1orghe3Q0dLnAi?=
+ =?us-ascii?Q?F4Pz+T99fgUvQ79tGcsrU9lDB+KOA3UrrDL9D86XgPx4bHYT5JxmOSqAWTq5?=
+ =?us-ascii?Q?s4/QevSDYYoolSpeeocj191fU3t6lk9EsvFAcltvnHjyhrx/HryE5QbYbdT5?=
+ =?us-ascii?Q?pY4J+gfKK0AH/QapnW9KJI07Kak6VWnlIVym6cueDlxITEqPgQz8wSoCXTrQ?=
+ =?us-ascii?Q?lyl28BpKJ4QvYijAMGMmIRruhrz+6+Mtn+H03f8FWLBoIg7uhewQbvnlYF2f?=
+ =?us-ascii?Q?ngt79ApD0Hk897oJHgNIqITWw4CgMZG83zx/N4Dc+YIPLhxY50Sl3jxAsILK?=
+ =?us-ascii?Q?x0Zb66zQIpJS2kdA1e4=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230602-vv-fw_update-v3-4-869f82069c95@intel.com>
-References: <20230602-vv-fw_update-v3-0-869f82069c95@intel.com>
-In-Reply-To: <20230602-vv-fw_update-v3-0-869f82069c95@intel.com>
-To:     Alison Schofield <alison.schofield@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>
-Cc:     linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-X-Mailer: b4 0.13-dev-02a79
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7763;
- i=vishal.l.verma@intel.com; h=from:subject:message-id;
- bh=3rej1/z6cKyA2TVrH+5R9/jUoDY9kF6jAMzOdlkY4Xk=;
- b=owGbwMvMwCXGf25diOft7jLG02pJDCltB6dkRbo8Mb8g/KPvSOgVh+nTu4tqxRd7fz7mMG9B6
- Voho+eTOkpZGMS4GGTFFFn+7vnIeExuez5PYIIjzBxWJpAhDFycAjCRqreMDM9rk15GMWXtnLta
- dWpoy+/uNwJFRw5rXkg8k1V5mPXpbQeGfwq9t84aHngs/fnwc7ZLXJO1tjN0lFnN2dW/z+CWHK+
- mFQcA
-X-Developer-Key: i=vishal.l.verma@intel.com; a=openpgp;
- fpr=F8682BE134C67A12332A2ED07AFA61BEA3B84DFF
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN7PR12MB7201.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f6c05135-9e07-4c3b-6c13-08db6b1233e1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jun 2023 06:56:52.6922
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yYCE3B+j73ixJ7rUUnQyAM0igfcJicn1kCK56RNM4PN7Rs5YXNDpZuhr0mBOyD57SZJrYvogCRFpM6BZiWAsMA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7525
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add emulation for the 'Get FW Info', 'Transfer FW', and 'Activate FW'
-CXL mailbox commands to the cxl_test emulated memdevs to enable
-end-to-end unit testing of a firmware update flow. For now, only
-advertise an 'offline activation' capability as that is all the CXL
-memdev driver currently implements.
+Hi Bjorn,
 
-Add some canned values for the serial number fields, and create a
-platform device sysfs knob to calculate the sha256sum of the firmware
-image that was received, so a unit test can compare it with the original
-file that was uploaded.
+> > +	  bridge DMA as soft IP say Y; if you are not sure, say N.
+>=20
+> s/is an soft/is soft/
+> s/xilinx/Xilinx/
+- Agreed, Will fix it in next patch.=20
+> > +#define XILINX_PCIE_DMA_REG_IMR			0x0000013c
+> > +#define XILINX_PCIE_DMA_REG_MSIBASE1		0x0000014c
+> > +#define XILINX_PCIE_DMA_REG_MSI_HI_MASK		0x0000017c
+> > ...
+> > +#define XILINX_PCIE_DMA_IMR_ALL_MASK	0x0FF30FE9
+> > +#define XILINX_PCIE_DMA_IDR_ALL_MASK	0xFFFFFFFF
+>=20
+> Pick upper-case hex or lower-case hex and use it consistently.
+- Agreed, will fix it in next patch.
+> > +static inline bool xilinx_pl_dma_pcie_linkup(struct pl_dma_pcie
+> > +*port)
+>=20
+> Name this *_pcie_link_up() (not *_pcie_linkup()) to match other drivers.
+- Agreed, Will fix it in next patch.
+> > +static bool xilinx_pl_dma_pcie_valid_device(struct pci_bus *bus,
+> > +unsigned int devfn) {
+> > +	struct pl_dma_pcie *port =3D bus->sysdata;
+> > +
+> > +	/* Check if link is up when trying to access downstream ports */
+> > +	if (!pci_is_root_bus(bus)) {
+> > +		if (!xilinx_pl_dma_pcie_linkup(port))
+> > +			return false;
+> > +	} else if (devfn > 0)
+> > +		/* Only one device down on each root port */
+> > +		return false;
+> > +
+> > +	return true;
+> > +}
+> > +
+> > +static void __iomem *xilinx_pl_dma_pcie_map_bus(struct pci_bus *bus,
+> > +						unsigned int devfn, int where)
+> > +{
+> > +	struct pl_dma_pcie *port =3D bus->sysdata;
+> > +
+> > +	if (!xilinx_pl_dma_pcie_valid_device(bus, devfn))
+> > +		return NULL;
+>=20
+> Checking whether the link is up is racy because the link may be up, so
+> xilinx_pl_dma_pcie_valid_device() returns true, then the link may go down
+> before the read below.
+>=20
+> What happens then?  If it's an error that you can recover from, it would
+> better to skip the link up check and just handle the error.
+- When link is down CPU stalls after RC Enumeration where it tries to send =
+PIO requests to EP and waits for its acknowledgement. Hence we need link up=
+ check atleast boot successfully and show RootPort device in lspci. We will=
+ add comments in the above function describe the race condition.
 
-Cc: Davidlohr Bueso <dave@stgolabs.net>
-Cc: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-Cc: Russ Weight <russell.h.weight@intel.com>
-Cc: Alison Schofield <alison.schofield@intel.com>
-Cc: Ira Weiny <ira.weiny@intel.com>
-Cc: Dave Jiang <dave.jiang@intel.com>
-Cc: Ben Widawsky <bwidawsk@kernel.org>
-Cc: Dan Williams <dan.j.williams@intel.com>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
----
- tools/testing/cxl/test/mem.c | 160 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 160 insertions(+)
+> > +	return port->reg_base + PCIE_ECAM_OFFSET(bus->number, devfn,
+> where);
+> > +}
+>=20
+> > +	/*set the Bridge enable bit */
+>=20
+>   /* Set ... */ (add space before "Set" and capitalize it)
+>=20
+> Bjorn
 
-diff --git a/tools/testing/cxl/test/mem.c b/tools/testing/cxl/test/mem.c
-index 68668d8df1cd..1166f470e0c7 100644
---- a/tools/testing/cxl/test/mem.c
-+++ b/tools/testing/cxl/test/mem.c
-@@ -8,11 +8,14 @@
- #include <linux/sizes.h>
- #include <linux/bits.h>
- #include <asm/unaligned.h>
-+#include <crypto/sha2.h>
- #include <cxlmem.h>
- 
- #include "trace.h"
- 
- #define LSA_SIZE SZ_128K
-+#define FW_SIZE SZ_64M
-+#define FW_SLOTS 3
- #define DEV_SIZE SZ_2G
- #define EFFECT(x) (1U << x)
- 
-@@ -72,6 +75,20 @@ static struct cxl_cel_entry mock_cel[] = {
- 		.opcode = cpu_to_le16(CXL_MBOX_OP_CLEAR_POISON),
- 		.effect = cpu_to_le16(EFFECT(DATA_CHANGE_IMMEDIATE)),
- 	},
-+	{
-+		.opcode = cpu_to_le16(CXL_MBOX_OP_GET_FW_INFO),
-+		.effect = CXL_CMD_EFFECT_NONE,
-+	},
-+	{
-+		.opcode = cpu_to_le16(CXL_MBOX_OP_TRANSFER_FW),
-+		.effect = cpu_to_le16(EFFECT(CONF_CHANGE_COLD_RESET) |
-+				      EFFECT(BACKGROUND_OP)),
-+	},
-+	{
-+		.opcode = cpu_to_le16(CXL_MBOX_OP_ACTIVATE_FW),
-+		.effect = cpu_to_le16(EFFECT(CONF_CHANGE_COLD_RESET) |
-+				      EFFECT(CONF_CHANGE_IMMEDIATE)),
-+	},
- };
- 
- /* See CXL 2.0 Table 181 Get Health Info Output Payload */
-@@ -123,6 +140,10 @@ struct mock_event_store {
- 
- struct cxl_mockmem_data {
- 	void *lsa;
-+	void *fw;
-+	int fw_slot;
-+	int fw_staged;
-+	size_t fw_size;
- 	u32 security_state;
- 	u8 user_pass[NVDIMM_PASSPHRASE_LEN];
- 	u8 master_pass[NVDIMM_PASSPHRASE_LEN];
-@@ -1128,6 +1149,87 @@ static struct attribute *cxl_mock_mem_core_attrs[] = {
- };
- ATTRIBUTE_GROUPS(cxl_mock_mem_core);
- 
-+static int mock_fw_info(struct cxl_dev_state *cxlds,
-+			    struct cxl_mbox_cmd *cmd)
-+{
-+	struct cxl_mockmem_data *mdata = dev_get_drvdata(cxlds->dev);
-+	struct cxl_mbox_get_fw_info fw_info = {
-+		.num_slots = FW_SLOTS,
-+		.slot_info = (mdata->fw_slot & 0x7) |
-+			     ((mdata->fw_staged & 0x7) << 3),
-+		.activation_cap = 0,
-+	};
-+
-+	strcpy(fw_info.slot_1_revision, "cxl_test_fw_001");
-+	strcpy(fw_info.slot_2_revision, "cxl_test_fw_002");
-+	strcpy(fw_info.slot_3_revision, "cxl_test_fw_003");
-+	strcpy(fw_info.slot_4_revision, "");
-+
-+	if (cmd->size_out < sizeof(fw_info))
-+		return -EINVAL;
-+
-+	memcpy(cmd->payload_out, &fw_info, sizeof(fw_info));
-+	return 0;
-+}
-+
-+static int mock_transfer_fw(struct cxl_dev_state *cxlds,
-+			    struct cxl_mbox_cmd *cmd)
-+{
-+	struct cxl_mbox_transfer_fw *transfer = cmd->payload_in;
-+	struct cxl_mockmem_data *mdata = dev_get_drvdata(cxlds->dev);
-+	void *fw = mdata->fw;
-+	size_t offset, length;
-+
-+	offset = le32_to_cpu(transfer->offset) * CXL_FW_TRANSFER_ALIGNMENT;
-+	length = cmd->size_in - sizeof(*transfer);
-+	if (offset + length > FW_SIZE)
-+		return -EINVAL;
-+
-+	switch (transfer->action) {
-+	case CXL_FW_TRANSFER_ACTION_FULL:
-+		if (offset != 0)
-+			return -EINVAL;
-+		fallthrough;
-+	case CXL_FW_TRANSFER_ACTION_END:
-+		if (transfer->slot == 0 || transfer->slot > FW_SLOTS)
-+			return -EINVAL;
-+		mdata->fw_size = offset + length;
-+		break;
-+	case CXL_FW_TRANSFER_ACTION_INITIATE:
-+	case CXL_FW_TRANSFER_ACTION_CONTINUE:
-+		break;
-+	case CXL_FW_TRANSFER_ACTION_ABORT:
-+		return 0;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	memcpy(fw + offset, transfer->data, length);
-+	return 0;
-+}
-+
-+static int mock_activate_fw(struct cxl_dev_state *cxlds,
-+			    struct cxl_mbox_cmd *cmd)
-+{
-+	struct cxl_mbox_activate_fw *activate = cmd->payload_in;
-+	struct cxl_mockmem_data *mdata = dev_get_drvdata(cxlds->dev);
-+
-+	if (activate->slot == 0 || activate->slot > FW_SLOTS)
-+		return -EINVAL;
-+
-+	switch (activate->action) {
-+	case CXL_FW_ACTIVATE_ONLINE:
-+		mdata->fw_slot = activate->slot;
-+		mdata->fw_staged = 0;
-+		return 0;
-+	case CXL_FW_ACTIVATE_OFFLINE:
-+		mdata->fw_staged = activate->slot;
-+		return 0;
-+	}
-+
-+	return -EINVAL;
-+}
-+
- static int cxl_mock_mbox_send(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd)
- {
- 	struct device *dev = cxlds->dev;
-@@ -1194,6 +1296,15 @@ static int cxl_mock_mbox_send(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *
- 	case CXL_MBOX_OP_CLEAR_POISON:
- 		rc = mock_clear_poison(cxlds, cmd);
- 		break;
-+	case CXL_MBOX_OP_GET_FW_INFO:
-+		rc = mock_fw_info(cxlds, cmd);
-+		break;
-+	case CXL_MBOX_OP_TRANSFER_FW:
-+		rc = mock_transfer_fw(cxlds, cmd);
-+		break;
-+	case CXL_MBOX_OP_ACTIVATE_FW:
-+		rc = mock_activate_fw(cxlds, cmd);
-+		break;
- 	default:
- 		break;
- 	}
-@@ -1209,6 +1320,11 @@ static void label_area_release(void *lsa)
- 	vfree(lsa);
- }
- 
-+static void fw_buf_release(void *buf)
-+{
-+	vfree(buf);
-+}
-+
- static bool is_rcd(struct platform_device *pdev)
- {
- 	const struct platform_device_id *id = platform_get_device_id(pdev);
-@@ -1241,10 +1357,19 @@ static int cxl_mock_mem_probe(struct platform_device *pdev)
- 	mdata->lsa = vmalloc(LSA_SIZE);
- 	if (!mdata->lsa)
- 		return -ENOMEM;
-+	mdata->fw = vmalloc(FW_SIZE);
-+	if (!mdata->fw)
-+		return -ENOMEM;
-+	mdata->fw_slot = 2;
-+
- 	rc = devm_add_action_or_reset(dev, label_area_release, mdata->lsa);
- 	if (rc)
- 		return rc;
- 
-+	rc = devm_add_action_or_reset(dev, fw_buf_release, mdata->fw);
-+	if (rc)
-+		return rc;
-+
- 	cxlds = cxl_dev_state_create(dev);
- 	if (IS_ERR(cxlds))
- 		return PTR_ERR(cxlds);
-@@ -1286,6 +1411,10 @@ static int cxl_mock_mem_probe(struct platform_device *pdev)
- 	if (IS_ERR(cxlmd))
- 		return PTR_ERR(cxlmd);
- 
-+	rc = cxl_memdev_setup_fw_upload(cxlds);
-+	if (rc)
-+		return rc;
-+
- 	cxl_mem_get_event_records(cxlds, CXLDEV_EVENT_STATUS_ALL);
- 
- 	return 0;
-@@ -1324,9 +1453,40 @@ static ssize_t security_lock_store(struct device *dev, struct device_attribute *
- 
- static DEVICE_ATTR_RW(security_lock);
- 
-+static ssize_t fw_buf_checksum_show(struct device *dev,
-+				    struct device_attribute *attr, char *buf)
-+{
-+	struct cxl_mockmem_data *mdata = dev_get_drvdata(dev);
-+	u8 hash[SHA256_DIGEST_SIZE];
-+	unsigned char *hstr, *hptr;
-+	struct sha256_state sctx;
-+	ssize_t written = 0;
-+	int i;
-+
-+	sha256_init(&sctx);
-+	sha256_update(&sctx, mdata->fw, mdata->fw_size);
-+	sha256_final(&sctx, hash);
-+
-+	hstr = kzalloc((SHA256_DIGEST_SIZE * 2) + 1, GFP_KERNEL);
-+	if (!hstr)
-+		return -ENOMEM;
-+
-+	hptr = hstr;
-+	for (i = 0; i < SHA256_DIGEST_SIZE; i++)
-+		hptr += sprintf(hptr, "%02x", hash[i]);
-+
-+	written = sysfs_emit(buf, "%s\n", hstr);
-+
-+	kfree(hstr);
-+	return written;
-+}
-+
-+static DEVICE_ATTR_RO(fw_buf_checksum);
-+
- static struct attribute *cxl_mock_mem_attrs[] = {
- 	&dev_attr_security_lock.attr,
- 	&dev_attr_event_trigger.attr,
-+	&dev_attr_fw_buf_checksum.attr,
- 	NULL
- };
- ATTRIBUTE_GROUPS(cxl_mock_mem);
-
--- 
-2.40.1
-
+Regards,
+Thippeswamy H=20
