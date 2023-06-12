@@ -2,52 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E818572D0F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:49:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A641C72D0F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:49:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbjFLUs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 16:48:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35830 "EHLO
+        id S237895AbjFLUsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 16:48:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237100AbjFLUr0 (ORCPT
+        with ESMTP id S236971AbjFLUrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 16:47:26 -0400
+        Mon, 12 Jun 2023 16:47:02 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9072956
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 13:46:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9BD12947
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 13:46:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D7CB62F02
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7891762EFF
         for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 20:45:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3993C433B0;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0971C433B4;
         Mon, 12 Jun 2023 20:45:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1686602716;
-        bh=aYadX67GYiG+Nuff8Hdg1wAWmzTfTdurTxNUVvBVt1c=;
+        bh=fq9Novytq9EKJSJOpiX99BQ9yCRZSIhHk3PPBCKpdpY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=agyfhPJYVc0kbRjDsZN7YsXptG8VkUsAwx0AOQgpsw68zsjgDkvW/O/PHyC8v73zP
-         Mv7zeQ8mtAtabnhDqyZHb/tO4A0ckb6YbsJHih2kZH0O60Aoj/SqWFWJbqTCNmmtgR
-         IwkAOjwkOUtQ1+eL2Mh7f7rOD87s0nTgbCnPBhqYZYKomZtgDyklK+K5jNPM6NQfDo
-         P7sz9BR/HKOsjpSX1HNu+xoY7TxJFc7xSXr3T/T9TdhZaYuwjedjnen4UKD3hvu6iU
-         xxnoAaF6Ijd0Wqf4ga7PSs6N/igt1FCcRwM8QBSIOCDjXGKel01BI6OKz513fMvvik
-         jXx3PrvcOZu8A==
+        b=jkSeDAmaew4avDeeKGbVMWmJIg8UX9nNJdjMiuk1Fx30gwqYD40eUrLLhLve/qfB9
+         7i2b265TDipJXOgn8Rj/LCefmQvvlQ3AchyTC5SunbYhD68VLY5FVWQW1M9EWPMPF9
+         CeR4dNYL/T6pui29UWb+t6/tuTJ3JYNLY5Az3PuIZBoQJTAZMTF2z0cbJQ1kJPKL0y
+         bvmTbiwEOMiXA0amQ7pF6nM0n1mAR/4RqbiUFmR57OhPaspoGTbzF4hCBC3p1ln+8k
+         o5Kj8ZrxrCagR1EpTlkINX2wzXYgS9ygFYQrua/8MkpELY6oT/R5vv/lQ3i7xQ96E7
+         kvr+uOK0xhMNw==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id CAE30CE3A56; Mon, 12 Jun 2023 13:45:15 -0700 (PDT)
+        id CD581CE3A57; Mon, 12 Jun 2023 13:45:15 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     gwml@vger.gnuweeb.org, kernel-team@meta.com, w@lwt.eu,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        Willy Tarreau <w@1wt.eu>,
+        Zhangjin Wu <falcon@tinylab.org>, Willy Tarreau <w@1wt.eu>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH v2 nolibc 15/53] tools/nolibc: remove LINUX_REBOOT_ constants
-Date:   Mon, 12 Jun 2023 13:44:36 -0700
-Message-Id: <20230612204514.292087-15-paulmck@kernel.org>
+Subject: [PATCH v2 nolibc 16/53] tools/nolibc: riscv: Fix up load/store instructions for rv32
+Date:   Mon, 12 Jun 2023 13:44:37 -0700
+Message-Id: <20230612204514.292087-16-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <8b757cc0-3719-4e63-a755-9710384137bc@paulmck-laptop>
 References: <8b757cc0-3719-4e63-a755-9710384137bc@paulmck-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -59,53 +57,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Weißschuh <linux@weissschuh.net>
+From: Zhangjin Wu <falcon@tinylab.org>
 
-The same constants and some more have been exposed to userspace via
-linux/reboot.h for a long time.
+When compile nolibc application for rv32, we got such errors:
+  nolibc/sysroot/riscv/include/arch.h:190: Error: unrecognized opcode `ld a4,0(a3)'
+  nolibc/sysroot/riscv/include/arch.h:194: Error: unrecognized opcode `sd a3,%lo(_auxv)(a4)'
+  nolibc/sysroot/riscv/include/arch.h:196: Error: unrecognized opcode `sd a2,%lo(environ)(a3)'
 
-To avoid conflicts and trim down nolibc a bit drop the custom
-definitions.
+Refer to arch/riscv/include/asm/asm.h and add REG_L/REG_S macros here to let
+rv32 uses its own lw/sw instructions.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- tools/include/nolibc/sys.h   | 1 +
- tools/include/nolibc/types.h | 8 --------
- 2 files changed, 1 insertion(+), 8 deletions(-)
+ tools/include/nolibc/arch-riscv.h | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 60dffb1cbf96..d5792a5de70b 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -21,6 +21,7 @@
- #include <linux/auxvec.h>
- #include <linux/fcntl.h> /* for O_* and AT_* */
- #include <linux/stat.h>  /* for statx() */
-+#include <linux/reboot.h> /* for LINUX_REBOOT_* */
+diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
+index 0d5f15fdedc4..992a1739dd9c 100644
+--- a/tools/include/nolibc/arch-riscv.h
++++ b/tools/include/nolibc/arch-riscv.h
+@@ -33,9 +33,13 @@ struct sys_stat_struct {
+ #if   __riscv_xlen == 64
+ #define PTRLOG "3"
+ #define SZREG  "8"
++#define REG_L  "ld"
++#define REG_S  "sd"
+ #elif __riscv_xlen == 32
+ #define PTRLOG "2"
+ #define SZREG  "4"
++#define REG_L  "lw"
++#define REG_S  "sw"
+ #endif
  
- #include "arch.h"
- #include "errno.h"
-diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
-index aedd7d9e3f64..15b0baffd336 100644
---- a/tools/include/nolibc/types.h
-+++ b/tools/include/nolibc/types.h
-@@ -86,14 +86,6 @@
- #define SEEK_CUR       1
- #define SEEK_END       2
+ /* Syscalls for RISCV :
+@@ -181,7 +185,7 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
+ 		".option norelax\n"
+ 		"lla   gp, __global_pointer$\n"
+ 		".option pop\n"
+-		"lw    a0, 0(sp)\n"          /* argc (a0) was in the stack                          */
++		REG_L" a0, 0(sp)\n"          /* argc (a0) was in the stack                          */
+ 		"add   a1, sp, "SZREG"\n"    /* argv (a1) = sp                                      */
+ 		"slli  a2, a0, "PTRLOG"\n"   /* envp (a2) = SZREG*argc ...                          */
+ 		"add   a2, a2, "SZREG"\n"    /*             + SZREG (skip null)                     */
+@@ -189,14 +193,14 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
  
--/* cmd for reboot() */
--#define LINUX_REBOOT_MAGIC1         0xfee1dead
--#define LINUX_REBOOT_MAGIC2         0x28121969
--#define LINUX_REBOOT_CMD_HALT       0xcdef0123
--#define LINUX_REBOOT_CMD_POWER_OFF  0x4321fedc
--#define LINUX_REBOOT_CMD_RESTART    0x01234567
--#define LINUX_REBOOT_CMD_SW_SUSPEND 0xd000fce2
--
- /* Macros used on waitpid()'s return status */
- #define WEXITSTATUS(status) (((status) & 0xff00) >> 8)
- #define WIFEXITED(status)   (((status) & 0x7f) == 0)
+ 		"add   a3, a2, zero\n"       /* iterate a3 over envp to find auxv (after NULL)      */
+ 		"0:\n"                       /* do {                                                */
+-		"ld    a4, 0(a3)\n"          /*   a4 = *a3;                                         */
++		REG_L" a4, 0(a3)\n"          /*   a4 = *a3;                                         */
+ 		"add   a3, a3, "SZREG"\n"    /*   a3 += sizeof(void*);                              */
+ 		"bne   a4, zero, 0b\n"       /* } while (a4);                                       */
+ 		"lui   a4, %hi(_auxv)\n"     /* a4 = &_auxv (high bits)                             */
+-		"sd    a3, %lo(_auxv)(a4)\n" /* store a3 into _auxv                                 */
++		REG_S" a3, %lo(_auxv)(a4)\n" /* store a3 into _auxv                                 */
+ 
+-		"lui a3, %hi(environ)\n"     /* a3 = &environ (high bits)                           */
+-		"sd a2,%lo(environ)(a3)\n"   /* store envp(a2) into environ                         */
++		"lui   a3, %hi(environ)\n"   /* a3 = &environ (high bits)                           */
++		REG_S" a2,%lo(environ)(a3)\n"/* store envp(a2) into environ                         */
+ 		"andi  sp,a1,-16\n"          /* sp must be 16-byte aligned                          */
+ 		"call  main\n"               /* main() returns the status code, we'll exit with it. */
+ 		"li a7, 93\n"                /* NR_exit == 93                                       */
 -- 
 2.40.1
 
