@@ -2,129 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49CC172CB0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 18:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2361572CB23
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 18:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229541AbjFLQJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 12:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50164 "EHLO
+        id S233345AbjFLQNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 12:13:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjFLQJS (ORCPT
+        with ESMTP id S232273AbjFLQM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 12:09:18 -0400
-Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA1B187
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 09:09:17 -0700 (PDT)
-Received: by mail-oo1-xc33.google.com with SMTP id 006d021491bc7-55b2fb308bbso2339310eaf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 09:09:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686586157; x=1689178157;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=krHnCQ5CZRMKrSb8ha+/q1/CNtxY7fdiNeyXa88Ch7U=;
-        b=z3EBHkglWnm5rnLT98HaYaM+oGWcCAOyxvug81oE2bBZpjVKxBgN29HUk1J+lwiLiZ
-         HsDVo1ETVzGu1HECjVIGZHpZCo21qG7E2DidskRGb9L67JJFLSKyZl45k4uZssKrn2K0
-         22ddrL24eEE9G4l8BbFRK+rUzlepuWNLezx5wqPj6QgDytdO1RvOQUV8oYgoVtfucW9M
-         bVrdjiGepr6ge7nbMw65RIYrDhIRac6HeFNdCeJMiaea2G8vm0olD15rTk/lWCWaqa7L
-         dnQq8z6sBAw12YOiMmgwwo7FThPlMXhO0rreAEAlcVOsqt8UuSWBug+vF4r8zpSiVX0I
-         c2Ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686586157; x=1689178157;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=krHnCQ5CZRMKrSb8ha+/q1/CNtxY7fdiNeyXa88Ch7U=;
-        b=kkw5DrrRXSI+Vg0tmLR2yQwa39/rogrG6X/URH9lbEAmi9RI/1xz1rvWYQtZ76TWJQ
-         2dD+rl8HnYAsJLVsz/m7zE4F25EV9ywze3gdDlyZjUK+dg6fVrgksNoqh4X+WjslcBLT
-         vNuB/3P5Vk7X142OjKt62na05OQ6w9XZ2yDGNeK6GtNji9ke//W6DuBniBbatYn02sfP
-         HXaDtLAJfIHwxbbARqZx4G2ABgEDYXqub269EqncqfVZOXvVzauSUzdJ+WfBJrUQ1gIA
-         kuDf7NL4Mvr6cNmnNy8YXhLKS6FBcvuPVkKerNDhtrpwvyOYhEhGMP+/WUTqjGbhplRO
-         ipcg==
-X-Gm-Message-State: AC+VfDyFKiLxcE+DJJnUdrVqTQTq3yRVWO45aPVv398VT1YhAAhYhKRS
-        oWEOrq9eX/ETQf+QPSkagaDaFZhky52cRxwBBlCSNA==
-X-Google-Smtp-Source: ACHHUZ4D0xPfFFsu+KArW+MWCrof3osUM2WtDYERfGMacYWgjQS8tjR/ytuDZp0rHDkHYrXTiPuEqxVBQnbyJDiu9gU=
-X-Received: by 2002:a05:6359:ba3:b0:12b:d6bf:7ac8 with SMTP id
- gf35-20020a0563590ba300b0012bd6bf7ac8mr635970rwb.29.1686586156856; Mon, 12
- Jun 2023 09:09:16 -0700 (PDT)
+        Mon, 12 Jun 2023 12:12:56 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16EDA118;
+        Mon, 12 Jun 2023 09:12:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686586376; x=1718122376;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=IYt04gSUqk2jrpPKBFAhlqeGc+makPe+S7hTcL63yKA=;
+  b=gYlSbBLTubETE886ni6fRCuGtHEDtvSVGP1lfjU7pAr8TPS0p4ERQf1M
+   7SChy4LtG/I77zfwG5nTsFlaPBp0L4LwuWpz1h6CNQWnzDCYioP4ORJce
+   yib/sj6JsSYLaEtPZssCMXUssIgGi9yUzIq8kqYzFzhINE/exX1Q4F5Zn
+   WDoXPrQzcS3Q7vKnRjWcRC5/ey4Pic0d3kOKTfs2PpSn2tWDov/B3PUo8
+   BGeupxmFk66NBVUC4kPShM8ef58rRiUVkvOvH2iAhSPQNgaqC2dphOj5Z
+   +F/m2uhNSj0k3v3P8I9gU8aW3oLm7Dp/NHlz+5VMoklwvmGqTNg+sqnIM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="360572675"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="360572675"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 09:10:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="824031048"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="824031048"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 12 Jun 2023 09:10:05 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id C0544357; Mon, 12 Jun 2023 19:10:13 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Cc:     Hans de Goede <hdegoede@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: [PATCH v3 0/3] device property: Introduce device_is_compatible()
+Date:   Mon, 12 Jun 2023 19:10:08 +0300
+Message-Id: <20230612161011.86871-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 MIME-Version: 1.0
-References: <20230609005158.2421285-1-surenb@google.com> <20230609005158.2421285-3-surenb@google.com>
- <ZIOKxoTlRzWQtQQR@x1n> <ZIONJQGuhYiDnFdg@casper.infradead.org>
- <ZIOPeNAy7viKNU5Z@x1n> <CAJuCfpFAh2KOhpCQ-4b+pzY+1GxOGk=eqj6pBj04gc_8eqB6QQ@mail.gmail.com>
- <ZIcktx8DPYxtV2Sd@x1n>
-In-Reply-To: <ZIcktx8DPYxtV2Sd@x1n>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Mon, 12 Jun 2023 09:09:06 -0700
-Message-ID: <CAJuCfpFJwDc8po3Ar1JsU8nGZUdCeiBNniQkp909dAC_fc8Kvw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/6] mm: handle swap page faults under VMA lock if page
- is uncontended
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, akpm@linux-foundation.org,
-        hannes@cmpxchg.org, mhocko@suse.com, josef@toxicpanda.com,
-        jack@suse.cz, ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
-        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
-        apopple@nvidia.com, ying.huang@intel.com, david@redhat.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        viro@zeniv.linux.org.uk, brauner@kernel.org,
-        pasha.tatashin@soleen.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 6:59=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote:
->
-> On Fri, Jun 09, 2023 at 03:34:34PM -0700, Suren Baghdasaryan wrote:
-> > On Fri, Jun 9, 2023 at 1:45=E2=80=AFPM Peter Xu <peterx@redhat.com> wro=
-te:
-> > >
-> > > On Fri, Jun 09, 2023 at 09:35:49PM +0100, Matthew Wilcox wrote:
-> > > > On Fri, Jun 09, 2023 at 04:25:42PM -0400, Peter Xu wrote:
-> > > > > >  bool __folio_lock_or_retry(struct folio *folio, struct mm_stru=
-ct *mm,
-> > > > > >                    unsigned int flags)
-> > > > > >  {
-> > > > > > + /* Can't do this if not holding mmap_lock */
-> > > > > > + if (flags & FAULT_FLAG_VMA_LOCK)
-> > > > > > +         return false;
-> > > > >
-> > > > > If here what we need is the page lock, can we just conditionally =
-release
-> > > > > either mmap lock or vma lock depending on FAULT_FLAG_VMA_LOCK?
-> > > >
-> > > > See patch 5 ...
-> > >
-> > > Just reaching.. :)
-> > >
-> > > Why not in one shot, then?
-> >
-> > I like small incremental changes, but I can squash them if that helps
-> > in having a complete picture.
->
-> Yes that'll be appreciated.  IMHO keeping changing semantics of
-> FAULT_FLAG_VMA_LOCK for the folio lock function in the same small series =
-is
-> confusing.
+Introduce a new helper to tell if device (node) is compatible to the
+given string value. This will help some drivers to get rid of unneeded
+OF APIs/etc and in may help others to be agnostic to OF/ACPI.
 
-Ack. Thanks for the feedback!
+While doing it, I have noticed that ACPI_DEVICE_CLASS() macro seems
+defined in unsuitable location. Move it to the better one.
 
->
-> --
-> Peter Xu
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kernel-team+unsubscribe@android.com.
->
+Last patch is an example of what the first two are doing.
+
+The entire series can go, I believe, via ACPI (linux-pm) tree in case
+the last patch gets tag from the respective maintainer.
+
+In v3:
+- added tag to patch 1 (Rafael), patches 2&3 (Sakari)
+- made commit message text wider in patch 3 (Sakari)
+
+In v2:
+- updated commit message and added kernel doc for a new API (Greg)
+- also replaced acpi_device_get_match_data() with the agnostic API
+- tried to keep header inclusions ordered (to some extent)
+
+Andy Shevchenko (3):
+  ACPI: Move ACPI_DEVICE_CLASS() to mod_devicetable.h
+  device property: Implement device_is_compatible()
+  ata: ahci_platform: Make code agnostic to OF/ACPI
+
+ drivers/ata/ahci_platform.c     |  8 ++++----
+ include/linux/acpi.h            | 14 --------------
+ include/linux/mod_devicetable.h | 13 +++++++++++++
+ include/linux/property.h        | 12 ++++++++++++
+ 4 files changed, 29 insertions(+), 18 deletions(-)
+
+-- 
+2.40.0.1.gaa8946217a0b
+
