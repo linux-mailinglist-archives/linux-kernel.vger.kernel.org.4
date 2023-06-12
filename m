@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CDE572C84B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E3D72C848
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238705AbjFLOYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 10:24:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32876 "EHLO
+        id S237228AbjFLOYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 10:24:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237743AbjFLOYI (ORCPT
+        with ESMTP id S238063AbjFLOYI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 12 Jun 2023 10:24:08 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8081717;
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CBD171D;
         Mon, 12 Jun 2023 07:22:36 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b1b30445cfso52395101fa.1;
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9745ba45cd1so670337466b.1;
         Mon, 12 Jun 2023 07:22:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686579752; x=1689171752;
+        d=gmail.com; s=20221208; t=1686579754; x=1689171754;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Fhxfo9jubdaq6rreLjK9+w/KO2DLgEBFFR+q3ArG03U=;
-        b=FiiK9bmK66Iw/mpParxnMkjQqkclvlfkvieuK+0KhErTJPvSqmxsMxP1XuEDTEYG5E
-         a14M1UZbO7IhcLGrYw7LTf/iQOsxHYy5Cua+1/7GZh7AJQCU15yyIVJ0LyrTWzptvy/q
-         P/Xz0UQvCBzfkVLNPvzrVvQk/HEhJzJ0yLCCmkAWARJ9Ggtg5Hc3qafpDd4BlVf4e52t
-         MoNrcK56F2Zt/w/1bdDs8FPlc0vzIU+P9x28AAn1nLJZvakdosZi4D4K/tFwAoxG2bLB
-         2X5pR5o3V85tc0BoNWxJBcWRpT2NEgB8RJ349Qf80xzpQd81H6GYc7vjcHxIWSRLT9Lt
-         x9RA==
+        bh=DWD8Em9iQLnTUuLRZcCjJmC8x71w7WKYWHctnvqWjcM=;
+        b=UrjR4Sm21Jig2kw9TLJadnR48cNe7svhsKDHhX19FI35fyLw1hb+CGduSgC8GinNv8
+         tGH7yfjy4hzA5M9ejqYDUzIB4F2y8e84Ijcmsq4ddBki6uSPOCa3s+SG9uBNAHUlQxy0
+         yn7PtGQBJ97GSlmuCVPJdhYAd21+RyINYRBLzA93CpqMoi8LR915VUFshd7tSfbhhGMc
+         sffXLFaBvH02/bzC5FtHhiN7t4C6CwzPdyfFD2KyZklURt7X995MRjBEHB+NzTWS3wZ1
+         3n0VyED9tIW+mDhjp7M0hOfNkQH5QorhvW0HZfUpneqrHbIjdErtOzE/XUPZC4R0D0Zw
+         B9UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686579752; x=1689171752;
+        d=1e100.net; s=20221208; t=1686579754; x=1689171754;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Fhxfo9jubdaq6rreLjK9+w/KO2DLgEBFFR+q3ArG03U=;
-        b=dfPdqZG3Hpnt1JwYR3cSoFwLwlGKujIv4q/mqvf4YKUKo7Dx7pTVYPWCqivyD8j2ui
-         2C+/8F+aGBe4kKR8MrkzgUW9GAdeedmPDaU0X0QFFMl359xqHL4EEanOYSN5BQe5oZEs
-         J0r0xFm/pYgx4mc8Aaw7M8PWAwpdDS64VlYQ31ngQ2P9qVD1b/LpK29NVPSpDBcSqV9E
-         t3uCd8LpuIEbLbJVDFXyspsvjJc2HB1ADtlfEFj/cawyzGE4NU3m05Rpl2NA6Tw9iK9G
-         5t0etkmRZYDFxVqWR3HI31KdvVsoiWiXb36I8jz1e80uqGMl2XRqote4LAKiY/Kxtnbx
-         JwmA==
-X-Gm-Message-State: AC+VfDwawXKoL1Dn06j+h0jvuFMcfs1fxqia08NlxgNPvLIKKXAKH9/1
-        eCkH6k/xlznwteBf0jNm1bA=
-X-Google-Smtp-Source: ACHHUZ46V9DWgi1CkRSWD/jiEdN3EM4O1BVDuc89JzvP40jOO8zvaaLioycyPqYo890k6VICCjXwQw==
-X-Received: by 2002:a2e:3c10:0:b0:2b1:fda8:e653 with SMTP id j16-20020a2e3c10000000b002b1fda8e653mr2506642lja.27.1686579752215;
-        Mon, 12 Jun 2023 07:22:32 -0700 (PDT)
+        bh=DWD8Em9iQLnTUuLRZcCjJmC8x71w7WKYWHctnvqWjcM=;
+        b=Jmkt6EXBNFKXaHNS+utau1LgwOGQCJZ1xOh3Gpy0uLhfn0jleFYZ0Qa7zpGpnUhmwn
+         PRZn3cNO2RI8gMLK4lEnuzhPLgORXMPc6EvBUoGPnzfPtWAj5Iqnc5yI1WsgyQFHJioB
+         LG4HlW7gkCff5FV01UMCX6MqK3urJpwR8u8PnV68gHRRJThGhBpz96o+J26h1e6p9PD2
+         r2DRrjpLD0VrPGCRQzvRzbCuHEXxW35GMNO7eHIa0noNPtvR/m78quiIJS5Rg1avp+N7
+         xFgu94lVo5MGh+2KSNVAUPLlAfpoWAzf7zpriGSlkSC/U4FPVdszzmYmOooeGPC9BF7J
+         Iw1Q==
+X-Gm-Message-State: AC+VfDwZRPjSK7qy4oU32Rkw1JOcEmvGQ5j+dkc9Hmp7kAa6LLp4JT8K
+        LQmAAg+Yo+CDJkgDn9k0Bd0=
+X-Google-Smtp-Source: ACHHUZ6tgKdHjSYCwyURWnR8dHPA3/4aG1G6fKY2vnTGEJqtQWIHQJk8ctx1dWDeyhV4mpyzT0n5Vw==
+X-Received: by 2002:a17:906:ef07:b0:96a:1c2a:5a38 with SMTP id f7-20020a170906ef0700b0096a1c2a5a38mr8317754ejs.11.1686579754219;
+        Mon, 12 Jun 2023 07:22:34 -0700 (PDT)
 Received: from localhost.localdomain ([2a02:8109:aa3f:ead8::d8a0])
-        by smtp.gmail.com with ESMTPSA id i8-20020a17090671c800b009659fa6eeddsm5262528ejk.196.2023.06.12.07.22.31
+        by smtp.gmail.com with ESMTPSA id i8-20020a17090671c800b009659fa6eeddsm5262528ejk.196.2023.06.12.07.22.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 07:22:31 -0700 (PDT)
+        Mon, 12 Jun 2023 07:22:33 -0700 (PDT)
 From:   Mehdi Djait <mehdi.djait.k@gmail.com>
 To:     jic23@kernel.org, mazziesaccount@gmail.com
 Cc:     krzysztof.kozlowski+dt@linaro.org,
@@ -57,9 +57,9 @@ Cc:     krzysztof.kozlowski+dt@linaro.org,
         lars@metafoo.de, linux-iio@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         Mehdi Djait <mehdi.djait.k@gmail.com>
-Subject: [PATCH v5 3/7] iio: accel: kionix-kx022a: Warn on failed matches and assume compatibility
-Date:   Mon, 12 Jun 2023 16:22:06 +0200
-Message-Id: <2c69e918cb6dfab663bb62952c554b6b72f58390.1686578554.git.mehdi.djait.k@gmail.com>
+Subject: [PATCH v5 4/7] iio: accel: kionix-kx022a: Add an i2c_device_id table
+Date:   Mon, 12 Jun 2023 16:22:07 +0200
+Message-Id: <9950e3963600465e1177a20ad8a93a3927c026ef.1686578554.git.mehdi.djait.k@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <cover.1686578553.git.mehdi.djait.k@gmail.com>
 References: <cover.1686578553.git.mehdi.djait.k@gmail.com>
@@ -75,9 +75,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid error returns on a failure to match and instead just warn with
-assumption that we have a correct dt-binding telling us that
-some new device with a different ID is backwards compatible.
+Add the missing i2c device id.
 
 Acked-by: Matti Vaittinen <mazziesaccount@gmail.com>
 Signed-off-by: Mehdi Djait <mehdi.djait.k@gmail.com>
@@ -86,33 +84,37 @@ v5:
 v4:
 - no changes
 
-v3:
-- changed from 'unsupported' to 'unknown'
-- removed the opening bracket
+v3:                                                                             
+- no changes, this patch is introduced in the v2 
 
-v2:
-- no changes, this patch is introduced in the v2
+ drivers/iio/accel/kionix-kx022a-i2c.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
- drivers/iio/accel/kionix-kx022a.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/iio/accel/kionix-kx022a.c b/drivers/iio/accel/kionix-kx022a.c
-index ff8aa7b9568e..494e81ba1da9 100644
---- a/drivers/iio/accel/kionix-kx022a.c
-+++ b/drivers/iio/accel/kionix-kx022a.c
-@@ -1036,10 +1036,8 @@ int kx022a_probe_internal(struct device *dev)
- 	if (ret)
- 		return dev_err_probe(dev, ret, "Failed to access sensor\n");
+diff --git a/drivers/iio/accel/kionix-kx022a-i2c.c b/drivers/iio/accel/kionix-kx022a-i2c.c
+index e6fd02d931b6..b5a85ce3a891 100644
+--- a/drivers/iio/accel/kionix-kx022a-i2c.c
++++ b/drivers/iio/accel/kionix-kx022a-i2c.c
+@@ -30,6 +30,12 @@ static int kx022a_i2c_probe(struct i2c_client *i2c)
+ 	return kx022a_probe_internal(dev);
+ }
  
--	if (chip_id != KX022A_ID) {
--		dev_err(dev, "unsupported device 0x%x\n", chip_id);
--		return -EINVAL;
--	}
-+	if (chip_id != KX022A_ID)
-+		dev_warn(dev, "unknown device 0x%x\n", chip_id);
++static const struct i2c_device_id kx022a_i2c_id[] = {
++	{ .name = "kx022a" },
++	{ }
++};
++MODULE_DEVICE_TABLE(i2c, kx022a_i2c_id);
++
+ static const struct of_device_id kx022a_of_match[] = {
+ 	{ .compatible = "kionix,kx022a", },
+ 	{ }
+@@ -42,6 +48,7 @@ static struct i2c_driver kx022a_i2c_driver = {
+ 		.of_match_table = kx022a_of_match,
+ 	  },
+ 	.probe_new    = kx022a_i2c_probe,
++	.id_table     = kx022a_i2c_id,
+ };
+ module_i2c_driver(kx022a_i2c_driver);
  
- 	irq = fwnode_irq_get_byname(fwnode, "INT1");
- 	if (irq > 0) {
 -- 
 2.30.2
 
