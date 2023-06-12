@@ -2,190 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5832872D434
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 00:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60CFD72D43C
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 00:15:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237269AbjFLWOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 18:14:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39464 "EHLO
+        id S238772AbjFLWPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 18:15:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjFLWOq (ORCPT
+        with ESMTP id S238500AbjFLWPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 18:14:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5406210C2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 15:14:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E20EB62C03
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 22:14:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AA97C433D2;
-        Mon, 12 Jun 2023 22:14:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686608084;
-        bh=/4GR9Hf1ASwJkuX0BXgNzC6bOV/3dAkzoO7nR0gcVMo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Tf3wLXVKRuYFAJRgyhnirYHZlD6zj0nqI8Iz1cWqkKsSY0W/Oc7Uc6+c1aedVtb3u
-         fIPtW7zHHHWCNTu0KtyyAcpQfJL2goJieV7p9ysE7kwDVK0nfJ/Y/AX19UQP9EeoWu
-         cAp0wwjx7jbTOY15d5ILJuYz8f4ODEL4arghzgYQE5X18OxfULSjm8MxwZ8QV/6z36
-         TEgBMUwGGNBcV1dToYTIfyOTbs1hYLkWIZcwKC2FlZzCxeADlUfx5f0blhWX/XSG/h
-         GMEqFphosIyzkwUanZVeHqaPfp+q0TAyYqjO8XivKq4jDtaOhsX2SgOcJWrkISVAnt
-         vYA2mhy0+GP4Q==
-Date:   Mon, 12 Jun 2023 15:14:42 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Sheng Yong <shengyong@oppo.com>
-Cc:     chao@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, ebiggers@kernel.org
-Subject: Re: [PATCH v4 1/6] f2fs: add helper to check compression level
-Message-ID: <ZIeY0qNjXgx419NZ@google.com>
-References: <20230612030121.2393541-1-shengyong@oppo.com>
- <20230612030121.2393541-2-shengyong@oppo.com>
+        Mon, 12 Jun 2023 18:15:07 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E774010D5;
+        Mon, 12 Jun 2023 15:15:06 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35CLYQk3006674;
+        Mon, 12 Jun 2023 22:15:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=92A7sWmY3DqiWHnz6ED8fB3lIzVvkd55/1DTc2WAPIc=;
+ b=QVnCQZflO6GzxfNikRYOMpe0y+lbyAIp1AsRZ45Tj/EUU5mHNFrydwL1OBJF6sjQH3rq
+ K5XYyaWFt5ssiUEmX6yC83frxyQzc7W12IDdtpXELzUn/1YfOcQ3mxOe4d7b1nuAlAZn
+ U6cwQIvVUBNiuH1RGrYVb81o/SgTsDZICO/G8eFEZdko1KpMq7Qgvb/VZ45y+ZFGc1fY
+ lnNtcvnMiD/ss3RyItgRy+lyzzdi2tady4cv5dQ/6IZxuqckcES79Yk8IPYo/NyFmezU
+ wSTaE/CoD6SLVxdzBA9VEfKizdlw1brswQiyun5zWVU+pQxPIsKPM1CVX7q1GCjk8wzl CA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r60pesfk3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Jun 2023 22:15:03 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35CMF2bE021895
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Jun 2023 22:15:02 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Mon, 12 Jun 2023 15:15:01 -0700
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/3] arm64: dts: qcom: sc8180x: USB TypeC plumbing
+Date:   Mon, 12 Jun 2023 15:14:53 -0700
+Message-ID: <20230612221456.1887533-1-quic_bjorande@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230612030121.2393541-2-shengyong@oppo.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 1qg8OP1QMAkVPCl_MFjGLpt1VdINvniR
+X-Proofpoint-ORIG-GUID: 1qg8OP1QMAkVPCl_MFjGLpt1VdINvniR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-12_16,2023-06-12_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 lowpriorityscore=0 clxscore=1015 spamscore=0
+ adultscore=0 suspectscore=0 mlxlogscore=723 impostorscore=0 mlxscore=0
+ phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2306120191
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Could you please check this version?
+This wires up USB Type-C and pmic_glink to provide battery monitoring,
+external display and orientation switching of the SuperSpeed pins.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git/commit/?h=dev-test&id=9c84aad379019a0d86655bb50bd7b4bc92683c4b
+Note that the external display has a functional dependency on INTF/PHY
+selection in the DPU driver.
 
-On 06/12, Sheng Yong wrote:
-> This patch adds a helper function to check if compression level is
-> valid.
-> 
-> Signed-off-by: Sheng Yong <shengyong@oppo.com>
-> ---
->  fs/f2fs/compress.c | 31 +++++++++++++++++++++++++++++++
->  fs/f2fs/f2fs.h     |  2 ++
->  fs/f2fs/super.c    |  4 ++--
->  3 files changed, 35 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/f2fs/compress.c b/fs/f2fs/compress.c
-> index 1132d3cd8f337..63a496137ebe7 100644
-> --- a/fs/f2fs/compress.c
-> +++ b/fs/f2fs/compress.c
-> @@ -55,6 +55,7 @@ struct f2fs_compress_ops {
->  	int (*init_decompress_ctx)(struct decompress_io_ctx *dic);
->  	void (*destroy_decompress_ctx)(struct decompress_io_ctx *dic);
->  	int (*decompress_pages)(struct decompress_io_ctx *dic);
-> +	bool (*is_level_valid)(int level);
->  };
->  
->  static unsigned int offset_in_cluster(struct compress_ctx *cc, pgoff_t index)
-> @@ -308,11 +309,23 @@ static int lz4_decompress_pages(struct decompress_io_ctx *dic)
->  	return 0;
->  }
->  
-> +static bool lz4_is_level_valid(int lvl)
-> +{
-> +	if (lvl == 0)
-> +		return true;
-> +#ifdef CONFIG_F2FS_FS_LZ4HC
-> +	if (lvl >= LZ4HC_MIN_CLEVEL && lvl <= LZ4HC_MAX_CLEVEL)
-> +		return true;
-> +#endif
-> +	return false;
-> +}
-> +
->  static const struct f2fs_compress_ops f2fs_lz4_ops = {
->  	.init_compress_ctx	= lz4_init_compress_ctx,
->  	.destroy_compress_ctx	= lz4_destroy_compress_ctx,
->  	.compress_pages		= lz4_compress_pages,
->  	.decompress_pages	= lz4_decompress_pages,
-> +	.is_level_valid		= lz4_is_level_valid,
->  };
->  #endif
->  
-> @@ -477,6 +490,13 @@ static int zstd_decompress_pages(struct decompress_io_ctx *dic)
->  	return 0;
->  }
->  
-> +static bool zstd_is_level_valid(int lvl)
-> +{
-> +	if (lvl < zstd_min_clevel() || lvl > zstd_max_clevel())
-> +		return false;
-> +	return true;
-> +}
-> +
->  static const struct f2fs_compress_ops f2fs_zstd_ops = {
->  	.init_compress_ctx	= zstd_init_compress_ctx,
->  	.destroy_compress_ctx	= zstd_destroy_compress_ctx,
-> @@ -484,6 +504,7 @@ static const struct f2fs_compress_ops f2fs_zstd_ops = {
->  	.init_decompress_ctx	= zstd_init_decompress_ctx,
->  	.destroy_decompress_ctx	= zstd_destroy_decompress_ctx,
->  	.decompress_pages	= zstd_decompress_pages,
-> +	.is_level_valid		= zstd_is_level_valid,
->  };
->  #endif
->  
-> @@ -542,6 +563,16 @@ bool f2fs_is_compress_backend_ready(struct inode *inode)
->  	return f2fs_cops[F2FS_I(inode)->i_compress_algorithm];
->  }
->  
-> +bool f2fs_is_compress_level_valid(int alg, int lvl)
-> +{
-> +	const struct f2fs_compress_ops *cops = f2fs_cops[alg];
-> +
-> +	if (cops->is_level_valid)
-> +		return cops->is_level_valid(lvl);
-> +
-> +	return lvl == 0;
-> +}
-> +
->  static mempool_t *compress_page_pool;
->  static int num_compress_pages = 512;
->  module_param(num_compress_pages, uint, 0444);
-> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> index 80c783215b5a3..1b17bbe7e8656 100644
-> --- a/fs/f2fs/f2fs.h
-> +++ b/fs/f2fs/f2fs.h
-> @@ -4236,6 +4236,7 @@ bool f2fs_compress_write_end(struct inode *inode, void *fsdata,
->  int f2fs_truncate_partial_cluster(struct inode *inode, u64 from, bool lock);
->  void f2fs_compress_write_end_io(struct bio *bio, struct page *page);
->  bool f2fs_is_compress_backend_ready(struct inode *inode);
-> +bool f2fs_is_compress_level_valid(int alg, int lvl);
->  int __init f2fs_init_compress_mempool(void);
->  void f2fs_destroy_compress_mempool(void);
->  void f2fs_decompress_cluster(struct decompress_io_ctx *dic, bool in_task);
-> @@ -4300,6 +4301,7 @@ static inline bool f2fs_is_compress_backend_ready(struct inode *inode)
->  	/* not support compression */
->  	return false;
->  }
-> +static inline bool f2fs_is_compress_level_valid(int alg, int lvl) { return false; }
->  static inline struct page *f2fs_compress_control_page(struct page *page)
->  {
->  	WARN_ON_ONCE(1);
-> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-> index 8fd23caa1ed99..023981824d240 100644
-> --- a/fs/f2fs/super.c
-> +++ b/fs/f2fs/super.c
-> @@ -606,7 +606,7 @@ static int f2fs_set_lz4hc_level(struct f2fs_sb_info *sbi, const char *str)
->  	if (kstrtouint(str + 1, 10, &level))
->  		return -EINVAL;
->  
-> -	if (level < LZ4HC_MIN_CLEVEL || level > LZ4HC_MAX_CLEVEL) {
-> +	if (!f2fs_is_compress_level_valid(COMPRESS_LZ4, level)) {
->  		f2fs_info(sbi, "invalid lz4hc compress level: %d", level);
->  		return -EINVAL;
->  	}
-> @@ -640,7 +640,7 @@ static int f2fs_set_zstd_level(struct f2fs_sb_info *sbi, const char *str)
->  	if (kstrtouint(str + 1, 10, &level))
->  		return -EINVAL;
->  
-> -	if (!level || level > zstd_max_clevel()) {
-> +	if (!f2fs_is_compress_level_valid(COMPRESS_ZSTD, level)) {
->  		f2fs_info(sbi, "invalid zstd compress level: %d", level);
->  		return -EINVAL;
->  	}
-> -- 
-> 2.40.1
+Bjorn Andersson (3):
+  arm64: dts: qcom: sc8180x: Add USB Type-C of_graph anchors
+  arm64: dts: qcom: sc8180x-primus: Wire up USB Type-C
+  arm64: dts: qcom: sc8180x-flex5g: Wire up USB Type-C
+
+ .../boot/dts/qcom/sc8180x-lenovo-flex-5g.dts  | 196 ++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc8180x-primus.dts   | 196 ++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc8180x.dtsi         |  48 +++++
+ 3 files changed, 440 insertions(+)
+
+-- 
+2.25.1
+
