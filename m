@@ -2,114 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8375E72C8BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:38:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44E0872C8C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236535AbjFLOiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 10:38:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50562 "EHLO
+        id S235525AbjFLOix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 10:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230354AbjFLOiR (ORCPT
+        with ESMTP id S238254AbjFLOip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 10:38:17 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301D8CD;
-        Mon, 12 Jun 2023 07:38:16 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 8A2DC5C0116;
-        Mon, 12 Jun 2023 10:38:15 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 12 Jun 2023 10:38:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1686580695; x=1686667095; bh=ZL
-        tbf+vkYKNwbdqr4ijTHLZjINUGdnp8fp3QuAY9ODo=; b=k4ZWeOyVjN5AfscYB9
-        Yz1mj4b49D9gMZwziq6qpkFlWVWLR+EKhBmAUIS0WzgvxGANmi+CCyxsJf6nmyyA
-        cnCHsOg/fDvRNYnF9zwp7E7HDk7dDcOZrheQHwYjq1sb7zVc225lLTC604U3Jr2F
-        mdpFZfyh4Bbe5gtlDcWa4dDQXhe80hwG3be4coPD2XHgbg9nqDWoMO5pR8KIKQ0f
-        HnCVV8HD2NHb2DKPUQlHSdAc8uek6NQsvMWF470Z2EQngZmk5+3xUsydcr4LwWoD
-        J6yj7TntqrfqXcza7U2redn4vyPX8RpCq8dyyFu0TVorP2Jrk0mUqcF0RqQxEK7x
-        LM+g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1686580695; x=1686667095; bh=ZLtbf+vkYKNwb
-        dqr4ijTHLZjINUGdnp8fp3QuAY9ODo=; b=g8BdJH2bXvlnCZYt6VW4QrbIsuFQ9
-        og0difewC1j1os/5sq0KVExEbXrOVKizJ15akK4c0rdc8bMamhTR1pz7hDjuSTPX
-        G175lQBA8P70pM8gQWNadhNGs526wB4nboj89+vUW5jc2xEOicqcbNGGq68hXJQV
-        3nnaeBD42fGsgNJASmBj5udAbqnd2RyDsk3JfnCxvGypTAJGOD3drVjuICdtXtd3
-        B1qXFDbTlvV+EBi0qTsX40Jkl6h2YiICJg5/PQNK9kJ0ymlVN9eRREWjZ1lOFeXq
-        tjeKjSZy3EzS6wdQW6WpNXW0qDDjUwJF+SrKybnZiuIlOX9UC+cRbqRdg==
-X-ME-Sender: <xms:1y2HZDWDAhBG8gTDDPxuNiSpvbyAxLRPAL-2cEA3Ls33Z2Nnr0kvdg>
-    <xme:1y2HZLmXxUUmSP2MiJG2bI2w__QLkh5ESyCKjq0ivtUjmYNjrdS8nX7cUk6SukreC
-    g_senb_pqrbqP_KmyA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeduhedgjeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:1y2HZPYnXn8RBJ9NZarTzXwvFx9gTIHXE17Eo0bog66PczrwbWNR7w>
-    <xmx:1y2HZOVzqUJJWPRLhgB57v08nAP0ZIfyy3ezMlQc_7YWpQTHm6chPg>
-    <xmx:1y2HZNnapUm6j95AJOVobbGi-dDuWUWVYlw-3dWqL-U7Q8s3G304Cg>
-    <xmx:1y2HZNEtrrhUUZLhzYvpo4MnM-i0sEieG0Ns2ajPXdJx2SQzqHIZbw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 224EBB60086; Mon, 12 Jun 2023 10:38:15 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-492-g08e3be04ba-fm-20230607.003-g08e3be04
-Mime-Version: 1.0
-Message-Id: <3b5bc8f7-6d6d-48a1-9536-4a50110fabe6@app.fastmail.com>
-In-Reply-To: <f0329c00-8d5a-ba89-c793-608f85cf70b3@kernel.org>
-References: <20230612124024.520720-1-arnd@kernel.org>
- <20230612124024.520720-3-arnd@kernel.org>
- <f0329c00-8d5a-ba89-c793-608f85cf70b3@kernel.org>
-Date:   Mon, 12 Jun 2023 16:37:54 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Roger Quadros" <rogerq@kernel.org>,
-        "Arnd Bergmann" <arnd@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>
-Cc:     "Grygorii Strashko" <grygorii.strashko@ti.com>,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        "Vignesh Raghavendra" <vigneshr@ti.com>,
-        "Nishanth Menon" <nm@ti.com>, "Tero Kristo" <kristo@kernel.org>,
-        "Randy Dunlap" <rdunlap@infradead.org>,
-        "Mao Wenan" <maowenan@huawei.com>, "Andrew Lunn" <andrew@lunn.ch>,
-        Netdev <netdev@vger.kernel.org>, linux-kernel@vger.kernel.org,
-        "Alexei Starovoitov" <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        "Jesper Dangaard Brouer" <hawk@kernel.org>,
-        "John Fastabend" <john.fastabend@gmail.com>,
-        "Simon Horman" <simon.horman@corigine.com>,
-        "Vladimir Oltean" <vladimir.oltean@nxp.com>, bpf@vger.kernel.org
-Subject: Re: [PATCH 3/3] net: ethernet: ti-cpsw: fix linking built-in code to modules
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 12 Jun 2023 10:38:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C1A4CF
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 07:38:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0207D625CB
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 14:38:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19FC6C433A1;
+        Mon, 12 Jun 2023 14:38:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686580723;
+        bh=gcogc2MHa/anB+TUpT1xFrrgFluTtUso9EJEcBuwueM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=j9fmqTSsfjuhMrrIloRBYfqCcAKIl0C+hg6AJ7uKGF6ASRismfc+gJNawGKSLKTf/
+         PFtahFp71ewjLRU0LT3kYtgc6FnHKAiM3AFioNpmo3rSA0qw48o8sChR28x3Dl/4N7
+         Zq4FWMMOEn9hvk9F9vNbcVjb/4dEoJAETSW2SF/SwQh6vGI1mfB5Z6nJ6OXnaFp6VT
+         E+p2W7Yu13ckbAzQirdtN18huUeSeLwN+vyNRglKsrQJCWlNn/ISB9t1UAm4ewnqg3
+         w3v4K5NrFwK09hBwL5JwfZHxEMGTBzTl70hu8H9XGwCh6iCmCx2ovGgijvfccSVGVS
+         Z0rcl4WUZp5OA==
+Message-ID: <8097d4d9-815e-2527-0fb7-90ec0609a4a3@kernel.org>
+Date:   Mon, 12 Jun 2023 22:38:39 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] f2fs: compress: don't force buffered io when in
+ COMPR_MODE_USER mode
+Content-Language: en-US
+To:     Yangtao Li <frank.li@vivo.com>, Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     Qi Han <hanqi@vivo.com>, linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20230609131555.56651-1-frank.li@vivo.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20230609131555.56651-1-frank.li@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023, at 16:27, Roger Quadros wrote:
-> On 12/06/2023 15:40, Arnd Bergmann wrote:
+On 2023/6/9 21:15, Yangtao Li wrote:
+> It is observed that when in user compression mode (compress_extension=*),
+> even though the file is not compressed, the file is still forced to use
+> buffer io, which makes the AndroBench sequential read and write drop
+> significantly. In fact, when the file is not compressed, we don't need
+> to force it to buffer io.
+> 
+>                   | w/o patch | w/ patch |
+> seq read  (MB/s) | 1320.068  | 3696.154 |
+> seq write (MB/s) | 617.996   | 2978.478 |
+> 
+> Fixes: 4c8ff7095bef ("f2fs: support data compression")
+> Signed-off-by: Qi Han <hanqi@vivo.com>
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+>   fs/f2fs/f2fs.h | 14 ++++++++++++++
+>   fs/f2fs/file.c |  2 +-
+>   2 files changed, 15 insertions(+), 1 deletion(-)
+> 
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index 1efcfd9e5a99..7f5472525310 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -3168,6 +3168,20 @@ static inline int f2fs_compressed_file(struct inode *inode)
+>   		is_inode_flag_set(inode, FI_COMPRESSED_FILE);
+>   }
+>   
+> +static inline bool f2fs_is_compressed_file(struct inode *inode)
+> +{
+> +	int compress_mode = F2FS_OPTION(F2FS_I_SB(inode)).compress_mode;
+> +
+> +	if (compress_mode == COMPR_MODE_FS)
+> +		return f2fs_compressed_file(inode);
+> +	else if (atomic_read(&F2FS_I(inode)->i_compr_blocks) ||
 
-> cpsw_priv.o and cpsw_ethtool.o (included in ti-cpsw-priv.o) are not 
-> required by ti-am65-cpsw-nuss.
-> It only needs cpsw_sl.o
+Should check dirty page as well? i_compr_blocks may increase after
+data writeback.
 
-Ok, I see. I'll split that out into yet another module then, and
-give it another day of randconfig tests.
+Thanks,
 
-     Arnd
+> +		is_inode_flag_set(inode, FI_COMPRESS_RELEASED) ||
+> +		is_inode_flag_set(inode, FI_ENABLE_COMPRESS))
+> +		return true;
+> +
+> +	return false;
+> +}
+> +
+>   static inline bool f2fs_need_compress_data(struct inode *inode)
+>   {
+>   	int compress_mode = F2FS_OPTION(F2FS_I_SB(inode)).compress_mode;
+> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> index 74ecc9e20619..0698129b2165 100644
+> --- a/fs/f2fs/file.c
+> +++ b/fs/f2fs/file.c
+> @@ -821,7 +821,7 @@ static bool f2fs_force_buffered_io(struct inode *inode, int rw)
+>   		return true;
+>   	if (fsverity_active(inode))
+>   		return true;
+> -	if (f2fs_compressed_file(inode))
+> +	if (f2fs_is_compressed_file(inode))
+>   		return true;
+>   
+>   	/* disallow direct IO if any of devices has unaligned blksize */
