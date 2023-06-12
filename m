@@ -2,85 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4A9172C54B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 15:00:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F0772C564
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 15:05:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235737AbjFLNA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 09:00:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45318 "EHLO
+        id S235879AbjFLNFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 09:05:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235386AbjFLNA0 (ORCPT
+        with ESMTP id S229604AbjFLNFP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 09:00:26 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F429E52
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 06:00:25 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-977d0ee1736so624526066b.0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 06:00:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686574823; x=1689166823;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wo+1PodCdHHB0tD1Y4UaF7/JGvZd1Adl0KqOZuyCrYQ=;
-        b=hmGzaL/1fj4DxM7vQM6aLIC7mcImR1hXuEfn+ACYbTVsZKQzCpzR8zD6hhLAxosEhA
-         RaWLvToMqnRT3rIITCOEJwEz1S1SIlRt6ykOhDCQ0bMTeQzKTIZbmX7cHf4/0k1vzo81
-         72zCI1PWJRlbabQkCA9TJRsdQIKyjYaaT4BBmX5HpHxJheD4jxtEOenAg1lv+O1AnmKL
-         eou1Cs5EwqNGjVQpMjmJfGB75ZFsP4ZUw6mZL4XaB8pvV9OWsl6rnK+qtJNEbYtWhSgD
-         eBZxi5FhD0caIzAnWiCUcD4yBP1Y3PVf8Et2l1L3JhVVyKhls+1r7x7r3Vh8HvZw2Xre
-         +pLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686574823; x=1689166823;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wo+1PodCdHHB0tD1Y4UaF7/JGvZd1Adl0KqOZuyCrYQ=;
-        b=GVBQiaNLow4nJmGxGlUms+KfNFsGPEqIPSNMXZbb7C8ZwsOP2+s66BDT0NGVobSXLu
-         UrYqwyCuXov3Mwflks1vwAJqFXbsJPCHPdxYa1/yZyhuOlNuZ6FbGInUouemyIoZ4inQ
-         v1wePadoi7gluxU3f4bRaxfcPAVPz6ugyEsZuG+dpWqc47bX2Zga0bThkn63/ID+NqxW
-         IkUNiPKfnv0Aqbig5jTMglYvcP3BS1FJada4D/WLojpYv5wMss0kFQRkDCJPr9m86+BX
-         yoVzdPkGVW3mOatve3QOABAimpA8YYjdR3fO/HH4Tbk93ThmezvvUVtoVepMK/zd4nEg
-         8aTQ==
-X-Gm-Message-State: AC+VfDzcBWqWD7lyzacMA+f/eKnPfbf0chedUUNhnJlCxsGFUymU+K4D
-        AYnOGIL49HffeWFaytxdVXH5vQ==
-X-Google-Smtp-Source: ACHHUZ6jYurA4SzJZWnpU4r2a9vrK80Vq4jKofL3dpTyho0SzI6ysux5e/lKnYhD8iQ8gZrCaJ4czg==
-X-Received: by 2002:a17:907:96ab:b0:96f:f98c:ac71 with SMTP id hd43-20020a17090796ab00b0096ff98cac71mr8490655ejc.67.1686574823483;
-        Mon, 12 Jun 2023 06:00:23 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id n24-20020a170906379800b0096a6bf89259sm5168854ejc.167.2023.06.12.06.00.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 06:00:22 -0700 (PDT)
-Message-ID: <e0171cb6-54e7-41bd-4b08-fa667fe58ff4@linaro.org>
-Date:   Mon, 12 Jun 2023 15:00:19 +0200
+        Mon, 12 Jun 2023 09:05:15 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7CF81A1;
+        Mon, 12 Jun 2023 06:05:13 -0700 (PDT)
+Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QfsK92KdFzLqhJ;
+        Mon, 12 Jun 2023 21:02:05 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 12 Jun 2023 21:05:05 +0800
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Yunsheng Lin <linyunsheng@huawei.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, <bpf@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH net-next v4 0/5] introduce page_pool_alloc() API
+Date:   Mon, 12 Jun 2023 21:02:51 +0800
+Message-ID: <20230612130256.4572-1-linyunsheng@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v18 1/3] ARM: dts: nuvoton: Add node for NPCM memory
- controller
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Marvin Lin <milkfafa@gmail.com>, robh+dt@kernel.org,
-        tony.luck@intel.com, james.morse@arm.com, mchehab@kernel.org,
-        rric@kernel.org, benjaminfair@google.com, yuenn@google.com,
-        venture@google.com, avifishman70@gmail.com, tmaimon77@gmail.com,
-        tali.perry1@gmail.com, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        openbmc@lists.ozlabs.org, KWLIU@nuvoton.com, YSCHU@nuvoton.com,
-        ctcchien@nuvoton.com, kflin@nuvoton.com
-References: <20230111093245.318745-1-milkfafa@gmail.com>
- <20230111093245.318745-2-milkfafa@gmail.com>
- <20230612110401.GPZIb7oZPdsPGFzSDc@fat_crate.local>
- <38c30778-9526-cba6-4ddb-00bcefeb5647@linaro.org>
- <20230612120107.GFZIcJA3zktkiyTS2+@fat_crate.local>
- <99795947-0584-df42-a28a-aa89d7e21c7e@linaro.org>
- <20230612123925.GGZIcR/dUrcu03z6V+@fat_crate.local>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230612123925.GGZIcR/dUrcu03z6V+@fat_crate.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.69.192.56]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,16 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/06/2023 14:39, Borislav Petkov wrote:
-> On Mon, Jun 12, 2023 at 02:09:33PM +0200, Krzysztof Kozlowski wrote:
->> Please route the DTS (1/3) via Nuvoton SoC tree.
-> 
-> Don't all three need to go together?
+In [1] & [2], there are usecases for veth and virtio_net to
+use frag support in page pool to reduce memory usage, and it
+may request different frag size depending on the head/tail
+room space for xdp_frame/shinfo and mtu/packet size. When the
+requested frag size is large enough that a single page can not
+be split into more than one frag, using frag support only have
+performance penalty because of the extra frag count handling
+for frag support.
 
-No, the DTS is always independent because it describes the hardware.
-Linux should work fine regardless of hardware description. Tying Linux
-to specific DTS is usually sign of an ABI break.
+So this patchset provides a page pool API for the driver to
+allocate memory with least memory utilization and performance
+penalty when it doesn't know the size of memory it need
+beforehand.
 
-Best regards,
-Krzysztof
+1. https://patchwork.kernel.org/project/netdevbpf/patch/d3ae6bd3537fbce379382ac6a42f67e22f27ece2.1683896626.git.lorenzo@kernel.org/
+2. https://patchwork.kernel.org/project/netdevbpf/patch/20230526054621.18371-3-liangchen.linux@gmail.com/
+
+V4. Fix a typo and add a patch to update document about frag
+    API, PAGE_POOL_DMA_USE_PP_FRAG_COUNT is not renamed yet
+    as we may need a different thread to discuss that.
+
+V3: Incorporate changes from the disscusion with Alexander,
+    mostly the inline wraper, PAGE_POOL_DMA_USE_PP_FRAG_COUNT
+    change split to separate patch and comment change.
+V2: Add patch to remove PP_FLAG_PAGE_FRAG flags and mention
+    virtio_net usecase in the cover letter.
+V1: Drop RFC tag and page_pool_frag patch.
+
+Yunsheng Lin (5):
+  page_pool: frag API support for 32-bit arch with 64-bit DMA
+  page_pool: unify frag_count handling in page_pool_is_last_frag()
+  page_pool: introduce page_pool_alloc() API
+  page_pool: remove PP_FLAG_PAGE_FRAG flag
+  page_pool: update document about frag API
+
+ Documentation/networking/page_pool.rst        |  34 +++-
+ .../net/ethernet/hisilicon/hns3/hns3_enet.c   |   3 +-
+ .../marvell/octeontx2/nic/otx2_common.c       |   2 +-
+ .../net/ethernet/mellanox/mlx5/core/en_main.c |  12 +-
+ drivers/net/wireless/mediatek/mt76/mac80211.c |   2 +-
+ include/net/page_pool.h                       | 153 +++++++++++++-----
+ net/core/page_pool.c                          |  26 ++-
+ net/core/skbuff.c                             |   2 +-
+ 8 files changed, 168 insertions(+), 66 deletions(-)
+
+-- 
+2.33.0
 
