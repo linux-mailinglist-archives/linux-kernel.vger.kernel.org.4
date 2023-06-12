@@ -2,121 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9436672C43B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 14:31:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41FA672C44A
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 14:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234887AbjFLMbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 08:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52826 "EHLO
+        id S235034AbjFLMcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 08:32:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234585AbjFLMac (ORCPT
+        with ESMTP id S235011AbjFLMcP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 08:30:32 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E620131
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 05:30:21 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f64fb05a8aso5040703e87.0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 05:30:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1686573020; x=1689165020;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1U9z6LiWhhNIjZTQZVib3hcbFKnnBjPQBx95lAycLnw=;
-        b=F1/6AZava+zQRwLlQeOO1h/1nEAd1sO8wigO0yr61pbTNrL0BaQc9+yIquUpTsISGk
-         WYCTxJXiU1wUtpADftFQCCSxSQGk2LwLUNVNA1gobhcoxkXsoE+nOrs052zVfNkX/fYW
-         i0satxDiN65XV4b0kRadeIDLuIj7mQBVGmiq0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686573020; x=1689165020;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1U9z6LiWhhNIjZTQZVib3hcbFKnnBjPQBx95lAycLnw=;
-        b=dq2Bu82ShFXemfcU61lltmU7p0HVrkMCOIY+c+zuB3FQb9XA/Txf8X+M+xXH4hpeW7
-         9Tt/VwJrYhnYSy1LhIowwFb06Az9DwoeQRXB11QQBsqwarL94QYJW5OIWvl6vk4ZbM7j
-         f25D/vl1gldWSg2l+TEEbeKpYYQMEYT8d2AltbDvSvEZ4RlwWKWEKunSf/1J2pYdRSwK
-         BE2NBOSVR1hTQj8qAPpSSazFbv+ObRx9ebAAp9anzyQ9Avhj0AfSzLbrN+ANruGaX5W8
-         upw3N+69v2PkSAyT/jABivQOoywOi7JDOH0+DnFACrBwEoiZKxfI7dm7oKagl//EykWb
-         iM/w==
-X-Gm-Message-State: AC+VfDyHEZO7/3Q/vw8Huc6ALX4pgDgJdY4vPky1jybf5e03snLNWAfS
-        bUIaNeUhXQRLINdKDem/MIj9vQ==
-X-Google-Smtp-Source: ACHHUZ6xroZGYOAtqAK+l3adlJ0TXz4+23QzUhBiw1ZWwYdsPksiPsUu4dtFS/kv82kzmk1opcJ5rQ==
-X-Received: by 2002:ac2:465b:0:b0:4f6:1805:6080 with SMTP id s27-20020ac2465b000000b004f618056080mr4892783lfo.4.1686573019770;
-        Mon, 12 Jun 2023 05:30:19 -0700 (PDT)
-Received: from [172.16.11.116] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id 11-20020ac2482b000000b004f251e73fc5sm1426472lft.30.2023.06.12.05.30.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 05:30:19 -0700 (PDT)
-Message-ID: <665d9926-2e0f-4b16-1414-f6d8fc487124@rasmusvillemoes.dk>
-Date:   Mon, 12 Jun 2023 14:30:18 +0200
+        Mon, 12 Jun 2023 08:32:15 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938CD10DA;
+        Mon, 12 Jun 2023 05:31:45 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 851995C0130;
+        Mon, 12 Jun 2023 08:31:23 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Mon, 12 Jun 2023 08:31:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1686573083; x=1686659483; bh=18
+        ZmLcFszkml7bXV6xlP2cbQVd6SoNIPAXzHdGblAUo=; b=i00L+HAvsds1HR+Nt8
+        U5hK/TCO+llTHSmmmGoOosh+8LtiCcZY8IDGJXozWJdX9Y2ea1syogRnfTYFs4BG
+        Ly07en1f0lcAbq33nP7XYpjVwqVfgqtx0bHwD0ddsEG89PHCCdGiftCu4s3Xyq5Q
+        dByucynJpaiLtI5MZdxTiHgwokAOcN2YKmDyh4px+X0TAW0fvmQtwDCqDSVuUe5C
+        pHAgT5rAqIzIwd9VR14iiSyWzjfyzBltWGzqnFIfATvGc6GhdqCmhgCEMOc6SSwB
+        ADXtwZH6OAIzPO/Pp5HI1q6f1jwyDMUYagxEjeaRB5AEaj+9xbdI5QbIdaFxYVOg
+        WXDg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1686573083; x=1686659483; bh=18ZmLcFszkml7
+        bXV6xlP2cbQVd6SoNIPAXzHdGblAUo=; b=NYRwSONRkr5CKpdTIt8W3yzSlgVW+
+        Z5cFqjOygHnJ093+g3AnUKT0YX7VDLtyLTZa+kKGAyZh8CSEO78KCGkJ9Ya2CeJN
+        aQiXLboLoWMtfZoCbmkATLlF9Q8M4ffuBI2SkgupdYtCTIAx6FveQ+medpZMDm9c
+        uFLJnox5bEGPmBeJHIcdwf7TXbYsa+591kM6eI0VLlgGjzv275pYEQ4Bf91wdAVB
+        24+MyRfMHH+SzcBIfgiMptmAYYc956SrBuEFrDV9sKbIugC/4Py0KnnCIswqa6fl
+        T4aN00qCdPEiJVWFxiAM02rcdeEZEQ3aQRMjDRElFO+yBzm+12joQszEQ==
+X-ME-Sender: <xms:GxCHZDeugUV2gPbF-Jeb9t-H_Kwqk695K5F-bQcrGAUeKkGWSWQFAw>
+    <xme:GxCHZJOzZq-cJ357p5MUhMB2_P-0e04ARW5_YH_8pBn5UP9Pj6RLQkdRwg2ytF5Cg
+    WGqAspPSyEp4iqP7PU>
+X-ME-Received: <xmr:GxCHZMjf9PCPel29z8amu9kkCPG5QB7zNYlIMUavPMbaipUqzAcuaKHLyz2X2p7g2YB7FxEHFg6VZTdR5540oA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeduhedghedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtsfertddtvdenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeeuveduheeutdekvefgudevjeeufedvvdevhfejgfelgfdtkeevueegteek
+    gfelfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:GxCHZE9klJqOWO5JzTmR4_1Y2hGVFOZu-7EbvTSwPQU3r1KPwTfTSQ>
+    <xmx:GxCHZPtzZVrtgxRmnsJqrK8KOFZZwude36EsVg_HCuFonsEyrgPUiA>
+    <xmx:GxCHZDGAsLnDXR8CyH-_nmnIWazENhj66yWBQKSvWPIYz60moBIPEA>
+    <xmx:GxCHZAn7zPw7dPcXEX_80-iyBsl0I5ZU96xwtsSVow8PFS7pyEsvKQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 12 Jun 2023 08:31:22 -0400 (EDT)
+Date:   Mon, 12 Jun 2023 14:31:21 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Frank Oltmanns <frank@oltmanns.dev>
+Cc:     Andre Przywara <andre.przywara@arm.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Roman Beranek <me@crly.cz>,
+        Samuel Holland <samuel@sholland.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v2 1/2] clk: sunxi-ng: nkm: consider alternative parent
+ rates when finding rate
+Message-ID: <sfni3vehkhotsqrrirklhzrxzkcxzkq6nbtqokeab5if3jgm53@frh7z3iowsfe>
+References: <20230611090143.132257-1-frank@oltmanns.dev>
+ <20230611090143.132257-2-frank@oltmanns.dev>
+ <87edmh12s7.fsf@oltmanns.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 6/8] rtc: isl12022: trigger battery level detection during
- probe
-Content-Language: en-US, da
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230612113059.247275-1-linux@rasmusvillemoes.dk>
- <20230612113059.247275-7-linux@rasmusvillemoes.dk>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <20230612113059.247275-7-linux@rasmusvillemoes.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kkj73vrcelww3r3q"
+Content-Disposition: inline
+In-Reply-To: <87edmh12s7.fsf@oltmanns.dev>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/06/2023 13.30, Rasmus Villemoes wrote:
 
-> diff --git a/drivers/rtc/rtc-isl12022.c b/drivers/rtc/rtc-isl12022.c
-> index 1b6659a9b33a..690dbb446d1a 100644
-> --- a/drivers/rtc/rtc-isl12022.c
-> +++ b/drivers/rtc/rtc-isl12022.c
-> @@ -280,8 +280,25 @@ static void isl12022_set_trip_levels(struct device *dev)
->  	mask = ISL12022_REG_VB85_MASK | ISL12022_REG_VB75_MASK;
->  
->  	ret = regmap_update_bits(regmap, ISL12022_REG_PWR_VBAT, mask, val);
-> -	if (ret)
-> +	if (ret) {
->  		dev_warn(dev, "unable to set battery alarm levels: %d\n", ret);
-> +		return;
-> +	}
-> +
-> +	ret = regmap_write_bits(regmap, ISL12022_REG_BETA,
-> +				ISL12022_BETA_TSE, ISL12022_BETA_TSE);
-> +	if (ret) {
-> +		dev_warn(dev, "unable to trigger battery level detection: %d\n", ret);
-> +		return;
-> +	}
-> +
-> +	ret = isl12022_read_sr(regmap);
+--kkj73vrcelww3r3q
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-So testing this a bit more thoroughly reveals that the LBAT85/LBAT75
-bits do not get updated immediately after the TSE bit is set; one needs
-to wait a little before the battery voltage detection is done and the SR
-bits updated. Unfortunately, the data sheet doesn't say anything about
-how long that might be or if there's some busy bit one could look at;
-all it says is actually exactly what I've done above:
+On Mon, Jun 12, 2023 at 10:51:52AM +0200, Frank Oltmanns wrote:
+> > @@ -28,12 +68,17 @@ static unsigned long ccu_nkm_find_best(unsigned lon=
+g parent, unsigned long rate,
+> >  			for (_m =3D nkm->min_m; _m <=3D nkm->max_m; _m++) {
+>=20
+> According to the manual M/N has to be <=3D 3. Therefore we need a
+> different maximum value for the _m-for-loop:
+>=20
+>         unsigned long max_m =3D min(3 * _n, nkm->max_m);
+>         for (_m =3D nkm->min_m; _m <=3D max_m; _m++) {
+>=20
+> I suggest that I add an optional member max_mn_ratio to the structs
+> ccu_nkm and _ccu_nkm. Optional meaning: Ignore if 0.
 
-  The battery level monitor is not functional in battery backup
-  mode. In order to read the monitor bits after powering up VDD,
-  instigate a battery level measurement by setting the TSE bit to
-  "1" (BETA register), and then read the bits.
+Which workload is affected by this restriction?
 
-IOW, please don't apply this patch until I figure out how to do this
-properly.
+> >  				unsigned long tmp_rate;
+> >
+> > -				tmp_rate =3D parent * _n * _k / _m;
+> > -
+> > +				if (parent_hw) {
+> > +					tmp_parent =3D optimal_parent_rate(rate, _n, _k, _m);
+> > +					tmp_parent =3D clk_hw_round_rate(parent_hw, tmp_parent);
+> > +				}
+>=20
+> Another constraint is PLL-VIDEO0 rate / M >=3D 24 MHz. Therefore we also =
+need:
+>         if (tmp_parent < 24000000 * _m)
+>                 continue;
+>
+> So, we need another optional member min_m_times_parent or, for
+> shortness, maybe min_m_parent. I could use help finding a good name for
+> this.
 
-Rasmus
+Again, if it's not causing any harm I'd rather keep the code as simple
+and maintainable as possible.
 
+Maxime
+
+--kkj73vrcelww3r3q
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZIcQGQAKCRDj7w1vZxhR
+xY3hAQCtAk7IaNBuR32MugoIudSv2GZ8z2nwVAfFQtk5TRpjdgD/f+kcH1jhaq0d
+ykaty48CnAYO/yQevebm/aotTXaQgAA=
+=VEfS
+-----END PGP SIGNATURE-----
+
+--kkj73vrcelww3r3q--
