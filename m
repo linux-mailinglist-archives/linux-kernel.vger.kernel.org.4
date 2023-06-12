@@ -2,109 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D45472CDC4
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:20:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2810272CDC8
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237516AbjFLSUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 14:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41620 "EHLO
+        id S237499AbjFLSVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 14:21:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237513AbjFLSUG (ORCPT
+        with ESMTP id S237000AbjFLSVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 14:20:06 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D5038E8
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:20:03 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8Dx_+vRYYdk1PkDAA--.8611S3;
-        Tue, 13 Jun 2023 02:20:01 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxjcrQYYdkO+gWAA--.57583S3;
-        Tue, 13 Jun 2023 02:20:00 +0800 (CST)
-Message-ID: <90fb836f-ba54-1d3c-965c-67f91ff89fb0@loongson.cn>
-Date:   Tue, 13 Jun 2023 02:20:00 +0800
+        Mon, 12 Jun 2023 14:21:22 -0400
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D70E8;
+        Mon, 12 Jun 2023 11:21:20 -0700 (PDT)
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1b3db8f3d94so5356785ad.1;
+        Mon, 12 Jun 2023 11:21:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686594080; x=1689186080;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XyzQ4No+RLHAAwpMFK+EQR9jGsjSskvb0lQK3qnBq3I=;
+        b=Rbae0nQ/+rpdPuzMGkNqkjjjeY4G8TDjp7oSMJcj66xh0nXvVGCf4r8COENWWLwtXZ
+         0kZdNe5v+8HqSqaM6Fd5m1UUKbXnwPxHZstzBZfjnZfwuisYHzxvpC4G1ZhDySp75oiO
+         Mjtmlt36apusvONontwSDfqWXt72ALShkMoKO0k/OUJ9Y1aDFuhcVCQikMOS2d1DtYaM
+         PyNZPKNsBMjw+yfWOmzjsNYH+cAyx4nSzWNBenN5wCrXkqn5qts3H1IV8k3dtihWM/nA
+         7TKUlEtxUl2uSTNF1BjXCB3siz2GR4378PQw+eMGJIqfpmRIPonm2ZiE4Jwu/rFcmhFC
+         NIwg==
+X-Gm-Message-State: AC+VfDzxG2a/Tx7ADeMSeak/hj7mSnGnKaJk2FTmA6MHy1xIZx8SDBgk
+        M+rpjYdd2XBrhswc5Xu/6nE=
+X-Google-Smtp-Source: ACHHUZ5f1pwszXT8WGp5oaVWVOxSV8LVVfMZf+xdKVWYKDccl8WDS4ykz/YwarTJqGK36Ica7qINeg==
+X-Received: by 2002:a17:902:c401:b0:1b1:753a:49ce with SMTP id k1-20020a170902c40100b001b1753a49cemr8867704plk.53.1686594079956;
+        Mon, 12 Jun 2023 11:21:19 -0700 (PDT)
+Received: from [192.168.3.219] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id d6-20020a170903230600b001ae57277a87sm8558051plh.255.2023.06.12.11.21.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 11:21:19 -0700 (PDT)
+Message-ID: <dbdadc45-0566-3a6c-be16-ab8f1f5c7a6a@acm.org>
+Date:   Mon, 12 Jun 2023 11:21:18 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] drm: etnaviv: Replace of_platform.h with explicit
- includes
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v4] scsi: ufs: wb: Add explicit flush_threshold sysfs
+ attribute
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Lucas Stach <l.stach@pengutronix.de>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, etnaviv@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230410232647.1561308-1-robh@kernel.org>
- <CAL_JsqLeAvEVa8h3qywqESkqGG1O+9QWqA7fc1EJeDGkmAV7Fw@mail.gmail.com>
- <0ce32e34-d53b-4038-ef39-3b0f3e2f8a7f@loongson.cn>
- <CAL_JsqKsa9KQxk6r=ZxtY30Mk5nk9ST5ejJ+8VXZ5vPJAGHMBg@mail.gmail.com>
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <CAL_JsqKsa9KQxk6r=ZxtY30Mk5nk9ST5ejJ+8VXZ5vPJAGHMBg@mail.gmail.com>
+To:     Lu Hongfei <luhongfei@vivo.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Daniil Lunev <dlunev@chromium.org>,
+        Jinyoung Choi <j-young.choi@samsung.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Peter Wang <peter.wang@mediatek.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER" 
+        <linux-scsi@vger.kernel.org>
+Cc:     opensource.kernel@vivo.com
+References: <20230609091113.22531-1-luhongfei@vivo.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230609091113.22531-1-luhongfei@vivo.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxjcrQYYdkO+gWAA--.57583S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj9xXoWrZr4rWFWUXF1xGr13KrWkKrX_yoWDuFgE9F
-        1I9w4kWr4fGr97Ja90yFyDZr909ry3JF4DZ3Z5tFn3W3sayry5JrykCryrXa43WF1IkFnx
-        X3Z3AF93Ar1IgosvyTuYvTs0mTUanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvT
-        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-        cSsGvfJTRUUUbTAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-        vaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        WUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r1j6r4UM28EF7xvwVC2z280aVCY1x0267AKxVWU
-        JVW8JwAaw2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa02
-        0Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1l
-        Yx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI
-        0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4U
-        MxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI
-        0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE
-        14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20x
-        vaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWU
-        JVW8JbIYCTnIWIevJa73UjIFyTuYvjxU2G-eUUUUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/9/23 02:11, Lu Hongfei wrote:
+> +What:		/sys/bus/platform/drivers/ufshcd/*/wb_flush_threshold
+> +What:		/sys/bus/platform/devices/*.ufs/wb_flush_threshold
+> +Date:		June 2023
+> +Contact:	Lu Hongfei <luhongfei@vivo.com>
+> +Description:	wb_flush_threshold is a percentage that represents the threshold for flush WB.
+> +		When avail_wb_buff < wb_flush_threshold, the dev will flush WB when entered H8.
+> +		When avail_wb_buff >= wb_flush_threshold, it is not necessary.
 
-On 2023/6/13 02:15, Rob Herring wrote:
-> On Sun, Jun 11, 2023 at 12:49 AM Sui Jingfeng <suijingfeng@loongson.cn> wrote:
->> Reviewed-by: Sui Jingfeng <suijingfeng@loongson.cn>
->>
->>
->> On 2023/6/10 04:17, Rob Herring wrote:
->>> On Mon, Apr 10, 2023 at 5:26 PM Rob Herring <robh@kernel.org> wrote:
->>>> Etnaviv doesn't use anything from of_platform.h, but depends on
->>>> of.h, of_device.h, and platform_device.h which are all implicitly
->>>> included, but that is going to be removed soon.
->>>>
->>>> Signed-off-by: Rob Herring <robh@kernel.org>
->>>> ---
->>>>    drivers/gpu/drm/etnaviv/etnaviv_drv.c | 4 +++-
->>>>    1 file changed, 3 insertions(+), 1 deletion(-)
->>> Ping!
->>
->> of_device.h already has 'linux/of.h' and 'linux/platform_device.h' included,
->>
->> Would it be sufficient by simply including linux/of_device.h ?
-> That's part of what I'm trying to remove. Standard practice is to not
-> rely on implicit includes.
+"Percentage" suggests a number in the range 0..100 while the valid range is 0..10.
+Please fix this.
 
-Ok, that's fine then.
+Thanks,
 
-
-Tested-by: Sui Jingfeng <suijingfeng@loongson.cn>
-
-
-> Rob
-
--- 
-Jingfeng
-
+Bart.
