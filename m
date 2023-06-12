@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26FFC72C429
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 14:30:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1231772C430
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 14:31:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234836AbjFLMao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 08:30:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53172 "EHLO
+        id S235085AbjFLMbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 08:31:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233758AbjFLMa0 (ORCPT
+        with ESMTP id S234050AbjFLMa3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 08:30:26 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253E9E6F;
-        Mon, 12 Jun 2023 05:30:12 -0700 (PDT)
+        Mon, 12 Jun 2023 08:30:29 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927CC10E0;
+        Mon, 12 Jun 2023 05:30:16 -0700 (PDT)
 X-GND-Sasl: herve.codina@bootlin.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686573011;
+        t=1686573014;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=AVqcs+RF8g9xZnk2mzzhe0NIqtDoWUK9eXmhpelzoNA=;
-        b=lMmnGJ+LkP+t8FpO2lpB6zuReoAinfucdXaQVqg8GA52ppvsP3CdnBI6bPA7uv86R+V17R
-        CYeGD2KCsIqcB9EyR84I7KybSX61YrUr8wdX0zsjyrEQMvUOjXRHYCGNGFMHDF+RSs+5Wt
-        8T7Lkn0e5OFFhZAn5hA2ON5gyv/YqZNwqWjykvuwBqAQOiJ/4RfwUM1bub5GaR56cpsR3G
-        NV9ULgdAXhDqST4zTQyUhl2+Z333eB9yREiqCJvehHtHtANd4f/ZkcEYSSWXC9rDZy/LEE
-        sIhJT1YChAWdqaT5ggxBfzUyRyNKJI0eUqShfQaSRDGqFCLdO6BnlzvY/Qf3Wg==
+        bh=0zjmMFQWF61zw9+cDMz5UXwQs5v91FQYhgIX9kfi+g8=;
+        b=GPwEuaotHYy+KeLmHieSOGl4ZFBSI5jW9fbAzyelPnPJgZSUYNy2nJ9FQH481z2kbd79ev
+        mWK4v88w1xCDOy6EglLRLeaHs00makBSqA4AJGxjD6TwPfQDBwPPuKovSv7V3mxM5r2QCp
+        4VJ4UhiAKmRONu8MVSCmGOtzpzNqp/GrwQrjNtfnG+qvyDEhHEeQy84ifJMS/jfoKeB2Nu
+        nL1gGVg//0h7FtGkBRbit2gDlLHOX6XzuJD2VJwlxwdDUnQv5HshickA5soSnBtXunBI28
+        F9NolqiQPJl671dfvtxW3HhlH+LUGXfIaVs81/ZEVZ8FUjXXh369AS6RxJxgdw==
 X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
@@ -45,8 +45,8 @@ X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
 X-GND-Sasl: herve.codina@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPA id E81F1240024;
-        Mon, 12 Jun 2023 12:30:09 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id F177A24000C;
+        Mon, 12 Jun 2023 12:30:11 +0000 (UTC)
 From:   Herve Codina <herve.codina@bootlin.com>
 To:     Herve Codina <herve.codina@bootlin.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
@@ -64,64 +64,69 @@ Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
         Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: [PATCH v3 05/12] iio: inkern: Remove the 'unused' variable usage in iio_channel_read_max()
-Date:   Mon, 12 Jun 2023 14:29:19 +0200
-Message-Id: <20230612122926.107333-6-herve.codina@bootlin.com>
+Subject: [PATCH v3 06/12] minmax: Introduce {min,max}_array()
+Date:   Mon, 12 Jun 2023 14:29:20 +0200
+Message-Id: <20230612122926.107333-7-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230612122926.107333-1-herve.codina@bootlin.com>
 References: <20230612122926.107333-1-herve.codina@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The code uses a local variable to initialize a null pointer in order to
-avoid accessing this null pointer later on.
-
-Simply removed the 'unused' variable and check for the null pointer just
-before accessing it.
+Introduce min_array() (resp max_array()) in order to get the
+minimal (resp maximum) of values present in an array.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 ---
- drivers/iio/inkern.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ include/linux/minmax.h | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/drivers/iio/inkern.c b/drivers/iio/inkern.c
-index f738db9a0c04..ce537b4ca6ca 100644
---- a/drivers/iio/inkern.c
-+++ b/drivers/iio/inkern.c
-@@ -849,14 +849,10 @@ static int iio_channel_read_max(struct iio_channel *chan,
- 				int *val, int *val2, int *type,
- 				enum iio_chan_info_enum info)
- {
--	int unused;
- 	const int *vals;
- 	int length;
- 	int ret;
+diff --git a/include/linux/minmax.h b/include/linux/minmax.h
+index 396df1121bff..37a211f22404 100644
+--- a/include/linux/minmax.h
++++ b/include/linux/minmax.h
+@@ -133,6 +133,32 @@
+  */
+ #define max_t(type, x, y)	__careful_cmp((type)(x), (type)(y), >)
  
--	if (!val2)
--		val2 = &unused;
--
- 	ret = iio_channel_read_avail(chan, &vals, type, &length, info);
- 	if (ret < 0)
- 		return ret;
-@@ -869,7 +865,8 @@ static int iio_channel_read_max(struct iio_channel *chan,
- 			break;
- 		default:
- 			*val = vals[4];
--			*val2 = vals[5];
-+			if (val2)
-+				*val2 = vals[5];
- 		}
- 		return 0;
- 
++#define __minmax_array(op, array, len) ({			\
++	typeof(array) __array = (array);			\
++	typeof(len) __len = (len);				\
++	typeof(*__array + 0) __element = __array[--__len];	\
++	while (__len--)						\
++		__element = op(__element, __array[__len]);	\
++	__element; })
++
++/**
++ * min_array - return minimum of values present in an array
++ * @array: array
++ * @len: array length
++ *
++ * Note that @len must not be zero (empty array).
++ */
++#define min_array(array, len) __minmax_array(min, array, len)
++
++/**
++ * max_array - return maximum of values present in an array
++ * @array: array
++ * @len: array length
++ *
++ * Note that @len must not be zero (empty array).
++ */
++#define max_array(array, len) __minmax_array(max, array, len)
++
+ /**
+  * clamp_t - return a value clamped to a given range using a given type
+  * @type: the type of variable to use
 -- 
 2.40.1
 
