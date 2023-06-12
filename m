@@ -2,68 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A624B72CE77
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:33:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A604372CE7B
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:34:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233132AbjFLSd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 14:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53126 "EHLO
+        id S235991AbjFLSeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 14:34:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232495AbjFLSd1 (ORCPT
+        with ESMTP id S232230AbjFLSeE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 14:33:27 -0400
+        Mon, 12 Jun 2023 14:34:04 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62BD10CC;
-        Mon, 12 Jun 2023 11:32:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C180A1711;
+        Mon, 12 Jun 2023 11:33:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1A0C62CF7;
-        Mon, 12 Jun 2023 18:32:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E12CCC4339C;
-        Mon, 12 Jun 2023 18:32:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686594775;
-        bh=WD6yfMd1Lig9EzPwhFo3GU2PEduL3upHoyMgQX0HNp0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y8rtO46J/yKiguHzzFrMJZbDczxiP6tNBlVVErJCCLqrefl7oHYqv0gvIi+XUTZ6d
-         egc04G7adjaGRDbFCet0xVxBXk7KRDjkP+LH4qHJeOvWBRbGkRCZGB10udcFWNf0ii
-         m3FVHNlJl1gNPlLs98KLuG97UtYg2R07tiC9CyhGbRvXJv65hgl8p92+waVzprV/qk
-         UxHm0UnbIvGA/UuqJpsiOnJmvO/udnUwZ1zijwAItWJsVi3PIkvJj1Si7g3ix/7t6G
-         T/D11UfKTAvesFpSKMIvqypkgOx0QS53KHpTjmOdI/wu3oQdJk/kVYsvFnZtok/8eg
-         uxGyh4xlVp8nA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 6D6E040692; Mon, 12 Jun 2023 15:32:52 -0300 (-03)
-Date:   Mon, 12 Jun 2023 15:32:52 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     James Clark <james.clark@arm.com>
-Cc:     coresight@lists.linaro.org,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/5] perf cs-etm: Track exception level
-Message-ID: <ZIdk1ArKuXLpKZT7@kernel.org>
-References: <20230612111403.100613-1-james.clark@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230612111403.100613-1-james.clark@arm.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 09654628E9;
+        Mon, 12 Jun 2023 18:33:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3456EC433EF;
+        Mon, 12 Jun 2023 18:33:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1686594818;
+        bh=Nb5X5bo+ew4Zt7z5zMsi3ZeUJLtS19io9VEBOewjWbU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Hafr2+mkzpv3gHWKge7eq0sB230h3g6bLAOK+7ruEGOP0pJaH69N5vq1tMcIR+iHj
+         /YPLBh/pqBkCXAz6/zpLStfyMuVYd/UdzO7NP8I6TxPKYOGU9LnPZ6widyGuogizEA
+         T352q9Sw9njpvr4pQw+cRC0pYxOW/md6SVpX3G0w=
+Date:   Mon, 12 Jun 2023 11:33:37 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
+        torvalds@linux-foundation.org, peterz@infradead.org,
+        npiggin@gmail.com
+Subject: Re: [merged mm-hotfixes-stable]
+ lazy-tlb-fix-hotplug-exit-race-with-mmu_lazy_tlb_shootdown.patch removed
+ from -mm tree
+Message-Id: <20230612113337.c33bed8dc3dc0811ce7c7a8a@linux-foundation.org>
+In-Reply-To: <87zg576ip1.ffs@tglx>
+References: <20230607200008.C2154C433D2@smtp.kernel.org>
+        <87zg576ip1.ffs@tglx>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,78 +56,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Jun 12, 2023 at 12:13:57PM +0100, James Clark escreveu:
-> Changes since v2:
-> 
->   * Rename prev_thread -> prev_packet_thread and prev_el ->
->     prev_packet_el
->   * Add a comment about tracking the previous packet's thread
-> 
-> Changes since v1:
-> 
->   * Always assume host kernel when the trace was captured at EL1 (nVHE)
->   * Fix EL validation to work with ETMv3
->   * Add a commit to make PID format accessible from struct
->     cs_etm_auxtrace
+On Sun, 11 Jun 2023 00:44:42 +0200 Thomas Gleixner <tglx@linutronix.de> wrote:
 
-Please take a look in my tmp.perf-tools-next branch, there were some
-conflicts I had to fix as those files were touched by refactorings for
-addr_location and thread reference counting.
-
-⬢[acme@toolbox perf-tools-next]$ git log --oneline -10
-aa53fb2c482e70c2 (HEAD -> perf-tools-next) perf cs-etm: Add exception level consistency check
-2918e9895224541f perf cs-etm: Track exception level
-f492a33909829a75 perf cs-etm: Make PID format accessible from struct cs_etm_auxtrace
-e29ec19b0751c6b2 perf cs-etm: Use previous thread for branch sample source IP
-e9e03e9c3ca7088c perf cs-etm: Only track threads instead of PID and TIDs
-6fd34445b8c94aa7 perf map: Fix double 'struct map' reference free found with -DREFCNT_CHECKING=1
-e9c0a7f63e45e76f perf srcline: Optimize comparision against SRCLINE_UNKNOWN
-fd87a79c7ed62804 perf hist: Fix srcline memory leak
-933f9651d47cdda2 perf srcline: Change free_srcline to zfree_srcline
-d22cfb063bcc674e perf callchain: Use pthread keys for tls callchain_cursor
-⬢[acme@toolbox perf-tools-next]$
-
-
-- Arnaldo
- 
-> ======
+> On Wed, Jun 07 2023 at 13:00, Andrew Morton wrote:
 > 
-> Some fixes to support an issue reported by Denis Nikitin where decoding
-> trace that contains different EL1 and EL2 kernels can crash or go into
-> an infinite loop because the wrong kernel maps are used for the decode.
+> > The quilt patch titled
+> >      Subject: lazy tlb: fix hotplug exit race with MMU_LAZY_TLB_SHOOTDOWN
+> > has been removed from the -mm tree.  Its filename was
+> >      lazy-tlb-fix-hotplug-exit-race-with-mmu_lazy_tlb_shootdown.patch
+> >
+> > This patch was dropped because it was merged into the mm-hotfixes-stable branch
+> > of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
 > 
-> This still doesn't support distinguishing guest and host userspace,
-> we'd still have to fix the timestamps and do a bit more work to
-> correlate that. And I've removed PERF_RECORD_MISC_HYPERVISOR as a
-> possible outcome of cs_etm__cpu_mode(). As far as I know this could
-> never have been returned anyway because machine__is_host(machine) was
-> always true due to session.machines.host being hard coded. And I'm not
-> sure of the relevance of the difference between PERF_RECORD_MISC_KERNEL
-> and PERF_RECORD_MISC_HYPERVISOR in this scenario.
-> 
-> The first commit is a tidy up, second fixes a bug that I found when
-> comparing the exception level and thread of branch records, the third
-> is the main fix, and the last commit is some extra error checking. 
-> 
-> Applies to acme/perf-tools-next (42713dafc)
-> 
-> James Clark (5):
->   perf cs-etm: Only track threads instead of PID and TIDs
->   perf cs-etm: Use previous thread for branch sample source IP
->   perf cs-etm: Make PID format accessible from struct cs_etm_auxtrace
->   perf cs-etm: Track exception level
->   perf cs-etm: Add exception level consistency check
-> 
->  .../perf/util/cs-etm-decoder/cs-etm-decoder.c |  33 +-
->  .../perf/util/cs-etm-decoder/cs-etm-decoder.h |   4 +-
->  tools/perf/util/cs-etm.c                      | 282 ++++++++++--------
->  tools/perf/util/cs-etm.h                      |  13 +-
->  4 files changed, 184 insertions(+), 148 deletions(-)
-> 
-> -- 
-> 2.34.1
+> Can you please drop that completely as there is no point to merge a
+> bogus "fix'.
 > 
 
--- 
+OK, I dropped this.  I also dropped "lazy tlb: consolidate lazy tlb mm
+switching", as it no longer applied.
 
-- Arnaldo
