@@ -2,88 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2C1F72BE5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:10:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22BA272BE65
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:10:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234746AbjFLKJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 06:09:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43464 "EHLO
+        id S235612AbjFLKJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 06:09:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236764AbjFLKDN (ORCPT
+        with ESMTP id S237434AbjFLKG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 06:03:13 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617654EC8
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:47:43 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-5162d2373cdso7427988a12.3
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:47:43 -0700 (PDT)
+        Mon, 12 Jun 2023 06:06:27 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCA265B7
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:48:40 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-30fbcfdc7b6so673632f8f.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:48:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686563262; x=1689155262;
+        d=linaro.org; s=google; t=1686563319; x=1689155319;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=swDmGDg9NuCM2bjbOR+WpvDnl7t732pcpG/NR4aJRv4=;
-        b=YXGYto9u8W82vnEKnTap55GQJyfR+pWShm9QBSQO2LrSJNtKo05ZAWOB16fk7flQCh
-         /b4DMKE7UTiad31KITiLK3scP6Oszmw6GwqzFMPpy9c4U6sRGAcNhgy1ODbgVjWT9O06
-         niVMr0SakePRGDfOfne0LnkRiTxVw76d/XAxTPyk7/D6gLLeV5Ai/DToqssNU5SuiJ38
-         oZ8Ol73QSOQQbSTinCn+IF8j034Hiha12T1t+Pug66fx+ZAfNnrexutvL4LUFrjenOt5
-         cYZsAeiRq5guM3JXxnXZ+HNnFjQUiXcYlB9O7MvT7wcouZFEUSA2GJGI+Ano98NkkmLL
-         1tXQ==
+        bh=TlNSyW01k9RQ6r3TAUIxxl3gEy3tIBaKB2a3SyuONic=;
+        b=xxOQI6NNANXTOWzWS32SlBLOHCGyjc8GT/MPA9syGH0nXWWJ9aMkSIyACTIqtJwwz7
+         aYWnV86EdevV+5dsjqn/qWqqczxClLrLQQkvtDcNgXhqZGaAeGj/d3yarqk68XqjrEmb
+         Vo/6ODEO9VnUPhXuJJhSWUIAW5cDYN4C85WUsQ6TrLtbhacAo23MyP+vXkEf2jTd8Gzy
+         wFDB79XoTZeiYS0mYd7BIygw/punojTzRtBal0junmkVOpebP+ZN6XoUMx/gYLFJQhJ/
+         PW7nmS7FcxFY3huNztvPY2T5+uvK+tVCpZxRsOLksYhr7rItDRC4yBSMBji1/Z9DKL7X
+         TEYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686563262; x=1689155262;
+        d=1e100.net; s=20221208; t=1686563319; x=1689155319;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=swDmGDg9NuCM2bjbOR+WpvDnl7t732pcpG/NR4aJRv4=;
-        b=V9decTlf9dw3Mxbpv6enjOXXUIHI4pdkD6O3ZaVbRqT6czvcdu4BKnWCTud06XorI8
-         DlEIad9oRkrWuJ2AG0C8sxDUmmSl7Ixyz7TaVav50EaayOo1Z7WMny/wDHNTkO9gu8Ot
-         RTTaVRC+Y+Rivc9M0YHYWaoff0fn/yCAACdrwqerJclIEVE8+6FLhR6P4h/kP7wPjryJ
-         WfRnboAdkc40kgTnRecvpPEsRrUz5cf66YQVqL3DLhkQ8b1iSQRv4iSY2TptWAPPhyZa
-         FifBgkZ6i4tVYxAf9wyid7ZL9gBZJ+gzU1yu20MOURMc7tdXzJBc2ExvCymvK4TaWhCr
-         jviQ==
-X-Gm-Message-State: AC+VfDzRgNeKQD/Of4QjWxKgRIdQtsXcZ5qs8CkKKb9YvNxuwctazrvw
-        Yd9cB6bBYCIDpaFAdPA2S1/ZHKS25ttA7skflrY=
-X-Google-Smtp-Source: ACHHUZ6mmtUIKzjbMdNCrJV5FA8uz7fKoiY13HgNWQYwj+87ouaFyCA+erWiLWbdyX6P8AhKPUX8LQ==
-X-Received: by 2002:a05:6402:10d8:b0:50b:c630:a956 with SMTP id p24-20020a05640210d800b0050bc630a956mr4045191edu.17.1686563261847;
-        Mon, 12 Jun 2023 02:47:41 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id n17-20020aa7c691000000b005105f002fd1sm4798496edq.66.2023.06.12.02.47.40
+        bh=TlNSyW01k9RQ6r3TAUIxxl3gEy3tIBaKB2a3SyuONic=;
+        b=awvCVhna6yPfGR180khhL57papxqMl4mk6CsruMm4PqfDvrN1pKtqhLJjqQxA95/vT
+         M9y4K4CQ2psyIUND2fYRzVbapIiej2rytIR8+BuOgj70/6AQllraShbYmtRuEO2WL+0P
+         R0Fo/eNGVVfMjf3sag4bZErY5fedDcuzkas3T/aV1UHYUsgUpIasHtJwiXQPjucYN3NP
+         k4ENdsWCRRRNA8aAmqvoYLFgaeZGAygO2AxxnA65RtL1jhTpHdAWyvOQO+ICCHjWAanf
+         YwvH+cz5DdoUH3aae064LN/MFMGAPszFrw9VV5Wh3pdoOf1LdRXyQl9rnE/C6Q/aclg3
+         BPwA==
+X-Gm-Message-State: AC+VfDzDY22CyMYovANjiCJnG8UlmSpxsWjVJcHRSeIVkZ4cdG1zhsE6
+        902cABtxalIR2d6SPe7Us639Wg==
+X-Google-Smtp-Source: ACHHUZ6J0MuzEgB+zY5N5cGweR8g3pcXTay98BeXBUo3Yy7hzVoM691gG3iZCVtdC3Kll3oHg6ecTg==
+X-Received: by 2002:a5d:6e0c:0:b0:30e:45a5:9476 with SMTP id h12-20020a5d6e0c000000b0030e45a59476mr4219195wrz.1.1686563318849;
+        Mon, 12 Jun 2023 02:48:38 -0700 (PDT)
+Received: from [192.168.2.107] ([79.115.63.153])
+        by smtp.gmail.com with ESMTPSA id t12-20020adfe10c000000b00307acec258esm11905152wrz.3.2023.06.12.02.48.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 02:47:41 -0700 (PDT)
-Message-ID: <22cbfb03-1959-3883-0c10-cde5233334ab@linaro.org>
-Date:   Mon, 12 Jun 2023 11:47:39 +0200
+        Mon, 12 Jun 2023 02:48:38 -0700 (PDT)
+Message-ID: <ea22bff7-ecd2-018e-77a1-1d2edaa21355@linaro.org>
+Date:   Mon, 12 Jun 2023 10:48:37 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] arm64: defconfig: Enable USB audio driver
+ Thunderbird/102.11.0
+Subject: Re: Build regressions/improvements in v6.4-rc6
 Content-Language: en-US
-To:     Ravi Gunasekaran <r-gunasekaran@ti.com>, catalin.marinas@arm.com,
-        will@kernel.org
-Cc:     arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
         linux-kernel@vger.kernel.org
-References: <20230612082150.20767-1-r-gunasekaran@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230612082150.20767-1-r-gunasekaran@ti.com>
+Cc:     linux-um@lists.infradead.org, linux-spi@vger.kernel.org,
+        linux-mips@vger.kernel.org
+References: <CAHk-=wgmbjQu3bVSa5JJhEymeQhkr7N3cjg-CoNLVituUnfW8w@mail.gmail.com>
+ <20230612090911.1579029-1-geert@linux-m68k.org>
+ <9c7f3e17-c1-1a3a-7e87-9b1ea25d9d7@linux-m68k.org>
+From:   Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <9c7f3e17-c1-1a3a-7e87-9b1ea25d9d7@linux-m68k.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/06/2023 10:21, Ravi Gunasekaran wrote:
-> Enable the USB audio driver so that USB audio devices
-> can be detected by apps such as aplay.
-
-defconfig is for development, not for using by distro. Why do you need
-for development of arm64 kernel USB audio? Commit msg should explain this.
 
 
-Best regards,
-Krzysztof
+On 6/12/23 10:28, Geert Uytterhoeven wrote:
+>> JFYI, when comparing v6.4-rc6[1] to v6.4-rc5[3], the summaries are:
+>>  - build errors: +5/-6
+> 
+>   + /kisskb/src/drivers/spi/spi-stm32-qspi.c: error: ‘op’ is used
+> uninitialized [-Werror=uninitialized]:  => 523:27, 564:27
 
+Seems that the report is not correct for this particular case as op is
+filled either by memcpy or memset before use.
