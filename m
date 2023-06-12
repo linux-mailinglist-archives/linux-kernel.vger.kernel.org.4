@@ -2,134 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F3172C6DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:04:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB08F72C6DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:04:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236534AbjFLOEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 10:04:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48996 "EHLO
+        id S236856AbjFLOEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 10:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232397AbjFLOEi (ORCPT
+        with ESMTP id S236535AbjFLOEk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 10:04:38 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA761AC;
-        Mon, 12 Jun 2023 07:04:38 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-3f9b8f1c2fdso29193681cf.2;
-        Mon, 12 Jun 2023 07:04:38 -0700 (PDT)
+        Mon, 12 Jun 2023 10:04:40 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E5C1AC;
+        Mon, 12 Jun 2023 07:04:39 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-655d1fc8ad8so3574106b3a.1;
+        Mon, 12 Jun 2023 07:04:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686578677; x=1689170677;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1686578679; x=1689170679;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8Nqk7opXz56V7mIpqm5KsGyT1vRoRc3GpMXEUFtGyL8=;
-        b=qM2YAKXVzfa2JaU+hOd5qfotCsKnAverw6L4epM9AS9ysVYswvh9HvnppUhzzBxjoU
-         OcsZl4cEW9fgB/kc6IyqHN0mWij4ps37xol30hDagJE/VyrUKgEvvWNQFQhKLSTty9RS
-         ChfTT3yp1DP1yrg34c05tKRfPcp5GtJxuPWpOs9wu+0z8XQ/Kqw0bFVRMIK/gYibPAtY
-         XyItUrHqIqoYawupgLcCVCm+oUoh14WZtIdQQsEgOIpFHoS408rZH5XT/oakJDy0iDwS
-         BH6dSVVyRONYDL4N+roBkjdLprotQVSFu+886KbZIBkrUDpSL9pl5WW9y5y4nrxTBzVA
-         nWkg==
+        bh=5MNr/jBTfwb38UZJfOzDqH21JXJSz0BDAQ1jmu5vvAs=;
+        b=TOFsy9ySuSQyAa+Hlj94ZUNT9AZgQwXBasadtQqCLeXrcmJJNCrDbQGXseiaAoI+oF
+         LR8soiYWttEOUGfYxpxcNTULQmJTbRfA08pZT1TeWUophmUinlpk4IEAcRKOwRc0tj1A
+         2Ezlxvf77TzsxbHmI6SvhVPTI0EjVGSnu+xIXO3bIcxL1H/I/rnoCtAOpU9TLC/r0Kl7
+         KoMRD9apljZ120ZifI1cGEJUK2X6qZprK4+tCwelETKFO2vYGDFyhZIxHinOLAp745Xl
+         zTjumE1oMEZ4XEuds3LbhX8/siuFuaGEw5Wxtc283js+HAqMOud5m0tkqqkAL+NRZJPx
+         RCGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686578677; x=1689170677;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1686578679; x=1689170679;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8Nqk7opXz56V7mIpqm5KsGyT1vRoRc3GpMXEUFtGyL8=;
-        b=jDZ7lSXfH7GHbUhlY6AGAOVXVq1rjtT6Sr1IaFoIj8nMYsMPc5p54rPHG1QkBfpgN/
-         kSZQq7uqwFxG4rb+jfIuRN6OAXC48UpTbBUqfs4zvctfzEoMSMEDwDvK5xjZBhw71lC3
-         a2NqKHWKOJcRgWOjmroePG3004POMeL+A9V/LoQcG4dFSpaOk/ohagtQ0ASkCb26z8mi
-         L19JTIeIw72NUTOIwRaKpaWJTTNEcYiII/o5A8c8ZLvhfUsS98mJoVEJQpat8FSwcr6W
-         ONFo41ph9Amf3XE/J0L2Sh/WdHHszAC4GIXvTtPGj/taskN8eExjaOt8aanAFjZJRJvC
-         iCdw==
-X-Gm-Message-State: AC+VfDwlPCdVZI4WPsRK1AbdJEJCqGoZhCeqCtiVW55jhY9W976OBO9I
-        XbC9mUSLtFRlXwPA9XUyKf8uC39LSTRzPrgzPW8=
-X-Google-Smtp-Source: ACHHUZ6CYvg10zoi9HIkb5vFNGGCLbHuRoSN1oR+9KoFwQC8JaYcEXHz6j+v+/QBdVrhCGleFWwCy3z8rKKcBsoqLb4=
-X-Received: by 2002:a05:6214:e4d:b0:625:b849:f86 with SMTP id
- o13-20020a0562140e4d00b00625b8490f86mr8613739qvc.14.1686578677154; Mon, 12
- Jun 2023 07:04:37 -0700 (PDT)
+        bh=5MNr/jBTfwb38UZJfOzDqH21JXJSz0BDAQ1jmu5vvAs=;
+        b=fyJOlPwOpaYFb/G8Rh7I2EnzbsmPM5G0xRfwqTws2cU9xpwYNazrvo78mnmtdYAPrC
+         B6opMRYIYK3Rn2fqTBRWG63wsMGHJyPFmN3BaiHc+7JQF3dStFhTdJ5irHJavZF5mEGH
+         DzouKMPScGj+XiFO0fEoAdAR6GZWW2VLGMZBDd7o2u/PIe5eLv1oUl/eyLSIFODzLT4T
+         is8YbKcifougYd2h4I7Ou3VC5ZnO59wsNXHf/Q2JGdZ2dXVow+r6YTkx0lqOZ+ikVmsj
+         Qjij+0l4XwxPyqRPKSu4WgyMIKmO5ZikouKnm+RDn9U+Lqs7ML13khBSveGU5g7LRVgm
+         7UqA==
+X-Gm-Message-State: AC+VfDxKsgAQEUBaLwy2JpCc2uAdl5mK5Eu6KON6IqR4oKh0E438qu5c
+        DjLZzT8FC8zzzLhmJTR3vJsop08ZOXdbA/Kn
+X-Google-Smtp-Source: ACHHUZ4Pogi8HWKz4xscrSILXggCgY7ZVK9Hz0ZkcrbdfV/zPK1AaQDhFcMwkWNDR2lpex6GSLLpVQ==
+X-Received: by 2002:a05:6a20:734c:b0:10c:2fce:96cc with SMTP id v12-20020a056a20734c00b0010c2fce96ccmr10938748pzc.34.1686578678834;
+        Mon, 12 Jun 2023 07:04:38 -0700 (PDT)
+Received: from localhost.localdomain ([103.116.245.58])
+        by smtp.gmail.com with ESMTPSA id q4-20020a63e944000000b0053f06d09725sm7573318pgj.32.2023.06.12.07.04.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 07:04:38 -0700 (PDT)
+From:   Jianhui Zhao <zhaojh329@gmail.com>
+To:     zhaojh329@gmail.com
+Cc:     andrew@lunn.ch, davem@davemloft.net, edumazet@google.com,
+        hkallweit1@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux@armlinux.org.uk,
+        netdev@vger.kernel.org, pabeni@redhat.com
+Subject: [PATCH] net: phy: Add sysfs attribute for PHY c45 identifiers.
+Date:   Mon, 12 Jun 2023 22:04:26 +0800
+Message-Id: <20230612140426.1648-1-zhaojh329@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230611152743.2158-1-zhaojh329@gmail.com>
+References: <20230611152743.2158-1-zhaojh329@gmail.com>
 MIME-Version: 1.0
-References: <20230612122926.107333-1-herve.codina@bootlin.com> <20230612122926.107333-4-herve.codina@bootlin.com>
-In-Reply-To: <20230612122926.107333-4-herve.codina@bootlin.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 12 Jun 2023 17:04:01 +0300
-Message-ID: <CAHp75VcwaHEzZxpGiVNtrDT=2kYqEiLOALUm_KFb+036XYO1wQ@mail.gmail.com>
-Subject: Re: [PATCH v3 03/12] iio: inkern: Check error explicitly in iio_channel_read_max()
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 3:30=E2=80=AFPM Herve Codina <herve.codina@bootlin.=
-com> wrote:
->
-> The current implementation returns the error code as part of the
-> default switch case.
-> This can lead to returning an incorrect positive value in case of
-> iio_avail_type enum entries evolution.
->
-> In order to avoid this case, be more strict in error checking.
+diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
+index 17d0d0555a79..81a4bc043ee2 100644
+--- a/drivers/net/phy/phy_device.c
++++ b/drivers/net/phy/phy_device.c
+@@ -541,8 +541,10 @@ static int phy_bus_match(struct device *dev, struct device_driver *drv)
+ 
+ 			if ((phydrv->phy_id & phydrv->phy_id_mask) ==
+ 			    (phydev->c45_ids.device_ids[i] &
+-			     phydrv->phy_id_mask))
++			     phydrv->phy_id_mask)) {
++				phydev->phy_id = phydev->c45_ids.device_ids[i];
+ 				return 1;
++			}
+ 		}
+ 		return 0;
+ 	} else {
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> ---
->  drivers/iio/inkern.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/iio/inkern.c b/drivers/iio/inkern.c
-> index 872fd5c24147..f738db9a0c04 100644
-> --- a/drivers/iio/inkern.c
-> +++ b/drivers/iio/inkern.c
-> @@ -858,6 +858,9 @@ static int iio_channel_read_max(struct iio_channel *c=
-han,
->                 val2 =3D &unused;
->
->         ret =3D iio_channel_read_avail(chan, &vals, type, &length, info);
-> +       if (ret < 0)
-> +               return ret;
-> +
->         switch (ret) {
->         case IIO_AVAIL_RANGE:
->                 switch (*type) {
-> @@ -888,7 +891,7 @@ static int iio_channel_read_max(struct iio_channel *c=
-han,
->                 return 0;
->
->         default:
-> -               return ret;
-> +               return -EINVAL;
->         }
->  }
->
-> --
-> 2.40.1
->
-
-
---=20
-With Best Regards,
-Andy Shevchenko
+How about modifying it like this?
