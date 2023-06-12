@@ -2,175 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 487A472BACD
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 10:35:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4034572BACA
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 10:35:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232943AbjFLIfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 04:35:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42814 "EHLO
+        id S232929AbjFLIfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 04:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232868AbjFLIfj (ORCPT
+        with ESMTP id S232540AbjFLIfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 04:35:39 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B78DE;
-        Mon, 12 Jun 2023 01:35:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686558939; x=1718094939;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=bT6O2cPBKL9wWvt0ZECXZcc2XFRp90hO6lwZK983o1o=;
-  b=iXaRqubKQ18NuFai6y1eiZagIPKASsM/hk0Ti3AN0ACalz0eZiAGFL3z
-   iJ0TkqxkEZ+jP/Naw4Lj7/oIMBpWhBrVIBtOIXL/zFRSzSfkNeIXfmHX/
-   /LhZFapHJ9M0gHTxSTMGUYY+/zFoz/xYqDwqSJI0ZZiMNEFc7KBdGpTzz
-   MIqKZ4zkWKMEtFZi9s5lMe0UkPC+UnGXsev5sXHMLbrpdZOa5tgICti3D
-   fWEQVQXoPZvynM3ENQsDhMoK6Ihz8EinRV50RxxkV6iVGKbbV+02jDEjP
-   nRkpP4r0vmqbYpLQYMp1uUl7TVSsXplpM+gk+ZOLfD+Lx3cfawxMl74NQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="355477104"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="355477104"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 01:35:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="661504969"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="661504969"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga003.jf.intel.com with ESMTP; 12 Jun 2023 01:35:37 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 12 Jun 2023 01:35:36 -0700
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 12 Jun 2023 01:35:35 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Mon, 12 Jun 2023 01:35:35 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Mon, 12 Jun 2023 01:35:34 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bZmfNhN+VT7SLTHjFeZ+b4+2N2+eNJO6JkLHGT80jRemWCo0TY45IMxRaYXKzbjc/LYWFm3Nfca8jNmso0cW61nHqsHciUJyLZWDWb1HznPFazBImOfrftiZYckp12vxb6/hfuhEKc2mLjHxC94fBkzYF+C28vHHezl5A64idRpQN086ky1FZBuSZ66yPBo1X6AYkT16WFq4IT/um/LIk/DJtoceAzwJk8UweJ/a8ckDpeFc9XAL78GH6yRwIFlwg7GXB3qzZVtlIqG8juaPF0r0aPW03nU8/TRCrUnfmbLIV57fIV+HhObFW5ZpZSilubp3Z1KrVTcNM4Y6jpIwLA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kkVYROVDuWUoaBv4MGqQ/kqsCIufwnqiKyOpe0kAo0E=;
- b=HtTJPSJP8a1MTbYtJpN5200gWm6BW3ITZUtnRZdvrK7muDEcNy4hCzmcbFKhPkyNTI8qNRNOEHn7X+4XmjCyvoN+1u4qrWYszL/5FkcEHdzNuEUfK2GygMSh7ipF/MEXmjhar054QBUpqc0Nt6M6xbS8ZX2arqiuFfft0Y3WKU+kwtW0152m+h4kJ/hUDkbUVhMr/FDwAIa2+YXlOQIFFPMSOhLTp8PKzoQeRmEnZOWkNmKSgxuKszOVZfJ/WUt6ymrsznvyrflVhpddH37YxA2BXlUI8t+idj84rP3bBWeGVjWPIUl4356mco6G3roWr0avEqISm5EUbjdB5OsapQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH8PR11MB6780.namprd11.prod.outlook.com (2603:10b6:510:1cb::11)
- by DS7PR11MB6224.namprd11.prod.outlook.com (2603:10b6:8:97::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6477.29; Mon, 12 Jun 2023 08:35:06 +0000
-Received: from PH8PR11MB6780.namprd11.prod.outlook.com
- ([fe80::5817:cb8f:c2b7:f1e5]) by PH8PR11MB6780.namprd11.prod.outlook.com
- ([fe80::5817:cb8f:c2b7:f1e5%4]) with mapi id 15.20.6455.028; Mon, 12 Jun 2023
- 08:35:06 +0000
-Date:   Mon, 12 Jun 2023 16:34:56 +0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-CC:     Paolo Bonzini <pbonzini@redhat.com>, <kvm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Xiaoyao Li <xiaoyao.li@intel.com>,
-        "Pawan Gupta" <pawan.kumar.gupta@linux.intel.com>
-Subject: Re: [PATCH 1/2] KVM: x86: Snapshot host's MSR_IA32_ARCH_CAPABILITIES
-Message-ID: <ZIbYsBv43EcwLavy@chao-email>
-References: <20230607004311.1420507-1-seanjc@google.com>
- <20230607004311.1420507-2-seanjc@google.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230607004311.1420507-2-seanjc@google.com>
-X-ClientProxiedBy: SI2PR02CA0032.apcprd02.prod.outlook.com
- (2603:1096:4:195::12) To PH8PR11MB6780.namprd11.prod.outlook.com
- (2603:10b6:510:1cb::11)
+        Mon, 12 Jun 2023 04:35:21 -0400
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DE7BE;
+        Mon, 12 Jun 2023 01:35:17 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R441e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0VkvdYLG_1686558911;
+Received: from 30.240.118.86(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VkvdYLG_1686558911)
+          by smtp.aliyun-inc.com;
+          Mon, 12 Jun 2023 16:35:13 +0800
+Message-ID: <5fe7c14e-4dd4-3e7f-ece4-75da36c3b6c3@linux.alibaba.com>
+Date:   Mon, 12 Jun 2023 16:35:07 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR11MB6780:EE_|DS7PR11MB6224:EE_
-X-MS-Office365-Filtering-Correlation-Id: 57046e16-b2b6-45da-02df-08db6b1fec65
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WT3x7ATkLLY4q1lekFrKI+C8vi//CdrbGROCpM1lNslGPIQFz8Pf8b4aY4p4fMJP0RVVEVSYYQ6aBrgpA9nwNkeDAIczPQN8r5GJHxTZ8HQKEqdxgqbEyXDUcuJy4MNIZv1AYWiMeOdj0Ngo4/ID47/e9o+tpwra8teb6TnfhMwLKnhIjRBBw4h6SpiCKCzBPXMddqtoeDvmlDfTHdgdTGxnnnd7iN/38IcORKnUoPR7xxawLYgjRmwaWLGc2b6N4sP93gdUVquwvt3gSHzUNpTYm1WMWhrDbDQQS5DtBejVulWnEqZP3ITYZKU3Mq9PbFS2CHuOLOCZ1bW2IHOYR5LvcqMhdWLGL0P1x+1BaPUvPf5Fmj476SwMdM7VLP/moMCp9En5jXc3A1fH2acgqGw0iEU6mwD8t08gbd/o6A9OBOPJy1ofyo1HLvWXJdMFo1RghyJMw6wf6giDaQCS/mu8RDlbPeAZ5AunqmLehZ6JIeZS8eT1hSesqVRxkf0JZIN6ozbcpilXj96wVGYjJ/nNBiyMyJMvOIbVUCKVZGo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB6780.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(396003)(39860400002)(346002)(376002)(366004)(136003)(451199021)(86362001)(66556008)(6916009)(478600001)(4326008)(54906003)(316002)(6666004)(66476007)(66946007)(966005)(6486002)(8676002)(8936002)(41300700001)(5660300002)(2906002)(44832011)(33716001)(82960400001)(38100700002)(9686003)(6512007)(26005)(6506007)(186003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OjYk1q9GSbzOaljU0SIg1W67rWpPVAX7frz2z+ZZOwlDbGWNbPOZHvenbJPV?=
- =?us-ascii?Q?szOCAK9Om/+6zurfllJmFqKmUhyi7Y7cgEXwTBo4tYG2MftoIzfKUBCINnLm?=
- =?us-ascii?Q?RnJNfq/bh6p61W88x1VLLtXMTBsfPsQVE9H4EERptzESNObwFOoRp6PtLHle?=
- =?us-ascii?Q?2Ye3wuuJxx3WId1hUMjVZ8Xsa7W/RbnCAP295melNSdp63NiBwBBohy46Fzf?=
- =?us-ascii?Q?a4Z7K/tb57imf5QG87WRkGk/uArKSydjAkyYigFLa4T0Uw4Dgjged0mZ9T2s?=
- =?us-ascii?Q?4sldNKM7PLrojdF2mCmRXgY+Y+G1XlqsEn6jn5zatSvt8dQg0wX2dDD7Jzz5?=
- =?us-ascii?Q?ziIDEYn4sFIw4v8GsmJr7KUw0gHizZji6zlRrP8oXQwMOPhzXFiyYlDHra2x?=
- =?us-ascii?Q?0zg2nGkXF4Zk2Ki+mKIRMgJQizXMyClN6RVQBpdcXWNfxah4RzZfCOMDoTf7?=
- =?us-ascii?Q?/buGlxgCA+hQ8YKViLcIMsQpU6SBQoU8cqc9t7F7laHzXE3UAdReuSpBjBDD?=
- =?us-ascii?Q?Sc9jlqt7GqpaTMIhmj5x1lg05S3f008rxWFSk/IPQnmClL6R5R4tzjekBuuJ?=
- =?us-ascii?Q?InQTJ34nr8ZzYB0Iu5s6JENKBF7PmGfU/eNhwpupYJWZWfdCtIkE8FvgS/XZ?=
- =?us-ascii?Q?97ghKST8nQQql1KwP3mwLfHLCl0YvXyldayQyax7ha2Uxu5Lc3yrF5vSD2Bw?=
- =?us-ascii?Q?mD0Bp+Z4XHTY2Lafdzpp7Xqm9uZMDiVTWmoHFGxzjJjlhJLNRVDlqHvyuVWX?=
- =?us-ascii?Q?BUbc61woe35LEwp2OZSgnkiIeuDS5ShItgK9CylVgVTn0+zC7Hilk2QuJhuu?=
- =?us-ascii?Q?CgrLejJcZwEAFa2+X85+pC4VAVr8761ReWoYK1RD36dWSlhLqVG676kqRz1h?=
- =?us-ascii?Q?ZWTkTujs2x3GZFmDTfcAFz6f05ixLWFlYeI7jHo42UgHfQe3l7o/e8+zXw2r?=
- =?us-ascii?Q?mk9wPIodvvACReMRAY3ThPZ7PidslvJ3ghhfrS59R7/fFJN42ZPeb21Oouxg?=
- =?us-ascii?Q?AMyGNmVULexFf/cR9gUZgme8IkUI6vfNc2SpbhB9VMafIeMkceNgnphCvjm6?=
- =?us-ascii?Q?aKwb8Cnhk6e5HXtGwqzOc7hkgt1H7T6wO8Z0hHUuRSHDw2VT/sjJ/IjzsSQQ?=
- =?us-ascii?Q?A+Ozi9kgps9QRJP6jpGbPxBVqsBe6J7xmMtVdfAV3lIOm5WqQRx6F2CsX658?=
- =?us-ascii?Q?M4IeDWg25DKa7Oh/NeCTnIRElDMugJdgcNWKyd2aJmqq6eKtvnuH1cLK6D2Y?=
- =?us-ascii?Q?hRyFGfR3Jm8V5peG2VlcukAw7l2ztOvojNeauz+a5FT00DNaWn0tJnQUX/t0?=
- =?us-ascii?Q?DTYRCLjOuSL5DFJdYXZDFObVlnXgM1jLIpCipzATFnZ2IS6HCY9hklD1ndIr?=
- =?us-ascii?Q?7TXiCzekUx2BGGb3bEk9DZ6u7nURpcu8DpZOAZlHnTor0tJ3tzKE/O9inHPa?=
- =?us-ascii?Q?Krm7J/G3kat9+sWo80D/z5/qx8OdwHWbPeds1v1mk8UNPlCI2DVHZo2tDw52?=
- =?us-ascii?Q?yoSJS8fuVDqzvlOLa6RG/Lwxy7uKyo2dJNXIh6F5XA5q4xwbmAmb5JXthOug?=
- =?us-ascii?Q?5/LMRbngQOmcFxPXyHxU6NOg+fujVILY/emsVI8/?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 57046e16-b2b6-45da-02df-08db6b1fec65
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB6780.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 08:35:05.9901
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Rk6Rvf43+ntq179NNni+VfjKD6ROwMNIAMpxvEAg34XPt+eEKI7YjX7UiexyBQ6ARXU8oMnxiuxzKfNotj57bg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB6224
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.1
+Subject: Re: [PATCH 1/2] perf/core: Bail out early if the request AUX area is
+ out of bound
+Content-Language: en-US
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     alexander.shishkin@linux.intel.com, peterz@infradead.org,
+        mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
+        adrian.hunter@intel.com, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Baolin Wang <baolin.wang@linux.alibaba.com>
+References: <20230612052452.53425-1-xueshuai@linux.alibaba.com>
+ <20230612052452.53425-2-xueshuai@linux.alibaba.com>
+ <20230612073821.GB217089@leoy-huanghe.lan>
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <20230612073821.GB217089@leoy-huanghe.lan>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 05:43:09PM -0700, Sean Christopherson wrote:
->Snapshot the host's MSR_IA32_ARCH_CAPABILITIES, if it's supported, instead
->of reading the MSR every time KVM wants to query the host state, e.g. when
->initializing the default value during vCPU creation.  The paths that query
->ARCH_CAPABILITIES aren't particularly performance sensitive, but creating
->vCPUs is a frequent enough operation that burning 8 bytes is a good
->trade-off.
->
->Alternatively, KVM could add a field in kvm_caps and thus skip the
->on-demand calculations entirely, but a pure snapshot isn't possible due to
->the way KVM handles the l1tf_vmx_mitigation module param.  And unlike the
->other "supported" fields in kvm_caps, KVM doesn't enforce the "supported"
->value, i.e. KVM treats ARCH_CAPABILITIES like a CPUID leaf and lets
->userspace advertise whatever it wants.  Those problems are solvable, but
->it's not clear there is real benefit versus snapshotting the host value,
->and grabbing the host value will allow additional cleanup of KVM's
->FB_CLEAR_CTRL code.
->
->Link: https://lore.kernel.org/all/20230524061634.54141-2-chao.gao@intel.com
->Cc: Chao Gao <chao.gao@intel.com>
->Cc: Xiaoyao Li <xiaoyao.li@intel.com>
->Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-Reviewed-by: Chao Gao <chao.gao@intel.com>
+
+On 2023/6/12 15:38, Leo Yan wrote:
+> Hi Shuai,
+> 
+> On Mon, Jun 12, 2023 at 01:24:51PM +0800, Shuai Xue wrote:
+>> When perf-record with a large AUX area, e.g 4GB, it fails with:
+>>
+>>     #perf record -C 0 -m ,4G -e arm_spe_0// -- sleep 1
+>>     failed to mmap with 12 (Cannot allocate memory)
+>>
+>> and it reveals a WARNING with __alloc_pages:
+>>
+>> [   66.595604] ------------[ cut here ]------------
+>> [   66.600206] WARNING: CPU: 44 PID: 17573 at mm/page_alloc.c:5568 __alloc_pages+0x1ec/0x248
+>> [   66.608375] Modules linked in: ip6table_filter(E) ip6_tables(E) iptable_filter(E) ebtable_nat(E) ebtables(E) aes_ce_blk(E) vfat(E) fat(E) aes_ce_cipher(E) crct10dif_ce(E) ghash_ce(E) sm4_ce_cipher(E) sm4(E) sha2_ce(E) sha256_arm64(E) sha1_ce(E) acpi_ipmi(E) sbsa_gwdt(E) sg(E) ipmi_si(E) ipmi_devintf(E) ipmi_msghandler(E) ip_tables(E) sd_mod(E) ast(E) drm_kms_helper(E) syscopyarea(E) sysfillrect(E) nvme(E) sysimgblt(E) i2c_algo_bit(E) nvme_core(E) drm_shmem_helper(E) ahci(E) t10_pi(E) libahci(E) drm(E) crc64_rocksoft(E) i40e(E) crc64(E) libata(E) i2c_core(E)
+>> [   66.657719] CPU: 44 PID: 17573 Comm: perf Kdump: loaded Tainted: G            E      6.3.0-rc4+ #58
+>> [   66.666749] Hardware name: Default Default/Default, BIOS 1.2.M1.AL.P.139.00 03/22/2023
+>> [   66.674650] pstate: 23400009 (nzCv daif +PAN -UAO +TCO +DIT -SSBS BTYPE=--)
+>> [   66.681597] pc : __alloc_pages+0x1ec/0x248
+>> [   66.685680] lr : __kmalloc_large_node+0xc0/0x1f8
+>> [   66.690285] sp : ffff800020523980
+>> [   66.693585] pmr_save: 000000e0
+>> [   66.696624] x29: ffff800020523980 x28: ffff000832975800 x27: 0000000000000000
+>> [   66.703746] x26: 0000000000100000 x25: 0000000000100000 x24: ffff8000083615d0
+>> [   66.710866] x23: 0000000000040dc0 x22: ffff000823d6d140 x21: 000000000000000b
+>> [   66.717987] x20: 000000000000000b x19: 0000000000000000 x18: 0000000000000030
+>> [   66.725108] x17: 0000000000000000 x16: ffff800008f05be8 x15: ffff000823d6d6d0
+>> [   66.732229] x14: 0000000000000000 x13: 343373656761705f x12: 726e202c30206574
+>> [   66.739350] x11: 00000000ffff7fff x10: 00000000ffff7fff x9 : ffff8000083af570
+>> [   66.746471] x8 : 00000000000bffe8 x7 : c0000000ffff7fff x6 : 000000000005fff4
+>> [   66.753592] x5 : 0000000000000000 x4 : ffff000823d6d8d8 x3 : 0000000000000000
+>> [   66.760713] x2 : 0000000000000000 x1 : 0000000000000001 x0 : 0000000000040dc0
+>> [   66.767834] Call trace:
+>> [   66.770267]  __alloc_pages+0x1ec/0x248
+>> [   66.774003]  __kmalloc_large_node+0xc0/0x1f8
+>> [   66.778259]  __kmalloc_node+0x134/0x1e8
+>> [   66.782081]  rb_alloc_aux+0xe0/0x298
+>> [   66.785643]  perf_mmap+0x440/0x660
+>> [   66.789031]  mmap_region+0x308/0x8a8
+>> [   66.792593]  do_mmap+0x3c0/0x528
+>> [   66.795807]  vm_mmap_pgoff+0xf4/0x1b8
+>> [   66.799456]  ksys_mmap_pgoff+0x18c/0x218
+>> [   66.803365]  __arm64_sys_mmap+0x38/0x58
+>> [   66.807187]  invoke_syscall+0x50/0x128
+>> [   66.810922]  el0_svc_common.constprop.0+0x58/0x188
+>> [   66.815698]  do_el0_svc+0x34/0x50
+>> [   66.818999]  el0_svc+0x34/0x108
+>> [   66.822127]  el0t_64_sync_handler+0xb8/0xc0
+>> [   66.826296]  el0t_64_sync+0x1a4/0x1a8
+>> [   66.829946] ---[ end trace 0000000000000000 ]---
+>>
+>> The pages for AUX area are organized as rb->aux_pages[] which alloced by
+>> kcalloc_node() later. The kcalloc() family guarantees the pages are
+>> physically contiguous (and virtually contiguous) with an order of
+>> MAX_ORDER - 1 at maximum.
+> 
+> This description is incorrect.  We need to distinguish two things:
+> 
+> AUX trace pages and 'rb->aux_pages' is pointer array which is used to
+> maintains these page.  Here, the kernel oops reports the error is not
+> for AUX trace pages but for failing to allocate the pointer array from
+> slab (or slub) area.
+
+You are right, 'rb->aux_pages' is a pointer array of AUX trace pages, I intend
+to mean that "The pages for AUX area are organized as rb->aux_pages[]"
+and it fails to allocate a continuous physical for 'rb->aux_pages'.
+
+> 
+> Furthermore, I believe the AUX trace pages are only mapped for VMA
+> (continuous virtual address), the kernel will defer to map to physical
+> pages (which means it's not necessarily continuous physical pages)
+> when handling data abort caused by accessing the pages.
+
+I don't know why the rb->aux_pages is limit to allocated with continuous physical pages.
+so I just add a check to avoid oops and report a proper error code -EINVAL to
+user.
+
+I would like to use vmalloc() family to replace kmalloc() so that we could support
+allocate a more large AUX area if it is not necessarily continuous physical pages.
+Should we remove the restriction?
+
+> 
+> When you specify the AUX buffer size to 4GiB, the kernel will convert it
+> to page numbers (page size is 4KiB, page number is = 4GiB / 4KiB = 1MiB).
+> Since aarch64's pointer type's length is 8 bytes, thus we need to
+> allocate the 8MiB buffer from slab/slub, unfortunately, 8MiB crosses the
+> limitation set by MAX_ORDER (4KiB ^ (MAX_ORDER - 1) = 4MiB), this is
+> why we receive the oops from __alloc_pages().
+
+Exactly, the oops is due to allocating of the pointer array rb->aux_pages.
+As the lines in doc I added, the max order page (order 10, 4MiB) of the pointer
+array supports to hold 2GiB AUX pages.
+
+> 
+>> So bail out early with -EINVAL if the request AUX area is out of bound,
+>> e.g.:
+>>
+>>     #perf record -C 0 -m ,4G -e arm_spe_0// -- sleep 1
+>>     failed to mmap with 22 (Invalid argument)
+>>
+>> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
+>> ---
+>>  kernel/events/core.c                     | 10 ++++++++++
+>>  tools/perf/Documentation/perf-record.txt |  3 ++-
+>>  2 files changed, 12 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/kernel/events/core.c b/kernel/events/core.c
+>> index 435815d..83d4e29 100644
+>> --- a/kernel/events/core.c
+>> +++ b/kernel/events/core.c
+>> @@ -6404,6 +6404,16 @@ static int perf_mmap(struct file *file, struct vm_area_struct *vma)
+>>  			return -EINVAL;
+>>  
+>>  		nr_pages = vma_size / PAGE_SIZE;
+>> +		/*
+>> +		 * The pages for AUX area are organized as rb->aux_pages[]
+>> +		 * which alloced by kcalloc_node() later. The kcalloc() family
+>> +		 * guarantees the pages are physically contiguous (and
+>> +		 * virtually contiguous) with an order of MAX_ORDER - 1 at
+>> +		 * maximum MAX_ORDER. So bail out early if the request AUX area
+>> +		 * is out of bound.
+>> +		 */
+>> +		if (get_order(nr_pages * sizeof(void *)) >= MAX_ORDER)
+>> +			return -EINVAL;
+> 
+> From my view, now kernel has handled this case (I agree it might be
+> not directive for outputting error or warning info rather than oops).
+> 
+> If we really want this checking, I'd like to add it in rb_alloc_aux(),
+> since rb_alloc_aux() is the place for allocation the memory, thus it's
+> right place for the checking memory limitation.  
+
+Got it. If we should have physical continuous for rb->aux_pages, I'd like to
+move this check to rb_alloc_aux().
+
+> And you might need to
+> consider the update the comments to avoid confusion.
+
+Ok, I will update the commit log and comments to make it more clear.
+
+
+> 
+> I am not the best person for the decision, I'd like to leave it to perf
+> maintainers and wait for their thoughts.
+
+Haha, let's waiting for other thoughts.
+
+> 
+> Thanks,
+> Leo
+
+
+Thank you for your quick reply and valuable comments.
+
+Best Regards,
+Shuai
+
+> 
+>>  		mutex_lock(&event->mmap_mutex);
+>>  		ret = -EINVAL;
+>> diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
+>> index ff815c2..a50a426 100644
+>> --- a/tools/perf/Documentation/perf-record.txt
+>> +++ b/tools/perf/Documentation/perf-record.txt
+>> @@ -236,7 +236,8 @@ OPTIONS
+>>  	specification with appended unit character - B/K/M/G. The
+>>  	size is rounded up to have nearest pages power of two value.
+>>  	Also, by adding a comma, the number of mmap pages for AUX
+>> -	area tracing can be specified.
+>> +	area tracing can be specified. With MAX_ORDER set as 11, the
+>> +	maximum AUX area is limit to 2GB.
+>>  
+>>  -g::
+>>  	Enables call-graph (stack chain/backtrace) recording for both
+>> -- 
+>> 1.8.3.1
+>>
