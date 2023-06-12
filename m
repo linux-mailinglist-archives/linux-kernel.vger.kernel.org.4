@@ -2,72 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B1F372CA90
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E49172CA94
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:47:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239682AbjFLPpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 11:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37656 "EHLO
+        id S237111AbjFLPrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 11:47:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239689AbjFLPpF (ORCPT
+        with ESMTP id S230449AbjFLPrI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 11:45:05 -0400
+        Mon, 12 Jun 2023 11:47:08 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D09210CE;
-        Mon, 12 Jun 2023 08:45:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E6DCA
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 08:47:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E84C962B10;
-        Mon, 12 Jun 2023 15:45:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CF72C433D2;
-        Mon, 12 Jun 2023 15:45:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686584702;
-        bh=i8KTAL9m8czF59/PWA43ufGF+FzGsWZsS4YZqCVtdKk=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 75A8D61E99
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 15:47:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEC85C433D2;
+        Mon, 12 Jun 2023 15:47:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686584825;
+        bh=ng4NcAv7Bg3W3tmF1h5jtSAaleUESGi5n+V3tZwTWEU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S6SCCwEkUvsAE44g1h3nEDQvyPPbLi9tRWYfi7bXehLj56bfQ32rk8JZJk89wj1KH
-         wbSgiqPPh527cc4rsW/DFf21XHZC1DgpLsktZsa6oeyHkHf49wYWp20NWb+pX3Ivf8
-         7UX+5YYHNwBwokPzVWADs1YDGLcSKPZcwRgqNknA=
-Date:   Mon, 12 Jun 2023 17:44:59 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     torvalds@linux-foundation.org, keescook@chromium.org,
-        pbonzini@redhat.com, masahiroy@kernel.org, nathan@kernel.org,
-        ndesaulniers@google.com, nicolas@fjasle.eu,
-        catalin.marinas@arm.com, will@kernel.org, vkoul@kernel.org,
-        trix@redhat.com, ojeda@kernel.org, mingo@redhat.com,
-        longman@redhat.com, boqun.feng@gmail.com, dennis@kernel.org,
-        tj@kernel.org, cl@linux.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, irogers@google.com, adrian.hunter@intel.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
-        42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
-        dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
-        john.johansen@canonical.com, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
-        rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
-        tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
-        luc.vanoostenryck@gmail.com
-Subject: Re: [PATCH v3 46/57] perf: Simplify pmu_dev_alloc()
-Message-ID: <2023061217-mutable-curry-c2ac@gregkh>
-References: <20230612090713.652690195@infradead.org>
- <20230612093540.850386350@infradead.org>
- <20230612094400.GG4253@hirez.programming.kicks-ass.net>
- <2023061226-grumpily-entire-f06a@gregkh>
- <20230612141322.GA83892@hirez.programming.kicks-ass.net>
+        b=Uo+iMwMFzqnknsT6HcnYRjvEGXEYWlvF+x2bv6cuzX88g4K2GbTE1mP7NGI8KdbdZ
+         RBsd5ZalxQDYYUs7cqCb/dLNuwMLggb3L64mLygYdCgjUJ4qsxP3UGsFuNTKZIs9fA
+         u0yFlfb8dNx9WsJpsTj4vmARvgeqGphcIkgeuJOZ3O8hUoidPzWd09gK06l4+hOL8q
+         kedrKQj8v0bV8reN2wlCaYfZX0tkOQUm44H0RMmlfR4rudqFNBsMZVQ95s035pCGCy
+         HOkdcirQzZJxS21/scJryJWuHWqiJ9epaNrciI1Fa54gf4ezTGO1rghVzxRs2uANgZ
+         1/JQ0JWu4rS1A==
+Date:   Mon, 12 Jun 2023 08:47:04 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Sheng Yong <shengyong@oppo.com>
+Cc:     chao@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, ebiggers@kernel.org
+Subject: Re: [PATCH v4 5/6] f2fs: add f2fs_ioc_[get|set]_extra_attr
+Message-ID: <ZIc9+N2GIQepZcCq@google.com>
+References: <20230612030121.2393541-1-shengyong@oppo.com>
+ <20230612030121.2393541-6-shengyong@oppo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230612141322.GA83892@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230612030121.2393541-6-shengyong@oppo.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -78,200 +55,294 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 04:13:22PM +0200, Peter Zijlstra wrote:
-> > Mind if I try this series to convert a more "normal" driver to see how
-> > it works with that?  That's going to be the true test, see if the
-> > changes make sense to someone who doesn't really know the internals of
-> > the driver core like this...
+On 06/12, Sheng Yong wrote:
+> This patch introduces two ioctls:
+>   * f2fs_ioc_get_extra_attr
+>   * f2fs_ioc_set_extra_attr
+> to get or modify values in f2fs_inode's extra attribute area.
+
+What'd be the main purpose of this new ioctl? Use-cases or examples?
+
 > 
-> Not at all, feel tree to have a go at that. I picked code I was familiar
-> with, but it would ofc. be good to have others give it a spin too.
-
-Ok, here's an attempt to clean up misc.c a bit.  It does two things,
-adds a guard for the global misc_mtx mutex when used (sometimes, it's
-not always paired with a release.)
-
-Then in the last part of the file, I abuse the DEFINE_FREE() to handle a
-special case of removing a proc file if things go bad (and add a
-DEFINE_FREE() for class_destroy(), which should go into
-include/device/class.h.
-
-I've only test-built it, but is this the proper use of DEFINE_FREE()?
-There wasn't much documentation :)
-
-To be fair the end-result of misc_init() is much nicer and cleaner and
-"obviously correct", which is good, even with the crazy proc file mess
-in it.  So I like the idea overall, need to figure out when to use
-DEFINE_CLASS() vs. DEFINE_FREE(), that isn't obvious to me.
-
-Also, you can't put a DEFINE_FREE() within a function declaration, which
-I guess makes sense, but the build warning is very odd when you attempt
-it, mentioning an "invalid storage class".  Is that supposed to be able
-to work?
-
-thanks,
-
-greg k-h
-
-
----
- drivers/char/misc.c | 69 +++++++++++++++++----------------------------
- 1 file changed, 26 insertions(+), 43 deletions(-)
-
-diff --git a/drivers/char/misc.c b/drivers/char/misc.c
-index 1c44c29a666e..a203b17a2b82 100644
---- a/drivers/char/misc.c
-+++ b/drivers/char/misc.c
-@@ -123,10 +123,9 @@ static int misc_open(struct inode *inode, struct file *file)
- {
- 	int minor = iminor(inode);
- 	struct miscdevice *c = NULL, *iter;
--	int err = -ENODEV;
- 	const struct file_operations *new_fops = NULL;
- 
--	mutex_lock(&misc_mtx);
-+	guard(mutex)(&misc_mtx);
- 
- 	list_for_each_entry(iter, &misc_list, list) {
- 		if (iter->minor != minor)
-@@ -149,7 +148,7 @@ static int misc_open(struct inode *inode, struct file *file)
- 			break;
- 		}
- 		if (!new_fops)
--			goto fail;
-+			return -ENODEV;
- 	}
- 
- 	/*
-@@ -159,13 +158,11 @@ static int misc_open(struct inode *inode, struct file *file)
- 	 */
- 	file->private_data = c;
- 
--	err = 0;
- 	replace_fops(file, new_fops);
- 	if (file->f_op->open)
--		err = file->f_op->open(inode, file);
--fail:
--	mutex_unlock(&misc_mtx);
--	return err;
-+		return file->f_op->open(inode, file);
-+
-+	return 0;
- }
- 
- static struct class *misc_class;
-@@ -197,29 +194,24 @@ static const struct file_operations misc_fops = {
- int misc_register(struct miscdevice *misc)
- {
- 	dev_t dev;
--	int err = 0;
- 	bool is_dynamic = (misc->minor == MISC_DYNAMIC_MINOR);
- 
- 	INIT_LIST_HEAD(&misc->list);
- 
--	mutex_lock(&misc_mtx);
-+	guard(mutex)(&misc_mtx);
- 
- 	if (is_dynamic) {
- 		int i = misc_minor_alloc();
- 
--		if (i < 0) {
--			err = -EBUSY;
--			goto out;
--		}
-+		if (i < 0)
-+			return -EBUSY;
- 		misc->minor = i;
- 	} else {
- 		struct miscdevice *c;
- 
- 		list_for_each_entry(c, &misc_list, list) {
--			if (c->minor == misc->minor) {
--				err = -EBUSY;
--				goto out;
--			}
-+			if (c->minor == misc->minor)
-+				return -EBUSY;
- 		}
- 	}
- 
-@@ -233,8 +225,7 @@ int misc_register(struct miscdevice *misc)
- 			misc_minor_free(misc->minor);
- 			misc->minor = MISC_DYNAMIC_MINOR;
- 		}
--		err = PTR_ERR(misc->this_device);
--		goto out;
-+		return PTR_ERR(misc->this_device);
- 	}
- 
- 	/*
-@@ -242,9 +233,7 @@ int misc_register(struct miscdevice *misc)
- 	 * earlier defaults
- 	 */
- 	list_add(&misc->list, &misc_list);
-- out:
--	mutex_unlock(&misc_mtx);
--	return err;
-+	return 0;
- }
- EXPORT_SYMBOL(misc_register);
- 
-@@ -261,11 +250,10 @@ void misc_deregister(struct miscdevice *misc)
- 	if (WARN_ON(list_empty(&misc->list)))
- 		return;
- 
--	mutex_lock(&misc_mtx);
-+	guard(mutex)(&misc_mtx);
- 	list_del(&misc->list);
- 	device_destroy(misc_class, MKDEV(MISC_MAJOR, misc->minor));
- 	misc_minor_free(misc->minor);
--	mutex_unlock(&misc_mtx);
- }
- EXPORT_SYMBOL(misc_deregister);
- 
-@@ -280,29 +268,24 @@ static char *misc_devnode(const struct device *dev, umode_t *mode)
- 	return NULL;
- }
- 
-+DEFINE_FREE(class_destroy, struct class *, if (_T) class_destroy(_T));
-+DEFINE_FREE(remove_proc, struct proc_dir_entry *, if (_T) remove_proc_entry("misc", NULL));
- static int __init misc_init(void)
- {
--	int err;
--	struct proc_dir_entry *ret;
-+	struct proc_dir_entry *ret __free(remove_proc) = proc_create_seq("misc", 0, NULL, &misc_seq_ops);
-+	struct class *c __free(class_destroy) = class_create("misc");
- 
--	ret = proc_create_seq("misc", 0, NULL, &misc_seq_ops);
--	misc_class = class_create("misc");
--	err = PTR_ERR(misc_class);
--	if (IS_ERR(misc_class))
--		goto fail_remove;
-+	if (IS_ERR(c))
-+		return PTR_ERR(c);
- 
--	err = -EIO;
- 	if (register_chrdev(MISC_MAJOR, "misc", &misc_fops))
--		goto fail_printk;
--	misc_class->devnode = misc_devnode;
--	return 0;
-+		return -EIO;
- 
--fail_printk:
--	pr_err("unable to get major %d for misc devices\n", MISC_MAJOR);
--	class_destroy(misc_class);
--fail_remove:
--	if (ret)
--		remove_proc_entry("misc", NULL);
--	return err;
-+	c->devnode = misc_devnode;
-+
-+	misc_class = no_free_ptr(c);
-+	no_free_ptr(ret);
-+
-+	return 0;
- }
- subsys_initcall(misc_init);
--- 
-2.41.0
-
+> The argument of these two ioctls is `struct f2fs_extra_attr', which has
+> three members:
+>   * field: indicates which field in extra attribute area is handled
+>   * attr: value or userspace pointer
+>   * attr_size: size of `attr'
+> 
+> The `field' member could help extend functionality of these two ioctls
+> without modify or add new interfaces, if more fields are added into
+> extra attributes ares in the feture.
+> 
+> Signed-off-by: Sheng Yong <shengyong@oppo.com>
+> ---
+>  fs/f2fs/file.c            | 205 ++++++++++++++++++++++++++++++++++++++
+>  include/uapi/linux/f2fs.h |  25 +++++
+>  2 files changed, 230 insertions(+)
+> 
+> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> index f8aa842b5d233..39d04f8f0bb6b 100644
+> --- a/fs/f2fs/file.c
+> +++ b/fs/f2fs/file.c
+> @@ -4179,6 +4179,207 @@ static int f2fs_ioc_compress_file(struct file *filp)
+>  	return ret;
+>  }
+>  
+> +static bool extra_attr_fits_in_inode(struct inode *inode, int field)
+> +{
+> +	struct f2fs_inode_info *fi = F2FS_I(inode);
+> +	struct f2fs_inode *ri;
+> +
+> +	switch (field) {
+> +	case F2FS_EXTRA_ATTR_TOTAL_SIZE:
+> +	case F2FS_EXTRA_ATTR_ISIZE:
+> +	case F2FS_EXTRA_ATTR_INLINE_XATTR_SIZE:
+> +		return true;
+> +	case F2FS_EXTRA_ATTR_PROJID:
+> +		if (!F2FS_FITS_IN_INODE(ri, fi->i_extra_isize, i_projid))
+> +			return false;
+> +		return true;
+> +	case F2FS_EXTRA_ATTR_INODE_CHKSUM:
+> +		if (!F2FS_FITS_IN_INODE(ri, fi->i_extra_isize, i_inode_checksum))
+> +			return false;
+> +		return true;
+> +	case F2FS_EXTRA_ATTR_CRTIME:
+> +		if (!F2FS_FITS_IN_INODE(ri, fi->i_extra_isize, i_crtime))
+> +			return false;
+> +		return true;
+> +	case F2FS_EXTRA_ATTR_COMPR_BLOCKS:
+> +	case F2FS_EXTRA_ATTR_COMPR_OPTION:
+> +		if (!F2FS_FITS_IN_INODE(ri, fi->i_extra_isize, i_compr_blocks))
+> +			return false;
+> +		return true;
+> +	default:
+> +		BUG_ON(1);
+> +		return false;
+> +	}
+> +}
+> +
+> +static int f2fs_ioc_get_extra_attr(struct file *filp, unsigned long arg)
+> +{
+> +	struct inode *inode = file_inode(filp);
+> +	struct f2fs_inode_info *fi = F2FS_I(inode);
+> +	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+> +	struct f2fs_extra_attr attr;
+> +	u32 chksum;
+> +	int ret = 0;
+> +
+> +	if (!f2fs_has_extra_attr(inode))
+> +		return -EOPNOTSUPP;
+> +
+> +	if (copy_from_user(&attr, (void __user *)arg, sizeof(attr)))
+> +		return -EFAULT;
+> +
+> +	if (attr.field >= F2FS_EXTRA_ATTR_MAX)
+> +		return -EINVAL;
+> +
+> +	if (!extra_attr_fits_in_inode(inode, attr.field))
+> +		return -EOPNOTSUPP;
+> +
+> +	switch (attr.field) {
+> +	case F2FS_EXTRA_ATTR_TOTAL_SIZE:
+> +		attr.attr = F2FS_TOTAL_EXTRA_ATTR_SIZE;
+> +		break;
+> +	case F2FS_EXTRA_ATTR_ISIZE:
+> +		attr.attr = fi->i_extra_isize;
+> +		break;
+> +	case F2FS_EXTRA_ATTR_INLINE_XATTR_SIZE:
+> +		if (!f2fs_has_inline_xattr(inode))
+> +			return -EOPNOTSUPP;
+> +		attr.attr = get_inline_xattr_addrs(inode);
+> +		break;
+> +	case F2FS_EXTRA_ATTR_PROJID:
+> +		if (!f2fs_sb_has_project_quota(F2FS_I_SB(inode)))
+> +			return -EOPNOTSUPP;
+> +		attr.attr = from_kprojid(&init_user_ns, fi->i_projid);
+> +		break;
+> +	case F2FS_EXTRA_ATTR_INODE_CHKSUM:
+> +		ret = f2fs_inode_chksum_get(sbi, inode, &chksum);
+> +		if (ret)
+> +			return ret;
+> +		attr.attr = chksum;
+> +		break;
+> +	case F2FS_EXTRA_ATTR_CRTIME:
+> +		if (!f2fs_sb_has_inode_crtime(sbi))
+> +			return -EOPNOTSUPP;
+> +		if (attr.attr_size == sizeof(struct timespec64)) {
+> +			if (put_timespec64(&fi->i_crtime,
+> +					(void __user *)(uintptr_t)attr.attr))
+> +				return -EFAULT;
+> +		} else if (attr.attr_size == sizeof(struct old_timespec32)) {
+> +			if (put_old_timespec32(&fi->i_crtime,
+> +					(void __user *)(uintptr_t)attr.attr))
+> +				return -EFAULT;
+> +		} else {
+> +			return -EINVAL;
+> +		}
+> +		break;
+> +	case F2FS_EXTRA_ATTR_COMPR_BLOCKS:
+> +		if (attr.attr_size != sizeof(__u64))
+> +			return -EINVAL;
+> +		ret = f2fs_get_compress_blocks(inode, &attr.attr);
+> +		break;
+> +	case F2FS_EXTRA_ATTR_COMPR_OPTION:
+> +		ret = f2fs_ioc_get_compress_option(filp, attr.attr);
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (copy_to_user((void __user *)arg, &attr, sizeof(attr)))
+> +		return -EFAULT;
+> +
+> +	return 0;
+> +}
+> +
+> +static int f2fs_ioc_set_extra_attr(struct file *filp, unsigned long arg)
+> +{
+> +	struct inode *inode = file_inode(filp);
+> +	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+> +	struct f2fs_extra_attr attr;
+> +	struct page *ipage;
+> +	void *inline_addr;
+> +	int ret;
+> +
+> +	if (!f2fs_has_extra_attr(inode))
+> +		return -EOPNOTSUPP;
+> +
+> +	if (copy_from_user(&attr, (void __user *)arg, sizeof(attr)))
+> +		return -EFAULT;
+> +
+> +	if (attr.field >= F2FS_EXTRA_ATTR_MAX)
+> +		return -EINVAL;
+> +
+> +	if (!extra_attr_fits_in_inode(inode, attr.field))
+> +		return -EOPNOTSUPP;
+> +
+> +	switch (attr.field) {
+> +	case F2FS_EXTRA_ATTR_TOTAL_SIZE:
+> +	case F2FS_EXTRA_ATTR_ISIZE:
+> +	case F2FS_EXTRA_ATTR_PROJID:
+> +	case F2FS_EXTRA_ATTR_INODE_CHKSUM:
+> +	case F2FS_EXTRA_ATTR_CRTIME:
+> +	case F2FS_EXTRA_ATTR_COMPR_BLOCKS:
+> +		/* read only attribtues */
+> +		return -EOPNOTSUPP;
+> +	case F2FS_EXTRA_ATTR_INLINE_XATTR_SIZE:
+> +		if (!f2fs_sb_has_flexible_inline_xattr(sbi) ||
+> +		    !f2fs_has_inline_xattr(inode))
+> +			return -EOPNOTSUPP;
+> +		if (attr.attr < MIN_INLINE_XATTR_SIZE ||
+> +		    attr.attr > MAX_INLINE_XATTR_SIZE)
+> +			return -EINVAL;
+> +		inode_lock(inode);
+> +		f2fs_lock_op(sbi);
+> +		f2fs_down_write(&F2FS_I(inode)->i_xattr_sem);
+> +		if (i_size_read(inode) || F2FS_I(inode)->i_xattr_nid) {
+> +			/*
+> +			 * it is not allowed to set this field if the inode
+> +			 * has data or xattr node
+> +			 */
+> +			ret = -EFBIG;
+> +			goto xattr_out_unlock;
+> +		}
+> +		ipage = f2fs_get_node_page(sbi, inode->i_ino);
+> +		if (IS_ERR(ipage)) {
+> +			ret = PTR_ERR(ipage);
+> +			goto xattr_out_unlock;
+> +		}
+> +		inline_addr = inline_xattr_addr(inode, ipage);
+> +		if (!IS_XATTR_LAST_ENTRY(XATTR_FIRST_ENTRY(inline_addr))) {
+> +			ret = -EFBIG;
+> +		} else {
+> +			struct f2fs_xattr_header *hdr;
+> +			struct f2fs_xattr_entry *ent;
+> +
+> +			F2FS_I(inode)->i_inline_xattr_size = (int)attr.attr;
+> +			inline_addr = inline_xattr_addr(inode, ipage);
+> +			hdr = XATTR_HDR(inline_addr);
+> +			ent = XATTR_FIRST_ENTRY(inline_addr);
+> +			hdr->h_magic = cpu_to_le32(F2FS_XATTR_MAGIC);
+> +			hdr->h_refcount = cpu_to_le32(1);
+> +			memset(ent, 0, attr.attr - sizeof(*hdr));
+> +			set_page_dirty(ipage);
+> +			ret = 0;
+> +		}
+> +		f2fs_put_page(ipage, 1);
+> +xattr_out_unlock:
+> +		f2fs_up_write(&F2FS_I(inode)->i_xattr_sem);
+> +		f2fs_unlock_op(sbi);
+> +		inode_unlock(inode);
+> +		if (!ret)
+> +			f2fs_balance_fs(sbi, true);
+> +		break;
+> +	case F2FS_EXTRA_ATTR_COMPR_OPTION:
+> +		ret = f2fs_ioc_set_compress_option(filp, attr.attr);
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+>  static long __f2fs_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+>  {
+>  	switch (cmd) {
+> @@ -4265,6 +4466,10 @@ static long __f2fs_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+>  		return f2fs_ioc_decompress_file(filp);
+>  	case F2FS_IOC_COMPRESS_FILE:
+>  		return f2fs_ioc_compress_file(filp);
+> +	case F2FS_IOC_GET_EXTRA_ATTR:
+> +		return f2fs_ioc_get_extra_attr(filp, arg);
+> +	case F2FS_IOC_SET_EXTRA_ATTR:
+> +		return f2fs_ioc_set_extra_attr(filp, arg);
+>  	default:
+>  		return -ENOTTY;
+>  	}
+> diff --git a/include/uapi/linux/f2fs.h b/include/uapi/linux/f2fs.h
+> index 955d440be1046..2b53e90421bfc 100644
+> --- a/include/uapi/linux/f2fs.h
+> +++ b/include/uapi/linux/f2fs.h
+> @@ -43,6 +43,10 @@
+>  #define F2FS_IOC_DECOMPRESS_FILE	_IO(F2FS_IOCTL_MAGIC, 23)
+>  #define F2FS_IOC_COMPRESS_FILE		_IO(F2FS_IOCTL_MAGIC, 24)
+>  #define F2FS_IOC_START_ATOMIC_REPLACE	_IO(F2FS_IOCTL_MAGIC, 25)
+> +#define F2FS_IOC_GET_EXTRA_ATTR		_IOR(F2FS_IOCTL_MAGIC, 26,	\
+> +						struct f2fs_extra_attr)
+> +#define F2FS_IOC_SET_EXTRA_ATTR		_IOW(F2FS_IOCTL_MAGIC, 27,	\
+> +						struct f2fs_extra_attr)
+>  
+>  /*
+>   * should be same as XFS_IOC_GOINGDOWN.
+> @@ -96,4 +100,25 @@ struct f2fs_comp_option {
+>  	__u8 log_cluster_size;
+>  };
+>  
+> +enum {
+> +	F2FS_EXTRA_ATTR_TOTAL_SIZE,		/* ro, size of extra attr area */
+> +	F2FS_EXTRA_ATTR_ISIZE,			/* ro, i_extra_isize */
+> +	F2FS_EXTRA_ATTR_INLINE_XATTR_SIZE,	/* rw, i_inline_xattr_size */
+> +	F2FS_EXTRA_ATTR_PROJID,			/* ro, i_projid */
+> +	F2FS_EXTRA_ATTR_INODE_CHKSUM,		/* ro, i_inode_chksum */
+> +	F2FS_EXTRA_ATTR_CRTIME,			/* ro, i_crtime, i_crtime_nsec */
+> +	F2FS_EXTRA_ATTR_COMPR_BLOCKS,		/* ro, i_compr_blocks */
+> +	F2FS_EXTRA_ATTR_COMPR_OPTION,		/* rw, i_compress_algorithm,
+> +						 *     i_log_cluster_size
+> +						 */
+> +	F2FS_EXTRA_ATTR_MAX,
+> +};
+> +
+> +struct f2fs_extra_attr {
+> +	__u8 field;		/* F2FS_EXTRA_ATTR_* */
+> +	__u8 rsvd1;
+> +	__u16 attr_size;	/* size of @attr */
+> +	__u32 rsvd2;
+> +	__u64 attr;		/* attr value or pointer */
+> +};
+>  #endif /* _UAPI_LINUX_F2FS_H */
+> -- 
+> 2.40.1
