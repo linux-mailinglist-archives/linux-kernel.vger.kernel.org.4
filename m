@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D73272C505
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 14:51:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 992F072C508
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 14:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235615AbjFLMvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 08:51:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39182 "EHLO
+        id S235707AbjFLMv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 08:51:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235596AbjFLMvj (ORCPT
+        with ESMTP id S235691AbjFLMvp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 08:51:39 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A9310FA
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 05:51:31 -0700 (PDT)
-Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com [209.85.160.70])
+        Mon, 12 Jun 2023 08:51:45 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF32172B
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 05:51:35 -0700 (PDT)
+Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com [209.85.161.72])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id F0D193F378
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 12:51:29 +0000 (UTC)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 5FBE23F235
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 12:51:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1686574289;
-        bh=9WA1GnTKde4fTKucBDNJJp1kdZH51ghqRlq/wPSryAw=;
+        s=20210705; t=1686574293;
+        bh=omMsUqmf+wDARTSBLeWKvRxM4zligfqqpbMttBMt0pg=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
          MIME-Version;
-        b=JRhn3b0i3r0tYbzIrbNqe+WJf80cSxs0y6XxIetGg+MUiepxgyee+A7EshCvhTpIR
-         Cf8m5D1JXdzzPFkW7gg7udzaHwek9IsLiIN/3mbM2jCee4+AmMUkOxpWUiwS64tajL
-         yinKJ/47RHWfIWgoYu60Qo7cBtwHHo8X31qIyBV7XsUrK5zgbKVQ9XN0GNe0j8zxY6
-         moNs2+BQleTR5BoB4TAPL4VeN6K/RpsfYLHMPAZ95n08/t1MBpPs0m+z2lKGtIS/Wc
-         THm+zuaNsnPZw9uZng9Ru3R7YD8R/GEi8FUHRjfh6IgJSeaNGiRJdq7Pm0aOJw8Oa/
-         tDWWsMUGfnYXA==
-Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-1a31a9ddd87so2138226fac.3
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 05:51:29 -0700 (PDT)
+        b=UA/fdTTAIioDD+O770I8naogOwvF/EA0aLYblU1j+xnd6Z1Tj5UqYXMsJ/eShk1/X
+         D13BJQ4A8RMETmWj0NJYefoaCrhikX5Ygov0W1zmEidfrS9q8BjabQEe/6LR6WZNza
+         Ob36v2TOKP8ov88b1BxBbcCodNuGGOT07eIyBByBtpkX+DwaIKJCGmiEUkqUMft1r/
+         u+ylTox6X7SrBCyZOqgL3hwvIaMFRZ7MLkZD8mjfzSRBLSpKgi67HEpf67QFK9+WXW
+         u7hreeTeFeHdqGHLR/3ZBb76RYD+jQ1QLX9LPcfu5bHqkmBnTIgHgs9iRpSUe5qgEe
+         R84EcMbX9VLVw==
+Received: by mail-oo1-f72.google.com with SMTP id 006d021491bc7-55b15c956e2so2949698eaf.0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 05:51:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686574288; x=1689166288;
+        d=1e100.net; s=20221208; t=1686574292; x=1689166292;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9WA1GnTKde4fTKucBDNJJp1kdZH51ghqRlq/wPSryAw=;
-        b=bjtipLAWkO+eCuVock1ExcwJ62+1Dr3Sux2DA2Vo255w+YjIGdvae2Y/rjR09ICELM
-         zWN9d7CfAVrDqVXvQPfETP55t5j/SjcM/gkbktVxncF5pu684Qycp/QKas7jOTcUDafS
-         i32FB5ESCSAr4ObkUluSC7WRnkLibK6kSsSvpQnoh7HhzUWFAknv5pLIWkMpiuCG9AUK
-         TPRzpaC06e9OOqFjXNVtv4GIEtrtBR+CFOU6LmSRsBSMQ+xySHKke22RJqNqZVYHi8S8
-         eb1NAk25VwtrK8rsW7OR8SfGQ+B+tFYRRmDmR7+p2Ywdm8VVTtoF0z17cBNQHZU2Vf98
-         DkgQ==
-X-Gm-Message-State: AC+VfDytv3hEn3E7z2MTjcGogwIvXIxw5mhHA/5b/6b4qYQM0ET8vuLU
-        oHY7Mi8zhV8lcuLEJKlEXCqhKX2cTqc7KPXh2FVDEiizE1h5vmTt9+MkFgrhwEuHuYAEtcfis+Y
-        2vapFjf44cd/ap75upr+C77uX8KZ07hYCmjUz47Z2SQ==
-X-Received: by 2002:a05:6870:6256:b0:196:8dc3:4e16 with SMTP id r22-20020a056870625600b001968dc34e16mr6011819oak.39.1686574287734;
-        Mon, 12 Jun 2023 05:51:27 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4zWRS7ZviV1sYFayuCJ8VhSxwjQK/79tiCchsPFEkiZDfJBlJWhoUWPx7Bd1s+FgghYjeJMw==
-X-Received: by 2002:a05:6870:6256:b0:196:8dc3:4e16 with SMTP id r22-20020a056870625600b001968dc34e16mr6011809oak.39.1686574287496;
-        Mon, 12 Jun 2023 05:51:27 -0700 (PDT)
+        bh=omMsUqmf+wDARTSBLeWKvRxM4zligfqqpbMttBMt0pg=;
+        b=kpKa9gELfVDwEnThawug7l/Tw5912/NqbpE4EDKWdCziGnm9Yo6m/rh5ZAZh6eWLSV
+         OxjceGbtGbnwsE8n2oGBqLyx88DvEteaIG2Usr3Jwwkrk3pXz3fZkRgDV0AkZrAd2Kb3
+         y6J9+C3NayWBQENE0YCm4LdjBLAr0r/ZFJCVJBvb9qhyXiEc7a2WLW0cD3AlUB0Kw9H0
+         RowuIw6mFrrP1icWwDDRujjiApJvfpDd4B6SGehSE0V2F2jzOgaCx5kQpD+ch0ELLr2M
+         5s8s21S24/kR5wa6nXTwoBbhtvmr3bMxlV220CSGJqHcB5uHMbBSxzpTaP3Ia2ipT1Kw
+         v1PQ==
+X-Gm-Message-State: AC+VfDyTDW7OMgpRyZNauivzpZtYcvINmZ3YyuccwHiu+rfZSUHIFLUy
+        ufDX2+epzx7Xo0swNbdBSYqa4vda1R45wTaDktDve6gqt9hlseAo01L1GFYlTLBicapBkJ0wZ/y
+        VvzSwrFEBBiA93QwhwpHmYPoysoZZWdT7Z1rKE1dSFA==
+X-Received: by 2002:a4a:dccc:0:b0:54b:ce85:490a with SMTP id h12-20020a4adccc000000b0054bce85490amr4906217oou.0.1686574292103;
+        Mon, 12 Jun 2023 05:51:32 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7zLTOWJnv96ffTmwdgO+vzkEG8P4Mwm7wW1mYTKkUTXLGwXHNy9GMezl/BTJdLH++Nny4/Vg==
+X-Received: by 2002:a4a:dccc:0:b0:54b:ce85:490a with SMTP id h12-20020a4adccc000000b0054bce85490amr4906211oou.0.1686574291870;
+        Mon, 12 Jun 2023 05:51:31 -0700 (PDT)
 Received: from magali.. ([2804:14c:bbe3:4606:d612:b95d:6bdc:8f6d])
-        by smtp.gmail.com with ESMTPSA id j22-20020a4ad196000000b00529cc3986c8sm3157193oor.40.2023.06.12.05.51.23
+        by smtp.gmail.com with ESMTPSA id j22-20020a4ad196000000b00529cc3986c8sm3157193oor.40.2023.06.12.05.51.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 05:51:27 -0700 (PDT)
+        Mon, 12 Jun 2023 05:51:31 -0700 (PDT)
 From:   Magali Lemes <magali.lemes@canonical.com>
 To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         pabeni@redhat.com, shuah@kernel.org, dsahern@gmail.com
 Cc:     andrei.gherzan@canonical.com, netdev@vger.kernel.org,
         David Ahern <dsahern@kernel.org>,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/4] selftests: net: vrf-xfrm-tests: change authentication and encryption algos
-Date:   Mon, 12 Jun 2023 09:51:06 -0300
-Message-Id: <20230612125107.73795-4-magali.lemes@canonical.com>
+Subject: [PATCH v3 4/4] selftests: net: fcnal-test: check if FIPS mode is enabled
+Date:   Mon, 12 Jun 2023 09:51:07 -0300
+Message-Id: <20230612125107.73795-5-magali.lemes@canonical.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230612125107.73795-1-magali.lemes@canonical.com>
 References: <20230612125107.73795-1-magali.lemes@canonical.com>
@@ -82,13 +82,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The vrf-xfrm-tests tests use the hmac(md5) and cbc(des3_ede)
-algorithms for performing authentication and encryption, respectively.
-This causes the tests to fail when fips=1 is set, since these algorithms
-are not allowed in FIPS mode. Therefore, switch from hmac(md5) and
-cbc(des3_ede) to hmac(sha1) and cbc(aes), which are FIPS compliant.
+There are some MD5 tests which fail when the kernel is in FIPS mode,
+since MD5 is not FIPS compliant. Add a check and only run those tests
+if FIPS mode is not enabled.
 
-Fixes: 3f251d741150 ("selftests: Add tests for vrf and xfrms")
+Fixes: f0bee1ebb5594 ("fcnal-test: Add TCP MD5 tests")
+Fixes: 5cad8bce26e01 ("fcnal-test: Add TCP MD5 tests for VRF")
 Reviewed-by: David Ahern <dsahern@kernel.org>
 Signed-off-by: Magali Lemes <magali.lemes@canonical.com>
 ---
@@ -97,90 +96,75 @@ No change in v3.
 Changes in v2:
  - Add R-b tag.
 
- tools/testing/selftests/net/vrf-xfrm-tests.sh | 32 +++++++++----------
- 1 file changed, 16 insertions(+), 16 deletions(-)
+ tools/testing/selftests/net/fcnal-test.sh | 27 ++++++++++++++++-------
+ 1 file changed, 19 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/net/vrf-xfrm-tests.sh b/tools/testing/selftests/net/vrf-xfrm-tests.sh
-index 184da81f554f..452638ae8aed 100755
---- a/tools/testing/selftests/net/vrf-xfrm-tests.sh
-+++ b/tools/testing/selftests/net/vrf-xfrm-tests.sh
-@@ -264,60 +264,60 @@ setup_xfrm()
- 	ip -netns host1 xfrm state add src ${HOST1_4} dst ${HOST2_4} \
- 	    proto esp spi ${SPI_1} reqid 0 mode tunnel \
- 	    replay-window 4 replay-oseq 0x4 \
--	    auth-trunc 'hmac(md5)' ${AUTH_1} 96 \
--	    enc 'cbc(des3_ede)' ${ENC_1} \
-+	    auth-trunc 'hmac(sha1)' ${AUTH_1} 96 \
-+	    enc 'cbc(aes)' ${ENC_1} \
- 	    sel src ${h1_4} dst ${h2_4} ${devarg}
+diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
+index 21ca91473c09..ee6880ac3e5e 100755
+--- a/tools/testing/selftests/net/fcnal-test.sh
++++ b/tools/testing/selftests/net/fcnal-test.sh
+@@ -92,6 +92,13 @@ NSC_CMD="ip netns exec ${NSC}"
  
- 	ip -netns host2 xfrm state add src ${HOST1_4} dst ${HOST2_4} \
- 	    proto esp spi ${SPI_1} reqid 0 mode tunnel \
- 	    replay-window 4 replay-oseq 0x4 \
--	    auth-trunc 'hmac(md5)' ${AUTH_1} 96 \
--	    enc 'cbc(des3_ede)' ${ENC_1} \
-+	    auth-trunc 'hmac(sha1)' ${AUTH_1} 96 \
-+	    enc 'cbc(aes)' ${ENC_1} \
- 	    sel src ${h1_4} dst ${h2_4}
+ which ping6 > /dev/null 2>&1 && ping6=$(which ping6) || ping6=$(which ping)
  
++# Check if FIPS mode is enabled
++if [ -f /proc/sys/crypto/fips_enabled ]; then
++	fips_enabled=`cat /proc/sys/crypto/fips_enabled`
++else
++	fips_enabled=0
++fi
++
+ ################################################################################
+ # utilities
  
- 	ip -netns host1 xfrm state add src ${HOST2_4} dst ${HOST1_4} \
- 	    proto esp spi ${SPI_2} reqid 0 mode tunnel \
- 	    replay-window 4 replay-oseq 0x4 \
--	    auth-trunc 'hmac(md5)' ${AUTH_2} 96 \
--	    enc 'cbc(des3_ede)' ${ENC_2} \
-+	    auth-trunc 'hmac(sha1)' ${AUTH_2} 96 \
-+	    enc 'cbc(aes)' ${ENC_2} \
- 	    sel src ${h2_4} dst ${h1_4} ${devarg}
+@@ -1216,7 +1223,7 @@ ipv4_tcp_novrf()
+ 	run_cmd nettest -d ${NSA_DEV} -r ${a}
+ 	log_test_addr ${a} $? 1 "No server, device client, local conn"
  
- 	ip -netns host2 xfrm state add src ${HOST2_4} dst ${HOST1_4} \
- 	    proto esp spi ${SPI_2} reqid 0 mode tunnel \
- 	    replay-window 4 replay-oseq 0x4 \
--	    auth-trunc 'hmac(md5)' ${AUTH_2} 96 \
--	    enc 'cbc(des3_ede)' ${ENC_2} \
-+	    auth-trunc 'hmac(sha1)' ${AUTH_2} 96 \
-+	    enc 'cbc(aes)' ${ENC_2} \
- 	    sel src ${h2_4} dst ${h1_4}
- 
- 
- 	ip -6 -netns host1 xfrm state add src ${HOST1_6} dst ${HOST2_6} \
- 	    proto esp spi ${SPI_1} reqid 0 mode tunnel \
- 	    replay-window 4 replay-oseq 0x4 \
--	    auth-trunc 'hmac(md5)' ${AUTH_1} 96 \
--	    enc 'cbc(des3_ede)' ${ENC_1} \
-+	    auth-trunc 'hmac(sha1)' ${AUTH_1} 96 \
-+	    enc 'cbc(aes)' ${ENC_1} \
- 	    sel src ${h1_6} dst ${h2_6} ${devarg}
- 
- 	ip -6 -netns host2 xfrm state add src ${HOST1_6} dst ${HOST2_6} \
- 	    proto esp spi ${SPI_1} reqid 0 mode tunnel \
- 	    replay-window 4 replay-oseq 0x4 \
--	    auth-trunc 'hmac(md5)' ${AUTH_1} 96 \
--	    enc 'cbc(des3_ede)' ${ENC_1} \
-+	    auth-trunc 'hmac(sha1)' ${AUTH_1} 96 \
-+	    enc 'cbc(aes)' ${ENC_1} \
- 	    sel src ${h1_6} dst ${h2_6}
- 
- 
- 	ip -6 -netns host1 xfrm state add src ${HOST2_6} dst ${HOST1_6} \
- 	    proto esp spi ${SPI_2} reqid 0 mode tunnel \
- 	    replay-window 4 replay-oseq 0x4 \
--	    auth-trunc 'hmac(md5)' ${AUTH_2} 96 \
--	    enc 'cbc(des3_ede)' ${ENC_2} \
-+	    auth-trunc 'hmac(sha1)' ${AUTH_2} 96 \
-+	    enc 'cbc(aes)' ${ENC_2} \
- 	    sel src ${h2_6} dst ${h1_6} ${devarg}
- 
- 	ip -6 -netns host2 xfrm state add src ${HOST2_6} dst ${HOST1_6} \
- 	    proto esp spi ${SPI_2} reqid 0 mode tunnel \
- 	    replay-window 4 replay-oseq 0x4 \
--	    auth-trunc 'hmac(md5)' ${AUTH_2} 96 \
--	    enc 'cbc(des3_ede)' ${ENC_2} \
-+	    auth-trunc 'hmac(sha1)' ${AUTH_2} 96 \
-+	    enc 'cbc(aes)' ${ENC_2} \
- 	    sel src ${h2_6} dst ${h1_6}
+-	ipv4_tcp_md5_novrf
++	[ "$fips_enabled" = "1" ] || ipv4_tcp_md5_novrf
  }
  
+ ipv4_tcp_vrf()
+@@ -1270,9 +1277,11 @@ ipv4_tcp_vrf()
+ 	log_test_addr ${a} $? 1 "Global server, local connection"
+ 
+ 	# run MD5 tests
+-	setup_vrf_dup
+-	ipv4_tcp_md5
+-	cleanup_vrf_dup
++	if [ "$fips_enabled" = "0" ]; then
++		setup_vrf_dup
++		ipv4_tcp_md5
++		cleanup_vrf_dup
++	fi
+ 
+ 	#
+ 	# enable VRF global server
+@@ -2772,7 +2781,7 @@ ipv6_tcp_novrf()
+ 		log_test_addr ${a} $? 1 "No server, device client, local conn"
+ 	done
+ 
+-	ipv6_tcp_md5_novrf
++	[ "$fips_enabled" = "1" ] || ipv6_tcp_md5_novrf
+ }
+ 
+ ipv6_tcp_vrf()
+@@ -2842,9 +2851,11 @@ ipv6_tcp_vrf()
+ 	log_test_addr ${a} $? 1 "Global server, local connection"
+ 
+ 	# run MD5 tests
+-	setup_vrf_dup
+-	ipv6_tcp_md5
+-	cleanup_vrf_dup
++	if [ "$fips_enabled" = "0" ]; then
++		setup_vrf_dup
++		ipv6_tcp_md5
++		cleanup_vrf_dup
++	fi
+ 
+ 	#
+ 	# enable VRF global server
 -- 
 2.34.1
 
