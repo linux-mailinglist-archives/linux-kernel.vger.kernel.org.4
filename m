@@ -2,101 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38A8B72B5C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 05:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B639E72B5CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 05:14:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234516AbjFLDMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 23:12:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46608 "EHLO
+        id S232909AbjFLDON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 23:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234498AbjFLDMD (ORCPT
+        with ESMTP id S229604AbjFLDOJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 23:12:03 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8D01708;
-        Sun, 11 Jun 2023 20:11:01 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b3b3f67ad6so12458515ad.3;
-        Sun, 11 Jun 2023 20:11:00 -0700 (PDT)
+        Sun, 11 Jun 2023 23:14:09 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 426C010D
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 20:13:46 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-53fbf2c42bfso2570417a12.3
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 20:13:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686539460; x=1689131460;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=L6KNbaFn2nG2SIGK/gZ66YDTXs40QpUnGoY8mioLa8s=;
-        b=lBXuMbEAI+d/a17F/z0dRn8RWtleBtTS4saBM/sSHTcjRIt08ZLyAEh9+16NanOfmm
-         HMJi4EhSnsCccVLjnSZSF6zciNU0kXsoW2LGxTPBA3dwe09h926aoOZUokv9y0uyA9Th
-         K/f0Et0APIwdPSdwahU729BbKI92BVxf5bWGMTggwXEJnbNBm5uRLhmv8gV+84RDZq6x
-         sbWe9ciO8FcFQq6ho66/H5Hh0dqWCPpvV3t4acOi+F1GLApycFLQzUyYCxENdfhUusTn
-         QR5nWs3lKi9kmTfe4QERnG4JxIxjOW878DCS8FMTO+64KFdick7pGr1cJL4Dngj0clGw
-         qNGg==
+        d=bytedance.com; s=google; t=1686539625; x=1689131625;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=isvk/E9G1J5c+bipF9hN5zG+Nag5iOn+AJ5rYPC8Si8=;
+        b=azPuT2b/FtHoAE095FDR2kcjtJf9/JJ1kwqBOO/u2aEEI3Upa/kUJnA5vvloGhQG7r
+         Iq+fbnSJBqkhGGYeCBgoOWvSIujRe8NiJ3FYP1EHlVv7vrfk6oxNh8ZHXDfYsBuKotAy
+         +5+Cpmfhr7aM9znnX2mKAAj3dqHQUyVUhQZN1OLISWBXX9O8eJHZ7BIZAYE5CXkzSFC6
+         sZvc2fzdRRDexf2en3ztWWHCPpXkv4oj5GFlhfIkzBO3Xp/0g8psQ5l1YC4ye66gAwfH
+         ghNd3rtQE07xppYBOMZIBJDrr4kp5uJ8mKIhAXPrM2LZE4peyAM6++6FZZ1os15mN2Ie
+         Yedw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686539460; x=1689131460;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=L6KNbaFn2nG2SIGK/gZ66YDTXs40QpUnGoY8mioLa8s=;
-        b=WOjSfOaZxcxy2Y/T0IKzfeucoBNJHIkdJTpnyGWNnHZJumEBz0RUpw2lcMHCRvx/Ap
-         nBX1AL/rtiGbXH52wwugeGCOqHB5M1TXgYwXT5mTLKXc8TE9Nxdxy4FYy1Rmta4TRLKt
-         PD/35yFJQw9n8BbwkgUj+07RAJGPcrFYfd6oZyoXpeXuXk6xUIUP+m6uKZYeT40PzywD
-         HJhDxBWO4vpv//JyjBEmi/owxy2alMVU6BKNT5x0dILw2gfmhYArEo6/zW7jlCB7F0xh
-         MKY1XM7JWrci8Bw6fpymtpt6ewA1TzoblNC+PHJ3JkygDVZHVHmnKC23tsjV4MhizJ5q
-         9uzg==
-X-Gm-Message-State: AC+VfDwlIB+blJ2D+0+LujDjSage/eNppjtCbD2Seuzpdz40+8jyj/u7
-        Oq6KTAYnd8LmK/sfI45dcj2pzt1aRME=
-X-Google-Smtp-Source: ACHHUZ5wZr9qOHFUvmerp0a4J9VaQhZ8h1Dq44zp133YyZaRR8UzBZ+oosivN3bLdcSADgfOv6IJGA==
-X-Received: by 2002:a17:902:db0f:b0:1af:981b:eeff with SMTP id m15-20020a170902db0f00b001af981beeffmr6481619plx.64.1686539460405;
-        Sun, 11 Jun 2023 20:11:00 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e6-20020a170902cf4600b001b24857d1f2sm6986103plg.188.2023.06.11.20.10.58
+        d=1e100.net; s=20221208; t=1686539625; x=1689131625;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=isvk/E9G1J5c+bipF9hN5zG+Nag5iOn+AJ5rYPC8Si8=;
+        b=dkky/CwYB5VfI9xvaxV+hDFp7G70GDriy30O9j22IcXq8cWhV9jvZPYXeE/KvSwYA9
+         1LIuKswwlvbQbrL4Sk5JNvSHyvz+KfYUrsIcxQO0ffJNNHGYSsNLsYjUUAb/aG9P4kG/
+         hxBytci0+UtzD0Y7uo8NZqV/PmEwY/FWya/vYAZdm+Xppaj+Zo9W8Oi6m0u+guQ2EBaS
+         of6TjfkNjDhvxFZaVYvQbXtzGicRPUON+2WTdJUcJQgTDqdGsAwjud76mCcGah/4VkWD
+         a5UzlWD7w7q06M7DsUfRHzvjF3m0POcAvhBySCy3vaviIJsHX8zNe7y55od1CpzJZvwS
+         ZyxA==
+X-Gm-Message-State: AC+VfDyQryuMTAh/Fk1RVw6I28EVB3csPFWic46p3SIT58Bsve56Wz5O
+        wtR6wX8m9bvzlpPaGcCKaOVN8A==
+X-Google-Smtp-Source: ACHHUZ4+3GyKjWyJiTMgFWqIeax2k+2coVDDCLctZJq+F7ehqqhkVNUKOb3HU/wA9VbOPBh1S6xj+A==
+X-Received: by 2002:a17:90b:3b52:b0:259:17ba:e89a with SMTP id ot18-20020a17090b3b5200b0025917bae89amr7216391pjb.34.1686539625689;
+        Sun, 11 Jun 2023 20:13:45 -0700 (PDT)
+Received: from ?IPV6:fdbd:ff1:ce00:11b7:189f:bf83:942e:7892? ([240e:694:e21:b::2])
+        by smtp.gmail.com with ESMTPSA id 14-20020a17090a190e00b00259b729eea9sm6800414pjg.8.2023.06.11.20.13.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 11 Jun 2023 20:10:59 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <898a6ebb-b0cc-5a48-30da-c4a5dc19d1a4@roeck-us.net>
-Date:   Sun, 11 Jun 2023 20:10:57 -0700
+        Sun, 11 Jun 2023 20:13:45 -0700 (PDT)
+Message-ID: <d6d19a61-a584-1839-e6cc-ea63479ca800@bytedance.com>
+Date:   Mon, 12 Jun 2023 11:13:41 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [RFC] sht3x code modifcation
-To:     JuenKit Yip <JuenKit_Yip@hotmail.com>, jdelvare@suse.com
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <DB4PR10MB62612F917CF1BF8FB03927609254A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
-Content-Language: en-US
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <DB4PR10MB62612F917CF1BF8FB03927609254A@DB4PR10MB6261.EURPRD10.PROD.OUTLOOK.COM>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [External] Re: [PATCH] cgroup: rstat: Simplified
+ cgroup_base_stat_flush() update last_bstat logic
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     tj@kernel.org, lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230518124142.57644-1-jiahao.os@bytedance.com>
+ <f39b9229-e59c-2b1c-7f3f-1aeedfad44dc@bytedance.com>
+ <5g73i4yvi4ub4dqrf4dnq5qghkyckoygmgd2st6be3gg7twww2@w6zim6nxpt3b>
+ <4d49f7e7-2488-9690-258e-34e617cfef6f@bytedance.com>
+ <remnwctqmxleig7ywt6puhxnpmzjo7xm6hlfhpnul46ulfnw7j@36sbuxhuatto>
+From:   Hao Jia <jiahao.os@bytedance.com>
+In-Reply-To: <remnwctqmxleig7ywt6puhxnpmzjo7xm6hlfhpnul46ulfnw7j@36sbuxhuatto>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/11/23 19:16, JuenKit Yip wrote:
-> Hi All,
+
+
+On 2023/5/24 Michal Koutný wrote:
+> On Wed, May 24, 2023 at 02:54:10PM +0800, Hao Jia <jiahao.os@bytedance.com> wrote:
+>> Yes, so we need @curr to record the bstat value after the sequence fetch is
+>> completed.
 > 
-> I was using sht3x driver in my linux device but I saw that it should be put in IIO module properly.
+> No, I still don't see a problem that it solves. If you find incorrect
+> data being reported, please explain it more/with an example.
+> 
+>> Yes, but it may not be obvious.
+>> Another reason is that when we complete an update, we snapshot last_bstat as
+>> the current bstat, which is better for readers to understand. Arithmetics is
+>> somewhat obscure.
+> 
+> The readability here is subjective. It'd be interesting to have some
+> data comparing arithmetics vs copying though.
 > 
 
-Why ?
+Sorry for replying you so late. I am using RDTSC on my machine (an Intel 
+Xeon(R) Platinum 8260 CPU@2.40GHz machine with 2 NUMA nodes each of 
+which has 24 cores with SMT2 enabled, so 96 CPUs in total.) to compare 
+the time consumption of arithmetics vs copying. There is almost no 
+difference in the time consumption between arithmetics and copying.
 
-> In fact, I am going to add medium-repeatabilty and device-tree support on it, and planning to add more sysfs interface "repeatability". The orginal version did not support to modify the repeatability after device loaded.
-> 
 
-I have no idea what you are talking about.
 
-Guenter
-
-> If there is any comment or idea, kindly show it.
-> 
-> 
-> Thanks
-> 
-> Juen Kit Yip
-> 
-
+> HTH,
+> Michal
