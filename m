@@ -2,137 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E02472B527
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 03:41:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2750C72B52A
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 03:43:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232218AbjFLBlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 21:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52600 "EHLO
+        id S232387AbjFLBnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 21:43:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjFLBlt (ORCPT
+        with ESMTP id S229531AbjFLBm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 21:41:49 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E80C7;
-        Sun, 11 Jun 2023 18:41:48 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-6537d2a8c20so3025284b3a.2;
-        Sun, 11 Jun 2023 18:41:48 -0700 (PDT)
+        Sun, 11 Jun 2023 21:42:59 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A41A0F0;
+        Sun, 11 Jun 2023 18:42:58 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f6e13940daso39471865e9.0;
+        Sun, 11 Jun 2023 18:42:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686534107; x=1689126107;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yopFSgNdaN//0wszcig4teNnA065e5aIyJpZ3l6KI2Y=;
-        b=DqASSGU8054Ojl4Rp41Eu/AmjYA9jTSyaEJ0cT4Ok9haxIh7MnmOLTwG9MBAEI8LPl
-         FKGFpjsxHXwnExkVBlW5jrYbY1nZqzFZnDQxVk2Mq1G2B1D1Iz5/ycZl92w921k6aNBI
-         nlR3oS+J1LhledE6iR2o6PWPq3zPjFK/qL/iGluaDWpJdqyRvDWI1tD7QRtcVWVYXlgw
-         ERPqU8XoDjjFIVqIyhWizvwdlyzIMmId3RwgXncXMZ02L8OpyReC9xryVc8H6eW98Azc
-         nrIYr1yFfeSrDGJbt4HM3vAZ4Jte68RK47V/GK3oFmdQcqqf8qqV5z4yQkNHUmAJAOML
-         EO0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686534107; x=1689126107;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1686534177; x=1689126177;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yopFSgNdaN//0wszcig4teNnA065e5aIyJpZ3l6KI2Y=;
-        b=MC+zpvDZ4oSqAJUNxN0NjOcQSKGTn259ilXtqvLc1fxpLY61EuS/jQzv91aGjpLYTf
-         IWPcf7yladti8qLm6Fu1Bt3AOs/CFw/15y9quEQuPlted8pMganXUUTihKzo8YUakTOW
-         F3fR+b4AjEyxgLwH0YDEsu/V9j1EmIAzNsMDYk9vhDTZJ3Eh4cmSN6vPlI5LSrxd8Mzg
-         dRDPqVEZ4+RNsd0ayp+9RhGu9DNSHeJvmL8TIWZrxSL0Z4y7T72xXk0gDIJF7ZWtuhFq
-         ttKAMrWwxYcVcsbFg7zaLV7EdUUooR1SSHQL/4+LIrb25EUTGaFpOingWQpj+z4cjIOy
-         mlpQ==
-X-Gm-Message-State: AC+VfDxE5u3+njANwR4YVMmIHYSFxO3rWcrswc0gtl74aqvQOoR/y4+h
-        hlZ0d+cXCHfrjQ51/xbDD7o=
-X-Google-Smtp-Source: ACHHUZ6F08vBBoX4T/x09Do29EIHP3a1t6uCNlx2RFx9MU/8OcrMmTEmgkGCtC7CKgkw3zbk3GyT/w==
-X-Received: by 2002:a05:6a20:8f04:b0:110:9b0b:71ab with SMTP id b4-20020a056a208f0400b001109b0b71abmr10344083pzk.40.1686534107283;
-        Sun, 11 Jun 2023 18:41:47 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-80.three.co.id. [180.214.232.80])
-        by smtp.gmail.com with ESMTPSA id z17-20020a631911000000b00548fb73874asm4790988pgl.37.2023.06.11.18.41.46
+        bh=QJ3L8d7H1al/XCBYgfDABPwcj+9CgFQ1uhpMmg8tLFw=;
+        b=YrCSBa/HlivCvBCVejVf4szh9u3ZzJk/97t1dAoztEYwGqYJTlygJHfrPmMkhiS1bs
+         P5ZG8JU8IRmtg/XG+xEGQeH2eqJ48dKoxG2X2QWO62rV2dA2hoEv3q4BU2pkG4RROSVI
+         UbixJWQkkFKu8U76y1o9QtdjnARevZmbTO9ooewcpFsWMq/d6GVoIXxX37G+xJp+jsEq
+         2yMO/GgtI/5B7Wc20hYJNeIcuNqyL5BzOp0c3w9widfsHWpmLUOAxCMg5+8qAniUx96N
+         iDZr4XKq0POAXbGHeelfw5AUNUQroMEl26VSPNqPLnZXDgdVX7CN/xuu2UbDPLLTxy6n
+         +2TA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686534177; x=1689126177;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QJ3L8d7H1al/XCBYgfDABPwcj+9CgFQ1uhpMmg8tLFw=;
+        b=Xt8EPvpo8eNpub0N34WhLwA32+HSa1VGzaY2CKI8C4j6QwAuLcifitD9fiWY397MoF
+         6nVXv4E5a1vrXlaIUsEzUMb4M8jQt1xyRIOr/W25qZzjhrmVcAFftl3JPguYBOpF89Cx
+         c6QJ8RuzMRvgbAGyVHWASRsGMJSd0KK4vulnQGIoV9H9T3v793zbYvuX2NM0OgW2nTLH
+         xrfPnBlcPdr/vxU8+xuHpPZbLI8MSHfyhGW/AxiYK3jIZwlPu814QCwmpxNRAh5P6Xc1
+         3kOeFh8+IFxtQUSLC7Jyt7a89bwfTya0EtDIrIlwq81u6mVMF/XVbeej/eKPqJJyRoBH
+         dI9Q==
+X-Gm-Message-State: AC+VfDwK71/m4AZdwQZAtuoHxVVLGQUmybu/EVPtNoYIwgjmhfoB1+FV
+        kjRWkGssY0Q1TK2VjG8rLcxG23getPUxPQ==
+X-Google-Smtp-Source: ACHHUZ5uZyXyqI1SDe4IGuFmMUgHBiVfmTfAk8MyK/tXOuq4WxiqalciA8Nk3idZyxBOnCyPchXxaw==
+X-Received: by 2002:a05:600c:aca:b0:3f6:44e:9d8 with SMTP id c10-20020a05600c0aca00b003f6044e09d8mr6784156wmr.22.1686534176921;
+        Sun, 11 Jun 2023 18:42:56 -0700 (PDT)
+Received: from localhost.localdomain (bba-2-50-150-163.alshamil.net.ae. [2.50.150.163])
+        by smtp.gmail.com with ESMTPSA id a11-20020a05600c224b00b003f8126bcf34sm5421323wmm.48.2023.06.11.18.42.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jun 2023 18:41:46 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 211C2106B23; Mon, 12 Jun 2023 08:41:43 +0700 (WIB)
-Date:   Mon, 12 Jun 2023 08:41:42 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Shaomin Deng <dengshaomin@cdjrlc.com>, viro@zeniv.linux.org.uk,
-        brauner@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mao Zhu <zhumao001@208suo.com>
-Subject: Re: [PATCH] fs: Fix comment typo
-Message-ID: <ZIZ31kVtPmaYBqa0@debian.me>
-References: <20230611123314.5282-1-dengshaomin@cdjrlc.com>
- <ZIXEHHvkJVlmE_c4@debian.me>
- <87edmhok1h.fsf@meer.lwn.net>
+        Sun, 11 Jun 2023 18:42:56 -0700 (PDT)
+From:   Yongsheng Yang <iyysheng@gmail.com>
+To:     linux@roeck-us.net
+Cc:     corbet@lwn.net, iyysheng@gmail.com, jdelvare@suse.com,
+        linux-doc@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] Documentation/hwmon: Fix description of devm_hwmon_device_unregister()
+Date:   Mon, 12 Jun 2023 05:42:46 +0400
+Message-ID: <20230612014246.1394-1-iyysheng@gmail.com>
+X-Mailer: git-send-email 2.41.0.windows.1
+In-Reply-To: <e605a8d8-4f40-447d-8238-eccb7e22342a@roeck-us.net>
+References: <e605a8d8-4f40-447d-8238-eccb7e22342a@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="FGXs17wAABqF2OWs"
-Content-Disposition: inline
-In-Reply-To: <87edmhok1h.fsf@meer.lwn.net>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> On Fri, Jun 09, 2023 at 11:55:10AM +0400, Yongsheng Yang wrote:
+> > Use devm_hwmon_device_register_with_info to replace
+> > hwmon_device_register_with_info in description of
+> > devm_hwmon_device_unregister.
+> > 
+> 
+> You didn't add () to function names, but I guess it is better to do that
+> in a separate patch anyway.
+> 
+> Applied.
+> 
+> Thanks,
+> Guenter
+> 
+Ok, I just add () to function names in commit message title. I will add
+() to function names releate in the whole commit message. Then I will
+post the updated version.
 
---FGXs17wAABqF2OWs
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks
 
-On Sun, Jun 11, 2023 at 01:50:34PM -0600, Jonathan Corbet wrote:
-> Bagas Sanjaya <bagasdotme@gmail.com> writes:
->=20
-> > On Sun, Jun 11, 2023 at 08:33:14AM -0400, Shaomin Deng wrote:
-> >> From: Mao Zhu <zhumao001@208suo.com>
-> >>=20
-> >> Delete duplicated word in comment.
-> >
-> > On what function?
->=20
-> Bagas, do I *really* have to ask you, yet again, to stop nitpicking our
-> contributors into the ground?  It appears I do.  So:
->=20
-> Bagas, *stop* this.  It's a typo patch removing an extraneous word.  The
-> changelog is fine.  We absolutely do not need you playing changelog cop
-> and harassing contributors over this kind of thing.
+Yongsheng
+> > Signed-off-by: Yongsheng Yang <iyysheng@gmail.com>
+> > Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> > ---
+> >  Documentation/hwmon/hwmon-kernel-api.rst | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
+> > index c2d1e0299d8d..6cacf7daf25c 100644
+> > --- a/Documentation/hwmon/hwmon-kernel-api.rst
+> > +++ b/Documentation/hwmon/hwmon-kernel-api.rst
+> > @@ -66,7 +66,7 @@ hwmon_device_register_with_info.
+> >  
+> >  devm_hwmon_device_unregister does not normally have to be called. It is only
+> >  needed for error handling, and only needed if the driver probe fails after
+> > -the call to hwmon_device_register_with_info and if the automatic (device
+> > +the call to devm_hwmon_device_register_with_info and if the automatic (device
+> >  managed) removal would be too late.
+> >  
+> >  All supported hwmon device registration functions only accept valid device
 
-OK, thanks for reminding me again.
-
-At the time of reviewing, I had bad feeling that @cdjrlc.com people will
-ignore review comments (I betted due to mail setup problem that prevents
-them from properly repling to mailing lists, which is unfortunate). I
-was nitpicking because the diff context doesn't look clear to me (what
-function name?).
-
->=20
-> >> Signed-off-by: Mao Zhu <zhumao001@208suo.com>
-> >
-> > You're carrying someone else's patch, so besides SoB from original
-> > author, you need to also have your own SoB.
->=20
-> This, instead, is a valid problem that needs to be fixed.
-
-OK.
-
-Sorry for my inconvenience.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---FGXs17wAABqF2OWs
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZIZ31gAKCRD2uYlJVVFO
-oxQkAQD/hoO/EDmJSjuflzqFnpSdkF1t/o215NOR4w7GAu2RUwD/TkrHHm+FiR4L
-J5tKq3R8DIFZrBrP4yfaUIkP3SMwuQk=
-=tNfU
------END PGP SIGNATURE-----
-
---FGXs17wAABqF2OWs--
