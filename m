@@ -2,78 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5100072D441
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 00:15:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A85A72D442
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 00:16:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238523AbjFLWPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 18:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39662 "EHLO
+        id S233276AbjFLWQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 18:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238339AbjFLWPJ (ORCPT
+        with ESMTP id S234811AbjFLWQ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 18:15:09 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047BC10F2;
-        Mon, 12 Jun 2023 15:15:07 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35CJrWqn018957;
-        Mon, 12 Jun 2023 22:15:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=pGyvwgOlbTLUo+V/Y9nEOaXJa/euEuK6f+dzmjv3IZ8=;
- b=Pp94PJcnhy3iWHX0XFwvsvm7xLHUnN6/KpEcl2Sqmr7uEO5U8BBwDWRKFl6Emiv+d5z4
- 2JFYq0uQ5CygKCFpW9KsEnpgXWJxq6r1ZRQ7lRkWtFRzBsPlYd3HWnQP/iCDvwC8dmB6
- D+rLoK/l8QUjEAtDJ5D6hLelfkQqV/U3ZvjGEZbrWCQ8VywO2V47i+hLBVUHRzdpUITa
- P+a8ZxlZoOw5ZjJpbJcYJLw4W1M2qLYFXk5qpppESD+DSuvNRmKRHi/9YcYSHbUakZUQ
- SdZawfccgLwQn1QR7Wt0y15Ih1t3boAbZmW+PxpZ7/W01+14w/pNor9eeyL5R5pq3Ldb DQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r60pesfk4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jun 2023 22:15:04 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35CMF3pY022238
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jun 2023 22:15:03 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Mon, 12 Jun 2023 15:15:02 -0700
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 3/3] arm64: dts: qcom: sc8180x-flex5g: Wire up USB Type-C
-Date:   Mon, 12 Jun 2023 15:14:56 -0700
-Message-ID: <20230612221456.1887533-4-quic_bjorande@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230612221456.1887533-1-quic_bjorande@quicinc.com>
-References: <20230612221456.1887533-1-quic_bjorande@quicinc.com>
+        Mon, 12 Jun 2023 18:16:26 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E38E10CB
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 15:16:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686608184; x=1718144184;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=YCFjBDLB4Ig6iZIjnUtrvpzt6xRtCATwkSb2vj5LVo0=;
+  b=UNf/anWI2t4kV/cdcp70hyjW1kHODnrUIUQXqDy/YDs2JEsnfQ2YqL+Q
+   a1nJ/NCAdrIhWflwKfeu/lTDzOwl59C93uv4ddOSpKEhjMdDLBSK9XU9i
+   cTZnzxnFx0z9gE4/Ue0qj3wQ8PN45Ru5P3czDjRSxORX6xhSCC82FXQpk
+   1jz3/S69TvuJhCna/yF72aPCAFuFBfPWz6VACgHUg+6NcRsfMkMFlkdBX
+   DljCocsW5f7wOv7PPSqmhhAd2mwaicUhDfWZ0NFfJatCCtZkbkhTL90y4
+   Fh7I7xpU3AeQB/GDPfSpTz6K5mcob4/F0tLnUitBx5TVKIHLfVNG1hIiu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="342861316"
+X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
+   d="scan'208";a="342861316"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 15:16:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="824136836"
+X-IronPort-AV: E=Sophos;i="6.00,238,1681196400"; 
+   d="scan'208";a="824136836"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP; 12 Jun 2023 15:16:17 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1q8ppg-003JgV-0x;
+        Tue, 13 Jun 2023 01:16:16 +0300
+Date:   Tue, 13 Jun 2023 01:16:15 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Demi Marie Obenour <demi@invisiblethingslab.com>
+Cc:     Alexey Dobriyan <adobriyan@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Lee Jones <lee@kernel.org>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: Re: [PATCH v3 0/4] Make sscanf() stricter
+Message-ID: <ZIeZL42Ik6KgHFCG@smile.fi.intel.com>
+References: <6ab6adce-2318-4ae6-bde6-4317485639fd@p183>
+ <ZId/IA41c2sJyvE0@itl-email>
+ <ZIeHfBf3aB3vUgRM@smile.fi.intel.com>
+ <ZIeMyQXU49OcoxY2@itl-email>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: CqIVJeCj7HUS553nE3pthGnz8pCp_Y3h
-X-Proofpoint-ORIG-GUID: CqIVJeCj7HUS553nE3pthGnz8pCp_Y3h
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-12_16,2023-06-12_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 lowpriorityscore=0 clxscore=1015 spamscore=0
- adultscore=0 suspectscore=0 mlxlogscore=999 impostorscore=0 mlxscore=0
- phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306120191
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+In-Reply-To: <ZIeMyQXU49OcoxY2@itl-email>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,267 +83,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following the SC8180X Primus reference design, add pmic_glink and USB
-Type-C wiring for battery manager, external display and orientation
-switching.
+On Mon, Jun 12, 2023 at 05:23:18PM -0400, Demi Marie Obenour wrote:
+> On Tue, Jun 13, 2023 at 12:00:44AM +0300, Andy Shevchenko wrote:
+> > On Mon, Jun 12, 2023 at 04:25:01PM -0400, Demi Marie Obenour wrote:
+> > > On Mon, Jun 12, 2023 at 02:59:38PM +0300, Alexey Dobriyan wrote:
+> > > > > +	bool _placeholder;
+> > > > > +	return simple_strntoull(cp, INT_MAX, endp, base, &_placeholder);
+> > > > 
+> > > > This can be done without introducing dummy variables:
+> > > > 
+> > > > 	void f(bool *b)
+> > > > 	{
+> > > > 	}
+> > > > 
+> > > > 	f((bool[1]){});
+> > > 
+> > > This is more consise, but (at least to me) significantly less readable.
+> > > 
+> > > > > > lib/vsprintf.c:3727:26: error: unknown conversion type character ‘!’ in format [-Werror=format=]
+> > > > > So NAK.
+> > > > 
+> > > > Yeah, ! should go after format specifier like it does for %p.
+> > > 
+> > > I hadn't considered that.  Is the typical approach in Linux to use e.g.
+> > > %d%[!] if one wants a literal '!'?
+> > 
+> > It might be that the cleanest way we have is to create %p-like extensions to
+> > sscanf(). %p takes alnum as parameter and that is usually works since it makes
+> > a little sense to attach alnum suffix to the pointer.
+> > 
+> > (I don't like to have %dX, where X is alnum as we expanding our hack to
+> >  something which people don't expect to be altered even in the kernelm, you may
+> >  refer to the discussion about %de for printing errors)
+> 
+> Personally I’m not too worried about compatibility with userspace
+> sscanf(), except to the extent that -Werror=format can keep working.
+> Userspace sscanf() is almost useless: it has undefined behavior on
+> integer overflow and swallows spaces that should usually be rejected.
+> I typically either use strto*l() or (as I am currently doing for Xen’s
+> toolstack) just write my own parsing functions from scratch.
 
-Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
----
- .../boot/dts/qcom/sc8180x-lenovo-flex-5g.dts  | 196 ++++++++++++++++++
- 1 file changed, 196 insertions(+)
+`man sscanf` tells about %p, and currently we have no use (if I'm not mistaken)
+for %pj in printf(), so that can be used for %pj in sscanf() to avoid ambiguity
+with possible extensions to actually parse our %p extension-like strings.
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8180x-lenovo-flex-5g.dts b/arch/arm64/boot/dts/qcom/sc8180x-lenovo-flex-5g.dts
-index fe3b366e1435..677cb255fad2 100644
---- a/arch/arm64/boot/dts/qcom/sc8180x-lenovo-flex-5g.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8180x-lenovo-flex-5g.dts
-@@ -45,6 +45,84 @@ lid {
- 		};
- 	};
- 
-+	pmic-glink {
-+		compatible = "qcom,sc8180x-pmic-glink", "qcom,pmic-glink";
-+
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		connector@0 {
-+			compatible = "usb-c-connector";
-+			reg = <0>;
-+			power-role = "dual";
-+			data-role = "dual";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+
-+					pmic_glink_con0_hs: endpoint {
-+						remote-endpoint = <&usb_prim_role_switch>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+
-+					pmic_glink_con0_ss: endpoint {
-+						remote-endpoint = <&usb_prim_qmpphy_out>;
-+					};
-+				};
-+
-+				port@2 {
-+					reg = <2>;
-+
-+					pmic_glink_con0_sbu: endpoint {
-+						remote-endpoint = <&usbprim_sbu_mux>;
-+					};
-+				};
-+			};
-+		};
-+
-+		connector@1 {
-+			compatible = "usb-c-connector";
-+			reg = <1>;
-+			power-role = "dual";
-+			data-role = "dual";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				port@0 {
-+					reg = <0>;
-+
-+					pmic_glink_con1_hs: endpoint {
-+						remote-endpoint = <&usb_sec_role_switch>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+
-+					pmic_glink_con1_ss: endpoint {
-+						remote-endpoint = <&usb_sec_qmpphy_out>;
-+					};
-+				};
-+
-+				port@2 {
-+					reg = <2>;
-+
-+					pmic_glink_con1_sbu: endpoint {
-+						remote-endpoint = <&usbsec_sbu_mux>;
-+					};
-+				};
-+			};
-+		};
-+	};
-+
- 	reserved-memory {
- 		rmtfs_mem: rmtfs-region@85500000 {
- 			compatible = "qcom,rmtfs-mem";
-@@ -100,6 +178,44 @@ vreg_s4a_1p8: pm8150-s4-regulator {
- 
- 		vin-supply = <&vph_pwr>;
- 	};
-+
-+	usbprim-sbu-mux {
-+		compatible = "pericom,pi3usb102", "gpio-sbu-mux";
-+
-+		enable-gpios = <&tlmm 152 GPIO_ACTIVE_LOW>;
-+		select-gpios = <&tlmm 100 GPIO_ACTIVE_HIGH>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&usbprim_sbu_default>;
-+
-+		mode-switch;
-+		orientation-switch;
-+
-+		port {
-+			usbprim_sbu_mux: endpoint {
-+				remote-endpoint = <&pmic_glink_con0_sbu>;
-+			};
-+		};
-+	};
-+
-+	usbsec-sbu-mux {
-+		compatible = "pericom,pi3usb102", "gpio-sbu-mux";
-+
-+		enable-gpios = <&tlmm 188 GPIO_ACTIVE_LOW>;
-+		select-gpios = <&tlmm 187 GPIO_ACTIVE_HIGH>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&usbsec_sbu_default>;
-+
-+		mode-switch;
-+		orientation-switch;
-+
-+		port {
-+			usbsec_sbu_mux: endpoint {
-+				remote-endpoint = <&pmic_glink_con1_sbu>;
-+			};
-+		};
-+	};
- };
- 
- &apps_rsc {
-@@ -283,6 +399,24 @@ &mdss {
- 	status = "okay";
- };
- 
-+&mdss_dp0 {
-+	status = "okay";
-+};
-+
-+&mdss_dp0_out {
-+	data-lanes = <0 1>;
-+	remote-endpoint = <&usb_prim_qmpphy_dp_in>;
-+};
-+
-+&mdss_dp1 {
-+	status = "okay";
-+};
-+
-+&mdss_dp1_out {
-+	data-lanes = <0 1>;
-+	remote-endpoint = <&usb_sec_qmpphy_dp_in>;
-+};
-+
- &mdss_edp {
- 	data-lanes = <0 1 2 3>;
- 
-@@ -419,6 +553,8 @@ &usb_prim_qmpphy {
- 	vdda-phy-supply = <&vreg_l3c_1p2>;
- 	vdda-pll-supply = <&vreg_l5e_0p88>;
- 
-+	orientation-switch;
-+
- 	status = "okay";
- };
- 
-@@ -430,6 +566,18 @@ &usb_prim_dwc3 {
- 	dr_mode = "host";
- };
- 
-+&usb_prim_qmpphy_dp_in {
-+	remote-endpoint = <&mdss_dp0_out>;
-+};
-+
-+&usb_prim_qmpphy_out {
-+	remote-endpoint = <&pmic_glink_con0_ss>;
-+};
-+
-+&usb_prim_role_switch {
-+	remote-endpoint = <&pmic_glink_con0_hs>;
-+};
-+
- &usb_sec_hsphy {
- 	vdda-pll-supply = <&vreg_l5e_0p88>;
- 	vdda18-supply = <&vreg_l12a_1p8>;
-@@ -442,9 +590,23 @@ &usb_sec_qmpphy {
- 	vdda-phy-supply = <&vreg_l3c_1p2>;
- 	vdda-pll-supply = <&vreg_l5e_0p88>;
- 
-+	orientation-switch;
-+
- 	status = "okay";
- };
- 
-+&usb_sec_qmpphy_dp_in {
-+	remote-endpoint = <&mdss_dp1_out>;
-+};
-+
-+&usb_sec_qmpphy_out {
-+	remote-endpoint = <&pmic_glink_con1_ss>;
-+};
-+
-+&usb_sec_role_switch {
-+	remote-endpoint = <&pmic_glink_con1_hs>;
-+};
-+
- &usb_sec {
- 	status = "okay";
- };
-@@ -560,6 +722,40 @@ wake-n-pins {
- 		};
- 	};
- 
-+	usbprim_sbu_default: usbprim-sbu-state {
-+		oe-n-pins {
-+			pins = "gpio152";
-+			function = "gpio";
-+			bias-disable;
-+			drive-strength = <16>;
-+			output-high;
-+		};
-+
-+		sel-pins {
-+			pins = "gpio100";
-+			function = "gpio";
-+			bias-disable;
-+			drive-strength = <16>;
-+		};
-+	};
-+
-+	usbsec_sbu_default: usbsec-sbu-state {
-+		oe-n-pins {
-+			pins = "gpio188";
-+			function = "gpio";
-+			bias-disable;
-+			drive-strength = <16>;
-+			output-high;
-+		};
-+
-+		sel-pins {
-+			pins = "gpio187";
-+			function = "gpio";
-+			bias-disable;
-+			drive-strength = <16>;
-+		};
-+	};
-+
- 	uart13_state: uart13-state {
- 		cts-pins {
- 			pins = "gpio43";
+Not sure if others support the idea.
+
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 
