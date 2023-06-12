@@ -2,128 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEFE172C5C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 15:22:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5B5872C5DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 15:27:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235847AbjFLNWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 09:22:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
+        id S236459AbjFLN1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 09:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbjFLNWJ (ORCPT
+        with ESMTP id S236284AbjFLN1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 09:22:09 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2078.outbound.protection.outlook.com [40.107.95.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41937AC;
-        Mon, 12 Jun 2023 06:22:08 -0700 (PDT)
+        Mon, 12 Jun 2023 09:27:06 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C523DB;
+        Mon, 12 Jun 2023 06:27:04 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PSOGLaIT1W07/QXcfByUgnGyr8dC7b4WHH+MVqNCSq3sP2EHjGI0Ix9QWiudycYHUeRhvopf+3qzM7seIqxM2Kk/3vWisBaG1GKSj7v51xzW1+jRjyF90+NF8Cg0ouHbIij3Eg6JEgu3hPNymUzZq2o3Wuns3H6gsJDpP04ojDaKuGftmjS+1B7CJSVa7ctGZvk3Ez7bkCof3Jk/k8YwybOYqpnxzfI9r5i7zuVZXTswjQsJV0S0UKd+sn2rd9eecb9hle+m1D1Pe6YaKSA/gyg5xpaY3Bpto7eFL6Vevw5/EpAr1rXFVFze5Eu4Gc6x33zZ3p801jVncQDiq1Jl3w==
+ b=JBFy2+AyP8JH83bfkjP8XORxuwwshwyo1VxB2TuVxeEzMvZsIb8JcwZKBsUvU24YCmEb4cX7w9ihILV6fdI//4p94wt4WlKaYNplP7oDZFuQV4cwWN1QetnDgHMxjfOFqAnfZwIq6/ARU7M4N2xs4WAZe+33P22IUSDKWIOXSCl3BUz182Sn3XDf9EbhnWPgjg+jcGlO5zINwFBvZqKCv+YX44MkRFY7TmXGP06pJlaHKUqTZu95wXtzs9gdFMqOPc+Gc8j3PyPvj99eEs8sHNfOsBlrRhOxEm79ZpuWPRlwJRJNNh9MiGHSS1t2WIfrEzDITAw1DsQwkWPP0AQA2A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=s5mge1eShA5IQnwzWxQFDZ+08BVbyNHBjCPhmUwEXEk=;
- b=ByNIZbpZD0J43IGmhWvUBcF2YkjOUv9mukt+eXQaobAKjbNz/QIbMy+3xhFup3Vsi8N8jBHixK+8gsb2lt2llKdNfkeqHbVF46PQVEVeMnHSOpzS4R3dMNqfn44zcU5ZERBBhSppVOqnueHrPPUYth1PkrJDvD3f4XI8PISsIMO5D3Ci+HILP4dblYNjvXaKnbjuEVDLaBIrB0X46egdS6sPlZ/iIYipjmwRp+s5J0yNF+fz4BUwtqwMsMsAZa8J3vsHcVSzCsJuxa/z1BC2x274rjXTAkxqdSasozmFoiVlnj12gaC52512rJwL1mpkmg7S+gIiYmTf7jrltD4tJw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
+ bh=TKaGjzIg0X7wyKURCPGlcqPphHpdDF1+5arVR4u+two=;
+ b=k2MD/FAg6JBE91sDWxJBrXm6M5mVS8WCrRH2LqhXwOycAPAS3pbm/b9IHixipj/bhM+bHKBlc+A9WIUxjmWSiDkO3nm0kBvvJT0Cm5Zj5ct40iXeSExUFOCxTAvLz2P17Ahxw540oqvEQNeiIeoE9qyz3/DqDRCPi8HvP//K2U7YyKhzQsFmVMMchVYvaD8ZyJziDusf0+PilZHKljXR2jQdtgW9nJW7qHMIQBeM7QR77+D80GvvvXimLM0N+eC4lM3uB0Jvs8BfzHl54CwUFu7fNzNAVV3Ch/61KX0/jOBULHuhY1xEMecX6ClHSb1vlujF8APgJ+/MDELGHo5uxw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=s5mge1eShA5IQnwzWxQFDZ+08BVbyNHBjCPhmUwEXEk=;
- b=nSet+gvIGpLERmYxjQdEB6obqd0uSNgobY1wcCvpA3ZmG/3cZJ+Y4oSvAUbUMs1SJxF13FId6Jn6VIiUZcIUL20Cl8W+AEFW2mLYlQAMtJaNiLgpUPFUJoeqpaOLSD2Oou10XyuBa+zUOzvSmUV85XA5bQzSaR8H+ZpKDKPUYT4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BYAPR12MB3589.namprd12.prod.outlook.com (2603:10b6:a03:df::29)
- by CH3PR12MB8306.namprd12.prod.outlook.com (2603:10b6:610:12c::5) with
+ bh=TKaGjzIg0X7wyKURCPGlcqPphHpdDF1+5arVR4u+two=;
+ b=C7gRPCjX8+/ZfbFOVtUet85s+PKdidKqFGVNrEubfzzojKu8m07nhgmrQjI+P5RV2G/cZ965d+ozBILd+uXb5sH+FZR1igYKPhIaGBcY0TjIDcDjIl3mPsA8NVmyGcRiMW6/LEOsdsi+ZUeyx1Cd5X+ol+2gaC2wyVJ+uU+nLFg=
+Received: from DM6PR04CA0004.namprd04.prod.outlook.com (2603:10b6:5:334::9) by
+ IA1PR12MB8264.namprd12.prod.outlook.com (2603:10b6:208:3f5::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.44; Mon, 12 Jun
- 2023 13:22:05 +0000
-Received: from BYAPR12MB3589.namprd12.prod.outlook.com
- ([fe80::401e:2e7f:7c2b:6bff]) by BYAPR12MB3589.namprd12.prod.outlook.com
- ([fe80::401e:2e7f:7c2b:6bff%4]) with mapi id 15.20.6455.024; Mon, 12 Jun 2023
- 13:22:05 +0000
-Message-ID: <ff196b04-e8c5-52d9-852b-9a9cc7eecdd0@amd.com>
-Date:   Mon, 12 Jun 2023 15:21:58 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] accel/qaic: Fix dereferencing freed memory
-Content-Language: en-US
-To:     Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>,
-        Sukrut Bellary <sukrut.bellary@linux.com>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, linux-media@vger.kernel.org
-References: <20230610021200.377452-1-sukrut.bellary@linux.com>
- <fc979a4e-c30a-2606-9eec-afbba4fdd774@amd.com>
- <e3a867a8-284b-7250-b1b2-1956f533f6b0@quicinc.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <e3a867a8-284b-7250-b1b2-1956f533f6b0@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR0P281CA0091.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a9::11) To BYAPR12MB3589.namprd12.prod.outlook.com
- (2603:10b6:a03:df::29)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Mon, 12 Jun
+ 2023 13:27:01 +0000
+Received: from CY4PEPF0000E9D5.namprd05.prod.outlook.com
+ (2603:10b6:5:334:cafe::c1) by DM6PR04CA0004.outlook.office365.com
+ (2603:10b6:5:334::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.33 via Frontend
+ Transport; Mon, 12 Jun 2023 13:27:01 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CY4PEPF0000E9D5.mail.protection.outlook.com (10.167.241.76) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6500.22 via Frontend Transport; Mon, 12 Jun 2023 13:27:00 +0000
+Received: from pyuan-Splinter.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Mon, 12 Jun
+ 2023 08:26:56 -0500
+From:   Perry Yuan <perry.yuan@amd.com>
+To:     <rafael.j.wysocki@intel.com>, <viresh.kumar@linaro.org>,
+        <Ray.Huang@amd.com>, <Mario.Limonciello@amd.com>
+CC:     <Deepak.Sharma@amd.com>, <Wyes.Karny@amd.com>,
+        <gautham.shenoy@amd.com>, <Sunpeng.Li@amd.com>,
+        <Xinmei.Huang@amd.com>, <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3] cpufreq: amd-pstate: Set default governor to schedutil
+Date:   Mon, 12 Jun 2023 09:26:48 -0400
+Message-ID: <20230612132648.3181772-1-perry.yuan@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3589:EE_|CH3PR12MB8306:EE_
-X-MS-Office365-Filtering-Correlation-Id: 699f6d86-3e13-44a1-1c69-08db6b48040a
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D5:EE_|IA1PR12MB8264:EE_
+X-MS-Office365-Filtering-Correlation-Id: a7f11161-46e4-47a8-e109-08db6b48b409
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Co8flGdHn8XVC80FRFvZyQpBSzvvtP3YS+sjbsf02YD1JJ05Bfxs2QeoQfPE6c0NNrwiTJSDxzjCvfE2WuAdfVjuprX8MFFLQpcLEjlrK9XKlFB8HKxlVuvUSt6rPerA3ErGyXaDimJS5JtvJm9fJxLNgMX10B9y6mvS6NqBCmbjq4/y9Y5jyCSmF/ckrOaBuPK5xjlfBk3/6Mq/CCN9nLnbunot9PP3Cgyk0UjvaagHnLyMTN/JY7X002gBgVNt6N/Sr2lmEX5KueQK1NBQWDCxOX/hOwC2m1EhZhbrP/fmyaZx2lvIGeRlrg6cN++nPI3EAxdxWsdQ1sbqhiF0gRaV5bmPOyZ5PIhFJWUK1kX9x2J8KkaR5DTIpVj+QnzmYo227vNsrF6C3+9/zfos/ZGN0EFcmcV4DxLgTjbJE1saeomTtumLBOOMPeJfLJII5GMCPpBY8ie46m7hcT93BHlSWXVJ0tXmrtAyy6AwjhcXFhaNr6WmwuM7I4dqiyQtrfcLxVvyjI4kAqOQaoMs034EmqP8xsmNkzSgFEXWVxSzVGnw6wL4xRnbMe4Ewql4/S44KP+Jb1QsFBYnyNRsEDcGHuaVJoALq4H89BGvCjGOqLyT+ki4h1su6UOiNNMKBXgAMchYDPvUzTdort3fjA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3589.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(39860400002)(346002)(376002)(366004)(451199021)(6666004)(6486002)(478600001)(66574015)(6512007)(6506007)(53546011)(83380400001)(186003)(36756003)(38100700002)(31696002)(86362001)(2616005)(31686004)(5660300002)(8936002)(8676002)(316002)(41300700001)(2906002)(4326008)(66556008)(66476007)(66946007)(7416002)(110136005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZnQyK1l5Y2FkNG8ycmthZlRoWWtVTCtpelBvb1kvRVZDYlMxQVhNaWYrQ2Mr?=
- =?utf-8?B?UUU0RUNNUjV0ZnRQbVF5dnlLNFhicWhubXo3VGdSaWltWk5GZVM2VzJZd0lu?=
- =?utf-8?B?VVM3cTJobWFpekJxL1hKeEVSNHNsTmZNODhuZGpEeHNCbWpmbkY5dHcvWG13?=
- =?utf-8?B?N1RRVnYyd25QMnZhMFVSUTljWmpzb1BXaENpYmF4dkp3QlRPOWhidkVqbElL?=
- =?utf-8?B?UVhSYkVWNGRSdDJYOTI1dU02eUwxY1phdHJ5dTUzcDZwZ3ovUFIrWkd0bDBp?=
- =?utf-8?B?akk4anlxcFZ1VThiT1RPVjkwLy9qRDdHVWFOVkozY2hBWmhPeHhENUFneXQ1?=
- =?utf-8?B?S1M2eERVUjNWM0QzajRXYWFGa2hVUVJHa0FVUkhKNVN1UldVTlJlS0JxSWlo?=
- =?utf-8?B?UDd2bENmc0RlMFBoMm1TWXdLRFlWZlRJb1FaWnVtNDZlM1ZaRzFuaXQ0ejlj?=
- =?utf-8?B?cnpNSlVTWlJtK2dYNEF6NG1yVFVqaTNLa0lTdU9vOXduQm5VSkpYMHUxMlhw?=
- =?utf-8?B?SHZGZ0RyYTdGS2lQQzV1YWZXejdyd2NHUW5sdkFDbWhFbGovaUN5MTYxMncv?=
- =?utf-8?B?VEM2VnZmRGRIVUZ6U0hhZFVkTUdiYVpnb0tFVitneHRLUWRuL21JMGVrMVo5?=
- =?utf-8?B?WWlOR0dMME5WMWNHR1hsMTVHZmZCQWZZdUJXT2xtMUtDRDFMcG04MSsvWDBB?=
- =?utf-8?B?YS9vVS9XcDgwOW5oUXZOcit4OE9tUjk2Nk5BMDZzRkpyS2pKeVBkWTdzK3BE?=
- =?utf-8?B?alhHTmp2bVdlelU0Q2YxR1hlVi91RERINmluN3N6VXRaYTZIM1o0cmhxYTlK?=
- =?utf-8?B?UHc2aEM5bXBzcmtWY3JuMTBhdFJYbnhzZGVEZG1ad2RhaU5rUk5wdEs0cm93?=
- =?utf-8?B?alNiYWgybDVpbW0xamg4QjZQcWVMa0NlZlJLUnZCbTVuL3Z2aStkNGlxSEtT?=
- =?utf-8?B?YWxjblAwR0FINmMvaEp0ZVdnZXN2QjdtTHl0QkR6eU9KV2tmMGFObXJENkZ4?=
- =?utf-8?B?ZGxIdUFjUXkyeHdHVms3dnZkN29EWWtBdHFKcWNvZFVRL2FiaGJlbkd0RGdp?=
- =?utf-8?B?bW5PZFZVTGxDeWxxWTVnbjZBTnN1SFg2UER6WmtPZVlwNmtTRkpoRTZPUDN6?=
- =?utf-8?B?RURBSS93NXhXNmtvY01renVZbmRiY2xVWnhjZU54RFRUWVYyNGdsQ0syV0Ns?=
- =?utf-8?B?eFByU05Fc3lKN1l5Rmt6TEVJMVB6SlVpRlVxTWJla0NaaG5nd2JWL1B0WThF?=
- =?utf-8?B?VEdxNVg3cUlNRU9kd0l6THk5MHQ5TFRXMkdneldOY01oNnNCcDNoMWJ0RGpI?=
- =?utf-8?B?NmxWOVh3emVMWVNwcXMyMldXWndNRXkra0VVQ1hqb1AvQzgzRW9CMjRhckJG?=
- =?utf-8?B?UFpicUpTL0V0QjhqVjREYSszM1lmWldTa3k1bm04cHpaTVlFK1hHaGtBcWhZ?=
- =?utf-8?B?YUE5dmpXQWhzazNxRnVaTGhSZlNtN0YwNmFMcFJHeit1K1ozbUk4MndRU1FX?=
- =?utf-8?B?Q0xtQmFjVFVick1LU0pKN2JhcklCTGp5U1BIUC91VjVUNWczT2srQlcrRG9N?=
- =?utf-8?B?cVpFenhvTVdFSURNb0ovZ2haZXR5KzdTQ21mYkhCM2JzZjlMVDUyS0kwb2lQ?=
- =?utf-8?B?ai9hdDZQZ3A2aEx2N3ZkM3M4blBqSjJ5cHhsR1BqbEJvbzFteXR6WVFOVTJ6?=
- =?utf-8?B?SzZpME92YVdoaEtyNU9pVkx5NWNsZDNLQ1RETnVaR0VJL1o2UFFWVGRZR2xN?=
- =?utf-8?B?Q0x0Tkw3aWlSckpHV1BXenRqTHA1SUplQldWQktYdHdUOWxvcXg4WE8rMDNp?=
- =?utf-8?B?azM1SmtpL2tyZEkzZ3V1OGh5bEExalNucTBpSHZPbGdmbnZLYUdUR1lWcWtt?=
- =?utf-8?B?MTNGMkhXYzhkSFVNMDgzMmY0RjZEMkE0VW0rbVEreGVoZC90dVFhR3FuMkIy?=
- =?utf-8?B?eHdjNmdTaytHSnJuTU1OdnRNZGNWUTR0U1hFY2ZsSXM4ZytnVmh2V0FTOEU3?=
- =?utf-8?B?UW5wRnN1WklqWjVUbUt2R3JmYkVqVXRtRE8zcTBOOGpISTdWWUlSSjVOL1NN?=
- =?utf-8?B?ZExmS3dtbktuamJGbmgyYjRJQXozeDRBZG84WDNiMG9TOXNJSWxRaWt1c0Qy?=
- =?utf-8?B?bkpIU3F2RFU5S1VtNDBGT1AxdTcxN0FoNy94QzBnMHEzUmRqWHE5OTZWUStD?=
- =?utf-8?Q?rR9fX8K02smsVb4vHn+isorPfCyXzARQ0SyR98iDH8xv?=
+X-Microsoft-Antispam-Message-Info: 0Y03a7q/XLDRQQxoM58jW15s9vAtS2Y8nxti8aIkhqaZPQvcM8NYubvM9uZqzNhKTAxae8E9v2cJqggwAfXVb0AFgKYMlV+f5Uk0oJ6HaaVOGMT7kipBxMJZnkLhrExllUN2KnPgpHNP2gwFpJjc7O8+V0y0pg1ZpDiFPFMiZ5a89GF+Y2Hzhir11eJlCC3Wbnlw3VEPzoN+PuVBfVdMbdCQR9sw4yJte9cE9o2Q3uL9K30j20JuJsxpSUvwiewy2Bz0O0EZUZWgQNLhRkSXwW321PLeraqai7W4+tt7YC+2K/Zwe9Mfvg2qmZTi/FOJ3FeHMVKSDGo+yjNZrI7zR7DbI6mOIgL9rTvkERbfKogVKDdvPiUTXYEN9nwZrYl4o2OEJORMEzrA0H+QFB219hvBdwMCNEX96p8HRHqvkR4JOXs0R6aP4ImAcuGYQBY/vVV5SD22ZMiWWtAYHjYe4b0T+5dx5D+B4Ve/P7EPeMAkF9xekb09pjYNdWnQx1UhjeRDIA0W+6+I0ojZHhGHRsFufxx2W0S/FeT68cqXLSu8iOYvEsHTvTmym8+3ssyxlggEApt7oZZBBdhbUofND3shcmxIe4kqdRL7xZYyamFiVFZcZFMDW4l0W+cnXt6IQEJUn08znp5m+dum9miKmGZqk/DBUa5DGZ+6OJCEMqoO9YQIK9TwuTrallcbmJOZAs6VVlZce1/X1icSdFN8RAJ3FfywEyC2c02xo39gOP65c4Wlbil7yYvXTTViXxvJhQktgZsU/EGWFDXes84xpg==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(136003)(346002)(376002)(451199021)(46966006)(36840700001)(40470700004)(86362001)(36756003)(6636002)(110136005)(54906003)(478600001)(4326008)(316002)(6666004)(70206006)(70586007)(7696005)(40480700001)(8936002)(8676002)(41300700001)(5660300002)(2906002)(44832011)(82310400005)(356005)(81166007)(82740400003)(2616005)(426003)(336012)(1076003)(26005)(16526019)(186003)(83380400001)(47076005)(36860700001)(40460700003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 699f6d86-3e13-44a1-1c69-08db6b48040a
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3589.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 13:22:05.6306
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 13:27:00.4327
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Network-Message-Id: a7f11161-46e4-47a8-e109-08db6b48b409
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /ItTkRIaOYHj/VASe/4SEn7/ZEvT4ssXgpTA8f4f739v9Pa2jrTnzDj7+JDhdSU9
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8306
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000E9D5.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8264
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -132,70 +100,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 12.06.23 um 15:03 schrieb Pranjal Ramajor Asha Kanojiya:
->
->
-> On 6/12/2023 4:52 PM, Christian König wrote:
->>
->>
->> Am 10.06.23 um 04:12 schrieb Sukrut Bellary:
->>> smatch warning:
->>>     drivers/accel/qaic/qaic_data.c:620 qaic_free_object() error:
->>>         dereferencing freed memory 'obj->import_attach'
->>>
->>> obj->import_attach is detached and freed using dma_buf_detach().
->>> But used after free to decrease the dmabuf ref count using
->>> dma_buf_put().
->>>
->>> Fixes: ff13be830333 ("accel/qaic: Add datapath")
->>> Signed-off-by: Sukrut Bellary <sukrut.bellary@linux.com>
->>> ---
->>>   drivers/accel/qaic/qaic_data.c | 4 +++-
->>>   1 file changed, 3 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/accel/qaic/qaic_data.c 
->>> b/drivers/accel/qaic/qaic_data.c
->>> index e42c1f9ffff8..7cba4d680ea8 100644
->>> --- a/drivers/accel/qaic/qaic_data.c
->>> +++ b/drivers/accel/qaic/qaic_data.c
->>> @@ -613,11 +613,13 @@ static int qaic_gem_object_mmap(struct 
->>> drm_gem_object *obj, struct vm_area_struc
->>>   static void qaic_free_object(struct drm_gem_object *obj)
->>>   {
->>>       struct qaic_bo *bo = to_qaic_bo(obj);
->>> +    struct dma_buf *dmabuf;
->>
->> Maybe move that variable into the if.
->>
->>>       if (obj->import_attach) {
->>>           /* DMABUF/PRIME Path */
->>> +        dmabuf = obj->import_attach->dmabuf;
->>>           dma_buf_detach(obj->import_attach->dmabuf, 
->>> obj->import_attach);
->>> -        dma_buf_put(obj->import_attach->dmabuf);
->>> +        dma_buf_put(dmabuf);
->>
->> I strongly assume you are not using the GEM prime helpers for this?
->>
->> Christian.
->
-> Driver uses drm_gem_prime_fd_to_handle() helper function but it also 
-> registers for ->gem_prime_import() which is internally called by 
-> drm_gem_prime_fd_to_handle(). All the operations done in 
-> gem_prime_import() are undone here.
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-Then why don't you use drm_prime_gem_destroy() which is the cleanup 
-helper for imports created by ->gem_prime_import() ?
+The Kconfig currently defaults the governor to schedutil on x86_64
+only when intel-pstate and SMP have been selected.
 
-That looks pretty much identical to what you do here manually.
+If the kernel is built only with amd-pstate, the default governor
+should also be schedutil.
 
-Regards,
-Christian.
+Cc: Sun Peng (Leo) Li <sunpeng.li@amd.com>
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Reviewed-by: Leo Li <sunpeng.li@amd.com>
+Acked-by: Huang Rui <ray.huang@amd.com>
+Tested-by: Perry Yuan <Perry.Yuan@amd.com>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+ drivers/cpufreq/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
->>
->>>       } else {
->>>           /* Private buffer allocation path */
->>>           qaic_free_sgt(bo->sgt);
->>
+diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig
+index 2c839bd2b051..a1c51abddbc5 100644
+--- a/drivers/cpufreq/Kconfig
++++ b/drivers/cpufreq/Kconfig
+@@ -38,7 +38,7 @@ choice
+ 	prompt "Default CPUFreq governor"
+ 	default CPU_FREQ_DEFAULT_GOV_USERSPACE if ARM_SA1110_CPUFREQ
+ 	default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if ARM64 || ARM
+-	default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if X86_INTEL_PSTATE && SMP
++	default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if (X86_INTEL_PSTATE || X86_AMD_PSTATE) && SMP
+ 	default CPU_FREQ_DEFAULT_GOV_PERFORMANCE
+ 	help
+ 	  This option sets which CPUFreq governor shall be loaded at
+-- 
+2.34.1
 
