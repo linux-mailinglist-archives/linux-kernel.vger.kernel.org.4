@@ -2,158 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB96372D3A6
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 23:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB4672D3A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 23:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232253AbjFLVzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 17:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57510 "EHLO
+        id S236108AbjFLVzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 17:55:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238328AbjFLVyv (ORCPT
+        with ESMTP id S233893AbjFLVzt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 17:54:51 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2122.outbound.protection.outlook.com [40.107.114.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C55C810C2;
-        Mon, 12 Jun 2023 14:54:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P/eQFcaGyNvJCtMZ1yaZSnjdmrO1MRxH82yl6AwfVD6XmJwr0p1ibxwyvRiXtnzWlH2VySWOQVEHPDoudDsUELcDWAxcqXUrVQ5VBFjDM9PyMxOHwcqXfyNzYVa65Bcn721Haq+QEabWLjTYiLVkXTWvyV2qpkzU9kVsZVXm/U9HAsscdfWkXwN+yzXgcmx2ImbNGOR9i4EzMv1yBZDyqXK9vFa5l9rMdWUQ40CicDh1lpxUwS9sc4HZnnlL02zGxDk5pc4UbGCYzpW5zfghIieJExNSCaJBUrp9dl/K4266MvQcIRDRMpYa1sC01/S91swcPljqQs5g6U/i+HnRSg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Nc9LR9XpozkqxMEbdbabbaq7QTkDPcMymjqTwiPTFqk=;
- b=YfP2bRvmx1tCi9UtB+m2hxOKo9XmZCbYqFrLcUEptEd8rUKXtDTMifk/Yn5cpXVU4b0OkOM5BmnmaZX4gGMrQoRzvaZ82ntjQU/GRcHnV7tzRLc8fUeTP3gX8ql3afd2irCRyyG872WaEWs3Wib+sRuL4DU/ZSb0/mpQLtTISMQhl4QfiLKRA+qHhyzMekAlC/6INhRno/OdUnXhVwTLIBXSQbWxtH+IPX0tmxq8alnImYk5Den37wBRLmSRzp4YGwUZ2EnIQodGEAjVDjUBSLpifkIoUMZeCk510U8GU3dK7FES6zM+cCDZWIRK2SCEEADl+pgyeQF2RmADrM0Mxg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Nc9LR9XpozkqxMEbdbabbaq7QTkDPcMymjqTwiPTFqk=;
- b=L6q0qyXHhhhlt0ewZ86sA3/FBnjQJGMXh7Qb1+AgroYYyDfjiijXPrVqkHSwJlKhI/5V0cSs0O8Os2z3Weldu+KHOtzk8G4F/ftDFdRJVNjGrlSnk/+MZyvlaRCSG9EFKUt58HEgf/YncavMsrtg2hLv8RBafoqQb0PVS0h9FmE=
-Received: from TY2PR01MB3788.jpnprd01.prod.outlook.com (2603:1096:404:dd::14)
- by TYCPR01MB8680.jpnprd01.prod.outlook.com (2603:1096:400:157::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Mon, 12 Jun
- 2023 21:54:45 +0000
-Received: from TY2PR01MB3788.jpnprd01.prod.outlook.com
- ([fe80::a4f8:4204:cbe6:6cb3]) by TY2PR01MB3788.jpnprd01.prod.outlook.com
- ([fe80::a4f8:4204:cbe6:6cb3%3]) with mapi id 15.20.6477.028; Mon, 12 Jun 2023
- 21:54:44 +0000
-From:   Chris Paterson <Chris.Paterson2@renesas.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-CC:     "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "patches@kernelci.org" <patches@kernelci.org>,
-        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
-        "pavel@denx.de" <pavel@denx.de>,
-        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>,
-        "srw@sladewatkins.net" <srw@sladewatkins.net>,
-        "rwarsow@gmx.de" <rwarsow@gmx.de>
-Subject: RE: [PATCH 5.4 00/45] 5.4.247-rc1 review
-Thread-Topic: [PATCH 5.4 00/45] 5.4.247-rc1 review
-Thread-Index: AQHZnRsyQf8l7QzxzUSR5KzCzuOwa6+HtErw
-Date:   Mon, 12 Jun 2023 21:54:44 +0000
-Message-ID: <TY2PR01MB3788FCFD0BE2497DCD1FBD51B754A@TY2PR01MB3788.jpnprd01.prod.outlook.com>
-References: <20230612101654.644983109@linuxfoundation.org>
-In-Reply-To: <20230612101654.644983109@linuxfoundation.org>
-Accept-Language: en-US, en-GB
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY2PR01MB3788:EE_|TYCPR01MB8680:EE_
-x-ms-office365-filtering-correlation-id: 2279ed01-ed9d-43d1-5325-08db6b8fa23b
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: jsizpPjanyX3K8uskD3mDlr7ZIOTJBw7z8QNzB5z8GnzVk3qSbO31AundNW1YJ8ZA/77TmfJ/AKIZJc9SHBF2wqOfY8fBzuORj+mozuf2lVobJzWgPm8ryLBI+rSKwP5Hfvc9rORZIAf+xGB/XCYhbK2sj57qzvNUDLeeETSh5I17IKPGcfGdXid/TsQKokewcSXK6uFdF9+CJsRiIjA0M9uyxplEyVF4MBgtQHvPOZrAZVpQNxWVAPW3p7jsL1e39SvhyvjO4tK0ozX+bEm61nvNJ8ypty8tPJxnE9qDYOIGN/UymT+qjEq/znZvsOC+4nLJ8ImCn2u3Dqk8Wk7wxRS1GIeXMv5OtpOHk3xfEK6FIbbdCUu+nLrV897HW5Y5t7DBi8KiCYKZMco0DWwVJrptCOFiqDkij2Cr9g7FXoHKbKGW/ms0qsQwisX7gV162gUYIgG8+YuIb6naQkyaSVMgF38ZownkV4qLHizlfaRHSgifGMxJlxC5SaHpxrYhKeJxVmRQtvPfhKikiEE5mOwbGk8sLnVDyx9jPbOzpzOwXbVSeZErduVmo+e3g+XcYIRPHoqjAZnfWoZoQ+thW8J4vTuXVHr4YZWrtZsrXWnq8ki66JDYGu/HyNkhtlKvZj5wfDWT4s2eu6eQ0Sk1w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR01MB3788.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(376002)(366004)(136003)(39860400002)(451199021)(64756008)(66476007)(66556008)(66946007)(316002)(7416002)(4326008)(66446008)(41300700001)(76116006)(186003)(4744005)(2906002)(110136005)(54906003)(478600001)(8676002)(8936002)(5660300002)(52536014)(71200400001)(966005)(7696005)(6506007)(33656002)(122000001)(26005)(55016003)(9686003)(86362001)(38070700005)(38100700002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?Windows-1252?Q?Oeo0Wg7GCDhNdvkok4BJo+3kEoMRzHZnsKret5MEgDXA2JfE/xuuYMNQ?=
- =?Windows-1252?Q?2PaYTT9fGiioePAFG+sGRY6oJ6xaCUDHg0wzZwiaMmAl85JCjcfiDMuE?=
- =?Windows-1252?Q?/e0VoEEEgRxT7t4jmdFRrNa/VQA20yXBED2IuEN8TEeisGmBPLtEnEH0?=
- =?Windows-1252?Q?Y3wl6Ma5kVgxIVlT79+0Oyd+hHiTrWJDnvI5auP8MKL+pP45JSAJ1YBm?=
- =?Windows-1252?Q?esEnSa9XY9IRYyM6jlEB3tI6F+msz++3w+nyj7VyRD84/Ov/vBWgI7PB?=
- =?Windows-1252?Q?G9CqrYu3YXHOl50cM3V/W6agas5f16jDTnNuFX3LltGMKKkN/rR5yUfN?=
- =?Windows-1252?Q?t0vwv+DVxkjMsEUCG2/pZPzt1iR8BFc1ftbAKAZLmytsBs8fAFglACj0?=
- =?Windows-1252?Q?5gmXjw7dMaesf980+8A4xiKzIkcZ7ttgenX9vMevucDrkHJmHBz4iQrW?=
- =?Windows-1252?Q?jJW1Jjn4zW6tDuz8fFtOo77V2CMjJ4TebbDNsfHGm9LBHD6OeJNZZn68?=
- =?Windows-1252?Q?dadT3Wz7tIJSs6tOJp5W0s8t19DwnuCZf8YoGV9ui1FJR/wpoGWcC+3P?=
- =?Windows-1252?Q?YMqGB/cTHIz9forQti2I/l8xq1yJm7gip26Nt47m4aqscmijGvn8WTNi?=
- =?Windows-1252?Q?ljNOdQBn18kMentOKtxmtZoj6OFDE36Y8U/MWOWSWW8grEsUBym5wVd9?=
- =?Windows-1252?Q?860tBuvu8vgo531VqqgehQO/gBVe41A5oiBk3jPY7YpdAxycAjZZro7P?=
- =?Windows-1252?Q?xonNvI4geTwOY3jKppx2TkSyPSgaS+rO1gVyaEODOSVi3GedArezOngO?=
- =?Windows-1252?Q?3+BgJV2YqWmgFOVKn8GGNxFLnV9B+0AblpgH+QPASWwvu485ge273lQs?=
- =?Windows-1252?Q?G1fEBcN8UPREWZK76t1cLf+V2mJYBW77TxxYoi32hcd/NXQMMXcZKSdv?=
- =?Windows-1252?Q?i3NBJ9g3WLm5b9wF5JgVsH1/A9m/Lur3VH/ohuGIm8Bvjmeind1JBIpD?=
- =?Windows-1252?Q?ctFX55QuEx5BzXAndSceDrZS2iBRoI3FJhPA1o4STy/eVTbOXYIqiHE1?=
- =?Windows-1252?Q?rWnGwzC/CFahdPje1o4PyS81zcGhsrbdRvpzardlvKwVVRc1l3NmVsjC?=
- =?Windows-1252?Q?V8JFKWLPdGTlYv/Fme+APhoq8hEFOgj6qHYI0CJKmcneJU9ieOHJbrKg?=
- =?Windows-1252?Q?jjMhw3MLj+nEG4bFy+pmEEm8tfHOGUkE+3qO+CxzO4qxi4kAdMVQWe9C?=
- =?Windows-1252?Q?euNz7WpGTCoQznmdnyLS2rkFWOcSubQVUorptN4deCHEUE9ukzfqDu00?=
- =?Windows-1252?Q?OKQBcWdYcsltPADSHMiRRdtWB3jhtRlRAc37Jutor2AYMu8mYPSI0Iei?=
- =?Windows-1252?Q?CW8G4kJ3G9/X263ROHiUv1/g1rvfoxja0/qhV22laMYFddK8VMAtDMki?=
- =?Windows-1252?Q?8MgroJtaJBXHPZcoDljkNtBnFOvg+kKEUKrDmrgS66isbU+PsUARm6Nr?=
- =?Windows-1252?Q?GXV8V1mluXDGltG/JLXsuZTroxCDakdfA0+5U32QlxQMlyprV7e4Y0Ti?=
- =?Windows-1252?Q?/zcqOt7mBa0rlzwV01VjAcICR2OBSmQHmLfCgyxDvyPKFuCr1ivELfkD?=
- =?Windows-1252?Q?IUf5LHq/1itwqcpdoyVwgSPRFSp8Ibwdew+lRsgdYGBNh1/QfiepRweo?=
- =?Windows-1252?Q?YrpzBMo5pB33KSusxL/TNow8sFiQ+UTBi+ARnlG0e2BYh+neDW0cOw?=
- =?Windows-1252?Q?=3D=3D?=
-Content-Type: text/plain; charset="Windows-1252"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 12 Jun 2023 17:55:49 -0400
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8A5E47
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 14:55:48 -0700 (PDT)
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-3f9dd2fabe2so3126721cf.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 14:55:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686606947; x=1689198947;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NdjVUJ6/scsSqpoSTprToMI3M6bYhDxCkzPi9uXpyWQ=;
+        b=B14QBvpVJbdqQsVKmxDcUXelCXP1fVETXj2AkcdhqCNGM2Ly7hrEupgIlmrSdCtOU/
+         qpBMrnQIUFGIe86ruYVNkv6ZlmovzcWu9oDvzMtUn+CEL5N3+SaqNmx19TleGWOKwCPv
+         ONKQoyITvR/5qO/dF9HxoV+XEDLVIfQywlAKNxAkpePrspMr7rPqCDpL/erY7TqlLTb0
+         9bPMtPvh3dMg31nr7YhBkUoyGELSYCO7rZ037+oX3s99MOk2+jow/CeHP8jAycBkg8Rz
+         loMagm13Dmzvj9+E0pZaj0LRBfoTZ5hvBpJxU0upAKvrieDDo/1t8iJ/qs9Y2r0jccEd
+         LMiw==
+X-Gm-Message-State: AC+VfDzWM6PiTTcLgoVMWvQwGYpemw1crqyD3NXbjbvMWZDiIsjWUlX0
+        5vJuDUVUSpd4PkUlrg6g66o=
+X-Google-Smtp-Source: ACHHUZ4m5vStrs0sioVKbOYDwj/2oyC5bo7y8pq6ntqGS4HJej45p5Csu8B3wr92BynaH+AKYVHjSw==
+X-Received: by 2002:ad4:5ca8:0:b0:626:1984:2461 with SMTP id q8-20020ad45ca8000000b0062619842461mr11872904qvh.28.1686606947610;
+        Mon, 12 Jun 2023 14:55:47 -0700 (PDT)
+Received: from V92F7Y9K0C.lan (c-73-228-235-230.hsd1.mn.comcast.net. [73.228.235.230])
+        by smtp.gmail.com with ESMTPSA id l5-20020a0ce085000000b0062439f05b87sm3539394qvk.45.2023.06.12.14.55.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 14:55:47 -0700 (PDT)
+Date:   Mon, 12 Jun 2023 14:55:44 -0700
+From:   Dennis Zhou <dennis@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Yu Ma <yu.ma@intel.com>, dennis@kernel.org,
+        Liam.Howlett@oracle.com, dan.j.williams@intel.com,
+        dave.hansen@intel.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, lipeng.zhu@intel.com, pan.deng@intel.com,
+        shakeelb@google.com, tianyou.li@intel.com, tim.c.chen@intel.com,
+        tim.c.chen@linux.intel.com
+Subject: Re: [PATCH v3] percpu-internal/pcpu_chunk: Re-layout pcpu_chunk
+ structure to reduce false sharing
+Message-ID: <ZIeUYNd8sAVm1xE8@V92F7Y9K0C.lan>
+References: <ZINtij2HhIu9h9Wx@V92F7Y9K0C.lan>
+ <20230610030730.110074-1-yu.ma@intel.com>
+ <20230612144331.b1d069bce4ba3800fdd62738@linux-foundation.org>
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY2PR01MB3788.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2279ed01-ed9d-43d1-5325-08db6b8fa23b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jun 2023 21:54:44.9140
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: b9JrQOOKOkdUHaCn+fnvn1+MgdvJZtiO9jejANRVsfwOxwlUl36UkH2ark90MRHF3JfGssLCFvYOYPrJt+VvnJNXJvUMpZXrgU3ilP2GAko=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB8680
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230612144331.b1d069bce4ba3800fdd62738@linux-foundation.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Greg,
+Hi Andrew,
 
-> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Sent: Monday, June 12, 2023 11:26 AM
->=20
-> This is the start of the stable review cycle for the 5.4.247 release.
-> There are 45 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
-> Responses should be made by Wed, 14 Jun 2023 10:16:41 +0000.
-> Anything received after that time might be too late.
+On Mon, Jun 12, 2023 at 02:43:31PM -0700, Andrew Morton wrote:
+> On Fri,  9 Jun 2023 23:07:30 -0400 Yu Ma <yu.ma@intel.com> wrote:
+> 
+> > When running UnixBench/Execl throughput case, false sharing is observed
+> > due to frequent read on base_addr and write on free_bytes, chunk_md.
+> > 
+> > UnixBench/Execl represents a class of workload where bash scripts
+> > are spawned frequently to do some short jobs. It will do system call on
+> > execl frequently, and execl will call mm_init to initialize mm_struct
+> > of the process. mm_init will call __percpu_counter_init for
+> > percpu_counters initialization. Then pcpu_alloc is called to read
+> > the base_addr of pcpu_chunk for memory allocation. Inside pcpu_alloc,
+> > it will call pcpu_alloc_area  to allocate memory from a specified chunk.
+> > This function will update "free_bytes" and "chunk_md" to record the
+> > rest free bytes and other meta data for this chunk. Correspondingly,
+> > pcpu_free_area will also update these 2 members when free memory.
+> > Call trace from perf is as below:
+> > +   57.15%  0.01%  execl   [kernel.kallsyms] [k] __percpu_counter_init
+> > +   57.13%  0.91%  execl   [kernel.kallsyms] [k] pcpu_alloc
+> > -   55.27% 54.51%  execl   [kernel.kallsyms] [k] osq_lock
+> >    - 53.54% 0x654278696e552f34
+> >         main
+> >         __execve
+> >         entry_SYSCALL_64_after_hwframe
+> >         do_syscall_64
+> >         __x64_sys_execve
+> >         do_execveat_common.isra.47
+> >         alloc_bprm
+> >         mm_init
+> >         __percpu_counter_init
+> >         pcpu_alloc
+> >       - __mutex_lock.isra.17
+> > 
+> > In current pcpu_chunk layout, ‘base_addr’ is in the same cache line
+> > with ‘free_bytes’ and ‘chunk_md’, and ‘base_addr’ is at the
+> > last 8 bytes. This patch moves ‘bound_map’ up to ‘base_addr’,
+> > to let ‘base_addr’ locate in a new cacheline.
+> > 
+> > With this change, on Intel Sapphire Rapids 112C/224T platform,
+> > based on v6.4-rc4, the 160 parallel score improves by 24%.
+> 
+> Well that's nice.
+> 
+> >
+> > ...
+> >
+> > --- a/mm/percpu-internal.h
+> > +++ b/mm/percpu-internal.h
+> > @@ -41,10 +41,17 @@ struct pcpu_chunk {
+> >  	struct list_head	list;		/* linked to pcpu_slot lists */
+> >  	int			free_bytes;	/* free bytes in the chunk */
+> >  	struct pcpu_block_md	chunk_md;
+> > -	void			*base_addr;	/* base address of this chunk */
+> > +	unsigned long		*bound_map;	/* boundary map */
+> > +	
+> > +	/* 
+> > +	 * base_addr is the base address of this chunk.
+> > +	 * To reduce false sharing, current layout is optimized to make sure
+> > +	 * base_addr locate in the different cacheline with free_bytes and
+> > +	 * chunk_md.
+> > +	 */
+> > +	void			*base_addr ____cacheline_aligned_in_smp;
+> >  
+> >  	unsigned long		*alloc_map;	/* allocation map */
+> > -	unsigned long		*bound_map;	/* boundary map */
+> >  	struct pcpu_block_md	*md_blocks;	/* metadata blocks */
+> >  
+> >  	void			*data;		/* chunk data */
+> 
+> This will of course consume more memory.  Do we have a feel for the
+> worst-case impact of this?
+> 
 
-Thank you for the release!
+The pcpu_chunk struct is a backing data structure per chunk, so the
+additional memory should not be dramatic. A chunk covers ballpark
+between 64kb and 512kb memory depending on some config and boot time
+stuff, so I believe the additional memory used here is nominal at best.
 
-CIP configurations built and booted okay with Linux 5.4.247-rc1 (6385fa1037=
-74):
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/pipelines/8=
-97026070
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/commits/lin=
-ux-5.4.y
+Working the #s on my desktop:
+Percpu:            58624 kB
+28 cores -> ~2.1MB of percpu memory.
+At say ~128KB per chunk -> 33 chunks, generously 40 chunks.
+Adding alignment might bump the chunk size ~64 bytes, so in total ~2KB
+of overhead?
 
-Tested-by: Chris Paterson (CIP) <chris.paterson2@renesas.com>
+I believe we can do a little better to avoid eating that full padding,
+so likely less than that.
 
-Kind regards, Chris
+Acked-by: Dennis Zhou <dennis@kernel.org>
+
+Thanks,
+Dennis
