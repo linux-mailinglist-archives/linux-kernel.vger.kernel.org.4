@@ -2,109 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AFCB72C383
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:54:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC51C72C388
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:56:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbjFLLyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 07:54:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38562 "EHLO
+        id S229717AbjFLL4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 07:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232468AbjFLLxs (ORCPT
+        with ESMTP id S229454AbjFLL4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 07:53:48 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068C32978
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 04:52:10 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 627671EC0398;
-        Mon, 12 Jun 2023 13:52:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1686570729;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=iZhYZTS/exJyQzB19qwAl5pWglF7rQ+U0ac4FoA1V0o=;
-        b=XVcrfz6BPJmjxxeE7zmvLg7fVp+QfuQsOAa5JHKaDnyA0RqaO9ii5XxE6XXN0wWBxBLRV5
-        OcJ/jO5yUNji7n3K8am2Pj/5L5fOjUm9Zlw1KlGBXS9pbgm0EQLlXWtARM17T7HG2eJ+c/
-        Gg3KZp/2bcrVXWa+aX7qxGGtpcedgho=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1686570728; bh=iZhYZTS/exJyQzB19qwAl5pWglF7rQ+U0ac4FoA1V0o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YgVEB7LG4HuBaQtF6S4ZM7/wNFWh7MfVuzwLB8AHvvBWUUMq3MhKSPcZTSt+RxSFX
-         k8+W9ooRa3zFjFQcHcsqqxkSO+Ru4U+AQ5qtLzFHQeXuK7/oKJ72aajFf+pA2MHiA1
-         lmPqj88NU8d8QVLRxT5pVUcVVQKvsck201/rUlWqofSAP8oqGQ7nzXf7gQDMssPQh3
-         JFgBSgGxuxyvP6AvC7cNANx95QdqXgxB8qCjXW+AJ+i0fheozRNft5j8f3xPq1sQJR
-         aZuIdqRmKsvlvxJiI8e68dDicFT+TXwWTWk2P/IH/OaSeF1BgVjX2o1tIVr7ZkCL8e
-         V+FLFDd4p9uhXjfmxj6r+R2IzpqMni/0U8UUkv2xlnS9fuuTXHq5D/njtyp0HSCG+9
-         ySxNAn/xgXyPzy4YilSWA43jE+fkWc6avS63iW2VqJyNDZ4PXz33zCX3DV86GGk9sb
-         U9QTMSvjxsO2H4uTIC3IX6ohpFw1DCwI6U29VAIWAA3an69Rbvfj2ZdSBCt06jZoCG
-         vsxORkKaJxQen+w7/CBRfRnxaJ0DJa2rHGCYp+1O8MCd2jCZKaszG/7LH82bInyG50
-         bPBQ6oGHx1/mKtmEXo8IJIRHhYf4xQSy2poAqEYOYD87CBoXfa5VZEn7XLQwe4Y9Gr
-         LBR6xZtonGtrk8xVNyiYdO/A=
-X-Virus-Scanned: Debian amavisd-new at mail.maysoba.com
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.maysoba.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 9u111MmGTE7Z; Mon, 12 Jun 2023 11:52:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1686570727; bh=iZhYZTS/exJyQzB19qwAl5pWglF7rQ+U0ac4FoA1V0o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GVrPaWdDHVI0pof13JevT+8ZOsYsSiFPpx9knYCK3CUYE4P1ZtMMoAjqnhvgWooN6
-         9FRyeF7inJOJbDZCp0cFV9j2qMYxZshnaym7MCLvYbpKlB/qz1tMDSfZlwCvY9lenJ
-         31k9zRMy3PlRTccDJjATwnVV3zxxgsZVjaSUlmq1UK+he86BsDGOyBbzIyuCU4qEja
-         6C9b/2isL4sMaRBtgW0daAid/jOXWrEk+Uj29v/dnNKCAv0lS1Ia2nn1bpV0WzGpHP
-         YNx4sZtDKnGe0bNG4eA1jzwSEuBmnK/Iiuh37fOXmsl2B0GPs1+rlJYdm7vOOhr624
-         L3/myjSnPf0F+SF9Gk8Hici91stppDUSgBqKX27EhbTXxkZY+m5dpDHUZvSwSzfC9h
-         C/09TK532kvAyCatFkzz3xZss3xHK+4lPCipuE4wacAbLKurccpRAu+Lo6fsQrKRJN
-         X9QZvgnm1xCngrV1VRoJ7KwhC78lC+Vdjc8xTCdRhae5ClF7VS/aK3qtjHs1NM5zDV
-         HbphiBvevJZ4hPn2JooRB/KKnqvb70GlI68uuzGR5WZaJIFcC/jbVS5GEtOTWHxqsl
-         M+++8pu2nvJ5/t1EclwcpI1UCJSsOdAbPAJCEFUIHTO9avkWy8N/vZ0Lz3JLBpEpp7
-         dRDdfwjlZRDdIU0wZy89PxPU=
-Received: from zn.tnic (p200300Ea971Dc508329C23FFFEA6A903.dip0.t-ipconnect.de [IPv6:2003:ea:971d:c508:329c:23ff:fea6:a903])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 19EDE40E018C;
-        Mon, 12 Jun 2023 11:51:59 +0000 (UTC)
-Date:   Mon, 12 Jun 2023 13:51:54 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Breno Leitao <leitao@debian.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "pawan.kumar.gupta@linux.intel.com" 
-        <pawan.kumar.gupta@linux.intel.com>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "leit@meta.com" <leit@meta.com>, "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] cpu/bugs: Disable CPU mitigations at compilation time
-Message-ID: <20230612115154.GEZIcG2tWkn8I0+E2t@fat_crate.local>
-References: <20230203120615.1121272-1-leitao@debian.org>
- <20230609173343.GDZINid4EgJGnkW7HK@fat_crate.local>
- <543116e1a8cf4b7a8b086c850374f99e@AcuMS.aculab.com>
+        Mon, 12 Jun 2023 07:56:10 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B74B93
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 04:56:07 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35CBtlkt049372;
+        Mon, 12 Jun 2023 06:55:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1686570947;
+        bh=1bN6NxcCjY+QAN5JLc6yms+BPijFm/G6q8gUsULt3TU=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=QYRwK0Xk89cjat5dyLZCnV0chMNkWPMOErM3nS2iAEbOe3/k6WZQ96TvU7uNUe3kN
+         VV16N3aMlXjq+m7dSW57fH4E8JyRo7kWmq89uZr3RPB1M58ejW/MWftyYbKN4GeJy7
+         55SDZ+qbY1mtgY3e/+JYrzudlJyqgg2foSy6q3a4=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35CBtl4H092981
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 12 Jun 2023 06:55:47 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 12
+ Jun 2023 06:55:47 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 12 Jun 2023 06:55:46 -0500
+Received: from [10.24.69.79] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35CBtiPZ099301;
+        Mon, 12 Jun 2023 06:55:45 -0500
+Message-ID: <3362316a-dc24-e2e2-4baa-69e51703e86e@ti.com>
+Date:   Mon, 12 Jun 2023 17:25:44 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <543116e1a8cf4b7a8b086c850374f99e@AcuMS.aculab.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [EXTERNAL] Re: [PATCH] arm64: defconfig: Enable HSR by default
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>
+CC:     <arnd@arndb.de>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230612094340.13865-1-r-gunasekaran@ti.com>
+ <ab8dfd0f-fa49-6493-d79d-c35f632373f3@linaro.org>
+ <e3e409c5-56b5-570d-e962-a7c0a1c05fa3@ti.com>
+ <3ac37e54-0633-37d2-2ba7-f06abcb9a5a7@linaro.org>
+From:   Ravi Gunasekaran <r-gunasekaran@ti.com>
+In-Reply-To: <3ac37e54-0633-37d2-2ba7-f06abcb9a5a7@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 11:22:15AM +0000, David Laight wrote:
-> I can definitely justify compiling them all out.
-> For instance embedded systems with limited userspace and
-> (pretty much) everything running as root.
 
-Nothing's stopping you from adding "mitigations=off" to your grub
-config.
+
+On 6/12/23 3:21 PM, Krzysztof Kozlowski wrote:
+> On 12/06/2023 11:49, Ravi Gunasekaran wrote:
+>>
+>>
+>> On 6/12/23 3:14 PM, Krzysztof Kozlowski wrote:
+>>> On 12/06/2023 11:43, Ravi Gunasekaran wrote:
+>>>> Enable HSR feature in kernel build.
+>>>
+>>> Why? Commit msg should answer to this question.
+>>
+>> I apologize for incomplete description. I will send out a v2.
+>>
+>> HSR protocol is implemented by the network stack at /net/hsr/*
+>> In order to create HSR interface, HSR module needs to be loaded.
+> 
+> You described what HSR is, but I want to know why do we need it in our
+> development arm64 kernel. You might want to enable anything and explain
+> what is this "anything" but this does not solve any of the concerns.
+> 
+
+TI SoCs such as AM64x, AM65x support multiple ethernet ports which can be
+used to setup HSR (a redundancy protocol) node in the network. So enabling
+the HSR driver to be built as module. The HSR node can be created using a
+pair of ethernet ports in the system.
+
+> Best regards,
+> Krzysztof
+> 
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Regards,
+Ravi
