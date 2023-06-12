@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAAB572C98F
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C4D872C990
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:16:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238379AbjFLPQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 11:16:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44398 "EHLO
+        id S239453AbjFLPQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 11:16:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234242AbjFLPQD (ORCPT
+        with ESMTP id S234242AbjFLPQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 11:16:03 -0400
+        Mon, 12 Jun 2023 11:16:07 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9F82498
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 08:16:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D4FD8F
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 08:16:06 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4E5FE1FB;
-        Mon, 12 Jun 2023 08:16:46 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 64A882F4;
+        Mon, 12 Jun 2023 08:16:51 -0700 (PDT)
 Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 628073F5A1;
-        Mon, 12 Jun 2023 08:15:56 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7B93A3F5A1;
+        Mon, 12 Jun 2023 08:16:01 -0700 (PDT)
 From:   Ryan Roberts <ryan.roberts@arm.com>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         SeongJae Park <sj@kernel.org>,
@@ -61,10 +61,12 @@ To:     Andrew Morton <akpm@linux-foundation.org>,
         Lorenzo Stoakes <lstoakes@gmail.com>
 Cc:     Ryan Roberts <ryan.roberts@arm.com>, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, damon@lists.linux.dev
-Subject: [PATCH v3 0/3] Encapsulate PTE contents from non-arch code
-Date:   Mon, 12 Jun 2023 16:15:42 +0100
-Message-Id: <20230612151545.3317766-1-ryan.roberts@arm.com>
+Subject: [PATCH v3 1/3] mm: ptdump should use ptep_get_lockless()
+Date:   Mon, 12 Jun 2023 16:15:43 +0100
+Message-Id: <20230612151545.3317766-2-ryan.roberts@arm.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230612151545.3317766-1-ryan.roberts@arm.com>
+References: <20230612151545.3317766-1-ryan.roberts@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -76,103 +78,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+The page table dumper uses walk_page_range_novma() to walk the page
+tables, which does not lock the PTL before calling the pte_entry()
+callback. Therefore, the page table dumper's callback must use
+ptep_get_lockless() rather than ptep_get() to ensure that the pte it
+reads is not torn or otherwise corrupt when racing with writers.
 
-(Including wider audience this time since changes touch a fair few subsystems)
+Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+---
+ mm/ptdump.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This is the second half of v3 of a series to improve the encapsulation of pte
-entries by disallowing non-arch code from directly dereferencing pte_t pointers.
-Based on earlier feedback, I split the series in 2; the first part, fixes for
-existing bugs, was already posted at [3] and merged into mm-stable. This second
-part contains the conversion from direct dereferences to instead use
-ptep_get()/ptep_get_lockless().
-
-See the v1 cover letter at [1] for rationale for this work.
-
-Based on feedback at v2, I've removed the new ptep_deref() helper I originally
-added, and am now using the existing ptep_get() and ptep_get_lockless() helpers.
-Testing on Ampere Altra (arm64) showed no difference in performance when using
-ptep_deref() (*pte) vs ptep_get() (READ_ONCE(*pte)).
-
-Patches are based on mm-unstable (49e038b1919e) and a branch is available at [4]
-(Let me know if this is the wrong branch to target - I'm still not familiar with
-the details of the mm- dev process!). Note that Hugh Dickins's "mm: allow
-pte_offset_map[_lock]() to fail" (now in mm-unstable) patch set caused a number
-of conflicts which I've resolved. But due to that, you won't be able to apply
-these patches on top of Linus's tree. I have an alternate branch on top of
-v6.4-rc6 at [5].
-
-Changes since v2 [2]:
-   - Removed ptep_deref() helper
-   - Converted ptep_deref() callsites to use ptep_get[_lockless]()
-
-Changes since v1 [1]:
-   - Fixed sh build bug reported by 0-day CI
-
-[1] https://lore.kernel.org/linux-mm/20230511132113.80196-1-ryan.roberts@arm.com/
-[2] https://lore.kernel.org/linux-mm/20230518110727.2106156-1-ryan.roberts@arm.com/
-[3] https://lore.kernel.org/all/20230602092949.545577-1-ryan.roberts@arm.com/
-[4] https://gitlab.arm.com/linux-arm/linux-rr/-/tree/features/granule_perf/ptep_get-mm-unstable-lkml_v3
-[5] https://gitlab.arm.com/linux-arm/linux-rr/-/tree/features/granule_perf/ptep_get-v6.4-rc6-lkml_v3
-
-Thanks,
-Ryan
-
-Ryan Roberts (3):
-  mm: ptdump should use ptep_get_lockless()
-  mm: Move ptep_get() and pmdp_get() helpers
-  mm: ptep_get() conversion
-
- .../drm/i915/gem/selftests/i915_gem_mman.c    |   8 +-
- drivers/misc/sgi-gru/grufault.c               |   2 +-
- drivers/vfio/vfio_iommu_type1.c               |   7 +-
- drivers/xen/privcmd.c                         |   2 +-
- fs/proc/task_mmu.c                            |  33 +++---
- fs/userfaultfd.c                              |   6 +-
- include/linux/hugetlb.h                       |   4 +
- include/linux/mm_inline.h                     |   2 +-
- include/linux/pgtable.h                       |  34 +++---
- kernel/events/uprobes.c                       |   2 +-
- mm/damon/ops-common.c                         |   2 +-
- mm/damon/paddr.c                              |   2 +-
- mm/damon/vaddr.c                              |  10 +-
- mm/filemap.c                                  |   2 +-
- mm/gup.c                                      |  21 ++--
- mm/highmem.c                                  |  12 ++-
- mm/hmm.c                                      |   2 +-
- mm/huge_memory.c                              |   4 +-
- mm/hugetlb.c                                  |   2 +-
- mm/hugetlb_vmemmap.c                          |   6 +-
- mm/kasan/init.c                               |   9 +-
- mm/kasan/shadow.c                             |  10 +-
- mm/khugepaged.c                               |  22 ++--
- mm/ksm.c                                      |  22 ++--
- mm/madvise.c                                  |   6 +-
- mm/mapping_dirty_helpers.c                    |   4 +-
- mm/memcontrol.c                               |   4 +-
- mm/memory-failure.c                           |  26 ++---
- mm/memory.c                                   | 100 ++++++++++--------
- mm/mempolicy.c                                |   6 +-
- mm/migrate.c                                  |  14 +--
- mm/migrate_device.c                           |  15 +--
- mm/mincore.c                                  |   2 +-
- mm/mlock.c                                    |   6 +-
- mm/mprotect.c                                 |   8 +-
- mm/mremap.c                                   |   2 +-
- mm/page_table_check.c                         |   4 +-
- mm/page_vma_mapped.c                          |  27 +++--
- mm/pgtable-generic.c                          |   2 +-
- mm/ptdump.c                                   |   2 +-
- mm/rmap.c                                     |  34 +++---
- mm/sparse-vmemmap.c                           |   8 +-
- mm/swap_state.c                               |   8 +-
- mm/swapfile.c                                 |  20 ++--
- mm/userfaultfd.c                              |   4 +-
- mm/vmalloc.c                                  |   6 +-
- mm/vmscan.c                                   |  14 +--
- virt/kvm/kvm_main.c                           |  11 +-
- 48 files changed, 316 insertions(+), 243 deletions(-)
-
---
+diff --git a/mm/ptdump.c b/mm/ptdump.c
+index 8adab455a68b..03c1bdae4a43 100644
+--- a/mm/ptdump.c
++++ b/mm/ptdump.c
+@@ -119,7 +119,7 @@ static int ptdump_pte_entry(pte_t *pte, unsigned long addr,
+ 			    unsigned long next, struct mm_walk *walk)
+ {
+ 	struct ptdump_state *st = walk->private;
+-	pte_t val = ptep_get(pte);
++	pte_t val = ptep_get_lockless(pte);
+ 
+ 	if (st->effective_prot)
+ 		st->effective_prot(st, 4, pte_val(val));
+-- 
 2.25.1
 
