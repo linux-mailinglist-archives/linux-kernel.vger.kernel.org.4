@@ -2,107 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA1B272B536
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 03:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 929C272B538
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 03:53:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232674AbjFLBxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 21:53:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54690 "EHLO
+        id S232896AbjFLBxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 21:53:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjFLBw6 (ORCPT
+        with ESMTP id S232699AbjFLBxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 21:52:58 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A36136
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 18:52:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686534776; x=1718070776;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=m46vQZk4pefLmm8P5SfQHMea4c/QsvdPEaoeo/+mU18=;
-  b=d4MnuauMbtK5FlL0pQEx5UTkUf4XeAfgUGynsmG6fw8235qHjNNyfTu1
-   58fgnuU0qPXfwSLYblV0p2QBVO0YMxGz7h9JunbeUZ7qsrpfq/lC5f6ZF
-   dGVURe67YhDQoPmjJYaylL8z5i2JjZHmJHX3Ir3nr5yq2vjCQkfLJ+HvK
-   +uSyVKw6lwEx1u6AF9YDgWWnKEIbye6rbmYA1U99m7ZmFRPKG9JOppmCz
-   nHPeRlCttSyZ91xEd53WlmoayDPUF1Je/JLfk4EVgQ032CAlBvT5QdAIN
-   SEqKsMEoV8xPpgYy3I5OUMDDWdcgdJJjuGgtvYDUFwVTe+/vDBHNq3Bzu
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="338286803"
-X-IronPort-AV: E=Sophos;i="6.00,235,1681196400"; 
-   d="scan'208";a="338286803"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2023 18:52:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="1041156934"
-X-IronPort-AV: E=Sophos;i="6.00,235,1681196400"; 
-   d="scan'208";a="1041156934"
-Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 11 Jun 2023 18:52:55 -0700
-Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q8Wjm-00001A-14;
-        Mon, 12 Jun 2023 01:52:54 +0000
-Date:   Mon, 12 Jun 2023 09:52:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yogesh Hegde <yogi.kernel@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v2 1/5] staging: rtl8192e: Remove variable SetWirelessMode
-Message-ID: <202306120923.uMeOfojk-lkp@intel.com>
-References: <fba56522e419351b05e33df8cd0ac31806534d8c.1686149467.git.yogi.kernel@gmail.com>
+        Sun, 11 Jun 2023 21:53:18 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D387E42;
+        Sun, 11 Jun 2023 18:53:16 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1b3d44e3d1cso2708825ad.0;
+        Sun, 11 Jun 2023 18:53:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686534796; x=1689126796;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lXP4cNz2t4ZDkBT1cIgolpXOZPb+pc1BHI1BHsEvX7M=;
+        b=QZ5bGCIpGHbOH30GJ0Vj1yd4riN0She2upYTWDR3Egs4ibXpscmtcucLmvkfxF/ORO
+         7OGvYZIPfnqFfJEzuvN/15sJDKbMTF6OaIfbEf0bU85dVY1YYfRCtDh1SLOGfcU5osK6
+         8dN2w/eYlereO1YRJQZ6aUkr3fhim5ThMXNhqlHY9lGRJqvm1Q+WYt0sAp86Povb7U/a
+         0TiXekpQCtbKU87a20i51stNCpkCXcq0Z4zokTxMgN1aaqKL3mTWTlK+L5lM8klPbMX5
+         zp7DaAv23vObUuOlpxW2XF6QHNytWiNQD4VZFwLNHcI9/rJZBckrlYQ/CXCOEFhdnDJ9
+         mHAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686534796; x=1689126796;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lXP4cNz2t4ZDkBT1cIgolpXOZPb+pc1BHI1BHsEvX7M=;
+        b=NrXQkNzrHo5/gGRKTTkbAAOnx64mAW4ydwLp48xlLEKCAKpQX6m7GFwUJys/2opIyg
+         OxFPKxOKvj8wDohPHkRDPsdjqohq/eudQYRKIUqdwyQoyC9y26OjhVkqvknbdwbixJtX
+         YaCO0FlvRyFHnqJSb9gyPdpDzQQ7x7dUZdBo50mhdYI5UCknpP/KodfGCeDMKWtIxkuz
+         KDWrtgrlo6D9O6fiH72rpdiSdk43NZiz/D/xQ6VcPpPfkOS5ftZVuxjay2DTZI/TjF0i
+         zYYsrgtYHOibiVSQmDyNNmzSXAWhmBr9/AERdQLV/ZCeAH6/+UDJqSQLEBOdwuXi83Os
+         E92Q==
+X-Gm-Message-State: AC+VfDzr7fO7njEo7VelQygIAuqGqL1UVQJyXSLIAW+SGgllvx+SY4L/
+        SVnA2MAVDhiDKM4atEHuumA=
+X-Google-Smtp-Source: ACHHUZ5BNiY3nhsAahGpBTQXH2dS2OYKPuqr+MFJAL26s478eK40jCOAPCUITbQCzP7gmMnMowSheA==
+X-Received: by 2002:a17:902:c407:b0:1ac:5717:fd5 with SMTP id k7-20020a170902c40700b001ac57170fd5mr7562551plk.60.1686534795692;
+        Sun, 11 Jun 2023 18:53:15 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-80.three.co.id. [180.214.232.80])
+        by smtp.gmail.com with ESMTPSA id o7-20020a170902bcc700b001b052483e9csm6915001pls.231.2023.06.11.18.53.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Jun 2023 18:53:15 -0700 (PDT)
+Message-ID: <35a8d0f1-0def-a1f8-b3db-d48863693fbb@gmail.com>
+Date:   Mon, 12 Jun 2023 08:53:11 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fba56522e419351b05e33df8cd0ac31806534d8c.1686149467.git.yogi.kernel@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] fs: Fix comment typo
+Content-Language: en-US
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Shaomin Deng <dengshaomin@cdjrlc.com>, viro@zeniv.linux.org.uk,
+        brauner@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mao Zhu <zhumao001@208suo.com>
+References: <20230611123314.5282-1-dengshaomin@cdjrlc.com>
+ <ZIXEHHvkJVlmE_c4@debian.me> <87edmhok1h.fsf@meer.lwn.net>
+ <ZIZ31kVtPmaYBqa0@debian.me>
+In-Reply-To: <ZIZ31kVtPmaYBqa0@debian.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yogesh,
+On 6/12/23 08:41, Bagas Sanjaya wrote:
+> On Sun, Jun 11, 2023 at 01:50:34PM -0600, Jonathan Corbet wrote:
+>> Bagas Sanjaya <bagasdotme@gmail.com> writes:
+>>
+>>> On Sun, Jun 11, 2023 at 08:33:14AM -0400, Shaomin Deng wrote:
+>>>> From: Mao Zhu <zhumao001@208suo.com>
+>>>>
+>>>> Delete duplicated word in comment.
+>>>
+>>> On what function?
+>>
+>> Bagas, do I *really* have to ask you, yet again, to stop nitpicking our
+>> contributors into the ground?  It appears I do.  So:
+>>
+>> Bagas, *stop* this.  It's a typo patch removing an extraneous word.  The
+>> changelog is fine.  We absolutely do not need you playing changelog cop
+>> and harassing contributors over this kind of thing.
+> 
+> OK, thanks for reminding me again.
+> 
+> At the time of reviewing, I had bad feeling that @cdjrlc.com people will
+> ignore review comments (I betted due to mail setup problem that prevents
+> them from properly repling to mailing lists, which is unfortunate). I
+> was nitpicking because the diff context doesn't look clear to me (what
+> function name?).
+> 
 
-kernel test robot noticed the following build errors:
+And no wonder why several maintainers also highlight this (which prompted
+me to review that way):
 
-[auto build test ERROR on staging/staging-testing]
-[also build test ERROR on staging/staging-next staging/staging-linus linus/master v6.4-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yogesh-Hegde/staging-rtl8192e-Remove-variable-SetWirelessMode/20230607-230636
-base:   staging/staging-testing
-patch link:    https://lore.kernel.org/r/fba56522e419351b05e33df8cd0ac31806534d8c.1686149467.git.yogi.kernel%40gmail.com
-patch subject: [PATCH v2 1/5] staging: rtl8192e: Remove variable SetWirelessMode
-config: x86_64-randconfig-s053-20230611 (https://download.01.org/0day-ci/archive/20230612/202306120923.uMeOfojk-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/823187b988791852e562dba90e5eb7c7e7df8eca
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yogesh-Hegde/staging-rtl8192e-Remove-variable-SetWirelessMode/20230607-230636
-        git checkout 823187b988791852e562dba90e5eb7c7e7df8eca
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306120923.uMeOfojk-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "rtl92e_set_wireless_mode" [drivers/staging/rtl8192e/rtllib.ko] undefined!
+[1]: https://lore.kernel.org/all/162b5545-7d24-3cf2-9158-3100ef644e03@linux.intel.com/
+[2]: https://lore.kernel.org/all/3a73cf7f02915891c77dc5a3203dc187f6d91194.camel@HansenPartnership.com/
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+An old man doll... just what I always wanted! - Clara
+
