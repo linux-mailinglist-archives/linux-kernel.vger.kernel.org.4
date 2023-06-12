@@ -2,149 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A9D72BE7F
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:13:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F1C272BE94
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbjFLKNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 06:13:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48772 "EHLO
+        id S231293AbjFLKP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 06:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232269AbjFLKNS (ORCPT
+        with ESMTP id S232210AbjFLKOe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 06:13:18 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16DE10CC;
-        Mon, 12 Jun 2023 02:53:56 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5AE1E6605907;
-        Mon, 12 Jun 2023 10:53:54 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686563635;
-        bh=12+M92ejc+eDkMrCoA63t6hfzspIbG8XPxdjeW+mgqE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=IEjF90KqrXkK2WXSoPZpydyHRiHNiisuQv0m/SM8Icg68gW/oWxAhG7JpoS2bPH3A
-         ECZs3viXyqx83QNASlzbfaP4XcIDuAPijapONC6WRlhIwLUioYvHXt5AHXZRsqUtpb
-         dHcoHLn1oGJSTJCBqN6IvGwgGRqNY4SijA993M+HuKivXnM5LER+zRSQclNA+zjqcJ
-         si8uTlazy6ukbUAP2RFAmCTMc9PLqXcVXrqRAgkn6uPk6QNskA+Z9PFlao54EZy7rL
-         0zX9P8xaaMNp75bQoZWzzR/vkKe+zFz7je2tA0Kf7Bb37Z92qltgyLsewoTbvQdPWY
-         oKQ1uWqcd2C9A==
-Message-ID: <fda4f196-8466-8290-9072-d80fff367720@collabora.com>
-Date:   Mon, 12 Jun 2023 11:53:51 +0200
+        Mon, 12 Jun 2023 06:14:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A1649F3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:54:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686563698;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2+lliQQv0MFqMy2/MjnJS4GgfZK9CtTvSlEKJTTXlR0=;
+        b=DOEe/Xew12p6V9pgc0y0z6YsJXrNH1s7W7EhoKevVRHuKl2RWd2gpdwe6PSrwfMNdmFlEy
+        R5ZrrDo1kmqXil8ymRvI42KMtU9QjtL8WTLk0+xlaeZ0fYl3jEeT7HjR2wfh01LSEYZshS
+        eq9wlv9EtYprb9xxh/E4BQEgmZrt814=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-277-t_O5PXXHOIi8hpvhlrifpQ-1; Mon, 12 Jun 2023 05:54:53 -0400
+X-MC-Unique: t_O5PXXHOIi8hpvhlrifpQ-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f7ecc15771so18390315e9.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:54:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686563693; x=1689155693;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2+lliQQv0MFqMy2/MjnJS4GgfZK9CtTvSlEKJTTXlR0=;
+        b=Lw2/EgeFTknFt6rfcy6ovkHdRFHQFGaUGfSnbiOxmDGtYQ0xEVH/mdfpIMFB9b5Xsf
+         rriY60EAz4ZwghvDT3Po+G1zFIp3O4xJn1UsCkFBjBWUImNpIy6upO6BIPrHQtpjBfTa
+         wt/eyjIEzdDPAvb5wvBvYfZw4/Om8MWOmBHzMBAc0SLM8F054Vm/AvSOlMkfZAPts2o/
+         M683OWn2u/LHvkXv7sjX/YclJ8Vs3L6xQ4qw6Ek8G4GGc7eNw/yK/F3DVC6tL9p7T88T
+         QsAVYeiVK3Ngv2MkWWvjyCRszfslymjGBYaDR3//kXrzKspJOoOjYe2pYg5tLxy+YtC/
+         YKNw==
+X-Gm-Message-State: AC+VfDxPda/WRgb3RrhGJDSerfyJhdHeee+rgcgSzTlep+d1a0qXqtPN
+        S9MWP4MBubj21GuIXfZC7n4YYd7+zmsaNYe/+HPOcY/QUCdfWjCVCOKoOtY16e/VbMn2OqYGYtR
+        gqNx/kfUsa3wC/YNuo38aHSV+
+X-Received: by 2002:a1c:f70e:0:b0:3f4:1ce0:a606 with SMTP id v14-20020a1cf70e000000b003f41ce0a606mr6887900wmh.1.1686563692838;
+        Mon, 12 Jun 2023 02:54:52 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7zaoW/4EJw3xh9E18HQ7DmUYd+SNWO5wWCUYsDX5fhzMtWJef4K3YX9DfpLzkdvYrozazasg==
+X-Received: by 2002:a1c:f70e:0:b0:3f4:1ce0:a606 with SMTP id v14-20020a1cf70e000000b003f41ce0a606mr6887887wmh.1.1686563692460;
+        Mon, 12 Jun 2023 02:54:52 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c74e:1600:4f67:25b2:3e8c:2a4e? (p200300cbc74e16004f6725b23e8c2a4e.dip0.t-ipconnect.de. [2003:cb:c74e:1600:4f67:25b2:3e8c:2a4e])
+        by smtp.gmail.com with ESMTPSA id i12-20020a05600c290c00b003f7e653c3e3sm10904071wmd.21.2023.06.12.02.54.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 02:54:51 -0700 (PDT)
+Message-ID: <55e05ac0-041d-75eb-4707-e053dc3f2976@redhat.com>
+Date:   Mon, 12 Jun 2023 11:54:51 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 0/5] Enable decoder for mt8183
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] mm: compaction: skip memory hole rapidly when isolating
+ migratable pages
 Content-Language: en-US
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     kernel@collabora.com, Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20230607205714.510012-1-nfraprado@collabora.com>
- <380c6489-7a3c-778b-5b81-6339b6964b90@xs4all.nl>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <380c6489-7a3c-778b-5b81-6339b6964b90@xs4all.nl>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        "Huang, Ying" <ying.huang@intel.com>
+Cc:     akpm@linux-foundation.org, mgorman@techsingularity.net,
+        vbabka@suse.cz, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <8cc668b77c8eb2fa78058b3d81386ebed9c5a9cd.1686294549.git.baolin.wang@linux.alibaba.com>
+ <87sfax6v7c.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <d8444045-9497-1073-5cf9-e2959197701d@linux.alibaba.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <d8444045-9497-1073-5cf9-e2959197701d@linux.alibaba.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 12/06/23 09:02, Hans Verkuil ha scritto:
-> Hi Nicolas,
+On 12.06.23 11:36, Baolin Wang wrote:
 > 
-> On 07/06/2023 22:53, Nícolas F. R. A. Prado wrote:
+> 
+> On 6/12/2023 2:39 PM, Huang, Ying wrote:
+>> Baolin Wang <baolin.wang@linux.alibaba.com> writes:
 >>
->> This series enables the hardware decoder present on mt8183. At first
->> glance, the only missing piece is the devicetree node for it, however,
->> simply adding it as is would cause an address collision between the
->> first register iospace and the clock-controller node, so a rework of the
->> dt-binding and driver, as well as addition of a clock, were needed
->> first.
+>>> On some machines, the normal zone can have a large memory hole like
+>>> below memory layout, and we can see the range from 0x100000000 to
+>>> 0x1800000000 is a hole. So when isolating some migratable pages, the
+>>> scanner can meet the hole and it will take more time to skip the large
+>>> hole. From my measurement, I can see the isolation scanner will take
+>>> 80us ~ 100us to skip the large hole [0x100000000 - 0x1800000000].
+>>>
+>>> So adding a new helper to fast search next online memory section
+>>> to skip the large hole can help to find next suitable pageblock
+>>> efficiently. With this patch, I can see the large hole scanning only
+>>> takes < 1us.
+>>>
+>>> [    0.000000] Zone ranges:
+>>> [    0.000000]   DMA      [mem 0x0000000040000000-0x00000000ffffffff]
+>>> [    0.000000]   DMA32    empty
+>>> [    0.000000]   Normal   [mem 0x0000000100000000-0x0000001fa7ffffff]
+>>> [    0.000000] Movable zone start for each node
+>>> [    0.000000] Early memory node ranges
+>>> [    0.000000]   node   0: [mem 0x0000000040000000-0x0000000fffffffff]
+>>> [    0.000000]   node   0: [mem 0x0000001800000000-0x0000001fa3c7ffff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa3c80000-0x0000001fa3ffffff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa4000000-0x0000001fa402ffff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa4030000-0x0000001fa40effff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa40f0000-0x0000001fa73cffff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa73d0000-0x0000001fa745ffff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa7460000-0x0000001fa746ffff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa7470000-0x0000001fa758ffff]
+>>> [    0.000000]   node   0: [mem 0x0000001fa7590000-0x0000001fa7ffffff]
+>>>
+>>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>>> ---
+>>>    include/linux/mmzone.h | 10 ++++++++++
+>>>    mm/compaction.c        | 23 ++++++++++++++++++++++-
+>>>    2 files changed, 32 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+>>> index 5a7ada0413da..87e6c535d895 100644
+>>> --- a/include/linux/mmzone.h
+>>> +++ b/include/linux/mmzone.h
+>>> @@ -2000,6 +2000,16 @@ static inline unsigned long next_present_section_nr(unsigned long section_nr)
+>>>    	return -1;
+>>>    }
+>>>    
+>>> +static inline unsigned long next_online_section_nr(unsigned long section_nr)
+>>> +{
+>>> +	while (++section_nr <= __highest_present_section_nr) {
+>>> +		if (online_section_nr(section_nr))
+>>> +			return section_nr;
+>>> +	}
+>>> +
+>>> +	return -1UL;
+>>> +}
+>>> +
+>>>    /*
+>>>     * These are _only_ used during initialisation, therefore they
+>>>     * can use __initdata ...  They could have names to indicate
+>>> diff --git a/mm/compaction.c b/mm/compaction.c
+>>> index 3398ef3a55fe..3a55fdd20c49 100644
+>>> --- a/mm/compaction.c
+>>> +++ b/mm/compaction.c
+>>> @@ -229,6 +229,21 @@ static void reset_cached_positions(struct zone *zone)
+>>>    				pageblock_start_pfn(zone_end_pfn(zone) - 1);
+>>>    }
+>>>    
+>>> +static unsigned long skip_hole_pageblock(unsigned long start_pfn)
+>>> +{
+>>> +	unsigned long next_online_nr;
+>>> +	unsigned long start_nr = pfn_to_section_nr(start_pfn);
+>>> +
+>>> +	if (online_section_nr(start_nr))
+>>> +		return -1UL;
 >>
->> Tested that H264 decoding works with the hardware decoder on
->> mt8183-kukui-jacuzzi-juniper-sku16, giving a fluster score of 98/135 on
->> the JVT-AVC_V1 test suite. And ensured other SoCs (MT8192 and MT8195)
->> still work as usual.
->>
->> Changes in v2:
->> - Merged commit 1 (media: dt-bindings: mediatek,vcodec: Allow single
->>    clock for mt8183) into commit 3 (media: dt-bindings: mediatek,vcodec:
->>    Remove VDEC_SYS for mt8183)
->> - Further constrained properties in dt-binding
->> - Added CLK_IGNORE_UNUSED flag to active clock
->> - Reformatted reg-names in DT node
->>
->> Nícolas F. R. A. Prado (4):
->>    media: dt-bindings: mediatek,vcodec: Don't require assigned-clocks
->>    media: dt-bindings: mediatek,vcodec: Remove VDEC_SYS for mt8183
->>    media: mediatek: vcodec: Read HW active status from clock
->>    clk: mediatek: mt8183: Add CLK_VDEC_ACTIVE to vdec
+>> Define a macro for the maigic "-1UL"?  Which is used for multiple times
+>> in the patch.
 > 
-> Is the clk patch independent from the others? It's not clear to me.
-> 
-> If the clk patch has to go in together with the media patches, then
-> please let me know and post a v3 where the clk patch is also CC-ed to
-> the linux-media mailinglist to ensure it ends up in our patchwork system.
-> 
-> And in that case I need a Acked-by from the clk maintainer as well.
-> 
-> If it is independent, then there is no need for a v3 (at least, not
-> for this).
-> 
+> I am struggling to find a readable macro for these '-1UL', since the
+> '-1UL' in next_online_section_nr() indicates that it can not find an
+> online section. However the '-1' in skip_hole_pageblock() indicates that
+> it can not find an online pfn.
 
-The clock patch is not independent, as in the devicetree changes will not
-work without the addition of that clock (and of course even fail building),
-so that series needs a v3.
+Maybe something like
 
-Nícolas, please go on and send a v3 as requested.
+#define SECTION_NR_INVALID -1UL
 
+> 
+> So after more thinking, I will change to return 'NR_MEM_SECTIONS' if can
+> not find next online section in next_online_section_nr(). And in
+> skip_hole_pageblock(), I will change to return 0 if can not find next
+> online pfn. What do you think?
+
+Well, 0 "might be" (and most likely is) a valid section number, so you'd 
+simulate some kind-of a wraparound. I guess I'd prefer 
+SECTION_NR_INVALID instead.
+
+-- 
 Cheers,
-Angelo
 
-> Regards,
-> 
-> 	Hans
-> 
->>
->> Yunfei Dong (1):
->>    arm64: dts: mediatek: mt8183: Add decoder
->>
->>   .../media/mediatek,vcodec-decoder.yaml        | 65 +++++++++++++++----
->>   arch/arm64/boot/dts/mediatek/mt8183.dtsi      | 30 +++++++++
->>   drivers/clk/mediatek/clk-mt8183-vdec.c        |  5 ++
->>   .../mediatek/vcodec/mtk_vcodec_dec_drv.c      | 59 +++++++++++++----
->>   .../mediatek/vcodec/mtk_vcodec_dec_hw.c       | 20 ++++--
->>   .../mediatek/vcodec/mtk_vcodec_dec_pm.c       | 12 +++-
->>   .../platform/mediatek/vcodec/mtk_vcodec_drv.h |  1 +
->>   include/dt-bindings/clock/mt8183-clk.h        |  3 +-
->>   8 files changed, 165 insertions(+), 30 deletions(-)
->>
-> 
-> 
-
+David / dhildenb
 
