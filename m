@@ -2,140 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0232372C011
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:49:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ECC872C06D
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:52:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234846AbjFLKta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 06:49:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54922 "EHLO
+        id S235416AbjFLKwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 06:52:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234671AbjFLKtN (ORCPT
+        with ESMTP id S229736AbjFLKvz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 06:49:13 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D4849E1;
-        Mon, 12 Jun 2023 03:33:50 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-544c0d768b9so2823150a12.0;
-        Mon, 12 Jun 2023 03:33:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686566029; x=1689158029;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bfpZtHxfMfNOA+nAShm6Lv54zYUDy4unPqc7jTzW5IY=;
-        b=g5MQrV06tGnu5T49c+fqlRVbz+4vl6lTs+B5PSv26UDs8SmwuUjbtgpYvi4XYvsfXs
-         g3Wc2jiZquREb5ZwSnwRH1DOO0gSmxP4ZhQb3LUz6RactKq1Qh1tXR07KR1JZ3n9uWCT
-         OmsqK5utFoC85oyQFK3hSzIZZeudEFukchwPhsPYdiKrxiULBo149J62DCxM9rqD41OP
-         2n7nwRHR5sp/jW8AFmWtySZQaZxDatBrFk8cg247NVR8wSaZAu6PlfoyvC/ViMgBDKkk
-         RAaGZwoamqew0CIJp9D6bhGrbvVd7HtX1+WQ2KrieFtv7QreWGEkuOXnHV8eTeMGwGfH
-         vGLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686566029; x=1689158029;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bfpZtHxfMfNOA+nAShm6Lv54zYUDy4unPqc7jTzW5IY=;
-        b=klHY3KT7nsVYH+OCPVC1Ij0lO+Bvv+rJHOh+YuF14SskOsX9HrNW/NMZiwes24SjGO
-         2RgE3n2OleroGM4C7yxbey27X/cd0nJS+NtAsi+ar5xh01uT3MuVCF9xk3e0JMGDEyXD
-         sTtTwmff0CCWfFaLLCMh120PeNZ7HXea7p8457JA12Qp4xJOpNKg6HjAs4fXfSt4Ev1o
-         PDBtQNlMRbb0CdkB3X3X7fjVcC7+g7xTUVRUeCTMoi4igQPn0RKKKp+NTH7PthHONQRQ
-         uTbhLzycgfnQVkhJYSKuQJewy35+m/JN33vC7yd4y5Hwx7W7PhwJdCUiglBOcm/X72ME
-         W08A==
-X-Gm-Message-State: AC+VfDwhdoGDcY6xVuGWRbCxVgYzbfLdXlJ1fv/DlCsLnfJR/O2uPu9o
-        iJI7toM3BuFOZDzfzyg4XIo=
-X-Google-Smtp-Source: ACHHUZ7KCgzwwzt/+U5B3rtE7WuKTwMKF7qrktbVjO71FDDyDZXzkAmBeySxeqnVrqprjbrMQuTzgQ==
-X-Received: by 2002:a17:902:8d8a:b0:1b1:9d14:1537 with SMTP id v10-20020a1709028d8a00b001b19d141537mr5845271plo.55.1686566029363;
-        Mon, 12 Jun 2023 03:33:49 -0700 (PDT)
-Received: from sumitra.com ([117.212.94.125])
-        by smtp.gmail.com with ESMTPSA id n3-20020a170902968300b001b0266579ebsm7866299plp.194.2023.06.12.03.33.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 03:33:48 -0700 (PDT)
-Date:   Mon, 12 Jun 2023 03:33:41 -0700
-From:   Sumitra Sharma <sumitraartsy@gmail.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Ira Weiny <ira.weiny@intel.com>, Fabio <fmdefrancesco@gmail.com>,
-        Deepak R Varma <drv@mailo.com>
-Subject: [PATCH] lib/test_bpf: Replace kmap() with kmap_local_page()
-Message-ID: <20230612103341.GA354790@sumitra.com>
+        Mon, 12 Jun 2023 06:51:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01B993FF;
+        Mon, 12 Jun 2023 03:36:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A808C614F0;
+        Mon, 12 Jun 2023 10:36:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10C3AC4339C;
+        Mon, 12 Jun 2023 10:36:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686566191;
+        bh=7lfE8n4wCuge2Ilsu3h1F4ipyzhUj7bSJuflx8EXZtw=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=DU0ZjjsJO4rS5B/LrOhkcDtfvbBZTjXhclQjcMb8L0SMAJ/Zj8o6cOouP0LPA9kRi
+         VqJ/momrCYS9bgBfSwuBqZwMMGlKax5OQGCSRTBF7m/eO1OCct4ECh1Dq3q51n5hhV
+         Yhf0l7cjjbGMIJ2UYDeBi6gwKGFHv0g6f2BclJ5kTS9KJF0zsyYQaetziIibzJHykN
+         7tP2iy40SDcuxMKwZA7N7Mbn26TeBSys37uMErgDMUpaf6wBIfwFsLid/c78sbMh0z
+         WHZh5yV0lSHcOPaWQW6a50hTCYgYFvBa4rOsjTJ1iVF0vlDpRO8qNBXUJAB1ctdV+d
+         JMJSCsxLTJnJg==
+Message-ID: <a1f7a725186082d933aff702d1d50c6456da6f20.camel@kernel.org>
+Subject: Re: [PATCH 7/9] gfs2: update ctime when quota is updated
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Andreas Gruenbacher <agruenba@redhat.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Brad Warrum <bwarrum@linux.ibm.com>,
+        Ritu Agarwal <rituagar@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ian Kent <raven@themaw.net>,
+        "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
+        Jeremy Kerr <jk@ozlabs.org>, Ard Biesheuvel <ardb@kernel.org>,
+        Namjae Jeon <linkinjeon@kernel.org>,
+        Sungjong Seo <sj1557.seo@samsung.com>,
+        Bob Peterson <rpeterso@redhat.com>,
+        Steve French <sfrench@samba.org>,
+        Paulo Alcantara <pc@manguebit.com>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Tom Talpey <tom@talpey.com>,
+        John Johansen <john.johansen@canonical.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Ruihan Li <lrh2000@pku.edu.cn>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        autofs@vger.kernel.org, linux-efi@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, cluster-devel@redhat.com,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org
+Date:   Mon, 12 Jun 2023 06:36:26 -0400
+In-Reply-To: <CAHc6FU4wyfQT7T75j2Sd9WNp=ag7hpDZGYkR=m73h2nOaH+AqQ@mail.gmail.com>
+References: <20230609125023.399942-1-jlayton@kernel.org>
+         <20230609125023.399942-8-jlayton@kernel.org>
+         <CAHc6FU4wyfQT7T75j2Sd9WNp=ag7hpDZGYkR=m73h2nOaH+AqQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kmap() has been deprecated in favor of the kmap_local_page()
-due to high cost, restricted mapping space, the overhead of
-a global lock for synchronization, and making the process
-sleep in the absence of free slots.
+On Fri, 2023-06-09 at 18:44 +0200, Andreas Gruenbacher wrote:
+> Jeff,
+>=20
+> On Fri, Jun 9, 2023 at 2:50=E2=80=AFPM Jeff Layton <jlayton@kernel.org> w=
+rote:
+> > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > ---
+> >  fs/gfs2/quota.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+> > diff --git a/fs/gfs2/quota.c b/fs/gfs2/quota.c
+> > index 1ed17226d9ed..6d283e071b90 100644
+> > --- a/fs/gfs2/quota.c
+> > +++ b/fs/gfs2/quota.c
+> > @@ -869,7 +869,7 @@ static int gfs2_adjust_quota(struct gfs2_inode *ip,=
+ loff_t loc,
+> >                 size =3D loc + sizeof(struct gfs2_quota);
+> >                 if (size > inode->i_size)
+> >                         i_size_write(inode, size);
+> > -               inode->i_mtime =3D inode->i_atime =3D current_time(inod=
+e);
+> > +               inode->i_mtime =3D inode->i_atime =3D inode->i_ctime =
+=3D current_time(inode);
+>=20
+> I don't think we need to worry about the ctime of the quota inode as
+> that inode is internal to the filesystem only.
+>=20
 
-kmap_local_page() is faster than kmap() and offers thread-local
-and CPU-local mappings, take pagefaults in a local kmap region
-and preserves preemption by saving the mappings of outgoing
-tasks and restoring those of the incoming one during a context
-switch.
+Thanks Andreas.  I'll plan to drop this patch from the series for now.
 
-The mapping is kept thread local in the function
-“generate_test_data” in test_bpf.c
+Does updating the mtime and atime here serve any purpose, or should
+those also be removed? If you plan to keep the a/mtime updates then I'd
+still suggest updating the ctime for consistency's sake. It shouldn't
+cost anything extra to do so since you're dirtying the inode below
+anyway.
 
-Therefore, replace kmap() with kmap_local_page() and use
-memcpy_to_page() to avoid open coding kmap_local_page()
-+ memcpy() + kunmap_local().
+Thanks!
 
-Remove the unused variable “ptr”.
+> >                 mark_inode_dirty(inode);
+> >                 set_bit(QDF_REFRESH, &qd->qd_flags);
+> >         }
+> > --
+> > 2.40.1
+> >=20
+>=20
+> Thanks,
+> Andreas
+>=20
 
-Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
----
- lib/test_bpf.c | 10 +---------
- 1 file changed, 1 insertion(+), 9 deletions(-)
-
-diff --git a/lib/test_bpf.c b/lib/test_bpf.c
-index ade9ac672adb..3bb94727d83b 100644
---- a/lib/test_bpf.c
-+++ b/lib/test_bpf.c
-@@ -14381,25 +14381,17 @@ static void *generate_test_data(struct bpf_test *test, int sub)
- 		 * single fragment to the skb, filled with
- 		 * test->frag_data.
- 		 */
--		void *ptr;
--
- 		page = alloc_page(GFP_KERNEL);
- 
- 		if (!page)
- 			goto err_kfree_skb;
- 
--		ptr = kmap(page);
--		if (!ptr)
--			goto err_free_page;
--		memcpy(ptr, test->frag_data, MAX_DATA);
--		kunmap(page);
-+		memcpy_to_page(page, 0, test->frag_data, MAX_DATA);
- 		skb_add_rx_frag(skb, 0, page, 0, MAX_DATA, MAX_DATA);
- 	}
- 
- 	return skb;
- 
--err_free_page:
--	__free_page(page);
- err_kfree_skb:
- 	kfree_skb(skb);
- 	return NULL;
--- 
-2.25.1
-
+--=20
+Jeff Layton <jlayton@kernel.org>
