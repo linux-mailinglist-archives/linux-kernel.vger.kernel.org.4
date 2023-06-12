@@ -2,114 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7B572C926
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:01:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B8AC72C929
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238562AbjFLPBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 11:01:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34840 "EHLO
+        id S238744AbjFLPBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 11:01:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238427AbjFLPBD (ORCPT
+        with ESMTP id S238423AbjFLPBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 11:01:03 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB718CC
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 08:01:02 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-977d6aa3758so814067166b.0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 08:01:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686582061; x=1689174061;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mrjIaSswtTyEY7Z8qdbgtXftw/wW1klcn/CpxmtkX3c=;
-        b=MoV2QEdO3zATE97Mvg8ltny6qdqArDowpHJ8EY5BBTGq7VSxNV6B3GamkBWpiZS+8t
-         stSc29yAUb4awRgsYYXV7YSTR9hZCQD9ak5fZVowQfL1PPN/nzvARWjoQBLbcSqAS6LG
-         67fANOGUc/tNyL1WvzgzdIxUewkgq8pDTwkQagZ06TTqPTUQeLLTEbgI3I5hZlipXo42
-         3yziw4GhShnQ6Lg/Cv/jlwjurvWNKnQgJhKXqym7acLF+NVH4fhZ7vSJ9nkhFjRdoRtY
-         aj/DHXiXC0YDv7IPBdRpIWqujinu9a/yU4SzLooRU+h6TXBi8fqoC9fB53TWBjwSlXYJ
-         zgWg==
+        Mon, 12 Jun 2023 11:01:13 -0400
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98D7F9
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 08:01:11 -0700 (PDT)
+Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-33fd4eed094so15309435ab.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 08:01:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686582061; x=1689174061;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=mrjIaSswtTyEY7Z8qdbgtXftw/wW1klcn/CpxmtkX3c=;
-        b=Cml8HKppPhfGRHi9pHXOdZhrB6sv/7nhwxACKnP+d3bU26PvVz2q7inuDhoZsqCVcg
-         0AIifbeZcHCvIl8e1RGm6LuwBzNnccxl6y5MB8f1HJIA3SizOUomEdj7zyLJLSXbxV1U
-         hcwVdMtgQZCqL2c96IemcYilqYyQojD+v2mtVczXkG/7DIRz2Lj/8a6CBM8M5zmTgL/9
-         yt9hIc0TQOd/+GrtrMHjWtb7MwbdplxEEtmS3hXLCUVdmQ+fB+tfxSLPxhxHaKrqXxd7
-         B5lP04GSjGLSVBg5zFCDttK6aCpGU1tEUW69r72VZHgOZnee8eadOE9UOYDuNjbXzVYp
-         Tibw==
-X-Gm-Message-State: AC+VfDxNbbAHKEZYPmpf39Rt/PcE69jAPeHUXicwA5knzP/1FzzK1zQw
-        aJjM6aMQv3rVJeHGrxbfUxs=
-X-Google-Smtp-Source: ACHHUZ5blwfhznY7HEehsUI5LMmuOJwU7N2BdDI1xQ2Y0yJXTUUc4FAlxBZNIkv7qM1VODcBabS/9w==
-X-Received: by 2002:a17:906:730b:b0:973:bcf6:1d4 with SMTP id di11-20020a170906730b00b00973bcf601d4mr11632209ejc.76.1686582060941;
-        Mon, 12 Jun 2023 08:01:00 -0700 (PDT)
-Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
-        by smtp.gmail.com with ESMTPSA id m3-20020a1709061ec300b00973f1cd586fsm5420857ejj.1.2023.06.12.08.00.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 08:01:00 -0700 (PDT)
-Message-ID: <11e16c3b-6f7b-a6a9-b0ed-b7ac0cd703e3@gmail.com>
-Date:   Mon, 12 Jun 2023 17:00:59 +0200
+        d=1e100.net; s=20221208; t=1686582071; x=1689174071;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YN3ynu0U4WVKTG1RHVdbuOrP7GA0Qluqiyijqs3pGpk=;
+        b=BM9gu9GZsCS5HDYesmJflST5gw8ZZo4D/JmfemQKrujedAOWCq96qAdh6s8fjG09KF
+         nEWWZDqd/YIywklamPRYKWWyHSAdX89iN8cu1PpW9aFzLojgtw49R0bvkzcbc1kbuIWp
+         1jct3uMGvvqugQpks97Dbc4QDuIjO2ubJngak30ufZTWdqnPnjTvY2lPlFchLdBqjbvj
+         cqV/V4uKBlYs2kG9IYXA7VRnKliPHGKakzZkpglizEiBuO4iYDuTJCRhE0eIylY4PgQD
+         TFWVwa1IJ4W2JI8y4FSpeWC19uuHr33+ntZ9nEaArAt+z5Ms/d3zgxIQ/VqSfnib2wJ8
+         ryuw==
+X-Gm-Message-State: AC+VfDwnDeBW0hY/QW7d5cQ7WxIMwGACJI8xpin2iFe1IQYkgTFJ8y4D
+        GS/JvZ2Sr4xDVmtSspMgtoZFMgumHYQqrytG3B1N5J21j2dn
+X-Google-Smtp-Source: ACHHUZ77uH/BBpn9hMjUBO8ctk9N9xc3hS5FVZT4MZC55A2PCJ88NDv/QOXwp8RhTeGyyXAVwlZR1jMjo3+QtmjsszC2KRu93OfU
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-From:   Johan Jonker <jbx6244@gmail.com>
-Subject: [PATCH v2 0/5] Fixes for Rockchip NAND controller driver
-To:     miquel.raynal@bootlin.com
-Cc:     richard@nod.at, vigneshr@ti.com, heiko@sntech.de,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, yifeng.zhao@rock-chips.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:cac2:0:b0:335:b02:f8b4 with SMTP id
+ m2-20020a92cac2000000b003350b02f8b4mr4185406ilq.2.1686582071238; Mon, 12 Jun
+ 2023 08:01:11 -0700 (PDT)
+Date:   Mon, 12 Jun 2023 08:01:11 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003da75f05fdeffd12@google.com>
+Subject: [syzbot] [nilfs?] WARNING in mark_buffer_dirty (5)
+From:   syzbot <syzbot+cdfcae656bac88ba0e2d@syzkaller.appspotmail.com>
+To:     konishi.ryusuke@gmail.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nilfs@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This serie contains various fixes for the Rockchip NAND controller
-driver that showed up while testing boot block writing.
+Hello,
 
-Fixed are:
-  Always copy hwecc PA data to/from oob_poi buffer in order to be able
-  to read/write the various boot block layouts.
-  Add option to safely probe the driver on a NAND with unknown data layout.
-  Fix default timing.
-  Fix oobfree layout.
-  Add missing chip ID.
+syzbot found the following issue on:
 
-Changed V2:
-  Add tag
-  Add manufacturer ops
-  Reword
+HEAD commit:    5f63595ebd82 Merge tag 'input-for-v6.4-rc5' of git://git.k..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=1095a51b280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7474de833c217bf4
+dashboard link: https://syzkaller.appspot.com/bug?extid=cdfcae656bac88ba0e2d
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17a18595280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=141c5463280000
 
-Johan Jonker (4):
-  mtd: nand: raw: rockchip-nand-controller: copy hwecc PA data to
-    oob_poi buffer
-  mtd: nand: raw: rockchip-nand-controller: add skipbbt option
-  mtd: nand: raw: rockchip-nand-controller: fix oobfree offset and
-    description
-  mtd: nand: raw: add basic sandisk manufacturer ops
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/d12b9e46ffe8/disk-5f63595e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c9044ded7edd/vmlinux-5f63595e.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/09f0fd3926e8/bzImage-5f63595e.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/1f3799cb13b4/mount_0.gz
 
-Paweł Jarosz (1):
-  mtd: nand: add support for the Sandisk SDTNQGAMA chip
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+cdfcae656bac88ba0e2d@syzkaller.appspotmail.com
 
- drivers/mtd/nand/raw/Makefile                 |  1 +
- drivers/mtd/nand/raw/internals.h              |  1 +
- drivers/mtd/nand/raw/nand_ids.c               |  5 +-
- drivers/mtd/nand/raw/nand_sandisk.c           | 26 ++++++++++
- .../mtd/nand/raw/rockchip-nand-controller.c   | 52 ++++++++++++-------
- 5 files changed, 64 insertions(+), 21 deletions(-)
- create mode 100644 drivers/mtd/nand/raw/nand_sandisk.c
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 5085 at fs/buffer.c:1130 mark_buffer_dirty+0x2dd/0x500
+Modules linked in:
+CPU: 1 PID: 5085 Comm: syz-executor134 Not tainted 6.4.0-rc5-syzkaller-00024-g5f63595ebd82 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
+RIP: 0010:mark_buffer_dirty+0x2dd/0x500 fs/buffer.c:1130
+Code: df e8 57 0e e0 ff 48 8b 3b be 04 00 00 00 5b 41 5c 41 5e 41 5f 5d e9 22 69 fc ff e8 3d 39 88 ff e9 71 ff ff ff e8 33 39 88 ff <0f> 0b e9 6d fd ff ff e8 27 39 88 ff 0f 0b e9 96 fd ff ff e8 1b 39
+RSP: 0018:ffffc90003f5f810 EFLAGS: 00010293
 
---
-2.30.2
+RAX: ffffffff820345fd RBX: ffff8880775fbb01 RCX: ffff888015f30000
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffff82034364 R09: ffffed100eeb48af
+R10: 0000000000000000 R11: dffffc0000000001 R12: ffff8880775a4570
+R13: dffffc0000000000 R14: ffffc90003f5f880 R15: 1ffff920007ebf10
+FS:  0000555556a02300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000000 CR3: 000000002ba98000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __nilfs_mark_inode_dirty+0x105/0x280 fs/nilfs2/inode.c:1115
+ nilfs_dirty_inode+0x164/0x200 fs/nilfs2/inode.c:1148
+ __mark_inode_dirty+0x305/0xd90 fs/fs-writeback.c:2424
+ mark_inode_dirty include/linux/fs.h:2144 [inline]
+ generic_write_end+0x184/0x1e0 fs/buffer.c:2257
+ nilfs_write_end+0x85/0xf0 fs/nilfs2/inode.c:280
+ generic_perform_write+0x3ed/0x5e0 mm/filemap.c:3934
+ __generic_file_write_iter+0x29b/0x400 mm/filemap.c:4019
+ generic_file_write_iter+0xaf/0x310 mm/filemap.c:4083
+ call_write_iter include/linux/fs.h:1868 [inline]
+ new_sync_write fs/read_write.c:491 [inline]
+ vfs_write+0x790/0xb20 fs/read_write.c:584
+ ksys_write+0x1a0/0x2c0 fs/read_write.c:637
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f417000db39
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd6c282ed8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 0032656c69662f2e RCX: 00007f417000db39
+RDX: 0000000000000018 RSI: 00000000200001c0 RDI: 0000000000000004
+RBP: 0000000000000000 R08: 00007ffd6c282f00 R09: 00007ffd6c282f00
+R10: 00007ffd6c282f00 R11: 0000000000000246 R12: 00007ffd6c282efc
+R13: 00007ffd6c282f30 R14: 00007ffd6c282f10 R15: 0000000000000006
+ </TASK>
 
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
