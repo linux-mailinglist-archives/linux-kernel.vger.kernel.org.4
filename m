@@ -2,139 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0FD72CD3A
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3040372CD3D
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236071AbjFLRvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 13:51:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54560 "EHLO
+        id S236181AbjFLRwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 13:52:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235386AbjFLRvp (ORCPT
+        with ESMTP id S236088AbjFLRwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 13:51:45 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4B498
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:51:44 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9745d99cfccso806949166b.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:51:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1686592302; x=1689184302;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HgioPKcaHc+2ScCYWNcCop9oGPk4yLITypWHe3V71TQ=;
-        b=ZITGtXB29M2sUayESWUa4yYDVHxmeRumG3nNzNMoACaIgIv9DKL3lms2+WphPAMwo9
-         nqmPR9r8HDoOikRrGFyhIJlqgbyEHUfHwA8Nbtar8VVlX2+H6BxJzkaFq4760a61t3KQ
-         YVWsuDad5G/oZ8MWSQwr8X2XJHqQ9zvF4tZYk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686592302; x=1689184302;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HgioPKcaHc+2ScCYWNcCop9oGPk4yLITypWHe3V71TQ=;
-        b=CMaRqZKPUvenIEQsDs6eezQsYj8C7Zk+gxWz54MGzBLzH8102G0CPtGX7k4BCIMfDC
-         LWdNBk1zsd4Eb52QLqPoAv7B0QLAJlWp1M8mgX3Obv0Qat/ET+t+xJmQpPq3ZDEtlFuR
-         qcBt7PJuv+PxofFk5b+LWdxgPRBfvWsYqSZpAbTnGaWZdOOcdKbXJJpQwMqo1Jw8FHDy
-         nqw+h/szgDL5G8CiqCkx4qPnBw7bhbcn+FmBv4DsKQ1tWQxUE59JB48cXU8zo2OGFYjJ
-         S5kWuTAmqn5lxl065BiJnRPLJSERLEayNSoEAQBwBy21VK0c8OKs5+gtEbs1KzgYgTR2
-         BFbg==
-X-Gm-Message-State: AC+VfDxxaE723Diax25JcBf2Z/8vFl0mfrKDB0tGuFZaxeFqcmeqZe03
-        Ujjf3WXsP4mTN8uvEU73610MO7P7OhrTiMcH0ls/iFtO
-X-Google-Smtp-Source: ACHHUZ7WDoT7njQmrLphpNUnarsxnf/JQZAQv25XM59ReDRf2UOSo7P534Qdta6qzby4BzI0A/gojQ==
-X-Received: by 2002:a17:907:70a:b0:96f:a935:8997 with SMTP id xb10-20020a170907070a00b0096fa9358997mr10864309ejb.12.1686592302298;
-        Mon, 12 Jun 2023 10:51:42 -0700 (PDT)
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com. [209.85.208.44])
-        by smtp.gmail.com with ESMTPSA id n24-20020a170906165800b00977c7566ccbsm5482386ejd.164.2023.06.12.10.51.41
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 10:51:41 -0700 (PDT)
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5149b63151aso7804441a12.3
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:51:41 -0700 (PDT)
-X-Received: by 2002:aa7:d753:0:b0:516:af22:bccc with SMTP id
- a19-20020aa7d753000000b00516af22bcccmr5384633eds.21.1686592301040; Mon, 12
- Jun 2023 10:51:41 -0700 (PDT)
+        Mon, 12 Jun 2023 13:52:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3954134;
+        Mon, 12 Jun 2023 10:52:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F62B617C7;
+        Mon, 12 Jun 2023 17:52:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A317CC433D2;
+        Mon, 12 Jun 2023 17:52:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686592328;
+        bh=/ToCL3aGaEH80Ud7UwLUCZyJVDohdUdWHNYivUAhkis=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=njqHybfcjZH/1+OX9IiOeAbahZfe3B3pT9mink6GUa6FeVzycmvWdso6AYv4Kuqcr
+         Y1Iqv8Dgq7md6yLGMffpc0iU4BI1KA33hiYshH3Yl4ELN+un+eauTK2c1D6quQAFjl
+         muFuHwcq3NXsbFhDx0urjXmQ4x12EEpr0fm18nX7yXhZfsOA7CpP2wlPOKJZ9cah4e
+         UncRSmKXfTd0czu/TmuSmpMc75CZxS07/Y2lrJmqRjQhCNiiBGoylzmEusJ/nu7wFT
+         oWp9/IntmnxlSlQvJWwgp/h/uQGbiPoi4M5Dlr4hhzko9XdKdP8NaWswPFYxFBDM7t
+         OvJ34GUVqt9kA==
+Received: by pali.im (Postfix)
+        id 0DF697EB; Mon, 12 Jun 2023 19:52:05 +0200 (CEST)
+Date:   Mon, 12 Jun 2023 19:52:05 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Michal Wilczynski <michal.wilczynski@intel.com>
+Cc:     linux-acpi@vger.kernel.org, rafael@kernel.org,
+        andriy.shevchenko@intel.com, ilpo.jarvinen@linux.intel.com,
+        hdegoede@redhat.com, markgross@kernel.org, fengguang.wu@intel.com,
+        dvhart@linux.intel.com, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] platform/x86/dell/dell-rbtn: Fix resources leaking on
+ error path
+Message-ID: <20230612175205.eom2guabgfmnzrce@pali>
+References: <20230612090250.1417940-1-michal.wilczynski@intel.com>
 MIME-Version: 1.0
-References: <20230611124836.whfktwaumnefm5z5@zlang-mailbox>
- <ZIZSPyzReZkGBEFy@dread.disaster.area> <20230612015145.GA11441@frogsfrogsfrogs>
- <ZIaBQnCKJ6NsqGhd@dread.disaster.area> <CAHk-=whJqZLKPR-cpX-V4wJTXVX-_tG5Vjuj2q9knvKGCPdfkg@mail.gmail.com>
- <20230612153629.GA11427@frogsfrogsfrogs> <CAHk-=wiN-JcUh4uhDNmA4hp26Mg+c2DTuzgWY2fZ6hytDtOMCg@mail.gmail.com>
- <af31cadf-8c15-8d88-79fb-066dc87f0324@kernel.dk> <13d9e4f2-17c5-0709-0cc0-6f92bfe9f30d@kernel.dk>
- <CAHk-=wgdBfqyNHk0iNyYpEuBUdVgq1KMzHMuEqn=ADtfyK_pkQ@mail.gmail.com>
- <212a190c-f81e-2876-cf14-6d1e37d47192@kernel.dk> <CAHk-=wh0hrFjcU5C8uHvLBThrT5vQsFHb7Jk6HRP3LAJqdNx1A@mail.gmail.com>
- <ff34a007-fdd0-8575-8482-919ead39fc88@kernel.dk>
-In-Reply-To: <ff34a007-fdd0-8575-8482-919ead39fc88@kernel.dk>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 12 Jun 2023 10:51:24 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whXt9+-YfhgjBYxT9_ATjHbMDZ0yJdK7umrJGU8zBVZ9w@mail.gmail.com>
-Message-ID: <CAHk-=whXt9+-YfhgjBYxT9_ATjHbMDZ0yJdK7umrJGU8zBVZ9w@mail.gmail.com>
-Subject: Re: [6.5-rc5 regression] core dump hangs (was Re: [Bug report]
- fstests generic/051 (on xfs) hang on latest linux v6.5-rc5+)
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Zorro Lang <zlang@redhat.com>, linux-xfs@vger.kernel.org,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230612090250.1417940-1-michal.wilczynski@intel.com>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 10:29=E2=80=AFAM Jens Axboe <axboe@kernel.dk> wrote=
-:
->
-> Looks fine to me to just kill it indeed, whatever we did need this
-> for is definitely no longer the case. I _think_ we used to have
-> something in the worker exit that would potentially sleep which
-> is why we killed it before doing that, now it just looks like dead
-> code.
+On Monday 12 June 2023 12:02:50 Michal Wilczynski wrote:
+> Currently rbtn_add() in case of failure is leaking resources. Fix this
+> by adding a proper rollback. While at it, remove unnecessary assignment
+> of NULL to device->driver_data and unnecessary whitespace, plus add a
+> break for the default case in a switch.
+> 
+> Suggested-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> Fixes: 817a5cdb40c8 ("dell-rbtn: Dell Airplane Mode Switch driver")
+> Signed-off-by: Michal Wilczynski <michal.wilczynski@intel.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/platform/x86/dell/dell-rbtn.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/dell/dell-rbtn.c b/drivers/platform/x86/dell/dell-rbtn.c
+> index aa0e6c907494..e9b3f9c3ab7d 100644
+> --- a/drivers/platform/x86/dell/dell-rbtn.c
+> +++ b/drivers/platform/x86/dell/dell-rbtn.c
+> @@ -420,10 +420,12 @@ static int rbtn_add(struct acpi_device *device)
+>  		break;
+>  	default:
+>  		ret = -EINVAL;
+> +		break;
+>  	}
+> +	if (ret)
+> +		rbtn_acquire(device, false);
+>  
+>  	return ret;
+> -
+>  }
 
-Ok, can you (and the fsstress people) confirm that this
-whitespace-damaged patch fixes the coredump issue:
+Hello! I'm looking at rbtn_add() function and there is also code:
 
+	rbtn_data = devm_kzalloc(&device->dev, sizeof(*rbtn_data), GFP_KERNEL);
+	if (!rbtn_data)
+		return -ENOMEM;
 
-  --- a/io_uring/io-wq.c
-  +++ b/io_uring/io-wq.c
-  @@ -221,9 +221,6 @@ static void io_worker_exit(..
-        raw_spin_unlock(&wq->lock);
-        io_wq_dec_running(worker);
-        worker->flags =3D 0;
-  -     preempt_disable();
-  -     current->flags &=3D ~PF_IO_WORKER;
-  -     preempt_enable();
+which is called after rbtn_acquire(). So it looks like when kzalloc
+fails then there is another leak...
 
-        kfree_rcu(worker, rcu);
-        io_worker_ref_put(wq);
-
-Jens, I think that the two lines above there, ie the whole
-
-        io_wq_dec_running(worker);
-        worker->flags =3D 0;
-
-thing may actually be the (partial?) reason for those PF_IO_WORKER
-games. It's basically doing "now I'm doing stats by hand", and I
-wonder if now it decrements the running worker one time too much?
-
-Ie when the finally *dead* worker schedules away, never to return,
-that's when that io_wq_worker_sleeping() case triggers and decrements
-things one more time.
-
-So there might be some bookkeeping reason for those games, but it
-looks like if that's the case, then that
-
-        worker->flags =3D 0;
-
-will have already taken care of it.
-
-I wonder if those two lines could just be removed too. But I think
-that's separate from the "let's fix the core dumping" issue.
-
-           Linus
+>  
+>  static void rbtn_remove(struct acpi_device *device)
+> @@ -442,7 +444,6 @@ static void rbtn_remove(struct acpi_device *device)
+>  	}
+>  
+>  	rbtn_acquire(device, false);
+> -	device->driver_data = NULL;
+>  }
+>  
+>  static void rbtn_notify(struct acpi_device *device, u32 event)
+> -- 
+> 2.40.1
+> 
