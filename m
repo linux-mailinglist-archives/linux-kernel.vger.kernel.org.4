@@ -2,77 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 247CC72D0A6
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6997672D0BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237714AbjFLUgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 16:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55050 "EHLO
+        id S231724AbjFLUjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 16:39:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237704AbjFLUgE (ORCPT
+        with ESMTP id S237022AbjFLUje (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 16:36:04 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1EC1BC3
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 13:35:22 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-bc7ebb912dcso2098444276.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 13:35:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1686602121; x=1689194121;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Tna/5MCpfh2CQQ+MigqWyTaJ1L9g7ThuMJA32e33y4A=;
-        b=uPpOK67x/N/0dc7FRfJMGN81wHOiBPP7oDiOdsaD2qzpV+B/MTdEuYG39oOXu6v2gr
-         JgevcePW5R1c5j7nMJXFkhpJ6BguEKUjC2vWog8KmEpSwxXPP7lOjzwK+Y2qLmn2Ixhq
-         x737RZxkBLsn9MrwiUjsL2CBe7fs7JxdrA5ts=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686602121; x=1689194121;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Tna/5MCpfh2CQQ+MigqWyTaJ1L9g7ThuMJA32e33y4A=;
-        b=aoZCtTBXr05RelVMl6HujbmKCh+KTGWq1TacKc2Fjo3i8xWjcjq0RCW5cv0SCS1t/B
-         q0zOaIrcuPaMCYA4lLI1F6i4M+AgYOBO1YXkJWdPyh0kbif+lZ1AXwlwjJ+jiDGr/gST
-         yus16C18Mu8StItigVEXwAO9irSSzQnLmQjr1rXc82w0ymocND4ZRbmVz7x9k4k/isyF
-         GIAgXFiAk+vTBddM4/5ELObdJDLenv4fF/5Rkm9e9KCUKUPxu6ovxsjPYtZBcK7RN0be
-         AfVM0cmBiFAaDL/h6cfgVIOxZ4aySYnrjNPcrhJSfstFHSGWTyLW0LfbMUP/Zj7AdsTV
-         lHiA==
-X-Gm-Message-State: AC+VfDwiTtTDE/sWpAYpmRj5OCc8T+1AWIBfv2GOskDaz9nV31Bz1U7u
-        RqXqfmibCdVtypn78shwxk9RqQTl4M/wPE9GBPWMu3lzUzJ8srji
-X-Google-Smtp-Source: ACHHUZ5KcAQLLhVj7lmkq1gne9ElkQhjBzZ4S38AHrzzjOqMReAkePS2tJqdbLBT1dpZWqeO5d0fbOOH7l9Xn+lZaRI=
-X-Received: by 2002:a25:b46:0:b0:bc4:72c4:b8e2 with SMTP id
- 67-20020a250b46000000b00bc472c4b8e2mr7930703ybl.21.1686602121296; Mon, 12 Jun
- 2023 13:35:21 -0700 (PDT)
+        Mon, 12 Jun 2023 16:39:34 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3DD1984
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 13:39:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686602369; x=1718138369;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=SbYyvJYQ3piNwv5linQ1WYTpJRSYyWv7Nn+u6U5b9MI=;
+  b=OxVR9bSn+Gqng7y8CeA4ynA8Btl6WiOBhlxtoygOzneJqK7w03LwrUSo
+   3H3F4F0ylnol287uW5WBiSWtZixjRRVlSy8/SrKM6ihymzhx7z4yrS5re
+   NjlYoM3bSUZVU+CBSvqWUvs6CsHPdyEl/3o1dvigoeGf66Np9iwfU3BN3
+   ouC7fS/Kg1/w4pCqdhtkioBqheZhZ2rJ/aTQLB5n/UOHKeCnP/ud7rWND
+   taharkK06DdZyf2mELDmGHxuqmO0l144IXce+1v5Oe4ywkcJOM9NMbwRT
+   CakYK1HsoYGbPUlD6T6i5CGug5jFBq8z3aXafRfXZud2orQuZtP/IFX4H
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="358153907"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="358153907"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 13:37:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="741167195"
+X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
+   d="scan'208";a="741167195"
+Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 12 Jun 2023 13:37:07 -0700
+Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q8oHi-0000gg-0C;
+        Mon, 12 Jun 2023 20:37:06 +0000
+Date:   Tue, 13 Jun 2023 04:36:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>
+Subject: arch/powerpc/platforms/52xx/lite5200_pm.c:47:12: error: stack frame
+ size (1040) exceeds limit (1024) in 'lite5200_pm_prepare'
+Message-ID: <202306130405.uTv5yOZD-lkp@intel.com>
 MIME-Version: 1.0
-References: <cover.1686239016.git.bristot@kernel.org> <bd9977efff8cc3e002c4b2db02f611167905a99f.1686239016.git.bristot@kernel.org>
- <CAEXW_YT0DmvQo_gfCq5uzpZpf36HmfzXozo9+=sYJp-hZx4qTQ@mail.gmail.com> <b2cd0072-d226-4adb-ddf5-958d9635f881@kernel.org>
-In-Reply-To: <b2cd0072-d226-4adb-ddf5-958d9635f881@kernel.org>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Mon, 12 Jun 2023 16:35:10 -0400
-Message-ID: <CAEXW_YR9Tfw5KyFU7TQtYE02k+DpaMXH=osx9Ws5w_j1YpHxhg@mail.gmail.com>
-Subject: Re: [RFC PATCH V3 6/6] sched/fair: Implement starvation monitor
-To:     Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        Luca Abeni <luca.abeni@santannapisa.it>,
-        Tommaso Cucinotta <tommaso.cucinotta@santannapisa.it>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vineeth Pillai <vineeth@bitbyteword.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,158 +63,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Daniel!
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   858fd168a95c5b9669aac8db6c14a9aeab446375
+commit: 2500763dd3db37fad94d9b506907c59c2f5e97c6 powerpc: Use of_address_to_resource()
+date:   10 weeks ago
+config: powerpc-randconfig-r033-20230612 (https://download.01.org/0day-ci/archive/20230613/202306130405.uTv5yOZD-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=2500763dd3db37fad94d9b506907c59c2f5e97c6
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 2500763dd3db37fad94d9b506907c59c2f5e97c6
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/platforms/52xx/
 
-On Mon, Jun 12, 2023 at 1:21=E2=80=AFPM Daniel Bristot de Oliveira
-<bristot@kernel.org> wrote:
-[...]
-> > On Thu, Jun 8, 2023 at 11:58=E2=80=AFAM Daniel Bristot de Oliveira
-> > <bristot@kernel.org> wrote:
-> >>
-> >> From: Juri Lelli <juri.lelli@redhat.com>
-> >>
-> >> Starting deadline server for lower priority classes right away when
-> >> first task is enqueued might break guarantees, as tasks belonging to
-> >> intermediate priority classes could be uselessly preempted. E.g., a we=
-ll
-> >> behaving (non hog) FIFO task can be preempted by NORMAL tasks even if
-> >> there are still CPU cycles available for NORMAL tasks to run, as they'=
-ll
-> >> be running inside the fair deadline server for some period of time.
-> >>
-> >> To prevent this issue, implement a starvation monitor mechanism that
-> >> starts the deadline server only if a (fair in this case) task hasn't
-> >> been scheduled for some interval of time after it has been enqueued.
-> >> Use pick/put functions to manage starvation monitor status.
-> >
-> > Me and Vineeth were discussing that another way of resolving this
-> > issue is to use a DL-server for RT as well, and then using a smaller
-> > deadline  for RT. That way the RT is more likely to be selected due to
-> > its earlier deadline/period.
->
-> It would not be that different from what we have now.
->
-> One of the problems of throttling nowadays is that it accounts for a larg=
-e window
-> of time, and any "imprecision" can cause the mechanism not to work as exp=
-ected.
->
-> For example, we work on a fully-isolated CPU scenario, where some very sp=
-oradic
-> workload can be placed on the isolated CPU because of per-cpu kernel acti=
-vities,
-> e.g., kworkers... We need to let them run, but for a minimal amount of ti=
-me, for
-> instance, 20 us, to bound the interference.
->
-> The current mechanism does not give this precision because the IRQ accoun=
-ting
-> does not account for runtime for the rt throttling (which makes sense).
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306130405.uTv5yOZD-lkp@intel.com/
 
-I lost you here, "Runtime for the rt throttling" does not make much
-sense to me as a statement.
+All errors (new ones prefixed by >>):
 
-> So the
-> RT throttling has the 20 us stolen from IRQs and keeps running. The same =
-will
-> happen if we swap the current mechanism with a DL server for the RT.
+>> arch/powerpc/platforms/52xx/lite5200_pm.c:47:12: error: stack frame size (1040) exceeds limit (1024) in 'lite5200_pm_prepare' [-Werror,-Wframe-larger-than]
+      47 | static int lite5200_pm_prepare(void)
+         |            ^
+   1 error generated.
 
-I read this about 10 times to learn that *maybe* you mean that IRQs
-stole time from the "Well behaved running time" of the RT class. I am
-not seeing how that is related to creation of a DL-server for the RT
-class. Maybe describe your point a bit more clearly?
 
->
-> Also, thinking about short deadlines to fake a fixed priority is... not s=
-tarting
-> well. A fixed-priority higher instance is not a property of a deadline-ba=
-sed
-> scheduler, and Linux has a fixed-priority hierarchy: STOP -> DL -> RT -> =
-CFS...
-> It is simple, and that is good.
->
-> That is why it is better to boost CFS instead of throttling RT. By boosti=
-ng
-> CFS, you do not need a server for RT, and we account for anything on top =
-of CFS
-> for free (IRQ/DL/FIFO...).
+vim +/lite5200_pm_prepare +47 arch/powerpc/platforms/52xx/lite5200_pm.c
 
-I did mention in my last email that it is not ideal. I just brought it
-up as an option. It might reduce the problem being seen and is better
-than not having it.
+e6c5eb9541f219 Rafael J. Wysocki 2007-10-18  46  
+e6c5eb9541f219 Rafael J. Wysocki 2007-10-18 @47  static int lite5200_pm_prepare(void)
+ee983079ce0464 Domen Puncer      2007-07-18  48  {
+75ca399e82726f Grant Likely      2008-01-18  49  	struct device_node *np;
+66ffbe490b6156 Grant Likely      2008-01-24  50  	const struct of_device_id immr_ids[] = {
+66ffbe490b6156 Grant Likely      2008-01-24  51  		{ .compatible = "fsl,mpc5200-immr", },
+66ffbe490b6156 Grant Likely      2008-01-24  52  		{ .compatible = "fsl,mpc5200b-immr", },
+66ffbe490b6156 Grant Likely      2008-01-24  53  		{ .type = "soc", .compatible = "mpc5200", }, /* lite5200 */
+66ffbe490b6156 Grant Likely      2008-01-24  54  		{ .type = "builtin", .compatible = "mpc5200", }, /* efika */
+66ffbe490b6156 Grant Likely      2008-01-24  55  		{}
+66ffbe490b6156 Grant Likely      2008-01-24  56  	};
+2500763dd3db37 Rob Herring       2023-03-29  57  	struct resource res;
+75ca399e82726f Grant Likely      2008-01-18  58  
+ee983079ce0464 Domen Puncer      2007-07-18  59  	/* deep sleep? let mpc52xx code handle that */
+e6c5eb9541f219 Rafael J. Wysocki 2007-10-18  60  	if (lite5200_pm_target_state == PM_SUSPEND_STANDBY)
+e6c5eb9541f219 Rafael J. Wysocki 2007-10-18  61  		return mpc52xx_pm_prepare();
+ee983079ce0464 Domen Puncer      2007-07-18  62  
+e6c5eb9541f219 Rafael J. Wysocki 2007-10-18  63  	if (lite5200_pm_target_state != PM_SUSPEND_MEM)
+ee983079ce0464 Domen Puncer      2007-07-18  64  		return -EINVAL;
+ee983079ce0464 Domen Puncer      2007-07-18  65  
+ee983079ce0464 Domen Puncer      2007-07-18  66  	/* map registers */
+66ffbe490b6156 Grant Likely      2008-01-24  67  	np = of_find_matching_node(NULL, immr_ids);
+2500763dd3db37 Rob Herring       2023-03-29  68  	of_address_to_resource(np, 0, &res);
+75ca399e82726f Grant Likely      2008-01-18  69  	of_node_put(np);
+18d76ac9a47742 Tim Yamin         2008-06-17  70  
+2500763dd3db37 Rob Herring       2023-03-29  71  	mbar = ioremap(res.start, 0xC000);
+ee983079ce0464 Domen Puncer      2007-07-18  72  	if (!mbar) {
+ee983079ce0464 Domen Puncer      2007-07-18  73  		printk(KERN_ERR "%s:%i Error mapping registers\n", __func__, __LINE__);
+ee983079ce0464 Domen Puncer      2007-07-18  74  		return -ENOSYS;
+ee983079ce0464 Domen Puncer      2007-07-18  75  	}
+ee983079ce0464 Domen Puncer      2007-07-18  76  
+ee983079ce0464 Domen Puncer      2007-07-18  77  	cdm = mbar + 0x200;
+ee983079ce0464 Domen Puncer      2007-07-18  78  	pic = mbar + 0x500;
+ee983079ce0464 Domen Puncer      2007-07-18  79  	gps = mbar + 0xb00;
+ee983079ce0464 Domen Puncer      2007-07-18  80  	gpw = mbar + 0xc00;
+18d76ac9a47742 Tim Yamin         2008-06-17  81  	pci = mbar + 0xd00;
+ee983079ce0464 Domen Puncer      2007-07-18  82  	bes = mbar + 0x1200;
+ee983079ce0464 Domen Puncer      2007-07-18  83  	xlb = mbar + 0x1f00;
+ee983079ce0464 Domen Puncer      2007-07-18  84  	sram = mbar + 0x8000;
+ee983079ce0464 Domen Puncer      2007-07-18  85  
+ee983079ce0464 Domen Puncer      2007-07-18  86  	return 0;
+ee983079ce0464 Domen Puncer      2007-07-18  87  }
+ee983079ce0464 Domen Puncer      2007-07-18  88  
 
-> > Another approach could be to implement the 0-laxity scheduling as a
-> > general SCHED_DEADLINE feature, perhaps through a flag. And allow DL
-> > tasks to opt-in to 0-laxity scheduling unless there are idle cycles.
-> > And then opt-in the feature for the CFS deadline server task.
->
-> A 0-laxity scheduler is not as simple as it sounds, as the priority also =
-depends
-> on the "C" (runtime, generally WCET), which is hard to find and embeds
-> pessimism. Also, having such a feature would make other mechanisms harder=
-, as
-> well as debugging things. For example, proxy-execution or a more precise
-> schedulability test...
+:::::: The code at line 47 was first introduced by commit
+:::::: e6c5eb9541f2197a3ffab90b1c7a3250a9b51bf6 PM: Rework struct platform_suspend_ops
 
-I think you did not read my email properly, I was saying make the
-0-laxity default-off and the opt-in for certain DL tasks. That may
-work perfectly well for a system like ChromeOS where likely we will
-use the DL server as the sole deadline task and opt-in for the
-0-laxity. Then we don't need watchdog hacks at all and it all cleanly
-works within the DL class itself. There are the drawbacks of the
-pessimism/locking  etc (I already knew that by the way as the obvious
-drawbacks of 0-laxity) but I am not immediately seeing how this
-CFS-watchdog with 0-laxity is any different from the DL-server itself
-having such a property. If you really have a concrete point on why
-that won't work, and if you could clarify that more clearly why a
-watchdog is better than it, that would be great.
+:::::: TO: Rafael J. Wysocki <rjw@sisk.pl>
+:::::: CC: Linus Torvalds <torvalds@woody.linux-foundation.org>
 
-> In a paper, the scheduler alone is the solution. In real life, the soluti=
-on
-> for problems like locking is as fundamental as the scheduler. We need to =
-keep
-> things simple to expand on these other topics as well.
->
-> So, I do not think we need all the drawbacks of a mixed solution to just =
-fix
-> the throttling problem, and EDF is more capable and explored for the
-> general case.
-
-Again, I was saying making it opt-in seems like a reasonable approach
-and just enabling such property for the DL server.
-
-> With this patch's idea (and expansions), we can fix the throttling proble=
-m
-> without breaking other behaviors like scheduling order...
-
-I don't mind the watchdog patch as such, of course. I presented its
-mechanics at OSSNA and I know how it works, but I feel the DL server
-opting-in for 0-laxity would be cleaner while keeping such behavior as
-default-off for regular DL uses, that's my opinion -- but what else am
-I missing?  Either way, no harm in discussing alternate approaches as
-well even if we are settling for the watchdog.
-
-> > Lastly, if the goal is to remove RT throttling code eventually, are
-> > you also planning to remove RT group scheduling as well? Are there
-> > users of RT group scheduling that might be impacted? On the other
-> > hand, RT throttling / group scheduling code can be left as it is
-> > (perhaps documenting it as deprecated) and the server stuff can be
-> > implemented via a CONFIG option.
->
-> I think that the idea is to have the DL servers eventually replace the gr=
-oup
-> schedule. But I also believe that it is better to start by solving the
-> throttling and then moving to other constructions on top of the mechanism=
-.
-
-Hmm. For throttling at the root level yes, but  I am not seeing how
-you can replace the group scheduling code for existing users of RT
-Cgroups with this. The throttling in the RT group scheduling code is
-not exactly only about "not starving CFS", it is more related to
-letting RT groups run with certain bandwidth. So you cannot really
-delete it if there are real users of that code -- you'll have to
-migrate those users away first (to an alternate implementation like
-DL).  If there are no users of RT group scheduling, that's lovely
-though. We don't use it in ChromeOS fwiw.
-
-- Joel
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
