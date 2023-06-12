@@ -2,144 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 617A972CF72
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 21:28:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2947572CF79
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 21:29:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238161AbjFLT2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 15:28:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53636 "EHLO
+        id S237490AbjFLT3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 15:29:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234808AbjFLT22 (ORCPT
+        with ESMTP id S234808AbjFLT3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 15:28:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A5C10FC;
-        Mon, 12 Jun 2023 12:27:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 545DE62D9D;
-        Mon, 12 Jun 2023 19:27:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 997A8C433EF;
-        Mon, 12 Jun 2023 19:27:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1686598033;
-        bh=lSpYaMyG6ik/eNMtm78Mfwqh28u7fTZv7+iyrRa8J+U=;
-        h=Date:From:To:Cc:Subject:From;
-        b=KgzcOsAGO/AUnZ7JaM/3SVTq1vybaKq/+MbCPG5M3mTFXq1p7WFt3bgF0tz7JtwQC
-         hZYk6e0r8TC+rwafT4gBnEUtlJcpJHt8ygIFG5xcsfWgvcrkpsyPC/MxEZXSztjznc
-         k6TuC7vvyu4rjo8a5qXvwvjYBwkDVuRBLfACAqP8=
-Date:   Mon, 12 Jun 2023 12:27:12 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-mm@kvack.org, mm-commits@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] hotfixes for 6.4-rc7
-Message-Id: <20230612122712.f495e24b80f88f58557ea470@linux-foundation.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 12 Jun 2023 15:29:01 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D7D1720
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 12:28:53 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f6dfc4dffaso35880765e9.0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 12:28:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686598131; x=1689190131;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nJZJSaEZDg70TXbshUH3X07m1qzGMFDczgD0hVDQgVw=;
+        b=cp7o0HoGkxtGnWAvfPLUcigk1NXL22/mysLv2Xtu+BWI9J/YI7aKTBLHbf+4S4De4b
+         IJ3Qtv7wM6Mp4sN/lKa+Fo/8ldPIx23PT7wxeeBbZdZ+LJx8ULV8nTuWoKAiq3aGtWtB
+         cU5KBL+/AIJrdiRDrHJDK2+uHxSx/QePtYDhRp76VSJ/XozzWlcYGOkk5JahdeJRXLgD
+         RAdHnAFdjI4UjLTBzCLQqrbZzWasP271gPYWjPH35aaZ84rXWbqFi8RtsYKlAos/VRLl
+         yFN+YFWqZvuwtb/hvdK6GH/hNSHC6SrR/3Wn32b1FK10iZDlyfHUZljdNjgegR9bT+6S
+         HdoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686598131; x=1689190131;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nJZJSaEZDg70TXbshUH3X07m1qzGMFDczgD0hVDQgVw=;
+        b=E4cgpoCIfVpjO31bGSRXAXmWpHTQoREnMm7zGnFgFKDkZThvlivrDg/4fATNTEFgtH
+         v9Bb2j0nrEan+fDApH1+a8OoSWYdzJ+NXrVhU2cpZuP0uvBG6AontQ+cZfv4AxS0wDRp
+         KIoJlJ5or+CiWr1H9hkASDYhZ3g8i8U+boDVbsOdPj3P2pNHkYWrWmyTIHfaceZXflPz
+         qvYUK9OzP62sZtPFM2vI9PDBdiDu3weZ6IGcK4NY82Y0OIYLW23BKytntvg2sHN3QKWl
+         9b+ljb+91LRhf4lAFD41TmmvBoic8OYbrYLxmryXqW7VE1Tf9vq3yrlrTjzWNoDSqHYY
+         dGVw==
+X-Gm-Message-State: AC+VfDzjveKGMRhRiH0pJC6DcrkD0M9TwL041wn/kvGUIisi5QcQ8quS
+        yhNZB+JXW+D4wIbIPosnxD3oVg==
+X-Google-Smtp-Source: ACHHUZ5OzKiW3U57XN0Htaa50N2NhdLd5CFniE1NlCW4kDpPPcqYy2HPZOQKXayyvEEZJhY+ya0Wwg==
+X-Received: by 2002:a05:600c:2190:b0:3f7:395e:46a2 with SMTP id e16-20020a05600c219000b003f7395e46a2mr6389324wme.16.1686598131498;
+        Mon, 12 Jun 2023 12:28:51 -0700 (PDT)
+Received: from hackbox.lan ([86.121.163.20])
+        by smtp.gmail.com with ESMTPSA id a7-20020a05600c224700b003f60a9ccd34sm12286861wmm.37.2023.06.12.12.28.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 12:28:50 -0700 (PDT)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Subject: [RESEND v7 0/3] Add dedicated Qcom ICE driver
+Date:   Mon, 12 Jun 2023 22:28:44 +0300
+Message-Id: <20230612192847.1599416-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+As both SDCC and UFS drivers use the ICE with duplicated implementation,
+while none of the currently supported platforms make use concomitantly
+of the same ICE IP block instance, the new SM8550 allows both UFS and
+SDCC to do so. In order to support such scenario, there is a need for
+a unified implementation and a devicetree node to be shared between
+both types of storage devices. So lets drop the duplicate implementation
+of the ICE from both SDCC and UFS and make it a dedicated (soc) driver.
 
-Linus, please merge this batch of hotfixes, thanks.
+The v7 is here:
+https://lore.kernel.org/all/20230408214041.533749-1-abel.vesa@linaro.org/
 
+Changes since v7:
+ * rebased on next-20230609
 
-The following changes since commit 8b817fded42d8fe3a0eb47b1149d907851a3c942:
+Changes since v6:
+ * Dropped the patches 1, 3 and 6 as they are already in Bjorn's tree.
+ * Dropped the minItems for both the qcom,ice and the reg in the
+   qcom,ice compatile subschema, in the ufs schema file,
+   like Krzysztof suggested
 
-  Merge tag 'trace-v6.4-rc3' of git://git.kernel.org/pub/scm/linux/kernel/g=
-it/trace/linux-trace (2023-05-29 07:20:13 -0400)
+Changes since v5:
+ * See each individual patch for changelogs.
 
-are available in the Git repository at:
+Changes since v4:
+ * dropped the SDHCI dt-bindings patch as it will be added along
+   with the first use of qcom,ice property from an SDHCI DT node
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-hotfixes-st=
-able-2023-06-12-12-22
+Abel Vesa (3):
+  dt-bindings: ufs: qcom: Add ICE phandle
+  scsi: ufs: ufs-qcom: Switch to the new ICE API
+  mmc: sdhci-msm: Switch to the new ICE API
 
-for you to fetch changes up to 0bdf0efa180a9cb1361cbded4e2260a49306ac89:
+ .../devicetree/bindings/ufs/qcom,ufs.yaml     |  24 ++
+ drivers/mmc/host/Kconfig                      |   2 +-
+ drivers/mmc/host/sdhci-msm.c                  | 223 ++++------------
+ drivers/ufs/host/Kconfig                      |   2 +-
+ drivers/ufs/host/Makefile                     |   4 +-
+ drivers/ufs/host/ufs-qcom-ice.c               | 244 ------------------
+ drivers/ufs/host/ufs-qcom.c                   |  99 ++++++-
+ drivers/ufs/host/ufs-qcom.h                   |  32 +--
+ 8 files changed, 176 insertions(+), 454 deletions(-)
+ delete mode 100644 drivers/ufs/host/ufs-qcom-ice.c
 
-  zswap: do not shrink if cgroup may not zswap (2023-06-12 11:31:52 -0700)
-
-----------------------------------------------------------------
-19 hotfixes.  14 are cc:stable and the remainder address issues which were
-introduced during this -rc cycle or which were considered inappropriate
-for a backport.
-
-----------------------------------------------------------------
-Arnd Bergmann (1):
-      radix-tree: move declarations to header
-
-Benjamin Segall (1):
-      epoll: ep_autoremove_wake_function should use list_del_init_careful
-
-Haibo Li (1):
-      mm/gup_test: fix ioctl fail for compat task
-
-John Keeping (1):
-      mailmap: add entry for John Keeping
-
-Kefeng Wang (1):
-      mm/damon/core: fix divide error in damon_nr_accesses_to_accesses_bp()
-
-Lorenzo Stoakes (1):
-      lib/test_vmalloc.c: avoid garbage in page array
-
-Lu=EDs Henriques (2):
-      ocfs2: fix use-after-free when unmounting read-only filesystem
-      ocfs2: check new file size on fallocate call
-
-Mike Kravetz (1):
-      page cache: fix page_cache_next/prev_miss off by one
-
-Nhat Pham (1):
-      zswap: do not shrink if cgroup may not zswap
-
-Peter Xu (2):
-      mm/uffd: fix vma operation where start addr cuts part of vma
-      mm/uffd: allow vma to merge as much as possible
-
-Ricardo Ribalda (4):
-      kexec: support purgatories with .text.hot sections
-      x86/purgatory: remove PGO flags
-      powerpc/purgatory: remove PGO flags
-      riscv/purgatory: remove PGO flags
-
-Ryusuke Konishi (3):
-      nilfs2: fix incomplete buffer cleanup in nilfs_btnode_abort_change_ke=
-y()
-      nilfs2: fix possible out-of-bounds segment allocation in resize ioctl
-      nilfs2: reject devices with insufficient block count
-
- .mailmap                          |  1 +
- arch/powerpc/purgatory/Makefile   |  5 +++++
- arch/riscv/purgatory/Makefile     |  5 +++++
- arch/x86/purgatory/Makefile       |  5 +++++
- fs/eventpoll.c                    |  6 +++++-
- fs/nilfs2/btnode.c                | 12 +++++++++--
- fs/nilfs2/sufile.c                |  9 ++++++++
- fs/nilfs2/the_nilfs.c             | 43 +++++++++++++++++++++++++++++++++++=
-+++-
- fs/ocfs2/file.c                   |  8 +++++++-
- fs/ocfs2/super.c                  |  6 ++++--
- fs/userfaultfd.c                  | 13 ++++++++++--
- kernel/kexec_file.c               | 14 ++++++++++++-
- lib/radix-tree.c                  |  2 ++
- lib/radix-tree.h                  |  8 ++++++++
- lib/test_vmalloc.c                |  2 +-
- lib/xarray.c                      |  6 ++----
- mm/damon/core.c                   |  2 ++
- mm/filemap.c                      | 26 ++++++++++++++---------
- mm/gup_test.c                     |  1 +
- mm/zswap.c                        | 11 ++++++++--
- tools/testing/radix-tree/Makefile |  5 +++--
- 21 files changed, 161 insertions(+), 29 deletions(-)
- create mode 100644 lib/radix-tree.h
+-- 
+2.34.1
 
