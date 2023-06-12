@@ -2,255 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C5972BF1B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A2672BF48
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbjFLKcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 06:32:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38980 "EHLO
+        id S231684AbjFLKi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 06:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbjFLKcV (ORCPT
+        with ESMTP id S234095AbjFLKil (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 06:32:21 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F1E527AB5;
-        Mon, 12 Jun 2023 03:13:45 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 83B282F4;
-        Mon, 12 Jun 2023 03:13:30 -0700 (PDT)
-Received: from [192.168.0.146] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 300A13F663;
-        Mon, 12 Jun 2023 03:12:37 -0700 (PDT)
-Message-ID: <65b7c83f-7fab-3f4e-bff8-9a60937dc207@arm.com>
-Date:   Mon, 12 Jun 2023 15:42:38 +0530
+        Mon, 12 Jun 2023 06:38:41 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FC125A15
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 03:21:54 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-80-JBvm8a2QMzWcyDGfkZf9HA-1; Mon, 12 Jun 2023 11:13:52 +0100
+X-MC-Unique: JBvm8a2QMzWcyDGfkZf9HA-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 12 Jun
+ 2023 11:13:40 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Mon, 12 Jun 2023 11:13:40 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Chen-Yu Tsai' <wenst@chromium.org>
+CC:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        "linux-actions@lists.infradead.org" 
+        <linux-actions@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: RE: [PATCH] regulator: Use bitfield values for range selectors
+Thread-Topic: [PATCH] regulator: Use bitfield values for range selectors
+Thread-Index: AQHZmd7Pe+BdgVqXZ0e5XsPeombenK+ER+4AgAIyfwCAAFXbcIAAC1kAgAAcgoA=
+Date:   Mon, 12 Jun 2023 10:13:40 +0000
+Message-ID: <f5e6353f324343df8c289d8aed2a8930@AcuMS.aculab.com>
+References: <20230608075651.3214540-1-wenst@chromium.org>
+ <ce04685b7c4840b683add0bdd4404da6@AcuMS.aculab.com>
+ <CAGXv+5EtdhkMq916LLOfpz8ok_xump5tv+oeNBvPq-_3-93oqQ@mail.gmail.com>
+ <0929093384864ff99c78800029ff5d76@AcuMS.aculab.com>
+ <CAGXv+5Hnrpv8kTU+0B9S4NyqALEz+DQOLfO3U7GwMZp9AoqLEw@mail.gmail.com>
+In-Reply-To: <CAGXv+5Hnrpv8kTU+0B9S4NyqALEz+DQOLfO3U7GwMZp9AoqLEw@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V11 06/10] arm64/perf: Enable branch stack events via
- FEAT_BRBE
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     James Clark <james.clark@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, catalin.marinas@arm.com,
-        Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-References: <20230531040428.501523-1-anshuman.khandual@arm.com>
- <20230531040428.501523-7-anshuman.khandual@arm.com>
- <ZH3mhorKNo77hsv5@FVFF77S0Q05N>
- <e960d5d5-07a8-2049-7d0a-07268ecfe36a@arm.com>
- <ZIMfVsF50cODuOYx@FVFF77S0Q05N.cambridge.arm.com>
- <510f88f2-574c-097f-7299-2842b1cf432d@arm.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <510f88f2-574c-097f-7299-2842b1cf432d@arm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+RnJvbTogQ2hlbi1ZdSBUc2FpDQo+IFNlbnQ6IDEyIEp1bmUgMjAyMyAxMDoyNw0KPiBUbzogRGF2
+aWQgTGFpZ2h0IDxEYXZpZC5MYWlnaHRAQUNVTEFCLkNPTT4NCj4gQ2M6IE1hcmsgQnJvd24gPGJy
+b29uaWVAa2VybmVsLm9yZz47IExpYW0gR2lyZHdvb2QgPGxnaXJkd29vZEBnbWFpbC5jb20+OyBN
+YW5pdmFubmFuIFNhZGhhc2l2YW0NCj4gPG1hbmlAa2VybmVsLm9yZz47IENyaXN0aWFuIENpb2Nh
+bHRlYSA8Y3Jpc3RpYW4uY2lvY2FsdGVhQGdtYWlsLmNvbT47IE1hdHRpIFZhaXR0aW5lbg0KPiA8
+bWF6emllc2FjY291bnRAZ21haWwuY29tPjsgbGludXgtYWN0aW9uc0BsaXN0cy5pbmZyYWRlYWQu
+b3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBsaW51eC0NCj4gYXJtLWtlcm5lbEBs
+aXN0cy5pbmZyYWRlYWQub3JnDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0hdIHJlZ3VsYXRvcjogVXNl
+IGJpdGZpZWxkIHZhbHVlcyBmb3IgcmFuZ2Ugc2VsZWN0b3JzDQo+IA0KPiBPbiBNb24sIEp1biAx
+MiwgMjAyMyBhdCAzOjQ44oCvUE0gRGF2aWQgTGFpZ2h0IDxEYXZpZC5MYWlnaHRAYWN1bGFiLmNv
+bT4gd3JvdGU6DQo+ID4NCj4gPiBGcm9tOiBDaGVuLVl1IFRzYWkNCj4gPiA+IFNlbnQ6IDEyIEp1
+bmUgMjAyMyAwNDozOQ0KPiA+ID4NCj4gPiA+IE9uIFN1biwgSnVuIDExLCAyMDIzIGF0IDE6MTDi
+gK9BTSBEYXZpZCBMYWlnaHQgPERhdmlkLkxhaWdodEBhY3VsYWIuY29tPiB3cm90ZToNCj4gPiA+
+ID4NCj4gPiA+ID4gRnJvbTogQ2hlbi1ZdSBUc2FpDQo+ID4gPiA+ID4gU2VudDogMDggSnVuZSAy
+MDIzIDA4OjU3DQo+ID4gPiA+ID4NCj4gPiA+ID4gPiBSaWdodCBub3cgdGhlIHJlZ3VsYXRvciBo
+ZWxwZXJzIGV4cGVjdCByYXcgcmVnaXN0ZXIgdmFsdWVzIGZvciB0aGUgcmFuZ2UNCj4gPiA+ID4g
+PiBzZWxlY3RvcnMuIFRoaXMgaXMgZGlmZmVyZW50IGZyb20gdGhlIHZvbHRhZ2Ugc2VsZWN0b3Jz
+LCB3aGljaCBhcmUNCj4gPiA+ID4gPiBub3JtYWxpemVkIGFzIGJpdGZpZWxkIHZhbHVlcy4gVGhp
+cyBsZWFkcyB0byBhIGJpdCBvZiBjb25mdXNpb24uIEFsc28sDQo+ID4gPiA+ID4gcmF3IHZhbHVl
+cyBhcmUgaGFyZGVyIHRvIGNvcHkgZnJvbSBkYXRhc2hlZXRzIG9yIG1hdGNoIHVwIHdpdGggdGhl
+bSwNCj4gPiA+ID4gPiBhcyBkYXRhc2hlZXRzIHdpbGwgdHlwaWNhbGx5IGhhdmUgYml0ZmllbGQg
+dmFsdWVzLg0KPiA+ID4gPiA+DQo+ID4gPiA+ID4gTWFrZSB0aGUgaGVscGVycyBleHBlY3QgYml0
+ZmllbGQgdmFsdWVzLCBhbmQgY29udmVydCBleGlzdGluZyB1c2Vycy4NCj4gPiA+ID4gPiBJbmNs
+dWRlIGJpdG9wcy5oIGV4cGxpY2l0bHkgZm9yIGZmcygpLCBhbmQgcmVvcmRlciB0aGUgaGVhZGVy
+IGluY2x1ZGUNCj4gPiA+ID4gPiBzdGF0ZW1lbnRzLiBXaGlsZSBhdCBpdCwgYWxzbyByZXBsYWNl
+IG1vZHVsZS5oIHdpdGggZXhwb3J0LmgsIHNpbmNlIHRoZQ0KPiA+ID4gPiA+IG9ubHkgdXNlIGlz
+IEVYUE9SVF9TWU1CT0xfR1BMLg0KPiA+ID4gPiA+DQo+ID4gPiA+IC4uLg0KPiA+ID4gPiA+ICBz
+dGF0aWMgY29uc3QgdW5zaWduZWQgaW50IGF0YzI2MHhfbGRvX3ZvbHRhZ2VfcmFuZ2Vfc2VsW10g
+PSB7DQo+ID4gPiA+ID4gLSAgICAgMHgwLCAweDIwLA0KPiA+ID4gPiA+ICsgICAgIDB4MCwgMHgx
+LA0KPiA+ID4gPiA+ICB9Ow0KPiA+ID4gPg0KPiA+ID4gPiBJcyB0aGVyZSBhbnkgd2F5IHRoZSBj
+aGFuZ2UgY2FuIGJlIGRvbmUgc28gdGhhdCB1bi1lZGl0ZWQNCj4gPiA+ID4gbW9kdWxlcyBmYWls
+IHRvIGNvbXBpbGU/DQo+ID4gPiA+IE90aGVyd2lzZSB0aGUgd2hvbGUgdGhpbmcgaXMgYW4gYWNj
+aWRlbnQgd2FpdGluZyB0byBoYXBwZW4uDQo+ID4gPg0KPiA+ID4gSSB0aGluayB3ZSBjb3VsZCBj
+aGFuZ2UgdGhlIGZpZWxkIG5hbWUgaW4gdGhlIHJlZ3VsYXRvciBkZXNjcmlwdGlvbj8NCj4gPiA+
+IEJ1dCB1bnN1c3BlY3RpbmcgZW5kIHVzZXJzIC8gZGV2ZWxvcGVycyBtaWdodCBqdXN0IGVkaXQg
+dGhlIG5hbWUgYW5kIG5vdA0KPiA+ID4gc2VlIHRoYXQgdGhlIHNjaGVtZSBoYXMgY2hhbmdlZC4N
+Cg0KTG9va2luZyBhdCBpdCwgdGhhdCB3b3VsZCBzZWVtIHRvIGJlIG5lZWRlZC4NCg0KCURhdmlk
+DQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBG
+YXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2
+IChXYWxlcykNCg==
 
-
-On 6/9/23 19:04, James Clark wrote:
-> 
-> 
-> On 09/06/2023 13:47, Mark Rutland wrote:
->> On Fri, Jun 09, 2023 at 10:52:37AM +0530, Anshuman Khandual wrote:
->>> [...]
->>>
->>> On 6/5/23 19:13, Mark Rutland wrote:
->>>>> +void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
->>>>> +{
->>>>> +	struct brbe_hw_attr *brbe_attr = (struct brbe_hw_attr *)cpuc->percpu_pmu->private;
->>>>> +	u64 brbfcr, brbcr;
->>>>> +	int idx, loop1_idx1, loop1_idx2, loop2_idx1, loop2_idx2, count;
->>>>> +
->>>>> +	brbcr = read_sysreg_s(SYS_BRBCR_EL1);
->>>>> +	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
->>>>> +
->>>>> +	/* Ensure pause on PMU interrupt is enabled */
->>>>> +	WARN_ON_ONCE(!(brbcr & BRBCR_EL1_FZP));
->>>>> +
->>>>> +	/* Pause the buffer */
->>>>> +	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
->>>>> +	isb();
->>>>> +
->>>>> +	/* Determine the indices for each loop */
->>>>> +	loop1_idx1 = BRBE_BANK0_IDX_MIN;
->>>>> +	if (brbe_attr->brbe_nr <= BRBE_BANK_MAX_ENTRIES) {
->>>>> +		loop1_idx2 = brbe_attr->brbe_nr - 1;
->>>>> +		loop2_idx1 = BRBE_BANK1_IDX_MIN;
->>>>> +		loop2_idx2 = BRBE_BANK0_IDX_MAX;
->>>>> +	} else {
->>>>> +		loop1_idx2 = BRBE_BANK0_IDX_MAX;
->>>>> +		loop2_idx1 = BRBE_BANK1_IDX_MIN;
->>>>> +		loop2_idx2 = brbe_attr->brbe_nr - 1;
->>>>> +	}
->>>>> +
->>>>> +	/* Loop through bank 0 */
->>>>> +	select_brbe_bank(BRBE_BANK_IDX_0);
->>>>> +	for (idx = 0, count = loop1_idx1; count <= loop1_idx2; idx++, count++) {
->>>>> +		if (!capture_branch_entry(cpuc, event, idx))
->>>>> +			goto skip_bank_1;
->>>>> +	}
->>>>> +
->>>>> +	/* Loop through bank 1 */
->>>>> +	select_brbe_bank(BRBE_BANK_IDX_1);
->>>>> +	for (count = loop2_idx1; count <= loop2_idx2; idx++, count++) {
->>>>> +		if (!capture_branch_entry(cpuc, event, idx))
->>>>> +			break;
->>>>> +	}
->>>>> +
->>>>> +skip_bank_1:
->>>>> +	cpuc->branches->branch_stack.nr = idx;
->>>>> +	cpuc->branches->branch_stack.hw_idx = -1ULL;
->>>>> +	process_branch_aborts(cpuc);
->>>>> +
->>>>> +	/* Unpause the buffer */
->>>>> +	write_sysreg_s(brbfcr & ~BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
->>>>> +	isb();
->>>>> +	armv8pmu_branch_reset();
->>>>> +}
->>>> The loop indicies are rather difficult to follow, and I think those can be made
->>>> quite a lot simpler if split out, e.g.
->>>>
->>>> | int __armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
->>>> | {
->>>> | 	struct brbe_hw_attr *brbe_attr = (struct brbe_hw_attr *)cpuc->percpu_pmu->private;
->>>> | 	int nr_hw_entries = brbe_attr->brbe_nr;
->>>> | 	int idx;
->>>
->>> I guess idx needs an init to 0.
->>
->> Yes, sorry, that should have been:
->>
->> 	int idx = 0;
->>
->>>> | 
->>>> | 	select_brbe_bank(BRBE_BANK_IDX_0);
->>>> | 	while (idx < nr_hw_entries && idx < BRBE_BANK0_IDX_MAX) {
->>>> | 		if (!capture_branch_entry(cpuc, event, idx))
->>>> | 			return idx;
->>>> | 		idx++;
->>>> | 	}
->>>> | 
->>>> | 	select_brbe_bank(BRBE_BANK_IDX_1);
->>>> | 	while (idx < nr_hw_entries && idx < BRBE_BANK1_IDX_MAX) {
->>>> | 		if (!capture_branch_entry(cpuc, event, idx))
->>>> | 			return idx;
->>>> | 		idx++;
->>>> | 	}
->>>> | 
->>>> | 	return idx;
->>>> | }
->>>
->>> These loops are better than the proposed one with indices, will update.
->>
->> Great!
->>
->>>> | 
->>>> | void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
->>>> | {
->>>> | 	u64 brbfcr, brbcr;
->>>> | 	int nr;
->>>> | 
->>>> | 	brbcr = read_sysreg_s(SYS_BRBCR_EL1);
->>>> | 	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
->>>> | 
->>>> | 	/* Ensure pause on PMU interrupt is enabled */
->>>> | 	WARN_ON_ONCE(!(brbcr & BRBCR_EL1_FZP));
->>>> | 
->>>> | 	/* Pause the buffer */
->>>> | 	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
->>>> | 	isb();
->>>> | 
->>>> | 	nr = __armv8pmu_branch_read(cpus, event);
->>>> | 
->>>> | 	cpuc->branches->branch_stack.nr = nr;
->>>> | 	cpuc->branches->branch_stack.hw_idx = -1ULL;
->>>> | 	process_branch_aborts(cpuc);
->>>> | 
->>>> | 	/* Unpause the buffer */
->>>> | 	write_sysreg_s(brbfcr & ~BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
->>>> | 	isb();
->>>> | 	armv8pmu_branch_reset();
->>>> | }
->>>>
->>>> Looking at <linux/perf_event.h> I see:
->>>>
->>>> | /*
->>>> |  * branch stack layout:
->>>> |  *  nr: number of taken branches stored in entries[]
->>>> |  *  hw_idx: The low level index of raw branch records
->>>> |  *          for the most recent branch.
->>>> |  *          -1ULL means invalid/unknown.
->>>> |  *
->>>> |  * Note that nr can vary from sample to sample
->>>> |  * branches (to, from) are stored from most recent
->>>> |  * to least recent, i.e., entries[0] contains the most
->>>> |  * recent branch.
->>>> |  * The entries[] is an abstraction of raw branch records,
->>>> |  * which may not be stored in age order in HW, e.g. Intel LBR.
->>>> |  * The hw_idx is to expose the low level index of raw
->>>> |  * branch record for the most recent branch aka entries[0].
->>>> |  * The hw_idx index is between -1 (unknown) and max depth,
->>>> |  * which can be retrieved in /sys/devices/cpu/caps/branches.
->>>> |  * For the architectures whose raw branch records are
->>>> |  * already stored in age order, the hw_idx should be 0.
->>>> |  */
->>>> | struct perf_branch_stack {
->>>> |         __u64                           nr;  
->>>> |         __u64                           hw_idx;
->>>> |         struct perf_branch_entry        entries[];
->>>> | };
->>>>
->>>> ... which seems to indicate we should be setting hw_idx to 0, since IIUC our
->>>> records are in age order.
->>> Branch records are indeed in age order, sure will change hw_idx as 0. Earlier
->>> figured that there was no need for hw_idx and hence marked it as -1UL similar
->>> to other platforms like powerpc.
->>
->> That's fair enough; looking at power_pmu_bhrb_read() in
->> arch/powerpc/perf/core-book3s.c, I see a comment:
->>
->> 	Branches are read most recent first (ie. mfbhrb 0 is
->> 	the most recent branch).
->>
->> ... which suggests that should be 0 also, or that the documentation is wrong.
->>
->> Do you know how the perf tool consumes this?
->>
->> Thanks,
->> Mark.
-> 
-> It looks like it's a unique ID/last position updated in the LBR FIFO and
-> it's used to stitch callchains together when the stack depth exceeds the
-> buffer size. Perf takes the previous one that got filled to the limit
-> and and the new one and stitches them together if the hw_idx matches.
-
-Right.
-
-> 
-> There are some options in perf you need to provide to make it happen, so
-> I think for BRBE it doesn't matter what value is assigned to it. -1
-> seems to be a 'not used' value which we should probably set in case the
-> event is opened with PERF_SAMPLE_BRANCH_HW_INDEX
-
--1 indeed did seem like a "not used" option rather than an "unkwown" option.
- 
-> 
-> You could also fail to open the event if PERF_SAMPLE_BRANCH_HW_INDEX is
-> set, and that would save writing out -1 every time for every branch
-> stack. Although it's not enabled by default, so maybe that's not necessary.
-
-Yeah blocking events with PERF_SAMPLE_BRANCH_HW_INDEX is not necessary IMHO.
