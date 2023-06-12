@@ -2,397 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E810472BE83
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49A9D72BE7F
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:13:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232978AbjFLKNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 06:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49046 "EHLO
+        id S230316AbjFLKNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 06:13:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233269AbjFLKNW (ORCPT
+        with ESMTP id S232269AbjFLKNS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 06:13:22 -0400
+        Mon, 12 Jun 2023 06:13:18 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EAD46A6;
-        Mon, 12 Jun 2023 02:54:16 -0700 (PDT)
-Received: from localhost.localdomain (unknown [119.152.150.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16DE10CC;
+        Mon, 12 Jun 2023 02:53:56 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 89B476606E9A;
-        Mon, 12 Jun 2023 10:54:13 +0100 (BST)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5AE1E6605907;
+        Mon, 12 Jun 2023 10:53:54 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686563655;
-        bh=SjDGf2SNMcjDK66xmbsxwO0e5mfU/9DarkBr2D33KK0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d5xPMxchf9475mvOgqV8KOXB51ccreXiNMBeNfeEElbq3ZYRVna6om8JKgIiYTnG3
-         x2Yvek0sRb81U+y3PTdeRR/osPnnf+hKxljHUB+94udHC3aJWhoCAkFVHeDyDhe32Q
-         0FV8lDdfeCD12yeFfv5hkuNmEKaxPR6fqT6HW9nlRwzuRpbh7UcUAcsEUhA5jzigSe
-         XU2nlXOEpkQ4D97Qly830Ffo0EA+BIj+5w5u5s4w2DuAHLHlmdHa0kSBNDAyxBrwoU
-         it2aPS02XNfoyFnqrpqzM1RoQXS5RSKXhE7R5htjdOVWg6b2przC+iVc88ORuAradl
-         +YPfBOZ3E3aNQ==
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        kernel@collabora.com, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] selftests: mm: remove duplicate unneeded defines
-Date:   Mon, 12 Jun 2023 14:53:47 +0500
-Message-Id: <20230612095347.996335-2-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230612095347.996335-1-usama.anjum@collabora.com>
-References: <20230612095347.996335-1-usama.anjum@collabora.com>
+        s=mail; t=1686563635;
+        bh=12+M92ejc+eDkMrCoA63t6hfzspIbG8XPxdjeW+mgqE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=IEjF90KqrXkK2WXSoPZpydyHRiHNiisuQv0m/SM8Icg68gW/oWxAhG7JpoS2bPH3A
+         ECZs3viXyqx83QNASlzbfaP4XcIDuAPijapONC6WRlhIwLUioYvHXt5AHXZRsqUtpb
+         dHcoHLn1oGJSTJCBqN6IvGwgGRqNY4SijA993M+HuKivXnM5LER+zRSQclNA+zjqcJ
+         si8uTlazy6ukbUAP2RFAmCTMc9PLqXcVXrqRAgkn6uPk6QNskA+Z9PFlao54EZy7rL
+         0zX9P8xaaMNp75bQoZWzzR/vkKe+zFz7je2tA0Kf7Bb37Z92qltgyLsewoTbvQdPWY
+         oKQ1uWqcd2C9A==
+Message-ID: <fda4f196-8466-8290-9072-d80fff367720@collabora.com>
+Date:   Mon, 12 Jun 2023 11:53:51 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 0/5] Enable decoder for mt8183
+Content-Language: en-US
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     kernel@collabora.com, Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
+References: <20230607205714.510012-1-nfraprado@collabora.com>
+ <380c6489-7a3c-778b-5b81-6339b6964b90@xs4all.nl>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <380c6489-7a3c-778b-5b81-6339b6964b90@xs4all.nl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove all defines which aren't needed after correctly including the
-kernel header files.
+Il 12/06/23 09:02, Hans Verkuil ha scritto:
+> Hi Nicolas,
+> 
+> On 07/06/2023 22:53, Nícolas F. R. A. Prado wrote:
+>>
+>> This series enables the hardware decoder present on mt8183. At first
+>> glance, the only missing piece is the devicetree node for it, however,
+>> simply adding it as is would cause an address collision between the
+>> first register iospace and the clock-controller node, so a rework of the
+>> dt-binding and driver, as well as addition of a clock, were needed
+>> first.
+>>
+>> Tested that H264 decoding works with the hardware decoder on
+>> mt8183-kukui-jacuzzi-juniper-sku16, giving a fluster score of 98/135 on
+>> the JVT-AVC_V1 test suite. And ensured other SoCs (MT8192 and MT8195)
+>> still work as usual.
+>>
+>> Changes in v2:
+>> - Merged commit 1 (media: dt-bindings: mediatek,vcodec: Allow single
+>>    clock for mt8183) into commit 3 (media: dt-bindings: mediatek,vcodec:
+>>    Remove VDEC_SYS for mt8183)
+>> - Further constrained properties in dt-binding
+>> - Added CLK_IGNORE_UNUSED flag to active clock
+>> - Reformatted reg-names in DT node
+>>
+>> Nícolas F. R. A. Prado (4):
+>>    media: dt-bindings: mediatek,vcodec: Don't require assigned-clocks
+>>    media: dt-bindings: mediatek,vcodec: Remove VDEC_SYS for mt8183
+>>    media: mediatek: vcodec: Read HW active status from clock
+>>    clk: mediatek: mt8183: Add CLK_VDEC_ACTIVE to vdec
+> 
+> Is the clk patch independent from the others? It's not clear to me.
+> 
+> If the clk patch has to go in together with the media patches, then
+> please let me know and post a v3 where the clk patch is also CC-ed to
+> the linux-media mailinglist to ensure it ends up in our patchwork system.
+> 
+> And in that case I need a Acked-by from the clk maintainer as well.
+> 
+> If it is independent, then there is no need for a v3 (at least, not
+> for this).
+> 
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- tools/testing/selftests/mm/cow.c               |  1 +
- tools/testing/selftests/mm/hugepage-shm.c      |  4 ----
- tools/testing/selftests/mm/hugepage-vmemmap.c  |  4 ----
- tools/testing/selftests/mm/khugepaged.c        |  1 +
- tools/testing/selftests/mm/madv_populate.c     |  7 -------
- .../testing/selftests/mm/map_fixed_noreplace.c |  4 ----
- tools/testing/selftests/mm/map_hugetlb.c       | 12 ------------
- tools/testing/selftests/mm/map_populate.c      |  2 --
- tools/testing/selftests/mm/mlock-random-test.c |  1 +
- tools/testing/selftests/mm/mlock2.h            |  8 --------
- tools/testing/selftests/mm/mrelease_test.c     | 10 +---------
- tools/testing/selftests/mm/mremap_dontunmap.c  |  4 ----
- tools/testing/selftests/mm/on-fault-limit.c    |  4 ----
- tools/testing/selftests/mm/pkey-powerpc.h      |  3 ---
- tools/testing/selftests/mm/pkey-x86.h          | 18 ------------------
- tools/testing/selftests/mm/protection_keys.c   | 13 ++-----------
- tools/testing/selftests/mm/vm_util.h           | 10 ----------
- 17 files changed, 6 insertions(+), 100 deletions(-)
+The clock patch is not independent, as in the devicetree changes will not
+work without the addition of that clock (and of course even fail building),
+so that series needs a v3.
 
-diff --git a/tools/testing/selftests/mm/cow.c b/tools/testing/selftests/mm/cow.c
-index e4c5095e74fc..7324ce5363c0 100644
---- a/tools/testing/selftests/mm/cow.c
-+++ b/tools/testing/selftests/mm/cow.c
-@@ -15,6 +15,7 @@
- #include <errno.h>
- #include <fcntl.h>
- #include <assert.h>
-+#include <linux/mman.h>
- #include <sys/mman.h>
- #include <sys/ioctl.h>
- #include <sys/wait.h>
-diff --git a/tools/testing/selftests/mm/hugepage-shm.c b/tools/testing/selftests/mm/hugepage-shm.c
-index e2527f32005b..478bb1e989e9 100644
---- a/tools/testing/selftests/mm/hugepage-shm.c
-+++ b/tools/testing/selftests/mm/hugepage-shm.c
-@@ -35,10 +35,6 @@
- #include <sys/shm.h>
- #include <sys/mman.h>
- 
--#ifndef SHM_HUGETLB
--#define SHM_HUGETLB 04000
--#endif
--
- #define LENGTH (256UL*1024*1024)
- 
- #define dprintf(x)  printf(x)
-diff --git a/tools/testing/selftests/mm/hugepage-vmemmap.c b/tools/testing/selftests/mm/hugepage-vmemmap.c
-index 557bdbd4f87e..5b354c209e93 100644
---- a/tools/testing/selftests/mm/hugepage-vmemmap.c
-+++ b/tools/testing/selftests/mm/hugepage-vmemmap.c
-@@ -13,10 +13,6 @@
- 
- #define MAP_LENGTH		(2UL * 1024 * 1024)
- 
--#ifndef MAP_HUGETLB
--#define MAP_HUGETLB		0x40000	/* arch specific */
--#endif
--
- #define PAGE_SIZE		4096
- 
- #define PAGE_COMPOUND_HEAD	(1UL << 15)
-diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-index e88ee039d0eb..030667cb5533 100644
---- a/tools/testing/selftests/mm/khugepaged.c
-+++ b/tools/testing/selftests/mm/khugepaged.c
-@@ -11,6 +11,7 @@
- #include <string.h>
- #include <unistd.h>
- 
-+#include <linux/mman.h>
- #include <sys/mman.h>
- #include <sys/wait.h>
- #include <sys/types.h>
-diff --git a/tools/testing/selftests/mm/madv_populate.c b/tools/testing/selftests/mm/madv_populate.c
-index 262eae6b58f2..60547245e479 100644
---- a/tools/testing/selftests/mm/madv_populate.c
-+++ b/tools/testing/selftests/mm/madv_populate.c
-@@ -20,13 +20,6 @@
- #include "../kselftest.h"
- #include "vm_util.h"
- 
--#ifndef MADV_POPULATE_READ
--#define MADV_POPULATE_READ	22
--#endif /* MADV_POPULATE_READ */
--#ifndef MADV_POPULATE_WRITE
--#define MADV_POPULATE_WRITE	23
--#endif /* MADV_POPULATE_WRITE */
--
- /*
-  * For now, we're using 2 MiB of private anonymous memory for all tests.
-  */
-diff --git a/tools/testing/selftests/mm/map_fixed_noreplace.c b/tools/testing/selftests/mm/map_fixed_noreplace.c
-index eed44322d1a6..598159f3df1f 100644
---- a/tools/testing/selftests/mm/map_fixed_noreplace.c
-+++ b/tools/testing/selftests/mm/map_fixed_noreplace.c
-@@ -13,10 +13,6 @@
- #include <stdlib.h>
- #include <unistd.h>
- 
--#ifndef MAP_FIXED_NOREPLACE
--#define MAP_FIXED_NOREPLACE 0x100000
--#endif
--
- static void dump_maps(void)
- {
- 	char cmd[32];
-diff --git a/tools/testing/selftests/mm/map_hugetlb.c b/tools/testing/selftests/mm/map_hugetlb.c
-index 312889edb84a..193281560b61 100644
---- a/tools/testing/selftests/mm/map_hugetlb.c
-+++ b/tools/testing/selftests/mm/map_hugetlb.c
-@@ -19,18 +19,6 @@
- #define LENGTH (256UL*1024*1024)
- #define PROTECTION (PROT_READ | PROT_WRITE)
- 
--#ifndef MAP_HUGETLB
--#define MAP_HUGETLB 0x40000 /* arch specific */
--#endif
--
--#ifndef MAP_HUGE_SHIFT
--#define MAP_HUGE_SHIFT 26
--#endif
--
--#ifndef MAP_HUGE_MASK
--#define MAP_HUGE_MASK 0x3f
--#endif
--
- /* Only ia64 requires this */
- #ifdef __ia64__
- #define ADDR (void *)(0x8000000000000000UL)
-diff --git a/tools/testing/selftests/mm/map_populate.c b/tools/testing/selftests/mm/map_populate.c
-index 6b8aeaa0bf7a..240f2d9dae7a 100644
---- a/tools/testing/selftests/mm/map_populate.c
-+++ b/tools/testing/selftests/mm/map_populate.c
-@@ -17,9 +17,7 @@
- #include <string.h>
- #include <unistd.h>
- 
--#ifndef MMAP_SZ
- #define MMAP_SZ		4096
--#endif
- 
- #define BUG_ON(condition, description)					\
- 	do {								\
-diff --git a/tools/testing/selftests/mm/mlock-random-test.c b/tools/testing/selftests/mm/mlock-random-test.c
-index 782ea94dee2f..1fba77df7f62 100644
---- a/tools/testing/selftests/mm/mlock-random-test.c
-+++ b/tools/testing/selftests/mm/mlock-random-test.c
-@@ -7,6 +7,7 @@
- #include <sys/resource.h>
- #include <sys/capability.h>
- #include <sys/mman.h>
-+#include <linux/mman.h>
- #include <fcntl.h>
- #include <string.h>
- #include <sys/ipc.h>
-diff --git a/tools/testing/selftests/mm/mlock2.h b/tools/testing/selftests/mm/mlock2.h
-index 2a6e76c226bc..8e02991b313c 100644
---- a/tools/testing/selftests/mm/mlock2.h
-+++ b/tools/testing/selftests/mm/mlock2.h
-@@ -4,14 +4,6 @@
- #include <stdio.h>
- #include <stdlib.h>
- 
--#ifndef MLOCK_ONFAULT
--#define MLOCK_ONFAULT 1
--#endif
--
--#ifndef MCL_ONFAULT
--#define MCL_ONFAULT (MCL_FUTURE << 1)
--#endif
--
- static int mlock2_(void *start, size_t len, int flags)
- {
- #ifdef __NR_mlock2
-diff --git a/tools/testing/selftests/mm/mrelease_test.c b/tools/testing/selftests/mm/mrelease_test.c
-index 37b6d33b9e84..dca21042b679 100644
---- a/tools/testing/selftests/mm/mrelease_test.c
-+++ b/tools/testing/selftests/mm/mrelease_test.c
-@@ -9,18 +9,10 @@
- #include <stdlib.h>
- #include <sys/wait.h>
- #include <unistd.h>
-+#include <asm-generic/unistd.h>
- #include "vm_util.h"
--
- #include "../kselftest.h"
- 
--#ifndef __NR_pidfd_open
--#define __NR_pidfd_open -1
--#endif
--
--#ifndef __NR_process_mrelease
--#define __NR_process_mrelease -1
--#endif
--
- #define MB(x) (x << 20)
- #define MAX_SIZE_MB 1024
- 
-diff --git a/tools/testing/selftests/mm/mremap_dontunmap.c b/tools/testing/selftests/mm/mremap_dontunmap.c
-index f01dc4a85b0b..ca2359835e75 100644
---- a/tools/testing/selftests/mm/mremap_dontunmap.c
-+++ b/tools/testing/selftests/mm/mremap_dontunmap.c
-@@ -15,10 +15,6 @@
- 
- #include "../kselftest.h"
- 
--#ifndef MREMAP_DONTUNMAP
--#define MREMAP_DONTUNMAP 4
--#endif
--
- unsigned long page_size;
- char *page_buffer;
- 
-diff --git a/tools/testing/selftests/mm/on-fault-limit.c b/tools/testing/selftests/mm/on-fault-limit.c
-index 634d87dfb2a4..b5888d613f34 100644
---- a/tools/testing/selftests/mm/on-fault-limit.c
-+++ b/tools/testing/selftests/mm/on-fault-limit.c
-@@ -6,10 +6,6 @@
- #include <sys/time.h>
- #include <sys/resource.h>
- 
--#ifndef MCL_ONFAULT
--#define MCL_ONFAULT (MCL_FUTURE << 1)
--#endif
--
- static int test_limit(void)
- {
- 	int ret = 1;
-diff --git a/tools/testing/selftests/mm/pkey-powerpc.h b/tools/testing/selftests/mm/pkey-powerpc.h
-index 1ebb586b2fbc..ae5df26104e5 100644
---- a/tools/testing/selftests/mm/pkey-powerpc.h
-+++ b/tools/testing/selftests/mm/pkey-powerpc.h
-@@ -3,9 +3,6 @@
- #ifndef _PKEYS_POWERPC_H
- #define _PKEYS_POWERPC_H
- 
--#ifndef SYS_mprotect_key
--# define SYS_mprotect_key	386
--#endif
- #ifndef SYS_pkey_alloc
- # define SYS_pkey_alloc		384
- # define SYS_pkey_free		385
-diff --git a/tools/testing/selftests/mm/pkey-x86.h b/tools/testing/selftests/mm/pkey-x86.h
-index e32ae8a1cd99..814758e109c0 100644
---- a/tools/testing/selftests/mm/pkey-x86.h
-+++ b/tools/testing/selftests/mm/pkey-x86.h
-@@ -5,29 +5,11 @@
- 
- #ifdef __i386__
- 
--#ifndef SYS_mprotect_key
--# define SYS_mprotect_key	380
--#endif
--
--#ifndef SYS_pkey_alloc
--# define SYS_pkey_alloc		381
--# define SYS_pkey_free		382
--#endif
--
- #define REG_IP_IDX		REG_EIP
- #define si_pkey_offset		0x14
- 
- #else
- 
--#ifndef SYS_mprotect_key
--# define SYS_mprotect_key	329
--#endif
--
--#ifndef SYS_pkey_alloc
--# define SYS_pkey_alloc		330
--# define SYS_pkey_free		331
--#endif
--
- #define REG_IP_IDX		REG_RIP
- #define si_pkey_offset		0x20
- 
-diff --git a/tools/testing/selftests/mm/protection_keys.c b/tools/testing/selftests/mm/protection_keys.c
-index 0381c34fdd56..48dc151f8fca 100644
---- a/tools/testing/selftests/mm/protection_keys.c
-+++ b/tools/testing/selftests/mm/protection_keys.c
-@@ -294,15 +294,6 @@ void pkey_access_deny(int pkey)
- 	pkey_disable_set(pkey, PKEY_DISABLE_ACCESS);
- }
- 
--/* Failed address bound checks: */
--#ifndef SEGV_BNDERR
--# define SEGV_BNDERR		3
--#endif
--
--#ifndef SEGV_PKUERR
--# define SEGV_PKUERR		4
--#endif
--
- static char *si_code_str(int si_code)
- {
- 	if (si_code == SEGV_MAPERR)
-@@ -476,7 +467,7 @@ int sys_mprotect_pkey(void *ptr, size_t size, unsigned long orig_prot,
- 			ptr, size, orig_prot, pkey);
- 
- 	errno = 0;
--	sret = syscall(SYS_mprotect_key, ptr, size, orig_prot, pkey);
-+	sret = syscall(__NR_pkey_mprotect, ptr, size, orig_prot, pkey);
- 	if (errno) {
- 		dprintf2("SYS_mprotect_key sret: %d\n", sret);
- 		dprintf2("SYS_mprotect_key prot: 0x%lx\n", orig_prot);
-@@ -1684,7 +1675,7 @@ void test_mprotect_pkey_on_unsupported_cpu(int *ptr, u16 pkey)
- 		return;
- 	}
- 
--	sret = syscall(SYS_mprotect_key, ptr, size, PROT_READ, pkey);
-+	sret = syscall(__NR_pkey_mprotect, ptr, size, PROT_READ, pkey);
- 	pkey_assert(sret < 0);
- }
- 
-diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-index e57ace1323a7..c7fa61f0dff8 100644
---- a/tools/testing/selftests/mm/vm_util.h
-+++ b/tools/testing/selftests/mm/vm_util.h
-@@ -60,13 +60,3 @@ int uffd_register_with_ioctls(int uffd, void *addr, uint64_t len,
- 
- #define PAGEMAP_PRESENT(ent)	(((ent) & (1ull << 63)) != 0)
- #define PAGEMAP_PFN(ent)	((ent) & ((1ull << 55) - 1))
--
--#ifndef MADV_PAGEOUT
--#define MADV_PAGEOUT 21
--#endif
--#ifndef MADV_POPULATE_READ
--#define MADV_POPULATE_READ 22
--#endif
--#ifndef MADV_COLLAPSE
--#define MADV_COLLAPSE 25
--#endif
--- 
-2.39.2
+Nícolas, please go on and send a v3 as requested.
+
+Cheers,
+Angelo
+
+> Regards,
+> 
+> 	Hans
+> 
+>>
+>> Yunfei Dong (1):
+>>    arm64: dts: mediatek: mt8183: Add decoder
+>>
+>>   .../media/mediatek,vcodec-decoder.yaml        | 65 +++++++++++++++----
+>>   arch/arm64/boot/dts/mediatek/mt8183.dtsi      | 30 +++++++++
+>>   drivers/clk/mediatek/clk-mt8183-vdec.c        |  5 ++
+>>   .../mediatek/vcodec/mtk_vcodec_dec_drv.c      | 59 +++++++++++++----
+>>   .../mediatek/vcodec/mtk_vcodec_dec_hw.c       | 20 ++++--
+>>   .../mediatek/vcodec/mtk_vcodec_dec_pm.c       | 12 +++-
+>>   .../platform/mediatek/vcodec/mtk_vcodec_drv.h |  1 +
+>>   include/dt-bindings/clock/mt8183-clk.h        |  3 +-
+>>   8 files changed, 165 insertions(+), 30 deletions(-)
+>>
+> 
+> 
+
 
