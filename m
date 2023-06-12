@@ -2,79 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C269972C2A2
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:13:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F053472C2A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:13:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238318AbjFLLNU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 12 Jun 2023 07:13:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46888 "EHLO
+        id S238462AbjFLLNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 07:13:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234917AbjFLLND (ORCPT
+        with ESMTP id S237681AbjFLLNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 07:13:03 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18687A93;
-        Mon, 12 Jun 2023 04:01:59 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1q8fIS-00164Q-JP; Mon, 12 Jun 2023 13:01:16 +0200
-Received: from p57bd9486.dip0.t-ipconnect.de ([87.189.148.134] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1q8fIS-00087K-EX; Mon, 12 Jun 2023 13:01:16 +0200
-Message-ID: <cf997239b624431486ecba90a1f67d81d6c3fb13.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH v6] sh: avoid using IRQ0 on SH3/4
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 12 Jun 2023 13:01:15 +0200
-In-Reply-To: <f32a649e-3563-2485-234e-640f9dace105@omp.ru>
-References: <71105dbf-cdb0-72e1-f9eb-eeda8e321696@omp.ru>
-         <983d701befce7fc0010c53d09be84f5c330bdf45.camel@physik.fu-berlin.de>
-         <837a586e-5e76-7a5b-a890-403ce26ea51b@gmail.com>
-         <3fff103bcea3874cc7fd93c3a765ca642aa7f632.camel@physik.fu-berlin.de>
-         <f32a649e-3563-2485-234e-640f9dace105@omp.ru>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.48.3 
-MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.148.134
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 12 Jun 2023 07:13:12 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6408A5BAF;
+        Mon, 12 Jun 2023 04:02:07 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8Bx4OgU+4ZkAbYDAA--.6082S3;
+        Mon, 12 Jun 2023 19:01:40 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxfcoQ+4Zk19QVAA--.54161S2;
+        Mon, 12 Jun 2023 19:01:37 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Subject: [PATCH v1 0/2] Unify uapi bitsperlong.h
+Date:   Mon, 12 Jun 2023 19:01:32 +0800
+Message-Id: <1686567694-20099-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8AxfcoQ+4Zk19QVAA--.54161S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7WF17Jr1xtF4fKrWkCw1fZrc_yoW8CFW5pF
+        93ArnxWF45CrWayw15Ja4jqryUJ3yxGr4jgay2qry8GrWIvF1UJrsYkrs7Ca47JayUXFn5
+        ur93Gry5G3WDK3cCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUU9Yb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVWxJr0_GcWln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y
+        6r17McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_
+        Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
+        AY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
+        cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42
+        IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIev
+        Ja73UjIFyTuYvjxU4s2-UUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sergey!
+v1:
+  -- Rebase on 6.4-rc6
+  -- Only unify uapi bitsperlong.h for arm64, riscv and loongarch
+  -- Remove uapi bitsperlong.h of hexagon and microblaze in a new patch
 
-On Mon, 2023-06-12 at 13:56 +0300, Sergey Shtylyov wrote:
-> > Applied to my for-next branch.
-> 
->    Note that this was positioned as a fix.
+Here is the RFC patch:
+https://lore.kernel.org/linux-arch/1683615903-10862-1-git-send-email-yangtiezhu@loongson.cn/
 
-Hmm, it will be at least backported to the stable trees.
+Tiezhu Yang (2):
+  asm-generic: Unify uapi bitsperlong.h for arm64, riscv and loongarch
+  tools arch: Remove uapi bitsperlong.h of hexagon and microblaze
 
->    Where is your tree, BTW? :-)
-
-https://git.kernel.org/pub/scm/linux/kernel/git/glaubitz/sh-linux.git
-
-Adrian
+ arch/arm64/include/uapi/asm/bitsperlong.h          | 24 -------------------
+ arch/loongarch/include/uapi/asm/bitsperlong.h      |  9 --------
+ arch/riscv/include/uapi/asm/bitsperlong.h          | 14 -----------
+ include/uapi/asm-generic/bitsperlong.h             | 10 ++++++++
+ tools/arch/arm64/include/uapi/asm/bitsperlong.h    | 24 -------------------
+ tools/arch/hexagon/include/uapi/asm/bitsperlong.h  | 27 ----------------------
+ .../arch/loongarch/include/uapi/asm/bitsperlong.h  |  9 --------
+ .../arch/microblaze/include/uapi/asm/bitsperlong.h |  2 --
+ tools/arch/riscv/include/uapi/asm/bitsperlong.h    | 14 -----------
+ tools/include/uapi/asm-generic/bitsperlong.h       | 11 +++++++++
+ tools/include/uapi/asm/bitsperlong.h               |  6 -----
+ 11 files changed, 21 insertions(+), 129 deletions(-)
+ delete mode 100644 arch/arm64/include/uapi/asm/bitsperlong.h
+ delete mode 100644 arch/loongarch/include/uapi/asm/bitsperlong.h
+ delete mode 100644 arch/riscv/include/uapi/asm/bitsperlong.h
+ delete mode 100644 tools/arch/arm64/include/uapi/asm/bitsperlong.h
+ delete mode 100644 tools/arch/hexagon/include/uapi/asm/bitsperlong.h
+ delete mode 100644 tools/arch/loongarch/include/uapi/asm/bitsperlong.h
+ delete mode 100644 tools/arch/microblaze/include/uapi/asm/bitsperlong.h
+ delete mode 100644 tools/arch/riscv/include/uapi/asm/bitsperlong.h
 
 -- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+2.1.0
+
