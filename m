@@ -2,201 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D677972B72B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 07:06:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF73E72B735
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 07:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235453AbjFLFDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 01:03:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58246 "EHLO
+        id S233609AbjFLFNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 01:13:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235711AbjFLFCu (ORCPT
+        with ESMTP id S229455AbjFLFNL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 01:02:50 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2079.outbound.protection.outlook.com [40.107.244.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16107E78
-        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 22:01:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DoSde5uT6So1EoXo2jUJIOxxqRse9ogREqi1RgPFBp3d59HnNRVUZpTWRSN2QIQsBp4LNrYJUZRv1lgKyb5XVIsdzk+MMaFGQU+3gzTxj75hsPsxXKnYcX3K/B8mSmmKLy5Ld1aOmt+YYheYGG4dhCm72EvOWdxnwZMKztc0eqHns/Fjaj7cpxSrpZF33jiIPLKhSWSII+Sl5VoX+XoT0S7pR1zdezkNuCbhuHKyb/BFkRihL23wBw40fuSUOhBpyMl6TK1+Tql9XYefAGZBZn6nJP5/qFxQRVCgSIRcHs3WCy7ykm/gqNv7l7b1FYNv8NTuFpnhvLv5ZOSeUgDlHw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oq5FJpkYY5S6Hrlg+j8e6ywDJ/uA+b8nu0rUik/4QPA=;
- b=Z2xvhHO1I/XPyFxFdzNU86hxfWkjhvGzhbQJPSzgP18vF7YSV0xhpeWSDXEbK65ipCwXXO2ubbX9+mhFb0jwZuKmkcid/ebEQ4SVZatGavcnjkRIFxUmKGZ/d4e9TAkbtKtGSrob4ZIpCrlufoZpE7AFy4ASJzrV8kPs9g/AFohK5+AMREqoshPW2+0AJ1krZISqJOAsmujE0EQGyeCmuzNqSYlrVnc1Z7+h/aWoCAgg4mGz8CVqGboUydpKLm5Q+2fX0sSq0bxMuHKdJ3sY8uQcVH4Gk2ubauKBM7d9ol2ZJlQOqj6bBwpNliNZzzH4Fs6OEn9JutZ0H0dRaTmrvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oq5FJpkYY5S6Hrlg+j8e6ywDJ/uA+b8nu0rUik/4QPA=;
- b=tbTS4aJyKy0n48s4Kvko9kaMEsGkR8ORUUmLkv1NGNAHz3AhxdPH9Q7FEJrsEp/U8jXSO/Y48/0WvEnv3XgaP5hRu1FVXC/ru4jCdSrtUYqLX3cktj9Kyenv6et50K7UfgwAxUYKZtQHjLHtvZDbNKSmqyq2TcewOmkAD3ZQsW4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BYAPR12MB3286.namprd12.prod.outlook.com (2603:10b6:a03:139::15)
- by BL1PR12MB5288.namprd12.prod.outlook.com (2603:10b6:208:314::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.44; Mon, 12 Jun
- 2023 05:01:56 +0000
-Received: from BYAPR12MB3286.namprd12.prod.outlook.com
- ([fe80::8801:420d:4748:33b1]) by BYAPR12MB3286.namprd12.prod.outlook.com
- ([fe80::8801:420d:4748:33b1%4]) with mapi id 15.20.6477.028; Mon, 12 Jun 2023
- 05:01:55 +0000
-Date:   Mon, 12 Jun 2023 10:31:39 +0530
-From:   "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-To:     Yicong Yang <yangyicong@huawei.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        tim.c.chen@linux.intel.com, yu.c.chen@intel.com, mgorman@suse.de,
-        vschneid@redhat.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, rostedt@goodmis.org,
-        bsegall@google.com, bristot@redhat.com, prime.zeng@huawei.com,
-        yangyicong@hisilicon.com, jonathan.cameron@huawei.com,
-        ego@linux.vnet.ibm.com, srikar@linux.vnet.ibm.com,
-        linuxarm@huawei.com, 21cnbao@gmail.com, kprateek.nayak@amd.com,
-        wuyun.abel@bytedance.com, Barry Song <song.bao.hua@hisilicon.com>
-Subject: Re: [PATCH v8 2/2] sched/fair: Scan cluster before scanning LLC in
- wake-up path
-Message-ID: <ZIams6s+qShFWhfQ@BLR-5CG11610CF.amd.com>
-References: <20230530070253.33306-1-yangyicong@huawei.com>
- <20230530070253.33306-3-yangyicong@huawei.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530070253.33306-3-yangyicong@huawei.com>
-X-ClientProxiedBy: PN2PR01CA0203.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:e9::15) To BYAPR12MB3286.namprd12.prod.outlook.com
- (2603:10b6:a03:139::15)
+        Mon, 12 Jun 2023 01:13:11 -0400
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BDD5FB;
+        Sun, 11 Jun 2023 22:13:10 -0700 (PDT)
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-9788554a8c9so694996966b.2;
+        Sun, 11 Jun 2023 22:13:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686546788; x=1689138788;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=R/kWdHQ/ZksQh1sHAU7xUcJLGSlV/yI789RhpZXKfRE=;
+        b=I0hv7Y3x3lI8M8nD9Kho2cAa8R77wpfqJqhIk5AJMqb3LrbNx5Pe4/KynmFyEdgQDq
+         uIP9thrWTQaM/0Kn7XF9s+NtmBeBiuUeXHjAKQbhDvbVxWwD15zf9BdbP66wWoQKoY/2
+         kJoX5NUdgYjtuAuijcryB68Y5QD2YLqzaNpiz5qsdFthVhO01tE1qipGEQn5WV1UAi7L
+         AlY4Al5L+dkziJdnykDfln2iAdepVbBHgYy6V0MX0yBiFbGt2Clqe8E99iyb3obme6cF
+         os+zJQDU4BZlXJgYvdgJ+wuM2hXoB/PZOg8zfl5HQtYnPw/h3KXBjOs5U1JKdUMwAWgw
+         d6hQ==
+X-Gm-Message-State: AC+VfDxDvhHqpNfPEqgyUFvRYji/zIOK4JznsN5iQ03hZ54LVLG9fM25
+        0CAMQRtSD+He0/SmoZZUfUI=
+X-Google-Smtp-Source: ACHHUZ5c17qY5AyhpjBNaSKA+UiVrfEBjtFC1aShHzbmMUc0ji2I5r6GGQz2+rH2btH2xcInHkbe1A==
+X-Received: by 2002:a17:907:7285:b0:953:517a:8f1a with SMTP id dt5-20020a170907728500b00953517a8f1amr9576993ejc.58.1686546787978;
+        Sun, 11 Jun 2023 22:13:07 -0700 (PDT)
+Received: from [192.168.1.58] (185-219-167-24-static.vivo.cz. [185.219.167.24])
+        by smtp.gmail.com with ESMTPSA id w12-20020a17090633cc00b00965f31ff894sm4587641eja.137.2023.06.11.22.13.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 11 Jun 2023 22:13:07 -0700 (PDT)
+Message-ID: <69054d03-39e5-8c42-a9a9-8934ab4bf6c9@kernel.org>
+Date:   Mon, 12 Jun 2023 07:13:06 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3286:EE_|BL1PR12MB5288:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2bf1df22-ff66-4b36-baf4-08db6b02248c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: w4xNOZlKhnk2sORau7AgWVrbee1qDrHfPsl0FsL7gaEeiZwCO5Mg9epPUWKyfXTkegip3SxOQ4rIupxG/dAFN3BkB1EytzY6tXHPZSMOWzVFPgkDTVFnrnloUhXvJCfGO7px24OiEYEzJ7pm1jFQrfRthFt8o1giVs48WOWeo2aWSf0TVh1qpforeQt6gKnJrhtfhnkYqGKetcoo3+L+ezAsRQ7t6uG9ySIy5zoma3QzQTcLJmKMQjV8i/PN3XTNfIiJXk/h62jJx1mh3meRy3aVK6eDDWxuhqr104H6j8PBlX/hyIlFtmrGD2v07aVQRIDUHq3z3m2+Q3HfiFVkydBTgmNiCEAxOhhHpevuClHbqm1bT6JP4wpHwqCtE2Ye5XcuOUeePhntPDWcLAO0nNtk6vlaReSIwGip+3CV3IGrR+4G57TDnzI3k0wdqABJOafgvhDjy8Y2CqHNdBCKKCietAQawtsrLHaGCBc74ncXZTLFRI6e7xG9WAajAaKqaJPli8Hh7XBpOYsD0SbbVJmDJdjB/db02VyC1tl2ZWSatgqHA0ViamhxlJyST0CfWQL1J0rF/DbV+HY4aXbZkQ1sSypTRXmiMOnQ3lwwI3U=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3286.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(396003)(346002)(366004)(376002)(451199021)(86362001)(2906002)(7416002)(83380400001)(6486002)(6666004)(186003)(6506007)(26005)(6512007)(6916009)(66556008)(66476007)(8676002)(4326008)(66946007)(38100700002)(8936002)(316002)(478600001)(5660300002)(41300700001)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mF5n4VMshU1iK7L5Jnh6HV4xrhND2hd2hl6m6wgPC58NQ0dPYcExPvg9PHvZ?=
- =?us-ascii?Q?Qu0JJmREdroWcQBhhFSlJ3K8FSN3h34Ei5htfMLnbn0S4VjnzcdS84mn4c4G?=
- =?us-ascii?Q?sWxu+AYCK8mcl97Pq25wawioNmWojd0BzwCYnARThxR2xAsiC7kcXsTStWI+?=
- =?us-ascii?Q?kAZWaXxnaCDsBa8vUiZz0gzhYT+sVmFXIWf70sL8xos2aYwfkEoFvI93//Lc?=
- =?us-ascii?Q?KtuQv8KokMxxEXNcC54tdoXiPrHeTa8GkBXmkyM5oyaASPtMqRWsgSALFLqK?=
- =?us-ascii?Q?xtRatRWeb9xR/aRg7ym5y2FeJbWG05c+/IdIV8VvtFtRdJfuGdVWNg1lv1PV?=
- =?us-ascii?Q?PYl2kZwUE6YlMb7CANtEvTvTa85v9WE/Buzp3bh812VaFYPFUSykfpgG8O/Y?=
- =?us-ascii?Q?AnCK2Cn2L2vJmMAHOxMdYKHj5b/WOnM6luqc5QzVcchqPE02Be+CF0RtUEsz?=
- =?us-ascii?Q?9c2pcjEOTCj4yXoh5w3+OPBLJ1sNeasB6m2ZgwCReYOTuyYvahHDbuDEMRue?=
- =?us-ascii?Q?9Fqtr09cS4yoh7q043nZQtTWfASt4/ENSniJaDkSGW9dDYDJ1P/EitxFhkpK?=
- =?us-ascii?Q?JzqlFnFTIzHt5WsbSS00oMGtQs+/V8FENqDYN4CviGWYjM6xN34h0D6jv3hG?=
- =?us-ascii?Q?WsAivBskcVJeNXRNGm3JnxrUbUQJ9SEjl5FQenoiIukFvCIRdMsc6iRMnXS6?=
- =?us-ascii?Q?BIbXF1Rnm6QgIN4r95tREnvo7Ea5oZEMjhWqsp5AaQ1tzXOE4buQkaD+vtqI?=
- =?us-ascii?Q?WWDS5L0Ga3O0jMuvqEeam951H3TtRzY5UULtiTSWeHdfilMGXSfCpNUvrjFl?=
- =?us-ascii?Q?TnoR1YVNNLqlpnEZdusDUHl3nsVA2LdezQeofjrZEyY3Xm9T/RHq4PEPbivF?=
- =?us-ascii?Q?UmQBw6z24crV9L7COa6ceFT8h+JARASzZayEI/ujU/mySuwhk66bSbX10g9h?=
- =?us-ascii?Q?dD8jBXGYk+ae3g6T1b4MOvzK8PXa4RAioE3r/0QRWK5G0ANxc/Vp5qwidQdK?=
- =?us-ascii?Q?vyFsVWIhhuGVBZ+LK7D67Z3bBnjc/WBvsFbvVhiXWuEmGLJcFe4Won21QXu+?=
- =?us-ascii?Q?aDJ1RXYyT3+xwiUo4FM66BKZD461Eiv4QTk7jKwuQJHbyQjRIQ1rfqfsmIof?=
- =?us-ascii?Q?hyExwU11aaM5GixbhXPPa180zF8CppdM5daJ+pH051x8kE/hJ08k3ziEFLxB?=
- =?us-ascii?Q?VU5WR38umLe/OywkK6fQbnZl6SavC4wcEKQ6qTN2Zzm+VJIIOITI+liremZc?=
- =?us-ascii?Q?mId12DfqlrMso/BboBroOtoDT+7uWDAhAUnEM3XDFH68gvibZ+PEhD4uNkQ+?=
- =?us-ascii?Q?82VByIqUNQ+LJka6PDLGis3hJhSxhBrdga8GRKHVCWyivgLYf5s8qN4aUaos?=
- =?us-ascii?Q?4M7w/qpCVoLYGtowSrEPNW58znh2VtKBR1mmA/NsCBXfCIilNkt3AY2EwXDx?=
- =?us-ascii?Q?qNt0DLhnT63Jmi/9URhtCbdnjrW0KE7s23EjwinLPL+LP4CpSDNIk40gRtRe?=
- =?us-ascii?Q?7XLVgmJLfsxgH5OulvTRdILltboGceSaaC7lF/ITtTZE+qjzeG/N6zkKNbpz?=
- =?us-ascii?Q?8NERyDghFAmhMIpJ/aIwKZGGyPczXalQH45sV/iD?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2bf1df22-ff66-4b36-baf4-08db6b02248c
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3286.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 05:01:55.4389
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EaXF85hhVR37L927apRbPxTpfE5P7LpfSnFkHgh9rbGwQmdATXCCncZFsCsFop6pDXZzYTSDe1SkX9US42Roxg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5288
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 3/3] tty: serial: samsung_tty: Use abs() to simplify
+ some code
+Content-Language: en-US
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Walter Harms <wharms@bfs.de>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-serial@vger.kernel.org
+References: <e4baf6039368f52e5a5453982ddcb9a330fc689e.1686412569.git.christophe.jaillet@wanadoo.fr>
+ <7bd165e82ed3675d4ddee343ab373031e995a126.1686412569.git.christophe.jaillet@wanadoo.fr>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <7bd165e82ed3675d4ddee343ab373031e995a126.1686412569.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Yicong,
+On 10. 06. 23, 17:59, Christophe JAILLET wrote:
+> Use abs() instead of hand-writing it.
+> 
+> Suggested-by: Walter Harms <wharms@bfs.de>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> v2: new patch
+> ---
+>   drivers/tty/serial/samsung_tty.c | 5 ++---
+>   1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
+> index 0b37019820b4..b29e9dfd81a6 100644
+> --- a/drivers/tty/serial/samsung_tty.c
+> +++ b/drivers/tty/serial/samsung_tty.c
+> @@ -24,6 +24,7 @@
+>   #include <linux/dmaengine.h>
+>   #include <linux/dma-mapping.h>
+>   #include <linux/slab.h>
+> +#include <linux/math.h>
+>   #include <linux/module.h>
+>   #include <linux/ioport.h>
+>   #include <linux/io.h>
+> @@ -1485,9 +1486,7 @@ static unsigned int s3c24xx_serial_getclk(struct s3c24xx_uart_port *ourport,
+>   		}
+>   		quot--;
+>   
+> -		calc_deviation = req_baud - baud;
+> -		if (calc_deviation < 0)
+> -			calc_deviation = -calc_deviation;
+> +		calc_deviation = abs(req_baud - baud);
 
+Does this work provided req_baud and baud are unsigned?
 
-On Tue, May 30, 2023 at 03:02:53PM +0800, Yicong Yang wrote:
-> From: Barry Song <song.bao.hua@hisilicon.com>
-[..snip..]
+thanks,
+-- 
+js
+suse labs
 
-> @@ -7103,7 +7127,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
->  	bool has_idle_core = false;
->  	struct sched_domain *sd;
->  	unsigned long task_util, util_min, util_max;
-> -	int i, recent_used_cpu;
-> +	int i, recent_used_cpu, prev_aff = -1;
->  
->  	/*
->  	 * On asymmetric system, update task utilization because we will check
-> @@ -7130,8 +7154,11 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
->  	 */
->  	if (prev != target && cpus_share_cache(prev, target) &&
->  	    (available_idle_cpu(prev) || sched_idle_cpu(prev)) &&
-> -	    asym_fits_cpu(task_util, util_min, util_max, prev))
-> -		return prev;
-> +	    asym_fits_cpu(task_util, util_min, util_max, prev)) {
-> +		if (cpus_share_lowest_cache(prev, target))
-
-For platforms without the cluster domain, the cpus_share_lowest_cache
-check is a repetition of the cpus_share_cache(prev, target) check. Can
-we avoid this using a static branch check for cluster ?
-
-
-> +			return prev;
-> +		prev_aff = prev;
-> +	}
->  
->  	/*
->  	 * Allow a per-cpu kthread to stack with the wakee if the
-> @@ -7158,7 +7185,10 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
->  	    (available_idle_cpu(recent_used_cpu) || sched_idle_cpu(recent_used_cpu)) &&
->  	    cpumask_test_cpu(p->recent_used_cpu, p->cpus_ptr) &&
->  	    asym_fits_cpu(task_util, util_min, util_max, recent_used_cpu)) {
-> -		return recent_used_cpu;
-> +		if (cpus_share_lowest_cache(recent_used_cpu, target))
-
-Same here.
-
-> +			return recent_used_cpu;
-> +	} else {
-> +		recent_used_cpu = -1;
->  	}
->  
->  	/*
-> @@ -7199,6 +7229,17 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
->  	if ((unsigned)i < nr_cpumask_bits)
->  		return i;
->  
-> +	/*
-> +	 * For cluster machines which have lower sharing cache like L2 or
-> +	 * LLC Tag, we tend to find an idle CPU in the target's cluster
-> +	 * first. But prev_cpu or recent_used_cpu may also be a good candidate,
-> +	 * use them if possible when no idle CPU found in select_idle_cpu().
-> +	 */
-> +	if ((unsigned int)prev_aff < nr_cpumask_bits)
-> +		return prev_aff;
-
-Shouldn't we check if prev_aff (and the recent_used_cpu below) is
-still idle ?
-
-
-> +	if ((unsigned int)recent_used_cpu < nr_cpumask_bits)
-> +		return recent_used_cpu;
-> +
->  	return target;
->  }
->  
-
---
-Thanks and Regards
-gautham.
