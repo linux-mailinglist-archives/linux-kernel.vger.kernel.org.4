@@ -2,176 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBDD172C21D
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:03:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5377F72C23C
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:03:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237501AbjFLLC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 07:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36304 "EHLO
+        id S237344AbjFLLDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 07:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237573AbjFLLC2 (ORCPT
+        with ESMTP id S237639AbjFLLDW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 07:02:28 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A24C45FCB;
-        Mon, 12 Jun 2023 03:49:54 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C2A291EC064A;
-        Mon, 12 Jun 2023 12:49:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1686566992;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=HNvNkDQEJ4NeFu80fh8zSTZwGO0VQ8+2hvqiV1HA19E=;
-        b=ECTZefKK401QeBWbC2TMZGv1HwZo6E/eF6Xf8qNHTCiodkyfOIAgHrznnvJfF4yDLLDbfR
-        uXqar2YSbZ3mBBO6eY0bPQFgPpAx5RVLUAsgD5qb0TR/nZlft64jdSauyTfRGw/kkZjlkO
-        qIT1tCwwAJ9hbkLilT4cwLex4Idpb1E=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1686566991; bh=HNvNkDQEJ4NeFu80fh8zSTZwGO0VQ8+2hvqiV1HA19E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fzHKlyoDn2jIjrFPn3fXdIOHGew1ihpJ24xw/CcJG3TkZy17Yg3oiu1bnMbVq84UW
-         iNgouJVqXUIlprpLNT6jEYqwuCdIR4UyBqN0LLeppXZ6Zxnf/1zACTaax6OG6HN9O2
-         SOE2iUm4kVIsIWVAczbvD2b+xCOwZVkRo6KUyMxDLpXHsntacFHeddLoi5YIQ/XDLs
-         lej+epOiS2/P6jDOdqpPgXhgQXBnG+ufX6pIjXgBsksfc0NJNmcQHl9YYln/2cU41g
-         BwAiPcgtmQmzsCKNNWrhLfI+dBIbWHN+bDNFEfTBC6xTLSbAI9b2Cdiggf9B1ORMWL
-         WjTHJQvMY5uFZKSwRvPshA4OqL2czb3UjBcE9IaoQJUll3BgtWGF8D8Ix6+9qEVZQj
-         xAR1Mr8SRBHTUk4+Jn8/VYxtmea7lne8vuliylnzJa2ix4PRv3555QkY4Hvs+LLTjy
-         3DoXoLVlqLVpANXROF0gAKgiqwfA9ogDG+BlQKffdEePFS5jp6nvtK+Srd3JAllsfS
-         EY8ZUaaDvnGrDN96o+2/qkjV80LcPe+uPdEknjnOeIF08vAiQJNKvstI9NTfFuAZwV
-         oi00rtkB+AXh/hoxZHwCf+p5d0ljHivaOc1IxQkNzAaerWb25Vebzd0C9E+NzEMbGn
-         n7bRmxX/yzDrVN55Z4Y0J6bU=
-Received: from zn.tnic (p200300EA971DC508329c23FFfEa6A903.dip0.t-ipconnect.de [IPv6:2003:ea:971d:c508:329c:23ff:fea6:a903])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F1CD040E01E2;
-        Mon, 12 Jun 2023 10:49:11 +0000 (UTC)
-Date:   Mon, 12 Jun 2023 12:49:05 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
-        nikunj.dadhania@amd.com, liam.merwick@oracle.com,
-        zhi.a.wang@intel.com
-Subject: Re: [PATCH RFC v9 02/51] KVM: x86: Add gmem hook for invalidating
- private memory
-Message-ID: <20230612104905.GOZIb4ISN9gj9lWYNv@fat_crate.local>
-References: <20230612042559.375660-1-michael.roth@amd.com>
- <20230612042559.375660-3-michael.roth@amd.com>
+        Mon, 12 Jun 2023 07:03:22 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF907DB0;
+        Mon, 12 Jun 2023 03:50:59 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-977d0288fd2so706834866b.1;
+        Mon, 12 Jun 2023 03:50:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686567058; x=1689159058;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=XrJnAcQXaaKtEzxkhRkZVaQ+TNeCvbTHyVGe6/lX350=;
+        b=ZX/zgdnjqLp5frWFF0tmhlrQaah5uP+E2/nKpuVuLRyU3dvU+9+tJt9RnDMzo9ZNM8
+         KuHSt662s1ARIEposq65rWX/QbqddpAjkFg0q4mp+3pXqs4PZpOZxPPWf2//ZqLqHTOV
+         k+xT1AWGSKR+MROAvQ+tFHJemt5OzLlkQwmR7E8M6m/CwlPxmoU+57zpDEHZt7N9KExM
+         1dv8LfZyWFPxPq08yHV1CzIft2zOYkSHLRnAYrxlXQAXVuwHsYKDZJYdufLTTDD8F57R
+         VGrMYibyu3WyB5dTp7MBKVMnAhJhAMh6YMrLa90HywEg4nAmlfYBULzgdf02rvTESf2X
+         x2vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686567058; x=1689159058;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XrJnAcQXaaKtEzxkhRkZVaQ+TNeCvbTHyVGe6/lX350=;
+        b=PRBo7JUQf/ARVQGwzFP8p5C7tbhwD4jYJ/GHtGA1LrzhqU+0Yuaond2f21Z217PD/5
+         mB+dGl91GTjboF/MDjbnDoA4Xn5r2jrv7+dhKm+b0XXNzVS1Qd+eJ8Ex+THKf5DNDVDf
+         NppqMVptkNF4meHwlSZCovPF0yRHJIIMpnfnDOhGApaHhTOFosgzDrM+aIs8lWmaePZS
+         UkL2PemEyNWgkSgwfcc4uWMiYqFi1/rRyIROMj3d6jCqKARENq0HC6WqWF3oFGvvXT27
+         FN8yh6qyMg8HWNfyc8cAW1iEMdyPCzREftBWvCg23NK2w8hz+1EMAnzdjgqGXdkuApu0
+         pn6w==
+X-Gm-Message-State: AC+VfDxDPwBZ4YwmoU+Yu3FyKoCWgUNR6/yQ7eYYTFHS1D8oBCW0XSKu
+        g+nOolmckMLBdUb23Hz8ruA=
+X-Google-Smtp-Source: ACHHUZ7lljuQbOIokmQ75s0khk6c2hRSyrkERDFUFIGiWkYHqQiu5SAlW3DeI44y6F+AWXNzoFMuRA==
+X-Received: by 2002:a17:906:fe4d:b0:973:93e3:bc9a with SMTP id wz13-20020a170906fe4d00b0097393e3bc9amr8904535ejb.6.1686567057749;
+        Mon, 12 Jun 2023 03:50:57 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id t16-20020a1709066bd000b009596e7e0dbasm5025364ejs.162.2023.06.12.03.50.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 03:50:57 -0700 (PDT)
+Date:   Mon, 12 Jun 2023 13:50:54 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net v2 1/7] net: dsa: mt7530: fix trapping frames with
+ multiple CPU ports on MT7531
+Message-ID: <20230612105054.fqv46qpnpf2ktc3b@skbuf>
+References: <20230611081547.26747-1-arinc.unal@arinc9.com>
+ <ZIXwc0V5Ye6xrpmn@shell.armlinux.org.uk>
+ <9d571682-7271-2a5e-8079-900d14a5d7cd@arinc9.com>
+ <ZIbuxohDqHA0S7QP@shell.armlinux.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230612042559.375660-3-michael.roth@amd.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZIbuxohDqHA0S7QP@shell.armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 11, 2023 at 11:25:10PM -0500, Michael Roth wrote:
-> TODO: add a CONFIG option that can be to completely skip arch
-> invalidation loop and avoid __weak references for arch/platforms that
-> don't need an additional invalidation hook.
+On Mon, Jun 12, 2023 at 11:09:10AM +0100, Russell King (Oracle) wrote:
+> > Yes but it's not the affinity we set here. It's to enable the CPU port for
+> > trapping.
 > 
-> In some cases, like with SEV-SNP, guest memory needs to be updated in a
-> platform-specific manner before it can be safely freed back to the host.
-> Add hooks to wire up handling of this sort when freeing memory in
-> response to FALLOC_FL_PUNCH_HOLE operations.
-> 
-> Also issue invalidations of all allocated pages when releasing the gmem
-> file so that the pages are not left in an unusable state when they get
-> freed back to the host.
-> 
-> Signed-off-by: Michael Roth <michael.roth@amd.com>
-> ---
->  arch/x86/include/asm/kvm-x86-ops.h |  1 +
->  arch/x86/include/asm/kvm_host.h    |  1 +
->  arch/x86/kvm/x86.c                 |  6 ++++
->  include/linux/kvm_host.h           |  3 ++
->  virt/kvm/guest_mem.c               | 48 ++++++++++++++++++++++++++++--
->  5 files changed, 57 insertions(+), 2 deletions(-)
+> In light of that, is the problem that we only enable one CPU port to
+> receive trapped frames from their affine user ports?
 
-ld: arch/x86/kvm/../../../virt/kvm/eventfd.o: in function `kvm_arch_gmem_invalidate':
-/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: multiple definition of `kvm_arch_gmem_invalidate'; arch/x86/kvm/../../../virt/kvm/kvm_main.o:/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: first defined here
-ld: arch/x86/kvm/../../../virt/kvm/binary_stats.o: in function `kvm_arch_gmem_invalidate':
-/home/boris/kernel/2nd/linux/arch/x86/kvm/../../../virt/kvm/binary_stats.c:2356: multiple definition of `kvm_arch_gmem_invalidate'; arch/x86/kvm/../../../virt/kvm/kvm_main.o:/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: first defined here
-ld: arch/x86/kvm/../../../virt/kvm/vfio.o: in function `kvm_arch_gmem_invalidate':
-/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: multiple definition of `kvm_arch_gmem_invalidate'; arch/x86/kvm/../../../virt/kvm/kvm_main.o:/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: first defined here
-ld: arch/x86/kvm/../../../virt/kvm/coalesced_mmio.o: in function `kvm_arch_gmem_invalidate':
-/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: multiple definition of `kvm_arch_gmem_invalidate'; arch/x86/kvm/../../../virt/kvm/kvm_main.o:/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: first defined here
-ld: arch/x86/kvm/../../../virt/kvm/async_pf.o: in function `kvm_arch_gmem_invalidate':
-/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: multiple definition of `kvm_arch_gmem_invalidate'; arch/x86/kvm/../../../virt/kvm/kvm_main.o:/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: first defined here
-ld: arch/x86/kvm/../../../virt/kvm/irqchip.o: in function `kvm_arch_gmem_invalidate':
-/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: multiple definition of `kvm_arch_gmem_invalidate'; arch/x86/kvm/../../../virt/kvm/kvm_main.o:/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: first defined here
-ld: arch/x86/kvm/../../../virt/kvm/dirty_ring.o: in function `kvm_arch_gmem_invalidate':
-/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: multiple definition of `kvm_arch_gmem_invalidate'; arch/x86/kvm/../../../virt/kvm/kvm_main.o:/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: first defined here
-ld: arch/x86/kvm/../../../virt/kvm/pfncache.o: in function `kvm_arch_gmem_invalidate':
-/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: multiple definition of `kvm_arch_gmem_invalidate'; arch/x86/kvm/../../../virt/kvm/kvm_main.o:/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: first defined here
-ld: arch/x86/kvm/x86.o: in function `kvm_arch_gmem_invalidate':
-/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: multiple definition of `kvm_arch_gmem_invalidate'; arch/x86/kvm/../../../virt/kvm/kvm_main.o:/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: first defined here
-ld: arch/x86/kvm/emulate.o: in function `kvm_arch_gmem_invalidate':
-/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: multiple definition of `kvm_arch_gmem_invalidate'; arch/x86/kvm/../../../virt/kvm/kvm_main.o:/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: first defined here
-ld: arch/x86/kvm/i8259.o: in function `kvm_arch_gmem_invalidate':
-/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: multiple definition of `kvm_arch_gmem_invalidate'; arch/x86/kvm/../../../virt/kvm/kvm_main.o:/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: first defined here
-ld: arch/x86/kvm/irq.o: in function `kvm_arch_gmem_invalidate':
-/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: multiple definition of `kvm_arch_gmem_invalidate'; arch/x86/kvm/../../../virt/kvm/kvm_main.o:/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: first defined here
-ld: arch/x86/kvm/lapic.o: in function `kvm_arch_gmem_invalidate':
-/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: multiple definition of `kvm_arch_gmem_invalidate'; arch/x86/kvm/../../../virt/kvm/kvm_main.o:/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: first defined here
-ld: arch/x86/kvm/i8254.o: in function `kvm_arch_gmem_invalidate':
-/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: multiple definition of `kvm_arch_gmem_invalidate'; arch/x86/kvm/../../../virt/kvm/kvm_main.o:/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: first defined here
-ld: arch/x86/kvm/ioapic.o: in function `kvm_arch_gmem_invalidate':
-/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: multiple definition of `kvm_arch_gmem_invalidate'; arch/x86/kvm/../../../virt/kvm/kvm_main.o:/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: first defined here
-ld: arch/x86/kvm/irq_comm.o: in function `kvm_arch_gmem_invalidate':
-/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: multiple definition of `kvm_arch_gmem_invalidate'; arch/x86/kvm/../../../virt/kvm/kvm_main.o:/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: first defined here
-ld: arch/x86/kvm/cpuid.o: in function `kvm_arch_gmem_invalidate':
-/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: multiple definition of `kvm_arch_gmem_invalidate'; arch/x86/kvm/../../../virt/kvm/kvm_main.o:/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: first defined here
-ld: arch/x86/kvm/pmu.o: in function `kvm_arch_gmem_invalidate':
-/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: multiple definition of `kvm_arch_gmem_invalidate'; arch/x86/kvm/../../../virt/kvm/kvm_main.o:/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: first defined here
-ld: arch/x86/kvm/mtrr.o: in function `kvm_arch_gmem_invalidate':
-/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: multiple definition of `kvm_arch_gmem_invalidate'; arch/x86/kvm/../../../virt/kvm/kvm_main.o:/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: first defined here
-ld: arch/x86/kvm/hyperv.o: in function `kvm_arch_gmem_invalidate':
-/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: multiple definition of `kvm_arch_gmem_invalidate'; arch/x86/kvm/../../../virt/kvm/kvm_main.o:/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: first defined here
-ld: arch/x86/kvm/debugfs.o: in function `kvm_arch_gmem_invalidate':
-/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: multiple definition of `kvm_arch_gmem_invalidate'; arch/x86/kvm/../../../virt/kvm/kvm_main.o:/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: first defined here
-ld: arch/x86/kvm/mmu/mmu.o: in function `kvm_arch_gmem_invalidate':
-/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: multiple definition of `kvm_arch_gmem_invalidate'; arch/x86/kvm/../../../virt/kvm/kvm_main.o:/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: first defined here
-ld: arch/x86/kvm/mmu/page_track.o: in function `kvm_arch_gmem_invalidate':
-/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: multiple definition of `kvm_arch_gmem_invalidate'; arch/x86/kvm/../../../virt/kvm/kvm_main.o:/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: first defined here
-ld: arch/x86/kvm/mmu/spte.o: in function `kvm_arch_gmem_invalidate':
-/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: multiple definition of `kvm_arch_gmem_invalidate'; arch/x86/kvm/../../../virt/kvm/kvm_main.o:/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: first defined here
-ld: arch/x86/kvm/mmu/tdp_iter.o: in function `kvm_arch_gmem_invalidate':
-/home/boris/kernel/2nd/linux/arch/x86/kvm/mmu/tdp_iter.c:2356: multiple definition of `kvm_arch_gmem_invalidate'; arch/x86/kvm/../../../virt/kvm/kvm_main.o:/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: first defined here
-ld: arch/x86/kvm/mmu/tdp_mmu.o: in function `kvm_arch_gmem_invalidate':
-/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: multiple definition of `kvm_arch_gmem_invalidate'; arch/x86/kvm/../../../virt/kvm/kvm_main.o:/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: first defined here
-ld: arch/x86/kvm/smm.o: in function `kvm_arch_gmem_invalidate':
-/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: multiple definition of `kvm_arch_gmem_invalidate'; arch/x86/kvm/../../../virt/kvm/kvm_main.o:/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: first defined here
-make[3]: *** [scripts/Makefile.build:452: arch/x86/kvm/kvm.o] Error 1
-make[3]: *** Waiting for unfinished jobs....
-make[2]: *** [scripts/Makefile.build:494: arch/x86/kvm] Error 2
-make[2]: *** Waiting for unfinished jobs....
-make[1]: *** [scripts/Makefile.build:494: arch/x86] Error 2
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:2028: .] Error 2
+The badly explained problem is that this driver is not coded up to handle
+device trees with multiple CPU ports in the way that is desirable for Arınç.
 
--- 
-Regards/Gruss,
-    Boris.
+Namely, when both CPU ports 5 and 6 are described in the device tree,
+DSA currently chooses port 5 as the active and unchangeable CPU port.
+That works, however it is not desirable for Arınç for performance reasons,
+as explained in commit "net: dsa: introduce preferred_default_local_cpu_port
+and use on MT7530" from this series.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+So that change makes DSA choose port 6 as the active and unchangeable
+CPU port. But as a preliminary change for that to work, one would need
+to remove the current built-in assumption of the mt7530 driver: that the
+active and unchangeable CPU port is also the first CPU port.
+
+This change builds on the observation that there is no problem when all
+CPU ports described in the device tree are set in the CPU port bitmap,
+regardless of whether they are active or not. This is because packet
+trapping on these switch sub-families follows the user to CPU port
+affinity, and inactive CPU ports have no user ports affine to them.
