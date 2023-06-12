@@ -2,57 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 652F072BE6A
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D43EB72BE6D
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:12:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233342AbjFLKK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 06:10:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49130 "EHLO
+        id S235639AbjFLKMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 06:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236747AbjFLKJl (ORCPT
+        with ESMTP id S231951AbjFLKLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 06:09:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD4E7280
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:50:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AD1E622BE
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 09:50:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 44269C433B3;
-        Mon, 12 Jun 2023 09:50:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686563421;
-        bh=CezdVL33asTp+QCAsDrtsg3Oq74MmAINSOzqCnmZfIU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=d3JaJT5sf8uBfMGJTZ2DbEYdYIVpDLExSESatpg+QlWFRPeARnXaQdNiVzGtnYSNe
-         40V0TD5MhuVCCqHE9O/G2WvZwD1bFSBDo0O8mC2vtg0az0OvK3T0R7QhiA95tw9ZDQ
-         LrQePyfApalrUrEbhI3cLIs8EvmcSTE6Jl+X8TcMOUvL2TTcC+YO9uCWY/KZc6pAp6
-         R3UleSRQtkxcxkHw+0IDAUUgLEwQhVrV4av8+QA9uCu1nOusmTQKa0UcdF45cUMMvf
-         gEI2HcNCv/+BTRcvEoE/zOZ79B8x2xS5UV4oCF6PclotXQ/Ci88QhIjt+aUWhryiYw
-         sCQkWN4jyHIbg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DAAE7E1CF31;
-        Mon, 12 Jun 2023 09:50:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 12 Jun 2023 06:11:22 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E8A64228
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:51:23 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9788faaca2dso701537966b.0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:51:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686563482; x=1689155482;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=p73p8iBF8aXDQgFdOMI5kr8I00UMbWdp8nhLok7wZbE=;
+        b=kaBQyxEJjsN1+xKoTCuWznHkrGfi24IjYupmx3KNL49JI8TcnKOm3gzqPs4xKKSZ8P
+         LxuWnwpAGq37k88T1nK0WwLd4azQNkH1m8eSVpl5akD8ywZx96Qr00DZCjpKdF/ngw4X
+         TsrDjF9h/M/5bGxwZFuPGTYfdFF6lkf65E/bTYT8wfa+tnxOEkXhf6XdJdN0+Na0Nrvp
+         WNWXuIb6b4L/HhvuUCX/8uqrTTjfgzMuyFrT8HI9elIGIH5J3bYSYxVQNgS6kYskGiaL
+         bCzihQyJ879LMowmgq0Y7n8D63YUqmaSrvIoT/Ra7A93VD6Aeeud3m11zOGL8VL6SHuU
+         jpwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686563482; x=1689155482;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=p73p8iBF8aXDQgFdOMI5kr8I00UMbWdp8nhLok7wZbE=;
+        b=BoBDSjbHHp+IQXwkUuOV/oGlvetBv/6oP/BGv/ELYEcL9EDccx3mlOtxBe58263zZp
+         iDqB1uhCfPFcX5dO2/fMl6PyVBOvr/7Qxu3+9uwdZFOlv/ZtT1FTdKpgqo874IN39W7f
+         2X2GHRyA97Lld+1WBw1hmRvK2hP5XodGyTDWzWp5Yqq+ti4nd2jJXZhbE9QtcDfwylx0
+         bap2twRW4sS6pGrXJbxBZQuwWss9WhQ13u8izOfEpoKfsBFvuEiept4i8cUgJ/ji/Lw2
+         MhjKnrsc3hvNcfjnFYOH/ZIStk6pOnyeEBAz1rO21Ud/myvJ7xoGwajMHz+QBQaJptZA
+         fCtA==
+X-Gm-Message-State: AC+VfDzbTrg2snlIP57+AHS2VU4Q9cA9WqAJ4kwa5Chs9mPGrBTPQSyy
+        MAyjdc2hJ4sRbJEdqp/kXahniA==
+X-Google-Smtp-Source: ACHHUZ4rvqW+RXF5ZByOUxAp90+FZQtXk5GA+J2fVeqLdy9oIQxUyIWww+3XSb16dju+/3m1aea4bg==
+X-Received: by 2002:a17:906:6a1c:b0:978:ab6b:afe9 with SMTP id qw28-20020a1709066a1c00b00978ab6bafe9mr8699754ejc.66.1686563482008;
+        Mon, 12 Jun 2023 02:51:22 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id kf10-20020a17090776ca00b00965f6ad266bsm4850797ejc.119.2023.06.12.02.51.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 02:51:21 -0700 (PDT)
+Message-ID: <3ac37e54-0633-37d2-2ba7-f06abcb9a5a7@linaro.org>
+Date:   Mon, 12 Jun 2023 11:51:19 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v7 0/4] Add SCM_PIDFD and SO_PEERPIDFD
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168656342089.25012.9925385632760123942.git-patchwork-notify@kernel.org>
-Date:   Mon, 12 Jun 2023 09:50:20 +0000
-References: <20230608202628.837772-1-aleksandr.mikhalitsyn@canonical.com>
-In-Reply-To: <20230608202628.837772-1-aleksandr.mikhalitsyn@canonical.com>
-To:     Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, leon@kernel.org, dsahern@kernel.org,
-        arnd@arndb.de, keescook@chromium.org, brauner@kernel.org,
-        kuniyu@amazon.com, mzxreary@0pointer.de, bluca@debian.org,
-        daniel@iogearbox.net, sdf@google.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [EXTERNAL] Re: [PATCH] arm64: defconfig: Enable HSR by default
+Content-Language: en-US
+To:     Ravi Gunasekaran <r-gunasekaran@ti.com>, catalin.marinas@arm.com,
+        will@kernel.org
+Cc:     arnd@arndb.de, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20230612094340.13865-1-r-gunasekaran@ti.com>
+ <ab8dfd0f-fa49-6493-d79d-c35f632373f3@linaro.org>
+ <e3e409c5-56b5-570d-e962-a7c0a1c05fa3@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <e3e409c5-56b5-570d-e962-a7c0a1c05fa3@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,34 +78,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by David S. Miller <davem@davemloft.net>:
-
-On Thu,  8 Jun 2023 22:26:24 +0200 you wrote:
-> 1. Implement SCM_PIDFD, a new type of CMSG type analogical to SCM_CREDENTIALS,
-> but it contains pidfd instead of plain pid, which allows programmers not
-> to care about PID reuse problem.
+On 12/06/2023 11:49, Ravi Gunasekaran wrote:
 > 
-> 2. Add SO_PEERPIDFD which allows to get pidfd of peer socket holder pidfd.
-> This thing is direct analog of SO_PEERCRED which allows to get plain PID.
 > 
-> [...]
+> On 6/12/23 3:14 PM, Krzysztof Kozlowski wrote:
+>> On 12/06/2023 11:43, Ravi Gunasekaran wrote:
+>>> Enable HSR feature in kernel build.
+>>
+>> Why? Commit msg should answer to this question.
+> 
+> I apologize for incomplete description. I will send out a v2.
+> 
+> HSR protocol is implemented by the network stack at /net/hsr/*
+> In order to create HSR interface, HSR module needs to be loaded.
 
-Here is the summary with links:
-  - [net-next,v7,1/4] scm: add SO_PASSPIDFD and SCM_PIDFD
-    https://git.kernel.org/netdev/net-next/c/5e2ff6704a27
-  - [net-next,v7,2/4] net: core: add getsockopt SO_PEERPIDFD
-    https://git.kernel.org/netdev/net-next/c/7b26952a91cf
-  - [net-next,v7,3/4] selftests: net: add SCM_PIDFD / SO_PEERPIDFD test
-    https://git.kernel.org/netdev/net-next/c/ec80f488252b
-  - [net-next,v7,4/4] af_unix: Kconfig: make CONFIG_UNIX bool
-    https://git.kernel.org/netdev/net-next/c/97154bcf4d1b
+You described what HSR is, but I want to know why do we need it in our
+development arm64 kernel. You might want to enable anything and explain
+what is this "anything" but this does not solve any of the concerns.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Best regards,
+Krzysztof
 
