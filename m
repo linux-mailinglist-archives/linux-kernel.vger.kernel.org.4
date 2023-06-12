@@ -2,165 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 808D772B8D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 09:41:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 328A172B8E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 09:42:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234707AbjFLHl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 03:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50432 "EHLO
+        id S235041AbjFLHmQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 12 Jun 2023 03:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234745AbjFLHlY (ORCPT
+        with ESMTP id S235008AbjFLHlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 03:41:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2CBF10E2;
-        Mon, 12 Jun 2023 00:40:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53EBD61267;
-        Mon, 12 Jun 2023 07:29:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82824C433EF;
-        Mon, 12 Jun 2023 07:29:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686554956;
-        bh=SZmIp6ywoNZW/16DvVOxLRUnnE5sFCr7JfjAiFKlPt8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nnK+lUj66rsngdG+yb6or83tS7FL0+uxdX6Liij19G5WnviIBkUtGUL68I9PKmZAX
-         LlxL2GkqITNwmBrVfvQpY3y+eU1DIvAoy8X6Vu5+N9MKItgQxTzlrboSZOlpZyKVXm
-         EEM0UMPAM02X/RhfOjmqTKETutU52lNvGhsWPk9O+PZZc/5iSTaeSP7TQIW5ETQHO2
-         hv8/0PBdyErii1diIobjKY2Lcm03uy7pM3IDEU/qFXnCOAd2p4w1V0n6vO9UMJB85x
-         hEYVmgZk/7y+RGefADHBu8nwR3LCeoBzziX7EldfY/f8MNDJh1DFiehCJNcoGvF4JD
-         M9FnuSSNpLIEA==
-Date:   Mon, 12 Jun 2023 09:29:11 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     wenyang.linux@foxmail.com
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
-        Dylan Yudaken <dylany@fb.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Eric Biggers <ebiggers@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] eventfd: add a uapi header for eventfd userspace APIs
-Message-ID: <20230612-erden-geier-f4a73586dc20@brauner>
-References: <tencent_F7EEF9B42A817A28086FF22DBD84B9CF2F05@qq.com>
+        Mon, 12 Jun 2023 03:41:55 -0400
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26ACA10E2;
+        Mon, 12 Jun 2023 00:41:27 -0700 (PDT)
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-652426346bbso3121796b3a.3;
+        Mon, 12 Jun 2023 00:41:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686555587; x=1689147587;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZfTmhYwHEf0iCvCy8Z+q4+p065tZoTThjF1daF8hM/E=;
+        b=QyLyR5sD7YwiMHRHSyaXnt7Rzl3Iy/1x6wTRKBpMrqI4JJ6EJTLUcEu1bStfDJsply
+         MHvKf0CRAmyFhyXBaRvktIl+KnTOomE+ITnZ5dP2x+YJyESKBkDJY5YjL5r/S3FUW/ZH
+         EUaDCdBKSf+6mrHg4UV1QEdslZgeGtnKKHoQ1C7kXqq0is/dIjJQGT7e4yAR0UUTeZS/
+         EbCS9S2ia6Qq02mLVzDwSJ2bF2KuCDKgBYEueW1hZWIuVi+K2xZ0qrlwjVS7+IZwYUdH
+         oXexxP00KjFZU5fpedhWpMgik2PPRFvQ0n4FNmX5APsW4DdeQGtkKQQEVxCnX9hng9/V
+         QVDQ==
+X-Gm-Message-State: AC+VfDyqSWMiQULeoc1p63TZQLjiTx3RbLQQcLCPloFCXp4cecW0lQC6
+        R48VIUk4fpC6L3LFaXIQwVXukOk7DP6hoA==
+X-Google-Smtp-Source: ACHHUZ4g/vbbLvaXeKajjx3XjtFZMUz34s9HLzOzCHg8y4Ox8ijBPZZzJ5ocvu8SJzMvPt5pzO35LQ==
+X-Received: by 2002:a1f:ed83:0:b0:464:2bdd:ab1e with SMTP id l125-20020a1fed83000000b004642bddab1emr3649039vkh.5.1686554968250;
+        Mon, 12 Jun 2023 00:29:28 -0700 (PDT)
+Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com. [209.85.217.45])
+        by smtp.gmail.com with ESMTPSA id 77-20020a1f1950000000b0046142c6abfbsm1301601vkz.25.2023.06.12.00.29.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 00:29:27 -0700 (PDT)
+Received: by mail-vs1-f45.google.com with SMTP id ada2fe7eead31-43b4056391dso1000170137.1;
+        Mon, 12 Jun 2023 00:29:27 -0700 (PDT)
+X-Received: by 2002:a05:6102:3659:b0:43c:15b1:6661 with SMTP id
+ s25-20020a056102365900b0043c15b16661mr2721069vsu.2.1686554967247; Mon, 12 Jun
+ 2023 00:29:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <tencent_F7EEF9B42A817A28086FF22DBD84B9CF2F05@qq.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230609221136.7431-1-chris.paterson2@renesas.com>
+In-Reply-To: <20230609221136.7431-1-chris.paterson2@renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 12 Jun 2023 09:29:15 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWV6nBN=W4s2c+xhKu8rwg7JtE1qX=GgO+HbiyOUsV=TA@mail.gmail.com>
+Message-ID: <CAMuHMdWV6nBN=W4s2c+xhKu8rwg7JtE1qX=GgO+HbiyOUsV=TA@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: renesas: Fix txdv-skew-psec typo in RZ/G2L
+ family smarc-som.dtsi files
+To:     Chris Paterson <chris.paterson2@renesas.com>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Tomohiro Komagata <tomohiro.komagata.aj@renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 02:59:20AM +0800, wenyang.linux@foxmail.com wrote:
-> From: Wen Yang <wenyang.linux@foxmail.com>
-> 
-> Create a uapi header include/uapi/linux/eventfd.h, move the associated
-> flags to the uapi header, and include it from linux/eventfd.h.
-> 
-> Signed-off-by: Wen Yang <wenyang.linux@foxmail.com>
-> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-> Cc: Jens Axboe <axboe@kernel.dk>
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Dylan Yudaken <dylany@fb.com>
-> Cc: David Woodhouse <dwmw@amazon.co.uk>
-> Cc: Matthew Wilcox <willy@infradead.org>
-> Cc: Eric Biggers <ebiggers@google.com>
-> Cc: linux-fsdevel@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> ---
+On Sat, Jun 10, 2023 at 12:11 AM Chris Paterson
+<chris.paterson2@renesas.com> wrote:
+> It looks like txdv-skew-psec is a typo from a copy+paste. txdv-skew-psec
+> is not present in the PHY bindings nor is it in the driver.
+>
+> Correct to txen-skew-psec which is clearly what it was meant to be.
+>
+> Given that the default for txen-skew-psec is 0, and the device tree is
+> only trying to set it to 0 anyway, there should not be any functional
+> change from this fix.
+>
+> Fixes: 361b0dcbd7f9 ("arm64: dts: renesas: rzg2l-smarc-som: Enable Ethernet")
+> Fixes: 6494e4f90503 ("arm64: dts: renesas: rzg2ul-smarc-som: Enable Ethernet on SMARC platform")
+> Fixes: ce0c63b6a5ef ("arm64: dts: renesas: Add initial device tree for RZ/G2LC SMARC EVK")
+> Cc: stable@vger.kernel.org # 6.1.y
+> Reported-by: Tomohiro Komagata <tomohiro.komagata.aj@renesas.com>
+> Signed-off-by: Chris Paterson <chris.paterson2@renesas.com>
 
-I think the change overall makes sense but see below.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v6.6.
 
->  include/linux/eventfd.h      | 16 +---------------
->  include/uapi/linux/eventfd.h | 27 +++++++++++++++++++++++++++
->  2 files changed, 28 insertions(+), 15 deletions(-)
->  create mode 100644 include/uapi/linux/eventfd.h
-> 
-> diff --git a/include/linux/eventfd.h b/include/linux/eventfd.h
-> index 98d31cdaca40..c8be8fa6795d 100644
-> --- a/include/linux/eventfd.h
-> +++ b/include/linux/eventfd.h
-> @@ -9,26 +9,12 @@
->  #ifndef _LINUX_EVENTFD_H
->  #define _LINUX_EVENTFD_H
->  
-> -#include <linux/fcntl.h>
->  #include <linux/wait.h>
->  #include <linux/err.h>
->  #include <linux/percpu-defs.h>
->  #include <linux/percpu.h>
->  #include <linux/sched.h>
-> -
-> -/*
-> - * CAREFUL: Check include/uapi/asm-generic/fcntl.h when defining
-> - * new flags, since they might collide with O_* ones. We want
-> - * to re-use O_* flags that couldn't possibly have a meaning
-> - * from eventfd, in order to leave a free define-space for
-> - * shared O_* flags.
-> - */
-> -#define EFD_SEMAPHORE (1 << 0)
-> -#define EFD_CLOEXEC O_CLOEXEC
-> -#define EFD_NONBLOCK O_NONBLOCK
-> -
-> -#define EFD_SHARED_FCNTL_FLAGS (O_CLOEXEC | O_NONBLOCK)
-> -#define EFD_FLAGS_SET (EFD_SHARED_FCNTL_FLAGS | EFD_SEMAPHORE)
-> +#include <uapi/linux/eventfd.h>
->  
->  struct eventfd_ctx;
->  struct file;
-> diff --git a/include/uapi/linux/eventfd.h b/include/uapi/linux/eventfd.h
-> new file mode 100644
-> index 000000000000..02e9dcdb8d29
-> --- /dev/null
-> +++ b/include/uapi/linux/eventfd.h
-> @@ -0,0 +1,27 @@
-> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> +#ifndef _UAPI_LINUX_EVENTFD_H
-> +#define _UAPI_LINUX_EVENTFD_H
-> +
-> +#include <linux/types.h>
-> +
-> +/* For O_CLOEXEC and O_NONBLOCK */
-> +#include <linux/fcntl.h>
-> +
-> +/* For _IO helpers */
-> +#include <linux/ioctl.h>
+Gr{oetje,eeting}s,
 
-Why would you want to include that?
+                        Geert
 
-> +
-> +/*
-> + * CAREFUL: Check include/uapi/asm-generic/fcntl.h when defining
-> + * new flags, since they might collide with O_* ones. We want
-> + * to re-use O_* flags that couldn't possibly have a meaning
-> + * from eventfd, in order to leave a free define-space for
-> + * shared O_* flags.
-> + */
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-I would leave that comment together with EFD_SHARED_FCNTL_FLAGS and
-EFD_FLAGS_SET in the kernel only header.
-
-> +#define EFD_SEMAPHORE (1 << 0)
-> +#define EFD_CLOEXEC O_CLOEXEC
-> +#define EFD_NONBLOCK O_NONBLOCK
-> +
-> +#define EFD_SHARED_FCNTL_FLAGS (O_CLOEXEC | O_NONBLOCK)
-> +#define EFD_FLAGS_SET (EFD_SHARED_FCNTL_FLAGS | EFD_SEMAPHORE)
-
-I think that doesn't belong into the uapi header and should be left in
-the kernel header.
-
-> +
-> +#endif /* _UAPI_LINUX_EVENTFD_H */
-> -- 
-> 2.34.1
-> 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
