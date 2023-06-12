@@ -2,296 +2,663 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14AD172C3DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 14:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CBDE72C3E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 14:21:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232959AbjFLMTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 08:19:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49268 "EHLO
+        id S233015AbjFLMV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 08:21:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232840AbjFLMTM (ORCPT
+        with ESMTP id S229576AbjFLMVY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 08:19:12 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134BC8F;
-        Mon, 12 Jun 2023 05:19:11 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 9E1145C017C;
-        Mon, 12 Jun 2023 08:19:08 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Mon, 12 Jun 2023 08:19:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1686572348; x=1686658748; bh=0D
-        oQciBN3VlYhgiS5cMmE54STTMQXVrhpUKmr0F5Rm0=; b=DYgAoAxBm4R8+/qxpt
-        GLQ4uuNKIcf4FQAZ+PgUs4Fhn15l/ssuPXX2qGNvdqDR7Rqt/2jSj0XLSzbPq4VU
-        qvA5SoecGp71BQSA1q0ZovySLBHwtf8EcwZ5jIkyzet25x/rd1VQku4HuHbmbjhn
-        SUHdf7+xrj+qpjwqaMzdg5W71ecN/P5MF7AAxilPBHS2RXQSCIGznzfTPQyQT1hT
-        MhRgDef3eg240+RvC27cd1lgFZmdW7OImhSc1lu6sd6PV23e77DOY+g543+MlyJX
-        a6XB5iacIguMguszpiDQ0DXod17PDAQQZbQzw1d5MEA8xUL+C5ywUk59iYOl0uHN
-        HgHw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1686572348; x=1686658748; bh=0DoQciBN3VlYh
-        giS5cMmE54STTMQXVrhpUKmr0F5Rm0=; b=lQbZ8Q6Pzn8SA5G+dhqWt7m9bvZcT
-        eIiKz8cTmgF6Xc/rbSzTAo2fPiyzHwD4UECfjey4Q/FBhZzP6kxDtN4Mo6aA0bqM
-        TFTRks/tFKtXovDWrKfwOChTCdzrJj53BRTaSioDVMF/OSQDPVhJ+xdQpN26xbGa
-        uA2+HS5Iyu2o7aVbCWnE6SMUpCByYj6g5wD3wFHZx/UJuAR8sbSnEqram6Zt+bpG
-        +bTikpJf1yWXZVJ4TqIglBh8PxTmYeIZPDWAbMEZ6XS2Szkm3omIRY4KbvjFAJl3
-        8Gqe5NkOCnII2rPyczkAr3S77mS5VFh0/munXGP1ijZE9kZvI85c1p2ZQ==
-X-ME-Sender: <xms:Ow2HZAp9MSsuqdvLr0vSs9Bn_DMLHZkPyAP0dfcNxAQ9GB2co461Ww>
-    <xme:Ow2HZGpVlxM7GQrFBWAyJzDkb_cwINVz3AC0mh52ID129aGFmDKkWE_GaNhgqwt4k
-    CNeNJfqc40tesIcVV4>
-X-ME-Received: <xmr:Ow2HZFPyRO-OG98D5WMDt1Yogpfwe5lYprC91dm2iA4cEpmAP7MTi1gEarpFnt2y_9MEEHCSx7ZSMGmWrtStwg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeduhedggeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtsfertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeeuveduheeutdekvefgudevjeeufedvvdevhfejgfelgfdtkeevueegteek
-    gfelfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:Ow2HZH4reXUeVWThFZLVI4-SeCMBkAR72Fcf5SB-O1tBb6pgxbiWQQ>
-    <xmx:Ow2HZP58FnqixmxPxkvZCfME7pQtHlkUH0yMb0R81dlfbU5T4vAojg>
-    <xmx:Ow2HZHgI7i7b-gUYkU9expxu9ITXgleRf4RkY2X_RFPJwLGJixpZow>
-    <xmx:PA2HZMxKLqDF8Wd6d2R2JTwpdDnyYTweTsR-i6NEgapKkNCxqhyPLg>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 12 Jun 2023 08:19:07 -0400 (EDT)
+        Mon, 12 Jun 2023 08:21:24 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3E6109;
+        Mon, 12 Jun 2023 05:21:21 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f658a17aa4so4035049e87.0;
+        Mon, 12 Jun 2023 05:21:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686572480; x=1689164480;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cH53Mtt4u0mXvAKw4ltn0uKXyNTwfonkw3uf76iVmFU=;
+        b=egnNHmnkyrXhnYPwGhcR/D+lExIbkTv2kQoB0JqgBBnijv4tjH2HXHg+bUc+1W2ZSq
+         IeHoDbmkzOaXSF1kNwXLCi3nX6TU/oS+/xyYkzVTUiRh4h2hSyF4DA/Lsx+DGeLxDckY
+         ssXNnDlKhjHXw375wCWwig/4ab9C5yAF8TNaS/0RcZtH1aJUM18oYLAb+wapW1Ji1g6u
+         Ji6wRhRh5ebgdhHyTiGbLQVSktJyen+aYvzQHb5k8tkC5desvNNkgq273IVivj1KiC0E
+         TNNZVUAY+Pm6Kv3jTaeX3fupYDuNC2A0BULO2rKGAuyLuX8J2L7vhcOHakE4Ub/I7LxH
+         Cg6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686572480; x=1689164480;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cH53Mtt4u0mXvAKw4ltn0uKXyNTwfonkw3uf76iVmFU=;
+        b=GcAyVK/x5fhZ/Klt8UNZsL53BR6MMrxCK9pGVsZ2Mi/C/+PJJMGe022NNCIkOnTG0j
+         XzL3Zo0OSPEAjV7mE7fPJWVWjBeafVxwtEDbZkFE7CT0WEoqxyjp8icGPQGCQN6EP1J+
+         /LCmDLozujVhG7y+cyfTydwfEF2F+Yfxv7KpzWzP6wePWaZJjC54Acse26ZTjHYf8nrT
+         CBfLTMe2/EB13U34dugTMapD9i59zDmaiYtgk2FFFPNyxhkyienxt+jvH74YNeQTavmU
+         CK7dDpxZN6+7/rCyqcPRytrUdIGxhFBuz9hWuf2ZZP/0/71+aXuxwCN+JwGwp+v/UmXu
+         /uGQ==
+X-Gm-Message-State: AC+VfDz2yYLF6b1MtORaXiPyLyRqEbRRXkdCdoL7IE0SUrUyoUnW1Ih4
+        yFqGTRcb16dmQWcwcy48a+I=
+X-Google-Smtp-Source: ACHHUZ6sLqM4h5UWCEkW1os+hgeHmt2QVhIzIO9qfzI3QodlvQ0jrXXjQR6Mr823OWoJSYVmtX3Yww==
+X-Received: by 2002:a19:7712:0:b0:4e8:c5d:42a5 with SMTP id s18-20020a197712000000b004e80c5d42a5mr3181886lfc.24.1686572479258;
+        Mon, 12 Jun 2023 05:21:19 -0700 (PDT)
+Received: from [192.168.88.92] (95-158-68-28.static.chello.pl. [95.158.68.28])
+        by smtp.gmail.com with ESMTPSA id m1-20020ac24ac1000000b004f37bd02a89sm1423284lfp.287.2023.06.12.05.21.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 05:21:18 -0700 (PDT)
+Message-ID: <a8cf894c-7e2c-a302-9208-b25ea6782355@gmail.com>
 Date:   Mon, 12 Jun 2023 14:19:05 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Frank Oltmanns <frank@oltmanns.dev>
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Roman Beranek <me@crly.cz>,
-        Samuel Holland <samuel@sholland.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 1/2] clk: sunxi-ng: nkm: consider alternative parent
- rates when finding rate
-Message-ID: <sijbhopoxuw5wodyry3smg7tm4wzoc7k6xakt4qdvxqsok32mv@u7rh4dct5ya6>
-References: <20230605190745.366882-1-frank@oltmanns.dev>
- <20230605190745.366882-2-frank@oltmanns.dev>
- <2bvcukogzhcdbfsrruylgw5fbezaqjpcojqaambfoiv5fc2upy@ffumn5sevbeb>
- <875y7y1f0d.fsf@oltmanns.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ewqo76xruqzoduop"
-Content-Disposition: inline
-In-Reply-To: <875y7y1f0d.fsf@oltmanns.dev>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] scsi: target: Fix data corruption under concurrent target
+ configuration
+Content-Language: en-US
+From:   Grzegorz Uriasz <gorbak25@gmail.com>
+To:     Dmitry Bogdanov <d.bogdanov@yadro.com>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dutkahugo@gmail.com
+References: <5f637569-36af-a8d0-e378-b27a63f08501@gmail.com>
+ <20230520084600.GC20571@yadro.com>
+ <d0f77858-4370-aa0c-0ece-32f4dcfe85f0@gmail.com>
+ <8c4aae2c-4a5f-3d7e-41a4-dc198bf15956@gmail.com>
+In-Reply-To: <8c4aae2c-4a5f-3d7e-41a4-dc198bf15956@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLY,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+ping :)
 
---ewqo76xruqzoduop
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Jun 07, 2023 at 09:39:35AM +0200, Frank Oltmanns wrote:
-> Hi Maxime,
->=20
-> On 2023-06-07 at 08:38:39 +0200, Maxime Ripard <maxime@cerno.tech> wrote:
-> > [[PGP Signed Part:Undecided]]
-> > On Mon, Jun 05, 2023 at 09:07:44PM +0200, Frank Oltmanns wrote:
-> >> In case the CLK_SET_RATE_PARENT flag is set, consider using a different
-> >> parent rate when determining a new rate.
-> >>
-> >> To find the best match for the requested rate, perform the following
-> >> steps for each NKM combination:
-> >>  - calculate the optimal parent rate,
-> >>  - find the best parent rate that the parent clock actually supports
-> >>  - use that parent rate to calculate the effective rate.
-> >>
-> >> In case the clk does not support setting the parent rate, use the same
-> >> algorithm as before.
-> >>
-> >> Signed-off-by: Frank Oltmanns <frank@oltmanns.dev>
-> >> ---
-> >>  drivers/clk/sunxi-ng/ccu_nkm.c | 40 ++++++++++++++++++++++++++--------
-> >>  1 file changed, 31 insertions(+), 9 deletions(-)
-> >>
-> >> diff --git a/drivers/clk/sunxi-ng/ccu_nkm.c b/drivers/clk/sunxi-ng/ccu=
-_nkm.c
-> >> index a0978a50edae..c71e237226f2 100644
-> >> --- a/drivers/clk/sunxi-ng/ccu_nkm.c
-> >> +++ b/drivers/clk/sunxi-ng/ccu_nkm.c
-> >> @@ -16,10 +16,10 @@ struct _ccu_nkm {
-> >>  	unsigned long	m, min_m, max_m;
-> >>  };
-> >>
-> >> -static unsigned long ccu_nkm_find_best(unsigned long parent, unsigned=
- long rate,
-> >> -				       struct _ccu_nkm *nkm)
-> >> +static unsigned long ccu_nkm_find_best(unsigned long *parent, unsigne=
-d long rate,
-> >> +				       struct _ccu_nkm *nkm, struct clk_hw *parent_hw)
-> >>  {
-> >> -	unsigned long best_rate =3D 0;
-> >> +	unsigned long best_rate =3D 0, best_parent_rate =3D 0, tmp_parent =
-=3D *parent;
-> >>  	unsigned long best_n =3D 0, best_k =3D 0, best_m =3D 0;
-> >>  	unsigned long _n, _k, _m;
-> >>
-> >> @@ -28,12 +28,29 @@ static unsigned long ccu_nkm_find_best(unsigned lo=
-ng parent, unsigned long rate,
-> >>  			for (_m =3D nkm->min_m; _m <=3D nkm->max_m; _m++) {
-> >>  				unsigned long tmp_rate;
-> >>
-> >> -				tmp_rate =3D parent * _n * _k / _m;
-> >> +				if (parent_hw) {
-> >
-> > NKM clocks always have a parent
-> >
-> > You should test if the CLK_SET_RATE_PARENT flag is set.
->=20
-> ccu_nkm_find_best is called in the following two situations:
->  a. from ccu_nkm_set_rate when setting the rate
->  b. from ccu_nkm_round_rate when determining the rate
->=20
-> In situation a. we never want ccu_nkm_find_best to try different parent
-> rates because setting the parent rate is a done deal (at least that's my
-> understanding).
->=20
-> In situation b. we only want ccu_nkm_find_best to try different parent
-> rates when, as you mentioned, the CLK_SET_RATE_PARENT flag is set.
-
-It doesn't really matter though. The output of that function must be
-stable and must return the same set of factors and parent rate for a
-given target rate.
-
-So you can call it as many times as you want, it doesn't really matter.
-
-> So, what this patch does, it provides a NULL pointer as parent_hw when
-> we don't want ccu_nkm_find_best to try alternative parent rates.
-
-At best, the argument is misleading then. You're not passing a pointer
-to the parent, you're telling it whether it should look for other
-parents or not. And it's not a pointer, it's a boolean.
-
-> Is it ok if I add a comment to ccu_nkm_find_best that explains the
-> function and explicitly also the parameters?
-
-Sure
-
-> I also thought about using two different functions for the two
-> situations. I have no strong opinion which is better.
->=20
-> However, I don't think we should hand over the flags to this function,
-> because we'd still only need to provide the parent_hw if we want to
-> find the optimal parent rate, so having two parametes for the same
-> purpose seems redundant. Unless, there is a rule to not use NULL
-> pointers.
-
-Again, the behaviour must be stable across all calling sites.
-
-> >
-> >> +					// We must round up the desired parent rate, because the
-> >> +					// rounding down happens when calculating tmp_rate. If we
-> >> +					// round down also here, we'd round down twice.
-> >> +					unsigned long optimal_parent =3D
-> >> +							(rate * _m + (_n * _k - 1)) / _n / _k;
-> >
-> > I assume the addition of n * k - 1 is to round up, but I'm not sure we
-> > should hack around like that.
-> >
-> > You should compute the ideal parent rate for a given set of timings, and
-> > then just call round_rate on it. If the parent wants to round it one way
-> > or another, that's the parent concern.
->=20
-> I admit that the comment explaining this is not doing the complexity of
-> this issue any justice. Let me try to explain:
->=20
-> Let's say for our panel the optimal rate for pll-mipi is 449064000. The
-> best closest we can get is 449035712 with a parent rate of 217714285
-> (n=3D11, k=3D3, m=3D16).
->=20
-> Eventually, ccu_nkm_find_best is going to be called with 449035712 as
-> the rate. If we don't round up, like I proposend, but instead calculate:
->   optimal_parent =3D rate * m / n / k
-> (which is, I think, what you you're proposing) leading to an optimal
-> parent of 217714284 (!). We can't get 217714284 from the parent (we
-> could get 217714285, but we're not asking for that) so the parent rounds
-> down.
->=20
-> To make things worse, this story continues for the new "best rate" as
-> well.
->=20
-> In the end, ccu_nkm_find_best claims:
->  - the optimal rate for 449064000 is 449035712 (parent=3D217714285, n=3D1=
-1,
->    k=3D3, m=3D16)
->  - but ccu_nkm_find_best would claim that the optimal rate for 449035712
->    is 449018181 (parent=3D235200000, n=3D7, k=3D3, m=3D11)
->  - and finally, the optimal rate for 449018181 is 449018180
->    (parent=3D213818181, n=3D7, k=3D3, m=3D10)
->=20
-> This doesn't seem right to me.
->=20
-> But you're also right, in that we can't just always round up. In a
-> hypothetical example that we request a parent rate of 450000000. With
-> rounding up, we'd get an optimal parent rate of 218181819 for n=3D11, k=
-=3D3,
-> m=3D16. And let's now further claim that the parent could provide exactly
-> that rate, we'd end up with a rate of 450000001. So, we'd overshoot,
-> which (currently) is not acceptable.
->=20
-> Hmm... I currently can't think of a clever way to solve this other than
-> this:
->=20
->     optimal_parent =3D (rate * _m + (_n * _k - 1)) / _n / _k;
->     tmp_parent =3D clk_hw_round_rate(parent_hw, optimal_parent);
->     tmp_rate =3D tmp_parent * _n * _k / _m;
->     if (tmp_rate > rate) {
->         optimal_parent =3D rate * m / n / k
->         tmp_parent =3D clk_hw_round_rate(parent_hw, optimal_parent);
->         tmp_rate =3D tmp_parent * _n * _k / _m;
->     }
->     if (tmp_parent > optimal_parent)
->         continue;
->=20
-> This seems ugly, but at least it should work in all cases. Any opinions?
-
-Again, you shouldn't work around the issue.
-
-It's very simple really: you already computed the optimal parent rate,
-you ask the parent to compute whatever is closest to that optimal parent
-rate.
-
-It's the parent responsibility now. It's the parent decision to figure
-out what "the closest" means, if it can change rate, if it has any range
-limitation, etc. You can't work around that.
-
-What you actually want there is the parent to actually provide the
-closest rate, even if it means overshooting. That's fine, we have a flag
-for that: CLK_(MUX|DIVIDER)_ROUND_CLOSEST. We just need to set it on the
-parent and be done with it.
-
-Maxime
-
---ewqo76xruqzoduop
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZIcNOAAKCRDj7w1vZxhR
-xYwOAP9dhvoHhy6yorQXLvTbpuXa+NqMXxFKcE4OlTMaJfnnKgD9GDb3X+024tBw
-suArvrgmBFZQmQMpdcypFxYMx2WX1Ak=
-=/ihT
------END PGP SIGNATURE-----
-
---ewqo76xruqzoduop--
+On 22/05/2023 13:27, Grzegorz Uriasz wrote:
+> Subject:
+> Re: [PATCH] scsi: target: Fix data corruption under concurrent target 
+> configuration
+> From:
+> Grzegorz Uriasz <gorbak25@gmail.com>
+> Date:
+> 22/05/2023, 13:27
+>
+> To:
+> Dmitry Bogdanov <d.bogdanov@yadro.com>
+> CC:
+> "Martin K. Petersen" <martin.petersen@oracle.com>, 
+> linux-scsi@vger.kernel.org, target-devel@vger.kernel.org, 
+> linux-kernel@vger.kernel.org, dutkahugo@gmail.com
+>
+>
+> Hi Dmitry,
+> I've added a debug printk call to see whether the devices are enabled 
+> concurrently:
+> ---
+>  drivers/target/target_core_device.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/target/target_core_device.c 
+> b/drivers/target/target_core_device.c
+> index 5054b647dd0b..f594ee86a986 100644
+> --- a/drivers/target/target_core_device.c
+> +++ b/drivers/target/target_core_device.c
+> @@ -910,6 +910,8 @@ int target_configure_device(struct se_device *dev)
+>          return -EEXIST;
+>      }
+>
+> +    pr_err("Configuring %p device", dev);
+> +
+>      /*
+>       * Add early so modules like tcmu can use during its
+>       * configuration.
+> -- 
+> 2.40.0
+>
+> It turns out that even when the flags are set atomically it seems that 
+> there is either no mutex protecting the setup or concurrent kzalloc 
+> calls returned the same address:
+>
+> [ 3179.785908] kobject: 'maps' (000000000fdf10fd): calling ktype release
+> [ 3179.785910] kobject: (000000000fdf10fd): dynamic_kobj_release
+> [ 3179.785912] kobject: 'maps': free name
+> [ 3179.785953] tcmu nl cmd 2/0 completion could not find device with 
+> dev id 87.
+> [ 3179.786015] kobject: 'uio8' (000000001b25d2de): kobject_uevent_env
+> [ 3179.786315] kobject: 'uio8' (000000001b25d2de): fill_kobj_path: 
+> path = '/devices/tcm_user/uio/uio8'
+> [ 3179.786315] tcmu nl cmd 2/0 completion could not find device with 
+> dev id 87.
+> [ 3179.786322] tcmu nl cmd 2/0 completion could not find device with 
+> dev id 87.
+> [ 3179.786557] kobject: 'uio8' (000000001b25d2de): kobject_cleanup, 
+> parent 0000000000000000
+> [ 3179.786902] kobject: 'uio8' (000000001b25d2de): calling ktype release
+> [ 3179.786904] kobject: 'uio8': free name
+> [ 3179.786906] tcmu nl cmd 2/0 completion could not find device with 
+> dev id 87.
+> [ 3179.787226] tcmu nl cmd 2/0 completion could not find device with 
+> dev id 87.
+> [ 3179.809906] kobject: 'map0' (000000003fa04166): kobject_cleanup, 
+> parent 00000000e5849eec
+> [ 3179.809914] kobject: 'map0' (000000003fa04166): auto cleanup 
+> kobject_del
+> [ 3179.809930] tcmu nl cmd 2/0 completion could not find device with 
+> dev id 89.
+> [ 3179.809936] kobject: 'map0' (000000003fa04166): calling ktype release
+> [ 3179.810216] kobject: 'map0': free name
+> [ 3179.810218] tcmu nl cmd 2/0 completion could not find device with 
+> dev id 89.
+> [ 3179.810219] kobject: 'maps' (00000000e5849eec): kobject_cleanup, 
+> parent 00000000345aab09
+> [ 3179.810226] tcmu nl cmd 2/0 completion could not find device with 
+> dev id 89.
+> [ 3179.810535] kobject: 'maps' (00000000e5849eec): auto cleanup 
+> kobject_del
+> [ 3179.810890] tcmu nl cmd 2/0 completion could not find device with 
+> dev id 89.
+> [ 3179.810890] kobject: 'maps' (00000000e5849eec): calling ktype release
+> [ 3179.811171] kobject: (00000000e5849eec): dynamic_kobj_release
+> [ 3179.811174] kobject: 'maps': free name
+> [ 3179.811195] tcmu nl cmd 2/0 completion could not find device with 
+> dev id 89.
+> [ 3179.811292] kobject: 'uio9' (00000000345aab09): kobject_uevent_env
+> [ 3179.811546] kobject: 'uio9' (00000000345aab09): fill_kobj_path: 
+> path = '/devices/tcm_user/uio/uio9'
+> [ 3179.811576] kobject: 'uio9' (00000000345aab09): kobject_cleanup, 
+> parent 0000000000000000
+> [ 3179.811578] kobject: 'uio9' (00000000345aab09): calling ktype release
+> [ 3179.811581] kobject: 'uio9': free name
+> [ 3179.829730] kobject: '0' (00000000981718a9): kobject_cleanup, 
+> parent 0000000000000000
+> [ 3179.829736] kobject: '0' (00000000981718a9): calling ktype release
+> [ 3179.829740] kobject: '0': free name
+> [ 3179.829743] kobject: 'cpu0' (00000000155d52b3): kobject_cleanup, 
+> parent 0000000000000000
+> [ 3179.829744] kobject: 'cpu0' (00000000155d52b3): calling ktype release
+> [ 3179.829746] kobject: 'cpu0': free name
+> [ 3179.829751] kobject: 'cpu1' (0000000050648bc7): kobject_cleanup, 
+> parent 0000000000000000
+> [ 3179.829753] kobject: 'cpu1' (0000000050648bc7): calling ktype release
+> [ 3179.829754] kobject: 'cpu1': free name
+> [ 3179.829755] kobject: 'cpu2' (00000000f0e72c5c): kobject_cleanup, 
+> parent 0000000000000000
+> [ 3179.829757] kobject: 'cpu2' (00000000f0e72c5c): calling ktype release
+> [ 3179.829758] kobject: 'cpu2': free name
+> [ 3179.829759] kobject: 'cpu3' (000000000b256e81): kobject_cleanup, 
+> parent 0000000000000000
+> [ 3179.829760] kobject: 'cpu3' (000000000b256e81): calling ktype release
+> [ 3179.829761] kobject: 'cpu3': free name
+> [ 3179.829762] kobject: 'cpu4' (000000008d489b4f): kobject_cleanup, 
+> parent 0000000000000000
+> [ 3179.829764] kobject: 'cpu4' (000000008d489b4f): calling ktype release
+> [ 3179.829765] kobject: 'cpu4': free name
+> [ 3179.829766] kobject: 'cpu5' (00000000f2e35ad0): kobject_cleanup, 
+> parent 0000000000000000
+> [ 3179.829767] kobject: 'cpu5' (00000000f2e35ad0): calling ktype release
+> [ 3179.829768] kobject: 'cpu5': free name
+> [ 3179.829769] kobject: 'cpu6' (00000000ecbd8737): kobject_cleanup, 
+> parent 0000000000000000
+> [ 3179.829771] kobject: 'cpu6' (00000000ecbd8737): calling ktype release
+> [ 3179.829772] kobject: 'cpu6': free name
+> [ 3179.829773] kobject: 'cpu7' (00000000813ca063): kobject_cleanup, 
+> parent 0000000000000000
+> [ 3179.829774] kobject: 'cpu7' (00000000813ca063): calling ktype release
+> [ 3179.829775] kobject: 'cpu7': free name
+> [ 3179.829776] kobject: 'mq' (0000000062154d34): kobject_cleanup, 
+> parent 0000000000000000
+> [ 3179.829778] kobject: 'mq' (0000000062154d34): calling ktype release
+> [ 3179.829781] kobject: 'mq': free name
+> [ 3179.937204] tcmu daemon: command reply support 1.
+> [ 3180.242175] Configuring 0000000048576d33 device
+> [ 3180.242191] Configuring 00000000a24b9f12 device
+> [ 3180.243085] Configuring 0000000048576d33 device
+> [ 3180.243097] Configuring 0000000048576d33 device
+> [ 3180.243195] kobject: 'uio8' (00000000d48cde09): 
+> kobject_add_internal: parent: 'uio', set: 'devices'
+> [ 3180.243293] kobject: 'uio8' (00000000d48cde09): kobject_uevent_env
+> [ 3180.243325] kobject: 'uio9' (0000000025c5cb20): 
+> kobject_add_internal: parent: 'uio', set: 'devices'
+> [ 3180.243388] kobject: 'uio9' (0000000025c5cb20): kobject_uevent_env
+> [ 3180.243392] kobject: 'uio9' (0000000025c5cb20): fill_kobj_path: 
+> path = '/devices/tcm_user/uio/uio9'
+> [ 3180.243419] kobject: 'maps' (000000007f057cf5): 
+> kobject_add_internal: parent: 'uio9', set: '<NULL>'
+> [ 3180.243424] kobject: 'map0' (00000000f663b250): 
+> kobject_add_internal: parent: 'maps', set: '<NULL>'
+> [ 3180.243432] kobject: 'map0' (00000000f663b250): kobject_uevent_env
+> [ 3180.243433] kobject: 'map0' (00000000f663b250): kobject_uevent_env: 
+> filter function caused the event to drop!
+> [ 3180.243565] Configuring 0000000048576d33 device
+> [ 3180.243598] tcmu nl cmd 1/-2 completion could not find device with 
+> dev id 91.
+> [ 3180.243606] tcmu nl cmd 1/-2 completion could not find device with 
+> dev id 91.
+> [ 3180.243618] kobject: 'uio8' (00000000d48cde09): fill_kobj_path: 
+> path = '/devices/tcm_user/uio/uio8'
+> [ 3180.243622] tcmu nl cmd 1/-2 completion could not find device with 
+> dev id 91.
+> [ 3180.243640] kobject: 'maps' (00000000592a7aac): 
+> kobject_add_internal: parent: 'uio8', set: '<NULL>'
+> [ 3180.243646] kobject: 'map0' (0000000009bdede6): 
+> kobject_add_internal: parent: 'maps', set: '<NULL>'
+> [ 3180.243656] kobject: 'map0' (0000000009bdede6): kobject_uevent_env
+> [ 3180.243658] kobject: 'map0' (0000000009bdede6): kobject_uevent_env: 
+> filter function caused the event to drop!
+> [ 3180.243726] se_dev->se_dev_ptr already set for storage object
+> [ 3180.243731] se_dev->se_dev_ptr already set for storage object
+> [ 3180.243735] se_dev->se_dev_ptr already set for storage object
+> [ 3180.243738] se_dev->se_dev_ptr already set for storage object
+> [ 3180.243742] se_dev->se_dev_ptr already set for storage object
+> [ 3180.243746] se_dev->se_dev_ptr already set for storage object
+> [ 3180.243749] se_dev->se_dev_ptr already set for storage object
+> [ 3180.243760] se_dev->se_dev_ptr already set for storage object
+> [ 3180.243763] se_dev->se_dev_ptr already set for storage object
+> [ 3180.243767] se_dev->se_dev_ptr already set for storage object
+> [ 3180.243777] se_dev->se_dev_ptr already set for storage object
+> [ 3180.243780] se_dev->se_dev_ptr already set for storage object
+> [ 3180.243784] se_dev->se_dev_ptr already set for storage object
+> [ 3180.243788] se_dev->se_dev_ptr already set for storage object
+> [ 3180.244302] kobject: 'uio10' (000000001e7fdf06): 
+> kobject_add_internal: parent: 'uio', set: 'devices'
+> [ 3180.244472] tcmu nl cmd 1/-2 completion could not find device with 
+> dev id 93.
+> [ 3180.244628] kobject: 'uio11' (00000000a5f1af78): 
+> kobject_add_internal: parent: 'uio', set: 'devices'
+> [ 3180.244738] kobject: 'uio11' (00000000a5f1af78): kobject_uevent_env
+> [ 3180.244746] kobject: 'uio10' (000000001e7fdf06): kobject_uevent_env
+> [ 3180.244753] kobject: 'uio10' (000000001e7fdf06): fill_kobj_path: 
+> path = '/devices/tcm_user/uio/uio10'
+> [ 3180.244781] kobject: 'maps' (00000000def336c9): 
+> kobject_add_internal: parent: 'uio10', set: '<NULL>'
+> [ 3180.244787] kobject: 'map0' (0000000026045935): 
+> kobject_add_internal: parent: 'maps', set: '<NULL>'
+> [ 3180.244797] kobject: 'map0' (0000000026045935): kobject_uevent_env
+> [ 3180.244798] kobject: 'map0' (0000000026045935): kobject_uevent_env: 
+> filter function caused the event to drop!
+> [ 3180.244820] kobject: 'uio12' (00000000768952da): 
+> kobject_add_internal: parent: 'uio', set: 'devices'
+> [ 3180.244837] list_add double add: new=ffff888017480000, 
+> prev=ffffffff82e35ba0, next=ffff888017480000.
+> [ 3180.244855] tcmu nl cmd 1/-2 completion could not find device with 
+> dev id 93.
+> [ 3180.244883] kobject: 'uio12' (00000000768952da): kobject_uevent_env
+> [ 3180.244888] kobject: 'uio12' (00000000768952da): fill_kobj_path: 
+> path = '/devices/tcm_user/uio/uio12'
+> [ 3180.244894] ------------[ cut here ]------------
+> [ 3180.244897] kernel BUG at lib/list_debug.c:33!
+> [ 3180.244901] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+> [ 3180.244902] kobject: 'maps' (000000008b3ebaee): 
+> kobject_add_internal: parent: 'uio12', set: '<NULL>'
+> [ 3180.244903] CPU: 5 PID: 240588 Comm: node Not tainted 
+> 6.4.0-rc2hocus-00247-g02bf964976ef-dirty #11 
+> 1a56ed25763fc52a0220ba3bab2f1b70cacabece
+> [ 3180.244905] kobject: 'map0' (0000000012d7aa89): 
+> kobject_add_internal: parent: 'maps', set: '<NULL>'
+> [ 3180.244908] kobject: 'map0' (0000000012d7aa89): kobject_uevent_env
+> [ 3180.244909] kobject: 'map0' (0000000012d7aa89): kobject_uevent_env: 
+> filter function caused the event to drop!
+> [ 3180.244906] RIP: 0010:__list_add_valid+0x94/0xa0
+> [ 3180.244917] Code: d1 48 89 c6 4c 89 c2 48 c7 c7 38 e1 4b 82 e8 63 
+> 25 b3 ff 0f 0b 48 89 f2 48 89 c1 48 89 fe 48 c7 c7 90 e1 4b 82 e8 4c 
+> 25 b3 ff <0f> 0b 66 2e 0f 1f 84 00 00 00 00 00 90 90 90 90 90 90 90 90 
+> 90 90
+> [ 3180.244918] RSP: 0018:ffffc90002e7fd68 EFLAGS: 00010246
+> [ 3180.244919] RAX: 0000000000000058 RBX: ffff888017480018 RCX: 
+> 0000000000000000
+> [ 3180.244919] RDX: 0000000000000000 RSI: ffffffff824440d9 RDI: 
+> 00000000ffffffff
+> [ 3180.244920] RBP: ffffc90002e7fd68 R08: 0000000000000001 R09: 
+> 0000000000000001
+> [ 3180.244921] R10: 000000001b629664 R11: 0000000000000005 R12: 
+> 0000000000000000
+> [ 3180.244921] R13: ffff888017480000 R14: ffff888017480000 R15: 
+> ffff888017480010
+> [ 3180.244924] FS:  00007f26e5a526c0(0000) GS:ffff88841fc80000(0000) 
+> knlGS:0000000000000000
+> [ 3180.244924] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [ 3180.244925] CR2: 00007f0104208440 CR3: 000000032af22000 CR4: 
+> 00000000003506a0
+> [ 3180.244926] Call Trace:
+> [ 3180.244926]  <TASK>
+> [ 3180.244927]  tcmu_configure_device+0x29f/0x3a0
+> [ 3180.244933]  target_configure_device+0x8c/0x2f0
+> [ 3180.244936]  target_dev_enable_store+0x32/0x60
+> [ 3180.244940]  configfs_write_iter+0xd5/0x140
+> [ 3180.244944]  vfs_write+0x1ed/0x4f0
+> [ 3180.244948]  ksys_write+0x70/0xf0
+> [ 3180.244949]  __x64_sys_write+0x18/0x20
+> [ 3180.244950]  do_syscall_64+0x3e/0x90
+> [ 3180.244956]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+> [ 3180.244962] RIP: 0033:0x7f26e875611f
+> [ 3180.244963] Code: 89 54 24 18 48 89 74 24 10 89 7c 24 08 e8 39 d5 
+> f8 ff 48 8b 54 24 18 48 8b 74 24 10 41 89 c0 8b 7c 24 08 b8 01 00 00 
+> 00 0f 05 <48> 3d 00 f0 ff ff 77 31 44 89 c7 48 89 44 24 08 e8 8c d5 f8 
+> ff 48
+> [ 3180.244963] RSP: 002b:00007f26e5a51cf0 EFLAGS: 00000293 ORIG_RAX: 
+> 0000000000000001
+> [ 3180.244966] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 
+> 00007f26e875611f
+> [ 3180.244966] RDX: 0000000000000001 RSI: 00007f26be6549f0 RDI: 
+> 0000000000000030
+> [ 3180.244967] RBP: 00007f26e5a51e20 R08: 0000000000000000 R09: 
+> 00000000ffffffff
+> [ 3180.244967] R10: 0000000000000000 R11: 0000000000000293 R12: 
+> 00007f26e5a525c0
+> [ 3180.244968] R13: 00007f26e5cab8a8 R14: 0000000000000001 R15: 
+> 0000000000000400
+> [ 3180.244968]  </TASK>
+> [ 3180.244969] ---[ end trace 0000000000000000 ]---
+> [ 3180.244970] RIP: 0010:__list_add_valid+0x94/0xa0
+> [ 3180.244971] Code: d1 48 89 c6 4c 89 c2 48 c7 c7 38 e1 4b 82 e8 63 
+> 25 b3 ff 0f 0b 48 89 f2 48 89 c1 48 89 fe 48 c7 c7 90 e1 4b 82 e8 4c 
+> 25 b3 ff <0f> 0b 66 2e 0f 1f 84 00 00 00 00 00 90 90 90 90 90 90 90 90 
+> 90 90
+> [ 3180.244972] RSP: 0018:ffffc90002e7fd68 EFLAGS: 00010246
+> [ 3180.244973] RAX: 0000000000000058 RBX: ffff888017480018 RCX: 
+> 0000000000000000
+> [ 3180.244973] RDX: 0000000000000000 RSI: ffffffff824440d9 RDI: 
+> 00000000ffffffff
+> [ 3180.244974] RBP: ffffc90002e7fd68 R08: 0000000000000001 R09: 
+> 0000000000000001
+> [ 3180.244974] R10: 000000001b629664 R11: 0000000000000005 R12: 
+> 0000000000000000
+> [ 3180.244975] R13: ffff888017480000 R14: ffff888017480000 R15: 
+> ffff888017480010
+> [ 3180.244977] FS:  00007f26e5a526c0(0000) GS:ffff88841fc80000(0000) 
+> knlGS:0000000000000000
+> [ 3180.244977] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [ 3180.244978] CR2: 00007f0104208440 CR3: 000000032af22000 CR4: 
+> 00000000003506a0
+> [ 3180.245068] se_dev->se_dev_ptr already set for storage object
+> [ 3180.245087] kobject: 'uio11' (00000000a5f1af78): fill_kobj_path: 
+> path = '/devices/tcm_user/uio/uio11'
+> [ 3180.245265] tcmu nl cmd 1/-2 completion could not find device with 
+> dev id 91.
+> [ 3180.245491] kobject: 'maps' (000000009b2a87fb): 
+> kobject_add_internal: parent: 'uio11', set: '<NULL>'
+> [ 3180.245749] tcmu nl cmd 1/-2 completion could not find device with 
+> dev id 94.
+> [ 3180.245966] kobject: 'map0' (00000000d832f7b9): 
+> kobject_add_internal: parent: 'maps', set: '<NULL>'
+> [ 3180.246150] tcmu nl cmd 1/-2 completion could not find device with 
+> dev id 94.
+> [ 3180.246349] kobject: 'map0' (00000000d832f7b9): kobject_uevent_env
+> [ 3180.246523] tcmu nl cmd 1/-2 completion could not find device with 
+> dev id 93.
+> [ 3180.246691] kobject: 'map0' (00000000d832f7b9): kobject_uevent_env: 
+> filter function caused the event to drop!
+> [ 3180.246878] tcmu nl cmd 1/0 completion could not find device with 
+> dev id 91.
+> [ 3180.263756] tcmu nl cmd 1/-2 completion could not find device with 
+> dev id 93.
+>
+> Best regards,
+> Grzegorz Uriasz
+>
+> On 21/05/2023 13:28, Grzegorz Uriasz wrote:
+>> Hi Dmitry,
+>>
+>> Thank you for your feedback 😄
+>>
+>> On 20/05/2023 10:46, Dmitry Bogdanov wrote:
+>>> Hi Grzegorz,
+>>>
+>>> On Sat, May 20, 2023 at 02:26:14AM +0200, Grzegorz Uriasz wrote:
+>>>> This fixes data corruptions arising from concurrent enabling of a 
+>>>> target
+>>>> devices. When multiple enable calls are made concurrently then it is
+>>>> possible for the target device to be set up twice which results in a
+>>>> kernel BUG.
+>>>> Introduces a per target device mutex for serializing enable requests.
+>>> Device enable call is already secured by configfs per-file mutex. That
+>>> is actually per device. So Enable procedures are already not executed
+>>> simulteniously.
+>> True, I've checked the code in configfs and indeed there is a per 
+>> file/subsystem mutex.
+>>>
+>>> Look like you wrongly identified the root cause of double list_add.
+>>>
+>>>
+>>> If you have an evidence that dev->dev_flags could have no DF_CONFIGURED
+>>> bit, then it meeans that it (dev_flags) is raced in other
+>>> configuration actions (udev_path, vpd_unit_serial, alias).
+>>> Bits in dev->dev_flags are written not atomically and if you writes to
+>>> enable, alias, udev_path,unit_serial files simulteniously, then some
+>>> bits could be lost.
+>>>
+>>> IHMO the best solution is to make dev_flags changes be atomical.
+>>
+>> I've tried that using the following patch:
+>> ---
+>>  drivers/target/target_core_configfs.c | 12 ++++++------
+>>  drivers/target/target_core_device.c   |  2 +-
+>>  drivers/target/target_core_iblock.c   |  2 +-
+>>  drivers/target/target_core_pscsi.c    |  4 ++--
+>>  drivers/target/target_core_spc.c      |  8 ++++----
+>>  drivers/target/target_core_tpg.c      |  2 +-
+>>  include/target/target_core_backend.h  |  2 +-
+>>  include/target/target_core_base.h     |  4 ++--
+>>  8 files changed, 18 insertions(+), 18 deletions(-)
+>>
+>> diff --git a/drivers/target/target_core_configfs.c 
+>> b/drivers/target/target_core_configfs.c
+>> index 74b67c346dfe..bdc06f654aa8 100644
+>> --- a/drivers/target/target_core_configfs.c
+>> +++ b/drivers/target/target_core_configfs.c
+>> @@ -1621,7 +1621,7 @@ static ssize_t 
+>> target_wwn_vpd_unit_serial_store(struct config_item *item,
+>>       * it is doing 'the right thing' wrt a world wide unique
+>>       * VPD Unit Serial Number that OS dependent multipath can depend 
+>> on.
+>>       */
+>> -    if (dev->dev_flags & DF_FIRMWARE_VPD_UNIT_SERIAL) {
+>> +    if (atomic_read(&dev->dev_flags) & DF_FIRMWARE_VPD_UNIT_SERIAL) {
+>>          pr_err("Underlying SCSI device firmware provided VPD"
+>>              " Unit Serial, ignoring request\n");
+>>          return -EOPNOTSUPP;
+>> @@ -1654,7 +1654,7 @@ static ssize_t 
+>> target_wwn_vpd_unit_serial_store(struct config_item *item,
+>>      snprintf(buf, INQUIRY_VPD_SERIAL_LEN, "%s", page);
+>>      snprintf(dev->t10_wwn.unit_serial, INQUIRY_VPD_SERIAL_LEN,
+>>              "%s", strstrip(buf));
+>> -    dev->dev_flags |= DF_EMULATED_VPD_UNIT_SERIAL;
+>> +    atomic_or(DF_EMULATED_VPD_UNIT_SERIAL, &dev->dev_flags);
+>>
+>>      pr_debug("Target_Core_ConfigFS: Set emulated VPD Unit Serial:"
+>>              " %s\n", dev->t10_wwn.unit_serial);
+>> @@ -2263,7 +2263,7 @@ static ssize_t target_dev_alias_show(struct 
+>> config_item *item, char *page)
+>>  {
+>>      struct se_device *dev = to_device(item);
+>>
+>> -    if (!(dev->dev_flags & DF_USING_ALIAS))
+>> +    if (!(atomic_read(&dev->dev_flags) & DF_USING_ALIAS))
+>>          return 0;
+>>
+>>      return snprintf(page, PAGE_SIZE, "%s\n", dev->dev_alias);
+>> @@ -2289,7 +2289,7 @@ static ssize_t target_dev_alias_store(struct 
+>> config_item *item,
+>>      if (dev->dev_alias[read_bytes - 1] == '\n')
+>>          dev->dev_alias[read_bytes - 1] = '\0';
+>>
+>> -    dev->dev_flags |= DF_USING_ALIAS;
+>> +    atomic_or(DF_USING_ALIAS, &dev->dev_flags);
+>>
+>>      pr_debug("Target_Core_ConfigFS: %s/%s set alias: %s\n",
+>>          config_item_name(&hba->hba_group.cg_item),
+>> @@ -2303,7 +2303,7 @@ static ssize_t target_dev_udev_path_show(struct 
+>> config_item *item, char *page)
+>>  {
+>>      struct se_device *dev = to_device(item);
+>>
+>> -    if (!(dev->dev_flags & DF_USING_UDEV_PATH))
+>> +    if (!(atomic_read(&dev->dev_flags) & DF_USING_UDEV_PATH))
+>>          return 0;
+>>
+>>      return snprintf(page, PAGE_SIZE, "%s\n", dev->udev_path);
+>> @@ -2330,7 +2330,7 @@ static ssize_t 
+>> target_dev_udev_path_store(struct config_item *item,
+>>      if (dev->udev_path[read_bytes - 1] == '\n')
+>>          dev->udev_path[read_bytes - 1] = '\0';
+>>
+>> -    dev->dev_flags |= DF_USING_UDEV_PATH;
+>> +    atomic_or(DF_USING_UDEV_PATH, &dev->dev_flags);
+>>
+>>      pr_debug("Target_Core_ConfigFS: %s/%s set udev_path: %s\n",
+>>          config_item_name(&hba->hba_group.cg_item),
+>> diff --git a/drivers/target/target_core_device.c 
+>> b/drivers/target/target_core_device.c
+>> index 90f3f4926172..5054b647dd0b 100644
+>> --- a/drivers/target/target_core_device.c
+>> +++ b/drivers/target/target_core_device.c
+>> @@ -967,7 +967,7 @@ int target_configure_device(struct se_device *dev)
+>>      hba->dev_count++;
+>>      spin_unlock(&hba->device_lock);
+>>
+>> -    dev->dev_flags |= DF_CONFIGURED;
+>> +    atomic_or(DF_CONFIGURED, &dev->dev_flags);
+>>
+>>      return 0;
+>>
+>> diff --git a/drivers/target/target_core_iblock.c 
+>> b/drivers/target/target_core_iblock.c
+>> index cc838ffd1294..38d0d104661d 100644
+>> --- a/drivers/target/target_core_iblock.c
+>> +++ b/drivers/target/target_core_iblock.c
+>> @@ -112,7 +112,7 @@ static int iblock_configure_device(struct 
+>> se_device *dev)
+>>      if (!ib_dev->ibd_readonly)
+>>          mode |= FMODE_WRITE;
+>>      else
+>> -        dev->dev_flags |= DF_READ_ONLY;
+>> +        atomic_or(DF_READ_ONLY, &dev->dev_flags);
+>>
+>>      bd = blkdev_get_by_path(ib_dev->ibd_udev_path, mode, ib_dev);
+>>      if (IS_ERR(bd)) {
+>> diff --git a/drivers/target/target_core_pscsi.c 
+>> b/drivers/target/target_core_pscsi.c
+>> index e7425549e39c..36a1ac519f0b 100644
+>> --- a/drivers/target/target_core_pscsi.c
+>> +++ b/drivers/target/target_core_pscsi.c
+>> @@ -201,7 +201,7 @@ pscsi_get_inquiry_vpd_serial(struct scsi_device 
+>> *sdev, struct t10_wwn *wwn)
+>>
+>>      snprintf(&wwn->unit_serial[0], INQUIRY_VPD_SERIAL_LEN, "%s", 
+>> &buf[4]);
+>>
+>> -    wwn->t10_dev->dev_flags |= DF_FIRMWARE_VPD_UNIT_SERIAL;
+>> +    atomic_or(DF_FIRMWARE_VPD_UNIT_SERIAL, &wwn->t10_dev->dev_flags);
+>>
+>>      kfree(buf);
+>>      return 0;
+>> @@ -450,7 +450,7 @@ static int pscsi_configure_device(struct 
+>> se_device *dev)
+>>           * For the newer PHV_VIRTUAL_HOST_ID struct scsi_device
+>>           * reference, we enforce that udev_path has been set
+>>           */
+>> -        if (!(dev->dev_flags & DF_USING_UDEV_PATH)) {
+>> +        if (!(atomic_read(&dev->dev_flags) & DF_USING_UDEV_PATH)) {
+>>              pr_err("pSCSI: udev_path attribute has not"
+>>                  " been set before ENABLE=1\n");
+>>              return -EINVAL;
+>> diff --git a/drivers/target/target_core_spc.c 
+>> b/drivers/target/target_core_spc.c
+>> index 89c0d56294cc..d380d08a2df0 100644
+>> --- a/drivers/target/target_core_spc.c
+>> +++ b/drivers/target/target_core_spc.c
+>> @@ -159,7 +159,7 @@ spc_emulate_evpd_80(struct se_cmd *cmd, unsigned 
+>> char *buf)
+>>      struct se_device *dev = cmd->se_dev;
+>>      u16 len;
+>>
+>> -    if (dev->dev_flags & DF_EMULATED_VPD_UNIT_SERIAL) {
+>> +    if (atomic_read(&dev->dev_flags) & DF_EMULATED_VPD_UNIT_SERIAL) {
+>>          len = sprintf(&buf[4], "%s", dev->t10_wwn.unit_serial);
+>>          len++; /* Extra Byte for NULL Terminator */
+>>          buf[3] = len;
+>> @@ -239,7 +239,7 @@ spc_emulate_evpd_83(struct se_cmd *cmd, unsigned 
+>> char *buf)
+>>       * /sys/kernel/config/target/core/$HBA/$DEV/wwn/vpd_unit_serial
+>>       * value in order to return the NAA id.
+>>       */
+>> -    if (!(dev->dev_flags & DF_EMULATED_VPD_UNIT_SERIAL))
+>> +    if (!(atomic_read(&dev->dev_flags) & DF_EMULATED_VPD_UNIT_SERIAL))
+>>          goto check_t10_vend_desc;
+>>
+>>      /* CODE SET == Binary */
+>> @@ -267,7 +267,7 @@ spc_emulate_evpd_83(struct se_cmd *cmd, unsigned 
+>> char *buf)
+>>       */
+>>      id_len = 8; /* For Vendor field */
+>>
+>> -    if (dev->dev_flags & DF_EMULATED_VPD_UNIT_SERIAL)
+>> +    if (atomic_read(&dev->dev_flags) & DF_EMULATED_VPD_UNIT_SERIAL)
+>>          id_len += sprintf(&buf[off+12], "%s:%s", prod,
+>>                  &dev->t10_wwn.unit_serial[0]);
+>>      buf[off] = 0x2; /* ASCII */
+>> @@ -720,7 +720,7 @@ spc_emulate_evpd_00(struct se_cmd *cmd, unsigned 
+>> char *buf)
+>>       * Registered Extended LUN WWN has been set via ConfigFS
+>>       * during device creation/restart.
+>>       */
+>> -    if (cmd->se_dev->dev_flags & DF_EMULATED_VPD_UNIT_SERIAL) {
+>> +    if (atomic_read(&cmd->se_dev->dev_flags) & 
+>> DF_EMULATED_VPD_UNIT_SERIAL) {
+>>          buf[3] = ARRAY_SIZE(evpd_handlers);
+>>          for (p = 0; p < ARRAY_SIZE(evpd_handlers); ++p)
+>>              buf[p + 4] = evpd_handlers[p].page;
+>> diff --git a/drivers/target/target_core_tpg.c 
+>> b/drivers/target/target_core_tpg.c
+>> index c0e429e5ef31..c88dc36db6de 100644
+>> --- a/drivers/target/target_core_tpg.c
+>> +++ b/drivers/target/target_core_tpg.c
+>> @@ -656,7 +656,7 @@ int core_tpg_add_lun(
+>>      list_add_tail(&lun->lun_dev_link, &dev->dev_sep_list);
+>>      spin_unlock(&dev->se_port_lock);
+>>
+>> -    if (dev->dev_flags & DF_READ_ONLY)
+>> +    if (atomic_read(&dev->dev_flags) & DF_READ_ONLY)
+>>          lun->lun_access_ro = true;
+>>      else
+>>          lun->lun_access_ro = lun_access_ro;
+>> diff --git a/include/target/target_core_backend.h 
+>> b/include/target/target_core_backend.h
+>> index a3c193df25b3..27c70a69e088 100644
+>> --- a/include/target/target_core_backend.h
+>> +++ b/include/target/target_core_backend.h
+>> @@ -122,7 +122,7 @@ bool target_configure_unmap_from_queue(struct 
+>> se_dev_attrib *attrib,
+>>
+>>  static inline bool target_dev_configured(struct se_device *se_dev)
+>>  {
+>> -    return !!(se_dev->dev_flags & DF_CONFIGURED);
+>> +    return !!(atomic_read(&se_dev->dev_flags) & DF_CONFIGURED);
+>>  }
+>>
+>>  #endif /* TARGET_CORE_BACKEND_H */
+>> diff --git a/include/target/target_core_base.h 
+>> b/include/target/target_core_base.h
+>> index 5f8e96f1516f..5794b2360c47 100644
+>> --- a/include/target/target_core_base.h
+>> +++ b/include/target/target_core_base.h
+>> @@ -792,8 +792,8 @@ struct se_device_queue {
+>>
+>>  struct se_device {
+>>      /* Used for SAM Task Attribute ordering */
+>> -    u32            dev_cur_ordered_id;
+>> -    u32            dev_flags;
+>> +    u32         dev_cur_ordered_id;
+>> +    atomic_t    dev_flags;
+>>  #define DF_CONFIGURED                0x00000001
+>>  #define DF_FIRMWARE_VPD_UNIT_SERIAL        0x00000002
+>>  #define DF_EMULATED_VPD_UNIT_SERIAL        0x00000004
