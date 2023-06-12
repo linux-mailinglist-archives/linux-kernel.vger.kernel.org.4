@@ -2,175 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CACB372D069
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF8D372D06D
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236137AbjFLUZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 16:25:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50510 "EHLO
+        id S236955AbjFLU0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 16:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237529AbjFLUZI (ORCPT
+        with ESMTP id S236948AbjFLU0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 16:25:08 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC94D191
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 13:25:07 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 471335C003F;
-        Mon, 12 Jun 2023 16:25:07 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Mon, 12 Jun 2023 16:25:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1686601507; x=1686687907; bh=5/ryBt9ZvozkAtMkTKZdMMTn2JRB5m11moy
-        MFTsx680=; b=VbT98QdafwqB/tmVRvJiC4NIlT3+BAmZTgye5asLoYLvkDvvn0h
-        q1VSLAc3WdwURv5S0WlBi/5BTnLXacUrVvB8InPVKzWH3a35gk/nnkIOf/hQWvMm
-        0XqhPWLjfLzn2WVeSKFlGSIZZBSn0PGawlYCZXoGl9cEWMbZkml8po93jhTpKV73
-        IsqpobRrxGvhezL6vnO9jg3cHVgYs5F0jEjeheMmiMD00RL37OCWfngfB3CJlcB6
-        9+s2y08uPhoMoLROkggwaLc5Xu3smBM/S6Ujribz3r4S9dlnsLqOwb8BIXfnstyJ
-        XLgAlHw0oyM/As/CW5enPUXrZ2FVawIm78w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1686601507; x=1686687907; bh=5/ryBt9ZvozkA
-        tMkTKZdMMTn2JRB5m11moyMFTsx680=; b=P9Irt2nsuLsansx1DD69O8hlluDZE
-        U+ELE7H73gAPocd97Sdjruz2E+b3OQ+vtna+I84ULYY90v/wWfVx3TRJW+UaMF6M
-        Z1cb16aWRfj+stOwmi2rQwtl07L8doZFfQj82DUHurW+8fTeB0KQqKslL0sUcEhe
-        Fv2sEKyUO19YAfZdX9ILXMbNUdI3Ca3e6P/XUsqU21eFj7Tb/f2m/YnGUBGpTJTo
-        pjOlS9/FTTrpVb9eZ/pcZaVZ03zDCxHXFvINuEkymDUWDJK2NIevw93+ReKnV1vy
-        Eg/AO++DRE7s/9eDOFzRho3ok6FVHsc1v44gwbF+mLthDZ51HxH7aineg==
-X-ME-Sender: <xms:In-HZIQi7WzLzoxajS418DnaT_XNKPo-T7dtixUl_rwygtSM76_vGg>
-    <xme:In-HZFxmoP-Qhb4A76bKCVuwATQjQaQLm4JntHl2jE15uB0vMuE7epa8LBV0O6Rhv
-    IXq5MpMK1gjpPg>
-X-ME-Received: <xmr:In-HZF2Vcg_UPfFA5QoXua679a7ZSSkqWJn6aF7TKMvpx03yYxBbZGY2oQY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeduhedgudegjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpeffvghm
-    ihcuofgrrhhivgcuqfgsvghnohhurhcuoeguvghmihesihhnvhhishhisghlvghthhhinh
-    hgshhlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpedvjeetgeekhfetudfhgfetffeg
-    fffguddvgffhffeifeeikeektdehgeetheffleenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpeguvghmihesihhnvhhishhisghlvghthhhinhhg
-    shhlrggsrdgtohhm
-X-ME-Proxy: <xmx:In-HZMCSmiJ7USqJCTrwnm1FcPpRNDInffBYJ2_ZrcOBM_XflVQ8jQ>
-    <xmx:In-HZBjA7KBmHncubCahNgWABKXWWJQqovBg_cNAtgShulu2S3XV7Q>
-    <xmx:In-HZIr2aaAEGuAqPdU4jWlxf5xzICux5oZwkPhmKDrQIyNkqBFWvg>
-    <xmx:I3-HZJym_bgS67oacCk4HR4i76vSjH86PSWhmUsR0rdGhLJXauhPyw>
-Feedback-ID: iac594737:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 12 Jun 2023 16:25:05 -0400 (EDT)
-Date:   Mon, 12 Jun 2023 16:25:01 -0400
-From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Lee Jones <lee@kernel.org>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v3 0/4] Make sscanf() stricter
-Message-ID: <ZId/IA41c2sJyvE0@itl-email>
-References: <6ab6adce-2318-4ae6-bde6-4317485639fd@p183>
+        Mon, 12 Jun 2023 16:26:14 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B135E19B;
+        Mon, 12 Jun 2023 13:25:57 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-97881a996a0so847463366b.0;
+        Mon, 12 Jun 2023 13:25:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686601556; x=1689193556;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vdv3vzNPkrrapPOhx9OkW0gebiaW56nR0p2AcI7Bl0s=;
+        b=YtKUkr7aYmpsscebasGh8jqgUj5/RFK5S0z5Vojx92Ai+P7xlRaZJZZw08ZgOJaAh9
+         tYprzwpmWpRnaVbG5+ooVLNyL6fKx9LI46l6r/JZ7IrIUwgqjc6R4onX0se8NTB9XYva
+         /YFRBczWG//nlp3Vw71eUQ01RVjG8xcrP305D6e2MJyt6nP6WoLY+u/AzPF9e3ZwrHh/
+         0Q7k9wqT1FyfVOMfj5mD5WxppPbYiFp2j7gf85nDVb2DcYf+rDNKIN72McnVeSfu3hZY
+         u5dVqvCwxgKgZ0sxbn+8TgjY1raC8UUQF/go2LnfZOkTkoCgwVXb7/V0IU88eq4LwdcA
+         MDvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686601556; x=1689193556;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Vdv3vzNPkrrapPOhx9OkW0gebiaW56nR0p2AcI7Bl0s=;
+        b=Pb8q7FOoOEMxYeAwugMbkllq8bzn3+GmLzGZlJJxG4tk7soQB3cXI1FHMIc6VckzLQ
+         4PCvJxVEuIilWoiBjTPQacD4b9Lqqi2ZxMPPYOMgoB/Y6U/KSKqseIxSzha3tPCCxfM9
+         EA0Tm2FXdNxfYyuU9WOL+peZiNydPGcxd23UoX3RexNcpJ+Z18VRgBGlMESfkRqiKx0e
+         Zt1aeklECtgwks2l+h1eUmWuj/23LBFI4ocUKNenlRAxw3bfYdU8eFTV4m1vfzbHPEWJ
+         RUcR3nQrhDBp5Q8XqdTaL1l/wqPlsWsAPJfRANWa+ne5CEQ0vnHNiiJRnwprk/W8nkX3
+         2Z3Q==
+X-Gm-Message-State: AC+VfDw7ewjLVM1gkP/JQLkwTTigWRqMQhaAC26BDELtYjk1npa/dz34
+        XmWb2ocvOa5gPN09+Z/umk0=
+X-Google-Smtp-Source: ACHHUZ68tbqVprHJAzbsOB+yLTYiQ1Lh4TimLjN9ifwSPBOKlpqNOeM8ktKZXpxvMRzjr/SWYGnNKg==
+X-Received: by 2002:a17:907:728b:b0:97d:a87a:f4db with SMTP id dt11-20020a170907728b00b0097da87af4dbmr8539757ejc.66.1686601555829;
+        Mon, 12 Jun 2023 13:25:55 -0700 (PDT)
+Received: from krava ([83.240.63.222])
+        by smtp.gmail.com with ESMTPSA id sa1-20020a170906eda100b009745a6d1b37sm5574871ejb.202.2023.06.12.13.25.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 13:25:55 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Mon, 12 Jun 2023 22:25:52 +0200
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Yonghong Song <yhs@meta.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Jackie Liu <liu.yun@linux.dev>
+Subject: Re: [PATCHv2] ftrace: Show all functions with addresses in
+ available_filter_functions_addrs
+Message-ID: <ZId/UL/iujOdgel+@krava>
+References: <20230611130029.1202298-1-jolsa@kernel.org>
+ <53a11f31-256d-e7bc-eca5-597571076dc5@meta.com>
+ <20230611225407.3e9b8ad2@gandalf.local.home>
+ <20230611225754.01350a50@gandalf.local.home>
+ <d5ffd64c-65b7-e28c-b8ee-0d2ff9dcd78b@meta.com>
+ <20230612110222.50c254f3@gandalf.local.home>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="PjrwJQtKdb92ybe3"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6ab6adce-2318-4ae6-bde6-4317485639fd@p183>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230612110222.50c254f3@gandalf.local.home>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jun 12, 2023 at 11:02:22AM -0400, Steven Rostedt wrote:
+> On Mon, 12 Jun 2023 07:49:53 -0700
+> Yonghong Song <yhs@meta.com> wrote:
+> 
+> > I am actually interested in how available_filter_functions_addrs
+> > will be used. For example, bpf_program__attach_kprobe_multi_opts()
+> > can already take addresses from kallsyms. How to use
+> > available_filter_functions_addrs to facilitate kprobe_multi?
 
---PjrwJQtKdb92ybe3
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 12 Jun 2023 16:25:01 -0400
-From: Demi Marie Obenour <demi@invisiblethingslab.com>
-To: Alexey Dobriyan <adobriyan@gmail.com>
-Cc: linux-kernel@vger.kernel.org,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Juergen Gross <jgross@suse.com>,
-	Stefano Stabellini <sstabellini@kernel.org>,
-	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-	Lee Jones <lee@kernel.org>, Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Petr Mladek <pmladek@suse.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v3 0/4] Make sscanf() stricter
+the problem is that we need to do 2 passes:
 
-On Mon, Jun 12, 2023 at 02:59:38PM +0300, Alexey Dobriyan wrote:
-> > +	bool _placeholder;
-> > +	return simple_strntoull(cp, INT_MAX, endp, base, &_placeholder);
->=20
-> This can be done without introducing dummy variables:
->=20
-> 	void f(bool *b)
-> 	{
-> 	}
->=20
-> 	f((bool[1]){});
+ - through available_filter_functions and find out if the function is traceable
+ - through /proc/kallsyms to get the address for traceable function
 
-This is more consise, but (at least to me) significantly less readable.
+having available_filter_functions symbols together with addresses allow
+us to skip the kallsyms step
 
-> > > lib/vsprintf.c:3727:26: error: unknown conversion type character =E2=
-=80=98!=E2=80=99 in format [-Werror=3Dformat=3D]
-> > So NAK.
->=20
-> Yeah, ! should go after format specifier like it does for %p.
+and we are ok with the address in available_filter_functions_addr not being the
+function entry, because kprobe_multi uses fprobe and that handles both entry and
+patch-site address properly
 
-I hadn't considered that.  Is the typical approach in Linux to use e.g.
-%d%[!] if one wants a literal '!'?
---=20
-Sincerely,
-Demi Marie Obenour (she/her/hers)
-Invisible Things Lab
+> > Do we need to change kernel APIs? It would be great at least we
+> > got a RFC patch to answer these questions.
+> 
+> I agree, having that information would also be useful to me.
+> 
+> Jiri? Andrii?
 
---PjrwJQtKdb92ybe3
-Content-Type: application/pgp-signature; name="signature.asc"
+so we have 2 interfaces how to create kprobe_multi link:
 
------BEGIN PGP SIGNATURE-----
+  a) passing symbols to kernel
 
-iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmSHfyEACgkQsoi1X/+c
-IsHM8BAArfYIa3ISJO/sXxxYMbF1z45VuZ+APs6Jy06/KZBRK9BfvdjOIYICgJLj
-dDEWB1JaM9Z5wtu37GhiwkMBHueuQ1VUsHk2PFcdsqs0VeTBgcKYq7H/doMRwPhh
-ihF9OP2Fcl1CnPBJv3WrZFfiRvm0iNjJdglt/Uqp1Qxbf0/x/QrtpqRPm3dzyQbA
-ofRGw161bV/vu/PzcYNnjeMtUHZvz2skcC7OiFb1q/RYxowXz3w0xydLRXBL/YAf
-12X+z6xCy6iZTHYT47h7WdQODjOUyscEeUyMYjqM2McveM6gnRGLbaKTYmKc4yMD
-Gb/TwOyyGpm5BVyDYSxqxJBUvX3NATyEz6x4+uD6CS50c+mdXzhs7BjWGlqEzsg/
-t2hHAfEQU4gef3y8aE6x34jFXJxl4YEHXwX97w+h0imIK0v02qwQkUD1GxWIWobo
-4uPjxeEM3rH2aYnHW/Vpr7EfYW7GDYdz79EZGfxsZE0kXcSPfmUNb/jsMvO+Ezit
-5am01alceJr8fYnWaD0ot999X9LX52PqizPbENVkVIKrd8ZAUcyxykQ7FZGI2loA
-vBz58sEOK3GuPwl5C0p4Ll1pRvbU5lRBScxmu9i+ElELYb66xh1805XgBKw1uAZe
-tg2qXZ2bdKM+/e4eDA2V4ceLzeHUGD2/AjVlsY+sOIPAyrxQWEw=
-=K6Gh
------END PGP SIGNATURE-----
+     1) user gathers symbols and need to ensure that they are
+        trace-able -> pass through available_filter_functions file
 
---PjrwJQtKdb92ybe3--
+     2) kernel takes those symbols and translates them to addresses
+        through kallsyms api
+
+     3) addresses are passed to fprobe/ftrace through:
+
+         register_fprobe_ips
+         -> ftrace_set_filter_ips
+
+  b) passing addresses to kernel
+
+     1) user gathers symbols and needs to ensure that they are
+        trace-able -> pass through available_filter_functions file
+
+     2) user takes those symbols and translates them to addresses
+       through /proc/kallsyms
+
+     3) addresses are passed to the kernel and kernel calls:
+
+         register_fprobe_ips
+         -> ftrace_set_filter_ips
+
+
+The new available_filter_functions_addrs file helps us with option b),
+because we can make 'b 1' and 'b 2' in one step - while filtering traceable
+functions, we get the address directly.
+
+I tested the new available_filter_functions_addrs changes with some hacked
+selftest changes, you can check it in here [1].
+
+I assume Jackie Liu will send new version of her patchset [2] based on this
+new available_filter_functions_addrs file.
+
+I think we should have these changes coming together and add some perf
+measurements from before and after to make the benefit apparent.
+
+jirka
+
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?h=bpf/avail_addrs&id=fecaeeaf40bae034715ab2e9a46ca1dc16371e8e
+[2] https://lore.kernel.org/bpf/20230526155026.1419390-1-liu.yun@linux.dev/#r
