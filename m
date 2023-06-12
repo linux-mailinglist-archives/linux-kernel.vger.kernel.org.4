@@ -2,139 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D8DD72C8AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:35:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94EE372C8DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:42:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236758AbjFLOfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 10:35:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48244 "EHLO
+        id S237838AbjFLOmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 10:42:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235319AbjFLOfq (ORCPT
+        with ESMTP id S239376AbjFLOka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 10:35:46 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D920BAA;
-        Mon, 12 Jun 2023 07:35:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686580536; x=1718116536;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UV/2h6fqgbTSA+6nmz5EI6zXiJFLRye4hW68DS9EZqo=;
-  b=HpbqCkok+pVDmwG7yB5/WvZDlqCwd/MyZibYrkmRhczsDhEde1vXxPHR
-   fYmZbUmNAtQTJrBLZBbAqq/TrpOsa1iQewreRjw4mT05tLiaqHLJthAG5
-   blNWWMYn3YEqaVcQFtXaHz4NQMDz4/+sOb+mBeJ/nIvGMH8bCBDn672xs
-   MjD9FEzpzPp9VE2NsQ4if40msT/AnWDz1sUnf6Kivys/RFRRIeyJ6jsx0
-   iudTq3t/aUDbdyzfO3aB5Jfdv2Ru1BNmUvfEKdFvURaqC6y6tSn7qJUDF
-   Cw1Paqv2SWAoBzjcSGtP6pIdGWIliT3eWfH33+5LU3K62yBkyLHzqg+U1
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="338419480"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="338419480"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 07:34:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="711224041"
-X-IronPort-AV: E=Sophos;i="6.00,236,1681196400"; 
-   d="scan'208";a="711224041"
-Received: from smizr3x-mobl3.ger.corp.intel.com (HELO box.shutemov.name) ([10.249.43.127])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2023 07:33:58 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 3E33710CE1A; Mon, 12 Jun 2023 17:33:55 +0300 (+03)
-Date:   Mon, 12 Jun 2023 17:33:55 +0300
-From:   "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-Subject: Re: [PATCH v11 11/20] x86/virt/tdx: Fill out TDMRs to cover all TDX
- memory regions
-Message-ID: <20230612143355.sur7zc7byu7omxal@box.shutemov.name>
-References: <cover.1685887183.git.kai.huang@intel.com>
- <927ec9871721d2a50f1aba7d1cf7c3be50e4f49b.1685887183.git.kai.huang@intel.com>
- <0600959d-9e10-fb1f-b3a9-862a51b9d8e1@intel.com>
- <ddbcadf36016bb60a695f54b28f5c9e9af53a07f.camel@intel.com>
- <201af662-f700-9145-c113-563e378074ad@intel.com>
- <89c99e7360dc2acfe5fb56c2bbb40e074e1f94d5.camel@intel.com>
+        Mon, 12 Jun 2023 10:40:30 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE21BD
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 07:40:27 -0700 (PDT)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QftwP2VmGz18M14;
+        Mon, 12 Jun 2023 22:14:13 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 12 Jun 2023 22:19:07 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     <akpm@linux-foundation.org>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <willy@infradead.org>, <jgowans@amazon.com>, <yuzhao@google.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: [PATCH -next 1/2] mm: compaction: convert to use a folio in isolate_migratepages_block()
+Date:   Mon, 12 Jun 2023 22:34:13 +0800
+Message-ID: <20230612143414.186389-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <89c99e7360dc2acfe5fb56c2bbb40e074e1f94d5.camel@intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 02:33:58AM +0000, Huang, Kai wrote:
-> 
-> > 
-> > Maybe not even a pr_warn(), but something that's a bit ominous and has a
-> > chance of getting users to act.
-> 
-> Sorry I am not sure how to do.  Could you give some suggestion?
+Directly use a folio instead of page_folio() when page successfully
+isolated (hugepage and movable page) and after folio_get_nontail_page(),
+which removes several calls to compound_head(). 
 
-Maybe something like this would do?
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+---
+ mm/compaction.c | 71 ++++++++++++++++++++++++++-----------------------
+ 1 file changed, 38 insertions(+), 33 deletions(-)
 
-I'm struggle with the warning message. Any suggestion is welcome.
-
-diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
-index 9cd4f6b58d4a..cc141025b249 100644
---- a/arch/x86/virt/vmx/tdx/tdx.c
-+++ b/arch/x86/virt/vmx/tdx/tdx.c
-@@ -627,6 +627,15 @@ static int fill_out_tdmrs(struct list_head *tmb_list,
- 	/* @tdmr_idx is always the index of last valid TDMR. */
- 	tdmr_list->nr_consumed_tdmrs = tdmr_idx + 1;
+diff --git a/mm/compaction.c b/mm/compaction.c
+index 3398ef3a55fe..5d3f0aaa6785 100644
+--- a/mm/compaction.c
++++ b/mm/compaction.c
+@@ -831,6 +831,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+ 	struct lruvec *lruvec;
+ 	unsigned long flags = 0;
+ 	struct lruvec *locked = NULL;
++	struct folio *folio = NULL;
+ 	struct page *page = NULL, *valid_page = NULL;
+ 	struct address_space *mapping;
+ 	unsigned long start_pfn = low_pfn;
+@@ -927,7 +928,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+ 		if (!valid_page && pageblock_aligned(low_pfn)) {
+ 			if (!isolation_suitable(cc, page)) {
+ 				low_pfn = end_pfn;
+-				page = NULL;
++				folio = NULL;
+ 				goto isolate_abort;
+ 			}
+ 			valid_page = page;
+@@ -959,7 +960,8 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+ 				 * Hugepage was successfully isolated and placed
+ 				 * on the cc->migratepages list.
+ 				 */
+-				low_pfn += compound_nr(page) - 1;
++				folio = page_folio(page);
++				low_pfn += folio_nr_pages(folio) - 1;
+ 				goto isolate_success_no_list;
+ 			}
  
-+	/*
-+	 * Warn early that kernel is about to run out of TDMRs.
-+	 *
-+	 * This is indication that TDMR allocation has to be reworked to be
-+	 * smarter to not run into an issue.
-+	 */
-+	if (tdmr_list->max_tdmrs - tdmr_list->nr_consumed_tdmrs < TDMR_NR_WARN)
-+		pr_warn("Low number of spare TDMRs\n");
-+
- 	return 0;
- }
+@@ -1027,8 +1029,10 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+ 					locked = NULL;
+ 				}
  
-diff --git a/arch/x86/virt/vmx/tdx/tdx.h b/arch/x86/virt/vmx/tdx/tdx.h
-index 323ce744b853..17efe33847ae 100644
---- a/arch/x86/virt/vmx/tdx/tdx.h
-+++ b/arch/x86/virt/vmx/tdx/tdx.h
-@@ -98,6 +98,9 @@ struct tdx_memblock {
- 	int nid;
- };
+-				if (isolate_movable_page(page, mode))
++				if (isolate_movable_page(page, mode)) {
++					folio = page_folio(page);
+ 					goto isolate_success;
++				}
+ 			}
  
-+/* Warn if kernel has less than TDMR_NR_WARN TDMRs after allocation */
-+#define TDMR_NR_WARN 4
-+
- struct tdmr_info_list {
- 	void *tdmrs;	/* Flexible array to hold 'tdmr_info's */
- 	int nr_consumed_tdmrs;	/* How many 'tdmr_info's are in use */
+ 			goto isolate_fail;
+@@ -1039,7 +1043,8 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+ 		 * sure the page is not being freed elsewhere -- the
+ 		 * page release code relies on it.
+ 		 */
+-		if (unlikely(!get_page_unless_zero(page)))
++		folio = folio_get_nontail_page(page);
++		if (unlikely(!folio))
+ 			goto isolate_fail;
+ 
+ 		/*
+@@ -1047,7 +1052,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+ 		 * from long term pinning preventing it from migrating,
+ 		 * so avoid taking lru_lock and isolating it unnecessarily.
+ 		 */
+-		mapping = page_mapping(page);
++		mapping = folio_mapping(folio);
+ 		if (!cc->alloc_contig && page_has_extra_refs(page, mapping))
+ 			goto isolate_fail_put;
+ 
+@@ -1063,7 +1068,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+ 			goto isolate_fail_put;
+ 
+ 		/* Compaction might skip unevictable pages but CMA takes them */
+-		if (!(mode & ISOLATE_UNEVICTABLE) && PageUnevictable(page))
++		if (!(mode & ISOLATE_UNEVICTABLE) && folio_test_unevictable(folio))
+ 			goto isolate_fail_put;
+ 
+ 		/*
+@@ -1072,10 +1077,10 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+ 		 * it will be able to migrate without blocking - clean pages
+ 		 * for the most part.  PageWriteback would require blocking.
+ 		 */
+-		if ((mode & ISOLATE_ASYNC_MIGRATE) && PageWriteback(page))
++		if ((mode & ISOLATE_ASYNC_MIGRATE) && folio_test_writeback(folio))
+ 			goto isolate_fail_put;
+ 
+-		if ((mode & ISOLATE_ASYNC_MIGRATE) && PageDirty(page)) {
++		if ((mode & ISOLATE_ASYNC_MIGRATE) && folio_test_dirty(folio)) {
+ 			bool migrate_dirty;
+ 
+ 			/*
+@@ -1087,22 +1092,22 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+ 			 * the page lock until after the page is removed
+ 			 * from the page cache.
+ 			 */
+-			if (!trylock_page(page))
++			if (!folio_trylock(folio))
+ 				goto isolate_fail_put;
+ 
+-			mapping = page_mapping(page);
++			mapping = folio_mapping(folio);
+ 			migrate_dirty = !mapping ||
+ 					mapping->a_ops->migrate_folio;
+-			unlock_page(page);
++			folio_unlock(folio);
+ 			if (!migrate_dirty)
+ 				goto isolate_fail_put;
+ 		}
+ 
+ 		/* Try isolate the page */
+-		if (!TestClearPageLRU(page))
++		if (!folio_test_clear_lru(folio))
+ 			goto isolate_fail_put;
+ 
+-		lruvec = folio_lruvec(page_folio(page));
++		lruvec = folio_lruvec(folio);
+ 
+ 		/* If we already hold the lock, we can skip some rechecking */
+ 		if (lruvec != locked) {
+@@ -1112,7 +1117,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+ 			compact_lock_irqsave(&lruvec->lru_lock, &flags, cc);
+ 			locked = lruvec;
+ 
+-			lruvec_memcg_debug(lruvec, page_folio(page));
++			lruvec_memcg_debug(lruvec, folio);
+ 
+ 			/*
+ 			 * Try get exclusive access under lock. If marked for
+@@ -1132,30 +1137,30 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+ 			 * and it's on LRU. It can only be a THP so the order
+ 			 * is safe to read and it's 0 for tail pages.
+ 			 */
+-			if (unlikely(PageCompound(page) && !cc->alloc_contig)) {
+-				low_pfn += compound_nr(page) - 1;
+-				nr_scanned += compound_nr(page) - 1;
+-				SetPageLRU(page);
++			if (unlikely(folio_test_large(folio) && !cc->alloc_contig)) {
++				low_pfn += folio_nr_pages(folio) - 1;
++				nr_scanned += folio_nr_pages(folio) - 1;
++				folio_set_lru(folio);
+ 				goto isolate_fail_put;
+ 			}
+ 		}
+ 
+ 		/* The whole page is taken off the LRU; skip the tail pages. */
+-		if (PageCompound(page))
+-			low_pfn += compound_nr(page) - 1;
++		if (folio_test_large(folio))
++			low_pfn += folio_nr_pages(folio) - 1;
+ 
+ 		/* Successfully isolated */
+-		del_page_from_lru_list(page, lruvec);
+-		mod_node_page_state(page_pgdat(page),
+-				NR_ISOLATED_ANON + page_is_file_lru(page),
+-				thp_nr_pages(page));
++		lruvec_del_folio(lruvec, folio);
++		mod_node_page_state(folio_pgdat(folio),
++				NR_ISOLATED_ANON + folio_is_file_lru(folio),
++				folio_nr_pages(folio));
+ 
+ isolate_success:
+-		list_add(&page->lru, &cc->migratepages);
++		list_add(&folio->lru, &cc->migratepages);
+ isolate_success_no_list:
+-		cc->nr_migratepages += compound_nr(page);
+-		nr_isolated += compound_nr(page);
+-		nr_scanned += compound_nr(page) - 1;
++		cc->nr_migratepages += folio_nr_pages(folio);
++		nr_isolated += folio_nr_pages(folio);
++		nr_scanned += folio_nr_pages(folio) - 1;
+ 
+ 		/*
+ 		 * Avoid isolating too much unless this block is being
+@@ -1177,7 +1182,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+ 			unlock_page_lruvec_irqrestore(locked, flags);
+ 			locked = NULL;
+ 		}
+-		put_page(page);
++		folio_put(folio);
+ 
+ isolate_fail:
+ 		if (!skip_on_failure && ret != -ENOMEM)
+@@ -1218,14 +1223,14 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+ 	if (unlikely(low_pfn > end_pfn))
+ 		low_pfn = end_pfn;
+ 
+-	page = NULL;
++	folio = NULL;
+ 
+ isolate_abort:
+ 	if (locked)
+ 		unlock_page_lruvec_irqrestore(locked, flags);
+-	if (page) {
+-		SetPageLRU(page);
+-		put_page(page);
++	if (folio) {
++		folio_set_lru(folio);
++		folio_put(folio);
+ 	}
+ 
+ 	/*
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+2.35.3
+
