@@ -2,55 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F99D72C61B
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 15:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33BF872C61C
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 15:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235567AbjFLNgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 09:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60274 "EHLO
+        id S236630AbjFLNg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 09:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236657AbjFLNgP (ORCPT
+        with ESMTP id S234673AbjFLNgQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 09:36:15 -0400
+        Mon, 12 Jun 2023 09:36:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B0610A
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 06:35:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF0E107;
+        Mon, 12 Jun 2023 06:35:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E30BA61562
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 13:35:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1F1AC433D2;
-        Mon, 12 Jun 2023 13:35:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686576946;
-        bh=qAGctGPmTEGb8Q322023xH/8ic4A2qSPM1FKoiXCBSk=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 780246219F;
+        Mon, 12 Jun 2023 13:35:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3F29C433EF;
+        Mon, 12 Jun 2023 13:35:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686576952;
+        bh=dbjfLeRVVirIIBHlnay6kcWtyYVF/I6R+13hE9mByOU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QvDxDyruXr+m7Nhq2DHbE0eMq5Bv0/Vs2UIxhO1PWnbg0RpNbROQQ5QB/y1lEB1nt
-         ZL1O4J8dEmi33KST4wq8FgbUVFfzUMR6n3Z3R1GTC4IyWFW00ncK7P51eA08JXQPze
-         Zp4+Te3auFeleRBfNrA0AX+fzfh1CHJ3EsEq6/Wt0UQfsyFPxI3bpRPyCW8dShDV4v
-         AOWIm/TJhAPQ4S9N56JhjTxGWe71+OEYKlxPdyW2zPQCcAcgtjnx6CZUQqOXsD/dJb
-         IoMN2TehnUo8DvHbJvllWjDXLgB252JvWBVLkyeBVog4bKehA2aflV1oxP5+W+PYH1
-         tk1qIdNsos5hA==
-Date:   Mon, 12 Jun 2023 15:35:42 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
-        Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/i915/gmch: avoid unused variable warning
-Message-ID: <20230612133542.knm4edwlk2nhfboj@intel.intel>
-References: <20230612124408.521325-1-arnd@kernel.org>
+        b=GOMIAVxt+cyHIvr19eAJhFqIonbIYoOBgtK0PmpiwwErwzHNjg53T2EvRBWUWnN7Y
+         nw4LRWpOsOib5ObTNG02xKUCB4SJjBlz9gROxWbPJnHEBkHtn3pWdU4rVzf8RkD/BJ
+         a2zbuugsDFWGViql8PldWWeDryGp/ZpEBo9/RFC0=
+Date:   Mon, 12 Jun 2023 15:35:49 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     torvalds@linux-foundation.org, keescook@chromium.org,
+        pbonzini@redhat.com, masahiroy@kernel.org, nathan@kernel.org,
+        ndesaulniers@google.com, nicolas@fjasle.eu,
+        catalin.marinas@arm.com, will@kernel.org, vkoul@kernel.org,
+        trix@redhat.com, ojeda@kernel.org, mingo@redhat.com,
+        longman@redhat.com, boqun.feng@gmail.com, dennis@kernel.org,
+        tj@kernel.org, cl@linux.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
+        42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
+        dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
+        john.johansen@canonical.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
+        rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
+        tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
+        luc.vanoostenryck@gmail.com
+Subject: Re: [PATCH v3 46/57] perf: Simplify pmu_dev_alloc()
+Message-ID: <2023061226-grumpily-entire-f06a@gregkh>
+References: <20230612090713.652690195@infradead.org>
+ <20230612093540.850386350@infradead.org>
+ <20230612094400.GG4253@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230612124408.521325-1-arnd@kernel.org>
+In-Reply-To: <20230612094400.GG4253@hirez.programming.kicks-ass.net>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,52 +76,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On Mon, Jun 12, 2023 at 11:44:00AM +0200, Peter Zijlstra wrote:
+> On Mon, Jun 12, 2023 at 11:07:59AM +0200, Peter Zijlstra wrote:
+> > 
+> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > ---
+> >  kernel/events/core.c |   65 ++++++++++++++++++++++++---------------------------
+> >  1 file changed, 31 insertions(+), 34 deletions(-)
+> > 
+> > --- a/kernel/events/core.c
+> > +++ b/kernel/events/core.c
+> > @@ -11285,49 +11285,46 @@ static void pmu_dev_release(struct devic
+> >  
+> >  static int pmu_dev_alloc(struct pmu *pmu)
+> >  {
+> > +	int ret;
+> >  
+> > +	struct device *dev __free(put_device) =
+> > +		kzalloc(sizeof(struct device), GFP_KERNEL);
+> > +	if (!dev)
+> > +		return -ENOMEM;
+> >  
+> > +	dev->groups = pmu->attr_groups;
+> > +	device_initialize(dev);
+> >  
+> > +	dev_set_drvdata(dev, pmu);
+> > +	dev->bus = &pmu_bus;
+> > +	dev->release = pmu_dev_release;
+> >  
+> > +	ret = dev_set_name(dev, "%s", pmu->name);
+> >  	if (ret)
+> > +		return ret;
+> >  
+> > +	ret = device_add(dev);
+> >  	if (ret)
+> > +		return ret;
+> >  
+> > +	struct device *del __free(device_del) = dev;
+> 
+> Greg, I'm not much familiar with the whole device model, but it seems
+> unfortunate to me that one has to call device_del() explicitly if we
+> already have a put_device() queued.
+> 
+> Is there a saner way to write this?
 
-On Mon, Jun 12, 2023 at 02:43:59PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> When CONFIG_PNP is disabled, the mchbar_addr variable is only written but
-> not read:
-> 
-> drivers/gpu/drm/i915/soc/intel_gmch.c: In function 'intel_alloc_mchbar_resource':
-> drivers/gpu/drm/i915/soc/intel_gmch.c:41:13: error: variable 'mchbar_addr' set but not used [-Werror=unused-but-set-variable]
->    41 |         u64 mchbar_addr;
->       |             ^~~~~~~~~~~
-> 
-> No idea why this showed up now, but it's easy to fix by changing the #ifdef to
-> an IS_ENABLED() check that the compiler can see through.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Ok, to answer my other question, yes, you are changing the free call
+here in the "middle" of the function, sorry, I missed "del" vs. "dev"
+and was wondering how this would work...
 
-Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
+This should work, it's tricky, especially:
 
-Andi
+> > +	no_free_ptr(del);
+> > +	pmu->dev = no_free_ptr(dev);
 
-> ---
-> I saw this last week already, so it's likely that someone else already sent
-> a fix for it.
-> 
->  drivers/gpu/drm/i915/soc/intel_gmch.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/soc/intel_gmch.c b/drivers/gpu/drm/i915/soc/intel_gmch.c
-> index 6d0204942f7a5..49c7fb16e934f 100644
-> --- a/drivers/gpu/drm/i915/soc/intel_gmch.c
-> +++ b/drivers/gpu/drm/i915/soc/intel_gmch.c
-> @@ -47,11 +47,9 @@ intel_alloc_mchbar_resource(struct drm_i915_private *i915)
->  	mchbar_addr = ((u64)temp_hi << 32) | temp_lo;
->  
->  	/* If ACPI doesn't have it, assume we need to allocate it ourselves */
-> -#ifdef CONFIG_PNP
-> -	if (mchbar_addr &&
-> +	if (IS_ENABLED(CONFIG_PNP) && mchbar_addr &&
->  	    pnp_range_reserved(mchbar_addr, mchbar_addr + MCHBAR_SIZE))
->  		return 0;
-> -#endif
->  
->  	/* Get some space for it */
->  	i915->gmch.mch_res.name = "i915 MCHBAR";
-> -- 
-> 2.39.2
-> 
+this.
+
+I had to stare at it for a while to realize that yes, you are calling
+the two different "cleanup" functions prior to thes lines, on the same
+pointer, and that the order is correct.
+
+Ick, this is going to be a rough audit for bus code that gets converted
+to this, BUT bonus is that once it's done, any changes to the middle of
+the function should "just work", and it's a good task for an intern to
+do :)
+
+
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+Mind if I try this series to convert a more "normal" driver to see how
+it works with that?  That's going to be the true test, see if the
+changes make sense to someone who doesn't really know the internals of
+the driver core like this...
+
+thanks,
+
+greg k-h
