@@ -2,150 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2171372C48F
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 14:40:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6016572C4AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 14:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231816AbjFLMke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 08:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32918 "EHLO
+        id S233676AbjFLMoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 08:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbjFLMkb (ORCPT
+        with ESMTP id S231165AbjFLMoQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 08:40:31 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81997E4C
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 05:40:30 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b3a6469623so10948725ad.3
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 05:40:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1686573630; x=1689165630;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UJquZgA76BSmiwPTwdcZvv8HMtB2zit5x2dH7MVfNuM=;
-        b=Kq6vT1wBZ2mNe7fpEVKhE76AM3FBq23mdh2fJe4UVHhZU2+Qd0RVdAT6+V6LuTbHL9
-         IDtFIam3dKQyodkBimhtPGDqn+nZl95gjcTR8QM//HHgKhkuYUoYVPI/R3VoJEed6BHA
-         7qinyAWccJNBV9qzMSEK596SIMbWuy/4EeElaA6ObqPP6XCbc4Zu5anUNxMPSjGD9AZV
-         ovMBSK8qRqA8NCESCGicChVWHC3TLJT7Bk8Q/Twqr2ubSw3ua64MPYmFsNP1JhmeyTjw
-         XP1to15m0x2E6dPDwSVi6vE8GOar3+Uh1Z4mZkDmMUFRiyFJx+zxDoukfJnspp0YUQmh
-         tsZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686573630; x=1689165630;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UJquZgA76BSmiwPTwdcZvv8HMtB2zit5x2dH7MVfNuM=;
-        b=duGjkxXJqNGymJ/lonVZBESR1+ntQ4nh0wNIkosD7o0AB5um8ApUN+VXmaibxbZtUd
-         6Y7hy/eVvbPF1TZvGumRAw9aMntJSNAUi1G9/G+8DONIrPPYedZe01lZ88iyi1GMpzvV
-         Pg6VEDBKblCr9YYX0kL/F3r02YuotS6oISx9NDE40my2V8FVUgjOvhaKhZHh8Lh3ZeBr
-         7VaLpS0KvlV6f932koPmc2XQUSY9MmhoFVXvh/uxs/nsbuXvkuXLx1q40rK97NAxyI2/
-         T24xA7vVl+HVvcW2uHrFlTeA3sqEzH+iogs0C9fcI8NxhWgtEX3Sr0+PGA+XVHVxj/8e
-         8rJg==
-X-Gm-Message-State: AC+VfDwYyc2RFTghN4S/KPI3f4DmMslxGD0PdWpb/lGL51uwzau5HyBM
-        BgKbZYYKwuyntsXKsjuaGD8I3g==
-X-Google-Smtp-Source: ACHHUZ66Dfxma/yCR3b6ZMAOci7Ea2V7yR3Q4VsR+NeJ/p3wh2BH71xudK0ajK+OO+H5A3mNIPYh8Q==
-X-Received: by 2002:a17:903:1207:b0:1ae:8b4b:327d with SMTP id l7-20020a170903120700b001ae8b4b327dmr9068984plh.42.1686573629968;
-        Mon, 12 Jun 2023 05:40:29 -0700 (PDT)
-Received: from C02GD5ZHMD6R.bytedance.net ([139.177.225.230])
-        by smtp.gmail.com with ESMTPSA id x1-20020a170902ec8100b001a6f7744a27sm2394019plg.87.2023.06.12.05.40.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 05:40:29 -0700 (PDT)
-From:   Jinke Han <hanjinke.666@bytedance.com>
-X-Google-Original-From: Jinke Han <hnajinke.666@bytedance>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jinke Han <hanjinke.666@bytedance.com>
-Subject: [PATCH] ext4: Make running and commit transaction have their own freed_data_list
-Date:   Mon, 12 Jun 2023 20:40:17 +0800
-Message-Id: <20230612124017.14115-1-hanjinke.666@bytedance.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+        Mon, 12 Jun 2023 08:44:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16E7AA
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 05:44:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CA7A613CA
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 12:44:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62198C433EF;
+        Mon, 12 Jun 2023 12:44:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686573854;
+        bh=gq5hRxWovnLtF31u4zc0XX1gnCt36dRWdFL6GhVRm1Y=;
+        h=From:To:Cc:Subject:Date:From;
+        b=aNZ6vU+zqRHWZ7v5rU9caKOXoKFrLPpnXcJFL7SjBButK5TfSon8w7qd0ZGp3yPsX
+         EI2aVc23QU7o5UMTofxC4fGvGweV9D6QVN3tE084zyRWCdedehtmIrGLbT0VoKpqdw
+         BT5zR5FmOIvCn1GZl8eJESDk4BGo0K/dPVAQHhF3a0XxsP8kX962PEjdsRaf+Dn6S6
+         syUv+UxCqUM8TTY2vYE8wjvhxTtSHo356wst1ETPwgdjxwxXSpbs8BzigsIqWGMteP
+         dB4wSGS686NpkLtVIG7xL2SsTi2m3BtYsQxqmS+4eOCxf6HmMm0b6OSVoD/mQr+iS1
+         WWdWTKzRDvpCQ==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/i915/gmch: avoid unused variable warning
+Date:   Mon, 12 Jun 2023 14:43:59 +0200
+Message-Id: <20230612124408.521325-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinke Han <hanjinke.666@bytedance.com>
+From: Arnd Bergmann <arnd@arndb.de>
 
-When releasing space in jbd, we traverse s_freed_data_list to get the
-free range belonging to the current commit transaction. In extreme cases,
-the time spent may not be small, and we have observed cases exceeding
-10ms. This patch makes running and commit transactions manage their own
-free_data_list respectively, eliminating unnecessary traversal.
+When CONFIG_PNP is disabled, the mchbar_addr variable is only written but
+not read:
 
-And in the callback phase of the commit transaction, no one will touch
-it except the jbd thread itself, so s_md_lock is no longer needed.
+drivers/gpu/drm/i915/soc/intel_gmch.c: In function 'intel_alloc_mchbar_resource':
+drivers/gpu/drm/i915/soc/intel_gmch.c:41:13: error: variable 'mchbar_addr' set but not used [-Werror=unused-but-set-variable]
+   41 |         u64 mchbar_addr;
+      |             ^~~~~~~~~~~
 
-Signed-off-by: Jinke Han <hanjinke.666@bytedance.com>
+No idea why this showed up now, but it's easy to fix by changing the #ifdef to
+an IS_ENABLED() check that the compiler can see through.
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- fs/ext4/ext4.h    |  2 +-
- fs/ext4/mballoc.c | 19 +++++--------------
- 2 files changed, 6 insertions(+), 15 deletions(-)
+I saw this last week already, so it's likely that someone else already sent
+a fix for it.
 
-diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
-index 813b4da098a0..356905357dc9 100644
---- a/fs/ext4/ext4.h
-+++ b/fs/ext4/ext4.h
-@@ -1557,7 +1557,7 @@ struct ext4_sb_info {
- 	unsigned int *s_mb_maxs;
- 	unsigned int s_group_info_size;
- 	unsigned int s_mb_free_pending;
--	struct list_head s_freed_data_list;	/* List of blocks to be freed
-+	struct list_head s_freed_data_list[2];	/* List of blocks to be freed
- 						   after commit completed */
- 	struct list_head s_discard_list;
- 	struct work_struct s_discard_work;
-diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-index 4f2a1df98141..8fab5720a979 100644
---- a/fs/ext4/mballoc.c
-+++ b/fs/ext4/mballoc.c
-@@ -3626,7 +3626,8 @@ int ext4_mb_init(struct super_block *sb)
+ drivers/gpu/drm/i915/soc/intel_gmch.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/i915/soc/intel_gmch.c b/drivers/gpu/drm/i915/soc/intel_gmch.c
+index 6d0204942f7a5..49c7fb16e934f 100644
+--- a/drivers/gpu/drm/i915/soc/intel_gmch.c
++++ b/drivers/gpu/drm/i915/soc/intel_gmch.c
+@@ -47,11 +47,9 @@ intel_alloc_mchbar_resource(struct drm_i915_private *i915)
+ 	mchbar_addr = ((u64)temp_hi << 32) | temp_lo;
  
- 	spin_lock_init(&sbi->s_md_lock);
- 	sbi->s_mb_free_pending = 0;
--	INIT_LIST_HEAD(&sbi->s_freed_data_list);
-+	INIT_LIST_HEAD(&sbi->s_freed_data_list[0]);
-+	INIT_LIST_HEAD(&sbi->s_freed_data_list[1]);
- 	INIT_LIST_HEAD(&sbi->s_discard_list);
- 	INIT_WORK(&sbi->s_discard_work, ext4_discard_work);
- 	atomic_set(&sbi->s_retry_alloc_pending, 0);
-@@ -3878,21 +3879,11 @@ void ext4_process_freed_data(struct super_block *sb, tid_t commit_tid)
- 	struct ext4_sb_info *sbi = EXT4_SB(sb);
- 	struct ext4_free_data *entry, *tmp;
- 	struct list_head freed_data_list;
--	struct list_head *cut_pos = NULL;
-+	struct list_head *s_freed_head = &sbi->s_freed_data_list[commit_tid & 1];
- 	bool wake;
+ 	/* If ACPI doesn't have it, assume we need to allocate it ourselves */
+-#ifdef CONFIG_PNP
+-	if (mchbar_addr &&
++	if (IS_ENABLED(CONFIG_PNP) && mchbar_addr &&
+ 	    pnp_range_reserved(mchbar_addr, mchbar_addr + MCHBAR_SIZE))
+ 		return 0;
+-#endif
  
- 	INIT_LIST_HEAD(&freed_data_list);
--
--	spin_lock(&sbi->s_md_lock);
--	list_for_each_entry(entry, &sbi->s_freed_data_list, efd_list) {
--		if (entry->efd_tid != commit_tid)
--			break;
--		cut_pos = &entry->efd_list;
--	}
--	if (cut_pos)
--		list_cut_position(&freed_data_list, &sbi->s_freed_data_list,
--				  cut_pos);
--	spin_unlock(&sbi->s_md_lock);
-+	list_replace_init(s_freed_head, &freed_data_list);
- 
- 	list_for_each_entry(entry, &freed_data_list, efd_list)
- 		ext4_free_data_in_buddy(sb, entry);
-@@ -6298,7 +6289,7 @@ ext4_mb_free_metadata(handle_t *handle, struct ext4_buddy *e4b,
- 	}
- 
- 	spin_lock(&sbi->s_md_lock);
--	list_add_tail(&new_entry->efd_list, &sbi->s_freed_data_list);
-+	list_add_tail(&new_entry->efd_list, &sbi->s_freed_data_list[new_entry->efd_tid & 1]);
- 	sbi->s_mb_free_pending += clusters;
- 	spin_unlock(&sbi->s_md_lock);
- }
+ 	/* Get some space for it */
+ 	i915->gmch.mch_res.name = "i915 MCHBAR";
 -- 
-2.20.1
+2.39.2
 
