@@ -2,78 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BECB572C1A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 12:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1ABD72C1D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:00:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237078AbjFLK7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 06:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60336 "EHLO
+        id S237336AbjFLLAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 07:00:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236256AbjFLK5w (ORCPT
+        with ESMTP id S237269AbjFLLA1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 06:57:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 186026EAB;
-        Mon, 12 Jun 2023 03:45:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A1A6D62451;
-        Mon, 12 Jun 2023 10:45:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E347C433D2;
-        Mon, 12 Jun 2023 10:45:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686566754;
-        bh=n83nlEjKdfIOBmYidDyhQMkFJfDZwR7ta+gYJd+TVCQ=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=q+YkQNa328pMVFsA2bRAmz5UMjgF+DnvTPqv88BK4VXVNKMksbd7Idlt4Ynx5ayzp
-         0mpe940TUN7nIlv6rm8JohB1cnuug/RTPS8ZSK+Gqpfo935WqDt6AQW29cfrzEWyI0
-         hntdqRNzxTdjhNixoS4zPOB7ooqWzN4tqKdIHQzS3XjVL+czdUWoPRcWhg6kxtbJ6I
-         Cr9pv+DlyR4FK0jjAjwunzAxUmuLz2ahMFQjJr+odeexqZ9ZZh/jTAkvwuE5rDARGz
-         WM34MHMRkkLBu8ZnBc5JXo2/ZX2kgl5ccHEvr2qcjhgn1OBiH3soWsvGTwYWhRxGiM
-         bCPjv8pHoyx6w==
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Brad Warrum <bwarrum@linux.ibm.com>,
-        Ritu Agarwal <rituagar@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ian Kent <raven@themaw.net>,
-        "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
-        Jeremy Kerr <jk@ozlabs.org>, Ard Biesheuvel <ardb@kernel.org>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        Steve French <sfrench@samba.org>,
-        Paulo Alcantara <pc@manguebit.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Tom Talpey <tom@talpey.com>,
-        John Johansen <john.johansen@canonical.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Ruihan Li <lrh2000@pku.edu.cn>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        autofs@vger.kernel.org, linux-efi@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, apparmor@lists.ubuntu.com,
-        linux-security-module@vger.kernel.org
-Subject: [PATCH v2 8/8] cifs: update the ctime on a partial page write
-Date:   Mon, 12 Jun 2023 06:45:24 -0400
-Message-Id: <20230612104524.17058-9-jlayton@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230612104524.17058-1-jlayton@kernel.org>
-References: <20230612104524.17058-1-jlayton@kernel.org>
+        Mon, 12 Jun 2023 07:00:27 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC1C422C
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 03:47:15 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-bc9782291f5so1275998276.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 03:47:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686566834; x=1689158834;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zK+5/FNj+k4ZWi43EQASjOkAHsMeL62PdJmxEoQuvdw=;
+        b=Fsk6RWO9CMPW7FjB4nUCPNAWgR+seXUZUAMvPpSvNFJGojQyEf/Hm4Wx1154Hl5UDI
+         UB2vYZLwjxghyCIoL+h5RTlVTXC2sF7IqxoFc42xayxgHdbjkHkfrL5Y7kHYjvIXf+Q0
+         4p2Fnz8sNKAjbsxMNGOATxYr7yeRKMQoR0aBp1rxcEzsI1r1myHTdTi0VbJMuapBA+Z/
+         LlJ2jCXgAJqcO2RFsxi7T5vMGGrdRIyf6VJBn6wWxowqb3RlkwFIbeX9t3n/jy+Y46fJ
+         RtyASTqTFzyM4Et8Ky30meP05Rfnz72xlrdQFAcXUGuxrd4Nppt40K27YtRsVioKiAwV
+         hVCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686566834; x=1689158834;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zK+5/FNj+k4ZWi43EQASjOkAHsMeL62PdJmxEoQuvdw=;
+        b=Do2BHnBS7VZ9dRpmqcp/pc05IT5deVwtVtYE8nqPkFO1zZ5RM0w6msv5uQ9ICjuPNd
+         o5R10u9gmqrftwIv2Lq97uHDq5lVv+RV9hRB/tXrXWAjIk3LQ8Ze4hTQiNcDZrx7BWnP
+         pH9q+0zVffy+DtkaERwx+SOVy05gcdaWeNfMOG3buxKVsmKhbmxBjKA3z5/ecKYvyos7
+         UUbLjbNy4HnG5HY3n9dAK0sKYn2WZ3e0k7Z3OlsMJOJJV3tL8cafrxmENFNWNcPlNaqK
+         qLgD3A/rhAtSUn+0tj/F6lcyFcl6paLXR4KepS7TbwF2it9Rgszj8c8+sOB0EK0DZygc
+         bG4w==
+X-Gm-Message-State: AC+VfDy5DHjUIpcfCkVs0u5pa2xRa/q2x6sQtl1fZ45UaYPzZSBnMMYL
+        FCdgAjerOHyRsvIMzDt1BxMhQ1rHZP96fakQEAOXDQ==
+X-Google-Smtp-Source: ACHHUZ6B/OrlRtGQbF7+ZlmWNRQP3wH8yAKtLDhv0Y2cz/pnTQ56MIjj3LtTMrgBz1H2qPBaU5jC32UVg3A0NPJGElc=
+X-Received: by 2002:a5b:d06:0:b0:bc7:47a:9861 with SMTP id y6-20020a5b0d06000000b00bc7047a9861mr4650391ybp.51.1686566834491;
+ Mon, 12 Jun 2023 03:47:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230424110933.3908-1-quic_mkshah@quicinc.com>
+ <CAPDyKFqSY9HJgKwuOqJPU5aA=wcAtDp91s0hkQye+dm=Wk=YDQ@mail.gmail.com>
+ <20230525024546.ug6nbrmkgx2alerc@ripper> <CAPDyKFrzHHz+c_y787TVKLGizA3vVfKvnu+uJ1JC+itgryfdSQ@mail.gmail.com>
+ <20230529160848.ujthfuuj3zblkq4b@ripper> <CAPDyKFo1rsm5gk_eKESa_WMFn6bSicH1UV1vJ7CU_64jZ5Uj-Q@mail.gmail.com>
+In-Reply-To: <CAPDyKFo1rsm5gk_eKESa_WMFn6bSicH1UV1vJ7CU_64jZ5Uj-Q@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 12 Jun 2023 12:46:38 +0200
+Message-ID: <CAPDyKFp0wHxMZYACX4TFzDr+vM=fT6dNGQooCGOip82w+3A28Q@mail.gmail.com>
+Subject: Re: [PATCH v4 0/3] Use PSCI OS initiated mode for sc7280
+To:     Bjorn Andersson <andersson@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Maulik Shah <quic_mkshah@quicinc.com>, dianders@chromium.org,
+        swboyd@chromium.org, wingers@google.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, sudeep.holla@arm.com,
+        jwerner@chromium.org, quic_lsrao@quicinc.com,
+        quic_rjendra@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,32 +74,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-POSIX says:
+[...]
 
-    "Upon successful completion, where nbyte is greater than 0, write()
-     shall mark for update the last data modification and last file status
-     change timestamps of the file..."
+> > > > >
+> > > > > Looks like this series has not been queued up yet. Note that patch1
+> > > > > and patch2 are needed for stable kernels too. Moreover, patch3 (Qcom
+> > > > > DTS change) is dependent on patch 1 and patch2.
+> > > > >
+> > > > > Therefore I suggest Bjorn to pick this up via the Qcom SoC tree.
+> > > > > Bjorn, is that okay for you?
+> > > > >
+> > > >
+> > > > Sorry, this fell between the chairs after you pointed me to it...
+> > > >
+> > > > I can certainly pick the 3 patches through my tree, but are they fixing
+> > > > any current regressions, or is it just that we need the first two
+> > > > patches to land before the 3rd patch?
+> > >
+> > > I am not aware of any current regressions.
+> > >
+> >
+> > Okay, that confirms my understanding. So not -rc material.
+> >
+> > > >
+> > > > I also presume the 3rd patch is only needed when paired with the new
+> > > > ATF?
+> > >
+> > > Patch3 is beneficial to use with a new TF-A, but works with an old
+> > > TF-A too. Anyway, forget what I said about patch3 earlier, as that was
+> > > just not the complete information.
+> > >
+> > > The problem is that we can't be using a new TF-A (supporting both PSCI
+> > > OSI and PC mode) without patch1 and patch2, unless we are using
+> > > patch3.
+> > >
+> > > Thus, I strongly suggest we tag patch1 and patch2 for stable kernels,
+> > > to avoid any potential conflicts of TF-A versions that may be used.
+> > >
+> >
+> > So you're suggesting that I pick them for v6.5 and add a Cc: stable?
+> >
+> > An alternative would be that you take the cpuidle patches for v6.4-rc
+> > and I pick the dt for v6.5 - given that the cpuidle patches actually
+> > resolves a problem, while the dts just introduces "new functionality".
+>
+> Right, that's probably the best option. Although I don't have a tree
+> to take these patches through, let's ask Rafael if he can help with
+> this.
+>
+> Rafael, can you pick patch 1 and patch 2 from $subject series for
+> v6.4-rc and tag them for stable? Then Bjorn can pick patch3 for v6.5.
 
-Add the missing ctime update.
+Rafael, Bjorn, sorry for nagging about this series. Can you please
+help to pick it up?
 
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
----
- fs/smb/client/file.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/smb/client/file.c b/fs/smb/client/file.c
-index df88b8c04d03..a00038a326cf 100644
---- a/fs/smb/client/file.c
-+++ b/fs/smb/client/file.c
-@@ -2596,7 +2596,7 @@ static int cifs_partialpagewrite(struct page *page, unsigned from, unsigned to)
- 					   write_data, to - from, &offset);
- 		cifsFileInfo_put(open_file);
- 		/* Does mm or vfs already set times? */
--		inode->i_atime = inode->i_mtime = current_time(inode);
-+		inode->i_atime = inode->i_mtime = inode->i_ctime = current_time(inode);
- 		if ((bytes_written > 0) && (offset))
- 			rc = 0;
- 		else if (bytes_written < 0)
--- 
-2.40.1
-
+Kind regards
+Uffe
