@@ -2,99 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5CC72CCE8
+	by mail.lfdr.de (Postfix) with ESMTP id AA5CC72CCE9
 	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235382AbjFLRaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 13:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39980 "EHLO
+        id S236698AbjFLRa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 13:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237415AbjFLR3c (ORCPT
+        with ESMTP id S237698AbjFLR3r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 13:29:32 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A047FB;
-        Mon, 12 Jun 2023 10:29:32 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-653fcd58880so3618536b3a.0;
-        Mon, 12 Jun 2023 10:29:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686590971; x=1689182971;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EhcWplw0MheBHEmIkzjsW91UZcSA6RHIkXpE9/7nU90=;
-        b=NKxzs0eIWy7UWWQrFowAJB+athTXNxT0R4kZFxHQbro1O9i4PXE+7x05SExYwpCPTr
-         JHkzRvDOKFeRoWfQDVr/o5ha52O5DGrJO1YdD8q66+WuCwJylvtGLjo87peWA4CQd8bP
-         aSUQ+9Am8E1n6lj+y3ObEjknyZTNkQ4Jl9/Eyb3psn19a8ydN+BdHGV6W76Zs5k79oc7
-         gHuxRwx1OUgW/tbZD34k4j0DV+yL/TsJDF3BhaaUZhw0NQUiJ0Z1Xl3V7e1WOx7//wox
-         EuUl2rPqyc6thx3A9zSsOg4E8rCUTxdhbAYscAk7NQ6vtMcl8+Q35+aYGA5jPdcdDswE
-         nkMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686590971; x=1689182971;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EhcWplw0MheBHEmIkzjsW91UZcSA6RHIkXpE9/7nU90=;
-        b=WqzCT1OLNRkGG11eTBCZTmfIg7JfHirc1ndFdvNlEwbt4B56rVpI5SiVkZcLewZ5DP
-         jC3meBHfkk2LFBlbXGESuudZUx1f00WjAf0a8nghgDoGQQcWF0GOp+Rt4FveV0nawQgL
-         SeVYVqXRc1KNr0IaPD+8Pgbw5f7EP9RGHsjOk+J9tTsoSNDD2aKJpAFhdFguk0quafLC
-         u6MgaZYlwziKEEu63Rjb+IxYZqQY+aj56Rbf1tE4e67x+fEor4RzvtmksITwLq/wNC18
-         1rL6kmYncD8SrSHId/P+imiiQP2p0Bbr6yzK+5QzAfysKyynWOY/Lhw+Md1+fU7sfefn
-         SP5Q==
-X-Gm-Message-State: AC+VfDwV86Fskaycs4GqN0UnHESx8VDTUHyDczNAXalmaqx0TFJL7LKE
-        RfyumQ4fx42QKXHVCUtvaMw=
-X-Google-Smtp-Source: ACHHUZ4NUcEcJJpcgpODDaZDZg7v27pbXFpSaNRkaWn+ixsVnrFVTIpoxb3MF5ex212EeZuO69aafA==
-X-Received: by 2002:a05:6a20:4417:b0:110:9210:f6ac with SMTP id ce23-20020a056a20441700b001109210f6acmr11156146pzb.37.1686590970988;
-        Mon, 12 Jun 2023 10:29:30 -0700 (PDT)
-Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
-        by smtp.gmail.com with ESMTPSA id v65-20020a632f44000000b00543e9e17207sm7808560pgv.30.2023.06.12.10.29.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 10:29:30 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 12 Jun 2023 07:29:33 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Xiu Jianfeng <xiujianfeng@huaweicloud.com>
-Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org, mkoutny@suse.com,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cuigaosheng1@huawei.com
-Subject: Re: [PATCH v2] cgroup: Do not corrupt task iteration when rebinding
- subsystem
-Message-ID: <ZIdV_dDDKZazcO6p@slm.duckdns.org>
-References: <20230610092643.139007-1-xiujianfeng@huaweicloud.com>
+        Mon, 12 Jun 2023 13:29:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF519DB;
+        Mon, 12 Jun 2023 10:29:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B888620E7;
+        Mon, 12 Jun 2023 17:29:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF4F2C433D2;
+        Mon, 12 Jun 2023 17:29:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686590985;
+        bh=tVyezW3o2HAblHhWfBLLzXDJWYWq8x5ow1lKCcaOQkI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hgXZWmlOMWS0quDcXThICtAZ+0rkyiTG7asel0q5gUhCktm7Oliwo79T3YUOcWqE8
+         Q9qPEF4STvIBjwjg9Oa5MJ2tjoIE63DZ3zbk4BTF35APAkJuAYyV71e98NAFYCuG1z
+         ZivboAUfiXLvkTA4hJkyEU7WCGwaFNwtYF669u8uNjxHiqUIk5H19neSf9uc0+HgsK
+         7LyDMsI+oGuPYVJn3PC0NE3fd892RGzwo96Fcl9wZDfJutPFXH3O3uxffmo+dHUxDa
+         rsFElNU+xRUCKgN+jWlWOAOlH04q3NAil12NAR1cjROimwyHUtMeh/NStJvKjZM8i8
+         VWhWyhVfikWzA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 2DC1A40692; Mon, 12 Jun 2023 14:29:42 -0300 (-03)
+Date:   Mon, 12 Jun 2023 14:29:42 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     James Clark <james.clark@arm.com>,
+        linux-perf-users@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf map: Fix refcount errors on Arm with
+ -DREFCNT_CHECKING=1
+Message-ID: <ZIdWBl+MZYKI83Mb@kernel.org>
+References: <20230612150424.198914-1-james.clark@arm.com>
+ <CAP-5=fWu0yCSCB__prps2g=JRDScbhWuimPJHUsU0S_c0ywDhg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230610092643.139007-1-xiujianfeng@huaweicloud.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAP-5=fWu0yCSCB__prps2g=JRDScbhWuimPJHUsU0S_c0ywDhg@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 10, 2023 at 05:26:43PM +0800, Xiu Jianfeng wrote:
-> From: Xiu Jianfeng <xiujianfeng@huawei.com>
+Em Mon, Jun 12, 2023 at 09:32:30AM -0700, Ian Rogers escreveu:
+> On Mon, Jun 12, 2023 at 8:05â€¯AM James Clark <james.clark@arm.com> wrote:
+> >
+> > When quitting after running a perf report, the refcount checker finds
+> > some double frees. The issue is that map__put() is called on a function
+> > argument so it removes the refcount wrapper that someone else was using.
+> >
+> > Fix it by only calling map__put() on a reference that is owned by this
+> > function.
+> >
+> > Signed-off-by: James Clark <james.clark@arm.com>
 > 
-> We found a refcount UAF bug as follows:
-...
-> To fix this issue, switch from all css_sets to only scgrp's css_sets to
-> patch in-flight iterators to preserve correct iteration, and then
-> update it->cset_head as well.
+> Acked-by: Ian Rogers <irogers@google.com>
 > 
-> Reported-by: Gaosheng Cui <cuigaosheng1@huawei.com>
-> Link: https://www.spinics.net/lists/cgroups/msg37935.html
-> Suggested-by: Michal Koutný <mkoutny@suse.com>
-> Link: https://lore.kernel.org/all/20230526114139.70274-1-xiujianfeng@huaweicloud.com/
-> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+> > ---
+> >  tools/perf/util/symbol-elf.c | 9 +++++----
+> >  tools/perf/util/symbol.c     | 9 +++++----
+> >  2 files changed, 10 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
+> > index 63882a4db5c7..ec0d7810bbb0 100644
+> > --- a/tools/perf/util/symbol-elf.c
+> > +++ b/tools/perf/util/symbol-elf.c
+> > @@ -1365,6 +1365,7 @@ static int dso__process_kernel_symbol(struct dso *dso, struct map *map,
+> >         struct dso *curr_dso = *curr_dsop;
+> >         struct map *curr_map;
+> >         char dso_name[PATH_MAX];
+> > +       struct map *map_ref;
+> 
+> nit: can we narrow the scope of this by moving it to the scope where it is used.
 
-Applied to cgroup/for-6.14-fixes w/ stable tag added.
+Which is what you did in a patch I already processed, its only in
+tmp.perf-tools-next as I was going thru the other patches, but this one
+is there already.
 
-Thanks.
+I'm checking the tools/perf/util/symbol.c part.
+
+- Arnaldo
+ 
+> >
+> >         /* Adjust symbol to map to file offset */
+> >         if (adjust_kernel_syms)
+> > @@ -1390,10 +1391,10 @@ static int dso__process_kernel_symbol(struct dso *dso, struct map *map,
+> >                         if (kmaps) {
+> >                                 int err;
+> >
+> > -                               map__get(map);
+> > -                               maps__remove(kmaps, map);
+> > -                               err = maps__insert(kmaps, map);
+> > -                               map__put(map);
+> > +                               map_ref = map__get(map);
+> > +                               maps__remove(kmaps, map_ref);
+> > +                               err = maps__insert(kmaps, map_ref);
+> > +                               map__put(map_ref);
+> >                                 if (err)
+> >                                         return err;
+> >                         }
+> > diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
+> > index 6b9c55784b56..b3034fd5c0af 100644
+> > --- a/tools/perf/util/symbol.c
+> > +++ b/tools/perf/util/symbol.c
+> > @@ -1368,6 +1368,7 @@ static int dso__load_kcore(struct dso *dso, struct map *map,
+> >         int err, fd;
+> >         char kcore_filename[PATH_MAX];
+> >         u64 stext;
+> > +       struct map *map_ref;
+> 
+> nit: can we narrow the scope of this by moving it to the scope where it is used.
+> 
+> Thanks,
+> Ian
+> 
+> >
+> >         if (!kmaps)
+> >                 return -EINVAL;
+> > @@ -1464,10 +1465,10 @@ static int dso__load_kcore(struct dso *dso, struct map *map,
+> >                         map__set_map_ip(map, map__map_ip_ptr(new_map));
+> >                         map__set_unmap_ip(map, map__unmap_ip_ptr(new_map));
+> >                         /* Ensure maps are correctly ordered */
+> > -                       map__get(map);
+> > -                       maps__remove(kmaps, map);
+> > -                       err = maps__insert(kmaps, map);
+> > -                       map__put(map);
+> > +                       map_ref = map__get(map);
+> > +                       maps__remove(kmaps, map_ref);
+> > +                       err = maps__insert(kmaps, map_ref);
+> > +                       map__put(map_ref);
+> >                         map__put(new_map);
+> >                         if (err)
+> >                                 goto out_err;
+> > --
+> > 2.34.1
+> >
 
 -- 
-tejun
+
+- Arnaldo
