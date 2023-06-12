@@ -2,129 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7124E72CD00
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 687C572CD04
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbjFLRhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 13:37:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44404 "EHLO
+        id S232994AbjFLRh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 13:37:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233706AbjFLRgn (ORCPT
+        with ESMTP id S236327AbjFLRgz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 13:36:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98ABD1BFD
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:35:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03C8562C25
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 17:35:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1C36C4339B;
-        Mon, 12 Jun 2023 17:35:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686591355;
-        bh=yC5mi0XHtFLtIv5jLmar9jZwOk85IwJ3eKL6+ztXRvM=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=fcFgNk+B1+RWU1Yja2l/rB3cVIJfFbRkcTNtESIVYy+A2BQIvAAVLpAXSl4hcE4g0
-         y24jT/5PPmP5n+EoQSSX2SSw54TIfOiLB8a4KGEs7V3V0cU3BDujndngxdlP02Bxtj
-         vaofVez8+4vzTFqH2Y4uBOtHqKXPksh2qOQdyDLh8FTwH2WZDcqRNLpqR4S3V0XFYG
-         aiZNm1HQJriOYSitf6EePTEdpLwuZQxrJ1ZsOc70fGmtvicN5mCqz6zdrbOXOlIqLF
-         lqPZWHg0sUIxpcYLLczq5FefKYAyBUkMh4nCypfuRH4gvZWkfZvJexj1V+F6TuggTI
-         pCXko+RIau8oQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     alsa-devel@alsa-project.org, Brent Lu <brent.lu@intel.com>
-Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        =?utf-8?q?Amadeusz_S=C5=82awi=C5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>,
-        linux-kernel@vger.kernel.org,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-In-Reply-To: <20230612110958.592674-1-brent.lu@intel.com>
-References: <20230612110958.592674-1-brent.lu@intel.com>
-Subject: Re: [PATCH 00/12] ASoC: Intel: avs: remove redundant dapm routes
-Message-Id: <168659135251.88952.16253642341528642250.b4-ty@kernel.org>
-Date:   Mon, 12 Jun 2023 18:35:52 +0100
+        Mon, 12 Jun 2023 13:36:55 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83B6210E;
+        Mon, 12 Jun 2023 10:36:00 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-977e7d6945aso819257566b.2;
+        Mon, 12 Jun 2023 10:36:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686591359; x=1689183359;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4XDj0zSgyyWltCqtBRmREw0UunfagEPZkjaup8ya13g=;
+        b=OEE9t8mkolbA2bxjRz0u79syIYRXmQRjrKXXm4nvmkx2/LQOlzy0G2WORRDLu0P1Yg
+         UG3COTziDEQjkN//x1Do3difKdNzbSZ3ATlTLK4c6fklP2FWWkaXhF68SjdQxsS4ELBb
+         u4koSKGLAZV6WpCmb80iqlcrz3hxGtuUubNEGRophrtSqIEC7A3zsWGivKcaZqO1f5xV
+         6dMr0d8YcblEQe0L7HVNXtluynM2Qkd3IM1QLaQv1Ked+5H5KppJNb7LZBgGe70NheM8
+         YjGBFX4kI+SJQDj5zAZzxZbxyjNKyqYvwL9juq5klVubEQHZHXwJGNj4ac1SkHAjLiJj
+         d2xA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686591359; x=1689183359;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4XDj0zSgyyWltCqtBRmREw0UunfagEPZkjaup8ya13g=;
+        b=L3b7eFM9Sk8NJOd4UWJB2EcMelOHKStByAKJDjiSGmcQ48Q/xVrOv1OlbCy/wfNbip
+         xh0rSU/Uj7Rh6KZHaEK7DpPuz2EYf/h4U5vkLFC3Z2Gk7J3XPhYHnRE4fxf/3a3OoGp5
+         GKdH294Og0uWFYcBSwSCwyamFlo6IE55Q+xt3586DGYTb4I0r5pPbQFB5fZZeQnLHEex
+         oXQ4jZl3JR7pzqBR+8XqFSMZ8jXz7K3eWI1nK5XvmIDOqL+sMnPqLjjkaSVPBkVa4Acc
+         jY3eJM1M0+4c7qhaD1FVBRhOTsGFYLCxGuwfEpcf4/5OwrmQEXOeeT0v4um73WPgVEkW
+         H+tw==
+X-Gm-Message-State: AC+VfDwdfcMSRhWuf/M167k/yG4rSVOhmjLKJ5o4InqFAvYY4wpbp+wT
+        Bcy4zLJsbxqxpkHtIUkxCEo=
+X-Google-Smtp-Source: ACHHUZ6vyqc25p9VU9PLZgYtZKTHZniKLYJtpRY1meHbFdhDlnXCdjSYu09LpXCSJhbmGUr7b859fQ==
+X-Received: by 2002:a17:906:9b84:b0:982:227e:1a16 with SMTP id dd4-20020a1709069b8400b00982227e1a16mr2643834ejc.13.1686591358861;
+        Mon, 12 Jun 2023 10:35:58 -0700 (PDT)
+Received: from carbian ([2a02:8109:aa3f:ead8::d8a0])
+        by smtp.gmail.com with ESMTPSA id i25-20020a170906265900b00977ca5de275sm5600669ejc.13.2023.06.12.10.35.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 10:35:58 -0700 (PDT)
+Date:   Mon, 12 Jun 2023 19:35:55 +0200
+From:   Mehdi Djait <mehdi.djait.k@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     jic23@kernel.org, mazziesaccount@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        lars@metafoo.de, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 5/7] iio: accel: kionix-kx022a: Refactor driver and
+ add chip_info structure
+Message-ID: <ZIdXe3Vp4uHEGeRr@carbian>
+References: <cover.1686578553.git.mehdi.djait.k@gmail.com>
+ <3a41a5ae9857cacdb062c398715a5938ccd47014.1686578554.git.mehdi.djait.k@gmail.com>
+ <ZIc/uvB1zxNRnuRS@smile.fi.intel.com>
+ <ZIdIev+evQUvX5Rg@carbian>
+ <ZIdSO7MGk3K/R2u1@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bfdf5
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZIdSO7MGk3K/R2u1@smile.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 12 Jun 2023 19:09:46 +0800, Brent Lu wrote:
-> This patch series remove redundant dapm routes declared in multiple machine
-> drivers. These routes will be created by snd_soc_dapm_connect_dai_link_widgets()
-> during soundcard initialization. Following is the kernel log from a KBL
-> chromebook nocturne.
+Hello Andy,
+
+On Mon, Jun 12, 2023 at 08:13:31PM +0300, Andy Shevchenko wrote:
+> On Mon, Jun 12, 2023 at 06:31:54PM +0200, Mehdi Djait wrote:
+> > On Mon, Jun 12, 2023 at 06:54:34PM +0300, Andy Shevchenko wrote:
+> > > On Mon, Jun 12, 2023 at 04:22:08PM +0200, Mehdi Djait wrote:
 > 
-> dmic:
-> [   13.773455] avs_dmic avs_dmic: connected DAI link dmic-codec:Capture -> dmic-platform:DMIC Rx
-> [   13.773460] avs_dmic avs_dmic: connected DAI link dmic-codec:Capture -> dmic-platform:DMIC WoV Rx
+> ...
 > 
-> [...]
+> > > >  struct kx022a_data {
+> > > > +	const struct kx022a_chip_info *chip_info;
+> > > >  	struct regmap *regmap;
+> > > 
+> > > I would suggest to run bloat-o-meter with this version and if you place
+> > > chip_info after regmap. Does it gain us some memory?
+> > 
+> > I used the bloat-o-meter on the two .ko files (this version and the the
+> > one where chip_info after regamp) Is this what you asked for ?
+> 
+> Yes. I assume the old one is the current as in this patch?
 
-Applied to
+Yes
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+> If so, you know what to do in the next version :-)
 
-Thanks!
+Yes, I will change it in the next version :)
 
-[01/12] ASoC: Intel: avs-da7219: remove redundant dapm routes
-        commit: 530ca0a7ed04230408775b495034941346ea5db1
-[02/12] ASoC: Intel: avs-dmic: remove redundant dapm routes
-        commit: c2076f4fa4f15559ed7e568186c4089479a62154
-[03/12] ASoC: Intel: avs-hdaudio: remove redundant dapm routes
-        commit: 12ea56d73c548929ef1a498848905b04bfe85f90
-[04/12] ASoC: Intel: avs-max98357a: remove redundant dapm routes
-        commit: d48e3cd5aaecd7769b073f65bb95004a54bc76e6
-[05/12] ASoC: Intel: avs-max98373: remove redundant dapm routes
-        commit: b4df7ce9905b1e8cb84ee247ca7db6ae004bc508
-[06/12] ASoC: Intel: avs-max98927: remove redundant dapm routes
-        commit: 9868ca64fd7a87cf997040452519b07e47a8d008
-[07/12] ASoC: Intel: avs-nau8825: remove redundant dapm routes
-        commit: ae7d66822de5aeaf991eda96c823ee9dffebfe46
-[08/12] ASoC: Intel: avs-rt274: remove redundant dapm routes
-        commit: 6227269fb375af2ff239a68499856abfd6a2bceb
-[09/12] ASoC: Intel: avs-rt286: remove redundant dapm routes
-        commit: cca1ac1f097afa7ad6e587d6f1e86fd738ede508
-[10/12] ASoC: Intel: avs-rt298: remove redundant dapm routes
-        commit: eae0655316a5d741ab27c7b3a67a55b0af970e19
-[11/12] ASoC: Intel: avs-rt5682: remove redundant dapm routes
-        commit: 96b5452fe43c23451050b3efa5197bd10dce9bc6
-[12/12] ASoC: Intel: avs-ssm4567: remove redundant dapm routes
-        commit: 51bdf6ebe5b7da8d1b86cf66fe7e21de353e5218
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+--
+Kind Regards
+Mehdi Djait
