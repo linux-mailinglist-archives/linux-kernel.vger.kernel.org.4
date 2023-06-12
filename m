@@ -2,129 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8FDD72CA76
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:41:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 101FF72CA7E
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 17:43:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238135AbjFLPlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 11:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35520 "EHLO
+        id S239266AbjFLPnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 11:43:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238148AbjFLPlu (ORCPT
+        with ESMTP id S233394AbjFLPnA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 11:41:50 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8B510E2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 08:41:49 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-bc4ed01b5d4so1303362276.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 08:41:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686584508; x=1689176508;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kbcWWy6lgJlv49u77NIuToLcJ7w9+T3qZB5UWslqyxQ=;
-        b=A41ks5sFHka57K4fqfE86JUZi8sVGCoTPYI5ynNaLuhHWaVD5wnyI5E/THeG9ezv9h
-         hFUN9NeXdSmdLTfV6cU6RhW6ixeXdJmtNq2y0OhafeE0g900sSc3BM37utl2iCvyu3pS
-         xxfgQmQbYso5DjWghSSS8E/l89+tAaOV68U9KiGP2g9j1jE4hB6T8R6++UPP4RumZMV8
-         LAmAF8KoJr8GavbZrW2RE1zZc3QKRPJhjcCzs5R0EgwiMcU56m0L3HM4XYn+eViUJpyI
-         8vqYxeegj//ny6HzAJhC8KTZYUOxcFLk2OUJoaoVW3wydskZ3x20ve8D1Xwk+AB12dwu
-         q0mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686584508; x=1689176508;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kbcWWy6lgJlv49u77NIuToLcJ7w9+T3qZB5UWslqyxQ=;
-        b=EuQXlApWE91T0ItUl0PC3EzdUSh7C//F4uecmIw4J4uY64+tXmgcdXqVKmEhWhtcav
-         TYL14Z3PyyQ2joR8rir99AVxW9slE5eCakOcMAP7a08Miz7nCMOUzZ1NUtFBuD/8MSu7
-         XeJoS8eUJLuEsUwg/UhxoHfnlVxA1kTAfVzxp2p23j2jS1KbiLYUMnNv6HRmPWW5z65k
-         n3i3e6IJ/p1ER66UI/xxFNqETmilTfr4oTSVBEyFOkkeGchqpr8P9ldjzjnoYue0nFbK
-         5spte3vLCx7VitxJXfNGhUXDiwMRUYDqU11pl1/xzI3fhz3yvCmKYyT00rU6o86mDNch
-         8zHQ==
-X-Gm-Message-State: AC+VfDyXpDat20vVnIl/r0W/QexsubSXHu0BpLjXTYwrUxDU97HOVWQ6
-        m/AMHPFd9hbiLL9KsIlerpgpoOHCnPVGy1uLsERAkQ==
-X-Google-Smtp-Source: ACHHUZ6i33Zt6lBAsGFhBQjcAHgEqwffZrn+lh/Sa7XfqbavLy9BGOHe+OV0wQUJlUl+nF7rG6XcZNDeJbNZHnhEQ4U=
-X-Received: by 2002:a25:c744:0:b0:bc4:3e4e:12 with SMTP id w65-20020a25c744000000b00bc43e4e0012mr4781374ybe.36.1686584508078;
- Mon, 12 Jun 2023 08:41:48 -0700 (PDT)
+        Mon, 12 Jun 2023 11:43:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2422610C7;
+        Mon, 12 Jun 2023 08:42:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD27B60C78;
+        Mon, 12 Jun 2023 15:42:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19E05C433A0;
+        Mon, 12 Jun 2023 15:42:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686584578;
+        bh=V+v277y/LQOz1Bd9zPL2sVCJjEZLpKCmRiZipD29G+Y=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=nV8jgN32EqcJ+FTLKjKQrdO+6UGgsibH0hBgFrN3I6uszPhudDY8fexRMZ/07CnjD
+         lw3+Zkm13jI3yKUkZjoMGfJ5pOyDmBMs5gf3zBW4D+b/N9gPaFIlklW/M1AXPbIuHi
+         lVO0uJpbVnBMPt0l1oOh8+Mn4xkaXfq7/BZ/WA2gDZ+YKD/68mkWciuq/aAA1ZQC8Z
+         XNXVERcMaX8v7+avRuFwq04OcQYlfy+QWbhL1dCi9y3fTIaweLBKD4Km0w0kHhGqJc
+         zkHM8IZbVti8WBdKOmSeBxI3JVIYXsaBs6M07c2k182ldn5Jb1SPHTdNQ+TRETs3PE
+         3hUWZDrc3poZg==
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-4f642a24555so5375902e87.3;
+        Mon, 12 Jun 2023 08:42:57 -0700 (PDT)
+X-Gm-Message-State: AC+VfDwaeYwc9Fybhw004xuKb5HGn8yzJ0n57AtvcvcmH+FiT7NCNhPg
+        SiHS+kb9Smf9gyOuoEOEXkQ021rqlupQPIZEPA==
+X-Google-Smtp-Source: ACHHUZ6nK/lGP80l1yVoeQh4mg6RqY5XjAR5DaGsogZyrQ2YZ6G1K4uViCXSD8gcr66iTuqg+9qD1vtGZ+/MAR57VpI=
+X-Received: by 2002:a2e:b618:0:b0:2a8:eee0:59f3 with SMTP id
+ r24-20020a2eb618000000b002a8eee059f3mr3172291ljn.41.1686584576044; Mon, 12
+ Jun 2023 08:42:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230609005158.2421285-1-surenb@google.com> <20230609005158.2421285-5-surenb@google.com>
- <ZIOOmC26qh4EXUEX@x1n> <CAJuCfpHKUjAwgWbxvJQDyEnneRD03p2M6247Q6=3-oOq_FL7zA@mail.gmail.com>
- <ZIcddoWjYlDXNKJA@x1n>
-In-Reply-To: <ZIcddoWjYlDXNKJA@x1n>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Mon, 12 Jun 2023 08:41:37 -0700
-Message-ID: <CAJuCfpE_1S9bXPDxz-4i2oCNwrsrP8V8q5=H4rxPtZ0kZk3cjw@mail.gmail.com>
-Subject: Re: [PATCH v2 4/6] mm: drop VMA lock before waiting for migration
-To:     Peter Xu <peterx@redhat.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
-        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
-        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
-        apopple@nvidia.com, ying.huang@intel.com, david@redhat.com,
-        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
-        viro@zeniv.linux.org.uk, brauner@kernel.org,
-        pasha.tatashin@soleen.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
+References: <20230605125248.279921-1-brgl@bgdev.pl> <CAL_JsqKczF9yYHWjqneBv-y+Qv+O7AkX4gwVG87+aPPazKxtDw@mail.gmail.com>
+ <22a21176-f2e2-bce5-2223-97cb095162c5@gmail.com> <98a35030-6dd3-795c-4381-1db4e94a18e4@gmail.com>
+In-Reply-To: <98a35030-6dd3-795c-4381-1db4e94a18e4@gmail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 12 Jun 2023 09:42:43 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKDQy+tq7uDJ9impTr+uetkb7vz-K4BYX8bZBkpvZ=8uQ@mail.gmail.com>
+Message-ID: <CAL_JsqKDQy+tq7uDJ9impTr+uetkb7vz-K4BYX8bZBkpvZ=8uQ@mail.gmail.com>
+Subject: Re: [PATCH] gpiolib: demote the hogging log messages to debug
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Kent Gibson <warthog618@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 6:28=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote:
+On Sun, Jun 11, 2023 at 6:48=E2=80=AFAM Frank Rowand <frowand.list@gmail.co=
+m> wrote:
 >
-> On Fri, Jun 09, 2023 at 03:30:10PM -0700, Suren Baghdasaryan wrote:
-> > On Fri, Jun 9, 2023 at 1:42=E2=80=AFPM Peter Xu <peterx@redhat.com> wro=
-te:
-> > >
-> > > On Thu, Jun 08, 2023 at 05:51:56PM -0700, Suren Baghdasaryan wrote:
-> > > > migration_entry_wait does not need VMA lock, therefore it can be dr=
-opped
-> > > > before waiting. Introduce VM_FAULT_VMA_UNLOCKED to indicate that VM=
-A
-> > > > lock was dropped while in handle_mm_fault().
-> > > > Note that once VMA lock is dropped, the VMA reference can't be used=
- as
-> > > > there are no guarantees it was not freed.
-> > >
-> > > Then vma lock behaves differently from mmap read lock, am I right?  C=
-an we
-> > > still make them match on behaviors, or there's reason not to do so?
+> On 6/11/23 07:39, Frank Rowand wrote:
+> > On 6/9/23 08:47, Rob Herring wrote:
+> >> On Mon, Jun 5, 2023 at 6:53=E2=80=AFAM Bartosz Golaszewski <brgl@bgdev=
+.pl> wrote:
+> >>>
+> >>> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >>>
+> >>> Drivers should be silent when they work correctly. There's no reason =
+to
+> >>> emit info messages when GPIO lines are hogged. Demote the message to
+> >>> debug.
+> >>>
+> >>> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >>> Suggested-by: Kent Gibson <warthog618@gmail.com>
+> >>> ---
+> >>>  drivers/gpio/gpiolib.c |  2 +-
+> >>>  drivers/of/unittest.c  | 16 ++++++++--------
+> >>>  2 files changed, 9 insertions(+), 9 deletions(-)
+> >>>
+> >>> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+> >>> index a7220e04a93e..e4515bda8915 100644
+> >>> --- a/drivers/gpio/gpiolib.c
+> >>> +++ b/drivers/gpio/gpiolib.c
+> >>> @@ -4243,7 +4243,7 @@ int gpiod_hog(struct gpio_desc *desc, const cha=
+r *name,
+> >>>         /* Mark GPIO as hogged so it can be identified and removed la=
+ter */
+> >>>         set_bit(FLAG_IS_HOGGED, &desc->flags);
+> >>>
+> >>> -       gpiod_info(desc, "hogged as %s%s\n",
+> >>> +       gpiod_dbg(desc, "hogged as %s%s\n",
+> >>>                 (dflags & GPIOD_FLAGS_BIT_DIR_OUT) ? "output" : "inpu=
+t",
+> >>>                 (dflags & GPIOD_FLAGS_BIT_DIR_OUT) ?
+> >>>                   (dflags & GPIOD_FLAGS_BIT_DIR_VAL) ? "/high" : "/lo=
+w" : "");
+> >>> diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
+> >>> index 2191c0136531..0060334a98a7 100644
+> >>> --- a/drivers/of/unittest.c
+> >>> +++ b/drivers/of/unittest.c
+> >>> @@ -1849,19 +1849,19 @@ static void __init of_unittest_overlay_gpio(v=
+oid)
+> >>>          * driver is registered
+> >>>          */
+> >>>
+> >>> -       EXPECT_BEGIN(KERN_INFO,
+> >>> +       EXPECT_BEGIN(KERN_DEBUG,
+> >>>                      "gpio-<<int>> (line-B-input): hogged as input\n"=
+);
+> >>
+> >> As debug messages are normally off, I think you can just remove these.
 > >
-> > I think we could match their behavior by also dropping mmap_lock here
-> > when fault is handled under mmap_lock (!(fault->flags &
-> > FAULT_FLAG_VMA_LOCK)).
-> > I missed the fact that VM_FAULT_COMPLETED can be used to skip dropping
-> > mmap_lock in do_page_fault(), so indeed, I might be able to use
-> > VM_FAULT_COMPLETED to skip vma_end_read(vma) for per-vma locks as well
-> > instead of introducing FAULT_FLAG_VMA_LOCK. I think that was your idea
-> > of reusing existing flags?
+> > This patch is an example of exactly why the message level is the first =
+parameter
+> > passed to EXPECT_*().  The test results are then _always_ valid, not ju=
+st
+> > _normally_.
 >
-> Yes.
+> One should never say never.  One should never say always. :-)
 >
-> I'd suggest we move this patch out of the series as it's not really part =
-of
-> it on enabling swap + uffd.  It can be a separate patch and hopefully it'=
-ll
-> always change both vma+mmap lock cases, and with proper reasonings.
+> Yes, there is still the exception where debug can be enabled independentl=
+y
+> for drivers/gpio/gpiolib.c  vs for drivers/of/unittest.c.  And dynamic
+> debug can make things even more wonky.
 
-Ok, I can move it out with mmap_lock support only and then add per-vma
-lock support in my patchset (because this path is still part of
-do_swap_page and my patchset enables swap support for per-vma locks).
+If we turned on debug messages for drivers/of/, the unittest would be
+hopelessly broken.
 
->
-> Thanks,
->
-> --
-> Peter Xu
->
+Debug messages are special compared to all the other levels as they
+are normally off whereas the rest are always on. For the unittest we
+should assume they are off.
+
+Rob
