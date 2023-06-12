@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC6AE72D0FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D54C272D122
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 22:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238052AbjFLUse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 16:48:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36462 "EHLO
+        id S229636AbjFLUvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 16:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237384AbjFLUra (ORCPT
+        with ESMTP id S238233AbjFLUt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 16:47:30 -0400
+        Mon, 12 Jun 2023 16:49:28 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A710295C
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 13:46:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358B31BFB
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 13:47:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E46062F0B
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 20:45:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03E8FC433A0;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1125062F2D
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 20:45:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AFE2C43445;
         Mon, 12 Jun 2023 20:45:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1686602717;
-        bh=XFbVAoZliJCAsIZtC3pxKZbS9h6xeSTohI3SMPpRFt0=;
+        bh=m6VW9L1DfLWVSVi0RNl6hit3N3enOx/+urG9Qu9XTN8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=T6chP21R/i3XiGgRmPpX4CX4ZHFRyynO1aN1tCDAHDWdODS/Js2M72FfrxexZqBso
-         QRBqdL9SShZFknnwRIWjCoyKVDy5e2sQPVBWViDoK1zIcgEFsCj6PyzmoE6syLm9Kv
-         8nroR2RR9jbX7Q63pxcYbmSqHhtht01/wi6xutzJmA37TmjYt6yCUpXCleG3Ir8HKE
-         yfugWe9O8lnJwAxLEdGpxj7WdWbRXKR5u0wnqhqCDHVoTGg+DrFrXX4TUBYyWLQRf7
-         YJWLOLq5hSW37D8CZPhRAUOQqglKKLTcr8pFZ1tCzUwgrMCs+d6K05/QNNX7xWA0XT
-         dxBrYLAJ5mGpA==
+        b=p0Ohgdl5koVAi4NEWD3gyKQla9v1Znt/dlMhMqbKNxXuOrDZyMlTGgp2OhL4j31H7
+         DdLqVvl+gc1fSiIiLDYbCL95Clf3cwRZHI40wnNnURs3TQQjPOA366vHS51bY1+V09
+         u3CbgcCz1kVQfKkkSkOaHn9vku+k2BWUT1ZQl16sEZXSzoUaJEAyymSmvdOhMhJfo6
+         HJ6dtFzW3PKq3wMkZsPUy37BJXepc8L+fkb7B90ABwOwKgSpEYvdPfTZ0IWUfzGvN9
+         G1Vv332VaM6wGTw+jY4jgG+571m9h+7N6yT5CFPzLVDDSd1NH0ZHgsSkmNVk3SjhTH
+         xXSq+V8IpCQkg==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id E40AACE3A6C; Mon, 12 Jun 2023 13:45:15 -0700 (PDT)
+        id E6798CE3A6F; Mon, 12 Jun 2023 13:45:15 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     gwml@vger.gnuweeb.org, kernel-team@meta.com, w@lwt.eu,
         =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
         Willy Tarreau <w@1wt.eu>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH v2 nolibc 26/53] tools/nolibc: x86_64: disable stack protector for _start
-Date:   Mon, 12 Jun 2023 13:44:47 -0700
-Message-Id: <20230612204514.292087-26-paulmck@kernel.org>
+Subject: [PATCH v2 nolibc 27/53] tools/nolibc: ensure stack protector guard is never zero
+Date:   Mon, 12 Jun 2023 13:44:48 -0700
+Message-Id: <20230612204514.292087-27-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <8b757cc0-3719-4e63-a755-9710384137bc@paulmck-laptop>
 References: <8b757cc0-3719-4e63-a755-9710384137bc@paulmck-laptop>
@@ -61,34 +61,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Thomas Weißschuh <linux@weissschuh.net>
 
-This was forgotten in the original submission.
+The all-zero pattern is one of the more probable out-of-bound writes so
+add a special case to not accidentally accept it.
 
-It is unknown why it worked for x86_64 on some compiler without this
-attribute.
+Also it enables the reliable detection of stack protector initialization
+during testing.
 
-Reported-by: Willy Tarreau <w@1wt.eu>
-Closes: https://lore.kernel.org/lkml/20230520133237.GA27501@1wt.eu/
-Fixes: 0d8c461adbc4 ("tools/nolibc: x86_64: add stackprotector support")
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- tools/include/nolibc/arch-x86_64.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/include/nolibc/stackprotector.h | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/tools/include/nolibc/arch-x86_64.h b/tools/include/nolibc/arch-x86_64.h
-index d98f6c89d143..e201af15e142 100644
---- a/tools/include/nolibc/arch-x86_64.h
-+++ b/tools/include/nolibc/arch-x86_64.h
-@@ -190,7 +190,7 @@ const unsigned long *_auxv __attribute__((weak));
-  * 2) The deepest stack frame should be zero (the %rbp).
-  *
-  */
--void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
-+void __attribute__((weak,noreturn,optimize("omit-frame-pointer"),no_stack_protector)) _start(void)
+diff --git a/tools/include/nolibc/stackprotector.h b/tools/include/nolibc/stackprotector.h
+index 77e5251c4490..b0156fc077a0 100644
+--- a/tools/include/nolibc/stackprotector.h
++++ b/tools/include/nolibc/stackprotector.h
+@@ -45,8 +45,9 @@ __attribute__((weak,no_stack_protector,section(".text.nolibc_stack_chk")))
+ void __stack_chk_init(void)
  {
- 	__asm__ volatile (
- #ifdef NOLIBC_STACKPROTECTOR
+ 	my_syscall3(__NR_getrandom, &__stack_chk_guard, sizeof(__stack_chk_guard), 0);
+-	/* a bit more randomness in case getrandom() fails */
+-	__stack_chk_guard ^= (uintptr_t) &__stack_chk_guard;
++	/* a bit more randomness in case getrandom() fails, ensure the guard is never 0 */
++	if (__stack_chk_guard != (uintptr_t) &__stack_chk_guard)
++		__stack_chk_guard ^= (uintptr_t) &__stack_chk_guard;
+ }
+ #endif /* defined(NOLIBC_STACKPROTECTOR) */
+ 
 -- 
 2.40.1
 
