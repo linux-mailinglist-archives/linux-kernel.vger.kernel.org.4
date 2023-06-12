@@ -2,154 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B0C72CC93
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:30:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 124EC72CCE7
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232888AbjFLR3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 13:29:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39380 "EHLO
+        id S233006AbjFLRaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 13:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235149AbjFLR2s (ORCPT
+        with ESMTP id S236825AbjFLR33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 13:28:48 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9254170C
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:28:41 -0700 (PDT)
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35CHJqel015170;
-        Mon, 12 Jun 2023 17:28:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : content-type :
- mime-version; s=pp1; bh=cx95bW4SbB5z+l0ikJhaFb6aZ3vBFxncXDXQHurb2E0=;
- b=YrPFyhVi/dngQxTSkjS1ED+9QZPuGe/RTSHZkbdvn6/TwxowFX6SC/U44tWz1rV3D2Df
- x0fn2ZYEYY3YZPPKxz9NPaxwaqYSbml0MwCKy7jRDvETM89Lmtauv12h7E94wPIRbIib
- mFT0Kw/i8eA/1CjS5R+AjuQbx7UbfKV2RYms8dBOTRC5kUm8ZuYda6rBkwt1H9KjoZDy
- gVQY8jmmEpOftWdKpf5Wtluv2KS/g1Oxfw/xkPh7tchN+GLL1gDhkMTvBmCFPFoSipE0
- H2sYHsM8yKFnkmMRRR8wXngwPPF/0b7N4RCTf5O6sw4VuFQTH5oBacwTDJ/jrqcW19c5 eA== 
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r67ns059f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jun 2023 17:28:32 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35CEpIqJ014911;
-        Mon, 12 Jun 2023 17:28:30 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3r4gt517yb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jun 2023 17:28:30 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35CHSS2g15794826
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 12 Jun 2023 17:28:28 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 36B6220043;
-        Mon, 12 Jun 2023 17:28:28 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B965320040;
-        Mon, 12 Jun 2023 17:28:26 +0000 (GMT)
-Received: from tarunpc (unknown [9.43.32.94])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Mon, 12 Jun 2023 17:28:26 +0000 (GMT)
-From:   Tarun Sahu <tsahu@linux.ibm.com>
-To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     akpm@linux-foundation.org, willy@infradead.org,
-        aneesh.kumar@linux.ibm.com,
-        Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Subject: Re: [PATCH] mm: remove set_compound_page_dtor()
-In-Reply-To: <20230612163405.99345-1-sidhartha.kumar@oracle.com>
-References: <20230612163405.99345-1-sidhartha.kumar@oracle.com>
-Date:   Mon, 12 Jun 2023 22:58:24 +0530
-Message-ID: <87fs6w7fpj.fsf@linux.ibm.com>
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: fKL54VRqqH0EXOA78_Sbn6K_iourvIkC
-X-Proofpoint-ORIG-GUID: fKL54VRqqH0EXOA78_Sbn6K_iourvIkC
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 12 Jun 2023 13:29:29 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E8610B
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:29:27 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id ca18e2360f4ac-777a9ca9112so45574939f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:29:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1686590967; x=1689182967;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TFWZn0n6OGSV4kVBbYftRZo2ty8H3Bci18vHV3tC0Uw=;
+        b=G8JD84g8f9Aeee5HTb3j/7SgOJh5Qn/aixcR5+GacNDkyxtuggQHLsYFnC6bEXjPzX
+         CFDBvYGcEzc1Ttl+IUa85nXJaOctQM+3Wy8xIs72fL9U/EZpbxXE0eJqLOsg7VKrMIC5
+         weokx/JiqIENqjn+LXa6+yAoNSa4c/vJ0Jsnyuao7rqrJ9O5YfZGoHB+GpSAFFK7rf5t
+         e3cgg3kcuwmy9bn41z6Fh0yOgs9hNIUGeYIWRQdX3YWh0zxo6BeyQp86i/LzYL50hqt3
+         RK/B1dfYGtQYx6zG0W9kb866p34EKPfBVuRjPGLhqy6GqZBIlr+JvIP15dv+x4wcQyQ9
+         QDCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686590967; x=1689182967;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TFWZn0n6OGSV4kVBbYftRZo2ty8H3Bci18vHV3tC0Uw=;
+        b=aOpR6+qHQ085iy/SwiSP6V/EIRZtbU+I7c5af2vOacc2FiRzZBNSJdUdLFgzvy1RyV
+         surFD0KaeUcGmzOH1KA4Bq7EsAUNwfjRXm5e8Jd9jAeovyLD2Oh8C9syK5xhu5f4u1d7
+         PxFJVT7eycNa8xZfNrh/L3cQdpUx8htxYPKPERvRV3E/n1pNxntnlW3KLwPi3KtZB4nI
+         Pz2jIHCJAqF1FhrluIA9pHenQsvmO7vLxxDoxidfFClIG5hE02Pvty4gi+YFpKdr7up9
+         SiZdb1EGEMi5mtQs1bYgoNgbQIGmgpozFqRudYQLkyPfHI64+LjPUdlITS0JAhLgbv8X
+         AChw==
+X-Gm-Message-State: AC+VfDyi6/wvg7Us17ebt5WJbvUHV9SsVtDMxsSLWsIWCWBtt1BZBZVN
+        e6f8ix8TeEaIwNZ2Gwb4aOzA3w==
+X-Google-Smtp-Source: ACHHUZ5bDIcReS9+YhyEZIK2CCIqFlbV7Kvzlpd9NEY+7ScY3yUVxP60SWtqVvazxqpp+hgdcN0Nww==
+X-Received: by 2002:a92:440e:0:b0:33b:e24b:ca46 with SMTP id r14-20020a92440e000000b0033be24bca46mr5234504ila.3.1686590967286;
+        Mon, 12 Jun 2023 10:29:27 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id t11-20020a92d14b000000b0033d2d6620b0sm3295648ilg.2.2023.06.12.10.29.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 10:29:26 -0700 (PDT)
+Message-ID: <ff34a007-fdd0-8575-8482-919ead39fc88@kernel.dk>
+Date:   Mon, 12 Jun 2023 11:29:25 -0600
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-12_06,2023-06-12_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=999 priorityscore=1501 bulkscore=0 suspectscore=0 spamscore=0
- clxscore=1015 adultscore=0 mlxscore=0 phishscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306120147
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [6.5-rc5 regression] core dump hangs (was Re: [Bug report]
+ fstests generic/051 (on xfs) hang on latest linux v6.5-rc5+)
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Zorro Lang <zlang@redhat.com>, linux-xfs@vger.kernel.org,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>, linux-kernel@vger.kernel.org
+References: <20230611124836.whfktwaumnefm5z5@zlang-mailbox>
+ <ZIZSPyzReZkGBEFy@dread.disaster.area>
+ <20230612015145.GA11441@frogsfrogsfrogs>
+ <ZIaBQnCKJ6NsqGhd@dread.disaster.area>
+ <CAHk-=whJqZLKPR-cpX-V4wJTXVX-_tG5Vjuj2q9knvKGCPdfkg@mail.gmail.com>
+ <20230612153629.GA11427@frogsfrogsfrogs>
+ <CAHk-=wiN-JcUh4uhDNmA4hp26Mg+c2DTuzgWY2fZ6hytDtOMCg@mail.gmail.com>
+ <af31cadf-8c15-8d88-79fb-066dc87f0324@kernel.dk>
+ <13d9e4f2-17c5-0709-0cc0-6f92bfe9f30d@kernel.dk>
+ <CAHk-=wgdBfqyNHk0iNyYpEuBUdVgq1KMzHMuEqn=ADtfyK_pkQ@mail.gmail.com>
+ <212a190c-f81e-2876-cf14-6d1e37d47192@kernel.dk>
+ <CAHk-=wh0hrFjcU5C8uHvLBThrT5vQsFHb7Jk6HRP3LAJqdNx1A@mail.gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CAHk-=wh0hrFjcU5C8uHvLBThrT5vQsFHb7Jk6HRP3LAJqdNx1A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/12/23 10:57 AM, Linus Torvalds wrote:
+> On Mon, Jun 12, 2023 at 9:45 AM Jens Axboe <axboe@kernel.dk> wrote:
+>>
+>> You snipped the suspicion in my reply on why that exists, to avoid
+>> io_wq_worker_sleeping() triggering.
+> 
+> I'm not seeing why triggering io_wq_worker_sleeping() should even be a
+> problem in the first place.
+> 
+> I suspect that is entirely historical too, and has to do with how it
+> used to do that
+> 
+>         struct io_worker *worker = kthread_data(tsk);
+>         struct io_wqe *wqe = worker->wqe;
+> 
+> back in the bad old days of kthreads.
+> 
+> But yeah, I don't know that code.
 
-LGTM;
+Looks fine to me to just kill it indeed, whatever we did need this
+for is definitely no longer the case. I _think_ we used to have
+something in the worker exit that would potentially sleep which
+is why we killed it before doing that, now it just looks like dead
+code.
 
-Sidhartha Kumar <sidhartha.kumar@oracle.com> writes:
+-- 
+Jens Axboe
 
-> All users can use the folio equivalent so this function can be safely
-> removed.
->
-> Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
-> ---
->
-> rebased on 06/12/23 mm-unstable + Tarun's patch[1]
-> [1]: https://lore.kernel.org/linux-mm/20230612093514.689846-1-tsahu@linux.ibm.com/
->
->  include/linux/mm.h | 10 ----------
->  mm/huge_memory.c   |  2 +-
->  mm/internal.h      |  2 +-
->  3 files changed, 2 insertions(+), 12 deletions(-)
->
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 4a1aec5e4b83c..485224cd62ffb 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -1223,16 +1223,6 @@ enum compound_dtor_id {
->  };
->  extern compound_page_dtor * const compound_page_dtors[NR_COMPOUND_DTORS];
->  
-> -static inline void set_compound_page_dtor(struct page *page,
-> -		enum compound_dtor_id compound_dtor)
-> -{
-> -	struct folio *folio = (struct folio *)page;
-> -
-> -	VM_BUG_ON_PAGE(compound_dtor >= NR_COMPOUND_DTORS, page);
-> -	VM_BUG_ON_PAGE(!PageHead(page), page);
-> -	folio->_folio_dtor = compound_dtor;
-> -}
-> -
->  static inline void folio_set_compound_dtor(struct folio *folio,
->  		enum compound_dtor_id compound_dtor)
->  {
-> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> index 31bc8fa768e3d..76f970aa5b4da 100644
-> --- a/mm/huge_memory.c
-> +++ b/mm/huge_memory.c
-> @@ -583,7 +583,7 @@ void prep_transhuge_page(struct page *page)
->  
->  	VM_BUG_ON_FOLIO(folio_order(folio) < 2, folio);
->  	INIT_LIST_HEAD(&folio->_deferred_list);
-> -	set_compound_page_dtor(page, TRANSHUGE_PAGE_DTOR);
-> +	folio_set_compound_dtor(folio, TRANSHUGE_PAGE_DTOR);
->  }
->  
->  static inline bool is_transparent_hugepage(struct page *page)
-> diff --git a/mm/internal.h b/mm/internal.h
-> index 61acceface45f..a64967bfcd2ab 100644
-> --- a/mm/internal.h
-> +++ b/mm/internal.h
-> @@ -406,7 +406,7 @@ static inline void prep_compound_head(struct page *page, unsigned int order)
->  {
->  	struct folio *folio = (struct folio *)page;
->  
-> -	set_compound_page_dtor(page, COMPOUND_PAGE_DTOR);
-> +	folio_set_compound_dtor(folio, COMPOUND_PAGE_DTOR);
->  	folio_set_order(folio, order);
->  	atomic_set(&folio->_entire_mapcount, -1);
->  	atomic_set(&folio->_nr_pages_mapped, 0);
 
-Reviewed-by: Tarun Sahu <tsahu@linux.ibm.com>
