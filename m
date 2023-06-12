@@ -2,76 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F16772C545
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 14:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4A9172C54B
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 15:00:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235679AbjFLM7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 08:59:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44876 "EHLO
+        id S235737AbjFLNA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 09:00:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231769AbjFLM7A (ORCPT
+        with ESMTP id S235386AbjFLNA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 08:59:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A027C118;
-        Mon, 12 Jun 2023 05:58:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38909615F9;
-        Mon, 12 Jun 2023 12:58:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD5E0C433EF;
-        Mon, 12 Jun 2023 12:58:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686574738;
-        bh=h0kYHlGpKzmyUgUMsdBILkbq2D5vPRBEb+QOfa+0Obw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xoyq3+JCSSepnk4P4cPIXEz5D86lbTa+xSdgzV0PRJyLAFl6Vc6ImdAHH9P3f+q9M
-         k2orB793rDEd/KA+p+9gWu+lq6haBao/xSUckcrk5KHzLBDHsXrpx1Vy4A9OqzV+fu
-         2QXTw4AiC5eXI94kl416XsQT1Ti7bZ2hhtJVMxOg=
-Date:   Mon, 12 Jun 2023 14:58:55 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        torvalds@linux-foundation.org, keescook@chromium.org,
-        masahiroy@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
-        nicolas@fjasle.eu, catalin.marinas@arm.com, will@kernel.org,
-        vkoul@kernel.org, trix@redhat.com, ojeda@kernel.org,
-        mingo@redhat.com, longman@redhat.com, boqun.feng@gmail.com,
-        dennis@kernel.org, tj@kernel.org, cl@linux.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
-        adrian.hunter@intel.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, paulmck@kernel.org,
-        frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
-        42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
-        dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
-        john.johansen@canonical.com, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
-        rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
-        tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
-        luc.vanoostenryck@gmail.com
-Subject: Re: [PATCH v3 46/57] perf: Simplify pmu_dev_alloc()
-Message-ID: <2023061226-effective-droplet-1ba3@gregkh>
-References: <20230612090713.652690195@infradead.org>
- <20230612093540.850386350@infradead.org>
- <20230612094400.GG4253@hirez.programming.kicks-ass.net>
- <2023061213-knapsack-moonlike-e595@gregkh>
- <29924c50-cf96-13bb-ef84-4813caa3aef3@redhat.com>
+        Mon, 12 Jun 2023 09:00:26 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F429E52
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 06:00:25 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-977d0ee1736so624526066b.0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 06:00:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686574823; x=1689166823;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wo+1PodCdHHB0tD1Y4UaF7/JGvZd1Adl0KqOZuyCrYQ=;
+        b=hmGzaL/1fj4DxM7vQM6aLIC7mcImR1hXuEfn+ACYbTVsZKQzCpzR8zD6hhLAxosEhA
+         RaWLvToMqnRT3rIITCOEJwEz1S1SIlRt6ykOhDCQ0bMTeQzKTIZbmX7cHf4/0k1vzo81
+         72zCI1PWJRlbabQkCA9TJRsdQIKyjYaaT4BBmX5HpHxJheD4jxtEOenAg1lv+O1AnmKL
+         eou1Cs5EwqNGjVQpMjmJfGB75ZFsP4ZUw6mZL4XaB8pvV9OWsl6rnK+qtJNEbYtWhSgD
+         eBZxi5FhD0caIzAnWiCUcD4yBP1Y3PVf8Et2l1L3JhVVyKhls+1r7x7r3Vh8HvZw2Xre
+         +pLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686574823; x=1689166823;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wo+1PodCdHHB0tD1Y4UaF7/JGvZd1Adl0KqOZuyCrYQ=;
+        b=GVBQiaNLow4nJmGxGlUms+KfNFsGPEqIPSNMXZbb7C8ZwsOP2+s66BDT0NGVobSXLu
+         UrYqwyCuXov3Mwflks1vwAJqFXbsJPCHPdxYa1/yZyhuOlNuZ6FbGInUouemyIoZ4inQ
+         v1wePadoi7gluxU3f4bRaxfcPAVPz6ugyEsZuG+dpWqc47bX2Zga0bThkn63/ID+NqxW
+         IkUNiPKfnv0Aqbig5jTMglYvcP3BS1FJada4D/WLojpYv5wMss0kFQRkDCJPr9m86+BX
+         yoVzdPkGVW3mOatve3QOABAimpA8YYjdR3fO/HH4Tbk93ThmezvvUVtoVepMK/zd4nEg
+         8aTQ==
+X-Gm-Message-State: AC+VfDzcBWqWD7lyzacMA+f/eKnPfbf0chedUUNhnJlCxsGFUymU+K4D
+        AYnOGIL49HffeWFaytxdVXH5vQ==
+X-Google-Smtp-Source: ACHHUZ6jYurA4SzJZWnpU4r2a9vrK80Vq4jKofL3dpTyho0SzI6ysux5e/lKnYhD8iQ8gZrCaJ4czg==
+X-Received: by 2002:a17:907:96ab:b0:96f:f98c:ac71 with SMTP id hd43-20020a17090796ab00b0096ff98cac71mr8490655ejc.67.1686574823483;
+        Mon, 12 Jun 2023 06:00:23 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id n24-20020a170906379800b0096a6bf89259sm5168854ejc.167.2023.06.12.06.00.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 06:00:22 -0700 (PDT)
+Message-ID: <e0171cb6-54e7-41bd-4b08-fa667fe58ff4@linaro.org>
+Date:   Mon, 12 Jun 2023 15:00:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <29924c50-cf96-13bb-ef84-4813caa3aef3@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v18 1/3] ARM: dts: nuvoton: Add node for NPCM memory
+ controller
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Marvin Lin <milkfafa@gmail.com>, robh+dt@kernel.org,
+        tony.luck@intel.com, james.morse@arm.com, mchehab@kernel.org,
+        rric@kernel.org, benjaminfair@google.com, yuenn@google.com,
+        venture@google.com, avifishman70@gmail.com, tmaimon77@gmail.com,
+        tali.perry1@gmail.com, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        openbmc@lists.ozlabs.org, KWLIU@nuvoton.com, YSCHU@nuvoton.com,
+        ctcchien@nuvoton.com, kflin@nuvoton.com
+References: <20230111093245.318745-1-milkfafa@gmail.com>
+ <20230111093245.318745-2-milkfafa@gmail.com>
+ <20230612110401.GPZIb7oZPdsPGFzSDc@fat_crate.local>
+ <38c30778-9526-cba6-4ddb-00bcefeb5647@linaro.org>
+ <20230612120107.GFZIcJA3zktkiyTS2+@fat_crate.local>
+ <99795947-0584-df42-a28a-aa89d7e21c7e@linaro.org>
+ <20230612123925.GGZIcR/dUrcu03z6V+@fat_crate.local>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230612123925.GGZIcR/dUrcu03z6V+@fat_crate.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,41 +88,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 02:29:05PM +0200, Paolo Bonzini wrote:
-> On 6/12/23 14:18, Greg KH wrote:
-> > Yeah, it's a pain, but you are trying to hand-roll code that is not a
-> > "normal" path for a struct device, sorry.
-> > 
-> > I don't know if you really can encode all of that crazy logic in the
-> > cleanup api, UNLESS you can "switch" the cleanup function at a point in
-> > time (i.e. after device_add() is successful).  Is that possible?
+On 12/06/2023 14:39, Borislav Petkov wrote:
+> On Mon, Jun 12, 2023 at 02:09:33PM +0200, Krzysztof Kozlowski wrote:
+>> Please route the DTS (1/3) via Nuvoton SoC tree.
 > 
-> What _could_ make sense is that device_add() completely takes ownership of
-> the given pointer, and takes care of calling put_device() on failure.
+> Don't all three need to go together?
 
-I think we tried that decades ago :)
+No, the DTS is always independent because it describes the hardware.
+Linux should work fine regardless of hardware description. Tying Linux
+to specific DTS is usually sign of an ABI break.
 
-Problem is that the caller wants to clean stuff up associted with that
-struct device-embedded structure _before_ the final put_device() is
-called which would usually free the memory of the overall structure.
+Best regards,
+Krzysztof
 
-So device_add() can't call put_device() on the error path within it, you
-need the caller to unwind it's local stuff before that happens.
-
-> Then you can have
-> 
-> 	struct device *dev_struct __free(put_device) =
-> 		kzalloc(sizeof(struct device), GFP_KERNEL);
-> 
-> 	struct device *dev __free(device_del) =
-> 		device_add(no_free_ptr(dev_struct));
-> 
-> 	/* dev_struct is NULL now */
-> 
-> 	pmu->dev = no_free_ptr(dev);
-
-I don't see how that works properly, what am I missing?
-
-thanks,
-
-greg k-h
