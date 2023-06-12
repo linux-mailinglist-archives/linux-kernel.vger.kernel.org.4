@@ -2,90 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F26A72CD42
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:54:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEDA572CD44
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:54:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236514AbjFLRyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 13:54:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55978 "EHLO
+        id S236741AbjFLRyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 13:54:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234208AbjFLRyD (ORCPT
+        with ESMTP id S236691AbjFLRy3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 13:54:03 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A51319B
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:54:02 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id ca18e2360f4ac-77af9ee36d0so24837939f.0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:54:02 -0700 (PDT)
+        Mon, 12 Jun 2023 13:54:29 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D30510E7
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:54:13 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-543ae6ce8d1so3193170a12.2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:54:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1686592441; x=1689184441;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3fQNgNzuA1xLIJP7vU8TndmEPfYIrtst1yzrc/yrHA4=;
-        b=yvdVi4Bh9WeC/lTfOlqHnIvRf/w6x7R7/uJfHzTkFjfgtIgXOuS4Cm9wfoyEUVow08
-         n5upQhziZHsoEURC8x4gS4XS+v1vPQueJZmuAuOgscsbCirfrB+DNZt6VbmA/RQ1GHmS
-         NRfDmSzmZtXRCkvMgLBPUtZGZpBYksJfMe/viyhTtdbJHc7nqs54tfGTGEQ7wSE0Btmz
-         buht5gYg04O0TyQhlYiwECaX3dhGtASCYyTbT1YgnCtvRNJW/G8L+S5ZxLO6JIP1XBAB
-         /YA9Max3Fbpf0graZOvM/XNQzzA6L5E/HOuQ80Wsbr2AWGsCp9Xg5IGvw5xLwv79hzL1
-         KrLw==
+        d=gmail.com; s=20221208; t=1686592453; x=1689184453;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OyB2HATrYe07EZyc2MwF8RbLQn+UFgKmybbWs9IGAwU=;
+        b=MywNV8fXHWlAfDdphSSsN0f4MvLWc/0kHWE8dxMLiZxkJpjRJopoFLoiugeDzOVyoA
+         Jb+4YLDxBH4R7sOPubDpy/zC0pBC3fntcZBvZV3NpqGTi40BKjNdSjNzlNEQzQIpvovW
+         CB6xZaqfU4IrOddgVEn8QSfbpCP8230BKbOhhQ9Gi58cTcxcqhNZ5Zp/N32eIaJK817X
+         8h5A2xwYoOlg8TY8CfC1K33aD/PqJOobF3kVxBC7INCcFnqz3e9wNNyHkeaI/kSMwDoi
+         Sj2zRkfrSImmLnb5UiYie6xT56qOYxa2ZRwap5HG6x5w+oEmtltFv1BA2/q+g0rgz5BG
+         nk5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686592441; x=1689184441;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3fQNgNzuA1xLIJP7vU8TndmEPfYIrtst1yzrc/yrHA4=;
-        b=F4EHDyjeadxZT6IlZCd16sssslLewPamEhmYu80syubCq0qrHqZ/NN53FplUEAzEMM
-         8rh6eIKsj9H1+v8iyUpuYu8O7BjXL/9vkvmZF97SI2uZZGUFZ1jpxGNd1t6X75P3wi/+
-         irovaQjjsmNyqU74i4jt8bGPBaMAAX5cswknOpf79TtjiwNMUvahkwGIK/f4RVFk+ux+
-         8J5fafjRAHnfDc5WavmukIIIRSZO6hj4DHDPgruYN4VdX8yWF3NvbuBwIeUL0hPEbrkb
-         zSyWd4Y6heBV5kzWL1/+TDYHmqLvrhiK4uAoqd97NvUl1esrO/KqtlvPFgCLloJxS9ib
-         7uwQ==
-X-Gm-Message-State: AC+VfDx6XnzvRVGTRosavSBDeOPZYqzSmcKk7655rwyvvA3GtbV/eKOy
-        DSqv/9eQTr4h592+VvY2wNLADw==
-X-Google-Smtp-Source: ACHHUZ6kvptc3paAngHhyRPCIJVOdCsMYQrpBYvNUKtOFm7GqFkWZRs1tVG74djBYg22gjfsT+56Gw==
-X-Received: by 2002:a6b:5810:0:b0:777:b7c8:ad32 with SMTP id m16-20020a6b5810000000b00777b7c8ad32mr6666017iob.0.1686592441652;
-        Mon, 12 Jun 2023 10:54:01 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id dj14-20020a0566384b8e00b004165289bf0csm2922380jab.168.2023.06.12.10.54.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 10:54:00 -0700 (PDT)
-Message-ID: <8a97ca5d-69ef-d716-9f61-2b9b2a26dd14@kernel.dk>
-Date:   Mon, 12 Jun 2023 11:53:59 -0600
+        d=1e100.net; s=20221208; t=1686592453; x=1689184453;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OyB2HATrYe07EZyc2MwF8RbLQn+UFgKmybbWs9IGAwU=;
+        b=UxDcDy8xpgCcUHRpPbqYLnA9MkB3pbyTWPJiZh+UxLYgpbhK9fYZ02kDQI6qDfV94t
+         aDXe/RTW25Trf/XlQGNtewS6StBt9CStnq1I+vKy+8CJZ8MNlx/W7av7/wtjS8kixF/g
+         40nybC0+bHEyVmFszVUZFwnOZ7KS/yC2OxxN6XZTU7T6Typ5Tmw6k3VBVynWNYBigQ50
+         xJy6egUHmX9IE3MmpHCYrErWBAmY+01JyhbcgU/r/M4Zdj0WtJia/1toAf4koF9Qzd6k
+         SkNQHaXzCojxchfQkR1vWpZhW2fHI/Vwd7wK2tiJVvcx5utQ/5PgQ7NPhBuavkgmmZd1
+         o3ng==
+X-Gm-Message-State: AC+VfDzZpM7CH5w59UQ5Li9L1kYExu7zSC99Itr0pORTfqd/KcOALgzS
+        PEIuHDI8wWBQOKf8xWFC83c=
+X-Google-Smtp-Source: ACHHUZ5QY3+5a49J28P27Uzg4dWqLSU9/jmW7TJ8NLPRztzUuecnMUPUkbrnKunlRzN7YKwCJJRcqA==
+X-Received: by 2002:a17:902:ea01:b0:1ac:4735:45d7 with SMTP id s1-20020a170902ea0100b001ac473545d7mr8990405plg.6.1686592452544;
+        Mon, 12 Jun 2023 10:54:12 -0700 (PDT)
+Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
+        by smtp.gmail.com with ESMTPSA id a7-20020a170902ecc700b00198d7b52eefsm8488904plh.257.2023.06.12.10.54.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 10:54:12 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 12 Jun 2023 07:54:16 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Yuanhan Zhang <zyhtheonly@gmail.com>
+Cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
+        pmladek@suse.com, zyhtheonly@yeah.net, zwp10758@gmail.com,
+        tiozhang@didiglobal.com, fuyuanli@didiglobal.com
+Subject: Re: [PATCH] workqueue: introduce queue_work_cpumask to queue work
+ onto a given cpumask
+Message-ID: <ZIdbyOBdU6zAGxVw@slm.duckdns.org>
+References: <20230606093135.GA9077@didi-ThinkCentre-M930t-N000>
+ <ZIJbvCcaqjzNteWs@slm.duckdns.org>
+ <CAEQmJ=gYe=d53HHC1xW_epmPmmddA4J28SHybwGmQzUZgxZovg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [6.5-rc5 regression] core dump hangs (was Re: [Bug report]
- fstests generic/051 (on xfs) hang on latest linux v6.5-rc5+)
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Zorro Lang <zlang@redhat.com>, linux-xfs@vger.kernel.org,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>, linux-kernel@vger.kernel.org
-References: <20230611124836.whfktwaumnefm5z5@zlang-mailbox>
- <ZIZSPyzReZkGBEFy@dread.disaster.area>
- <20230612015145.GA11441@frogsfrogsfrogs>
- <ZIaBQnCKJ6NsqGhd@dread.disaster.area>
- <CAHk-=whJqZLKPR-cpX-V4wJTXVX-_tG5Vjuj2q9knvKGCPdfkg@mail.gmail.com>
- <20230612153629.GA11427@frogsfrogsfrogs>
- <CAHk-=wiN-JcUh4uhDNmA4hp26Mg+c2DTuzgWY2fZ6hytDtOMCg@mail.gmail.com>
- <af31cadf-8c15-8d88-79fb-066dc87f0324@kernel.dk>
- <13d9e4f2-17c5-0709-0cc0-6f92bfe9f30d@kernel.dk>
- <CAHk-=wgdBfqyNHk0iNyYpEuBUdVgq1KMzHMuEqn=ADtfyK_pkQ@mail.gmail.com>
- <212a190c-f81e-2876-cf14-6d1e37d47192@kernel.dk>
- <CAHk-=wh0hrFjcU5C8uHvLBThrT5vQsFHb7Jk6HRP3LAJqdNx1A@mail.gmail.com>
- <ff34a007-fdd0-8575-8482-919ead39fc88@kernel.dk>
- <CAHk-=whXt9+-YfhgjBYxT9_ATjHbMDZ0yJdK7umrJGU8zBVZ9w@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CAHk-=whXt9+-YfhgjBYxT9_ATjHbMDZ0yJdK7umrJGU8zBVZ9w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEQmJ=gYe=d53HHC1xW_epmPmmddA4J28SHybwGmQzUZgxZovg@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,64 +78,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/12/23 11:51?AM, Linus Torvalds wrote:
-> On Mon, Jun 12, 2023 at 10:29?AM Jens Axboe <axboe@kernel.dk> wrote:
->>
->> Looks fine to me to just kill it indeed, whatever we did need this
->> for is definitely no longer the case. I _think_ we used to have
->> something in the worker exit that would potentially sleep which
->> is why we killed it before doing that, now it just looks like dead
->> code.
-> 
-> Ok, can you (and the fsstress people) confirm that this
-> whitespace-damaged patch fixes the coredump issue:
-> 
-> 
->   --- a/io_uring/io-wq.c
->   +++ b/io_uring/io-wq.c
->   @@ -221,9 +221,6 @@ static void io_worker_exit(..
->         raw_spin_unlock(&wq->lock);
->         io_wq_dec_running(worker);
->         worker->flags = 0;
->   -     preempt_disable();
->   -     current->flags &= ~PF_IO_WORKER;
->   -     preempt_enable();
-> 
->         kfree_rcu(worker, rcu);
->         io_worker_ref_put(wq);
+Hello,
 
-Yep, it fixes it on my end and it passes my basic tests as well.
+On Fri, Jun 09, 2023 at 02:28:19PM +0800, Yuanhan Zhang wrote:
+> // I resend this to put it into the same thread, sorry for the confusion.
 
-> Jens, I think that the two lines above there, ie the whole
-> 
->         io_wq_dec_running(worker);
->         worker->flags = 0;
-> 
-> thing may actually be the (partial?) reason for those PF_IO_WORKER
-> games. It's basically doing "now I'm doing stats by hand", and I
-> wonder if now it decrements the running worker one time too much?
-> 
-> Ie when the finally *dead* worker schedules away, never to return,
-> that's when that io_wq_worker_sleeping() case triggers and decrements
-> things one more time.
-> 
-> So there might be some bookkeeping reason for those games, but it
-> looks like if that's the case, then that
-> 
->         worker->flags = 0;
-> 
-> will have already taken care of it.
-> 
-> I wonder if those two lines could just be removed too. But I think
-> that's separate from the "let's fix the core dumping" issue.
+This got resent quite a few times and I don't know which one to reply to.
+Just picking the one which seems like the latest.
 
-Something like that was/is my worry. Let me add some tracing to confirm
-it's fine, don't fully trust just my inspection of it. I'll send out the
-patch separately once done, and then would be great if you can just pick
-it up so it won't have to wait until I need to send a pull later in the
-week. Particularly as I have nothing planned for 6.4 unless something
-else comes up of course.
+> > Can you elaborate the intended use cases?
+> 
+> Thanks for your reply! Please let me use myself as an example to explain this.
+> 
+> In my scenario, I have 7 cpus on my machine (actually it is uma, so
+> queue_work_node
+> or using UNBOUND do not works for me), and for some unlucky reasons
+> there are always some irqs running on cpu 0 and cpu 6, since I'm using arm64
+> with irqs tuning into FIFO threads, those threaded irqs are always running on
+> cpu 0 and 6 too (for affinity). And this would not be fixed easily in
+> short terms :(
+> 
+> So in order to help async init for better boot times for my devices,
+> I'd like to prevent
+> works from running on cpu 0 and 6. With queue_work_cpumask(), it would be simply
+> done by:
+> 
+> ...
+> cpumask_clear_cpu(0, cpumask);  // actually I use sysfs to parse my cpumask
+> cpumask_clear_cpu(6, cpumask);
+> queue_work_cpumask(cpumask, my_wq, &my_work->work);
+> ...
+
+But this would require explicit code customization on every call site which
+doesn't seem ideal given that this is to work around something which is tied
+to the specific hardware.
+
+Wouldn't it be better to add a kernel parameter to further constrain
+wq_unbound_cpumask? Right now, on boot, it's only determined by isolcpus but
+it shouldn't be difficult to add a workqueue parameter to further constrain
+it.
+
+Thanks.
 
 -- 
-Jens Axboe
-
+tejun
