@@ -2,103 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39C2672BCFE
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 120C072BCFB
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 11:48:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234894AbjFLJsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 05:48:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59132 "EHLO
+        id S233727AbjFLJsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 05:48:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbjFLJrq (ORCPT
+        with ESMTP id S234667AbjFLJre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 05:47:46 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05293A5EB
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:34:35 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9786fc23505so610433366b.2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:34:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686562410; x=1689154410;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sn1KmoSk4w+76jXteo+X6vERxlyroWl5Pa1iBI+YhcU=;
-        b=aKH7YgYs7NdNLNjRM9saAyjtg6C3B3PKNqk8EubOZ6PjsYpJobwp71ACl+zvOE1iZb
-         9thz1H5IUgtL/SCUeJXGYRkmj5KgbZpHFsQDcZbwv/2q/YRrc+fPbfiSYYV9O/sw6+Rr
-         L3y8KeFvzqgT+g6J29ILMtchcRVu9zG1HOLeELMUENtL5YmqiXb79aLY8GRTERxHEko8
-         sbyoJuu7t5BHvloNCYKfQ0NwIPWoiZ4YwurXL6XjL2RNPfxGoaq57IOBZbKqyDFR4Vuk
-         175cfzC//CjQ3tTQubUK9eP2vVSP+DgR1Dn2lbHf5v6MSaq8WkFSEnm0R6jW1Pl6st8z
-         VClQ==
+        Mon, 12 Jun 2023 05:47:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A1A524A
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:34:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686562382;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j2zik9I6wtN0hN5lDN65C1IiqrhISpY0AugfFqCf2aE=;
+        b=EgE8UGyOoPhPfQP2mFHd3ulGQNziNlnkv+SOQ32drFAuSNy4PBi9+z9BWjks433iNvQ2ad
+        113h39HtXJXQcKv8nQQGpPPzxcCjAKwRLJdopAFsnYXEaIVxG7NTk3j3dJRKwcdrVpfxV4
+        //BEZDQJbtF1rDlBOn39DF7t2N5P9W4=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-481-xsj9x_AkObSIXBv9LqtriA-1; Mon, 12 Jun 2023 05:33:01 -0400
+X-MC-Unique: xsj9x_AkObSIXBv9LqtriA-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f7e7cfcae4so25594025e9.1
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 02:33:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686562410; x=1689154410;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sn1KmoSk4w+76jXteo+X6vERxlyroWl5Pa1iBI+YhcU=;
-        b=EWl/Re0Y/ysHyvWzJ11z+3SbHHibkPD8StriEHY/J5dsp7uMw7EAjqBrYK6thVUzvt
-         AiWdop8ziJvRnICIadV7n8gEt3DNUzhCPzWDbXNErKuL+ZUsCBMz4vQz4hGNCrlK+ENy
-         lNzT1/GIeGwLfbVS/Xm1QKJ7uA5xVrPeIBIRDZGqKL9XGeWo6/f1foHZCaGia3/BzKcl
-         +2z8y1qNNL1wPEuZvektveQ0U32V+ke+61sCSc/J4Mo84Js6UNDLsg2FXrOWc+cB9pXb
-         cTTdvkx0w89h0Gj7XaAAbqTCQ/Vof3sEDhKmkVPGPHAMEJQk+CFEOuWym6ablwNjDznZ
-         3VUQ==
-X-Gm-Message-State: AC+VfDw9FPGFF0VptvLrpS8nEjyhhjXbuYGF3+rzr3EOVqJ1W/22rS7C
-        W349bX5PYZgZVb55Li5KXz7K7A==
-X-Google-Smtp-Source: ACHHUZ4+8vTsEZaxwOtLPHygS9TYUr1UyDbsg0bBA37CkuzbfQ3tHT6uZY4O9wlvwavwYKWxUWhGsg==
-X-Received: by 2002:a17:906:ef07:b0:96f:7b4a:2904 with SMTP id f7-20020a170906ef0700b0096f7b4a2904mr9276446ejs.3.1686562409808;
-        Mon, 12 Jun 2023 02:33:29 -0700 (PDT)
-Received: from hackbox.lan ([86.121.163.20])
-        by smtp.gmail.com with ESMTPSA id gj13-20020a170906e10d00b00965a56f82absm4908151ejb.212.2023.06.12.02.33.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 02:33:29 -0700 (PDT)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Zhanhao Hu <zero12113@hust.edu.cn>
-Cc:     hust-os-kernel-patches@googlegroups.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] clk: imx93: fix memory leak and missing unwind goto in imx93_clocks_probe
-Date:   Mon, 12 Jun 2023 12:32:40 +0300
-Message-Id: <168656228140.662397.4112940711975875013.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230601033825.336558-1-zero12113@hust.edu.cn>
-References: <20230601033825.336558-1-zero12113@hust.edu.cn>
+        d=1e100.net; s=20221208; t=1686562380; x=1689154380;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j2zik9I6wtN0hN5lDN65C1IiqrhISpY0AugfFqCf2aE=;
+        b=Ci99ebkDVmLAT5BaLP479j+unm7jAuzg2OB/aneJWlRxADCg65Y3yXVsQFiIbzEt+F
+         yiVlemab3EaYr4BFTAcTLiu7mqFAhKDqj01ApGBAeS0RIp9uz0pgne7/FmbhZ90ISWBQ
+         fwC0gJi0kaZ33EDL3xY3+n8C/16cbw9Jp89am9/ZJgslp24ywsJ2uUr5lmIh0fWA5qw2
+         V9Tex+kte5Es9LPDt57+qCbFXS2psBuweVB5J8AvAmyzhYqOM16E2++MzhTLDCCsMrgh
+         GrfmcbNACeYBtVQUKnxVR/2FWGNNe17XAHzueezayAUbR2pnM5dRpG1+0pQ6FcphV1an
+         h7Aw==
+X-Gm-Message-State: AC+VfDw3BXu9UXVylTiX6SESHBlgZ9JalnVDoBOOwXoyMbMBguCCravn
+        jOOmgmKtElXfnSMCqlH3UYipRUoXG3S0d5yRdX2LCQBZ9ezAxBIzaFJonBFFPo/vkO+kD+/V3wc
+        RCNtEm2aSwiSpzkAZwwiCnSdv
+X-Received: by 2002:a1c:6a04:0:b0:3f6:143:7c4b with SMTP id f4-20020a1c6a04000000b003f601437c4bmr7194239wmc.6.1686562380176;
+        Mon, 12 Jun 2023 02:33:00 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4z8ERkPWmOW1qx+Uef6lYQlwqsm4Uqr2iyzMwAUJ3cV4HfE2QxGeOBqFvLloo/xVA2Hvg5Vw==
+X-Received: by 2002:a1c:6a04:0:b0:3f6:143:7c4b with SMTP id f4-20020a1c6a04000000b003f601437c4bmr7194224wmc.6.1686562379843;
+        Mon, 12 Jun 2023 02:32:59 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c74e:1600:4f67:25b2:3e8c:2a4e? (p200300cbc74e16004f6725b23e8c2a4e.dip0.t-ipconnect.de. [2003:cb:c74e:1600:4f67:25b2:3e8c:2a4e])
+        by smtp.gmail.com with ESMTPSA id f25-20020a7bcd19000000b003f7ff520a14sm10762632wmj.22.2023.06.12.02.32.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 02:32:59 -0700 (PDT)
+Message-ID: <3f943c78-bc8b-fd2f-50b1-5bd3501bc878@redhat.com>
+Date:   Mon, 12 Jun 2023 11:32:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] mm: vmscan: mark kswapd_run() and kswapd_stop() __meminit
+Content-Language: en-US
+To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20230606121813.242163-1-linmiaohe@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230606121813.242163-1-linmiaohe@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Thu, 01 Jun 2023 03:38:25 +0000, Zhanhao Hu wrote:
-> In function probe(), it returns directly without unregistered hws
-> when error occurs.
+On 06.06.23 14:18, Miaohe Lin wrote:
+> Add __meminit to kswapd_run() and kswapd_stop() to ensure they're default
+> to __init when memory hotplug is not enabled.
 > 
-> Fix this by adding 'goto unregister_hws;' on line 295 and
-> line 310.
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>   include/linux/swap.h | 4 ++--
+>   mm/vmscan.c          | 4 ++--
+>   2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> Use devm_kzalloc() instead of kzalloc() to automatically
-> free the memory using devm_kfree() when error occurs.
-> 
-> [...]
+> diff --git a/include/linux/swap.h b/include/linux/swap.h
+> index 2ddbfd85f6c7..b5f6f2916de1 100644
+> --- a/include/linux/swap.h
+> +++ b/include/linux/swap.h
+> @@ -460,8 +460,8 @@ static inline bool node_reclaim_enabled(void)
+>   void check_move_unevictable_folios(struct folio_batch *fbatch);
+>   void check_move_unevictable_pages(struct pagevec *pvec);
+>   
+> -extern void kswapd_run(int nid);
+> -extern void kswapd_stop(int nid);
+> +extern void __meminit kswapd_run(int nid);
+> +extern void __meminit kswapd_stop(int nid);
+>   
+>   #ifdef CONFIG_SWAP
+>   
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 43dc5c90abbf..a8881571e0ed 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -7871,7 +7871,7 @@ unsigned long shrink_all_memory(unsigned long nr_to_reclaim)
+>   /*
+>    * This kswapd start function will be called by init and node-hot-add.
+>    */
+> -void kswapd_run(int nid)
+> +void __meminit kswapd_run(int nid)
+>   {
+>   	pg_data_t *pgdat = NODE_DATA(nid);
+>   
+> @@ -7892,7 +7892,7 @@ void kswapd_run(int nid)
+>    * Called by memory hotplug when all memory in a node is offlined.  Caller must
+>    * be holding mem_hotplug_begin/done().
+>    */
+> -void kswapd_stop(int nid)
+> +void __meminit kswapd_stop(int nid)
+>   {
+>   	pg_data_t *pgdat = NODE_DATA(nid);
+>   	struct task_struct *kswapd;
 
-Applied, thanks!
+kswapd_stop() is only called with CONFIG_MEMORY_HOTPLUG, so I'm 
+wondering if we even want to compiled that without CONFIG_MEMORY_HOTPLUG ...
 
-[1/1] clk: imx93: fix memory leak and missing unwind goto in imx93_clocks_probe
-      commit: e02ba11b457647050cb16e7cad16cec3c252fade
+Anyhow,
 
-Best regards,
+Acked-by: David Hildenbrand <david@redhat.com>
+
 -- 
-Abel Vesa <abel.vesa@linaro.org>
+Cheers,
+
+David / dhildenb
+
