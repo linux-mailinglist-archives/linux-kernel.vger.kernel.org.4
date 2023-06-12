@@ -2,236 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0504B72BB4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 10:53:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C57172BB3F
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 10:52:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234194AbjFLIxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 04:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52510 "EHLO
+        id S233746AbjFLIwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 04:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233781AbjFLIxJ (ORCPT
+        with ESMTP id S233773AbjFLIwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 04:53:09 -0400
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B5D2D4A;
-        Mon, 12 Jun 2023 01:52:25 -0700 (PDT)
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4Qfln22Rxvz9sd2;
-        Mon, 12 Jun 2023 10:52:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
-        s=MBO0001; t=1686559942;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=T2MJ+F0cRREqc9apuK/Y9l5PP1ml/WVEL7uBUhsIOhM=;
-        b=AmtNWOEeOV8ZGTDCiTA9+LwCqvaGtuLcptDiEO4rk8YyGtg4ZXTKSOsAUpCR9qekTdQyek
-        bhcca/VR59O4e96l1MfnZbk6TS9tJiwAbWTRht1KBuqDTPw6Bk7BSCAgCDefpPpe5/MJBj
-        MX5GsA2AwmKTTqi5nKpYm0lnuE6rvJ2IBLof1mGM/y27LJjbkIoLDJjR47YS79A07wkT7U
-        fNCn3EeKZo7qjtwTc/cMMO4U+bPiNSHCJbR4QhCbwLBZmRvAWIfYwSNf1WMRKTGCkHSr1e
-        wM60L/hxSSHXnNNCTp7fcK7DtoEbQlfOURqgG8JZUNRdmhJfDajQFZhVM2NHaA==
-References: <20230611090143.132257-1-frank@oltmanns.dev>
- <20230611090143.132257-2-frank@oltmanns.dev>
-From:   Frank Oltmanns <frank@oltmanns.dev>
-To:     Frank Oltmanns <frank@oltmanns.dev>
-Cc:     Andre Przywara <andre.przywara@arm.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Roman Beranek <me@crly.cz>,
-        Samuel Holland <samuel@sholland.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH v2 1/2] clk: sunxi-ng: nkm: consider alternative parent
- rates when finding rate
-In-reply-to: <20230611090143.132257-2-frank@oltmanns.dev>
-Date:   Mon, 12 Jun 2023 10:51:52 +0200
-Message-ID: <87edmh12s7.fsf@oltmanns.dev>
+        Mon, 12 Jun 2023 04:52:16 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E92F1B3;
+        Mon, 12 Jun 2023 01:52:05 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b1b06af50eso46999481fa.1;
+        Mon, 12 Jun 2023 01:52:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686559923; x=1689151923;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vC6uwJ0JqcA9AI2hZ192LN4Lm6HljDsWRRLUQCbqRcI=;
+        b=ha+NLGOPK268A8Rm69MB2VrlRZ+bdLMoCKBLy0i1SKtuixABoEGpHl4oGE70nPdWrI
+         fWHYhWb5EBh38UF+ViInymqzwkg/Zad+alqWfDprpVo9fgantG3Tz2sziWPw8upec7ts
+         /Fv3t/yWt6xY9KXU53ybP9Y85wyqEazYhy6JiPo96nIX5SF4uRKG5GITBsqxWuCk1vQX
+         EkWAFhD8ZV+9RpimOe60IiIxpLQXcl/lff1tzJzFERRz1X4gJJh8cCQuDLq3wpAnM8wY
+         WWTst4ebBmy5XYqnnge0LQw1u/wcQ76+CfadGwNDS32TMQdIsStrT+N5jEUX9QHUrcCk
+         D7qQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686559923; x=1689151923;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vC6uwJ0JqcA9AI2hZ192LN4Lm6HljDsWRRLUQCbqRcI=;
+        b=i0l5Dbz4oZrBwXUAkXHVFeZ7TxK0rZA95I9mLV51H4+VshpWkkQ4M3cFRW1Wn77gCf
+         kwxhr0FBsSWBAUMrKCV94zMNtYjYH28KTNQ0kr3cmmJlG92z3AA0nSjfQJR2e7BKaOmF
+         yM+olLohriLVAsGE+RJICsSgOnGBkew11lYXORLPNUqWf86+QzJWqRlKFqv5YJ2A04Rn
+         qNSOZIGI2VN4454iqsXY8g+7hyevJMFguQ8a3LLDceGSAn5DnT6lEpQXMhZzAqWoXXxK
+         vgSsknsJMkBVJ3obSW5lFkVffTuIfub3MpJ4NgyMubAaXV7WMM3ky+a5PRqHbM6zyBk+
+         MNQg==
+X-Gm-Message-State: AC+VfDzHqtwgSNirCeCPQ8pNHmuHPaJ3rXs5268hQHdLRvuKsrkaOTjw
+        6fYCxRp0MfLCd4stLJFn/b8=
+X-Google-Smtp-Source: ACHHUZ7EKA8vldamQ7vDC+e0lKSYEpHmgr+nXY6Twa32SsY75+3B3FPeePjMNjp0U0aabyKDkLIrCw==
+X-Received: by 2002:a05:651c:1039:b0:2af:d2ef:49d4 with SMTP id w25-20020a05651c103900b002afd2ef49d4mr2231817ljm.1.1686559923246;
+        Mon, 12 Jun 2023 01:52:03 -0700 (PDT)
+Received: from mobilestation ([95.79.140.35])
+        by smtp.gmail.com with ESMTPSA id s9-20020a2e9c09000000b002b31e0be2d7sm1003800lji.90.2023.06.12.01.52.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 01:52:02 -0700 (PDT)
+Date:   Mon, 12 Jun 2023 11:52:00 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-ide@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCH v3 2/5] dt-bindings: ata: dwc-ahci: add Rockchip RK3588
+Message-ID: <20230612085200.5okxcipiw5sofo62@mobilestation>
+References: <20230608162238.50078-1-sebastian.reichel@collabora.com>
+ <20230608162238.50078-3-sebastian.reichel@collabora.com>
+ <4c914503-c2e5-a5d8-97af-daaee0b4ec7c@linaro.org>
+ <20230612083536.q3sq7w6cyiuxaqtv@mobilestation>
+ <838ed0e6-985d-9a45-7ece-c607bda15871@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <838ed0e6-985d-9a45-7ece-c607bda15871@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On Mon, Jun 12, 2023 at 10:39:57AM +0200, Krzysztof Kozlowski wrote:
+> On 12/06/2023 10:35, Serge Semin wrote:
+> > On Mon, Jun 12, 2023 at 10:24:06AM +0200, Krzysztof Kozlowski wrote:
+> >> On 08/06/2023 18:22, Sebastian Reichel wrote:
+> >>> This adds Rockchip RK3588 AHCI binding. In order to narrow down the
+> >>> allowed clocks without bloating the generic binding, the description
+> >>> of Rockchip's AHCI controllers has been moved to its own file.
+> >>>
+> >>> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> >>> ---
+> >>
+> >> ...
+> >>
+> >>> +
+> >>> +properties:
+> >>> +  compatible:
+> >>> +    items:
+> >>> +      - enum:
+> >>> +          - rockchip,rk3568-dwc-ahci
+> >>> +          - rockchip,rk3588-dwc-ahci
+> >>> +      - const: snps,dwc-ahci
+> >>> +
+> >>> +  ports-implemented:
+> >>> +    const: 1
+> >>> +
+> >>> +patternProperties:
+> >>> +  "^sata-port@[0-9a-e]$":
+> >>> +    $ref: /schemas/ata/snps,dwc-ahci-common.yaml#/$defs/dwc-ahci-port
+> >>> +
+> >>> +    unevaluatedProperties: false
+> >>
+> > 
+> >> You should be able to skip this patternProperties entirely, because it
+> >> comes from dwc-ahci-common -> ahci-common schema. Did you try the patch
+> >> without it?
+> > 
 
-I just found in the Allwinner A64 User Manual V1.0, that there are
-additional constraints on the combinations for pll-mipi, that are not
-(and never were) enforced by by ccu_nkm.
+> > Please see my message about this. The "sata-port@[0-9a-e]$" sub-node
+> > bindings could be updated with the "reg" property constraint which,
+> > based on the "ports-implemented" property value, most likely is
+> > supposed to be always set to const: 1.
+> 
+> Then anyway the pattern is wrong as it should be @1 always.
 
-On 2023-06-11 at 11:01:42 +0200, Frank Oltmanns <frank@oltmanns.dev> wrote:
-> In case the CLK_SET_RATE_PARENT flag is set, consider using a different
-> parent rate when determining a new rate.
->
-> To find the best match for the requested rate, perform the following
-> steps for each NKM combination:
->  - calculate the optimal parent rate,
->  - find the best parent rate that the parent clock actually supports
->  - use that parent rate to calculate the effective rate.
->
-> In case the clk does not support setting the parent rate, use the same
-> algorithm as before.
->
-> Signed-off-by: Frank Oltmanns <frank@oltmanns.dev>
-> ---
->  drivers/clk/sunxi-ng/ccu_nkm.c | 66 +++++++++++++++++++++++++++++-----
->  1 file changed, 58 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/clk/sunxi-ng/ccu_nkm.c b/drivers/clk/sunxi-ng/ccu_nkm.c
-> index a0978a50edae..c49d5879fe73 100644
-> --- a/drivers/clk/sunxi-ng/ccu_nkm.c
-> +++ b/drivers/clk/sunxi-ng/ccu_nkm.c
-> @@ -6,6 +6,7 @@
->
->  #include <linux/clk-provider.h>
->  #include <linux/io.h>
-> +#include <linux/math.h>
->
->  #include "ccu_gate.h"
->  #include "ccu_nkm.h"
-> @@ -16,10 +17,49 @@ struct _ccu_nkm {
->  	unsigned long	m, min_m, max_m;
->  };
->
-> -static unsigned long ccu_nkm_find_best(unsigned long parent, unsigned long rate,
-> -				       struct _ccu_nkm *nkm)
-> +static unsigned long optimal_parent_rate(unsigned long rate, unsigned long n,
-> +					 unsigned long k, unsigned long m)
->  {
-> -	unsigned long best_rate = 0;
-> +	unsigned long _rate, parent;
-> +
-> +	// We must first try to find the desired parent rate that is rounded up, because there are
-> +	// cases where truncating makes us miss the requested rate.
-> +	// E.g. rate=449035712, n=11, k=3, m=16
-> +	// When truncating, we'd get parent=217714284 and calculating the rate from that would give
-> +	// us 449035710. When rounding up, we get parent=217714285 which would give us the requested
-> +	// rate of 449035712.
-> +	parent = DIV_ROUND_UP(rate * m, n * k);
-> +
-> +	// But there are other cases, where rounding up the parent gives us a too high rate.
-> +	// Therefore, we need to check for this case and, if necessary, truncate the parent rate
-> +	// instead of rounding up.
-> +	_rate = parent * n * k / m;
-> +	if (_rate > rate)
-> +		parent = rate * m / (n * k);
-> +	return parent;
-> +}
-> +
-> +/**
-> + * ccu_nkm_find_best - Find the best nkm combination for a given rate
-> + *
-> + * @parent: rate of parent clock. This is used either as an input or out parameter:
-> + *           - In cases where the parent clock can be set, this parameter will be updated to contain
-> + *             the optimal rate for the parent to achieve the best rate for the nkm clock.
-> + *           - In cases where the parent clock can not be set, this parameter must contain the
-> + *             current rate of the parent, which is used to determine the best combination of n, k,
-> + *             and m.
-> + * @rate: requested rate.
-> + * @nkm: Input/output parameter that contains the clocks constraints on the n, k, m combinations and
-> + *       is updated in this function to contain the resulting best n, k, m combination.
-> + * @parent_hw: parent clock. If set, this function assumes that the parent clock can be updated to a
-> + *             rate that would be best to in order to get as close as possible to @rate. This
-> + *             parameter must be set to NULL if this function shall not try to find the optimal
-> + *             parent rate for the requested rate.
-> + */
-> +static unsigned long ccu_nkm_find_best(unsigned long *parent, unsigned long rate,
-> +				       struct _ccu_nkm *nkm, struct clk_hw *parent_hw)
-> +{
-> +	unsigned long best_rate = 0, best_parent_rate = *parent, tmp_parent = *parent;
->  	unsigned long best_n = 0, best_k = 0, best_m = 0;
->  	unsigned long _n, _k, _m;
->
-> @@ -28,12 +68,17 @@ static unsigned long ccu_nkm_find_best(unsigned long parent, unsigned long rate,
->  			for (_m = nkm->min_m; _m <= nkm->max_m; _m++) {
+* I miscalculated a bit, it should have been zero but in general
+the pattern-property is indeed redundant.
 
-According to the manual M/N has to be <= 3. Therefore we need a
-different maximum value for the _m-for-loop:
+As a conclusion the change should look like this:
 
-        unsigned long max_m = min(3 * _n, nkm->max_m);
-        for (_m = nkm->min_m; _m <= max_m; _m++) {
++properties:
++  compatible:
++    items:
++      - enum:
++          - rockchip,rk3568-dwc-ahci
++          - rockchip,rk3588-dwc-ahci
++      - const: snps,dwc-ahci
++
++  ports-implemented:
++    const: 1
++
++  "sata-port@0":
++    $ref: /schemas/ata/snps,dwc-ahci-common.yaml#/$defs/dwc-ahci-port
++
++    properties:
++      reg:
++        const: 0
++
++    unevaluatedProperties: false
++
++ ...
 
-I suggest that I add an optional member max_mn_ratio to the structs
-ccu_nkm and _ccu_nkm. Optional meaning: Ignore if 0.
+Right?
 
->  				unsigned long tmp_rate;
->
-> -				tmp_rate = parent * _n * _k / _m;
-> -
-> +				if (parent_hw) {
-> +					tmp_parent = optimal_parent_rate(rate, _n, _k, _m);
-> +					tmp_parent = clk_hw_round_rate(parent_hw, tmp_parent);
-> +				}
+-Serge(y)
 
-Another constraint is PLL-VIDEO0 rate / M >= 24 MHz. Therefore we also
-need:
-        if (tmp_parent < 24000000 * _m)
-                continue;
-
-So, we need another optional member min_m_times_parent or, for
-shortness, maybe min_m_parent. I could use help finding a good name for
-this.
-
-I guess there needs to be a V3 of this patchset. :)
-
-Regards,
-  Frank
-
-> +				tmp_rate = tmp_parent * _n * _k / _m;
->  				if (tmp_rate > rate)
->  					continue;
-> +
->  				if ((rate - tmp_rate) < (rate - best_rate)) {
->  					best_rate = tmp_rate;
-> +					best_parent_rate = tmp_parent;
->  					best_n = _n;
->  					best_k = _k;
->  					best_m = _m;
-> @@ -46,6 +91,8 @@ static unsigned long ccu_nkm_find_best(unsigned long parent, unsigned long rate,
->  	nkm->k = best_k;
->  	nkm->m = best_m;
->
-> +	*parent = best_parent_rate;
-> +
->  	return best_rate;
->  }
->
-> @@ -106,7 +153,7 @@ static unsigned long ccu_nkm_recalc_rate(struct clk_hw *hw,
->  }
->
->  static unsigned long ccu_nkm_round_rate(struct ccu_mux_internal *mux,
-> -					struct clk_hw *hw,
-> +					struct clk_hw *parent_hw,
->  					unsigned long *parent_rate,
->  					unsigned long rate,
->  					void *data)
-> @@ -124,7 +171,10 @@ static unsigned long ccu_nkm_round_rate(struct ccu_mux_internal *mux,
->  	if (nkm->common.features & CCU_FEATURE_FIXED_POSTDIV)
->  		rate *= nkm->fixed_post_div;
->
-> -	rate = ccu_nkm_find_best(*parent_rate, rate, &_nkm);
-> +	if (!clk_hw_can_set_rate_parent(&nkm->common.hw))
-> +		rate = ccu_nkm_find_best(parent_rate, rate, &_nkm, NULL);
-> +	else
-> +		rate = ccu_nkm_find_best(parent_rate, rate, &_nkm, parent_hw);
->
->  	if (nkm->common.features & CCU_FEATURE_FIXED_POSTDIV)
->  		rate /= nkm->fixed_post_div;
-> @@ -159,7 +209,7 @@ static int ccu_nkm_set_rate(struct clk_hw *hw, unsigned long rate,
->  	_nkm.min_m = 1;
->  	_nkm.max_m = nkm->m.max ?: 1 << nkm->m.width;
->
-> -	ccu_nkm_find_best(parent_rate, rate, &_nkm);
-> +	ccu_nkm_find_best(&parent_rate, rate, &_nkm, NULL);
->
->  	spin_lock_irqsave(nkm->common.lock, flags);
+> 
+> Best regards,
+> Krzysztof
+> 
