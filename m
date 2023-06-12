@@ -2,135 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1280872C8A2
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B42B272C8A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238866AbjFLOeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 10:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
+        id S238852AbjFLOed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 10:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238827AbjFLOdn (ORCPT
+        with ESMTP id S236277AbjFLOeQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 10:33:43 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D8910D9;
-        Mon, 12 Jun 2023 07:32:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=PwbnNapXRdevBF0hfE35KqBRaBpKqJIqHALduY4qOvE=; b=C7wViTvphkn9dIMtH5VQREhMUv
-        1+E8O8JuhmHiYk+T16MMJqF/5v+zETwS4qWgZQ13Iy3fitgN+Qsx70hNBOJcF3Z1ZrUcIS/ol7AHQ
-        E+wgpI0JDDsTgpeu07A5zlWT36Z2dhcbYcdjJMxUfz7cDnpognXwMNZmGzpoz1KO9VejzqKFfAxyS
-        AjqgPBwN1pR1bBUcDcvUSNZ4xL37g4gTaCk3BT6JU3ZTLCFXz6E2K7PmKBczz+eDYrBC596zadpdL
-        HNHKxVCFSCamSO+JSQsLkfdHzUYpwRIPqioTTKT8BKG1tlR/drnQiKyK2ajJ1DH+LA+ttEJeAM8Lb
-        KkA/wExw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q8ib4-004JET-0R;
-        Mon, 12 Jun 2023 14:32:42 +0000
-Date:   Mon, 12 Jun 2023 07:32:42 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Sergei Shtepa <sergei.shtepa@veeam.com>
-Cc:     axboe@kernel.dk, hch@infradead.org, corbet@lwn.net,
-        snitzer@kernel.org, viro@zeniv.linux.org.uk, brauner@kernel.org,
-        dchinner@redhat.com, willy@infradead.org, dlemoal@kernel.org,
-        linux@weissschuh.net, jack@suse.cz, ming.lei@redhat.com,
-        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v5 00/11] blksnap - block devices snapshots module
-Message-ID: <ZIcsijGWeyk/FjHs@infradead.org>
-References: <20230612135228.10702-1-sergei.shtepa@veeam.com>
+        Mon, 12 Jun 2023 10:34:16 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB531BE9;
+        Mon, 12 Jun 2023 07:33:37 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-653fcd58880so3430753b3a.0;
+        Mon, 12 Jun 2023 07:33:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686580416; x=1689172416;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nNXAs9HydHwmsXxu4M0TPC9uqDZfY6tekgQKCC23OZc=;
+        b=Ft+e9h25J+ApfkTpN3as45AS7UwWutDchW0/xUxbJu8YN4S6bWF4pO47C7vH+JgWQZ
+         BKHyKl1YCOkb44JWYJkB50Fk5bUF22UmougfQpTQqmPU+v3VCzaDzrdSXMJjiGwX1asv
+         FFHhQH6Khq3GTbl3GX8cWCYQ+E+EmMt4aRTMcLKSCwkTxx01gCJ5qxof7HNQHiZ59kRE
+         39B26RzRP85cALw2VN5V7p006Al7hxXI1AtLLl5KfpFe2i7YDyQmuWmZ61Km6EizHRLl
+         ttTy2/FkZ4UVaGCVMmzdxFdw7QdG7AFHizFuKdb9zuB3pHl8MmdJiolhhvpesHTJ4sXC
+         LCEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686580416; x=1689172416;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nNXAs9HydHwmsXxu4M0TPC9uqDZfY6tekgQKCC23OZc=;
+        b=AOwkdTepmugnrzvMLyuNuzE41d2eb5qU09gXHuxzm8AH7mAIEAGGXQpLFWUJ3z6Wy5
+         5K/Oww5gaARmk3OfYzmtFtwLpWfEmtwVMdf3PjGFJrYnMBxTKt/+6T97TZn1SjCdvqZu
+         xPwdRvEm4Rv5kHVGClgWJEXqgwMGlvxpMmz69aXoEDhVvzYmVgKc8zvSgojemWkboAxO
+         Q8ZwATBe5z1bJmfGQYNLon9rzbso4qr0ubqBH2PjGMIQSaVyveXlxzXHkP1mkF/xZTHh
+         3LFxN9t0Emn8t5VFyFviCm52ML7r+PRTcKeOeBEdyVQCQ4tZ0dNvNSXx0v6ifhzyweHG
+         4wmA==
+X-Gm-Message-State: AC+VfDyFs1yQmQEVfI3qEMdt7BN4R4SF/vRMtU7NLDvMk3MvV1P9pQOb
+        +iJOOo1DxXwFsCY5nXqpCOaQ76WX1KsA/mRk
+X-Google-Smtp-Source: ACHHUZ47gKkme4BlvMezN9DctFC6s/g8/MW9j8MZr/ozNk8h4akIH/CDSUWj2RKDMOrTQkGlPZVv6g==
+X-Received: by 2002:a05:6a21:168b:b0:115:83f:fd0d with SMTP id np11-20020a056a21168b00b00115083ffd0dmr8894049pzb.18.1686580416006;
+        Mon, 12 Jun 2023 07:33:36 -0700 (PDT)
+Received: from localhost.localdomain ([103.116.245.58])
+        by smtp.gmail.com with ESMTPSA id z24-20020a63c058000000b0051ba9d772f9sm7639626pgi.59.2023.06.12.07.33.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 07:33:35 -0700 (PDT)
+From:   Jianhui Zhao <zhaojh329@gmail.com>
+To:     andrew@lunn.ch
+Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jianhui Zhao <zhaojh329@gmail.com>
+Subject: [PATCH] net: phy: Assign the c45 id to phy_id property when matched.
+Date:   Mon, 12 Jun 2023 22:33:20 +0800
+Message-Id: <20230612143320.2077-1-zhaojh329@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230612135228.10702-1-sergei.shtepa@veeam.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'm of course a little byassed by having spent a lot of my own time
-on this, but this version now looks ready to merge to me:
+If a phydevice use c45, its phy_id property is always 0 previously.
+This change make the phy_id property has a valid value assigned from
+c45 id.
 
-Acked-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Jianhui Zhao <zhaojh329@gmail.com>
+---
+ drivers/net/phy/phy_device.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-But as Jens just merged my series to reopen the open flag we'll also
-need to fold this in:
+diff --git a/drivers/net/phy/phy_device.c b/drivers/net/phy/phy_device.c
+index 17d0d0555a79..81a4bc043ee2 100644
+--- a/drivers/net/phy/phy_device.c
++++ b/drivers/net/phy/phy_device.c
+@@ -541,8 +541,10 @@ static int phy_bus_match(struct device *dev, struct device_driver *drv)
+ 
+ 			if ((phydrv->phy_id & phydrv->phy_id_mask) ==
+ 			    (phydev->c45_ids.device_ids[i] &
+-			     phydrv->phy_id_mask))
++			     phydrv->phy_id_mask)) {
++				phydev->phy_id = phydev->c45_ids.device_ids[i];
+ 				return 1;
++			}
+ 		}
+ 		return 0;
+ 	} else {
+-- 
+2.34.1
 
-diff --git a/drivers/block/blksnap/diff_area.c b/drivers/block/blksnap/diff_area.c
-index 169fa003b6d66d..0848c947591508 100644
---- a/drivers/block/blksnap/diff_area.c
-+++ b/drivers/block/blksnap/diff_area.c
-@@ -128,7 +128,7 @@ void diff_area_free(struct kref *kref)
- 	xa_destroy(&diff_area->chunk_map);
- 
- 	if (diff_area->orig_bdev) {
--		blkdev_put(diff_area->orig_bdev, FMODE_READ | FMODE_WRITE);
-+		blkdev_put(diff_area->orig_bdev, NULL);
- 		diff_area->orig_bdev = NULL;
- 	}
- 
-@@ -214,7 +214,8 @@ struct diff_area *diff_area_new(dev_t dev_id, struct diff_storage *diff_storage)
- 
- 	pr_debug("Open device [%u:%u]\n", MAJOR(dev_id), MINOR(dev_id));
- 
--	bdev = blkdev_get_by_dev(dev_id, FMODE_READ | FMODE_WRITE, NULL, NULL);
-+	bdev = blkdev_get_by_dev(dev_id, BLK_OPEN_READ | BLK_OPEN_WRITE, NULL,
-+				 NULL);
- 	if (IS_ERR(bdev)) {
- 		int err = PTR_ERR(bdev);
- 
-@@ -224,7 +225,7 @@ struct diff_area *diff_area_new(dev_t dev_id, struct diff_storage *diff_storage)
- 
- 	diff_area = kzalloc(sizeof(struct diff_area), GFP_KERNEL);
- 	if (!diff_area) {
--		blkdev_put(bdev, FMODE_READ | FMODE_WRITE);
-+		blkdev_put(bdev, NULL);
- 		return ERR_PTR(-ENOMEM);
- 	}
- 
-diff --git a/drivers/block/blksnap/diff_storage.c b/drivers/block/blksnap/diff_storage.c
-index 1787fa6931a816..f3814474b9804a 100644
---- a/drivers/block/blksnap/diff_storage.c
-+++ b/drivers/block/blksnap/diff_storage.c
-@@ -123,7 +123,7 @@ void diff_storage_free(struct kref *kref)
- 	}
- 
- 	while ((storage_bdev = first_storage_bdev(diff_storage))) {
--		blkdev_put(storage_bdev->bdev, FMODE_READ | FMODE_WRITE);
-+		blkdev_put(storage_bdev->bdev, NULL);
- 		list_del(&storage_bdev->link);
- 		kfree(storage_bdev);
- 	}
-@@ -138,7 +138,7 @@ static struct block_device *diff_storage_add_storage_bdev(
- 	struct storage_bdev *storage_bdev, *existing_bdev = NULL;
- 	struct block_device *bdev;
- 
--	bdev = blkdev_get_by_path(bdev_path, FMODE_READ | FMODE_WRITE,
-+	bdev = blkdev_get_by_path(bdev_path, BLK_OPEN_READ | BLK_OPEN_WRITE,
- 				  NULL, NULL);
- 	if (IS_ERR(bdev)) {
- 		pr_err("Failed to open device. errno=%ld\n", PTR_ERR(bdev));
-@@ -153,14 +153,14 @@ static struct block_device *diff_storage_add_storage_bdev(
- 	spin_unlock(&diff_storage->lock);
- 
- 	if (existing_bdev->bdev == bdev) {
--		blkdev_put(bdev, FMODE_READ | FMODE_WRITE);
-+		blkdev_put(bdev, NULL);
- 		return existing_bdev->bdev;
- 	}
- 
- 	storage_bdev = kzalloc(sizeof(struct storage_bdev) +
- 			       strlen(bdev_path) + 1, GFP_KERNEL);
- 	if (!storage_bdev) {
--		blkdev_put(bdev, FMODE_READ | FMODE_WRITE);
-+		blkdev_put(bdev, NULL);
- 		return ERR_PTR(-ENOMEM);
- 	}
- 
