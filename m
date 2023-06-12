@@ -2,172 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B987E72D3A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 23:54:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF86172D39E
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 23:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238392AbjFLVyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 17:54:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56006 "EHLO
+        id S235903AbjFLVxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 17:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238171AbjFLVxk (ORCPT
+        with ESMTP id S237693AbjFLVxY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 17:53:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9424B199B
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 14:52:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686606771;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Lig8bfKofULub0rdesjmJTGhCjl+c+cZITPDTaTBD/c=;
-        b=SK3t2i4HWkvOs0bA/+lNwejEFm32sd9+9kUGrSglII7LdTwJVXLY8Vt1ezKiCOjniIEVYE
-        v/YNfVH+OOZ9x29fBM6AiMyMKf+1Tmqx+wDnji0jqxFhj4Dupsexkb6XiXl8TfBPIF/I/5
-        w/o/QyE2TTEtQr6HNGjeU0jVL9lW1nc=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-53-dS3E9yAhMxq60o4q5UfoDw-1; Mon, 12 Jun 2023 17:52:50 -0400
-X-MC-Unique: dS3E9yAhMxq60o4q5UfoDw-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-30fb891c5e3so3613906f8f.2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 14:52:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686606769; x=1689198769;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Lig8bfKofULub0rdesjmJTGhCjl+c+cZITPDTaTBD/c=;
-        b=NDTsCuhwWtTeKwA4TZ4N8U9vKl4X6lgroL8kM9mz5Q7SclWvFxSEAPUsEuGN2zs0jz
-         croCk1iNHtcX2zmb2lto7/i1omxGMgn+1xgFJ7uXRVVbPgylJa92xR+nclze+BlvDkpC
-         JXmCzdAeshYLo57yANO/mL3yfwgpgAuLPW8OzCVRDPj4QXy84kzGQa/z6WrJ6A29yTS1
-         ycc02gFhnK2EhQrVnZC7NxQgqZUMURBqG1pTPABs3QmoRTkeGQdyE1SYDmFLVBdcPuTz
-         JLnGQXZ4K77W6fB1rB1xpshpZoR/yl5IyuWoOGs3aONRrrmpEJk0FWG4CIzUqtrnDqIa
-         O5QA==
-X-Gm-Message-State: AC+VfDwMn5ILBU54IgMmTIrRwAmrgHv2UD1WWOhUu5lSw9cU165FZMD0
-        4DsU5SwdUFfzClstW5B3Cm8nI97v29TGm8x+NQE7qMTea6Urv2bsDRAaObVOw3h/tXV53M8HSGQ
-        ybwb4sNbmo/fFLR/ePBdUsZBA
-X-Received: by 2002:a5d:4e85:0:b0:30a:d2e6:6a78 with SMTP id e5-20020a5d4e85000000b0030ad2e66a78mr5644108wru.24.1686606769103;
-        Mon, 12 Jun 2023 14:52:49 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ533dy2vongGwe/ijXoDrZL6tuCydkYrtVs8jx5yk/Ac46ZodmFGImZx55e7jFjVeMCqkk2YQ==
-X-Received: by 2002:a5d:4e85:0:b0:30a:d2e6:6a78 with SMTP id e5-20020a5d4e85000000b0030ad2e66a78mr5644097wru.24.1686606768769;
-        Mon, 12 Jun 2023 14:52:48 -0700 (PDT)
-Received: from localhost (net-130-25-106-149.cust.vodafonedsl.it. [130.25.106.149])
-        by smtp.gmail.com with ESMTPSA id a11-20020a05600c224b00b003f8126bcf34sm8119367wmm.48.2023.06.12.14.52.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 14:52:48 -0700 (PDT)
-Date:   Mon, 12 Jun 2023 23:52:46 +0200
-From:   Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Daniel Golle <daniel@makrotopia.org>, netdev@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sam Shih <Sam.Shih@mediatek.com>
-Subject: Re: [PATCH net-next 3/8] net: ethernet: mtk_eth_soc: move MAX_DEVS
- in mtk_soc_data
-Message-ID: <ZIeTrjCsyQSiCnsr@lore-desk>
-References: <ZIUWxQ9H7hNSd6rJ@makrotopia.org>
- <ZIb6604WRJsevaWN@shell.armlinux.org.uk>
+        Mon, 12 Jun 2023 17:53:24 -0400
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2099.outbound.protection.outlook.com [40.107.114.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6EA10F9;
+        Mon, 12 Jun 2023 14:53:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HSWPG3973XDQVXKx1N4l6Iur5qgbWqNFenlEUnqy2Zx2Q1m4coC4++aCKJiALxFwDUGL/UBNnq1ulW6hzNhNaOheWevnzTDdjFIWQ4MJ1ElmRONs0Yx4LuyAtWD/Zbc8jFBBRoDAqSdDdifpFecus/QM6s11/uIVPlvqaO3HOy8yoXdNt1VGgxKMzvjoRCBgwC9QEcXAVaWCeQJUOGiFamY+YPPkC3liDZa4S9mEfWyDk59KKXcIH753qRAPt6xHiqDV3Ol6ho1BAhbFhJKvNaDyGGnKw5KSybjoE3Td42Z6DKFV2dB6+mNSw6db2GTx1XgiyYj2sp0r/DhyB6wzcw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=o99FOv5ZqZMeF4TU/jes7zkplth9D0lca+wPjdBJokE=;
+ b=QRtEXf5UUzlGt5fgFqudvlkk6R2VO2zZd7IJhjX5UR+CFsE3h2RGGAWKHczmgTS4afeVamxto7aDuMukfnQ8v+yCYBfZDI58YkiN+rab/9ysHvhVNpZNmzviDLdDFD7lDLGrFa2UDmbxhvtPR6LcOcgvVFHWBl5vF29vOtm7gaAmonQH/9Onfg54DAU9SznlHyeO/yfnwVz1H0UUQ8VpbXf8OkYT+GhQuY7ZGJDSJAKNPgC9x+k6dBax7Q8YMvexB6iUjkQizqurqvvCap6u7kW46DwKKfljHtsSticrKqntSoYb4E7UiDWB3dGFlNNrk6BHuJ9ZPA1iwkQGDC7IVg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=o99FOv5ZqZMeF4TU/jes7zkplth9D0lca+wPjdBJokE=;
+ b=JpPoaGLDUMfNM2DCoLZPyfX1OR0ccrK5gqgViS9veIExUCVTFVMp4krQaaE/MJnj+NeXWNujOxbhQAWn9jOsJGLxDeBGr4u95Se1SOzMaR82vp/b5lcOc5Qwy7IHi3pk+t/5T3uaUF/Qqt6laCVs6Skm2jeNQ0S6PxbHf8tbPRI=
+Received: from TY2PR01MB3788.jpnprd01.prod.outlook.com (2603:1096:404:dd::14)
+ by TYCPR01MB8680.jpnprd01.prod.outlook.com (2603:1096:400:157::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Mon, 12 Jun
+ 2023 21:53:14 +0000
+Received: from TY2PR01MB3788.jpnprd01.prod.outlook.com
+ ([fe80::a4f8:4204:cbe6:6cb3]) by TY2PR01MB3788.jpnprd01.prod.outlook.com
+ ([fe80::a4f8:4204:cbe6:6cb3%3]) with mapi id 15.20.6477.028; Mon, 12 Jun 2023
+ 21:53:14 +0000
+From:   Chris Paterson <Chris.Paterson2@renesas.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+CC:     "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "patches@kernelci.org" <patches@kernelci.org>,
+        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
+        "pavel@denx.de" <pavel@denx.de>,
+        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>,
+        "srw@sladewatkins.net" <srw@sladewatkins.net>,
+        "rwarsow@gmx.de" <rwarsow@gmx.de>
+Subject: RE: [PATCH 6.1 000/132] 6.1.34-rc1 review
+Thread-Topic: [PATCH 6.1 000/132] 6.1.34-rc1 review
+Thread-Index: AQHZnRxkpLFT31A0BUq+nKFZbX/S9K+HtOew
+Date:   Mon, 12 Jun 2023 21:53:14 +0000
+Message-ID: <TY2PR01MB37889370E317ED5458E5B82EB754A@TY2PR01MB3788.jpnprd01.prod.outlook.com>
+References: <20230612101710.279705932@linuxfoundation.org>
+In-Reply-To: <20230612101710.279705932@linuxfoundation.org>
+Accept-Language: en-US, en-GB
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TY2PR01MB3788:EE_|TYCPR01MB8680:EE_
+x-ms-office365-filtering-correlation-id: 99dd74e1-c151-4b73-e4fc-08db6b8f6c4a
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 8LwlYE3kPkduotJh/DEWyheOmTEn7AtMnd7wXEsuKhO7YCe0E+1cJ2UiDsb7W3rNHVk5rd4CdXwIgHQLT0FgOGozmf0j4U6ZeF77HCDdbacnTjPkbSsWnpMrSlvxSBWWMvQQ1tLOUBwv+PDN8xuUllUhheKk7QdTVSpyPwyrn0srIkhuyBi5aV9j1HMXGNobcXiXezbNhjnzE0jhgV5iZxIRFHubYru7RBHA8Y8Caz5pplKZ1jgTss16Xvv750bzSDOJ1v9bToxvVmTz9J6HvgF9SWVdm1xP3XX/0IKO5mJuy3OxSLgfnNQwJgiQaV3okwpoouW0sfgQ/tTe9X2w5jaWuIWQ/9wwtet1KTi05FLI7XKiByXQIRErPCmy/vEsKehzwJclOLyBr2z9OUbi5y+FyNpjHmuc3xLq4ta/J/UVc+9qwRch2kKzIqwGGG/gVrKfC2ugNN+9ypnco2WV86bFPZbhLq7t7cr/Ya0koMIjV1e7JCgHoAf4YzecxN3Fk0CU67rzPXqZl6Sd3CA+WT9Ng37G+EKvK9jlb9O5LbLjNDmopXb+zqMj6m5mVO66gAbqPb7atwm9XqCiHiO2ZIkhdKBD6poxKFEO+hYbE7SghEYwxZAl0+CYWBC9YAYui9kTD5ligR2smSGvKmI/qQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR01MB3788.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(376002)(366004)(136003)(39860400002)(451199021)(64756008)(66476007)(66556008)(66946007)(316002)(7416002)(4326008)(66446008)(41300700001)(76116006)(186003)(4744005)(2906002)(110136005)(54906003)(478600001)(8676002)(8936002)(5660300002)(52536014)(71200400001)(966005)(7696005)(6506007)(33656002)(122000001)(26005)(55016003)(9686003)(86362001)(38070700005)(38100700002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?Windows-1252?Q?u53D5JbxA0hhhQlEZowJVr/gjmfasuQ3UdMfRA8aTUT3oU1Tu69LzzDq?=
+ =?Windows-1252?Q?o8qNUWVJglVq1ewKzgvBhPNBlkhxnVuIUBsmKap1CBs3TBC+lQlVqlac?=
+ =?Windows-1252?Q?UaS1VhzzkaxouVJ/CYfIGjt4gVvZ73aQdei0TCXZtaepyzxqrEXqRtEG?=
+ =?Windows-1252?Q?f3GMmCTow2QCFfmpZY2p/ijZZX/ORH5I56z1y5QhnB2dF8ILa/0zgKTB?=
+ =?Windows-1252?Q?HpXg5Hhq1iLn8NXK+4CZd6EIuxTO52Dcgu32NCitdBcF8KTuUiBI408a?=
+ =?Windows-1252?Q?b0ud8kI7mziiGV38rShlyNLP/K1nR454ipSkAl9YhZDM9wKN4mfDsknq?=
+ =?Windows-1252?Q?slMCzjBDCdl59/YSMPOgV8SWGW5XGL27chRH6PbW+rtxbVKhE2m+FR7K?=
+ =?Windows-1252?Q?RbBxyzBqv6esk5pq273VfVecWiV8sh9UwdIyhUsZfc9VCASQQif3eygK?=
+ =?Windows-1252?Q?j6gKZzgfweEDfUOQomnz2EJuqxO+wCAhhCvjwujr6rWEoM1DwNpG1zJq?=
+ =?Windows-1252?Q?XfDFrNPtgjbdoQo8c1UiuZqLuTdsnUpfsmn8eR+HiaGhksgMp2zAxZb3?=
+ =?Windows-1252?Q?tqLY84+7VhVJC+vrT9TQm/EtfMq5Fhujsheu4ckDxJdes07a+84bFv6C?=
+ =?Windows-1252?Q?uVyeyl9ToKcmbE2CDazhxGaAkDYMr8D/0gS2CA0kYJflTZ+2wbwRzQDl?=
+ =?Windows-1252?Q?dkULDwfewMPqFeYAhDWKwqDaQ9IbyI3xmtjZF6HjhLBCBUvd5cjIAdXb?=
+ =?Windows-1252?Q?d3UheK1d+XDu6MK7fjNUshpYkLI3URf5R1oQjvuh5EOqyHptyzREYxtX?=
+ =?Windows-1252?Q?IYkFD+1xEWLKO1d/HFTfn05a7Chxm5YDlbmGRPpX3/X5GxQXfxYbVoYK?=
+ =?Windows-1252?Q?ETR6EdtYA1onXlXkYrk2ArBGz3C9vrjCDywo1TDyO+8sivToRtNza2NZ?=
+ =?Windows-1252?Q?shKSRoIWMXmTaOKc8YRx+8/06gJ8VcWumv3RhGBIb6bKE2pgHIjDXJzU?=
+ =?Windows-1252?Q?yTYQUNHTT/46J7DsqebGxFrDtqAcTKuYN2/ci2NPy7OzjWgC4wOVJ4Ws?=
+ =?Windows-1252?Q?e2OmTka2IIzrYSYlJFl6pgR3mWduqlFPamdxzk0l2reROwu7lnx2cCDq?=
+ =?Windows-1252?Q?qAH/l48RFN0W5TUSt1WhrTvu973HmVrbIeb7AHPleXiL3af5zZ1xBM7G?=
+ =?Windows-1252?Q?SUuYpiffDkCkIycrDDokFtz1cvCHZ8IHHdLLkbP2q9TGCO4dbxZn37ph?=
+ =?Windows-1252?Q?fQw31gs3/X12FZVGmVF9h/2jk6PsXHsPc23+hJPu39pOp+C32rH9XjyA?=
+ =?Windows-1252?Q?u+aNyTy/PfGEcpW/SR55UlqIKyNmuiz2V1m5YyId0mtCGu+m3r0c3hqd?=
+ =?Windows-1252?Q?gLOyBEfDCuRUr2LMurhfFa6WDJv9o8l8Jhbj7htmeelV5UeK2H8IZORc?=
+ =?Windows-1252?Q?s9BC+eQeaHMys8g3ZP/OgF6xO27sTvIpHHEKa6YRSgLb6BGHdj7HKI9t?=
+ =?Windows-1252?Q?5E+RfkbxmteEBNTDraXAyaCsRVYxU5jimaOmIIve1aSMDzyBC6bL5QCw?=
+ =?Windows-1252?Q?YlTRn8/HnupV6vNB890nhH6VrKtInaxpIzrVtWlhtQaRA4Pcv1HVy98s?=
+ =?Windows-1252?Q?qKarlmCI6Na6066YwjIGtv6A6OmncWqN83tRlrPb5YzS1b71Fj3zxaul?=
+ =?Windows-1252?Q?mhu0ldeCgYYU2YdoitiNTSPLPs4MXOHBXO7izwKG+92ogLlueB5ifQ?=
+ =?Windows-1252?Q?=3D=3D?=
+Content-Type: text/plain; charset="Windows-1252"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+jV/BeWnWuWrIw8B"
-Content-Disposition: inline
-In-Reply-To: <ZIb6604WRJsevaWN@shell.armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TY2PR01MB3788.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 99dd74e1-c151-4b73-e4fc-08db6b8f6c4a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jun 2023 21:53:14.4012
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: UywlWU1w4T8v23CoTud5wR7WEkutmcgPZaA4w/YUA70B5ljr3HE6+414Mkb689gQsEJbL4693NidXAKDhv31/wlP2HUHq6o6nKMuXlKep1c=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB8680
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Greg,
 
---+jV/BeWnWuWrIw8B
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-> On Sun, Jun 11, 2023 at 01:35:17AM +0100, Daniel Golle wrote:
-> > @@ -1106,14 +1105,14 @@ struct mtk_eth {
-> >  	spinlock_t			tx_irq_lock;
-> >  	spinlock_t			rx_irq_lock;
-> >  	struct net_device		dummy_dev;
-> > -	struct net_device		*netdev[MTK_MAX_DEVS];
-> > -	struct mtk_mac			*mac[MTK_MAX_DEVS];
-> > +	struct net_device		**netdev;
-> > +	struct mtk_mac			**mac;
-> >  	int				irq[3];
-> >  	u32				msg_enable;
-> >  	unsigned long			sysclk;
-> >  	struct regmap			*ethsys;
-> >  	struct regmap			*infra;
-> > -	struct phylink_pcs		*sgmii_pcs[MTK_MAX_DEVS];
-> > +	struct phylink_pcs		**sgmii_pcs;
-> >  	struct regmap			*pctl;
-> >  	bool				hwlro;
-> >  	refcount_t			dma_refcnt;
+> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Sent: Monday, June 12, 2023 11:26 AM
 >=20
-> Is it really worth the extra allocations?
+> This is the start of the stable review cycle for the 6.1.34 release.
+> There are 132 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >=20
-> There's three pointers here per device. Let's talk about modern systems,
-> so that's 8 bytes each, and if MTK_MAX_DEVS was two, that's 48 bytes in
-> all. If we expanded the array to allow three, that would be 72 bytes.
->=20
-> If we allocate separately, then we're allocating 16 or 24 bytes three
-> times depending on whether we want two or three of them.
->=20
-> On arm64, I'm seeing the minimum slab size as 128 bytes, which means
-> that's the minimum memory allocation. So, allocating three arrays will
-> be 384 bytes in all, irrespective of whether we want two or three
-> entries.
->=20
-> That's a waste of about 5x the memory over just expanding the arrays!
+> Responses should be made by Wed, 14 Jun 2023 10:16:41 +0000.
+> Anything received after that time might be too late.
 
-ack, I agree. I will fix it.
+Thank you for the release!
 
-Regards,
-Lorenzo
+CIP configurations built and booted okay with Linux 6.1.34-rc1 (08f336c8c68=
+d):
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/pipelines/8=
+97026254
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/commits/lin=
+ux-6.1.y
 
->=20
-> If you want to go down the route of dynamically allocating these, it
-> would make better sense to combine them into a single structure that
-> itself is an array, and thus requiring only one allocation. That
-> reduces the wastage to about 56 bytes for three ports or 80 bytes
-> for two.
->=20
-> Thanks.
->=20
-> --=20
-> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
->=20
+Tested-by: Chris Paterson (CIP) <chris.paterson2@renesas.com>
 
---+jV/BeWnWuWrIw8B
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCZIeTrgAKCRA6cBh0uS2t
-rNj4AP9deO0Gr7/2QBPFl0zwa5owkvBsU7Fw1f3Xo0VOcoEEOQEApfOn/gVjmHQW
-s9GY/xg59Fhdvwhh8lfHmXEvgidsqAg=
-=V5g1
------END PGP SIGNATURE-----
-
---+jV/BeWnWuWrIw8B--
-
+Kind regards, Chris
