@@ -2,253 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B103472D41F
-	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 00:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 653CD72D423
+	for <lists+linux-kernel@lfdr.de>; Tue, 13 Jun 2023 00:08:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238683AbjFLWHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 18:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36268 "EHLO
+        id S238700AbjFLWHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 18:07:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238519AbjFLWHh (ORCPT
+        with ESMTP id S238695AbjFLWHw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 18:07:37 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E674E1;
-        Mon, 12 Jun 2023 15:07:35 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f620583bc2so5737287e87.1;
-        Mon, 12 Jun 2023 15:07:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686607654; x=1689199654;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mcHe4XpFq0AW2AUqP2k4N8qIUXEU3zKguGq7BXWzAdE=;
-        b=jHgOf0AWqjxtbfSi/mnme0SxvQEIzX1iEXtrpvJsUaatCv4uINA30hRmB5lJuuGcM2
-         Swo6zESQOUraHapg+ZHN6LUEGw3SHwyCOF7reaaFSIJ0X6OO1W0Thj6iKzsj3cExjYlC
-         zS6mph96er0FeY5w7lGyVqQnjmaTwqciwvzbWym5IziLfJocYwcqAE3GXCW6Raeu4U7m
-         TFFSZyCdWlZoT+WlaQ6yQ4UuRqHApLShhDggLbaYpLb5irBMQgI+2WA0b3UpjgSmLPNj
-         /TarMdUTakduM0kIsfwT59AzXp8dK8bbn0gKGGblFdMYzvZdwYSRoAE+wrZRMShjFWxQ
-         /OCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686607654; x=1689199654;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mcHe4XpFq0AW2AUqP2k4N8qIUXEU3zKguGq7BXWzAdE=;
-        b=eBbUXqW8NrgnR69S7lHjkfgcS361gUuXiZBN7EBuzH2cd/n+qLd2BaxOcBmZ+yrJwD
-         wd8DkgZqCcszSdSSA6ZU3WZ8iaa32HeqwhX8AJSJAcmZZPfJBDLMI7Y2N68cNraOgbgF
-         Rtn1cI2medzeGkOkCvJ+484bNteXklVH0UJ18jcXzRcw8xLvww/6Hz99YD5F4ad0nSCr
-         HjI6yjv0KPsLYahjLodKHzY0rZR9ku+QQclNYHJb8bTPnVP2byCQ0DWj373y85B/e/+C
-         9zPTCFBTbUkcoEjJqGyu2cBSUdM74SzY/jXB/bzQDWAMwahIMlAM/8fAhYiDNXINKNeR
-         82hw==
-X-Gm-Message-State: AC+VfDzKTTeBofvWnX7NYD3JYsiPtYsUS4I6WFYwBernGr+q8++zN6rm
-        EvVcdVUYnKpOQUZsjNgP9ihqhVITKPZ17ZaXNzE=
-X-Google-Smtp-Source: ACHHUZ6JueSPOeP2I+jZk3U364o996ITHBauYMOpKEvV2emdY5w+CaYkyu1MYxkEEWt/1UVBmUf0lcuuUqa9/OsQpGw=
-X-Received: by 2002:a2e:9bd3:0:b0:2ae:db65:2d01 with SMTP id
- w19-20020a2e9bd3000000b002aedb652d01mr3555485ljj.23.1686607653334; Mon, 12
- Jun 2023 15:07:33 -0700 (PDT)
+        Mon, 12 Jun 2023 18:07:52 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D09E1;
+        Mon, 12 Jun 2023 15:07:49 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35CM7kOH023457;
+        Mon, 12 Jun 2023 22:07:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=mY5Z1R+ihDJ1EUKQDtJ6kfoM3Poq9FSIVUXa0+sgZsI=;
+ b=MsEv+qTTnsd5tfoOdxzFIWJCOPDplAVOdApmZTKsV+6JEr7G2HWvKKldACu3DfX3EgIC
+ 7N3Ay0klDRYsK7AMnyoxrHbx05giLdbCN73++ziJmJ9jnJQHjhTuDRVIwzs77UugBIVV
+ JQ/qt+iqwdnPgeJE3jMITLXU/9OAZUyAGh9HDkXxvBKUlI4ixuZ3unBC7upAJNBpt7fW
+ X2BvsUscohiLswsPMvhEKfQBGsaGv1XD00ajgzPszTL2w3PnFNn1kB8FOw5UrWgppAbf
+ 85mMSGBPOPw6XZLj5/b4ZAKlZS1hID3g8J0WqXzyQnFWWyN8Bq1gTbzzcOkx6L0vajvY sg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r690q08v9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Jun 2023 22:07:46 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35CM7jW1009924
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Jun 2023 22:07:45 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Mon, 12 Jun 2023 15:07:44 -0700
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] arm64: dts: qcom: sc8180x: Move DisplayPort for MMCX
+Date:   Mon, 12 Jun 2023 15:07:39 -0700
+Message-ID: <20230612220739.1886155-1-quic_bjorande@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <cover.1686268304.git.kjlx@templeofstupid.com> <9e3041e182a75f558f1132f915ddf2ee7e859c6e.1686268304.git.kjlx@templeofstupid.com>
- <CAADnVQKAmbb2mTNem+3wvCSS44mvmydDCjWj-4V9VZd93vgksQ@mail.gmail.com> <ef33f004f1f20c7a4cc7c963eea628df7bec0c53.camel@linux.ibm.com>
-In-Reply-To: <ef33f004f1f20c7a4cc7c963eea628df7bec0c53.camel@linux.ibm.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 12 Jun 2023 15:07:22 -0700
-Message-ID: <CAADnVQLWNt0KsXoYVGFD0i089YMivYJ+ZeWmutUiefcdK=eOrw@mail.gmail.com>
-Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: add a test for subprogram extables
-To:     Ilya Leoshkevich <iii@linux.ibm.com>
-Cc:     Krister Johansen <kjlx@templeofstupid.com>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: dl10Il--uvBP_JB21t7GCvPeGWqGvsIw
+X-Proofpoint-GUID: dl10Il--uvBP_JB21t7GCvPeGWqGvsIw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-12_16,2023-06-12_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ mlxlogscore=999 priorityscore=1501 spamscore=0 lowpriorityscore=0
+ suspectscore=0 clxscore=1015 bulkscore=0 adultscore=0 phishscore=0
+ malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306120190
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 6:46=E2=80=AFAM Ilya Leoshkevich <iii@linux.ibm.com=
-> wrote:
->
-> On Fri, 2023-06-09 at 11:15 -0700, Alexei Starovoitov wrote:
-> > On Thu, Jun 8, 2023 at 5:11=E2=80=AFPM Krister Johansen
-> > <kjlx@templeofstupid.com> wrote:
-> > >
-> > > In certain situations a program with subprograms may have a NULL
-> > > extable entry.  This should not happen, and when it does, it turns
-> > > a
-> > > single trap into multiple.  Add a test case for further debugging
-> > > and to
-> > > prevent regressions.  N.b: without any other patches this can panic
-> > > or
-> > > oops a kernel.
-> > >
-> > > Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
-> > > ---
-> > >  .../bpf/prog_tests/subprogs_extable.c         | 31 +++++++++++++
-> > >  .../bpf/progs/test_subprogs_extable.c         | 46
-> > > +++++++++++++++++++
-> > >  2 files changed, 77 insertions(+)
-> > >  create mode 100644
-> > > tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
-> > >  create mode 100644
-> > > tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-> > >
-> > > diff --git
-> > > a/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
-> > > b/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
-> > > new file mode 100644
-> > > index 000000000000..2201988274a4
-> > > --- /dev/null
-> > > +++ b/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
-> > > @@ -0,0 +1,31 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +
-> > > +#include <test_progs.h>
-> > > +#include "test_subprogs_extable.skel.h"
-> > > +
-> > > +void test_subprogs_extable(void)
-> > > +{
-> > > +       const int READ_SZ =3D 456;
-> > > +       struct test_subprogs_extable *skel;
-> > > +       int err;
-> > > +
-> > > +       skel =3D test_subprogs_extable__open();
-> > > +       if (!ASSERT_OK_PTR(skel, "skel_open"))
-> > > +               return;
-> > > +
-> > > +       err =3D test_subprogs_extable__load(skel);
-> > > +       if (!ASSERT_OK(err, "skel_load"))
-> > > +               goto cleanup;
-> > > +
-> > > +       err =3D test_subprogs_extable__attach(skel);
-> > > +       if (!ASSERT_OK(err, "skel_attach"))
-> > > +               goto cleanup;
-> > > +
-> > > +       /* trigger tracepoint */
-> > > +       ASSERT_OK(trigger_module_test_read(READ_SZ),
-> > > "trigger_read");
-> > > +
-> > > +       test_subprogs_extable__detach(skel);
-> > > +
-> > > +cleanup:
-> > > +       test_subprogs_extable__destroy(skel);
-> > > +}
-> > > diff --git
-> > > a/tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-> > > b/tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-> > > new file mode 100644
-> > > index 000000000000..c3ff66bf4cbe
-> > > --- /dev/null
-> > > +++ b/tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-> > > @@ -0,0 +1,46 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +
-> > > +#include "vmlinux.h"
-> > > +#include <bpf/bpf_helpers.h>
-> > > +#include <bpf/bpf_tracing.h>
-> > > +
-> > > +struct {
-> > > +       __uint(type, BPF_MAP_TYPE_ARRAY);
-> > > +       __uint(max_entries, 8);
-> > > +       __type(key, __u32);
-> > > +       __type(value, __u64);
-> > > +} test_array SEC(".maps");
-> > > +
-> > > +static __u64 test_cb(struct bpf_map *map, __u32 *key, __u64 *val,
-> > > void *data)
-> > > +{
-> > > +       return 1;
-> > > +}
-> > > +
-> > > +SEC("fexit/bpf_testmod_return_ptr")
-> > > +int BPF_PROG(handle_fexit_ret_subprogs, int arg, struct file *ret)
-> > > +{
-> > > +       *(volatile long *)ret;
-> > > +       *(volatile int *)&ret->f_mode;
-> > > +       bpf_for_each_map_elem(&test_array, test_cb, NULL, 0);
-> > > +       return 0;
-> > > +}
-> > > +
-> > > +SEC("fexit/bpf_testmod_return_ptr")
-> > > +int BPF_PROG(handle_fexit_ret_subprogs2, int arg, struct file
-> > > *ret)
-> > > +{
-> > > +       *(volatile long *)ret;
-> > > +       *(volatile int *)&ret->f_mode;
-> > > +       bpf_for_each_map_elem(&test_array, test_cb, NULL, 0);
-> > > +       return 0;
-> > > +}
-> > > +
-> > > +SEC("fexit/bpf_testmod_return_ptr")
-> > > +int BPF_PROG(handle_fexit_ret_subprogs3, int arg, struct file
-> > > *ret)
-> > > +{
-> > > +       *(volatile long *)ret;
-> > > +       *(volatile int *)&ret->f_mode;
-> > > +       bpf_for_each_map_elem(&test_array, test_cb, NULL, 0);
-> > > +       return 0;
-> > > +}
-> >
-> > What is the point of attaching 3 the same progs to the same hook?
-> > One would be enough to test it, no?
-> >
-> > In other news...
-> > Looks like this test is triggering a bug on s390.
-> >
-> > Ilya,
-> > please take a look:
-> > https://github.com/kernel-patches/bpf/actions/runs/5216942096/jobs/9416=
-404780
-> >
-> > bpf_prog_78c0d4c618ed2df7_handle_fexit_ret_subprogs3
-> > is crashing the kernel.
-> > A bug in extable logic on s390?
->
-> I think we also need this:
->
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -17664,6 +17664,7 @@ static int jit_subprogs(struct bpf_verifier_env
-> *env)
->         prog->bpf_func =3D func[0]->bpf_func;
->         prog->jited_len =3D func[0]->jited_len;
->         prog->aux->extable =3D func[0]->aux->extable;
-> +       prog->aux->num_exentries =3D func[0]->aux->num_exentries;
->         prog->aux->func =3D func;
->         prog->aux->func_cnt =3D env->subprog_cnt;
->         bpf_prog_jit_attempt_done(prog);
->
-> The reason is that s390 JIT doubles the number of extable entries due
-> to how the hardware works (some exceptions point to the failing insn,
-> some point to the next one).
->
-> With that:
->
-> Acked-by: Ilya Leoshkevich <iii@linux.ibm.com>
-> Tested-by: Ilya Leoshkevich <iii@linux.ibm.com>
->
-> for the v4 series.
+The DisplayPort blocks are powered by MMCX and should be described as
+such to ensure that power votes are done on the right resource.
 
-Great.
+This also solves the problem that sync_state is unaware of the DP
+controllers needing MMCX to be kept alive during boot. As such this
+change also fixes occasionally seen crashes during boot due to
+undervoltage of MMCX.
 
-Krister,
-could you please resubmit v5 adding the above change and Ilya's tags to pat=
-ch 1?
+Fixes: 494dec9b6f54 ("arm64: dts: qcom: sc8180x: Add display and gpu nodes")
+Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+---
+ arch/arm64/boot/dts/qcom/sc8180x.dtsi | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-I'd like to see green BPF CI on all platforms before landing.
+diff --git a/arch/arm64/boot/dts/qcom/sc8180x.dtsi b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
+index 3de62e26d56a..a7668f9e68d6 100644
+--- a/arch/arm64/boot/dts/qcom/sc8180x.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
+@@ -2969,7 +2969,7 @@ mdss_dp0: displayport-controller@ae90000 {
+ 				#sound-dai-cells = <0>;
+ 
+ 				operating-points-v2 = <&dp0_opp_table>;
+-				power-domains = <&rpmhpd SC8180X_CX>;
++				power-domains = <&rpmhpd SC8180X_MMCX>;
+ 
+ 				status = "disabled";
+ 
+@@ -3043,7 +3043,7 @@ mdss_dp1: displayport-controller@ae98000 {
+ 				#sound-dai-cells = <0>;
+ 
+ 				operating-points-v2 = <&dp0_opp_table>;
+-				power-domains = <&rpmhpd SC8180X_CX>;
++				power-domains = <&rpmhpd SC8180X_MMCX>;
+ 
+ 				status = "disabled";
+ 
+@@ -3117,7 +3117,7 @@ mdss_edp: displayport-controller@ae9a000 {
+ 				#sound-dai-cells = <0>;
+ 
+ 				operating-points-v2 = <&edp_opp_table>;
+-				power-domains = <&rpmhpd SC8180X_CX>;
++				power-domains = <&rpmhpd SC8180X_MMCX>;
+ 
+ 				status = "disabled";
+ 
+-- 
+2.25.1
+
