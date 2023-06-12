@@ -2,54 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C368972C56E
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 15:05:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60B1D72C560
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 15:03:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236334AbjFLNFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 09:05:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46742 "EHLO
+        id S235858AbjFLND0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 09:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236081AbjFLNF1 (ORCPT
+        with ESMTP id S229604AbjFLNDX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 09:05:27 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F2810D8;
-        Mon, 12 Jun 2023 06:05:24 -0700 (PDT)
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QfsHJ1yNwz18MB1;
-        Mon, 12 Jun 2023 21:00:28 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 12 Jun 2023 21:05:22 +0800
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Yunsheng Lin <linyunsheng@huawei.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        <linux-doc@vger.kernel.org>, <bpf@vger.kernel.org>
-Subject: [PATCH net-next v4 5/5] page_pool: update document about frag API
-Date:   Mon, 12 Jun 2023 21:02:56 +0800
-Message-ID: <20230612130256.4572-6-linyunsheng@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20230612130256.4572-1-linyunsheng@huawei.com>
-References: <20230612130256.4572-1-linyunsheng@huawei.com>
+        Mon, 12 Jun 2023 09:03:23 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7D619D;
+        Mon, 12 Jun 2023 06:03:22 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35CCUVEL030059;
+        Mon, 12 Jun 2023 13:03:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=vwUQ1F8I7JI/UaeWgCAqXrFbc20JHeM5AvHArrbGZns=;
+ b=G6ua1Gn9MbO7FPY+XSeGpjItS1FFYvAY0JwZYk1Uiz/KAgD+xkH4m7U8pwqrdL37oyex
+ 7TZdggKYfXNzWeA2MDyCWykL95+zxUR89pNu4OGnk4jVnVK+nH9rjJUmj55OTHOcphJT
+ dOPFqY/Pp8hRXz4zgbOqQA+oAHP4bjcttkDOmNrE+CAkfUCPh4AOsXe9E65w2LopWTTf
+ YqQzadC33GUZF6tsXq37njVCMe6Hyj+hBeY5EmDlt29zKG27sdlJQyUZp/tlnTYuzxgd
+ T+gQCi9Y69hRp7ndog5L4cG+9oKWIWmV6HgTHHHNlMgyS3PWvivDVnLdbP5NDyKh0Wd9 xQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r4hd8bcah-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Jun 2023 13:03:11 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35CD3ArR004276
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Jun 2023 13:03:10 GMT
+Received: from [10.50.37.200] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 12 Jun
+ 2023 06:03:07 -0700
+Message-ID: <e3a867a8-284b-7250-b1b2-1956f533f6b0@quicinc.com>
+Date:   Mon, 12 Jun 2023 18:33:04 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] accel/qaic: Fix dereferencing freed memory
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Sukrut Bellary" <sukrut.bellary@linux.com>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linaro-mm-sig@lists.linaro.org>, <linux-media@vger.kernel.org>
+References: <20230610021200.377452-1-sukrut.bellary@linux.com>
+ <fc979a4e-c30a-2606-9eec-afbba4fdd774@amd.com>
+From:   Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>
+In-Reply-To: <fc979a4e-c30a-2606-9eec-afbba4fdd774@amd.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: SeHIjpfi9M7u3H3WwjT4NY5sa6NN1EoZ
+X-Proofpoint-GUID: SeHIjpfi9M7u3H3WwjT4NY5sa6NN1EoZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-12_06,2023-06-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ impostorscore=0 clxscore=1015 lowpriorityscore=0 priorityscore=1501
+ phishscore=0 adultscore=0 bulkscore=0 mlxscore=0 spamscore=0
+ suspectscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2306120112
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,106 +85,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As more drivers begin to use the frag API, update the
-document about how to decide which API to for the driver
-author.
 
-Also it seems there is a similar document in page_pool.h,
-so remove it to avoid the duplication.
 
-Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
-CC: Lorenzo Bianconi <lorenzo@kernel.org>
-CC: Alexander Duyck <alexander.duyck@gmail.com>
----
- Documentation/networking/page_pool.rst | 34 +++++++++++++++++++++-----
- include/net/page_pool.h                | 22 -----------------
- 2 files changed, 28 insertions(+), 28 deletions(-)
+On 6/12/2023 4:52 PM, Christian König wrote:
+> 
+> 
+> Am 10.06.23 um 04:12 schrieb Sukrut Bellary:
+>> smatch warning:
+>>     drivers/accel/qaic/qaic_data.c:620 qaic_free_object() error:
+>>         dereferencing freed memory 'obj->import_attach'
+>>
+>> obj->import_attach is detached and freed using dma_buf_detach().
+>> But used after free to decrease the dmabuf ref count using
+>> dma_buf_put().
+>>
+>> Fixes: ff13be830333 ("accel/qaic: Add datapath")
+>> Signed-off-by: Sukrut Bellary <sukrut.bellary@linux.com>
+>> ---
+>>   drivers/accel/qaic/qaic_data.c | 4 +++-
+>>   1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/accel/qaic/qaic_data.c 
+>> b/drivers/accel/qaic/qaic_data.c
+>> index e42c1f9ffff8..7cba4d680ea8 100644
+>> --- a/drivers/accel/qaic/qaic_data.c
+>> +++ b/drivers/accel/qaic/qaic_data.c
+>> @@ -613,11 +613,13 @@ static int qaic_gem_object_mmap(struct 
+>> drm_gem_object *obj, struct vm_area_struc
+>>   static void qaic_free_object(struct drm_gem_object *obj)
+>>   {
+>>       struct qaic_bo *bo = to_qaic_bo(obj);
+>> +    struct dma_buf *dmabuf;
+> 
+> Maybe move that variable into the if.
+> 
+>>       if (obj->import_attach) {
+>>           /* DMABUF/PRIME Path */
+>> +        dmabuf = obj->import_attach->dmabuf;
+>>           dma_buf_detach(obj->import_attach->dmabuf, obj->import_attach);
+>> -        dma_buf_put(obj->import_attach->dmabuf);
+>> +        dma_buf_put(dmabuf);
+> 
+> I strongly assume you are not using the GEM prime helpers for this?
+> 
+> Christian.
 
-diff --git a/Documentation/networking/page_pool.rst b/Documentation/networking/page_pool.rst
-index 873efd97f822..df3e28728008 100644
---- a/Documentation/networking/page_pool.rst
-+++ b/Documentation/networking/page_pool.rst
-@@ -4,12 +4,28 @@
- Page Pool API
- =============
- 
--The page_pool allocator is optimized for the XDP mode that uses one frame
--per-page, but it can fallback on the regular page allocator APIs.
--
--Basic use involves replacing alloc_pages() calls with the
--page_pool_alloc_pages() call.  Drivers should use page_pool_dev_alloc_pages()
--replacing dev_alloc_pages().
-+The page_pool allocator is optimized for recycling page or page frag used by skb
-+packet and xdp frame.
-+
-+Basic use involves replacing alloc_pages() calls with different page pool
-+allocator API based on different use case:
-+1. page_pool_alloc_pages(): allocate memory without page splitting when driver
-+   knows that the memory it need is always bigger than half of the page
-+   allocated from page pool. There is no cache line dirtying for 'struct page'
-+   when a page is recycled back to the page pool.
-+
-+2. page_pool_alloc_frag(): allocate memory with page splitting when driver knows
-+   that the memory it need is always smaller than or equal to half of the page
-+   allocated from page pool. Page splitting enables memory saving and thus avoid
-+   TLB/cache miss for data access, but there also is some cost to implement page
-+   splitting, mainly some cache line dirtying/bouncing for 'struct page' and
-+   atomic operation for page->pp_frag_count.
-+
-+3. page_pool_alloc(): allocate memory with or without page splitting depending
-+   on the requested memory size when driver doesn't know the size of memory it
-+   need beforehand. It is a mix of the above two case, so it is a wrapper of the
-+   above API to simplify driver's interface for memory allocation with least
-+   memory utilization and performance penalty.
- 
- API keeps track of in-flight pages, in order to let API user know
- when it is safe to free a page_pool object.  Thus, API users
-@@ -93,6 +109,12 @@ a page will cause no race conditions is enough.
- * page_pool_dev_alloc_pages(): Get a page from the page allocator or page_pool
-   caches.
- 
-+* page_pool_dev_alloc_frag(): Get a page frag from the page allocator or
-+  page_pool caches.
-+
-+* page_pool_dev_alloc(): Get a page or page frag from the page allocator or
-+  page_pool caches.
-+
- * page_pool_get_dma_addr(): Retrieve the stored DMA address.
- 
- * page_pool_get_dma_dir(): Retrieve the stored DMA direction.
-diff --git a/include/net/page_pool.h b/include/net/page_pool.h
-index f4fc339ff020..5fea37fd7767 100644
---- a/include/net/page_pool.h
-+++ b/include/net/page_pool.h
-@@ -5,28 +5,6 @@
-  *	Copyright (C) 2016 Red Hat, Inc.
-  */
- 
--/**
-- * DOC: page_pool allocator
-- *
-- * This page_pool allocator is optimized for the XDP mode that
-- * uses one-frame-per-page, but have fallbacks that act like the
-- * regular page allocator APIs.
-- *
-- * Basic use involve replacing alloc_pages() calls with the
-- * page_pool_alloc_pages() call.  Drivers should likely use
-- * page_pool_dev_alloc_pages() replacing dev_alloc_pages().
-- *
-- * API keeps track of in-flight pages, in-order to let API user know
-- * when it is safe to dealloactor page_pool object.  Thus, API users
-- * must make sure to call page_pool_release_page() when a page is
-- * "leaving" the page_pool.  Or call page_pool_put_page() where
-- * appropiate.  For maintaining correct accounting.
-- *
-- * API user must only call page_pool_put_page() once on a page, as it
-- * will either recycle the page, or in case of elevated refcnt, it
-- * will release the DMA mapping and in-flight state accounting.  We
-- * hope to lift this requirement in the future.
-- */
- #ifndef _NET_PAGE_POOL_H
- #define _NET_PAGE_POOL_H
- 
--- 
-2.33.0
+Driver uses drm_gem_prime_fd_to_handle() helper function but it also 
+registers for ->gem_prime_import() which is internally called by 
+drm_gem_prime_fd_to_handle(). All the operations done in 
+gem_prime_import() are undone here.
 
+> 
+>>       } else {
+>>           /* Private buffer allocation path */
+>>           qaic_free_sgt(bo->sgt);
+> 
