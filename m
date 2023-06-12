@@ -2,105 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E4772C64D
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 15:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0626A72C648
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 15:46:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235689AbjFLNqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 09:46:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37358 "EHLO
+        id S234793AbjFLNqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 09:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232287AbjFLNqp (ORCPT
+        with ESMTP id S232364AbjFLNqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 09:46:45 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB61612C;
-        Mon, 12 Jun 2023 06:46:41 -0700 (PDT)
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35CDeVcI001168;
-        Mon, 12 Jun 2023 13:46:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=x8SqpugqvWhELVcIPbpCYTMm5Xh5tqMI1QEXk4MkfrE=;
- b=MUjdFPhRt/kp4SB3uEBeXte0JUdX3wmEvX4w21JXNiS1EN5e8LsBBZREB0B7H4VbRZct
- SW8Rxz38U/cHjCEDmdVfknG4Nwfaob3F2Ca8tBi1JkmqUX8QBOOuUhTk89Z/yYmJyYMA
- 1S4QcV8n2N0JC4X8cAB28egnLQk6T9Q5L/BZgf8JCPaqXGbXt4axzh1yzdTJNCusQgBO
- loyFYGZVkYdYxuzCO75i3XpDeYv9l3y71ryaW25wmlodIy4BYuTFWgEzDae3mIvg6KlW
- CT2V8/Xm+YqOl0oQ2qTQrga0vdSDRsYCsyal2tvV+SyCANdQ+9uR7JmaBNeEwzbDHDy1 Kg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r643u0paf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jun 2023 13:46:15 +0000
-Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35CDjGRZ016604;
-        Mon, 12 Jun 2023 13:46:14 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r643u0p94-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jun 2023 13:46:14 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35C5KiQI031654;
-        Mon, 12 Jun 2023 13:46:12 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3r4gt51h27-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jun 2023 13:46:12 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35CDkARP6029924
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 12 Jun 2023 13:46:10 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 34AC420043;
-        Mon, 12 Jun 2023 13:46:10 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B897320040;
-        Mon, 12 Jun 2023 13:46:09 +0000 (GMT)
-Received: from [9.155.209.184] (unknown [9.155.209.184])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 12 Jun 2023 13:46:09 +0000 (GMT)
-Message-ID: <ef33f004f1f20c7a4cc7c963eea628df7bec0c53.camel@linux.ibm.com>
-Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: add a test for subprogram
- extables
-From:   Ilya Leoshkevich <iii@linux.ibm.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Krister Johansen <kjlx@templeofstupid.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Date:   Mon, 12 Jun 2023 15:46:09 +0200
-In-Reply-To: <CAADnVQKAmbb2mTNem+3wvCSS44mvmydDCjWj-4V9VZd93vgksQ@mail.gmail.com>
-References: <cover.1686268304.git.kjlx@templeofstupid.com>
-         <9e3041e182a75f558f1132f915ddf2ee7e859c6e.1686268304.git.kjlx@templeofstupid.com>
-         <CAADnVQKAmbb2mTNem+3wvCSS44mvmydDCjWj-4V9VZd93vgksQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: tPpUquuLNk1qCKHVYy8_bCYMKHFHwaEk
-X-Proofpoint-GUID: II0r5JYD2ZkE8AvQBJFKpuoR2P_quAD5
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 12 Jun 2023 09:46:22 -0400
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040AE102
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 06:46:21 -0700 (PDT)
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-3f6e4554453so31965245e9.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 06:46:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686577579; x=1689169579;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=otV7Rr6B+JZBSPxcoaD0JT8jIkvmj3/OZDYSAFQABGo=;
+        b=L6S9pSsFtOAtiLPU9H2E91psntKdw3Q9+jnLEWWdVpZa42YceXy8ixbB5xhTQ+Dgt1
+         Aj08hKGdgkffPZIeT1oX5niXmz3sNr3BHOAmpXFF6I53Vr7271U/33aKrP11SPfYNruH
+         mjZlZyu1AFoB9pgC+dhWvOsoZiiLvWG+T8S1wY/TRb4f0Vuad7tnHbte7m1E9VBqDQ9c
+         q+ZST0boesDCFlOeD49neW8xhGwad3DDSn7+q2cWoSLluudkD169LipfRmue2Gs7gx59
+         /oiEXM7Z7/I1V79YqxFzJDbhphKFA6yMTr1Spn3tMrMsCLnM6rmCgR1yFiI0xdgi+oqk
+         MeSg==
+X-Gm-Message-State: AC+VfDwIm9J/r7f8EeI29uQSW8YCpIZtVivuz3eBYESNgavDuKS2UI0D
+        k+xi481GKXjMzLAnt+lk478=
+X-Google-Smtp-Source: ACHHUZ40ZnzYX38dZON5DZGAhec83RzGwwTkf5nYXOj/X+j/oivBUCocEpQfv+J3rwBCVyuqeA2I4w==
+X-Received: by 2002:a05:600c:299:b0:3f6:444:b344 with SMTP id 25-20020a05600c029900b003f60444b344mr6084293wmk.34.1686577579108;
+        Mon, 12 Jun 2023 06:46:19 -0700 (PDT)
+Received: from gmail.com (fwdproxy-cln-006.fbsv.net. [2a03:2880:31ff:6::face:b00c])
+        by smtp.gmail.com with ESMTPSA id v5-20020a05600c214500b003f819faff24sm4254387wml.40.2023.06.12.06.46.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 06:46:18 -0700 (PDT)
+Date:   Mon, 12 Jun 2023 06:46:16 -0700
+From:   Breno Leitao <leitao@debian.org>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        pawan.kumar.gupta@linux.intel.com, paul@paul-moore.com,
+        leit@meta.com, x86@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpu/bugs: Disable CPU mitigations at compilation time
+Message-ID: <ZIchqLWousxkCqyB@gmail.com>
+References: <20230203120615.1121272-1-leitao@debian.org>
+ <87352z7xld.ffs@tglx>
+ <ZIcVoIAQbRl1GTo5@gmail.com>
+ <20230612133230.GJZIcebkHxd8QJs0Dv@fat_crate.local>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-12_06,2023-06-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=999 impostorscore=0 phishscore=0 spamscore=0 bulkscore=0
- suspectscore=0 clxscore=1011 mlxscore=0 malwarescore=0 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306120116
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230612133230.GJZIcebkHxd8QJs0Dv@fat_crate.local>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FSL_HELO_FAKE,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -108,179 +65,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-06-09 at 11:15 -0700, Alexei Starovoitov wrote:
-> On Thu, Jun 8, 2023 at 5:11=E2=80=AFPM Krister Johansen
-> <kjlx@templeofstupid.com> wrote:
-> >=20
-> > In certain situations a program with subprograms may have a NULL
-> > extable entry.=C2=A0 This should not happen, and when it does, it turns
-> > a
-> > single trap into multiple.=C2=A0 Add a test case for further debugging
-> > and to
-> > prevent regressions.=C2=A0 N.b: without any other patches this can panic
-> > or
-> > oops a kernel.
-> >=20
-> > Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
-> > ---
-> > =C2=A0.../bpf/prog_tests/subprogs_extable.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 | 31 +++++++++++++
-> > =C2=A0.../bpf/progs/test_subprogs_extable.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 | 46
-> > +++++++++++++++++++
-> > =C2=A02 files changed, 77 insertions(+)
-> > =C2=A0create mode 100644
-> > tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
-> > =C2=A0create mode 100644
-> > tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-> >=20
-> > diff --git
-> > a/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
-> > b/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
-> > new file mode 100644
-> > index 000000000000..2201988274a4
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/prog_tests/subprogs_extable.c
-> > @@ -0,0 +1,31 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +
-> > +#include <test_progs.h>
-> > +#include "test_subprogs_extable.skel.h"
-> > +
-> > +void test_subprogs_extable(void)
-> > +{
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const int READ_SZ =3D 456;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct test_subprogs_extable *ske=
-l;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int err;
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 skel =3D test_subprogs_extable__o=
-pen();
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!ASSERT_OK_PTR(skel, "skel_op=
-en"))
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 return;
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 err =3D test_subprogs_extable__lo=
-ad(skel);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!ASSERT_OK(err, "skel_load"))
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 goto cleanup;
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 err =3D test_subprogs_extable__at=
-tach(skel);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!ASSERT_OK(err, "skel_attach"=
-))
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 goto cleanup;
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* trigger tracepoint */
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ASSERT_OK(trigger_module_test_rea=
-d(READ_SZ),
-> > "trigger_read");
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 test_subprogs_extable__detach(ske=
-l);
-> > +
-> > +cleanup:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 test_subprogs_extable__destroy(sk=
-el);
-> > +}
-> > diff --git
-> > a/tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-> > b/tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-> > new file mode 100644
-> > index 000000000000..c3ff66bf4cbe
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/progs/test_subprogs_extable.c
-> > @@ -0,0 +1,46 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +
-> > +#include "vmlinux.h"
-> > +#include <bpf/bpf_helpers.h>
-> > +#include <bpf/bpf_tracing.h>
-> > +
-> > +struct {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 __uint(type, BPF_MAP_TYPE_ARRAY);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 __uint(max_entries, 8);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 __type(key, __u32);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 __type(value, __u64);
-> > +} test_array SEC(".maps");
-> > +
-> > +static __u64 test_cb(struct bpf_map *map, __u32 *key, __u64 *val,
-> > void *data)
-> > +{
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 1;
-> > +}
-> > +
-> > +SEC("fexit/bpf_testmod_return_ptr")
-> > +int BPF_PROG(handle_fexit_ret_subprogs, int arg, struct file *ret)
-> > +{
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *(volatile long *)ret;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *(volatile int *)&ret->f_mode;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bpf_for_each_map_elem(&test_array=
-, test_cb, NULL, 0);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
-> > +}
-> > +
-> > +SEC("fexit/bpf_testmod_return_ptr")
-> > +int BPF_PROG(handle_fexit_ret_subprogs2, int arg, struct file
-> > *ret)
-> > +{
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *(volatile long *)ret;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *(volatile int *)&ret->f_mode;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bpf_for_each_map_elem(&test_array=
-, test_cb, NULL, 0);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
-> > +}
-> > +
-> > +SEC("fexit/bpf_testmod_return_ptr")
-> > +int BPF_PROG(handle_fexit_ret_subprogs3, int arg, struct file
-> > *ret)
-> > +{
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *(volatile long *)ret;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *(volatile int *)&ret->f_mode;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bpf_for_each_map_elem(&test_array=
-, test_cb, NULL, 0);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
-> > +}
->=20
-> What is the point of attaching 3 the same progs to the same hook?
-> One would be enough to test it, no?
->=20
-> In other news...
-> Looks like this test is triggering a bug on s390.
->=20
-> Ilya,
-> please take a look:
-> https://github.com/kernel-patches/bpf/actions/runs/5216942096/jobs/941640=
-4780
->=20
-> bpf_prog_78c0d4c618ed2df7_handle_fexit_ret_subprogs3
-> is crashing the kernel.
-> A bug in extable logic on s390?
+On Mon, Jun 12, 2023 at 03:32:30PM +0200, Borislav Petkov wrote:
+> On Mon, Jun 12, 2023 at 05:54:56AM -0700, Breno Leitao wrote:
+> > 1) We keep consistency with other CONFIG options. Linux already has a
+> > CONFIG option to enable/disable mitigations for speculations
+> > (CONFIG_SPECULATION_MITIGATIONS), so, this will be a similar one.
+> 
+> So you can get what you want by disabling all those options there,
+> right?
 
-I think we also need this:
+This patch proposes creating CONFIG_CPU_MITIGATIONS_DEFAULT_OFF that
+will turn all the mitigations off in a binary, which is the same as
+passing mitigations=off in the command line when the kernel boots.
 
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -17664,6 +17664,7 @@ static int jit_subprogs(struct bpf_verifier_env
-*env)
-        prog->bpf_func =3D func[0]->bpf_func;
-        prog->jited_len =3D func[0]->jited_len;
-        prog->aux->extable =3D func[0]->aux->extable;
-+       prog->aux->num_exentries =3D func[0]->aux->num_exentries;
-        prog->aux->func =3D func;
-        prog->aux->func_cnt =3D env->subprog_cnt;
-        bpf_prog_jit_attempt_done(prog);
-
-The reason is that s390 JIT doubles the number of extable entries due
-to how the hardware works (some exceptions point to the failing insn,
-some point to the next one).
-
-With that:
-
-Acked-by: Ilya Leoshkevich <iii@linux.ibm.com>
-Tested-by: Ilya Leoshkevich <iii@linux.ibm.com>
-
-for the v4 series.
+Setting CONFIG_SPECULATION_MITIGATIONS=n does *not* disable all the
+mitigations, as, there are some mitigations that are *not* disabled when
+you pass CONFIG_SPECULATION_MITIGATIONS=n. As an example (from my
+memory - need to double check in 6.4), MDS and TAA mitigations are not
+disabled when CONFIG_SPECULATION_MITIGATIONS=n. MDS and TAA mitigations
+are disabled when `mitigations=off` parameter is passed, tho.
