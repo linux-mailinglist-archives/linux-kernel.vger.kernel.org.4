@@ -2,148 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C923B72C33D
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:41:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E53C72C33F
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:41:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237198AbjFLLlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 07:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55030 "EHLO
+        id S234097AbjFLLlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 07:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237306AbjFLLja (ORCPT
+        with ESMTP id S238504AbjFLLkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 07:39:30 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC62BBD;
-        Mon, 12 Jun 2023 04:33:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=36XT+W2jk5CIFa+WG0Q2ZcCHn/yHT0eHq3gE6BLySHQ=; b=U1lQrQVH5nBqDOyuohzmMYHg5j
-        X8OJVBhjV1g+IZlMta6smtL5UyG5THn0GEpnDDC1GX5OLBe/7FyN6hw9VL1f4SNyzn7aKSq7PSp7G
-        rxuRWlALT6mNIbCyeOh9uXuQMMwfduQiRgCR1tJXpcXsAfCsLDatmemMgCbEN3csev3SCSEOZbbZ4
-        vfEIfita03v846CVuFGdpr4rnEADICC1l2nIC21h0sWEwRLuS/TxAB/5LDw/T/NVxbonuHCY/CP3h
-        sLLXiFczoHwtDxrsIqydkENI/eQwKPRd9ZZa2MywV75dqpMCVzQQhJEYqkda1Xa/uYoKPl/Tyjaq3
-        tmiMSjGQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:38822)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1q8fnd-0005fn-Pp; Mon, 12 Jun 2023 12:33:29 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1q8fna-0004va-3b; Mon, 12 Jun 2023 12:33:26 +0100
-Date:   Mon, 12 Jun 2023 12:33:25 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sam Shih <Sam.Shih@mediatek.com>
-Subject: Re: [PATCH net-next 8/8] net: ethernet: mtk_eth_soc: add basic
- support for MT7988 SoC
-Message-ID: <ZIcChW9FTHm+HbYV@shell.armlinux.org.uk>
-References: <ZIUYubFtVGYHhlMt@makrotopia.org>
+        Mon, 12 Jun 2023 07:40:04 -0400
+Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D632630D2;
+        Mon, 12 Jun 2023 04:34:25 -0700 (PDT)
+Received: from [192.168.4.25] (unknown [62.77.71.229])
+        by mx.gpxsee.org (Postfix) with ESMTPSA id 41F14BF23;
+        Mon, 12 Jun 2023 13:34:23 +0200 (CEST)
+Message-ID: <f72a7380-d8bc-24bf-630c-75f8ffd6abf3@gpxsee.org>
+Date:   Mon, 12 Jun 2023 13:34:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZIUYubFtVGYHhlMt@makrotopia.org>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [RESEND PATCH v6 1/1] Added Digiteq Automotive MGB4 driver
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Martin_T=c5=afma?= <martin.tuma@digiteqautomotive.com>
+References: <20230524112126.2242-1-tumic@gpxsee.org>
+ <20230524112126.2242-2-tumic@gpxsee.org>
+ <3a7da3cd-8d03-a2c4-0534-a75565aefc13@xs4all.nl>
+ <7072a8f3-5c9e-1170-e480-6fb57b95110f@gpxsee.org>
+ <6b792de3-bb2c-d2b5-a652-eca6d20dad20@xs4all.nl>
+ <c34db414-159a-313f-90eb-2bfc0f4496fa@gpxsee.org>
+ <089e728b-0596-d3e3-39a1-651a3ac73e33@xs4all.nl>
+Content-Language: en-US
+From:   =?UTF-8?Q?Martin_T=c5=afma?= <tumic@gpxsee.org>
+In-Reply-To: <089e728b-0596-d3e3-39a1-651a3ac73e33@xs4all.nl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 11, 2023 at 01:43:37AM +0100, Daniel Golle wrote:
->  	if (updated) {
-> -		val = mtk_r32(eth, MTK_MAC_MISC);
-> +		val = mtk_r32(eth, reg);
->  		val = (val & mask) | set;
-> -		mtk_w32(eth, val, MTK_MAC_MISC);
-> +		mtk_w32(eth, val, reg);
+On 12. 06. 23 10:51, Hans Verkuil wrote:
+> On 08/06/2023 17:30, Martin Tůma wrote:
+>> On 08. 06. 23 12:23, Hans Verkuil wrote:
+>>
+>>> Can you make a list of which sysfs properties correspond to existing V4L2
+>>> format or timing fields and which are 'new'?
+>>>
+>>
+>> On the left all the current mgb4 sysfs properties (see the admin-guide doc from the patch for description), on the right v4l2 structures where they could be mapped (may not be true for all of them in
+>> the patch, I will check it and update the code in v7)
+>>
+>>
+>> --- PCIE CARD ---
+>>
+>> module_type        -
+>> module_version        -
+>> fw_type            -
+>> fw_version        -
+>> serial_number        -
+>> temperature        hwmon
+>>
+>> --- INPUTS ---
+>>
+>> input_id        -
+>> oldi_lane_width        -
+>> color_mapping        -
+>> link_status        v4l2_input.status (V4L2_IN_ST_NO_SYNC)
+>> stream_status        v4l2_input.status (V4L2_IN_ST_NO_SIGNAL)
+>> video_width        v4l2_bt_timings.width
+>> video_height        v4l2_bt_timings.height
+>> vsync_status        v4l2_bt_timings.polarities
+>> hsync_status        v4l2_bt_timings.polarities
+>> vsync_gap_length    -
+>> hsync_gap_length    -
+>> pclk_frequency        v4l2_bt_timings.pixelclock
+>> hsync_width        v4l2_bt_timings.hsync
+>> vsync_width        v4l2_bt_timings.vsync
+>> hback_porch        v4l2_bt_timings.hbackporch
+>> hfront_porch        v4l2_bt_timings.hfrontporch
+>> vback_porch        v4l2_bt_timings.vbackporch
+>> vfront_porch        v4l2_bt_timings.vfrontporch
+>> frequency_range        -
+>> alignment        v4l2_pix_format.bytesperline
+>> fpdl3_input_width    -
+>> gmsl_mode        -
+>> gmsl_stream_id        -
+>> gmsl_fec        -
+>>
+>> --- OUTPUTS ---
+>>
+>> output_id        -
+>> video_source        -
+>> display_width        v4l2_bt_timings.width
+>> display_height        v4l2_bt_timings.height
+>> frame_rate        v4l2_frmivalenum
+> 
+> The frame rate is a property of the width/height+blanking and the
+> pixel clock frequency. IMHO it does not make sense to have this as
+> a writable property. Read-only is OK.
+> 
+>> hsync_polarity        v4l2_bt_timings.polarities
+>> vsync_polarity        v4l2_bt_timings.polarities
+>> de_polarity        -
+>> pclk_frequency        v4l2_bt_timings.pixelclock
+>> hsync_width        v4l2_bt_timings.hsync
+>> vsync_width        v4l2_bt_timings.vsync
+>> vsync_width        v4l2_bt_timings.vsync
+>> hback_porch        v4l2_bt_timings.hbackporch
+>> hfront_porch        v4l2_bt_timings.hfrontporch
+>> vback_porch        v4l2_bt_timings.vbackporch
+>> vfront_porch        v4l2_bt_timings.vfrontporch
+>> alignment        v4l2_pix_format.bytesperline
+>> fpdl3_output_width    -
+>>
+>>
+>> M.
+> 
+> The property I am most concerned with is alignment (both for input and output).
+> But it is not clear to me what the use-case is.
+> 
 
-mtk_m32() ?
+Hi,
+The use-case is to provide the alignment required by some video 
+processing chips. We have a product based on NVIDIA Jetson TX2 that uses 
+the mgb4 cards and the HW video encoding needs a specific alignment to 
+work.
 
-> +	/* Force Port1 XGMAC Link Up */
-> +	val = mtk_r32(eth, MTK_XGMAC_STS(MTK_GMAC1_ID));
-> +	mtk_w32(eth, val | MTK_XGMAC_FORCE_LINK(MTK_GMAC1_ID),
-> +		MTK_XGMAC_STS(MTK_GMAC1_ID));
-> +
-> +	/* Adjust GSW bridge IPG to 11 */
-> +	val = mtk_r32(eth, MTK_GSW_CFG);
-> +	val &= ~(GSWTX_IPG_MASK | GSWRX_IPG_MASK);
-> +	val |= (GSW_IPG_11 << GSWTX_IPG_SHIFT) |
-> +	       (GSW_IPG_11 << GSWRX_IPG_SHIFT);
-> +	mtk_w32(eth, val, MTK_GSW_CFG);
+M.
 
-mtk_m32() for both these?
+> Regards,
+> 
+> 	Hans
 
-> +	/* Setup gmac */
-> +	if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V3) &&
-> +	    mac->interface == PHY_INTERFACE_MODE_INTERNAL) {
-> +		mtk_w32(mac->hw, MTK_GDMA_XGDM_SEL, MTK_GDMA_EG_CTRL(mac->id));
-> +		mtk_w32(mac->hw, MAC_MCR_FORCE_LINK_DOWN, MTK_MAC_MCR(mac->id));
-> +
-> +		mtk_setup_bridge_switch(eth);
-
-
-I think this should be documented somewhere - that
-PHY_INTERFACE_MODE_INTERNAL means the MAC is connected to a switch.
-However, I'm not sure that's the best condition to use - don't we have a
-way for a MAC to test if it's connected to a DSA switch?
-
-> +	/* Configure MDC Turbo Mode */
-> +	if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V3)) {
-> +		val = mtk_r32(eth, MTK_MAC_MISC_V3);
-> +		val |= MISC_MDC_TURBO;
-> +		mtk_w32(eth, val, MTK_MAC_MISC_V3);
-> +	}
->  	val = mtk_r32(eth, MTK_PPSC);
-> +	if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V1) ||
-> +	    MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2))
-> +		val |= PPSC_MDC_TURBO;
-> +
-> +	/* Configure MDC Divider */
->  	val &= ~PPSC_MDC_CFG;
-> -	val |= FIELD_PREP(PPSC_MDC_CFG, divider) | PPSC_MDC_TURBO;
-> +	val |= FIELD_PREP(PPSC_MDC_CFG, divider);
->  	mtk_w32(eth, val, MTK_PPSC);
-
-More opportunities for mtk_m32().
-
-> +	if (MTK_HAS_CAPS(mac->hw->soc->caps, MTK_NETSYS_V3_BIT) &&
-> +	    MTK_HAS_CAPS(mac->hw->soc->caps, MTK_ESW_BIT) &&
-> +	    id == MTK_GMAC1_ID) {
-> +		mac->phylink_config.mac_capabilities = MAC_ASYM_PAUSE |
-> +						       MAC_SYM_PAUSE |
-> +						       MAC_10000FD;
-> +		phy_interface_zero(mac->phylink_config.supported_interfaces);
-
-Were there bits set that you don't want?
-
-Thanks!
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
