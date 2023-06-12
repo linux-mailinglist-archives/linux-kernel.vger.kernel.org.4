@@ -2,129 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABBB272B8CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 09:40:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAC3172B996
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 10:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233872AbjFLHkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 03:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49688 "EHLO
+        id S229487AbjFLICI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 04:02:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234941AbjFLHk0 (ORCPT
+        with ESMTP id S232812AbjFLIA7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 03:40:26 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2060e.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e1a::60e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE24510DA;
-        Mon, 12 Jun 2023 00:39:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AdJPlOJk/Pyifui7i+8UWM44ilhlq/XMKV6vnLwgM3s+9bVGS+8NoImO95WeprMcYlBKk2cC04UTUnNl25vmDryhLHYApCpofjZvBqSM6fkVCZVW2B+JCqocG/TsIl0Vnqd/fpbUyqS8gXTYGUrTJ5sxoWb0DrpYrJSY+AwJvYe7MN4FrgJfaLaFLVeRw9D82w/cVeK5tErDvse4C0jZ+KIIxhEDvH2I0N0tpeq38TJ45QR0EwK/NZkhQ2HiEvzjG5uT6XIWMCWXo+lF+8le6TNtUCo610qs0OPdI8G9RyD7Fv1boAyo0jUSFsm22ltyqUK1mVlLHwdysfg5cM8KmA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=N75a6xG3s+qLFF3PlI6av295LIDPuta7mHnO0bq2XzE=;
- b=Xip0mXkhFtRGvLSXZHOy0dAw4pv9kihff5mbyMSMq2vpMn6zIkgnPAEI60yTliP5GdlDh7kRg+/dIXlQNyocjElwiOrYbn97C2keyaoLlTiJYKxpE43vYEQYC86cojGgTfqxZt3YjLjlYp+ibJEHUK/2MYt89mog901vf/E95d1QHf5Cuq7QpB2X4FGRJifzJl8B0o7LbcVGi9hHaOKuPVSGjguL0VYzzIUj5CC0MOdO5R5bXfh1rl1yMK5aXkJOKmyF6vpWt6x4du2lvJUwp1VMjfqHuCXHs2XaDChoYMAcbwczE80Kn2Wf4Olgh1F6KkNBpvpJWhsO4GgOBqHEfg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=N75a6xG3s+qLFF3PlI6av295LIDPuta7mHnO0bq2XzE=;
- b=gCnDXapMhaclLx87L16cmcSjva0VtyX/kNC41Sswmwig5s6NmZrXkqSmEHVkMZPoyR2F1krr9aC45/2UgP4NlbCanpFJlDpKDI/lY6Zq9Sg4GNFO7cD4SFdSMcz/2GVxPY3l6DBTfeFlkcgarClPpM8OtACGiTvy7f6U7wKoYtqBp57tq4lHI+0uGD4LMxF7W1wUO6quqnBav92GucosHLtT3IUgaxBeIKWW1OLlByf41Ah4hnC92StRkTStJlsCxFjmb/zhdOQHYCbSys0EgrZQ034iAUsXaAGHSC78EYQ7sHH0NROA/hEqVpujr/dno+a115tS24FM0ekA/hLoNg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-Received: from AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:588::19)
- by PAWPR10MB8113.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:37e::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Mon, 12 Jun
- 2023 06:49:13 +0000
-Received: from AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::53c2:174a:8b13:ce94]) by AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::53c2:174a:8b13:ce94%3]) with mapi id 15.20.6455.037; Mon, 12 Jun 2023
- 06:49:13 +0000
-Message-ID: <c195c196-d99b-9e17-3854-fc147ac2e447@siemens.com>
-Date:   Mon, 12 Jun 2023 08:49:04 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] rtc: pcf-8563: Report previously detected low-voltage via
- RTC_VL_BACKUP_LOW
-Content-Language: en-US
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <da84b6b1-a9d8-ce46-16a9-e1a2d495240c@siemens.com>
- <20230610083135e40dd2f6@mail.local>
- <1d532c45-ee33-9729-f0ac-b59c2bec8d7d@siemens.com>
- <202306111511569834cac2@mail.local>
- <9ac4b2a5-7cc8-4fce-7ea0-61b26d6ef223@siemens.com>
- <202306112216153a75dfa3@mail.local>
-From:   Jan Kiszka <jan.kiszka@siemens.com>
-In-Reply-To: <202306112216153a75dfa3@mail.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH0PR03CA0262.namprd03.prod.outlook.com
- (2603:10b6:610:e5::27) To AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:20b:588::19)
+        Mon, 12 Jun 2023 04:00:59 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8ED55AD;
+        Mon, 12 Jun 2023 01:00:25 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8DxTutawIZkBoIDAA--.7689S3;
+        Mon, 12 Jun 2023 14:51:06 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxC8pZwIZk9ioVAA--.52063S3;
+        Mon, 12 Jun 2023 14:51:05 +0800 (CST)
+Subject: Re: [PATCH v2] usb: dwc2: add pci_device_id driver_data parse support
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Minas Harutyunyan <hminas@synopsys.com>,
+        Alan Stern <stern@rowland.harvard.edu>, zhuyinbo@loongson.cn,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+References: <20230609025047.691-1-zhuyinbo@loongson.cn>
+ <2023060915-uneasy-pedicure-35f4@gregkh>
+ <1e2a07a4-f81f-3672-f29c-144d1a12ea21@loongson.cn>
+ <2023060958-unvocal-flattery-256a@gregkh> <2023060912-shun-work-a667@gregkh>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <d260aae0-2ce2-ed72-e680-8ec2d50335cc@loongson.cn>
+Date:   Mon, 12 Jun 2023 14:51:05 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS4PR10MB6181:EE_|PAWPR10MB8113:EE_
-X-MS-Office365-Filtering-Correlation-Id: 56fff30d-6899-4bb8-04fd-08db6b1121f8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YBB44RjTlo5WlOpr0IVJ1IJuZrxGW5R1eSizjlwnHcm7eUuMAmFfSgZb7K08gGK1P/TrjTzX4fc3tLbTs7+7ikhdgN/koIV625gPlvgMLkS/+6HnK0STB1iXyHaIGmOMCQkjBFB0FAvgEEJ1/nW1CIJb4IeVakqv1Xu6Mdcp8L5Lf4fXqobWjTr1ONcgiTki3iv1wvSPg2Ce7G+zrbqTa5VXM5Gj/ojc6BPAygzSOeDReypfldenF82iATQJl+q4ikzKvLkaHXxh/LzsVWyTeASs705MNf28xchP5VBogLITH+cNYrHYsUb3azbKp2Wzm7SOLrhJK2JuQMqk/qEGDj2lKcpdhhpHyvXHzRRV2s78Vk4MCCzHH8QdtPzcDuYymAnjqiRaExY+KqaRCnJpg/JbU8LtxpJZ292lHRERxrxhrgKRS+4vy61Qfi1WqaGW1Wgrdrje7R++9kD7UiwwfkiNThVXfTo0+CwMdbnSheyhlDMB0xYxkmRREZm8YCLXkIGVBUnIRxsz9ep3pkWOwSC4EfJy7wCobeYWK1GI76sJln1ZuYF3RCoX6fZF2ri6iZq46j3msIVBoip4vvJmBMjU2somuEgU314pKyGX0ooV9PMeN2nJDCRCYI3eS0rbIMbXftrgRrJSgKm0DL7cwQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(366004)(376002)(136003)(39860400002)(451199021)(83380400001)(66476007)(66556008)(66946007)(6916009)(6512007)(6506007)(26005)(53546011)(6666004)(6486002)(478600001)(2616005)(54906003)(186003)(86362001)(44832011)(2906002)(8936002)(8676002)(31696002)(5660300002)(316002)(36756003)(4326008)(82960400001)(41300700001)(38100700002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YnFvZkI1Sm0xcW1OTWY0KytjaW5BSVpzWGZydndrSHZyUzB3ZU5STW1ZdVI5?=
- =?utf-8?B?TFFZL0xodVEybWt0VXk2TG1ZcVR1dUJGa1ZGRml2aHFEV082aE9aTisxMkc0?=
- =?utf-8?B?WWRTTEQxTmN4OUVCajVhRmNJcUV6cFRWenpxZ0ZsTlBEUGJvRGpCYnkyZU5O?=
- =?utf-8?B?Wmg0Ri9BKzA4RWFOWDZ5bE9rTWt6WnBsNlQ1VTkxZkJrcEpFZXM5L0Y4U1Bt?=
- =?utf-8?B?YWtxL3ZKOXkyQnlpTEFkZU9qQmN1Vk1CZkxjSnRVTllKdDJPUTJJbXFjR1Nm?=
- =?utf-8?B?UXJlcFFPNHBWLzYzVG94VE1xOHRvZitzYllMOTYrRjZHY25uRlJ3MThNMmo1?=
- =?utf-8?B?UTI0cWh2cWE5RWV0bDdoY1RuNnNEamplNFZZY29QeEdSYWwwRDBDRnRqblJm?=
- =?utf-8?B?K3FrUld4djh2K0gyeVpObVVGUTZ1azZmT2JzTHpLLzVDTWxKYkZBRUpUQTNs?=
- =?utf-8?B?eW1BTDc4aEZLaXFibUhLdzJzQTZGVCthbEFsMDQ0Znptb0daYTZuekJaYlI3?=
- =?utf-8?B?bkpEdXRmNWhkWnVtaDg5S3kwV1c3QWxZd2QvYXNmc2NwVUhJWVVkc0R1bzJB?=
- =?utf-8?B?MEJLaEhPMXlER05CYTVWTUwxYXFwWXh2UCtDT1lRNzdMMk5pc0tpYVMxeWRZ?=
- =?utf-8?B?aGFjNFVlSERlR1N0WHRqQ3F6RGMvcWVlRnJ0Z3NtWURHa1AxK3FIdWpCSm9j?=
- =?utf-8?B?OVpvcGVjaDFaeThJWFY4VUd6M3ZmaE5DdDVJNy91UGdOSHN6eVBxR1lsQUJq?=
- =?utf-8?B?L2daQmNHbmdBb2JTaWlsQmhPWVlxdThxUitVT3UvdnlyT3YyL3M4S1hDR1Zy?=
- =?utf-8?B?NUlJNXlFQnVGUkdPcGR2aUNBMTNpTG5QNXhlVTVTMVRKV0ErSmxtZk5jMElP?=
- =?utf-8?B?dStsUUk1aTR5aE1QT2tjU3RDUlVpc1BDb3krdXRJZDBIRVg3NHp5eVhzR3lB?=
- =?utf-8?B?U3Azb3pwbGlPYjZMdVF0MTNTMFhoUDRXcnJyL1QwMENyVk9mNFBuZHhkMnN4?=
- =?utf-8?B?QjRUczlTVWpkM3NQcXk0RGYyQmxOUC9QbFoyRnFGWjM3S1gwNDgzS1FYdS9L?=
- =?utf-8?B?SUptMjFvRmtiVlBPTHVzSnFFUXowaW9IQzJjODR2bitGSWRVRzQ2Z08rN1Z5?=
- =?utf-8?B?TGpjWmJCU3VWQkRTdUtZQ2JySGxtM3krYlBCMjg2NElLRVVWNHYrL0hBbnFy?=
- =?utf-8?B?Y2hhNFBnYXJrMHdmNGswaENxNTNEUXlzSHcrN3o2OE5RZkxKOFQ0dzJVV2Np?=
- =?utf-8?B?ZlI0M2o4em1CeGFCTUl1eUJLZ0pBcTdPcFVrU2Fha3FlOW5ZUHJDQnJpSFVm?=
- =?utf-8?B?NDMvTFA2OUlaWm9lYmh0TWdlL2pBaUtBa3lnRWtENXJrRHdRMjZQUzVsUXJx?=
- =?utf-8?B?SVR0bG5RV3FFaGcwblEzdlRmNUgyRmNybGVtMGZBQWw0ZmNYRWRQS1ZGUFpR?=
- =?utf-8?B?dHFMY0lFNVl4SHpuOTZkWk5kQm1Ka1ZuU0hkZ2NvZGN0Ni9iM3RFSm8vQkE0?=
- =?utf-8?B?OGIzRmYzaGc4Y3JWSHdBUnhMTDVBdDhMRXMvclpzU29ReGRZd2NkYzdHcVlu?=
- =?utf-8?B?VDYrc1lrZThTZDF6TzI4RXRRZlFZaEp6anpSREx4eXM0YkpyL0VXT3cvQVN0?=
- =?utf-8?B?aHArbTQ1dkE2ZjB0cDcrV0hleUtieTQwbkg3UE55WjkyZy9MTmhna041WkRq?=
- =?utf-8?B?RkllSUJEN0xBVmtremJPcm1GNE52MncwbTRWVTZ0b2UyaUdDUXY2ODYvT1dN?=
- =?utf-8?B?Z2xTVzQ0cGVLUUNaQWUrQTVocDgwck9nMzlJTHZ5QWJNL0Z2SFFFUlZaNTFF?=
- =?utf-8?B?V2xValVlelZaWW50Q3g0RStydk40aWNlZldPcEt2NHlqL2V6OEdoZ09jRk00?=
- =?utf-8?B?azVydlZOb0pVZnFTenptS0Z1bEdLT1grTS9GMFZVbmtqdmtBcXFVR1NERm8r?=
- =?utf-8?B?dEgvUU1KQjRROHlsaGxidnJpQzJ6bHlWUkpsL214QlJpR3pqS0thNVRSSkdU?=
- =?utf-8?B?YXlyMm9vaU03TW5Qb0w4R2FmYURqY1ExL2hCbnhUeWl6eVVBandjUXBOeGEw?=
- =?utf-8?B?L3BOeXYxUGU2U2I4M3pFdCtBTHpsQVlpV0kxRUVPWGh3M2lMYnFCZEk2eHhX?=
- =?utf-8?B?THFmTGhhRW9qMWJ1ZWFzU042c3dyakxDN3Y4QWRUNFVmdzUwTXhZcS90Kzkz?=
- =?utf-8?B?Rnc9PQ==?=
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 56fff30d-6899-4bb8-04fd-08db6b1121f8
-X-MS-Exchange-CrossTenant-AuthSource: AS4PR10MB6181.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 06:49:13.4667
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FDHemdxQ7YNqNHqvT8reQ81tUAWUnrTxGkiGRJFpY6/PUksi/cFN5RP/L6c0/+LU38ocvcCSE/b8eHHAk0j1sg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR10MB8113
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <2023060912-shun-work-a667@gregkh>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxC8pZwIZk9ioVAA--.52063S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
+        nUUI43ZEXa7xR_UUUUUUUUU==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -132,77 +57,189 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12.06.23 00:16, Alexandre Belloni wrote:
-> On 11/06/2023 18:28:22+0200, Jan Kiszka wrote:
->> On 11.06.23 17:11, Alexandre Belloni wrote:
->>> On 11/06/2023 15:38:04+0200, Jan Kiszka wrote:
->>>> On 10.06.23 10:31, Alexandre Belloni wrote:
->>>>> Hello Jan,
+
+
+在 2023/6/9 下午5:31, Greg Kroah-Hartman 写道:
+> On Fri, Jun 09, 2023 at 11:25:15AM +0200, Greg Kroah-Hartman wrote:
+>> On Fri, Jun 09, 2023 at 05:07:03PM +0800, zhuyinbo wrote:
+>>>
+>>>
+>>> 在 2023/6/9 下午2:13, Greg Kroah-Hartman 写道:
+>>>> On Fri, Jun 09, 2023 at 10:50:47AM +0800, Yinbo Zhu wrote:
+>>>>> The dwc2 driver has everything we need to run in PCI mode except
+>>>>> for pci_device_id driver_data parse.  With that to set Loongson
+>>>>> dwc2 element and added identified as PCI_VENDOR_ID_LOONGSON
+>>>>> and PCI_DEVICE_ID_LOONGSON_DWC2 in dwc2_pci_ids, the Loongson
+>>>>> dwc2 controller will work.
 >>>>>
->>>>> On 09/06/2023 23:04:12+0200, Jan Kiszka wrote:
->>>>>> From: Jan Kiszka <jan.kiszka@siemens.com>
->>>>>>
->>>>>> The VL bit in the seconds register remains set only until seconds are
->>>>>> written under main power. As this often happens during boot-up after
->>>>>> picking up a network time, make sure to preserve the low battery state
->>>>>> across this, caching it and returning it via the RTC_VL_BACKUP_LOW bit.
->>>>>>
->>>>>> To permit userspace clearing this state during runtime, also implement
->>>>>> RTC_VL_CLR that works against the cached state.
->>>>>>
->>>>>> This is emulating RTCs which have a battery voltage check that works
->>>>>> under main power as well.
->>>>>>
+>>>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>>>>> ---
+>>>>> Change in v2:
+>>>>> 		1. Move the dwc2 pci ID from pci_ids.h to params.c.
+>>>>> 		2. Add some code logic to ensure that the current device is
+>>>>> 		   a PCI device.
+>>>>> 		3. Fix the compile issue when dwc2 pci driver as module.
 >>>>>
->>>>> Emulating doesn't work well and I deliberately chose to not implement
->>>>> it. For example, in your scenario, if you boot twice without using
->>>>> VL_READ, you anyway have lost the information. This makes emulating
->>>>> unreliabl. The fix you need is in userspace where you have to ensure you
->>>>> read the status before setting the time.
+>>>>>    drivers/usb/dwc2/core.h   |  1 +
+>>>>>    drivers/usb/dwc2/params.c | 39 ++++++++++++++++++++++++++++++++++++++-
+>>>>>    drivers/usb/dwc2/pci.c    | 14 +-------------
+>>>>>    3 files changed, 40 insertions(+), 14 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
+>>>>> index 0bb4c0c845bf..c92a1da46a01 100644
+>>>>> --- a/drivers/usb/dwc2/core.h
+>>>>> +++ b/drivers/usb/dwc2/core.h
+>>>>> @@ -1330,6 +1330,7 @@ irqreturn_t dwc2_handle_common_intr(int irq, void *dev);
+>>>>>    /* The device ID match table */
+>>>>>    extern const struct of_device_id dwc2_of_match_table[];
+>>>>>    extern const struct acpi_device_id dwc2_acpi_match[];
+>>>>> +extern const struct pci_device_id dwc2_pci_ids[];
+>>>>>    int dwc2_lowlevel_hw_enable(struct dwc2_hsotg *hsotg);
+>>>>>    int dwc2_lowlevel_hw_disable(struct dwc2_hsotg *hsotg);
+>>>>> diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
+>>>>> index 21d16533bd2f..6b68a8830781 100644
+>>>>> --- a/drivers/usb/dwc2/params.c
+>>>>> +++ b/drivers/usb/dwc2/params.c
+>>>>> @@ -7,9 +7,14 @@
+>>>>>    #include <linux/module.h>
+>>>>>    #include <linux/of_device.h>
+>>>>>    #include <linux/usb/of.h>
+>>>>> +#include <linux/pci_ids.h>
+>>>>> +#include <linux/pci.h>
+>>>>>    #include "core.h"
+>>>>> +#define PCI_PRODUCT_ID_HAPS_HSOTG	0xabc0
+>>>>> +#define PCI_DEVICE_ID_LOONGSON_DWC2	0x7a04
+>>>>> +
+>>>>>    static void dwc2_set_bcm_params(struct dwc2_hsotg *hsotg)
+>>>>>    {
+>>>>>    	struct dwc2_core_params *p = &hsotg->params;
+>>>>> @@ -55,6 +60,14 @@ static void dwc2_set_jz4775_params(struct dwc2_hsotg *hsotg)
+>>>>>    		!device_property_read_bool(hsotg->dev, "disable-over-current");
+>>>>>    }
+>>>>> +static void dwc2_set_loongson_params(struct dwc2_hsotg *hsotg)
+>>>>> +{
+>>>>> +	struct dwc2_core_params *p = &hsotg->params;
+>>>>> +
+>>>>> +	p->phy_utmi_width = 8;
+>>>>> +	p->power_down = DWC2_POWER_DOWN_PARAM_PARTIAL;
+>>>>> +}
+>>>>> +
+>>>>>    static void dwc2_set_x1600_params(struct dwc2_hsotg *hsotg)
+>>>>>    {
+>>>>>    	struct dwc2_core_params *p = &hsotg->params;
+>>>>> @@ -281,6 +294,23 @@ const struct acpi_device_id dwc2_acpi_match[] = {
+>>>>>    };
+>>>>>    MODULE_DEVICE_TABLE(acpi, dwc2_acpi_match);
+>>>>> +const struct pci_device_id dwc2_pci_ids[] = {
+>>>>> +	{
+>>>>> +		PCI_DEVICE(PCI_VENDOR_ID_SYNOPSYS, PCI_PRODUCT_ID_HAPS_HSOTG),
+>>>>> +	},
+>>>>> +	{
+>>>>> +		PCI_DEVICE(PCI_VENDOR_ID_STMICRO,
+>>>>> +			   PCI_DEVICE_ID_STMICRO_USB_OTG),
+>>>>> +	},
+>>>>> +	{
+>>>>> +		PCI_DEVICE(PCI_VENDOR_ID_LOONGSON, PCI_DEVICE_ID_LOONGSON_DWC2),
+>>>>> +		.driver_data = (unsigned long)dwc2_set_loongson_params,
+>>>>> +	},
+>>>>> +	{ /* end: all zeroes */ }
+>>>>> +};
+>>>>> +MODULE_DEVICE_TABLE(pci, dwc2_pci_ids);
+>>>>> +EXPORT_SYMBOL_GPL(dwc2_pci_ids);
+>>>>> +
+>>>>>    static void dwc2_set_param_otg_cap(struct dwc2_hsotg *hsotg)
+>>>>>    {
+>>>>>    	switch (hsotg->hw_params.op_mode) {
+>>>>> @@ -927,13 +957,20 @@ int dwc2_init_params(struct dwc2_hsotg *hsotg)
+>>>>>    	if (match && match->data) {
+>>>>>    		set_params = match->data;
+>>>>>    		set_params(hsotg);
+>>>>> -	} else {
+>>>>> +	} else if (!match) {
+>>>>>    		const struct acpi_device_id *amatch;
+>>>>> +		const struct pci_device_id *pmatch = NULL;
+>>>>>    		amatch = acpi_match_device(dwc2_acpi_match, hsotg->dev);
+>>>>>    		if (amatch && amatch->driver_data) {
+>>>>>    			set_params = (set_params_cb)amatch->driver_data;
+>>>>>    			set_params(hsotg);
+>>>>> +		} else if (!amatch)
+>>>>> +			pmatch = pci_match_id(dwc2_pci_ids, to_pci_dev(hsotg->dev->parent));
 >>>>
->>>> Then let's make sure the bit is also set in the hardware register. Then
->>>> also the reboot issue (which is practically a minor one) is solved. The
->>>> current situation is far from optimal.
+>>>> At this point in time, how can you guarantee that the parent device
+>>>> really is a PCI one?  This function is being called from a platform
+>>>> device callback, and platform devices should NEVER be a child of a PCI
+>>>> device, as that's not how PCI or platform devices work.
+>>>>
+>>>> So how is this even possible?
+>>>>
+>>>> confused,
+>>>>
 >>>
->>> This doesn't work because then the time will be considered invalid. I'm
->>> not sure why you don't want to fix your userspace.
 >>>
+>>> Hi greg k-h,
+>>>
+>>> My current considerations are based on that the dwc2 drivers support
+>>> three types of devices, they are Platform device / ACPI device / PCI
+>>> device, and The dwc2/platform.c can all cover the three type dwc2
+>>> device, no matter how it is registered.
+>>>
+>>> So, when a dwc2 device wasn't platform device and acpi device and It
+>>> will be a PCI device, and the the dwc2/pci.c will register a dwc2
+>>> platform device that dwc2 device is a device that in dwc2/platform.c's
+>>> dwc2_driver_probe.  the "&dwc2->dev->parent" is the "hsotg->dev->parent"
+>>> and it was also the &pci->dev.
 >>
->> Nope, that could be easily avoided in software. The actual problem is
->> that the VL bit is not settable (clear-on-write). And that means we
->> can't do anything about losing the low battery information across
->> reboots - but that's no difference to the situation with the existing
->> driver.
+>> That's wrong, a PCI device should NEVER register a platform device under
+>> it, as obviously it's not a platform device at all.
 >>
->> There is no "fix" for userspace as there is no standard framework to
->> read-out the status early and retrieve it from there when the user asks
->> for it. That's best done in the kernel.
-> 
-> That's not true, nothing prevents userspace from reading the battery
-> status before setting the time and destroying the information which is
-> exactly what you should be doing.
-
-What is your "userspace"? Mine is stock Debian with systemd and
-timesyncd enabled. But there is no framework to read the status early
-enough and propagate that after timesyncd did its job. Any concrete
-suggestion to "fix" userspace?
-
-> 
+>> So please work to fix that layering violation here, as that's not
+>> correct and will cause problems as you are showing here.
 >>
->> In that light, I still believe my patch is an improvement over the
->> current situation without making anything worse.
+>>> So, We can use "to_pci_dev(hsotg->dev->parent)" to gain a dwc2 pci
+>>> device.
+>>
+>> No, not if the parent is something else as you have no way of knowing
+>> this at this point in time.
+>>
+>>>
+>>> 1)  DWC2 PCI device driver (drivers/usb/dwc2/pci.c) :
+>>>
+>>> static int dwc2_pci_probe(struct pci_dev *pci,
+>>>                            const struct pci_device_id *id)
+>>> {
+>>> ...
+>>>          struct platform_device  *dwc2;
+>>> ...
+>>>          struct device           *dev = &pci->dev;
+>>> ...
+>>> 	dwc2 = platform_device_alloc("dwc2", PLATFORM_DEVID_AUTO);
+>>> 	              //"dwc2" was used to match dwc2 platform driver
+>>
+>> This needs to be fixed, it's not ok at all.  Just use the real PCI
+>> device here please.
 > 
-> The information goes from behaving deterministically to being unreliable
-> which makes the situation worse.
+> Also, to be fair, you didn't cause this problem, I missed it previously.
+> But fixing it is essential, and will be required in order to get your
+> changes to work properly.  Sorry about that.
+> 
 
-Nope, not at all. You already lose the VL bit today during reboot when
-you have written a new value (which is standard). So this here is not
-making things worse. It's rather improving the situation for the first
-boot at least. Deterministically.
 
-Jan
+Hi greg k-h,
 
--- 
-Siemens AG, Technology
-Competence Center Embedded Linux
+Actually,  the dwc2/pci.c's  platform_device_add(dwc2) was create a
+platform device called "dwc2"  ensure dwc2/platform's dwc2_driver_probe
+function can be called. After all, the dwc2/platform's dwc2_driver_probe
+is the one that truly initializes the dwc2 controller. In addition, the
+same applies to dwc3 code.
+
+So, Do we need to refactor all the dwc (dwc2/dwc3) code ?  For dwc2, It
+seems need to rework dwc2/pci.c, dwc2/platform.c and dwc2/params.c.
+And it is necessary to decouple dwc2/platform.c and dwc2/params.c and
+this is to ensure that dwc2/pci. c and dwc2/platform. c are two
+relatively independent drivers, but, from my personal perspective, this
+doesn't seem like a good choice.  Do you think so ?  Or did I
+misunderstand your meaning?
+
+Thanks,
+Yinbo
 
