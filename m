@@ -2,141 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C21872CF99
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 21:33:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD4472CFAB
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 21:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238249AbjFLTdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 15:33:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56988 "EHLO
+        id S237605AbjFLTgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 15:36:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232156AbjFLTdO (ORCPT
+        with ESMTP id S232156AbjFLTgN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 15:33:14 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EE798B1;
-        Mon, 12 Jun 2023 12:33:11 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8BxZ+n2codk_AoEAA--.6763S3;
-        Tue, 13 Jun 2023 03:33:10 +0800 (CST)
-Received: from openarena.loongson.cn (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax6OT1codkpR4XAA--.813S2;
-        Tue, 13 Jun 2023 03:33:09 +0800 (CST)
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-To:     Alex Deucher <alexander.deucher@amd.com>,
-        Christian Konig <christian.koenig@amd.com>,
-        Pan Xinhui <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        YiPeng Chai <YiPeng.Chai@amd.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
-        Bokun Zhang <Bokun.Zhang@amd.com>,
-        Ville Syrjala <ville.syrjala@linux.intel.com>,
-        Li Yi <liyi@loongson.cn>,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Abhishek Sahu <abhsahu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-Subject: [PATCH v6 0/8] PCI/VGA: introduce is_boot_device function callback to vga_client_register
-Date:   Tue, 13 Jun 2023 03:33:01 +0800
-Message-Id: <20230612193309.197571-1-suijingfeng@loongson.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 12 Jun 2023 15:36:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A72BD;
+        Mon, 12 Jun 2023 12:36:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 114B762C5E;
+        Mon, 12 Jun 2023 19:36:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59465C433D2;
+        Mon, 12 Jun 2023 19:36:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686598571;
+        bh=yAgX0JikH7rPLfyjpnILVBy5NjwslilMd796NeaS0cw=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=Lu7JgBx0RtFRsvt/kimbvd+yuM2etqKAHiGLJ/clyfA9v1cDzlgtvpg8eszSQi4fm
+         ClfM0W+DWnugerIOE2NtwQ+oIRp39INKrn2vqLS/eoZsKX2FJdBMT+Chm7JkMEKwc1
+         vQ4y5IuZrr0eupM2XcndrAUYWIwkGkRi7FvzqGeCj+MIxjGkaD0/gqE5xtLqRQvxiE
+         KT0/1hYOQgTnOH1n9RnoDCyawfIRbgZkVA6yaKyjxRms0V/StXblcu+hqA5H1O80RW
+         1lAWNy2PdTb7ot2iqh/8bzj4qNkWCC2NFqjUt1LkkccIbRFJS3aP8rP+dSxwB7pfP1
+         bZ+DGC8JE9ymw==
+Message-ID: <958e9a7abe1170876e96ae919db9273a.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Ax6OT1codkpR4XAA--.813S2
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoW7ZrWUZF45Zr4kur18tFW3XFc_yoW8tr1rpF
-        45GF9xAr95Jr4akry7Aw4xZFy5Zan7CayfKr9rCw13u3W3Cry8trWqyFWrK34DJrWxAF10
-        qr9xKryUCF1qvrXCm3ZEXasCq-sJn29KB7ZKAUJUUUUk529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUBFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-        Gr0_Gr1UM2kKe7AKxVWUtVW8ZwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-        kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWr
-        XwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
-        8JMxkF7I0En4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
-        6r4UMxCIbckI1I0E14v26r1q6r43MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
-        AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWrXVW8Jr1lIxkGc2Ij64vIr41lIxAIcVC0I7IY
-        x2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26c
-        xKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAF
-        wI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jC2NZUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230526-topic-smd_icc-v3-4-5fb7d39b874f@linaro.org>
+References: <20230526-topic-smd_icc-v3-0-5fb7d39b874f@linaro.org> <20230526-topic-smd_icc-v3-4-5fb7d39b874f@linaro.org>
+Subject: Re: [PATCH v3 04/23] clk: qcom: smd-rpm: Move some RPM resources to the common header
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Evan Green <evgreen@chromium.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 12 Jun 2023 12:36:09 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The vga_is_firmware_default() function is arch-dependent, it's probably
-wrong if we simply remove the arch guard. As the VRAM BAR which contains
-firmware framebuffer may move, while the lfb_base and lfb_size members of
-the screen_info does not change accordingly. In short, it should take the
-re-allocation of the PCI BAR into consideration.
+Quoting Konrad Dybcio (2023-06-12 11:24:21)
+> In preparation for handling the bus clocks in the icc driver, carve out
+> some defines and a struct definition to the common rpm header.
+>=20
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
 
-With the observation that device drivers or video aperture helpers may
-have better knowledge about which PCI bar contains the firmware fb,
-which could avoid the need to iterate all of the PCI BARs. But as a PCI
-function at pci/vgaarb.c, vga_is_firmware_default() is not suitable to
-make such an optimization since it is loaded too early.
-
-There are PCI display controllers that don't have a dedicated VRAM bar,
-this function will lose its effectiveness in such a case. Luckily, the
-device driver can provide an accurate workaround.
-
-Therefore, this patch introduces a callback that allows the device driver
-to tell the VGAARB if the device is the default boot device. Also honor
-the comment: "Clients have two callback mechanisms they can use"
-
-Sui Jingfeng (8):
-  PCI/VGA: Use unsigned type for the io_state variable
-  PCI/VGA: Deal only with VGA class devices
-  PCI/VGA: Tidy up the code and comment format
-  PCI/VGA: Replace full MIT license text with SPDX identifier
-  video/aperture: Add a helper to detect if an aperture contains
-    firmware FB
-  PCI/VGA: Introduce is_boot_device function callback to
-    vga_client_register
-  drm/amdgpu: Implement the is_boot_device callback function
-  drm/radeon: Implement the is_boot_device callback function
-
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c |  12 +-
- drivers/gpu/drm/drm_aperture.c             |  16 +++
- drivers/gpu/drm/i915/display/intel_vga.c   |   3 +-
- drivers/gpu/drm/nouveau/nouveau_vga.c      |   2 +-
- drivers/gpu/drm/radeon/radeon_device.c     |  12 +-
- drivers/pci/vgaarb.c                       | 153 +++++++++++++--------
- drivers/vfio/pci/vfio_pci_core.c           |   2 +-
- drivers/video/aperture.c                   |  29 ++++
- include/drm/drm_aperture.h                 |   2 +
- include/linux/aperture.h                   |   7 +
- include/linux/vgaarb.h                     |  35 ++---
- 11 files changed, 184 insertions(+), 89 deletions(-)
-
--- 
-2.25.1
-
+Acked-by: Stephen Boyd <sboyd@kernel.org>
