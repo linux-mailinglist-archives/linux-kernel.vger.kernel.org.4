@@ -2,261 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C1AA72CF6F
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 21:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4834E72CF71
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 21:28:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237643AbjFLT1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 15:27:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52960 "EHLO
+        id S238033AbjFLT2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 15:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237424AbjFLT1d (ORCPT
+        with ESMTP id S237600AbjFLT21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 15:27:33 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA43319AE;
-        Mon, 12 Jun 2023 12:27:05 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f624daccd1so5370864e87.0;
-        Mon, 12 Jun 2023 12:27:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686598024; x=1689190024;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ejV5kgx3hh37txIAYRNNYKvIriYQUHYrwXp8KRCJYl4=;
-        b=LYER8swJIMWaeDGZ2hkjyJOD6ND8uFats/yvoPB7ibeB5ZjEBi5yxPSWnmn7dYoDy5
-         9YzgYvQa/lmsZH27yWeAyaJHL6o6p/ATfvr/+QI/CvmWSa0LtzaDCFdVtcS4b8hLNmLs
-         KC1DfDe23MY7B+edf2XG9ZSoVcT2hvmexqOIaXRiHdbRDzNhXeL6UNUXz/ihVnXM5RJ8
-         zYolz5pt7aznawgMX4deagz9rt3FU3as8j2na+PvHllzryco963N80M+XQGuh4zcfZPT
-         SYFEq99/wEqAgeId8wN2JeF5sOvL748sDNHQvBq/0c9PsxccdxokurM8rc6/hRKxbakb
-         zRHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686598024; x=1689190024;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ejV5kgx3hh37txIAYRNNYKvIriYQUHYrwXp8KRCJYl4=;
-        b=ltYqQDLZkOYtAt3PFa+pAjU8H61BsjF8SR89h8+BQG1UJSMTQCP7zG+lKgWFLkOhM9
-         QlWctmBzl/Wt5TFu5YFQeSXayrT+E2RsrLZb7c5toO7UrwWIuI4zAZ3DEMpHmJX9W6SJ
-         0gmC1lWigJ0wnQSx9afWEWb3MWpW1qSmrnzMQCqa02cEu3KbCR1ZCGhqevU4HwGtprrn
-         OjOMArDHZoBe2ERrMffVKSldwj6YoXRPMOqEU+gtpdR+q2WBIIwnl0aN+v9d9T5BDDSZ
-         YOq9w3WLlE0lo4PQA14365C/VvPMPyeW+YN9vLiXB11aXdeAZNfNqIzRLqNLRI3S8mxa
-         rx7g==
-X-Gm-Message-State: AC+VfDyVEp8cY4c6FiaweA2SINu0G+rf+PMZuYFMdQ/HK7NT+MIQOTbG
-        FhcE+cbMSzxJc8IOLaeTTpU=
-X-Google-Smtp-Source: ACHHUZ6A6MkVpb+0rEzh/Ln9SlF8OV11QAdT0mkQWx0k205rKa35tH+XEtW7A0DwjsG6evJQCknNXw==
-X-Received: by 2002:a05:6512:60f:b0:4f6:133e:a0ec with SMTP id b15-20020a056512060f00b004f6133ea0ecmr5130780lfe.25.1686598023507;
-        Mon, 12 Jun 2023 12:27:03 -0700 (PDT)
-Received: from mobilestation ([95.79.140.35])
-        by smtp.gmail.com with ESMTPSA id n17-20020a195511000000b004f252a753e1sm1553756lfe.22.2023.06.12.12.27.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 12:27:02 -0700 (PDT)
-Date:   Mon, 12 Jun 2023 22:27:00 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-ide@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCH v4 2/5] dt-bindings: ata: dwc-ahci: add Rockchip RK3588
-Message-ID: <20230612192700.nd5t4ekt6my5dqqo@mobilestation>
-References: <20230612171337.74576-1-sebastian.reichel@collabora.com>
- <20230612171337.74576-3-sebastian.reichel@collabora.com>
+        Mon, 12 Jun 2023 15:28:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BBB10FA;
+        Mon, 12 Jun 2023 12:27:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F052662D9E;
+        Mon, 12 Jun 2023 19:27:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 607CCC433D2;
+        Mon, 12 Jun 2023 19:27:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686598037;
+        bh=iJCZ76QVcYu+WrnDtaY6T9pVzx4+azFJ79YHZfLwbIY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=UHxBL4yfXKQOT9XEXIX9TCw/HUkznuuCgmo6o1mUeyrHMTMo21FjTZaMWcz46N1Y0
+         F3ZGjlSiWCpkFIZJnumJGKR0LyDkSPetfU7E8z+14cxPS2MQMfjyU6ZAKVjee1CT/N
+         kiwg42KY3r5UGN2rYS6+Rupi3rk0T+8MFHzsvGgOFnXYqGdjPlyn3O3/RaU6ourGrQ
+         LL8i3wy244IucPx+8dn586a0Bjo/emq2brgifkzAw3vl3zvrOwlErpN38vruJL/GM1
+         SE4TrlwT3sIUbxBSckgUH+FAYUQwqDs5peXXR65iHK1J2Hp3TyLIKi0CGMhvhZW1mP
+         d/eM0aCcYKxPw==
+Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2b1adf27823so57447821fa.2;
+        Mon, 12 Jun 2023 12:27:17 -0700 (PDT)
+X-Gm-Message-State: AC+VfDw4b4ETzg9dJOYld4MMZ9GUJK5rqoiL1V5W2rUDHuCngyCz5X63
+        VUdKrUZthDjzG+KqXjrrA/s6eV4MsQniaypBVw==
+X-Google-Smtp-Source: ACHHUZ4Oo+luUo4/b3eAGBHO2o/YJy0nbQ8Elg00rvCPSQ4v/mgVpYdoeH/Oaq/G2JxyGhLyng3L/YE3TqnWMwMx2fs=
+X-Received: by 2002:a2e:241a:0:b0:2b1:e958:efa0 with SMTP id
+ k26-20020a2e241a000000b002b1e958efa0mr2807470ljk.50.1686598035363; Mon, 12
+ Jun 2023 12:27:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230612171337.74576-3-sebastian.reichel@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230609183044.1764951-1-robh@kernel.org> <20230610093625.gvgbt7g4xvnuuog6@intel.intel>
+In-Reply-To: <20230610093625.gvgbt7g4xvnuuog6@intel.intel>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 12 Jun 2023 13:27:03 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqL9ax73zdn148S_7M0SyZqQfWh1Hr_yY5Vary3qye7bjQ@mail.gmail.com>
+Message-ID: <CAL_JsqL9ax73zdn148S_7M0SyZqQfWh1Hr_yY5Vary3qye7bjQ@mail.gmail.com>
+Subject: Re: [PATCH] i2c: mpc: Use of_property_read_reg() to parse "reg"
+To:     Andi Shyti <andi.shyti@kernel.org>
+Cc:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 07:13:34PM +0200, Sebastian Reichel wrote:
-> This adds Rockchip RK3588 AHCI binding. In order to narrow down the
-> allowed clocks without bloating the generic binding, the description
-> of Rockchip's AHCI controllers has been moved to its own file.
-> 
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+On Sat, Jun 10, 2023 at 3:36=E2=80=AFAM Andi Shyti <andi.shyti@kernel.org> =
+wrote:
+>
+> Hi Rob,
+>
+> On Fri, Jun 09, 2023 at 12:30:44PM -0600, Rob Herring wrote:
+> > Use the recently added of_property_read_reg() helper to get the
+> > untranslated "reg" address value.
+> >
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> > ---
+> >  drivers/i2c/busses/i2c-mpc.c | 5 +++--
+> >  1 file changed, 3 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/i2c/busses/i2c-mpc.c b/drivers/i2c/busses/i2c-mpc.=
+c
+> > index cfd074ee6d54..595dce9218ad 100644
+> > --- a/drivers/i2c/busses/i2c-mpc.c
+> > +++ b/drivers/i2c/busses/i2c-mpc.c
+> > @@ -316,9 +316,10 @@ static void mpc_i2c_setup_512x(struct device_node =
+*node,
+> >       if (node_ctrl) {
+> >               ctrl =3D of_iomap(node_ctrl, 0);
+> >               if (ctrl) {
+> > +                     u64 addr;
+> >                       /* Interrupt enable bits for i2c-0/1/2: bit 24/26=
+/28 */
+> > -                     pval =3D of_get_property(node, "reg", NULL);
+> > -                     idx =3D (*pval & 0xff) / 0x20;
+> > +                     of_property_read_reg(node, 0, &addr, NULL);
+>
+> because of_property_read_reg() can return error, can we check
+> also the error value here?
 
-Thanks. The patch now looks good.
-Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+Why? The old code wasn't worried about of_get_property() returning
+NULL on the same possible errors. If anyone is still actually using
+mpc512x, I don't think their DTB will have an error at this point.
+IOW, is improving the error handling on this really worth it?
 
--Serge(y)
-
-> ---
->  .../bindings/ata/rockchip,dwc-ahci.yaml       | 124 ++++++++++++++++++
->  .../bindings/ata/snps,dwc-ahci.yaml           |  13 +-
->  2 files changed, 133 insertions(+), 4 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/ata/rockchip,dwc-ahci.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/ata/rockchip,dwc-ahci.yaml b/Documentation/devicetree/bindings/ata/rockchip,dwc-ahci.yaml
-> new file mode 100644
-> index 000000000000..b5e5767d8698
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/ata/rockchip,dwc-ahci.yaml
-> @@ -0,0 +1,124 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/ata/rockchip,dwc-ahci.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Synopsys DWC AHCI SATA controller for Rockchip devices
-> +
-> +maintainers:
-> +  - Serge Semin <fancer.lancer@gmail.com>
-> +
-> +description:
-> +  This document defines device tree bindings for the Synopsys DWC
-> +  implementation of the AHCI SATA controller found in Rockchip
-> +  devices.
-> +
-> +select:
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        enum:
-> +          - rockchip,rk3568-dwc-ahci
-> +          - rockchip,rk3588-dwc-ahci
-> +  required:
-> +    - compatible
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - rockchip,rk3568-dwc-ahci
-> +          - rockchip,rk3588-dwc-ahci
-> +      - const: snps,dwc-ahci
-> +
-> +  ports-implemented:
-> +    const: 1
-> +
-> +  sata-port@0:
-> +    $ref: /schemas/ata/snps,dwc-ahci-common.yaml#/$defs/dwc-ahci-port
-> +
-> +    properties:
-> +      reg:
-> +        const: 0
-> +
-> +    unevaluatedProperties: false
-> +
-> +patternProperties:
-> +  "^sata-port@[1-9a-e]$": false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +  - ports-implemented
-> +
-> +allOf:
-> +  - $ref: snps,dwc-ahci-common.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - rockchip,rk3588-dwc-ahci
-> +    then:
-> +      properties:
-> +        clocks:
-> +          maxItems: 5
-> +        clock-names:
-> +          items:
-> +            - const: sata
-> +            - const: pmalive
-> +            - const: rxoob
-> +            - const: ref
-> +            - const: asic
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - rockchip,rk3568-dwc-ahci
-> +    then:
-> +      properties:
-> +        clocks:
-> +          maxItems: 3
-> +        clock-names:
-> +          items:
-> +            - const: sata
-> +            - const: pmalive
-> +            - const: rxoob
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/rockchip,rk3588-cru.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/ata/ahci.h>
-> +    #include <dt-bindings/phy/phy.h>
-> +
-> +    sata@fe210000 {
-> +      compatible = "rockchip,rk3588-dwc-ahci", "snps,dwc-ahci";
-> +      reg = <0xfe210000 0x1000>;
-> +      clocks = <&cru ACLK_SATA0>, <&cru CLK_PMALIVE0>,
-> +               <&cru CLK_RXOOB0>, <&cru CLK_PIPEPHY0_REF>,
-> +               <&cru CLK_PIPEPHY0_PIPE_ASIC_G>;
-> +      clock-names = "sata", "pmalive", "rxoob", "ref", "asic";
-> +      interrupts = <GIC_SPI 273 IRQ_TYPE_LEVEL_HIGH 0>;
-> +      ports-implemented = <0x1>;
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      sata-port@0 {
-> +        reg = <0>;
-> +        hba-port-cap = <HBA_PORT_FBSCP>;
-> +        phys = <&combphy0_ps PHY_TYPE_SATA>;
-> +        phy-names = "sata-phy";
-> +        snps,rx-ts-max = <32>;
-> +        snps,tx-ts-max = <32>;
-> +      };
-> +    };
-> +
-> +...
-> diff --git a/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml b/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
-> index 5afa4b57ce20..4c848fcb5a5d 100644
-> --- a/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
-> +++ b/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
-> @@ -13,6 +13,15 @@ description:
->    This document defines device tree bindings for the generic Synopsys DWC
->    implementation of the AHCI SATA controller.
->  
-> +select:
-> +  properties:
-> +    compatible:
-> +      enum:
-> +        - snps,dwc-ahci
-> +        - snps,spear-ahci
-> +  required:
-> +    - compatible
-> +
->  allOf:
->    - $ref: snps,dwc-ahci-common.yaml#
->  
-> @@ -23,10 +32,6 @@ properties:
->          const: snps,dwc-ahci
->        - description: SPEAr1340 AHCI SATA device
->          const: snps,spear-ahci
-> -      - description: Rockhip RK3568 AHCI controller
-> -        items:
-> -          - const: rockchip,rk3568-dwc-ahci
-> -          - const: snps,dwc-ahci
->  
->  patternProperties:
->    "^sata-port@[0-9a-e]$":
-> -- 
-> 2.39.2
-> 
+Rob
