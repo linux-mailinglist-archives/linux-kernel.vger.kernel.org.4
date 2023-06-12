@@ -2,104 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B01B772B8A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 09:34:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D545272B88D
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 09:23:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234491AbjFLHeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 03:34:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46122 "EHLO
+        id S234307AbjFLHXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 03:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231764AbjFLHeO (ORCPT
+        with ESMTP id S233172AbjFLHXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 03:34:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20DE4173C;
-        Mon, 12 Jun 2023 00:29:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 04AEE6113A;
-        Mon, 12 Jun 2023 07:12:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6591C433D2;
-        Mon, 12 Jun 2023 07:12:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686553947;
-        bh=8kqxjlMxqImRCSYxygvdrZXAxdpzb5xsKrUIf7JdIlg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hdFLQIL0eb5MFzQNx/P/BSz/45zaaTQz8UztRLTkKPLWc8J0Nwv2cx2BK2KVN8Grk
-         oVx3Rnrmqpt3TtkrxzhK8lrE2vlxkO91xMe2KlemMYqd6tMUUSszzuGcbb+RMTekLy
-         qCIeh9rXQrbHarZMiby8jmOOm4Npx5k4omNx7n9A=
-Date:   Mon, 12 Jun 2023 09:12:24 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Qingsong Chen <changxian.cqs@antgroup.com>
-Cc:     linux-kernel@vger.kernel.org,
-        =?utf-8?B?55Sw5rSq5Lqu?= <tate.thl@antgroup.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH v3 0/3] Rust scatterlist abstractions
-Message-ID: <2023061238-disagree-nape-f549@gregkh>
-References: <20230610104909.3202958-1-changxian.cqs@antgroup.com>
- <2023061017-usable-bountiful-3f59@gregkh>
- <2023061001-immovable-mongoose-7546@gregkh>
- <37513fcd-b371-cc2f-b7f9-e94b045d8c5c@antgroup.com>
- <2023061257-unbeaten-dropkick-a25c@gregkh>
- <5469fb25-e88a-b703-c0d9-204f0cbcab91@antgroup.com>
+        Mon, 12 Jun 2023 03:23:49 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 806BC1997;
+        Mon, 12 Jun 2023 00:18:47 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8DxzOqHxYZk34QDAA--.7725S3;
+        Mon, 12 Jun 2023 15:13:11 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax6OSFxYZkjTQVAA--.61011S3;
+        Mon, 12 Jun 2023 15:13:10 +0800 (CST)
+Subject: Re: [PATCH v12 1/2] spi: add loongson spi bindings
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        zhuyinbo@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+References: <20230608072819.25930-1-zhuyinbo@loongson.cn>
+ <20230608072819.25930-2-zhuyinbo@loongson.cn>
+ <6ebed84c-2b42-c981-7b3f-e71cc88e4c2c@linaro.org>
+ <4bf747c4-b767-b20c-e00f-724b50f44edb@loongson.cn>
+ <6bfc2a22-6901-0858-7b90-bc4c52c66810@linaro.org>
+ <bd2d7830-3ab6-0906-b06a-83d3e0a96749@loongson.cn>
+ <11ca2b90-544d-18c2-fb15-7909ca60507f@linaro.org>
+ <f6d4ecb5-e9df-346e-4aab-772fd01689c8@loongson.cn>
+ <a9952e76-1204-5bc7-7856-0c7f8a411d76@linaro.org>
+ <9c94397d-1e31-02fa-bdbe-af888c72eac4@loongson.cn>
+ <657f8d19-de83-8be6-4a9d-5f13b1df7383@linaro.org>
+ <b0e5e13e-6746-bd90-2a49-31ee6dd3e8a2@loongson.cn>
+ <84ccf4cc-072d-adbf-0361-95ceae13f333@linaro.org>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <5d060cac-ff28-60e9-98a8-f2bd4d378455@loongson.cn>
+Date:   Mon, 12 Jun 2023 15:13:09 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5469fb25-e88a-b703-c0d9-204f0cbcab91@antgroup.com>
+In-Reply-To: <84ccf4cc-072d-adbf-0361-95ceae13f333@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Ax6OSFxYZkjTQVAA--.61011S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
+        nUUI43ZEXa7xR_UUUUUUUUU==
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 03:03:14PM +0800, Qingsong Chen wrote:
-> On 6/12/23 1:38 PM, Greg KH wrote:
-> > On Mon, Jun 12, 2023 at 11:49:51AM +0800, Qingsong Chen wrote:
-> > > On 6/10/23 11:35 PM, Greg KH wrote:
-> > > > On Sat, Jun 10, 2023 at 05:33:47PM +0200, Greg KH wrote:
-> > > > > On Sat, Jun 10, 2023 at 06:49:06PM +0800, Qingsong Chen wrote:
-> > > > > > Hi All!
-> > > > > > 
-> > > > > > This is a version of scatterlist abstractions for Rust drivers.
-> > > > > > 
-> > > > > > Scatterlist is used for efficient management of memory buffers, which is
-> > > > > > essential for many kernel-level operations such as Direct Memory Access
-> > > > > > (DMA) transfers and crypto APIs.
-> > > > > > 
-> > > > > > This patch should be a good start to introduce the crypto APIs for Rust
-> > > > > > drivers and to develop cipher algorithms in Rust later.
-> > > > > 
-> > > > > I thought we were getting rid of the scatter list api for the crypto
-> > > > > drivers, so this shouldn't be needed going forward, right?  Why not just
-> > > > > use the direct apis instead?
-> > > > 
-> > > > See https://lore.kernel.org/r/ZH2hgrV6po9dkxi+@gondor.apana.org.au for
-> > > > the details of that (sorry I forgot the link first time...)
-> > > 
-> > > Thanks for the information. I agree that turning simple buffers into
-> > > sg-bufs is not a good idea. If I were implementing a new cipher
-> > > algorithm, I would definitely follow the `struct cipher_alg`, which
-> > > takes simple `u8 *` pointer as parameter. However, if we'd like to
-> > > utilize some existing ciphers, such as aead, we still need scatterlists
-> > > to construct an `aead_request` for further operations, util changes are
-> > > made to the underlying interface.
-> > 
-> > Why not make the changes to the C code first, and get those changes
-> > merged, making this patch series not needed at all?
-> > 
+
+
+在 2023/6/10 上午12:45, Krzysztof Kozlowski 写道:
+> On 09/06/2023 05:13, zhuyinbo wrote:
+>>
+>>
+>> 在 2023/6/8 下午9:26, Krzysztof Kozlowski 写道:
+>>> On 08/06/2023 14:10, zhuyinbo wrote:
+>>>>
+>>>>
+>>>> 在 2023/6/8 下午7:45, Krzysztof Kozlowski 写道:
+>>>>> On 08/06/2023 13:42, zhuyinbo wrote:
+>>>>>> --- a/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>>>>>> +++ b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>>>>>> @@ -16,6 +16,7 @@ properties:
+>>>>>>        compatible:
+>>>>>>          enum:
+>>>>>>            - loongson,ls2k1000-spi
+>>>>>> +      - loongson,ls2k0500-spi
+>>>>>
+>>>>> Aren't they compatible?
+>>>>>
+>>>>
+>>>>
+>>>> Are you saying that the spi driver is compatible with 2k0500 ?
+>>>
+>>> Didn't you say this through 11 previous revisions?
+>>
+>>
+>> Yes, did I understand your meaning incorrectly ?
 > 
-> Yes, you're right. I believe Herbert would work on that. And I would
-> stop this patch series. Thanks.
+> If they are compatible, then they are not part of one enum. They could
+> not be as this would easily fail in testing of your DTS.
+> 
 
-No, I mean you work on that now.  There's no reason you should wait for
-Herbert, or any one else, submit the patch series this week to that
-subsystem that does the conversion and see how it goes!
 
-thanks,
+The "loongson,ls2k0500-spi" wasn't a compatible in previous version and
+I will add "loongson,ls2k0500-spi" as a compatible in spi driver and
+added it as a part of the one enum in dt-binding.
 
-greg k-h
+Thanks,
+Yinbo
+
