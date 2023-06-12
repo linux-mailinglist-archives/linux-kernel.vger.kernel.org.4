@@ -2,139 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB88072C2F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0E6372C2ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:36:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237487AbjFLLhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 07:37:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52400 "EHLO
+        id S234557AbjFLLge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 07:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237809AbjFLLg2 (ORCPT
+        with ESMTP id S234902AbjFLLgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 07:36:28 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 348B510E6
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 04:14:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=pl7chRYk/uyru+lQcBj9K0R9DWBsRbU5ZH1ZZl8pMdA=; b=IclETesgPyZyl+LdaUeoizqTxu
-        ApimhlJ7qUFdXRHjSHXRsl+pcfSuzXDroVtLy4K5bHqU35+8IZ1isfITE6R8sXpNNCABqYuhy8QEJ
-        QJU4vUAvv0U/Ulw4kMoiKKctKZ/b3n8wZq2uXmjTixK2xAaz12vRWrBa414QiX5BK5FVhEt/c2j2G
-        qnq557qzlt1K3hW4yqDxvJ6JVLRrNZVjigxG1hu3vmiF1zfz1p+pPhSuLCD5Mme1CONrsohJOoqdK
-        o+YcUSkISMTN6rPXMjtNgDjeiHXLtkoobufHre+WCyxBlHTyabZRHEp0f147urQRY7YHMnqUpbRZz
-        QOMUwe1Q==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q8fUr-008mw5-0T;
-        Mon, 12 Jun 2023 11:14:08 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5D08C3002A9;
-        Mon, 12 Jun 2023 13:13:59 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4130424513501; Mon, 12 Jun 2023 13:13:59 +0200 (CEST)
-Date:   Mon, 12 Jun 2023 13:13:59 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Tim Chen <tim.c.chen@linux.intel.com>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V . Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shrikanth Hegde <sshegde@linux.vnet.ibm.com>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        naveen.n.rao@linux.vnet.ibm.com,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        Barry Song <v-songbaohua@oppo.com>,
-        Chen Yu <yu.c.chen@intel.com>, Hillf Danton <hdanton@sina.com>
-Subject: Re: [Patch v2 1/6] sched/fair: Determine active load balance for SMT
- sched groups
-Message-ID: <20230612111359.GI4253@hirez.programming.kicks-ass.net>
-References: <cover.1686263351.git.tim.c.chen@linux.intel.com>
- <253f5272200d3cec3f24427262bb4e95244f681c.1686263351.git.tim.c.chen@linux.intel.com>
+        Mon, 12 Jun 2023 07:36:10 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0DC4D4C0D;
+        Mon, 12 Jun 2023 04:14:23 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F172A2F4;
+        Mon, 12 Jun 2023 04:15:07 -0700 (PDT)
+Received: from e127643.broadband (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 512873F587;
+        Mon, 12 Jun 2023 04:14:19 -0700 (PDT)
+From:   James Clark <james.clark@arm.com>
+To:     coresight@lists.linaro.org
+Cc:     James Clark <james.clark@arm.com>, Leo Yan <leo.yan@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 3/5] perf cs-etm: Make PID format accessible from struct cs_etm_auxtrace
+Date:   Mon, 12 Jun 2023 12:14:00 +0100
+Message-Id: <20230612111403.100613-4-james.clark@arm.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230612111403.100613-1-james.clark@arm.com>
+References: <20230612111403.100613-1-james.clark@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <253f5272200d3cec3f24427262bb4e95244f681c.1686263351.git.tim.c.chen@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 03:32:27PM -0700, Tim Chen wrote:
+To avoid every user of PID format having to use their own static
+local variable, cache it on initialisation and change the accessor to
+take struct cs_etm_auxtrace.
 
-> +/* One group has more than one SMT CPU while the other group does not */
-> +static inline bool smt_vs_nonsmt_groups(struct sched_group *sg1,
-> +				    struct sched_group *sg2)
-> +{
-> +	if (!sg1 || !sg2)
-> +		return false;
-> +
-> +	return (sg1->flags & SD_SHARE_CPUCAPACITY) !=
-> +		(sg2->flags & SD_SHARE_CPUCAPACITY);
-> +}
-> +
-> +static inline bool smt_balance(struct lb_env *env, struct sg_lb_stats *sgs,
-> +			       struct sched_group *group)
-> +{
-> +	if (env->idle == CPU_NOT_IDLE)
-> +		return false;
-> +
-> +	/*
-> +	 * For SMT source group, it is better to move a task
-> +	 * to a CPU that doesn't have multiple tasks sharing its CPU capacity.
-> +	 * Note that if a group has a single SMT, SD_SHARE_CPUCAPCITY
-> +	 * will not be on.
-> +	 */
-> +	if (group->flags & SD_SHARE_CPUCAPACITY &&
-> +	    sgs->sum_h_nr_running > 1)
-> +		return true;
+Reviewed-by: Leo Yan <leo.yan@linaro.org>
+Signed-off-by: James Clark <james.clark@arm.com>
+---
+ .../perf/util/cs-etm-decoder/cs-etm-decoder.c | 20 ++-------
+ tools/perf/util/cs-etm.c                      | 42 ++++++++++++-------
+ tools/perf/util/cs-etm.h                      |  8 +++-
+ 3 files changed, 37 insertions(+), 33 deletions(-)
 
-AFAICT this does the right thing for SMT>2
-
-> +
-> +	return false;
-> +}
-> +
->  static inline bool
->  sched_reduced_capacity(struct rq *rq, struct sched_domain *sd)
->  {
-
-> @@ -9537,6 +9581,18 @@ static bool update_sd_pick_busiest(struct lb_env *env,
->  		break;
->  
->  	case group_has_spare:
-> +		/*
-> +		 * Do not pick sg with SMT CPUs over sg with pure CPUs,
-> +		 * as we do not want to pull task off half empty SMT core
-> +		 * and make the core idle.
-> +		 */
-> +		if (smt_vs_nonsmt_groups(sds->busiest, sg)) {
-> +			if (sg->flags & SD_SHARE_CPUCAPACITY)
-> +				return false;
-> +			else
-> +				return true;
-> +		}
-
-However, here I'm not at all sure. Consider SMT-4 with 2 active CPUs, we
-still very much would like to pull one task off if we have an idle core
-somewhere, no?
+diff --git a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
+index 82a27ab90c8b..2af641d26866 100644
+--- a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
++++ b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
+@@ -541,34 +541,22 @@ cs_etm_decoder__set_tid(struct cs_etm_queue *etmq,
+ 			const uint8_t trace_chan_id)
+ {
+ 	pid_t tid = -1;
+-	static u64 pid_fmt;
+-	int ret;
+-
+-	/*
+-	 * As all the ETMs run at the same exception level, the system should
+-	 * have the same PID format crossing CPUs.  So cache the PID format
+-	 * and reuse it for sequential decoding.
+-	 */
+-	if (!pid_fmt) {
+-		ret = cs_etm__get_pid_fmt(trace_chan_id, &pid_fmt);
+-		if (ret)
+-			return OCSD_RESP_FATAL_SYS_ERR;
+-	}
+ 
+ 	/*
+ 	 * Process the PE_CONTEXT packets if we have a valid contextID or VMID.
+ 	 * If the kernel is running at EL2, the PID is traced in CONTEXTIDR_EL2
+ 	 * as VMID, Bit ETM_OPT_CTXTID2 is set in this case.
+ 	 */
+-	switch (pid_fmt) {
+-	case BIT(ETM_OPT_CTXTID):
++	switch (cs_etm__get_pid_fmt(etmq)) {
++	case CS_ETM_PIDFMT_CTXTID:
+ 		if (elem->context.ctxt_id_valid)
+ 			tid = elem->context.context_id;
+ 		break;
+-	case BIT(ETM_OPT_CTXTID2):
++	case CS_ETM_PIDFMT_CTXTID2:
+ 		if (elem->context.vmid_valid)
+ 			tid = elem->context.vmid;
+ 		break;
++	case CS_ETM_PIDFMT_NONE:
+ 	default:
+ 		break;
+ 	}
+diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
+index 5b909bca294e..afe0a838152d 100644
+--- a/tools/perf/util/cs-etm.c
++++ b/tools/perf/util/cs-etm.c
+@@ -78,6 +78,7 @@ struct cs_etm_auxtrace {
+ 	u64 instructions_id;
+ 	u64 **metadata;
+ 	unsigned int pmu_type;
++	enum cs_etm_pid_fmt pid_fmt;
+ };
+ 
+ struct cs_etm_traceid_queue {
+@@ -170,44 +171,46 @@ int cs_etm__get_cpu(u8 trace_chan_id, int *cpu)
+ }
+ 
+ /*
+- * The returned PID format is presented by two bits:
++ * The returned PID format is presented as an enum:
+  *
+- *   Bit ETM_OPT_CTXTID: CONTEXTIDR or CONTEXTIDR_EL1 is traced;
+- *   Bit ETM_OPT_CTXTID2: CONTEXTIDR_EL2 is traced.
++ *   CS_ETM_PIDFMT_CTXTID: CONTEXTIDR or CONTEXTIDR_EL1 is traced.
++ *   CS_ETM_PIDFMT_CTXTID2: CONTEXTIDR_EL2 is traced.
++ *   CS_ETM_PIDFMT_NONE: No context IDs
+  *
+  * It's possible that the two bits ETM_OPT_CTXTID and ETM_OPT_CTXTID2
+  * are enabled at the same time when the session runs on an EL2 kernel.
+  * This means the CONTEXTIDR_EL1 and CONTEXTIDR_EL2 both will be
+  * recorded in the trace data, the tool will selectively use
+  * CONTEXTIDR_EL2 as PID.
++ *
++ * The result is cached in etm->pid_fmt so this function only needs to be called
++ * when processing the aux info.
+  */
+-int cs_etm__get_pid_fmt(u8 trace_chan_id, u64 *pid_fmt)
++static enum cs_etm_pid_fmt cs_etm__init_pid_fmt(u64 *metadata)
+ {
+-	struct int_node *inode;
+-	u64 *metadata, val;
+-
+-	inode = intlist__find(traceid_list, trace_chan_id);
+-	if (!inode)
+-		return -EINVAL;
+-
+-	metadata = inode->priv;
++	u64 val;
+ 
+ 	if (metadata[CS_ETM_MAGIC] == __perf_cs_etmv3_magic) {
+ 		val = metadata[CS_ETM_ETMCR];
+ 		/* CONTEXTIDR is traced */
+ 		if (val & BIT(ETM_OPT_CTXTID))
+-			*pid_fmt = BIT(ETM_OPT_CTXTID);
++			return CS_ETM_PIDFMT_CTXTID;
+ 	} else {
+ 		val = metadata[CS_ETMV4_TRCCONFIGR];
+ 		/* CONTEXTIDR_EL2 is traced */
+ 		if (val & (BIT(ETM4_CFG_BIT_VMID) | BIT(ETM4_CFG_BIT_VMID_OPT)))
+-			*pid_fmt = BIT(ETM_OPT_CTXTID2);
++			return CS_ETM_PIDFMT_CTXTID2;
+ 		/* CONTEXTIDR_EL1 is traced */
+ 		else if (val & BIT(ETM4_CFG_BIT_CTXTID))
+-			*pid_fmt = BIT(ETM_OPT_CTXTID);
++			return CS_ETM_PIDFMT_CTXTID;
+ 	}
+ 
+-	return 0;
++	return CS_ETM_PIDFMT_NONE;
++}
++
++enum cs_etm_pid_fmt cs_etm__get_pid_fmt(struct cs_etm_queue *etmq)
++{
++	return etmq->etm->pid_fmt;
+ }
+ 
+ static int cs_etm__map_trace_id(u8 trace_chan_id, u64 *cpu_metadata)
+@@ -3235,6 +3238,13 @@ int cs_etm__process_auxtrace_info_full(union perf_event *event,
+ 		goto err_free_metadata;
+ 	}
+ 
++	/*
++	 * As all the ETMs run at the same exception level, the system should
++	 * have the same PID format crossing CPUs.  So cache the PID format
++	 * and reuse it for sequential decoding.
++	 */
++	etm->pid_fmt = cs_etm__init_pid_fmt(metadata[0]);
++
+ 	err = auxtrace_queues__init(&etm->queues);
+ 	if (err)
+ 		goto err_free_etm;
+diff --git a/tools/perf/util/cs-etm.h b/tools/perf/util/cs-etm.h
+index ecca40787ac9..2f47f4ec5b27 100644
+--- a/tools/perf/util/cs-etm.h
++++ b/tools/perf/util/cs-etm.h
+@@ -244,9 +244,15 @@ int cs_etm__process_auxtrace_info(union perf_event *event,
+ 				  struct perf_session *session);
+ struct perf_event_attr *cs_etm_get_default_config(struct perf_pmu *pmu);
+ 
++enum cs_etm_pid_fmt {
++	CS_ETM_PIDFMT_NONE,
++	CS_ETM_PIDFMT_CTXTID,
++	CS_ETM_PIDFMT_CTXTID2
++};
++
+ #ifdef HAVE_CSTRACE_SUPPORT
+ int cs_etm__get_cpu(u8 trace_chan_id, int *cpu);
+-int cs_etm__get_pid_fmt(u8 trace_chan_id, u64 *pid_fmt);
++enum pid_fmt cs_etm__get_pid_fmt(struct cs_etm_queue *etmq);
+ int cs_etm__etmq_set_tid(struct cs_etm_queue *etmq,
+ 			 pid_t tid, u8 trace_chan_id);
+ bool cs_etm__etmq_is_timeless(struct cs_etm_queue *etmq);
+-- 
+2.34.1
 
