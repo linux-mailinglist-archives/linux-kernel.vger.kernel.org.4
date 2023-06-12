@@ -2,81 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B137272CF09
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 21:11:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C38E72CF08
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 21:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237889AbjFLTLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 15:11:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44884 "EHLO
+        id S237822AbjFLTL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 15:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237873AbjFLTLf (ORCPT
+        with ESMTP id S232656AbjFLTLY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 15:11:35 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D642AED
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 12:11:34 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-3f9d619103dso47201cf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 12:11:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686597094; x=1689189094;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g8g7vLhL7EFYkxF/CEAE3cAlq8J+ckJkpg1IYnErrxc=;
-        b=TCh+0bftHfLk+DgBwOYgbe9CIcKn6q4xqoiF2jA02xQU9IfV1Qr8625n9sKj/azgjD
-         anC61FVDat8ahe2+p1Ft19Fwn5RNCDpWhbht5YS5tQWj48G883TfUSfcWxuyrIl/+Hb6
-         e9THiUz7QhkU6G5YM8fjDlc2rcd/iNLMlmhAARiz4cGv/wu3EpSl/YbRA5HXPG4tvLej
-         3TU17lbMkt7MqIGH2cMbVdXGDd7nrz4ZK5resRc8aUUGwr5T7ze7XQnqO0qNJnOocI0Q
-         zfSxEQ8ky5T6Te0AIIKOdbuWe7DMrY1RzZRH5cOqhVLpVY6DhKEnDwakA+RKDNM6QkMB
-         NeNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686597094; x=1689189094;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g8g7vLhL7EFYkxF/CEAE3cAlq8J+ckJkpg1IYnErrxc=;
-        b=Yu7Ur8VhU/w0S7JUwXuYdr8WOKUEHVY/DLdTQZ8i9fkuVq7FWrAv7zD3ehGQGyzzQO
-         liHHJDFlRUUy6ka/wLSn+KiNBNbhCa7yNkQ0zatBUrNuBGfkPnh9VhXLjhDwnRB17gzP
-         JFAXoaBYYB4kFHWMQwDTmsCHrtyvyuSPbBQ5D8O9FJGthkjjqIHDQtkAWjbVUKKgZthI
-         iujnRzOWOssmc0aLtTcsZh0TOPhGoDgrpJAKweV48deGdgdJB8D4m3hTOHHx2fPr1YU0
-         nbO8SdpIO5fFv3GFzVKybzyfPlUAdr5wRnNKBW9oJAxHzX//TTesnozxy+QT+vyLO+Zm
-         ByCA==
-X-Gm-Message-State: AC+VfDwuLq6Ml3ngWkBZdCs3BbD7yIcXGyZM0xUzqip1RA/7fckSBEDA
-        446Jke+oDIdwJ/1a80J1ReXzU5ckhGuWSdS00CBUZ5X2aQQc5Gcjer0=
-X-Google-Smtp-Source: ACHHUZ5FCLC9Lk/XrJ1xyPUdn2S7c534a2OQ+v4gT/cdVz21GlzBGJ4HqV4IE9TDJ9Cn1MYyuiX1kBxO3c2RAiNBU7E=
-X-Received: by 2002:a05:622a:506:b0:3f9:f877:1129 with SMTP id
- l6-20020a05622a050600b003f9f8771129mr10495qtx.29.1686597093835; Mon, 12 Jun
- 2023 12:11:33 -0700 (PDT)
+        Mon, 12 Jun 2023 15:11:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7085AD;
+        Mon, 12 Jun 2023 12:11:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7743962D5E;
+        Mon, 12 Jun 2023 19:11:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79B5CC433EF;
+        Mon, 12 Jun 2023 19:11:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686597081;
+        bh=DQ/Od0CF4jpt4XMYdVtzce6cD5R6KE/yyJueAcvxr0g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ikk7aOHUu4MF6rf1YibiyOBhvmnyoEh3Dt0+t118OE/U5OKQ2kwprmq5K3ENj2Upc
+         Bmead5WSXta2V1AatizLeLn8HkonVWhByupoixPHtTxxLc/uBbO5PypO8HYSqYBJpv
+         NIXdXEab737AUD897jXpDBmLo45mxAXdVtRO0yaeAbiO5A3DiJ+UxEV1d3yHijqghf
+         2cJB/6z9TvKofMYNTQv2yr9ui2k2nTkkznscv0Oe2ewqkzmLTMCxOa3owc06LjMq4H
+         PdXWoQWGnvnLM51fBBgkzsbRfPHtNjN/3ERrF3P7iHMThKOskzvVz8sSiJDpPnqZzh
+         s+tdEgldWvTzA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 6210940692; Mon, 12 Jun 2023 16:11:19 -0300 (-03)
+Date:   Mon, 12 Jun 2023 16:11:19 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Changbin Du <changbin.du@huawei.com>,
+        Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Changbin Du <changbin.du@huawei.com>
+Subject: Re: [PATCH v1 2/2] perf srcline: Make sentinel reading for binutils
+ addr2line more robust
+Message-ID: <ZIdt18EmHQBgiWXF@kernel.org>
+References: <20230609235419.204624-1-irogers@google.com>
+ <20230609235419.204624-2-irogers@google.com>
 MIME-Version: 1.0
-References: <20230612143414.186389-1-wangkefeng.wang@huawei.com> <20230612143414.186389-2-wangkefeng.wang@huawei.com>
-In-Reply-To: <20230612143414.186389-2-wangkefeng.wang@huawei.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Mon, 12 Jun 2023 13:10:57 -0600
-Message-ID: <CAOUHufYb0ADyh-b2JtmamJ4gHd_M=nYr765ffWbr1oZ9zRCAAg@mail.gmail.com>
-Subject: Re: [PATCH -next 2/2] mm: kill [add|del]_page_to_lru_list()
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, willy@infradead.org,
-        jgowans@amazon.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230609235419.204624-2-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 8:19=E2=80=AFAM Kefeng Wang <wangkefeng.wang@huawei=
-.com> wrote:
->
-> Now no one call [add|del]_page_to_lru_list(), let's drop unused
-> page interfaces.
->
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+Em Fri, Jun 09, 2023 at 04:54:19PM -0700, Ian Rogers escreveu:
+> The addr2line process is sent an address then multiple function,
+> filename:line "records" are read. To detect the end of output a ',' is
+> sent and for llvm-addr2line a ',' is then read back showing the end of
+> addrline's output. For binutils addr2line the ',' translates to
+> address 0 and we expect the bogus filename marker "??:0" (see
+> filename_split) to be sent from addr2line. For some kernels address 0
+> may have a mapping and so a seemingly valid inline output is given and
+> breaking the sentinel discovery:
+> 
+> ```
+> $ addr2line -e vmlinux -f -i
+> ,
+> __per_cpu_start
+> ./arch/x86/kernel/cpu/common.c:1850
+> ```
+> 
+> To avoid this problem enable the address dumping for addr2line (the -a
+> option). If an address of 0x0000000000000000 is read then this is the
+> sentinel value working around the problem above. The filename_split
+> still needs to check for "??:0" as bogus non-zero addresses also need
+> handling.
+> 
+> Reported-by: Changbin Du <changbin.du@huawei.com>
 
-Acked-by: Yu Zhao <yuzhao@google.com>
+Changbin,
+
+	Did this fix the problem you reported? If so can I have your
+Tested-by?
+
+Thanks,
+
+- Arnaldo
+
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/util/srcline.c | 61 ++++++++++++++++++++++++++++++++++-----
+>  1 file changed, 53 insertions(+), 8 deletions(-)
+> 
+> diff --git a/tools/perf/util/srcline.c b/tools/perf/util/srcline.c
+> index fc85cdd6c8f9..c99a001453b4 100644
+> --- a/tools/perf/util/srcline.c
+> +++ b/tools/perf/util/srcline.c
+> @@ -406,7 +406,7 @@ static struct child_process *addr2line_subprocess_init(const char *addr2line_pat
+>  	const char *argv[] = {
+>  		addr2line_path ?: "addr2line",
+>  		"-e", binary_path,
+> -		"-i", "-f", NULL
+> +		"-a", "-i", "-f", NULL
+>  	};
+>  	struct child_process *a2l = zalloc(sizeof(*a2l));
+>  	int start_command_status = 0;
+> @@ -461,10 +461,10 @@ static enum a2l_style addr2line_configure(struct child_process *a2l, const char
+>  			style = LLVM;
+>  			cached = true;
+>  			lines = 1;
+> -		} else if (ch == '?') {
+> +		} else if (ch == '0') {
+>  			style = GNU_BINUTILS;
+>  			cached = true;
+> -			lines = 2;
+> +			lines = 3;
+>  		} else {
+>  			if (!symbol_conf.disable_add2line_warn) {
+>  				char *output;
+> @@ -516,20 +516,64 @@ static int read_addr2line_record(struct io *io,
+>  	if (line_nr != NULL)
+>  		*line_nr = 0;
+>  
+> +	/*
+> +	 * Read the first line. Without an error this will be either an address
+> +	 * like 0x1234 or for llvm-addr2line the sentinal ',' character.
+> +	 */
+>  	if (io__getline(io, &line, &line_len) < 0 || !line_len)
+>  		goto error;
+>  
+> -	if (style == LLVM && line_len == 2 && line[0] == ',') {
+> -		zfree(&line);
+> -		return 0;
+> +	if (style == LLVM) {
+> +		if (line_len == 2 && line[0] == ',') {
+> +			zfree(&line);
+> +			return 0;
+> +		}
+> +	} else {
+> +		int zero_count = 0, non_zero_count = 0;
+> +
+> +		/* The address should always start 0x. */
+> +		if (line_len < 2 || line[0] != '0' || line[1] != 'x')
+> +			goto error;
+> +
+> +		for (size_t i = 2; i < line_len; i++) {
+> +			if (line[i] == '0')
+> +				zero_count++;
+> +			else
+> +				non_zero_count++;
+> +		}
+> +		if (!non_zero_count) {
+> +			int ch;
+> +
+> +			if (!zero_count) {
+> +				/* Line was erroneous just '0x'. */
+> +				goto error;
+> +			}
+> +			/*
+> +			 * Line was 0x0..0, the sentinel for binutils. Remove
+> +			 * the function and filename lines.
+> +			 */
+> +			zfree(&line);
+> +			do {
+> +				ch = io__get_char(io);
+> +			} while (ch > 0 && ch != '\n');
+> +			do {
+> +				ch = io__get_char(io);
+> +			} while (ch > 0 && ch != '\n');
+> +			return 0;
+> +		}
+>  	}
+>  
+> +	/* Read the second function name line. */
+> +	if (io__getline(io, &line, &line_len) < 0 || !line_len)
+> +		goto error;
+> +
+>  	if (function != NULL)
+>  		*function = strdup(strim(line));
+>  
+>  	zfree(&line);
+>  	line_len = 0;
+>  
+> +	/* Read the third filename and line number line. */
+>  	if (io__getline(io, &line, &line_len) < 0 || !line_len)
+>  		goto error;
+>  
+> @@ -633,8 +677,9 @@ static int addr2line(const char *dso_name, u64 addr,
+>  		goto out;
+>  	case 0:
+>  		/*
+> -		 * The first record was invalid, so return failure, but first read another
+> -		 * record, since we asked a junk question and have to clear the answer out.
+> +		 * The first record was invalid, so return failure, but first
+> +		 * read another record, since we sent a sentinel ',' for the
+> +		 * sake of detected the last inlined function.
+>  		 */
+>  		switch (read_addr2line_record(&io, a2l_style, NULL, NULL, NULL)) {
+>  		case -1:
+> -- 
+> 2.41.0.162.gfafddb0af9-goog
+> 
+
+-- 
+
+- Arnaldo
