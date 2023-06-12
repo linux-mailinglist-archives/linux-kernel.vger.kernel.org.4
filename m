@@ -2,129 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E7672CC14
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD8A772CC18
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237361AbjFLRIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 13:08:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53388 "EHLO
+        id S236341AbjFLRKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 13:10:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236888AbjFLRIb (ORCPT
+        with ESMTP id S236176AbjFLRK1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 13:08:31 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0564610D5
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:08:25 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f61efe4584so113e87.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:08:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686589703; x=1689181703;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hPHA2iInW/5MWEIDY5sRw7hsczk67ay7y9vys8rDT34=;
-        b=JGfnzKQxNy5ZG+svk3pKWyN7ndYnw6Cg9NfAVLy+p80Ss4DBGYrgTioADx2kTru1sI
-         Jiw4Cq4n4CvBniPpQdYSG0bgvTXC/lCBZWwzRI7ImGoniwCx5RT1mmyE3fAVGSZuo6rl
-         kOLCwE/HMFlIkIC68lxhIo0g1ynyfizgcrAin0y7fQOFLdZJL5qPtHBMIMc9HeTz8j3C
-         FV6Fe3V1rWxDiUqDjzbJEvoouy9sNYhVLzaF2X0FSyMHSmG8McHmXGU1sd5SgwDQWOqk
-         lh1TtdgZNNeeCJXKMM8jvJSHzd5f0xl+QTVGjqiepFPlYV7S5SME39tqQGLNNvDwTNuQ
-         OaSw==
+        Mon, 12 Jun 2023 13:10:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA55EE6
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:09:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686589781;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=o3x5Jqp9svWUEJlBaR37fMtGHfPwZ3q/oDq0tcjZVns=;
+        b=Ff6XRQPtNLIe9uY8jC/Efl7WUBtGKq/dLeK6ZdCEdbjbmQmGo/cTSsvidjR4x0z7MEg2Oq
+        KiuG07PiOtf4r34s14f1N1ib9iEPcEAM8Y5khxJIiLPeCMM94iPjf5sycDRP5xkkGg2Kx8
+        uk3E9GsgM+I4zDMzsFYoMLT1Qvhn+0k=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-552-kNJSJI6zMPCl7QK55fItfg-1; Mon, 12 Jun 2023 13:09:39 -0400
+X-MC-Unique: kNJSJI6zMPCl7QK55fItfg-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f5fa06debcso30499635e9.0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:09:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686589703; x=1689181703;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hPHA2iInW/5MWEIDY5sRw7hsczk67ay7y9vys8rDT34=;
-        b=HUEN7wXbLvoOr2RScqwwM5bDYYTAsY1x5CrL3g4lAyW3pE9QckyIlpdeoDJxlgVefb
-         QNWYSpkwXOxOY5dFUAVkwL7x6urVMToMUYuipCiz5tdByFkH9Rsf20uuuyyNMF7IfpMo
-         zfXNo4JgFBUngRdCshgO+J27g2Nwgt0WVXYZfTMx9qdZ62NbxSzKamCtT+fewyYMo6pS
-         M/gu+OBH0KDcdP4Fhrc/fWyRdS4PWKpPTNpRxPK2XBF90pfdBGRWmA5x++dVqIIpItuH
-         bfXedkMtKojv8hJNvEDdRwtZb1pcwu3qhKF15+QaAiwYTrn28du9q1bRHJg5sMc6e8R9
-         NdqQ==
-X-Gm-Message-State: AC+VfDydQ1qtMs4HovTyEj3p6YNznV1eJDW+X96G6oE6tOrJpwXfWaed
-        e8uacCBHcuQQOtBqnNl+70+WuesolizAk2+3c23teg==
-X-Google-Smtp-Source: ACHHUZ75qxKnzvhiDDf0D5IcWH78fHsJ5oE2uWNN4sR3H9U9eFd+mPr5PWjgybS2SATgWNhLMY+e7X97TQ0uvb78OYc=
-X-Received: by 2002:ac2:4c39:0:b0:4f6:1722:d73a with SMTP id
- u25-20020ac24c39000000b004f61722d73amr147507lfq.5.1686589702990; Mon, 12 Jun
- 2023 10:08:22 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686589778; x=1689181778;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o3x5Jqp9svWUEJlBaR37fMtGHfPwZ3q/oDq0tcjZVns=;
+        b=Hs8rRQ2ZBKzqI34DEZJfTI8+ZXOcYXOdKCPVYZWOT2Clh9+6icmW08Apdhh/C/KnYX
+         VON+2vfrMIkgeO85BMF6ys0aXP0icPKKdTJaoA3x/QCblykLCRyAZmZRJipeA/g/xFXK
+         e1h2PWNneArULIVsko5PeSvZ0WIxdH9pO5IX3XE7bo6EfJeG+OoqE8yKY8/LHJfKlkMf
+         ewGW14M8hSHDDxqLJgfYyIdLyrx2gKxLmwYGPQCPXUCFeVXiFSsC1aG7OTJAToVADmoU
+         Qkke50XwjRL4L2lBB92n5jDmzMtyTVlyFtyXIOtguM9GodBJs5Iaq7cnDynz06xZRdxR
+         f1ug==
+X-Gm-Message-State: AC+VfDzcnfIAdRF5C/XIXYz+GBVqvfqR6xQKJXElI9cnxnXM9bhdAWFL
+        JBSrLpyIMfkZFyudT7shz6UxgqQpqsra7P9cHiMk/I7oMPeEG/ahs7t6f4UaUY5eTw26rvnitaT
+        LzaDdDYT4C4k5D0nY0hGzTUWFMCHBZKAy
+X-Received: by 2002:a05:600c:cb:b0:3f7:6bd9:2819 with SMTP id u11-20020a05600c00cb00b003f76bd92819mr7388868wmm.29.1686589778157;
+        Mon, 12 Jun 2023 10:09:38 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7nWjp7iROukoRx3QdDb1Ucz3BrypuugeOU3OCYTyx8Zc1xEtRgGB+SAOqjI1Yo/YCWeALfKw==
+X-Received: by 2002:a05:600c:cb:b0:3f7:6bd9:2819 with SMTP id u11-20020a05600c00cb00b003f76bd92819mr7388858wmm.29.1686589777876;
+        Mon, 12 Jun 2023 10:09:37 -0700 (PDT)
+Received: from vschneid.remote.csb ([154.57.232.159])
+        by smtp.gmail.com with ESMTPSA id l17-20020a1ced11000000b003f810be0231sm8205622wmh.32.2023.06.12.10.09.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 10:09:37 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Wang You <wangyoua@uniontech.com>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com
+Cc:     linux-kernel@vger.kernel.org, Wang You <wangyoua@uniontech.com>
+Subject: Re: [RFC PATCH] sched/wait: Determine whether the wait queue is
+ empty before waking up
+In-Reply-To: <20230609053812.10230-1-wangyoua@uniontech.com>
+References: <20230609053812.10230-1-wangyoua@uniontech.com>
+Date:   Mon, 12 Jun 2023 18:09:36 +0100
+Message-ID: <xhsmhfs6wy5db.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-References: <20230612042559.375660-1-michael.roth@amd.com> <20230612042559.375660-30-michael.roth@amd.com>
-In-Reply-To: <20230612042559.375660-30-michael.roth@amd.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Mon, 12 Jun 2023 11:08:11 -0600
-Message-ID: <CAMkAt6qQ73ah0UW2sTh8CYNgMhWRMQ7bVxH5bWpVfCR-ncnZuQ@mail.gmail.com>
-Subject: Re: [PATCH RFC v9 29/51] KVM: SVM: Add KVM_SEV_SNP_LAUNCH_START command
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, peterz@infradead.org,
-        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
-        dovmurik@linux.ibm.com, tobin@ibm.com, bp@alien8.de,
-        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
-        nikunj.dadhania@amd.com, liam.merwick@oracle.com,
-        zhi.a.wang@intel.com, Brijesh Singh <brijesh.singh@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +
-> +static int snp_launch_start(struct kvm *kvm, struct kvm_sev_cmd *argp)
-> +{
-> +       struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> +       struct sev_data_snp_launch_start start = {0};
-> +       struct kvm_sev_snp_launch_start params;
-> +       int rc;
-> +
-> +       if (!sev_snp_guest(kvm))
-> +               return -ENOTTY;
-> +
-> +       if (copy_from_user(&params, (void __user *)(uintptr_t)argp->data, sizeof(params)))
-> +               return -EFAULT;
-> +
-> +       sev->snp_context = snp_context_create(kvm, argp);
-> +       if (!sev->snp_context)
-> +               return -ENOTTY;
-
-
-I commented on a  previous series but I think the bug is still here. I
-think users can repeatedly call KVM_SEV_SNP_LAUNCH_START to have KVM
-keep allocating more snp_contexts above.
-
-Should we check if the VM already has a |snp_context| and error out if so?
-
+On 09/06/23 13:38, Wang You wrote:
+> When we did some benchmark tests (such as pipe tests), we found
+> that the wake behavior was still triggered when the wait queue
+> was empty, even though it would exit later.
 >
+> This processing consumes some unnecessary resources. Can we
+> determine at the beginning of the wake up whether there are
+> elements in the queue that need to be awakened? I think this
+> judgment is probably good for performance and should be safe.
+>
+> Looking forward to your reply, thank you.
+>
+> Signed-off-by: Wang You <wangyoua@uniontech.com>
+> ---
+>  kernel/sched/wait.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/kernel/sched/wait.c b/kernel/sched/wait.c
+> index 133b74730738..17011780aa21 100644
+> --- a/kernel/sched/wait.c
+> +++ b/kernel/sched/wait.c
+> @@ -205,6 +205,9 @@ void __wake_up_sync_key(struct wait_queue_head *wq_head, unsigned int mode,
+>       if (unlikely(!wq_head))
+>               return;
+>
+> +	if (unlikely(!wq_has_sleeper(wq_head)))
+> +		return;
 > +
-> +       start.gctx_paddr = __psp_pa(sev->snp_context);
-> +       start.policy = params.policy;
-> +       memcpy(start.gosvw, params.gosvw, sizeof(params.gosvw));
-> +       rc = __sev_issue_cmd(argp->sev_fd, SEV_CMD_SNP_LAUNCH_START, &start, &argp->error);
-> +       if (rc)
-> +               goto e_free_context;
-> +
-> +       sev->fd = argp->sev_fd;
-> +       rc = snp_bind_asid(kvm, &argp->error);
-> +       if (rc)
-> +               goto e_free_context;
-> +
-> +       return 0;
-> +
-> +e_free_context:
-> +       snp_decommission_context(kvm);
-> +
-> +       return rc;
-> +}
-> +
+
+
+Hm so I suppose that if we end up in wake_up*() then the update of the wait
+condition has been done (so this shouldn't lead to missed wakeups), but
+that still means an extra smp_mb() before grabbing the wq_head->lock.
+
+I'd suggest benchmarking the change, this is going to cause unwanted
+overhead when dealing with busy queues, and I'm not sure it's saving much
+vs grabbing wq_head->lock before noticing the list is empty.
+
+
+>       __wake_up_common_lock(wq_head, mode, 1, WF_SYNC, key);
+>  }
+>  EXPORT_SYMBOL_GPL(__wake_up_sync_key);
+> --
+> 2.20.1
+
