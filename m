@@ -2,71 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D02F72C289
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:09:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A1272C286
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236957AbjFLLJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 07:09:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43840 "EHLO
+        id S237980AbjFLLJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 07:09:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237996AbjFLLIt (ORCPT
+        with ESMTP id S237584AbjFLLIr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 07:08:49 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A87558D
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 03:57:34 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-56d047c92a8so19197817b3.2
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 03:57:34 -0700 (PDT)
+        Mon, 12 Jun 2023 07:08:47 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A551B3ABB
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 03:57:31 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f7368126a6so28755725e9.0
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 03:57:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686567454; x=1689159454;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FweiWQAKeJ1qYvQwzXHdf5IwJMN0iNTbE1K9BK6H9xg=;
-        b=WnDiBYhrr8ywVzCLEe4cmZxqw6YeuzJj5kGb3e9xBpYCsF4tbkjSAHM0lKnXCio0F5
-         KozJRq3iCeWP1uGoP5A7lCdZm4YCww49oj1wCin/CkDPVGVjAYIH0Z+AIV/Af+hdZ21n
-         qteRcYtgwDBdXRqRluQz4pcRpjDvVdsr4AsZw=
+        d=linaro.org; s=google; t=1686567450; x=1689159450;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=W3kmvUAfNo3YbORL99wyB9d/VkxQG+CDQISNkS7AYFY=;
+        b=LbtlzcSpmCCuP4cm7gDwerVL1WTk9KNh06oHq9A0mwZTE4G+ZpxLqhwilrdo/3hoo3
+         QsUrFkAy/k/STcQupiaxgaWtgyIMwXENuCeVNBBnp+k+W5tGENmphRRzKVgZx7C3okm5
+         T4EfzBjd40y5kX4ueOq4j1qRqqJmz+tKshdmXy1KaYIfecHsq9EpUpIUj7HKheeRngPw
+         sdMu/QClAIkcDd6hzSAdtFk3MLofcdiUtQvVd47tgEuRU8z2vbyyKm21EleT/OEidl64
+         Yxdi9vCi7wltWFQfSolkQYjGOmeqxT1OoCStSey2VhEsxB2fyZu7F6cmjSe2fvngWv0K
+         5Oag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686567454; x=1689159454;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FweiWQAKeJ1qYvQwzXHdf5IwJMN0iNTbE1K9BK6H9xg=;
-        b=Eum0+Khs92RLQ+0uPJcObfpMCv9h1Qee7lHk7B2a+q/9lYs79zYf4MSeZau+EOJU9y
-         IDoZP0m92rfYwjeSov0ym6S3dgwlC30kUA4izsvmPOFU35ufirEzvgelC9wOYG7CKjz1
-         0MXu3YdUB5ikfCarjJWzD5SqOKXLOqYFTWt+mHvXfuylG91tuQ9kgSBUNH/3xk8Rwp/T
-         gCaDncMZk2dQ2Z8KGBwcnnH2seGBx+T3UvyU9MpKUhChGvFnBi+/wjIp8tzxd1B+YvUX
-         O5a/ECcuEUvVohsSuFP07zt6fMv7X2PeCuLIpMK1wnPV1z4i0KwVNyMQYvOcNgescXRH
-         NJvg==
-X-Gm-Message-State: AC+VfDyFg2TitlC7gb+RVJF2ZY65soF+p3mN3cTFIWtm32lMxjjsYkSp
-        Svvcr92kEl5os6xdu5hXTkl9CBzr4aj63Bm/N/nseg==
-X-Google-Smtp-Source: ACHHUZ5DiVPqDVDXyr1wW3qzzIDwHKIlLI2Yp2xZlxBWD7laHCQv1Vj9L02XabmKUv0TtDZGQLdqNKnCpn3hBA1KwtY=
-X-Received: by 2002:a0d:cc56:0:b0:56c:fd58:ac27 with SMTP id
- o83-20020a0dcc56000000b0056cfd58ac27mr6184234ywd.8.1686567453877; Mon, 12 Jun
- 2023 03:57:33 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686567450; x=1689159450;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=W3kmvUAfNo3YbORL99wyB9d/VkxQG+CDQISNkS7AYFY=;
+        b=U1wkL6LRJs/qHc6lpqLIuUIB4S4aL+jnlYUczL2ZTwuX0EOPY5bgsyuOb9NyF0vbe4
+         vHqkOG+9cCprr9MyaUt6S69Zzm2PkBYJ+eeLIzRuxspRCLrzgRbpuyoo9xz7LEur1AIm
+         L6YIBbyTtGCSH8GxlhH/YhGnyTapHhUzXxjxFWt1aDncnhTfa6buTU82uQxMPXJCmUOf
+         LX73uuwpRsQLRDuVwnFsHY66A8O/2GMe3Lh9HULiRmHbEuNhdB+Tfpn3IyYgxgxpDNps
+         XS15w7JtNfS05P/EjbT0RBQlKkxOr7+ZPAT1aYPXi+sf0Fdn0B5yVFAWmf8RzPHWzBXq
+         PBcg==
+X-Gm-Message-State: AC+VfDwBp0HiB88A20qxGRDrvOgKe9FsR6W80TEvNNO3BKBE3CkoJH3D
+        N6XB+EfaX9NbVeAh9KnvusZFug==
+X-Google-Smtp-Source: ACHHUZ66P2FM5CekuhNr41io1xfJ2KVdwDqa0FLk9jJsHmsoS/bE3S3iqKRvLRp1yuUtDYfNOlpO/g==
+X-Received: by 2002:a1c:f718:0:b0:3f7:3526:d96f with SMTP id v24-20020a1cf718000000b003f73526d96fmr5775811wmh.27.1686567450090;
+        Mon, 12 Jun 2023 03:57:30 -0700 (PDT)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id gy15-20020a05600c880f00b003f7f475c3bcsm14697856wmb.1.2023.06.12.03.57.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 03:57:29 -0700 (PDT)
+Message-ID: <b65f4d0b-cc2a-f4d6-5d9d-a14e6a9cc444@linaro.org>
+Date:   Mon, 12 Jun 2023 11:57:28 +0100
 MIME-Version: 1.0
-References: <20230609083009.2822259-1-wenst@chromium.org> <20230609083009.2822259-4-wenst@chromium.org>
-In-Reply-To: <20230609083009.2822259-4-wenst@chromium.org>
-From:   Fei Shao <fshao@chromium.org>
-Date:   Mon, 12 Jun 2023 18:56:57 +0800
-Message-ID: <CAJ66y9H91WaRxaZzXRYc5LN9t+M+ZpEy6nbgo=W1kOn_Yu_BCg@mail.gmail.com>
-Subject: Re: [PATCH 3/9] regulator: mt6358: Merge VCN33_* regulators
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2] misc: fastrpc: Fix double free of 'buf' in error path
+Content-Language: en-US
+To:     Sukrut Bellary <sukrut.bellary@linux.com>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230602113602.1271695-1-sukrut.bellary@linux.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20230602113602.1271695-1-sukrut.bellary@linux.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,137 +81,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 4:30=E2=80=AFPM Chen-Yu Tsai <wenst@chromium.org> wr=
-ote:
->
-> The VCN33_BT and VCN33_WIFI regulators are actually the same regulator,
-> having the same voltage setting and output pin. There are simply two
-> enable bits that are ORed together to enable the regulator.
->
-> Having two regulators representing the same output pin is misleading
-> from a design matching standpoint, and also error-prone in driver
-> implementations. If consumers try to set different voltages on either
-> regulator, the one set later would override the one set before. There
-> are ways around this, such as chaining them together and having the
-> downstream one act as a switch. But given there's only one output pin,
-> such a workaround doesn't match reality.
->
-> Remove the VCN33_WIFI regulator. During the probe phase, have the driver
-> sync the enable status of VCN33_WIFI to VCN33_BT. Also drop the suffix
-> so that the regulator name matches the pin name in the datasheet.
->
-> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+
+
+On 02/06/2023 12:36, Sukrut Bellary wrote:
+> smatch warning:
+> drivers/misc/fastrpc.c:1926 fastrpc_req_mmap() error: double free of 'buf'
+> 
+> In fastrpc_req_mmap() error path, the fastrpc buffer is freed in
+> fastrpc_req_munmap_impl() if unmap is successful.
+> 
+> But in the end, there is an unconditional call to fastrpc_buf_free().
+> So the above case triggers the double free of fastrpc buf.
+> 
+> Fixes: 72fa6f7820c4 ("misc: fastrpc: Rework fastrpc_req_munmap")
+> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+> Reviewed-by: Dan Carpenter <dan.carpenter@linaro.org>
+> Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Not sure how was this reviewed-by picked up on this patch.
+
+Suggested-by will be a right choice here.
+
+Will manually edit before applying it.
+
+--srini
+
+> Signed-off-by: Sukrut Bellary <sukrut.bellary@linux.com>
 > ---
->  drivers/regulator/mt6358-regulator.c       | 65 +++++++++++++++++-----
->  include/linux/regulator/mt6358-regulator.h |  6 +-
->  2 files changed, 52 insertions(+), 19 deletions(-)
->
-> diff --git a/drivers/regulator/mt6358-regulator.c b/drivers/regulator/mt6=
-358-regulator.c
-> index c9e16bd092f6..faf6b0757019 100644
-> --- a/drivers/regulator/mt6358-regulator.c
-> +++ b/drivers/regulator/mt6358-regulator.c
-> @@ -277,7 +277,7 @@ static const unsigned int vcama_voltages[] =3D {
->         2800000, 2900000, 3000000,
->  };
->
-> -static const unsigned int vcn33_bt_wifi_voltages[] =3D {
-> +static const unsigned int vcn33_voltages[] =3D {
->         3300000, 3400000, 3500000,
->  };
->
-> @@ -321,7 +321,7 @@ static const u32 vcama_idx[] =3D {
->         0, 7, 9, 10, 11, 12,
->  };
->
-> -static const u32 vcn33_bt_wifi_idx[] =3D {
-> +static const u32 vcn33_idx[] =3D {
->         1, 2, 3,
->  };
->
-> @@ -566,12 +566,8 @@ static struct mt6358_regulator_info mt6358_regulator=
-s[] =3D {
->                    MT6358_LDO_VCAMA1_CON0, 0, MT6358_VCAMA1_ANA_CON0, 0xf=
-00),
->         MT6358_LDO("ldo_vemc", VEMC, vmch_vemc_voltages, vmch_vemc_idx,
->                    MT6358_LDO_VEMC_CON0, 0, MT6358_VEMC_ANA_CON0, 0x700),
-> -       MT6358_LDO("ldo_vcn33_bt", VCN33_BT, vcn33_bt_wifi_voltages,
-> -                  vcn33_bt_wifi_idx, MT6358_LDO_VCN33_CON0_0,
-> -                  0, MT6358_VCN33_ANA_CON0, 0x300),
-> -       MT6358_LDO("ldo_vcn33_wifi", VCN33_WIFI, vcn33_bt_wifi_voltages,
-> -                  vcn33_bt_wifi_idx, MT6358_LDO_VCN33_CON0_1,
-> -                  0, MT6358_VCN33_ANA_CON0, 0x300),
-> +       MT6358_LDO("ldo_vcn33", VCN33, vcn33_voltages, vcn33_idx,
-> +                  MT6358_LDO_VCN33_CON0_0, 0, MT6358_VCN33_ANA_CON0, 0x3=
-00),
->         MT6358_LDO("ldo_vcama2", VCAMA2, vcama_voltages, vcama_idx,
->                    MT6358_LDO_VCAMA2_CON0, 0, MT6358_VCAMA2_ANA_CON0, 0xf=
-00),
->         MT6358_LDO("ldo_vmc", VMC, vmc_voltages, vmc_idx,
-> @@ -662,12 +658,8 @@ static struct mt6358_regulator_info mt6366_regulator=
-s[] =3D {
->                    MT6358_LDO_VMCH_CON0, 0, MT6358_VMCH_ANA_CON0, 0x700),
->         MT6366_LDO("ldo_vemc", VEMC, vmch_vemc_voltages, vmch_vemc_idx,
->                    MT6358_LDO_VEMC_CON0, 0, MT6358_VEMC_ANA_CON0, 0x700),
-> -       MT6366_LDO("ldo_vcn33_bt", VCN33_BT, vcn33_bt_wifi_voltages,
-> -                  vcn33_bt_wifi_idx, MT6358_LDO_VCN33_CON0_0,
-> -                  0, MT6358_VCN33_ANA_CON0, 0x300),
-> -       MT6366_LDO("ldo_vcn33_wifi", VCN33_WIFI, vcn33_bt_wifi_voltages,
-> -                  vcn33_bt_wifi_idx, MT6358_LDO_VCN33_CON0_1,
-> -                  0, MT6358_VCN33_ANA_CON0, 0x300),
-> +       MT6366_LDO("ldo_vcn33", VCN33, vcn33_voltages, vcn33_idx,
-> +                  MT6358_LDO_VCN33_CON0_0, 0, MT6358_VCN33_ANA_CON0, 0x3=
-00),
->         MT6366_LDO("ldo_vmc", VMC, vmc_voltages, vmc_idx,
->                    MT6358_LDO_VMC_CON0, 0, MT6358_VMC_ANA_CON0, 0xf00),
->         MT6366_LDO("ldo_vsim2", VSIM2, vsim_voltages, vsim_idx,
-> @@ -690,13 +682,56 @@ static struct mt6358_regulator_info mt6366_regulato=
-rs[] =3D {
->                     MT6358_LDO_VSRAM_CON1, 0x7f),
->  };
->
-> +static int mt6358_sync_vcn33_setting(struct device *dev)
-> +{
-> +       struct mt6397_chip *mt6397 =3D dev_get_drvdata(dev->parent);
-> +       unsigned int val;
-> +       int ret;
-> +
-> +       /*
-> +        * VCN33_WIFI and VCN33_BT are two separate enable bits for the s=
-ame
-> +        * regulator. They share the same voltage setting and output pin.
-> +        * Instead of having two potentially conflicting regulators, just=
- have
-> +        * one VCN33 regulator. Sync the two enable bits and only use one=
- in
-> +        * the regulator device.
-> +        */
-> +       ret =3D regmap_read(mt6397->regmap, MT6358_LDO_VCN33_CON0_1, &val=
-);
-> +       if (ret) {
-> +               dev_err(dev, "Failed to read VCN33_WIFI setting\n");
-> +               return ret;
-> +       }
-> +
-> +       if (!(val & BIT(0)))
-> +               return 0;
-> +
-> +       /* Sync VCN33_WIFI enable status to VCN33_BT */
-> +       ret =3D regmap_update_bits(mt6397->regmap, MT6358_LDO_VCN33_CON0_=
-0, BIT(0), BIT(0));
-> +       if (ret) {
-> +               dev_err(dev, "Failed to sync VCN33_WIFI setting to VCN33_=
-BT\n");
-> +               return ret;
-> +       }
-> +
-> +       /* Disable VCN33_WIFI */
-> +       ret =3D regmap_update_bits(mt6397->regmap, MT6358_LDO_VCN33_CON0_=
-1, BIT(0), 0);
-> +       if (ret) {
-> +               dev_err(dev, "Failed to disable VCN33_BT\n");
-
-I think it should be "VCN33_WIFI" in the error message?
-
-Regards,
-Fei
+> This is based on static analysis. Compilation tested.
+> ---
+> Changes in v2:
+> - Fixed the commit message.
+> - Addressed the review comment about deleting buf from the list
+>    before freeing.
+> - Link to v1: https://lore.kernel.org/all/20230518100829.515143-1-sukrut.bellary@linux.com/
+> ---
+>   drivers/misc/fastrpc.c | 5 ++---
+>   1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
+> index f48466960f1b..b3b520fcfb75 100644
+> --- a/drivers/misc/fastrpc.c
+> +++ b/drivers/misc/fastrpc.c
+> @@ -1882,7 +1882,8 @@ static int fastrpc_req_mmap(struct fastrpc_user *fl, char __user *argp)
+>   				      &args[0]);
+>   	if (err) {
+>   		dev_err(dev, "mmap error (len 0x%08llx)\n", buf->size);
+> -		goto err_invoke;
+> +		fastrpc_buf_free(buf);
+> +		return err;
+>   	}
+>   
+>   	/* update the buffer to be able to deallocate the memory on the DSP */
+> @@ -1922,8 +1923,6 @@ static int fastrpc_req_mmap(struct fastrpc_user *fl, char __user *argp)
+>   
+>   err_assign:
+>   	fastrpc_req_munmap_impl(fl, buf);
+> -err_invoke:
+> -	fastrpc_buf_free(buf);
+>   
+>   	return err;
+>   }
