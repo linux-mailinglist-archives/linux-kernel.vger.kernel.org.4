@@ -2,95 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C94BE72CE81
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:34:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A624B72CE77
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:33:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237149AbjFLSel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 14:34:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53526 "EHLO
+        id S233132AbjFLSd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 14:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235463AbjFLSec (ORCPT
+        with ESMTP id S232495AbjFLSd1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 14:34:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8090FE69
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:33:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686594769;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qSuO83O2GJF69D20JvszqVCusWGni7xZeOtz58f06pw=;
-        b=P1Gzm0BvCPN7KWcYUorr5D3fvJVkAGDa9p/j/PG+2h5kIVuKTNofQyGirvEUugLLMBzIMD
-        dKh5l5KPdtRspWNPJcuP/Lw6dP5PLsH+bj8a72EN8z6l+yTayTnkbnh7L2whfUeMxLP5Fd
-        BJOSzaB7QMsxJJpg7uuyEZEfS6GH2bY=
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
- [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-615-C3Y4dTG7OMaJhTeLug0M0w-1; Mon, 12 Jun 2023 14:32:47 -0400
-X-MC-Unique: C3Y4dTG7OMaJhTeLug0M0w-1
-Received: by mail-ot1-f69.google.com with SMTP id 46e09a7af769-6b2a7789f31so2297238a34.0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:32:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686594767; x=1689186767;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qSuO83O2GJF69D20JvszqVCusWGni7xZeOtz58f06pw=;
-        b=TeunLe/jQiaUMw9nyFJxMBGh8WvCP0rHWJ2UWC+11DlhjWaq4NH/OiB5/TFtjaEkX5
-         JUM79bawUluqyvvvc/aOu8j5FGO+wLdgpM6WauBn6isSTXbCEeDWcmxYfKymgfxzTed5
-         FB+OIel0U/t2BzWMFaOYUqL3JtCnjDeD3amnfkAq4CyHATS4HqJY1w53YWMj/waKBeKZ
-         h6kWtYEi9Vo0eL6RVL9mrjrqDnLsQcGovnyNSi2FPWx1F8Kdedb1Trdlt/66oG+z0aRw
-         JPANeFlXySdPhggyeZDUsBNxfAPbJ48Z11KliJ5JyTuS0gYVqvXi5ZjUJvvA+6LEv0Ay
-         Qe0g==
-X-Gm-Message-State: AC+VfDyzlyzUvifAsL/Hkn3m+qQ6tgHJpPkQT699MUORzSWkiDWlR+Zj
-        mxJoTWDK6sB4P/jjL4aYgSJnR1gvdUwZOYzY9sdQl+bYES3F2p90kF7krCFiP2iHP18kWJOPap9
-        JRKAHNs2RpLeLnbuD0wU3e7rg
-X-Received: by 2002:a05:6830:92:b0:6a5:dd70:38cd with SMTP id a18-20020a056830009200b006a5dd7038cdmr6651276oto.2.1686594767177;
-        Mon, 12 Jun 2023 11:32:47 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5HntANaGm+HkD+UPQVxKZBUJkVk1zEqMvLrahjA8N+vIH05i26ddN13SkrcVSLU5flZVuT2A==
-X-Received: by 2002:a05:6830:92:b0:6a5:dd70:38cd with SMTP id a18-20020a056830009200b006a5dd7038cdmr6651260oto.2.1686594766931;
-        Mon, 12 Jun 2023 11:32:46 -0700 (PDT)
-Received: from halaney-x13s ([2600:1700:1ff0:d0e0::45])
-        by smtp.gmail.com with ESMTPSA id w14-20020a056830060e00b006af9d8af435sm4138880oti.50.2023.06.12.11.32.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 11:32:46 -0700 (PDT)
-Date:   Mon, 12 Jun 2023 13:32:43 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        Mon, 12 Jun 2023 14:33:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62BD10CC;
+        Mon, 12 Jun 2023 11:32:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B1A0C62CF7;
+        Mon, 12 Jun 2023 18:32:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E12CCC4339C;
+        Mon, 12 Jun 2023 18:32:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686594775;
+        bh=WD6yfMd1Lig9EzPwhFo3GU2PEduL3upHoyMgQX0HNp0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Y8rtO46J/yKiguHzzFrMJZbDczxiP6tNBlVVErJCCLqrefl7oHYqv0gvIi+XUTZ6d
+         egc04G7adjaGRDbFCet0xVxBXk7KRDjkP+LH4qHJeOvWBRbGkRCZGB10udcFWNf0ii
+         m3FVHNlJl1gNPlLs98KLuG97UtYg2R07tiC9CyhGbRvXJv65hgl8p92+waVzprV/qk
+         UxHm0UnbIvGA/UuqJpsiOnJmvO/udnUwZ1zijwAItWJsVi3PIkvJj1Si7g3ix/7t6G
+         T/D11UfKTAvesFpSKMIvqypkgOx0QS53KHpTjmOdI/wu3oQdJk/kVYsvFnZtok/8eg
+         uxGyh4xlVp8nA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 6D6E040692; Mon, 12 Jun 2023 15:32:52 -0300 (-03)
+Date:   Mon, 12 Jun 2023 15:32:52 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     coresight@lists.linaro.org,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
         linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH 06/26] net: stmmac: dwmac-qcom-ethqos: rename a label in
- probe()
-Message-ID: <20230612183243.5rkphsaqofi42bgc@halaney-x13s>
-References: <20230612092355.87937-1-brgl@bgdev.pl>
- <20230612092355.87937-7-brgl@bgdev.pl>
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/5] perf cs-etm: Track exception level
+Message-ID: <ZIdk1ArKuXLpKZT7@kernel.org>
+References: <20230612111403.100613-1-james.clark@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230612092355.87937-7-brgl@bgdev.pl>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230612111403.100613-1-james.clark@arm.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -98,77 +72,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 11:23:35AM +0200, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Em Mon, Jun 12, 2023 at 12:13:57PM +0100, James Clark escreveu:
+> Changes since v2:
 > 
-> The err_mem label's name is unclear. It actually should be reached on
-> any error after stmmac_probe_config_dt() succeeds. Name it after the
-> cleanup action that needs to be called before exiting.
+>   * Rename prev_thread -> prev_packet_thread and prev_el ->
+>     prev_packet_el
+>   * Add a comment about tracking the previous packet's thread
 > 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> Changes since v1:
+> 
+>   * Always assume host kernel when the trace was captured at EL1 (nVHE)
+>   * Fix EL validation to work with ETMv3
+>   * Add a commit to make PID format accessible from struct
+>     cs_etm_auxtrace
 
-Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
+Please take a look in my tmp.perf-tools-next branch, there were some
+conflicts I had to fix as those files were touched by refactorings for
+addr_location and thread reference counting.
 
-> ---
->  .../ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c    | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
+⬢[acme@toolbox perf-tools-next]$ git log --oneline -10
+aa53fb2c482e70c2 (HEAD -> perf-tools-next) perf cs-etm: Add exception level consistency check
+2918e9895224541f perf cs-etm: Track exception level
+f492a33909829a75 perf cs-etm: Make PID format accessible from struct cs_etm_auxtrace
+e29ec19b0751c6b2 perf cs-etm: Use previous thread for branch sample source IP
+e9e03e9c3ca7088c perf cs-etm: Only track threads instead of PID and TIDs
+6fd34445b8c94aa7 perf map: Fix double 'struct map' reference free found with -DREFCNT_CHECKING=1
+e9c0a7f63e45e76f perf srcline: Optimize comparision against SRCLINE_UNKNOWN
+fd87a79c7ed62804 perf hist: Fix srcline memory leak
+933f9651d47cdda2 perf srcline: Change free_srcline to zfree_srcline
+d22cfb063bcc674e perf callchain: Use pthread keys for tls callchain_cursor
+⬢[acme@toolbox perf-tools-next]$
+
+
+- Arnaldo
+ 
+> ======
 > 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-> index 2da0738eed24..16e856861558 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-> @@ -615,14 +615,14 @@ static int qcom_ethqos_probe(struct platform_device *pdev)
->  	ethqos = devm_kzalloc(&pdev->dev, sizeof(*ethqos), GFP_KERNEL);
->  	if (!ethqos) {
->  		ret = -ENOMEM;
-> -		goto err_mem;
-> +		goto out_config_dt;
->  	}
->  
->  	ethqos->pdev = pdev;
->  	ethqos->rgmii_base = devm_platform_ioremap_resource_byname(pdev, "rgmii");
->  	if (IS_ERR(ethqos->rgmii_base)) {
->  		ret = PTR_ERR(ethqos->rgmii_base);
-> -		goto err_mem;
-> +		goto out_config_dt;
->  	}
->  
->  	data = of_device_get_match_data(&pdev->dev);
-> @@ -634,16 +634,16 @@ static int qcom_ethqos_probe(struct platform_device *pdev)
->  	ethqos->rgmii_clk = devm_clk_get(&pdev->dev, "rgmii");
->  	if (IS_ERR(ethqos->rgmii_clk)) {
->  		ret = PTR_ERR(ethqos->rgmii_clk);
-> -		goto err_mem;
-> +		goto out_config_dt;
->  	}
->  
->  	ret = ethqos_clks_config(ethqos, true);
->  	if (ret)
-> -		goto err_mem;
-> +		goto out_config_dt;
->  
->  	ret = devm_add_action_or_reset(&pdev->dev, ethqos_clks_disable, ethqos);
->  	if (ret)
-> -		goto err_mem;
-> +		goto out_config_dt;
->  
->  	ethqos->speed = SPEED_1000;
->  	ethqos_update_rgmii_clk(ethqos, SPEED_1000);
-> @@ -662,11 +662,11 @@ static int qcom_ethqos_probe(struct platform_device *pdev)
->  
->  	ret = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
->  	if (ret)
-> -		goto err_mem;
-> +		goto out_config_dt;
->  
->  	return ret;
->  
-> -err_mem:
-> +out_config_dt:
->  	stmmac_remove_config_dt(pdev, plat_dat);
->  
->  	return ret;
+> Some fixes to support an issue reported by Denis Nikitin where decoding
+> trace that contains different EL1 and EL2 kernels can crash or go into
+> an infinite loop because the wrong kernel maps are used for the decode.
+> 
+> This still doesn't support distinguishing guest and host userspace,
+> we'd still have to fix the timestamps and do a bit more work to
+> correlate that. And I've removed PERF_RECORD_MISC_HYPERVISOR as a
+> possible outcome of cs_etm__cpu_mode(). As far as I know this could
+> never have been returned anyway because machine__is_host(machine) was
+> always true due to session.machines.host being hard coded. And I'm not
+> sure of the relevance of the difference between PERF_RECORD_MISC_KERNEL
+> and PERF_RECORD_MISC_HYPERVISOR in this scenario.
+> 
+> The first commit is a tidy up, second fixes a bug that I found when
+> comparing the exception level and thread of branch records, the third
+> is the main fix, and the last commit is some extra error checking. 
+> 
+> Applies to acme/perf-tools-next (42713dafc)
+> 
+> James Clark (5):
+>   perf cs-etm: Only track threads instead of PID and TIDs
+>   perf cs-etm: Use previous thread for branch sample source IP
+>   perf cs-etm: Make PID format accessible from struct cs_etm_auxtrace
+>   perf cs-etm: Track exception level
+>   perf cs-etm: Add exception level consistency check
+> 
+>  .../perf/util/cs-etm-decoder/cs-etm-decoder.c |  33 +-
+>  .../perf/util/cs-etm-decoder/cs-etm-decoder.h |   4 +-
+>  tools/perf/util/cs-etm.c                      | 282 ++++++++++--------
+>  tools/perf/util/cs-etm.h                      |  13 +-
+>  4 files changed, 184 insertions(+), 148 deletions(-)
+> 
 > -- 
-> 2.39.2
+> 2.34.1
 > 
 
+-- 
+
+- Arnaldo
