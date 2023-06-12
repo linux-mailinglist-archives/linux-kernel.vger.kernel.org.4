@@ -2,190 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C436272BAB3
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 10:31:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A849D72B8FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 09:46:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232757AbjFLIb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 04:31:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35660 "EHLO
+        id S235349AbjFLHqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 03:46:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232540AbjFLIan (ORCPT
+        with ESMTP id S234935AbjFLHqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 04:30:43 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B573589;
-        Mon, 12 Jun 2023 01:30:09 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35C1Ksgi010128;
-        Mon, 12 Jun 2023 09:35:48 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=opv3kX/ph4BOOfru46Fxfd30UvHEy9/IFAiCrxHELPs=;
- b=xeCAtb+HSOplkuvGUk2p1b2verNsEL46d+xjVg+BPe4glBbyCPue57Skz4XQd9wr9NDM
- DT/ljCLasrv8aOw/Ufd+DcuJ/eI8r0/as61jAtyTdOcV8rBKfP+dVPS+lboGZkMfEHt9
- 5NhesBE7HWJbacAM16Pb4Kby+zerJxbCST7N2wE3biIVaVE4Kei4X4P9R0Pw5r0RxjDX
- pzJmptNNH5G5j5Mn112VXde725iW0m1AvsGDkwuEbGEmRKYacJlzhp8hIhdcAQT6yiLy
- C15ZP2fzWbua5yNrWtUYO2br64U5I1NlM3RIqan8Ks/59vJpGcXSEwjk/dq8U0B+5tde kw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3r5smd1ps3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 12 Jun 2023 09:35:48 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2957810002A;
-        Mon, 12 Jun 2023 09:35:47 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1B557216835;
-        Mon, 12 Jun 2023 09:35:47 +0200 (CEST)
-Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Mon, 12 Jun
- 2023 09:35:46 +0200
-Message-ID: <3580b822-1d6e-91af-3f5b-f076a8aaddf1@foss.st.com>
-Date:   Mon, 12 Jun 2023 09:35:46 +0200
+        Mon, 12 Jun 2023 03:46:34 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4696119B2
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 00:46:01 -0700 (PDT)
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id F216A3F375
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 07:37:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1686555429;
+        bh=SARDuX0ozM1dSrw1r+XdZ1aSpyhQuZmUUG6i83rAkzc=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=dv7qEN2/+WBE3GlPnw4MQ3232hxQg4S0dQyNzEJPE6PQFKPP7962beOG33up0ALs8
+         /Ap/VIWHJUUla0gxKWN4OkiT2+R2OxiPkTu0v66NuNNXT+Mmbho+ARfL4/d7KiS8Ae
+         34QqowCwT1HW35PR1fU8YhsOeqnjPmHUDgc0S5VlbJ9b44WQsO83EdOqBvbVK7BRdy
+         Zf+E7KNmRlrgNuq46leC58Ix/uY0k/neBMAh2A29WQ5EfK//sxxDd5gbQiyMgNeGgm
+         fSe18FZgPMDD7mwA4SwbzI178qhXt07DF6XncR2piZsfSCMjaNeUcHpRtI4dCwl6C7
+         sVrjltHaT779A==
+Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-543a25df980so1698946a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 00:37:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686555427; x=1689147427;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SARDuX0ozM1dSrw1r+XdZ1aSpyhQuZmUUG6i83rAkzc=;
+        b=UtHQpXfBtE89LV8tISvhhSDCdqk8DvFonUb+h5OK/3NPMR/hTMOF2sNDdPJYyRulGS
+         VNFXrteuBXIWt7j4U5Ca2aNhDrrS16/UyEN/fiaIZQBvRxF43VyyeGSMzrSHw28oDOXo
+         vYEo8xnSNawBNhtzdbvjt0PmKv9uUkWsUYoEeWLwg8SzAaTx4G47kErtcSuwdvwHzeOb
+         jtrJzdxTcPURhIU2OfqmH7Cv0ZYNuPiZxvIXXSKf3R/LkKhDxxxdqNTuuXo9fGtvA8S/
+         XKIekUJjbBa+8MBq9zFLzrIbIwJSeq1a9aVlG6es7HQqebIDMCRsA4RX6cWZg37TDNij
+         MpEg==
+X-Gm-Message-State: AC+VfDzex2bzyXqQPWCgVeUlIEKUIpxiMLn8hUe/kBt0pH1TxK5hl2Dj
+        tmLGkbXfDTAl4naSd7qD9hFyGG1a9bYdA5kXSyFXPb9pK28ch4MvvCPzWmzh5nCNEquQ8tv3zmT
+        7HvWvCM6xAqmITVvSF+4bxabiXbPuqe6S3Txw/U1y1mXENV659eynECg55Q==
+X-Received: by 2002:a17:90a:1a0a:b0:258:996c:a2e8 with SMTP id 10-20020a17090a1a0a00b00258996ca2e8mr7314701pjk.5.1686555427241;
+        Mon, 12 Jun 2023 00:37:07 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6Yj42CeU0uWY/ySQzUq50P4dnzJCgR3Qa5gLWoMOBy2SUVIWUXgk6mm5OGuSpj2WelHyVYhxK439rub4Zew/w=
+X-Received: by 2002:a17:90a:1a0a:b0:258:996c:a2e8 with SMTP id
+ 10-20020a17090a1a0a00b00258996ca2e8mr7314672pjk.5.1686555426671; Mon, 12 Jun
+ 2023 00:37:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [RESEND PATCH v2 2/6] ARM: dts: stm32: add pin map for LTDC on
- stm32f7
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-CC:     <linux-kernel@vger.kernel.org>,
-        Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <dri-devel@lists.freedesktop.org>,
-        Philippe Cornu <philippe.cornu@foss.st.com>,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        <michael@amarulasolutions.com>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>
-References: <20230607063139.621351-1-dario.binacchi@amarulasolutions.com>
- <20230607063139.621351-3-dario.binacchi@amarulasolutions.com>
- <7139fb21-6a1d-a26f-fef3-d3154d234ca2@foss.st.com>
- <CABGWkvoRZqQsEmpNRhhrRUrf+WHebErPO9Jt2L9bsNL_EKeoHg@mail.gmail.com>
-Content-Language: en-US
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <CABGWkvoRZqQsEmpNRhhrRUrf+WHebErPO9Jt2L9bsNL_EKeoHg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.201.21.93]
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-12_04,2023-06-09_01,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <2d1fdf6d-682c-a18d-2260-5c5ee7097f7d@gmail.com>
+ <5513e29d-955a-f795-21d6-ec02a2e2e128@gmail.com> <ZIQ6bkau3j6qGef8@duo.ucw.cz>
+ <07d6e2e7-a50a-8cf4-5c5d-200551bd6687@gmail.com> <02e4f87a-80e8-dc5d-0d6e-46939f2c74ac@acm.org>
+ <4005a768-9e45-0707-509d-98ce0d2769bd@kernel.org> <0505654c-e487-6b91-57cf-fa7996f5c738@suse.de>
+ <6957a93c-b933-9b08-2f9f-901c4782cd40@kernel.org>
+In-Reply-To: <6957a93c-b933-9b08-2f9f-901c4782cd40@kernel.org>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Mon, 12 Jun 2023 15:36:55 +0800
+Message-ID: <CAAd53p5CsAAX5G1J2WH5N5JT5dZB_BD2AW8WL-S=pHZtGXr1sw@mail.gmail.com>
+Subject: Re: Fwd: Waking up from resume locks up on sr device
+To:     Damien Le Moal <dlemoal@kernel.org>
+Cc:     Hannes Reinecke <hare@suse.de>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Joe Breuer <linux-kernel@jmbreuer.net>,
+        Linux Power Management <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Hardening <linux-hardening@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux SCSI <linux-scsi@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hi Dario
+On Mon, Jun 12, 2023 at 3:22=E2=80=AFPM Damien Le Moal <dlemoal@kernel.org>=
+ wrote:
+>
+> On 6/12/23 15:09, Hannes Reinecke wrote:
+> > On 6/12/23 05:09, Damien Le Moal wrote:
+> >> On 6/11/23 00:03, Bart Van Assche wrote:
+> >>> On 6/10/23 06:27, Bagas Sanjaya wrote:
+> >>>> On 6/10/23 15:55, Pavel Machek wrote:
+> >>>>>>> #regzbot introduced: v5.0..v6.4-rc5 https://bugzilla.kernel.org/s=
+how_bug.cgi?id=3D217530
+> >>>>>>> #regzbot title: Waking up from resume locks up on SCSI CD/DVD dri=
+ve
+> >>>>>>>
+> >>>>>> The reporter had found the culprit (via bisection), so:
+> >>>>>>
+> >>>>>> #regzbot introduced: a19a93e4c6a98c
+> >>>>> Maybe cc the authors of that commit?
+> >>>>
+> >>>> Ah! I forgot to do that! Thanks anyway.
+> >>>
+> >>> Hi Damien,
+> >>>
+> >>> Why does the ATA code call scsi_rescan_device() before system resume =
+has
+> >>> finished? Would ATA devices still work with the patch below applied?
+> >>
+> >> I do not know the PM code well at all, need to dig into it. But your p=
+atch
+> >> worries me as it seems it would prevent rescan of the device on a resu=
+me, which
+> >> can be an issue if the device has changed.
+> >>
+> >> I am not yet 100% clear on the root cause for this, but I think it com=
+es from
+> >> the fact that ata_port_pm_resume() runs before the sci device resume i=
+s done, so
+> >> with scsi_dev->power.is_suspended still true. And ata_port_pm_resume()=
+ calls
+> >> ata_port_resume_async() which triggers EH (which will do reset + resca=
+n)
+> >> asynchronously. So it looks like we have scsi device resume and libata=
+ EH for
+> >> rescan fighting each others for the scan mutex and device lock, leadin=
+g to deadlock.
+> >>
+> >> Trying to recreate this issue now to confirm and debug further. But I =
+suspect
+> >> the solution to this may be best implemented in libata, not in scsi.
+> >> This looks definitely related to this thread:
+> >>
+> >> https://lore.kernel.org/linux-scsi/7b553268-69d3-913a-f9de-28f8d45bdb1=
+e@acm.org/
+> >>
+> >> Similaraly to your comment on that thread, having to look at
+> >> dev->power.is_suspended is not ideal I think. What we need is to have =
+ata and
+> >> scsi pm resume be synchronized, but I am not yet 100% clear on the scs=
+i layer side.
+> >>
+> > Which is my feeling, too.
+> > libata runs rescan as part of the device discovery, so really it will
+> > run after resume. And consequently resume really cannot wait for rescan
+> > to finish.
+> >
+> > What I would be looking at is to decouple resume from libata device
+> > rescan, and have resume to complete before libata EH runs.
+>
+> That is the case now, for the ata port at least, even though that is not =
+super
+> explicit, and not reliable. See ata_port_pm_resume(): I think that the ca=
+ll to
+> EH in ata_port_pm_resume() -> ata_port_resume_async() -> ata_port_request=
+_pm()
+> -> ata_port_schedule_eh() should instead use a sync resume, leading to a =
+sync EH
+> call.
+>
+> That EH execution essentially does ata_eh_handle_port_resume(), which cal=
+ls into
+> the adapter resume operation. That in itself does not do much beside some
+> registers accesses to wakeup the port. There should be no issues doing th=
+at
+> synchronously.
+>
+> The problem is that after that is done, ata EH calls ata_std_error_handle=
+r() ->
+> ata_do_eh() -> ata_eh_recover() -> ata_eh_revalidate_and_attach() ->
+> schedule_work(&(ap->scsi_rescan_task)). And the rescan work calls
+> scsi_rescan_device() (yet in another context than EH) which causes the pr=
+oblem
+> when the scsi disk device has not been resumed yet (dev->power_is_suspend=
+ed
+> still true).
+>
+> So it really looks like the solution should be to have ata_scsi_dev_resca=
+n()
+> wait for the scsi device to resume first, but not sure how to do that wit=
+h the
+> pm API. Digging...
 
-On 6/9/23 08:21, Dario Binacchi wrote:
-> Hi Alexandre,
-> 
-> On Thu, Jun 8, 2023 at 2:42 PM Alexandre TORGUE
-> <alexandre.torgue@foss.st.com> wrote:
->>
->> Hi Dario
->>
->> On 6/7/23 08:31, Dario Binacchi wrote:
->>> Add pin configurations for using LTDC (LCD-tft Display Controller) on
->>> stm32f746-disco board.
->>>
->>> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
->>> ---
->>>
->>> (no changes since v1)
->>>
->>>    arch/arm/boot/dts/stm32f7-pinctrl.dtsi | 35 ++++++++++++++++++++++++++
->>>    1 file changed, 35 insertions(+)
->>>
->>> diff --git a/arch/arm/boot/dts/stm32f7-pinctrl.dtsi b/arch/arm/boot/dts/stm32f7-pinctrl.dtsi
->>> index 9f65403295ca..f3f90b9bcd61 100644
->>> --- a/arch/arm/boot/dts/stm32f7-pinctrl.dtsi
->>> +++ b/arch/arm/boot/dts/stm32f7-pinctrl.dtsi
->>> @@ -365,6 +365,41 @@ pins2 {
->>>                                        bias-pull-up;
->>>                                };
->>>                        };
->>> +
->>> +
->>> +                     ltdc_pins_a: ltdc-pins-a-0 {
->>
->>    ltdc-pins-a-0 -->  ltdc-pins-0 is a bit cleaner. I know that I have to
->> fix sdio pins nodes in this file to keep the same spirit for all group
->> names.
-> 
-> I have looked at the file arch/arm/boot/dts/stm32f7-pinctrl.dtsi, and
-> based on the following nodes:
-> usart1_pins_a: usart1-0
-> i2c1_pins_b: i2c1-0
-> can1_pins_a: can1-0
-> 
-> I have decided to rename ltdc-pins-a-0 to ltdc-0.
-> 
-> I hope you agree.
+Probably use dpm_wait_for_children()? Right now it's an internal PM API.
 
-Yes! perfect.
+Rafael,
+What do you think?
 
-Alex
+Kai-Heng
 
-> 
-> Thanks and regards,
-> 
-> Dario
-> 
->>
->> If there is no V3 I wil do it directly when I'll apply DT patches if you
->> agree.
->>
->> Alex
->>
->>
->>> +                             pins {
->>> +                                     pinmux = <STM32_PINMUX('E', 4, AF14)>, /* LCD_B0 */
->>> +                                              <STM32_PINMUX('G',12, AF9)>,  /* LCD_B4 */
->>> +                                              <STM32_PINMUX('I', 9, AF14)>, /* LCD_VSYNC */
->>> +                                              <STM32_PINMUX('I',10, AF14)>, /* LCD_HSYNC */
->>> +                                              <STM32_PINMUX('I',14, AF14)>, /* LCD_CLK */
->>> +                                              <STM32_PINMUX('I',15, AF14)>, /* LCD_R0 */
->>> +                                              <STM32_PINMUX('J', 0, AF14)>, /* LCD_R1 */
->>> +                                              <STM32_PINMUX('J', 1, AF14)>, /* LCD_R2 */
->>> +                                              <STM32_PINMUX('J', 2, AF14)>, /* LCD_R3 */
->>> +                                              <STM32_PINMUX('J', 3, AF14)>, /* LCD_R4 */
->>> +                                              <STM32_PINMUX('J', 4, AF14)>, /* LCD_R5 */
->>> +                                              <STM32_PINMUX('J', 5, AF14)>, /* LCD_R6 */
->>> +                                              <STM32_PINMUX('J', 6, AF14)>, /* LCD_R7 */
->>> +                                              <STM32_PINMUX('J', 7, AF14)>, /* LCD_G0 */
->>> +                                              <STM32_PINMUX('J', 8, AF14)>, /* LCD_G1 */
->>> +                                              <STM32_PINMUX('J', 9, AF14)>, /* LCD_G2 */
->>> +                                              <STM32_PINMUX('J',10, AF14)>, /* LCD_G3 */
->>> +                                              <STM32_PINMUX('J',11, AF14)>, /* LCD_G4 */
->>> +                                              <STM32_PINMUX('J',13, AF14)>, /* LCD_B1 */
->>> +                                              <STM32_PINMUX('J',14, AF14)>, /* LCD_B2 */
->>> +                                              <STM32_PINMUX('J',15, AF14)>, /* LCD_B3 */
->>> +                                              <STM32_PINMUX('K', 0, AF14)>, /* LCD_G5 */
->>> +                                              <STM32_PINMUX('K', 1, AF14)>, /* LCD_G6 */
->>> +                                              <STM32_PINMUX('K', 2, AF14)>, /* LCD_G7 */
->>> +                                              <STM32_PINMUX('K', 4, AF14)>, /* LCD_B5 */
->>> +                                              <STM32_PINMUX('K', 5, AF14)>, /* LCD_B6 */
->>> +                                              <STM32_PINMUX('K', 6, AF14)>, /* LCD_B7 */
->>> +                                              <STM32_PINMUX('K', 7, AF14)>; /* LCD_DE */
->>> +                                     slew-rate = <2>;
->>> +                             };
->>> +                     };
->>>                };
->>>        };
->>>    };
->>
-> 
-> 
-
+>
+> >
+> > Cheers,
+> >
+> > Hannes
+>
+> --
+> Damien Le Moal
+> Western Digital Research
+>
