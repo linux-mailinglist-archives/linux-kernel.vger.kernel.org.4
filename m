@@ -2,79 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 178D172C6E5
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0E3B72C6E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 16:06:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236874AbjFLOGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 10:06:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49714 "EHLO
+        id S236914AbjFLOGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 10:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235659AbjFLOGE (ORCPT
+        with ESMTP id S236880AbjFLOGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 10:06:04 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBAD41AC;
-        Mon, 12 Jun 2023 07:06:03 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-3f9baa69682so35928441cf.3;
-        Mon, 12 Jun 2023 07:06:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686578763; x=1689170763;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JzGHAlJH/0YXEKipZ+Ms41o/6AaOdNH3x2SChySThcc=;
-        b=DQABeuTLfLAmeKt8tVvq/jaKPBv/urqBjnHEkh0ByKqGpXluH6Z+1GGormG4y5x5MI
-         KX28oZl7VIRbr4QsdcCoXwZK3jITjhKI20HgS1aYLLxTW94IMrnaN7K86FP/ZMcV5tT1
-         6yv77z1MQ5qlj65i7yMqt7u4CWMmhf4ZPXpJbjo4bmUq+2APmCbgzX2659P6JNVD0inK
-         Tm83araMfqQkMvX9nmBOgOGLzJwR8GFXwFHgXXsD4/nxFc8mPKXhPhpUmyHzKhsl8Yhq
-         guJQhgKvFTo6CGRpwRm0P+VJXxRusBFE2MfjQlF9DvAn3MGBA/YWfU/oi1iGsnFpvs38
-         87cA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686578763; x=1689170763;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JzGHAlJH/0YXEKipZ+Ms41o/6AaOdNH3x2SChySThcc=;
-        b=Ybkdbs/SCb/Sr0BikqTD5/Awcnb4C4PbNNOf+7MUdjtFDnDoU8224QD89g4yanU9rs
-         GI3zKQ1LtW9L0aHaBlq/SvzNt6HEs25diawQc351xDL/u6rWSFt+pvMGTeGlrYEw+Jld
-         EQ5BgS87ex2QXZw2MTFFtwnZeuj0+u9l21UH/nVmbeJcp0aMsZ+IuozTFsGDGDmyviTj
-         ToGJSYjXmhH4JdQOpMSGmyjz+FkXpl2NCdQinQeUQjpCPt5pe2ffCC4gIOWRzHhTwM54
-         YaCAt9lXzbLGswp+Luc2vgq+I9FA3kz6UhFKuiebUw566TorrvpBL3lVMMTYDh7z9wek
-         eubg==
-X-Gm-Message-State: AC+VfDwyMJWgn5bhYah5IM6rfN+UKp5UoS22dr5egAXk6bb/UWzaQg80
-        dBFlspe8BcJ9KiiizQVdncC3SPt7dH241euQzF8=
-X-Google-Smtp-Source: ACHHUZ5uI20fWf+pWNjdO28+l44cjNEfQFnUdIimfKXlh/dtHGKpDu8ztgzTIX1zOzglSjftG5zT/WzO0W8ilN/xRm0=
-X-Received: by 2002:a05:6214:5298:b0:61b:5e9b:a15d with SMTP id
- kj24-20020a056214529800b0061b5e9ba15dmr10948726qvb.36.1686578762963; Mon, 12
- Jun 2023 07:06:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230612122926.107333-1-herve.codina@bootlin.com> <20230612122926.107333-6-herve.codina@bootlin.com>
-In-Reply-To: <20230612122926.107333-6-herve.codina@bootlin.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 12 Jun 2023 17:05:27 +0300
-Message-ID: <CAHp75Vc+Y7yOu1faosisPeL5N5x13DSTi142HuAwFgGmBiKsrA@mail.gmail.com>
-Subject: Re: [PATCH v3 05/12] iio: inkern: Remove the 'unused' variable usage
- in iio_channel_read_max()
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Mon, 12 Jun 2023 10:06:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47882A1;
+        Mon, 12 Jun 2023 07:06:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B60916299A;
+        Mon, 12 Jun 2023 14:06:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 846A3C433D2;
+        Mon, 12 Jun 2023 14:06:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686578764;
+        bh=uLqyqxD/9IhBKEZaxugIUrvoO6jx00t64M+mDxwyjAI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=d6CuA0ouuekx/0n3pYEXbEm/dNvT7l8ZpihmKPASY/LvaLV4qeGftT1UtCB/Esfud
+         N7ty5BCguycdFafR8l6pBCovphP89qc5PXOf/KpI1J4UYBuzCXSJtqnjBy0deQWc/v
+         Ni6BgD30Z7fsPwnri2jMW04zOcOeeQvFBtjow3I95HoabEL3XqkGq3HEuQ+/h0L+AP
+         26/QzElOH/JCHMPTT/oTDue2b81z4obe5law3aTUtLUNPEE2uqR3nB+JfRByhA9/P/
+         tHl+zk9YVKvwHRipZQ5hbevCakr8ri7yVYdIBGtKJs4opRyDpPu5j6B87+XhtC7602
+         nrqrvj4oeYmrg==
+Date:   Mon, 12 Jun 2023 23:06:00 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-doc@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
+        William White <chwhite@redhat.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [PATCH V3 02/11] rtla: Add --house-keeping option
+Message-Id: <20230612230600.7e009782e8365cd5f1bce444@kernel.org>
+In-Reply-To: <6a6c78a579a96ba8b02ae67ee1e0ba2cb5e03c4a.1686066600.git.bristot@kernel.org>
+References: <cover.1686066600.git.bristot@kernel.org>
+        <6a6c78a579a96ba8b02ae67ee1e0ba2cb5e03c4a.1686066600.git.bristot@kernel.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,58 +60,533 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 3:30=E2=80=AFPM Herve Codina <herve.codina@bootlin.=
-com> wrote:
->
-> The code uses a local variable to initialize a null pointer in order to
-> avoid accessing this null pointer later on.
->
-> Simply removed the 'unused' variable and check for the null pointer just
-> before accessing it.
+On Tue,  6 Jun 2023 18:12:16 +0200
+Daniel Bristot de Oliveira <bristot@kernel.org> wrote:
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> To avoid having rtla interfering with the measurement threads, add an
+> option for the user to set the CPUs in which rtla should run. For
+> instance:
+> 
+>   # rtla timerlat top -H 0 -C 1-7
 
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+Isn't it '-c 1-7' instead of '-C', because -C is for cgroup name?
+
+Thanks,
+
+> 
+> Will place rtla in the CPU 0, while running the measurement threads in
+> the CPU 1-7.
+> 
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Suggested-by: Juri Lelli <juri.lelli@redhat.com>
+> Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 > ---
->  drivers/iio/inkern.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/iio/inkern.c b/drivers/iio/inkern.c
-> index f738db9a0c04..ce537b4ca6ca 100644
-> --- a/drivers/iio/inkern.c
-> +++ b/drivers/iio/inkern.c
-> @@ -849,14 +849,10 @@ static int iio_channel_read_max(struct iio_channel =
-*chan,
->                                 int *val, int *val2, int *type,
->                                 enum iio_chan_info_enum info)
->  {
-> -       int unused;
->         const int *vals;
->         int length;
->         int ret;
->
-> -       if (!val2)
-> -               val2 =3D &unused;
-> -
->         ret =3D iio_channel_read_avail(chan, &vals, type, &length, info);
->         if (ret < 0)
->                 return ret;
-> @@ -869,7 +865,8 @@ static int iio_channel_read_max(struct iio_channel *c=
-han,
->                         break;
->                 default:
->                         *val =3D vals[4];
-> -                       *val2 =3D vals[5];
-> +                       if (val2)
-> +                               *val2 =3D vals[5];
->                 }
->                 return 0;
->
-> --
-> 2.40.1
->
+>  Documentation/tools/rtla/common_options.rst |  4 ++
+>  tools/tracing/rtla/src/osnoise_hist.c       | 29 +++++++++--
+>  tools/tracing/rtla/src/osnoise_top.c        | 27 +++++++++-
+>  tools/tracing/rtla/src/timerlat_hist.c      | 27 +++++++++-
+>  tools/tracing/rtla/src/timerlat_top.c       | 27 +++++++++-
+>  tools/tracing/rtla/src/utils.c              | 58 +++++++++++++++++++++
+>  tools/tracing/rtla/src/utils.h              |  3 ++
+>  7 files changed, 166 insertions(+), 9 deletions(-)
+> 
+> diff --git a/Documentation/tools/rtla/common_options.rst b/Documentation/tools/rtla/common_options.rst
+> index ede07359d93c..aeb91ff3bd68 100644
+> --- a/Documentation/tools/rtla/common_options.rst
+> +++ b/Documentation/tools/rtla/common_options.rst
+> @@ -2,6 +2,10 @@
+>  
+>          Set the osnoise tracer to run the sample threads in the cpu-list.
+>  
+> +**-H**, **--house-keeping** *cpu-list*
+> +
+> +        Run rtla control threads only on the given cpu-list.
+> +
+>  **-d**, **--duration** *time[s|m|h|d]*
+>  
+>          Set the duration of the session.
+> diff --git a/tools/tracing/rtla/src/osnoise_hist.c b/tools/tracing/rtla/src/osnoise_hist.c
+> index 076f4c6af3dd..d2b68177ffac 100644
+> --- a/tools/tracing/rtla/src/osnoise_hist.c
+> +++ b/tools/tracing/rtla/src/osnoise_hist.c
+> @@ -3,6 +3,7 @@
+>   * Copyright (C) 2021 Red Hat Inc, Daniel Bristot de Oliveira <bristot@kernel.org>
+>   */
+>  
+> +#define _GNU_SOURCE
+>  #include <getopt.h>
+>  #include <stdlib.h>
+>  #include <string.h>
+> @@ -11,6 +12,7 @@
+>  #include <errno.h>
+>  #include <stdio.h>
+>  #include <time.h>
+> +#include <sched.h>
+>  
+>  #include "utils.h"
+>  #include "osnoise.h"
+> @@ -30,6 +32,8 @@ struct osnoise_hist_params {
+>  	int			set_sched;
+>  	int			output_divisor;
+>  	int			cgroup;
+> +	int			hk_cpus;
+> +	cpu_set_t		hk_cpu_set;
+>  	struct sched_attr	sched_param;
+>  	struct trace_events	*events;
+>  
+> @@ -434,8 +438,8 @@ static void osnoise_hist_usage(char *usage)
+>  		"",
+>  		"  usage: rtla osnoise hist [-h] [-D] [-d s] [-a us] [-p us] [-r us] [-s us] [-S us] \\",
+>  		"	  [-T us] [-t[=file]] [-e sys[:event]] [--filter <filter>] [--trigger <trigger>] \\",
+> -		"	  [-c cpu-list] [-P priority] [-b N] [-E N] [--no-header] [--no-summary] [--no-index] \\",
+> -		"	  [--with-zeros] [-C[=cgroup_name]]",
+> +		"	  [-c cpu-list] [-H cpu-list] [-P priority] [-b N] [-E N] [--no-header] [--no-summary] \\",
+> +		"	  [--no-index] [--with-zeros] [-C[=cgroup_name]]",
+>  		"",
+>  		"	  -h/--help: print this menu",
+>  		"	  -a/--auto: set automatic trace mode, stopping the session if argument in us sample is hit",
+> @@ -445,6 +449,7 @@ static void osnoise_hist_usage(char *usage)
+>  		"	  -S/--stop-total us: stop trace if the total sample is higher than the argument in us",
+>  		"	  -T/--threshold us: the minimum delta to be considered a noise",
+>  		"	  -c/--cpus cpu-list: list of cpus to run osnoise threads",
+> +		"	  -H/--house-keeping cpus: run rtla control threads only on the given cpus",
+>  		"	  -C/--cgroup[=cgroup_name]: set cgroup, if no cgroup_name is passed, the rtla's cgroup will be inherited",
+>  		"	  -d/--duration time[s|m|h|d]: duration of the session",
+>  		"	  -D/--debug: print debug info",
+> @@ -507,6 +512,7 @@ static struct osnoise_hist_params
+>  			{"cgroup",		optional_argument,	0, 'C'},
+>  			{"debug",		no_argument,		0, 'D'},
+>  			{"duration",		required_argument,	0, 'd'},
+> +			{"house-keeping",	required_argument,		0, 'H'},
+>  			{"help",		no_argument,		0, 'h'},
+>  			{"period",		required_argument,	0, 'p'},
+>  			{"priority",		required_argument,	0, 'P'},
+> @@ -528,7 +534,7 @@ static struct osnoise_hist_params
+>  		/* getopt_long stores the option index here. */
+>  		int option_index = 0;
+>  
+> -		c = getopt_long(argc, argv, "a:c:C::b:d:e:E:Dhp:P:r:s:S:t::T:01234:5:",
+> +		c = getopt_long(argc, argv, "a:c:C::b:d:e:E:DhH:p:P:r:s:S:t::T:01234:5:",
+>  				 long_options, &option_index);
+>  
+>  		/* detect the end of the options. */
+> @@ -597,6 +603,14 @@ static struct osnoise_hist_params
+>  		case '?':
+>  			osnoise_hist_usage(NULL);
+>  			break;
+> +		case 'H':
+> +			params->hk_cpus = 1;
+> +			retval = parse_cpu_set(optarg, &params->hk_cpu_set);
+> +			if (retval) {
+> +				err_msg("Error parsing house keeping CPUs\n");
+> +				exit(EXIT_FAILURE);
+> +			}
+> +			break;
+>  		case 'p':
+>  			params->period = get_llong_from_str(optarg);
+>  			if (params->period > 10000000)
+> @@ -732,6 +746,15 @@ osnoise_hist_apply_config(struct osnoise_tool *tool, struct osnoise_hist_params
+>  		}
+>  	}
+>  
+> +	if (params->hk_cpus) {
+> +		retval = sched_setaffinity(getpid(), sizeof(params->hk_cpu_set),
+> +					   &params->hk_cpu_set);
+> +		if (retval == -1) {
+> +			err_msg("Failed to set rtla to the house keeping CPUs\n");
+> +			goto out_err;
+> +		}
+> +	}
+> +
+>  	return 0;
+>  
+>  out_err:
+> diff --git a/tools/tracing/rtla/src/osnoise_top.c b/tools/tracing/rtla/src/osnoise_top.c
+> index 139d8d392540..fcf6c14ce1bc 100644
+> --- a/tools/tracing/rtla/src/osnoise_top.c
+> +++ b/tools/tracing/rtla/src/osnoise_top.c
+> @@ -3,6 +3,7 @@
+>   * Copyright (C) 2021 Red Hat Inc, Daniel Bristot de Oliveira <bristot@kernel.org>
+>   */
+>  
+> +#define _GNU_SOURCE
+>  #include <getopt.h>
+>  #include <stdlib.h>
+>  #include <string.h>
+> @@ -10,6 +11,7 @@
+>  #include <unistd.h>
+>  #include <stdio.h>
+>  #include <time.h>
+> +#include <sched.h>
+>  
+>  #include "osnoise.h"
+>  #include "utils.h"
+> @@ -37,6 +39,8 @@ struct osnoise_top_params {
+>  	int			quiet;
+>  	int			set_sched;
+>  	int			cgroup;
+> +	int			hk_cpus;
+> +	cpu_set_t		hk_cpu_set;
+>  	struct sched_attr	sched_param;
+>  	struct trace_events	*events;
+>  	enum osnoise_mode	mode;
+> @@ -278,7 +282,7 @@ static void osnoise_top_usage(struct osnoise_top_params *params, char *usage)
+>  	static const char * const msg[] = {
+>  		" [-h] [-q] [-D] [-d s] [-a us] [-p us] [-r us] [-s us] [-S us] \\",
+>  		"	  [-T us] [-t[=file]] [-e sys[:event]] [--filter <filter>] [--trigger <trigger>] \\",
+> -		"	  [-c cpu-list] [-P priority] [-C[=cgroup_name]]",
+> +		"	  [-c cpu-list] [-H cpu-list] [-P priority] [-C[=cgroup_name]]",
+>  		"",
+>  		"	  -h/--help: print this menu",
+>  		"	  -a/--auto: set automatic trace mode, stopping the session if argument in us sample is hit",
+> @@ -288,6 +292,7 @@ static void osnoise_top_usage(struct osnoise_top_params *params, char *usage)
+>  		"	  -S/--stop-total us: stop trace if the total sample is higher than the argument in us",
+>  		"	  -T/--threshold us: the minimum delta to be considered a noise",
+>  		"	  -c/--cpus cpu-list: list of cpus to run osnoise threads",
+> +		"	  -H/--house-keeping cpus: run rtla control threads only on the given cpus",
+>  		"	  -C/--cgroup[=cgroup_name]: set cgroup, if no cgroup_name is passed, the rtla's cgroup will be inherited",
+>  		"	  -d/--duration time[s|m|h|d]: duration of the session",
+>  		"	  -D/--debug: print debug info",
+> @@ -354,6 +359,7 @@ struct osnoise_top_params *osnoise_top_parse_args(int argc, char **argv)
+>  			{"debug",		no_argument,		0, 'D'},
+>  			{"duration",		required_argument,	0, 'd'},
+>  			{"event",		required_argument,	0, 'e'},
+> +			{"house-keeping",	required_argument,	0, 'H'},
+>  			{"help",		no_argument,		0, 'h'},
+>  			{"period",		required_argument,	0, 'p'},
+>  			{"priority",		required_argument,	0, 'P'},
+> @@ -371,7 +377,7 @@ struct osnoise_top_params *osnoise_top_parse_args(int argc, char **argv)
+>  		/* getopt_long stores the option index here. */
+>  		int option_index = 0;
+>  
+> -		c = getopt_long(argc, argv, "a:c:C::d:De:hp:P:qr:s:S:t::T:0:1:",
+> +		c = getopt_long(argc, argv, "a:c:C::d:De:hH:p:P:qr:s:S:t::T:0:1:",
+>  				 long_options, &option_index);
+>  
+>  		/* Detect the end of the options. */
+> @@ -430,6 +436,14 @@ struct osnoise_top_params *osnoise_top_parse_args(int argc, char **argv)
+>  		case '?':
+>  			osnoise_top_usage(params, NULL);
+>  			break;
+> +		case 'H':
+> +			params->hk_cpus = 1;
+> +			retval = parse_cpu_set(optarg, &params->hk_cpu_set);
+> +			if (retval) {
+> +				err_msg("Error parsing house keeping CPUs\n");
+> +				exit(EXIT_FAILURE);
+> +			}
+> +			break;
+>  		case 'p':
+>  			params->period = get_llong_from_str(optarg);
+>  			if (params->period > 10000000)
+> @@ -561,6 +575,15 @@ osnoise_top_apply_config(struct osnoise_tool *tool, struct osnoise_top_params *p
+>  		}
+>  	}
+>  
+> +	if (params->hk_cpus) {
+> +		retval = sched_setaffinity(getpid(), sizeof(params->hk_cpu_set),
+> +					   &params->hk_cpu_set);
+> +		if (retval == -1) {
+> +			err_msg("Failed to set rtla to the house keeping CPUs\n");
+> +			goto out_err;
+> +		}
+> +	}
+> +
+>  	return 0;
+>  
+>  out_err:
+> diff --git a/tools/tracing/rtla/src/timerlat_hist.c b/tools/tracing/rtla/src/timerlat_hist.c
+> index 459c159923e8..d48c05d238f9 100644
+> --- a/tools/tracing/rtla/src/timerlat_hist.c
+> +++ b/tools/tracing/rtla/src/timerlat_hist.c
+> @@ -3,6 +3,7 @@
+>   * Copyright (C) 2021 Red Hat Inc, Daniel Bristot de Oliveira <bristot@kernel.org>
+>   */
+>  
+> +#define _GNU_SOURCE
+>  #include <getopt.h>
+>  #include <stdlib.h>
+>  #include <string.h>
+> @@ -10,6 +11,7 @@
+>  #include <unistd.h>
+>  #include <stdio.h>
+>  #include <time.h>
+> +#include <sched.h>
+>  
+>  #include "utils.h"
+>  #include "osnoise.h"
+> @@ -31,6 +33,8 @@ struct timerlat_hist_params {
+>  	int			set_sched;
+>  	int			dma_latency;
+>  	int			cgroup;
+> +	int			hk_cpus;
+> +	cpu_set_t		hk_cpu_set;
+>  	struct sched_attr	sched_param;
+>  	struct trace_events	*events;
+>  	char			no_irq;
+> @@ -432,7 +436,7 @@ static void timerlat_hist_usage(char *usage)
+>  	char *msg[] = {
+>  		"",
+>  		"  usage: [rtla] timerlat hist [-h] [-q] [-d s] [-D] [-n] [-a us] [-p us] [-i us] [-T us] [-s us] \\",
+> -		"         [-t[=file]] [-e sys[:event]] [--filter <filter>] [--trigger <trigger>] [-c cpu-list] \\",
+> +		"         [-t[=file]] [-e sys[:event]] [--filter <filter>] [--trigger <trigger>] [-c cpu-list] [-H cpu-list]\\",
+>  		"	  [-P priority] [-E N] [-b N] [--no-irq] [--no-thread] [--no-header] [--no-summary] \\",
+>  		"	  [--no-index] [--with-zeros] [--dma-latency us] [-C[=cgroup_name]]",
+>  		"",
+> @@ -443,6 +447,7 @@ static void timerlat_hist_usage(char *usage)
+>  		"	  -T/--thread us: stop trace if the thread latency is higher than the argument in us",
+>  		"	  -s/--stack us: save the stack trace at the IRQ if a thread latency is higher than the argument in us",
+>  		"	  -c/--cpus cpus: run the tracer only on the given cpus",
+> +		"	  -H/--house-keeping cpus: run rtla control threads only on the given cpus",
+>  		"	  -C/--cgroup[=cgroup_name]: set cgroup, if no cgroup_name is passed, the rtla's cgroup will be inherited",
+>  		"	  -d/--duration time[m|h|d]: duration of the session in seconds",
+>  		"	  -D/--debug: print debug info",
+> @@ -513,6 +518,7 @@ static struct timerlat_hist_params
+>  			{"debug",		no_argument,		0, 'D'},
+>  			{"entries",		required_argument,	0, 'E'},
+>  			{"duration",		required_argument,	0, 'd'},
+> +			{"house-keeping",	required_argument,	0, 'H'},
+>  			{"help",		no_argument,		0, 'h'},
+>  			{"irq",			required_argument,	0, 'i'},
+>  			{"nano",		no_argument,		0, 'n'},
+> @@ -537,7 +543,7 @@ static struct timerlat_hist_params
+>  		/* getopt_long stores the option index here. */
+>  		int option_index = 0;
+>  
+> -		c = getopt_long(argc, argv, "a:c:C::b:d:e:E:Dhi:np:P:s:t::T:0123456:7:8:",
+> +		c = getopt_long(argc, argv, "a:c:C::b:d:e:E:DhH:i:np:P:s:t::T:0123456:7:8:",
+>  				 long_options, &option_index);
+>  
+>  		/* detect the end of the options. */
+> @@ -608,6 +614,14 @@ static struct timerlat_hist_params
+>  		case '?':
+>  			timerlat_hist_usage(NULL);
+>  			break;
+> +		case 'H':
+> +			params->hk_cpus = 1;
+> +			retval = parse_cpu_set(optarg, &params->hk_cpu_set);
+> +			if (retval) {
+> +				err_msg("Error parsing house keeping CPUs\n");
+> +				exit(EXIT_FAILURE);
+> +			}
+> +			break;
+>  		case 'i':
+>  			params->stop_us = get_llong_from_str(optarg);
+>  			break;
+> @@ -755,6 +769,15 @@ timerlat_hist_apply_config(struct osnoise_tool *tool, struct timerlat_hist_param
+>  		}
+>  	}
+>  
+> +	if (params->hk_cpus) {
+> +		retval = sched_setaffinity(getpid(), sizeof(params->hk_cpu_set),
+> +					   &params->hk_cpu_set);
+> +		if (retval == -1) {
+> +			err_msg("Failed to set rtla to the house keeping CPUs\n");
+> +			goto out_err;
+> +		}
+> +	}
+> +
+>  	return 0;
+>  
+>  out_err:
+> diff --git a/tools/tracing/rtla/src/timerlat_top.c b/tools/tracing/rtla/src/timerlat_top.c
+> index a19cbc2aa1f4..5395d1c5921e 100644
+> --- a/tools/tracing/rtla/src/timerlat_top.c
+> +++ b/tools/tracing/rtla/src/timerlat_top.c
+> @@ -3,6 +3,7 @@
+>   * Copyright (C) 2021 Red Hat Inc, Daniel Bristot de Oliveira <bristot@kernel.org>
+>   */
+>  
+> +#define _GNU_SOURCE
+>  #include <getopt.h>
+>  #include <stdlib.h>
+>  #include <string.h>
+> @@ -11,6 +12,7 @@
+>  #include <stdio.h>
+>  #include <time.h>
+>  #include <errno.h>
+> +#include <sched.h>
+>  
+>  #include "utils.h"
+>  #include "osnoise.h"
+> @@ -37,6 +39,8 @@ struct timerlat_top_params {
+>  	int			aa_only;
+>  	int			dump_tasks;
+>  	int			cgroup;
+> +	int			hk_cpus;
+> +	cpu_set_t		hk_cpu_set;
+>  	struct sched_attr	sched_param;
+>  	struct trace_events	*events;
+>  };
+> @@ -286,7 +290,7 @@ static void timerlat_top_usage(char *usage)
+>  	static const char *const msg[] = {
+>  		"",
+>  		"  usage: rtla timerlat [top] [-h] [-q] [-a us] [-d s] [-D] [-n] [-p us] [-i us] [-T us] [-s us] \\",
+> -		"	  [[-t[=file]] [-e sys[:event]] [--filter <filter>] [--trigger <trigger>] [-c cpu-list] \\",
+> +		"	  [[-t[=file]] [-e sys[:event]] [--filter <filter>] [--trigger <trigger>] [-c cpu-list] [-H cpu-list]\\",
+>  		"	  [-P priority] [--dma-latency us] [--aa-only us] [-C[=cgroup_name]]",
+>  		"",
+>  		"	  -h/--help: print this menu",
+> @@ -297,6 +301,7 @@ static void timerlat_top_usage(char *usage)
+>  		"	  -T/--thread us: stop trace if the thread latency is higher than the argument in us",
+>  		"	  -s/--stack us: save the stack trace at the IRQ if a thread latency is higher than the argument in us",
+>  		"	  -c/--cpus cpus: run the tracer only on the given cpus",
+> +		"	  -H/--house-keeping cpus: run rtla control threads only on the given cpus",
+>  		"	  -C/--cgroup[=cgroup_name]: set cgroup, if no cgroup_name is passed, the rtla's cgroup will be inherited",
+>  		"	  -d/--duration time[m|h|d]: duration of the session in seconds",
+>  		"	  -D/--debug: print debug info",
+> @@ -360,6 +365,7 @@ static struct timerlat_top_params
+>  			{"duration",		required_argument,	0, 'd'},
+>  			{"event",		required_argument,	0, 'e'},
+>  			{"help",		no_argument,		0, 'h'},
+> +			{"house-keeping",	required_argument,	0, 'H'},
+>  			{"irq",			required_argument,	0, 'i'},
+>  			{"nano",		no_argument,		0, 'n'},
+>  			{"period",		required_argument,	0, 'p'},
+> @@ -380,7 +386,7 @@ static struct timerlat_top_params
+>  		/* getopt_long stores the option index here. */
+>  		int option_index = 0;
+>  
+> -		c = getopt_long(argc, argv, "a:c:C::d:De:hi:np:P:qs:t::T:0:1:2:345:",
+> +		c = getopt_long(argc, argv, "a:c:C::d:De:hH:i:np:P:qs:t::T:0:1:2:345:",
+>  				 long_options, &option_index);
+>  
+>  		/* detect the end of the options. */
+> @@ -454,6 +460,14 @@ static struct timerlat_top_params
+>  		case '?':
+>  			timerlat_top_usage(NULL);
+>  			break;
+> +		case 'H':
+> +			params->hk_cpus = 1;
+> +			retval = parse_cpu_set(optarg, &params->hk_cpu_set);
+> +			if (retval) {
+> +				err_msg("Error parsing house keeping CPUs\n");
+> +				exit(EXIT_FAILURE);
+> +			}
+> +			break;
+>  		case 'i':
+>  			params->stop_us = get_llong_from_str(optarg);
+>  			break;
+> @@ -598,6 +612,15 @@ timerlat_top_apply_config(struct osnoise_tool *top, struct timerlat_top_params *
+>  		}
+>  	}
+>  
+> +	if (params->hk_cpus) {
+> +		retval = sched_setaffinity(getpid(), sizeof(params->hk_cpu_set),
+> +					   &params->hk_cpu_set);
+> +		if (retval == -1) {
+> +			err_msg("Failed to set rtla to the house keeping CPUs\n");
+> +			goto out_err;
+> +		}
+> +	}
+> +
+>  	return 0;
+>  
+>  out_err:
+> diff --git a/tools/tracing/rtla/src/utils.c b/tools/tracing/rtla/src/utils.c
+> index bcc0a9f39cfe..ee6fab09acae 100644
+> --- a/tools/tracing/rtla/src/utils.c
+> +++ b/tools/tracing/rtla/src/utils.c
+> @@ -3,6 +3,7 @@
+>   * Copyright (C) 2021 Red Hat Inc, Daniel Bristot de Oliveira <bristot@kernel.org>
+>   */
+>  
+> +#define _GNU_SOURCE
+>  #include <dirent.h>
+>  #include <stdarg.h>
+>  #include <stdlib.h>
+> @@ -150,6 +151,63 @@ int parse_cpu_list(char *cpu_list, char **monitored_cpus)
+>  	return 1;
+>  }
+>  
+> +/*
+> + * parse_cpu_set - parse a cpu_list filling cpu_set_t argument
+> + *
+> + * Receives a cpu list, like 1-3,5 (cpus 1, 2, 3, 5), and then set
+> + * filling cpu_set_t argument.
+> + *
+> + * Returns 1 on success, 0 otherwise.
+> + */
+> +int parse_cpu_set(char *cpu_list, cpu_set_t *set)
+> +{
+> +	const char *p;
+> +	int end_cpu;
+> +	int nr_cpus;
+> +	int cpu;
+> +	int i;
+> +
+> +	CPU_ZERO(set);
+> +
+> +	nr_cpus = sysconf(_SC_NPROCESSORS_CONF);
+> +
+> +	for (p = cpu_list; *p; ) {
+> +		cpu = atoi(p);
+> +		if (cpu < 0 || (!cpu && *p != '0') || cpu >= nr_cpus)
+> +			goto err;
+> +
+> +		while (isdigit(*p))
+> +			p++;
+> +		if (*p == '-') {
+> +			p++;
+> +			end_cpu = atoi(p);
+> +			if (end_cpu < cpu || (!end_cpu && *p != '0') || end_cpu >= nr_cpus)
+> +				goto err;
+> +			while (isdigit(*p))
+> +				p++;
+> +		} else
+> +			end_cpu = cpu;
+> +
+> +		if (cpu == end_cpu) {
+> +			debug_msg("cpu_set: adding cpu %d\n", cpu);
+> +			CPU_SET(cpu, set);
+> +		} else {
+> +			for (i = cpu; i <= end_cpu; i++) {
+> +				debug_msg("cpu_set: adding cpu %d\n", i);
+> +				CPU_SET(i, set);
+> +			}
+> +		}
+> +
+> +		if (*p == ',')
+> +			p++;
+> +	}
+> +
+> +	return 0;
+> +err:
+> +	debug_msg("Error parsing the cpu set %s\n", cpu_list);
+> +	return 1;
+> +}
+> +
+>  /*
+>   * parse_duration - parse duration with s/m/h/d suffix converting it to seconds
+>   */
+> diff --git a/tools/tracing/rtla/src/utils.h b/tools/tracing/rtla/src/utils.h
+> index 42b6f099d10a..9ab2f0d7bc1c 100644
+> --- a/tools/tracing/rtla/src/utils.h
+> +++ b/tools/tracing/rtla/src/utils.h
+> @@ -1,6 +1,8 @@
+>  // SPDX-License-Identifier: GPL-2.0
+> +
+>  #include <stdint.h>
+>  #include <time.h>
+> +#include <sched.h>
+>  
+>  /*
+>   * '18446744073709551615\0'
+> @@ -54,6 +56,7 @@ struct sched_attr {
+>  };
+>  
+>  int parse_prio(char *arg, struct sched_attr *sched_param);
+> +int parse_cpu_set(char *cpu_list, cpu_set_t *set);
+>  int set_comm_sched_attr(const char *comm_prefix, struct sched_attr *attr);
+>  int set_comm_cgroup(const char *comm_prefix, const char *cgroup);
+>  int set_cpu_dma_latency(int32_t latency);
+> -- 
+> 2.38.1
+> 
 
 
---=20
-With Best Regards,
-Andy Shevchenko
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
