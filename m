@@ -2,75 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F3FF72C2D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C71A72C2D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 13:34:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237400AbjFLLeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 07:34:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52428 "EHLO
+        id S230375AbjFLLeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 07:34:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234623AbjFLLd5 (ORCPT
+        with ESMTP id S231223AbjFLLeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 07:33:57 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F038228
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 04:10:35 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f62cf9755eso4806395e87.1
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 04:10:35 -0700 (PDT)
+        Mon, 12 Jun 2023 07:34:02 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE5CB822C
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 04:10:55 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1a6960956d5so547438fac.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 04:10:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686568234; x=1689160234;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wD+biu0ZIn2TjFvFNPymCrPjn0dWNSM6m/3jx0dQi+c=;
-        b=dOAEbhc6ckpLkhFKYR0jUipojb2aoSBd48zFmz978c11p8Ae3R0+5MbI5SM5LubK1M
-         BkDuewK3cKhzhm7RTjTn8aAudAU5++XoRuo5t7bujPJCCGwSRNENtGjOc9mdovD/XLPy
-         ONtHghwu/jXmgsNiNFzJSvCtUd5kSvJS8soJTycLJJF+rRNJATTHgyfJjJMD0UaN/PCm
-         i4jb3d16+zo2BrJMYEW+jnZ6A4zPwsBWxJ35jQAUjkED2gJTjAAtljLESJbj2EZe6iMl
-         rABn7K0E1LJ7JXfQL9MjzlvWlSjSCYRGt2rVpAUQvBU1ZDa5I0sadmxwKZekAisQIS6R
-         OwUA==
+        d=ventanamicro.com; s=google; t=1686568255; x=1689160255;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zL7XkrZyqya8n0rx7DgOZlvul+j+rHB3G7NIYCr/fJ4=;
+        b=Cu8HvVsL3Oo1kBqetVxfB8kxfDzsr/6mR6QXuR/GV6F3dSI2mMfAfYmUdskwrE+YsA
+         H5Xpd2MWKbgGnHgAlzwLyQGRzDOcQ0Lc/c4rMu/XtI2+d33IF5dIjqFbD0aMM8f+jRMt
+         zbnZ6+0uRsLg4nUomzgoSWkHxaJEwmsHgC8C0xNYgzV7UnT5kbB5fGUIP90W8/x25Usl
+         JDx2Hv4KBbxi140bn/X+aovN+bd/5S42CXTgrweuu7HZzeDwgXczUzzZSyVj/aR9WUxl
+         DQtCVdeDP6NxSOe7fs/+A/rghZs/zkufpNgWpQnpa1lrrFtP5B0rtCZUGUf0YRULaxhY
+         oTAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686568234; x=1689160234;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wD+biu0ZIn2TjFvFNPymCrPjn0dWNSM6m/3jx0dQi+c=;
-        b=Z1+gwBRvK8fCwwY3znN3HnaOMYw2lOqN02N5DpLNE2bW3J4lTnrDzIBFY+wHjANP2X
-         dWn7aER1JOjSj8E+3wH4X0YjSoarwIvFBMyOcvBhHSLT6HThzyxjDYoj8Rgs4B3ZMBNj
-         qu2GW42viLBS6Wh4lkXHWuEE4eZVtFNydmr6B/0HA8+T1h3AkdFL4+VSZDrJtVSygt3+
-         zBtgaC75FqXYZdtJm88Xr0V9uz9T8zSxFl6wlnvLBQE+UuN7Kzp/84j66lYG+qKdIcgr
-         B0PEDmsZK3RAttCeWafdayD/VLhlaJWIUN7kSHljtsrfCz+qbiJtA8uGDeI02h9NxnhI
-         MKSg==
-X-Gm-Message-State: AC+VfDyNZOOPfbDWruJM7iemahsaFL3OM/4iLkehwW72TR2rshhfMGQ+
-        JqgAXU5YnMXUQyu5d1msAoYdkw==
-X-Google-Smtp-Source: ACHHUZ4s0Jzo/H5twPl2OCe+G81QZxwH1pFYWS1cMpaZ76zkhGyTtMgwP3YcEQnNXaw0GvgMgmhfRQ==
-X-Received: by 2002:a19:6518:0:b0:4e8:c81b:1a11 with SMTP id z24-20020a196518000000b004e8c81b1a11mr4413822lfb.49.1686568233526;
-        Mon, 12 Jun 2023 04:10:33 -0700 (PDT)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id m19-20020a7bcb93000000b003f7f4b7f286sm11131846wmi.12.2023.06.12.04.10.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 04:10:33 -0700 (PDT)
-Message-ID: <16d255fc-7186-11a9-58b5-2d3787f69d59@linaro.org>
-Date:   Mon, 12 Jun 2023 12:10:32 +0100
+        d=1e100.net; s=20221208; t=1686568255; x=1689160255;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zL7XkrZyqya8n0rx7DgOZlvul+j+rHB3G7NIYCr/fJ4=;
+        b=EEFs41Ms2hsaeQUrSrjJh8NvLYaVGgNDDgBQ0Bw+P34JUv2l71DO5n8RsxP61SCAXi
+         m3THcgGsH6jZLtyzcG3xyt7IHsqStjGGnBqcRC+vH9J75ymkOlFsvXLTsBlBYtosRHgu
+         n2fB+7HwKJpgoz6XMdsV3I8AaI7Do60GWYq0+vTeYiTfG2SPzk8RtsTv2sAe11uMqMpH
+         TkMMiCbA9SzKWkNXss8Ic2SLjtIuDB6/HEP/QOVUg7Trj9o0oKVd6sV0tvgvNBtiSvzf
+         029W9yEOx1ZIPRx0R5n66eX7ORYDFrzogUrKdXoqgASI2hZUbFOmsZ5IS8XiW9cgNiHZ
+         zpJw==
+X-Gm-Message-State: AC+VfDxGyAgCc5yQmUO80C+LCJkp7de+VpzI/hYjfQOXn0aRmwy8gqSJ
+        z+wrIROMOTJI4YSI7WxOYGA/hg==
+X-Google-Smtp-Source: ACHHUZ4gRLnvcXL/JEGjteWqrP6XC6G4pxlYpyz+2HznJdMy7z5H1TyKvw56mBzuGJaiSuGr3hPVzQ==
+X-Received: by 2002:a05:6870:4353:b0:196:4cb3:7b7 with SMTP id x19-20020a056870435300b001964cb307b7mr5797393oah.43.1686568255008;
+        Mon, 12 Jun 2023 04:10:55 -0700 (PDT)
+Received: from anup-ubuntu-vm.localdomain ([103.97.165.210])
+        by smtp.gmail.com with ESMTPSA id c8-20020a056870c08800b0017fea9c156esm5715955oad.18.2023.06.12.04.10.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 04:10:54 -0700 (PDT)
+From:   Anup Patel <apatel@ventanamicro.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Andrew Jones <ajones@ventanamicro.com>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Anup Patel <apatel@ventanamicro.com>
+Subject: [PATCH] RISC-V: KVM: Allow Svnapot extension for Guest/VM
+Date:   Mon, 12 Jun 2023 16:40:44 +0530
+Message-Id: <20230612111044.87775-1-apatel@ventanamicro.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v1] misc: fastrpc: Pass proper scm arguments for static
- process init
-Content-Language: en-US
-To:     Ekansh Gupta <quic_ekangupt@quicinc.com>,
-        linux-arm-msm@vger.kernel.org
-Cc:     ekangupt@qti.qualcomm.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, bkumar@qti.qualcomm.com,
-        fastrpc.upstream@qti.qualcomm.com, stable <stable@kernel.org>
-References: <1685972918-30371-1-git-send-email-quic_ekangupt@quicinc.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <1685972918-30371-1-git-send-email-quic_ekangupt@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,90 +73,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Ekansh for the patch.
+We extend the KVM ISA extension ONE_REG interface to allow KVM
+user space to detect and enable Svnapot extension for Guest/VM.
 
+Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+---
+ arch/riscv/include/uapi/asm/kvm.h | 1 +
+ arch/riscv/kvm/vcpu.c             | 2 ++
+ 2 files changed, 3 insertions(+)
 
-On 05/06/2023 14:48, Ekansh Gupta wrote:
-> Memory is allocated for dynamic loading when audio daemon is trying
-> to attach to audioPD on DSP side. This memory is allocated from
-> reserved CMA memory region and needs ownership assignment to
-> new VMID in order to use it from audioPD.
-> 
-> In the current implementation, arguments are not correctly passed
-> to the scm call which might result in failure of dynamic loading
-> on audioPD. Added changes to pass correct arguments during daemon
-> attach request.
-> 
-> Fixes: 	0871561055e6 ("misc: fastrpc: Add support for audiopd")
-> Cc: stable <stable@kernel.org>
-> Tested-by: Ekansh Gupta <quic_ekangupt@quicinc.com>
-> Signed-off-by: Ekansh Gupta <quic_ekangupt@quicinc.com>
-> ---
->   drivers/misc/fastrpc.c | 31 +++++++++++++++++++++++++------
->   1 file changed, 25 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-> index 30d4d04..b7335dd 100644
-> --- a/drivers/misc/fastrpc.c
-> +++ b/drivers/misc/fastrpc.c
-> @@ -1278,10 +1278,23 @@ static int fastrpc_init_create_static_process(struct fastrpc_user *fl,
->   
->   		/* Map if we have any heap VMIDs associated with this ADSP Static Process. */
->   		if (fl->cctx->vmcount) {
-> +			u64 src_perms = BIT(QCOM_SCM_VMID_HLOS);
+diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
+index 61d7fecc4899..a1ca18408bbd 100644
+--- a/arch/riscv/include/uapi/asm/kvm.h
++++ b/arch/riscv/include/uapi/asm/kvm.h
+@@ -122,6 +122,7 @@ enum KVM_RISCV_ISA_EXT_ID {
+ 	KVM_RISCV_ISA_EXT_ZICBOZ,
+ 	KVM_RISCV_ISA_EXT_ZBB,
+ 	KVM_RISCV_ISA_EXT_SSAIA,
++	KVM_RISCV_ISA_EXT_SVNAPOT,
+ 	KVM_RISCV_ISA_EXT_MAX,
+ };
+ 
+diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
+index 2db62c6c0d3e..7b355900f235 100644
+--- a/arch/riscv/kvm/vcpu.c
++++ b/arch/riscv/kvm/vcpu.c
+@@ -61,6 +61,7 @@ static const unsigned long kvm_isa_ext_arr[] = {
+ 	KVM_ISA_EXT_ARR(SSAIA),
+ 	KVM_ISA_EXT_ARR(SSTC),
+ 	KVM_ISA_EXT_ARR(SVINVAL),
++	KVM_ISA_EXT_ARR(SVNAPOT),
+ 	KVM_ISA_EXT_ARR(SVPBMT),
+ 	KVM_ISA_EXT_ARR(ZBB),
+ 	KVM_ISA_EXT_ARR(ZIHINTPAUSE),
+@@ -102,6 +103,7 @@ static bool kvm_riscv_vcpu_isa_disable_allowed(unsigned long ext)
+ 	case KVM_RISCV_ISA_EXT_SSAIA:
+ 	case KVM_RISCV_ISA_EXT_SSTC:
+ 	case KVM_RISCV_ISA_EXT_SVINVAL:
++	case KVM_RISCV_ISA_EXT_SVNAPOT:
+ 	case KVM_RISCV_ISA_EXT_ZIHINTPAUSE:
+ 	case KVM_RISCV_ISA_EXT_ZBB:
+ 		return false;
+-- 
+2.34.1
 
-This is redundant too, we already have cctx->perms initialized to 
-exactly same bit map.
-
-> +			struct qcom_scm_vmperm *dst_perms;
-> +			u32 i;
-> +
-> +			dst_perms = kcalloc(fl->cctx->vmcount,
-> +							sizeof(struct qcom_scm_vmperm), GFP_KERNEL);
-> +			if (!dst_perms)
-> +				return -ENOMEM;
-> +			for (i = 0; i < fl->cctx->vmcount; i++) {
-> +				dst_perms[i].vmid = fl->cctx->vmperms[i].vmid;
-> +				dst_perms[i].perm = fl->cctx->vmperms[i].perm;
-
-why do we need to copy this to another struct when we already have this 
-information in fl->cctx->vmperms ?
-
-> +			}
-> +
->   			err = qcom_scm_assign_mem(fl->cctx->remote_heap->phys,
->   							(u64)fl->cctx->remote_heap->size,
-> -							&fl->cctx->perms,
-> -							fl->cctx->vmperms, fl->cctx->vmcount);
-> +							&src_perms, dst_perms, fl->cctx->vmcount);
-
-
-> +			kfree(dst_perms);
->   			if (err) {
->   				dev_err(fl->sctx->dev, "Failed to assign memory with phys 0x%llx size 0x%llx err %d",
->   					fl->cctx->remote_heap->phys, fl->cctx->remote_heap->size, err);
-> @@ -1322,13 +1335,19 @@ static int fastrpc_init_create_static_process(struct fastrpc_user *fl,
->   	return 0;
->   err_invoke:
->   	if (fl->cctx->vmcount) {
-> -		struct qcom_scm_vmperm perm;
-> +		u64 src_perms = 0;
-> +		struct qcom_scm_vmperm dst_perms;
-> +		u32 i;
->   
-> -		perm.vmid = QCOM_SCM_VMID_HLOS;
-> -		perm.perm = QCOM_SCM_PERM_RWX;
-> +		for (i = 0; i < fl->cctx->vmcount; i++) {
-> +			src_perms |= BIT(fl->cctx->vmperms[i].vmid);
-> +		}
-no need for brackets here.
-> +
-> +		dst_perms.vmid = QCOM_SCM_VMID_HLOS;
-> +		dst_perms.perm = QCOM_SCM_PERM_RWX;
->   		err = qcom_scm_assign_mem(fl->cctx->remote_heap->phys,
->   						(u64)fl->cctx->remote_heap->size,
-> -						&fl->cctx->perms, &perm, 1);
-> +						&src_perms, &dst_perms, 1);
->   		if (err)
->   			dev_err(fl->sctx->dev, "Failed to assign memory phys 0x%llx size 0x%llx err %d",
->   				fl->cctx->remote_heap->phys, fl->cctx->remote_heap->size, err);
