@@ -2,232 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA79272B51D
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 03:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2882E72B51F
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 03:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231702AbjFLBd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 21:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50938 "EHLO
+        id S231787AbjFLBd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 21:33:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjFLBd1 (ORCPT
+        with ESMTP id S229531AbjFLBdy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 21:33:27 -0400
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B161C7;
-        Sun, 11 Jun 2023 18:33:26 -0700 (PDT)
-Received: by mail-vs1-xe2d.google.com with SMTP id ada2fe7eead31-43b2da5b307so1030947137.2;
-        Sun, 11 Jun 2023 18:33:26 -0700 (PDT)
+        Sun, 11 Jun 2023 21:33:54 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA44BE41;
+        Sun, 11 Jun 2023 18:33:48 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b3a9e5bf6aso8154895ad.3;
+        Sun, 11 Jun 2023 18:33:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686533605; x=1689125605;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ud3GHaugFlTWgt3eVABQXSfDs3e4nTmgNYap85e+06E=;
-        b=amWA2VIH0o7HsD/FEOm2D1dssGSZ1SWrW11XOMUTvmKYlCI0oPHoxRn7lxpx7G7T3R
-         JaAUUDLqlMdyRQ82Vh+9G6CYqPPoVLLUIxT4bBrDz0vlEA0v43kLCwDnFmm+O/G3W+Hm
-         SGUmtO2jdrwC6PVN+RPwQau4z7ld6L44eVT6wwdGmkwTLzbF4GBW73PlrOgQTj/eXcLp
-         NK04lWhYl7M4wX40xhwWRBmaWhqBafVLdFsHPlIgtSgeO3z0Bfx3zGZtJN1FDB9fSz/e
-         BsOEOa7VyIFts4pMffzJIcd+cIh3s99yo8516rtdUggHw/0t51MHA8H/Dyria/mhHABl
-         nlLw==
+        d=gmail.com; s=20221208; t=1686533628; x=1689125628;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pj8Psjqk7CgWPc+v//HZXxY7XZibLgT4Jrs268KptsY=;
+        b=SeLKtZUDZuopbxgpwykl9UBZkOEpcVJhEVEBWYWAR708Ot8Nb5rgHOqDhiBxXXLc0h
+         1gcQKsqbe7SCPY8eMEfbvZz1w8Twr7A4b6bLtbxdA4nnURORJb7I6SBThjrPKKQqAwTm
+         BpTx9z5ITGmexslmFp++ui3mieLK6z0e9NGcsDxwP06L6rft1l9RWnXVp64ZrdgyHmDG
+         aLcLyFTa7IBKOf/0W26/mr/g7vTxinAJQAjOsAQj5QAfcBsaY9cjU/U4roiycw9C6bul
+         mCVVaZoBKwiu2q0GQaCXHQcH2VzHieOvYoPL+zi2taesHqX3aJinoGgYJG+Ttf07MhrU
+         dnbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686533605; x=1689125605;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ud3GHaugFlTWgt3eVABQXSfDs3e4nTmgNYap85e+06E=;
-        b=da4lCGauRBjZCsIjQwWK57Mx6wjdSUe8TrvQQjAHSuWarMjJE2FGEQpfAYJgsZPsMd
-         XduPKZ7OgmOEBQaIR861QR2Sy4D6aKTwwMFNK/MvsXirFMcLidw1D1XxgnxK1smfkCZ4
-         xtjt3c+e7nFADYQ3wfo5ibF2iEUXYyfs6Pv77M3S686hGANKqJ2z/RqN0LNnFClz/U6U
-         dVSOLavNaQuTc6IlCr3uG2ffr0cB7C0nUdovrSe04ILtoLxBVm6SEHtUFqwKA5zJj/Fm
-         Xv8XHe7OYhGiNxjs96JZ2/9GCUif108NppsG1cm8bm6pVaPEGyZVYYD2vPfA0twNTOXx
-         7Big==
-X-Gm-Message-State: AC+VfDw+nnm9NNHYecIVralFp3fTv9kJQHFOLrqmC2Ygul0Jl2s9nF8F
-        BZvhJdCq0hZk+V6DBy4f0i8=
-X-Google-Smtp-Source: ACHHUZ6vXKpHT1KclLMh/rpSgQLCkjHNmx/+qncsRUIzBAhLU/n62P9EpBZ9RWHnsTtNfAL8PE9XQw==
-X-Received: by 2002:a67:efc2:0:b0:43d:ef1b:232c with SMTP id s2-20020a67efc2000000b0043def1b232cmr959325vsp.0.1686533605277;
-        Sun, 11 Jun 2023 18:33:25 -0700 (PDT)
-Received: from localhost.localdomain ([179.50.15.34])
-        by smtp.gmail.com with ESMTPSA id k6-20020ab05386000000b006904fa86e7csm1476365uaa.2.2023.06.11.18.33.24
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 11 Jun 2023 18:33:24 -0700 (PDT)
-From:   Yang Hau <yuanyanghau@gmail.com>
-To:     axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Hau <yuanyanghau@gmail.com>
-Subject: [PATCH 1/2] block: fix random typos
-Date:   Sun, 11 Jun 2023 20:33:17 -0500
-Message-Id: <20230612013317.87065-1-yuanyanghau@gmail.com>
-X-Mailer: git-send-email 2.39.0
+        d=1e100.net; s=20221208; t=1686533628; x=1689125628;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Pj8Psjqk7CgWPc+v//HZXxY7XZibLgT4Jrs268KptsY=;
+        b=Ile4MUJHHq0AXiTlZvCdcwZWj8ZndMJXyO4H8tRtLd0xCmwLpy/k5UccdAF1MKg/Mq
+         cnopMydV3l4Kjbz7TQz968Bls6syO1gNTkuFwh1JQqyNxp+tiq3XETd+2iYbS9/WPvwS
+         djZJB4j+zKSPPhb483ycye9Y0e6BxjgYAZawHabayVDiWrqwYXiRk2C+4I58SPXPDJiz
+         hiNXKHgXE3fnpOZCsybCpVXQatRrqfci0R6Jwkhi/EdjaTZUgtgieAHZLdpJlxeERTnQ
+         vCrTh2kxJmDvTmxQen5OGEtxZj07FIxfbHljOIHSdFoEmtYDuIq7IE3UN2Df7Ju4giFz
+         leCA==
+X-Gm-Message-State: AC+VfDxatS71yuIcALCciGH4unACq8SYO4X1ArYCoSEiIryDqKbVocHO
+        M6ryGGN4m2e6ay4dI0Fg+inc8/KkuR0=
+X-Google-Smtp-Source: ACHHUZ4NlhL/4lcVM5lAWw/oCFvSortwIYk1gB8R29RjN6q6E+VuMQT32+qlqhj9RaiJfcvFyDrmgg==
+X-Received: by 2002:a17:902:c406:b0:1b0:48e9:cddd with SMTP id k6-20020a170902c40600b001b048e9cdddmr7194103plk.69.1686533628246;
+        Sun, 11 Jun 2023 18:33:48 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-80.three.co.id. [180.214.232.80])
+        by smtp.gmail.com with ESMTPSA id jm18-20020a17090304d200b001a1d553de0fsm6914241plb.271.2023.06.11.18.33.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 11 Jun 2023 18:33:47 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id C3CAD106B23; Mon, 12 Jun 2023 08:33:42 +0700 (WIB)
+Date:   Mon, 12 Jun 2023 08:33:42 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Subject: Re: [PATCH] Documentation: virt: correct location of haltpoll module
+ params
+Message-ID: <ZIZ19ghqt_dbEEQF@debian.me>
+References: <20230610054302.6223-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pOsHwrdnPQXWfJ2n"
+Content-Disposition: inline
+In-Reply-To: <20230610054302.6223-1-rdunlap@infradead.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix some random typos.
 
-Signed-off-by: Yang Hau <yuanyanghau@gmail.com>
----
- block/bdev.c              | 2 +-
- block/bfq-iosched.c       | 4 ++--
- block/blk-cgroup-rwstat.c | 2 +-
- block/blk-ia-ranges.c     | 2 +-
- block/blk-merge.c         | 6 +++---
- block/blk.h               | 2 +-
- block/elevator.c          | 2 +-
- block/kyber-iosched.c     | 2 +-
- block/mq-deadline.c       | 2 +-
- 9 files changed, 12 insertions(+), 12 deletions(-)
+--pOsHwrdnPQXWfJ2n
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/block/bdev.c b/block/bdev.c
-index 1795c7d4b..6f8bff116 100644
---- a/block/bdev.c
-+++ b/block/bdev.c
-@@ -539,7 +539,7 @@ static void bd_clear_claiming(struct block_device *whole, void *holder)
-  * @bdev: block device of interest
-  * @holder: holder that has claimed @bdev
-  *
-- * Finish exclusive open of a block device. Mark the device as exlusively
-+ * Finish exclusive open of a block device. Mark the device as exclusively
-  * open by the holder and wake up all waiters for exclusive open to finish.
-  */
- static void bd_finish_claiming(struct block_device *bdev, void *holder)
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index d9ed3108c..3adb03633 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -1963,7 +1963,7 @@ static void bfq_bfqq_handle_idle_busy_switch(struct bfq_data *bfqd,
- 	 * As for throughput, we ask bfq_better_to_idle() whether we
- 	 * still need to plug I/O dispatching. If bfq_better_to_idle()
- 	 * says no, then plugging is not needed any longer, either to
--	 * boost throughput or to perserve service guarantees. Then
-+	 * boost throughput or to preserve service guarantees. Then
- 	 * the best option is to stop plugging I/O, as not doing so
- 	 * would certainly lower throughput. We may end up in this
- 	 * case if: (1) upon a dispatch attempt, we detected that it
-@@ -2491,7 +2491,7 @@ static int bfq_request_merge(struct request_queue *q, struct request **req,
- 	if (__rq && elv_bio_merge_ok(__rq, bio)) {
- 		*req = __rq;
- 
--		if (blk_discard_mergable(__rq))
-+		if (blk_discard_mergeable(__rq))
- 			return ELEVATOR_DISCARD_MERGE;
- 		return ELEVATOR_FRONT_MERGE;
- 	}
-diff --git a/block/blk-cgroup-rwstat.c b/block/blk-cgroup-rwstat.c
-index 3304e841d..0039e4756 100644
---- a/block/blk-cgroup-rwstat.c
-+++ b/block/blk-cgroup-rwstat.c
-@@ -37,7 +37,7 @@ EXPORT_SYMBOL_GPL(blkg_rwstat_exit);
-  * @pd: policy private data of interest
-  * @rwstat: rwstat to print
-  *
-- * Print @rwstat to @sf for the device assocaited with @pd.
-+ * Print @rwstat to @sf for the device associated with @pd.
-  */
- u64 __blkg_prfill_rwstat(struct seq_file *sf, struct blkg_policy_data *pd,
- 			 const struct blkg_rwstat_sample *rwstat)
-diff --git a/block/blk-ia-ranges.c b/block/blk-ia-ranges.c
-index c9eb4241e..f65f7a2cf 100644
---- a/block/blk-ia-ranges.c
-+++ b/block/blk-ia-ranges.c
-@@ -63,7 +63,7 @@ static const struct sysfs_ops blk_ia_range_sysfs_ops = {
- };
- 
- /*
-- * Independent access range entries are not freed individually, but alltogether
-+ * Independent access range entries are not freed individually, but all together
-  * with struct blk_independent_access_ranges and its array of ranges. Since
-  * kobject_add() takes a reference on the parent kobject contained in
-  * struct blk_independent_access_ranges, the array of independent access range
-diff --git a/block/blk-merge.c b/block/blk-merge.c
-index 6460abdb2..29034bb9d 100644
---- a/block/blk-merge.c
-+++ b/block/blk-merge.c
-@@ -790,7 +790,7 @@ static void blk_account_io_merge_request(struct request *req)
- static enum elv_merge blk_try_req_merge(struct request *req,
- 					struct request *next)
- {
--	if (blk_discard_mergable(req))
-+	if (blk_discard_mergeable(req))
- 		return ELEVATOR_DISCARD_MERGE;
- 	else if (blk_rq_pos(req) + blk_rq_sectors(req) == blk_rq_pos(next))
- 		return ELEVATOR_BACK_MERGE;
-@@ -864,7 +864,7 @@ static struct request *attempt_merge(struct request_queue *q,
- 
- 	req->__data_len += blk_rq_bytes(next);
- 
--	if (!blk_discard_mergable(req))
-+	if (!blk_discard_mergeable(req))
- 		elv_merge_requests(q, req, next);
- 
- 	/*
-@@ -947,7 +947,7 @@ bool blk_rq_merge_ok(struct request *rq, struct bio *bio)
- 
- enum elv_merge blk_try_merge(struct request *rq, struct bio *bio)
- {
--	if (blk_discard_mergable(rq))
-+	if (blk_discard_mergeable(rq))
- 		return ELEVATOR_DISCARD_MERGE;
- 	else if (blk_rq_pos(rq) + blk_rq_sectors(rq) == bio->bi_iter.bi_sector)
- 		return ELEVATOR_BACK_MERGE;
-diff --git a/block/blk.h b/block/blk.h
-index cc4e8873d..eb2ae2df1 100644
---- a/block/blk.h
-+++ b/block/blk.h
-@@ -148,7 +148,7 @@ static inline bool rq_mergeable(struct request *rq)
-  *  2) Otherwise, the request will be normal read/write requests.  The ranges
-  *     need to be contiguous.
-  */
--static inline bool blk_discard_mergable(struct request *req)
-+static inline bool blk_discard_mergeable(struct request *req)
- {
- 	if (req_op(req) == REQ_OP_DISCARD &&
- 	    queue_max_discard_segments(req->q) > 1)
-diff --git a/block/elevator.c b/block/elevator.c
-index 24909069f..a6ab90cff 100644
---- a/block/elevator.c
-+++ b/block/elevator.c
-@@ -310,7 +310,7 @@ enum elv_merge elv_merge(struct request_queue *q, struct request **req,
- 	if (__rq && elv_bio_merge_ok(__rq, bio)) {
- 		*req = __rq;
- 
--		if (blk_discard_mergable(__rq))
-+		if (blk_discard_mergeable(__rq))
- 			return ELEVATOR_DISCARD_MERGE;
- 		return ELEVATOR_BACK_MERGE;
- 	}
-diff --git a/block/kyber-iosched.c b/block/kyber-iosched.c
-index 214696923..678448cf9 100644
---- a/block/kyber-iosched.c
-+++ b/block/kyber-iosched.c
-@@ -142,7 +142,7 @@ struct kyber_cpu_latency {
-  */
- struct kyber_ctx_queue {
- 	/*
--	 * Used to ensure operations on rq_list and kcq_map to be an atmoic one.
-+	 * Used to ensure operations on rq_list and kcq_map to be an atomic one.
- 	 * Also protect the rqs on rq_list when merge.
- 	 */
- 	spinlock_t lock;
-diff --git a/block/mq-deadline.c b/block/mq-deadline.c
-index f10c2a0d1..910a23ef4 100644
---- a/block/mq-deadline.c
-+++ b/block/mq-deadline.c
-@@ -734,7 +734,7 @@ static int dd_request_merge(struct request_queue *q, struct request **rq,
- 
- 		if (elv_bio_merge_ok(__rq, bio)) {
- 			*rq = __rq;
--			if (blk_discard_mergable(__rq))
-+			if (blk_discard_mergeable(__rq))
- 				return ELEVATOR_DISCARD_MERGE;
- 			return ELEVATOR_FRONT_MERGE;
- 		}
--- 
-2.39.0
+On Fri, Jun 09, 2023 at 10:43:02PM -0700, Randy Dunlap wrote:
+> diff -- a/Documentation/virt/guest-halt-polling.rst b/Documentation/virt/=
+guest-halt-polling.rst
+> --- a/Documentation/virt/guest-halt-polling.rst
+> +++ b/Documentation/virt/guest-halt-polling.rst
+> @@ -72,7 +72,7 @@ high once achieves global guest_halt_pol
+> =20
+>  Default: Y
+> =20
+> -The module parameters can be set from the debugfs files in::
+> +The module parameters can be set from the sysfs files in::
+> =20
+>  	/sys/module/haltpoll/parameters/
+> =20
 
+LGTM, thanks!
+
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--pOsHwrdnPQXWfJ2n
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZIZ17wAKCRD2uYlJVVFO
+oxPUAP9Nd0IqK7CJvUjbdoPbvj+rByu59sIirlsDAgiPKeGd5QEAnIoxS7TiUYnw
+Zrze6zXCLU/uktE2qFQbDojBhuk1JQE=
+=/gTz
+-----END PGP SIGNATURE-----
+
+--pOsHwrdnPQXWfJ2n--
