@@ -2,116 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 929C272B538
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 03:53:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D9B172B53B
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 03:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232896AbjFLBxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 21:53:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54938 "EHLO
+        id S232885AbjFLB5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 21:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232699AbjFLBxS (ORCPT
+        with ESMTP id S229531AbjFLB5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 21:53:18 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D387E42;
-        Sun, 11 Jun 2023 18:53:16 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1b3d44e3d1cso2708825ad.0;
-        Sun, 11 Jun 2023 18:53:16 -0700 (PDT)
+        Sun, 11 Jun 2023 21:57:43 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C6C1B9
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 18:57:42 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-56d1ca11031so8701287b3.2
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 18:57:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686534796; x=1689126796;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lXP4cNz2t4ZDkBT1cIgolpXOZPb+pc1BHI1BHsEvX7M=;
-        b=QZ5bGCIpGHbOH30GJ0Vj1yd4riN0She2upYTWDR3Egs4ibXpscmtcucLmvkfxF/ORO
-         7OGvYZIPfnqFfJEzuvN/15sJDKbMTF6OaIfbEf0bU85dVY1YYfRCtDh1SLOGfcU5osK6
-         8dN2w/eYlereO1YRJQZ6aUkr3fhim5ThMXNhqlHY9lGRJqvm1Q+WYt0sAp86Povb7U/a
-         0TiXekpQCtbKU87a20i51stNCpkCXcq0Z4zokTxMgN1aaqKL3mTWTlK+L5lM8klPbMX5
-         zp7DaAv23vObUuOlpxW2XF6QHNytWiNQD4VZFwLNHcI9/rJZBckrlYQ/CXCOEFhdnDJ9
-         mHAw==
+        d=joelfernandes.org; s=google; t=1686535061; x=1689127061;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6WRMXdRW88ppStcWyJhaZVvKNZHentgg2ibSVuxx6Lo=;
+        b=mSLZo/xpDq+9c41jd0JrFqDGC2y1MRW9jDU5zBd/Z1C/glv4zVNwe/Ts0Smx0HxO50
+         1OivTvwliQlRmAZWI+x227wNDn1jEzKL2Vpa4Q6SIBdxbiLUwNBirNvZf2ZhWqDJuVHS
+         4N2ForEszKRtYYuUzF3o6+hwpfXG+6Y9+tNmA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686534796; x=1689126796;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lXP4cNz2t4ZDkBT1cIgolpXOZPb+pc1BHI1BHsEvX7M=;
-        b=NrXQkNzrHo5/gGRKTTkbAAOnx64mAW4ydwLp48xlLEKCAKpQX6m7GFwUJys/2opIyg
-         OxFPKxOKvj8wDohPHkRDPsdjqohq/eudQYRKIUqdwyQoyC9y26OjhVkqvknbdwbixJtX
-         YaCO0FlvRyFHnqJSb9gyPdpDzQQ7x7dUZdBo50mhdYI5UCknpP/KodfGCeDMKWtIxkuz
-         KDWrtgrlo6D9O6fiH72rpdiSdk43NZiz/D/xQ6VcPpPfkOS5ftZVuxjay2DTZI/TjF0i
-         zYYsrgtYHOibiVSQmDyNNmzSXAWhmBr9/AERdQLV/ZCeAH6/+UDJqSQLEBOdwuXi83Os
-         E92Q==
-X-Gm-Message-State: AC+VfDzr7fO7njEo7VelQygIAuqGqL1UVQJyXSLIAW+SGgllvx+SY4L/
-        SVnA2MAVDhiDKM4atEHuumA=
-X-Google-Smtp-Source: ACHHUZ5BNiY3nhsAahGpBTQXH2dS2OYKPuqr+MFJAL26s478eK40jCOAPCUITbQCzP7gmMnMowSheA==
-X-Received: by 2002:a17:902:c407:b0:1ac:5717:fd5 with SMTP id k7-20020a170902c40700b001ac57170fd5mr7562551plk.60.1686534795692;
-        Sun, 11 Jun 2023 18:53:15 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-80.three.co.id. [180.214.232.80])
-        by smtp.gmail.com with ESMTPSA id o7-20020a170902bcc700b001b052483e9csm6915001pls.231.2023.06.11.18.53.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 11 Jun 2023 18:53:15 -0700 (PDT)
-Message-ID: <35a8d0f1-0def-a1f8-b3db-d48863693fbb@gmail.com>
-Date:   Mon, 12 Jun 2023 08:53:11 +0700
+        d=1e100.net; s=20221208; t=1686535061; x=1689127061;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6WRMXdRW88ppStcWyJhaZVvKNZHentgg2ibSVuxx6Lo=;
+        b=MxMZSFfQ7ZnLLVIhMQHsSzW1gN1QJ0drRrempunj/q5wK54ER24rqkxQ2vCTJXp1jn
+         CF/hQPHhBbeFJ56VqSdRAE8bcA0thmEirPjHXeL7wCG/eYZ/408RHTIdiWsgEhB414e1
+         qfiDn8qp3HQX97OFz38lY0RoVF988A1xAH+LiNlMoW6Znf1BWjyJJrc6Xd5ef719VdVw
+         yaXtkgQo7JOzFaC+Qd/YtM+FEQczbKdlHiZ2TnQN28ykSNhE7jBKyNpLYuEiTl1rggEi
+         jX+cmziJgw9Cn/Iddz9D35TW1eNC6uGwKoRRbTk5u58n1r4fVmrp2q21K63EOvI0gzdz
+         lhOQ==
+X-Gm-Message-State: AC+VfDxR2a05ZHfBWaf8yzu0hMdjBXdAA3bUu1plplyzm2+v3ILX5ku6
+        rQVoax4k0THyTvqWThonTviLHiXTqAZe6s+3XayBwQ==
+X-Google-Smtp-Source: ACHHUZ7V49fwhWWTGIFvEFVvZ59Lsxy+B9IIL32srDHwf9YcSIvjHpZmra7QX/H/GlM2KcgoJQdjEDjqOgneh+ceoBQ=
+X-Received: by 2002:a0d:f9c4:0:b0:565:a8dd:c6f4 with SMTP id
+ j187-20020a0df9c4000000b00565a8ddc6f4mr8953716ywf.33.1686535061205; Sun, 11
+ Jun 2023 18:57:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] fs: Fix comment typo
-Content-Language: en-US
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Shaomin Deng <dengshaomin@cdjrlc.com>, viro@zeniv.linux.org.uk,
-        brauner@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mao Zhu <zhumao001@208suo.com>
-References: <20230611123314.5282-1-dengshaomin@cdjrlc.com>
- <ZIXEHHvkJVlmE_c4@debian.me> <87edmhok1h.fsf@meer.lwn.net>
- <ZIZ31kVtPmaYBqa0@debian.me>
-In-Reply-To: <ZIZ31kVtPmaYBqa0@debian.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <cover.1686239016.git.bristot@kernel.org> <bd9977efff8cc3e002c4b2db02f611167905a99f.1686239016.git.bristot@kernel.org>
+In-Reply-To: <bd9977efff8cc3e002c4b2db02f611167905a99f.1686239016.git.bristot@kernel.org>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Sun, 11 Jun 2023 21:57:35 -0400
+Message-ID: <CAEXW_YT0DmvQo_gfCq5uzpZpf36HmfzXozo9+=sYJp-hZx4qTQ@mail.gmail.com>
+Subject: Re: [RFC PATCH V3 6/6] sched/fair: Implement starvation monitor
+To:     Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Luca Abeni <luca.abeni@santannapisa.it>,
+        Tommaso Cucinotta <tommaso.cucinotta@santannapisa.it>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vineeth Pillai <vineeth@bitbyteword.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/12/23 08:41, Bagas Sanjaya wrote:
-> On Sun, Jun 11, 2023 at 01:50:34PM -0600, Jonathan Corbet wrote:
->> Bagas Sanjaya <bagasdotme@gmail.com> writes:
->>
->>> On Sun, Jun 11, 2023 at 08:33:14AM -0400, Shaomin Deng wrote:
->>>> From: Mao Zhu <zhumao001@208suo.com>
->>>>
->>>> Delete duplicated word in comment.
->>>
->>> On what function?
->>
->> Bagas, do I *really* have to ask you, yet again, to stop nitpicking our
->> contributors into the ground?  It appears I do.  So:
->>
->> Bagas, *stop* this.  It's a typo patch removing an extraneous word.  The
->> changelog is fine.  We absolutely do not need you playing changelog cop
->> and harassing contributors over this kind of thing.
-> 
-> OK, thanks for reminding me again.
-> 
-> At the time of reviewing, I had bad feeling that @cdjrlc.com people will
-> ignore review comments (I betted due to mail setup problem that prevents
-> them from properly repling to mailing lists, which is unfortunate). I
-> was nitpicking because the diff context doesn't look clear to me (what
-> function name?).
-> 
+Hello,
 
-And no wonder why several maintainers also highlight this (which prompted
-me to review that way):
+On Thu, Jun 8, 2023 at 11:58=E2=80=AFAM Daniel Bristot de Oliveira
+<bristot@kernel.org> wrote:
+>
+> From: Juri Lelli <juri.lelli@redhat.com>
+>
+> Starting deadline server for lower priority classes right away when
+> first task is enqueued might break guarantees, as tasks belonging to
+> intermediate priority classes could be uselessly preempted. E.g., a well
+> behaving (non hog) FIFO task can be preempted by NORMAL tasks even if
+> there are still CPU cycles available for NORMAL tasks to run, as they'll
+> be running inside the fair deadline server for some period of time.
+>
+> To prevent this issue, implement a starvation monitor mechanism that
+> starts the deadline server only if a (fair in this case) task hasn't
+> been scheduled for some interval of time after it has been enqueued.
+> Use pick/put functions to manage starvation monitor status.
 
-[1]: https://lore.kernel.org/all/162b5545-7d24-3cf2-9158-3100ef644e03@linux.intel.com/
-[2]: https://lore.kernel.org/all/3a73cf7f02915891c77dc5a3203dc187f6d91194.camel@HansenPartnership.com/
+Me and Vineeth were discussing that another way of resolving this
+issue is to use a DL-server for RT as well, and then using a smaller
+deadline  for RT. That way the RT is more likely to be selected due to
+its earlier deadline/period.
 
--- 
-An old man doll... just what I always wanted! - Clara
+Another approach could be to implement the 0-laxity scheduling as a
+general SCHED_DEADLINE feature, perhaps through a flag. And allow DL
+tasks to opt-in to 0-laxity scheduling unless there are idle cycles.
+And then opt-in the feature for the CFS deadline server task.
 
+Lastly, if the goal is to remove RT throttling code eventually, are
+you also planning to remove RT group scheduling as well? Are there
+users of RT group scheduling that might be impacted? On the other
+hand, RT throttling / group scheduling code can be left as it is
+(perhaps documenting it as deprecated) and the server stuff can be
+implemented via a CONFIG option.
+
+ - Joel
+
+> Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
+> Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+> ---
+>  kernel/sched/fair.c  | 57 ++++++++++++++++++++++++++++++++++++++++++--
+>  kernel/sched/sched.h |  4 ++++
+>  2 files changed, 59 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index f493f05c1f84..75eadd85e2b3 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -6315,6 +6315,53 @@ static int sched_idle_cpu(int cpu)
+>  }
+>  #endif
+>
+> +
+> +static void fair_server_watchdog(struct timer_list *list)
+> +{
+> +       struct rq *rq =3D container_of(list, struct rq, fair_server_wd);
+> +       struct rq_flags rf;
+> +
+> +       rq_lock_irqsave(rq, &rf);
+> +       rq->fair_server_wd_running =3D 0;
+> +
+> +       if (!rq->cfs.h_nr_running)
+> +               goto out;
+> +
+> +       update_rq_clock(rq);
+> +       dl_server_start(&rq->fair_server);
+> +       rq->fair_server_active =3D 1;
+> +       resched_curr(rq);
+> +
+> +out:
+> +       rq_unlock_irqrestore(rq, &rf);
+> +}
+> +
+> +static inline void fair_server_watchdog_start(struct rq *rq)
+> +{
+> +       if (rq->fair_server_wd_running || rq->fair_server_active)
+> +               return;
+> +
+> +       timer_setup(&rq->fair_server_wd, fair_server_watchdog, 0);
+> +       rq->fair_server_wd.expires =3D jiffies + FAIR_SERVER_WATCHDOG_INT=
+ERVAL;
+> +       add_timer_on(&rq->fair_server_wd, cpu_of(rq));
+> +       rq->fair_server_active =3D 0;
+> +       rq->fair_server_wd_running =3D 1;
+> +}
+> +
+> +static inline void fair_server_watchdog_stop(struct rq *rq, bool stop_se=
+rver)
+> +{
+> +       if (!rq->fair_server_wd_running && !stop_server)
+> +               return;
+> +
+> +       del_timer(&rq->fair_server_wd);
+> +       rq->fair_server_wd_running =3D 0;
+> +
+> +       if (stop_server && rq->fair_server_active) {
+> +               dl_server_stop(&rq->fair_server);
+> +               rq->fair_server_active =3D 0;
+> +       }
+> +}
+> +
+>  /*
+>   * The enqueue_task method is called before nr_running is
+>   * increased. Here we update the fair scheduling stats and
+> @@ -6337,7 +6384,7 @@ enqueue_task_fair(struct rq *rq, struct task_struct=
+ *p, int flags)
+>         util_est_enqueue(&rq->cfs, p);
+>
+>         if (!rq->cfs.h_nr_running)
+> -               dl_server_start(&rq->fair_server);
+> +               fair_server_watchdog_start(rq);
+>
+>         /*
+>          * If in_iowait is set, the code below may not trigger any cpufre=
+q
+> @@ -6484,7 +6531,7 @@ static void dequeue_task_fair(struct rq *rq, struct=
+ task_struct *p, int flags)
+>
+>  dequeue_throttle:
+>         if (!rq->cfs.h_nr_running)
+> -               dl_server_stop(&rq->fair_server);
+> +               fair_server_watchdog_stop(rq, true);
+>
+>         util_est_update(&rq->cfs, p, task_sleep);
+>         hrtick_update(rq);
+> @@ -8193,6 +8240,7 @@ done: __maybe_unused;
+>                 hrtick_start_fair(rq, p);
+>
+>         update_misfit_status(p, rq);
+> +       fair_server_watchdog_stop(rq, false);
+>
+>         return p;
+>
+> @@ -8248,6 +8296,8 @@ void fair_server_init(struct rq *rq)
+>         dl_se->dl_period =3D 20 * TICK_NSEC;
+>
+>         dl_server_init(dl_se, rq, fair_server_has_tasks, fair_server_pick=
+);
+> +
+> +       rq->fair_server_wd_running =3D 0;
+>  }
+>
+>  /*
+> @@ -8262,6 +8312,9 @@ static void put_prev_task_fair(struct rq *rq, struc=
+t task_struct *prev)
+>                 cfs_rq =3D cfs_rq_of(se);
+>                 put_prev_entity(cfs_rq, se);
+>         }
+> +
+> +       if (rq->cfs.h_nr_running)
+> +               fair_server_watchdog_start(rq);
+>  }
+>
+>  /*
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index d4a7c0823c53..cab5d2b1e71f 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -353,6 +353,7 @@ extern void dl_server_init(struct sched_dl_entity *dl=
+_se, struct rq *rq,
+>                     dl_server_has_tasks_f has_tasks,
+>                     dl_server_pick_f pick);
+>
+> +#define FAIR_SERVER_WATCHDOG_INTERVAL (HZ >> 1)
+>  extern void fair_server_init(struct rq *);
+>
+>  #ifdef CONFIG_CGROUP_SCHED
+> @@ -1018,6 +1019,9 @@ struct rq {
+>         struct dl_rq            dl;
+>
+>         struct sched_dl_entity  fair_server;
+> +       int                     fair_server_active;
+> +       struct timer_list       fair_server_wd;
+> +       int                     fair_server_wd_running;
+>
+>  #ifdef CONFIG_FAIR_GROUP_SCHED
+>         /* list of leaf cfs_rq on this CPU: */
+> --
+> 2.40.1
+>
