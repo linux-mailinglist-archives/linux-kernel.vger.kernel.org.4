@@ -2,108 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38B4F72CEB6
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC9672CEBA
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236060AbjFLSvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 14:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33812 "EHLO
+        id S236796AbjFLSwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 14:52:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232904AbjFLSvQ (ORCPT
+        with ESMTP id S232904AbjFLSwU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 14:51:16 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66EF184;
-        Mon, 12 Jun 2023 11:51:14 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-977e7d6945aso829521566b.2;
-        Mon, 12 Jun 2023 11:51:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686595873; x=1689187873;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=hM2bcW1LFJ85TQw0TjBRJcRn+H5yaOsbrGxlp/leb9I=;
-        b=VMSwAL45vFsVVj8p7peRFkBaI6gSYrmDq87jds5qA+lCMNVJOC1REo+++nzWEpRBYu
-         9DDmWmSaJpCOAnXoW/Mx9N+6thP/Qc9j4tIs8timUmlTstzev/IncMnsLcwt+lDGfOba
-         zkELTMcZ3R8b8+oSQ8bP85iyZBGF9JRqhLrOY0xQkOy4EX8jj3w4gjJgyzVkJw58PeUb
-         TiNpGBlHyQ09hJjcgB4EERzNRjnPPpBEobQv54Cn6jMiywACEV6h4Op8EyVpZqdCiWi/
-         wVhuuns9VCtzhiLg+KL7JEbap82DormDNZj4VJewAhAScyvuchaej/gd/wl+57BYn+js
-         qvZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686595873; x=1689187873;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hM2bcW1LFJ85TQw0TjBRJcRn+H5yaOsbrGxlp/leb9I=;
-        b=SJ50+F9bnNJaj1nvsDoF4hV5yM6koTvsnyc2j2jYBYS78uVzkstVfpju8mdDmV2BO0
-         hWH3xT+JBpB78ZTQlT2PXP7Oe4NsotA8KUUwnLkdhFVeX0Rq8LVsYQFk8bDYnyJIuy8l
-         4poCW9e8v5TrlPnUZSkGIHVuRFLD3LqgECVTz5OexnvWqBlqsUXO/utdLXcSFK0M0hWH
-         BAYumqvY1RrkK7sOM4zq+28cV52ABQ+Xx0ygwFUdG+Fr/bT34lo1JQJ6mz+J9iWN9OsO
-         MfW9bq0rqdOzKr4/7tlwaS3T/T9f7gClNUjbfRXCFjLAYu0MU8SIBnfTUwBnerZYdq0Y
-         l+xg==
-X-Gm-Message-State: AC+VfDy+ivGIcgt3qMppcmjy1fEzyzPjL8tVvm82VVxnWIaaTG768pCH
-        LwWbIskD3usH/4mWJZh8M7o=
-X-Google-Smtp-Source: ACHHUZ5Y7dSfCYK2WBlnOA7CjvQw7wU+Bi+lLhXU89HZaR++HSJ9twQY7g5PlxTIYuJR7OR4LGobdw==
-X-Received: by 2002:a17:906:d555:b0:978:b1fe:99b8 with SMTP id cr21-20020a170906d55500b00978b1fe99b8mr11068382ejc.56.1686595872979;
-        Mon, 12 Jun 2023 11:51:12 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id p6-20020a1709061b4600b00977e4c1727esm5524760ejg.29.2023.06.12.11.51.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 11:51:12 -0700 (PDT)
-Date:   Mon, 12 Jun 2023 21:51:10 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Sunil Kovvuri <sunil.kovvuri@gmail.com>
-Cc:     Alexis =?utf-8?Q?Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        paul.arola@telus.com, scott.roberts@telus.com
-Subject: Re: [PATCH net-next 2/2] net: dsa: mv88e6xxx: implement egress tbf
- qdisc for 6393x family
-Message-ID: <20230612185110.bppazw2mgbyoj6nz@skbuf>
-References: <20230609141812.297521-1-alexis.lothore@bootlin.com>
- <20230609141812.297521-3-alexis.lothore@bootlin.com>
- <d196f8c7-19f7-4a7c-9024-e97001c21b90@lunn.ch>
- <dbec77de-ee34-e281-3dd4-2332116a0910@bootlin.com>
- <176f073a-b5ab-4d8a-8850-fcd8eff65aa7@lunn.ch>
- <bb799b06-8ca8-8a29-3873-af09c859ae88@bootlin.com>
- <CA+sq2CcG4pQDLcw+fTkcEfTZv6zPY3pcGCKeOy8owiaRF2HELA@mail.gmail.com>
- <20230612094321.vjvj3jnyw7bcnjmw@skbuf>
- <CA+sq2CdkfuMWE4jf0QEQc4w-2Nb45nER64BV8EbSroJcYi=__Q@mail.gmail.com>
+        Mon, 12 Jun 2023 14:52:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AA7118
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:52:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D298661FE8
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 18:52:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97BCAC433D2;
+        Mon, 12 Jun 2023 18:52:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686595938;
+        bh=pnRmShH3zQPplLb9mvpVVNrWQAOBdcEg/Pe89/g7yo8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ndlyxcr8M5ZZZHhtDAKNpxVr7Y7goaKcu4uzsdw30OYeV6XVNvjqwpaJFKB8PymCy
+         MQJmgL1rsrHjMdj9FKVLF9zf1TbsYeZm2/RHQNL1CfwhaC7wrdmSpA7DJMAPa952y1
+         +AYPUMpXpztFp5l+ECrupKh+RAglfitV4CNENev2W3sPTwS45E5PoHqFcgJ965drjN
+         /lTrJSYGFZYwzo930hShNSFJlOo++jz1Kndd1CSgKHixoT+p0UEay360mggpHhCWRm
+         b1o6xfs/Zb9KJ3AvH5ryhE7cZNvZy6N834NzMluMoGD8RwfMlOog63P+Zb/pFugTK3
+         dwv5gAhbDbHow==
+Date:   Mon, 12 Jun 2023 19:52:13 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     YingKun Meng <mengyingkun@loongson.cn>
+Cc:     lgirdwood@gmail.com, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, loongarch@lists.linux.dev,
+        loongson-kernel@lists.loongnix.cn,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [ PATCH v2 1/3] ASoC: Add support for Loongson I2S controller
+Message-ID: <8b069919-664d-4329-9168-ec8f26fef647@sirena.org.uk>
+References: <20230612085318.3039485-1-mengyingkun@loongson.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7mJvWglGipw14bY8"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+sq2CdkfuMWE4jf0QEQc4w-2Nb45nER64BV8EbSroJcYi=__Q@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230612085318.3039485-1-mengyingkun@loongson.cn>
+X-Cookie: If it heals good, say it.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 11:53:06PM +0530, Sunil Kovvuri wrote:
-> On Mon, Jun 12, 2023 at 3:13 PM Vladimir Oltean <olteanv@gmail.com> wrote:
-> >
-> > Hi Sunil,
-> >
-> > On Mon, Jun 12, 2023 at 12:04:56PM +0530, Sunil Kovvuri wrote:
-> > > For setting up simple per-port ratelimit, instead of TBF isn't "egress
-> > > matchall" suitable here ?
-> >
-> > "matchall" is a filter. What would be the associated action for a
-> > port-level shaper?
-> 
-> As Alexis mentioned I was referring to "matchall + policer".
 
-The idea would be to pick a software representation which matches the
-hardware behavior. A policer drops excess packets, a shaper queues them.
-This hardware supports some sort of egress rate shaping.
+--7mJvWglGipw14bY8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Jun 12, 2023 at 04:53:18PM +0800, YingKun Meng wrote:
+
+> Loongson I2S controller is found on 7axxx/2kxxx chips from loongson,
+> it is a PCI device with two private DMA controllers, one for playback,
+> the other for capture.
+>=20
+> The driver supports the use of DTS or ACPI to describe device resources.
+
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202306060223.9hdivLrx-lkp@i=
+ntel.com/
+> Closes: https://lore.kernel.org/oe-kbuild-all/202306060320.Sphw0ihy-lkp@i=
+ntel.com/
+
+These don't really make sense for a new driver.
+
+> @@ -0,0 +1,213 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Loongson-2K I2S master mode driver
+> + *
+> + * Copyright (C) 2022 Loongson Technology Corporation Limited
+> + */
+
+Please make the entire comment a C++ one so things look more
+intentional.  You might also want to update the copyright year if there
+was any substantial work on the driver recently.
+
+> +		/* Enable master mode */
+> +		regmap_update_bits(i2s->regmap, LS_I2S_CTRL, I2S_CTRL_MASTER,
+> +				   I2S_CTRL_MASTER);
+> +		if (i2s->rev_id =3D=3D 1) {
+> +			ret =3D regmap_read_poll_timeout_atomic(i2s->regmap,
+> +						LS_I2S_CTRL, val,
+> +						val & I2S_CTRL_CLK_READY,
+> +						10, 2000);
+> +			if (ret < 0)
+> +				dev_warn(dai->dev, "wait BCLK ready timeout\n");
+> +		}
+
+Ideally you'd have a set_dai_fmt() operation and support both clock
+provider and consumer mode. =20
+
+> +	if (i2s->rev_id =3D=3D 0) {
+
+> +	} else if (i2s->rev_id =3D=3D 1) {
+
+> +	} else
+> +		dev_err(i2s->dev, "I2S revision invalid\n");
+> +
+
+This looks like a switch statement.
+
+> +static int loongson_i2s_set_dai_sysclk(struct snd_soc_dai *dai, int clk_=
+id,
+> +				       unsigned int freq, int dir)
+> +{
+> +	struct loongson_i2s *i2s =3D snd_soc_dai_get_drvdata(dai);
+> +
+> +	i2s->sysclk =3D freq;
+> +
+> +	return 0;
+> +}
+
+Should this be integrated with the clock API rather than just using the
+ASoC specific stuff - where does this sysclk come from?  I do note that
+the PCI driver appears to have a fixed clock...
+
+> +void loongson_i2s_init(struct loongson_i2s *i2s)
+> +{
+> +	if (i2s->rev_id =3D=3D 1) {
+> +		regmap_write(i2s->regmap, LS_I2S_CTRL, I2S_CTRL_RESET);
+> +		udelay(200);
+> +	}
+> +}
+
+What's this for?  I'd expect initialising the hardware to be handled
+internally within the driver but this is semi-exported?
+
+> diff --git a/sound/soc/loongson/loongson_i2s_pci.c b/sound/soc/loongson/l=
+oongson_i2s_pci.c
+> new file mode 100644
+> index 000000000000..f09713b560e9
+> --- /dev/null
+> +++ b/sound/soc/loongson/loongson_i2s_pci.c
+> @@ -0,0 +1,500 @@
+
+Please split the PCI driver into a separate patch to keep the individual
+reviews smaller.
+
+> +static int loongson_pcm_trigger(struct snd_soc_component *component,
+> +				struct snd_pcm_substream *substream, int cmd)
+> +{
+
+> +	switch (cmd) {
+
+> +	default:
+> +		ret =3D -EINVAL;
+> +	}
+
+Missing break; here.
+
+> +	/* initialize dma descriptor array */
+> +	mem_addr =3D runtime->dma_addr;
+> +	order_addr =3D prtd->dma_desc_arr_phy;
+> +	for (i =3D 0; i < num_periods; i++) {
+> +		desc =3D &prtd->dma_desc_arr[i];
+
+We didn't validate that the number of periods fits in the array.
+
+> +	if (num_periods > 0) {
+> +		desc =3D &prtd->dma_desc_arr[num_periods - 1];
+> +		desc->order =3D lower_32_bits(prtd->dma_desc_arr_phy | BIT(0));
+> +		desc->order_hi =3D upper_32_bits(prtd->dma_desc_arr_phy);
+> +	}
+
+This is always true, right?
+
+> +       ret =3D request_irq(dma_data->irq, loongson_pcm_dma_irq,
+> +                         IRQF_TRIGGER_HIGH, LS_I2S_DRVNAME, substream);
+
+Does it really make sense to request and free the interrupt when the
+stream is running?  It's generally better to just request the interrupt
+once during probe(), that way we know we've got all the resources we
+need.  If we do need to allocate/free all the time a comment explaining
+why would be good so people don't go trying to fix this.
+
+> +	ret =3D pci_request_region(pdev, BAR_NUM, LS_I2S_DRVNAME);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "request regions failed %d\n", ret);
+> +		return ret;
+> +	}
+
+pcim_iomap_regions()?  At the minute you'll free the region before devm
+frees the regmap which is probably harmless but not ideal.
+
+--7mJvWglGipw14bY8
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSHaVwACgkQJNaLcl1U
+h9DJGAf9Ep6CwNQYredDySttL400B4S/REQ1oaOQqJw+0WmP0KmOF6PXeIQuDzAV
+zinJzrHhykdbNGHx6aW41IrCo8wxsctwRLlWQqfwzRcnGO0R8TnknoF1M39bLKWn
+A27hmnq0PZfvdWtRC3PhosiYhz+vav/1iU4fNxGyMHKYfTzFpZisJrOTO+xg40DI
+x+CKOEzpioj1QQHuOQQLGoGV3P9QXVsdkqRRG8mO2p7WgHsiIJSNpfvc/X0JmpqY
+O3YTCbzqbfst2o+QCJF7x06SLIQPg9j19MOFqX239VS+HGfnRITTvRQPTDMjrvL7
+FxbV/wCFf1KXQYFxyhrYLK3E3BIufw==
+=vj4u
+-----END PGP SIGNATURE-----
+
+--7mJvWglGipw14bY8--
