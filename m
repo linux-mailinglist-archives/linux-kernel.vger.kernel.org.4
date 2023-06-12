@@ -2,125 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD8A772CC18
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23B3B72CC1A
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:11:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236341AbjFLRKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 13:10:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
+        id S234803AbjFLRLc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 12 Jun 2023 13:11:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236176AbjFLRK1 (ORCPT
+        with ESMTP id S231252AbjFLRLb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 13:10:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA55EE6
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:09:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686589781;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=o3x5Jqp9svWUEJlBaR37fMtGHfPwZ3q/oDq0tcjZVns=;
-        b=Ff6XRQPtNLIe9uY8jC/Efl7WUBtGKq/dLeK6ZdCEdbjbmQmGo/cTSsvidjR4x0z7MEg2Oq
-        KiuG07PiOtf4r34s14f1N1ib9iEPcEAM8Y5khxJIiLPeCMM94iPjf5sycDRP5xkkGg2Kx8
-        uk3E9GsgM+I4zDMzsFYoMLT1Qvhn+0k=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-552-kNJSJI6zMPCl7QK55fItfg-1; Mon, 12 Jun 2023 13:09:39 -0400
-X-MC-Unique: kNJSJI6zMPCl7QK55fItfg-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f5fa06debcso30499635e9.0
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:09:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686589778; x=1689181778;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o3x5Jqp9svWUEJlBaR37fMtGHfPwZ3q/oDq0tcjZVns=;
-        b=Hs8rRQ2ZBKzqI34DEZJfTI8+ZXOcYXOdKCPVYZWOT2Clh9+6icmW08Apdhh/C/KnYX
-         VON+2vfrMIkgeO85BMF6ys0aXP0icPKKdTJaoA3x/QCblykLCRyAZmZRJipeA/g/xFXK
-         e1h2PWNneArULIVsko5PeSvZ0WIxdH9pO5IX3XE7bo6EfJeG+OoqE8yKY8/LHJfKlkMf
-         ewGW14M8hSHDDxqLJgfYyIdLyrx2gKxLmwYGPQCPXUCFeVXiFSsC1aG7OTJAToVADmoU
-         Qkke50XwjRL4L2lBB92n5jDmzMtyTVlyFtyXIOtguM9GodBJs5Iaq7cnDynz06xZRdxR
-         f1ug==
-X-Gm-Message-State: AC+VfDzcnfIAdRF5C/XIXYz+GBVqvfqR6xQKJXElI9cnxnXM9bhdAWFL
-        JBSrLpyIMfkZFyudT7shz6UxgqQpqsra7P9cHiMk/I7oMPeEG/ahs7t6f4UaUY5eTw26rvnitaT
-        LzaDdDYT4C4k5D0nY0hGzTUWFMCHBZKAy
-X-Received: by 2002:a05:600c:cb:b0:3f7:6bd9:2819 with SMTP id u11-20020a05600c00cb00b003f76bd92819mr7388868wmm.29.1686589778157;
-        Mon, 12 Jun 2023 10:09:38 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7nWjp7iROukoRx3QdDb1Ucz3BrypuugeOU3OCYTyx8Zc1xEtRgGB+SAOqjI1Yo/YCWeALfKw==
-X-Received: by 2002:a05:600c:cb:b0:3f7:6bd9:2819 with SMTP id u11-20020a05600c00cb00b003f76bd92819mr7388858wmm.29.1686589777876;
-        Mon, 12 Jun 2023 10:09:37 -0700 (PDT)
-Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id l17-20020a1ced11000000b003f810be0231sm8205622wmh.32.2023.06.12.10.09.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 10:09:37 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Wang You <wangyoua@uniontech.com>, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com
-Cc:     linux-kernel@vger.kernel.org, Wang You <wangyoua@uniontech.com>
-Subject: Re: [RFC PATCH] sched/wait: Determine whether the wait queue is
- empty before waking up
-In-Reply-To: <20230609053812.10230-1-wangyoua@uniontech.com>
-References: <20230609053812.10230-1-wangyoua@uniontech.com>
-Date:   Mon, 12 Jun 2023 18:09:36 +0100
-Message-ID: <xhsmhfs6wy5db.mognet@vschneid.remote.csb>
+        Mon, 12 Jun 2023 13:11:31 -0400
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B06113;
+        Mon, 12 Jun 2023 10:11:30 -0700 (PDT)
+Received: from in02.mta.xmission.com ([166.70.13.52]:56964)
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1q8l4i-008G1Y-7Y; Mon, 12 Jun 2023 11:11:28 -0600
+Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:35692 helo=email.froward.int.ebiederm.org.xmission.com)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1q8l4h-00GGD8-4b; Mon, 12 Jun 2023 11:11:27 -0600
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Chinner <david@fromorbit.com>,
+        Zorro Lang <zlang@redhat.com>, linux-xfs@vger.kernel.org,
+        Mike Christie <michael.christie@oracle.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>, linux-kernel@vger.kernel.org
+References: <20230611124836.whfktwaumnefm5z5@zlang-mailbox>
+        <ZIZSPyzReZkGBEFy@dread.disaster.area>
+        <20230612015145.GA11441@frogsfrogsfrogs>
+        <ZIaBQnCKJ6NsqGhd@dread.disaster.area>
+        <CAHk-=whJqZLKPR-cpX-V4wJTXVX-_tG5Vjuj2q9knvKGCPdfkg@mail.gmail.com>
+        <20230612153629.GA11427@frogsfrogsfrogs>
+        <CAHk-=wiN-JcUh4uhDNmA4hp26Mg+c2DTuzgWY2fZ6hytDtOMCg@mail.gmail.com>
+        <af31cadf-8c15-8d88-79fb-066dc87f0324@kernel.dk>
+        <13d9e4f2-17c5-0709-0cc0-6f92bfe9f30d@kernel.dk>
+        <CAHk-=wgdBfqyNHk0iNyYpEuBUdVgq1KMzHMuEqn=ADtfyK_pkQ@mail.gmail.com>
+        <212a190c-f81e-2876-cf14-6d1e37d47192@kernel.dk>
+        <CAHk-=wh0hrFjcU5C8uHvLBThrT5vQsFHb7Jk6HRP3LAJqdNx1A@mail.gmail.com>
+Date:   Mon, 12 Jun 2023 12:11:19 -0500
+In-Reply-To: <CAHk-=wh0hrFjcU5C8uHvLBThrT5vQsFHb7Jk6HRP3LAJqdNx1A@mail.gmail.com>
+        (Linus Torvalds's message of "Mon, 12 Jun 2023 09:57:51 -0700")
+Message-ID: <87wn08ppvs.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-XM-SPF: eid=1q8l4h-00GGD8-4b;;;mid=<87wn08ppvs.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=pass
+X-XM-AID: U2FsdGVkX19EY7Ho9kfWEUAJ7nVOKAACcXVbaQOg1IQ=
+X-SA-Exim-Connect-IP: 68.110.29.46
+X-SA-Exim-Mail-From: ebiederm@xmission.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;Linus Torvalds <torvalds@linux-foundation.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 526 ms - load_scoreonly_sql: 0.08 (0.0%),
+        signal_user_changed: 12 (2.3%), b_tie_ro: 10 (2.0%), parse: 1.27
+        (0.2%), extract_message_metadata: 17 (3.2%), get_uri_detail_list: 1.26
+        (0.2%), tests_pri_-2000: 18 (3.3%), tests_pri_-1000: 2.7 (0.5%),
+        tests_pri_-950: 1.30 (0.2%), tests_pri_-900: 1.08 (0.2%),
+        tests_pri_-200: 0.89 (0.2%), tests_pri_-100: 4.4 (0.8%),
+        tests_pri_-90: 56 (10.7%), check_bayes: 55 (10.4%), b_tokenize: 6
+        (1.1%), b_tok_get_all: 6 (1.2%), b_comp_prob: 2.1 (0.4%),
+        b_tok_touch_all: 37 (7.0%), b_finish: 0.93 (0.2%), tests_pri_0: 178
+        (33.8%), check_dkim_signature: 0.61 (0.1%), check_dkim_adsp: 2.5
+        (0.5%), poll_dns_idle: 218 (41.5%), tests_pri_10: 2.1 (0.4%),
+        tests_pri_500: 228 (43.3%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [6.5-rc5 regression] core dump hangs (was Re: [Bug report]
+ fstests generic/051 (on xfs) hang on latest linux v6.5-rc5+)
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/06/23 13:38, Wang You wrote:
-> When we did some benchmark tests (such as pipe tests), we found
-> that the wake behavior was still triggered when the wait queue
-> was empty, even though it would exit later.
+Linus Torvalds <torvalds@linux-foundation.org> writes:
+
+> On Mon, Jun 12, 2023 at 9:45 AM Jens Axboe <axboe@kernel.dk> wrote:
+>>
+>> You snipped the suspicion in my reply on why that exists, to avoid
+>> io_wq_worker_sleeping() triggering.
 >
-> This processing consumes some unnecessary resources. Can we
-> determine at the beginning of the wake up whether there are
-> elements in the queue that need to be awakened? I think this
-> judgment is probably good for performance and should be safe.
+> I'm not seeing why triggering io_wq_worker_sleeping() should even be a
+> problem in the first place.
 >
-> Looking forward to your reply, thank you.
+> I suspect that is entirely historical too, and has to do with how it
+> used to do that
 >
-> Signed-off-by: Wang You <wangyoua@uniontech.com>
-> ---
->  kernel/sched/wait.c | 3 +++
->  1 file changed, 3 insertions(+)
+>         struct io_worker *worker = kthread_data(tsk);
+>         struct io_wqe *wqe = worker->wqe;
 >
-> diff --git a/kernel/sched/wait.c b/kernel/sched/wait.c
-> index 133b74730738..17011780aa21 100644
-> --- a/kernel/sched/wait.c
-> +++ b/kernel/sched/wait.c
-> @@ -205,6 +205,9 @@ void __wake_up_sync_key(struct wait_queue_head *wq_head, unsigned int mode,
->       if (unlikely(!wq_head))
->               return;
+> back in the bad old days of kthreads.
 >
-> +	if (unlikely(!wq_has_sleeper(wq_head)))
-> +		return;
-> +
+> But yeah, I don't know that code.
 
+If it is a problem it looks like the thread shutdown can clear
+"worker->flags & IO_WORKER_F_UP" rather than
+"current->flags & PF_IO_WORKER".
 
-Hm so I suppose that if we end up in wake_up*() then the update of the wait
-condition has been done (so this shouldn't lead to missed wakeups), but
-that still means an extra smp_mb() before grabbing the wq_head->lock.
+I don't see how it makes sense for the load balancing logic for
+a per-process thread pool to be running at that point.
 
-I'd suggest benchmarking the change, this is going to cause unwanted
-overhead when dealing with busy queues, and I'm not sure it's saving much
-vs grabbing wq_head->lock before noticing the list is empty.
-
-
->       __wake_up_common_lock(wq_head, mode, 1, WF_SYNC, key);
->  }
->  EXPORT_SYMBOL_GPL(__wake_up_sync_key);
-> --
-> 2.20.1
-
+Eric
