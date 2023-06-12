@@ -2,141 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D169972CF6C
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 21:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1AA72CF6F
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 21:27:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238169AbjFLT0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 15:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51614 "EHLO
+        id S237643AbjFLT1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 15:27:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237901AbjFLT0T (ORCPT
+        with ESMTP id S237424AbjFLT1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 15:26:19 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3C54D19AA;
-        Mon, 12 Jun 2023 12:26:13 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.41:42778.1249123675
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
-        by 189.cn (HERMES) with SMTP id 4C72D1002BE;
-        Tue, 13 Jun 2023 03:26:09 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-75648544bd-xwndj with ESMTP id b0e3610dd26740b199961e43479640c6 for alexander.deucher@amd.com;
-        Tue, 13 Jun 2023 03:26:12 CST
-X-Transaction-ID: b0e3610dd26740b199961e43479640c6
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-From:   Sui Jingfeng <15330273260@189.cn>
-To:     Alex Deucher <alexander.deucher@amd.com>,
-        Christian Konig <christian.koenig@amd.com>,
-        Pan Xinhui <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        YiPeng Chai <YiPeng.Chai@amd.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
-        Bokun Zhang <Bokun.Zhang@amd.com>,
-        Ville Syrjala <ville.syrjala@linux.intel.com>,
-        Li Yi <liyi@loongson.cn>,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Abhishek Sahu <abhsahu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
-        Andi Shyti <andi.shyti@linux.intel.com>
-Subject: [PATCH v6 4/8] PCI/VGA: Replace full MIT license text with SPDX identifier
-Date:   Tue, 13 Jun 2023 03:25:46 +0800
-Message-Id: <20230612192550.197053-5-15330273260@189.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230612192550.197053-1-15330273260@189.cn>
-References: <20230612192550.197053-1-15330273260@189.cn>
+        Mon, 12 Jun 2023 15:27:33 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA43319AE;
+        Mon, 12 Jun 2023 12:27:05 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f624daccd1so5370864e87.0;
+        Mon, 12 Jun 2023 12:27:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686598024; x=1689190024;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ejV5kgx3hh37txIAYRNNYKvIriYQUHYrwXp8KRCJYl4=;
+        b=LYER8swJIMWaeDGZ2hkjyJOD6ND8uFats/yvoPB7ibeB5ZjEBi5yxPSWnmn7dYoDy5
+         9YzgYvQa/lmsZH27yWeAyaJHL6o6p/ATfvr/+QI/CvmWSa0LtzaDCFdVtcS4b8hLNmLs
+         KC1DfDe23MY7B+edf2XG9ZSoVcT2hvmexqOIaXRiHdbRDzNhXeL6UNUXz/ihVnXM5RJ8
+         zYolz5pt7aznawgMX4deagz9rt3FU3as8j2na+PvHllzryco963N80M+XQGuh4zcfZPT
+         SYFEq99/wEqAgeId8wN2JeF5sOvL748sDNHQvBq/0c9PsxccdxokurM8rc6/hRKxbakb
+         zRHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686598024; x=1689190024;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ejV5kgx3hh37txIAYRNNYKvIriYQUHYrwXp8KRCJYl4=;
+        b=ltYqQDLZkOYtAt3PFa+pAjU8H61BsjF8SR89h8+BQG1UJSMTQCP7zG+lKgWFLkOhM9
+         QlWctmBzl/Wt5TFu5YFQeSXayrT+E2RsrLZb7c5toO7UrwWIuI4zAZ3DEMpHmJX9W6SJ
+         0gmC1lWigJ0wnQSx9afWEWb3MWpW1qSmrnzMQCqa02cEu3KbCR1ZCGhqevU4HwGtprrn
+         OjOMArDHZoBe2ERrMffVKSldwj6YoXRPMOqEU+gtpdR+q2WBIIwnl0aN+v9d9T5BDDSZ
+         YOq9w3WLlE0lo4PQA14365C/VvPMPyeW+YN9vLiXB11aXdeAZNfNqIzRLqNLRI3S8mxa
+         rx7g==
+X-Gm-Message-State: AC+VfDyVEp8cY4c6FiaweA2SINu0G+rf+PMZuYFMdQ/HK7NT+MIQOTbG
+        FhcE+cbMSzxJc8IOLaeTTpU=
+X-Google-Smtp-Source: ACHHUZ6A6MkVpb+0rEzh/Ln9SlF8OV11QAdT0mkQWx0k205rKa35tH+XEtW7A0DwjsG6evJQCknNXw==
+X-Received: by 2002:a05:6512:60f:b0:4f6:133e:a0ec with SMTP id b15-20020a056512060f00b004f6133ea0ecmr5130780lfe.25.1686598023507;
+        Mon, 12 Jun 2023 12:27:03 -0700 (PDT)
+Received: from mobilestation ([95.79.140.35])
+        by smtp.gmail.com with ESMTPSA id n17-20020a195511000000b004f252a753e1sm1553756lfe.22.2023.06.12.12.27.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 12:27:02 -0700 (PDT)
+Date:   Mon, 12 Jun 2023 22:27:00 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-ide@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCH v4 2/5] dt-bindings: ata: dwc-ahci: add Rockchip RK3588
+Message-ID: <20230612192700.nd5t4ekt6my5dqqo@mobilestation>
+References: <20230612171337.74576-1-sebastian.reichel@collabora.com>
+ <20230612171337.74576-3-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230612171337.74576-3-sebastian.reichel@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sui Jingfeng <suijingfeng@loongson.cn>
+On Mon, Jun 12, 2023 at 07:13:34PM +0200, Sebastian Reichel wrote:
+> This adds Rockchip RK3588 AHCI binding. In order to narrow down the
+> allowed clocks without bloating the generic binding, the description
+> of Rockchip's AHCI controllers has been moved to its own file.
+> 
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-Per Documentation/process/license-rules.rst, the SPDX MIT identifier is
-equivalent to including the entire MIT license text from
-LICENSES/preferred/MIT.
+Thanks. The patch now looks good.
+Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
 
-Replace the MIT license text with the equivalent SPDX identifier.
+-Serge(y)
 
-Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
-Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
----
- include/linux/vgaarb.h | 23 ++---------------------
- 1 file changed, 2 insertions(+), 21 deletions(-)
-
-diff --git a/include/linux/vgaarb.h b/include/linux/vgaarb.h
-index 6d5465f8c3f2..97129a1bbb7d 100644
---- a/include/linux/vgaarb.h
-+++ b/include/linux/vgaarb.h
-@@ -1,3 +1,5 @@
-+/* SPDX-License-Identifier: MIT */
-+
- /*
-  * The VGA aribiter manages VGA space routing and VGA resource decode to
-  * allow multiple VGA devices to be used in a system in a safe way.
-@@ -5,27 +7,6 @@
-  * (C) Copyright 2005 Benjamin Herrenschmidt <benh@kernel.crashing.org>
-  * (C) Copyright 2007 Paulo R. Zanoni <przanoni@gmail.com>
-  * (C) Copyright 2007, 2009 Tiago Vignatti <vignatti@freedesktop.org>
-- *
-- * Permission is hereby granted, free of charge, to any person obtaining a
-- * copy of this software and associated documentation files (the "Software"),
-- * to deal in the Software without restriction, including without limitation
-- * the rights to use, copy, modify, merge, publish, distribute, sublicense,
-- * and/or sell copies of the Software, and to permit persons to whom the
-- * Software is furnished to do so, subject to the following conditions:
-- *
-- * The above copyright notice and this permission notice (including the next
-- * paragraph) shall be included in all copies or substantial portions of the
-- * Software.
-- *
-- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
-- * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-- * DEALINGS
-- * IN THE SOFTWARE.
-- *
-  */
- 
- #ifndef LINUX_VGA_H
--- 
-2.25.1
-
+> ---
+>  .../bindings/ata/rockchip,dwc-ahci.yaml       | 124 ++++++++++++++++++
+>  .../bindings/ata/snps,dwc-ahci.yaml           |  13 +-
+>  2 files changed, 133 insertions(+), 4 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/ata/rockchip,dwc-ahci.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/ata/rockchip,dwc-ahci.yaml b/Documentation/devicetree/bindings/ata/rockchip,dwc-ahci.yaml
+> new file mode 100644
+> index 000000000000..b5e5767d8698
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/ata/rockchip,dwc-ahci.yaml
+> @@ -0,0 +1,124 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/ata/rockchip,dwc-ahci.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Synopsys DWC AHCI SATA controller for Rockchip devices
+> +
+> +maintainers:
+> +  - Serge Semin <fancer.lancer@gmail.com>
+> +
+> +description:
+> +  This document defines device tree bindings for the Synopsys DWC
+> +  implementation of the AHCI SATA controller found in Rockchip
+> +  devices.
+> +
+> +select:
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        enum:
+> +          - rockchip,rk3568-dwc-ahci
+> +          - rockchip,rk3588-dwc-ahci
+> +  required:
+> +    - compatible
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - rockchip,rk3568-dwc-ahci
+> +          - rockchip,rk3588-dwc-ahci
+> +      - const: snps,dwc-ahci
+> +
+> +  ports-implemented:
+> +    const: 1
+> +
+> +  sata-port@0:
+> +    $ref: /schemas/ata/snps,dwc-ahci-common.yaml#/$defs/dwc-ahci-port
+> +
+> +    properties:
+> +      reg:
+> +        const: 0
+> +
+> +    unevaluatedProperties: false
+> +
+> +patternProperties:
+> +  "^sata-port@[1-9a-e]$": false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +  - ports-implemented
+> +
+> +allOf:
+> +  - $ref: snps,dwc-ahci-common.yaml#
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - rockchip,rk3588-dwc-ahci
+> +    then:
+> +      properties:
+> +        clocks:
+> +          maxItems: 5
+> +        clock-names:
+> +          items:
+> +            - const: sata
+> +            - const: pmalive
+> +            - const: rxoob
+> +            - const: ref
+> +            - const: asic
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - rockchip,rk3568-dwc-ahci
+> +    then:
+> +      properties:
+> +        clocks:
+> +          maxItems: 3
+> +        clock-names:
+> +          items:
+> +            - const: sata
+> +            - const: pmalive
+> +            - const: rxoob
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/rockchip,rk3588-cru.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/ata/ahci.h>
+> +    #include <dt-bindings/phy/phy.h>
+> +
+> +    sata@fe210000 {
+> +      compatible = "rockchip,rk3588-dwc-ahci", "snps,dwc-ahci";
+> +      reg = <0xfe210000 0x1000>;
+> +      clocks = <&cru ACLK_SATA0>, <&cru CLK_PMALIVE0>,
+> +               <&cru CLK_RXOOB0>, <&cru CLK_PIPEPHY0_REF>,
+> +               <&cru CLK_PIPEPHY0_PIPE_ASIC_G>;
+> +      clock-names = "sata", "pmalive", "rxoob", "ref", "asic";
+> +      interrupts = <GIC_SPI 273 IRQ_TYPE_LEVEL_HIGH 0>;
+> +      ports-implemented = <0x1>;
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      sata-port@0 {
+> +        reg = <0>;
+> +        hba-port-cap = <HBA_PORT_FBSCP>;
+> +        phys = <&combphy0_ps PHY_TYPE_SATA>;
+> +        phy-names = "sata-phy";
+> +        snps,rx-ts-max = <32>;
+> +        snps,tx-ts-max = <32>;
+> +      };
+> +    };
+> +
+> +...
+> diff --git a/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml b/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
+> index 5afa4b57ce20..4c848fcb5a5d 100644
+> --- a/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
+> +++ b/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
+> @@ -13,6 +13,15 @@ description:
+>    This document defines device tree bindings for the generic Synopsys DWC
+>    implementation of the AHCI SATA controller.
+>  
+> +select:
+> +  properties:
+> +    compatible:
+> +      enum:
+> +        - snps,dwc-ahci
+> +        - snps,spear-ahci
+> +  required:
+> +    - compatible
+> +
+>  allOf:
+>    - $ref: snps,dwc-ahci-common.yaml#
+>  
+> @@ -23,10 +32,6 @@ properties:
+>          const: snps,dwc-ahci
+>        - description: SPEAr1340 AHCI SATA device
+>          const: snps,spear-ahci
+> -      - description: Rockhip RK3568 AHCI controller
+> -        items:
+> -          - const: rockchip,rk3568-dwc-ahci
+> -          - const: snps,dwc-ahci
+>  
+>  patternProperties:
+>    "^sata-port@[0-9a-e]$":
+> -- 
+> 2.39.2
+> 
