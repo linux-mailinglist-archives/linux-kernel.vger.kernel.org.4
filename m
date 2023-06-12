@@ -2,95 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C374F72B52E
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 03:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA1B272B536
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 03:53:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232530AbjFLBqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 11 Jun 2023 21:46:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53702 "EHLO
+        id S232674AbjFLBxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 11 Jun 2023 21:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjFLBp5 (ORCPT
+        with ESMTP id S229531AbjFLBw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 11 Jun 2023 21:45:57 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE567F0;
-        Sun, 11 Jun 2023 18:45:56 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f7f6341bf9so38082605e9.1;
-        Sun, 11 Jun 2023 18:45:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686534355; x=1689126355;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ERhjlW5Y7nSKYA99YG69XuklrOuLnBz2WHAZvzU2WSA=;
-        b=q7uuUGigrvzJ22nk9TaB8M91ZXOrRIOHZeXXKyq5Z5v5t20LSp/IU3X85y3CKys0sH
-         nbcPnZghWesXPKzvlsvZ9X/YhDxpM570BWgpZkM9hh91T60OyaR4jPRVQfPRnFpa1rOt
-         lBfzhF46qRmQIXFz1IZ5pXXYmW6IIRWxjZJMKMRnzf8CnrdQeEmVmjMI7rkrQ6I4/kuf
-         NYNruxGWWgJivbR2cJqUxjlc6fDkibOSrz1UJEvr6ddecM0l/8KCSc7BmcyKsUf5kMAi
-         kcZWDsLVHntELxeffqfpRojHz8UMA+mUVOKNprXns4KYPX17QgI7xCOPISajBLNhl+OF
-         cvzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686534355; x=1689126355;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ERhjlW5Y7nSKYA99YG69XuklrOuLnBz2WHAZvzU2WSA=;
-        b=jKg9scrrAB2v0eUc7c6ceFml1b1hcptKKA+wyo9l8p9U6FZHaIHw/snpXJRKuVMOAi
-         gbkE760fvsLQMDubkRoYRsNYfrrsaQMrP5BIHbPtynJoIl6eHTWk2VeE9zMQ6L/GPSKD
-         tMwJsKidgFuOXaJUBnjLToAyL4zdauRH/JT1dWdyG7Z0/IgyN5z/TdcT4QONRtkiUITp
-         Nwf3rVGrQB/OpsvaXiykRBsldCEfBE+Yskserdi6mAt+CpW613ru3LgaQyCeHqZffoJ2
-         Oj8ldYnz5aB7lvDmjCMB31Bnc32c3eKFvHJZCn5vqdykde8Zav7C/BqAMXn2iXWwmTaI
-         UYUA==
-X-Gm-Message-State: AC+VfDyxjCNadtlEX+Vh4lp7tMAyXyHhe5rBaqSsI/ZY+Xkp8+jysIK9
-        Y4dkUAQwNL8+H6EJnXn+OGs=
-X-Google-Smtp-Source: ACHHUZ6GvDD0NGNbjw8iF2TxKFeM/CleBCGE/EJoMUmOg9PV3FezRg2QIuZKvR1Nyn+/Ytp5B/nBzA==
-X-Received: by 2002:a1c:ed15:0:b0:3f6:da2:bc86 with SMTP id l21-20020a1ced15000000b003f60da2bc86mr5902025wmh.7.1686534355268;
-        Sun, 11 Jun 2023 18:45:55 -0700 (PDT)
-Received: from localhost.localdomain (bba-2-50-150-163.alshamil.net.ae. [2.50.150.163])
-        by smtp.gmail.com with ESMTPSA id m7-20020a7bca47000000b003f80b96097esm7140919wml.31.2023.06.11.18.45.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jun 2023 18:45:54 -0700 (PDT)
-From:   Yongsheng Yang <iyysheng@gmail.com>
-To:     jdelvare@suse.com, linux@roeck-us.net, corbet@lwn.net
-Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yongsheng Yang <iyysheng@gmail.com>
-Subject: [PATCH v3] Documentation/hwmon: Fix description of devm_hwmon_device_unregister()
-Date:   Mon, 12 Jun 2023 05:45:35 +0400
-Message-ID: <20230612014535.1433-1-iyysheng@gmail.com>
-X-Mailer: git-send-email 2.41.0.windows.1
+        Sun, 11 Jun 2023 21:52:58 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A36136
+        for <linux-kernel@vger.kernel.org>; Sun, 11 Jun 2023 18:52:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686534776; x=1718070776;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=m46vQZk4pefLmm8P5SfQHMea4c/QsvdPEaoeo/+mU18=;
+  b=d4MnuauMbtK5FlL0pQEx5UTkUf4XeAfgUGynsmG6fw8235qHjNNyfTu1
+   58fgnuU0qPXfwSLYblV0p2QBVO0YMxGz7h9JunbeUZ7qsrpfq/lC5f6ZF
+   dGVURe67YhDQoPmjJYaylL8z5i2JjZHmJHX3Ir3nr5yq2vjCQkfLJ+HvK
+   +uSyVKw6lwEx1u6AF9YDgWWnKEIbye6rbmYA1U99m7ZmFRPKG9JOppmCz
+   nHPeRlCttSyZ91xEd53WlmoayDPUF1Je/JLfk4EVgQ032CAlBvT5QdAIN
+   SEqKsMEoV8xPpgYy3I5OUMDDWdcgdJJjuGgtvYDUFwVTe+/vDBHNq3Bzu
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="338286803"
+X-IronPort-AV: E=Sophos;i="6.00,235,1681196400"; 
+   d="scan'208";a="338286803"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2023 18:52:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10738"; a="1041156934"
+X-IronPort-AV: E=Sophos;i="6.00,235,1681196400"; 
+   d="scan'208";a="1041156934"
+Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 11 Jun 2023 18:52:55 -0700
+Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q8Wjm-00001A-14;
+        Mon, 12 Jun 2023 01:52:54 +0000
+Date:   Mon, 12 Jun 2023 09:52:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yogesh Hegde <yogi.kernel@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v2 1/5] staging: rtl8192e: Remove variable SetWirelessMode
+Message-ID: <202306120923.uMeOfojk-lkp@intel.com>
+References: <fba56522e419351b05e33df8cd0ac31806534d8c.1686149467.git.yogi.kernel@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fba56522e419351b05e33df8cd0ac31806534d8c.1686149467.git.yogi.kernel@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use devm_hwmon_device_register_with_info() to replace
-hwmon_device_register_with_info() in description of
-devm_hwmon_device_unregister().
+Hi Yogesh,
 
-Signed-off-by: Yongsheng Yang <iyysheng@gmail.com>
----
- Documentation/hwmon/hwmon-kernel-api.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+kernel test robot noticed the following build errors:
 
-diff --git a/Documentation/hwmon/hwmon-kernel-api.rst b/Documentation/hwmon/hwmon-kernel-api.rst
-index c2d1e0299d8d..6cacf7daf25c 100644
---- a/Documentation/hwmon/hwmon-kernel-api.rst
-+++ b/Documentation/hwmon/hwmon-kernel-api.rst
-@@ -66,7 +66,7 @@ hwmon_device_register_with_info.
- 
- devm_hwmon_device_unregister does not normally have to be called. It is only
- needed for error handling, and only needed if the driver probe fails after
--the call to hwmon_device_register_with_info and if the automatic (device
-+the call to devm_hwmon_device_register_with_info and if the automatic (device
- managed) removal would be too late.
- 
- All supported hwmon device registration functions only accept valid device
+[auto build test ERROR on staging/staging-testing]
+[also build test ERROR on staging/staging-next staging/staging-linus linus/master v6.4-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Yogesh-Hegde/staging-rtl8192e-Remove-variable-SetWirelessMode/20230607-230636
+base:   staging/staging-testing
+patch link:    https://lore.kernel.org/r/fba56522e419351b05e33df8cd0ac31806534d8c.1686149467.git.yogi.kernel%40gmail.com
+patch subject: [PATCH v2 1/5] staging: rtl8192e: Remove variable SetWirelessMode
+config: x86_64-randconfig-s053-20230611 (https://download.01.org/0day-ci/archive/20230612/202306120923.uMeOfojk-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/823187b988791852e562dba90e5eb7c7e7df8eca
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yogesh-Hegde/staging-rtl8192e-Remove-variable-SetWirelessMode/20230607-230636
+        git checkout 823187b988791852e562dba90e5eb7c7e7df8eca
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306120923.uMeOfojk-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "rtl92e_set_wireless_mode" [drivers/staging/rtl8192e/rtllib.ko] undefined!
+
 -- 
-2.37.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
