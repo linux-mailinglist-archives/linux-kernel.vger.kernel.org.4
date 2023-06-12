@@ -2,243 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50FCC72CEAA
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:44:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A536672CEAC
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 20:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234242AbjFLSoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 14:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59180 "EHLO
+        id S235891AbjFLSpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 14:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjFLSoN (ORCPT
+        with ESMTP id S237291AbjFLSot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 14:44:13 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92519184;
-        Mon, 12 Jun 2023 11:44:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=DfpkQU/ATTdj8SQ8S2sycjFTHz0K1T3h41EdnH1FLuQ=; b=A2P3J1t+kFU71LJhv8EYFdMWC4
-        T5bWxDAMk4Zh6Ks3vN3nx/A/JGUVHTwElYJUZNilKGcMUm2/wKmIGvvQhZbLEeJmxCLwQb7JgKEFo
-        oe1Te5CWVP6D6Jd3D3BGxKIF5pHAKMWd0vocfR0UMPLHIGk4YW8LfF3onsgabmKUOz7IIXuZ9tVXA
-        DraFcLoaxsDxn2EMMxzeSqA3NFNVMbrPlCrT3g+7yCksa52VYLaJ6TQyQGxSTbuYLK18U0h5TAbUp
-        8Cc/c/PVbaGDnEQepe44h7OZsm2Tojs6bv9jwHMIpDa8+Cm2MNM3pUHP5H2SkF05k7TkZLbAV9Aoa
-        h7Xkpfhg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q8mWL-008yMw-1F;
-        Mon, 12 Jun 2023 18:44:05 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C6BFA30058D;
-        Mon, 12 Jun 2023 20:44:03 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 999F420D70605; Mon, 12 Jun 2023 20:44:03 +0200 (CEST)
-Date:   Mon, 12 Jun 2023 20:44:03 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     keescook@chromium.org, gregkh@linuxfoundation.org,
-        pbonzini@redhat.com, masahiroy@kernel.org, nathan@kernel.org,
-        ndesaulniers@google.com, nicolas@fjasle.eu,
-        catalin.marinas@arm.com, will@kernel.org, vkoul@kernel.org,
-        trix@redhat.com, ojeda@kernel.org, mingo@redhat.com,
-        longman@redhat.com, boqun.feng@gmail.com, dennis@kernel.org,
-        tj@kernel.org, cl@linux.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, irogers@google.com, adrian.hunter@intel.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        rientjes@google.com, vbabka@suse.cz, roman.gushchin@linux.dev,
-        42.hyeyoo@gmail.com, apw@canonical.com, joe@perches.com,
-        dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com,
-        john.johansen@canonical.com, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        llvm@lists.linux.dev, linux-perf-users@vger.kernel.org,
-        rcu@vger.kernel.org, linux-security-module@vger.kernel.org,
-        tglx@linutronix.de, ravi.bangoria@amd.com, error27@gmail.com,
-        luc.vanoostenryck@gmail.com
-Subject: Re: [PATCH v3 33/57] perf: Simplify perf_adjust_freq_unthr_context()
-Message-ID: <20230612184403.GE83892@hirez.programming.kicks-ass.net>
-References: <20230612090713.652690195@infradead.org>
- <20230612093539.895253662@infradead.org>
- <CAHk-=wgPtj9Y+nkMe+s20sntBPoadKL7GLxTr=mhfdONMR=iZg@mail.gmail.com>
+        Mon, 12 Jun 2023 14:44:49 -0400
+Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C9C10F3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:44:45 -0700 (PDT)
+Received: by mail-oo1-xc2c.google.com with SMTP id 006d021491bc7-558b6cffe03so2692851eaf.3
+        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 11:44:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686595485; x=1689187485;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gLSvKncaUgXX5sMVjgHiwvAyzgL2miMkV5TwRmL7eWs=;
+        b=5Y4Vy2iismoAzZRhbru/V2dPtaEpSrjSWGAfWTaV/GCVgdTzE3uEYmWLtkAw83XnbU
+         +w8KNafozBU6IE2VJ2xTusRtqZEYg5sPtWP9cRbzBxArC7cGXYVRD6XYTGQ6s5sEBHCw
+         +sUusni7pX503tgT/34wEX1EtJtAGRxpI/m2DnVA/nXxgYJNaUWbmM0eDG2An8aq70td
+         Kz6eDZ2DGLuBVm5y0DeUHhHJHAUU5Z8J1gZByNQ3zDilNMNn1asZLjd4UWbON/IxayMv
+         z8BH/H+TXzGcm95HEHXW5Bs7LmwIOUCJRvd64FNrbT3Snso8giytf+Fs0svKVrb7Iq7+
+         GSaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686595485; x=1689187485;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gLSvKncaUgXX5sMVjgHiwvAyzgL2miMkV5TwRmL7eWs=;
+        b=UYqc8YY8KAKp2jGd5bBG0TdSb4t5951qAS+bqJOnlBs6z4nDR2ajA+l5fPaH7rGmtS
+         9c72ElenYOfLUl3d6X66kLb2JyGwaCDCFIit9u2kTTH4eT/1SCOPvfaIJb+5NMj8nSDq
+         PB1Yw63YSIk6PKd/HraKJ7XnJcgFeCjj4Ni4SwIMLzcOajKGC0i30GY53q3kaJ6k+Vmw
+         S5h2BkeiF1TR06G+fNJlxyA/KfbTZSUlVEVJdHi4aRbzHrSEWlL/H1wfOfEiSKqkfaWu
+         AjI/Yxcz4AR9d8krhAvcNAbjnpKkH0wEiIABcLkZk+QTnIX/s6hVl1VY4gFXWCSuzJr5
+         /4AA==
+X-Gm-Message-State: AC+VfDw5COZCA13HXS0i5NK6xGi10b0maKxbjjWlVRqU1LS8WKa+unVR
+        K6KmJzTd7UKrbhTu3QjuZXSMN8KCbGpZU5PZLaOT2A==
+X-Google-Smtp-Source: ACHHUZ7GdKM3fdCF0BbRZ7LDjfdKukE+hxCwPT2UJ9z/E0fZdGEJitZ6xGzwak0ybXCSfMcrn6FPBI3A9bGC7wYAIZc=
+X-Received: by 2002:a05:6358:c603:b0:12b:e390:2b5f with SMTP id
+ fd3-20020a056358c60300b0012be3902b5fmr1677492rwb.6.1686595484442; Mon, 12 Jun
+ 2023 11:44:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgPtj9Y+nkMe+s20sntBPoadKL7GLxTr=mhfdONMR=iZg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230609005158.2421285-1-surenb@google.com> <20230609005158.2421285-5-surenb@google.com>
+ <ZIOOmC26qh4EXUEX@x1n> <CAJuCfpHKUjAwgWbxvJQDyEnneRD03p2M6247Q6=3-oOq_FL7zA@mail.gmail.com>
+ <CAJuCfpG3PrbGxpDAEkyGQXW88+otb=FsbrhPJ4ePN7Xhn0a+_A@mail.gmail.com>
+ <ZIcfYQ1c5teMSHAX@x1n> <CAJuCfpGZvhBUdfNHojXwqZbspuhy0bstjT+-JMfwgmnqTnkoHA@mail.gmail.com>
+ <ZIdlNj+X2HDwfCeN@x1n>
+In-Reply-To: <ZIdlNj+X2HDwfCeN@x1n>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Mon, 12 Jun 2023 11:44:33 -0700
+Message-ID: <CAJuCfpH6tO8yo8YkUWWiLnkDUR0csdYyqVnuyGC+A-g3N_rKug@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] mm: drop VMA lock before waiting for migration
+To:     Peter Xu <peterx@redhat.com>
+Cc:     akpm@linux-foundation.org, willy@infradead.org, hannes@cmpxchg.org,
+        mhocko@suse.com, josef@toxicpanda.com, jack@suse.cz,
+        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
+        michel@lespinasse.org, liam.howlett@oracle.com, jglisse@google.com,
+        vbabka@suse.cz, minchan@google.com, dave@stgolabs.net,
+        punit.agrawal@bytedance.com, lstoakes@gmail.com, hdanton@sina.com,
+        apopple@nvidia.com, ying.huang@intel.com, david@redhat.com,
+        yuzhao@google.com, dhowells@redhat.com, hughd@google.com,
+        viro@zeniv.linux.org.uk, brauner@kernel.org,
+        pasha.tatashin@soleen.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 09:27:09AM -0700, Linus Torvalds wrote:
+On Mon, Jun 12, 2023 at 11:34=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote=
+:
+>
+> On Mon, Jun 12, 2023 at 09:07:38AM -0700, Suren Baghdasaryan wrote:
+> > On Mon, Jun 12, 2023 at 6:36=E2=80=AFAM Peter Xu <peterx@redhat.com> wr=
+ote:
+> > >
+> > > On Fri, Jun 09, 2023 at 06:29:43PM -0700, Suren Baghdasaryan wrote:
+> > > > On Fri, Jun 9, 2023 at 3:30=E2=80=AFPM Suren Baghdasaryan <surenb@g=
+oogle.com> wrote:
+> > > > >
+> > > > > On Fri, Jun 9, 2023 at 1:42=E2=80=AFPM Peter Xu <peterx@redhat.co=
+m> wrote:
+> > > > > >
+> > > > > > On Thu, Jun 08, 2023 at 05:51:56PM -0700, Suren Baghdasaryan wr=
+ote:
+> > > > > > > migration_entry_wait does not need VMA lock, therefore it can=
+ be dropped
+> > > > > > > before waiting. Introduce VM_FAULT_VMA_UNLOCKED to indicate t=
+hat VMA
+> > > > > > > lock was dropped while in handle_mm_fault().
+> > > > > > > Note that once VMA lock is dropped, the VMA reference can't b=
+e used as
+> > > > > > > there are no guarantees it was not freed.
+> > > > > >
+> > > > > > Then vma lock behaves differently from mmap read lock, am I rig=
+ht?  Can we
+> > > > > > still make them match on behaviors, or there's reason not to do=
+ so?
+> > > > >
+> > > > > I think we could match their behavior by also dropping mmap_lock =
+here
+> > > > > when fault is handled under mmap_lock (!(fault->flags &
+> > > > > FAULT_FLAG_VMA_LOCK)).
+> > > > > I missed the fact that VM_FAULT_COMPLETED can be used to skip dro=
+pping
+> > > > > mmap_lock in do_page_fault(), so indeed, I might be able to use
+> > > > > VM_FAULT_COMPLETED to skip vma_end_read(vma) for per-vma locks as=
+ well
+> > > > > instead of introducing FAULT_FLAG_VMA_LOCK. I think that was your=
+ idea
+> > > > > of reusing existing flags?
+> > > > Sorry, I meant VM_FAULT_VMA_UNLOCKED, not FAULT_FLAG_VMA_LOCK in th=
+e
+> > > > above reply.
+> > > >
+> > > > I took a closer look into using VM_FAULT_COMPLETED instead of
+> > > > VM_FAULT_VMA_UNLOCKED but when we fall back from per-vma lock to
+> > > > mmap_lock we need to retry with an indication that the per-vma lock
+> > > > was dropped. Returning (VM_FAULT_RETRY | VM_FAULT_COMPLETE) to
+> > > > indicate such state seems strange to me ("retry" and "complete" see=
+m
+> > >
+> > > Not relevant to this migration patch, but for the whole idea I was th=
+inking
+> > > whether it should just work if we simply:
+> > >
+> > >         fault =3D handle_mm_fault(vma, address, flags | FAULT_FLAG_VM=
+A_LOCK, regs);
+> > > -       vma_end_read(vma);
+> > > +       if (!(fault & (VM_FAULT_RETRY | VM_FAULT_COMPLETED)))
+> > > +               vma_end_read(vma);
+> > >
+> > > ?
+> >
+> > Today when we can't handle a page fault under per-vma locks we return
+> > VM_FAULT_RETRY, in which case per-vma lock is dropped and the fault is
+>
+> Oh I see what I missed.  I think it may not be a good idea to reuse
+> VM_FAULT_RETRY just for that, because it makes VM_FAULT_RETRY even more
+> complicated - now it adds one more case where the lock is not released,
+> that's when PER_VMA even if !NOWAIT.
+>
+> > retried under mmap_lock. The condition you suggest above would not
+> > drop per-vma lock for VM_FAULT_RETRY case and would break the current
+> > fallback mechanism.
+> > However your suggestion gave me an idea. I could indicate that per-vma
+> > lock got dropped using vmf structure (like Matthew suggested before)
+> > and once handle_pte_fault(vmf) returns I could check if it returned
+> > VM_FAULT_RETRY but per-vma lock is still held.
+> > If that happens I can
+> > call vma_end_read() before returning from __handle_mm_fault(). That
+> > way any time handle_mm_fault() returns VM_FAULT_RETRY per-vma lock
+> > will be already released, so your condition in do_page_fault() will
+> > work correctly. That would eliminate the need for a new
+> > VM_FAULT_VMA_UNLOCKED flag. WDYT?
+>
+> Sounds good.
+>
+> So probably that's the major pain for now with the legacy fallback (I'll
+> have commented if I noticed it with the initial vma lock support..).  I
+> assume that'll go away as long as we recover the VM_FAULT_RETRY semantics
+> to before.
 
-> The thing does not not go out of scope when the loop *iterates*.
-> 
-> It only goes out of scope when the loop *ends*.
+I think so. With that change getting VM_FAULT_RETRY in do_page_fault()
+will guarantee that per-vma lock was dropped. Is that what you mean?
 
-> Or have I mis-understood something completely?
-
-I tried this before I used it and variables inside a for() loop have a
-scope of a single iteration.
-
-
-$ gcc -O2 -o guard guard.c && ./guard
-spin_lock
-ponies
-__raw_spin_lock_irqsave
-can haz
-raw_spin_unlock_irqrestore
-mutex_lock
-mutex_unlock
-mutex_lock
-mutex_unlock
-mutex_lock
-mutex_unlock
-mutex_lock
-mutex_unlock
-mutex_lock
-mutex_unlock
-spin_unlock
-
-
-
----
-#include <stdio.h>
-#include <stdbool.h>
-
-typedef struct {
-} raw_spinlock_t;
-
-typedef struct {
-} spinlock_t;
-
-typedef struct {
-} mutex_t;
-
-void raw_spin_lock(raw_spinlock_t *)
-{
-	printf("%s\n", __FUNCTION__);
-}
-
-void raw_spin_unlock(raw_spinlock_t *)
-{
-	printf("%s\n", __FUNCTION__);
-}
-
-unsigned long __raw_spin_lock_irqsave(raw_spinlock_t *lock)
-{
-	printf("%s\n", __FUNCTION__);
-	return 0;
-}
-#define raw_spin_lock_irqsave(lock, flags) \
-	flags = __raw_spin_lock_irqsave(lock)
-
-void raw_spin_unlock_irqrestore(raw_spinlock_t *lock, unsigned long flags)
-{
-	printf("%s\n", __FUNCTION__);
-}
-
-void spin_lock(spinlock_t *)
-{
-	printf("%s\n", __FUNCTION__);
-}
-
-void spin_unlock(spinlock_t *)
-{
-	printf("%s\n", __FUNCTION__);
-}
-
-
-void mutex_lock(mutex_t *)
-{
-	printf("%s\n", __FUNCTION__);
-}
-
-void mutex_unlock(mutex_t *)
-{
-	printf("%s\n", __FUNCTION__);
-}
-
-#define DEFINE_LOCK_GUARD(_type, _Type, _Lock, _Unlock, ...)			\
-typedef struct {								\
-	_Type *lock;								\
-	__VA_ARGS__								\
-} lock_guard_##_type##_t;							\
-										\
-static inline void lock_guard_##_type##_cleanup(void *_g)	\
-{										\
-	lock_guard_##_type##_t *_G = _g; \
-	if (_G->lock) \
-	_Unlock;								\
-}										\
-										\
-static inline lock_guard_##_type##_t lock_guard_##_type##_init(_Type *lock)	\
-{										\
-	lock_guard_##_type##_t _g = { .lock = lock }, *_G = &_g;		\
-	_Lock;									\
-	return _g;								\
-}
-
-DEFINE_LOCK_GUARD(raw,   raw_spinlock_t,
-		  raw_spin_lock(_G->lock),
-		  raw_spin_unlock(_G->lock)
-		  )
-
-DEFINE_LOCK_GUARD(spin,  spinlock_t,
-		  spin_lock(_G->lock),
-		  spin_unlock(_G->lock)
-		  )
-
-DEFINE_LOCK_GUARD(mutex, mutex_t,
-		  mutex_lock(_G->lock),
-		  mutex_unlock(_G->lock)
-		  )
-
-DEFINE_LOCK_GUARD(raw_irqsave, raw_spinlock_t,
-		  raw_spin_lock_irqsave(_G->lock, _G->flags),
-		  raw_spin_unlock_irqrestore(_G->lock, _G->flags),
-		  unsigned long flags;
-		 )
-
-#define __cleanup(func) __attribute__((__cleanup__(func)))
-
-#define lock_guard(_type, _name, _ptr) \
-	lock_guard_##_type##_t _name __cleanup(lock_guard_##_type##_cleanup) = \
-	lock_guard_##_type##_init(_ptr)
-
-#define lock_scope(_type, _ptr) \
-	for (struct { lock_guard_##_type##_t guard ; bool done; } _scope __cleanup(lock_guard_##_type##_cleanup) = \
-	     { .guard = lock_guard_##_type##_init(_ptr), .done = false }; \
-	     !_scope.done; _scope.done = true)
-
-raw_spinlock_t raw_lock;
-spinlock_t lock;
-mutex_t mutex;
-
-void main(void)
-{
-	lock_guard(spin, guard, &lock);
-	printf("ponies\n");
-	lock_scope(raw_irqsave, &raw_lock) {
-		printf("can haz\n");
-	}
-
-	for (int i=0; i<5; i++) {
-		lock_guard(mutex, foo, &mutex);
-		continue;
-	}
-}
+>
+> --
+> Peter Xu
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kernel-team+unsubscribe@android.com.
+>
