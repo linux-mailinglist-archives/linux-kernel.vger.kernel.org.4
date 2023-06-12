@@ -2,157 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94F0272CD40
-	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 19:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1B1372CFD6
+	for <lists+linux-kernel@lfdr.de>; Mon, 12 Jun 2023 21:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236366AbjFLRxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 12 Jun 2023 13:53:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55472 "EHLO
+        id S237520AbjFLTue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 12 Jun 2023 15:50:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231127AbjFLRxO (ORCPT
+        with ESMTP id S230302AbjFLTub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 12 Jun 2023 13:53:14 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB816C7
-        for <linux-kernel@vger.kernel.org>; Mon, 12 Jun 2023 10:53:11 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686592390;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=eLGlTgvrhOiI7CIUt2StK8gMQZowawdoEviSYddzekk=;
-        b=HWk/zjbuzfAc91L/H+00DKcMgNROXKfM8PErTKAN2EJzSVP3ef0FgZlJ74PLd7gHVXR2eJ
-        4IAFHbHqfguHcOocRtCxK784SA0u09turJi550wQ6rXrTN8w9+d0gA0E8Ree+78OZGmNva
-        m34Xr0DDpxuxv/mBzuHvgNafOf+NCqfAcqG9MjpQuTHzykBYklrqr+DcuVc7YMQSMhBsXV
-        jL86MnMFaHeynyRincRfVyESkc0ePMkFmbgLPtrvklk5yOi1uGvGZ1J+litv4pAZ0FwR8N
-        Td4af4mG6dTtq2+1nXH59z1GfzAjUIXaAL8gnH3vOyyUl+WEfqB8v8i8xQ14Kg==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8467A20004;
-        Mon, 12 Jun 2023 17:53:07 +0000 (UTC)
-Date:   Mon, 12 Jun 2023 19:53:05 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        Linux MTD List <linux-mtd@lists.infradead.org>,
-        f.fainelli@gmail.com, rafal@milecki.pl, kursad.oney@broadcom.com,
-        joel.peshkin@broadcom.com, computersforpeace@gmail.com,
-        anand.gore@broadcom.com, dregan@mail.com, kamal.dasu@broadcom.com,
-        tomer.yacoby@broadcom.com, dan.beygelman@broadcom.com,
-        linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 10/12] mtd: rawnand: brcmnand: Add BCMBCA read data bus
- interface
-Message-ID: <20230612195305.4b097c46@xps-13>
-In-Reply-To: <20230612194908.5465bc56@xps-13>
-References: <20230606231252.94838-1-william.zhang@broadcom.com>
-        <20230606231252.94838-11-william.zhang@broadcom.com>
-        <20230607102232.17c4a27b@xps-13>
-        <7b393f47-4053-a8c7-f32e-3881d8130d80@broadcom.com>
-        <20230608081821.1de5a50b@xps-13>
-        <4ab08e3e-3be4-8b8b-6eb8-03a62337f46f@broadcom.com>
-        <20230609103544.0f00f799@xps-13>
-        <3d3b471b-c555-ee1c-96d6-c04d76979e76@broadcom.com>
-        <20230612194908.5465bc56@xps-13>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Mon, 12 Jun 2023 15:50:31 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2523ED7;
+        Mon, 12 Jun 2023 12:50:30 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b3be39e35dso17592905ad.0;
+        Mon, 12 Jun 2023 12:50:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686599429; x=1689191429;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MOoF/vQdU2Aiyxi0xZ9RaUaGYrilRuj0Hy/ULdNFUkM=;
+        b=VGCSEi5r6+cjMh8b1JNLTuOhx9yuyd298tWlU300TiX99Gxq/wJv9a51hTTj/FEmyV
+         +k1Qy+dpUQBH3hEPowT4Nax1I520pqfGtmnOsBart4a89ciniDOkut0vAANtidufjudJ
+         xcmrPRoWDRvICajBmfxkjx32TfR2Aw4C6HdHCDRIXSDpH+N09P8CblI+24WNVfBplgut
+         lI1PM64dawMStNcv6eRLkOY6nuu1Xqg1i06RMoRUGIbqhdNpcTHXsetWToRdc8cD3TXZ
+         TA38DBh0qSQDLqqPBTgwvJnDS3Y2Y8FmGRYCFzJVmB7cFnoTeRqPyQhDihEIur+fKd46
+         yw4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686599429; x=1689191429;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MOoF/vQdU2Aiyxi0xZ9RaUaGYrilRuj0Hy/ULdNFUkM=;
+        b=eoGV6TymAXDNK3Z1K/Hp5GqfgxsuDNlSf1p3+vngn1wBff5WeMRccIpI2XRBHK+wJN
+         t7rDmBtcuL9bOerokFxD+tWWZuq3v6Ispa99uY7aIpS1OuYGVh1yzx9Ll/e8/XefcG4D
+         8iZJoh3gjUsTnomo7zcloM4WA5UEaXYOZdypRBsu84Rf70SiikNx/0H1M/m9zFQ2U4na
+         sDN5K2m/QEiTgvcqr2X1Rh79YTXNTxGPU2w0P9ONEE5xb4hRinFEeNRcHBMgbixUaL62
+         wwWkRTV7MkzksK/JOvHrM06DdL4P1PG+cF/BMncUSHEo1u7ihDQ+c7tzeaKaLkqk6zU5
+         Uglg==
+X-Gm-Message-State: AC+VfDzw6T8djpssPQe+bPhRf4WURP3nK4Pv3+Tbc0nvX4GxW2Et5yHs
+        6pbXp9nRE4g3C+Mnk8Cbw6c=
+X-Google-Smtp-Source: ACHHUZ7OhPai3uWA834fndvGh2fiP+1+6Wo2P992KJGLAFBRrwQ7rrU2gppW9O17Sl6bSGfcaSEL9w==
+X-Received: by 2002:a17:902:d2c4:b0:1ab:253e:6906 with SMTP id n4-20020a170902d2c400b001ab253e6906mr8708967plc.67.1686599429472;
+        Mon, 12 Jun 2023 12:50:29 -0700 (PDT)
+Received: from localhost (ec2-52-8-182-0.us-west-1.compute.amazonaws.com. [52.8.182.0])
+        by smtp.gmail.com with ESMTPSA id f12-20020a170902ab8c00b001aaed524541sm8622843plr.227.2023.06.12.12.50.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jun 2023 12:50:29 -0700 (PDT)
+Date:   Mon, 12 Jun 2023 17:53:25 +0000
+From:   Bobby Eshleman <bobbyeshleman@gmail.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@sberdevices.ru, oxffffaa@gmail.com
+Subject: Re: [RFC PATCH v4 02/17] vhost/vsock: read data from non-linear skb
+Message-ID: <ZIdblVkbADonJzNY@bullseye>
+References: <20230603204939.1598818-1-AVKrasnov@sberdevices.ru>
+ <20230603204939.1598818-3-AVKrasnov@sberdevices.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230603204939.1598818-3-AVKrasnov@sberdevices.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello again,
+On Sat, Jun 03, 2023 at 11:49:24PM +0300, Arseniy Krasnov wrote:
+> This adds copying to guest's virtio buffers from non-linear skbs. Such
+> skbs are created by protocol layer when MSG_ZEROCOPY flags is used. It
+> changes call of 'copy_to_iter()' to 'skb_copy_datagram_iter()'. Second
+> function can read data from non-linear skb.
+> 
+> See commit to 'net/vmw_vsock/virtio_transport_common.c' with the same
+> name for more details.
+> 
+> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+> ---
+>  drivers/vhost/vsock.c | 12 +++++++-----
+>  1 file changed, 7 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
+> index 6578db78f0ae..b254aa4b756a 100644
+> --- a/drivers/vhost/vsock.c
+> +++ b/drivers/vhost/vsock.c
+> @@ -156,7 +156,7 @@ vhost_transport_do_send_pkt(struct vhost_vsock *vsock,
+>  		}
+>  
+>  		iov_iter_init(&iov_iter, ITER_DEST, &vq->iov[out], in, iov_len);
+> -		payload_len = skb->len;
+> +		payload_len = skb->len - VIRTIO_VSOCK_SKB_CB(skb)->frag_off;
+>  		hdr = virtio_vsock_hdr(skb);
+>  
+>  		/* If the packet is greater than the space available in the
+> @@ -197,8 +197,10 @@ vhost_transport_do_send_pkt(struct vhost_vsock *vsock,
+>  			break;
+>  		}
+>  
+> -		nbytes = copy_to_iter(skb->data, payload_len, &iov_iter);
+> -		if (nbytes != payload_len) {
+> +		if (skb_copy_datagram_iter(skb,
+> +					   VIRTIO_VSOCK_SKB_CB(skb)->frag_off,
+> +					   &iov_iter,
+> +					   payload_len)) {
+>  			kfree_skb(skb);
+>  			vq_err(vq, "Faulted on copying pkt buf\n");
+>  			break;
+> @@ -212,13 +214,13 @@ vhost_transport_do_send_pkt(struct vhost_vsock *vsock,
+>  		vhost_add_used(vq, head, sizeof(*hdr) + payload_len);
+>  		added = true;
+>  
+> -		skb_pull(skb, payload_len);
+> +		VIRTIO_VSOCK_SKB_CB(skb)->frag_off += payload_len;
+>  		total_len += payload_len;
+>  
+>  		/* If we didn't send all the payload we can requeue the packet
+>  		 * to send it with the next available buffer.
+>  		 */
+> -		if (skb->len > 0) {
+> +		if (VIRTIO_VSOCK_SKB_CB(skb)->frag_off < skb->len) {
+>  			hdr->flags |= cpu_to_le32(flags_to_restore);
+>  
+>  			/* We are queueing the same skb to handle
+> -- 
+> 2.25.1
+> 
 
-> > >>>>> Perhaps we could have a single function that is statically assign=
-ed at
-> > >>>>> probe time instead of a first helper with two conditions which ca=
-lls in
-> > >>>>> one case another hook... This can be simplified I guess. =20
-> > >>>>>     >> Well this will need to be done at the SoC specific impleme=
-ntation level (bcm<xxx>_nand.c) and each SoC will need to have either gener=
-al data bus read func with is_param option or data_bus_read_page, data_bus_=
-read_param. =20
-> > >>>
-> > >>> You told me in case we would use exec_op we could avoid the param
-> > >>> cache. If that's true then the whole support can be simplified. =20
-> > >>>    >> Correct we may possibly unified the parameter data read but e=
-xec_op is long shot and we are not fully ready for that yet. It also depend=
-s on if the low level data register has endianess difference for the parame=
-ter data between difference SoCs. =20
-> > >>
-> > >> So I would like to push the current implementation and we can explor=
-e the exec_op option late which will be a much big and complete different i=
-mplementation. =20
-> > >=20
-> > > I am sorry but this series is totally backwards, you're trying to gue=
-ss
-> > > what comes next with the 'is_param' thing, it's exactly what we are
-> > > fighting against since 2017. There are plenty of ->exec_op()
-> > > conversions out there, I don't believe this one will be harder. You
-> > > need to convert the driver to this new API and get rid of this whole
-> > > endianness non-sense to simplify a lot the driver.
-> > >  =20
-> > I am not guessing anything but just factor out the existing common nand=
- cache read logic into the single default function(or one for page read and=
- another for parameter read as I mentioned in another thread) and allow SoC=
- to overrides the implementation when needed.
->=20
-> No, you are trying to guess what type of read the core is performing,
-> either a regular data page read or a parameter page read.
->=20
-> > I agree ->exec_op can possibly get rid of the parameter page read funct=
-ion and is the way to go. But it won't help on the page read for endianess.
->=20
-> You told me there is no endianess issue with the data pages, so why it
-> won't help on the page read?
->=20
-> > It's not that I am against exec_op but I want to take one step a time
-> > and I'd like to get these fixes
->=20
-> I don't see any fix here? Let me know if I am missing something but
-> right now I see a new version of the controller being supported with
-> its own constraints. If you are fixing existing code for already
-> supported platform, then make it clear and we can discuss this. But if
-> you just want to support the bcmbca flavor, then there is no risk
-> mitigation involved here, and a conversion is the right step :)
->=20
+LGTM.
 
-I forgot to mention: the exec_op conversion is almost ready, Boris
-worked on it but he lacked the hardware so maybe you'll just need to
-revive the few patches which target your platform and do a little bit of
-debugging?
-
-https://github.com/bbrezillon/linux/commits/nand/exec-op-conversion?after=
-=3D8a3cf6fd25d5e15c6667f9e95c1fc86e4cb735e6+34&branch=3Dnand%2Fexec-op-conv=
-ersion&qualified_name=3Drefs%2Fheads%2Fnand%2Fexec-op-conversion
-
-Cheers,
-Miqu=C3=A8l
+Reviewed-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
